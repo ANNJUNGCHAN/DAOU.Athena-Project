@@ -1,3 +1,6 @@
+# ruff: noqa: E501, I001
+
+
 """Generated Pydantic models. Do not edit; run backend/scripts/generate_api.py."""
 
 
@@ -7336,6 +7339,252 @@ class Kt50075Response(BaseModel):
     acnt_ord_oso_prst: list[Kt50075ResponseAcntOrdOsoPrstItem] = Field(default_factory=list, alias='acnt_ord_oso_prst', description='계좌별주문미체결현황')
 
 
+class Ka10001IdentityAndCapitalResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka10001'
+    stk_cd: str | None = Field(None, alias='stk_cd', description='종목코드')
+    stk_nm: str | None = Field(None, alias='stk_nm', description='종목명')
+    setl_mm: str | None = Field(None, alias='setl_mm', description='결산월')
+    fav: str | None = Field(None, alias='fav', description='액면가 — 단위: 원')
+    cap: str | None = Field(None, alias='cap', description='자본금 — 단위: 억원')
+    flo_stk: str | None = Field(None, alias='flo_stk', description='상장주식 — 단위: 천원')
+
+
+class Ka10001MarketScaleAndOwnershipResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka10001'
+    crd_rt: str | None = Field(None, alias='crd_rt', description='신용비율 — 단위: %, 부호 포함 소수점 둘째 자리까지 포맷된 백분율')
+    mac: str | None = Field(None, alias='mac', description='시가총액 — 단위: 억원')
+    mac_wght: str | None = Field(None, alias='mac_wght', description='시가총액비중')
+    for_exh_rt: str | None = Field(None, alias='for_exh_rt', description='외인소진률 — 단위: %, 부호 포함 소수점 둘째 자리까지 포맷된 백분율')
+    repl_pric: str | None = Field(None, alias='repl_pric', description='대용가 — 단위: 원')
+    fav_unit: str | None = Field(None, alias='fav_unit', description='액면가단위')
+    dstr_stk: str | None = Field(None, alias='dstr_stk', description='유통주식 — 단위: 1주')
+    dstr_rt: str | None = Field(None, alias='dstr_rt', description='유통비율 — 단위: %, 부호 포함 소수점 첫째 자리까지 포맷된 백분율')
+
+
+class Ka10001PriceRangeResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka10001'
+    oyr_hgst: str | None = Field(None, alias='oyr_hgst', description='연중최고 — 단위: 원, 부호가 포함된 숫자')
+    oyr_lwst: str | None = Field(None, alias='oyr_lwst', description='연중최저 — 단위: 원, 부호가 포함된 숫자')
+    f_250hgst: str | None = Field(None, alias='250hgst', description='250최고 — 단위: 원, 부호가 포함된 숫자')
+    f_250lwst: str | None = Field(None, alias='250lwst', description='250최저 — 단위: 원, 부호가 포함된 숫자')
+    f_250hgst_pric_dt: str | None = Field(None, alias='250hgst_pric_dt', description='250최고가일 — YYYYMMDD')
+    f_250hgst_pric_pre_rt: str | None = Field(None, alias='250hgst_pric_pre_rt', description='250최고가대비율 — 단위: %, 부호 포함 소수점 둘째 자리까지 포맷된 백분율')
+    f_250lwst_pric_dt: str | None = Field(None, alias='250lwst_pric_dt', description='250최저가일 — YYYYMMDD')
+    f_250lwst_pric_pre_rt: str | None = Field(None, alias='250lwst_pric_pre_rt', description='250최저가대비율 — 단위: %, 부호 포함 소수점 둘째 자리까지 포맷된 백분율')
+
+
+class Ka10001ValuationResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka10001'
+    per: str | None = Field(None, alias='per', description='PER — [ 주의 ] PER, ROE 값들은 외부벤더사에서 제공되는 데이터이며 일주일에 한번 또는 실적발표 시즌에 업데이트 됨')
+    eps: str | None = Field(None, alias='eps', description='EPS')
+    roe: str | None = Field(None, alias='roe', description='ROE — [ 주의 ]  PER, ROE 값들은 외부벤더사에서 제공되는 데이터이며 일주일에 한번 또는 실적발표 시즌에 업데이트 됨')
+    pbr: str | None = Field(None, alias='pbr', description='PBR')
+    ev: str | None = Field(None, alias='ev', description='EV')
+    bps: str | None = Field(None, alias='bps', description='BPS')
+
+
+class Ka10001FinancialPerformanceResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka10001'
+    sale_amt: str | None = Field(None, alias='sale_amt', description='매출액 — 단위: 억원')
+    bus_pro: str | None = Field(None, alias='bus_pro', description='영업이익 — 단위: 억원')
+    cup_nga: str | None = Field(None, alias='cup_nga', description='당기순이익 — 단위: 억원')
+
+
+class Ka10001DailyPriceBandResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka10001'
+    open_pric: str | None = Field(None, alias='open_pric', description='시가 — 단위: 원, 부호가 포함된 숫자')
+    high_pric: str | None = Field(None, alias='high_pric', description='고가 — 단위: 원, 부호가 포함된 숫자')
+    low_pric: str | None = Field(None, alias='low_pric', description='저가 — 단위: 원, 부호가 포함된 숫자')
+    upl_pric: str | None = Field(None, alias='upl_pric', description='상한가 — 단위: 원, 부호가 포함된 숫자')
+    lst_pric: str | None = Field(None, alias='lst_pric', description='하한가 — 단위: 원, 부호가 포함된 숫자')
+    base_pric: str | None = Field(None, alias='base_pric', description='기준가 — 단위: 원')
+    exp_cntr_pric: str | None = Field(None, alias='exp_cntr_pric', description='예상체결가')
+    exp_cntr_qty: str | None = Field(None, alias='exp_cntr_qty', description='예상체결수량')
+
+
+class Ka10001CurrentTradingResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka10001'
+    cur_prc: str | None = Field(None, alias='cur_prc', description='현재가 — 단위: 원, 부호가 포함된 숫자')
+    pre_sig: str | None = Field(None, alias='pre_sig', description='대비기호 — 1: 상한가, 2:상승, 3:보합, 4:하한가, 5:하락')
+    pred_pre: str | None = Field(None, alias='pred_pre', description='전일대비 — 단위: 원, 부호가 포함된 숫자')
+    flu_rt: str | None = Field(None, alias='flu_rt', description='등락율 — 단위: %, 부호 포함 소수점 둘째 자리까지 포맷된 백분율')
+    trde_qty: str | None = Field(None, alias='trde_qty', description='거래량 — 단위: 1주')
+    trde_pre: str | None = Field(None, alias='trde_pre', description='거래대비 — 단위: %, 부호 포함 소수점 둘째 자리까지 포맷된 백분율')
+
+
+class Ka10002MarketSnapshotResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka10002'
+    stk_cd: str | None = Field(None, alias='stk_cd', description='종목코드')
+    stk_nm: str | None = Field(None, alias='stk_nm', description='종목명')
+    cur_prc: str | None = Field(None, alias='cur_prc', description='현재가 — 단위: 원, 부호가 포함된 숫자')
+    flu_smbol: str | None = Field(None, alias='flu_smbol', description='등락부호 — 1: 상한가, 2:상승, 3:보합, 4:하한가, 5:하락')
+    base_pric: str | None = Field(None, alias='base_pric', description='기준가 — 단위: 원')
+    pred_pre: str | None = Field(None, alias='pred_pre', description='전일대비 — 단위: 원, 부호가 포함된 숫자')
+    flu_rt: str | None = Field(None, alias='flu_rt', description='등락율 — 단위: %, 부호 포함 소수점 둘째 자리까지 포맷된 백분율')
+
+
+class Ka10002SellBrokersResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka10002'
+    sel_trde_ori_nm_1: str | None = Field(None, alias='sel_trde_ori_nm_1', description='매도거래원명1')
+    sel_trde_ori_1: str | None = Field(None, alias='sel_trde_ori_1', description='매도거래원1')
+    sel_trde_qty_1: str | None = Field(None, alias='sel_trde_qty_1', description='매도거래량1 — 단위: 1주, 부호가 포함된 숫자')
+    sel_trde_ori_nm_2: str | None = Field(None, alias='sel_trde_ori_nm_2', description='매도거래원명2')
+    sel_trde_ori_2: str | None = Field(None, alias='sel_trde_ori_2', description='매도거래원2')
+    sel_trde_qty_2: str | None = Field(None, alias='sel_trde_qty_2', description='매도거래량2 — 단위: 1주, 부호가 포함된 숫자')
+    sel_trde_ori_nm_3: str | None = Field(None, alias='sel_trde_ori_nm_3', description='매도거래원명3')
+    sel_trde_ori_3: str | None = Field(None, alias='sel_trde_ori_3', description='매도거래원3')
+    sel_trde_qty_3: str | None = Field(None, alias='sel_trde_qty_3', description='매도거래량3 — 단위: 1주, 부호가 포함된 숫자')
+    sel_trde_ori_nm_4: str | None = Field(None, alias='sel_trde_ori_nm_4', description='매도거래원명4')
+    sel_trde_ori_4: str | None = Field(None, alias='sel_trde_ori_4', description='매도거래원4')
+    sel_trde_qty_4: str | None = Field(None, alias='sel_trde_qty_4', description='매도거래량4 — 단위: 1주, 부호가 포함된 숫자')
+    sel_trde_ori_nm_5: str | None = Field(None, alias='sel_trde_ori_nm_5', description='매도거래원명5')
+    sel_trde_ori_5: str | None = Field(None, alias='sel_trde_ori_5', description='매도거래원5')
+    sel_trde_qty_5: str | None = Field(None, alias='sel_trde_qty_5', description='매도거래량5 — 단위: 1주, 부호가 포함된 숫자')
+
+
+class Ka10002BuyBrokersResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka10002'
+    buy_trde_ori_nm_1: str | None = Field(None, alias='buy_trde_ori_nm_1', description='매수거래원명1')
+    buy_trde_ori_1: str | None = Field(None, alias='buy_trde_ori_1', description='매수거래원1')
+    buy_trde_qty_1: str | None = Field(None, alias='buy_trde_qty_1', description='매수거래량1 — 단위: 1주, 부호가 포함된 숫자')
+    buy_trde_ori_nm_2: str | None = Field(None, alias='buy_trde_ori_nm_2', description='매수거래원명2')
+    buy_trde_ori_2: str | None = Field(None, alias='buy_trde_ori_2', description='매수거래원2')
+    buy_trde_qty_2: str | None = Field(None, alias='buy_trde_qty_2', description='매수거래량2 — 단위: 1주, 부호가 포함된 숫자')
+    buy_trde_ori_nm_3: str | None = Field(None, alias='buy_trde_ori_nm_3', description='매수거래원명3')
+    buy_trde_ori_3: str | None = Field(None, alias='buy_trde_ori_3', description='매수거래원3')
+    buy_trde_qty_3: str | None = Field(None, alias='buy_trde_qty_3', description='매수거래량3 — 단위: 1주, 부호가 포함된 숫자')
+    buy_trde_ori_nm_4: str | None = Field(None, alias='buy_trde_ori_nm_4', description='매수거래원명4')
+    buy_trde_ori_4: str | None = Field(None, alias='buy_trde_ori_4', description='매수거래원4')
+    buy_trde_qty_4: str | None = Field(None, alias='buy_trde_qty_4', description='매수거래량4 — 단위: 1주, 부호가 포함된 숫자')
+    buy_trde_ori_nm_5: str | None = Field(None, alias='buy_trde_ori_nm_5', description='매수거래원명5')
+    buy_trde_ori_5: str | None = Field(None, alias='buy_trde_ori_5', description='매수거래원5')
+    buy_trde_qty_5: str | None = Field(None, alias='buy_trde_qty_5', description='매수거래량5 — 단위: 1주, 부호가 포함된 숫자')
+
+
+class Ka10004SnapshotTimeResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka10004'
+    bid_req_base_tm: str | None = Field(None, alias='bid_req_base_tm', description='호가잔량기준시간 — YYYYMMDD')
+
+
+class Ka10004SellBidPricesResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka10004'
+    sel_10th_pre_bid: str | None = Field(None, alias='sel_10th_pre_bid', description='매도10차선호가 — 단위: 원, 부호가 포함된 숫자')
+    sel_9th_pre_bid: str | None = Field(None, alias='sel_9th_pre_bid', description='매도9차선호가 — 단위: 원, 부호가 포함된 숫자')
+    sel_8th_pre_bid: str | None = Field(None, alias='sel_8th_pre_bid', description='매도8차선호가 — 단위: 원, 부호가 포함된 숫자')
+    sel_7th_pre_bid: str | None = Field(None, alias='sel_7th_pre_bid', description='매도7차선호가 — 단위: 원, 부호가 포함된 숫자')
+    sel_6th_pre_bid: str | None = Field(None, alias='sel_6th_pre_bid', description='매도6차선호가 — 단위: 원, 부호가 포함된 숫자')
+    sel_5th_pre_bid: str | None = Field(None, alias='sel_5th_pre_bid', description='매도5차선호가 — 단위: 원, 부호가 포함된 숫자')
+    sel_4th_pre_bid: str | None = Field(None, alias='sel_4th_pre_bid', description='매도4차선호가 — 단위: 원, 부호가 포함된 숫자')
+    sel_3th_pre_bid: str | None = Field(None, alias='sel_3th_pre_bid', description='매도3차선호가 — 단위: 원, 부호가 포함된 숫자')
+    sel_2th_pre_bid: str | None = Field(None, alias='sel_2th_pre_bid', description='매도2차선호가 — 단위: 원, 부호가 포함된 숫자')
+    sel_fpr_bid: str | None = Field(None, alias='sel_fpr_bid', description='매도최우선호가 — 단위: 원, 부호가 포함된 숫자')
+
+
+class Ka10004SellBidQuantitiesResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka10004'
+    sel_10th_pre_req: str | None = Field(None, alias='sel_10th_pre_req', description='매도10차선잔량 — 단위: 1주')
+    sel_9th_pre_req: str | None = Field(None, alias='sel_9th_pre_req', description='매도9차선잔량 — 단위: 1주')
+    sel_8th_pre_req: str | None = Field(None, alias='sel_8th_pre_req', description='매도8차선잔량 — 단위: 1주')
+    sel_7th_pre_req: str | None = Field(None, alias='sel_7th_pre_req', description='매도7차선잔량 — 단위: 1주')
+    sel_6th_pre_req: str | None = Field(None, alias='sel_6th_pre_req', description='매도6차선잔량 — 단위: 1주')
+    sel_5th_pre_req: str | None = Field(None, alias='sel_5th_pre_req', description='매도5차선잔량 — 단위: 1주')
+    sel_4th_pre_req: str | None = Field(None, alias='sel_4th_pre_req', description='매도4차선잔량 — 단위: 1주')
+    sel_3th_pre_req: str | None = Field(None, alias='sel_3th_pre_req', description='매도3차선잔량 — 단위: 1주')
+    sel_2th_pre_req: str | None = Field(None, alias='sel_2th_pre_req', description='매도2차선잔량 — 단위: 1주')
+    sel_fpr_req: str | None = Field(None, alias='sel_fpr_req', description='매도최우선잔량 — 단위: 1주')
+
+
+class Ka10004SellBidChangesResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka10004'
+    sel_10th_pre_req_pre: str | None = Field(None, alias='sel_10th_pre_req_pre', description='매도10차선잔량대비 — 단위: 1주, 부호가 포함된 숫자')
+    sel_9th_pre_req_pre: str | None = Field(None, alias='sel_9th_pre_req_pre', description='매도9차선잔량대비 — 단위: 1주, 부호가 포함된 숫자')
+    sel_8th_pre_req_pre: str | None = Field(None, alias='sel_8th_pre_req_pre', description='매도8차선잔량대비 — 단위: 1주, 부호가 포함된 숫자')
+    sel_7th_pre_req_pre: str | None = Field(None, alias='sel_7th_pre_req_pre', description='매도7차선잔량대비 — 단위: 1주, 부호가 포함된 숫자')
+    sel_6th_pre_req_pre: str | None = Field(None, alias='sel_6th_pre_req_pre', description='매도6차선잔량대비 — 단위: 1주, 부호가 포함된 숫자')
+    sel_5th_pre_req_pre: str | None = Field(None, alias='sel_5th_pre_req_pre', description='매도5차선잔량대비 — 단위: 1주, 부호가 포함된 숫자')
+    sel_4th_pre_req_pre: str | None = Field(None, alias='sel_4th_pre_req_pre', description='매도4차선잔량대비 — 단위: 1주, 부호가 포함된 숫자')
+    sel_3th_pre_req_pre: str | None = Field(None, alias='sel_3th_pre_req_pre', description='매도3차선잔량대비 — 단위: 1주, 부호가 포함된 숫자')
+    sel_2th_pre_req_pre: str | None = Field(None, alias='sel_2th_pre_req_pre', description='매도2차선잔량대비 — 단위: 1주, 부호가 포함된 숫자')
+    sel_1th_pre_req_pre: str | None = Field(None, alias='sel_1th_pre_req_pre', description='매도1차선잔량대비 — 단위: 1주, 부호가 포함된 숫자')
+
+
+class Ka10004BuyBidPricesResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka10004'
+    buy_fpr_bid: str | None = Field(None, alias='buy_fpr_bid', description='매수최우선호가 — 단위: 원, 부호가 포함된 숫자')
+    buy_2th_pre_bid: str | None = Field(None, alias='buy_2th_pre_bid', description='매수2차선호가 — 단위: 원, 부호가 포함된 숫자')
+    buy_3th_pre_bid: str | None = Field(None, alias='buy_3th_pre_bid', description='매수3차선호가 — 단위: 원, 부호가 포함된 숫자')
+    buy_4th_pre_bid: str | None = Field(None, alias='buy_4th_pre_bid', description='매수4차선호가 — 단위: 원, 부호가 포함된 숫자')
+    buy_5th_pre_bid: str | None = Field(None, alias='buy_5th_pre_bid', description='매수5차선호가 — 단위: 원, 부호가 포함된 숫자')
+    buy_6th_pre_bid: str | None = Field(None, alias='buy_6th_pre_bid', description='매수6차선호가 — 단위: 원, 부호가 포함된 숫자')
+    buy_7th_pre_bid: str | None = Field(None, alias='buy_7th_pre_bid', description='매수7차선호가 — 단위: 원, 부호가 포함된 숫자')
+    buy_8th_pre_bid: str | None = Field(None, alias='buy_8th_pre_bid', description='매수8차선호가 — 단위: 원, 부호가 포함된 숫자')
+    buy_9th_pre_bid: str | None = Field(None, alias='buy_9th_pre_bid', description='매수9차선호가 — 단위: 원, 부호가 포함된 숫자')
+    buy_10th_pre_bid: str | None = Field(None, alias='buy_10th_pre_bid', description='매수10차선호가 — 단위: 원, 부호가 포함된 숫자')
+
+
+class Ka10004BuyBidQuantitiesResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka10004'
+    buy_fpr_req: str | None = Field(None, alias='buy_fpr_req', description='매수최우선잔량 — 단위: 1주')
+    buy_2th_pre_req: str | None = Field(None, alias='buy_2th_pre_req', description='매수2차선잔량 — 단위: 1주')
+    buy_3th_pre_req: str | None = Field(None, alias='buy_3th_pre_req', description='매수3차선잔량 — 단위: 1주')
+    buy_4th_pre_req: str | None = Field(None, alias='buy_4th_pre_req', description='매수4차선잔량 — 단위: 1주')
+    buy_5th_pre_req: str | None = Field(None, alias='buy_5th_pre_req', description='매수5차선잔량 — 단위: 1주')
+    buy_6th_pre_req: str | None = Field(None, alias='buy_6th_pre_req', description='매수6차선잔량 — 단위: 1주')
+    buy_7th_pre_req: str | None = Field(None, alias='buy_7th_pre_req', description='매수7차선잔량 — 단위: 1주')
+    buy_8th_pre_req: str | None = Field(None, alias='buy_8th_pre_req', description='매수8차선잔량 — 단위: 1주')
+    buy_9th_pre_req: str | None = Field(None, alias='buy_9th_pre_req', description='매수9차선잔량 — 단위: 1주')
+    buy_10th_pre_req: str | None = Field(None, alias='buy_10th_pre_req', description='매수10차선잔량 — 단위: 1주')
+
+
+class Ka10004BuyBidChangesResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka10004'
+    buy_1th_pre_req_pre: str | None = Field(None, alias='buy_1th_pre_req_pre', description='매수1차선잔량대비 — 단위: 1주, 부호가 포함된 숫자')
+    buy_2th_pre_req_pre: str | None = Field(None, alias='buy_2th_pre_req_pre', description='매수2차선잔량대비 — 단위: 1주, 부호가 포함된 숫자')
+    buy_3th_pre_req_pre: str | None = Field(None, alias='buy_3th_pre_req_pre', description='매수3차선잔량대비 — 단위: 1주, 부호가 포함된 숫자')
+    buy_4th_pre_req_pre: str | None = Field(None, alias='buy_4th_pre_req_pre', description='매수4차선잔량대비 — 단위: 1주, 부호가 포함된 숫자')
+    buy_5th_pre_req_pre: str | None = Field(None, alias='buy_5th_pre_req_pre', description='매수5차선잔량대비 — 단위: 1주, 부호가 포함된 숫자')
+    buy_6th_pre_req_pre: str | None = Field(None, alias='buy_6th_pre_req_pre', description='매수6차선잔량대비 — 단위: 1주, 부호가 포함된 숫자')
+    buy_7th_pre_req_pre: str | None = Field(None, alias='buy_7th_pre_req_pre', description='매수7차선잔량대비 — 단위: 1주, 부호가 포함된 숫자')
+    buy_8th_pre_req_pre: str | None = Field(None, alias='buy_8th_pre_req_pre', description='매수8차선잔량대비 — 단위: 1주, 부호가 포함된 숫자')
+    buy_9th_pre_req_pre: str | None = Field(None, alias='buy_9th_pre_req_pre', description='매수9차선잔량대비 — 단위: 1주, 부호가 포함된 숫자')
+    buy_10th_pre_req_pre: str | None = Field(None, alias='buy_10th_pre_req_pre', description='매수10차선잔량대비 — 단위: 1주, 부호가 포함된 숫자')
+
+
+class Ka10004AggregateTotalsResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka10004'
+    tot_sel_req_jub_pre: str | None = Field(None, alias='tot_sel_req_jub_pre', description='총매도잔량직전대비 — 단위: 1주, 부호가 포함된 숫자')
+    tot_sel_req: str | None = Field(None, alias='tot_sel_req', description='총매도잔량 — 단위: 1주')
+    tot_buy_req: str | None = Field(None, alias='tot_buy_req', description='총매수잔량 — 단위: 1주')
+    tot_buy_req_jub_pre: str | None = Field(None, alias='tot_buy_req_jub_pre', description='총매수잔량직전대비 — 단위: 1주, 부호가 포함된 숫자')
+
+
+class Ka10004AfterHoursTotalsResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka10004'
+    ovt_sel_req_pre: str | None = Field(None, alias='ovt_sel_req_pre', description='시간외매도잔량대비 — 단위: 1주, 부호가 포함된 숫자')
+    ovt_sel_req: str | None = Field(None, alias='ovt_sel_req', description='시간외매도잔량 — 단위: 1주, 시간외 매도호가 총잔량')
+    ovt_buy_req: str | None = Field(None, alias='ovt_buy_req', description='시간외매수잔량 — 단위: 1주, 시간외 매수호가 총잔량')
+    ovt_buy_req_pre: str | None = Field(None, alias='ovt_buy_req_pre', description='시간외매수잔량대비 — 단위: 1주, 부호가 포함된 숫자, 시간외 매수호가 총잔량 직전대비')
+
+
 class Ka10007IdentityResponse(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra='allow')
     tr_id: ClassVar[str] = 'ka10007'
@@ -7503,3 +7752,989 @@ class Ka10007TotalsResponse(BaseModel):
     tot_sel_req: str | None = Field(None, alias='tot_sel_req', description='총매도잔량 — 단위: 1주')
     tot_buy_cnt: str | None = Field(None, alias='tot_buy_cnt', description='총매수건수')
     tot_sel_cnt: str | None = Field(None, alias='tot_sel_cnt', description='총매도건수')
+
+
+class Ka10040SellBrokersResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka10040'
+    sel_trde_ori_irds_1: str | None = Field(None, alias='sel_trde_ori_irds_1', description='매도거래원별증감1 — 단위: 1주, 부호가 포함된 숫자')
+    sel_trde_ori_qty_1: str | None = Field(None, alias='sel_trde_ori_qty_1', description='매도거래원수량1 — 단위: 1주, 부호가 포함된 숫자')
+    sel_trde_ori_1: str | None = Field(None, alias='sel_trde_ori_1', description='매도거래원1')
+    sel_trde_ori_cd_1: str | None = Field(None, alias='sel_trde_ori_cd_1', description='매도거래원코드1')
+    sel_trde_ori_irds_2: str | None = Field(None, alias='sel_trde_ori_irds_2', description='매도거래원별증감2 — 단위: 1주, 부호가 포함된 숫자')
+    sel_trde_ori_qty_2: str | None = Field(None, alias='sel_trde_ori_qty_2', description='매도거래원수량2 — 단위: 1주, 부호가 포함된 숫자')
+    sel_trde_ori_2: str | None = Field(None, alias='sel_trde_ori_2', description='매도거래원2')
+    sel_trde_ori_cd_2: str | None = Field(None, alias='sel_trde_ori_cd_2', description='매도거래원코드2')
+    sel_trde_ori_irds_3: str | None = Field(None, alias='sel_trde_ori_irds_3', description='매도거래원별증감3 — 단위: 1주, 부호가 포함된 숫자')
+    sel_trde_ori_qty_3: str | None = Field(None, alias='sel_trde_ori_qty_3', description='매도거래원수량3 — 단위: 1주, 부호가 포함된 숫자')
+    sel_trde_ori_3: str | None = Field(None, alias='sel_trde_ori_3', description='매도거래원3')
+    sel_trde_ori_cd_3: str | None = Field(None, alias='sel_trde_ori_cd_3', description='매도거래원코드3')
+    sel_trde_ori_irds_4: str | None = Field(None, alias='sel_trde_ori_irds_4', description='매도거래원별증감4 — 단위: 1주, 부호가 포함된 숫자')
+    sel_trde_ori_qty_4: str | None = Field(None, alias='sel_trde_ori_qty_4', description='매도거래원수량4 — 단위: 1주, 부호가 포함된 숫자')
+    sel_trde_ori_4: str | None = Field(None, alias='sel_trde_ori_4', description='매도거래원4')
+    sel_trde_ori_cd_4: str | None = Field(None, alias='sel_trde_ori_cd_4', description='매도거래원코드4')
+    sel_trde_ori_irds_5: str | None = Field(None, alias='sel_trde_ori_irds_5', description='매도거래원별증감5 — 단위: 1주, 부호가 포함된 숫자')
+    sel_trde_ori_qty_5: str | None = Field(None, alias='sel_trde_ori_qty_5', description='매도거래원수량5 — 단위: 1주, 부호가 포함된 숫자')
+    sel_trde_ori_5: str | None = Field(None, alias='sel_trde_ori_5', description='매도거래원5')
+    sel_trde_ori_cd_5: str | None = Field(None, alias='sel_trde_ori_cd_5', description='매도거래원코드5')
+
+
+class Ka10040BuyBrokersResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka10040'
+    buy_trde_ori_1: str | None = Field(None, alias='buy_trde_ori_1', description='매수거래원1')
+    buy_trde_ori_cd_1: str | None = Field(None, alias='buy_trde_ori_cd_1', description='매수거래원코드1')
+    buy_trde_ori_qty_1: str | None = Field(None, alias='buy_trde_ori_qty_1', description='매수거래원수량1 — 단위: 1주, 부호가 포함된 숫자')
+    buy_trde_ori_irds_1: str | None = Field(None, alias='buy_trde_ori_irds_1', description='매수거래원별증감1 — 단위: 1주, 부호가 포함된 숫자')
+    buy_trde_ori_2: str | None = Field(None, alias='buy_trde_ori_2', description='매수거래원2')
+    buy_trde_ori_cd_2: str | None = Field(None, alias='buy_trde_ori_cd_2', description='매수거래원코드2')
+    buy_trde_ori_qty_2: str | None = Field(None, alias='buy_trde_ori_qty_2', description='매수거래원수량2 — 단위: 1주, 부호가 포함된 숫자')
+    buy_trde_ori_irds_2: str | None = Field(None, alias='buy_trde_ori_irds_2', description='매수거래원별증감2 — 단위: 1주, 부호가 포함된 숫자')
+    buy_trde_ori_3: str | None = Field(None, alias='buy_trde_ori_3', description='매수거래원3')
+    buy_trde_ori_cd_3: str | None = Field(None, alias='buy_trde_ori_cd_3', description='매수거래원코드3')
+    buy_trde_ori_qty_3: str | None = Field(None, alias='buy_trde_ori_qty_3', description='매수거래원수량3 — 단위: 1주, 부호가 포함된 숫자')
+    buy_trde_ori_irds_3: str | None = Field(None, alias='buy_trde_ori_irds_3', description='매수거래원별증감3 — 단위: 1주, 부호가 포함된 숫자')
+    buy_trde_ori_4: str | None = Field(None, alias='buy_trde_ori_4', description='매수거래원4')
+    buy_trde_ori_cd_4: str | None = Field(None, alias='buy_trde_ori_cd_4', description='매수거래원코드4')
+    buy_trde_ori_qty_4: str | None = Field(None, alias='buy_trde_ori_qty_4', description='매수거래원수량4 — 단위: 1주, 부호가 포함된 숫자')
+    buy_trde_ori_irds_4: str | None = Field(None, alias='buy_trde_ori_irds_4', description='매수거래원별증감4 — 단위: 1주, 부호가 포함된 숫자')
+    buy_trde_ori_5: str | None = Field(None, alias='buy_trde_ori_5', description='매수거래원5')
+    buy_trde_ori_cd_5: str | None = Field(None, alias='buy_trde_ori_cd_5', description='매수거래원코드5')
+    buy_trde_ori_qty_5: str | None = Field(None, alias='buy_trde_ori_qty_5', description='매수거래원수량5 — 단위: 1주, 부호가 포함된 숫자')
+    buy_trde_ori_irds_5: str | None = Field(None, alias='buy_trde_ori_irds_5', description='매수거래원별증감5 — 단위: 1주, 부호가 포함된 숫자')
+
+
+class Ka10040ForeignBrokerEstimatesResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka10040'
+    frgn_sel_prsm_sum_chang: str | None = Field(None, alias='frgn_sel_prsm_sum_chang', description='외국계매도추정합변동 — 단위: 1주, 부호가 포함된 숫자')
+    frgn_sel_prsm_sum: str | None = Field(None, alias='frgn_sel_prsm_sum', description='외국계매도추정합 — 단위: 1주, 부호가 포함된 숫자')
+    frgn_buy_prsm_sum: str | None = Field(None, alias='frgn_buy_prsm_sum', description='외국계매수추정합 — 단위: 1주, 부호가 포함된 숫자')
+    frgn_buy_prsm_sum_chang: str | None = Field(None, alias='frgn_buy_prsm_sum_chang', description='외국계매수추정합변동 — 단위: 1주, 부호가 포함된 숫자')
+
+
+class Ka10040BrokerDeparturesResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka10040'
+    tdy_main_trde_ori: list[Ka10040ResponseTdyMainTrdeOriItem] = Field(default_factory=list, alias='tdy_main_trde_ori', description='당일주요거래원')
+
+
+class Ka10087SnapshotTimeResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka10087'
+    bid_req_base_tm: str | None = Field(None, alias='bid_req_base_tm', description='호가잔량기준시간 — HHmmss')
+
+
+class Ka10087SellBidChangesResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka10087'
+    ovt_sigpric_sel_bid_jub_pre_5: str | None = Field(None, alias='ovt_sigpric_sel_bid_jub_pre_5', description='시간외단일가_매도호가직전대비5 — 단위: 1주, 부호가 포함된 숫자')
+    ovt_sigpric_sel_bid_jub_pre_4: str | None = Field(None, alias='ovt_sigpric_sel_bid_jub_pre_4', description='시간외단일가_매도호가직전대비4 — 단위: 1주, 부호가 포함된 숫자')
+    ovt_sigpric_sel_bid_jub_pre_3: str | None = Field(None, alias='ovt_sigpric_sel_bid_jub_pre_3', description='시간외단일가_매도호가직전대비3 — 단위: 1주, 부호가 포함된 숫자')
+    ovt_sigpric_sel_bid_jub_pre_2: str | None = Field(None, alias='ovt_sigpric_sel_bid_jub_pre_2', description='시간외단일가_매도호가직전대비2 — 단위: 1주, 부호가 포함된 숫자')
+    ovt_sigpric_sel_bid_jub_pre_1: str | None = Field(None, alias='ovt_sigpric_sel_bid_jub_pre_1', description='시간외단일가_매도호가직전대비1 — 단위: 1주, 부호가 포함된 숫자')
+
+
+class Ka10087SellBidQuantitiesResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka10087'
+    ovt_sigpric_sel_bid_qty_5: str | None = Field(None, alias='ovt_sigpric_sel_bid_qty_5', description='시간외단일가_매도호가수량5 — 단위: 1주')
+    ovt_sigpric_sel_bid_qty_4: str | None = Field(None, alias='ovt_sigpric_sel_bid_qty_4', description='시간외단일가_매도호가수량4 — 단위: 1주')
+    ovt_sigpric_sel_bid_qty_3: str | None = Field(None, alias='ovt_sigpric_sel_bid_qty_3', description='시간외단일가_매도호가수량3 — 단위: 1주')
+    ovt_sigpric_sel_bid_qty_2: str | None = Field(None, alias='ovt_sigpric_sel_bid_qty_2', description='시간외단일가_매도호가수량2 — 단위: 1주')
+    ovt_sigpric_sel_bid_qty_1: str | None = Field(None, alias='ovt_sigpric_sel_bid_qty_1', description='시간외단일가_매도호가수량1 — 단위: 1주')
+
+
+class Ka10087SellBidPricesResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka10087'
+    ovt_sigpric_sel_bid_5: str | None = Field(None, alias='ovt_sigpric_sel_bid_5', description='시간외단일가_매도호가5 — 단위: 원, 부호가 포함된 숫자')
+    ovt_sigpric_sel_bid_4: str | None = Field(None, alias='ovt_sigpric_sel_bid_4', description='시간외단일가_매도호가4 — 단위: 원, 부호가 포함된 숫자')
+    ovt_sigpric_sel_bid_3: str | None = Field(None, alias='ovt_sigpric_sel_bid_3', description='시간외단일가_매도호가3 — 단위: 원, 부호가 포함된 숫자')
+    ovt_sigpric_sel_bid_2: str | None = Field(None, alias='ovt_sigpric_sel_bid_2', description='시간외단일가_매도호가2 — 단위: 원, 부호가 포함된 숫자')
+    ovt_sigpric_sel_bid_1: str | None = Field(None, alias='ovt_sigpric_sel_bid_1', description='시간외단일가_매도호가1 — 단위: 원, 부호가 포함된 숫자')
+
+
+class Ka10087BuyBidPricesResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka10087'
+    ovt_sigpric_buy_bid_1: str | None = Field(None, alias='ovt_sigpric_buy_bid_1', description='시간외단일가_매수호가1 — 단위: 원, 부호가 포함된 숫자')
+    ovt_sigpric_buy_bid_2: str | None = Field(None, alias='ovt_sigpric_buy_bid_2', description='시간외단일가_매수호가2 — 단위: 원, 부호가 포함된 숫자')
+    ovt_sigpric_buy_bid_3: str | None = Field(None, alias='ovt_sigpric_buy_bid_3', description='시간외단일가_매수호가3 — 단위: 원, 부호가 포함된 숫자')
+    ovt_sigpric_buy_bid_4: str | None = Field(None, alias='ovt_sigpric_buy_bid_4', description='시간외단일가_매수호가4 — 단위: 원, 부호가 포함된 숫자')
+    ovt_sigpric_buy_bid_5: str | None = Field(None, alias='ovt_sigpric_buy_bid_5', description='시간외단일가_매수호가5 — 단위: 원, 부호가 포함된 숫자')
+
+
+class Ka10087BuyBidQuantitiesResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka10087'
+    ovt_sigpric_buy_bid_qty_1: str | None = Field(None, alias='ovt_sigpric_buy_bid_qty_1', description='시간외단일가_매수호가수량1 — 단위: 1주')
+    ovt_sigpric_buy_bid_qty_2: str | None = Field(None, alias='ovt_sigpric_buy_bid_qty_2', description='시간외단일가_매수호가수량2 — 단위: 1주')
+    ovt_sigpric_buy_bid_qty_3: str | None = Field(None, alias='ovt_sigpric_buy_bid_qty_3', description='시간외단일가_매수호가수량3 — 단위: 1주')
+    ovt_sigpric_buy_bid_qty_4: str | None = Field(None, alias='ovt_sigpric_buy_bid_qty_4', description='시간외단일가_매수호가수량4 — 단위: 1주')
+    ovt_sigpric_buy_bid_qty_5: str | None = Field(None, alias='ovt_sigpric_buy_bid_qty_5', description='시간외단일가_매수호가수량5 — 단위: 1주')
+
+
+class Ka10087BuyBidChangesResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka10087'
+    ovt_sigpric_buy_bid_jub_pre_1: str | None = Field(None, alias='ovt_sigpric_buy_bid_jub_pre_1', description='시간외단일가_매수호가직전대비1 — 단위: 1주, 부호가 포함된 숫자')
+    ovt_sigpric_buy_bid_jub_pre_2: str | None = Field(None, alias='ovt_sigpric_buy_bid_jub_pre_2', description='시간외단일가_매수호가직전대비2 — 단위: 1주, 부호가 포함된 숫자')
+    ovt_sigpric_buy_bid_jub_pre_3: str | None = Field(None, alias='ovt_sigpric_buy_bid_jub_pre_3', description='시간외단일가_매수호가직전대비3 — 단위: 1주, 부호가 포함된 숫자')
+    ovt_sigpric_buy_bid_jub_pre_4: str | None = Field(None, alias='ovt_sigpric_buy_bid_jub_pre_4', description='시간외단일가_매수호가직전대비4 — 단위: 1주, 부호가 포함된 숫자')
+    ovt_sigpric_buy_bid_jub_pre_5: str | None = Field(None, alias='ovt_sigpric_buy_bid_jub_pre_5', description='시간외단일가_매수호가직전대비5 — 단위: 1주, 부호가 포함된 숫자')
+
+
+class Ka10087AggregateTotalsResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka10087'
+    ovt_sigpric_sel_bid_tot_req: str | None = Field(None, alias='ovt_sigpric_sel_bid_tot_req', description='시간외단일가_매도호가총잔량 — 단위: 1주')
+    ovt_sigpric_buy_bid_tot_req: str | None = Field(None, alias='ovt_sigpric_buy_bid_tot_req', description='시간외단일가_매수호가총잔량 — 단위: 1주')
+    sel_bid_tot_req_jub_pre: str | None = Field(None, alias='sel_bid_tot_req_jub_pre', description='매도호가총잔량직전대비 — 단위: 1주, 부호가 포함된 숫자')
+    sel_bid_tot_req: str | None = Field(None, alias='sel_bid_tot_req', description='매도호가총잔량 — 단위: 1주')
+    buy_bid_tot_req: str | None = Field(None, alias='buy_bid_tot_req', description='매수호가총잔량 — 단위: 1주')
+    buy_bid_tot_req_jub_pre: str | None = Field(None, alias='buy_bid_tot_req_jub_pre', description='매수호가총잔량직전대비 — 단위: 1주, 부호가 포함된 숫자')
+    ovt_sel_bid_tot_req_jub_pre: str | None = Field(None, alias='ovt_sel_bid_tot_req_jub_pre', description='시간외매도호가총잔량직전대비 — 단위: 1주, 부호가 포함된 숫자')
+    ovt_sel_bid_tot_req: str | None = Field(None, alias='ovt_sel_bid_tot_req', description='시간외매도호가총잔량 — 단위: 1주')
+    ovt_buy_bid_tot_req: str | None = Field(None, alias='ovt_buy_bid_tot_req', description='시간외매수호가총잔량 — 단위: 1주')
+    ovt_buy_bid_tot_req_jub_pre: str | None = Field(None, alias='ovt_buy_bid_tot_req_jub_pre', description='시간외매수호가총잔량직전대비 — 단위: 1주, 부호가 포함된 숫자')
+
+
+class Ka10087TradingSummaryResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka10087'
+    ovt_sigpric_cur_prc: str | None = Field(None, alias='ovt_sigpric_cur_prc', description='시간외단일가_현재가 — 단위: 원, 부호가 포함된 숫자')
+    ovt_sigpric_pred_pre_sig: str | None = Field(None, alias='ovt_sigpric_pred_pre_sig', description='시간외단일가_전일대비기호')
+    ovt_sigpric_pred_pre: str | None = Field(None, alias='ovt_sigpric_pred_pre', description='시간외단일가_전일대비 — 단위: 원, 부호가 포함된 숫자')
+    ovt_sigpric_flu_rt: str | None = Field(None, alias='ovt_sigpric_flu_rt', description='시간외단일가_등락률 — 단위: %, 부호 포함 소수점 둘째 자리까지 포맷된 백분율')
+    ovt_sigpric_acc_trde_qty: str | None = Field(None, alias='ovt_sigpric_acc_trde_qty', description='시간외단일가_누적거래량 — 단위: 1주')
+
+
+class Ka20001MarketSnapshotResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka20001'
+    cur_prc: str | None = Field(None, alias='cur_prc', description='현재가 — 단위: 지수, 부호가 포함된 숫자')
+    pred_pre_sig: str | None = Field(None, alias='pred_pre_sig', description='전일대비기호 — 1: 상한가, 2:상승, 3:보합, 4:하한가, 5:하락')
+    pred_pre: str | None = Field(None, alias='pred_pre', description='전일대비 — 단위: 지수, 부호가 포함된 숫자')
+    flu_rt: str | None = Field(None, alias='flu_rt', description='등락률 — 단위: %, 부호 포함 소수점 둘째 자리까지 포맷된 백분율')
+    trde_qty: str | None = Field(None, alias='trde_qty', description='거래량 — 단위: 1000주')
+    trde_prica: str | None = Field(None, alias='trde_prica', description='거래대금 — 단위: 백만원')
+    trde_frmatn_stk_num: str | None = Field(None, alias='trde_frmatn_stk_num', description='거래형성종목수 — 단위: 종목수')
+    trde_frmatn_rt: str | None = Field(None, alias='trde_frmatn_rt', description='거래형성비율 — 단위: %, 부호 포함 소수점 둘째 자리까지 포맷된 백분율')
+
+
+class Ka20001SessionRangeResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka20001'
+    open_pric: str | None = Field(None, alias='open_pric', description='시가 — 단위: 지수, 부호가 포함된 숫자')
+    high_pric: str | None = Field(None, alias='high_pric', description='고가 — 단위: 지수, 부호가 포함된 숫자')
+    low_pric: str | None = Field(None, alias='low_pric', description='저가 — 단위: 지수, 부호가 포함된 숫자')
+
+
+class Ka20001MarketBreadthResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka20001'
+    upl: str | None = Field(None, alias='upl', description='상한 — 단위: 종목수')
+    rising: str | None = Field(None, alias='rising', description='상승 — 단위: 종목수')
+    stdns: str | None = Field(None, alias='stdns', description='보합 — 단위: 종목수')
+    fall: str | None = Field(None, alias='fall', description='하락 — 단위: 종목수')
+    lst: str | None = Field(None, alias='lst', description='하한 — 단위: 종목수')
+
+
+class Ka20001FiftyTwoWeekRangeResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka20001'
+    f_52wk_hgst_pric: str | None = Field(None, alias='52wk_hgst_pric', description='52주최고가 — 단위: 지수, 부호가 포함된 숫자')
+    f_52wk_hgst_pric_dt: str | None = Field(None, alias='52wk_hgst_pric_dt', description='52주최고가일 — YYYYMMDD')
+    f_52wk_hgst_pric_pre_rt: str | None = Field(None, alias='52wk_hgst_pric_pre_rt', description='52주최고가대비율 — 단위: %, 부호 포함 소수점 둘째 자리까지 포맷된 백분율')
+    f_52wk_lwst_pric: str | None = Field(None, alias='52wk_lwst_pric', description='52주최저가 — 단위: 지수, 부호가 포함된 숫자')
+    f_52wk_lwst_pric_dt: str | None = Field(None, alias='52wk_lwst_pric_dt', description='52주최저가일 — YYYYMMDD')
+    f_52wk_lwst_pric_pre_rt: str | None = Field(None, alias='52wk_lwst_pric_pre_rt', description='52주최저가대비율 — 단위: %, 부호 포함 소수점 둘째 자리까지 포맷된 백분율')
+
+
+class Ka20001IntradayHistoryResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka20001'
+    inds_cur_prc_tm: list[Ka20001ResponseIndsCurPrcTmItem] = Field(default_factory=list, alias='inds_cur_prc_tm', description='업종현재가_시간별')
+
+
+class Ka20009MarketSnapshotResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka20009'
+    cur_prc: str | None = Field(None, alias='cur_prc', description='현재가 — 단위: 지수, 부호가 포함된 숫자')
+    pred_pre_sig: str | None = Field(None, alias='pred_pre_sig', description='전일대비기호 — 1: 상한가, 2:상승, 3:보합, 4:하한가, 5:하락')
+    pred_pre: str | None = Field(None, alias='pred_pre', description='전일대비 — 단위: 지수, 부호가 포함된 숫자')
+    flu_rt: str | None = Field(None, alias='flu_rt', description='등락률 — 단위: %, 부호 포함 소수점 둘째 자리까지 포맷된 백분율')
+    trde_qty: str | None = Field(None, alias='trde_qty', description='거래량 — 단위: 1000주')
+    trde_prica: str | None = Field(None, alias='trde_prica', description='거래대금 — 단위: 백만원')
+    trde_frmatn_stk_num: str | None = Field(None, alias='trde_frmatn_stk_num', description='거래형성종목수 — 단위: 종목수')
+    trde_frmatn_rt: str | None = Field(None, alias='trde_frmatn_rt', description='거래형성비율 — 단위: %, 부호 포함 소수점 둘째 자리까지 포맷된 백분율')
+
+
+class Ka20009SessionRangeResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka20009'
+    open_pric: str | None = Field(None, alias='open_pric', description='시가 — 단위: 지수, 부호가 포함된 숫자')
+    high_pric: str | None = Field(None, alias='high_pric', description='고가 — 단위: 지수, 부호가 포함된 숫자')
+    low_pric: str | None = Field(None, alias='low_pric', description='저가 — 단위: 지수, 부호가 포함된 숫자')
+
+
+class Ka20009MarketBreadthResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka20009'
+    upl: str | None = Field(None, alias='upl', description='상한 — 단위: 종목수')
+    rising: str | None = Field(None, alias='rising', description='상승 — 단위: 종목수')
+    stdns: str | None = Field(None, alias='stdns', description='보합 — 단위: 종목수')
+    fall: str | None = Field(None, alias='fall', description='하락 — 단위: 종목수')
+    lst: str | None = Field(None, alias='lst', description='하한 — 단위: 종목수')
+
+
+class Ka20009FiftyTwoWeekRangeResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka20009'
+    f_52wk_hgst_pric: str | None = Field(None, alias='52wk_hgst_pric', description='52주최고가 — 단위: 지수, 부호가 포함된 숫자')
+    f_52wk_hgst_pric_dt: str | None = Field(None, alias='52wk_hgst_pric_dt', description='52주최고가일 — YYYYMMDD')
+    f_52wk_hgst_pric_pre_rt: str | None = Field(None, alias='52wk_hgst_pric_pre_rt', description='52주최고가대비율 — 단위: %, 부호 포함 소수점 둘째 자리까지 포맷된 백분율')
+    f_52wk_lwst_pric: str | None = Field(None, alias='52wk_lwst_pric', description='52주최저가 — 단위: 지수, 부호가 포함된 숫자')
+    f_52wk_lwst_pric_dt: str | None = Field(None, alias='52wk_lwst_pric_dt', description='52주최저가일 — YYYYMMDD')
+    f_52wk_lwst_pric_pre_rt: str | None = Field(None, alias='52wk_lwst_pric_pre_rt', description='52주최저가대비율 — 단위: %, 부호 포함 소수점 둘째 자리까지 포맷된 백분율')
+
+
+class Ka20009DailyHistoryResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka20009'
+    inds_cur_prc_daly_rept: list[Ka20009ResponseIndsCurPrcDalyReptItem] = Field(default_factory=list, alias='inds_cur_prc_daly_rept', description='업종현재가_일별반복')
+
+
+class Ka30012MarketSnapshotResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka30012'
+    aset_cd: str | None = Field(None, alias='aset_cd', description='자산코드')
+    cur_prc: str | None = Field(None, alias='cur_prc', description='현재가 — 단위: 원, 부호가 포함된 숫자')
+    pred_pre_sig: str | None = Field(None, alias='pred_pre_sig', description='전일대비기호 — 1: 상한가, 2:상승, 3:보합, 4:하한가, 5:하락')
+    pred_pre: str | None = Field(None, alias='pred_pre', description='전일대비 — 단위: 원, 부호가 포함된 숫자')
+    flu_rt: str | None = Field(None, alias='flu_rt', description='등락율 — 단위: %, 부호 포함 소수점 둘째 자리까지 포맷된 백분율')
+
+
+class Ka30012LiquidityProvidersResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka30012'
+    lpmmcm_nm: str | None = Field(None, alias='lpmmcm_nm', description='LP회원사명')
+    lpmmcm_nm_1: str | None = Field(None, alias='lpmmcm_nm_1', description='LP회원사명1')
+    lpmmcm_nm_2: str | None = Field(None, alias='lpmmcm_nm_2', description='LP회원사명2')
+
+
+class Ka30012ValuationAndRightsResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka30012'
+    elwrght_cntn: str | None = Field(None, alias='elwrght_cntn', description='ELW권리내용')
+    elwexpr_evlt_pric: str | None = Field(None, alias='elwexpr_evlt_pric', description='ELW만기평가가격')
+    elwtheory_pric: str | None = Field(None, alias='elwtheory_pric', description='ELW이론가 — 소수점 제거 된 100배 값으로 제공\n \n예) "4234322"값은 42,344.22를 의미합니다.')
+    dispty_rt: str | None = Field(None, alias='dispty_rt', description='괴리율 — 단위: %, 부호 포함 소수점 둘째 자리까지 포맷된 백분율')
+    elwinnr_vltl: str | None = Field(None, alias='elwinnr_vltl', description='ELW내재변동성')
+    exp_rght_pric: str | None = Field(None, alias='exp_rght_pric', description='예상권리가')
+    elwpl_qutr_rt: str | None = Field(None, alias='elwpl_qutr_rt', description='ELW손익분기율 — 단위: %, 부호 포함 소수점 둘째 자리까지 포맷된 백분율')
+    elwexec_pric: str | None = Field(None, alias='elwexec_pric', description='ELW행사가')
+    elwcnvt_rt: str | None = Field(None, alias='elwcnvt_rt', description='ELW전환비율 — 소수점 넷째 자리까지 포맷된 숫자')
+    elwcmpn_rt: str | None = Field(None, alias='elwcmpn_rt', description='ELW보상율 — 단위: %, 소수점 둘째 자리까지 포맷된 백분율')
+    elwpric_rising_part_rt: str | None = Field(None, alias='elwpric_rising_part_rt', description='ELW가격상승참여율 — 단위: %, 소수점 둘째 자리까지 포맷된 백분율')
+    elwrght_type: str | None = Field(None, alias='elwrght_type', description='ELW권리유형')
+    elwsrvive_dys: str | None = Field(None, alias='elwsrvive_dys', description='ELW잔존일수')
+
+
+class Ka30012LiquidityAndLeverageResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka30012'
+    stkcnt: str | None = Field(None, alias='stkcnt', description='상장주식수 — 단위: 천원')
+    elwlpord_pos: str | None = Field(None, alias='elwlpord_pos', description='ELWLP주문가능')
+    lpposs_rt: str | None = Field(None, alias='lpposs_rt', description='LP보유비율 — 단위: %, 소수점 둘째 자리까지 포맷된 백분율')
+    lprmnd_qty: str | None = Field(None, alias='lprmnd_qty', description='LP보유수량 — 단위: 1주')
+    elwspread: str | None = Field(None, alias='elwspread', description='ELW스프레드 — 소수점 둘째 자리까지 포맷된 숫자')
+    elwprty: str | None = Field(None, alias='elwprty', description='ELW패리티 — 소수점 둘째 자리까지 포맷된 숫자')
+    elwgear: str | None = Field(None, alias='elwgear', description='ELW기어링 — 소수점 둘째 자리까지 포맷된 숫자')
+
+
+class Ka30012KeyDatesResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka30012'
+    elwflo_dt: str | None = Field(None, alias='elwflo_dt', description='ELW상장일 — YYYYMMDD')
+    elwfin_trde_dt: str | None = Field(None, alias='elwfin_trde_dt', description='ELW최종거래일 — YYYYMMDD')
+    expr_dt: str | None = Field(None, alias='expr_dt', description='만기일 — YYYYMMDD')
+    exec_dt: str | None = Field(None, alias='exec_dt', description='행사일 — YYYYMMDD')
+    lpsuply_end_dt: str | None = Field(None, alias='lpsuply_end_dt', description='LP공급종료일 — YYYYMMDD')
+    elwpay_dt: str | None = Field(None, alias='elwpay_dt', description='ELW지급일 — YYYYMMDD')
+
+
+class Ka30012AdministrationResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka30012'
+    elwinvt_ix_comput: str | None = Field(None, alias='elwinvt_ix_comput', description='ELW투자지표산출')
+    elwpay_agnt: str | None = Field(None, alias='elwpay_agnt', description='ELW지급대리인')
+    elwappr_way: str | None = Field(None, alias='elwappr_way', description='ELW결재방법')
+    elwrght_exec_way: str | None = Field(None, alias='elwrght_exec_way', description='ELW권리행사방식')
+    elwpblicte_orgn: str | None = Field(None, alias='elwpblicte_orgn', description='ELW발행기관')
+
+
+class Ka30012PayoffConditionsResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka30012'
+    dcsn_pay_amt: str | None = Field(None, alias='dcsn_pay_amt', description='확정지급액 — 소수점 셋째 자리까지 포맷된 숫자')
+    kobarr: str | None = Field(None, alias='kobarr', description='KO베리어')
+    iv: str | None = Field(None, alias='iv', description='IV — 소수점 셋째 자리까지 포맷된 숫자')
+    clsprd_end_elwocr: str | None = Field(None, alias='clsprd_end_elwocr', description='종기종료ELW발생')
+
+
+class Ka30012UnderlyingBasketResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka30012'
+    bsis_aset_1: str | None = Field(None, alias='bsis_aset_1', description='기초자산1')
+    bsis_aset_comp_rt_1: str | None = Field(None, alias='bsis_aset_comp_rt_1', description='기초자산구성비율1 — 소수점 셋째 자리까지 포맷된 숫자')
+    bsis_aset_2: str | None = Field(None, alias='bsis_aset_2', description='기초자산2')
+    bsis_aset_comp_rt_2: str | None = Field(None, alias='bsis_aset_comp_rt_2', description='기초자산구성비율2 — 소수점 셋째 자리까지 포맷된 숫자')
+    bsis_aset_3: str | None = Field(None, alias='bsis_aset_3', description='기초자산3')
+    bsis_aset_comp_rt_3: str | None = Field(None, alias='bsis_aset_comp_rt_3', description='기초자산구성비율3 — 소수점 셋째 자리까지 포맷된 숫자')
+    bsis_aset_4: str | None = Field(None, alias='bsis_aset_4', description='기초자산4')
+    bsis_aset_comp_rt_4: str | None = Field(None, alias='bsis_aset_comp_rt_4', description='기초자산구성비율4 — 소수점 셋째 자리까지 포맷된 숫자')
+    bsis_aset_5: str | None = Field(None, alias='bsis_aset_5', description='기초자산5')
+    bsis_aset_comp_rt_5: str | None = Field(None, alias='bsis_aset_comp_rt_5', description='기초자산구성비율5 — 소수점 셋째 자리까지 포맷된 숫자')
+
+
+class Ka30012EvaluationWindowResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka30012'
+    fr_dt: str | None = Field(None, alias='fr_dt', description='평가시작일자')
+    to_dt: str | None = Field(None, alias='to_dt', description='평가종료일자')
+    fr_tm: str | None = Field(None, alias='fr_tm', description='평가시작시간')
+    evlt_end_tm: str | None = Field(None, alias='evlt_end_tm', description='평가종료시간')
+    evlt_pric: str | None = Field(None, alias='evlt_pric', description='평가가격')
+    evlt_fnsh_yn: str | None = Field(None, alias='evlt_fnsh_yn', description='평가완료여부')
+
+
+class Ka30012EvaluationExtremaResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'ka30012'
+    all_hgst_pric: str | None = Field(None, alias='all_hgst_pric', description='전체최고가')
+    all_lwst_pric: str | None = Field(None, alias='all_lwst_pric', description='전체최저가')
+    imaf_hgst_pric: str | None = Field(None, alias='imaf_hgst_pric', description='직후최고가')
+    imaf_lwst_pric: str | None = Field(None, alias='imaf_lwst_pric', description='직후최저가')
+    sndhalf_mrkt_hgst_pric: str | None = Field(None, alias='sndhalf_mrkt_hgst_pric', description='후반장최고가')
+    sndhalf_mrkt_lwst_pric: str | None = Field(None, alias='sndhalf_mrkt_lwst_pric', description='후반장최저가')
+
+
+class Kt00001CashAndMarginResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00001'
+    entr: str | None = Field(None, alias='entr', description='예수금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    profa_ch: str | None = Field(None, alias='profa_ch', description='주식증거금현금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    bncr_profa_ch: str | None = Field(None, alias='bncr_profa_ch', description='수익증권증거금현금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    nxdy_bncr_sell_exct: str | None = Field(None, alias='nxdy_bncr_sell_exct', description='익일수익증권매도정산대금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    fc_stk_krw_repl_set_amt: str | None = Field(None, alias='fc_stk_krw_repl_set_amt', description='해외주식원화대용설정금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    crd_grnta_ch: str | None = Field(None, alias='crd_grnta_ch', description='신용보증금현금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    crd_grnt_ch: str | None = Field(None, alias='crd_grnt_ch', description='신용담보금현금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    add_grnt_ch: str | None = Field(None, alias='add_grnt_ch', description='추가담보금현금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    etc_profa: str | None = Field(None, alias='etc_profa', description='기타증거금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    uncl_stk_amt: str | None = Field(None, alias='uncl_stk_amt', description='미수확보금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+
+
+class Kt00001SpecialDepositsAndCreditResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00001'
+    shrts_prica: str | None = Field(None, alias='shrts_prica', description='공매도대금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    crd_set_grnta: str | None = Field(None, alias='crd_set_grnta', description='신용설정평가금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    chck_ina_amt: str | None = Field(None, alias='chck_ina_amt', description='수표입금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    etc_chck_ina_amt: str | None = Field(None, alias='etc_chck_ina_amt', description='기타수표입금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    crd_grnt_ruse: str | None = Field(None, alias='crd_grnt_ruse', description='신용담보재사용 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    knx_asset_evltv: str | None = Field(None, alias='knx_asset_evltv', description='코넥스기본예탁금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    elwdpst_evlta: str | None = Field(None, alias='elwdpst_evlta', description='ELW예탁평가금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    crd_ls_rght_frcs_amt: str | None = Field(None, alias='crd_ls_rght_frcs_amt', description='신용대주권리예정금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    lvlh_join_amt: str | None = Field(None, alias='lvlh_join_amt', description='생계형가입금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    lvlh_trns_alowa: str | None = Field(None, alias='lvlh_trns_alowa', description='생계형입금가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+
+
+class Kt00001SubstituteCollateralResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00001'
+    repl_amt: str | None = Field(None, alias='repl_amt', description='대용금평가금액(합계) — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    remn_repl_evlta: str | None = Field(None, alias='remn_repl_evlta', description='잔고대용평가금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    trst_remn_repl_evlta: str | None = Field(None, alias='trst_remn_repl_evlta', description='위탁대용잔고평가금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    bncr_remn_repl_evlta: str | None = Field(None, alias='bncr_remn_repl_evlta', description='수익증권대용평가금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    profa_repl: str | None = Field(None, alias='profa_repl', description='위탁증거금대용 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    crd_grnta_repl: str | None = Field(None, alias='crd_grnta_repl', description='신용보증금대용 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    crd_grnt_repl: str | None = Field(None, alias='crd_grnt_repl', description='신용담보금대용 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    add_grnt_repl: str | None = Field(None, alias='add_grnt_repl', description='추가담보금대용 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    rght_repl_amt: str | None = Field(None, alias='rght_repl_amt', description='권리대용금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+
+
+class Kt00001WithdrawalAndOrderCapacityResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00001'
+    pymn_alow_amt: str | None = Field(None, alias='pymn_alow_amt', description='출금가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    wrap_pymn_alow_amt: str | None = Field(None, alias='wrap_pymn_alow_amt', description='랩출금가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    ord_alow_amt: str | None = Field(None, alias='ord_alow_amt', description='주문가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    bncr_buy_alowa: str | None = Field(None, alias='bncr_buy_alowa', description='수익증권매수가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    f_20stk_ord_alow_amt: str | None = Field(None, alias='20stk_ord_alow_amt', description='20%종목주문가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    f_30stk_ord_alow_amt: str | None = Field(None, alias='30stk_ord_alow_amt', description='30%종목주문가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    f_40stk_ord_alow_amt: str | None = Field(None, alias='40stk_ord_alow_amt', description='40%종목주문가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    f_100stk_ord_alow_amt: str | None = Field(None, alias='100stk_ord_alow_amt', description='100%종목주문가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    f_50stk_ord_alow_amt: str | None = Field(None, alias='50stk_ord_alow_amt', description='50%종목주문가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    f_60stk_ord_alow_amt: str | None = Field(None, alias='60stk_ord_alow_amt', description='60%종목주문가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+
+
+class Kt00001ReceivablesAndArrearsResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00001'
+    ch_uncla: str | None = Field(None, alias='ch_uncla', description='현금미수금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    ch_uncla_dlfe: str | None = Field(None, alias='ch_uncla_dlfe', description='현금미수연체료 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    ch_uncla_tot: str | None = Field(None, alias='ch_uncla_tot', description='현금미수금합계 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    crd_int_npay: str | None = Field(None, alias='crd_int_npay', description='신용이자미납 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    int_npay_amt_dlfe: str | None = Field(None, alias='int_npay_amt_dlfe', description='신용이자미납연체료 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    int_npay_amt_tot: str | None = Field(None, alias='int_npay_amt_tot', description='신용이자미납합계 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    etc_loana: str | None = Field(None, alias='etc_loana', description='기타대여금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    etc_loana_dlfe: str | None = Field(None, alias='etc_loana_dlfe', description='기타대여금연체료 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    etc_loan_tot: str | None = Field(None, alias='etc_loan_tot', description='기타대여금합계 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+
+
+class Kt00001LoansAndCollateralResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00001'
+    nrpy_loan: str | None = Field(None, alias='nrpy_loan', description='미상환융자금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    loan_sum: str | None = Field(None, alias='loan_sum', description='융자금합계 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    ls_sum: str | None = Field(None, alias='ls_sum', description='대주금합계 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    crd_grnt_rt: str | None = Field(None, alias='crd_grnt_rt', description='신용담보비율 — 단위: %, 소수점 둘째 자리까지 포맷된 백분율')
+    mdstrm_usfe: str | None = Field(None, alias='mdstrm_usfe', description='중도이용료 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    min_ord_alow_yn: str | None = Field(None, alias='min_ord_alow_yn', description='최소주문가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    loan_remn_evlt_amt: str | None = Field(None, alias='loan_remn_evlt_amt', description='대출총평가금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    dpst_grntl_remn: str | None = Field(None, alias='dpst_grntl_remn', description='예탁담보대출잔고 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    sell_grntl_remn: str | None = Field(None, alias='sell_grntl_remn', description='매도담보대출잔고 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+
+
+class Kt00001SettlementForecastResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00001'
+    d1_entra: str | None = Field(None, alias='d1_entra', description='d+1추정예수금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    d1_slby_exct_amt: str | None = Field(None, alias='d1_slby_exct_amt', description='d+1매도매수정산금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    d1_buy_exct_amt: str | None = Field(None, alias='d1_buy_exct_amt', description='d+1매수정산금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    d1_out_rep_mor: str | None = Field(None, alias='d1_out_rep_mor', description='d+1미수변제소요금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    d1_sel_exct_amt: str | None = Field(None, alias='d1_sel_exct_amt', description='d+1매도정산금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    d1_pymn_alow_amt: str | None = Field(None, alias='d1_pymn_alow_amt', description='d+1출금가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    d2_entra: str | None = Field(None, alias='d2_entra', description='d+2추정예수금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    d2_slby_exct_amt: str | None = Field(None, alias='d2_slby_exct_amt', description='d+2매도매수정산금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    d2_buy_exct_amt: str | None = Field(None, alias='d2_buy_exct_amt', description='d+2매수정산금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    d2_out_rep_mor: str | None = Field(None, alias='d2_out_rep_mor', description='d+2미수변제소요금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    d2_sel_exct_amt: str | None = Field(None, alias='d2_sel_exct_amt', description='d+2매도정산금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    d2_pymn_alow_amt: str | None = Field(None, alias='d2_pymn_alow_amt', description='d+2출금가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+
+
+class Kt00001ForeignCurrencyDepositsResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00001'
+    stk_entr_prst: list[Kt00001ResponseStkEntrPrstItem] = Field(default_factory=list, alias='stk_entr_prst', description='종목별예수금')
+
+
+class Kt00004AccountIdentityResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00004'
+    acnt_nm: str | None = Field(None, alias='acnt_nm', description='계좌명')
+    brch_nm: str | None = Field(None, alias='brch_nm', description='지점명')
+
+
+class Kt00004CashAndAssetsResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00004'
+    entr: str | None = Field(None, alias='entr', description='예수금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    d2_entra: str | None = Field(None, alias='d2_entra', description='D+2추정예수금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    tot_est_amt: str | None = Field(None, alias='tot_est_amt', description='유가잔고평가액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    aset_evlt_amt: str | None = Field(None, alias='aset_evlt_amt', description='예탁자산평가액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    tot_pur_amt: str | None = Field(None, alias='tot_pur_amt', description='총매입금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    prsm_dpst_aset_amt: str | None = Field(None, alias='prsm_dpst_aset_amt', description='추정예탁자산 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    tot_grnt_sella: str | None = Field(None, alias='tot_grnt_sella', description='매도담보대출금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+
+
+class Kt00004ProfitAndLossResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00004'
+    tdy_lspft_amt: str | None = Field(None, alias='tdy_lspft_amt', description='당일투자원금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    invt_bsamt: str | None = Field(None, alias='invt_bsamt', description='당월투자원금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    lspft_amt: str | None = Field(None, alias='lspft_amt', description='누적투자원금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    tdy_lspft: str | None = Field(None, alias='tdy_lspft', description='당일투자손익 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    lspft2: str | None = Field(None, alias='lspft2', description='당월투자손익 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    lspft: str | None = Field(None, alias='lspft', description='누적투자손익 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    tdy_lspft_rt: str | None = Field(None, alias='tdy_lspft_rt', description='당일손익율 — 단위: %, 소수점 둘째 자리까지 포맷된 백분율')
+    lspft_ratio: str | None = Field(None, alias='lspft_ratio', description='당월손익율 — 단위: %, 소수점 둘째 자리까지 포맷된 백분율')
+    lspft_rt: str | None = Field(None, alias='lspft_rt', description='누적손익율 — 단위: %, 소수점 둘째 자리까지 포맷된 백분율')
+
+
+class Kt00004PositionValuationResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00004'
+    stk_acnt_evlt_prst: list[Kt00004ResponseStkAcntEvltPrstItem] = Field(default_factory=list, alias='stk_acnt_evlt_prst', description='종목별계좌평가현황')
+
+
+class Kt00005CashAndCapacityResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00005'
+    entr: str | None = Field(None, alias='entr', description='예수금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    entr_d1: str | None = Field(None, alias='entr_d1', description='예수금D+1 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    entr_d2: str | None = Field(None, alias='entr_d2', description='예수금D+2 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    pymn_alow_amt: str | None = Field(None, alias='pymn_alow_amt', description='출금가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    uncl_stk_amt: str | None = Field(None, alias='uncl_stk_amt', description='미수확보금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    repl_amt: str | None = Field(None, alias='repl_amt', description='대용금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    rght_repl_amt: str | None = Field(None, alias='rght_repl_amt', description='권리대용금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    ord_alowa: str | None = Field(None, alias='ord_alowa', description='주문가능현금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+
+
+class Kt00005ReceivablesAndMarginResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00005'
+    ch_uncla: str | None = Field(None, alias='ch_uncla', description='현금미수금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    crd_int_npay_gold: str | None = Field(None, alias='crd_int_npay_gold', description='신용이자미납금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    etc_loana: str | None = Field(None, alias='etc_loana', description='기타대여금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    nrpy_loan: str | None = Field(None, alias='nrpy_loan', description='미상환융자금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    profa_ch: str | None = Field(None, alias='profa_ch', description='증거금현금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    repl_profa: str | None = Field(None, alias='repl_profa', description='증거금대용 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+
+
+class Kt00005PortfolioSummaryResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00005'
+    stk_buy_tot_amt: str | None = Field(None, alias='stk_buy_tot_amt', description='주식매수총액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    evlt_amt_tot: str | None = Field(None, alias='evlt_amt_tot', description='평가금액합계 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    tot_pl_tot: str | None = Field(None, alias='tot_pl_tot', description='총손익합계 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    tot_pl_rt: str | None = Field(None, alias='tot_pl_rt', description='총손익률 — 단위: %, 소수점 넷째 자리까지 포맷된 백분율')
+    tot_re_buy_alowa: str | None = Field(None, alias='tot_re_buy_alowa', description='총재매수가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+
+
+class Kt00005MarginOrderCapacityResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00005'
+    f_20ord_alow_amt: str | None = Field(None, alias='20ord_alow_amt', description='20%주문가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    f_30ord_alow_amt: str | None = Field(None, alias='30ord_alow_amt', description='30%주문가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    f_40ord_alow_amt: str | None = Field(None, alias='40ord_alow_amt', description='40%주문가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    f_50ord_alow_amt: str | None = Field(None, alias='50ord_alow_amt', description='50%주문가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    f_60ord_alow_amt: str | None = Field(None, alias='60ord_alow_amt', description='60%주문가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    f_100ord_alow_amt: str | None = Field(None, alias='100ord_alow_amt', description='100%주문가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+
+
+class Kt00005CreditAndCollateralResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00005'
+    crd_loan_tot: str | None = Field(None, alias='crd_loan_tot', description='신용융자합계 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    crd_loan_ls_tot: str | None = Field(None, alias='crd_loan_ls_tot', description='신용융자대주합계 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    crd_grnt_rt: str | None = Field(None, alias='crd_grnt_rt', description='신용담보비율 — 단위: %, 소수점 둘째 자리까지 포맷된 백분율')
+    dpst_grnt_use_amt_amt: str | None = Field(None, alias='dpst_grnt_use_amt_amt', description='예탁담보대출금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    grnt_loan_amt: str | None = Field(None, alias='grnt_loan_amt', description='매도담보대출금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+
+
+class Kt00005SettledPositionsResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00005'
+    stk_cntr_remn: list[Kt00005ResponseStkCntrRemnItem] = Field(default_factory=list, alias='stk_cntr_remn', description='종목별체결잔고')
+
+
+class Kt00009ContractAmountsResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00009'
+    sell_grntl_engg_amt: str | None = Field(None, alias='sell_grntl_engg_amt', description='매도약정금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    buy_engg_amt: str | None = Field(None, alias='buy_engg_amt', description='매수약정금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    engg_amt: str | None = Field(None, alias='engg_amt', description='약정금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+
+
+class Kt00009OrderExecutionStatusResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00009'
+    acnt_ord_cntr_prst_array: list[Kt00009ResponseAcntOrdCntrPrstArrayItem] = Field(default_factory=list, alias='acnt_ord_cntr_prst_array', description='계좌별주문체결현황배열')
+
+
+class Kt00010MarginOrderCapacityResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00010'
+    profa_20ord_alow_amt: str | None = Field(None, alias='profa_20ord_alow_amt', description='증거금20%주문가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    profa_20ord_alowq: str | None = Field(None, alias='profa_20ord_alowq', description='증거금20%주문가능수량 — 단위: 1주, 좌측 0-padding 처리된 부호 포함 10자리 숫자')
+    profa_30ord_alow_amt: str | None = Field(None, alias='profa_30ord_alow_amt', description='증거금30%주문가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    profa_30ord_alowq: str | None = Field(None, alias='profa_30ord_alowq', description='증거금30%주문가능수량 — 단위: 1주, 좌측 0-padding 처리된 부호 포함 10자리 숫자')
+    profa_40ord_alow_amt: str | None = Field(None, alias='profa_40ord_alow_amt', description='증거금40%주문가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    profa_40ord_alowq: str | None = Field(None, alias='profa_40ord_alowq', description='증거금40%주문가능수량 — 단위: 1주, 좌측 0-padding 처리된 부호 포함 10자리 숫자')
+    profa_50ord_alow_amt: str | None = Field(None, alias='profa_50ord_alow_amt', description='증거금50%주문가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    profa_50ord_alowq: str | None = Field(None, alias='profa_50ord_alowq', description='증거금50%주문가능수량 — 단위: 1주, 좌측 0-padding 처리된 부호 포함 10자리 숫자')
+    profa_60ord_alow_amt: str | None = Field(None, alias='profa_60ord_alow_amt', description='증거금60%주문가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    profa_60ord_alowq: str | None = Field(None, alias='profa_60ord_alowq', description='증거금60%주문가능수량 — 단위: 1주, 좌측 0-padding 처리된 부호 포함 10자리 숫자')
+    profa_rdex_60ord_alow_amt: str | None = Field(None, alias='profa_rdex_60ord_alow_amt', description='증거금감면60%주문가능금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    profa_rdex_60ord_alowq: str | None = Field(None, alias='profa_rdex_60ord_alowq', description='증거금감면60%주문가능수 — 단위: 1주, 좌측 0-padding 처리된 부호 포함 10자리 숫자')
+    profa_100ord_alow_amt: str | None = Field(None, alias='profa_100ord_alow_amt', description='증거금100%주문가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    profa_100ord_alowq: str | None = Field(None, alias='profa_100ord_alowq', description='증거금100%주문가능수량 — 단위: 1주, 좌측 0-padding 처리된 부호 포함 10자리 숫자')
+
+
+class Kt00010CashAndWithdrawalCapacityResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00010'
+    pred_reu_alowa: str | None = Field(None, alias='pred_reu_alowa', description='전일재사용가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    tdy_reu_alowa: str | None = Field(None, alias='tdy_reu_alowa', description='금일재사용가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    entr: str | None = Field(None, alias='entr', description='예수금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    repl_amt: str | None = Field(None, alias='repl_amt', description='대용금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    uncla: str | None = Field(None, alias='uncla', description='미수금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    ord_pos_repl: str | None = Field(None, alias='ord_pos_repl', description='주문가능대용 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    ord_alowa: str | None = Field(None, alias='ord_alowa', description='주문가능현금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    wthd_alowa: str | None = Field(None, alias='wthd_alowa', description='인출가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    nxdy_wthd_alowa: str | None = Field(None, alias='nxdy_wthd_alowa', description='익일인출가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+
+
+class Kt00010PurchaseSettlementResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00010'
+    pur_amt: str | None = Field(None, alias='pur_amt', description='매입금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    cmsn: str | None = Field(None, alias='cmsn', description='수수료 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    pur_exct_amt: str | None = Field(None, alias='pur_exct_amt', description='매입정산금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    d2entra: str | None = Field(None, alias='d2entra', description='D2추정예수금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    profa_rdex_aplc_tp: str | None = Field(None, alias='profa_rdex_aplc_tp', description='증거금감면적용구분 — 0:일반,1:60%감면')
+
+
+class Kt00011MarginRatesResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00011'
+    stk_profa_rt: str | None = Field(None, alias='stk_profa_rt', description='종목증거금율 — %가 포함된 백분율 값')
+    profa_rt: str | None = Field(None, alias='profa_rt', description='계좌증거금율 — %가 포함된 백분율 값')
+    aplc_rt: str | None = Field(None, alias='aplc_rt', description='적용증거금율 — %가 포함된 백분율 값')
+
+
+class Kt00011MarginCapacity20To50Response(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00011'
+    profa_20ord_alow_amt: str | None = Field(None, alias='profa_20ord_alow_amt', description='증거금20%주문가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    profa_20ord_alowq: str | None = Field(None, alias='profa_20ord_alowq', description='증거금20%주문가능수량 — 단위: 1주, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    profa_20pred_reu_amt: str | None = Field(None, alias='profa_20pred_reu_amt', description='증거금20%전일재사용금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    profa_20tdy_reu_amt: str | None = Field(None, alias='profa_20tdy_reu_amt', description='증거금20%금일재사용금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    profa_30ord_alow_amt: str | None = Field(None, alias='profa_30ord_alow_amt', description='증거금30%주문가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    profa_30ord_alowq: str | None = Field(None, alias='profa_30ord_alowq', description='증거금30%주문가능수량 — 단위: 1주, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    profa_30pred_reu_amt: str | None = Field(None, alias='profa_30pred_reu_amt', description='증거금30%전일재사용금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    profa_30tdy_reu_amt: str | None = Field(None, alias='profa_30tdy_reu_amt', description='증거금30%금일재사용금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    profa_40ord_alow_amt: str | None = Field(None, alias='profa_40ord_alow_amt', description='증거금40%주문가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    profa_40ord_alowq: str | None = Field(None, alias='profa_40ord_alowq', description='증거금40%주문가능수량 — 단위: 1주, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    profa_40pred_reu_amt: str | None = Field(None, alias='profa_40pred_reu_amt', description='증거금40전일재사용금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    profa_40tdy_reu_amt: str | None = Field(None, alias='profa_40tdy_reu_amt', description='증거금40%금일재사용금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    profa_50ord_alow_amt: str | None = Field(None, alias='profa_50ord_alow_amt', description='증거금50%주문가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    profa_50ord_alowq: str | None = Field(None, alias='profa_50ord_alowq', description='증거금50%주문가능수량 — 단위: 1주, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    profa_50pred_reu_amt: str | None = Field(None, alias='profa_50pred_reu_amt', description='증거금50%전일재사용금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    profa_50tdy_reu_amt: str | None = Field(None, alias='profa_50tdy_reu_amt', description='증거금50%금일재사용금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+
+
+class Kt00011MarginCapacity60ToCashOnlyResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00011'
+    profa_60ord_alow_amt: str | None = Field(None, alias='profa_60ord_alow_amt', description='증거금60%주문가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    profa_60ord_alowq: str | None = Field(None, alias='profa_60ord_alowq', description='증거금60%주문가능수량 — 단위: 1주, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    profa_60pred_reu_amt: str | None = Field(None, alias='profa_60pred_reu_amt', description='증거금60%전일재사용금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    profa_60tdy_reu_amt: str | None = Field(None, alias='profa_60tdy_reu_amt', description='증거금60%금일재사용금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    profa_100ord_alow_amt: str | None = Field(None, alias='profa_100ord_alow_amt', description='증거금100%주문가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    profa_100ord_alowq: str | None = Field(None, alias='profa_100ord_alowq', description='증거금100%주문가능수량 — 단위: 1주, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    profa_100pred_reu_amt: str | None = Field(None, alias='profa_100pred_reu_amt', description='증거금100%전일재사용금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    profa_100tdy_reu_amt: str | None = Field(None, alias='profa_100tdy_reu_amt', description='증거금100%금일재사용금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    min_ord_alow_amt: str | None = Field(None, alias='min_ord_alow_amt', description='미수불가주문가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    min_ord_alowq: str | None = Field(None, alias='min_ord_alowq', description='미수불가주문가능수량 — 단위: 1주, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    min_pred_reu_amt: str | None = Field(None, alias='min_pred_reu_amt', description='미수불가전일재사용금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    min_tdy_reu_amt: str | None = Field(None, alias='min_tdy_reu_amt', description='미수불가금일재사용금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+
+
+class Kt00011AccountFundingResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00011'
+    entr: str | None = Field(None, alias='entr', description='예수금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    repl_amt: str | None = Field(None, alias='repl_amt', description='대용금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    uncla: str | None = Field(None, alias='uncla', description='미수금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    ord_pos_repl: str | None = Field(None, alias='ord_pos_repl', description='주문가능대용 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    ord_alowa: str | None = Field(None, alias='ord_alowa', description='주문가능현금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+
+
+class Kt00012GuaranteeRateResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00012'
+    stk_assr_rt: str | None = Field(None, alias='stk_assr_rt', description='종목보증금율')
+    stk_assr_rt_nm: str | None = Field(None, alias='stk_assr_rt_nm', description='종목보증금율명')
+
+
+class Kt00012GuaranteeOrderCapacityResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00012'
+    assr_30ord_alow_amt: str | None = Field(None, alias='assr_30ord_alow_amt', description='보증금30%주문가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    assr_30ord_alowq: str | None = Field(None, alias='assr_30ord_alowq', description='보증금30%주문가능수량 — 단위: 1주, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    assr_30pred_reu_amt: str | None = Field(None, alias='assr_30pred_reu_amt', description='보증금30%전일재사용금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    assr_30tdy_reu_amt: str | None = Field(None, alias='assr_30tdy_reu_amt', description='보증금30%금일재사용금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    assr_40ord_alow_amt: str | None = Field(None, alias='assr_40ord_alow_amt', description='보증금40%주문가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    assr_40ord_alowq: str | None = Field(None, alias='assr_40ord_alowq', description='보증금40%주문가능수량 — 단위: 1주, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    assr_40pred_reu_amt: str | None = Field(None, alias='assr_40pred_reu_amt', description='보증금40%전일재사용금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    assr_40tdy_reu_amt: str | None = Field(None, alias='assr_40tdy_reu_amt', description='보증금40%금일재사용금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    assr_50ord_alow_amt: str | None = Field(None, alias='assr_50ord_alow_amt', description='보증금50%주문가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    assr_50ord_alowq: str | None = Field(None, alias='assr_50ord_alowq', description='보증금50%주문가능수량 — 단위: 1주, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    assr_50pred_reu_amt: str | None = Field(None, alias='assr_50pred_reu_amt', description='보증금50%전일재사용금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    assr_50tdy_reu_amt: str | None = Field(None, alias='assr_50tdy_reu_amt', description='보증금50%금일재사용금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    assr_60ord_alow_amt: str | None = Field(None, alias='assr_60ord_alow_amt', description='보증금60%주문가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    assr_60ord_alowq: str | None = Field(None, alias='assr_60ord_alowq', description='보증금60%주문가능수량 — 단위: 1주, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    assr_60pred_reu_amt: str | None = Field(None, alias='assr_60pred_reu_amt', description='보증금60%전일재사용금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    assr_60tdy_reu_amt: str | None = Field(None, alias='assr_60tdy_reu_amt', description='보증금60%금일재사용금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+
+
+class Kt00012AccountAndReceivableCapacityResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00012'
+    entr: str | None = Field(None, alias='entr', description='예수금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    repl_amt: str | None = Field(None, alias='repl_amt', description='대용금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    uncla: str | None = Field(None, alias='uncla', description='미수금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    ord_pos_repl: str | None = Field(None, alias='ord_pos_repl', description='주문가능대용 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    ord_alowa: str | None = Field(None, alias='ord_alowa', description='주문가능현금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    out_alowa: str | None = Field(None, alias='out_alowa', description='미수가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    out_pos_qty: str | None = Field(None, alias='out_pos_qty', description='미수가능수량 — 단위: 1주, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    min_amt: str | None = Field(None, alias='min_amt', description='미수불가금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    min_qty: str | None = Field(None, alias='min_qty', description='미수불가수량 — 단위: 1주, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+
+
+class Kt00013TodayReuseResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00013'
+    tdy_reu_objt_amt: str | None = Field(None, alias='tdy_reu_objt_amt', description='금일재사용대상금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    tdy_reu_use_amt: str | None = Field(None, alias='tdy_reu_use_amt', description='금일재사용사용금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    tdy_reu_alowa: str | None = Field(None, alias='tdy_reu_alowa', description='금일재사용가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    tdy_reu_lmtt_amt: str | None = Field(None, alias='tdy_reu_lmtt_amt', description='금일재사용제한금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    tdy_reu_alowa_fin: str | None = Field(None, alias='tdy_reu_alowa_fin', description='금일재사용가능금액최종 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+
+
+class Kt00013PreviousDayReuseResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00013'
+    pred_reu_objt_amt: str | None = Field(None, alias='pred_reu_objt_amt', description='전일재사용대상금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    pred_reu_use_amt: str | None = Field(None, alias='pred_reu_use_amt', description='전일재사용사용금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    pred_reu_alowa: str | None = Field(None, alias='pred_reu_alowa', description='전일재사용가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    pred_reu_lmtt_amt: str | None = Field(None, alias='pred_reu_lmtt_amt', description='전일재사용제한금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    pred_reu_alowa_fin: str | None = Field(None, alias='pred_reu_alowa_fin', description='전일재사용가능금액최종 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+
+
+class Kt00013CashResourcesResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00013'
+    ch_amt: str | None = Field(None, alias='ch_amt', description='현금금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    ch_profa: str | None = Field(None, alias='ch_profa', description='현금증거금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    use_pos_ch: str | None = Field(None, alias='use_pos_ch', description='사용가능현금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    ch_use_lmtt_amt: str | None = Field(None, alias='ch_use_lmtt_amt', description='현금사용제한금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    use_pos_ch_fin: str | None = Field(None, alias='use_pos_ch_fin', description='사용가능현금최종 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+
+
+class Kt00013SubstituteResourcesResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00013'
+    repl_amt_amt: str | None = Field(None, alias='repl_amt_amt', description='대용금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    repl_profa: str | None = Field(None, alias='repl_profa', description='대용증거금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    use_pos_repl: str | None = Field(None, alias='use_pos_repl', description='사용가능대용 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    repl_use_lmtt_amt: str | None = Field(None, alias='repl_use_lmtt_amt', description='대용사용제한금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    use_pos_repl_fin: str | None = Field(None, alias='use_pos_repl_fin', description='사용가능대용최종 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+
+
+class Kt00013CreditAndLendingCollateralResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00013'
+    crd_grnta_ch: str | None = Field(None, alias='crd_grnta_ch', description='신용보증금현금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    crd_grnta_repl: str | None = Field(None, alias='crd_grnta_repl', description='신용보증금대용 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    crd_grnt_ch: str | None = Field(None, alias='crd_grnt_ch', description='신용담보금현금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    crd_grnt_repl: str | None = Field(None, alias='crd_grnt_repl', description='신용담보금대용 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    uncla: str | None = Field(None, alias='uncla', description='미수금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    ls_grnt_reu_gold: str | None = Field(None, alias='ls_grnt_reu_gold', description='대주담보금재사용금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+
+
+class Kt00013MarginOrderCapacityResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00013'
+    f_20ord_alow_amt: str | None = Field(None, alias='20ord_alow_amt', description='20%주문가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    f_30ord_alow_amt: str | None = Field(None, alias='30ord_alow_amt', description='30%주문가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    f_40ord_alow_amt: str | None = Field(None, alias='40ord_alow_amt', description='40%주문가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    f_50ord_alow_amt: str | None = Field(None, alias='50ord_alow_amt', description='50%주문가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    f_60ord_alow_amt: str | None = Field(None, alias='60ord_alow_amt', description='60%주문가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    f_100ord_alow_amt: str | None = Field(None, alias='100ord_alow_amt', description='100%주문가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+
+
+class Kt00013RepaymentLossesResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00013'
+    tdy_crd_rpya_loss_amt: str | None = Field(None, alias='tdy_crd_rpya_loss_amt', description='금일신용상환손실금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    pred_crd_rpya_loss_amt: str | None = Field(None, alias='pred_crd_rpya_loss_amt', description='전일신용상환손실금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    tdy_ls_rpya_loss_repl_profa: str | None = Field(None, alias='tdy_ls_rpya_loss_repl_profa', description='금일대주상환손실대용증거금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    pred_ls_rpya_loss_repl_profa: str | None = Field(None, alias='pred_ls_rpya_loss_repl_profa', description='전일대주상환손실대용증거금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+
+
+class Kt00013SubstituteValuationAndLimitsResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00013'
+    evlt_repl_amt_spg_use_skip: str | None = Field(None, alias='evlt_repl_amt_spg_use_skip', description='평가대용금(현물사용제외) — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    evlt_repl_rt: str | None = Field(None, alias='evlt_repl_rt', description='평가대용비율 — 단위: %, 소수점 일곱번째 자리까지 포맷된 백분율')
+    crd_repl_profa: str | None = Field(None, alias='crd_repl_profa', description='신용대용증거금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    ch_ord_repl_profa: str | None = Field(None, alias='ch_ord_repl_profa', description='현금주문대용증거금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    crd_ord_repl_profa: str | None = Field(None, alias='crd_ord_repl_profa', description='신용주문대용증거금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    crd_repl_conv_gold: str | None = Field(None, alias='crd_repl_conv_gold', description='신용대용환산금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    repl_alowa: str | None = Field(None, alias='repl_alowa', description='대용가능금액(현금제한) — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    repl_alowa_2: str | None = Field(None, alias='repl_alowa_2', description='대용가능금액2(신용제한) — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    ch_repl_lck_gold: str | None = Field(None, alias='ch_repl_lck_gold', description='현금대용부족금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    crd_repl_lck_gold: str | None = Field(None, alias='crd_repl_lck_gold', description='신용대용부족금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    ch_ord_alow_repla: str | None = Field(None, alias='ch_ord_alow_repla', description='현금주문가능대용금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    crd_ord_alow_repla: str | None = Field(None, alias='crd_ord_alow_repla', description='신용주문가능대용금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+
+
+class Kt00013D2FundingCapacityResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00013'
+    d2vexct_entr: str | None = Field(None, alias='d2vexct_entr', description='D2가정산예수금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    d2ch_ord_alow_amt: str | None = Field(None, alias='d2ch_ord_alow_amt', description='D2현금주문가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+
+
+class Kt00016AccountManagerResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00016'
+    mang_empno: str | None = Field(None, alias='mang_empno', description='관리사원번호')
+    mngr_nm: str | None = Field(None, alias='mngr_nm', description='관리자명')
+    dept_nm: str | None = Field(None, alias='dept_nm', description='관리자지점')
+
+
+class Kt00016AssetBalanceChangeResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00016'
+    entr_fr: str | None = Field(None, alias='entr_fr', description='예수금_초 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    entr_to: str | None = Field(None, alias='entr_to', description='예수금_말 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    scrt_evlt_amt_fr: str | None = Field(None, alias='scrt_evlt_amt_fr', description='유가증권평가금액_초 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    scrt_evlt_amt_to: str | None = Field(None, alias='scrt_evlt_amt_to', description='유가증권평가금액_말 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    ls_grnt_fr: str | None = Field(None, alias='ls_grnt_fr', description='대주담보금_초 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    ls_grnt_to: str | None = Field(None, alias='ls_grnt_to', description='대주담보금_말 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    crd_loan_fr: str | None = Field(None, alias='crd_loan_fr', description='신용융자금_초 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    crd_loan_to: str | None = Field(None, alias='crd_loan_to', description='신용융자금_말 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    ch_uncla_fr: str | None = Field(None, alias='ch_uncla_fr', description='현금미수금_초 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    ch_uncla_to: str | None = Field(None, alias='ch_uncla_to', description='현금미수금_말 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    krw_asgna_fr: str | None = Field(None, alias='krw_asgna_fr', description='원화대용금_초 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    krw_asgna_to: str | None = Field(None, alias='krw_asgna_to', description='원화대용금_말 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    ls_evlta_fr: str | None = Field(None, alias='ls_evlta_fr', description='대주평가금_초 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    ls_evlta_to: str | None = Field(None, alias='ls_evlta_to', description='대주평가금_말 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    rght_evlta_fr: str | None = Field(None, alias='rght_evlta_fr', description='권리평가금_초 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    rght_evlta_to: str | None = Field(None, alias='rght_evlta_to', description='권리평가금_말 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+
+
+class Kt00016LiabilityBalanceChangeResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00016'
+    loan_amt_fr: str | None = Field(None, alias='loan_amt_fr', description='대출금_초 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    loan_amt_to: str | None = Field(None, alias='loan_amt_to', description='대출금_말 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    etc_loana_fr: str | None = Field(None, alias='etc_loana_fr', description='기타대여금_초 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    etc_loana_to: str | None = Field(None, alias='etc_loana_to', description='기타대여금_말 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    crd_int_npay_gold_fr: str | None = Field(None, alias='crd_int_npay_gold_fr', description='신용이자미납금_초 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    crd_int_npay_gold_to: str | None = Field(None, alias='crd_int_npay_gold_to', description='신용이자미납금_말 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    crd_int_fr: str | None = Field(None, alias='crd_int_fr', description='신용이자_초 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    crd_int_to: str | None = Field(None, alias='crd_int_to', description='신용이자_말 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+
+
+class Kt00016PerformanceSummaryResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00016'
+    tot_amt_fr: str | None = Field(None, alias='tot_amt_fr', description='순자산액계_초 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    tot_amt_to: str | None = Field(None, alias='tot_amt_to', description='순자산액계_말 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    invt_bsamt: str | None = Field(None, alias='invt_bsamt', description='투자원금평잔 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    evltv_prft: str | None = Field(None, alias='evltv_prft', description='평가손익 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    prft_rt: str | None = Field(None, alias='prft_rt', description='수익률 — 단위: %, 소수점 둘째 자리까지 포맷된 백분율')
+    tern_rt: str | None = Field(None, alias='tern_rt', description='회전율 — 단위: %, 소수점 둘째 자리까지 포맷된 백분율')
+
+
+class Kt00016PeriodFlowsResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00016'
+    termin_tot_trns: str | None = Field(None, alias='termin_tot_trns', description='기간내총입금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    termin_tot_pymn: str | None = Field(None, alias='termin_tot_pymn', description='기간내총출금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    termin_tot_inq: str | None = Field(None, alias='termin_tot_inq', description='기간내총입고 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    termin_tot_outq: str | None = Field(None, alias='termin_tot_outq', description='기간내총출고 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    futr_repl_sella: str | None = Field(None, alias='futr_repl_sella', description='선물대용매도금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    trst_repl_sella: str | None = Field(None, alias='trst_repl_sella', description='위탁대용매도금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+
+
+class Kt00017D2AccountPositionResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00017'
+    d2_entra: str | None = Field(None, alias='d2_entra', description='D+2추정예수금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    crd_int_npay_gold: str | None = Field(None, alias='crd_int_npay_gold', description='신용이자미납금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    etc_loana: str | None = Field(None, alias='etc_loana', description='기타대여금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    gnrl_stk_evlt_amt_d2: str | None = Field(None, alias='gnrl_stk_evlt_amt_d2', description='일반주식평가금액D+2 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    dpst_grnt_use_amt_d2: str | None = Field(None, alias='dpst_grnt_use_amt_d2', description='예탁담보대출금D+2 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    crd_stk_evlt_amt_d2: str | None = Field(None, alias='crd_stk_evlt_amt_d2', description='예탁담보주식평가금액D+2 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    crd_loan_d2: str | None = Field(None, alias='crd_loan_d2', description='신용융자금D+2 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    crd_loan_evlta_d2: str | None = Field(None, alias='crd_loan_evlta_d2', description='신용융자평가금D+2 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    crd_ls_grnt_d2: str | None = Field(None, alias='crd_ls_grnt_d2', description='신용대주담보금D+2 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    crd_ls_evlta_d2: str | None = Field(None, alias='crd_ls_evlta_d2', description='신용대주평가금D+2 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+
+
+class Kt00017DailyCashAndTradingFlowsResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00017'
+    ina_amt: str | None = Field(None, alias='ina_amt', description='입금금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    outa: str | None = Field(None, alias='outa', description='출금금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    inq_amt: str | None = Field(None, alias='inq_amt', description='입고금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    outq_amt: str | None = Field(None, alias='outq_amt', description='출고금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    sell_amt: str | None = Field(None, alias='sell_amt', description='매도금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    buy_amt: str | None = Field(None, alias='buy_amt', description='매수금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    cmsn: str | None = Field(None, alias='cmsn', description='수수료 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    tax: str | None = Field(None, alias='tax', description='세금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+
+
+class Kt00017OtherAssetsAndIncomeResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00017'
+    stk_pur_cptal_loan_amt: str | None = Field(None, alias='stk_pur_cptal_loan_amt', description='주식매입자금대출금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    rp_evlt_amt: str | None = Field(None, alias='rp_evlt_amt', description='RP평가금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    bd_evlt_amt: str | None = Field(None, alias='bd_evlt_amt', description='채권평가금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    elsevlt_amt: str | None = Field(None, alias='elsevlt_amt', description='ELS평가금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    crd_int_amt: str | None = Field(None, alias='crd_int_amt', description='신용이자금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    sel_prica_grnt_loan_int_amt_amt: str | None = Field(None, alias='sel_prica_grnt_loan_int_amt_amt', description='매도대금담보대출이자금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    dvida_amt: str | None = Field(None, alias='dvida_amt', description='배당금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+
+
+class Kt00018PortfolioSummaryResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00018'
+    tot_pur_amt: str | None = Field(None, alias='tot_pur_amt', description='총매입금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    tot_evlt_amt: str | None = Field(None, alias='tot_evlt_amt', description='총평가금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    tot_evlt_pl: str | None = Field(None, alias='tot_evlt_pl', description='총평가손익금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    tot_prft_rt: str | None = Field(None, alias='tot_prft_rt', description='총수익률(%) — 단위: %, 소수점 둘째 자리까지 포맷된 백분율')
+    prsm_dpst_aset_amt: str | None = Field(None, alias='prsm_dpst_aset_amt', description='추정예탁자산 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+
+
+class Kt00018FinancingSummaryResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00018'
+    tot_loan_amt: str | None = Field(None, alias='tot_loan_amt', description='총대출금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    tot_crd_loan_amt: str | None = Field(None, alias='tot_crd_loan_amt', description='총융자금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+    tot_crd_ls_amt: str | None = Field(None, alias='tot_crd_ls_amt', description='총대주금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 15자리 숫자')
+
+
+class Kt00018HoldingsResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt00018'
+    acnt_evlt_remn_indv_tot: list[Kt00018ResponseAcntEvltRemnIndvTotItem] = Field(default_factory=list, alias='acnt_evlt_remn_indv_tot', description='계좌평가잔고개별합산')
+
+
+class Kt50020GoldAccountSummaryResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt50020'
+    tot_entr: str | None = Field(None, alias='tot_entr', description='예수금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    net_entr: str | None = Field(None, alias='net_entr', description='추정예수금 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    tot_est_amt: str | None = Field(None, alias='tot_est_amt', description='잔고평가액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    net_amt: str | None = Field(None, alias='net_amt', description='예탁자산평가액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    tot_book_amt2: str | None = Field(None, alias='tot_book_amt2', description='총매입금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    tot_dep_amt: str | None = Field(None, alias='tot_dep_amt', description='추정예탁자산 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    paym_alowa: str | None = Field(None, alias='paym_alowa', description='출금가능금액 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+    pl_amt: str | None = Field(None, alias='pl_amt', description='실현손익 — 단위: 원, 좌측 0-padding 처리된 부호 포함 12자리 숫자')
+
+
+class Kt50020GoldHoldingsResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt50020'
+    gold_acnt_evlt_prst: list[Kt50020ResponseGoldAcntEvltPrstItem] = Field(default_factory=list, alias='gold_acnt_evlt_prst', description='금현물계좌평가현황')
+
+
+class Kt50032AccountIdentityResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt50032'
+    acnt_print: str | None = Field(None, alias='acnt_print', description='계좌번호 — 계좌번호 출력용')
+
+
+class Kt50032GoldTradeHistoryResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra='allow')
+    tr_id: ClassVar[str] = 'kt50032'
+    gold_trde_hist: list[Kt50032ResponseGoldTrdeHistItem] = Field(default_factory=list, alias='gold_trde_hist', description='금현물거래내역')

@@ -1,3 +1,4 @@
+import asyncio
 from datetime import datetime, timedelta
 
 import httpx
@@ -6,6 +7,7 @@ import respx
 from fastapi.testclient import TestClient
 
 from athena_api.config import Settings
+from athena_api.dependencies import require_kiwoom_client
 from athena_api.errors import KiwoomApiError
 from athena_api.kiwoom import KiwoomAuth, KiwoomClient, RateLimiter
 from athena_api.main import create_app
@@ -105,6 +107,63 @@ async def test_all_malformed_and_non_success_responses_are_secret_safe(
     assert error.value.code == expected_code
     assert secret not in str(error.value)
     assert secret not in error.value.message
+
+
+@pytest.mark.asyncio
+async def test_empty_success_object_is_rejected_as_invalid_response() -> None:
+    limiter = RateLimiter(rate_per_second=1000, per_api_rate=None)
+    with respx.mock(base_url="https://mockapi.kiwoom.com") as mock:
+        route = mock.post("/query").mock(return_value=httpx.Response(200, json={}))
+        client = KiwoomClient(ready_auth(), limiter)
+        try:
+            with pytest.raises(KiwoomApiError) as error:
+                await client.post("ka10001", "/query")
+        finally:
+            await client.aclose()
+    assert error.value.code == "invalid_response"
+    assert error.value.http_status == 502
+    assert error.value.message == "upstream response was invalid"
+    assert route.call_count == 1
+
+
+@pytest.mark.asyncio
+async def test_nonempty_success_object_without_return_code_remains_valid() -> None:
+    limiter = RateLimiter(rate_per_second=1000, per_api_rate=None)
+    with respx.mock(base_url="https://mockapi.kiwoom.com") as mock:
+        mock.post("/query").mock(return_value=httpx.Response(200, json={"stk_nm": "OK"}))
+        client = KiwoomClient(ready_auth(), limiter)
+        try:
+            body = await client.post("ka10001", "/query")
+        finally:
+            await client.aclose()
+    assert body == {"stk_nm": "OK"}
+
+
+def test_empty_success_object_is_fail_closed_on_detail_route() -> None:
+    limiter = RateLimiter(rate_per_second=1000, per_api_rate=None)
+    upstream_client = KiwoomClient(ready_auth(), limiter)
+    app = create_app(Settings(_env_file=None))
+    app.dependency_overrides[require_kiwoom_client] = lambda: upstream_client
+
+    with respx.mock(base_url="https://mockapi.kiwoom.com") as mock:
+        route = mock.post("/api/dostk/stkinfo").mock(
+            return_value=httpx.Response(200, json={})
+        )
+        try:
+            with TestClient(app) as client:
+                response = client.post(
+                    "/api/v1/tr/stockinfo/ka10001/detail/price_range",
+                    json={"stk_cd": "005930"},
+                )
+        finally:
+            asyncio.run(upstream_client.aclose())
+
+    assert response.status_code == 502
+    assert response.json() == {
+        "detail": "Kiwoom upstream request failed",
+        "code": "invalid_response",
+    }
+    assert route.call_count == 1
 
 
 @pytest.mark.asyncio

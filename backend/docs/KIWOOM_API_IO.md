@@ -91,22 +91,165 @@ the 171 HTTP query IDs. It runs at most five distinct calls concurrently and pre
 order. Each result contains `tr_id`, `ok`, `body`, `cont_yn`, `next_key`, and a sanitized
 `error` object. Orders, OAuth controls, and WebSocket IDs are rejected.
 
-## ka10007 detail projections
+## Response detail projections
 
-The full `ka10007` response has 124 top-level fields. These nine non-overlapping routes
-project that response without making extra upstream calls:
+The canonical manifest defines 22 candidate TRs and 115 non-overlapping routes.
+Each route projects one full typed response without making an extra upstream call.
 
-| Group | FastAPI path | Fields | Source field names |
-| --- | --- | ---: | --- |
-| `identity` | `/api/v1/tr/quotes/ka10007/detail/identity` | 4 | `stk_nm`, `stk_cd`, `date`, `tm` |
-| `expected_market` | `/api/v1/tr/quotes/ka10007/detail/expected_market` | 10 | `pred_close_pric`, `pred_trde_qty`, `upl_pric`, `lst_pric`, `pred_trde_prica`, `flo_stkcnt`, `cur_prc`, `smbol`, `flu_rt`, `pred_rt` |
-| `session` | `/api/v1/tr/quotes/ka10007/detail/session` | 16 | `open_pric`, `high_pric`, `low_pric`, `cntr_qty`, `trde_qty`, `trde_prica`, `exp_cntr_pric`, `exp_cntr_qty`, `exp_sel_pri_bid`, `exp_buy_pri_bid`, `trde_strt_dt`, `exec_pric`, `hgst_pric`, `lwst_pric`, `hgst_pric_dt`, `lwst_pric_dt` |
-| `bid_prices` | `/api/v1/tr/quotes/ka10007/detail/bid_prices` | 20 | `sel_1bid`, `sel_2bid`, `sel_3bid`, `sel_4bid`, `sel_5bid`, `sel_6bid`, `sel_7bid`, `sel_8bid`, `sel_9bid`, `sel_10bid`, `buy_1bid`, `buy_2bid`, `buy_3bid`, `buy_4bid`, `buy_5bid`, `buy_6bid`, `buy_7bid`, `buy_8bid`, `buy_9bid`, `buy_10bid` |
-| `bid_quantities` | `/api/v1/tr/quotes/ka10007/detail/bid_quantities` | 20 | `sel_1bid_req`, `sel_2bid_req`, `sel_3bid_req`, `sel_4bid_req`, `sel_5bid_req`, `sel_6bid_req`, `sel_7bid_req`, `sel_8bid_req`, `sel_9bid_req`, `sel_10bid_req`, `buy_1bid_req`, `buy_2bid_req`, `buy_3bid_req`, `buy_4bid_req`, `buy_5bid_req`, `buy_6bid_req`, `buy_7bid_req`, `buy_8bid_req`, `buy_9bid_req`, `buy_10bid_req` |
-| `bid_changes` | `/api/v1/tr/quotes/ka10007/detail/bid_changes` | 20 | `sel_1bid_jub_pre`, `sel_2bid_jub_pre`, `sel_3bid_jub_pre`, `sel_4bid_jub_pre`, `sel_5bid_jub_pre`, `sel_6bid_jub_pre`, `sel_7bid_jub_pre`, `sel_8bid_jub_pre`, `sel_9bid_jub_pre`, `sel_10bid_jub_pre`, `buy_1bid_jub_pre`, `buy_2bid_jub_pre`, `buy_3bid_jub_pre`, `buy_4bid_jub_pre`, `buy_5bid_jub_pre`, `buy_6bid_jub_pre`, `buy_7bid_jub_pre`, `buy_8bid_jub_pre`, `buy_9bid_jub_pre`, `buy_10bid_jub_pre` |
-| `order_counts` | `/api/v1/tr/quotes/ka10007/detail/order_counts` | 10 | `sel_1bid_cnt`, `sel_2bid_cnt`, `sel_3bid_cnt`, `sel_4bid_cnt`, `sel_5bid_cnt`, `buy_1bid_cnt`, `buy_2bid_cnt`, `buy_3bid_cnt`, `buy_4bid_cnt`, `buy_5bid_cnt` |
-| `liquidity_provider` | `/api/v1/tr/quotes/ka10007/detail/liquidity_provider` | 20 | `lpsel_1bid_req`, `lpsel_2bid_req`, `lpsel_3bid_req`, `lpsel_4bid_req`, `lpsel_5bid_req`, `lpsel_6bid_req`, `lpsel_7bid_req`, `lpsel_8bid_req`, `lpsel_9bid_req`, `lpsel_10bid_req`, `lpbuy_1bid_req`, `lpbuy_2bid_req`, `lpbuy_3bid_req`, `lpbuy_4bid_req`, `lpbuy_5bid_req`, `lpbuy_6bid_req`, `lpbuy_7bid_req`, `lpbuy_8bid_req`, `lpbuy_9bid_req`, `lpbuy_10bid_req` |
-| `totals` | `/api/v1/tr/quotes/ka10007/detail/totals` | 4 | `tot_buy_req`, `tot_sel_req`, `tot_buy_cnt`, `tot_sel_cnt` |
+| TR | Layout | Group | FastAPI path | Fields | Source field names |
+| --- | --- | --- | --- | ---: | --- |
+| `ka10001` | `facts` | `identity_and_capital` | `/api/v1/tr/stockinfo/ka10001/detail/identity_and_capital` | 6 | `stk_cd`, `stk_nm`, `setl_mm`, `fav`, `cap`, `flo_stk` |
+| `ka10001` | `facts` | `market_scale_and_ownership` | `/api/v1/tr/stockinfo/ka10001/detail/market_scale_and_ownership` | 8 | `crd_rt`, `mac`, `mac_wght`, `for_exh_rt`, `repl_pric`, `fav_unit`, `dstr_stk`, `dstr_rt` |
+| `ka10001` | `facts` | `price_range` | `/api/v1/tr/stockinfo/ka10001/detail/price_range` | 8 | `oyr_hgst`, `oyr_lwst`, `250hgst`, `250lwst`, `250hgst_pric_dt`, `250hgst_pric_pre_rt`, `250lwst_pric_dt`, `250lwst_pric_pre_rt` |
+| `ka10001` | `facts` | `valuation` | `/api/v1/tr/stockinfo/ka10001/detail/valuation` | 6 | `per`, `eps`, `roe`, `pbr`, `ev`, `bps` |
+| `ka10001` | `facts` | `financial_performance` | `/api/v1/tr/stockinfo/ka10001/detail/financial_performance` | 3 | `sale_amt`, `bus_pro`, `cup_nga` |
+| `ka10001` | `facts` | `daily_price_band` | `/api/v1/tr/stockinfo/ka10001/detail/daily_price_band` | 8 | `open_pric`, `high_pric`, `low_pric`, `upl_pric`, `lst_pric`, `base_pric`, `exp_cntr_pric`, `exp_cntr_qty` |
+| `ka10001` | `facts` | `current_trading` | `/api/v1/tr/stockinfo/ka10001/detail/current_trading` | 6 | `cur_prc`, `pre_sig`, `pred_pre`, `flu_rt`, `trde_qty`, `trde_pre` |
+| `ka10002` | `facts` | `market_snapshot` | `/api/v1/tr/stockinfo/ka10002/detail/market_snapshot` | 7 | `stk_cd`, `stk_nm`, `cur_prc`, `flu_smbol`, `base_pric`, `pred_pre`, `flu_rt` |
+| `ka10002` | `facts` | `sell_brokers` | `/api/v1/tr/stockinfo/ka10002/detail/sell_brokers` | 15 | `sel_trde_ori_nm_1`, `sel_trde_ori_1`, `sel_trde_qty_1`, `sel_trde_ori_nm_2`, `sel_trde_ori_2`, `sel_trde_qty_2`, `sel_trde_ori_nm_3`, `sel_trde_ori_3`, `sel_trde_qty_3`, `sel_trde_ori_nm_4`, `sel_trde_ori_4`, `sel_trde_qty_4`, `sel_trde_ori_nm_5`, `sel_trde_ori_5`, `sel_trde_qty_5` |
+| `ka10002` | `facts` | `buy_brokers` | `/api/v1/tr/stockinfo/ka10002/detail/buy_brokers` | 15 | `buy_trde_ori_nm_1`, `buy_trde_ori_1`, `buy_trde_qty_1`, `buy_trde_ori_nm_2`, `buy_trde_ori_2`, `buy_trde_qty_2`, `buy_trde_ori_nm_3`, `buy_trde_ori_3`, `buy_trde_qty_3`, `buy_trde_ori_nm_4`, `buy_trde_ori_4`, `buy_trde_qty_4`, `buy_trde_ori_nm_5`, `buy_trde_ori_5`, `buy_trde_qty_5` |
+| `ka10004` | `facts` | `snapshot_time` | `/api/v1/tr/quotes/ka10004/detail/snapshot_time` | 1 | `bid_req_base_tm` |
+| `ka10004` | `facts` | `sell_bid_prices` | `/api/v1/tr/quotes/ka10004/detail/sell_bid_prices` | 10 | `sel_10th_pre_bid`, `sel_9th_pre_bid`, `sel_8th_pre_bid`, `sel_7th_pre_bid`, `sel_6th_pre_bid`, `sel_5th_pre_bid`, `sel_4th_pre_bid`, `sel_3th_pre_bid`, `sel_2th_pre_bid`, `sel_fpr_bid` |
+| `ka10004` | `facts` | `sell_bid_quantities` | `/api/v1/tr/quotes/ka10004/detail/sell_bid_quantities` | 10 | `sel_10th_pre_req`, `sel_9th_pre_req`, `sel_8th_pre_req`, `sel_7th_pre_req`, `sel_6th_pre_req`, `sel_5th_pre_req`, `sel_4th_pre_req`, `sel_3th_pre_req`, `sel_2th_pre_req`, `sel_fpr_req` |
+| `ka10004` | `facts` | `sell_bid_changes` | `/api/v1/tr/quotes/ka10004/detail/sell_bid_changes` | 10 | `sel_10th_pre_req_pre`, `sel_9th_pre_req_pre`, `sel_8th_pre_req_pre`, `sel_7th_pre_req_pre`, `sel_6th_pre_req_pre`, `sel_5th_pre_req_pre`, `sel_4th_pre_req_pre`, `sel_3th_pre_req_pre`, `sel_2th_pre_req_pre`, `sel_1th_pre_req_pre` |
+| `ka10004` | `facts` | `buy_bid_prices` | `/api/v1/tr/quotes/ka10004/detail/buy_bid_prices` | 10 | `buy_fpr_bid`, `buy_2th_pre_bid`, `buy_3th_pre_bid`, `buy_4th_pre_bid`, `buy_5th_pre_bid`, `buy_6th_pre_bid`, `buy_7th_pre_bid`, `buy_8th_pre_bid`, `buy_9th_pre_bid`, `buy_10th_pre_bid` |
+| `ka10004` | `facts` | `buy_bid_quantities` | `/api/v1/tr/quotes/ka10004/detail/buy_bid_quantities` | 10 | `buy_fpr_req`, `buy_2th_pre_req`, `buy_3th_pre_req`, `buy_4th_pre_req`, `buy_5th_pre_req`, `buy_6th_pre_req`, `buy_7th_pre_req`, `buy_8th_pre_req`, `buy_9th_pre_req`, `buy_10th_pre_req` |
+| `ka10004` | `facts` | `buy_bid_changes` | `/api/v1/tr/quotes/ka10004/detail/buy_bid_changes` | 10 | `buy_1th_pre_req_pre`, `buy_2th_pre_req_pre`, `buy_3th_pre_req_pre`, `buy_4th_pre_req_pre`, `buy_5th_pre_req_pre`, `buy_6th_pre_req_pre`, `buy_7th_pre_req_pre`, `buy_8th_pre_req_pre`, `buy_9th_pre_req_pre`, `buy_10th_pre_req_pre` |
+| `ka10004` | `facts` | `aggregate_totals` | `/api/v1/tr/quotes/ka10004/detail/aggregate_totals` | 4 | `tot_sel_req_jub_pre`, `tot_sel_req`, `tot_buy_req`, `tot_buy_req_jub_pre` |
+| `ka10004` | `facts` | `after_hours_totals` | `/api/v1/tr/quotes/ka10004/detail/after_hours_totals` | 4 | `ovt_sel_req_pre`, `ovt_sel_req`, `ovt_buy_req`, `ovt_buy_req_pre` |
+| `ka10007` | `facts` | `identity` | `/api/v1/tr/quotes/ka10007/detail/identity` | 4 | `stk_nm`, `stk_cd`, `date`, `tm` |
+| `ka10007` | `facts` | `expected_market` | `/api/v1/tr/quotes/ka10007/detail/expected_market` | 10 | `pred_close_pric`, `pred_trde_qty`, `upl_pric`, `lst_pric`, `pred_trde_prica`, `flo_stkcnt`, `cur_prc`, `smbol`, `flu_rt`, `pred_rt` |
+| `ka10007` | `facts` | `session` | `/api/v1/tr/quotes/ka10007/detail/session` | 16 | `open_pric`, `high_pric`, `low_pric`, `cntr_qty`, `trde_qty`, `trde_prica`, `exp_cntr_pric`, `exp_cntr_qty`, `exp_sel_pri_bid`, `exp_buy_pri_bid`, `trde_strt_dt`, `exec_pric`, `hgst_pric`, `lwst_pric`, `hgst_pric_dt`, `lwst_pric_dt` |
+| `ka10007` | `facts` | `bid_prices` | `/api/v1/tr/quotes/ka10007/detail/bid_prices` | 20 | `sel_1bid`, `sel_2bid`, `sel_3bid`, `sel_4bid`, `sel_5bid`, `sel_6bid`, `sel_7bid`, `sel_8bid`, `sel_9bid`, `sel_10bid`, `buy_1bid`, `buy_2bid`, `buy_3bid`, `buy_4bid`, `buy_5bid`, `buy_6bid`, `buy_7bid`, `buy_8bid`, `buy_9bid`, `buy_10bid` |
+| `ka10007` | `facts` | `bid_quantities` | `/api/v1/tr/quotes/ka10007/detail/bid_quantities` | 20 | `sel_1bid_req`, `sel_2bid_req`, `sel_3bid_req`, `sel_4bid_req`, `sel_5bid_req`, `sel_6bid_req`, `sel_7bid_req`, `sel_8bid_req`, `sel_9bid_req`, `sel_10bid_req`, `buy_1bid_req`, `buy_2bid_req`, `buy_3bid_req`, `buy_4bid_req`, `buy_5bid_req`, `buy_6bid_req`, `buy_7bid_req`, `buy_8bid_req`, `buy_9bid_req`, `buy_10bid_req` |
+| `ka10007` | `facts` | `bid_changes` | `/api/v1/tr/quotes/ka10007/detail/bid_changes` | 20 | `sel_1bid_jub_pre`, `sel_2bid_jub_pre`, `sel_3bid_jub_pre`, `sel_4bid_jub_pre`, `sel_5bid_jub_pre`, `sel_6bid_jub_pre`, `sel_7bid_jub_pre`, `sel_8bid_jub_pre`, `sel_9bid_jub_pre`, `sel_10bid_jub_pre`, `buy_1bid_jub_pre`, `buy_2bid_jub_pre`, `buy_3bid_jub_pre`, `buy_4bid_jub_pre`, `buy_5bid_jub_pre`, `buy_6bid_jub_pre`, `buy_7bid_jub_pre`, `buy_8bid_jub_pre`, `buy_9bid_jub_pre`, `buy_10bid_jub_pre` |
+| `ka10007` | `facts` | `order_counts` | `/api/v1/tr/quotes/ka10007/detail/order_counts` | 10 | `sel_1bid_cnt`, `sel_2bid_cnt`, `sel_3bid_cnt`, `sel_4bid_cnt`, `sel_5bid_cnt`, `buy_1bid_cnt`, `buy_2bid_cnt`, `buy_3bid_cnt`, `buy_4bid_cnt`, `buy_5bid_cnt` |
+| `ka10007` | `facts` | `liquidity_provider` | `/api/v1/tr/quotes/ka10007/detail/liquidity_provider` | 20 | `lpsel_1bid_req`, `lpsel_2bid_req`, `lpsel_3bid_req`, `lpsel_4bid_req`, `lpsel_5bid_req`, `lpsel_6bid_req`, `lpsel_7bid_req`, `lpsel_8bid_req`, `lpsel_9bid_req`, `lpsel_10bid_req`, `lpbuy_1bid_req`, `lpbuy_2bid_req`, `lpbuy_3bid_req`, `lpbuy_4bid_req`, `lpbuy_5bid_req`, `lpbuy_6bid_req`, `lpbuy_7bid_req`, `lpbuy_8bid_req`, `lpbuy_9bid_req`, `lpbuy_10bid_req` |
+| `ka10007` | `facts` | `totals` | `/api/v1/tr/quotes/ka10007/detail/totals` | 4 | `tot_buy_req`, `tot_sel_req`, `tot_buy_cnt`, `tot_sel_cnt` |
+| `ka10040` | `facts` | `sell_brokers` | `/api/v1/tr/ranking/ka10040/detail/sell_brokers` | 20 | `sel_trde_ori_irds_1`, `sel_trde_ori_qty_1`, `sel_trde_ori_1`, `sel_trde_ori_cd_1`, `sel_trde_ori_irds_2`, `sel_trde_ori_qty_2`, `sel_trde_ori_2`, `sel_trde_ori_cd_2`, `sel_trde_ori_irds_3`, `sel_trde_ori_qty_3`, `sel_trde_ori_3`, `sel_trde_ori_cd_3`, `sel_trde_ori_irds_4`, `sel_trde_ori_qty_4`, `sel_trde_ori_4`, `sel_trde_ori_cd_4`, `sel_trde_ori_irds_5`, `sel_trde_ori_qty_5`, `sel_trde_ori_5`, `sel_trde_ori_cd_5` |
+| `ka10040` | `facts` | `buy_brokers` | `/api/v1/tr/ranking/ka10040/detail/buy_brokers` | 20 | `buy_trde_ori_1`, `buy_trde_ori_cd_1`, `buy_trde_ori_qty_1`, `buy_trde_ori_irds_1`, `buy_trde_ori_2`, `buy_trde_ori_cd_2`, `buy_trde_ori_qty_2`, `buy_trde_ori_irds_2`, `buy_trde_ori_3`, `buy_trde_ori_cd_3`, `buy_trde_ori_qty_3`, `buy_trde_ori_irds_3`, `buy_trde_ori_4`, `buy_trde_ori_cd_4`, `buy_trde_ori_qty_4`, `buy_trde_ori_irds_4`, `buy_trde_ori_5`, `buy_trde_ori_cd_5`, `buy_trde_ori_qty_5`, `buy_trde_ori_irds_5` |
+| `ka10040` | `facts` | `foreign_broker_estimates` | `/api/v1/tr/ranking/ka10040/detail/foreign_broker_estimates` | 4 | `frgn_sel_prsm_sum_chang`, `frgn_sel_prsm_sum`, `frgn_buy_prsm_sum`, `frgn_buy_prsm_sum_chang` |
+| `ka10040` | `table` | `broker_departures` | `/api/v1/tr/ranking/ka10040/detail/broker_departures` | 1 | `tdy_main_trde_ori` |
+| `ka10087` | `facts` | `snapshot_time` | `/api/v1/tr/quotes/ka10087/detail/snapshot_time` | 1 | `bid_req_base_tm` |
+| `ka10087` | `facts` | `sell_bid_changes` | `/api/v1/tr/quotes/ka10087/detail/sell_bid_changes` | 5 | `ovt_sigpric_sel_bid_jub_pre_5`, `ovt_sigpric_sel_bid_jub_pre_4`, `ovt_sigpric_sel_bid_jub_pre_3`, `ovt_sigpric_sel_bid_jub_pre_2`, `ovt_sigpric_sel_bid_jub_pre_1` |
+| `ka10087` | `facts` | `sell_bid_quantities` | `/api/v1/tr/quotes/ka10087/detail/sell_bid_quantities` | 5 | `ovt_sigpric_sel_bid_qty_5`, `ovt_sigpric_sel_bid_qty_4`, `ovt_sigpric_sel_bid_qty_3`, `ovt_sigpric_sel_bid_qty_2`, `ovt_sigpric_sel_bid_qty_1` |
+| `ka10087` | `facts` | `sell_bid_prices` | `/api/v1/tr/quotes/ka10087/detail/sell_bid_prices` | 5 | `ovt_sigpric_sel_bid_5`, `ovt_sigpric_sel_bid_4`, `ovt_sigpric_sel_bid_3`, `ovt_sigpric_sel_bid_2`, `ovt_sigpric_sel_bid_1` |
+| `ka10087` | `facts` | `buy_bid_prices` | `/api/v1/tr/quotes/ka10087/detail/buy_bid_prices` | 5 | `ovt_sigpric_buy_bid_1`, `ovt_sigpric_buy_bid_2`, `ovt_sigpric_buy_bid_3`, `ovt_sigpric_buy_bid_4`, `ovt_sigpric_buy_bid_5` |
+| `ka10087` | `facts` | `buy_bid_quantities` | `/api/v1/tr/quotes/ka10087/detail/buy_bid_quantities` | 5 | `ovt_sigpric_buy_bid_qty_1`, `ovt_sigpric_buy_bid_qty_2`, `ovt_sigpric_buy_bid_qty_3`, `ovt_sigpric_buy_bid_qty_4`, `ovt_sigpric_buy_bid_qty_5` |
+| `ka10087` | `facts` | `buy_bid_changes` | `/api/v1/tr/quotes/ka10087/detail/buy_bid_changes` | 5 | `ovt_sigpric_buy_bid_jub_pre_1`, `ovt_sigpric_buy_bid_jub_pre_2`, `ovt_sigpric_buy_bid_jub_pre_3`, `ovt_sigpric_buy_bid_jub_pre_4`, `ovt_sigpric_buy_bid_jub_pre_5` |
+| `ka10087` | `facts` | `aggregate_totals` | `/api/v1/tr/quotes/ka10087/detail/aggregate_totals` | 10 | `ovt_sigpric_sel_bid_tot_req`, `ovt_sigpric_buy_bid_tot_req`, `sel_bid_tot_req_jub_pre`, `sel_bid_tot_req`, `buy_bid_tot_req`, `buy_bid_tot_req_jub_pre`, `ovt_sel_bid_tot_req_jub_pre`, `ovt_sel_bid_tot_req`, `ovt_buy_bid_tot_req`, `ovt_buy_bid_tot_req_jub_pre` |
+| `ka10087` | `facts` | `trading_summary` | `/api/v1/tr/quotes/ka10087/detail/trading_summary` | 5 | `ovt_sigpric_cur_prc`, `ovt_sigpric_pred_pre_sig`, `ovt_sigpric_pred_pre`, `ovt_sigpric_flu_rt`, `ovt_sigpric_acc_trde_qty` |
+| `ka20001` | `facts` | `market_snapshot` | `/api/v1/tr/sector/ka20001/detail/market_snapshot` | 8 | `cur_prc`, `pred_pre_sig`, `pred_pre`, `flu_rt`, `trde_qty`, `trde_prica`, `trde_frmatn_stk_num`, `trde_frmatn_rt` |
+| `ka20001` | `facts` | `session_range` | `/api/v1/tr/sector/ka20001/detail/session_range` | 3 | `open_pric`, `high_pric`, `low_pric` |
+| `ka20001` | `facts` | `market_breadth` | `/api/v1/tr/sector/ka20001/detail/market_breadth` | 5 | `upl`, `rising`, `stdns`, `fall`, `lst` |
+| `ka20001` | `facts` | `fifty_two_week_range` | `/api/v1/tr/sector/ka20001/detail/fifty_two_week_range` | 6 | `52wk_hgst_pric`, `52wk_hgst_pric_dt`, `52wk_hgst_pric_pre_rt`, `52wk_lwst_pric`, `52wk_lwst_pric_dt`, `52wk_lwst_pric_pre_rt` |
+| `ka20001` | `table` | `intraday_history` | `/api/v1/tr/sector/ka20001/detail/intraday_history` | 1 | `inds_cur_prc_tm` |
+| `ka20009` | `facts` | `market_snapshot` | `/api/v1/tr/sector/ka20009/detail/market_snapshot` | 8 | `cur_prc`, `pred_pre_sig`, `pred_pre`, `flu_rt`, `trde_qty`, `trde_prica`, `trde_frmatn_stk_num`, `trde_frmatn_rt` |
+| `ka20009` | `facts` | `session_range` | `/api/v1/tr/sector/ka20009/detail/session_range` | 3 | `open_pric`, `high_pric`, `low_pric` |
+| `ka20009` | `facts` | `market_breadth` | `/api/v1/tr/sector/ka20009/detail/market_breadth` | 5 | `upl`, `rising`, `stdns`, `fall`, `lst` |
+| `ka20009` | `facts` | `fifty_two_week_range` | `/api/v1/tr/sector/ka20009/detail/fifty_two_week_range` | 6 | `52wk_hgst_pric`, `52wk_hgst_pric_dt`, `52wk_hgst_pric_pre_rt`, `52wk_lwst_pric`, `52wk_lwst_pric_dt`, `52wk_lwst_pric_pre_rt` |
+| `ka20009` | `table` | `daily_history` | `/api/v1/tr/sector/ka20009/detail/daily_history` | 1 | `inds_cur_prc_daly_rept` |
+| `ka30012` | `facts` | `market_snapshot` | `/api/v1/tr/elw/ka30012/detail/market_snapshot` | 5 | `aset_cd`, `cur_prc`, `pred_pre_sig`, `pred_pre`, `flu_rt` |
+| `ka30012` | `facts` | `liquidity_providers` | `/api/v1/tr/elw/ka30012/detail/liquidity_providers` | 3 | `lpmmcm_nm`, `lpmmcm_nm_1`, `lpmmcm_nm_2` |
+| `ka30012` | `facts` | `valuation_and_rights` | `/api/v1/tr/elw/ka30012/detail/valuation_and_rights` | 13 | `elwrght_cntn`, `elwexpr_evlt_pric`, `elwtheory_pric`, `dispty_rt`, `elwinnr_vltl`, `exp_rght_pric`, `elwpl_qutr_rt`, `elwexec_pric`, `elwcnvt_rt`, `elwcmpn_rt`, `elwpric_rising_part_rt`, `elwrght_type`, `elwsrvive_dys` |
+| `ka30012` | `facts` | `liquidity_and_leverage` | `/api/v1/tr/elw/ka30012/detail/liquidity_and_leverage` | 7 | `stkcnt`, `elwlpord_pos`, `lpposs_rt`, `lprmnd_qty`, `elwspread`, `elwprty`, `elwgear` |
+| `ka30012` | `facts` | `key_dates` | `/api/v1/tr/elw/ka30012/detail/key_dates` | 6 | `elwflo_dt`, `elwfin_trde_dt`, `expr_dt`, `exec_dt`, `lpsuply_end_dt`, `elwpay_dt` |
+| `ka30012` | `facts` | `administration` | `/api/v1/tr/elw/ka30012/detail/administration` | 5 | `elwinvt_ix_comput`, `elwpay_agnt`, `elwappr_way`, `elwrght_exec_way`, `elwpblicte_orgn` |
+| `ka30012` | `facts` | `payoff_conditions` | `/api/v1/tr/elw/ka30012/detail/payoff_conditions` | 4 | `dcsn_pay_amt`, `kobarr`, `iv`, `clsprd_end_elwocr` |
+| `ka30012` | `facts` | `underlying_basket` | `/api/v1/tr/elw/ka30012/detail/underlying_basket` | 10 | `bsis_aset_1`, `bsis_aset_comp_rt_1`, `bsis_aset_2`, `bsis_aset_comp_rt_2`, `bsis_aset_3`, `bsis_aset_comp_rt_3`, `bsis_aset_4`, `bsis_aset_comp_rt_4`, `bsis_aset_5`, `bsis_aset_comp_rt_5` |
+| `ka30012` | `facts` | `evaluation_window` | `/api/v1/tr/elw/ka30012/detail/evaluation_window` | 6 | `fr_dt`, `to_dt`, `fr_tm`, `evlt_end_tm`, `evlt_pric`, `evlt_fnsh_yn` |
+| `ka30012` | `facts` | `evaluation_extrema` | `/api/v1/tr/elw/ka30012/detail/evaluation_extrema` | 6 | `all_hgst_pric`, `all_lwst_pric`, `imaf_hgst_pric`, `imaf_lwst_pric`, `sndhalf_mrkt_hgst_pric`, `sndhalf_mrkt_lwst_pric` |
+| `kt00001` | `facts` | `cash_and_margin` | `/api/v1/tr/account/kt00001/detail/cash_and_margin` | 10 | `entr`, `profa_ch`, `bncr_profa_ch`, `nxdy_bncr_sell_exct`, `fc_stk_krw_repl_set_amt`, `crd_grnta_ch`, `crd_grnt_ch`, `add_grnt_ch`, `etc_profa`, `uncl_stk_amt` |
+| `kt00001` | `facts` | `special_deposits_and_credit` | `/api/v1/tr/account/kt00001/detail/special_deposits_and_credit` | 10 | `shrts_prica`, `crd_set_grnta`, `chck_ina_amt`, `etc_chck_ina_amt`, `crd_grnt_ruse`, `knx_asset_evltv`, `elwdpst_evlta`, `crd_ls_rght_frcs_amt`, `lvlh_join_amt`, `lvlh_trns_alowa` |
+| `kt00001` | `facts` | `substitute_collateral` | `/api/v1/tr/account/kt00001/detail/substitute_collateral` | 9 | `repl_amt`, `remn_repl_evlta`, `trst_remn_repl_evlta`, `bncr_remn_repl_evlta`, `profa_repl`, `crd_grnta_repl`, `crd_grnt_repl`, `add_grnt_repl`, `rght_repl_amt` |
+| `kt00001` | `facts` | `withdrawal_and_order_capacity` | `/api/v1/tr/account/kt00001/detail/withdrawal_and_order_capacity` | 10 | `pymn_alow_amt`, `wrap_pymn_alow_amt`, `ord_alow_amt`, `bncr_buy_alowa`, `20stk_ord_alow_amt`, `30stk_ord_alow_amt`, `40stk_ord_alow_amt`, `100stk_ord_alow_amt`, `50stk_ord_alow_amt`, `60stk_ord_alow_amt` |
+| `kt00001` | `facts` | `receivables_and_arrears` | `/api/v1/tr/account/kt00001/detail/receivables_and_arrears` | 9 | `ch_uncla`, `ch_uncla_dlfe`, `ch_uncla_tot`, `crd_int_npay`, `int_npay_amt_dlfe`, `int_npay_amt_tot`, `etc_loana`, `etc_loana_dlfe`, `etc_loan_tot` |
+| `kt00001` | `facts` | `loans_and_collateral` | `/api/v1/tr/account/kt00001/detail/loans_and_collateral` | 9 | `nrpy_loan`, `loan_sum`, `ls_sum`, `crd_grnt_rt`, `mdstrm_usfe`, `min_ord_alow_yn`, `loan_remn_evlt_amt`, `dpst_grntl_remn`, `sell_grntl_remn` |
+| `kt00001` | `facts` | `settlement_forecast` | `/api/v1/tr/account/kt00001/detail/settlement_forecast` | 12 | `d1_entra`, `d1_slby_exct_amt`, `d1_buy_exct_amt`, `d1_out_rep_mor`, `d1_sel_exct_amt`, `d1_pymn_alow_amt`, `d2_entra`, `d2_slby_exct_amt`, `d2_buy_exct_amt`, `d2_out_rep_mor`, `d2_sel_exct_amt`, `d2_pymn_alow_amt` |
+| `kt00001` | `table` | `foreign_currency_deposits` | `/api/v1/tr/account/kt00001/detail/foreign_currency_deposits` | 1 | `stk_entr_prst` |
+| `kt00004` | `facts` | `account_identity` | `/api/v1/tr/account/kt00004/detail/account_identity` | 2 | `acnt_nm`, `brch_nm` |
+| `kt00004` | `facts` | `cash_and_assets` | `/api/v1/tr/account/kt00004/detail/cash_and_assets` | 7 | `entr`, `d2_entra`, `tot_est_amt`, `aset_evlt_amt`, `tot_pur_amt`, `prsm_dpst_aset_amt`, `tot_grnt_sella` |
+| `kt00004` | `facts` | `profit_and_loss` | `/api/v1/tr/account/kt00004/detail/profit_and_loss` | 9 | `tdy_lspft_amt`, `invt_bsamt`, `lspft_amt`, `tdy_lspft`, `lspft2`, `lspft`, `tdy_lspft_rt`, `lspft_ratio`, `lspft_rt` |
+| `kt00004` | `table` | `position_valuation` | `/api/v1/tr/account/kt00004/detail/position_valuation` | 1 | `stk_acnt_evlt_prst` |
+| `kt00005` | `facts` | `cash_and_capacity` | `/api/v1/tr/account/kt00005/detail/cash_and_capacity` | 8 | `entr`, `entr_d1`, `entr_d2`, `pymn_alow_amt`, `uncl_stk_amt`, `repl_amt`, `rght_repl_amt`, `ord_alowa` |
+| `kt00005` | `facts` | `receivables_and_margin` | `/api/v1/tr/account/kt00005/detail/receivables_and_margin` | 6 | `ch_uncla`, `crd_int_npay_gold`, `etc_loana`, `nrpy_loan`, `profa_ch`, `repl_profa` |
+| `kt00005` | `facts` | `portfolio_summary` | `/api/v1/tr/account/kt00005/detail/portfolio_summary` | 5 | `stk_buy_tot_amt`, `evlt_amt_tot`, `tot_pl_tot`, `tot_pl_rt`, `tot_re_buy_alowa` |
+| `kt00005` | `facts` | `margin_order_capacity` | `/api/v1/tr/account/kt00005/detail/margin_order_capacity` | 6 | `20ord_alow_amt`, `30ord_alow_amt`, `40ord_alow_amt`, `50ord_alow_amt`, `60ord_alow_amt`, `100ord_alow_amt` |
+| `kt00005` | `facts` | `credit_and_collateral` | `/api/v1/tr/account/kt00005/detail/credit_and_collateral` | 5 | `crd_loan_tot`, `crd_loan_ls_tot`, `crd_grnt_rt`, `dpst_grnt_use_amt_amt`, `grnt_loan_amt` |
+| `kt00005` | `table` | `settled_positions` | `/api/v1/tr/account/kt00005/detail/settled_positions` | 1 | `stk_cntr_remn` |
+| `kt00009` | `facts` | `contract_amounts` | `/api/v1/tr/account/kt00009/detail/contract_amounts` | 3 | `sell_grntl_engg_amt`, `buy_engg_amt`, `engg_amt` |
+| `kt00009` | `table` | `order_execution_status` | `/api/v1/tr/account/kt00009/detail/order_execution_status` | 1 | `acnt_ord_cntr_prst_array` |
+| `kt00010` | `facts` | `margin_order_capacity` | `/api/v1/tr/account/kt00010/detail/margin_order_capacity` | 14 | `profa_20ord_alow_amt`, `profa_20ord_alowq`, `profa_30ord_alow_amt`, `profa_30ord_alowq`, `profa_40ord_alow_amt`, `profa_40ord_alowq`, `profa_50ord_alow_amt`, `profa_50ord_alowq`, `profa_60ord_alow_amt`, `profa_60ord_alowq`, `profa_rdex_60ord_alow_amt`, `profa_rdex_60ord_alowq`, `profa_100ord_alow_amt`, `profa_100ord_alowq` |
+| `kt00010` | `facts` | `cash_and_withdrawal_capacity` | `/api/v1/tr/account/kt00010/detail/cash_and_withdrawal_capacity` | 9 | `pred_reu_alowa`, `tdy_reu_alowa`, `entr`, `repl_amt`, `uncla`, `ord_pos_repl`, `ord_alowa`, `wthd_alowa`, `nxdy_wthd_alowa` |
+| `kt00010` | `facts` | `purchase_settlement` | `/api/v1/tr/account/kt00010/detail/purchase_settlement` | 5 | `pur_amt`, `cmsn`, `pur_exct_amt`, `d2entra`, `profa_rdex_aplc_tp` |
+| `kt00011` | `facts` | `margin_rates` | `/api/v1/tr/account/kt00011/detail/margin_rates` | 3 | `stk_profa_rt`, `profa_rt`, `aplc_rt` |
+| `kt00011` | `facts` | `margin_capacity_20_to_50` | `/api/v1/tr/account/kt00011/detail/margin_capacity_20_to_50` | 16 | `profa_20ord_alow_amt`, `profa_20ord_alowq`, `profa_20pred_reu_amt`, `profa_20tdy_reu_amt`, `profa_30ord_alow_amt`, `profa_30ord_alowq`, `profa_30pred_reu_amt`, `profa_30tdy_reu_amt`, `profa_40ord_alow_amt`, `profa_40ord_alowq`, `profa_40pred_reu_amt`, `profa_40tdy_reu_amt`, `profa_50ord_alow_amt`, `profa_50ord_alowq`, `profa_50pred_reu_amt`, `profa_50tdy_reu_amt` |
+| `kt00011` | `facts` | `margin_capacity_60_to_cash_only` | `/api/v1/tr/account/kt00011/detail/margin_capacity_60_to_cash_only` | 12 | `profa_60ord_alow_amt`, `profa_60ord_alowq`, `profa_60pred_reu_amt`, `profa_60tdy_reu_amt`, `profa_100ord_alow_amt`, `profa_100ord_alowq`, `profa_100pred_reu_amt`, `profa_100tdy_reu_amt`, `min_ord_alow_amt`, `min_ord_alowq`, `min_pred_reu_amt`, `min_tdy_reu_amt` |
+| `kt00011` | `facts` | `account_funding` | `/api/v1/tr/account/kt00011/detail/account_funding` | 5 | `entr`, `repl_amt`, `uncla`, `ord_pos_repl`, `ord_alowa` |
+| `kt00012` | `facts` | `guarantee_rate` | `/api/v1/tr/account/kt00012/detail/guarantee_rate` | 2 | `stk_assr_rt`, `stk_assr_rt_nm` |
+| `kt00012` | `facts` | `guarantee_order_capacity` | `/api/v1/tr/account/kt00012/detail/guarantee_order_capacity` | 16 | `assr_30ord_alow_amt`, `assr_30ord_alowq`, `assr_30pred_reu_amt`, `assr_30tdy_reu_amt`, `assr_40ord_alow_amt`, `assr_40ord_alowq`, `assr_40pred_reu_amt`, `assr_40tdy_reu_amt`, `assr_50ord_alow_amt`, `assr_50ord_alowq`, `assr_50pred_reu_amt`, `assr_50tdy_reu_amt`, `assr_60ord_alow_amt`, `assr_60ord_alowq`, `assr_60pred_reu_amt`, `assr_60tdy_reu_amt` |
+| `kt00012` | `facts` | `account_and_receivable_capacity` | `/api/v1/tr/account/kt00012/detail/account_and_receivable_capacity` | 9 | `entr`, `repl_amt`, `uncla`, `ord_pos_repl`, `ord_alowa`, `out_alowa`, `out_pos_qty`, `min_amt`, `min_qty` |
+| `kt00013` | `facts` | `today_reuse` | `/api/v1/tr/account/kt00013/detail/today_reuse` | 5 | `tdy_reu_objt_amt`, `tdy_reu_use_amt`, `tdy_reu_alowa`, `tdy_reu_lmtt_amt`, `tdy_reu_alowa_fin` |
+| `kt00013` | `facts` | `previous_day_reuse` | `/api/v1/tr/account/kt00013/detail/previous_day_reuse` | 5 | `pred_reu_objt_amt`, `pred_reu_use_amt`, `pred_reu_alowa`, `pred_reu_lmtt_amt`, `pred_reu_alowa_fin` |
+| `kt00013` | `facts` | `cash_resources` | `/api/v1/tr/account/kt00013/detail/cash_resources` | 5 | `ch_amt`, `ch_profa`, `use_pos_ch`, `ch_use_lmtt_amt`, `use_pos_ch_fin` |
+| `kt00013` | `facts` | `substitute_resources` | `/api/v1/tr/account/kt00013/detail/substitute_resources` | 5 | `repl_amt_amt`, `repl_profa`, `use_pos_repl`, `repl_use_lmtt_amt`, `use_pos_repl_fin` |
+| `kt00013` | `facts` | `credit_and_lending_collateral` | `/api/v1/tr/account/kt00013/detail/credit_and_lending_collateral` | 6 | `crd_grnta_ch`, `crd_grnta_repl`, `crd_grnt_ch`, `crd_grnt_repl`, `uncla`, `ls_grnt_reu_gold` |
+| `kt00013` | `facts` | `margin_order_capacity` | `/api/v1/tr/account/kt00013/detail/margin_order_capacity` | 6 | `20ord_alow_amt`, `30ord_alow_amt`, `40ord_alow_amt`, `50ord_alow_amt`, `60ord_alow_amt`, `100ord_alow_amt` |
+| `kt00013` | `facts` | `repayment_losses` | `/api/v1/tr/account/kt00013/detail/repayment_losses` | 4 | `tdy_crd_rpya_loss_amt`, `pred_crd_rpya_loss_amt`, `tdy_ls_rpya_loss_repl_profa`, `pred_ls_rpya_loss_repl_profa` |
+| `kt00013` | `facts` | `substitute_valuation_and_limits` | `/api/v1/tr/account/kt00013/detail/substitute_valuation_and_limits` | 12 | `evlt_repl_amt_spg_use_skip`, `evlt_repl_rt`, `crd_repl_profa`, `ch_ord_repl_profa`, `crd_ord_repl_profa`, `crd_repl_conv_gold`, `repl_alowa`, `repl_alowa_2`, `ch_repl_lck_gold`, `crd_repl_lck_gold`, `ch_ord_alow_repla`, `crd_ord_alow_repla` |
+| `kt00013` | `facts` | `d2_funding_capacity` | `/api/v1/tr/account/kt00013/detail/d2_funding_capacity` | 2 | `d2vexct_entr`, `d2ch_ord_alow_amt` |
+| `kt00016` | `facts` | `account_manager` | `/api/v1/tr/account/kt00016/detail/account_manager` | 3 | `mang_empno`, `mngr_nm`, `dept_nm` |
+| `kt00016` | `facts` | `asset_balance_change` | `/api/v1/tr/account/kt00016/detail/asset_balance_change` | 16 | `entr_fr`, `entr_to`, `scrt_evlt_amt_fr`, `scrt_evlt_amt_to`, `ls_grnt_fr`, `ls_grnt_to`, `crd_loan_fr`, `crd_loan_to`, `ch_uncla_fr`, `ch_uncla_to`, `krw_asgna_fr`, `krw_asgna_to`, `ls_evlta_fr`, `ls_evlta_to`, `rght_evlta_fr`, `rght_evlta_to` |
+| `kt00016` | `facts` | `liability_balance_change` | `/api/v1/tr/account/kt00016/detail/liability_balance_change` | 8 | `loan_amt_fr`, `loan_amt_to`, `etc_loana_fr`, `etc_loana_to`, `crd_int_npay_gold_fr`, `crd_int_npay_gold_to`, `crd_int_fr`, `crd_int_to` |
+| `kt00016` | `facts` | `performance_summary` | `/api/v1/tr/account/kt00016/detail/performance_summary` | 6 | `tot_amt_fr`, `tot_amt_to`, `invt_bsamt`, `evltv_prft`, `prft_rt`, `tern_rt` |
+| `kt00016` | `facts` | `period_flows` | `/api/v1/tr/account/kt00016/detail/period_flows` | 6 | `termin_tot_trns`, `termin_tot_pymn`, `termin_tot_inq`, `termin_tot_outq`, `futr_repl_sella`, `trst_repl_sella` |
+| `kt00017` | `facts` | `d2_account_position` | `/api/v1/tr/account/kt00017/detail/d2_account_position` | 10 | `d2_entra`, `crd_int_npay_gold`, `etc_loana`, `gnrl_stk_evlt_amt_d2`, `dpst_grnt_use_amt_d2`, `crd_stk_evlt_amt_d2`, `crd_loan_d2`, `crd_loan_evlta_d2`, `crd_ls_grnt_d2`, `crd_ls_evlta_d2` |
+| `kt00017` | `facts` | `daily_cash_and_trading_flows` | `/api/v1/tr/account/kt00017/detail/daily_cash_and_trading_flows` | 8 | `ina_amt`, `outa`, `inq_amt`, `outq_amt`, `sell_amt`, `buy_amt`, `cmsn`, `tax` |
+| `kt00017` | `facts` | `other_assets_and_income` | `/api/v1/tr/account/kt00017/detail/other_assets_and_income` | 7 | `stk_pur_cptal_loan_amt`, `rp_evlt_amt`, `bd_evlt_amt`, `elsevlt_amt`, `crd_int_amt`, `sel_prica_grnt_loan_int_amt_amt`, `dvida_amt` |
+| `kt00018` | `facts` | `portfolio_summary` | `/api/v1/tr/account/kt00018/detail/portfolio_summary` | 5 | `tot_pur_amt`, `tot_evlt_amt`, `tot_evlt_pl`, `tot_prft_rt`, `prsm_dpst_aset_amt` |
+| `kt00018` | `facts` | `financing_summary` | `/api/v1/tr/account/kt00018/detail/financing_summary` | 3 | `tot_loan_amt`, `tot_crd_loan_amt`, `tot_crd_ls_amt` |
+| `kt00018` | `table` | `holdings` | `/api/v1/tr/account/kt00018/detail/holdings` | 1 | `acnt_evlt_remn_indv_tot` |
+| `kt50020` | `facts` | `gold_account_summary` | `/api/v1/tr/account/kt50020/detail/gold_account_summary` | 8 | `tot_entr`, `net_entr`, `tot_est_amt`, `net_amt`, `tot_book_amt2`, `tot_dep_amt`, `paym_alowa`, `pl_amt` |
+| `kt50020` | `table` | `gold_holdings` | `/api/v1/tr/account/kt50020/detail/gold_holdings` | 1 | `gold_acnt_evlt_prst` |
+| `kt50032` | `facts` | `account_identity` | `/api/v1/tr/account/kt50032/detail/account_identity` | 1 | `acnt_print` |
+| `kt50032` | `table` | `gold_trade_history` | `/api/v1/tr/account/kt50032/detail/gold_trade_history` | 1 | `gold_trde_hist` |
+
+## Response output profile and detail-candidate policy
+
+The generated response contract is profiled for every base operation after applying
+the same typed-row and LIST-item structure used by the Pydantic model generator.
+The pinned profile contains 36 scalar-only, 111 pure-list, and 61 compound responses.
+Pure lists are pagination/UI concerns and are never field-split; the UI page size is
+10 rows. The practical one-screen field budget is 20.
+
+`screen_complexity` is transparent and deterministic: top-level non-list fields plus
+the sum of `min(list row width, 20)` for each list section. The cap represents the
+field budget, not the number of list rows fetched or returned.
+
+All quantiles use Hyndman-Fan type 7. Tukey fences are `Q1 - 1.5 * IQR` and
+`Q3 + 1.5 * IQR`. These statistics describe the pinned response population; Tukey
+outlier status does not gate detail-candidate selection. The additional non-list-query
+distribution includes domestic HTTP queries with at least one top-level non-list field.
+
+| Metric (all 208 base operations) | Min | Q1 | Median | Q3 | Max | Tukey upper fence |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| `top_level_total_fields` | 0 | 1 | 1 | 4 | 124 | 8.5 |
+| `top_level_non_list_fields` | 0 | 0 | 0 | 3 | 124 | 7.5 |
+| `scalar_leaf_count` | 0 | 9 | 12 | 18.25 | 170 | 32.125 |
+| `list_section_count` | 0 | 1 | 1 | 1 | 2 | 1 |
+| `max_list_row_width` | 0 | 6 | 10 | 14 | 167 | 26 |
+| `nesting_depth` | 0 | 2 | 2 | 2 | 2 | 2 |
+| `screen_complexity` | 0 | 9 | 12 | 18.25 | 124 | 32.125 |
+
+The descriptive non-list-query population has **60** operations: Q1 1, median 5.5, Q3 22.75, IQR 21.75, and Tukey upper fence 55.375.
+A domestic HTTP query is a candidate when it is not pure-list and its `screen_complexity` is greater than the one-screen budget of 20. The pinned candidates are `ka10001`, `ka10002`, `ka10004`, `ka10007`, `ka10040`, `ka10087`, `ka20001`, `ka20009`, `ka30012`, `kt00001`, `kt00004`, `kt00005`, `kt00009`, `kt00010`, `kt00011`, `kt00012`, `kt00013`, `kt00016`, `kt00017`, `kt00018`, `kt50020`, `kt50032`.
+Every pinned candidate has complete semantic projection coverage in
+[`ref/response-projections.json`](../ref/response-projections.json). Facts groups contain
+at most 20 serialized API aliases; table groups preserve one top-level LIST atomically
+and declare a UI page size of 10 rows.
+
+The canonical machine-readable artifact is
+[`ref/kiwoom-output-profile.json`](../ref/kiwoom-output-profile.json).
 
 ## Operation reference
 
@@ -8992,8 +9135,8 @@ generic error path. Athena exposes only its sanitized wrapper status/body contra
 
 ## Drift procedure
 
-1. Update the checked-in inventory or detail manifest from an authorized source review.
-2. Update `ref/kiwoom-io-source-profile.json` counts and inventory SHA-256 from that review.
+1. Update the checked-in inventory or canonical response-projection manifest from an authorized source review.
+2. Update `ref/kiwoom-io-source-profile.json` counts and SHA-256 values from that review.
 3. Run `python scripts/generate_api.py`, review this document's diff, then run
    `python scripts/generate_api.py --check` and the backend test suite.
 4. Treat ID case changes, field-row changes, official deltas, and newly discovered US-only

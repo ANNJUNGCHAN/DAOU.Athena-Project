@@ -16,13 +16,20 @@ import hashlib
 import json
 import keyword
 import re
+import sys
 from pathlib import Path
 from typing import Any
 
 BACKEND = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(BACKEND))
+
+from athena_api.output_profile import build_output_profile, canonical_json  # noqa: E402
+
 INVENTORY_PATH = BACKEND / "ref" / "kiwoom-tr-inventory.json"
-DETAIL_MANIFEST_PATH = BACKEND / "ref" / "ka10007-detail-groups.json"
+PROJECTION_MANIFEST_PATH = BACKEND / "ref" / "response-projections.json"
+KA10007_COMPATIBILITY_PATH = BACKEND / "ref" / "ka10007-detail-groups.json"
 IO_SOURCE_PROFILE_PATH = BACKEND / "ref" / "kiwoom-io-source-profile.json"
+OUTPUT_PROFILE_PATH = BACKEND / "ref" / "kiwoom-output-profile.json"
 IO_DOC_PATH = BACKEND / "docs" / "KIWOOM_API_IO.md"
 GENERATED = BACKEND / "athena_api" / "generated"
 
@@ -183,8 +190,125 @@ def render_nested(model: dict[str, Any], *, request: bool) -> str:
     return render_class(model["class_name"], "", normalized, request=request, include_tr_id=False)
 
 
-def render_models(trs: list[dict[str, Any]], detail_manifest: dict[str, Any]) -> str:
+def projection_model_name(tr_id: str, group_id: str) -> str:
+    return f"{class_prefix(tr_id)}{pascal(group_id)}Response"
+
+
+def group_layout(group: dict[str, Any]) -> str:
+    return group.get("layout", "facts")
+
+
+def validate_response_projections(
+    operations: list[dict[str, Any]],
+    manifest: dict[str, Any],
+    output_profile: dict[str, Any],
+    ka10007_compatibility: dict[str, Any],
+) -> None:
+    projections = manifest.get("projections")
+    if not isinstance(projections, list):
+        raise ValueError("Response projection manifest must contain a projections list")
+    candidate_ids = output_profile["policy"]["detail_candidates"]
+    projection_ids = [projection.get("tr_id") for projection in projections]
+    if projection_ids != candidate_ids:
+        raise ValueError(
+            "Response projection TR IDs must exactly match profile candidates in source order: "
+            f"expected={candidate_ids}, actual={projection_ids}"
+        )
+    if len(projection_ids) != len(set(projection_ids)):
+        raise ValueError("Response projection manifest contains duplicate TR IDs")
+
+    by_id = {operation["id"]: operation for operation in operations}
+    for projection in projections:
+        tr_id = projection["tr_id"]
+        operation = by_id.get(tr_id)
+        if operation is None or operation["kind"] != "query":
+            raise ValueError(f"Response projections are query-only: {tr_id}")
+        response_fields, _ = parse_fields(
+            operation.get("resp_body", []), f"{class_prefix(tr_id)}Response"
+        )
+        aliases = [field["alias"] for field in response_fields]
+        if len(aliases) != len(set(aliases)):
+            raise ValueError(f"Generated response aliases are not unique for {tr_id}")
+        fields_by_alias = {field["alias"]: field for field in response_fields}
+        source_index = {alias: index for index, alias in enumerate(aliases)}
+        covered: list[str] = []
+        group_ids: set[str] = set()
+        for group in projection.get("groups", []):
+            group_id = group["id"]
+            if group_id in group_ids:
+                raise ValueError(f"Duplicate response projection group ID for {tr_id}: {group_id}")
+            group_ids.add(group_id)
+            fields = group.get("fields", [])
+            if not fields:
+                raise ValueError(f"Empty response projection group: {tr_id}/{group_id}")
+            if len(fields) != len(set(fields)):
+                raise ValueError(f"Duplicate fields within response projection: {tr_id}/{group_id}")
+            extras = [alias for alias in fields if alias not in fields_by_alias]
+            if extras:
+                raise ValueError(f"Unknown response aliases for {tr_id}/{group_id}: {extras}")
+            indexes = [source_index[alias] for alias in fields]
+            if indexes != sorted(indexes):
+                raise ValueError(f"Response projection fields are not in source order: {tr_id}/{group_id}")
+            layout = group_layout(group)
+            if layout == "facts":
+                if len(fields) > 20:
+                    raise ValueError(f"Facts projection exceeds 20 fields: {tr_id}/{group_id}")
+                if any(fields_by_alias[alias]["kind"] == "list" for alias in fields):
+                    raise ValueError(f"Facts projection contains a LIST alias: {tr_id}/{group_id}")
+                if "ui_page_size" in group:
+                    raise ValueError(f"Facts projection must not declare ui_page_size: {tr_id}/{group_id}")
+            elif layout == "table":
+                if group.get("ui_page_size") != 10:
+                    raise ValueError(f"Table projection page size must be 10: {tr_id}/{group_id}")
+                if len(fields) != 1 or any(
+                    fields_by_alias[alias]["kind"] != "list" for alias in fields
+                ):
+                    raise ValueError(
+                        f"Table projection must contain exactly one top-level LIST alias: {tr_id}/{group_id}"
+                    )
+            else:
+                raise ValueError(f"Unknown response projection layout for {tr_id}/{group_id}: {layout}")
+            covered.extend(fields)
+        duplicates = sorted({alias for alias in covered if covered.count(alias) > 1})
+        missing = [alias for alias in aliases if alias not in covered]
+        extras = [alias for alias in covered if alias not in fields_by_alias]
+        if duplicates or missing or extras or len(covered) != len(aliases):
+            raise ValueError(
+                f"Response projection coverage mismatch for {tr_id}: "
+                f"duplicates={duplicates}, missing={missing}, extras={extras}"
+            )
+
+    ka10007 = next(projection for projection in projections if projection["tr_id"] == "ka10007")
+    if ka10007 != ka10007_compatibility:
+        raise ValueError(
+            "ref/ka10007-detail-groups.json must remain a byte-equivalent JSON compatibility mirror "
+            "of the canonical ka10007 projection"
+        )
+
+
+def response_projection_metadata(
+    manifest: dict[str, Any], *, sha256: str
+) -> dict[str, Any]:
+    groups = [
+        group
+        for projection in manifest["projections"]
+        for group in projection["groups"]
+    ]
+    return {
+        "path": "ref/response-projections.json",
+        "sha256": sha256,
+        "candidate_count": len(manifest["projections"]),
+        "group_count": len(groups),
+        "facts_group_count": sum(group_layout(group) == "facts" for group in groups),
+        "table_group_count": sum(group_layout(group) == "table" for group in groups),
+        "field_count": sum(len(group["fields"]) for group in groups),
+        "route_count": len(groups),
+    }
+
+
+def render_models(trs: list[dict[str, Any]], projection_manifest: dict[str, Any]) -> str:
     blocks = [
+        "# ruff: noqa: E501, I001",
         '"""Generated Pydantic models. Do not edit; run backend/scripts/generate_api.py."""',
         "from __future__ import annotations",
         "",
@@ -215,17 +339,31 @@ def render_models(trs: list[dict[str, Any]], detail_manifest: dict[str, Any]) ->
         blocks.append(render_class(f"{prefix}Response", tr["id"], resp_fields, request=False))
         parsed[tr["id"]] = (req_fields, resp_fields)
 
-    _, response_fields = parsed["ka10007"]
-    fields_by_alias = {field["alias"]: field for field in response_fields}
-    for group in detail_manifest["groups"]:
-        group_fields = [fields_by_alias[name] for name in group["fields"]]
-        class_name = f"Ka10007{pascal(group['id'])}Response"
-        blocks.append(render_class(class_name, "ka10007", group_fields, request=False))
+    for projection in projection_manifest["projections"]:
+        tr_id = projection["tr_id"]
+        _, response_fields = parsed[tr_id]
+        fields_by_alias = {field["alias"]: field for field in response_fields}
+        for group in projection["groups"]:
+            group_fields = [fields_by_alias[name] for name in group["fields"]]
+            blocks.append(
+                render_class(
+                    projection_model_name(tr_id, group["id"]),
+                    tr_id,
+                    group_fields,
+                    request=False,
+                )
+            )
     return "\n\n\n".join(blocks) + "\n"
 
 
-def render_registry(operations: list[dict[str, Any]], counts: dict[str, int], detail: dict[str, Any]) -> str:
+def render_registry(
+    operations: list[dict[str, Any]],
+    counts: dict[str, int],
+    projections: dict[str, Any],
+    output_profile: dict[str, Any],
+) -> str:
     lines = [
+        "# ruff: noqa: E501, I001",
         '"""Generated allowlist and model registry. Do not edit."""',
         "from __future__ import annotations",
         "",
@@ -267,14 +405,29 @@ def render_registry(operations: list[dict[str, Any]], counts: dict[str, int], de
             "ALL_TR_IDS = frozenset(TR_REGISTRY)",
             f"INVENTORY_COUNTS = {counts!r}",
             "",
-            f"KA10007_DETAIL_MANIFEST: dict[str, Any] = {detail!r}",
+            f"OUTPUT_PROFILE: dict[str, Any] = {output_profile!r}",
+            "OUTPUT_PROFILE_BY_ID: dict[str, dict[str, Any]] = {",
+            "    operation['id']: operation for operation in OUTPUT_PROFILE['operations']",
+            "}",
+            "",
+            f"RESPONSE_PROJECTION_MANIFEST: dict[str, Any] = {projections!r}",
+            "RESPONSE_PROJECTION_BY_TR_ID: dict[str, dict[str, Any]] = {",
+            "    projection['tr_id']: projection",
+            "    for projection in RESPONSE_PROJECTION_MANIFEST['projections']",
+            "}",
+            "KA10007_DETAIL_MANIFEST: dict[str, Any] = next(",
+            "    projection",
+            "    for projection in RESPONSE_PROJECTION_MANIFEST['projections']",
+            "    if projection['tr_id'] == 'ka10007'",
+            ")",
         ]
     )
     return "\n".join(lines) + "\n"
 
 
-def render_routes(operations: list[dict[str, Any]], detail: dict[str, Any]) -> str:
-    return '''"""Generated static OpenAPI routes registered from the inventory. Do not edit."""
+def render_routes(operations: list[dict[str, Any]], projections: dict[str, Any]) -> str:
+    return '''# ruff: noqa: E501, I001
+"""Generated static OpenAPI routes registered from the inventory. Do not edit."""
 from typing import Annotated
 
 from fastapi import APIRouter, Header, Request, Response
@@ -291,7 +444,7 @@ from athena_api.dependencies import (
     OrderKiwoomClientDep,
     TokenManagerDep,
 )
-from athena_api.generated.registry import KA10007_DETAIL_MANIFEST, TR_REGISTRY, TrSpec
+from athena_api.generated.registry import RESPONSE_PROJECTION_MANIFEST, TR_REGISTRY, TrSpec
 from athena_api.generated import models
 
 router = APIRouter()
@@ -350,12 +503,12 @@ def _oauth_endpoint(spec: TrSpec):
     return endpoint
 
 
-def _detail_endpoint(group_id: str, response_model: type):
-    request_model = models.Ka10007Request
+def _detail_endpoint(spec: TrSpec, response_model: type):
+    request_model = spec.request_model
 
     async def endpoint(payload: request_model, request: Request, response: Response, client: KiwoomClientDep) -> response_model:
         return await call_typed_tr(
-            "ka10007", payload, request, response, client, response_model=response_model
+            spec.tr_id, payload, request, response, client, response_model=response_model
         )
 
     return endpoint
@@ -391,19 +544,28 @@ for _spec in TR_REGISTRY.values():
         openapi_extra=_extra,
     )
 
-for _group in KA10007_DETAIL_MANIFEST["groups"]:
-    _group_id = _group["id"]
-    _response_model = getattr(models, "Ka10007" + "".join(part.title() for part in _group_id.split("_")) + "Response")
-    router.add_api_route(
-        f"/api/v1/tr/quotes/ka10007/detail/{_group_id}",
-        _detail_endpoint(_group_id, _response_model),
-        methods=["POST"],
-        response_model=_response_model,
-        tags=["Kiwoom TR details"],
-        summary=_group["title"],
-        operation_id=f"post_tr_quotes_ka10007_detail_{_group_id}",
-        openapi_extra={"x-kiwoom-tr-id": "ka10007", "x-athena-detail-group": _group_id},
-    )
+for _projection in RESPONSE_PROJECTION_MANIFEST["projections"]:
+    _tr_id = _projection["tr_id"]
+    _spec = TR_REGISTRY[_tr_id]
+    for _group in _projection["groups"]:
+        _group_id = _group["id"]
+        _response_model = getattr(
+            models,
+            _tr_id[:1].upper()
+            + _tr_id[1:]
+            + "".join(part.title() for part in _group_id.split("_"))
+            + "Response",
+        )
+        router.add_api_route(
+            f"/api/v1/tr/{_spec.domain}/{_tr_id}/detail/{_group_id}",
+            _detail_endpoint(_spec, _response_model),
+            methods=["POST"],
+            response_model=_response_model,
+            tags=["Kiwoom TR details"],
+            summary=_group.get("title_en") or _group.get("title") or _group_id,
+            operation_id=f"post_tr_{_spec.domain}_{_tr_id}_detail_{_group_id}",
+            openapi_extra={"x-kiwoom-tr-id": _tr_id, "x-athena-detail-group": _group_id},
+        )
 '''
 
 
@@ -460,8 +622,9 @@ def render_field_table(fields: list[dict[str, Any]]) -> list[str]:
 def render_io_docs(
     operations: list[dict[str, Any]],
     counts: dict[str, int],
-    detail: dict[str, Any],
+    projections: dict[str, Any],
     profile: dict[str, Any],
+    output_profile: dict[str, Any],
 ) -> str:
     source = profile["source_inventory"]
     audit = profile["official_github_audit"]
@@ -572,19 +735,86 @@ def render_io_docs(
         "order. Each result contains `tr_id`, `ok`, `body`, `cont_yn`, `next_key`, and a sanitized",
         "`error` object. Orders, OAuth controls, and WebSocket IDs are rejected.",
         "",
-        "## ka10007 detail projections",
+        "## Response detail projections",
         "",
-        "The full `ka10007` response has 124 top-level fields. These nine non-overlapping routes",
-        "project that response without making extra upstream calls:",
+        f"The canonical manifest defines {len(projections['projections'])} candidate TRs and "
+        f"{sum(len(projection['groups']) for projection in projections['projections'])} non-overlapping routes.",
+        "Each route projects one full typed response without making an extra upstream call.",
         "",
-        "| Group | FastAPI path | Fields | Source field names |",
-        "| --- | --- | ---: | --- |",
+        "| TR | Layout | Group | FastAPI path | Fields | Source field names |",
+        "| --- | --- | --- | --- | ---: | --- |",
     ]
-    for group in detail["groups"]:
-        route = f"/api/v1/tr/quotes/ka10007/detail/{group['id']}"
-        fields = ", ".join(f"`{markdown(name)}`" for name in group["fields"])
-        lines.append(f"| `{group['id']}` | `{route}` | {len(group['fields'])} | {fields} |")
-    lines.extend(["", "## Operation reference", ""])
+    operation_by_id = {operation["id"]: operation for operation in operations}
+    for projection in projections["projections"]:
+        tr_id = projection["tr_id"]
+        domain = operation_by_id[tr_id]["domain"]
+        for group in projection["groups"]:
+            route = f"/api/v1/tr/{domain}/{tr_id}/detail/{group['id']}"
+            fields = ", ".join(f"`{markdown(name)}`" for name in group["fields"])
+            lines.append(
+                f"| `{tr_id}` | `{group_layout(group)}` | `{group['id']}` | `{route}` | "
+                f"{len(group['fields'])} | {fields} |"
+            )
+    output_policy = output_profile["policy"]
+    non_list_query_distribution = output_policy["descriptive_non_list_query_distribution"]
+    lines.extend(
+        [
+            "",
+            "## Response output profile and detail-candidate policy",
+            "",
+            "The generated response contract is profiled for every base operation after applying",
+            "the same typed-row and LIST-item structure used by the Pydantic model generator.",
+            f"The pinned profile contains {output_profile['shape_counts']['scalar_only']} scalar-only, "
+            f"{output_profile['shape_counts']['pure_list']} pure-list, and "
+            f"{output_profile['shape_counts']['compound']} compound responses.",
+            "Pure lists are pagination/UI concerns and are never field-split; the UI page size is",
+            f"{output_policy['list_ui_page_size']} rows. The practical one-screen field budget is "
+            f"{output_policy['screen_budget']}.",
+            "",
+            "`screen_complexity` is transparent and deterministic: top-level non-list fields plus",
+            "the sum of `min(list row width, 20)` for each list section. The cap represents the",
+            "field budget, not the number of list rows fetched or returned.",
+            "",
+            "All quantiles use Hyndman-Fan type 7. Tukey fences are `Q1 - 1.5 * IQR` and",
+            "`Q3 + 1.5 * IQR`. These statistics describe the pinned response population; Tukey",
+            "outlier status does not gate detail-candidate selection. The additional non-list-query",
+            "distribution includes domestic HTTP queries with at least one top-level non-list field.",
+            "",
+            "| Metric (all 208 base operations) | Min | Q1 | Median | Q3 | Max | Tukey upper fence |",
+            "| --- | ---: | ---: | ---: | ---: | ---: | ---: |",
+        ]
+    )
+    for metric, summary in output_profile["distributions"].items():
+        lines.append(
+            f"| `{metric}` | {summary['min']:g} | {summary['q1']:g} | "
+            f"{summary['median']:g} | {summary['q3']:g} | {summary['max']:g} | "
+            f"{summary['tukey_upper_fence']:g} |"
+        )
+    candidates = ", ".join(f"`{tr_id}`" for tr_id in output_policy["detail_candidates"])
+    lines.extend(
+        [
+            "",
+            f"The descriptive non-list-query population has **{non_list_query_distribution['count']}** "
+            f"operations: Q1 {non_list_query_distribution['q1']:g}, median "
+            f"{non_list_query_distribution['median']:g}, Q3 "
+            f"{non_list_query_distribution['q3']:g}, IQR "
+            f"{non_list_query_distribution['iqr']:g}, and Tukey upper fence "
+            f"{non_list_query_distribution['tukey_upper_fence']:g}.",
+            f"A domestic HTTP query is a candidate when it is not pure-list and its "
+            f"`screen_complexity` is greater than the one-screen budget of "
+            f"{output_policy['screen_budget']}. The pinned candidates are {candidates}.",
+            "Every pinned candidate has complete semantic projection coverage in",
+            "[`ref/response-projections.json`](../ref/response-projections.json). Facts groups contain",
+            "at most 20 serialized API aliases; table groups preserve one top-level LIST atomically",
+            "and declare a UI page size of 10 rows.",
+            "",
+            "The canonical machine-readable artifact is",
+            "[`ref/kiwoom-output-profile.json`](../ref/kiwoom-output-profile.json).",
+            "",
+            "## Operation reference",
+            "",
+        ]
+    )
 
     for tr in operations:
         transport = "WSS" if tr["kind"] == "websocket" else "HTTPS JSON"
@@ -658,8 +888,8 @@ def render_io_docs(
             "",
             "## Drift procedure",
             "",
-            "1. Update the checked-in inventory or detail manifest from an authorized source review.",
-            "2. Update `ref/kiwoom-io-source-profile.json` counts and inventory SHA-256 from that review.",
+            "1. Update the checked-in inventory or canonical response-projection manifest from an authorized source review.",
+            "2. Update `ref/kiwoom-io-source-profile.json` counts and SHA-256 values from that review.",
             "3. Run `python scripts/generate_api.py`, review this document's diff, then run",
             "   `python scripts/generate_api.py --check` and the backend test suite.",
             "4. Treat ID case changes, field-row changes, official deltas, and newly discovered US-only",
@@ -681,7 +911,10 @@ def main() -> int:
     args = parser.parse_args()
     inventory = load_inventory()
     operations, counts = classify(inventory)
-    detail = json.loads(DETAIL_MANIFEST_PATH.read_text(encoding="utf-8"))
+    projections = json.loads(PROJECTION_MANIFEST_PATH.read_text(encoding="utf-8"))
+    ka10007_compatibility = json.loads(
+        KA10007_COMPATIBILITY_PATH.read_text(encoding="utf-8")
+    )
     profile = json.loads(IO_SOURCE_PROFILE_PATH.read_text(encoding="utf-8"))
     inventory_sha256 = hashlib.sha256(INVENTORY_PATH.read_bytes()).hexdigest()
     if profile["source_inventory"]["sha256"] != inventory_sha256:
@@ -692,13 +925,28 @@ def main() -> int:
     inventory_ids = {tr["id"] for tr in operations}
     if len(official_us_ids) != 129 or official_us_ids & inventory_ids:
         raise ValueError("Domestic-only allowlist overlaps official U.S.-only operation IDs")
+    output_profile = build_output_profile(operations, inventory_sha256=inventory_sha256)
+    validate_response_projections(
+        operations, projections, output_profile, ka10007_compatibility
+    )
+    projection_sha256 = hashlib.sha256(PROJECTION_MANIFEST_PATH.read_bytes()).hexdigest()
+    expected_projection_metadata = response_projection_metadata(
+        projections, sha256=projection_sha256
+    )
+    if profile.get("response_projection_manifest") != expected_projection_metadata:
+        raise ValueError(
+            "Response projection metadata does not match ref/kiwoom-io-source-profile.json: "
+            f"expected={expected_projection_metadata}, "
+            f"actual={profile.get('response_projection_manifest')}"
+        )
+    output_profile_json = canonical_json(output_profile)
     outputs = {
         "__init__.py": '"""Inventory-generated API artifacts."""\n',
-        "models.py": render_models(operations, detail),
-        "registry.py": render_registry(operations, counts, detail),
-        "routes.py": render_routes(operations, detail),
+        "models.py": render_models(operations, projections),
+        "registry.py": render_registry(operations, counts, projections, output_profile),
+        "routes.py": render_routes(operations, projections),
     }
-    io_doc = render_io_docs(operations, counts, detail, profile)
+    io_doc = render_io_docs(operations, counts, projections, profile, output_profile)
     if args.check:
         stale = [
             name
@@ -712,17 +960,25 @@ def main() -> int:
         if not IO_DOC_PATH.is_file() or IO_DOC_PATH.read_text(encoding="utf-8") != io_doc:
             print(f"Generated documentation is stale: {IO_DOC_PATH.relative_to(BACKEND)}")
             return 1
+        if (
+            not OUTPUT_PROFILE_PATH.is_file()
+            or OUTPUT_PROFILE_PATH.read_text(encoding="utf-8") != output_profile_json
+        ):
+            print(f"Generated output profile is stale: {OUTPUT_PROFILE_PATH.relative_to(BACKEND)}")
+            return 1
         print("Generated files are current")
         return 0
     for name, content in outputs.items():
         write(GENERATED / name, content)
     write(IO_DOC_PATH, io_doc)
+    write(OUTPUT_PROFILE_PATH, output_profile_json)
     expected = {"__init__.py", "models.py", "registry.py", "routes.py", "runtime.py"}
     for stale in GENERATED.glob("*.py"):
         if stale.name not in expected:
             stale.unlink()
     print(
-        f"Generated {len(operations)} inventory operations: {counts}"
+        f"Generated {len(operations)} inventory operations and "
+        f"{expected_projection_metadata['route_count']} response projections: {counts}"
     )
     return 0
 
