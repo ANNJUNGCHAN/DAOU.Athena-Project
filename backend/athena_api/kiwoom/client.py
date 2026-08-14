@@ -140,6 +140,12 @@ class KiwoomClient:
                 jitter = 0.75 + self._random_value() * 0.5
                 await self._sleep(0.2 * (2 ** (attempt - 1)) * jitter)
                 continue
+            if 200 <= response.status_code < 300 and not body:
+                raise KiwoomApiError(
+                    code="invalid_response",
+                    message="upstream response was invalid",
+                    http_status=502,
+                )
             if not 200 <= response.status_code < 300 or return_code not in {"", "0"}:
                 raise KiwoomApiError(
                     code=return_code or str(response.status_code),

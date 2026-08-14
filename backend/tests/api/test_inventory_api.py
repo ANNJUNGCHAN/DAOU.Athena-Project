@@ -7,6 +7,7 @@ import subprocess
 import sys
 import threading
 from pathlib import Path
+from typing import get_origin
 
 import httpx
 import pytest
@@ -31,10 +32,14 @@ from athena_api.generated.registry import (
     KA10007_DETAIL_MANIFEST,
     OAUTH_TR_IDS,
     ORDER_TR_IDS,
+    OUTPUT_PROFILE,
+    OUTPUT_PROFILE_BY_ID,
     QUERY_TR_IDS,
+    RESPONSE_PROJECTION_BY_TR_ID,
     TR_REGISTRY,
     WEBSOCKET_TR_IDS,
 )
+from athena_api.generated.routes import router as generated_router
 from athena_api.generated.runtime import OrderReservation, OrderState, call_order_tr
 from athena_api.kiwoom import KiwoomWsError, ResponseEnvelope
 from athena_api.main import create_app
@@ -122,6 +127,167 @@ def test_inventory_partition_and_static_openapi_coverage() -> None:
     assert len(operation_ids) == len(set(operation_ids))
     assert len(base_tr_ids) == 208
     assert set(base_tr_ids) == ALL_TR_IDS
+
+
+def test_catalog_exposes_embedded_output_profile_and_candidate_projection_routes() -> None:
+    client = TestClient(create_app(Settings()))
+
+    profile_response = client.get("/api/v1/catalog/output-profile")
+    assert profile_response.status_code == 200
+    assert profile_response.json() == OUTPUT_PROFILE
+
+    catalog_response = client.get("/api/v1/catalog")
+    assert catalog_response.status_code == 200
+    catalog = catalog_response.json()
+    assert catalog["counts"] == {**INVENTORY_COUNTS, "total": 208}
+    assert catalog["output_profile"] == {
+        "operation_count": OUTPUT_PROFILE["operation_count"],
+        "shape_counts": OUTPUT_PROFILE["shape_counts"],
+        "distributions": OUTPUT_PROFILE["distributions"],
+        "policy": OUTPUT_PROFILE["policy"],
+    }
+    operations = {operation["tr_id"]: operation for operation in catalog["operations"]}
+    assert set(operations) == ALL_TR_IDS
+    assert len(operations) == 208
+
+    for tr_id, metadata in operations.items():
+        assert metadata["output_profile"] == OUTPUT_PROFILE_BY_ID[tr_id]
+        projection = RESPONSE_PROJECTION_BY_TR_ID.get(tr_id)
+        if projection is None:
+            assert "projection" not in metadata
+            assert "detail_groups" not in metadata
+            assert "detail_routes" not in metadata
+            continue
+        expected_routes = [
+            f"/api/v1/tr/{TR_REGISTRY[tr_id].domain}/{tr_id}/detail/{group['id']}"
+            for group in projection["groups"]
+        ]
+        assert metadata["projection"] == projection
+        assert metadata["detail_groups"] == projection["groups"]
+        assert metadata["detail_routes"] == expected_routes
+
+    assert operations["ka10007"]["detail_groups"] == KA10007_DETAIL_MANIFEST["groups"]
+    for tr_id in ("ka10007", "00"):
+        detail_response = client.get(f"/api/v1/catalog/{tr_id}")
+        assert detail_response.status_code == 200
+        assert detail_response.json() == operations[tr_id]
+    assert client.get("/api/v1/catalog/not-a-tr").status_code == 404
+
+
+def _projection_response_body(tr_id: str) -> dict[str, object]:
+    body: dict[str, object] = {}
+    for name, field in TR_REGISTRY[tr_id].response_model.model_fields.items():
+        alias = field.alias or name
+        body[alias] = [] if get_origin(field.annotation) is list else f"value-{alias}"
+    return body
+
+
+def _request_body(tr_id: str) -> dict[str, str]:
+    return {
+        field.alias or name: f"input-{field.alias or name}"
+        for name, field in TR_REGISTRY[tr_id].request_model.model_fields.items()
+    }
+
+
+def test_all_projection_routes_have_exact_openapi_contract_and_query_only_scope() -> None:
+    schema = create_app(Settings()).openapi()
+    projection_ids = set(RESPONSE_PROJECTION_BY_TR_ID)
+    assert projection_ids == set(OUTPUT_PROFILE["policy"]["detail_candidates"])
+    assert projection_ids <= QUERY_TR_IDS
+    assert not projection_ids & (ORDER_TR_IDS | WEBSOCKET_TR_IDS | OAUTH_TR_IDS)
+
+    detail_operations: list[str] = []
+    detail_paths: set[str] = set()
+    for tr_id, projection in RESPONSE_PROJECTION_BY_TR_ID.items():
+        spec = TR_REGISTRY[tr_id]
+        assert spec.kind == "query"
+        for group in projection["groups"]:
+            path = f"/api/v1/tr/{spec.domain}/{tr_id}/detail/{group['id']}"
+            operation = schema["paths"][path]["post"]
+            detail_paths.add(path)
+            detail_operations.append(operation["operationId"])
+            assert operation["x-kiwoom-tr-id"] == tr_id
+            assert operation["x-athena-detail-group"] == group["id"]
+
+    assert len(detail_paths) == 115
+    assert len(detail_operations) == len(set(detail_operations)) == 115
+    assert not any(
+        "/detail/" in path
+        for path in schema["paths"]
+        if path.startswith(("/api/v1/order/", "/api/v1/websocket/", "/api/v1/internal/oauth/"))
+    )
+
+
+@pytest.mark.asyncio
+async def test_all_candidate_base_and_projection_routes_preserve_runtime_contracts() -> None:
+    fake = FakeClient()
+    app = create_app(Settings())
+    endpoints = {
+        route.path: route.endpoint
+        for route in generated_router.routes
+        if hasattr(route, "endpoint") and hasattr(route, "path")
+    }
+
+    for tr_id, projection in RESPONSE_PROJECTION_BY_TR_ID.items():
+        spec = TR_REGISTRY[tr_id]
+        request_body = _request_body(tr_id)
+        response_body = _projection_response_body(tr_id)
+        fake.body = response_body
+        payload = spec.request_model.model_validate(request_body)
+        request = Request(
+            {
+                "type": "http",
+                "method": "POST",
+                "path": "/",
+                "app": app,
+                "headers": [(b"cont-yn", b"Y"), (b"next-key", b"INPUT-NEXT")],
+            }
+        )
+
+        fake.calls.clear()
+        base_path = f"/api/v1/tr/{spec.domain}/{tr_id}"
+        base_response = await endpoints[base_path](
+            payload, request, Response(), fake
+        )
+        assert base_response.model_dump(by_alias=True) == response_body
+        assert len(fake.calls) == 1
+        assert fake.calls[0][:3] == (tr_id, spec.upstream_path, request_body)
+        assert (fake.calls[0][3].cont_yn, fake.calls[0][3].next_key) == (
+            "Y",
+            "INPUT-NEXT",
+        )
+
+        for group in projection["groups"]:
+            fake.calls.clear()
+            detail_path = f"/api/v1/tr/{spec.domain}/{tr_id}/detail/{group['id']}"
+            response = await endpoints[detail_path](
+                payload, request, Response(), fake
+            )
+            assert set(response.model_dump(by_alias=True)) == set(group["fields"])
+            assert len(fake.calls) == 1
+            assert fake.calls[0][:3] == (tr_id, spec.upstream_path, request_body)
+            assert (fake.calls[0][3].cont_yn, fake.calls[0][3].next_key) == (
+                "Y",
+                "INPUT-NEXT",
+            )
+
+    numeric_aliases = RESPONSE_PROJECTION_BY_TR_ID["ka10001"]["groups"][2]["fields"]
+    assert "250hgst" in numeric_aliases
+    fake.body = _projection_response_body("ka10001")
+    numeric_payload = TR_REGISTRY["ka10001"].request_model.model_validate(
+        {"stk_cd": "005930"}
+    )
+    numeric_response = await endpoints[
+        "/api/v1/tr/stockinfo/ka10001/detail/price_range"
+    ](
+        numeric_payload,
+        Request({"type": "http", "method": "POST", "path": "/", "app": app, "headers": []}),
+        Response(),
+        fake,
+    )
+    numeric_body = numeric_response.model_dump(by_alias=True)
+    assert set(numeric_body) == set(numeric_aliases)
+    assert numeric_body["250hgst"] == "value-250hgst"
 
 
 def _websocket_payload(tr_id: str, command: str = "REG") -> dict[str, object]:

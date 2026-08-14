@@ -1,3 +1,4 @@
+# ruff: noqa: E501, I001
 """Generated static OpenAPI routes registered from the inventory. Do not edit."""
 from typing import Annotated
 
@@ -15,7 +16,7 @@ from athena_api.dependencies import (
     OrderKiwoomClientDep,
     TokenManagerDep,
 )
-from athena_api.generated.registry import KA10007_DETAIL_MANIFEST, TR_REGISTRY, TrSpec
+from athena_api.generated.registry import RESPONSE_PROJECTION_MANIFEST, TR_REGISTRY, TrSpec
 from athena_api.generated import models
 
 router = APIRouter()
@@ -74,12 +75,12 @@ def _oauth_endpoint(spec: TrSpec):
     return endpoint
 
 
-def _detail_endpoint(group_id: str, response_model: type):
-    request_model = models.Ka10007Request
+def _detail_endpoint(spec: TrSpec, response_model: type):
+    request_model = spec.request_model
 
     async def endpoint(payload: request_model, request: Request, response: Response, client: KiwoomClientDep) -> response_model:
         return await call_typed_tr(
-            "ka10007", payload, request, response, client, response_model=response_model
+            spec.tr_id, payload, request, response, client, response_model=response_model
         )
 
     return endpoint
@@ -115,16 +116,25 @@ for _spec in TR_REGISTRY.values():
         openapi_extra=_extra,
     )
 
-for _group in KA10007_DETAIL_MANIFEST["groups"]:
-    _group_id = _group["id"]
-    _response_model = getattr(models, "Ka10007" + "".join(part.title() for part in _group_id.split("_")) + "Response")
-    router.add_api_route(
-        f"/api/v1/tr/quotes/ka10007/detail/{_group_id}",
-        _detail_endpoint(_group_id, _response_model),
-        methods=["POST"],
-        response_model=_response_model,
-        tags=["Kiwoom TR details"],
-        summary=_group["title"],
-        operation_id=f"post_tr_quotes_ka10007_detail_{_group_id}",
-        openapi_extra={"x-kiwoom-tr-id": "ka10007", "x-athena-detail-group": _group_id},
-    )
+for _projection in RESPONSE_PROJECTION_MANIFEST["projections"]:
+    _tr_id = _projection["tr_id"]
+    _spec = TR_REGISTRY[_tr_id]
+    for _group in _projection["groups"]:
+        _group_id = _group["id"]
+        _response_model = getattr(
+            models,
+            _tr_id[:1].upper()
+            + _tr_id[1:]
+            + "".join(part.title() for part in _group_id.split("_"))
+            + "Response",
+        )
+        router.add_api_route(
+            f"/api/v1/tr/{_spec.domain}/{_tr_id}/detail/{_group_id}",
+            _detail_endpoint(_spec, _response_model),
+            methods=["POST"],
+            response_model=_response_model,
+            tags=["Kiwoom TR details"],
+            summary=_group.get("title_en") or _group.get("title") or _group_id,
+            operation_id=f"post_tr_{_spec.domain}_{_tr_id}_detail_{_group_id}",
+            openapi_extra={"x-kiwoom-tr-id": _tr_id, "x-athena-detail-group": _group_id},
+        )

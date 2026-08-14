@@ -1,0 +1,3604 @@
+{
+  "distributions": {
+    "list_section_count": {
+      "count": 208,
+      "iqr": 0.0,
+      "max": 2,
+      "median": 1.0,
+      "min": 0,
+      "q1": 1.0,
+      "q3": 1.0,
+      "tukey_lower_fence": 1.0,
+      "tukey_upper_fence": 1.0
+    },
+    "max_list_row_width": {
+      "count": 208,
+      "iqr": 8.0,
+      "max": 167,
+      "median": 10.0,
+      "min": 0,
+      "q1": 6.0,
+      "q3": 14.0,
+      "tukey_lower_fence": -6.0,
+      "tukey_upper_fence": 26.0
+    },
+    "nesting_depth": {
+      "count": 208,
+      "iqr": 0.0,
+      "max": 2,
+      "median": 2.0,
+      "min": 0,
+      "q1": 2.0,
+      "q3": 2.0,
+      "tukey_lower_fence": 2.0,
+      "tukey_upper_fence": 2.0
+    },
+    "scalar_leaf_count": {
+      "count": 208,
+      "iqr": 9.25,
+      "max": 170,
+      "median": 12.0,
+      "min": 0,
+      "q1": 9.0,
+      "q3": 18.25,
+      "tukey_lower_fence": -4.875,
+      "tukey_upper_fence": 32.125
+    },
+    "screen_complexity": {
+      "count": 208,
+      "iqr": 9.25,
+      "max": 124,
+      "median": 12.0,
+      "min": 0,
+      "q1": 9.0,
+      "q3": 18.25,
+      "tukey_lower_fence": -4.875,
+      "tukey_upper_fence": 32.125
+    },
+    "top_level_non_list_fields": {
+      "count": 208,
+      "iqr": 3.0,
+      "max": 124,
+      "median": 0.0,
+      "min": 0,
+      "q1": 0.0,
+      "q3": 3.0,
+      "tukey_lower_fence": -4.5,
+      "tukey_upper_fence": 7.5
+    },
+    "top_level_total_fields": {
+      "count": 208,
+      "iqr": 3.0,
+      "max": 124,
+      "median": 1.0,
+      "min": 0,
+      "q1": 1.0,
+      "q3": 4.0,
+      "tukey_lower_fence": -3.5,
+      "tukey_upper_fence": 8.5
+    }
+  },
+  "operation_count": 208,
+  "operations": [
+    {
+      "detail_candidate": false,
+      "domain": "websocket",
+      "id": "00",
+      "kind": "websocket",
+      "list_row_widths": [
+        39
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 39,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 42,
+      "screen_complexity": 23,
+      "shape": "compound",
+      "top_level_non_list_fields": 3,
+      "top_level_total_fields": 4
+    },
+    {
+      "detail_candidate": false,
+      "domain": "websocket",
+      "id": "04",
+      "kind": "websocket",
+      "list_row_widths": [
+        31
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 31,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 34,
+      "screen_complexity": 23,
+      "shape": "compound",
+      "top_level_non_list_fields": 3,
+      "top_level_total_fields": 4
+    },
+    {
+      "detail_candidate": false,
+      "domain": "websocket",
+      "id": "0A",
+      "kind": "websocket",
+      "list_row_widths": [
+        23
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 23,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 26,
+      "screen_complexity": 23,
+      "shape": "compound",
+      "top_level_non_list_fields": 3,
+      "top_level_total_fields": 4
+    },
+    {
+      "detail_candidate": false,
+      "domain": "websocket",
+      "id": "0B",
+      "kind": "websocket",
+      "list_row_widths": [
+        47
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 47,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 50,
+      "screen_complexity": 23,
+      "shape": "compound",
+      "top_level_non_list_fields": 3,
+      "top_level_total_fields": 4
+    },
+    {
+      "detail_candidate": false,
+      "domain": "websocket",
+      "id": "0C",
+      "kind": "websocket",
+      "list_row_widths": [
+        6
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 6,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 9,
+      "screen_complexity": 9,
+      "shape": "compound",
+      "top_level_non_list_fields": 3,
+      "top_level_total_fields": 4
+    },
+    {
+      "detail_candidate": false,
+      "domain": "websocket",
+      "id": "0D",
+      "kind": "websocket",
+      "list_row_widths": [
+        167
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 167,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 170,
+      "screen_complexity": 23,
+      "shape": "compound",
+      "top_level_non_list_fields": 3,
+      "top_level_total_fields": 4
+    },
+    {
+      "detail_candidate": false,
+      "domain": "websocket",
+      "id": "0E",
+      "kind": "websocket",
+      "list_row_widths": [
+        9
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 9,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 12,
+      "screen_complexity": 12,
+      "shape": "compound",
+      "top_level_non_list_fields": 3,
+      "top_level_total_fields": 4
+    },
+    {
+      "detail_candidate": false,
+      "domain": "websocket",
+      "id": "0F",
+      "kind": "websocket",
+      "list_row_widths": [
+        61
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 61,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 64,
+      "screen_complexity": 23,
+      "shape": "compound",
+      "top_level_non_list_fields": 3,
+      "top_level_total_fields": 4
+    },
+    {
+      "detail_candidate": false,
+      "domain": "websocket",
+      "id": "0G",
+      "kind": "websocket",
+      "list_row_widths": [
+        19
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 19,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 22,
+      "screen_complexity": 22,
+      "shape": "compound",
+      "top_level_non_list_fields": 3,
+      "top_level_total_fields": 4
+    },
+    {
+      "detail_candidate": false,
+      "domain": "websocket",
+      "id": "0H",
+      "kind": "websocket",
+      "list_row_widths": [
+        11
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 11,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 14,
+      "screen_complexity": 14,
+      "shape": "compound",
+      "top_level_non_list_fields": 3,
+      "top_level_total_fields": 4
+    },
+    {
+      "detail_candidate": false,
+      "domain": "websocket",
+      "id": "0I",
+      "kind": "websocket",
+      "list_row_widths": [
+        8
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 8,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 10,
+      "screen_complexity": 10,
+      "shape": "compound",
+      "top_level_non_list_fields": 2,
+      "top_level_total_fields": 3
+    },
+    {
+      "detail_candidate": false,
+      "domain": "websocket",
+      "id": "0J",
+      "kind": "websocket",
+      "list_row_widths": [
+        16
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 16,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 19,
+      "screen_complexity": 19,
+      "shape": "compound",
+      "top_level_non_list_fields": 3,
+      "top_level_total_fields": 4
+    },
+    {
+      "detail_candidate": false,
+      "domain": "websocket",
+      "id": "0U",
+      "kind": "websocket",
+      "list_row_widths": [
+        18
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 18,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 21,
+      "screen_complexity": 21,
+      "shape": "compound",
+      "top_level_non_list_fields": 3,
+      "top_level_total_fields": 4
+    },
+    {
+      "detail_candidate": false,
+      "domain": "websocket",
+      "id": "0g",
+      "kind": "websocket",
+      "list_row_widths": [
+        14
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 14,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 17,
+      "screen_complexity": 17,
+      "shape": "compound",
+      "top_level_non_list_fields": 3,
+      "top_level_total_fields": 4
+    },
+    {
+      "detail_candidate": false,
+      "domain": "websocket",
+      "id": "0m",
+      "kind": "websocket",
+      "list_row_widths": [
+        14
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 14,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 17,
+      "screen_complexity": 17,
+      "shape": "compound",
+      "top_level_non_list_fields": 3,
+      "top_level_total_fields": 4
+    },
+    {
+      "detail_candidate": false,
+      "domain": "websocket",
+      "id": "0s",
+      "kind": "websocket",
+      "list_row_widths": [
+        7
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 7,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 10,
+      "screen_complexity": 10,
+      "shape": "compound",
+      "top_level_non_list_fields": 3,
+      "top_level_total_fields": 4
+    },
+    {
+      "detail_candidate": false,
+      "domain": "websocket",
+      "id": "0u",
+      "kind": "websocket",
+      "list_row_widths": [
+        10
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 10,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 13,
+      "screen_complexity": 13,
+      "shape": "compound",
+      "top_level_non_list_fields": 3,
+      "top_level_total_fields": 4
+    },
+    {
+      "detail_candidate": false,
+      "domain": "websocket",
+      "id": "0w",
+      "kind": "websocket",
+      "list_row_widths": [
+        21
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 21,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 24,
+      "screen_complexity": 23,
+      "shape": "compound",
+      "top_level_non_list_fields": 3,
+      "top_level_total_fields": 4
+    },
+    {
+      "detail_candidate": false,
+      "domain": "websocket",
+      "id": "1h",
+      "kind": "websocket",
+      "list_row_widths": [
+        23
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 23,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 26,
+      "screen_complexity": 23,
+      "shape": "compound",
+      "top_level_non_list_fields": 3,
+      "top_level_total_fields": 4
+    },
+    {
+      "detail_candidate": false,
+      "domain": "auth",
+      "id": "au10001",
+      "kind": "oauth",
+      "list_row_widths": [],
+      "list_section_count": 0,
+      "max_list_row_width": 0,
+      "nesting_depth": 1,
+      "scalar_leaf_count": 3,
+      "screen_complexity": 3,
+      "shape": "scalar_only",
+      "top_level_non_list_fields": 3,
+      "top_level_total_fields": 3
+    },
+    {
+      "detail_candidate": false,
+      "domain": "auth",
+      "id": "au10002",
+      "kind": "oauth",
+      "list_row_widths": [],
+      "list_section_count": 0,
+      "max_list_row_width": 0,
+      "nesting_depth": 0,
+      "scalar_leaf_count": 0,
+      "screen_complexity": 0,
+      "shape": "scalar_only",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 0
+    },
+    {
+      "detail_candidate": false,
+      "domain": "account",
+      "id": "ka00001",
+      "kind": "query",
+      "list_row_widths": [],
+      "list_section_count": 0,
+      "max_list_row_width": 0,
+      "nesting_depth": 1,
+      "scalar_leaf_count": 1,
+      "screen_complexity": 1,
+      "shape": "scalar_only",
+      "top_level_non_list_fields": 1,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "stockinfo",
+      "id": "ka00198",
+      "kind": "query",
+      "list_row_widths": [
+        12
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 12,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 12,
+      "screen_complexity": 12,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "watchlist",
+      "id": "ka01300",
+      "kind": "query",
+      "list_row_widths": [
+        2
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 2,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 3,
+      "screen_complexity": 3,
+      "shape": "compound",
+      "top_level_non_list_fields": 1,
+      "top_level_total_fields": 2
+    },
+    {
+      "detail_candidate": false,
+      "domain": "watchlist",
+      "id": "ka01301",
+      "kind": "query",
+      "list_row_widths": [
+        3
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 3,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 4,
+      "screen_complexity": 4,
+      "shape": "compound",
+      "top_level_non_list_fields": 1,
+      "top_level_total_fields": 2
+    },
+    {
+      "detail_candidate": false,
+      "domain": "account",
+      "id": "ka01690",
+      "kind": "query",
+      "list_row_widths": [
+        10
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 10,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 18,
+      "screen_complexity": 18,
+      "shape": "compound",
+      "top_level_non_list_fields": 8,
+      "top_level_total_fields": 9
+    },
+    {
+      "detail_candidate": true,
+      "domain": "stockinfo",
+      "id": "ka10001",
+      "kind": "query",
+      "list_row_widths": [],
+      "list_section_count": 0,
+      "max_list_row_width": 0,
+      "nesting_depth": 1,
+      "scalar_leaf_count": 45,
+      "screen_complexity": 45,
+      "shape": "scalar_only",
+      "top_level_non_list_fields": 45,
+      "top_level_total_fields": 45
+    },
+    {
+      "detail_candidate": true,
+      "domain": "stockinfo",
+      "id": "ka10002",
+      "kind": "query",
+      "list_row_widths": [],
+      "list_section_count": 0,
+      "max_list_row_width": 0,
+      "nesting_depth": 1,
+      "scalar_leaf_count": 37,
+      "screen_complexity": 37,
+      "shape": "scalar_only",
+      "top_level_non_list_fields": 37,
+      "top_level_total_fields": 37
+    },
+    {
+      "detail_candidate": false,
+      "domain": "stockinfo",
+      "id": "ka10003",
+      "kind": "query",
+      "list_row_widths": [
+        12
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 12,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 12,
+      "screen_complexity": 12,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": true,
+      "domain": "quotes",
+      "id": "ka10004",
+      "kind": "query",
+      "list_row_widths": [],
+      "list_section_count": 0,
+      "max_list_row_width": 0,
+      "nesting_depth": 1,
+      "scalar_leaf_count": 69,
+      "screen_complexity": 69,
+      "shape": "scalar_only",
+      "top_level_non_list_fields": 69,
+      "top_level_total_fields": 69
+    },
+    {
+      "detail_candidate": false,
+      "domain": "quotes",
+      "id": "ka10005",
+      "kind": "query",
+      "list_row_widths": [
+        17
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 17,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 17,
+      "screen_complexity": 17,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "quotes",
+      "id": "ka10006",
+      "kind": "query",
+      "list_row_widths": [],
+      "list_section_count": 0,
+      "max_list_row_width": 0,
+      "nesting_depth": 1,
+      "scalar_leaf_count": 10,
+      "screen_complexity": 10,
+      "shape": "scalar_only",
+      "top_level_non_list_fields": 10,
+      "top_level_total_fields": 10
+    },
+    {
+      "detail_candidate": true,
+      "domain": "quotes",
+      "id": "ka10007",
+      "kind": "query",
+      "list_row_widths": [],
+      "list_section_count": 0,
+      "max_list_row_width": 0,
+      "nesting_depth": 1,
+      "scalar_leaf_count": 124,
+      "screen_complexity": 124,
+      "shape": "scalar_only",
+      "top_level_non_list_fields": 124,
+      "top_level_total_fields": 124
+    },
+    {
+      "detail_candidate": false,
+      "domain": "investor",
+      "id": "ka10008",
+      "kind": "query",
+      "list_row_widths": [
+        11
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 11,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 11,
+      "screen_complexity": 11,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "sector",
+      "id": "ka10010",
+      "kind": "query",
+      "list_row_widths": [],
+      "list_section_count": 0,
+      "max_list_row_width": 0,
+      "nesting_depth": 1,
+      "scalar_leaf_count": 18,
+      "screen_complexity": 18,
+      "shape": "scalar_only",
+      "top_level_non_list_fields": 18,
+      "top_level_total_fields": 18
+    },
+    {
+      "detail_candidate": false,
+      "domain": "quotes",
+      "id": "ka10011",
+      "kind": "query",
+      "list_row_widths": [
+        12
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 12,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 12,
+      "screen_complexity": 12,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "stockinfo",
+      "id": "ka10013",
+      "kind": "query",
+      "list_row_widths": [
+        12
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 12,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 12,
+      "screen_complexity": 12,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "shortsale",
+      "id": "ka10014",
+      "kind": "query",
+      "list_row_widths": [
+        11
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 11,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 11,
+      "screen_complexity": 11,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "stockinfo",
+      "id": "ka10015",
+      "kind": "query",
+      "list_row_widths": [
+        30
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 30,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 30,
+      "screen_complexity": 20,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "stockinfo",
+      "id": "ka10016",
+      "kind": "query",
+      "list_row_widths": [
+        12
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 12,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 12,
+      "screen_complexity": 12,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "stockinfo",
+      "id": "ka10017",
+      "kind": "query",
+      "list_row_widths": [
+        14
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 14,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 14,
+      "screen_complexity": 14,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "stockinfo",
+      "id": "ka10018",
+      "kind": "query",
+      "list_row_widths": [
+        11
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 11,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 11,
+      "screen_complexity": 11,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "stockinfo",
+      "id": "ka10019",
+      "kind": "query",
+      "list_row_widths": [
+        11
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 11,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 11,
+      "screen_complexity": 11,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "ranking",
+      "id": "ka10020",
+      "kind": "query",
+      "list_row_widths": [
+        10
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 10,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 10,
+      "screen_complexity": 10,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "ranking",
+      "id": "ka10021",
+      "kind": "query",
+      "list_row_widths": [
+        10
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 10,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 10,
+      "screen_complexity": 10,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "ranking",
+      "id": "ka10022",
+      "kind": "query",
+      "list_row_widths": [
+        10
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 10,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 10,
+      "screen_complexity": 10,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "ranking",
+      "id": "ka10023",
+      "kind": "query",
+      "list_row_widths": [
+        10
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 10,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 10,
+      "screen_complexity": 10,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "stockinfo",
+      "id": "ka10024",
+      "kind": "query",
+      "list_row_widths": [
+        10
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 10,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 10,
+      "screen_complexity": 10,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "stockinfo",
+      "id": "ka10025",
+      "kind": "query",
+      "list_row_widths": [
+        11
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 11,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 11,
+      "screen_complexity": 11,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "stockinfo",
+      "id": "ka10026",
+      "kind": "query",
+      "list_row_widths": [
+        9
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 9,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 9,
+      "screen_complexity": 9,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "ranking",
+      "id": "ka10027",
+      "kind": "query",
+      "list_row_widths": [
+        12
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 12,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 12,
+      "screen_complexity": 12,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "stockinfo",
+      "id": "ka10028",
+      "kind": "query",
+      "list_row_widths": [
+        12
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 12,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 12,
+      "screen_complexity": 12,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "ranking",
+      "id": "ka10029",
+      "kind": "query",
+      "list_row_widths": [
+        12
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 12,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 12,
+      "screen_complexity": 12,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "ranking",
+      "id": "ka10030",
+      "kind": "query",
+      "list_row_widths": [
+        22
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 22,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 22,
+      "screen_complexity": 20,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "ranking",
+      "id": "ka10031",
+      "kind": "query",
+      "list_row_widths": [
+        6
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 6,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 6,
+      "screen_complexity": 6,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "ranking",
+      "id": "ka10032",
+      "kind": "query",
+      "list_row_widths": [
+        13
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 13,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 13,
+      "screen_complexity": 13,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "ranking",
+      "id": "ka10033",
+      "kind": "query",
+      "list_row_widths": [
+        11
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 11,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 11,
+      "screen_complexity": 11,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "ranking",
+      "id": "ka10034",
+      "kind": "query",
+      "list_row_widths": [
+        11
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 11,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 11,
+      "screen_complexity": 11,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "ranking",
+      "id": "ka10035",
+      "kind": "query",
+      "list_row_widths": [
+        13
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 13,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 13,
+      "screen_complexity": 13,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "ranking",
+      "id": "ka10036",
+      "kind": "query",
+      "list_row_widths": [
+        12
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 12,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 12,
+      "screen_complexity": 12,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "ranking",
+      "id": "ka10037",
+      "kind": "query",
+      "list_row_widths": [
+        13
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 13,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 13,
+      "screen_complexity": 13,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "ranking",
+      "id": "ka10038",
+      "kind": "query",
+      "list_row_widths": [
+        5
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 5,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 9,
+      "screen_complexity": 9,
+      "shape": "compound",
+      "top_level_non_list_fields": 4,
+      "top_level_total_fields": 5
+    },
+    {
+      "detail_candidate": false,
+      "domain": "ranking",
+      "id": "ka10039",
+      "kind": "query",
+      "list_row_widths": [
+        12
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 12,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 12,
+      "screen_complexity": 12,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": true,
+      "domain": "ranking",
+      "id": "ka10040",
+      "kind": "query",
+      "list_row_widths": [
+        8
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 8,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 52,
+      "screen_complexity": 52,
+      "shape": "compound",
+      "top_level_non_list_fields": 44,
+      "top_level_total_fields": 45
+    },
+    {
+      "detail_candidate": false,
+      "domain": "ranking",
+      "id": "ka10042",
+      "kind": "query",
+      "list_row_widths": [
+        3
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 3,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 3,
+      "screen_complexity": 3,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "stockinfo",
+      "id": "ka10043",
+      "kind": "query",
+      "list_row_widths": [
+        9
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 9,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 9,
+      "screen_complexity": 9,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "quotes",
+      "id": "ka10044",
+      "kind": "query",
+      "list_row_widths": [
+        4
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 4,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 4,
+      "screen_complexity": 4,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "quotes",
+      "id": "ka10045",
+      "kind": "query",
+      "list_row_widths": [
+        11
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 11,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 13,
+      "screen_complexity": 13,
+      "shape": "compound",
+      "top_level_non_list_fields": 2,
+      "top_level_total_fields": 3
+    },
+    {
+      "detail_candidate": false,
+      "domain": "quotes",
+      "id": "ka10046",
+      "kind": "query",
+      "list_row_widths": [
+        13
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 13,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 13,
+      "screen_complexity": 13,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "quotes",
+      "id": "ka10047",
+      "kind": "query",
+      "list_row_widths": [
+        12
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 12,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 12,
+      "screen_complexity": 12,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "elw",
+      "id": "ka10048",
+      "kind": "query",
+      "list_row_widths": [
+        8
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 8,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 8,
+      "screen_complexity": 8,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "elw",
+      "id": "ka10050",
+      "kind": "query",
+      "list_row_widths": [
+        10
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 10,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 10,
+      "screen_complexity": 10,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "sector",
+      "id": "ka10051",
+      "kind": "query",
+      "list_row_widths": [
+        20
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 20,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 20,
+      "screen_complexity": 20,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "stockinfo",
+      "id": "ka10052",
+      "kind": "query",
+      "list_row_widths": [
+        11
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 11,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 11,
+      "screen_complexity": 11,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "ranking",
+      "id": "ka10053",
+      "kind": "query",
+      "list_row_widths": [
+        8
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 8,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 8,
+      "screen_complexity": 8,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "stockinfo",
+      "id": "ka10054",
+      "kind": "query",
+      "list_row_widths": [
+        14
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 14,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 14,
+      "screen_complexity": 14,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "stockinfo",
+      "id": "ka10055",
+      "kind": "query",
+      "list_row_widths": [
+        8
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 8,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 8,
+      "screen_complexity": 8,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "stockinfo",
+      "id": "ka10058",
+      "kind": "query",
+      "list_row_widths": [
+        11
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 11,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 11,
+      "screen_complexity": 11,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "stockinfo",
+      "id": "ka10059",
+      "kind": "query",
+      "list_row_widths": [
+        20
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 20,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 20,
+      "screen_complexity": 20,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "charts",
+      "id": "ka10060",
+      "kind": "query",
+      "list_row_widths": [
+        17
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 17,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 17,
+      "screen_complexity": 17,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "stockinfo",
+      "id": "ka10061",
+      "kind": "query",
+      "list_row_widths": [
+        13
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 13,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 13,
+      "screen_complexity": 13,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "ranking",
+      "id": "ka10062",
+      "kind": "query",
+      "list_row_widths": [
+        16
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 16,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 16,
+      "screen_complexity": 16,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "quotes",
+      "id": "ka10063",
+      "kind": "query",
+      "list_row_widths": [
+        21
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 21,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 21,
+      "screen_complexity": 20,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "charts",
+      "id": "ka10064",
+      "kind": "query",
+      "list_row_widths": [
+        9
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 9,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 9,
+      "screen_complexity": 9,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "ranking",
+      "id": "ka10065",
+      "kind": "query",
+      "list_row_widths": [
+        5
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 5,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 5,
+      "screen_complexity": 5,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "quotes",
+      "id": "ka10066",
+      "kind": "query",
+      "list_row_widths": [
+        19
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 19,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 19,
+      "screen_complexity": 19,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "lending",
+      "id": "ka10068",
+      "kind": "query",
+      "list_row_widths": [
+        6
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 6,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 6,
+      "screen_complexity": 6,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "lending",
+      "id": "ka10069",
+      "kind": "query",
+      "list_row_widths": [
+        6
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 6,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 14,
+      "screen_complexity": 14,
+      "shape": "compound",
+      "top_level_non_list_fields": 8,
+      "top_level_total_fields": 9
+    },
+    {
+      "detail_candidate": false,
+      "domain": "account",
+      "id": "ka10072",
+      "kind": "query",
+      "list_row_widths": [
+        14
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 14,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 14,
+      "screen_complexity": 14,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "account",
+      "id": "ka10073",
+      "kind": "query",
+      "list_row_widths": [
+        14
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 14,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 14,
+      "screen_complexity": 14,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "account",
+      "id": "ka10074",
+      "kind": "query",
+      "list_row_widths": [
+        6
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 6,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 11,
+      "screen_complexity": 11,
+      "shape": "compound",
+      "top_level_non_list_fields": 5,
+      "top_level_total_fields": 6
+    },
+    {
+      "detail_candidate": false,
+      "domain": "account",
+      "id": "ka10075",
+      "kind": "query",
+      "list_row_widths": [
+        30
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 30,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 30,
+      "screen_complexity": 20,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "account",
+      "id": "ka10076",
+      "kind": "query",
+      "list_row_widths": [
+        19
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 19,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 19,
+      "screen_complexity": 19,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "account",
+      "id": "ka10077",
+      "kind": "query",
+      "list_row_widths": [
+        9
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 9,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 10,
+      "screen_complexity": 10,
+      "shape": "compound",
+      "top_level_non_list_fields": 1,
+      "top_level_total_fields": 2
+    },
+    {
+      "detail_candidate": false,
+      "domain": "quotes",
+      "id": "ka10078",
+      "kind": "query",
+      "list_row_widths": [
+        9
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 9,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 9,
+      "screen_complexity": 9,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "charts",
+      "id": "ka10079",
+      "kind": "query",
+      "list_row_widths": [
+        8
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 8,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 10,
+      "screen_complexity": 10,
+      "shape": "compound",
+      "top_level_non_list_fields": 2,
+      "top_level_total_fields": 3
+    },
+    {
+      "detail_candidate": false,
+      "domain": "charts",
+      "id": "ka10080",
+      "kind": "query",
+      "list_row_widths": [
+        8
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 8,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 9,
+      "screen_complexity": 9,
+      "shape": "compound",
+      "top_level_non_list_fields": 1,
+      "top_level_total_fields": 2
+    },
+    {
+      "detail_candidate": false,
+      "domain": "charts",
+      "id": "ka10081",
+      "kind": "query",
+      "list_row_widths": [
+        10
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 10,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 11,
+      "screen_complexity": 11,
+      "shape": "compound",
+      "top_level_non_list_fields": 1,
+      "top_level_total_fields": 2
+    },
+    {
+      "detail_candidate": false,
+      "domain": "charts",
+      "id": "ka10082",
+      "kind": "query",
+      "list_row_widths": [
+        10
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 10,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 11,
+      "screen_complexity": 11,
+      "shape": "compound",
+      "top_level_non_list_fields": 1,
+      "top_level_total_fields": 2
+    },
+    {
+      "detail_candidate": false,
+      "domain": "charts",
+      "id": "ka10083",
+      "kind": "query",
+      "list_row_widths": [
+        10
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 10,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 11,
+      "screen_complexity": 11,
+      "shape": "compound",
+      "top_level_non_list_fields": 1,
+      "top_level_total_fields": 2
+    },
+    {
+      "detail_candidate": false,
+      "domain": "stockinfo",
+      "id": "ka10084",
+      "kind": "query",
+      "list_row_widths": [
+        12
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 12,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 12,
+      "screen_complexity": 12,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "account",
+      "id": "ka10085",
+      "kind": "query",
+      "list_row_widths": [
+        17
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 17,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 17,
+      "screen_complexity": 17,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "quotes",
+      "id": "ka10086",
+      "kind": "query",
+      "list_row_widths": [
+        22
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 22,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 22,
+      "screen_complexity": 20,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": true,
+      "domain": "quotes",
+      "id": "ka10087",
+      "kind": "query",
+      "list_row_widths": [],
+      "list_section_count": 0,
+      "max_list_row_width": 0,
+      "nesting_depth": 1,
+      "scalar_leaf_count": 46,
+      "screen_complexity": 46,
+      "shape": "scalar_only",
+      "top_level_non_list_fields": 46,
+      "top_level_total_fields": 46
+    },
+    {
+      "detail_candidate": false,
+      "domain": "account",
+      "id": "ka10088",
+      "kind": "query",
+      "list_row_widths": [
+        14
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 14,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 14,
+      "screen_complexity": 14,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "charts",
+      "id": "ka10094",
+      "kind": "query",
+      "list_row_widths": [
+        7
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 7,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 8,
+      "screen_complexity": 8,
+      "shape": "compound",
+      "top_level_non_list_fields": 1,
+      "top_level_total_fields": 2
+    },
+    {
+      "detail_candidate": false,
+      "domain": "stockinfo",
+      "id": "ka10095",
+      "kind": "query",
+      "list_row_widths": [
+        63
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 63,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 63,
+      "screen_complexity": 20,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "ranking",
+      "id": "ka10098",
+      "kind": "query",
+      "list_row_widths": [
+        13
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 13,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 13,
+      "screen_complexity": 13,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "stockinfo",
+      "id": "ka10099",
+      "kind": "query",
+      "list_row_widths": [
+        14
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 14,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 14,
+      "screen_complexity": 14,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "stockinfo",
+      "id": "ka10100",
+      "kind": "query",
+      "list_row_widths": [],
+      "list_section_count": 0,
+      "max_list_row_width": 0,
+      "nesting_depth": 1,
+      "scalar_leaf_count": 14,
+      "screen_complexity": 14,
+      "shape": "scalar_only",
+      "top_level_non_list_fields": 14,
+      "top_level_total_fields": 14
+    },
+    {
+      "detail_candidate": false,
+      "domain": "stockinfo",
+      "id": "ka10101",
+      "kind": "query",
+      "list_row_widths": [
+        4
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 4,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 4,
+      "screen_complexity": 4,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "stockinfo",
+      "id": "ka10102",
+      "kind": "query",
+      "list_row_widths": [
+        3
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 3,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 3,
+      "screen_complexity": 3,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "investor",
+      "id": "ka10131",
+      "kind": "query",
+      "list_row_widths": [
+        19
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 19,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 19,
+      "screen_complexity": 19,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "account",
+      "id": "ka10170",
+      "kind": "query",
+      "list_row_widths": [
+        11
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 11,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 17,
+      "screen_complexity": 17,
+      "shape": "compound",
+      "top_level_non_list_fields": 6,
+      "top_level_total_fields": 7
+    },
+    {
+      "detail_candidate": false,
+      "domain": "websocket",
+      "id": "ka10171",
+      "kind": "websocket",
+      "list_row_widths": [
+        2
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 2,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 5,
+      "screen_complexity": 5,
+      "shape": "compound",
+      "top_level_non_list_fields": 3,
+      "top_level_total_fields": 4
+    },
+    {
+      "detail_candidate": false,
+      "domain": "websocket",
+      "id": "ka10172",
+      "kind": "websocket",
+      "list_row_widths": [
+        10
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 10,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 16,
+      "screen_complexity": 16,
+      "shape": "compound",
+      "top_level_non_list_fields": 6,
+      "top_level_total_fields": 7
+    },
+    {
+      "detail_candidate": false,
+      "domain": "websocket",
+      "id": "ka10173",
+      "kind": "websocket",
+      "list_row_widths": [
+        1,
+        0
+      ],
+      "list_section_count": 2,
+      "max_list_row_width": 1,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 14,
+      "screen_complexity": 14,
+      "shape": "compound",
+      "top_level_non_list_fields": 13,
+      "top_level_total_fields": 15
+    },
+    {
+      "detail_candidate": false,
+      "domain": "websocket",
+      "id": "ka10174",
+      "kind": "websocket",
+      "list_row_widths": [],
+      "list_section_count": 0,
+      "max_list_row_width": 0,
+      "nesting_depth": 1,
+      "scalar_leaf_count": 4,
+      "screen_complexity": 4,
+      "shape": "scalar_only",
+      "top_level_non_list_fields": 4,
+      "top_level_total_fields": 4
+    },
+    {
+      "detail_candidate": true,
+      "domain": "sector",
+      "id": "ka20001",
+      "kind": "query",
+      "list_row_widths": [
+        7
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 7,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 29,
+      "screen_complexity": 29,
+      "shape": "compound",
+      "top_level_non_list_fields": 22,
+      "top_level_total_fields": 23
+    },
+    {
+      "detail_candidate": false,
+      "domain": "sector",
+      "id": "ka20002",
+      "kind": "query",
+      "list_row_widths": [
+        12
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 12,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 12,
+      "screen_complexity": 12,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "sector",
+      "id": "ka20003",
+      "kind": "query",
+      "list_row_widths": [
+        15
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 15,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 15,
+      "screen_complexity": 15,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "charts",
+      "id": "ka20004",
+      "kind": "query",
+      "list_row_widths": [
+        8
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 8,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 9,
+      "screen_complexity": 9,
+      "shape": "compound",
+      "top_level_non_list_fields": 1,
+      "top_level_total_fields": 2
+    },
+    {
+      "detail_candidate": false,
+      "domain": "charts",
+      "id": "ka20005",
+      "kind": "query",
+      "list_row_widths": [
+        9
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 9,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 10,
+      "screen_complexity": 10,
+      "shape": "compound",
+      "top_level_non_list_fields": 1,
+      "top_level_total_fields": 2
+    },
+    {
+      "detail_candidate": false,
+      "domain": "charts",
+      "id": "ka20006",
+      "kind": "query",
+      "list_row_widths": [
+        7
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 7,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 8,
+      "screen_complexity": 8,
+      "shape": "compound",
+      "top_level_non_list_fields": 1,
+      "top_level_total_fields": 2
+    },
+    {
+      "detail_candidate": false,
+      "domain": "charts",
+      "id": "ka20007",
+      "kind": "query",
+      "list_row_widths": [
+        7
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 7,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 8,
+      "screen_complexity": 8,
+      "shape": "compound",
+      "top_level_non_list_fields": 1,
+      "top_level_total_fields": 2
+    },
+    {
+      "detail_candidate": false,
+      "domain": "charts",
+      "id": "ka20008",
+      "kind": "query",
+      "list_row_widths": [
+        7
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 7,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 8,
+      "screen_complexity": 8,
+      "shape": "compound",
+      "top_level_non_list_fields": 1,
+      "top_level_total_fields": 2
+    },
+    {
+      "detail_candidate": true,
+      "domain": "sector",
+      "id": "ka20009",
+      "kind": "query",
+      "list_row_widths": [
+        6
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 6,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 28,
+      "screen_complexity": 28,
+      "shape": "compound",
+      "top_level_non_list_fields": 22,
+      "top_level_total_fields": 23
+    },
+    {
+      "detail_candidate": false,
+      "domain": "charts",
+      "id": "ka20019",
+      "kind": "query",
+      "list_row_widths": [
+        7
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 7,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 8,
+      "screen_complexity": 8,
+      "shape": "compound",
+      "top_level_non_list_fields": 1,
+      "top_level_total_fields": 2
+    },
+    {
+      "detail_candidate": false,
+      "domain": "lending",
+      "id": "ka20068",
+      "kind": "query",
+      "list_row_widths": [
+        6
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 6,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 6,
+      "screen_complexity": 6,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "elw",
+      "id": "ka30001",
+      "kind": "query",
+      "list_row_widths": [
+        10
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 10,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 11,
+      "screen_complexity": 11,
+      "shape": "compound",
+      "top_level_non_list_fields": 1,
+      "top_level_total_fields": 2
+    },
+    {
+      "detail_candidate": false,
+      "domain": "elw",
+      "id": "ka30002",
+      "kind": "query",
+      "list_row_widths": [
+        8
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 8,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 8,
+      "screen_complexity": 8,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "elw",
+      "id": "ka30003",
+      "kind": "query",
+      "list_row_widths": [
+        10
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 10,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 10,
+      "screen_complexity": 10,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "elw",
+      "id": "ka30004",
+      "kind": "query",
+      "list_row_widths": [
+        15
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 15,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 15,
+      "screen_complexity": 15,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "elw",
+      "id": "ka30005",
+      "kind": "query",
+      "list_row_widths": [
+        39
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 39,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 39,
+      "screen_complexity": 20,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "elw",
+      "id": "ka30009",
+      "kind": "query",
+      "list_row_widths": [
+        11
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 11,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 11,
+      "screen_complexity": 11,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "elw",
+      "id": "ka30010",
+      "kind": "query",
+      "list_row_widths": [
+        12
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 12,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 12,
+      "screen_complexity": 12,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "elw",
+      "id": "ka30011",
+      "kind": "query",
+      "list_row_widths": [
+        8
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 8,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 8,
+      "screen_complexity": 8,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": true,
+      "domain": "elw",
+      "id": "ka30012",
+      "kind": "query",
+      "list_row_widths": [],
+      "list_section_count": 0,
+      "max_list_row_width": 0,
+      "nesting_depth": 1,
+      "scalar_leaf_count": 65,
+      "screen_complexity": 65,
+      "shape": "scalar_only",
+      "top_level_non_list_fields": 65,
+      "top_level_total_fields": 65
+    },
+    {
+      "detail_candidate": false,
+      "domain": "etf",
+      "id": "ka40001",
+      "kind": "query",
+      "list_row_widths": [
+        4
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 4,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 4,
+      "screen_complexity": 4,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "etf",
+      "id": "ka40002",
+      "kind": "query",
+      "list_row_widths": [],
+      "list_section_count": 0,
+      "max_list_row_width": 0,
+      "nesting_depth": 1,
+      "scalar_leaf_count": 5,
+      "screen_complexity": 5,
+      "shape": "scalar_only",
+      "top_level_non_list_fields": 5,
+      "top_level_total_fields": 5
+    },
+    {
+      "detail_candidate": false,
+      "domain": "etf",
+      "id": "ka40003",
+      "kind": "query",
+      "list_row_widths": [
+        14
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 14,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 14,
+      "screen_complexity": 14,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "etf",
+      "id": "ka40004",
+      "kind": "query",
+      "list_row_widths": [
+        18
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 18,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 18,
+      "screen_complexity": 18,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "etf",
+      "id": "ka40006",
+      "kind": "query",
+      "list_row_widths": [
+        14
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 14,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 19,
+      "screen_complexity": 19,
+      "shape": "compound",
+      "top_level_non_list_fields": 5,
+      "top_level_total_fields": 6
+    },
+    {
+      "detail_candidate": false,
+      "domain": "etf",
+      "id": "ka40007",
+      "kind": "query",
+      "list_row_widths": [
+        6
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 6,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 12,
+      "screen_complexity": 12,
+      "shape": "compound",
+      "top_level_non_list_fields": 6,
+      "top_level_total_fields": 7
+    },
+    {
+      "detail_candidate": false,
+      "domain": "etf",
+      "id": "ka40008",
+      "kind": "query",
+      "list_row_widths": [
+        7
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 7,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 12,
+      "screen_complexity": 12,
+      "shape": "compound",
+      "top_level_non_list_fields": 5,
+      "top_level_total_fields": 6
+    },
+    {
+      "detail_candidate": false,
+      "domain": "etf",
+      "id": "ka40009",
+      "kind": "query",
+      "list_row_widths": [
+        12
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 12,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 12,
+      "screen_complexity": 12,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "etf",
+      "id": "ka40010",
+      "kind": "query",
+      "list_row_widths": [
+        5
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 5,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 5,
+      "screen_complexity": 5,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "quotes",
+      "id": "ka50010",
+      "kind": "query",
+      "list_row_widths": [
+        13
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 13,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 13,
+      "screen_complexity": 13,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "quotes",
+      "id": "ka50012",
+      "kind": "query",
+      "list_row_widths": [
+        13
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 13,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 13,
+      "screen_complexity": 13,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "charts",
+      "id": "ka50079",
+      "kind": "query",
+      "list_row_widths": [
+        9
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 9,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 9,
+      "screen_complexity": 9,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "charts",
+      "id": "ka50080",
+      "kind": "query",
+      "list_row_widths": [
+        10
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 10,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 10,
+      "screen_complexity": 10,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "charts",
+      "id": "ka50081",
+      "kind": "query",
+      "list_row_widths": [
+        8
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 8,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 8,
+      "screen_complexity": 8,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "charts",
+      "id": "ka50082",
+      "kind": "query",
+      "list_row_widths": [
+        7
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 7,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 7,
+      "screen_complexity": 7,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "charts",
+      "id": "ka50083",
+      "kind": "query",
+      "list_row_widths": [
+        7
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 7,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 7,
+      "screen_complexity": 7,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "quotes",
+      "id": "ka50087",
+      "kind": "query",
+      "list_row_widths": [
+        8
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 8,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 8,
+      "screen_complexity": 8,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "charts",
+      "id": "ka50091",
+      "kind": "query",
+      "list_row_widths": [
+        9
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 9,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 9,
+      "screen_complexity": 9,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "charts",
+      "id": "ka50092",
+      "kind": "query",
+      "list_row_widths": [
+        11
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 11,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 11,
+      "screen_complexity": 11,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "quotes",
+      "id": "ka50100",
+      "kind": "query",
+      "list_row_widths": [],
+      "list_section_count": 0,
+      "max_list_row_width": 0,
+      "nesting_depth": 1,
+      "scalar_leaf_count": 11,
+      "screen_complexity": 11,
+      "shape": "scalar_only",
+      "top_level_non_list_fields": 11,
+      "top_level_total_fields": 11
+    },
+    {
+      "detail_candidate": false,
+      "domain": "quotes",
+      "id": "ka50101",
+      "kind": "query",
+      "list_row_widths": [
+        15
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 15,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 15,
+      "screen_complexity": 15,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "investor",
+      "id": "ka52301",
+      "kind": "query",
+      "list_row_widths": [
+        18
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 18,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 18,
+      "screen_complexity": 18,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "theme",
+      "id": "ka90001",
+      "kind": "query",
+      "list_row_widths": [
+        9
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 9,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 9,
+      "screen_complexity": 9,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "theme",
+      "id": "ka90002",
+      "kind": "query",
+      "list_row_widths": [
+        12
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 12,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 14,
+      "screen_complexity": 14,
+      "shape": "compound",
+      "top_level_non_list_fields": 2,
+      "top_level_total_fields": 3
+    },
+    {
+      "detail_candidate": false,
+      "domain": "stockinfo",
+      "id": "ka90003",
+      "kind": "query",
+      "list_row_widths": [
+        11
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 11,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 11,
+      "screen_complexity": 11,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "stockinfo",
+      "id": "ka90004",
+      "kind": "query",
+      "list_row_widths": [
+        11
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 11,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 17,
+      "screen_complexity": 17,
+      "shape": "compound",
+      "top_level_non_list_fields": 6,
+      "top_level_total_fields": 7
+    },
+    {
+      "detail_candidate": false,
+      "domain": "quotes",
+      "id": "ka90005",
+      "kind": "query",
+      "list_row_widths": [
+        18
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 18,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 18,
+      "screen_complexity": 18,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "quotes",
+      "id": "ka90006",
+      "kind": "query",
+      "list_row_widths": [
+        7
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 7,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 7,
+      "screen_complexity": 7,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "quotes",
+      "id": "ka90007",
+      "kind": "query",
+      "list_row_widths": [
+        9
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 9,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 9,
+      "screen_complexity": 9,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "quotes",
+      "id": "ka90008",
+      "kind": "query",
+      "list_row_widths": [
+        18
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 18,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 18,
+      "screen_complexity": 18,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "ranking",
+      "id": "ka90009",
+      "kind": "query",
+      "list_row_widths": [
+        16
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 16,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 16,
+      "screen_complexity": 16,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "quotes",
+      "id": "ka90010",
+      "kind": "query",
+      "list_row_widths": [
+        18
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 18,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 18,
+      "screen_complexity": 18,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "lending",
+      "id": "ka90012",
+      "kind": "query",
+      "list_row_widths": [
+        6
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 6,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 6,
+      "screen_complexity": 6,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "quotes",
+      "id": "ka90013",
+      "kind": "query",
+      "list_row_widths": [
+        18
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 18,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 18,
+      "screen_complexity": 18,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": true,
+      "domain": "account",
+      "id": "kt00001",
+      "kind": "query",
+      "list_row_widths": [
+        14
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 14,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 83,
+      "screen_complexity": 83,
+      "shape": "compound",
+      "top_level_non_list_fields": 69,
+      "top_level_total_fields": 70
+    },
+    {
+      "detail_candidate": false,
+      "domain": "account",
+      "id": "kt00002",
+      "kind": "query",
+      "list_row_widths": [
+        8
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 8,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 8,
+      "screen_complexity": 8,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "account",
+      "id": "kt00003",
+      "kind": "query",
+      "list_row_widths": [],
+      "list_section_count": 0,
+      "max_list_row_width": 0,
+      "nesting_depth": 1,
+      "scalar_leaf_count": 1,
+      "screen_complexity": 1,
+      "shape": "scalar_only",
+      "top_level_non_list_fields": 1,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": true,
+      "domain": "account",
+      "id": "kt00004",
+      "kind": "query",
+      "list_row_widths": [
+        15
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 15,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 33,
+      "screen_complexity": 33,
+      "shape": "compound",
+      "top_level_non_list_fields": 18,
+      "top_level_total_fields": 19
+    },
+    {
+      "detail_candidate": true,
+      "domain": "account",
+      "id": "kt00005",
+      "kind": "query",
+      "list_row_widths": [
+        13
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 13,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 43,
+      "screen_complexity": 43,
+      "shape": "compound",
+      "top_level_non_list_fields": 30,
+      "top_level_total_fields": 31
+    },
+    {
+      "detail_candidate": false,
+      "domain": "account",
+      "id": "kt00007",
+      "kind": "query",
+      "list_row_widths": [
+        22
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 22,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 22,
+      "screen_complexity": 20,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "account",
+      "id": "kt00008",
+      "kind": "query",
+      "list_row_widths": [
+        15
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 15,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 19,
+      "screen_complexity": 19,
+      "shape": "compound",
+      "top_level_non_list_fields": 4,
+      "top_level_total_fields": 5
+    },
+    {
+      "detail_candidate": true,
+      "domain": "account",
+      "id": "kt00009",
+      "kind": "query",
+      "list_row_widths": [
+        22
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 22,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 25,
+      "screen_complexity": 23,
+      "shape": "compound",
+      "top_level_non_list_fields": 3,
+      "top_level_total_fields": 4
+    },
+    {
+      "detail_candidate": true,
+      "domain": "account",
+      "id": "kt00010",
+      "kind": "query",
+      "list_row_widths": [],
+      "list_section_count": 0,
+      "max_list_row_width": 0,
+      "nesting_depth": 1,
+      "scalar_leaf_count": 28,
+      "screen_complexity": 28,
+      "shape": "scalar_only",
+      "top_level_non_list_fields": 28,
+      "top_level_total_fields": 28
+    },
+    {
+      "detail_candidate": true,
+      "domain": "account",
+      "id": "kt00011",
+      "kind": "query",
+      "list_row_widths": [],
+      "list_section_count": 0,
+      "max_list_row_width": 0,
+      "nesting_depth": 1,
+      "scalar_leaf_count": 36,
+      "screen_complexity": 36,
+      "shape": "scalar_only",
+      "top_level_non_list_fields": 36,
+      "top_level_total_fields": 36
+    },
+    {
+      "detail_candidate": true,
+      "domain": "account",
+      "id": "kt00012",
+      "kind": "query",
+      "list_row_widths": [],
+      "list_section_count": 0,
+      "max_list_row_width": 0,
+      "nesting_depth": 1,
+      "scalar_leaf_count": 27,
+      "screen_complexity": 27,
+      "shape": "scalar_only",
+      "top_level_non_list_fields": 27,
+      "top_level_total_fields": 27
+    },
+    {
+      "detail_candidate": true,
+      "domain": "account",
+      "id": "kt00013",
+      "kind": "query",
+      "list_row_widths": [],
+      "list_section_count": 0,
+      "max_list_row_width": 0,
+      "nesting_depth": 1,
+      "scalar_leaf_count": 50,
+      "screen_complexity": 50,
+      "shape": "scalar_only",
+      "top_level_non_list_fields": 50,
+      "top_level_total_fields": 50
+    },
+    {
+      "detail_candidate": false,
+      "domain": "account",
+      "id": "kt00015",
+      "kind": "query",
+      "list_row_widths": [
+        51
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 51,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 51,
+      "screen_complexity": 20,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": true,
+      "domain": "account",
+      "id": "kt00016",
+      "kind": "query",
+      "list_row_widths": [],
+      "list_section_count": 0,
+      "max_list_row_width": 0,
+      "nesting_depth": 1,
+      "scalar_leaf_count": 39,
+      "screen_complexity": 39,
+      "shape": "scalar_only",
+      "top_level_non_list_fields": 39,
+      "top_level_total_fields": 39
+    },
+    {
+      "detail_candidate": true,
+      "domain": "account",
+      "id": "kt00017",
+      "kind": "query",
+      "list_row_widths": [],
+      "list_section_count": 0,
+      "max_list_row_width": 0,
+      "nesting_depth": 1,
+      "scalar_leaf_count": 25,
+      "screen_complexity": 25,
+      "shape": "scalar_only",
+      "top_level_non_list_fields": 25,
+      "top_level_total_fields": 25
+    },
+    {
+      "detail_candidate": true,
+      "domain": "account",
+      "id": "kt00018",
+      "kind": "query",
+      "list_row_widths": [
+        23
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 23,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 31,
+      "screen_complexity": 28,
+      "shape": "compound",
+      "top_level_non_list_fields": 8,
+      "top_level_total_fields": 9
+    },
+    {
+      "detail_candidate": false,
+      "domain": "order",
+      "id": "kt10000",
+      "kind": "order",
+      "list_row_widths": [],
+      "list_section_count": 0,
+      "max_list_row_width": 0,
+      "nesting_depth": 1,
+      "scalar_leaf_count": 2,
+      "screen_complexity": 2,
+      "shape": "scalar_only",
+      "top_level_non_list_fields": 2,
+      "top_level_total_fields": 2
+    },
+    {
+      "detail_candidate": false,
+      "domain": "order",
+      "id": "kt10001",
+      "kind": "order",
+      "list_row_widths": [],
+      "list_section_count": 0,
+      "max_list_row_width": 0,
+      "nesting_depth": 1,
+      "scalar_leaf_count": 2,
+      "screen_complexity": 2,
+      "shape": "scalar_only",
+      "top_level_non_list_fields": 2,
+      "top_level_total_fields": 2
+    },
+    {
+      "detail_candidate": false,
+      "domain": "order",
+      "id": "kt10002",
+      "kind": "order",
+      "list_row_widths": [],
+      "list_section_count": 0,
+      "max_list_row_width": 0,
+      "nesting_depth": 1,
+      "scalar_leaf_count": 4,
+      "screen_complexity": 4,
+      "shape": "scalar_only",
+      "top_level_non_list_fields": 4,
+      "top_level_total_fields": 4
+    },
+    {
+      "detail_candidate": false,
+      "domain": "order",
+      "id": "kt10003",
+      "kind": "order",
+      "list_row_widths": [],
+      "list_section_count": 0,
+      "max_list_row_width": 0,
+      "nesting_depth": 1,
+      "scalar_leaf_count": 3,
+      "screen_complexity": 3,
+      "shape": "scalar_only",
+      "top_level_non_list_fields": 3,
+      "top_level_total_fields": 3
+    },
+    {
+      "detail_candidate": false,
+      "domain": "order",
+      "id": "kt10006",
+      "kind": "order",
+      "list_row_widths": [],
+      "list_section_count": 0,
+      "max_list_row_width": 0,
+      "nesting_depth": 1,
+      "scalar_leaf_count": 2,
+      "screen_complexity": 2,
+      "shape": "scalar_only",
+      "top_level_non_list_fields": 2,
+      "top_level_total_fields": 2
+    },
+    {
+      "detail_candidate": false,
+      "domain": "order",
+      "id": "kt10007",
+      "kind": "order",
+      "list_row_widths": [],
+      "list_section_count": 0,
+      "max_list_row_width": 0,
+      "nesting_depth": 1,
+      "scalar_leaf_count": 2,
+      "screen_complexity": 2,
+      "shape": "scalar_only",
+      "top_level_non_list_fields": 2,
+      "top_level_total_fields": 2
+    },
+    {
+      "detail_candidate": false,
+      "domain": "order",
+      "id": "kt10008",
+      "kind": "order",
+      "list_row_widths": [],
+      "list_section_count": 0,
+      "max_list_row_width": 0,
+      "nesting_depth": 1,
+      "scalar_leaf_count": 4,
+      "screen_complexity": 4,
+      "shape": "scalar_only",
+      "top_level_non_list_fields": 4,
+      "top_level_total_fields": 4
+    },
+    {
+      "detail_candidate": false,
+      "domain": "order",
+      "id": "kt10009",
+      "kind": "order",
+      "list_row_widths": [],
+      "list_section_count": 0,
+      "max_list_row_width": 0,
+      "nesting_depth": 1,
+      "scalar_leaf_count": 3,
+      "screen_complexity": 3,
+      "shape": "scalar_only",
+      "top_level_non_list_fields": 3,
+      "top_level_total_fields": 3
+    },
+    {
+      "detail_candidate": false,
+      "domain": "stockinfo",
+      "id": "kt20016",
+      "kind": "query",
+      "list_row_widths": [
+        7
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 7,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 8,
+      "screen_complexity": 8,
+      "shape": "compound",
+      "top_level_non_list_fields": 1,
+      "top_level_total_fields": 2
+    },
+    {
+      "detail_candidate": false,
+      "domain": "stockinfo",
+      "id": "kt20017",
+      "kind": "query",
+      "list_row_widths": [],
+      "list_section_count": 0,
+      "max_list_row_width": 0,
+      "nesting_depth": 1,
+      "scalar_leaf_count": 1,
+      "screen_complexity": 1,
+      "shape": "scalar_only",
+      "top_level_non_list_fields": 1,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "order",
+      "id": "kt50000",
+      "kind": "order",
+      "list_row_widths": [],
+      "list_section_count": 0,
+      "max_list_row_width": 0,
+      "nesting_depth": 1,
+      "scalar_leaf_count": 1,
+      "screen_complexity": 1,
+      "shape": "scalar_only",
+      "top_level_non_list_fields": 1,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "order",
+      "id": "kt50001",
+      "kind": "order",
+      "list_row_widths": [],
+      "list_section_count": 0,
+      "max_list_row_width": 0,
+      "nesting_depth": 1,
+      "scalar_leaf_count": 1,
+      "screen_complexity": 1,
+      "shape": "scalar_only",
+      "top_level_non_list_fields": 1,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "order",
+      "id": "kt50002",
+      "kind": "order",
+      "list_row_widths": [],
+      "list_section_count": 0,
+      "max_list_row_width": 0,
+      "nesting_depth": 1,
+      "scalar_leaf_count": 3,
+      "screen_complexity": 3,
+      "shape": "scalar_only",
+      "top_level_non_list_fields": 3,
+      "top_level_total_fields": 3
+    },
+    {
+      "detail_candidate": false,
+      "domain": "order",
+      "id": "kt50003",
+      "kind": "order",
+      "list_row_widths": [],
+      "list_section_count": 0,
+      "max_list_row_width": 0,
+      "nesting_depth": 1,
+      "scalar_leaf_count": 3,
+      "screen_complexity": 3,
+      "shape": "scalar_only",
+      "top_level_non_list_fields": 3,
+      "top_level_total_fields": 3
+    },
+    {
+      "detail_candidate": true,
+      "domain": "account",
+      "id": "kt50020",
+      "kind": "query",
+      "list_row_widths": [
+        16
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 16,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 24,
+      "screen_complexity": 24,
+      "shape": "compound",
+      "top_level_non_list_fields": 8,
+      "top_level_total_fields": 9
+    },
+    {
+      "detail_candidate": false,
+      "domain": "account",
+      "id": "kt50021",
+      "kind": "query",
+      "list_row_widths": [],
+      "list_section_count": 0,
+      "max_list_row_width": 0,
+      "nesting_depth": 1,
+      "scalar_leaf_count": 14,
+      "screen_complexity": 14,
+      "shape": "scalar_only",
+      "top_level_non_list_fields": 14,
+      "top_level_total_fields": 14
+    },
+    {
+      "detail_candidate": false,
+      "domain": "account",
+      "id": "kt50030",
+      "kind": "query",
+      "list_row_widths": [
+        22
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 22,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 22,
+      "screen_complexity": 20,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": false,
+      "domain": "account",
+      "id": "kt50031",
+      "kind": "query",
+      "list_row_widths": [
+        22
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 22,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 22,
+      "screen_complexity": 20,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    },
+    {
+      "detail_candidate": true,
+      "domain": "account",
+      "id": "kt50032",
+      "kind": "query",
+      "list_row_widths": [
+        24
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 24,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 25,
+      "screen_complexity": 21,
+      "shape": "compound",
+      "top_level_non_list_fields": 1,
+      "top_level_total_fields": 2
+    },
+    {
+      "detail_candidate": false,
+      "domain": "account",
+      "id": "kt50075",
+      "kind": "query",
+      "list_row_widths": [
+        22
+      ],
+      "list_section_count": 1,
+      "max_list_row_width": 22,
+      "nesting_depth": 2,
+      "scalar_leaf_count": 22,
+      "screen_complexity": 20,
+      "shape": "pure_list",
+      "top_level_non_list_fields": 0,
+      "top_level_total_fields": 1
+    }
+  ],
+  "policy": {
+    "candidate_rule": "kind == query and shape != pure_list and screen_complexity > screen_budget",
+    "descriptive_non_list_query_distribution": {
+      "count": 60,
+      "iqr": 21.75,
+      "max": 124,
+      "median": 5.5,
+      "min": 1,
+      "q1": 1.0,
+      "q3": 22.75,
+      "tukey_lower_fence": -31.625,
+      "tukey_upper_fence": 55.375
+    },
+    "descriptive_reference_population": "domestic HTTP query operations with top_level_non_list_fields > 0",
+    "detail_candidates": [
+      "ka10001",
+      "ka10002",
+      "ka10004",
+      "ka10007",
+      "ka10040",
+      "ka10087",
+      "ka20001",
+      "ka20009",
+      "ka30012",
+      "kt00001",
+      "kt00004",
+      "kt00005",
+      "kt00009",
+      "kt00010",
+      "kt00011",
+      "kt00012",
+      "kt00013",
+      "kt00016",
+      "kt00017",
+      "kt00018",
+      "kt50020",
+      "kt50032"
+    ],
+    "list_ui_page_size": 10,
+    "pure_lists_never_split": true,
+    "quantile_method": "Hyndman-Fan type 7",
+    "screen_budget": 20,
+    "screen_complexity_formula": "top_level_non_list_fields + sum(min(list_row_width, screen_budget) for each list section)",
+    "tukey_fence_multiplier": 1.5
+  },
+  "shape_counts": {
+    "compound": 61,
+    "pure_list": 111,
+    "scalar_only": 36
+  },
+  "source_inventory": {
+    "path": "ref/kiwoom-tr-inventory.json",
+    "sha256": "318d081c7cac23e3fa290e3b885308bc42a28c6f84f7c74cad3c3103e80ff63b"
+  },
+  "version": 1
+}

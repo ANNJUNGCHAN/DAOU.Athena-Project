@@ -10,13 +10,19 @@ from pathlib import Path
 from fastapi.testclient import TestClient
 
 from athena_api.config import Settings
-from athena_api.generated.registry import INVENTORY_COUNTS, TR_REGISTRY
+from athena_api.generated.registry import (
+    INVENTORY_COUNTS,
+    RESPONSE_PROJECTION_MANIFEST,
+    TR_REGISTRY,
+)
 from athena_api.main import create_app
 
 BACKEND = Path(__file__).resolve().parents[1]
 INVENTORY_PATH = BACKEND / "ref" / "kiwoom-tr-inventory.json"
 PROFILE_PATH = BACKEND / "ref" / "kiwoom-io-source-profile.json"
 DETAIL_PATH = BACKEND / "ref" / "ka10007-detail-groups.json"
+OUTPUT_PROFILE_PATH = BACKEND / "ref" / "kiwoom-output-profile.json"
+PROJECTION_PATH = BACKEND / "ref" / "response-projections.json"
 DOC_PATH = BACKEND / "docs" / "KIWOOM_API_IO.md"
 GENERATOR_PATH = BACKEND / "scripts" / "generate_api.py"
 OPERATION_MARKER = re.compile(
@@ -28,6 +34,18 @@ OPERATION_MARKER = re.compile(
 
 def _json(path: Path):
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _top_level_response_aliases(operation: dict) -> list[str]:
+    aliases: list[str] = []
+    for item in operation.get("resp_body", []):
+        if not item.get("type"):
+            continue
+        element = str(item.get("element", ""))
+        if element.lstrip().startswith("-"):
+            continue
+        aliases.append(element.lstrip("- ").strip())
+    return aliases
 
 
 def test_io_reference_exact_inventory_coverage_and_field_counts() -> None:
@@ -85,6 +103,107 @@ def test_io_reference_source_hash_and_ka10007_detail_completeness() -> None:
     for group in detail["groups"]:
         route = f"/api/v1/tr/quotes/ka10007/detail/{group['id']}"
         assert document.count(f"| `{group['id']}` | `{route}` |") == 1
+
+
+def test_projection_manifest_candidates_exactly_match_output_profile() -> None:
+    profile = _json(OUTPUT_PROFILE_PATH)
+    manifest = _json(PROJECTION_PATH)
+
+    manifest_ids = [projection["tr_id"] for projection in manifest["projections"]]
+    assert manifest_ids == profile["policy"]["detail_candidates"]
+    assert len(manifest_ids) == len(set(manifest_ids)) == 22
+
+
+def test_generated_projection_registry_is_the_canonical_manifest() -> None:
+    assert RESPONSE_PROJECTION_MANIFEST == _json(PROJECTION_PATH)
+
+
+def test_generated_projection_routes_exactly_match_the_manifest() -> None:
+    manifest = _json(PROJECTION_PATH)
+    schema = create_app(Settings(_env_file=None)).openapi()
+    expected = {
+        (
+            f"/api/v1/tr/{TR_REGISTRY[projection['tr_id']].domain}/"
+            f"{projection['tr_id']}/detail/{group['id']}",
+            projection["tr_id"],
+            group["id"],
+        )
+        for projection in manifest["projections"]
+        for group in projection["groups"]
+    }
+    actual = {
+        (
+            path,
+            operation["x-kiwoom-tr-id"],
+            operation["x-athena-detail-group"],
+        )
+        for path, path_item in schema["paths"].items()
+        for method, operation in path_item.items()
+        if method in {"get", "post"} and "x-athena-detail-group" in operation
+    }
+
+    assert actual == expected
+
+
+def test_projection_groups_cover_each_top_level_alias_once_within_layout_budget() -> None:
+    inventory_by_id = {
+        operation["id"]: operation for operation in _json(INVENTORY_PATH)
+    }
+    manifest = _json(PROJECTION_PATH)
+
+    for projection in manifest["projections"]:
+        source_aliases = _top_level_response_aliases(
+            inventory_by_id[projection["tr_id"]]
+        )
+        projected_aliases = [
+            alias for group in projection["groups"] for alias in group["fields"]
+        ]
+        assert len(projected_aliases) == len(set(projected_aliases))
+        assert set(projected_aliases) == set(source_aliases)
+        for group in projection["groups"]:
+            assert group["fields"] == [
+                alias for alias in source_aliases if alias in group["fields"]
+            ]
+            layout = group.get("layout", "facts")
+            if layout == "facts":
+                assert len(group["fields"]) <= 20
+                assert "ui_page_size" not in group
+            else:
+                assert layout == "table"
+                assert len(group["fields"]) == 1
+                assert group["fields"][0] in {
+                    item["element"].lstrip("- ").strip()
+                    for item in inventory_by_id[projection["tr_id"]]["resp_body"]
+                    if item.get("type") == "LIST"
+                    and not str(item.get("element", "")).lstrip().startswith("-")
+                }
+                assert group["ui_page_size"] == 10
+
+
+def test_io_reference_documents_projection_policy_and_every_generated_route() -> None:
+    document = DOC_PATH.read_text(encoding="utf-8")
+    manifest = _json(PROJECTION_PATH)
+
+    required_policy_text = [
+        "Hyndman-Fan type 7",
+        "Tukey",
+        "screen_complexity",
+        "one-screen",
+        "20",
+        "Pure lists",
+        "never field-split",
+        "10 rows",
+    ]
+    for value in required_policy_text:
+        assert value in document
+    for projection in manifest["projections"]:
+        domain = TR_REGISTRY[projection["tr_id"]].domain
+        for group in projection["groups"]:
+            route = (
+                f"/api/v1/tr/{domain}/{projection['tr_id']}"
+                f"/detail/{group['id']}"
+            )
+            assert document.count(f"`{route}`") == 1
 
 
 def test_io_reference_contains_required_contract_and_audit_notes() -> None:
@@ -174,10 +293,15 @@ def test_official_us_only_ids_never_enter_athena_surfaces() -> None:
     audit = _json(PROFILE_PATH)["official_github_audit"]
     document = DOC_PATH.read_text(encoding="utf-8")
     us_only_ids = set(audit["us_only_operation_ids"])
+    projection_ids = {
+        projection["tr_id"] for projection in _json(PROJECTION_PATH)["projections"]
+    }
 
     assert len(us_only_ids) == audit["us_only_operation_count"] == 129
     assert not us_only_ids.intersection(item["id"] for item in inventory)
     assert not us_only_ids.intersection(TR_REGISTRY)
+    assert projection_ids.issubset(item["id"] for item in inventory)
+    assert not us_only_ids.intersection(projection_ids)
 
     app = create_app(Settings(_env_file=None))
     schema = app.openapi()
@@ -206,6 +330,8 @@ def test_io_generator_check_and_determinism() -> None:
     tracked = [
         *sorted((BACKEND / "athena_api" / "generated").glob("*.py")),
         DOC_PATH,
+        OUTPUT_PROFILE_PATH,
+        PROJECTION_PATH,
     ]
 
     def hashes() -> dict[str, str]:

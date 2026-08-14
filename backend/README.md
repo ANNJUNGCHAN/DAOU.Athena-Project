@@ -37,9 +37,19 @@ HTTP 503 until both `ATHENA_KIWOOM_APP_KEY` and `ATHENA_KIWOOM_SECRET_KEY` are c
 token is issued successfully.
 
 The generated [exhaustive Kiwoom I/O reference](docs/KIWOOM_API_IO.md) documents every source
-request and response row for all 208 case-sensitive operations and the nine `ka10007` detail
-projections. At runtime, use [Swagger UI](/docs), the [OpenAPI JSON](/openapi.json), or the
+request and response row for all 208 case-sensitive operations and 115 response-detail
+projections across all 22 pinned candidates. At runtime, use [Swagger UI](/docs), the [OpenAPI JSON](/openapi.json), or the
 [operation catalog](/api/v1/catalog) for machine-readable schemas and route metadata.
+
+The generator also commits a deterministic
+[response output profile](ref/kiwoom-output-profile.json). It classifies scalar-only, pure-list,
+and compound response shapes, records field/list/depth distributions, and applies the documented
+one-screen complexity policy for identifying detail candidates. Type-7 quantiles and Tukey fences
+remain descriptive statistics rather than candidate gates. Pure-list responses stay list/pagination
+UI concerns and are never selected for arbitrary field-split routes.
+The canonical [response projection manifest](ref/response-projections.json) covers every generated
+top-level response alias exactly once. Facts groups contain at most 20 fields; LIST fields remain
+atomic table groups with a UI page size of 10 rows.
 
 Order endpoints, when installed, are additionally disabled by default. Enabling them requires
 `ATHENA_ENABLE_ORDER_API=true` and `ATHENA_LOCAL_BEARER_TOKEN`; the order router also enforces its
