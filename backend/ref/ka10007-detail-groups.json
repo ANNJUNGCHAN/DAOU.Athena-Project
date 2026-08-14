@@ -1,0 +1,52 @@
+{
+  "tr_id": "ka10007",
+  "version": 1,
+  "description": "Coherent, non-overlapping response projections for the 124-field ka10007 snapshot.",
+  "groups": [
+    {
+      "id": "identity",
+      "title": "ka10007 identity and timestamp",
+      "fields": ["stk_nm", "stk_cd", "date", "tm"]
+    },
+    {
+      "id": "expected_market",
+      "title": "ka10007 expected market state",
+      "fields": ["pred_close_pric", "pred_trde_qty", "upl_pric", "lst_pric", "pred_trde_prica", "flo_stkcnt", "cur_prc", "smbol", "flu_rt", "pred_rt"]
+    },
+    {
+      "id": "session",
+      "title": "ka10007 session prices and trading totals",
+      "fields": ["open_pric", "high_pric", "low_pric", "cntr_qty", "trde_qty", "trde_prica", "exp_cntr_pric", "exp_cntr_qty", "exp_sel_pri_bid", "exp_buy_pri_bid", "trde_strt_dt", "exec_pric", "hgst_pric", "lwst_pric", "hgst_pric_dt", "lwst_pric_dt"]
+    },
+    {
+      "id": "bid_prices",
+      "title": "ka10007 ten-level bid prices",
+      "fields": ["sel_1bid", "sel_2bid", "sel_3bid", "sel_4bid", "sel_5bid", "sel_6bid", "sel_7bid", "sel_8bid", "sel_9bid", "sel_10bid", "buy_1bid", "buy_2bid", "buy_3bid", "buy_4bid", "buy_5bid", "buy_6bid", "buy_7bid", "buy_8bid", "buy_9bid", "buy_10bid"]
+    },
+    {
+      "id": "bid_quantities",
+      "title": "ka10007 ten-level bid quantities",
+      "fields": ["sel_1bid_req", "sel_2bid_req", "sel_3bid_req", "sel_4bid_req", "sel_5bid_req", "sel_6bid_req", "sel_7bid_req", "sel_8bid_req", "sel_9bid_req", "sel_10bid_req", "buy_1bid_req", "buy_2bid_req", "buy_3bid_req", "buy_4bid_req", "buy_5bid_req", "buy_6bid_req", "buy_7bid_req", "buy_8bid_req", "buy_9bid_req", "buy_10bid_req"]
+    },
+    {
+      "id": "bid_changes",
+      "title": "ka10007 ten-level bid changes",
+      "fields": ["sel_1bid_jub_pre", "sel_2bid_jub_pre", "sel_3bid_jub_pre", "sel_4bid_jub_pre", "sel_5bid_jub_pre", "sel_6bid_jub_pre", "sel_7bid_jub_pre", "sel_8bid_jub_pre", "sel_9bid_jub_pre", "sel_10bid_jub_pre", "buy_1bid_jub_pre", "buy_2bid_jub_pre", "buy_3bid_jub_pre", "buy_4bid_jub_pre", "buy_5bid_jub_pre", "buy_6bid_jub_pre", "buy_7bid_jub_pre", "buy_8bid_jub_pre", "buy_9bid_jub_pre", "buy_10bid_jub_pre"]
+    },
+    {
+      "id": "order_counts",
+      "title": "ka10007 bid order counts",
+      "fields": ["sel_1bid_cnt", "sel_2bid_cnt", "sel_3bid_cnt", "sel_4bid_cnt", "sel_5bid_cnt", "buy_1bid_cnt", "buy_2bid_cnt", "buy_3bid_cnt", "buy_4bid_cnt", "buy_5bid_cnt"]
+    },
+    {
+      "id": "liquidity_provider",
+      "title": "ka10007 liquidity-provider quantities",
+      "fields": ["lpsel_1bid_req", "lpsel_2bid_req", "lpsel_3bid_req", "lpsel_4bid_req", "lpsel_5bid_req", "lpsel_6bid_req", "lpsel_7bid_req", "lpsel_8bid_req", "lpsel_9bid_req", "lpsel_10bid_req", "lpbuy_1bid_req", "lpbuy_2bid_req", "lpbuy_3bid_req", "lpbuy_4bid_req", "lpbuy_5bid_req", "lpbuy_6bid_req", "lpbuy_7bid_req", "lpbuy_8bid_req", "lpbuy_9bid_req", "lpbuy_10bid_req"]
+    },
+    {
+      "id": "totals",
+      "title": "ka10007 aggregate order-book totals",
+      "fields": ["tot_buy_req", "tot_sel_req", "tot_buy_cnt", "tot_sel_cnt"]
+    }
+  ]
+}

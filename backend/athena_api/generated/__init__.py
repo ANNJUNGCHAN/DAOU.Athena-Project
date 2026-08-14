@@ -1,0 +1,1 @@
+"""Inventory-generated API artifacts."""
