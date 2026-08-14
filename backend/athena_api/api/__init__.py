@@ -1,0 +1,18 @@
+"""Athena API routers."""
+
+from fastapi import APIRouter
+
+from athena_api.api.batch import router as batch_router
+from athena_api.api.catalog import router as catalog_router
+from athena_api.api.raw import router as raw_router
+from athena_api.api.stream import router as stream_router
+from athena_api.generated.routes import router as generated_router
+
+router = APIRouter()
+router.include_router(generated_router)
+router.include_router(batch_router)
+router.include_router(catalog_router)
+router.include_router(raw_router)
+router.include_router(stream_router)
+
+__all__ = ["router"]
