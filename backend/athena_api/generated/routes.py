@@ -16,8 +16,7 @@ from athena_api.dependencies import (
     OrderKiwoomClientDep,
     TokenManagerDep,
 )
-from athena_api.generated.registry import RESPONSE_PROJECTION_MANIFEST, TR_REGISTRY, TrSpec
-from athena_api.generated import models
+from athena_api.generated.registry import DETAIL_REGISTRY, TR_REGISTRY, DetailSpec, TrSpec
 
 router = APIRouter()
 
@@ -75,8 +74,9 @@ def _oauth_endpoint(spec: TrSpec):
     return endpoint
 
 
-def _detail_endpoint(spec: TrSpec, response_model: type):
+def _detail_endpoint(spec: TrSpec, detail: DetailSpec):
     request_model = spec.request_model
+    response_model = detail.response_model
 
     async def endpoint(payload: request_model, request: Request, response: Response, client: KiwoomClientDep) -> response_model:
         return await call_typed_tr(
@@ -89,22 +89,23 @@ def _detail_endpoint(spec: TrSpec, response_model: type):
 for _spec in TR_REGISTRY.values():
     if _spec.kind == "query":
         _path, _tag, _factory = f"/api/v1/tr/{_spec.domain}/{_spec.tr_id}", "Kiwoom TR", _query_endpoint
-        _extra = {"x-kiwoom-tr-id": _spec.tr_id}
+        _extra = {"x-kiwoom-tr-id": _spec.tr_id, "x-athena-llm-exposed": False}
     elif _spec.kind == "websocket":
         _path, _tag, _factory = f"/api/v1/websocket/{_spec.tr_id}", "Kiwoom WebSocket", _websocket_endpoint
         _extra = {
             "x-kiwoom-tr-id": _spec.tr_id,
             "x-athena-operation-kind": "websocket",
             "x-athena-upstream-transport": "wss",
+            "x-athena-llm-exposed": False,
         }
         if _spec.tr_id == "0g":
             _extra["x-athena-case-sensitive-note"] = "0g is lowercase and distinct from 0G"
     elif _spec.kind == "order":
         _path, _tag, _factory = f"/api/v1/order/{_spec.tr_id}", "Kiwoom Orders", _order_endpoint
-        _extra = {"x-kiwoom-tr-id": _spec.tr_id, "x-athena-operation-kind": "order", "x-athena-retry-count": 0}
+        _extra = {"x-kiwoom-tr-id": _spec.tr_id, "x-athena-operation-kind": "order", "x-athena-retry-count": 0, "x-athena-llm-exposed": False}
     else:
         _path, _tag, _factory = f"/api/v1/internal/oauth/{_spec.tr_id}", "Internal OAuth lifecycle", _oauth_endpoint
-        _extra = {"x-kiwoom-tr-id": _spec.tr_id, "x-athena-operation-kind": "internal-oauth", "x-athena-secrets-exposed": False}
+        _extra = {"x-kiwoom-tr-id": _spec.tr_id, "x-athena-operation-kind": "internal-oauth", "x-athena-secrets-exposed": False, "x-athena-llm-exposed": False}
     router.add_api_route(
         _path,
         _factory(_spec),
@@ -116,25 +117,19 @@ for _spec in TR_REGISTRY.values():
         openapi_extra=_extra,
     )
 
-for _projection in RESPONSE_PROJECTION_MANIFEST["projections"]:
-    _tr_id = _projection["tr_id"]
-    _spec = TR_REGISTRY[_tr_id]
-    for _group in _projection["groups"]:
-        _group_id = _group["id"]
-        _response_model = getattr(
-            models,
-            _tr_id[:1].upper()
-            + _tr_id[1:]
-            + "".join(part.title() for part in _group_id.split("_"))
-            + "Response",
-        )
-        router.add_api_route(
-            f"/api/v1/tr/{_spec.domain}/{_tr_id}/detail/{_group_id}",
-            _detail_endpoint(_spec, _response_model),
-            methods=["POST"],
-            response_model=_response_model,
-            tags=["Kiwoom TR details"],
-            summary=_group.get("title_en") or _group.get("title") or _group_id,
-            operation_id=f"post_tr_{_spec.domain}_{_tr_id}_detail_{_group_id}",
-            openapi_extra={"x-kiwoom-tr-id": _tr_id, "x-athena-detail-group": _group_id},
-        )
+for _detail in DETAIL_REGISTRY.values():
+    _spec = TR_REGISTRY[_detail.tr_id]
+    router.add_api_route(
+        f"/api/v1/tr/{_spec.domain}/{_detail.tr_id}/detail/{_detail.group_id}",
+        _detail_endpoint(_spec, _detail),
+        methods=["POST"],
+        response_model=_detail.response_model,
+        tags=["Kiwoom TR details"],
+        summary=_detail.title_en or _detail.title_ko or _detail.group_id,
+        operation_id=f"post_tr_{_spec.domain}_{_detail.tr_id}_detail_{_detail.group_id}",
+        openapi_extra={
+            "x-kiwoom-tr-id": _detail.tr_id,
+            "x-athena-detail-group": _detail.group_id,
+            "x-athena-llm-exposed": False,
+        },
+    )

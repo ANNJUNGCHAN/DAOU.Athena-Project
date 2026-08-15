@@ -1,0 +1,183 @@
+from __future__ import annotations
+
+import json
+from pathlib import Path
+from typing import Any, get_args, get_origin
+
+from pydantic import BaseModel
+
+from athena_api.config import Settings
+from athena_api.generated.registry import DETAIL_REGISTRY, TR_REGISTRY
+from athena_api.main import create_app
+
+BACKEND = Path(__file__).resolve().parents[1]
+MANIFEST_PATH = BACKEND / "ref" / "kiwoom-common-screen-manifest.json"
+PROJECTION_PATH = BACKEND / "ref" / "response-projections.json"
+OUTPUT_PROFILE_PATH = BACKEND / "ref" / "kiwoom-output-profile.json"
+
+
+def _json(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _model_aliases(model: type[BaseModel]) -> dict[str, Any]:
+    top_level: list[str] = []
+    data: list[dict[str, Any]] = []
+    for field_name, field in model.model_fields.items():
+        alias = field.alias or field_name
+        top_level.append(alias)
+        if get_origin(field.annotation) is list:
+            item_model = get_args(field.annotation)[0]
+            data.append(
+                {
+                    "container_alias": alias,
+                    "field_aliases": [
+                        item_field.alias or item_name
+                        for item_name, item_field in item_model.model_fields.items()
+                    ],
+                }
+            )
+    return {"top_level": top_level, "data": data}
+
+
+def test_common_screen_manifest_has_exact_totals_and_unique_route_identities() -> None:
+    manifest = _json(MANIFEST_PATH)
+    mappings = manifest["mappings"]
+
+    assert manifest["counts"] == {
+        "base_operations": 208,
+        "categories": {
+            "oauth": 2,
+            "order": 12,
+            "read_display": 264,
+            "websocket": 23,
+        },
+        "excluded_split_originals": 22,
+        "routable": 301,
+        "split_derived": 115,
+        "unsplit_base": 186,
+    }
+    mapping_ids = [mapping["mapping_id"] for mapping in mappings]
+    route_identities = [
+        (mapping["route"]["method"], mapping["route"]["path"], mapping["route"]["operation_id"])
+        for mapping in mappings
+    ]
+    assert len(mapping_ids) == len(set(mapping_ids)) == 301
+    assert len(route_identities) == len(set(route_identities)) == 301
+
+
+def test_common_screen_manifest_preserves_exact_split_original_exclusions() -> None:
+    manifest = _json(MANIFEST_PATH)
+    projections = _json(PROJECTION_PATH)["projections"]
+    expected_ids = [projection["tr_id"] for projection in projections]
+
+    assert [exclusion["tr_id"] for exclusion in manifest["exclusions"]] == expected_ids
+    assert len(expected_ids) == len(set(expected_ids)) == 22
+    assert {
+        exclusion["reason"] for exclusion in manifest["exclusions"]
+    } == {"replaced_by_split_derived_detail_routes"}
+    assert not set(expected_ids) & {
+        mapping["operation"]["tr_id"]
+        for mapping in manifest["mappings"]
+        if mapping["mapping_type"] == "base"
+    }
+    for exclusion, projection in zip(manifest["exclusions"], projections, strict=True):
+        assert exclusion["replacement_mapping_ids"] == [
+            f"detail:{projection['tr_id']}:{group['id']}" for group in projection["groups"]
+        ]
+
+
+def test_common_screen_manifest_category_partition_is_exact() -> None:
+    mappings = _json(MANIFEST_PATH)["mappings"]
+    by_category = {
+        category: [
+            mapping
+            for mapping in mappings
+            if mapping["classification"]["category"] == category
+        ]
+        for category in ("read_display", "websocket", "order", "oauth")
+    }
+
+    assert {category: len(entries) for category, entries in by_category.items()} == {
+        "read_display": 264,
+        "websocket": 23,
+        "order": 12,
+        "oauth": 2,
+    }
+    assert all(mapping["classification"]["read"] for mapping in by_category["read_display"])
+    assert all(
+        not mapping["classification"]["read"]
+        for category in ("websocket", "order", "oauth")
+        for mapping in by_category[category]
+    )
+    assert set().union(*(set(map(id, entries)) for entries in by_category.values())) == set(
+        map(id, mappings)
+    )
+
+
+def test_common_screen_manifest_has_no_orphan_base_or_detail_mappings() -> None:
+    manifest = _json(MANIFEST_PATH)
+    schema = create_app(Settings(_env_file=None)).openapi()
+    projection_ids = {
+        projection["tr_id"] for projection in _json(PROJECTION_PATH)["projections"]
+    }
+    base_mappings = {
+        mapping["operation"]["tr_id"]: mapping
+        for mapping in manifest["mappings"]
+        if mapping["mapping_type"] == "base"
+    }
+    detail_mappings = {
+        mapping["mapping_id"]: mapping
+        for mapping in manifest["mappings"]
+        if mapping["mapping_type"] == "split_derived"
+    }
+
+    assert set(base_mappings) == set(TR_REGISTRY) - projection_ids
+    assert set(detail_mappings) == set(DETAIL_REGISTRY)
+    for tr_id, mapping in base_mappings.items():
+        spec = TR_REGISTRY[tr_id]
+        assert mapping["operation"]["kind"] == spec.kind
+        assert mapping["operation"]["domain"] == spec.domain
+        assert mapping["operation"]["upstream_path"] == spec.upstream_path
+        route = schema["paths"][mapping["route"]["path"]]["post"]
+        assert mapping["route"]["method"] == "POST"
+        assert mapping["route"]["operation_id"] == route["operationId"]
+    for mapping_id, mapping in detail_mappings.items():
+        detail = DETAIL_REGISTRY[mapping_id]
+        assert mapping["operation"]["tr_id"] == detail.tr_id
+        assert mapping["operation"]["detail_group_id"] == detail.group_id
+        assert mapping["presentation"]["layout"] == detail.layout
+        route = schema["paths"][mapping["route"]["path"]]["post"]
+        assert mapping["route"]["method"] == "POST"
+        assert mapping["route"]["operation_id"] == route["operationId"]
+
+
+def test_every_common_screen_mapping_has_exact_contract_fields_and_provenance() -> None:
+    manifest = _json(MANIFEST_PATH)
+    profile_by_id = {
+        operation["id"]: operation
+        for operation in _json(OUTPUT_PROFILE_PATH)["operations"]
+    }
+    required_provenance = {
+        "inventory",
+        "output_profile",
+        "generated_registry",
+        "generated_contracts",
+    }
+
+    for mapping in manifest["mappings"]:
+        tr_id = mapping["operation"]["tr_id"]
+        spec = TR_REGISTRY[tr_id]
+        response_model = (
+            DETAIL_REGISTRY[mapping["mapping_id"]].response_model
+            if mapping["mapping_type"] == "split_derived"
+            else spec.response_model
+        )
+        assert mapping["fields"]["request"] == _model_aliases(spec.request_model)
+        assert mapping["fields"]["response"] == _model_aliases(response_model)
+        assert mapping["presentation"]["shape"] == profile_by_id[tr_id]["shape"]
+        assert required_provenance <= set(mapping["provenance"])
+        assert mapping["provenance"]["inventory"]["operation_id"] == tr_id
+        assert mapping["provenance"]["output_profile"]["operation_id"] == tr_id
+        assert mapping["contracts"]["request_model"].endswith(spec.request_model.__name__)
+        assert mapping["contracts"]["response_model"].endswith(response_model.__name__)

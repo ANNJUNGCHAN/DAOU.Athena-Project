@@ -28,6 +28,7 @@ from athena_api.errors import KiwoomApiError
 from athena_api.generated import models
 from athena_api.generated.registry import (
     ALL_TR_IDS,
+    DETAIL_REGISTRY,
     INVENTORY_COUNTS,
     KA10007_DETAIL_MANIFEST,
     OAUTH_TR_IDS,
@@ -117,14 +118,26 @@ def test_inventory_partition_and_static_openapi_coverage() -> None:
     schema = create_app(Settings()).openapi()
     operation_ids: list[str] = []
     base_tr_ids: list[str] = []
+    llm_exposed: list[str] = []
     for path_item in schema["paths"].values():
         for method, operation in path_item.items():
             if method not in {"get", "post"}:
                 continue
             operation_ids.append(operation["operationId"])
+            if operation.get("x-athena-llm-exposed") is True:
+                llm_exposed.append(operation["operationId"])
             if "x-kiwoom-tr-id" in operation and "x-athena-detail-group" not in operation:
                 base_tr_ids.append(operation["x-kiwoom-tr-id"])
+            if "x-kiwoom-tr-id" in operation:
+                assert operation["x-athena-llm-exposed"] is False
     assert len(operation_ids) == len(set(operation_ids))
+    assert len(operation_ids) == 335
+    assert set(llm_exposed) == {
+        "llm_search_operations",
+        "llm_describe_operation",
+        "llm_resolve_operation",
+        "llm_call_operation",
+    }
     assert len(base_tr_ids) == 208
     assert set(base_tr_ids) == ALL_TR_IDS
 
@@ -195,6 +208,7 @@ def test_all_projection_routes_have_exact_openapi_contract_and_query_only_scope(
     assert projection_ids == set(OUTPUT_PROFILE["policy"]["detail_candidates"])
     assert projection_ids <= QUERY_TR_IDS
     assert not projection_ids & (ORDER_TR_IDS | WEBSOCKET_TR_IDS | OAUTH_TR_IDS)
+    assert len(DETAIL_REGISTRY) == 115
 
     detail_operations: list[str] = []
     detail_paths: set[str] = set()
