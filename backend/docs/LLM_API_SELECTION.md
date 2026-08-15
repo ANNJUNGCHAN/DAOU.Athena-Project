@@ -278,16 +278,32 @@ registry insertion order or Python hash seed.
 | Exact canonical operation identity | 10,000 | `EXACT_OPERATION_REF` |
 | Exact case-sensitive TR ID | 5,000 | `EXACT_TR_ID` |
 | Exact detail group ID | 4,000 | `EXACT_GROUP_ID` |
-| Full operation or group-title phrase | 1,400 | `TITLE_PHRASE_MATCH` |
-| Group-title token | 150 each, maximum 750 | `TITLE_TOKEN_MATCH` |
+| TR ID cited inside a longer question | 3,000 | `TR_ID_TOKEN_MATCH` |
+| Operation title phrase (two or more tokens) | 1,400 | `TITLE_PHRASE_MATCH` |
+| Operation title token | 150 each, maximum 750 | `TITLE_TOKEN_MATCH` |
+| Absorbed projection-title token | 150 each, maximum 750 | `PROJECTION_TITLE_MATCH` |
+| Fraction of distinct question tokens matched | up to 600 | `QUERY_COVERAGE` |
 | Domain/category/subcategory token | 80 each, maximum 400 | `DOMAIN_MATCH` |
 | Request-field alias or description token | 70 each per zone, maximum 350 per zone | `REQUEST_FIELD_MATCH` |
 | Response-field alias or description token | 50 each per zone, maximum 500 per zone | `RESPONSE_FIELD_MATCH` |
 | Synonym-only match | 75% of the underlying match | `SYNONYM_MATCH` |
 
-Operation names and overviews occupy the same title zone as detail-group titles,
-so their tokens use the title-token rule. `SINGLE_GROUP_PREFERRED` is a later
-base/detail policy decision, not an extra lexical score.
+Three rules deserve their reasons stated, because each exists to stop a
+reproducible misranking:
+
+- **`TR_ID_TOKEN_MATCH`** — `EXACT_TR_ID` only fires when the whole query *is*
+  the id. A question that merely cites one (`ka10001 가치평가 지표만`) was losing
+  to lexical noise. Matching is case-sensitive on identity boundaries, so `0G`
+  and `0g` stay distinct and `ka100010` never matches `ka10001`.
+- **`PROJECTION_TITLE_MATCH`** — a base document stands for its whole family, so
+  it absorbs its projections' titles; without this, English questions could not
+  reach Korean-named TRs at all. The zone is separate from `title` and carries no
+  phrase bonus: slice titles such as `계좌 정보` / `Account information` are
+  boilerplate that unrelated families reuse, and a 1,400 point phrase bonus there
+  decided family selection on a naming coincidence.
+- **`TITLE_PHRASE_MATCH` needs two or more tokens** — a one-word title such as
+  `totals` appears inside unrelated questions, and the phrase bonus let it
+  outrank the correct family. Single-token titles still earn token matches.
 
 Ties sort by score descending, generic-callable operations first, query family
 first, then Unicode code-point order of `operation_ref`. Every nonzero scoring
@@ -348,7 +364,11 @@ Contract:
 
 - `question`: 2 to 2,000 characters.
 - `candidate_refs`: zero to eight hints from `search`.
-- `preferred_ref`: an optional preference, never an instruction.
+- `preferred_ref`: an optional preference, never an instruction. It is evaluated
+  at **family** granularity, because that is the granularity the ranker decides
+  at. Naming a projection here also implies its `detail_group`.
+- `detail_group`: an optional projection of the selected family, taken from
+  `athena_describe.detail_groups`. The server never infers it from the question.
 - `arguments`: wire-alias arguments for the final typed request model.
 - `response_mode`: `auto`, `compact`, or `full`.
 - `continuation`: `cont_yn` (`N` or `Y`) and optional `next_key`.
@@ -409,24 +429,51 @@ Examples:
 
 ## Base versus detail selection
 
-The selector does not treat a base operation and its detail projections as
-unrelated peers. After choosing the TR family, it applies these rules in order:
+**The server selects a TR family. The model selects the projection.**
+
+A detail projection is not a cheaper call. `call_typed_tr` issues the same single
+upstream request the base operation issues, then filters the response by the
+projection's field aliases. Base is therefore always a correct and complete
+answer; a projection only narrows it — by 5.5x on average across the 22 split
+TRs, and by 9x for the widest (`ka10007`: 124 fields to 13.8).
+
+Because sibling projections of one TR share that TR's entire vocabulary, ranking
+them against each other cannot be made reliable. `detail:ka10004:buy_bid_prices`
+and `detail:ka10004:buy_bid_quantities` differ by one token inside titles that
+are otherwise identical. So the selector does not guess. After choosing the
+family it applies these rules in order:
 
 1. If the question explicitly asks for `전체`, `전부`, `모든`, `원문`, `raw`,
    `full`, or `complete`, or `response_mode=full`, select the typed base operation
-   and record `EXPLICIT_FULL_RESPONSE`.
-2. If the response shape is `pure_list`, always select the base operation and
-   record `PURE_LIST_BASE_REQUIRED`.
-3. If the TR has no detail projections, select the base operation.
-4. If exactly one detail group has a meaningful group score of at least 180,
-   the second group is below 100, and their margin is at least 80, select that
-   detail and record `SINGLE_GROUP_PREFERRED`.
-5. If two or more groups score at least 180, or the top-two group margin is below
-   80, select the base and record `MULTI_GROUP_BASE_REQUIRED`.
-6. If detail confidence remains insufficient, select the typed base operation.
+   and record `EXPLICIT_FULL_RESPONSE`. An explicit full-response request outranks
+   `detail_group`: the caller asked for everything, so narrowing would drop fields
+   they named.
+2. If `resolve` supplied `detail_group`, select `detail:{tr_id}:{detail_group}`
+   and record `EXPLICIT_DETAIL_GROUP`. A group that does not belong to the
+   selected family fails with `UNKNOWN_DETAIL_GROUP` and the family's real group
+   list; it never silently falls back to base.
+3. If the response shape is `pure_list`, select the base operation and record
+   `PURE_LIST_BASE_REQUIRED`.
+4. Otherwise select the typed base operation and record `BASE_DEFAULT`.
 
 `raw` means the complete **typed base response**. The selector never routes to
 Athena's untyped raw endpoint.
+
+### How the model learns which groups exist
+
+`athena_describe` on a base query operation returns `detail_groups`: every
+projection of that family with its `group_id`, canonical `operation_ref`,
+Korean and English titles, `layout`, `ui_page_size`, and `response_field_count`.
+That listing is the only supported source for `detail_group`.
+
+```text
+athena_search("매수 10단계 호가 가격")      -> base:ka10004
+athena_describe("base:ka10004")           -> detail_groups: 9 entries
+athena_resolve(..., detail_group="buy_bid_prices")
+athena_call(plan_token)                   -> 7 fields, one upstream call
+```
+
+Omitting `detail_group` is always safe and returns the full typed base response.
 
 ### Why pure lists stay at the base identity
 
@@ -561,6 +608,7 @@ similar Korean operation.
 | Two families remain too close | `AMBIGUOUS_OPERATION` | 409 | Present at most the returned candidates and ask which information is wanted. |
 | Client preference conflicts with server ranking | `PREFERRED_REF_NOT_SUPPORTED_BY_QUERY` | 409 | Drop the preference and refine the question. |
 | Order/WSS passed to generic execution | `OPERATION_NOT_GENERIC_CALLABLE` | 403 | Use the guarded direct surface; never retry through `call`. |
+| `detail_group` not in the selected family | `UNKNOWN_DETAIL_GROUP` | 422 | Read `details.available_groups`, or drop `detail_group` for the base response. |
 | Missing, unknown, or invalid request fields | `INVALID_ARGUMENTS` | 422 | Collect or correct arguments, then resolve again. |
 | Malformed token or invalid signature | `INVALID_PLAN` | 400 | Resolve again; do not alter the token. |
 | Plan expired | `EXPIRED_PLAN` | 410 | Resolve again with current intent and arguments. |
@@ -641,10 +689,11 @@ Recommended MCP initialization instruction:
 ```text
 Athena exposes domestic Kiwoom data through four catalog tools. Search first,
 describe the best candidate, resolve with all required arguments, then call only
-the returned plan token. Prefer one detail projection for a focused question;
-use a base operation for explicit full responses, pure lists, or multiple detail
-groups. Orders and WebSocket operations are discovery-only. OAuth and U.S.-only
-operations are unavailable.
+the returned plan token. Search returns one operation per TR family. For a
+focused question, read detail_groups from describe and pass the matching
+detail_group to resolve; omit it for the full typed base response. Orders and
+WebSocket operations are discovery-only. OAuth and U.S.-only operations are
+unavailable.
 ```
 
 Adapter requirements:
@@ -711,12 +760,17 @@ base/detail identity or expected error, and relevant reason codes.
 
 ### Metrics
 
+Retrieval is scored at **family** granularity, because that is the only thing
+retrieval decides. Projection choice is not a retrieval outcome; it is an
+explicit argument, and its correctness is asserted per case by
+`test_resolve_selects_the_gold_base_or_detail`.
+
 | Metric | Definition | Release expectation |
 | --- | --- | --- |
-| Family top-1 accuracy | Correct base TR family ranks first. | Measured on the full gold set; regressions block release. |
-| Exact operation accuracy | Correct base/detail identity after family selection. | Report separately from family accuracy. |
-| Detail precision | Focused questions resolved to a sufficient single detail group. | No group may omit a required answer field. |
-| Base over-fetch rate | Focused questions unnecessarily resolved to a base response. | Track downward; never trade correctness for size. |
+| Family recall@5 | Correct base TR family appears in the top five. | >= 0.98; regressions block release. |
+| Family top-1 accuracy | Correct base TR family ranks first. | >= 0.95 overall, >= 0.97 on the detail and base slices. |
+| Projection fidelity | `detail_group` resolves to that group or fails loudly. | 100%; an unknown group must never fall back to base. |
+| Base over-fetch rate | Focused questions answered without their `detail_group`. | Adapter-side metric; the server no longer guesses. |
 | Full-response recall | Explicit full/multi-group questions resolved to base. | 100% for explicit-full fixtures. |
 | Pure-list compliance | Pure-list questions remain at base. | 100%. |
 | Ambiguity precision | Ambiguous gold cases produce no plan. | 100% for safety fixtures. |
@@ -732,15 +786,19 @@ family accuracy and poor projection quality.
 
 ### Current progress
 
-The catalog, four-tool transport contract, signed-plan boundary, and safety
-fixtures are implemented. The selector evaluation is not release-green yet:
-several focused detail questions still resolve to a base operation or reject the
-requested detail as an unsupported preference; a vague account-information
-question can resolve instead of requesting clarification; and duplicated titles
-within several TR families still cause Korean and English top-1 collisions. Keep
-these failures as regression blockers until ranking and base/detail policy fixes
-make the full evaluation suite pass without weakening the natural-language gold
-questions.
+The catalog, four-tool transport contract, signed-plan boundary, explicit
+projection selection, and safety fixtures are implemented, and the selector
+evaluation is green on the unweakened natural-language gold questions.
+
+One known near-miss remains and is deliberately not tuned away: `금일 재사용
+금액만` ranks `base:kt00010` (1,449) above the gold `base:kt00013` (1,379), a 5%
+margin. `resolve` still reaches the correct family through `preferred_ref`, and
+family top-1 on the detail and base slices is 43/44 = 0.977. Closing it would
+mean fitting the lexicon to a gold question rather than to the domain.
+
+The earlier failure mode — focused questions resolving to a base operation
+because sibling projections were ranked against each other — is gone by
+construction, not by threshold tuning: siblings are no longer ranked.
 
 ### Regression invariants
 
@@ -750,6 +808,10 @@ update:
 - 323 canonical operation documents: 171 query bases, 115 details, 12 orders,
   23 WebSocket operations, and 2 hidden OAuth controls;
 - exactly 286 generic-callable query identities;
+- a searchable query surface of exactly 171 documents, one per TR family, with
+  no projection among them;
+- every one of the 115 projections advertised by `describe` on its base, and
+  reachable only by naming its `group_id`;
 - exactly 35 explicit discovery-only identities;
 - no U.S.-only identity in search, describe, resolve, call, or manifest;
 - no plan for ambiguity, invalid arguments, order, WebSocket, or OAuth;

@@ -38,6 +38,7 @@ def install_exception_handlers(app: FastAPI) -> None:
         PreferredOperationError,
         SelectorError,
         StalePlanError,
+        UnknownDetailGroupError,
         UnsupportedOperationError,
     )
 
@@ -48,6 +49,7 @@ def install_exception_handlers(app: FastAPI) -> None:
         (InvalidPlanError, 400),
         (InvalidArgumentsError, 422),
         (UnsupportedOperationError, 403),
+        (UnknownDetailGroupError, 422),
         (PreferredOperationError, 409),
         (AmbiguousOperationError, 409),
         (NoConfidentMatchError, 404),

@@ -24,6 +24,7 @@ from .schemas import (
     CallResponse,
     ContinuationOutput,
     DescribeRequest,
+    DetailGroupSummary,
     DiscoveryIntent,
     FieldContract,
     OperationDescription,
@@ -53,6 +54,29 @@ def _field_contracts(model: type, *, required: bool | None = None) -> list[Field
             )
         )
     return contracts
+
+
+def _detail_group_summaries(
+    catalog: OperationCatalog, document: OperationDocument
+) -> list[DetailGroupSummary]:
+    """List the projections a caller may pass back as ``detail_group``.
+
+    Only a base query operation offers a choice; a projection is already one.
+    """
+    if document.group_id is not None or document.kind != "query":
+        return []
+    return [
+        DetailGroupSummary(
+            group_id=str(detail.group_id),
+            operation_ref=detail.operation_ref,
+            title_ko=detail.group_title_ko,
+            title_en=detail.group_title_en,
+            layout=detail.layout,  # type: ignore[arg-type]
+            ui_page_size=detail.ui_page_size,
+            response_field_count=len(detail.response_model.model_fields),
+        )
+        for detail in catalog.details_for(document.tr_id)
+    ]
 
 
 def _intent_allows(document: OperationDocument, intent: DiscoveryIntent) -> bool:
@@ -116,6 +140,7 @@ class SelectorService:
             required_arguments=_field_contracts(document.request_model, required=True),
             optional_arguments=_field_contracts(document.request_model, required=False),
             response_fields=_field_contracts(document.response_model),
+            detail_groups=_detail_group_summaries(self.catalog, document),
             generic_callable=document.generic_callable,
             execution_policy=execution_policy,  # type: ignore[arg-type]
             policy_reasons=policy_reasons,
@@ -135,23 +160,29 @@ class SelectorService:
                 requested.append(document)
             documents = tuple(requested)
         ranked = rank_documents(request.question, documents)
+        detail_group = request.detail_group
 
         if request.preferred_ref:
             preferred = self.catalog.find_exact(request.preferred_ref)
             if preferred is None or not preferred.generic_callable:
                 raise PreferredOperationError("Preferred operation is unavailable")
-            ranked_refs = [item.document.operation_ref for item in ranked]
-            if request.preferred_ref not in ranked_refs[:3]:
+            # A preference is expressed at family granularity, because that is
+            # the granularity the ranker works at. Naming a projection as the
+            # preference also implies its detail_group.
+            if preferred.group_id is not None and detail_group is None:
+                detail_group = preferred.group_id
+            families: list[str] = []
+            best_by_family: dict[str, int] = {}
+            for item in ranked:
+                family = item.document.family_ref
+                if family not in best_by_family:
+                    families.append(family)
+                    best_by_family[family] = item.score
+            if preferred.family_ref not in families[:3]:
                 raise PreferredOperationError(
                     "Preferred operation is not supported by the question"
                 )
-            top_score = ranked[0].score
-            preferred_score = next(
-                item.score
-                for item in ranked
-                if item.document.operation_ref == request.preferred_ref
-            )
-            if preferred_score < top_score * 0.8:
+            if best_by_family[preferred.family_ref] < best_by_family[families[0]] * 0.8:
                 raise PreferredOperationError(
                     "Preferred operation is not supported by the question"
                 )
@@ -160,7 +191,11 @@ class SelectorService:
             )
 
         document, reasons = select_operation(
-            self.catalog, request.question, ranked, request.response_mode
+            self.catalog,
+            request.question,
+            ranked,
+            request.response_mode,
+            detail_group,
         )
 
         if not document.generic_callable or document.kind != "query":
