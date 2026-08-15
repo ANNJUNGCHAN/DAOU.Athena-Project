@@ -1,7 +1,7 @@
 # MCP · 범용 캔버스 실행 계획
 
 출처: [`plan/mcp계획.txt`](mcp계획.txt) 녹취 + 참조 링크 10건 조사
-기준 문서: [`ui/soul.md`](../ui/soul.md) · [`ui/canvas-taxonomy.md`](../ui/canvas-taxonomy.md) · [`ui/round-1R/two-windows.md`](../ui/round-1R/two-windows.md)
+기준 문서: [`ui/soul.md`](../ui/soul.md) · [`plan/canvas-taxonomy.md`](canvas-taxonomy.md) · [`ui/round-1R/two-windows.md`](../ui/round-1R/two-windows.md)
 자매 문서: [`plan/감시에이전트-실행계획.md`](감시에이전트-실행계획.md) (파수꾼 · 조사관 · 원장)
 
 ---

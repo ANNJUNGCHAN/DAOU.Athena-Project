@@ -183,6 +183,6 @@
 | [brand.md](brand.md) | 로고 기하 · 45° · 마젠타 문법 |
 | [liquid-glass.md](liquid-glass.md) | Apple 규범 원문 · 이탈 기록 |
 | [moodboard/moodboard.md](moodboard/moodboard.md) | 핀 선별 · DNA |
-| [canvas-taxonomy.md](canvas-taxonomy.md) | 키움 TR → 캔버스 |
+| [../plan/canvas-taxonomy.md](../plan/canvas-taxonomy.md) | 키움 TR → 캔버스 |
 | [effects.md](effects.md) | Paper Shaders |
 | round-1R/ | 시안별 판정 · 랭킹 |

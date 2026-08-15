@@ -99,7 +99,7 @@ Athena의 기존 두 창 구조를 유지한다. 채팅 창은 명령과 설명�
    - 조회 입력, 구독 시작/중지, 주문 draft/review/confirm, OAuth lifecycle control
    - 결과 표시와 외부 side effect 제어를 분리
 
-기존 `ui/canvas-taxonomy.md`의 차트·호가·포트폴리오 등은 선택적 semantic lens다. 전수 커버리지 primitive가 아니며, 의미 정보가 부족한 route를 억지로 차트로 추론하지 않는다.
+기존 [`plan/canvas-taxonomy.md`](canvas-taxonomy.md)의 차트·호가·포트폴리오 등은 선택적 semantic lens다. 전수 커버리지 primitive가 아니며, 의미 정보가 부족한 route를 억지로 차트로 추론하지 않는다.
 
 디자인은 `ui/soul.md`, `ui/palette.md`, `ui/liquid-glass.md`, `ui/DESIGN-SOUL.md`, `app/styles/tokens.css`, `app/styles/access.css`를 따른다. Liquid Glass는 배경 재료이며 실시간 데이터 갱신층과 분리해야 한다. reduced-transparency, increased-contrast, reduced-motion fallback은 필수다.
 

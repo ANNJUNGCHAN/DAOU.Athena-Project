@@ -112,7 +112,7 @@ TR 2~3개짜리 답변은 1초 미만이라 진행 표시가 거의 안 보인�
 
 - TR 호출 실패 / **레이트리밋 초과**
 - AI가 부를 TR을 못 고르는 경우
-- 데이터는 왔는데 맞는 캔버스가 없는 경우 → **자유 캔버스로 간다** ([canvas-taxonomy.md](../canvas-taxonomy.md))
+- 데이터는 왔는데 맞는 캔버스가 없는 경우 → **자유 캔버스로 간다** ([plan/canvas-taxonomy.md](../../plan/canvas-taxonomy.md))
 
 ### 오류 색 — 해결됨
 

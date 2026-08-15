@@ -3,8 +3,8 @@
 > 최종 갱신: 2026-08-15 · 브랜치 `main` · 작성 시점에 `origin/main`과 동기화됨
 >
 > **다음 세션은 이 파일부터 읽는다.** 여기에는 *지금 상태 / 검증된 사실 / 다음 수*만 적는다.
-> 설계 근거와 함정 목록은 [`plan/00-인수인계.md`](plan/00-인수인계.md)에 있다. 중복하지 않는다.
-> 키움 공통화면 Ultragoal만 이어받는다면 [`plan/kiwoom-common-screen-handoff.md`](plan/kiwoom-common-screen-handoff.md)로 바로 간다.
+> 설계 근거와 함정 목록은 [`plan/00-인수인계.md`](00-인수인계.md)에 있다. 중복하지 않는다.
+> 키움 공통화면 Ultragoal만 이어받는다면 [`plan/kiwoom-common-screen-handoff.md`](kiwoom-common-screen-handoff.md)로 바로 간다.
 
 ---
 
@@ -34,7 +34,7 @@ backend 전체:  403 passed, 22 failed   (232초)
 | 스파이크 실측 데이터 | 86건 보존 | `spike/captures/` |
 | CLI (`claude -p`) 연동 | **미착수** | — |
 | 파수꾼·조사관 | **미착수** (설계만) | `plan/감시에이전트-실행계획.md` |
-| 캔버스 설계 라운드 | **미착수** | — |
+| 캔버스 설계 라운드 | **미착수** (초안만) | `plan/canvas-taxonomy.md` |
 
 ---
 
@@ -101,7 +101,7 @@ lexicon이 44줄뿐이라 분할 화면 이름의 어휘 신호가 부족한 것
 
 ### B. 투자 브레인 `backend/athena_api/brain/`
 
-ADR: [`plan/investment-brain-architecture.md`](plan/investment-brain-architecture.md).
+ADR: [`plan/investment-brain-architecture.md`](investment-brain-architecture.md).
 **embedded LadybugDB `0.19.1` 그래프 투영**. `pyproject.toml`에 의존성 고정 완료.
 
 - `ontology.py`(176) 스키마 · `extraction.py`(479) 엔티티/관계 추출 · `ingestion.py`(284) 적재 커서
@@ -112,7 +112,7 @@ ADR: [`plan/investment-brain-architecture.md`](plan/investment-brain-architectur
 
 ### C. LLM API 셀렉터 `backend/athena_api/selector/`
 
-문서: [`backend/docs/LLM_API_SELECTION.md`](backend/docs/LLM_API_SELECTION.md).
+문서: [`backend/docs/LLM_API_SELECTION.md`](../backend/docs/LLM_API_SELECTION.md).
 전체 스키마를 컨텍스트에 넣지 않고 `search → describe → resolve → call` 4단계로 좁힌다.
 타입드 FastAPI 라우트를 대체하지 않는 **좁은 컨트롤 플레인**. 노출은 `api/llm_tools.py`.
 → 정확도 문제는 §3.
@@ -153,6 +153,8 @@ ADR: [`plan/investment-brain-architecture.md`](plan/investment-brain-architectur
 ---
 
 ## 7. 재개 시 바로 쓰는 커맨드
+
+모든 경로는 **저장소 루트 기준**이다. 루트에서 실행한다.
 
 ```bash
 # 상태 확인
