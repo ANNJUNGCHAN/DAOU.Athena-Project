@@ -1,0 +1,16 @@
+{
+  "name": "athena-shell",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Athena W2 — 두 창 Electron 셸 (대화 창 + 캔버스 창). 프로토타입.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "verify": "electron verify.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^43.4.0"
+  }
+}

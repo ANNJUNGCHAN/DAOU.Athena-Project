@@ -1,0 +1,57 @@
+/* palette.md 계승. 색을 새로 만들지 않는다. */
+@font-face { font-family: 'Daki';       src: url('file:///C:/Windows/Fonts/DakiL.ttf') format('truetype'); font-weight: 300; }
+@font-face { font-family: 'Daki';       src: url('file:///C:/Windows/Fonts/DakiM.ttf') format('truetype'); font-weight: 400; }
+@font-face { font-family: 'Daki B';     src: url('file:///C:/Windows/Fonts/DakiB.ttf') format('truetype'); font-weight: 400; }
+@font-face { font-family: 'Daki Title'; src: url('file:///C:/Windows/Fonts/DakiMTitle.ttf') format('truetype'); font-weight: 400; }
+
+:root {
+  /* 표면 */
+  --color-k-bg: #10131a;
+  --color-k-panel: #171b24;
+  --color-k-panel2: #1d222c;
+  --color-k-panel3: #242a36;
+  --color-k-line: #2c3340;
+  --color-k-line-soft: #262c38;
+
+  /* 텍스트 */
+  --color-k-text: #e6e8ee;
+  --color-k-dim: #9aa2b1;
+  --color-k-faint: #6b7480;
+
+  /* 가격 의미색 */
+  --color-up: #ff5c5c;
+  --color-down: #4d9fff;
+  --color-flat: #98a0b0;
+
+  /* 브랜드 — 인터랙션 지점 하나에만 */
+  --color-brand: #ee137b;
+  --color-navy: #9b9fe6;
+
+  /* 상태색 — bad는 up과 충돌하므로 오류에 warn(주황)을 쓴다 */
+  --color-ok: #5fce3f;
+  --color-warn: #ff9838;
+  --color-info: #4d9fff;
+
+  --ease: cubic-bezier(.2, 0, 0, 1);
+  --dur-fast: 120ms;
+  --dur-base: 180ms;
+  --tracking-num: -1px;
+
+  --font-body: 'Daki', -apple-system, 'Segoe UI', sans-serif;
+  --font-strong: 'Daki B', -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Daki Title', -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, 'Cascadia Code', monospace;
+}
+
+* { box-sizing: border-box; }
+/* [hidden]의 UA 기본값(display:none)은 author 스타일시트의 어떤 display 규칙에도
+   밀린다(둘 다 author origin이면 specificity/later-wins 규칙을 따르는데, 요소별
+   display:flex 규칙이 흔히 더 구체적이거나 나중에 온다) — 실측으로 발견(#app,
+   #lockHint가 hidden 상태에서도 그려짐). 전역으로 우선순위를 강제한다. */
+[hidden] { display: none !important; }
+html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; }
+body {
+  font-family: var(--font-body);
+  color: var(--color-k-text);
+  font-variant-numeric: tabular-nums;
+}

@@ -1,0 +1,145 @@
+{
+  "startedAt": "2026-08-15T05:04:55.013Z",
+  "layout": {
+    "scale": 1,
+    "screen": {
+      "sw": 1920,
+      "sh": 1152
+    },
+    "canvasW": 1560,
+    "canvasH": 800,
+    "chatW": 1560,
+    "chatBaseH": 204,
+    "chatMaxH": 788,
+    "originX": 180,
+    "originY": 74
+  },
+  "bootChatOnly": {
+    "canvasVisibleAtBoot": false,
+    "chatVisibleAtBoot": true,
+    "shots": {
+      "boot": {
+        "width": 2346,
+        "height": 312
+      },
+      "idle": {
+        "width": 2340,
+        "height": 336
+      }
+    },
+    "chatReadyAfterBoot": true
+  },
+  "dotScreenPoint": {
+    "x": 214.66666793823242,
+    "y": 1046.6666717529297
+  },
+  "osCaptureAttempted": {
+    "ok": true
+  },
+  "expand": {
+    "frameCount": 11,
+    "p50": 66.70000000000027,
+    "p95": 116.70000000000027,
+    "max": 116.70000000000027,
+    "min": 16.59999999999991
+  },
+  "collapse": {
+    "frameCount": 35,
+    "p50": 16.699999999999818,
+    "p95": 16.800000000000182,
+    "max": 17,
+    "min": 16.399999999999636
+  },
+  "afterCollapse": {
+    "canvasVisible": false
+  },
+  "independence": {
+    "initial": {
+      "canvas": {
+        "x": 180,
+        "y": 74,
+        "width": 1565,
+        "height": 804
+      },
+      "chat": {
+        "x": 180,
+        "y": 855,
+        "width": 1561,
+        "height": 224
+      }
+    },
+    "afterCanvasMove": {
+      "canvas": {
+        "x": 260,
+        "y": 74,
+        "width": 1567,
+        "height": 805
+      },
+      "chat": {
+        "x": 180,
+        "y": 855,
+        "width": 1561,
+        "height": 224
+      }
+    },
+    "afterChatResize": {
+      "canvas": {
+        "x": 260,
+        "y": 74,
+        "width": 1567,
+        "height": 805
+      },
+      "chat": {
+        "x": 180,
+        "y": 855,
+        "width": 1563,
+        "height": 325
+      }
+    },
+    "canvasMovedButChatUnchanged": true,
+    "chatResizedButCanvasUnchanged": true
+  },
+  "accessibilityShotsTaken": [
+    "05-a11y-reduced-transparency-canvas.png",
+    "05-a11y-reduced-transparency-chat.png",
+    "06-a11y-prefers-contrast-canvas.png",
+    "06-a11y-prefers-contrast-chat.png",
+    "07-a11y-reduced-motion-canvas.png",
+    "07-a11y-reduced-motion-chat.png"
+  ],
+  "e2eTrigger": {
+    "reachedDoneState": true,
+    "boundsBeforeQuery": {
+      "x": 180,
+      "y": 874,
+      "width": 1561,
+      "height": 205
+    },
+    "boundsAfterQuery": {
+      "x": 180,
+      "y": 827,
+      "width": 1561,
+      "height": 252
+    },
+    "grewTallerThanBase": true,
+    "finalAnswerText": "캔버스 창에 스트림, 리더, 공통 테이블을 띄웠습니다.",
+    "canvasChipCount": 3
+  },
+  "manualResize": {
+    "beforeDrag": {
+      "x": 180,
+      "y": 827,
+      "width": 1561,
+      "height": 252
+    },
+    "afterDrag": {
+      "x": 180,
+      "y": 666,
+      "width": 1561,
+      "height": 413
+    },
+    "grewByDrag": true,
+    "bottomEdgePinned": true
+  },
+  "finishedAt": "2026-08-15T05:05:08.243Z"
+}

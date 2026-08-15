@@ -1,0 +1,96 @@
+html, body { background: transparent; }
+
+.mosaic {
+  position: fixed; inset: 0;
+  /* soul.md 결정 2: 캔버스는 준불투명 rgba(29,34,44,0.92~0.95) — 데이터 가독성 우선 */
+  background: rgba(29, 34, 44, 0.94);
+  will-change: clip-path;
+  overflow: hidden;
+}
+.glass-sheen {
+  position: fixed; inset: 0; pointer-events: none;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0) 35%);
+  /* 정지 상태 기본값은 0 — 굴절 블러는 점→캔버스 materialize 애니메이션 중에만
+     JS(canvas.js)가 인라인으로 30px→0px로 변조한다. 정지 상태에 블러가 남아있으면
+     실제 데이터가 영구히 흐려져 soul.md §8 "정보 정직성"을 위반한다(실측으로 발견). */
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  z-index: 5;
+}
+
+.grid {
+  position: absolute; inset: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: min-content;
+  gap: 16px;
+  padding: 20px;
+  align-content: start;
+}
+.grid:empty::before {
+  content: '캔버스 대기 중 — 대화 창에서 질의를 보내면 이 자리에 캔버스가 뜬다';
+  grid-column: 1 / -1;
+  color: var(--color-k-faint);
+  font-size: 13px;
+  padding: 40px;
+  text-align: center;
+}
+
+.card {
+  background: rgba(36, 42, 54, 0.7);
+  border: 1px solid var(--color-k-line);
+  border-radius: 14px;
+  padding: 14px 16px;
+  min-height: 200px;
+  max-height: 360px;
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  transition: box-shadow var(--dur-base) var(--ease), border-color var(--dur-base) var(--ease);
+}
+.card.stream { order: 1; }
+.card.reader { order: 2; }
+.card.table { order: 3; grid-column: 1 / -1; }
+.card.highlight {
+  border-color: var(--color-brand);
+  box-shadow: 0 0 0 1px rgba(238, 19, 123, 0.5), 0 0 24px rgba(238, 19, 123, 0.25);
+}
+
+.card-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  margin-bottom: 10px; flex-shrink: 0;
+}
+.card-title {
+  font-family: var(--font-strong);
+  font-size: 14px;
+  letter-spacing: 0.3px;
+}
+.card-fresh {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-k-faint);
+}
+
+.card-body { flex: 1; min-height: 0; overflow: auto; }
+
+/* ---- 스트림 ---- */
+.stream-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 7px; }
+.stream-item { display: flex; gap: 10px; align-items: baseline; font-size: 13px; }
+.stream-time { font-family: var(--font-mono); color: var(--color-k-faint); flex-shrink: 0; width: 76px; }
+.stream-source { color: var(--color-k-dim); flex-shrink: 0; width: 92px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.stream-title { color: var(--color-k-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.stream-more { color: var(--color-k-faint); font-size: 12px; padding-top: 4px; }
+
+/* ---- 리더(마크다운) ---- */
+.md-h1 { font-family: var(--font-strong); font-size: 15px; margin: 4px 0 8px; }
+.md-h2 { font-family: var(--font-strong); font-size: 13px; margin: 10px 0 6px; color: var(--color-k-dim); }
+.md-p { font-size: 12.5px; line-height: 1.6; color: var(--color-k-text); margin: 0 0 8px; }
+.md-list { margin: 0 0 8px 18px; padding: 0; font-size: 12.5px; line-height: 1.6; }
+.md-table { border-collapse: collapse; width: 100%; font-size: 11.5px; margin: 4px 0 10px; }
+.md-table td { border: 1px solid var(--color-k-line-soft); padding: 3px 6px; color: var(--color-k-dim); vertical-align: top; }
+
+/* ---- 공통 테이블 ---- */
+.fin-meta { font-family: var(--font-mono); font-size: 11px; color: var(--color-k-faint); margin-bottom: 8px; }
+table.fin-table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: 12.5px; }
+.fin-table th, .fin-table td { padding: 5px 10px; text-align: right; border-bottom: 1px solid var(--color-k-line-soft); white-space: nowrap; }
+.fin-table th:first-child, .fin-table td:first-child { text-align: left; }
+.fin-table thead th { position: sticky; top: 0; background: rgba(29, 34, 44, 0.96); color: var(--color-k-dim); font-weight: 400; font-family: var(--font-strong); }
