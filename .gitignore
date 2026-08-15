@@ -2,7 +2,8 @@
 .env
 .env.*
 !.env.example
-
+.omc/
+.omx/
 # 스파이크에서 클론한 외부 저장소 — 커밋 금지
 vendor/
 
