@@ -4,7 +4,7 @@
       "real_key": {
         "status_code": 401,
         "headers_sent": {
-          "AUTH_KEY": "896D8E24D41746F6BF3FDD80FD29FBE38BEB344B"
+          "AUTH_KEY": "<redacted-valid-key>"
         },
         "response_headers": {
           "Access-Control-Allow-Origin": "*",
@@ -12,10 +12,10 @@
           "Access-Control-Allow-Credentials": "true",
           "Content-Length": "52",
           "Content-Type": "application/json;charset=utf-8",
-          "Expires": "Fri, 14 Aug 2026 17:11:32 GMT",
+          "Expires": "Sat, 15 Aug 2026 05:12:32 GMT",
           "Cache-Control": "max-age=0, no-cache, no-store",
           "Pragma": "no-cache",
-          "Date": "Fri, 14 Aug 2026 17:11:32 GMT",
+          "Date": "Sat, 15 Aug 2026 05:12:32 GMT",
           "Connection": "keep-alive"
         },
         "body_text": "{\"respMsg\":\"Unauthorized API Call\",\"respCode\":\"401\"}",
@@ -35,10 +35,10 @@
           "Access-Control-Allow-Credentials": "true",
           "Content-Length": "47",
           "Content-Type": "application/json;charset=utf-8",
-          "Expires": "Fri, 14 Aug 2026 17:11:32 GMT",
+          "Expires": "Sat, 15 Aug 2026 05:12:32 GMT",
           "Cache-Control": "max-age=0, no-cache, no-store",
           "Pragma": "no-cache",
-          "Date": "Fri, 14 Aug 2026 17:11:32 GMT",
+          "Date": "Sat, 15 Aug 2026 05:12:32 GMT",
           "Connection": "keep-alive"
         },
         "body_text": "{\"respMsg\":\"Unauthorized Key\",\"respCode\":\"401\"}",
@@ -56,10 +56,10 @@
           "Access-Control-Allow-Credentials": "true",
           "Content-Length": "47",
           "Content-Type": "application/json;charset=utf-8",
-          "Expires": "Fri, 14 Aug 2026 17:11:32 GMT",
+          "Expires": "Sat, 15 Aug 2026 05:12:33 GMT",
           "Cache-Control": "max-age=0, no-cache, no-store",
           "Pragma": "no-cache",
-          "Date": "Fri, 14 Aug 2026 17:11:32 GMT",
+          "Date": "Sat, 15 Aug 2026 05:12:33 GMT",
           "Connection": "keep-alive"
         },
         "body_text": "{\"respMsg\":\"Unauthorized Key\",\"respCode\":\"401\"}",
@@ -73,7 +73,7 @@
       "real_key": {
         "status_code": 401,
         "headers_sent": {
-          "AUTH_KEY": "896D8E24D41746F6BF3FDD80FD29FBE38BEB344B"
+          "AUTH_KEY": "<redacted-valid-key>"
         },
         "response_headers": {
           "Access-Control-Allow-Origin": "*",
@@ -81,10 +81,10 @@
           "Access-Control-Allow-Credentials": "true",
           "Content-Length": "52",
           "Content-Type": "application/json;charset=utf-8",
-          "Expires": "Fri, 14 Aug 2026 17:11:33 GMT",
+          "Expires": "Sat, 15 Aug 2026 05:12:34 GMT",
           "Cache-Control": "max-age=0, no-cache, no-store",
           "Pragma": "no-cache",
-          "Date": "Fri, 14 Aug 2026 17:11:33 GMT",
+          "Date": "Sat, 15 Aug 2026 05:12:34 GMT",
           "Connection": "keep-alive"
         },
         "body_text": "{\"respMsg\":\"Unauthorized API Call\",\"respCode\":\"401\"}",
@@ -104,10 +104,10 @@
           "Access-Control-Allow-Credentials": "true",
           "Content-Length": "47",
           "Content-Type": "application/json;charset=utf-8",
-          "Expires": "Fri, 14 Aug 2026 17:11:33 GMT",
+          "Expires": "Sat, 15 Aug 2026 05:12:37 GMT",
           "Cache-Control": "max-age=0, no-cache, no-store",
           "Pragma": "no-cache",
-          "Date": "Fri, 14 Aug 2026 17:11:33 GMT",
+          "Date": "Sat, 15 Aug 2026 05:12:37 GMT",
           "Connection": "keep-alive"
         },
         "body_text": "{\"respMsg\":\"Unauthorized Key\",\"respCode\":\"401\"}",
@@ -125,10 +125,10 @@
           "Access-Control-Allow-Credentials": "true",
           "Content-Length": "47",
           "Content-Type": "application/json;charset=utf-8",
-          "Expires": "Fri, 14 Aug 2026 17:11:34 GMT",
+          "Expires": "Sat, 15 Aug 2026 05:12:38 GMT",
           "Cache-Control": "max-age=0, no-cache, no-store",
           "Pragma": "no-cache",
-          "Date": "Fri, 14 Aug 2026 17:11:34 GMT",
+          "Date": "Sat, 15 Aug 2026 05:12:38 GMT",
           "Connection": "keep-alive"
         },
         "body_text": "{\"respMsg\":\"Unauthorized Key\",\"respCode\":\"401\"}",
@@ -143,8 +143,10 @@
     "dns_data-dbg.krx.co.kr": {
       "resolved": true,
       "addresses": [
-        "23.201.35.106",
-        "23.201.35.43"
+        "23.202.97.40",
+        "23.202.97.9",
+        "64:ff9b::173b:4893",
+        "64:ff9b::173b:4898"
       ]
     },
     "root_data-dbg": {

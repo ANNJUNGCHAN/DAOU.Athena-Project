@@ -61,7 +61,12 @@ for name, url in ENDPOINTS.items():
                 body_json = None
             results["experiment_1_auth_key_comparison"][name][label] = {
                 "status_code": r.status_code,
-                "headers_sent": headers,
+                # 실키는 캡처에 절대 기록하지 않는다. 가짜 키는 대조군 재현을 위해 남긴다.
+                "headers_sent": (
+                    {"AUTH_KEY": "<redacted-valid-key>"}
+                    if label == "real_key"
+                    else headers
+                ),
                 "response_headers": dict(r.headers),
                 "body_text": body_text[:2000],
                 "body_json": body_json,

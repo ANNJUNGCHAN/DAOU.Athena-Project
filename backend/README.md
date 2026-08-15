@@ -51,6 +51,25 @@ The canonical [response projection manifest](ref/response-projections.json) cove
 top-level response alias exactly once. Facts groups contain at most 20 fields; LIST fields remain
 atomic table groups with a UI page size of 10 rows.
 
+## LLM API selector
+
+Use the [LLM API selection contract](docs/LLM_API_SELECTION.md) when connecting an LLM or MCP
+adapter. Athena keeps the 323-operation domestic catalog server-side: 208 base operations plus 115
+detail projections. Of these, 286 query identities are generic-callable, 35 order/WebSocket
+identities are discovery-only, and 2 OAuth identities are hidden.
+
+Expose exactly these four POST tools to the model: `athena_search`, `athena_describe`,
+`athena_resolve`, and `athena_call`. Do not register all 323 operations as flat model tools and do
+not pass the complete OpenAPI document into the model context. Adapters may bootstrap from
+`GET /api/v1/llm/manifest` (`llm_get_manifest`), which is explicitly marked
+`x-athena-llm-exposed: false` and is not a fifth model tool. The current OpenAPI build contains
+335 GET/POST operations (323 generated Kiwoom operations plus 12 service operations); only the four
+selector POST operations carry `x-athena-llm-exposed: true`.
+
+The selector implementation is still in progress. Its catalog and execution boundary are covered,
+but focused detail resolution, vague-question clarification, and duplicate-title ranking still have
+known regression failures. Treat the selector evaluation suite as a release gate.
+
 Order endpoints, when installed, are additionally disabled by default. Enabling them requires
 `ATHENA_ENABLE_ORDER_API=true` and `ATHENA_LOCAL_BEARER_TOKEN`; the order router also enforces its
 own local bearer authorization, explicit confirmation, and idempotency contract. Order calls use a
