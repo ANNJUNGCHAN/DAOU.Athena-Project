@@ -1,0 +1,142 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<style>
+  html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: transparent; }
+  body { font-family: -apple-system, "Segoe UI", sans-serif; color: #e8e8ec; }
+  #root { position: relative; width: 100%; height: 100%; }
+  #mosaic {
+    position: absolute; inset: 0;
+    background: rgba(15, 17, 22, 0.97);
+    overflow: hidden;
+    will-change: clip-path;
+  }
+  .sheen {
+    position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0) 40%);
+    will-change: backdrop-filter;
+  }
+  .chart-wrap {
+    position: absolute; top: 18px; left: 18px; right: 18px; height: 196px;
+    background: rgba(255,255,255,0.03); border-radius: 12px; padding: 10px; box-sizing: border-box;
+  }
+  .table-wrap {
+    position: absolute; top: 230px; left: 18px; right: 18px; bottom: 18px; overflow: auto;
+    background: rgba(255,255,255,0.02); border-radius: 12px;
+  }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: 13px; }
+  th, td { padding: 4px 10px; text-align: right; border-bottom: 1px solid rgba(255,255,255,0.06); white-space: nowrap; }
+  th:first-child, td:first-child { text-align: left; }
+  thead th { position: sticky; top: 0; background: rgba(15,17,22,0.97); color: #9aa0ac; font-weight: 600; }
+  .up { color: #ff6b6b; } .down { color: #6ea8ff; }
+  #label { position: absolute; top: 8px; right: 16px; font-size: 12px; color: #8a8f9c; z-index: 5; }
+</style>
+</head>
+<body>
+  <div id="root">
+    <div id="mosaic">
+      <div class="chart-wrap"><svg id="chart" width="100%" height="100%" viewBox="0 0 1500 260" preserveAspectRatio="none"></svg></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>종목명</th><th>현재가</th><th>등락률</th><th>거래량</th><th>시가</th><th>고가</th><th>저가</th></tr></thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="sheen" id="sheen"></div>
+    <div id="label">CANVAS 1560×800</div>
+  </div>
+<script>
+  const { ipcRenderer } = require('electron');
+
+  // --- dummy render load: SVG line chart (300 points) ---
+  const svg = document.getElementById('chart');
+  const N = 300;
+  let y = 130;
+  const pts = [];
+  for (let i = 0; i < N; i++) {
+    y += (Math.random() - 0.5) * 14;
+    y = Math.max(10, Math.min(250, y));
+    pts.push([i * (1500 / (N - 1)), y]);
+  }
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  path.setAttribute('d', 'M ' + pts.map((p) => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' L '));
+  path.setAttribute('fill', 'none');
+  path.setAttribute('stroke', '#6ea8ff');
+  path.setAttribute('stroke-width', '2');
+  svg.appendChild(path);
+  // grid lines
+  for (let gx = 0; gx <= 1500; gx += 150) {
+    const l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    l.setAttribute('x1', gx); l.setAttribute('x2', gx); l.setAttribute('y1', 0); l.setAttribute('y2', 260);
+    l.setAttribute('stroke', 'rgba(255,255,255,0.05)');
+    svg.appendChild(l);
+  }
+
+  // --- dummy render load: 100-row numeric table ---
+  const tbody = document.getElementById('tbody');
+  const names = ['삼성전자','SK하이닉스','LG에너지솔루션','현대차','카카오','네이버','POSCO홀딩스','기아','셀트리온','LG화학'];
+  let rows = '';
+  for (let i = 0; i < 100; i++) {
+    const name = names[i % names.length] + (i >= names.length ? ' ' + (Math.floor(i / names.length) + 1) : '');
+    const price = (10000 + Math.random() * 90000).toFixed(0);
+    const pct = (Math.random() * 6 - 3).toFixed(2);
+    const cls = pct >= 0 ? 'up' : 'down';
+    const vol = Math.floor(Math.random() * 5_000_000).toLocaleString();
+    const o = (Number(price) * (1 + (Math.random() * 0.02 - 0.01))).toFixed(0);
+    const h = (Number(price) * (1 + Math.random() * 0.02)).toFixed(0);
+    const l = (Number(price) * (1 - Math.random() * 0.02)).toFixed(0);
+    rows += `<tr><td>${name}</td><td>${Number(price).toLocaleString()}</td><td class="${cls}">${pct >= 0 ? '+' : ''}${pct}%</td><td>${vol}</td><td>${Number(o).toLocaleString()}</td><td>${Number(h).toLocaleString()}</td><td>${Number(l).toLocaleString()}</td></tr>`;
+  }
+  tbody.innerHTML = rows;
+
+  // --- expand/collapse animation driven by rAF, timestamps recorded ---
+  const mosaic = document.getElementById('mosaic');
+  const sheen = document.getElementById('sheen');
+
+  function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+  function easeInCubic(t) { return t * t * t; }
+
+  function runAnimation({ cx, cy, rmax, duration, mode }) {
+    return new Promise((resolve) => {
+      const timestamps = [];
+      const t0 = performance.now();
+      function frame(now) {
+        timestamps.push(now);
+        const elapsed = now - t0;
+        let t = Math.min(1, elapsed / duration);
+        const et = mode === 'expand' ? easeOutCubic(t) : (1 - easeInCubic(1 - t));
+        const r = mode === 'expand' ? rmax * et : rmax * (1 - et);
+        const blur = mode === 'expand' ? (30 - 24 * et) : (6 + 24 * et);
+        mosaic.style.clipPath = `circle(${r}px at ${cx}px ${cy}px)`;
+        sheen.style.backdropFilter = `blur(${blur}px)`;
+        sheen.style.webkitBackdropFilter = `blur(${blur}px)`;
+        if (t < 1) {
+          requestAnimationFrame(frame);
+        } else {
+          resolve(timestamps);
+        }
+      }
+      requestAnimationFrame(frame);
+    });
+  }
+
+  ipcRenderer.on('run-animation', async (event, payload) => {
+    // set initial clip state before this window is shown (main process calls show() right after sending 'prime')
+    if (payload.mode === 'expand') {
+      mosaic.style.clipPath = `circle(0px at ${payload.cx}px ${payload.cy}px)`;
+      sheen.style.backdropFilter = 'blur(30px)';
+    }
+    const timestamps = await runAnimation(payload);
+    ipcRenderer.send('animation-done', { mode: payload.mode, timestamps });
+  });
+
+  ipcRenderer.on('prime-clip', (event, payload) => {
+    mosaic.style.clipPath = `circle(0px at ${payload.cx}px ${payload.cy}px)`;
+    sheen.style.backdropFilter = 'blur(30px)';
+    ipcRenderer.send('primed');
+  });
+</script>
+</body>
+</html>

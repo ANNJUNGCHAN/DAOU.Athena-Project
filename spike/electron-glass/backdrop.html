@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<style>
+  html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; }
+  body {
+    background:
+      repeating-linear-gradient(45deg, #ff3b3b 0 40px, #ffb400 40px 80px, #34d058 80px 120px, #2ea1ff 120px 160px, #b967ff 160px 200px);
+    font-family: -apple-system, "Segoe UI", sans-serif;
+    color: #fff;
+  }
+  .grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,0.5) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.5) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  .caption {
+    position: absolute; top: 20px; left: 20px;
+    font-size: 22px; font-weight: 700;
+    background: rgba(0,0,0,0.55); padding: 6px 14px; border-radius: 6px;
+  }
+</style>
+</head>
+<body>
+  <div class="grid"></div>
+  <div class="caption">S1 BACKDROP — 이 색상/격자가 유리창 뒤로 굴절되어 보이면 통과</div>
+</body>
+</html>

@@ -1,0 +1,250 @@
+{
+  "meta": null,
+  "nextCursor": null,
+  "tools": [
+    {
+      "name": "get_stock_ohlcv",
+      "title": null,
+      "description": "\n    Retrieve OHLCV (Open, High, Low, Close, Volume) data for a Korean stock.\n\n    This tool fetches historical stock price data from the Korean stock\n    market (KRX). Use this when you need to analyze stock price movements,\n    calculate technical indicators, or visualize price trends for Korean\n    stocks.\n\n    Args:\n        ticker: Stock ticker symbol (e.g., \"005930\" for Samsung Electronics).\n                Korean stock tickers are 6-digit numbers.\n        start_date: Start date in YYYYMMDD format (e.g., \"20240101\").\n        end_date: End date in YYYYMMDD format (e.g., \"20240131\").\n        adjusted: Whether to return adjusted prices (default: True).\n                  Adjusted prices account for stock splits and dividends.\n\n    Returns:\n        Dictionary containing OHLCV data with dates as keys and price/volume\n        information. Each entry includes: Open, High, Low, Close, Volume, and\n        trading value.\n\n    Example:\n        get_stock_ohlcv(\"005930\", \"20240101\", \"20240131\", True)\n        Returns Samsung Electronics stock data for January 2024.\n    ",
+      "inputSchema": {
+        "properties": {
+          "ticker": {
+            "title": "Ticker",
+            "type": "string"
+          },
+          "start_date": {
+            "title": "Start Date",
+            "type": "string"
+          },
+          "end_date": {
+            "title": "End Date",
+            "type": "string"
+          },
+          "adjusted": {
+            "default": true,
+            "title": "Adjusted",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "ticker",
+          "start_date",
+          "end_date"
+        ],
+        "title": "get_stock_ohlcvArguments",
+        "type": "object"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "get_market_ticker_list",
+      "title": null,
+      "description": "\n    Retrieve list of stock tickers for a specific market.\n\n    Args:\n        date: Date in YYYYMMDD format (e.g., \"20240101\")\n        market: Market name - \"KOSPI\", \"KOSDAQ\", or \"KONEX\" (default: \"KOSPI\")\n\n    Returns:\n        Dictionary with ticker list and count\n\n    Example:\n        get_market_ticker_list(\"20240101\", \"KOSPI\")\n        Returns list of all KOSPI stocks on 2024-01-01\n    ",
+      "inputSchema": {
+        "properties": {
+          "date": {
+            "title": "Date",
+            "type": "string"
+          },
+          "market": {
+            "default": "KOSPI",
+            "title": "Market",
+            "type": "string"
+          }
+        },
+        "required": [
+          "date"
+        ],
+        "title": "get_market_ticker_listArguments",
+        "type": "object"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "get_market_ticker_name",
+      "title": null,
+      "description": "\n    Get the name of a stock from its ticker code.\n\n    Args:\n        ticker: 6-digit stock ticker code (e.g., \"005930\")\n\n    Returns:\n        Dictionary with ticker and company name\n\n    Example:\n        get_market_ticker_name(\"005930\")\n        Returns {\"ticker\": \"005930\", \"name\": \"삼성전자\"}\n    ",
+      "inputSchema": {
+        "properties": {
+          "ticker": {
+            "title": "Ticker",
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticker"
+        ],
+        "title": "get_market_ticker_nameArguments",
+        "type": "object"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "get_market_fundamental_by_date",
+      "title": null,
+      "description": "\n    Retrieve fundamental data (PER, PBR, dividend yield, etc.) for a stock.\n\n    This tool fetches fundamental indicators that help evaluate stock valuation.\n\n    Args:\n        ticker: Stock ticker symbol (e.g., \"005930\" for Samsung Electronics)\n        start_date: Start date in YYYYMMDD format (e.g., \"20240101\")\n        end_date: End date in YYYYMMDD format (e.g., \"20240131\")\n\n    Returns:\n        Dictionary containing fundamental data (BPS, PER, PBR, EPS, DIV, DPS)\n\n    Example:\n        get_market_fundamental_by_date(\"005930\", \"20240101\", \"20240131\")\n        Returns Samsung fundamental data for January 2024\n    ",
+      "inputSchema": {
+        "properties": {
+          "ticker": {
+            "title": "Ticker",
+            "type": "string"
+          },
+          "start_date": {
+            "title": "Start Date",
+            "type": "string"
+          },
+          "end_date": {
+            "title": "End Date",
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticker",
+          "start_date",
+          "end_date"
+        ],
+        "title": "get_market_fundamental_by_dateArguments",
+        "type": "object"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "get_market_cap_by_date",
+      "title": null,
+      "description": "\n    Retrieve market capitalization data for a stock.\n\n    Use this tool to get market cap, trading volume, trading value,\n    and outstanding shares.\n\n    Args:\n        ticker: 6-digit stock ticker code (e.g., \"005930\" for Samsung Electronics)\n        start_date: Start date in YYYYMMDD format (e.g., \"20240101\")\n        end_date: End date in YYYYMMDD format (e.g., \"20240131\")\n\n    Returns:\n        Dictionary with market cap data including 시가총액, 거래량, 거래대금, 상장주식수\n    ",
+      "inputSchema": {
+        "properties": {
+          "ticker": {
+            "title": "Ticker",
+            "type": "string"
+          },
+          "start_date": {
+            "title": "Start Date",
+            "type": "string"
+          },
+          "end_date": {
+            "title": "End Date",
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticker",
+          "start_date",
+          "end_date"
+        ],
+        "title": "get_market_cap_by_dateArguments",
+        "type": "object"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "get_market_trading_value_by_date",
+      "title": null,
+      "description": "\n    Retrieve trading value by investor type for supply/demand analysis.\n\n    Essential for analyzing institutional and foreign investor flows.\n    Positive values = net buying, negative values = net selling.\n\n    Args:\n        ticker: 6-digit stock ticker code (e.g., \"005930\" for Samsung Electronics)\n        start_date: Start date in YYYYMMDD format (e.g., \"20240101\")\n        end_date: End date in YYYYMMDD format (e.g., \"20240131\")\n\n    Returns:\n        Dictionary with trading value by investor type (금융투자, 외국인, 개인, etc.)\n    ",
+      "inputSchema": {
+        "properties": {
+          "ticker": {
+            "title": "Ticker",
+            "type": "string"
+          },
+          "start_date": {
+            "title": "Start Date",
+            "type": "string"
+          },
+          "end_date": {
+            "title": "End Date",
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticker",
+          "start_date",
+          "end_date"
+        ],
+        "title": "get_market_trading_value_by_dateArguments",
+        "type": "object"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "get_etf_ohlcv_by_date",
+      "title": null,
+      "description": "\n    Retrieve ETF OHLCV (Open, High, Low, Close, Volume) data.\n\n    This tool fetches historical ETF price data from the Korean market.\n\n    Args:\n        ticker: ETF ticker symbol (e.g., \"069500\" for KODEX 200)\n        start_date: Start date in YYYYMMDD format (e.g., \"20240101\")\n        end_date: End date in YYYYMMDD format (e.g., \"20240131\")\n\n    Returns:\n        Dictionary containing ETF OHLCV data with NAV information\n\n    Example:\n        get_etf_ohlcv_by_date(\"069500\", \"20240101\", \"20240131\")\n        Returns KODEX 200 ETF price data for January 2024\n    ",
+      "inputSchema": {
+        "properties": {
+          "ticker": {
+            "title": "Ticker",
+            "type": "string"
+          },
+          "start_date": {
+            "title": "Start Date",
+            "type": "string"
+          },
+          "end_date": {
+            "title": "End Date",
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticker",
+          "start_date",
+          "end_date"
+        ],
+        "title": "get_etf_ohlcv_by_dateArguments",
+        "type": "object"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "get_etf_ticker_list",
+      "title": null,
+      "description": "\n    Retrieve list of all ETF tickers traded on a specific date.\n\n    Args:\n        date: Date in YYYYMMDD format (e.g., \"20240101\")\n\n    Returns:\n        Dictionary with ETF ticker list and count\n\n    Example:\n        get_etf_ticker_list(\"20240101\")\n        Returns list of all ETFs traded on 2024-01-01\n    ",
+      "inputSchema": {
+        "properties": {
+          "date": {
+            "title": "Date",
+            "type": "string"
+          }
+        },
+        "required": [
+          "date"
+        ],
+        "title": "get_etf_ticker_listArguments",
+        "type": "object"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    }
+  ]
+}

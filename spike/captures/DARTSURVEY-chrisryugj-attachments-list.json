@@ -1,0 +1,14 @@
+{
+  "tool": "get_attachments",
+  "args": {
+    "rcept_no": "20260310002820",
+    "mode": "list"
+  },
+  "label": "삼성전자 사업보고서(20260310002820) 첨부파일 목록",
+  "isError": false,
+  "content0_text_len": 771,
+  "content0_text_head": "{\n  \"rcept_no\": \"20260310002820\",\n  \"supported\": true,\n  \"dcm_no\": \"11104488\",\n  \"viewer_url\": \"https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260310002820\",\n  \"download_page_url\": \"https://dart.fss.or.kr/pdf/download/main.do?rcp_no=20260310002820&dcm_no=11104488\",\n  \"count\": 2,\n  \"attachments\": [\n    {\n      \"index\": 0,\n      \"filename\": \"[삼성전자]사업보고서(2026.03.10).pdf\",\n      \"download_url\": \"https://dart.fss.or.kr/pdf/download/pdf.do?rcp_no=20260310002820&dcm_no=11104488\",\n      \"format\": \"pdf\"\n    },\n    {\n      \"index\": 1,\n      \"filename\": \"[삼성전자]사업보고서_IFRS(원문XBRL)(2026.03.10).zip\",\n      \"download_url\": \"https://dart.fss.or.kr/pdf/download/ifrs.do?rcp_no=20260310002820&dcm_no=11104488&lang=ko\",\n      \"format\": \"zip\"\n    }\n  ],\n  \"unsupported_reason\": null\n}",
+  "has_structuredContent": false,
+  "structuredContent": null,
+  "u_fffd_count": 0
+}

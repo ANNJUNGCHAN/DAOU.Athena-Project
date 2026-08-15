@@ -1,0 +1,902 @@
+{
+  "meta": null,
+  "nextCursor": null,
+  "tools": [
+    {
+      "name": "search_webkr",
+      "title": null,
+      "description": "🌐 Search Korean web documents and general content. Comprehensive search across Korean websites and online content. Find articles, information, and documents from various Korean sources. (네이버 웹문서 검색 - 한국 웹사이트 종합 검색)",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "검색어"
+          },
+          "display": {
+            "type": "number",
+            "description": "한 번에 가져올 결과 수 (기본 10)"
+          },
+          "start": {
+            "type": "number",
+            "description": "검색 시작 위치 (기본 1)"
+          },
+          "sort": {
+            "type": "string",
+            "enum": [
+              "sim",
+              "date"
+            ],
+            "description": "정렬 방식 (sim: 유사도, date: 날짜순)"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "search_news",
+      "title": null,
+      "description": "📰 Search latest Korean news articles from major outlets. Perfect for current events, breaking news, and recent developments. Covers politics, economy, society, and international news. (네이버 뉴스 검색 - 최신 뉴스와 시사 정보)",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "검색어"
+          },
+          "display": {
+            "type": "number",
+            "description": "한 번에 가져올 결과 수 (기본 10)"
+          },
+          "start": {
+            "type": "number",
+            "description": "검색 시작 위치 (기본 1)"
+          },
+          "sort": {
+            "type": "string",
+            "enum": [
+              "sim",
+              "date"
+            ],
+            "description": "정렬 방식 (sim: 유사도, date: 날짜순)"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "search_blog",
+      "title": null,
+      "description": "✍️ Search personal blogs and reviews for authentic user experiences. Great for product reviews, personal stories, detailed tutorials, and real user opinions. Find genuine Korean perspectives. (네이버 블로그 검색 - 실제 사용자 후기와 개인적 경험)",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "검색어"
+          },
+          "display": {
+            "type": "number",
+            "description": "한 번에 가져올 결과 수 (기본 10)"
+          },
+          "start": {
+            "type": "number",
+            "description": "검색 시작 위치 (기본 1)"
+          },
+          "sort": {
+            "type": "string",
+            "enum": [
+              "sim",
+              "date"
+            ],
+            "description": "정렬 방식 (sim: 유사도, date: 날짜순)"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "search_image",
+      "title": null,
+      "description": "🖼️ Search for images with Korean context and relevance. Find visual content, infographics, charts, and photos related to your search terms. Great for visual research and content discovery. (네이버 이미지 검색 - 시각적 컨텐츠 발견)",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "검색어"
+          },
+          "display": {
+            "type": "number",
+            "description": "한 번에 가져올 결과 수 (기본 10)"
+          },
+          "start": {
+            "type": "number",
+            "description": "검색 시작 위치 (기본 1)"
+          },
+          "sort": {
+            "type": "string",
+            "enum": [
+              "sim",
+              "date"
+            ],
+            "description": "정렬 방식 (sim: 유사도, date: 날짜순)"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "search_kin",
+      "title": null,
+      "description": "❓ Search Naver KnowledgeiN for Q&A and community-driven answers. Find solutions to problems, get expert advice, and discover community insights on various topics. (네이버 지식iN 검색 - 질문과 답변, 커뮤니티 지식)",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "검색어"
+          },
+          "display": {
+            "type": "number",
+            "description": "한 번에 가져올 결과 수 (기본 10)"
+          },
+          "start": {
+            "type": "number",
+            "description": "검색 시작 위치 (기본 1)"
+          },
+          "sort": {
+            "type": "string",
+            "enum": [
+              "sim",
+              "date"
+            ],
+            "description": "정렬 방식 (sim: 유사도, date: 날짜순)"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "search_encyc",
+      "title": null,
+      "description": "📖 Search Naver Encyclopedia for authoritative knowledge and definitions. Best for academic research, getting reliable information, and understanding Korean concepts and terminology. (네이버 지식백과 검색 - 신뢰할 수 있는 정보와 정의)",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "검색어"
+          },
+          "display": {
+            "type": "number",
+            "description": "한 번에 가져올 결과 수 (기본 10)"
+          },
+          "start": {
+            "type": "number",
+            "description": "검색 시작 위치 (기본 1)"
+          },
+          "sort": {
+            "type": "string",
+            "enum": [
+              "sim",
+              "date"
+            ],
+            "description": "정렬 방식 (sim: 유사도, date: 날짜순)"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "search_local",
+      "title": null,
+      "description": "📍 Search for local businesses, restaurants, and places in Korea. Find location information, reviews, contact details, and business hours for Korean establishments. (네이버 지역 검색 - 지역 업체와 장소 정보)",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "검색어"
+          },
+          "display": {
+            "type": "number",
+            "description": "한 번에 가져올 결과 수 (최대 5)"
+          },
+          "start": {
+            "type": "number",
+            "description": "검색 시작 위치 (최대 1)"
+          },
+          "sort": {
+            "type": "string",
+            "enum": [
+              "random",
+              "comment"
+            ],
+            "description": "정렬 방식 (random: 정확도순, comment: 리뷰 많은순)"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "search_cafearticle",
+      "title": null,
+      "description": "☕ Search Naver Cafe articles for community discussions and specialized content. Find niche communities, hobby groups, and specialized discussions on various topics. (네이버 카페글 검색 - 커뮤니티 토론과 전문 정보)",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "검색어"
+          },
+          "display": {
+            "type": "number",
+            "description": "한 번에 가져올 결과 수 (기본 10)"
+          },
+          "start": {
+            "type": "number",
+            "description": "검색 시작 위치 (기본 1)"
+          },
+          "sort": {
+            "type": "string",
+            "enum": [
+              "sim",
+              "date"
+            ],
+            "description": "정렬 방식 (sim: 유사도, date: 날짜순)"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "datalab_search",
+      "title": null,
+      "description": "📊 Analyze search keyword trends over time using Naver DataLab. Track popularity changes, seasonal patterns, and compare multiple keywords. Perfect for market research and trend analysis. (네이버 데이터랩 검색어 트렌드 분석)",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "startDate": {
+            "type": "string",
+            "description": "Start date (yyyy-mm-dd or 'today' for KST today)"
+          },
+          "endDate": {
+            "type": "string",
+            "description": "End date (yyyy-mm-dd or 'today' for KST today)"
+          },
+          "timeUnit": {
+            "type": "string",
+            "enum": [
+              "date",
+              "week",
+              "month"
+            ],
+            "description": "Time unit"
+          },
+          "keywordGroups": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "groupName": {
+                  "type": "string",
+                  "description": "Group name"
+                },
+                "keywords": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "List of keywords"
+                }
+              },
+              "required": [
+                "groupName",
+                "keywords"
+              ],
+              "additionalProperties": false
+            },
+            "description": "Keyword groups"
+          }
+        },
+        "required": [
+          "startDate",
+          "endDate",
+          "timeUnit",
+          "keywordGroups"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "datalab_shopping_category",
+      "title": null,
+      "description": "🛍️ STEP 2: Analyze shopping category trends over time. Use find_category first to get category codes. BUSINESS CASES: Market size analysis, seasonal trend identification, category performance comparison. EXAMPLE: Compare '패션의류' vs '화장품' trends over 6 months. (네이버 쇼핑 카테고리별 트렌드 분석 - 먼저 find_category 도구로 카테고리 코드를 찾으세요)",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "startDate": {
+            "type": "string",
+            "description": "Start date (yyyy-mm-dd or 'today' for KST today)"
+          },
+          "endDate": {
+            "type": "string",
+            "description": "End date (yyyy-mm-dd or 'today' for KST today)"
+          },
+          "timeUnit": {
+            "type": "string",
+            "enum": [
+              "date",
+              "week",
+              "month"
+            ],
+            "description": "Time unit"
+          },
+          "category": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Category name"
+                },
+                "param": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Category codes"
+                }
+              },
+              "required": [
+                "name",
+                "param"
+              ],
+              "additionalProperties": false
+            },
+            "description": "Array of category name and code pairs"
+          }
+        },
+        "required": [
+          "startDate",
+          "endDate",
+          "timeUnit",
+          "category"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "datalab_shopping_by_device",
+      "title": null,
+      "description": "📱 Analyze shopping trends by device (PC vs Mobile). Use find_category first. BUSINESS CASES: Mobile commerce strategy, responsive design priority, device-specific campaigns. EXAMPLE: 'PC 사용자가 더 많이 구매하는 카테고리는?' (기기별 쇼핑 트렌드 분석 - 먼저 find_category 도구로 카테고리 코드를 찾으세요)",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "startDate": {
+            "type": "string",
+            "description": "Start date (yyyy-mm-dd or 'today' for KST today)"
+          },
+          "endDate": {
+            "type": "string",
+            "description": "End date (yyyy-mm-dd or 'today' for KST today)"
+          },
+          "timeUnit": {
+            "type": "string",
+            "enum": [
+              "date",
+              "week",
+              "month"
+            ],
+            "description": "Time unit"
+          },
+          "category": {
+            "type": "string",
+            "description": "Category code"
+          },
+          "device": {
+            "type": "string",
+            "enum": [
+              "pc",
+              "mo"
+            ],
+            "description": "Device type"
+          }
+        },
+        "required": [
+          "startDate",
+          "endDate",
+          "timeUnit",
+          "category",
+          "device"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "datalab_shopping_by_gender",
+      "title": null,
+      "description": "👥 Analyze shopping trends by gender (Male vs Female). Use find_category first. BUSINESS CASES: Gender-targeted marketing, product positioning, demographic analysis. EXAMPLE: '화장품 쇼핑에서 남녀 비율은?' (성별 쇼핑 트렌드 분석 - 먼저 find_category 도구로 카테고리 코드를 찾으세요)",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "startDate": {
+            "type": "string",
+            "description": "Start date (yyyy-mm-dd or 'today' for KST today)"
+          },
+          "endDate": {
+            "type": "string",
+            "description": "End date (yyyy-mm-dd or 'today' for KST today)"
+          },
+          "timeUnit": {
+            "type": "string",
+            "enum": [
+              "date",
+              "week",
+              "month"
+            ],
+            "description": "Time unit"
+          },
+          "category": {
+            "type": "string",
+            "description": "Category code"
+          },
+          "gender": {
+            "type": "string",
+            "enum": [
+              "f",
+              "m"
+            ],
+            "description": "Gender"
+          }
+        },
+        "required": [
+          "startDate",
+          "endDate",
+          "timeUnit",
+          "category",
+          "gender"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "datalab_shopping_by_age",
+      "title": null,
+      "description": "👶👦👨👴 Analyze shopping trends by age groups (10s, 20s, 30s, 40s, 50s, 60s+). Use find_category first. BUSINESS CASES: Age-targeted products, generational preferences, lifecycle marketing. EXAMPLE: '개발 도구는 어느 연령대가 많이 구매하나?' (연령별 쇼핑 트렌드 - 먼저 find_category 도구로 카테고리 코드를 찾으세요)",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "startDate": {
+            "type": "string",
+            "description": "Start date (yyyy-mm-dd or 'today' for KST today)"
+          },
+          "endDate": {
+            "type": "string",
+            "description": "End date (yyyy-mm-dd or 'today' for KST today)"
+          },
+          "timeUnit": {
+            "type": "string",
+            "enum": [
+              "date",
+              "week",
+              "month"
+            ],
+            "description": "Time unit"
+          },
+          "category": {
+            "type": "string",
+            "description": "Category code"
+          },
+          "ages": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "10",
+                "20",
+                "30",
+                "40",
+                "50",
+                "60"
+              ]
+            },
+            "description": "Age groups"
+          }
+        },
+        "required": [
+          "startDate",
+          "endDate",
+          "timeUnit",
+          "category",
+          "ages"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "datalab_shopping_keywords",
+      "title": null,
+      "description": "🔍 Compare specific keywords within a shopping category. Use find_category first. BUSINESS CASES: Product keyword optimization, competitor analysis, search trend identification. EXAMPLE: Within '패션' category, compare '원피스' vs '자켓' vs '드레스' trends. (카테고리 내 키워드 비교 - 먼저 find_category 도구로 카테고리 코드를 찾으세요)",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "startDate": {
+            "type": "string",
+            "description": "Start date (yyyy-mm-dd or 'today' for KST today)"
+          },
+          "endDate": {
+            "type": "string",
+            "description": "End date (yyyy-mm-dd or 'today' for KST today)"
+          },
+          "timeUnit": {
+            "type": "string",
+            "enum": [
+              "date",
+              "week",
+              "month"
+            ],
+            "description": "Time unit"
+          },
+          "category": {
+            "type": "string",
+            "description": "Category code"
+          },
+          "keyword": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Keyword name"
+                },
+                "param": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Keyword values"
+                }
+              },
+              "required": [
+                "name",
+                "param"
+              ],
+              "additionalProperties": false
+            },
+            "description": "Array of keyword name and value pairs"
+          }
+        },
+        "required": [
+          "startDate",
+          "endDate",
+          "timeUnit",
+          "category",
+          "keyword"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "datalab_shopping_keyword_by_device",
+      "title": null,
+      "description": "📱🔍 Analyze keyword performance by device within shopping categories. Use find_category first to get category codes. Perfect for understanding mobile vs desktop shopping behavior for specific products. (쇼핑 키워드 기기별 트렌드 - 먼저 find_category 도구로 카테고리 코드를 찾으세요)",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "startDate": {
+            "type": "string",
+            "description": "Start date (yyyy-mm-dd or 'today' for KST today)"
+          },
+          "endDate": {
+            "type": "string",
+            "description": "End date (yyyy-mm-dd or 'today' for KST today)"
+          },
+          "timeUnit": {
+            "type": "string",
+            "enum": [
+              "date",
+              "week",
+              "month"
+            ],
+            "description": "Time unit"
+          },
+          "category": {
+            "type": "string",
+            "description": "Category code"
+          },
+          "keyword": {
+            "type": "string",
+            "description": "Search keyword"
+          },
+          "device": {
+            "type": "string",
+            "enum": [
+              "pc",
+              "mo"
+            ],
+            "description": "Device type"
+          }
+        },
+        "required": [
+          "startDate",
+          "endDate",
+          "timeUnit",
+          "category",
+          "keyword",
+          "device"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "datalab_shopping_keyword_by_gender",
+      "title": null,
+      "description": "👥🔍 Analyze keyword performance by gender within shopping categories. Use find_category first to get category codes. Essential for gender-targeted marketing and product positioning strategies. (쇼핑 키워드 성별 트렌드 - 먼저 find_category 도구로 카테고리 코드를 찾으세요)",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "startDate": {
+            "type": "string",
+            "description": "Start date (yyyy-mm-dd or 'today' for KST today)"
+          },
+          "endDate": {
+            "type": "string",
+            "description": "End date (yyyy-mm-dd or 'today' for KST today)"
+          },
+          "timeUnit": {
+            "type": "string",
+            "enum": [
+              "date",
+              "week",
+              "month"
+            ],
+            "description": "Time unit"
+          },
+          "category": {
+            "type": "string",
+            "description": "Category code"
+          },
+          "keyword": {
+            "type": "string",
+            "description": "Search keyword"
+          },
+          "gender": {
+            "type": "string",
+            "enum": [
+              "f",
+              "m"
+            ],
+            "description": "Gender"
+          }
+        },
+        "required": [
+          "startDate",
+          "endDate",
+          "timeUnit",
+          "category",
+          "keyword",
+          "gender"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "datalab_shopping_keyword_by_age",
+      "title": null,
+      "description": "👶👦👨👴🔍 Analyze keyword performance by age groups within shopping categories. Use find_category first to get category codes. Perfect for age-targeted marketing and understanding generational shopping preferences. (쇼핑 키워드 연령별 트렌드 - 먼저 find_category 도구로 카테고리 코드를 찾으세요)",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "startDate": {
+            "type": "string",
+            "description": "Start date (yyyy-mm-dd or 'today' for KST today)"
+          },
+          "endDate": {
+            "type": "string",
+            "description": "End date (yyyy-mm-dd or 'today' for KST today)"
+          },
+          "timeUnit": {
+            "type": "string",
+            "enum": [
+              "date",
+              "week",
+              "month"
+            ],
+            "description": "Time unit"
+          },
+          "category": {
+            "type": "string",
+            "description": "Category code"
+          },
+          "keyword": {
+            "type": "string",
+            "description": "Search keyword"
+          },
+          "ages": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "10",
+                "20",
+                "30",
+                "40",
+                "50",
+                "60"
+              ]
+            },
+            "description": "Age groups"
+          }
+        },
+        "required": [
+          "startDate",
+          "endDate",
+          "timeUnit",
+          "category",
+          "keyword",
+          "ages"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "find_category",
+      "title": null,
+      "description": "🚀 STEP 1: Find shopping categories with Korean search terms. Search in KOREAN (패션, 화장품, 가전제품, etc.) to find category codes needed for datalab tools. Smart fuzzy matching finds similar categories even with partial matches. (카테고리 검색: 한국어로 검색하여 데이터랩 분석에 필요한 카테고리 코드를 찾아주는 필수 도구)",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Korean category search query (한국어 카테고리 검색어, 예: '패션', '화장품', '가구', '스마트폰'). Supports exact match and fuzzy search with level-based priority"
+          },
+          "max_results": {
+            "type": "number",
+            "default": 10,
+            "description": "Maximum number of results to return (반환할 최대 결과 수, 기본값: 10)"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    }
+  ]
+}

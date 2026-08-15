@@ -1,0 +1,29 @@
+{
+  "condition": "A_hub_only",
+  "included_vars": [
+    "NCP_APIGW_API_KEY_ID",
+    "NCP_APIGW_API_KEY"
+  ],
+  "initialize_ok": true,
+  "serverInfo": {
+    "name": "naver-search",
+    "title": null,
+    "version": "1.0.49",
+    "websiteUrl": null,
+    "icons": null
+  },
+  "call_result": {
+    "meta": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"lastBuildDate\": \"Sat, 15 Aug 2026 00:48:28 +0900\",\n  \"total\": 2378701,\n  \"start\": 1,\n  \"display\": 1,\n  \"items\": [\n    {\n      \"title\": \"퀄컴 스냅드래곤 C, 300달러 노트북서 넷플릭스 재생 전력효율 106% 앞선...\",\n      \"originallink\": \"https://www.wikitree.co.kr/articles/1152579\",\n      \"link\": \"https://www.wikitree.co.kr/articles/1152579\",\n      \"description\": \"톰스하드웨어에 따르면 시네벤치 멀티스레드 <b>테스트</b>를 기준으로는 최대 2.1배(110%) 전력 효율이... 테크스팟은 완제품이 출시돼 독립적인 <b>테스트</b>가 이뤄지기 전까지는 이 수치들을 벤더의 주장으로만 봐야... \",\n      \"pubDate\": \"Sat, 15 Aug 2026 00:42:00 +0900\"\n    }\n  ]\n}",
+        "annotations": null,
+        "meta": null
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  },
+  "isError": false
+}

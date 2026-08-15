@@ -1,0 +1,357 @@
+{
+  "meta": null,
+  "nextCursor": null,
+  "tools": [
+    {
+      "name": "get_corp_code",
+      "title": null,
+      "description": "\n  고유번호: DART에 등록되어있는 공시대상회사의 고유번호, 회사명, 종목코드, 최근변경일자 제공합니다.\n  이름이 일치하는 경우 모든 항목을 반환합니다.\n  ",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "corp_name": {
+            "type": "string",
+            "description": "정식 회사 명칭"
+          }
+        },
+        "required": [
+          "corp_name"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "get_disclosure_list",
+      "title": null,
+      "description": "\n  공시검색: 공시 유형별, 회사별, 날짜별 등 여러가지 조건으로 공시보고서 검색기능을 제공합니다.\n  최근 공시를 검색할때는 bgn_de를 반드시 지정하세요.\n  ",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "corp_code": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 8,
+            "description": "공시대상회사의 고유번호(8자리)"
+          },
+          "bgn_de": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 8,
+            "description": "검색시작 접수일자(YYYYMMDD) 1) 기본값 : 종료일(end_de)"
+          },
+          "end_de": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 8,
+            "description": "검색종료 접수일자(YYYYMMDD) 1) 기본값 : 당일"
+          },
+          "last_reprt_at": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1,
+            "description": "최종보고서 검색여부 (Y 또는 N) 1) 기본값 : N(정정이 있는 경우 최종정정만 검색)"
+          },
+          "pblntf_ty": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1,
+            "description": "공시유형 // A : 정기공시, B : 주요사항보고, C : 발행공시, D : 지분공시, E : 기타공시, F : 외부감사관련, G : 펀드공시, H : 자산유동화, I : 거래소공시, J : 공정위공시"
+          },
+          "pblntf_detail_ty": {
+            "type": "string",
+            "minLength": 4,
+            "maxLength": 4,
+            "description": "공시상세유형"
+          },
+          "corp_cls": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1,
+            "description": "법인구분 (Y: 유가증권시장, K: 코스닥, N: 코넥스, E: 기타) ※ 없으면 전체조회, 복수조건 불가"
+          },
+          "sort": {
+            "type": "string",
+            "minLength": 4,
+            "maxLength": 4,
+            "description": "정렬 (date: 접수일자, crp: 회사명, rpt: 보고서명) ※ 기본값 : date"
+          },
+          "sort_mth": {
+            "type": "string",
+            "minLength": 4,
+            "maxLength": 4,
+            "description": "정렬방법 (asc: 오름차순, desc: 내림차순) ※ 기본값 : desc"
+          },
+          "page_no": {
+            "type": "string",
+            "minLength": 5,
+            "maxLength": 5,
+            "description": "페이지 번호(1~n) 기본값 : 1"
+          },
+          "page_count": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 3,
+            "description": "페이지당 건수(1~100) 기본값 : 10, 최대값 : 100"
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "get_disclosure",
+      "title": null,
+      "description": "DART API를 통해 공시보고서 원본파일을 파싱해 가져옵니다.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "rcept_no": {
+            "type": "string",
+            "minLength": 14,
+            "maxLength": 14,
+            "description": "접수번호"
+          }
+        },
+        "required": [
+          "rcept_no"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "get_financial_statement",
+      "title": null,
+      "description": "재무제표: 상장법인(유가증권, 코스닥) 및 주요 비상장법인(사업보고서 제출대상 & IFRS 적용)이 제출한 정기보고서 내에 XBRL재무제표의 모든계정과목을 제공합니다.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "corp_code": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 8,
+            "description": "공시대상회사의 고유번호(8자리)"
+          },
+          "bsns_year": {
+            "type": "string",
+            "minLength": 4,
+            "maxLength": 4,
+            "description": "사업연도(4자리) - 2015년 이후부터 정보제공"
+          },
+          "reprt_code": {
+            "type": "string",
+            "enum": [
+              "11013",
+              "11012",
+              "11014",
+              "11011"
+            ],
+            "description": "보고서 코드: 11013(1분기), 11012(반기), 11014(3분기), 11011(사업보고서)"
+          },
+          "fs_div": {
+            "type": "string",
+            "enum": [
+              "OFS",
+              "CFS"
+            ],
+            "description": "개별/연결구분: OFS(재무제표), CFS(연결재무제표)"
+          },
+          "sj_nm": {
+            "type": "string",
+            "enum": [
+              "재무상태표",
+              "포괄손익계산서",
+              "자본변동표",
+              "현금흐름표"
+            ],
+            "description": "재무상태표, 포괄손익계산서, 자본변동표, 현금흐름표 중 하나. 없으면 전체조회"
+          }
+        },
+        "required": [
+          "corp_code",
+          "bsns_year",
+          "reprt_code",
+          "fs_div"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "get_market_type",
+      "title": null,
+      "description": "\n  DART에 등록되어 있는 종목의 상장시장 정보를 제공합니다.\n  Y(유가), K(코스닥), N(코넥스), E(기타)\n  ",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "corp_code": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 8,
+            "description": "공시대상회사의 고유번호(8자리)"
+          }
+        },
+        "required": [
+          "corp_code"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "get_stock_base_info",
+      "title": null,
+      "description": "\n  코스피, 코스닥, 코넥스에 상장되어있는 종목의 기준일에 해당하는 한글 종목명, 영문 종목명, 상장일, 주식종류, 액면가, 상장주식수 등의 정보를 제공합니다.\n  codeList에 종목코드가 포함된 종목들의의 정보만 추출됩니다.\n  basDd 하나당 KRX API를 한번씩 호출합니다.\n  ",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "basDdList": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 8
+            },
+            "minItems": 1,
+            "description": "기준일자(YYYYMMDD) 배열"
+          },
+          "market": {
+            "type": "string",
+            "enum": [
+              "KOSPI",
+              "KOSDAQ",
+              "KONEX"
+            ],
+            "description": "상장된 주식시장 종류"
+          },
+          "codeList": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "description": "데이터를 가져올 종목들의 종목코드의 배열"
+          }
+        },
+        "required": [
+          "basDdList",
+          "market",
+          "codeList"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "get_stock_trade_info",
+      "title": null,
+      "description": "\n  코스피, 코스닥, 코넥스에 상장되어있는 종목의 기준일에 해당하는 종가, 등락률, 시가, 고가, 저가, 거래량, 거대금, 시총액, 상장주식수 등의 정보를 제공합니다.\n  codeList에 종목코드가 포함된 종목들의의 정보만 추출되어 제공됩니다.\n  basDd 하나당 KRX API를 한번씩 호출합니다.\n  ",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "basDdList": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 8
+            },
+            "minItems": 1,
+            "description": "기준일자(YYYYMMDD) 배열"
+          },
+          "market": {
+            "type": "string",
+            "enum": [
+              "KOSPI",
+              "KOSDAQ",
+              "KONEX"
+            ],
+            "description": "상장된 주식시장 종류"
+          },
+          "codeList": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "description": "데이터를 가져올 종목들의 종목코드의 배열"
+          }
+        },
+        "required": [
+          "basDdList",
+          "market",
+          "codeList"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "get_today_date",
+      "title": null,
+      "description": "오늘 날짜를 KST, UTC 기준 YYYYMMDD 형식으로 제공합니다.",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {}
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    }
+  ]
+}

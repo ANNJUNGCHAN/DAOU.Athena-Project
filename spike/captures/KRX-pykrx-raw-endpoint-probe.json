@@ -1,0 +1,22 @@
+{
+  "ticker_list_bld_MDCSTAT01501": {
+    "status_code": 400,
+    "content_length": 6,
+    "content_type": "text/html; charset=utf-8",
+    "body_text_head": "LOGOUT",
+    "body_json_ok": false
+  },
+  "ohlcv_bld_MDCSTAT01701_control": {
+    "status_code": 400,
+    "content_length": 6,
+    "content_type": "text/html; charset=utf-8",
+    "body_text_head": "LOGOUT",
+    "body_json_ok": false
+  },
+  "ticker_list_no_headers": {
+    "status_code": 403,
+    "content_length": 2421,
+    "content_type": "text/html;charset=ISO-8859-1",
+    "body_text_head": "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n \r\n \r\n\r\n\r\n\t\r\n\t\r\n\t\t<html>\r\n<head>\r\n  <title>Error - KRX | Market Data System</title>\r\n  <meta charset=\"utf-8\">\r\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\r\n  <meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\">\r\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">\r\n  <meta name=\"author\" content=\"?????\" />\r\n  <meta name=\"description\" content=\"??·????? ????(Marketdata), ?????, ??????(SMILE) ? ?????? ?????? ???? ?? ???\" />\r\n  <meta name=\"keywords\" content=\"???????? ?????? ????? ?? KRX?? ??????? ???? ?? ???????? KRX ???????? ??? ?????? ???????? ?????????? ?????\" />\r\n  <meta property=\"og:type\" content=\"website\" />\r\n  <meta property=\"og:title\" content=\"KRX Market Data System\" />\r\n  <meta property=\"og:description\" content=\"??·????? ????(Marketdata), ?????, ??????(SMILE) ? ?????? ?????? ???? ?? ???\" />\r\n  <meta name=\"naver-site-verification\" content=\"222ad2f14a7a611c5494c898d311a8d7b61ba13e\"/>\r\n  <meta name=\"robots\" content=\"index,follow\" >\r\n  <style type=\"text/css\">\r\n    .error {position:relative; width:100%; height:100%; background:#f6f7fc; font-family:'Open Sans', sans-serif;}\r\n    .error .content {position:absolute; left:50%; top:50%; width:724px; height:224px; padding-left:206px; padding-top:50px; margin:-150px 0 0 -362px; line-height:1.6; font-size:13px; color:#666666; background:url('/comm/error/img/bg_error.png') no-repeat left 0;}\r\n    .error .content:after {content:'Market Data System'; display"
+  }
+}

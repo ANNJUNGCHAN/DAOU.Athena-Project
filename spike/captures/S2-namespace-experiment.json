@@ -1,0 +1,118 @@
+{
+  "servers": [
+    {
+      "server_label": "pykrx",
+      "reported_server_name": "pykrx-mcp",
+      "reported_server_version": "1.28.1",
+      "tools": [
+        "get_stock_ohlcv",
+        "get_market_ticker_list",
+        "get_market_ticker_name",
+        "get_market_fundamental_by_date",
+        "get_market_cap_by_date",
+        "get_market_trading_value_by_date",
+        "get_etf_ohlcv_by_date",
+        "get_etf_ticker_list"
+      ]
+    },
+    {
+      "server_label": "drfirst-korea-stock",
+      "reported_server_name": "korea-stock-mcp",
+      "reported_server_version": "0.1.0",
+      "tools": [
+        "get_etfs_by_market_cap",
+        "get_themes_with_leaders",
+        "get_market_cap_stocks",
+        "get_dividend_yield_stocks",
+        "search_stock_code",
+        "get_stock_price_by_code"
+      ]
+    }
+  ],
+  "namespaced_tools": [
+    {
+      "namespaced_name": "pykrx__get_stock_ohlcv",
+      "length": 22,
+      "valid": true
+    },
+    {
+      "namespaced_name": "pykrx__get_market_ticker_list",
+      "length": 29,
+      "valid": true
+    },
+    {
+      "namespaced_name": "pykrx__get_market_ticker_name",
+      "length": 29,
+      "valid": true
+    },
+    {
+      "namespaced_name": "pykrx__get_market_fundamental_by_date",
+      "length": 37,
+      "valid": true
+    },
+    {
+      "namespaced_name": "pykrx__get_market_cap_by_date",
+      "length": 29,
+      "valid": true
+    },
+    {
+      "namespaced_name": "pykrx__get_market_trading_value_by_date",
+      "length": 39,
+      "valid": true
+    },
+    {
+      "namespaced_name": "pykrx__get_etf_ohlcv_by_date",
+      "length": 28,
+      "valid": true
+    },
+    {
+      "namespaced_name": "pykrx__get_etf_ticker_list",
+      "length": 26,
+      "valid": true
+    },
+    {
+      "namespaced_name": "drfirst-korea-stock__get_etfs_by_market_cap",
+      "length": 43,
+      "valid": true
+    },
+    {
+      "namespaced_name": "drfirst-korea-stock__get_themes_with_leaders",
+      "length": 44,
+      "valid": true
+    },
+    {
+      "namespaced_name": "drfirst-korea-stock__get_market_cap_stocks",
+      "length": 42,
+      "valid": true
+    },
+    {
+      "namespaced_name": "drfirst-korea-stock__get_dividend_yield_stocks",
+      "length": 46,
+      "valid": true
+    },
+    {
+      "namespaced_name": "drfirst-korea-stock__search_stock_code",
+      "length": 38,
+      "valid": true
+    },
+    {
+      "namespaced_name": "drfirst-korea-stock__get_stock_price_by_code",
+      "length": 44,
+      "valid": true
+    },
+    {
+      "namespaced_name": "user-registered-very-long-server-name-for-korean-market-data__get_market_fundamental_by_date",
+      "length": 92,
+      "valid": false
+    }
+  ],
+  "violations": [
+    "user-registered-very-long-server-name-for-korean-market-data__get_market_fundamental_by_date"
+  ],
+  "violation_count": 1,
+  "collision_note": {
+    "known_collision": "jjlabsio/korea-stock-mcp vs drfirst/korea-stock-mcp share the package family name 'korea-stock-mcp'",
+    "drfirst_self_reported_name": "korea-stock-mcp",
+    "conclusion": "self-reported serverInfo.name is NOT a safe namespace key; registry must key on user-assigned registration name, not serverInfo.name"
+  }
+}

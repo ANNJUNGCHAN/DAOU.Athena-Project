@@ -1,0 +1,166 @@
+{
+  "get_corp_code": {
+    "args": {
+      "corp_name": "test"
+    },
+    "isError": true,
+    "result": {
+      "meta": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "There is no DART API KEY",
+          "annotations": null,
+          "meta": null
+        }
+      ],
+      "structuredContent": null,
+      "isError": true
+    }
+  },
+  "get_disclosure_list": {
+    "args": {
+      "corp_code": "005930",
+      "bgn_de": "test",
+      "end_de": "test",
+      "last_reprt_at": "test",
+      "pblntf_ty": "test",
+      "pblntf_detail_ty": "test",
+      "corp_cls": "test",
+      "sort": "test",
+      "sort_mth": "test",
+      "page_no": "test",
+      "page_count": "test"
+    },
+    "isError": true,
+    "result": {
+      "meta": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "MCP error -32602: Input validation error: Invalid arguments for tool get_disclosure_list: String must contain exactly 8 character(s) at corp_code\nString must contain exactly 8 character(s) at bgn_de\nString must contain exactly 8 character(s) at end_de\nString must contain exactly 1 character(s) at last_reprt_at\nString must contain exactly 1 character(s) at pblntf_ty\nString must contain exactly 1 character(s) at corp_cls\nString must contain exactly 5 character(s) at page_no\nString must contain exactly 3 character(s) at page_count",
+          "annotations": null,
+          "meta": null
+        }
+      ],
+      "structuredContent": null,
+      "isError": true
+    }
+  },
+  "get_disclosure": {
+    "args": {
+      "rcept_no": "test"
+    },
+    "isError": true,
+    "result": {
+      "meta": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "MCP error -32602: Input validation error: Invalid arguments for tool get_disclosure: String must contain exactly 14 character(s) at rcept_no",
+          "annotations": null,
+          "meta": null
+        }
+      ],
+      "structuredContent": null,
+      "isError": true
+    }
+  },
+  "get_financial_statement": {
+    "args": {
+      "corp_code": "005930",
+      "bsns_year": "test",
+      "reprt_code": "005930",
+      "fs_div": "test",
+      "sj_nm": "test"
+    },
+    "isError": true,
+    "result": {
+      "meta": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "MCP error -32602: Input validation error: Invalid arguments for tool get_financial_statement: String must contain exactly 8 character(s) at corp_code\nInvalid enum value. Expected '11013' | '11012' | '11014' | '11011', received '005930' at reprt_code\nInvalid enum value. Expected 'OFS' | 'CFS', received 'test' at fs_div\nInvalid enum value. Expected '재무상태표' | '포괄손익계산서' | '자본변동표' | '현금흐름표', received 'test' at sj_nm",
+          "annotations": null,
+          "meta": null
+        }
+      ],
+      "structuredContent": null,
+      "isError": true
+    }
+  },
+  "get_market_type": {
+    "args": {
+      "corp_code": "005930"
+    },
+    "isError": true,
+    "result": {
+      "meta": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "MCP error -32602: Input validation error: Invalid arguments for tool get_market_type: String must contain exactly 8 character(s) at corp_code",
+          "annotations": null,
+          "meta": null
+        }
+      ],
+      "structuredContent": null,
+      "isError": true
+    }
+  },
+  "get_stock_base_info": {
+    "args": {
+      "market": "test"
+    },
+    "isError": true,
+    "result": {
+      "meta": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "MCP error -32602: Input validation error: Invalid arguments for tool get_stock_base_info: Required at basDdList\nInvalid enum value. Expected 'KOSPI' | 'KOSDAQ' | 'KONEX', received 'test' at market\nRequired at codeList",
+          "annotations": null,
+          "meta": null
+        }
+      ],
+      "structuredContent": null,
+      "isError": true
+    }
+  },
+  "get_stock_trade_info": {
+    "args": {
+      "market": "test"
+    },
+    "isError": true,
+    "result": {
+      "meta": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "MCP error -32602: Input validation error: Invalid arguments for tool get_stock_trade_info: Required at basDdList\nInvalid enum value. Expected 'KOSPI' | 'KOSDAQ' | 'KONEX', received 'test' at market\nRequired at codeList",
+          "annotations": null,
+          "meta": null
+        }
+      ],
+      "structuredContent": null,
+      "isError": true
+    }
+  },
+  "get_today_date": {
+    "args": {},
+    "isError": false,
+    "result": {
+      "meta": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"todayKST\":\"20260814\",\"todayUTC\":\"20260814\"}",
+          "annotations": null,
+          "meta": null
+        }
+      ],
+      "structuredContent": null,
+      "isError": false
+    }
+  }
+}

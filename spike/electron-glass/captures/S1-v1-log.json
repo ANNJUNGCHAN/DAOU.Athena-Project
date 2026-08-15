@@ -1,0 +1,36 @@
+[
+  {
+    "combo": "a",
+    "optsUsed": {
+      "transparent": true
+    },
+    "createErr": null,
+    "screenCapture": "C:\\Projects\\DAOU.Athena\\spike\\electron-glass\\captures\\S1-a.png"
+  },
+  {
+    "combo": "b",
+    "optsUsed": {
+      "transparent": false,
+      "backgroundMaterial": "acrylic"
+    },
+    "createErr": null,
+    "screenCapture": "C:\\Projects\\DAOU.Athena\\spike\\electron-glass\\captures\\S1-b.png"
+  },
+  {
+    "combo": "c",
+    "optsUsed": {
+      "transparent": true,
+      "backgroundMaterial": "acrylic"
+    },
+    "createErr": null,
+    "screenCapture": "C:\\Projects\\DAOU.Athena\\spike\\electron-glass\\captures\\S1-c.png"
+  },
+  {
+    "combo": "d",
+    "optsUsed": {
+      "transparent": false
+    },
+    "createErr": null,
+    "screenCapture": "C:\\Projects\\DAOU.Athena\\spike\\electron-glass\\captures\\S1-d.png"
+  }
+]

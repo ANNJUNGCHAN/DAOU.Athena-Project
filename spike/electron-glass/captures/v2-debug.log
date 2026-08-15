@@ -1,0 +1,6 @@
+start 2026-08-14T15:20:28.696Z
+2026-08-14T15:20:28.742Z whenReady fired
+2026-08-14T15:20:31.573Z before captureRegion chat-only
+2026-08-14T15:20:32.827Z after captureRegion chat-only, before capturePage
+2026-08-14T15:20:32.846Z after capturePage, size={"width":2340,"height":216}
+2026-08-14T15:20:32.854Z after writeFileSync webcontents png

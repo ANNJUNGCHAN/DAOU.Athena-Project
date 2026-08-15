@@ -1,0 +1,23 @@
+{
+  "tool": "get_disclosure",
+  "args": {
+    "rcept_no": "20260814003549"
+  },
+  "result": {
+    "meta": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "ADM-ZIP: Invalid or unsupported zip format. No END header found",
+        "annotations": null,
+        "meta": null
+      }
+    ],
+    "structuredContent": null,
+    "isError": true
+  },
+  "isError": true,
+  "content0_text_len": 63,
+  "has_structuredContent": false,
+  "has_ufffd": false
+}

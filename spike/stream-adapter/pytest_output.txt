@@ -1,0 +1,29 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Projects\DAOU.Athena\spike\mcp-client\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Projects\DAOU.Athena\spike\stream-adapter
+plugins: anyio-4.14.2
+collecting ... collected 20 items
+
+test_adapter.py::test_strip_tags_removes_b_tag PASSED                    [  5%]
+test_adapter.py::test_unescape_entities PASSED                           [ 10%]
+test_adapter.py::test_sanitize_order_strip_then_unescape PASSED          [ 15%]
+test_adapter.py::test_sanitize_order_prevents_escaped_tag_resurrection PASSED [ 20%]
+test_adapter.py::test_sanitize_none_passthrough PASSED                   [ 25%]
+test_adapter.py::test_tag_audit_only_b_tag_found PASSED                  [ 30%]
+test_adapter.py::test_normalize_news_ts_rfc822 PASSED                    [ 35%]
+test_adapter.py::test_normalize_filing_ts_is_day_precision_no_invented_time PASSED [ 40%]
+test_adapter.py::test_news_url_prefers_originallink PASSED               [ 45%]
+test_adapter.py::test_news_url_falls_back_to_link_when_no_originallink PASSED [ 50%]
+test_adapter.py::test_filing_url_composed_from_rcept_no PASSED           [ 55%]
+test_adapter.py::test_normalize_news_item_shape PASSED                   [ 60%]
+test_adapter.py::test_normalize_filing_item_shape_and_source_dart PASSED [ 65%]
+test_adapter.py::test_normalize_filing_item_ticker_from_stock_code PASSED [ 70%]
+test_adapter.py::test_dedupe_date_sort_matches_measured_zero_dups PASSED [ 75%]
+test_adapter.py::test_dedupe_sim_sort_matches_measured_7_groups_15_items PASSED [ 80%]
+test_adapter.py::test_dedupe_seen_hash_filters_cross_poll_repeat PASSED  [ 85%]
+test_adapter.py::test_dedupe_no_raw_id_collisions_within_single_capture PASSED [ 90%]
+test_adapter.py::test_combined_sort_mixed_precision_does_not_crash PASSED [ 95%]
+test_adapter.py::test_combined_sort_filing_same_day_ordered_by_rcept_no PASSED [100%]
+
+============================= 20 passed in 0.14s ==============================

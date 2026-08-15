@@ -1,0 +1,137 @@
+[
+  {
+    "tool": "get_today_date",
+    "capture_file": "S2B-jjlabsio-today.json",
+    "isError": false,
+    "exception": null,
+    "content0_text_len": 45,
+    "has_structuredContent": false,
+    "has_ufffd": false
+  },
+  {
+    "tool": "get_corp_code",
+    "capture_file": "S2B-jjlabsio-corp-code.json",
+    "isError": false,
+    "exception": null,
+    "content0_text_len": 128,
+    "has_structuredContent": false,
+    "has_ufffd": false
+  },
+  {
+    "tool": "get_disclosure_list",
+    "capture_file": "S2B-jjlabsio-disclosure-list.json",
+    "isError": false,
+    "exception": null,
+    "content0_text_len": 3919,
+    "has_structuredContent": false,
+    "has_ufffd": false
+  },
+  {
+    "tool": "get_disclosure",
+    "capture_file": "S2B-jjlabsio-disclosure-20260814003973.json",
+    "isError": true,
+    "exception": null,
+    "content0_text_len": 63,
+    "has_structuredContent": false,
+    "has_ufffd": false
+  },
+  {
+    "tool": "get_disclosure",
+    "capture_file": "S2B-jjlabsio-disclosure-20260814003950.json",
+    "isError": true,
+    "exception": null,
+    "content0_text_len": 63,
+    "has_structuredContent": false,
+    "has_ufffd": false
+  },
+  {
+    "tool": "get_disclosure",
+    "capture_file": "S2B-jjlabsio-disclosure-20260814003912.json",
+    "isError": true,
+    "exception": null,
+    "content0_text_len": 63,
+    "has_structuredContent": false,
+    "has_ufffd": false
+  },
+  {
+    "tool": "get_disclosure",
+    "capture_file": "S2B-jjlabsio-disclosure-20260814003844.json",
+    "isError": true,
+    "exception": null,
+    "content0_text_len": 63,
+    "has_structuredContent": false,
+    "has_ufffd": false
+  },
+  {
+    "tool": "get_disclosure",
+    "capture_file": "S2B-jjlabsio-disclosure-20260814003699.json",
+    "isError": true,
+    "exception": null,
+    "content0_text_len": 63,
+    "has_structuredContent": false,
+    "has_ufffd": false
+  },
+  {
+    "tool": "get_disclosure",
+    "capture_file": "S2B-jjlabsio-disclosure-20260814003747.json",
+    "isError": true,
+    "exception": null,
+    "content0_text_len": 63,
+    "has_structuredContent": false,
+    "has_ufffd": false
+  },
+  {
+    "tool": "get_disclosure",
+    "capture_file": "S2B-jjlabsio-disclosure-20260814003672.json",
+    "isError": true,
+    "exception": null,
+    "content0_text_len": 63,
+    "has_structuredContent": false,
+    "has_ufffd": false
+  },
+  {
+    "tool": "get_disclosure",
+    "capture_file": "S2B-jjlabsio-disclosure-20260814003549.json",
+    "isError": true,
+    "exception": null,
+    "content0_text_len": 63,
+    "has_structuredContent": false,
+    "has_ufffd": false
+  },
+  {
+    "tool": "get_financial_statement",
+    "capture_file": "S2B-jjlabsio-financial-statement.json",
+    "isError": false,
+    "exception": null,
+    "content0_text_len": 100145,
+    "has_structuredContent": false,
+    "has_ufffd": false
+  },
+  {
+    "tool": "get_market_type",
+    "capture_file": "S2B-jjlabsio-market-type.json",
+    "isError": false,
+    "exception": null,
+    "content0_text_len": 14,
+    "has_structuredContent": false,
+    "has_ufffd": false
+  },
+  {
+    "tool": "get_stock_base_info",
+    "capture_file": "S2B-jjlabsio-stock-base-info.json",
+    "isError": true,
+    "exception": null,
+    "content0_text_len": 17,
+    "has_structuredContent": false,
+    "has_ufffd": false
+  },
+  {
+    "tool": "get_stock_trade_info",
+    "capture_file": "S2B-jjlabsio-stock-trade-info.json",
+    "isError": true,
+    "exception": null,
+    "content0_text_len": 17,
+    "has_structuredContent": false,
+    "has_ufffd": false
+  }
+]

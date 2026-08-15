@@ -1,0 +1,29 @@
+{
+  "tool": "get_stock_base_info",
+  "args": {
+    "basDdList": [
+      "20260814"
+    ],
+    "market": "KOSPI",
+    "codeList": [
+      "005930"
+    ]
+  },
+  "result": {
+    "meta": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "KRX request error",
+        "annotations": null,
+        "meta": null
+      }
+    ],
+    "structuredContent": null,
+    "isError": true
+  },
+  "isError": true,
+  "content0_text_len": 17,
+  "has_structuredContent": false,
+  "has_ufffd": false
+}

@@ -1,0 +1,12 @@
+{
+  "tool": "get_attachments",
+  "args": {
+    "rcept_no": "20250814003156",
+    "mode": "list"
+  },
+  "label": "삼성전자 반기보고서(20250814003156) 첨부파일 목록",
+  "elapsed_s": 0.52,
+  "isError": false,
+  "content0_text_len": 771,
+  "content0_text_full": "{\n  \"rcept_no\": \"20250814003156\",\n  \"supported\": true,\n  \"dcm_no\": \"10770359\",\n  \"viewer_url\": \"https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20250814003156\",\n  \"download_page_url\": \"https://dart.fss.or.kr/pdf/download/main.do?rcp_no=20250814003156&dcm_no=10770359\",\n  \"count\": 2,\n  \"attachments\": [\n    {\n      \"index\": 0,\n      \"filename\": \"[삼성전자]반기보고서(2025.08.14).pdf\",\n      \"download_url\": \"https://dart.fss.or.kr/pdf/download/pdf.do?rcp_no=20250814003156&dcm_no=10770359\",\n      \"format\": \"pdf\"\n    },\n    {\n      \"index\": 1,\n      \"filename\": \"[삼성전자]반기보고서_IFRS(원문XBRL)(2025.08.14).zip\",\n      \"download_url\": \"https://dart.fss.or.kr/pdf/download/ifrs.do?rcp_no=20250814003156&dcm_no=10770359&lang=ko\",\n      \"format\": \"zip\"\n    }\n  ],\n  \"unsupported_reason\": null\n}"
+}
