@@ -4,6 +4,7 @@
 >
 > **다음 세션은 이 파일부터 읽는다.** 여기에는 *지금 상태 / 검증된 사실 / 다음 수*만 적는다.
 > 설계 근거와 함정 목록은 [`plan/00-인수인계.md`](plan/00-인수인계.md)에 있다. 중복하지 않는다.
+> 키움 공통화면 Ultragoal만 이어받는다면 [`plan/kiwoom-common-screen-handoff.md`](plan/kiwoom-common-screen-handoff.md)로 바로 간다.
 
 ---
 
