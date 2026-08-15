@@ -15,7 +15,7 @@ user question
   -> call that signed plan
 ```
 
-The four public selector endpoints are:
+The four model-controlled selector tools are:
 
 | LLM tool | HTTP endpoint | OpenAPI `operationId` | Purpose |
 | --- | --- | --- | --- |
@@ -24,15 +24,23 @@ The four public selector endpoints are:
 | `athena_resolve` | `POST /api/v1/llm/tools/resolve` | `llm_resolve_operation` | Re-rank, validate arguments, and issue a short-lived signed plan. |
 | `athena_call` | `POST /api/v1/llm/tools/call` | `llm_call_operation` | Execute only the operation and arguments bound into that plan. |
 
-`GET /api/v1/llm/manifest` is an optional adapter bootstrap endpoint. It reports
-the catalog version, surface counts, and the four meta-tool schemas. An LLM
-adapter must use this manifest instead of feeding Athena's full `/openapi.json`
-document to the model.
+The implemented adapter bootstrap endpoint is
+`GET /api/v1/llm/manifest` (`operationId=llm_get_manifest`). It reports the
+catalog version, surface counts, workflow, and the four meta-tool schemas. It is
+marked `x-athena-llm-exposed: false`, so it is not a fifth model-controlled tool.
+An adapter should fetch this endpoint itself instead of feeding Athena's full
+`/openapi.json` document to the model.
 
 The four meta-tool operations carry `x-athena-llm-exposed: true` in OpenAPI.
 Generated Kiwoom routes carry `x-athena-llm-exposed: false`. This annotation is
 for discovery and prompt construction; the signed `resolve`/`call` allowlist is
 the actual execution boundary.
+
+The current generated OpenAPI contains 335 paths and 335 GET/POST operations:
+323 generated Kiwoom base/detail operations plus 12 service operations. The
+service-operation count can change as unrelated endpoints are added; the stable
+LLM contract is exactly four exposed POST tools and one non-exposed bootstrap
+GET endpoint.
 
 > **Scope:** domestic Korea only. Official-repository-only U.S. operations never
 > enter the selector catalog. OAuth controls are also deliberately hidden.
@@ -546,17 +554,17 @@ similar Korean operation.
 
 ## Error-handling contract
 
-| Failure | Selector code | Required client action |
-| --- | --- | --- |
-| Unknown, hidden, or wrong-intent identity | `OPERATION_NOT_FOUND` | Search again with the correct explicit intent. Do not guess case or path. |
-| No family reaches the confidence floor | `NO_CONFIDENT_MATCH` | Ask a focused clarification or state unsupported scope. |
-| Two families remain too close | `AMBIGUOUS_OPERATION` | Present at most the returned candidates and ask which information is wanted. |
-| Client preference conflicts with server ranking | `PREFERRED_REF_NOT_SUPPORTED_BY_QUERY` | Drop the preference and refine the question. |
-| Order/WSS passed to generic execution | `OPERATION_NOT_GENERIC_CALLABLE` | Use the guarded direct surface; never retry through `call`. |
-| Missing, unknown, or invalid request fields | `INVALID_ARGUMENTS` | Collect or correct arguments, then resolve again. |
-| Malformed or invalid signature | `INVALID_PLAN` | Resolve again; do not alter the token. |
-| Plan expired | `EXPIRED_PLAN` | Resolve again with current intent and arguments. |
-| Catalog/schema changed after resolution | `STALE_PLAN` | Search/describe/resolve against the current catalog. |
+| Failure | Selector code | HTTP status | Required client action |
+| --- | --- | ---: | --- |
+| Unknown, hidden, or wrong-intent identity | `OPERATION_NOT_FOUND` | 404 | Search again with the correct explicit intent. Do not guess case or path. |
+| No family reaches the confidence floor | `NO_CONFIDENT_MATCH` | 404 | Ask a focused clarification or state unsupported scope. |
+| Two families remain too close | `AMBIGUOUS_OPERATION` | 409 | Present at most the returned candidates and ask which information is wanted. |
+| Client preference conflicts with server ranking | `PREFERRED_REF_NOT_SUPPORTED_BY_QUERY` | 409 | Drop the preference and refine the question. |
+| Order/WSS passed to generic execution | `OPERATION_NOT_GENERIC_CALLABLE` | 403 | Use the guarded direct surface; never retry through `call`. |
+| Missing, unknown, or invalid request fields | `INVALID_ARGUMENTS` | 422 | Collect or correct arguments, then resolve again. |
+| Malformed token or invalid signature | `INVALID_PLAN` | 400 | Resolve again; do not alter the token. |
+| Plan expired | `EXPIRED_PLAN` | 410 | Resolve again with current intent and arguments. |
+| Catalog/schema changed after resolution | `STALE_PLAN` | 409 | Search/describe/resolve against the current catalog. |
 
 No error may silently fall back to the first search result or a large base
 response. No failed resolution returns a plan token.
@@ -721,6 +729,18 @@ base/detail identity or expected error, and relevant reason codes.
 Accuracy must be reported at both family and exact-operation levels. A selector
 that finds `ka10001` but chooses its full base for every focused question has high
 family accuracy and poor projection quality.
+
+### Current progress
+
+The catalog, four-tool transport contract, signed-plan boundary, and safety
+fixtures are implemented. The selector evaluation is not release-green yet:
+several focused detail questions still resolve to a base operation or reject the
+requested detail as an unsupported preference; a vague account-information
+question can resolve instead of requesting clarification; and duplicated titles
+within several TR families still cause Korean and English top-1 collisions. Keep
+these failures as regression blockers until ranking and base/detail policy fixes
+make the full evaluation suite pass without weakening the natural-language gold
+questions.
 
 ### Regression invariants
 
