@@ -87,6 +87,7 @@ def test_golden_corpus_retains_selection_and_safety_expectations() -> None:
         "intent",
         "accepted_refs",
         "preferred_ref",
+        "detail_group",
         "disposition",
         "arguments",
         "response_mode",
@@ -97,7 +98,18 @@ def test_golden_corpus_retains_selection_and_safety_expectations() -> None:
     assert all(set(case) == required_keys for case in GOLDEN)
 
 
+def _family_of(operation_ref: str) -> str:
+    """Map any canonical identity onto its base TR family."""
+    parts = operation_ref.split(":")
+    return f"base:{parts[1]}"
+
+
 def test_golden_retrieval_meets_release_thresholds(service: SelectorService) -> None:
+    """Retrieval is scored at family granularity, because that is what it decides.
+
+    Search ranks one document per TR family; a projection is chosen afterwards
+    through an explicit ``detail_group``, never by out-ranking its siblings.
+    """
     evaluated = [case for case in GOLDEN if case["accepted_refs"]]
     per_slice: dict[str, list[bool]] = defaultdict(list)
     recall_at_five: list[bool] = []
@@ -111,8 +123,8 @@ def test_golden_retrieval_meets_release_thresholds(service: SelectorService) -> 
                 limit=5,
             )
         )
-        refs = [hit.operation_ref for hit in result.results]
-        accepted = set(case["accepted_refs"])
+        refs = [_family_of(hit.operation_ref) for hit in result.results]
+        accepted = {_family_of(ref) for ref in case["accepted_refs"]}
         recall_at_five.append(bool(accepted.intersection(refs)))
         top_one = bool(refs and refs[0] in accepted)
         accepted_top_one.append(top_one)
@@ -137,6 +149,7 @@ def test_resolve_selects_the_gold_base_or_detail(
         ResolveRequest(
             question=case["question"],
             preferred_ref=case["preferred_ref"],
+            detail_group=case["detail_group"],
             arguments=case["arguments"],
             response_mode=ResponseMode(case["response_mode"]),
         )
@@ -221,23 +234,64 @@ def test_all_non_oauth_base_refs_are_exactly_addressable(
     } == {"base:au10001", "base:au10002"}
 
 
+def test_search_surface_is_one_document_per_family_and_excludes_projections(
+    catalog: OperationCatalog,
+) -> None:
+    surface = catalog.visible_for(DiscoveryIntent.QUERY)
+    assert len(surface) == 171
+    assert all(document.group_id is None for document in surface)
+    assert len({document.tr_id for document in surface}) == len(surface)
+
+
+def test_every_detail_group_is_addressable_from_its_base_description(
+    service: SelectorService, catalog: OperationCatalog
+) -> None:
+    """Projections are reached by naming them, not by out-ranking siblings.
+
+    ``describe(base)`` must advertise every projection of that family, each
+    group id must be unique inside the family, and each advertised id must
+    resolve back to exactly one catalog document.
+    """
+    details = [document for document in catalog.documents if document.group_id is not None]
+    advertised: set[str] = set()
+    for tr_id in sorted({document.tr_id for document in details}):
+        description = service.describe(
+            DescribeRequest(operation_ref=f"base:{tr_id}", intent=DiscoveryIntent.QUERY)
+        )
+        group_ids = [group.group_id for group in description.detail_groups]
+        assert group_ids, f"base:{tr_id} advertises no detail groups"
+        assert len(group_ids) == len(set(group_ids))
+        for group in description.detail_groups:
+            document = catalog.find_exact(group.operation_ref)
+            assert document is not None
+            assert document.tr_id == tr_id
+            assert document.group_id == group.group_id
+            assert group.response_field_count == len(document.response_model.model_fields)
+            advertised.add(group.operation_ref)
+    assert len(details) == 115
+    assert advertised == {document.operation_ref for document in details}
+
+
 @pytest.mark.parametrize("language", ["ko", "en"])
-def test_every_detail_title_ranks_its_operation_first(
+def test_every_detail_title_is_unique_within_its_family(
     catalog: OperationCatalog, language: str
 ) -> None:
+    """Sibling titles must at least be distinguishable to a human reader.
+
+    They are no longer ranked against each other, so a collision across
+    families is harmless; a collision *inside* one family would make the
+    describe listing ambiguous for the model choosing a group.
+    """
+    by_family: dict[str, list[str | None]] = defaultdict(list)
     details = [document for document in catalog.documents if document.group_id is not None]
-    failures: list[tuple[str, str | None]] = []
     for document in details:
         title = document.group_title_ko if language == "ko" else document.group_title_en
-        ranked = rank_documents(
-            f"{document.tr_id} {title}",
-            catalog.visible_for(DiscoveryIntent.QUERY),
-        )
-        actual = ranked[0].document.operation_ref if ranked else None
-        if actual != document.operation_ref:
-            failures.append((document.operation_ref, actual))
+        by_family[document.tr_id].append(normalize_text(title) if title else None)
+    collisions = {
+        tr_id: titles for tr_id, titles in by_family.items() if len(titles) != len(set(titles))
+    }
     assert len(details) == 115
-    assert not failures
+    assert not collisions
 
 
 def test_ranking_is_deterministic_for_all_golden_questions(

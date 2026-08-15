@@ -16,6 +16,7 @@ from athena_api.selector.errors import (
     InvalidPlanError,
     OperationNotFoundError,
     StalePlanError,
+    UnknownDetailGroupError,
     UnsupportedOperationError,
 )
 from athena_api.selector.plans import PlanSigner
@@ -71,7 +72,7 @@ def test_search_is_deterministic_independent_of_catalog_order(catalog) -> None:
     assert [(item.document.operation_ref, item.score) for item in forward] == [
         (item.document.operation_ref, item.score) for item in reverse
     ]
-    assert forward[0].document.operation_ref == "detail:kt00018:portfolio_summary"
+    assert forward[0].document.operation_ref == "base:kt00018"
     assert forward[0].contributions
 
 
@@ -80,8 +81,10 @@ def test_korean_and_english_finance_queries_use_the_controlled_lexicon(service) 
     english = service.search(SearchRequest(query="portfolio valuation summary", limit=3))
 
     assert korean.results
-    assert any(hit.operation_ref.startswith("detail:kt00018:") for hit in korean.results)
-    assert english.results[0].operation_ref == "detail:kt00018:portfolio_summary"
+    assert any(hit.operation_ref == "base:kt00018" for hit in korean.results)
+    # An English question reaches a Korean-named TR through the projection
+    # vocabulary its base document absorbed.
+    assert english.results[0].operation_ref == "base:kt00018"
     assert any(
         contribution.reason_code.value == "SYNONYM_MATCH"
         for hit in korean.results
@@ -149,27 +152,60 @@ def _ranked(document, points: int) -> RankedDocument:
     )
 
 
-def test_family_policy_selects_one_detail_but_uses_base_for_multiple_groups(catalog) -> None:
-    current = catalog.by_ref["detail:ka10001:current_trading"]
-    valuation = catalog.by_ref["detail:ka10001:valuation"]
+def test_family_policy_defaults_to_base_and_honours_an_explicit_detail_group(
+    catalog,
+) -> None:
+    base = catalog.by_ref["base:ka10001"]
 
     selected, reasons = select_operation(
         catalog,
         "현재 거래 정보",
-        (_ranked(current, 300),),
+        (_ranked(base, 300),),
         ResponseMode.AUTO,
     )
-    assert selected is current
-    assert reasons == [ReasonCode.SINGLE_GROUP_PREFERRED]
+    assert selected is base
+    assert reasons == [ReasonCode.BASE_DEFAULT]
 
     selected, reasons = select_operation(
         catalog,
-        "현재 거래와 가치 평가",
-        (_ranked(current, 300), _ranked(valuation, 250)),
+        "현재 거래 정보",
+        (_ranked(base, 300),),
         ResponseMode.AUTO,
+        "current_trading",
     )
-    assert selected.operation_ref == "base:ka10001"
-    assert reasons == [ReasonCode.MULTI_GROUP_BASE_REQUIRED]
+    assert selected.operation_ref == "detail:ka10001:current_trading"
+    assert reasons == [ReasonCode.EXPLICIT_DETAIL_GROUP]
+
+
+def test_unknown_detail_group_is_rejected_with_the_available_groups(catalog) -> None:
+    base = catalog.by_ref["base:ka10001"]
+    with pytest.raises(UnknownDetailGroupError) as caught:
+        select_operation(
+            catalog,
+            "현재 거래 정보",
+            (_ranked(base, 300),),
+            ResponseMode.AUTO,
+            "not_a_group",
+        )
+    details = caught.value.details
+    assert details["operation_ref"] == "base:ka10001"
+    assert details["detail_group"] == "not_a_group"
+    assert "current_trading" in details["available_groups"]
+    assert len(details["available_groups"]) == 7
+
+
+def test_detail_group_of_another_family_cannot_be_borrowed(catalog) -> None:
+    """``holdings`` is a real group id - but not one of ka10001's."""
+    base = catalog.by_ref["base:ka10001"]
+    assert catalog.find_exact("detail:kt00018:holdings") is not None
+    with pytest.raises(UnknownDetailGroupError):
+        select_operation(
+            catalog,
+            "현재 거래 정보",
+            (_ranked(base, 300),),
+            ResponseMode.AUTO,
+            "holdings",
+        )
 
 
 def test_family_policy_keeps_pure_lists_and_explicit_full_requests_on_base(catalog) -> None:

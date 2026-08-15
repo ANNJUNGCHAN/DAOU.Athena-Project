@@ -81,6 +81,14 @@ class OperationCatalog:
         return None if document is None or document.visibility == "hidden" else document
 
     def visible_for(self, intent: DiscoveryIntent) -> tuple[OperationDocument, ...]:
+        """Return the searchable surface: one document per TR family.
+
+        Detail projections are deliberately excluded. Siblings of one TR share
+        that TR's whole vocabulary, so ranking them against each other cannot be
+        made reliable - the model picks a projection explicitly through
+        ``ResolveRequest.detail_group`` instead. Details stay addressable by
+        exact identity through :meth:`find_exact` and :meth:`details_for`.
+        """
         if intent in {DiscoveryIntent.AUTO, DiscoveryIntent.QUERY}:
             allowed = {"query"}
         elif intent is DiscoveryIntent.ORDER:
@@ -90,8 +98,39 @@ class OperationCatalog:
         return tuple(
             document
             for document in self.documents
-            if document.kind in allowed and document.visibility != "hidden"
+            if document.kind in allowed
+            and document.visibility != "hidden"
+            and document.group_id is None
         )
+
+    def details_for(self, tr_id: str) -> tuple[OperationDocument, ...]:
+        """Return every detail projection of ``tr_id`` in stable identity order."""
+        return tuple(
+            document
+            for document in self.documents
+            if document.tr_id == tr_id and document.group_id is not None
+        )
+
+
+def _detail_titles_by_tr() -> Mapping[str, tuple[str, ...]]:
+    """Group every projection's vocabulary under its base TR.
+
+    A base document stands for its whole family in search, so it must be
+    findable by the words of anything it can project. Without this, dropping
+    projections from the searchable surface would silently delete the English
+    group titles - base operations carry Korean TR names only.
+    """
+    grouped: dict[str, list[str]] = {}
+    for operation_ref in sorted(DETAIL_REGISTRY):
+        detail = DETAIL_REGISTRY[operation_ref]
+        terms = grouped.setdefault(detail.tr_id, [])
+        terms.extend(
+            term for term in (detail.title_ko, detail.title_en, detail.group_id) if term
+        )
+    return MappingProxyType({tr_id: tuple(terms) for tr_id, terms in grouped.items()})
+
+
+_DETAIL_TITLES_BY_TR = _detail_titles_by_tr()
 
 
 def _zones_for_base(tr_id: str) -> Mapping[str, tuple[str, ...]]:
@@ -101,6 +140,7 @@ def _zones_for_base(tr_id: str) -> Mapping[str, tuple[str, ...]]:
     return MappingProxyType(
         {
             "title": tuple(term for term in (spec.name, spec.overview) if term),
+            "family_projection": _DETAIL_TITLES_BY_TR.get(tr_id, ()),
             "domain": tuple(
                 term for term in (spec.domain, spec.category, spec.subcategory) if term
             ),

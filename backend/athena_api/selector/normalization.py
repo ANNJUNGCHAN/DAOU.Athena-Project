@@ -9,6 +9,7 @@ _TOKEN_RE = re.compile(r"[0-9a-z_]+|[가-힣]+")
 _OPERATION_REF_RE = re.compile(
     r"(?:base:[A-Za-z0-9]+|detail:[A-Za-z0-9]+:[a-z0-9_]+)\Z"
 )
+_IDENTITY_TOKEN_RE = re.compile(r"[A-Za-z0-9]+")
 
 
 def normalize_text(value: str) -> str:
@@ -24,6 +25,16 @@ def tokenize(value: str, *, korean_bigrams: bool = True) -> tuple[str, ...]:
             if re.fullmatch(r"[가-힣]+", token) and len(token) >= 2:
                 tokens.update(token[index : index + 2] for index in range(len(token) - 1))
     return tuple(sorted(tokens))
+
+
+def identity_tokens(value: str) -> frozenset[str]:
+    """Split on identity boundaries without case-folding or NFKC.
+
+    Used to spot a TR id embedded in a longer question. Casing must survive so
+    that the distinct WebSocket identities ``0G`` and ``0g`` stay distinct, and
+    boundaries must be respected so ``ka100010`` never matches ``ka10001``.
+    """
+    return frozenset(_IDENTITY_TOKEN_RE.findall(value))
 
 
 def is_canonical_operation_ref(value: str) -> bool:

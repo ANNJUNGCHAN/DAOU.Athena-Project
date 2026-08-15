@@ -35,15 +35,18 @@ class OperationKind(StrEnum):
 class ReasonCode(StrEnum):
     EXACT_OPERATION_REF = "EXACT_OPERATION_REF"
     EXACT_TR_ID = "EXACT_TR_ID"
+    TR_ID_TOKEN_MATCH = "TR_ID_TOKEN_MATCH"
     EXACT_GROUP_ID = "EXACT_GROUP_ID"
     TITLE_PHRASE_MATCH = "TITLE_PHRASE_MATCH"
     TITLE_TOKEN_MATCH = "TITLE_TOKEN_MATCH"
+    PROJECTION_TITLE_MATCH = "PROJECTION_TITLE_MATCH"
     DOMAIN_MATCH = "DOMAIN_MATCH"
     REQUEST_FIELD_MATCH = "REQUEST_FIELD_MATCH"
     RESPONSE_FIELD_MATCH = "RESPONSE_FIELD_MATCH"
     SYNONYM_MATCH = "SYNONYM_MATCH"
-    SINGLE_GROUP_PREFERRED = "SINGLE_GROUP_PREFERRED"
-    MULTI_GROUP_BASE_REQUIRED = "MULTI_GROUP_BASE_REQUIRED"
+    QUERY_COVERAGE = "QUERY_COVERAGE"
+    EXPLICIT_DETAIL_GROUP = "EXPLICIT_DETAIL_GROUP"
+    BASE_DEFAULT = "BASE_DEFAULT"
     PURE_LIST_BASE_REQUIRED = "PURE_LIST_BASE_REQUIRED"
     EXPLICIT_FULL_RESPONSE = "EXPLICIT_FULL_RESPONSE"
     DISCOVERY_ONLY = "DISCOVERY_ONLY"
@@ -95,6 +98,23 @@ class FieldContract(StrictModel):
     json_schema: dict[str, Any]
 
 
+class DetailGroupSummary(StrictModel):
+    """One screen-sized projection of a base TR response.
+
+    A detail projection costs exactly one upstream call - the same call the base
+    operation makes - and then narrows the response to ``response_field_count``
+    fields. It is chosen explicitly by the model, never guessed by the ranker.
+    """
+
+    group_id: str
+    operation_ref: str
+    title_ko: str | None = None
+    title_en: str | None = None
+    layout: Literal["facts", "table"] | None = None
+    ui_page_size: int | None = None
+    response_field_count: int
+
+
 class OperationDescription(StrictModel):
     catalog_version: str
     operation_ref: str
@@ -109,6 +129,7 @@ class OperationDescription(StrictModel):
     required_arguments: list[FieldContract]
     optional_arguments: list[FieldContract]
     response_fields: list[FieldContract]
+    detail_groups: list[DetailGroupSummary] = Field(default_factory=list)
     generic_callable: bool
     execution_policy: Literal[
         "selector_query",
@@ -128,6 +149,15 @@ class ResolveRequest(StrictModel):
     question: str = Field(min_length=2, max_length=2000)
     candidate_refs: list[str] = Field(default_factory=list, max_length=8)
     preferred_ref: str | None = None
+    detail_group: str | None = Field(
+        default=None,
+        max_length=64,
+        description=(
+            "Explicit detail projection of the selected TR family, taken from "
+            "athena_describe.detail_groups. The server never infers this from the "
+            "question; omit it to receive the full typed base response."
+        ),
+    )
     arguments: dict[str, Any] = Field(default_factory=dict)
     response_mode: ResponseMode = ResponseMode.AUTO
     continuation: ContinuationInput = Field(default_factory=ContinuationInput)

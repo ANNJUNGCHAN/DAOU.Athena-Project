@@ -33,6 +33,12 @@ class UnsupportedOperationError(SelectorError):
     code = "OPERATION_NOT_GENERIC_CALLABLE"
 
 
+class UnknownDetailGroupError(SelectorError):
+    """An explicit ``detail_group`` does not belong to the selected TR family."""
+
+    code = "UNKNOWN_DETAIL_GROUP"
+
+
 class InvalidArgumentsError(SelectorError):
     code = "INVALID_ARGUMENTS"
 
