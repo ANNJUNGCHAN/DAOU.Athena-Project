@@ -11,7 +11,7 @@ cd backend
 python -m venv .venv
 .venv\Scripts\python -m pip install -e ".[dev]"
 Copy-Item .env.example .env
-.venv\Scripts\python -m uvicorn athena_api.main:app --host 127.0.0.1 --port 8000 --workers 1
+.venv\Scripts\python -m uvicorn athena_api.main:app --host 127.0.0.1 --port 8010 --workers 1
 ```
 
 Use exactly one Uvicorn worker. When credentials are configured, startup also acquires a
