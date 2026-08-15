@@ -18,18 +18,19 @@
 ## 1. 실측 상태 (2026-08-15 재검증)
 
 ```
-backend 전체:  403 passed, 22 failed   (232초)
-  tests/mcp    126 collected  → 전부 통과
-  tests/unit   231 collected  → 22 실패 (전부 test_selector_eval.py)
-  tests/api     52 collected  → 전부 통과
+backend 전체:  429 passed, 0 failed   (198초)
+  ruff check                → All checks passed
+  generate_api.py --check   → Generated files are current
 ```
+
+> 이전 스냅샷의 `403 passed, 22 failed`는 셀렉터 base/detail 라우팅 재설계로 해소됐다. §3 참조.
 
 | 영역 | 상태 | 위치 |
 |---|---|---|
 | 키움 REST 백엔드 (301 라우팅) | **동작** | `backend/athena_api/` |
 | MCP 게이트웨이 | **동작** · 126 테스트 통과 | `backend/athena_mcp/` |
 | 투자 브레인 (그래프 투영) | **모듈 완성, FastAPI 미결선** | `backend/athena_api/brain/` |
-| LLM API 셀렉터 | **동작하나 정확도 미달** (§3) | `backend/athena_api/selector/` |
+| LLM API 셀렉터 | **동작** · 102 테스트 통과 (§3) | `backend/athena_api/selector/` |
 | Electron 두 창 셸 | **동작** · 실제 데이터 렌더 | `app/` |
 | 스파이크 실측 데이터 | 86건 보존 | `spike/captures/` |
 | CLI (`claude -p`) 연동 | **미착수** | — |
@@ -52,31 +53,31 @@ backend 전체:  403 passed, 22 failed   (232초)
 
 ---
 
-## 3. ★ 지금 유일하게 빨간 것 — 셀렉터 split-detail 라우팅
+## 3. 해소됨 — 셀렉터 split-detail 라우팅 (2026-08-15)
 
-`tests/unit/test_selector_eval.py` **22건 실패**. 재현:
+**진단**: 검색은 처음부터 맞았다. 19개 실패 케이스 전부 정답이 1위였고 보통 2위의 3~7배였다.
+되돌린 건 `policy.py`의 base/detail 게이트다. 같은 TR의 형제 상세는 **TR 제목 토큰을 공유하므로 구조적으로 절대하한(180)을 항상 넘는다.** `kt00018:holdings`는 1위가 2위의 6.8배(2435 vs 359)인데도 `len(meaningful) >= 2`에 걸려 base로 강등됐다.
 
-```bash
-cd backend && .venv/Scripts/python -m pytest tests/unit/test_selector_eval.py -x -q
-```
-
-실패 형태 (전부 동일 계열):
+**결정**: 임계값을 상대비로 손보는 대신 **detail을 검색 후보에서 빼고 인자로 강등**했다.
+근거 — `generated/runtime.py:70-89`가 detail도 base와 **동일한 상류 호출 1회**를 하고 응답 필드만 거른다. base 선택은 데이터 손실도 레이트리밋 손해도 아니고 응답이 5.5배 넓어질 뿐이다(22개 TR 826→150 필드, 최악 `ka10007` 9배). **정합성 문제가 아니라 좁히기 문제였다.**
 
 ```
-assert 'base:ka10002' in ['detail:ka10002:market_snapshot']
+search   → base 171개 평면 (family만 판정)
+describe → base:ka10004 의 detail_groups 9개 목록 반환
+resolve  → detail_group="buy_bid_prices" 를 LLM이 명시, 서버는 소속만 검증
 ```
 
-**증상**: 질의가 분할 파생 화면(`detail:*`)을 가리켜야 하는데 셀렉터가 **base 오퍼레이션**을 고른다.
-즉 랭킹이 *"어떤 TR인가"* 는 맞히지만 *"그 TR의 어떤 분할 화면인가"* 를 구분하지 못한다.
+형제끼리 점수 경쟁이 사라졌다. 임계값 튜닝이 아니라 구조로 제거했다.
+참조원 `migusdn/KIS_MCP_Server`의 `get-kis-api-spec(group, api_type)`가 원래 랭킹이 아니라 2인자 조회다.
 
-실패 분포:
-- `test_resolve_selects_the_gold_base_or_detail` — detail 케이스 다수 (ka10002/10040/10087, ka20001/20009, ka30012, kt00001~kt00018, kt50020 등)
-- `test_every_detail_title_ranks_its_operation_first[ko|en]` — detail 제목으로 검색해도 1위가 아님
-- `test_forbidden_ambiguous_and_adversarial_questions_issue_no_plan[ambiguous-account]` — 모호 질의를 거절하지 않음
+**부수적으로 고친 실제 랭킹 결함 3건**:
+1. 질의 **안**의 TR ID를 못 읽음 → `TR_ID_TOKEN_MATCH`(3,000). `EXACT_TR_ID`는 질의 전체가 ID일 때만 발동했다
+2. 1토큰 제목(`totals`)이 1,400점 구절 보너스로 엉뚱한 family를 이김 → 구절은 2토큰 이상만
+3. 질의 용어를 더 많이 덮은 family가, 한 단어로 여러 존에서 점수를 긁은 family에게 짐 → `QUERY_COVERAGE`(최대 600)
 
-**손댈 곳**: `selector/ranking.py`(162줄), `selector/lexicon.py`(44줄), `selector/catalog.py`(223줄).
-lexicon이 44줄뿐이라 분할 화면 이름의 어휘 신호가 부족한 것이 1순위 가설. base/detail 동점 시 tie-break 규칙도 확인.
-골든셋: `backend/tests/fixtures/api_selector_golden.jsonl`.
+**남은 근사 실패 1건 (의도적으로 안 고침)**: `금일 재사용 금액만` → `base:kt00010`(1,449)이 정답 `base:kt00013`(1,379)보다 5% 높다. `resolve`는 `preferred_ref`로 정답에 도달한다. 골든 질문에 맞춰 lexicon을 넣는 건 도메인이 아니라 테스트에 맞추는 것이라 남겼다. detail/base 슬라이스 family top-1 = 43/44 = 0.977.
+
+**변경 파일**: `selector/{catalog,ranking,policy,service,schemas,errors,normalization}.py` · `athena_api/errors.py` · `tests/unit/test_selector_{core,eval}.py` · `tests/fixtures/api_selector_golden.jsonl` · `docs/LLM_API_SELECTION.md`
 
 ---
 
@@ -131,13 +132,13 @@ ADR: [`plan/investment-brain-architecture.md`](investment-brain-architecture.md)
 
 | # | 작업 | 이유 / 시작점 |
 |---|---|---|
-| 1 | **셀렉터 22건 수정** | 저장소에서 유일하게 빨간 것. `ranking.py`/`lexicon.py`, §3 참조 |
-| 2 | **갈래 A·B 조율 — "공통 캔버스" 정의 통합** | A는 캔버스 16종, B는 301 라우팅 렌더. 상위 개념을 정하지 않으면 렌더러가 둘로 갈라진다 (`00-인수인계.md` §1 충돌 ①) |
-| 3 | **브레인 FastAPI 결선** | ADR §4.2. 락·writer queue 없이는 다중 프로세스 쓰기 사고 |
-| 4 | **CLI 연동** — 게이트웨이를 `claude -p`에 물린다 | 게이트웨이만 있고 소비자가 없다. `--setting-sources ""` 필수 (§7) |
-| 5 | **프레임 최적화** — 굴절층/데이터층 분리 | soul.md가 "모션이 곧 재료"라고 한 설계 |
-| 6 | 캔버스 설계 라운드 | 근거 ①②④ 확보됨. soul.md §9 프로세스로 |
-| 7 | 파수꾼·조사관 착수 | `plan/감시에이전트-실행계획.md`. 주문 자동집행 없음(결정 3) |
+| 1 | **갈래 A·B 조율 — "공통 캔버스" 정의 통합** | A는 캔버스 16종, B는 301 라우팅 렌더. 상위 개념을 정하지 않으면 렌더러가 둘로 갈라진다 (`00-인수인계.md` §1 충돌 ①) |
+| 2 | **브레인 FastAPI 결선** | ADR §4.2. 락·writer queue 없이는 다중 프로세스 쓰기 사고 |
+| 3 | **CLI 연동** — 게이트웨이를 `claude -p`에 물린다 | 게이트웨이만 있고 소비자가 없다. `--setting-sources ""` 필수 (§7) |
+| 4 | **프레임 최적화** — 굴절층/데이터층 분리 | soul.md가 "모션이 곧 재료"라고 한 설계 |
+| 5 | 캔버스 설계 라운드 | 근거 ①②④ 확보됨. soul.md §9 프로세스로 |
+| 6 | 파수꾼·조사관 착수 | `plan/감시에이전트-실행계획.md`. 주문 자동집행 없음(결정 3) |
+| 7 | MCP 어댑터에 `detail_group` 반영 | 4툴을 MCP로 노출할 때 `describe.detail_groups` → `resolve.detail_group` 경로 필수 (`docs/LLM_API_SELECTION.md`) |
 
 ---
 
