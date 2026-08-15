@@ -30,6 +30,7 @@ PROJECTION_MANIFEST_PATH = BACKEND / "ref" / "response-projections.json"
 KA10007_COMPATIBILITY_PATH = BACKEND / "ref" / "ka10007-detail-groups.json"
 IO_SOURCE_PROFILE_PATH = BACKEND / "ref" / "kiwoom-io-source-profile.json"
 OUTPUT_PROFILE_PATH = BACKEND / "ref" / "kiwoom-output-profile.json"
+COMMON_SCREEN_MANIFEST_PATH = BACKEND / "ref" / "kiwoom-common-screen-manifest.json"
 IO_DOC_PATH = BACKEND / "docs" / "KIWOOM_API_IO.md"
 GENERATED = BACKEND / "athena_api" / "generated"
 
@@ -385,6 +386,21 @@ def render_registry(
         "    response_model: type[BaseModel]",
         "    request_field_count: int",
         "    response_field_count: int",
+        "    category: str = ''",
+        "    subcategory: str = ''",
+        "    overview: str = ''",
+        "",
+        "@dataclass(frozen=True, slots=True)",
+        "class DetailSpec:",
+        "    operation_ref: str",
+        "    tr_id: str",
+        "    group_id: str",
+        "    title_ko: str",
+        "    title_en: str",
+        "    layout: str",
+        "    ui_page_size: int | None",
+        "    fields: tuple[str, ...]",
+        "    response_model: type[BaseModel]",
         "",
         "TR_REGISTRY: dict[str, TrSpec] = {",
     ]
@@ -393,7 +409,8 @@ def render_registry(
         lines.append(
             f"    {tr['id']!r}: TrSpec({tr['id']!r}, {tr['kind']!r}, {tr['domain']!r}, {tr['name']!r}, {tr['url']!r}, "
             f"models.{prefix}Request, models.{prefix}Response, "
-            f"{tr.get('req_body_count', len(tr.get('req_body', [])))}, {tr.get('resp_body_count', len(tr.get('resp_body', [])))}),"
+            f"{tr.get('req_body_count', len(tr.get('req_body', [])))}, {tr.get('resp_body_count', len(tr.get('resp_body', [])))}, "
+            f"{tr['cat']!r}, {tr['subcat']!r}, {tr.get('overview', '')!r}),"
         )
     lines.extend(
         [
@@ -415,6 +432,27 @@ def render_registry(
             "    projection['tr_id']: projection",
             "    for projection in RESPONSE_PROJECTION_MANIFEST['projections']",
             "}",
+            "",
+            "DETAIL_REGISTRY: dict[str, DetailSpec] = {",
+        ]
+    )
+    for projection in projections["projections"]:
+        tr_id = projection["tr_id"]
+        for group in projection["groups"]:
+            group_id = group["id"]
+            operation_ref = f"detail:{tr_id}:{group_id}"
+            lines.append(
+                f"    {operation_ref!r}: DetailSpec("
+                f"{operation_ref!r}, {tr_id!r}, {group_id!r}, "
+                f"{(group.get('title_ko') or group.get('title') or group_id)!r}, "
+                f"{(group.get('title_en') or group.get('title') or group_id)!r}, "
+                f"{group_layout(group)!r}, {group.get('ui_page_size')!r}, "
+                f"{tuple(group['fields'])!r}, models.{projection_model_name(tr_id, group_id)}),"
+            )
+    lines.extend(
+        [
+            "}",
+            "",
             "KA10007_DETAIL_MANIFEST: dict[str, Any] = next(",
             "    projection",
             "    for projection in RESPONSE_PROJECTION_MANIFEST['projections']",
@@ -444,8 +482,7 @@ from athena_api.dependencies import (
     OrderKiwoomClientDep,
     TokenManagerDep,
 )
-from athena_api.generated.registry import RESPONSE_PROJECTION_MANIFEST, TR_REGISTRY, TrSpec
-from athena_api.generated import models
+from athena_api.generated.registry import DETAIL_REGISTRY, TR_REGISTRY, DetailSpec, TrSpec
 
 router = APIRouter()
 
@@ -503,8 +540,9 @@ def _oauth_endpoint(spec: TrSpec):
     return endpoint
 
 
-def _detail_endpoint(spec: TrSpec, response_model: type):
+def _detail_endpoint(spec: TrSpec, detail: DetailSpec):
     request_model = spec.request_model
+    response_model = detail.response_model
 
     async def endpoint(payload: request_model, request: Request, response: Response, client: KiwoomClientDep) -> response_model:
         return await call_typed_tr(
@@ -517,22 +555,23 @@ def _detail_endpoint(spec: TrSpec, response_model: type):
 for _spec in TR_REGISTRY.values():
     if _spec.kind == "query":
         _path, _tag, _factory = f"/api/v1/tr/{_spec.domain}/{_spec.tr_id}", "Kiwoom TR", _query_endpoint
-        _extra = {"x-kiwoom-tr-id": _spec.tr_id}
+        _extra = {"x-kiwoom-tr-id": _spec.tr_id, "x-athena-llm-exposed": False}
     elif _spec.kind == "websocket":
         _path, _tag, _factory = f"/api/v1/websocket/{_spec.tr_id}", "Kiwoom WebSocket", _websocket_endpoint
         _extra = {
             "x-kiwoom-tr-id": _spec.tr_id,
             "x-athena-operation-kind": "websocket",
             "x-athena-upstream-transport": "wss",
+            "x-athena-llm-exposed": False,
         }
         if _spec.tr_id == "0g":
             _extra["x-athena-case-sensitive-note"] = "0g is lowercase and distinct from 0G"
     elif _spec.kind == "order":
         _path, _tag, _factory = f"/api/v1/order/{_spec.tr_id}", "Kiwoom Orders", _order_endpoint
-        _extra = {"x-kiwoom-tr-id": _spec.tr_id, "x-athena-operation-kind": "order", "x-athena-retry-count": 0}
+        _extra = {"x-kiwoom-tr-id": _spec.tr_id, "x-athena-operation-kind": "order", "x-athena-retry-count": 0, "x-athena-llm-exposed": False}
     else:
         _path, _tag, _factory = f"/api/v1/internal/oauth/{_spec.tr_id}", "Internal OAuth lifecycle", _oauth_endpoint
-        _extra = {"x-kiwoom-tr-id": _spec.tr_id, "x-athena-operation-kind": "internal-oauth", "x-athena-secrets-exposed": False}
+        _extra = {"x-kiwoom-tr-id": _spec.tr_id, "x-athena-operation-kind": "internal-oauth", "x-athena-secrets-exposed": False, "x-athena-llm-exposed": False}
     router.add_api_route(
         _path,
         _factory(_spec),
@@ -544,28 +583,22 @@ for _spec in TR_REGISTRY.values():
         openapi_extra=_extra,
     )
 
-for _projection in RESPONSE_PROJECTION_MANIFEST["projections"]:
-    _tr_id = _projection["tr_id"]
-    _spec = TR_REGISTRY[_tr_id]
-    for _group in _projection["groups"]:
-        _group_id = _group["id"]
-        _response_model = getattr(
-            models,
-            _tr_id[:1].upper()
-            + _tr_id[1:]
-            + "".join(part.title() for part in _group_id.split("_"))
-            + "Response",
-        )
-        router.add_api_route(
-            f"/api/v1/tr/{_spec.domain}/{_tr_id}/detail/{_group_id}",
-            _detail_endpoint(_spec, _response_model),
-            methods=["POST"],
-            response_model=_response_model,
-            tags=["Kiwoom TR details"],
-            summary=_group.get("title_en") or _group.get("title") or _group_id,
-            operation_id=f"post_tr_{_spec.domain}_{_tr_id}_detail_{_group_id}",
-            openapi_extra={"x-kiwoom-tr-id": _tr_id, "x-athena-detail-group": _group_id},
-        )
+for _detail in DETAIL_REGISTRY.values():
+    _spec = TR_REGISTRY[_detail.tr_id]
+    router.add_api_route(
+        f"/api/v1/tr/{_spec.domain}/{_detail.tr_id}/detail/{_detail.group_id}",
+        _detail_endpoint(_spec, _detail),
+        methods=["POST"],
+        response_model=_detail.response_model,
+        tags=["Kiwoom TR details"],
+        summary=_detail.title_en or _detail.title_ko or _detail.group_id,
+        operation_id=f"post_tr_{_spec.domain}_{_detail.tr_id}_detail_{_detail.group_id}",
+        openapi_extra={
+            "x-kiwoom-tr-id": _detail.tr_id,
+            "x-athena-detail-group": _detail.group_id,
+            "x-athena-llm-exposed": False,
+        },
+    )
 '''
 
 
@@ -577,6 +610,299 @@ def athena_path(tr: dict[str, Any]) -> str:
     if tr["kind"] == "websocket":
         return f"/api/v1/websocket/{tr['id']}"
     return f"/api/v1/internal/oauth/{tr['id']}"
+
+
+def field_aliases(items: list[dict[str, Any]]) -> dict[str, Any]:
+    """Return generated-contract aliases, preserving LIST container ownership."""
+    top_level: list[str] = []
+    data: list[dict[str, Any]] = []
+    current: dict[str, Any] | None = None
+    for item in items:
+        if not item.get("type"):
+            continue
+        element = str(item.get("element", ""))
+        nested = element.lstrip().startswith("-")
+        alias = element.lstrip("- ").strip()
+        if nested and current is not None:
+            current["field_aliases"].append(alias)
+            continue
+        top_level.append(alias)
+        current = None
+        if item.get("type") == "LIST":
+            current = {"container_alias": alias, "field_aliases": []}
+            data.append(current)
+    return {"top_level": top_level, "data": data}
+
+
+def contract_field_aliases(tr: dict[str, Any], *, request: bool) -> dict[str, Any]:
+    if tr["kind"] != "oauth":
+        return field_aliases(tr.get("req_body" if request else "resp_body", []))
+    if request:
+        return {"top_level": [], "data": []}
+    return {"top_level": ["configured", "ready", "expires_at"], "data": []}
+
+
+def operation_id(tr: dict[str, Any]) -> str:
+    return f"post_{tr['kind']}_{tr['domain']}_{tr['id']}"
+
+
+def base_layout(kind: str, shape: str) -> str:
+    if kind == "websocket":
+        return "event"
+    if kind == "order":
+        return "action"
+    if kind == "oauth":
+        return "status"
+    return {"scalar_only": "facts", "pure_list": "table", "compound": "compound"}[shape]
+
+
+def workflow_classification(kind: str) -> dict[str, Any]:
+    if kind == "query":
+        return {"category": "read_display", "workflow": "read", "read": True}
+    return {
+        "websocket": {"category": "websocket", "workflow": "websocket_lifecycle", "read": False},
+        "order": {"category": "order", "workflow": "guarded_order", "read": False},
+        "oauth": {"category": "oauth", "workflow": "oauth_lifecycle", "read": False},
+    }[kind]
+
+
+def mapping_provenance(tr_id: str, *, group_id: str | None = None) -> dict[str, Any]:
+    provenance: dict[str, Any] = {
+        "inventory": {"path": "ref/kiwoom-tr-inventory.json", "operation_id": tr_id},
+        "output_profile": {"path": "ref/kiwoom-output-profile.json", "operation_id": tr_id},
+        "generated_registry": {
+            "path": "athena_api/generated/registry.py",
+            "registry_key": tr_id,
+        },
+        "generated_contracts": {"path": "athena_api/generated/models.py"},
+    }
+    if group_id is not None:
+        provenance["response_projection"] = {
+            "path": "ref/response-projections.json",
+            "tr_id": tr_id,
+            "group_id": group_id,
+        }
+        provenance["generated_registry"] = {
+            "path": "athena_api/generated/registry.py",
+            "registry_key": f"detail:{tr_id}:{group_id}",
+        }
+    return provenance
+
+
+def build_common_screen_manifest(
+    operations: list[dict[str, Any]],
+    projections: dict[str, Any],
+    output_profile: dict[str, Any],
+    *,
+    inventory_sha256: str,
+    projection_sha256: str,
+) -> dict[str, Any]:
+    """Build the canonical routable common-screen coverage manifest."""
+    by_id = {operation["id"]: operation for operation in operations}
+    profile_by_id = {operation["id"]: operation for operation in output_profile["operations"]}
+    excluded_ids = [projection["tr_id"] for projection in projections["projections"]]
+    excluded_set = set(excluded_ids)
+    mappings: list[dict[str, Any]] = []
+
+    for tr in operations:
+        if tr["id"] in excluded_set:
+            continue
+        prefix = class_prefix(tr["id"])
+        shape = profile_by_id[tr["id"]]["shape"]
+        mappings.append(
+            {
+                "mapping_id": f"base:{tr['id']}",
+                "mapping_type": "base",
+                "route": {
+                    "method": "POST",
+                    "path": athena_path(tr),
+                    "operation_id": operation_id(tr),
+                },
+                "operation": {
+                    "tr_id": tr["id"],
+                    "kind": tr["kind"],
+                    "domain": tr["domain"],
+                    "upstream_path": tr["url"],
+                },
+                "fields": {
+                    "request": contract_field_aliases(tr, request=True),
+                    "response": contract_field_aliases(tr, request=False),
+                },
+                "presentation": {"shape": shape, "layout": base_layout(tr["kind"], shape)},
+                "classification": workflow_classification(tr["kind"]),
+                "contracts": {
+                    "request_model": f"athena_api.generated.models.{prefix}Request",
+                    "response_model": f"athena_api.generated.models.{prefix}Response",
+                },
+                "provenance": mapping_provenance(tr["id"]),
+            }
+        )
+
+    for projection in projections["projections"]:
+        tr = by_id[projection["tr_id"]]
+        request_fields = contract_field_aliases(tr, request=True)
+        source_response_fields = contract_field_aliases(tr, request=False)
+        source_data_by_container = {
+            entry["container_alias"]: entry for entry in source_response_fields["data"]
+        }
+        for group in projection["groups"]:
+            group_id = group["id"]
+            selected = set(group["fields"])
+            response_fields = {
+                "top_level": list(group["fields"]),
+                "data": [
+                    source_data_by_container[alias]
+                    for alias in group["fields"]
+                    if alias in selected and alias in source_data_by_container
+                ],
+            }
+            mappings.append(
+                {
+                    "mapping_id": f"detail:{tr['id']}:{group_id}",
+                    "mapping_type": "split_derived",
+                    "route": {
+                        "method": "POST",
+                        "path": f"{athena_path(tr)}/detail/{group_id}",
+                        "operation_id": f"post_tr_{tr['domain']}_{tr['id']}_detail_{group_id}",
+                    },
+                    "operation": {
+                        "tr_id": tr["id"],
+                        "kind": "query_detail",
+                        "domain": tr["domain"],
+                        "upstream_path": tr["url"],
+                        "detail_group_id": group_id,
+                    },
+                    "fields": {"request": request_fields, "response": response_fields},
+                    "presentation": {
+                        "shape": profile_by_id[tr["id"]]["shape"],
+                        "layout": group_layout(group),
+                    },
+                    "classification": workflow_classification("query"),
+                    "contracts": {
+                        "request_model": f"athena_api.generated.models.{class_prefix(tr['id'])}Request",
+                        "response_model": (
+                            f"athena_api.generated.models.{projection_model_name(tr['id'], group_id)}"
+                        ),
+                    },
+                    "provenance": mapping_provenance(tr["id"], group_id=group_id),
+                }
+            )
+
+    exclusions = [
+        {
+            "tr_id": tr_id,
+            "route": {"method": "POST", "path": athena_path(by_id[tr_id])},
+            "reason": "replaced_by_split_derived_detail_routes",
+            "replacement_mapping_ids": [
+                f"detail:{tr_id}:{group['id']}"
+                for group in next(
+                    projection["groups"]
+                    for projection in projections["projections"]
+                    if projection["tr_id"] == tr_id
+                )
+            ],
+        }
+        for tr_id in excluded_ids
+    ]
+    manifest = {
+        "version": 1,
+        "description": "Canonical Kiwoom common-screen routable coverage manifest.",
+        "sources": {
+            "inventory": {
+                "path": "ref/kiwoom-tr-inventory.json",
+                "sha256": inventory_sha256,
+            },
+            "output_profile": {"path": "ref/kiwoom-output-profile.json"},
+            "response_projections": {
+                "path": "ref/response-projections.json",
+                "sha256": projection_sha256,
+            },
+            "generated_registry": {"path": "athena_api/generated/registry.py"},
+            "generated_contracts": {"path": "athena_api/generated/models.py"},
+        },
+        "counts": {
+            "base_operations": len(operations),
+            "unsplit_base": sum(mapping["mapping_type"] == "base" for mapping in mappings),
+            "split_derived": sum(
+                mapping["mapping_type"] == "split_derived" for mapping in mappings
+            ),
+            "routable": len(mappings),
+            "excluded_split_originals": len(exclusions),
+            "categories": {
+                category: sum(
+                    mapping["classification"]["category"] == category for mapping in mappings
+                )
+                for category in ("read_display", "websocket", "order", "oauth")
+            },
+        },
+        "exclusions": exclusions,
+        "mappings": mappings,
+    }
+    validate_common_screen_manifest(manifest, operations, projections)
+    return manifest
+
+
+def validate_common_screen_manifest(
+    manifest: dict[str, Any],
+    operations: list[dict[str, Any]],
+    projections: dict[str, Any],
+) -> None:
+    mappings = manifest["mappings"]
+    exclusions = manifest["exclusions"]
+    expected_exclusions = [projection["tr_id"] for projection in projections["projections"]]
+    expected_details = {
+        f"detail:{projection['tr_id']}:{group['id']}"
+        for projection in projections["projections"]
+        for group in projection["groups"]
+    }
+    mapping_ids = [mapping["mapping_id"] for mapping in mappings]
+    route_identities = [
+        (mapping["route"]["method"], mapping["route"]["path"]) for mapping in mappings
+    ]
+    actual_details = {
+        mapping["mapping_id"]
+        for mapping in mappings
+        if mapping["mapping_type"] == "split_derived"
+    }
+    actual_base_ids = {
+        mapping["operation"]["tr_id"]
+        for mapping in mappings
+        if mapping["mapping_type"] == "base"
+    }
+    expected_base_ids = {operation["id"] for operation in operations} - set(expected_exclusions)
+    counts = manifest["counts"]
+    expected_counts = {
+        "base_operations": 208,
+        "unsplit_base": 186,
+        "split_derived": 115,
+        "routable": 301,
+        "excluded_split_originals": 22,
+        "categories": {"read_display": 264, "websocket": 23, "order": 12, "oauth": 2},
+    }
+    if counts != expected_counts:
+        raise ValueError(f"Unexpected common-screen manifest counts: {counts}")
+    if [entry["tr_id"] for entry in exclusions] != expected_exclusions:
+        raise ValueError("Common-screen exclusions do not exactly match split-original query IDs")
+    if any(entry["reason"] != "replaced_by_split_derived_detail_routes" for entry in exclusions):
+        raise ValueError("Common-screen exclusions must preserve the canonical replacement reason")
+    if len(mapping_ids) != len(set(mapping_ids)) or len(route_identities) != len(set(route_identities)):
+        raise ValueError("Common-screen mapping IDs and route identities must be unique")
+    if actual_base_ids != expected_base_ids or actual_details != expected_details:
+        raise ValueError("Common-screen manifest contains an orphan or missing base/detail mapping")
+    required_provenance = {
+        "inventory",
+        "output_profile",
+        "generated_registry",
+        "generated_contracts",
+    }
+    for mapping in mappings:
+        if not required_provenance <= mapping["provenance"].keys():
+            raise ValueError(f"Incomplete provenance for {mapping['mapping_id']}")
+        if set(mapping["fields"]) != {"request", "response"}:
+            raise ValueError(f"Incomplete field aliases for {mapping['mapping_id']}")
+        for direction in ("request", "response"):
+            if set(mapping["fields"][direction]) != {"top_level", "data"}:
+                raise ValueError(f"Incomplete {direction} aliases for {mapping['mapping_id']}")
 
 
 def markdown(value: Any) -> str:
@@ -940,6 +1266,14 @@ def main() -> int:
             f"actual={profile.get('response_projection_manifest')}"
         )
     output_profile_json = canonical_json(output_profile)
+    common_screen_manifest = build_common_screen_manifest(
+        operations,
+        projections,
+        output_profile,
+        inventory_sha256=inventory_sha256,
+        projection_sha256=projection_sha256,
+    )
+    common_screen_manifest_json = canonical_json(common_screen_manifest)
     outputs = {
         "__init__.py": '"""Inventory-generated API artifacts."""\n',
         "models.py": render_models(operations, projections),
@@ -966,19 +1300,31 @@ def main() -> int:
         ):
             print(f"Generated output profile is stale: {OUTPUT_PROFILE_PATH.relative_to(BACKEND)}")
             return 1
+        if (
+            not COMMON_SCREEN_MANIFEST_PATH.is_file()
+            or COMMON_SCREEN_MANIFEST_PATH.read_text(encoding="utf-8")
+            != common_screen_manifest_json
+        ):
+            print(
+                "Generated common-screen manifest is stale: "
+                f"{COMMON_SCREEN_MANIFEST_PATH.relative_to(BACKEND)}"
+            )
+            return 1
         print("Generated files are current")
         return 0
     for name, content in outputs.items():
         write(GENERATED / name, content)
     write(IO_DOC_PATH, io_doc)
     write(OUTPUT_PROFILE_PATH, output_profile_json)
+    write(COMMON_SCREEN_MANIFEST_PATH, common_screen_manifest_json)
     expected = {"__init__.py", "models.py", "registry.py", "routes.py", "runtime.py"}
     for stale in GENERATED.glob("*.py"):
         if stale.name not in expected:
             stale.unlink()
     print(
         f"Generated {len(operations)} inventory operations and "
-        f"{expected_projection_metadata['route_count']} response projections: {counts}"
+        f"{expected_projection_metadata['route_count']} response projections, "
+        f"{common_screen_manifest['counts']['routable']} common-screen mappings: {counts}"
     )
     return 0
 

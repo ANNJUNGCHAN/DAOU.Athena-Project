@@ -28,6 +28,50 @@ class KiwoomApiError(KiwoomError):
 
 def install_exception_handlers(app: FastAPI) -> None:
     from athena_api.kiwoom.ws_client import KiwoomWsError
+    from athena_api.selector.errors import (
+        AmbiguousOperationError,
+        ExpiredPlanError,
+        InvalidArgumentsError,
+        InvalidPlanError,
+        NoConfidentMatchError,
+        OperationNotFoundError,
+        PreferredOperationError,
+        SelectorError,
+        StalePlanError,
+        UnsupportedOperationError,
+    )
+
+    selector_statuses: tuple[tuple[type[SelectorError], int], ...] = (
+        (OperationNotFoundError, 404),
+        (ExpiredPlanError, 410),
+        (StalePlanError, 409),
+        (InvalidPlanError, 400),
+        (InvalidArgumentsError, 422),
+        (UnsupportedOperationError, 403),
+        (PreferredOperationError, 409),
+        (AmbiguousOperationError, 409),
+        (NoConfidentMatchError, 404),
+    )
+
+    @app.exception_handler(SelectorError)
+    async def selector_handler(_request: Request, exc: SelectorError) -> JSONResponse:
+        status_code = next(
+            (
+                mapped_status
+                for error_type, mapped_status in selector_statuses
+                if isinstance(exc, error_type)
+            ),
+            400,
+        )
+        return JSONResponse(
+            status_code=status_code,
+            content={
+                "detail": "Selector request failed",
+                "code": exc.code,
+                "message": str(exc),
+                "details": exc.details,
+            },
+        )
 
     @app.exception_handler(KiwoomNotReadyError)
     async def not_ready_handler(_request: Request, _exc: KiwoomNotReadyError) -> JSONResponse:
