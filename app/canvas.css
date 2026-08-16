@@ -69,6 +69,10 @@ html, body { background: transparent; }
   font-size: 11px;
   color: var(--color-k-faint);
 }
+/* fresh 타임스탬프 + 카드별 닫기(D7)를 한 그룹으로 묶어 card-head의
+   space-between이 title↔그룹 사이에만 적용되게 한다(3개 사이에 퍼지면
+   fresh가 가운데로 밀려 보인다). */
+.card-head-right { display: flex; align-items: center; gap: 10px; }
 
 .card-body { flex: 1; min-height: 0; overflow: auto; }
 
@@ -94,3 +98,286 @@ table.fin-table { width: 100%; border-collapse: collapse; font-variant-numeric: 
 .fin-table th, .fin-table td { padding: 5px 10px; text-align: right; border-bottom: 1px solid var(--color-k-line-soft); white-space: nowrap; }
 .fin-table th:first-child, .fin-table td:first-child { text-align: left; }
 .fin-table thead th { position: sticky; top: 0; background: rgba(29, 34, 44, 0.96); color: var(--color-k-dim); font-weight: 400; font-family: var(--font-strong); }
+
+/* =========================================================================
+   계좌(AT-ST-001/002/003) · MCP(AT-ST-004/005/006) 제어 캔버스 카드
+   — lib/settings-cards.js가 그린다. 두 카드 모두 폭 전체를 쓴다(표 형태 데이터라
+   360px 반쪽 컬럼으로는 컬럼 헤더가 찌그러진다 — table 카드와 같은 판단).
+   sheet()는 position:absolute; inset:0 오버레이라 부모 카드가 position:relative
+   여야 한다(lib/ui-kit.js 주석 그대로).
+   ========================================================================= */
+.card.accounts, .card.mcp {
+  grid-column: 1 / -1;
+  position: relative;
+  padding: 0;
+  max-height: 560px;
+}
+.card.accounts { order: 4; }
+.card.mcp { order: 5; }
+/* 시트가 떠 있는 동안만 카드를 시트 내용에 맞게 넉넉히 키운다 —
+   lib/settings-cards.js의 attachSheet()/detachSheet() 참고. */
+.card.accounts.has-sheet, .card.mcp.has-sheet { min-height: 660px; max-height: 800px; }
+
+.card.accounts .card-head, .card.mcp .card-head {
+  height: 44px;
+  padding: 0 18px;
+  margin-bottom: 0;
+  align-items: center;
+  background: rgba(29, 34, 44, 0.6);
+  border-bottom: 1px solid var(--color-k-line-soft);
+  flex-shrink: 0;
+}
+.card.accounts .card-body, .card.mcp .card-body { padding: 0; }
+
+.uk-settings-title { display: flex; align-items: baseline; gap: 12px; min-width: 0; }
+.uk-settings-name { font-family: var(--font-strong); font-size: 14px; color: var(--color-k-text); white-space: nowrap; }
+.uk-settings-count { font-family: var(--font-mono); font-size: 12px; color: var(--color-k-faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.uk-settings-actions { display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
+.uk-settings-note {
+  padding: 8px 18px;
+  background: rgba(29, 34, 44, 0.35);
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--color-k-faint);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* ---- 목록 열 헤더 · 데이터 행 (계좌 목록 · MCP 목록 공용) ---- */
+.uk-col-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 32px;
+  padding: 0 18px;
+  border-bottom: 1px solid var(--color-k-line-soft);
+}
+.uk-col-head span {
+  font-family: var(--font-body);
+  letter-spacing: 0.08em;
+  font-size: 11px;
+  color: var(--color-k-faint);
+}
+.uk-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 46px;
+  padding: 8px 18px;
+  border-bottom: 1px solid #21262F;
+}
+.uk-row.is-clickable { cursor: pointer; }
+.uk-row.is-clickable:hover { background: rgb(255 255 255 / 3%); }
+.uk-cell-strong { font-family: var(--font-body); font-size: 13px; color: var(--color-k-text); }
+.uk-mono-faint { font-family: var(--font-mono); font-size: 12px; color: var(--color-k-faint); }
+.uk-cmd { font-family: var(--font-mono); font-size: 11px; color: var(--color-k-faint); white-space: normal; word-break: break-all; }
+.uk-cmd-box { padding: 10px 12px; border-radius: 6px; background: rgba(29, 34, 44, 0.72); border: 1px solid var(--color-k-line-soft); }
+.uk-spacer { flex: none; }
+
+/* 계좌 목록 컬럼 */
+.uk-col-alias { flex: 0 0 260px; display: flex; align-items: center; gap: 8px; min-width: 0; }
+.uk-col-appkey { flex: 0 0 200px; }
+.uk-col-orderapi { flex: 0 0 100px; }
+.uk-col-status { flex: 0 0 120px; }
+.uk-col-lastcheck { flex: 1; }
+
+/* MCP 목록 컬럼 */
+.uk-col-mcpalias { flex: 0 0 260px; min-width: 0; }
+.uk-col-mcpstatus { flex: 0 0 130px; }
+.uk-col-mcptools { flex: 0 0 100px; }
+.uk-col-mcpcmd { flex: 1; }
+.uk-mcp-warning { font-family: var(--font-body); font-size: 11px; color: var(--color-warn); margin-top: 2px; }
+
+/* 필(pill) — 상태 표시 공용, 색은 상태에만 쓴다 */
+.uk-pill { display: inline-flex; align-items: center; height: 20px; padding: 0 8px; border-radius: 999px; font-family: var(--font-body); font-size: 11px; white-space: nowrap; }
+.uk-pill.is-clickable { cursor: pointer; }
+.uk-pill.tone-ok { background: rgb(95 206 63 / 12%); color: var(--color-ok); }
+.uk-pill.tone-warn { background: rgb(255 152 56 / 12%); color: var(--color-warn); }
+.uk-pill.tone-dim { background: rgb(255 255 255 / 6%); color: var(--color-k-dim); }
+.uk-pill.tone-brand { background: rgb(238 19 123 / 16%); color: var(--color-brand); }
+
+/* ---- 시트 내부 폼 요소 (계좌 등록 · MCP 등록) ---- */
+.uk-two-col { display: flex; gap: 24px; flex-wrap: wrap; }
+.uk-field-col { flex: 1 1 320px; min-width: 280px; }
+.uk-principles {
+  flex: 1 1 260px;
+  min-width: 240px;
+  padding: 16px;
+  border-radius: 10px;
+  background: var(--color-k-panel);
+  border: 1px solid var(--color-k-line-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-self: flex-start;
+}
+.uk-bullets { display: flex; flex-direction: column; gap: 8px; }
+.uk-bullet-item { display: flex; align-items: flex-start; gap: 8px; }
+.uk-bullet-dot { width: 4px; height: 4px; margin-top: 7px; border-radius: 999px; background: var(--color-k-faint); flex: none; }
+.uk-bullet-text { font-family: var(--font-body); font-size: 13px; line-height: 19px; color: var(--color-k-dim); }
+
+.uk-field-group { margin-bottom: 20px; }
+.uk-field-group:last-child { margin-bottom: 0; }
+.uk-field-label { font-family: var(--font-body); font-size: 13px; color: var(--color-k-dim); display: block; margin-bottom: 6px; }
+.uk-field-row { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 6px; }
+.uk-field-hint { font-family: var(--font-mono); font-size: 12px; color: var(--color-k-faint); }
+.uk-field-hint-static { font-family: var(--font-body); font-size: 12px; color: var(--color-k-faint); margin-top: 4px; }
+
+.uk-input {
+  width: 100%;
+  height: 44px;
+  padding: 0 14px;
+  border-radius: 8px;
+  background: var(--color-k-panel2);
+  border: 1px solid var(--color-k-line);
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: 14px;
+}
+.uk-input::placeholder { color: var(--color-k-faint); }
+.uk-input-mono { font-family: var(--font-mono); letter-spacing: 3px; }
+.uk-input:focus, .uk-textarea:focus { outline: 2px solid var(--color-brand); outline-offset: 1px; }
+
+.uk-textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: var(--color-k-panel2);
+  border: 1px solid var(--color-k-line);
+  color: var(--color-k-text);
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  resize: vertical;
+}
+.uk-textarea::placeholder { color: var(--color-k-faint); }
+
+.uk-btn-row-end { display: flex; justify-content: flex-end; align-items: center; gap: 10px; }
+.uk-status-row { display: flex; align-items: center; gap: 8px; min-height: 18px; }
+.uk-status-dot { width: 6px; height: 6px; border-radius: 999px; background: var(--color-k-dim); flex: none; }
+.uk-status-dot.is-busy { background: var(--color-brand); }
+.uk-status-text { font-family: var(--font-body); font-size: 13px; color: var(--color-k-dim); }
+
+/* ---- 주문 API 게이트 시트 ---- */
+.uk-split { display: flex; gap: 24px; padding: 4px 0; }
+.uk-split-col { flex: 1; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.uk-split-head { display: flex; align-items: center; gap: 8px; font-family: var(--font-strong); font-size: 13px; color: var(--color-k-dim); }
+.uk-dot-warn { width: 6px; height: 6px; border-radius: 999px; background: var(--color-warn); flex: none; }
+.uk-dot-dim { width: 6px; height: 6px; border-radius: 999px; background: var(--color-k-dim); flex: none; }
+.uk-tr-row { display: flex; gap: 10px; align-items: baseline; }
+.uk-tr-code { font-family: var(--font-mono); width: 96px; flex: none; color: var(--color-k-dim); font-size: 11px; }
+.uk-tr-name { font-family: var(--font-strong); width: 64px; flex: none; color: var(--color-k-text); font-size: 13px; }
+.uk-tr-actions { font-family: var(--font-body); color: var(--color-k-dim); font-size: 12px; }
+.uk-tr-foot { font-family: var(--font-body); color: var(--color-k-faint); font-size: 11px; padding-top: 4px; }
+.uk-closed-item { display: flex; flex-direction: column; gap: 3px; }
+.uk-closed-title { font-family: var(--font-strong); color: #F2F4F8; font-size: 14px; }
+.uk-closed-desc { font-family: var(--font-body); color: var(--color-k-dim); font-size: 12px; }
+
+.uk-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 0;
+  border-top: 1px solid var(--color-k-line-soft);
+  border-bottom: 1px solid var(--color-k-line-soft);
+}
+.uk-toggle-label { font-family: var(--font-strong); font-size: 14px; color: var(--color-k-text); }
+.uk-toggle-sub { font-family: var(--font-body); font-size: 12px; color: var(--color-k-faint); margin-top: 4px; }
+.uk-toggle {
+  width: 44px; height: 24px; padding: 0; flex: none;
+  border-radius: 999px;
+  background: var(--color-k-panel2);
+  border: 1px solid var(--color-k-line);
+  position: relative;
+  cursor: pointer;
+}
+.uk-toggle .uk-toggle-thumb {
+  position: absolute; top: 2px; left: 2px; width: 18px; height: 18px;
+  border-radius: 999px; background: var(--color-k-faint);
+  transition: transform var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease);
+}
+.uk-toggle.is-on { border-color: var(--color-brand); }
+.uk-toggle.is-on .uk-toggle-thumb { transform: translateX(20px); background: var(--color-brand); }
+@media (prefers-reduced-motion: reduce) {
+  .uk-toggle .uk-toggle-thumb { transition: none; }
+}
+
+.uk-checklist {
+  display: flex; flex-direction: column; gap: 6px;
+  padding: 12px 14px; border-radius: 8px; background: rgba(29, 34, 44, 0.35);
+}
+.uk-checklist-row { display: flex; align-items: center; justify-content: space-between; }
+.uk-checklist-label { display: flex; align-items: center; gap: 8px; font-family: var(--font-body); font-size: 13px; color: var(--color-k-text); }
+.uk-revert-note { font-family: var(--font-body); font-size: 12px; color: var(--color-k-dim); padding-top: 8px; }
+
+/* ---- MCP 등록 시트 ---- */
+.uk-alias-list { display: flex; flex-direction: column; border-radius: 6px; overflow: hidden; border: 1px solid var(--color-k-line-soft); }
+.uk-alias-row { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 1px solid var(--color-k-line-soft); background: rgba(29, 34, 44, 0.72); }
+.uk-alias-row:last-child { border-bottom: none; }
+.uk-alias-arrow { color: var(--color-k-faint); font-family: var(--font-mono); }
+.uk-staged-alias { font-family: var(--font-mono); font-size: 13px; color: var(--color-k-text); }
+.uk-gate-target { display: flex; align-items: center; gap: 10px; padding: 6px 0 4px; }
+.uk-pill-list { display: flex; flex-wrap: wrap; gap: 8px; }
+.uk-warnbox { display: flex; gap: 10px; padding: 10px 12px; border-radius: 8px; background: rgb(255 152 56 / 12%); border: 1px solid rgb(255 152 56 / 32%); }
+.uk-warnbox-icon {
+  width: 20px; height: 20px; border-radius: 999px; background: var(--color-warn); color: #3A2200;
+  display: flex; align-items: center; justify-content: center; font-family: var(--font-strong); font-size: 12px; flex: none;
+}
+.uk-warnbox-body { font-family: var(--font-body); font-size: 12px; color: var(--color-k-dim); }
+
+/* ---- probe · 툴 허용 시트 ---- */
+.uk-probe-head { display: flex; align-items: center; gap: 12px; padding-bottom: 6px; flex-wrap: wrap; }
+.uk-col-toolname { flex: 0 0 240px; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.uk-col-toollen { flex: 0 0 48px; white-space: nowrap; }
+.uk-col-tooldesc { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.uk-col-toolallow { flex: 0 0 120px; text-align: right; display: flex; justify-content: flex-end; white-space: nowrap; }
+.is-dim { color: #4A5566 !important; }
+.uk-row-oversized { background: rgb(255 152 56 / 5%); }
+.uk-oversized-note { font-family: var(--font-body); font-size: 11px; color: var(--color-warn); }
+.uk-probe-notes { display: flex; flex-direction: column; gap: 6px; padding: 10px 0; font-family: var(--font-body); font-size: 12px; color: var(--color-k-dim); }
+.uk-note-ok { color: var(--color-ok); font-family: var(--font-strong); }
+.uk-note-dim { color: var(--color-k-faint); font-family: var(--font-strong); }
+.uk-flex-spacer { flex: 1; }
+.uk-footer-count { flex: none; }
+
+.uk-check {
+  width: 16px; height: 16px; flex: none; border-radius: 2px; border: 1px solid #3A4150;
+  background: transparent; display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-strong); font-size: 11px; color: #12331A; cursor: pointer; padding: 0;
+}
+.uk-check.is-checked { background: var(--color-ok); border-color: var(--color-ok); }
+.uk-check.is-disabled { border-color: rgb(58 65 80 / 40%); color: #3A4150; cursor: default; }
+
+/* ---- 행 삭제 · 인라인 확인 (D3 — 계좌·MCP 목록 공용) ---- */
+.uk-col-actions { flex: 0 0 28px; display: flex; align-items: center; justify-content: flex-end; }
+.uk-row-delete {
+  width: 20px; height: 20px; padding: 0; border: 0; border-radius: 4px;
+  background: none; color: var(--color-k-faint);
+  font-family: var(--font-mono); font-size: 15px; line-height: 1;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+.uk-row-delete:hover:not(:disabled) { color: var(--color-warn); background: rgb(255 152 56 / 10%); }
+.uk-row-delete:disabled { color: rgb(107 116 128 / 40%); cursor: default; }
+
+.uk-row-confirm { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
+.uk-row-confirm-msg { font-family: var(--font-body); font-size: 12.5px; color: var(--color-k-dim); }
+/* 삭제 확정 버튼 — ghost 위에 경고색을 얹는다. primary(브랜드색)는 쓰지
+   않는다(MCP 카드는 "+ 서버 등록"이 이미 화면 내 유일한 브랜드색 자리다,
+   AT-ST-004 Desc 1.2). */
+.uk-btn.is-danger { color: var(--color-warn); border-color: rgb(255 152 56 / 42%); background: rgb(255 152 56 / 10%); }
+.uk-btn.is-danger:hover:not(:disabled) { background: rgb(255 152 56 / 18%); }
+
+/* ---- 카드별 닫기 (D7 — 계좌·MCP·stream·reader·table 5종 공용) ----
+   카드의 진짜 액션(등록·붙여넣기)과 경쟁하지 않도록 구분선 뒤 조용한
+   자리에 둔다 — 아이콘만, 배경 없음, 무채색. */
+.uk-card-close {
+  width: 20px; height: 20px; margin-left: 4px; padding-left: 14px;
+  border: 0; border-left: 1px solid var(--color-k-line-soft);
+  background: none; color: var(--color-k-faint);
+  font-family: var(--font-mono); font-size: 14px; line-height: 1;
+  cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.uk-card-close:hover { color: var(--color-k-text); }

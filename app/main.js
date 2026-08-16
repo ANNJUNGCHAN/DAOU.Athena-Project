@@ -3,6 +3,13 @@ const { app, BrowserWindow, ipcMain, screen } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
+// 설정·온보딩 화면군의 메인 프로세스 절반 (plan/paper-specs/00-통합-계획.md).
+// 비밀값은 secrets.js 밖으로 절대 안 나간다 — accounts.js가 내부적으로만 쓴다.
+const onboarding = require('./lib/main/onboarding');
+const cliAccounts = require('./lib/main/cli-accounts');
+const accounts = require('./lib/main/accounts');
+const mcpCli = require('./lib/main/mcp-cli');
+
 const MDEBUGLOG = path.join(__dirname, 'captures', 'main-debug.log');
 function mdlog(msg) {
   try { fs.appendFileSync(MDEBUGLOG, `${new Date().toISOString()} ${msg}\n`); } catch {}
@@ -124,7 +131,12 @@ async function createWindows() {
 }
 
 // ---------- 대화 창 높이 — 위로만 자란다, 입력줄(하단)은 고정 ----------
-ipcMain.on('athena:set-chat-height', (e, { height, manual }) => {
+// setChatHeight()로 뽑아낸 이유: 온보딩 완료 시("athena:onboarding-advance"가
+// done:true를 돌려줄 때) 메인 프로세스가 렌더러의 요청 없이 스스로 창을
+// 기본 높이로 되돌려야 한다(IPC 계약 — "when done is true, main returns the
+// chat window to base height itself"). 기존 수동 리사이즈 핸들러와 정확히
+// 같은 clamp·이동 로직을 공유한다.
+function setChatHeight(height) {
   if (!chatWin || chatWin.isDestroyed()) return;
   const clamped = Math.max(layout.chatBaseH, Math.min(layout.chatMaxH, Math.round(height)));
   if (clamped === chatHeight) return;
@@ -132,7 +144,9 @@ ipcMain.on('athena:set-chat-height', (e, { height, manual }) => {
   const y = chatBottom - chatHeight;
   chatWin.setBounds({ x: layout.originX, y, width: layout.chatW, height: chatHeight });
   if (canvasVisible) chatWin.moveTop(); // 확장 시 캔버스 창 위로 올라탄다(two-windows.md E3-확장)
-});
+}
+
+ipcMain.on('athena:set-chat-height', (e, { height }) => setChatHeight(height));
 
 // ---------- 점 → 캔버스 확장/수축 (spike v2.js 이식) ----------
 async function getDotScreenPoint() {
@@ -204,6 +218,163 @@ ipcMain.handle('athena__render_canvas', async (e, { type, mock, expand }) => {
   return { ok: true, type, mock: !!mock };
 });
 
+// ---------------------------------------------------------------------------
+// 온보딩 (AT-SY-002/003)
+// ---------------------------------------------------------------------------
+
+function handleOnboardingState() {
+  return onboarding.getState();
+}
+
+function handleOnboardingAdvance(e, { step } = {}) {
+  const result = onboarding.advance(step);
+  if (result.done) setChatHeight(layout.chatBaseH); // 계약: main이 스스로 기본 높이로 되돌린다
+  return result;
+}
+
+ipcMain.handle('athena:onboarding-state', handleOnboardingState);
+ipcMain.handle('athena:onboarding-advance', handleOnboardingAdvance);
+
+// ---------------------------------------------------------------------------
+// CLI 계정 (AT-SY-002)
+// ---------------------------------------------------------------------------
+
+function broadcastCliChanged() {
+  if (chatWin && !chatWin.isDestroyed()) {
+    chatWin.webContents.send('athena:cli-changed', cliAccounts.list());
+  }
+}
+
+// 로그인은 사용자가 별도 콘솔 창에서 완료한다(브라우저 로그인 연동 방식 자체가
+// 스펙 미정 — plan/paper-specs/AT-SY-002-온보딩-CLI연결.md §Open questions 4).
+// 이 프로세스는 완료 시점을 콜백으로 알 방법이 없으므로, 로그인 창을 띄운
+// 뒤 최대 60초간 2초 간격으로 목록을 다시 훑어(detectAndMerge) 변화가 보이면
+// 그때 한 번 athena:cli-changed를 쏜다 — 진짜 이벤트 기반 알림이 아니라
+// 최선 노력의 폴링이다. 정확한 콜백 메커니즘은 §7-3 열린 질문으로 남는다.
+function pollCliChangesAfterLogin() {
+  const before = JSON.stringify(cliAccounts.list());
+  let attempts = 0;
+  const timer = setInterval(() => {
+    attempts += 1;
+    const now = JSON.stringify(cliAccounts.list());
+    if (now !== before) {
+      clearInterval(timer);
+      broadcastCliChanged();
+    } else if (attempts >= 30) {
+      clearInterval(timer);
+    }
+  }, 2000);
+}
+
+function handleCliList() {
+  return cliAccounts.list();
+}
+
+async function handleCliLogin(e, { providerId } = {}) {
+  const result = await cliAccounts.login(providerId);
+  if (result.launched) pollCliChangesAfterLogin();
+  return result;
+}
+
+function handleCliSetActive(e, { accountId } = {}) {
+  const result = cliAccounts.setActive(accountId);
+  if (result.ok) broadcastCliChanged();
+  return result;
+}
+
+ipcMain.handle('athena:cli-list', handleCliList);
+ipcMain.handle('athena:cli-login', handleCliLogin);
+ipcMain.handle('athena:cli-set-active', handleCliSetActive);
+
+// ---------------------------------------------------------------------------
+// 계좌 (AT-SY-003, AT-ST-001/002/003, AT-CV-OAUTH)
+// ---------------------------------------------------------------------------
+
+function handleAccountList() {
+  return accounts.list();
+}
+
+async function handleAccountRegister(e, payload = {}) {
+  // payload = { alias, appKey, secretKey } — 값은 여기서 accounts.register()로
+  // 그대로 전달될 뿐, main.js의 어떤 변수에도 남지 않는다. mdlog()에 절대
+  // 넘기지 않는다(비밀값 로깅 금지 — AT-ST-007).
+  return accounts.register(payload);
+}
+
+function handleAccountSetActive(e, { id } = {}) {
+  return accounts.setActive(id);
+}
+
+function handleAccountRemove(e, { id } = {}) {
+  return accounts.remove(id);
+}
+
+function handleOrderApiSet(e, { id, enabled } = {}) {
+  return accounts.orderApiSet(id, enabled);
+}
+
+function handleAuthTokenStatus(e, { id } = {}) {
+  return accounts.tokenStatus(id);
+}
+
+function handleAuthTokenRefresh(e, { id } = {}) {
+  return accounts.tokenRefresh(id);
+}
+
+ipcMain.handle('athena:account-list', handleAccountList);
+ipcMain.handle('athena:account-register', handleAccountRegister);
+ipcMain.handle('athena:account-set-active', handleAccountSetActive);
+ipcMain.handle('athena:account-remove', handleAccountRemove);
+ipcMain.handle('athena:order-api-set', handleOrderApiSet);
+ipcMain.handle('athena:auth-token-status', handleAuthTokenStatus);
+ipcMain.handle('athena:auth-token-refresh', handleAuthTokenRefresh);
+
+accounts.onTokenChange((payload) => {
+  if (chatWin && !chatWin.isDestroyed()) {
+    chatWin.webContents.send('athena:auth-token-changed', payload);
+  }
+});
+
+// ---------------------------------------------------------------------------
+// MCP (AT-ST-004/005/006) — backend/athena_mcp CLI를 감싼다, 재구현하지 않는다.
+// ---------------------------------------------------------------------------
+
+function handleMcpList() {
+  return mcpCli.list();
+}
+
+function handleMcpStageSnippet(e, { snippet } = {}) {
+  return mcpCli.stageSnippet(snippet);
+}
+
+function handleMcpRegister(e, { staged } = {}) {
+  return mcpCli.register(staged);
+}
+
+function handleMcpApprove(e, { alias } = {}) {
+  return mcpCli.approve(alias);
+}
+
+function handleMcpProbe(e, { alias } = {}) {
+  return mcpCli.probe(alias);
+}
+
+function handleMcpAllowTool(e, { alias, tool, allowed } = {}) {
+  return mcpCli.allowTool(alias, tool, allowed);
+}
+
+function handleMcpRemove(e, { alias } = {}) {
+  return mcpCli.remove(alias);
+}
+
+ipcMain.handle('athena:mcp-list', handleMcpList);
+ipcMain.handle('athena:mcp-stage-snippet', handleMcpStageSnippet);
+ipcMain.handle('athena:mcp-register', handleMcpRegister);
+ipcMain.handle('athena:mcp-approve', handleMcpApprove);
+ipcMain.handle('athena:mcp-probe', handleMcpProbe);
+ipcMain.handle('athena:mcp-allow-tool', handleMcpAllowTool);
+ipcMain.handle('athena:mcp-remove', handleMcpRemove);
+
 // `require.main === module`은 Electron이 앱 진입점을 로드할 때 신뢰할 수 없다 —
 // 실측으로 확인: `electron .`(=npm start)로 띄워도 Electron의 내부 부트스트랩
 // 로더가 require.main을 이 모듈로 설정해주지 않아 항상 false였다. 그 결과
@@ -224,4 +395,28 @@ module.exports = {
   getDotScreenPoint,
   getWins: () => ({ chatWin, canvasWin }),
   getLayout: () => layout,
+  // 설정·온보딩 IPC 핸들러 — 실제 ipcMain.handle에 연결된 것과 동일한 함수
+  // 참조다(테스트용 별도 mock이 아니다). 검증 스크립트가 렌더러/IPC 왕복 없이
+  // 직접 호출해 반환 모양을 확인할 수 있게 노출한다.
+  settingsHandlers: {
+    onboardingState: handleOnboardingState,
+    onboardingAdvance: handleOnboardingAdvance,
+    cliList: handleCliList,
+    cliLogin: handleCliLogin,
+    cliSetActive: handleCliSetActive,
+    accountList: handleAccountList,
+    accountRegister: handleAccountRegister,
+    accountSetActive: handleAccountSetActive,
+    accountRemove: handleAccountRemove,
+    orderApiSet: handleOrderApiSet,
+    authTokenStatus: handleAuthTokenStatus,
+    authTokenRefresh: handleAuthTokenRefresh,
+    mcpList: handleMcpList,
+    mcpStageSnippet: handleMcpStageSnippet,
+    mcpRegister: handleMcpRegister,
+    mcpApprove: handleMcpApprove,
+    mcpProbe: handleMcpProbe,
+    mcpAllowTool: handleMcpAllowTool,
+    mcpRemove: handleMcpRemove,
+  },
 };

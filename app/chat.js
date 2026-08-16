@@ -1,5 +1,8 @@
 // 대화 창 렌더러. nodeIntegration:true / contextIsolation:false — spike/electron-glass 패턴 그대로.
 const { ipcRenderer } = require('electron');
+const onboarding = require('./lib/onboarding');
+const authScreen = require('./lib/auth-screen');
+const { el, progressDots } = require('./lib/ui-kit');
 
 const $boot = document.getElementById('boot');
 const $gaugeFill = document.getElementById('gaugeFill');
@@ -10,6 +13,8 @@ const $dot = document.getElementById('dot');
 const $lockHint = document.getElementById('lockHint');
 const $lockText = document.getElementById('lockText');
 const $grip = document.getElementById('grip');
+const $onboard = document.getElementById('onboard');
+const $onboardBody = document.getElementById('onboardBody');
 
 let layout = { chatBaseH: 204, chatMaxH: 788, scale: 1 };
 let manualOverride = false;
@@ -17,23 +22,125 @@ let currentHeight = layout.chatBaseH;
 let state = 'idle'; // idle | judging | calling | done(즉시 idle로 수렴)
 let liveProgressEl = null;
 let abortToken = 0;
+let onboardCleanup = null; // 현재 노출 중인 온보딩/인증 화면의 정리 함수(리스너·타이머 해제)
 
 // ---------- 부팅 게이지 ----------
+// D4 — 부팅(AT-SY-001)을 온보딩 3단계 중 1단계로 프레이밍한다. 온보딩 화면
+// 자체는 "2 / 3"·"3 / 3"뿐이고 "1 / 3"은 22개 아트보드 어디에도 없다
+// (README.md "설계에 없어서 지어낸 것" 표) — 그 빈 자리가 부팅이라는 결정이다.
+// 부팅 게이지는 최초 실행 여부와 무관하게 **매번** 뜬다(재실행 사용자도 본다).
+// 반면 2/3·3/3은 온보딩이 필요한 최초 실행 때만 이어진다. 그래서 "1 / 3" 표기와
+// 진행 점은 온보딩이 실제로 뒤따를 때만 보여준다 — 안 그러면 재실행 사용자에게
+// "3단계 중 1단계"라고 말해놓고 2단계로 이어지지 않는 거짓말이 된다. 이 판단을
+// 위해 onboarding-state 조회를 게이지 애니메이션과 동시에 시작한다(부팅 시간을
+// 늘리지 않고 그 안에서 미리 알아낸다).
 window.addEventListener('DOMContentLoaded', () => {
   requestAnimationFrame(() => {
     $gaugeFill.style.width = '100%';
   });
+
+  const onboardStatePromise = ipcRenderer.invoke('athena:onboarding-state').catch(() => {
+    // 채널이 아직 없거나 실패하면 "온보딩 필요"로 가정한다 — 온보딩을 건너
+    // 뛰고 정상 대화 화면을 보여주는 쪽이 훨씬 위험하다("건너뛰기 없음"
+    // 원칙, AT-SY-002/003). 이 fail-closed 결정은 발명이다 — 리포트 참고.
+    return { needed: true, step: 2 };
+  });
+  onboardStatePromise.then((s) => {
+    if (s && s.needed) showBootStepFraming();
+  });
+
   setTimeout(() => {
     $boot.style.transition = 'opacity 260ms ease';
     $boot.style.opacity = '0';
-    setTimeout(() => {
+    setTimeout(async () => {
       $boot.hidden = true;
-      $app.hidden = false;
-      $input.focus();
-      scheduleHeightSync();
+      const onboardState = await onboardStatePromise;
+      if (onboardState && onboardState.needed) {
+        startOnboarding(onboardState.step);
+      } else {
+        $app.hidden = false;
+        $input.focus();
+        scheduleHeightSync();
+      }
     }, 260);
   }, 1300);
 });
+
+// 새 부팅 화면을 만들지 않는다(D4 지시) — 있는 #boot에 온보딩과 같은 프리미티브
+// (ui-kit의 진행 점)·같은 스타일(onb-kicker)을 덧붙일 뿐이다. 진행 점은
+// ui-kit.css가 이미 무채색으로 고정해둔 컴포넌트라 D5(브랜드색은 [계속]에만)와도
+// 충돌하지 않는다.
+function showBootStepFraming() {
+  if ($boot.querySelector('.boot-step-kicker')) return; // 중복 호출 방지
+  const kicker = el('div', 'boot-step-kicker onb-kicker', '1 / 3');
+  $boot.insertBefore(kicker, $boot.firstChild);
+  $boot.appendChild(progressDots(3, 1));
+}
+
+// ---------- 온보딩(AT-SY-002/003) · 인증(AT-CV-OAUTH) 상태 머신 ----------
+// 대화 창을 chatMaxH로 확장한 상태에서 CLI 연결(2/3) → 계좌 연결(3/3) → 인증
+// 토큰 확인(등록 직후 1회) 순으로 진행하고, 끝나면 chatBaseH로 되돌려 AT-CH-001
+// (평소 대화 화면)로 넘어간다. 세 화면 모두 새 창이 아니라 이 컨테이너(#onboard)
+// 하나를 재사용한다(plan/paper-specs/00-통합-계획.md §1.1/§1.5).
+async function onboardAdvance(step) {
+  try {
+    const res = await ipcRenderer.invoke('athena:onboarding-advance', { step });
+    return !!(res && res.ok);
+  } catch (err) {
+    return false;
+  }
+}
+
+function startOnboarding(step) {
+  $onboard.hidden = false;
+  manualOverride = true; // 온보딩 동안은 대화 이력 기반 자동 성장 로직이 개입하지 않는다
+  ipcRenderer.send('athena:set-chat-height', { height: layout.chatMaxH, manual: false });
+  // 스펙 전체에 "1 / 3" 화면이 없다(00-통합-계획.md §7-2 열린 질문) — main이
+  // step:1을 돌려줘도 CLI 연결(2/3)부터 시작한다. 발명 — 리포트에 명시.
+  showOnboardingStep(step === 3 ? 3 : 2);
+}
+
+function showOnboardingStep(step) {
+  if (onboardCleanup) { onboardCleanup(); onboardCleanup = null; }
+  if (step === 3) {
+    onboardCleanup = onboarding.renderAccountStep($onboardBody, {
+      onRegistered: (accountId) => showAuthConfirm(accountId),
+    });
+  } else {
+    onboardCleanup = onboarding.renderCliStep($onboardBody, {
+      onContinue: async () => {
+        const ok = await onboardAdvance(2);
+        if (ok) showOnboardingStep(3);
+        return ok;
+      },
+    });
+  }
+}
+
+function showAuthConfirm(accountId) {
+  if (onboardCleanup) { onboardCleanup(); onboardCleanup = null; }
+  onboardCleanup = authScreen.renderAuthTokenStatus($onboardBody, {
+    accountId,
+    embedded: true,
+    onContinue: async () => {
+      const ok = await onboardAdvance(3);
+      if (ok) finishOnboarding();
+      return ok;
+    },
+  });
+}
+
+function finishOnboarding() {
+  if (onboardCleanup) { onboardCleanup(); onboardCleanup = null; }
+  $onboard.hidden = true;
+  $app.hidden = false;
+  manualOverride = false;
+  // main이 done:true 응답 시 스스로 축소한다(house rule IPC 계약) — 이 호출은
+  // 그 경로가 아직 없거나 실패했을 때를 위한 방어적 폴백이다.
+  ipcRenderer.send('athena:set-chat-height', { height: layout.chatBaseH, manual: false });
+  $input.focus();
+  scheduleHeightSync();
+}
 
 // ---------- 초기 레이아웃 정보 수신 ----------
 ipcRenderer.on('athena:init', (e, payload) => {
@@ -103,6 +210,11 @@ const CANVAS_PLAN = {
   stream: { label: '스트림', tool: 'search_news' },
   reader: { label: '리더', tool: 'download_document' },
   table: { label: '공통 테이블', tool: 'get_financial_statement' },
+  // AT-ST-001/AT-ST-004 제어 캔버스 트리거 — 카드 자체는 canvas.js가 그린다
+  // (00-통합-계획.md §4.1). tool 코드는 실제 TR/MCP 툴 이름이 아직 없어 이
+  // 대화 창 진행 표시용으로만 쓰는 자리표시자다 — 발명, 리포트에 명시.
+  accounts: { label: '계좌', tool: 'account_list' },
+  mcp: { label: 'MCP 서버', tool: 'mcp_server_list' },
 };
 
 function pickCanvasTypes(text) {
@@ -111,6 +223,8 @@ function pickCanvasTypes(text) {
   if (/뉴스|스트림|news/i.test(t)) picked.push('stream');
   if (/공시|리더|마크다운|reader/i.test(t)) picked.push('reader');
   if (/재무|표|테이블|table/i.test(t)) picked.push('table');
+  if (/계좌|account/i.test(t)) picked.push('accounts');
+  if (/MCP|엠씨피/i.test(t)) picked.push('mcp');
   // 키워드가 하나도 안 걸리면 기본값 — 3종 모두 (모자이크 데모)
   return picked.length ? picked : ['stream', 'reader', 'table'];
 }

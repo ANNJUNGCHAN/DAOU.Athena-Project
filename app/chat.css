@@ -173,3 +173,384 @@ html, body { background: transparent; }
   border-radius: 4px;
   padding: 1px 6px;
 }
+
+/* ==========================================================================
+   온보딩(AT-SY-002/003) · 인증(AT-CV-OAUTH) — #onboard(.app.glass)의 콘텐츠.
+   #onboard 자체가 이미 .app과 같은 유리 패널(창)이므로, 여기서는 스펙의
+   800px "Onboarding Window" 목업을 창 안에 가운데 정렬된 콘텐츠 컬럼으로만
+   재현한다 — 두 번째 카드/테두리를 덧그리지 않는다
+   (plan/paper-specs/00-통합-계획.md §1.1).
+   ========================================================================== */
+.onb-root { position: absolute; inset: 0; }
+
+.onb-col {
+  height: 100%;
+  width: 800px;
+  max-width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.onb-head {
+  flex-shrink: 0;
+  padding: 40px 42px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+.onb-kicker {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.22em;
+  color: rgb(242 244 248 / 42%);
+}
+.onb-title {
+  font-family: var(--font-display);
+  font-size: 28px;
+  line-height: 34px;
+  letter-spacing: -0.02em;
+  color: var(--color-k-text);
+}
+.onb-sub {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 22px;
+  color: rgb(242 244 248 / 54%);
+}
+
+.onb-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  padding: 26px 42px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.onb-foot {
+  flex-shrink: 0;
+  height: 70px;
+  padding: 0 42px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border-top: 1px solid rgb(255 255 255 / 11%);
+}
+.onb-spacer { flex: 1; }
+
+.onb-hint {
+  padding-top: 5px;
+  font-family: var(--font-body);
+  font-size: 11px;
+  line-height: 18px;
+  color: rgb(242 244 248 / 38%);
+}
+.onb-error-slot:empty { display: none; }
+
+/* ---------- CLI 목록 (AT-SY-002) ---------- */
+.onb-cli-list { display: flex; flex-direction: column; gap: 9px; }
+
+.onb-cli-card {
+  border-radius: 11px;
+  background: rgb(255 255 255 / 5%);
+  border: 1px solid rgb(255 255 255 / 16%);
+  overflow: hidden;
+}
+.onb-cli-card-head {
+  height: 48px;
+  padding: 0 15px;
+  gap: 13px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgb(255 255 255 / 9%);
+}
+.onb-cli-spacer { flex: 1; }
+.onb-cli-name {
+  font-family: var(--font-strong);
+  font-size: 14px;
+  line-height: 18px;
+  color: var(--color-k-text);
+}
+.onb-cli-waiting {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: rgb(242 244 248 / 54%);
+}
+
+.onb-cli-account-row {
+  height: 42px;
+  padding: 0 15px 0 35px;
+  gap: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+/* D5 — [계속]이 화면 내 유일한 브랜드색 요소여야 한다(AT-SY-002 Desc 5, ui-kit.css
+   .uk-badge.is-active 주석과 같은 결정). 목업 픽셀은 이 행 배경에도 브랜드색
+   10%를 썼지만 규칙 쪽을 택해 중립 흰색 알파로 바꿨다 — switch-row.is-active와
+   같은 톤(rgb(255 255 255 / 6%))을 재사용한다. */
+.onb-cli-account-row.is-active { background: rgb(255 255 255 / 6%); }
+.onb-cli-account-row.is-clickable { cursor: pointer; }
+.onb-cli-account-row.is-clickable:hover { background: rgb(255 255 255 / 5%); }
+.onb-cli-email {
+  font-family: var(--font-body);
+  font-size: 12px;
+  line-height: 16px;
+  color: rgb(242 244 248 / 92%);
+}
+
+.onb-cli-row {
+  height: 52px;
+  padding: 0 15px;
+  gap: 13px;
+  display: flex;
+  align-items: center;
+  border-radius: 11px;
+  background: rgb(255 255 255 / 3%);
+  border: 1px solid rgb(255 255 255 / 10%);
+}
+.onb-cli-row.is-clickable { cursor: pointer; }
+.onb-cli-namecol { display: flex; flex-direction: column; gap: 2px; }
+.onb-cli-email-sm {
+  font-family: var(--font-body);
+  font-size: 10px;
+  line-height: 12px;
+  color: rgb(242 244 248 / 44%);
+}
+
+/* ---------- 계좌 등록 폼 (AT-SY-003) ---------- */
+.onb-form { display: flex; flex-direction: column; gap: 16px; }
+.onb-field { display: flex; flex-direction: column; gap: 8px; }
+.onb-field-label {
+  font-family: var(--font-body);
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--color-k-dim);
+}
+.onb-input-row {
+  height: 44px;
+  padding: 0 14px;
+  border-radius: 6px;
+  background: rgb(16 19 26 / 55%);
+  border: 1px solid var(--color-k-line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.onb-input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: 13px;
+}
+.onb-input-mono {
+  font-family: var(--font-mono);
+  letter-spacing: 2px;
+  color: var(--color-k-text);
+}
+.onb-input-right {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 14px;
+  color: var(--color-k-faint);
+}
+.onb-field-helper {
+  font-family: var(--font-body);
+  font-size: 11px;
+  line-height: 15px;
+  color: var(--color-k-faint);
+}
+
+.onb-savebox {
+  padding: 14px 16px;
+  border-radius: 6px;
+  background: rgb(29 34 44 / 50%);
+  border: 1px solid #262c38;
+  display: flex;
+}
+.onb-savebox-inner { display: flex; flex-direction: column; gap: 4px; }
+.onb-savebox-title {
+  font-family: var(--font-strong);
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--color-k-text);
+}
+.onb-savebox-body {
+  font-family: var(--font-body);
+  font-size: 11px;
+  line-height: 15px;
+  color: var(--color-k-faint);
+}
+
+/* ==========================================================================
+   인증(AT-CV-OAUTH) — 토큰 상태 · 4상태 · 계좌 전환
+   ========================================================================== */
+.onb-auth-body { gap: 20px; }
+.onb-auth-foot {
+  flex-shrink: 0;
+  height: 88px;
+  padding: 0 42px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  border-top: 1px solid rgb(255 255 255 / 9%);
+}
+
+/* uk-dot은 on(초록)/off(흰 22%) 2색만 안다 — 주황(경고) 상태는 여기 scope 안에서만
+   덮어쓴다(ui-kit.css를 직접 고치지 않는다). */
+.onb-auth .uk-dot.is-warn { background: var(--color-warn); }
+
+.auth-timer-card {
+  padding: 26px 28px;
+  border-radius: 14px;
+  background: rgb(36 42 54 / 55%);
+  border: 1px solid rgb(255 255 255 / 9%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.auth-timer-label {
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 18px;
+  color: rgb(230 232 238 / 62%);
+}
+.auth-timer-row { display: flex; align-items: baseline; gap: 14px; }
+.auth-timer-digits {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 72px;
+  line-height: 78px;
+  letter-spacing: -1px;
+  color: var(--color-k-text);
+  white-space: nowrap;
+}
+.auth-timer-digits.is-warn { color: var(--color-warn); }
+.auth-timer-digits.is-dim { color: rgb(230 232 238 / 30%); }
+.auth-timer-units {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 20px;
+  color: rgb(230 232 238 / 45%);
+}
+.auth-timer-expiry {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+  line-height: 18px;
+  color: rgb(230 232 238 / 62%);
+  min-height: 18px;
+}
+
+.auth-status-rows { display: flex; flex-direction: column; }
+.auth-status-rows .uk-lrow { border-bottom: 1px solid rgb(255 255 255 / 7%); }
+.auth-status-rows .uk-lrow:last-child { border-bottom: none; }
+.auth-acc-row.is-clickable,
+.uk-lrow.is-clickable { cursor: pointer; }
+.uk-lrow.is-clickable:hover .uk-lrow-value { color: var(--color-k-text); }
+
+.auth-status-left { display: flex; align-items: center; gap: 9px; }
+.auth-status-label {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 20px;
+  color: rgb(230 232 238 / 78%);
+}
+.auth-btn-group { display: flex; align-items: center; gap: 10px; }
+.auth-btn-group .uk-btn-ghost,
+.auth-btn-group .uk-btn-primary { height: 40px; padding: 0 20px; border-radius: 6px; }
+.auth-btn-group .uk-btn-text { height: 40px; padding: 0 20px; }
+
+/* ---------- 계좌 전환 (AT-CV-OAUTH-계좌-전환) ---------- */
+.switch-count {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 16px;
+  letter-spacing: 0.06em;
+  color: rgb(230 232 238 / 35%);
+}
+.switch-list { display: flex; flex-direction: column; gap: 8px; }
+.switch-row {
+  height: 74px;
+  padding: 0 20px;
+  border-radius: 10px;
+  gap: 16px;
+  display: flex;
+  align-items: center;
+  border: 1px solid rgb(255 255 255 / 10%);
+}
+.switch-row.is-active { background: rgb(255 255 255 / 6%); border-color: rgb(255 255 255 / 22%); }
+.switch-row.is-clickable { cursor: pointer; }
+.switch-row.is-clickable:hover { background: rgb(255 255 255 / 4%); }
+/* D5 — 이 화면(계좌 전환)의 유일한 브랜드색 요소는 "전환하고 다시 인증" 버튼
+   (uk-btn-primary)이어야 한다. 선택 표시를 브랜드색 테두리로 하면 같은 화면에
+   브랜드 요소가 2개가 된다 — 중립 밝은 흰색 테두리로 바꿔 선택 상태 표시 기능은
+   유지하되(is-active 22%보다 밝게 해 구분됨) 브랜드색은 버튼 하나에만 남긴다. */
+.switch-row.is-selected { border-color: rgb(255 255 255 / 55%); }
+.switch-dot {
+  width: 7px; height: 7px; border-radius: 999px; flex: none;
+  border: 1px solid rgb(255 255 255 / 22%);
+}
+.switch-dot.is-filled { background: var(--color-ok); border-color: transparent; }
+.switch-namecol { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.switch-name { font-family: var(--font-strong); font-size: 15px; line-height: 20px; color: var(--color-k-text); }
+.switch-sub {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+  line-height: 17px;
+  color: rgb(230 232 238 / 45%);
+}
+.switch-badge {
+  height: 22px;
+  padding: 0 9px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-body);
+  font-size: 12px;
+  line-height: 16px;
+  background: rgb(122 160 200 / 16%);
+  color: rgb(200 220 240 / 86%);
+}
+.switch-state {
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 18px;
+  color: rgb(230 232 238 / 45%);
+}
+.switch-row.is-active .switch-state { color: rgb(230 232 238 / 62%); }
+
+.switch-warning { display: flex; gap: 10px; padding-top: 6px; }
+.switch-warning-bar { width: 3px; border-radius: 999px; background: var(--color-warn); align-self: stretch; }
+.switch-warning-text {
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 21px;
+  color: rgb(230 232 238 / 62%);
+}
+
+.switch-flow { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding-top: 4px; }
+.switch-flow-step,
+.switch-flow-arrow {
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 18px;
+  color: rgb(230 232 238 / 62%);
+}
+.switch-flow-arrow { color: rgb(230 232 238 / 28%); }
+
+.switch-footer-btns { display: flex; align-items: center; gap: 10px; }
+.switch-footer-btns .uk-btn-primary,
+.switch-footer-btns .uk-btn-text { height: 40px; padding: 0 20px; }

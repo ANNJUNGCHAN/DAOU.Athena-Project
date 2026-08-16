@@ -1,0 +1,8 @@
+[athena-mcp] 연결됨 server-everything: 툴 13개
+[athena-mcp] 연결 실패 isnow890-naver-search-mcp: McpError: Connection closed — 이 서버만 건너뛴다
+[athena-mcp]   upstream stderr: C:\Users\ajc22\AppData\Local\Temp\athena-graft\logs\isnow890-naver-search-mcp.log
+[athena-mcp] 연결됨 drfirst-korea-stock-mcp: 툴 6개
+[athena-mcp] 연결 실패 user-registered-very--1f1e99: McpError: Connection closed — 이 서버만 건너뛴다
+[athena-mcp]   upstream stderr: C:\Users\ajc22\AppData\Local\Temp\athena-graft\logs\user-registered-very--1f1e99.log
+[athena-mcp] 연결됨 pykrx: 툴 8개
+Tool 'server-everything__get-env' not listed, no validation will be performed

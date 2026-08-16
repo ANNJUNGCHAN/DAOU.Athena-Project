@@ -201,6 +201,19 @@ class ConsentStore:
         self.save()
 
     def disallow_tool(self, alias: str, tool_name: str) -> None:
+        """`allow_tool()`의 역연산 — 툴별 allowlist에서 하나를 뺀다.
+
+        `allow_tool()`은 "서버가 아직 승인 안 됐다"를 이유로 막지만
+        (`ConsentNotGrantedError`), 이 함수는 **그 확인을 하지 않는다** —
+        일부러다. 권한을 부여하는 쪽은 전제조건이 있어야 안전하지만, 권한을
+        회수하는 쪽은 반대다: 서버가 미승인이든, 그 툴을 애초에 allow한 적이
+        없든, 이 호출이 끝나면 "이 툴은 허용 안 됨"이라는 목표 상태는 이미
+        달성돼 있다. 그래서 두 경우 다 예외 없이 조용히 성공한다
+        (`set.discard()`와 같은 멱등 연산) — 없는 걸 지우라는 요청을 에러로
+        만들면 "혹시 몰라 한 번 더 disallow" 같은 방어적 호출이 쓸데없이
+        실패한다. `조용히 자르지 않는다` 원칙과는 충돌하지 않는다 — 결과를
+        숨기거나 왜곡하는 게 아니라 이미 도달한 상태를 정확히 보고할 뿐이다.
+        """
         record = self._records.get(alias)
         if record is None:
             return
@@ -221,6 +234,23 @@ class ConsentStore:
             raise ConsentNotGrantedError(
                 f"{alias!r} 서버는 아직 승인되지 않았다 — 명령 실행(spawn) 자체가 금지된다"
             )
+
+    def rename(self, old_alias: str, new_alias: str) -> None:
+        """승인 기록을 새 별칭으로 옮긴다.
+
+        승인 기록은 별칭을 키로 쓰므로, 레지스트리만 rename하고 여기를 안 옮기면
+        **이미 승인한 서버가 조용히 미승인 상태로 되돌아간다**(다음 spawn이
+        `ConsentNotGrantedError`로 막힌다). 승인은 "이 명령을 실행해도 좋다"는
+        판단이지 "이 이름을 신뢰한다"가 아니므로, 명령이 그대로인 rename에서
+        승인은 따라가는 게 맞다. 기록이 없으면 조용히 아무것도 하지 않는다
+        (등록만 하고 승인 요청 전인 서버의 rename은 정상 흐름이다).
+        """
+        record = self._records.pop(old_alias, None)
+        if record is None:
+            return
+        record.alias = new_alias
+        self._records[new_alias] = record
+        self.save()
 
     def get(self, alias: str) -> ConsentRecord | None:
         return self._records.get(alias)

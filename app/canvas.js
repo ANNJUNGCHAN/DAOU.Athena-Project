@@ -4,6 +4,7 @@ const { ipcRenderer } = require('electron');
 const { sanitize } = require('./lib/sanitize');
 const { renderMarkdownInto } = require('./lib/markdown');
 const { loadStreamItems, loadFinancialStatement, loadReaderMarkdown } = require('./lib/mockdata');
+const { renderAccounts, renderMcp } = require('./lib/settings-cards');
 
 const mosaic = document.getElementById('mosaic');
 const sheen = document.getElementById('sheen');
@@ -86,6 +87,33 @@ function freshLabel() {
   return `${hh}:${mm}:${ss} 기준`;
 }
 
+// ---------- 카드별 닫기 (D7) ----------
+// 지금까지 전역 Esc(athena:collapse-canvas → 캔버스 전체 접기)만 있었다 —
+// 설계가 여는 법만 정하고 카드 하나만 닫는 법은 안 정했다. accounts/mcp
+// 카드(lib/settings-cards.js)에 같은 어포던스를 다는 김에 여기 3개 카드
+// (stream/reader/table)도 일관되게 맞춘다 — 5개 카드 중 2개만 닫히면
+// 사용자 입장에서 더 헷갈린다는 판단(기존 동작 확장, 보고서에 별도로 남김).
+// 마지막 카드를 닫으면 빈 유리창을 남기지 않고 캔버스 자체를 접는다 — Esc가
+// 쓰는 채널을 그대로 재사용한다.
+function closeCard(card) {
+  const parent = card.parentElement;
+  card.remove();
+  if (parent && !parent.querySelector('.card')) {
+    ipcRenderer.send('athena:collapse-canvas');
+  }
+}
+
+function cardCloseButton(card) {
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'uk-card-close';
+  b.setAttribute('aria-label', '카드 닫기');
+  b.title = '이 카드 닫기';
+  b.textContent = '×';
+  b.addEventListener('click', () => closeCard(card));
+  return b;
+}
+
 function makeCard(type, title) {
   const existing = grid.querySelector(`.card.${type}`);
   if (existing) existing.remove(); // 재요청 시 새로 갱신
@@ -99,8 +127,12 @@ function makeCard(type, title) {
   const fresh = document.createElement('div');
   fresh.className = 'card-fresh';
   fresh.textContent = freshLabel();
+  const rightGroup = document.createElement('div');
+  rightGroup.className = 'card-head-right';
+  rightGroup.appendChild(fresh);
+  rightGroup.appendChild(cardCloseButton(card));
   head.appendChild(h);
-  head.appendChild(fresh);
+  head.appendChild(rightGroup);
   const body = document.createElement('div');
   body.className = 'card-body';
   card.appendChild(head);
@@ -113,6 +145,11 @@ function addCard(type) {
   if (type === 'stream') return renderStream();
   if (type === 'reader') return renderReader();
   if (type === 'table') return renderTable();
+  // 계좌(AT-ST-001)·MCP(AT-ST-004) 제어 캔버스 카드 — 등록·활성화·승인·probe
+  // 시트는 새 카드/새 창이 아니라 이 카드들 내부의 오버레이다
+  // (plan/paper-specs/00-통합-계획.md §1.2/1.3, lib/settings-cards.js).
+  if (type === 'accounts') return renderAccounts(grid);
+  if (type === 'mcp') return renderMcp(grid);
 }
 
 // ① 스트림 — sanitize한 문자열은 절대 innerHTML로 넣지 않는다. textContent로만.
