@@ -33,9 +33,15 @@ inspiration notes.
 
 ### Working In This Directory
 - `round-1R/two-windows.md` is the authoritative window spec; `round-1/` is history — don't cite it.
-- **"창" is ambiguous — always say which.** `soul.md` §3 now separates 상시 창 (대화 창 · 캔버스 창)
-  from 일시 표면 (설정창 · 팝업창). The §8 elimination rule "상시 창이 셋 이상" counts persistent
-  windows only. Full definitions live in `GLOSSARY.md` §1.
+- **There are exactly two windows — 대화 창 and 캔버스 창. No exceptions.** Everything else
+  (온보딩 · 인증 · 설정 · 주문 확인) is a **mode of the 대화 창**, not a window. `soul.md` §3,
+  `GLOSSARY.md` §1. "설정창" / "팝업창" / "일시 표면" are retired terms — don't reintroduce them.
+- **설정 모드 is entered by pressing `#dot`** (the magenta dot at the left of the input row), or
+  from the command bar. The command-bar path must always exist or §8 elimination applies.
+- **Want a new window? Solve it as a mode first.**
+- **Neither window has a title bar.** `main.js:60` is `frame: false` and `chat.html` has no title-bar
+  markup. Window control is `#grip` + OS shortcuts. `round-1R/two-windows.md:122` still lists the
+  canvas title bar as unresolved — don't draw one without closing that question first.
 - When a spec value cannot be implemented, record why in the implementing code and in `app/README.md`
   rather than silently dropping it (e.g. Electron `backgroundMaterial` exposes no runtime blur radius,
   so the "refraction 0.46→0.17" value is unimplementable as written).
