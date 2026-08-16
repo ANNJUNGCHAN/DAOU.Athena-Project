@@ -25,7 +25,7 @@ is the first thing to read in a new session. Documents are Korean.
 | `window-api-manual.md` | **Per-surface API map.** Which API each surface calls: 설정 모드 (3 endpoints + 6 IPC) vs 캔버스 창 (selector 4-tool -> callable ops). Review-pending, and its counts predate the split-base removal |
 | `감시에이전트-실행계획.md` | Monitoring-agent execution plan (not yet built) |
 | `2026-08-15-athena-progress-and-llm-selector.md` | Dated progress + selector snapshot |
-| `canvas-taxonomy.md` | Canvas type taxonomy |
+| `canvas-taxonomy.md` | **Card** taxonomy (12 kinds). Filename still says "canvas" — the term was unified to 카드 on 2026-08-17; see `GLOSSARY.md` §2 |
 | `ultragoal-screen-state.json` | Machine state for the screen-selection Ultragoal |
 | `Athena 프로젝트.txt`, `아테나 컨셉 및 추가 아이디어.txt`, `YC가 알려주는…스크립트.txt` | Source concept notes |
 
