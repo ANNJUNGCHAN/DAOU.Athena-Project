@@ -3,6 +3,8 @@
 
 # selector
 
+> Terminology: [`GLOSSARY.md`](../../../GLOSSARY.md) is the standard vocabulary for this repo. Use its definitions; register new terms there before using them in code.
+
 ## Purpose
 Deterministic, allowlisted operation selection for LLM clients. Keeps the 323-operation catalog
 server-side (286 generic-callable query identities, 35 discovery-only order/WebSocket identities,
