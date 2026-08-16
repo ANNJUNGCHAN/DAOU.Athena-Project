@@ -54,6 +54,7 @@ class VerifiedPlan:
     next_key: str | None
     question_hash: str
     expires_at: datetime
+    account: str
 
 
 class PlanSigner:
@@ -84,6 +85,7 @@ class PlanSigner:
         question_digest: str | None = None,
         cont_yn: str = "N",
         next_key: str | None = None,
+        account: str = "",
     ) -> tuple[str, datetime]:
         now = int(self._clock())
         digest = question_digest or question_hash(question or "")
@@ -100,6 +102,9 @@ class PlanSigner:
             "request_schema_hash": document.request_schema_hash,
             "response_schema_hash": document.response_schema_hash,
             "question_hash": digest,
+            # Kiwoom's wire protocol carries no account field, so nothing downstream would
+            # notice a plan resolved for one account being replayed against another.
+            "account": account,
         }
         encoded_payload = _b64encode(_canonical_json(payload))
         signing_input = f"v1.{encoded_payload}".encode("ascii")
@@ -109,7 +114,9 @@ class PlanSigner:
             datetime.fromtimestamp(payload["exp"], tz=UTC),
         )
 
-    def verify(self, token: str, catalog: OperationCatalog) -> VerifiedPlan:
+    def verify(
+        self, token: str, catalog: OperationCatalog, *, expected_account: str = ""
+    ) -> VerifiedPlan:
         parts = token.split(".")
         if len(parts) != 3 or parts[0] != "v1":
             raise InvalidPlanError("Plan token format is invalid")
@@ -135,9 +142,12 @@ class PlanSigner:
             "request_schema_hash",
             "response_schema_hash",
             "question_hash",
+            "account",
         }
         if not isinstance(payload, dict) or set(payload) != required_keys or payload.get("v") != 1:
             raise InvalidPlanError("Plan payload contract is invalid")
+        if not isinstance(payload["account"], str) or payload["account"] != expected_account:
+            raise InvalidPlanError("Plan was issued for a different account")
         if not isinstance(payload["exp"], int) or payload["exp"] <= int(self._clock()):
             raise ExpiredPlanError("Plan token has expired")
         if payload["catalog_version"] != catalog.version:
@@ -151,7 +161,7 @@ class PlanSigner:
             or payload["response_schema_hash"] != document.response_schema_hash
         ):
             raise StalePlanError("Plan schema is stale")
-        if not document.generic_callable or document.kind != "query":
+        if not document.generic_callable:
             raise InvalidPlanError("Plan operation is not generic-callable")
         arguments = payload["arguments"]
         if not isinstance(arguments, dict):
@@ -167,6 +177,7 @@ class PlanSigner:
             next_key=payload["next_key"],
             question_hash=payload["question_hash"],
             expires_at=datetime.fromtimestamp(payload["exp"], tz=UTC),
+            account=payload["account"],
         )
 
     def refresh(
@@ -185,4 +196,6 @@ class PlanSigner:
             question_digest=plan.question_hash,
             cont_yn=cont_yn,
             next_key=next_key,
+            # A continuation stays on the account that opened it; never re-target it.
+            account=plan.account,
         )

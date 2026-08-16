@@ -2,9 +2,11 @@
 
 import asyncio
 from collections import OrderedDict
+from typing import Any
 
 from fastapi import FastAPI, HTTPException
 
+from athena_api.accounts import account_runtimes, default_account_alias
 from athena_api.api import router as api_router
 from athena_api.config import Settings, get_settings
 from athena_api.errors import install_exception_handlers
@@ -41,6 +43,35 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         if client is None or not client.is_ready:
             raise HTTPException(status_code=503, detail="Kiwoom data service is not ready")
         return {"status": "ready"}
+
+    @app.get(
+        "/ready/accounts",
+        tags=["Service"],
+        summary="Per-account Kiwoom readiness",
+        openapi_extra={"x-athena-llm-exposed": False},
+    )
+    async def ready_accounts() -> dict[str, Any]:
+        """Report each account separately so a 1-of-N auth failure is visible.
+
+        Always 200: /ready already answers the process-level question, and collapsing N
+        accounts into one boolean is what hides the degraded one.
+        """
+        runtimes = account_runtimes(app)
+        return {
+            "default": default_account_alias(app),
+            "accounts": {
+                alias: {
+                    "ready": runtime.ready,
+                    "websocket": runtime.ws_client is not None and runtime.ws_client.is_ready,
+                    "order_scopes": (
+                        None
+                        if runtime.order_scopes is None
+                        else sorted(scope.value for scope in runtime.order_scopes)
+                    ),
+                }
+                for alias, runtime in runtimes.items()
+            },
+        }
 
     app.include_router(api_router)
     return app

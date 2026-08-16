@@ -18,6 +18,14 @@ class KiwoomAuthError(KiwoomError):
     """Kiwoom token issuance failed without retaining credential material."""
 
 
+class UnknownAccountError(KiwoomError):
+    """The caller named a Kiwoom account alias that is not configured."""
+
+
+class OrderScopeError(KiwoomError):
+    """The addressed account is not permitted to place this family of order."""
+
+
 class KiwoomApiError(KiwoomError):
     def __init__(self, code: str, message: str, http_status: int) -> None:
         super().__init__(f"Kiwoom request failed with code {code}")
@@ -30,6 +38,7 @@ def install_exception_handlers(app: FastAPI) -> None:
     from athena_api.kiwoom.ws_client import KiwoomWsError
     from athena_api.selector.errors import (
         AmbiguousOperationError,
+        DetailGroupRequiredError,
         ExpiredPlanError,
         InvalidArgumentsError,
         InvalidPlanError,
@@ -50,6 +59,7 @@ def install_exception_handlers(app: FastAPI) -> None:
         (InvalidArgumentsError, 422),
         (UnsupportedOperationError, 403),
         (UnknownDetailGroupError, 422),
+        (DetailGroupRequiredError, 422),
         (PreferredOperationError, 409),
         (AmbiguousOperationError, 409),
         (NoConfidentMatchError, 404),
@@ -73,6 +83,22 @@ def install_exception_handlers(app: FastAPI) -> None:
                 "message": str(exc),
                 "details": exc.details,
             },
+        )
+
+    @app.exception_handler(UnknownAccountError)
+    async def unknown_account_handler(
+        _request: Request, exc: UnknownAccountError
+    ) -> JSONResponse:
+        return JSONResponse(
+            status_code=404,
+            content={"detail": "Kiwoom account is not configured", "message": str(exc)},
+        )
+
+    @app.exception_handler(OrderScopeError)
+    async def order_scope_handler(_request: Request, exc: OrderScopeError) -> JSONResponse:
+        return JSONResponse(
+            status_code=403,
+            content={"detail": "Account is not permitted to place this order", "message": str(exc)},
         )
 
     @app.exception_handler(KiwoomNotReadyError)

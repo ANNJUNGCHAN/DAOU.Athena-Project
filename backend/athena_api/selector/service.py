@@ -7,10 +7,13 @@ from typing import Any
 from fastapi import Request, Response
 from pydantic import ValidationError
 
-from athena_api.generated.runtime import call_typed_tr
+from athena_api.errors import KiwoomNotReadyError
+from athena_api.generated.registry import SPLIT_BASE_TR_IDS
+from athena_api.generated.runtime import call_order_tr, call_typed_tr, call_websocket_tr
 
-from .catalog import OperationCatalog, OperationDocument
+from .catalog import OperationCatalog, OperationDocument, realtime_item_model
 from .errors import (
+    DetailGroupRequiredError,
     InvalidArgumentsError,
     OperationNotFoundError,
     PreferredOperationError,
@@ -116,16 +119,29 @@ class SelectorService:
         if document is None or not _intent_allows(document, request.intent):
             raise OperationNotFoundError("Operation was not found")
         if document.kind == "query":
-            execution_policy = (
-                "selector_detail" if document.group_id else "selector_query"
-            )
             policy_reasons: list[ReasonCode] = []
+            if document.group_id:
+                execution_policy = "selector_detail"
+            elif document.tr_id in SPLIT_BASE_TR_IDS:
+                # Discoverable so the model can read detail_groups, then call one of them.
+                execution_policy = "selector_detail_required"
+                policy_reasons = [ReasonCode.DETAIL_GROUP_REQUIRED]
+            else:
+                execution_policy = "selector_query"
         elif document.kind == "order":
-            execution_policy = "direct_guarded_order_only"
-            policy_reasons = [ReasonCode.DISCOVERY_ONLY]
+            execution_policy = "selector_guarded_order"
+            policy_reasons = [ReasonCode.GUARDED_EXECUTION]
         else:
-            execution_policy = "direct_websocket_control_only"
-            policy_reasons = [ReasonCode.DISCOVERY_ONLY]
+            execution_policy = "selector_websocket_control"
+            policy_reasons = [ReasonCode.WEBSOCKET_CONTROL_ONLY]
+        # The envelope model's four fields (return_code, return_msg, trnm, data) are the
+        # same across all 23 realtime types and tell a caller nothing about the stream;
+        # the FIDs inside data are the renderable contract, so describe substitutes the
+        # per-event model when one exists and only falls back to the envelope if a
+        # generator regression drops the data list, since that is not a caller error.
+        response_model = document.response_model
+        if document.kind == "websocket":
+            response_model = realtime_item_model(document.response_model) or response_model
         return OperationDescription(
             catalog_version=self.catalog.version,
             operation_ref=document.operation_ref,
@@ -139,23 +155,48 @@ class SelectorService:
             ui_page_size=document.ui_page_size,
             required_arguments=_field_contracts(document.request_model, required=True),
             optional_arguments=_field_contracts(document.request_model, required=False),
-            response_fields=_field_contracts(document.response_model),
+            response_fields=_field_contracts(response_model),
             detail_groups=_detail_group_summaries(self.catalog, document),
             generic_callable=document.generic_callable,
             execution_policy=execution_policy,  # type: ignore[arg-type]
             policy_reasons=policy_reasons,
         )
 
-    def resolve(self, request: ResolveRequest) -> ResolveResponse:
+    def _validated_arguments(
+        self, document: OperationDocument, arguments: dict[str, Any]
+    ) -> dict[str, Any]:
+        try:
+            payload = document.request_model.model_validate(arguments)
+        except ValidationError as exc:
+            raise InvalidArgumentsError(
+                "Arguments do not satisfy the selected operation",
+                details={"errors": exc.errors(include_url=False, include_input=False)},
+            ) from exc
+        return payload.model_dump(by_alias=True, exclude_none=True)
+
+    def resolve(self, request: ResolveRequest, *, account: str = "") -> ResolveResponse:
         explicit = self.catalog.find_exact(request.question.strip())
-        if explicit is not None and not explicit.generic_callable:
+        if (
+            explicit is not None
+            and not explicit.generic_callable
+            # A split family is uncallable but not undiscoverable: let it reach the policy,
+            # which either honours an explicit detail_group or names the groups on offer.
+            and explicit.tr_id not in SPLIT_BASE_TR_IDS
+        ):
             raise UnsupportedOperationError("Operation cannot be called by the generic selector")
-        documents = self.catalog.visible_for(DiscoveryIntent.QUERY)
+        documents = self.catalog.visible_for(request.intent)
         if request.candidate_refs:
             requested: list[OperationDocument] = []
             for operation_ref in request.candidate_refs:
                 document = self.catalog.find_exact(operation_ref)
-                if document is None or not document.generic_callable:
+                # search() already applies this gate, but a candidate_ref is caller-supplied
+                # and resolve ranks it again on its own surface, so a query intent paired with
+                # a handpicked order or websocket ref must be refused here too, not just there.
+                if (
+                    document is None
+                    or not document.generic_callable
+                    or not _intent_allows(document, request.intent)
+                ):
                     raise OperationNotFoundError("Candidate operation was not found")
                 requested.append(document)
             documents = tuple(requested)
@@ -164,7 +205,13 @@ class SelectorService:
 
         if request.preferred_ref:
             preferred = self.catalog.find_exact(request.preferred_ref)
-            if preferred is None or not preferred.generic_callable:
+            # A preference names a family, and a split family is a legitimate one to name
+            # even though only its projections are callable.
+            if (
+                preferred is None
+                or not (preferred.generic_callable or preferred.tr_id in SPLIT_BASE_TR_IDS)
+                or not _intent_allows(preferred, request.intent)
+            ):
                 raise PreferredOperationError("Preferred operation is unavailable")
             # A preference is expressed at family granularity, because that is
             # the granularity the ranker works at. Naming a projection as the
@@ -190,24 +237,25 @@ class SelectorService:
                 item for item in ranked if item.document.tr_id == preferred.tr_id
             )
 
-        document, reasons = select_operation(
-            self.catalog,
-            request.question,
-            ranked,
-            request.response_mode,
-            detail_group,
-        )
-
-        if not document.generic_callable or document.kind != "query":
-            raise UnsupportedOperationError("Operation cannot be called by the generic selector")
         try:
-            payload = document.request_model.model_validate(request.arguments)
-        except ValidationError as exc:
-            raise InvalidArgumentsError(
-                "Arguments do not satisfy the selected operation",
-                details={"errors": exc.errors(include_url=False, include_input=False)},
-            ) from exc
-        arguments = payload.model_dump(by_alias=True, exclude_none=True)
+            document, reasons = select_operation(
+                self.catalog,
+                request.question,
+                ranked,
+                request.response_mode,
+                detail_group,
+            )
+        except DetailGroupRequiredError as exc:
+            # Every projection of a family shares the family's request model, so malformed
+            # arguments are reported as such instead of hiding behind the group requirement.
+            self._validated_arguments(
+                self.catalog.by_ref[exc.details["operation_ref"]], request.arguments
+            )
+            raise
+
+        if not document.generic_callable:
+            raise UnsupportedOperationError("Operation cannot be called by the generic selector")
+        arguments = self._validated_arguments(document, request.arguments)
         token, expires_at = self.signer.issue(
             catalog=self.catalog,
             document=document,
@@ -215,6 +263,7 @@ class SelectorService:
             question=request.question,
             cont_yn=request.continuation.cont_yn,
             next_key=request.continuation.next_key,
+            account=account,
         )
         return ResolveResponse(
             catalog_version=self.catalog.version,
@@ -232,10 +281,17 @@ class SelectorService:
         request: Request,
         response: Response,
         client: Any,
+        *,
+        account: str = "",
+        order_client: Any = None,
+        ws_client: Any = None,
+        authorization: str | None = None,
+        confirmation: str | None = None,
+        idempotency_key: str | None = None,
     ) -> CallResponse:
-        plan = self.signer.verify(call.plan_token, self.catalog)
+        plan = self.signer.verify(call.plan_token, self.catalog, expected_account=account)
         document = self.catalog.find_exact(plan.operation_ref)
-        if document is None or not document.generic_callable or document.kind != "query":
+        if document is None or not document.generic_callable:
             raise UnsupportedOperationError("Operation cannot be called by the generic selector")
         try:
             payload = document.request_model.model_validate(plan.arguments)
@@ -244,18 +300,47 @@ class SelectorService:
         continuation_request = _continuation_request(
             request, cont_yn=plan.cont_yn, next_key=plan.next_key
         )
-        result = await call_typed_tr(
-            document.tr_id,
-            payload,
-            continuation_request,
-            response,
-            client,
-            response_model=document.response_model if document.group_id else None,
-        )
+
+        if document.kind == "order":
+            if order_client is None:
+                raise KiwoomNotReadyError("Kiwoom order service is not ready")
+            # The plan proves which operation was agreed on; it does not authorise placing
+            # it. The order route's own guards still apply, unchanged, one layer down.
+            result = await call_order_tr(
+                document.tr_id,
+                payload,
+                continuation_request,
+                response,
+                order_client,
+                authorization or "",
+                confirmation or "",
+                idempotency_key or "",
+                account,
+            )
+        elif document.kind == "websocket":
+            if ws_client is None:
+                raise KiwoomNotReadyError("Kiwoom WebSocket service is not ready")
+            # A control frame is a one-shot call that returns an ack. The events it turns
+            # on are delivered out of band through /api/v1/ws/stream, never through here.
+            result = await call_websocket_tr(document.tr_id, payload, ws_client)
+        else:
+            if client is None:
+                raise KiwoomNotReadyError("Kiwoom data service is not ready")
+            result = await call_typed_tr(
+                document.tr_id,
+                payload,
+                continuation_request,
+                response,
+                client,
+                response_model=document.response_model if document.group_id else None,
+            )
+
         cont_yn = response.headers.get("cont-yn", "N")
         next_key = response.headers.get("next-key")
         next_token = None
-        if cont_yn == "Y" and next_key:
+        # Only a read continues. Refreshing a plan for an order would hand back a token
+        # that places the same order again.
+        if document.kind == "query" and cont_yn == "Y" and next_key:
             next_token, _ = self.signer.refresh(
                 plan,
                 catalog=self.catalog,

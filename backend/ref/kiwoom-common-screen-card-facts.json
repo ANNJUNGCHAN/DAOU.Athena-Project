@@ -1,0 +1,1464 @@
+{
+  "version": 1,
+  "description": "Per-card facts for the Kiwoom common-screen artboards of the 화면기획서. Generated from ref/kiwoom-common-screen-manifest.json; do not edit by hand.",
+  "generator": "backend/scripts/render_screen_card_facts.py",
+  "source_manifest": "backend/ref/kiwoom-common-screen-manifest.json",
+  "screen_id": "AT-CV-005",
+  "totals": {
+    "routable": 301,
+    "base_operations": 208,
+    "unsplit_base": 186,
+    "split_derived": 115,
+    "excluded_split_originals": 22,
+    "categories": {
+      "oauth": 2,
+      "order": 12,
+      "read_display": 264,
+      "websocket": 23
+    }
+  },
+  "cards": [
+    {
+      "card": "TableCard",
+      "screen_id": "AT-CV-005",
+      "layout": "table",
+      "category": "read_display",
+      "mappings": 121,
+      "share_pct": 40.2,
+      "domains": [
+        {
+          "domain": "stockinfo",
+          "count": 25
+        },
+        {
+          "domain": "ranking",
+          "count": 22
+        },
+        {
+          "domain": "account",
+          "count": 19
+        },
+        {
+          "domain": "quotes",
+          "count": 19
+        },
+        {
+          "domain": "charts",
+          "count": 9
+        },
+        {
+          "domain": "elw",
+          "count": 9
+        },
+        {
+          "domain": "etf",
+          "count": 5
+        },
+        {
+          "domain": "sector",
+          "count": 5
+        },
+        {
+          "domain": "investor",
+          "count": 3
+        },
+        {
+          "domain": "lending",
+          "count": 3
+        },
+        {
+          "domain": "shortsale",
+          "count": 1
+        },
+        {
+          "domain": "theme",
+          "count": 1
+        }
+      ],
+      "dimensions": {
+        "request_top_level": {
+          "min": 0,
+          "median": 3,
+          "p90": 8,
+          "max": 13
+        },
+        "request_containers": {
+          "min": 0,
+          "median": 0,
+          "p90": 0,
+          "max": 0
+        },
+        "response_top_level": {
+          "min": 1,
+          "median": 1,
+          "p90": 1,
+          "max": 1
+        },
+        "response_containers": {
+          "min": 1,
+          "median": 1,
+          "p90": 1,
+          "max": 1
+        },
+        "response_columns": {
+          "min": 3,
+          "median": 12,
+          "p90": 22,
+          "max": 63
+        }
+      },
+      "extremes": {
+        "request_top_level": {
+          "mapping_id": "base:ka10054",
+          "value": 13
+        },
+        "request_containers": {
+          "mapping_id": "detail:kt50032:gold_trade_history",
+          "value": 0
+        },
+        "response_top_level": {
+          "mapping_id": "detail:kt50032:gold_trade_history",
+          "value": 1
+        },
+        "response_containers": {
+          "mapping_id": "detail:kt50032:gold_trade_history",
+          "value": 1
+        },
+        "response_columns": {
+          "mapping_id": "base:ka10095",
+          "value": 63
+        }
+      },
+      "representatives": [
+        {
+          "mapping_id": "base:ka10095",
+          "tr_id": "ka10095",
+          "domain": "stockinfo",
+          "name": "관심종목정보요청",
+          "route": "POST /api/v1/tr/stockinfo/ka10095",
+          "operation_id": "post_query_stockinfo_ka10095",
+          "request_top_level": 1,
+          "request_containers": 0,
+          "response_top_level": 1,
+          "response_containers": 1,
+          "response_columns": 63,
+          "role": "max",
+          "driving_dimension": "response_columns",
+          "driving_value": 63,
+          "sample_aliases": {
+            "response_top_level": [
+              "atn_stk_infr"
+            ],
+            "response_top_level_truncated": false,
+            "request_top_level": [
+              "stk_cd"
+            ],
+            "request_top_level_truncated": false,
+            "first_container_alias": "atn_stk_infr",
+            "first_container_columns": [
+              "stk_cd",
+              "stk_nm",
+              "cur_prc",
+              "base_pric",
+              "pred_pre",
+              "pred_pre_sig",
+              "flu_rt",
+              "trde_qty",
+              "trde_prica",
+              "cntr_qty",
+              "cntr_str",
+              "pred_trde_qty_pre"
+            ],
+            "first_container_columns_truncated": true
+          }
+        },
+        {
+          "mapping_id": "base:ka10029",
+          "tr_id": "ka10029",
+          "domain": "ranking",
+          "name": "예상체결등락률상위요청",
+          "route": "POST /api/v1/tr/ranking/ka10029",
+          "operation_id": "post_query_ranking_ka10029",
+          "request_top_level": 7,
+          "request_containers": 0,
+          "response_top_level": 1,
+          "response_containers": 1,
+          "response_columns": 12,
+          "role": "median",
+          "driving_dimension": "response_columns",
+          "driving_value": 12,
+          "sample_aliases": {
+            "response_top_level": [
+              "exp_cntr_flu_rt_upper"
+            ],
+            "response_top_level_truncated": false,
+            "request_top_level": [
+              "mrkt_tp",
+              "sort_tp",
+              "trde_qty_cnd",
+              "stk_cnd",
+              "crd_cnd",
+              "pric_cnd",
+              "stex_tp"
+            ],
+            "request_top_level_truncated": false,
+            "first_container_alias": "exp_cntr_flu_rt_upper",
+            "first_container_columns": [
+              "stk_cd",
+              "stk_nm",
+              "exp_cntr_pric",
+              "base_pric",
+              "pred_pre_sig",
+              "pred_pre",
+              "flu_rt",
+              "exp_cntr_qty",
+              "sel_req",
+              "sel_bid",
+              "buy_bid",
+              "buy_req"
+            ],
+            "first_container_columns_truncated": false
+          }
+        },
+        {
+          "mapping_id": "base:ka10042",
+          "tr_id": "ka10042",
+          "domain": "ranking",
+          "name": "순매수거래원순위요청",
+          "route": "POST /api/v1/tr/ranking/ka10042",
+          "operation_id": "post_query_ranking_ka10042",
+          "request_top_level": 7,
+          "request_containers": 0,
+          "response_top_level": 1,
+          "response_containers": 1,
+          "response_columns": 3,
+          "role": "min",
+          "driving_dimension": "response_columns",
+          "driving_value": 3,
+          "sample_aliases": {
+            "response_top_level": [
+              "netprps_trde_ori_rank"
+            ],
+            "response_top_level_truncated": false,
+            "request_top_level": [
+              "stk_cd",
+              "strt_dt",
+              "end_dt",
+              "qry_dt_tp",
+              "pot_tp",
+              "dt",
+              "sort_base"
+            ],
+            "request_top_level_truncated": false,
+            "first_container_alias": "netprps_trde_ori_rank",
+            "first_container_columns": [
+              "rank",
+              "mmcm_cd",
+              "mmcm_nm"
+            ],
+            "first_container_columns_truncated": false
+          }
+        }
+      ]
+    },
+    {
+      "card": "FactsCard",
+      "screen_id": "AT-CV-005",
+      "layout": "facts",
+      "category": "read_display",
+      "mappings": 114,
+      "share_pct": 37.9,
+      "domains": [
+        {
+          "domain": "account",
+          "count": 50
+        },
+        {
+          "domain": "quotes",
+          "count": 29
+        },
+        {
+          "domain": "stockinfo",
+          "count": 12
+        },
+        {
+          "domain": "elw",
+          "count": 10
+        },
+        {
+          "domain": "sector",
+          "count": 9
+        },
+        {
+          "domain": "ranking",
+          "count": 3
+        },
+        {
+          "domain": "etf",
+          "count": 1
+        }
+      ],
+      "dimensions": {
+        "request_top_level": {
+          "min": 0,
+          "median": 1,
+          "p90": 2,
+          "max": 8
+        },
+        "request_containers": {
+          "min": 0,
+          "median": 0,
+          "p90": 0,
+          "max": 0
+        },
+        "response_top_level": {
+          "min": 1,
+          "median": 6,
+          "p90": 15,
+          "max": 20
+        },
+        "response_containers": {
+          "min": 0,
+          "median": 0,
+          "p90": 0,
+          "max": 0
+        },
+        "response_columns": {
+          "min": 0,
+          "median": 0,
+          "p90": 0,
+          "max": 0
+        }
+      },
+      "extremes": {
+        "request_top_level": {
+          "mapping_id": "detail:kt00009:contract_amounts",
+          "value": 8
+        },
+        "request_containers": {
+          "mapping_id": "detail:kt50032:account_identity",
+          "value": 0
+        },
+        "response_top_level": {
+          "mapping_id": "detail:ka10040:sell_brokers",
+          "value": 20
+        },
+        "response_containers": {
+          "mapping_id": "detail:kt50032:account_identity",
+          "value": 0
+        },
+        "response_columns": {
+          "mapping_id": "detail:kt50032:account_identity",
+          "value": 0
+        }
+      },
+      "representatives": [
+        {
+          "mapping_id": "detail:ka10040:sell_brokers",
+          "tr_id": "ka10040",
+          "domain": "ranking",
+          "name": "상위 매도 거래원 (당일주요거래원요청)",
+          "route": "POST /api/v1/tr/ranking/ka10040/detail/sell_brokers",
+          "operation_id": "post_tr_ranking_ka10040_detail_sell_brokers",
+          "request_top_level": 1,
+          "request_containers": 0,
+          "response_top_level": 20,
+          "response_containers": 0,
+          "response_columns": 0,
+          "role": "max",
+          "driving_dimension": "response_top_level",
+          "driving_value": 20,
+          "sample_aliases": {
+            "response_top_level": [
+              "sel_trde_ori_irds_1",
+              "sel_trde_ori_qty_1",
+              "sel_trde_ori_1",
+              "sel_trde_ori_cd_1",
+              "sel_trde_ori_irds_2",
+              "sel_trde_ori_qty_2",
+              "sel_trde_ori_2",
+              "sel_trde_ori_cd_2",
+              "sel_trde_ori_irds_3",
+              "sel_trde_ori_qty_3",
+              "sel_trde_ori_3",
+              "sel_trde_ori_cd_3"
+            ],
+            "response_top_level_truncated": true,
+            "request_top_level": [
+              "stk_cd"
+            ],
+            "request_top_level_truncated": false,
+            "first_container_alias": null,
+            "first_container_columns": [],
+            "first_container_columns_truncated": false
+          }
+        },
+        {
+          "mapping_id": "detail:kt00016:performance_summary",
+          "tr_id": "kt00016",
+          "domain": "account",
+          "name": "자산 및 수익 성과 (일별계좌수익률상세현황요청)",
+          "route": "POST /api/v1/tr/account/kt00016/detail/performance_summary",
+          "operation_id": "post_tr_account_kt00016_detail_performance_summary",
+          "request_top_level": 2,
+          "request_containers": 0,
+          "response_top_level": 6,
+          "response_containers": 0,
+          "response_columns": 0,
+          "role": "median",
+          "driving_dimension": "response_top_level",
+          "driving_value": 6,
+          "sample_aliases": {
+            "response_top_level": [
+              "tot_amt_fr",
+              "tot_amt_to",
+              "invt_bsamt",
+              "evltv_prft",
+              "prft_rt",
+              "tern_rt"
+            ],
+            "response_top_level_truncated": false,
+            "request_top_level": [
+              "fr_dt",
+              "to_dt"
+            ],
+            "request_top_level_truncated": false,
+            "first_container_alias": null,
+            "first_container_columns": [],
+            "first_container_columns_truncated": false
+          }
+        },
+        {
+          "mapping_id": "base:ka00001",
+          "tr_id": "ka00001",
+          "domain": "account",
+          "name": "계좌번호조회",
+          "route": "POST /api/v1/tr/account/ka00001",
+          "operation_id": "post_query_account_ka00001",
+          "request_top_level": 0,
+          "request_containers": 0,
+          "response_top_level": 1,
+          "response_containers": 0,
+          "response_columns": 0,
+          "role": "min",
+          "driving_dimension": "response_top_level",
+          "driving_value": 1,
+          "sample_aliases": {
+            "response_top_level": [
+              "acctNo"
+            ],
+            "response_top_level_truncated": false,
+            "request_top_level": [],
+            "request_top_level_truncated": false,
+            "first_container_alias": null,
+            "first_container_columns": [],
+            "first_container_columns_truncated": false
+          }
+        }
+      ]
+    },
+    {
+      "card": "CompoundCard",
+      "screen_id": "AT-CV-005",
+      "layout": "compound",
+      "category": "read_display",
+      "mappings": 29,
+      "share_pct": 9.6,
+      "domains": [
+        {
+          "domain": "charts",
+          "count": 12
+        },
+        {
+          "domain": "account",
+          "count": 5
+        },
+        {
+          "domain": "etf",
+          "count": 3
+        },
+        {
+          "domain": "stockinfo",
+          "count": 2
+        },
+        {
+          "domain": "watchlist",
+          "count": 2
+        },
+        {
+          "domain": "elw",
+          "count": 1
+        },
+        {
+          "domain": "lending",
+          "count": 1
+        },
+        {
+          "domain": "quotes",
+          "count": 1
+        },
+        {
+          "domain": "ranking",
+          "count": 1
+        },
+        {
+          "domain": "theme",
+          "count": 1
+        }
+      ],
+      "dimensions": {
+        "request_top_level": {
+          "min": 0,
+          "median": 3,
+          "p90": 5,
+          "max": 9
+        },
+        "request_containers": {
+          "min": 0,
+          "median": 0,
+          "p90": 0,
+          "max": 0
+        },
+        "response_top_level": {
+          "min": 2,
+          "median": 2,
+          "p90": 7,
+          "max": 9
+        },
+        "response_containers": {
+          "min": 1,
+          "median": 1,
+          "p90": 1,
+          "max": 1
+        },
+        "response_columns": {
+          "min": 2,
+          "median": 8,
+          "p90": 12,
+          "max": 15
+        }
+      },
+      "extremes": {
+        "request_top_level": {
+          "mapping_id": "base:ka30001",
+          "value": 9
+        },
+        "request_containers": {
+          "mapping_id": "base:kt20016",
+          "value": 0
+        },
+        "response_top_level": {
+          "mapping_id": "base:ka10069",
+          "value": 9
+        },
+        "response_containers": {
+          "mapping_id": "base:kt20016",
+          "value": 1
+        },
+        "response_columns": {
+          "mapping_id": "base:kt00008",
+          "value": 15
+        }
+      },
+      "representatives": [
+        {
+          "mapping_id": "base:kt00008",
+          "tr_id": "kt00008",
+          "domain": "account",
+          "name": "계좌별익일결제예정내역요청",
+          "route": "POST /api/v1/tr/account/kt00008",
+          "operation_id": "post_query_account_kt00008",
+          "request_top_level": 1,
+          "request_containers": 0,
+          "response_top_level": 5,
+          "response_containers": 1,
+          "response_columns": 15,
+          "role": "max",
+          "driving_dimension": "response_columns",
+          "driving_value": 15,
+          "sample_aliases": {
+            "response_top_level": [
+              "trde_dt",
+              "setl_dt",
+              "sell_amt_sum",
+              "buy_amt_sum",
+              "acnt_nxdy_setl_frcs_prps_array"
+            ],
+            "response_top_level_truncated": false,
+            "request_top_level": [
+              "strt_dcd_seq"
+            ],
+            "request_top_level_truncated": false,
+            "first_container_alias": "acnt_nxdy_setl_frcs_prps_array",
+            "first_container_columns": [
+              "seq",
+              "stk_cd",
+              "loan_dt",
+              "qty",
+              "engg_amt",
+              "cmsn",
+              "incm_tax",
+              "rstx",
+              "stk_nm",
+              "sell_tp",
+              "unp",
+              "exct_amt"
+            ],
+            "first_container_columns_truncated": true
+          }
+        },
+        {
+          "mapping_id": "base:ka10080",
+          "tr_id": "ka10080",
+          "domain": "charts",
+          "name": "주식분봉차트조회요청",
+          "route": "POST /api/v1/tr/charts/ka10080",
+          "operation_id": "post_query_charts_ka10080",
+          "request_top_level": 4,
+          "request_containers": 0,
+          "response_top_level": 2,
+          "response_containers": 1,
+          "response_columns": 8,
+          "role": "median",
+          "driving_dimension": "response_columns",
+          "driving_value": 8,
+          "sample_aliases": {
+            "response_top_level": [
+              "stk_cd",
+              "stk_min_pole_chart_qry"
+            ],
+            "response_top_level_truncated": false,
+            "request_top_level": [
+              "stk_cd",
+              "tic_scope",
+              "upd_stkpc_tp",
+              "base_dt"
+            ],
+            "request_top_level_truncated": false,
+            "first_container_alias": "stk_min_pole_chart_qry",
+            "first_container_columns": [
+              "cur_prc",
+              "trde_qty",
+              "cntr_tm",
+              "open_pric",
+              "high_pric",
+              "low_pric",
+              "pred_pre",
+              "pred_pre_sig"
+            ],
+            "first_container_columns_truncated": false
+          }
+        },
+        {
+          "mapping_id": "base:ka01300",
+          "tr_id": "ka01300",
+          "domain": "watchlist",
+          "name": "관심종목 그룹 리스트 조회",
+          "route": "POST /api/v1/tr/watchlist/ka01300",
+          "operation_id": "post_query_watchlist_ka01300",
+          "request_top_level": 0,
+          "request_containers": 0,
+          "response_top_level": 2,
+          "response_containers": 1,
+          "response_columns": 2,
+          "role": "min",
+          "driving_dimension": "response_columns",
+          "driving_value": 2,
+          "sample_aliases": {
+            "response_top_level": [
+              "rtcd",
+              "nofi"
+            ],
+            "response_top_level_truncated": false,
+            "request_top_level": [],
+            "request_top_level_truncated": false,
+            "first_container_alias": "nofi",
+            "first_container_columns": [
+              "gcod",
+              "name"
+            ],
+            "first_container_columns_truncated": false
+          }
+        }
+      ]
+    },
+    {
+      "card": "EventCard",
+      "screen_id": "AT-CV-005",
+      "layout": "event",
+      "category": "websocket",
+      "mappings": 23,
+      "share_pct": 7.6,
+      "domains": [
+        {
+          "domain": "websocket",
+          "count": 23
+        }
+      ],
+      "dimensions": {
+        "request_top_level": {
+          "min": 1,
+          "median": 4,
+          "p90": 4,
+          "max": 6
+        },
+        "request_containers": {
+          "min": 0,
+          "median": 1,
+          "p90": 1,
+          "max": 1
+        },
+        "response_top_level": {
+          "min": 3,
+          "median": 4,
+          "p90": 4,
+          "max": 15
+        },
+        "response_containers": {
+          "min": 0,
+          "median": 1,
+          "p90": 1,
+          "max": 2
+        },
+        "response_columns": {
+          "min": 0,
+          "median": 14,
+          "p90": 47,
+          "max": 167
+        }
+      },
+      "extremes": {
+        "request_top_level": {
+          "mapping_id": "base:ka10172",
+          "value": 6
+        },
+        "request_containers": {
+          "mapping_id": "base:1h",
+          "value": 1
+        },
+        "response_top_level": {
+          "mapping_id": "base:ka10173",
+          "value": 15
+        },
+        "response_containers": {
+          "mapping_id": "base:ka10173",
+          "value": 2
+        },
+        "response_columns": {
+          "mapping_id": "base:0D",
+          "value": 167
+        }
+      },
+      "representatives": [
+        {
+          "mapping_id": "base:0D",
+          "tr_id": "0D",
+          "domain": "websocket",
+          "name": "주식호가잔량",
+          "route": "POST /api/v1/websocket/0D",
+          "operation_id": "post_websocket_websocket_0D",
+          "request_top_level": 4,
+          "request_containers": 1,
+          "response_top_level": 4,
+          "response_containers": 1,
+          "response_columns": 167,
+          "role": "max",
+          "driving_dimension": "response_columns",
+          "driving_value": 167,
+          "sample_aliases": {
+            "response_top_level": [
+              "return_code",
+              "return_msg",
+              "trnm",
+              "data"
+            ],
+            "response_top_level_truncated": false,
+            "request_top_level": [
+              "trnm",
+              "grp_no",
+              "refresh",
+              "data"
+            ],
+            "request_top_level_truncated": false,
+            "first_container_alias": "data",
+            "first_container_columns": [
+              "type",
+              "name",
+              "item",
+              "values",
+              "21",
+              "41",
+              "61",
+              "81",
+              "51",
+              "71",
+              "91",
+              "42"
+            ],
+            "first_container_columns_truncated": true
+          }
+        },
+        {
+          "mapping_id": "base:0m",
+          "tr_id": "0m",
+          "domain": "websocket",
+          "name": "ELW 이론가",
+          "route": "POST /api/v1/websocket/0m",
+          "operation_id": "post_websocket_websocket_0m",
+          "request_top_level": 4,
+          "request_containers": 1,
+          "response_top_level": 4,
+          "response_containers": 1,
+          "response_columns": 14,
+          "role": "median",
+          "driving_dimension": "response_columns",
+          "driving_value": 14,
+          "sample_aliases": {
+            "response_top_level": [
+              "return_code",
+              "return_msg",
+              "trnm",
+              "data"
+            ],
+            "response_top_level_truncated": false,
+            "request_top_level": [
+              "trnm",
+              "grp_no",
+              "refresh",
+              "data"
+            ],
+            "request_top_level_truncated": false,
+            "first_container_alias": "data",
+            "first_container_columns": [
+              "type",
+              "name",
+              "item",
+              "values",
+              "20",
+              "10",
+              "670",
+              "671",
+              "672",
+              "673",
+              "674",
+              "675"
+            ],
+            "first_container_columns_truncated": true
+          }
+        },
+        {
+          "mapping_id": "base:ka10174",
+          "tr_id": "ka10174",
+          "domain": "websocket",
+          "name": "조건검색 실시간 해제",
+          "route": "POST /api/v1/websocket/ka10174",
+          "operation_id": "post_websocket_websocket_ka10174",
+          "request_top_level": 2,
+          "request_containers": 0,
+          "response_top_level": 4,
+          "response_containers": 0,
+          "response_columns": 0,
+          "role": "min",
+          "driving_dimension": "response_columns",
+          "driving_value": 0,
+          "sample_aliases": {
+            "response_top_level": [
+              "return_code",
+              "return_msg",
+              "trnm",
+              "seq"
+            ],
+            "response_top_level_truncated": false,
+            "request_top_level": [
+              "trnm",
+              "seq"
+            ],
+            "request_top_level_truncated": false,
+            "first_container_alias": null,
+            "first_container_columns": [],
+            "first_container_columns_truncated": false
+          }
+        }
+      ]
+    },
+    {
+      "card": "ActionCard",
+      "screen_id": "AT-CV-005",
+      "layout": "action",
+      "category": "order",
+      "mappings": 12,
+      "share_pct": 4.0,
+      "domains": [
+        {
+          "domain": "order",
+          "count": 12
+        }
+      ],
+      "dimensions": {
+        "request_top_level": {
+          "min": 3,
+          "median": 4,
+          "p90": 6,
+          "max": 8
+        },
+        "request_containers": {
+          "min": 0,
+          "median": 0,
+          "p90": 0,
+          "max": 0
+        },
+        "response_top_level": {
+          "min": 1,
+          "median": 2,
+          "p90": 4,
+          "max": 4
+        },
+        "response_containers": {
+          "min": 0,
+          "median": 0,
+          "p90": 0,
+          "max": 0
+        },
+        "response_columns": {
+          "min": 0,
+          "median": 0,
+          "p90": 0,
+          "max": 0
+        }
+      },
+      "extremes": {
+        "request_top_level": {
+          "mapping_id": "base:kt10007",
+          "value": 8
+        },
+        "request_containers": {
+          "mapping_id": "base:kt50003",
+          "value": 0
+        },
+        "response_top_level": {
+          "mapping_id": "base:kt10008",
+          "value": 4
+        },
+        "response_containers": {
+          "mapping_id": "base:kt50003",
+          "value": 0
+        },
+        "response_columns": {
+          "mapping_id": "base:kt50003",
+          "value": 0
+        }
+      },
+      "representatives": [
+        {
+          "mapping_id": "base:kt10007",
+          "tr_id": "kt10007",
+          "domain": "order",
+          "name": "신용 매도주문",
+          "route": "POST /api/v1/order/kt10007",
+          "operation_id": "post_order_order_kt10007",
+          "request_top_level": 8,
+          "request_containers": 0,
+          "response_top_level": 2,
+          "response_containers": 0,
+          "response_columns": 0,
+          "role": "max",
+          "driving_dimension": "request_top_level",
+          "driving_value": 8,
+          "sample_aliases": {
+            "response_top_level": [
+              "ord_no",
+              "dmst_stex_tp"
+            ],
+            "response_top_level_truncated": false,
+            "request_top_level": [
+              "dmst_stex_tp",
+              "stk_cd",
+              "ord_qty",
+              "ord_uv",
+              "trde_tp",
+              "crd_deal_tp",
+              "crd_loan_dt",
+              "cond_uv"
+            ],
+            "request_top_level_truncated": false,
+            "first_container_alias": null,
+            "first_container_columns": [],
+            "first_container_columns_truncated": false
+          }
+        },
+        {
+          "mapping_id": "base:kt10000",
+          "tr_id": "kt10000",
+          "domain": "order",
+          "name": "주식 매수주문",
+          "route": "POST /api/v1/order/kt10000",
+          "operation_id": "post_order_order_kt10000",
+          "request_top_level": 6,
+          "request_containers": 0,
+          "response_top_level": 2,
+          "response_containers": 0,
+          "response_columns": 0,
+          "role": "median",
+          "driving_dimension": "request_top_level",
+          "driving_value": 6,
+          "sample_aliases": {
+            "response_top_level": [
+              "ord_no",
+              "dmst_stex_tp"
+            ],
+            "response_top_level_truncated": false,
+            "request_top_level": [
+              "dmst_stex_tp",
+              "stk_cd",
+              "ord_qty",
+              "ord_uv",
+              "trde_tp",
+              "cond_uv"
+            ],
+            "request_top_level_truncated": false,
+            "first_container_alias": null,
+            "first_container_columns": [],
+            "first_container_columns_truncated": false
+          }
+        },
+        {
+          "mapping_id": "base:kt50003",
+          "tr_id": "kt50003",
+          "domain": "order",
+          "name": "금현물 취소주문",
+          "route": "POST /api/v1/order/kt50003",
+          "operation_id": "post_order_order_kt50003",
+          "request_top_level": 3,
+          "request_containers": 0,
+          "response_top_level": 3,
+          "response_containers": 0,
+          "response_columns": 0,
+          "role": "min",
+          "driving_dimension": "request_top_level",
+          "driving_value": 3,
+          "sample_aliases": {
+            "response_top_level": [
+              "ord_no",
+              "base_orig_ord_no",
+              "cncl_qty"
+            ],
+            "response_top_level_truncated": false,
+            "request_top_level": [
+              "orig_ord_no",
+              "stk_cd",
+              "cncl_qty"
+            ],
+            "request_top_level_truncated": false,
+            "first_container_alias": null,
+            "first_container_columns": [],
+            "first_container_columns_truncated": false
+          }
+        }
+      ]
+    },
+    {
+      "card": "StatusCard",
+      "screen_id": "AT-CV-005",
+      "layout": "status",
+      "category": "oauth",
+      "mappings": 2,
+      "share_pct": 0.7,
+      "domains": [
+        {
+          "domain": "auth",
+          "count": 2
+        }
+      ],
+      "dimensions": {
+        "request_top_level": {
+          "min": 0,
+          "median": 0,
+          "p90": 0,
+          "max": 0
+        },
+        "request_containers": {
+          "min": 0,
+          "median": 0,
+          "p90": 0,
+          "max": 0
+        },
+        "response_top_level": {
+          "min": 3,
+          "median": 3,
+          "p90": 3,
+          "max": 3
+        },
+        "response_containers": {
+          "min": 0,
+          "median": 0,
+          "p90": 0,
+          "max": 0
+        },
+        "response_columns": {
+          "min": 0,
+          "median": 0,
+          "p90": 0,
+          "max": 0
+        }
+      },
+      "extremes": {
+        "request_top_level": {
+          "mapping_id": "base:au10002",
+          "value": 0
+        },
+        "request_containers": {
+          "mapping_id": "base:au10002",
+          "value": 0
+        },
+        "response_top_level": {
+          "mapping_id": "base:au10002",
+          "value": 3
+        },
+        "response_containers": {
+          "mapping_id": "base:au10002",
+          "value": 0
+        },
+        "response_columns": {
+          "mapping_id": "base:au10002",
+          "value": 0
+        }
+      },
+      "representatives": [
+        {
+          "mapping_id": "base:au10002",
+          "tr_id": "au10002",
+          "domain": "auth",
+          "name": "접근토큰폐기",
+          "route": "POST /api/v1/internal/oauth/au10002",
+          "operation_id": "post_oauth_auth_au10002",
+          "request_top_level": 0,
+          "request_containers": 0,
+          "response_top_level": 3,
+          "response_containers": 0,
+          "response_columns": 0,
+          "role": "max",
+          "driving_dimension": "response_top_level",
+          "driving_value": 3,
+          "sample_aliases": {
+            "response_top_level": [
+              "configured",
+              "ready",
+              "expires_at"
+            ],
+            "response_top_level_truncated": false,
+            "request_top_level": [],
+            "request_top_level_truncated": false,
+            "first_container_alias": null,
+            "first_container_columns": [],
+            "first_container_columns_truncated": false
+          }
+        },
+        {
+          "mapping_id": "base:au10001",
+          "tr_id": "au10001",
+          "domain": "auth",
+          "name": "접근토큰 발급",
+          "route": "POST /api/v1/internal/oauth/au10001",
+          "operation_id": "post_oauth_auth_au10001",
+          "request_top_level": 0,
+          "request_containers": 0,
+          "response_top_level": 3,
+          "response_containers": 0,
+          "response_columns": 0,
+          "role": "min",
+          "driving_dimension": "response_top_level",
+          "driving_value": 3,
+          "sample_aliases": {
+            "response_top_level": [
+              "configured",
+              "ready",
+              "expires_at"
+            ],
+            "response_top_level_truncated": false,
+            "request_top_level": [],
+            "request_top_level_truncated": false,
+            "first_container_alias": null,
+            "first_container_columns": [],
+            "first_container_columns_truncated": false
+          }
+        }
+      ]
+    }
+  ],
+  "cell_primitive_evidence": [
+    {
+      "alias": "cur_prc",
+      "mappings": 89
+    },
+    {
+      "alias": "pred_pre",
+      "mappings": 85
+    },
+    {
+      "alias": "stk_cd",
+      "mappings": 83
+    },
+    {
+      "alias": "stk_nm",
+      "mappings": 80
+    },
+    {
+      "alias": "trde_qty",
+      "mappings": 63
+    },
+    {
+      "alias": "flu_rt",
+      "mappings": 60
+    },
+    {
+      "alias": "pred_pre_sig",
+      "mappings": 49
+    },
+    {
+      "alias": "dt",
+      "mappings": 41
+    },
+    {
+      "alias": "high_pric",
+      "mappings": 33
+    },
+    {
+      "alias": "low_pric",
+      "mappings": 33
+    },
+    {
+      "alias": "open_pric",
+      "mappings": 32
+    },
+    {
+      "alias": "name",
+      "mappings": 26
+    },
+    {
+      "alias": "pre_sig",
+      "mappings": 25
+    },
+    {
+      "alias": "return_msg",
+      "mappings": 23
+    },
+    {
+      "alias": "trde_prica",
+      "mappings": 23
+    },
+    {
+      "alias": "trnm",
+      "mappings": 23
+    },
+    {
+      "alias": "acc_trde_qty",
+      "mappings": 22
+    },
+    {
+      "alias": "data",
+      "mappings": 22
+    },
+    {
+      "alias": "return_code",
+      "mappings": 22
+    },
+    {
+      "alias": "ord_no",
+      "mappings": 20
+    }
+  ],
+  "domain_matrix": [
+    {
+      "domain": "account",
+      "total": 74,
+      "by_card": {
+        "FactsCard": 50,
+        "TableCard": 19,
+        "CompoundCard": 5,
+        "EventCard": 0,
+        "ActionCard": 0,
+        "StatusCard": 0
+      }
+    },
+    {
+      "domain": "quotes",
+      "total": 49,
+      "by_card": {
+        "FactsCard": 29,
+        "TableCard": 19,
+        "CompoundCard": 1,
+        "EventCard": 0,
+        "ActionCard": 0,
+        "StatusCard": 0
+      }
+    },
+    {
+      "domain": "stockinfo",
+      "total": 39,
+      "by_card": {
+        "FactsCard": 12,
+        "TableCard": 25,
+        "CompoundCard": 2,
+        "EventCard": 0,
+        "ActionCard": 0,
+        "StatusCard": 0
+      }
+    },
+    {
+      "domain": "ranking",
+      "total": 26,
+      "by_card": {
+        "FactsCard": 3,
+        "TableCard": 22,
+        "CompoundCard": 1,
+        "EventCard": 0,
+        "ActionCard": 0,
+        "StatusCard": 0
+      }
+    },
+    {
+      "domain": "websocket",
+      "total": 23,
+      "by_card": {
+        "FactsCard": 0,
+        "TableCard": 0,
+        "CompoundCard": 0,
+        "EventCard": 23,
+        "ActionCard": 0,
+        "StatusCard": 0
+      }
+    },
+    {
+      "domain": "charts",
+      "total": 21,
+      "by_card": {
+        "FactsCard": 0,
+        "TableCard": 9,
+        "CompoundCard": 12,
+        "EventCard": 0,
+        "ActionCard": 0,
+        "StatusCard": 0
+      }
+    },
+    {
+      "domain": "elw",
+      "total": 20,
+      "by_card": {
+        "FactsCard": 10,
+        "TableCard": 9,
+        "CompoundCard": 1,
+        "EventCard": 0,
+        "ActionCard": 0,
+        "StatusCard": 0
+      }
+    },
+    {
+      "domain": "sector",
+      "total": 14,
+      "by_card": {
+        "FactsCard": 9,
+        "TableCard": 5,
+        "CompoundCard": 0,
+        "EventCard": 0,
+        "ActionCard": 0,
+        "StatusCard": 0
+      }
+    },
+    {
+      "domain": "order",
+      "total": 12,
+      "by_card": {
+        "FactsCard": 0,
+        "TableCard": 0,
+        "CompoundCard": 0,
+        "EventCard": 0,
+        "ActionCard": 12,
+        "StatusCard": 0
+      }
+    },
+    {
+      "domain": "etf",
+      "total": 9,
+      "by_card": {
+        "FactsCard": 1,
+        "TableCard": 5,
+        "CompoundCard": 3,
+        "EventCard": 0,
+        "ActionCard": 0,
+        "StatusCard": 0
+      }
+    },
+    {
+      "domain": "lending",
+      "total": 4,
+      "by_card": {
+        "FactsCard": 0,
+        "TableCard": 3,
+        "CompoundCard": 1,
+        "EventCard": 0,
+        "ActionCard": 0,
+        "StatusCard": 0
+      }
+    },
+    {
+      "domain": "investor",
+      "total": 3,
+      "by_card": {
+        "FactsCard": 0,
+        "TableCard": 3,
+        "CompoundCard": 0,
+        "EventCard": 0,
+        "ActionCard": 0,
+        "StatusCard": 0
+      }
+    },
+    {
+      "domain": "auth",
+      "total": 2,
+      "by_card": {
+        "FactsCard": 0,
+        "TableCard": 0,
+        "CompoundCard": 0,
+        "EventCard": 0,
+        "ActionCard": 0,
+        "StatusCard": 2
+      }
+    },
+    {
+      "domain": "theme",
+      "total": 2,
+      "by_card": {
+        "FactsCard": 0,
+        "TableCard": 1,
+        "CompoundCard": 1,
+        "EventCard": 0,
+        "ActionCard": 0,
+        "StatusCard": 0
+      }
+    },
+    {
+      "domain": "watchlist",
+      "total": 2,
+      "by_card": {
+        "FactsCard": 0,
+        "TableCard": 0,
+        "CompoundCard": 2,
+        "EventCard": 0,
+        "ActionCard": 0,
+        "StatusCard": 0
+      }
+    },
+    {
+      "domain": "shortsale",
+      "total": 1,
+      "by_card": {
+        "FactsCard": 0,
+        "TableCard": 1,
+        "CompoundCard": 0,
+        "EventCard": 0,
+        "ActionCard": 0,
+        "StatusCard": 0
+      }
+    }
+  ]
+}

@@ -26,7 +26,7 @@
 | G003 Shared Athena canvas and reusable screen states | 대기 | 공통 캔버스와 상태 컴포넌트 |
 | G004 Electron IPC, backend, and guarded workflow integration | 대기 | 안전한 preload/IPC 및 워크플로 연결 |
 | G005 Exhaustive route and field coverage verification | 대기 | 301개 전수 증명 |
-| G006 Paper artboards and Markdown screen-planning specification | 대기 | Paper와 최종 화면기획서 |
+| G006 Paper artboards and Markdown screen-planning specification | **부분 완료** (2026-08-16) | 화면기획서 Markdown + injection map + Paper 아트보드 10장 완료. 구현과의 대조는 미완 — §6 |
 | G007 Runtime, visual, invariant, and independent-review closeout | 대기 | 실앱·시각·불변식·독립 리뷰 |
 
 ## 2. 범위와 확정된 숫자
@@ -168,13 +168,27 @@ renderer가 URL, path, bearer, raw header, adapter 종류를 직접 선택하게
 Paper Desktop의 기존 파일은 `Athena — 화면설계서`다.
 
 - 파일: <https://app.paper.design/file/01M002A3JJ5SNHH8Z5AVB9KSQQ/1-0>
-- 추가한 아트보드 골격:
-  - `12 · 공통 API 화면 원칙`
-  - `13 · 데이터 매핑 · 검증`
-  - `14 · AT-CV-005 공통 API 캔버스`
-  - `15 · AT-CV-005 상태 · 안전`
-- 아직 내용·상태 variant·스크린샷 비평·`finish_working_on_nodes`가 완료되지 않았다.
-- G006에서 실제 구현과 숫자를 다시 대조한 뒤 완성해야 한다.
+
+**2026-08-16 갱신.** 위에 적혀 있던 골격 4개(`12`~`15`)는 파일이 다시 번호를 매기면서 사라졌다.
+현재 12~15는 `AT-CH-001 답변 3상태`와 `AT-ST-001~003`이다. 공통화면 장표는 25~34로 새로 그렸고,
+`23 · End of Document`는 `35 · End of Document`로 옮겼다.
+
+| 아트보드 | 내용 |
+|---|---|
+| `25 · 공통 API 화면 원칙` | 301/301 커버리지, 카드 6종 요약, layout→category 함수 관계, 셀 프리미티브 5종 |
+| `26 · API 주입 원장 · 도메인 × 카드` | 도메인 16종 × 카드 6종 행렬, 검증 명령·게이트, 제외 22개 |
+| `27`~`32 · AT-CV-005 <카드>` | Facts / Table / Compound / Event / Action / Status 각 1장 — 목업 + 주입 API |
+| `33 · AT-CV-005 상태 7종` | 상태 정의, 카드 × 상태 도달 가능 행렬, 오류=주황 / 상승=빨강 병치 |
+| `34 · AT-CV-005 보호 워크플로 3종` | WebSocket · order · OAuth lifecycle 3열 |
+
+장표가 인쇄하는 수치는 손으로 쓰지 않았다. `backend/scripts/render_screen_card_facts.py`가
+manifest에서 `backend/ref/kiwoom-common-screen-card-facts.json`을 생성하고,
+`backend/tests/test_screen_card_facts.py`가 카드별 매핑 수 · 도메인 분포 · 형상 분포 · 대표 매핑의
+실재성과 자격증명 문자열 0건을 검증한다. 상세 규범은
+[`plan/kiwoom-common-screen-spec.md`](kiwoom-common-screen-spec.md) §10.
+
+남은 것: G006의 나머지 — 실제 구현(G002~G004)이 생기면 목업과 구현을 다시 대조해야 한다. 현재
+장표는 manifest 실측과는 대조됐지만 **동작하는 renderer와는 대조되지 않았다**(renderer가 아직 없다).
 
 ## 7. 2026-08-15 최신 검증 기준선
 
