@@ -9,19 +9,31 @@ from fastapi import Request, Response
 from pydantic import ValidationError
 
 from athena_api.kiwoom import ResponseEnvelope
-from athena_api.selector.catalog import build_operation_catalog
+from athena_api.selector.catalog import build_operation_catalog, realtime_item_model
 from athena_api.selector.errors import (
+    AmbiguousOperationError,
+    DetailGroupRequiredError,
     ExpiredPlanError,
     InvalidArgumentsError,
     InvalidPlanError,
+    NoConfidentMatchError,
     OperationNotFoundError,
+    PreferredOperationError,
     StalePlanError,
     UnknownDetailGroupError,
-    UnsupportedOperationError,
 )
+from athena_api.selector.lexicon import synonym_only_tokens
+from athena_api.selector.normalization import tokenize
 from athena_api.selector.plans import PlanSigner
 from athena_api.selector.policy import select_operation
-from athena_api.selector.ranking import RankedDocument, rank_documents
+from athena_api.selector.ranking import (
+    _MINIMUM_SURFACE,
+    _ZONE_RULES,
+    RankedDocument,
+    _zone_tokens,
+    rank_documents,
+    uninformative_zone_tokens,
+)
 from athena_api.selector.schemas import (
     CallRequest,
     DescribeRequest,
@@ -49,7 +61,19 @@ def service(catalog):
 
 def test_catalog_has_exact_domestic_visibility_and_callability_counts(catalog) -> None:
     assert len(catalog.documents) == 323
-    assert sum(document.generic_callable for document in catalog.documents) == 286
+    # 149 unsplit query bases + 115 projections + 12 orders + 23 websocket controls.
+    # Only the 22 split families and the 2 OAuth controls are uncallable.
+    assert sum(document.generic_callable for document in catalog.documents) == 299
+    manifest = json.loads(
+        (BACKEND / "ref" / "kiwoom-common-screen-manifest.json").read_text(encoding="utf-8")
+    )
+    # The read surface is unchanged by opening order and websocket execution.
+    assert manifest["counts"]["categories"]["read_display"] == 264
+    read_callable = sum(
+        document.generic_callable and document.kind == "query"
+        for document in catalog.documents
+    )
+    assert read_callable == 264
     assert sum(document.visibility == "explicit" for document in catalog.documents) == 35
     assert sum(document.visibility == "hidden" for document in catalog.documents) == 2
     assert len({document.operation_ref for document in catalog.documents}) == 323
@@ -104,7 +128,9 @@ def test_auto_is_query_only_and_order_websocket_require_explicit_intent(service)
     assert websocket.results and all(
         hit.kind.value == "websocket" for hit in websocket.results
     )
-    assert all(not hit.generic_callable for hit in orders.results + websocket.results)
+    # Callable, but only reachable once the caller declares the intent.
+    assert all(hit.generic_callable for hit in orders.results + websocket.results)
+    assert all(hit.discovery_only for hit in orders.results + websocket.results)
 
 
 def test_operation_identity_is_case_sensitive_for_0g_and_0G(service) -> None:
@@ -155,16 +181,28 @@ def _ranked(document, points: int) -> RankedDocument:
 def test_family_policy_defaults_to_base_and_honours_an_explicit_detail_group(
     catalog,
 ) -> None:
-    base = catalog.by_ref["base:ka10001"]
-
+    # An unsplit family still answers from its base.
+    unsplit = catalog.by_ref["base:ka10006"]
     selected, reasons = select_operation(
         catalog,
-        "현재 거래 정보",
-        (_ranked(base, 300),),
+        "주식시분",
+        (_ranked(unsplit, 300),),
         ResponseMode.AUTO,
     )
-    assert selected is base
+    assert selected is unsplit
     assert reasons == [ReasonCode.BASE_DEFAULT]
+
+    # A split family has no base left to fall back to, and says what to call instead.
+    base = catalog.by_ref["base:ka10001"]
+    with pytest.raises(DetailGroupRequiredError) as caught:
+        select_operation(
+            catalog,
+            "현재 거래 정보",
+            (_ranked(base, 300),),
+            ResponseMode.AUTO,
+        )
+    assert caught.value.details["operation_ref"] == "base:ka10001"
+    assert "current_trading" in caught.value.details["available_groups"]
 
     selected, reasons = select_operation(
         catalog,
@@ -219,32 +257,49 @@ def test_family_policy_keeps_pure_lists_and_explicit_full_requests_on_base(catal
     assert selected is pure_list
     assert reasons == [ReasonCode.PURE_LIST_BASE_REQUIRED]
 
-    detail = catalog.by_ref["detail:ka10001:current_trading"]
+    # An explicit full-response request still outranks narrowing on an unsplit family.
+    unsplit = catalog.by_ref["base:ka10006"]
     selected, reasons = select_operation(
         catalog,
         "전체 원문 응답",
-        (_ranked(detail, 400),),
+        (_ranked(unsplit, 400),),
         ResponseMode.FULL,
     )
-    assert selected.operation_ref == "base:ka10001"
+    assert selected is unsplit
     assert reasons == [ReasonCode.EXPLICIT_FULL_RESPONSE]
+
+    # On a split family there is no full response left to ask for.
+    detail = catalog.by_ref["detail:ka10001:current_trading"]
+    with pytest.raises(DetailGroupRequiredError):
+        select_operation(
+            catalog,
+            "전체 원문 응답",
+            (_ranked(detail, 400),),
+            ResponseMode.FULL,
+        )
 
 
 def test_resolve_validates_required_arguments_and_issues_allowlisted_plan(service) -> None:
+    # Arguments are reported before the group requirement, because every projection of a
+    # family shares the family's request contract: the caller must fix this either way.
     with pytest.raises(InvalidArgumentsError):
         service.resolve(ResolveRequest(question="base:ka10001", arguments={}))
 
     resolved = service.resolve(
-        ResolveRequest(question="base:ka10001", arguments={"stk_cd": "005930"})
+        ResolveRequest(
+            question="base:ka10001",
+            detail_group="current_trading",
+            arguments={"stk_cd": "005930"},
+        )
     )
     verified = service.signer.verify(resolved.plan_token, service.catalog)
 
-    assert resolved.operation_ref == "base:ka10001"
-    assert verified.operation_ref == "base:ka10001"
+    assert resolved.operation_ref == "detail:ka10001:current_trading"
+    assert verified.operation_ref == "detail:ka10001:current_trading"
     assert verified.arguments == {"stk_cd": "005930"}
 
 
-def test_preferred_detail_cannot_bypass_explicit_full_response_policy(service) -> None:
+def test_explicit_full_response_cannot_resurrect_a_split_base(service) -> None:
     resolved = service.resolve(
         ResolveRequest(
             question="current trading",
@@ -255,15 +310,52 @@ def test_preferred_detail_cannot_bypass_explicit_full_response_policy(service) -
         )
     )
 
-    assert resolved.operation_ref == "base:ka10001"
-    assert resolved.selection_reasons == [ReasonCode.EXPLICIT_FULL_RESPONSE]
+    assert resolved.operation_ref == "detail:ka10001:current_trading"
+    assert resolved.selection_reasons == [ReasonCode.EXPLICIT_DETAIL_GROUP]
+
+    # With no projection named, a full-response request is refused rather than widened.
+    with pytest.raises(DetailGroupRequiredError):
+        service.resolve(
+            ResolveRequest(
+                question="base:ka10001",
+                arguments={"stk_cd": "005930"},
+                response_mode=ResponseMode.FULL,
+            )
+        )
 
 
-@pytest.mark.parametrize("operation_ref", ["base:kt10000", "base:0G"])
-def test_order_and_websocket_are_rejected_by_generic_resolve(
+@pytest.mark.parametrize(
+    ("operation_ref", "arguments"),
+    [
+        (
+            "base:kt10000",
+            {"dmst_stex_tp": "KRX", "stk_cd": "005930", "ord_qty": "1", "trde_tp": "0"},
+        ),
+        ("base:0G", {"trnm": "REG", "grp_no": "1", "refresh": "1"}),
+    ],
+)
+def test_order_and_websocket_resolve_only_from_an_exact_reference(
+    service, operation_ref: str, arguments: dict[str, object]
+) -> None:
+    """Resolve ranks the query surface alone, so only a named reference reaches these."""
+    resolved = service.resolve(ResolveRequest(question=operation_ref, arguments=arguments))
+    assert resolved.operation_ref == operation_ref
+
+    # No natural-language question can rank onto them, whatever it says.
+    with pytest.raises((NoConfidentMatchError, AmbiguousOperationError, OperationNotFoundError)):
+        service.resolve(ResolveRequest(question="!!!", arguments=arguments))
+
+
+@pytest.mark.parametrize("operation_ref", ["base:au10001", "base:au10002"])
+def test_oauth_stays_indistinguishable_from_missing_even_in_resolve(
     service, operation_ref: str
 ) -> None:
-    with pytest.raises(UnsupportedOperationError):
+    """Opening order and websocket execution must not leak the OAuth identities.
+
+    They are hidden rather than merely uncallable, so resolve answers exactly as it does
+    for an identity that does not exist.
+    """
+    with pytest.raises(NoConfidentMatchError):
         service.resolve(ResolveRequest(question=operation_ref))
 
 
@@ -297,7 +389,7 @@ def test_plan_rejects_tampering_expiry_and_stale_catalog(catalog) -> None:
 
 def test_continuation_refresh_preserves_operation_arguments_and_question(catalog) -> None:
     signer = PlanSigner(b"selector-test-secret", nonce_factory=lambda: "fixed")
-    document = catalog.by_ref["base:ka10001"]
+    document = catalog.by_ref["detail:ka10001:current_trading"]
     token, _ = signer.issue(
         catalog=catalog,
         document=document,
@@ -362,3 +454,231 @@ async def test_call_executes_only_the_signed_operation_and_returns_next_plan(ser
     next_plan = service.signer.verify(result.continuation.next_plan_token, service.catalog)
     assert next_plan.cont_yn == "Y"
     assert next_plan.next_key == "NEXT-1"
+
+
+@pytest.mark.parametrize(
+    "question",
+    [
+        "삼성전자 실시간 체결가 tick 스트리밍으로 받고 싶어",
+        "subscribe to live NAV ticks for the KODEX 200 ETF",
+        "실시간 매수/매도 호가 잔량 알려줘",
+    ],
+)
+def test_a_realtime_question_without_explicit_intent_never_resolves_a_websocket(
+    service, catalog, question: str
+) -> None:
+    """`auto` ranks the read surface only, so a vague realtime question must miss.
+
+    Without this guarantee, ranking.uninformative_zone_tokens or catalog.visible_for
+    could regress to leaking websocket documents onto the default surface, and a screen
+    builder's ordinary question would silently open a live subscription instead of
+    reading a snapshot.
+    """
+    websocket_refs = {
+        document.operation_ref for document in catalog.visible_for(DiscoveryIntent.WEBSOCKET)
+    }
+    try:
+        resolved = service.resolve(ResolveRequest(question=question, arguments={}))
+    except (
+        AmbiguousOperationError,
+        InvalidArgumentsError,
+        NoConfidentMatchError,
+        OperationNotFoundError,
+    ):
+        return
+    assert resolved.operation_ref not in websocket_refs
+
+
+def test_a_websocket_ref_handed_to_resolve_under_query_intent_is_refused(service) -> None:
+    """The intent gate is a guarantee, not a convenience the caller can route around.
+
+    ``service.resolve`` ranks the question a second time on ``request.intent``'s
+    surface, but a caller can also hand the operation directly through
+    ``candidate_refs`` or ``preferred_ref``. Both entry points must honour the same
+    gate as the ranked path, or a `query`-intent caller could still walk a websocket
+    control frame in by naming it explicitly.
+    """
+    with pytest.raises(OperationNotFoundError):
+        service.resolve(
+            ResolveRequest(
+                question="삼성전자 현재가",
+                intent=DiscoveryIntent.QUERY,
+                candidate_refs=["base:0B"],
+            )
+        )
+    with pytest.raises(PreferredOperationError):
+        service.resolve(
+            ResolveRequest(
+                question="삼성전자 현재가",
+                intent=DiscoveryIntent.QUERY,
+                preferred_ref="base:0B",
+            )
+        )
+
+
+def test_describe_reports_a_renderable_fid_contract_for_every_websocket_type(
+    service, catalog
+) -> None:
+    """A screen is built from ``response_fields``, so the FID contract must be real.
+
+    The four-field acknowledgement envelope (``return_code``/``return_msg``/``trnm``/
+    ``data``) is identical across all 23 realtime types and describes the transport,
+    not the stream. If ``describe`` ever fell back to it, every websocket type would
+    look the same to whatever renders a screen from the response.
+    """
+    envelope_aliases = {"return_code", "return_msg", "trnm", "data"}
+    websocket_docs = catalog.visible_for(DiscoveryIntent.WEBSOCKET)
+    assert len(websocket_docs) == 23
+    for document in websocket_docs:
+        description = service.describe(
+            DescribeRequest(operation_ref=document.operation_ref, intent=DiscoveryIntent.WEBSOCKET)
+        )
+        aliases = {field.alias for field in description.response_fields}
+        assert aliases, f"{document.operation_ref} advertises no realtime fields"
+        assert all(field.description for field in description.response_fields)
+        # Every type that streams events (all but ka10174, the condition-search
+        # unregister control, whose real response *is* an acknowledgement) must not
+        # be answered with the shared four-field envelope.
+        if realtime_item_model(document.response_model) is not None:
+            assert aliases.isdisjoint(envelope_aliases)
+
+    current_price = service.describe(
+        DescribeRequest(operation_ref="base:0B", intent=DiscoveryIntent.WEBSOCKET)
+    )
+    price_field = next(field for field in current_price.response_fields if field.alias == "10")
+    assert price_field.description is not None
+    assert price_field.description.startswith("현재가")
+
+
+def test_uninformative_zone_tokens_suppresses_redundant_zones_not_discriminators(
+    catalog,
+) -> None:
+    """The filter has to earn its name: silence shared noise, keep real signal.
+
+    "서비스명" ("service name") is shared boilerplate on this surface: 22 of 23 types
+    carry it in ``request_description`` and 23 of 23 in ``response_description``. Scored
+    in both, it hands every candidate near-identical points twice over for saying
+    nothing. The filter drops the redundant repetition (``response_description``, the
+    lower-weighted of the two per ``_ZONE_RULES``) and keeps the other, rather than
+    dropping both - see the never-empties-a-token property below for why dropping both
+    is the actual regression this filter must not cause.
+
+    "체결" is the opposite case: only base:00/0B/0H are *named* 체결 in ``title``, so it
+    is exactly the token that should decide between them. Suppressing it there too would
+    collapse 주문체결, 주식체결, and 주식예상체결 onto one score.
+    """
+    documents = catalog.visible_for(DiscoveryIntent.WEBSOCKET)
+    suppressed = uninformative_zone_tokens("서비스명 체결 정보", documents)
+    assert ("response_description", "서비스명") in suppressed
+    assert ("request_description", "서비스명") not in suppressed
+    assert ("title", "체결") not in suppressed
+
+
+def test_uninformative_zone_tokens_never_suppresses_every_zone_a_token_appears_in(
+    catalog,
+) -> None:
+    """Suppression removes redundant *repetitions* of evidence, never the evidence itself.
+
+    A token can be ubiquitous in every zone it occurs in at once - "websocket" is, in
+    ``domain``, which is the only zone it ever appears in on this surface. Suppressing
+    its one occurrence there would leave a websocket-intent question about "실시간"
+    (which expands to the "websocket" synonym) matching nothing at all: this is exactly
+    what emptied ``athena_search(query="주문 체결", intent=websocket)`` before this guard
+    existed. This is asserted as a property over the whole surface and several queries,
+    not one hand-picked example, because the failure mode is "some token, some query"
+    - not one the docstring's own example would necessarily still reproduce as the
+    surface's vocabulary keeps changing.
+    """
+    documents = catalog.visible_for(DiscoveryIntent.WEBSOCKET)
+    queries = ["실시간 체결 정보 알려줘", "주문 체결", "서비스명", "국내주식 실시간 스트리밍"]
+    for query in queries:
+        tokens = set(tokenize(query))
+        tokens.update(synonym_only_tokens(tuple(sorted(tokens))))
+        suppressed = uninformative_zone_tokens(query, documents)
+        for token in tokens:
+            zones_with_token = {
+                zone
+                for zone in _ZONE_RULES
+                if any(token in _zone_tokens(document, zone) for document in documents)
+            }
+            if not zones_with_token:
+                continue
+            surviving = zones_with_token - {
+                zone for zone, name in suppressed if name == token
+            }
+            assert surviving, f"{token!r} lost every zone for query {query!r}"
+
+    # The single-zone case named above, pinned concretely: "websocket" only ever
+    # appears in ``domain`` on this surface, so it must never be suppressed there.
+    assert ("domain", "websocket") not in uninformative_zone_tokens(
+        "실시간 체결 정보 알려줘", documents
+    )
+
+
+def test_uninformative_zone_tokens_suppresses_nothing_below_the_minimum_surface(
+    catalog,
+) -> None:
+    """A document frequency below the minimum surface is not evidence of anything.
+
+    Ratios computed from a handful of candidates are noise: three of five documents
+    sharing a token says nothing about whether that token discriminates, so the filter
+    must stay a no-op until there is enough surface to measure against.
+    """
+    documents = catalog.visible_for(DiscoveryIntent.WEBSOCKET)[: _MINIMUM_SURFACE - 1]
+    assert len(documents) < _MINIMUM_SURFACE
+    assert uninformative_zone_tokens("실시간 체결", documents) == frozenset()
+
+
+def test_search_survives_suppression_for_a_two_word_realtime_question(service) -> None:
+    """Regression: suppressing a token in every zone at once emptied the result set.
+
+    ``athena_search(query="주문 체결", intent=websocket)`` returned zero results before
+    the never-empties-a-token guard existed, because 주문 and 체결 each cleared the
+    uninformative threshold in every zone they occurred in, leaving nothing left to
+    score either candidate on. The unit-level assertions above would not have caught
+    this by themselves - only the end-to-end call surfaces an empty response.
+    """
+    result = service.search(
+        SearchRequest(query="주문 체결", intent=DiscoveryIntent.WEBSOCKET, limit=5)
+    )
+    assert result.results
+    assert result.results[0].operation_ref == "base:00"
+
+
+def test_realtime_round_trip_from_search_through_resolve_names_a_websocket_control(
+    service, catalog
+) -> None:
+    """search -> describe -> resolve must agree on one identity for a screen to build on.
+
+    A TR id is an identity signal (``ranking.rank_document`` awards it 3,000 points),
+    so searching by id is the deterministic way to prove the three tools compose,
+    independent of how the lexical scoring of a natural-language question happens to
+    land. What matters here is that the same operation comes back out at every step,
+    and that resolve records it as a websocket control frame rather than a read.
+    """
+    found = service.search(SearchRequest(query="0D", intent=DiscoveryIntent.WEBSOCKET, limit=3))
+    assert found.results[0].operation_ref == "base:0D"
+    assert found.results[0].kind.value == "websocket"
+
+    description = service.describe(
+        DescribeRequest(operation_ref="base:0D", intent=DiscoveryIntent.WEBSOCKET)
+    )
+    assert description.execution_policy == "selector_websocket_control"
+    assert description.response_fields
+
+    resolved = service.resolve(
+        ResolveRequest(
+            question="base:0D",
+            intent=DiscoveryIntent.WEBSOCKET,
+            arguments={
+                "trnm": "REG",
+                "grp_no": "1",
+                "refresh": "1",
+                "data": [{"item": "005930", "type": "0D"}],
+            },
+        )
+    )
+    assert resolved.operation_ref == "base:0D"
+    plan = service.signer.verify(resolved.plan_token, service.catalog)
+    assert plan.operation_ref == "base:0D"
+    assert catalog.by_ref["base:0D"].kind == "websocket"

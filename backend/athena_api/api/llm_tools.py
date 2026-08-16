@@ -2,11 +2,18 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Annotated, Any
 
-from fastapi import APIRouter, Request, Response
+from fastapi import APIRouter, Depends, Header, Request, Response
 
-from athena_api.dependencies import KiwoomClientDep, SelectorServiceDep
+from athena_api.dependencies import (
+    AccountAliasDep,
+    KiwoomClientDep,
+    SelectorServiceDep,
+    get_kiwoom_ws_client,
+    get_order_kiwoom_client,
+)
+from athena_api.kiwoom import KiwoomClient, KiwoomWsClient
 from athena_api.selector.schemas import (
     CallRequest,
     CallResponse,
@@ -18,12 +25,20 @@ from athena_api.selector.schemas import (
     SearchResponse,
 )
 
+# Resolved without raising: whether a call needs the order or websocket stack is known
+# only after the signed plan is opened. An order-disabled or socket-less deployment must
+# still serve reads, so absence becomes an error at dispatch rather than at injection.
+OptionalOrderClientDep = Annotated[KiwoomClient | None, Depends(get_order_kiwoom_client)]
+OptionalWsClientDep = Annotated[KiwoomWsClient | None, Depends(get_kiwoom_ws_client)]
+
 router = APIRouter(prefix="/api/v1/llm", tags=["LLM selector"])
 
 _TOOL_SPECS = (
     (
         "athena_search",
-        "Rank compact domestic Kiwoom operation candidates for a question.",
+        "Rank compact domestic Kiwoom operation candidates for a question. Reads are the "
+        "default surface; set intent=websocket for a realtime subscription or intent=order "
+        "to place one, and honour suggested_intent when the answer replies with it.",
         SearchRequest,
         SearchResponse,
     ),
@@ -35,13 +50,17 @@ _TOOL_SPECS = (
     ),
     (
         "athena_resolve",
-        "Select an operation, validate arguments, and issue a short-lived signed plan.",
+        "Select an operation, validate arguments, and issue a short-lived signed plan. Pass "
+        "the same intent used to search: resolve ranks the question again, against that "
+        "surface only.",
         ResolveRequest,
         ResolveResponse,
     ),
     (
         "athena_call",
-        "Execute only the query operation and arguments sealed in a signed plan.",
+        "Execute the operation and arguments sealed in a signed plan. A websocket plan sends "
+        "one registration frame and returns its acknowledgement; the events it turns on "
+        "arrive out of band on the stream endpoint, never in this response.",
         CallRequest,
         CallResponse,
     ),
@@ -113,9 +132,9 @@ async def describe_operation(
     openapi_extra={"x-athena-llm-exposed": True},
 )
 async def resolve_operation(
-    payload: ResolveRequest, selector: SelectorServiceDep
+    payload: ResolveRequest, selector: SelectorServiceDep, account: AccountAliasDep
 ) -> ResolveResponse:
-    return selector.resolve(payload)
+    return selector.resolve(payload, account=account)
 
 
 @router.post(
@@ -130,6 +149,28 @@ async def call_operation(
     request: Request,
     response: Response,
     client: KiwoomClientDep,
+    order_client: OptionalOrderClientDep,
+    ws_client: OptionalWsClientDep,
     selector: SelectorServiceDep,
+    account: AccountAliasDep,
+    authorization: Annotated[str | None, Header(alias="Authorization")] = None,
+    confirmation: Annotated[str | None, Header(alias="X-Athena-Confirm")] = None,
+    idempotency_key: Annotated[str | None, Header(alias="Idempotency-Key")] = None,
 ) -> CallResponse:
-    return await selector.call(payload, request, response, client)
+    """Execute a signed plan.
+
+    An order plan additionally demands the same headers the typed order route demands:
+    signing a plan settles *which* operation, never whether it may be placed.
+    """
+    return await selector.call(
+        payload,
+        request,
+        response,
+        client,
+        account=account,
+        order_client=order_client,
+        ws_client=ws_client,
+        authorization=authorization,
+        confirmation=confirmation,
+        idempotency_key=idempotency_key,
+    )

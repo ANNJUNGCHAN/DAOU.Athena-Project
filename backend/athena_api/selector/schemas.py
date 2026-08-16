@@ -40,9 +40,11 @@ class ReasonCode(StrEnum):
     TITLE_PHRASE_MATCH = "TITLE_PHRASE_MATCH"
     TITLE_TOKEN_MATCH = "TITLE_TOKEN_MATCH"
     PROJECTION_TITLE_MATCH = "PROJECTION_TITLE_MATCH"
+    OVERVIEW_MATCH = "OVERVIEW_MATCH"
     DOMAIN_MATCH = "DOMAIN_MATCH"
     REQUEST_FIELD_MATCH = "REQUEST_FIELD_MATCH"
     RESPONSE_FIELD_MATCH = "RESPONSE_FIELD_MATCH"
+    REALTIME_FIELD_MATCH = "REALTIME_FIELD_MATCH"
     SYNONYM_MATCH = "SYNONYM_MATCH"
     QUERY_COVERAGE = "QUERY_COVERAGE"
     EXPLICIT_DETAIL_GROUP = "EXPLICIT_DETAIL_GROUP"
@@ -50,6 +52,10 @@ class ReasonCode(StrEnum):
     PURE_LIST_BASE_REQUIRED = "PURE_LIST_BASE_REQUIRED"
     EXPLICIT_FULL_RESPONSE = "EXPLICIT_FULL_RESPONSE"
     DISCOVERY_ONLY = "DISCOVERY_ONLY"
+    DETAIL_GROUP_REQUIRED = "DETAIL_GROUP_REQUIRED"
+    GUARDED_EXECUTION = "GUARDED_EXECUTION"
+    WEBSOCKET_CONTROL_ONLY = "WEBSOCKET_CONTROL_ONLY"
+    INTENT_REQUIRED = "INTENT_REQUIRED"
     AMBIGUOUS_MARGIN = "AMBIGUOUS_MARGIN"
     LOW_CONFIDENCE = "LOW_CONFIDENCE"
 
@@ -84,6 +90,9 @@ class SearchResponse(StrictModel):
     catalog_version: str
     normalized_query: str
     results: list[SearchHit]
+    # Set when the question asks for something this intent cannot see. Without it an
+    # `auto` search for "실시간 체결" silently returns unrelated query operations.
+    suggested_intent: DiscoveryIntent | None = None
 
 
 class DescribeRequest(StrictModel):
@@ -134,8 +143,9 @@ class OperationDescription(StrictModel):
     execution_policy: Literal[
         "selector_query",
         "selector_detail",
-        "direct_guarded_order_only",
-        "direct_websocket_control_only",
+        "selector_detail_required",
+        "selector_guarded_order",
+        "selector_websocket_control",
     ]
     policy_reasons: list[ReasonCode]
 
@@ -147,6 +157,16 @@ class ContinuationInput(StrictModel):
 
 class ResolveRequest(StrictModel):
     question: str = Field(min_length=2, max_length=2000)
+    intent: DiscoveryIntent = Field(
+        default=DiscoveryIntent.AUTO,
+        description=(
+            "Which surface the question is allowed to land on. `auto` and `query` rank the "
+            "read surface only, so no vague question can reach an order or a realtime "
+            "subscription. `websocket` ranks the 23 streaming control frames; `order` ranks "
+            "the 12 guarded orders. This is the same gate athena_search applies, restated "
+            "here because resolve ranks the question a second time."
+        ),
+    )
     candidate_refs: list[str] = Field(default_factory=list, max_length=8)
     preferred_ref: str | None = None
     detail_group: str | None = Field(
