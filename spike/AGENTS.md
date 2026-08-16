@@ -3,6 +3,8 @@
 
 # spike
 
+> Terminology: [`GLOSSARY.md`](../GLOSSARY.md) is the standard vocabulary for this repo. Use its definitions; register new terms there before using them in code.
+
 ## Purpose
 Throwaway experiments kept for their **evidence**. Each spike directory holds runnable probe scripts
 plus a `RESULT.md` recording what was actually measured; raw responses land in `captures/`. Production

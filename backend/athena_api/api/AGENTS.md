@@ -3,6 +3,8 @@
 
 # api
 
+> Terminology: [`GLOSSARY.md`](../../../GLOSSARY.md) is the standard vocabulary for this repo. Use its definitions; register new terms there before using them in code.
+
 ## Purpose
 Hand-written routers that sit alongside the generated Kiwoom routes. `__init__.py` composes all of
 them (generated first, then batch/catalog/llm_tools/raw/stream) into the single `router` mounted by

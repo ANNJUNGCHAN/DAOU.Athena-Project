@@ -3,6 +3,8 @@
 
 # plan
 
+> Terminology: [`GLOSSARY.md`](../GLOSSARY.md) is the standard vocabulary for this repo. Use its definitions; register new terms there before using them in code.
+
 ## Purpose
 The project's working memory. Current state, verified measurements, and next moves live here — this
 is the first thing to read in a new session. Documents are Korean.

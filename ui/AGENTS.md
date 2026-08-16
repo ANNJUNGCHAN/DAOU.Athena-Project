@@ -3,6 +3,8 @@
 
 # ui
 
+> Terminology: [`GLOSSARY.md`](../GLOSSARY.md) is the standard vocabulary for this repo. Use its definitions; register new terms there before using them in code.
+
 ## Purpose
 The design contract for Athena's interface: identity, color tokens, glass/effect rules, and the
 outcome of design rounds. `app/` implements against these documents; they are specifications, not
@@ -31,6 +33,9 @@ inspiration notes.
 
 ### Working In This Directory
 - `round-1R/two-windows.md` is the authoritative window spec; `round-1/` is history — don't cite it.
+- **"창" is ambiguous — always say which.** `soul.md` §3 now separates 상시 창 (대화 창 · 캔버스 창)
+  from 일시 표면 (설정창 · 팝업창). The §8 elimination rule "상시 창이 셋 이상" counts persistent
+  windows only. Full definitions live in `GLOSSARY.md` §1.
 - When a spec value cannot be implemented, record why in the implementing code and in `app/README.md`
   rather than silently dropping it (e.g. Electron `backgroundMaterial` exposes no runtime blur radius,
   so the "refraction 0.46→0.17" value is unimplementable as written).
