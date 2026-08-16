@@ -153,6 +153,43 @@ def test_disallow_tool_removes_it(store):
     assert store.is_tool_allowed("dart", "search_disclosure") is False
 
 
+def test_disallow_tool_never_allowed_is_a_silent_success(store):
+    """이미 허용 안 된 툴을 또 disallow해도 에러가 아니다 — 목표 상태(허용
+    안 됨)는 이미 달성돼 있으므로 멱등하게 성공한다(disallow_tool 독스트링
+    참고)."""
+    store.request_consent("dart", "npx", ["-y", "x"], {})
+    store.approve("dart")  # 툴은 하나도 allow 안 함
+    store.disallow_tool("dart", "search_disclosure")  # raise 안 하면 통과
+    assert store.is_tool_allowed("dart", "search_disclosure") is False
+
+
+def test_disallow_tool_on_unapproved_server_does_not_raise(store):
+    """`allow_tool()`과 달리 서버 승인 여부를 요구하지 않는다 — 권한 회수는
+    전제조건으로 막을 이유가 없다."""
+    store.request_consent("dart", "npx", ["-y", "x"], {})  # approve() 호출 안 함
+    store.disallow_tool("dart", "search_disclosure")  # raise 안 하면 통과
+    assert store.is_tool_allowed("dart", "search_disclosure") is False
+
+
+def test_disallow_tool_on_never_registered_server_does_not_raise(store):
+    store.disallow_tool("never-registered", "search_disclosure")  # raise 안 하면 통과
+    assert store.is_tool_allowed("never-registered", "search_disclosure") is False
+
+
+def test_disallowed_tool_rejected_at_dispatch_gate_afterwards(store):
+    """`server.py`의 `dispatch_call()`이 실제로 거치는 게이트가
+    `is_tool_allowed()`다(`aggregator.resolve()` 다음 순서, SECURITY.md 참고).
+    disallow 이후 그 게이트가 진짜로 닫히는지 — 즉 다음 호출이 dispatch에서
+    거부될 조건이 성립하는지 — 확인한다."""
+    store.request_consent("dart", "npx", ["-y", "x"], {})
+    store.approve("dart", approved_tools={"search_disclosure"})
+    assert store.is_tool_allowed("dart", "search_disclosure") is True  # 사전조건
+
+    store.disallow_tool("dart", "search_disclosure")
+
+    assert store.is_tool_allowed("dart", "search_disclosure") is False
+
+
 def test_consent_persists_across_reload(tmp_path):
     path = tmp_path / "consent.json"
     store1 = consent.ConsentStore(path=path)

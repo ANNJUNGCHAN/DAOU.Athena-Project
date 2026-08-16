@@ -29,7 +29,7 @@ Claude Code CLI  ->  Athena Gateway (athena_mcp)  ->  등록된 MCP 서버 N개
 | `server.py` | 위 전부를 `mcp.server.lowlevel.Server`에 연결 — `list_tools`/`call_tool` 핸들러, `athena__render_canvas`/`athena__save_canvas`, 별칭 rename 결선 |
 | `onboarding.py` | **이식 절차** — 별칭 정규화(임의 이름 → MCP 규칙), 등록/승인 분리, `probe`(1회 연결로 툴 목록·인코딩·64자 위반 확인) |
 | `runner.py` | **프로세스로 띄우기** — 승인된 서버 연결(실패는 서버 단위 격리), `stdio_server()` + `Server.run()`, `tools/list_changed` 전송, 백그라운드 헬스체크 슈퍼바이저 |
-| `__main__.py` | `athena-mcp` CLI — register/list/show/approve/probe/allow/rename/remove/doctor/serve |
+| `__main__.py` | `athena-mcp` CLI — register/list/show/approve/probe/allow/disallow/rename/remove/doctor/serve |
 
 ## 설계 결정 중 문서화가 필요한 것
 

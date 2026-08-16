@@ -8,6 +8,7 @@ athena-mcp show <alias>                       # 실행 명령 전문 + 위험 �
 athena-mcp approve <alias>                    # 명시 승인 (이 전엔 spawn 금지)
 athena-mcp probe <alias>                      # 1회 연결해서 툴 목록·인코딩 확인
 athena-mcp allow <alias> <tool>...            # 툴별 allowlist
+athena-mcp disallow <alias> <tool>...         # 툴별 allowlist 해제 (allow의 역연산)
 athena-mcp serve                              # stdio MCP 서버 (.mcp.json이 부른다)
 ```
 
@@ -223,6 +224,19 @@ def cmd_allow(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_disallow(args: argparse.Namespace) -> int:
+    """`allow`의 역연산. `consent.disallow_tool()`이 서버 승인 여부를 따지지
+    않으므로(그 함수 독스트링 참고) 여기서도 별도 전제조건 검사를 얹지
+    않는다 — 허용 안 된 툴을 또 disallow해도, 서버가 미승인이어도 조용히
+    성공한다. 이 명령이 실행됐다는 것 자체가 "이제 이 툴은 안 된다"는 결과를
+    보장한다."""
+    _, consent, _ = _stores(args)
+    for tool in args.tools:
+        consent.disallow_tool(args.alias, tool)
+    print(f"허용 해제됨: {args.alias} -> {', '.join(args.tools)}")
+    return 0
+
+
 def cmd_rename(args: argparse.Namespace) -> int:
     runner = GatewayRunner(
         state_dir=Path(args.state_dir) if args.state_dir else None,
@@ -331,6 +345,11 @@ def build_parser() -> argparse.ArgumentParser:
     al.add_argument("alias")
     al.add_argument("tools", nargs="+")
     al.set_defaults(func=cmd_allow)
+
+    dis = sub.add_parser("disallow", help="툴별 allowlist 해제 (allow의 역연산)")
+    dis.add_argument("alias")
+    dis.add_argument("tools", nargs="+")
+    dis.set_defaults(func=cmd_disallow)
 
     rn = sub.add_parser("rename", help="별칭 변경 (등록·승인·집계 함께)")
     rn.add_argument("old_alias")

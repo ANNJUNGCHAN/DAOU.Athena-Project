@@ -201,6 +201,19 @@ class ConsentStore:
         self.save()
 
     def disallow_tool(self, alias: str, tool_name: str) -> None:
+        """`allow_tool()`의 역연산 — 툴별 allowlist에서 하나를 뺀다.
+
+        `allow_tool()`은 "서버가 아직 승인 안 됐다"를 이유로 막지만
+        (`ConsentNotGrantedError`), 이 함수는 **그 확인을 하지 않는다** —
+        일부러다. 권한을 부여하는 쪽은 전제조건이 있어야 안전하지만, 권한을
+        회수하는 쪽은 반대다: 서버가 미승인이든, 그 툴을 애초에 allow한 적이
+        없든, 이 호출이 끝나면 "이 툴은 허용 안 됨"이라는 목표 상태는 이미
+        달성돼 있다. 그래서 두 경우 다 예외 없이 조용히 성공한다
+        (`set.discard()`와 같은 멱등 연산) — 없는 걸 지우라는 요청을 에러로
+        만들면 "혹시 몰라 한 번 더 disallow" 같은 방어적 호출이 쓸데없이
+        실패한다. `조용히 자르지 않는다` 원칙과는 충돌하지 않는다 — 결과를
+        숨기거나 왜곡하는 게 아니라 이미 도달한 상태를 정확히 보고할 뿐이다.
+        """
         record = self._records.get(alias)
         if record is None:
             return
