@@ -453,6 +453,12 @@ def render_registry(
         [
             "}",
             "",
+            "# Base operations replaced by their detail projections. Derived from",
+            "# DETAIL_REGISTRY so it can never drift from the projections themselves.",
+            "SPLIT_BASE_TR_IDS = frozenset(detail.tr_id for detail in DETAIL_REGISTRY.values())",
+            "# The callable read surface: unsplit query bases plus every detail projection.",
+            "READ_TR_IDS = QUERY_TR_IDS - SPLIT_BASE_TR_IDS",
+            "",
             "KA10007_DETAIL_MANIFEST: dict[str, Any] = next(",
             "    projection",
             "    for projection in RESPONSE_PROJECTION_MANIFEST['projections']",
@@ -477,12 +483,19 @@ from athena_api.generated.runtime import (
     call_websocket_tr,
 )
 from athena_api.dependencies import (
+    AccountAliasDep,
     KiwoomClientDep,
     KiwoomWsClientDep,
     OrderKiwoomClientDep,
     TokenManagerDep,
 )
-from athena_api.generated.registry import DETAIL_REGISTRY, TR_REGISTRY, DetailSpec, TrSpec
+from athena_api.generated.registry import (
+    DETAIL_REGISTRY,
+    SPLIT_BASE_TR_IDS,
+    TR_REGISTRY,
+    DetailSpec,
+    TrSpec,
+)
 
 router = APIRouter()
 
@@ -504,12 +517,13 @@ def _order_endpoint(spec: TrSpec):
         request: Request,
         response: Response,
         client: OrderKiwoomClientDep,
+        account: AccountAliasDep,
         authorization: Annotated[str, Header(alias="Authorization")],
         confirmation: Annotated[str, Header(alias="X-Athena-Confirm")],
         idempotency_key: Annotated[str, Header(alias="Idempotency-Key")],
     ) -> response_model:
         return await call_order_tr(
-            spec.tr_id, payload, request, response, client, authorization, confirmation, idempotency_key
+            spec.tr_id, payload, request, response, client, authorization, confirmation, idempotency_key, account
         )
 
     return endpoint
@@ -553,6 +567,11 @@ def _detail_endpoint(spec: TrSpec, detail: DetailSpec):
 
 
 for _spec in TR_REGISTRY.values():
+    if _spec.kind == "query" and _spec.tr_id in SPLIT_BASE_TR_IDS:
+        # Replaced by this TR's detail projections; see ref/kiwoom-common-screen-manifest.json
+        # "exclusions". The base response is 5.5x wider on average and nothing consumes it.
+        # To restore it, drop this branch in scripts/generate_api.py and regenerate.
+        continue
     if _spec.kind == "query":
         _path, _tag, _factory = f"/api/v1/tr/{_spec.domain}/{_spec.tr_id}", "Kiwoom TR", _query_endpoint
         _extra = {"x-kiwoom-tr-id": _spec.tr_id, "x-athena-llm-exposed": False}

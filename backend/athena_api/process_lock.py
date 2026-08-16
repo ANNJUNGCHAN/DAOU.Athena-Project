@@ -7,11 +7,26 @@ import tempfile
 from pathlib import Path
 from typing import BinaryIO
 
+LOCK_FILENAME_PREFIX = "daou-athena-kiwoom"
+
 
 class CredentialProcessLock:
-    def __init__(self, path: Path | None = None) -> None:
-        self.path = path or Path(tempfile.gettempdir()) / "daou-athena-kiwoom.lock"
+    def __init__(self, path: Path | None = None, *, label: str | None = None) -> None:
+        self.path = path or Path(tempfile.gettempdir()) / f"{LOCK_FILENAME_PREFIX}.lock"
+        self.label = label
         self._file: BinaryIO | None = None
+
+    @classmethod
+    def for_credentials(
+        cls, fingerprint: str, *, label: str | None = None
+    ) -> CredentialProcessLock:
+        """Lock ownership of one credential pair, not of the whole process.
+
+        Two processes may legitimately own two different Kiwoom accounts at once, so the
+        lock is keyed off the credential fingerprint rather than a single fixed path.
+        """
+        path = Path(tempfile.gettempdir()) / f"{LOCK_FILENAME_PREFIX}-{fingerprint}.lock"
+        return cls(path, label=label)
 
     def acquire(self) -> None:
         handle: BinaryIO | None = None
@@ -34,6 +49,8 @@ class CredentialProcessLock:
             if handle is not None:
                 handle.close()
             message = "another credential-owning Athena backend is already running"
+            if self.label:
+                message = f"{message} for account '{self.label}'"
             raise RuntimeError(message) from exc
         assert handle is not None
         self._file = handle
