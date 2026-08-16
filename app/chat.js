@@ -208,19 +208,22 @@ window.addEventListener('mouseup', () => {
   document.body.style.cursor = '';
 });
 
-// ---------- TR / 캔버스 종류 라우팅 (목업) ----------
-const CANVAS_PLAN = {
+// ---------- TR → 카드 종류 라우팅 (목업) ----------
+// "캔버스"는 창을 뜻한다. 창 안에 뜨는 것은 **카드**다(GLOSSARY.md §2).
+// 카드는 데이터 표현 공통 UI라 들어오는 데이터가 달라져도 종류가 늘지 않는다 —
+// TR이 몇 개든 12종에 접는다. 여기 매핑은 그 접기의 목업이다.
+const CARD_PLAN = {
   stream: { label: '스트림', tool: 'search_news' },
   reader: { label: '리더', tool: 'download_document' },
   table: { label: '공통 테이블', tool: 'get_financial_statement' },
-  // AT-ST-001/AT-ST-004 제어 캔버스 트리거 — 카드 자체는 canvas.js가 그린다
+  // AT-ST-001/AT-ST-004 제어 카드 트리거 — 카드 자체는 canvas.js가 그린다
   // (00-통합-계획.md §4.1). tool 코드는 실제 TR/MCP 툴 이름이 아직 없어 이
   // 대화 창 진행 표시용으로만 쓰는 자리표시자다 — 발명, 리포트에 명시.
   accounts: { label: '계좌', tool: 'account_list' },
   mcp: { label: 'MCP 서버', tool: 'mcp_server_list' },
 };
 
-function pickCanvasTypes(text) {
+function pickCardTypes(text) {
   const t = text.trim();
   const picked = [];
   if (/뉴스|스트림|news/i.test(t)) picked.push('stream');
@@ -247,7 +250,7 @@ function setDot(mode) {
 async function runQuery(text) {
   const myToken = ++abortToken;
   manualOverride = false; // 새 턴 — 자동 성장 재개
-  const types = pickCanvasTypes(text);
+  const types = pickCardTypes(text);
 
   const qLine = document.createElement('div');
   qLine.className = 'turn';
@@ -285,7 +288,7 @@ async function runQuery(text) {
   for (const type of types) {
     const code = document.createElement('span');
     code.className = 'tr-code';
-    code.textContent = CANVAS_PLAN[type].tool;
+    code.textContent = CARD_PLAN[type].tool;
     progTrs.appendChild(code);
     trEls[type] = code;
   }
@@ -293,8 +296,8 @@ async function runQuery(text) {
   let done = 0;
   let opened = false;
   for (const type of types) {
-    progText.textContent = `${CANVAS_PLAN[type].tool} 불러오는 중 · ${done}/${types.length}`;
-    setLocked(true, `${CANVAS_PLAN[type].tool} 불러오는 중 · ${done}/${types.length}`);
+    progText.textContent = `${CARD_PLAN[type].tool} 불러오는 중 · ${done}/${types.length}`;
+    setLocked(true, `${CARD_PLAN[type].tool} 불러오는 중 · ${done}/${types.length}`);
     await wait(500);
     if (myToken !== abortToken) return;
 
@@ -304,7 +307,7 @@ async function runQuery(text) {
 
     trEls[type].classList.add('done');
     done += 1;
-    progText.textContent = `${CANVAS_PLAN[type].tool} 완료 · ${done}/${types.length}`;
+    progText.textContent = `${CARD_PLAN[type].tool} 완료 · ${done}/${types.length}`;
   }
   scheduleHeightSync();
   await wait(200);
@@ -329,12 +332,12 @@ async function runQuery(text) {
   for (const type of types) {
     const chip = document.createElement('span');
     chip.className = 'chip';
-    chip.textContent = CANVAS_PLAN[type].label;
+    chip.textContent = CARD_PLAN[type].label;
     chip.addEventListener('click', () => ipcRenderer.send('athena:highlight-canvas', type));
     meta.appendChild(chip);
   }
   const trace = document.createElement('span');
-  trace.textContent = types.map((t) => CANVAS_PLAN[t].tool).join(' · ') + ` · ${((types.length * 0.5) + 0.55).toFixed(1)}s`;
+  trace.textContent = types.map((t) => CARD_PLAN[t].tool).join(' · ') + ` · ${((types.length * 0.5) + 0.55).toFixed(1)}s`;
   meta.appendChild(trace);
   aLine.appendChild(meta);
 
@@ -352,7 +355,7 @@ function withEulReul(word) {
 }
 
 function answerFor(types) {
-  const labels = types.map((t) => CANVAS_PLAN[t].label).join(', ');
+  const labels = types.map((t) => CARD_PLAN[t].label).join(', ');
   return `캔버스 창에 ${withEulReul(labels)} 띄웠습니다.`;
 }
 

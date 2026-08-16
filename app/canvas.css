@@ -2,8 +2,15 @@ html, body { background: transparent; }
 
 .mosaic {
   position: fixed; inset: 0;
-  /* soul.md 결정 2: 캔버스는 준불투명 rgba(29,34,44,0.92~0.95) — 데이터 가독성 우선 */
-  background: rgba(29, 34, 44, 0.94);
+  /* 캔버스 창도 유리다 — soul.md §7 "모든 표면이 유리다. 두 창도, 창 안의 카드도 전부."
+     "캔버스는 불투명"은 2026-08-14에 폐기된 결론이다(liquid-glass.md:99).
+     재료는 창 레벨의 backgroundMaterial:'acrylic'이 준다(main.js commonWinOpts) —
+     여기 값은 그 위에 얹는 **유리 두께**다.
+     §7: "유리 두께는 고정값이 아니다. 뒤에 있는 것의 정보 밀도와 밝기에 비례해
+     두꺼워진다 — 어두운 데스크톱 위 ~0.82, 데이터 캔버스 위 ~0.97."
+     캔버스는 광량 3단(데스크톱→창→캔버스) 중 가장 두꺼운 단계다. 얇게 만들면
+     뒤가 비쳐 숫자가 겹쳐 읽히고 그건 §8 "정보 정직성" 위반이다. */
+  background: rgba(29, 34, 44, 0.97);
   will-change: clip-path;
   overflow: hidden;
 }
