@@ -6,7 +6,8 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "verify": "electron verify.js"
+    "verify": "electron verify.js",
+    "verify:settings": "electron verify-settings.js"
   },
   "author": "",
   "license": "ISC",

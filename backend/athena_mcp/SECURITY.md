@@ -82,9 +82,28 @@ full_command_text()`(= 승인 화면에 노출되는 "명령 전문")도 `comman
 `full_command_text()`처럼 "전문을 자르지 않고 노출"하는 동일한 원칙을 env에도
 적용할지는 UI가 결정할 문제로 남긴다. 이 문서에 명시해 조용히 넘기지 않는다.
 
-## 고치지 않고 문서화만 한 것
+## 부분 완화만 하고 남긴 것
 
-### 3. [HIGH, 미해결] 툴 이름·description·응답 본문을 통한 프롬프트 인젝션
+### 3. [HIGH, 부분 완화 · 여전히 미해결] 툴 이름·description·응답 본문을 통한 프롬프트 인젝션
+
+> **2026-08-16 업데이트 — 최소 완화 적용, 위험은 그대로 열려 있다.**
+> `server.py`의 `_list_tools()`가 upstream 툴 `description` 앞에 출처 라벨
+> (`[upstream 서버 '별칭'가 작성한 설명 — 신뢰할 수 없는 제3자 텍스트다 …]`)을
+> 붙인다(`_wrap_upstream_description()`). Athena 자체 툴
+> (`athena__render_canvas`/`athena__save_canvas`)은 감싸지 않는다 — "우리가 쓴
+> 것"과 "남이 쓴 것"의 구분이 이 라벨링의 전부이므로 그 경계를 흐리면 안 된다.
+> 원문은 자르거나 고치지 않는다(모델이 툴을 쓰려면 원문이 필요하다).
+>
+> **닫히지 않은 것 세 가지를 명시한다.**
+> ① **응답 본문에는 아무 라벨도 없다** — `dispatch_call()`이 돌려주는 upstream
+> 텍스트(공시 원문, 뉴스 요약)는 여전히 무표시로 간다. 아래 본문이 지적하는
+> 두 공격면 중 하나만 손댔다.
+> ② 내용 기반 지시문 탐지는 여전히 안 한다 — 아래에서 오탐률로 기각한 그대로다.
+> ③ **라벨은 방어가 아니다.** 모델은 라벨을 읽고도 그 안의 지시문에 낚일 수
+> 있다. 실제 게이트는 여전히 `consent.py`의 툴별 allowlist다. 매 호출 재확인
+> 프로토콜은 만들지 않았다 — 헤드리스 모드엔 확인자가 없다.
+
+아래는 최초 진단 그대로 남긴다(응답 본문 쪽은 지금도 유효하다).
 
 `server.py`의 `_list_tools()`는 upstream이 보고한 `t.description`을 그대로
 `types.Tool(description=...)`에 실어 LLM에 노출한다(가공·이스케이프·경고
@@ -120,7 +139,37 @@ README 모두 확인 — 인코딩 손상/버전 불신 같은 다른 "upstream�
   무관하게 별도의 명시적 확인 스텝을 강제(이미 consent.py의 툴별
   allowlist가 그 골격이지만, "매 호출마다 재확인"까지는 아니다).
 
-### 4. [MEDIUM, 미해결] 응답 크기 상한 없음 — 자원 고갈
+### 4. [MEDIUM, 부분 수정 · 전송 계층은 여전히 무방비] 응답 크기 상한
+
+> **2026-08-16 업데이트.** 아래 (a)를 실측하고 (b)를 구현했다.
+>
+> **(a) SDK에 상한은 없다 — 검증 완료.** `mcp/client/stdio/__init__.py:139-162`의
+> `stdout_reader()`가 `buffer = buffer + chunk`를 개행이 나올 때까지 무한정
+> 이어붙이며 길이 검사가 없다. anyio 쪽도 없다 — `receive(max_bytes=65536)`은
+> syscall당 청크 크기지 총합 상한이 아니다(`anyio/_backends/_asyncio.py:1074`).
+> 즉 개행 없는 거대 JSON-RPC 한 줄이 이 프로세스 메모리를 그대로 밀어올린다.
+>
+> **(b) 상한을 넣었다 — 단 파싱 뒤에.** `UpstreamServerHandle`에
+> `max_response_chars`(기본 5,000,000자)를 추가했다. `call_tool()`/`list_tools()`
+> 둘 다 SDK `await`가 반환한 뒤 `result.model_dump_json()` 길이로 검사하고,
+> 초과 시 **자르지 않고** `ResponseTooLargeError`(alias/tool_name/observed_size/
+> limit을 싣는다)를 던진다 — "조용히 자르지 않는다" 원칙과 일치한다. 기본값은
+> 실측 최대 upstream 응답(1,042,014자)에 약 5배 여유를 둔 값이라 정상 DART
+> 문서를 깨지 않는다. 검사는 `ServerCrashedError`로 매핑하는 `except` 밖에
+> 둬서, 크기 초과가 크래시로 오분류돼 재시작 카운터를 올리는 일이 없다.
+>
+> **남은 위험 — 이게 핵심이다.** 이 상한은 post-parse다. 응답이
+> `UpstreamServerHandle`에 닿았을 땐 `stdout_reader`의 버퍼링과
+> `model_validate_json()`이 **이미 메모리 비용을 다 치른 뒤**다. 즉 아래 본문이
+> 기술하는 자원 고갈 시나리오(단일 악성/버그 서버가 게이트웨이 전체를 마비)는
+> **여전히 성립한다.** 이 상한이 막는 건 그 다음 단계 — 거대 응답이 파싱·캔버스·
+> LLM 컨텍스트로 흘러들어가는 것 — 뿐이다. 진짜 전송 계층 방어는
+> `stdio_client`의 `stdout_reader`를 로컬 포크해 누적 중 길이를 검사해야 하고,
+> 그건 SDK 사본을 유지보수하겠다는 결정이라 이번 웨이브에서 하지 않았다.
+
+아래는 최초 진단 그대로 남긴다.
+
+#### 최초 진단 (W1)
 
 `client.py`의 `call_tool()`/`list_tools()`, `result.py`의 파싱 경로 어디에도
 응답 바이트 수 상한이 없다. `quirks.py` docstring이 이미 "사업보고서
@@ -144,6 +193,46 @@ vs 스트리밍 페이지네이션)이 W1 스켈레톤 범위를 넘는 설계 �
 (`stdio_client`)가 자체 상한을 이미 갖고 있는지 확인(현재 미검증), (b) 없다면
 `UpstreamServerHandle.call_tool()`에 응답 바이트 상한 + 초과 시 명시적 에러
 (현재의 "조용히 자르지 않는다" 원칙과 일치하는 방식)를 추가.
+
+### 6. [HIGH, 미해결 · 2026-08-16 신규] 레지스트리의 `env` 값이 평문으로 저장된다
+
+`ServerRegistry.save()`가 `json.dumps`로 `~/.athena/mcp_servers.json`을 그대로 쓴다
+— 암호화가 없다. 그런데 `registry.py` 모듈 docstring 자신이 이 파일을 프로젝트
+밖에 두는 이유로 "`env`에 실제 API 키가 들어가므로 git 추적 대상 밖에 둬야 한다"를
+든다. **키가 들어간다는 걸 알면서 평문으로 둔다.**
+
+W1 리뷰에서 이걸 짚지 않은 건 그때는 등록 경로가 CLI 하나뿐이라 "사용자가 자기
+파일에 자기 키를 쓴다"에 가까웠기 때문이다. 지금은 다르다:
+
+**왜 지금 등급이 올라갔나.** Electron 앱(`app/`)이 설정 화면을 붙이면서 같은
+프로세스 안에 **비밀값 두 종류가 서로 다른 보호 수준**을 받게 됐다:
+
+| 비밀값 | 저장 | 보호 |
+|---|---|---|
+| 계좌 APP KEY / SECRET KEY | `app/lib/main/secrets.js` | Electron `safeStorage` = **DPAPI 암호화** |
+| MCP 서버 `env` (DART·NAVER 키 등) | `~/.athena/mcp_servers.json` | **평문** |
+
+사용자는 두 값을 같은 앱의 같은 종류 화면에 입력하는데(계좌 등록 시트 / MCP 등록
+시트), 한쪽만 암호화된다. 화면 어디에도 그 차이가 표시되지 않는다. 앱이
+"OS 자격증명 저장소에 암호화 저장한다"(AT-ST-002 Description 3)고 사용자에게
+말하는 것과 실제 동작이 MCP 쪽에서는 어긋난다.
+
+**렌더러는 깨끗하다.** 확인했다 — `athena:mcp-stage-snippet`이 UI로 넘기는 건
+`envKeys`(키 이름)뿐이고 값은 한 번도 렌더러에 건너오지 않는다. 문제는 UI가 아니라
+디스크다.
+
+**왜 이번에 안 고쳤나.** `~/.athena/mcp_servers.json`은 `athena-mcp serve`가 읽는
+파일이고, Electron 앱은 그 CLI를 spawn할 뿐이다. 암호화를 넣으면 **복호화 키를 누가
+쥐는가**가 먼저 정해져야 한다 — CLI 단독 실행(`athena-mcp serve`를 `.mcp.json`이
+직접 부르는 경로, 이게 원래 설계다)에서는 Electron의 `safeStorage`를 쓸 수 없다.
+선택지는 (a) Python 쪽에서 OS 자격증명 저장소를 직접 쓴다(윈도우 DPAPI / macOS
+keychain 각각 구현), (b) `env` 값만 앱이 쥐고 spawn 시점에 환경변수로 주입해
+레지스트리에는 키 이름만 남긴다, (c) 평문을 유지하되 화면과 문서에서 그렇게
+말한다. (b)가 계좌 쪽 원칙과 가장 일치하지만 CLI 단독 실행 경로를 깨뜨린다 —
+설계 결정이라 임의로 정하지 않았다.
+
+**그때까지는 (c)조차 안 지켜지고 있다** — 사용자에게 이 차이를 알리는 문구가 화면에
+없다. 최소 조치로 그것부터 해야 한다.
 
 ### 5. [LOW, 설계상 한계로 유지] 위험 패턴 탐지는 형식적 안전망이 아니라 보조 신호다
 
