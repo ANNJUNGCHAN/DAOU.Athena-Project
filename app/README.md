@@ -228,11 +228,21 @@ Enter)을 그대로 시뮬레이션했다. `athena__render_canvas` 인터페이�
 
 ### 미구현 · 단순화한 것 (숨기지 않고 명시)
 
-- **캔버스 갱신 신선도**는 카드 헤더에 "HH:MM:SS 기준"으로 표시하지만, 실시간 재갱신
+- **⚠ 브랜치 병합에서 버린 기능 1건 — "옮기겠다"고 커밋에 써놓고 안 옮겼다.**
+  병합 커밋 `c0d874b`(`merge: ANNJUNGCHAN/Call을 병합한다`)의 본문은
+  *"버려진 것: 화면 설정(autoExpandCanvas/autoGrowChat), 커맨드바 설정 호출 정규식.
+  **둘 다 후속 커밋에서 모드 구현에 옮긴다**"*라고 적었다.
+  실제로는 **커맨드바 정규식만 옮겼고**(`chat.js`의 `SETTINGS_COMMAND`)
+  **화면 설정은 안 옮겼다.** 지금 코드에 `autoExpandCanvas`/`autoGrowChat`은 0건이다.
+  원본 구현은 `git show baa7e0e -- app/main.js`에 있다(약 40줄 + IPC 2채널 + 체크박스 2개).
+  되살릴 때는 `PREFS_FILE`을 그때처럼 `settings.json`으로 두지 말고
+  **`athena-prefs.json`으로 바꿔라** — `app/lib/main/`의 다른 모듈이 전부
+  `athena-*.json` 관례를 쓴다(`accounts.js`, `onboarding.js`, `secrets.js`, `cli-accounts.js`).
+- **카드 갱신 신선도**는 카드 헤더에 "HH:MM:SS 기준"으로 표시하지만, 실시간 재갱신
   로직(폴링/WebSocket)은 없다 — 목업 데이터라 시점이 고정.
-- **캔버스 칩 클릭 시 해당 캔버스 강조**는 구현했지만(`athena:highlight-canvas`),
+- **카드 칩 클릭 시 해당 카드 강조**는 구현했지만(`athena:highlight-canvas`),
   스크롤 위치 복원 등 세부 동작은 최소 구현.
-- **접기(collapse) 시 모자이크 내용을 초기화한다** — 재확장하면 새로 그린다. 캔버스별
+- **접기(collapse) 시 모자이크 내용을 초기화한다** — 재확장하면 새로 그린다. 카드별
   상태 보존은 W2 범위 밖으로 남겨뒀다.
 - **대화 창 sheen의 "굴절 0.46→0.17" 값은 구현하지 않았다.** two-windows.md는 이 값을
   창 자체의 네이티브 유리 재질 강도로 서술하는데, Electron `backgroundMaterial` API는
