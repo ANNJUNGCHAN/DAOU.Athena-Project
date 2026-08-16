@@ -82,9 +82,28 @@ full_command_text()`(= 승인 화면에 노출되는 "명령 전문")도 `comman
 `full_command_text()`처럼 "전문을 자르지 않고 노출"하는 동일한 원칙을 env에도
 적용할지는 UI가 결정할 문제로 남긴다. 이 문서에 명시해 조용히 넘기지 않는다.
 
-## 고치지 않고 문서화만 한 것
+## 부분 완화만 하고 남긴 것
 
-### 3. [HIGH, 미해결] 툴 이름·description·응답 본문을 통한 프롬프트 인젝션
+### 3. [HIGH, 부분 완화 · 여전히 미해결] 툴 이름·description·응답 본문을 통한 프롬프트 인젝션
+
+> **2026-08-16 업데이트 — 최소 완화 적용, 위험은 그대로 열려 있다.**
+> `server.py`의 `_list_tools()`가 upstream 툴 `description` 앞에 출처 라벨
+> (`[upstream 서버 '별칭'가 작성한 설명 — 신뢰할 수 없는 제3자 텍스트다 …]`)을
+> 붙인다(`_wrap_upstream_description()`). Athena 자체 툴
+> (`athena__render_canvas`/`athena__save_canvas`)은 감싸지 않는다 — "우리가 쓴
+> 것"과 "남이 쓴 것"의 구분이 이 라벨링의 전부이므로 그 경계를 흐리면 안 된다.
+> 원문은 자르거나 고치지 않는다(모델이 툴을 쓰려면 원문이 필요하다).
+>
+> **닫히지 않은 것 세 가지를 명시한다.**
+> ① **응답 본문에는 아무 라벨도 없다** — `dispatch_call()`이 돌려주는 upstream
+> 텍스트(공시 원문, 뉴스 요약)는 여전히 무표시로 간다. 아래 본문이 지적하는
+> 두 공격면 중 하나만 손댔다.
+> ② 내용 기반 지시문 탐지는 여전히 안 한다 — 아래에서 오탐률로 기각한 그대로다.
+> ③ **라벨은 방어가 아니다.** 모델은 라벨을 읽고도 그 안의 지시문에 낚일 수
+> 있다. 실제 게이트는 여전히 `consent.py`의 툴별 allowlist다. 매 호출 재확인
+> 프로토콜은 만들지 않았다 — 헤드리스 모드엔 확인자가 없다.
+
+아래는 최초 진단 그대로 남긴다(응답 본문 쪽은 지금도 유효하다).
 
 `server.py`의 `_list_tools()`는 upstream이 보고한 `t.description`을 그대로
 `types.Tool(description=...)`에 실어 LLM에 노출한다(가공·이스케이프·경고
@@ -120,7 +139,37 @@ README 모두 확인 — 인코딩 손상/버전 불신 같은 다른 "upstream�
   무관하게 별도의 명시적 확인 스텝을 강제(이미 consent.py의 툴별
   allowlist가 그 골격이지만, "매 호출마다 재확인"까지는 아니다).
 
-### 4. [MEDIUM, 미해결] 응답 크기 상한 없음 — 자원 고갈
+### 4. [MEDIUM, 부분 수정 · 전송 계층은 여전히 무방비] 응답 크기 상한
+
+> **2026-08-16 업데이트.** 아래 (a)를 실측하고 (b)를 구현했다.
+>
+> **(a) SDK에 상한은 없다 — 검증 완료.** `mcp/client/stdio/__init__.py:139-162`의
+> `stdout_reader()`가 `buffer = buffer + chunk`를 개행이 나올 때까지 무한정
+> 이어붙이며 길이 검사가 없다. anyio 쪽도 없다 — `receive(max_bytes=65536)`은
+> syscall당 청크 크기지 총합 상한이 아니다(`anyio/_backends/_asyncio.py:1074`).
+> 즉 개행 없는 거대 JSON-RPC 한 줄이 이 프로세스 메모리를 그대로 밀어올린다.
+>
+> **(b) 상한을 넣었다 — 단 파싱 뒤에.** `UpstreamServerHandle`에
+> `max_response_chars`(기본 5,000,000자)를 추가했다. `call_tool()`/`list_tools()`
+> 둘 다 SDK `await`가 반환한 뒤 `result.model_dump_json()` 길이로 검사하고,
+> 초과 시 **자르지 않고** `ResponseTooLargeError`(alias/tool_name/observed_size/
+> limit을 싣는다)를 던진다 — "조용히 자르지 않는다" 원칙과 일치한다. 기본값은
+> 실측 최대 upstream 응답(1,042,014자)에 약 5배 여유를 둔 값이라 정상 DART
+> 문서를 깨지 않는다. 검사는 `ServerCrashedError`로 매핑하는 `except` 밖에
+> 둬서, 크기 초과가 크래시로 오분류돼 재시작 카운터를 올리는 일이 없다.
+>
+> **남은 위험 — 이게 핵심이다.** 이 상한은 post-parse다. 응답이
+> `UpstreamServerHandle`에 닿았을 땐 `stdout_reader`의 버퍼링과
+> `model_validate_json()`이 **이미 메모리 비용을 다 치른 뒤**다. 즉 아래 본문이
+> 기술하는 자원 고갈 시나리오(단일 악성/버그 서버가 게이트웨이 전체를 마비)는
+> **여전히 성립한다.** 이 상한이 막는 건 그 다음 단계 — 거대 응답이 파싱·캔버스·
+> LLM 컨텍스트로 흘러들어가는 것 — 뿐이다. 진짜 전송 계층 방어는
+> `stdio_client`의 `stdout_reader`를 로컬 포크해 누적 중 길이를 검사해야 하고,
+> 그건 SDK 사본을 유지보수하겠다는 결정이라 이번 웨이브에서 하지 않았다.
+
+아래는 최초 진단 그대로 남긴다.
+
+#### 최초 진단 (W1)
 
 `client.py`의 `call_tool()`/`list_tools()`, `result.py`의 파싱 경로 어디에도
 응답 바이트 수 상한이 없다. `quirks.py` docstring이 이미 "사업보고서
