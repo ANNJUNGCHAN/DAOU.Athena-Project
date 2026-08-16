@@ -2,6 +2,7 @@
 const { ipcRenderer } = require('electron');
 const onboarding = require('./lib/onboarding');
 const authScreen = require('./lib/auth-screen');
+const settingsCards = require('./lib/settings-cards');
 const { el, progressDots } = require('./lib/ui-kit');
 
 const $boot = document.getElementById('boot');
@@ -15,6 +16,8 @@ const $lockText = document.getElementById('lockText');
 const $grip = document.getElementById('grip');
 const $onboard = document.getElementById('onboard');
 const $onboardBody = document.getElementById('onboardBody');
+const $settings = document.getElementById('settings');
+const $settingsGrid = document.getElementById('settingsGrid');
 
 let layout = { chatBaseH: 204, chatMaxH: 788, scale: 1 };
 let manualOverride = false;
@@ -355,17 +358,69 @@ function answerFor(types) {
 
 function wait(ms) { return new Promise((r) => setTimeout(r, ms)); }
 
+// ---------- 설정 모드 ----------
+// 설정은 새 창이 아니다. **이 창이 설정 모드로 바뀐다** — 온보딩·인증과 같은
+// 문법이다(ui/DESIGN-SOUL.md:100 "#dot를 건들면 그냥 채팅창이 설정창으로 변하는
+// 것이 좋겠다", 도출된 규칙 3). 근거: 설정을 만지는 동안 사용자는 채팅을 치지
+// 않는다 — 시간을 다투지 않으면 면적을 나누지 않는다.
+let settingsOpen = false;
+
+function openSettings() {
+  if (settingsOpen) return;
+  settingsOpen = true;
+  $app.hidden = true;
+  $settings.hidden = false;
+  manualOverride = true; // 설정 동안은 이력 기반 자동 성장이 개입하지 않는다
+  ipcRenderer.send('athena:set-chat-height', { height: layout.chatMaxH, manual: false });
+  settingsCards.renderAccounts($settingsGrid);
+  settingsCards.renderMcp($settingsGrid);
+}
+
+function closeSettings() {
+  if (!settingsOpen) return;
+  settingsOpen = false;
+  $settingsGrid.replaceChildren();
+  $settings.hidden = true;
+  $app.hidden = false;
+  manualOverride = false;
+  ipcRenderer.send('athena:set-chat-height', { height: layout.chatBaseH, manual: false });
+  $input.focus();
+}
+
+// 커맨드바에서 설정을 부르는 말. 결정론적 매칭만 한다 — 애매하면 일반 질의로 흘린다.
+// GLOSSARY.md §1: 설정은 커맨드바로도 반드시 도달할 수 있어야 한다. 점으로만
+// 갈 수 있으면 ui/soul.md §8 탈락 조건에 걸린다.
+// 실측 함정: `\b`는 한글 뒤에서 성립하지 않는다(한글은 \w가 아니다). 이걸 쓰면
+// 첫 분기가 통째로 죽는다. 단독 호출어는 문자열 전체 일치로, 나머지는 동사구로 잡는다.
+const SETTINGS_COMMAND =
+  /^(설정|환경설정|셋팅|세팅|settings?|config)\s*[?!.]*$|설정\s*(창|화면|모드)?\s*(을|를)?\s*(열어|보여|띄워|줘|줄래)|모델\s*(바꿔|변경|설정)|계좌\s*(연결|설정|관리)/i;
+
+function isSettingsCommand(text) {
+  return SETTINGS_COMMAND.test(text.trim());
+}
+
+$dot.addEventListener('click', () => { openSettings(); });
+
 // ---------- 입력 ----------
 $input.addEventListener('keydown', (e) => {
   if (e.key === 'Enter' && state === 'idle') {
     const text = $input.value.trim() || '보유 종목 수급 요약해줘';
     $input.value = '';
+    if (isSettingsCommand(text)) {
+      openSettings();
+      return;
+    }
     runQuery(text);
   }
 });
 
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
+    // 설정 모드가 떠 있으면 그것부터 닫는다 — 지금 눈앞에 있는 것이 먼저다.
+    if (settingsOpen) {
+      closeSettings();
+      return;
+    }
     if (state !== 'idle') {
       abortToken++; // 중단
       state = 'idle';
