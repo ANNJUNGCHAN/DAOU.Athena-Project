@@ -17,6 +17,7 @@ them (generated first, then batch/catalog/llm_tools/raw/stream) into the single 
 | `batch.py` | Bounded batch execution over allowlisted Kiwoom HTTP query operations |
 | `catalog.py` | Read-only metadata for every generated inventory operation (`/api/v1/catalog`) |
 | `llm_tools.py` | The four exposed LLM tools — `athena_search`, `athena_describe`, `athena_resolve`, `athena_call` — plus the non-tool `llm_get_manifest` |
+| `oauth_status.py` | Read-only token status (`GET /api/v1/internal/oauth/status`). **No in-repo consumer today** — see below |
 | `raw.py` | Allowlisted raw HTTP query passthrough |
 | `stream.py` | Authenticated downstream fanout of Kiwoom `REAL` WebSocket events (`WS /api/v1/ws/stream`) |
 
@@ -32,6 +33,13 @@ them (generated first, then batch/catalog/llm_tools/raw/stream) into the single 
   API ID); order TRs are excluded from batch entirely.
 - Routers stay transport-only: validation and orchestration belong in `selector/service.py` or
   `kiwoom/`.
+- **`oauth_status.py` has no caller in this repo (2026-08-17 실측).** It arrived with the
+  `ANNJUNGCHAN/Call` merge to feed a settings window that was deleted in the same merge. It is
+  **not dead code** — it fills a real protocol gap: `au10001` mints a token and `au10002` revokes
+  one, so before this route a client had to mint a new token just to ask how much time was left.
+  The Electron app does not use it because `app/lib/main/accounts.js` tracks token state per
+  account locally instead. Keep it, and if you wire a consumer, say so here.
+  It counts as one of the 14 service operations in the 315-operation contract.
 
 ### Testing Requirements
 `backend/tests/api/test_inventory_api.py` and `test_llm_tools_api.py`. Use `respx` to stub upstream
