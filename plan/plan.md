@@ -1,6 +1,6 @@
 # Athena 진행 상황 및 재개 계획
 
-> 최종 갱신: 2026-08-15 · 브랜치 `main` · 작성 시점에 `origin/main`과 동기화됨
+> 최종 갱신: 2026-08-16 · 브랜치 `ANNJUNGCHAN/REST-API` · §1의 2026-08-15 스냅샷은 `main` 기준이다
 >
 > **다음 세션은 이 파일부터 읽는다.** 여기에는 *지금 상태 / 검증된 사실 / 다음 수*만 적는다.
 > 설계 근거와 함정 목록은 [`plan/00-인수인계.md`](00-인수인계.md)에 있다. 중복하지 않는다.
@@ -25,6 +25,19 @@ backend 전체:  429 passed, 0 failed   (198초)
 
 > 이전 스냅샷의 `403 passed, 22 failed`는 셀렉터 base/detail 라우팅 재설계로 해소됐다. §3 참조.
 
+**2026-08-16 · 브랜치 `ANNJUNGCHAN/REST-API` 작업 트리 기준 재측정:**
+
+```
+backend 전체:  517 passed, 0 failed   (113초)
+  ruff check .                          → All checks passed
+  generate_api.py --check               → Generated files are current
+  render_screen_injection_map.py --check→ Generated screen injection map is current
+  render_screen_card_facts.py --check   → Generated screen card facts are current
+```
+
+이 브랜치는 `main`에 없는 미커밋 작업(계좌 모듈, 셀렉터 수정, 화면기획서)을 포함한다. 517은
+그 상태의 수치이지 `main`의 수치가 아니다.
+
 | 영역 | 상태 | 위치 |
 |---|---|---|
 | 키움 REST 백엔드 (301 라우팅) | **동작** | `backend/athena_api/` |
@@ -36,6 +49,7 @@ backend 전체:  429 passed, 0 failed   (198초)
 | CLI (`claude -p`) 연동 | **미착수** | — |
 | 파수꾼·조사관 | **미착수** (설계만) | `plan/감시에이전트-실행계획.md` |
 | 캔버스 설계 라운드 | **미착수** (초안만) | `plan/canvas-taxonomy.md` |
+| 키움 공통화면 화면기획서 | **문서·아트보드 완료, 구현 미착수** | `plan/kiwoom-common-screen-spec.md` · Paper 아트보드 25~34 |
 
 ---
 
