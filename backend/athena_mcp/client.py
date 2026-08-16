@@ -28,14 +28,59 @@ from typing import Any
 
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
-from mcp.types import CallToolResult, InitializeResult, Tool
+from mcp.shared.session import ProgressFnT
+from mcp.types import CallToolResult, InitializeResult, ListToolsResult, Tool
 
 from athena_mcp.consent import ConsentStore
 from athena_mcp.registry import ServerEntry
 
+# 실측 최대 upstream 응답: `jjlabsio` `get_disclosure`(사업보고서) 1,042,014자
+# (spike/mcp-client/CAPTURE-S2B-jjlabsio.md, quirks.py가 인용하는 636,059자
+# 사업보고서와는 별개의 대용량 캡처 — 둘 다 실측이고 자릿수 단위가 같다).
+# 상한 초과로 정상 DART 응답을 거부하면 안 되므로 관측 최댓값의 약 5배를
+# 여유로 뒀다 — 정확한 "안전한" 위치를 정할 근거는 없다(SECURITY.md #4가
+# 이미 그렇게 명시한다). 자원 고갈 방어와 실측 최대치 여유 확보 사이의
+# 임의 절충이며, 필요하면 생성자 인자로 서버별로 덮어쓴다.
+DEFAULT_MAX_RESPONSE_CHARS = 5_000_000
+
 
 class ServerCrashedError(RuntimeError):
     """upstream 서버 세션이 죽었다(healthcheck 실패 또는 호출 중 예외)."""
+
+
+class ResponseTooLargeError(RuntimeError):
+    """`call_tool()`/`list_tools()` 응답이 설정된 상한을 넘었다 — 자르지 않고 거부한다.
+
+    "조용히 자르지 않는다"는 이 패키지의 공통 규칙(SECURITY.md #4가 미해결로
+    남겨둔 항목)을 이 클래스가 채운다. `quirks.py` docstring이 이미 실측한
+    636,059자 사업보고서와 `spike/mcp-client/CAPTURE-S2B-jjlabsio.md`의
+    1,042,014자 캡처 둘 다 **정상적인 DART 대용량 공시**다 — 상한은 그 값들을
+    자르지 않도록 `DEFAULT_MAX_RESPONSE_CHARS`에 여유를 두고 잡았다.
+
+    **알려진 한계**: 이건 SDK가 `await`를 반환한 *뒤에* 파싱된 결과 크기를 재는
+    post-parse 상한이다. `mcp.client.stdio.stdio_client`의 `stdout_reader()`
+    (`mcp/client/stdio/__init__.py:139-162`)는 개행이 올 때까지
+    `buffer = buffer + chunk`로 무한정 이어붙이며 길이 상한이 전혀 없다 —
+    anyio의 `max_bytes=65536`은 syscall 1회당 청크 크기일 뿐 총합 상한이
+    아니다. 즉 이 클래스는 **이미 SDK 내부에서 벌어진 메모리 스파이크를 막지
+    못한다** — 응답이 이 클래스에 닿기 전에 이미 전부 메모리에 올라와 있다.
+    진짜 전송 계층 방어는 `stdio_client`의 `stdout_reader`를 로컬 포크해 청크
+    누적 중에 길이를 재는 것뿐이고, 이 웨이브에서는 하지 않았다 — 해결된 척
+    하지 않는다.
+    """
+
+    def __init__(
+        self, *, alias: str, tool_name: str | None, observed_size: int, limit: int
+    ) -> None:
+        self.alias = alias
+        self.tool_name = tool_name
+        self.observed_size = observed_size
+        self.limit = limit
+        label = f"call_tool({tool_name!r})" if tool_name is not None else "list_tools()"
+        super().__init__(
+            f"{alias!r}: {label} 응답이 상한을 넘었다 "
+            f"(관측 {observed_size:,}자 > 상한 {limit:,}자) — 자르지 않고 명시 에러로 거부한다"
+        )
 
 
 class MaxRestartsExceededError(RuntimeError):
@@ -108,6 +153,7 @@ class UpstreamServerHandle:
         list_tools_timeout_seconds: float = 30.0,
         max_restarts: int = 3,
         restart_backoff_seconds: float = 1.0,
+        max_response_chars: int = DEFAULT_MAX_RESPONSE_CHARS,
     ) -> None:
         self.entry = entry
         self.consent_store = consent_store
@@ -124,6 +170,11 @@ class UpstreamServerHandle:
         self.list_tools_timeout_seconds = list_tools_timeout_seconds
         self.max_restarts = max_restarts
         self.restart_backoff_seconds = restart_backoff_seconds
+        # post-parse 상한이다 — `ResponseTooLargeError` docstring의 "알려진 한계"
+        # 참고. SDK가 이미 파싱을 끝낸 뒤에야 재므로 전송 계층 메모리 스파이크는
+        # 못 막지만, 그 크기가 이 프로세스 밖(aggregator/LLM 컨텍스트)으로 계속
+        # 흘러가는 건 여기서 막는다.
+        self.max_response_chars = max_response_chars
 
         self._session: ClientSession | None = None
         self._task: asyncio.Task[None] | None = None
@@ -281,6 +332,26 @@ class UpstreamServerHandle:
             # 잡음이다. 종료를 막을 이유는 없다.
             pass
 
+    def _check_response_size(
+        self, result: CallToolResult | ListToolsResult, *, tool_name: str | None
+    ) -> None:
+        """직렬화된 JSON 문자열 길이로 상한을 검사한다. 초과 시 자르지 않고 던진다.
+
+        `model_dump_json()` 전체 길이를 재는 이유: `call_tool`은 `content` 배열
+        (여러 블록 가능) + `structuredContent`를, `list_tools`는 등록된 툴 전체의
+        `description`/`inputSchema`를 합산해서 재야 하므로, 두 결과 타입에 공통으로
+        적용 가능한 단일 지표가 필요하다. 개별 필드(예: `content[0].text`만)를 재면
+        다른 필드로 우회하는 상한이 된다.
+        """
+        observed_size = len(result.model_dump_json())
+        if observed_size > self.max_response_chars:
+            raise ResponseTooLargeError(
+                alias=self.alias,
+                tool_name=tool_name,
+                observed_size=observed_size,
+                limit=self.max_response_chars,
+            )
+
     async def list_tools(self) -> list[Tool]:
         if self._session is None:
             raise ServerCrashedError(f"{self.alias!r}: 세션이 시작되지 않았다")
@@ -294,19 +365,36 @@ class UpstreamServerHandle:
                 f"{self.alias!r}: list_tools가 {self.list_tools_timeout_seconds}초 안에 "
                 "응답하지 않았다"
             ) from None
+        # 상한 검사는 try/except 바깥이다 — `ResponseTooLargeError`를 크래시로
+        # 오분류하면 안 된다(아래 call_tool과 같은 이유).
+        self._check_response_size(result, tool_name=None)
         return result.tools
 
-    async def call_tool(self, name: str, arguments: dict[str, Any] | None = None) -> CallToolResult:
+    async def call_tool(
+        self,
+        name: str,
+        arguments: dict[str, Any] | None = None,
+        *,
+        progress_callback: ProgressFnT | None = None,
+    ) -> CallToolResult:
         if self._session is None:
             raise ServerCrashedError(f"{self.alias!r}: 세션이 시작되지 않았다")
         try:
-            return await asyncio.wait_for(
-                self._session.call_tool(name, arguments or {}),
+            result = await asyncio.wait_for(
+                self._session.call_tool(name, arguments or {}, progress_callback=progress_callback),
                 timeout=self.call_timeout_seconds,
             )
         except TimeoutError:
             # 느린 호출일 뿐 반드시 크래시는 아니다 — crash_count를 올리지 않고
             # 그대로 전파한다. 상위(aggregator)가 재시도/취소를 판단한다.
+            raise
+        except asyncio.CancelledError:
+            # `asyncio.CancelledError`는 3.8+에서 `BaseException`이라 아래
+            # `except Exception`에는 원래도 안 걸리지만, "취소를 크래시로 바꾸지
+            # 않는다"는 계약을 코드에서도 명시적으로 보이게 한다 — `wait_for`가
+            # 취소되면 내부 `call_tool` 요청도 함께 취소되고(anyio 취소 스코프),
+            # 세션은 죽은 것으로 간주하지 않는다. crash_count를 올리지 않고
+            # 그대로 재전파한다.
             raise
         except Exception as exc:
             # 그 외 예외(프로세스 종료로 인한 파이프 끊김 등)는 세션이 죽은
@@ -317,6 +405,11 @@ class UpstreamServerHandle:
             )
             self._mark_dead()
             raise ServerCrashedError(f"{self.alias!r}: call_tool({name!r}) 중 예외 발생") from exc
+        # 상한 검사는 try/except 바깥이다 — 여기서 `ResponseTooLargeError`를 던지면
+        # 위 `except Exception`에 걸려 `ServerCrashedError`로 오분류된다(서버는
+        # 정상 응답했다, 크기가 클 뿐이다). crash_count도 올리지 않는다.
+        self._check_response_size(result, tool_name=name)
+        return result
 
     def _mark_dead(self) -> None:
         """크래시가 확인된 세션을 즉시 못 쓰게 만든다.

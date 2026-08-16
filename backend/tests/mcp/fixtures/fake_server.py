@@ -10,9 +10,10 @@ npx/node 없이도(§1단계 후보 서버 없이도) 진짜 spawn -> initialize
 
 from __future__ import annotations
 
+import asyncio
 import os
 
-from mcp.server.fastmcp import FastMCP
+from mcp.server.fastmcp import Context, FastMCP
 
 mcp = FastMCP("fake-athena-fixture")
 
@@ -58,6 +59,30 @@ def datalab_shopping_keyword_by_device_and_gender_breakdown() -> str:
     (56자: 28자 별칭 + '__' + 56 = 86자).
     """
     return "ok"
+
+
+@mcp.tool()
+def large_response(size: int) -> str:
+    """`size`자 길이의 문자열을 반환한다 — `client.py`의 응답 크기 상한
+    (`ResponseTooLargeError`)을 진짜 subprocess 왕복으로 검증하기 위한 픽스처.
+    실제 DART 대용량 캡처(1,042,014자, `spike/mcp-client/CAPTURE-S2B-jjlabsio.md`)를
+    흉내내되 크기를 인자로 조절해 상한 위/아래 양쪽을 다 재현한다."""
+    return "x" * size
+
+
+@mcp.tool()
+async def progress_tool(steps: int, ctx: Context, delay_seconds: float = 0.0) -> str:
+    """`steps`번 진행 알림을 보낸 뒤 완료 문자열을 반환한다.
+
+    `delay_seconds`가 0이면 진행 알림 전달 자체만 빠르게 검증한다. 양수를 주면
+    스텝 사이에 그만큼 쉬어서, 클라이언트 쪽에서 도중에 태스크를 취소하는
+    테스트(취소가 크래시로 오분류되지 않는지)가 끼어들 시간을 벌어준다.
+    """
+    for i in range(steps):
+        if delay_seconds:
+            await asyncio.sleep(delay_seconds)
+        await ctx.report_progress(i + 1, steps, f"step {i + 1}/{steps}")
+    return f"done after {steps} steps"
 
 
 if __name__ == "__main__":
