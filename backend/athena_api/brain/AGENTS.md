@@ -3,6 +3,8 @@
 
 # brain
 
+> Terminology: [`GLOSSARY.md`](../../../GLOSSARY.md) is the standard vocabulary for this repo. Use its definitions; register new terms there before using them in code.
+
 ## Purpose
 The investment brain: a bounded ontology plus an embedded graph projection over local chat/trade
 history and ingested source records. Design rationale is in `plan/investment-brain-architecture.md`;

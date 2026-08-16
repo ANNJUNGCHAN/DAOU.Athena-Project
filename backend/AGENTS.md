@@ -3,6 +3,8 @@
 
 # backend
 
+> Terminology: [`GLOSSARY.md`](../GLOSSARY.md) is the standard vocabulary for this repo. Use its definitions; register new terms there before using them in code.
+
 ## Purpose
 Standalone FastAPI service locked to `https://mockapi.kiwoom.com`. It exposes an allowlisted,
 generated Kiwoom query surface (323 operations = 208 base + 115 detail projections), a four-tool LLM
