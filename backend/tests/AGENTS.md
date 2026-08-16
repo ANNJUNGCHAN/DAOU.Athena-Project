@@ -3,6 +3,8 @@
 
 # tests
 
+> Terminology: [`GLOSSARY.md`](../../GLOSSARY.md) is the standard vocabulary for this repo. Use its definitions; register new terms there before using them in code.
+
 ## Purpose
 Pytest suites for the whole backend. `pyproject.toml` sets `testpaths = ["tests"]` and
 `asyncio_mode = "auto"`, so async tests need no marker.
