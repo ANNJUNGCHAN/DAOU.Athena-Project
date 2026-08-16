@@ -171,7 +171,10 @@ class ToolAggregator:
             )
             for t in old_tools
         ]
-        del self._exposed_by_alias[old_alias]
+        # `.get(old_alias, [])`로 없는 키를 관대하게 받았으므로 삭제도 관대해야
+        # 한다 — 아직 connect되지 않아(= 노출 목록이 비어) 집계에 없는 별칭을
+        # rename하는 건 정상 흐름이고, 여기서 KeyError로 터지면 안 된다.
+        self._exposed_by_alias.pop(old_alias, None)
         # 옛 별칭의 노출 리스트는 지우지만, _resolution_table은 그대로 둔다
         # (일부러 지우지 않음 — 옛 qualified_name으로 온 in-flight 호출을 위해).
         self._exposed_by_alias[new_alias] = renamed

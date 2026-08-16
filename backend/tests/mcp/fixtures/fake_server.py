@@ -47,5 +47,18 @@ def flaky() -> str:
     return f"ok call #{_call_count['flaky']}"
 
 
+@mcp.tool()
+def datalab_shopping_keyword_by_device_and_gender_breakdown() -> str:
+    """긴 툴 이름 — 64자 규칙 2차 방어선(aggregator)을 실제 서버로 재현한다.
+
+    실측된 최장 툴 이름은 `naver-search-mcp`의
+    `datalab_shopping_keyword_by_device`(34자)였고, `registry.py`의 별칭 상한
+    28자는 그 값을 예약 폭으로 삼아 역산됐다. 그보다 긴 이름이 오면 별칭이
+    상한 안이어도 `별칭__툴명`이 64자를 넘는다 — 이 툴이 그 조건을 만든다
+    (56자: 28자 별칭 + '__' + 56 = 86자).
+    """
+    return "ok"
+
+
 if __name__ == "__main__":
     mcp.run(transport="stdio")

@@ -80,6 +80,40 @@ class DuplicateAliasError(ValueError):
     """이미 등록된 별칭이다."""
 
 
+class InvalidServerSpecError(ValueError):
+    """`command`/`args`/`env`가 문자열이 아니다.
+
+    stdio spawn은 전부 문자열을 요구한다(`StdioServerParameters`가 pydantic으로
+    강제). 그런데 클로드 데스크탑 스니펫은 사람이 손으로 쓴 JSON이라
+    `{"env": {"DEBUG": true}}`처럼 문자열 아닌 값이 섞여 들어온다 — JSON에서는
+    자연스러운 표기지만 환경변수로는 성립하지 않는다.
+
+    이걸 등록 시점에 안 막으면 spawn 시점까지 살아남아서, 훨씬 나쁜 자리에서
+    터진다. 여기서 이유를 붙여 거부한다.
+    """
+
+
+def validate_server_spec(command: str, args: list[str], env: dict[str, str]) -> None:
+    """spawn 가능한 형태인지 등록 시점에 확인한다."""
+    if not isinstance(command, str) or not command.strip():
+        raise InvalidServerSpecError(f"command는 비어 있지 않은 문자열이어야 한다: {command!r}")
+    for i, a in enumerate(args):
+        if not isinstance(a, str):
+            raise InvalidServerSpecError(
+                f"args[{i}]가 문자열이 아니다: {a!r} ({type(a).__name__}). "
+                "JSON에서 따옴표를 빠뜨렸는지 확인하라."
+            )
+    for k, v in env.items():
+        if not isinstance(k, str):
+            raise InvalidServerSpecError(f"환경변수 키가 문자열이 아니다: {k!r}")
+        if not isinstance(v, str):
+            raise InvalidServerSpecError(
+                f"환경변수 {k!r}의 값이 문자열이 아니다 ({type(v).__name__}). "
+                "환경변수는 전부 문자열이어야 한다 — JSON에서 따옴표를 빠뜨렸는지 "
+                f'확인하라 (예: {{"{k}": "true"}}). 값 자체는 여기 표시하지 않는다.'
+            )
+
+
 class UnknownAliasError(KeyError):
     """등록되지 않은 별칭을 조회/삭제하려 했다."""
 
@@ -196,6 +230,7 @@ class ServerRegistry:
         validate_alias(alias)
         if alias in self._entries:
             raise DuplicateAliasError(f"별칭 {alias!r}은 이미 등록돼 있다")
+        validate_server_spec(command, list(args or []), dict(env or {}))
         entry = ServerEntry(
             alias=alias,
             command=command,
