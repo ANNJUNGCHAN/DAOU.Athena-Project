@@ -10,12 +10,12 @@ from fastapi import FastAPI
 from athena_api.config import Settings
 from athena_api.dependencies import require_order_kiwoom_client
 from athena_api.errors import KiwoomAuthError, KiwoomNotReadyError
-from athena_api.kiwoom.auth import KiwoomAuth, TokenManager, parse_kiwoom_datetime
+from athena_api.kiwoom.auth import KST, KiwoomAuth, TokenManager, parse_kiwoom_datetime
 from athena_api.lifespan import build_lifespan
 
 
 def test_parse_kiwoom_datetime() -> None:
-    assert parse_kiwoom_datetime("20260814213045") == datetime(2026, 8, 14, 21, 30, 45)
+    assert parse_kiwoom_datetime("20260814213045") == datetime(2026, 8, 14, 21, 30, 45, tzinfo=KST)
 
 
 def test_token_is_unavailable_before_issue() -> None:
@@ -26,7 +26,7 @@ def test_token_is_unavailable_before_issue() -> None:
 
 @pytest.mark.asyncio
 async def test_issue_token_keeps_token_in_memory() -> None:
-    expires = datetime.now() + timedelta(hours=1)
+    expires = datetime.now(KST) + timedelta(hours=1)
     async with httpx.AsyncClient() as http_client:
         with respx.mock(base_url="https://mockapi.kiwoom.com") as mock:
             route = mock.post("/oauth2/token").mock(
@@ -50,7 +50,7 @@ async def test_concurrent_ensure_token_issues_once() -> None:
     started = asyncio.Event()
     release = asyncio.Event()
     call_count = 0
-    expires = datetime.now() + timedelta(hours=1)
+    expires = datetime.now(KST) + timedelta(hours=1)
 
     async def issue_response(_request: httpx.Request) -> httpx.Response:
         nonlocal call_count
@@ -126,7 +126,7 @@ async def test_issue_rejects_redirect_and_invalid_json_object_secret_safely(
 
 @pytest.mark.asyncio
 async def test_revoke_calls_upstream_then_clears_memory() -> None:
-    expires = datetime.now() + timedelta(hours=1)
+    expires = datetime.now(KST) + timedelta(hours=1)
     with respx.mock(base_url="https://mockapi.kiwoom.com") as mock:
         mock.post("/oauth2/token").mock(
             return_value=httpx.Response(
@@ -166,7 +166,7 @@ async def test_revoke_calls_upstream_then_clears_memory() -> None:
 async def test_revoke_rejects_redirect_invalid_body_and_missing_code_then_clears_token(
     revoke_response: httpx.Response,
 ) -> None:
-    expires = datetime.now() + timedelta(hours=1)
+    expires = datetime.now(KST) + timedelta(hours=1)
     calls = 0
 
     async def handler(_request: httpx.Request) -> httpx.Response:
@@ -199,7 +199,7 @@ async def test_revoke_rejects_redirect_invalid_body_and_missing_code_then_clears
 
 @pytest.mark.asyncio
 async def test_revoke_accepts_string_zero_return_code() -> None:
-    expires = datetime.now() + timedelta(hours=1)
+    expires = datetime.now(KST) + timedelta(hours=1)
     calls = 0
 
     async def handler(_request: httpx.Request) -> httpx.Response:
@@ -225,7 +225,7 @@ async def test_revoke_accepts_string_zero_return_code() -> None:
 
 @pytest.mark.asyncio
 async def test_order_client_is_retry_zero_and_disabled_by_default() -> None:
-    expires = datetime.now() + timedelta(hours=1)
+    expires = datetime.now(KST) + timedelta(hours=1)
     settings = Settings(
         _env_file=None,
         kiwoom_app_key="app-key",
