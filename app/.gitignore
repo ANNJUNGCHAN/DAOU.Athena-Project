@@ -1,1 +1,5 @@
 node_modules/
+
+# 실행 로그. 매 실행마다 타임스탬프가 바뀌어 병합할 때마다 충돌한다.
+# 검증의 안정 증거는 captures/VERIFY-REPORT.json과 캡처 PNG다.
+captures/*.log
