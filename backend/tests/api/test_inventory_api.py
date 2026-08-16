@@ -131,7 +131,9 @@ def test_inventory_partition_and_static_openapi_coverage() -> None:
             if "x-kiwoom-tr-id" in operation:
                 assert operation["x-athena-llm-exposed"] is False
     assert len(operation_ids) == len(set(operation_ids))
-    assert len(operation_ids) == 335
+    # 323 generated Kiwoom operations + 13 hand-written service operations.
+    assert len(operation_ids) == 336
+    assert "get_internal_oauth_status" in operation_ids
     assert set(llm_exposed) == {
         "llm_search_operations",
         "llm_describe_operation",
