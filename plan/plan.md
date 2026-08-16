@@ -18,22 +18,25 @@
 ## 1. 실측 상태 (2026-08-15 재검증)
 
 ```
-backend 전체:  429 passed, 0 failed   (198초)
+backend 전체:  470 passed, 0 failed   (87초)
   ruff check                → All checks passed
-  generate_api.py --check   → Generated files are current
+  tests/mcp                 → 167 passed (126 → +41, 이식 절차·러너)
 ```
+
+> 이 워크트리에는 `backend/.venv`가 없었다. `uv sync --extra dev`로 새로 만들어 실행했다.
 
 > 이전 스냅샷의 `403 passed, 22 failed`는 셀렉터 base/detail 라우팅 재설계로 해소됐다. §3 참조.
 
 | 영역 | 상태 | 위치 |
 |---|---|---|
 | 키움 REST 백엔드 (301 라우팅) | **동작** | `backend/athena_api/` |
-| MCP 게이트웨이 | **동작** · 126 테스트 통과 | `backend/athena_mcp/` |
+| MCP 게이트웨이 | **동작 · 실서버 이식 완료** · 167 테스트 통과 | `backend/athena_mcp/` |
 | 투자 브레인 (그래프 투영) | **모듈 완성, FastAPI 미결선** | `backend/athena_api/brain/` |
 | LLM API 셀렉터 | **동작** · 102 테스트 통과 (§3) | `backend/athena_api/selector/` |
 | Electron 두 창 셸 | **동작** · 실제 데이터 렌더 | `app/` |
 | 스파이크 실측 데이터 | 86건 보존 | `spike/captures/` |
-| CLI (`claude -p`) 연동 | **미착수** | — |
+| MCP 이식 절차 (등록→승인→probe→서빙) | **동작** · 외부 서버 3종 실왕복 | `athena_mcp/{onboarding,runner,__main__}.py` |
+| CLI (`claude -p`) 연동 | **준비됨, 미실행** — `.mcp.json` 예시 있음 | `spike/gateway-graft/` |
 | 파수꾼·조사관 | **미착수** (설계만) | `plan/감시에이전트-실행계획.md` |
 | 캔버스 설계 라운드 | **미착수** (초안만) | `plan/canvas-taxonomy.md` |
 
@@ -96,9 +99,31 @@ resolve  → detail_group="buy_bid_prices" 를 LLM이 명시, 서버는 소속�
 | `consent.py` | 동의 게이트, 위험 패턴, 툴 allowlist | — |
 | `quirks.py` | 서버별 결함 보정 (`corp_code` zfill 등) | — |
 | `stream.py` | NAVER/DART 스트림 정규화 | — |
-| `server.py` | 재노출 + `athena__render_canvas` | **CLI에 안 물림** |
+| `server.py` | 재노출 + `athena__render_canvas` | — |
+| `onboarding.py` | 별칭 정규화·등록/승인 분리·probe | — |
+| `runner.py` | `stdio_server()` + `Server.run()`, 실패 격리 | — |
+| `__main__.py` | `athena-mcp` CLI 10개 서브커맨드 | — |
+
+**실제 이식을 했다 (2026-08-15).** 클로드 데스크탑 스니펫 4개를 붙여넣어 등록 →
+승인 → probe → 서빙까지 전 절차를 밟고, 게이트웨이를 **진짜 MCP 클라이언트로**
+물어 28툴 노출·5건 호출을 확인했다. 상세와 실측 원문은
+[`backend/athena_mcp/README.md`](../backend/athena_mcp/README.md) "실제 이식" 절.
+
+```
+28 tools: {'server-everything': 12, 'drfirst-korea-stock-mcp': 6, 'pykrx': 8, 'athena': 2}
+```
+
+이 과정에서 **결함 16건**이 드러나 전부 고쳤다(10건은 이식 중, 6건은 이어 돌린 적대적 리뷰가 잡았다 — 기각 0건)(엔트리포인트 부재, anyio 취소
+스코프 위반, 타임아웃 부재, rename이 승인을 잃어버림, 캔버스 free 폴백이 죽은
+가지였던 것 등). 목록은 README "이번에 고친 결함".
+
+붙지 않은 서버 2종은 **전부 upstream 문제**였다 — `naver-search-mcp`는 API 키
+없음(이 저장소에 `.env`가 없다), `pykrx-mcp`는 상류가 `mcp` 2.x를 끌어와
+`mcp.server.fastmcp`가 사라짐(`uvx --with "mcp==1.28.*" pykrx-mcp`로 우회하면 붙는다).
 
 미해결 보안 2건은 `backend/athena_mcp/SECURITY.md`. 프롬프트 인젝션(HIGH)은 CLI 통합 시점 과제, 응답 크기 상한(MEDIUM)은 게이트웨이에서 처리 가능.
+**실서버를 붙이면서 프롬프트 인젝션 공격면이 가설에서 실물이 됐다** — 지금
+노출 중인 upstream 툴 26개의 설명이 전부 남이 쓴 텍스트다.
 
 ### B. 투자 브레인 `backend/athena_api/brain/`
 
@@ -134,7 +159,7 @@ ADR: [`plan/investment-brain-architecture.md`](investment-brain-architecture.md)
 |---|---|---|
 | 1 | **갈래 A·B 조율 — "공통 캔버스" 정의 통합** | A는 캔버스 16종, B는 301 라우팅 렌더. 상위 개념을 정하지 않으면 렌더러가 둘로 갈라진다 (`00-인수인계.md` §1 충돌 ①) |
 | 2 | **브레인 FastAPI 결선** | ADR §4.2. 락·writer queue 없이는 다중 프로세스 쓰기 사고 |
-| 3 | **CLI 연동** — 게이트웨이를 `claude -p`에 물린다 | 게이트웨이만 있고 소비자가 없다. `--setting-sources ""` 필수 (§7) |
+| 3 | **CLI 연동 마무리** — `claude -p`로 실왕복 | 게이트웨이는 stdio 서버로 뜨고 MCP 클라이언트 왕복까지 검증됐다. 남은 건 `claude` 자체로 확인하는 것뿐. `--setting-sources ""` 필수 (§7) |
 | 4 | **프레임 최적화** — 굴절층/데이터층 분리 | soul.md가 "모션이 곧 재료"라고 한 설계 |
 | 5 | 캔버스 설계 라운드 | 근거 ①②④ 확보됨. soul.md §9 프로세스로 |
 | 6 | 파수꾼·조사관 착수 | `plan/감시에이전트-실행계획.md`. 주문 자동집행 없음(결정 3) |
