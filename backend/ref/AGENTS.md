@@ -3,6 +3,8 @@
 
 # ref
 
+> Terminology: [`GLOSSARY.md`](../../GLOSSARY.md) is the standard vocabulary for this repo. Use its definitions; register new terms there before using them in code.
+
 ## Purpose
 Checked-in reference data that is the source of truth for Athena's Kiwoom API surface. The generator
 reads these files; several are themselves generated and committed deterministically.
