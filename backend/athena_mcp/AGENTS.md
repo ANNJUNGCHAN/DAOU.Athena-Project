@@ -3,6 +3,8 @@
 
 # athena_mcp
 
+> Terminology: [`GLOSSARY.md`](../../GLOSSARY.md) is the standard vocabulary for this repo. Use its definitions; register new terms there before using them in code.
+
 ## Purpose
 Athena as an MCP **client and server** at once: connects to N user-registered upstream MCP servers
 and re-exposes their aggregated tools under `alias__toolname` as a single MCP server, plus Athena's

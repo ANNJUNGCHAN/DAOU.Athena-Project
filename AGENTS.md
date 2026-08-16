@@ -2,6 +2,8 @@
 
 # DAOU.Athena
 
+> Terminology: [`GLOSSARY.md`](GLOSSARY.md) is the standard vocabulary for this repo. Use its definitions; register new terms there before using them in code.
+
 ## Purpose
 Athena is a local-first Korean-equity research assistant built on the Kiwoom mock REST/WebSocket API.
 Four tracks sit on top of that backend: an **MCP gateway** (`backend/athena_mcp`), an **investment

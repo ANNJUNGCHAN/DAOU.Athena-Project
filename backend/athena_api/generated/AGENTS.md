@@ -3,6 +3,8 @@
 
 # generated
 
+> Terminology: [`GLOSSARY.md`](../../../GLOSSARY.md) is the standard vocabulary for this repo. Use its definitions; register new terms there before using them in code.
+
 ## Purpose
 Deterministic output of `backend/scripts/generate_api.py`, built from `backend/ref/kiwoom-tr-inventory.json`.
 Covers all 208 inventory operations plus 115 detail projections, classified into safe query, order,
