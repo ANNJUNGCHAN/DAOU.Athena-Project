@@ -36,11 +36,14 @@ Generated Kiwoom routes carry `x-athena-llm-exposed: false`. This annotation is
 for discovery and prompt construction; the signed `resolve`/`call` allowlist is
 the actual execution boundary.
 
-The current generated OpenAPI contains 335 paths and 335 GET/POST operations:
-323 generated Kiwoom base/detail operations plus 12 service operations. The
-service-operation count can change as unrelated endpoints are added; the stable
-LLM contract is exactly four exposed POST tools and one non-exposed bootstrap
-GET endpoint.
+The current generated OpenAPI contains 314 paths and 314 GET/POST operations:
+301 generated Kiwoom routes (149 unsplit query bases, 115 detail projections,
+23 websocket controls, 12 orders, and 2 OAuth) plus 13 service operations. The
+22 split query bases are documented and searchable but are not registered as
+routes — their projections replaced them, so there is nothing left to route to.
+The service-operation count can change as unrelated endpoints are added; the
+stable LLM contract is exactly four exposed POST tools and one non-exposed
+bootstrap GET endpoint.
 
 > **Scope:** domestic Korea only. Official-repository-only U.S. operations never
 > enter the selector catalog. OAuth controls are also deliberately hidden.
@@ -51,12 +54,13 @@ Athena has 323 Kiwoom operations after response splitting:
 
 | Operation class | Count | Selector visibility | Generic `resolve` / `call` |
 | --- | ---: | --- | --- |
-| Typed query base operations | 171 | Normal | Yes |
+| Unsplit query base operations | 149 | Normal | Yes |
+| Split query base operations | 22 | Normal | No, `detail_group` required |
 | Query detail projections | 115 | Normal | Yes |
-| Guarded order operations | 12 | Explicit `intent=order` discovery only | No |
-| WebSocket operations | 23 | Explicit `intent=websocket` discovery only | No |
+| Guarded order operations | 12 | Explicit `intent=order` | Yes, with the order guards |
+| WebSocket operations | 23 | Explicit `intent=websocket` | Yes, control frame only |
 | OAuth controls | 2 | Hidden | No |
-| **Total** | **323** |  | **286 callable** |
+| **Total** | **323** |  | **299 callable** |
 
 Registering all 323 operations as independent LLM tools causes three related
 problems:
@@ -159,11 +163,13 @@ is the last mutable request. `call` accepts only the immutable signed result.
 | `search` | No | No | Returns ranked candidates | No |
 | `describe` | No | No | Describes one canonical identity | No |
 | `resolve` | No | No | Server makes final selection | Yes, then validates and seals them |
-| `call` | One query call | Query client must be ready | No | No |
+| `call` | One typed request: a query, a guarded order, or a websocket registration frame | The matching client (query/order/websocket) must be ready for the plan's kind | No | No |
 
 Search, description, and resolution are local registry operations. They do not
-consume Kiwoom's request allowance. Only `call` reaches the existing typed query
-runtime.
+consume Kiwoom's request allowance. Only `call` reaches the existing typed
+runtimes: `call_typed_tr` for a query, `call_order_tr` for a guarded order —
+the same function the direct order route calls — and `call_websocket_tr` for a
+subscription control frame.
 
 ## Canonical operation identities
 
@@ -218,7 +224,7 @@ Contract:
 - `limit`: 1 to 10; default 5.
 - Unknown request properties are rejected.
 
-`auto` and `query` search only the 286 query identities. `order` searches only
+`auto` and `query` search only the 171 query families. 22 of them were replaced by their projections and answer `resolve` with `DETAIL_GROUP_REQUIRED` and the group list. `order` searches only
 the 12 guarded order base operations. `websocket` searches only the 23 streaming
 base operations. No intent reveals OAuth.
 
@@ -263,10 +269,23 @@ Natural-language indexing uses:
 1. Unicode NFKC normalization.
 2. `casefold` for natural-language terms only.
 3. Tokens that preserve ASCII letters, digits, `_`, and Korean text.
-4. Two-character Korean bigrams in addition to whole tokens.
-5. A small, versioned Korean/English finance synonym lexicon.
+4. Two-character Korean bigrams in addition to whole tokens. A bigram scores at
+   half the weight of the whole token it stands in for, and is reported under
+   the matched zone's own reason code rather than a separate one — it is the
+   same evidence, only weaker, because it reaches inside a compound rather than
+   naming it. A bigram is also a fragment of a *different* word: `실시간`
+   (from `실시간항목`) tokenizes to the bigram `시간`, which matches
+   `주식시간외호가` as directly as `호가` does. Full weight there would tie an
+   unrelated after-hours-quote operation with the operation the question named.
+5. A small, versioned Korean/English finance synonym lexicon
+   (`LEXICON_VERSION = "ko-en-finance-v2"`), expanded over both whole tokens
+   and bigram fragments — Korean agglutinates, so a dictionary entry such as
+   해지 (cancel/unsubscribe) exists in a question only as a fragment of one
+   inflected token (해지해줘) and would never reach the lexicon otherwise.
 6. Exact case-sensitive identity, TR-ID, and group-ID checks before text
    normalization.
+7. Per-surface uninformative-token suppression (below) over the ranked
+   candidate set, before zone scoring.
 
 The same catalog version and request must produce the same ranking regardless of
 registry insertion order or Python hash seed.
@@ -283,12 +302,14 @@ registry insertion order or Python hash seed.
 | Operation title token | 150 each, maximum 750 | `TITLE_TOKEN_MATCH` |
 | Absorbed projection-title token | 150 each, maximum 750 | `PROJECTION_TITLE_MATCH` |
 | Fraction of distinct question tokens matched | up to 600 | `QUERY_COVERAGE` |
-| Domain/category/subcategory token | 80 each, maximum 400 | `DOMAIN_MATCH` |
-| Request-field alias or description token | 70 each per zone, maximum 350 per zone | `REQUEST_FIELD_MATCH` |
-| Response-field alias or description token | 50 each per zone, maximum 500 per zone | `RESPONSE_FIELD_MATCH` |
+| Operation overview-note token | 60 each, maximum 300, corroboration-capped | `OVERVIEW_MATCH` |
+| Realtime FID-name token | 90 each, maximum 600, corroboration-capped | `REALTIME_FIELD_MATCH` |
+| Domain/category/subcategory token | 80 each, maximum 400, corroboration-capped | `DOMAIN_MATCH` |
+| Request-field alias or description token | 70 each per zone, maximum 350 per zone, corroboration-capped | `REQUEST_FIELD_MATCH` |
+| Response-field alias or description token | 50 each per zone, maximum 500 per zone, corroboration-capped | `RESPONSE_FIELD_MATCH` |
 | Synonym-only match | 75% of the underlying match | `SYNONYM_MATCH` |
 
-Three rules deserve their reasons stated, because each exists to stop a
+Several rules deserve their reasons stated, because each exists to stop a
 reproducible misranking:
 
 - **`TR_ID_TOKEN_MATCH`** — `EXACT_TR_ID` only fires when the whole query *is*
@@ -304,6 +325,45 @@ reproducible misranking:
 - **`TITLE_PHRASE_MATCH` needs two or more tokens** — a one-word title such as
   `totals` appears inside unrelated questions, and the phrase bonus let it
   outrank the correct family. Single-token titles still earn token matches.
+- **`title` holds only the operation's name; `OVERVIEW_MATCH` is its own,
+  lower-weighted zone.** `title` used to be `(name, overview)` together. A TR's
+  overview is prose about how to use it, and for the 23 websocket types that
+  prose is about the *subscription mechanism* — near-identical boilerplate
+  across all 23. Scored at title weight, it ranked realtime candidates by how
+  verbose their registration note happened to be: "실시간 체결" put `04 잔고`
+  and `0A 주식기세` above `0B 주식체결`, whose note is one line.
+- **`REALTIME_FIELD_MATCH`** indexes the FID names a websocket type actually
+  emits (`_realtime_field_terms`, `catalog.py`). It is the only content-bearing
+  vocabulary a realtime type owns: its request/response envelope is the same
+  four fields on all 23 types, so `request_alias`/`response_alias` carry no
+  signal on this surface and only the FIDs inside `data[*]` can rank one
+  realtime type against another.
+- **Uninformative-zone-token suppression** (`uninformative_zone_tokens`,
+  `ranking.py`) drops a `(zone, token)` pair that at least 90% of the ranked
+  candidate set shares, computed fresh per search over that candidate set —
+  because what a token can discriminate depends on what it is discriminating
+  between. On the websocket surface every type repeats 실시간 in its domain,
+  its overview, and both envelope field descriptions; scored, it hands all 23
+  candidates the same ~600 points and the same coverage credit, so the words a
+  question actually contributed — 호가, 예상체결, NAV — decide nothing. The
+  judgement is per zone, not per document: every realtime type carries a
+  체결시간 FID, so 체결 says nothing in `realtime_field`, but only three types
+  are *named* 체결, so in `title` it is nearly the whole answer. A token is
+  never suppressed in every zone at once — "주문 체결" is ubiquitous across the
+  entire realtime surface, and suppressing it everywhere returned an empty
+  result for that question — so each token keeps its single highest-weighted
+  zone even past the 90% threshold.
+- **Corroboration cap (750 points).** What an operation is *called* is the
+  claim; `overview`, `domain`, the request/response field zones, and
+  `realtime_field` are corroboration, and their combined contribution is capped
+  at 750 — the same ceiling a title match has — by scaling every corroboration
+  contribution down proportionally, not truncating it, so the response still
+  shows which zones supported the match and in what proportion. Uncapped,
+  corroboration outvoted the claim: `ka10171 조건검색 목록조회` alone matches
+  `목록` in its title, yet lost to `ka10173`, because `ka10171` takes no
+  request arguments and so could not collect the points its sibling earned by
+  restating the family's vocabulary across four field-description zones. An
+  operation must not out-rank a correctly-named sibling for being verbose.
 
 Ties sort by score descending, generic-callable operations first, query family
 first, then Unicode code-point order of `operation_ref`. Every nonzero scoring
@@ -333,9 +393,24 @@ Description is a case-sensitive lookup. It returns:
 The response deliberately omits the upstream URL and internal FastAPI path. An
 LLM does not need either value and cannot use them to bypass the resolver.
 
-Order and WebSocket descriptions require matching explicit discovery intent and
-return `generic_callable=false`. OAuth identities and unknown identities both
-look absent.
+Order and WebSocket descriptions require matching explicit discovery intent, and
+both are `generic_callable=true`: `resolve` and `call` execute them directly (see
+[Discovery and execution safety](#discovery-and-execution-safety)). OAuth
+identities and unknown identities both look absent.
+
+### `response_fields` on a websocket operation is the realtime FID contract, not the envelope
+
+All 23 websocket operations share one four-field acknowledgement envelope —
+`return_code`, `return_msg`, `trnm`, `data` — because that is what `call` returns
+for a REG/REMOVE control frame. Describing the envelope would tell a screen
+builder nothing about what the subscription actually delivers: the renderable
+fields, keyed by FID (`"10"` 현재가, `"20"` 체결시간, and so on), live one level
+down in `data[*]`. So `describe` substitutes the per-event model for
+`response_fields` whenever one is present, and falls back to the envelope only
+if a generator regression drops the `data` list — a generator defect, not a
+caller error that should look like an absent operation. This is the model a
+screen is actually built from: describe `base:0B` and the FIDs returned are the
+same fields a `WS /api/v1/ws/stream` event carries once `call` has registered it.
 
 ## `athena_resolve`
 
@@ -344,6 +419,7 @@ look absent.
 ```json
 {
   "question": "삼성전자 PER, PBR, ROE만 보여줘",
+  "intent": "query",
   "candidate_refs": [
     "detail:ka10001:valuation",
     "base:ka10001"
@@ -363,6 +439,17 @@ look absent.
 Contract:
 
 - `question`: 2 to 2,000 characters.
+- `intent`: `auto`, `query`, `order`, or `websocket`; default `auto`. The same
+  gate `athena_search` applies, restated here because `resolve` ranks the
+  question a second time rather than trusting the caller's earlier search. It
+  is not the query surface by default plus an override; `auto` and `query` rank
+  `visible_for(query)` only, so a vague question cannot land on an order or a
+  subscription no matter how it scores. `candidate_refs` and `preferred_ref` are
+  filtered against this same intent — a caller cannot smuggle an order or
+  websocket ref past a `query` intent by naming it explicitly in either field.
+  A caller that searched under `intent=websocket` passes `intent=websocket` here
+  too; passing `query` instead makes every websocket candidate disappear from
+  ranking and from the `candidate_refs`/`preferred_ref` checks.
 - `candidate_refs`: zero to eight hints from `search`.
 - `preferred_ref`: an optional preference, never an instruction. It is evaluated
   at **family** granularity, because that is the granularity the ranker decides
@@ -405,10 +492,37 @@ Exact operation identities and exact case-sensitive TR IDs bypass family
 ambiguity checks. General natural language uses these thresholds:
 
 - top family score below 240: `NO_CONFIDENT_MATCH`;
-- top-to-second margin below 80, or top/second ratio below 1.15:
-  `AMBIGUOUS_OPERATION`;
+- top-to-second margin below 80, or top/second ratio below 1.15, **and the name
+  tie-break (below) does not resolve it**: `AMBIGUOUS_OPERATION`;
 - a preferred identity outside the server's top three or at least 20% below the
   top score: `PREFERRED_REF_NOT_SUPPORTED_BY_QUERY`.
+
+The margin only decides whether two families' totals are *distinguishable*; it
+does not by itself decide the winner. Every family within that margin of the
+top score — not only the runner-up — is collected first. When more than one
+family remains, `TITLE_TOKEN_MATCH`/`TITLE_PHRASE_MATCH` points alone (each
+family's `title_score`) break the tie, because the operation's name is a claim
+about identity and every other zone is corroboration. It stays
+`AMBIGUOUS_OPERATION` only when that tie-break is itself tied.
+
+On a tight surface — the four `조건검색` (condition-search) TRs, for example —
+most of the score is shared boilerplate: same domain, same field descriptions,
+so a decisive win on the one zone that actually differs, the name, moved the
+*total* by only a few percent and read as ambiguous under the margin alone.
+"조건검색 ... 해지해줘" puts `ka10174 조건검색 실시간 해제` second by total
+score and first by name; the name tie-break now answers it instead of either
+guessing `ka10173` or refusing a question that named its target.
+
+**Known limitation:** the tie-break assumes the total-score leader is also the
+best-named candidate among the indistinguishable set; when it is not, an
+unrelated family with a coincidentally high `title_score` wins instead of the
+true leader. `realtime-0H-en` (see
+[Current progress](#current-progress)) is exactly this case: `base:0H`
+860 leads `base:ka10173` 749 by total score but loses the tie-break, because
+`ka10173`'s 조건검색 title happens to match the question's 시간/실시간
+fragments harder than `0H`'s own title does. This is a real, measured gap in
+the tie-break, not a lexicon gap — see the linked section for the exact
+numbers.
 
 These failures issue no plan token. The error includes at most three candidates
 with their scores and reason codes so the LLM can refine the question without
@@ -521,7 +635,9 @@ On `call`, the server rechecks:
 1. token syntax and HMAC using constant-time comparison;
 2. expiry;
 3. catalog version and both schema hashes;
-4. canonical identity and query-only `generic_callable` policy;
+4. canonical identity and `generic_callable` policy — true for a query, a
+   guarded order, or a websocket control frame; false only for a hidden OAuth
+   identity or a stale plan pointing at a since-removed document;
 5. the typed request model against the sealed arguments.
 
 Any mismatch fails closed. `call` accepts no operation identity, path, group ID,
@@ -564,26 +680,72 @@ The data example shows shape, not live market values.
 When Kiwoom returns another page, `continuation.next_plan_token` seals the same
 operation and arguments with the returned `next_key`. The LLM must use that new
 token. It must not copy `next_key` into a fresh first-page resolve request.
+`continuation` only advances for a query plan; an order plan is never refreshed
+into one, and a websocket registration has nothing to page through.
+
+### Response for a websocket plan
+
+```json
+{
+  "operation_ref": "base:0B",
+  "data": {
+    "return_code": 0,
+    "return_msg": "",
+    "trnm": "REG",
+    "data": [{"item": "005930", "type": "0B"}]
+  },
+  "continuation": {
+    "cont_yn": "N",
+    "next_key": null,
+    "next_plan_token": null
+  }
+}
+```
+
+`call` returns the registration acknowledgement, not a market event. The FIDs a
+subscription actually delivers — the same fields `athena_describe` reports for
+that operation — arrive afterward, out of band, as `REAL` events on
+`WS /api/v1/ws/stream`; they never pass through `call` or a plan.
 
 ## Discovery and execution safety
 
-### Orders: explicit discovery only
+### Orders: explicit discovery, then callable, still guarded
 
-The 12 order operations appear only under `intent=order`. Description can explain
-their required fields and marks them `generic_callable=false` with the direct
-guarded-order execution policy. `resolve` and `call` never execute orders.
+The 12 order operations appear only under `intent=order` — `discovery_only=true`
+on the `search` hit means exactly that gate, not that `call` refuses them.
+`resolve`/`call` execute orders directly now: `generic_callable=true`,
+`execution_policy=selector_guarded_order`, and `call` dispatches to the same
+`call_order_tr` function the typed direct order route calls, so it is one guard
+implementation, not two. Signing a plan settles *which* operation was agreed
+on; it does not authorise placing it. `call` still demands the same
+`Authorization`, `X-Athena-Confirm`, and `Idempotency-Key` headers as the typed
+order route, and the account's `order_scopes` allowlist still applies. Order
+execution keeps every independent safeguard it always had — server opt-in,
+local bearer authentication, explicit confirmation, and idempotency key — the
+selector adds a resolution step in front of them, it does not replace or weaken
+any of them. Two further properties hold by construction: default/`query`
+`resolve` ranks only the query surface, so no vague question can land on an
+order — the model must search under `intent=order`, then name the operation it
+found — and an order plan is never refreshed into a continuation token, because
+that token would place the order a second time.
 
-Order execution must continue through Athena's existing direct order route and
-all of its independent safeguards: server opt-in, local bearer authentication,
-explicit confirmation, and idempotency key. The selector cannot weaken or
-bypass them.
+### WebSocket: control frames, never the stream
 
-### WebSocket: explicit discovery only
+The 23 WebSocket operations appear only under `intent=websocket`, and `call`
+dispatches them to the socket (`call_websocket_tr`) rather than the HTTP
+client — `generic_callable=true`, `execution_policy=selector_websocket_control`.
+A REG or REMOVE frame is a one-shot call that returns an ack, which is what
+`call` returns; the events it turns on are delivered out of band through
+`WS /api/v1/ws/stream` and never through a plan. A subscription has nothing to
+continue, so no follow-up plan token is minted.
 
-The 23 WebSocket operations appear only under `intent=websocket`. Description
-marks them `generic_callable=false` and points callers to the existing direct
-WebSocket control/stream lifecycle. A request/response plan token is not a valid
-substitute for a long-lived socket registration.
+### Missed intent: `suggested_intent`
+
+An `auto` or `query` search for "실시간 체결 구독" used to return unrelated read
+operations scoring in the hundreds, with nothing to signal the miss. `SearchResponse`
+now carries `suggested_intent` when the question reads as an action rather than a
+read. A read marker such as 조회, 내역, or 현황 always wins, so "미체결 주문 조회"
+stays a query.
 
 ### OAuth: completely hidden
 
@@ -607,7 +769,8 @@ similar Korean operation.
 | No family reaches the confidence floor | `NO_CONFIDENT_MATCH` | 404 | Ask a focused clarification or state unsupported scope. |
 | Two families remain too close | `AMBIGUOUS_OPERATION` | 409 | Present at most the returned candidates and ask which information is wanted. |
 | Client preference conflicts with server ranking | `PREFERRED_REF_NOT_SUPPORTED_BY_QUERY` | 409 | Drop the preference and refine the question. |
-| Order/WSS passed to generic execution | `OPERATION_NOT_GENERIC_CALLABLE` | 403 | Use the guarded direct surface; never retry through `call`. |
+| Hidden OAuth identity named directly | `OPERATION_NOT_GENERIC_CALLABLE` | 403 | OAuth is not part of this catalog; do not retry through `call`. |
+| Split family named without `detail_group` | `DETAIL_GROUP_REQUIRED` | 422 | Read `details.available_groups` and resolve again with one of them. |
 | `detail_group` not in the selected family | `UNKNOWN_DETAIL_GROUP` | 422 | Read `details.available_groups`, or drop `detail_group` for the base response. |
 | Missing, unknown, or invalid request fields | `INVALID_ARGUMENTS` | 422 | Collect or correct arguments, then resolve again. |
 | Malformed token or invalid signature | `INVALID_PLAN` | 400 | Resolve again; do not alter the token. |
@@ -692,8 +855,11 @@ describe the best candidate, resolve with all required arguments, then call only
 the returned plan token. Search returns one operation per TR family. For a
 focused question, read detail_groups from describe and pass the matching
 detail_group to resolve; omit it for the full typed base response. Orders and
-WebSocket operations are discovery-only. OAuth and U.S.-only operations are
-unavailable.
+WebSocket subscriptions need an explicit intent="order" or intent="websocket" on
+both search and resolve; a vague question never reaches them. A WebSocket call
+sends one registration frame and returns its acknowledgement, not the stream -
+subscribe the caller to WS /api/v1/ws/stream separately for the events it turns
+on. OAuth and U.S.-only operations are unavailable.
 ```
 
 Adapter requirements:
@@ -708,16 +874,21 @@ Adapter requirements:
 5. Treat plan tokens as opaque and avoid normal logs, telemetry labels, or model
    summaries that reproduce them.
 6. Do not retry an expired or stale token. Run resolution again.
-7. Do not route `OPERATION_NOT_GENERIC_CALLABLE` to another selector tool.
-   Orders and streams require their existing direct safety surfaces.
+7. Order and WebSocket plans go through the same `resolve`/`call` pair as a
+   read; only the intent argument, the order confirmation/idempotency headers,
+   and (for orders) the `Authorization` header differ. Do not build a second,
+   parallel call path for them. `OPERATION_NOT_GENERIC_CALLABLE` now means an
+   OAuth identity or a stale plan reached execution — never route it anywhere;
+   the identity is unsupported, full stop.
 8. Cache manifest/search/description only by `catalog_version`. Discard cached
    contracts when the version changes.
 
 ## Rate limit, concurrency, and continuation
 
 Selector-local operations do not consume the upstream allowance. A successful
-`athena_call` performs one typed Kiwoom query, even for a detail projection; the
-projection is applied to that single response.
+`athena_call` performs exactly one typed Kiwoom request — a query, a guarded
+order, or a websocket registration frame — even for a detail projection; the
+projection is applied to that single query response.
 
 Operational rules:
 
@@ -728,7 +899,10 @@ Operational rules:
   distinct query calls and Kiwoom's five-calls-per-second constraint.
 - Preserve question order when presenting multiple results even if calls finish
   out of order.
-- Do not automatically retry orders; the selector cannot execute them anyway.
+- Do not automatically retry an order call. `call` now executes orders, guarded
+  by the same `Idempotency-Key` contract the direct order route enforces, but a
+  blind client-side retry after an ambiguous response (timeout, connection
+  reset) is still the caller's risk to avoid, not the selector's to absorb.
 - Continue a paged query only with `next_plan_token` returned by the previous
   call. This binds the page cursor to the same operation and arguments.
 - `ui_page_size=10` is a display recommendation for table projections. It is not
@@ -753,7 +927,8 @@ base/detail identity or expected error, and relevant reason codes.
 - Korean/English synonyms, field aliases, exact TR IDs, and canonical identities;
 - ambiguous questions and missing-argument questions;
 - all 12 order and 23 WebSocket identities under both correct and incorrect
-  intents;
+  intents, including a dedicated 12-question realtime slice that exercises
+  `resolve` end to end (not just retrieval) against the FID vocabulary;
 - OAuth and all official U.S.-only identifiers as negative cases;
 - mixed-case WebSocket identities;
 - continuation, expired-token, tampered-token, and stale-catalog cases.
@@ -767,15 +942,17 @@ explicit argument, and its correctness is asserted per case by
 
 | Metric | Definition | Release expectation |
 | --- | --- | --- |
-| Family recall@5 | Correct base TR family appears in the top five. | >= 0.98; regressions block release. |
-| Family top-1 accuracy | Correct base TR family ranks first. | >= 0.95 overall, >= 0.97 on the detail and base slices. |
+| Family recall@5 | Correct base TR family appears in the top five. | >= 0.98 overall; 1.0 on the realtime slice; regressions block release. |
+| Family top-1 accuracy | Correct base TR family ranks first. | >= 0.95 overall, 1.0 on the detail and detail_required slices, >= 0.90 on every other non-realtime slice. |
+| Realtime family top-1 | Correct websocket family ranks first, retrieval only. | >= 0.75; deliberately looser than the other slices (see Current progress). |
+| Realtime resolve accuracy | `resolve` returns the gold `operation_ref` for a realtime question. | >= 10/12; the number `resolve`'s own tie-break and intent gate are actually held to. |
 | Projection fidelity | `detail_group` resolves to that group or fails loudly. | 100%; an unknown group must never fall back to base. |
 | Base over-fetch rate | Focused questions answered without their `detail_group`. | Adapter-side metric; the server no longer guesses. |
 | Full-response recall | Explicit full/multi-group questions resolved to base. | 100% for explicit-full fixtures. |
 | Pure-list compliance | Pure-list questions remain at base. | 100%. |
 | Ambiguity precision | Ambiguous gold cases produce no plan. | 100% for safety fixtures. |
 | Argument validation recall | Missing/unknown/invalid fields fail before a plan. | 100%. |
-| Policy isolation | Order/WSS never generic-call; OAuth/U.S. never leak. | 100%. |
+| Policy isolation | Order/WSS never reachable by a vague `auto`/`query` question or a mismatched `candidate_refs`/`preferred_ref`; OAuth/U.S. never leak. | 100%. |
 | Determinism | Same input/catalog produces byte-equivalent ordered candidates. | 100% across randomized registry order and hash seeds. |
 | Context footprint | Always-loaded schemas seen by the LLM. | Four meta-tools, independent of catalog size. |
 | Upstream efficiency | Kiwoom calls per successful focused question. | One unless the user explicitly requests multiple independent data sets/pages. |
@@ -787,18 +964,61 @@ family accuracy and poor projection quality.
 ### Current progress
 
 The catalog, four-tool transport contract, signed-plan boundary, explicit
-projection selection, and safety fixtures are implemented, and the selector
-evaluation is green on the unweakened natural-language gold questions.
+projection selection, realtime discovery and execution, and safety fixtures are
+implemented. The golden corpus is 84 cases (`detail` 22, `detail_required` 22,
+`realtime` 12, `missing_args` 8, `safety` 8, `forbidden` 4, `ambiguity` 4,
+`adversarial` 4; 35 Korean, 35 English, 14 mixed), measured against
+`tests/unit/test_selector_eval.py`:
 
-One known near-miss remains and is deliberately not tuned away: `금일 재사용
-금액만` ranks `base:kt00010` (1,449) above the gold `base:kt00013` (1,379), a 5%
-margin. `resolve` still reaches the correct family through `preferred_ref`, and
-family top-1 on the detail and base slices is 43/44 = 0.977. Closing it would
-mean fitting the lexicon to a gold question rather than to the domain.
+- Retrieval, over the 72 cases that carry an accepted family: recall@5 is
+  72/72 = 100%, top-1 is 69/72 = 95.8%.
+- `detail` and `detail_required` are each 22/22 = 100%, so the combined
+  detail-and-base slice is 44/44 = 100%. The long-standing near-miss here —
+  `금일 재사용 금액만` ranking `base:kt00010` above the gold `base:kt00013` — is
+  resolved, not tuned around: it was a Korean-bigram false match (a two-syllable
+  slice of one word matching as a whole word of another), and half-weighting
+  bigrams fixed it along with the class of mismatches it belonged to. The
+  earlier failure mode this slice also used to show — focused questions
+  resolving to a base operation because sibling projections were ranked against
+  each other — remains gone by construction: siblings are still never ranked.
+- `realtime` retrieval (12 websocket golden questions) is 9/12 = 75% top-1 but
+  12/12 = 100% recall@5: none of the three top-1 misses are actually lost, each
+  ranks the correct family second. `resolve`'s own re-ranking and name tie-break
+  (see [Ambiguity and no-match behavior](#ambiguity-and-no-match-behavior))
+  recovers two of those three, so **realtime resolve accuracy — what a screen
+  builder actually gets — is 10/12 = 83.3%**, measured separately by
+  `test_realtime_resolve_meets_a_measured_accuracy_floor`. Two genuine misses
+  remain:
+  - `realtime-0B-ko` ("삼성전자 실시간 체결가 tick 단위로 받아줘") resolves to
+    `base:00` 주문체결 instead of the gold `base:0B` 주식체결. Both types are
+    named 체결 and the question supplies no lexical discriminator between them
+    — the real signal is that the question names a tradable instrument, so it
+    is item-scoped, while `00` is account-scoped, which is semantic, not
+    lexical, and out of reach for this ranker.
+  - `realtime-0H-en` ("stream the expected opening match price for 005930
+    before the market fixes") is not a missing word; it is the name tie-break's
+    own blind spot. Totals: `base:0H` 860 (gold), `base:ka10173` 749,
+    `base:00` 748 — `860 / 749 = 1.148`, just under the 1.15 distinguishability
+    ratio, so all three enter the tie-break together. The tie-break then picks
+    by `title_score` alone, and `ka10173` 조건검색's title happens to score
+    337 there (its literal tokens match the fragments 시간/실시간) against
+    `0H`'s 112 — 0H's 860 is earned mostly through `realtime_field`/`domain`
+    corroboration, not its title. The tie-break exists to prefer the
+    *correctly-named* family among near-ties; it assumes that family also has
+    the best title match, which fails here, so it hands the question to an
+    unrelated, higher-scoring-by-title family instead of the actual leader.
+    Closing this needs either a wider name-tiebreak (fall back to total score
+    when the leader-by-total isn't the leader-by-title) or pulling `0H` far
+    enough past the 1.15 ratio that it never enters the tie-break at all — not
+    another lexicon entry. The eval floor is deliberately measured, not
+    inspected, so a fix here should be verified by re-running the suite rather
+    than assumed.
 
-The earlier failure mode — focused questions resolving to a base operation
-because sibling projections were ranked against each other — is gone by
-construction, not by threshold tuning: siblings are no longer ranked.
+Both floors — retrieval's realtime top-1 at 0.75 and resolve's realtime
+accuracy at 10/12 — are pinned at their currently measured values rather than a
+round number, so either regressing is a release-blocking test failure and
+either improving requires deliberately raising the floor, not just landing a
+change that happens to clear the old one.
 
 ### Regression invariants
 
@@ -807,20 +1027,33 @@ update:
 
 - 323 canonical operation documents: 171 query bases, 115 details, 12 orders,
   23 WebSocket operations, and 2 hidden OAuth controls;
-- exactly 286 generic-callable query identities;
+- exactly 299 generic-callable identities: 149 unsplit query bases, 115 projections,
+  12 orders, and 23 websocket controls. The 264 query identities match the
+  common-screen manifest's `read_display` count; the 22 split bases stay searchable
+  and describable but are not callable;
 - a searchable query surface of exactly 171 documents, one per TR family, with
   no projection among them;
 - every one of the 115 projections advertised by `describe` on its base, and
   reachable only by naming its `group_id`;
 - exactly 35 explicit discovery-only identities;
 - no U.S.-only identity in search, describe, resolve, call, or manifest;
-- no plan for ambiguity, invalid arguments, order, WebSocket, or OAuth;
-- base/detail selection rules and published score thresholds;
+- no plan for ambiguity, invalid arguments, or a hidden OAuth identity; a plan
+  for a named order or websocket operation is expected and, on `call`, is
+  guarded exactly as the direct order/websocket surfaces guard it;
+- an order plan never refreshes into a continuation token, and a websocket
+  registration mints no plan to continue in the first place;
+- a plan is bound to the account that resolved it and fails `INVALID_PLAN` if
+  replayed under another;
+- base/detail selection rules and published score thresholds, including the
+  ambiguity-margin name tie-break and the realtime corroboration cap;
 - catalog version changes whenever identities, searchable metadata, lexicon, or
   request/response schemas change;
 - every successful detail call performs one base TR call and returns only its
   declared response fields;
-- continuation can advance only through a server-issued next plan.
+- `describe` on a websocket operation reports the per-event FID model, not the
+  shared four-field envelope, whenever the response model carries one;
+- continuation can advance only through a server-issued next plan, and only for
+  a query plan.
 
 ## Developer maintenance checklist
 
