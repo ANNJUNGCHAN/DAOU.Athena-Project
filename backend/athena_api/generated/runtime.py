@@ -13,6 +13,8 @@ from typing import Any, TypeVar
 from fastapi import HTTPException, Request, Response, status
 from pydantic import BaseModel
 
+from athena_api.accounts import account_runtimes, order_scope_for
+from athena_api.errors import OrderScopeError
 from athena_api.generated.registry import TR_REGISTRY
 from athena_api.kiwoom import RequestOptions, ResponseEnvelope
 from athena_api.kiwoom.return_codes import normalize_return_code
@@ -147,6 +149,7 @@ async def call_order_tr(
     authorization: str,
     confirmation: str,
     idempotency_key: str,
+    account: str = "",
 ) -> BaseModel:
     _require_bearer(request, authorization)
     if confirmation.strip().lower() != "true":
@@ -157,11 +160,21 @@ async def call_order_tr(
             status_code=400, detail="Idempotency-Key must contain 1 to 128 characters"
         )
 
+    spec = TR_REGISTRY[tr_id]
+    scope = order_scope_for(tr_id, spec.upstream_path)
+    runtime = account_runtimes(request.app).get(account)
+    if runtime is not None and not runtime.permits_order(scope):
+        raise OrderScopeError(
+            f"account '{account}' may not place {scope.value} orders ({tr_id})"
+        )
+
     lock = request.app.state.order_idempotency_lock
-    cache: OrderedDict[tuple[str, str], OrderReservation] = (
+    cache: OrderedDict[tuple[str, str, str], OrderReservation] = (
         request.app.state.order_idempotency_cache
     )
-    key = (tr_id, idempotency_key)
+    # Account-scoped: two accounts may legitimately reuse the same client-generated key,
+    # and without this discriminator one would read or block the other's reservation.
+    key = (account, tr_id, idempotency_key)
     order_body = payload.model_dump(by_alias=True, exclude_none=True)
     fingerprint = json.dumps(order_body, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
     owner = False
@@ -209,7 +222,6 @@ async def call_order_tr(
             envelope = reservation.envelope
 
     if owner:
-        spec = TR_REGISTRY[tr_id]
         try:
             envelope = await client.post_with_headers(
                 tr_id,
