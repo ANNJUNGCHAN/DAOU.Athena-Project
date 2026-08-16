@@ -243,7 +243,7 @@ app.whenReady().then(async () => {
     boundsBeforeQuery, boundsAfterQuery,
     grewTallerThanBase: boundsAfterQuery.height > layout.chatBaseH,
     finalAnswerText: finalTurnText,
-    canvasChipCount: chipCount,
+    cardChipCount: chipCount,
   };
   console.log('[verify] 검증5(E2E Enter 트리거):', JSON.stringify(report.e2eTrigger));
 

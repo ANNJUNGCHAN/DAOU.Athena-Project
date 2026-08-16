@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-08-16T13:29:25.540Z",
+  "startedAt": "2026-08-16T15:32:20.111Z",
   "layout": {
     "scale": 1,
     "screen": {
@@ -37,18 +37,18 @@
     "ok": true
   },
   "expand": {
-    "frameCount": 32,
+    "frameCount": 31,
     "p50": 16.699999999999818,
-    "p95": 33.29999999999927,
-    "max": 33.400000000000546,
-    "min": 16.599999999999454
+    "p95": 33.30000000000018,
+    "max": 33.399999999999636,
+    "min": 16.5
   },
   "collapse": {
     "frameCount": 35,
-    "p50": 16.69999999999891,
-    "p95": 16.800000000000182,
-    "max": 16.899999999999636,
-    "min": 16.399999999999636
+    "p50": 16.700000000000728,
+    "p95": 16.80000000000109,
+    "max": 33.29999999999927,
+    "min": 8.300000000001091
   },
   "afterCollapse": {
     "canvasVisible": false
@@ -123,7 +123,7 @@
     },
     "grewTallerThanBase": true,
     "finalAnswerText": "캔버스 창에 스트림, 리더, 공통 테이블을 띄웠습니다.",
-    "canvasChipCount": 3
+    "cardChipCount": 3
   },
   "manualResize": {
     "beforeDrag": {
@@ -166,5 +166,5 @@
     "turnCountBefore": 1,
     "turnCountAfter": 1
   },
-  "finishedAt": "2026-08-16T13:29:43.596Z"
+  "finishedAt": "2026-08-16T15:32:38.623Z"
 }
