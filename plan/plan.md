@@ -18,9 +18,9 @@
 ## 1. 실측 상태 (2026-08-15 재검증)
 
 ```
-backend 전체:  470 passed, 0 failed   (87초)
+backend 전체:  494 passed, 0 failed   (138초)
   ruff check                → All checks passed
-  tests/mcp                 → 167 passed (126 → +41, 이식 절차·러너)
+  tests/mcp                 → 191 passed (126 → 167 이식 절차·러너 → 191 잔여 5건)
 ```
 
 > 이 워크트리에는 `backend/.venv`가 없었다. `uv sync --extra dev`로 새로 만들어 실행했다.
@@ -30,7 +30,7 @@ backend 전체:  470 passed, 0 failed   (87초)
 | 영역 | 상태 | 위치 |
 |---|---|---|
 | 키움 REST 백엔드 (301 라우팅) | **동작** | `backend/athena_api/` |
-| MCP 게이트웨이 | **동작 · 실서버 이식 완료** · 167 테스트 통과 | `backend/athena_mcp/` |
+| MCP 게이트웨이 | **동작 · 실서버 이식 완료 · W1 잔여 5건 결선** · 191 테스트 통과 | `backend/athena_mcp/` |
 | 투자 브레인 (그래프 투영) | **모듈 완성, FastAPI 미결선** | `backend/athena_api/brain/` |
 | LLM API 셀렉터 | **동작** · 102 테스트 통과 (§3) | `backend/athena_api/selector/` |
 | Electron 두 창 셸 | **동작** · 실제 데이터 렌더 | `app/` |
@@ -88,7 +88,7 @@ resolve  → detail_group="buy_bid_prices" 를 LLM이 명시, 서버는 소속�
 
 ### A. MCP 게이트웨이 `backend/athena_mcp/`
 
-외부 MCP 서버들을 집계해 **단일 MCP 서버로 재노출**한다. 126 테스트 통과.
+외부 MCP 서버들을 집계해 **단일 MCP 서버로 재노출**한다. 191 테스트 통과.
 
 | 모듈 | 역할 | 미완 |
 |---|---|---|
@@ -121,9 +121,22 @@ resolve  → detail_group="buy_bid_prices" 를 LLM이 명시, 서버는 소속�
 없음(이 저장소에 `.env`가 없다), `pykrx-mcp`는 상류가 `mcp` 2.x를 끌어와
 `mcp.server.fastmcp`가 사라짐(`uvx --with "mcp==1.28.*" pykrx-mcp`로 우회하면 붙는다).
 
-미해결 보안 2건은 `backend/athena_mcp/SECURITY.md`. 프롬프트 인젝션(HIGH)은 CLI 통합 시점 과제, 응답 크기 상한(MEDIUM)은 게이트웨이에서 처리 가능.
-**실서버를 붙이면서 프롬프트 인젝션 공격면이 가설에서 실물이 됐다** — 지금
-노출 중인 upstream 툴 26개의 설명이 전부 남이 쓴 텍스트다.
+**W1 잔여 5건도 닫았다 (2026-08-16).** "호출자 없는 메서드"와 "문서화된 미해결"로
+남아 있던 것들이다 — 응답 크기 상한, 백그라운드 헬스체크 슈퍼바이저, 취소 전파 +
+진행 알림 왕복, `truncate_at` 결선, 프롬프트 인젝션 최소 완화. 상세는 README
+"W1 잔여 5건을 닫았다" 절.
+
+이 과정에서 **SDK 실측이 전제 하나를 뒤집었다**: `notifications/cancelled`는
+lowlevel `Server`에 원천적으로 도달하지 않는다(`mcp/shared/session.py`가
+anyio 취소 스코프를 직접 취소한다). 즉 필요한 건 "리맵"이 아니라 "취소를 안
+삼키는 것"이었다. 반대로 진행 알림은 SDK가 노출하고 있어서 지금 결선됐다.
+
+보안 2건은 **둘 다 손댔지만 둘 다 안 닫혔다** (`SECURITY.md`):
+- **[HIGH] 프롬프트 인젝션 — 부분 완화.** 툴 `description`에 출처 라벨이 붙었다.
+  **응답 본문에는 여전히 아무 라벨도 없다.** 라벨은 방어가 아니다.
+- **[MEDIUM] 응답 크기 — post-parse 상한만.** SDK `stdout_reader()`가 개행까지
+  무제한 버퍼링하는 게 실측 확인됐고, 그 메모리 고갈은 이 상한 아래에서 이미
+  일어난다. 전송 계층 방어는 `stdio_client` 포크가 필요하다.
 
 ### B. 투자 브레인 `backend/athena_api/brain/`
 
@@ -159,11 +172,32 @@ ADR: [`plan/investment-brain-architecture.md`](investment-brain-architecture.md)
 |---|---|---|
 | 1 | **갈래 A·B 조율 — "공통 캔버스" 정의 통합** | A는 캔버스 16종, B는 301 라우팅 렌더. 상위 개념을 정하지 않으면 렌더러가 둘로 갈라진다 (`00-인수인계.md` §1 충돌 ①) |
 | 2 | **브레인 FastAPI 결선** | ADR §4.2. 락·writer queue 없이는 다중 프로세스 쓰기 사고 |
-| 3 | **CLI 연동 마무리** — `claude -p`로 실왕복 | 게이트웨이는 stdio 서버로 뜨고 MCP 클라이언트 왕복까지 검증됐다. 남은 건 `claude` 자체로 확인하는 것뿐. `--setting-sources ""` 필수 (§7) |
-| 4 | **프레임 최적화** — 굴절층/데이터층 분리 | soul.md가 "모션이 곧 재료"라고 한 설계 |
-| 5 | 캔버스 설계 라운드 | 근거 ①②④ 확보됨. soul.md §9 프로세스로 |
-| 6 | 파수꾼·조사관 착수 | `plan/감시에이전트-실행계획.md`. 주문 자동집행 없음(결정 3) |
-| 7 | MCP 어댑터에 `detail_group` 반영 | 4툴을 MCP로 노출할 때 `describe.detail_groups` → `resolve.detail_group` 경로 필수 (`docs/LLM_API_SELECTION.md`) |
+| 3 | **CLI 연동 마무리** — `claude -p`로 실왕복 | 게이트웨이는 stdio 서버로 뜨고 MCP 클라이언트 왕복까지 검증됐다. 남은 건 `claude` 자체로 확인하는 것뿐. `--setting-sources ""` 필수 (§7). **`--allowedTools` 없이는 툴 실행이 자동 거부된다** — S3 실측(`spike/cli-pipe/RESULT.md:127-136`) |
+| 4 | **stream-json 파서** (결정 D1의 귀결) | 프로덕션 코드에 파서가 **0건**이다. `tool_result.content`가 문자열/블록배열 둘 다 온다(RESULT.md:111-120) |
+| 5 | **W3 캔버스 어댑터** — upstream 출력 → 캔버스 데이터 | 미착수. `stream.py`가 여기서 첫 프로덕션 호출자를 얻는다. 계약 형상은 이미 일치(`canvas.py` 스트림 스키마 ↔ `stream.py` 레코드) |
+| 6 | **타임라인 캔버스** | 계획은 "타임라인부터"인데 `app/canvas.js`에 timeline 분기 자체가 없다(stream/reader/table만). 가격축은 KRX 승인 전까지 pykrx로 잠정 |
+| 7 | **프레임 최적화** — 굴절층/데이터층 분리 | soul.md가 "모션이 곧 재료"라고 한 설계 |
+| 8 | 캔버스 설계 라운드 | 근거 ①②④ 확보됨. soul.md §9 프로세스로 |
+| 9 | 파수꾼·조사관 착수 | `plan/감시에이전트-실행계획.md`. 주문 자동집행 없음(결정 3) |
+| 10 | MCP 어댑터에 `detail_group` 반영 | 4툴을 MCP로 노출할 때 `describe.detail_groups` → `resolve.detail_group` 경로 필수 (`docs/LLM_API_SELECTION.md`). 현재 `athena_mcp`에 selector 참조 **0건** |
+
+### 결정 D1 — 캔버스 페이로드가 UI에 닿는 경로 (2026-08-16 확정)
+
+게이트웨이 프로세스와 Electron 렌더러는 별개 프로세스다. `athena__render_canvas`의
+결과가 캔버스 창까지 가는 길을 **stream-json 파싱**으로 정했다:
+
+```
+Electron ──spawn──> claude -p ──stdio──> athena-mcp serve ──> upstream N개
+   ^                    │
+   └── stream-json ─────┘   tool_result에서 캔버스 페이로드를 뽑아 IPC로 렌더
+```
+
+게이트웨이는 순수 stdio MCP 서버로 남는다(변경 없음, 새 포트·인증 표면 없음).
+대가는 stream-json 파서를 새로 써야 한다는 것 — 액션 4.
+
+**지금 `app/`은 아직 목업이다.** `app/main.js`의 `athena__render_canvas`는 같은
+이름의 placeholder IPC이고, 데이터는 `spike/captures/*.json`을 파일에서 직접
+읽는다. `app/`에 MCP 클라이언트도 HTTP 호출도 없다(의존성은 `electron` 하나뿐).
 
 ---
 
@@ -171,10 +205,17 @@ ADR: [`plan/investment-brain-architecture.md`](investment-brain-architecture.md)
 
 | # | 무엇 | 누가 |
 |---|---|---|
-| 1 | **KRX 활용신청 미승인** — 21 엔드포인트 전부 `Unauthorized API Call` | **사용자**. `openapi.krx.co.kr` 마이페이지 → API별 활용신청 |
-| 2 | 프롬프트 인젝션 (HIGH) | CLI 통합 시점 |
-| 3 | `pykrx-mcp` 8툴 중 6 실패 (`400 LOGOUT`) | 상류 라이브러리 버그 |
-| 4 | `@drfirst/korea-stock-mcp` 한글 손상 | 해당 서버 하나. 안 쓰면 무관 |
+| 1 | **KRX 활용신청 미승인** — 21 엔드포인트 전부 `Unauthorized API Call` | **사용자**. `openapi.krx.co.kr` 마이페이지 → API별 활용신청. 타임라인 가격축이 여기 걸림 |
+| 2 | **DART 키 없음** — §10이 정한 DART 서버 `chrisryugj/korean-dart-mcp`를 **한 번도 안 붙였다** | **사용자**. 리더 캔버스 실데이터 + `truncate_at` 실증 + 당일접수 실패 재확인이 전부 여기 걸림 |
+| 3 | **NAVER 키 없음** (`NCP_APIGW_API_KEY_ID` 등) — `doctor`에서 FAIL | **사용자**. 스트림 캔버스 실데이터 |
+| 4 | 프롬프트 인젝션 (HIGH) — 응답 본문 쪽 | 부분 완화됨(설명 라벨). 본문 라벨·상위 권한 게이트는 CLI 통합 시점 |
+| 5 | `pykrx-mcp` 8툴 중 6 실패 (`400 LOGOUT`) | 상류 라이브러리 버그 |
+| 6 | `@drfirst/korea-stock-mcp` 한글 손상 | 해당 서버 하나. 안 쓰면 무관 |
+
+> §10이 정한 v1 서버 4종 중 **실제로 붙은 건 pykrx 하나**다(그것도 6툴 실패).
+> `doctor`가 OK 내는 `server-everything`/`drfirst`는 v1 선택 집합이 아니라
+> 스파이크 픽스처다 — 게이트웨이 배관이 동작한다는 증거이지 v1 서버가
+> 동작한다는 증거가 아니다.
 
 ---
 
@@ -189,8 +230,8 @@ git log --oneline -8
 
 # 백엔드 (전체 스위트는 약 4분)
 cd backend && .venv/Scripts/python -m pytest -q
-cd backend && .venv/Scripts/python -m pytest tests/mcp -q            # 126 passed
-cd backend && .venv/Scripts/python -m pytest tests/unit/test_selector_eval.py -x -q   # 지금 빨간 것
+cd backend && .venv/Scripts/python -m pytest tests/mcp -q            # 191 passed
+cd backend && .venv/Scripts/python -m pytest tests/unit/test_selector_eval.py -x -q
 cd backend && .venv/Scripts/python -m ruff check athena_api athena_mcp tests
 cd backend && .venv/Scripts/python scripts/generate_api.py --check   # 생성물 드리프트 확인
 
