@@ -4,6 +4,7 @@ const { ipcRenderer } = require('electron');
 const { sanitize } = require('./lib/sanitize');
 const { renderMarkdownInto } = require('./lib/markdown');
 const { loadStreamItems, loadFinancialStatement, loadReaderMarkdown } = require('./lib/mockdata');
+const { renderAccounts, renderMcp } = require('./lib/settings-cards');
 
 const mosaic = document.getElementById('mosaic');
 const sheen = document.getElementById('sheen');
@@ -113,6 +114,11 @@ function addCard(type) {
   if (type === 'stream') return renderStream();
   if (type === 'reader') return renderReader();
   if (type === 'table') return renderTable();
+  // 계좌(AT-ST-001)·MCP(AT-ST-004) 제어 캔버스 카드 — 등록·활성화·승인·probe
+  // 시트는 새 카드/새 창이 아니라 이 카드들 내부의 오버레이다
+  // (plan/paper-specs/00-통합-계획.md §1.2/1.3, lib/settings-cards.js).
+  if (type === 'accounts') return renderAccounts(grid);
+  if (type === 'mcp') return renderMcp(grid);
 }
 
 // ① 스트림 — sanitize한 문자열은 절대 innerHTML로 넣지 않는다. textContent로만.

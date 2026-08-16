@@ -1,0 +1,198 @@
+/* lib/ui-kit.js의 프리미티브 스타일. 두 창(chat.html·canvas.html)이 함께 링크한다.
+   치수·색은 Paper 화면설계서 실측값 — plan/paper-specs/ 각 문서 "레이아웃 · 스타일".
+   색을 새로 만들지 않는다: 전부 styles/tokens.css의 토큰이거나 흰색 알파다.
+   Paper 토큰 → 앱 토큰 대응: --font-kr=--font-body, --font-kr-bold=--font-strong,
+   --font-title=--font-display. */
+
+/* 표시등 — 7×7. 연결됨은 --color-ok, 미연결은 흰색 22%. */
+.uk-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex: none;
+  display: block;
+}
+.uk-dot.is-on { background: var(--color-ok); }
+.uk-dot.is-off { background: rgb(255 255 255 / 22%); }
+
+/* 배지 — 활성은 브랜드 솔리드, 비활성은 아웃라인. */
+.uk-badge {
+  flex: none;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 10px;
+  line-height: 12px;
+  white-space: nowrap;
+}
+.uk-badge.is-active {
+  background: var(--color-brand);
+  color: #fff;
+  font-family: var(--font-strong);
+}
+.uk-badge.is-idle {
+  background: rgb(255 255 255 / 7%);
+  border: 1px solid rgb(255 255 255 / 16%);
+  color: rgb(242 244 248 / 58%);
+  font-family: var(--font-body);
+}
+
+/* 버튼 3종. primary는 화면당 하나만 쓴다(브랜드색 단일 지점 규칙). */
+.uk-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 0;
+  cursor: pointer;
+  color: rgb(242 244 248 / 92%);
+  font-family: var(--font-strong);
+  transition: background var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
+}
+.uk-btn:disabled { cursor: default; opacity: 0.4; }
+.uk-btn:focus-visible { outline: 2px solid var(--color-brand); outline-offset: 2px; }
+
+.uk-btn-primary {
+  padding: 10px 20px;
+  border-radius: 9px;
+  gap: 8px;
+  background: var(--color-brand);
+  color: #fff;
+  font-size: 13px;
+  line-height: 16px;
+}
+.uk-btn-primary:hover:not(:disabled) { background: color-mix(in oklab, var(--color-brand) 88%, white); }
+
+.uk-btn-ghost {
+  padding: 7px 14px;
+  border-radius: 7px;
+  background: rgb(255 255 255 / 10%);
+  border: 1px solid rgb(255 255 255 / 24%);
+  font-size: 11px;
+  line-height: 14px;
+}
+.uk-btn-ghost:hover:not(:disabled) { background: rgb(255 255 255 / 16%); }
+
+.uk-btn-text {
+  padding: 0;
+  background: none;
+  color: rgb(242 244 248 / 40%);
+  font-family: var(--font-body);
+  font-size: 12px;
+  line-height: 16px;
+}
+.uk-btn-text:hover:not(:disabled) { color: rgb(242 244 248 / 72%); }
+
+/* 진행 점 — 20×3, 무채색 고정. 브랜드색을 쓰지 않는다. */
+.uk-dots { display: flex; align-items: center; gap: 6px; }
+.uk-dot-pill { width: 20px; height: 3px; border-radius: 999px; display: block; }
+.uk-dot-pill.is-past { background: rgb(255 255 255 / 30%); }
+.uk-dot-pill.is-now { background: rgb(255 255 255 / 70%); }
+.uk-dot-pill.is-next { background: rgb(255 255 255 / 12%); }
+
+/* 라벨 + 값 한 줄. */
+.uk-lrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 36px;
+}
+.uk-lrow-label {
+  font-family: var(--font-body);
+  font-size: 12px;
+  line-height: 16px;
+  color: rgb(242 244 248 / 42%);
+}
+.uk-lrow-value {
+  font-family: var(--font-body);
+  font-size: 12px;
+  line-height: 16px;
+  color: rgb(242 244 248 / 92%);
+  text-align: right;
+}
+
+/* 카드 내부 시트 — 부모 카드를 덮는 오버레이. 새 창이 아니다. */
+.uk-sheet {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  border-radius: inherit;
+  background: color-mix(in oklab, var(--color-k-panel) 92%, black);
+  border: 1px solid rgb(255 255 255 / 16%);
+  overflow: hidden;
+}
+.uk-sheet-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgb(255 255 255 / 9%);
+}
+.uk-sheet-title {
+  font-family: var(--font-strong);
+  font-size: 14px;
+  line-height: 18px;
+  color: var(--color-k-text);
+}
+.uk-sheet-sub {
+  font-family: var(--font-body);
+  font-size: 11px;
+  line-height: 16px;
+  color: rgb(242 244 248 / 48%);
+  flex: 1;
+}
+.uk-sheet-close { margin-left: auto; }
+.uk-sheet-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* 비밀값 — 값이 아니라 문자 수만. */
+.uk-secret {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 16px;
+  letter-spacing: 0.04em;
+  color: rgb(242 244 248 / 54%);
+}
+
+/* 빈 상태 · 오류. 둘 다 조용히 넘기지 않기 위한 자리다. */
+.uk-empty {
+  padding: 24px 8px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.uk-empty-text {
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 18px;
+  color: rgb(242 244 248 / 54%);
+}
+.uk-empty-hint {
+  font-family: var(--font-body);
+  font-size: 11px;
+  line-height: 16px;
+  color: rgb(242 244 248 / 34%);
+}
+.uk-error {
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: color-mix(in oklab, var(--color-warn) 14%, transparent);
+  border: 1px solid color-mix(in oklab, var(--color-warn) 42%, transparent);
+  font-family: var(--font-body);
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--color-warn);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .uk-btn { transition: none; }
+}

@@ -4,6 +4,7 @@
 <meta charset="utf-8" />
 <title>Athena — 대화</title>
 <link rel="stylesheet" href="styles/tokens.css" />
+<link rel="stylesheet" href="styles/ui-kit.css" />
 <link rel="stylesheet" href="chat.css" />
 <link rel="stylesheet" href="styles/access.css" />
 </head>
@@ -28,6 +29,13 @@
         <span class="esc">ESC 중단</span>
       </div>
     </div>
+  </div>
+
+  <!-- 온보딩(AT-SY-002/003)·인증(AT-CV-OAUTH) — 새 창이 아니다. 대화 창(.app과
+       같은 유리 패널)이 chatMaxH로 확장된 상태의 콘텐츠를 여기 채운다.
+       lib/onboarding.js·lib/auth-screen.js가 #onboardBody를 그린다. -->
+  <div id="onboard" class="app glass" hidden>
+    <div id="onboardBody" class="onb-root"></div>
   </div>
 
   <div class="glass-sheen" aria-hidden="true"></div>
