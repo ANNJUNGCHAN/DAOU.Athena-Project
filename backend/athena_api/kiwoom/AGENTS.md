@@ -3,6 +3,8 @@
 
 # kiwoom
 
+> Terminology: [`GLOSSARY.md`](../../../GLOSSARY.md) is the standard vocabulary for this repo. Use its definitions; register new terms there before using them in code.
+
 ## Purpose
 Transport primitives for the Kiwoom mock API: memory-only OAuth, a bounded read-only HTTP client, a
 persistent WebSocket transport, the process-wide rate limiter, and canonical return-code handling.
