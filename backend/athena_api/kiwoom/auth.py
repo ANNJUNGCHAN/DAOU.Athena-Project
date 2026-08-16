@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import asyncio
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from typing import Any
 
 import httpx
@@ -17,9 +17,26 @@ TOKEN_API_ID = "au10001"
 REVOKE_ENDPOINT = "/oauth2/revoke"
 REVOKE_API_ID = "au10002"
 
+# Kiwoom reports expiry as a bare local wall clock (``expires_dt``) with no zone.
+# It is Korea time, which has no DST, so a fixed offset is exact and avoids a
+# tzdata dependency. Attaching it here is what lets a renderer subtract the
+# expiry from its own clock without guessing whether the value was UTC.
+KST = timezone(timedelta(hours=9))
+
 
 def parse_kiwoom_datetime(value: str) -> datetime:
-    return datetime.strptime(value, "%Y%m%d%H%M%S")
+    """Parse Kiwoom's zone-less timestamp into an aware KST datetime."""
+    return datetime.strptime(value, "%Y%m%d%H%M%S").replace(tzinfo=KST)
+
+
+def as_kst(value: datetime) -> datetime:
+    """Interpret a zone-less expiry as KST.
+
+    A naive expiry is never UTC here - it is the wall clock Kiwoom reported. The
+    whole point of carrying the zone is that nobody downstream has to guess, so
+    normalize on the way out rather than letting a naive value escape.
+    """
+    return value if value.tzinfo is not None else value.replace(tzinfo=KST)
 
 
 def _json_object(
@@ -68,11 +85,12 @@ class KiwoomAuth:
 
     @property
     def expires_at(self) -> datetime | None:
-        return self._expires_at
+        return as_kst(self._expires_at) if self._expires_at else None
 
     @property
     def is_ready(self) -> bool:
-        return bool(self._token and self._expires_at and self._expires_at > datetime.now())
+        expires_at = self.expires_at
+        return bool(self._token and expires_at and expires_at > datetime.now(KST))
 
     async def issue_token(self) -> None:
         async with self._issue_lock:
