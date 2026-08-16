@@ -36,9 +36,9 @@ Generated Kiwoom routes carry `x-athena-llm-exposed: false`. This annotation is
 for discovery and prompt construction; the signed `resolve`/`call` allowlist is
 the actual execution boundary.
 
-The current generated OpenAPI contains 314 paths and 314 GET/POST operations:
+The current generated OpenAPI contains 315 paths and 315 GET/POST operations:
 301 generated Kiwoom routes (149 unsplit query bases, 115 detail projections,
-23 websocket controls, 12 orders, and 2 OAuth) plus 13 service operations. The
+23 websocket controls, 12 orders, and 2 OAuth) plus 14 service operations. The
 22 split query bases are documented and searchable but are not registered as
 routes — their projections replaced them, so there is nothing left to route to.
 The service-operation count can change as unrelated endpoints are added; the

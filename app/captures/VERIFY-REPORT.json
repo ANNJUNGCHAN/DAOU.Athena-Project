@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-08-15T05:07:52.327Z",
+  "startedAt": "2026-08-16T04:22:54.605Z",
   "layout": {
     "scale": 1,
     "screen": {
@@ -23,8 +23,8 @@
         "height": 312
       },
       "idle": {
-        "width": 2346,
-        "height": 312
+        "width": 2340,
+        "height": 336
       }
     },
     "chatReadyAfterBoot": true
@@ -37,18 +37,18 @@
     "ok": true
   },
   "expand": {
-    "frameCount": 8,
-    "p50": 50.100000000000364,
-    "p95": 266.9000000000001,
-    "max": 266.9000000000001,
-    "min": 16.534000000000106
+    "frameCount": 24,
+    "p50": 16.699999999999818,
+    "p95": 66.70000000000027,
+    "max": 83.29999999999973,
+    "min": 16.40000000000009
   },
   "collapse": {
-    "frameCount": 22,
+    "frameCount": 35,
     "p50": 16.699999999999818,
-    "p95": 83.39999999999964,
-    "max": 117,
-    "min": 8.400000000000546
+    "p95": 16.800000000000182,
+    "max": 16.899999999999636,
+    "min": 16.399999999999636
   },
   "afterCollapse": {
     "canvasVisible": false
@@ -141,5 +141,40 @@
     "grewByDrag": true,
     "bottomEdgePinned": true
   },
-  "finishedAt": "2026-08-15T05:08:05.130Z"
+  "settingsWindow": {
+    "openedAsSeparateWindow": true,
+    "loadedSettingsHtml": true,
+    "singleInstance": true,
+    "chatBoundsUnchanged": true,
+    "canvasBoundsUnchanged": true,
+    "chatHistoryStaysVisible": true,
+    "chatInputStaysEnabled": true,
+    "noSettingsMarkupInChat": true,
+    "dotMarkedWhileOpen": true,
+    "nodeIntegrationOff": true,
+    "contextBridgeOnly": true,
+    "bridgeSurface": [
+      "close",
+      "getInfo",
+      "getPrefs",
+      "getStatus",
+      "setPrefs",
+      "tokenAction"
+    ],
+    "backendState": "연결 안 됨",
+    "tokenButtonsLockedWhenUnreachable": true,
+    "revokeConfirmHiddenInitially": true,
+    "noTrIdLeak": true,
+    "noBearerLeak": true,
+    "closedByEsc": true,
+    "dotUnmarkedAfterClose": true
+  },
+  "settingsCommandBar": {
+    "openedByCommand": true,
+    "inputCleared": true,
+    "notTreatedAsQuery": true,
+    "turnCountAfter": 1,
+    "closedAfterCheck": true
+  },
+  "finishedAt": "2026-08-16T04:23:09.358Z"
 }

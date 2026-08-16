@@ -21,6 +21,8 @@ is the first thing to read in a new session. Documents are Korean.
 | `kiwoom-common-screen-brief.md` | Common-screen brief |
 | `kiwoom-common-screen-handoff.md` | Standalone entry point for the Kiwoom common-screen Ultragoal |
 | `kiwoom-optimal-screen-selection-rendering-plan.md` | Optimal screen selection + rendering plan |
+| `kiwoom-common-template-fit-dissonance-plan.md` | Common template + fit-dissonance test plan. §9 order confirmation, §10 settings. Both are **modes of the 대화 창**, not windows — the document still says "popup"/"window"; read it against `GLOSSARY.md` §1 |
+| `window-api-manual.md` | **Per-surface API map.** Which API each surface calls: 설정 모드 (3 endpoints + 6 IPC) vs 캔버스 창 (selector 4-tool -> callable ops). Review-pending, and its counts predate the split-base removal |
 | `감시에이전트-실행계획.md` | Monitoring-agent execution plan (not yet built) |
 | `2026-08-15-athena-progress-and-llm-selector.md` | Dated progress + selector snapshot |
 | `canvas-taxonomy.md` | Canvas type taxonomy |
