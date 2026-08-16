@@ -1,6 +1,18 @@
-# 창별 API 설명서 — 설정 창 · 캔버스 창
+# 표면별 API 설명서 — 설정 모드 · 캔버스 창
 
-> 작성일: 2026-08-16 · 저장소: `C:\Users\ajc22\orca\workspaces\DAOU.Athena\Call` · 브랜치: `ANNJUNGCHAN/Call`
+> ## ⚠ 표면 어휘가 폐기됐다 (2026-08-16 결정, 브랜치 병합으로 반영)
+>
+> 이 문서는 설정을 **독립 창**(`settingsWin`)으로 전제하고 쓰였다. 그 창은 **삭제됐다.**
+> "일시 표면" · "설정 창" · "팝업창"은 폐기된 용어다 — 창은 둘뿐이고 예외가 없다.
+> 설정 · 온보딩 · 인증 · 주문 확인은 전부 **대화 창의 모드**이며 `chat.html`의 형제 패널이다.
+> 정본은 [`GLOSSARY.md`](../GLOSSARY.md) §1.
+>
+> **API 매핑 본문 자체는 유효하다** — 어느 표면이 어느 엔드포인트를 부르는지는 그대로다.
+> 바뀐 것은 그 표면이 *창이냐 모드냐*다. 다만 캔버스 쪽 호출가능 오퍼레이션 수(286)는
+> `REST-API` 병합의 split-base 라우트 제거 **이전** 값이라 낡았다. 현행 계약은 315개
+> 오퍼레이션 / 301 생성 라우트다 — [`backend/docs/LLM_API_SELECTION.md`](../backend/docs/LLM_API_SELECTION.md) 참조.
+
+> 작성일: 2026-08-16 · 원 저장소: 워크트리 `Call` · 브랜치: `ANNJUNGCHAN/Call` (병합 후 삭제됨)
 > 상태: **검토 대기.** §7의 판단 항목에 답을 받은 뒤 확정한다.
 > 용어는 [`GLOSSARY.md`](../GLOSSARY.md)를 따른다. 깊은 계약 원문은 [`backend/docs/LLM_API_SELECTION.md`](../backend/docs/LLM_API_SELECTION.md)(셀렉터), [`backend/docs/KIWOOM_API_IO.md`](../backend/docs/KIWOOM_API_IO.md)(TR별 I/O).
 > 이 문서는 **창 관점의 지도**다 — "어느 창이 무엇을 부르는가". 화면 형태 설계는 [`kiwoom-common-template-fit-dissonance-plan.md`](kiwoom-common-template-fit-dissonance-plan.md).
@@ -28,16 +40,17 @@
 
 | 분류 | 표면 | 코드 |
 |---|---|---|
-| **상시 창** (창 개수에 센다) | 대화 창, 캔버스 창 | `chatWin` `app/main.js:99` / `canvasWin` `app/main.js:93` |
-| **일시 표면** (창 개수에 세지 않는다) | 설정 창, 주문 팝업 | `settingsWin` `app/main.js` / 미착수 |
+| **창** — 둘뿐이다 | 대화 창, 캔버스 창 | `chatWin` / `canvasWin` — `app/main.js` |
+| **대화 창의 모드** — 창이 아니다 | 설정 · 온보딩 · 인증 / 주문 확인 | `#settings` · `#onboard` 패널 `app/chat.html` / 미착수 |
 
-> `ui/soul.md` §3 "창은 두 개뿐" 과 §8 탈락 조건 "창이 셋 이상이다"는 **상시 창 기준**이다 (`GLOSSARY.md` §1).
+> `ui/soul.md` §3 "창은 두 개뿐"과 §8 탈락 조건 "창이 셋 이상이다"에 **예외는 없다** (`GLOSSARY.md` §1).
+> 모드는 창을 만들지 않으므로 애초에 셀 것이 없다.
 
-설정 창 진입로는 **둘 다** 있어야 한다(`GLOSSARY.md` §1: "커맨드바가 아닌 경로로**만** 갈 수 있으면 §8 탈락 조건에 걸린다").
+설정 모드 진입로는 **둘 다** 있어야 한다(`GLOSSARY.md` §1: "커맨드바가 아닌 경로로**만** 갈 수 있으면 §8 탈락 조건에 걸린다").
 
 | 진입로 | 구현 |
 |---|---|
-| 대화 창의 점(마젠타 `#ee137b`) 클릭 | `app/chat.html` `#dot` → `athena:open-settings` |
+| 대화 창의 점(마젠타 `#ee137b`) 클릭 | `app/chat.html` `#dot` → `app/chat.js` `openSettings` (새 창이 아니라 이 창이 모드를 바꾼다) |
 | 커맨드바에 자연어 입력 | `app/chat.js` `SETTINGS_COMMAND` — `설정` / `환경설정` / `settings` / `설정 열어줘` / `모델 바꿔줘` / `계좌 연결` 등 19케이스 실측 통과 |
 
 ---

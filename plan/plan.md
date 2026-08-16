@@ -43,19 +43,24 @@ backend 전체:  517 passed, 0 failed   (113초)
 **2026-08-16 · 브랜치 4종 병합 후 `main`에서 재측정 — 이 수치가 현행이다:**
 
 ```
-backend 전체:  603 passed, 0 failed   (135초)
+backend 전체:  603 passed, 0 failed   (130초)
   ruff check .                          → All checks passed
   generate_api.py --check               → Generated files are current
+app:
+  npm run verify                        → 검증 1~8 전부 통과 (검증 7은 15개 단언 전부 true)
+  npm run verify:settings-cards         → 계좌·MCP 카드 상태 11장 캡처
 ```
 
 병합된 브랜치: `ANNJUNGCHAN/MCP` · `ANNJUNGCHAN/REST-API` · `ANNJUNGCHAN/Call` ·
-`ANNJUNGCHAN/화면기획서-점검`. 각 워크트리의 미커밋 작업은 병합 전에 원자 커밋으로 보존했다.
+`ANNJUNGCHAN/화면기획서-점검`. 각 워크트리의 미커밋 작업은 병합 전에 원자 커밋으로 보존했다
+(`Call` 5건 +613줄, `REST-API` 4건 +2335줄). **네 브랜치와 워크트리는 병합 후 삭제했다 —
+로컬·원격 모두 `main` 하나다.**
 
 병합에서 내린 판단 3건:
 
 1. **설정 독립 창을 버렸다.** `Call`이 만든 `settingsWin`(720×620 독립 `BrowserWindow`)은
    `MCP` 쪽 구현과 중복이고 "창은 둘" 원칙(`ui/soul.md` §8)에 걸린다. `app/settings.*` 4파일을
-   삭제했다. 살아남은 설정은 캔버스 창에 그려지는 계좌·MCP 카드다.
+   삭제했다. 살아남은 설정은 계좌·MCP 카드다.
 2. **오퍼레이션 계약 314 → 315.** `REST-API`의 split-base 라우트 제거(301 생성 라우트)에
    `Call`의 `get_internal_oauth_status` 1건을 더한 값. 서비스 오퍼레이션 13 → 14. 실행으로 확인.
 3. **"일시 표면" 폐기가 정본이고, 설정을 대화 창으로 옮겼다.** 병합 직후에는 설정 카드가
