@@ -39,7 +39,11 @@ from athena_mcp.canvas import CANVAS_SCHEMAS, validate_canvas_payload
 from athena_mcp.client import ServerCrashedError, UpstreamServerHandle
 from athena_mcp.consent import AuditLog, ConsentStore
 from athena_mcp.registry import ServerRegistry, UnknownAliasError
-from athena_mcp.result import UnsupportedContentBlockError, parse_call_tool_result
+from athena_mcp.result import (
+    ERROR_ORIGIN_META_KEY,
+    UnsupportedContentBlockError,
+    parse_call_tool_result,
+)
 
 # `on_progress`/`send_progress_notification` 콜백 시그니처 — mcp SDK의
 # `ProgressFnT`(mcp/shared/session.py)와 동일한 모양이다. SDK 타입을 직접
@@ -89,6 +93,59 @@ _SAVE_CANVAS_INPUT_SCHEMA: dict[str, Any] = {
         "caption": {"type": ["string", "null"]},
     },
 }
+
+
+# ---------------------------------------------------------------------------
+# 에러 원산지 마커 — "Athena가 막았다" vs "upstream이 실패했다"
+#
+# `plan/paper-specs/02-MCP-응답-형상-전수조사.md` §D-7 실측: 동의 게이트 거부
+# (`GRAFT-verify.json`의 `unapproved_tool_direct`)와 진짜 upstream 에러
+# (`S2-jjlabsio-*`류)는 둘 다 `isError:true` + 사람이 읽는 문장으로 오고,
+# 발생 계층이 완전히 다른데도 형상이 동일해 카드가 문자열 파싱 없이는 구분할
+# 수 없었다. 이 절이 그 격차를 메운다 — 이 파일이 **직접 만드는** 에러
+# `CallToolResult`에만 마커를 붙인다. upstream이 이미 만들어 그대로 통과시키는
+# 결과(raw_result가 `CallToolResult`면 그대로 반환하는 아래 `dispatch_call()`
+# 마지막 분기)는 절대 건드리지 않는다 — 그건 정의상 upstream 것이라 잘못 라벨을
+# 붙이면 지금의 모호함보다 더 나쁘다.
+#
+# 마커를 어디에 두는가 — `structuredContent`가 아니라 `_meta`:
+#   `structuredContent`는 스펙상 "툴 호출의 구조화된 결과"다. 그리고
+#   `result.py`의 2단계(`structuredContent`가 있으면 신뢰)가 정확히 그 필드의
+#   존재 자체를 "이게 데이터"라는 신호로 쓴다 — 여기에 프로토콜 메타데이터를
+#   얹으면 에러 결과가 A2(구조화 미러) 클래스처럼 보이는 사고가 난다(캔버스로
+#   보내지 말아야 할 에러가 구조화된 "데이터"로 오인될 위험). `_meta`는 반대로
+#   스펙이 "구현체별 확장 정보, 모르는 클라이언트는 무시해야 한다"고 명시한
+#   자리다(`mcp/types.py`의 `Result.meta = Field(alias="_meta")`, SDK 자신도
+#   `RelatedTaskMetadata`를 이 자리에 얹는다) — 평범한 MCP 클라이언트는 이
+#   키를 몰라도 그냥 지나친다, 검증 에러를 내지 않는다(`Result.model_config
+#   = ConfigDict(extra="allow")`로 실측 확인).
+#
+# 값은 둘뿐이다 — 이 파일이 실제로 만드는 에러 분기가 그 둘로만 갈린다:
+#   gateway-blocked : upstream에 보내지도 않고 거부(미등록 툴명, 동의
+#                     미승인, 서버 미연결, save_canvas 경로 조작 방어)
+#   upstream-failed : 실제 upstream 호출이 나갔지만(또는 나가려다 프로세스가
+#                     죽어) 실패(ServerCrashedError, 미지원 콘텐츠 블록)
+_ORIGIN_GATEWAY_BLOCKED = "gateway-blocked"
+_ORIGIN_UPSTREAM_FAILED = "upstream-failed"
+
+
+def _gateway_blocked_result(text: str) -> types.CallToolResult:
+    """upstream에 아예 보내지 않고 게이트웨이 자신이 거부한 에러."""
+    return types.CallToolResult(
+        content=[types.TextContent(type="text", text=text)],
+        isError=True,
+        _meta={ERROR_ORIGIN_META_KEY: _ORIGIN_GATEWAY_BLOCKED},
+    )
+
+
+def _upstream_failed_result(text: str) -> types.CallToolResult:
+    """upstream 호출은 실제로 나갔지만 실패해서, 게이트웨이가 대신 텍스트를
+    합성해 반환하는 에러 — 원인은 upstream에 있다."""
+    return types.CallToolResult(
+        content=[types.TextContent(type="text", text=text)],
+        isError=True,
+        _meta={ERROR_ORIGIN_META_KEY: _ORIGIN_UPSTREAM_FAILED},
+    )
 
 
 @dataclass
@@ -193,30 +250,16 @@ class AthenaGateway:
         try:
             target = self.aggregator.resolve(name)
         except UnknownQualifiedNameError:
-            return types.CallToolResult(
-                content=[types.TextContent(type="text", text=f"알 수 없는 툴: {name!r}")],
-                isError=True,
-            )
+            return _gateway_blocked_result(f"알 수 없는 툴: {name!r}")
 
         if not self.is_tool_allowed(target.alias, target.upstream_name):
-            return types.CallToolResult(
-                content=[
-                    types.TextContent(
-                        type="text",
-                        text=f"{name!r}은 승인되지 않은 툴이라 호출할 수 없다 (allowlist에 없음)",
-                    )
-                ],
-                isError=True,
+            return _gateway_blocked_result(
+                f"{name!r}은 승인되지 않은 툴이라 호출할 수 없다 (allowlist에 없음)"
             )
 
         handle = self.handles.get(target.alias)
         if handle is None:
-            return types.CallToolResult(
-                content=[
-                    types.TextContent(type="text", text=f"{target.alias!r} 서버가 연결돼 있지 않다")
-                ],
-                isError=True,
-            )
+            return _gateway_blocked_result(f"{target.alias!r} 서버가 연결돼 있지 않다")
 
         fixed_args = quirks.normalize_known_args(target.upstream_name, arguments)
         fixed_args = self._apply_truncate_at_hint(target, name, fixed_args)
@@ -243,10 +286,7 @@ class AthenaGateway:
             raise
         except ServerCrashedError as exc:
             audit.record(target.alias, target.upstream_name, success=False)
-            return types.CallToolResult(
-                content=[types.TextContent(type="text", text=f"upstream 호출 실패: {exc}")],
-                isError=True,
-            )
+            return _upstream_failed_result(f"upstream 호출 실패: {exc}")
         finally:
             if progress_key is not None:
                 self.aggregator.clear_progress_token(progress_key)
@@ -255,10 +295,7 @@ class AthenaGateway:
             parsed = parse_call_tool_result(raw_result)
         except UnsupportedContentBlockError as exc:
             audit.record(target.alias, target.upstream_name, success=False)
-            return types.CallToolResult(
-                content=[types.TextContent(type="text", text=str(exc))],
-                isError=True,
-            )
+            return _upstream_failed_result(str(exc))
 
         audit.record(target.alias, target.upstream_name, success=(parsed.status != "error"))
         # raw_result가 이미 올바른 CallToolResult 형태이므로 그대로 재노출한다
@@ -349,17 +386,8 @@ def _save_canvas(arguments: dict[str, Any], save_dir: Path) -> types.CallToolRes
     resolved_save_dir.mkdir(parents=True, exist_ok=True)
     out_path = (save_dir / f"{name}.json").resolve()
     if not out_path.is_relative_to(resolved_save_dir):
-        return types.CallToolResult(
-            content=[
-                types.TextContent(
-                    type="text",
-                    text=(
-                        f"잘못된 캔버스 이름: {name!r} — 저장 디렉토리 밖으로 "
-                        "벗어나는 경로는 허용하지 않는다"
-                    ),
-                )
-            ],
-            isError=True,
+        return _gateway_blocked_result(
+            f"잘못된 캔버스 이름: {name!r} — 저장 디렉토리 밖으로 벗어나는 경로는 허용하지 않는다"
         )
 
     result = validate_canvas_payload(canvas_type, data)

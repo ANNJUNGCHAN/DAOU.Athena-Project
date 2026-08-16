@@ -2,6 +2,8 @@
 
 ```
 1. isError == True      -> content[0].text 는 사람이 읽는 에러. 캔버스로 보내지 말 것
+                            (게이트웨이 자신이 만든 에러라면 `_meta`에 발생지점
+                            마커가 실려 온다 -> ParsedResult.error_origin)
 2. structuredContent    -> 있으면 신뢰            (소수 서버만)
 3. content[0].text      -> json.loads() 시도      (대부분이 이 경로)
 4. 파싱 실패            -> 순수 텍스트 (리더 캔버스 원문 후보)
@@ -26,6 +28,33 @@ from typing import Any, Literal
 
 ParsedStatus = Literal["error", "structured", "json", "text", "empty"]
 
+ErrorOrigin = Literal["gateway-blocked", "upstream-failed"]
+"""에러 결과가 어디서 만들어졌는지 — `_meta[ERROR_ORIGIN_META_KEY]`로 실려 온다
+(server.py가 채우고, 이 모듈은 읽기만 한다).
+
+- `gateway-blocked`: Athena 게이트웨이 자신이 upstream에 보내지도 않고
+  거부했다(동의 미승인, 미등록 툴명, 서버 미연결, `save_canvas` 경로 조작
+  방어 등). 사용자 구제책이 있다 — 승인하거나 이름/경로를 고치면 통과한다.
+- `upstream-failed`: 실제로 upstream에 호출이 나갔다(또는 나가려다 프로세스가
+  죽었다). 실패 원인이 upstream 쪽에 있어 사용자가 게이트웨이 설정으로 고칠
+  방법이 없다.
+
+`plan/paper-specs/02-MCP-응답-형상-전수조사.md` §D-7이 기록한 격차를 메운다:
+동의 거부(`GRAFT-verify.json`의 `unapproved_tool_direct`)와 진짜 upstream
+에러(`S2-jjlabsio-*`류)가 `isError:true` + 사람이 읽는 문장으로 형상이
+완전히 같아서, 카드가 문자열 파싱 없이는 둘을 구분할 방법이 없었다.
+"""
+
+ERROR_ORIGIN_META_KEY = "athena/error_origin"
+"""`CallToolResult._meta`에 발생지점 마커를 실을 때 쓰는 키.
+
+`athena/` 접두사는 mcp SDK 자신이 쓰는 관례를 따른다 — `_meta`는 여러
+구현체가 같은 딕셔너리를 공유하는 확장 공간이라, 접두사 없는 평범한 키
+("origin" 등)를 쓰면 다른 서버/클라이언트가 우연히 같은 키를 다른 뜻으로 써
+충돌할 수 있다(SDK가 `io.modelcontextprotocol/related-task`를 `_meta` 키로
+쓰는 것과 같은 패턴, `mcp/types.py`의 `RelatedTaskMetadata` 독스트링).
+"""
+
 
 class UnsupportedContentBlockError(Exception):
     """`structuredContent`가 없고 text 블록도 없다 — 조용히 넘기지 않는다."""
@@ -47,6 +76,13 @@ class ParsedResult:
     data: Any
     raw_text: str | None
     error_message: str | None
+    error_origin: ErrorOrigin | None = None
+    """`status == "error"`일 때만 값을 가질 수 있다 — 그 외 상태에선 항상
+    `None`(발생지점 구분 자체가 무의미하다). `status == "error"`인데도 `None`인
+    경우가 있다 — upstream이 자체적으로 낸 `isError:true` 응답(A1의 대다수,
+    예: DART 키 없음)은 이 마커를 달고 오지 않는다. "구분 불가"와 "게이트웨이
+    발생"을 섞지 않기 위해 마커가 없으면 그냥 `None`으로 둔다(제3의 값을
+    지어내지 않는다)."""
 
 
 def _to_dict(result: Any) -> dict[str, Any]:
@@ -54,8 +90,23 @@ def _to_dict(result: Any) -> dict[str, Any]:
     if isinstance(result, dict):
         return result
     if hasattr(result, "model_dump"):
-        return result.model_dump(mode="json")
+        # by_alias=True가 필수다 — `meta` 필드의 와이어 이름은 `_meta`(mcp
+        # SDK가 `Result.meta = Field(alias="_meta")`로 선언). alias 없이
+        # 덤프하면 raw dict 입력(이미 와이어 그대로라 항상 `_meta`)과 모델
+        # 인스턴스 입력(기본 덤프는 파이썬 필드명 `meta`)이 서로 다른 키를
+        # 쓰게 돼, 아래 `_error_origin()`의 판정이 입력 타입에 따라 갈라진다
+        # (실측: `CallToolResult(...).model_dump(mode="json")` -> `"meta"`,
+        # `by_alias=True` -> `"_meta"`).
+        return result.model_dump(mode="json", by_alias=True)
     raise TypeError(f"CallToolResult로 다룰 수 없는 타입: {type(result)!r}")
+
+
+def _error_origin(d: dict[str, Any]) -> ErrorOrigin | None:
+    meta = d.get("_meta")
+    if not isinstance(meta, dict):
+        return None
+    origin = meta.get(ERROR_ORIGIN_META_KEY)
+    return origin if origin in ("gateway-blocked", "upstream-failed") else None
 
 
 def _content_blocks(d: dict[str, Any]) -> list[dict[str, Any]]:
@@ -82,7 +133,13 @@ def parse_call_tool_result(result: Any) -> ParsedResult:
     # 1. isError
     if d.get("isError"):
         message = first_text if first_text is not None else "(에러 결과에 text 블록이 없다)"
-        return ParsedResult(status="error", data=None, raw_text=first_text, error_message=message)
+        return ParsedResult(
+            status="error",
+            data=None,
+            raw_text=first_text,
+            error_message=message,
+            error_origin=_error_origin(d),
+        )
 
     # 2. structuredContent
     structured = d.get("structuredContent")

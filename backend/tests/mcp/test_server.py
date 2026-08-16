@@ -14,8 +14,10 @@ from mcp import types
 
 from athena_mcp import quirks
 from athena_mcp.aggregator import ToolAggregator
+from athena_mcp.client import ServerCrashedError
 from athena_mcp.consent import ConsentStore
 from athena_mcp.registry import ServerRegistry
+from athena_mcp.result import ERROR_ORIGIN_META_KEY
 from athena_mcp.server import RENDER_CANVAS_TOOL, SAVE_CANVAS_TOOL, AthenaGateway, build_mcp_server
 
 FIXTURE_SERVER = Path(__file__).resolve().parent / "fixtures" / "fake_server.py"
@@ -158,12 +160,16 @@ async def test_dispatch_call_unapproved_tool_rejected(gateway, tmp_path):
     result = await gateway.dispatch_call("fixture__flaky", {})
     assert result.isError is True
     assert "승인" in result.content[0].text
+    # 게이트웨이 자신이 upstream에 보내지도 않고 거부한 에러다 — origin 마커로
+    # 구분 가능해야 한다(§D-7 격차 메움).
+    assert result.meta[ERROR_ORIGIN_META_KEY] == "gateway-blocked"
 
 
 async def test_dispatch_call_unknown_qualified_name(tmp_path):
     gw = _bare_gateway(tmp_path)
     result = await gw.dispatch_call("nope__nope", {})
     assert result.isError is True
+    assert result.meta[ERROR_ORIGIN_META_KEY] == "gateway-blocked"
 
 
 async def test_render_canvas_valid_stream(tmp_path):
@@ -234,6 +240,7 @@ async def test_save_canvas_rejects_relative_path_traversal(tmp_path):
     result = await gw.dispatch_call(SAVE_CANVAS_TOOL, args)
     assert result.isError is True
     assert not outside_target.exists()
+    assert result.meta[ERROR_ORIGIN_META_KEY] == "gateway-blocked"
 
 
 async def test_save_canvas_rejects_absolute_path_override(tmp_path):
@@ -251,6 +258,7 @@ async def test_save_canvas_rejects_absolute_path_override(tmp_path):
     assert result.isError is True
     abs_target_json = abs_target.with_name(abs_target.name + ".json")
     assert not abs_target_json.exists()
+    assert result.meta[ERROR_ORIGIN_META_KEY] == "gateway-blocked"
 
 
 # ---------------------------------------------------------------------------
@@ -409,3 +417,88 @@ async def test_dispatch_call_propagates_cancellation_instead_of_swallowing_it(tm
         await task
 
     assert gw.aggregator.resolve_progress_token("tok-3") is None
+
+
+# ---------------------------------------------------------------------------
+# 에러 원산지 마커 — "Athena가 막았다" vs "upstream이 실패했다"
+# (plan/paper-specs/02-MCP-응답-형상-전수조사.md §D-7)
+# ---------------------------------------------------------------------------
+
+
+async def test_dispatch_call_handle_not_connected_is_gateway_blocked(tmp_path):
+    """대상은 등록·승인까지 됐지만 `connect()`가 아직 안 됐다(핸들 없음) —
+    upstream에 아예 시도조차 못 했으므로 게이트웨이 발생이다."""
+    gw, _handle = _gateway_with_fake_tool(tmp_path)
+    del gw.handles["dart"]  # connect() 이전 상태를 재현 — 시도조차 안 함
+
+    result = await gw.dispatch_call("dart__search_disclosure", {})
+
+    assert result.isError is True
+    assert "연결" in result.content[0].text
+    assert result.meta[ERROR_ORIGIN_META_KEY] == "gateway-blocked"
+
+
+async def test_dispatch_call_genuine_upstream_error_is_not_marked(gateway, tmp_path):
+    """`boom`은 진짜 upstream(fixture 서버)이 `ValueError`를 던져 FastMCP가
+    자체적으로 `isError:true`로 감싼 응답이다 — 게이트웨이는 이 결과를 그대로
+    통과시킬 뿐 직접 만든 게 아니므로 origin 마커를 붙이면 안 된다. 붙이면
+    "이 파일이 만든 에러만 표시한다"는 계약을 어기고 upstream 에러를 잘못
+    라벨링하게 된다(그게 지금의 모호함보다 더 나쁘다, server.py 주석 참고)."""
+    await _connected(gateway, tmp_path)
+    result = await gateway.dispatch_call("fixture__boom", {})
+
+    assert result.isError is True
+    assert not (result.meta and ERROR_ORIGIN_META_KEY in result.meta)
+
+
+class _CrashingUpstreamHandle:
+    """`handle.call_tool()`이 항상 `ServerCrashedError`를 던지는 테스트 더블."""
+
+    def log_event(self, message: str) -> None:
+        pass
+
+    async def call_tool(self, name, arguments=None, *, progress_callback=None):
+        raise ServerCrashedError(f"{name!r} 호출 중 프로세스가 죽었다")
+
+
+async def test_dispatch_call_server_crashed_is_marked_upstream_failed(tmp_path):
+    """호출이 실제로 upstream에 나갔지만(프로세스 죽음으로) 실패한 경우 —
+    게이트웨이가 텍스트를 합성해 반환하지만 원인은 upstream에 있다."""
+    gw, _handle = _gateway_with_fake_tool(tmp_path)
+    gw.handles["dart"] = _CrashingUpstreamHandle()
+
+    result = await gw.dispatch_call("dart__search_disclosure", {})
+
+    assert result.isError is True
+    assert "upstream 호출 실패" in result.content[0].text
+    assert result.meta[ERROR_ORIGIN_META_KEY] == "upstream-failed"
+
+
+class _UnsupportedBlockUpstreamHandle:
+    """`structuredContent`도 text 블록도 없이 image 블록만 주는 테스트 더블 —
+    `parse_call_tool_result()`가 `UnsupportedContentBlockError`를 던지는
+    경로(`result.py`의 명시적 미지원 처리)를 dispatch_call이 어떻게
+    감싸는지 검증한다."""
+
+    def log_event(self, message: str) -> None:
+        pass
+
+    async def call_tool(self, name, arguments=None, *, progress_callback=None):
+        return types.CallToolResult(
+            content=[types.ImageContent(type="image", data="YQ==", mimeType="image/png")],
+            isError=False,
+        )
+
+
+async def test_dispatch_call_unsupported_content_block_is_marked_upstream_failed(tmp_path):
+    """upstream은 실제로 응답했다(크래시 아님) — 다만 게이트웨이가 해석 못 하는
+    콘텐츠 블록이라 자체 에러를 합성한다. 원인이 upstream이 준 응답 형상에
+    있으므로 upstream-failed다(§D-7: "이건 카드 필드가 아니라 게이트웨이가
+    별도 필드로 얹어줘야 하는 정보"였던 격차를 이 마커가 메운다)."""
+    gw, _handle = _gateway_with_fake_tool(tmp_path)
+    gw.handles["dart"] = _UnsupportedBlockUpstreamHandle()
+
+    result = await gw.dispatch_call("dart__search_disclosure", {})
+
+    assert result.isError is True
+    assert result.meta[ERROR_ORIGIN_META_KEY] == "upstream-failed"
