@@ -132,7 +132,7 @@ ADR: [`plan/investment-brain-architecture.md`](investment-brain-architecture.md)
 
 | # | 작업 | 이유 / 시작점 |
 |---|---|---|
-| 1 | **갈래 A·B 조율 — "공통 캔버스" 정의 통합** | A는 캔버스 16종, B는 301 라우팅 렌더. 상위 개념을 정하지 않으면 렌더러가 둘로 갈라진다 (`00-인수인계.md` §1 충돌 ①) |
+| 1 | **갈래 A·B 조율 — "공통 캔버스" 정의 통합** | A는 캔버스 16종, B는 301 라우팅 렌더. 상위 개념을 정하지 않으면 렌더러가 둘로 갈라진다 (`00-인수인계.md` §1 충돌 ①). 실행계획: [`kiwoom-common-template-fit-dissonance-plan.md`](kiwoom-common-template-fit-dissonance-plan.md) — **pending approval**, §8 결정 5건 대기 |
 | 2 | **브레인 FastAPI 결선** | ADR §4.2. 락·writer queue 없이는 다중 프로세스 쓰기 사고 |
 | 3 | **CLI 연동** — 게이트웨이를 `claude -p`에 물린다 | 게이트웨이만 있고 소비자가 없다. `--setting-sources ""` 필수 (§7) |
 | 4 | **프레임 최적화** — 굴절층/데이터층 분리 | soul.md가 "모션이 곧 재료"라고 한 설계 |

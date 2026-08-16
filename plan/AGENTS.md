@@ -21,6 +21,8 @@ is the first thing to read in a new session. Documents are Korean.
 | `kiwoom-common-screen-brief.md` | Common-screen brief |
 | `kiwoom-common-screen-handoff.md` | Standalone entry point for the Kiwoom common-screen Ultragoal |
 | `kiwoom-optimal-screen-selection-rendering-plan.md` | Optimal screen selection + rendering plan |
+| `kiwoom-common-template-fit-dissonance-plan.md` | Common template + fit-dissonance test plan. §9 order popup, §10 settings window |
+| `window-api-manual.md` | **Per-window API map.** Which API each surface calls: settings window (3 endpoints + 6 IPC) vs canvas window (selector 4-tool -> 286 callable ops). Review-pending |
 | `감시에이전트-실행계획.md` | Monitoring-agent execution plan (not yet built) |
 | `2026-08-15-athena-progress-and-llm-selector.md` | Dated progress + selector snapshot |
 | `canvas-taxonomy.md` | Canvas type taxonomy |
