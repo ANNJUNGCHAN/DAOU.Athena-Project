@@ -1,0 +1,175 @@
+{
+  "initialize": {
+    "meta": null,
+    "protocolVersion": "2025-11-25",
+    "capabilities": {
+      "experimental": {},
+      "logging": null,
+      "prompts": null,
+      "resources": null,
+      "tools": {
+        "listChanged": true
+      },
+      "completions": null,
+      "tasks": null
+    },
+    "serverInfo": {
+      "name": "athena",
+      "title": null,
+      "version": "0.1.0",
+      "websiteUrl": null,
+      "icons": null
+    },
+    "instructions": null
+  },
+  "tool_names": [
+    "server-everything__echo",
+    "server-everything__get-annotated-message",
+    "server-everything__get-resource-links",
+    "server-everything__get-resource-reference",
+    "server-everything__get-structured-content",
+    "server-everything__get-sum",
+    "server-everything__get-tiny-image",
+    "server-everything__gzip-file-as-resource",
+    "server-everything__toggle-simulated-logging",
+    "server-everything__toggle-subscriber-updates",
+    "server-everything__trigger-long-running-operation",
+    "server-everything__simulate-research-query",
+    "pykrx__get_stock_ohlcv",
+    "pykrx__get_market_ticker_list",
+    "pykrx__get_market_ticker_name",
+    "pykrx__get_market_fundamental_by_date",
+    "pykrx__get_market_cap_by_date",
+    "pykrx__get_market_trading_value_by_date",
+    "pykrx__get_etf_ohlcv_by_date",
+    "pykrx__get_etf_ticker_list",
+    "drfirst-korea-stock-mcp__get_etfs_by_market_cap",
+    "drfirst-korea-stock-mcp__get_themes_with_leaders",
+    "drfirst-korea-stock-mcp__get_market_cap_stocks",
+    "drfirst-korea-stock-mcp__get_dividend_yield_stocks",
+    "drfirst-korea-stock-mcp__search_stock_code",
+    "drfirst-korea-stock-mcp__get_stock_price_by_code",
+    "athena__render_canvas",
+    "athena__save_canvas"
+  ],
+  "tool_count": 28,
+  "tools_by_namespace": {
+    "server-everything": 12,
+    "pykrx": 8,
+    "drfirst-korea-stock-mcp": 6,
+    "athena": 2
+  },
+  "calls": {
+    "everything_echo": {
+      "tool": "server-everything__echo",
+      "isError": false,
+      "structuredContent_present": false,
+      "result": {
+        "meta": null,
+        "content": [
+          {
+            "type": "text",
+            "text": "Echo: 삼성전자",
+            "annotations": null,
+            "meta": null
+          }
+        ],
+        "structuredContent": null,
+        "isError": false
+      }
+    },
+    "pykrx_ticker_name": {
+      "tool": "pykrx__get_market_ticker_name",
+      "isError": false,
+      "structuredContent_present": false,
+      "result": {
+        "meta": null,
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"ticker\": \"005930\",\n  \"name\": \"삼성전자\"\n}",
+            "annotations": null,
+            "meta": null
+          }
+        ],
+        "structuredContent": null,
+        "isError": false
+      }
+    },
+    "render_canvas_table": {
+      "tool": "athena__render_canvas",
+      "isError": false,
+      "structuredContent_present": true,
+      "result": {
+        "meta": null,
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"canvas_type\": \"table\", \"fell_back\": false, \"fallback_reason\": null, \"caption\": null, \"data\": {\"rows\": [{\"종목\": \"삼성전자\", \"종가\": 71000}]}}",
+            "annotations": null,
+            "meta": null
+          }
+        ],
+        "structuredContent": {
+          "canvas_type": "table",
+          "fell_back": false,
+          "fallback_reason": null,
+          "caption": null,
+          "data": {
+            "rows": [
+              {
+                "종목": "삼성전자",
+                "종가": 71000
+              }
+            ]
+          }
+        },
+        "isError": false
+      }
+    },
+    "render_canvas_unknown_type": {
+      "tool": "athena__render_canvas",
+      "isError": false,
+      "structuredContent_present": true,
+      "result": {
+        "meta": null,
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"canvas_type\": \"free\", \"fell_back\": true, \"fallback_reason\": \"알 수 없는 canvas_type='streem' — 지원 목록: ['reader', 'stream', 'table', 'timeline'] + free\", \"caption\": null, \"data\": {\"anything\": 1}}",
+            "annotations": null,
+            "meta": null
+          }
+        ],
+        "structuredContent": {
+          "canvas_type": "free",
+          "fell_back": true,
+          "fallback_reason": "알 수 없는 canvas_type='streem' — 지원 목록: ['reader', 'stream', 'table', 'timeline'] + free",
+          "caption": null,
+          "data": {
+            "anything": 1
+          }
+        },
+        "isError": false
+      }
+    },
+    "unapproved_tool_direct": {
+      "tool": "server-everything__get-env",
+      "isError": true,
+      "structuredContent_present": false,
+      "result": {
+        "meta": null,
+        "content": [
+          {
+            "type": "text",
+            "text": "'server-everything__get-env'은 승인되지 않은 툴이라 호출할 수 없다 (allowlist에 없음)",
+            "annotations": null,
+            "meta": null
+          }
+        ],
+        "structuredContent": null,
+        "isError": true
+      }
+    }
+  }
+}
