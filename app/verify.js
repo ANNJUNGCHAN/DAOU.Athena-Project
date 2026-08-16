@@ -267,100 +267,92 @@ app.whenReady().then(async () => {
   };
   console.log('[verify] 검증6(수동 리사이즈):', JSON.stringify(report.manualResize));
 
-  // ---------- 검증 7: 설정 창 — 대화 창과도 캔버스 창과도 별개인 독립 창 ----------
+  // ---------- 검증 7: 설정을 열어도 창은 둘이다 ----------
+  // ui/soul.md §3·§8 — 창은 둘뿐이고 창 3개 이상은 즉시 탈락이다. 설정은 새 창이
+  // 아니라 캔버스 창에 그려지는 카드다(GLOSSARY.md §1, app/canvas.js:151-152).
+  // 이 검증의 핵심 단언은 "창이 늘어난다"가 아니라 **"창이 늘지 않는다"**이다.
   const winCountBefore = BrowserWindow.getAllWindows().length;
   const chatBoundsBefore = chatWin.getBounds();
-  const canvasBoundsBefore = canvasWin.getBounds();
 
   await chatWin.webContents.executeJavaScript("document.getElementById('dot').click()");
   await wait(900);
 
-  const settingsWin = mainMod.getSettingsWin();
   const winCountAfterOpen = BrowserWindow.getAllWindows().length;
 
-  // 두 번 눌러도 창은 하나여야 한다(단일 인스턴스)
+  // 두 번 눌러도 카드는 하나여야 한다(buildCardShell이 기존 카드를 제거하고 다시 만든다)
   await chatWin.webContents.executeJavaScript("document.getElementById('dot').click()");
-  await wait(400);
+  await wait(600);
   const winCountAfterSecondClick = BrowserWindow.getAllWindows().length;
-
-  const settingsProbe = settingsWin && !settingsWin.isDestroyed()
-    ? await settingsWin.webContents.executeJavaScript(`
-        (() => ({
-          url: location.pathname.split('/').pop(),
-          // nodeIntegration:false 증명 — 렌더러에 require가 없다
-          hasRequire: typeof require !== 'undefined',
-          // contextIsolation + preload 증명 — contextBridge가 심은 API만 있다
-          hasBridge: typeof window.athenaSettings === 'object' && window.athenaSettings !== null,
-          bridgeKeys: Object.keys(window.athenaSettings || {}).sort(),
-          backendState: document.getElementById('stBackend').textContent,
-          issueDisabled: document.getElementById('btnIssue').disabled,
-          revokeDisabled: document.getElementById('btnRevoke').disabled,
-          revokeConfirmHidden: document.getElementById('revokeConfirm').hidden,
-          trIdLeak: /au1000[12]/.test(document.body.innerText),
-          bearerLeak: /ATHENA_LOCAL_BEARER_TOKEN\s*=/.test(document.body.innerText),
-        }))()
-      `)
-    : null;
 
   const chatProbe = await chatWin.webContents.executeJavaScript(`
     (() => ({
-      historyVisible: !document.getElementById('history').hidden,
-      dotMarked: document.getElementById('dot').classList.contains('settings-open'),
-      inputDisabled: document.getElementById('input').disabled,
-      hasSettingsMarkup: !!document.getElementById('settings'),
+      // 대화 화면은 물러나고 설정 화면이 그 자리를 차지한다 — 같은 창이 변한 것이다
+      appHidden: document.getElementById('app').hidden === true,
+      settingsVisible: document.getElementById('settings').hidden === false,
+      accountsCardCount: document.querySelectorAll('#settingsGrid .card.accounts').length,
+      mcpCardCount: document.querySelectorAll('#settingsGrid .card.mcp').length,
+      // 설정은 대화 창 문서 안에 있다 — 별도 문서가 아니다
+      url: location.pathname.split('/').pop(),
+      // 점은 실제 버튼이어야 한다(장식이 아니라 어포던스)
+      dotIsButton: document.getElementById('dot').tagName === 'BUTTON',
+      // 자격증명·토큰이 화면으로 새면 안 된다 (CLAUDE.md §1)
+      trIdLeak: /au1000[12]/.test(document.body.innerText),
+      bearerLeak: /ATHENA_LOCAL_BEARER_TOKEN\s*=/.test(document.body.innerText),
+    }))()
+  `);
+  // 캔버스 창은 설정에 관여하지 않는다 — 설정 카드가 저기 있으면 안 된다
+  const canvasProbe = await canvasWin.webContents.executeJavaScript(`
+    (() => ({
+      settingsCardsOnCanvas: document.querySelectorAll('#grid .card.accounts, #grid .card.mcp').length,
     }))()
   `);
   const chatBoundsWhileOpen = chatWin.getBounds();
-  const canvasBoundsWhileOpen = canvasWin.getBounds();
-  if (settingsWin && !settingsWin.isDestroyed()) await shot(settingsWin, '17-settings-window.png');
+  await shot(chatWin, '17-settings-mode.png');
 
-  // ESC로 닫는다
-  if (settingsWin && !settingsWin.isDestroyed()) {
-    await settingsWin.webContents.executeJavaScript(
-      "document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))"
-    );
-  }
-  await wait(600);
-  const winCountAfterClose = BrowserWindow.getAllWindows().length;
-  const chatProbeAfter = await chatWin.webContents.executeJavaScript(
-    "document.getElementById('dot').classList.contains('settings-open')"
+  // Esc로 대화 모드로 돌아온다
+  await chatWin.webContents.executeJavaScript(
+    "document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))"
   );
+  await wait(600);
+  const chatAfterClose = await chatWin.webContents.executeJavaScript(`
+    (() => ({
+      appVisible: document.getElementById('app').hidden === false,
+      settingsHidden: document.getElementById('settings').hidden === true,
+      gridEmptied: document.getElementById('settingsGrid').children.length === 0,
+    }))()
+  `);
 
-  report.settingsWindow = {
-    // 별도 창이다 — 클릭하면 창이 하나 늘어난다
-    openedAsSeparateWindow: winCountAfterOpen === winCountBefore + 1,
-    loadedSettingsHtml: settingsProbe ? settingsProbe.url === 'settings.html' : false,
-    singleInstance: winCountAfterSecondClick === winCountAfterOpen,
-    // 대화 창·캔버스 창은 건드리지 않는다
-    chatBoundsUnchanged:
-      near(chatBoundsBefore.height, chatBoundsWhileOpen.height) && near(chatBoundsBefore.y, chatBoundsWhileOpen.y),
-    canvasBoundsUnchanged:
-      near(canvasBoundsBefore.width, canvasBoundsWhileOpen.width) && near(canvasBoundsBefore.height, canvasBoundsWhileOpen.height),
-    chatHistoryStaysVisible: chatProbe.historyVisible === true,
-    chatInputStaysEnabled: chatProbe.inputDisabled === false,
-    noSettingsMarkupInChat: chatProbe.hasSettingsMarkup === false,
-    dotMarkedWhileOpen: chatProbe.dotMarked === true,
-    // 설정 창은 처음부터 안전 설정으로 태어난다
-    nodeIntegrationOff: settingsProbe ? settingsProbe.hasRequire === false : false,
-    contextBridgeOnly: settingsProbe ? settingsProbe.hasBridge === true : false,
-    bridgeSurface: settingsProbe ? settingsProbe.bridgeKeys : null,
-    // 백엔드가 없는 검증 환경에서는 "연결 안 됨"이 정상이고 토큰 버튼은 잠겨야 한다
-    backendState: settingsProbe ? settingsProbe.backendState : null,
-    tokenButtonsLockedWhenUnreachable:
-      settingsProbe && settingsProbe.backendState !== '연결됨'
-        ? (settingsProbe.issueDisabled && settingsProbe.revokeDisabled)
-        : null,
-    revokeConfirmHiddenInitially: settingsProbe ? settingsProbe.revokeConfirmHidden === true : false,
-    noTrIdLeak: settingsProbe ? settingsProbe.trIdLeak === false : false,
-    noBearerLeak: settingsProbe ? settingsProbe.bearerLeak === false : false,
-    closedByEsc: winCountAfterClose === winCountBefore,
-    dotUnmarkedAfterClose: chatProbeAfter === false,
+  report.settingsSurface = {
+    // 핵심 계약 — 설정은 창을 만들지 않는다. 이 창이 변한다.
+    noNewWindowOnOpen: winCountAfterOpen === winCountBefore,
+    stillTwoWindows: BrowserWindow.getAllWindows().length === winCountBefore,
+    noNewWindowOnSecondClick: winCountAfterSecondClick === winCountBefore,
+    // 대화 창이 설정 모드로 바뀐다
+    renderedInChatWindow: chatProbe.settingsVisible === true && chatProbe.url === 'chat.html',
+    chatModeSteppedAside: chatProbe.appHidden === true,
+    accountsCardPresent: chatProbe.accountsCardCount === 1,
+    mcpCardPresent: chatProbe.mcpCardCount === 1,
+    // 두 번 눌러도 카드가 겹쳐 쌓이지 않는다
+    singleCardAfterSecondClick: chatProbe.accountsCardCount === 1 && chatProbe.mcpCardCount === 1,
+    // 설정은 캔버스의 일이 아니다
+    noSettingsCardsOnCanvas: canvasProbe.settingsCardsOnCanvas === 0,
+    // 온보딩과 같은 문법 — 창이 chatMaxH로 자란다
+    chatGrewToMax: chatBoundsWhileOpen.height > chatBoundsBefore.height,
+    dotIsRealButton: chatProbe.dotIsButton === true,
+    noTrIdLeak: chatProbe.trIdLeak === false,
+    noBearerLeak: chatProbe.bearerLeak === false,
+    // Esc로 대화로 돌아오고 카드는 정리된다
+    escReturnsToChat: chatAfterClose.appVisible === true && chatAfterClose.settingsHidden === true,
+    gridEmptiedOnClose: chatAfterClose.gridEmptied === true,
   };
-  console.log('[verify] 검증7(설정 창):', JSON.stringify(report.settingsWindow));
+  console.log('[verify] 검증7(설정 모드):', JSON.stringify(report.settingsSurface));
 
   // ---------- 검증 8: 커맨드바로도 설정에 도달한다 ----------
   // GLOSSARY.md §1 — 점 클릭은 "추가" 진입로다. 커맨드바 경로가 없으면 soul.md §8 탈락 조건.
   const winCountBeforeCmd = BrowserWindow.getAllWindows().length;
+  const turnCountBeforeCmd = await chatWin.webContents.executeJavaScript(
+    "document.querySelectorAll('.turn-q').length"
+  );
   await chatWin.webContents.executeJavaScript(`
     (() => {
       const el = document.getElementById('input');
@@ -369,24 +361,30 @@ app.whenReady().then(async () => {
     })();
   `);
   await wait(900);
-  const cmdWin = mainMod.getSettingsWin();
   const winCountAfterCmd = BrowserWindow.getAllWindows().length;
   const chatAfterCmd = await chatWin.webContents.executeJavaScript(`
     (() => ({
       inputCleared: document.getElementById('input').value === '',
       turnCount: document.querySelectorAll('.turn-q').length,
+      settingsVisible: document.getElementById('settings').hidden === false,
+      accountsCardCount: document.querySelectorAll('#settingsGrid .card.accounts').length,
     }))()
   `);
-  if (cmdWin && !cmdWin.isDestroyed()) cmdWin.close();
+  // 정리 — 다음 단계에 설정 모드를 남기지 않는다
+  await chatWin.webContents.executeJavaScript(
+    "document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))"
+  );
   await wait(400);
 
   report.settingsCommandBar = {
-    openedByCommand: winCountAfterCmd === winCountBeforeCmd + 1,
+    // 커맨드바 경로도 창을 만들지 않는다
+    noNewWindowOnCommand: winCountAfterCmd === winCountBeforeCmd,
+    reachedSettings: chatAfterCmd.settingsVisible === true && chatAfterCmd.accountsCardCount === 1,
     inputCleared: chatAfterCmd.inputCleared === true,
     // 설정 명령은 질의로 흘러가지 않는다 — 이력에 질문이 추가되면 안 된다
-    notTreatedAsQuery: chatAfterCmd.turnCount === report.e2eTrigger.canvasChipCount / 3,
+    notTreatedAsQuery: chatAfterCmd.turnCount === turnCountBeforeCmd,
+    turnCountBefore: turnCountBeforeCmd,
     turnCountAfter: chatAfterCmd.turnCount,
-    closedAfterCheck: BrowserWindow.getAllWindows().length === winCountBeforeCmd,
   };
   console.log('[verify] 검증8(커맨드바 진입):', JSON.stringify(report.settingsCommandBar));
 

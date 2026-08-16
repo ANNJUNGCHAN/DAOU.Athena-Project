@@ -33,11 +33,20 @@ the future MCP tool call.
 ## For AI Agents
 
 ### Working In This Directory
-- **Surfaces: 2 persistent windows + 2 transient surfaces.** Persistent = 대화 창 (`chatWin`) and
-  캔버스 창 (`canvasWin`) — both exist today. Transient = 설정창 (settings; reached from the command
-  bar and from the chat window's red blink) and 팝업창 (the order-execution popup) — **neither is
-  implemented yet.** `BrowserWindow` construction is limited to `warmup`/`canvasWin`/`chatWin`, and
-  there are no `dialog.*` calls. Definitions: `GLOSSARY.md` §1.
+- **Exactly two windows. No exceptions.** 대화 창 (`chatWin`) and 캔버스 창 (`canvasWin`).
+  `BrowserWindow` construction is limited to `warmup`/`canvasWin`/`chatWin`, and there are no
+  `dialog.*` calls. "설정창" / "팝업창" / "일시 표면" are **retired terms** — don't reintroduce them.
+- **Everything else is a mode of the 대화 창**, implemented as a sibling panel in `chat.html`
+  that shows while `#app` hides. Same resize grammar for all of them: grow to `chatMaxH`, return
+  to `chatBaseH`.
+  - `#onboard` → 온보딩 · 인증 (`lib/onboarding.js`, `lib/auth-screen.js`)
+  - `#settings` → 설정, i.e. 계좌 · MCP cards (`chat.js` `openSettings`, `lib/settings-cards.js`).
+    Entered by clicking `#dot` or via the command bar (`SETTINGS_COMMAND`); Esc returns to chat.
+    The command-bar path must always exist or `ui/soul.md` §8 elimination applies.
+  - 주문 확인 is the only mode still unimplemented.
+  - Before 2026-08-16 the settings cards rendered in the **canvas** window. They moved because
+    settings is the app itself, not data output. Old commits and captures show the canvas host.
+- **Want a new window? Solve it as a mode first.** Definitions: `GLOSSARY.md` §1.
 - **Never use `innerHTML`.** Stream content goes through `lib/sanitize.js` and renders as text nodes;
   markdown builds DOM nodes directly. This is the rendering contract from `spike/stream-adapter/RESULT.md`.
 - Autostart is gated by the `ATHENA_NO_AUTOSTART` env var, **not** `require.main === module` —

@@ -75,11 +75,29 @@ Athena의 전체 UI는 정확히 **두 개의 독립된 창**으로 이루어진
 설정 아이콘을 찾아 헤매는 경험은 Athena에 없다. "모델 바꿔줘"라고 치면 같은 모드가 뜬다.
 점은 *추가* 진입로다. **커맨드바로 못 가고 점으로만 갈 수 있으면 그건 탈락이다.**
 
-> **현재 구현:** 창 둘만 존재하고 모드는 대화 하나뿐이다(`app/main.js`의 `BrowserWindow`는
-> 워밍업·캔버스·대화 셋뿐, 모달 호출 0건). 온보딩·인증·설정·주문 모드는 아직 코드에 없다.
-> `#dot`은 존재하지만 지금은 상태 표시와 캔버스 확장 중심점 역할만 한다
-> (`app/chat.html:24`, `app/chat.css:132-150`, `app/main.js:137-180`).
+> **현재 구현 (2026-08-16 실측, 브랜치 4종 병합 후):** 창은 둘이다 — `app/main.js`의
+> `BrowserWindow` 생성은 워밍업(10×10 임시, 즉시 close)·캔버스·대화 셋뿐이고
+> `dialog.*` / `showMessageBox` 호출은 0건이다.
+>
+> | 모드 | 상태 | 코드 |
+> |---|---|---|
+> | 대화 | 구현됨 | `app/chat.js` |
+> | 온보딩 (CLI·계좌) | 구현됨 | `app/chat.js` `startOnboarding`, `app/lib/onboarding.js` |
+> | 인증 (토큰 상태·계좌 전환) | 구현됨 | `app/chat.js` `showAuthConfirm`, `app/lib/auth-screen.js` |
+> | 설정 (계좌·MCP 카드) | 구현됨 | `app/chat.js` `openSettings`, `app/lib/settings-cards.js` |
+> | 주문 확인 | **미착수** | — |
+>
+> **모든 모드가 대화 창 안에 산다.** 각 모드는 `chat.html`의 형제 패널(`#onboard`,
+> `#settings`)이고, 열리면 `#app`이 물러난다. 셋 다 같은 리사이즈 문법을 쓴다 —
+> `chatMaxH`로 자라고 끝나면 `chatBaseH`로 돌아온다.
+>
+> `#dot`은 세 역할을 겸한다 — 상태 표시 · 캔버스 확장 중심점 · 설정 진입
+> (`app/chat.html`의 `#dot` 버튼, `app/chat.js`의 `openSettings`). 커맨드바 진입로도
+> 함께 있다(`SETTINGS_COMMAND`). Esc로 대화로 돌아온다.
 > 용어 정의는 [`GLOSSARY.md`](../GLOSSARY.md) §1.
+>
+> 검증: `npm run verify` 검증 7·8이 "창이 늘지 않는가 / 모드가 뜨고 닫히는가"를,
+> `npm run verify:settings-cards`가 카드 내부 상태들을 캡처로 남긴다.
 
 대화 이력은 볼 수 있다. 하지만 **이력이 차지하는 면적은 최소여야 한다.**
 Athena는 채팅 앱이 아니다. 채팅은 조종 수단이지 콘텐츠가 아니다.

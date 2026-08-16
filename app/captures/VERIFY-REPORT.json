@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-08-16T04:22:54.605Z",
+  "startedAt": "2026-08-16T13:29:25.540Z",
   "layout": {
     "scale": 1,
     "screen": {
@@ -24,28 +24,28 @@
       },
       "idle": {
         "width": 2340,
-        "height": 336
+        "height": 1182
       }
     },
-    "chatReadyAfterBoot": true
+    "chatReadyAfterBoot": false
   },
   "dotScreenPoint": {
-    "x": 214.66666793823242,
-    "y": 1046.6666717529297
+    "x": 180,
+    "y": 290
   },
   "osCaptureAttempted": {
     "ok": true
   },
   "expand": {
-    "frameCount": 24,
+    "frameCount": 32,
     "p50": 16.699999999999818,
-    "p95": 66.70000000000027,
-    "max": 83.29999999999973,
-    "min": 16.40000000000009
+    "p95": 33.29999999999927,
+    "max": 33.400000000000546,
+    "min": 16.599999999999454
   },
   "collapse": {
     "frameCount": 35,
-    "p50": 16.699999999999818,
+    "p50": 16.69999999999891,
     "p95": 16.800000000000182,
     "max": 16.899999999999636,
     "min": 16.399999999999636
@@ -63,9 +63,9 @@
       },
       "chat": {
         "x": 180,
-        "y": 855,
+        "y": 290,
         "width": 1561,
-        "height": 224
+        "height": 789
       }
     },
     "afterCanvasMove": {
@@ -77,9 +77,9 @@
       },
       "chat": {
         "x": 180,
-        "y": 855,
+        "y": 290,
         "width": 1561,
-        "height": 224
+        "height": 789
       }
     },
     "afterChatResize": {
@@ -91,9 +91,9 @@
       },
       "chat": {
         "x": 180,
-        "y": 855,
+        "y": 290,
         "width": 1563,
-        "height": 325
+        "height": 789
       }
     },
     "canvasMovedButChatUnchanged": true,
@@ -117,9 +117,9 @@
     },
     "boundsAfterQuery": {
       "x": 180,
-      "y": 827,
+      "y": 874,
       "width": 1561,
-      "height": 252
+      "height": 205
     },
     "grewTallerThanBase": true,
     "finalAnswerText": "캔버스 창에 스트림, 리더, 공통 테이블을 띄웠습니다.",
@@ -128,53 +128,43 @@
   "manualResize": {
     "beforeDrag": {
       "x": 180,
-      "y": 827,
+      "y": 874,
       "width": 1561,
-      "height": 252
+      "height": 205
     },
     "afterDrag": {
       "x": 180,
-      "y": 666,
+      "y": 714,
       "width": 1561,
-      "height": 413
+      "height": 365
     },
     "grewByDrag": true,
     "bottomEdgePinned": true
   },
-  "settingsWindow": {
-    "openedAsSeparateWindow": true,
-    "loadedSettingsHtml": true,
-    "singleInstance": true,
-    "chatBoundsUnchanged": true,
-    "canvasBoundsUnchanged": true,
-    "chatHistoryStaysVisible": true,
-    "chatInputStaysEnabled": true,
-    "noSettingsMarkupInChat": true,
-    "dotMarkedWhileOpen": true,
-    "nodeIntegrationOff": true,
-    "contextBridgeOnly": true,
-    "bridgeSurface": [
-      "close",
-      "getInfo",
-      "getPrefs",
-      "getStatus",
-      "setPrefs",
-      "tokenAction"
-    ],
-    "backendState": "연결 안 됨",
-    "tokenButtonsLockedWhenUnreachable": true,
-    "revokeConfirmHiddenInitially": true,
+  "settingsSurface": {
+    "noNewWindowOnOpen": true,
+    "stillTwoWindows": true,
+    "noNewWindowOnSecondClick": true,
+    "renderedInChatWindow": true,
+    "chatModeSteppedAside": true,
+    "accountsCardPresent": true,
+    "mcpCardPresent": true,
+    "singleCardAfterSecondClick": true,
+    "noSettingsCardsOnCanvas": true,
+    "chatGrewToMax": true,
+    "dotIsRealButton": true,
     "noTrIdLeak": true,
     "noBearerLeak": true,
-    "closedByEsc": true,
-    "dotUnmarkedAfterClose": true
+    "escReturnsToChat": true,
+    "gridEmptiedOnClose": true
   },
   "settingsCommandBar": {
-    "openedByCommand": true,
+    "noNewWindowOnCommand": true,
+    "reachedSettings": true,
     "inputCleared": true,
     "notTreatedAsQuery": true,
-    "turnCountAfter": 1,
-    "closedAfterCheck": true
+    "turnCountBefore": 1,
+    "turnCountAfter": 1
   },
-  "finishedAt": "2026-08-16T04:23:09.358Z"
+  "finishedAt": "2026-08-16T13:29:43.596Z"
 }

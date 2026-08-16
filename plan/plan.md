@@ -1,6 +1,6 @@
 # Athena 진행 상황 및 재개 계획
 
-> 최종 갱신: 2026-08-16 · 브랜치 `ANNJUNGCHAN/REST-API` · §1의 2026-08-15 스냅샷은 `main` 기준이다
+> 최종 갱신: 2026-08-16 · 브랜치 `main` — **작업 브랜치 4종이 전부 `main`에 병합됐다**
 >
 > **다음 세션은 이 파일부터 읽는다.** 여기에는 *지금 상태 / 검증된 사실 / 다음 수*만 적는다.
 > 설계 근거와 함정 목록은 [`plan/00-인수인계.md`](00-인수인계.md)에 있다. 중복하지 않는다.
@@ -39,6 +39,34 @@ backend 전체:  517 passed, 0 failed   (113초)
 
 이 브랜치는 `main`에 없는 미커밋 작업(계좌 모듈, 셀렉터 수정, 화면기획서)을 포함한다. 517은
 그 상태의 수치이지 `main`의 수치가 아니다.
+
+**2026-08-16 · 브랜치 4종 병합 후 `main`에서 재측정 — 이 수치가 현행이다:**
+
+```
+backend 전체:  603 passed, 0 failed   (135초)
+  ruff check .                          → All checks passed
+  generate_api.py --check               → Generated files are current
+```
+
+병합된 브랜치: `ANNJUNGCHAN/MCP` · `ANNJUNGCHAN/REST-API` · `ANNJUNGCHAN/Call` ·
+`ANNJUNGCHAN/화면기획서-점검`. 각 워크트리의 미커밋 작업은 병합 전에 원자 커밋으로 보존했다.
+
+병합에서 내린 판단 3건:
+
+1. **설정 독립 창을 버렸다.** `Call`이 만든 `settingsWin`(720×620 독립 `BrowserWindow`)은
+   `MCP` 쪽 구현과 중복이고 "창은 둘" 원칙(`ui/soul.md` §8)에 걸린다. `app/settings.*` 4파일을
+   삭제했다. 살아남은 설정은 캔버스 창에 그려지는 계좌·MCP 카드다.
+2. **오퍼레이션 계약 314 → 315.** `REST-API`의 split-base 라우트 제거(301 생성 라우트)에
+   `Call`의 `get_internal_oauth_status` 1건을 더한 값. 서비스 오퍼레이션 13 → 14. 실행으로 확인.
+3. **"일시 표면" 폐기가 정본이고, 설정을 대화 창으로 옮겼다.** 병합 직후에는 설정 카드가
+   캔버스 창에 그려지고 있었다(`canvas.js`가 `settings-cards`를 import). `ui/DESIGN-SOUL.md:100`에
+   기록된 결정 — *"#dot를 건들면 그냥 채팅창이 설정창으로 변하는 것이 좋겠다"* — 과 어긋나서
+   대화 창의 `#settings` 패널로 옮겼다. `canvas.css` 383줄 중 설정 카드 스타일 282줄을
+   `app/styles/settings-cards.css`로 분리해 대화 창이 싣는다.
+
+> **⚠ 위 표의 "미착수" 표기 일부가 낡았다.** 병합으로 온보딩·인증·설정 모드가 실제 코드에
+> 들어왔다. 갱신본은 [`GLOSSARY.md`](../GLOSSARY.md) §1과 [`ui/soul.md`](../ui/soul.md) §3의
+> 실측 표를 따른다.
 
 | 영역 | 상태 | 위치 |
 |---|---|---|
