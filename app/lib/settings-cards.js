@@ -85,6 +85,79 @@ function spacer(widthPx) {
 }
 
 // ---------------------------------------------------------------------------
+// 행 삭제 · 카드 닫기 — 설계(Paper 목업)가 그리지 않은 어포던스라 이 파일에서
+// 새로 정의한다(D3/D7, 오케스트레이터 지시). `athena:account-remove`/
+// `athena:mcp-remove`는 메인 프로세스에 이미 구현·검증돼 있었는데 부르는
+// 버튼이 없었다(app/README.md "남은 문제" 절) — 그 갭을 여기서 채운다.
+//
+// 삭제는 되돌릴 수 없다. window.confirm()은 프레임리스 글래스 렌더러를
+// 블로킹하므로 쓰지 않는다 — 행 안에 인라인 확인 바를 한 번 거친다. 계좌
+// 전환(AT-ST-001 Desc 4 "확인 대화상자 없음")은 그대로 무확인으로 둔다 — 그
+// 규칙은 전환 얘기지 삭제 얘기가 아니다.
+// ---------------------------------------------------------------------------
+
+// disabledTitle이 있으면(계좌 목록의 "마지막 하나는 삭제 불가", AT-ST-001
+// Desc 1.1) 클릭 리스너 없는 비활성 버튼만 돌려준다 — 64자 초과 툴 체크박스와
+// 같은 패턴(checkboxEl 참고).
+function deleteIconButton(onClick, disabledTitle) {
+  const b = el('button', 'uk-row-delete', '×');
+  b.type = 'button';
+  b.setAttribute('aria-label', '삭제');
+  if (disabledTitle) {
+    b.disabled = true;
+    b.title = disabledTitle;
+    return b;
+  }
+  b.title = '삭제';
+  b.addEventListener('click', (e) => { e.stopPropagation(); onClick(); });
+  return b;
+}
+
+// 확인 버튼은 ghost + is-danger(경고색)다 — primary(브랜드색)를 쓰지 않는다.
+// MCP 카드는 "+ 서버 등록"이 이미 화면 내 유일한 브랜드색 자리를 쓰고
+// 있고(AT-ST-004 Desc 1.2), 계좌 카드도 같은 규칙으로 맞춘다. 클릭 핸들러는
+// 호출자가 붙인다 — 여기서는 뼈대만 만든다.
+function deleteConfirmBar(message) {
+  const bar = el('div', 'uk-row-confirm');
+  // 확인 바 위 어디를 눌러도(버튼이 아닌 여백 포함) 아래 행의 클릭 리스너
+  // (계좌 전환 · MCP 상세 열기)로 새지 않게 막는다.
+  bar.addEventListener('click', (e) => e.stopPropagation());
+  bar.appendChild(el('span', 'uk-row-confirm-msg', message));
+  bar.appendChild(el('span', 'uk-flex-spacer'));
+  const cancelBtn = button('text', '취소');
+  const confirmBtn = button('ghost', '삭제');
+  confirmBtn.classList.add('is-danger');
+  bar.appendChild(cancelBtn);
+  bar.appendChild(confirmBtn);
+  return { bar, cancelBtn, confirmBtn };
+}
+
+// 카드별 닫기(D7) — 지금까지 전역 Esc(캔버스 전체 접기)만 있었다(설계가 여는
+// 법만 정하고 닫는 법을 안 정함, app/README.md 참고). 마지막 카드를 닫으면
+// 빈 유리창을 화면에 남겨두지 않고 캔버스 자체를 접는다 — Esc가 쓰는 채널
+// (athena:collapse-canvas)을 그대로 재사용한다. canvas.js의 3개 카드(stream/
+// reader/table)도 같은 채널·같은 스타일로 닫기를 단다(일관성 판단, 보고서
+// 참고).
+function closeCard(card) {
+  const parent = card.parentElement;
+  card.remove();
+  if (parent && !parent.querySelector('.card')) {
+    ipcRenderer.send('athena:collapse-canvas');
+  }
+}
+
+// 카드 헤더의 실제 액션(등록·스니펫 붙여넣기)과 경쟁하지 않게 구분선 뒤
+// 조용한 자리에 둔다 — canvas.css의 .uk-card-close가 그 시각적 거리를 만든다.
+function cardCloseButton(card) {
+  const b = el('button', 'uk-card-close', '×');
+  b.type = 'button';
+  b.setAttribute('aria-label', '카드 닫기');
+  b.title = '이 카드 닫기';
+  b.addEventListener('click', () => closeCard(card));
+  return b;
+}
+
+// ---------------------------------------------------------------------------
 // 카드 셸 — canvas.js의 makeCard()와 같은 역할이지만 이 두 카드는 헤더 구성이
 // (타이틀+카운트, 우측 액션 버튼) 달라 전용으로 만든다. .card 클래스는
 // canvas.css가 정의한 그대로 재사용해 그리드 안에서 stream/reader/table과
@@ -157,7 +230,10 @@ async function refreshAccountsCard(card, head, body) {
     el('span', 'uk-settings-name', '계좌'),
     el('span', 'uk-settings-count', `${accounts.length}개 등록`),
   ]));
-  head.appendChild(button('ghost', '+ 계좌 등록', { onClick: () => openAccountRegisterSheet(card, refresh) }));
+  const acctActions = row('uk-settings-actions', []);
+  acctActions.appendChild(button('ghost', '+ 계좌 등록', { onClick: () => openAccountRegisterSheet(card, refresh) }));
+  acctActions.appendChild(cardCloseButton(card));
+  head.appendChild(acctActions);
 
   if (!accounts.length) {
     body.appendChild(emptyState('등록된 계좌가 없다', '+ 계좌 등록으로 첫 모의투자 계좌를 연결한다'));
@@ -179,6 +255,85 @@ function acctStatusPill(a) {
   return a.connected ? pill('정상', 'ok') : pill('검증 필요', 'warn');
 }
 
+// canDelete === false는 "등록된 계좌가 이 하나뿐"이다(AT-ST-001 Desc 1.1
+// "마지막 하나는 삭제 불가"). 백엔드(accounts.remove())는 이 규칙을 강제하지
+// 않으므로 — 강제할 수 있는 유일한 자리인 UI에서 막는다.
+function buildAccountRow(a, refresh, openOrderApi, canDelete) {
+  const aliasCell = row('uk-col-alias', [
+    el('span', 'uk-cell-strong', a.alias),
+    badge(!!a.active, a.active ? '활성' : '비활성'),
+  ]);
+
+  const appkeyCell = el('div', 'uk-col-appkey');
+  appkeyCell.appendChild(secretMask(a.appKeyChars));
+
+  const orderApiChip = pill(a.orderApi ? 'ON' : 'OFF', a.orderApi ? 'brand' : 'dim');
+  orderApiChip.classList.add('is-clickable');
+  orderApiChip.title = '눌러서 주문 API 게이트 열기';
+  orderApiChip.addEventListener('click', (e) => {
+    e.stopPropagation();
+    openOrderApi(a);
+  });
+  const orderApiCell = el('div', 'uk-col-orderapi');
+  orderApiCell.appendChild(orderApiChip);
+
+  const statusCell = el('div', 'uk-col-status');
+  statusCell.appendChild(acctStatusPill(a));
+
+  // 마지막 검증 시각 — 고정 IPC 계약에 필드 자체가 없다(스펙은 원했지만
+  // athena:account-list 응답 모양에 없음). 항상 "—"로만 표시한다.
+  const lastCheckCell = el('span', 'uk-col-lastcheck uk-mono-faint', '—');
+
+  const actionsCell = el('div', 'uk-col-actions');
+  actionsCell.addEventListener('click', (e) => e.stopPropagation());
+
+  const normalCells = [aliasCell, appkeyCell, orderApiCell, statusCell, lastCheckCell, actionsCell];
+  const r = row('uk-row', normalCells);
+  if (!a.active) {
+    r.classList.add('is-clickable');
+    r.addEventListener('click', async () => {
+      try {
+        await ipcRenderer.invoke('athena:account-set-active', { id: a.id });
+      } catch { /* 핸들러 부재 — 조용히 무시하지 않되 카드 전체를 깨뜨리지 않는다 */ }
+      refresh();
+    });
+  }
+
+  actionsCell.appendChild(deleteIconButton(
+    () => {
+      clear(r);
+      const { bar, cancelBtn, confirmBtn } = deleteConfirmBar(
+        `'${a.alias}' 계좌를 삭제할까요? 앱키·시크릿도 함께 삭제된다`,
+      );
+      cancelBtn.addEventListener('click', () => {
+        clear(r);
+        for (const c of normalCells) r.appendChild(c);
+      });
+      confirmBtn.addEventListener('click', async () => {
+        cancelBtn.disabled = true;
+        confirmBtn.disabled = true;
+        confirmBtn.querySelector('.uk-btn-label').textContent = '삭제 중…';
+        let threw = false;
+        try {
+          await ipcRenderer.invoke('athena:account-remove', { id: a.id });
+        } catch { threw = true; }
+        if (threw) {
+          bar.appendChild(errorNote('계좌 삭제 기능을 아직 사용할 수 없다 (athena:account-remove 핸들러 없음)'));
+          cancelBtn.disabled = false;
+          confirmBtn.disabled = false;
+          confirmBtn.querySelector('.uk-btn-label').textContent = '삭제';
+          return;
+        }
+        refresh();
+      });
+      r.appendChild(bar);
+    },
+    canDelete ? null : '마지막 계좌는 삭제할 수 없다',
+  ));
+
+  return r;
+}
+
 function buildAccountsTable(accounts, refresh, openOrderApi) {
   const wrap = el('div');
   wrap.appendChild(row('uk-col-head', [
@@ -187,45 +342,12 @@ function buildAccountsTable(accounts, refresh, openOrderApi) {
     el('span', 'uk-col-orderapi', '주문 API'),
     el('span', 'uk-col-status', '연결 상태'),
     el('span', 'uk-col-lastcheck', '마지막 검증'),
+    el('span', 'uk-col-actions', ''),
   ]));
 
+  const canDelete = accounts.length > 1;
   for (const a of accounts) {
-    const aliasCell = row('uk-col-alias', [
-      el('span', 'uk-cell-strong', a.alias),
-      badge(!!a.active, a.active ? '활성' : '비활성'),
-    ]);
-
-    const appkeyCell = el('div', 'uk-col-appkey');
-    appkeyCell.appendChild(secretMask(a.appKeyChars));
-
-    const orderApiChip = pill(a.orderApi ? 'ON' : 'OFF', a.orderApi ? 'brand' : 'dim');
-    orderApiChip.classList.add('is-clickable');
-    orderApiChip.title = '눌러서 주문 API 게이트 열기';
-    orderApiChip.addEventListener('click', (e) => {
-      e.stopPropagation();
-      openOrderApi(a);
-    });
-    const orderApiCell = el('div', 'uk-col-orderapi');
-    orderApiCell.appendChild(orderApiChip);
-
-    const statusCell = el('div', 'uk-col-status');
-    statusCell.appendChild(acctStatusPill(a));
-
-    // 마지막 검증 시각 — 고정 IPC 계약에 필드 자체가 없다(스펙은 원했지만
-    // athena:account-list 응답 모양에 없음). 항상 "—"로만 표시한다.
-    const lastCheckCell = el('span', 'uk-col-lastcheck uk-mono-faint', '—');
-
-    const r = row('uk-row', [aliasCell, appkeyCell, orderApiCell, statusCell, lastCheckCell]);
-    if (!a.active) {
-      r.classList.add('is-clickable');
-      r.addEventListener('click', async () => {
-        try {
-          await ipcRenderer.invoke('athena:account-set-active', { id: a.id });
-        } catch { /* 핸들러 부재 — 조용히 무시하지 않되 카드 전체를 깨뜨리지 않는다 */ }
-        refresh();
-      });
-    }
-    wrap.appendChild(r);
+    wrap.appendChild(buildAccountRow(a, refresh, openOrderApi, canDelete));
   }
   return wrap;
 }
@@ -544,12 +666,13 @@ async function refreshMcpCard(card, head, body) {
   const actions = row('uk-settings-actions', []);
   actions.appendChild(button('text', '스니펫 붙여넣기', { onClick: () => openMcpRegisterSheet(card, refresh) }));
   actions.appendChild(button('primary', '+ 서버 등록', { onClick: () => openMcpRegisterSheet(card, refresh) }));
+  actions.appendChild(cardCloseButton(card));
   head.appendChild(actions);
 
   if (!servers.length) {
     body.appendChild(emptyState('등록된 MCP 서버가 없다', '스니펫 붙여넣기 또는 + 서버 등록으로 시작한다'));
   } else {
-    body.appendChild(buildMcpTable(servers, (alias) => openMcpProbeSheet(card, alias, refresh)));
+    body.appendChild(buildMcpTable(servers, refresh, (alias) => openMcpProbeSheet(card, alias, refresh)));
   }
   body.appendChild(el('div', 'uk-settings-note', '행을 누르면 상세 · 툴 목록 · 감사 로그가 열린다. 실행 명령은 자르지 않고 전문을 표시한다.'));
 }
@@ -571,13 +694,14 @@ function mcpStatusPill(s) {
   return pill('상태 미확인', 'dim');
 }
 
-function buildMcpTable(servers, onRowClick) {
+function buildMcpTable(servers, refresh, onRowClick) {
   const wrap = el('div');
   wrap.appendChild(row('uk-col-head', [
     el('span', 'uk-col-mcpalias', '별칭'),
     el('span', 'uk-col-mcpstatus', '상태'),
     el('span', 'uk-col-mcptools', '허용 툴'),
     el('span', 'uk-col-mcpcmd', '실행 명령'),
+    el('span', 'uk-col-actions', ''),
   ]));
 
   for (const s of servers) {
@@ -598,8 +722,43 @@ function buildMcpTable(servers, onRowClick) {
     const cmdText = [s.command, s.argsPreview].filter(Boolean).join(' ');
     const cmdCell = el('div', 'uk-col-mcpcmd uk-cmd', cmdText);
 
-    const r = row('uk-row is-clickable', [aliasCell, statusCell, toolsCell, cmdCell]);
+    const actionsCell = el('div', 'uk-col-actions');
+    actionsCell.addEventListener('click', (e) => e.stopPropagation());
+
+    const normalCells = [aliasCell, statusCell, toolsCell, cmdCell, actionsCell];
+    const r = row('uk-row is-clickable', normalCells);
     r.addEventListener('click', () => onRowClick(s.alias));
+
+    actionsCell.appendChild(deleteIconButton(() => {
+      clear(r);
+      r.classList.remove('is-clickable');
+      const { bar, cancelBtn, confirmBtn } = deleteConfirmBar(`'${s.alias}' 서버를 삭제할까요?`);
+      cancelBtn.addEventListener('click', () => {
+        clear(r);
+        r.classList.add('is-clickable');
+        for (const c of normalCells) r.appendChild(c);
+      });
+      confirmBtn.addEventListener('click', async () => {
+        cancelBtn.disabled = true;
+        confirmBtn.disabled = true;
+        confirmBtn.querySelector('.uk-btn-label').textContent = '삭제 중…';
+        let res;
+        let threw = false;
+        try {
+          res = await ipcRenderer.invoke('athena:mcp-remove', { alias: s.alias });
+        } catch { threw = true; }
+        if (threw || !(res && res.ok)) {
+          bar.appendChild(errorNote(threw ? 'MCP 서버 삭제 기능을 아직 사용할 수 없다 (athena:mcp-remove 핸들러 없음)' : '삭제에 실패했다'));
+          cancelBtn.disabled = false;
+          confirmBtn.disabled = false;
+          confirmBtn.querySelector('.uk-btn-label').textContent = '삭제';
+          return;
+        }
+        refresh();
+      });
+      r.appendChild(bar);
+    }));
+
     wrap.appendChild(r);
   }
   return wrap;

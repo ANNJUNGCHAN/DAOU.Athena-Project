@@ -178,3 +178,69 @@
 2026-08-16T02:54:31.496Z chatWin created + loadFile called
 2026-08-16T02:54:31.692Z both ready-to-show fired
 2026-08-16T02:54:31.693Z chatWin executeJavaScript done
+2026-08-16T03:23:13.752Z module loaded, ATHENA_NO_AUTOSTART: 1
+2026-08-16T03:23:13.753Z createWindows start
+2026-08-16T03:23:13.755Z layout computed {"scale":1,"screen":{"sw":1920,"sh":1152},"canvasW":1560,"canvasH":800,"chatW":1560,"chatBaseH":204,"chatMaxH":788,"originX":180,"originY":74}
+2026-08-16T03:23:13.807Z warmup created, waiting ready-to-show
+2026-08-16T03:23:14.093Z warmup ready-to-show fired
+2026-08-16T03:23:14.454Z window-all-closed fired (no-op)
+2026-08-16T03:23:14.522Z warmup done, creating canvasWin
+2026-08-16T03:23:14.554Z canvasWin created + loadFile called
+2026-08-16T03:23:14.578Z chatWin created + loadFile called
+2026-08-16T03:23:14.814Z both ready-to-show fired
+2026-08-16T03:23:14.815Z chatWin executeJavaScript done
+2026-08-16T03:24:20.874Z module loaded, ATHENA_NO_AUTOSTART: 1
+2026-08-16T03:24:20.875Z createWindows start
+2026-08-16T03:24:20.876Z layout computed {"scale":1,"screen":{"sw":1920,"sh":1152},"canvasW":1560,"canvasH":800,"chatW":1560,"chatBaseH":204,"chatMaxH":788,"originX":180,"originY":74}
+2026-08-16T03:24:20.927Z warmup created, waiting ready-to-show
+2026-08-16T03:24:21.191Z warmup ready-to-show fired
+2026-08-16T03:24:21.543Z window-all-closed fired (no-op)
+2026-08-16T03:24:21.611Z warmup done, creating canvasWin
+2026-08-16T03:24:21.660Z canvasWin created + loadFile called
+2026-08-16T03:24:21.701Z chatWin created + loadFile called
+2026-08-16T03:24:21.943Z both ready-to-show fired
+2026-08-16T03:24:21.944Z chatWin executeJavaScript done
+2026-08-16T03:24:50.509Z module loaded, ATHENA_NO_AUTOSTART: 1
+2026-08-16T03:24:50.510Z createWindows start
+2026-08-16T03:24:50.511Z layout computed {"scale":1,"screen":{"sw":1920,"sh":1152},"canvasW":1560,"canvasH":800,"chatW":1560,"chatBaseH":204,"chatMaxH":788,"originX":180,"originY":74}
+2026-08-16T03:24:50.563Z warmup created, waiting ready-to-show
+2026-08-16T03:24:50.838Z warmup ready-to-show fired
+2026-08-16T03:24:51.200Z window-all-closed fired (no-op)
+2026-08-16T03:24:51.260Z warmup done, creating canvasWin
+2026-08-16T03:24:51.289Z canvasWin created + loadFile called
+2026-08-16T03:24:51.308Z chatWin created + loadFile called
+2026-08-16T03:24:51.556Z both ready-to-show fired
+2026-08-16T03:24:51.557Z chatWin executeJavaScript done
+2026-08-16T03:25:39.053Z module loaded, ATHENA_NO_AUTOSTART: 1
+2026-08-16T03:25:39.102Z createWindows start
+2026-08-16T03:25:39.103Z layout computed {"scale":1,"screen":{"sw":1920,"sh":1152},"canvasW":1560,"canvasH":800,"chatW":1560,"chatBaseH":204,"chatMaxH":788,"originX":180,"originY":74}
+2026-08-16T03:25:39.150Z warmup created, waiting ready-to-show
+2026-08-16T03:25:39.408Z warmup ready-to-show fired
+2026-08-16T03:25:39.766Z window-all-closed fired (no-op)
+2026-08-16T03:25:39.835Z warmup done, creating canvasWin
+2026-08-16T03:25:39.864Z canvasWin created + loadFile called
+2026-08-16T03:25:39.889Z chatWin created + loadFile called
+2026-08-16T03:25:40.137Z both ready-to-show fired
+2026-08-16T03:25:40.143Z chatWin executeJavaScript done
+2026-08-16T03:27:35.263Z module loaded, ATHENA_NO_AUTOSTART: 1
+2026-08-16T03:27:35.264Z createWindows start
+2026-08-16T03:27:35.265Z layout computed {"scale":1,"screen":{"sw":1920,"sh":1152},"canvasW":1560,"canvasH":800,"chatW":1560,"chatBaseH":204,"chatMaxH":788,"originX":180,"originY":74}
+2026-08-16T03:27:35.310Z warmup created, waiting ready-to-show
+2026-08-16T03:27:35.555Z warmup ready-to-show fired
+2026-08-16T03:27:35.897Z window-all-closed fired (no-op)
+2026-08-16T03:27:35.979Z warmup done, creating canvasWin
+2026-08-16T03:27:36.004Z canvasWin created + loadFile called
+2026-08-16T03:27:36.027Z chatWin created + loadFile called
+2026-08-16T03:27:36.218Z both ready-to-show fired
+2026-08-16T03:27:36.248Z chatWin executeJavaScript done
+2026-08-16T03:28:25.381Z module loaded, ATHENA_NO_AUTOSTART: 1
+2026-08-16T03:28:25.382Z createWindows start
+2026-08-16T03:28:25.383Z layout computed {"scale":1,"screen":{"sw":1920,"sh":1152},"canvasW":1560,"canvasH":800,"chatW":1560,"chatBaseH":204,"chatMaxH":788,"originX":180,"originY":74}
+2026-08-16T03:28:25.426Z warmup created, waiting ready-to-show
+2026-08-16T03:28:25.664Z warmup ready-to-show fired
+2026-08-16T03:28:25.985Z window-all-closed fired (no-op)
+2026-08-16T03:28:26.062Z warmup done, creating canvasWin
+2026-08-16T03:28:26.085Z canvasWin created + loadFile called
+2026-08-16T03:28:26.101Z chatWin created + loadFile called
+2026-08-16T03:28:26.303Z both ready-to-show fired
+2026-08-16T03:28:26.305Z chatWin executeJavaScript done

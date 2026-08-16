@@ -49,17 +49,6 @@ function readConsent() {
   return readJson(consentPath(), {});
 }
 
-// consent.json을 ConsentStore.save()와 동일한 형태(alias -> record dict,
-// tmp-then-rename)로 다시 쓴다. 오직 allowTool(allowed:false) 경로에서만
-// 쓰인다 — __main__.py에 단일 툴 해제용 서브커맨드가 없기 때문(아래 참고).
-function writeConsent(consent) {
-  const p = consentPath();
-  fs.mkdirSync(path.dirname(p), { recursive: true });
-  const tmp = `${p}.tmp`;
-  fs.writeFileSync(tmp, JSON.stringify(consent, null, 2), 'utf-8');
-  fs.renameSync(tmp, p);
-}
-
 function runCli(args, opts = {}) {
   return new Promise((resolve) => {
     let child;
@@ -251,38 +240,18 @@ async function probe(alias) {
   };
 }
 
-// athena:mcp-allow-tool
+// athena:mcp-allow-tool — allow/disallow 둘 다 실제 파이썬 CLI 서브커맨드를
+// spawn한다. consent.json을 이 파일에서 직접 mutate하던 이전 경로(disallow_tool()과
+// "같은 연산"을 JS로 재구현)는 보안 경계 위반이었다 — consent.py가 유일한
+// 게이트여야 하는데, 두 번째 언어로 된 두 번째 writer가 파일 포맷이 바뀌는
+// 순간 조용히 깨진다. `disallow` 서브커맨드가 이제 백엔드에 있으니
+// (`backend/athena_mcp/__main__.py` cmd_disallow) 그걸 부른다.
 async function allowTool(alias, tool, allowed) {
-  if (allowed) {
-    const result = await runCli(['allow', alias, tool]);
-    if (result.code !== 0) {
-      return { ok: false, error: firstErrorLine(result.stderr || result.stdout) };
-    }
-    return { ok: true };
+  const result = await runCli([allowed ? 'allow' : 'disallow', alias, tool]);
+  if (result.code !== 0) {
+    return { ok: false, error: firstErrorLine(result.stderr || result.stdout) };
   }
-  // 갭: __main__.py에 단일 툴 allowlist 해제용 서브커맨드가 없다
-  // (consent.py의 ConsentStore.disallow_tool()에 대응하는 CLI가 없음 — 서버
-  // 전체 revoke만 있고, 그건 승인 자체를 취소해 서버를 다시 미승인 상태로
-  // 되돌려버려 이 요청("이 툴 하나만 해제")과 다르다). 그래서 consent.json을
-  // ConsentStore.disallow_tool()과 정확히 같은 연산(approved_tools에서 제거)으로
-  // 직접 수정한다 — 위험 스캔이나 승인 판단 같은 보안 로직은 전혀 다시
-  // 구현하지 않는다, 이미 승인된 배열에서 원소 하나를 지우는 순수 데이터
-  // 조작뿐이다. 원칙적으로는 `athena-mcp disallow <alias> <tool>` 서브커맨드가
-  // 백엔드에 추가되는 게 맞다 — 보고서에 남긴다.
-  try {
-    const consent = readConsent();
-    const record = consent[alias];
-    if (!record) {
-      return { ok: false, error: '이 서버는 아직 승인 기록이 없다' };
-    }
-    const tools = new Set(Array.isArray(record.approved_tools) ? record.approved_tools : []);
-    tools.delete(tool);
-    record.approved_tools = Array.from(tools).sort();
-    writeConsent(consent);
-    return { ok: true };
-  } catch (err) {
-    return { ok: false, error: String((err && err.message) || err) };
-  }
+  return { ok: true };
 }
 
 async function remove(alias) {

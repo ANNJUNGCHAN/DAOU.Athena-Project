@@ -36,20 +36,8 @@
         ]
       },
       {
-        "id": "gemini",
-        "name": "Gemini",
-        "connected": false,
-        "accounts": []
-      },
-      {
         "id": "codex",
         "name": "Codex",
-        "connected": false,
-        "accounts": []
-      },
-      {
-        "id": "grok",
-        "name": "Grok",
         "connected": false,
         "accounts": []
       }
@@ -63,12 +51,12 @@
   "cli.login.gemini(notInstalled)": {
     "ok": false,
     "launched": false,
-    "message": "Gemini CLI가 이 컴퓨터에 설치되어 있지 않다"
+    "message": "알 수 없는 CLI다"
   },
   "cli.login.grok(notInstalled)": {
     "ok": false,
     "launched": false,
-    "message": "Grok CLI가 이 컴퓨터에 설치되어 있지 않다"
+    "message": "알 수 없는 CLI다"
   },
   "cli.probeBinaryExists": {
     "claude": true,
@@ -89,12 +77,12 @@
   },
   "account.register.ok(stubbedNetwork)": {
     "ok": true,
-    "id": "d1891be8-fc6a-47b5-b610-22cf79738789"
+    "id": "2f29ab99-4c66-4488-b9e4-aaa6b644678b"
   },
   "account.list.afterRegister": {
     "accounts": [
       {
-        "id": "d1891be8-fc6a-47b5-b610-22cf79738789",
+        "id": "2f29ab99-4c66-4488-b9e4-aaa6b644678b",
         "alias": "검증-성공계좌",
         "connected": true,
         "active": true,
@@ -123,7 +111,7 @@
   "account.list.afterOrderApiOn": {
     "accounts": [
       {
-        "id": "d1891be8-fc6a-47b5-b610-22cf79738789",
+        "id": "2f29ab99-4c66-4488-b9e4-aaa6b644678b",
         "alias": "검증-성공계좌",
         "connected": true,
         "active": true,
@@ -151,8 +139,8 @@
   },
   "auth-token-status": {
     "state": "ready",
-    "expiresInSec": 2315563526,
-    "issuedAt": "2026-08-16T02:54:32.576Z"
+    "expiresInSec": 2315561658,
+    "issuedAt": "2026-08-16T03:25:41.018Z"
   },
   "auth-token-refresh": {
     "ok": true,

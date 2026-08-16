@@ -69,6 +69,10 @@ html, body { background: transparent; }
   font-size: 11px;
   color: var(--color-k-faint);
 }
+/* fresh 타임스탬프 + 카드별 닫기(D7)를 한 그룹으로 묶어 card-head의
+   space-between이 title↔그룹 사이에만 적용되게 한다(3개 사이에 퍼지면
+   fresh가 가운데로 밀려 보인다). */
+.card-head-right { display: flex; align-items: center; gap: 10px; }
 
 .card-body { flex: 1; min-height: 0; overflow: auto; }
 
@@ -345,3 +349,35 @@ table.fin-table { width: 100%; border-collapse: collapse; font-variant-numeric: 
 }
 .uk-check.is-checked { background: var(--color-ok); border-color: var(--color-ok); }
 .uk-check.is-disabled { border-color: rgb(58 65 80 / 40%); color: #3A4150; cursor: default; }
+
+/* ---- 행 삭제 · 인라인 확인 (D3 — 계좌·MCP 목록 공용) ---- */
+.uk-col-actions { flex: 0 0 28px; display: flex; align-items: center; justify-content: flex-end; }
+.uk-row-delete {
+  width: 20px; height: 20px; padding: 0; border: 0; border-radius: 4px;
+  background: none; color: var(--color-k-faint);
+  font-family: var(--font-mono); font-size: 15px; line-height: 1;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+.uk-row-delete:hover:not(:disabled) { color: var(--color-warn); background: rgb(255 152 56 / 10%); }
+.uk-row-delete:disabled { color: rgb(107 116 128 / 40%); cursor: default; }
+
+.uk-row-confirm { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
+.uk-row-confirm-msg { font-family: var(--font-body); font-size: 12.5px; color: var(--color-k-dim); }
+/* 삭제 확정 버튼 — ghost 위에 경고색을 얹는다. primary(브랜드색)는 쓰지
+   않는다(MCP 카드는 "+ 서버 등록"이 이미 화면 내 유일한 브랜드색 자리다,
+   AT-ST-004 Desc 1.2). */
+.uk-btn.is-danger { color: var(--color-warn); border-color: rgb(255 152 56 / 42%); background: rgb(255 152 56 / 10%); }
+.uk-btn.is-danger:hover:not(:disabled) { background: rgb(255 152 56 / 18%); }
+
+/* ---- 카드별 닫기 (D7 — 계좌·MCP·stream·reader·table 5종 공용) ----
+   카드의 진짜 액션(등록·붙여넣기)과 경쟁하지 않도록 구분선 뒤 조용한
+   자리에 둔다 — 아이콘만, 배경 없음, 무채색. */
+.uk-card-close {
+  width: 20px; height: 20px; margin-left: 4px; padding-left: 14px;
+  border: 0; border-left: 1px solid var(--color-k-line-soft);
+  background: none; color: var(--color-k-faint);
+  font-family: var(--font-mono); font-size: 14px; line-height: 1;
+  cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.uk-card-close:hover { color: var(--color-k-text); }
