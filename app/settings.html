@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Athena — 설정</title>
+<link rel="stylesheet" href="styles/tokens.css" />
+<link rel="stylesheet" href="settings.css" />
+<link rel="stylesheet" href="styles/access.css" />
+</head>
+<body>
+  <main class="win" id="win" tabindex="-1">
+    <header class="settings-head">
+      <h1 class="settings-title" id="settingsTitle">설정</h1>
+      <button class="settings-close" id="settingsClose" type="button" aria-label="설정 닫기">
+        닫기 <span class="esc">ESC</span>
+      </button>
+    </header>
+
+    <div class="settings-body">
+      <section class="settings-group" aria-labelledby="secAccount">
+        <h2 class="settings-group-title" id="secAccount">계좌 · 인증</h2>
+
+        <dl class="settings-rows">
+          <div class="settings-row">
+            <dt>백엔드</dt>
+            <dd><span class="state" id="stBackend">확인 중…</span></dd>
+          </div>
+          <div class="settings-row">
+            <dt>자격증명</dt>
+            <dd><span class="state" id="stCred">확인 중…</span></dd>
+          </div>
+          <div class="settings-row">
+            <dt>접근토큰</dt>
+            <dd><span class="state" id="stToken">확인 중…</span></dd>
+          </div>
+          <div class="settings-row">
+            <dt>만료</dt>
+            <dd><span class="state mono" id="stExpires">—</span></dd>
+          </div>
+        </dl>
+
+        <div class="settings-actions">
+          <button class="btn" id="btnIssue" type="button">토큰 발급</button>
+          <button class="btn btn-warn" id="btnRevoke" type="button">토큰 폐기</button>
+          <button class="btn" id="btnRefresh" type="button">새로고침</button>
+          <span class="settings-msg" id="acctMsg" role="status" aria-live="polite"></span>
+        </div>
+
+        <div class="confirm" id="revokeConfirm" hidden>
+          <span class="confirm-text">폐기하면 다시 발급하기 전까지 조회가 멈춘다.</span>
+          <button class="btn btn-warn" id="btnRevokeYes" type="button">폐기한다</button>
+          <button class="btn" id="btnRevokeNo" type="button">취소</button>
+        </div>
+
+        <p class="settings-note">
+          앱키·시크릿키는 여기서 입력하지 않는다. 백엔드가 시작할 때
+          <code>.env</code>의 <code>ATHENA_KIWOOM_APP_KEY</code> ·
+          <code>ATHENA_KIWOOM_SECRET_KEY</code>에서만 읽고 메모리에만 들고 있다.
+          값을 바꾸려면 <code>.env</code>를 고치고 백엔드를 다시 시작한다.
+          계좌번호는 앱 설정이 아니라 발급된 토큰에 묶인다.
+        </p>
+      </section>
+
+      <section class="settings-group" aria-labelledby="secScreen">
+        <h2 class="settings-group-title" id="secScreen">화면</h2>
+
+        <div class="settings-toggle">
+          <label class="toggle">
+            <input type="checkbox" id="prefAutoExpand" />
+            <span class="toggle-label">질의하면 캔버스 창을 자동으로 연다</span>
+          </label>
+          <p class="toggle-note">끄면 캔버스는 열려 있을 때만 갱신된다.</p>
+        </div>
+
+        <div class="settings-toggle">
+          <label class="toggle">
+            <input type="checkbox" id="prefAutoGrow" />
+            <span class="toggle-label">답변 길이에 따라 대화 창이 자란다</span>
+          </label>
+          <p class="toggle-note">끄면 창 높이는 그립을 끌 때만 바뀐다.</p>
+        </div>
+      </section>
+
+      <section class="settings-group" aria-labelledby="secInfo">
+        <h2 class="settings-group-title" id="secInfo">정보</h2>
+        <dl class="settings-rows">
+          <div class="settings-row">
+            <dt>앱</dt>
+            <dd><span class="state mono" id="infoVersion">—</span></dd>
+          </div>
+          <div class="settings-row">
+            <dt>백엔드 주소</dt>
+            <dd><span class="state mono" id="infoBackend">—</span></dd>
+          </div>
+          <div class="settings-row">
+            <dt>설계 치수</dt>
+            <dd><span class="state mono" id="infoLayout">—</span></dd>
+          </div>
+        </dl>
+      </section>
+    </div>
+  </main>
+
+  <div class="glass-sheen" aria-hidden="true"></div>
+
+<script src="settings.js"></script>
+</body>
+</html>

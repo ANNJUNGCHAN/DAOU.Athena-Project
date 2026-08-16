@@ -49,7 +49,7 @@ function computeLayout() {
 }
 
 let layout;
-let chatWin, canvasWin;
+let chatWin, canvasWin, settingsWin;
 let chatHeight;
 let chatBottom; // 입력줄이 고정되는 화면 y좌표 — 위로만 자란다
 let canvasVisible = false;
@@ -194,6 +194,197 @@ ipcMain.on('athena:highlight-canvas', (e, type) => {
   if (canvasVisible) canvasWin.webContents.send('athena:highlight-canvas', type);
 });
 
+// ==================== 설정 ====================
+// 렌더러는 백엔드 주소도 bearer 토큰도 알지 못한다. 이 파일 안에서만 읽고 쓴다.
+// 렌더러로 나가는 것은 표시용 상태({backendReachable, configured, ready, expiresAt})뿐이다.
+
+const BACKEND_BASE_URL = (process.env.ATHENA_BACKEND_BASE_URL || 'http://127.0.0.1:8010').replace(/\/+$/, '');
+const PREFS_FILE = () => path.join(app.getPath('userData'), 'settings.json');
+
+// 비민감 값만 디스크에 쓴다. 자격증명·토큰은 절대 여기 들어오지 않는다
+// (backend/athena_api/kiwoom/auth.py의 "메모리 전용" 불변식을 앱 쪽에서도 지킨다).
+const PREF_DEFAULTS = { autoExpandCanvas: true, autoGrowChat: true };
+
+function readPrefs() {
+  try {
+    const raw = JSON.parse(fs.readFileSync(PREFS_FILE(), 'utf8'));
+    const out = { ...PREF_DEFAULTS };
+    for (const key of Object.keys(PREF_DEFAULTS)) {
+      if (typeof raw[key] === 'boolean') out[key] = raw[key];
+    }
+    return out;
+  } catch {
+    return { ...PREF_DEFAULTS };
+  }
+}
+
+function writePrefs(patch) {
+  const next = { ...readPrefs() };
+  for (const key of Object.keys(PREF_DEFAULTS)) {
+    if (typeof patch[key] === 'boolean') next[key] = patch[key];
+  }
+  try {
+    fs.mkdirSync(path.dirname(PREFS_FILE()), { recursive: true });
+    fs.writeFileSync(PREFS_FILE(), JSON.stringify(next, null, 2));
+  } catch (err) {
+    mdlog('writePrefs failed: ' + err.message);
+  }
+  return next;
+}
+
+function bearerToken() {
+  const t = (process.env.ATHENA_LOCAL_BEARER_TOKEN || '').trim();
+  return t || null;
+}
+
+async function backendRequest(method, route, body) {
+  const token = bearerToken();
+  if (!token) {
+    return {
+      ok: false,
+      error: 'ATHENA_LOCAL_BEARER_TOKEN이 없다. 백엔드와 같은 값을 Electron 프로세스에도 넣어야 한다.',
+    };
+  }
+  try {
+    const res = await fetch(`${BACKEND_BASE_URL}${route}`, {
+      method,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: method === 'POST' ? JSON.stringify(body || {}) : undefined,
+      signal: AbortSignal.timeout(8000),
+    });
+    let payload = null;
+    try { payload = await res.json(); } catch { payload = null; }
+    if (!res.ok) {
+      const detail = payload && (payload.detail || payload.message);
+      return { ok: false, status: res.status, error: detail ? String(detail) : `HTTP ${res.status}` };
+    }
+    return { ok: true, payload };
+  } catch (err) {
+    return { ok: false, error: err && err.name === 'TimeoutError' ? '백엔드 응답이 없다(8초 초과).' : String(err.message || err) };
+  }
+}
+
+async function readOAuthStatus() {
+  const r = await backendRequest('GET', '/api/v1/internal/oauth/status');
+  if (!r.ok) return { backendReachable: false, configured: false, ready: false, expiresAt: null, error: r.error };
+  const p = r.payload || {};
+  return {
+    backendReachable: true,
+    configured: !!p.configured,
+    ready: !!p.ready,
+    expiresAt: p.expires_at || null,
+  };
+}
+
+ipcMain.handle('athena:settings:status', async () => readOAuthStatus());
+
+// 토큰 발급/폐기 — 사용자가 버튼을 눌렀을 때만. 창 열기·닫기·새로고침은 이 경로에 닿지 않는다.
+// 화면에는 TR ID(au10001/au10002)를 노출하지 않는다 — 여기서만 쓴다.
+ipcMain.handle('athena:settings:token', async (e, { action } = {}) => {
+  if (action !== 'issue' && action !== 'revoke') {
+    return { ...(await readOAuthStatus()), ok: false, error: '알 수 없는 동작이다.' };
+  }
+  const trId = action === 'issue' ? 'au10001' : 'au10002';
+  const r = await backendRequest('POST', `/api/v1/internal/oauth/${trId}`);
+  const status = await readOAuthStatus();
+  if (!r.ok) return { ...status, ok: false, error: r.error };
+  return { ...status, ok: true };
+});
+
+// app.getName()/getVersion()은 `electron verify.js`처럼 앱 경로가 Electron 자신일 때
+// "Electron"/Electron 버전을 돌려준다(실측으로 확인 — 정보 줄이 "Electron 43.4.0 · Electron 43.4.0"이 됐다).
+// package.json을 직접 읽어 셸 자신의 이름·버전을 쓴다.
+function shellPackage() {
+  try {
+    return JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json'), 'utf8'));
+  } catch {
+    return { name: app.getName(), version: app.getVersion() };
+  }
+}
+
+ipcMain.handle('athena:settings:info', async () => ({
+  name: shellPackage().name,
+  version: shellPackage().version,
+  electron: process.versions.electron,
+  backendBaseUrl: BACKEND_BASE_URL,
+  layout: layout
+    ? { canvasW: layout.canvasW, canvasH: layout.canvasH, chatW: layout.chatW, chatBaseH: layout.chatBaseH, scale: layout.scale }
+    : { canvasW: DESIGN.canvasW, canvasH: DESIGN.canvasH, chatW: DESIGN.chatW, chatBaseH: DESIGN.chatBaseH, scale: 1 },
+}));
+
+ipcMain.handle('athena:settings:prefs:get', async () => readPrefs());
+ipcMain.handle('athena:settings:prefs:set', async (e, patch) => {
+  const next = writePrefs(patch || {});
+  // 대화 창은 이 값을 읽어 동작을 바꾼다 — 설정 창이 바꾸면 즉시 알린다.
+  if (chatWin && !chatWin.isDestroyed()) chatWin.webContents.send('athena:prefs-changed', next);
+  return next;
+});
+
+// ---------- 설정 창 — 대화 창과도 캔버스 창과도 별개인 독립 창 ----------
+// 이 창은 처음부터 안전 설정으로 태어난다: nodeIntegration:false, contextIsolation:true,
+// sandbox:true. 기존 두 창(nodeIntegration:true)과 달리 preload가 노출하는 좁은 API만 쓴다.
+// 높이 620 — 560에서는 '정보' 섹션 마지막 행(설계 치수)이 잘려 스크롤이 생겼다(실측).
+const SETTINGS_DESIGN = { w: 720, h: 620 };
+
+function notifyDotState(open) {
+  if (chatWin && !chatWin.isDestroyed()) chatWin.webContents.send('athena:settings-window', { open });
+}
+
+function createSettingsWindow() {
+  // 단일 인스턴스 — 이미 있으면 새로 만들지 않고 앞으로 가져온다.
+  if (settingsWin && !settingsWin.isDestroyed()) {
+    settingsWin.show();
+    settingsWin.focus();
+    settingsWin.moveTop();
+    return settingsWin;
+  }
+  const scale = layout ? layout.scale : 1;
+  const w = Math.round(SETTINGS_DESIGN.w * scale);
+  const h = Math.round(SETTINGS_DESIGN.h * scale);
+  // 캔버스 영역 중앙에 띄운다(캔버스가 숨어 있어도 그 자리를 기준으로 삼는다).
+  const x = layout ? layout.originX + Math.round((layout.canvasW - w) / 2) : 100;
+  const y = layout ? layout.originY + Math.round((layout.canvasH - h) / 2) : 100;
+
+  settingsWin = new BrowserWindow({
+    x, y, width: w, height: h,
+    frame: false,
+    resizable: false,
+    show: false,
+    alwaysOnTop: true,
+    backgroundColor: '#00000000',
+    backgroundMaterial: 'acrylic',
+    webPreferences: {
+      preload: path.join(__dirname, 'settings-preload.js'),
+      nodeIntegration: false,
+      contextIsolation: true,
+      sandbox: true,
+    },
+  });
+  settingsWin.loadFile('settings.html');
+  settingsWin.once('ready-to-show', () => {
+    settingsWin.show();
+    settingsWin.focus();
+    settingsWin.moveTop();
+    notifyDotState(true);
+  });
+  settingsWin.on('closed', () => {
+    settingsWin = null;
+    notifyDotState(false);
+  });
+  mdlog('settingsWin created');
+  return settingsWin;
+}
+
+function closeSettingsWindow() {
+  if (settingsWin && !settingsWin.isDestroyed()) settingsWin.close();
+}
+
+ipcMain.on('athena:open-settings', () => { createSettingsWindow(); });
+ipcMain.on('athena:settings:close', () => { closeSettingsWindow(); });
+
 // ---------- athena__render_canvas — 나중에 실제 MCP 툴 호출로 대체될 인터페이스 ----------
 // 지금은 개발용 트리거(대화 창의 Enter)가 이 모양으로 호출한다.
 ipcMain.handle('athena__render_canvas', async (e, { type, mock, expand }) => {
@@ -224,4 +415,12 @@ module.exports = {
   getDotScreenPoint,
   getWins: () => ({ chatWin, canvasWin }),
   getLayout: () => layout,
+  // 설정 — verify.js가 백엔드 없이도 계약을 검사할 수 있게 노출한다
+  readPrefs,
+  writePrefs,
+  readOAuthStatus,
+  getBackendBaseUrl: () => BACKEND_BASE_URL,
+  createSettingsWindow,
+  closeSettingsWindow,
+  getSettingsWin: () => settingsWin,
 };

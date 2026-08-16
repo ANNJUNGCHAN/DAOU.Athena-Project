@@ -17,6 +17,7 @@ let currentHeight = layout.chatBaseH;
 let state = 'idle'; // idle | judging | calling | done(즉시 idle로 수렴)
 let liveProgressEl = null;
 let abortToken = 0;
+let prefs = { autoExpandCanvas: true, autoGrowChat: true };
 
 // ---------- 부팅 게이지 ----------
 window.addEventListener('DOMContentLoaded', () => {
@@ -62,6 +63,7 @@ window.addEventListener('resize', () => {
 function scheduleHeightSync() {
   requestAnimationFrame(() => {
     if (manualOverride) return;
+    if (!prefs.autoGrowChat) return;
     const need = measureNeededHeight();
     ipcRenderer.send('athena:set-chat-height', { height: need, manual: false });
   });
@@ -116,10 +118,18 @@ function pickCanvasTypes(text) {
 }
 
 // ---------- 상태 전이 ----------
+let busyLocked = false;
+
 function setLocked(locked, text) {
-  $input.disabled = locked;
+  busyLocked = locked;
   $lockHint.hidden = !locked;
   if (text) $lockText.textContent = text;
+  syncInputEnabled();
+}
+
+// 입력줄은 자리를 지키지만, 바쁠 때는 받지 않는다.
+function syncInputEnabled() {
+  $input.disabled = busyLocked;
 }
 
 function setDot(mode) {
@@ -182,7 +192,11 @@ async function runQuery(text) {
     if (myToken !== abortToken) return;
 
     // athena__render_canvas 호출 인터페이스 — 나중에 실제 MCP 툴 호출로 대체될 자리.
-    await ipcRenderer.invoke('athena__render_canvas', { type, mock: true, expand: !opened });
+    await ipcRenderer.invoke('athena__render_canvas', {
+      type,
+      mock: true,
+      expand: prefs.autoExpandCanvas && !opened,
+    });
     opened = true;
 
     trEls[type].classList.add('done');
@@ -246,9 +260,26 @@ $input.addEventListener('keydown', (e) => {
   if (e.key === 'Enter' && state === 'idle') {
     const text = $input.value.trim() || '보유 종목 수급 요약해줘';
     $input.value = '';
+    // GLOSSARY.md §1: "설정은 커맨드바로도 반드시 도달할 수 있어야 한다. 빨간 점멸은 추가
+    // 진입로다. 커맨드바가 아닌 경로로만 갈 수 있으면 soul.md §8 탈락 조건에 걸린다."
+    if (isSettingsCommand(text)) {
+      ipcRenderer.send('athena:open-settings');
+      return;
+    }
     runQuery(text);
   }
 });
+
+// 커맨드바에서 설정을 부르는 말. 결정론적 매칭만 한다 — 애매하면 일반 질의로 흘린다.
+// "모델 창"은 설정창의 한 갈래다(GLOSSARY.md §1, ui/soul.md:52).
+// 주의: `\b`는 한글 뒤에서 성립하지 않는다(한글은 \w가 아니다) — 실측으로 첫 분기가 통째로 죽었다.
+// 단독 호출어는 문자열 전체 일치로, 나머지는 동사구로 잡는다.
+const SETTINGS_COMMAND =
+  /^(설정|환경설정|셋팅|세팅|settings?|config)\s*[?!.]*$|설정\s*(창|화면)?\s*(을|를)?\s*(열어|보여|띄워|줘|줄래)|모델\s*(바꿔|변경|설정)|계좌\s*(연결|설정)/i;
+
+function isSettingsCommand(text) {
+  return SETTINGS_COMMAND.test(text.trim());
+}
 
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
@@ -264,3 +295,32 @@ document.addEventListener('keydown', (e) => {
     }
   }
 });
+
+// ==================== 설정 창 ====================
+// 설정은 이 창도 캔버스 창도 아닌 별도의 창이다. 여기서는 열어달라고 요청만 한다.
+// 상태 조회·토큰 제어는 전부 설정 창이 자기 preload를 통해 직접 한다.
+
+$dot.addEventListener('click', () => {
+  ipcRenderer.send('athena:open-settings');
+});
+
+// 설정 창이 열리고 닫히는 것을 점의 형태로 알린다("지금 여기"를 유지한 채).
+ipcRenderer.on('athena:settings-window', (e, { open }) => {
+  $dot.classList.toggle('settings-open', !!open);
+});
+
+// ---------- 화면 설정 ----------
+// 설정 창에서 바꾸면 main이 방송한다. 이 창은 읽기만 한다.
+async function loadPrefs() {
+  try {
+    prefs = await ipcRenderer.invoke('athena:settings:prefs:get');
+  } catch {
+    /* 기본값 유지 */
+  }
+}
+
+ipcRenderer.on('athena:prefs-changed', (e, next) => {
+  if (next && typeof next === 'object') prefs = next;
+});
+
+loadPrefs();
