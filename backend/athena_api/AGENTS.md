@@ -3,6 +3,8 @@
 
 # athena_api
 
+> Terminology: [`GLOSSARY.md`](../../GLOSSARY.md) is the standard vocabulary for this repo. Use its definitions; register new terms there before using them in code.
+
 ## Purpose
 The FastAPI application package: configuration, lifecycle, security boundary, error translation, and
 the composition root that wires generated Kiwoom routes, the LLM selector, and the streaming fanout
