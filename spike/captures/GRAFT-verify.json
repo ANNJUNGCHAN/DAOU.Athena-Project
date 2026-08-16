@@ -35,6 +35,12 @@
     "server-everything__toggle-subscriber-updates",
     "server-everything__trigger-long-running-operation",
     "server-everything__simulate-research-query",
+    "drfirst-korea-stock-mcp__get_etfs_by_market_cap",
+    "drfirst-korea-stock-mcp__get_themes_with_leaders",
+    "drfirst-korea-stock-mcp__get_market_cap_stocks",
+    "drfirst-korea-stock-mcp__get_dividend_yield_stocks",
+    "drfirst-korea-stock-mcp__search_stock_code",
+    "drfirst-korea-stock-mcp__get_stock_price_by_code",
     "pykrx__get_stock_ohlcv",
     "pykrx__get_market_ticker_list",
     "pykrx__get_market_ticker_name",
@@ -43,20 +49,14 @@
     "pykrx__get_market_trading_value_by_date",
     "pykrx__get_etf_ohlcv_by_date",
     "pykrx__get_etf_ticker_list",
-    "drfirst-korea-stock-mcp__get_etfs_by_market_cap",
-    "drfirst-korea-stock-mcp__get_themes_with_leaders",
-    "drfirst-korea-stock-mcp__get_market_cap_stocks",
-    "drfirst-korea-stock-mcp__get_dividend_yield_stocks",
-    "drfirst-korea-stock-mcp__search_stock_code",
-    "drfirst-korea-stock-mcp__get_stock_price_by_code",
     "athena__render_canvas",
     "athena__save_canvas"
   ],
   "tool_count": 28,
   "tools_by_namespace": {
     "server-everything": 12,
-    "pykrx": 8,
     "drfirst-korea-stock-mcp": 6,
+    "pykrx": 8,
     "athena": 2
   },
   "calls": {
@@ -158,7 +158,9 @@
       "isError": true,
       "structuredContent_present": false,
       "result": {
-        "meta": null,
+        "meta": {
+          "athena/error_origin": "gateway-blocked"
+        },
         "content": [
           {
             "type": "text",

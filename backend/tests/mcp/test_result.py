@@ -40,6 +40,93 @@ def test_priority1_iserror_from_jjlabsio_nokey_capture():
     parsed = r.parse_call_tool_result(raw["result"])
     assert parsed.status == "error"
     assert parsed.error_message == "There is no DART API KEY"
+    # 진짜 upstream 에러다 — 게이트웨이가 만든 게 아니므로 마커가 없다.
+    assert parsed.error_origin is None
+
+
+# ---------------------------------------------------------------------------
+# error_origin — 게이트웨이 자신이 만든 에러와 진짜 upstream 에러를 구분하는
+# `_meta` 마커. server.py가 채우고 이 모듈은 읽기만 한다
+# (plan/paper-specs/02-MCP-응답-형상-전수조사.md §D-7).
+# ---------------------------------------------------------------------------
+
+
+def test_error_origin_read_from_meta_when_gateway_blocked():
+    raw = {
+        "content": [{"type": "text", "text": "승인되지 않은 툴이라 호출할 수 없다"}],
+        "structuredContent": None,
+        "isError": True,
+        "_meta": {r.ERROR_ORIGIN_META_KEY: "gateway-blocked"},
+    }
+    parsed = r.parse_call_tool_result(raw)
+    assert parsed.status == "error"
+    assert parsed.error_origin == "gateway-blocked"
+
+
+def test_error_origin_read_from_meta_when_upstream_failed():
+    raw = {
+        "content": [{"type": "text", "text": "upstream 호출 실패: 프로세스가 죽었다"}],
+        "structuredContent": None,
+        "isError": True,
+        "_meta": {r.ERROR_ORIGIN_META_KEY: "upstream-failed"},
+    }
+    parsed = r.parse_call_tool_result(raw)
+    assert parsed.error_origin == "upstream-failed"
+
+
+def test_error_origin_none_when_meta_absent():
+    """마커가 아예 없는 에러(대다수의 실제 upstream 에러) — "구분 불가"를
+    임의의 값으로 채우지 않고 정직하게 `None`으로 둔다."""
+    raw = {
+        "content": [{"type": "text", "text": "There is no DART API KEY"}],
+        "structuredContent": None,
+        "isError": True,
+    }
+    parsed = r.parse_call_tool_result(raw)
+    assert parsed.error_origin is None
+
+
+def test_error_origin_none_for_non_error_status():
+    """`status != "error"`면 `_meta`에 뭐가 있든 무관하게 항상 `None`이다 —
+    발생지점 구분은 에러에만 의미가 있다."""
+    raw = {
+        "content": [{"type": "text", "text": '{"a": 1}'}],
+        "structuredContent": None,
+        "isError": False,
+        "_meta": {r.ERROR_ORIGIN_META_KEY: "gateway-blocked"},
+    }
+    parsed = r.parse_call_tool_result(raw)
+    assert parsed.status == "json"
+    assert parsed.error_origin is None
+
+
+def test_error_origin_ignores_unknown_values():
+    """알려지지 않은 값이 마커 자리에 오면(다른 구현체가 실수로 같은 키를
+    다른 뜻으로 썼거나, 데이터 손상) 제3의 값을 지어내지 않고 `None`으로
+    떨어뜨린다 — 카드 설계가 값 두 개만 가정하고 있다는 계약을 지킨다."""
+    raw = {
+        "content": [{"type": "text", "text": "에러"}],
+        "structuredContent": None,
+        "isError": True,
+        "_meta": {r.ERROR_ORIGIN_META_KEY: "something-else"},
+    }
+    parsed = r.parse_call_tool_result(raw)
+    assert parsed.error_origin is None
+
+
+def test_error_origin_survives_calltoolresult_model_instance_via_by_alias():
+    """`CallToolResult` 모델 인스턴스로 들어와도(raw dict가 아니라) 마커를
+    읽어야 한다 — `_to_dict()`가 `by_alias=True`로 덤프하지 않으면 `meta`
+    필드가 파이썬 필드명(`"meta"`)으로 덤프되어 `_meta` 조회가 빗나간다."""
+    from mcp.types import CallToolResult, TextContent
+
+    obj = CallToolResult(
+        content=[TextContent(type="text", text="거부됨")],
+        isError=True,
+        _meta={r.ERROR_ORIGIN_META_KEY: "gateway-blocked"},
+    )
+    parsed = r.parse_call_tool_result(obj)
+    assert parsed.error_origin == "gateway-blocked"
 
 
 # ---------------------------------------------------------------------------
