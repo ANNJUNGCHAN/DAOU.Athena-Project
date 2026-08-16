@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import hashlib
+import json
 import socket
 import subprocess
 import sys
@@ -37,6 +38,7 @@ from athena_api.generated.registry import (
     OUTPUT_PROFILE_BY_ID,
     QUERY_TR_IDS,
     RESPONSE_PROJECTION_BY_TR_ID,
+    SPLIT_BASE_TR_IDS,
     TR_REGISTRY,
     WEBSOCKET_TR_IDS,
 )
@@ -131,15 +133,24 @@ def test_inventory_partition_and_static_openapi_coverage() -> None:
             if "x-kiwoom-tr-id" in operation:
                 assert operation["x-athena-llm-exposed"] is False
     assert len(operation_ids) == len(set(operation_ids))
-    assert len(operation_ids) == 335
+    # 301 generated (149 unsplit query bases + 115 projections + 12 order + 23 websocket
+    # + 2 oauth) plus 13 service routes. Matches the common-screen manifest's routable count.
+    assert len(operation_ids) == 314
+    manifest = json.loads(
+        (BACKEND / "ref" / "kiwoom-common-screen-manifest.json").read_text(encoding="utf-8")
+    )
+    assert manifest["counts"]["routable"] == 301
+    assert len(generated_router.routes) == 301
     assert set(llm_exposed) == {
         "llm_search_operations",
         "llm_describe_operation",
         "llm_resolve_operation",
         "llm_call_operation",
     }
-    assert len(base_tr_ids) == 208
-    assert set(base_tr_ids) == ALL_TR_IDS
+    assert len(base_tr_ids) == 186
+    assert set(base_tr_ids) == ALL_TR_IDS - SPLIT_BASE_TR_IDS
+    # Every split family is still reachable, through its projections rather than its base.
+    assert SPLIT_BASE_TR_IDS <= {DETAIL_REGISTRY[ref].tr_id for ref in DETAIL_REGISTRY}
 
 
 def test_catalog_exposes_embedded_output_profile_and_candidate_projection_routes() -> None:
@@ -258,18 +269,8 @@ async def test_all_candidate_base_and_projection_routes_preserve_runtime_contrac
             }
         )
 
-        fake.calls.clear()
-        base_path = f"/api/v1/tr/{spec.domain}/{tr_id}"
-        base_response = await endpoints[base_path](
-            payload, request, Response(), fake
-        )
-        assert base_response.model_dump(by_alias=True) == response_body
-        assert len(fake.calls) == 1
-        assert fake.calls[0][:3] == (tr_id, spec.upstream_path, request_body)
-        assert (fake.calls[0][3].cont_yn, fake.calls[0][3].next_key) == (
-            "Y",
-            "INPUT-NEXT",
-        )
+        # The base route is gone: these families are served only through projections.
+        assert f"/api/v1/tr/{spec.domain}/{tr_id}" not in endpoints
 
         for group in projection["groups"]:
             fake.calls.clear()
@@ -694,7 +695,7 @@ def test_batch_is_bounded_ordered_isolated_and_preserves_continuation() -> None:
     app.dependency_overrides[require_kiwoom_client] = lambda: fake
     items = [
         {
-            "tr_id": "ka10001",
+            "tr_id": "ka10006",
             "body": {"marker": index, "delay": (9 - index) / 1000, "fail": index == 4},
             "cont_yn": "Y" if index == 0 else "N",
             "next_key": "INPUT" if index == 0 else None,
@@ -719,7 +720,7 @@ def test_batch_is_bounded_ordered_isolated_and_preserves_continuation() -> None:
     assert results[0]["cont_yn"] == "Y" and results[0]["next_key"] == "NEXT"
     assert (fake.options[0].cont_yn, fake.options[0].next_key) == ("Y", "INPUT")
     assert results[4] == {
-        "tr_id": "ka10001",
+        "tr_id": "ka10006",
         "ok": False,
         "body": None,
         "cont_yn": "N",
@@ -750,7 +751,7 @@ def test_batch_does_not_mask_unexpected_programming_errors() -> None:
     app.dependency_overrides[require_kiwoom_client] = BrokenClient
     response = TestClient(app, raise_server_exceptions=False).post(
         "/api/v1/batch",
-        json={"items": [{"tr_id": "ka10001", "body": {}}]},
+        json={"items": [{"tr_id": "ka10006", "body": {}}]},
     )
     assert response.status_code == 500
 
@@ -760,7 +761,7 @@ def test_raw_query_preserves_body_and_continuation_headers() -> None:
     app = create_app(Settings())
     app.dependency_overrides[require_kiwoom_client] = lambda: fake
     response = TestClient(app).post(
-        "/api/v1/raw/tr/ka10001",
+        "/api/v1/raw/tr/ka10006",
         json={"stk_cd": "005930"},
         headers={"cont-yn": "Y", "next-key": "PREVIOUS"},
     )
@@ -769,8 +770,8 @@ def test_raw_query_preserves_body_and_continuation_headers() -> None:
     assert response.headers["cont-yn"] == "Y"
     assert response.headers["next-key"] == "NEXT-1"
     assert fake.calls[0][:3] == (
-        "ka10001",
-        TR_REGISTRY["ka10001"].upstream_path,
+        "ka10006",
+        TR_REGISTRY["ka10006"].upstream_path,
         {"stk_cd": "005930"},
     )
     options = fake.calls[0][3]
@@ -785,6 +786,37 @@ def test_generic_raw_route_cannot_reach_order_or_websocket_operations() -> None:
     assert client.post("/api/v1/raw/tr/kt10000", json={}).status_code == 404
     assert client.post("/api/v1/raw/tr/0D", json={}).status_code == 404
     assert fake.calls == []
+
+
+def test_raw_and_batch_cannot_reach_a_split_base_behind_the_typed_route() -> None:
+    """Removing the typed base route is only real if the passthroughs close too.
+
+    Both allowlists are built from READ_TR_IDS, so a split family is unreachable by
+    every HTTP door rather than just the one that was deleted.
+    """
+    fake = FakeClient()
+    app = create_app(Settings())
+    app.dependency_overrides[require_kiwoom_client] = lambda: fake
+    client = TestClient(app)
+
+    for tr_id in sorted(SPLIT_BASE_TR_IDS):
+        raw = client.post(f"/api/v1/raw/tr/{tr_id}", json={})
+        assert raw.status_code == 404, tr_id
+        assert raw.json()["detail"] == "Query TR is served through its detail projections"
+
+        batch = client.post("/api/v1/batch", json={"items": [{"tr_id": tr_id, "body": {}}]})
+        assert batch.status_code == 422, tr_id
+
+    assert fake.calls == []
+
+    # An unsplit family still passes through both doors untouched.
+    assert client.post("/api/v1/raw/tr/ka10006", json={}).status_code == 200
+    assert (
+        client.post(
+            "/api/v1/batch", json={"items": [{"tr_id": "ka10006", "body": {}}]}
+        ).status_code
+        == 200
+    )
 
 
 def test_order_requires_guards_and_idempotency_prevents_duplicate_submission() -> None:
@@ -901,7 +933,7 @@ async def test_cancelled_order_owner_during_finalization_marks_reservation_in_do
     for index in range(1023):
         completed = asyncio.Event()
         completed.set()
-        app.state.order_idempotency_cache[("kt10000", f"blocked-{index}")] = (
+        app.state.order_idempotency_cache[("", "kt10000", f"blocked-{index}")] = (
             OrderReservation("blocked", OrderState.IN_DOUBT, completed)
         )
 
@@ -920,7 +952,7 @@ async def test_cancelled_order_owner_during_finalization_marks_reservation_in_do
     finally:
         lock.release()
 
-    reservation = app.state.order_idempotency_cache[("kt10000", "cancel-finalize")]
+    reservation = app.state.order_idempotency_cache[("", "kt10000", "cancel-finalize")]
     assert reservation.state == "in_doubt"
     assert reservation.completed.is_set()
     with pytest.raises(HTTPException) as waiting_retry:

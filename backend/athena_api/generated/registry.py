@@ -382,6 +382,12 @@ DETAIL_REGISTRY: dict[str, DetailSpec] = {
     'detail:kt50032:gold_trade_history': DetailSpec('detail:kt50032:gold_trade_history', 'kt50032', 'gold_trade_history', '금현물 거래 내역', 'Gold spot transaction history', 'table', 10, ('gold_trde_hist',), models.Kt50032GoldTradeHistoryResponse),
 }
 
+# Base operations replaced by their detail projections. Derived from
+# DETAIL_REGISTRY so it can never drift from the projections themselves.
+SPLIT_BASE_TR_IDS = frozenset(detail.tr_id for detail in DETAIL_REGISTRY.values())
+# The callable read surface: unsplit query bases plus every detail projection.
+READ_TR_IDS = QUERY_TR_IDS - SPLIT_BASE_TR_IDS
+
 KA10007_DETAIL_MANIFEST: dict[str, Any] = next(
     projection
     for projection in RESPONSE_PROJECTION_MANIFEST['projections']

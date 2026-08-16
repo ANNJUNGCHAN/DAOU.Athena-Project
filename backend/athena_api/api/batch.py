@@ -10,7 +10,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from athena_api.dependencies import KiwoomClientDep
 from athena_api.errors import KiwoomApiError
-from athena_api.generated.registry import QUERY_TR_IDS, TR_REGISTRY
+from athena_api.generated.registry import READ_TR_IDS, SPLIT_BASE_TR_IDS, TR_REGISTRY
 from athena_api.kiwoom import RequestOptions
 
 _BATCH_CONCURRENCY = 5
@@ -27,7 +27,9 @@ class BatchItem(BaseModel):
     @field_validator("tr_id")
     @classmethod
     def http_query_only(cls, value: str) -> str:
-        if value not in QUERY_TR_IDS:
+        if value in SPLIT_BASE_TR_IDS:
+            raise ValueError("tr_id is served through its detail projections")
+        if value not in READ_TR_IDS:
             raise ValueError("tr_id is not an allowlisted HTTP query operation")
         return value
 

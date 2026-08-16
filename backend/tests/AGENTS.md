@@ -14,6 +14,8 @@ Pytest suites for the whole backend. `pyproject.toml` sets `testpaths = ["tests"
 |------|-------------|
 | `test_io_docs.py` | Verifies `docs/KIWOOM_API_IO.md` matches the generated inventory — fails on stale docs |
 | `test_common_screen_manifest.py` | Validates `ref/kiwoom-common-screen-manifest.json` structure |
+| `test_screen_injection_map.py` | Pins the 301→6-card partition and keeps `plan/kiwoom-common-screen-injection-map.md` byte-identical to a fresh render |
+| `test_screen_card_facts.py` | Recomputes every number the 화면설계서 Paper artboards print from the manifest, and asserts no credential/token alias reaches the generated facts file |
 
 ## Subdirectories
 | Directory | Purpose |

@@ -7,13 +7,14 @@ import json
 from collections.abc import Mapping
 from dataclasses import dataclass
 from types import MappingProxyType
-from typing import Literal
+from typing import Literal, get_args
 
 from pydantic import BaseModel
 
 from athena_api.generated.registry import (
     DETAIL_REGISTRY,
     OUTPUT_PROFILE_BY_ID,
+    SPLIT_BASE_TR_IDS,
     TR_REGISTRY,
 )
 
@@ -43,11 +44,58 @@ def _field_terms(model: type[BaseModel]) -> tuple[tuple[str, ...], tuple[str, ..
     return tuple(aliases), tuple(descriptions)
 
 
+def realtime_item_model(response_model: type[BaseModel]) -> type[BaseModel] | None:
+    """Return the per-event model carried by a websocket envelope's ``data`` list.
+
+    Every websocket response is the same four-field acknowledgement envelope
+    (``return_code``/``return_msg``/``trnm``/``data``). The stream's actual payload -
+    the FID fields a screen renders, such as ``"10": 현재가`` - lives one level down in
+    ``data[*]``. Reading the envelope alone tells a caller nothing about what the
+    subscription delivers, so both retrieval and ``describe`` unwrap it.
+    """
+    field = response_model.model_fields.get("data")
+    if field is None:
+        return None
+    for argument in get_args(field.annotation):
+        for inner in (argument, *get_args(argument)):
+            if isinstance(inner, type) and issubclass(inner, BaseModel):
+                return inner
+    return None
+
+
+def _realtime_field_terms(response_model: type[BaseModel]) -> tuple[str, ...]:
+    """Name every FID a realtime type emits, dropping the unit/format notes.
+
+    A generated FID description reads ``현재가 — 단위: 원, 부호가 포함된 숫자``. Only the
+    head is content; the tail after the em dash is formatting boilerplate repeated
+    across hundreds of unrelated fields, and indexing it would let "단위" or "숫자"
+    contribute to retrieval.
+
+    Only numerically keyed fields qualify. The four named ones an event also carries -
+    ``type``/``name``/``item``/``values``, described as "실시간항목", "실시간 항목명",
+    "실시간 등록 요소", "실시간 값 리스트" - are the delivery envelope, identical on all
+    23 types. Indexed, they hand every realtime type the token 실시간 for free, which is
+    the one token a realtime question always contains.
+    """
+    terms: list[str] = []
+    for name, field in response_model.model_fields.items():
+        if not (field.alias or name).isdigit():
+            continue
+        if field.description:
+            terms.append(field.description.split("—", 1)[0].strip())
+    return tuple(term for term in terms if term)
+
+
 @dataclass(frozen=True, slots=True)
 class OperationDocument:
     operation_ref: str
     kind: Literal["query", "order", "websocket", "oauth"]
     domain: str
+    # The catalog's own name for a vocabulary cluster. Operations inside one subcategory
+    # restate each other's terms in their domain, notes and field descriptions, so a score
+    # comparison between two of them is mostly a comparison of shared boilerplate. Across
+    # subcategories that is not true, and policy relies on the distinction.
+    subcategory: str | None
     tr_id: str
     group_id: str | None
     name: str
@@ -137,10 +185,26 @@ def _zones_for_base(tr_id: str) -> Mapping[str, tuple[str, ...]]:
     spec = TR_REGISTRY[tr_id]
     request_aliases, request_descriptions = _field_terms(spec.request_model)
     response_aliases, response_descriptions = _field_terms(spec.response_model)
+    # A websocket type's payload is one level below its acknowledgement envelope, and the
+    # envelope is byte-identical across all 23 types. Without this the only content-bearing
+    # vocabulary a realtime type owns is its two-word name.
+    realtime_model = (
+        realtime_item_model(spec.response_model) if spec.kind == "websocket" else None
+    )
     return MappingProxyType(
         {
-            "title": tuple(term for term in (spec.name, spec.overview) if term),
+            # The name alone. A TR's overview is prose, and for the 23 websocket types it is
+            # prose about the *subscription mechanism* - "실시간 항목 04(잔고)는 종목코드
+            # 등록과 상관 없이 ... 주문 체결이 발생할 경우 ..." - which is near-identical
+            # boilerplate across the surface. Scored at title weight it decided realtime
+            # retrieval on how verbose a type's registration note happened to be: "실시간
+            # 체결" ranked 04 잔고 and 0A 주식기세 above 0B 주식체결, whose note is one line.
+            "title": (spec.name,) if spec.name else (),
+            "overview": (spec.overview,) if spec.overview else (),
             "family_projection": _DETAIL_TITLES_BY_TR.get(tr_id, ()),
+            "realtime_field": (
+                _realtime_field_terms(realtime_model) if realtime_model is not None else ()
+            ),
             "domain": tuple(
                 term for term in (spec.domain, spec.category, spec.subcategory) if term
             ),
@@ -179,6 +243,7 @@ def _catalog_version(documents: tuple[OperationDocument, ...]) -> str:
             "operation_ref": document.operation_ref,
             "kind": document.kind,
             "domain": document.domain,
+            "subcategory": document.subcategory,
             "tr_id": document.tr_id,
             "group_id": document.group_id,
             "name": document.name,
@@ -216,6 +281,7 @@ def build_operation_catalog() -> OperationCatalog:
                 operation_ref=f"base:{tr_id}",
                 kind=spec.kind,  # type: ignore[arg-type]
                 domain=spec.domain,
+                subcategory=spec.subcategory,
                 tr_id=tr_id,
                 group_id=None,
                 name=spec.name,
@@ -228,7 +294,14 @@ def build_operation_catalog() -> OperationCatalog:
                 response_model=spec.response_model,
                 searchable_zones=_zones_for_base(tr_id),
                 visibility=visibility,
-                generic_callable=spec.kind == "query",
+                # Callable does not mean reachable by a vague question. Order and websocket
+                # operations keep `explicit` visibility, so a natural-language search never
+                # ranks them; the model must declare the intent and then name the operation.
+                # A split family is the inverse: searchable, but replaced by its projections.
+                generic_callable=(
+                    spec.kind in {"query", "order", "websocket"}
+                    and tr_id not in SPLIT_BASE_TR_IDS
+                ),
                 request_schema_hash=model_schema_hash(spec.request_model),
                 response_schema_hash=model_schema_hash(spec.response_model),
             )
@@ -241,6 +314,7 @@ def build_operation_catalog() -> OperationCatalog:
                 operation_ref=operation_ref,
                 kind="query",
                 domain=base.domain,
+                subcategory=base.subcategory,
                 tr_id=detail.tr_id,
                 group_id=detail.group_id,
                 name=base.name,

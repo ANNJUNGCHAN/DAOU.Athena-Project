@@ -39,6 +39,16 @@ class UnknownDetailGroupError(SelectorError):
     code = "UNKNOWN_DETAIL_GROUP"
 
 
+class DetailGroupRequiredError(SelectorError):
+    """The family was replaced by its projections, so a ``detail_group`` is mandatory.
+
+    Distinct from UnknownDetailGroupError: the caller named no group at all, and the
+    response carries every group it may choose from.
+    """
+
+    code = "DETAIL_GROUP_REQUIRED"
+
+
 class InvalidArgumentsError(SelectorError):
     code = "INVALID_ARGUMENTS"
 
