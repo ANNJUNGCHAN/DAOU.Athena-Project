@@ -1,0 +1,157 @@
+/* 설정 창 — 독립 BrowserWindow.
+ * 뒤에 캔버스 창(고밀도 데이터)이 오므로 유리를 두껍게 잡는다.
+ * two-windows.md 실측: 기본(뒤=데스크톱) 다크 알파 ~0.82 / 확장(뒤=캔버스) ~0.97.
+ * 설정 창은 항상 후자 상황이라 0.97 고정이다.
+ * 마젠타(#ee137b)는 여기 쓰지 않는다 — "한 화면에 마젠타는 한 곳"의 그 한 곳은 대화 창의 점이다.
+ */
+html, body { background: transparent; }
+
+.glass-sheen {
+  position: fixed; inset: 0; pointer-events: none;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0) 45%);
+  z-index: 5;
+}
+
+.win {
+  position: fixed; inset: 0;
+  display: flex; flex-direction: column;
+  background: rgba(23, 27, 36, var(--glass-alpha, 0.97));
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+  padding: 18px 28px 22px;
+}
+
+.settings-head {
+  flex-shrink: 0;
+  display: flex; align-items: baseline; justify-content: space-between;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--color-k-line-soft);
+  -webkit-app-region: drag; /* 프레임이 없으므로 헤더로 창을 옮긴다 */
+}
+.settings-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 15px;
+  letter-spacing: 3px;
+  color: var(--color-k-text);
+}
+.settings-close {
+  -webkit-app-region: no-drag;
+  display: flex; align-items: center; gap: 8px;
+  background: transparent; border: none; cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--color-k-dim);
+  padding: 2px 0;
+}
+.settings-close:hover { color: var(--color-k-text); }
+.settings-close:focus-visible { outline: 2px solid var(--color-k-text); outline-offset: 2px; }
+.settings-close .esc {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-k-faint);
+  border: 1px solid var(--color-k-line);
+  border-radius: 4px;
+  padding: 1px 6px;
+}
+
+.settings-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding-top: 16px;
+  display: flex; flex-direction: column; gap: 22px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-k-line) transparent;
+}
+.settings-body::-webkit-scrollbar { width: 8px; }
+.settings-body::-webkit-scrollbar-track { background: transparent; }
+.settings-body::-webkit-scrollbar-thumb {
+  background: var(--color-k-line);
+  border-radius: 999px;
+}
+.settings-body::-webkit-scrollbar-thumb:hover { background: var(--color-k-faint); }
+
+/* 창 컨테이너는 포커스를 받되 테두리를 그리지 않는다(프로그램적 포커스용) */
+.win:focus { outline: none; }
+
+.settings-group { display: flex; flex-direction: column; gap: 10px; }
+.settings-group-title {
+  margin: 0;
+  font-family: var(--font-strong);
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--color-k-faint);
+}
+
+.settings-rows { margin: 0; display: flex; flex-direction: column; gap: 6px; }
+.settings-row {
+  display: grid; grid-template-columns: 96px 1fr; align-items: baseline; gap: 12px;
+}
+.settings-row dt { font-size: 13px; color: var(--color-k-dim); }
+.settings-row dd { margin: 0; }
+
+.state { font-size: 13px; color: var(--color-k-text); }
+.state.mono { font-family: var(--font-mono); font-size: 12px; color: var(--color-k-dim); }
+.state.ok { color: var(--color-ok); }
+.state.warn { color: var(--color-warn); }
+.state.off { color: var(--color-k-faint); }
+
+.settings-actions {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  padding-top: 4px;
+}
+.btn {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--color-k-text);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--color-k-line);
+  border-radius: 6px;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: border-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+}
+.btn:hover:not(:disabled) { border-color: var(--color-k-dim); }
+.btn:focus-visible { outline: 2px solid var(--color-k-text); outline-offset: 2px; }
+.btn:disabled { color: var(--color-k-faint); border-color: var(--color-k-line-soft); cursor: default; }
+.btn-warn:not(:disabled) { color: var(--color-warn); border-color: rgba(255, 152, 56, 0.35); }
+.btn-warn:hover:not(:disabled) { border-color: var(--color-warn); }
+
+.settings-msg { font-size: 12px; color: var(--color-k-dim); }
+.settings-msg.ok { color: var(--color-ok); }
+.settings-msg.warn { color: var(--color-warn); }
+
+/* 폐기 확인 — 되돌릴 수 없는 부수효과라 2단 확인을 둔다 */
+.confirm {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  border: 1px solid rgba(255, 152, 56, 0.35);
+  border-radius: 8px;
+  padding: 8px 12px;
+  background: rgba(255, 152, 56, 0.06);
+}
+.confirm-text { font-size: 12px; color: var(--color-k-text); }
+
+.settings-note {
+  margin: 2px 0 0;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--color-k-faint);
+}
+.settings-note code {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-k-dim);
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 3px;
+  padding: 1px 4px;
+}
+
+.settings-toggle { display: flex; flex-direction: column; gap: 3px; }
+.toggle { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+.toggle input { accent-color: var(--color-k-dim); width: 14px; height: 14px; cursor: pointer; }
+.toggle input:focus-visible { outline: 2px solid var(--color-k-text); outline-offset: 2px; }
+.toggle-label { font-size: 13px; color: var(--color-k-text); }
+.toggle-note { margin: 0 0 0 24px; font-size: 12px; color: var(--color-k-faint); }

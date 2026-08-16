@@ -10,7 +10,7 @@
 // 막아야 한다 — verify.js가 createWindows()를 직접, 통제된 시점에 호출한다.
 process.env.ATHENA_NO_AUTOSTART = '1';
 
-const { app, ipcMain } = require('electron');
+const { app, ipcMain, BrowserWindow } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const { execFileSync } = require('child_process');
@@ -266,6 +266,129 @@ app.whenReady().then(async () => {
     bottomEdgePinned: near(beforeDrag.y + beforeDrag.height, afterDrag.y + afterDrag.height),
   };
   console.log('[verify] 검증6(수동 리사이즈):', JSON.stringify(report.manualResize));
+
+  // ---------- 검증 7: 설정 창 — 대화 창과도 캔버스 창과도 별개인 독립 창 ----------
+  const winCountBefore = BrowserWindow.getAllWindows().length;
+  const chatBoundsBefore = chatWin.getBounds();
+  const canvasBoundsBefore = canvasWin.getBounds();
+
+  await chatWin.webContents.executeJavaScript("document.getElementById('dot').click()");
+  await wait(900);
+
+  const settingsWin = mainMod.getSettingsWin();
+  const winCountAfterOpen = BrowserWindow.getAllWindows().length;
+
+  // 두 번 눌러도 창은 하나여야 한다(단일 인스턴스)
+  await chatWin.webContents.executeJavaScript("document.getElementById('dot').click()");
+  await wait(400);
+  const winCountAfterSecondClick = BrowserWindow.getAllWindows().length;
+
+  const settingsProbe = settingsWin && !settingsWin.isDestroyed()
+    ? await settingsWin.webContents.executeJavaScript(`
+        (() => ({
+          url: location.pathname.split('/').pop(),
+          // nodeIntegration:false 증명 — 렌더러에 require가 없다
+          hasRequire: typeof require !== 'undefined',
+          // contextIsolation + preload 증명 — contextBridge가 심은 API만 있다
+          hasBridge: typeof window.athenaSettings === 'object' && window.athenaSettings !== null,
+          bridgeKeys: Object.keys(window.athenaSettings || {}).sort(),
+          backendState: document.getElementById('stBackend').textContent,
+          issueDisabled: document.getElementById('btnIssue').disabled,
+          revokeDisabled: document.getElementById('btnRevoke').disabled,
+          revokeConfirmHidden: document.getElementById('revokeConfirm').hidden,
+          trIdLeak: /au1000[12]/.test(document.body.innerText),
+          bearerLeak: /ATHENA_LOCAL_BEARER_TOKEN\s*=/.test(document.body.innerText),
+        }))()
+      `)
+    : null;
+
+  const chatProbe = await chatWin.webContents.executeJavaScript(`
+    (() => ({
+      historyVisible: !document.getElementById('history').hidden,
+      dotMarked: document.getElementById('dot').classList.contains('settings-open'),
+      inputDisabled: document.getElementById('input').disabled,
+      hasSettingsMarkup: !!document.getElementById('settings'),
+    }))()
+  `);
+  const chatBoundsWhileOpen = chatWin.getBounds();
+  const canvasBoundsWhileOpen = canvasWin.getBounds();
+  if (settingsWin && !settingsWin.isDestroyed()) await shot(settingsWin, '17-settings-window.png');
+
+  // ESC로 닫는다
+  if (settingsWin && !settingsWin.isDestroyed()) {
+    await settingsWin.webContents.executeJavaScript(
+      "document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))"
+    );
+  }
+  await wait(600);
+  const winCountAfterClose = BrowserWindow.getAllWindows().length;
+  const chatProbeAfter = await chatWin.webContents.executeJavaScript(
+    "document.getElementById('dot').classList.contains('settings-open')"
+  );
+
+  report.settingsWindow = {
+    // 별도 창이다 — 클릭하면 창이 하나 늘어난다
+    openedAsSeparateWindow: winCountAfterOpen === winCountBefore + 1,
+    loadedSettingsHtml: settingsProbe ? settingsProbe.url === 'settings.html' : false,
+    singleInstance: winCountAfterSecondClick === winCountAfterOpen,
+    // 대화 창·캔버스 창은 건드리지 않는다
+    chatBoundsUnchanged:
+      near(chatBoundsBefore.height, chatBoundsWhileOpen.height) && near(chatBoundsBefore.y, chatBoundsWhileOpen.y),
+    canvasBoundsUnchanged:
+      near(canvasBoundsBefore.width, canvasBoundsWhileOpen.width) && near(canvasBoundsBefore.height, canvasBoundsWhileOpen.height),
+    chatHistoryStaysVisible: chatProbe.historyVisible === true,
+    chatInputStaysEnabled: chatProbe.inputDisabled === false,
+    noSettingsMarkupInChat: chatProbe.hasSettingsMarkup === false,
+    dotMarkedWhileOpen: chatProbe.dotMarked === true,
+    // 설정 창은 처음부터 안전 설정으로 태어난다
+    nodeIntegrationOff: settingsProbe ? settingsProbe.hasRequire === false : false,
+    contextBridgeOnly: settingsProbe ? settingsProbe.hasBridge === true : false,
+    bridgeSurface: settingsProbe ? settingsProbe.bridgeKeys : null,
+    // 백엔드가 없는 검증 환경에서는 "연결 안 됨"이 정상이고 토큰 버튼은 잠겨야 한다
+    backendState: settingsProbe ? settingsProbe.backendState : null,
+    tokenButtonsLockedWhenUnreachable:
+      settingsProbe && settingsProbe.backendState !== '연결됨'
+        ? (settingsProbe.issueDisabled && settingsProbe.revokeDisabled)
+        : null,
+    revokeConfirmHiddenInitially: settingsProbe ? settingsProbe.revokeConfirmHidden === true : false,
+    noTrIdLeak: settingsProbe ? settingsProbe.trIdLeak === false : false,
+    noBearerLeak: settingsProbe ? settingsProbe.bearerLeak === false : false,
+    closedByEsc: winCountAfterClose === winCountBefore,
+    dotUnmarkedAfterClose: chatProbeAfter === false,
+  };
+  console.log('[verify] 검증7(설정 창):', JSON.stringify(report.settingsWindow));
+
+  // ---------- 검증 8: 커맨드바로도 설정에 도달한다 ----------
+  // GLOSSARY.md §1 — 점 클릭은 "추가" 진입로다. 커맨드바 경로가 없으면 soul.md §8 탈락 조건.
+  const winCountBeforeCmd = BrowserWindow.getAllWindows().length;
+  await chatWin.webContents.executeJavaScript(`
+    (() => {
+      const el = document.getElementById('input');
+      el.value = '설정';
+      el.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    })();
+  `);
+  await wait(900);
+  const cmdWin = mainMod.getSettingsWin();
+  const winCountAfterCmd = BrowserWindow.getAllWindows().length;
+  const chatAfterCmd = await chatWin.webContents.executeJavaScript(`
+    (() => ({
+      inputCleared: document.getElementById('input').value === '',
+      turnCount: document.querySelectorAll('.turn-q').length,
+    }))()
+  `);
+  if (cmdWin && !cmdWin.isDestroyed()) cmdWin.close();
+  await wait(400);
+
+  report.settingsCommandBar = {
+    openedByCommand: winCountAfterCmd === winCountBeforeCmd + 1,
+    inputCleared: chatAfterCmd.inputCleared === true,
+    // 설정 명령은 질의로 흘러가지 않는다 — 이력에 질문이 추가되면 안 된다
+    notTreatedAsQuery: chatAfterCmd.turnCount === report.e2eTrigger.canvasChipCount / 3,
+    turnCountAfter: chatAfterCmd.turnCount,
+    closedAfterCheck: BrowserWindow.getAllWindows().length === winCountBeforeCmd,
+  };
+  console.log('[verify] 검증8(커맨드바 진입):', JSON.stringify(report.settingsCommandBar));
 
   report.finishedAt = new Date().toISOString();
   fs.writeFileSync(path.join(CAPTURES, 'VERIFY-REPORT.json'), JSON.stringify(report, null, 2));
