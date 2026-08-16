@@ -1,0 +1,51 @@
+<!-- Parent: ../AGENTS.md -->
+<!-- Generated: 2026-08-16 | Updated: 2026-08-16 -->
+
+# ui
+
+## Purpose
+The design contract for Athena's interface: identity, color tokens, glass/effect rules, and the
+outcome of design rounds. `app/` implements against these documents; they are specifications, not
+inspiration notes.
+
+## Key Files
+| File | Description |
+|------|-------------|
+| `soul.md` | Core design principles. §8 "정보 정직성 — 숫자가 읽히는가?" is the rule that killed the residual-blur bug in `app/` |
+| `DESIGN-SOUL.md` | Extended design-soul document |
+| `palette.md` | Color tokens (`--color-k-*`), typography including tabular figures / `--font-mono`, light-background adaptation (not yet implemented) |
+| `liquid-glass.md` | Liquid-glass surface treatment |
+| `effects.md` | Motion and effect rules |
+| `brand.md` | Brand definition |
+
+## Subdirectories
+| Directory | Purpose |
+|-----------|---------|
+| `round-1R/` | **Current decision round.** `two-windows.md` is the E3 confirmed two-window spec `app/` implements; plus `answer.md`, `ranking.md` |
+| `round-1/` | Superseded first round (`ranking.md`) |
+| `moodboard/` | Reference imagery + `moodboard.md` + `참고url.txt` |
+| `brand/` | Brand assets (`its-logo.jpg`) |
+| `method/` | `화면기획서_양식.pdf` — screen-spec template |
+
+## For AI Agents
+
+### Working In This Directory
+- `round-1R/two-windows.md` is the authoritative window spec; `round-1/` is history — don't cite it.
+- When a spec value cannot be implemented, record why in the implementing code and in `app/README.md`
+  rather than silently dropping it (e.g. Electron `backgroundMaterial` exposes no runtime blur radius,
+  so the "refraction 0.46→0.17" value is unimplementable as written).
+- Palette changes must reach `app/styles/tokens.css`; the CSS custom properties are the shared surface.
+- Accessibility is part of the contract, not an add-on: `prefers-reduced-transparency`,
+  `prefers-contrast`, and `prefers-reduced-motion` all have implemented rules in `app/styles/access.css`.
+- Documents are Korean.
+
+### Testing Requirements
+Design compliance is checked visually against `app/captures/*.png` produced by `npm run verify`,
+including the three forced-accessibility captures (05–07).
+
+## Dependencies
+
+### Internal
+- Implemented by `app/styles/tokens.css`, `app/styles/access.css`, `app/chat.css`, `app/canvas.css`
+
+<!-- MANUAL: -->
