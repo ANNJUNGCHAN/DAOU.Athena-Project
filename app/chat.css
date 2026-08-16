@@ -289,7 +289,11 @@ html, body { background: transparent; }
   align-items: center;
   justify-content: space-between;
 }
-.onb-cli-account-row.is-active { background: rgb(238 19 123 / 10%); }
+/* D5 — [계속]이 화면 내 유일한 브랜드색 요소여야 한다(AT-SY-002 Desc 5, ui-kit.css
+   .uk-badge.is-active 주석과 같은 결정). 목업 픽셀은 이 행 배경에도 브랜드색
+   10%를 썼지만 규칙 쪽을 택해 중립 흰색 알파로 바꿨다 — switch-row.is-active와
+   같은 톤(rgb(255 255 255 / 6%))을 재사용한다. */
+.onb-cli-account-row.is-active { background: rgb(255 255 255 / 6%); }
 .onb-cli-account-row.is-clickable { cursor: pointer; }
 .onb-cli-account-row.is-clickable:hover { background: rgb(255 255 255 / 5%); }
 .onb-cli-email {
@@ -489,7 +493,11 @@ html, body { background: transparent; }
 .switch-row.is-active { background: rgb(255 255 255 / 6%); border-color: rgb(255 255 255 / 22%); }
 .switch-row.is-clickable { cursor: pointer; }
 .switch-row.is-clickable:hover { background: rgb(255 255 255 / 4%); }
-.switch-row.is-selected { border-color: var(--color-brand); }
+/* D5 — 이 화면(계좌 전환)의 유일한 브랜드색 요소는 "전환하고 다시 인증" 버튼
+   (uk-btn-primary)이어야 한다. 선택 표시를 브랜드색 테두리로 하면 같은 화면에
+   브랜드 요소가 2개가 된다 — 중립 밝은 흰색 테두리로 바꿔 선택 상태 표시 기능은
+   유지하되(is-active 22%보다 밝게 해 구분됨) 브랜드색은 버튼 하나에만 남긴다. */
+.switch-row.is-selected { border-color: rgb(255 255 255 / 55%); }
 .switch-dot {
   width: 7px; height: 7px; border-radius: 999px; flex: none;
   border: 1px solid rgb(255 255 255 / 22%);

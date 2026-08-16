@@ -1,6 +1,5 @@
-// CLI 공급자 4종(AT-SY-002) — Athena가 부릴 Claude/Gemini/Codex/Grok CLI
-// 계정을 연결·전환한다. `plan/paper-specs/01-CLI-로그인-조사.md`(조사 완료)
-// 실측 근거:
+// CLI 공급자(AT-SY-002) — Athena가 부릴 CLI 계정을 연결·전환한다.
+// `plan/paper-specs/01-CLI-로그인-조사.md`(조사 완료) 실측 근거:
 //   - Claude: 설치됨. `claude auth login` 서브커맨드. 이메일은
 //     `~/.claude.json`의 `oauthAccount.emailAddress`에서 비밀값을 건드리지
 //     않고 읽을 수 있다(조사 문서 결론). 자격증명 자체(`~/.claude/.credentials.json`)는
@@ -9,14 +8,23 @@
 //     "probe만 해도(중단해도) 기존 세션을 로그아웃시킨다"는 파괴적 부작용이
 //     조사 중 실측됐다. 이메일은 얻을 수 없다(`auth.json`엔 `account_id`
 //     UUID만 평문, 나머지는 토큰) — 그래서 라벨은 `account_id`만 쓴다.
-//   - Gemini/Grok: 이 컴퓨터에 설치돼 있지 않다(조사 결과, `where`/`npm
-//     list -g`/`pip list`/`winget list` 전수 실패). 로그인 명령 자체가
-//     미검증이다.
 //
 // 브라우저 로그인 연동 방식은 스펙 각주 자체가 "미정 — 협의 필요"(빨간 글씨)로
 // 명시한 미해결 이슈다(AT-SY-002 §Open questions 4). 여기서는 각 CLI의 실제
 // 서브커맨드를 사용자가 보이는 터미널 창에서 직접 실행하게 위임한다(OAuth
 // 리다이렉트를 이 프로세스가 가로채지 않는다) — 그 창에서 사용자가 완료한다.
+//
+// D6 — 설계 위반을 명시한다: AT-SY-002 Description 2는 "지원하는 CLI 4종을
+// 고정 순서로 노출... 설치 여부를 탐지하지 않는다"고 못박는다. 이 파일은
+// Claude·Codex 2종만 노출한다 — 원래는 Gemini·Grok도 포함한 4종이었다. 이유는
+// 위 조사가 명시하듯 Gemini·Grok은 이 머신에 설치돼 있지 않아 로그인 명령·
+// 자격증명 경로가 전부 **미검증 추정치**였기 때문이다(검증 안 된 명령을 실제
+// spawn 대상으로 노출하면 사용자가 누른 버튼이 조용히 실패하거나, 최악의 경우
+// 엉뚱한 바이너리를 찾아 실행할 수 있다). 사용자가 "실측 확인된 것만 보여준다"로
+// 결정했다. 복원하려면: Gemini·Grok CLI를 실제로 설치한 머신에서
+// `01-CLI-로그인-조사.md`와 같은 방식으로 `--help`/로그인 서브커맨드/TTY 요구·
+// 자격증명 경로를 실측 검증한 뒤, 아래 PROVIDER_ORDER·PROVIDER_NAMES·
+// LOGIN_COMMANDS에 두 항목을 되돌리면 된다.
 
 const fs = require('fs');
 const os = require('os');
@@ -24,8 +32,10 @@ const path = require('path');
 const { spawn } = require('child_process');
 const { app } = require('electron');
 
-const PROVIDER_ORDER = ['claude', 'gemini', 'codex', 'grok'];
-const PROVIDER_NAMES = { claude: 'Claude', gemini: 'Gemini', codex: 'Codex', grok: 'Grok' };
+// 고정 순서 규칙(AT-SY-002 Description 2)은 유지한다 — Claude 다음 Codex.
+// Gemini·Grok이 빠진 이유는 위 D6 주석 참고.
+const PROVIDER_ORDER = ['claude', 'codex'];
+const PROVIDER_NAMES = { claude: 'Claude', codex: 'Codex' };
 
 const LOGIN_COMMANDS = {
   claude: {
@@ -37,16 +47,6 @@ const LOGIN_COMMANDS = {
     command: 'codex',
     args: ['login'],
     message: '터미널에서 로그인 진행 — 로컬 콜백으로 자동 완료된다. 주의: 중단해도 기존 로그인 세션이 로그아웃될 수 있다(조사 문서 실측).',
-  },
-  gemini: {
-    command: 'gemini',
-    args: ['auth', 'login'],
-    message: 'Gemini CLI 로그인 명령은 이 조사에서 검증되지 않았다(설치 확인 안 됨).',
-  },
-  grok: {
-    command: 'grok',
-    args: ['auth', 'login'],
-    message: 'Grok CLI 로그인 명령은 이 조사에서 검증되지 않았다(설치 확인 안 됨).',
   },
 };
 
