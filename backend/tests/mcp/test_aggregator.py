@@ -182,3 +182,40 @@ def test_clear_progress_token_removes_it():
     a.register_progress_token("downstream-1", "dart", "upstream-token-abc")
     a.clear_progress_token("downstream-1")
     assert a.resolve_progress_token("downstream-1") is None
+
+
+# ---------------------------------------------------------------------------
+# find_input_schema — server.py의 quirks(truncate_at) 안전 주입이 쓴다
+# ---------------------------------------------------------------------------
+
+
+def test_find_input_schema_returns_currently_exposed_schema():
+    a = agg.ToolAggregator()
+    schema = {"type": "object", "properties": {"truncate_at": {"type": "integer"}}}
+    a.update_alias_tools("dart", [FakeTool("search_disclosure", inputSchema=schema)])
+    assert a.find_input_schema("dart__search_disclosure") == schema
+
+
+def test_find_input_schema_unknown_qualified_name_returns_none():
+    a = agg.ToolAggregator()
+    assert a.find_input_schema("nope__nope") is None
+
+
+def test_find_input_schema_missing_schema_defaults_to_empty_dict():
+    """`inputSchema`를 안 준 FakeTool은 aggregator가 `{}`로 채운다 — find_input_schema는
+    그 빈 dict를 그대로 돌려준다(None이 아니다)."""
+    a = agg.ToolAggregator()
+    a.update_alias_tools("dart", [FakeTool("search_disclosure")])
+    assert a.find_input_schema("dart__search_disclosure") == {}
+
+
+def test_find_input_schema_stale_after_rename_returns_none():
+    """rename 후에는 옛 qualified_name의 노출 목록이 사라지므로 스키마도 못
+    찾는다 — `resolve()`(리졸루션 테이블)와 다르게 `_exposed_by_alias`
+    (현재 노출)만 보는 설계라서다. 에러가 아니라 None(안전한 폴백)."""
+    a = agg.ToolAggregator()
+    schema = {"type": "object", "properties": {"truncate_at": {"type": "integer"}}}
+    a.update_alias_tools("old-name", [FakeTool("search_disclosure", inputSchema=schema)])
+    a.rename_alias("old-name", "new-name")
+    assert a.find_input_schema("old-name__search_disclosure") is None
+    assert a.find_input_schema("new-name__search_disclosure") == schema

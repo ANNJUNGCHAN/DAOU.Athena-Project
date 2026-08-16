@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import json
 import sys
 from pathlib import Path
@@ -11,6 +12,7 @@ from pathlib import Path
 import pytest
 from mcp import types
 
+from athena_mcp import quirks
 from athena_mcp.aggregator import ToolAggregator
 from athena_mcp.consent import ConsentStore
 from athena_mcp.registry import ServerRegistry
@@ -46,6 +48,81 @@ def gateway(tmp_path) -> AthenaGateway:
 async def _connected(gateway: AthenaGateway, tmp_path) -> AthenaGateway:
     await gateway.connect("fixture", log_dir=tmp_path / "logs")
     return gateway
+
+
+class _FakeUpstreamHandle:
+    """`UpstreamServerHandle`을 흉내내는 테스트 더블.
+
+    A3(취소/진행토큰 배선)·A4(truncate_at 주입)는 실제 subprocess 왕복 없이도
+    `dispatch_call()`의 배선 로직 자체를 검증할 수 있다 — `fake_server.py`는
+    다른 에이전트가 소유한 픽스처라 진행 알림/블로킹 툴을 새로 추가할 수 없어,
+    이 더블로 대신한다. `AthenaGateway.handles`가 평범한 dict라 실제
+    `UpstreamServerHandle` 대신 넣어도 `dispatch_call()`은 duck typing으로
+    그대로 동작한다(`call_tool`/`log_event` 시그니처만 맞으면 된다).
+    """
+
+    def __init__(self, *, progress_events=(), block_event: asyncio.Event | None = None):
+        self.log_events: list[str] = []
+        self.calls: list[tuple[str, dict]] = []
+        self._progress_events = list(progress_events)
+        self._block_event = block_event
+
+    def log_event(self, message: str) -> None:
+        self.log_events.append(message)
+
+    async def call_tool(self, name, arguments=None, *, progress_callback=None):
+        self.calls.append((name, dict(arguments or {})))
+        if progress_callback is not None:
+            for progress, total, message in self._progress_events:
+                await progress_callback(progress, total, message)
+        if self._block_event is not None:
+            await self._block_event.wait()
+        return types.CallToolResult(
+            content=[types.TextContent(type="text", text="ok")], isError=False
+        )
+
+
+def _gateway_with_fake_tool(
+    tmp_path,
+    *,
+    alias: str = "dart",
+    upstream_name: str = "search_disclosure",
+    command: str = "npx",
+    args: list[str] | None = None,
+    schema: dict | None = None,
+    progress_events=(),
+    block_event: asyncio.Event | None = None,
+) -> tuple[AthenaGateway, _FakeUpstreamHandle]:
+    """실제 spawn 없이 `dispatch_call()`을 왕복시키기 위한 최소 조립.
+
+    레지스트리에 등록 + 승인 + aggregator에 집계까지만 진짜로 하고,
+    `handles[alias]`엔 `_FakeUpstreamHandle`을 직접 심는다 — `connect()`가
+    하는 spawn/initialize를 건너뛴다."""
+    args = args if args is not None else ["-y", "korean-dart-mcp"]
+    registry = ServerRegistry(path=tmp_path / "reg.json")
+    registry.add(alias, command=command, args=args, env={})
+    consent_store = ConsentStore(path=tmp_path / "consent.json")
+    consent_store.request_consent(alias, command, args, {})
+    consent_store.approve(alias, approved_tools={upstream_name})
+    gw = AthenaGateway(
+        registry=registry,
+        consent_store=consent_store,
+        audit_log_dir=tmp_path / "audit",
+        canvas_save_dir=tmp_path / "canvases",
+    )
+    gw.aggregator.update_alias_tools(
+        alias,
+        [
+            types.Tool(
+                name=upstream_name,
+                description="테스트용",
+                inputSchema=schema or {"type": "object", "properties": {}},
+            )
+        ],
+    )
+    handle = _FakeUpstreamHandle(progress_events=progress_events, block_event=block_event)
+    gw.handles[alias] = handle
+    return gw, handle
 
 
 async def test_list_tools_only_exposes_approved_tools_plus_builtins(gateway, tmp_path):
@@ -174,3 +251,161 @@ async def test_save_canvas_rejects_absolute_path_override(tmp_path):
     assert result.isError is True
     abs_target_json = abs_target.with_name(abs_target.name + ".json")
     assert not abs_target_json.exists()
+
+
+# ---------------------------------------------------------------------------
+# A5 — 프롬프트 인젝션 최소 완화: upstream description 출처 라벨링
+# (SECURITY.md §3 [HIGH, 미해결])
+# ---------------------------------------------------------------------------
+
+
+async def test_list_tools_wraps_upstream_description_with_source_label(gateway, tmp_path):
+    raw_by_name = {t.upstream_name: t.description for t in gateway.aggregator.list_tools()}
+    await _connected(gateway, tmp_path)
+    server = build_mcp_server(gateway)
+    handler = server.request_handlers[types.ListToolsRequest]
+
+    result = await handler(types.ListToolsRequest(method="tools/list"))
+    by_name = {t.name: t.description for t in result.root.tools}
+
+    wrapped = by_name["fixture__echo"]
+    assert "'fixture'" in wrapped  # 출처(별칭)가 라벨에 들어있다
+    assert "신뢰할 수 없는" in wrapped  # 신뢰 경고가 들어있다
+    raw_echo_description = raw_by_name.get("echo")
+    if raw_echo_description:
+        assert raw_echo_description in wrapped  # 원문은 자르거나 고치지 않는다
+
+
+async def test_list_tools_does_not_wrap_builtin_tool_descriptions(gateway, tmp_path):
+    """Athena 자체 제작 툴(render_canvas/save_canvas)은 "우리가 쓴 것"이므로
+    라벨을 붙이지 않는다 — 이 구분이 라벨링의 전부다."""
+    await _connected(gateway, tmp_path)
+    server = build_mcp_server(gateway)
+    handler = server.request_handlers[types.ListToolsRequest]
+
+    result = await handler(types.ListToolsRequest(method="tools/list"))
+    by_name = {t.name: t.description for t in result.root.tools}
+
+    assert "신뢰할 수 없는" not in by_name[RENDER_CANVAS_TOOL]
+    assert "신뢰할 수 없는" not in by_name[SAVE_CANVAS_TOOL]
+
+
+# ---------------------------------------------------------------------------
+# A4 — quirks.suggested_truncate_at() 안전 결선
+# ---------------------------------------------------------------------------
+
+
+async def test_dispatch_call_injects_truncate_at_for_dart_when_schema_declares_it(tmp_path):
+    gw, handle = _gateway_with_fake_tool(
+        tmp_path,
+        schema={"type": "object", "properties": {"truncate_at": {"type": "integer"}}},
+    )
+    result = await gw.dispatch_call("dart__search_disclosure", {"corp_code": "00126380"})
+    assert result.isError is False
+    assert handle.calls[0][1]["truncate_at"] == quirks.KOREAN_DART_MCP_MIN_TRUNCATE_AT
+
+
+async def test_dispatch_call_does_not_inject_truncate_at_for_unrelated_server(tmp_path):
+    """schema가 `truncate_at`을 선언해도, 등록 명령이 korean-dart-mcp가
+    아니면 손대지 않는다 — 실측 근거 없는 서버에 추측값을 주입하지 않는다."""
+    gw, handle = _gateway_with_fake_tool(
+        tmp_path,
+        upstream_name="some_tool",
+        command="npx",
+        args=["-y", "some-other-mcp"],
+        schema={"type": "object", "properties": {"truncate_at": {"type": "integer"}}},
+    )
+    result = await gw.dispatch_call("dart__some_tool", {})
+    assert result.isError is False
+    assert "truncate_at" not in handle.calls[0][1]
+
+
+async def test_dispatch_call_does_not_invent_truncate_at_when_schema_lacks_it(tmp_path):
+    """dart 서버라도, 대상 툴의 inputSchema가 `truncate_at`을 선언 안 하면
+    주입하지 않는다 — upstream이 요청하지 않은 인자를 발명하지 않는다."""
+    gw, handle = _gateway_with_fake_tool(
+        tmp_path,
+        upstream_name="get_corp_code",
+        schema={"type": "object", "properties": {"corp_name": {"type": "string"}}},
+    )
+    result = await gw.dispatch_call("dart__get_corp_code", {"corp_name": "삼성전자"})
+    assert result.isError is False
+    assert "truncate_at" not in handle.calls[0][1]
+
+
+async def test_dispatch_call_leaves_explicit_truncate_at_untouched(tmp_path):
+    gw, handle = _gateway_with_fake_tool(
+        tmp_path,
+        schema={"type": "object", "properties": {"truncate_at": {"type": "integer"}}},
+    )
+    await gw.dispatch_call("dart__search_disclosure", {"truncate_at": 50_000})
+    assert handle.calls[0][1]["truncate_at"] == 50_000
+
+
+# ---------------------------------------------------------------------------
+# A3 — 진행토큰 리맵 + 취소 전파
+# ---------------------------------------------------------------------------
+
+
+async def test_dispatch_call_forwards_upstream_progress_to_downstream_callback(tmp_path):
+    events = [(0.3, 1.0, "1/3"), (1.0, 1.0, "3/3")]
+    gw, handle = _gateway_with_fake_tool(tmp_path, progress_events=events)
+    received: list[tuple] = []
+
+    async def on_progress(progress, total, message):
+        received.append((progress, total, message))
+
+    result = await gw.dispatch_call(
+        "dart__search_disclosure", {}, progress_token="tok-1", on_progress=on_progress
+    )
+    assert result.isError is False
+    assert received == events
+
+
+async def test_dispatch_call_registers_progress_token_then_clears_it_in_finally(tmp_path):
+    gw, handle = _gateway_with_fake_tool(tmp_path)
+    await gw.dispatch_call("dart__search_disclosure", {}, progress_token="tok-2")
+    # 호출이 끝났으면 finally에서 정리돼 더 이상 안 남아 있어야 한다.
+    assert gw.aggregator.resolve_progress_token("tok-2") is None
+
+
+async def test_dispatch_call_without_progress_token_does_not_touch_aggregator_table(tmp_path):
+    gw, handle = _gateway_with_fake_tool(tmp_path)
+    await gw.dispatch_call("dart__search_disclosure", {})
+    assert gw.aggregator.resolve_progress_token("tok-anything") is None
+
+
+async def test_dispatch_call_detects_reused_progress_token_and_logs_defensively(tmp_path):
+    """같은 진행토큰이 아직 정리 안 된 채 재사용되면(다운스트림 스펙 위반
+    가능성) 막지는 않되 서버 로그에 방어적으로 남긴다."""
+    gw, handle = _gateway_with_fake_tool(tmp_path)
+    gw.aggregator.register_progress_token("tok-4", "someone-else", "already-in-flight")
+
+    await gw.dispatch_call("dart__search_disclosure", {}, progress_token="tok-4")
+
+    assert any("재사용" in e for e in handle.log_events)
+    # 그리고 이번 호출의 매핑으로 갱신된 뒤 정상적으로 정리된다.
+    assert gw.aggregator.resolve_progress_token("tok-4") is None
+
+
+async def test_dispatch_call_propagates_cancellation_instead_of_swallowing_it(tmp_path):
+    """다운스트림 취소가 `handle.call_tool()` 대기 지점으로 그대로 들어오면
+    삼키지 않고 다시 던져야 한다 — 삼키면 실제로는 안 끝난 upstream 호출을
+    다운스트림에는 끝난 것처럼 보고하게 된다. 진행토큰 장부는 취소돼도
+    `finally`에서 정리돼야 한다."""
+    block = asyncio.Event()
+    gw, handle = _gateway_with_fake_tool(tmp_path, block_event=block)
+
+    task = asyncio.ensure_future(
+        gw.dispatch_call("dart__search_disclosure", {}, progress_token="tok-3")
+    )
+    await asyncio.sleep(0)
+    await asyncio.sleep(0)
+    # 이 시점에 upstream 호출이 진행 중이라는 게 등록된 진행토큰으로 보여야 한다.
+    assert gw.aggregator.resolve_progress_token("tok-3") == ("dart", "search_disclosure")
+
+    task.cancel()
+    with pytest.raises(asyncio.CancelledError):
+        await task
+
+    assert gw.aggregator.resolve_progress_token("tok-3") is None

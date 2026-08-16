@@ -30,6 +30,55 @@ stdio MCP 서버에서 stdout에 아무 문자열이나 쓰면 프로토콜이 �
 세션을 붙잡는다.** 이건 제약이 아니다: `list_changed`는 "네가 전에 받아간
 목록이 낡았다"는 뜻이라 클라이언트가 목록을 한 번이라도 요청한 뒤에만 의미가
 있고, 그 요청 자체가 세션을 잡아주기 때문이다.
+
+## 백그라운드 헬스체크 슈퍼바이저 (A2)
+
+W1까지는 `client.py`의 `healthcheck()`/`restart()`가 호출 가능한 메서드로만
+있었고 주기적으로 부르는 루프가 없었다 — 그래서 서빙 중 upstream이 죽으면
+그 서버의 툴 호출이 영원히 `isError`로만 떨어졌다(README "미구현" 절 참고).
+`GatewayRunner._supervise_healthchecks()`가 `connect_task`와 같은 자리·같은
+패턴으로(`asyncio.create_task` + `finally`에서 취소/조인) 도는 형제 태스크로
+그 자리를 채운다.
+
+**정책 — `client.py`의 healthcheck() 의도를 그대로 따른다.** `healthcheck()`는
+타임아웃(느릴 뿐, 세션 유지, `crash_count`만 증가)과 하드 실패(`_mark_dead()`로
+세션이 죽음)를 이미 구분해서 처리한다(client.py L344-354). 여기서 그 구분을
+다시 하지 않고 **`handle.is_running`으로 읽기만 한다** — `healthcheck()`가
+`False`를 반환해도 `is_running`이 아직 `True`면 세션은 살아있는 것이니
+restart()를 걸지 않는다. `is_running`이 `False`일 때만(세션이 이미 죽었을
+때만) `restart()`를 시도한다. `restart()` 자체의 상한(`max_restarts`)·지수
+백오프는 손대지 않고 그대로 위임한다 — 슈퍼바이저는 매 라운드 살아있지 않은
+핸들에 `restart()`를 한 번 더 걸 뿐이고, "몇 번째 시도인지"는 여전히
+`restart_count` 하나가 유일하게 센다(2차 재시도 레이어를 얹지 않는다).
+`MaxRestartsExceededError`가 나면 더 이상 걸지 않고 `gateway.disconnect()`로
+핸들과 노출 툴을 걷어낸다 — `self.gateway.handles`에서 빠지므로 다음 라운드는
+자동으로 그 별칭을 건너뛰고(더 이상 두드리지 않는다), 모델도 더 이상 죽어서
+못 부르는 툴을 목록에서 보지 않는다.
+
+**재시작 성공 후 툴 목록 갱신은 새로 만들지 않고 기존 경로를 그대로 탄다.**
+`handle.list_tools()`로 새 목록을 받아 `aggregator.update_alias_tools()`에
+넘기기만 하면, 그 안의 `_notify_changed()`가 `build_server()`에서 구독해둔
+`_on_tools_changed()`를 그대로 호출해 `tools/list_changed`가 나간다 — 알림
+전송 코드를 여기 두 번 안 짠다. 영구 실패 쪽도 `gateway.disconnect()`가 내부에서
+`aggregator.forget_alias()`를 불러 같은 경로로 알림이 나간다. 둘 다
+`_on_tools_changed()`에 이미 있는 `_shutting_down` 가드를 그대로 통과한다.
+
+**격리.** `connect_approved()`가 서버별로 예외를 가두는 것과 같은 원칙을
+`_healthcheck_one()`에도 그대로 쓴다 — 한 서버의 healthcheck/restart/list_tools
+중 무엇이 터져도 그 서버만 이번 라운드를 포기하고, 다른 서버·슈퍼바이저 루프
+자체는 안 죽는다.
+
+**세션 동시 접근.** `UpstreamServerHandle`은 `list_tools()`/`call_tool()`
+호출을 직렬화하는 락이 없다 — 필요가 없다. `mcp.shared.session.BaseSession`이
+요청마다 `request_id`를 매겨 응답을 그 id의 개인 스트림으로만 배달한다
+(`mcp/shared/session.py` `send_request()`/`_response_streams`). 그래서
+헬스체크의 `list_tools()` ping이 같은 세션에서 진행 중인 `call_tool()`과
+동시에 나가도 서로의 응답을 가로채지 않는다 — 디스패치가 깨질 위험은 프로토콜
+레벨에서 이미 없다. 별도로 막아야 하는 건 그게 아니라 **`restart()`가 세션을
+통째로 갈아치우는 동안** 같은 순간 그 세션으로 들어간 `call_tool()`이 취소되는
+경우인데, 이건 슈퍼바이저가 새로 만든 위험이 아니라 `restart()`/`close()`를
+누가 부르든 이미 있던 성질이다(수동 `restart()` 호출도 동일). 슈퍼바이저는
+`is_running`이 이미 `False`인 핸들에만 `restart()`를 걸어 그 창을 넓히지 않는다.
 """
 
 from __future__ import annotations
@@ -45,7 +94,7 @@ from mcp.server.models import InitializationOptions
 from mcp.server.stdio import stdio_server
 
 from athena_mcp.aggregator import ToolAggregator
-from athena_mcp.client import describe_exception
+from athena_mcp.client import MaxRestartsExceededError, UpstreamServerHandle, describe_exception
 from athena_mcp.consent import ConsentStore
 from athena_mcp.registry import ServerRegistry, default_registry_path
 from athena_mcp.server import AthenaGateway, build_mcp_server
@@ -83,11 +132,21 @@ class GatewayRunner:
         state_dir: Path | None = None,
         registry_path: Path | None = None,
         initial_list_wait_seconds: float = 30.0,
+        healthcheck_interval_seconds: float = 30.0,
     ) -> None:
         self.state_dir = state_dir or default_state_dir()
         # 첫 `tools/list`가 초기 연결을 기다려주는 상한. 0이면 안 기다린다.
         # 이유는 `build_server()`의 목록 게이트 주석 참고.
         self.initial_list_wait_seconds = initial_list_wait_seconds
+        # 백그라운드 헬스체크 주기. 핸들 기본 `healthcheck_timeout_seconds`(5초)
+        # 보다 넉넉히 커야 한 라운드가 끝나기 전에 다음 라운드가 겹치지 않는다
+        # (겹쳐도 `_supervise_healthchecks()`가 라운드를 순차로 await하므로 실제
+        # 겹침은 없지만, 너무 촘촘하면 응답 느린 서버 하나가 계속 다음 라운드를
+        # 미루는 꼴이 된다). `initial_list_wait_seconds`와 같은 30초를 기본값으로
+        # 맞췄다 — 이 정도면 죽은 서버를 방치하는 시간과 정상 서버를 불필요하게
+        # 자주 두드리는 비용 사이에서 무난하다. 0 이하면 슈퍼바이저를 끈다(테스트나
+        # 헬스체크가 필요 없는 배치 실행용).
+        self.healthcheck_interval_seconds = healthcheck_interval_seconds
         self.registry = ServerRegistry(registry_path or default_registry_path())
         self.consent_store = ConsentStore(self.state_dir / "consent.json")
         self.gateway = AthenaGateway(
@@ -154,6 +213,74 @@ class GatewayRunner:
                 await self.gateway.disconnect(alias)
             except Exception:
                 pass
+
+    # -- 백그라운드 헬스체크 슈퍼바이저 (모듈 docstring 참고) ---------------------
+
+    async def _healthcheck_one(self, alias: str, handle: UpstreamServerHandle) -> None:
+        """핸들 하나를 healthcheck하고, 필요하면 restart까지 시도한다.
+
+        `connect_approved()`/`_connect_one()`과 같은 격리 원칙 — 이 함수 안에서
+        무엇이 터지든 여기서 끝난다. 다른 별칭의 라운드나 슈퍼바이저 루프 자체를
+        절대 막지 않는다.
+        """
+        try:
+            await handle.healthcheck()
+            if handle.is_running:
+                # `healthcheck()`가 True든(정상) 타임아웃으로 False든, 세션이
+                # 아직 살아있으면(`_mark_dead()`가 안 불렸으면) restart 대상이
+                # 아니다 — client.py의 명시된 의도: "세지만(crash_count) 죽이진
+                # 않는다." 여기서 restart()를 걸면 멀쩡한 세션을 억지로 끊는다.
+                return
+            if self._shutting_down:
+                return
+
+            try:
+                await handle.restart()
+            except MaxRestartsExceededError as exc:
+                # 더 이상 두드리지 않는다 — handles에서 걷어내면 다음 라운드는
+                # 이 별칭을 자동으로 건너뛴다. `disconnect()`가 aggregator에서도
+                # 노출 툴을 지우고 그 김에 기존 tools/list_changed 경로를 태운다
+                # (forget_alias() -> _notify_changed(), 모듈 docstring 참고).
+                handle.log_event(f"healthcheck 슈퍼바이저: 재시작 상한 초과, 영구 실패 — {exc}")
+                await self.gateway.disconnect(alias)
+                print(
+                    f"[athena-mcp] {alias}: 재시작 상한 초과 — 더 이상 재시도하지 않고 "
+                    f"핸들·툴 목록에서 걷어낸다 (원인: {handle.log_path})",
+                    file=sys.stderr,
+                )
+                return
+
+            # restart 성공 — 새 세션의 툴 목록을 받아 집계기에 반영한다. 여기서
+            # 알림을 새로 만들지 않는다: update_alias_tools()가 부르는
+            # _notify_changed()가 이미 구독된 _on_tools_changed()를 그대로 태운다.
+            tools = await handle.list_tools()
+            self.gateway.aggregator.update_alias_tools(alias, tools)
+            handle.log_event("healthcheck 슈퍼바이저: 재시작 성공, 툴 목록 갱신")
+        except Exception as exc:
+            handle.log_event(f"healthcheck 슈퍼바이저 라운드 중 처리되지 않은 예외: {exc!r}")
+
+    async def _healthcheck_round(self) -> None:
+        if self._shutting_down:
+            return
+        # 스냅샷 후 순회 — 라운드 도중 `_healthcheck_one()`이 영구 실패 서버를
+        # `self.gateway.handles`에서 지울 수 있으므로, 그 딕셔너리를 직접
+        # 순회하면 안 된다.
+        handles = list(self.gateway.handles.items())
+        if not handles:
+            return
+        await asyncio.gather(*(self._healthcheck_one(alias, h) for alias, h in handles))
+
+    async def _supervise_healthchecks(self) -> None:
+        """`healthcheck_interval_seconds`마다 라운드를 돈다. 0 이하면 즉시 끝낸다
+        (슈퍼바이저 끔). 라운드는 순차로 await하므로(겹치지 않는다) 같은 핸들에
+        두 라운드가 동시에 restart()를 거는 경우는 없다."""
+        if self.healthcheck_interval_seconds <= 0:
+            return
+        while True:
+            await asyncio.sleep(self.healthcheck_interval_seconds)
+            if self._shutting_down:
+                return
+            await self._healthcheck_round()
 
     # -- list_changed 전송 ---------------------------------------------------
 
@@ -266,17 +393,22 @@ class GatewayRunner:
         """
         server = self.build_server()
         connect_task: asyncio.Task[None] | None = None
+        healthcheck_task: asyncio.Task[None] | None = None
         try:
             async with stdio_server() as (read, write):
                 connect_task = asyncio.create_task(self._connect_and_report())
+                # connect_task와 같은 자리·같은 취소/조인 패턴을 쓰는 형제
+                # 태스크다(모듈 docstring "백그라운드 헬스체크 슈퍼바이저" 참고).
+                healthcheck_task = asyncio.create_task(self._supervise_healthchecks())
                 await server.run(read, write, self.initialization_options(server))
         finally:
-            if connect_task is not None and not connect_task.done():
-                connect_task.cancel()
-                try:
-                    await connect_task
-                except (asyncio.CancelledError, Exception):
-                    pass
+            for task in (connect_task, healthcheck_task):
+                if task is not None and not task.done():
+                    task.cancel()
+                    try:
+                        await task
+                    except (asyncio.CancelledError, Exception):
+                        pass
             await self.close()
 
 

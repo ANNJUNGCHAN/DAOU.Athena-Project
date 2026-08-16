@@ -219,20 +219,58 @@ class ToolAggregator:
         except KeyError:
             raise UnknownQualifiedNameError(qname) from None
 
-    # -- 진행토큰/취소 리맵 --------------------------------------------------
+    def find_input_schema(self, qname: str) -> dict[str, Any] | None:
+        """qualified_name의 **현재 노출된** inputSchema를 찾는다. 없으면 None.
+
+        `resolve()`와 다르게 `_resolution_table`이 아니라 `_exposed_by_alias`
+        (지금 이 순간의 노출 목록)만 본다 — quirks 결선(server.py의 인자 보정)이
+        "upstream이 실제로 이 파라미터를 선언했는가"를 물을 때 쓰는데, 그건
+        옛 별칭으로 남아있는 리졸루션 기록이 아니라 **지금** 그 별칭이 뭘
+        내보내고 있는지에 대한 질문이라서다. 별칭이 rename되거나 forget된
+        뒤라 스키마를 못 찾아도 에러가 아니라 None — 호출자(quirks 인자 주입)는
+        그냥 보정을 건너뛰면 되는 안전한 폴백이다.
+        """
+        for tools in self._exposed_by_alias.values():
+            for t in tools:
+                if t.qualified_name == qname:
+                    return t.input_schema
+        return None
+
+    # -- 진행토큰 장부 --------------------------------------------------------
+    #
+    # 이 표의 원래 목적("다운스트림 진행토큰 → upstream 진행토큰"으로 매핑해
+    # `notifications/cancelled`를 올바른 upstream 세션에 되돌린다)은 SDK 실측으로
+    # **두 군데서 성립하지 않는다**:
+    #
+    # 1. 취소는 이 표가 필요 없다. `notifications/cancelled`는 lowlevel `Server`에
+    #    도달하지 않는다 — `mcp/shared/session.py`가 `RequestResponder`의 anyio
+    #    취소 스코프를 직접 취소하고, `dispatch_call()`이 그 스코프 안에서 돌기
+    #    때문에 취소가 호출 지점으로 그냥 전파된다.
+    # 2. upstream **진행토큰 값**은 애초에 관측할 수 없다.
+    #    `ClientSession.call_tool(progress_callback=...)`이 SDK 내부 카운터로
+    #    `_meta.progressToken`을 덮어쓰고 그 값을 호출자에게 돌려주지 않는다.
+    #
+    # 그래서 표는 남기되 **저장하는 값을 실제와 일치시켰다** — upstream 토큰이
+    # 아니라 `(alias, upstream_name)`, 즉 "이 진행토큰이 지금 어느 서버의 어느
+    # 툴에 묶여 있나"다. 이 형태로 실제 쓰임이 있다: 인플라이트 중복 토큰 탐지
+    # (다운스트림 스펙 위반)와 정리 누락 확인. 이름이 실제 내용과 다른 API를
+    # 남겨두면 다음 사람이 없는 토큰을 찾게 되므로 시그니처를 고쳤다.
 
     def register_progress_token(
-        self, downstream_token: str, alias: str, upstream_token: str
+        self, downstream_token: str, alias: str, upstream_name: str
     ) -> None:
-        """CLI(다운스트림)가 준 진행토큰을 실제 upstream 세션의 진행토큰에 매핑한다.
+        """다운스트림 진행토큰이 지금 어느 `(별칭, upstream 툴)`에 묶여 있는지 기록한다.
 
-        `notifications/cancelled`를 올바른 upstream 세션으로 리맵할 때 쓴다.
+        호출이 끝나면(성공·실패·취소 무관) `clear_progress_token()`으로 지운다.
         """
-        self._progress_tokens[downstream_token] = (alias, upstream_token)
+        self._progress_tokens[downstream_token] = (alias, upstream_name)
 
     def resolve_progress_token(self, downstream_token: str) -> tuple[str, str] | None:
-        """`(alias, upstream_token)`. `notifications/cancelled`를 올바른 upstream
-        세션으로 리맵할 때 쓴다. 없으면 None(이미 끝났거나 알 수 없는 토큰)."""
+        """`(alias, upstream_name)`. 없으면 None — 이미 끝났거나 모르는 토큰이다.
+
+        None이 정상 경로다. 값이 있는데 새 호출이 같은 토큰으로 들어오면 그건
+        다운스트림이 인플라이트 토큰을 재사용한 것이다(스펙 위반 신호).
+        """
         return self._progress_tokens.get(downstream_token)
 
     def clear_progress_token(self, downstream_token: str) -> None:

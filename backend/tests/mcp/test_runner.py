@@ -22,14 +22,14 @@ import pytest
 from mcp import types
 
 from athena_mcp.aggregator import ToolAggregator
-from athena_mcp.client import describe_exception
+from athena_mcp.client import MaxRestartsExceededError, describe_exception
 from athena_mcp.consent import ConsentStore
 from athena_mcp.registry import ServerRegistry
 from athena_mcp.runner import GatewayRunner
 from athena_mcp.server import RENDER_CANVAS_TOOL, AthenaGateway, build_mcp_server
 
 _FIXTURE_PATH = Path(__file__).resolve().parent / "fixtures" / "fake_server.py"
-_APPROVED_TOOLS = {"echo", "get_corp_code", "boom"}
+_APPROVED_TOOLS = {"echo", "get_corp_code", "boom", "flaky"}
 
 
 def _make_runner(tmp_path: Path, aliases: list[str]) -> GatewayRunner:
@@ -434,5 +434,131 @@ async def test_connect_approved_runs_concurrently_not_sequentially(tmp_path):
         assert all(o.ok for o in outcomes)
         # 순차라면 4배가 든다. 넉넉한 상한으로 "동시성이 실제로 있다"만 고정한다.
         assert elapsed < 20.0, f"4개 연결에 {elapsed:.1f}초 — 동시 실행이 아닌 것 같다"
+    finally:
+        await runner.close()
+
+
+# -- A2: 백그라운드 헬스체크 슈퍼바이저 ----------------------------------------
+#
+# README "백그라운드 헬스체크 스케줄러는 없다"가 남긴 다음 일감이다 — 지금까지는
+# 크래시한 서버의 툴 호출이 영원히 isError로만 떨어졌다. 아래는 그게 고쳐졌다는
+# 회귀 증거다. 첫 테스트는 목만 쓰지 않는다 — `flaky` 툴이 실제로 os._exit(1)로
+# 죽는 진짜 subprocess를 슈퍼바이저가 진짜로 되살리는 것까지 확인한다.
+
+
+async def test_healthcheck_supervisor_restarts_a_crashed_server_and_recovers_dispatch(tmp_path):
+    """살아있는 세션이 아니라 진짜 하드 크래시(call_tool 중 예외 -> _mark_dead())를
+    슈퍼바이저가 감지해 restart()로 되살리고, 그 뒤 실제 dispatch_call()이 다시
+    성공하는 것까지 실제 subprocess로 확인한다. 재시작 성공 시 aggregator의 기존
+    변경 알림 경로(_notify_changed())를 그대로 태우는지도 스파이로 확인한다."""
+    runner = GatewayRunner(
+        state_dir=tmp_path / "state",
+        registry_path=tmp_path / "state" / "registry.json",
+        healthcheck_interval_seconds=0.05,
+    )
+    runner.registry.add(
+        "h", command=sys.executable, args=[str(_FIXTURE_PATH)], env={"CRASH_AFTER_N_CALLS": "1"}
+    )
+    runner.consent_store.request_consent(
+        "h", sys.executable, [str(_FIXTURE_PATH)], {"CRASH_AFTER_N_CALLS": "1"}
+    )
+    runner.consent_store.approve("h", approved_tools={"echo", "flaky"})
+    try:
+        await runner.connect_approved()
+        handle = runner.gateway.handles["h"]
+
+        changed_events: list[bool] = []
+        runner.gateway.aggregator.subscribe(lambda: changed_events.append(True))
+
+        # flaky의 첫 호출이 프로세스를 os._exit(1)로 죽인다 -> call_tool()이
+        # ServerCrashedError를 던지고 _mark_dead()가 세션을 지운다.
+        crashed = await runner.gateway.dispatch_call("h__flaky", {})
+        assert crashed.isError is True
+        assert handle.is_running is False
+
+        supervisor = asyncio.create_task(runner._supervise_healthchecks())
+        try:
+            for _ in range(150):
+                if handle.is_running and handle.restart_count >= 1:
+                    break
+                await asyncio.sleep(0.1)
+            assert handle.is_running is True, "슈퍼바이저가 크래시를 감지해 재시작하지 못했다"
+            assert handle.restart_count == 1
+        finally:
+            supervisor.cancel()
+            try:
+                await supervisor
+            except (asyncio.CancelledError, Exception):
+                pass
+
+        # 재시작 후 실제 dispatch_call이 다시 성공해야 한다 — isError로만 계속
+        # 떨어지던 결함이 해소됐다는 기능적 증거.
+        recovered = await runner.gateway.dispatch_call("h__echo", {"message": "again"})
+        assert recovered.isError is False
+
+        assert changed_events, (
+            "재시작 성공 후 aggregator._notify_changed()(tools/list_changed 경로)가 안 불렸다"
+        )
+    finally:
+        await runner.close()
+
+
+async def test_healthcheck_supervisor_does_not_restart_on_timeout_only_hard_failure(tmp_path):
+    """`healthcheck()`가 타임아웃으로 실패해도(세션은 유지) restart()를 걸면 안
+    된다 — client.py의 healthcheck() docstring이 명시한 정책("세지만 죽이진
+    않는다"). 하드 실패(`_mark_dead()`로 세션이 죽음)일 때만 재시작해야 한다."""
+    runner = _make_runner(tmp_path, ["h"])
+    try:
+        await runner.connect_approved()
+        handle = runner.gateway.handles["h"]
+
+        async def fake_timeout_healthcheck() -> bool:
+            # 타임아웃 경로를 흉내낸다 — crash_count만 올라가고 세션(_session)은
+            # 그대로 둔다. 실제 healthcheck()의 TimeoutError 분기와 같은 부작용.
+            handle.crash_count += 1
+            return False
+
+        handle.healthcheck = fake_timeout_healthcheck  # type: ignore[method-assign]
+
+        await runner._healthcheck_round()
+
+        assert handle.is_running is True, "타임아웃일 뿐인데 세션이 끊겼다"
+        assert handle.restart_count == 0, "타임아웃만으로 restart()가 걸리면 안 된다"
+    finally:
+        await runner.close()
+
+
+async def test_healthcheck_supervisor_evicts_a_permanently_dead_server_and_leaves_others_alone(
+    tmp_path,
+):
+    """재시작 상한을 넘기면(`MaxRestartsExceededError`) 더 재시도하지 않고
+    핸들·노출 툴을 걷어낸다 — 모델이 더 이상 부를 수 없는 툴을 계속 보면
+    안 된다. 같은 라운드의 다른(정상) 서버는 이 실패에 영향받지 않는다
+    (connect_approved()와 같은 서버 단위 격리 원칙)."""
+    runner = _make_runner(tmp_path, ["dead", "good"])
+    try:
+        await runner.connect_approved()
+        dead_handle = runner.gateway.handles["dead"]
+
+        # 하드 실패 상태를 직접 만든다 — 세션이 없으면 실제 healthcheck()도
+        # 첫 줄에서 그대로 False를 반환하므로 healthcheck()까지 목으로 대신할
+        # 필요는 없다.
+        dead_handle._session = None  # noqa: SLF001 — 하드 실패 상태를 재현
+
+        async def fake_restart_always_exceeds():
+            raise MaxRestartsExceededError("dead: 재시작 상한 초과(테스트)")
+
+        dead_handle.restart = fake_restart_always_exceeds  # type: ignore[method-assign]
+
+        exposed_before = {t.alias for t in runner.gateway.aggregator.list_tools()}
+        assert {"dead", "good"} <= exposed_before
+
+        await runner._healthcheck_round()
+
+        assert "dead" not in runner.gateway.handles, "영구 실패 서버가 handles에서 안 걷혔다"
+        assert "good" in runner.gateway.handles, "정상 서버가 같이 걷혔다 — 격리가 깨졌다"
+        exposed_after = {t.alias for t in runner.gateway.aggregator.list_tools()}
+        assert "dead" not in exposed_after, "영구 실패 서버 툴이 여전히 노출된다"
+        assert "good" in exposed_after
     finally:
         await runner.close()
