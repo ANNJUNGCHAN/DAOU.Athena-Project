@@ -222,6 +222,23 @@ class ConsentStore:
                 f"{alias!r} 서버는 아직 승인되지 않았다 — 명령 실행(spawn) 자체가 금지된다"
             )
 
+    def rename(self, old_alias: str, new_alias: str) -> None:
+        """승인 기록을 새 별칭으로 옮긴다.
+
+        승인 기록은 별칭을 키로 쓰므로, 레지스트리만 rename하고 여기를 안 옮기면
+        **이미 승인한 서버가 조용히 미승인 상태로 되돌아간다**(다음 spawn이
+        `ConsentNotGrantedError`로 막힌다). 승인은 "이 명령을 실행해도 좋다"는
+        판단이지 "이 이름을 신뢰한다"가 아니므로, 명령이 그대로인 rename에서
+        승인은 따라가는 게 맞다. 기록이 없으면 조용히 아무것도 하지 않는다
+        (등록만 하고 승인 요청 전인 서버의 rename은 정상 흐름이다).
+        """
+        record = self._records.pop(old_alias, None)
+        if record is None:
+            return
+        record.alias = new_alias
+        self._records[new_alias] = record
+        self.save()
+
     def get(self, alias: str) -> ConsentRecord | None:
         return self._records.get(alias)
 
