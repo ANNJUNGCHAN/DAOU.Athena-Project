@@ -217,10 +217,24 @@ State 4 · 절단됨 (근거: `DARTSURVEY-chrisryugj-download_document-LARGE-mar
 
 ## Open questions
 
-1. **`origin` 필드의 실제 스키마가 이 카드 작성 시점엔 아직 없었다.** 코드베이스에 병렬로
-   추가되는 중이라는 것만 팀 태스크로 확인했고, 정확한 타입(enum 값 이름, 위치)은 검증하지
-   않았다. 구현이 끝나면 이 카드의 `origin: gateway|upstream` 문자열이 실제 필드명과
-   일치하는지 재확인 필요.
+1. ~~**`origin` 필드의 실제 스키마가 이 카드 작성 시점엔 아직 없었다.**~~ → **닫혔다
+   (2026-08-16, 커밋 `b5e59cb`).** 필드가 실제로 들어갔고, 이 카드가 가정한 이분법이
+   그대로 맞았다. 다만 **정확한 위치와 이름은 보드 표기와 다르다** — 보드는
+   `origin: gateway|upstream`으로 적었는데 실제는:
+
+   - 위치: `CallToolResult._meta["athena/error_origin"]`.
+     `structuredContent`가 아니다 — `result.py`의 2단계 파싱이 `structuredContent`의
+     **존재 자체**를 "이건 데이터다"로 취급해서, 거기 넣으면 게이트가 막은 호출이
+     구조화 응답(A2)처럼 보인다. 이 카드가 피하려던 바로 그 오분류다.
+   - 값: `"gateway-blocked"` / `"upstream-failed"` (하이픈 포함, 두 개뿐).
+   - `result.py`의 `ParsedResult.error_origin`으로도 노출된다. `isError` 단계에서만
+     채워지고 나머지 3단계는 안 건드린다 — 4단계 우선순위 계약은 그대로다.
+   - **상류에서 넘어온 에러엔 안 붙는다.** 붙이면 지금의 모호함보다 나쁘기 때문이다.
+     즉 봉투에서 "origin 없음 + isError" = 상류 에러로 읽으면 된다.
+
+   와이어로도 확인됐다 — `GRAFT-verify.json`의 `unapproved_tool_direct`가 표시를
+   달고 오고, `S2-jjlabsio-nokey-error.json`(진짜 DART 키 부재 응답)은 안 단다.
+   **보드의 `origin: gateway|upstream` 라벨을 실제 값 이름으로 갱신해야 한다.**
 2. **`free` 폴백 상태의 실제 예시가 이 보드에 없다.** 4개 상태 모두 표/리더/스칼라(미구현)/없음
    중 하나로 착지했다 — `validate_canvas_payload()`가 스키마 불일치 시 `free`로 떨어뜨리는
    경우(예: `canvas_type='streem'` 오타, `GRAFT-verify.json`의 `render_canvas_unknown_type`
