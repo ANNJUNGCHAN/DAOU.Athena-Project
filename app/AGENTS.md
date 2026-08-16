@@ -3,6 +3,8 @@
 
 # app
 
+> Terminology: [`GLOSSARY.md`](../GLOSSARY.md) is the standard vocabulary for this repo. Use its definitions; register new terms there before using them in code.
+
 ## Purpose
 Athena W2 — the two-window Electron shell prototype: a canvas window (1560×800, top) and a chat
 window (1560×204–788, bottom) as two OS-level independent windows. Ported from
@@ -31,6 +33,11 @@ the future MCP tool call.
 ## For AI Agents
 
 ### Working In This Directory
+- **Surfaces: 2 persistent windows + 2 transient surfaces.** Persistent = 대화 창 (`chatWin`) and
+  캔버스 창 (`canvasWin`) — both exist today. Transient = 설정창 (settings; reached from the command
+  bar and from the chat window's red blink) and 팝업창 (the order-execution popup) — **neither is
+  implemented yet.** `BrowserWindow` construction is limited to `warmup`/`canvasWin`/`chatWin`, and
+  there are no `dialog.*` calls. Definitions: `GLOSSARY.md` §1.
 - **Never use `innerHTML`.** Stream content goes through `lib/sanitize.js` and renders as text nodes;
   markdown builds DOM nodes directly. This is the rendering contract from `spike/stream-adapter/RESULT.md`.
 - Autostart is gated by the `ATHENA_NO_AUTOSTART` env var, **not** `require.main === module` —
