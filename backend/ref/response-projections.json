@@ -327,7 +327,8 @@
       "groups": [
         {
           "id": "identity",
-          "title": "ka10007 identity and timestamp",
+          "title_ko": "종목·일시 정보",
+          "title_en": "Identity and timestamp",
           "fields": [
             "stk_nm",
             "stk_cd",
@@ -337,7 +338,8 @@
         },
         {
           "id": "expected_market",
-          "title": "ka10007 expected market state",
+          "title_ko": "현재가·전일 시세·가격제한",
+          "title_en": "Expected market state",
           "fields": [
             "pred_close_pric",
             "pred_trde_qty",
@@ -353,7 +355,8 @@
         },
         {
           "id": "session",
-          "title": "ka10007 session prices and trading totals",
+          "title_ko": "당일 시세·예상 체결",
+          "title_en": "Session prices and trading totals",
           "fields": [
             "open_pric",
             "high_pric",
@@ -375,7 +378,8 @@
         },
         {
           "id": "bid_prices",
-          "title": "ka10007 ten-level bid prices",
+          "title_ko": "매도·매수 10호가",
+          "title_en": "Ten-level bid prices",
           "fields": [
             "sel_1bid",
             "sel_2bid",
@@ -401,7 +405,8 @@
         },
         {
           "id": "bid_quantities",
-          "title": "ka10007 ten-level bid quantities",
+          "title_ko": "매도·매수 10호가 잔량",
+          "title_en": "Ten-level bid quantities",
           "fields": [
             "sel_1bid_req",
             "sel_2bid_req",
@@ -427,7 +432,8 @@
         },
         {
           "id": "bid_changes",
-          "title": "ka10007 ten-level bid changes",
+          "title_ko": "매도·매수 10호가 직전대비",
+          "title_en": "Ten-level bid changes",
           "fields": [
             "sel_1bid_jub_pre",
             "sel_2bid_jub_pre",
@@ -453,7 +459,8 @@
         },
         {
           "id": "order_counts",
-          "title": "ka10007 bid order counts",
+          "title_ko": "매도·매수 5호가 건수",
+          "title_en": "Bid order counts",
           "fields": [
             "sel_1bid_cnt",
             "sel_2bid_cnt",
@@ -469,7 +476,8 @@
         },
         {
           "id": "liquidity_provider",
-          "title": "ka10007 liquidity-provider quantities",
+          "title_ko": "LP 매도·매수 10호가 잔량",
+          "title_en": "Liquidity-provider quantities",
           "fields": [
             "lpsel_1bid_req",
             "lpsel_2bid_req",
@@ -495,7 +503,8 @@
         },
         {
           "id": "totals",
-          "title": "ka10007 aggregate order-book totals",
+          "title_ko": "총매도·총매수 잔량·건수",
+          "title_en": "Aggregate order-book totals",
           "fields": [
             "tot_buy_req",
             "tot_sel_req",

@@ -219,6 +219,23 @@ FactsCard(114) · TableCard(121) · CompoundCard(29) · EventCard(23) · ActionC
 | **초당 5건 (호출 예산)** | 롤링 1초 최대 5건, 같은 API ID는 1건. REST·WebSocket 제어·주문이 **하나의 리미터**를 공유한다. UI 설계 제약이기도 하다 |
 | **fail-closed** | 자격증명이 없으면 데이터 라우트가 503을 낸다. 조용한 빈 결과는 없다 |
 
+### ka10007(시세표성정보요청) detail 9그룹 한국어 제목 — 2026-08-18 확정
+
+출처: `backend/ref/kiwoom-tr-inventory.json`의 키움 공식 필드 라벨(`kor`) 실측. 제목은 공식 용어의
+조합으로만 짓고 자체 작명하지 않는다. TR ID 노출(zero-tolerance `TR_ID_LEAKAGE`) 해소용 `title_ko`.
+
+| group id | title_ko | 근거 필드(공식 라벨) |
+|---|---|---|
+| identity | 종목·일시 정보 | 종목명·종목코드·날짜·시간 |
+| expected_market | 현재가·전일 시세·가격제한 | 현재가·등락률·전일비·전일종가·상한가·하한가·상장주식수 |
+| session | 당일 시세·예상 체결 | 시가·고가·저가·거래량·거래대금·예상체결가·예상체결량 |
+| bid_prices | 매도·매수 10호가 | 매도1~10호가·매수1~10호가 |
+| bid_quantities | 매도·매수 10호가 잔량 | 매도/매수N호가잔량 |
+| bid_changes | 매도·매수 10호가 직전대비 | 매도/매수N호가직전대비 |
+| order_counts | 매도·매수 5호가 건수 | 매도/매수1~5호가건수 |
+| liquidity_provider | LP 매도·매수 10호가 잔량 | LP매도/LP매수N호가잔량 |
+| totals | 총매도·총매수 잔량·건수 | 총매수잔량·총매도잔량·총매수건수·총매도건수 |
+
 ---
 
 ## 7. LLM 셀렉터
