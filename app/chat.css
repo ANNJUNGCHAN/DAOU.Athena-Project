@@ -68,11 +68,24 @@ html, body { background: transparent; }
 .history {
   flex: 1 1 auto;
   min-height: 0;
-  display: flex; flex-direction: column; justify-content: flex-end;
-  overflow: hidden;
+  display: flex; flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
   padding: 8px 28px 4px;
   gap: 10px;
 }
+/* 하단 정렬은 justify-content:flex-end가 아니라 첫 자식의 margin-top:auto로 만든다 —
+ * flex-end는 컨테이너 위쪽으로 넘친 내용을 스크롤로 도달할 수 없게 만들어(플렉스
+ * 사양) 이력 스크롤과 양립하지 않는다. 시각 결과는 동일하다: 내용이 적으면 바닥에
+ * 붙고, 넘치면 위로 스크롤된다. 바닥 추적은 chat.js scrollHistoryToBottom(). */
+.history > :first-child { margin-top: auto; }
+.history::-webkit-scrollbar { width: 8px; }
+.history::-webkit-scrollbar-track { background: transparent; }
+.history::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+}
+.history::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.28); }
 
 .turn {
   display: flex; flex-direction: column; gap: 4px;

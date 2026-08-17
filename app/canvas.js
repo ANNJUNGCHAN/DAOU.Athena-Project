@@ -1,6 +1,6 @@
 // 캔버스 창 렌더러. spike/electron-glass/canvas.html의 확장/수축 rAF 애니메이션을
 // 그대로 이식 + 목업 데이터 3종 렌더.
-const { ipcRenderer } = require('electron');
+const { ipcRenderer, webFrame } = require('electron');
 const { sanitize } = require('./lib/sanitize');
 const { renderMarkdownInto } = require('./lib/markdown');
 const { loadStreamItems, loadFinancialStatement, loadReaderMarkdown } = require('./lib/mockdata');
@@ -47,19 +47,30 @@ function runAnimation({ cx, cy, rmax, duration, mode }) {
   });
 }
 
+// main.js가 주는 cx/cy/rmax는 물리 px(스크린 좌표 기반) — clipPath는 CSS px로
+// 그리므로 줌 배율만큼 되돌린다(줌 미사용 시 zf=1로 기존과 동일).
+function toCssCoords(payload) {
+  const zf = webFrame.getZoomFactor();
+  const scaled = { ...payload, cx: payload.cx / zf, cy: payload.cy / zf };
+  if (typeof payload.rmax === 'number') scaled.rmax = payload.rmax / zf;
+  return scaled;
+}
+
 ipcRenderer.on('prime-clip', (e, payload) => {
-  mosaic.style.clipPath = `circle(0px at ${payload.cx}px ${payload.cy}px)`;
+  const p = toCssCoords(payload);
+  mosaic.style.clipPath = `circle(0px at ${p.cx}px ${p.cy}px)`;
   sheen.style.backdropFilter = 'blur(30px)';
   ipcRenderer.send('primed');
 });
 
 ipcRenderer.on('run-animation', async (e, payload) => {
-  if (payload.mode === 'expand') {
-    mosaic.style.clipPath = `circle(0px at ${payload.cx}px ${payload.cy}px)`;
+  const p = toCssCoords(payload);
+  if (p.mode === 'expand') {
+    mosaic.style.clipPath = `circle(0px at ${p.cx}px ${p.cy}px)`;
     sheen.style.backdropFilter = 'blur(30px)';
   }
-  const timestamps = await runAnimation(payload);
-  ipcRenderer.send('animation-done', { mode: payload.mode, timestamps });
+  const timestamps = await runAnimation(p);
+  ipcRenderer.send('animation-done', { mode: p.mode, timestamps });
 });
 
 // ---------- 캔버스 카드 추가/초기화/하이라이트 ----------
@@ -497,3 +508,47 @@ function fmtWon(raw) {
   if (Number.isNaN(n)) return raw;
   return n.toLocaleString('ko-KR');
 }
+
+// ---------- 창 기본 기능 (2026-08-17) — 대화 창(chat.js)과 같은 배선 ----------
+// 줌·최소화는 main.js가 두 창을 동기하므로 어느 창에 포커스가 있어도 동작이 같다.
+document.addEventListener('keydown', (e) => {
+  if (!(e.ctrlKey || e.metaKey) || e.altKey) return;
+  if (e.key === '=' || e.key === '+') {
+    e.preventDefault();
+    ipcRenderer.send('athena:zoom', { dir: 'in' });
+  } else if (e.key === '-' || e.key === '_') {
+    e.preventDefault();
+    ipcRenderer.send('athena:zoom', { dir: 'out' });
+  } else if (e.key === '0') {
+    e.preventDefault();
+    ipcRenderer.send('athena:zoom', { dir: 'reset' });
+  } else if (e.key === 'm' || e.key === 'M') {
+    e.preventDefault();
+    ipcRenderer.send('athena:minimize-windows');
+  }
+});
+
+window.addEventListener('wheel', (e) => {
+  if (!e.ctrlKey) return;
+  e.preventDefault();
+  ipcRenderer.send('athena:zoom', { dir: e.deltaY < 0 ? 'in' : 'out' });
+}, { passive: false });
+
+// 창 이동 — 카드가 없는 빈 유리 표면(grid 여백)을 잡고 끈다. e.target 조건으로
+// 카드 내부 스크롤·선택과 충돌하지 않는다.
+function bindWindowDrag(el) {
+  if (!el) return;
+  el.addEventListener('mousedown', (e) => {
+    if (e.button !== 0 || e.target !== el) return;
+    ipcRenderer.send('athena:window-drag', { phase: 'start' });
+    const end = () => {
+      ipcRenderer.send('athena:window-drag', { phase: 'end' });
+      window.removeEventListener('mouseup', end);
+      window.removeEventListener('blur', end);
+    };
+    window.addEventListener('mouseup', end);
+    window.addEventListener('blur', end);
+  });
+}
+bindWindowDrag(grid);
+bindWindowDrag(mosaic);
