@@ -2,11 +2,13 @@
 
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from dataclasses import dataclass
 
 import httpx
 from fastapi import FastAPI
 
 from athena_api.accounts import AccountRuntime
+from athena_api.brain import GraphStore
 from athena_api.config import KiwoomAccount, Settings, get_settings
 from athena_api.errors import KiwoomAuthError
 from athena_api.kiwoom import (
@@ -17,7 +19,19 @@ from athena_api.kiwoom import (
     RateLimiter,
     TokenManager,
 )
-from athena_api.process_lock import CredentialProcessLock
+from athena_api.process_lock import BrainProcessLock, CredentialProcessLock
+
+
+@dataclass(slots=True)
+class BrainRuntime:
+    """Everything bound to the investment-brain graph projection for this process."""
+
+    store: GraphStore
+    lock: BrainProcessLock
+    ready: bool = False
+    last_error: str | None = None
+    fts_ready: bool = False
+    fts_last_error: str | None = None
 
 
 def _publish_default(app: FastAPI, runtime: AccountRuntime | None) -> None:
@@ -38,6 +52,53 @@ def _publish_default(app: FastAPI, runtime: AccountRuntime | None) -> None:
     )
     app.state.kiwoom_order_rate_limiter = app.state.kiwoom_rate_limiter
     app.state.kiwoom_ws_last_error = runtime.ws_last_error if runtime else None
+
+
+def _publish_brain(app: FastAPI, brain: BrainRuntime | None) -> None:
+    app.state.brain_store = brain.store if brain is not None and brain.ready else None
+    app.state.brain_ready = brain is not None and brain.ready
+    app.state.brain_last_error = brain.last_error if brain is not None else None
+    app.state.brain_fts_ready = brain is not None and brain.fts_ready
+    app.state.brain_fts_last_error = brain.fts_last_error if brain is not None else None
+
+
+async def _open_brain(settings: Settings) -> BrainRuntime:
+    """Best-effort brain startup: a missing native runtime degrades, lock contention does not.
+
+    ADR investment-brain-architecture.md §4.1 makes this process the graph projection's
+    sole READ_WRITE owner, so a held process lock is a correctness hazard — §11's
+    acceptance list requires a second backend to fail to start, so lock contention is
+    left to raise and abort startup (see the caller). A missing native runtime (e.g. no
+    ATHENA_LADYBUG_DLL_DIR configured on this machine) is an environment/packaging gap,
+    not a correctness hazard: the brain is optional and independent of Kiwoom, so that
+    failure is recorded on the runtime instead of aborting startup.
+    """
+    lock = BrainProcessLock.for_db_path(settings.brain_db_path, label=str(settings.brain_db_path))
+    lock.acquire()
+    store = GraphStore(settings.brain_db_path)
+    brain = BrainRuntime(store=store, lock=lock)
+    try:
+        settings.brain_db_path.parent.mkdir(parents=True, exist_ok=True)
+        await store.open()
+    except Exception as exc:
+        brain.last_error = str(exc)
+        lock.release()
+        return brain
+    brain.ready = True
+    try:
+        await store.load_fts_extension()
+    except Exception as exc:
+        brain.fts_last_error = str(exc)
+    else:
+        brain.fts_ready = True
+    return brain
+
+
+async def _teardown_brain(app: FastAPI, brain: BrainRuntime | None) -> None:
+    if brain is not None:
+        await brain.store.close()
+        brain.lock.release()
+    _publish_brain(app, None)
 
 
 def _build_runtime(
@@ -91,8 +152,10 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
         app.state.kiwoom_accounts = runtimes
         app.state.kiwoom_default_account = runtime_settings.kiwoom_default_account
         _publish_default(app, None)
+        _publish_brain(app, None)
         http_client: httpx.AsyncClient | None = None
         locks: list[CredentialProcessLock] = []
+        brain: BrainRuntime | None = None
         try:
             if runtime_settings.has_credentials:
                 http_client = httpx.AsyncClient()
@@ -125,13 +188,18 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
                     else:
                         runtime.ws_client = ws_client
                 _publish_default(app, runtimes.get(runtime_settings.kiwoom_default_account or ""))
+            if runtime_settings.brain_enabled:
+                brain = await _open_brain(runtime_settings)
+                _publish_brain(app, brain)
         except BaseException:
             await _teardown(app, runtimes, http_client, locks)
+            await _teardown_brain(app, brain)
             raise
         try:
             yield
         finally:
             await _teardown(app, runtimes, http_client, locks)
+            await _teardown_brain(app, brain)
 
     return lifespan
 

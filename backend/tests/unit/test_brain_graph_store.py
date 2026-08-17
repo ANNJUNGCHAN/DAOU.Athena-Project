@@ -300,6 +300,15 @@ async def test_relation_id_replaces_old_endpoints_and_preserves_stored_direction
     )
 
 
+async def test_load_fts_extension_activates_the_official_package(store: GraphStore) -> None:
+    """Regression guard for ADR §4.2's "fts 로드" lifespan step (lifespan.py:_open_brain).
+
+    Only activation is covered here — search_entities is still a substring scan; see
+    brain/AGENTS.md and plan.md §4-B for the documented gap.
+    """
+    await store.load_fts_extension()
+
+
 async def test_reset_deletes_projection_and_restores_schema_metadata(store: GraphStore) -> None:
     await store.upsert_entity(entity("theme:semiconductor", "반도체"))
     await store.upsert_source(source())
