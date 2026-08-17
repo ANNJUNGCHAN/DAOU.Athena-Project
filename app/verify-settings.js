@@ -149,6 +149,13 @@ async function run() {
     log('order-api-set.disable', h.orderApiSet(null, { id: okReg.id, enabled: false }));
     log('auth-token-status', h.authTokenStatus(null, { id: okReg.id }));
     log('auth-token-refresh', await h.authTokenRefresh(null, { id: okReg.id }));
+    // "연결 해제" 버튼(auth-screen.js) 결선 — au10002(접근토큰폐기) 계약을 같은
+    // 스텁 네트워크로 확인한다. 폐기 후 상태는 항상 needed로 돌아가야 한다.
+    log('auth-token-revoke.ok(stubbedNetwork)', await h.authTokenRevoke(null, { id: okReg.id }));
+    log('auth-token-status.afterRevoke', h.authTokenStatus(null, { id: okReg.id }));
+    // 두 번째 폐기 — 이미 로컬 토큰이 없는 상태(needed)에서는 upstream 호출 없이
+    // 바로 ok:true를 돌려줘야 한다(revoke_token()의 "토큰 없으면 즉시 반환"과 동일).
+    log('auth-token-revoke.alreadyNeeded(noUpstreamCall)', await h.authTokenRevoke(null, { id: okReg.id }));
     log('account.setActive.self', h.accountSetActive(null, { id: okReg.id }));
     log('account.remove', h.accountRemove(null, { id: okReg.id }));
     log('account.list.afterRemove', h.accountList());

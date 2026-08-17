@@ -428,6 +428,10 @@ function handleAuthTokenRefresh(e, { id } = {}) {
   return accounts.tokenRefresh(id);
 }
 
+function handleAuthTokenRevoke(e, { id } = {}) {
+  return accounts.tokenRevoke(id);
+}
+
 ipcMain.handle('athena:account-list', handleAccountList);
 ipcMain.handle('athena:account-register', handleAccountRegister);
 ipcMain.handle('athena:account-set-active', handleAccountSetActive);
@@ -435,6 +439,7 @@ ipcMain.handle('athena:account-remove', handleAccountRemove);
 ipcMain.handle('athena:order-api-set', handleOrderApiSet);
 ipcMain.handle('athena:auth-token-status', handleAuthTokenStatus);
 ipcMain.handle('athena:auth-token-refresh', handleAuthTokenRefresh);
+ipcMain.handle('athena:auth-token-revoke', handleAuthTokenRevoke);
 
 accounts.onTokenChange((payload) => {
   if (chatWin && !chatWin.isDestroyed()) {
@@ -518,6 +523,7 @@ module.exports = {
     orderApiSet: handleOrderApiSet,
     authTokenStatus: handleAuthTokenStatus,
     authTokenRefresh: handleAuthTokenRefresh,
+    authTokenRevoke: handleAuthTokenRevoke,
     mcpList: handleMcpList,
     mcpStageSnippet: handleMcpStageSnippet,
     mcpRegister: handleMcpRegister,

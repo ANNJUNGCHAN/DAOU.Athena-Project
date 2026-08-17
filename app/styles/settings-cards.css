@@ -264,6 +264,12 @@
 }
 .uk-warnbox-body { font-family: var(--font-body); font-size: 12px; color: var(--color-k-dim); }
 
+/* probe 시트 닫기 확인 — .uk-warnbox 그대로 쓰되 본문을 늘리고 버튼을 오른쪽에
+   붙인다(D8). 새 색·새 형태를 만들지 않는다 — risks 경고와 같은 자리다. */
+.uk-close-warn { align-items: center; margin-bottom: 10px; }
+.uk-close-warn .uk-warnbox-body { flex: 1; }
+.uk-close-warn-btns { display: flex; gap: 8px; flex: none; }
+
 /* ---- probe · 툴 허용 시트 ---- */
 .uk-probe-head { display: flex; align-items: center; gap: 12px; padding-bottom: 6px; flex-wrap: wrap; }
 .uk-col-toolname { flex: 0 0 240px; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

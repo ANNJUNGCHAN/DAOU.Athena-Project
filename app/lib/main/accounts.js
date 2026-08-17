@@ -23,6 +23,8 @@ const secrets = require('./secrets');
 const KIWOOM_HOST = 'mockapi.kiwoom.com';
 const TOKEN_PATH = '/oauth2/token';
 const TOKEN_API_ID = 'au10001';
+const REVOKE_PATH = '/oauth2/revoke';
+const REVOKE_API_ID = 'au10002';
 
 function statePath() {
   return path.join(app.getPath('userData'), 'athena-accounts.json');
@@ -108,6 +110,78 @@ function issueKiwoomToken(appKey, secretKey) {
             return;
           }
           resolve({ ok: true, token: parsed.token, expiresDt: String(parsed.expires_dt) });
+        });
+      },
+    );
+    req.on('timeout', () => { req.destroy(); resolve({ ok: false, reason: 'network' }); });
+    req.on('error', () => resolve({ ok: false, reason: 'network' }));
+    req.write(body);
+    req.end();
+  });
+}
+
+// backend/athena_api/kiwoom/return_codes.py의 normalize_return_code와 동일한
+// 규칙 — 숫자 문자열("0000" 등)을 정수로 정규화한다. tests/unit/test_auth.py
+// ::test_revoke_accepts_string_zero_return_code가 "0000"도 성공으로 받아들이는
+// 걸 실측으로 확정했다. issueKiwoomToken은 이 정규화 없이 이미 동작 중인 기존
+// 코드라 건드리지 않는다 — 여기 revoke 쪽에서만 새로 쓴다.
+function normalizeReturnCode(value) {
+  if (value == null) return '';
+  if (typeof value === 'boolean') return String(value);
+  if (typeof value === 'number') return String(value);
+  if (typeof value !== 'string') return String(value);
+  const trimmed = value.trim();
+  if (!trimmed) return '';
+  return /^[+-]?\d+$/.test(trimmed) ? String(parseInt(trimmed, 10)) : trimmed;
+}
+
+// 키움 모의투자 토큰 폐기 — 문서화된 au10002 계약(backend/docs/KIWOOM_API_IO.md
+// "접근토큰폐기": POST /oauth2/revoke, body {appkey, secretkey, token})을
+// issueKiwoomToken과 같은 방식으로 그대로 다시 호출한다. authorization 헤더는
+// backend/athena_api/kiwoom/auth.py:141-153(KiwoomAuth.revoke_token, 같은
+// upstream을 실제로 호출하는 유일한 참조 구현)가 실어 보내는 것과 동일하게
+// 채운다.
+function revokeKiwoomToken(appKey, secretKey, token) {
+  return new Promise((resolve) => {
+    const body = JSON.stringify({ appkey: appKey, secretkey: secretKey, token });
+    const req = https.request(
+      {
+        hostname: KIWOOM_HOST,
+        path: REVOKE_PATH,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+          'api-id': REVOKE_API_ID,
+          authorization: `Bearer ${token}`,
+          'Content-Length': Buffer.byteLength(body),
+        },
+        timeout: 10000,
+      },
+      (res) => {
+        let data = '';
+        res.on('data', (chunk) => { data += chunk; });
+        res.on('end', () => {
+          if (res.statusCode < 200 || res.statusCode >= 300) {
+            resolve({ ok: false, reason: 'network' });
+            return;
+          }
+          let parsed;
+          try {
+            parsed = JSON.parse(data);
+          } catch {
+            resolve({ ok: false, reason: 'network' });
+            return;
+          }
+          if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed) || !('return_code' in parsed)) {
+            resolve({ ok: false, reason: 'network' });
+            return;
+          }
+          const returnCode = normalizeReturnCode(parsed.return_code);
+          if (returnCode !== '0') {
+            resolve({ ok: false, reason: 'auth' });
+            return;
+          }
+          resolve({ ok: true });
         });
       },
     );
@@ -329,6 +403,47 @@ async function tokenRefresh(id) {
   return { ok: !!result.ok, state: finalState };
 }
 
+// ---------------------------------------------------------------------------
+// athena:auth-token-revoke — auth-screen.js의 "연결 해제" 버튼. 갭이었던 IPC
+// 채널을 여기서 채운다(2026-08-17, 팀리드 지시). backend/athena_api/kiwoom/
+// auth.py의 KiwoomAuth.revoke_token()이 이미 이 upstream을 실제로 호출해
+// 검증됐고(테스트로 확정), 그 구현은 upstream이 거부해도 `finally`에서 로컬
+// 토큰을 항상 지운다 — "연결 해제"는 사용자가 명시적으로 요청한 동작이라
+// upstream 실패로 로컬에 죽은 토큰이 남아있는 것보다 지우는 쪽이 낫다고 이미
+// 내려진 결정을 그대로 따른다. 그래서 이 함수는 항상 state: 'needed'로
+// 끝나고, ok는 upstream 폐기 확인이 성공했는지만 별도로 알려준다.
+async function tokenRevoke(id) {
+  const state = readState();
+  const entry = state.accounts.find((a) => a.id === id);
+  if (!entry) return { ok: false, state: 'needed' };
+
+  // 로컬에 발급된 토큰 자체가 없으면(state 'needed') 폐기할 게 없다 —
+  // revoke_token()이 `if not self._token: return`으로 upstream 호출 없이
+  // 끝내는 것과 동일하게 처리한다.
+  if (computeTokenState(entry) === 'needed') return { ok: true, state: 'needed' };
+
+  const appKey = secrets.getValue(id, 'appKey');
+  const secretKey = secrets.getValue(id, 'secretKey');
+  const token = secrets.getValue(id, 'kiwoomToken');
+
+  let result = { ok: false, reason: 'invalid' };
+  if (appKey && secretKey && token) {
+    result = await revokeKiwoomToken(appKey, secretKey, token);
+  }
+
+  const state2 = readState();
+  const entry2 = state2.accounts.find((a) => a.id === id);
+  if (entry2) {
+    delete entry2.tokenOverride;
+    delete entry2.tokenExpiresAt;
+    delete entry2.tokenIssuedAt;
+    writeState(state2);
+  }
+  secrets.deleteValue(id, 'kiwoomToken');
+  emitChange(id);
+  return { ok: !!result.ok, state: 'needed' };
+}
+
 module.exports = {
   list,
   register,
@@ -337,5 +452,6 @@ module.exports = {
   orderApiSet,
   tokenStatus,
   tokenRefresh,
+  tokenRevoke,
   onTokenChange,
 };
