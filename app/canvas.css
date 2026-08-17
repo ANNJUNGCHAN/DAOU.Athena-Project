@@ -10,7 +10,15 @@ html, body { background: transparent; }
      두꺼워진다 — 어두운 데스크톱 위 ~0.82, 데이터 캔버스 위 ~0.97."
      캔버스는 광량 3단(데스크톱→창→캔버스) 중 가장 두꺼운 단계다. 얇게 만들면
      뒤가 비쳐 숫자가 겹쳐 읽히고 그건 §8 "정보 정직성" 위반이다. */
-  background: rgba(29, 34, 44, 0.97);
+  background-color: rgba(29, 34, 44, 0.97);
+  /* 리퀴드 글라스는 검정 평면이 아니다(2026-08-17 사용자 지시 — "애플의 리퀴드
+   * 글라스라는 사실을 명심해"). 두께 0.97은 규범값이라 유지하되, 표면에 무채색
+   * (백색 알파만 — 틴트 금지) 광량 변화를 깔아 카드 유리(backdrop-filter)가 실제로
+   * 굴절할 것을 만든다 — soul.md §7 "유리 뒤에는 반드시 굴절할 것이 있다".
+   * 균일한 단색 위의 blur는 눈에 보이지 않아 유리가 아니라 평면으로 읽힌다. */
+  background-image:
+    radial-gradient(820px 480px at 22% 12%, rgba(255, 255, 255, 0.05), transparent 70%),
+    radial-gradient(720px 520px at 78% 88%, rgba(255, 255, 255, 0.035), transparent 70%);
   will-change: clip-path;
   overflow: hidden;
 }
@@ -33,7 +41,18 @@ html, body { background: transparent; }
   gap: 16px;
   padding: 20px;
   align-content: start;
+  /* 카드가 창보다 많이 쌓이면 스크롤 — 2026-08-17 디자인 리뷰 [HIGH] 정정.
+   * 이전 판은 부모 .mosaic의 overflow:hidden에 잘려 4번째 카드부터 영구히
+   * 안 보였다(soul.md §5 "서로를 밀어내지 않는다" 위반 — 밀어내기는커녕 통째로
+   * 사라졌다). 창 자동 성장이 아니라 스크롤을 택했다 — 캔버스 창 치수는 E3
+   * 확정값(1560×800)이고, 확장 애니메이션의 clip-path 기하가 창 크기에 묶여 있다. */
+  overflow-y: auto;
+  overflow-x: hidden;
 }
+.grid::-webkit-scrollbar { width: 8px; }
+.grid::-webkit-scrollbar-track { background: transparent; }
+.grid::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.14); border-radius: 999px; }
+.grid::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.28); }
 .grid:empty::before {
   content: '캔버스 대기 중 — 대화 창에서 질의를 보내면 이 자리에 캔버스가 뜬다';
   grid-column: 1 / -1;
@@ -43,15 +62,28 @@ html, body { background: transparent; }
   text-align: center;
 }
 
+/* 카드도 유리다 — soul.md §7 "모든 표면이 유리다. 두 창도, 창 안의 카드도 전부."
+ * 2026-08-17 디자인 리뷰 [HIGH]로 정정: 이전 판은 고정 rgba 채움 + backdrop-filter
+ * 0건이라 §7이 금지한 "뒤에 굴절할 것 없는 반투명 회색 사각형"이었다. 이제 알파를
+ * 낮추고 실제 blur를 걸어 뒤(모자이크 표면·sheen 그라데이션·그 뒤의 acrylic)를
+ * 굴절시킨다. 콘텐츠는 backdrop-filter의 영향을 받지 않으므로 §8 정보 정직성
+ * (숫자 가독)은 훼손되지 않는다 — 흐려지는 것은 카드 뒤이지 카드 위 텍스트가 아니다.
+ * 깊이는 값으로 만든다(§7) — 경계는 테두리가 아니라 상단 인셋 하이라이트(광량) +
+ * 드롭섀도가 긋고, 테두리는 유리 가장자리 두께 암시 수준으로만 남긴다. */
 .card {
-  background: rgba(36, 42, 54, 0.7);
-  border: 1px solid var(--color-k-line);
+  background: rgba(36, 42, 54, 0.55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 14px;
   padding: 14px 16px;
   min-height: 200px;
   max-height: 360px;
   display: flex; flex-direction: column;
   overflow: hidden;
+  /* 상단 인셋 하이라이트 = 유리 윗면에 맺히는 빛(애플 리퀴드 글라스의 스펙큘러).
+   * 광량으로 깊이를 만들고 테두리는 뒤로 물린다(§7 "깊이는 값으로"). */
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.13), 0 12px 32px rgba(0, 0, 0, 0.35);
   transition: box-shadow var(--dur-base) var(--ease), border-color var(--dur-base) var(--ease);
 }
 .card.stream { order: 1; }

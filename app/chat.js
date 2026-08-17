@@ -227,15 +227,35 @@ window.addEventListener('mouseup', () => {
 // 카드는 데이터 표현 공통 UI라 들어오는 데이터가 달라져도 종류가 늘지 않는다 —
 // TR이 몇 개든 12종에 접는다. 여기 매핑은 그 접기의 목업이다.
 const CARD_PLAN = {
-  stream: { label: '스트림', tool: 'search_news' },
-  reader: { label: '리더', tool: 'download_document' },
-  table: { label: '공통 테이블', tool: 'get_financial_statement' },
+  stream: { label: '스트림', tool: 'search_news', toolLabel: '뉴스 검색' },
+  reader: { label: '리더', tool: 'download_document', toolLabel: '공시 원문 조회' },
+  table: { label: '공통 테이블', tool: 'get_financial_statement', toolLabel: '재무제표 조회' },
   // AT-ST-001/AT-ST-004 제어 카드 트리거 — 카드 자체는 canvas.js가 그린다
   // (00-통합-계획.md §4.1). tool 코드는 실제 TR/MCP 툴 이름이 아직 없어 이
   // 대화 창 진행 표시용으로만 쓰는 자리표시자다 — 발명, 리포트에 명시.
-  accounts: { label: '계좌', tool: 'account_list' },
-  mcp: { label: 'MCP 서버', tool: 'mcp_server_list' },
+  accounts: { label: '계좌', tool: 'account_list', toolLabel: '계좌 목록 조회' },
+  mcp: { label: 'MCP 서버', tool: 'mcp_server_list', toolLabel: 'MCP 서버 목록 조회' },
 };
+
+// 내부 식별자를 사용자에게 보여주지 않는다(ui/DESIGN-SOUL.md 축3 — "TR코드는
+// 개발자의 언어이지 사용자의 언어가 아니다"). 2026-08-17 디자인 리뷰 [HIGH] 정정:
+// 이전 판은 진행 라인·트레이스에 tool 코드(search_news 등)를, 완료 칩에 응답
+// canvas_type(table/free 등)을 원문 그대로 노출했다. 화면에는 한국어 라벨만 내보내고
+// 원문 식별자는 코드(CARD_PLAN.tool)와 로그에만 남는다.
+const CANVAS_TYPE_LABELS = {
+  table: '공통 테이블',
+  'mcp-table': '공통 테이블',
+  stream: '스트림',
+  reader: '리더',
+  free: '자유 카드',
+  notice: '알림',
+};
+
+function canvasTypeLabel(t) {
+  // 미지의 타입도 원문 식별자를 새지 않게 한다 — 게이트웨이가 새 canvas_type을
+  // 보내기 시작하면 여기 매핑에 등록하는 것이 정직한 경로다.
+  return CANVAS_TYPE_LABELS[t] || '카드';
+}
 
 function pickCardTypes(text) {
   const t = text.trim();
@@ -352,7 +372,9 @@ async function runQueryLive(text) {
   for (const t of canvasTypes) {
     const chip = document.createElement('span');
     chip.className = 'chip';
-    chip.textContent = t; // 실제 응답 canvas_type(table/free/...) — 요청값이 아니다
+    // 실제 응답 canvas_type(table/free/...) — 요청값이 아니다. 화면에는 한국어
+    // 라벨로만 낸다(내부 식별자 노출 금지, CANVAS_TYPE_LABELS 주석 참조).
+    chip.textContent = canvasTypeLabel(t);
     meta.appendChild(chip);
   }
   const trace = document.createElement('span');
@@ -413,7 +435,7 @@ async function runQueryFixture(text) {
   for (const type of types) {
     const code = document.createElement('span');
     code.className = 'tr-code';
-    code.textContent = CARD_PLAN[type].tool;
+    code.textContent = CARD_PLAN[type].toolLabel; // 화면은 사용자 언어 — 원문 코드는 UI에 안 낸다
     progTrs.appendChild(code);
     trEls[type] = code;
   }
@@ -421,8 +443,8 @@ async function runQueryFixture(text) {
   let done = 0;
   let opened = false;
   for (const type of types) {
-    progText.textContent = `${CARD_PLAN[type].tool} 불러오는 중 · ${done}/${types.length}`;
-    setLocked(true, `${CARD_PLAN[type].tool} 불러오는 중 · ${done}/${types.length}`);
+    progText.textContent = `${CARD_PLAN[type].toolLabel} 불러오는 중 · ${done}/${types.length}`;
+    setLocked(true, `${CARD_PLAN[type].toolLabel} 불러오는 중 · ${done}/${types.length}`);
     await wait(500);
     if (myToken !== abortToken) return;
 
@@ -433,7 +455,7 @@ async function runQueryFixture(text) {
 
     trEls[type].classList.add('done');
     done += 1;
-    progText.textContent = `${CARD_PLAN[type].tool} 완료 · ${done}/${types.length}`;
+    progText.textContent = `${CARD_PLAN[type].toolLabel} 완료 · ${done}/${types.length}`;
   }
   scheduleHeightSync();
   await wait(200);
@@ -463,7 +485,7 @@ async function runQueryFixture(text) {
     meta.appendChild(chip);
   }
   const trace = document.createElement('span');
-  trace.textContent = types.map((t) => CARD_PLAN[t].tool).join(' · ') + ` · ${((types.length * 0.5) + 0.55).toFixed(1)}s`;
+  trace.textContent = types.map((t) => CARD_PLAN[t].toolLabel).join(' · ') + ` · ${((types.length * 0.5) + 0.55).toFixed(1)}s`;
   meta.appendChild(trace);
   aLine.appendChild(meta);
 
