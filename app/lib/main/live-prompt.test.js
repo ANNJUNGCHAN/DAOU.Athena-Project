@@ -17,3 +17,18 @@ test('buildLivePrompt: 캔버스 렌더 지시와 table 스키마 힌트를 담�
   // 조회 없는 질문의 탈출구가 있어야 잡담에 빈 캔버스를 강제하지 않는다.
   assert.ok(p.includes('캔버스 없이 짧게'));
 });
+
+test('buildLivePrompt: stream 스키마 힌트가 canvas.py STREAM_SCHEMA 필드명 그대로 들어간다', () => {
+  const p = buildLivePrompt('x');
+  assert.ok(p.includes('"stream"'));
+  assert.ok(p.includes('"records"'));
+  assert.ok(p.includes('"ts_precision"'));
+  assert.ok(p.includes('"source"'));
+});
+
+test('buildLivePrompt: reader 스키마 힌트가 canvas.py READER_SCHEMA 필드명 그대로 들어간다', () => {
+  const p = buildLivePrompt('x');
+  assert.ok(p.includes('"reader"'));
+  assert.ok(p.includes('"body_markdown"'));
+  assert.ok(p.includes('"highlights"'));
+});

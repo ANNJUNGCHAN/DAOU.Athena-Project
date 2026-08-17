@@ -3,7 +3,7 @@
   "ok": true,
   "exitCode": 0,
   "error": null,
-  "elapsedMs": 9326,
+  "elapsedMs": 11726,
   "canvasCount": 1,
   "canvases": [
     {
@@ -18,16 +18,16 @@
   ],
   "diagnostics": {
     "skippedLines": 0,
-    "totalEvents": 11
+    "totalEvents": 14
   },
   "eventTypeCounts": {
     "system/init": 1,
-    "system/thinking_tokens": 2,
-    "assistant": 4,
-    "user": 2,
+    "assistant": 6,
+    "user": 3,
     "rate_limit_event": 1,
+    "system/thinking_tokens": 2,
     "result/success": 1
   },
   "stderrHead": "",
-  "finalResultText": "호출 완료했다. 결과:\n\n- `canvas_type`: `table`\n- `fell_back`: `false` — 폴백 없이 table 스키마로 그대로 렌더링됨\n- `fallback_reason`: `null`\n- `data`: 보낸 columns/rows가 변형 없이 그대로 반환됨 (종목명/현재가, 삼성전자 71,000원)\n\n추가 툴 호출은 하지 않았다."
+  "finalResultText": "호출 완료했습니다.\n\n- `canvas_type`: `table`\n- `fell_back`: `false` — free 폴백 없이 table 스키마로 그대로 렌더됐습니다.\n- `data`: 지시한 columns/rows가 변형 없이 그대로 반영됨 (종목명/현재가, 삼성전자 71,000원)\n\n지시대로 이후 추가 툴 호출은 하지 않았습니다."
 }

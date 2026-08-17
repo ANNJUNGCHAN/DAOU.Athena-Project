@@ -93,9 +93,16 @@ function addLiveCard(result) {
   const envelope = result.envelope;
   if (!envelope) return renderLiveNotice('캔버스 응답에 데이터가 없다.');
   // ★ canvas_type은 응답값이다 — 요청값이 아니다(S4 RESULT.md §5). success/fallback
-  // 둘 다 이 필드로 어떤 카드를 그릴지 정한다. table이 아니면(대개 free로 폴백)
-  // 자유 카드로 떨어뜨린다 — 폴백은 예외가 아니라 흔한 경로다.
+  // 둘 다 이 필드로 어떤 카드를 그릴지 정한다. 알려진 4종(table/stream/reader) 중
+  // 하나가 아니면(대개 free로 폴백) 자유 카드로 떨어뜨린다 — 폴백은 예외가 아니라
+  // 흔한 경로다. `!envelope.fell_back`은 방어적 중복이다 — canvas.py의
+  // validate_canvas_payload()는 폴백 시 canvas_type 자체를 'free'로 바꿔 보내므로
+  // (backend/athena_mcp/canvas.py L152-157) 이론상 fell_back=true인데 canvas_type이
+  // 'stream'/'reader'/'table'로 남는 조합은 안 나오지만, 계약이 바뀌어도 조용히
+  // 깨진 카드를 그리지 않도록 남겨둔다.
   if (envelope.canvas_type === 'table' && !envelope.fell_back) return renderMcpTable(envelope);
+  if (envelope.canvas_type === 'stream' && !envelope.fell_back) return renderLiveStream(envelope);
+  if (envelope.canvas_type === 'reader' && !envelope.fell_back) return renderLiveReader(envelope);
   return renderFreeCanvas(envelope);
 }
 
@@ -148,6 +155,107 @@ function renderMcpTable(envelope) {
   }
   table.appendChild(tbody);
   body.appendChild(table);
+}
+
+// ---------- 실배선 스트림(신규①) — MCP render_canvas의 실제 stream 응답 ----------
+// 목업 스트림(아래 addCard → renderStream)은 네이버 뉴스 API 원형
+// {title, pubDate, originallink, link}을 읽는다 — 이건 다른 데이터 형상이다.
+// 실배선은 canvas.py STREAM_SCHEMA를 그대로 따른다(backend/athena_mcp/canvas.py
+// L34-55 실측): data.records:[{ts, ts_precision:"second"|"day", source, title,
+// url, summary?, tickers?[], kind?}]. title은 null 허용(스키마 "type":
+// ["string","null"]) — sanitize(null)도 null을 그대로 돌려주므로(lib/sanitize.js)
+// textContent 대입 전에 폴백 문구를 둔다. sanitize한 문자열은 textContent로만
+// 넣는다 — innerHTML 금지(CLAUDE.md §6).
+function renderLiveStream(envelope) {
+  const { body } = makeCard('stream', envelope.caption || '스트림 · 뉴스');
+  const records = (envelope.data && Array.isArray(envelope.data.records)) ? envelope.data.records : [];
+  if (!records.length) {
+    body.appendChild(errorNote('빈 스트림 — records가 없다.'));
+    return;
+  }
+  const ul = document.createElement('ul');
+  ul.className = 'stream-list';
+  const SHOW = 14;
+  for (const rec of records.slice(0, SHOW)) {
+    const li = document.createElement('li');
+    li.className = 'stream-item';
+
+    const time = document.createElement('span');
+    time.className = 'stream-time';
+    time.textContent = formatRecordTs(rec && rec.ts, rec && rec.ts_precision);
+
+    const source = document.createElement('span');
+    source.className = 'stream-source';
+    source.textContent = (rec && rec.source) || domainOf(rec && rec.url);
+
+    const title = document.createElement('span');
+    title.className = 'stream-title';
+    title.textContent = sanitize(rec && rec.title) || '(제목 없음)'; // 텍스트 노드만
+
+    li.appendChild(time);
+    li.appendChild(source);
+    li.appendChild(title);
+    ul.appendChild(li);
+  }
+  body.appendChild(ul);
+  if (records.length > SHOW) {
+    const more = document.createElement('div');
+    more.className = 'stream-more';
+    more.textContent = `+ ${records.length - SHOW}건 더`;
+    body.appendChild(more);
+  }
+}
+
+// `ts`가 second/day 어느 정밀도든 한 형식으로 렌더한다 — day 정밀도에서 없는
+// 시:분을 지어내지 않는다(정보 정직성, soul.md §8).
+function formatRecordTs(ts, precision) {
+  if (!ts) return '';
+  const d = new Date(ts);
+  if (Number.isNaN(d.getTime())) return String(ts);
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  if (precision === 'day') return `${mm}.${dd}`;
+  const hh = String(d.getHours()).padStart(2, '0');
+  const mi = String(d.getMinutes()).padStart(2, '0');
+  return `${mm}.${dd} ${hh}:${mi}`;
+}
+
+// ---------- 실배선 리더(신규②) — MCP render_canvas의 실제 reader 응답 ----------
+// canvas.py READER_SCHEMA 실측(L57-68): data는 {title, body_markdown,
+// format?:"markdown"|"raw"(기본 markdown), highlights?[], error_state?:
+// null|"not_found"|"processing_delayed"}. error_state가 있으면 문서가 아예
+// 없거나(당일 접수 공시 등) 처리 지연 중이라는 뜻이라 본문 대신 안내만 낸다 —
+// 조용히 빈 카드를 그리지 않는다. format:"raw"는 마크다운 문법으로 해석하지
+// 않고 문단 하나로 그대로 낸다.
+function renderLiveReader(envelope) {
+  const data = (envelope.data && typeof envelope.data === 'object') ? envelope.data : {};
+  const { body } = makeCard('reader', data.title || envelope.caption || '리더 · 공시 원문');
+  if (data.error_state === 'not_found') {
+    body.appendChild(errorNote('문서를 찾을 수 없다 — not_found.'));
+    return;
+  }
+  if (data.error_state === 'processing_delayed') {
+    body.appendChild(errorNote('문서 처리가 지연되고 있다 — processing_delayed.'));
+    return;
+  }
+  if (!data.body_markdown) {
+    body.appendChild(errorNote('빈 리더 — body_markdown이 없다.'));
+    return;
+  }
+  if (Array.isArray(data.highlights) && data.highlights.length) {
+    const note = document.createElement('div');
+    note.className = 'fin-meta';
+    note.textContent = `하이라이트: ${data.highlights.join(' · ')}`;
+    body.appendChild(note);
+  }
+  if (data.format === 'raw') {
+    const p = document.createElement('p');
+    p.className = 'md-p';
+    p.textContent = data.body_markdown; // 텍스트 노드 — innerHTML 금지
+    body.appendChild(p);
+  } else {
+    renderMarkdownInto(body, data.body_markdown);
+  }
 }
 
 // ---------- 자유 카드(신규, W4 최소 구현) ----------
