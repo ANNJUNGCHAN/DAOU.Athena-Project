@@ -233,6 +233,45 @@ uv run pytest -q
 
 22개 실패는 모두 `tests/unit/test_selector_eval.py`에 집중된다. 주요 원인은 분할 detail 질의가 제외된 base operation을 선택하는 문제, preferred detail ranking 실패, 모호한 account 질의를 거부하지 않는 문제, 한·영 detail title first-rank 불변식 실패다. G001 매니페스트 테스트 실패가 아니며, 이후 selector와 화면 definition을 연결하기 전에 반드시 해결해야 한다.
 
+### 7-1. 2026-08-17 재실측 — 위 기준선은 전부 낡았다
+
+§7은 2026-08-15 스냅샷이다. 그대로 인용하지 마라. `main`에서 재실행한 현행 수치:
+
+```powershell
+cd C:\Projects\DAOU.Athena\backend
+.venv\Scripts\python -m pytest -q
+.venv\Scripts\python -m pytest tests\test_common_screen_manifest.py `
+                               tests\test_screen_card_facts.py tests\test_io_docs.py -q
+.venv\Scripts\python -m ruff check .
+.venv\Scripts\python scripts\generate_api.py --check
+.venv\Scripts\python scripts\render_screen_injection_map.py --check
+.venv\Scripts\python scripts\render_screen_card_facts.py --check
+```
+
+| 항목 | 2026-08-15 (§7) | **2026-08-17 (현행)** |
+|---|---|---|
+| 전체 백엔드 | 403 passed, **22 failed** | **603 passed, 0 failed** (245초) |
+| 공통화면 테스트 | 16 passed (manifest + io_docs) | **25 passed** (+ `test_screen_card_facts.py`) |
+| generator check | 통과 | 통과 (injection map · card facts 생성기 2종 추가) |
+| Ruff | 통과 | 통과 (`ruff check .` 전체) |
+| 앱 확장 p95 | 266.9ms | **33.4ms** (max 33.4ms) |
+| 앱 수축 p95 | 83.4ms | **16.8ms** |
+
+**22개 selector 실패는 해소됐다** — split-detail 라우팅 재설계로 구조에서 제거했다
+(원인·결정은 [`plan.md`](plan.md) §3). §7의 "selector와 화면 definition을 연결하기
+전에 반드시 해결" 조건은 **충족됐다.** 다만 §10의 나머지 항목은 그대로 남아 있다.
+
+**앱 프레임 수치가 좋아진 것을 G007 개선으로 읽지 마라.** `ui/soul.md` §7의
+굴절층·데이터층 분리는 여전히 미구현이고, 이 환경은 공유 데스크톱이라 실행마다
+흔들린다. G007의 성능 재검증 대상은 그대로다.
+
+**같은 재실측이 `npm run verify` 자체의 결함 2건을 잡았다.** exit 0에 단언 전부
+`true`인데도 검증 5~8이 온보딩에 가려진 숨은 DOM을 재고 있었고, 자동 성장 단언은
+DPI 반올림 1px에 통과하고 있었다. 고친 뒤의 수치가 위 표다. 원인·수정·대가는
+[`app/README.md`](../app/README.md) "검증이 스스로를 속인 결함". **G005/G007이
+요구하는 "전수 DOM/IPC sentinel 검증"을 설계할 때 이 실패 양식을 전제로 삼아라 —
+숨은 요소에도 `executeJavaScript` 이벤트는 도달한다.**
+
 ## 8. 커밋·푸시 체크포인트
 
 현재 공통화면 관련 주요 커밋은 다음과 같다.
@@ -272,7 +311,8 @@ guarded workflow다. live order는 절대 호출하지 마라.
 - Electron은 실제 FastAPI/키움 데이터가 아니라 mock canvas를 사용한다.
 - 301개 전수 DOM/IPC/field sentinel 검증은 아직 없다.
 - Paper 아트보드는 골격만 있고 최종 비평·완료 처리가 남았다.
-- 전체 백엔드 테스트는 22개 selector 평가 실패가 있다.
+- ~~전체 백엔드 테스트는 22개 selector 평가 실패가 있다.~~ → **해소됐다** (§7-1,
+  2026-08-17 `603 passed, 0 failed`). 이 항목은 더 이상 차단 사유가 아니다.
 - 독립 code-reviewer `APPROVE`와 architect `CLEAR`를 받지 않았다.
 - runtime, visual, safety, architecture invariant 최종 게이트를 통과하지 않았다.
 

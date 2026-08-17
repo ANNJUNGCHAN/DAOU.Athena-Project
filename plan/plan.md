@@ -1,6 +1,6 @@
 # Athena 진행 상황 및 재개 계획
 
-> 최종 갱신: 2026-08-16 · 브랜치 `main` — **작업 브랜치 4종이 전부 `main`에 병합됐다**
+> 최종 갱신: 2026-08-17 · 브랜치 `main` — **작업 브랜치 4종이 전부 `main`에 병합됐다**
 >
 > **다음 세션은 이 파일부터 읽는다.** 여기에는 *지금 상태 / 검증된 사실 / 다음 수*만 적는다.
 > 설계 근거와 함정 목록은 [`plan/00-인수인계.md`](00-인수인계.md)에 있다. 중복하지 않는다.
@@ -15,7 +15,12 @@
 
 ---
 
-## 1. 실측 상태 (2026-08-15 재검증)
+## 1. 실측 상태
+
+> **현행 수치는 아래 세 블록 중 마지막(2026-08-17)이다.** 앞 두 블록은 날짜가
+> 박힌 스냅샷이고 어떻게 여기까지 왔는지를 남기려고 보존한다 — **인용하지 마라.**
+
+**2026-08-15 · 재검증:**
 
 ```
 backend 전체:  494 passed, 0 failed   (138초)
@@ -40,16 +45,29 @@ backend 전체:  517 passed, 0 failed   (113초)
 이 브랜치는 `main`에 없는 미커밋 작업(계좌 모듈, 셀렉터 수정, 화면기획서)을 포함한다. 517은
 그 상태의 수치이지 `main`의 수치가 아니다.
 
-**2026-08-16 · 브랜치 4종 병합 후 `main`에서 재측정 — 이 수치가 현행이다:**
+**2026-08-17 · `main`에서 전면 재실측 — 이 수치가 현행이다:**
 
 ```
-backend 전체:  603 passed, 0 failed   (130초)
+backend 전체:  603 passed, 0 failed   (245초)
+  tests/mcp                             → 205 passed  (이전 기록 191 — 낡았다)
+  test_selector_core + test_selector_eval → 127 passed  (이전 기록 102 — 낡았다)
+  공통화면 3종(manifest·card_facts·io_docs) → 25 passed
   ruff check .                          → All checks passed
   generate_api.py --check               → Generated files are current
+  render_screen_injection_map.py --check→ Generated screen injection map is current
+  render_screen_card_facts.py --check   → Generated screen card facts are current
 app:
   npm run verify                        → 검증 1~8 전부 통과 (검증 7은 15개 단언 전부 true)
+                                          확장 p95 33.4ms / max 33.4ms · 수축 p95 16.8ms
   npm run verify:settings-cards         → 계좌·MCP 카드 상태 11장 캡처
 ```
+
+> **⚠ 이 실측이 검증 자체의 결함 2건을 잡아냈고, 고친 뒤의 수치다.** 고치기 전
+> `npm run verify`는 exit 0에 단언 전부 `true`를 내면서 **아무것도 검증하지 않고
+> 있었다** — 계좌 미등록 머신에서 온보딩이 `#app`을 가린 채 검증 5~8이 숨은 DOM에
+> 이벤트를 쐈고, 자동 성장 단언은 DPI 반올림 1px(205 > 204)에 통과했다. 원인·수정·
+> 대가는 [`app/README.md`](../app/README.md) "검증이 스스로를 속인 결함". 잡은 방법은
+> 단언을 읽은 게 아니라 **캡처를 열어본 것**이다(§3 "실측이 문서를 이긴다").
 
 병합된 브랜치: `ANNJUNGCHAN/MCP` · `ANNJUNGCHAN/REST-API` · `ANNJUNGCHAN/Call` ·
 `ANNJUNGCHAN/화면기획서-점검`. 각 워크트리의 미커밋 작업은 병합 전에 원자 커밋으로 보존했다
@@ -76,9 +94,9 @@ app:
 | 영역 | 상태 | 위치 |
 |---|---|---|
 | 키움 REST 백엔드 (301 라우팅) | **동작** | `backend/athena_api/` |
-| MCP 게이트웨이 | **동작 · 실서버 이식 완료 · W1 잔여 5건 결선** · 191 테스트 통과 | `backend/athena_mcp/` |
+| MCP 게이트웨이 | **동작 · 실서버 이식 완료 · W1 잔여 5건 결선** · 205 테스트 통과 | `backend/athena_mcp/` |
 | 투자 브레인 (그래프 투영) | **모듈 완성, FastAPI 미결선** | `backend/athena_api/brain/` |
-| LLM API 셀렉터 | **동작** · 102 테스트 통과 (§3) | `backend/athena_api/selector/` |
+| LLM API 셀렉터 | **동작** · 127 테스트 통과 (§3) | `backend/athena_api/selector/` |
 | Electron 두 창 셸 | **동작** · 실제 데이터 렌더 | `app/` |
 | 스파이크 실측 데이터 | 86건 보존 | `spike/captures/` |
 | MCP 이식 절차 (등록→승인→probe→서빙) | **동작** · 외부 서버 3종 실왕복 | `athena_mcp/{onboarding,runner,__main__}.py` |
@@ -135,7 +153,7 @@ resolve  → detail_group="buy_bid_prices" 를 LLM이 명시, 서버는 소속�
 
 ### A. MCP 게이트웨이 `backend/athena_mcp/`
 
-외부 MCP 서버들을 집계해 **단일 MCP 서버로 재노출**한다. 191 테스트 통과.
+외부 MCP 서버들을 집계해 **단일 MCP 서버로 재노출**한다. 205 테스트 통과 (2026-08-17).
 
 | 모듈 | 역할 | 미완 |
 |---|---|---|
@@ -208,8 +226,11 @@ ADR: [`plan/investment-brain-architecture.md`](investment-brain-architecture.md)
 대화 창(1560×204, 위로만 성장) + 캔버스 창(1560×800, clip-path 확장). Acrylic 기반 OS 합성.
 실측 데이터로 렌더되고 접근성 3종(투명도/대비/모션 축소) 캡처 보유.
 
-**알려진 리스크**: 확장 프레임 p95 **54ms** (최악 89.5ms). 스파이크 단계는 33.3ms였다.
-완화책은 `ui/soul.md` §7이 이미 적어둠 — **굴절층과 데이터층 분리** (미구현).
+**알려진 리스크**: 확장 프레임이 실행마다 흔들린다. 2026-08-17 세 실행의 max가
+33.4 / 49.9 / 33.4ms였고 이전 기록은 p95 54ms / max 89.5ms였다. **좋아진 것을 개선으로
+읽으면 안 된다** — 완화책인 `ui/soul.md` §7의 **굴절층·데이터층 분리는 여전히
+미구현**이고, 이 변동은 공유 데스크톱의 부하 편차다(§9 "초록 나올 때까지 재실행하는
+건 검증이 아니다").
 
 ---
 
@@ -340,7 +361,7 @@ git log --oneline -8
 
 # 백엔드 (전체 스위트는 약 4분)
 cd backend && .venv/Scripts/python -m pytest -q
-cd backend && .venv/Scripts/python -m pytest tests/mcp -q            # 191 passed
+cd backend && .venv/Scripts/python -m pytest tests/mcp -q            # 205 passed
 cd backend && .venv/Scripts/python -m pytest tests/unit/test_selector_eval.py -x -q
 cd backend && .venv/Scripts/python -m ruff check athena_api athena_mcp tests
 cd backend && .venv/Scripts/python scripts/generate_api.py --check   # 생성물 드리프트 확인
