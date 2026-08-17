@@ -55,7 +55,11 @@ function runCli(args, opts = {}) {
     try {
       child = spawn(PYTHON_EXE, ['-m', 'athena_mcp', ...args], {
         cwd: BACKEND_DIR,
-        env: { ...process.env, PYTHONPATH: BACKEND_DIR },
+        // opts.env — mcp-env.js의 buildEnvOverrides() 결과(있으면). upstream
+        // 서버를 실제로 spawn하는 서브커맨드(probe)만 이걸 채워 보낸다 —
+        // 안 쓰는 서브커맨드(list/register/approve/allow/remove)까지 복호화된
+        // 비밀값을 자식 프로세스 환경에 실어 보낼 이유가 없다.
+        env: { ...process.env, PYTHONPATH: BACKEND_DIR, ...(opts.env || {}) },
         windowsHide: true,
       });
     } catch (err) {
@@ -207,8 +211,15 @@ async function approve(alias) {
 // athena:mcp-probe — `probe --json`은 실제 --json 플래그가 있는 유일한
 // 서브커맨드다. cmd_probe는 사람용 텍스트를 먼저 찍고 그 뒤에 JSON 블록을
 // 찍는다 — 그 블록만 파싱한다(첫 '{' 부터).
-async function probe(alias) {
-  const result = await runCli(['probe', alias, '--json']);
+//
+// `extraEnv` — mcp-env.js의 `buildEnvOverrides(alias)`. probe는 실제로 upstream
+// 서버를 spawn하므로(client.py의 UpstreamServerHandle.start()), 레지스트리에
+// 센티널이 남아있으면 이 env가 없이는 그 서버만 명확히 실패한다(fail-closed,
+// registry.py의 resolve_secret_env() 참고). 호출자(main.js)가 채워 넘긴다 —
+// 이 파일은 mcp-env.js를 직접 require하지 않는다(순환 회피, mcp-env.js
+// 모듈 설명 참고).
+async function probe(alias, extraEnv = {}) {
+  const result = await runCli(['probe', alias, '--json'], { env: extraEnv });
   let report = null;
   const jsonStart = result.stdout.indexOf('{');
   if (jsonStart >= 0) {

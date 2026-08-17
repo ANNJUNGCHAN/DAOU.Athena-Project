@@ -19,7 +19,7 @@ from athena_mcp.client import (
     UpstreamServerHandle,
 )
 from athena_mcp.consent import ConsentNotGrantedError, ConsentStore
-from athena_mcp.registry import ServerEntry
+from athena_mcp.registry import SECRET_SENTINEL, MissingSecretEnvError, ServerEntry
 
 FIXTURE_SERVER = Path(__file__).resolve().parent / "fixtures" / "fake_server.py"
 
@@ -73,6 +73,51 @@ async def test_spawn_without_approval_is_blocked(tmp_path, entry):
     store = ConsentStore(path=tmp_path / "consent.json")  # request_consent도 안 함
     handle = UpstreamServerHandle(entry, store, log_dir=tmp_path / "logs")
     with pytest.raises(ConsentNotGrantedError):
+        await handle.start()
+    assert handle.is_running is False
+
+
+# ---------------------------------------------------------------------------
+# SECURITY.md §6 — env 센티널이 실제로 자식 프로세스까지 전달되는지 (진짜 spawn)
+# ---------------------------------------------------------------------------
+
+
+async def test_sentinel_env_resolved_and_delivered_to_subprocess(tmp_path, monkeypatch):
+    """앱이 주입하는 `ATHENA_MCP_ENV__<alias>__<KEY>`가 실제로 이 프로세스의
+    env로 spawn된 자식(fake_server.py)에 전달되는지 진짜 subprocess 왕복으로
+    확인한다 — resolve_secret_env() 단위 테스트(test_registry.py)만으로는
+    StdioServerParameters를 거쳐 실제 자식까지 도달하는지 증명하지 못한다."""
+    monkeypatch.setenv("ATHENA_MCP_ENV__fixture__MY_SECRET", "복호화된-실값")
+    entry = ServerEntry(
+        alias="fixture",
+        command=sys.executable,
+        args=[str(FIXTURE_SERVER)],
+        env={"MY_SECRET": SECRET_SENTINEL},
+    )
+    store = _approved_store(tmp_path, "fixture")
+    handle = UpstreamServerHandle(entry, store, log_dir=tmp_path / "logs")
+    try:
+        await handle.start()
+        result = await handle.call_tool("env_var", {"name": "MY_SECRET"})
+        assert result.isError is False
+        assert result.content[0].text == "복호화된-실값"
+    finally:
+        await handle.close()
+
+
+async def test_sentinel_env_missing_injection_blocks_spawn_fail_closed(tmp_path, monkeypatch):
+    """앱을 거치지 않고 이 서버를 직접 spawn하려 하면(주입 환경변수 없음)
+    조용히 빈 값으로 넘기지 않고 spawn 자체가 명확히 실패한다."""
+    monkeypatch.delenv("ATHENA_MCP_ENV__fixture__MY_SECRET", raising=False)
+    entry = ServerEntry(
+        alias="fixture",
+        command=sys.executable,
+        args=[str(FIXTURE_SERVER)],
+        env={"MY_SECRET": SECRET_SENTINEL},
+    )
+    store = _approved_store(tmp_path, "fixture")
+    handle = UpstreamServerHandle(entry, store, log_dir=tmp_path / "logs")
+    with pytest.raises(MissingSecretEnvError):
         await handle.start()
     assert handle.is_running is False
 

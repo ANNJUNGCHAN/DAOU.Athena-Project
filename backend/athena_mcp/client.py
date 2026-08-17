@@ -32,7 +32,7 @@ from mcp.shared.session import ProgressFnT
 from mcp.types import CallToolResult, InitializeResult, ListToolsResult, Tool
 
 from athena_mcp.consent import ConsentStore
-from athena_mcp.registry import ServerEntry
+from athena_mcp.registry import ServerEntry, resolve_secret_env
 
 # 실측 최대 upstream 응답: `jjlabsio` `get_disclosure`(사업보고서) 1,042,014자
 # (spike/mcp-client/CAPTURE-S2B-jjlabsio.md, quirks.py가 인용하는 636,059자
@@ -232,10 +232,16 @@ class UpstreamServerHandle:
             # 그대로 여기까지 온다). 둘 다 "느린 서버"가 아니라 즉시 실패이므로
             # 리포트로 돌려줘야 한다.
             errlog = self.log_path.open("a", encoding="utf-8")
+            # SECURITY.md §6 — 레지스트리의 env 값은 평문이 아니라 센티널일 수
+            # 있다(app/lib/main/mcp-env.js가 마이그레이션한 경우). 여기서 실값으로
+            # 푼다 — 이 프로세스 환경에 `ATHENA_MCP_ENV__<alias>__<KEY>`가 없으면
+            # `MissingSecretEnvError`가 나고, 그건 이 try 블록 안이라 아래
+            # `except Exception`이 `_startup_error`에 담아 정상적인 "즉시 실패"
+            # 경로(pydantic ValidationError와 같은 처리)를 그대로 탄다.
             params = StdioServerParameters(
                 command=self.entry.command,
                 args=list(self.entry.args),
-                env=dict(self.entry.env) or None,
+                env=resolve_secret_env(self.alias, self.entry.env) or None,
             )
             async with (
                 stdio_client(params, errlog=errlog) as (read, write),

@@ -9,6 +9,7 @@ const onboarding = require('./lib/main/onboarding');
 const cliAccounts = require('./lib/main/cli-accounts');
 const accounts = require('./lib/main/accounts');
 const mcpCli = require('./lib/main/mcp-cli');
+const mcpEnv = require('./lib/main/mcp-env');
 // 결정 D1의 실배선 — claude -p 스폰 + stream-json 파싱 + .mcp.json 생성.
 const { runClaudeQuery } = require('./lib/main/claude-runner');
 const { ensureMcpConfig } = require('./lib/main/mcp-config');
@@ -451,7 +452,22 @@ accounts.onTokenChange((payload) => {
 // MCP (AT-ST-004/005/006) — backend/athena_mcp CLI를 감싼다, 재구현하지 않는다.
 // ---------------------------------------------------------------------------
 
-function handleMcpList() {
+// SECURITY.md §6 — mcp-list 호출마다 평문 env를 발견하면 마이그레이션한다.
+// migratePlaintextEnv()는 멱등이라(이미 센티널이면 즉시 no-op) 매번 불러도
+// 비용이 거의 없다. 마이그레이션 실패(예: safeStorage 불가)는 리스트 자체를
+// 막지 않는다 — 평문 상태로라도 서버 목록은 계속 보여야 한다.
+async function handleMcpList() {
+  try {
+    const { migrated, skipped } = await mcpEnv.migratePlaintextEnv();
+    if (migrated.length) {
+      mdlog(`mcp-env 마이그레이션: ${migrated.length}건 (${migrated.map((m) => `${m.alias}.${m.key}`).join(', ')})`);
+    }
+    if (skipped.length) {
+      mdlog(`mcp-env 마이그레이션 스킵: ${skipped.map((s) => `${s.alias}.${s.key}: ${s.reason}`).join('; ')}`);
+    }
+  } catch (err) {
+    mdlog(`mcp-env 마이그레이션 실패: ${String((err && err.message) || err)}`);
+  }
   return mcpCli.list();
 }
 
@@ -468,7 +484,9 @@ function handleMcpApprove(e, { alias } = {}) {
 }
 
 function handleMcpProbe(e, { alias } = {}) {
-  return mcpCli.probe(alias);
+  // probe는 실제로 upstream 서버를 spawn한다 — 그 서버 하나만의 env override를
+  // 넘긴다(전체가 아니라 alias로 필터링, mcp-env.js buildEnvOverrides() 참고).
+  return mcpCli.probe(alias, mcpEnv.buildEnvOverrides(alias));
 }
 
 function handleMcpAllowTool(e, { alias, tool, allowed } = {}) {
@@ -494,8 +512,17 @@ ipcMain.handle('athena:mcp-remove', handleMcpRemove);
 // 버그가 있었다(프로세스는 뜨지만 windows는 전혀 생성되지 않음 — W2 검증 중 발견).
 // verify.js가 main.js를 라이브러리로 require할 때만 자동 기동을 끄도록
 // 명시적 환경변수로 분기한다.
+// 부팅 시에도 한 번 마이그레이션을 시도한다(SECURITY.md §6) — 설정 화면을
+// 한 번도 안 열어 mcp-list가 호출되지 않아도, claude -p의 첫 왕복 전에 최대한
+// 일찍 평문을 지운다. createWindows()를 막지 않는다 — fire-and-forget이고
+// 실패해도(멱등이라 다음 mcp-list/부팅에서 재시도된다) 창 생성과 무관하다.
 if (!process.env.ATHENA_NO_AUTOSTART) {
-  app.whenReady().then(createWindows);
+  app.whenReady().then(() => {
+    createWindows();
+    mcpEnv.migratePlaintextEnv().catch((err) => {
+      mdlog(`부팅 시 mcp-env 마이그레이션 실패: ${String((err && err.message) || err)}`);
+    });
+  });
 }
 
 // verify.js에서 재사용 (require로 로드될 때는 자동 기동하지 않는다)

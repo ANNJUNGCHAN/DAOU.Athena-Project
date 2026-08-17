@@ -77,12 +77,12 @@
   },
   "account.register.ok(stubbedNetwork)": {
     "ok": true,
-    "id": "b26d705d-0584-44f2-b791-93e305e8d6e2"
+    "id": "4675ed8a-fb9d-4ef3-bfe8-0e532cecbc05"
   },
   "account.list.afterRegister": {
     "accounts": [
       {
-        "id": "b26d705d-0584-44f2-b791-93e305e8d6e2",
+        "id": "4675ed8a-fb9d-4ef3-bfe8-0e532cecbc05",
         "alias": "검증-성공계좌",
         "connected": true,
         "active": true,
@@ -111,7 +111,7 @@
   "account.list.afterOrderApiOn": {
     "accounts": [
       {
-        "id": "b26d705d-0584-44f2-b791-93e305e8d6e2",
+        "id": "4675ed8a-fb9d-4ef3-bfe8-0e532cecbc05",
         "alias": "검증-성공계좌",
         "connected": true,
         "active": true,
@@ -139,8 +139,8 @@
   },
   "auth-token-status": {
     "state": "ready",
-    "expiresInSec": 2315441772,
-    "issuedAt": "2026-08-17T12:43:46.978Z"
+    "expiresInSec": 2315440456,
+    "issuedAt": "2026-08-17T13:05:43.405Z"
   },
   "auth-token-refresh": {
     "ok": true,
@@ -181,7 +181,9 @@
         "args": [
           "tests/mcp/fixtures/fake_server.py"
         ],
-        "envKeys": [],
+        "envKeys": [
+          "MY_TEST_SECRET"
+        ],
         "risks": []
       }
     ]
@@ -197,7 +199,7 @@
     "ok": true,
     "protocolVersion": "2025-11-25",
     "encodingCorrupt": false,
-    "toolCount": 7,
+    "toolCount": 8,
     "echoAllowed": {
       "name": "echo",
       "description": "Echo: <message>",
@@ -232,6 +234,19 @@
         "warnings": []
       }
     ]
+  },
+  "mcp-env.afterMigrate.isSentinel": true,
+  "mcp-env.afterMigrate.noPlaintextOnDisk": true,
+  "mcp-env.buildEnvOverrides.decryptRoundTripMatches": true,
+  "mcp-env.directSpawn.withoutAppInjection": {
+    "exitCode": 1,
+    "ok": false,
+    "errorMentionsInjectionVar": true
+  },
+  "mcp-env.directSpawn.withAppSimulatedInjection": {
+    "exitCode": 0,
+    "ok": true,
+    "toolCount": 8
   },
   "mcp.remove": {
     "ok": true

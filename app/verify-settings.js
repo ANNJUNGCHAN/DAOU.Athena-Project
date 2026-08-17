@@ -162,13 +162,20 @@ async function run() {
   }
 
   // ---------------- MCP ----------------
-  log('mcp.list.empty', h.mcpList());
+  // mcpList()는 mcp-env.js의 마이그레이션(비동기)을 먼저 시도하고 나서 목록을
+  // 돌려주므로 이제 async다 — await 없이 부르면 Promise 객체가 그대로
+  // 로깅된다(SECURITY.md §6 배선 이후).
+  log('mcp.list.empty', await h.mcpList());
 
   const pythonExe = '.venv/Scripts/python.exe';
   const fixture = 'tests/mcp/fixtures/fake_server.py';
+  // env에 평문 시크릿을 심는다 — SECURITY.md §6 마이그레이션 실검증이 이 값의
+  // 왕복(등록 시 평문 -> mcpList() 마이그레이션 -> 센티널 -> buildEnvOverrides()
+  // 복호화 -> 실제 spawn 전달)을 추적한다.
+  const PLAINTEXT_SECRET = 'plaintext-verify-value-0123456789';
   const snippet = JSON.stringify({
     mcpServers: {
-      '검증용 테스트 서버': { command: pythonExe, args: [fixture] },
+      '검증용 테스트 서버': { command: pythonExe, args: [fixture], env: { MY_TEST_SECRET: PLAINTEXT_SECRET } },
     },
   });
   const staged = await h.mcpStageSnippet(null, { snippet });
@@ -196,10 +203,64 @@ async function run() {
     log('mcp.allowTool.off(consentJsonMutation)', allowOff);
     const probe3 = await h.mcpProbe(null, { alias: one.alias });
     log('mcp.probe.afterAllowOff.echoAllowed', (probe3.tools || []).find((t) => t.name === 'echo'));
-    log('mcp.list.afterProbe', h.mcpList());
+    log('mcp.list.afterProbe', await h.mcpList());
+
+    // ---- SECURITY.md §6 실검증 — MCP env 암호화 왕복 + fail-closed ----
+    // 위 mcpList() 호출이 이미 이번 프로세스의 실제 safeStorage로 마이그레이션을
+    // 한 번 거쳤다 — 그 결과를 여기서 확인한다.
+    {
+      const mcpEnv = require('./lib/main/mcp-env');
+      const { PYTHON_EXE, BACKEND_DIR } = require('./lib/main/mcp-config');
+      const { spawnSync } = require('child_process');
+
+      const registryRaw = fs.readFileSync(mcpEnv.registryPath(), 'utf-8');
+      const registryJson = JSON.parse(registryRaw);
+      const redactedValue = registryJson.servers[one.alias].env.MY_TEST_SECRET;
+      log('mcp-env.afterMigrate.isSentinel', redactedValue === mcpEnv.SENTINEL);
+      log('mcp-env.afterMigrate.noPlaintextOnDisk', !registryRaw.includes(PLAINTEXT_SECRET));
+
+      const overrides = mcpEnv.buildEnvOverrides(one.alias);
+      const varName = mcpEnv.envVarName(one.alias, 'MY_TEST_SECRET');
+      log('mcp-env.buildEnvOverrides.decryptRoundTripMatches', overrides[varName] === PLAINTEXT_SECRET);
+
+      // 앱 경유 없이 이 서버를 직접 probe — 주입 환경변수가 없으므로 센티널을
+      // 못 풀어 spawn이 명확히 실패해야 한다(fail-closed, registry.py의
+      // MissingSecretEnvError).
+      const directNoEnv = spawnSync(
+        PYTHON_EXE, ['-m', 'athena_mcp', 'probe', one.alias, '--json'],
+        { cwd: BACKEND_DIR, env: { ...process.env, PYTHONPATH: BACKEND_DIR }, encoding: 'utf-8' }
+      );
+      let directNoEnvReport = null;
+      try {
+        const idx = directNoEnv.stdout.indexOf('{');
+        if (idx >= 0) directNoEnvReport = JSON.parse(directNoEnv.stdout.slice(idx));
+      } catch { /* 파싱 실패해도 아래 exitCode/ok로 판단 가능 */ }
+      log('mcp-env.directSpawn.withoutAppInjection', {
+        exitCode: directNoEnv.status,
+        ok: directNoEnvReport ? directNoEnvReport.ok : null,
+        errorMentionsInjectionVar: !!(directNoEnvReport && directNoEnvReport.error && directNoEnvReport.error.includes(varName)),
+      });
+
+      // 앱 spawn 경로 시뮬레이션 — 복호화된 값을 환경변수로 주입하면 성공해야 한다.
+      const directWithEnv = spawnSync(
+        PYTHON_EXE, ['-m', 'athena_mcp', 'probe', one.alias, '--json'],
+        { cwd: BACKEND_DIR, env: { ...process.env, PYTHONPATH: BACKEND_DIR, ...overrides }, encoding: 'utf-8' }
+      );
+      let directWithEnvReport = null;
+      try {
+        const idx = directWithEnv.stdout.indexOf('{');
+        if (idx >= 0) directWithEnvReport = JSON.parse(directWithEnv.stdout.slice(idx));
+      } catch { /* ignore */ }
+      log('mcp-env.directSpawn.withAppSimulatedInjection', {
+        exitCode: directWithEnv.status,
+        ok: directWithEnvReport ? directWithEnvReport.ok : null,
+        toolCount: directWithEnvReport ? (directWithEnvReport.tools || []).length : null,
+      });
+    }
+
     const removed = await h.mcpRemove(null, { alias: one.alias });
     log('mcp.remove', removed);
-    log('mcp.list.afterRemove', h.mcpList());
+    log('mcp.list.afterRemove', await h.mcpList());
   }
 
   fs.writeFileSync(path.join(__dirname, 'captures', 'VERIFY-SETTINGS-REPORT.json'), JSON.stringify(report, null, 2), 'utf-8');
