@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""앱-검증-200.jsonl 결정적 검증기 (v2 — tier·judge 루브릭 포함).
+"""앱-검증-200.jsonl 결정적 검증기 (v3 — 페르소나·비개발자 어휘 규칙 포함).
 
 데이터셋의 기계 검증 가능한 계약을 강제한다:
   1. JSONL 파싱 · 200건(live 100 + contract 100) · id 유일성
@@ -8,6 +8,8 @@
   4. tool_path의 upstream 툴이 등록·승인 별칭 체계와 정합
   5. tier 규칙: live는 키움 셀렉터 4툴 금지 + 난이도 최상 + 동작-실배선/차단-외부요인만
   6. 질문 문자열 완전 중복 금지
+  7. (v3) persona 필수 — 사용자는 HTS/MTS 투자자다. question에 TR ID·툴 함수명·
+     코드 개념(개발자 어휘)이 나오면 위반. 붙여넣기 원문은 attachment 필드로 분리
 
 실행:  backend/.venv/Scripts/python.exe datasets/validate.py
 성공 시 exit 0, 위반 발견 시 위반 목록을 출력하고 exit 1.
@@ -59,8 +61,21 @@ KNOWN_INTENTIONAL = {"HRD-094"}
 REQUIRED = (
     "id", "tier", "category", "difficulty", "question", "why_hard", "expected_answer",
     "judge", "expected_route", "expected_screen", "implementation_status", "notes", "group",
+    "persona",
 )
 JUDGE_REQUIRED = ("must_include", "must_not_include", "verify_via", "auto_checks")
+PERSONAS = {"개인투자자", "전업투자자", "일반직장인", "애널리스트", "리서치원", "브로커", "CFO", "재무전문가"}
+# 질문은 비개발자(HTS/MTS 사용자) 화법이어야 한다 — 아래 패턴이 question에 있으면 위반.
+# 붙여넣기 원문(설정 스니펫 등)은 question이 아니라 attachment 필드에 담는다.
+import re as _re
+QUESTION_JARGON = [
+    (_re.compile(r"k[at]\d{5}"), "TR-ID"),
+    (_re.compile(r"(?<![A-Za-z0-9])0[A-Z](?![A-Za-z])"), "websocket-ID"),
+    (_re.compile(r"get_[a-z_]+|search_[a-z_]+"), "툴 함수명"),
+    (_re.compile(r"dart-mcp|korea-stock-mcp|naver-search-2|kiwoom-realtime-mcp|pykrx"), "서버 별칭(개발자식 지칭)"),
+    (_re.compile(r"corp_code|detail_group|canvas_type|fell_back|mcpServers|NODE_OPTIONS|IPC|스키마|정규식|리터럴|renderer|렌더러"), "코드 개념"),
+    (_re.compile(r"probe|프로브"), "probe(UI 어휘 아님)"),
+]
 
 
 def main() -> int:
@@ -101,6 +116,15 @@ def main() -> int:
 
         if tier not in TIERS:
             problems.append(f"{cid}: tier 위반 {tier}")
+        if c.get("persona") not in PERSONAS:
+            problems.append(f"{cid}: persona 위반 {c.get('persona')}")
+        q = c.get("question", "")
+        for pat, label in QUESTION_JARGON:
+            if pat.search(q):
+                problems.append(f"{cid}: 질문에 개발자 어휘({label}) — {pat.search(q).group(0)}")
+                break
+        if c.get("attachment") is not None and not isinstance(c.get("attachment"), str):
+            problems.append(f"{cid}: attachment 타입 위반")
         if route.get("kind") not in KINDS:
             problems.append(f"{cid}: kind 위반 {route.get('kind')}")
         if c.get("difficulty") not in DIFFICULTIES:
@@ -178,6 +202,7 @@ def main() -> int:
         "status": dict(Counter(c.get("implementation_status") for c in cases)),
         "kind": dict(Counter((c.get("expected_route") or {}).get("kind") for c in cases)),
         "group": dict(Counter(c.get("group") for c in cases)),
+        "persona": dict(Counter(c.get("persona") for c in cases)),
         "verify_via_usage": dict(Counter(v for c in cases for v in (c.get("judge") or {}).get("verify_via", []))),
     }
     out = Path(__file__).resolve().parent / "validate-report.json"

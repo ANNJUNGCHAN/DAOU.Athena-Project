@@ -5,6 +5,23 @@
 > Athena 앱(두 창 Electron 셸 + MCP 게이트웨이 + 키움 REST 셀렉터)의 검증 데이터셋.
 > **Claude가 평가자다** — 채점 방법·절차·로드맵은 [`평가-로드맵.md`](평가-로드맵.md)가 정본이다.
 
+## 전제 — 사용자는 개발자가 아니다
+
+이 앱을 쓰는 사람은 **HTS/MTS를 쓰는 투자자**다: 개인투자자 · 전업투자자 · 일반직장인 ·
+애널리스트 · 리서치원 · 브로커(PB) · CFO · 재무전문가. TR 코드(`ka10079`)나 툴 함수명
+(`get_financial_statement`), 코드 개념(`corp_code`·스키마·렌더러)을 **모른다**.
+
+따라서 **질문에는 개발자 어휘가 등장하지 않는다** — `validate.py`가 이것을 기계 검증한다
+(TR ID / 툴 함수명 / 서버 별칭의 개발자식 지칭 / 코드 개념 / probe). 케이스마다 `persona`
+필드가 있고, 질문은 그 사람의 실제 화법으로 쓰였다.
+
+허용되는 것은 **사용자가 실제로 보고 쓰는 어휘**다: 앱 UI 문구(설정·계좌·MCP 서버 등록·
+분석/승인/허용 버튼·카드·커맨드바), 본인이 발급받아 입력한 "API 키", 키움 HTS 화면번호,
+그리고 각 전문가군의 금융 전문용어(연결/별도, 이격도, 수급, YoY, 커버리지).
+
+설정 텍스트나 인젝션 페이로드처럼 **붙여넣는 원문**은 `question`이 아니라 `attachment`
+필드에 담는다 — 사용자는 그것을 "받은 텍스트"로 붙여넣을 뿐 내용을 이해하고 말하지 않는다.
+
 ## 두 계층 (tier)
 
 | tier | 건수 | id | 무엇인가 |
@@ -37,9 +54,11 @@ backend/.venv/Scripts/python.exe datasets/validate.py   # exit 0 이어야 한�
 {
   "id": "LIV-001 | HRD-001",
   "tier": "live | contract",
+  "persona": "개인투자자 | 전업투자자 | 일반직장인 | 애널리스트 | 리서치원 | 브로커 | CFO | 재무전문가",
   "category": "소분류",
   "difficulty": "상 | 최상  (live는 전부 최상)",
-  "question": "사용자가 커맨드바에 칠 질문. app-mode 케이스는 조작 절차 서술 포함",
+  "question": "그 페르소나가 커맨드바에 칠 질문. app-mode 케이스는 조작 절차 서술 포함",
+  "attachment": "붙여넣는 원문(설정 텍스트·인젝션 페이로드 등). 없으면 필드 자체가 없음",
   "why_hard": "난이도 근거 — 6요소(①합성 ②선택판단 ③산술·시간추론 ④정책경계 ⑤부분실패 ⑥카드배치) 인용",
   "expected_answer": "사람용 요약 1~3문장 — 채점 정본은 judge다",
   "judge": {
@@ -63,6 +82,8 @@ backend/.venv/Scripts/python.exe datasets/validate.py   # exit 0 이어야 한�
 ## 분포 (validate.py 2026-08-18 실행 결과)
 
 - **tier**: live 100 · contract 100 / **난이도**: 최상 174 · 상 26
+- **페르소나**: 전업투자자 30 · 개인투자자 26 · 브로커 26 · 애널리스트 25 · 리서치원 25 ·
+  일반직장인 24 · 재무전문가 23 · CFO 21 (8종 전부 21~30 범위) / `attachment` 보유 5건
 - **경로**: cross-source 68 · mcp-upstream 53 · kiwoom-api 46 · app-mode 15 · blocked 11 · chat-only 7
 - **구현 상태**: 동작-실배선 127 · 설계-미구현 68 · 차단-외부요인 5
 - **증거 사용**: chat-answer 185 · audit-log 119 · canvas-file 68 · ui-state 34 · screenshot 13 · upstream-log 5
