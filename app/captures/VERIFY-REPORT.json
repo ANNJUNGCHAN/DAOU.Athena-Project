@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-08-17T14:07:39.875Z",
+  "startedAt": "2026-08-17T18:02:56.332Z",
   "layout": {
     "scale": 1,
     "screen": {
@@ -23,8 +23,8 @@
         "height": 312
       },
       "idle": {
-        "width": 2340,
-        "height": 336
+        "width": 2346,
+        "height": 312
       }
     },
     "chatBootedAfterBoot": true,
@@ -46,18 +46,18 @@
     "ok": true
   },
   "expand": {
-    "frameCount": 26,
-    "p50": 16.700000000000045,
-    "p95": 50,
-    "max": 50,
-    "min": 16.5
+    "frameCount": 27,
+    "p50": 18,
+    "p95": 36.09999999999991,
+    "max": 52.69999999999982,
+    "min": 17.299999999999955
   },
   "collapse": {
-    "frameCount": 34,
-    "p50": 16.699999999999818,
-    "p95": 16.90000000000009,
-    "max": 33.19999999999982,
-    "min": 16.40000000000009
+    "frameCount": 33,
+    "p50": 17.899999999999636,
+    "p95": 18.199999999999818,
+    "max": 19.099999999999454,
+    "min": 17.199999999999818
   },
   "afterCollapse": {
     "canvasVisible": false
@@ -126,27 +126,27 @@
     },
     "boundsAfterQuery": {
       "x": 180,
-      "y": 845,
+      "y": 830,
       "width": 1561,
-      "height": 236
+      "height": 252
     },
     "grewTallerThanBase": true,
-    "grownByPx": 31,
+    "grownByPx": 47,
     "finalAnswerText": "캔버스 창에 스트림, 리더, 공통 테이블을 띄웠습니다.",
     "cardChipCount": 3
   },
   "manualResize": {
     "beforeDrag": {
       "x": 180,
-      "y": 845,
+      "y": 830,
       "width": 1561,
-      "height": 236
+      "height": 252
     },
     "afterDrag": {
       "x": 180,
-      "y": 685,
+      "y": 670,
       "width": 1561,
-      "height": 397
+      "height": 413
     },
     "grewByDrag": true,
     "bottomEdgePinned": true
@@ -193,5 +193,14 @@
     "minimizeLowersBoth": true,
     "restorePairsBoth": true
   },
-  "finishedAt": "2026-08-17T14:07:57.608Z"
+  "tableColumnFold": {
+    "trId": "ka10095",
+    "totalColumns": 63,
+    "cardRendered": true,
+    "visibleColumns": 13,
+    "foldedBelowTotal": true,
+    "headerMatchesEveryRow": true,
+    "foldNote": "접힌 컬럼 50개 (전체 63개 중 13개 표시, 1560px 기준)"
+  },
+  "finishedAt": "2026-08-17T18:03:14.058Z"
 }

@@ -525,6 +525,53 @@ app.whenReady().then(async () => {
   };
   console.log('[verify] 검증9(창 기본 기능):', JSON.stringify(report.windowBasics));
 
+  // ---------- 검증 10: §5.3.1 컬럼 우선순위 흡수(2층) — table 카드가 1560px에서 접힌다 ----------
+  // claude -p 실배선 없이(quota 0) canvas.js의 'athena:add-canvas-live' 경로에 실제
+  // ka10095(63컬럼, backend/ref/kiwoom-common-screen-manifest.json column_priority 그대로
+  // 추출한 app/data/wide-table-fold-fixtures.json)를 직접 주입해 app/lib/column-fold.js가
+  // 실제 렌더 DOM에서도 fold를 발동시키는지 확인한다 — main.js를 거치지 않고 canvasWin에
+  // 바로 IPC를 보내므로 fixture/live 소스 분기와 무관하다(순수 렌더러 단 검증).
+  const wideFixtures = JSON.parse(
+    fs.readFileSync(path.join(__dirname, 'data', 'wide-table-fold-fixtures.json'), 'utf-8')
+  );
+  const ka10095Fixture = wideFixtures.trs.find((t) => t.mapping_id === 'base:ka10095');
+  const mockRow = {};
+  for (const col of ka10095Fixture.columns) mockRow[col.key] = `v:${col.key}`;
+  await canvasWin.webContents.send('athena:add-canvas-live', {
+    status: 'success',
+    envelope: {
+      canvas_type: 'table',
+      fell_back: false,
+      caption: `공통 테이블 · ${ka10095Fixture.tr_id} 검증용`,
+      data: { columns: ka10095Fixture.columns, rows: [mockRow, mockRow] },
+    },
+  });
+  await wait(300);
+  const foldProbe = await canvasWin.webContents.executeJavaScript(`
+    (() => {
+      const card = document.querySelector('#grid .card.mcp-table');
+      if (!card) return null;
+      return {
+        headerCellCount: card.querySelectorAll('thead th').length,
+        rowCellCounts: Array.from(card.querySelectorAll('tbody tr')).map((tr) => tr.children.length),
+        foldNote: card.querySelector('.fin-meta') ? card.querySelector('.fin-meta').textContent : null,
+      };
+    })()
+  `);
+  await shot(canvasWin, '18-table-column-fold-ka10095.png');
+
+  report.tableColumnFold = {
+    trId: ka10095Fixture.tr_id,
+    totalColumns: ka10095Fixture.total_columns,
+    cardRendered: foldProbe !== null,
+    visibleColumns: foldProbe && foldProbe.headerCellCount,
+    foldedBelowTotal: foldProbe !== null && foldProbe.headerCellCount < ka10095Fixture.total_columns,
+    headerMatchesEveryRow: foldProbe !== null
+      && foldProbe.rowCellCounts.every((n) => n === foldProbe.headerCellCount),
+    foldNote: foldProbe && foldProbe.foldNote,
+  };
+  console.log('[verify] 검증10(컬럼 우선순위 fold):', JSON.stringify(report.tableColumnFold));
+
   report.finishedAt = new Date().toISOString();
   fs.writeFileSync(path.join(CAPTURES, 'VERIFY-REPORT.json'), JSON.stringify(report, null, 2));
   console.log('[verify] 리포트 저장:', path.join(CAPTURES, 'VERIFY-REPORT.json'));

@@ -5,6 +5,7 @@ const { sanitize } = require('./lib/sanitize');
 const { renderMarkdownInto } = require('./lib/markdown');
 const { loadStreamItems, loadFinancialStatement, loadReaderMarkdown } = require('./lib/mockdata');
 const { errorNote } = require('./lib/ui-kit');
+const { foldColumns } = require('./lib/column-fold');
 
 const mosaic = document.getElementById('mosaic');
 const sheen = document.getElementById('sheen');
@@ -133,13 +134,20 @@ function renderLiveNotice(message) {
 // GLOSSARY.md §2 신규④ "공통 테이블 — 스키마 불특정 레코드. '부모'이자 기본값".
 function renderMcpTable(envelope) {
   const { body } = makeCard('mcp-table', envelope.caption || '공통 테이블');
-  const cols = (envelope.data && Array.isArray(envelope.data.columns)) ? envelope.data.columns : [];
+  const rawCols = (envelope.data && Array.isArray(envelope.data.columns)) ? envelope.data.columns : [];
   const rows = (envelope.data && Array.isArray(envelope.data.rows)) ? envelope.data.rows : [];
 
-  if (!cols.length || !rows.length) {
+  if (!rawCols.length || !rows.length) {
     body.appendChild(errorNote('빈 테이블 — columns 또는 rows가 없다.'));
     return;
   }
+
+  // §5.3.1 컬럼 우선순위 흡수(2층): columns는 이미 백엔드가 §5.3.1 규칙(식별 컬럼
+  // 고정 + 실측 alias 빈도 tie-break, backend/scripts/generate_api.py의
+  // column_priority_ranking)으로 정렬해 보낸다고 가정한다 — 여기서는 그 순서 위에서
+  // 1560px 캔버스 폭 기준으로 접기만 한다(app/lib/column-fold.js). ka10095(63컬럼)
+  // 같은 넓은 표가 스크롤 없이 fold되어 보이는 게 이 단계의 목표다.
+  const { visible: cols, hidden } = foldColumns(rawCols);
 
   const table = document.createElement('table');
   table.className = 'fin-table';
@@ -166,6 +174,14 @@ function renderMcpTable(envelope) {
   }
   table.appendChild(tbody);
   body.appendChild(table);
+
+  // 정보 정직성(ui/soul.md §8): 컬럼을 조용히 지우지 않는다 — 접힌 컬럼 수를 그대로 노출한다.
+  if (hidden.length > 0) {
+    const note = document.createElement('div');
+    note.className = 'fin-meta';
+    note.textContent = `접힌 컬럼 ${hidden.length}개 (전체 ${rawCols.length}개 중 ${cols.length}개 표시, 1560px 기준)`;
+    body.appendChild(note);
+  }
 }
 
 // ---------- 실배선 스트림(신규①) — MCP render_canvas의 실제 stream 응답 ----------

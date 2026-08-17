@@ -1,0 +1,1868 @@
+{
+  "source": "backend/ref/kiwoom-common-screen-manifest.json (column_priority) + backend/ref/kiwoom-tr-inventory.json (resp_body kor 라벨, 1단 LIST 필드는 element가 '- '로 시작 — WS leaf 규칙('- - ')과 다름)",
+  "method": "2026-08-18 1회성 추출 스크립트 실행 결과. column_priority 순서를 그대로 보존(재계산 없음) — app/lib/column-fold.js가 이 순서 위에서 픽셀폭을 누적해 접는다. 재생성하려면 backend/ref/kiwoom-common-screen-manifest.json에서 각 mapping_id의 fields.response.data[].column_priority를 읽고 kiwoom-tr-inventory.json의 해당 TR resp_body에서 alias->kor를 조회하면 된다(추출 스크립트 자체는 app/README.md의 reader-mock.md 선례처럼 남기지 않는다).",
+  "canvas_width_px": 1560,
+  "tr_count": 15,
+  "trs": [
+    {
+      "mapping_id": "base:ka10095",
+      "tr_id": "ka10095",
+      "container_alias": "atn_stk_infr",
+      "total_columns": 63,
+      "columns": [
+        {
+          "key": "stk_cd",
+          "label": "종목코드"
+        },
+        {
+          "key": "stk_nm",
+          "label": "종목명"
+        },
+        {
+          "key": "cur_prc",
+          "label": "현재가"
+        },
+        {
+          "key": "pred_pre",
+          "label": "전일대비"
+        },
+        {
+          "key": "trde_qty",
+          "label": "거래량"
+        },
+        {
+          "key": "flu_rt",
+          "label": "등락율"
+        },
+        {
+          "key": "pred_pre_sig",
+          "label": "전일대비기호"
+        },
+        {
+          "key": "dt",
+          "label": "일자"
+        },
+        {
+          "key": "high_pric",
+          "label": "고가"
+        },
+        {
+          "key": "low_pric",
+          "label": "저가"
+        },
+        {
+          "key": "open_pric",
+          "label": "시가"
+        },
+        {
+          "key": "trde_prica",
+          "label": "거래대금"
+        },
+        {
+          "key": "cntr_tm",
+          "label": "체결시간"
+        },
+        {
+          "key": "cntr_qty",
+          "label": "체결량"
+        },
+        {
+          "key": "sel_bid",
+          "label": "매도호가"
+        },
+        {
+          "key": "buy_bid",
+          "label": "매수호가"
+        },
+        {
+          "key": "cntr_str",
+          "label": "체결강도"
+        },
+        {
+          "key": "close_pric",
+          "label": "종가"
+        },
+        {
+          "key": "base_pric",
+          "label": "기준가"
+        },
+        {
+          "key": "exp_cntr_pric",
+          "label": "예상체결가"
+        },
+        {
+          "key": "tot_sel_req",
+          "label": "총매도잔량"
+        },
+        {
+          "key": "tot_buy_req",
+          "label": "총매수잔량"
+        },
+        {
+          "key": "upl_pric",
+          "label": "상한가"
+        },
+        {
+          "key": "lst_pric",
+          "label": "하한가"
+        },
+        {
+          "key": "exp_cntr_qty",
+          "label": "예상체결량"
+        },
+        {
+          "key": "delta",
+          "label": "델타"
+        },
+        {
+          "key": "stkcnt",
+          "label": "주식수"
+        },
+        {
+          "key": "theory_pric",
+          "label": "이론가"
+        },
+        {
+          "key": "gam",
+          "label": "감마"
+        },
+        {
+          "key": "theta",
+          "label": "쎄타"
+        },
+        {
+          "key": "vega",
+          "label": "베가"
+        },
+        {
+          "key": "law",
+          "label": "로"
+        },
+        {
+          "key": "cap",
+          "label": "자본금"
+        },
+        {
+          "key": "fav",
+          "label": "액면가"
+        },
+        {
+          "key": "mac",
+          "label": "시가총액"
+        },
+        {
+          "key": "tot_sel_cnt",
+          "label": "총매도건수"
+        },
+        {
+          "key": "tot_buy_cnt",
+          "label": "총매수건수"
+        },
+        {
+          "key": "prty",
+          "label": "패리티"
+        },
+        {
+          "key": "elwexec_pric",
+          "label": "ELW행사가"
+        },
+        {
+          "key": "cnvt_rt",
+          "label": "전환비율"
+        },
+        {
+          "key": "innr_vltl",
+          "label": "내재변동성"
+        },
+        {
+          "key": "pred_trde_qty_pre",
+          "label": "전일거래량대비"
+        },
+        {
+          "key": "sel_1th_bid",
+          "label": "매도1차호가"
+        },
+        {
+          "key": "sel_2th_bid",
+          "label": "매도2차호가"
+        },
+        {
+          "key": "sel_3th_bid",
+          "label": "매도3차호가"
+        },
+        {
+          "key": "sel_4th_bid",
+          "label": "매도4차호가"
+        },
+        {
+          "key": "sel_5th_bid",
+          "label": "매도5차호가"
+        },
+        {
+          "key": "buy_1th_bid",
+          "label": "매수1차호가"
+        },
+        {
+          "key": "buy_2th_bid",
+          "label": "매수2차호가"
+        },
+        {
+          "key": "buy_3th_bid",
+          "label": "매수3차호가"
+        },
+        {
+          "key": "buy_4th_bid",
+          "label": "매수4차호가"
+        },
+        {
+          "key": "buy_5th_bid",
+          "label": "매수5차호가"
+        },
+        {
+          "key": "bid_tm",
+          "label": "호가시간"
+        },
+        {
+          "key": "pri_sel_req",
+          "label": "우선매도잔량"
+        },
+        {
+          "key": "pri_buy_req",
+          "label": "우선매수잔량"
+        },
+        {
+          "key": "pri_sel_cnt",
+          "label": "우선매도건수"
+        },
+        {
+          "key": "pri_buy_cnt",
+          "label": "우선매수건수"
+        },
+        {
+          "key": "gear",
+          "label": "기어링"
+        },
+        {
+          "key": "pl_qutr",
+          "label": "손익분기"
+        },
+        {
+          "key": "cap_support",
+          "label": "자본지지"
+        },
+        {
+          "key": "elwexpr_dt",
+          "label": "ELW만기일"
+        },
+        {
+          "key": "cntr_engg",
+          "label": "미결제약정"
+        },
+        {
+          "key": "cntr_pred_pre",
+          "label": "미결제전일대비"
+        }
+      ]
+    },
+    {
+      "mapping_id": "base:kt00015",
+      "tr_id": "kt00015",
+      "container_alias": "trst_ovrl_trde_prps_array",
+      "total_columns": 51,
+      "columns": [
+        {
+          "key": "stk_nm",
+          "label": "종목명"
+        },
+        {
+          "key": "stk_cd",
+          "label": "종목코드"
+        },
+        {
+          "key": "io_tp_nm",
+          "label": "입출구분명"
+        },
+        {
+          "key": "loan_dt",
+          "label": "대출일"
+        },
+        {
+          "key": "cmsn",
+          "label": "수수료"
+        },
+        {
+          "key": "exct_amt",
+          "label": "정산금액"
+        },
+        {
+          "key": "cntr_dt",
+          "label": "체결일"
+        },
+        {
+          "key": "trde_dt",
+          "label": "거래일자"
+        },
+        {
+          "key": "rmrk_nm",
+          "label": "적요명"
+        },
+        {
+          "key": "entra_remn",
+          "label": "예수금잔고"
+        },
+        {
+          "key": "crnc_cd",
+          "label": "통화코드"
+        },
+        {
+          "key": "trde_amt",
+          "label": "거래금액"
+        },
+        {
+          "key": "dly_sum",
+          "label": "연체합"
+        },
+        {
+          "key": "orig_deal_no",
+          "label": "원거래번호"
+        },
+        {
+          "key": "uncl_ocr",
+          "label": "미수(원/주)"
+        },
+        {
+          "key": "rpym_sum",
+          "label": "변제합"
+        },
+        {
+          "key": "rcpy_no",
+          "label": "출납번호"
+        },
+        {
+          "key": "prcsr",
+          "label": "처리자"
+        },
+        {
+          "key": "trde_no",
+          "label": "거래번호"
+        },
+        {
+          "key": "crd_deal_tp_nm",
+          "label": "신용거래구분명"
+        },
+        {
+          "key": "loan_amt_rpya",
+          "label": "대출금상환"
+        },
+        {
+          "key": "fc_trde_amt",
+          "label": "거래금액(외)"
+        },
+        {
+          "key": "fc_exct_amt",
+          "label": "정산금액(외)"
+        },
+        {
+          "key": "trde_ocr_tp",
+          "label": "거래종류구분"
+        },
+        {
+          "key": "trde_kind_nm",
+          "label": "거래종류명"
+        },
+        {
+          "key": "trde_agri_tax",
+          "label": "거래및농특세"
+        },
+        {
+          "key": "rpy_diffa",
+          "label": "상환차금"
+        },
+        {
+          "key": "fc_trde_tax",
+          "label": "거래세(외)"
+        },
+        {
+          "key": "fc_entra",
+          "label": "외화예수금잔고"
+        },
+        {
+          "key": "mdia_tp_nm",
+          "label": "매체구분명"
+        },
+        {
+          "key": "io_tp",
+          "label": "입출구분"
+        },
+        {
+          "key": "trde_qty_jwa_cnt",
+          "label": "거래수량/좌수"
+        },
+        {
+          "key": "int_ls_usfe",
+          "label": "이자/대주이용"
+        },
+        {
+          "key": "fc_cmsn",
+          "label": "수수료(외)"
+        },
+        {
+          "key": "fc_dly_sum",
+          "label": "연체합(외)"
+        },
+        {
+          "key": "vlbl_nowrm",
+          "label": "유가금잔"
+        },
+        {
+          "key": "proc_tm",
+          "label": "처리시간"
+        },
+        {
+          "key": "isin_cd",
+          "label": "ISIN코드"
+        },
+        {
+          "key": "stex_cd",
+          "label": "거래소코드"
+        },
+        {
+          "key": "stex_nm",
+          "label": "거래소명"
+        },
+        {
+          "key": "trde_unit",
+          "label": "거래단가/환율"
+        },
+        {
+          "key": "incm_resi_tax",
+          "label": "소득/주민세"
+        },
+        {
+          "key": "proc_brch",
+          "label": "처리점"
+        },
+        {
+          "key": "trde_stle",
+          "label": "매매형태"
+        },
+        {
+          "key": "txon_base_pric",
+          "label": "과세기준가"
+        },
+        {
+          "key": "tax_sum_cmsn",
+          "label": "세금수수료합"
+        },
+        {
+          "key": "frgn_pay_txam",
+          "label": "외국납부세액(외)"
+        },
+        {
+          "key": "fc_uncl_ocr",
+          "label": "미수(외)"
+        },
+        {
+          "key": "rpym_sum_fr",
+          "label": "변제합(외)"
+        },
+        {
+          "key": "rcpmnyer",
+          "label": "입금자"
+        },
+        {
+          "key": "trde_prtc_tp",
+          "label": "거래내역구분"
+        }
+      ]
+    },
+    {
+      "mapping_id": "base:ka30005",
+      "tr_id": "ka30005",
+      "container_alias": "elwcnd_qry",
+      "total_columns": 39,
+      "columns": [
+        {
+          "key": "stk_cd",
+          "label": "종목코드"
+        },
+        {
+          "key": "stk_nm",
+          "label": "종목명"
+        },
+        {
+          "key": "cur_prc",
+          "label": "현재가"
+        },
+        {
+          "key": "pred_pre",
+          "label": "전일대비"
+        },
+        {
+          "key": "trde_qty",
+          "label": "거래량"
+        },
+        {
+          "key": "flu_rt",
+          "label": "등락율"
+        },
+        {
+          "key": "trde_prica",
+          "label": "거래대금"
+        },
+        {
+          "key": "sel_bid",
+          "label": "매도호가"
+        },
+        {
+          "key": "buy_bid",
+          "label": "매수호가"
+        },
+        {
+          "key": "expr_dt",
+          "label": "만기일"
+        },
+        {
+          "key": "pred_trde_qty",
+          "label": "전일거래량"
+        },
+        {
+          "key": "delta",
+          "label": "델타"
+        },
+        {
+          "key": "dispty_rt",
+          "label": "괴리율"
+        },
+        {
+          "key": "pre_tp",
+          "label": "대비구분"
+        },
+        {
+          "key": "theory_pric",
+          "label": "이론가"
+        },
+        {
+          "key": "lpmmcm_nm_1",
+          "label": "LP회원사명1"
+        },
+        {
+          "key": "isscomp_nm",
+          "label": "발행사명"
+        },
+        {
+          "key": "sqnc",
+          "label": "회차"
+        },
+        {
+          "key": "base_aset_nm",
+          "label": "기초자산명"
+        },
+        {
+          "key": "rght_tp",
+          "label": "권리구분"
+        },
+        {
+          "key": "prty",
+          "label": "패리티"
+        },
+        {
+          "key": "innr_vltl",
+          "label": "내재변동성"
+        },
+        {
+          "key": "exec_pric",
+          "label": "행사가격"
+        },
+        {
+          "key": "cnvt_rt",
+          "label": "전환비율"
+        },
+        {
+          "key": "lpposs_rt",
+          "label": "LP보유비율"
+        },
+        {
+          "key": "srvive_dys",
+          "label": "잔존일수"
+        },
+        {
+          "key": "lpmmcm_nm",
+          "label": "LP회원사명"
+        },
+        {
+          "key": "lpmmcm_nm_2",
+          "label": "LP회원사명2"
+        },
+        {
+          "key": "trde_qty_pre",
+          "label": "거래량대비"
+        },
+        {
+          "key": "gear_rt",
+          "label": "기어링비율"
+        },
+        {
+          "key": "pl_qutr_rt",
+          "label": "손익분기율"
+        },
+        {
+          "key": "cfp",
+          "label": "자본지지점"
+        },
+        {
+          "key": "lvrg",
+          "label": "레버리지"
+        },
+        {
+          "key": "pl_qutr_pt",
+          "label": "손익분기점"
+        },
+        {
+          "key": "fin_trde_dt",
+          "label": "최종거래일"
+        },
+        {
+          "key": "flo_dt",
+          "label": "상장일"
+        },
+        {
+          "key": "lpinitlast_suply_dt",
+          "label": "LP초종공급일"
+        },
+        {
+          "key": "xraymont_cntr_qty_arng_trde_tp",
+          "label": "Xray순간체결량정리매매구분"
+        },
+        {
+          "key": "xraymont_cntr_qty_profa_100tp",
+          "label": "Xray순간체결량증거금100구분"
+        }
+      ]
+    },
+    {
+      "mapping_id": "base:ka10075",
+      "tr_id": "ka10075",
+      "container_alias": "oso",
+      "total_columns": 30,
+      "columns": [
+        {
+          "key": "acnt_no",
+          "label": "계좌번호"
+        },
+        {
+          "key": "ord_no",
+          "label": "주문번호"
+        },
+        {
+          "key": "stk_cd",
+          "label": "종목코드"
+        },
+        {
+          "key": "stk_nm",
+          "label": "종목명"
+        },
+        {
+          "key": "cur_prc",
+          "label": "현재가"
+        },
+        {
+          "key": "cntr_qty",
+          "label": "체결량"
+        },
+        {
+          "key": "sel_bid",
+          "label": "매도호가"
+        },
+        {
+          "key": "buy_bid",
+          "label": "매수호가"
+        },
+        {
+          "key": "stex_tp",
+          "label": "거래소구분"
+        },
+        {
+          "key": "tm",
+          "label": "시간"
+        },
+        {
+          "key": "cntr_pric",
+          "label": "체결가"
+        },
+        {
+          "key": "io_tp_nm",
+          "label": "주문구분"
+        },
+        {
+          "key": "ord_qty",
+          "label": "주문수량"
+        },
+        {
+          "key": "trde_tp",
+          "label": "매매구분"
+        },
+        {
+          "key": "tdy_trde_cmsn",
+          "label": "당일매매수수료"
+        },
+        {
+          "key": "tdy_trde_tax",
+          "label": "당일매매세금"
+        },
+        {
+          "key": "orig_ord_no",
+          "label": "원주문번호"
+        },
+        {
+          "key": "ind_invsr",
+          "label": "개인투자자"
+        },
+        {
+          "key": "ord_stt",
+          "label": "주문상태"
+        },
+        {
+          "key": "ord_pric",
+          "label": "주문가격"
+        },
+        {
+          "key": "stex_tp_txt",
+          "label": "거래소구분텍스트"
+        },
+        {
+          "key": "mang_empno",
+          "label": "관리사번"
+        },
+        {
+          "key": "oso_qty",
+          "label": "미체결수량"
+        },
+        {
+          "key": "cntr_no",
+          "label": "체결번호"
+        },
+        {
+          "key": "sor_yn",
+          "label": "SOR 여부값"
+        },
+        {
+          "key": "stop_pric",
+          "label": "스톱가"
+        },
+        {
+          "key": "tsk_tp",
+          "label": "업무구분"
+        },
+        {
+          "key": "cntr_tot_amt",
+          "label": "체결누계금액"
+        },
+        {
+          "key": "unit_cntr_pric",
+          "label": "단위체결가"
+        },
+        {
+          "key": "unit_cntr_qty",
+          "label": "단위체결량"
+        }
+      ]
+    },
+    {
+      "mapping_id": "base:ka10015",
+      "tr_id": "ka10015",
+      "container_alias": "daly_trde_dtl",
+      "total_columns": 30,
+      "columns": [
+        {
+          "key": "pred_pre",
+          "label": "전일대비"
+        },
+        {
+          "key": "trde_qty",
+          "label": "거래량"
+        },
+        {
+          "key": "flu_rt",
+          "label": "등락율"
+        },
+        {
+          "key": "pred_pre_sig",
+          "label": "전일대비기호"
+        },
+        {
+          "key": "dt",
+          "label": "일자"
+        },
+        {
+          "key": "trde_prica",
+          "label": "거래대금"
+        },
+        {
+          "key": "close_pric",
+          "label": "종가"
+        },
+        {
+          "key": "cntr_str",
+          "label": "체결강도"
+        },
+        {
+          "key": "for_netprps",
+          "label": "외인순매수"
+        },
+        {
+          "key": "orgn_netprps",
+          "label": "기관순매수"
+        },
+        {
+          "key": "ind_netprps",
+          "label": "개인순매수"
+        },
+        {
+          "key": "prid_trde_qty",
+          "label": "기간중거래량"
+        },
+        {
+          "key": "for_poss",
+          "label": "외인보유"
+        },
+        {
+          "key": "for_wght",
+          "label": "외인비중"
+        },
+        {
+          "key": "frgn",
+          "label": "외국계"
+        },
+        {
+          "key": "crd_remn_rt",
+          "label": "신용잔고율"
+        },
+        {
+          "key": "prm",
+          "label": "프로그램"
+        },
+        {
+          "key": "bf_mkrt_trde_qty",
+          "label": "장전거래량"
+        },
+        {
+          "key": "opmr_trde_qty",
+          "label": "장중거래량"
+        },
+        {
+          "key": "af_mkrt_trde_qty",
+          "label": "장후거래량"
+        },
+        {
+          "key": "tot_3",
+          "label": "합계3"
+        },
+        {
+          "key": "bf_mkrt_trde_wght",
+          "label": "장전거래비중"
+        },
+        {
+          "key": "opmr_trde_wght",
+          "label": "장중거래비중"
+        },
+        {
+          "key": "af_mkrt_trde_wght",
+          "label": "장후거래비중"
+        },
+        {
+          "key": "bf_mkrt_trde_prica",
+          "label": "장전거래대금"
+        },
+        {
+          "key": "bf_mkrt_trde_prica_wght",
+          "label": "장전거래대금비중"
+        },
+        {
+          "key": "opmr_trde_prica",
+          "label": "장중거래대금"
+        },
+        {
+          "key": "opmr_trde_prica_wght",
+          "label": "장중거래대금비중"
+        },
+        {
+          "key": "af_mkrt_trde_prica",
+          "label": "장후거래대금"
+        },
+        {
+          "key": "af_mkrt_trde_prica_wght",
+          "label": "장후거래대금비중"
+        }
+      ]
+    },
+    {
+      "mapping_id": "detail:kt50032:gold_trade_history",
+      "tr_id": "kt50032",
+      "container_alias": "gold_trde_hist",
+      "total_columns": 24,
+      "columns": [
+        {
+          "key": "stk_nm",
+          "label": "종목명"
+        },
+        {
+          "key": "stk_cd",
+          "label": "종목코드"
+        },
+        {
+          "key": "cmsn",
+          "label": "수수료"
+        },
+        {
+          "key": "exct_amt",
+          "label": "정산금액"
+        },
+        {
+          "key": "cntr_dt",
+          "label": "체결일"
+        },
+        {
+          "key": "rmrk_nm",
+          "label": "적요명"
+        },
+        {
+          "key": "dly_sum",
+          "label": "연체합"
+        },
+        {
+          "key": "entra_remn",
+          "label": "예수금잔고"
+        },
+        {
+          "key": "orig_deal_no",
+          "label": "원거래번호"
+        },
+        {
+          "key": "uncl_ocr",
+          "label": "미수(원/g)"
+        },
+        {
+          "key": "rpym_sum",
+          "label": "변제합"
+        },
+        {
+          "key": "rcpy_no",
+          "label": "출납번호"
+        },
+        {
+          "key": "prcsr",
+          "label": "처리자"
+        },
+        {
+          "key": "deal_dt",
+          "label": "거래일자"
+        },
+        {
+          "key": "deal_no",
+          "label": "거래번호"
+        },
+        {
+          "key": "deal_qty",
+          "label": "거래수량"
+        },
+        {
+          "key": "gold_spot_vat",
+          "label": "금현물부가가치세"
+        },
+        {
+          "key": "mdia_nm",
+          "label": "메체구분명"
+        },
+        {
+          "key": "uv_exrt",
+          "label": "거래단가"
+        },
+        {
+          "key": "spot_remn",
+          "label": "현물잔고"
+        },
+        {
+          "key": "proc_time",
+          "label": "처리시간"
+        },
+        {
+          "key": "deal_amt",
+          "label": "거래금액"
+        },
+        {
+          "key": "tax_tot_amt",
+          "label": "소득/주민세"
+        },
+        {
+          "key": "proc_brch_nm",
+          "label": "처리점"
+        }
+      ]
+    },
+    {
+      "mapping_id": "detail:kt00018:holdings",
+      "tr_id": "kt00018",
+      "container_alias": "acnt_evlt_remn_indv_tot",
+      "total_columns": 23,
+      "columns": [
+        {
+          "key": "stk_cd",
+          "label": "종목번호"
+        },
+        {
+          "key": "stk_nm",
+          "label": "종목명"
+        },
+        {
+          "key": "cur_prc",
+          "label": "현재가"
+        },
+        {
+          "key": "crd_tp",
+          "label": "신용구분"
+        },
+        {
+          "key": "pur_amt",
+          "label": "매입금액"
+        },
+        {
+          "key": "evltv_prft",
+          "label": "평가손익"
+        },
+        {
+          "key": "prft_rt",
+          "label": "수익률(%)"
+        },
+        {
+          "key": "pred_close_pric",
+          "label": "전일종가"
+        },
+        {
+          "key": "rmnd_qty",
+          "label": "보유수량"
+        },
+        {
+          "key": "evlt_amt",
+          "label": "평가금액"
+        },
+        {
+          "key": "pur_pric",
+          "label": "매입가"
+        },
+        {
+          "key": "pred_buyq",
+          "label": "전일매수수량"
+        },
+        {
+          "key": "pred_sellq",
+          "label": "전일매도수량"
+        },
+        {
+          "key": "tdy_buyq",
+          "label": "금일매수수량"
+        },
+        {
+          "key": "tdy_sellq",
+          "label": "금일매도수량"
+        },
+        {
+          "key": "tax",
+          "label": "세금"
+        },
+        {
+          "key": "trde_able_qty",
+          "label": "매매가능수량"
+        },
+        {
+          "key": "pur_cmsn",
+          "label": "매입수수료"
+        },
+        {
+          "key": "sell_cmsn",
+          "label": "평가수수료"
+        },
+        {
+          "key": "sum_cmsn",
+          "label": "수수료합"
+        },
+        {
+          "key": "poss_rt",
+          "label": "보유비중(%)"
+        },
+        {
+          "key": "crd_tp_nm",
+          "label": "신용구분명"
+        },
+        {
+          "key": "crd_loan_dt",
+          "label": "대출일"
+        }
+      ]
+    },
+    {
+      "mapping_id": "detail:kt00009:order_execution_status",
+      "tr_id": "kt00009",
+      "container_alias": "acnt_ord_cntr_prst_array",
+      "total_columns": 22,
+      "columns": [
+        {
+          "key": "ord_no",
+          "label": "주문번호"
+        },
+        {
+          "key": "stk_cd",
+          "label": "종목번호"
+        },
+        {
+          "key": "stk_nm",
+          "label": "종목명"
+        },
+        {
+          "key": "cntr_tm",
+          "label": "체결시간"
+        },
+        {
+          "key": "cntr_qty",
+          "label": "체결수량"
+        },
+        {
+          "key": "dmst_stex_tp",
+          "label": "국내거래소구분"
+        },
+        {
+          "key": "io_tp_nm",
+          "label": "주문유형구분"
+        },
+        {
+          "key": "trde_tp",
+          "label": "매매구분"
+        },
+        {
+          "key": "ord_qty",
+          "label": "주문수량"
+        },
+        {
+          "key": "ord_uv",
+          "label": "주문단가"
+        },
+        {
+          "key": "cnfm_qty",
+          "label": "확인수량"
+        },
+        {
+          "key": "orig_ord_no",
+          "label": "원주문번호"
+        },
+        {
+          "key": "cntr_uv",
+          "label": "체결단가"
+        },
+        {
+          "key": "comm_ord_tp",
+          "label": "통신구분"
+        },
+        {
+          "key": "cond_uv",
+          "label": "스톱가"
+        },
+        {
+          "key": "stk_bond_tp",
+          "label": "주식채권구분"
+        },
+        {
+          "key": "acpt_tp",
+          "label": "접수구분"
+        },
+        {
+          "key": "crd_deal_tp",
+          "label": "신용거래구분"
+        },
+        {
+          "key": "mdfy_cncl_tp",
+          "label": "정정/취소구분"
+        },
+        {
+          "key": "cntr_no",
+          "label": "체결번호"
+        },
+        {
+          "key": "rsrv_oppo",
+          "label": "예약/반대"
+        },
+        {
+          "key": "setl_tp",
+          "label": "결제구분"
+        }
+      ]
+    },
+    {
+      "mapping_id": "base:kt50075",
+      "tr_id": "kt50075",
+      "container_alias": "acnt_ord_oso_prst",
+      "total_columns": 22,
+      "columns": [
+        {
+          "key": "ord_no",
+          "label": "주문번호"
+        },
+        {
+          "key": "stk_cd",
+          "label": "상품코드"
+        },
+        {
+          "key": "stk_nm",
+          "label": "종목명"
+        },
+        {
+          "key": "cntr_qty",
+          "label": "체결수량"
+        },
+        {
+          "key": "dmst_stex_tp",
+          "label": "국내거래소구분"
+        },
+        {
+          "key": "io_tp_nm",
+          "label": "주문유형구분"
+        },
+        {
+          "key": "trde_tp",
+          "label": "매매구분"
+        },
+        {
+          "key": "ord_qty",
+          "label": "주문수량"
+        },
+        {
+          "key": "ord_uv",
+          "label": "주문단가"
+        },
+        {
+          "key": "cnfm_qty",
+          "label": "확인수량"
+        },
+        {
+          "key": "orig_ord_no",
+          "label": "원주문번호"
+        },
+        {
+          "key": "cntr_uv",
+          "label": "체결단가"
+        },
+        {
+          "key": "comm_ord_tp",
+          "label": "통신구분"
+        },
+        {
+          "key": "cond_uv",
+          "label": "스톱가"
+        },
+        {
+          "key": "rsrv_tp",
+          "label": "예약/반대여부"
+        },
+        {
+          "key": "ord_remnq",
+          "label": "미체결수량"
+        },
+        {
+          "key": "stk_bond_tp",
+          "label": "주식채권구분"
+        },
+        {
+          "key": "crd_deal_tp",
+          "label": "신용거래구분"
+        },
+        {
+          "key": "mdfy_cncl_tp",
+          "label": "정정취소구분"
+        },
+        {
+          "key": "data_send_end_tp",
+          "label": "접수구분"
+        },
+        {
+          "key": "mrkt_deal_tp",
+          "label": "시장구분"
+        },
+        {
+          "key": "dcd_tp_nm",
+          "label": "결제구분"
+        }
+      ]
+    },
+    {
+      "mapping_id": "base:kt50031",
+      "tr_id": "kt50031",
+      "container_alias": "acnt_ord_cntr_prps_dtl",
+      "total_columns": 22,
+      "columns": [
+        {
+          "key": "ord_no",
+          "label": "주문번호"
+        },
+        {
+          "key": "stk_cd",
+          "label": "종목번호"
+        },
+        {
+          "key": "stk_nm",
+          "label": "종목명"
+        },
+        {
+          "key": "cntr_qty",
+          "label": "체결수량"
+        },
+        {
+          "key": "dmst_stex_tp",
+          "label": "국내거래소구분"
+        },
+        {
+          "key": "io_tp_nm",
+          "label": "주문구분"
+        },
+        {
+          "key": "loan_dt",
+          "label": "대출일"
+        },
+        {
+          "key": "trde_tp",
+          "label": "매매구분"
+        },
+        {
+          "key": "crd_tp",
+          "label": "신용구분"
+        },
+        {
+          "key": "ord_qty",
+          "label": "주문수량"
+        },
+        {
+          "key": "ord_uv",
+          "label": "주문단가"
+        },
+        {
+          "key": "cnfm_qty",
+          "label": "확인수량"
+        },
+        {
+          "key": "cntr_uv",
+          "label": "체결단가"
+        },
+        {
+          "key": "comm_ord_tp",
+          "label": "통신구분"
+        },
+        {
+          "key": "cond_uv",
+          "label": "스톱가"
+        },
+        {
+          "key": "rsrv_tp",
+          "label": "반대여부"
+        },
+        {
+          "key": "ord_remnq",
+          "label": "주문잔량"
+        },
+        {
+          "key": "acpt_tp",
+          "label": "접수구분"
+        },
+        {
+          "key": "ord_tm",
+          "label": "주문시간"
+        },
+        {
+          "key": "ori_ord",
+          "label": "원주문"
+        },
+        {
+          "key": "mdfy_cncl",
+          "label": "정정취소"
+        },
+        {
+          "key": "cnfm_tm",
+          "label": "확인시간"
+        }
+      ]
+    },
+    {
+      "mapping_id": "base:kt50030",
+      "tr_id": "kt50030",
+      "container_alias": "acnt_ord_cntr_prst",
+      "total_columns": 22,
+      "columns": [
+        {
+          "key": "ord_no",
+          "label": "주문번호"
+        },
+        {
+          "key": "stk_cd",
+          "label": "상품코드"
+        },
+        {
+          "key": "stk_nm",
+          "label": "종목명"
+        },
+        {
+          "key": "cntr_qty",
+          "label": "체결수량"
+        },
+        {
+          "key": "dmst_stex_tp",
+          "label": "국내거래소구분"
+        },
+        {
+          "key": "io_tp_nm",
+          "label": "주문유형구분"
+        },
+        {
+          "key": "trde_tp",
+          "label": "매매구분"
+        },
+        {
+          "key": "ord_qty",
+          "label": "주문수량"
+        },
+        {
+          "key": "ord_uv",
+          "label": "주문단가"
+        },
+        {
+          "key": "cnfm_qty",
+          "label": "확인수량"
+        },
+        {
+          "key": "orig_ord_no",
+          "label": "원주문번호"
+        },
+        {
+          "key": "cntr_uv",
+          "label": "체결단가"
+        },
+        {
+          "key": "comm_ord_tp",
+          "label": "통신구분"
+        },
+        {
+          "key": "cond_uv",
+          "label": "스톱가"
+        },
+        {
+          "key": "rsrv_tp",
+          "label": "예약/반대여부"
+        },
+        {
+          "key": "ord_remnq",
+          "label": "미체결수량"
+        },
+        {
+          "key": "stk_bond_tp",
+          "label": "주식채권구분"
+        },
+        {
+          "key": "crd_deal_tp",
+          "label": "신용거래구분"
+        },
+        {
+          "key": "mdfy_cncl_tp",
+          "label": "정정취소구분"
+        },
+        {
+          "key": "data_send_end_tp",
+          "label": "접수구분"
+        },
+        {
+          "key": "mrkt_deal_tp",
+          "label": "시장구분"
+        },
+        {
+          "key": "dcd_tp_nm",
+          "label": "결제구분"
+        }
+      ]
+    },
+    {
+      "mapping_id": "base:kt00007",
+      "tr_id": "kt00007",
+      "container_alias": "acnt_ord_cntr_prps_dtl",
+      "total_columns": 22,
+      "columns": [
+        {
+          "key": "ord_no",
+          "label": "주문번호"
+        },
+        {
+          "key": "stk_cd",
+          "label": "종목번호"
+        },
+        {
+          "key": "stk_nm",
+          "label": "종목명"
+        },
+        {
+          "key": "cntr_qty",
+          "label": "체결수량"
+        },
+        {
+          "key": "dmst_stex_tp",
+          "label": "국내거래소구분"
+        },
+        {
+          "key": "io_tp_nm",
+          "label": "주문구분"
+        },
+        {
+          "key": "loan_dt",
+          "label": "대출일"
+        },
+        {
+          "key": "trde_tp",
+          "label": "매매구분"
+        },
+        {
+          "key": "crd_tp",
+          "label": "신용구분"
+        },
+        {
+          "key": "ord_qty",
+          "label": "주문수량"
+        },
+        {
+          "key": "ord_uv",
+          "label": "주문단가"
+        },
+        {
+          "key": "cnfm_qty",
+          "label": "확인수량"
+        },
+        {
+          "key": "cntr_uv",
+          "label": "체결단가"
+        },
+        {
+          "key": "comm_ord_tp",
+          "label": "통신구분"
+        },
+        {
+          "key": "cond_uv",
+          "label": "스톱가"
+        },
+        {
+          "key": "rsrv_tp",
+          "label": "반대여부"
+        },
+        {
+          "key": "ord_remnq",
+          "label": "주문잔량"
+        },
+        {
+          "key": "acpt_tp",
+          "label": "접수구분"
+        },
+        {
+          "key": "ord_tm",
+          "label": "주문시간"
+        },
+        {
+          "key": "ori_ord",
+          "label": "원주문"
+        },
+        {
+          "key": "mdfy_cncl",
+          "label": "정정취소"
+        },
+        {
+          "key": "cnfm_tm",
+          "label": "확인시간"
+        }
+      ]
+    },
+    {
+      "mapping_id": "base:ka10086",
+      "tr_id": "ka10086",
+      "container_alias": "daly_stkpc",
+      "total_columns": 22,
+      "columns": [
+        {
+          "key": "trde_qty",
+          "label": "거래량"
+        },
+        {
+          "key": "flu_rt",
+          "label": "등락률"
+        },
+        {
+          "key": "high_pric",
+          "label": "고가"
+        },
+        {
+          "key": "low_pric",
+          "label": "저가"
+        },
+        {
+          "key": "open_pric",
+          "label": "시가"
+        },
+        {
+          "key": "close_pric",
+          "label": "종가"
+        },
+        {
+          "key": "orgn",
+          "label": "기관"
+        },
+        {
+          "key": "for_netprps",
+          "label": "외인순매수"
+        },
+        {
+          "key": "orgn_netprps",
+          "label": "기관순매수"
+        },
+        {
+          "key": "ind_netprps",
+          "label": "개인순매수"
+        },
+        {
+          "key": "date",
+          "label": "날짜"
+        },
+        {
+          "key": "pred_rt",
+          "label": "전일비"
+        },
+        {
+          "key": "crd_rt",
+          "label": "신용비"
+        },
+        {
+          "key": "frgn",
+          "label": "외국계"
+        },
+        {
+          "key": "prm",
+          "label": "프로그램"
+        },
+        {
+          "key": "for_poss",
+          "label": "외인보유"
+        },
+        {
+          "key": "for_wght",
+          "label": "외인비중"
+        },
+        {
+          "key": "crd_remn_rt",
+          "label": "신용잔고율"
+        },
+        {
+          "key": "amt_mn",
+          "label": "금액(백만)"
+        },
+        {
+          "key": "ind",
+          "label": "개인"
+        },
+        {
+          "key": "for_qty",
+          "label": "외인수량"
+        },
+        {
+          "key": "for_rt",
+          "label": "외인비"
+        }
+      ]
+    },
+    {
+      "mapping_id": "base:ka10030",
+      "tr_id": "ka10030",
+      "container_alias": "tdy_trde_qty_upper",
+      "total_columns": 22,
+      "columns": [
+        {
+          "key": "stk_cd",
+          "label": "종목코드"
+        },
+        {
+          "key": "stk_nm",
+          "label": "종목명"
+        },
+        {
+          "key": "cur_prc",
+          "label": "현재가"
+        },
+        {
+          "key": "pred_pre",
+          "label": "전일대비"
+        },
+        {
+          "key": "trde_qty",
+          "label": "거래량"
+        },
+        {
+          "key": "flu_rt",
+          "label": "등락률"
+        },
+        {
+          "key": "pred_pre_sig",
+          "label": "전일대비기호"
+        },
+        {
+          "key": "trde_tern_rt",
+          "label": "거래회전율"
+        },
+        {
+          "key": "pred_rt",
+          "label": "전일비"
+        },
+        {
+          "key": "trde_amt",
+          "label": "거래금액"
+        },
+        {
+          "key": "opmr_trde_qty",
+          "label": "장중거래량"
+        },
+        {
+          "key": "af_mkrt_trde_qty",
+          "label": "장후거래량"
+        },
+        {
+          "key": "bf_mkrt_trde_qty",
+          "label": "장전거래량"
+        },
+        {
+          "key": "opmr_pred_rt",
+          "label": "장중전일비"
+        },
+        {
+          "key": "opmr_trde_rt",
+          "label": "장중거래회전율"
+        },
+        {
+          "key": "opmr_trde_amt",
+          "label": "장중거래금액"
+        },
+        {
+          "key": "af_mkrt_pred_rt",
+          "label": "장후전일비"
+        },
+        {
+          "key": "af_mkrt_trde_rt",
+          "label": "장후거래회전율"
+        },
+        {
+          "key": "af_mkrt_trde_amt",
+          "label": "장후거래금액"
+        },
+        {
+          "key": "bf_mkrt_pred_rt",
+          "label": "장전전일비"
+        },
+        {
+          "key": "bf_mkrt_trde_rt",
+          "label": "장전거래회전율"
+        },
+        {
+          "key": "bf_mkrt_trde_amt",
+          "label": "장전거래금액"
+        }
+      ]
+    },
+    {
+      "mapping_id": "base:ka10063",
+      "tr_id": "ka10063",
+      "container_alias": "opmr_invsr_trde",
+      "total_columns": 21,
+      "columns": [
+        {
+          "key": "stk_cd",
+          "label": "종목코드"
+        },
+        {
+          "key": "stk_nm",
+          "label": "종목명"
+        },
+        {
+          "key": "cur_prc",
+          "label": "현재가"
+        },
+        {
+          "key": "pred_pre",
+          "label": "전일대비"
+        },
+        {
+          "key": "flu_rt",
+          "label": "등락율"
+        },
+        {
+          "key": "pre_sig",
+          "label": "대비기호"
+        },
+        {
+          "key": "acc_trde_qty",
+          "label": "누적거래량"
+        },
+        {
+          "key": "buy_qty",
+          "label": "매수수량"
+        },
+        {
+          "key": "sell_qty",
+          "label": "매도수량"
+        },
+        {
+          "key": "buy_amt",
+          "label": "매수금액"
+        },
+        {
+          "key": "sell_amt",
+          "label": "매도금액"
+        },
+        {
+          "key": "netprps_qty",
+          "label": "순매수수량"
+        },
+        {
+          "key": "netprps_amt",
+          "label": "순매수금액"
+        },
+        {
+          "key": "netprps_amt_irds",
+          "label": "순매수금액증감"
+        },
+        {
+          "key": "buy_amt_irds",
+          "label": "매수금액증감"
+        },
+        {
+          "key": "sell_amt_irds",
+          "label": "매도금액증감"
+        },
+        {
+          "key": "buy_qty_irds",
+          "label": "매수수량증감"
+        },
+        {
+          "key": "sell_qty_irds",
+          "label": "매도수량증감"
+        },
+        {
+          "key": "prev_netprps_amt",
+          "label": "이전순매수금액"
+        },
+        {
+          "key": "prev_pot_netprps_qty",
+          "label": "이전시점순매수수량"
+        },
+        {
+          "key": "netprps_irds",
+          "label": "순매수증감"
+        }
+      ]
+    }
+  ]
+}

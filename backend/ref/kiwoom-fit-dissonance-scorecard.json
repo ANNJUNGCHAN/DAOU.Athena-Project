@@ -80,7 +80,7 @@
     ],
     "target_count": 26
   },
-  "generated_at": "unstamped",
+  "generated_at": "test",
   "mappings": [
     {
       "agreement": null,
@@ -2651,8 +2651,7 @@
     {
       "agreement": null,
       "auto_failure_codes": [
-        "OVERFLOW_WIDTH",
-        "PRIORITY_FIELD_HIDDEN"
+        "OVERFLOW_WIDTH"
       ],
       "auto_fit": 1,
       "auto_warnings": [],
@@ -2662,9 +2661,6 @@
         "formatter_unknown_ratio": 0.1,
         "layout": "table",
         "max_table_column_count": 30,
-        "priority_field_hidden": [
-          "cur_prc"
-        ],
         "shape": "pure_list",
         "title": "미체결요청",
         "title_source": "kiwoom_tr_inventory.name"
@@ -3764,10 +3760,8 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "PRIORITY_FIELD_HIDDEN"
-      ],
-      "auto_fit": 1,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [
         "OVERFLOW_WIDTH_WARN"
       ],
@@ -3777,10 +3771,6 @@
         "formatter_unknown_ratio": 0.2,
         "layout": "table",
         "max_table_column_count": 15,
-        "priority_field_hidden": [
-          "flu_rt",
-          "trde_qty"
-        ],
         "shape": "pure_list",
         "title": "ELW괴리율요청",
         "title_source": "kiwoom_tr_inventory.name"
@@ -3794,10 +3784,8 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 1,
-      "rules_applied": [
-        "table_column_priority"
-      ],
+      "resolved_fit": 2,
+      "rules_applied": [],
       "tr_id": "ka30004"
     },
     {
