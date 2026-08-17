@@ -113,6 +113,26 @@ function deleteIconButton(onClick, disabledTitle) {
   return b;
 }
 
+// probe 시트 닫기 경고(D8, 오케스트레이터 지시) — 2026-08-17 실사용 사고 재발
+// 방지. probe만 하고 "선택 허용"을 누르지 않은 채 닫으면 로컬에서 고른 허용
+// 상태가 반영되지 않고 사라지거나, 허용 툴이 0개인 채로 남아 이 서버의 툴이
+// 하나도 재노출되지 않을 수 있다(dart-mcp에서 실제로 발생). 새 모달/새 창을
+// 만들지 않고 이 시트가 이미 risks 경고에 쓰는 .uk-warnbox를 재사용해 시트
+// 안에서 인라인으로 한 번 더 확인한다.
+function closeWarnBar(message) {
+  const bar = el('div', 'uk-warnbox uk-close-warn');
+  bar.appendChild(el('span', 'uk-warnbox-icon', '!'));
+  bar.appendChild(el('span', 'uk-warnbox-body', message));
+  const btns = el('div', 'uk-close-warn-btns');
+  const keepBtn = button('text', '계속 편집');
+  const closeBtn = button('ghost', '그냥 닫기');
+  closeBtn.classList.add('is-danger');
+  btns.appendChild(keepBtn);
+  btns.appendChild(closeBtn);
+  bar.appendChild(btns);
+  return { bar, keepBtn, closeBtn };
+}
+
 // 확인 버튼은 ghost + is-danger(경고색)다 — primary(브랜드색)를 쓰지 않는다.
 // MCP 카드는 "+ 서버 등록"이 이미 화면 내 유일한 브랜드색 자리를 쓰고
 // 있고(AT-ST-004 Desc 1.2), 계좌 카드도 같은 규칙으로 맞춘다. 클릭 핸들러는
@@ -949,11 +969,47 @@ function openMcpRegisterSheet(card, onDone) {
 
 // ---- AT-ST-006: MCP probe · 툴 허용 시트 ----
 function openMcpProbeSheet(card, alias, onDone) {
-  const { root, body } = sheet(`probe 결과 · ${alias}`, { onClose: () => detachSheet(card, root) });
+  // 닫기 판단 함수들 — probe 결과가 로드되기 전(로딩·에러 상태)에는 항상
+  // "경고 없음"이다. renderProbeResult()가 실제 tools/localAllowed를 알게 된
+  // 뒤에만 의미 있는 판정으로 교체된다.
+  let hasUnsavedChanges = () => false;
+  // null = "아직 판단할 수 없다"(로딩/에러 중이거나 probe 결과 자체가 0개 툴).
+  // 0 = "툴은 있는데 허용된 게 하나도 없다" — 이 값일 때만 경고한다.
+  let allowedCountGetter = () => null;
+  let activeWarnBar = null;
+
+  function attemptClose() {
+    if (activeWarnBar) return; // 이미 경고 중 — 중복으로 새 바를 쌓지 않는다
+    const allowedCount = allowedCountGetter();
+    const dirty = hasUnsavedChanges();
+    if (!dirty && allowedCount !== 0) {
+      detachSheet(card, root);
+      return;
+    }
+    const parts = [];
+    if (allowedCount === 0) parts.push('허용된 툴이 0개다 — 이 서버의 툴이 하나도 노출되지 않는다');
+    if (dirty) parts.push('바꾼 허용 상태를 아직 반영하지 않았다');
+    const { bar, keepBtn, closeBtn } = closeWarnBar(`${parts.join(' · ')} — 그래도 닫을까?`);
+    activeWarnBar = bar;
+    keepBtn.addEventListener('click', () => {
+      bar.remove();
+      activeWarnBar = null;
+    });
+    closeBtn.addEventListener('click', () => detachSheet(card, root));
+    body.insertBefore(bar, body.firstChild);
+  }
+
+  const { root, body } = sheet(`probe 결과 · ${alias}`, { onClose: () => attemptClose() });
   attachSheet(card, root);
   runProbe();
 
   async function runProbe() {
+    // 재조회 때마다 경고 상태를 초기화한다 — clear(body)가 이전 경고 바
+    // DOM도 지우므로, 판정 함수도 같이 로딩 상태로 되돌려야 잔여 참조가
+    // "닫아도 되는데 경고" 같은 유령 상태를 만들지 않는다.
+    activeWarnBar = null;
+    hasUnsavedChanges = () => false;
+    allowedCountGetter = () => null;
     clear(body);
     body.appendChild(emptyState('probe 실행 중…'));
     let res;
@@ -1004,6 +1060,13 @@ function openMcpProbeSheet(card, alias, onDone) {
     // 아니고, "선택 허용"이 화면 내 유일한 브랜드색 주 액션이다).
     const localAllowed = {};
     for (const t of tools) localAllowed[t.name] = !!t.allowed;
+
+    // attemptClose()가 참조하는 실제 판정 — localAllowed는 이후 체크박스
+    // 클릭으로 제자리에서(in-place) 바뀌므로 여기서 한 번만 연결해두면 항상
+    // 최신 상태를 본다. tools가 애초에 0개면(서버에 노출할 툴 자체가 없음)
+    // "0개 허용" 경고 대상이 아니다 — null로 판단 보류.
+    hasUnsavedChanges = () => tools.some((t) => !!localAllowed[t.name] !== !!t.allowed);
+    allowedCountGetter = () => (tools.length ? tools.filter((t) => localAllowed[t.name]).length : null);
 
     const rowsWrap = el('div');
     body.appendChild(rowsWrap);

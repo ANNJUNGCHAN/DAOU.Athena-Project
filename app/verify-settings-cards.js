@@ -166,9 +166,47 @@ app.whenReady().then(async () => {
   `));
   await wait(150);
   await shot(chatWin, 'SETTINGS-12-mcp-probe-sheet-toggled.png');
+
+  // 닫기 경고(D8, 2026-08-17 실사용 사고 재발 방지) — 체크박스를 건드린 뒤
+  // "선택 허용"을 누르지 않은 채 닫으려 하면, 바로 닫지 말고 인라인으로
+  // 경고해야 한다. 커밋 전에 이 갈래부터 확인한다.
+  console.log('[verify-settings] close probe sheet with unsaved change (expect warning bar):', await chatWin.webContents.executeJavaScript(clickByText('.card.mcp .uk-sheet-close', '닫기')));
+  await wait(150);
+  await shot(chatWin, 'SETTINGS-12b-mcp-probe-sheet-close-warning-dirty.png');
+  console.log('[verify-settings] warning bar present (dirty):', await chatWin.webContents.executeJavaScript(
+    "!!document.querySelector('.card.mcp .uk-close-warn')"
+  ));
+  console.log('[verify-settings] dismiss warning (계속 편집):', await chatWin.webContents.executeJavaScript(clickByText('.card.mcp .uk-close-warn button', '계속 편집')));
+  await wait(150);
+  console.log('[verify-settings] sheet still open after 계속 편집:', await chatWin.webContents.executeJavaScript(
+    "!!document.querySelector('.card.mcp .uk-sheet')"
+  ));
+
   console.log('[verify-settings] commit 선택 허용:', await chatWin.webContents.executeJavaScript(clickByText('.card.mcp .uk-sheet button', '선택 허용')));
   await wait(400);
   await shot(chatWin, 'SETTINGS-13-mcp-probe-sheet-committed.png');
+
+  // 실제 사고 재현(2026-08-17 dart-mcp) — 커밋 후 남아있는 이 시트에서 허용된
+  // 툴을 전부 해제한 채 닫으면 "허용된 툴 0개" 경고가 떠야 한다.
+  console.log('[verify-settings] uncheck all allowed tools:', await chatWin.webContents.executeJavaScript(`
+    (() => {
+      const cbs = Array.from(document.querySelectorAll('.card.mcp .uk-sheet .uk-check.is-checked'));
+      cbs.forEach((c) => c.click());
+      return cbs.length + ' unchecked';
+    })();
+  `));
+  await wait(150);
+  console.log('[verify-settings] close probe sheet with 0 allowed (expect warning):', await chatWin.webContents.executeJavaScript(clickByText('.card.mcp .uk-sheet-close', '닫기')));
+  await wait(150);
+  await shot(chatWin, 'SETTINGS-14-mcp-probe-sheet-close-warning-zero.png');
+  console.log('[verify-settings] warning bar text (zero-allowed):', await chatWin.webContents.executeJavaScript(
+    "(document.querySelector('.card.mcp .uk-close-warn .uk-warnbox-body') || {}).textContent || 'NOT FOUND'"
+  ));
+  console.log('[verify-settings] force close anyway (그냥 닫기):', await chatWin.webContents.executeJavaScript(clickByText('.card.mcp .uk-close-warn button', '그냥 닫기')));
+  await wait(150);
+  console.log('[verify-settings] sheet closed after force-close:', await chatWin.webContents.executeJavaScript(
+    "!document.querySelector('.card.mcp .uk-sheet')"
+  ));
 
   console.log('[verify-settings] all captures written to app/captures/SETTINGS-*.png');
   await wait(200);
