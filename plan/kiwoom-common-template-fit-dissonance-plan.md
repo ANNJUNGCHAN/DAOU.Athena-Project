@@ -244,6 +244,12 @@ G001.5 완료조건을 **세 개의 독립 플래그**로 분리한다(하나의
 | G006 Paper 최종 동기화 | 대기 — **역할 축소**: `design_medium`이 이미 G003 이전에 `paper`로 전환되어 있으므로, G006은 구현 완료 후 Paper 아트보드의 잔여 상태 variant(loading/empty/error/auth/order-confirm/OAuth)만 보완하는 순수 대조 단계다 | 기존과 동일 | G005 | rendering-plan §13 G006 기준 그대로 | rendering-plan §15 명령 |
 | G007 Closeout | 대기 — **완료조건에 §7 Athena 용량 목표 + rater_mode 재검증 추가**(신설) | 기존과 동일 | G006 | rendering-plan §13 G007 기준 + §7 용량 상한 + (`rater_mode==intra_rater_fallback`이면 anchor 부분집합 ≥13개 독립 재검증 완료) | rendering-plan §15 명령 + 위 추가 항목 수동 확인 |
 
+> **2026-08-18 이관 기록 (사용자 결정)**: `fit_dissonance_check.py` 최초 전수 실행이 zero-tolerance 82건을
+> 잡았고 **전부 `FORMATTER_MISSING`**(semanticType unknown + override 부재)이다. LABEL_MISSING/TR_ID_LEAKAGE는
+> 0건(ka10007 title_ko 해소 확인). 포맷터·오버라이드 정의는 G002(정규화 화면 계약) 소관이므로 **82건 해소를
+> G002 착수 조건으로 이관**한다 — G001.5 `gate_complete`의 fit 비율 게이트는 G002의 포맷터 작업 후 재판정한다.
+> 근거: `backend/ref/kiwoom-fit-dissonance-scorecard.json`(2026-08-18), 감사 충실성 라운드 회귀 기록.
+
 수량 불변식(186+115=301, 264/23/12/2, exclusion 22) 불변.
 
 **BLOCKER 구조 요약**: 폴백을 쓰더라도 G002(계약/생성)까지는 진행 가능하지만, 실제 화면을 그리는 **G003은 Paper 실동기화 없이 착수할 수 없다.** "정적 HTML 먼저 → 구현 다 하고 → 맨 마지막 G006에서 Paper" 경로를 구조적으로 차단한다. 폴백 경로는 §8 결정1에서 사용자가 명시적으로 선택하기 전에는 자동으로 진입하지 않는다 — Paper MCP 재연결이 실패해도 G001.5는 사용자 응답을 기다리며 대기한다.

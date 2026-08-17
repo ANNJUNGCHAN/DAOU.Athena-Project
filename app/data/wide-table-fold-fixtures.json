@@ -262,7 +262,8 @@
           "key": "cntr_pred_pre",
           "label": "미결제전일대비"
         }
-      ]
+      ],
+      "name_ko": "관심종목정보요청"
     },
     {
       "mapping_id": "base:kt00015",
@@ -474,7 +475,8 @@
           "key": "trde_prtc_tp",
           "label": "거래내역구분"
         }
-      ]
+      ],
+      "name_ko": "위탁종합거래내역요청"
     },
     {
       "mapping_id": "base:ka30005",
@@ -638,7 +640,8 @@
           "key": "xraymont_cntr_qty_profa_100tp",
           "label": "Xray순간체결량증거금100구분"
         }
-      ]
+      ],
+      "name_ko": "ELW조건검색요청"
     },
     {
       "mapping_id": "base:ka10075",
@@ -766,7 +769,8 @@
           "key": "unit_cntr_qty",
           "label": "단위체결량"
         }
-      ]
+      ],
+      "name_ko": "미체결요청"
     },
     {
       "mapping_id": "base:ka10015",
@@ -894,7 +898,8 @@
           "key": "af_mkrt_trde_prica_wght",
           "label": "장후거래대금비중"
         }
-      ]
+      ],
+      "name_ko": "일별거래상세요청"
     },
     {
       "mapping_id": "detail:kt50032:gold_trade_history",
@@ -998,7 +1003,8 @@
           "key": "proc_brch_nm",
           "label": "처리점"
         }
-      ]
+      ],
+      "name_ko": "금현물 거래내역조회"
     },
     {
       "mapping_id": "detail:kt00018:holdings",
@@ -1098,7 +1104,8 @@
           "key": "crd_loan_dt",
           "label": "대출일"
         }
-      ]
+      ],
+      "name_ko": "계좌평가잔고내역요청"
     },
     {
       "mapping_id": "detail:kt00009:order_execution_status",
@@ -1194,7 +1201,8 @@
           "key": "setl_tp",
           "label": "결제구분"
         }
-      ]
+      ],
+      "name_ko": "계좌별주문체결현황요청"
     },
     {
       "mapping_id": "base:kt50075",
@@ -1290,7 +1298,8 @@
           "key": "dcd_tp_nm",
           "label": "결제구분"
         }
-      ]
+      ],
+      "name_ko": "금현물 미체결조회"
     },
     {
       "mapping_id": "base:kt50031",
@@ -1386,7 +1395,8 @@
           "key": "cnfm_tm",
           "label": "확인시간"
         }
-      ]
+      ],
+      "name_ko": "금현물 주문체결조회"
     },
     {
       "mapping_id": "base:kt50030",
@@ -1482,7 +1492,8 @@
           "key": "dcd_tp_nm",
           "label": "결제구분"
         }
-      ]
+      ],
+      "name_ko": "금현물 주문체결전체조회"
     },
     {
       "mapping_id": "base:kt00007",
@@ -1578,7 +1589,8 @@
           "key": "cnfm_tm",
           "label": "확인시간"
         }
-      ]
+      ],
+      "name_ko": "계좌별주문체결내역상세요청"
     },
     {
       "mapping_id": "base:ka10086",
@@ -1674,7 +1686,8 @@
           "key": "for_rt",
           "label": "외인비"
         }
-      ]
+      ],
+      "name_ko": "일별주가요청"
     },
     {
       "mapping_id": "base:ka10030",
@@ -1770,7 +1783,8 @@
           "key": "bf_mkrt_trde_amt",
           "label": "장전거래금액"
         }
-      ]
+      ],
+      "name_ko": "당일거래량상위요청"
     },
     {
       "mapping_id": "base:ka10063",
@@ -1862,7 +1876,8 @@
           "key": "netprps_irds",
           "label": "순매수증감"
         }
-      ]
+      ],
+      "name_ko": "장중투자자별매매요청"
     }
   ]
 }

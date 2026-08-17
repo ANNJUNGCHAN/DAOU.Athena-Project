@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-17T18:12:32.561Z",
+  "generatedAt": "2026-08-17T23:31:59.233Z",
   "method": "app/capture-wide15.js — verify.js 검증10(app/verify.js:528-573) 경로를 15 TR 전부로 확장. canvasWin에 athena:add-canvas-live를 직접 주입 → renderMcpTable → webContents.capturePage().",
   "canvasWidthPx": 1560,
   "trCount": 15,
@@ -16,7 +16,11 @@
       "hiddenColumns": 50,
       "foldedBelowTotal": true,
       "headerMatchesEveryRow": true,
-      "foldNote": "접힌 컬럼 50개 (전체 63개 중 13개 표시, 1560px 기준)",
+      "foldDataset": {
+        "total": "63",
+        "visible": "13",
+        "hidden": "50"
+      },
       "matchesFoldSummary": true,
       "foldSummaryExpected": {
         "total_columns": 63,
@@ -35,7 +39,11 @@
       "hiddenColumns": 38,
       "foldedBelowTotal": true,
       "headerMatchesEveryRow": true,
-      "foldNote": "접힌 컬럼 38개 (전체 51개 중 13개 표시, 1560px 기준)",
+      "foldDataset": {
+        "total": "51",
+        "visible": "13",
+        "hidden": "38"
+      },
       "matchesFoldSummary": true,
       "foldSummaryExpected": {
         "total_columns": 51,
@@ -54,7 +62,11 @@
       "hiddenColumns": 26,
       "foldedBelowTotal": true,
       "headerMatchesEveryRow": true,
-      "foldNote": "접힌 컬럼 26개 (전체 39개 중 13개 표시, 1560px 기준)",
+      "foldDataset": {
+        "total": "39",
+        "visible": "13",
+        "hidden": "26"
+      },
       "matchesFoldSummary": true,
       "foldSummaryExpected": {
         "total_columns": 39,
@@ -73,7 +85,11 @@
       "hiddenColumns": 17,
       "foldedBelowTotal": true,
       "headerMatchesEveryRow": true,
-      "foldNote": "접힌 컬럼 17개 (전체 30개 중 13개 표시, 1560px 기준)",
+      "foldDataset": {
+        "total": "30",
+        "visible": "13",
+        "hidden": "17"
+      },
       "matchesFoldSummary": true,
       "foldSummaryExpected": {
         "total_columns": 30,
@@ -92,7 +108,11 @@
       "hiddenColumns": 17,
       "foldedBelowTotal": true,
       "headerMatchesEveryRow": true,
-      "foldNote": "접힌 컬럼 17개 (전체 30개 중 13개 표시, 1560px 기준)",
+      "foldDataset": {
+        "total": "30",
+        "visible": "13",
+        "hidden": "17"
+      },
       "matchesFoldSummary": true,
       "foldSummaryExpected": {
         "total_columns": 30,
@@ -111,7 +131,11 @@
       "hiddenColumns": 11,
       "foldedBelowTotal": true,
       "headerMatchesEveryRow": true,
-      "foldNote": "접힌 컬럼 11개 (전체 24개 중 13개 표시, 1560px 기준)",
+      "foldDataset": {
+        "total": "24",
+        "visible": "13",
+        "hidden": "11"
+      },
       "matchesFoldSummary": true,
       "foldSummaryExpected": {
         "total_columns": 24,
@@ -130,7 +154,11 @@
       "hiddenColumns": 10,
       "foldedBelowTotal": true,
       "headerMatchesEveryRow": true,
-      "foldNote": "접힌 컬럼 10개 (전체 23개 중 13개 표시, 1560px 기준)",
+      "foldDataset": {
+        "total": "23",
+        "visible": "13",
+        "hidden": "10"
+      },
       "matchesFoldSummary": true,
       "foldSummaryExpected": {
         "total_columns": 23,
@@ -149,7 +177,11 @@
       "hiddenColumns": 9,
       "foldedBelowTotal": true,
       "headerMatchesEveryRow": true,
-      "foldNote": "접힌 컬럼 9개 (전체 22개 중 13개 표시, 1560px 기준)",
+      "foldDataset": {
+        "total": "22",
+        "visible": "13",
+        "hidden": "9"
+      },
       "matchesFoldSummary": true,
       "foldSummaryExpected": {
         "total_columns": 22,
@@ -168,7 +200,11 @@
       "hiddenColumns": 9,
       "foldedBelowTotal": true,
       "headerMatchesEveryRow": true,
-      "foldNote": "접힌 컬럼 9개 (전체 22개 중 13개 표시, 1560px 기준)",
+      "foldDataset": {
+        "total": "22",
+        "visible": "13",
+        "hidden": "9"
+      },
       "matchesFoldSummary": true,
       "foldSummaryExpected": {
         "total_columns": 22,
@@ -187,7 +223,11 @@
       "hiddenColumns": 9,
       "foldedBelowTotal": true,
       "headerMatchesEveryRow": true,
-      "foldNote": "접힌 컬럼 9개 (전체 22개 중 13개 표시, 1560px 기준)",
+      "foldDataset": {
+        "total": "22",
+        "visible": "13",
+        "hidden": "9"
+      },
       "matchesFoldSummary": true,
       "foldSummaryExpected": {
         "total_columns": 22,
@@ -206,7 +246,11 @@
       "hiddenColumns": 9,
       "foldedBelowTotal": true,
       "headerMatchesEveryRow": true,
-      "foldNote": "접힌 컬럼 9개 (전체 22개 중 13개 표시, 1560px 기준)",
+      "foldDataset": {
+        "total": "22",
+        "visible": "13",
+        "hidden": "9"
+      },
       "matchesFoldSummary": true,
       "foldSummaryExpected": {
         "total_columns": 22,
@@ -225,7 +269,11 @@
       "hiddenColumns": 9,
       "foldedBelowTotal": true,
       "headerMatchesEveryRow": true,
-      "foldNote": "접힌 컬럼 9개 (전체 22개 중 13개 표시, 1560px 기준)",
+      "foldDataset": {
+        "total": "22",
+        "visible": "13",
+        "hidden": "9"
+      },
       "matchesFoldSummary": true,
       "foldSummaryExpected": {
         "total_columns": 22,
@@ -244,7 +292,11 @@
       "hiddenColumns": 9,
       "foldedBelowTotal": true,
       "headerMatchesEveryRow": true,
-      "foldNote": "접힌 컬럼 9개 (전체 22개 중 13개 표시, 1560px 기준)",
+      "foldDataset": {
+        "total": "22",
+        "visible": "13",
+        "hidden": "9"
+      },
       "matchesFoldSummary": true,
       "foldSummaryExpected": {
         "total_columns": 22,
@@ -263,7 +315,11 @@
       "hiddenColumns": 9,
       "foldedBelowTotal": true,
       "headerMatchesEveryRow": true,
-      "foldNote": "접힌 컬럼 9개 (전체 22개 중 13개 표시, 1560px 기준)",
+      "foldDataset": {
+        "total": "22",
+        "visible": "13",
+        "hidden": "9"
+      },
       "matchesFoldSummary": true,
       "foldSummaryExpected": {
         "total_columns": 22,
@@ -282,7 +338,11 @@
       "hiddenColumns": 8,
       "foldedBelowTotal": true,
       "headerMatchesEveryRow": true,
-      "foldNote": "접힌 컬럼 8개 (전체 21개 중 13개 표시, 1560px 기준)",
+      "foldDataset": {
+        "total": "21",
+        "visible": "13",
+        "hidden": "8"
+      },
       "matchesFoldSummary": true,
       "foldSummaryExpected": {
         "total_columns": 21,

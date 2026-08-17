@@ -229,7 +229,7 @@ window.addEventListener('mouseup', () => {
 const CARD_PLAN = {
   stream: { label: '스트림', tool: 'search_news' },
   reader: { label: '리더', tool: 'download_document' },
-  table: { label: '공통 테이블', tool: 'get_financial_statement' },
+  table: { label: '테이블', tool: 'get_financial_statement' },
   // AT-ST-001/AT-ST-004 제어 카드 트리거 — 카드 자체는 canvas.js가 그린다
   // (00-통합-계획.md §4.1). tool 코드는 실제 TR/MCP 툴 이름이 아직 없어 이
   // 대화 창 진행 표시용으로만 쓰는 자리표시자다 — 발명, 리포트에 명시.

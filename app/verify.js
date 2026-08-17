@@ -542,7 +542,7 @@ app.whenReady().then(async () => {
     envelope: {
       canvas_type: 'table',
       fell_back: false,
-      caption: `공통 테이블 · ${ka10095Fixture.tr_id} 검증용`,
+      caption: `${ka10095Fixture.name_ko} 검증용`,
       data: { columns: ka10095Fixture.columns, rows: [mockRow, mockRow] },
     },
   });
@@ -554,7 +554,10 @@ app.whenReady().then(async () => {
       return {
         headerCellCount: card.querySelectorAll('thead th').length,
         rowCellCounts: Array.from(card.querySelectorAll('tbody tr')).map((tr) => tr.children.length),
-        foldNote: card.querySelector('.fin-meta') ? card.querySelector('.fin-meta').textContent : null,
+        foldDataset: (() => {
+          const t = card.querySelector('table.fin-table');
+          return t ? { total: t.dataset.totalColumns, visible: t.dataset.visibleColumns, hidden: t.dataset.hiddenColumns } : null;
+        })(),
       };
     })()
   `);
@@ -568,7 +571,7 @@ app.whenReady().then(async () => {
     foldedBelowTotal: foldProbe !== null && foldProbe.headerCellCount < ka10095Fixture.total_columns,
     headerMatchesEveryRow: foldProbe !== null
       && foldProbe.rowCellCounts.every((n) => n === foldProbe.headerCellCount),
-    foldNote: foldProbe && foldProbe.foldNote,
+    foldDataset: foldProbe && foldProbe.foldDataset,
   };
   console.log('[verify] 검증10(컬럼 우선순위 fold):', JSON.stringify(report.tableColumnFold));
 
