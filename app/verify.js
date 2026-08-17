@@ -461,6 +461,70 @@ app.whenReady().then(async () => {
   };
   console.log('[verify] 검증8(커맨드바 진입):', JSON.stringify(report.settingsCommandBar));
 
+  // ---------- 검증 9: 창 기본 기능 (2026-08-17) — 줌 · 이동 앵커 · 최소화/복원 ----------
+  // frame:false·타이틀바 없음이라 main.js에 직접 배선한 기능들이다. 커서 폴링
+  // 드래그 자체는 실제 마우스가 필요해 자동화로 못 돌린다 — 대신 그 결과(창이
+  // 옮겨진 상태)를 setBounds로 재현해 "다음 높이 변경이 창을 부팅 좌표로
+  // 되돌리지 않는다"(앵커 동기화)를 단언한다.
+  const sendFromChat = (channel, payload) => chatWin.webContents.executeJavaScript(
+    `require('electron').ipcRenderer.send('${channel}', ${JSON.stringify(payload)})`
+  );
+
+  // 9a — 줌: 두 창이 같은 배율로 움직이고, reset으로 1.0에 돌아온다
+  await sendFromChat('athena:zoom', { dir: 'in' });
+  await sendFromChat('athena:zoom', { dir: 'in' });
+  await wait(300);
+  const zoomAfterIn = {
+    chat: chatWin.webContents.getZoomFactor(),
+    canvas: canvasWin.webContents.getZoomFactor(),
+  };
+  await sendFromChat('athena:zoom', { dir: 'reset' });
+  await wait(300);
+  const zoomAfterReset = chatWin.webContents.getZoomFactor();
+
+  // 9b — 이동 앵커: 창을 옮긴 뒤 높이를 바꿔도 새 위치가 유지된다(스냅백 회귀 방지)
+  const beforeMove = chatWin.getBounds();
+  chatWin.setBounds({ x: beforeMove.x + 120, y: beforeMove.y - 40, width: beforeMove.width, height: beforeMove.height });
+  await wait(150);
+  const moved = chatWin.getBounds();
+  await sendFromChat('athena:set-chat-height', { height: layout.chatBaseH + 150 });
+  await wait(300);
+  const afterHeightAtNewSpot = chatWin.getBounds();
+  const anchorKept = {
+    xKept: near(afterHeightAtNewSpot.x, moved.x),
+    bottomKept: near(afterHeightAtNewSpot.y + afterHeightAtNewSpot.height, moved.y + moved.height),
+    heightApplied: near(afterHeightAtNewSpot.height, layout.chatBaseH + 150),
+  };
+  // 원위치 복구 — 이후 단계에 이동 상태를 남기지 않는다
+  chatWin.setBounds(beforeMove);
+  await wait(150);
+  await sendFromChat('athena:set-chat-height', { height: layout.chatBaseH });
+  await wait(200);
+
+  // 9c — 최소화(내리기)·복원(올리기): 두 창이 한 몸으로 내려가고, 한쪽 복원이 짝을 끌어올린다
+  const canvasWasVisible = canvasWin.isVisible();
+  await sendFromChat('athena:minimize-windows');
+  await wait(500);
+  const minimized = { chat: chatWin.isMinimized(), canvas: canvasWin.isMinimized() };
+  chatWin.restore();
+  await wait(600);
+  const restoredPair = {
+    chat: !chatWin.isMinimized(),
+    canvas: !canvasWasVisible || !canvasWin.isMinimized(),
+  };
+
+  report.windowBasics = {
+    zoomInSyncsBothWindows: zoomAfterIn.chat > 1 && Math.abs(zoomAfterIn.chat - zoomAfterIn.canvas) < 0.001,
+    zoomAfterIn,
+    zoomResetReturnsTo1: Math.abs(zoomAfterReset - 1) < 0.001,
+    movedAnchorKept: anchorKept.xKept && anchorKept.bottomKept && anchorKept.heightApplied,
+    anchorKept,
+    canvasWasVisible,
+    minimizeLowersBoth: minimized.chat && (!canvasWasVisible || minimized.canvas),
+    restorePairsBoth: restoredPair.chat && restoredPair.canvas,
+  };
+  console.log('[verify] 검증9(창 기본 기능):', JSON.stringify(report.windowBasics));
+
   report.finishedAt = new Date().toISOString();
   fs.writeFileSync(path.join(CAPTURES, 'VERIFY-REPORT.json'), JSON.stringify(report, null, 2));
   console.log('[verify] 리포트 저장:', path.join(CAPTURES, 'VERIFY-REPORT.json'));

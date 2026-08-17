@@ -1,5 +1,5 @@
 // 대화 창 렌더러. nodeIntegration:true / contextIsolation:false — spike/electron-glass 패턴 그대로.
-const { ipcRenderer } = require('electron');
+const { ipcRenderer, webFrame } = require('electron');
 const onboarding = require('./lib/onboarding');
 const authScreen = require('./lib/auth-screen');
 const settingsCards = require('./lib/settings-cards');
@@ -167,18 +167,35 @@ function applyGlassFraction(frac) {
 }
 
 window.addEventListener('resize', () => {
-  currentHeight = window.innerHeight;
+  // innerHeight는 CSS px — 창 bounds(물리 px)와 비교하려면 줌 배율을 되돌린다.
+  currentHeight = Math.round(window.innerHeight * webFrame.getZoomFactor());
   const growable = Math.max(1, layout.chatMaxH - layout.chatBaseH);
   const frac = Math.min(1, Math.max(0, (currentHeight - layout.chatBaseH) / growable));
   applyGlassFraction(frac);
 });
 
+// ---------- 이력 스크롤 — 하단 고정(stick-to-bottom) ----------
+// .history가 overflow-y:auto로 바뀌었다(chat.css) — 창이 chatMaxH까지 자란 뒤에는
+// 지난 턴을 스크롤로 되짚는다. 새 내용이 올 때는 바닥에 붙어 따라가되, 사용자가
+// 위로 올려 읽는 중이면(바닥에서 24px 이상) 강제로 끌어내리지 않는다.
+let stickToBottom = true;
+$history.addEventListener('scroll', () => {
+  stickToBottom = $history.scrollHeight - $history.scrollTop - $history.clientHeight < 24;
+});
+
+function scrollHistoryToBottom(force) {
+  if (force) stickToBottom = true;
+  if (stickToBottom) $history.scrollTop = $history.scrollHeight;
+}
+
 // ---------- 자동 성장 (위로만, 사용자 수동 조작을 덮어쓰지 않음) ----------
 function scheduleHeightSync() {
   requestAnimationFrame(() => {
-    if (manualOverride) return;
-    const need = measureNeededHeight();
-    ipcRenderer.send('athena:set-chat-height', { height: need, manual: false });
+    if (!manualOverride) {
+      const need = measureNeededHeight();
+      ipcRenderer.send('athena:set-chat-height', { height: need, manual: false });
+    }
+    scrollHistoryToBottom();
   });
 }
 
@@ -187,8 +204,12 @@ function measureNeededHeight() {
   const inputRow = document.querySelector('.input-row');
   const inputH = inputRow ? inputRow.getBoundingClientRect().height : 64;
   const histNeeded = $history.scrollHeight + 16; // padding
-  return Math.round(gripH + inputH + histNeeded);
+  // 측정은 CSS px, 창 높이는 물리 px — 줌 배율을 곱해 보낸다(main의 clamp와 단위 일치).
+  return Math.round((gripH + inputH + histNeeded) * webFrame.getZoomFactor());
 }
+
+// 줌 배율이 바뀌면 같은 내용이라도 필요한 창 높이가 달라진다 — 다시 재서 요청한다.
+ipcRenderer.on('athena:zoom-changed', () => scheduleHeightSync());
 
 // ---------- 수동 리사이즈 (그립 드래그) ----------
 let dragging = false;
@@ -275,6 +296,7 @@ async function runQueryLive(text) {
   qText.textContent = text;
   qLine.appendChild(qText);
   $history.appendChild(qLine);
+  scrollHistoryToBottom(true); // 새 질문은 무조건 바닥으로 — 위에서 읽던 중이어도 새 턴이 우선이다
   scheduleHeightSync();
 
   state = 'judging';
@@ -374,6 +396,7 @@ async function runQueryFixture(text) {
   qText.textContent = text;
   qLine.appendChild(qText);
   $history.appendChild(qLine);
+  scrollHistoryToBottom(true);
   scheduleHeightSync();
 
   // 상태 1 — 판단 중
@@ -531,6 +554,56 @@ $input.addEventListener('keydown', (e) => {
     runQuery(text);
   }
 });
+
+// ---------- 창 기본 기능 (2026-08-17) — frame:false라 OS 타이틀바가 없어 직접 배선 ----------
+// 줌: Ctrl+= / Ctrl+- / Ctrl+0 / Ctrl+휠. 최소화: Ctrl+M. main.js가 두 창을 동기한다.
+document.addEventListener('keydown', (e) => {
+  if (!(e.ctrlKey || e.metaKey) || e.altKey) return;
+  if (e.key === '=' || e.key === '+') {
+    e.preventDefault();
+    ipcRenderer.send('athena:zoom', { dir: 'in' });
+  } else if (e.key === '-' || e.key === '_') {
+    e.preventDefault();
+    ipcRenderer.send('athena:zoom', { dir: 'out' });
+  } else if (e.key === '0') {
+    e.preventDefault();
+    ipcRenderer.send('athena:zoom', { dir: 'reset' });
+  } else if (e.key === 'm' || e.key === 'M') {
+    e.preventDefault();
+    ipcRenderer.send('athena:minimize-windows');
+  }
+});
+
+window.addEventListener('wheel', (e) => {
+  if (!e.ctrlKey) return;
+  e.preventDefault();
+  ipcRenderer.send('athena:zoom', { dir: e.deltaY < 0 ? 'in' : 'out' });
+}, { passive: false });
+
+// 창 이동 — 빈 유리 표면(이력 여백·입력줄 여백·설정/온보딩 배경)을 잡고 끈다.
+// e.target === el 조건이 핵심이다: 턴 텍스트·입력창·버튼 등 자식 위에서는
+// 시작하지 않아 선택/클릭/스크롤과 충돌하지 않는다. 실제 이동은 main.js가
+// 커서를 폴링해 수행한다(athena:window-drag).
+function bindWindowDrag(el) {
+  if (!el) return;
+  el.addEventListener('mousedown', (e) => {
+    if (e.button !== 0 || e.target !== el) return;
+    ipcRenderer.send('athena:window-drag', { phase: 'start' });
+    const end = () => {
+      ipcRenderer.send('athena:window-drag', { phase: 'end' });
+      window.removeEventListener('mouseup', end);
+      window.removeEventListener('blur', end);
+    };
+    window.addEventListener('mouseup', end);
+    window.addEventListener('blur', end);
+  });
+}
+bindWindowDrag($history);
+bindWindowDrag(document.querySelector('.input-row'));
+bindWindowDrag($settings);
+bindWindowDrag(document.querySelector('.settings-head'));
+bindWindowDrag($onboard);
+bindWindowDrag($onboardBody);
 
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {

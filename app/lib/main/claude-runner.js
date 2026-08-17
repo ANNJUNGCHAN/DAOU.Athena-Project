@@ -54,8 +54,8 @@ function killTree(child) {
   }
 }
 
-function buildArgs({ prompt, configFile, allowedTools }) {
-  return [
+function buildArgs({ prompt, configFile, allowedTools, resumeSessionId }) {
+  const args = [
     '-p', prompt,
     '--output-format', 'stream-json',
     '--verbose',
@@ -64,6 +64,11 @@ function buildArgs({ prompt, configFile, allowedTools }) {
     '--setting-sources', '',
     '--allowedTools', allowedTools,
   ];
+  // 멀티턴 — 직전 왕복의 result 이벤트가 준 session_id로 대화를 잇는다.
+  // -p 재개는 세션을 포크해 **새 session_id**를 발급한다 — 호출자는 매 왕복의
+  // finalResult.session_id로 갱신해야 체인이 이어진다(main.js runLiveQuery).
+  if (resumeSessionId) args.push('--resume', String(resumeSessionId));
+  return args;
 }
 
 // prompt/cwd/configFile은 호출자가 채운다(mcp-config.ensureMcpConfig()의 결과).
@@ -77,6 +82,7 @@ function runClaudeQuery({
   cwd,
   configFile = '.mcp.json',
   allowedTools = GATEWAY_ALLOWED_TOOLS,
+  resumeSessionId = null,
   claudeBin = process.env.ATHENA_CLAUDE_BIN || 'claude',
   timeoutMs = DEFAULT_TIMEOUT_MS,
   onSpawn,
@@ -93,7 +99,7 @@ function runClaudeQuery({
       return;
     }
 
-    const args = buildArgs({ prompt, configFile, allowedTools });
+    const args = buildArgs({ prompt, configFile, allowedTools, resumeSessionId });
     const session = new StreamJsonSession();
     let child;
     try {

@@ -64,6 +64,7 @@ let layout;
 let chatWin, canvasWin;
 let chatHeight;
 let chatBottom; // 입력줄이 고정되는 화면 y좌표 — 위로만 자란다
+let chatX; // 대화 창 x — 사용자가 창을 끌어 옮기면 갱신된다(setChatHeight가 되돌리지 않게)
 let canvasVisible = false;
 
 function commonWinOpts(bounds) {
@@ -72,7 +73,10 @@ function commonWinOpts(bounds) {
     frame: false,
     resizable: false,
     show: false,
-    alwaysOnTop: true,
+    // alwaysOnTop을 걸지 않는다(2026-08-17 결정) — 스파이크 시절 값이었지만, 다른
+    // 앱 위에 영구히 떠서 "창을 내릴 수 없다"는 실사용 문제가 됐다. z순서는 OS에
+    // 맡기고, 두 창끼리의 짝(캔버스 위에 대화 창)은 focus/restore 핸들러의
+    // moveTop()으로만 유지한다(createWindows 하단).
     backgroundColor: '#00000000',
     // S1 실측(spike/electron-glass/RESULT.md): backgroundMaterial:'acrylic' 단독으로
     // "뒤가 비치며 블러"가 성립한다. transparent:true는 기본으로 켜지 않는다(W2 지시) —
@@ -86,6 +90,7 @@ async function createWindows() {
   mdlog('createWindows start');
   layout = computeLayout();
   chatBottom = layout.originY + layout.canvasH + layout.chatBaseH;
+  chatX = layout.originX;
   chatHeight = layout.chatBaseH;
   mdlog('layout computed ' + JSON.stringify(layout));
 
@@ -137,7 +142,97 @@ async function createWindows() {
 
   chatWin.on('closed', () => app.quit());
   canvasWin.on('closed', () => { canvasVisible = false; });
+
+  // ---------- 창 기본 기능 (2026-08-17) — frame:false라 OS 타이틀바가 없어 직접 배선 ----------
+  // 사용자가 창을 끌어 옮기면(아래 athena:window-drag) 높이 앵커를 새 위치로 갱신한다 —
+  // 안 하면 다음 setChatHeight가 창을 부팅 좌표로 되돌린다. setChatHeight 자신의
+  // setBounds도 이 핸들러를 지나가지만 y = chatBottom - height라 재계산값이 같다(무해).
+  const syncChatAnchor = () => {
+    if (!chatWin || chatWin.isDestroyed() || chatWin.isMinimized()) return;
+    const b = chatWin.getBounds();
+    chatX = b.x;
+    chatBottom = b.y + b.height;
+  };
+  chatWin.on('move', syncChatAnchor);
+  chatWin.on('resize', syncChatAnchor);
+
+  // alwaysOnTop이 없어졌으므로 두 창의 짝(캔버스 위에 대화 창)은 여기서만 유지한다.
+  chatWin.on('focus', () => {
+    if (canvasVisible && canvasWin && !canvasWin.isDestroyed() && !canvasWin.isMinimized()) {
+      canvasWin.moveTop();
+      chatWin.moveTop();
+    }
+  });
+  canvasWin.on('focus', () => {
+    if (chatWin && !chatWin.isDestroyed() && !chatWin.isMinimized()) chatWin.moveTop();
+  });
+
+  // 한쪽을 작업 표시줄에서 복원하면 나머지도 같이 올라온다 — 짝이 갈라지지 않는다.
+  chatWin.on('restore', () => {
+    if (canvasVisible && canvasWin && !canvasWin.isDestroyed() && canvasWin.isMinimized()) {
+      canvasWin.restore();
+      canvasWin.moveTop();
+      chatWin.moveTop();
+    }
+  });
+  canvasWin.on('restore', () => {
+    if (chatWin && !chatWin.isDestroyed() && chatWin.isMinimized()) chatWin.restore();
+    if (chatWin && !chatWin.isDestroyed()) chatWin.moveTop();
+  });
 }
+
+// ---------- 창 이동 — 빈 유리 표면을 잡고 끈다 ----------
+// -webkit-app-region:drag를 쓰지 않는 이유: 드래그 영역은 wheel/선택 이벤트를
+// 삼켜 이력 스크롤과 충돌하고, verify.js가 두 창 bounds 독립성을 단언하므로
+// 창별로 정밀하게 시작/끝을 제어해야 한다. 렌더러가 빈 배경 mousedown에서
+// start를 보내면, 커서를 폴링해 그 창 하나만 따라 움직인다(줌·DPI 무관 —
+// 스크린 좌표만 쓴다).
+let winDragTimer = null;
+
+function endWindowDrag() {
+  if (winDragTimer) { clearInterval(winDragTimer); winDragTimer = null; }
+}
+
+ipcMain.on('athena:window-drag', (e, { phase } = {}) => {
+  if (phase !== 'start') { endWindowDrag(); return; }
+  const win = BrowserWindow.fromWebContents(e.sender);
+  if (!win || win.isDestroyed()) return;
+  endWindowDrag();
+  const startCursor = screen.getCursorScreenPoint();
+  const [startX, startY] = win.getPosition();
+  winDragTimer = setInterval(() => {
+    if (win.isDestroyed()) { endWindowDrag(); return; }
+    const c = screen.getCursorScreenPoint();
+    win.setPosition(startX + (c.x - startCursor.x), startY + (c.y - startCursor.y));
+  }, 16);
+});
+
+// ---------- 최소화(창 내리기) — 두 창을 한 몸으로 내린다. 복원은 restore 핸들러가 짝 맞춘다 ----------
+ipcMain.on('athena:minimize-windows', () => {
+  if (canvasVisible && canvasWin && !canvasWin.isDestroyed()) canvasWin.minimize();
+  if (chatWin && !chatWin.isDestroyed()) chatWin.minimize();
+});
+
+// ---------- 줌(화면 확대/축소) — 두 창 동기, Ctrl+= / Ctrl+- / Ctrl+0 / Ctrl+휠 ----------
+// 창 크기는 그대로 두고 콘텐츠 배율만 바꾼다(브라우저 줌과 같은 문법). 렌더러의
+// CSS px 좌표 계약이 배율만큼 어긋나는 지점은 정확히 세 곳이고 각자 보정한다:
+//   높이 측정(chat.js measureNeededHeight) · 점 좌표(getDotScreenPoint) ·
+//   확장 애니메이션 클립 좌표(canvas.js prime-clip/run-animation).
+let uiZoom = 1;
+
+function applyUiZoom(dir) {
+  const next = dir === 'reset' ? 1 : uiZoom * (dir === 'in' ? 1.1 : 1 / 1.1);
+  uiZoom = Math.min(2, Math.max(0.5, Math.round(next * 100) / 100));
+  for (const w of [chatWin, canvasWin]) {
+    if (w && !w.isDestroyed()) w.webContents.setZoomFactor(uiZoom);
+  }
+  // 배율이 바뀌면 필요한 창 높이도 바뀐다 — 렌더러가 다시 재고 요청하게 알린다.
+  if (chatWin && !chatWin.isDestroyed()) {
+    chatWin.webContents.send('athena:zoom-changed', { zoom: uiZoom });
+  }
+}
+
+ipcMain.on('athena:zoom', (e, { dir } = {}) => applyUiZoom(dir));
 
 // ---------- 대화 창 높이 — 위로만 자란다, 입력줄(하단)은 고정 ----------
 // setChatHeight()로 뽑아낸 이유: 온보딩 완료 시("athena:onboarding-advance"가
@@ -151,7 +246,7 @@ function setChatHeight(height) {
   if (clamped === chatHeight) return;
   chatHeight = clamped;
   const y = chatBottom - chatHeight;
-  chatWin.setBounds({ x: layout.originX, y, width: layout.chatW, height: chatHeight });
+  chatWin.setBounds({ x: chatX, y, width: layout.chatW, height: chatHeight });
   if (canvasVisible) chatWin.moveTop(); // 확장 시 캔버스 창 위로 올라탄다(two-windows.md E3-확장)
 }
 
@@ -163,7 +258,9 @@ async function getDotScreenPoint() {
     "(() => { const r = document.getElementById('dot').getBoundingClientRect(); return {x: r.left + r.width/2, y: r.top + r.height/2}; })()"
   );
   const chatBounds = chatWin.getBounds();
-  return { x: chatBounds.x + rect.x, y: chatBounds.y + rect.y };
+  // getBoundingClientRect는 CSS px, 창 bounds는 물리 px — 줌 배율만큼 벌어진다.
+  const zf = chatWin.webContents.getZoomFactor();
+  return { x: chatBounds.x + rect.x * zf, y: chatBounds.y + rect.y * zf };
 }
 
 function canvasLocalFromScreen(pt) {
@@ -249,6 +346,12 @@ function sendLiveCanvasResult(result) {
 // Esc 후 재질의로 프로세스가 쌓이던 갭(README "다중 세션도 없다")의 해소.
 let activeLiveQuery = null;
 
+// 멀티턴(2026-08-17) — 직전 성공 왕복의 session_id. 다음 질의를 --resume으로
+// 이어 이전 대화 내용(질문·답변·툴 결과)이 반영되게 한다. -p 재개는 세션을
+// 포크해 새 session_id를 발급하므로 매 성공 왕복마다 갱신해야 체인이 이어진다.
+// 앱 재시작 시 null — 대화는 앱 수명 단위다(디스크에 세션 키를 남기지 않는다).
+let liveSessionId = null;
+
 async function runLiveQuery(query, expand) {
   const { dir, configFile } = getLiveMcpConfig();
 
@@ -264,12 +367,14 @@ async function runLiveQuery(query, expand) {
   // 실제로 가능하다 — 그때 빈 유리창을 열어두지 않는다.
   let expandTriggered = false;
   const canvasTypesSeen = [];
+  const resumeSessionId = liveSessionId;
   const result = await runClaudeQuery({
     // 날것 질문을 그대로 넘기면 모델이 조회만 하고 캔버스를 건너뛸 수 있다 —
     // 렌더 지시·스키마 힌트로 감싼다(lib/main/live-prompt.js의 실측 근거 참조).
     prompt: buildLivePrompt(query),
     cwd: dir,
     configFile,
+    resumeSessionId,
     onSpawn: (h) => { myHandle = h; activeLiveQuery = h; },
     onCanvasResult: (r) => {
       if (expand && !expandTriggered && !canvasVisible) {
@@ -284,6 +389,20 @@ async function runLiveQuery(query, expand) {
   // 내가 등록한 핸들일 때만 지운다 — 이 await 동안 새 질의가 선점해 자기 핸들을
   // 걸어뒀다면 그걸 지우면 안 된다.
   if (activeLiveQuery === myHandle) activeLiveQuery = null;
+
+  // 멀티턴 세션 체인 갱신 — 성공 왕복의 새 session_id로 잇는다.
+  if (result.ok && result.finalResult && result.finalResult.session_id) {
+    liveSessionId = result.finalResult.session_id;
+  } else if (!result.ok && resumeSessionId && !result.aborted && !result.timedOut) {
+    // 재개 실패 — 세션 파일이 사라졌거나 CLI가 재개를 거부했을 수 있다. 다음
+    // 질의가 계속 같은 이유로 죽지 않게 세션을 버린다(fail-open은 새 대화 시작).
+    liveSessionId = null;
+    if (/session/i.test(String(result.error || ''))) {
+      // 세션 문제로 죽은 게 분명하면 이번 질의만은 새 세션으로 1회 재시도한다 —
+      // liveSessionId가 이미 null이라 재귀는 한 단계에서 끝난다.
+      return runLiveQuery(query, expand);
+    }
+  }
 
   // finalResult.result는 claude -p의 마지막 assistant 텍스트다(RESULT.md의
   // type:"result" 이벤트) — 목업 시절의 정형화된 "캔버스 창에 ~ 띄웠습니다"

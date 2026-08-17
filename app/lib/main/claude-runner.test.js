@@ -28,6 +28,21 @@ test('buildArgs: --setting-sources 값은 항상 빈 문자열 하나뿐 — 콤
   assert.equal(args[i + 1], ''); // S3 실측: "user"처럼 값을 하나라도 주면 완화책이 깨진다
 });
 
+test('buildArgs: resumeSessionId가 없으면 --resume이 붙지 않는다 — 첫 턴은 새 세션', () => {
+  const args = buildArgs({ prompt: 'x', configFile: '.mcp.json', allowedTools: 'y' });
+  assert.equal(args.indexOf('--resume'), -1);
+});
+
+test('buildArgs: resumeSessionId가 있으면 --resume <id>가 끝에 붙는다 — 멀티턴 재개', () => {
+  const args = buildArgs({
+    prompt: 'x', configFile: '.mcp.json', allowedTools: 'y',
+    resumeSessionId: 'sess-abc-123',
+  });
+  assert.deepEqual(args.slice(-2), ['--resume', 'sess-abc-123']);
+  // 기존 인자 순서(RESULT.md §1 계약)는 그대로 보존된다 — 재개 인자는 뒤에만 붙는다
+  assert.deepEqual(args.slice(0, -2), buildArgs({ prompt: 'x', configFile: '.mcp.json', allowedTools: 'y' }));
+});
+
 test('RENDER_CANVAS_ALLOWED_TOOL: athena__가 두 번 나오는 실측 이름 그대로', () => {
   assert.equal(RENDER_CANVAS_ALLOWED_TOOL, 'mcp__athena__athena__render_canvas');
 });
