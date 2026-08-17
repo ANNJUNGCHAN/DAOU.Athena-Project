@@ -411,6 +411,11 @@ projection에 legacy/unspecified layout이 남아 있으면 G002 생성 단계�
 | `auth_required` | 인증/권한 필요 | credential 값 노출 없이 인증 상태 안내 |
 | `action_required` | 주문 확인 등 명시적 사용자 행동 필요 | draft/review/confirm 단계 표시 |
 
+> **2026-08-17 정정 — 이 표는 구판이다.** 상태 7종의 정본은
+> [`kiwoom-common-screen-spec.md`](kiwoom-common-screen-spec.md) §5
+> (`loading/empty/error/unavailable/auth_required/permission_denied/stale`)로 확정됐다(사용자 결정).
+> `ready`는 상태가 아니라 정상 표시이고, `action_required`는 주문 확인 흐름의 단계로 흡수된다.
+
 ### 7.3 section 종류
 
 - `facts`

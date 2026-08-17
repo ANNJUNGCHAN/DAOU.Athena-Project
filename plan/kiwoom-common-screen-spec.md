@@ -111,6 +111,11 @@ cd backend && .venv/Scripts/python -m pytest tests/test_screen_injection_map.py 
 
 ### 3.5 ActionCard
 
+> **2026-08-17 확정 — 주문 확인 표면은 대화 창 모드 단독이다(§11-11 해소, 사용자 결정).**
+> 확인 워크플로의 입력 행위(draft 입력·confirm)는 대화 창의 **주문 확인 모드**가 담당하고,
+> ActionCard는 **표시 전용**(주문 상태·접수 결과의 출력)으로 역할이 줄어든다. 아래 서술과
+> 아트보드 31은 이 결정 전의 것이다 — 개정은 §11-10 판정(G001.5 시안)과 같은 라운드에서 한다.
+
 - **목적**: 주문 draft/review/confirm/receipt를 표시한다. 표 없음.
 - **대상 매핑 수**: 12
 - **실측 치수**: 요청 3~8, 응답 1~4(주문번호·상태 ack).
@@ -255,6 +260,12 @@ injection map은 도메인별(`account`, `charts`, `elw`, `etf` 등) 절로 나�
 
 12캔버스를 확정된 것으로 취급하지 않는다. canvas-taxonomy.md 자체가 미해결로 남긴 "캔버스 3개가 한 창에 동시에 있을 때의 배치 규칙"(§11 미해결 7)도 이 문서에서 풀지 않는다.
 
+**2026-08-17 확정 — 시계열(차트) 렌즈는 저작 상태를 갖는다(사용자 결정).** 보조지표는 질의
+기반("볼린저 얹어줘")으로도 **수동 드로잉으로도** 조작 가능해야 하며, 차트 기능은 **토스증권
+WTS와 동등**을 목표로 한다. 즉 렌즈는 "같은 데이터의 다른 표현"을 넘어 상호작용·주석(영속)
+상태를 보유할 수 있다 — 저장·복원 설계는 별도의 **차트 렌즈 스펙 라운드**에서 정한다.
+([감사](kiwoom-common-screen-aits-coverage-audit.md) §5.2 G1의 "결정 필요"가 이 결정으로 닫혔다.)
+
 ---
 
 ## 10. Paper 아트보드 사양
@@ -316,6 +327,6 @@ End of Document → `40`. 신규 장표 2장이 들어왔다 — `23 · AT-CH-00
 7. **캔버스 3개가 한 창에 동시에 있을 때의 배치 규칙이 미정이다**([`plan/canvas-taxonomy.md`](canvas-taxonomy.md) 미해결 항목, 라운드 2 미완).
 8. **이 문서가 스스로와 충돌했던 지점 — CompoundCard의 `stale`.** §3.3은 CompoundCard의 상태 목록에 `stale`을 넣었고 §5 말미는 CompoundCard가 `stale`에 도달하지 않는다고 적었다. 실측은 §3.3 쪽이다(29개 전체가 컨테이너 정확히 1개 = 연속조회 대상). §5를 정정하고 아트보드 33의 행렬도 그렇게 그렸다. 다만 §11-2가 풀리기 전에는 어느 카드에서도 `stale`이 실제로 발화하지 않는다 — 지금 이 구분은 UI 계약이지 관측된 동작이 아니다.
 9. **§3.1의 "최대는 `detail:ka10007:bid_prices`"는 동점 중 하나다.** 응답 top-level 20개짜리가 여럿 있고, 생성기(`render_screen_card_facts.py`)는 동점을 mapping ID로 결정적으로 깨서 `detail:ka10040:sell_brokers`를 최대로 고른다. 둘 다 20이므로 어느 쪽도 틀리지 않았지만, 아트보드와 이 문서가 서로 다른 이름을 부르는 이유가 여기 있다.
-10. **ActionCard "표 없음"이 정정/취소 실무와 충돌한다(2026-08-17 AITS 실측).** AITS `AmendOrderCard`는 미체결 원주문 선택 드롭다운 + before/after **diff 표** + 중첩 확인 게이트(1차 확인 → 별도 카운트다운 모달)를 갖는다. §3.5의 "표 없음"과 4단 선형(draft→review 요약→confirm→receipt) 서술이 정정 2·취소 2 주문에도 유효한지, 아니면 정정/취소 변형 계약이 필요한지 판정이 필요하다 ([감사](kiwoom-common-screen-aits-coverage-audit.md) §5.2 G2).
-11. **주문 확인의 최종 표면이 문서끼리 갈린다.** `GLOSSARY.md` §1·`CLAUDE.md`는 "주문 확인 = 대화 창의 모드(미착수)"라 하고, 이 문서 §3.5·§6.2는 캔버스 창의 ActionCard로 설계한다. 둘 다 "3번째 창은 아니다"에는 일치하지만 어느 표면인지 조정된 기록이 없다 (2026-08-17 결정 원장 발견).
-12. **상태 7종 목록이 `kiwoom-optimal-screen-selection-rendering-plan.md` §7.2와 다르다.** 공통 5종(loading/empty/error/unavailable/auth_required)에 그 문서는 `ready`/`action_required`를, 이 문서 §5는 `permission_denied`/`stale`을 더한다. 둘 다 "7종"이라 부르지만 목록이 다르고 조정 기록이 없다.
+10. **ActionCard "표 없음"이 정정/취소 실무와 충돌한다(2026-08-17 AITS 실측).** AITS `AmendOrderCard`는 미체결 원주문 선택 드롭다운 + before/after **diff 표** + 중첩 확인 게이트(1차 확인 → 별도 카운트다운 모달)를 갖는다. §3.5의 "표 없음"과 4단 선형(draft→review 요약→confirm→receipt) 서술이 정정 2·취소 2 주문에도 유효한지, 아니면 정정/취소 변형 계약이 필요한지 판정이 필요하다 ([감사](kiwoom-common-screen-aits-coverage-audit.md) §5.2 G2). (2026-08-17 결정: **G001.5 시안 후 판정** — 두 방식의 Paper 시안을 실물로 비교해 결정한다. 사용자 확정.)
+11. **주문 확인의 최종 표면이 문서끼리 갈린다.** `GLOSSARY.md` §1·`CLAUDE.md`는 "주문 확인 = 대화 창의 모드(미착수)"라 하고, 이 문서 §3.5·§6.2는 캔버스 창의 ActionCard로 설계한다. 둘 다 "3번째 창은 아니다"에는 일치하지만 어느 표면인지 조정된 기록이 없다 (2026-08-17 결정 원장 발견). **(같은 날 해소: 대화 창 모드 단독으로 확정 — 사용자 결정. ActionCard는 표시 전용으로 역할 축소, §3.5 배너 참조.)**
+12. **상태 7종 목록이 `kiwoom-optimal-screen-selection-rendering-plan.md` §7.2와 다르다.** 공통 5종(loading/empty/error/unavailable/auth_required)에 그 문서는 `ready`/`action_required`를, 이 문서 §5는 `permission_denied`/`stale`을 더한다. 둘 다 "7종"이라 부르지만 목록이 다르고 조정 기록이 없다. **(2026-08-17 해소: 이 문서 §5가 정본 — 사용자 결정. rendering-plan §7.2에 구판 표시를 달았다.)**
