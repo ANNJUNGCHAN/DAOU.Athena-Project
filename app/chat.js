@@ -20,6 +20,10 @@ const $settings = document.getElementById('settings');
 const $settingsGrid = document.getElementById('settingsGrid');
 
 let layout = { chatBaseH: 204, chatMaxH: 788, scale: 1 };
+// 'live'(기본) | 'fixture'. main이 athena:init에서 알려준다(main.js
+// ATHENA_CANVAS_SOURCE 참조). verify.js만 명시적으로 'fixture'를 세팅한다 —
+// 사람이 쓰는 npm start는 항상 live다(결정 D1의 실배선이 기본 경로여야 한다).
+let canvasSource = 'live';
 let manualOverride = false;
 let currentHeight = layout.chatBaseH;
 let state = 'idle'; // idle | judging | calling | done(즉시 idle로 수렴)
@@ -148,6 +152,7 @@ function finishOnboarding() {
 // ---------- 초기 레이아웃 정보 수신 ----------
 ipcRenderer.on('athena:init', (e, payload) => {
   layout = payload;
+  canvasSource = payload.canvasSource || 'live';
   currentHeight = layout.chatBaseH;
   applyGlassFraction(0);
 });
@@ -247,7 +252,116 @@ function setDot(mode) {
   if (mode) $dot.classList.add(mode);
 }
 
+// 실배선/픽스처 분기 — plan/kiwoom-common-screen-handoff.md §6, main.js의
+// athena__render_canvas source:'fixture' 분기와 짝을 이룬다. 기본은 live다.
 async function runQuery(text) {
+  if (canvasSource === 'fixture') return runQueryFixture(text);
+  return runQueryLive(text);
+}
+
+// ---------- 실배선 — claude -p 실호출, 결정 D1 ----------
+// 목업 시절의 "TR 이름을 미리 안다"는 전제가 여기선 성립하지 않는다 — 어떤
+// MCP 툴이 몇 번 불릴지는 claude가 정한다. 그래서 진행 표시는 TR 코드 나열이
+// 아니라 "카드가 늘어난 개수 + 경과 시간"이다. 실왕복은 43초까지 걸린 실측이
+// 있다(spike/cli-pipe/gateway/RESULT.md) — 조용히 멈춘 것처럼 보이면 안 된다.
+async function runQueryLive(text) {
+  const myToken = ++abortToken;
+  manualOverride = false;
+
+  const qLine = document.createElement('div');
+  qLine.className = 'turn';
+  const qText = document.createElement('div');
+  qText.className = 'turn-q';
+  qText.textContent = text;
+  qLine.appendChild(qText);
+  $history.appendChild(qLine);
+  scheduleHeightSync();
+
+  state = 'judging';
+  setDot('judging');
+  setLocked(true, 'Claude에게 물어보는 중 — 수십 초 걸릴 수 있다');
+  const progress = document.createElement('div');
+  progress.className = 'progress-line';
+  const progText = document.createElement('span');
+  const startedAt = Date.now();
+  progText.textContent = 'Claude에게 물어보는 중 · 0.0s';
+  progress.appendChild(progText);
+  $history.appendChild(progress);
+  liveProgressEl = progress;
+  scheduleHeightSync();
+
+  let cardCount = 0;
+  let calling = false;
+  const elapsedText = () => `${((Date.now() - startedAt) / 1000).toFixed(1)}s`;
+  const renderProgress = () => {
+    if (myToken !== abortToken) return;
+    const base = calling ? `카드 ${cardCount}개 렌더됨` : 'Claude에게 물어보는 중';
+    progText.textContent = `${base} · ${elapsedText()} 경과`;
+    setLocked(true, `${base} · ${elapsedText()} 경과`);
+  };
+  const tick = setInterval(renderProgress, 1000); // 진행이 눈에 보이게 — 조용히 멈춘 것처럼 보이면 안 된다
+
+  const onLiveCanvasAdded = () => {
+    if (myToken !== abortToken) return;
+    if (!calling) { calling = true; state = 'calling'; setDot('calling'); }
+    cardCount += 1;
+    renderProgress();
+    scheduleHeightSync();
+  };
+  ipcRenderer.on('athena:live-canvas-added', onLiveCanvasAdded);
+
+  let result;
+  try {
+    result = await ipcRenderer.invoke('athena__render_canvas', { source: 'live', query: text, expand: true });
+  } finally {
+    clearInterval(tick);
+    ipcRenderer.removeListener('athena:live-canvas-added', onLiveCanvasAdded);
+  }
+  if (myToken !== abortToken) return;
+
+  state = 'idle';
+  setDot(null);
+  setLocked(false);
+  progress.remove();
+  liveProgressEl = null;
+
+  const aLine = document.createElement('div');
+  aLine.className = 'turn';
+  const aText = document.createElement('div');
+  aText.className = 'turn-a';
+  // 정직하게: 실패했으면 실패했다고 보여준다(CLAUDE.md §4). result.error는
+  // claude 종료 코드거나 CLI가 낸 실패 메시지 원문이다.
+  aText.textContent = result && result.ok
+    ? (result.answerText || `완료 — 카드 ${cardCount}개, 답변 텍스트 없음`)
+    : `실패 — ${(result && result.error) || '알 수 없는 오류'}`;
+  aLine.appendChild(aText);
+
+  const meta = document.createElement('div');
+  meta.className = 'turn-meta';
+  const canvasTypes = (result && result.canvasTypes) || [];
+  for (const t of canvasTypes) {
+    const chip = document.createElement('span');
+    chip.className = 'chip';
+    chip.textContent = t; // 실제 응답 canvas_type(table/free/...) — 요청값이 아니다
+    meta.appendChild(chip);
+  }
+  const trace = document.createElement('span');
+  const durS = result && typeof result.durationMs === 'number' ? (result.durationMs / 1000).toFixed(1) : elapsedText().replace('s', '');
+  const skipped = result && result.diagnostics && result.diagnostics.skippedLines;
+  trace.textContent = `claude -p · ${durS}s` + (skipped ? ` · 비JSON 라인 ${skipped}건 건너뜀` : '');
+  meta.appendChild(trace);
+  aLine.appendChild(meta);
+
+  $history.appendChild(aLine);
+  scheduleHeightSync();
+  $input.focus();
+}
+
+// ---------- 픽스처 어댑터 — 검증 전용, 명시적으로 선택했을 때만 탄다 ----------
+// spike/captures/*.json을 lib/mockdata.js가 읽는 경로(main.js의 source:'fixture'
+// 분기)로 이어진다. verify.js가 ATHENA_CANVAS_SOURCE=fixture로 canvasSource를
+// 강제할 때만 여기로 온다 — quota 없이 결정론적 3상태/자동성장 검증을 위해서다.
+async function runQueryFixture(text) {
   const myToken = ++abortToken;
   manualOverride = false; // 새 턴 — 자동 성장 재개
   const types = pickCardTypes(text);
@@ -301,8 +415,9 @@ async function runQuery(text) {
     await wait(500);
     if (myToken !== abortToken) return;
 
-    // athena__render_canvas 호출 인터페이스 — 나중에 실제 MCP 툴 호출로 대체될 자리.
-    await ipcRenderer.invoke('athena__render_canvas', { type, mock: true, expand: !opened });
+    // 픽스처 어댑터 — main.js의 source:'fixture' 분기로 간다(위 runQueryLive의
+    // 실배선 호출과 짝을 이룬다. 여긴 명시적으로 fixture를 요청한 경로다).
+    await ipcRenderer.invoke('athena__render_canvas', { source: 'fixture', type, expand: !opened });
     opened = true;
 
     trEls[type].classList.add('done');

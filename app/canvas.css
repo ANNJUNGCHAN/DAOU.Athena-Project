@@ -57,6 +57,10 @@ html, body { background: transparent; }
 .card.stream { order: 1; }
 .card.reader { order: 2; }
 .card.table { order: 3; grid-column: 1 / -1; }
+/* ---- 실배선 카드 — mcp-table(공통 테이블 신규④) · free(자유 카드) ---- */
+.card.mcp-table { order: 4; grid-column: 1 / -1; }
+.card.free { order: 5; grid-column: 1 / -1; }
+.card.notice { order: 6; grid-column: 1 / -1; min-height: unset; }
 .card.highlight {
   border-color: var(--color-brand);
   box-shadow: 0 0 0 1px rgba(238, 19, 123, 0.5), 0 0 24px rgba(238, 19, 123, 0.25);
@@ -105,4 +109,11 @@ table.fin-table { width: 100%; border-collapse: collapse; font-variant-numeric: 
 .fin-table th, .fin-table td { padding: 5px 10px; text-align: right; border-bottom: 1px solid var(--color-k-line-soft); white-space: nowrap; }
 .fin-table th:first-child, .fin-table td:first-child { text-align: left; }
 .fin-table thead th { position: sticky; top: 0; background: rgba(29, 34, 44, 0.96); color: var(--color-k-dim); font-weight: 400; font-family: var(--font-strong); }
+
+/* ---- 자유 카드 — 스키마를 가정하지 않는 재귀 key/value 트리 (W4 최소 구현) ---- */
+.free-tree-dl { margin: 0 0 6px; display: grid; grid-template-columns: minmax(90px, max-content) 1fr; gap: 3px 12px; }
+.free-tree-dl dt { font-family: var(--font-mono); font-size: 11.5px; color: var(--color-k-faint); }
+.free-tree-dl dd { margin: 0; font-size: 12.5px; color: var(--color-k-text); }
+.free-tree-list { list-style: none; margin: 0 0 6px; padding: 0 0 0 14px; border-left: 1px solid var(--color-k-line-soft); display: flex; flex-direction: column; gap: 4px; }
+.free-tree-scalar { font-size: 12.5px; color: var(--color-k-text); font-variant-numeric: tabular-nums; }
 

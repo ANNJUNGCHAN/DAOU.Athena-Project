@@ -6,6 +6,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
+    "test": "node --test lib/main/*.test.js",
     "verify": "electron verify.js",
     "verify:settings": "electron verify-settings.js",
     "verify:settings-cards": "electron verify-settings-cards.js"

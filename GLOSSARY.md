@@ -310,6 +310,8 @@ TR 하나에 화면 하나를 그리면 288개를 그려야 한다. 카드는 �
 | `ATHENA_MCP_REGISTRY_PATH` | MCP 레지스트리 JSON 경로 재정의 |
 | `ATHENA_LADYBUG_DLL_DIR` | Windows LadybugDB 네이티브 DLL 디렉토리 |
 | `ATHENA_NO_AUTOSTART` | Electron `main.js`를 라이브러리로 require할 때 자동 기동 차단. **`require.main` 체크의 대체물 — 건드리지 마라** |
+| `ATHENA_CANVAS_SOURCE` | `app/`의 `athena__render_canvas` 소스 선택. 기본(미설정) = **live**(`claude -p` 실배선, 결정 D1). `fixture`로 주면 `spike/captures/*.json` 목업 경로로 강제 — `app/verify.js`만 이걸 쓴다(quota 없이 결정론적 검증). 사람이 쓰는 `npm start`는 항상 live |
+| `ATHENA_CLAUDE_BIN` | `app/lib/main/claude-runner.js`가 spawn할 `claude` 바이너리 경로 재정의. 기본은 PATH의 `claude` |
 
 ---
 

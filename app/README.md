@@ -59,6 +59,171 @@ W2 지시대로 실제 캡처 파일을 그대로 읽어 렌더한다(`spike/cap
 결정" 공시 원문 중간에서 끊긴다. 리더 캔버스 헤더에 이 사실을 그대로 노출한다
 ("원문 일부… 캡처 당시 미리보기 필드 한도로 절단됨"). 감추지 않았다.
 
+## 실배선 — `claude -p` ↔ 캔버스 (결정 D1, 2026-08-17)
+
+`plan/plan.md` §5 액션 4 완료. 이 절 전까지의 "캔버스 3종 — 목업 데이터"는 여전히
+존재하지만 이제 **명시적으로 선택했을 때만** 쓰이는 픽스처 어댑터다. 기본 경로는
+실배선이다:
+
+```
+Electron ──spawn──> claude -p ──stdio──> athena-mcp serve ──> upstream N개
+   ^                    │
+   └── stream-json ─────┘   tool_result에서 캔버스 페이로드를 뽑아 IPC로 렌더
+```
+
+### 파서 — `lib/main/stream-json-parser.js`
+
+순수 함수 위주. 유일한 상태는 `StreamJsonSession` 클래스(청크 경계 carry, tool_use
+인덱스, 카운터)뿐이고 전체 이벤트 로그는 쌓지 않는다 — 왕복 하나가 43초+ 걸릴 수
+있어서다(`spike/cli-pipe/gateway/RESULT.md`). 공개 함수: `splitLines`/`flushCarry`
+(청크 경계 라인 분할), `parseLine`/`parseAllLines`(비JSON은 던지지 않고 건너뛰고
+센다), `buildToolUseIndex`(tool_use_id → 툴 이름, `athena__`가 두 번 나오는 실측
+이름을 접미사로 매칭), `extractToolResultBlocks`(content 문자열/블록배열 정규화),
+`extractCanvasEnvelope`(content 문자열을 한 번 더 JSON.parse), `classifyCanvasBlock`
+(성공/폴백/거부/에러/해석불가 분류 — **canvas_type은 응답값으로 읽는다, 요청값이
+아니다**), `collectCanvasResults`(배치), `StreamJsonSession`(스트리밍).
+
+테스트: `lib/main/stream-json-parser.test.js` — 지어낸 픽스처가 아니라
+`spike/captures/S4-gateway-cli-roundtrip.ndjson`(실왕복 42 이벤트, 불변 증거) 하나로
+전부 검증한다. `npm test`(`node --test lib/main/*.test.js`)로 돈다 — electron이
+필요 없다. 2026-08-17 실행: **29 passed, 0 failed** (`stream-json-parser` 24건 +
+`claude-runner`의 `buildArgs` 계약 3건 + `mcp-config` 2건).
+
+### 실배선 경로와 픽스처 경로가 갈리는 지점
+
+`main.js`의 `ipcMain.handle('athena__render_canvas', ...)` 하나가 `payload.source`로
+분기한다 — 채널 이름은 그대로 두고 안을 실제 경로로 교체하라는 지시를 그렇게
+지켰다:
+
+| `payload.source` | 무엇을 하는가 | 언제 타는가 |
+|---|---|---|
+| `'fixture'` | 기존 목업 그대로 — `spike/captures/*.json`을 `lib/mockdata.js`가 읽는다 | **명시적으로 선택했을 때만.** `chat.js`가 `athena:init`으로 받은 `canvasSource`가 `'fixture'`일 때(`runQueryFixture`) |
+| 그 외(기본) | `lib/main/claude-runner.js`가 `claude -p`를 스폰, `lib/main/mcp-config.js`가 매 실행 `userData/mcp-config/.mcp.json`을 다시 쓴다(클론 위치가 달라도 절대경로가 항상 맞다) | 기본 경로. `chat.js`의 `runQueryLive` |
+
+`canvasSource`는 `main.js`가 `ATHENA_CANVAS_SOURCE` 환경변수로 정해 `athena:init`에
+실어 보낸다(`GLOSSARY.md` §11). **`npm start`는 항상 live**다 — `verify.js`만
+`ATHENA_CANVAS_SOURCE=fixture`를 명시적으로 세팅해 quota 없이 검증 5(E2E Enter)의
+3상태·자동성장 단언을 그대로 재현한다. 두 경로가 갈리는 이유는
+`plan/kiwoom-common-screen-handoff.md` §6이 요구한 "HTTP/WebSocket adapter와 명시적
+fixture adapter 분리" 그대로다.
+
+### `claude -p` 커맨드 계약 — `lib/main/claude-runner.js`
+
+`spike/cli-pipe/gateway/RESULT.md` §1 실왕복 커맨드와 인자 순서까지 동일하게
+고정했다(`buildArgs`, `claude-runner.test.js`로 잠갔다):
+
+```
+claude -p "<질의>" --output-format stream-json --verbose
+  --mcp-config .mcp.json --strict-mcp-config
+  --setting-sources ""
+  --allowedTools "mcp__athena__athena__render_canvas"
+```
+
+`stdio: ['ignore', 'pipe', 'pipe']`로 stdin을 명시적으로 닫는다(안 닫으면 "no stdin
+data received in 3s" 경고로 3초를 버린다 — RESULT.md §1).
+
+#### ★ `shell: true`를 쓰면 실배선이 통째로 깨진다 (2026-08-17 실측)
+
+이 파일의 첫 판은 *"Windows에서 `claude`는 npm 전역 설치 시 `.cmd`/`.ps1` 셸 래퍼로
+깔리는 경우가 실측 다수"* 라는 **추측**으로 `shell: process.platform === 'win32'`를
+걸었다. 실호출로 검증하니 **즉시 죽었다**:
+
+```
+exit 1 · 캔버스 0건 · 319ms
+stderr: Error processing --setting-sources: Invalid setting source: --allowedTools.
+        Valid options are: user, project, local
+```
+
+원인: Windows에서 `shell:true`는 args를 커맨드라인 **문자열로 합치는데 빈 문자열
+인자가 그 과정에서 사라진다.** 그래서 `--setting-sources`가 자기 값이 아니라
+**다음 인자(`--allowedTools`)를 값으로 먹었다.**
+
+대조 실측(쿼터 없이 `process.argv` 에코로 확인):
+
+| | 결과 |
+|---|---|
+| `shell:false` | `[..., "--setting-sources", "", "--allowedTools", "TOOL"]` — **빈 문자열이 살아남는다** |
+| `shell:true` | 깨진다 (공백 있는 실행 파일 경로도 함께 깨졌다) |
+
+bash에서 손으로 돌렸을 때 통과했던 이유도 같다 — bash는 `""`를 진짜 빈 argv
+원소로 넘긴다.
+
+그리고 **추측 자체가 틀렸다.** `where claude` →
+`C:\Users\USER\.local\bin\claude.exe` — 진짜 `.exe`다. `.exe`는 `CreateProcess`가
+PATH에서 찾으므로 셸이 필요 없다. 지금은 `shell: false` 고정이고,
+`ENOENT`가 나면 `ATHENA_CLAUDE_BIN`으로 절대경로를 지정하라는 안내를 낸다.
+
+증거: [`spike/cli-pipe/gateway/PROBE-LIVE-SPAWN.json`](../spike/cli-pipe/gateway/PROBE-LIVE-SPAWN.json),
+재현 스크립트 [`probe_live_spawn.js`](../spike/cli-pipe/gateway/probe_live_spawn.js).
+
+> **교훈**: 파서 단위 테스트 29건은 이 버그 **전에도 후에도 전부 통과했다.**
+> 캡처 픽스처로는 spawn 인자 전달을 못 잡는다. `verify.js`도 못 잡는다 —
+> 픽스처 경로만 타기 때문이다. CLAUDE.md §3의 "추측을 코드에 넣지 마라"가
+> 정확히 이 사례다.
+
+### 자유 카드 — 최소 구현 (`canvas.js` `renderFreeCanvas`/`renderJsonTree`)
+
+S4 실왕복에서 **3회 중 2회가 `free`로 폴백했다** — 폴백은 예외가 아니라 흔한
+경로라서 렌더러가 없으면 실배선의 절반이 화면에 아무것도 못 띄운다. `GLOSSARY.md`
+§2의 "자유 카드"(W4, 미착수)를 정식으로 설계하진 않았고, 스키마를 가정하지 않고
+`envelope.data`를 재귀적 key/value 트리(`<dl>`/`<ul>`)로 펼치는 최소 구현만 넣었다.
+`innerHTML` 미사용(`createElement`+`textContent`만). 성공한 `table` 카드는
+`renderMcpTable`이 별도로 그린다 — 실측된 실제 형상(`columns:[{key,label}]`,
+`rows:[{key:value}]`)을 그대로 쓴다. 기존 목업 `table` 카드(DART 재무제표 고정
+스키마)와는 다른 카드 슬롯(`mcp-table`)이다 — 스키마가 완전히 다르다.
+
+거부(`--allowedTools` 밖)·에러·해석불가는 카드 대신 `notice` 슬롯에
+`ui-kit.errorNote`로 안내만 띄운다(조용히 삼키지 않는다). `free`가 아니라 별도
+슬롯을 쓴 이유: 같은 세션에서 정상 `free` 카드가 이미 떠 있는데 다음 호출이
+실패하면, "재요청 시 같은 타입 카드를 갈아치운다"는 `makeCard` 규칙 때문에 실제
+데이터가 에러 배너로 덮이는 걸 막기 위해서다.
+
+### 3상태 표시 — 정직한 진행
+
+목업 시절엔 TR 이름을 미리 알았지만(고정 매핑), 실배선에서는 어떤 MCP 툴이 몇 번
+불릴지 claude가 정하므로 사전에 알 수 없다. `chat.js`의 `runQueryLive`는 1초마다
+경과 시간을 갱신하고(`setInterval`), 카드가 하나 뜰 때마다(`athena:live-canvas-added`
+IPC) "카드 N개 렌더됨"으로 갱신한다 — 43초짜리 왕복 동안 조용히 멈춘 것처럼 보이지
+않게 하려는 것이다(S4 실측: `duration_ms: 43865`). 완료 후 답변 텍스트는 더 이상
+정형화된 "캔버스 창에 ~ 띄웠습니다" 문장이 아니라 `claude -p`의 마지막 assistant
+텍스트(`result` 이벤트의 `result` 필드) 그대로다.
+
+### 미구현 · 단순화 · 검증 못 한 것 (정직하게 기록)
+
+- ~~**`claude -p`를 이 작업에서 실제로 한 번도 부르지 않았다.**~~ → **닫혔다.**
+  `spike/cli-pipe/gateway/probe_live_spawn.js`로 `runClaudeQuery`를 실제로 불러
+  **종단간 왕복을 검증했다.** 그 검증이 위의 `shell:true` 버그를 잡았다.
+  고친 뒤 실측: `ok:true · exit:0 · 캔버스 1건(canvas_type:"table", fell_back:false) · 9,326ms`
+  (`PROBE-LIVE-SPAWN.json`). spawn · PATH 해석 · stdin 닫기 · `--mcp-config` 상대경로 ·
+  `StreamJsonSession.feed()`의 실시간 청크 처리가 전부 실제로 통했다.
+  - **단, `npm run verify`는 이 경로를 타지 않는다.** 자동 검증은
+    `ATHENA_CANVAS_SOURCE=fixture`로 고정돼 있다(쿼터·43초·비결정성). 실배선 QA는
+    `node spike/cli-pipe/gateway/probe_live_spawn.js`를 **수동으로** 돌려야 한다.
+    이건 의도된 분리이지 누락이 아니다 — 다만 **CI가 실배선 회귀를 못 잡는다**는
+    뜻이므로 여기 적어둔다.
+- **Esc로 중단해도 스폰된 `claude` 프로세스는 안 죽는다.** `runQueryLive`의
+  `abortToken` 체크는 UI가 그 결과를 더 반영하지 않게 막을 뿐이다 —
+  `child_process`를 `kill()`하는 취소 경로가 없다. 다음 웨이브 대상.
+  `athena_mcp`의 진행 알림/취소 전파(`plan/plan.md` §4-A)와 이어질 문제다.
+  게이트웨이 프로세스(`athena-mcp serve`)는 `claude -p`가 죽으면 자기 stdio가
+  끊겨 따라 죽는다고 가정했지만 이것도 실측하지 못했다.
+  - **다중 세션도 없다.** 같은 창에서 두 번째 질의를 실배선으로 보내면 이전
+    `claude -p` 프로세스가 아직 살아있어도 새 프로세스를 또 스폰한다 — 동시
+    실행 상한이나 큐가 없다.
+- **응답 크기/시간 상한이 없다.** `athena_mcp`가 이미 응답 크기 post-parse
+  상한을 갖고 있지만(README "W1 잔여 5건"), 이 앱의 `claude -p` 왕복 자체엔
+  타임아웃이 없다 — 왕복이 영원히 멈추면 UI도 영원히 "경과 시간"만 늘린다.
+- **`.mcp.json`은 매 라이브 질의마다 다시 쓰지 않는다** — `liveMcpConfig`를
+  프로세스 생애주기 동안 캐시한다. 백엔드 venv 경로가 앱 실행 중 바뀌는 시나리오는
+  없다고 가정했다(재시작하면 다시 생성된다).
+- **카드 12종 중 실제로 실배선이 그리는 건 2종뿐이다**(`mcp-table`, `free`/
+  `notice`). 나머지(스트림·리더·타임라인 등)는 여전히 픽스처 전용이거나
+  미구현이다 — 실배선이 만드는 건 `render_canvas`의 봉투(`table`/`free`)뿐이고,
+  다른 카드 종류로 가는 경로(스트림/리더 등)는 이번 작업 범위 밖이다.
+- **자유 카드는 W4 정식 설계가 아니라 최소 구현이다** — 위 "자유 카드" 절 참조.
+  대용량/깊게 중첩된 `data`가 오면 트리가 카드 높이(`max-height:360px`, 스크롤)를
+  넘어 답답하게 보일 수 있다. 접기/펼치기 같은 UX는 넣지 않았다.
+
 ## 구현 중 발견·수정한 버그 4건 (정직하게 기록)
 
 포팅하면서 실제로 실행해보니 네 가지가 있었다. "될 것이다"로 안 넘기고 재현→원인

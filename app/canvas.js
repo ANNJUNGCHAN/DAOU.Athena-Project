@@ -4,6 +4,7 @@ const { ipcRenderer } = require('electron');
 const { sanitize } = require('./lib/sanitize');
 const { renderMarkdownInto } = require('./lib/markdown');
 const { loadStreamItems, loadFinancialStatement, loadReaderMarkdown } = require('./lib/mockdata');
+const { errorNote } = require('./lib/ui-kit');
 
 const mosaic = document.getElementById('mosaic');
 const sheen = document.getElementById('sheen');
@@ -69,6 +70,132 @@ ipcRenderer.on('athena:add-canvas', (e, { type }) => {
 ipcRenderer.on('athena:clear-canvases', () => {
   grid.innerHTML = '';
 });
+
+// ---------- 실배선 — stream-json-parser.classifyCanvasBlock()의 결과를 렌더 ----------
+// main.js가 athena__render_canvas(source:'live')로 claude -p를 실왕복한 뒤 매
+// render_canvas tool_result마다 이걸 보낸다. status는 success/fallback(둘 다
+// canvas_type을 읽어 렌더한다) · rejected/error/unparseable(카드 대신 안내만).
+ipcRenderer.on('athena:add-canvas-live', (e, result) => {
+  addLiveCard(result);
+});
+
+function addLiveCard(result) {
+  if (!result) return renderLiveNotice('빈 응답을 받았다.');
+  if (result.status === 'rejected') {
+    return renderLiveNotice('캔버스 호출이 거부됐다 — --allowedTools 권한이 없다.');
+  }
+  if (result.status === 'error') {
+    return renderLiveNotice('캔버스 호출이 게이트웨이/upstream 에러로 실패했다.');
+  }
+  if (result.status === 'unparseable') {
+    return renderLiveNotice(`캔버스 응답을 해석하지 못했다 — ${result.reason || '원인 미상'}.`);
+  }
+  const envelope = result.envelope;
+  if (!envelope) return renderLiveNotice('캔버스 응답에 데이터가 없다.');
+  // ★ canvas_type은 응답값이다 — 요청값이 아니다(S4 RESULT.md §5). success/fallback
+  // 둘 다 이 필드로 어떤 카드를 그릴지 정한다. table이 아니면(대개 free로 폴백)
+  // 자유 카드로 떨어뜨린다 — 폴백은 예외가 아니라 흔한 경로다.
+  if (envelope.canvas_type === 'table' && !envelope.fell_back) return renderMcpTable(envelope);
+  return renderFreeCanvas(envelope);
+}
+
+// 카드를 못 그릴 상황(거부/에러/해석불가)을 조용히 삼키지 않는다 — 모자이크에
+// 안내 카드를 하나 띄운다. 'free'가 아니라 별도 타입('notice')을 쓴다 — 같은
+// 세션에서 정상 free 카드가 이미 떠 있는데 이후 호출이 실패하면, makeCard가
+// 같은 타입 카드를 갈아치우는 규칙(재요청 시 새로 갱신) 때문에 실제 데이터
+// 카드가 에러 배너로 덮일 수 있어서다. ui-kit.errorNote는 role="alert"다.
+function renderLiveNotice(message) {
+  const { body } = makeCard('notice', '캔버스 알림');
+  body.appendChild(errorNote(message));
+}
+
+// ---------- 공통 테이블(신규④) — MCP render_canvas의 실제 table 응답 ----------
+// 목업 table 카드(renderTable, 아래)와는 다른 데이터 형상이다 — 이건 키움
+// 재무제표 고정 스키마가 아니라 스키마 불특정 {columns:[{key,label}], rows:[{key:value}]}다.
+// GLOSSARY.md §2 신규④ "공통 테이블 — 스키마 불특정 레코드. '부모'이자 기본값".
+function renderMcpTable(envelope) {
+  const { body } = makeCard('mcp-table', envelope.caption || '공통 테이블');
+  const cols = (envelope.data && Array.isArray(envelope.data.columns)) ? envelope.data.columns : [];
+  const rows = (envelope.data && Array.isArray(envelope.data.rows)) ? envelope.data.rows : [];
+
+  if (!cols.length || !rows.length) {
+    body.appendChild(errorNote('빈 테이블 — columns 또는 rows가 없다.'));
+    return;
+  }
+
+  const table = document.createElement('table');
+  table.className = 'fin-table';
+  const thead = document.createElement('thead');
+  const trh = document.createElement('tr');
+  for (const col of cols) {
+    const th = document.createElement('th');
+    th.textContent = col && col.label != null ? col.label : (col && col.key) || '';
+    trh.appendChild(th);
+  }
+  thead.appendChild(trh);
+  table.appendChild(thead);
+
+  const tbody = document.createElement('tbody');
+  for (const r of rows) {
+    const tr = document.createElement('tr');
+    for (const col of cols) {
+      const td = document.createElement('td');
+      const v = r ? r[col.key] : undefined;
+      td.textContent = v == null ? '—' : String(v);
+      tr.appendChild(td);
+    }
+    tbody.appendChild(tr);
+  }
+  table.appendChild(tbody);
+  body.appendChild(table);
+}
+
+// ---------- 자유 카드(신규, W4 최소 구현) ----------
+// GLOSSARY.md §2: "기성 12종으로 표현 못 하는 데이터가 오면 AI가 그 자리에서
+// 그리는 설계된 탈출구." 전체 자유 카드 설계(W4)는 미착수 상태로 남아 있다 —
+// 이건 그 자리를 비워두지 않기 위한 최소 구현이다: 스키마를 가정하지 않고
+// envelope.data를 재귀적으로 key/value 트리로 펼친다. innerHTML 미사용
+// (CLAUDE.md §6) — DOM 노드만 만든다.
+function renderFreeCanvas(envelope) {
+  const { body } = makeCard('free', envelope.caption || '자유 카드');
+  if (envelope.fell_back) {
+    const note = document.createElement('div');
+    note.className = 'fin-meta';
+    note.textContent = `table 카드로 못 그려 자유 카드로 폴백함 — ${envelope.fallback_reason || '사유 미상'}`;
+    body.appendChild(note);
+  }
+  body.appendChild(renderJsonTree(envelope.data));
+}
+
+function renderJsonTree(value) {
+  if (Array.isArray(value)) {
+    const ul = document.createElement('ul');
+    ul.className = 'free-tree-list';
+    for (const item of value) {
+      const li = document.createElement('li');
+      li.appendChild(renderJsonTree(item));
+      ul.appendChild(li);
+    }
+    return ul;
+  }
+  if (value !== null && typeof value === 'object') {
+    const dl = document.createElement('dl');
+    dl.className = 'free-tree-dl';
+    for (const [k, v] of Object.entries(value)) {
+      const dt = document.createElement('dt');
+      dt.textContent = k;
+      const dd = document.createElement('dd');
+      dd.appendChild(renderJsonTree(v));
+      dl.appendChild(dt);
+      dl.appendChild(dd);
+    }
+    return dl;
+  }
+  const span = document.createElement('span');
+  span.className = 'free-tree-scalar';
+  span.textContent = value === null || value === undefined ? '—' : String(value);
+  return span;
+}
 
 ipcRenderer.on('athena:highlight-canvas', (e, type) => {
   const el = grid.querySelector(`.card.${type}`);
