@@ -71,7 +71,7 @@ app.whenReady().then(async () => {
       envelope: {
         canvas_type: 'table',
         fell_back: false,
-        caption: `공통 테이블 · ${tr.tr_id} (${tr.mapping_id})`,
+        caption: tr.name_ko,
         data: { columns: tr.columns, rows: [mockRow, mockRow] },
       },
     });
@@ -84,7 +84,10 @@ app.whenReady().then(async () => {
         return {
           headerCellCount: card.querySelectorAll('thead th').length,
           rowCellCounts: Array.from(card.querySelectorAll('tbody tr')).map((tr) => tr.children.length),
-          foldNote: card.querySelector('.fin-meta') ? card.querySelector('.fin-meta').textContent : null,
+          foldDataset: (() => {
+            const t = card.querySelector('table.fin-table');
+            return t ? { total: t.dataset.totalColumns, visible: t.dataset.visibleColumns, hidden: t.dataset.hiddenColumns } : null;
+          })(),
         };
       })()
     `);
@@ -108,7 +111,7 @@ app.whenReady().then(async () => {
       hiddenColumns,
       foldedBelowTotal: foldProbe !== null && visibleColumns < tr.total_columns,
       headerMatchesEveryRow,
-      foldNote: foldProbe && foldProbe.foldNote,
+      foldDataset: foldProbe && foldProbe.foldDataset,
       matchesFoldSummary: !!expected
         && expected.total_columns === tr.total_columns
         && expected.visible_columns === visibleColumns

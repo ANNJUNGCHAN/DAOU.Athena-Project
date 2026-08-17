@@ -133,7 +133,7 @@ function renderLiveNotice(message) {
 // 재무제표 고정 스키마가 아니라 스키마 불특정 {columns:[{key,label}], rows:[{key:value}]}다.
 // GLOSSARY.md §2 신규④ "공통 테이블 — 스키마 불특정 레코드. '부모'이자 기본값".
 function renderMcpTable(envelope) {
-  const { body } = makeCard('mcp-table', envelope.caption || '공통 테이블');
+  const { body } = makeCard('mcp-table', envelope.caption || '테이블');
   const rawCols = (envelope.data && Array.isArray(envelope.data.columns)) ? envelope.data.columns : [];
   const rows = (envelope.data && Array.isArray(envelope.data.rows)) ? envelope.data.rows : [];
 
@@ -175,13 +175,12 @@ function renderMcpTable(envelope) {
   table.appendChild(tbody);
   body.appendChild(table);
 
-  // 정보 정직성(ui/soul.md §8): 컬럼을 조용히 지우지 않는다 — 접힌 컬럼 수를 그대로 노출한다.
-  if (hidden.length > 0) {
-    const note = document.createElement('div');
-    note.className = 'fin-meta';
-    note.textContent = `접힌 컬럼 ${hidden.length}개 (전체 ${rawCols.length}개 중 ${cols.length}개 표시, 1560px 기준)`;
-    body.appendChild(note);
-  }
+  // 접힘 사실은 데이터 속성으로만 남긴다(검증·캡처 리포트가 기계로 읽는다).
+  // 표시 텍스트("접힌 컬럼 N개 …")는 2026-08-18 사용자 결정으로 제거 —
+  // 정보 정직성(ui/soul.md §8)은 기계 검증 가능성으로 유지한다.
+  table.dataset.totalColumns = String(rawCols.length);
+  table.dataset.visibleColumns = String(cols.length);
+  table.dataset.hiddenColumns = String(hidden.length);
 }
 
 // ---------- 실배선 스트림(신규①) — MCP render_canvas의 실제 stream 응답 ----------
@@ -370,7 +369,22 @@ function cardCloseButton(card) {
   b.className = 'uk-card-close';
   b.setAttribute('aria-label', '카드 닫기');
   b.title = '이 카드 닫기';
-  b.textContent = '×';
+  // 문자 '×' 대신 스트로크 SVG — 폰트에 따라 흔들리지 않는 정밀한 X.
+  // createElementNS는 DOM 노드 생성이므로 innerHTML 금지 원칙(CLAUDE.md §6)과 무관.
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', '0 0 10 10');
+  svg.setAttribute('width', '10');
+  svg.setAttribute('height', '10');
+  svg.setAttribute('aria-hidden', 'true');
+  for (const d of ['M1.2 1.2 L8.8 8.8', 'M8.8 1.2 L1.2 8.8']) {
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', d);
+    path.setAttribute('stroke', 'currentColor');
+    path.setAttribute('stroke-width', '1.3');
+    path.setAttribute('stroke-linecap', 'round');
+    svg.appendChild(path);
+  }
+  b.appendChild(svg);
   b.addEventListener('click', () => closeCard(card));
   return b;
 }
@@ -481,7 +495,7 @@ function renderReader() {
 
 // ④ 공통 테이블 — 재무제표(재무상태표) 스냅샷
 function renderTable() {
-  const { body } = makeCard('table', '공통 테이블 · 재무제표(연결)');
+  const { body } = makeCard('table', '재무제표(연결)');
   const { meta, list } = loadFinancialStatement();
   const rows = list.filter((r) => r.sj_nm === '재무상태표');
 
