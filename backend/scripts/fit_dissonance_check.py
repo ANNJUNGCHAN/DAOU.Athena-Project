@@ -347,7 +347,17 @@ ENVELOPE_TOP_LEVEL_ALIASES = {"return_code", "return_msg", "trnm", "rtcd"}
 WS_GROUP_META_ALIASES = {"type", "name", "item", "values"}
 
 
-def mapping_facts_and_groups(mapping: dict[str, Any]) -> tuple[list[str], list[tuple[str | None, list[str]]]]:
+def mapping_facts_and_groups(
+    mapping: dict[str, Any],
+) -> tuple[list[str], list[tuple[str | None, list[str], list[str]]]]:
+    """facts alias 목록과 table 그룹(container_alias, 선언 순 alias, §5.3.1 우선순위 순 alias)을 반환한다.
+
+    우선순위 순서는 더 이상 여기서 다시 추정하지 않는다 — generate_api.py가 매니페스트를
+    구울 때 이미 §5.3.1 규칙(식별 컬럼 고정 + 실측 alias 빈도 tie-break)으로 계산해
+    `column_priority`에 구워 넣었으므로 그 값을 그대로 읽는다(이중 추정 제거).
+    `column_priority`가 없는 컨테이너(생성물이 아닌 손 조립 fixture 등)는 선언 순서로
+    안전하게 폴백한다.
+    """
     response = mapping["fields"]["response"]
     data_groups = response.get("data", [])
     container_names = {g.get("container_alias") for g in data_groups if g.get("container_alias")}
@@ -360,6 +370,11 @@ def mapping_facts_and_groups(mapping: dict[str, Any]) -> tuple[list[str], list[t
         (
             group.get("container_alias"),
             [alias for alias in group.get("field_aliases", []) if alias not in WS_GROUP_META_ALIASES],
+            [
+                alias
+                for alias in group.get("column_priority", group.get("field_aliases", []))
+                if alias not in WS_GROUP_META_ALIASES
+            ],
         )
         for group in data_groups
     ]
@@ -407,21 +422,21 @@ def evaluate_mapping(
         elif facts_count > FACTS_WARN:
             warnings.append("FACTS_DENSITY_EXCEEDED_WARN")
 
-    max_col_count = max((len(aliases) for _, aliases in table_groups), default=0)
+    max_col_count = max((len(aliases) for _, aliases, _ in table_groups), default=0)
     diagnostics["max_table_column_count"] = max_col_count
     if max_col_count > WIDTH_FAIL:
         failure_codes.append("OVERFLOW_WIDTH")
     elif max_col_count > WIDTH_WARN:
         warnings.append("OVERFLOW_WIDTH_WARN")
 
+    # §5.3.1 fold: 매니페스트에 구워진 column_priority 순서(식별 컬럼 고정 + 빈도 tie-break)
+    # 그대로 앞 VISIBLE_FOLD_COLUMNS개가 fold 안, 나머지가 fold 밖(hidden)이다 — 이 스크립트가
+    # pinned/rest를 다시 나누지 않는다(generate_api.py의 이중화 제거, plan §5.3.1 참고).
     priority_hidden: list[str] = []
-    for _, aliases in table_groups:
+    for _, aliases, ranked in table_groups:
         if len(aliases) <= VISIBLE_FOLD_COLUMNS:
             continue
-        pinned = [a for a in aliases if a in IDENTITY_ALIASES]
-        rest = [a for a in aliases if a not in IDENTITY_ALIASES]
-        fold_capacity = max(VISIBLE_FOLD_COLUMNS - len(pinned), 0)
-        hidden = rest[fold_capacity:]
+        hidden = ranked[VISIBLE_FOLD_COLUMNS:]
         priority_hidden.extend(a for a in hidden if a in HIGH_FREQ_ALIASES)
     if priority_hidden:
         failure_codes.append("PRIORITY_FIELD_HIDDEN")
@@ -429,7 +444,7 @@ def evaluate_mapping(
 
     ladder_families_found: list[dict[str, Any]] = []
     if category == "websocket":
-        all_aliases = list(facts_aliases) + [alias for _, aliases in table_groups for alias in aliases]
+        all_aliases = list(facts_aliases) + [alias for _, aliases, _ in table_groups for alias in aliases]
         pairs = [(alias, resp_labels.get(alias)) for alias in all_aliases]
         families, _matched = ladder_families(pairs)
         diagnostics["event_stream_field_count"] = len(all_aliases)
@@ -447,7 +462,7 @@ def evaluate_mapping(
     elif TR_ID_PATTERN.match(title):
         failure_codes.append("TR_ID_LEAKAGE")
 
-    all_field_aliases = list(dict.fromkeys(facts_aliases + [a for _, aliases in table_groups for a in aliases]))
+    all_field_aliases = list(dict.fromkeys(facts_aliases + [a for _, aliases, _ in table_groups for a in aliases]))
     if all_field_aliases:
         unknown = [a for a in all_field_aliases if semantic_type_for_field(a, resp_labels.get(a)) == "unknown"]
         ratio = len(unknown) / len(all_field_aliases)
@@ -490,7 +505,7 @@ def apply_rest_structural_mismatch(
         group_aliases: dict[str, list[str]] = {}
         for group_mapping in detail_groups:
             facts, table_groups = mapping_facts_and_groups(group_mapping)
-            aliases = facts + [a for _, aliases in table_groups for a in aliases]
+            aliases = facts + [a for _, aliases, _ in table_groups for a in aliases]
             group_aliases[group_mapping["mapping_id"]] = aliases
             pool.extend((alias, resp_labels.get(alias)) for alias in aliases)
         families, matched = ladder_families(pool)

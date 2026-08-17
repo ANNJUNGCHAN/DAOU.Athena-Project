@@ -631,6 +631,44 @@ def athena_path(tr: dict[str, Any]) -> str:
     return f"/api/v1/internal/oauth/{tr['id']}"
 
 
+# 식별 컬럼(§5.3.1(a)): semanticType이 종목코드/종목명/계좌번호/주문번호인 alias.
+# fit_dissonance_check.IDENTITY_ALIASES와 값이 동일해야 한다 — 채점 스크립트가 이 매니페스트가
+# 구운 순서를 그대로 소비하므로 두 상수가 갈라지면 이중 정의가 서로를 배신한다.
+IDENTITY_ALIASES = {"stk_cd", "stk_nm", "acnt_no", "ord_no"}
+
+
+def response_alias_frequency(mappings: list[dict[str, Any]]) -> dict[str, int]:
+    """§5.3.1(b) tie-break 근거: alias가 몇 개 매핑에 등장하는지 실측한다.
+
+    매핑 1개당 alias 1회만 센다(top_level ∪ 모든 data 컨테이너의 field_aliases 합집합).
+    backend/scripts/render_screen_card_facts.py의 alias_frequency와 동일한 방법이다 —
+    그 스크립트는 이미 조립된 kiwoom-common-screen-manifest.json을 다시 읽어 같은 계산을
+    반복하지만, 여기서는 매니페스트를 굽는 도중 이미 메모리에 있는 mappings 리스트에서 바로
+    계산해 순환 의존(매니페스트를 읽어야 매니페스트를 만드는 구조)을 피한다.
+    실측값(2026-08-18, 301개 매핑 기준) 상위 6개: cur_prc 89, pred_pre 85, stk_cd 83,
+    stk_nm 80, trde_qty 63, flu_rt 60 — plan/kiwoom-common-screen-spec.md §1.2와
+    backend/ref/kiwoom-common-screen-card-facts.json의 cell_primitive_evidence로 재검증 가능.
+    """
+    counts: dict[str, int] = {}
+    for mapping in mappings:
+        response = mapping["fields"]["response"]
+        aliases = set(response.get("top_level", []))
+        for container in response.get("data", []):
+            aliases.update(container.get("field_aliases", []))
+        for alias in aliases:
+            counts[alias] = counts.get(alias, 0) + 1
+    return counts
+
+
+def column_priority_ranking(aliases: list[str], freq: dict[str, int]) -> list[str]:
+    """§5.3.1 컬럼 우선순위: (a) 식별 컬럼 고정 최우선(선언 순서 유지, 복수 허용),
+    (b) 나머지는 실측 alias 빈도 내림차순, 동률은 선언 순서(빈도 0인 alias끼리도 동일 규칙)."""
+    pinned = [a for a in aliases if a in IDENTITY_ALIASES]
+    rest = [a for a in aliases if a not in IDENTITY_ALIASES]
+    ranked_indices = sorted(range(len(rest)), key=lambda i: (-freq.get(rest[i], 0), i))
+    return pinned + [rest[i] for i in ranked_indices]
+
+
 def field_aliases(items: list[dict[str, Any]]) -> dict[str, Any]:
     """Return generated-contract aliases, preserving LIST container ownership."""
     top_level: list[str] = []
@@ -806,6 +844,20 @@ def build_common_screen_manifest(
                     "provenance": mapping_provenance(tr["id"], group_id=group_id),
                 }
             )
+
+    # §5.3.1 컬럼 우선순위를 매니페스트에 굽는다. 모든 응답 LIST 컨테이너(=table 렌더링
+    # 대상)에 적용한다 — mapping.presentation.layout이 "table"이 아니어도(예: compound)
+    # data 컨테이너 자체는 fit_dissonance_check.mapping_facts_and_groups가 이미 layout과
+    # 무관하게 table_groups로 취급하므로 여기서도 동일 범위로 굽는다. split_derived 그룹의
+    # data 컨테이너는 원본 base 응답과 객체를 공유할 수 있어(같은 container_alias가 정확히
+    # 한 그룹에만 속하는 게 보통이라 값은 항상 같다) 중복 계산을 건너뛴다.
+    response_alias_freq = response_alias_frequency(mappings)
+    for mapping in mappings:
+        for container in mapping["fields"]["response"].get("data", []):
+            if "column_priority" not in container:
+                container["column_priority"] = column_priority_ranking(
+                    container["field_aliases"], response_alias_freq
+                )
 
     exclusions = [
         {
