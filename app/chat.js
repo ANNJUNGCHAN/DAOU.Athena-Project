@@ -540,7 +540,8 @@ document.addEventListener('keydown', (e) => {
       return;
     }
     if (state !== 'idle') {
-      abortToken++; // 중단
+      abortToken++; // 중단 — UI 반영 차단
+      ipcRenderer.send('athena:abort-live-query'); // 실배선 프로세스 트리도 실제로 죽인다
       state = 'idle';
       setDot(null);
       setLocked(false);
