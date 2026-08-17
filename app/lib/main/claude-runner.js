@@ -36,6 +36,23 @@ const RENDER_CANVAS_ALLOWED_TOOL = 'mcp__athena__athena__render_canvas';
 // MCP 툴 이름에는 와일드카드가 안 되고 서버 단위 접두만 된다).
 const GATEWAY_ALLOWED_TOOLS = 'mcp__athena';
 
+// 실왕복 실측 최대 43초(RESULT.md) + DART 다중 호출 실측 ~60초 — 3분이면
+// 정상 질의는 전부 덮고, 멈춘 왕복이 UI를 영원히 잡아두는 것만 자른다.
+const DEFAULT_TIMEOUT_MS = 180_000;
+
+// claude.exe만 죽이면 그 자식(athena-mcp serve → upstream N개)이 고아로 남을 수
+// 있다 — Windows는 taskkill /T로 프로세스 트리를 통째로 끊는다.
+function killTree(child) {
+  if (!child || child.exitCode !== null || child.signalCode !== null) return;
+  if (process.platform === 'win32') {
+    try {
+      spawn('taskkill', ['/PID', String(child.pid), '/T', '/F'], { windowsHide: true, stdio: 'ignore' });
+    } catch { /* 이미 죽어 있으면 그만 */ }
+  } else {
+    try { child.kill('SIGTERM'); } catch { /* 동일 */ }
+  }
+}
+
 function buildArgs({ prompt, configFile, allowedTools }) {
   return [
     '-p', prompt,
@@ -51,6 +68,8 @@ function buildArgs({ prompt, configFile, allowedTools }) {
 // prompt/cwd/configFile은 호출자가 채운다(mcp-config.ensureMcpConfig()의 결과).
 // onCanvasResult(result) — render_canvas의 tool_result가 확정될 때마다(스트리밍 중).
 // onEvent(event) — 모든 파싱된 이벤트마다(진행 표시용, 선택).
+// onSpawn({pid, kill}) — 프로세스가 뜨자마자. kill()은 트리 전체를 끊는다(Esc 중단용).
+// timeoutMs — 왕복 상한. 넘기면 트리를 죽이고 ok:false·timedOut:true로 끝낸다. 0이면 무제한.
 // claudeBin — 테스트/오버라이드용. 기본은 PATH의 `claude`.
 function runClaudeQuery({
   prompt,
@@ -58,6 +77,8 @@ function runClaudeQuery({
   configFile = '.mcp.json',
   allowedTools = GATEWAY_ALLOWED_TOOLS,
   claudeBin = process.env.ATHENA_CLAUDE_BIN || 'claude',
+  timeoutMs = DEFAULT_TIMEOUT_MS,
+  onSpawn,
   onCanvasResult,
   onEvent,
 } = {}) {
@@ -112,6 +133,17 @@ function runClaudeQuery({
     child.stderr.setEncoding('utf8');
     let stderrText = '';
     let settled = false;
+    let killedBy = null; // 'timeout' | 'abort' — close 핸들러가 에러 메시지를 고른다
+
+    if (typeof onSpawn === 'function') {
+      onSpawn({
+        pid: child.pid,
+        kill: () => { killedBy = killedBy || 'abort'; killTree(child); },
+      });
+    }
+    const timer = timeoutMs > 0
+      ? setTimeout(() => { killedBy = killedBy || 'timeout'; killTree(child); }, timeoutMs)
+      : null;
 
     child.stdout.on('data', (chunk) => {
       session.feed(chunk, { onCanvasResult, onEvent });
@@ -125,6 +157,7 @@ function runClaudeQuery({
     child.on('error', (err) => {
       if (settled) return;
       settled = true;
+      if (timer) clearTimeout(timer);
       // `shell:false`는 PATH에서 실행 파일(.exe)을 찾는다. `claude`가 이 머신에
       // `.cmd`/`.ps1` 래퍼로 깔려 있으면 여기서 ENOENT가 난다. `shell:true`로
       // 되돌리면 안 된다 — 빈 문자열 인자가 사라져 `--setting-sources`가
@@ -148,13 +181,21 @@ function runClaudeQuery({
     child.on('close', (code) => {
       if (settled) return;
       settled = true;
+      if (timer) clearTimeout(timer);
       session.end({ onCanvasResult, onEvent });
       const finalResult = session.finalResult();
-      const isError = code !== 0 || (finalResult && finalResult.is_error === true) || !finalResult;
+      const isError = !!killedBy || code !== 0 || (finalResult && finalResult.is_error === true) || !finalResult;
+      const killMessage = killedBy === 'timeout'
+        ? `왕복 타임아웃(${Math.round(timeoutMs / 1000)}s) — claude 프로세스 트리를 종료했다`
+        : killedBy === 'abort'
+          ? '사용자 중단 — claude 프로세스 트리를 종료했다'
+          : null;
       resolve({
         ok: !isError,
         exitCode: code,
-        error: isError ? (finalResult && finalResult.result) || `claude 종료 코드 ${code}` : null,
+        timedOut: killedBy === 'timeout',
+        aborted: killedBy === 'abort',
+        error: isError ? killMessage || (finalResult && finalResult.result) || `claude 종료 코드 ${code}` : null,
         finalResult,
         stderr: stderrText,
         diagnostics: session.diagnostics(),

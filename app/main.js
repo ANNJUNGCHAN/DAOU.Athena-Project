@@ -244,8 +244,19 @@ function sendLiveCanvasResult(result) {
   }
 }
 
+// 지금 떠 있는 실배선 claude 프로세스의 kill 핸들. 정확히 하나만 유지한다 —
+// Esc 후 재질의로 프로세스가 쌓이던 갭(README "다중 세션도 없다")의 해소.
+let activeLiveQuery = null;
+
 async function runLiveQuery(query, expand) {
   const { dir, configFile } = getLiveMcpConfig();
+
+  // 이전 질의 프로세스가 아직 살아 있으면 먼저 트리째 끊는다 — 새 질의가 항상 선점한다.
+  if (activeLiveQuery) {
+    activeLiveQuery.kill();
+    activeLiveQuery = null;
+  }
+  let myHandle = null;
 
   // 첫 카드가 실제로 확정된 시점에만 연다(목업 시절과 같은 문법 — expand:!opened).
   // 질의가 카드를 하나도 만들지 않고 텍스트 답변만으로 끝나는 경우가 실배선에서는
@@ -258,6 +269,7 @@ async function runLiveQuery(query, expand) {
     prompt: buildLivePrompt(query),
     cwd: dir,
     configFile,
+    onSpawn: (h) => { myHandle = h; activeLiveQuery = h; },
     onCanvasResult: (r) => {
       if (expand && !expandTriggered && !canvasVisible) {
         expandTriggered = true;
@@ -267,6 +279,10 @@ async function runLiveQuery(query, expand) {
       if (r.envelope && r.envelope.canvas_type) canvasTypesSeen.push(r.envelope.canvas_type);
     },
   });
+
+  // 내가 등록한 핸들일 때만 지운다 — 이 await 동안 새 질의가 선점해 자기 핸들을
+  // 걸어뒀다면 그걸 지우면 안 된다.
+  if (activeLiveQuery === myHandle) activeLiveQuery = null;
 
   // finalResult.result는 claude -p의 마지막 assistant 텍스트다(RESULT.md의
   // type:"result" 이벤트) — 목업 시절의 정형화된 "캔버스 창에 ~ 띄웠습니다"
@@ -285,6 +301,14 @@ async function runLiveQuery(query, expand) {
     durationMs: result.finalResult && result.finalResult.duration_ms,
   };
 }
+
+// Esc 중단 — 렌더러의 abortToken은 UI 반영만 막는다. 프로세스는 여기서 실제로 죽인다.
+ipcMain.on('athena:abort-live-query', () => {
+  if (activeLiveQuery) {
+    activeLiveQuery.kill();
+    activeLiveQuery = null;
+  }
+});
 
 ipcMain.handle('athena__render_canvas', async (e, payload = {}) => {
   if (payload.source === 'fixture') {
