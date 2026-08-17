@@ -123,6 +123,14 @@ TR 하나에 화면 하나를 그리면 288개를 그려야 한다. 카드는 �
 | **타임라인** (신규③) | 가격축 × 이벤트 핀. MCP 없이는 불가능한 유일한 카드 |
 | **공통 테이블** (신규④) | 스키마 불특정 레코드. **"부모"이자 기본값** — 랭킹 테이블이 그 자식. 원장·규칙·감시가 전부 여기 산다 |
 
+### 공통 API 카드 6종 (`plan/kiwoom-common-screen-spec.md`, AT-CV-005) — 문서·아트보드 완료, 구현 미착수
+
+FactsCard(114) · TableCard(121) · CompoundCard(29) · EventCard(23) · ActionCard(12) · StatusCard(2).
+갈래 B(키움 manifest 파생)의 **완전성 계층** — 301개 라우팅 매핑 전부를 나머지 없이 덮는 것이
+기계 검증돼 있다(`render_screen_injection_map.py --check` 등 게이트 4종). 위 "카드 12종"은 이
+완전성 계층 위에 선택적으로 얹는 **표현 계층**(렌즈)이다(spec §9) — 두 목록은 경쟁하지 않는다.
+커버리지 감사는 [`plan/kiwoom-common-screen-aits-coverage-audit.md`](plan/kiwoom-common-screen-aits-coverage-audit.md).
+
 > ⚠ **"공통 캔버스"는 두 뜻으로 쓰인다.** §12 참조.
 
 ---
