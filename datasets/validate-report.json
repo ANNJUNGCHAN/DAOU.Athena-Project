@@ -1,0 +1,30 @@
+{
+ "dataset": "앱-검증-고난도-100.jsonl",
+ "total": 100,
+ "problems": [],
+ "difficulty": {
+  "최상": 74,
+  "상": 26
+ },
+ "status": {
+  "설계-미구현": 68,
+  "동작-실배선": 29,
+  "차단-외부요인": 3
+ },
+ "kind": {
+  "kiwoom-api": 46,
+  "cross-source": 26,
+  "mcp-upstream": 16,
+  "app-mode": 4,
+  "blocked": 8
+ },
+ "group": {
+  "compose-account": 14,
+  "compose-scan": 14,
+  "disambiguation": 14,
+  "cross-source": 15,
+  "temporal-math": 14,
+  "edge-failure": 14,
+  "adversarial": 15
+ }
+}
