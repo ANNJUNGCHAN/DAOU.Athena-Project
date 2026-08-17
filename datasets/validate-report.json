@@ -1,24 +1,36 @@
 {
- "dataset": "앱-검증-고난도-100.jsonl",
- "total": 100,
+ "dataset": "앱-검증-200.jsonl",
+ "total": 200,
  "problems": [],
+ "tier": {
+  "live": 100,
+  "contract": 100
+ },
  "difficulty": {
-  "최상": 74,
+  "최상": 174,
   "상": 26
  },
  "status": {
-  "설계-미구현": 68,
-  "동작-실배선": 29,
-  "차단-외부요인": 3
+  "동작-실배선": 127,
+  "차단-외부요인": 5,
+  "설계-미구현": 68
  },
  "kind": {
-  "kiwoom-api": 46,
-  "cross-source": 26,
-  "mcp-upstream": 16,
-  "app-mode": 4,
-  "blocked": 8
+  "cross-source": 68,
+  "mcp-upstream": 53,
+  "chat-only": 7,
+  "blocked": 11,
+  "app-mode": 15,
+  "kiwoom-api": 46
  },
  "group": {
+  "live-finance": 14,
+  "live-disclosure": 15,
+  "live-temporal": 14,
+  "live-render": 14,
+  "live-adversarial": 15,
+  "live-gate": 14,
+  "live-appmode": 14,
   "compose-account": 14,
   "compose-scan": 14,
   "disambiguation": 14,
@@ -26,5 +38,13 @@
   "temporal-math": 14,
   "edge-failure": 14,
   "adversarial": 15
+ },
+ "verify_via_usage": {
+  "chat-answer": 185,
+  "audit-log": 119,
+  "ui-state": 34,
+  "upstream-log": 5,
+  "canvas-file": 68,
+  "screenshot": 13
  }
 }
