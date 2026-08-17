@@ -5,9 +5,10 @@ import json
 import re
 from enum import StrEnum
 from functools import lru_cache
+from pathlib import Path
 from typing import Self
 
-from pydantic import BaseModel, ConfigDict, SecretStr, field_validator, model_validator
+from pydantic import BaseModel, ConfigDict, Field, SecretStr, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 KIWOOM_MOCK_BASE_URL = "https://mockapi.kiwoom.com"
@@ -91,6 +92,11 @@ class Settings(BaseSettings):
     request_timeout_seconds: float = 10.0
     max_rate_limit_retries: int = 1
     max_pages: int = 100
+    # The investment brain (LadybugDB graph projection) is independent of Kiwoom
+    # credentials — off by default so the existing test suite and any deployment that
+    # never opts in never touches a real database file. See lifespan.py's build_lifespan.
+    brain_enabled: bool = False
+    brain_db_path: Path = Field(default_factory=lambda: Path.home() / ".athena" / "brain.lbug")
 
     @field_validator("local_bearer_token", mode="before")
     @classmethod

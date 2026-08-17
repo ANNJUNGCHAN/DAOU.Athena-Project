@@ -146,6 +146,8 @@ _RESET_STATEMENTS: Final = (
 _BEGIN: Final = "BEGIN TRANSACTION"
 _COMMIT: Final = "COMMIT"
 _ROLLBACK: Final = "ROLLBACK"
+_INSTALL_FTS: Final = "INSTALL fts"
+_LOAD_FTS: Final = "LOAD fts"
 _NEIGHBORHOOD_QUERIES: Final = {
     depth: f"""
 MATCH p=(root:Entity {{id: $entity_id}})-[:RELATES_TO*1..{depth}]-(neighbor:Entity)
@@ -318,6 +320,21 @@ class GraphStore:
         if len(rows) != 1:
             raise RuntimeError("graph schema metadata is missing")
         return int(rows[0]["version"])
+
+    async def load_fts_extension(self) -> None:
+        """Fetch and activate the official full-text-search package (ADR §4.2 step 4).
+
+        Best-effort by design: ADR investment-brain-architecture.md §7 requires the graph
+        core to start safely even when this package is unavailable (no bundled offline
+        artifact, no network) and to surface that as degraded readiness rather than a
+        startup failure, so callers should catch failures here rather than propagate them.
+        This only activates the package — ``search_entities`` is still a plain substring
+        scan; wiring a ranked query through it is separate follow-up work (see
+        ``brain/AGENTS.md`` and plan.md §4-B for the current gap between that doc and
+        this method).
+        """
+        await self._execute(_INSTALL_FTS)
+        await self._execute(_LOAD_FTS)
 
     async def upsert_entity(self, entity: Entity) -> str:
         rows = await self._execute(
