@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "athena": {
+      "command": "C:\\Projects\\DAOU.Athena\\backend\\.venv\\Scripts\\python.exe",
+      "args": ["-m", "athena_mcp", "serve"],
+      "env": {
+        "PYTHONPATH": "C:\\Projects\\DAOU.Athena\\backend"
+      }
+    }
+  }
+}

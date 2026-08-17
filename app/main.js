@@ -9,6 +9,9 @@ const onboarding = require('./lib/main/onboarding');
 const cliAccounts = require('./lib/main/cli-accounts');
 const accounts = require('./lib/main/accounts');
 const mcpCli = require('./lib/main/mcp-cli');
+// 결정 D1의 실배선 — claude -p 스폰 + stream-json 파싱 + .mcp.json 생성.
+const { runClaudeQuery } = require('./lib/main/claude-runner');
+const { ensureMcpConfig } = require('./lib/main/mcp-config');
 
 const MDEBUGLOG = path.join(__dirname, 'captures', 'main-debug.log');
 function mdlog(msg) {
@@ -124,6 +127,10 @@ async function createWindows() {
 
   chatWin.webContents.send('athena:init', {
     scale: layout.scale, chatBaseH: layout.chatBaseH, chatMaxH: layout.chatMaxH,
+    // 기본은 실배선(live)이다 — ATHENA_CANVAS_SOURCE=fixture일 때만 목업 경로를
+    // 쓴다. verify.js가 이 변수를 명시적으로 세팅한다(quota를 쓰는 실제 claude -p
+    // 호출을 자동 검증에서 피하려고). 사람이 쓰는 npm start는 항상 live다.
+    canvasSource: process.env.ATHENA_CANVAS_SOURCE === 'fixture' ? 'fixture' : 'live',
   });
 
   chatWin.on('closed', () => app.quit());
@@ -208,14 +215,87 @@ ipcMain.on('athena:highlight-canvas', (e, type) => {
   if (canvasVisible) canvasWin.webContents.send('athena:highlight-canvas', type);
 });
 
-// ---------- athena__render_canvas — 나중에 실제 MCP 툴 호출로 대체될 인터페이스 ----------
-// 지금은 개발용 트리거(대화 창의 Enter)가 이 모양으로 호출한다.
-ipcMain.handle('athena__render_canvas', async (e, { type, mock, expand }) => {
-  if (expand && !canvasVisible) {
-    await expandCanvasWindow();
+// ---------- athena__render_canvas — 결정 D1의 실배선 + 명시적 픽스처 어댑터 ----------
+// 두 경로가 여기서 갈린다(plan/kiwoom-common-screen-handoff.md §6 — HTTP/WebSocket
+// adapter와 명시적 fixture adapter를 분리하라는 지시 그대로):
+//   source:'fixture' → 기존 목업 경로. spike/captures/*.json을 lib/mockdata.js가
+//                       읽는다. **명시적으로 선택했을 때만** 탄다 — verify.js가
+//                       ATHENA_CANVAS_SOURCE=fixture로 이 경로를 강제해서 quota
+//                       없이 결정론적으로 검증한다.
+//   그 외(기본값)      → 실배선. claude -p를 스폰해 실제 게이트웨이를 왕복한다.
+let liveMcpConfig = null; // 지연 생성 — app.getPath('userData')는 whenReady 이후에만 안전
+
+function getLiveMcpConfig() {
+  if (!liveMcpConfig) liveMcpConfig = ensureMcpConfig(app.getPath('userData'));
+  return liveMcpConfig;
+}
+
+// 캔버스 결과 하나(stream-json-parser.classifyCanvasBlock의 출력)를 캔버스
+// 창으로 보낸다. 렌더러(canvas.js)가 status별로 카드를 그리거나 안내를 띄운다.
+function sendLiveCanvasResult(result) {
+  if (canvasWin && !canvasWin.isDestroyed()) {
+    canvasWin.webContents.send('athena:add-canvas-live', result);
   }
-  canvasWin.webContents.send('athena:add-canvas', { type });
-  return { ok: true, type, mock: !!mock };
+  if (chatWin && !chatWin.isDestroyed()) {
+    // 대화 창의 3상태 표시가 실제 진행을 보여줄 수 있도록 카드 하나가 뜰 때마다
+    // 알린다 — 43초짜리 왕복 동안 조용히 멈춘 것처럼 보이면 안 된다(오케스트레이터 지시).
+    chatWin.webContents.send('athena:live-canvas-added', { status: result.status });
+  }
+}
+
+async function runLiveQuery(query, expand) {
+  const { dir, configFile } = getLiveMcpConfig();
+
+  // 첫 카드가 실제로 확정된 시점에만 연다(목업 시절과 같은 문법 — expand:!opened).
+  // 질의가 카드를 하나도 만들지 않고 텍스트 답변만으로 끝나는 경우가 실배선에서는
+  // 실제로 가능하다 — 그때 빈 유리창을 열어두지 않는다.
+  let expandTriggered = false;
+  const canvasTypesSeen = [];
+  const result = await runClaudeQuery({
+    prompt: query,
+    cwd: dir,
+    configFile,
+    onCanvasResult: (r) => {
+      if (expand && !expandTriggered && !canvasVisible) {
+        expandTriggered = true;
+        expandCanvasWindow(); // fire-and-forget — 카드 전송을 막지 않는다
+      }
+      sendLiveCanvasResult(r);
+      if (r.envelope && r.envelope.canvas_type) canvasTypesSeen.push(r.envelope.canvas_type);
+    },
+  });
+
+  // finalResult.result는 claude -p의 마지막 assistant 텍스트다(RESULT.md의
+  // type:"result" 이벤트) — 목업 시절의 정형화된 "캔버스 창에 ~ 띄웠습니다"
+  // 문장 대신, 실제로 Claude가 쓴 답변을 그대로 보여준다.
+  const answerText = result.finalResult && typeof result.finalResult.result === 'string'
+    ? result.finalResult.result
+    : null;
+
+  return {
+    ok: !!result.ok,
+    source: 'live',
+    error: result.ok ? null : (result.error || `claude 종료 코드 ${result.exitCode}`),
+    answerText,
+    canvasTypes: [...new Set(canvasTypesSeen)],
+    diagnostics: result.diagnostics,
+    durationMs: result.finalResult && result.finalResult.duration_ms,
+  };
+}
+
+ipcMain.handle('athena__render_canvas', async (e, payload = {}) => {
+  if (payload.source === 'fixture') {
+    // 기존 목업 경로 — 그대로 보존한다. type만 알면 되고 실제 텍스트는 안 쓴다.
+    const { type, expand } = payload;
+    if (expand && !canvasVisible) await expandCanvasWindow();
+    canvasWin.webContents.send('athena:add-canvas', { type });
+    return { ok: true, source: 'fixture', type };
+  }
+  const { query, expand } = payload;
+  if (!query || !String(query).trim()) {
+    return { ok: false, source: 'live', error: '질의가 비어 있다' };
+  }
+  return runLiveQuery(query, expand);
 });
 
 // ---------------------------------------------------------------------------

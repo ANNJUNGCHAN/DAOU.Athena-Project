@@ -9,6 +9,13 @@
 // main.js를 라이브러리로 불러올 때는 자동 기동(app.whenReady().then(createWindows))을
 // 막아야 한다 — verify.js가 createWindows()를 직접, 통제된 시점에 호출한다.
 process.env.ATHENA_NO_AUTOSTART = '1';
+// 기본 경로는 이제 실배선(live) — claude -p를 실제로 spawn한다(결정 D1).
+// 자동 검증은 그 경로를 타면 안 된다: quota를 쓰고, 43초+ 걸리고, 외부 상태에
+// 좌우돼 결정론적이지 않다. 검증 5(E2E Enter)는 명시적으로 픽스처 경로를 강제해
+// 기존 3상태·자동성장 검증을 quota 없이 그대로 재현한다(app/main.js
+// ATHENA_CANVAS_SOURCE 참조, plan/kiwoom-common-screen-handoff.md §6의
+// "명시적 fixture adapter" 지시).
+process.env.ATHENA_CANVAS_SOURCE = 'fixture';
 
 const { app, ipcMain, BrowserWindow } = require('electron');
 const path = require('path');
