@@ -1,0 +1,111 @@
+{
+  "generatedAt": "2026-08-17T18:12:32.594Z",
+  "method": "mapping_id 사전순 정렬 → sha256(mapping_id) 오름차순으로 W01~W15 배정 (결정적 순열).",
+  "mapping": [
+    {
+      "blindLabel": "W01",
+      "mappingId": "base:ka10095",
+      "trId": "ka10095",
+      "sourceFile": "01-ka10095.png",
+      "hash": "0e9196c535092d08e423d46300530f6cb88bf8e206899b5a9492e3eb20de7773"
+    },
+    {
+      "blindLabel": "W02",
+      "mappingId": "base:kt00007",
+      "trId": "kt00007",
+      "sourceFile": "12-kt00007.png",
+      "hash": "12d5bbf0fcfa4993a5cafb028b3eba9be6ed1bf815d0d1569ec5466c89bb77c4"
+    },
+    {
+      "blindLabel": "W03",
+      "mappingId": "base:kt50075",
+      "trId": "kt50075",
+      "sourceFile": "09-kt50075.png",
+      "hash": "1b626da443541b72b1e0a289c3f30c8f2f51c223830947e21c6ad9b79b47531d"
+    },
+    {
+      "blindLabel": "W04",
+      "mappingId": "base:kt00015",
+      "trId": "kt00015",
+      "sourceFile": "02-kt00015.png",
+      "hash": "23484a61cf2ad04f8c96e2d97fd6e62e76310eb618f89c372ef1bda4d5871c4e"
+    },
+    {
+      "blindLabel": "W05",
+      "mappingId": "base:ka10086",
+      "trId": "ka10086",
+      "sourceFile": "13-ka10086.png",
+      "hash": "3cb69a9af2bc0f743055ea6a7a6e7a940df8293b3ff1c1e5da44f81c4059623b"
+    },
+    {
+      "blindLabel": "W06",
+      "mappingId": "detail:kt00009:order_execution_status",
+      "trId": "kt00009",
+      "sourceFile": "08-kt00009.png",
+      "hash": "75e14c60ab909b16acd53efc22de2d662c0108cc4aadaf25cf3e83fb50062295"
+    },
+    {
+      "blindLabel": "W07",
+      "mappingId": "base:ka10075",
+      "trId": "ka10075",
+      "sourceFile": "04-ka10075.png",
+      "hash": "7b09a702ef8a834069d4e586607588437471ba438c83d114715ee88021e49c01"
+    },
+    {
+      "blindLabel": "W08",
+      "mappingId": "base:ka30005",
+      "trId": "ka30005",
+      "sourceFile": "03-ka30005.png",
+      "hash": "7eff290c45ea50798cfd821227381770b05cd30ecd8a98cf37f6321256aa938e"
+    },
+    {
+      "blindLabel": "W09",
+      "mappingId": "base:ka10030",
+      "trId": "ka10030",
+      "sourceFile": "14-ka10030.png",
+      "hash": "9a20ac2f7b68a73655db7464e26dc3133a238c407e0807f899109983254ef254"
+    },
+    {
+      "blindLabel": "W10",
+      "mappingId": "base:ka10015",
+      "trId": "ka10015",
+      "sourceFile": "05-ka10015.png",
+      "hash": "9ed79b6596b856454daf45d6cac0b06c98c923b6a21b458851cc9b175ed306a1"
+    },
+    {
+      "blindLabel": "W11",
+      "mappingId": "detail:kt50032:gold_trade_history",
+      "trId": "kt50032",
+      "sourceFile": "06-kt50032.png",
+      "hash": "b2e6e3598045fb9adcedf4122396f9d0b18f6b1f0fafc2bddcd8262e56d72bc6"
+    },
+    {
+      "blindLabel": "W12",
+      "mappingId": "base:kt50030",
+      "trId": "kt50030",
+      "sourceFile": "11-kt50030.png",
+      "hash": "bab14c043c7e64de11a0b8c912e8f1bea1e22fd41182a4c5c2b5f675950c3997"
+    },
+    {
+      "blindLabel": "W13",
+      "mappingId": "base:kt50031",
+      "trId": "kt50031",
+      "sourceFile": "10-kt50031.png",
+      "hash": "c7681bbac3f31318f45d390af0a0dae00cc3d0e38a1cfa73cbd5c97df9f7220d"
+    },
+    {
+      "blindLabel": "W14",
+      "mappingId": "base:ka10063",
+      "trId": "ka10063",
+      "sourceFile": "15-ka10063.png",
+      "hash": "dbea9efafeffb2d85d6092a367191d9c47bf4abbe667f22eb060a614c81460bb"
+    },
+    {
+      "blindLabel": "W15",
+      "mappingId": "detail:kt00018:holdings",
+      "trId": "kt00018",
+      "sourceFile": "07-kt00018.png",
+      "hash": "fb67e279390a37e943b98c948143aef4da645543e8bc39d5146e1b7aa07207ae"
+    }
+  ]
+}
