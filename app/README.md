@@ -102,26 +102,27 @@ W2 지시대로 실제 캡처 파일을 그대로 읽어 렌더한다(`spike/cap
 
 ## 검증 — 실행 결과 원문
 
-`npm run verify` (=`electron verify.js`) 마지막 통과 실행의 stdout 그대로:
+`npm run verify` (=`electron verify.js`) 마지막 통과 실행의 stdout 그대로
+(**2026-08-17 실행**):
 
 ```
 [layout] 화면(1920x1152)이 설계 치수를 그대로 수용 — 축소 없음
-[verify] 검증1 완료 — 부팅 시 캔버스 창 표시 여부: false chatReady: true
-[verify] 확장 프레임 stats: {"frameCount":25,"p50":18,"p95":54,"max":89.5,"min":17.5}
-[verify] 수축 프레임 stats: {"frameCount":32,"p50":18,"p95":18.5,"max":20.300000000000182,"min":17.5}
+[verify] 검증1 완료 — 부팅 시 캔버스 창 표시 여부: false | 대화 창 부팅: true | 모드: app | 모드 배타성: true
+[verify] 확장 프레임 stats: {"frameCount":30,"p50":16.699999999999818,"p95":33.399999999999864,"max":33.399999999999864,"min":16.40000000000009}
+[verify] 수축 프레임 stats: {"frameCount":35,"p50":16.699999999999818,"p95":16.800000000000182,"max":33.399999999999636,"min":8.300000000000182}
 [verify] 독립성 체크: true true
 [verify] 접근성 3종 캡처 완료
-[verify] 검증5(E2E Enter 트리거): {"reachedDoneState":true,"boundsBeforeQuery":{"x":180,"y":874,"width":1561,"height":205},"boundsAfterQuery":{"x":180,"y":827,"width":1561,"height":252},"grewTallerThanBase":true,"finalAnswerText":"캔버스 창에 스트림, 리더, 공통 테이블을 띄웠습니다.","canvasChipCount":3}
+[verify] 검증5(E2E Enter 트리거): {"reachedDoneState":true,"boundsBeforeQuery":{"x":180,"y":874,"width":1561,"height":205},"boundsAfterQuery":{"x":180,"y":827,"width":1561,"height":252},"grewTallerThanBase":true,"grownByPx":47,"finalAnswerText":"캔버스 창에 스트림, 리더, 공통 테이블을 띄웠습니다.","cardChipCount":3}
 [verify] 검증6(수동 리사이즈): {"beforeDrag":{"x":180,"y":827,"width":1561,"height":252},"afterDrag":{"x":180,"y":666,"width":1561,"height":413},"grewByDrag":true,"bottomEdgePinned":true}
+[verify] 검증7(설정 모드): {"noNewWindowOnOpen":true,"stillTwoWindows":true,"noNewWindowOnSecondClick":true,"renderedInChatWindow":true,"chatModeSteppedAside":true,"accountsCardPresent":true,"mcpCardPresent":true,"singleCardAfterSecondClick":true,"noSettingsCardsOnCanvas":true,"chatGrewToMax":true,"dotIsRealButton":true,"noTrIdLeak":true,"noBearerLeak":true,"escReturnsToChat":true,"gridEmptiedOnClose":true}
+[verify] 검증8(커맨드바 진입): {"noNewWindowOnCommand":true,"reachedSettings":true,"inputCleared":true,"notTreatedAsQuery":true,"turnCountBefore":1,"turnCountAfter":1}
 [verify] 리포트 저장: C:\Projects\DAOU.Athena\app\captures\VERIFY-REPORT.json
 ```
 
-(W2 검증(외부 검토) 단계에서 `npm start`가 창을 안 띄우는 버그(위 버그 0번)를 고친 뒤
-`npm run verify`를 다시 실행해 재현한 결과 — 수치가 이전 기록과 미세하게 다른 것은
-공유 데스크톱 환경의 프레임 편차 때문이다(같은 이유가 아래 검증2 서술에도 그대로
-적용된다). `package.json`의 `verify` 스크립트가 처음에 `node verify.js`로 잘못
-적혀 있었다 — `verify.js`는 `electron` 모듈 API를 쓰므로 일반 Node로 실행하면
-동작하지 않는다. 이것도 구현 중 발견해 `electron verify.js`로 고쳤다.)
+(`package.json`의 `verify` 스크립트가 처음에 `node verify.js`로 잘못 적혀 있었다 —
+`verify.js`는 `electron` 모듈 API를 쓰므로 일반 Node로 실행하면 동작하지 않는다.
+구현 중 발견해 `electron verify.js`로 고쳤다. 프레임 수치는 실행마다 흔들린다 —
+공유 데스크톱이라 다른 프로세스 부하를 탄다. 아래 검증2 서술 참조.)
 
 원본 수치 전체: `app/captures/VERIFY-REPORT.json`. 실행 환경: Windows 11 26200,
 화면 1920×1152 — 설계 치수(1560×1004)가 그대로 들어가 축소 없음.
@@ -132,6 +133,14 @@ W2 지시대로 실제 캡처 파일을 그대로 읽어 렌더한다(`spike/cap
 `captures/01-boot-gauge.png`(게이지 차오르는 중), `captures/02-chat-only-idle.png`
 (부팅 완료, 캔버스 창은 화면에 없음).
 
+부팅 완료 판정은 `bootMode`로 남긴다 — **`#app`이 보이는 것과 "부팅 성공"은 같은
+말이 아니다.** 온보딩이 필요하면 `chat.js`가 `#app`을 숨긴 채 `#onboard`를 띄우고
+그게 정상 동작이다. 그래서 판정은 "게이지가 끝났고 대화 창이 **어떤 모드로든**
+도달했는가"이고, 어느 모드였는지(`app` / `onboard`)와 **모드 배타성**
+(`exactlyOneModeVisible` — 형제 패널 둘이 동시에 보이면 겹쳐 그려진다)을 함께
+기록한다. 검증 전용 프로필이 온보딩을 완료로 심으므로 기대값은 `app`이고,
+`onboard`가 나오면 프로필 격리가 깨진 것이다(아래 "검증이 스스로를 속인 결함" 참조).
+
 ### 검증 2 — 점 → 캔버스 확장/수축, 프레임 실측 (부하 있는 상태)
 
 `requestAnimationFrame` 타임스탬프 기준(뉴스 100건 + 재무제표 52행 + 마크다운을 실제로
@@ -139,15 +148,20 @@ W2 지시대로 실제 캡처 파일을 그대로 읽어 렌더한다(`spike/cap
 
 | | p50 | p95 | max | 프레임 수 |
 |---|---|---|---|---|
-| 확장 | 18.0ms | 54.0ms | 89.5ms | 25 |
-| 수축 | 18.0ms | 18.5ms | 20.3ms | 32 |
+| 확장 | 16.7ms | 33.4ms | 33.4ms | 30 |
+| 수축 | 16.7ms | 16.8ms | 33.4ms | 35 |
 
-수축은 거의 완전히 60fps. 확장은 p50이 60fps 근처지만 p95/max에 눈에 띄는 프레임
-드롭이 있다(콘텐츠 3종을 순차로 마운트하는 부하 때문으로 보임 — spike S1도 동일
-환경에서 확장 쪽에만 드롭을 기록했다). 반복 실행마다 편차가 컸다(다른 실행에서는
-p95 35.6ms/max 54ms) — 이 환경 자체가 공유 데스크톱이라(spike RESULT.md에 이미
-기록됨) 다른 프로세스 부하에 흔들린다. **정직하게 말해 확장 쪽 프레임 안정성은
-spike와 마찬가지로 "부분통과"다.** 수축은 안정적으로 60fps. 스크린샷: `captures/03-mosaic-expanded.png`
+(2026-08-17 실행. 이전 기록은 확장 p50 18.0 / p95 54.0 / max 89.5ms였다.)
+
+수축은 거의 완전히 60fps. 확장은 p50이 60fps지만 p95/max에 프레임 드롭이 남는다
+(콘텐츠 3종을 순차로 마운트하는 부하 때문으로 보임 — spike S1도 동일 환경에서
+확장 쪽에만 드롭을 기록했다). **반복 실행마다 편차가 크다** — 같은 날 세 번
+돌린 확장 max가 33.4 / 49.9 / 33.4ms였고, 이전 기록은 89.5ms였다. 이 환경 자체가
+공유 데스크톱이라(spike RESULT.md에 이미 기록됨) 다른 프로세스 부하에 흔들린다.
+**수치가 좋아진 것을 개선으로 읽으면 안 된다 — `ui/soul.md` §7의 굴절층·데이터층
+분리는 여전히 미구현이고, 이 변동은 그 작업의 결과가 아니다.** 정직하게 말해
+확장 쪽 프레임 안정성은 spike와 마찬가지로 **"부분통과"**다. 수축은 안정적으로
+60fps. 스크린샷: `captures/03-mosaic-expanded.png`
 (렌더러 캡처, 주 증거), `captures/03c-mosaic-OS-composited.png`(PowerShell
 `CopyFromScreen` 실제 OS 합성 캡처 — 이번 실행에서는 성공. spike RESULT.md가 기록한
 간헐 실패가 발생하면 렌더러 캡처만으로 충분하도록 `verify.js`가 실패를 흡수한다),
@@ -192,10 +206,15 @@ Enter)을 그대로 시뮬레이션했다. `athena__render_canvas` 인터페이�
   "boundsBeforeQuery": { "height": 205 },
   "boundsAfterQuery": { "height": 252 },
   "grewTallerThanBase": true,
+  "grownByPx": 47,
   "finalAnswerText": "캔버스 창에 스트림, 리더, 공통 테이블을 띄웠습니다.",
-  "canvasChipCount": 3
+  "cardChipCount": 3
 }
 ```
+
+`grownByPx`는 나중에 붙였다. `grewTallerThanBase`가 원래 `chatBaseH`(204)와만
+비교해서 **DPI 반올림 1px(205 > 204)에도 통과했기 때문**이다 — 아래 "검증이
+스스로를 속인 결함" 참조. 지금은 질의 전 높이 대비 실제 증가를 본다.
 
 스크린샷: `captures/08-e2e-1-judging.png`(상태 1), `captures/09-e2e-2-calling.png`
 (상태 2, TR 코드 누적 표시), `captures/10-e2e-3-done-autogrow.png`(상태 3, 캔버스
@@ -207,6 +226,53 @@ Enter)을 그대로 시뮬레이션했다. `athena__render_canvas` 인터페이�
 그립에서 위로 160px 드래그 시뮬레이션 → 높이 252→413(+161, 거의 정확히 일치),
 **입력줄이 있는 하단 모서리는 고정**(`bottomEdgePinned:true`) — "위로만 자란다"가
 실측으로 확인됨.
+
+### 검증이 스스로를 속인 결함 (2026-08-17 발견·수정)
+
+`plan/plan.md` 수치를 재실측하다가 나왔다. **`npm run verify`가 exit 0에 단언
+전부 `true`를 내면서도 실제로는 아무것도 검증하지 않고 있었다.**
+
+발단은 `chatReady: false`였다. 낡은 단언인 줄 알고 캡처를 열었더니
+`02-chat-only-idle.png`가 "부팅 완료된 대화 창"이 아니라 **온보딩 3/3 계좌 등록
+화면**이었다. 원인 사슬:
+
+1. `lib/main/`의 네 모듈이 전부 `app.getPath('userData')` 아래를 읽는다 —
+   `onboarding.js` · `accounts.js` · `cli-accounts.js` · `secrets.js`.
+   **검증 결과가 이 머신에 무엇이 등록돼 있느냐에 따라 달라졌다.**
+2. 이 머신은 계좌가 미등록이라 `chat.js`가 `#app`을 숨기고 `#onboard`를 띄웠다.
+   정상 동작이다.
+3. 그런데 `verify.js`는 그걸 모른 채 검증 5~8을 진행했다. `executeJavaScript`로
+   쏘는 이벤트는 **숨은 요소에도 도달한다.** 그래서 단언은 전부 통과했다.
+4. 같은 실행의 스크린샷은 정반대를 말하고 있었다 —
+   `10-e2e-3-done-autogrow.png`("상태 3, 카드 칩 3개 + 트레이스"라고 이 문서가
+   설명하던 그 캡처)에 대화 이력이 아니라 온보딩 계좌 화면이 잘려 찍혀 있었다.
+
+같은 뿌리에서 두 번째 결함이 나왔다. **자동 성장이 죽어 있었는데 검증은
+통과했다.** `startOnboarding()`이 `manualOverride=true`를 걸고, 숨은 `#history`의
+`scrollHeight`는 0이라 `measureNeededHeight()`가 기본 높이만 돌려준다. 결과
+높이는 205 — 그런데 옛 단언이 `boundsAfterQuery.height > layout.chatBaseH`(=204)
+였다. **acrylic 창의 DPI 반올림 1px에 통과한 것이다.** 이 문서에 기록돼 있던
+`boundsAfterQuery: 252`(진짜 성장 +47)는 온보딩 병합 **이전** 실행 값이었고,
+그 뒤로 이 단언은 계속 1px로 통과하고 있었다.
+
+수정 3건:
+
+| 무엇 | 어떻게 |
+|---|---|
+| 시작 상태가 머신에 의존 | `verify.js`가 `app.setPath('userData', app/.verify-profile)`로 **검증 전용 프로필**을 쓰고 온보딩을 완료로 심는다. 매 실행 새로 만들고 개인 프로필은 건드리지 않는다 |
+| `chatReady`가 정상 동작을 false로 찍음 | `bootMode`(`app`/`onboard`) + `exactlyOneModeVisible`(모드 배타성)로 교체 |
+| `grewTallerThanBase`가 1px에 통과 | 질의 **전** 높이 대비 증가로 바꾸고 DPI 오차(±2px)보다 커야 통과. `grownByPx`를 함께 남긴다 |
+
+수정 후 재실행: `모드: app`, `모드 배타성: true`, `grownByPx: 47`.
+`10-e2e-3-done-autogrow.png`에 이제 질문·답변·카드 칩 3개·트레이스가 실제로 찍힌다.
+
+대가를 적는다: 검증 전용 프로필은 계좌·MCP 목록이 **빈 상태**다. 검증 7·8은
+카드의 존재와 경계(누수 0건, 창 안 늘어남)를 보는 것이라 유효하지만, **데이터가
+찬 상태의 증거는 `npm run verify:settings-cards` 쪽**이다(캡처 11장). 두 검증의
+역할이 다르다.
+
+교훈은 CLAUDE.md §3·§9가 이미 적어둔 것이다 — **초록 불은 증거가 아니다.**
+이 결함은 단언을 읽어서가 아니라 **캡처를 열어봐서** 잡혔다.
 
 ## soul.md·two-windows.md 대비 구현 범위
 
@@ -289,7 +355,7 @@ Paper 화면설계서 `Athena — 화면설계서`의 13개 아트보드를 실�
 
 `lib/main/mcp-cli.js`가 `backend/athena_mcp`의 Python CLI를 spawn한다. 스니펫 파싱,
 별칭 정규화, 위험 패턴 스캔, 동의 게이트를 JS로 다시 만들지 않았다 — **그게 보안
-경계이고, 191개 테스트로 고정돼 있다.** 두 벌로 만들면 경계가 갈라진다.
+경계이고, 205개 테스트로 고정돼 있다(2026-08-17 실측).** 두 벌로 만들면 경계가 갈라진다.
 
 검증 중 실제로 확인했다: 승인 전에 `mcp-probe`/`mcp-allow-tool`을 렌더러를 우회해
 직접 호출해도 Python 쪽이 `ConsentNotGrantedError`로 거부한다. UI가 만든 게이트가

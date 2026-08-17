@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-08-16T15:49:51.878Z",
+  "startedAt": "2026-08-17T04:41:46.310Z",
   "layout": {
     "scale": 1,
     "screen": {
@@ -24,31 +24,40 @@
       },
       "idle": {
         "width": 2340,
-        "height": 1182
+        "height": 336
       }
     },
-    "chatReadyAfterBoot": false
+    "chatBootedAfterBoot": true,
+    "bootMode": "app",
+    "exactlyOneModeVisible": true,
+    "panels": {
+      "boot": false,
+      "app": true,
+      "onboard": false,
+      "settings": false
+    },
+    "bootedIntoChatMode": true
   },
   "dotScreenPoint": {
-    "x": 180,
-    "y": 290
+    "x": 214.66666793823242,
+    "y": 1046.6666717529297
   },
   "osCaptureAttempted": {
     "ok": true
   },
   "expand": {
-    "frameCount": 31,
+    "frameCount": 30,
     "p50": 16.699999999999818,
-    "p95": 33.399999999999636,
-    "max": 33.400000000000546,
-    "min": 16.599999999999454
+    "p95": 33.399999999999864,
+    "max": 33.399999999999864,
+    "min": 16.40000000000009
   },
   "collapse": {
     "frameCount": 35,
-    "p50": 16.69999999999891,
-    "p95": 16.799999999999272,
-    "max": 16.80000000000109,
-    "min": 11.200000000000728
+    "p50": 16.699999999999818,
+    "p95": 16.800000000000182,
+    "max": 33.399999999999636,
+    "min": 8.300000000000182
   },
   "afterCollapse": {
     "canvasVisible": false
@@ -63,9 +72,9 @@
       },
       "chat": {
         "x": 180,
-        "y": 290,
+        "y": 855,
         "width": 1561,
-        "height": 789
+        "height": 224
       }
     },
     "afterCanvasMove": {
@@ -77,9 +86,9 @@
       },
       "chat": {
         "x": 180,
-        "y": 290,
+        "y": 855,
         "width": 1561,
-        "height": 789
+        "height": 224
       }
     },
     "afterChatResize": {
@@ -91,9 +100,9 @@
       },
       "chat": {
         "x": 180,
-        "y": 290,
+        "y": 855,
         "width": 1563,
-        "height": 789
+        "height": 325
       }
     },
     "canvasMovedButChatUnchanged": true,
@@ -117,26 +126,27 @@
     },
     "boundsAfterQuery": {
       "x": 180,
-      "y": 874,
+      "y": 827,
       "width": 1561,
-      "height": 205
+      "height": 252
     },
     "grewTallerThanBase": true,
+    "grownByPx": 47,
     "finalAnswerText": "캔버스 창에 스트림, 리더, 공통 테이블을 띄웠습니다.",
     "cardChipCount": 3
   },
   "manualResize": {
     "beforeDrag": {
       "x": 180,
-      "y": 874,
+      "y": 827,
       "width": 1561,
-      "height": 205
+      "height": 252
     },
     "afterDrag": {
       "x": 180,
-      "y": 714,
+      "y": 666,
       "width": 1561,
-      "height": 365
+      "height": 413
     },
     "grewByDrag": true,
     "bottomEdgePinned": true
@@ -166,5 +176,5 @@
     "turnCountBefore": 1,
     "turnCountAfter": 1
   },
-  "finishedAt": "2026-08-16T15:50:10.445Z"
+  "finishedAt": "2026-08-17T04:42:01.186Z"
 }
