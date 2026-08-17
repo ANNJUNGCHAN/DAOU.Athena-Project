@@ -45,7 +45,23 @@ backend 전체:  517 passed, 0 failed   (113초)
 이 브랜치는 `main`에 없는 미커밋 작업(계좌 모듈, 셀렉터 수정, 화면기획서)을 포함한다. 517은
 그 상태의 수치이지 `main`의 수치가 아니다.
 
-**2026-08-17 · `main`에서 전면 재실측 — 이 수치가 현행이다:**
+**2026-08-17 (2차) · 액션 2·3·4 구현 후 — 이 수치가 현행이다:**
+
+```
+backend 전체:  614 passed, 0 failed   (121초)   ← 브레인 결선으로 +11
+  ruff check .                          → All checks passed
+  generate_api.py --check               → Generated files are current
+app:
+  npm test                              → 29 passed, 0 failed (node --test, electron 불필요)
+  npm run verify                        → 검증 1~8 전부 통과 (모드 app · grownByPx 47)
+  probe_live_spawn.js (수동·쿼터 소모)  → ok:true · exit:0 · 캔버스 1건 · 9,326ms
+```
+
+> **실배선은 `npm run verify`가 검증하지 않는다.** 자동 검증은
+> `ATHENA_CANVAS_SOURCE=fixture` 고정이다(쿼터·43초·비결정성). 실배선 회귀는
+> `node spike/cli-pipe/gateway/probe_live_spawn.js`를 **수동으로** 돌려야 잡힌다.
+
+**2026-08-17 (1차) · 전면 재실측:**
 
 ```
 backend 전체:  603 passed, 0 failed   (245초)
@@ -95,12 +111,12 @@ app:
 |---|---|---|
 | 키움 REST 백엔드 (301 라우팅) | **동작** | `backend/athena_api/` |
 | MCP 게이트웨이 | **동작 · 실서버 이식 완료 · W1 잔여 5건 결선** · 205 테스트 통과 | `backend/athena_mcp/` |
-| 투자 브레인 (그래프 투영) | **모듈 완성, FastAPI 미결선** | `backend/athena_api/brain/` |
+| 투자 브레인 (그래프 투영) | **결선 완료** (2026-08-17) · 기본 비활성(`brain_enabled=false`) | `backend/athena_api/brain/` · `lifespan.py` |
 | LLM API 셀렉터 | **동작** · 127 테스트 통과 (§3) | `backend/athena_api/selector/` |
-| Electron 두 창 셸 | **동작** · 실제 데이터 렌더 | `app/` |
+| Electron 두 창 셸 | **동작 · 실배선 결선 완료** (2026-08-17) — `claude -p` 실호출 종단간 검증됨 | `app/` |
 | 스파이크 실측 데이터 | 86건 보존 | `spike/captures/` |
 | MCP 이식 절차 (등록→승인→probe→서빙) | **동작** · 외부 서버 3종 실왕복 | `athena_mcp/{onboarding,runner,__main__}.py` |
-| CLI (`claude -p`) 연동 | **준비됨, 미실행** — `.mcp.json` 예시 있음 | `spike/gateway-graft/` |
+| CLI (`claude -p`) 연동 | **실왕복 통과** (2026-08-17) — 게이트웨이 툴이 실제 집행됨 | `spike/cli-pipe/gateway/RESULT.md` |
 | 파수꾼·조사관 | **미착수** (설계만) | `plan/감시에이전트-실행계획.md` |
 | 캔버스 설계 라운드 | **미착수** (초안만) | `plan/canvas-taxonomy.md` |
 | 키움 공통화면 화면기획서 | **문서·아트보드 완료, 구현 미착수** | `plan/kiwoom-common-screen-spec.md` · Paper 아트보드 25~34 |
@@ -212,7 +228,22 @@ ADR: [`plan/investment-brain-architecture.md`](investment-brain-architecture.md)
 - `history.py`(921) 시점별 이력 · `store.py`(651) 그래프 저장소
 - 검색은 그래프 순회 + `fts` BM25만. **vector DB·embedding 없음** (ADR 결정)
 
-**미완**: ADR §4.2가 요구한 **FastAPI lifespan 결선**. `build_lifespan()`에 Ladybug 서비스(프로세스 락 → DB open → 스키마 확인 → `fts` 로드 → writer queue)를 붙이는 작업이 아직이다. 현재는 모듈 + 단위테스트만 존재.
+**결선 완료 (2026-08-17)** — ADR §4.2의 5단계가 전부 자리를 잡았다. 다만 **대부분은 이미
+`GraphStore` 안에 있었다**: DB open · 스키마 확인 · writer queue(`ThreadPoolExecutor(max_workers=1,
+thread_name_prefix="athena-brain")`가 곧 단일 소유자다). 새로 쓴 건 **프로세스 락**
+(`BrainProcessLock` — DB 경로 해시 키. 자격증명 지문 기반 `CredentialProcessLock`을 전용하면
+의미가 어긋난다)과 **`fts` 로드**(`GraphStore.load_fts_extension`), 그리고 lifespan 배선이다.
+
+**아직 사실이 아닌 것**: `plan.md`와 ADR이 적어온 *"검색은 그래프 순회 + `fts` BM25만"* 은
+**현재 코드와 다르다.** `_SEARCH_ENTITIES`는 여전히
+`WHERE lower(e.name) CONTAINS lower($query) OR ...` **부분문자열 스캔**이다 —
+랭킹이 없다. `fts` 확장은 이제 로드되지만 **검색 쿼리가 그걸 안 쓴다.**
+(`INSTALL fts`·`LOAD fts`는 이 빌드에서 실제로 성공한다 — 미구현이지 불가능이 아니다.)
+
+**환경 제약**: `ladybug.Database()`는 네이티브 공유 라이브러리를 찾아야 열린다.
+못 찾으면 `RuntimeError: Could not find lbug C API shared library`.
+프로덕션은 `ATHENA_LADYBUG_DLL_DIR`을 읽고, 테스트는 `C:\Program Files\Git\mingw64\bin`으로
+폴백한다. **없어도 앱은 죽지 않는다** — `brain_last_error`에 기록하고 강등한다.
 
 ### C. LLM API 셀렉터 `backend/athena_api/selector/`
 
@@ -239,15 +270,25 @@ ADR: [`plan/investment-brain-architecture.md`](investment-brain-architecture.md)
 | # | 작업 | 이유 / 시작점 |
 |---|---|---|
 | 1 | ~~**갈래 A·B 조율**~~ → **의도적으로 둘로 간다** | 통합을 검토하고 기각했다. 전제가 다르다 — `AT-CV-005`는 스키마를 아는 키움 manifest 파생, MCP는 상류 스키마를 모르는 게 전제다. **렌더러가 둘이 되는 대가를 알고 받았다.** 아래 "결정 — MCP 봉투와 AT-CV-005는 별개로 간다" 참조 |
-| 2 | **브레인 FastAPI 결선** | ADR §4.2. 락·writer queue 없이는 다중 프로세스 쓰기 사고 |
-| 3 | **CLI 연동 마무리** — `claude -p`로 실왕복 | 게이트웨이는 stdio 서버로 뜨고 MCP 클라이언트 왕복까지 검증됐다. 남은 건 `claude` 자체로 확인하는 것뿐. `--setting-sources ""` 필수 (§7). **`--allowedTools` 없이는 툴 실행이 자동 거부된다** — S3 실측(`spike/cli-pipe/RESULT.md:127-136`) |
-| 4 | **stream-json 파서** (결정 D1의 귀결) | 프로덕션 코드에 파서가 **0건**이다. `tool_result.content`가 문자열/블록배열 둘 다 온다(RESULT.md:111-120) |
+| 2 | ~~**브레인 FastAPI 결선**~~ → **완료** (2026-08-17) | `lifespan.py`의 `_open_brain`/`_teardown_brain`. **기본 비활성**(`brain_enabled=false`) — 브레인은 키움과 무관한 선택 기능이고, 켜지 않은 배포·테스트가 DB 파일을 건드리지 않게 했다. 락은 `BrainProcessLock`(DB 경로 해시 키). 락 경합은 **기동을 막고**(ADR §11), 네이티브 런타임 부재는 **강등**한다(`brain_last_error`) |
+| 3 | ~~**CLI 연동 마무리**~~ → **완료** (2026-08-17) | `claude -p` → `athena-mcp serve` → 게이트웨이로 `athena__render_canvas` **실제 집행됨**. 원문 `spike/captures/S4-gateway-cli-roundtrip.ndjson`, 보고서 `spike/cli-pipe/gateway/RESULT.md` |
+| 4 | ~~**stream-json 파서**~~ → **완료** (2026-08-17) | `app/lib/main/stream-json-parser.js`. 테스트 29건 전부 실왕복 캡처로 검증(지어낸 픽스처 0건) |
 | 5 | **W3 캔버스 어댑터** — upstream 출력 → 캔버스 데이터 | 미착수. `stream.py`가 여기서 첫 프로덕션 호출자를 얻는다. 계약 형상은 이미 일치(`canvas.py` 스트림 스키마 ↔ `stream.py` 레코드) |
 | 6 | **타임라인 캔버스** | 계획은 "타임라인부터"인데 `app/canvas.js`에 timeline 분기 자체가 없다(stream/reader/table만). 가격축은 KRX 승인 전까지 pykrx로 잠정 |
 | 7 | **프레임 최적화** — 굴절층/데이터층 분리 | soul.md가 "모션이 곧 재료"라고 한 설계 |
 | 8 | 캔버스 설계 라운드 | 근거 ①②④ 확보됨. soul.md §9 프로세스로 |
 | 9 | 파수꾼·조사관 착수 | `plan/감시에이전트-실행계획.md`. 주문 자동집행 없음(결정 3) |
 | 10 | MCP 어댑터에 `detail_group` 반영 | 4툴을 MCP로 노출할 때 `describe.detail_groups` → `resolve.detail_group` 경로 필수 (`docs/LLM_API_SELECTION.md`). 현재 `athena_mcp`에 selector 참조 **0건** |
+
+### 2026-08-17 결선에서 새로 열린 것
+
+| # | 작업 | 근거 |
+|---|---|---|
+| 11 | **`render_canvas`가 캔버스별 `data` 스키마를 모델에 안 알려준다** | `_RENDER_CANVAS_INPUT_SCHEMA`가 `data`를 `{"type":"object"}`로만 선언한다. 실왕복에서 모델이 `table` 형상을 맞추는 데 **3회** 걸렸다(지연·토큰 3배). 실패 메시지는 정확했지만 스키마를 미리 주면 1회다. `canvas_type`별 `oneOf` 스키마가 답 |
+| 12 | **`fts` 로드는 됐는데 검색이 안 쓴다** | §4-B 참조. `_SEARCH_ENTITIES`가 `CONTAINS` 스캔이라 랭킹이 없다. 문서가 오래 "BM25"라고 말해왔다 |
+| 13 | **스폰된 `claude` 프로세스의 생애주기 관리가 없다** | Esc가 UI 반영만 막고 `kill()`을 안 한다. 왕복 타임아웃도, 동시 실행 상한/큐도 없다 — 연속 질의하면 프로세스가 쌓인다 |
+| 14 | **실배선을 자동 검증이 안 잡는다** | `npm run verify`는 `ATHENA_CANVAS_SOURCE=fixture` 고정이다(쿼터·43초·비결정성 때문에 의도된 분리). 실배선 회귀는 `probe_live_spawn.js` 수동 실행뿐 |
+| 15 | **실배선이 그리는 카드는 2종뿐** | `mcp-table`·`free`(+`notice`). 스트림·리더는 여전히 픽스처 전용이다. 카드 12종 중 실데이터가 닿는 게 2종이라는 뜻 |
 
 ### 결정 D1 — 캔버스 페이로드가 UI에 닿는 경로 (2026-08-16 확정)
 
@@ -263,9 +304,19 @@ Electron ──spawn──> claude -p ──stdio──> athena-mcp serve ──
 게이트웨이는 순수 stdio MCP 서버로 남는다(변경 없음, 새 포트·인증 표면 없음).
 대가는 stream-json 파서를 새로 써야 한다는 것 — 액션 4.
 
-**지금 `app/`은 아직 목업이다.** `app/main.js`의 `athena__render_canvas`는 같은
-이름의 placeholder IPC이고, 데이터는 `spike/captures/*.json`을 파일에서 직접
-읽는다. `app/`에 MCP 클라이언트도 HTTP 호출도 없다(의존성은 `electron` 하나뿐).
+~~**지금 `app/`은 아직 목업이다.**~~ → **2026-08-17에 실배선이 깔렸다.**
+`app/main.js`의 `athena__render_canvas` 핸들러가 `payload.source`로 갈린다 —
+기본은 `claude-runner.runClaudeQuery`가 실제로 `claude -p`를 spawn하고,
+`spike/captures/*.json` 목업은 **명시적으로 고른 픽스처 어댑터**로만 남았다
+(`ATHENA_CANVAS_SOURCE=fixture`). 종단간 실호출로 검증됨.
+
+**이 결선에서 실측이 추측을 뒤집었다.** 첫 구현이 *"Windows에서 `claude`는 `.cmd`
+셸 래퍼"* 라는 추측으로 `shell:true`를 걸었는데, Windows `shell:true`는 **빈 문자열
+인자를 삼킨다.** 그래서 `--setting-sources`가 다음 인자인 `--allowedTools`를 값으로
+먹고 즉시 죽었다(`exit 1`, 319ms). 이 머신의 `claude`는 실제로는 진짜 `.exe`라
+셸이 아예 필요 없었다. `shell:false`로 고쳐 통과.
+**파서 단위 테스트 29건은 이 버그 전에도 후에도 전부 통과했다** — 캡처 픽스처로는
+spawn 인자 전달을 못 잡는다. 상세는 `app/README.md`.
 
 ### MCP 공통 카드 — 봉투만 정의했다 (2026-08-16)
 
