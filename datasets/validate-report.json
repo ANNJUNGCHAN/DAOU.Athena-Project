@@ -39,6 +39,16 @@
   "edge-failure": 14,
   "adversarial": 15
  },
+ "persona": {
+  "CFO": 21,
+  "애널리스트": 25,
+  "개인투자자": 26,
+  "전업투자자": 30,
+  "재무전문가": 23,
+  "일반직장인": 24,
+  "브로커": 26,
+  "리서치원": 25
+ },
  "verify_via_usage": {
   "chat-answer": 185,
   "audit-log": 119,
