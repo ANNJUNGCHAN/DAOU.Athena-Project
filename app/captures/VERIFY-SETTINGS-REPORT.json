@@ -77,12 +77,12 @@
   },
   "account.register.ok(stubbedNetwork)": {
     "ok": true,
-    "id": "4675ed8a-fb9d-4ef3-bfe8-0e532cecbc05"
+    "id": "e5b1f64a-410b-4551-93e9-de8511bad9a7"
   },
   "account.list.afterRegister": {
     "accounts": [
       {
-        "id": "4675ed8a-fb9d-4ef3-bfe8-0e532cecbc05",
+        "id": "e5b1f64a-410b-4551-93e9-de8511bad9a7",
         "alias": "검증-성공계좌",
         "connected": true,
         "active": true,
@@ -111,7 +111,7 @@
   "account.list.afterOrderApiOn": {
     "accounts": [
       {
-        "id": "4675ed8a-fb9d-4ef3-bfe8-0e532cecbc05",
+        "id": "e5b1f64a-410b-4551-93e9-de8511bad9a7",
         "alias": "검증-성공계좌",
         "connected": true,
         "active": true,
@@ -139,8 +139,8 @@
   },
   "auth-token-status": {
     "state": "ready",
-    "expiresInSec": 2315440456,
-    "issuedAt": "2026-08-17T13:05:43.405Z"
+    "expiresInSec": 2315436204,
+    "issuedAt": "2026-08-17T14:16:35.033Z"
   },
   "auth-token-refresh": {
     "ok": true,

@@ -3,10 +3,10 @@ const { ipcRenderer, webFrame } = require('electron');
 const onboarding = require('./lib/onboarding');
 const authScreen = require('./lib/auth-screen');
 const settingsCards = require('./lib/settings-cards');
-const { el, progressDots } = require('./lib/ui-kit');
 
 const $boot = document.getElementById('boot');
-const $gaugeFill = document.getElementById('gaugeFill');
+const $bootLine = document.getElementById('bootLine');
+const $bootPanel = document.getElementById('bootPanel');
 const $app = document.getElementById('app');
 const $history = document.getElementById('history');
 const $input = document.getElementById('input');
@@ -31,58 +31,46 @@ let liveProgressEl = null;
 let abortToken = 0;
 let onboardCleanup = null; // 현재 노출 중인 온보딩/인증 화면의 정리 함수(리스너·타이머 해제)
 
-// ---------- 부팅 게이지 ----------
-// D4 — 부팅(AT-SY-001)을 온보딩 3단계 중 1단계로 프레이밍한다. 온보딩 화면
-// 자체는 "2 / 3"·"3 / 3"뿐이고 "1 / 3"은 22개 아트보드 어디에도 없다
-// (README.md "설계에 없어서 지어낸 것" 표) — 그 빈 자리가 부팅이라는 결정이다.
-// 부팅 게이지는 최초 실행 여부와 무관하게 **매번** 뜬다(재실행 사용자도 본다).
-// 반면 2/3·3/3은 온보딩이 필요한 최초 실행 때만 이어진다. 그래서 "1 / 3" 표기와
-// 진행 점은 온보딩이 실제로 뒤따를 때만 보여준다 — 안 그러면 재실행 사용자에게
-// "3단계 중 1단계"라고 말해놓고 2단계로 이어지지 않는 거짓말이 된다. 이 판단을
-// 위해 onboarding-state 조회를 게이지 애니메이션과 동시에 시작한다(부팅 시간을
-// 늘리지 않고 그 안에서 미리 알아낸다).
+// ---------- 부팅(AT-SY-001) — 4단계 생성 시퀀스 ----------
+// 기획안 8쪽 그대로: 발광점(0ms) → 가로 확장(+180ms) → 세로 전개(+420ms, 유리 72%)
+// → 창 확정(+620ms, 로고·입력줄·브랜드 커서). 이징 cubic-bezier(.2,0,0,1).
+// 이전 판의 게이지 바 + "1 / 3" 프레이밍(D4)은 2026-08-17 사용자 지시("기획안대로
+// 똑같이")로 폐기했다 — 온보딩 자동 전환(최초 실행 시 AT-SY-002)은 그대로다.
+// prefers-reduced-motion이면 시퀀스를 건너뛰고 즉시 완료 상태로 간다(접근성 3종은
+// 직접 구현한다 — CLAUDE.md §2).
 window.addEventListener('DOMContentLoaded', () => {
-  requestAnimationFrame(() => {
-    $gaugeFill.style.width = '100%';
-  });
-
   const onboardStatePromise = ipcRenderer.invoke('athena:onboarding-state').catch(() => {
     // 채널이 아직 없거나 실패하면 "온보딩 필요"로 가정한다 — 온보딩을 건너
     // 뛰고 정상 대화 화면을 보여주는 쪽이 훨씬 위험하다("건너뛰기 없음"
     // 원칙, AT-SY-002/003). 이 fail-closed 결정은 발명이다 — 리포트 참고.
     return { needed: true, step: 2 };
   });
-  onboardStatePromise.then((s) => {
-    if (s && s.needed) showBootStepFraming();
-  });
 
-  setTimeout(() => {
-    $boot.style.transition = 'opacity 260ms ease';
-    $boot.style.opacity = '0';
-    setTimeout(async () => {
-      $boot.hidden = true;
-      const onboardState = await onboardStatePromise;
-      if (onboardState && onboardState.needed) {
-        startOnboarding(onboardState.step);
-      } else {
-        $app.hidden = false;
-        $input.focus();
-        scheduleHeightSync();
-      }
-    }, 260);
-  }, 1300);
+  const finishBoot = async () => {
+    $boot.hidden = true;
+    const onboardState = await onboardStatePromise;
+    if (onboardState && onboardState.needed) {
+      startOnboarding(onboardState.step);
+    } else {
+      $app.hidden = false;
+      $input.focus();
+      scheduleHeightSync();
+    }
+  };
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    finishBoot();
+    return;
+  }
+
+  // 1단계(0ms)는 CSS 초기 상태(발광점 16px)다. 이후 단계는 시각 경계에 클래스 토글.
+  setTimeout(() => $bootLine.classList.add('expand'), 180); // 2단계 — 가로 확장
+  setTimeout(() => $bootPanel.classList.add('unfold'), 420); // 3단계 — 세로 전개(72%)
+  setTimeout(() => $bootPanel.classList.add('final'), 620); // 4단계 — 창 확정
+  // 4단계 유리 전환(160ms)이 정착한 직후 실제 대화 창으로 바꿔치운다 — 부팅 패널의
+  // 최종 유리(0.82)와 .app 기본 유리가 같은 값이라 이음새가 보이지 않는다.
+  setTimeout(finishBoot, 800);
 });
-
-// 새 부팅 화면을 만들지 않는다(D4 지시) — 있는 #boot에 온보딩과 같은 프리미티브
-// (ui-kit의 진행 점)·같은 스타일(onb-kicker)을 덧붙일 뿐이다. 진행 점은
-// ui-kit.css가 이미 무채색으로 고정해둔 컴포넌트라 D5(브랜드색은 [계속]에만)와도
-// 충돌하지 않는다.
-function showBootStepFraming() {
-  if ($boot.querySelector('.boot-step-kicker')) return; // 중복 호출 방지
-  const kicker = el('div', 'boot-step-kicker onb-kicker', '1 / 3');
-  $boot.insertBefore(kicker, $boot.firstChild);
-  $boot.appendChild(progressDots(3, 1));
-}
 
 // ---------- 온보딩(AT-SY-002/003) · 인증(AT-CV-OAUTH) 상태 머신 ----------
 // 대화 창을 chatMaxH로 확장한 상태에서 CLI 연결(2/3) → 계좌 연결(3/3) → 인증

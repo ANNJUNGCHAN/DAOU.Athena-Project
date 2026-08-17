@@ -1,27 +1,82 @@
 html, body { background: transparent; }
 
-/* ---------- 부팅 — soul.md §3 "게이지가 차오르고 창 하나가 뜬다" ---------- */
-.boot {
-  position: fixed; inset: 0;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 18px;
-  background: rgba(16, 19, 26, 0.9);
+/* ---------- 부팅(AT-SY-001) — 4단계 생성 시퀀스 (기획안 8쪽 그대로) ----------
+ * 발광점(0ms) → 가로 확장(+180ms) → 세로 전개(+420ms, 유리 72%) → 창 확정(+620ms).
+ * 이징은 스펙의 cubic-bezier(.2,0,0,1). 배경 시트를 깔지 않는다 — 1단계에는
+ * "창 프레임을 그리지 않는다"가 스펙이다. 창 자체의 acrylic 재질은 Electron이
+ * DOM과 무관하게 항상 그리는 것이라 여기서 없앨 수 없다(README 부팅 절 참조).
+ * 스펙의 "굴절 강도 변화" 표현도 같은 한계로 불가 — 기획안 각주가 제시한 저사양
+ * 대체 경로("굴절 변조 대신 크기 전이만")를 기본 구현으로 채택했다. */
+.boot { position: fixed; inset: 0; overflow: hidden; }
+.boot-line {
+  position: absolute; left: 50%; top: 50%;
+  width: 16px; height: 3px; border-radius: 999px;
+  transform: translate(-50%, -50%);
+  background: var(--color-brand);
+  box-shadow: 0 0 22px rgba(238, 19, 123, 0.95);
+  transition: width 240ms cubic-bezier(0.2, 0, 0, 1), box-shadow 240ms cubic-bezier(0.2, 0, 0, 1);
 }
-.boot-gauge {
-  width: 220px; height: 3px; border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
+/* 2단계 — 창 너비만큼 확장, 양 끝 투명도 그라데이션(스펙 명시) */
+.boot-line.expand {
+  width: 100%;
+  background: linear-gradient(90deg,
+    rgba(238, 19, 123, 0) 0%, #ee137b 22%, #ee137b 78%, rgba(238, 19, 123, 0) 100%);
+  box-shadow: 0 0 26px rgba(238, 19, 123, 0.85);
+}
+/* 3단계 — 선을 축으로 위아래 전개. 유리 불투명도 72%(최종값보다 낮음).
+ * visibility 토글은 opacity 페이드가 아니다 — "투명도 페이드 금지" 준수. */
+.boot-panel {
+  position: absolute; left: 0; right: 0; top: 50%;
+  height: 0;
+  transform: translateY(-50%);
+  visibility: hidden;
+  display: flex; flex-direction: column;
+  border-radius: 20px;
+  background: rgba(23, 27, 36, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.4), 0 20px 50px rgba(0, 0, 0, 0.58);
   overflow: hidden;
+  transition: height 200ms cubic-bezier(0.2, 0, 0, 1),
+    background-color 160ms cubic-bezier(0.2, 0, 0, 1),
+    border-color 160ms cubic-bezier(0.2, 0, 0, 1),
+    box-shadow 160ms cubic-bezier(0.2, 0, 0, 1);
 }
-.boot-gauge-fill {
-  width: 0%; height: 100%;
-  background: linear-gradient(90deg, var(--color-k-faint), var(--color-k-text));
-  transition: width 1100ms var(--ease);
+.boot-panel.unfold { visibility: visible; height: 100%; }
+/* 4단계 — 유리 불투명도 최종값(.app 기본 --glass-alpha 0.82와 동일), 로고·입력줄 표시 */
+.boot-panel.final {
+  background: rgba(23, 27, 36, 0.82);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.58), 0 40px 90px rgba(0, 0, 0, 0.72);
 }
-.boot-label {
+.boot-logo {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center;
   font-family: var(--font-display);
-  letter-spacing: 6px;
-  font-size: 13px;
-  color: var(--color-k-dim);
+  font-size: 16px;
+  letter-spacing: 0.4em;
+  padding-left: 0.4em; /* letter-spacing 우측 여백 보정(기획안 목업과 동일) */
+  color: rgba(242, 244, 248, 0.6);
+  visibility: hidden;
+}
+.boot-inputbar {
+  flex-shrink: 0;
+  height: 64px; /* 실제 .input-row와 같은 높이 — 부팅 창이 곧 대화 창이다 */
+  display: flex; align-items: center; gap: 12px;
+  padding: 0 28px;
+  border-top: 1px solid rgba(255, 255, 255, 0.13);
+  visibility: hidden;
+}
+.boot-panel.final .boot-logo,
+.boot-panel.final .boot-inputbar { visibility: visible; }
+.boot-cursor {
+  width: 2px; height: 17px; flex-shrink: 0;
+  background: var(--color-brand);
+  box-shadow: 0 0 12px rgba(238, 19, 123, 0.9);
+}
+.boot-ph {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: rgba(242, 244, 248, 0.44);
 }
 
 /* ---------- 유리 sheen — 가장자리 하이라이트만. 블러는 넣지 않는다 ----------
@@ -184,6 +239,7 @@ html, body { background: transparent; }
   flex: 1;
   background: transparent; border: none; outline: none;
   color: var(--color-k-text);
+  caret-color: var(--color-brand); /* AT-SY-001 4단계 — "입력 커서는 브랜드 색" */
   font-family: var(--font-body);
   font-size: 15px;
 }

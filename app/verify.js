@@ -141,7 +141,7 @@ app.whenReady().then(async () => {
   // ---------- 검증 1: 부팅 — 대화 창만 뜬다 ----------
   await wait(200);
   report.bootChatOnly = { canvasVisibleAtBoot: canvasWin.isVisible(), chatVisibleAtBoot: chatWin.isVisible() };
-  dlog('before shot 01'); const s1 = await shot(chatWin, '01-boot-gauge.png'); dlog('after shot 01');
+  dlog('before shot 01'); const s1 = await shot(chatWin, '01-boot-sequence.png'); dlog('after shot 01');
   const boot = await waitForChatBooted(chatWin);
   dlog('boot done, before shot 02'); const s2 = await shot(chatWin, '02-chat-only-idle.png'); dlog('after shot 02');
   report.bootChatOnly.shots = { boot: s1, idle: s2 };

@@ -10,11 +10,18 @@
 <link rel="stylesheet" href="styles/access.css" />
 </head>
 <body>
+  <!-- 부팅(AT-SY-001) — 4단계 생성 시퀀스. 별도 스플래시가 아니라 대화 창 자신이
+       생성되는 연출이다: 발광점(0ms) → 가로 확장(+180ms) → 세로 전개(+420ms, 유리 72%)
+       → 창 확정(+620ms, 로고·입력줄). 시퀀스는 chat.js가 클래스 토글로 구동한다. -->
   <div id="boot" class="boot">
-    <div class="boot-gauge">
-      <div class="boot-gauge-fill" id="gaugeFill"></div>
+    <div class="boot-line" id="bootLine"></div>
+    <div class="boot-panel" id="bootPanel">
+      <div class="boot-logo">ATHENA</div>
+      <div class="boot-inputbar">
+        <span class="boot-cursor"></span>
+        <span class="boot-ph">무엇이든 물어보세요</span>
+      </div>
     </div>
-    <div class="boot-label">ATHENA</div>
   </div>
 
   <div id="app" class="app glass" hidden>
