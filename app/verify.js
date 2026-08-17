@@ -18,6 +18,35 @@ const { execFileSync } = require('child_process');
 const CAPTURES = path.join(__dirname, 'captures');
 if (!fs.existsSync(CAPTURES)) fs.mkdirSync(CAPTURES, { recursive: true });
 
+// ---------- 검증 전용 프로필 — 시작 상태를 이 머신에 맡기지 않는다 ----------
+// 실측으로 드러난 결함이다(2026-08-17). `lib/main/`의 네 모듈이 전부
+// `app.getPath('userData')` 아래를 읽는다 — `onboarding.js`(온보딩 진행),
+// `accounts.js`, `cli-accounts.js`, `secrets.js`. 그래서 **검증 결과가 이 머신에
+// 무엇이 등록돼 있느냐에 따라 달라졌다.**
+//
+// 실제로 일어난 일: 계좌가 미등록이라 `chat.js`가 `#app`을 숨긴 채 온보딩
+// (`#onboard`)을 띄웠고, 그 상태로 검증 5~8이 **숨은 DOM에 대고** 이벤트를
+// 쐈다. 단언은 전부 true였지만 같은 실행의 스크린샷
+// (`10-e2e-3-done-autogrow.png`)에는 대화 이력이 아니라 온보딩 계좌 화면이
+// 찍혀 있었다. 자동 성장도 죽어 있었다 — `startOnboarding()`이
+// `manualOverride=true`를 걸고, 숨은 `#history`의 `scrollHeight`는 0이라
+// `measureNeededHeight()`가 기본 높이만 돌려준다.
+//
+// userData를 검증 전용 디렉토리로 갈아끼우고 온보딩을 완료로 심어 **항상 같은
+// 시작 상태**에서 잰다. 개인 프로필은 건드리지 않는다(백업·복원도 필요 없다).
+// 대가: 계좌·MCP 목록이 빈 상태로 검증된다. 검증 7·8은 카드의 **존재와 경계**를
+// 보는 것이라 유효하지만, 데이터가 찬 상태의 증거는 `npm run verify:settings-cards`
+// 쪽이다(캡처 11장). 두 검증의 역할이 다르다.
+const VERIFY_PROFILE = path.join(__dirname, '.verify-profile');
+fs.rmSync(VERIFY_PROFILE, { recursive: true, force: true });
+fs.mkdirSync(VERIFY_PROFILE, { recursive: true });
+fs.writeFileSync(
+  path.join(VERIFY_PROFILE, 'athena-onboarding.json'),
+  JSON.stringify({ cliDone: true, accountDone: true }, null, 2),
+  'utf-8'
+);
+app.setPath('userData', VERIFY_PROFILE);
+
 const DEBUGLOG = path.join(CAPTURES, 'verify-debug.log');
 fs.writeFileSync(DEBUGLOG, `start ${new Date().toISOString()}\n`);
 function dlog(msg) { fs.appendFileSync(DEBUGLOG, `${new Date().toISOString()} ${msg}\n`); }
@@ -57,16 +86,36 @@ async function clearMedia(win) {
   if (wc.debugger.isAttached()) wc.debugger.detach();
 }
 
-async function waitForChatReady(chatWin, timeoutMs = 5000) {
+// 부팅 완료 판정. **`#app`이 보이는 것과 "부팅 성공"은 더 이상 같은 말이 아니다** —
+// 온보딩 병합 이후 `chat.js`는 온보딩이 필요하면 `#app`을 숨긴 채 `#onboard`를
+// 띄우고, 그게 정상 동작이다. 옛 판정(`!#app.hidden`)은 정상 동작을 false로
+// 찍었다. 판정을 "게이지가 끝났고 대화 창이 **어떤 모드로든** 도달했는가"로
+// 바꾸고, 어느 모드였는지를 리포트에 남긴다.
+//
+// 모드는 배타적이어야 한다 — `#app`·`#onboard`·`#settings`는 형제 패널이고
+// 둘이 동시에 보이면 겹쳐 그려진다(GLOSSARY.md §1: 모드는 창이 아니다).
+async function waitForChatBooted(chatWin, timeoutMs = 5000) {
+  const probe = `(() => {
+    const vis = (id) => { const n = document.getElementById(id); return !!n && !n.hidden; };
+    return { boot: vis('boot'), app: vis('app'), onboard: vis('onboard'), settings: vis('settings') };
+  })()`;
   const t0 = Date.now();
+  let panels = null;
   while (Date.now() - t0 < timeoutMs) {
-    const ready = await chatWin.webContents.executeJavaScript(
-      "!document.getElementById('app').hidden"
-    );
-    if (ready) return true;
+    panels = await chatWin.webContents.executeJavaScript(probe);
+    if (!panels.boot && (panels.app || panels.onboard)) break;
     await wait(100);
   }
-  return false;
+  const booted = !!panels && !panels.boot && (panels.app || panels.onboard);
+  const visibleCount = panels
+    ? ['app', 'onboard', 'settings'].filter((k) => panels[k]).length
+    : 0;
+  return {
+    booted,
+    mode: booted ? (panels.app ? 'app' : 'onboard') : null,
+    exactlyOneModeVisible: visibleCount === 1,
+    panels,
+  };
 }
 
 app.whenReady().then(async () => {
@@ -86,11 +135,22 @@ app.whenReady().then(async () => {
   await wait(200);
   report.bootChatOnly = { canvasVisibleAtBoot: canvasWin.isVisible(), chatVisibleAtBoot: chatWin.isVisible() };
   dlog('before shot 01'); const s1 = await shot(chatWin, '01-boot-gauge.png'); dlog('after shot 01');
-  const chatReady = await waitForChatReady(chatWin);
-  dlog('chatReady done, before shot 02'); const s2 = await shot(chatWin, '02-chat-only-idle.png'); dlog('after shot 02');
+  const boot = await waitForChatBooted(chatWin);
+  dlog('boot done, before shot 02'); const s2 = await shot(chatWin, '02-chat-only-idle.png'); dlog('after shot 02');
   report.bootChatOnly.shots = { boot: s1, idle: s2 };
-  report.bootChatOnly.chatReadyAfterBoot = chatReady;
-  console.log('[verify] 검증1 완료 — 부팅 시 캔버스 창 표시 여부:', canvasWin.isVisible(), 'chatReady:', chatReady);
+  report.bootChatOnly.chatBootedAfterBoot = boot.booted;
+  report.bootChatOnly.bootMode = boot.mode;
+  report.bootChatOnly.exactlyOneModeVisible = boot.exactlyOneModeVisible;
+  report.bootChatOnly.panels = boot.panels;
+  // 검증 전용 프로필은 온보딩을 완료로 심는다(파일 상단 참조) — 그러므로 여기서
+  // 기대하는 모드는 'app'이다. 'onboard'가 나오면 프로필 격리가 깨진 것이고,
+  // 그 상태의 검증 5~8은 숨은 DOM을 재는 것이라 믿으면 안 된다.
+  report.bootChatOnly.bootedIntoChatMode = boot.mode === 'app';
+  console.log(
+    '[verify] 검증1 완료 — 부팅 시 캔버스 창 표시 여부:', canvasWin.isVisible(),
+    '| 대화 창 부팅:', boot.booted, '| 모드:', boot.mode,
+    '| 모드 배타성:', boot.exactlyOneModeVisible
+  );
 
   // ---------- 검증 2: 점 → 캔버스 확장/수축, 프레임 실측 ----------
   const dotBefore = await mainMod.getDotScreenPoint();
@@ -241,7 +301,13 @@ app.whenReady().then(async () => {
   report.e2eTrigger = {
     reachedDoneState: e2eDone,
     boundsBeforeQuery, boundsAfterQuery,
-    grewTallerThanBase: boundsAfterQuery.height > layout.chatBaseH,
+    // 옛 단언은 `boundsAfterQuery.height > layout.chatBaseH`였다. 이건 DPI 반올림
+    // 1px(205 > 204)에 통과한다 — 2026-08-17 실행이 실제로 그렇게 통과했다.
+    // 그때 자동 성장은 죽어 있었다(온보딩이 `#app`을 숨겨 `#history.scrollHeight`가
+    // 0이었다). 질의 **전** 높이 대비 실제 증가를 보고, acrylic DPI 반올림 오차
+    // (±2px)보다 커야 통과시킨다.
+    grewTallerThanBase: boundsAfterQuery.height > boundsBeforeQuery.height + 2,
+    grownByPx: boundsAfterQuery.height - boundsBeforeQuery.height,
     finalAnswerText: finalTurnText,
     cardChipCount: chipCount,
   };
