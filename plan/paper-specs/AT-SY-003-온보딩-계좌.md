@@ -1,6 +1,6 @@
 # 23 · AT-SY-003 온보딩 계좌
 
-- Paper node: 1K3-0 | artboard "23 · AT-SY-003 온보딩 계좌"
+- Paper node: 1K3-0 | artboard "10 · AT-SY-003 온보딩 (계좌 연결)" (구 "23 · AT-SY-003 온보딩 계좌" — 파일 재번호, 2026-08-17 확인)
 - Screenshot (full artboard): C:\Users\ajc22\orca\workspaces\DAOU.Athena\MCP\spike\paper-bridge\shot-1K3-0-7992.jpg
 - Screenshot (mockup window only): C:\Users\ajc22\orca\workspaces\DAOU.Athena\MCP\spike\paper-bridge\shot-1M8-0-36048.jpg
 - Mockup window node: 1M8-0 "Onboarding Window", 800×687

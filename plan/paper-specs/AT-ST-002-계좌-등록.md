@@ -1,6 +1,6 @@
 # 17 · AT-ST-002 계좌 등록
 
-- Paper node: QO-0 | artboard "17 · AT-ST-002 계좌 등록"
+- Paper node: QO-0 | artboard "14 · AT-ST-002 계좌 등록" (구 17 — 파일 재번호, 2026-08-17 확인)
 - Screenshot: C:/Users/ajc22/orca/workspaces/DAOU.Athena/MCP/spike/paper-bridge/shot-195-0-34636.jpg (mockup window only)
   Full sheet (with spec panel): C:/Users/ajc22/orca/workspaces/DAOU.Athena/MCP/spike/paper-bridge/shot-QO-0-35536.jpg
 

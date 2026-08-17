@@ -1,6 +1,6 @@
 # 23 · AT-CV-OAUTH 인증 토큰 상태
 
-- Paper node: 1FC-0 | artboard "23 · AT-CV-OAUTH 인증 토큰 상태"
+- Paper node: 1FC-0 | artboard "16 · AT-CH-005 인증 토큰 상태" (구 "23 · AT-CV-OAUTH 인증 토큰 상태" — 파일 재번호·ID 개명, 2026-08-17 확인)
 - Screenshot: C:\Users\ajc22\orca\workspaces\DAOU.Athena\MCP\spike\paper-bridge\shot-1FC-0-36344.jpg (full artboard)
   Mockup-only crop: C:\Users\ajc22\orca\workspaces\DAOU.Athena\MCP\spike\paper-bridge\shot-1FI-0-17284.jpg
 

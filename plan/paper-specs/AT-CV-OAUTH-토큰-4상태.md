@@ -1,6 +1,6 @@
 # 24 · AT-CV-OAUTH 토큰 4상태
 
-- Paper node: 1Q0-0 | artboard "24 · AT-CV-OAUTH 토큰 4상태"
+- Paper node: 1Q0-0 | artboard "17 · AT-CH-005 토큰 4상태" (구 "24 · AT-CV-OAUTH 토큰 4상태" — 파일 재번호·ID 개명, 2026-08-17 확인)
 - Mockup window subtree: "Mockup Area" (1Q1-0), 1508×1080 (dark backdrop panel; no OS-chrome "window" frame exists on this board — content sits directly on the dark section background)
 - Screenshot (full artboard, mockup + spec panel): C:\Users\ajc22\orca\workspaces\DAOU.Athena\MCP\spike\paper-bridge\shot-1Q0-0-14008.jpg
 - Screenshot (mockup area only): C:\Users\ajc22\orca\workspaces\DAOU.Athena\MCP\spike\paper-bridge\shot-1Q1-0-35172.jpg

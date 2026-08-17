@@ -1,6 +1,6 @@
 # 18 · AT-ST-003 주문 API 활성화
 
-- Paper node: QP-0 | artboard "18 · AT-ST-003 주문 API 활성화"
+- Paper node: QP-0 | artboard "15 · AT-ST-003 주문 API 활성화" (구 18 — 파일 재번호, 2026-08-17 확인)
 - Screenshot (full artboard): C:/Users/ajc22/orca/workspaces/DAOU.Athena/MCP/spike/paper-bridge/shot-QP-0-22696.jpg
 - Screenshot (mockup area only): C:/Users/ajc22/orca/workspaces/DAOU.Athena/MCP/spike/paper-bridge/shot-19D-0-36216.jpg
 

@@ -1,6 +1,6 @@
 # 16 · AT-ST-001 계좌 목록
 
-- Paper node: QN-0 | artboard "16 · AT-ST-001 계좌 목록"
+- Paper node: QN-0 | artboard "13 · AT-ST-001 계좌 목록" (구 16 — 파일 재번호, 2026-08-17 확인)
 - Screenshot (full artboard): C:/Users/ajc22/orca/workspaces/DAOU.Athena/MCP/spike/paper-bridge/shot-QN-0-34388.jpg
 - Screenshot (mockup area only): C:/Users/ajc22/orca/workspaces/DAOU.Athena/MCP/spike/paper-bridge/shot-14Z-0-35928.jpg
 

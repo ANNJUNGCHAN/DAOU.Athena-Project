@@ -1,6 +1,6 @@
 # 25 · AT-CV-OAUTH 계좌 전환
 
-- Paper node: 2J8-0 | artboard "25 · AT-CV-OAUTH 계좌 전환"
+- Paper node: 2J8-0 | artboard "18 · AT-CH-006 인증 계좌 전환" (구 "25 · AT-CV-OAUTH 계좌 전환" — 파일 재번호·ID 개명, 2026-08-17 확인)
 - Mockup window node: 2K5-0 "Switch Window", 800×690
 - Screenshot (full artboard): C:\Users\ajc22\orca\workspaces\DAOU.Athena\MCP\spike\paper-bridge\shot-2J8-0-34368.jpg
 - Screenshot (mockup window only): C:\Users\ajc22\orca\workspaces\DAOU.Athena\MCP\spike\paper-bridge\shot-2K5-0-33668.jpg
