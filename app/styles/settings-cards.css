@@ -14,10 +14,24 @@
 .settings-grid {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 24px; /* 16→24 (2026-08-17) — 스크롤 중 다음 카드가 어중간하게 걸쳐 보이는 구간 축소 */
   padding: 0;
   overflow: auto;
   min-height: 0;
+  /* 카드 시작점에 느슨하게 스냅 — 마젠타 주 액션이 반쯤 걸쳐 보이는 상태를 줄인다.
+     proximity라 자유 스크롤은 막지 않는다(palette.md "마젠타는 정확히 한 곳" 보강). */
+  scroll-snap-type: y proximity;
+}
+.settings-grid > .card { scroll-snap-align: start; }
+
+/* 시트가 열려 있는 동안 마젠타는 그 시트 하나다 — palette.md "화면에서 마젠타가
+   보이는 곳은 정확히 하나: 지금 입력을 받는 자리". 시트가 곧 지금 입력을 받는
+   자리이므로, 시트 밖(스크롤로 걸쳐 보이는 다른 카드 포함)의 주 액션은 중립 톤으로
+   물러난다. 2026-08-17 디자인 리뷰 [MED] 정정 — SETTINGS-05 캡처에서 "활성화"와
+   "+ 서버 등록"이 동시에 마젠타로 보였다. */
+.settings-grid:has(.uk-sheet) .card:not(:has(.uk-sheet)) .uk-btn-primary {
+  background: rgb(255 255 255 / 10%);
+  color: var(--color-k-dim);
 }
 
 .settings-grid .card {
