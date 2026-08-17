@@ -255,7 +255,99 @@ vs 스트리밍 페이지네이션)이 W1 스켈레톤 범위를 넘는 설계 �
 `UpstreamServerHandle.call_tool()`에 응답 바이트 상한 + 초과 시 명시적 에러
 (현재의 "조용히 자르지 않는다" 원칙과 일치하는 방식)를 추가.
 
-### 6. [HIGH, 미해결 · 2026-08-16 신규] 레지스트리의 `env` 값이 평문으로 저장된다
+### 6. [HIGH, 2026-08-17 해소] 레지스트리의 `env` 값이 평문으로 저장된다
+
+> **2026-08-17 업데이트 — 해소됐다.** 아래 최초 진단이 제시한 선택지 (b)를
+> 그대로 구현했다: **레지스트리엔 env 키 이름만 남기고, 값은 앱이 쥐고 spawn
+> 시점에 환경변수로 주입한다.**
+>
+> **계약.** 레지스트리(`~/.athena/mcp_servers.json`)의 평문 값은 고정 센티널
+> `SECRET_SENTINEL = "__ATHENA_SAFESTORAGE__"`(`registry.py`)로 치환된다. 실값은
+> Electron `safeStorage`(DPAPI)로 앱 userData에 암호화 저장된다
+> (`app/lib/main/secrets.js`, 계좌 APP KEY/SECRET KEY와 같은 저장 문법 —
+> `mcp-env:<alias>` 네임스페이스만 다르다). spawn 직전에 앱이 그 값을
+> `ATHENA_MCP_ENV__<alias>__<KEY>` 환경변수로 자기 자식 프로세스(claude -p 또는
+> 직접 spawn하는 python CLI) 환경에 얹는다 — 환경변수는 자식으로 상속되므로
+> `claude -p` → `athena-mcp serve`까지 별도 배선 없이 전달된다.
+> `client.py`의 `UpstreamServerHandle._session_lifetime()`이 upstream을 spawn하기
+> **직전**(`StdioServerParameters` 생성 시점)에 `registry.resolve_secret_env()`로
+> 센티널을 실값으로 푼다 — 단일 지점이라 `serve`/`probe`/`doctor` 세 경로가
+> 전부 이 배선을 공유한다.
+>
+> **fail-closed.** 이 프로세스 환경에 해당 `ATHENA_MCP_ENV__` 변수가 없으면
+> (앱을 거치지 않고 `python -m athena_mcp probe/serve`를 직접 부른 경우 등)
+> `resolve_secret_env()`가 조용히 빈 값으로 넘기지 않고 `MissingSecretEnvError`를
+> 던진다 — 그 서버 하나만 명확히 spawn 실패하고(다른 서버는 격리돼 계속 뜬다),
+> 원인이 로그/에러 메시지에 그대로 보인다. **이게 이 설계가 미리 받아들인
+> 대가다: 앱 없이 CLI를 단독 실행하는 경로(`athena-mcp serve`를 `.mcp.json`이
+> 직접 부르는 원래 설계, `registry.py` 모듈 docstring 참고)는 마이그레이션된
+> 서버에 대해서는 더 이상 동작하지 않는다.** 대신 이제 마이그레이션 안 된
+> (또는 CLI로 `--env`를 직접 줘서 등록한) 서버는 여전히 평문 그대로 통과되므로
+> CLI 단독 등록·테스트 흐름 자체가 막히지는 않는다 — 막히는 건 "이미
+> safeStorage로 옮겨진 값을 CLI 혼자 복호화하는 것"뿐이다.
+>
+> **마이그레이션.** `app/lib/main/mcp-env.js`의 `migratePlaintextEnv()`가
+> 앱의 `athena:mcp-list` 호출마다(`main.js`의 `handleMcpList()`) + 앱 부팅 시
+> (`app.whenReady()`) 평문 값을 발견하면 암호화 저장 → `athena-mcp redact-env`
+> CLI 서브커맨드(`__main__.py`, `registry.ServerRegistry.set_env_sentinel()`을
+> 그대로 위임)로 레지스트리를 센티널로 재작성한다. **멱등**이다 — 이미
+> 센티널이거나 빈 값이면 아무것도 안 한다. `secrets.setValue()`가
+> `encryption-unavailable`을 돌려주면(예: `safeStorage.isEncryptionAvailable()`이
+> false) 평문을 그대로 두고 조용히 넘어가지 않고 skip 사유를 기록한다 —
+> 옮기지도 못했는데 원본을 지우면 데이터를 그냥 잃는다.
+>
+> **레지스트리를 두 번째 언어(JS)가 재작성하지 않는다.** JS는 `redact-env`
+> CLI 서브커맨드를 spawn만 하고, 실제 JSON 쓰기는 여전히 python
+> `ServerRegistry.save()` 하나가 전담한다 — §7이 경계한 "두 번째 writer가
+> 파일 포맷이 바뀌는 순간 조용히 깨진다" 문제를 이 경로에도 그대로 적용했다.
+>
+> **검증(2026-08-17 실행).**
+> ```
+> $ .venv\Scripts\python -m pytest tests\mcp -q
+> 225 passed in 37.88s   # 211 + 14(신규: 센티널 치환/해석/fail-closed, redact-env CLI, 실 spawn 왕복)
+> $ .venv\Scripts\python -m ruff check athena_mcp tests
+> All checks passed!
+> ```
+> ```
+> $ cd app && npm test
+> # tests 44   (34 + 10 신규 — envVarName/SENTINEL/registryPath/buildEnvOverrides/migratePlaintextEnv)
+> # pass 44
+> # fail 0
+> ```
+> `npm run verify:settings`(실 Electron, 실 `safeStorage`, 격리된 임시 레지스트리
+> — 진짜 사용자 파일은 안 건드림)로 전체 왕복을 실측했다: 스니펫에 평문
+> 시크릿을 심어 등록 → `mcpList()`가 마이그레이션 → 레지스트리 값이 센티널로
+> 바뀜(`true`) → 디스크 어디에도 평문 없음(`true`) → `buildEnvOverrides()`로
+> 복호화한 값이 원본과 일치(`true`) → 앱을 거치지 않고 직접 `probe`하면
+> `exitCode:1, ok:false, errorMentionsInjectionVar:true`(fail-closed 실측) →
+> 앱 spawn을 흉내내 env를 주입하면 `exitCode:0, ok:true, toolCount:8`(정상
+> spawn 실측). 네 단계 전부 실제 코드 경로로 확인됐다 — 추측이 아니다.
+>
+> **2026-08-17 사고 기록 — 실 데이터 이관 중 사람 실수로 실키 유실.** 위
+> 메커니즘을 실제 `~/.athena/mcp_servers.json`(dart-mcp의 `DART_API_KEY`
+> 평문)에 적용하는 1회성 스크립트(`app/migrate-mcp-env-once.js`)를
+> `npx electron migrate-mcp-env-once.js`(파일 직접 지정, `electron .`이 아님)로
+> 실행했는데, 이 호출 방식에서 `app.getName()`이 `package.json`의
+> `"athena-shell"`이 아니라 Electron 기본값 `"Electron"`으로 떨어져
+> `secrets.js`가 실제 앱(`npm start` = `electron .`)이 쓰는
+> `%APPDATA%\athena-shell\`이 아니라 `%APPDATA%\Electron\athena-secrets.json`에
+> 암호화 저장했다. 레지스트리는 정상적으로 센티널로 재작성됐지만, 그 직후
+> 이 불일치를 확인하는 과정에서 **잘못된 위치의 암호화 파일을 다른 곳으로
+> 옮기지 않고 삭제했다** — 사전에 레지스트리 백업을 뜨지 않은 채였다. 그
+> 시점에는 디스크의 모든 사본(파일 시스템·Recycle Bin·VSS)이 사라져 유실로
+> 판정됐다. **같은 날 복구됐다** — 오케스트레이터 세션이 이관 전 진단 과정에서
+> 레지스트리 파일을 읽어둔 기록이 남아 있어, 그 값을 레지스트리에 임시
+> 복원한 뒤 **수정된** 스크립트로 재이관했다. 재이관 후 실측: 레지스트리
+> 평문 0건·센티널 정위치, 암호화 저장은 `%APPDATA%\athena-shell\`(올바른
+> 위치), 주입 env로 실제 `probe dart-mcp` exit 0(복호화 왕복 검증).
+> `migrate-mcp-env-once.js`는 이제 `app.setPath('userData', ...)`로
+> `%APPDATA%\athena-shell`을 명시 고정한다. **교훈 두 가지**: ① 실 시크릿이
+> 걸린 1회성 마이그레이션은 원본 백업이 선행이다 — 메커니즘이 샌드박스에서
+> 검증됐어도 실행 방식(파일 직접 지정 vs `.`)이 프로덕션과 다를 수 있다.
+> ② 복구가 가능했던 건 설계가 아니라 우연이다(세션 기록에 남아 있었을
+> 뿐) — 다음부터는 백업이 그 우연을 대체해야 한다.
+
+아래는 최초 진단 그대로 남긴다(2026-08-16 시점, 지금은 위와 같이 해소됐다).
 
 `ServerRegistry.save()`가 `json.dumps`로 `~/.athena/mcp_servers.json`을 그대로 쓴다
 — 암호화가 없다. 그런데 `registry.py` 모듈 docstring 자신이 이 파일을 프로젝트

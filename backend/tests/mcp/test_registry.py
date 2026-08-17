@@ -205,3 +205,61 @@ def test_rename_keeps_entry_data(store):
     with pytest.raises(reg.UnknownAliasError):
         store.get("old-name")
     assert store.get("new-name").command == "npx"
+
+
+# ---------------------------------------------------------------------------
+# SECURITY.md §6 — env 비밀값 센티널/치환 (평문 저장 [HIGH] 해소)
+# ---------------------------------------------------------------------------
+
+
+def test_set_env_sentinel_replaces_value_and_persists(store):
+    store.add("dart", command="npx", args=[], env={"DART_API_KEY": "실제-키-값"})
+    store.set_env_sentinel("dart", "DART_API_KEY")
+    assert store.get("dart").env["DART_API_KEY"] == reg.SECRET_SENTINEL
+
+    reloaded = reg.ServerRegistry(path=store.path)
+    assert reloaded.get("dart").env["DART_API_KEY"] == reg.SECRET_SENTINEL
+    # 평문이 디스크 어디에도 남지 않는다 — round-trip 후에도 센티널만 있다.
+    assert "실제-키-값" not in store.path.read_text(encoding="utf-8")
+
+
+def test_set_env_sentinel_unknown_key_rejected(store):
+    store.add("dart", command="npx", args=[], env={"DART_API_KEY": "x"})
+    with pytest.raises(KeyError):
+        store.set_env_sentinel("dart", "NOT_A_REAL_KEY")
+
+
+def test_set_env_sentinel_unknown_alias_rejected(store):
+    with pytest.raises(reg.UnknownAliasError):
+        store.set_env_sentinel("no-such-alias", "KEY")
+
+
+def test_resolve_secret_env_passes_through_plaintext_values(monkeypatch):
+    """마이그레이션 전(또는 CLI로 직접 등록한) 평문 값은 그대로 통과한다 —
+    센티널이 아닌 값을 재해석하지 않는다."""
+    env = {"DART_API_KEY": "평문-그대로"}
+    resolved = reg.resolve_secret_env("dart", env)
+    assert resolved == {"DART_API_KEY": "평문-그대로"}
+
+
+def test_resolve_secret_env_substitutes_sentinel_from_process_env(monkeypatch):
+    monkeypatch.setenv("ATHENA_MCP_ENV__dart__DART_API_KEY", "복호화된-실값")
+    env = {"DART_API_KEY": reg.SECRET_SENTINEL, "OTHER": "안-건드림"}
+    resolved = reg.resolve_secret_env("dart", env)
+    assert resolved == {"DART_API_KEY": "복호화된-실값", "OTHER": "안-건드림"}
+
+
+def test_resolve_secret_env_missing_injection_fails_closed(monkeypatch):
+    """앱을 거치지 않고 직접 spawn하면(환경변수 없음) 조용히 빈 값으로 넘기지
+    않고 명확히 실패한다 — SECURITY.md §6이 받아들인 대가."""
+    monkeypatch.delenv("ATHENA_MCP_ENV__dart__DART_API_KEY", raising=False)
+    env = {"DART_API_KEY": reg.SECRET_SENTINEL}
+    with pytest.raises(reg.MissingSecretEnvError):
+        reg.resolve_secret_env("dart", env)
+
+
+def test_resolve_secret_env_does_not_mutate_original_dict(monkeypatch):
+    monkeypatch.setenv("ATHENA_MCP_ENV__dart__DART_API_KEY", "x")
+    env = {"DART_API_KEY": reg.SECRET_SENTINEL}
+    reg.resolve_secret_env("dart", env)
+    assert env["DART_API_KEY"] == reg.SECRET_SENTINEL  # 원본은 그대로

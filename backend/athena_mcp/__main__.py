@@ -237,6 +237,20 @@ def cmd_disallow(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_redact_env(args: argparse.Namespace) -> int:
+    """평문 env 값을 센티널로 치환한다 — 마이그레이션 전용, 값 자체는 받지 않는다.
+
+    호출자(앱)가 이미 그 값을 Electron `safeStorage`에 옮겨놨다는 전제다.
+    `registry.ServerRegistry.set_env_sentinel()`이 하는 일 그대로를 CLI 표면에
+    노출할 뿐 — 여기서 값을 다루는 코드는 없다(SECURITY.md §6).
+    """
+    registry, _, _ = _stores(args)
+    for key in args.keys:
+        registry.set_env_sentinel(args.alias, key)
+    print(f"센티널로 치환됨: {args.alias} -> {', '.join(args.keys)} (값은 여기서 다루지 않는다)")
+    return 0
+
+
 def cmd_rename(args: argparse.Namespace) -> int:
     runner = GatewayRunner(
         state_dir=Path(args.state_dir) if args.state_dir else None,
@@ -350,6 +364,14 @@ def build_parser() -> argparse.ArgumentParser:
     dis.add_argument("alias")
     dis.add_argument("tools", nargs="+")
     dis.set_defaults(func=cmd_disallow)
+
+    re_env = sub.add_parser(
+        "redact-env",
+        help="평문 env 값을 센티널로 치환 (마이그레이션 전용, 값을 받지 않는다)",
+    )
+    re_env.add_argument("alias")
+    re_env.add_argument("keys", nargs="+")
+    re_env.set_defaults(func=cmd_redact_env)
 
     rn = sub.add_parser("rename", help="별칭 변경 (등록·승인·집계 함께)")
     rn.add_argument("old_alias")

@@ -62,6 +62,17 @@ def datalab_shopping_keyword_by_device_and_gender_breakdown() -> str:
 
 
 @mcp.tool()
+def env_var(name: str) -> str:
+    """`name` 환경변수 값을 그대로 돌려준다.
+
+    `client.py`의 `resolve_secret_env()`가 센티널을 실값으로 치환한 뒤 실제로
+    이 자식 프로세스까지 전달했는지 진짜 subprocess 왕복으로 확인하기 위한
+    픽스처다(SECURITY.md §6). 없으면 빈 문자열 — 서버 쪽에서 구분이 필요하면
+    호출자가 먼저 존재를 알고 부른다."""
+    return os.environ.get(name, "")
+
+
+@mcp.tool()
 def large_response(size: int) -> str:
     """`size`자 길이의 문자열을 반환한다 — `client.py`의 응답 크기 상한
     (`ResponseTooLargeError`)을 진짜 subprocess 왕복으로 검증하기 위한 픽스처.

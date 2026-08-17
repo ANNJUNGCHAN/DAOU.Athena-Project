@@ -30,6 +30,7 @@
 
 const { spawn } = require('child_process');
 const { StreamJsonSession } = require('./stream-json-parser');
+const mcpEnv = require('./mcp-env');
 
 const RENDER_CANVAS_ALLOWED_TOOL = 'mcp__athena__athena__render_canvas';
 // `mcp__<서버명>` 형태는 그 서버의 모든 툴을 허용한다(Claude Code 권한 규칙 —
@@ -101,6 +102,12 @@ function runClaudeQuery({
         // stdin을 명시적으로 닫는다(S4 §1) — 안 닫으면 "no stdin data received
         // in 3s" 경고로 3초를 버린다.
         stdio: ['ignore', 'pipe', 'pipe'],
+        // SECURITY.md §6 — 게이트웨이(athena-mcp serve)가 upstream MCP 서버를
+        // spawn할 때 쓸 복호화된 env를 여기서 claude 프로세스 환경에 얹는다.
+        // 환경변수는 자식으로 상속되므로 claude -p -> athena-mcp serve까지
+        // 별도 배선 없이 전달된다 — env를 명시하지 않으면 spawn()은 어차피
+        // process.env를 상속하므로, 여기서도 그 기반 위에 override만 덧붙인다.
+        env: { ...process.env, ...mcpEnv.buildEnvOverrides() },
         windowsHide: true,
         // ★ `shell: true`를 쓰면 안 된다 — 실측으로 확정됐다(2026-08-17).
         //

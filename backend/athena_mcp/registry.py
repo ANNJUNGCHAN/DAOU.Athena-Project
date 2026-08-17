@@ -67,6 +67,16 @@ QUALIFIED_NAME_SEPARATOR = "__"
 MAX_QUALIFIED_NAME_LEN = 64
 # 실측 근거는 모듈 docstring 참조. spike/captures/*tools*.json 전수조사로 확정.
 OBSERVED_MAX_TOOL_NAME_LEN = 34
+
+# SECURITY.md §6 [HIGH] 해소 — env 값을 평문으로 저장하지 않는다.
+#
+# 레지스트리(`~/.athena/mcp_servers.json`)에는 이 센티널 문자열만 남는다. 실값은
+# Electron `safeStorage`(DPAPI)로 앱 userData에 암호화 저장되고, spawn 직전에
+# 앱이 `ATHENA_MCP_ENV__<alias>__<KEY>` 환경변수로 이 프로세스에 주입한다
+# (`app/lib/main/mcp-env.js`가 문자 그대로 같은 상수를 쓴다 — 값을 바꾸면 양쪽을
+# 함께 고쳐야 한다). `resolve_secret_env()`가 spawn 직전에 이 센티널을 실값으로
+# 치환한다.
+SECRET_SENTINEL = "__ATHENA_SAFESTORAGE__"
 MAX_ALIAS_LEN = MAX_QUALIFIED_NAME_LEN - len(QUALIFIED_NAME_SEPARATOR) - OBSERVED_MAX_TOOL_NAME_LEN
 
 SourceKind = Literal["manual", "claude_desktop_snippet"]
@@ -116,6 +126,40 @@ def validate_server_spec(command: str, args: list[str], env: dict[str, str]) -> 
 
 class UnknownAliasError(KeyError):
     """등록되지 않은 별칭을 조회/삭제하려 했다."""
+
+
+class MissingSecretEnvError(RuntimeError):
+    """레지스트리의 env 값이 `SECRET_SENTINEL`인데 이 프로세스 환경에 실값이 없다.
+
+    앱(Electron)이 spawn 시점에 `ATHENA_MCP_ENV__<alias>__<KEY>` 환경변수로
+    복호화한 값을 주입해야 한다. 이 프로세스가 그 변수 없이 직접 실행되면
+    (예: 앱 없이 `python -m athena_mcp probe/serve`를 손으로 부른 경우) 여기서
+    막힌다 — 조용히 빈 문자열로 넘기지 않고 명확히 실패시킨다(fail-closed).
+    SECURITY.md §6이 미리 받아들인 대가다."""
+
+
+def resolve_secret_env(alias: str, env: dict[str, str]) -> dict[str, str]:
+    """센티널 값을 `ATHENA_MCP_ENV__{alias}__{key}` 환경변수의 실값으로 치환한다.
+
+    센티널이 아닌 값(마이그레이션 전이거나 `athena-mcp register --env`로 방금
+    수동 등록한 경우)은 그대로 통과시킨다 — 이 함수는 "센티널만 골라 푼다"이지
+    "모든 env를 재해석한다"가 아니다. 원본 dict는 건드리지 않고 새 dict를 돌려준다.
+    """
+    resolved: dict[str, str] = {}
+    for key, value in env.items():
+        if value != SECRET_SENTINEL:
+            resolved[key] = value
+            continue
+        var_name = f"ATHENA_MCP_ENV__{alias}__{key}"
+        real = os.environ.get(var_name)
+        if real is None:
+            raise MissingSecretEnvError(
+                f"{alias!r}의 env {key!r}가 센티널이지만 환경변수 {var_name!r}가 "
+                "이 프로세스에 없다 — 앱이 주입해야 할 복호화 값이 도달하지 않았다. "
+                "앱(Electron)을 거치지 않고 이 서버를 직접 spawn할 수는 없다."
+            )
+        resolved[key] = real
+    return resolved
 
 
 def validate_alias(alias: str) -> None:
@@ -277,6 +321,20 @@ class ServerRegistry:
     def record_encoding_smoke_test(self, alias: str, mojibake_detected: bool) -> None:
         entry = self.get(alias)
         entry.encoding_smoke_test_warning = mojibake_detected
+        self.save()
+
+    def set_env_sentinel(self, alias: str, key: str) -> None:
+        """`env[key]`를 `SECRET_SENTINEL`로 치환한다 — 마이그레이션 전용 연산.
+
+        실값을 인자로 받지 않는다: 호출자(앱)가 이미 그 값을 Electron
+        `safeStorage`에 옮겨놨다는 게 전제다. 이 메서드는 "레지스트리에서
+        평문을 지운다"만 한다 — 값 자체를 여기서 다루지 않으므로 이 프로세스가
+        평문을 아는 순간이 아예 없다.
+        """
+        entry = self.get(alias)
+        if key not in entry.env:
+            raise KeyError(f"{alias!r}에 env 키 {key!r}가 없다")
+        entry.env[key] = SECRET_SENTINEL
         self.save()
 
     def rename(self, old_alias: str, new_alias: str) -> ServerEntry:
