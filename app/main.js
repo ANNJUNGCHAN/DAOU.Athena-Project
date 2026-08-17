@@ -12,6 +12,7 @@ const mcpCli = require('./lib/main/mcp-cli');
 // 결정 D1의 실배선 — claude -p 스폰 + stream-json 파싱 + .mcp.json 생성.
 const { runClaudeQuery } = require('./lib/main/claude-runner');
 const { ensureMcpConfig } = require('./lib/main/mcp-config');
+const { buildLivePrompt } = require('./lib/main/live-prompt');
 
 const MDEBUGLOG = path.join(__dirname, 'captures', 'main-debug.log');
 function mdlog(msg) {
@@ -252,7 +253,9 @@ async function runLiveQuery(query, expand) {
   let expandTriggered = false;
   const canvasTypesSeen = [];
   const result = await runClaudeQuery({
-    prompt: query,
+    // 날것 질문을 그대로 넘기면 모델이 조회만 하고 캔버스를 건너뛸 수 있다 —
+    // 렌더 지시·스키마 힌트로 감싼다(lib/main/live-prompt.js의 실측 근거 참조).
+    prompt: buildLivePrompt(query),
     cwd: dir,
     configFile,
     onCanvasResult: (r) => {
