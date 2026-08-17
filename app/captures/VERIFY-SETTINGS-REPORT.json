@@ -29,8 +29,8 @@
         "connected": true,
         "accounts": [
           {
-            "id": "claude:j227ung@naver.com",
-            "label": "j227ung@naver.com",
+            "id": "claude:ajc227ung@gmail.com",
+            "label": "ajc227ung@gmail.com",
             "active": true
           }
         ]
@@ -77,12 +77,12 @@
   },
   "account.register.ok(stubbedNetwork)": {
     "ok": true,
-    "id": "e5b1f64a-410b-4551-93e9-de8511bad9a7"
+    "id": "d5ab557f-885e-4d72-99f6-e2a3a354f072"
   },
   "account.list.afterRegister": {
     "accounts": [
       {
-        "id": "e5b1f64a-410b-4551-93e9-de8511bad9a7",
+        "id": "d5ab557f-885e-4d72-99f6-e2a3a354f072",
         "alias": "검증-성공계좌",
         "connected": true,
         "active": true,
@@ -111,7 +111,7 @@
   "account.list.afterOrderApiOn": {
     "accounts": [
       {
-        "id": "e5b1f64a-410b-4551-93e9-de8511bad9a7",
+        "id": "d5ab557f-885e-4d72-99f6-e2a3a354f072",
         "alias": "검증-성공계좌",
         "connected": true,
         "active": true,
@@ -139,8 +139,8 @@
   },
   "auth-token-status": {
     "state": "ready",
-    "expiresInSec": 2315436204,
-    "issuedAt": "2026-08-17T14:16:35.033Z"
+    "expiresInSec": 2315428962,
+    "issuedAt": "2026-08-17T16:17:17.086Z"
   },
   "auth-token-refresh": {
     "ok": true,
