@@ -228,11 +228,19 @@ ADR: [`plan/investment-brain-architecture.md`](investment-brain-architecture.md)
 - `history.py`(921) 시점별 이력 · `store.py`(651) 그래프 저장소
 - 검색은 그래프 순회 + `fts` BM25만. **vector DB·embedding 없음** (ADR 결정)
 
-**결선 완료 (2026-08-17)** — ADR §4.2의 5단계가 전부 자리를 잡았다. 다만 **대부분은 이미
-`GraphStore` 안에 있었다**: DB open · 스키마 확인 · writer queue(`ThreadPoolExecutor(max_workers=1,
-thread_name_prefix="athena-brain")`가 곧 단일 소유자다). 새로 쓴 건 **프로세스 락**
+**`GraphStore` 생애주기 결선 완료 (2026-08-17)** — 락 → DB open → 스키마 확인 → `fts` 로드 →
+close가 lifespan에 대칭으로 붙었고 `app.state.brain_*`로 readiness가 드러난다.
+대부분은 이미 `GraphStore` 안에 있었다(DB open · 스키마 확인). 새로 쓴 건 **프로세스 락**
 (`BrainProcessLock` — DB 경로 해시 키. 자격증명 지문 기반 `CredentialProcessLock`을 전용하면
 의미가 어긋난다)과 **`fts` 로드**(`GraphStore.load_fts_extension`), 그리고 lifespan 배선이다.
+
+> **⚠ "ADR §4.2가 전부 됐다"는 뜻이 아니다.** 초판 기록이 과장이라 정정한다.
+> **`lifespan.py`에 `IngestionCoordinator` 참조가 0건이다.** ADR §4.2 2단계가 말하는
+> *"모든 graph mutation을 bounded `asyncio.Queue`에 enqueue하고 전용 writer task 하나가
+> 순서대로 처리"* 가 바로 그 모듈인데, 지금 결선된 "writer queue"는
+> `GraphStore._owner`(`ThreadPoolExecutor(max_workers=1)`)다. **DB 접근 직렬화라는
+> 목적은 만족하지만 ADR이 지정한 큐는 아니다.** 따라서 3단계(shutdown 시 신규 enqueue
+> 차단 → checkpoint → writer cancel)도 결선된 적이 없다. 아래 후속 16~17번.
 
 **아직 사실이 아닌 것**: `plan.md`와 ADR이 적어온 *"검색은 그래프 순회 + `fts` BM25만"* 은
 **현재 코드와 다르다.** `_SEARCH_ENTITIES`는 여전히
@@ -270,7 +278,7 @@ thread_name_prefix="athena-brain")`가 곧 단일 소유자다). 새로 쓴 건 
 | # | 작업 | 이유 / 시작점 |
 |---|---|---|
 | 1 | ~~**갈래 A·B 조율**~~ → **의도적으로 둘로 간다** | 통합을 검토하고 기각했다. 전제가 다르다 — `AT-CV-005`는 스키마를 아는 키움 manifest 파생, MCP는 상류 스키마를 모르는 게 전제다. **렌더러가 둘이 되는 대가를 알고 받았다.** 아래 "결정 — MCP 봉투와 AT-CV-005는 별개로 간다" 참조 |
-| 2 | ~~**브레인 FastAPI 결선**~~ → **완료** (2026-08-17) | `lifespan.py`의 `_open_brain`/`_teardown_brain`. **기본 비활성**(`brain_enabled=false`) — 브레인은 키움과 무관한 선택 기능이고, 켜지 않은 배포·테스트가 DB 파일을 건드리지 않게 했다. 락은 `BrainProcessLock`(DB 경로 해시 키). 락 경합은 **기동을 막고**(ADR §11), 네이티브 런타임 부재는 **강등**한다(`brain_last_error`) |
+| 2 | **브레인 FastAPI 결선** → **`GraphStore`까지만 완료** (2026-08-17) | `lifespan.py`의 `_open_brain`/`_teardown_brain`. **기본 비활성**(`brain_enabled=false`) — 브레인은 키움과 무관한 선택 기능이고, 켜지 않은 배포·테스트가 DB 파일을 건드리지 않게 했다. 락은 `BrainProcessLock`(DB 경로 해시 키). 락 경합은 **기동을 막고**(ADR §11), 네이티브 런타임 부재는 **강등**한다(`brain_last_error`). **`IngestionCoordinator`는 미결선** — 후속 16번 |
 | 3 | ~~**CLI 연동 마무리**~~ → **완료** (2026-08-17) | `claude -p` → `athena-mcp serve` → 게이트웨이로 `athena__render_canvas` **실제 집행됨**. 원문 `spike/captures/S4-gateway-cli-roundtrip.ndjson`, 보고서 `spike/cli-pipe/gateway/RESULT.md` |
 | 4 | ~~**stream-json 파서**~~ → **완료** (2026-08-17) | `app/lib/main/stream-json-parser.js`. 테스트 29건 전부 실왕복 캡처로 검증(지어낸 픽스처 0건) |
 | 5 | **W3 캔버스 어댑터** — upstream 출력 → 캔버스 데이터 | 미착수. `stream.py`가 여기서 첫 프로덕션 호출자를 얻는다. 계약 형상은 이미 일치(`canvas.py` 스트림 스키마 ↔ `stream.py` 레코드) |
@@ -289,6 +297,9 @@ thread_name_prefix="athena-brain")`가 곧 단일 소유자다). 새로 쓴 건 
 | 13 | **스폰된 `claude` 프로세스의 생애주기 관리가 없다** | Esc가 UI 반영만 막고 `kill()`을 안 한다. 왕복 타임아웃도, 동시 실행 상한/큐도 없다 — 연속 질의하면 프로세스가 쌓인다 |
 | 14 | **실배선을 자동 검증이 안 잡는다** | `npm run verify`는 `ATHENA_CANVAS_SOURCE=fixture` 고정이다(쿼터·43초·비결정성 때문에 의도된 분리). 실배선 회귀는 `probe_live_spawn.js` 수동 실행뿐 |
 | 15 | **실배선이 그리는 카드는 2종뿐** | `mcp-table`·`free`(+`notice`). 스트림·리더는 여전히 픽스처 전용이다. 카드 12종 중 실데이터가 닿는 게 2종이라는 뜻 |
+| 16 | **`IngestionCoordinator`를 lifespan에 결선** | ADR §4.2 2·3단계. `lifespan.py`에 참조 0건이다. 지금 결선된 writer queue는 `GraphStore._owner`(스레드풀)이지 ADR이 지정한 `asyncio.Queue` + 전용 writer task가 아니다 |
+| 17 | **`IngestionCoordinator.enqueue()`가 shutdown을 안 본다** | `_stopping`은 `_writer_loop()`의 `while not self._stopping`에서만 읽힌다. `enqueue()`/`_queue_job()`은 안 본다 — ADR §4.2 3단계 "신규 enqueue 차단"과 어긋난다. **오늘은 도달 불가**(16번이 안 돼 있어 코디네이터가 안 뜬다). 16번을 하기 **전에** 닫아야 한다 |
+| 18 | **프롬프트 인젝션 (HIGH) — 기한이 도래했다** | `00-인수인계.md` 함정 ②가 *"CLI 통합 시점에 대응"*이라고 미뤄뒀는데, **그 시점이 방금 왔다.** upstream 본문(뉴스·공시)이 LLM을 거쳐 `tool_use.input`으로 되돌아오는 경로가 이제 실제로 존재한다. 이번 결선에서 **아무 대응도 하지 않았다** |
 
 ### 결정 D1 — 캔버스 페이로드가 UI에 닿는 경로 (2026-08-16 확정)
 
