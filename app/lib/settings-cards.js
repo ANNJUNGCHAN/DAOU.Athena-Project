@@ -714,7 +714,16 @@ function buildMcpTable(servers, refresh, onRowClick) {
     const statusCell = el('div', 'uk-col-mcpstatus');
     statusCell.appendChild(mcpStatusPill(s));
 
-    const toolsCell = el('div', 'uk-col-mcptools uk-mono-faint', s.toolCount != null ? `${s.toolCount}개` : '—');
+    // toolCount는 consent.json의 approved_tools 수다(lib/main/mcp-cli.js). 승인까지
+    // 마쳤는데 0개면 게이트웨이가 이 서버의 툴을 하나도 재노출하지 않는 상태 —
+    // probe 시트에서 "선택 허용"을 안 누르면 이렇게 되는데, 흐린 숫자로는 안 보인다
+    // (2026-08-17 dart-mcp 실사용에서 실제로 조용히 삼켜진 사례).
+    const toolsCell = el('div', 'uk-col-mcptools uk-mono-faint');
+    if (s.approved && Number(s.toolCount) === 0) {
+      toolsCell.appendChild(pill('0개 — 노출 안 됨', 'warn'));
+    } else {
+      toolsCell.textContent = s.toolCount != null ? `${s.toolCount}개` : '—';
+    }
 
     // "자르지 않는다" (AT-ST-004 Desc 3) — CSS에 텍스트 말줄임(ellipsis)을
     // 적용하지 않고 그대로 줄바꿈되도록 둔다. command/argsPreview는 main
