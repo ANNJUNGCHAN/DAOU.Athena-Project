@@ -178,6 +178,55 @@ S4 실왕복에서 **3회 중 2회가 `free`로 폴백했다** — 폴백은 예
 실패하면, "재요청 시 같은 타입 카드를 갈아치운다"는 `makeCard` 규칙 때문에 실제
 데이터가 에러 배너로 덮이는 걸 막기 위해서다.
 
+### 실배선 스트림·리더 (2026-08-17, W3-lite)
+
+`addLiveCard`(`canvas.js`)의 `envelope.canvas_type` 분기에 `stream`/`reader`를
+추가했다 — `table`이 `renderMcpTable`로 가듯 `stream`은 `renderLiveStream`,
+`reader`는 `renderLiveReader`로 간다(둘 다 안 맞으면 여전히 `renderFreeCanvas`).
+목업 렌더러(`renderStream`/`renderReader`, 위 "캔버스 3종 — 목업 데이터" 절)와
+DOM 클래스(`stream-list`/`stream-item`/`fin-meta`/`lib/markdown.js`)는
+재사용하지만 **데이터 소스는 다른 스키마다** — 목업은 네이버 뉴스 API 원형
+(`title`/`pubDate`/`originallink`)을 읽고, 실배선은
+`backend/athena_mcp/canvas.py`의 계약을 그대로 읽는다(2026-08-17 실측,
+`canvas.py` L34-68):
+
+| canvas_type | 스키마(`data`) | 필수 / 선택 |
+|---|---|---|
+| `stream` | `{"records":[{"ts","ts_precision","source","title","url","summary","tickers","kind"}, ...]}` | `ts`/`ts_precision`/`source`/`title`/`url` 필수 (`title`은 `null` 허용), `summary`/`tickers`/`kind` 선택 |
+| `reader` | `{"title","body_markdown","format","highlights","error_state"}` | `title`/`body_markdown` 필수, `format`("markdown"\|"raw", 기본 markdown)/`highlights`/`error_state`("not_found"\|"processing_delayed") 선택 |
+
+세부 처리:
+
+- `title`이 `null`이면(스키마가 허용) `sanitize(null)`도 `null`을 그대로
+  돌려주므로(`lib/sanitize.js`) `textContent`에 넣기 전 `'(제목 없음)'`으로
+  폴백한다. `sanitize`한 문자열은 그대로 `textContent`로만 넣는다 — `innerHTML`
+  미사용(CLAUDE.md §6).
+- `ts_precision:"day"`면 없는 시:분을 지어내지 않고 `MM.DD`까지만 표시한다
+  (soul.md §8 정보 정직성).
+- `reader`의 `error_state`가 `not_found`/`processing_delayed`면 본문 대신
+  `errorNote` 안내만 띄운다 — 조용히 빈 카드를 그리지 않는다.
+- `format:"raw"`는 마크다운 문법으로 해석하지 않고 문단 하나로 그대로 낸다.
+- `records`/`body_markdown`이 비어 있으면(스키마 위반 이전에 빈 배열/빈
+  문자열인 경우) `errorNote`로 안내한다.
+
+`live-prompt.js`의 프롬프트에도 `table` 힌트와 같은 이유로 `stream`/`reader`
+스키마 힌트를 필드명 그대로 추가했다(위 표와 동일한 `records`/`ts_precision`/
+`body_markdown`/`highlights`). `live-prompt.test.js`는 두 힌트가 프롬프트
+문자열에 실제로 존재하는지 단언한다. `npm test` 2026-08-17 실행: **34 passed,
+0 failed**(기존 32건 + 이번에 추가한 stream/reader 힌트 단언 2건).
+
+**미검증으로 정직하게 남긴다**: 이번 작업은 `canvas.js`/`live-prompt.js`의
+코드 배선과 단위 테스트까지다. `README.md`의 "미구현 · 단순화 · 검증 못 한 것"
+절이 이미 적어둔 대로 `npm run verify`는 `ATHENA_CANVAS_SOURCE=fixture`
+고정이라 이 실배선 경로를 타지 않고, 실배선 QA는
+`node spike/cli-pipe/gateway/probe_live_spawn.js` 수동 실행으로만 확인
+가능하다 — 이번 작업에서 **실제 `claude -p` 왕복으로 모델이 `canvas_type:
+"stream"`/`"reader"`를 골라 이 렌더러가 실제로 그려지는 것까지는 재현하지
+않았다.** 스키마 검증(`jsonschema.validate`)과 DOM 렌더 경로는 코드 레벨로는
+`table`/`free`와 동일한 패턴이라 동작할 것으로 판단하지만, "될 것이다"로
+넘기지 않기 위해 여기 명시한다 — 다음 실배선 QA 때 `stream`/`reader`가
+실제로 뜨는지 캡처로 확인해야 한다.
+
 ### 3상태 표시 — 정직한 진행
 
 목업 시절엔 TR 이름을 미리 알았지만(고정 매핑), 실배선에서는 어떤 MCP 툴이 몇 번
@@ -218,10 +267,10 @@ IPC) "카드 N개 렌더됨"으로 갱신한다 — 43초짜리 왕복 동안 �
 - **`.mcp.json`은 매 라이브 질의마다 다시 쓰지 않는다** — `liveMcpConfig`를
   프로세스 생애주기 동안 캐시한다. 백엔드 venv 경로가 앱 실행 중 바뀌는 시나리오는
   없다고 가정했다(재시작하면 다시 생성된다).
-- **카드 12종 중 실제로 실배선이 그리는 건 2종뿐이다**(`mcp-table`, `free`/
-  `notice`). 나머지(스트림·리더·타임라인 등)는 여전히 픽스처 전용이거나
-  미구현이다 — 실배선이 만드는 건 `render_canvas`의 봉투(`table`/`free`)뿐이고,
-  다른 카드 종류로 가는 경로(스트림/리더 등)는 이번 작업 범위 밖이다.
+- ~~**카드 12종 중 실제로 실배선이 그리는 건 2종뿐이다**~~ → **4종으로
+  늘었다(2026-08-17, W3-lite: 리더·스트림 카드 실배선)**. `mcp-table`/`free`/
+  `notice`에 더해 `stream`·`reader`를 실배선 경로에 결선했다 — 아래 "실배선
+  스트림·리더" 절 참조. **여전히 안 열린 건 `timeline` 하나뿐**이다.
 - **자유 카드는 W4 정식 설계가 아니라 최소 구현이다** — 위 "자유 카드" 절 참조.
   대용량/깊게 중첩된 `data`가 오면 트리가 카드 높이(`max-height:360px`, 스크롤)를
   넘어 답답하게 보일 수 있다. 접기/펼치기 같은 UX는 넣지 않았다.
