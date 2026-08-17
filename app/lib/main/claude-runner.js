@@ -18,12 +18,23 @@
 //   - --allowedTools 없이는 툴 실행이 자동 거부된다(S3).
 //   - stdin을 명시적으로 닫는다 — 안 그러면 "no stdin data received in 3s"
 //     경고와 함께 3초를 버린다(S4 §1).
+//
+// 2026-08-17 개정 — --allowedTools 기본값은 툴 1개가 아니라 서버 전체다.
+// 위 계약의 예시(`mcp__athena__athena__render_canvas`)를 기본값으로 쓰면
+// 게이트웨이가 재노출한 업스트림 툴(예: mcp__athena__dart-mcp__search_disclosure)이
+// 전부 권한에서 거부된다 — 헤드리스라 승인 프롬프트가 뜰 수 없어 실사용에서
+// "권한 승인이 되지 않았습니다"로 죽는 것이 실측됐다(dart-mcp, 2026-08-17).
+// 툴 단위 게이트는 게이트웨이의 consent allowlist(~/.athena/consent.json,
+// probe 시트의 "선택 허용")가 담당한다 — CLI에서 이중 게이트를 만들지 않는다.
 'use strict';
 
 const { spawn } = require('child_process');
 const { StreamJsonSession } = require('./stream-json-parser');
 
 const RENDER_CANVAS_ALLOWED_TOOL = 'mcp__athena__athena__render_canvas';
+// `mcp__<서버명>` 형태는 그 서버의 모든 툴을 허용한다(Claude Code 권한 규칙 —
+// MCP 툴 이름에는 와일드카드가 안 되고 서버 단위 접두만 된다).
+const GATEWAY_ALLOWED_TOOLS = 'mcp__athena';
 
 function buildArgs({ prompt, configFile, allowedTools }) {
   return [
@@ -45,7 +56,7 @@ function runClaudeQuery({
   prompt,
   cwd,
   configFile = '.mcp.json',
-  allowedTools = RENDER_CANVAS_ALLOWED_TOOL,
+  allowedTools = GATEWAY_ALLOWED_TOOLS,
   claudeBin = process.env.ATHENA_CLAUDE_BIN || 'claude',
   onCanvasResult,
   onEvent,
@@ -152,4 +163,4 @@ function runClaudeQuery({
   });
 }
 
-module.exports = { buildArgs, runClaudeQuery, RENDER_CANVAS_ALLOWED_TOOL };
+module.exports = { buildArgs, runClaudeQuery, RENDER_CANVAS_ALLOWED_TOOL, GATEWAY_ALLOWED_TOOLS };
