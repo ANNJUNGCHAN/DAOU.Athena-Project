@@ -1,3 +1,8 @@
+// IIFE 스코프 격리(2026-08-18 렌더러 격리) — <script> 태그는 top-level const/function을
+// 문서 전체가 공유하는 하나의 스크립트 스코프에 넣는다(require()의 모듈별 격리와 다르다).
+// el/sanitize 같은 흔한 이름이 파일 간에 충돌해 SyntaxError가 났다(실측, diag-isolation.js).
+// CJS(require)는 이 IIFE 밖에서도 동일하게 동작한다 — Node의 모듈 래퍼가 이미 함수 스코프다.
+(function () {
 // 최소 마크다운 → DOM 렌더러.
 // 이유: 리더 캔버스에도 렌더링 계약(텍스트 노드 원칙)을 지킨다 — 문자열을
 // innerHTML로 파싱시키지 않고, 직접 DOM 노드를 만들어 붙인다. 라이브러리도
@@ -108,4 +113,13 @@ function renderMarkdownInto(container, mdText) {
   }
 }
 
-module.exports = { renderMarkdownInto };
+// UMD 각주(2026-08-18 렌더러 격리) — sanitize.js와 같은 패턴.
+const __exports = { renderMarkdownInto };
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = __exports;
+} else {
+  window.AthenaLib = window.AthenaLib || {};
+  window.AthenaLib.Markdown = __exports;
+}
+
+})();

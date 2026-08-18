@@ -1,3 +1,8 @@
+// IIFE 스코프 격리(2026-08-18 렌더러 격리) — <script> 태그는 top-level const/function을
+// 문서 전체가 공유하는 하나의 스크립트 스코프에 넣는다(require()의 모듈별 격리와 다르다).
+// el/sanitize 같은 흔한 이름이 파일 간에 충돌해 SyntaxError가 났다(실측, diag-isolation.js).
+// CJS(require)는 이 IIFE 밖에서도 동일하게 동작한다 — Node의 모듈 래퍼가 이미 함수 스코프다.
+(function () {
 // §5.3.1 table 컬럼 우선순위 — 표시 시(렌더러) 절반.
 // backend/scripts/generate_api.py가 생성 시(백엔드) column_priority 랭킹을
 // kiwoom-common-screen-manifest.json에 굽는다(식별 컬럼 고정 + 실측 alias 빈도
@@ -54,7 +59,7 @@ function foldColumns(columns, canvasWidthPx = DEFAULT_CANVAS_WIDTH_PX) {
   return { visible, hidden, canvasWidthPx, usedPx: accumulatedPx };
 }
 
-module.exports = {
+const __exports = {
   foldColumns,
   columnPixelWidth,
   labelPixelWidth,
@@ -64,3 +69,13 @@ module.exports = {
   COLUMN_PADDING_PX,
   DATA_CELL_MIN_WIDTH_PX,
 };
+
+// UMD 각주(2026-08-18 렌더러 격리) — sanitize.js와 같은 패턴.
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = __exports;
+} else {
+  window.AthenaLib = window.AthenaLib || {};
+  window.AthenaLib.ColumnFold = __exports;
+}
+
+})();

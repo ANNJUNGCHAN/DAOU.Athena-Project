@@ -1,3 +1,8 @@
+// IIFE 스코프 격리(2026-08-18 렌더러 격리) — <script> 태그는 top-level const/function을
+// 문서 전체가 공유하는 하나의 스크립트 스코프에 넣는다(require()의 모듈별 격리와 다르다).
+// el/sanitize 같은 흔한 이름이 파일 간에 충돌해 SyntaxError가 났다(실측, diag-isolation.js).
+// CJS(require)는 이 IIFE 밖에서도 동일하게 동작한다 — Node의 모듈 래퍼가 이미 함수 스코프다.
+(function () {
 // 카드 배치·생애주기 규칙 — 규칙 원본은 plan/canvas-taxonomy.md
 // "배치·생애주기 규칙 (2026-08-18 확정)". 순수 로직만 둔다(DOM 없음) —
 // canvas.js(렌더러)가 쓰고 canvas-layout.test.js(node --test)가 검증한다.
@@ -60,7 +65,7 @@ function exceedsHeightBudget(scrollHeight, clientHeight, cardCount) {
   return scrollHeight > HEIGHT_BUDGET_FACTOR * clientHeight;
 }
 
-module.exports = {
+const __exports = {
   CARD_WIDTH_GRADE,
   DROP_TYPE_MAP,
   HEIGHT_BUDGET_FACTOR,
@@ -69,3 +74,13 @@ module.exports = {
   dropTargetsFor,
   exceedsHeightBudget,
 };
+
+// UMD 각주(2026-08-18 렌더러 격리) — sanitize.js와 같은 패턴.
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = __exports;
+} else {
+  window.AthenaLib = window.AthenaLib || {};
+  window.AthenaLib.CanvasLayout = __exports;
+}
+
+})();

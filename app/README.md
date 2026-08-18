@@ -14,6 +14,74 @@ npm start             # 앱 직접 실행 (electron .)
 npm run verify         # 검증 스크립트 — 창 생성, 스크린샷, 프레임 실측, 접근성 캡처까지 자동 수행 후 종료
 ```
 
+## 렌더러 격리 전환 (2026-08-18, 클로드 데스크탑 방식)
+
+계기: 2026-08-18 전수검사 보안 감사에서 두 창이 `nodeIntegration:true` +
+`contextIsolation:false`로 떠 있는 것이 지적됐다(렌더러 JS가 `require('electron')`·
+`fs`·`path`를 직접 쓸 수 있는 상태 — XSS 한 건이 곧 파일 시스템 접근이 되는 구조)
++ 사용자 결정. 목표 상태: 두 창 모두 `contextIsolation:true` + `nodeIntegration:false`
++ `sandbox:true`, `preload.js`의 `contextBridge`만이 유일한 다리.
+
+- **`preload.js`** — `window.athena`를 `contextBridge.exposeInMainWorld`로 노출한다.
+  `invoke`/`send`/`on`(구독 해제 함수를 반환) 세 메서드뿐이고, 각각 실측된 채널
+  allowlist(`INVOKE_CHANNELS`/`SEND_CHANNELS`/`ON_CHANNELS`)를 통과해야 한다 —
+  임의 채널을 그대로 넘기는 범용 패스스루가 아니다. `webFrame.getZoomFactor()`도
+  `window.athena.getZoomFactor()`로 다리를 건넌다.
+- **`lib/*.js`(렌더러 쪽) 로딩 방식 — UMD 각주 + `<script>` 태그.** 번들러를 넣지
+  않는다(CLAUDE.md 지시). 각 파일 머리에 `require('./x')` 대신
+  `(typeof module !== 'undefined' && module.exports) ? require('./x') : window.AthenaLib.X`
+  분기를 두고, 꼬리의 `module.exports = {...}`도 같은 분기로 `window.AthenaLib.X`에
+  얹는다. `node --test`(CommonJS)와 `<script>` 태그(nodeIntegration:false) 양쪽에서
+  같은 파일이 그대로 동작한다. `chat.html`/`canvas.html`이 의존 순서대로
+  `<script>` 태그를 나열해 로드한다(각 HTML 파일 주석에 순서 명시).
+  - **함정**: 처음엔 UMD "꼬리만" 붙이면 되는 줄 알았는데, 여러 `<script>` 태그는
+    브라우저에서 **문서 전체가 공유하는 하나의 스크립트 스코프**를 쓴다 —
+    `require()`의 모듈별 격리와 다르다. `el`(`ui-kit.js` 소비자 3개 파일이 전부
+    top-level `const { el } = ...`로 받음)·`sanitize` 같은 흔한 이름이 파일 간에
+    충돌해 `SyntaxError: Identifier 'el' has already been declared`로 전부 죽었다
+    (실측 — 렌더러 콘솔에 아무 로그도 안 남고 IPC가 조용히 영원히 응답을 안 기다리는
+    것처럼 보여서 처음엔 "hang"으로 오인했다. `web-contents-created`에 `console-message`
+    리스너를 미리 걸어야 초기 `<script>` 실행 중 에러가 잡힌다 — `createWindows()`
+    완료 후에 걸면 이미 다 실행된 뒤라 놓친다). 해결: 렌더러 쪽 lib 17개 파일 **전체
+    본문을 `(function () { ... })();`로 감쌌다** — 함수 스코프 격리를 얻으면서도
+    내부 코드는 한 줄도 안 건드렸다(require/전역 접근 로직은 이미 head/tail
+    UMD 각주가 처리하므로 IIFE 안에서도 그대로 유효).
+- **`lib/mockdata.js` → `lib/main/mockdata.js`.** 캔버스 렌더러가 `fs`로
+  `spike/captures/*.json`을 직접 읽던 것을 막았다 — 이제 main 프로세스가 읽고
+  `athena:load-fixture` invoke로 파싱된 데이터만 넘긴다(canvas.js는 `await
+  window.athena.invoke('athena:load-fixture', { kind })`). `verify.js`의 fixture
+  경로(`source:'fixture'`)에서만 쓰인다 — 실배선(live) 경로는 무관.
+- **`lib/chart-card.js`의 `lightweight-charts` 동적 import가 두 번 깨졌다 — 둘 다
+  실측으로 잡았다:**
+  1. bare specifier(`import('lightweight-charts')`)는 `nodeIntegration:true`일 때만
+     Electron이 Node 해석 규칙으로 풀어준다. 꺼진 뒤엔 브라우저의 HTML 모듈 해석
+     규칙만 남아 "Failed to resolve module specifier" — `document.currentScript.src`로
+     `chart-card.js` 자신의 URL을 잡아 `node_modules` 상대 경로로 바꿨다(번들러도
+     import map도 안 씀).
+  2. 그렇게 고친 뒤에도 `Failed to resolve module specifier "fancy-canvas"`가
+     새로 났다 — `lightweight-charts.production.mjs`가 `fancy-canvas`(package.json
+     dependency)를 bare import로 참조하는데, 그 파일은 번들에 안 들어 있다.
+     `lightweight-charts.standalone.production.mjs`(TradingView가 브라우저 직접
+     로드용으로 배포하는 완전 번들본, 외부 import 0건 — 실측: grep)로 바꿔 해결.
+     export 이름(`createChart`/`CandlestickSeries`/…)은 두 빌드가 동일하다(확인함).
+- **verify.js·verify-settings-cards.js도 같이 고쳤다** — `executeJavaScript`
+  스니펫 안의 `require('electron').ipcRenderer.send(...)` → `window.athena.send(...)`.
+  `verify-settings-cards.js`는 렌더러 쪽 `ipcRenderer.invoke` 몽키패치로 IPC 응답을
+  스텁했었는데, `contextBridge`가 노출한 객체는 깊이 동결(deep-freeze)돼 있어
+  렌더러에서 재할당이 안 먹는다 — **main 프로세스에서 `ipcMain.removeHandler` +
+  `ipcMain.handle`로 채널 자체를 스텁으로 갈아끼우는 방식**으로 바꿨다(렌더러
+  호출부 코드는 그대로).
+- **검증(2026-08-18 실행)**: `npm test` 110/110 통과. `npm run verify` 검증 1~13
+  전부 통과, exit 0. `npm run verify:settings` exit 0. `npm run verify:settings-cards`
+  exit 0. `probe-boot-bounds.js`·차트 프로브 5종(`probe-chart-card.js`·
+  `-authoring.js`·`-drawing.js`·`-indicators.js`·`-toolbar.js`) 전부 exit 0(단독
+  실행 기준 — 5개를 동시에 병렬로 돌리면 실 포인터 클릭 타이밍에 민감한
+  `probe-chart-drawing.js` 등이 자원 경합으로 간헐적으로 실패한다는 것도 실측으로
+  확인했다. 순차 실행에서는 재현 안 됨).
+- **타협/미해결**: 없음 — `sandbox:true`까지 켠 채로 전부 통과했다(원래 "실측으로
+  안 되면 끄고 사유를 보고하라"는 지시가 있었지만, preload.js가 `require('electron')`
+  만 쓰므로 그대로 켜졌다).
+
 `npm start`로 뜨면: 대화 창 하나만 뜬다(발광점→채팅바 부팅) → 아무 텍스트나 입력하고
 Enter(빈 입력이면 기본 목업 질의 사용) → 점이 캔버스 창으로 확장되며 모자이크가
 채워진다 → `Esc`로 캔버스 접기. 대화 창 위쪽 그립을 잡고 위로 끌면 이력이 펼쳐진다.

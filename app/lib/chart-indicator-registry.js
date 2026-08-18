@@ -1,3 +1,8 @@
+// IIFE 스코프 격리(2026-08-18 렌더러 격리) — <script> 태그는 top-level const/function을
+// 문서 전체가 공유하는 하나의 스크립트 스코프에 넣는다(require()의 모듈별 격리와 다르다).
+// el/sanitize 같은 흔한 이름이 파일 간에 충돌해 SyntaxError가 났다(실측, diag-isolation.js).
+// CJS(require)는 이 IIFE 밖에서도 동일하게 동작한다 — Node의 모듈 래퍼가 이미 함수 스코프다.
+(function () {
 'use strict';
 
 // 보조지표 35종 전수 레지스트리 — plan/chart-card-control-spec.md §3.1~3.3 순서 그대로.
@@ -99,4 +104,13 @@ function defaultParamsFor(id) {
   return out;
 }
 
-module.exports = { INDICATOR_DEFS, DEFAULT_INDICATOR_VISIBLE, defaultParamsFor };
+// UMD 각주(2026-08-18 렌더러 격리) — sanitize.js와 같은 패턴.
+const __exports = { INDICATOR_DEFS, DEFAULT_INDICATOR_VISIBLE, defaultParamsFor };
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = __exports;
+} else {
+  window.AthenaLib = window.AthenaLib || {};
+  window.AthenaLib.ChartIndicatorRegistry = __exports;
+}
+
+})();

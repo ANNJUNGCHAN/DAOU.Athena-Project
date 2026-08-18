@@ -1,13 +1,19 @@
 // 캔버스 창 렌더러. spike/electron-glass/canvas.html의 확장/수축 rAF 애니메이션을
-// 그대로 이식 + 목업 데이터 3종 렌더.
-const { ipcRenderer, webFrame } = require('electron');
-const { sanitize } = require('./lib/sanitize');
-const { renderMarkdownInto } = require('./lib/markdown');
-const { loadStreamItems, loadFinancialStatement, loadReaderMarkdown, loadChartOhlcv } = require('./lib/mockdata');
-const { errorNote } = require('./lib/ui-kit');
-const { widthGradeFor, dropTargetsFor, exceedsHeightBudget, MIN_CARDS } = require('./lib/canvas-layout');
-const { foldColumns } = require('./lib/column-fold');
-const { createChartCard } = require('./lib/chart-card');
+// 그대로 이식 + 목업 데이터 3종 렌더. nodeIntegration:false / contextIsolation:true
+// (2026-08-18 렌더러 격리) — preload.js의 window.athena 다리로만 main과 통신한다.
+// lib/*.js는 canvas.html이 <script> 태그로 미리 로드해 window.AthenaLib에 얹어둔
+// 전역이다. 목업 데이터(spike/captures/*.json)는 fs를 직접 못 읽어 main으로
+// 옮겼다 — athena:load-fixture invoke로 파싱된 데이터만 받는다.
+const { sanitize } = window.AthenaLib.Sanitize;
+const { renderMarkdownInto } = window.AthenaLib.Markdown;
+const { errorNote } = window.AthenaLib.UiKit;
+const { widthGradeFor, dropTargetsFor, exceedsHeightBudget, MIN_CARDS } = window.AthenaLib.CanvasLayout;
+const { foldColumns } = window.AthenaLib.ColumnFold;
+const { createChartCard } = window.AthenaLib.ChartCard;
+
+async function loadFixture(kind) {
+  return window.athena.invoke('athena:load-fixture', { kind });
+}
 
 // 카드별 destroy 콜백 — closeCard가 lightweight-charts 인스턴스를 누수 없이
 // 정리하도록 카드 DOM 노드에 매달아둔다(WeakMap: 카드가 GC되면 콜백도 같이 사라짐).
@@ -30,7 +36,7 @@ function easeInCubic(t) { return t * t * t; }
 // - cards: 'live'(현행 — 카드 backdrop-filter 유지)
 //          | 'baked'(애니메이션 동안 카드를 정적 프로스트로 굽는다, canvas.css .frost-baked)
 let glassSeparation = { sheen: 'modulate', cards: 'live' };
-ipcRenderer.on('athena:glass-separation', (e, payload) => {
+window.athena.on('athena:glass-separation', (payload) => {
   glassSeparation = {
     sheen: payload && payload.sheen === 'bake' ? 'bake' : 'modulate',
     cards: payload && payload.cards === 'baked' ? 'baked' : 'live',
@@ -90,35 +96,35 @@ function runAnimation({ cx, cy, rmax, duration, mode }) {
 // main.js가 주는 cx/cy/rmax는 물리 px(스크린 좌표 기반) — clipPath는 CSS px로
 // 그리므로 줌 배율만큼 되돌린다(줌 미사용 시 zf=1로 기존과 동일).
 function toCssCoords(payload) {
-  const zf = webFrame.getZoomFactor();
+  const zf = window.athena.getZoomFactor();
   const scaled = { ...payload, cx: payload.cx / zf, cy: payload.cy / zf };
   if (typeof payload.rmax === 'number') scaled.rmax = payload.rmax / zf;
   return scaled;
 }
 
-ipcRenderer.on('prime-clip', (e, payload) => {
+window.athena.on('prime-clip', (payload) => {
   const p = toCssCoords(payload);
   mosaic.style.clipPath = `circle(0px at ${p.cx}px ${p.cy}px)`;
   sheen.style.backdropFilter = 'blur(30px)';
-  ipcRenderer.send('primed');
+  window.athena.send('primed');
 });
 
-ipcRenderer.on('run-animation', async (e, payload) => {
+window.athena.on('run-animation', async (payload) => {
   const p = toCssCoords(payload);
   if (p.mode === 'expand') {
     mosaic.style.clipPath = `circle(0px at ${p.cx}px ${p.cy}px)`;
     sheen.style.backdropFilter = 'blur(30px)';
   }
   const timestamps = await runAnimation(p);
-  ipcRenderer.send('animation-done', { mode: p.mode, timestamps });
+  window.athena.send('animation-done', { mode: p.mode, timestamps });
 });
 
 // ---------- 캔버스 카드 추가/초기화/하이라이트 ----------
-ipcRenderer.on('athena:add-canvas', (e, { type }) => {
+window.athena.on('athena:add-canvas', ({ type }) => {
   addCard(type);
 });
 
-ipcRenderer.on('athena:clear-canvases', () => {
+window.athena.on('athena:clear-canvases', () => {
   grid.innerHTML = '';
 });
 
@@ -126,7 +132,7 @@ ipcRenderer.on('athena:clear-canvases', () => {
 // main.js가 athena__render_canvas(source:'live')로 claude -p를 실왕복한 뒤 매
 // render_canvas tool_result마다 이걸 보낸다. status는 success/fallback(둘 다
 // canvas_type을 읽어 렌더한다) · rejected/error/unparseable(카드 대신 안내만).
-ipcRenderer.on('athena:add-canvas-live', (e, result) => {
+window.athena.on('athena:add-canvas-live', (result) => {
   addLiveCard(result);
 });
 
@@ -377,7 +383,7 @@ function renderJsonTree(value) {
   return span;
 }
 
-ipcRenderer.on('athena:highlight-canvas', (e, type) => {
+window.athena.on('athena:highlight-canvas', (type) => {
   const el = grid.querySelector(`.card.${type}`);
   if (!el) return;
   el.classList.add('highlight');
@@ -410,7 +416,7 @@ function closeCard(card) {
   }
   card.remove();
   if (parent && !parent.querySelector('.card')) {
-    ipcRenderer.send('athena:collapse-canvas');
+    window.athena.send('athena:collapse-canvas');
   }
 }
 
@@ -485,7 +491,7 @@ function makeCard(type, title, layoutHint) {
   return { card, body };
 }
 
-function addCard(type) {
+async function addCard(type) {
   if (type === 'stream') return renderStream();
   if (type === 'reader') return renderReader();
   if (type === 'table') return renderTable();
@@ -506,7 +512,7 @@ async function renderChartCard() {
   chartBody.className = 'chart-card-body';
   body.appendChild(chartBody);
   try {
-    const { bars } = loadChartOhlcv();
+    const { bars } = await loadFixture('chart');
     const instance = await createChartCard(chartBody, { symbol: '005930', name: '삼성전자', ohlcv: bars });
     // 닫기 버튼(closeCard)이 lightweight-charts를 정리하도록 카드 자체에 매단다.
     cardDestroyers.set(card, instance.destroy);
@@ -517,9 +523,9 @@ async function renderChartCard() {
 }
 
 // ① 스트림 — sanitize한 문자열은 절대 innerHTML로 넣지 않는다. textContent로만.
-function renderStream() {
+async function renderStream() {
   const { body } = makeCard('stream', '스트림 · 뉴스');
-  const items = loadStreamItems();
+  const { items } = await loadFixture('stream');
   const ul = document.createElement('ul');
   ul.className = 'stream-list';
   const SHOW = 14;
@@ -574,9 +580,9 @@ function formatPubDate(pubDate) {
 }
 
 // ② 리더 — 마크다운을 직접 DOM으로 렌더(innerHTML 미사용, lib/markdown.js)
-function renderReader() {
+async function renderReader() {
   const { body } = makeCard('reader', '리더 · 공시 원문');
-  const md = loadReaderMarkdown();
+  const { markdown: md } = await loadFixture('reader');
   const note = document.createElement('div');
   note.className = 'fin-meta';
   note.textContent = '원문 일부(캡처 당시 미리보기 필드 한도로 절단됨) — DART 자기주식 처분 결정 공시';
@@ -585,9 +591,9 @@ function renderReader() {
 }
 
 // ④ 공통 테이블 — 재무제표(재무상태표) 스냅샷
-function renderTable() {
+async function renderTable() {
   const { body } = makeCard('table', '재무제표(연결)');
-  const { meta, list } = loadFinancialStatement();
+  const { meta, list } = await loadFixture('table');
   const rows = list.filter((r) => r.sj_nm === '재무상태표');
 
   const note = document.createElement('div');
@@ -636,23 +642,23 @@ document.addEventListener('keydown', (e) => {
   if (!(e.ctrlKey || e.metaKey) || e.altKey) return;
   if (e.key === '=' || e.key === '+') {
     e.preventDefault();
-    ipcRenderer.send('athena:zoom', { dir: 'in' });
+    window.athena.send('athena:zoom', { dir: 'in' });
   } else if (e.key === '-' || e.key === '_') {
     e.preventDefault();
-    ipcRenderer.send('athena:zoom', { dir: 'out' });
+    window.athena.send('athena:zoom', { dir: 'out' });
   } else if (e.key === '0') {
     e.preventDefault();
-    ipcRenderer.send('athena:zoom', { dir: 'reset' });
+    window.athena.send('athena:zoom', { dir: 'reset' });
   } else if (e.key === 'm' || e.key === 'M') {
     e.preventDefault();
-    ipcRenderer.send('athena:minimize-windows');
+    window.athena.send('athena:minimize-windows');
   }
 });
 
 window.addEventListener('wheel', (e) => {
   if (!e.ctrlKey) return;
   e.preventDefault();
-  ipcRenderer.send('athena:zoom', { dir: e.deltaY < 0 ? 'in' : 'out' });
+  window.athena.send('athena:zoom', { dir: e.deltaY < 0 ? 'in' : 'out' });
 }, { passive: false });
 
 // 창 이동 — 카드가 없는 빈 유리 표면(grid 여백)을 잡고 끈다. e.target 조건으로
@@ -661,9 +667,9 @@ function bindWindowDrag(el) {
   if (!el) return;
   el.addEventListener('mousedown', (e) => {
     if (e.button !== 0 || e.target !== el) return;
-    ipcRenderer.send('athena:window-drag', { phase: 'start' });
+    window.athena.send('athena:window-drag', { phase: 'start' });
     const end = () => {
-      ipcRenderer.send('athena:window-drag', { phase: 'end' });
+      window.athena.send('athena:window-drag', { phase: 'end' });
       window.removeEventListener('mouseup', end);
       window.removeEventListener('blur', end);
     };

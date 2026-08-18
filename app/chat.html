@@ -87,6 +87,13 @@
 
   <div class="glass-sheen" aria-hidden="true"></div>
 
+<!-- 렌더러 격리(2026-08-18, CLAUDE.md §6) — nodeIntegration:false라 require가
+     없다. lib/*.js는 UMD 각주로 window.AthenaLib에 전역을 얹는 순수 <script>다.
+     ui-kit이 onboarding/auth-screen/settings-cards보다 먼저 와야 한다. -->
+<script src="lib/ui-kit.js"></script>
+<script src="lib/onboarding.js"></script>
+<script src="lib/auth-screen.js"></script>
+<script src="lib/settings-cards.js"></script>
 <script src="chat.js"></script>
 </body>
 </html>

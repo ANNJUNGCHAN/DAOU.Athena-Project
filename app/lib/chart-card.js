@@ -1,3 +1,8 @@
+// IIFE 스코프 격리(2026-08-18 렌더러 격리) — <script> 태그는 top-level const/function을
+// 문서 전체가 공유하는 하나의 스크립트 스코프에 넣는다(require()의 모듈별 격리와 다르다).
+// el/sanitize 같은 흔한 이름이 파일 간에 충돌해 SyntaxError가 났다(실측, diag-isolation.js).
+// CJS(require)는 이 IIFE 밖에서도 동일하게 동작한다 — Node의 모듈 래퍼가 이미 함수 스코프다.
+(function () {
 // 차트 카드(CC-101 + CC-102 + CC-103) — CompoundCard(charts) 위 시계열 렌즈의
 // 첫 렌더러. 계약: plan/chart-card-control-spec.md(컨트롤 실측) ·
 // plan/chart-lens-spec.md §4·§6 (저작 계층, 카드 신설 없음 — 이 파일은
@@ -25,14 +30,39 @@
 // 실측으로 확인(probe-chart-card.js 캡처, elementFromPoint로 캔버스 픽셀임을
 // 확인 — DOM 오버레이가 아니다). 대체 표기 없이 끄면 라이선스 위반이라 그대로 둔다.
 
-const { createChartToolbar } = require('./chart-toolbar');
-const { resample } = require('./chart-resample');
-const { createIndicatorPanel } = require('./chart-indicator-panel');
-const { DEFAULT_INDICATOR_VISIBLE, defaultParamsFor } = require('./chart-indicator-registry');
-const { sma, bollinger, rsi, macd } = require('./chart-indicators');
-const { volumeProfile } = require('./chart-volume-profile');
-const { createAuthoringStore, periodToken } = require('./chart-authoring-store');
-const { createDrawingLayer } = require('./chart-drawings');
+// UMD 헤드(2026-08-18 렌더러 격리) — node --test(CommonJS)면 require, <script>
+// 태그 전역 로딩(nodeIntegration:false)이면 window.AthenaLib를 쓴다. 8개
+// 의존 모두 같은 분기라 헬퍼 하나로 묶는다(chart-card.js만 의존이 이만큼 많다).
+const __isCjs = typeof module !== 'undefined' && module.exports;
+function __dep(reqPath, globalName) {
+  return __isCjs ? require(reqPath) : window.AthenaLib[globalName];
+}
+const { createChartToolbar } = __dep('./chart-toolbar', 'ChartToolbar');
+const { resample } = __dep('./chart-resample', 'ChartResample');
+const { createIndicatorPanel } = __dep('./chart-indicator-panel', 'ChartIndicatorPanel');
+const { DEFAULT_INDICATOR_VISIBLE, defaultParamsFor } = __dep('./chart-indicator-registry', 'ChartIndicatorRegistry');
+const { sma, bollinger, rsi, macd } = __dep('./chart-indicators', 'ChartIndicators');
+const { volumeProfile } = __dep('./chart-volume-profile', 'ChartVolumeProfile');
+const { createAuthoringStore, periodToken } = __dep('./chart-authoring-store', 'ChartAuthoringStore');
+const { createDrawingLayer } = __dep('./chart-drawings', 'ChartDrawings');
+
+// lightweight-charts는 5.2.1부터 ESM 전용이라 동적 import()로만 부를 수 있다
+// (아래 createChartCard 안 주석 참고). nodeIntegration:true였을 때는 bare
+// specifier('lightweight-charts')를 Electron이 Node 해석 규칙으로 풀어줬지만,
+// nodeIntegration:false 아래서는 브라우저의 HTML 모듈 해석 규칙만 적용되어
+// bare specifier가 안 풀린다(import map도 안 씀 — CLAUDE.md 지시 "번들러 금지"와
+// 같은 결로 최소 개입). document.currentScript.src로 이 파일 자신의 URL을
+// 잡아 node_modules 상대 경로를 계산한다 — canvas.html의 document base URL에
+// 기대지 않는 방식이라 <script> 태그 로드 순서와 무관하게 항상 맞다.
+// standalone 빌드를 쓴다 — 일반 production.mjs는 fancy-canvas를 bare
+// specifier로 import해서(package.json dependencies), nodeIntegration:false
+// 아래 브라우저 ESM 해석기가 못 푼다("Failed to resolve module specifier
+// fancy-canvas" — 실측, diag-chart.js). standalone.production.mjs는 그
+// 의존성까지 번들에 넣어 외부 import가 0건이다(실측: grep으로 확인).
+const __LIGHTWEIGHT_CHARTS_URL = (() => {
+  if (typeof document === 'undefined' || !document.currentScript) return 'lightweight-charts';
+  return new URL('../node_modules/lightweight-charts/dist/lightweight-charts.standalone.production.mjs', document.currentScript.src).href;
+})();
 
 const UP_COLOR = '#FF5C5C';
 const DOWN_COLOR = '#4D9FFF';
@@ -103,7 +133,7 @@ function withAlpha(hex, alpha) {
 async function createChartCard(container, opts) {
   const o = opts || {};
   const { createChart, CandlestickSeries, BarSeries, LineSeries, AreaSeries, HistogramSeries, CrosshairMode, LineStyle } =
-    await import('lightweight-charts');
+    await import(__LIGHTWEIGHT_CHARTS_URL);
 
   const dailyBars = Array.isArray(o.ohlcv) ? o.ohlcv : [];
 
@@ -676,7 +706,7 @@ async function createChartCard(container, opts) {
 
 // 외부 소비자는 canvas.js(createChartCard)와 chart-card.test.js(순수 변환 + 등락색)
 // 뿐이다 — 나머지 상수는 내부 구현 세부라 내보내지 않는다(deslop 2026-08-18).
-module.exports = {
+const __exports = {
   createChartCard,
   toCandleSeriesData,
   toVolumeSeriesData,
@@ -684,3 +714,11 @@ module.exports = {
   UP_COLOR,
   DOWN_COLOR,
 };
+if (__isCjs) {
+  module.exports = __exports;
+} else {
+  window.AthenaLib = window.AthenaLib || {};
+  window.AthenaLib.ChartCard = __exports;
+}
+
+})();

@@ -1,3 +1,8 @@
+// IIFE 스코프 격리(2026-08-18 렌더러 격리) — <script> 태그는 top-level const/function을
+// 문서 전체가 공유하는 하나의 스크립트 스코프에 넣는다(require()의 모듈별 격리와 다르다).
+// el/sanitize 같은 흔한 이름이 파일 간에 충돌해 SyntaxError가 났다(실측, diag-isolation.js).
+// CJS(require)는 이 IIFE 밖에서도 동일하게 동작한다 — Node의 모듈 래퍼가 이미 함수 스코프다.
+(function () {
 // 인증(토큰 상태) 화면 — AT-CV-OAUTH 3건을 하나의 실제 화면으로 통합 구현한다:
 //   - AT-CV-OAUTH-인증토큰-상태.md   : 실제 레이아웃(마스트헤드 + 타이머 카드 +
 //     상태 행 3개 + 하단 액션 바) — "준비됨" 상태 1종만 보여주는 스크린샷.
@@ -15,10 +20,11 @@
 // 결정을 그대로 따름 — accounts.js 주석 참고). upstream 폐기 확인 자체가
 // 실패해도 로컬 토큰은 지워지므로, 실패는 막지 않고 참고용 안내만 보여준다.
 
-const { ipcRenderer } = require('electron');
+// UMD 헤드(2026-08-18 렌더러 격리) — ipcRenderer는 window.athena 다리로
+// 대체한다(preload.js). ui-kit require는 node --test/<script> 태그 겸용.
 const {
   el, button, labeledRow, statusDot, errorNote, clear,
-} = require('./ui-kit');
+} = (typeof module !== 'undefined' && module.exports) ? require('./ui-kit') : window.AthenaLib.UiKit;
 
 const STATE_META = {
   needed: { label: '인증 필요' },
@@ -192,11 +198,15 @@ function renderAuthTokenStatus(root, opts) {
   }
 
   async function doAction() {
+    // scheduleAutoContinue()가 건 2.4초 타이머가 그대로 살아있으면, 사용자가
+    // "지금 재발급"을 눌러 currentState가 바뀐 뒤에도 옛 ready 스냅샷을 기준으로
+    // proceed()가 발동해 온보딩을 강제 통과시킨다(경합 실측) — 먼저 지운다.
+    if (autoContinueTimer) { clearTimeout(autoContinueTimer); autoContinueTimer = null; }
     clearErr();
     currentState = 'refreshing';
     paint();
     try {
-      const res = await ipcRenderer.invoke('athena:auth-token-refresh', { id: accountId });
+      const res = await window.athena.invoke('athena:auth-token-refresh', { id: accountId });
       if (!res || !res.ok) showErr('발급/재발급에 실패했습니다.');
     } catch (err) {
       showErr('발급/재발급 요청 중 오류가 발생했습니다.');
@@ -205,6 +215,8 @@ function renderAuthTokenStatus(root, opts) {
   }
 
   async function doRevoke() {
+    // doAction()과 같은 경합 — "연결 해제" 클릭도 옛 예약된 자동진행을 지운다.
+    if (autoContinueTimer) { clearTimeout(autoContinueTimer); autoContinueTimer = null; }
     clearErr();
     revoking = true;
     paint();
@@ -217,7 +229,7 @@ function renderAuthTokenStatus(root, opts) {
     // 여기서는 새로 만드는 함수라 순서를 바꿔 피한다).
     let failMsg = null;
     try {
-      const res = await ipcRenderer.invoke('athena:auth-token-revoke', { id: accountId });
+      const res = await window.athena.invoke('athena:auth-token-revoke', { id: accountId });
       if (!res || !res.ok) failMsg = '연결은 해제했지만 upstream 폐기 확인에는 실패했습니다.';
     } catch (err) {
       failMsg = '연결 해제 요청 중 오류가 발생했습니다.';
@@ -237,8 +249,8 @@ function renderAuthTokenStatus(root, opts) {
   async function refreshStatus() {
     try {
       const [statusRes, accountsRes] = await Promise.all([
-        ipcRenderer.invoke('athena:auth-token-status', { id: accountId }),
-        ipcRenderer.invoke('athena:account-list'),
+        window.athena.invoke('athena:auth-token-status', { id: accountId }),
+        window.athena.invoke('athena:account-list'),
       ]);
       const acc = accountsRes && accountsRes.accounts ? accountsRes.accounts.find((a) => a.id === accountId) : null;
       accountAlias = acc ? acc.alias : '';
@@ -258,6 +270,9 @@ function renderAuthTokenStatus(root, opts) {
 
   async function proceed() {
     if (!embedded || autoContinueFired || destroyed) return;
+    // 추가 방어 — 타이머가 걸린 뒤 상태가 ready를 벗어났다면(doAction/doRevoke가
+    // 지우지 못한 경합이 남아있더라도) 여기서 다시 한번 막는다.
+    if (currentState !== 'ready') return;
     autoContinueFired = true;
     if (autoContinueTimer) { clearTimeout(autoContinueTimer); autoContinueTimer = null; }
     const ok = onContinue ? await onContinue() : true;
@@ -278,7 +293,7 @@ function renderAuthTokenStatus(root, opts) {
     clear(foot);
     body.appendChild(el('div', 'onb-hint', '계좌 목록을 불러오는 중…'));
     try {
-      const data = await ipcRenderer.invoke('athena:account-list');
+      const data = await window.athena.invoke('athena:account-list');
       switchAccounts = (data && data.accounts) || [];
     } catch (err) {
       switchAccounts = [];
@@ -348,7 +363,7 @@ function renderAuthTokenStatus(root, opts) {
     const targetId = switchSelectedId;
     if (!targetId) return;
     try {
-      const res = await ipcRenderer.invoke('athena:account-set-active', { id: targetId });
+      const res = await window.athena.invoke('athena:account-set-active', { id: targetId });
       if (res && res.ok) {
         accountId = targetId;
         view = 'status';
@@ -374,11 +389,11 @@ function renderAuthTokenStatus(root, opts) {
     currentTimerDigitsEl.textContent = formatHMS((expiresAtMs - Date.now()) / 1000);
   }, 1000);
 
-  function onChanged(e, payload) {
+  function onChanged(payload) {
     if (!payload || payload.id !== accountId) return;
     if (view === 'status') applyState(payload.state, payload.expiresInSec);
   }
-  ipcRenderer.on('athena:auth-token-changed', onChanged);
+  const unsubscribeAuthTokenChanged = window.athena.on('athena:auth-token-changed', onChanged);
 
   paint();
   refreshStatus();
@@ -387,8 +402,17 @@ function renderAuthTokenStatus(root, opts) {
     destroyed = true;
     clearInterval(tickInterval);
     if (autoContinueTimer) clearTimeout(autoContinueTimer);
-    ipcRenderer.removeListener('athena:auth-token-changed', onChanged);
+    unsubscribeAuthTokenChanged();
   };
 }
 
-module.exports = { renderAuthTokenStatus };
+// UMD 각주(2026-08-18 렌더러 격리) — sanitize.js와 같은 패턴.
+const __exports = { renderAuthTokenStatus };
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = __exports;
+} else {
+  window.AthenaLib = window.AthenaLib || {};
+  window.AthenaLib.AuthScreen = __exports;
+}
+
+})();

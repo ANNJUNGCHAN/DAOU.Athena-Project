@@ -1,3 +1,8 @@
+// IIFE 스코프 격리(2026-08-18 렌더러 격리) — <script> 태그는 top-level const/function을
+// 문서 전체가 공유하는 하나의 스크립트 스코프에 넣는다(require()의 모듈별 격리와 다르다).
+// el/sanitize 같은 흔한 이름이 파일 간에 충돌해 SyntaxError가 났다(실측, diag-isolation.js).
+// CJS(require)는 이 IIFE 밖에서도 동일하게 동작한다 — Node의 모듈 래퍼가 이미 함수 스코프다.
+(function () {
 // 계좌(AT-ST-001/002/003) · MCP(AT-ST-004/005/006) 제어 캔버스 카드.
 //
 // 배치 근거: plan/paper-specs/00-통합-계획.md §1.2/1.3 — 두 화면 모두 "캔버스 창 ›
@@ -24,11 +29,12 @@
 // 아직 없으면(메인 프로세스 작업이 병행 중이라 있을 수 있다) 빈 카드에 예외를
 // 던지는 대신 emptyState + errorNote를 그린다.
 
-const { ipcRenderer } = require('electron');
+// UMD 헤드(2026-08-18 렌더러 격리) — ipcRenderer는 window.athena 다리로
+// 대체한다(preload.js). ui-kit require는 node --test/<script> 태그 겸용.
 const {
   el, row, statusDot, badge, arrowIcon, button, progressDots, labeledRow,
   sheet, secretMask, emptyState, errorNote, clear,
-} = require('./ui-kit');
+} = (typeof module !== 'undefined' && module.exports) ? require('./ui-kit') : window.AthenaLib.UiKit;
 
 // ---------------------------------------------------------------------------
 // 로컬 프리미티브 — ui-kit.js에 없는 것만 여기서 만든다(오케스트레이터 지시:
@@ -162,7 +168,7 @@ function closeCard(card) {
   const parent = card.parentElement;
   card.remove();
   if (parent && !parent.querySelector('.card')) {
-    ipcRenderer.send('athena:collapse-canvas');
+    window.athena.send('athena:collapse-canvas');
   }
 }
 
@@ -232,7 +238,7 @@ function renderScreen(grid) {
 async function refreshScreenCard(card, head, body) {
   let data;
   try {
-    data = await ipcRenderer.invoke('athena:settings:prefs:get');
+    data = await window.athena.invoke('athena:settings:prefs:get');
   } catch (err) {
     clear(head);
     clear(body);
@@ -252,7 +258,7 @@ async function refreshScreenCard(card, head, body) {
 
   async function setPref(key, value) {
     try {
-      await ipcRenderer.invoke('athena:settings:prefs:set', { [key]: value });
+      await window.athena.invoke('athena:settings:prefs:set', { [key]: value });
     } catch { /* 핸들러 부재 — 로컬 토글 표시만 유지, 다음 새로고침에서 다시 기본값으로 보인다 */ }
   }
 
@@ -286,7 +292,7 @@ async function refreshAccountsCard(card, head, body) {
   // 보인다. 이전 내용을 그대로 둔 채 기다렸다가 한 번에 교체한다.
   let data;
   try {
-    data = await ipcRenderer.invoke('athena:account-list');
+    data = await window.athena.invoke('athena:account-list');
   } catch (err) {
     clear(head);
     clear(body);
@@ -366,7 +372,7 @@ function buildAccountRow(a, refresh, openOrderApi, canDelete) {
     r.classList.add('is-clickable');
     r.addEventListener('click', async () => {
       try {
-        await ipcRenderer.invoke('athena:account-set-active', { id: a.id });
+        await window.athena.invoke('athena:account-set-active', { id: a.id });
       } catch { /* 핸들러 부재 — 조용히 무시하지 않되 카드 전체를 깨뜨리지 않는다 */ }
       refresh();
     });
@@ -388,7 +394,7 @@ function buildAccountRow(a, refresh, openOrderApi, canDelete) {
         confirmBtn.querySelector('.uk-btn-label').textContent = '삭제 중…';
         let threw = false;
         try {
-          await ipcRenderer.invoke('athena:account-remove', { id: a.id });
+          await window.athena.invoke('athena:account-remove', { id: a.id });
         } catch { threw = true; }
         if (threw) {
           bar.appendChild(errorNote('계좌 삭제 기능을 아직 사용할 수 없다 (athena:account-remove 핸들러 없음)'));
@@ -554,7 +560,7 @@ function openAccountRegisterSheet(card, onDone) {
     let res;
     let threw = false;
     try {
-      res = await ipcRenderer.invoke('athena:account-register', { alias, appKey, secretKey });
+      res = await window.athena.invoke('athena:account-register', { alias, appKey, secretKey });
     } catch (err) {
       threw = true;
     }
@@ -636,7 +642,7 @@ function openOrderApiSheet(card, account, onDone) {
     // 켜는 것은 아래 "활성화" 버튼의 최종 확인을 반드시 거친다(Desc 2).
     if (!next && account.orderApi) {
       try {
-        const res = await ipcRenderer.invoke('athena:order-api-set', { id: account.id, enabled: false });
+        const res = await window.athena.invoke('athena:order-api-set', { id: account.id, enabled: false });
         if (res && res.ok) {
           account.orderApi = false;
           statusPill.textContent = '현재 OFF';
@@ -680,7 +686,7 @@ function openOrderApiSheet(card, account, onDone) {
     clear(errBox);
     activateBtn.disabled = true;
     try {
-      const res = await ipcRenderer.invoke('athena:order-api-set', { id: account.id, enabled: toggleState });
+      const res = await window.athena.invoke('athena:order-api-set', { id: account.id, enabled: toggleState });
       if (res && res.checklist) renderChecklist(res.checklist);
       if (res && res.ok) {
         account.orderApi = toggleState;
@@ -715,7 +721,7 @@ async function refreshMcpCard(card, head, body) {
   // 콜드 스폰하므로 공백 구간이 더 길다(실측 ~850ms).
   let data;
   try {
-    data = await ipcRenderer.invoke('athena:mcp-list');
+    data = await window.athena.invoke('athena:mcp-list');
   } catch (err) {
     clear(head);
     clear(body);
@@ -827,7 +833,7 @@ function buildMcpTable(servers, refresh, onRowClick) {
         let res;
         let threw = false;
         try {
-          res = await ipcRenderer.invoke('athena:mcp-remove', { alias: s.alias });
+          res = await window.athena.invoke('athena:mcp-remove', { alias: s.alias });
         } catch { threw = true; }
         if (threw || !(res && res.ok)) {
           bar.appendChild(errorNote(threw ? 'MCP 서버 삭제 기능을 아직 사용할 수 없다 (athena:mcp-remove 핸들러 없음)' : '삭제에 실패했다'));
@@ -898,7 +904,7 @@ function openMcpRegisterSheet(card, onDone) {
     if (analyzeLabel) analyzeLabel.textContent = '분석 중…';
     analyzeBtn.disabled = true;
     try {
-      const res = await ipcRenderer.invoke('athena:mcp-stage-snippet', { snippet });
+      const res = await window.athena.invoke('athena:mcp-stage-snippet', { snippet });
       if (res && res.ok) {
         stagedList = res.staged || [];
         queueIndex = 0;
@@ -999,12 +1005,12 @@ function openMcpRegisterSheet(card, onDone) {
   async function onApproveCurrent(staged, gateErrBox) {
     clear(gateErrBox);
     try {
-      const registerRes = await ipcRenderer.invoke('athena:mcp-register', { staged });
+      const registerRes = await window.athena.invoke('athena:mcp-register', { staged });
       if (!(registerRes && registerRes.ok)) {
         gateErrBox.appendChild(errorNote((registerRes && registerRes.error) || '등록에 실패했다'));
         return;
       }
-      const approveRes = await ipcRenderer.invoke('athena:mcp-approve', { alias: registerRes.alias || staged.alias });
+      const approveRes = await window.athena.invoke('athena:mcp-approve', { alias: registerRes.alias || staged.alias });
       if (!(approveRes && approveRes.ok)) {
         gateErrBox.appendChild(errorNote((approveRes && approveRes.error) || '승인에 실패했다'));
         return;
@@ -1068,7 +1074,7 @@ function openMcpProbeSheet(card, alias, onDone) {
     let res;
     let threw = false;
     try {
-      res = await ipcRenderer.invoke('athena:mcp-probe', { alias });
+      res = await window.athena.invoke('athena:mcp-probe', { alias });
     } catch (err) {
       threw = true;
     }
@@ -1083,7 +1089,7 @@ function openMcpProbeSheet(card, alias, onDone) {
       // 서버 승인은 여기서도 독립적인 명시 동작으로만 수행한다 — 자동 승인 없음.
       body.appendChild(button('primary', '서버 시작 승인 후 재시도', {
         onClick: async () => {
-          try { await ipcRenderer.invoke('athena:mcp-approve', { alias }); } catch { /* 무시 — 아래 재probe가 실패를 다시 보여준다 */ }
+          try { await window.athena.invoke('athena:mcp-approve', { alias }); } catch { /* 무시 — 아래 재probe가 실패를 다시 보여준다 */ }
           runProbe();
         },
       }));
@@ -1194,7 +1200,7 @@ function openMcpProbeSheet(card, alias, onDone) {
         const nowAllowed = !!localAllowed[t.name];
         if (wasAllowed === nowAllowed) continue;
         try {
-          const r = await ipcRenderer.invoke('athena:mcp-allow-tool', { alias, tool: t.name, allowed: nowAllowed });
+          const r = await window.athena.invoke('athena:mcp-allow-tool', { alias, tool: t.name, allowed: nowAllowed });
           if (!r || !r.ok) failures.push(t.name);
         } catch (err) {
           failures.push(t.name);
@@ -1207,4 +1213,13 @@ function openMcpProbeSheet(card, alias, onDone) {
   }
 }
 
-module.exports = { renderAccounts, renderMcp, renderScreen };
+// UMD 각주(2026-08-18 렌더러 격리) — sanitize.js와 같은 패턴.
+const __exports = { renderAccounts, renderMcp, renderScreen };
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = __exports;
+} else {
+  window.AthenaLib = window.AthenaLib || {};
+  window.AthenaLib.SettingsCards = __exports;
+}
+
+})();
