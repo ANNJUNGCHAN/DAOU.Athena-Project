@@ -187,17 +187,24 @@ write_html {
 ```
 → `<MOCKUP_ID>`
 
-### 5.4 Desktop + Glow 배경 (한 그룹으로 같이 넣어도 되는 순수 장식 레이어)
+### 5.4 Desktop + Glow 배경 — 기존 보드에서 `duplicate_nodes`로 복제 (2026-08-18 개정)
 
 ```json
-write_html {
-  "targetNodeId": "<MOCKUP_ID>",
-  "mode": "insert-children",
-  "html": "<div layer-name=\"Desktop\" style=\"position:absolute;top:0px;left:0px;width:1508px;height:1080px;boxSizing:border-box;backgroundImage:linear-gradient(158deg,#1a1d24 0%,#171a20 38%,#151a1e 62%,#1a1e24 100%);\"></div><div layer-name=\"Glow\" style=\"position:absolute;top:-300px;left:520px;width:1100px;height:860px;borderRadius:999px;boxSizing:border-box;backgroundImage:radial-gradient(circle,rgba(200,205,215,0.13) 0%,rgba(200,205,215,0.04) 52%,rgba(50,55,60,0) 78%);\"></div>"
+duplicate_nodes {
+  "nodes": [
+    { "id": "<기존 창 보드의 Desktop 노드ID>", "parentId": "<MOCKUP_ID>" },
+    { "id": "<기존 창 보드의 Glow 노드ID>",    "parentId": "<MOCKUP_ID>" }
+  ]
 }
 ```
-(정확한 oklab 그라디언트 값은 두 보드가 동일하니, 필요하면 `get_computed_styles`로
-`QT-0`의 `Desktop`/`Glow` 노드를 다시 뽑아 그대로 복붙 — 위 hex/rgba는 근사치다.)
+복제 직후 `move_nodes`로 두 노드를 index 0·1(z순서 맨 뒤)로 내린다. 교차 보드 복제는
+35쪽 재작업에서 실측 검증됐다(2026-08-18) — 40쪽 `6S0-0`(Desktop)/`6S1-0`(Glow)을
+35쪽 Mockup Area로 복제했더니 좌표(top 0/left 0, top -300/left 520)와 oklab
+그라디언트가 원본 그대로 왔다.
+
+초판이 권했던 "write_html 손그림 + computed 원문 복붙"은 **함정 11** 때문에 폐기한다.
+부득이 원본이 없는 새 그라디언트를 손으로 쓸 때만 write_html/update_styles를 쓰되,
+색공간은 각도 뒤(`158deg in oklab`)에 적고 직후 `get_computed_styles`로 적용을 확인한다.
 
 ### 5.5 Caption
 
@@ -354,6 +361,14 @@ finish_working_on_nodes {}
     행처럼 형태가 같고 텍스트/좌표만 다른 요소는 처음부터 새로 쓰지 말고 기존
     노드(같은 보드 안이든 `QT-0`/`QQ-0`이든)를 복제 → `update_styles`로 위치 조정 →
     `set_text_content`로 텍스트 교체.
+11. **computed 값을 입력으로 왕복시키지 마라** (2026-08-18 실측, 35쪽 재작업).
+    `get_computed_styles`가 반환하는 `linear-gradient(in oklab 158deg, …)`(색공간
+    선행) 문자열을 write_html/update_styles에 그대로 되넣으면 **조용히 버려진다** —
+    Paper 입력 파서는 각도 선행(`158deg in oklab`)만 받는다(CSS 표준은 두 순서 다
+    유효한데 자기 직렬화 출력을 자기가 못 읽는 왕복 비대칭이다). write_html 경로는
+    `ignoredStyles` 같은 실패 신호조차 없다. **기존 노드 재현은 `duplicate_nodes`
+    복제로 — 왕복 자체가 없다.** 새 복합값을 손으로 쓸 때만 각도 선행으로 쓰고
+    직후 `get_computed_styles`로 검증한다.
 
 ---
 
@@ -361,6 +376,6 @@ finish_working_on_nodes {}
 
 - 23번 보드가 실제로 어떤 화면(AT-ID)을 다룰지는 이 조사 범위 밖 — 콘텐츠는
   `plan/paper-specs/AT-*.md` 스펙 문서 중 아직 Paper에 없는 화면을 골라 채울 것.
-- Desktop/Glow의 정확한 oklab 그라디언트 문자열은 §5.4에 근사치만 적었다. 실행
-  직전 `get_computed_styles(["QT-0의 Desktop/Glow 노드ID"])`로 원문 그대로
-  재확인 권장.
+- ~~Desktop/Glow의 정확한 oklab 그라디언트 문자열은 §5.4에 근사치만 적었다. 실행
+  직전 `get_computed_styles`로 원문 재확인 권장.~~ → **해소(2026-08-18).** computed
+  원문 복붙은 함정 11로 판명 — §5.4의 `duplicate_nodes` 복제로 대체됐다.
