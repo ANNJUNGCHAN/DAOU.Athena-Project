@@ -97,6 +97,11 @@ class Settings(BaseSettings):
     # never opts in never touches a real database file. See lifespan.py's build_lifespan.
     brain_enabled: bool = False
     brain_db_path: Path = Field(default_factory=lambda: Path.home() / ".athena" / "brain.lbug")
+    # Authoritative raw history + durable ingestion job state (ADR §5), kept in a separate
+    # sqlite file next to the graph projection — never touched unless brain_enabled=true.
+    brain_history_db_path: Path = Field(
+        default_factory=lambda: Path.home() / ".athena" / "brain-history.sqlite3"
+    )
 
     @field_validator("local_bearer_token", mode="before")
     @classmethod

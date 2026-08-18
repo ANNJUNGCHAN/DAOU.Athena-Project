@@ -11,7 +11,7 @@ from pathlib import Path
 import pytest
 from fastapi import FastAPI
 
-from athena_api.brain import GraphStore
+from athena_api.brain import GraphStore, HistoryStore
 from athena_api.config import Settings
 from athena_api.lifespan import _open_brain, build_lifespan
 from athena_api.process_lock import BrainProcessLock
@@ -42,6 +42,7 @@ def _brain_settings(tmp_path: Path, **overrides: object) -> Settings:
         _env_file=None,
         brain_enabled=True,
         brain_db_path=tmp_path / "brain.lbug",
+        brain_history_db_path=tmp_path / "brain-history.sqlite3",
         **overrides,
     )
 
@@ -57,8 +58,11 @@ async def test_brain_disabled_by_default_never_touches_app_state_or_disk() -> No
         assert app.state.brain_ready is False
         assert app.state.brain_store is None
         assert app.state.brain_last_error is None
+        assert app.state.brain_ingestion_ready is False
+        assert app.state.brain_ingestion_last_error is None
     # A disabled brain must never create a file under the real default path.
     assert not settings.brain_db_path.exists()
+    assert not settings.brain_history_db_path.exists()
 
 
 # --- happy path: real ladybug runtime available on this machine ----------------------
@@ -74,12 +78,55 @@ async def test_brain_opens_and_closes_symmetrically_with_the_app_lifespan(
     async with build_lifespan(settings)(app):
         assert app.state.brain_ready is True
         assert app.state.brain_last_error is None
+        assert app.state.brain_ingestion_ready is True
+        assert app.state.brain_ingestion_last_error is None
         store: GraphStore = app.state.brain_store
         assert store.is_open
         assert await store.schema_version() == 1
     assert app.state.brain_ready is False
     assert app.state.brain_store is None
+    assert app.state.brain_ingestion_ready is False
     assert not store.is_open
+
+
+async def test_ingestion_coordinator_starts_and_stops_symmetrically_with_the_app_lifespan(
+    tmp_path: Path, ladybug_dll_dir: Path | None
+) -> None:
+    """ADR §4.2 step 1 ("writer queue/scheduler 시작") and step 3 ("scheduler/writer
+    cancel 및 await") must bracket the app lifespan the same way DB open/close do.
+    """
+    if ladybug_dll_dir is None:
+        pytest.skip("no local ladybug native runtime available on this machine")
+    app = FastAPI()
+    settings = _brain_settings(tmp_path)
+    async with build_lifespan(settings)(app):
+        assert app.state.brain_ingestion_ready is True
+        assert app.state.brain_ingestion_last_error is None
+        assert settings.brain_history_db_path.exists()
+    assert app.state.brain_ingestion_ready is False
+    assert app.state.brain_ingestion_last_error is None
+
+
+async def test_ingestion_start_failure_is_recorded_but_does_not_fail_the_brain_open(
+    tmp_path: Path, ladybug_dll_dir: Path | None, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Ingestion is optional the same way fts is: a failure to open the raw-history store
+    or start IngestionCoordinator degrades ingestion_ready without failing graph
+    read/write, which does not depend on it (ADR §4.2 step 1, see _open_brain docstring).
+    """
+    if ladybug_dll_dir is None:
+        pytest.skip("no local ladybug native runtime available on this machine")
+
+    async def _boom(self: HistoryStore) -> None:
+        raise RuntimeError("deterministic raw-history open failure")
+
+    monkeypatch.setattr(HistoryStore, "open", _boom)
+    app = FastAPI()
+    settings = _brain_settings(tmp_path)
+    async with build_lifespan(settings)(app):
+        assert app.state.brain_ready is True
+        assert app.state.brain_ingestion_ready is False
+        assert app.state.brain_ingestion_last_error is not None
 
 
 async def test_second_backend_is_rejected_while_first_holds_an_open_brain(

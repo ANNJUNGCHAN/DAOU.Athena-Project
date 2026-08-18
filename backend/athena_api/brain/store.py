@@ -121,6 +121,18 @@ RETURN e.id AS id, e.kind AS kind, e.name AS name
 ORDER BY lower(e.name), e.id
 LIMIT $limit
 """
+_ENTITY_SEARCH_INDEX_NAME: Final = "entity_search_idx"
+_SHOW_INDEXES: Final = "CALL SHOW_INDEXES() RETURN index_name AS index_name"
+_CREATE_ENTITY_SEARCH_INDEX: Final = f"""
+CALL CREATE_FTS_INDEX('Entity', '{_ENTITY_SEARCH_INDEX_NAME}',
+    ['name', 'aliases_json', 'attributes_json'], stemmer := 'none')
+"""
+_SEARCH_ENTITIES_FTS: Final = f"""
+CALL QUERY_FTS_INDEX('Entity', '{_ENTITY_SEARCH_INDEX_NAME}', $query)
+RETURN node.id AS id, node.kind AS kind, node.name AS name, score
+ORDER BY score DESC, node.id
+LIMIT $limit
+"""
 _SUMMARY_QUERIES: Final = {
     "entities": "MATCH (n:Entity) RETURN count(n) AS count",
     "sources": "MATCH (n:SourceRecord) RETURN count(n) AS count",
@@ -209,6 +221,10 @@ class GraphStore:
         self._open_future: asyncio.Future[Any] | None = None
         self._close_future: asyncio.Future[Any] | None = None
         self._closed = False
+        # Set only once load_fts_extension() has both loaded the package and confirmed
+        # (or created) the entity search index — search_entities() reads this to pick
+        # the FTS/BM25 query path over the CONTAINS fallback, per ADR §7.
+        self._fts_index_ready = False
 
     @property
     def is_open(self) -> bool:
@@ -322,19 +338,32 @@ class GraphStore:
         return int(rows[0]["version"])
 
     async def load_fts_extension(self) -> None:
-        """Fetch and activate the official full-text-search package (ADR §4.2 step 4).
+        """Fetch/activate the fts package and ensure the entity search index (ADR §4.2 step 4).
 
         Best-effort by design: ADR investment-brain-architecture.md §7 requires the graph
         core to start safely even when this package is unavailable (no bundled offline
         artifact, no network) and to surface that as degraded readiness rather than a
         startup failure, so callers should catch failures here rather than propagate them.
-        This only activates the package — ``search_entities`` is still a plain substring
-        scan; wiring a ranked query through it is separate follow-up work (see
-        ``brain/AGENTS.md`` and plan.md §4-B for the current gap between that doc and
-        this method).
+
+        Verified empirically against ladybug 0.19.1 (no syntax precedent existed in this
+        repo or the ADR before this): ``CREATE_FTS_INDEX`` builds a live, auto-maintained
+        index over the named node properties — new/updated rows are picked up without a
+        rebuild, and the index itself persists across process restarts, so this only
+        (re)creates it when ``SHOW_INDEXES`` doesn't already list it (``CREATE_FTS_INDEX``
+        raises if called twice for the same name). It does *not* do substring/CONTAINS
+        matching — it tokenizes on whitespace/punctuation and only matches whole terms
+        (e.g. a query for "하이닉스" will not match a stored "SK하이닉스" token unless that
+        exact substring appears as its own token, such as in an alias). Once this method
+        succeeds, ``search_entities`` switches from the CONTAINS scan to this ranked
+        index; recall-quality gating against a fixed corpus (ADR §7) is unaddressed
+        follow-up work, not covered here.
         """
         await self._execute(_INSTALL_FTS)
         await self._execute(_LOAD_FTS)
+        rows = await self._execute(_SHOW_INDEXES)
+        if not any(row["index_name"] == _ENTITY_SEARCH_INDEX_NAME for row in rows):
+            await self._execute(_CREATE_ENTITY_SEARCH_INDEX)
+        self._fts_index_ready = True
 
     async def upsert_entity(self, entity: Entity) -> str:
         rows = await self._execute(
@@ -586,11 +615,19 @@ class GraphStore:
         """Internal fault-injection seam used to verify transaction rollback."""
 
     async def search_entities(self, query: str, *, limit: int = 20) -> tuple[EntitySearchHit, ...]:
+        """Rank by fts/BM25 once load_fts_extension() has built the index; else CONTAINS.
+
+        The two are not equivalent: BM25 matches whole terms, not substrings (see
+        load_fts_extension's docstring). This falls back to the CONTAINS scan only when
+        the index isn't ready — not as a secondary pass merged with fts results — matching
+        the pre-fts behavior exactly for stores that never call load_fts_extension().
+        """
         if not query.strip() or len(query) > 256:
             raise ValueError("query must contain 1 to 256 non-blank characters")
         if not 1 <= limit <= MAX_SEARCH_LIMIT:
             raise ValueError(f"limit must be between 1 and {MAX_SEARCH_LIMIT}")
-        rows = await self._execute(_SEARCH_ENTITIES, {"query": query, "limit": limit})
+        template = _SEARCH_ENTITIES_FTS if self._fts_index_ready else _SEARCH_ENTITIES
+        rows = await self._execute(template, {"query": query, "limit": limit})
         return tuple(
             EntitySearchHit(id=row["id"], kind=row["kind"], name=row["name"]) for row in rows
         )

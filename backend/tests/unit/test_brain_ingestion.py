@@ -326,6 +326,53 @@ async def test_cancelled_backpressured_producer_keeps_durable_pending_job(stores
     assert await history.due_job_ids(now=NOW, limit=10) == ()
 
 
+async def test_enqueue_is_rejected_while_stop_is_draining(stores) -> None:
+    """ADR investment-brain-architecture.md §4.2 step 3: "신규 enqueue 차단" is the first
+    thing shutdown does, ahead of draining the queue or cancelling the writer. A producer
+    racing an in-flight stop() must be rejected, not silently accepted into a job the
+    writer is about to stop picking up.
+    """
+    history, graph = stores
+    blocking = CancelAfterProjection(graph)
+    coordinator = IngestionCoordinator(
+        history, blocking, clock=ManualClock(NOW), poll_interval_seconds=0.01
+    )
+    await history.upsert_chat(chat("message-1", "종료 중 메시지"), changed_at=NOW)
+    await coordinator.start()
+    await coordinator.enqueue(JobTrigger.MANUAL)
+    # Block the writer mid-job so stop()'s drain() phase cannot finish until we release it,
+    # giving a real window where shutdown is in progress and enqueue() must be rejected.
+    await asyncio.wait_for(blocking.projected.wait(), timeout=2)
+
+    stop_task = asyncio.create_task(coordinator.stop())
+    await asyncio.sleep(0)
+    assert coordinator._shutting_down is True
+    with pytest.raises(RuntimeError, match="shutting down"):
+        await coordinator.enqueue(JobTrigger.HOURLY)
+
+    blocking._block.set()
+    await stop_task
+    assert coordinator._shutting_down is False
+    # The rejected enqueue() raised before ever calling history.create_job(), so it left
+    # no durable job behind for a future start() to pick up.
+    assert await history.due_job_ids(now=NOW, limit=10) == ()
+    assert (await graph.summary()).sources == 1
+
+
+async def test_enqueue_works_again_once_stop_returns(stores) -> None:
+    """A completed stop() is not a permanent lockout: durable jobs queued while idle
+    (before the next start()) must still be accepted, matching the restart pattern in
+    test_bounded_queue_backpressures_concurrent_producers_and_single_writes.
+    """
+    history, graph = stores
+    coordinator = IngestionCoordinator(history, graph, clock=ManualClock(NOW))
+    await coordinator.start()
+    await coordinator.stop()
+
+    job = await coordinator.enqueue(JobTrigger.MANUAL)
+    assert (await history.get_job(job.id)) is not None
+
+
 async def test_writer_poll_recovers_job_that_becomes_stale_after_start(stores) -> None:
     history, graph = stores
     job = await history.create_job(JobTrigger.MANUAL, now=NOW)

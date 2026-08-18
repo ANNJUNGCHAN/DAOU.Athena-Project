@@ -113,13 +113,23 @@ class IngestionCoordinator:
         self._run_lock = asyncio.Lock()
         self._writer_task: asyncio.Task[None] | None = None
         self._stopping = False
+        # ADR investment-brain-architecture.md §4.2 step 3 ("신규 enqueue 차단") must take
+        # effect the instant stop() begins, before drain()/checkpoint even runs. `_stopping`
+        # cannot double as that flag: the writer loop's `while not self._stopping` would
+        # exit mid-drain if it flipped early, so a dedicated flag tracks "a stop() call is
+        # in flight" without touching the writer loop's own termination signal.
+        self._shutting_down = False
         self._poll_interval_seconds = poll_interval_seconds
         self._stale_after = timedelta(minutes=10)
         self._source_projector = source_projector
 
     async def enqueue(self, trigger: JobTrigger) -> IngestionJob:
+        if self._shutting_down:
+            raise RuntimeError("ingestion coordinator is shutting down; new jobs are rejected")
         job = await self._history.create_job(trigger, now=self._clock())
-        await self._queue_job(job.id, wait=True)
+        queued = await self._queue_job(job.id, wait=True)
+        if not queued:
+            raise RuntimeError("ingestion coordinator is shutting down; new jobs are rejected")
         return job
 
     async def start(self, *, stale_after: timedelta = timedelta(minutes=10)) -> None:
@@ -128,6 +138,7 @@ class IngestionCoordinator:
         self._stale_after = stale_after
         await self.recover_stale_jobs(stale_after=stale_after)
         self._stopping = False
+        self._shutting_down = False
         self._writer_task = asyncio.create_task(self._writer_loop(), name="athena-ingestion-writer")
         await self._refill_due_jobs()
 
@@ -145,16 +156,30 @@ class IngestionCoordinator:
         task = self._writer_task
         if task is None:
             return
-        if drain:
-            await self.drain()
-        self._stopping = True
-        task.cancel()
-        with suppress(asyncio.CancelledError):
-            await task
-        self._writer_task = None
+        self._shutting_down = True
+        try:
+            if drain:
+                await self.drain()
+            self._stopping = True
+            task.cancel()
+            with suppress(asyncio.CancelledError):
+                await task
+            self._writer_task = None
+        finally:
+            # A stop() call is only "in flight" for its own duration. Once it returns,
+            # enqueue() must work again so a later start() has durable jobs to recover —
+            # test_bounded_queue_backpressures_concurrent_producers_and_single_writes
+            # enqueues while idle between a stop() and the next start().
+            self._shutting_down = False
 
     async def _queue_job(self, job_id: str, *, wait: bool) -> bool:
         async with self._enqueue_lock:
+            # Only the externally-facing enqueue() path (wait=True) is rejected here.
+            # _refill_due_jobs() calls this with wait=False from inside drain() itself
+            # while _shutting_down is already True — rejecting those would make drain()
+            # loop forever waiting for due jobs it can never re-queue.
+            if wait and self._shutting_down:
+                return False
             if job_id in self._queued_ids or job_id == self._active_job_id:
                 return False
             self._queued_ids.add(job_id)
