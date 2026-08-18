@@ -575,6 +575,42 @@ app.whenReady().then(async () => {
   };
   console.log('[verify] 검증10(컬럼 우선순위 fold):', JSON.stringify(report.tableColumnFold));
 
+  // ---- 검증11(CC-106): 차트 카드 — 마운트·툴바·지표 토글·매물대 스모크 ----
+  // 깊은 상호작용(형식 전환·저작 영속·드로잉)은 probe-chart-*.js 4종이 전담한다 —
+  // 여기서는 회귀 게이트로서 "카드가 뜨고, 툴바가 계약대로 있고, 매물대가 켜진다"
+  // 만 매 verify마다 실측한다.
+  await canvasWin.webContents.executeJavaScript(`window.addCard('chart')`);
+  await wait(1500); // 동적 import + 비동기 마운트
+  const chartProbe = await canvasWin.webContents.executeJavaScript(`(async () => {
+    const card = document.querySelector('.card.chart');
+    if (!card) return null;
+    const tabs = Array.from(card.querySelectorAll('.chart-toolbar-tab')).map(b => b.textContent);
+    const paneRows = Array.from(card.querySelectorAll('.chart-price-pane table tr'))
+      .map(tr => tr.getBoundingClientRect()).filter(r => r.height > 0).length;
+    const indBtn = Array.from(card.querySelectorAll('.chart-toolbar-btn')).find(b => b.textContent.includes('∿'));
+    indBtn.click();
+    await new Promise(r => setTimeout(r, 150));
+    const panel = card.querySelector('.chart-indicator-panel');
+    const indicatorRows = panel ? panel.querySelectorAll('.chart-ind-row').length : 0;
+    const vpRow = panel && panel.querySelector('.chart-ind-vp-row');
+    if (vpRow) vpRow.click();
+    await new Promise(r => setTimeout(r, 300));
+    const vpBars = card.querySelectorAll('.chart-volume-profile-overlay .chart-vp-bar').length;
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+    await new Promise(r => setTimeout(r, 100));
+    return { cardPresent: true, tabs, paneRows, indicatorRows, vpBars };
+  })()`);
+  await wait(200);
+  await shot(canvasWin, '19-chart-card.png');
+  report.chartCard = {
+    cardRendered: chartProbe !== null,
+    periodTabsOk: chartProbe !== null && chartProbe.tabs.join(',') === '일,주,월,년,분,틱',
+    paneSeparated: chartProbe !== null && chartProbe.paneRows >= 3, // 가격+구분+거래량 이상
+    indicatorRows35: chartProbe !== null && chartProbe.indicatorRows === 35,
+    volumeProfileBars24: chartProbe !== null && chartProbe.vpBars === 24,
+  };
+  console.log('[verify] 검증11(차트 카드):', JSON.stringify(report.chartCard));
+
   report.finishedAt = new Date().toISOString();
   fs.writeFileSync(path.join(CAPTURES, 'VERIFY-REPORT.json'), JSON.stringify(report, null, 2));
   console.log('[verify] 리포트 저장:', path.join(CAPTURES, 'VERIFY-REPORT.json'));
