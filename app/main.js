@@ -1,5 +1,5 @@
 // Athena W2 — 두 창 Electron 셸. spike/electron-glass/v2.js·v3.js 이식.
-const { app, BrowserWindow, ipcMain, screen, Tray, Menu, nativeImage } = require('electron');
+const { app, BrowserWindow, ipcMain, screen, Tray, Menu, nativeImage, desktopCapturer } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
@@ -21,6 +21,9 @@ const { buildLivePrompt } = require('./lib/main/live-prompt');
 // 목업 데이터 로더 — 렌더러 격리 이관(2026-08-18). canvas.js가 더는 fs를
 // 직접 못 쓴다 — athena:load-fixture가 이 모듈을 대신 호출해준다.
 const mockdata = require('./lib/main/mockdata');
+// 휘도 감지-적응의 순수 계산부(2026-08-19) — 캡처·타이머는 아래
+// startBackdropSampling()이, 계산·매핑은 이 모듈이 담당한다(단위 테스트 9건).
+const backdropLuma = require('./lib/main/backdrop-luma');
 
 const MDEBUGLOG = path.join(__dirname, 'captures', 'main-debug.log');
 function mdlog(msg) {
@@ -257,6 +260,9 @@ async function createWindows() {
   chatWin.on('will-resize', (event, newBounds, details) => {
     if (details && details.edge === 'top') event.preventDefault();
   });
+
+  // 휘도 감지-적응 시작(2026-08-19) — 두 창이 다 뜬 뒤에만. fixture면 내부에서 no-op.
+  startBackdropSampling();
 }
 
 // ---------- OS 스냅 이벤트 정착 (2026-08-18 승급 — qa-win-arrow.json 실측 근거) ----------
@@ -584,6 +590,85 @@ app.on('will-quit', () => {
 ipcMain.on('athena:close-windows', () => {
   ensureTray(); // 숨기기 전에 복귀 경로부터 확보한다 — 순서가 안전장치다
   hideToBackground();
+});
+
+// ---------- 휘도 감지-적응 (2026-08-19 구현 — palette.md "채택" 스펙의 실결선) ----------
+// 검증 보드 45가 실측으로 증명한 결함의 해소: 밝은 배경화면 위에서 유리 0.30은
+// dim 계층 텍스트를 소실시킨다. 2초 저빈도 폴링으로 데스크톱 썸네일을 떠서
+// **우리 창 영역을 제외한**(화면 캡처에는 우리 창 자신도 찍힌다) 평균 휘도를 재고,
+// EMA 스무딩 후 두 렌더러에 표면별 유리 두께를 보낸다. 렌더러는 CSS 전이(600ms)로
+// 부드럽게 따라간다 — 이건 opacity 페이드가 아니라 리퀴드 글래스의 정의 그 자체
+// ("배경에 따라 tint를 연속적으로 조정", liquid-glass.md §1 적응성)다.
+// fixture(자동 검증) 실행에서는 돌리지 않는다 — 캡처·검증16 결정론 보호.
+// 연속 실패 3회면 폴백 0.55 고정(부록 A2: 가독성이 감지 성공 여부에 걸리면 안 된다).
+let backdropTimer = null;
+let smoothedLuma = null;
+let sampleFailures = 0;
+let lastSent = null;
+
+async function sampleBackdropOnce() {
+  if (!chatWin || chatWin.isDestroyed()) return;
+  try {
+    const display = screen.getDisplayMatching(chatWin.getBounds());
+    const thumbW = 240;
+    const thumbH = Math.max(1, Math.round(thumbW * display.bounds.height / display.bounds.width));
+    const sources = await desktopCapturer.getSources({ types: ['screen'], thumbnailSize: { width: thumbW, height: thumbH } });
+    const source = sources.find((s) => String(s.display_id) === String(display.id)) || sources[0];
+    if (!source || source.thumbnail.isEmpty()) throw new Error('빈 썸네일');
+    const size = source.thumbnail.getSize();
+    const scaleX = size.width / display.bounds.width;
+    const scaleY = size.height / display.bounds.height;
+    const exclude = [];
+    for (const w of [chatWin, canvasWin]) {
+      if (w && !w.isDestroyed() && w.isVisible() && !w.isMinimized()) {
+        const b = w.getBounds();
+        exclude.push(backdropLuma.scaleRect(
+          { x: b.x - display.bounds.x, y: b.y - display.bounds.y, width: b.width, height: b.height },
+          scaleX, scaleY
+        ));
+      }
+    }
+    const luma = backdropLuma.computeAverageLuminance(source.thumbnail.toBitmap(), size.width, size.height, exclude);
+    if (luma === null) return; // 창이 화면을 다 덮어 판정 불가 — 이전 값 유지
+    sampleFailures = 0;
+    smoothedLuma = backdropLuma.smooth(smoothedLuma, luma);
+    const b = backdropLuma.lumaToBrightness(smoothedLuma);
+    sendBackdropAlphas({
+      brightness: b,
+      windowAlpha: backdropLuma.brightnessToAlpha(b, 0.30),
+      canvasAlpha: backdropLuma.brightnessToAlpha(b, 0.50),
+    });
+  } catch (err) {
+    sampleFailures += 1;
+    if (sampleFailures === 3) {
+      // 폴백 — 감지가 계속 실패하면 중간 두께로 고정한다. 가독성을 감지 성공
+      // 여부에 걸어두지 않는다(palette.md). mdlog로 원인은 남긴다.
+      mdlog(`휘도 샘플링 3연속 실패 — 폴백 0.55 고정: ${String((err && err.message) || err)}`);
+      sendBackdropAlphas({ brightness: null, windowAlpha: 0.55, canvasAlpha: 0.55, fallback: true });
+    }
+  }
+}
+
+function sendBackdropAlphas(payload) {
+  // 0.01 미만의 변화는 보내지 않는다 — 렌더러 전이가 미세 진동하지 않게.
+  if (lastSent && payload.windowAlpha !== undefined
+    && Math.abs(lastSent.windowAlpha - payload.windowAlpha) < 0.01
+    && Math.abs(lastSent.canvasAlpha - payload.canvasAlpha) < 0.01) return;
+  lastSent = payload;
+  for (const w of [chatWin, canvasWin]) {
+    if (w && !w.isDestroyed()) w.webContents.send('athena:backdrop-luminance', payload);
+  }
+}
+
+function startBackdropSampling() {
+  if (backdropTimer) return;
+  if (process.env.ATHENA_CANVAS_SOURCE === 'fixture') return; // 자동 검증 결정론 보호
+  sampleBackdropOnce();
+  backdropTimer = setInterval(sampleBackdropOnce, 2000);
+}
+
+app.on('will-quit', () => {
+  if (backdropTimer) { clearInterval(backdropTimer); backdropTimer = null; }
 });
 
 // ---------- 줌(화면 확대/축소) — 두 창 동기, Ctrl+= / Ctrl+- / Ctrl+0 / Ctrl+휠 ----------

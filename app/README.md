@@ -1088,6 +1088,20 @@ Win+←/→/↑/↓가 이 앱에서 OS 표준 창 단축키와 같은 뜻으로
 알린다(chat.js `maybeShowCoachmark`, localStorage 플래그). fixture(자동 검증)
 실행에선 뜨지 않는다 — 캡처 결정론 보호.
 
+**휘도 감지-적응 (2026-08-19)** — palette.md "채택" 스펙의 실결선. Paper 보드 45가
+밝은 배경 위 유리 0.30에서 dim 텍스트 소실을 실측한 것이 근거다.
+`main.js startBackdropSampling()`: desktopCapturer 썸네일에서 **자기 창 영역을
+제외**하고(화면 캡처에는 우리 창도 찍힌다) 평균 휘도를 재고, 2초 폴링 + EMA
+스무딩 후 `athena:backdrop-luminance`로 표면별 두께를 방송한다 — 창 0.30→최대
+0.72, 캔버스 창 0.50→0.72. 렌더러는 600ms 전이(opacity 페이드가 아니라 두께
+변조). 폴백: 3연속 실패 시 0.55 고정. 계산부는 `lib/main/backdrop-luma.js`
+(단위 테스트 9건), 실측은 `probe-backdrop-luma.js`(captures/backdrop-luma-probe.json
+— 어두운 데스크톱에서 b=0 판정·이벤트 왕복 확인). fixture 실행에선 루프를 아예
+안 돌린다 — 검증16(유리 사다리) 결정론 보호.
+
+**부수(2026-08-19)** — 창 이동 커서 신호(.history/.input-row hover grab · 드래그 중
+grabbing), 캔버스 900px 이하 1열 접힘(canvas.css @media — Paper 보드 46 명세와 짝).
+
 `globalShortcut`은 다른 앱과 전역 충돌 위험이 있어(electron#9206) 여전히 쓰지
 않는다. `before-input-event` 배선은 무해한 백스톱으로 남긴다(도달하면 처리).
 
