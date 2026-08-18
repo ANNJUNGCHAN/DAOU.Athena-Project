@@ -9,3 +9,5 @@ captures/*.log
 .verify-profile/
 .capture-wide15-profile/
 .probe-chart-profile/
+.probe-chart-indicators-profile/
+.probe-chart-toolbar-profile/
