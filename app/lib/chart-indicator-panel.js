@@ -189,11 +189,26 @@ function createIndicatorPanel(opts) {
     if (openPanelState && openPanelState.panel === panel) closeAnyOpenIndicatorPanel();
   }
 
+  // 저작 상태 복원(CC-104) — chart-card.js가 저장된 상태를 공유 Set/params에
+  // 반영한 뒤 이걸 불러 행 UI(체크 표시)와 매물대 행을 실제 상태에 맞춘다.
+  // 행 DOM은 생성 시 1회 렌더라, 외부에서 Set을 바꿔도 스스로 갱신되지 않는다.
+  function syncFromState(vpOn) {
+    for (const id of Object.keys(rowById)) {
+      const on = visible.has(id);
+      rowById[id].classList.toggle('is-on', on);
+      rowById[id].setAttribute('aria-checked', String(on));
+    }
+    volumeProfileOn = !!vpOn;
+    vpRow.classList.toggle('is-on', volumeProfileOn);
+    vpRow.setAttribute('aria-checked', String(volumeProfileOn));
+    renderSettings(); // 파라미터 입력값도 복원된 params를 다시 읽는다
+  }
+
   function destroy() {
     close();
   }
 
-  return { panel, open, close, destroy };
+  return { panel, open, close, destroy, syncFromState };
 }
 
 module.exports = { createIndicatorPanel };

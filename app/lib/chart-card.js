@@ -31,6 +31,7 @@ const { createIndicatorPanel } = require('./chart-indicator-panel');
 const { DEFAULT_INDICATOR_VISIBLE, defaultParamsFor } = require('./chart-indicator-registry');
 const { sma, bollinger, rsi, macd } = require('./chart-indicators');
 const { volumeProfile } = require('./chart-volume-profile');
+const { createAuthoringStore, periodToken } = require('./chart-authoring-store');
 
 const UP_COLOR = '#FF5C5C';
 const DOWN_COLOR = '#4D9FFF';
@@ -457,6 +458,53 @@ async function createChartCard(container, opts) {
     if (volumeProfileOn) renderVolumeProfile();
   });
 
+  // ---------- 저작 상태 영속(CC-104) — chart-lens-spec §3 ----------
+  // 4종(지표 on/off+파라미터·차트형식·매물대·드로잉[CC-105])을 종목×주기 키
+  // (chart.authoring.{symbol}.{token})로 저장·복원한다. 저장소는 렌더러
+  // localStorage 1판(백엔드 영속은 후속 라운드 — note에 정직 표기). probe·테스트가
+  // 저장소를 주입할 수 있게 opts.authoringStorage를 받는다.
+  const authoringStore = createAuthoringStore(
+    o.authoringStorage !== undefined
+      ? o.authoringStorage
+      : (typeof localStorage !== 'undefined' ? localStorage : null)
+  );
+  const symbol = o.symbol || 'UNKNOWN';
+
+  function saveAuthoring() {
+    authoringStore.save(symbol, periodToken(currentPeriod, currentInterval), {
+      form: currentForm,
+      volumeProfileOn,
+      visible: indicatorState.visible,
+      params: indicatorState.params,
+      drawings: [], // CC-105가 채운다
+    });
+  }
+
+  // 저장된 상태를 실제 화면에 반영한다. 없으면(null) 아무것도 안 한다 — 처음
+  // 방문하는 주기는 현재 상태를 상속한다(리셋보다 자연스럽다는 판단, 상속된
+  // 상태는 다음 변경 때 그 주기 키로 저장된다).
+  function applyAuthoring(saved) {
+    if (!saved) return false;
+    if (SERIES_DEFS[saved.form] && saved.form !== currentForm) {
+      currentForm = saved.form;
+      toolbar.state.form = saved.form;
+      buildPriceSeries(saved.form);
+    }
+    indicatorState.visible.clear();
+    for (const id of saved.indicators.visible) indicatorState.visible.add(id);
+    for (const id of Object.keys(indicatorState.params)) {
+      if (saved.indicators.params[id]) {
+        indicatorState.params[id] = Object.assign({}, indicatorState.params[id], saved.indicators.params[id]);
+      }
+    }
+    volumeProfileOn = !!saved.volumeProfileOn;
+    indicatorPanel.syncFromState(volumeProfileOn);
+    applyOverlayIndicators();
+    applyVolMaIndicator();
+    applyPaneIndicators();
+    return true;
+  }
+
   const indicatorPanel = createIndicatorPanel({
     initial: { visible: indicatorState.visible, params: indicatorState.params, volumeProfileOn },
     callbacks: {
@@ -464,15 +512,18 @@ async function createChartCard(container, opts) {
         if (id === 'ma' || id === 'boll') applyOverlayIndicators();
         else if (id === 'volMa') applyVolMaIndicator();
         else if (id === 'rsi' || id === 'macd') applyPaneIndicators();
+        saveAuthoring();
       },
       onParamChange: (id) => {
         if (id === 'ma' || id === 'boll') applyOverlayIndicators();
         else if (id === 'volMa') applyVolMaIndicator();
         else if (id === 'rsi' || id === 'macd') applyPaneIndicators();
+        saveAuthoring();
       },
       onVolumeProfileToggle: (on) => {
         volumeProfileOn = on;
         requestAnimationFrame(() => renderVolumeProfile());
+        saveAuthoring();
       },
     },
   });
@@ -505,6 +556,7 @@ async function createChartCard(container, opts) {
     currentForm = form;
     buildPriceSeries(form);
     if (currentBars && currentBars.length) setData(currentBars);
+    saveAuthoring();
   }
 
   // 정직 표기(fin-meta 관례) — 수정주가는 백엔드 미연결이라 토글해도 실제
@@ -514,16 +566,21 @@ async function createChartCard(container, opts) {
   function updateNote() {
     const parts = ['서버 보정(upd_stkpc_tp) 미연결 — 목업 동일 데이터'];
     if (currentMockResample) parts.push('분/틱은 일봉에서 만든 결정적 의사 재샘플 — 실제 장중 분포 아님');
+    if (authoringStore.enabled) parts.push('저작 상태 로컬 저장 1판 — 백엔드 영속은 후속 라운드');
     adjustedNote.textContent = parts.join(' · ');
   }
 
   // 주기 탭·세분 전환 — 원본 일봉(dailyBars)에서 매번 새로 파생한다(누적 오차 없음).
+  // 저작 상태는 주기별 독립이다(CC-104): 떠나는 주기의 상태를 저장하고, 도착한
+  // 주기에 저장분이 있으면 복원한다(없으면 현재 상태 상속 — applyAuthoring 주석).
   function applyPeriod(period, interval) {
+    saveAuthoring(); // 떠나는 주기의 상태를 그 주기 키로 확정
     currentPeriod = period;
     currentInterval = interval;
     const { bars, mock } = resample(dailyBars, period, interval);
     currentBars = bars;
     currentMockResample = mock;
+    applyAuthoring(authoringStore.load(symbol, periodToken(period, interval)));
     setData(currentBars);
     updateNote();
   }
@@ -535,6 +592,10 @@ async function createChartCard(container, opts) {
     currentAdjusted = adjustedOn;
     applyPeriod(currentPeriod, currentInterval);
   }
+
+  // 마운트 시 복원(CC-104) — 이 종목×주기에 저장된 저작 상태가 있으면 기본값
+  // 대신 그걸 쓴다(위의 기본 on 적용을 덮어쓴다).
+  applyAuthoring(authoringStore.load(symbol, periodToken(currentPeriod, currentInterval)));
 
   if (dailyBars.length) {
     setData(currentBars);

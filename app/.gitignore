@@ -11,3 +11,4 @@ captures/*.log
 .probe-chart-profile/
 .probe-chart-indicators-profile/
 .probe-chart-toolbar-profile/
+.probe-chart-authoring-profile/
