@@ -1,0 +1,71 @@
+{
+ "ok": true,
+ "error": null,
+ "exitCode": 0,
+ "finalResult": {
+  "is_error": false,
+  "duration_api_ms": 44952,
+  "num_turns": 11,
+  "stop_reason": "end_turn",
+  "session_id": "8758ee7a-7cde-4696-b960-f36cdff1f100",
+  "total_cost_usd": 0.3562425,
+  "usage": {
+   "input_tokens": 13,
+   "cache_creation_input_tokens": 17460,
+   "cache_read_input_tokens": 195805,
+   "output_tokens": 3347,
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 17460,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "not_available",
+   "iterations": [],
+   "speed": "standard"
+  },
+  "modelUsage": {
+   "claude-opus-5[1m]": {
+    "inputTokens": 13,
+    "outputTokens": 3347,
+    "cacheReadInputTokens": 195805,
+    "cacheCreationInputTokens": 17460,
+    "webSearchRequests": 0,
+    "costUSD": 0.3562425,
+    "contextWindow": 1000000,
+    "maxOutputTokens": 64000,
+    "canonicalModel": "claude-opus-5",
+    "provider": "firstParty"
+   }
+  },
+  "permission_denials": [
+   {
+    "tool_name": "Bash",
+    "tool_use_id": "toolu_01GzcGTHd8NApMQKufChSQvM",
+    "tool_input": {
+     "command": "cd \"C:\\Users\\ajc22\\.claude\\projects\\C--Users-ajc22-AppData-Roaming-athena-shell-mcp-config\\8758ee7a-7cde-4696-b960-f36cdff1f100\\tool-results\" && python -c \"\nimport json,glob\nfor f in ['mcp-athena-korea-stock-mcp__get_financial_statement-1787016934178.txt','mcp-athena-korea-stock-mcp__get_financial_statement-1787016934967.txt']:\n    t=open(f,encoding='utf-8').read()\n    s=t[t.find('['):t.rfind(']')+1]\n    try:\n        d=json.loads(s)\n    except Exception as e:\n        print(f,'ERR',e); continue\n    print('===',f,len(d))\n    for r in d:\n        if r.get('account_nm') in ('부채총계','자본총계','자산총계'):\n            print(r.get('bsns_year'),r.get('account_nm'),r.get('thstrm_amount'),'|prev',r.get('frmtrm_amount'),'|prev2',r.get('bfefrmtrm_amount'))\n\"",
+     "description": "Parse balance sheet totals"
+    }
+   }
+  ],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "삼성전자 연결 부채비율은 2023년 25.36% → 2024년 27.93% → 2025년 29.94%로 2년 연속 상승했습니다(누적 +4.58%p). 자본총계가 363.7조 → 436.3조로 20% 늘었음에도 부채총계가 92.2조 → 130.6조로 42% 증가하며 비율을 끌어올린 구조입니다. 다만 30% 미만 수준으로 제조업 평균 대비 여전히 매우 낮은 재무 레버리지이며, 수치는 각 사업보고서의 DART XBRL 연결재무상태표(부채총계÷자본총계) 기준입니다.",
+  "ttft_ms": 2187,
+  "ttft_stream_ms": 1443,
+  "time_to_request_ms": 293,
+  "type": "result",
+  "duration_ms": 46105,
+  "uuid": "b0968fd3-313d-417a-98e9-04dbefb0b840"
+ },
+ "diagnostics": {
+  "skippedLines": 0,
+  "totalEvents": 42
+ }
+}

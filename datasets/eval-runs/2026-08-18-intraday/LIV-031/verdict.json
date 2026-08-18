@@ -1,0 +1,52 @@
+{
+ "verdict": "pass",
+ "judge_note": "오늘 날짜를 실제 조회해 2026-07-31을 계산하고 pubDate로 그날만 걸렀다. 네이버 API에 날짜 필터가 없고 start가 1000건으로 막혀 전수가 아닌 표본이라는 한계를 스스로 밝힌 점이 특히 정직하다.",
+ "suspect_dataset_defect": false,
+ "auto_checks": [
+  {
+   "check": "get_today_date success=true",
+   "ok": true,
+   "evidence": "audit-delta.jsonl"
+  },
+  {
+   "check": "search_news success=true",
+   "ok": true,
+   "evidence": "audit-delta.jsonl 13건"
+  }
+ ],
+ "must_not_include": [
+  {
+   "item": "날짜 조회 없이 임의 특정",
+   "violated": false,
+   "evidence": "get_today_date 호출 확인"
+  },
+  {
+   "item": "다른 날짜 기사를 그날인 것처럼 제시",
+   "violated": false,
+   "evidence": "7/31분만 선별했다고 명시"
+  }
+ ],
+ "must_include": [
+  {
+   "item": "오늘 조회 후 지난달 말일 계산",
+   "ok": true,
+   "evidence": "2026-08-18 → 2026-07-31"
+  },
+  {
+   "item": "pubDate 대조 근거",
+   "ok": true,
+   "evidence": "7/31분만 골라낸 결과"
+  },
+  {
+   "item": "없으면 없음 명시",
+   "ok": true,
+   "evidence": "기사 존재. 대신 표본 한계 고지"
+  }
+ ],
+ "case_id": "LIV-031",
+ "run": "2026-08-18-intraday",
+ "duration_s": 138.7,
+ "market_session": "정규장",
+ "tier": "live",
+ "persona": "리서치원"
+}

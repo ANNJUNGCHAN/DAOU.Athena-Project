@@ -1,0 +1,290 @@
+[
+ {
+  "toolUseId": "toolu_014K3HrrCit3x11ULZjP6eY3",
+  "status": "success",
+  "envelope": {
+   "canvas_type": "table",
+   "fell_back": false,
+   "fallback_reason": null,
+   "caption": "SK바이오사이언스(302440) 최근 공시 목록 36건 — 2026.02.03 ~ 2026.08.14, DART 접수일 기준",
+   "data": {
+    "columns": [
+     {
+      "key": "rcept_dt",
+      "label": "접수일자"
+     },
+     {
+      "key": "report_nm",
+      "label": "보고서명"
+     },
+     {
+      "key": "flr_nm",
+      "label": "제출인"
+     },
+     {
+      "key": "rm",
+      "label": "비고"
+     },
+     {
+      "key": "url",
+      "label": "원문링크"
+     }
+    ],
+    "rows": [
+     {
+      "rcept_dt": "2026-08-14",
+      "report_nm": "지급수단별ㆍ지급기간별지급금액및분쟁조정기구에관한사항",
+      "flr_nm": "SK바이오사이언스",
+      "rm": "공정위공시",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260814002309"
+     },
+     {
+      "rcept_dt": "2026-08-13",
+      "report_nm": "반기보고서 (2026.06)",
+      "flr_nm": "SK바이오사이언스",
+      "rm": "",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260813001292"
+     },
+     {
+      "rcept_dt": "2026-08-10",
+      "report_nm": "기업설명회(IR)개최(안내공시)",
+      "flr_nm": "SK바이오사이언스",
+      "rm": "유가증권시장",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260810800485"
+     },
+     {
+      "rcept_dt": "2026-08-10",
+      "report_nm": "연결재무제표기준영업(잠정)실적(공정공시)",
+      "flr_nm": "SK바이오사이언스",
+      "rm": "유가증권시장",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260810800429"
+     },
+     {
+      "rcept_dt": "2026-07-29",
+      "report_nm": "기업설명회(IR)개최(안내공시)",
+      "flr_nm": "SK바이오사이언스",
+      "rm": "유가증권시장",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260729800754"
+     },
+     {
+      "rcept_dt": "2026-06-23",
+      "report_nm": "단일판매ㆍ공급계약체결",
+      "flr_nm": "SK바이오사이언스",
+      "rm": "유가증권시장",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260623800501"
+     },
+     {
+      "rcept_dt": "2026-06-16",
+      "report_nm": "자기주식취득결과보고서",
+      "flr_nm": "SK바이오사이언스",
+      "rm": "",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260616000207"
+     },
+     {
+      "rcept_dt": "2026-05-29",
+      "report_nm": "기업지배구조보고서공시",
+      "flr_nm": "SK바이오사이언스",
+      "rm": "유가증권시장",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260529802083"
+     },
+     {
+      "rcept_dt": "2026-05-29",
+      "report_nm": "대규모기업집단현황공시[연1회공시및1/4분기용(개별회사)]",
+      "flr_nm": "SK바이오사이언스",
+      "rm": "공정위공시",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260529001889"
+     },
+     {
+      "rcept_dt": "2026-05-13",
+      "report_nm": "분기보고서 (2026.03)",
+      "flr_nm": "SK바이오사이언스",
+      "rm": "",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260513000618"
+     },
+     {
+      "rcept_dt": "2026-05-06",
+      "report_nm": "기업설명회(IR)개최(안내공시)",
+      "flr_nm": "SK바이오사이언스",
+      "rm": "유가증권시장",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260506800695"
+     },
+     {
+      "rcept_dt": "2026-05-06",
+      "report_nm": "연결재무제표기준영업(잠정)실적(공정공시)",
+      "flr_nm": "SK바이오사이언스",
+      "rm": "유가증권시장",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260506800645"
+     },
+     {
+      "rcept_dt": "2026-04-28",
+      "report_nm": "주요사항보고서(자기주식취득결정)",
+      "flr_nm": "SK바이오사이언스",
+      "rm": "",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260428000715"
+     },
+     {
+      "rcept_dt": "2026-04-22",
+      "report_nm": "기업설명회(IR)개최(안내공시)",
+      "flr_nm": "SK바이오사이언스",
+      "rm": "유가증권시장",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260422800614"
+     },
+     {
+      "rcept_dt": "2026-03-27",
+      "report_nm": "주식등의대량보유상황보고서(일반)",
+      "flr_nm": "SK케미칼",
+      "rm": "",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260327001256"
+     },
+     {
+      "rcept_dt": "2026-03-26",
+      "report_nm": "임원ㆍ주요주주특정증권등소유상황보고서",
+      "flr_nm": "김훈",
+      "rm": "",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260326000825"
+     },
+     {
+      "rcept_dt": "2026-03-25",
+      "report_nm": "최대주주등소유주식변동신고서",
+      "flr_nm": "SK바이오사이언스",
+      "rm": "유가증권시장",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260325801142"
+     },
+     {
+      "rcept_dt": "2026-03-23",
+      "report_nm": "정기주주총회결과",
+      "flr_nm": "SK바이오사이언스",
+      "rm": "유가증권시장",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260323802539"
+     },
+     {
+      "rcept_dt": "2026-03-23",
+      "report_nm": "독립이사의선임ㆍ해임또는중도퇴임에관한신고",
+      "flr_nm": "SK바이오사이언스",
+      "rm": "",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260323001627"
+     },
+     {
+      "rcept_dt": "2026-03-23",
+      "report_nm": "주식매수선택권부여에관한신고",
+      "flr_nm": "SK바이오사이언스",
+      "rm": "",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260323001622"
+     },
+     {
+      "rcept_dt": "2026-03-23",
+      "report_nm": "[기재정정]투자판단관련주요경영사항 (21가 폐렴구균백신(GBP410)의 미국 제3상 임상시험계획(IND) 승인)",
+      "flr_nm": "SK바이오사이언스",
+      "rm": "유가증권시장",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260323801823"
+     },
+     {
+      "rcept_dt": "2026-03-16",
+      "report_nm": "[기재정정]주주총회소집결의",
+      "flr_nm": "SK바이오사이언스",
+      "rm": "유가증권시장",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260316802158"
+     },
+     {
+      "rcept_dt": "2026-03-13",
+      "report_nm": "사업보고서 (2025.12)",
+      "flr_nm": "SK바이오사이언스",
+      "rm": "연결",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260313000936"
+     },
+     {
+      "rcept_dt": "2026-03-13",
+      "report_nm": "감사보고서제출",
+      "flr_nm": "SK바이오사이언스",
+      "rm": "유가증권시장",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260313801048"
+     },
+     {
+      "rcept_dt": "2026-02-27",
+      "report_nm": "대규모기업집단현황공시[분기별공시(개별회사용)]",
+      "flr_nm": "SK바이오사이언스",
+      "rm": "공정위공시",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260227006829"
+     },
+     {
+      "rcept_dt": "2026-02-24",
+      "report_nm": "최대주주등소유주식변동신고서",
+      "flr_nm": "SK바이오사이언스",
+      "rm": "유가증권시장",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260224800979"
+     },
+     {
+      "rcept_dt": "2026-02-24",
+      "report_nm": "주식등의대량보유상황보고서(일반)",
+      "flr_nm": "SK케미칼",
+      "rm": "",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260224003078"
+     },
+     {
+      "rcept_dt": "2026-02-20",
+      "report_nm": "주주총회소집결의",
+      "flr_nm": "SK바이오사이언스",
+      "rm": "유가증권시장/정정",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260220801196"
+     },
+     {
+      "rcept_dt": "2026-02-20",
+      "report_nm": "의결권대리행사권유참고서류",
+      "flr_nm": "SK바이오사이언스",
+      "rm": "",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260220002587"
+     },
+     {
+      "rcept_dt": "2026-02-20",
+      "report_nm": "주주총회소집공고",
+      "flr_nm": "SK바이오사이언스",
+      "rm": "",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260220002585"
+     },
+     {
+      "rcept_dt": "2026-02-20",
+      "report_nm": "주식매수선택권부여에관한신고",
+      "flr_nm": "SK바이오사이언스",
+      "rm": "",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260220002583"
+     },
+     {
+      "rcept_dt": "2026-02-13",
+      "report_nm": "지급수단별ㆍ지급기간별지급금액및분쟁조정기구에관한사항",
+      "flr_nm": "SK바이오사이언스",
+      "rm": "공정위공시",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260213002377"
+     },
+     {
+      "rcept_dt": "2026-02-03",
+      "report_nm": "기업설명회(IR)개최(안내공시)",
+      "flr_nm": "SK바이오사이언스",
+      "rm": "유가증권시장",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260203800784"
+     },
+     {
+      "rcept_dt": "2026-02-03",
+      "report_nm": "매출액또는손익구조30%(대규모법인은15%)이상변경",
+      "flr_nm": "SK바이오사이언스",
+      "rm": "유가증권시장",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260203800733"
+     },
+     {
+      "rcept_dt": "2026-02-03",
+      "report_nm": "연결재무제표기준영업(잠정)실적(공정공시)",
+      "flr_nm": "SK바이오사이언스",
+      "rm": "유가증권시장",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260203800694"
+     },
+     {
+      "rcept_dt": "2026-02-03",
+      "report_nm": "투자판단관련주요경영사항 (RSV 예방항체 기술도입 계약 체결)",
+      "flr_nm": "SK바이오사이언스",
+      "rm": "유가증권시장",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260203800659"
+     }
+    ]
+   }
+  }
+ }
+]

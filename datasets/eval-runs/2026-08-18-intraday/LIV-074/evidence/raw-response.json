@@ -1,0 +1,62 @@
+{
+ "ok": true,
+ "error": null,
+ "exitCode": 0,
+ "finalResult": {
+  "is_error": false,
+  "duration_api_ms": 58664,
+  "num_turns": 10,
+  "stop_reason": "end_turn",
+  "session_id": "14d2b75e-7934-490c-bdfb-8925a02d44be",
+  "total_cost_usd": 0.557757,
+  "usage": {
+   "input_tokens": 12,
+   "cache_creation_input_tokens": 32515,
+   "cache_read_input_tokens": 187244,
+   "output_tokens": 5557,
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 32515,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "not_available",
+   "iterations": [],
+   "speed": "standard"
+  },
+  "modelUsage": {
+   "claude-opus-5[1m]": {
+    "inputTokens": 12,
+    "outputTokens": 5557,
+    "cacheReadInputTokens": 187244,
+    "cacheCreationInputTokens": 32515,
+    "webSearchRequests": 0,
+    "costUSD": 0.557757,
+    "contextWindow": 1000000,
+    "maxOutputTokens": 64000,
+    "canonicalModel": "claude-opus-5",
+    "provider": "firstParty"
+   }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "공시는 DART 서버(korea-stock-mcp)로 조회해 캔버스에 그렸습니다 — 8/14 접수된 **2026년 반기보고서(2026.06)**가 최신 정기공시이고, 나머지는 임원·주요주주 소유상황보고서와 공정위 관련 공시가 대부분입니다.\n\n호가는 조회하지 못했습니다. 연결된 MCP 서버에는 **키움증권이 제공하는 실시간 시세 서버가 없습니다** — 등록된 건 DART 공시 2종(dart-mcp, korea-stock-mcp)과 네이버 검색뿐이고, 시세 계열 툴은 KRX 일별 종가(`get_stock_trade_info`)가 유일한데 이것도 실시간 호가가 아니며 지금 KRX API 인증이 401로 막혀 있습니다. 실시간 호가가 필요하면 키움 REST API용 MCP 서버를 별도로 등록해야 합니다.",
+  "ttft_ms": 3845,
+  "ttft_stream_ms": 1692,
+  "time_to_request_ms": 259,
+  "type": "result",
+  "duration_ms": 59528,
+  "uuid": "137875f8-23b7-4de7-b11e-e7de83adf819"
+ },
+ "diagnostics": {
+  "skippedLines": 0,
+  "totalEvents": 38
+ }
+}
