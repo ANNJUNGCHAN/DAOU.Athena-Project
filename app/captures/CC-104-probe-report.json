@@ -1,0 +1,31 @@
+{
+  "afterAuthoringOnD": {
+    "bollChecked": true,
+    "vpChecked": true,
+    "vpOverlayDisplayed": true,
+    "storedD": "{\"v\":1,\"form\":\"bar\",\"volumeProfileOn\":true,\"indicators\":{\"visible\":[\"boll\",\"ma\",\"volMa\"],\"params\":{\"ma\":{\"periods\":[5,10,20,60,120]},\"boll\":{\"period\":20,\"mult\":2},\"volMa\":{\"periods\":[5,20,60,120]},\"rsi\":{\"period\":14},\"macd\":{\"shortP\":12,\"longP\":26,\"signalP\":9}}},\"drawings\":[]}",
+    "storedW": null
+  },
+  "afterChangesOnW": {
+    "bollChecked": true,
+    "vpChecked": false,
+    "vpOverlayDisplayed": false,
+    "storedD": "{\"v\":1,\"form\":\"bar\",\"volumeProfileOn\":true,\"indicators\":{\"visible\":[\"boll\",\"ma\",\"volMa\"],\"params\":{\"ma\":{\"periods\":[5,10,20,60,120]},\"boll\":{\"period\":20,\"mult\":2},\"volMa\":{\"periods\":[5,20,60,120]},\"rsi\":{\"period\":14},\"macd\":{\"shortP\":12,\"longP\":26,\"signalP\":9}}},\"drawings\":[]}",
+    "storedW": "{\"v\":1,\"form\":\"candle\",\"volumeProfileOn\":false,\"indicators\":{\"visible\":[\"boll\",\"ma\",\"volMa\"],\"params\":{\"ma\":{\"periods\":[5,10,20,60,120]},\"boll\":{\"period\":20,\"mult\":2},\"volMa\":{\"periods\":[5,20,60,120]},\"rsi\":{\"period\":14},\"macd\":{\"shortP\":12,\"longP\":26,\"signalP\":9}}},\"drawings\":[]}"
+  },
+  "afterReturnToD": {
+    "bollChecked": true,
+    "vpChecked": true,
+    "vpOverlayDisplayed": true,
+    "storedD": "{\"v\":1,\"form\":\"bar\",\"volumeProfileOn\":true,\"indicators\":{\"visible\":[\"boll\",\"ma\",\"volMa\"],\"params\":{\"ma\":{\"periods\":[5,10,20,60,120]},\"boll\":{\"period\":20,\"mult\":2},\"volMa\":{\"periods\":[5,20,60,120]},\"rsi\":{\"period\":14},\"macd\":{\"shortP\":12,\"longP\":26,\"signalP\":9}}},\"drawings\":[]}",
+    "storedW": "{\"v\":1,\"form\":\"candle\",\"volumeProfileOn\":false,\"indicators\":{\"visible\":[\"boll\",\"ma\",\"volMa\"],\"params\":{\"ma\":{\"periods\":[5,10,20,60,120]},\"boll\":{\"period\":20,\"mult\":2},\"volMa\":{\"periods\":[5,20,60,120]},\"rsi\":{\"period\":14},\"macd\":{\"shortP\":12,\"longP\":26,\"signalP\":9}}},\"drawings\":[]}"
+  },
+  "assertions": {
+    "dBollRestored": true,
+    "dVpRestored": true,
+    "dFormRestored": true,
+    "wIndependent": true,
+    "storageKeysExist": true
+  },
+  "pass": true
+}
