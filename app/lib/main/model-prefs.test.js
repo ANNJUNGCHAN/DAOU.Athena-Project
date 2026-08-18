@@ -27,11 +27,10 @@ async function withTempState(fn) {
   }
 }
 
-test('get: 상태 파일이 없으면 둘 다 기본값(null)', async () => {
+test('get: 상태 파일이 없으면 claude 기본값(null)', async () => {
   await withTempState(() => {
     assert.deepEqual(modelPrefs.get(), {
       claude: { model: null, effort: null },
-      codex: { model: null, effort: null },
     });
   });
 });
@@ -98,15 +97,11 @@ test('set: claude effort 화이트리스트 — low/medium/high/xhigh/max만 허
   });
 });
 
-test('set: codex effort 화이트리스트 — minimal/low/medium/high/xhigh만 허용, max는 거부', async () => {
+test('set: provider "codex"는 더 이상 여기서 다루지 않는다(invalid-provider) — Codex 값은 codex-config.js가 config.toml에 직접 쓴다(2026-08-18 실결선)', async () => {
   await withTempState(() => {
-    for (const effort of ['minimal', 'low', 'medium', 'high', 'xhigh']) {
-      const result = modelPrefs.set({ provider: 'codex', patch: { effort } });
-      assert.equal(result.ok, true, `${effort}는 허용돼야 한다`);
-    }
-    const bad = modelPrefs.set({ provider: 'codex', patch: { effort: 'max' } });
-    assert.equal(bad.ok, false); // max는 claude 전용
-    assert.equal(bad.error, 'invalid-effort');
+    const result = modelPrefs.set({ provider: 'codex', patch: { model: 'gpt-5-codex' } });
+    assert.equal(result.ok, false);
+    assert.equal(result.error, 'invalid-provider');
   });
 });
 
@@ -136,15 +131,6 @@ test('set: 알 수 없는 provider는 거부된다', async () => {
   });
 });
 
-test('set: 한쪽 provider 갱신이 다른 쪽 provider 값을 건드리지 않는다', async () => {
-  await withTempState(() => {
-    modelPrefs.set({ provider: 'codex', patch: { model: 'gpt-5-codex' } });
-    const result = modelPrefs.set({ provider: 'claude', patch: { model: 'claude-sonnet-5' } });
-    assert.equal(result.state.codex.model, 'gpt-5-codex');
-    assert.equal(result.state.claude.model, 'claude-sonnet-5');
-  });
-});
-
 test('원자적 쓰기: 쓰고 나면 .tmp 파일이 안 남고 최종 파일에만 값이 있다', async () => {
   await withTempState((statePath) => {
     modelPrefs.set({ provider: 'claude', patch: { model: 'claude-sonnet-5' } });
@@ -162,27 +148,26 @@ test('fail-open: 상태 파일이 깨진 JSON이어도 기본값으로 저하된
     assert.doesNotThrow(() => modelPrefs.get());
     assert.deepEqual(modelPrefs.get(), {
       claude: { model: null, effort: null },
-      codex: { model: null, effort: null },
     });
   });
 });
 
-test('fail-open: 저장된 값 중 검증에 실패하는 필드만 기본값으로 저하되고 나머지는 보존된다', async () => {
+test('fail-open: 저장된 claude 값 중 검증에 실패하는 필드만 기본값으로 저하된다; 파일에 남은 옛 codex 키는 무해하게 무시된다(읽지 않는다)', async () => {
   await withTempState((statePath) => {
     fs.mkdirSync(path.dirname(statePath), { recursive: true });
     fs.writeFileSync(statePath, JSON.stringify({
       claude: { model: '-bad-flag-like', effort: 'not-a-real-effort' },
+      // 예전 판(codex를 여기 저장하던 시절)의 흔적 — 마이그레이션하지 않는다.
       codex: { model: 'gpt-5-codex', effort: 'medium' },
     }), 'utf-8');
     const state = modelPrefs.get();
-    assert.deepEqual(state.claude, { model: null, effort: null });
-    assert.deepEqual(state.codex, { model: 'gpt-5-codex', effort: 'medium' });
+    assert.deepEqual(state, { claude: { model: null, effort: null } });
   });
 });
 
-test('isValidModel/isValidEffort: 모듈 내부 검증 함수도 직접 호출 가능하다', () => {
+test('isValidModel/isValidEffort: 모듈 내부 검증 함수도 직접 호출 가능하다 — codex는 이제 이 모듈이 모른다', () => {
   assert.equal(modelPrefs.isValidModel('claude-sonnet-5'), true);
   assert.equal(modelPrefs.isValidModel('-x'), false);
   assert.equal(modelPrefs.isValidEffort('claude', 'max'), true);
-  assert.equal(modelPrefs.isValidEffort('codex', 'max'), false);
+  assert.equal(modelPrefs.isValidEffort('codex', 'minimal'), false);
 });

@@ -29,8 +29,8 @@
 ```
 backend:  변동 없음 (667 passed — 2차 블록 참조)
 app:
-  npm test                              → 141건 통과 (2차 110 + 모델 저장소 17 · 창 배치 9 · 러너 5)
-  npm run verify                        → 검증 1~15 전부 통과 · exit 0 (14 창 배치 · 15 모델 설정 신설)
+  npm test                              → 151건 통과 (2차 110 + 모델 저장소 16 · 창 배치 9 · 러너 5 · codex-config 11)
+  npm run verify                        → 검증 1~15 전부 통과 · exit 0 (14 창 배치 · 15 모델 설정+config.toml 신설)
   verify:settings / verify:settings-cards / probe-boot-bounds → 전부 exit 0
   Win+방향키 실측(OS 레벨 SendInput 4회) → ←/→ 짝 정착(경계 규칙 좌표 일치) · ↑ 최대화 토글 왕복 ·
                                           ↓ 최소화 — 원문 app/captures/qa-win-arrow.json
@@ -51,6 +51,12 @@ app:
   ↓ 복원→최소화. Paper 44쪽 신설(실측 확정 문구 포함). 부수: 검증 스크립트의 직접 setBounds가
   OS 배치로 오인되는 회귀 2건을 `noteAppBounds` 표시로 해소.
 - 상세는 `app/README.md` "설정 사이드바 · 모델 설정 · 창 단축키" 절.
+- **(추가) Codex 설정 실결선** — "저장만"이던 Codex 모델·사고 강도를
+  `$CODEX_HOME/config.toml`(`model` · `model_reasoning_effort`)에 **직접 반영**하는 구조로
+  교체(사용자 지시). 알려진 키만 라인 단위 in-place 패치, 주석·미지 키·[섹션] 바이트 보존,
+  원자적 쓰기, 무효값은 파일에 손대기 전 거부. `lib/main/codex-config.js` + 테스트 11건,
+  verify 검증15 확장 6단언(CODEX_HOME 격리). **앱 밖 codex 사용에도 적용되는 전역
+  기본값**임을 UI 정직성 노트에 명시. app 테스트 141 → 151.
 
 **2026-08-18 (2차) · 전수검사 → 결함 수정 → 렌더러 격리 전환 후 재실측:**
 

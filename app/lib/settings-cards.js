@@ -1656,7 +1656,7 @@ async function refreshModelCard(card, head, body) {
   body.appendChild(errBox);
 
   const note = el('div', 'uk-settings-note');
-  note.appendChild(el('div', null, '질의 실행은 Claude만 결선 — Codex 설정은 저장되고 결선 시 적용된다.'));
+  note.appendChild(el('div', null, 'Codex 설정은 $CODEX_HOME/config.toml의 model · model_reasoning_effort에 직접 반영된다 — 이 앱 밖에서 codex를 쓸 때도 적용되는 전역 기본값이다. 질의 실행 결선은 여전히 Claude뿐이다.'));
   note.appendChild(el('div', null, '모델 접근 권한은 활성 계정의 플랜을 따른다 — 접근 불가 모델이면 질의가 오류로 표면화된다.'));
   body.appendChild(note);
 }
