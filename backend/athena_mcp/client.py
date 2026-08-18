@@ -21,6 +21,8 @@ W1-5(consent.py) 요구사항: `claude -p` 헤드리스가 `.mcp.json` 서버를
 from __future__ import annotations
 
 import asyncio
+import codecs
+import os
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -129,6 +131,26 @@ def describe_exception(exc: BaseException) -> str:
     return " / ".join(seen)
 
 
+def read_log_text(path: Path) -> str:
+    """서버별 로그 파일(`UpstreamServerHandle.log_path`)을 관대하게 디코드해서 읽는다.
+
+    이 로그 파일은 두 출처가 섞여 있다: ①`_log_event()`가 쓰는, 항상 유효한
+    UTF-8 텍스트(파이썬이 직접 인코딩한다). ②`stdio_client(errlog=...)`에 그대로
+    넘겨지는 파일 핸들에 **upstream 서브프로세스가 자기 stderr를 직접 쓰는 바이트**
+    (`mcp.client.stdio.stdio_client`/`mcp.os.win32.utilities.create_windows_process`가
+    이 핸들의 OS 파일 디스크립터를 자식에게 그대로 넘긴다 — 파이썬 인코딩 계층을
+    거치지 않으므로 자식이 어떤 인코딩으로 쓰든 이 프로세스가 통제할 수 없다).
+
+    한글이 포함된 경로에서 실측 확인됐다(US-011): 자식 프로세스(Windows, 한국어
+    로케일)가 기본 콘솔 코드페이지(cp949)로 stderr를 쓰면 그 바이트가 이 로그
+    파일에 그대로 섞여 들어간다. `read_text(encoding="utf-8")`(strict)로 읽으면
+    이 지점에서 `UnicodeDecodeError`로 죽는다 — 로그는 진단용 산출물일 뿐이므로
+    크래시보다는 읽을 수 없는 바이트만 U+FFFD로 치환해 보여주는 쪽이 낫다
+    (정보 정직성: 조용히 자르지 않고, 깨진 부분이 있다는 사실 자체는 남긴다).
+    """
+    return path.read_bytes().decode("utf-8", errors="replace")
+
+
 @dataclass(frozen=True)
 class ServerInfoSnapshot:
     """upstream이 스스로 보고한 정보. 신뢰하지 말고 그대로 기록만 한다."""
@@ -198,6 +220,12 @@ class UpstreamServerHandle:
     def is_running(self) -> bool:
         return self._session is not None
 
+    def read_log(self) -> str:
+        """`log_path`를 관대하게 디코드해서 읽는다 — `read_log_text()` 참고
+        (upstream 서브프로세스 stderr가 이 파일에 임의 인코딩으로 섞여 들어올 수
+        있어 strict utf-8 읽기는 크래시한다)."""
+        return read_log_text(self.log_path)
+
     def _log_event(self, message: str) -> None:
         ts = datetime.now(UTC).isoformat()
         with self.log_path.open("a", encoding="utf-8") as f:
@@ -208,6 +236,52 @@ class UpstreamServerHandle:
         직접 기록할 때 쓴다 — 64자 위반 스킵처럼 핸들 바깥에서 판정되지만
         "이 서버에 대한 사실"인 이벤트가 있다."""
         self._log_event(message)
+
+    def _append_stderr_text(self, text: str) -> None:
+        """`_pump_stderr()`가 디코드한 자식 stderr 텍스트를 로그에 그대로
+        이어 쓴다. `_log_event()`와 달리 타임스탬프/우리 형식을 붙이지
+        않는다 — 자식이 실제로 쓴 원문을 그대로 보존한다(형식만 우리가
+        더하지 않을 뿐, 정보 정직성)."""
+        with self.log_path.open("a", encoding="utf-8") as f:
+            f.write(text)
+
+    async def _pump_stderr(self, read_fd: int) -> None:
+        """upstream 서브프로세스의 stderr 원시 바이트를 파이프에서 직접 읽어
+        `errors="replace"`로 디코드한 뒤 로그 파일에 이어 쓴다.
+
+        **기록 시점 방어(US-011)**: `stdio_client(errlog=...)`에 로그 파일을
+        그대로 넘기면(예전 방식) 자식이 그 OS 파일 디스크립터에 직접 쓴다 —
+        파이썬 인코딩 계층을 완전히 건너뛰므로 자식이 어떤 인코딩으로 쓰든
+        통제할 수 없다. 한글이 포함된 경로에서 실측 확인됐다: Windows 한국어
+        로케일 자식이 기본 콘솔 코드페이지(cp949)로 stderr를 쓰면 그 바이트가
+        로그 파일에 그대로 섞여 들어갔다. 이제는 파이프로 직접 받아 여기서
+        미리 안전한 UTF-8로 바꾸므로, 로그 파일 자체가 **항상** 유효한
+        UTF-8이다 — strict로 다시 읽어도 죽지 않는다. `read_log_text()`의
+        관대한 읽기는 이중 방어로 남겨둔다(이 파이프 밖에서 로그 파일에 다른
+        경로로 잘못된 바이트가 들어올 가능성까지 방어).
+
+        청크 경계에서 멀티바이트 UTF-8 시퀀스가 잘려도 오탐(잘못된 U+FFFD
+        치환) 없이 이어붙이도록 `IncrementalDecoder`를 쓴다 — 한 청크씩
+        `errors="replace"`로 독립 디코드하면 정상적인 멀티바이트 문자가
+        청크 경계에 걸렸을 때도 깨진 것으로 오판할 수 있다.
+        """
+        decoder = codecs.getincrementaldecoder("utf-8")(errors="replace")
+        try:
+            with os.fdopen(read_fd, "rb") as pipe_in:
+                while True:
+                    chunk = await asyncio.to_thread(pipe_in.read, 65536)
+                    if not chunk:
+                        break
+                    text = decoder.decode(chunk)
+                    if text:
+                        self._append_stderr_text(text)
+            tail = decoder.decode(b"", final=True)
+            if tail:
+                self._append_stderr_text(tail)
+        except (OSError, ValueError):
+            # 파이프가 예기치 않게 이미 닫힌 경우(취소/조기 종료) — 진단용
+            # stderr 로그 일부를 놓치는 것이 세션 전체를 죽이는 것보다 낫다.
+            pass
 
     async def _session_lifetime(self) -> None:
         """이 서버의 stdio 컨텍스트를 **자기 태스크 안에서** 열고 닫는다.
@@ -222,6 +296,8 @@ class UpstreamServerHandle:
         """
         assert self._ready is not None and self._stop is not None
         errlog = None
+        stderr_read_fd: int | None = None
+        stderr_pump_task: asyncio.Task[None] | None = None
         try:
             # 로그 파일 열기와 `StdioServerParameters` 생성은 **반드시 try 안**에
             # 있어야 한다. 밖에 두면 여기서 나는 예외가 `finally`의
@@ -231,7 +307,15 @@ class UpstreamServerHandle:
             # `ValidationError`를 던지는 경우(스니펫에 `"DEBUG": true`가 섞이면
             # 그대로 여기까지 온다). 둘 다 "느린 서버"가 아니라 즉시 실패이므로
             # 리포트로 돌려줘야 한다.
-            errlog = self.log_path.open("a", encoding="utf-8")
+            #
+            # `errlog`는 로그 파일을 직접 여는 대신 우리가 만든 파이프의 쓰기
+            # 끝이다 — `_pump_stderr()` 독스트링 참고(US-011). 자식이 이
+            # 디스크립터에 직접 쓴 바이트를 우리가 파이프 반대편에서 받아
+            # `errors="replace"`로 안전하게 디코드한 뒤에만 로그 파일에 쓴다.
+            stderr_read_fd, stderr_write_fd = os.pipe()
+            errlog = os.fdopen(stderr_write_fd, "wb")
+            stderr_pump_task = asyncio.create_task(self._pump_stderr(stderr_read_fd))
+            stderr_read_fd = None  # 소유권이 pump 태스크로 넘어갔다 — 직접 닫지 않는다
             # SECURITY.md §6 — 레지스트리의 env 값은 평문이 아니라 센티널일 수
             # 있다(app/lib/main/mcp-env.js가 마이그레이션한 경우). 여기서 실값으로
             # 푼다 — 이 프로세스 환경에 `ATHENA_MCP_ENV__<alias>__<KEY>`가 없으면
@@ -273,7 +357,24 @@ class UpstreamServerHandle:
             self._session = None
             self._ready.set()  # 실패했어도 start()가 영원히 기다리지 않게 한다
             if errlog is not None:
+                # 쓰기 끝을 닫아 파이프 반대편(_pump_stderr)에 EOF를 알린다.
+                # `stdio_client`의 자체 종료 시퀀스(stdin 닫기 -> 정상 종료
+                # 대기 -> SIGTERM/SIGKILL 승격)가 이미 위 `async with`에서 끝난
+                # 뒤이므로, 이 시점엔 자식도 자기 쪽 사본을 이미 닫았을 것이다.
                 errlog.close()
+            if stderr_pump_task is not None:
+                try:
+                    # 정상 경로는 즉시 끝난다(자식이 이미 죽어 있다). 이 상한은
+                    # 고아 손자 프로세스가 파이프 사본을 계속 들고 있는 것 같은
+                    # 드문 경우에 대한 방어일 뿐이다 — close()/restart()가
+                    # 무한정 멈추면 안 된다.
+                    await asyncio.wait_for(stderr_pump_task, timeout=5.0)
+                except TimeoutError:
+                    stderr_pump_task.cancel()
+                    self._log_event("stderr 파이프 배수 태스크가 5초 안에 끝나지 않아 취소했다")
+            if stderr_read_fd is not None:
+                # pump 태스크를 아예 못 띄운 예외 경로 — 여기서 직접 닫는다.
+                os.close(stderr_read_fd)
 
     async def start(self) -> InitializeResult:
         """서버 승인 확인 -> spawn -> initialize. 승인 없으면 spawn 자체가 금지된다."""
