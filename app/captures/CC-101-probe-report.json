@@ -7,12 +7,12 @@
     "priceWrapPresent": true,
     "priceWrapRect": {
       "x": 36.66666793823242,
-      "y": 66,
+      "y": 128,
       "width": 1490.666748046875,
-      "height": 380.3333435058594,
-      "top": 66,
+      "height": 330.3333435058594,
+      "top": 128,
       "right": 1527.3334159851074,
-      "bottom": 446.3333435058594,
+      "bottom": 458.3333435058594,
       "left": 36.66666793823242
     },
     "errorNotePresent": false

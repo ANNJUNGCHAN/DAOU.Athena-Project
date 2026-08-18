@@ -1,0 +1,113 @@
+{
+  "periodSwitch": {
+    "before": {
+      "activeLabel": "일"
+    },
+    "afterActive": "주",
+    "weekTabPresent": true,
+    "dayTabPresent": true
+  },
+  "intervalDropdown": {
+    "hiddenBeforeClick": false,
+    "labelAfterMinuteSelect": "1분 ▾",
+    "optionLabels": [
+      "1분",
+      "3분",
+      "5분",
+      "10분",
+      "30분"
+    ],
+    "labelAfterSelect3": "3분 ▾"
+  },
+  "formLabels": [
+    "바",
+    "캔들",
+    "라인",
+    "영역"
+  ],
+  "paneSeparationByForm": {
+    "바": {
+      "rowCount": 4,
+      "rowHeights": [
+        221,
+        1,
+        80,
+        28
+      ],
+      "volumeRowFound": true,
+      "priceRowFound": true,
+      "overlapPx": 0,
+      "separated": true
+    },
+    "캔들": {
+      "rowCount": 4,
+      "rowHeights": [
+        221,
+        1,
+        80,
+        28
+      ],
+      "volumeRowFound": true,
+      "priceRowFound": true,
+      "overlapPx": 0,
+      "separated": true
+    },
+    "라인": {
+      "rowCount": 4,
+      "rowHeights": [
+        221,
+        1,
+        80,
+        28
+      ],
+      "volumeRowFound": true,
+      "priceRowFound": true,
+      "overlapPx": 0,
+      "separated": true
+    },
+    "영역": {
+      "rowCount": 4,
+      "rowHeights": [
+        221,
+        1,
+        80,
+        28
+      ],
+      "volumeRowFound": true,
+      "priceRowFound": true,
+      "overlapPx": 0,
+      "separated": true
+    }
+  },
+  "adjustedToggle": {
+    "before": "수정주가",
+    "after": "원주가",
+    "noteBefore": "서버 보정(upd_stkpc_tp) 미연결 — 목업 동일 데이터",
+    "notePresent": true
+  },
+  "fullscreen": {
+    "beforeExpanded": false,
+    "beforeLabel": "⛶",
+    "afterEnterExpanded": true,
+    "afterEnterGridHasExpanded": true,
+    "afterEnterLabel": "✕"
+  },
+  "fullscreenPaneSeparation": {
+    "rowCount": 4,
+    "rowHeights": [
+      449,
+      1,
+      163,
+      28
+    ],
+    "volumeRowFound": true,
+    "priceRowFound": true,
+    "overlapPx": 0,
+    "separated": true
+  },
+  "fullscreenExit": {
+    "afterExitExpanded": false,
+    "afterExitGridHasExpanded": false,
+    "afterExitLabel": "⛶"
+  }
+}
