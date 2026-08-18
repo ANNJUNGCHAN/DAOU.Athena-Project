@@ -54,6 +54,13 @@ fails if the tree is stale.
 ```
 Async tests need no marker (`asyncio_mode = "auto"`). HTTP is stubbed with `respx`.
 
+빠른 루프: `pytest -n auto --dist loadgroup` (pytest-xdist, 전체 스위트 약 176s → 약 55~58s, 22코어
+실측 2026-08-19). `addopts`에는 넣지 않았다 — 단일 테스트 디버깅(`-x --pdb`) 편의를 지키기 위해서다.
+프로세스 전역 상태(고정 가짜 자격증명, 실소켓 바인딩)를 쓰는 테스트는 `pytest.mark.xdist_group(...)`로
+같은 워커에 묶여 있다 — `tests/unit/test_accounts.py`(모듈 전체, alias `daeju` 공유),
+`test_real_uvicorn_loopback_smoke_uses_os_assigned_port`. 새 테스트가 같은 종류의 전역 상태를 쓰면
+그룹에 합류시키거나 새 그룹을 만들어라.
+
 ### Common Patterns
 - One-line module docstring at the top of every module states its single responsibility.
 - Dependency injection through `athena_api/dependencies.py`; no import-time globals for clients.
@@ -66,6 +73,6 @@ Async tests need no marker (`asyncio_mode = "auto"`). HTTP is stubbed with `resp
 
 ### External
 - fastapi, httpx, uvicorn[standard], websockets, pydantic-settings, jsonschema, ladybug 0.19.1, mcp 1.28.*
-- dev: pytest, pytest-asyncio, respx, ruff
+- dev: pytest, pytest-asyncio, pytest-xdist, respx, ruff
 
 <!-- MANUAL: -->

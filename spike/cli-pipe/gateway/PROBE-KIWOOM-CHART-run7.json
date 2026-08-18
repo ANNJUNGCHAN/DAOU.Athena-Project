@@ -1,0 +1,401 @@
+{
+  "ok": true,
+  "exitCode": 0,
+  "error": null,
+  "elapsedMs": 92881,
+  "firstCanvasMs": 86939,
+  "turnTimeline": [
+    {
+      "atMs": 952,
+      "deltaMs": 952,
+      "type": "system",
+      "subtype": "init",
+      "toolNames": []
+    },
+    {
+      "atMs": 2678,
+      "deltaMs": 1726,
+      "type": "assistant",
+      "toolNames": []
+    },
+    {
+      "atMs": 3173,
+      "deltaMs": 495,
+      "type": "assistant",
+      "toolNames": [
+        "ToolSearch"
+      ]
+    },
+    {
+      "atMs": 3182,
+      "deltaMs": 9,
+      "type": "user",
+      "toolNames": []
+    },
+    {
+      "atMs": 3184,
+      "deltaMs": 2,
+      "type": "rate_limit_event",
+      "toolNames": []
+    },
+    {
+      "atMs": 5501,
+      "deltaMs": 2317,
+      "type": "assistant",
+      "toolNames": []
+    },
+    {
+      "atMs": 5568,
+      "deltaMs": 67,
+      "type": "assistant",
+      "toolNames": [
+        "ToolSearch"
+      ]
+    },
+    {
+      "atMs": 5576,
+      "deltaMs": 8,
+      "type": "user",
+      "toolNames": []
+    },
+    {
+      "atMs": 7714,
+      "deltaMs": 2138,
+      "type": "assistant",
+      "toolNames": [
+        "mcp__athena__athena_search"
+      ]
+    },
+    {
+      "atMs": 7849,
+      "deltaMs": 135,
+      "type": "user",
+      "toolNames": []
+    },
+    {
+      "atMs": 9844,
+      "deltaMs": 1995,
+      "type": "assistant",
+      "toolNames": [
+        "mcp__athena__athena_describe"
+      ]
+    },
+    {
+      "atMs": 9856,
+      "deltaMs": 12,
+      "type": "rate_limit_event",
+      "toolNames": []
+    },
+    {
+      "atMs": 9859,
+      "deltaMs": 3,
+      "type": "user",
+      "toolNames": []
+    },
+    {
+      "atMs": 12869,
+      "deltaMs": 3010,
+      "type": "assistant",
+      "toolNames": [
+        "mcp__athena__athena_resolve"
+      ]
+    },
+    {
+      "atMs": 13017,
+      "deltaMs": 148,
+      "type": "user",
+      "toolNames": []
+    },
+    {
+      "atMs": 20577,
+      "deltaMs": 7560,
+      "type": "assistant",
+      "toolNames": [
+        "mcp__athena__athena_call"
+      ]
+    },
+    {
+      "atMs": 21040,
+      "deltaMs": 463,
+      "type": "user",
+      "toolNames": []
+    },
+    {
+      "atMs": 23435,
+      "deltaMs": 2395,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 24203,
+      "deltaMs": 768,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 24203,
+      "deltaMs": 0,
+      "type": "assistant",
+      "toolNames": []
+    },
+    {
+      "atMs": 24206,
+      "deltaMs": 3,
+      "type": "assistant",
+      "toolNames": []
+    },
+    {
+      "atMs": 26246,
+      "deltaMs": 2040,
+      "type": "assistant",
+      "toolNames": [
+        "Bash"
+      ]
+    },
+    {
+      "atMs": 26267,
+      "deltaMs": 21,
+      "type": "user",
+      "toolNames": []
+    },
+    {
+      "atMs": 30340,
+      "deltaMs": 4073,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 32311,
+      "deltaMs": 1971,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 33717,
+      "deltaMs": 1406,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 33719,
+      "deltaMs": 2,
+      "type": "assistant",
+      "toolNames": []
+    },
+    {
+      "atMs": 35381,
+      "deltaMs": 1662,
+      "type": "assistant",
+      "toolNames": [
+        "Grep"
+      ]
+    },
+    {
+      "atMs": 35470,
+      "deltaMs": 89,
+      "type": "user",
+      "toolNames": []
+    },
+    {
+      "atMs": 38049,
+      "deltaMs": 2579,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 39468,
+      "deltaMs": 1419,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 40887,
+      "deltaMs": 1419,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 42290,
+      "deltaMs": 1403,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 43702,
+      "deltaMs": 1412,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 45113,
+      "deltaMs": 1411,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 46525,
+      "deltaMs": 1412,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 47936,
+      "deltaMs": 1411,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 49351,
+      "deltaMs": 1415,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 50759,
+      "deltaMs": 1408,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 52170,
+      "deltaMs": 1411,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 53584,
+      "deltaMs": 1414,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 54996,
+      "deltaMs": 1412,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 56405,
+      "deltaMs": 1409,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 57819,
+      "deltaMs": 1414,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 59235,
+      "deltaMs": 1416,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 59944,
+      "deltaMs": 709,
+      "type": "assistant",
+      "toolNames": []
+    },
+    {
+      "atMs": 60101,
+      "deltaMs": 157,
+      "type": "assistant",
+      "toolNames": [
+        "ToolSearch"
+      ]
+    },
+    {
+      "atMs": 60121,
+      "deltaMs": 20,
+      "type": "user",
+      "toolNames": []
+    },
+    {
+      "atMs": 86923,
+      "deltaMs": 26802,
+      "type": "assistant",
+      "toolNames": [
+        "mcp__athena__athena__render_canvas"
+      ]
+    },
+    {
+      "atMs": 86939,
+      "deltaMs": 16,
+      "type": "user",
+      "toolNames": []
+    },
+    {
+      "atMs": 92716,
+      "deltaMs": 5777,
+      "type": "assistant",
+      "toolNames": []
+    },
+    {
+      "atMs": 92733,
+      "deltaMs": 17,
+      "type": "result",
+      "subtype": "success",
+      "toolNames": []
+    }
+  ],
+  "canvasCount": 1,
+  "chartCanvasCount": 1,
+  "chartDataKeys": [
+    "symbol",
+    "name",
+    "bars"
+  ],
+  "chartBarsLength": 60,
+  "toolNames": [
+    "ToolSearch",
+    "ToolSearch",
+    "mcp__athena__athena_search",
+    "mcp__athena__athena_describe",
+    "mcp__athena__athena_resolve",
+    "mcp__athena__athena_call",
+    "Bash",
+    "Grep",
+    "ToolSearch",
+    "mcp__athena__athena__render_canvas"
+  ],
+  "kiwoomToolCalls": [
+    "mcp__athena__athena_search",
+    "mcp__athena__athena_describe",
+    "mcp__athena__athena_resolve",
+    "mcp__athena__athena_call"
+  ],
+  "foreignStockCalls": [],
+  "eventTypeCounts": {
+    "system/init": 1,
+    "assistant": 17,
+    "user": 10,
+    "rate_limit_event": 2,
+    "system/thinking_tokens": 21,
+    "result/success": 1
+  },
+  "stderrHead": "",
+  "finalResultText": "삼성전자 최근 60거래일(2026-05-21~08-18) 일봉을 캔버스에 그렸습니다.\n\n6월 중순 37만원대 고점 이후 7월 말 20만원 초반까지 밀렸다가, 8월 들어 23만→27만원대로 회복 중입니다. 마지막 봉(08-18)은 28.3만 시가에 26.85만 종가로 위꼬리 긴 음봉이며, 거래대금 급증일은 7-29(저가 189,200원)와 7-31이었습니다."
+}

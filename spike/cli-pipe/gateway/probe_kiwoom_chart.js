@@ -30,9 +30,14 @@ const QUERY = '삼성전자 최근 일봉 차트 그려줘';
 const events = [];
 const canvases = [];
 const toolNames = [];
+// 턴 타임라인 — 각 이벤트의 수신 시각(ms since start)·타입·tool_use 이름·직전
+// 이벤트와의 간격을 기록한다(오케스트레이터 지시, 합의 계획 W1 지연 계측).
+const turnTimeline = [];
+let firstCanvasMs = null;
 
 (async () => {
   const startedAt = Date.now();
+  let lastEventAt = startedAt;
   const result = await runClaudeQuery({
     prompt: buildLivePrompt(QUERY),
     cwd: GATEWAY_DIR,
@@ -40,6 +45,7 @@ const toolNames = [];
     timeoutMs: 240_000,
     onCanvasResult: (r) => {
       canvases.push(r);
+      if (firstCanvasMs === null) firstCanvasMs = Date.now() - startedAt;
       console.log('[probe] canvas:', JSON.stringify({
         kind: r && r.kind,
         canvasType: r && r.envelope && r.envelope.canvas_type,
@@ -49,14 +55,27 @@ const toolNames = [];
     onEvent: (e) => {
       events.push({ type: e && e.type, subtype: e && e.subtype });
       // assistant 턴의 tool_use 이름을 수집 — 키움 4툴을 실제로 탔는지의 근거.
+      const eventToolNames = [];
       try {
         const content = e && e.message && e.message.content;
         if (Array.isArray(content)) {
           for (const block of content) {
-            if (block && block.type === 'tool_use' && block.name) toolNames.push(block.name);
+            if (block && block.type === 'tool_use' && block.name) {
+              toolNames.push(block.name);
+              eventToolNames.push(block.name);
+            }
           }
         }
       } catch { /* 관측 실패는 프로브 실패가 아니다 */ }
+      const now = Date.now();
+      turnTimeline.push({
+        atMs: now - startedAt,
+        deltaMs: now - lastEventAt,
+        type: e && e.type,
+        subtype: e && e.subtype,
+        toolNames: eventToolNames,
+      });
+      lastEventAt = now;
     },
   });
 
@@ -72,6 +91,8 @@ const toolNames = [];
     exitCode: result.exitCode,
     error: result.error,
     elapsedMs,
+    firstCanvasMs,
+    turnTimeline,
     canvasCount: canvases.length,
     chartCanvasCount: chartCanvases.length,
     chartDataKeys: chartCanvases[0] && chartCanvases[0].envelope.data

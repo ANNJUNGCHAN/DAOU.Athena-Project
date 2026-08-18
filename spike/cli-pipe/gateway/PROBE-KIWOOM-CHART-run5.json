@@ -1,0 +1,364 @@
+{
+  "ok": true,
+  "exitCode": 0,
+  "error": null,
+  "elapsedMs": 60290,
+  "firstCanvasMs": null,
+  "turnTimeline": [
+    {
+      "atMs": 971,
+      "deltaMs": 971,
+      "type": "system",
+      "subtype": "init",
+      "toolNames": []
+    },
+    {
+      "atMs": 2544,
+      "deltaMs": 1573,
+      "type": "assistant",
+      "toolNames": []
+    },
+    {
+      "atMs": 3144,
+      "deltaMs": 600,
+      "type": "assistant",
+      "toolNames": [
+        "ToolSearch"
+      ]
+    },
+    {
+      "atMs": 3152,
+      "deltaMs": 8,
+      "type": "user",
+      "toolNames": []
+    },
+    {
+      "atMs": 3339,
+      "deltaMs": 187,
+      "type": "rate_limit_event",
+      "toolNames": []
+    },
+    {
+      "atMs": 4908,
+      "deltaMs": 1569,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 4908,
+      "deltaMs": 0,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 4909,
+      "deltaMs": 1,
+      "type": "assistant",
+      "toolNames": []
+    },
+    {
+      "atMs": 4947,
+      "deltaMs": 38,
+      "type": "assistant",
+      "toolNames": [
+        "ToolSearch"
+      ]
+    },
+    {
+      "atMs": 4949,
+      "deltaMs": 2,
+      "type": "user",
+      "toolNames": []
+    },
+    {
+      "atMs": 7275,
+      "deltaMs": 2326,
+      "type": "assistant",
+      "toolNames": [
+        "mcp__athena__athena_search"
+      ]
+    },
+    {
+      "atMs": 7387,
+      "deltaMs": 112,
+      "type": "user",
+      "toolNames": []
+    },
+    {
+      "atMs": 8716,
+      "deltaMs": 1329,
+      "type": "assistant",
+      "toolNames": [
+        "mcp__athena__athena_describe"
+      ]
+    },
+    {
+      "atMs": 8729,
+      "deltaMs": 13,
+      "type": "user",
+      "toolNames": []
+    },
+    {
+      "atMs": 11415,
+      "deltaMs": 2686,
+      "type": "assistant",
+      "toolNames": [
+        "mcp__athena__athena_resolve"
+      ]
+    },
+    {
+      "atMs": 11523,
+      "deltaMs": 108,
+      "type": "user",
+      "toolNames": []
+    },
+    {
+      "atMs": 19170,
+      "deltaMs": 7647,
+      "type": "assistant",
+      "toolNames": [
+        "mcp__athena__athena_call"
+      ]
+    },
+    {
+      "atMs": 19580,
+      "deltaMs": 410,
+      "type": "user",
+      "toolNames": []
+    },
+    {
+      "atMs": 21964,
+      "deltaMs": 2384,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 21967,
+      "deltaMs": 3,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 21974,
+      "deltaMs": 7,
+      "type": "assistant",
+      "toolNames": []
+    },
+    {
+      "atMs": 22644,
+      "deltaMs": 670,
+      "type": "assistant",
+      "toolNames": []
+    },
+    {
+      "atMs": 22654,
+      "deltaMs": 10,
+      "type": "assistant",
+      "toolNames": [
+        "ToolSearch"
+      ]
+    },
+    {
+      "atMs": 22655,
+      "deltaMs": 1,
+      "type": "user",
+      "toolNames": []
+    },
+    {
+      "atMs": 24271,
+      "deltaMs": 1616,
+      "type": "assistant",
+      "toolNames": [
+        "ToolSearch"
+      ]
+    },
+    {
+      "atMs": 24273,
+      "deltaMs": 2,
+      "type": "user",
+      "toolNames": []
+    },
+    {
+      "atMs": 25882,
+      "deltaMs": 1609,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 25882,
+      "deltaMs": 0,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 25883,
+      "deltaMs": 1,
+      "type": "assistant",
+      "toolNames": []
+    },
+    {
+      "atMs": 25984,
+      "deltaMs": 101,
+      "type": "assistant",
+      "toolNames": [
+        "ToolSearch"
+      ]
+    },
+    {
+      "atMs": 25986,
+      "deltaMs": 2,
+      "type": "user",
+      "toolNames": []
+    },
+    {
+      "atMs": 27717,
+      "deltaMs": 1731,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 29121,
+      "deltaMs": 1404,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 30525,
+      "deltaMs": 1404,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 30525,
+      "deltaMs": 0,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 30549,
+      "deltaMs": 24,
+      "type": "assistant",
+      "toolNames": []
+    },
+    {
+      "atMs": 31235,
+      "deltaMs": 686,
+      "type": "assistant",
+      "toolNames": []
+    },
+    {
+      "atMs": 32870,
+      "deltaMs": 1635,
+      "type": "assistant",
+      "toolNames": [
+        "mcp__athena__athena_resolve"
+      ]
+    },
+    {
+      "atMs": 32983,
+      "deltaMs": 113,
+      "type": "user",
+      "toolNames": []
+    },
+    {
+      "atMs": 40568,
+      "deltaMs": 7585,
+      "type": "assistant",
+      "toolNames": [
+        "mcp__athena__athena_call"
+      ]
+    },
+    {
+      "atMs": 41141,
+      "deltaMs": 573,
+      "type": "user",
+      "toolNames": []
+    },
+    {
+      "atMs": 43453,
+      "deltaMs": 2312,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 44855,
+      "deltaMs": 1402,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 45564,
+      "deltaMs": 709,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 45565,
+      "deltaMs": 1,
+      "type": "assistant",
+      "toolNames": []
+    },
+    {
+      "atMs": 60087,
+      "deltaMs": 14522,
+      "type": "assistant",
+      "toolNames": []
+    },
+    {
+      "atMs": 60102,
+      "deltaMs": 15,
+      "type": "result",
+      "subtype": "success",
+      "toolNames": []
+    }
+  ],
+  "canvasCount": 0,
+  "chartCanvasCount": 0,
+  "chartDataKeys": null,
+  "chartBarsLength": null,
+  "toolNames": [
+    "ToolSearch",
+    "ToolSearch",
+    "mcp__athena__athena_search",
+    "mcp__athena__athena_describe",
+    "mcp__athena__athena_resolve",
+    "mcp__athena__athena_call",
+    "ToolSearch",
+    "ToolSearch",
+    "ToolSearch",
+    "mcp__athena__athena_resolve",
+    "mcp__athena__athena_call"
+  ],
+  "kiwoomToolCalls": [
+    "mcp__athena__athena_search",
+    "mcp__athena__athena_describe",
+    "mcp__athena__athena_resolve",
+    "mcp__athena__athena_call",
+    "mcp__athena__athena_resolve",
+    "mcp__athena__athena_call"
+  ],
+  "foreignStockCalls": [],
+  "eventTypeCounts": {
+    "system/init": 1,
+    "assistant": 20,
+    "user": 11,
+    "rate_limit_event": 1,
+    "system/thinking_tokens": 13,
+    "result/success": 1
+  },
+  "stderrHead": "",
+  "finalResultText": "차트를 렌더하지 못했습니다. 데이터 조회 자체는 성공했지만, 결과가 제 쪽으로 전달되지 못했습니다.\n\n**상황**\n\n- `athena_search` → `athena_describe` → `athena_resolve` → `athena_call`(`base:ka10081`, 삼성전자 005930, base_dt 20260819, 수정주가 적용) 순서로 정상 호출했고, 키움 백엔드는 응답을 반환했습니다(미기동 에러 아님).\n- 그런데 응답이 134,073자 단일 라인이라 툴 결과 토큰 한도를 초과했고, 내용은 디스크 파일로만 저장됐습니다.\n- `response_mode: \"compact\"`로 다시 resolve→call 했지만 크기가 동일했습니다(134,073자). `ka10081`은 `detail_groups`가 비어 있고 optional 인자도 없어서, 조회 건수를 줄일 파라미터가 없습니다.\n- 이 세션에는 파일 읽기 툴도 셸 툴도 로드되어 있지 않아(`ToolSearch`로 Re"
+}

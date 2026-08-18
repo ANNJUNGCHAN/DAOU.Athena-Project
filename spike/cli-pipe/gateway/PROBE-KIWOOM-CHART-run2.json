@@ -1,0 +1,71 @@
+{
+  "ok": true,
+  "exitCode": 0,
+  "error": null,
+  "elapsedMs": 4912,
+  "firstCanvasMs": null,
+  "turnTimeline": [
+    {
+      "atMs": 1047,
+      "deltaMs": 1047,
+      "type": "system",
+      "subtype": "init",
+      "toolNames": []
+    },
+    {
+      "atMs": 3518,
+      "deltaMs": 2471,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 3537,
+      "deltaMs": 19,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 3558,
+      "deltaMs": 21,
+      "type": "assistant",
+      "toolNames": []
+    },
+    {
+      "atMs": 4710,
+      "deltaMs": 1152,
+      "type": "assistant",
+      "toolNames": []
+    },
+    {
+      "atMs": 4723,
+      "deltaMs": 13,
+      "type": "rate_limit_event",
+      "toolNames": []
+    },
+    {
+      "atMs": 4726,
+      "deltaMs": 3,
+      "type": "result",
+      "subtype": "success",
+      "toolNames": []
+    }
+  ],
+  "canvasCount": 0,
+  "chartCanvasCount": 0,
+  "chartDataKeys": null,
+  "chartBarsLength": null,
+  "toolNames": [],
+  "kiwoomToolCalls": [],
+  "foreignStockCalls": [],
+  "eventTypeCounts": {
+    "system/init": 1,
+    "system/thinking_tokens": 2,
+    "assistant": 2,
+    "rate_limit_event": 1,
+    "result/success": 1
+  },
+  "stderrHead": "",
+  "finalResultText": "삼성전자 일봉을 키움 셀렉터로 조회하겠습니다.\n\nantml:invoke Search\">\n<parameter name=\"query\">국내주식 일봉 차트 조회</parameter>\n</invoke>\n</function_calls>"
+}

@@ -131,3 +131,16 @@ an order.
 .venv\Scripts\python -m ruff check .
 .venv\Scripts\python scripts\generate_api.py --check
 ```
+
+느린 개발 루프를 위해 `pytest-xdist`로 병렬 실행할 수 있다(전체 스위트 기준 약 176s → 약 55~58s,
+22코어 실측 2026-08-19). `-n auto --dist loadgroup`은 `addopts`에 넣지 않았다 — 넣으면
+`-x`/`--pdb`로 단일 테스트를 디버깅하기 불편해지기 때문이다. 평소 개발 루프에서만 직접 붙여 쓴다.
+
+```powershell
+.venv\Scripts\python -m pytest -n auto --dist loadgroup
+```
+
+`tests/unit/test_accounts.py`는 파일 전체가 고정된 가짜 자격증명(alias `daeju`) 하나를 공유한다 —
+같은 `CredentialProcessLock` 파일을 놓고 경합하므로 `pytestmark = pytest.mark.xdist_group(...)`로
+한 워커에 묶여 있다. 새 파일에서 같은 가짜 자격증명을 재사용하면 이 그룹에 합류시켜라. 단일 테스트
+디버깅은 그대로 `pytest -k <name>` 또는 `pytest tests/path::test_name`을 쓴다(xdist 없이).

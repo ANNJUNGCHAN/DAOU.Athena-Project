@@ -1,0 +1,576 @@
+{
+  "ok": true,
+  "exitCode": 0,
+  "error": null,
+  "elapsedMs": 104437,
+  "firstCanvasMs": 96574,
+  "turnTimeline": [
+    {
+      "atMs": 916,
+      "deltaMs": 916,
+      "type": "system",
+      "subtype": "init",
+      "toolNames": []
+    },
+    {
+      "atMs": 2509,
+      "deltaMs": 1593,
+      "type": "assistant",
+      "toolNames": []
+    },
+    {
+      "atMs": 3032,
+      "deltaMs": 523,
+      "type": "assistant",
+      "toolNames": [
+        "ToolSearch"
+      ]
+    },
+    {
+      "atMs": 3063,
+      "deltaMs": 31,
+      "type": "user",
+      "toolNames": []
+    },
+    {
+      "atMs": 3065,
+      "deltaMs": 2,
+      "type": "rate_limit_event",
+      "toolNames": []
+    },
+    {
+      "atMs": 5049,
+      "deltaMs": 1984,
+      "type": "assistant",
+      "toolNames": [
+        "mcp__athena__athena_search"
+      ]
+    },
+    {
+      "atMs": 5171,
+      "deltaMs": 122,
+      "type": "user",
+      "toolNames": []
+    },
+    {
+      "atMs": 6755,
+      "deltaMs": 1584,
+      "type": "assistant",
+      "toolNames": [
+        "mcp__athena__athena_describe"
+      ]
+    },
+    {
+      "atMs": 6768,
+      "deltaMs": 13,
+      "type": "user",
+      "toolNames": []
+    },
+    {
+      "atMs": 9282,
+      "deltaMs": 2514,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 9283,
+      "deltaMs": 1,
+      "type": "assistant",
+      "toolNames": []
+    },
+    {
+      "atMs": 10880,
+      "deltaMs": 1597,
+      "type": "assistant",
+      "toolNames": [
+        "mcp__athena__athena_resolve"
+      ]
+    },
+    {
+      "atMs": 10895,
+      "deltaMs": 15,
+      "type": "user",
+      "toolNames": []
+    },
+    {
+      "atMs": 18932,
+      "deltaMs": 8037,
+      "type": "assistant",
+      "toolNames": [
+        "mcp__athena__athena_call"
+      ]
+    },
+    {
+      "atMs": 19552,
+      "deltaMs": 620,
+      "type": "user",
+      "toolNames": []
+    },
+    {
+      "atMs": 22287,
+      "deltaMs": 2735,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 22873,
+      "deltaMs": 586,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 22873,
+      "deltaMs": 0,
+      "type": "assistant",
+      "toolNames": []
+    },
+    {
+      "atMs": 23500,
+      "deltaMs": 627,
+      "type": "assistant",
+      "toolNames": []
+    },
+    {
+      "atMs": 23507,
+      "deltaMs": 7,
+      "type": "assistant",
+      "toolNames": [
+        "ToolSearch"
+      ]
+    },
+    {
+      "atMs": 23510,
+      "deltaMs": 3,
+      "type": "user",
+      "toolNames": []
+    },
+    {
+      "atMs": 25104,
+      "deltaMs": 1594,
+      "type": "assistant",
+      "toolNames": [
+        "ToolSearch"
+      ]
+    },
+    {
+      "atMs": 25107,
+      "deltaMs": 3,
+      "type": "user",
+      "toolNames": []
+    },
+    {
+      "atMs": 26690,
+      "deltaMs": 1583,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 26690,
+      "deltaMs": 0,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 26691,
+      "deltaMs": 1,
+      "type": "assistant",
+      "toolNames": []
+    },
+    {
+      "atMs": 27032,
+      "deltaMs": 341,
+      "type": "assistant",
+      "toolNames": [
+        "ToolSearch"
+      ]
+    },
+    {
+      "atMs": 27034,
+      "deltaMs": 2,
+      "type": "user",
+      "toolNames": []
+    },
+    {
+      "atMs": 28653,
+      "deltaMs": 1619,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 30060,
+      "deltaMs": 1407,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 31536,
+      "deltaMs": 1476,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 31538,
+      "deltaMs": 2,
+      "type": "assistant",
+      "toolNames": []
+    },
+    {
+      "atMs": 33436,
+      "deltaMs": 1898,
+      "type": "assistant",
+      "toolNames": [
+        "mcp__athena__athena_resolve"
+      ]
+    },
+    {
+      "atMs": 33452,
+      "deltaMs": 16,
+      "type": "user",
+      "toolNames": []
+    },
+    {
+      "atMs": 40956,
+      "deltaMs": 7504,
+      "type": "assistant",
+      "toolNames": [
+        "mcp__athena__athena_call"
+      ]
+    },
+    {
+      "atMs": 41413,
+      "deltaMs": 457,
+      "type": "user",
+      "toolNames": []
+    },
+    {
+      "atMs": 43824,
+      "deltaMs": 2411,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 45231,
+      "deltaMs": 1407,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 45946,
+      "deltaMs": 715,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 45947,
+      "deltaMs": 1,
+      "type": "assistant",
+      "toolNames": []
+    },
+    {
+      "atMs": 46575,
+      "deltaMs": 628,
+      "type": "assistant",
+      "toolNames": [
+        "ToolSearch"
+      ]
+    },
+    {
+      "atMs": 46580,
+      "deltaMs": 5,
+      "type": "user",
+      "toolNames": []
+    },
+    {
+      "atMs": 48569,
+      "deltaMs": 1989,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 49978,
+      "deltaMs": 1409,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 51382,
+      "deltaMs": 1404,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 52796,
+      "deltaMs": 1414,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 53502,
+      "deltaMs": 706,
+      "type": "assistant",
+      "toolNames": []
+    },
+    {
+      "atMs": 54216,
+      "deltaMs": 714,
+      "type": "assistant",
+      "toolNames": []
+    },
+    {
+      "atMs": 54864,
+      "deltaMs": 648,
+      "type": "assistant",
+      "toolNames": [
+        "mcp__athena__athena_search"
+      ]
+    },
+    {
+      "atMs": 54986,
+      "deltaMs": 122,
+      "type": "user",
+      "toolNames": []
+    },
+    {
+      "atMs": 57779,
+      "deltaMs": 2793,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 59881,
+      "deltaMs": 2102,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 61298,
+      "deltaMs": 1417,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 62725,
+      "deltaMs": 1427,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 64142,
+      "deltaMs": 1417,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 64152,
+      "deltaMs": 10,
+      "type": "assistant",
+      "toolNames": []
+    },
+    {
+      "atMs": 64377,
+      "deltaMs": 225,
+      "type": "assistant",
+      "toolNames": [
+        "mcp__athena__athena_describe"
+      ]
+    },
+    {
+      "atMs": 64391,
+      "deltaMs": 14,
+      "type": "user",
+      "toolNames": []
+    },
+    {
+      "atMs": 66927,
+      "deltaMs": 2536,
+      "type": "assistant",
+      "toolNames": [
+        "mcp__athena__athena_resolve"
+      ]
+    },
+    {
+      "atMs": 66940,
+      "deltaMs": 13,
+      "type": "user",
+      "toolNames": []
+    },
+    {
+      "atMs": 74526,
+      "deltaMs": 7586,
+      "type": "assistant",
+      "toolNames": [
+        "mcp__athena__athena_call"
+      ]
+    },
+    {
+      "atMs": 74592,
+      "deltaMs": 66,
+      "type": "user",
+      "toolNames": []
+    },
+    {
+      "atMs": 76956,
+      "deltaMs": 2364,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 78372,
+      "deltaMs": 1416,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 80495,
+      "deltaMs": 2123,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 81909,
+      "deltaMs": 1414,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 83333,
+      "deltaMs": 1424,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 84735,
+      "deltaMs": 1402,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 86152,
+      "deltaMs": 1417,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 87583,
+      "deltaMs": 1431,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 88281,
+      "deltaMs": 698,
+      "type": "assistant",
+      "toolNames": []
+    },
+    {
+      "atMs": 88282,
+      "deltaMs": 1,
+      "type": "assistant",
+      "toolNames": []
+    },
+    {
+      "atMs": 96565,
+      "deltaMs": 8283,
+      "type": "assistant",
+      "toolNames": [
+        "mcp__athena__athena__render_canvas"
+      ]
+    },
+    {
+      "atMs": 96574,
+      "deltaMs": 9,
+      "type": "user",
+      "toolNames": []
+    },
+    {
+      "atMs": 104282,
+      "deltaMs": 7708,
+      "type": "assistant",
+      "toolNames": []
+    },
+    {
+      "atMs": 104296,
+      "deltaMs": 14,
+      "type": "result",
+      "subtype": "success",
+      "toolNames": []
+    }
+  ],
+  "canvasCount": 1,
+  "chartCanvasCount": 1,
+  "chartDataKeys": [
+    "symbol",
+    "name",
+    "bars"
+  ],
+  "chartBarsLength": 20,
+  "toolNames": [
+    "ToolSearch",
+    "mcp__athena__athena_search",
+    "mcp__athena__athena_describe",
+    "mcp__athena__athena_resolve",
+    "mcp__athena__athena_call",
+    "ToolSearch",
+    "ToolSearch",
+    "ToolSearch",
+    "mcp__athena__athena_resolve",
+    "mcp__athena__athena_call",
+    "ToolSearch",
+    "mcp__athena__athena_search",
+    "mcp__athena__athena_describe",
+    "mcp__athena__athena_resolve",
+    "mcp__athena__athena_call",
+    "mcp__athena__athena__render_canvas"
+  ],
+  "kiwoomToolCalls": [
+    "mcp__athena__athena_search",
+    "mcp__athena__athena_describe",
+    "mcp__athena__athena_resolve",
+    "mcp__athena__athena_call",
+    "mcp__athena__athena_resolve",
+    "mcp__athena__athena_call",
+    "mcp__athena__athena_search",
+    "mcp__athena__athena_describe",
+    "mcp__athena__athena_resolve",
+    "mcp__athena__athena_call"
+  ],
+  "foreignStockCalls": [],
+  "eventTypeCounts": {
+    "system/init": 1,
+    "assistant": 29,
+    "user": 16,
+    "rate_limit_event": 1,
+    "system/thinking_tokens": 28,
+    "result/success": 1
+  },
+  "stderrHead": "",
+  "finalResultText": "삼성전자(005930) 최근 20거래일 일봉을 캔버스에 그렸습니다. 7월 말 20만원대 초반(7/30 종가 207,000)까지 밀렸다가 8월 들어 꾸준히 회복해 8/14 274,500까지 올랐고, 마지막 거래일 8/18은 288,000까지 찍은 뒤 268,500(-2.19%)으로 밀리며 장대 음봉으로 마감했습니다.\n\n한 가지 알려드릴 점: 원래 규칙대로 일봉 차트 API(ka10081)를 먼저 호출했지만 응답이 134,073자로 컨텍스트 한도를 넘겨 읽을 수 없었고, 이 세션에는 저장된 파일을 잘라 읽을 파일/셸 툴이 없었습니다. 그래서 같은 키움 REST의 일별주가 API(ka10086)로 대체해 최근 20봉을 가져왔습니다 — 더 긴 기간이 필요하면 연속조회로 이어 받겠습니다."
+}

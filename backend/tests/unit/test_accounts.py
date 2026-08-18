@@ -34,6 +34,13 @@ from athena_api.process_lock import CredentialProcessLock
 from athena_api.selector import PlanSigner, build_operation_catalog
 from athena_api.selector.errors import InvalidPlanError
 
+# 이 파일의 모든 테스트가 같은 고정 가짜 자격증명(alias "daeju")을 쓴다 — 즉 같은
+# CredentialProcessLock 파일을 놓고 경합한다. xdist 병렬 실행에서 서로 다른 워커
+# 프로세스가 이 파일의 테스트를 동시에 돌리면 실제 OS 레벨 락 충돌로 무작위 실패한다
+# (US-008 실측: -n auto --dist loadgroup 초기 실행에서 6건 실패, 전부 이 파일).
+# xdist_group으로 한 워커에 묶어 서로에게는 직렬을 강제한다 — 다른 파일과는 여전히 병렬.
+pytestmark = pytest.mark.xdist_group(name="kiwoom-credential-pool")
+
 ACCOUNTS_JSON = (
     '[{"alias":"daeju","app_key":"key-a","secret_key":"secret-a"},'
     '{"alias":"sangsi","app_key":"key-b","secret_key":"secret-b"}]'

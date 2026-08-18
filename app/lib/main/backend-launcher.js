@@ -117,6 +117,7 @@ async function ensureBackend({ mdlog } = {}) {
   }
 
   log(`ensureBackend: 헬스체크 실패 — 백엔드 스폰 (${PYTHON_EXE} ${buildUvicornArgs().join(' ')}, cwd=${BACKEND_DIR})`);
+  const spawnAt = Date.now(); // 부팅 지연 계측(합의 계획 W1) — "스폰→manifest 200" 구간의 시작점
   let child;
   try {
     child = spawn(PYTHON_EXE, buildUvicornArgs(), {
@@ -143,12 +144,13 @@ async function ensureBackend({ mdlog } = {}) {
 
   const ready = await waitUntilHealthy(STARTUP_POLL_TIMEOUT_MS, STARTUP_POLL_INTERVAL_MS);
   const elapsedMs = Date.now() - t0;
+  const spawnToHealthyMs = Date.now() - spawnAt;
   if (ready) {
-    log(`ensureBackend: 기동 완료 — 준비까지 ${elapsedMs}ms`);
+    log(`ensureBackend: 기동 완료 — 준비까지 ${elapsedMs}ms (스폰→manifest 200: ${spawnToHealthyMs}ms)`);
   } else {
-    log(`ensureBackend: ${STARTUP_POLL_TIMEOUT_MS}ms 안에 준비 확인 실패 — 계속 기동 중일 수 있다(elapsed=${elapsedMs}ms)`);
+    log(`ensureBackend: ${STARTUP_POLL_TIMEOUT_MS}ms 안에 준비 확인 실패 — 계속 기동 중일 수 있다(elapsed=${elapsedMs}ms, 스폰 이후=${spawnToHealthyMs}ms)`);
   }
-  return { ok: true, spawned: true, ready, elapsedMs };
+  return { ok: true, spawned: true, ready, elapsedMs, spawnToHealthyMs };
 }
 
 // 우리가 스폰한 경우에만 트리를 끊는다 — 사용자가 별도로 기동한 인스턴스는

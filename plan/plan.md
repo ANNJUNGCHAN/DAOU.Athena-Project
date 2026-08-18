@@ -1,10 +1,10 @@
 # Athena 진행 상황 및 재개 계획
 
-> 최종 갱신: 2026-08-18 · 브랜치 `main` — **2026-08-18 작업 브랜치 4종(데이터셋-개발·
-> AITS-화면·화면기획서·장중)이 전부 `main`에 병합됐다 — 로컬·원격 모두 `main` 하나다.**
-> 장중의 전수 조사([`장중_해야할것.md`](장중_해야할것.md)) 착수 순서 ①(보안·결함)·
-> ②(문서 동기화) + 백엔드 결선 2건 포함. 2026-08-17까지의 이전 병합 이력(작업 브랜치
-> 4종 → `main`)은 §1 참조.
+> 최종 갱신: 2026-08-19 · 브랜치 `main` — **전 구간 지연 최적화(합의 계획
+> `.omc/plans/plan-latency-optimization.md`) 완료. 진단 보고서는
+> [`plan/latency-audit-2026-08-19.md`](latency-audit-2026-08-19.md) — "백엔드가 느리다"는
+> 전제가 반증됐다(백엔드 몫 0.2초, 병목은 모델 왕복).** 2026-08-18 작업 브랜치 4종
+> 병합 이력은 §1 참조.
 >
 > **다음 세션은 이 파일부터 읽는다.** 여기에는 *지금 상태 / 검증된 사실 / 다음 수*만 적는다.
 > 설계 근거와 함정 목록은 [`plan/00-인수인계.md`](00-인수인계.md)에 있다. 중복하지 않는다.
@@ -21,10 +21,41 @@
 
 ## 1. 실측 상태
 
-> **현행 수치는 바로 아래 첫 블록(2026-08-18)이다.** 이후 블록들은 날짜가 박힌
+> **현행 수치는 바로 아래 첫 블록(2026-08-19)이다.** 이후 블록들은 날짜가 박힌
 > 스냅샷이고 어떻게 여기까지 왔는지를 남기려고 보존한다 — **인용하지 마라.**
 
-**2026-08-18 (4차) · 키움 실배선 라우팅 — "주식은 무조건 키움"(사용자 지시) 결선 후 재실측 — 이 수치가 현행이다:**
+**2026-08-19 (5차) · 전 구간 지연 최적화(합의 계획 실행) 후 재실측 — 이 수치가 현행이다:**
+
+```
+backend:  708 passed, 0 failed (병렬 56.8초 · pytest-xdist -n auto --dist loadgroup · 직렬은 178초)
+  ruff check . → All checks passed | generate_api.py --check → current
+app:
+  npm test        → 166건 통과
+  npm run verify  → 전 단언 통과 · exit 0
+E2E 최종 N=2 (PROBE-KIWOOM-CHART-run6/7.json):
+  총 75.4s/92.9s · 첫 카드 69.9s/86.9s · 키움 4툴 정확 1사이클(재조회 0) · 외부 주식 API 0 · chart 1
+부팅: 창 표시 1.115s (≤2s 달성) · 백엔드 스폰→manifest 3.773s (≤5s 달성)
+4툴 백엔드 몫: 0.17~0.20s (목표 ≤5s의 25배 여유)
+```
+
+**2026-08-19 (5차) 세션 기록:**
+
+- **진단이 전제를 뒤집었다**: "백엔드가 느리다" → 실측 분해로 반증. 게이트웨이+백엔드+키움 몫은
+  사이클당 0.2초, 질의 지연의 99%는 모델 판단 대기. 질의 목표 2종(첫 카드 ≤15s·완료 ≤30s)은
+  **미달로 정직 판정** — 구조 변경(auto_execute 이중 디스패치 등) 없이는 도달 불가.
+  전체 판정·남은 선택지는 [`latency-audit-2026-08-19.md`](latency-audit-2026-08-19.md) §5.
+- **`--tools` 표면 축소 실험 전면 철회** (E2E 5회 실측 전패): MCP 툴이 ToolSearch 지연 로딩이라
+  빌트인 축소가 로딩을 깨뜨림(최악은 렌더 실패). 재도입 조건(E2E 재실측)을 주석·테스트로 고정.
+  낭비 턴 억제는 프롬프트 규율만 채택(재조회 금지·describe 생략 금지·첫 카드 우선).
+- **게이트웨이 읽기 캐시**(selector_tools.py SelectorCache): search/describe만, TTL 5분·LRU 256.
+  resolve/call은 구조적 캐시 불가(화이트리스트 게이트 + 우회 불가 테스트 3건). 웜 경로 전용.
+- **pytest 병렬화**: 직렬 178초 → 54~58초(연속 2회 green). 원인 규명된 그룹 고정 2건
+  (test_accounts.py 실제 OS 락 공유 → xdist_group). addopts 미기재, README/AGENTS.md에 규약.
+- **밀폐성 수정 1건**: test_inventory_api.py의 `_env_file=None` 누락(파일 내 유일한 이탈) →
+  실 .env 로드로 기실행 백엔드와 락 충돌하던 환경 의존 실패 소멸. 708건이 백엔드 기동 무관 green.
+- 부팅 lifespan 재구성은 **불발동** — 실측이 목표 기달성이라 발동 조건 불성립(무근거 수술 금지).
+
+**2026-08-18 (4차) · 키움 실배선 라우팅 — "주식은 무조건 키움"(사용자 지시) 결선 후 재실측:**
 
 ```
 backend:  687 passed, 0 failed (164초)   ← 667 + selector_tools 24 · chart 스키마 6 등 (tests/mcp 258)
@@ -644,8 +675,9 @@ spawn 시점에 앱이 환경변수로 주입한다. ~~**구현은 안 했다**~
 git status --short --branch
 git log --oneline -8
 
-# 백엔드 (전체 스위트는 약 4분)
-cd backend && .venv/Scripts/python -m pytest -q
+# 백엔드 (병렬 약 1분 · 직렬은 약 3분)
+cd backend && .venv/Scripts/python -m pytest -n auto --dist loadgroup -q
+cd backend && .venv/Scripts/python -m pytest -q                      # 직렬(디버깅용)
 cd backend && .venv/Scripts/python -m pytest tests/mcp -q            # 205 passed
 cd backend && .venv/Scripts/python -m pytest tests/unit/test_selector_eval.py -x -q
 cd backend && .venv/Scripts/python -m ruff check athena_api athena_mcp tests
