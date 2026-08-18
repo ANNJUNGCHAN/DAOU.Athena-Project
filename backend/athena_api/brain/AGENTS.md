@@ -30,8 +30,12 @@ status in `plan/investment-brain-progress-2026-08-15.md`.
   output against the ontology before anything is written.
 - Ingestion is incremental and resumable — durable state must be updated in the same step that
   commits the projection.
-- **Not yet wired into FastAPI.** There is no route surface for the brain; wiring it is open work
-  tracked in `plan/plan.md`.
+- **Lifespan is wired; the route surface is not.** Since 2026-08-18 `lifespan.py` opens/closes the
+  full brain runtime (lock → GraphStore → fts index → HistoryStore → IngestionCoordinator, ADR §4.2
+  order) behind `brain_enabled=false` by default. There is still **no HTTP route surface** for the
+  brain, and the coordinator runs over an empty HistoryStore (no production writer calls
+  `upsert_chat`/`upsert_completed_trade` yet) — both tracked in `plan/plan.md` §5 (G005 routes,
+  action 20 pipeline).
 
 ### Testing Requirements
 `tests/unit/test_brain_ontology.py`, `test_brain_graph_store.py`, `test_brain_history.py`,
