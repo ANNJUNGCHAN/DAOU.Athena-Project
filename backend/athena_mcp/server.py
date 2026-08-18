@@ -26,10 +26,11 @@ from pathlib import Path
 from typing import Any
 
 import anyio
+import httpx
 import mcp.types as types
 from mcp.server.lowlevel import Server
 
-from athena_mcp import quirks
+from athena_mcp import quirks, selector_tools
 from athena_mcp.aggregator import (
     ResolvedTarget,
     ToolAggregator,
@@ -180,6 +181,13 @@ class AthenaGateway:
     handles: dict[str, UpstreamServerHandle] = field(default_factory=dict)
     audit_log_dir: Path = field(default_factory=lambda: Path.home() / ".athena" / "audit")
     canvas_save_dir: Path = field(default_factory=lambda: Path.home() / ".athena" / "canvases")
+    # `athena_search`/`describe`/`resolve`/`call`이 쓰는 백엔드 루프백 클라이언트.
+    # 기본은 `ATHENA_BACKEND_URL`(없으면 127.0.0.1:8010)을 향하는 실제 클라이언트다
+    # — 테스트는 이 필드에 `transport=httpx.MockTransport(...)`를 심은 클라이언트를
+    # 직접 대입해 네트워크 없이 왕복을 검증한다(selector_tools.py 모듈 docstring 참고).
+    selector_http_client: httpx.AsyncClient = field(
+        default_factory=selector_tools.default_http_client_factory
+    )
 
     def _audit_log(self, alias: str) -> AuditLog:
         return AuditLog(self.audit_log_dir / f"{alias}.jsonl")
@@ -268,6 +276,13 @@ class AthenaGateway:
             return _render_canvas(arguments)
         if name == SAVE_CANVAS_TOOL:
             return _save_canvas(arguments, self.canvas_save_dir)
+        # 키움 셀렉터 4툴 — `aggregator.resolve()`보다 먼저 검사한다. 이 넷은
+        # upstream 서버가 아니라 게이트웨이 자신이 백엔드로 프록시하는
+        # 빌트인이므로, 어떤 alias가 우연히 같은 qualified_name을 등록해도
+        # 빌트인이 항상 이긴다(selector_tools.py 모듈 docstring의 이름 충돌
+        # 절 참고 — RENDER_CANVAS_TOOL/SAVE_CANVAS_TOOL과 같은 우선순위 패턴).
+        if name in selector_tools.SELECTOR_TOOL_NAMES:
+            return await self._dispatch_selector_tool(name, arguments)
 
         try:
             target = self.aggregator.resolve(name)
@@ -397,6 +412,28 @@ class AthenaGateway:
         fixed = dict(arguments)
         fixed["truncate_at"] = suggested
         return fixed
+
+    async def _dispatch_selector_tool(
+        self, name: str, arguments: dict[str, Any]
+    ) -> types.CallToolResult:
+        """`athena_search`/`describe`/`resolve`/`call`을 `selector_tools.dispatch()`로
+        위임하고, 성공 여부만 감사 로그에 남긴다.
+
+        이 넷은 upstream 서버가 아니라 게이트웨이 자신이 백엔드로 프록시하는
+        빌트인이라 `dispatch_call()`의 upstream 경로(위 `try/except` 블록)를
+        전혀 타지 않는다 — `athena__render_canvas`/`athena__save_canvas`처럼
+        지금까지는 감사 로그가 없던 자리였지만, 이 넷은 실제 키움 데이터·주문
+        경로에 닿으므로 별도로 감사한다. 별칭은 특정 upstream 서버가 아니라
+        고정 문자열 `'kiwoom-selector'`를 쓴다 — `consent.py`의 AuditLog와
+        같은 최소 원칙(시각·툴명·성공여부만)을 그대로 따르고, `plan_token`을
+        포함한 인자·응답 본문은 절대 이 로그에 닿지 않는다(인자 자체를 넘기는
+        자리가 코드에 없다).
+        """
+        result = await selector_tools.dispatch(name, arguments, self.selector_http_client)
+        self._audit_log("kiwoom-selector").record(
+            "kiwoom-selector", name, success=not result.isError
+        )
+        return result
 
 
 _LAYOUT_GRADES = ("half", "full")
@@ -597,8 +634,8 @@ def _builtin_tool_defs() -> list[types.Tool]:
     return [
         types.Tool(
             name=RENDER_CANVAS_TOOL,
-            description="4종 캔버스(stream/reader/timeline/table) 또는 free로 렌더링한다. "
-            "스키마 불일치 시 free로 폴백하고 그 사실을 응답에 남긴다.",
+            description="5종 캔버스(stream/reader/timeline/table/chart) 또는 free로 "
+            "렌더링한다. 스키마 불일치 시 free로 폴백하고 그 사실을 응답에 남긴다.",
             inputSchema=_RENDER_CANVAS_INPUT_SCHEMA,
         ),
         types.Tool(
@@ -606,6 +643,12 @@ def _builtin_tool_defs() -> list[types.Tool]:
             description="캔버스를 이름 붙여 저장한다. 저장된 캔버스는 나중에 다시 열 수 있다.",
             inputSchema=_SAVE_CANVAS_INPUT_SCHEMA,
         ),
+        # 키움 셀렉터 4툴 — 게이트웨이 자체 빌트인이지만 upstream이 아니라
+        # 백엔드로 프록시하므로 캔버스 툴과 같은 "우리가 관리하는 툴" 범주에
+        # 둔다. 정의는 selector_tools.py가 갖는다(입력 스키마·설명이 길어
+        # 여기 인라인하면 이 파일이 비대해진다 — canvas.py를 별도 모듈로 뺀
+        # 것과 같은 이유).
+        *selector_tools.builtin_tool_defs(),
     ]
 
 

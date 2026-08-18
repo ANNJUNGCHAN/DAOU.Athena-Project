@@ -457,6 +457,37 @@ keychain 각각 구현), (b) `env` 값만 앱이 쥐고 spawn 시점에 환경�
   `max_restarts`(기본 3) 초과 시 `MaxRestartsExceededError`를 던지고
   더 이상 재시작하지 않는다(`test_restart_respects_max_restarts`로 커버).
 
+## 키움 셀렉터 4툴 노출 — 새 공격면 점검 (2026-08-18)
+
+`athena_search`/`describe`/`resolve`/`call`(`selector_tools.py`)이 실제 키움
+데이터·주문 경로에 닿는 첫 게이트웨이 빌트인이라 별도로 점검했다.
+
+- **인프로세스 import 없음.** `athena_api.selector`를 절대 import하지
+  않는다 — `SelectorService`가 키움 자격증명에 의존하고,
+  `CredentialProcessLock`(`athena_api/process_lock.py`)이 자격증명 보유
+  프로세스를 정확히 1개로 강제한다. 게이트웨이가 in-process import하면
+  이 프로세스가 두 번째 자격증명 인접 프로세스가 될 위험을 안는다. 대신
+  `httpx.AsyncClient` 루프백 HTTP만 쓴다.
+- **감사 로그 신설.** 지금까지 게이트웨이 자체 툴(`athena__render_canvas`/
+  `save_canvas`)은 감사 로그가 없었다 — 계좌·주문에 안 닿기 때문이다. 이
+  넷은 닿으므로 고정 별칭 `'kiwoom-selector'`로 시각·툴명·성공여부만 남긴다
+  (`consent.py`의 `AuditLog`와 같은 최소 원칙). `plan_token`·인자·응답
+  본문은 로그에 넘기는 자리 자체가 없어 구조적으로 새지 않는다.
+- **재시도 없음 = 중복 주문 방어의 일부.** `plan_token`은 1회용이라
+  재시도는 항상 `PLAN_ALREADY_USED`고, 주문 계획이면 재시도 자체가 중복
+  주문 위험이다(`docs/LLM_API_SELECTION.md` 어댑터 요구사항 6). 타임아웃·
+  연결 실패 모두 단 한 번만 시도한다 — `tests/mcp/test_selector_tools.py`의
+  "단일 시도 보장" 절이 회귀 테스트다.
+- **백엔드 4xx/5xx 원문 전달은 원문 누출이 아니다.** 이 프록시가 그대로
+  전달하는 오류 본문은 제3자 upstream이 아니라 Athena 자신의 백엔드가 낸
+  것이고, `athena_api/errors.py`가 실제 키움 원문·키를 이미 도메인 에러로
+  번역한 뒤다 — SECURITY.md 위쪽 §3(upstream 프롬프트 인젝션/원문 누출)과는
+  다른 신뢰 경계에 있다.
+- **남은 위험.** 백엔드가 127.0.0.1에 바인딩된다는 전제(CLAUDE.md §6)는
+  이 프록시가 아니라 백엔드 자신의 책임이다 — 이 파일은 그 바인딩을
+  검증하지 않는다. `ATHENA_BACKEND_URL`을 사용자가 임의로 바꾸면 이
+  프록시는 그 값을 그대로 신뢰한다(로컬 환경변수라 원격 공격면은 아니다).
+
 ## 재현/검증 커맨드
 
 ```

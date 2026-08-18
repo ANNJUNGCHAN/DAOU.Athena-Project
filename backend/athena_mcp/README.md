@@ -25,8 +25,9 @@ Claude Code CLI  ->  Athena Gateway (athena_mcp)  ->  등록된 MCP 서버 N개
 | `consent.py` | 동의 게이트 — 서버 승인 없이는 spawn 불가, 위험 패턴 경고, 툴별 allowlist, 인자/응답 본문 없는 감사 로그 |
 | `quirks.py` | `corp_code` zfill(8), 인코딩 스모크 테스트(U+FFFD 탐지), `korean-dart-mcp` truncate_at 상향 제안 |
 | `stream.py` | `spike/stream-adapter/adapter.py` 승격 — 뉴스/공시 정규화 어댑터, sanitize 순서, dedupe 3단계 |
-| `canvas.py` | 신규 4종 캔버스(stream/reader/timeline/table) JSON Schema + `free` 폴백 판정 |
-| `server.py` | 위 전부를 `mcp.server.lowlevel.Server`에 연결 — `list_tools`/`call_tool` 핸들러, `athena__render_canvas`/`athena__save_canvas`, 별칭 rename 결선 |
+| `canvas.py` | 5종 캔버스(stream/reader/timeline/table/chart) JSON Schema + `free` 폴백 판정 |
+| `selector_tools.py` | 키움 셀렉터 4툴(`athena_search`/`describe`/`resolve`/`call`) — 백엔드 `/api/v1/llm/tools/*`로 HTTP 루프백 프록시, 재시도 없음, 감사 로그 |
+| `server.py` | 위 전부를 `mcp.server.lowlevel.Server`에 연결 — `list_tools`/`call_tool` 핸들러, `athena__render_canvas`/`athena__save_canvas`, 셀렉터 4툴 라우팅, 별칭 rename 결선 |
 | `onboarding.py` | **이식 절차** — 별칭 정규화(임의 이름 → MCP 규칙), 등록/승인 분리, `probe`(1회 연결로 툴 목록·인코딩·64자 위반 확인) |
 | `runner.py` | **프로세스로 띄우기** — 승인된 서버 연결(실패는 서버 단위 격리), `stdio_server()` + `Server.run()`, `tools/list_changed` 전송, 백그라운드 헬스체크 슈퍼바이저 |
 | `__main__.py` | `athena-mcp` CLI — register/list/show/approve/probe/allow/disallow/rename/remove/doctor/serve |
@@ -44,6 +45,30 @@ Claude Code CLI  ->  Athena Gateway (athena_mcp)  ->  등록된 MCP 서버 N개
   이름을 아는 시점(`aggregator.py`)에서 진짜 64자 규칙으로 2차 방어한다 —
   92자 위반 재현(`spike/mcp-client/RESULT.md` L67, `user-registered-...
   __get_market_fundamental_by_date`)을 두 층 모두에서 테스트로 고정했다.
+
+## 키움 셀렉터 4툴 — `athena_search`/`describe`/`resolve`/`call` (게이트웨이 빌트인)
+
+`docs/LLM_API_SELECTION.md` §MCP adapter instructions가 못박은 계약 이름 그대로
+노출한다(`athena__` 이중 프리픽스 없음 — 이유는 `selector_tools.py` 모듈
+docstring). 실행은 인프로세스 import가 아니라 `httpx.AsyncClient` 루프백
+HTTP로 `{ATHENA_BACKEND_URL 또는 127.0.0.1:8010}/api/v1/llm/tools/*`를
+호출한다 — `SelectorService`가 키움 자격증명에 의존하고
+`CredentialProcessLock`(`athena_api/process_lock.py`)이 자격증명 보유
+프로세스를 정확히 1개로 못박기 때문에, 게이트웨이가 그 코드를 직접 import하면
+안 된다.
+
+**재시도가 절대 없다** — `plan_token`은 1회용이라 실패한 `athena_call`을
+재시도하면 항상 `PLAN_ALREADY_USED`고, 주문 계획이면 중복 주문 위험까지
+있다. 타임아웃·연결 실패(백엔드 미기동) 모두 단 한 번 시도하고 즉시 에러를
+반환한다 — 연결 거부는 "다른 데이터 소스로 대체하지 마라"는 지시가 담긴
+전용 메시지를 준다.
+
+**감사 로그가 새로 붙었다.** `athena__render_canvas`/`athena__save_canvas`는
+게이트웨이 자체 툴이라 지금까지 감사 로그가 없었지만, 이 넷은 실제 키움
+데이터·주문 경로에 닿으므로 `consent.py`의 `AuditLog`(시각·툴명·성공여부만,
+인자·응답 본문 없음)를 고정 별칭 `'kiwoom-selector'`로 남긴다. `plan_token`은
+인자를 로그에 넘기는 자리 자체가 코드에 없어 구조적으로 새지 않는다
+(`tests/mcp/test_selector_tools.py::test_audit_log_never_contains_plan_token_or_arguments`).
 
 ## 실행법
 

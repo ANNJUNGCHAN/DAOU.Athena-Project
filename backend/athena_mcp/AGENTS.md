@@ -27,8 +27,9 @@ Claude Code CLI  ->  Athena Gateway (athena_mcp)  ->  N registered MCP servers
 | `consent.py` | Consent gate — no spawn without approval, risky-pattern warnings, per-tool allowlist, audit log with no argument or response bodies |
 | `result.py` | `CallToolResult` parsing, 4-step priority: `isError` → `structuredContent` → `content[0].text` json.loads → plain text; unsupported blocks error explicitly |
 | `quirks.py` | Per-server known-defect compensation — measured W0/W0.9 findings only, no guesses |
-| `canvas.py` | Canvas contract schemas for `athena__render_canvas` / `athena__save_canvas` |
+| `canvas.py` | Canvas contract schemas for `athena__render_canvas` / `athena__save_canvas` (5 types: stream/reader/timeline/table/chart) |
 | `stream.py` | Streaming/notification plumbing |
+| `selector_tools.py` | Kiwoom selector 4-tool builtins (`athena_search`/`describe`/`resolve`/`call`) — HTTP loopback proxy to backend, no retries, audit-logged |
 | `server.py` | Exposes Athena as one MCP server |
 
 ## For AI Agents
@@ -47,7 +48,7 @@ Claude Code CLI  ->  Athena Gateway (athena_mcp)  ->  N registered MCP servers
 ### Testing Requirements
 `backend/tests/mcp/` — `test_registry.py`, `test_mcp_client.py`, `test_result.py`,
 `test_aggregator.py`, `test_consent.py`, `test_quirks.py`, `test_canvas.py`, `test_stream.py`,
-`test_server.py`, against `tests/mcp/fixtures/fake_server.py`.
+`test_server.py`, `test_selector_tools.py`, against `tests/mcp/fixtures/fake_server.py`.
 
 ### Common Patterns
 - Fail closed and fail loud: unknown content blocks raise rather than degrade silently.
