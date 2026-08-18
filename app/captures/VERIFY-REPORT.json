@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-08-18T14:48:43.386Z",
+  "startedAt": "2026-08-18T15:16:59.856Z",
   "layout": {
     "scale": 1,
     "screen": {
@@ -56,16 +56,16 @@
   "expand": {
     "frameCount": 33,
     "p50": 16.699999999999818,
-    "p95": 16.799999999999955,
-    "max": 33.399999999999864,
-    "min": 16.300000000000182
+    "p95": 16.800000000000182,
+    "max": 50,
+    "min": 16.59999999999991
   },
   "collapse": {
     "frameCount": 35,
     "p50": 16.699999999999818,
     "p95": 16.800000000000182,
     "max": 16.800000000000182,
-    "min": 16.5
+    "min": 16.599999999999454
   },
   "afterCollapse": {
     "canvasVisible": false
@@ -273,13 +273,13 @@
     "scaleFactor": 1.5,
     "before": {
       "x": 180,
-      "y": 886,
+      "y": 885,
       "width": 1574,
       "height": 205
     },
     "after": {
       "x": 180,
-      "y": 886,
+      "y": 885,
       "width": 1574,
       "height": 205
     },
@@ -480,5 +480,27 @@
     "rejectedPatchesDidNotChangeFile": true,
     "nullRemovesModelLine": true
   },
-  "finishedAt": "2026-08-18T14:49:11.663Z"
+  "glassLadder": {
+    "chatTokens": {
+      "window": 0.3,
+      "card": 0.45,
+      "canvas": 0.5,
+      "windowMax": 0.55
+    },
+    "canvasTokens": {
+      "window": 0.3,
+      "card": 0.45,
+      "canvas": 0.5,
+      "windowMax": 0.55
+    },
+    "mosaicAlpha": 0.5,
+    "cardAlpha": 0.45,
+    "chatAppAlpha": 0.3,
+    "tokensMatchAcrossWindows": true,
+    "ladderOrdered": true,
+    "mosaicMatchesToken": true,
+    "cardMatchesToken": true,
+    "chatAppMatchesWindowToken": true
+  },
+  "finishedAt": "2026-08-18T15:17:28.781Z"
 }

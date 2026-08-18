@@ -4,6 +4,24 @@
    Paper 토큰 → 앱 토큰 대응: --font-kr=--font-body, --font-kr-bold=--font-strong,
    --font-title=--font-display. */
 
+/* ---------- 경계 hover 광량 (lib/edge-glow.js, 2026-08-19 결정) ----------
+   자유 리사이즈의 발견 장치 — 마우스가 창 경계 14px 안이면 그 변이 밝아진다.
+   상시 크롬 없이 광량으로만 알린다(soul.md §7 "깊이는 값으로"). 무채색 준수. */
+.edge-glow {
+  position: fixed;
+  pointer-events: none;
+  z-index: 40;
+  opacity: 0;
+  transition: opacity var(--dur-base) var(--ease);
+}
+.edge-glow.is-near { opacity: 1; }
+.edge-glow-n, .edge-glow-s { left: 8px; right: 8px; height: 2px; }
+.edge-glow-w, .edge-glow-e { top: 8px; bottom: 8px; width: 2px; }
+.edge-glow-n { top: 0; background: linear-gradient(90deg, transparent, rgb(255 255 255 / 45%) 30%, rgb(255 255 255 / 45%) 70%, transparent); }
+.edge-glow-s { bottom: 0; background: linear-gradient(90deg, transparent, rgb(255 255 255 / 45%) 30%, rgb(255 255 255 / 45%) 70%, transparent); }
+.edge-glow-w { left: 0; background: linear-gradient(180deg, transparent, rgb(255 255 255 / 45%) 30%, rgb(255 255 255 / 45%) 70%, transparent); }
+.edge-glow-e { right: 0; background: linear-gradient(180deg, transparent, rgb(255 255 255 / 45%) 30%, rgb(255 255 255 / 45%) 70%, transparent); }
+
 /* 표시등 — 7×7. 연결됨은 --color-ok, 미연결은 흰색 22%. */
 .uk-dot {
   width: 7px;
@@ -26,7 +44,7 @@
   flex: none;
   padding: 4px 10px;
   border-radius: 6px;
-  font-size: 10px;
+  font-size: var(--text-2xs);
   line-height: 12px;
   white-space: nowrap;
 }
@@ -38,7 +56,7 @@
 .uk-badge.is-idle {
   background: rgb(255 255 255 / 7%);
   border: 1px solid rgb(255 255 255 / 16%);
-  color: rgb(242 244 248 / 58%);
+  color: var(--color-k-soft);
   font-family: var(--font-body);
 }
 
@@ -49,7 +67,7 @@
   gap: 7px;
   border: 0;
   cursor: pointer;
-  color: rgb(242 244 248 / 92%);
+  color: var(--color-k-bright);
   font-family: var(--font-strong);
   transition: background var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
 }
@@ -62,7 +80,7 @@
   gap: 8px;
   background: var(--color-brand);
   color: #fff;
-  font-size: 13px;
+  font-size: var(--text-base);
   line-height: 16px;
 }
 .uk-btn-primary:hover:not(:disabled) { background: color-mix(in oklab, var(--color-brand) 88%, white); }
@@ -72,7 +90,7 @@
   border-radius: 7px;
   background: rgb(255 255 255 / 10%);
   border: 1px solid rgb(255 255 255 / 24%);
-  font-size: 11px;
+  font-size: var(--text-xs);
   line-height: 14px;
 }
 .uk-btn-ghost:hover:not(:disabled) { background: rgb(255 255 255 / 16%); }
@@ -80,12 +98,12 @@
 .uk-btn-text {
   padding: 0;
   background: none;
-  color: rgb(242 244 248 / 40%);
+  color: var(--color-k-hint);
   font-family: var(--font-body);
-  font-size: 12px;
+  font-size: var(--text-sm);
   line-height: 16px;
 }
-.uk-btn-text:hover:not(:disabled) { color: rgb(242 244 248 / 72%); }
+.uk-btn-text:hover:not(:disabled) { color: var(--color-k-soft); }
 
 /* 진행 점 — 20×3, 무채색 고정. 브랜드색을 쓰지 않는다. */
 .uk-dots { display: flex; align-items: center; gap: 6px; }
@@ -104,15 +122,15 @@
 }
 .uk-lrow-label {
   font-family: var(--font-body);
-  font-size: 12px;
+  font-size: var(--text-sm);
   line-height: 16px;
-  color: rgb(242 244 248 / 42%);
+  color: var(--color-k-hint);
 }
 .uk-lrow-value {
   font-family: var(--font-body);
-  font-size: 12px;
+  font-size: var(--text-sm);
   line-height: 16px;
-  color: rgb(242 244 248 / 92%);
+  color: var(--color-k-bright);
   text-align: right;
 }
 
@@ -142,15 +160,15 @@
 }
 .uk-sheet-title {
   font-family: var(--font-strong);
-  font-size: 14px;
+  font-size: var(--text-md);
   line-height: 18px;
   color: var(--color-k-text);
 }
 .uk-sheet-sub {
   font-family: var(--font-body);
-  font-size: 11px;
+  font-size: var(--text-xs);
   line-height: 16px;
-  color: rgb(242 244 248 / 48%);
+  color: var(--color-k-hint);
   flex: 1;
 }
 .uk-sheet-close { margin-left: auto; }
@@ -167,10 +185,10 @@
 /* 비밀값 — 값이 아니라 문자 수만. */
 .uk-secret {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: var(--text-xs);
   line-height: 16px;
   letter-spacing: 0.04em;
-  color: rgb(242 244 248 / 54%);
+  color: var(--color-k-soft);
 }
 
 /* 빈 상태 · 오류. 둘 다 조용히 넘기지 않기 위한 자리다. */
@@ -183,15 +201,15 @@
 }
 .uk-empty-text {
   font-family: var(--font-body);
-  font-size: 13px;
+  font-size: var(--text-base);
   line-height: 18px;
-  color: rgb(242 244 248 / 54%);
+  color: var(--color-k-soft);
 }
 .uk-empty-hint {
   font-family: var(--font-body);
-  font-size: 11px;
+  font-size: var(--text-xs);
   line-height: 16px;
-  color: rgb(242 244 248 / 34%);
+  color: var(--color-k-ghost);
 }
 .uk-error {
   padding: 10px 12px;
@@ -199,7 +217,7 @@
   background: color-mix(in oklab, var(--color-warn) 14%, transparent);
   border: 1px solid color-mix(in oklab, var(--color-warn) 42%, transparent);
   font-family: var(--font-body);
-  font-size: 12px;
+  font-size: var(--text-sm);
   line-height: 18px;
   color: var(--color-warn);
 }

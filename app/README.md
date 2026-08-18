@@ -1070,6 +1070,24 @@ Win+←/→/↑/↓가 이 앱에서 OS 표준 창 단축키와 같은 뜻으로
 - **Win+↓** → OS가 포커스 창을 최소화 → `minimize` 이벤트에서 짝 창도 함께
   내린다(복원 짝맞춤은 기존 restore 핸들러).
 
+**자유 리사이즈 후속 3건 (2026-08-19, 질의응답 결정 — plan/디자인-비판-2026-08-18.md §4):**
+
+- **경계 hover 광량** — 리사이즈 가능함을 알리는 신호가 0개라는 지적의 해소.
+  `lib/edge-glow.js`(두 창 공용, 자기 초기화)가 마우스가 창 경계 14px 안에 오면
+  그 변을 밝힌다. 상시 크롬 없음, 무채색, prefers-contrast에서 숨김(access.css).
+- **상단은 그립 우선** — 채팅창 상단 10px에서 그립과 OS 엣지 리사이즈가 경합하던
+  비결정성 해소. `main.js`가 `will-resize`의 `edge==='top'`만 preventDefault —
+  좌/우/아래·모서리는 네이티브 자유 리사이즈 그대로다.
+- **□ 토글의 복원 의미론** — Windows 복원 사각형처럼 "확장 ↔ 직전 크기"로 동작한다
+  (chat.js `lastRestoreHeight`). 표준 최대(chatMaxH)를 넘긴 커스텀 크기에서 □를
+  누르면 표준 최대로 접고 원크기를 기억, 다시 누르면 돌아온다. 이를 위해
+  `setChatHeight`의 수동 요청(manual:true)은 chatMaxH가 아니라 workArea 높이까지
+  허용한다 — 자동 성장 캡은 여전히 chatMaxH.
+
+**설정 진입 코치마크 (2026-08-19)** — 최초 1회, 점·커맨드바 두 진입로를 한 문장으로
+알린다(chat.js `maybeShowCoachmark`, localStorage 플래그). fixture(자동 검증)
+실행에선 뜨지 않는다 — 캡처 결정론 보호.
+
 `globalShortcut`은 다른 앱과 전역 충돌 위험이 있어(electron#9206) 여전히 쓰지
 않는다. `before-input-event` 배선은 무해한 백스톱으로 남긴다(도달하면 처리).
 
