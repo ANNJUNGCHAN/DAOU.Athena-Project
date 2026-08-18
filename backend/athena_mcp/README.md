@@ -339,15 +339,18 @@ stdio MCP 서버다. 크래시/재시작 테스트는 `flaky` 툴이 실제로 `
 `corp_code: 126380`(정수, 정상값 `"00126380"`), `S2-drfirst-response.json`의
 실제 U+FFFD 손상, `S2-pykrx-response.json`의 `structuredContent: null`.
 
-## 미구현 / 의도적으로 남겨둔 것 (조용히 넘기지 않고 명시한다)
+## 미구현 / 의도적으로 남겨둔 것 (조용히 넘기지 않고 명시한다) — 최종 확인 2026-08-18
 
 - **응답 크기 상한은 절반만 막는다.** A1은 post-parse 상한이라 SDK의
   `stdout_reader()`가 이미 메모리에 올린 뒤에 걸린다. 전송 계층 방어는
   `stdio_client` 로컬 포크가 필요하고 안 했다(위 "A1의 상한은 절반짜리다").
-- **응답 **본문**에는 아직 출처 라벨이 없다.** A5는 툴 `description`에만
-  라벨을 붙였다. `dispatch_call()`이 돌려주는 upstream 응답 텍스트(공시 원문,
-  뉴스 요약)는 여전히 무표시로 모델에 간다. 프롬프트 인젝션의 절반은
-  그대로 열려 있다.
+- ~~**응답 **본문**에는 아직 출처 라벨이 없다.**~~ → **닫혔다(2026-08-17, 위조
+  방어는 2026-08-18 보강).** `_label_upstream_result()`가 `dispatch_call()` 재노출
+  직전에 본문 텍스트 블록에 여닫는 출처 마커를 씌우고(`SECURITY.md` §3),
+  `_defuse_embedded_markers()`가 upstream이 본문에 미리 심은 위조 마커를
+  무해화한다(조기 종료·가짜 라벨 회피 차단). 여전히 열린 것 —
+  `structuredContent` 채널은 라벨링 범위 밖, 내용 기반 지시문 탐지는 오탐률
+  문제로 미구현. 라벨은 완화이지 방어가 아니다.
 - **upstream 진행토큰 값은 관측 불가.** SDK가 내부 카운터로 덮어쓰고 호출자에게
   안 돌려준다. 진행 알림 forward 자체는 되지만, "다운스트림 토큰 ↔ upstream
   토큰" 매핑은 이 SDK 버전에서 만들 수 없다(위 A3 절).
@@ -360,11 +363,12 @@ stdio MCP 서버다. 크래시/재시작 테스트는 `flaky` 툴이 실제로 `
   아니라 **순서 문제**다 — 정규화의 소비자는 캔버스 어댑터(W3)이고, W3는
   아직 착수하지 않았다. `canvas.py`의 스트림 스키마가 `stream.py`가 만드는
   레코드 형상과 이미 같은 계약이라 붙는 자리는 정해져 있다.
-- **`claude -p`에 실제로 물려 왕복시키지는 않았다.** 게이트웨이가 stdio MCP
-  서버로 정상 동작하는 건 `spike/gateway-graft/verify_graft.py`가 **진짜 MCP
-  클라이언트로** 검증했지만(프로토콜은 동일하다), `claude` CLI를 띄우는 건
-  구독 쿼터를 소모해서 이번 범위에 넣지 않았다. `.mcp.json` 예시는
-  `spike/gateway-graft/mcp.json.example`에 있다.
+- ~~**`claude -p`에 실제로 물려 왕복시키지는 않았다.**~~ → **실왕복 완료
+  (2026-08-17).** `claude -p` → `athena-mcp serve` → 게이트웨이 경유로
+  `athena__render_canvas`가 실제 집행됐다. 원문 캡처
+  `spike/captures/S4-gateway-cli-roundtrip.ndjson`, 보고서
+  `spike/cli-pipe/gateway/RESULT.md` (`plan/plan.md` §5 액션 3). 이 절이 오래
+  구판으로 남아 있던 건 문서 갱신 누락이다 — 2026-08-18 동기화.
 - **원격(Streamable HTTP + OAuth) 서버 미지원.** stdio 전용이다
   (`plan/mcp-실행계획.md` §2 — 1단계는 stdio만, 원격은 2단계).
 - **키움 TR 노출 없음**(결정 4, 의도된 범위 제외 — 버그 아님).
@@ -373,9 +377,11 @@ stdio MCP 서버다. 크래시/재시작 테스트는 `flaky` 툴이 실제로 `
 
 `SECURITY.md` 참고.
 
-- **[HIGH] 프롬프트 인젝션 — 부분 완화.** 이제 upstream 툴 `description` 앞에
-  출처 라벨이 붙는다(A5). 하지만 **응답 본문에는 아무 라벨도 없고**, 내용 기반
-  탐지는 여전히 안 한다(오탐률 문제로 기각한 그대로). 라벨은 방어가 아니다 —
+- **[HIGH] 프롬프트 인젝션 — 부분 완화 (진전 있음, 미해결 유지 · 2026-08-18).**
+  툴 `description` 라벨(A5)에 더해 **응답 본문 라벨**(2026-08-17,
+  `_label_upstream_result`)과 **위조 마커 무해화**(2026-08-18,
+  `_defuse_embedded_markers`)가 붙었다. 남은 것 — `structuredContent` 무라벨,
+  내용 기반 탐지 미구현(오탐률 문제로 기각한 그대로). 라벨은 방어가 아니다 —
   모델은 라벨을 보고도 낚일 수 있다. 실제 게이트는 여전히 툴별 allowlist다.
   실서버를 붙이면서 공격면은 가설이 아니라 실물이다 — 노출 중인 upstream 툴
   26개 설명이 전부 남이 쓴 텍스트다.
