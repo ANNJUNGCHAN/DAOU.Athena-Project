@@ -41,6 +41,14 @@ const GATEWAY_ALLOWED_TOOLS = 'mcp__athena';
 // 정상 질의는 전부 덮고, 멈춘 왕복이 UI를 영원히 잡아두는 것만 자른다.
 const DEFAULT_TIMEOUT_MS = 180_000;
 
+// stdout 누적 총량 상한 — README(app/README.md "응답 크기 상한은 여전히
+// 없다")가 지적한 갭의 해소(2026-08-18). `athena_mcp`의 post-parse 상한이
+// 1차 방어이고, 이건 앱 쪽 2차 방어다 — 게이트웨이가 그 상한을 우회하거나
+// 폭주하는 응답을 내도(버그·악의적 upstream 모두) 렌더러/메인 프로세스
+// 메모리가 무한정 자라지 않게 한다. 5,000,000바이트 — backend post-parse
+// 상한(500만 자, ASCII 기준 대략 5MB)과 같은 자릿수로 맞췄다.
+const MAX_STDOUT_BYTES = 5_000_000;
+
 // claude.exe만 죽이면 그 자식(athena-mcp serve → upstream N개)이 고아로 남을 수
 // 있다 — Windows는 taskkill /T로 프로세스 트리를 통째로 끊는다.
 function killTree(child) {
@@ -146,7 +154,8 @@ function runClaudeQuery({
     child.stderr.setEncoding('utf8');
     let stderrText = '';
     let settled = false;
-    let killedBy = null; // 'timeout' | 'abort' — close 핸들러가 에러 메시지를 고른다
+    let killedBy = null; // 'timeout' | 'abort' | 'stdout-cap' — close 핸들러가 에러 메시지를 고른다
+    let stdoutBytes = 0; // 누적 총량 — MAX_STDOUT_BYTES 초과 시 트리를 죽인다
 
     if (typeof onSpawn === 'function') {
       onSpawn({
@@ -159,6 +168,13 @@ function runClaudeQuery({
       : null;
 
     child.stdout.on('data', (chunk) => {
+      if (killedBy) return; // 이미 죽이는 중 — 종료를 기다리는 동안 더 파싱하지 않는다
+      stdoutBytes += Buffer.byteLength(chunk, 'utf8');
+      if (stdoutBytes > MAX_STDOUT_BYTES) {
+        killedBy = 'stdout-cap';
+        killTree(child);
+        return;
+      }
       session.feed(chunk, { onCanvasResult, onEvent });
     });
     child.stderr.on('data', (c) => {
@@ -202,12 +218,15 @@ function runClaudeQuery({
         ? `왕복 타임아웃(${Math.round(timeoutMs / 1000)}s) — claude 프로세스 트리를 종료했다`
         : killedBy === 'abort'
           ? '사용자 중단 — claude 프로세스 트리를 종료했다'
-          : null;
+          : killedBy === 'stdout-cap'
+            ? `stdout 누적 상한(${Math.round(MAX_STDOUT_BYTES / 1_000_000)}MB) 초과 — claude 프로세스 트리를 종료했다`
+            : null;
       resolve({
         ok: !isError,
         exitCode: code,
         timedOut: killedBy === 'timeout',
         aborted: killedBy === 'abort',
+        stdoutCapped: killedBy === 'stdout-cap',
         error: isError ? killMessage || (finalResult && finalResult.result) || `claude 종료 코드 ${code}` : null,
         finalResult,
         stderr: stderrText,
@@ -217,4 +236,4 @@ function runClaudeQuery({
   });
 }
 
-module.exports = { buildArgs, runClaudeQuery, RENDER_CANVAS_ALLOWED_TOOL, GATEWAY_ALLOWED_TOOLS };
+module.exports = { buildArgs, runClaudeQuery, RENDER_CANVAS_ALLOWED_TOOL, GATEWAY_ALLOWED_TOOLS, MAX_STDOUT_BYTES };

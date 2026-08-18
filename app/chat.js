@@ -31,6 +31,20 @@ let liveProgressEl = null;
 let abortToken = 0;
 let onboardCleanup = null; // 현재 노출 중인 온보딩/인증 화면의 정리 함수(리스너·타이머 해제)
 
+// ---------- 화면 설정(autoExpandCanvas/autoGrowChat) — 복구된 baa7e0e 계약 ----------
+// 병합 커밋 c0d874b가 옮기겠다고 하고 안 옮긴 것을 2026-08-18에 되살렸다
+// (app/README.md L599-608). 기본값은 원본과 동일 — 채널·기본값을 못 받아도
+// 두 동작 모두 이전과 같은 "항상 켜짐"으로 동작한다(fail-open, 새 기능이라
+// 실패가 기존 동작을 축소시키면 안 된다).
+let prefs = { autoExpandCanvas: true, autoGrowChat: true };
+async function loadPrefs() {
+  try {
+    const next = await ipcRenderer.invoke('athena:settings:prefs:get');
+    if (next) prefs = next;
+  } catch { /* 채널 없음 — 기본값 유지 */ }
+}
+ipcRenderer.on('athena:prefs-changed', (e, next) => { if (next) prefs = next; });
+
 // ---------- 부팅(AT-SY-001) — 4단계 생성 시퀀스 ----------
 // 기획안 8쪽 그대로: 발광점(0ms) → 가로 확장(+180ms) → 세로 전개(+420ms, 유리 72%)
 // → 창 확정(+620ms, 로고·입력줄·브랜드 커서). 이징 cubic-bezier(.2,0,0,1).
@@ -45,6 +59,7 @@ window.addEventListener('DOMContentLoaded', () => {
     // 원칙, AT-SY-002/003). 이 fail-closed 결정은 발명이다 — 리포트 참고.
     return { needed: true, step: 2 };
   });
+  loadPrefs(); // 화면 설정 — 부팅을 막지 않는다. 로드 전에는 기본값(둘 다 켜짐)으로 동작한다.
 
   const finishBoot = async () => {
     $boot.hidden = true;
@@ -179,7 +194,9 @@ function scrollHistoryToBottom(force) {
 // ---------- 자동 성장 (위로만, 사용자 수동 조작을 덮어쓰지 않음) ----------
 function scheduleHeightSync() {
   requestAnimationFrame(() => {
-    if (!manualOverride) {
+    // autoGrowChat=false여도 스크롤(하단 고정)은 계속 동작한다 — 막는 건 창을
+    // 키우는 자동 요청뿐이다. 수동 리사이즈(그립 드래그)는 이 경로를 안 탄다.
+    if (!manualOverride && prefs.autoGrowChat) {
       const need = measureNeededHeight();
       ipcRenderer.send('athena:set-chat-height', { height: need, manual: false });
     }
@@ -342,7 +359,7 @@ async function runQueryLive(text) {
 
   let result;
   try {
-    result = await ipcRenderer.invoke('athena__render_canvas', { source: 'live', query: text, expand: true });
+    result = await ipcRenderer.invoke('athena__render_canvas', { source: 'live', query: text, expand: prefs.autoExpandCanvas });
   } finally {
     clearInterval(tick);
     ipcRenderer.removeListener('athena:live-canvas-added', onLiveCanvasAdded);
@@ -450,7 +467,7 @@ async function runQueryFixture(text) {
 
     // 픽스처 어댑터 — main.js의 source:'fixture' 분기로 간다(위 runQueryLive의
     // 실배선 호출과 짝을 이룬다. 여긴 명시적으로 fixture를 요청한 경로다).
-    await ipcRenderer.invoke('athena__render_canvas', { source: 'fixture', type, expand: !opened });
+    await ipcRenderer.invoke('athena__render_canvas', { source: 'fixture', type, expand: prefs.autoExpandCanvas && !opened });
     opened = true;
 
     trEls[type].classList.add('done');
@@ -523,6 +540,7 @@ function openSettings() {
   $settings.hidden = false;
   manualOverride = true; // 설정 동안은 이력 기반 자동 성장이 개입하지 않는다
   ipcRenderer.send('athena:set-chat-height', { height: layout.chatMaxH, manual: false });
+  settingsCards.renderScreen($settingsGrid);
   settingsCards.renderAccounts($settingsGrid);
   settingsCards.renderMcp($settingsGrid);
 }

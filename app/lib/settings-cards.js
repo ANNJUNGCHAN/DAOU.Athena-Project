@@ -217,6 +217,59 @@ function detachSheet(card, root) {
 }
 
 // =============================================================================
+// 화면 — autoExpandCanvas/autoGrowChat (2026-08-18 복구, app/README.md L599-608)
+// 병합 커밋 c0d874b가 "후속 커밋에서 모드 구현에 옮긴다"고 적어놓고 실제로는
+// 안 옮긴 것을 여기 되살린다. 원본(git show baa7e0e -- app/settings.html)의
+// 체크박스 2개를 이 카드의 토글 2개로 대체한다 — 컴포넌트는 주문 API 게이트
+// 시트가 이미 쓰는 toggleSwitch/.uk-toggle-row 그대로 재사용한다.
+// =============================================================================
+
+function renderScreen(grid) {
+  const { card, head, body } = buildCardShell(grid, 'screen');
+  return refreshScreenCard(card, head, body);
+}
+
+async function refreshScreenCard(card, head, body) {
+  let data;
+  try {
+    data = await ipcRenderer.invoke('athena:settings:prefs:get');
+  } catch (err) {
+    clear(head);
+    clear(body);
+    missingHandlerCard(head, body, '화면', 'athena:settings:prefs:get');
+    body.appendChild(errorNote(String((err && err.message) || err)));
+    return;
+  }
+  clear(head);
+  clear(body);
+
+  head.appendChild(row('uk-settings-title', [
+    el('span', 'uk-settings-name', '화면'),
+  ]));
+  const actions = row('uk-settings-actions', []);
+  actions.appendChild(cardCloseButton(card));
+  head.appendChild(actions);
+
+  async function setPref(key, value) {
+    try {
+      await ipcRenderer.invoke('athena:settings:prefs:set', { [key]: value });
+    } catch { /* 핸들러 부재 — 로컬 토글 표시만 유지, 다음 새로고침에서 다시 기본값으로 보인다 */ }
+  }
+
+  const expandLabelCol = el('div');
+  expandLabelCol.appendChild(el('div', 'uk-toggle-label', '질의하면 캔버스 창을 자동으로 연다'));
+  expandLabelCol.appendChild(el('div', 'uk-toggle-sub', 'OFF면 캔버스 창을 손으로 열어야 한다'));
+  const expandToggle = toggleSwitch(!!data.autoExpandCanvas, (next) => setPref('autoExpandCanvas', next));
+  body.appendChild(row('uk-toggle-row', [expandLabelCol, expandToggle]));
+
+  const growLabelCol = el('div');
+  growLabelCol.appendChild(el('div', 'uk-toggle-label', '답변 길이에 따라 대화 창이 자란다'));
+  growLabelCol.appendChild(el('div', 'uk-toggle-sub', 'OFF면 그립을 끌어야만 창이 커진다'));
+  const growToggle = toggleSwitch(!!data.autoGrowChat, (next) => setPref('autoGrowChat', next));
+  body.appendChild(row('uk-toggle-row', [growLabelCol, growToggle]));
+}
+
+// =============================================================================
 // 계좌 — AT-ST-001 (목록) · AT-ST-002 (등록 시트) · AT-ST-003 (주문 API 게이트)
 // =============================================================================
 
@@ -1154,4 +1207,4 @@ function openMcpProbeSheet(card, alias, onDone) {
   }
 }
 
-module.exports = { renderAccounts, renderMcp };
+module.exports = { renderAccounts, renderMcp, renderScreen };
