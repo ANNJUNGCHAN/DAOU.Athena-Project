@@ -1,0 +1,67 @@
+{
+ "verdict": "pass",
+ "judge_note": "표 렌더와 영속화가 모두 확인됐다. canvases/공시목록-SK바이오사이언스.json이 canvas_type=table·fell_back=false·rows=36으로 저장됐고 답변 서술의 36건과 일치한다. 파일명에 경로 문자도 없다.",
+ "suspect_dataset_defect": false,
+ "auto_checks": [
+  {
+   "check": "지정 이름의 canvas 파일 존재",
+   "ok": true,
+   "evidence": "~/.athena/canvases/공시목록-SK바이오사이언스.json (10.6K)"
+  },
+  {
+   "check": "canvas_type=table, fell_back=false",
+   "ok": true,
+   "evidence": "파일 필드 확인"
+  },
+  {
+   "check": "saved_at ISO 타임스탬프",
+   "ok": true,
+   "evidence": "2026-08-18T01:43:17.790376+00:00"
+  },
+  {
+   "check": "rows가 원본 응답과 일치",
+   "ok": true,
+   "evidence": "rows=36, 답변 서술 36건과 일치"
+  }
+ ],
+ "must_not_include": [
+  {
+   "item": "호출 없이 저장했다고만 답변",
+   "violated": false,
+   "evidence": "파일 실존"
+  },
+  {
+   "item": "요청하지 않은 경로 문자 추가",
+   "violated": false,
+   "evidence": "파일명이 지정 이름 그대로"
+  },
+  {
+   "item": "저장 데이터가 화면과 다름",
+   "violated": false,
+   "evidence": "rows 36 일치"
+  }
+ ],
+ "must_include": [
+  {
+   "item": "table·fell_back=false 렌더",
+   "ok": true,
+   "evidence": "canvas-results.json"
+  },
+  {
+   "item": "지정 이름으로 save_canvas 호출",
+   "ok": true,
+   "evidence": "파일 실존"
+  },
+  {
+   "item": "저장 data가 화면과 동일",
+   "ok": true,
+   "evidence": "rows 36"
+  }
+ ],
+ "case_id": "LIV-057",
+ "run": "2026-08-18-intraday",
+ "duration_s": 143.3,
+ "market_session": "정규장",
+ "tier": "live",
+ "persona": "브로커"
+}

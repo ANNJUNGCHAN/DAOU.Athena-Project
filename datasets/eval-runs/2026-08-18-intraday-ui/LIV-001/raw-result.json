@@ -1,0 +1,56 @@
+{
+ "case_id": "LIV-001",
+ "tier": "live",
+ "persona": "CFO",
+ "question": "삼성전자의 최근 3개 사업연도 사업보고서를 기준으로 연결 부채비율 변화를 연도별로 정리해 주시기 바랍니다.",
+ "attachment": null,
+ "sent_text": "삼성전자의 최근 3개 사업연도 사업보고서를 기준으로 연결 부채비율 변화를 연도별로 정리해 주시기 바랍니다.",
+ "ran_at": "2026-08-18T04:45:00.545Z",
+ "duration_s": 60.1,
+ "completed": true,
+ "timed_out": false,
+ "answer_chars": 325,
+ "chip_count_total": 2,
+ "chip_count_added": 1,
+ "chip_labels_added": [
+  "table"
+ ],
+ "chip_labels_total": [
+  "stream",
+  "table"
+ ],
+ "state_transitions": [
+  "judging",
+  "calling",
+  "idle"
+ ],
+ "card_types_rendered": [
+  "mcp-table"
+ ],
+ "canvas_card_count": 1,
+ "audit_calls": [
+  "dart-mcp__search_json_financial_data=true",
+  "dart-mcp__search_json_financial_data=true",
+  "dart-mcp__search_json_financial_data=true"
+ ],
+ "judge": {
+  "must_include": [
+   "부채총계÷자본총계×100 계산식 또는 그와 동치인 산식을 명시했다",
+   "3개년(제55/56/57기 또는 2023/2024/2025) 수치를 각각 구분해 제시했다",
+   "부채비율이 매년 상승(2023<2024<2025)했다는 방향을 정확히 짚었다",
+   "재무상태표(BS) 기준 자본총계를 썼다는 점 또는 자본변동표에 동일 계정명이 중복된다는 점을 인지했다는 근거가 드러난다"
+  ],
+  "must_not_include": [
+   "자본변동표의 소계성 '자본총계'(예: 897,514백만원 등 소액 행)를 그대로 분모로 써서 비율이 비정상적으로 커지는 오류",
+   "실측 없이 임의 수치를 날조"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 1개 이상 있다",
+   "audit-log에 alias=korea-stock-mcp tool=get_financial_statement success=true 행이 1개 이상 있다"
+  ]
+ }
+}

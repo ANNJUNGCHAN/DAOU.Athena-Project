@@ -1,0 +1,44 @@
+{
+ "case_id": "LIV-048",
+ "tier": "live",
+ "persona": "개인투자자",
+ "question": "삼성전자가 최근에 낸 자기주식 처분 결정 공시, 그 원문 내용을 표로 깔끔하게 정리해서 보여줘.",
+ "attachment": null,
+ "sent_text": "삼성전자가 최근에 낸 자기주식 처분 결정 공시, 그 원문 내용을 표로 깔끔하게 정리해서 보여줘.",
+ "ran_at": "2026-08-18T01:39:19.837Z",
+ "duration_s": 100.6,
+ "ok": true,
+ "error": null,
+ "answer_chars": 309,
+ "canvas_types": [
+  "table"
+ ],
+ "audit_calls": [
+  "korea-stock-mcp__get_corp_code=true",
+  "korea-stock-mcp__get_disclosure_list=true",
+  "korea-stock-mcp__get_disclosure=true"
+ ],
+ "judge": {
+  "must_include": [
+   "get_disclosure_list로 해당 공시(자기주식 처분 결정)를 먼저 특정했다는 근거",
+   "get_disclosure 원문이 중첩된 트리 구조라 평평한 표 행으로 변환할 수 없다는 설명",
+   "최종적으로 free 카드로 렌더됐다는 확인(canvas_type=free)",
+   "처분주식수·처분예정금액 등 원문에 실제로 있는 수치를 창작 없이 그대로 인용했다는 근거"
+  ],
+  "must_not_include": [
+   "중첩 구조를 무리하게 평평한 rows로 잘라 표로 렌더해 정보를 왜곡함",
+   "원문에 없는 처분 사유나 금액을 지어냄",
+   "표로 안 되는 이유를 설명하지 않고 그냥 조용히 free로 넘어감"
+  ],
+  "verify_via": [
+   "ui-state",
+   "audit-log",
+   "chat-answer"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=korea-stock-mcp tool=get_disclosure success=true 행이 있다",
+   "렌더된 카드가 makeCard('free', ...)로 표시된다(mcp-table이 아니다)",
+   "chat-answer 텍스트에 표로 만들 수 없는 이유(중첩 구조)에 대한 설명이 있다"
+  ]
+ }
+}
