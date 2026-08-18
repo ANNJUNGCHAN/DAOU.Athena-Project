@@ -126,7 +126,16 @@ def _gateway(tmp_path: Path) -> AthenaGateway:
     registry.add("old", command=sys.executable, args=[str(_FIXTURE_PATH)], env={})
     consent.request_consent("old", sys.executable, [str(_FIXTURE_PATH)], {})
     consent.approve("old", approved_tools={"echo"})
-    return AthenaGateway(registry=registry, consent_store=consent, aggregator=ToolAggregator())
+    return AthenaGateway(
+        registry=registry,
+        consent_store=consent,
+        aggregator=ToolAggregator(),
+        # 기본값(`Path.home() / ".athena" / ...`)을 그대로 두면 아래
+        # dispatch_call()이 실제 사용자 홈 디렉토리에 감사 로그를 남긴다 —
+        # 테스트 격리를 위해 tmp_path로 못박는다.
+        audit_log_dir=tmp_path / "audit",
+        canvas_save_dir=tmp_path / "canvases",
+    )
 
 
 def test_rename_moves_approval_so_server_does_not_silently_become_unapproved(tmp_path):
@@ -156,6 +165,18 @@ def test_rename_before_connect_does_not_raise_keyerror(tmp_path):
 
 
 async def test_rename_after_connect_keeps_old_qualified_name_resolvable(tmp_path):
+    """resolve()와 handles만 따로 보면 이 결함을 놓친다 — 실제로
+    `dispatch_call("old__echo", ...)`까지 성공해야 "in-flight 호출이 안
+    깨진다"는 보장이 실제로 성립한다.
+
+    예전 `aggregator.rename_alias()`는 옛 qualified_name(`old__echo`)의
+    리졸루션을 지우지는 않았지만 `alias=old`로 **그대로 남겨뒀다**. 그런데
+    `server.py`의 `AthenaGateway.rename_alias()`는 승인(`consent_store`)과
+    핸들(`handles`)을 옛 별칭에서 걷어 새 별칭으로 옮기므로, rename 직후
+    옛 별칭은 승인 기록도 핸들도 없다 — `resolve("old__echo")`까지는
+    성공해도 그 뒤 `is_tool_allowed("old", ...)`와 `handles.get("old")`가
+    둘 다 실패해 `gateway_blocked`로 떨어졌다. 이 테스트는 그 결선까지
+    실제로 통과하는지를 본다."""
     gw = _gateway(tmp_path)
     await gw.connect("old", log_dir=tmp_path / "logs")
     try:
@@ -166,10 +187,20 @@ async def test_rename_after_connect_keeps_old_qualified_name_resolvable(tmp_path
         # 새 이름으로 노출되고
         exposed = {t.qualified_name for t in gw.aggregator.list_tools()}
         assert "new__echo" in exposed
-        # 옛 이름으로 온 in-flight 호출도 여전히 풀린다
-        assert gw.aggregator.resolve("old__echo").upstream_name == "echo"
+        # 옛 이름으로 온 in-flight 호출도 여전히 풀리는데, 이제는 살아있는
+        # 새 별칭을 가리켜야 한다 — 옛 별칭은 rename 후 승인/핸들이 없다.
+        resolved = gw.aggregator.resolve("old__echo")
+        assert resolved.upstream_name == "echo"
+        assert resolved.alias == "new"
         # 핸들도 새 별칭으로 따라와야 실제 호출이 된다
         assert "new" in gw.handles
+
+        # 진짜 결선 검증: 옛 qualified_name으로 실제 dispatch_call이 성공해야
+        # 한다. 예전 버그에서는 여기서 gateway_blocked(승인 안 됨 또는 서버
+        # 미연결)로 떨어졌다.
+        result = await gw.dispatch_call("old__echo", {"message": "여전히 되나"})
+        assert result.isError is False
+        assert "Echo: 여전히 되나" in result.content[0].text
     finally:
         for alias in list(gw.handles):
             await gw.disconnect(alias)

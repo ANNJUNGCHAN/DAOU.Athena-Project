@@ -434,7 +434,23 @@ class UpstreamServerHandle:
             self._stop.set()
         try:
             await task
-        except (asyncio.CancelledError, Exception):
+        except asyncio.CancelledError:
+            # `await task`에서 CancelledError가 나는 경로는 둘이다:
+            # (1) `task` 자신이 취소로 끝난 경우(예: 외부에서 `task.cancel()`을
+            #     직접 불렀다) — `task.cancelled()`가 True. 이건 조인 대상의
+            #     결과이므로 삼켜도 된다.
+            # (2) **이 코루틴 자신이 취소된 경우** — `await task` 지점에 바깥
+            #     취소 스코프가 CancelledError를 주입한 것이다(예: 헬스체크
+            #     슈퍼바이저가 취소되면서 restart() -> close() -> _join_task()로
+            #     전파). 이때 `task`는 우리가 취소한 적이 없으니 아직 끝나지
+            #     않았을 수 있고 `task.cancelled()`는 False다.
+            # 예전 코드는 `except (CancelledError, Exception): pass`로 둘을
+            # 구분하지 않고 다 삼켰다 — (2)까지 삼키면 바깥 취소가 여기서
+            # 증발해 `serve_stdio` 종료가 무기한 걸릴 수 있었다. `task.cancelled()`
+            # 로 구분해 (1)만 삼키고 (2)는 재전파한다.
+            if not task.cancelled():
+                raise
+        except Exception:
             # 종료 중 예외는 이미 `_startup_error`에 담겼거나 정리 과정의
             # 잡음이다. 종료를 막을 이유는 없다.
             pass

@@ -293,21 +293,45 @@ upstream 서버가 자가 작성한, 신뢰할 수 없는 제3자 텍스트다".
 (`SECURITY.md`가 오탐률로 기각한 그대로), 그리고 **응답 본문에는 아직 아무
 라벨도 안 붙는다.** 모델은 라벨을 보고도 그 지시문에 낚일 수 있다.
 
+## 감사로 실증된 결함 4건 (2026-08-18, 전부 재현 후 수정)
+
+`server.py`/`client.py`/`aggregator.py`를 대상으로 한 감사가 잡은 결함이다.
+전부 실제 코드 경로로 재현되는 것만 고쳤다 — 추측성 방어는 넣지 않았다.
+
+| # | 결함 | 증상 | 회귀 테스트 |
+|---|---|---|---|
+| 17 | `dispatch_call()`의 `except ServerCrashedError`가 `TimeoutError`/`ResponseTooLargeError`를 안 잡음 | `handle.call_tool()`이 이 둘을 bare로 재전파(`client.py:494-497`, `:515-518`)하는데 dispatch_call이 못 잡아 SDK 범용 핸들러까지 새고, `audit.record(success=False)`와 `_meta` 에러 출처 마커가 둘 다 누락됐다 | `test_dispatch_call_timeout_is_audited_and_marked_upstream_failed`, `test_dispatch_call_response_too_large_is_audited_and_marked_upstream_failed` |
+| 18 | `aggregator.rename_alias()`가 옛 qualified_name의 리졸루션을 옛 별칭 그대로 남김 | rename 후 옛 이름(`옛별칭__툴`)으로 오는 in-flight 호출이 `resolve()`까지는 성공해도, `server.py`가 승인/핸들을 이미 새 별칭으로 옮겨놔서 `is_tool_allowed`·`handles.get`이 실패해 `gateway_blocked`로 떨어졌다 | `test_rename_after_connect_keeps_old_qualified_name_resolvable`(옛 이름으로 실제 `dispatch_call` 성공까지 검증하도록 강화) |
+| 19 | `client.py`의 `_join_task()`가 `except (CancelledError, Exception): pass`로 바깥 취소까지 삼킴 | 헬스체크 슈퍼바이저 취소 → `restart()` → `close()` → `_join_task()` 경로에서 **이 코루틴 자신의** 취소가 조인 대상 태스크의 취소와 구분 없이 삼켜져, `serve_stdio` 종료가 무기한 걸릴 수 있었다 | `test_join_task_reraises_cancelled_error_when_joined_task_was_not_itself_cancelled`, `test_join_task_swallows_cancelled_error_when_joined_task_was_itself_cancelled` |
+| 20 | `_CONTENT_LABEL_MARKER_RE`에 `re.DOTALL` 없음 | 위조 마커의 따옴표 안(alias 값)에 개행이 끼면 `.`이 개행을 못 건너뛰어 `_defuse_embedded_markers()`가 그 마커를 놓친다 | `test_wrap_upstream_content_text_defuses_forged_marker_with_embedded_newline` |
+
+**17·18은 실제로 도달 가능한 경로다** — 17은 upstream이 느리거나(타임아웃) DART
+같은 서버가 대용량 응답을 주기만 해도 발생하고, 18은 온보딩 CLI의 `rename`
+명령을 쓰는 정상 운영 흐름에서 발생한다. **19는 재현이 까다롭다** — 실제
+`asyncio.Task`끼리는 `await task` 지점에서 바깥이 취소되면 `Task.cancel()`의
+`_fut_waiter` 위임 메커니즘 때문에 조인 대상 태스크 자신도 함께 취소되는
+경우가 많아, 회귀 테스트는 진짜 프로세스 타이밍 레이스 대신 `cancelled()`를
+직접 통제하는 최소 가짜 객체로 `_join_task()`의 분기 로직 자체를 고정했다 —
+코드 수정은 들어갔지만 "정확히 이 레이스가 실제로 발생했다"는 실측 재현은
+아니라는 점을 그대로 적는다.
+
 ## 테스트
 
 ```
 $ .venv\Scripts\python -m pytest tests\mcp -q
-191 passed
+238 passed   # 2026-08-18 실행, 게이트웨이 결함 4건(감사 로그 우회·rename
+             # in-flight 실호출 검증·바깥 취소 삼킴·위조 마커 개행 회피) 수정 후
 
-$ .venv\Scripts\python -m pytest -q          # athena_api 포함 전체
-494 passed, 1 warning in 137.71s
-
-$ .venv\Scripts\python -m ruff check athena_api athena_mcp tests
+$ .venv\Scripts\python -m ruff check athena_mcp tests
 All checks passed!
 ```
 
 `tests/mcp` 126 → 167(이식 절차·러너) → 191(잔여 5건 결선: `test_server.py` +15,
-`test_mcp_client.py` +6, `test_runner.py` +3, `test_aggregator.py` +4).
+`test_mcp_client.py` +6, `test_runner.py` +3, `test_aggregator.py` +4) →
+238(2026-08-18 감사 실증 결함 4건: `dispatch_call()`의 `TimeoutError`/
+`ResponseTooLargeError` audit 우회 회귀 2건, `rename_alias()` in-flight 실호출
+검증 강화, `_join_task()` 바깥 취소 삼킴 회귀 2건, 위조 마커 개행 회피 회귀
+1건 — 나머지는 `test_aggregator.py` 등 다른 웨이브에서 병행 추가된 것).
 전체 스위트에 **실패 0건**이다 — 이 README의 이전 판이 적어둔 "22 failed"는
 셀렉터 base/detail 라우팅 재설계로 해소됐다(`plan/plan.md` §3). 그 절은 삭제했다.
 
