@@ -18,6 +18,10 @@
   padding: 0;
   overflow: auto;
   min-height: 0;
+  /* 2026-08-18 사이드바 도입 — 부모(.settings-body)가 이제 row 방향 flex라
+     남는 가로폭을 이 패널이 갖는다(사이드바 236px 고정 폭을 제외한 나머지). */
+  flex: 1 1 auto;
+  min-width: 0;
   /* 카드 시작점에 느슨하게 스냅 — 마젠타 주 액션이 반쯤 걸쳐 보이는 상태를 줄인다.
      proximity라 자유 스크롤은 막지 않는다(palette.md "마젠타는 정확히 한 곳" 보강). */
   scroll-snap-type: y proximity;
@@ -55,23 +59,25 @@
    sheet()는 position:absolute; inset:0 오버레이라 부모 카드가 position:relative
    여야 한다(lib/ui-kit.js 주석 그대로).
    ========================================================================= */
-.card.accounts, .card.mcp, .card.screen {
+.card.accounts, .card.mcp, .card.screen, .card.model {
   /* grid-column을 쓰지 않는다 — 캔버스 창의 2열 그리드에 살던 시절의 잔재였고
      지금 부모는 .settings-grid(flex column)라 아무 효과가 없었다. 2026-08-17 제거. */
   position: relative;
   padding: 0;
 }
 .card.accounts, .card.mcp { max-height: 560px; }
-/* flex column에서도 order는 유효하다 — 화면 설정(가장 자주 만지는 토글 2개)을
-   맨 위에, 그다음 계좌·MCP 순으로 둔다. */
+/* 2026-08-18 사이드바 도입 이후 .settings-grid에는 nav가 고른 카드 하나만 산다 —
+   order는 더 이상 여러 카드를 섞어 배치하는 데 쓰이지 않지만, 값을 남겨 두면
+   훗날 우연히 같이 마운트돼도 화면/계좌/MCP/모델 순서가 유지된다. */
 .card.screen { order: 3; }
 .card.accounts { order: 4; }
 .card.mcp { order: 5; }
+.card.model { order: 6; }
 /* 시트가 떠 있는 동안만 카드를 시트 내용에 맞게 넉넉히 키운다 —
    lib/settings-cards.js의 attachSheet()/detachSheet() 참고. */
 .card.accounts.has-sheet, .card.mcp.has-sheet { min-height: 660px; max-height: 800px; }
 
-.card.accounts .card-head, .card.mcp .card-head, .card.screen .card-head {
+.card.accounts .card-head, .card.mcp .card-head, .card.screen .card-head, .card.model .card-head {
   height: 44px;
   padding: 0 18px;
   margin-bottom: 0;
@@ -81,7 +87,7 @@
   flex-shrink: 0;
 }
 .card.accounts .card-body, .card.mcp .card-body { padding: 0; }
-.card.screen .card-body { padding: 0 18px; }
+.card.screen .card-body, .card.model .card-body { padding: 0 18px; }
 
 .uk-settings-title { display: flex; align-items: baseline; gap: 12px; min-width: 0; }
 .uk-settings-name { font-family: var(--font-strong); font-size: 14px; color: var(--color-k-text); white-space: nowrap; }
@@ -334,3 +340,88 @@
    자리에 둔다 — 아이콘만, 배경 없음, 무채색. */
 /* .uk-card-close는 styles/ui-kit.css로 이동(2026-08-18) — 캔버스 창이 이 파일을
    로드하지 않아 카드 X가 기본 브라우저 버튼으로 렌더되던 결함의 수정. */
+
+/* =========================================================================
+   화면 카드 확장 (2026-08-18) — UI 배율 · 창 배치 안내 · 접근성 3종 상태.
+   기존 토글 2개(.uk-toggle-row)는 그대로, 아래는 그 뒤에 이어지는 읽기·조작
+   행이다. 색은 상태에만 쓴다 — 새 강조색을 만들지 않는다.
+   ========================================================================= */
+.uk-zoom-controls { display: flex; align-items: center; gap: 10px; flex: none; }
+.uk-zoom-value { min-width: 42px; text-align: center; }
+
+.uk-a11y-status {
+  padding: 14px 0 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.uk-a11y-row { display: flex; align-items: center; gap: 10px; }
+.uk-a11y-label { font-family: var(--font-body); font-size: 13px; color: var(--color-k-text); flex: 1; }
+
+/* =========================================================================
+   모델 카드 (2026-08-18, 다계정 요건 추가) — Claude/Codex 섹션(계정 목록 ·
+   계정 추가 · 모델/강도 칩) · 구분선.
+   ========================================================================= */
+.card.model .card-body { display: flex; flex-direction: column; gap: 20px; padding-top: 18px; padding-bottom: 18px; }
+.uk-model-section { display: flex; flex-direction: column; gap: 12px; }
+.uk-model-section-head { display: flex; align-items: center; gap: 10px; }
+.uk-model-divider { height: 1px; background: var(--color-k-line-soft); flex-shrink: 0; }
+/* disabled는 모델·강도 컨트롤에만 걸린다 — 계정 목록은 연결해야 잠금이
+   풀리므로 항상 켜져 있어야 한다(Codex 미연결 상태에서도 "계정 추가"는
+   눌려야 한다). */
+.uk-model-controls { display: flex; flex-direction: column; gap: 10px; }
+.uk-model-controls.is-disabled { opacity: 0.5; }
+.uk-model-effort-label { margin-top: 4px; }
+.uk-model-custom-input { max-width: 320px; }
+
+/* ---- 계정 목록 — 활성(정적 행) · 비활성(전환 button) · 미연결(연결 button) ----
+   button.uk-model-account-row는 uk-btn 계열이 아니라 여기서 직접 리셋한다
+   (chip/ghost 버튼과 시각적으로 다르다 — 표 행처럼 보여야 한다). */
+.uk-model-accounts { display: flex; flex-direction: column; gap: 2px; }
+.uk-model-account-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 34px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--color-k-text);
+}
+button.uk-model-account-row {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: background var(--dur-fast) var(--ease);
+}
+button.uk-model-account-row:hover { background: rgb(255 255 255 / 5%); }
+button.uk-model-account-row:focus-visible { outline: 2px solid rgb(255 255 255 / 55%); outline-offset: -2px; }
+.uk-model-account-label { flex: none; }
+.uk-model-connect-label { font-family: var(--font-body); font-size: 12px; color: var(--color-k-dim); }
+.uk-model-account-connect:hover .uk-model-connect-label { color: var(--color-k-text); }
+@media (prefers-reduced-motion: reduce) {
+  button.uk-model-account-row { transition: none; }
+}
+
+/* 칩 — 모델·사고 강도 선택. 액센트 색을 쓰지 않는다(soul.md §7): 눌림 상태는
+   배경 밝기·굵은 글자로만 구분한다(설정 사이드바 선택 표시와 같은 문법). */
+.uk-chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.uk-btn.uk-chip {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 5%);
+  border: 1px solid rgb(255 255 255 / 14%);
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-size: 12px;
+}
+.uk-btn.uk-chip:hover:not(:disabled) { background: rgb(255 255 255 / 10%); }
+.uk-btn.uk-chip.is-pressed {
+  background: rgb(255 255 255 / 16%);
+  border-color: rgb(255 255 255 / 32%);
+  color: var(--color-k-text);
+  font-family: var(--font-strong);
+}

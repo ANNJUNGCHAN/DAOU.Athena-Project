@@ -65,13 +65,20 @@
 
   <!-- 설정 모드 — 온보딩·인증과 같은 문법이다. 새 창이 아니라 대화 창이 chatMaxH로
        확장된 상태의 콘텐츠다(ui/DESIGN-SOUL.md 도출된 규칙 3).
-       lib/settings-cards.js가 #settingsGrid에 계좌·MCP 카드를 그린다. -->
+       Paper 43쪽(2026-08-18) 확정 — 헤더 + 좌 사이드바(#settingsNav, 화면·계좌·
+       MCP 서버·모델 4종) + 우 패널(#settingsGrid). lib/settings-cards.js의
+       renderNav()가 #settingsNav를, 화면/계좌/MCP/모델 각 render*()가
+       #settingsGrid를 그린다 — #settingsGrid에 카드가 마운트되는 계약은
+       그대로다(verify가 이 id를 찌른다). -->
   <div id="settings" class="app glass" hidden>
     <div class="settings-head">
       <span class="settings-title">설정</span>
-      <span class="settings-hint">Esc로 대화로 돌아간다</span>
+      <span class="settings-hint">↑↓ 이동 · Enter 선택 · Tab 패널 이동 · Esc 닫기</span>
     </div>
-    <div id="settingsGrid" class="settings-grid"></div>
+    <div class="settings-body">
+      <div id="settingsNav" class="settings-nav"></div>
+      <div id="settingsGrid" class="settings-grid"></div>
+    </div>
   </div>
 
   <!-- 창 제어(AT-CH-001, 2026-08-18) — frame:false라 OS 타이틀바가 없어 직접 배선한

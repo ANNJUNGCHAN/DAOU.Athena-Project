@@ -14,6 +14,8 @@ const INVOKE_CHANNELS = new Set([
   'athena:onboarding-advance',
   'athena:settings:prefs:get',
   'athena:settings:prefs:set',
+  'athena:model-get',
+  'athena:model-set',
   'athena:cli-list',
   'athena:cli-login',
   'athena:cli-set-active',
@@ -44,6 +46,7 @@ const SEND_CHANNELS = new Set([
   'athena:collapse-canvas',
   'athena:highlight-canvas',
   'athena:abort-live-query',
+  'athena:place-windows',
   'primed',
   'animation-done',
 ]);
@@ -58,10 +61,15 @@ const ON_CHANNELS = new Set([
   'athena:add-canvas-live',
   'athena:highlight-canvas',
   'athena:prefs-changed',
+  'athena:model-changed',
   'athena:zoom-changed',
   'athena:live-canvas-added',
   'athena:auth-token-changed',
   'athena:cli-changed',
+  // main의 before-input-event(Win+↑/↓)가 위임하는 채널 — 높이 상태는 렌더러가
+  // 소유하므로(chat.js manualOverride 등) main이 setChatHeight를 직접 부르지
+  // 않고 이 이벤트로 chat.js의 □ 버튼과 같은 로컬 경로를 태운다(2026-08-18).
+  'athena:window-key',
 ]);
 
 contextBridge.exposeInMainWorld('athena', {

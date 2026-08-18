@@ -46,9 +46,21 @@ via `ATHENA_CANVAS_SOURCE=fixture` to keep automated verification quota-free and
   that shows while `#app` hides. Same resize grammar for all of them: grow to `chatMaxH`, return
   to `chatBaseH`.
   - `#onboard` → 온보딩 · 인증 (`lib/onboarding.js`, `lib/auth-screen.js`)
-  - `#settings` → 설정, i.e. 계좌 · MCP cards (`chat.js` `openSettings`, `lib/settings-cards.js`).
+  - `#settings` → 설정: a sidebar nav (`#settingsNav`, 화면 · 계좌 · MCP 서버 · 모델, default
+    selection 화면) + a single card panel (`#settingsGrid`) that the nav swaps
+    (`renderNav`'s `onSelect` calls `grid.replaceChildren()` before rendering — exactly one
+    card lives in the grid at a time; this replaced the older "accounts + mcp cards both
+    render at once" layout, 2026-08-18). `chat.js` `openSettings`, `lib/settings-cards.js`
+    `renderNav`/`renderScreen`/`renderAccounts`/`renderMcp`/`renderModel`.
     Entered by clicking `#dot` or via the command bar (`SETTINGS_COMMAND`); Esc returns to chat.
     The command-bar path must always exist or `ui/soul.md` §8 elimination applies.
+    The 모델 panel (`renderModel`) lists multiple CLI accounts per provider
+    (`athena:cli-list`'s `accounts[]`) — inactive rows are buttons that call
+    `athena:cli-set-active` (no confirm), "+ 계정 추가" calls `athena:cli-login`, and
+    `athena:cli-changed` broadcasts trigger a re-render. Model/effort values persist via
+    `lib/main/model-prefs.js` (`athena-model.json` under userData) and feed
+    `claude-runner.js buildArgs()`'s `--model`/`--effort` — Codex values are stored but not
+    yet consumed (only `claude -p` is wired to live queries).
   - 주문 확인 is the only mode still unimplemented.
   - Before 2026-08-16 the settings cards rendered in the **canvas** window. They moved because
     settings is the app itself, not data output. Old commits and captures show the canvas host.
@@ -63,6 +75,15 @@ via `ATHENA_CANVAS_SOURCE=fixture` to keep automated verification quota-free and
   throws/rejects by design. Adding a new renderer lib module means giving it the UMD head/tail
   pattern **and** wrapping its whole body in `(function () { ... })();` (see `lib/` row above) —
   skipping the IIFE wrap reproduces the `Identifier '...' has already been declared` regression.
+- **Window placement/height ownership split (2026-08-18):** `main.js`'s `placeWindows(dir)`
+  only handles `left`/`right` (pure position, via `lib/main/window-placement.js`
+  `computePlacement`) — it does **not** handle `up`/`down`. Height state (auto-grow, manual
+  override, □-button state) is owned entirely by the renderer (`chat.js`). Win+↑/↓ (and the
+  Ctrl+Alt+↑/↓ fallback) reach `chat.js`'s `toggleMaxHeight`/`restoreOrMinimize` — main relays
+  Win+↑/↓ via the `athena:window-key` IPC channel rather than calling `setChatHeight()`
+  directly, because doing so bypasses `chat.js`'s `manualOverride` flag and lets auto-grow
+  fight the just-maximized window on the next content change. Don't reintroduce a main-side
+  `toggleChatMaximize()`-style function that calls `setChatHeight()` for up/down.
 - Autostart is gated by the `ATHENA_NO_AUTOSTART` env var, **not** `require.main === module` —
   that check is always false under `electron .` and silently produced zero windows (README bug 0).
   `verify.js` sets the var before requiring `main.js`.

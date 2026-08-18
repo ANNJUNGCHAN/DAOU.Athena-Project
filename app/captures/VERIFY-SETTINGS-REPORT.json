@@ -17,7 +17,7 @@
   },
   "onboarding.chatHeight.selfReturnedToBase": {
     "heightBeforeStep3Done": 789,
-    "heightAfterStep3Done": 205,
+    "heightAfterStep3Done": 206,
     "baseH": 204,
     "shrunkBackToBase": true
   },
@@ -77,12 +77,12 @@
   },
   "account.register.ok(stubbedNetwork)": {
     "ok": true,
-    "id": "ee7ac939-4a0c-4c74-8a03-144142226566"
+    "id": "92748b31-fc33-4907-9657-f2ff6c94fd7b"
   },
   "account.list.afterRegister": {
     "accounts": [
       {
-        "id": "ee7ac939-4a0c-4c74-8a03-144142226566",
+        "id": "92748b31-fc33-4907-9657-f2ff6c94fd7b",
         "alias": "검증-성공계좌",
         "connected": true,
         "active": true,
@@ -111,7 +111,7 @@
   "account.list.afterOrderApiOn": {
     "accounts": [
       {
-        "id": "ee7ac939-4a0c-4c74-8a03-144142226566",
+        "id": "92748b31-fc33-4907-9657-f2ff6c94fd7b",
         "alias": "검증-성공계좌",
         "connected": true,
         "active": true,
@@ -139,8 +139,8 @@
   },
   "auth-token-status": {
     "state": "ready",
-    "expiresInSec": 2315365118,
-    "issuedAt": "2026-08-18T10:01:20.673Z"
+    "expiresInSec": 2315360365,
+    "issuedAt": "2026-08-18T11:20:33.721Z"
   },
   "auth-token-refresh": {
     "ok": true,

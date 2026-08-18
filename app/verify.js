@@ -271,16 +271,23 @@ app.whenReady().then(async () => {
   // 흔들린다(CLAUDE.md §9) — 수치는 리포트에 남기되 pass/fail 단언에서는 뺀다.
 
   // ---------- 검증 3: 두 창 독립 이동/리사이즈 ----------
+  // 직접 setBounds는 반드시 noteAppBounds로 "앱 주도"임을 표시한다 — 안 하면
+  // 스냅 대상화(2026-08-18)의 OS 배치 감지가 이 이동을 Win+방향키 스냅으로
+  // 오인해 짝 전체를 정착시켜 독립성 단언이 설계된 동작에 의해 깨진다.
   const initial = { canvas: canvasWin.getBounds(), chat: chatWin.getBounds() };
   canvasWin.setBounds({ ...canvasWin.getBounds(), x: canvasWin.getBounds().x + 80 });
+  mainMod.noteAppBounds(canvasWin);
   await wait(150);
   const afterCanvasMove = { canvas: canvasWin.getBounds(), chat: chatWin.getBounds() };
   chatWin.setBounds({ ...chatWin.getBounds(), height: Math.min(layout.chatMaxH, chatWin.getBounds().height + 100) });
+  mainMod.noteAppBounds(chatWin);
   await wait(150);
   const afterChatResize = { canvas: canvasWin.getBounds(), chat: chatWin.getBounds() };
   // 원위치
   canvasWin.setBounds({ ...canvasWin.getBounds(), x: canvasWin.getBounds().x - 80 });
+  mainMod.noteAppBounds(canvasWin);
   chatWin.setBounds({ x: layout.originX, y: (layout.originY + layout.canvasH + layout.chatBaseH) - layout.chatBaseH, width: layout.chatW, height: layout.chatBaseH });
+  mainMod.noteAppBounds(chatWin);
   await wait(150);
 
   // 허용 오차 2px — Windows에서 backgroundMaterial(acrylic) 적용 시 setBounds() 요청값과
@@ -416,10 +423,14 @@ app.whenReady().then(async () => {
   assertOk('manualResize: grip drag grew chat height', report.manualResize.grewByDrag === true);
   assertOk('manualResize: bottom edge stayed pinned while resizing', report.manualResize.bottomEdgePinned === true);
 
-  // ---------- 검증 7: 설정을 열어도 창은 둘이다 ----------
+  // ---------- 검증 7: 설정을 열어도 창은 둘이다 + 사이드바 nav 전환 ----------
   // ui/soul.md §3·§8 — 창은 둘뿐이고 창 3개 이상은 즉시 탈락이다. 설정은 새 창이
-  // 아니라 캔버스 창에 그려지는 카드다(GLOSSARY.md §1, app/canvas.js:151-152).
-  // 이 검증의 핵심 단언은 "창이 늘어난다"가 아니라 **"창이 늘지 않는다"**이다.
+  // 아니라 대화 창의 모드다(GLOSSARY.md §1). 이 검증의 핵심 단언은 "창이 늘어난다"
+  // 가 아니라 **"창이 늘지 않는다"**이다.
+  // 2026-08-18 사이드바 도입(Paper 43쪽) — #settingsGrid에는 nav가 고른 카드
+  // 하나만 산다. 옛 단언("점 클릭 한 번에 계좌·MCP 카드가 동시에 뜬다")은 더 이상
+  // 성립하지 않는다 — 기본 선택은 '화면'이고, 계좌·MCP·모델은 nav에서 선택해야
+  // 각각 뜬다(lib/settings-cards.js renderNav/SETTINGS_PANELS, chat.js openSettings).
   const winCountBefore = BrowserWindow.getAllWindows().length;
   const chatBoundsBefore = chatWin.getBounds();
 
@@ -428,18 +439,67 @@ app.whenReady().then(async () => {
 
   const winCountAfterOpen = BrowserWindow.getAllWindows().length;
 
-  // 두 번 눌러도 카드는 하나여야 한다(buildCardShell이 기존 카드를 제거하고 다시 만든다)
+  // 두 번 눌러도(재오픈이 no-op) nav·카드가 중복되지 않아야 한다
   await chatWin.webContents.executeJavaScript("document.getElementById('dot').click()");
   await wait(600);
   const winCountAfterSecondClick = BrowserWindow.getAllWindows().length;
+
+  const navProbe = await chatWin.webContents.executeJavaScript(`
+    (() => {
+      const nav = document.getElementById('settingsNav');
+      const items = nav ? Array.from(nav.querySelectorAll('.settings-nav-item')) : [];
+      return {
+        navExists: !!nav,
+        navItemCount: items.length,
+        navLabels: items.map((b) => { const l = b.querySelector('.settings-nav-label'); return l ? l.textContent.trim() : ''; }),
+        screenCardCount: document.querySelectorAll('#settingsGrid .card.screen').length,
+      };
+    })()
+  `);
+
+  function clickNavItemScript(label) {
+    return `
+    (() => {
+      const nav = document.getElementById('settingsNav');
+      const items = nav ? Array.from(nav.querySelectorAll('.settings-nav-item')) : [];
+      const btn = items.find((b) => { const l = b.querySelector('.settings-nav-label'); return l && l.textContent.trim() === ${JSON.stringify(label)}; });
+      if (!btn) return 'NOT FOUND: ${label}';
+      btn.click();
+      return 'clicked';
+    })();
+    `;
+  }
+
+  const navClickAccounts = await chatWin.webContents.executeJavaScript(clickNavItemScript('계좌'));
+  await wait(500);
+  const accountsPanelCardCount = await chatWin.webContents.executeJavaScript(
+    "document.querySelectorAll('#settingsGrid .card.accounts').length"
+  );
+
+  const navClickMcp = await chatWin.webContents.executeJavaScript(clickNavItemScript('MCP 서버'));
+  await wait(1000); // mcp-list는 Python CLI 콜드 스폰이라 실측 ~850ms 걸린다(verify-settings.js 주석 참고)
+  const mcpPanelCardCount = await chatWin.webContents.executeJavaScript(
+    "document.querySelectorAll('#settingsGrid .card.mcp').length"
+  );
+
+  const navClickModel = await chatWin.webContents.executeJavaScript(clickNavItemScript('모델'));
+  await wait(500);
+  const modelPanelProbe = await chatWin.webContents.executeJavaScript(`
+    (() => {
+      const card = document.querySelector('#settingsGrid .card.model');
+      return {
+        modelCardCount: document.querySelectorAll('#settingsGrid .card.model').length,
+        claudeAccountRows: card ? card.querySelectorAll('.uk-model-accounts .uk-model-account-row').length : 0,
+        modelChipCount: card ? card.querySelectorAll('.uk-chip-row .uk-chip').length : 0,
+      };
+    })()
+  `);
 
   const chatProbe = await chatWin.webContents.executeJavaScript(`
     (() => ({
       // 대화 화면은 물러나고 설정 화면이 그 자리를 차지한다 — 같은 창이 변한 것이다
       appHidden: document.getElementById('app').hidden === true,
       settingsVisible: document.getElementById('settings').hidden === false,
-      accountsCardCount: document.querySelectorAll('#settingsGrid .card.accounts').length,
-      mcpCardCount: document.querySelectorAll('#settingsGrid .card.mcp').length,
       // 설정은 대화 창 문서 안에 있다 — 별도 문서가 아니다
       url: location.pathname.split('/').pop(),
       // 점은 실제 버튼이어야 한다(장식이 아니라 어포던스)
@@ -452,7 +512,7 @@ app.whenReady().then(async () => {
   // 캔버스 창은 설정에 관여하지 않는다 — 설정 카드가 저기 있으면 안 된다
   const canvasProbe = await canvasWin.webContents.executeJavaScript(`
     (() => ({
-      settingsCardsOnCanvas: document.querySelectorAll('#grid .card.accounts, #grid .card.mcp').length,
+      settingsCardsOnCanvas: document.querySelectorAll('#grid .card.accounts, #grid .card.mcp, #grid .card.model, #grid .card.screen').length,
     }))()
   `);
   const chatBoundsWhileOpen = chatWin.getBounds();
@@ -479,10 +539,18 @@ app.whenReady().then(async () => {
     // 대화 창이 설정 모드로 바뀐다
     renderedInChatWindow: chatProbe.settingsVisible === true && chatProbe.url === 'chat.html',
     chatModeSteppedAside: chatProbe.appHidden === true,
-    accountsCardPresent: chatProbe.accountsCardCount === 1,
-    mcpCardPresent: chatProbe.mcpCardCount === 1,
-    // 두 번 눌러도 카드가 겹쳐 쌓이지 않는다
-    singleCardAfterSecondClick: chatProbe.accountsCardCount === 1 && chatProbe.mcpCardCount === 1,
+    // 사이드바 nav — 존재 + 항목 4개(화면·계좌·MCP 서버·모델) + 기본 선택은 '화면'
+    navExists: navProbe.navExists === true,
+    navHasFourItems: navProbe.navItemCount === 4,
+    defaultPanelIsScreen: navProbe.screenCardCount === 1,
+    // nav에서 각 항목을 고르면 그 카드 하나만 뜬다
+    accountsPanelOnNavSelect: accountsPanelCardCount === 1,
+    mcpPanelOnNavSelect: mcpPanelCardCount === 1,
+    modelPanelOnNavSelect: modelPanelProbe.modelCardCount === 1,
+    // 모델 패널 — Claude 계정 행(활성 계정이 최소 1개, cli-accounts.js가 이 머신의
+    // ~/.claude/.credentials.json을 실측 감지) + 모델 칩이 실제로 그려진다
+    modelPanelHasClaudeAccountRow: modelPanelProbe.claudeAccountRows >= 1,
+    modelPanelHasModelChips: modelPanelProbe.modelChipCount > 0,
     // 설정은 캔버스의 일이 아니다
     noSettingsCardsOnCanvas: canvasProbe.settingsCardsOnCanvas === 0,
     // 온보딩과 같은 문법 — 창이 chatMaxH로 자란다
@@ -494,15 +562,24 @@ app.whenReady().then(async () => {
     escReturnsToChat: chatAfterClose.appVisible === true && chatAfterClose.settingsHidden === true,
     gridEmptiedOnClose: chatAfterClose.gridEmptied === true,
   };
+  report.settingsNavClicks = { navClickAccounts, navClickMcp, navClickModel, navLabels: navProbe.navLabels };
   console.log('[verify] 검증7(설정 모드):', JSON.stringify(report.settingsSurface));
+  console.log('[verify] 검증7 nav 클릭 로그:', JSON.stringify(report.settingsNavClicks));
   // settingsSurface는 전부 참이 기대값인 불리언들이다(noTrIdLeak/noBearerLeak
   // 포함 — 자격증명 화면 유출 가드) — 일괄 단언한다.
   for (const [key, val] of Object.entries(report.settingsSurface)) {
     assertOk(`settingsSurface.${key}`, val === true);
   }
+  // nav 클릭 자체가 대상을 못 찾은 실패(NOT FOUND)를 놓치지 않는다 — 문자열이라
+  // 위 일괄 단언 루프 밖에서 따로 확인한다.
+  assertOk('settingsSurface.navClickAccountsFound', navClickAccounts === 'clicked');
+  assertOk('settingsSurface.navClickMcpFound', navClickMcp === 'clicked');
+  assertOk('settingsSurface.navClickModelFound', navClickModel === 'clicked');
 
   // ---------- 검증 8: 커맨드바로도 설정에 도달한다 ----------
   // GLOSSARY.md §1 — 점 클릭은 "추가" 진입로다. 커맨드바 경로가 없으면 soul.md §8 탈락 조건.
+  // 사이드바 도입 이후 커맨드바 경로도 기본 선택은 '화면'이다 — 옛 accountsCardCount
+  // 전제(검증7과 같은 이유로) 대신 nav 존재 + 기본 패널로 판정한다.
   const winCountBeforeCmd = BrowserWindow.getAllWindows().length;
   const turnCountBeforeCmd = await chatWin.webContents.executeJavaScript(
     "document.querySelectorAll('.turn-q').length"
@@ -521,7 +598,8 @@ app.whenReady().then(async () => {
       inputCleared: document.getElementById('input').value === '',
       turnCount: document.querySelectorAll('.turn-q').length,
       settingsVisible: document.getElementById('settings').hidden === false,
-      accountsCardCount: document.querySelectorAll('#settingsGrid .card.accounts').length,
+      navExists: !!document.getElementById('settingsNav'),
+      screenCardCount: document.querySelectorAll('#settingsGrid .card.screen').length,
     }))()
   `);
   // 정리 — 다음 단계에 설정 모드를 남기지 않는다
@@ -533,7 +611,7 @@ app.whenReady().then(async () => {
   report.settingsCommandBar = {
     // 커맨드바 경로도 창을 만들지 않는다
     noNewWindowOnCommand: winCountAfterCmd === winCountBeforeCmd,
-    reachedSettings: chatAfterCmd.settingsVisible === true && chatAfterCmd.accountsCardCount === 1,
+    reachedSettings: chatAfterCmd.settingsVisible === true && chatAfterCmd.navExists === true && chatAfterCmd.screenCardCount === 1,
     inputCleared: chatAfterCmd.inputCleared === true,
     // 설정 명령은 질의로 흘러가지 않는다 — 이력에 질문이 추가되면 안 된다
     notTreatedAsQuery: chatAfterCmd.turnCount === turnCountBeforeCmd,
@@ -570,6 +648,7 @@ app.whenReady().then(async () => {
   // 9b — 이동 앵커: 창을 옮긴 뒤 높이를 바꿔도 새 위치가 유지된다(스냅백 회귀 방지)
   const beforeMove = chatWin.getBounds();
   chatWin.setBounds({ x: beforeMove.x + 120, y: beforeMove.y - 40, width: beforeMove.width, height: beforeMove.height });
+  mainMod.noteAppBounds(chatWin); // 앱 주도 표시 — OS 스냅 오인 정착 방지(검증3 주석)
   await wait(150);
   const moved = chatWin.getBounds();
   await sendFromChat('athena:set-chat-height', { height: layout.chatBaseH + 150 });
@@ -582,6 +661,7 @@ app.whenReady().then(async () => {
   };
   // 원위치 복구 — 이후 단계에 이동 상태를 남기지 않는다
   chatWin.setBounds(beforeMove);
+  mainMod.noteAppBounds(chatWin);
   await wait(150);
   await sendFromChat('athena:set-chat-height', { height: layout.chatBaseH });
   await wait(200);
@@ -697,7 +777,12 @@ app.whenReady().then(async () => {
   // 10e — 높이 예산 집행: 창을 절반 높이로 줄여 예산을 좁힌 뒤 4장째를 추가하면
   // 가장 오래된 카드부터 제거된다(최소 3장 보장이라 3장에서 멈춘다).
   const cbBefore = canvasWin.getBounds();
-  canvasWin.setBounds({ ...cbBefore, height: Math.round(cbBefore.height / 2) });
+  // 캔버스는 스냅 대상화(2026-08-18)로 min=max 크기 잠금이 걸려 있다 — 절반
+  // 축소 시뮬레이션 동안만 하한을 풀고, 끝나면 원래 잠금으로 되돌린다.
+  const halfH = Math.round(cbBefore.height / 2);
+  canvasWin.setMinimumSize(layout.canvasW, halfH);
+  canvasWin.setBounds({ ...cbBefore, height: halfH });
+  mainMod.noteAppBounds(canvasWin); // 앱 주도 표시 — OS 스냅 오인 정착 방지
   await wait(200);
   canvasWin.webContents.send('athena:add-canvas', { type: 'table' });
   await wait(150);
@@ -705,6 +790,8 @@ app.whenReady().then(async () => {
   await wait(250);
   const afterBudget = await gridProbe();
   canvasWin.setBounds(cbBefore);
+  canvasWin.setMinimumSize(layout.canvasW, layout.canvasH); // 잠금 복구
+  mainMod.noteAppBounds(canvasWin);
   await wait(150);
 
   report.cardLayout = {
@@ -860,6 +947,119 @@ app.whenReady().then(async () => {
   assertOk('chartCard: price/volume panes separated', report.chartCard.paneSeparated === true);
   assertOk('chartCard: 35 indicator rows present', report.chartCard.indicatorRows35 === true);
   assertOk('chartCard: 24 volume-profile bars present', report.chartCard.volumeProfileBars24 === true);
+
+  // ---------- 검증 14: 창 배치(스냅) — Windows 표준 의미론 (2026-08-18) ----------
+  // main.js가 노출한 placeWindows(left/right)·centerWindows를 직접 구동하고,
+  // up/down은 실제 경로(athena:window-key → chat.js의 □ 버튼과 같은 로컬 함수)를
+  // 그대로 왕복한다. 확인할 것: (a) 두 창이 함께 움직이는가(짝의 상대 오프셋
+  // 불변 — computePlacement 계약상 캔버스·대화 창 x가 같다) (b) 크기는 안
+  // 변하는가(스냅은 위치만 바꾼다) (c) 스냅 뒤에도 앵커가 갱신돼 다음
+  // setChatHeight가 부팅 좌표로 되돌리지 않는가(syncChatAnchor 회귀 가드, 커밋
+  // 5e0a9ab와 같은 종류의 버그를 잡는다).
+  mainMod.centerWindows(); // 이전 검증들의 이동 상태를 정리 — 원점에서 시작
+  await wait(150);
+  const beforePlacement = { canvas: canvasWin.getBounds(), chat: chatWin.getBounds() };
+
+  mainMod.placeWindows('left');
+  await wait(200);
+  const afterLeft = { canvas: canvasWin.getBounds(), chat: chatWin.getBounds() };
+
+  mainMod.placeWindows('right');
+  await wait(200);
+  const afterRight = { canvas: canvasWin.getBounds(), chat: chatWin.getBounds() };
+
+  // □ 토글 경유 — Win+↑와 정확히 같은 채널(athena:window-key)로 렌더러의 로컬
+  // 경로(chat.js toggleMaxHeight)를 태운다. 먼저 알려진 높이(chatBaseH)로
+  // 맞춰 시작한다 — 이전 단계의 잔여 높이에 기댄 판정은 흔들린다.
+  chatWin.webContents.executeJavaScript(`window.athena.send('athena:set-chat-height', { height: ${layout.chatBaseH} })`);
+  await wait(250);
+  const chatHeightBeforeMax = chatWin.getBounds().height;
+  chatWin.webContents.send('athena:window-key', { dir: 'up' });
+  await wait(400);
+  const afterMaximize = chatWin.getBounds();
+
+  chatWin.webContents.send('athena:window-key', { dir: 'down' });
+  await wait(400);
+  const afterRestore = chatWin.getBounds();
+
+  // 앵커 유지 — 스냅(right) 뒤 위치에서 높이만 바꿔도 x/하단 y가 그대로여야
+  // 한다(검증9의 이동 앵커 계약과 같은 종류, syncChatAnchor 회귀 가드).
+  const beforeAnchorCheck = chatWin.getBounds();
+  chatWin.webContents.executeJavaScript(
+    `window.athena.send('athena:set-chat-height', { height: ${layout.chatBaseH + 80} })`
+  );
+  await wait(300);
+  const afterAnchorHeightChange = chatWin.getBounds();
+
+  mainMod.centerWindows(); // 원위치 — 이후 단계에 배치 상태를 남기지 않는다
+  await wait(200);
+  chatWin.webContents.executeJavaScript(`window.athena.send('athena:set-chat-height', { height: ${layout.chatBaseH} })`);
+  await wait(200);
+  const afterCenter = { canvas: canvasWin.getBounds(), chat: chatWin.getBounds() };
+
+  report.windowPlacement = {
+    beforePlacement, afterLeft, afterRight, afterMaximize, afterRestore, afterCenter,
+    pairMovedTogetherOnLeft: near(afterLeft.chat.x, afterLeft.canvas.x),
+    pairMovedTogetherOnRight: near(afterRight.chat.x, afterRight.canvas.x),
+    leftDiffersFromRight: afterLeft.canvas.x !== afterRight.canvas.x,
+    sizeUnchangedOnLeft: afterLeft.canvas.width === beforePlacement.canvas.width && afterLeft.canvas.height === beforePlacement.canvas.height,
+    sizeUnchangedOnRight: afterRight.canvas.width === beforePlacement.canvas.width && afterRight.canvas.height === beforePlacement.canvas.height,
+    maximizedViaWindowKey: afterMaximize.height > chatHeightBeforeMax,
+    maximizedReachedChatMaxH: near(afterMaximize.height, layout.chatMaxH),
+    restoredViaWindowKey: near(afterRestore.height, layout.chatBaseH),
+    anchorKeptAfterSnap:
+      near(afterAnchorHeightChange.x, beforeAnchorCheck.x)
+      && near(afterAnchorHeightChange.y + afterAnchorHeightChange.height, beforeAnchorCheck.y + beforeAnchorCheck.height),
+    centerReturnsToBootOrigin: near(afterCenter.canvas.x, layout.originX) && near(afterCenter.canvas.y, layout.originY),
+  };
+  console.log('[verify] 검증14(창 배치):', JSON.stringify(report.windowPlacement));
+  assertOk('windowPlacement: pair moves together on left snap', report.windowPlacement.pairMovedTogetherOnLeft === true);
+  assertOk('windowPlacement: pair moves together on right snap', report.windowPlacement.pairMovedTogetherOnRight === true);
+  assertOk('windowPlacement: left and right snap to different positions', report.windowPlacement.leftDiffersFromRight === true);
+  assertOk('windowPlacement: size unchanged on left snap', report.windowPlacement.sizeUnchangedOnLeft === true);
+  assertOk('windowPlacement: size unchanged on right snap', report.windowPlacement.sizeUnchangedOnRight === true);
+  assertOk('windowPlacement: athena:window-key up maximizes chat height', report.windowPlacement.maximizedViaWindowKey === true);
+  assertOk('windowPlacement: maximize reaches chatMaxH', report.windowPlacement.maximizedReachedChatMaxH === true);
+  assertOk('windowPlacement: athena:window-key down restores base height', report.windowPlacement.restoredViaWindowKey === true);
+  assertOk('windowPlacement: anchor kept after snap (no snapback on height change)', report.windowPlacement.anchorKeptAfterSnap === true);
+  assertOk('windowPlacement: centerWindows returns to boot origin', report.windowPlacement.centerReturnsToBootOrigin === true);
+
+  // ---------- 검증 15: 모델 설정 저장 (lib/main/model-prefs.js) ----------
+  // UI 쪽(모델 칩·Claude 계정 행 존재)은 검증7의 settingsSurface.modelPanel*
+  // 단언이 이미 커버한다 — 여기서는 main.js가 노출한 settingsHandlers를 렌더러
+  // 없이 직접 호출해 저장 계약(디스크 실재·검증 거부·거부 시 무변경)을 확인한다.
+  const modelSetOk = mainMod.settingsHandlers.modelSet(null, { provider: 'claude', patch: { model: 'sonnet', effort: 'low' } });
+  const modelGetAfterSet = mainMod.settingsHandlers.modelGet();
+  const modelPrefsPath = path.join(VERIFY_PROFILE, 'athena-model.json');
+  const modelPrefsOnDisk = fs.existsSync(modelPrefsPath)
+    ? JSON.parse(fs.readFileSync(modelPrefsPath, 'utf-8'))
+    : null;
+  // 선두 '-'는 claude CLI 인자 파서가 값을 플래그로 오독하는 걸 막으려고
+  // model-prefs.js가 명시적으로 거부한다(isValidModel). 무효 effort는 화이트리스트 밖.
+  const modelSetRejectLeadingDash = mainMod.settingsHandlers.modelSet(null, { provider: 'claude', patch: { model: '-sonnet' } });
+  const modelSetRejectInvalidEffort = mainMod.settingsHandlers.modelSet(null, { provider: 'claude', patch: { effort: 'not-a-real-effort' } });
+  const modelGetAfterRejects = mainMod.settingsHandlers.modelGet();
+
+  report.modelPrefs = {
+    setOk: modelSetOk,
+    getAfterSet: modelGetAfterSet,
+    onDisk: modelPrefsOnDisk,
+    rejectLeadingDash: modelSetRejectLeadingDash,
+    rejectInvalidEffort: modelSetRejectInvalidEffort,
+    savedCorrectly: modelSetOk.ok === true && modelGetAfterSet.claude.model === 'sonnet' && modelGetAfterSet.claude.effort === 'low',
+    persistedToDisk: !!modelPrefsOnDisk && !!modelPrefsOnDisk.claude
+      && modelPrefsOnDisk.claude.model === 'sonnet' && modelPrefsOnDisk.claude.effort === 'low',
+    rejectsLeadingDash: modelSetRejectLeadingDash.ok === false,
+    rejectsInvalidEffort: modelSetRejectInvalidEffort.ok === false,
+    // 거부된 패치가 직전의 유효값을 덮어쓰지 않는다 — 여전히 sonnet/low여야 한다
+    rejectedValuesDidNotOverwrite: modelGetAfterRejects.claude.model === 'sonnet' && modelGetAfterRejects.claude.effort === 'low',
+  };
+  console.log('[verify] 검증15(모델 설정):', JSON.stringify(report.modelPrefs));
+  assertOk('modelPrefs: model-set saves claude model/effort', report.modelPrefs.savedCorrectly === true);
+  assertOk('modelPrefs: persisted to athena-model.json on disk', report.modelPrefs.persistedToDisk === true);
+  assertOk('modelPrefs: rejects model with leading dash', report.modelPrefs.rejectsLeadingDash === true);
+  assertOk('modelPrefs: rejects invalid effort value', report.modelPrefs.rejectsInvalidEffort === true);
+  assertOk('modelPrefs: rejected patches do not overwrite prior valid values', report.modelPrefs.rejectedValuesDidNotOverwrite === true);
 
   report.finishedAt = new Date().toISOString();
   fs.writeFileSync(path.join(CAPTURES, 'VERIFY-REPORT.json'), JSON.stringify(report, null, 2));

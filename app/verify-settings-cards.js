@@ -114,6 +114,24 @@ function clickByText(selector, text) {
   `;
 }
 
+// 사이드바 nav(2026-08-18, Paper 43쪽) — #settingsGrid에는 nav가 고른 카드
+// 하나만 산다(renderNav의 onSelect가 grid.replaceChildren() 먼저 부른다).
+// clickByText는 버튼 자신의 textContent 전체를 비교하는데, 계좌·MCP 서버 항목은
+// 카운트 배지(예: "0개")가 같은 버튼 안에 붙어 있어 라벨 전체 일치가 깨질 수
+// 있다 — 라벨 자식(.settings-nav-label)만 비교하는 전용 헬퍼를 쓴다.
+function clickNavItem(label) {
+  return `
+  (() => {
+    const nav = document.getElementById('settingsNav');
+    const items = nav ? Array.from(nav.querySelectorAll('.settings-nav-item')) : [];
+    const btn = items.find((b) => { const l = b.querySelector('.settings-nav-label'); return l && l.textContent.trim() === ${JSON.stringify(label)}; });
+    if (!btn) return 'NOT FOUND: ${label}';
+    btn.click();
+    return 'clicked';
+  })();
+  `;
+}
+
 app.whenReady().then(async () => {
   const mainMod = require('./main.js');
   // ---------- main 프로세스의 ipcMain 핸들러를 스텁으로 갈아끼운다 ----------
@@ -128,9 +146,13 @@ app.whenReady().then(async () => {
   await wait(600);
 
   // ---------- 설정 모드를 연다 — 새 창이 아니라 이 창이 변한다 ----------
-  // 점 클릭이 계좌·MCP 카드를 한 번에 그린다(chat.js openSettings).
+  // 점 클릭의 기본 선택은 '화면'이다(2026-08-18 사이드바 도입) — 계좌 카드를
+  // 보려면 nav에서 '계좌'를 선택해야 한다(예전엔 점 클릭 한 번에 계좌·MCP 카드가
+  // 동시에 떴다, chat.js openSettings/lib/settings-cards.js renderNav 참고).
   await chatWin.webContents.executeJavaScript("document.getElementById('dot').click()");
   await wait(500);
+  await clickAndLog(chatWin, 'select nav 계좌', clickNavItem('계좌'));
+  await wait(400);
   await shot(chatWin, 'SETTINGS-03-accounts-list.png');
 
   await clickAndLog(chatWin, 'open register sheet', clickByText('.card.accounts button', '+ 계좌 등록'));
@@ -146,7 +168,12 @@ app.whenReady().then(async () => {
   await wait(300);
   await shot(chatWin, 'SETTINGS-06-orderapi-after-activate.png');
 
-  await rerenderMcpCard(chatWin);
+  // MCP 카드로 전환 — nav '경유'다(직접 renderMcp() 호출이 아니다). 실제
+  // 사용자 경로(renderNav onSelect)를 타야 grid.replaceChildren()이 먼저 불려
+  // 계좌 카드가 정리된다 — 안 그러면 두 카드가 같은 grid에 함께 남는, 실제로는
+  // 도달 불가능한 상태가 된다(사이드바는 한 번에 카드 하나만 보여준다).
+  await clickAndLog(chatWin, 'select nav MCP 서버', clickNavItem('MCP 서버'));
+  await wait(1000); // mcp-list는 Python CLI 콜드 스폰이라 실측 ~850ms 걸린다(verify-settings.js 주석 참고)
   await shot(chatWin, 'SETTINGS-07-mcp-list.png');
 
   await clickAndLog(chatWin, 'open mcp register sheet', clickByText('.card.mcp button', '+ 서버 등록'));

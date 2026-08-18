@@ -90,6 +90,14 @@ function spacer(widthPx) {
   return s;
 }
 
+// 카드가 다시 그려질 때마다(nav에서 재선택할 때마다) 이전 구독을 반드시 끊는다 —
+// window.athena.on()의 반환값은 구독 해제 함수이고, 카드는 buildCardShell()이
+// 기존 DOM만 지우고 리스너는 그대로 두므로 여기서 직접 관리하지 않으면 설정을
+// 여닫을 때마다 athena:zoom-changed/athena:model-changed 리스너가 누적된다.
+let unsubscribeScreenZoom = null;
+let unsubscribeModelChanged = null;
+let unsubscribeCliChangedForModel = null;
+
 // ---------------------------------------------------------------------------
 // 행 삭제 · 카드 닫기 — 설계(Paper 목업)가 그리지 않은 어포던스라 이 파일에서
 // 새로 정의한다(D3/D7, 오케스트레이터 지시). `athena:account-remove`/
@@ -223,6 +231,101 @@ function detachSheet(card, root) {
 }
 
 // =============================================================================
+// 사이드바 내비게이션 — Paper 43쪽(2026-08-18 확정). 화면 · 계좌 · MCP 서버 · 모델
+// 4종. 선택 표시는 배경/글자 밝기로만 한다(액센트 색 금지, ui/soul.md §7). 키보드는
+// 리스트박스 문법: ↑↓는 포커스만 옮기고(선택 아님), Enter/Space가 커밋해 패널을
+// 렌더한다 — 자동 활성화(탭 문법)가 아니다. #settingsNav → #settingsGrid로 이어지는
+// DOM 순서 그대로라 Tab 키가 자연스럽게 "패널로 이동"이 된다(별도 배선 불필요).
+// =============================================================================
+
+const NAV_ITEMS = [
+  { key: 'screen', label: '화면' },
+  { key: 'accounts', label: '계좌', countChannel: 'athena:account-list', countKey: 'accounts' },
+  { key: 'mcp', label: 'MCP 서버', countChannel: 'athena:mcp-list', countKey: 'servers' },
+  { key: 'model', label: '모델' },
+];
+
+async function refreshNavCount(item, badgeEl) {
+  try {
+    const data = await window.athena.invoke(item.countChannel);
+    const list = (data && data[item.countKey]) || [];
+    badgeEl.textContent = `${list.length}개`;
+  } catch {
+    badgeEl.textContent = '';
+  }
+}
+
+// renderNav(nav, grid, { onSelect }) — onSelect(key, grid)가 실제 패널을 그린다
+// (기존 renderScreen/renderAccounts/renderMcp 재사용 + 신규 renderModel, 호출자는
+// chat.js openSettings). nav 자신은 어떤 카드도 모른다 — 그리는 책임은 호출자에게
+// 넘긴다(관심사 분리, 계좌/MCP 카드 재작성 금지 지시와도 맞물린다).
+function renderNav(nav, grid, { onSelect }) {
+  clear(nav);
+  nav.setAttribute('role', 'listbox');
+  nav.setAttribute('aria-label', '설정 카테고리');
+
+  const order = NAV_ITEMS.map((i) => i.key);
+  const buttons = {};
+  let focusedKey = order[0];
+
+  function applyRovingTabindex() {
+    for (const k of order) buttons[k].tabIndex = (k === focusedKey) ? 0 : -1;
+  }
+
+  function commitSelect(key) {
+    focusedKey = key;
+    for (const k of order) {
+      const isSel = k === key;
+      buttons[k].classList.toggle('is-selected', isSel);
+      buttons[k].setAttribute('aria-selected', String(isSel));
+    }
+    applyRovingTabindex();
+    const item = NAV_ITEMS.find((i) => i.key === key);
+    if (item && item.countChannel && item._badgeEl) refreshNavCount(item, item._badgeEl);
+    onSelect(key, grid);
+  }
+
+  function moveFocus(nextKey) {
+    focusedKey = nextKey;
+    applyRovingTabindex();
+    buttons[nextKey].focus();
+  }
+
+  for (const item of NAV_ITEMS) {
+    const b = el('button', 'settings-nav-item');
+    b.type = 'button';
+    b.setAttribute('role', 'option');
+    b.setAttribute('aria-selected', 'false');
+    b.appendChild(el('span', 'settings-nav-label', item.label));
+    if (item.countChannel) {
+      const badgeEl = el('span', 'settings-nav-badge', '');
+      item._badgeEl = badgeEl;
+      b.appendChild(badgeEl);
+      refreshNavCount(item, badgeEl);
+    }
+    b.addEventListener('click', () => commitSelect(item.key));
+    b.addEventListener('keydown', (e) => {
+      const i = order.indexOf(item.key);
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        moveFocus(order[(i + 1) % order.length]);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        moveFocus(order[(i - 1 + order.length) % order.length]);
+      } else if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        commitSelect(item.key);
+      }
+    });
+    buttons[item.key] = b;
+    nav.appendChild(b);
+  }
+
+  applyRovingTabindex();
+  commitSelect(order[0]);
+}
+
+// =============================================================================
 // 화면 — autoExpandCanvas/autoGrowChat (2026-08-18 복구, app/README.md L599-608)
 // 병합 커밋 c0d874b가 "후속 커밋에서 모드 구현에 옮긴다"고 적어놓고 실제로는
 // 안 옮긴 것을 여기 되살린다. 원본(git show baa7e0e -- app/settings.html)의
@@ -232,6 +335,7 @@ function detachSheet(card, root) {
 
 function renderScreen(grid) {
   const { card, head, body } = buildCardShell(grid, 'screen');
+  if (unsubscribeScreenZoom) { unsubscribeScreenZoom(); unsubscribeScreenZoom = null; }
   return refreshScreenCard(card, head, body);
 }
 
@@ -273,6 +377,50 @@ async function refreshScreenCard(card, head, body) {
   growLabelCol.appendChild(el('div', 'uk-toggle-sub', 'OFF면 그립을 끌어야만 창이 커진다'));
   const growToggle = toggleSwitch(!!data.autoGrowChat, (next) => setPref('autoGrowChat', next));
   body.appendChild(row('uk-toggle-row', [growLabelCol, growToggle]));
+
+  // ---- UI 배율 — 기존 Ctrl+=/Ctrl+-/Ctrl+휠(chat.js)과 같은 채널을 버튼으로 노출 ----
+  const zoomLabelCol = el('div');
+  zoomLabelCol.appendChild(el('div', 'uk-toggle-label', 'UI 배율'));
+  zoomLabelCol.appendChild(el('div', 'uk-toggle-sub', 'Ctrl+= / Ctrl+- / Ctrl+휠과 같은 조작이다'));
+  const zoomControls = el('div', 'uk-zoom-controls');
+  const zoomValue = el('span', 'uk-zoom-value uk-mono-faint', `${Math.round(window.athena.getZoomFactor() * 100)}%`);
+  zoomControls.appendChild(button('ghost', '−', { onClick: () => window.athena.send('athena:zoom', { dir: 'out' }) }));
+  zoomControls.appendChild(zoomValue);
+  zoomControls.appendChild(button('ghost', '+', { onClick: () => window.athena.send('athena:zoom', { dir: 'in' }) }));
+  zoomControls.appendChild(button('text', '재설정', { onClick: () => window.athena.send('athena:zoom', { dir: 'reset' }) }));
+  body.appendChild(row('uk-toggle-row', [zoomLabelCol, zoomControls]));
+
+  unsubscribeScreenZoom = window.athena.on('athena:zoom-changed', (payload) => {
+    const z = (payload && typeof payload.zoom === 'number') ? payload.zoom : window.athena.getZoomFactor();
+    zoomValue.textContent = `${Math.round(z * 100)}%`;
+  });
+
+  // ---- 창 배치 — 읽기 전용 안내. 주 경로는 Windows 네이티브 Win+방향키
+  // (main.js WIN_ARROW_DIR가 before-input-event로 직접 처리), Ctrl+Alt+방향키는
+  // 보조 경로이고 같은 의미론이다 — up=최대화 토글(□ 버튼과 동일), down=복원→최소화
+  // (2026-08-18 정정, chat.js 키다운과 짝을 이룬다). ----
+  const placeLabelCol = el('div');
+  placeLabelCol.appendChild(el('div', 'uk-toggle-label', '창 배치'));
+  placeLabelCol.appendChild(el('div', 'uk-toggle-sub', 'Win+←/→/↑/↓ — Windows 창 단축키 그대로 (좌/우 배치 · 최대화 · 최소화) · 보조: Ctrl+Alt+방향키'));
+  body.appendChild(row('uk-toggle-row', [placeLabelCol]));
+
+  // ---- 접근성 3종 — 읽기 전용, OS 값을 그대로 보여준다(설정은 OS 소관, CLAUDE.md §2) ----
+  const a11yWrap = el('div', 'uk-a11y-status');
+  a11yWrap.appendChild(el('div', 'uk-field-label', '접근성 — 이 컴퓨터의 OS 설정을 따른다'));
+  const A11Y_QUERIES = [
+    { q: '(prefers-reduced-transparency: reduce)', label: '투명도 감소' },
+    { q: '(prefers-contrast: more)', label: '고대비' },
+    { q: '(prefers-reduced-motion: reduce)', label: '모션 감소' },
+  ];
+  for (const { q, label } of A11Y_QUERIES) {
+    const on = window.matchMedia(q).matches;
+    a11yWrap.appendChild(row('uk-a11y-row', [
+      statusDot(on, `${label} ${on ? '켜짐' : '꺼짐'}`),
+      el('span', 'uk-a11y-label', label),
+      pill(on ? '켜짐' : '꺼짐', on ? 'ok' : 'dim'),
+    ]));
+  }
+  body.appendChild(a11yWrap);
 }
 
 // =============================================================================
@@ -1213,8 +1361,308 @@ function openMcpProbeSheet(card, alias, onDone) {
   }
 }
 
+// =============================================================================
+// 모델 — Paper 43쪽(2026-08-18 확정, 다계정 요건 2026-08-18 추가). Claude 섹션
+// (계정 목록 · 계정 추가 · 모델 칩 · 직접 입력 · 사고 강도 칩) / 구분선 / Codex
+// 섹션(같은 구조, 미연결이면 계정 목록 대신 "미연결 · 연결" 행이고 모델·강도는
+// 비활성) / 정직성 노트 2줄.
+//
+// 공급자당 연결 상태는 더 이상 단일 pill이 아니라 **계정 목록**이다 —
+// athena:cli-list가 provider.accounts: [{id,label,active}]를 준다(2~3개 가능,
+// 온보딩 2/3과 같은 계약). 활성 전환은 athena:cli-set-active(무확인, 온보딩과
+// 동일), 계정 추가는 athena:cli-login(providerId) 위임 — 새 콘솔 창에서 로그인이
+// 끝나면 athena:cli-changed가 이 창에도 오고, 그 구독이 카드를 다시 그린다(아래
+// renderModel 참고). 여기서 별도 폴링·타임아웃을 두지 않는다.
+//
+// 모델·사고 강도는 계정별이 아니라 앱 전역 설정이다(athena:model-get/-set, 위
+// IPC 계약 그대로) — 그래서 buildModelSection이 accounts와 modelState를
+// 별개 인자로 받는다.
+// IPC 계약: athena:model-get → {claude:{model,effort}, codex:{model,effort}}
+// (null=기본) · athena:model-set {provider, patch} → 성공 시 전체 상태, 실패
+// 시 {ok:false, error} · on athena:model-changed.
+// =============================================================================
+
+const CLAUDE_MODEL_CHIPS = [
+  { value: null, label: '기본' },
+  { value: 'fable', label: 'fable' },
+  { value: 'opus', label: 'opus' },
+  { value: 'sonnet', label: 'sonnet' },
+  { value: 'haiku', label: 'haiku' },
+];
+const CLAUDE_EFFORT_CHIPS = [
+  { value: null, label: '기본' },
+  { value: 'low', label: 'low' },
+  { value: 'medium', label: 'medium' },
+  { value: 'high', label: 'high' },
+  { value: 'xhigh', label: 'xhigh' },
+  { value: 'max', label: 'max' },
+];
+const CODEX_EFFORT_CHIPS = [
+  { value: null, label: '기본' },
+  { value: 'minimal', label: 'minimal' },
+  { value: 'low', label: 'low' },
+  { value: 'medium', label: 'medium' },
+  { value: 'high', label: 'high' },
+  { value: 'xhigh', label: 'xhigh' },
+];
+
+// 활성 계정 행 — 상태 표시만, 조작이 없으므로 button이 아니다(누를 게 없는
+// 행까지 버튼으로 만들면 오히려 키보드 사용자에게 "여기 액션이 있다"고
+// 거짓 신호를 준다). 비활성 계정 행은 buildModelAccountSwitchButton이 만든다
+// — 그쪽만 진짜 button이다(팀리드 지시: 전부 키보드 도달 가능, 행도 button).
+function buildModelActiveAccountRow(acc) {
+  return row('uk-model-account-row is-active', [
+    el('span', 'uk-model-account-label', acc.label),
+    el('span', 'uk-flex-spacer'),
+    badge(true, '활성'),
+  ]);
+}
+
+function buildModelAccountSwitchButton(acc, onSwitch) {
+  const b = el('button', 'uk-model-account-row uk-model-account-switch');
+  b.type = 'button';
+  b.setAttribute('aria-label', `${acc.label} — 눌러서 활성 계정으로 전환`);
+  b.appendChild(el('span', 'uk-model-account-label', acc.label));
+  b.appendChild(el('span', 'uk-flex-spacer'));
+  b.appendChild(badge(false, '비활성'));
+  b.addEventListener('click', () => onSwitch(acc));
+  return b;
+}
+
+function buildModelConnectRow(title, onConnect) {
+  const b = el('button', 'uk-model-account-row uk-model-account-connect');
+  b.type = 'button';
+  b.appendChild(statusDot(false, `${title} 미연결`));
+  b.appendChild(el('span', 'uk-model-account-label', '미연결'));
+  b.appendChild(el('span', 'uk-flex-spacer'));
+  b.appendChild(el('span', 'uk-model-connect-label', '연결'));
+  b.addEventListener('click', onConnect);
+  return b;
+}
+
+// title/provider(athena:cli-list의 provider 항목, accounts:[{id,label,active}])/
+// modelState({model,effort} 또는 null)/modelChips(null이면 Codex처럼 입력 하나만)/
+// effortChips/disabled(모델·강도 컨트롤만 잠근다 — 계정 목록·로그인은 연결
+// 상태와 무관하게 항상 조작 가능해야 "연결" 자체가 가능하다)/onModelChange/
+// onAccountsChanged(계정 전환·로그인 성공 시 카드 전체를 다시 그리라는 콜백)/
+// errBox(공용 오류 표시 슬롯, 두 섹션이 공유).
+function buildModelSection(opts) {
+  const { title, provider, modelState, modelChips, effortChips, disabled, onModelChange, onAccountsChanged, errBox } = opts;
+  const accounts = (provider && provider.accounts) || [];
+  const connected = accounts.length > 0;
+  const s = modelState || {};
+
+  const wrap = el('div', 'uk-model-section');
+  wrap.appendChild(row('uk-model-section-head', [
+    el('span', 'uk-settings-name', title),
+    pill(connected ? '연결됨' : '미연결', connected ? 'ok' : 'dim'),
+  ]));
+
+  async function doSwitch(acc) {
+    clear(errBox);
+    try {
+      const res = await window.athena.invoke('athena:cli-set-active', { accountId: acc.id });
+      if (!res || !res.ok) { errBox.appendChild(errorNote('활성 계정 전환에 실패했다')); return; }
+    } catch (err) {
+      errBox.appendChild(errorNote('계정 전환 기능을 아직 사용할 수 없다 (athena:cli-set-active 핸들러 없음)'));
+      return;
+    }
+    onAccountsChanged();
+  }
+
+  async function doLogin() {
+    clear(errBox);
+    try {
+      const res = await window.athena.invoke('athena:cli-login', { providerId: provider.id });
+      if (!res || !res.ok) {
+        errBox.appendChild(errorNote(`${title} 로그인을 시작하지 못했다${res && res.message ? ' — ' + res.message : ''}`));
+      }
+      // launched:true면 새 터미널 창에서 로그인이 진행 중이다 — 성공하면
+      // athena:cli-changed가 이 창에도 방송되고 renderModel()의 구독이 카드를
+      // 다시 그린다(onboarding.js와 같은 신호, 별도 폴링을 두지 않는다).
+    } catch (err) {
+      errBox.appendChild(errorNote('CLI 로그인 기능을 아직 사용할 수 없다 (athena:cli-login 핸들러 없음)'));
+    }
+  }
+
+  // ---- 계정 목록 · 계정 추가 — 연결 상태와 무관하게 항상 조작 가능하다 ----
+  const accountsWrap = el('div', 'uk-model-accounts');
+  if (connected) {
+    for (const acc of accounts) {
+      accountsWrap.appendChild(acc.active ? buildModelActiveAccountRow(acc) : buildModelAccountSwitchButton(acc, doSwitch));
+    }
+    accountsWrap.appendChild(button('text', '+ 계정 추가', { onClick: doLogin }));
+  } else {
+    accountsWrap.appendChild(buildModelConnectRow(title, doLogin));
+  }
+  accountsWrap.appendChild(el('div', 'uk-field-hint-static', '연결을 누르면 해당 CLI의 로그인 명령이 새 터미널 창에서 실행된다 — 로그인은 그 창에서 완료한다.'));
+  wrap.appendChild(accountsWrap);
+
+  // ---- 모델 · 사고 강도 — 앱 전역 설정(계정별 아님). disabled면 이 컨트롤만
+  // 잠긴다, 위 계정 UI는 그대로 켜져 있다(연결해야 잠금이 풀리므로). ----
+  const controlsWrap = el('div', `uk-model-controls${disabled ? ' is-disabled' : ''}`);
+  const modelValue = s.model || null;
+
+  function makeCommittableInput(placeholder, initialValue, onCommit) {
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'uk-input uk-input-mono uk-model-custom-input';
+    input.placeholder = placeholder;
+    input.autocomplete = 'off';
+    input.value = initialValue || '';
+    if (disabled) input.disabled = true;
+    const commit = () => onCommit(input.value.trim());
+    input.addEventListener('blur', commit);
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') { e.preventDefault(); commit(); input.blur(); }
+    });
+    return input;
+  }
+
+  if (modelChips) {
+    controlsWrap.appendChild(el('div', 'uk-field-label', '모델'));
+    const chipRow = row('uk-chip-row', []);
+    for (const c of modelChips) {
+      const isOn = c.value === modelValue;
+      const b = button('ghost', c.label, { disabled, onClick: () => onModelChange({ model: c.value }) });
+      b.classList.add('uk-chip');
+      if (isOn) b.classList.add('is-pressed');
+      b.setAttribute('aria-pressed', String(isOn));
+      chipRow.appendChild(b);
+    }
+    controlsWrap.appendChild(chipRow);
+
+    const isCustomModel = modelValue && !modelChips.some((c) => c.value === modelValue);
+    const customInput = makeCommittableInput('모델 이름 직접 입력', isCustomModel ? modelValue : '', (v) => {
+      if (!v || v === modelValue) return;
+      onModelChange({ model: v });
+    });
+    controlsWrap.appendChild(customInput);
+  } else {
+    controlsWrap.appendChild(el('div', 'uk-field-label', '모델'));
+    const modelInput = makeCommittableInput('모델 이름', modelValue, (v) => {
+      if (v === (modelValue || '')) return;
+      onModelChange({ model: v || null });
+    });
+    controlsWrap.appendChild(modelInput);
+  }
+
+  controlsWrap.appendChild(el('div', 'uk-field-label uk-model-effort-label', '사고 강도'));
+  const effortValue = s.effort || null;
+  const effortRow = row('uk-chip-row', []);
+  for (const c of effortChips) {
+    const isOn = c.value === effortValue;
+    const b = button('ghost', c.label, { disabled, onClick: () => onModelChange({ effort: c.value }) });
+    b.classList.add('uk-chip');
+    if (isOn) b.classList.add('is-pressed');
+    b.setAttribute('aria-pressed', String(isOn));
+    effortRow.appendChild(b);
+  }
+  controlsWrap.appendChild(effortRow);
+  wrap.appendChild(controlsWrap);
+
+  return wrap;
+}
+
+function renderModel(grid) {
+  const { card, head, body } = buildCardShell(grid, 'model');
+  if (unsubscribeModelChanged) { unsubscribeModelChanged(); unsubscribeModelChanged = null; }
+  if (unsubscribeCliChangedForModel) { unsubscribeCliChangedForModel(); unsubscribeCliChangedForModel = null; }
+  const refresh = () => refreshModelCard(card, head, body);
+  unsubscribeModelChanged = window.athena.on('athena:model-changed', () => refresh());
+  // 계정 추가·전환이 다른 경로(온보딩 등)에서 일어나도 이 카드가 열려 있으면
+  // 반영돼야 한다 — athena:cli-changed는 이미 preload ON allowlist에 있다.
+  unsubscribeCliChangedForModel = window.athena.on('athena:cli-changed', () => refresh());
+  return refresh();
+}
+
+async function refreshModelCard(card, head, body) {
+  let modelState;
+  try {
+    modelState = await window.athena.invoke('athena:model-get');
+  } catch (err) {
+    clear(head);
+    clear(body);
+    missingHandlerCard(head, body, '모델', 'athena:model-get');
+    body.appendChild(errorNote(String((err && err.message) || err)));
+    return;
+  }
+  let providers = [];
+  try {
+    const cliData = await window.athena.invoke('athena:cli-list');
+    providers = (cliData && cliData.providers) || [];
+  } catch { /* 연결 상태 조회 실패 — 두 섹션 다 미연결로 그린다 */ }
+
+  clear(head);
+  clear(body);
+
+  head.appendChild(row('uk-settings-title', [
+    el('span', 'uk-settings-name', '모델'),
+  ]));
+  const actions = row('uk-settings-actions', []);
+  actions.appendChild(cardCloseButton(card));
+  head.appendChild(actions);
+
+  const claudeProvider = providers.find((p) => p.id === 'claude') || { id: 'claude', accounts: [] };
+  const codexProvider = providers.find((p) => p.id === 'codex') || { id: 'codex', accounts: [] };
+  const codexConnected = (codexProvider.accounts || []).length > 0;
+
+  const errBox = el('div');
+  const refresh = () => refreshModelCard(card, head, body);
+
+  // 성공 시 여기서 직접 다시 그리지 않는다 — main이 athena:model-set 성공 응답과
+  // 별개로 이 창(chatWin)에 athena:model-changed를 방송하고(app/main.js
+  // handleModelSet), renderModel()이 그 이벤트를 구독해 이미 다시 그린다. 여기서도
+  // refresh()를 부르면 같은 변경 하나에 athena:model-get·athena:cli-list를 두 번씩
+  // 보내는 꼴이다.
+  async function applyChange(provider, patch) {
+    clear(errBox);
+    try {
+      const res = await window.athena.invoke('athena:model-set', { provider, patch });
+      if (!res || res.ok === false) {
+        errBox.appendChild(errorNote((res && res.error) || '모델 설정을 저장하지 못했다'));
+      }
+    } catch (err) {
+      errBox.appendChild(errorNote('모델 설정 기능을 아직 사용할 수 없다 (athena:model-set 핸들러 없음)'));
+    }
+  }
+
+  body.appendChild(buildModelSection({
+    title: 'Claude',
+    provider: claudeProvider,
+    modelState: modelState && modelState.claude,
+    modelChips: CLAUDE_MODEL_CHIPS,
+    effortChips: CLAUDE_EFFORT_CHIPS,
+    disabled: false,
+    onModelChange: (patch) => applyChange('claude', patch),
+    onAccountsChanged: refresh,
+    errBox,
+  }));
+
+  body.appendChild(el('div', 'uk-model-divider'));
+
+  body.appendChild(buildModelSection({
+    title: 'Codex',
+    provider: codexProvider,
+    modelState: modelState && modelState.codex,
+    modelChips: null,
+    effortChips: CODEX_EFFORT_CHIPS,
+    disabled: !codexConnected,
+    onModelChange: (patch) => applyChange('codex', patch),
+    onAccountsChanged: refresh,
+    errBox,
+  }));
+
+  body.appendChild(errBox);
+
+  const note = el('div', 'uk-settings-note');
+  note.appendChild(el('div', null, '질의 실행은 Claude만 결선 — Codex 설정은 저장되고 결선 시 적용된다.'));
+  note.appendChild(el('div', null, '모델 접근 권한은 활성 계정의 플랜을 따른다 — 접근 불가 모델이면 질의가 오류로 표면화된다.'));
+  body.appendChild(note);
+}
+
 // UMD 각주(2026-08-18 렌더러 격리) — sanitize.js와 같은 패턴.
-const __exports = { renderAccounts, renderMcp, renderScreen };
+const __exports = { renderAccounts, renderMcp, renderScreen, renderModel, renderNav };
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = __exports;
 } else {

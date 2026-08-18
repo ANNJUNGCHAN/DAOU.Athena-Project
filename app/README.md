@@ -969,3 +969,106 @@ npm run verify:settings   # 설정 화면군 캡처
 `captures/ONB-*.png`·`captures/SETTINGS-*.png`가 실측 캡처다.
 `ONB-01-cli-step-list-load-failed.png`는 **정상 상태가 아니라 `cli-list` 실패
 상태**의 캡처다 — 그 상황에서도 [계속]이 잠기는지 보려고 남겼다.
+
+## 설정 사이드바 · 모델 설정 · 창 단축키 (2026-08-18)
+
+Paper 43쪽 확정안 세 가지를 결선했다 — 설정 사이드바, 모델·계정 설정, Windows
+표준 의미론의 창 단축키.
+
+### 설정 사이드바 구조
+
+`#dot` 클릭 또는 커맨드바("설정")로 여는 설정 모드는 이제 좌측 nav(`#settingsNav`)
++ 우측 카드(`#settingsGrid`) 2단 구성이다(`lib/settings-cards.js` `renderNav`,
+`chat.js` `openSettings`). 이전 판은 계좌·MCP 카드를 한 번에 같이 그렸는데,
+그 판을 대체한다.
+
+- nav 항목은 **화면 · 계좌 · MCP 서버 · 모델** 4개 고정, 리스트박스 키보드 문법
+  (↑↓는 포커스만, Enter/Space가 선택을 커밋)이다. 기본 선택은 **화면**이다.
+- 선택할 때마다 `grid.replaceChildren()`을 먼저 불러 이전 카드를 지운다 —
+  `#settingsGrid`에는 **항상 카드 하나만** 산다. 계좌·MCP 카드를 그리는 함수
+  자체(`renderAccounts`/`renderMcp`)는 그대로 재사용했다 — 새로 만들지 않았다.
+- 계좌·MCP 항목의 배지는 각 목록 채널(`athena:account-list`/`athena:mcp-list`)을
+  다시 불러 개수를 채운다(`refreshNavCount`) — nav 자체는 카드 내용을 모른다.
+
+### 모델 설정 — `--model`/`--effort` 결선
+
+`lib/main/model-prefs.js`가 `athena-model.json`(userData)에 `{claude:{model,effort},
+codex:{model,effort}}`를 저장한다. `main.js`의 `runLiveQuery()`가 매 질의마다
+`modelPrefs.get().claude`를 읽어 `claude-runner.js buildArgs()`에 넘긴다 —
+값이 `null`이면 `--model`/`--effort` 인자 자체를 안 붙여 `claude -p` CLI 기본값을
+쓴다. Codex는 **저장만** 한다 — 이 앱의 질의 실행은 `claude -p` 하나뿐이라 Codex
+설정을 실제로 소비하는 경로가 아직 없다(설정 화면 정직성 노트에 명시).
+
+값 검증은 저장 전에 거부한다(조용히 버리지 않는다) — 모델명은 영문·숫자·점·
+하이픈·대괄호 64자 이내에 선두 `-` 금지(`claude` 인자 파서가 값을 플래그로
+오독하는 걸 막는다), effort는 공급자별 화이트리스트
+(`claude`: low/medium/high/xhigh/max, `codex`: minimal/low/medium/high/xhigh)다.
+
+모델 패널(`lib/settings-cards.js` `renderModel`/`buildModelSection`)은 Claude·
+Codex 섹션마다 **다계정 목록**을 그린다(`athena:cli-list`의 `accounts[]`, 2~3개
+가능) — 활성 계정은 정적 행(배지만), 비활성 행은 버튼이라 누르면
+`athena:cli-set-active`로 무확인 전환된다(계좌 카드의 "비활성 계좌 클릭=전환"과
+같은 문법). "+ 계정 추가"는 `athena:cli-login`으로 새 콘솔 창의 로그인 명령을
+띄운다 — 완료 여부는 `athena:cli-changed` 방송을 구독해 반영한다(폴링,
+`main.js pollCliChangesAfterLogin`). 계정이 하나도 없으면 "미연결 · 연결" 행
+하나만 보여준다. 모델·강도 칩은 연결 여부와 무관하게 계정 UI는 항상 조작
+가능하되(연결해야 잠금이 풀리므로), 모델·강도 컨트롤만 미연결 시 잠긴다
+(`.uk-model-controls.is-disabled`). "모델 접근 권한은 활성 계정의 플랜을 따른다 —
+접근 불가 모델이면 질의가 오류로 표면화된다"는 정직성 노트로 명시했다(이 앱이
+플랜별 모델 접근 가능 여부를 사전에 알 방법이 없다).
+
+### 창 단축키 — Windows 표준 의미론
+
+Win+←/→/↑/↓가 이 앱에서 OS 표준 창 단축키와 같은 뜻으로 통한다(자체 조합이
+아니다): **←/→**는 창 짝을 현재 디스플레이 workArea 좌/우 절반에 배치(크기
+불변, `lib/main/window-placement.js` 순수 함수 + 단위 테스트), **↑**는 최대화
+토글(= 창 제어 □ 버튼, `chatBaseH↔chatMaxH`), **↓**는 "최대화 상태면 복원,
+아니면 두 창 최소화"(Windows의 restore-then-minimize). `Ctrl+Alt+방향키`는
+보조 경로이고 같은 의미론을 그대로 따른다.
+
+**실측이 1차 설계를 뒤집었다 (2026-08-18, OS 레벨 SendInput 4회 실측 —
+`qa-win-arrow.ps1` → `captures/qa-win-arrow.json`).** 원래 1차 경로는
+`before-input-event`(`wireWindowsKeyShortcuts`)였는데, **Win+방향키는 OS가
+항상 선점해 이 핸들러에 아예 도달하지 않는다**(mdlog 도달 0건 — resizable
+여부와 무관). 그래서 **스냅 대상화로 승급했다**: `resizable:true` + 크기
+잠금(캔버스는 min=max 완전 잠금, 채팅창은 폭 고정 + 높이만
+chatBaseH~chatMaxH 범위)으로 창을 OS 스냅 대상으로 만들고, OS가 창을 움직인
+**결과**를 앱이 받아 정착시킨다:
+
+- **Win+←/→** → OS가 포커스 창을 스냅 이동/리사이즈 → `move`/`resize` 디바운스
+  + `expectedBounds` 대조(`handleForeignArrange` — 앱이 마지막으로 지정한
+  bounds와 다르면 OS 주도)로 감지 → `placeWindows(left|right)`가 짝 전체를 그
+  절반의 앱 레이아웃(크기 불변)으로 정착. `win.snapped` 플래그는 크기 잠금
+  창에서 서지 않는 것이 실측됐고, 키보드 스냅은 드래그 모달 루프가 없어
+  과거형 이벤트(`moved`/`resized`)도 안 온다 — 현재형+디바운스가 정답이었다.
+- **Win+↑** → OS maximize 이벤트 → 즉시 `unmaximize` + 렌더러 위임. 위임은
+  `unmaximize` 완료 후로 지연한다 — 복원 setBounds가 비동기라 먼저 보내면
+  렌더러의 토글을 복원이 덮어써 "2회차 토글이 안 먹는" 경쟁이 실측됐다(3차).
+  스냅 후 Win+↑는 Windows 복원 사각형 의미론대로 스냅 전 위치로 돌아가며
+  최대화된다(네이티브 동작과 일치).
+- **Win+↓** → OS가 포커스 창을 최소화 → `minimize` 이벤트에서 짝 창도 함께
+  내린다(복원 짝맞춤은 기존 restore 핸들러).
+
+`globalShortcut`은 다른 앱과 전역 충돌 위험이 있어(electron#9206) 여전히 쓰지
+않는다. `before-input-event` 배선은 무해한 백스톱으로 남긴다(도달하면 처리).
+
+**높이 상태(auto-grow·수동 오버라이드·□ 버튼 상태)의 단일 소유자는 렌더러다**
+(`chat.js`). 그래서 ↑/↓는 main이 `setChatHeight()`를 직접 부르지 않는다 —
+`athena:window-key`(신규 IPC, `preload.js` ON 허용목록에 추가)로 `chatWin`에
+위임하면 `chat.js`가 □ 버튼과 정확히 같은 로컬 함수(`toggleMaxHeight`/
+`restoreOrMinimize`)를 태운다. main이 직접 높이를 바꾸면 렌더러의 수동
+오버라이드 플래그가 안 켜져 다음 내용 변화에 자동 성장이 끼어들어 방금
+최대화한 창을 도로 줄이는 결함이 있었다 — 이 위임 구조가 그 결함의 수정이다.
+←/→는 렌더러 상태와 무관한 순수 위치 이동이라 main이 여전히 직접 처리한다.
+
+옛 의미론(↑=창 짝을 부팅 좌표로 복귀, "center")은 재정의로 키에서 빠졌지만
+함수(`main.js centerWindows()`)는 나중에 다시 쓸 수 있게 남겨뒀다 — 지금은
+어떤 키·IPC에도 매여 있지 않다.
+
+**실측 완료 (2026-08-18 4차).** OS 레벨 키 주입(SendInput — Chromium을
+우회하지 않는 진짜 경로)으로 Win+←/→/↑/↑/↓ 전 조합의 동작을 좌표로 확인했다:
+← x=-307(왼 절반 중앙, 창 폭>절반이라 경계 규칙대로 겹침 배치 — 계산값과
+일치) · → x=653 · ↑ 789 성장(하단 고정) · ↑ 2회차 204 복원 · ↓ 최소화.
+원문은 `captures/qa-win-arrow.json`, 감지 로그는 `main-debug.log`의
+`os-arrange 감지`/`os-maximize 감지` 줄. 자동 검증(`verify.js` 검증14)은
+`athena:window-key`/`placeWindows()` 뒤쪽 경로를 상시 커버한다.

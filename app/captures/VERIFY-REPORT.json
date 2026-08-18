@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-08-18T10:00:53.747Z",
+  "startedAt": "2026-08-18T11:20:02.494Z",
   "layout": {
     "scale": 1,
     "screen": {
@@ -19,12 +19,12 @@
     "chatVisibleAtBoot": true,
     "shots": {
       "boot": {
-        "width": 2346,
-        "height": 312
+        "width": 2343,
+        "height": 311
       },
       "idle": {
         "width": 2340,
-        "height": 336
+        "height": 333
       }
     },
     "chatBootedAfterBoot": true,
@@ -48,24 +48,24 @@
   },
   "dotScreenPoint": {
     "x": 214.66666793823242,
-    "y": 1046.6666717529297
+    "y": 1045.6666717529297
   },
   "osCaptureAttempted": {
     "ok": true
   },
   "expand": {
-    "frameCount": 30,
+    "frameCount": 34,
     "p50": 16.699999999999818,
-    "p95": 49.899999999999864,
-    "max": 50,
-    "min": 16.59999999999991
+    "p95": 16.799999999999955,
+    "max": 16.799999999999955,
+    "min": 16.5
   },
   "collapse": {
     "frameCount": 35,
     "p50": 16.699999999999818,
-    "p95": 16.799999999999272,
-    "max": 16.899999999999636,
-    "min": 16.400000000000546
+    "p95": 16.800000000000182,
+    "max": 16.800000000000182,
+    "min": 16.599999999999454
   },
   "afterCollapse": {
     "canvasVisible": false
@@ -75,42 +75,42 @@
       "canvas": {
         "x": 180,
         "y": 74,
-        "width": 1565,
-        "height": 804
+        "width": 1563,
+        "height": 803
       },
       "chat": {
         "x": 180,
-        "y": 855,
+        "y": 856,
         "width": 1561,
-        "height": 224
+        "height": 223
       }
     },
     "afterCanvasMove": {
       "canvas": {
         "x": 260,
         "y": 74,
-        "width": 1567,
-        "height": 805
+        "width": 1561,
+        "height": 801
       },
       "chat": {
         "x": 180,
-        "y": 855,
+        "y": 856,
         "width": 1561,
-        "height": 224
+        "height": 223
       }
     },
     "afterChatResize": {
       "canvas": {
         "x": 260,
         "y": 74,
-        "width": 1567,
-        "height": 805
+        "width": 1561,
+        "height": 801
       },
       "chat": {
         "x": 180,
-        "y": 855,
-        "width": 1563,
-        "height": 325
+        "y": 856,
+        "width": 1561,
+        "height": 323
       }
     },
     "canvasMovedButChatUnchanged": true,
@@ -136,10 +136,10 @@
       "x": 180,
       "y": 830,
       "width": 1561,
-      "height": 252
+      "height": 251
     },
     "grewTallerThanBase": true,
-    "grownByPx": 47,
+    "grownByPx": 46,
     "finalAnswerText": "캔버스 창에 스트림, 리더, 공통 테이블을 띄웠습니다.",
     "cardChipCount": 3
   },
@@ -148,13 +148,13 @@
       "x": 180,
       "y": 830,
       "width": 1561,
-      "height": 252
+      "height": 251
     },
     "afterDrag": {
       "x": 180,
       "y": 670,
       "width": 1561,
-      "height": 413
+      "height": 411
     },
     "grewByDrag": true,
     "bottomEdgePinned": true
@@ -165,9 +165,14 @@
     "noNewWindowOnSecondClick": true,
     "renderedInChatWindow": true,
     "chatModeSteppedAside": true,
-    "accountsCardPresent": true,
-    "mcpCardPresent": true,
-    "singleCardAfterSecondClick": true,
+    "navExists": true,
+    "navHasFourItems": true,
+    "defaultPanelIsScreen": true,
+    "accountsPanelOnNavSelect": true,
+    "mcpPanelOnNavSelect": true,
+    "modelPanelOnNavSelect": true,
+    "modelPanelHasClaudeAccountRow": true,
+    "modelPanelHasModelChips": true,
     "noSettingsCardsOnCanvas": true,
     "chatGrewToMax": true,
     "dotIsRealButton": true,
@@ -175,6 +180,17 @@
     "noBearerLeak": true,
     "escReturnsToChat": true,
     "gridEmptiedOnClose": true
+  },
+  "settingsNavClicks": {
+    "navClickAccounts": "clicked",
+    "navClickMcp": "clicked",
+    "navClickModel": "clicked",
+    "navLabels": [
+      "화면",
+      "계좌",
+      "MCP 서버",
+      "모델"
+    ]
   },
   "settingsCommandBar": {
     "noNewWindowOnCommand": true,
@@ -250,20 +266,20 @@
       ],
       "count": 3,
       "scrollHeight": 832,
-      "clientHeight": 404
+      "clientHeight": 402
     }
   },
   "dragNoResize": {
     "scaleFactor": 1.5,
     "before": {
       "x": 180,
-      "y": 887,
+      "y": 884,
       "width": 1561,
       "height": 205
     },
     "after": {
       "x": 180,
-      "y": 887,
+      "y": 884,
       "width": 1561,
       "height": 205
     },
@@ -307,5 +323,133 @@
       "vpBars": 24
     }
   },
-  "finishedAt": "2026-08-18T10:01:17.467Z"
+  "windowPlacement": {
+    "beforePlacement": {
+      "canvas": {
+        "x": 180,
+        "y": 74,
+        "width": 1561,
+        "height": 801
+      },
+      "chat": {
+        "x": 180,
+        "y": 874,
+        "width": 1561,
+        "height": 205
+      }
+    },
+    "afterLeft": {
+      "canvas": {
+        "x": -300,
+        "y": 74,
+        "width": 1561,
+        "height": 801
+      },
+      "chat": {
+        "x": -300,
+        "y": 874,
+        "width": 1561,
+        "height": 205
+      }
+    },
+    "afterRight": {
+      "canvas": {
+        "x": 660,
+        "y": 74,
+        "width": 1561,
+        "height": 801
+      },
+      "chat": {
+        "x": 660,
+        "y": 874,
+        "width": 1561,
+        "height": 205
+      }
+    },
+    "afterMaximize": {
+      "x": 660,
+      "y": 291,
+      "width": 1561,
+      "height": 789
+    },
+    "afterRestore": {
+      "x": 660,
+      "y": 876,
+      "width": 1561,
+      "height": 205
+    },
+    "afterCenter": {
+      "canvas": {
+        "x": 180,
+        "y": 74,
+        "width": 1561,
+        "height": 801
+      },
+      "chat": {
+        "x": 180,
+        "y": 875,
+        "width": 1561,
+        "height": 206
+      }
+    },
+    "pairMovedTogetherOnLeft": true,
+    "pairMovedTogetherOnRight": true,
+    "leftDiffersFromRight": true,
+    "sizeUnchangedOnLeft": true,
+    "sizeUnchangedOnRight": true,
+    "maximizedViaWindowKey": true,
+    "maximizedReachedChatMaxH": true,
+    "restoredViaWindowKey": true,
+    "anchorKeptAfterSnap": true,
+    "centerReturnsToBootOrigin": true
+  },
+  "modelPrefs": {
+    "setOk": {
+      "ok": true,
+      "state": {
+        "claude": {
+          "model": "sonnet",
+          "effort": "low"
+        },
+        "codex": {
+          "model": null,
+          "effort": null
+        }
+      }
+    },
+    "getAfterSet": {
+      "claude": {
+        "model": "sonnet",
+        "effort": "low"
+      },
+      "codex": {
+        "model": null,
+        "effort": null
+      }
+    },
+    "onDisk": {
+      "claude": {
+        "model": "sonnet",
+        "effort": "low"
+      },
+      "codex": {
+        "model": null,
+        "effort": null
+      }
+    },
+    "rejectLeadingDash": {
+      "ok": false,
+      "error": "invalid-model"
+    },
+    "rejectInvalidEffort": {
+      "ok": false,
+      "error": "invalid-effort"
+    },
+    "savedCorrectly": true,
+    "persistedToDisk": true,
+    "rejectsLeadingDash": true,
+    "rejectsInvalidEffort": true,
+    "rejectedValuesDidNotOverwrite": true
+  },
+  "finishedAt": "2026-08-18T11:20:30.672Z"
 }
