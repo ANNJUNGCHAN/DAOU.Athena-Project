@@ -80,6 +80,27 @@ _RENDER_CANVAS_INPUT_SCHEMA: dict[str, Any] = {
         "canvas_type": _CANVAS_TYPE_PROPERTY,
         "data": {"type": "object"},
         "caption": {"type": ["string", "null"]},
+        # 배치·생애주기 규칙(plan/canvas-taxonomy.md, 2026-08-18 확정)의 모델
+        # 접점 둘. 판정은 게이트웨이가 한다 — 무효값은 거부가 아니라 무시/필터다
+        # (위 canvas_type과 같은 이유: 폴백·관용이 이 계약의 문법이다).
+        "layout": {
+            "type": ["string", "null"],
+            "description": (
+                "폭 등급 힌트(선택): 'half'(반폭) 또는 'full'(전폭). 카드 배치 "
+                "순서는 바꿀 수 없다(도착순 고정) — 폭 등급 승격·강등만 가능하다. "
+                "그 외 값은 무시되고 형상별 기본 문법으로 렌더된다."
+            ),
+        },
+        "drop_types": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": (
+                "턴별 큐레이션(선택): 이번 렌더와 함께 치울, 현재 질의와 무관해진 "
+                "기존 카드의 canvas_type 목록. 카드는 대화가 길어져도 쌓이지 "
+                "않는다 — 지금 질문과 무관해진 카드는 여기 담아 치운다. "
+                "알 수 없는 값은 무시된다."
+            ),
+        },
     },
 }
 
@@ -362,6 +383,25 @@ class AthenaGateway:
         return fixed
 
 
+_LAYOUT_GRADES = ("half", "full")
+
+
+def _normalize_layout(value: Any) -> str | None:
+    """폭 등급 힌트 — 'half'/'full'만 통과, 그 외는 None(렌더러가 문법 기본값으로 폴백)."""
+    return value if value in _LAYOUT_GRADES else None
+
+
+def _normalize_drop_types(value: Any) -> list[str]:
+    """턴별 큐레이션 목록 — 알려진 canvas_type만 남기고 중복 제거(순서 보존)."""
+    if not isinstance(value, list):
+        return []
+    out: list[str] = []
+    for item in value:
+        if isinstance(item, str) and item in _KNOWN_CANVAS_TYPES and item not in out:
+            out.append(item)
+    return out
+
+
 def _render_canvas(arguments: dict[str, Any]) -> types.CallToolResult:
     canvas_type = arguments.get("canvas_type", "free")
     data = arguments.get("data", {})
@@ -373,6 +413,11 @@ def _render_canvas(arguments: dict[str, Any]) -> types.CallToolResult:
         "fallback_reason": result.fallback_reason,
         "caption": caption,
         "data": result.data,
+        # 배치·생애주기 규칙(canvas-taxonomy 2026-08-18)의 모델 접점 — 렌더러
+        # (app/canvas.js)가 읽는다. 무효 layout은 None으로, drop_types는 알려진
+        # canvas_type만 남긴다(거부하지 않는다 — canvas_type 폴백과 같은 관용 문법).
+        "layout": _normalize_layout(arguments.get("layout")),
+        "drop_types": _normalize_drop_types(arguments.get("drop_types")),
     }
     return types.CallToolResult(
         content=[types.TextContent(type="text", text=json.dumps(payload, ensure_ascii=False))],

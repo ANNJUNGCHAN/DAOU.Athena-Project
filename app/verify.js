@@ -525,6 +525,90 @@ app.whenReady().then(async () => {
   };
   console.log('[verify] 검증9(창 기본 기능):', JSON.stringify(report.windowBasics));
 
+  // ---------- 검증 10: 카드 배치·생애주기 규칙 (2026-08-18) ----------
+  // 규칙 원본: plan/canvas-taxonomy.md "배치·생애주기 규칙". 폭은 형상이 정하고
+  // (w-half/w-full) 순서는 도착순, AI layout 힌트는 폭 등급 승격·강등만,
+  // drop_types는 턴별 큐레이션, 높이 예산(뷰포트 2배·최소 3장)은 안전망이다.
+  // 실배선 경로(athena:add-canvas-live)는 합성 봉투로 구동한다 — main.js가
+  // 실왕복 후 보내는 채널·형상 그대로이고 quota를 쓰지 않는다(파일 상단 원칙).
+  if (!canvasWin.isVisible()) { dlog('expand for check10'); await mainMod.expandCanvasWindow(); await wait(200); }
+  canvasWin.webContents.send('athena:clear-canvases');
+  await wait(120);
+
+  const gridProbe = () => canvasWin.webContents.executeJavaScript(`
+    (() => {
+      const grid = document.getElementById('grid');
+      const cards = [...grid.querySelectorAll('.card')];
+      return {
+        order: cards.map((c) => [...c.classList].find((k) => !['card', 'w-half', 'w-full', 'highlight'].includes(k))),
+        widths: cards.map((c) => (c.classList.contains('w-full') ? 'full' : (c.classList.contains('w-half') ? 'half' : 'none'))),
+        count: cards.length,
+        scrollHeight: grid.scrollHeight,
+        clientHeight: grid.clientHeight,
+      };
+    })()
+  `);
+  const liveEnvelope = (envelope) => canvasWin.webContents.send('athena:add-canvas-live', {
+    status: 'success',
+    envelope: { fell_back: false, fallback_reason: null, layout: null, drop_types: [], ...envelope },
+  });
+
+  // 10a — 도착순 + 형상별 폭 문법: stream → table → reader 순서로 보낸다. 옛 CSS는
+  // 타입 고정 order라 이 순서가 stream·reader·table로 재정렬됐다 — 이제 도착순이 규범.
+  canvasWin.webContents.send('athena:add-canvas', { type: 'stream' });
+  await wait(120);
+  canvasWin.webContents.send('athena:add-canvas', { type: 'table' });
+  await wait(120);
+  canvasWin.webContents.send('athena:add-canvas', { type: 'reader' });
+  await wait(200);
+  const arrival = await gridProbe();
+
+  // 10b — layout 힌트 승격: stream(기본 반폭)을 'full'로. 같은 타입 재렌더라
+  // 기존 stream 카드를 갈아치우고 맨 뒤(최신 도착)로 간다 — 도착순 규칙의 귀결.
+  const streamRecord = { ts: '2026-08-18T09:00:00+09:00', ts_precision: 'second', source: 'verify', title: '검증 레코드', url: 'https://example.com' };
+  liveEnvelope({ canvas_type: 'stream', caption: '검증10 스트림', layout: 'full', data: { records: [streamRecord] } });
+  await wait(200);
+  const promoted = await gridProbe();
+
+  // 10c — 무효 힌트('mega')는 조용히 문법 기본값(반폭)으로 폴백한다.
+  liveEnvelope({ canvas_type: 'stream', caption: '검증10 스트림', layout: 'mega', data: { records: [streamRecord] } });
+  await wait(200);
+  const invalidHint = await gridProbe();
+
+  // 10d — 턴별 큐레이션: reader 봉투의 drop_types:['table']가 픽스처 table을 치운다.
+  liveEnvelope({ canvas_type: 'reader', caption: '검증10 리더', drop_types: ['table'], data: { title: '검증10 리더', body_markdown: '# 검증\n큐레이션 본문' } });
+  await wait(200);
+  const curated = await gridProbe();
+  await shot(canvasWin, '12-card-layout-rules.png');
+
+  // 10e — 높이 예산 집행: 창을 절반 높이로 줄여 예산을 좁힌 뒤 4장째를 추가하면
+  // 가장 오래된 카드부터 제거된다(최소 3장 보장이라 3장에서 멈춘다).
+  const cbBefore = canvasWin.getBounds();
+  canvasWin.setBounds({ ...cbBefore, height: Math.round(cbBefore.height / 2) });
+  await wait(200);
+  canvasWin.webContents.send('athena:add-canvas', { type: 'table' });
+  await wait(150);
+  liveEnvelope({ canvas_type: 'free', caption: '검증10 자유', data: { a: 1, b: '검증' } });
+  await wait(250);
+  const afterBudget = await gridProbe();
+  canvasWin.setBounds(cbBefore);
+  await wait(150);
+
+  report.cardLayout = {
+    arrivalOrder: arrival.order,
+    arrivalOrderIsSendOrder: JSON.stringify(arrival.order) === JSON.stringify(['stream', 'table', 'reader']),
+    grammarWidths: arrival.widths,
+    grammarWidthsCorrect: JSON.stringify(arrival.widths) === JSON.stringify(['half', 'full', 'half']),
+    hintPromotedStreamToFull: promoted.widths[promoted.order.indexOf('stream')] === 'full',
+    promotedOrder: promoted.order,
+    invalidHintFallsBackToHalf: invalidHint.widths[invalidHint.order.indexOf('stream')] === 'half',
+    dropTypesRemovedTable: !curated.order.includes('table'),
+    curatedOrder: curated.order,
+    budgetEnforcedOldestFirst: afterBudget.count === 3 && !afterBudget.order.includes('stream'),
+    afterBudget,
+  };
+  console.log('[verify] 검증10(카드 배치·생애주기):', JSON.stringify(report.cardLayout));
+
   report.finishedAt = new Date().toISOString();
   fs.writeFileSync(path.join(CAPTURES, 'VERIFY-REPORT.json'), JSON.stringify(report, null, 2));
   console.log('[verify] 리포트 저장:', path.join(CAPTURES, 'VERIFY-REPORT.json'));

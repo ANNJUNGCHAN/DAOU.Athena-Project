@@ -5,6 +5,7 @@ const { sanitize } = require('./lib/sanitize');
 const { renderMarkdownInto } = require('./lib/markdown');
 const { loadStreamItems, loadFinancialStatement, loadReaderMarkdown } = require('./lib/mockdata');
 const { errorNote } = require('./lib/ui-kit');
+const { widthGradeFor, dropTargetsFor, exceedsHeightBudget, MIN_CARDS } = require('./lib/canvas-layout');
 
 const mosaic = document.getElementById('mosaic');
 const sheen = document.getElementById('sheen');
@@ -13,9 +14,32 @@ const grid = document.getElementById('grid');
 function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
 function easeInCubic(t) { return t * t * t; }
 
+// 굴절층·데이터층 분리(soul.md §7 완화책) — 애니메이션 굴절의 두 축을 따로 토글한다.
+// 기본은 현행(modulate/live) — 스파이크 계측(verify-glass-separation.js)이 수치로
+// 채택을 판정한다(plan.md 다음 수 7 "프로토타입 실측 먼저").
+// - sheen: 'modulate'(현행 — blur 반경을 매 프레임 30→0px 변조)
+//          | 'bake'(정적 프로스트 — 반경은 30px 고정, 서리층의 농도(opacity)만 변조.
+//            유리 표면의 페이드가 아니라 안개층의 걷힘이라 soul.md §7 "굴절 변조로
+//            등장" 규범과 양립한다는 가설 — 판정은 실측이 한다)
+// - cards: 'live'(현행 — 카드 backdrop-filter 유지)
+//          | 'baked'(애니메이션 동안 카드를 정적 프로스트로 굽는다, canvas.css .frost-baked)
+let glassSeparation = { sheen: 'modulate', cards: 'live' };
+ipcRenderer.on('athena:glass-separation', (e, payload) => {
+  glassSeparation = {
+    sheen: payload && payload.sheen === 'bake' ? 'bake' : 'modulate',
+    cards: payload && payload.cards === 'baked' ? 'baked' : 'live',
+  };
+});
+
 // ---------- 점 → 캔버스 확장/수축 (spike v2.js 이식, setBounds 애니메이션 없음) ----------
 function runAnimation({ cx, cy, rmax, duration, mode }) {
   return new Promise((resolve) => {
+    const gs = glassSeparation; // 애니메이션 도중 토글이 바뀌어도 한 실행 안에서는 일관되게
+    if (gs.cards === 'baked') mosaic.classList.add('frost-baked');
+    if (gs.sheen === 'bake') {
+      sheen.style.backdropFilter = 'blur(30px)';
+      sheen.style.webkitBackdropFilter = 'blur(30px)';
+    }
     const timestamps = [];
     const t0 = performance.now();
     function frame(now) {
@@ -28,18 +52,28 @@ function runAnimation({ cx, cy, rmax, duration, mode }) {
       // 스파이크(canvas.html)는 등장 끝값을 6px로 남겨뒀는데, 이 상태로 캡처해보니
       // 실제 재무 데이터·텍스트가 영구적으로 흐려져 읽히지 않았다(soul.md §8
       // "정보 정직성" 위반 — 실측으로 발견, W2 구현 중 정정). 정지 상태는 0이어야 한다.
-      const blur = mode === 'expand' ? (30 * (1 - et)) : (30 * et);
       mosaic.style.clipPath = `circle(${r}px at ${cx}px ${cy}px)`;
-      sheen.style.backdropFilter = `blur(${blur}px)`;
-      sheen.style.webkitBackdropFilter = `blur(${blur}px)`;
+      if (gs.sheen === 'bake') {
+        // 정적 프로스트 — 반경 고정, 농도만 변조(굴절 재계산을 반경 변화와 분리)
+        sheen.style.opacity = String(mode === 'expand' ? (1 - et) : et);
+      } else {
+        const blur = mode === 'expand' ? (30 * (1 - et)) : (30 * et);
+        sheen.style.backdropFilter = `blur(${blur}px)`;
+        sheen.style.webkitBackdropFilter = `blur(${blur}px)`;
+      }
       if (t < 1) {
         requestAnimationFrame(frame);
       } else {
         if (mode === 'expand') {
           // 안전망 — 부동소수 오차로 완전히 0에 못 미치는 경우를 명시적으로 정리한다.
+          // (bake 변형은 반경이 30px 고정이었으므로 여기서 0으로 되돌리는 것이
+          // 정지 상태 규범 "blur는 반드시 0px"의 유일한 경로다.)
           sheen.style.backdropFilter = 'blur(0px)';
           sheen.style.webkitBackdropFilter = 'blur(0px)';
         }
+        // 잔류 방지 — 토글 상태와 무관하게 무조건 정리한다(구운 서리·농도 인라인).
+        sheen.style.opacity = '';
+        mosaic.classList.remove('frost-baked');
         resolve(timestamps);
       }
     }
@@ -103,6 +137,13 @@ function addLiveCard(result) {
   }
   const envelope = result.envelope;
   if (!envelope) return renderLiveNotice('캔버스 응답에 데이터가 없다.');
+  // 턴별 큐레이션(배치·생애주기 규칙 3, canvas-taxonomy) — 모델이 봉투
+  // drop_types로 지목한, 현재 질의와 무관해진 카드를 렌더 전에 치운다.
+  // 'table'은 픽스처 table과 실배선 mcp-table 둘 다다(lib/canvas-layout.js).
+  for (const cls of dropTargetsFor(envelope.drop_types)) {
+    const el = grid.querySelector(`.card.${cls}`);
+    if (el) el.remove();
+  }
   // ★ canvas_type은 응답값이다 — 요청값이 아니다(S4 RESULT.md §5). success/fallback
   // 둘 다 이 필드로 어떤 카드를 그릴지 정한다. 알려진 4종(table/stream/reader) 중
   // 하나가 아니면(대개 free로 폴백) 자유 카드로 떨어뜨린다 — 폴백은 예외가 아니라
@@ -132,7 +173,7 @@ function renderLiveNotice(message) {
 // 재무제표 고정 스키마가 아니라 스키마 불특정 {columns:[{key,label}], rows:[{key:value}]}다.
 // GLOSSARY.md §2 신규④ "공통 테이블 — 스키마 불특정 레코드. '부모'이자 기본값".
 function renderMcpTable(envelope) {
-  const { body } = makeCard('mcp-table', envelope.caption || '공통 테이블');
+  const { body } = makeCard('mcp-table', envelope.caption || '공통 테이블', envelope.layout);
   const cols = (envelope.data && Array.isArray(envelope.data.columns)) ? envelope.data.columns : [];
   const rows = (envelope.data && Array.isArray(envelope.data.rows)) ? envelope.data.rows : [];
 
@@ -178,7 +219,7 @@ function renderMcpTable(envelope) {
 // textContent 대입 전에 폴백 문구를 둔다. sanitize한 문자열은 textContent로만
 // 넣는다 — innerHTML 금지(CLAUDE.md §6).
 function renderLiveStream(envelope) {
-  const { body } = makeCard('stream', envelope.caption || '스트림 · 뉴스');
+  const { body } = makeCard('stream', envelope.caption || '스트림 · 뉴스', envelope.layout);
   const records = (envelope.data && Array.isArray(envelope.data.records)) ? envelope.data.records : [];
   if (!records.length) {
     body.appendChild(errorNote('빈 스트림 — records가 없다.'));
@@ -240,7 +281,7 @@ function formatRecordTs(ts, precision) {
 // 않고 문단 하나로 그대로 낸다.
 function renderLiveReader(envelope) {
   const data = (envelope.data && typeof envelope.data === 'object') ? envelope.data : {};
-  const { body } = makeCard('reader', data.title || envelope.caption || '리더 · 공시 원문');
+  const { body } = makeCard('reader', data.title || envelope.caption || '리더 · 공시 원문', envelope.layout);
   if (data.error_state === 'not_found') {
     body.appendChild(errorNote('문서를 찾을 수 없다 — not_found.'));
     return;
@@ -276,7 +317,7 @@ function renderLiveReader(envelope) {
 // envelope.data를 재귀적으로 key/value 트리로 펼친다. innerHTML 미사용
 // (CLAUDE.md §6) — DOM 노드만 만든다.
 function renderFreeCanvas(envelope) {
-  const { body } = makeCard('free', envelope.caption || '자유 카드');
+  const { body } = makeCard('free', envelope.caption || '자유 카드', envelope.layout);
   if (envelope.fell_back) {
     const note = document.createElement('div');
     note.className = 'fin-meta';
@@ -359,11 +400,28 @@ function cardCloseButton(card) {
   return b;
 }
 
-function makeCard(type, title) {
+// 높이 예산 안전망(배치·생애주기 규칙 4) — 총높이 ≤ 뷰포트 2배, 최소 3장 보장.
+// 큐레이션(규칙 3, drop_types)이 먼저 돌므로 여기 닿는 경우는 드물어야 한다.
+// 초과 시 가장 오래된(도착순 맨 앞) 카드부터 제거한다. 판정 로직은
+// lib/canvas-layout.js — 순수 함수라 node --test로 검증된다.
+function enforceHeightBudget() {
+  let cards = grid.querySelectorAll('.card');
+  while (
+    cards.length > MIN_CARDS &&
+    exceedsHeightBudget(grid.scrollHeight, grid.clientHeight, cards.length)
+  ) {
+    cards[0].remove();
+    cards = grid.querySelectorAll('.card');
+  }
+}
+
+function makeCard(type, title, layoutHint) {
   const existing = grid.querySelector(`.card.${type}`);
-  if (existing) existing.remove(); // 재요청 시 새로 갱신
+  if (existing) existing.remove(); // 재요청 시 새로 갱신 — 큐레이션(규칙 3)의 특수 사례
   const card = document.createElement('div');
-  card.className = `card ${type}`;
+  // 폭은 형상이 정하고(w-half/w-full), AI layout 힌트는 등급 승격·강등만 한다.
+  // 순서는 도착순(appendChild) — canvas-taxonomy "배치·생애주기 규칙 (2026-08-18)".
+  card.className = `card ${type} w-${widthGradeFor(type, layoutHint)}`;
   const head = document.createElement('div');
   head.className = 'card-head';
   const h = document.createElement('div');
@@ -383,6 +441,7 @@ function makeCard(type, title) {
   card.appendChild(head);
   card.appendChild(body);
   grid.appendChild(card);
+  enforceHeightBudget();
   return { card, body };
 }
 

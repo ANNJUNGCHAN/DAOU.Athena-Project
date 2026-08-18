@@ -207,6 +207,41 @@ async def test_render_canvas_schema_mismatch_falls_back_to_free_and_reports_it(t
     assert payload["fallback_reason"] is not None
 
 
+async def test_render_canvas_layout_hint_normalization(tmp_path):
+    """배치 규칙(canvas-taxonomy 2026-08-18) — layout은 'half'/'full'만 통과하고
+    그 외는 None으로 정규화된다(거부 아님 — 렌더러가 문법 기본값으로 폴백)."""
+    gw = _bare_gateway(tmp_path)
+
+    args = {"canvas_type": "free", "data": {"x": 1}, "layout": "full"}
+    payload = json.loads((await gw.dispatch_call(RENDER_CANVAS_TOOL, args)).content[0].text)
+    assert payload["layout"] == "full"
+
+    args_bad = {"canvas_type": "free", "data": {"x": 1}, "layout": "mega"}
+    payload_bad = json.loads(
+        (await gw.dispatch_call(RENDER_CANVAS_TOOL, args_bad)).content[0].text
+    )
+    assert payload_bad["layout"] is None
+
+    args_none = {"canvas_type": "free", "data": {"x": 1}}
+    payload_none = json.loads(
+        (await gw.dispatch_call(RENDER_CANVAS_TOOL, args_none)).content[0].text
+    )
+    assert payload_none["layout"] is None
+    assert payload_none["drop_types"] == []
+
+
+async def test_render_canvas_drop_types_filters_unknown_and_dedupes(tmp_path):
+    """턴별 큐레이션 — drop_types는 알려진 canvas_type만 남기고 중복·비문자열을 버린다."""
+    gw = _bare_gateway(tmp_path)
+    args = {
+        "canvas_type": "free",
+        "data": {"x": 1},
+        "drop_types": ["stream", "stream", "nope", "table", 42],
+    }
+    payload = json.loads((await gw.dispatch_call(RENDER_CANVAS_TOOL, args)).content[0].text)
+    assert payload["drop_types"] == ["stream", "table"]
+
+
 async def test_save_canvas_writes_file(tmp_path):
     save_dir = tmp_path / "canvases"
     gw = AthenaGateway(
