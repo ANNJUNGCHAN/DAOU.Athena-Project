@@ -91,7 +91,6 @@ class Settings(BaseSettings):
     local_bearer_token: SecretStr | None = None
     request_timeout_seconds: float = 10.0
     max_rate_limit_retries: int = 1
-    max_pages: int = 100
     # The investment brain (LadybugDB graph projection) is independent of Kiwoom
     # credentials — off by default so the existing test suite and any deployment that
     # never opts in never touches a real database file. See lifespan.py's build_lifespan.
@@ -179,8 +178,6 @@ class Settings(BaseSettings):
             raise ValueError("request_timeout_seconds must be positive")
         if not 0 <= self.max_rate_limit_retries <= 5:
             raise ValueError("max_rate_limit_retries must be between 0 and 5")
-        if not 1 <= self.max_pages <= 1000:
-            raise ValueError("max_pages must be between 1 and 1000")
         return self
 
     @property

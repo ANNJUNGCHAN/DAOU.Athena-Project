@@ -111,6 +111,10 @@ class IngestionCoordinator:
         self._active_job_id: str | None = None
         self._enqueue_lock = asyncio.Lock()
         self._run_lock = asyncio.Lock()
+        # Guards start()'s done-check/create_task/refill sequence as one unit -- separate
+        # from _run_lock (guards claimed-job execution) and _enqueue_lock (guards queueing)
+        # so start() only ever contends with itself.
+        self._start_lock = asyncio.Lock()
         self._writer_task: asyncio.Task[None] | None = None
         self._stopping = False
         # ADR investment-brain-architecture.md §4.2 step 3 ("신규 enqueue 차단") must take
@@ -133,14 +137,32 @@ class IngestionCoordinator:
         return job
 
     async def start(self, *, stale_after: timedelta = timedelta(minutes=10)) -> None:
-        if self._writer_task is not None and not self._writer_task.done():
-            return
-        self._stale_after = stale_after
-        await self.recover_stale_jobs(stale_after=stale_after)
-        self._stopping = False
-        self._shutting_down = False
-        self._writer_task = asyncio.create_task(self._writer_loop(), name="athena-ingestion-writer")
-        await self._refill_due_jobs()
+        # recover_stale_jobs() below awaits, so without this lock two concurrent start()
+        # calls could both pass the done-check before either creates a writer task --
+        # a TOCTOU that spawns two writers for one coordinator.
+        async with self._start_lock:
+            if self._writer_task is not None and not self._writer_task.done():
+                return
+            self._stale_after = stale_after
+            await self.recover_stale_jobs(stale_after=stale_after)
+            self._stopping = False
+            self._shutting_down = False
+            writer_task = asyncio.create_task(
+                self._writer_loop(), name="athena-ingestion-writer"
+            )
+            self._writer_task = writer_task
+            try:
+                await self._refill_due_jobs()
+            except BaseException:
+                # A failure here (including cancellation) must not leave the writer task
+                # referenced by nothing: cancel and await it before start() raises, so the
+                # coordinator is left as if start() never ran.
+                self._stopping = True
+                writer_task.cancel()
+                with suppress(asyncio.CancelledError):
+                    await writer_task
+                self._writer_task = None
+                raise
 
     async def drain(self) -> None:
         while True:

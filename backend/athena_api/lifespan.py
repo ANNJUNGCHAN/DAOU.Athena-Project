@@ -1,7 +1,7 @@
 """Application resource lifecycle."""
 
 from collections.abc import AsyncIterator
-from contextlib import asynccontextmanager
+from contextlib import asynccontextmanager, suppress
 from dataclasses import dataclass
 
 import httpx
@@ -55,7 +55,6 @@ def _publish_default(app: FastAPI, runtime: AccountRuntime | None) -> None:
         rate_per_second=5.0
     )
     app.state.kiwoom_order_rate_limiter = app.state.kiwoom_rate_limiter
-    app.state.kiwoom_ws_last_error = runtime.ws_last_error if runtime else None
 
 
 def _publish_brain(app: FastAPI, brain: BrainRuntime | None) -> None:
@@ -89,37 +88,61 @@ async def _open_brain(settings: Settings) -> BrainRuntime:
     (nothing calls HistoryStore.upsert_chat/upsert_completed_trade outside tests), so this
     only satisfies the lifecycle contract (start -> reject-new-enqueue -> drain -> cancel,
     symmetric with the app lifespan); it does not yet move real chat/trade data.
+
+    Every `except Exception` above is a deliberate demotion to a degraded runtime; none of
+    them catch cancellation (`CancelledError` is a `BaseException`), and startup being
+    aborted can cancel this coroutine at any of the awaits below. If that happened
+    uncaught, it would propagate past the caller's `brain = await _open_brain(...)`
+    assignment, leaving that local `None` -- so `build_lifespan`'s abort path calls
+    `_teardown_brain(app, None)` and cleans up nothing, leaking the process lock and any
+    opened store/history and stalling the next startup in this process. The outer
+    `except BaseException` below is only for that escape path: it does not change the
+    demotion semantics above, it just unwinds whatever was acquired so far before
+    re-raising so the caller's abort path still fires.
     """
     lock = BrainProcessLock.for_db_path(settings.brain_db_path, label=str(settings.brain_db_path))
     lock.acquire()
     store = GraphStore(settings.brain_db_path)
     history = HistoryStore(settings.brain_history_db_path)
     brain = BrainRuntime(store=store, lock=lock, history=history)
+    coordinator: IngestionCoordinator | None = None
     try:
-        settings.brain_db_path.parent.mkdir(parents=True, exist_ok=True)
-        await store.open()
-    except Exception as exc:
-        brain.last_error = str(exc)
-        lock.release()
+        try:
+            settings.brain_db_path.parent.mkdir(parents=True, exist_ok=True)
+            await store.open()
+        except Exception as exc:
+            brain.last_error = str(exc)
+            lock.release()
+            return brain
+        brain.ready = True
+        try:
+            await store.load_fts_extension()
+        except Exception as exc:
+            brain.fts_last_error = str(exc)
+        else:
+            brain.fts_ready = True
+        try:
+            await history.open()
+            coordinator = IngestionCoordinator(history, store)
+            await coordinator.start()
+        except Exception as exc:
+            brain.ingestion_last_error = str(exc)
+            await history.close()
+        else:
+            brain.coordinator = coordinator
+            brain.ingestion_ready = True
         return brain
-    brain.ready = True
-    try:
-        await store.load_fts_extension()
-    except Exception as exc:
-        brain.fts_last_error = str(exc)
-    else:
-        brain.fts_ready = True
-    try:
-        await history.open()
-        coordinator = IngestionCoordinator(history, store)
-        await coordinator.start()
-    except Exception as exc:
-        brain.ingestion_last_error = str(exc)
-        await history.close()
-    else:
-        brain.coordinator = coordinator
-        brain.ingestion_ready = True
-    return brain
+    except BaseException:
+        if coordinator is not None:
+            with suppress(BaseException):
+                await coordinator.stop()
+        with suppress(BaseException):
+            await history.close()
+        with suppress(BaseException):
+            await store.close()
+        with suppress(BaseException):
+            lock.release()
+        raise
 
 
 async def _teardown_brain(app: FastAPI, brain: BrainRuntime | None) -> None:
@@ -158,7 +181,6 @@ def _build_runtime(
             client=http_client,
             timeout_seconds=settings.request_timeout_seconds,
             max_rate_limit_retries=settings.max_rate_limit_retries,
-            max_pages=settings.max_pages,
         ),
         order_client=KiwoomClient(
             auth,
@@ -166,7 +188,6 @@ def _build_runtime(
             client=http_client,
             timeout_seconds=settings.request_timeout_seconds,
             max_rate_limit_retries=0,
-            max_pages=settings.max_pages,
         ),
     )
 
@@ -217,7 +238,6 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
                     try:
                         await ws_client.start()
                     except KiwoomWsError:
-                        runtime.ws_last_error = ws_client.last_error
                         await ws_client.close()
                     else:
                         runtime.ws_client = ws_client

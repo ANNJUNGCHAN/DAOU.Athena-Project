@@ -42,13 +42,12 @@ class KiwoomClient:
         base_url: str = KIWOOM_MOCK_BASE_URL,
         timeout_seconds: float = 10.0,
         max_rate_limit_retries: int = 1,
-        max_pages: int = 100,
         sleep: Callable[[float], Awaitable[None]] = asyncio.sleep,
         random_value: Callable[[], float] = random.random,
     ) -> None:
         if base_url.rstrip("/") != KIWOOM_MOCK_BASE_URL:
             raise ValueError("KiwoomClient only supports the mock domain")
-        if timeout_seconds <= 0 or max_rate_limit_retries < 0 or max_pages < 1:
+        if timeout_seconds <= 0 or max_rate_limit_retries < 0:
             raise ValueError("invalid Kiwoom client limits")
         self._auth = auth
         self._rate_limiter = rate_limiter
@@ -56,7 +55,6 @@ class KiwoomClient:
         self._owns_client = client is None
         self._timeout = timeout_seconds
         self._max_retries = max_rate_limit_retries
-        self._max_pages = max_pages
         self._sleep = sleep
         self._random_value = random_value
 
@@ -166,32 +164,6 @@ class KiwoomClient:
         options: RequestOptions | None = None,
     ) -> dict[str, Any]:
         return (await self.post_with_headers(api_id, endpoint, data, options)).body
-
-    async def post_paged(
-        self,
-        api_id: str,
-        endpoint: str,
-        data: dict[str, Any] | None = None,
-        *,
-        list_key: str = "list",
-        max_pages: int | None = None,
-    ) -> tuple[list[Any], int, ResponseEnvelope]:
-        cap = self._max_pages if max_pages is None else max_pages
-        if not 1 <= cap <= self._max_pages:
-            raise ValueError(f"max_pages must be between 1 and {self._max_pages}")
-        items: list[Any] = []
-        options = RequestOptions()
-        last: ResponseEnvelope | None = None
-        for page in range(1, cap + 1):
-            last = await self.post_with_headers(api_id, endpoint, data, options)
-            page_items = last.body.get(list_key)
-            if isinstance(page_items, list):
-                items.extend(page_items)
-            if last.cont_yn != "Y" or not last.next_key:
-                return items, page, last
-            options = RequestOptions(cont_yn="Y", next_key=last.next_key)
-        assert last is not None
-        return items, cap, last
 
     async def aclose(self) -> None:
         if self._owns_client:
