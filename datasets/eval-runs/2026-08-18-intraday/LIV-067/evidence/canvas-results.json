@@ -1,0 +1,258 @@
+[
+ {
+  "toolUseId": "toolu_01K4jN8BkYEA63JxA52s7BTJ",
+  "status": "success",
+  "envelope": {
+   "canvas_type": "stream",
+   "fell_back": false,
+   "fallback_reason": null,
+   "caption": "카카오(035720) 주가 부진 배경 관련 뉴스 — 2026년 5월~8월 18일",
+   "data": {
+    "records": [
+     {
+      "ts": "2026-08-18T09:32:00+09:00",
+      "ts_precision": "second",
+      "source": "뉴데일리경제",
+      "title": "코스피, 외인 '사자'에 7100선 훌쩍…카카오는 -2.37%",
+      "url": "https://biz.newdaily.co.kr/site/data/html/2026/08/18/2026081800059.html",
+      "summary": "지수는 반도체 주도로 강세인데 카카오는 LG에너지솔루션·HD현대중공업과 함께 하락 상위. '지수는 오르는데 카카오만 빠지는' 소외 국면이 이어짐.",
+      "tickers": [
+       "035720"
+      ],
+      "kind": "시황"
+     },
+     {
+      "ts": "2026-08-18T09:03:00+09:00",
+      "ts_precision": "second",
+      "source": "뉴스1 / 이데일리",
+      "title": "하나증권, 반등 기대주로 카카오(035720) 지목",
+      "url": "https://n.news.naver.com/mnews/article/421/0009118088?sid=101",
+      "summary": "달러 약세에 따른 외국인 자금 유입 수혜주로 삼성전자·HD한국조선해양·한미반도체 등과 함께 카카오를 제시. 주가 할인율이 과도하다는 논리.",
+      "tickers": [
+       "035720"
+      ],
+      "kind": "증권가"
+     },
+     {
+      "ts": "2026-08-17T14:34:00+09:00",
+      "ts_precision": "second",
+      "source": "핀포인트뉴스",
+      "title": "카카오톡에 AI 에이전트 탑재…카카오 주가 다시 뛸까",
+      "url": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=477994",
+      "summary": "향후 주가의 핵심은 카톡이 AI 에이전트 플랫폼으로 진화하느냐. 기능 추가 수준에 그치면 재평가는 어렵다는 분석.",
+      "tickers": [
+       "035720"
+      ],
+      "kind": "분석"
+     },
+     {
+      "ts": "2026-08-15T12:16:00+09:00",
+      "ts_precision": "second",
+      "source": "톱스타뉴스",
+      "title": "최근 5거래일 카카오 주가 3만9천~4만1천원 등락",
+      "url": "https://www.topstarnews.net/news/articleView.html?idxno=16164344",
+      "summary": "4만원 선을 중심으로 변동성. 8월 10일 시가 39,850원, 장중 저가 38,500원.",
+      "tickers": [
+       "035720"
+      ],
+      "kind": "시황"
+     },
+     {
+      "ts": "2026-08-14T16:20:00+09:00",
+      "ts_precision": "second",
+      "source": "뉴스웰",
+      "title": "현대차·카카오뱅크 줄파업, 이 주식 들고 가도 되나요",
+      "url": "http://www.newswell.co.kr/news/articleView.html?idxno=21082",
+      "summary": "화섬식품노조 카카오지회가 카카오뱅크에서 2차 파업 진행. 그룹 전반의 노사 리스크가 이어지는 중.",
+      "tickers": [
+       "035720"
+      ],
+      "kind": "리스크"
+     },
+     {
+      "ts": "2026-08-14T05:20:00+09:00",
+      "ts_precision": "second",
+      "source": "신아일보",
+      "title": "[기자수첩] AI 빛 못보는 '네카오'…'체감' AI 서비스 보여줄 때",
+      "url": "https://www.shinailbo.co.kr/news/articleView.html?idxno=5050853",
+      "summary": "네이버·카카오 모두 사상 최대 실적에도 AI에서 눈에 보이는 성과가 없다는 지적. 주가 디레이팅의 핵심 논리.",
+      "tickers": [
+       "035720"
+      ],
+      "kind": "분석"
+     },
+     {
+      "ts": "2026-08-12T10:02:00+09:00",
+      "ts_precision": "second",
+      "source": "뉴스웨이",
+      "title": "AI 시대에 '실종'된 카카오…생존 갈림길 섰다",
+      "url": "https://www.newsway.co.kr/news/view?ud=2026080622392486111",
+      "summary": "2Q 매출 2조985억원(+9%)·영업이익 2770억원(+36%) 역대 최대에도, 호실적이 플랫폼 본업 위주라 AI 스토리가 없다는 평가.",
+      "tickers": [
+       "035720"
+      ],
+      "kind": "분석"
+     },
+     {
+      "ts": "2026-08-11T18:36:00+09:00",
+      "ts_precision": "second",
+      "source": "새타임스",
+      "title": "카카오, AI 적자 커졌지만 본업으로 버텨…수익화는 내년 시험대",
+      "url": "https://sateconomy.co.kr/news/view/1065597140073936",
+      "summary": "영업이익률 10.6%→13.2% 개선. 다만 AI 부문 적자 확대, 실질 수익화 검증은 2027년으로 미뤄짐.",
+      "tickers": [
+       "035720"
+      ],
+      "kind": "실적"
+     },
+     {
+      "ts": "2026-08-11T08:02:00+09:00",
+      "ts_precision": "second",
+      "source": "딜사이트",
+      "title": "[핀포인트] 카카오, 몸집 축소…노사 갈등 봉합 비용에 '도로묵' 될까",
+      "url": "https://news.dealsitetv.com/articles/174257",
+      "summary": "노사 합의분 소급 반영으로 영업비용 27.5% 급증, 일부 이익률은 19.3%→16.4%로 하락. 구조조정 효과 상쇄 우려.",
+      "tickers": [
+       "035720"
+      ],
+      "kind": "리스크"
+     },
+     {
+      "ts": "2026-08-10T15:28:00+09:00",
+      "ts_precision": "second",
+      "source": "EBN",
+      "title": "'돈 버는 AI' 집중 네카오…네이버는 B2B·카카오는 B2C",
+      "url": "https://www.ebn.co.kr/news/articleView.html?idxno=1719780",
+      "summary": "정신아 대표, AI 데이터센터 사업은 재무 부담 대비 ROI가 낮다며 선 그음. AI 관련 영업이익 기여는 2027년 317억원 수준 전망.",
+      "tickers": [
+       "035720"
+      ],
+      "kind": "전략"
+     },
+     {
+      "ts": "2026-07-07T07:57:00+09:00",
+      "ts_precision": "second",
+      "source": "이데일리",
+      "title": "카카오, AI 사업 수익모델 부재…DB증권 목표가 6.9만→5.7만원 하향",
+      "url": "https://n.news.naver.com/mnews/article/018/0006324227?sid=101",
+      "summary": "광고·커머스 실적은 견조하나 AI 수익모델이 구체적이지 않다며 목표주가 17% 하향.",
+      "tickers": [
+       "035720"
+      ],
+      "kind": "증권가"
+     },
+     {
+      "ts": "2026-06-08T10:28:00+09:00",
+      "ts_precision": "second",
+      "source": "서울경제",
+      "title": "카카오, 52주 신저가…AI 성과 지연 우려에 5%대 급락",
+      "url": "https://n.news.naver.com/mnews/article/011/0004628679?sid=101",
+      "summary": "AI 서비스 도입 지연 우려로 장 초반 5% 넘게 하락하며 52주 신저가. 창사 첫 파업 위기도 동반.",
+      "tickers": [
+       "035720"
+      ],
+      "kind": "시황"
+     },
+     {
+      "ts": "2026-05-11T16:45:00+09:00",
+      "ts_precision": "second",
+      "source": "한국일보",
+      "title": "'만스피' 전망에도 개미 소외감…네카오 부진",
+      "url": "https://n.news.naver.com/mnews/article/469/0000930114?sid=101",
+      "summary": "연초 이후 코스피가 85.62% 오르는 동안 네이버 -12.78%, 카카오 -25.62%. 지수 대비 극심한 소외가 올해 내내 지속.",
+      "tickers": [
+       "035720"
+      ],
+      "kind": "분석"
+     }
+    ]
+   }
+  }
+ },
+ {
+  "toolUseId": "toolu_01BvBboT7cXMKPQfY2T39yHt",
+  "status": "success",
+  "envelope": {
+   "canvas_type": "table",
+   "fell_back": false,
+   "fallback_reason": null,
+   "caption": "카카오 주가 하락 요인 vs 지지 요인 정리 (2026-08-18 기준, 뉴스 기반)",
+   "data": {
+    "columns": [
+     {
+      "key": "gubun",
+      "label": "구분"
+     },
+     {
+      "key": "yoin",
+      "label": "요인"
+     },
+     {
+      "key": "naeyong",
+      "label": "내용"
+     },
+     {
+      "key": "geunger",
+      "label": "근거 시점"
+     }
+    ],
+    "rows": [
+     {
+      "gubun": "▼ 하락",
+      "yoin": "AI 수익모델 부재",
+      "naeyong": "광고·커머스는 잘 되는데 AI에서 돈 버는 그림이 없다는 평가. DB증권 목표가 6.9만→5.7만원 하향",
+      "geunger": "2026-07-07"
+     },
+     {
+      "gubun": "▼ 하락",
+      "yoin": "AI 수익화 시점 이연",
+      "naeyong": "AI 부문 적자 확대, 실질 기여는 2027년 영업이익 300억원대 전망. 데이터센터는 ROI 낮다며 미진입",
+      "geunger": "2026-08-10~11"
+     },
+     {
+      "gubun": "▼ 하락",
+      "yoin": "노사 리스크 · 비용",
+      "naeyong": "창사 첫 파업 이후 그룹 내 파업 지속(카카오뱅크 2차). 합의분 소급 반영으로 영업비용 27.5% 급증",
+      "geunger": "2026-08-11~14"
+     },
+     {
+      "gubun": "▼ 하락",
+      "yoin": "지수 대비 소외",
+      "naeyong": "유동성이 반도체로 쓸림. 연초 이후 코스피 +85.6%일 때 카카오 -25.6%. 8/18도 지수 강세 속 -2.37%",
+      "geunger": "2026-05-11 / 08-18"
+     },
+     {
+      "gubun": "▼ 하락",
+      "yoin": "지배구조 할인",
+      "naeyong": "카카오뱅크·페이 등 핵심 자회사 분할 상장으로 모회사 가치 훼손이 여전히 거론됨",
+      "geunger": "2026-08-17"
+     },
+     {
+      "gubun": "▲ 지지",
+      "yoin": "역대 최대 실적",
+      "naeyong": "2Q 매출 2조985억원(+9.4%), 영업이익 2770억원(+35.9%). 영업이익률 10.6%→13.2%",
+      "geunger": "2026-08-06 잠정실적"
+     },
+     {
+      "gubun": "▲ 지지",
+      "yoin": "본업 성장",
+      "naeyong": "톡비즈 매출 6432억원(+12%). 플랫폼·커머스·콘텐츠 전 사업 성장",
+      "geunger": "2026-08-10"
+     },
+     {
+      "gubun": "▲ 지지",
+      "yoin": "촉매 대기",
+      "naeyong": "카카오톡 AI 에이전트 탑재, 쿠팡이츠 협력 등 생활플랫폼 전환 시도",
+      "geunger": "2026-08-10~17"
+     },
+     {
+      "gubun": "▲ 지지",
+      "yoin": "증권가 반등 지목",
+      "naeyong": "하나증권, 달러 약세·외국인 자금 유입 수혜 및 할인율 과대 종목으로 카카오 제시",
+      "geunger": "2026-08-18"
+     }
+    ]
+   }
+  }
+ }
+]

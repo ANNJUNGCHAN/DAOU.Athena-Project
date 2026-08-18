@@ -1,0 +1,33 @@
+{
+ "ran_at": "2026-08-18T04:52:11.212Z",
+ "boot": {
+  "booted": true,
+  "panels": {
+   "boot": false,
+   "app": true,
+   "onboard": false,
+   "settings": false
+  }
+ },
+ "cases": [
+  {
+   "id": "LIV-004",
+   "completed": true,
+   "duration_s": 42.3,
+   "cards": [
+    "mcp-table"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-067",
+   "completed": true,
+   "duration_s": 158.5,
+   "cards": [
+    "stream",
+    "mcp-table"
+   ],
+   "chips_added": 2
+  }
+ ]
+}

@@ -1,0 +1,62 @@
+{
+ "ok": true,
+ "error": null,
+ "exitCode": 0,
+ "finalResult": {
+  "is_error": false,
+  "duration_api_ms": 140506,
+  "num_turns": 8,
+  "stop_reason": "end_turn",
+  "session_id": "0711fcde-fa72-40b8-a184-e59c0008b6f7",
+  "total_cost_usd": 0.9164984999999999,
+  "usage": {
+   "input_tokens": 14,
+   "cache_creation_input_tokens": 47232,
+   "cache_read_input_tokens": 234617,
+   "output_tokens": 13072,
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 47232,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "not_available",
+   "iterations": [],
+   "speed": "standard"
+  },
+  "modelUsage": {
+   "claude-opus-5[1m]": {
+    "inputTokens": 14,
+    "outputTokens": 13072,
+    "cacheReadInputTokens": 234617,
+    "cacheCreationInputTokens": 47232,
+    "webSearchRequests": 0,
+    "costUSD": 0.9164984999999999,
+    "contextWindow": 1000000,
+    "maxOutputTokens": 64000,
+    "canonicalModel": "claude-opus-5",
+    "provider": "firstParty"
+   }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "SK바이오사이언스(302440)의 2026년 2월 3일~8월 14일 접수 공시 36건을 표 캔버스로 그리고 '공시목록-SK바이오사이언스' 이름으로 저장했습니다. 최근 건은 반기보고서(2026.06), 2분기 잠정실적·IR 공시이며, 그 외 주요 이벤트로 단일판매·공급계약 체결(6/23), 자기주식 취득 결정(4/28)·결과보고(6/16), GBP410 미국 3상 IND 승인(3/23), RSV 예방항체 기술도입 계약(2/3)이 있습니다. 각 행의 원문링크로 DART 본문을 바로 열 수 있습니다.",
+  "ttft_ms": 2399,
+  "ttft_stream_ms": 1592,
+  "time_to_request_ms": 303,
+  "type": "result",
+  "duration_ms": 141592,
+  "uuid": "78caa53f-3afd-4d6e-b9a6-eb9d1a8fa360"
+ },
+ "diagnostics": {
+  "skippedLines": 0,
+  "totalEvents": 29
+ }
+}

@@ -1,0 +1,4 @@
+{"ts":"2026-08-18T01:24:13.605109+00:00","alias":"korea-stock-mcp","tool":"get_today_date","success":true}
+{"ts":"2026-08-18T01:24:16.380479+00:00","alias":"korea-stock-mcp","tool":"get_stock_trade_info","success":false}
+{"ts":"2026-08-18T01:24:22.648385+00:00","alias":"naver-search-2","tool":"search_webkr","success":false}
+{"ts":"2026-08-18T01:24:27.590801+00:00","alias":"naver-search-2","tool":"search_news","success":true}

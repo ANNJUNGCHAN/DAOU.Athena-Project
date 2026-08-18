@@ -1,0 +1,71 @@
+{
+ "ok": true,
+ "error": null,
+ "exitCode": 0,
+ "finalResult": {
+  "is_error": false,
+  "duration_api_ms": 95787,
+  "num_turns": 19,
+  "stop_reason": "end_turn",
+  "session_id": "b5f41fce-24df-4604-be5f-51ccfe0b4da4",
+  "total_cost_usd": 0.7779905,
+  "usage": {
+   "input_tokens": 33,
+   "cache_creation_input_tokens": 34082,
+   "cache_read_input_tokens": 547161,
+   "output_tokens": 6537,
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 34082,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "not_available",
+   "iterations": [],
+   "speed": "standard"
+  },
+  "modelUsage": {
+   "claude-opus-5[1m]": {
+    "inputTokens": 33,
+    "outputTokens": 6537,
+    "cacheReadInputTokens": 547161,
+    "cacheCreationInputTokens": 34082,
+    "webSearchRequests": 0,
+    "costUSD": 0.7779905,
+    "contextWindow": 1000000,
+    "maxOutputTokens": 64000,
+    "canonicalModel": "claude-opus-5",
+    "provider": "firstParty"
+   }
+  },
+  "permission_denials": [
+   {
+    "tool_name": "Bash",
+    "tool_use_id": "toolu_01MumfAKfPt822aVZn6EodDF",
+    "tool_input": {
+     "command": "f=\"C:/Users/ajc22/.claude/projects/C--Users-ajc22-AppData-Roaming-athena-shell-mcp-config/b5f41fce-24df-4604-be5f-51ccfe0b4da4/tool-results/mcp-athena-korea-stock-mcp__get_disclosure-1787017178497.txt\"; awk '{print NR\": \"length($0)}' \"$f\"",
+     "description": "Check line lengths of disclosure file"
+    }
+   }
+  ],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "가장 최근 건은 **2026년 7월 13일 접수된 주요사항보고서(자기주식 처분 결정)** 로, 보통주 1,132,477주를 주당 285,000원(총 3,227.6억원)에 처분하는 내용이며 처분기간은 7월 13일 당일입니다. 목적은 임원 등 928명에게 장기성과급 일부를 자기주식으로 지급하기 위한 것으로, 장내매매가 아닌 '기타' 방식 처분이고 이사회에는 사외이사 5명이 전원 참석했습니다. 처분 전 자기주식 보유량은 배당가능이익 범위 내 취득분 보통주 81,003,271주(1.4%)이며, 직전 7월 7일에도 같은 종류의 처분 결정 공시가 있었습니다.",
+  "ttft_ms": 2058,
+  "ttft_stream_ms": 1349,
+  "time_to_request_ms": 416,
+  "type": "result",
+  "duration_ms": 99066,
+  "uuid": "3e04378c-29b1-4223-8a40-6a6de049c98b"
+ },
+ "diagnostics": {
+  "skippedLines": 0,
+  "totalEvents": 80
+ }
+}
