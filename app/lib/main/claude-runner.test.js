@@ -43,6 +43,42 @@ test('buildArgs: resumeSessionId가 있으면 --resume <id>가 끝에 붙는다 
   assert.deepEqual(args.slice(0, -2), buildArgs({ prompt: 'x', configFile: '.mcp.json', allowedTools: 'y' }));
 });
 
+test('buildArgs: model이 있으면 --model <model>이 --allowedTools 뒤·--resume 앞에 붙는다', () => {
+  const args = buildArgs({ prompt: 'x', configFile: '.mcp.json', allowedTools: 'y', model: 'claude-sonnet-5' });
+  const i = args.indexOf('--model');
+  assert.ok(i >= 0);
+  assert.equal(args[i + 1], 'claude-sonnet-5');
+});
+
+test('buildArgs: model이 없으면(undefined) --model이 안 붙는다 — "기본"의 의미', () => {
+  const args = buildArgs({ prompt: 'x', configFile: '.mcp.json', allowedTools: 'y' });
+  assert.equal(args.indexOf('--model'), -1);
+});
+
+test('buildArgs: effort가 있으면 --effort <effort>가 붙는다', () => {
+  const args = buildArgs({ prompt: 'x', configFile: '.mcp.json', allowedTools: 'y', effort: 'high' });
+  const i = args.indexOf('--effort');
+  assert.ok(i >= 0);
+  assert.equal(args[i + 1], 'high');
+});
+
+test('buildArgs: effort가 없으면 --effort가 안 붙는다', () => {
+  const args = buildArgs({ prompt: 'x', configFile: '.mcp.json', allowedTools: 'y' });
+  assert.equal(args.indexOf('--effort'), -1);
+});
+
+test('buildArgs: model·effort·resumeSessionId가 모두 있으면 셋 다 붙고, model/effort가 --resume보다 앞이다', () => {
+  const args = buildArgs({
+    prompt: 'x', configFile: '.mcp.json', allowedTools: 'y',
+    model: 'claude-opus-5', effort: 'max', resumeSessionId: 'sess-1',
+  });
+  assert.deepEqual(args.slice(-6), [
+    '--model', 'claude-opus-5',
+    '--effort', 'max',
+    '--resume', 'sess-1',
+  ]);
+});
+
 test('RENDER_CANVAS_ALLOWED_TOOL: athena__가 두 번 나오는 실측 이름 그대로', () => {
   assert.equal(RENDER_CANVAS_ALLOWED_TOOL, 'mcp__athena__athena__render_canvas');
 });

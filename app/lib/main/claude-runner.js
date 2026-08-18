@@ -62,7 +62,7 @@ function killTree(child) {
   }
 }
 
-function buildArgs({ prompt, configFile, allowedTools, resumeSessionId }) {
+function buildArgs({ prompt, configFile, allowedTools, resumeSessionId, model, effort }) {
   const args = [
     '-p', prompt,
     '--output-format', 'stream-json',
@@ -72,6 +72,12 @@ function buildArgs({ prompt, configFile, allowedTools, resumeSessionId }) {
     '--setting-sources', '',
     '--allowedTools', allowedTools,
   ];
+  // 모델·추론강도(설정 화면 모델 패널, lib/main/model-prefs.js) — 값이 있을
+  // 때만 붙인다. null/undefined면 인자 자체를 안 붙여 claude CLI 자체 기본값을
+  // 쓴다("기본"의 의미). RESULT.md §1의 실왕복 계약(위 커맨드 블록)에는 없던
+  // 추가 인자라 그 계약은 안 건드리고 뒤에 얹는다.
+  if (model) args.push('--model', model);
+  if (effort) args.push('--effort', effort);
   // 멀티턴 — 직전 왕복의 result 이벤트가 준 session_id로 대화를 잇는다.
   // -p 재개는 세션을 포크해 **새 session_id**를 발급한다 — 호출자는 매 왕복의
   // finalResult.session_id로 갱신해야 체인이 이어진다(main.js runLiveQuery).
@@ -91,6 +97,8 @@ function runClaudeQuery({
   configFile = '.mcp.json',
   allowedTools = GATEWAY_ALLOWED_TOOLS,
   resumeSessionId = null,
+  model = null,
+  effort = null,
   claudeBin = process.env.ATHENA_CLAUDE_BIN || 'claude',
   timeoutMs = DEFAULT_TIMEOUT_MS,
   onSpawn,
@@ -107,7 +115,7 @@ function runClaudeQuery({
       return;
     }
 
-    const args = buildArgs({ prompt, configFile, allowedTools, resumeSessionId });
+    const args = buildArgs({ prompt, configFile, allowedTools, resumeSessionId, model, effort });
     const session = new StreamJsonSession();
     let child;
     try {

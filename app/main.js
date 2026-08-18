@@ -9,6 +9,8 @@ const onboarding = require('./lib/main/onboarding');
 const cliAccounts = require('./lib/main/cli-accounts');
 const accounts = require('./lib/main/accounts');
 const prefs = require('./lib/main/prefs');
+const modelPrefs = require('./lib/main/model-prefs');
+const { computePlacement } = require('./lib/main/window-placement');
 const mcpCli = require('./lib/main/mcp-cli');
 const mcpEnv = require('./lib/main/mcp-env');
 // 결정 D1의 실배선 — claude -p 스폰 + stream-json 파싱 + .mcp.json 생성.
@@ -78,11 +80,30 @@ let chatBottom; // 입력줄이 고정되는 화면 y좌표 — 위로만 자란
 let chatX; // 대화 창 x — 사용자가 창을 끌어 옮기면 갱신된다(setChatHeight가 되돌리지 않게)
 let canvasVisible = false;
 
+// 사용자가 창을 끌어 옮기거나(드래그), placeWindows()로 스냅하면 높이 앵커를
+// 새 위치로 갱신한다 — 안 하면 다음 setChatHeight가 창을 부팅 좌표로 되돌린다.
+// createWindows()의 'move'/'resize' 이벤트가 이걸 부른다(모듈 스코프로 뺀 이유는
+// placeWindows()가 setBounds() 뒤에 명시적으로도 불러야 해서다 — 이벤트가
+// 실제로 도는지 보장이 없는 환경 대비 안전망).
+function syncChatAnchor() {
+  if (!chatWin || chatWin.isDestroyed() || chatWin.isMinimized()) return;
+  const b = chatWin.getBounds();
+  chatX = b.x;
+  chatBottom = b.y + b.height;
+}
+
 function commonWinOpts(bounds) {
   return {
     ...bounds,
     frame: false,
-    resizable: false,
+    // 2026-08-18 실측(qa-win-arrow.json): resizable:false에서는 Win+←/→/↑가 OS에
+    // 선점돼 before-input-event에 아예 안 온다(mdlog 도달 0건 — Win+↓ 최소화만
+    // OS가 실행). Windows 스냅(Win+방향키)이 이 앱에서 통하려면 창이 OS 스냅
+    // 대상이어야 하므로 resizable:true로 승급한다. **크기는 여전히 불변이다** —
+    // 생성 직후 setMinimumSize=setMaximumSize 잠금(아래 lockWindowSize)이 OS든
+    // 사용자든 크기를 못 바꾸게 막고, OS가 스냅으로 "옮긴" 결과는 moved/maximize/
+    // minimize 이벤트에서 받아 짝을 정착시킨다.
+    resizable: true,
     show: false,
     // alwaysOnTop을 걸지 않는다(2026-08-17 결정) — 스파이크 시절 값이었지만, 다른
     // 앱 위에 영구히 떠서 "창을 내릴 수 없다"는 실사용 문제가 됐다. z순서는 OS에
@@ -130,14 +151,25 @@ async function createWindows() {
   canvasWin = new BrowserWindow(commonWinOpts({
     x: layout.originX, y: layout.originY, width: layout.canvasW, height: layout.canvasH,
   }));
+  lockWindowSize(canvasWin, layout.canvasW, layout.canvasH);
   canvasWin.loadFile('canvas.html');
   mdlog('canvasWin created + loadFile called');
 
   chatWin = new BrowserWindow(commonWinOpts({
     x: layout.originX, y: chatBottom - chatHeight, width: layout.chatW, height: chatHeight,
   }));
+  // 채팅창은 높이만 가동 범위(chatBaseH~chatMaxH)로 연다 — 폭은 고정. 완전
+  // 잠금(min=max)이면 Win+↑의 OS maximize가 이벤트도 없이 무시된다(2026-08-18
+  // qa-win-arrow 실측). 범위를 열어두면 maximize 이벤트가 와서 렌더러 토글로
+  // 위임할 수 있고, OS가 스냅으로 높이를 건드려도 handleForeignArrange가 즉시
+  // 앱 레이아웃으로 되돌린다.
+  chatWin.setMinimumSize(layout.chatW, layout.chatBaseH);
+  chatWin.setMaximumSize(layout.chatW, layout.chatMaxH);
   chatWin.loadFile('chat.html');
   mdlog('chatWin created + loadFile called');
+
+  noteAppBounds(canvasWin);
+  noteAppBounds(chatWin);
 
   await Promise.all([
     new Promise((r) => canvasWin.once('ready-to-show', r)),
@@ -174,15 +206,8 @@ async function createWindows() {
   canvasWin.on('closed', () => { canvasVisible = false; });
 
   // ---------- 창 기본 기능 (2026-08-17) — frame:false라 OS 타이틀바가 없어 직접 배선 ----------
-  // 사용자가 창을 끌어 옮기면(아래 athena:window-drag) 높이 앵커를 새 위치로 갱신한다 —
-  // 안 하면 다음 setChatHeight가 창을 부팅 좌표로 되돌린다. setChatHeight 자신의
-  // setBounds도 이 핸들러를 지나가지만 y = chatBottom - height라 재계산값이 같다(무해).
-  const syncChatAnchor = () => {
-    if (!chatWin || chatWin.isDestroyed() || chatWin.isMinimized()) return;
-    const b = chatWin.getBounds();
-    chatX = b.x;
-    chatBottom = b.y + b.height;
-  };
+  // syncChatAnchor는 모듈 스코프 함수(위 정의)다. setChatHeight 자신의 setBounds도
+  // 이 핸들러를 지나가지만 y = chatBottom - height라 재계산값이 같다(무해).
   chatWin.on('move', syncChatAnchor);
   chatWin.on('resize', syncChatAnchor);
 
@@ -208,6 +233,109 @@ async function createWindows() {
   canvasWin.on('restore', () => {
     if (chatWin && !chatWin.isDestroyed() && chatWin.isMinimized()) chatWin.restore();
     if (chatWin && !chatWin.isDestroyed()) chatWin.moveTop();
+  });
+
+  // Win+방향키 보너스 경로(2026-08-18) — OS 창 스냅과 같은 손버릇으로 두 창
+  // 짝을 옮긴다. globalShortcut은 다른 앱과 전역 충돌 위험이 있어 쓰지 않고
+  // (electron#9206), 각 창의 webContents에 before-input-event로만 건다 —
+  // OS(Windows 자체 스냅)가 먼저 먹으면 이벤트가 그냥 안 올 뿐이라 무해하다.
+  wireWindowsKeyShortcuts(chatWin);
+  wireWindowsKeyShortcuts(canvasWin);
+  wireOsSnapEvents(chatWin);
+  wireOsSnapEvents(canvasWin);
+}
+
+// ---------- OS 스냅 이벤트 정착 (2026-08-18 승급 — qa-win-arrow.json 실측 근거) ----------
+// resizable:true 승급으로 Windows가 Win+←/→(스냅)·Win+↑(최대화)·Win+↓(최소화)를
+// 직접 실행하게 됐다. OS는 포커스 창 하나만 움직이므로, 그 결과 이벤트를 받아
+// 앱이 짝·의미론을 정착시킨다:
+//   moved + win.snapped  → OS가 어느 절반에 스냅했는지 판정해 placeWindows(left/right)로
+//                          짝 전체를 그 절반의 우리 레이아웃으로 정착(크기 불변).
+//   maximize             → 즉시 unmaximize하고 athena:window-key {dir:'up'}으로 렌더러의
+//                          최대화 토글(□ 버튼과 동일 경로 — 모드 가드 포함)에 위임.
+//   minimize             → 짝 창도 함께 내린다(복원 짝맞춤은 기존 restore 핸들러).
+// settlingSnap 가드: placeWindows의 setBounds가 다시 moved를 발화시키는 재진입을 막는다.
+let settlingSnap = false;
+
+function lockWindowSize(win, w, h) {
+  win.setMinimumSize(w, h);
+  win.setMaximumSize(w, h);
+}
+
+// 앱이 마지막으로 지정한 bounds. 여기서 벗어난 moved/resized는 전부 OS 주도
+// (Win+←/→ 스냅 등)다 — frame:false라 사용자가 OS 경로로 창을 움직일 방법은
+// 스냅뿐이고, 앱 주도 이동(드래그 폴링·setChatHeight·placeWindows·centerWindows)은
+// 전부 이 맵을 갱신하고 지나간다. win.snapped는 크기 잠금 창에서 안 선다는 것이
+// 실측됐다(2026-08-18 qa-win-arrow 2차) — 그래서 스냅 플래그가 아니라 기대 좌표
+// 대조로 감지한다.
+const expectedBounds = new Map();
+
+function noteAppBounds(win) {
+  if (win && !win.isDestroyed()) expectedBounds.set(win, win.getBounds());
+}
+
+function boundsDiffer(a, b) {
+  return !a || !b || Math.abs(a.x - b.x) > 2 || Math.abs(a.y - b.y) > 2
+    || Math.abs(a.width - b.width) > 2 || Math.abs(a.height - b.height) > 2;
+}
+
+function handleForeignArrange(win) {
+  if (settlingSnap) return;
+  if (!win || win.isDestroyed() || win.isMinimized() || win.isMaximized()) return;
+  if (winDragTimer) { noteAppBounds(win); return; } // 드래그 중 이동은 앱 주도다
+  const actual = win.getBounds();
+  if (!boundsDiffer(expectedBounds.get(win), actual)) return;
+  const display = screen.getDisplayMatching(actual);
+  const wa = display.workArea;
+  const dir = (actual.x + actual.width / 2) < (wa.x + wa.width / 2) ? 'left' : 'right';
+  mdlog(`os-arrange 감지(${win === chatWin ? 'chat' : 'canvas'}): ${JSON.stringify(actual)} -> ${dir} 정착`);
+  settlingSnap = true;
+  try { placeWindows(dir); } finally {
+    setTimeout(() => { settlingSnap = false; }, 250);
+  }
+}
+
+function wireOsSnapEvents(win) {
+  // 키보드 스냅(Win+←/→)은 드래그 모달 루프가 없어 과거형 이벤트(moved/resized)가
+  // 안 온다(2026-08-18 3차 실측 — 스냅됐는데 정착 로그 0건). 현재형(move/resize)을
+  // 디바운스로 받아 OS 배치가 끝난 뒤 한 번만 판정한다. 앱 주도 setBounds도 같은
+  // 이벤트를 쏘지만 expectedBounds 대조(handleForeignArrange)가 걸러낸다.
+  let arrangeTimer = null;
+  const queueArrange = () => {
+    if (settlingSnap || win.isMaximized()) return;
+    clearTimeout(arrangeTimer);
+    arrangeTimer = setTimeout(() => handleForeignArrange(win), 120);
+  };
+  win.on('move', queueArrange);
+  win.on('resize', queueArrange);
+  win.on('moved', queueArrange);
+  win.on('resized', queueArrange);
+  win.on('maximize', () => {
+    if (settlingSnap) return;
+    settlingSnap = true;
+    mdlog('os-maximize 감지 — unmaximize 후 렌더러 최대화 토글 위임');
+    // unmaximize()의 복원 setBounds는 비동기다 — 위임을 먼저 보내면 렌더러의
+    // 토글 setBounds를 복원이 나중에 덮어써 "2회차 토글이 안 먹는" 경쟁이
+    // 실측됐다(3차 afterUp2). 복원(unmaximize 이벤트)이 끝난 뒤에 위임한다.
+    win.once('unmaximize', () => {
+      setTimeout(() => {
+        noteAppBounds(win);
+        if (chatWin && !chatWin.isDestroyed()) chatWin.webContents.send('athena:window-key', { dir: 'up' });
+      }, 80);
+    });
+    try { win.unmaximize(); } finally {
+      setTimeout(() => { settlingSnap = false; }, 400);
+    }
+  });
+  win.on('minimize', () => {
+    // Win+↓(또는 작업 표시줄)로 한쪽만 내려가면 짝도 같이 내린다. minimize()는
+    // 이미 내려간 창에는 no-op이라 상호 발화가 무한 재귀하지 않는다.
+    const other = win === chatWin ? canvasWin : chatWin;
+    if (win === canvasWin && !canvasVisible) return;
+    if (other && !other.isDestroyed() && !other.isMinimized()) {
+      if (other === canvasWin && !canvasVisible) return;
+      other.minimize();
+    }
   });
 }
 
@@ -252,6 +380,7 @@ ipcMain.on('athena:window-drag', (e, { phase } = {}) => {
       width: startBounds.width,
       height: startBounds.height,
     });
+    noteAppBounds(win); // 드래그도 앱 주도 이동이다 — OS 배치 감지의 기준점 갱신
   }, 16);
 });
 
@@ -260,6 +389,97 @@ ipcMain.on('athena:minimize-windows', () => {
   if (canvasVisible && canvasWin && !canvasWin.isDestroyed()) canvasWin.minimize();
   if (chatWin && !chatWin.isDestroyed()) chatWin.minimize();
 });
+
+// ---------- 창 배치(스냅) — Windows 표준 창 단축키 의미론 (2026-08-18, 최종 정본) ----------
+// 목표는 자체 조합이 아니라 **Win+방향키가 이 앱에서 OS 표준 창 단축키와 같은
+// 뜻으로 통하는 것**이다. 매핑은 Windows 의미론을 그대로 따른다:
+//   Win+←/→ = 창 짝을 현재 디스플레이 workArea 좌/우 절반에 배치(크기 불변).
+//   Win+↑   = 최대화 토글(창 제어 □ 버튼과 동일 동작 — chatBaseH↔chatMaxH).
+//   Win+↓   = 최대화 상태면 복원(chatBaseH로), 아니면 두 창 최소화 — Windows의
+//             "restore-then-minimize" 의미론.
+//
+// **높이 상태(auto-grow·manualOverride·□ 버튼 상태)의 단일 소유자는 렌더러다**
+// (chat.js). main이 setChatHeight()를 직접 불러 ↑/↓를 처리하면(구판) 그 상태들과
+// 어긋난다 — 예: Win+↑로 최대화해도 chat.js의 manualOverride가 안 켜져서, 다음
+// 내용 변화에 자동 성장이 끼어들어 방금 최대화한 창을 자연 높이로 되감는다.
+// 그래서 ↑/↓는 main이 직접 처리하지 않고 `athena:window-key`로 chatWin에 위임한다
+// — chat.js가 □ 버튼과 똑같은 로컬 함수(toggleMaxHeight/restoreOrMinimize)를 탄다
+// (2026-08-18 팀리드 지시). ←/→는 렌더러 상태와 무관한 순수 위치 이동이라 main이
+// 여기서 직접 처리한다.
+//
+// 좌우 배치의 좌표 계산은 lib/main/window-placement.js(순수 함수, Electron
+// 의존 없음, 단위 테스트됨)로 뺐다 — 결과를 그대로 setBounds에 먹인다. 크기는
+// 항상 명시적으로 재지정한다(setBounds({x,y,width,height})) — x/y만 옮기는
+// setPosition()은 DPI 배율 화면에서 반올림이 누적돼 창이 자라는 버그가 있었다
+// (커밋 5e0a9ab, 드래그 폴링 L249-254와 같은 이유).
+//
+// 캔버스 창이 숨김 상태(canvasVisible=false)여도 setBounds()는 숨은 창을
+// 보이게 만들지 않는다 — 좌표만 갱신돼 다음 dot 확장이 새 위치 기준으로 열린다.
+//
+// 창 생성 옵션(commonWinOpts — resizable:false 등)은 이 단계에서 건드리지
+// 않는다 — before-input-event가 실측으로 안 오는 것으로 판명되면 스냅
+// 대상화(thickFrame, setMinimumSize/setMaximumSize 등)를 시도할 여지를 남긴다.
+// 그래서 이 배치 로직 전체를 창 생성과 독립된 함수로만 유지한다.
+function placeWindows(dir) {
+  if (!chatWin || chatWin.isDestroyed()) return;
+  if (dir !== 'left' && dir !== 'right') return; // up/down은 렌더러가 처리한다 — 위 주석 참고
+  if (!canvasWin || canvasWin.isDestroyed()) return;
+
+  const display = screen.getDisplayMatching(chatWin.getBounds());
+  const placement = computePlacement(dir, display.workArea, {
+    canvasW: layout.canvasW, canvasH: layout.canvasH,
+    chatW: layout.chatW, chatBaseH: layout.chatBaseH, chatHeight,
+  });
+  canvasWin.setBounds(placement.canvasBounds);
+  chatWin.setBounds(placement.chatBounds);
+  noteAppBounds(canvasWin);
+  noteAppBounds(chatWin);
+  chatBottom = placement.chatBottom;
+  chatX = placement.chatX;
+  syncChatAnchor();
+}
+
+ipcMain.on('athena:place-windows', (e, { dir } = {}) => placeWindows(dir));
+
+// 기본 위치 복귀("center") — Win+↑/Ctrl+Alt+↑의 옛 의미론이었다(창 짝을 부팅
+// 좌표로 되돌린다). 2026-08-18 Windows 표준 의미론 재정의로 그 자리는 최대화
+// 토글이 대신하지만, 위치 리셋 자체는 나중에 다시 쓸 수 있어 함수로 남겨둔다
+// (팀리드 지시) — 지금은 어떤 키·IPC 채널에도 매지 않는다.
+function centerWindows() {
+  if (!chatWin || chatWin.isDestroyed() || !canvasWin || canvasWin.isDestroyed()) return;
+  canvasWin.setBounds({ x: layout.originX, y: layout.originY, width: layout.canvasW, height: layout.canvasH });
+  const bottom = layout.originY + layout.canvasH + layout.chatBaseH;
+  chatWin.setBounds({ x: layout.originX, y: bottom - chatHeight, width: layout.chatW, height: chatHeight });
+  noteAppBounds(canvasWin);
+  noteAppBounds(chatWin);
+  chatBottom = bottom;
+  chatX = layout.originX;
+  syncChatAnchor();
+}
+
+// Win+방향키 — 1차 구현(보너스 아님, 주 경로). meta는 Windows 키(Electron의
+// input.meta가 Windows에서 Win 키를 가리킨다). OS가 이 조합을 먼저 가로채면
+// (실제 Windows 창 스냅) 이 핸들러엔 이벤트가 아예 안 온다 — 조합별 도달
+// 여부를 mdlog로 남겨 QA 실측이 OS 선점 여부를 판정하게 한다(globalShortcut은
+// 전역 충돌 위험 때문에 안 쓴다). chatWin·canvasWin 둘 다에 걸리므로(아래
+// createWindows) 어느 창에서 눌려도 `win`이 아니라 모듈 스코프 `chatWin`으로
+// 위임한다 — 높이 상태는 항상 대화 창 쪽에 있다.
+const WIN_ARROW_DIR = { ArrowLeft: 'left', ArrowRight: 'right', ArrowUp: 'up', ArrowDown: 'down' };
+
+function wireWindowsKeyShortcuts(win) {
+  win.webContents.on('before-input-event', (event, input) => {
+    if (!input.meta || input.type !== 'keyDown') return;
+    const dir = WIN_ARROW_DIR[input.key];
+    if (!dir) return;
+    mdlog(`win+arrow 도달: ${input.key} -> ${dir}`);
+    event.preventDefault();
+    if (dir === 'left' || dir === 'right') {
+      placeWindows(dir);
+      return;
+    }
+    if (chatWin && !chatWin.isDestroyed()) chatWin.webContents.send('athena:window-key', { dir });
+  });
+}
 
 // ---------- 닫기(백그라운드 유지) + 트레이 복귀 (AT-CH-001, 2026-08-18) ----------
 // 닫기 버튼은 종료가 아니다 — 두 창을 숨기고 프로세스(세션·자격증명·감시)는 그대로
@@ -363,6 +583,7 @@ function setChatHeight(height) {
   chatHeight = clamped;
   const y = chatBottom - chatHeight;
   chatWin.setBounds({ x: chatX, y, width: layout.chatW, height: chatHeight });
+  noteAppBounds(chatWin);
   if (canvasVisible) chatWin.moveTop(); // 확장 시 캔버스 창 위로 올라탄다(two-windows.md E3-확장)
 }
 
@@ -489,6 +710,9 @@ async function runLiveQuery(query, expand) {
   let expandTriggered = false;
   const canvasTypesSeen = [];
   const resumeSessionId = liveSessionId;
+  // 설정 화면 모델 패널(lib/main/model-prefs.js) 값 — null이면 buildArgs가
+  // --model/--effort를 안 붙여 claude CLI 기본값을 쓴다.
+  const { model, effort } = modelPrefs.get().claude;
   const result = await runClaudeQuery({
     // 날것 질문을 그대로 넘기면 모델이 조회만 하고 캔버스를 건너뛸 수 있다 —
     // 렌더 지시·스키마 힌트로 감싼다(lib/main/live-prompt.js의 실측 근거 참조).
@@ -496,6 +720,8 @@ async function runLiveQuery(query, expand) {
     cwd: dir,
     configFile,
     resumeSessionId,
+    model,
+    effort,
     onSpawn: (h) => { myHandle = h; activeLiveQuery = h; },
     onCanvasResult: (r) => {
       if (expand && !expandTriggered && !canvasVisible) {
@@ -605,6 +831,27 @@ function handlePrefsSet(e, patch) {
 
 ipcMain.handle('athena:settings:prefs:get', handlePrefsGet);
 ipcMain.handle('athena:settings:prefs:set', handlePrefsSet);
+
+// ---------------------------------------------------------------------------
+// 모델 설정(모델·추론강도) — lib/main/model-prefs.js. 검증은 그 모듈이 한다,
+// 여기선 성공 시 방송만 담당한다(prefs와 같은 문법 — chatWin이 같은 렌더러의
+// #settings 패널이라도 명시적으로 보낸다).
+// ---------------------------------------------------------------------------
+
+function handleModelGet() {
+  return modelPrefs.get();
+}
+
+function handleModelSet(e, payload = {}) {
+  const result = modelPrefs.set(payload);
+  if (result.ok && chatWin && !chatWin.isDestroyed()) {
+    chatWin.webContents.send('athena:model-changed', result.state);
+  }
+  return result;
+}
+
+ipcMain.handle('athena:model-get', handleModelGet);
+ipcMain.handle('athena:model-set', handleModelSet);
 
 // ---------------------------------------------------------------------------
 // 픽스처 로더 (2026-08-18 렌더러 격리 이관) — canvas.js의 목업 카드 3종
@@ -811,6 +1058,14 @@ module.exports = {
   // 트레이 클릭과 동일한 복귀 경로 — verify.js가 닫기(백그라운드 유지)를 검증할 때
   // 실제 트레이 클릭을 자동화할 수 없어 같은 함수 참조를 직접 부른다.
   restoreFromBackground,
+  // OS 배치 감지의 기준점 갱신 — verify.js가 창을 직접 setBounds로 움직이는
+  // 검증(독립성 등)에서는 그 이동이 "앱 주도"임을 이걸로 표시해야 한다. 안 하면
+  // handleForeignArrange가 OS 스냅으로 오인해 짝을 정착시킨다(설계된 동작).
+  noteAppBounds,
+  // 창 배치 — verify.js 검증14(창 배치)가 좌/우/센터를 직접 구동한다. 위/아래는
+  // 렌더러가 소유하므로(위 주석) chatWin에 athena:window-key를 보내 검증한다.
+  placeWindows,
+  centerWindows,
   // 설정·온보딩 IPC 핸들러 — 실제 ipcMain.handle에 연결된 것과 동일한 함수
   // 참조다(테스트용 별도 mock이 아니다). 검증 스크립트가 렌더러/IPC 왕복 없이
   // 직접 호출해 반환 모양을 확인할 수 있게 노출한다.
@@ -819,6 +1074,8 @@ module.exports = {
     onboardingAdvance: handleOnboardingAdvance,
     prefsGet: handlePrefsGet,
     prefsSet: handlePrefsSet,
+    modelGet: handleModelGet,
+    modelSet: handleModelSet,
     loadFixture: handleLoadFixture,
     cliList: handleCliList,
     cliLogin: handleCliLogin,

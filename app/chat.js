@@ -25,6 +25,7 @@ const $grip = document.getElementById('grip');
 const $onboard = document.getElementById('onboard');
 const $onboardBody = document.getElementById('onboardBody');
 const $settings = document.getElementById('settings');
+const $settingsNav = document.getElementById('settingsNav');
 const $settingsGrid = document.getElementById('settingsGrid');
 
 let layout = { chatBaseH: 204, chatMaxH: 788, scale: 1 };
@@ -591,15 +592,29 @@ function openSettings() {
   manualOverride = true; // 설정 동안은 이력 기반 자동 성장이 개입하지 않는다
   syncMaxButton(); // 모드가 높이 소유권을 가져간다 — 최대화 버튼 비활성
   window.athena.send('athena:set-chat-height', { height: layout.chatMaxH, manual: false });
-  settingsCards.renderScreen($settingsGrid);
-  settingsCards.renderAccounts($settingsGrid);
-  settingsCards.renderMcp($settingsGrid);
+  // Paper 43쪽(2026-08-18 확정) — 좌 사이드바(화면·계좌·MCP 서버·모델) + 우 패널.
+  // 세 카드를 동시에 쌓아 보여주던 이전 판(renderScreen/renderAccounts/renderMcp를
+  // 나란히 호출)을 대체한다. 패널 렌더 함수 자체는 그대로 재사용 — nav가 어떤 걸
+  // 부를지만 고른다.
+  const SETTINGS_PANELS = {
+    screen: settingsCards.renderScreen,
+    accounts: settingsCards.renderAccounts,
+    mcp: settingsCards.renderMcp,
+    model: settingsCards.renderModel,
+  };
+  settingsCards.renderNav($settingsNav, $settingsGrid, {
+    onSelect: (key, grid) => {
+      grid.replaceChildren();
+      (SETTINGS_PANELS[key] || settingsCards.renderScreen)(grid);
+    },
+  });
 }
 
 function closeSettings() {
   if (!settingsOpen) return;
   settingsOpen = false;
   $settingsGrid.replaceChildren();
+  $settingsNav.replaceChildren();
   $settings.hidden = true;
   $app.hidden = false;
   manualOverride = false;
@@ -642,10 +657,13 @@ $input.addEventListener('keydown', (e) => {
 // 프로세스를 백그라운드에 남긴다(사용자 지시 "백그라운드는 살아있음") — 복귀는
 // 트레이(main.js). 온보딩·설정 모드가 열려 있는 동안 높이는 모드 소유라 최대화
 // 토글은 개입하지 않는다.
-$winMin.addEventListener('click', () => {
-  window.athena.send('athena:minimize-windows');
-});
-$winMax.addEventListener('click', () => {
+// ---------- 창 최대화/복원/최소화 — 로컬 경로 (2026-08-18, Windows 표준 의미론) ----------
+// 높이 상태(auto-grow·manualOverride·□ 버튼 상태)의 단일 소유자는 렌더러다.
+// □ 버튼 · Win+↑/↓(main이 athena:window-key로 위임) · Ctrl+Alt+↑/↓가 전부 이
+// 두 함수를 공유한다 — main이 setChatHeight를 직접 부르면(구판) 이 상태들과
+// 어긋난다(팀리드 지시). Win+←/→·Ctrl+Alt+←/→는 렌더러 상태와 무관한 순수 위치
+// 이동이라 여전히 IPC(athena:place-windows)로 main이 직접 처리한다.
+function toggleMaxHeight() {
   if (settingsOpen || !$onboard.hidden) return; // 모드가 높이를 소유 중 — disabled의 백스톱
   const atMax = currentHeight >= layout.chatMaxH - 2;
   if (atMax) {
@@ -660,14 +678,61 @@ $winMax.addEventListener('click', () => {
     window.athena.send('athena:set-chat-height', { height: layout.chatMaxH, manual: true });
   }
   $input.focus();
+}
+
+// Windows의 "restore-then-minimize" 의미론 — 최대화 상태면 기본 높이로 복원,
+// 아니면(이미 기본 높이) 두 창을 최소화한다.
+function restoreOrMinimize() {
+  if (settingsOpen || !$onboard.hidden) return; // 모드가 높이를 소유 중 — disabled의 백스톱
+  const atMax = currentHeight >= layout.chatMaxH - 2;
+  if (atMax) {
+    manualOverride = false;
+    window.athena.send('athena:set-chat-height', { height: layout.chatBaseH, manual: false });
+  } else {
+    window.athena.send('athena:minimize-windows');
+  }
+}
+
+// main의 before-input-event(Win+↑/↓)가 위임하는 이벤트 — □ 버튼과 같은 로컬
+// 경로를 태운다(main.js wireWindowsKeyShortcuts 주석 참고).
+window.athena.on('athena:window-key', ({ dir } = {}) => {
+  if (dir === 'up') toggleMaxHeight();
+  else if (dir === 'down') restoreOrMinimize();
 });
+
+$winMin.addEventListener('click', () => {
+  window.athena.send('athena:minimize-windows');
+});
+$winMax.addEventListener('click', () => { toggleMaxHeight(); });
 $winClose.addEventListener('click', () => {
   window.athena.send('athena:close-windows');
 });
 
 // ---------- 창 기본 기능 (2026-08-17) — frame:false라 OS 타이틀바가 없어 직접 배선 ----------
 // 줌: Ctrl+= / Ctrl+- / Ctrl+0 / Ctrl+휠. 최소화: Ctrl+M. main.js가 두 창을 동기한다.
+// 창 배치(2026-08-18, 설정 › 화면 안내 행과 짝을 이룬다) — 주 경로는 Windows
+// 네이티브 Win+방향키(main.js가 before-input-event로 직접 처리한다,
+// WIN_ARROW_DIR). Ctrl+Alt+방향키는 보조 경로이고 같은 의미론을 써야 한다 —
+// left/right는 좌/우 절반, **up은 최대화 토글**(□ 버튼과 동일), **down은
+// 복원→최소화**다. left/right는 렌더러 상태와 무관하니 여전히 IPC
+// (athena:place-windows)로 main이 처리하지만, up/down은 높이 상태를 렌더러가
+// 소유하므로(toggleMaxHeight/restoreOrMinimize 주석 참고) IPC 왕복 없이 같은
+// 로컬 함수를 직접 부른다 — Win+↑/↓가 athena:window-key로 도착하는 것과 결국
+// 같은 경로를 탄다. 'center'/'minimize' 같은 옛 별도 이름은 쓰지 않는다.
+// Ctrl 단독 분기(줌·최소화)보다 먼저 검사해야 한다 — 기존 코드는 altKey가
+// 눌리면 그냥 return했는데, 여기서 그 자리를 가로채 처리하고 여전히
+// return한다(다른 Ctrl+Alt 조합에도 줌 로직이 새지 않게).
 document.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.altKey) {
+    if (e.key === 'ArrowUp') { e.preventDefault(); toggleMaxHeight(); return; }
+    if (e.key === 'ArrowDown') { e.preventDefault(); restoreOrMinimize(); return; }
+    const dir = { ArrowLeft: 'left', ArrowRight: 'right' }[e.key];
+    if (dir) {
+      e.preventDefault();
+      window.athena.send('athena:place-windows', { dir });
+    }
+    return;
+  }
   if (!(e.ctrlKey || e.metaKey) || e.altKey) return;
   if (e.key === '=' || e.key === '+') {
     e.preventDefault();

@@ -758,3 +758,74 @@ html, body { background: transparent; }
   font-size: 12px;
   color: var(--color-k-faint);
 }
+
+/* Paper 43쪽(2026-08-18 확정) — 헤더 아래는 좌 사이드바(#settingsNav) + 우 패널
+ * (#settingsGrid)의 행(row) 레이아웃이다. #settings가 이미 chatMaxH로 고정된
+ * 높이를 가지므로(main.js가 세팅) .settings-grid가 써오던 "flex-shrink로 남는
+ * 높이만큼 줄어들며 overflow:auto가 작동" 트릭을 이 레벨에서도 그대로 쓴다 —
+ * min-height:0이 없으면 내용이 넘칠 때 카드 목록이 창 밖으로 삐져나간다. */
+.settings-body {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+/* 사이드바 — 유리 위의 미묘한 인셋. backdrop-filter를 추가하지 않는다(그러면
+ * 유리 위에 유리를 또 얹는 꼴이라 재료 규범 위반) — 밝기·보더만으로 구분한다
+ * (ui/soul.md §7 "깊이는 값으로 만든다"). */
+.settings-nav {
+  flex: 0 0 236px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px;
+  border-radius: 12px;
+  background: rgb(255 255 255 / 2%);
+  border: 1px solid rgb(255 255 255 / 5%);
+  overflow-y: auto;
+}
+
+.settings-nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: 0;
+  background: transparent;
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.settings-nav-item:hover { background: rgb(255 255 255 / 4%); color: var(--color-k-text); }
+/* 선택 표시는 배경/글자 밝기로만 — 액센트 색 금지(Paper 43쪽, ui/soul.md §7 "액센트
+ * 색은 없다"). */
+.settings-nav-item.is-selected {
+  background: rgb(255 255 255 / 7%);
+  color: var(--color-k-text);
+  font-family: var(--font-strong);
+}
+.settings-nav-item:focus-visible {
+  outline: 2px solid rgb(255 255 255 / 55%);
+  outline-offset: -2px;
+}
+.settings-nav-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.settings-nav-badge {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-k-faint);
+}
+
+@media (prefers-contrast: more) {
+  .settings-nav { border-color: #ffffff; }
+  .settings-nav-item.is-selected { background: rgb(255 255 255 / 22%); }
+  .settings-nav-item:focus-visible { outline-color: #ffffff; }
+}
