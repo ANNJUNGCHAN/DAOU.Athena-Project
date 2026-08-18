@@ -1,15 +1,16 @@
-// 차트 카드(CC-101 + CC-102) — CompoundCard(charts) 위 시계열 렌즈의 첫 렌더러.
-// 계약: plan/chart-card-control-spec.md(컨트롤 실측) · plan/chart-lens-spec.md §4·§6
-// (저작 계층, 카드 신설 없음 — 이 파일은 makeCard('chart', …) 하나를 추가할 뿐
-// 새 카드 종류를 만들지 않는다).
+// 차트 카드(CC-101 + CC-102 + CC-103) — CompoundCard(charts) 위 시계열 렌즈의
+// 첫 렌더러. 계약: plan/chart-card-control-spec.md(컨트롤 실측) ·
+// plan/chart-lens-spec.md §4·§6 (저작 계층, 카드 신설 없음 — 이 파일은
+// makeCard('chart', …) 하나를 추가할 뿐 새 카드 종류를 만들지 않는다).
 //
-// CC-101 범위: 캔들 차트 본체 + 거래량 하위 pane. CC-102가 이 라운드에서
-// 얹은 것: 툴바(§0 — 주기 탭·세분·차트모양·수정주가·전체화면), 주기별 실제
-// 재샘플(lib/chart-resample.js), 전체화면(카드가 그리드를 전체 점유 — §7의
-// OS position:fixed 전체화면과 다른 "두 창 원칙" 적응, 아래 toggleFullscreen
-// 참고). 보조지표(§3)·매물대(§4)·드로잉(§5)·크로스헤어 수치조회창(§8)은 이
-// 라운드에도 포함하지 않는다 — 툴바에 ∿ 자리만 비활성 버튼으로 남겨 CC-103이
-// 확장하게 한다.
+// CC-101 범위: 캔들 차트 본체 + 거래량 하위 pane. CC-102가 얹은 것: 툴바(§0 —
+// 주기 탭·세분·차트모양·수정주가·전체화면), 주기별 실제 재샘플
+// (lib/chart-resample.js), 전체화면(카드가 그리드를 전체 점유 — §7의 OS
+// position:fixed 전체화면과 다른 "두 창 원칙" 적응, 아래 toggleFullscreen
+// 참고). CC-103이 얹은 것: 보조지표 패널(§3, ∿▾ — lib/chart-indicator-panel.js
+// + lib/chart-indicator-registry.js, 35종 전수 노출·5종 계산 구현) · 매물대
+// 오버레이(§4, lib/chart-volume-profile.js 계산을 가격 pane 위 DOM 오버레이로
+// 렌더). 드로잉(§5)·크로스헤어 수치조회창(§8)은 이 라운드에도 포함하지 않는다.
 //
 // lightweight-charts 5.2.1은 ESM 전용(exports 필드에 "require" 조건 없음,
 // package.json 실측: `"exports": {".": {"...": {"import": "..."}}}`). 이 앱은
@@ -26,6 +27,10 @@
 
 const { createChartToolbar } = require('./chart-toolbar');
 const { resample } = require('./chart-resample');
+const { createIndicatorPanel } = require('./chart-indicator-panel');
+const { DEFAULT_INDICATOR_VISIBLE, defaultParamsFor } = require('./chart-indicator-registry');
+const { sma, bollinger, rsi, macd } = require('./chart-indicators');
+const { volumeProfile } = require('./chart-volume-profile');
 
 const UP_COLOR = '#FF5C5C';
 const DOWN_COLOR = '#4D9FFF';
@@ -37,6 +42,17 @@ const CROSSHAIR_COLOR = 'rgba(120,128,140,0.6)';
 const AXIS_TEXT_COLOR = '#6B7480';
 // 가격축은 원 단위 정수로 — CC-101 이월 폴리시(팀 리드 지시, CC-102 인수 조건).
 const PRICE_FORMAT = { type: 'price', precision: 0, minMove: 1 };
+
+// ---- 보조지표(CC-103) 색 — 이평선·거래량MA는 "서로 구분되는 무채색 계열"
+// (spec §3.1) — 액센트 색 없음 원칙(soul.md)과 같은 결. 밝기 단계로만 구분한다.
+const MA_COLORS = ['#E7E9F2', '#C3C8DC', '#9AA0BF', '#6F76A0', '#4A5080'];
+const BOLL_BAND_COLOR = 'rgba(154,160,191,0.55)';
+const BOLL_MID_COLOR = 'rgba(154,160,191,0.9)';
+const RSI_COLOR = '#C3C8DC';
+const RSI_GUIDE_COLOR = 'rgba(154,160,191,0.4)';
+const MACD_LINE_COLOR = '#C3C8DC';
+const MACD_SIGNAL_COLOR = '#6F76A0';
+const DECIMAL_PRICE_FORMAT = { type: 'price', precision: 2, minMove: 0.01 };
 
 // ---------- 순수 변환 (DOM 없이 테스트 가능) ----------
 // ohlcv: [{time,open,high,low,close,volume}, ...] (app/data/chart-mock-ohlcv.json
@@ -84,7 +100,7 @@ function withAlpha(hex, alpha) {
 // 반환: {chart, setForm(candle|bar|line|area), setData(ohlcv), destroy}.
 async function createChartCard(container, opts) {
   const o = opts || {};
-  const { createChart, CandlestickSeries, BarSeries, LineSeries, AreaSeries, HistogramSeries, CrosshairMode } =
+  const { createChart, CandlestickSeries, BarSeries, LineSeries, AreaSeries, HistogramSeries, CrosshairMode, LineStyle } =
     await import('lightweight-charts');
 
   const dailyBars = Array.isArray(o.ohlcv) ? o.ohlcv : [];
@@ -96,6 +112,7 @@ async function createChartCard(container, opts) {
       onFormChange: (form) => setForm(form),
       onAdjustedToggle: (adjustedOn) => applyAdjusted(adjustedOn),
       onFullscreenToggle: () => toggleFullscreen(),
+      onIndicatorButtonClick: (anchorBtn) => indicatorPanel.open(anchorBtn),
     },
   });
   container.appendChild(toolbar.element);
@@ -107,6 +124,16 @@ async function createChartCard(container, opts) {
   const priceWrap = document.createElement('div');
   priceWrap.className = 'chart-price-pane';
   container.appendChild(priceWrap);
+
+  // 오버레이 2종(CC-103) — lightweight-charts 캔버스 위에 얹는 DOM 레이어다.
+  // pointer-events:none이라 크로스헤어·줌·드래그를 가로채지 않는다.
+  const overlayLegend = document.createElement('div');
+  overlayLegend.className = 'chart-overlay-legend';
+  priceWrap.appendChild(overlayLegend);
+
+  const vpOverlay = document.createElement('div');
+  vpOverlay.className = 'chart-volume-profile-overlay';
+  priceWrap.appendChild(vpOverlay);
 
   const chart = createChart(priceWrap, {
     autoSize: true,
@@ -205,6 +232,251 @@ async function createChartCard(container, opts) {
 
   buildPriceSeries(currentForm);
 
+  // ---------- 보조지표 패널(CC-103) — spec §3·§4 ----------
+  // indicatorState.visible/params는 chart-indicator-panel.js와 공유하는 같은
+  // 객체다(참조 공유, 복제 아님) — 패널이 토글·파라미터를 직접 갱신하고, 여기는
+  // "무엇이 바뀌었는지"만 콜백으로 받아 해당 시리즈군을 재생성한다.
+  const indicatorState = {
+    visible: new Set(DEFAULT_INDICATOR_VISIBLE),
+    params: {
+      ma: defaultParamsFor('ma'),
+      boll: defaultParamsFor('boll'),
+      volMa: defaultParamsFor('volMa'),
+      rsi: defaultParamsFor('rsi'),
+      macd: defaultParamsFor('macd'),
+    },
+  };
+  let volumeProfileOn = false;
+
+  let maSeriesList = []; // [{period, series}]
+  let bollSeriesGroup = null; // {upper, middle, lower}
+  let volMaSeriesList = []; // [{period, series}] — 거래량 pane(1) 위 오버레이
+  let rsiLine = null;
+  let macdLine = null;
+  let macdSignalLine = null;
+  let macdHistSeries = null;
+
+  function refreshExtraPaneHeights() {
+    if (chart.panes()[1]) chart.panes()[1].setHeight(80);
+    if (rsiLine && typeof rsiLine.paneIndex === 'function') {
+      const idx = rsiLine.paneIndex();
+      if (chart.panes()[idx]) chart.panes()[idx].setHeight(90);
+    }
+    if (macdLine && typeof macdLine.paneIndex === 'function') {
+      const idx = macdLine.paneIndex();
+      if (chart.panes()[idx]) chart.panes()[idx].setHeight(90);
+    }
+  }
+
+  function renderOverlayLegend() {
+    overlayLegend.textContent = '';
+    if (!indicatorState.visible.has('ma')) return;
+    const periods = indicatorState.params.ma.periods;
+    for (let i = 0; i < periods.length; i += 1) {
+      const chip = document.createElement('span');
+      chip.className = 'chart-overlay-legend-chip';
+      const dot = document.createElement('span');
+      dot.className = 'chart-overlay-legend-dot';
+      dot.style.background = MA_COLORS[i % MA_COLORS.length];
+      chip.appendChild(dot);
+      chip.appendChild(document.createTextNode(`MA${periods[i]}`));
+      overlayLegend.appendChild(chip);
+    }
+  }
+
+  // 이평선·볼린저 — 가격 pane(0) 위 라인. 파라미터/토글이 바뀔 때마다 통째로
+  // 지우고 다시 만든다(개수가 늘거나 줄 수 있어 diff보다 재생성이 단순하다).
+  function applyOverlayIndicators() {
+    for (const { series } of maSeriesList) chart.removeSeries(series);
+    maSeriesList = [];
+    if (indicatorState.visible.has('ma')) {
+      const periods = indicatorState.params.ma.periods;
+      for (let i = 0; i < periods.length; i += 1) {
+        const series = chart.addSeries(
+          LineSeries,
+          { color: MA_COLORS[i % MA_COLORS.length], lineWidth: 1, priceFormat: PRICE_FORMAT, crosshairMarkerVisible: false, lastValueVisible: false, priceLineVisible: false },
+          0
+        );
+        maSeriesList.push({ period: periods[i], series });
+      }
+    }
+    if (bollSeriesGroup) {
+      chart.removeSeries(bollSeriesGroup.upper);
+      chart.removeSeries(bollSeriesGroup.middle);
+      chart.removeSeries(bollSeriesGroup.lower);
+      bollSeriesGroup = null;
+    }
+    if (indicatorState.visible.has('boll')) {
+      const bandOpts = { lineWidth: 1, priceFormat: PRICE_FORMAT, crosshairMarkerVisible: false, lastValueVisible: false, priceLineVisible: false };
+      bollSeriesGroup = {
+        upper: chart.addSeries(LineSeries, Object.assign({ color: BOLL_BAND_COLOR }, bandOpts), 0),
+        middle: chart.addSeries(LineSeries, Object.assign({ color: BOLL_MID_COLOR }, bandOpts), 0),
+        lower: chart.addSeries(LineSeries, Object.assign({ color: BOLL_BAND_COLOR }, bandOpts), 0),
+      };
+    }
+    renderOverlayLegend();
+    recomputeOverlayData();
+  }
+
+  // 거래량MA — 거래량 pane(1) 위 오버레이(같은 스케일, priceScaleId:'').
+  function applyVolMaIndicator() {
+    for (const { series } of volMaSeriesList) chart.removeSeries(series);
+    volMaSeriesList = [];
+    if (indicatorState.visible.has('volMa')) {
+      const periods = indicatorState.params.volMa.periods;
+      for (let i = 0; i < periods.length; i += 1) {
+        const series = chart.addSeries(
+          LineSeries,
+          { color: MA_COLORS[i % MA_COLORS.length], lineWidth: 1, priceScaleId: '', crosshairMarkerVisible: false, lastValueVisible: false, priceLineVisible: false },
+          1
+        );
+        volMaSeriesList.push({ period: periods[i], series });
+      }
+    }
+    refreshExtraPaneHeights();
+    recomputeVolMaData();
+  }
+
+  // RSI·MACD — 별도 pane. 부분 토글이 pane 인덱스를 뒤섞지 않도록(CC-102 pane
+  // 분리 계약 연장) 항상 고정 순서(RSI→MACD)로 둘 다 통째로 재생성한다.
+  function applyPaneIndicators() {
+    if (rsiLine) { chart.removeSeries(rsiLine); rsiLine = null; }
+    if (macdLine) { chart.removeSeries(macdLine); macdLine = null; }
+    if (macdSignalLine) { chart.removeSeries(macdSignalLine); macdSignalLine = null; }
+    if (macdHistSeries) { chart.removeSeries(macdHistSeries); macdHistSeries = null; }
+
+    let paneIdx = 2; // 0=가격 1=거래량
+    if (indicatorState.visible.has('rsi')) {
+      rsiLine = chart.addSeries(
+        LineSeries,
+        { color: RSI_COLOR, lineWidth: 1, priceFormat: DECIMAL_PRICE_FORMAT, crosshairMarkerVisible: false, lastValueVisible: false },
+        paneIdx
+      );
+      rsiLine.createPriceLine({ price: 70, color: RSI_GUIDE_COLOR, lineStyle: LineStyle.Dashed, lineWidth: 1, axisLabelVisible: true, title: '70' });
+      rsiLine.createPriceLine({ price: 30, color: RSI_GUIDE_COLOR, lineStyle: LineStyle.Dashed, lineWidth: 1, axisLabelVisible: true, title: '30' });
+      paneIdx += 1;
+    }
+    if (indicatorState.visible.has('macd')) {
+      macdHistSeries = chart.addSeries(HistogramSeries, { priceFormat: DECIMAL_PRICE_FORMAT, lastValueVisible: false }, paneIdx);
+      macdLine = chart.addSeries(LineSeries, { color: MACD_LINE_COLOR, lineWidth: 1, priceFormat: DECIMAL_PRICE_FORMAT, crosshairMarkerVisible: false, lastValueVisible: false }, paneIdx);
+      macdSignalLine = chart.addSeries(LineSeries, { color: MACD_SIGNAL_COLOR, lineWidth: 1, priceFormat: DECIMAL_PRICE_FORMAT, crosshairMarkerVisible: false, lastValueVisible: false }, paneIdx);
+      paneIdx += 1;
+    }
+    refreshExtraPaneHeights();
+    recomputePaneIndicatorData();
+  }
+
+  function recomputeOverlayData() {
+    if (!currentBars.length) return;
+    const closes = currentBars.map((b) => Number(b.close));
+    const times = currentBars.map((b) => b.time);
+    for (const { period, series } of maSeriesList) {
+      const vals = sma(closes, period);
+      series.setData(times.map((t, i) => ({ time: t, value: vals[i] })).filter((d) => d.value != null));
+    }
+    if (bollSeriesGroup) {
+      const { upper, middle, lower } = bollinger(closes, indicatorState.params.boll.period, indicatorState.params.boll.mult);
+      bollSeriesGroup.upper.setData(times.map((t, i) => ({ time: t, value: upper[i] })).filter((d) => d.value != null));
+      bollSeriesGroup.middle.setData(times.map((t, i) => ({ time: t, value: middle[i] })).filter((d) => d.value != null));
+      bollSeriesGroup.lower.setData(times.map((t, i) => ({ time: t, value: lower[i] })).filter((d) => d.value != null));
+    }
+  }
+
+  function recomputeVolMaData() {
+    if (!currentBars.length) return;
+    const volumes = currentBars.map((b) => Number(b.volume));
+    const times = currentBars.map((b) => b.time);
+    for (const { period, series } of volMaSeriesList) {
+      const vals = sma(volumes, period);
+      series.setData(times.map((t, i) => ({ time: t, value: vals[i] })).filter((d) => d.value != null));
+    }
+  }
+
+  function recomputePaneIndicatorData() {
+    if (!currentBars.length) return;
+    const closes = currentBars.map((b) => Number(b.close));
+    const times = currentBars.map((b) => b.time);
+    if (rsiLine) {
+      const vals = rsi(closes, indicatorState.params.rsi.period);
+      rsiLine.setData(times.map((t, i) => ({ time: t, value: vals[i] })).filter((d) => d.value != null));
+    }
+    if (macdLine) {
+      const p = indicatorState.params.macd;
+      const { macd: line, signal, histogram } = macd(closes, p.shortP, p.longP, p.signalP);
+      macdLine.setData(times.map((t, i) => ({ time: t, value: line[i] })).filter((d) => d.value != null));
+      macdSignalLine.setData(times.map((t, i) => ({ time: t, value: signal[i] })).filter((d) => d.value != null));
+      macdHistSeries.setData(
+        times
+          .map((t, i) => ({ time: t, value: histogram[i], color: histogram[i] >= 0 ? withAlpha(UP_COLOR, 0.6) : withAlpha(DOWN_COLOR, 0.6) }))
+          .filter((d) => d.value != null)
+      );
+    }
+  }
+
+  // 매물대(§4) — 독립 차트가 아니다. 가격 pane 우측 34% 오버레이(절대배치
+  // 수평 히스토그램, pointer-events:none). priceSeries.priceToCoordinate()로
+  // 가격→픽셀을 얻어 그린다 — 스크롤/줌으로 가격축이 오토스케일되면 값도 따라
+  // 움직여야 해서(§4 "주기 전환·데이터 변경 시 재계산") visibleLogicalRange
+  // 변경도 구독한다(아래).
+  function renderVolumeProfile() {
+    if (!volumeProfileOn) {
+      vpOverlay.style.display = 'none';
+      vpOverlay.textContent = '';
+      return;
+    }
+    if (!currentBars.length) {
+      vpOverlay.style.display = 'none';
+      return;
+    }
+    const rows = currentBars.map((b) => ({ high: Number(b.high), low: Number(b.low), close: Number(b.close), volume: Number(b.volume) }));
+    const { buckets, pocIndex } = volumeProfile(rows);
+    vpOverlay.textContent = '';
+    if (!buckets.length) {
+      vpOverlay.style.display = 'none';
+      return;
+    }
+    vpOverlay.style.display = 'block';
+    const maxVol = Math.max.apply(null, buckets.map((b) => b.volume).concat([1]));
+    for (let i = 0; i < buckets.length; i += 1) {
+      const bucket = buckets[i];
+      const yHigh = priceSeries.priceToCoordinate(bucket.high);
+      const yLow = priceSeries.priceToCoordinate(bucket.low);
+      if (yHigh == null || yLow == null) continue;
+      const top = Math.min(yHigh, yLow);
+      const height = Math.max(1, Math.abs(yLow - yHigh));
+      const widthPct = (bucket.volume / maxVol) * 100;
+      const bar = document.createElement('div');
+      bar.className = 'chart-vp-bar' + (i === pocIndex ? ' is-poc' : '');
+      bar.style.top = `${top}px`;
+      bar.style.height = `${height}px`;
+      bar.style.width = `${widthPct}%`;
+      vpOverlay.appendChild(bar);
+    }
+  }
+  chart.timeScale().subscribeVisibleLogicalRangeChange(() => {
+    if (volumeProfileOn) renderVolumeProfile();
+  });
+
+  const indicatorPanel = createIndicatorPanel({
+    initial: { visible: indicatorState.visible, params: indicatorState.params, volumeProfileOn },
+    callbacks: {
+      onToggle: (id) => {
+        if (id === 'ma' || id === 'boll') applyOverlayIndicators();
+        else if (id === 'volMa') applyVolMaIndicator();
+        else if (id === 'rsi' || id === 'macd') applyPaneIndicators();
+      },
+      onParamChange: (id) => {
+        if (id === 'ma' || id === 'boll') applyOverlayIndicators();
+        else if (id === 'volMa') applyVolMaIndicator();
+        else if (id === 'rsi' || id === 'macd') applyPaneIndicators();
+      },
+      onVolumeProfileToggle: (on) => {
+        volumeProfileOn = on;
+        requestAnimationFrame(() => renderVolumeProfile());
+      },
+    },
+  });
+
   function setData(ohlcv) {
     const candleData = toCandleSeriesData(ohlcv);
     const volumeData = toVolumeSeriesData(ohlcv);
@@ -215,7 +487,18 @@ async function createChartCard(container, opts) {
     }
     volumeSeries.setData(volumeData);
     chart.timeScale().fitContent();
+    recomputeOverlayData();
+    recomputeVolMaData();
+    recomputePaneIndicatorData();
+    // priceToCoordinate()는 fitContent() 이후 렌더가 실제로 갱신돼야 정확하다
+    // (같은 틱에서 읽으면 이전 스케일값을 돌려줄 수 있다 — 실측 방어).
+    requestAnimationFrame(() => renderVolumeProfile());
   }
+
+  // 기본 on(이평선·거래량MA) 초기 적용 — 패널·데이터 로드보다 먼저 시리즈를
+  // 만들어둬야 setData()가 첫 렌더에서 바로 채운다.
+  applyOverlayIndicators();
+  applyVolMaIndicator();
 
   function setForm(form) {
     if (!SERIES_DEFS[form]) return;
@@ -272,6 +555,7 @@ async function createChartCard(container, opts) {
       const rect = priceWrap.getBoundingClientRect();
       if (rect.width > 0 && rect.height > 0) chart.resize(rect.width, rect.height);
       chart.timeScale().fitContent();
+      if (volumeProfileOn) renderVolumeProfile();
     });
   }
 
@@ -291,6 +575,7 @@ async function createChartCard(container, opts) {
 
   function destroy() {
     toolbar.destroy();
+    indicatorPanel.destroy();
     const card = container.closest('.card');
     const grid = container.closest('.grid');
     if (card) card.classList.remove('is-expanded');

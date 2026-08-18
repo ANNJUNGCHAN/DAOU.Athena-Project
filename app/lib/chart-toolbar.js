@@ -104,7 +104,7 @@ function closeAnyOpenDropdown() {
 }
 
 // opts.callbacks: { onPeriodChange(period, interval), onFormChange(form),
-//   onAdjustedToggle(nextOn), onFullscreenToggle() }
+//   onAdjustedToggle(nextOn), onFullscreenToggle(), onIndicatorButtonClick(anchorBtn) }
 // opts.initial: { period, interval, form, adjusted, fullscreen }
 // 반환: { element, setFullscreenLabel(isFullscreen) } — 다른 상태는 툴바가
 // 스스로 갱신한다(클릭한 사람이 곧 상태를 아는 사람이라 되돌려줄 게 없다).
@@ -183,10 +183,14 @@ function createChartToolbar(opts) {
   });
   right.appendChild(formBtn);
 
-  // ∿ 보조지표 — CC-103 소관. 버튼만 두고 비활성화한다(제어권을 아직 안
-  // 준 상태에서 눌러도 반응 없는 죽은 클릭을 만들지 않는다 — disabled로 명시).
-  const indicatorBtn = iconButton('chart-toolbar-btn', '∿ ▾', '보조지표 패널 — CC-103 예정', '보조지표 패널은 CC-103에서 연결된다');
-  indicatorBtn.disabled = true;
+  // ∿ 보조지표(CC-103) — 2단 패널(토글 리스트 + 설정, spec §3·§4)을 연다.
+  // 패널 자체는 chart-indicator-panel.js가 만든다 — 이 버튼은 열기 신호와
+  // 자기 자신(anchorBtn)만 콜백에 넘긴다(패널 배치 기준점이 필요해서다).
+  const indicatorBtn = iconButton('chart-toolbar-btn', '∿ ▾', '보조지표 패널', '보조지표 패널 — 상단/하단 지표 토글·설정, 매물대');
+  indicatorBtn.setAttribute('aria-expanded', 'false');
+  indicatorBtn.addEventListener('click', () => {
+    cb.onIndicatorButtonClick && cb.onIndicatorButtonClick(indicatorBtn);
+  });
   right.appendChild(indicatorBtn);
 
   right.appendChild(el('span', 'chart-toolbar-divider'));
