@@ -167,6 +167,7 @@ function addLiveCard(result) {
   if (envelope.canvas_type === 'table' && !envelope.fell_back) return renderMcpTable(envelope);
   if (envelope.canvas_type === 'stream' && !envelope.fell_back) return renderLiveStream(envelope);
   if (envelope.canvas_type === 'reader' && !envelope.fell_back) return renderLiveReader(envelope);
+  if (envelope.canvas_type === 'chart' && !envelope.fell_back) return renderLiveChart(envelope);
   return renderFreeCanvas(envelope);
 }
 
@@ -333,6 +334,35 @@ function renderLiveReader(envelope) {
     body.appendChild(p);
   } else {
     renderMarkdownInto(body, data.body_markdown);
+  }
+}
+
+// ---------- 실배선 차트(신규⑤) — MCP render_canvas의 실제 chart 응답 ----------
+// live-prompt.js의 chart 힌트가 규정한 형상: data는 {symbol, name, bars:[{time,
+// open,high,low,close,volume}, ...]}(날짜 오름차순 — 프롬프트가 모델에게 정렬해서
+// 보내라고 지시한다, 여기서는 재정렬하지 않는다). 렌더 자체는 아래 renderChartCard
+// (목업 경로, addCard('chart'))와 같은 createChartCard를 재사용한다 — 차이는
+// loadFixture 대신 envelope.data를 바로 먹인다는 것뿐이다. 카드 셸(makeCard)·
+// cardDestroyers 등록·에러 처리는 다른 실배선 렌더러(renderMcpTable 등)와 동일하다.
+async function renderLiveChart(envelope) {
+  const data = (envelope.data && typeof envelope.data === 'object') ? envelope.data : {};
+  const bars = Array.isArray(data.bars) ? data.bars : [];
+  const title = envelope.caption || (data.name ? `일봉 — ${data.name}` : '차트');
+  const { card, body } = makeCard('chart', title, envelope.layout);
+  if (!bars.length) {
+    body.appendChild(errorNote('빈 차트 — bars가 없다.'));
+    return;
+  }
+  const chartBody = document.createElement('div');
+  chartBody.className = 'chart-card-body';
+  body.appendChild(chartBody);
+  try {
+    const instance = await createChartCard(chartBody, { symbol: data.symbol, name: data.name, ohlcv: bars });
+    // 닫기 버튼(closeCard)이 lightweight-charts를 정리하도록 카드 자체에 매단다.
+    cardDestroyers.set(card, instance.destroy);
+  } catch (err) {
+    chartBody.remove();
+    body.appendChild(errorNote(`차트를 그리지 못했다 — ${err && err.message ? err.message : String(err)}`));
   }
 }
 

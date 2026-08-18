@@ -558,6 +558,99 @@ pytest 2건 + **verify 검증 10**(합성 봉투로 실배선 채널 `athena:add
 - 부수 재현: 스트림 스키마를 맞추는 데 3회 걸렸다(턴 A 56초) — `render_canvas`가
   `data` 스키마를 모델에 안 알려준다는 plan.md 다음 수 11이 그대로 재재현됐다.
 
+## 키움 라우팅 규칙 · 실배선 chart 카드 · 백엔드 자동 기동 (2026-08-18)
+
+`app/`(이 디렉토리)만 건드렸다 — `backend/`는 같은 날 다른 작업이 동시에 손대고
+있어 의도적으로 안 건드렸다.
+
+### 라우팅 규칙 + 4단계 사용법 한 줄 (`lib/main/live-prompt.js`)
+
+이 게이트웨이는 `backend/docs/LLM_API_SELECTION.md`가 정의한 4개 셀렉터 툴
+(`athena_search`/`athena_describe`/`athena_resolve`/`athena_call`)로 키움 REST
+323개 오퍼레이션을 감싸는데, 같은 왕복에 공시·뉴스용 외부 MCP 서버도 함께 물려
+있으면(`GATEWAY_ALLOWED_TOOLS`가 서버 전체를 허용한다) 모델이 마켓 데이터 질문을
+엉뚱한 MCP로 답할 여지가 있었다 — 프롬프트에 명시적으로 못 박았다:
+
+- 시세·차트·호가·체결·순위·잔고 등 마켓 데이터는 반드시 `athena_search →
+  athena_describe → athena_resolve → athena_call` 순서로 조회하고, 외부 MCP·웹으로
+  대체하지 않는다.
+- `athena_describe`의 `detail_groups`에서만 `detail_group`을 지정한다(없으면 전체
+  응답).
+- `plan_token`은 1회용이다 — 실패해도 소진되므로(`LLM_API_SELECTION.md` "Single-use
+  enforcement") 같은 토큰으로 재시도하지 않고 `athena_resolve`부터 다시 밟는다.
+- 키움 백엔드가 미기동이라는 에러가 오면 그 사실을 사용자에게 알리고 끝낸다.
+
+증거: `live-prompt.test.js`에 라우팅 규칙 단언 2건 + 4단계 사용법 단언 1건 추가,
+`npm test` 통과.
+
+### chart 캔버스 힌트 + 실배선 렌더 (`live-prompt.js` + `canvas.js`)
+
+프롬프트에 `table`/`stream`/`reader`와 같은 형식으로 `chart` 힌트를 추가했다 —
+`canvas_type "chart"`, `data`는 `{"symbol","name","bars":[{"time":"YYYY-MM-DD",
+"open","high","low","close","volume"}, ...]}`. 키움 일봉(`ka10081` 등) 응답
+매핑을 예시로 못 박았다 — `dt(YYYYMMDD)→time(YYYY-MM-DD)`,
+`open_pric→open`/`high_pric→high`/`low_pric→low`/`cur_prc→close`/`trde_qty→volume`
+(전부 문자열로 오므로 숫자 변환 지시 포함), `bars`는 날짜 **오름차순**(키움 응답은
+최신순이므로 뒤집으라고 명시).
+
+`canvas.js`의 `addLiveCard`에 `canvas_type === 'chart' && !fell_back` 분기와
+`renderLiveChart(envelope)`를 추가했다 — 기존 `renderChartCard`(목업, `addCard('chart')`
+경로)와 같은 `createChartCard`를 재사용하되 `loadFixture` 대신 `envelope.data`의
+`{symbol,name,bars}`를 그대로 먹인다. 카드 셸(`makeCard('chart', …)`)·
+`cardDestroyers` 등록·빈 `bars` 시 `errorNote` 처리는 다른 실배선 렌더러
+(`renderMcpTable`/`renderLiveStream`/`renderLiveReader`)와 동일한 패턴이다. 카드
+제목은 `envelope.caption`을 우선하고 없으면 `data.name`으로 "일봉 — 종목명"을
+만든다. `lib/canvas-layout.js`의 폭 문법(`chart: 'full'`)과 큐레이션 드롭 타깃
+(`chart: ['chart']`)은 차트 카드(CC-101~106) 작업 때 이미 들어가 있어 수정하지
+않았다.
+
+**정직하게 남기는 갭**: `backend/athena_mcp/canvas.py`의 `CANVAS_SCHEMAS`
+레지스트리(2026-08-18 기준)는 `stream`/`reader`/`timeline`/`table` 4종뿐이고
+`chart`는 아직 없다 — 게이트웨이가 실제로 `canvas_type:"chart"` 봉투를 그대로
+통과시키는지는 `backend/`가 스키마를 추가해야 실측할 수 있다(별도 작업, 이
+브랜치에서는 손대지 않았다). `main.js`/`canvas.js`는 응답값 `canvas_type`만 읽으므로
+백엔드가 스키마를 추가하면 이 앱 쪽은 추가 수정 없이 그대로 동작해야 한다는 게
+설계 의도지만, 실왕복으로는 아직 확인 못 했다.
+
+증거: `npm run verify` 검증13b — `liveEnvelope` 헬퍼(검증10)로 합성 chart 봉투를
+보내 카드 렌더·`lightweight-charts` `<canvas>` 마운트·같은 타입 재요청 시 목업
+차트 카드를 갈아치우는 것까지 단언(백엔드·quota 무관, 순수 렌더러 단 검증).
+2026-08-18 실행 통과, `captures/20-live-chart-card.png`.
+
+### 백엔드 자동 기동 (`lib/main/backend-launcher.js`)
+
+지금까지는 실배선 왕복이 붙으려면 사용자가 `backend/`를 손으로 먼저 띄워야 했다.
+`ensureBackend()`를 추가해 앱 부팅 시(`main.js`, `app.whenReady()` 안에서
+fire-and-forget — `createWindows()`를 막지 않는다) 자동으로 확인·기동한다:
+
+1. `GET http://127.0.0.1:8010/api/v1/llm/manifest`(1.5초 타임아웃)로 헬스체크한다
+   — 이 엔드포인트는 `x-athena-llm-exposed:false` 부트스트랩 경로라 자격증명 없이도
+   200을 돌려준다(`backend/docs/LLM_API_SELECTION.md` 실측 확인).
+2. **이미 떠 있으면 스폰하지 않는다** — 사용자가 별도 콘솔에서 수동 기동한
+   인스턴스를 존중한다. CLAUDE.md §7(uvicorn 워커 정확히 1개, 레이트리미터·
+   멱등성 캐시가 프로세스 로컬)과도 맞닿아 있다 — 중복 스폰은 그 불변식을 깬다.
+3. 죽어 있으면 `backend/.venv/Scripts/python.exe -m uvicorn athena_api.main:app
+   --host 127.0.0.1 --port 8010 --workers 1`을 `cwd=backend`로 스폰한다
+   (`backend/README.md` "실행법"과 문자 그대로 일치, `shell:false` —
+   `claude-runner.js`가 실측으로 확정한 것과 같은 이유로 셸을 안 거친다).
+   `backend/.venv`가 없으면(이 앱만 배포된 레이아웃 등) 조용히 스킵한다 — 실패로
+   취급하지 않고 개발 레이아웃 전제라는 사실을 로그에 남긴다.
+4. 스폰 후 최대 12초, 0.5초 간격으로 같은 헬스체크를 폴링해 준비를 확인한다.
+5. 판정·타이밍을 전부 `main.js`의 `mdlog`(파일 로거)에 남긴다.
+
+종료 정책: `before-quit`에서 `shutdownBackend()`를 부르지만, 이 모듈이 **자기가
+스폰한 child 핸들을 쥐고 있을 때만** `killTree()`(Windows `taskkill /T /F` —
+`claude-runner.js`와 같은 패턴)로 죽인다. 사용자가 수동 기동한 인스턴스는 이
+변수에 잡히지 않으므로 앱이 꺼져도 계속 산다.
+
+**단위 테스트 범위(의도적으로 좁힘)**: `checkHealth`(fetch)·`ensureBackend`(spawn)는
+네트워크·프로세스에 의존해 자동 테스트에서 안 부른다(`claude -p`를 테스트에서 안
+부르는 것과 같은 원칙). 순수 로직만 테스트했다 — `buildUvicornArgs()`가
+`backend/README.md`와 문자 그대로 일치하는지, `decideAction({healthy,venvExists})`가
+세 갈래(이미 실행 중/venv 없음/스폰)를 결정적으로 판정하는지. `npm test` 7건 추가,
+전부 통과. **실제 스폰·헬스체크 폴링·종료 시 트리 kill은 QA가 실측해야 한다** —
+이 브랜치에서는 코드 배선과 순수 로직 단위 테스트까지다.
+
 ### 굴절층·데이터층 분리 — 실측 결과 미채택
 
 soul.md §7 완화책을 스파이크로 실측했다(`npm run verify:glass`, 변형 3종 ABC×6

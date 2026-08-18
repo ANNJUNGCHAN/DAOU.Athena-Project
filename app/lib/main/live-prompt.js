@@ -13,11 +13,26 @@
 // 그대로 옮겼다(2026-08-17 실측, canvas.py L34-68) — 필드명·필수여부가 다르면
 // 게이트웨이(validate_canvas_payload)가 조용히 free로 폴백시키므로, table과 같은
 // 이유로 여기 명시한다.
+//
+// 라우팅 규칙(2026-08-18)을 추가하는 이유: 이 게이트웨이는 athena_search/
+// athena_describe/athena_resolve/athena_call(backend/docs/LLM_API_SELECTION.md)
+// 4개 셀렉터 툴로 키움 REST 323개 오퍼레이션을 감싸는데, 같은 왕복에 공시·뉴스용
+// 외부 MCP 서버도 함께 물려 있으면 모델이 "이미 연결된 아무 MCP"로 마켓 데이터
+// 질문을 답해버릴 수 있다(예: dart-mcp로 시세를 지어내는 식) — 명시적으로 못 박는다.
 'use strict';
 
 function buildLivePrompt(query) {
   return [
     '아래 사용자 질문에 답하라. 데이터 조회가 필요하면 연결된 MCP 툴을 호출하라.',
+    '',
+    '라우팅 규칙 — 국내 주식의 시세·차트·호가·체결·순위·잔고 등 마켓 데이터는',
+    '반드시 athena_search → athena_describe → athena_resolve → athena_call(키움 REST)',
+    '순서로 조회한다. 외부 MCP 서버(공시·뉴스·검색 등)는 투자정보 전용이다 —',
+    '주식 마켓 데이터를 외부 MCP나 웹으로 대체하지 마라. athena_describe의',
+    'detail_groups에서만 detail_group을 지정한다(없으면 생략 — 전체 응답). plan_token은',
+    '1회용이다 — 실패해도 소진되므로 같은 토큰으로 재시도하지 말고 athena_resolve부터',
+    '다시 밟는다. 키움 백엔드가 미기동이라는 에러가 오면 그 사실을 사용자에게 알리고',
+    '끝낸다.',
     '',
     '조회한 데이터는 반드시 athena__render_canvas 툴로 캔버스에 그린다:',
     '- 같은 필드가 반복되는 목록/표 데이터 → canvas_type "table",',
@@ -29,6 +44,13 @@ function buildLivePrompt(query) {
     '- 장문 문서 1건(공시 원문 등) → canvas_type "reader",',
     '  data는 {"title":"...", "body_markdown":"...", "highlights":["..."]}',
     '  (title/body_markdown은 필수, highlights는 선택 — 인용할 요약 구간)',
+    '- 국내 주식 일봉/분봉 등 시계열 시세 → canvas_type "chart",',
+    '  data는 {"symbol":"005930","name":"삼성전자","bars":[{"time":"YYYY-MM-DD",',
+    '  "open":숫자,"high":숫자,"low":숫자,"close":숫자,"volume":숫자}, ...]}',
+    '  키움 일봉(ka10081 등) 응답 매핑 예시: dt(YYYYMMDD)→time(YYYY-MM-DD),',
+    '  open_pric→open, high_pric→high, low_pric→low, cur_prc→close, trde_qty→volume',
+    '  — 전부 문자열로 오므로 반드시 숫자로 변환한다. bars는 날짜 오름차순으로',
+    '  정렬한다(키움 응답은 최신순으로 오므로 뒤집어야 한다).',
     '- 표로 접기 어려운 구조 → canvas_type "free", data에 구조를 그대로 담는다',
     '- caption에 무엇의 데이터인지 한 줄로 적는다',
     '- 데이터 묶음이 여러 개면 캔버스를 여러 번 호출해도 된다',

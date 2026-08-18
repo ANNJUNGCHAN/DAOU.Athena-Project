@@ -957,6 +957,50 @@ app.whenReady().then(async () => {
   assertOk('chartCard: 35 indicator rows present', report.chartCard.indicatorRows35 === true);
   assertOk('chartCard: 24 volume-profile bars present', report.chartCard.volumeProfileBars24 === true);
 
+  // ---- 검증13b — 실배선 chart 봉투(canvas.js renderLiveChart, 2026-08-18) ----
+  // live-prompt.js의 chart 힌트가 규정한 형상 그대로(symbol/name/bars) liveEnvelope
+  // 헬퍼(검증10에서 정의)로 합성 봉투를 보낸다 — 백엔드·quota 무관, 순수 렌더러 단
+  // 검증(canvas_type:'chart'가 backend/athena_mcp/canvas.py 스키마 레지스트리에
+  // 아직 없어도 이 경로는 상관없다 — main.js는 응답값 canvas_type만 읽는다).
+  // 위 검증13이 이미 mock 'chart' 카드(window.addCard('chart'))를 그려뒀으므로,
+  // makeCard의 "같은 타입 재요청 시 갈아치운다" 규칙(카드 정리 규칙)에 따라 이
+  // 봉투가 그 카드를 대체한다 — 별도 정리 호출 없이 정확히 카드 1장만 남아야 한다.
+  const liveChartBars = [
+    { time: '2026-08-14', open: 71000, high: 71600, low: 70800, close: 71300, volume: 9123456 },
+    { time: '2026-08-17', open: 71300, high: 71900, low: 71100, close: 71700, volume: 8877665 },
+    { time: '2026-08-18', open: 71700, high: 72200, low: 71500, close: 72000, volume: 10233445 },
+  ];
+  liveEnvelope({
+    canvas_type: 'chart',
+    caption: '검증13b 실배선 차트',
+    data: { symbol: '005930', name: '삼성전자', bars: liveChartBars },
+  });
+  await wait(1200); // renderLiveChart도 동적 import + 비동기 마운트(검증13과 같은 이유)
+  const liveChartProbe = await canvasWin.webContents.executeJavaScript(`
+    (() => {
+      const cards = document.querySelectorAll('#grid .card.chart');
+      const card = cards[cards.length - 1];
+      if (!card) return null;
+      return {
+        cardCount: cards.length,
+        canvasCount: card.querySelectorAll('canvas').length,
+        titleText: card.querySelector('.card-title') ? card.querySelector('.card-title').textContent : null,
+      };
+    })()
+  `);
+  await shot(canvasWin, '20-live-chart-card.png');
+  report.liveChartCard = {
+    cardRendered: liveChartProbe !== null,
+    replacedMockChartCard: liveChartProbe !== null && liveChartProbe.cardCount === 1,
+    canvasMounted: liveChartProbe !== null && liveChartProbe.canvasCount > 0,
+    // caption은 정보성 참고값(어떤 문구가 카드 제목에 실제로 반영됐는지 추적용) — 단언에서 뺀다.
+    titleText: liveChartProbe && liveChartProbe.titleText,
+  };
+  console.log('[verify] 검증13b(실배선 chart 봉투):', JSON.stringify(report.liveChartCard));
+  assertOk('liveChartCard: card rendered from a synthetic live envelope', report.liveChartCard.cardRendered === true);
+  assertOk('liveChartCard: same-type re-render replaced the mock chart card (exactly one .card.chart)', report.liveChartCard.replacedMockChartCard === true);
+  assertOk('liveChartCard: lightweight-charts canvas element mounted', report.liveChartCard.canvasMounted === true);
+
   // ---------- 검증 14: 창 배치(스냅) — Windows 표준 의미론 (2026-08-18) ----------
   // main.js가 노출한 placeWindows(left/right)·centerWindows를 직접 구동하고,
   // up/down은 실제 경로(athena:window-key → chat.js의 □ 버튼과 같은 로컬 함수)를
