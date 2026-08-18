@@ -35,6 +35,8 @@
 |---|---|
 | [`앱-검증-200.jsonl`](앱-검증-200.jsonl) | 데이터셋 본체. 1행 = 1케이스 |
 | [`평가-로드맵.md`](평가-로드맵.md) | **평가 실행 명세** — 하네스 절차, 증거 수집, 채점 규칙, R0~R5 로드맵 |
+| [`장중_해야할것_QA.md`](장중_해야할것_QA.md) | **시각 의존 34건의 실행 시간표** — 장중필수 22 · 장중권장 7 · 장마감후유리 5. 0순위는 KRX 차단이 승인 문제인지 시각 문제인지 판별 |
+| [`_intraday.json`](_intraday.json) | 200건 전수 시각 의존성 판정 원문(timing/window/reason/check_point) |
 | [`validate.py`](validate.py) | 결정적 검증기 v2 — api_id·detail 실존, enum, tier 규칙, judge 계약, 별칭·허용툴 정합 |
 | [`validate-report.json`](validate-report.json) | 검증기 실행 결과 (2026-08-18 — problems 0) |
 | [`_digest.md`](_digest.md) | 생성 근거인 앱 4방향 실측 분석. 케이스 notes가 참조 |
