@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-08-18T03:00:29.146Z",
+  "startedAt": "2026-08-18T03:02:37.595Z",
   "layout": {
     "scale": 1,
     "screen": {
@@ -46,16 +46,16 @@
     "ok": true
   },
   "expand": {
-    "frameCount": 31,
+    "frameCount": 27,
     "p50": 16.700000000000045,
-    "p95": 33.299999999999955,
-    "max": 33.399999999999864,
-    "min": 16.5
+    "p95": 33.399999999999864,
+    "max": 50.03800000000001,
+    "min": 16.59999999999991
   },
   "collapse": {
     "frameCount": 35,
     "p50": 16.699999999999818,
-    "p95": 16.700000000000728,
+    "p95": 16.800000000000182,
     "max": 16.800000000000182,
     "min": 16.5
   },
@@ -206,5 +206,12 @@
       "hidden": "50"
     }
   },
-  "finishedAt": "2026-08-18T03:00:46.208Z"
+  "chartCard": {
+    "cardRendered": true,
+    "periodTabsOk": true,
+    "paneSeparated": true,
+    "indicatorRows35": true,
+    "volumeProfileBars24": true
+  },
+  "finishedAt": "2026-08-18T03:02:56.866Z"
 }
