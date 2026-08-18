@@ -1,0 +1,44 @@
+{
+  "ok": true,
+  "exitCode": 0,
+  "error": null,
+  "elapsedMs": 72684,
+  "canvasCount": 1,
+  "chartCanvasCount": 1,
+  "chartDataKeys": [
+    "symbol",
+    "name",
+    "bars"
+  ],
+  "chartBarsLength": 60,
+  "toolNames": [
+    "ToolSearch",
+    "ToolSearch",
+    "mcp__athena__athena_search",
+    "mcp__athena__athena_describe",
+    "mcp__athena__athena_resolve",
+    "mcp__athena__athena_call",
+    "Bash",
+    "Bash",
+    "Bash",
+    "Grep",
+    "mcp__athena__athena__render_canvas"
+  ],
+  "kiwoomToolCalls": [
+    "mcp__athena__athena_search",
+    "mcp__athena__athena_describe",
+    "mcp__athena__athena_resolve",
+    "mcp__athena__athena_call"
+  ],
+  "foreignStockCalls": [],
+  "eventTypeCounts": {
+    "system/init": 1,
+    "assistant": 18,
+    "user": 11,
+    "rate_limit_event": 1,
+    "system/thinking_tokens": 6,
+    "result/success": 1
+  },
+  "stderrHead": "",
+  "finalResultText": "삼성전자(005930) 최근 60거래일 일봉을 캔버스에 그렸습니다.\n\n- 8/18 종가 268,500원(전일 대비 -6,000원), 6월 중순 37만원대 고점에서 7/29 저점 189,200원까지 밀린 뒤 8월 들어 23만원대에서 반등 중입니다.\n- 7/29~7/31 구간에 거래량이 4,600만~6,500만 주로 급증한 변동성 확대 구간이 뚜렷합니다."
+}

@@ -24,7 +24,36 @@
 > **현행 수치는 바로 아래 첫 블록(2026-08-18)이다.** 이후 블록들은 날짜가 박힌
 > 스냅샷이고 어떻게 여기까지 왔는지를 남기려고 보존한다 — **인용하지 마라.**
 
-**2026-08-18 (3차) · 설정 사이드바 개편 · 모델 설정 · Windows 창 단축키 후 재실측 — 이 수치가 현행이다:**
+**2026-08-18 (4차) · 키움 실배선 라우팅 — "주식은 무조건 키움"(사용자 지시) 결선 후 재실측 — 이 수치가 현행이다:**
+
+```
+backend:  687 passed, 0 failed (164초)   ← 667 + selector_tools 24 · chart 스키마 6 등 (tests/mcp 258)
+  ruff check .                          → All checks passed
+app:
+  npm test                              → 162건 통과 (3차 151 + live-prompt 8 · backend-launcher 7 등 순증 11)
+  npm run verify                        → 전 단언 통과 · exit 0 (검증13b 라이브 chart 봉투 신설)
+실배선 E2E (spike/cli-pipe/gateway/probe_kiwoom_chart.js · PROBE-KIWOOM-CHART.json):
+  자연어 "삼성전자 최근 일봉 차트 그려줘" → athena_search→describe→resolve→call(ka10081)
+  → chart 캔버스 1건(bars 60) · 외부 주식 MCP 호출 0건 · 감사 로그 kiwoom-selector 4건 · 72.7초
+```
+
+**2026-08-18 (4차) 세션 기록:**
+
+- **다음 수 10 결선 완료** — 게이트웨이가 셀렉터 4툴(`athena_search/describe/resolve/call`)을
+  빌트인으로 노출(`athena_mcp/selector_tools.py`). 실행은 백엔드 `/api/v1/llm/tools/*` HTTP
+  루프백 프록시(기본 127.0.0.1:8010, `ATHENA_BACKEND_URL`) — 인프로세스 import는
+  CredentialProcessLock(자격증명 단일 프로세스) 위반이라 의도적으로 금지. **재시도 0회**
+  (plan_token 1회용), 빌트인 최초로 감사 로그 기록(`kiwoom-selector` 별칭).
+- **라우팅 규칙**(사용자 지시): 라이브 프롬프트에 "주식 마켓 데이터(시세·차트·호가·체결·순위·
+  잔고)는 반드시 키움 4툴, 외부 MCP는 투자정보 전용, 키움 미기동 시 대체 금지" 명시.
+- **chart 캔버스 실배선**: `CHART_SCHEMA`(canvas.py) + `renderLiveChart`(canvas.js) +
+  ka10081 필드 매핑 힌트(dt→time 등, 오름차순 정렬). 차트 카드는 더 이상 픽스처 전용이 아니다.
+- **백엔드 자동 기동**: 앱 부팅 시 헬스체크(manifest) → 미기동이면 uvicorn 스폰(중복 스폰
+  금지 — 수동 인스턴스 존중), 종료 시 자가 스폰분만 정리(`lib/main/backend-launcher.js`).
+- 부수 실측: 전체 스위트 1회 실패는 코드가 아니라 **떠 있는 백엔드와의 CredentialProcessLock
+  충돌**(환경) — 백엔드 내리고 재실행해 687 전부 초록 확인.
+
+**2026-08-18 (3차) · 설정 사이드바 개편 · 모델 설정 · Windows 창 단축키 후 재실측:**
 
 ```
 backend:  변동 없음 (667 passed — 2차 블록 참조)
