@@ -1,33 +1,26 @@
 {
- "ran_at": "2026-08-18T01:29:06.229Z",
+ "ran_at": "2026-08-18T01:43:23.771Z",
  "cases": [
   {
-   "id": "LIV-066",
+   "id": "LIV-031",
    "ok": true,
-   "duration_s": 36.5,
+   "duration_s": 138.7,
    "cards": 1,
-   "audit": 4
+   "audit": 14
   },
   {
-   "id": "LIV-069",
+   "id": "LIV-048",
    "ok": true,
-   "duration_s": 33.1,
-   "cards": 0,
-   "audit": 2
-  },
-  {
-   "id": "LIV-072",
-   "ok": true,
-   "duration_s": 81,
+   "duration_s": 100.6,
    "cards": 1,
    "audit": 3
   },
   {
-   "id": "LIV-067",
+   "id": "LIV-057",
    "ok": true,
-   "duration_s": 151.2,
-   "cards": 2,
-   "audit": 6
+   "duration_s": 143.3,
+   "cards": 1,
+   "audit": 2
   }
  ]
 }
