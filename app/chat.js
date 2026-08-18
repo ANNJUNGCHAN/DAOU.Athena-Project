@@ -110,8 +110,9 @@ window.addEventListener('DOMContentLoaded', () => {
     $bootPh.hidden = false;
   }, 1160);
   // placeholder 상태가 한 박자(200ms) 정착한 뒤 실제 대화 창으로 바꿔치운다 — 부팅
-  // 바의 최종 유리(0.82)·그립·점·입력줄이 전부 .app과 같은 값이라 이음새가 보이지
-  // 않는다. 200ms는 verify.js의 60ms 폴링이 이 상태를 놓치지 않는 하한이기도 하다.
+  // 바의 최종 유리(0.30 — 2026-08-18 하향 후 현행)·그립·점·입력줄이 전부 .app과 같은
+  // 값이라 이음새가 보이지 않는다. 200ms는 verify.js의 60ms 폴링이 이 상태를 놓치지
+  // 않는 하한이기도 하다.
   setTimeout(finishBoot, 1360);
 });
 

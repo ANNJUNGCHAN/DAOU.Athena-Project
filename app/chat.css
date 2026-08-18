@@ -110,7 +110,7 @@ html, body { background: transparent; }
  * 런타임에 파라미터화하는 API를 주지 않는다(on/off + 타입만). 이 sheen 레이어에
  * backdrop-filter blur를 걸면 창 "뒤"가 아니라 이 창 자신의 전경 텍스트(대화
  * 이력·입력)가 흐려진다 — 실측으로 확인된 설계 오류라 걷어냈다. 실제로 조절 가능한
- * 값은 --glass-alpha(패널 배경 불투명도, 0.82→0.97)뿐이라 그것만 보간한다.
+ * 값은 --glass-alpha(패널 배경 불투명도, 0.30→0.55 — 2026-08-18 하향 후 현행)뿐이라 그것만 보간한다.
  */
 .glass-sheen {
   position: fixed; inset: 0; pointer-events: none;
@@ -255,7 +255,7 @@ html, body { background: transparent; }
 .turn-meta {
   display: flex; align-items: center; gap: 10px;
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 12px; /* 11→12 — 실제 호출된 TR·경과시간은 판단 자료(12px 하한, 2026-08-18) */
   color: var(--color-k-faint);
 }
 .chip {
@@ -437,7 +437,11 @@ html, body { background: transparent; }
 
 .onb-cli-card {
   border-radius: 11px;
+  /* 유리화(2026-08-18) — 흰 알파 틴트만으로는 굴절이 없어 §7 금지 목록("뒤에 굴절할
+   * 것 없는 반투명 사각형")에 걸린다. blur를 걸어 진짜 유리로. */
   background: rgb(255 255 255 / 5%);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgb(255 255 255 / 16%);
   overflow: hidden;
 }
@@ -595,7 +599,10 @@ html, body { background: transparent; }
 .auth-timer-card {
   padding: 26px 28px;
   border-radius: 14px;
-  background: rgb(36 42 54 / 55%);
+  /* 유리화(2026-08-18) — 카드 표준 재질(0.45 + blur 14px)로 통일 */
+  background: rgb(36 42 54 / 45%);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgb(255 255 255 / 9%);
   display: flex;
   flex-direction: column;

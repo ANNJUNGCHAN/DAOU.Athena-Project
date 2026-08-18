@@ -124,7 +124,12 @@
   display: flex;
   flex-direction: column;
   border-radius: inherit;
-  background: color-mix(in oklab, var(--color-k-panel) 92%, black);
+  /* 시트도 유리다(2026-08-18 유리화) — 다만 지금 입력을 받는 포컬 표면이라 카드
+   * (0.45)보다 두껍게(0.62) 두고 blur를 키워 아래 카드 내용과 확실히 분리한다.
+   * 가독은 blur가 담당한다 — 아래가 뭉개지므로 솔리드일 필요가 없다. */
+  background: rgba(23, 27, 36, 0.62);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
   border: 1px solid rgb(255 255 255 / 16%);
   overflow: hidden;
 }
