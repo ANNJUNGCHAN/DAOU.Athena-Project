@@ -3,7 +3,7 @@
   "ok": true,
   "exitCode": 0,
   "error": null,
-  "elapsedMs": 10952,
+  "elapsedMs": 11576,
   "canvasCount": 1,
   "canvases": [
     {
@@ -29,5 +29,5 @@
     "result/success": 1
   },
   "stderrHead": "",
-  "finalResultText": "호출 완료했습니다.\n\n- `canvas_type`: `table`\n- `fell_back`: `false` — free 폴백 없이 table 스키마로 그대로 렌더링됐습니다.\n- `data`: 보낸 columns(`name`/종목명, `price`/현재가)와 rows(삼성전자 / 71,000원)가 변형 없이 그대로 반환됐습니다.\n\n지시대로 이후 추가 툴 호출은 하지 않았습니다."
+  "finalResultText": "호출 완료했습니다.\n\n- `canvas_type`: `table`\n- `fell_back`: `false` — 스키마가 그대로 맞아서 free 폴백 없이 테이블 캔버스로 렌더됐습니다.\n- 컬럼 2개(종목명/현재가), 행 1건(삼성전자 / 71,000원)이 지정한 그대로 반환됐습니다.\n\n지시대로 이후 추가 툴 호출은 하지 않았습니다."
 }

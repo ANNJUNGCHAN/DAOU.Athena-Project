@@ -24,7 +24,44 @@
 > **현행 수치는 바로 아래 첫 블록(2026-08-18)이다.** 이후 블록들은 날짜가 박힌
 > 스냅샷이고 어떻게 여기까지 왔는지를 남기려고 보존한다 — **인용하지 마라.**
 
-**2026-08-18 · 작업 브랜치 4종 병합 직후 `main`에서 재실측 — 이 수치가 현행이다:**
+**2026-08-18 (2차) · 전수검사 → 결함 수정 → 렌더러 격리 전환 후 재실측 — 이 수치가 현행이다:**
+
+```
+backend 전체:  667 passed, 0 failed   (145초)   ← 659 − post_paged 테스트 3(데드코드 제거) + 회귀 11(MCP 6·selector 5)
+  ruff check .                          → All checks passed
+  generate_api.py --check               → Generated files are current
+  render_screen_injection_map.py --check→ Generated screen injection map is current
+  render_screen_card_facts.py --check   → Generated screen card facts are current
+app (렌더러 격리 전환 후):
+  npm test                              → fail 0 (110건, node --test)
+  npm run verify                        → 검증 1~13 전부 통과 · exit 0 (실패 시 exit 1 결선 신설 —
+                                          app.quit()은 process.exitCode를 무시함을 실측, app.exit(1) 패턴)
+  verify:settings / verify:settings-cards → 둘 다 exit 0
+  probe-boot-bounds + 차트 프로브 5종     → 전부 exit 0
+실배선:
+  probe_live_spawn.js                   → ok:true · exit 0 · 캔버스 1건(table·폴백 없음) · 11.6초
+```
+
+**2026-08-18 (2차) 세션 기록 — 전수검사·질의응답·수정:**
+
+- **전수검사 (감사 6기 + 조사 1기)** → 확정 결함 13건 전부 수정. 주요: 캔버스 창 Alt+F4 파괴
+  후 미복구(HIGH, `app/main.js` close 가로채기+가드) · 브레인 기동 취소 시 락 누수(HIGH,
+  `lifespan.py` BaseException 정리) · MCP rename 후 옛 이름 호출 거부(`aggregator.py` 포워딩) ·
+  타임아웃/응답초과의 감사 로그 우회(`server.py`) · ingestion `start()` task 누수+TOCTOU ·
+  `_join_task` 취소 삼킴 · 인증 화면 자동진행 타이머 경합(`auth-screen.js`). 상세 표는
+  `backend/athena_mcp/README.md`(결함 #17~20)와 각 커밋.
+- **질의응답 확정 결정 4건**: ① **plan_token 전면 1회용** — 한 질문의 계획 안에서 동일 API
+  중복 호출은 비용 낭비, 재질의는 재-resolve로(`docs/LLM_API_SELECTION.md` Single-use 절,
+  PLAN_ALREADY_USED 409) ② **렌더러 격리 전환**(클로드 데스크탑 방식) — contextIsolation +
+  sandbox + preload 다리, 채널 allowlist(invoke 24·send 10·on 13), UMD 로딩(빌드 도구 없음),
+  `mockdata` main 이관(`app/README.md` 전환 절) ③ MCP 스니펫 textarea 현행 유지 ④ Paper
+  구현 배지는 기능 장표에만.
+- **데드코드 제거**: `ws_last_error`(3지점) · `post_paged`+`max_pages` 전 연쇄 · no-op innerHTML.
+- **Paper 화면설계서 배지 30장**: 기능 장표 우측 최상단에 구현됨 18 · 부분 구현 1(24쪽 —
+  봉투 5상태 분기는 결선, 척추 메타 표시 미구현) · 미구현 10(25~34) · 폐기 1(41). 문서 장표
+  12장은 표기 안 함(사용자 결정). 제목 실측으로 겹침 0 확인(7장 스크린샷 검증).
+
+**2026-08-18 (1차) · 작업 브랜치 4종 병합 직후 `main`에서 재실측:**
 
 ```
 backend 전체:  659 passed, 0 failed   (145초)   ← 장중(브레인 코디네이터·fts·cp949)+AITS(fit·매니페스트) 합산
@@ -331,7 +368,9 @@ soul.md §7의 굴절층·데이터층 분리는 실측 결과 개선 없음 —
 | # | 작업 | 근거 |
 |---|---|---|
 | 19 | **fts recall 게이트** — 토큰 매칭 전환의 품질 검증 | 액션 12를 닫으면서 검색 의미가 바뀌었다(부분문자열 → 완전 토큰). ADR §7이 예정한 대로 고정 corpus top-k recall을 검증하고, 미달 시 UI에 "키워드 검색" 한계를 표시하는 게이트가 필요하다. `store.py` docstring에 의미 변화 명시됨 |
-| 20 | **브레인 실데이터 파이프라인** — HistoryStore 쓰기 호출자 0건 | 액션 16의 코디네이터는 **빈 HistoryStore 위에서 돈다.** `upsert_chat`/`upsert_completed_trade`를 부르는 곳이 brain/tests 밖에 없다 — 채팅·체결 캡처가 히스토리에 쓰는 파이프라인이 없으면 그래프는 영원히 비어 있다. `lifespan.py` `_open_brain` docstring에 명시 |
+| 20 | **브레인 실데이터 파이프라인** — HistoryStore 쓰기 호출자 0건 | 액션 16의 코디네이터는 **빈 HistoryStore 위에서 돈다.** `upsert_chat`/`upsert_completed_trade`를 부르는 곳이 brain/tests 밖에 없다 — 채팅·체결 캡처가 히스토리에 쓰는 파이프라인이 없으면 그래프는 영원히 비어 있다. `lifespan.py` `_open_brain` docstring에 명시. **⚠ 2026-08-18 결함 수정 감사에서 두 번째 갭 발견**: 설령 쓰기 파이프라인이 생겨도 `IngestionCoordinator`에 `source_projector`가 프로덕션에서 주입되지 않는다(`lifespan.py`의 `_open_brain`이 `IngestionCoordinator(history, store)`를 인자 없이 생성) — `ExtractionService` 인스턴스화가 저장소 전체에 0건이라 `SourceRecord`만 쌓이고 Entity/Claim/Relation 추출은 안 된다. G004(추출 결선)가 이 액션의 선행 조건 |
+| 21 | **Kiwoom teardown 취소 안전 정비 검토** | 2026-08-18 (2차) 전수검사가 잡은 브레인 락 누수(수정됨)와 같은 패턴이 `lifespan.py` `_teardown`(Kiwoom 계정락)에도 있다. 사용자 결정으로 **브레인만 국소 수정**했고 Kiwoom 쪽은 의도적으로 남겼다 — 별도 스코프로 다룰 것 |
+| 22 | **CC-102/103 프로브의 verify 게이트 편입 검토** | `chart-toolbar.js`·`chart-indicator-panel.js`는 단위 테스트 짝이 없고(DOM 의존) Electron 프로브(`probe-chart-toolbar/authoring.js`)만 커버한다. 프로브는 수동 실행이라 상시 게이트(`npm run verify`)에 안 물려 있다 |
 
 > 부수 기록: 2026-08-17의 "614 passed"는 **ASCII 경로 워크트리 전제**였다. 한글 경로("장중")
 > 워크트리에서 upstream 서브프로세스 stderr의 cp949 바이트가 utf-8 strict 디코드를 죽이는
