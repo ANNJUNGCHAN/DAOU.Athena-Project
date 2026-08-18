@@ -311,7 +311,7 @@ soul.md §7의 굴절층·데이터층 분리는 실측 결과 개선 없음 —
 
 | # | 작업 | 근거 |
 |---|---|---|
-| 19 | ~~**카드 배치·생애주기 규칙 앱 반영**~~ → **완료** (2026-08-18) | 폭 문법(w-half/w-full)·도착순(타입 고정 order 제거)·layout 힌트·drop_types 큐레이션·높이 예산(뷰포트 2배·최소 3장) 전부 결선. 로직은 `app/lib/canvas-layout.js`(단위 테스트 9건), 계약은 `server.py` `layout`/`drop_types`(pytest 2건), E2E는 verify 검증 10(합성 봉투 — 도착순·폭·승격/폴백·큐레이션·예산 집행 초록). **실배선에서 모델이 힌트·드롭을 실제로 쓰는지는 미실측**(verify는 픽스처 고정, 14번과 같은 제약) |
+| 19 | ~~**카드 배치·생애주기 규칙 앱 반영**~~ → **완료** (2026-08-18) | 폭 문법(w-half/w-full)·도착순(타입 고정 order 제거)·layout 힌트·drop_types 큐레이션·높이 예산(뷰포트 2배·최소 3장) 전부 결선. 로직은 `app/lib/canvas-layout.js`(단위 테스트 9건), 계약은 `server.py` `layout`/`drop_types`(pytest 2건), E2E는 verify 검증 10(합성 봉투 — 도착순·폭·승격/폴백·큐레이션·예산 집행 초록). 실배선 실측까지 완료(`spike/cli-pipe/gateway/probe_layout_curation.js` 실왕복 3회) — 배관은 결정적 통과, 자발 사용은 자연어 "치워줘·크게"만으로 `drop_types`·`layout` 사용 확인(N=1 일화 — 보장 아님. 부수로 11번 스키마 미고지 3회 재시도 재재현) |
 
 ### Paper 화면설계서 정합 (2026-08-17)
 
