@@ -28,6 +28,11 @@ from __future__ import annotations
 
 import json
 import os
+import time
+from collections import OrderedDict
+from collections.abc import Callable
+from datetime import UTC, datetime
+from pathlib import Path
 from typing import Any
 
 import httpx
@@ -84,6 +89,131 @@ _BACKEND_URL_ENV_VAR = "ATHENA_BACKEND_URL"
 
 def backend_base_url() -> str:
     return os.environ.get(_BACKEND_URL_ENV_VAR, DEFAULT_BACKEND_URL)
+
+
+# W1 계측(plan/plan.md) — 4툴 각각의 게이트웨이<->백엔드 HTTP 왕복 소요(ms)를
+# 감사 로그(consent.AuditLog, ts/alias/tool/success 4필드 계약)와는 **별도
+# 파일**에 남긴다. 같은 디렉터리를 쓰되 파일명만 다르므로 `server.py`가 이미
+# 테스트에서 주입하는 `audit_log_dir`를 그대로 재사용할 수 있다(별도 설정
+# 표면을 새로 만들지 않는다).
+_TIMING_LOG_FILENAME = "kiwoom-selector-timing.jsonl"
+
+
+def default_timing_log_path() -> Path:
+    return Path.home() / ".athena" / "audit" / _TIMING_LOG_FILENAME
+
+
+def _record_backend_timing(
+    path: Path, tool: str, backend_ms: int, *, cache_hit: bool = False
+) -> None:
+    """백엔드 HTTP 왕복 소요 한 줄을 append한다.
+
+    기본 계약은 `{"ts", "tool", "backend_ms"}` 세 필드뿐이다 — 인자·plan_token·
+    응답 본문은 이 함수 시그니처에 애초에 들어오지 않는다. 쓰기 실패(디스크
+    가득 참 등)는 조용히 무시한다: `consent.py`의 감사 로그와 같은 원칙으로,
+    계측이 실제 툴 호출(4단계 흐름)을 깨면 안 된다.
+
+    `cache_hit=True`(W4 게이트웨이 캐시, `SelectorCache` 참고)일 때만 네 번째
+    필드 `cache_hit`를 덧붙인다 — 기존 3필드 계약을 깨지 않으면서(필드
+    추가는 허용) 캐시 히트로 인해 `backend_ms`가 실제 왕복이 아니라 `0`
+    고정값임을 로그만 보고도 구분할 수 있게 한다."""
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        entry: dict[str, Any] = {
+            "ts": datetime.now(UTC).isoformat(),
+            "tool": tool,
+            "backend_ms": backend_ms,
+        }
+        if cache_hit:
+            entry["cache_hit"] = True
+        with path.open("a", encoding="utf-8") as f:
+            f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+    except OSError:
+        pass
+
+
+# ---------------------------------------------------------------------------
+# W4 게이트웨이 결정적 캐시(.omc/plans/plan-latency-optimization.md) —
+# search/describe 전용 warm-path 캐시.
+#
+# **warm-path 전용이다** — 첫 질의(콜드 경로)에는 이 캐시가 있어도 전혀
+# 빨라지지 않는다. 같은 프로세스가 같은 질의를 반복할 때만 백엔드 왕복을
+# 건너뛴다. E2E 1회 측정(질의당 한 번씩만 부르는 경로)에는 거의 안 잡히는
+# 최적화라 과대 주장하지 않는다 — 효과는 지연이 아니라 반복 질의의 안정성이다.
+_CACHEABLE_TOOLS: frozenset[str] = frozenset({SEARCH_TOOL, DESCRIBE_TOOL})
+_CACHE_TTL_SECONDS = 300.0  # 5분
+_CACHE_MAX_ENTRIES = 256
+
+
+class SelectorCache:
+    """`athena_search`/`athena_describe` 응답 전용 프로세스 내 캐시.
+
+    `athena_resolve`/`athena_call`은 이 클래스의 `get()`/`put()`이 코드
+    구조상 절대 건드리지 않는다 — 두 메서드 모두 첫 줄에서
+    `tool not in _CACHEABLE_TOOLS`면 즉시 반환하는 명시적 화이트리스트
+    게이트를 갖는다(문자열 비교 하나로 끝나는 확인이라 우회할 틈이 없다).
+    resolve가 발급하는 plan_token은 1회용이라 캐시하면 재사용을 만들고,
+    call은 시세·주문처럼 신선도가 생명이라 캐시가 곧 결함이다.
+
+    캐시 키는 (툴, catalog_version, 정규화된 인자) 세 부분이다. 인자는
+    `json.dumps(..., sort_keys=True)`로 정규화해 키 순서가 달라도 같은 논리
+    인자면 같은 키를 만든다. catalog_version은 첫 성공 응답을 받기 전에는
+    아직 모르므로, 그때까지는 프로세스(정확히는 이 캐시 인스턴스) 생성
+    시각 기반 세대 토큰으로 대신한다 — 백엔드가 catalog_version 필드를 준
+    첫 순간부터는 그 값으로 갈아탄다. 카탈로그는 생성물
+    (`athena_api/generated/`)이라 프로세스 생애 동안 사실상 불변이므로,
+    이 세대 토큰이 사실상 실질 상한 노릇을 하는 건 TTL이다(과도한 고정
+    금지 원칙에 따라 정직하게 명시).
+    """
+
+    def __init__(
+        self,
+        *,
+        ttl_seconds: float = _CACHE_TTL_SECONDS,
+        max_entries: int = _CACHE_MAX_ENTRIES,
+        clock: Callable[[], float] = time.monotonic,
+    ) -> None:
+        self._ttl_seconds = ttl_seconds
+        self._max_entries = max_entries
+        self._clock = clock
+        self._store: OrderedDict[str, tuple[float, Any]] = OrderedDict()
+        self._generation_token = f"gen-{clock()}"
+        self._catalog_version: str | None = None
+
+    def _key(self, tool: str, arguments: dict[str, Any]) -> str:
+        version = self._catalog_version or self._generation_token
+        normalized = json.dumps(arguments, ensure_ascii=False, sort_keys=True)
+        return f"{tool}\x1f{version}\x1f{normalized}"
+
+    def get(self, tool: str, arguments: dict[str, Any]) -> Any | None:
+        """캐시 히트면 저장된 응답 payload를, 미스(또는 캐시 대상 아님)면
+        `None`을 반환한다. 만료된 항목은 조회 시점에 지워 상한 계산에서
+        빠지게 한다."""
+        if tool not in _CACHEABLE_TOOLS:
+            return None
+        key = self._key(tool, arguments)
+        entry = self._store.get(key)
+        if entry is None:
+            return None
+        expires_at, payload = entry
+        if self._clock() >= expires_at:
+            del self._store[key]
+            return None
+        self._store.move_to_end(key)  # LRU: 최근 사용으로 갱신
+        return payload
+
+    def put(self, tool: str, arguments: dict[str, Any], payload: Any) -> None:
+        """성공 응답만 이 메서드로 들어온다(호출부 `dispatch()`가 보장) —
+        에러 응답을 캐시하면 백엔드 복구 후에도 실패가 반복된다."""
+        if tool not in _CACHEABLE_TOOLS:
+            return
+        if isinstance(payload, dict) and isinstance(payload.get("catalog_version"), str):
+            self._catalog_version = payload["catalog_version"]
+        key = self._key(tool, arguments)
+        self._store[key] = (self._clock() + self._ttl_seconds, payload)
+        self._store.move_to_end(key)
+        while len(self._store) > self._max_entries:
+            self._store.popitem(last=False)  # 가장 오래전에 쓰인 항목부터 축출
 
 
 def default_http_client_factory() -> httpx.AsyncClient:
@@ -279,7 +409,12 @@ def _extract_error_detail(response: httpx.Response) -> str:
 
 
 async def dispatch(
-    name: str, arguments: dict[str, Any], http_client: httpx.AsyncClient
+    name: str,
+    arguments: dict[str, Any],
+    http_client: httpx.AsyncClient,
+    *,
+    timing_log_path: Path | None = None,
+    cache: SelectorCache | None = None,
 ) -> types.CallToolResult:
     """`server.py`의 `AthenaGateway.dispatch_call()`이 빌트인 라우팅 분기에서 부른다.
 
@@ -287,11 +422,33 @@ async def dispatch(
     시도 뒤 즉시 에러 결과를 반환한다(모듈 docstring 참고). 연결 거부(백엔드
     미기동)는 별도의 안내 문구를 준다 — 다른 데이터 소스로 조용히 대체하지
     말라는 지시를 명시적으로 담는다.
+
+    `timing_log_path`(생략 시 `default_timing_log_path()`)에 이 호출의 백엔드
+    HTTP 왕복 소요(ms)를 성공·실패 상관없이 한 줄 남긴다(W1 계측, plan/plan.md).
+    측정 구간은 `http_client.post()` 왕복만이다 — 응답 JSON 파싱 등 그 뒤의
+    처리 시간은 포함하지 않는다.
+
+    `cache`(W4, `SelectorCache` 참고)를 넘기면 search/describe만 캐시 조회·
+    저장 대상이 된다 — `SelectorCache.get()`/`put()` 자체가
+    `_CACHEABLE_TOOLS` 화이트리스트로 게이트돼 있어 resolve/call은 `cache`가
+    주어져도 이 함수 안에서 캐시 경로에 닿지 않는다(아래 두 지점 모두 같은
+    가드를 반복하지 않고 `SelectorCache` 쪽 게이트 하나에 의존한다). `cache`가
+    `None`이면(기본값) 캐시 없이 예전과 동일하게 매번 HTTP를 탄다 — 기존
+    호출부와의 하위 호환이 이걸로 보장된다.
     """
+    log_path = timing_log_path or default_timing_log_path()
+
+    if cache is not None:
+        cached_payload = cache.get(name, arguments)
+        if cached_payload is not None:
+            _record_backend_timing(log_path, name, 0, cache_hit=True)
+            return _success(cached_payload)
+
     endpoint = _ENDPOINT_BY_TOOL[name]
     timeout = _TIMEOUT_SECONDS_BY_TOOL[name]
     url = f"/api/v1/llm/tools/{endpoint}"
 
+    start = time.monotonic()
     try:
         response = await http_client.post(url, json=arguments, timeout=timeout)
     except httpx.ConnectError:
@@ -306,6 +463,8 @@ async def dispatch(
         )
     except httpx.HTTPError as exc:
         return _upstream_failed(f"{name} 호출 중 전송 오류: {exc}")
+    finally:
+        _record_backend_timing(log_path, name, int((time.monotonic() - start) * 1000))
 
     if response.status_code >= 400:
         detail = _extract_error_detail(response)
@@ -315,5 +474,8 @@ async def dispatch(
         payload = response.json()
     except ValueError:
         return _upstream_failed(f"{name} 응답이 JSON이 아니다: {response.text[:500]!r}")
+
+    if cache is not None:
+        cache.put(name, arguments, payload)  # resolve/call은 게이트로 걸러 무시된다
 
     return _success(payload)

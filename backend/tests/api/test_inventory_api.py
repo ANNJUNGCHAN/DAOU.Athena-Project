@@ -453,7 +453,7 @@ def test_websocket_missing_or_blank_return_code_is_not_success(
 def test_downstream_real_stream_requires_auth_before_fanout() -> None:
     ws_client = FakeWsClient()
     ws_client.next_event = {"trnm": "REAL", "data": [{"item": "005930", "value": "1"}]}
-    app = create_app(Settings(local_bearer_token="stream-secret"))
+    app = create_app(Settings(local_bearer_token="stream-secret", _env_file=None))
     app.dependency_overrides[require_kiwoom_ws_client] = lambda: ws_client
 
     with TestClient(app) as client:
@@ -1069,6 +1069,7 @@ def test_oauth_lifecycle_requires_configured_matching_local_bearer() -> None:
         assert response.status_code == expected
 
 
+@pytest.mark.xdist_group(name="real-uvicorn-socket")
 async def test_real_uvicorn_loopback_smoke_uses_os_assigned_port() -> None:
     listener = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     listener.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)

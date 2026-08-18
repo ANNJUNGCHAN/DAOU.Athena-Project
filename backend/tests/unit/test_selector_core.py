@@ -458,6 +458,43 @@ async def test_call_executes_only_the_signed_operation_and_returns_next_plan(ser
     assert next_plan.next_key == "NEXT-1"
 
 
+@pytest.mark.asyncio
+async def test_call_logs_upstream_round_trip_without_payload_or_token(service, caplog) -> None:
+    """W1 계측(plan/plan.md) — call()이 실제 upstream(call_typed_tr)을 감싸는
+    구간의 소요를 표준 logging으로 남긴다. tr_id와 ms만, 인자·응답 본문·
+    plan_token은 로그 문자열에 닿지 않는다(CLAUDE.md SS6)."""
+
+    class SlowClient:
+        async def post_with_headers(self, tr_id, path, body, options):
+            return ResponseEnvelope(body={"cur_prc": "70000"}, cont_yn="N", next_key=None)
+
+    resolved = service.resolve(
+        ResolveRequest(
+            question="detail:ka10001:current_trading",
+            arguments={"stk_cd": "005930"},
+        )
+    )
+    request = Request({"type": "http", "method": "POST", "path": "/", "headers": []})
+
+    with caplog.at_level("INFO", logger="athena_api.selector.service"):
+        result = await service.call(
+            CallRequest(plan_token=resolved.plan_token),
+            request,
+            Response(),
+            SlowClient(),
+        )
+
+    assert result.data["cur_prc"] == "70000"
+    upstream_records = [r for r in caplog.records if "athena_call upstream" in r.message]
+    assert len(upstream_records) == 1
+    message = upstream_records[0].message
+    assert "tr=ka10001" in message
+    assert "upstream_ms=" in message
+    assert resolved.plan_token not in message
+    assert "005930" not in message
+    assert "70000" not in message
+
+
 class _CountingClient:
     """Records how many times the upstream would have been hit."""
 

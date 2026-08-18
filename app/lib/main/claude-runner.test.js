@@ -21,6 +21,11 @@ test('buildArgs: RESULT.md §1 실왕복 커맨드와 동일한 인자 순서 ·
   ]);
 });
 
+test('buildArgs: --tools를 붙이지 않는다 — 표면 축소 실험 철회(E2E run1~5 실측, claude-runner.js 주석)', () => {
+  const args = buildArgs({ prompt: 'x', configFile: '.mcp.json', allowedTools: 'y' });
+  assert.equal(args.indexOf('--tools'), -1); // 재도입하려면 E2E 재실측 먼저
+});
+
 test('buildArgs: --setting-sources 값은 항상 빈 문자열 하나뿐 — 콤마 값 등으로 오염되지 않는다', () => {
   const args = buildArgs({ prompt: 'x', configFile: '.mcp.json', allowedTools: 'y' });
   const i = args.indexOf('--setting-sources');

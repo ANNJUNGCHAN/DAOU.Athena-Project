@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import logging
+import time
 from collections import OrderedDict
 from typing import Any
 
@@ -107,6 +109,8 @@ def _continuation_request(request: Request, *, cont_yn: str, next_key: str | Non
     scope["headers"] = headers
     return Request(scope, receive=request.receive)
 
+
+logger = logging.getLogger(__name__)
 
 # Bound on the process-local single-use nonce cache. The shared limiter caps upstream
 # traffic at 5 calls/second and a plan's TTL is at most 600 seconds (CLAUDE.md SS7), so
@@ -342,6 +346,13 @@ class SelectorService:
             request, cont_yn=plan.cont_yn, next_key=plan.next_key
         )
 
+        # Upstream round-trip only (not plan verification, not response model dumping
+        # below) - this is the third leg of the W1 latency breakdown (plan/plan.md):
+        # audit-interval - backend_ms (selector_tools.py) - upstream_ms (here) isolates
+        # gateway/backend processing from time actually spent waiting on Kiwoom. No
+        # payload or token in the log line - CLAUDE.md SS6 forbids upstream bodies/keys
+        # leaking into logs.
+        upstream_start = time.monotonic()
         if document.kind == "order":
             if order_client is None:
                 raise KiwoomNotReadyError("Kiwoom order service is not ready")
@@ -375,6 +386,8 @@ class SelectorService:
                 client,
                 response_model=document.response_model if document.group_id else None,
             )
+        upstream_ms = int((time.monotonic() - upstream_start) * 1000)
+        logger.info("athena_call upstream tr=%s upstream_ms=%d", document.tr_id, upstream_ms)
 
         cont_yn = response.headers.get("cont-yn", "N")
         next_key = response.headers.get("next-key")

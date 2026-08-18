@@ -1,4 +1,8 @@
 // Athena W2 — 두 창 Electron 셸. spike/electron-glass/v2.js·v3.js 이식.
+// 부팅 지연 계측(합의 계획 W1) — 이 모듈이 로드되는 순간을 기준점으로 삼는다.
+// require()들도 이 시각 이후 비용이므로, "창 표시까지" 수치는 require 체인
+// 전체를 포함한다(가장 이른 지점에서 찍어야 실제 부팅 지연을 반영한다).
+const MODULE_LOAD_AT = Date.now();
 const { app, BrowserWindow, ipcMain, screen, Tray, Menu, nativeImage } = require('electron');
 const path = require('path');
 const fs = require('fs');
@@ -190,6 +194,7 @@ async function createWindows() {
   await chatWin.webContents.executeJavaScript('1');
   mdlog('chatWin executeJavaScript done');
   chatWin.show();
+  mdlog(`창 표시까지 ${Date.now() - MODULE_LOAD_AT} ms`);
   chatWin.focus();
   chatWin.moveTop();
 

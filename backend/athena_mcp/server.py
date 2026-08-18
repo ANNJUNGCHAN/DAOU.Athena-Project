@@ -188,6 +188,15 @@ class AthenaGateway:
     selector_http_client: httpx.AsyncClient = field(
         default_factory=selector_tools.default_http_client_factory
     )
+    # W4 게이트웨이 캐시(.omc/plans/plan-latency-optimization.md) — search/
+    # describe 응답만 담는 프로세스 내 warm-path 캐시. `AthenaGateway` 인스턴스마다
+    # 독립된 캐시를 갖는다(테스트마다 새 게이트웨이를 만들면 캐시도 자연히
+    # 격리된다). resolve/call은 `SelectorCache` 쪽 화이트리스트 게이트가 막아
+    # 이 필드가 있어도 캐시 경로에 닿지 않는다 — `selector_tools.py`의
+    # `SelectorCache` docstring 참고.
+    selector_cache: selector_tools.SelectorCache = field(
+        default_factory=selector_tools.SelectorCache
+    )
 
     def _audit_log(self, alias: str) -> AuditLog:
         return AuditLog(self.audit_log_dir / f"{alias}.jsonl")
@@ -417,7 +426,7 @@ class AthenaGateway:
         self, name: str, arguments: dict[str, Any]
     ) -> types.CallToolResult:
         """`athena_search`/`describe`/`resolve`/`call`을 `selector_tools.dispatch()`로
-        위임하고, 성공 여부만 감사 로그에 남긴다.
+        위임하고, 성공 여부는 감사 로그에, 백엔드 왕복 소요는 별도 타이밍 로그에 남긴다.
 
         이 넷은 upstream 서버가 아니라 게이트웨이 자신이 백엔드로 프록시하는
         빌트인이라 `dispatch_call()`의 upstream 경로(위 `try/except` 블록)를
@@ -428,8 +437,24 @@ class AthenaGateway:
         같은 최소 원칙(시각·툴명·성공여부만)을 그대로 따르고, `plan_token`을
         포함한 인자·응답 본문은 절대 이 로그에 닿지 않는다(인자 자체를 넘기는
         자리가 코드에 없다).
+
+        타이밍 로그(`kiwoom-selector-timing.jsonl`)는 W1 계측(plan/plan.md) —
+        4필드 감사 계약과는 별도 파일에 `{ts, tool, backend_ms}`만 남긴다.
+        `selector_tools.dispatch()` 안에서 기록하므로 여기서는 파일 경로만
+        `audit_log_dir`에서 파생해 넘긴다. 캐시 히트일 때는 `cache_hit` 필드가
+        추가로 붙는다(W4, `SelectorCache` 참고).
+
+        `self.selector_cache`를 넘긴다 — search/describe는 이걸로 두 번째
+        호출부터 백엔드 왕복을 건너뛰고, resolve/call은 `SelectorCache` 자체의
+        화이트리스트 게이트 때문에 이 인자가 있어도 캐시되지 않는다.
         """
-        result = await selector_tools.dispatch(name, arguments, self.selector_http_client)
+        result = await selector_tools.dispatch(
+            name,
+            arguments,
+            self.selector_http_client,
+            timing_log_path=self.audit_log_dir / "kiwoom-selector-timing.jsonl",
+            cache=self.selector_cache,
+        )
         self._audit_log("kiwoom-selector").record(
             "kiwoom-selector", name, success=not result.isError
         )

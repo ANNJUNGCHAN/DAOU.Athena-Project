@@ -50,6 +50,26 @@ test('buildLivePrompt: 4단계 사용법 — detail_group·plan_token 1회용 �
   assert.ok(p.includes('1회용'));
 });
 
+test('buildLivePrompt: W3 번복 — describe 생략 금지(인자 목록이 describe에만 있음, 실측 턴 18→31 악화)', () => {
+  const p = buildLivePrompt('x');
+  assert.ok(p.includes('athena_describe를 건너뛰지 마라'));
+  assert.ok(p.includes('인자 추측')); // 생략 시 실패 루프의 원인 명시
+  assert.ok(!p.includes('athena_describe를 생략하라')); // 옛 규칙 부활 방지
+});
+
+test('buildLivePrompt: W3 첫 카드 우선 — 첫 데이터 확보 즉시 render_canvas를 먼저 호출', () => {
+  const p = buildLivePrompt('x');
+  assert.ok(p.includes('먼저 render_canvas를 호출'));
+  assert.ok(p.includes('첫 카드를 기다리고'));
+});
+
+test('buildLivePrompt: W3 작업 규율 — 초반 툴 로드 권고 + 재조회 금지 (run3~5 반복 사이클 실측의 수정)', () => {
+  const p = buildLivePrompt('x');
+  assert.ok(p.includes('초반에 필요한 툴'));
+  assert.ok(p.includes('athena__render_canvas')); // 로드 목록에 렌더 툴 포함 — 중간 사냥 방지
+  assert.ok(p.includes('call을 반복하거나'));
+});
+
 test('buildLivePrompt: chart 스키마 힌트 — canvas_type "chart"와 symbol/name/bars 형상', () => {
   const p = buildLivePrompt('x');
   assert.ok(p.includes('"chart"'));

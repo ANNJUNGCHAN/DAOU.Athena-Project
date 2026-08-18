@@ -272,6 +272,63 @@ async def test_audit_log_never_contains_plan_token_or_arguments(tmp_path):
 
 
 # ---------------------------------------------------------------------------
+# 타이밍 로그(W1 계측, plan/plan.md) — 감사 로그와 별도 파일, ts/tool/backend_ms만
+# ---------------------------------------------------------------------------
+
+
+def _timing_log_path(tmp_path: Path) -> Path:
+    return tmp_path / "audit" / "kiwoom-selector-timing.jsonl"
+
+
+async def test_timing_log_records_one_line_per_call(tmp_path):
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(200, json={"results": []})
+
+    gw = _gateway(tmp_path, handler)
+    await gw.dispatch_call(SEARCH_TOOL, {"query": "삼성전자 현재가"})
+
+    lines = _timing_log_path(tmp_path).read_text(encoding="utf-8").splitlines()
+    assert len(lines) == 1
+    entry = json.loads(lines[0])
+    assert entry["tool"] == SEARCH_TOOL
+    assert set(entry) == {"ts", "tool", "backend_ms"}
+    assert isinstance(entry["backend_ms"], int)
+    assert entry["backend_ms"] >= 0
+
+
+async def test_timing_log_never_contains_plan_token_or_arguments(tmp_path):
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(
+            200,
+            json={"operation_ref": "ka10001", "data": {}, "continuation": {"cont_yn": "N"}},
+        )
+
+    gw = _gateway(tmp_path, handler)
+    secret_token = "super-secret-plan-token-xyz"
+    await gw.dispatch_call(CALL_TOOL, {"plan_token": secret_token})
+
+    raw_log_text = _timing_log_path(tmp_path).read_text(encoding="utf-8")
+    assert secret_token not in raw_log_text
+    assert "data" not in json.loads(raw_log_text.splitlines()[0])
+
+
+async def test_timing_log_records_even_on_upstream_failure(tmp_path):
+    """백엔드 왕복 소요는 실패해도 의미 있는 신호다(재시도가 없으니 "실패까지
+    걸린 시간"도 3분해의 일부) — 감사 로그와 달리 success 필드가 없으니 실패
+    시에도 그냥 한 줄 남는다."""
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        raise httpx.ConnectError("refused", request=request)
+
+    gw = _gateway(tmp_path, handler)
+    await gw.dispatch_call(SEARCH_TOOL, {"query": "x"})
+
+    lines = _timing_log_path(tmp_path).read_text(encoding="utf-8").splitlines()
+    assert len(lines) == 1
+    assert json.loads(lines[0])["tool"] == SEARCH_TOOL
+
+
+# ---------------------------------------------------------------------------
 # 노출 — tools/list에 athena__ 이중 프리픽스 없이 계약 이름 그대로 나온다
 # ---------------------------------------------------------------------------
 

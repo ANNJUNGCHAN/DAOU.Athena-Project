@@ -70,6 +70,14 @@ function buildArgs({ prompt, configFile, allowedTools, resumeSessionId, model, e
     '--mcp-config', configFile,
     '--strict-mcp-config',
     '--setting-sources', '',
+    // `--tools` 표면 축소는 시도 후 **철회**됐다 (2026-08-19, W2b E2E 5회 실측 —
+    // PROBE-KIWOOM-CHART-run1~5.json). 기록으로 남긴다:
+    //   ""(전체 비활성)        → MCP 지연 로딩의 로더(ToolSearch)까지 끊겨 툴 0건.
+    //   "ToolSearch"(로더만)   → 중간 ToolSearch 사냥·재조회 사이클로 96~104초
+    //                            (기준선 72.7초보다 악화), run5는 렌더 자체 실패.
+    // 기준선(무제한)의 Bash 3·Grep 1 낭비 4턴(~10초)이 깨진 지연 로딩보다 싸다 —
+    // 실측이 두 번 뒤집은 끝의 결론이므로, 이 플래그를 재도입하려면 E2E 재실측을
+    // 먼저 하라. 낭비 턴 억제는 프롬프트 규율(live-prompt.js 작업 규율)로만 한다.
     '--allowedTools', allowedTools,
   ];
   // 모델·추론강도(설정 화면 모델 패널, lib/main/model-prefs.js) — 값이 있을
