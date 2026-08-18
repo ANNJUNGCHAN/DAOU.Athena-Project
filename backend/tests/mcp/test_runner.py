@@ -22,7 +22,7 @@ import pytest
 from mcp import types
 
 from athena_mcp.aggregator import ToolAggregator
-from athena_mcp.client import MaxRestartsExceededError, describe_exception
+from athena_mcp.client import MaxRestartsExceededError, describe_exception, read_log_text
 from athena_mcp.consent import ConsentStore
 from athena_mcp.registry import ServerRegistry
 from athena_mcp.runner import GatewayRunner
@@ -194,8 +194,10 @@ async def test_connect_returns_update_result_with_violations(tmp_path):
         update = await gw.connect(long_alias, log_dir=log_dir)
         assert update.committed is True
         assert update.violations, "28자 별칭 + 긴 툴 이름이면 64자 위반이 나와야 한다"
-        # 반환만이 아니라 서버 로그에도 남는다
-        log_text = (log_dir / f"{long_alias}.log").read_text(encoding="utf-8")
+        # 반환만이 아니라 서버 로그에도 남는다. strict utf-8이 아니라
+        # read_log_text() — 이 로그엔 upstream 서브프로세스가 stderr에 직접 쓴,
+        # 임의 인코딩일 수 있는 바이트가 섞여 있다(US-011).
+        log_text = read_log_text(log_dir / f"{long_alias}.log")
         assert "툴 스킵" in log_text
     finally:
         for alias in list(gw.handles):

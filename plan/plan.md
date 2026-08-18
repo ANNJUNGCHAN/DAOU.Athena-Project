@@ -1,6 +1,10 @@
 # Athena 진행 상황 및 재개 계획
 
-> 최종 갱신: 2026-08-18 · 브랜치 `main` — **데이터셋-개발·AITS-화면·화면기획서 병합 완료, 잔여 작업 브랜치는 `장중` 하나**
+> 최종 갱신: 2026-08-18 · 브랜치 `main` — **2026-08-18 작업 브랜치 4종(데이터셋-개발·
+> AITS-화면·화면기획서·장중)이 전부 `main`에 병합됐다 — 로컬·원격 모두 `main` 하나다.**
+> 장중의 전수 조사([`장중_해야할것.md`](장중_해야할것.md)) 착수 순서 ①(보안·결함)·
+> ②(문서 동기화) + 백엔드 결선 2건 포함. 2026-08-17까지의 이전 병합 이력(작업 브랜치
+> 4종 → `main`)은 §1 참조.
 >
 > **다음 세션은 이 파일부터 읽는다.** 여기에는 *지금 상태 / 검증된 사실 / 다음 수*만 적는다.
 > 설계 근거와 함정 목록은 [`plan/00-인수인계.md`](00-인수인계.md)에 있다. 중복하지 않는다.
@@ -17,8 +21,26 @@
 
 ## 1. 실측 상태
 
-> **현행 수치는 아래 세 블록 중 마지막(2026-08-17)이다.** 앞 두 블록은 날짜가
-> 박힌 스냅샷이고 어떻게 여기까지 왔는지를 남기려고 보존한다 — **인용하지 마라.**
+> **현행 수치는 바로 아래 첫 블록(2026-08-18)이다.** 이후 블록들은 날짜가 박힌
+> 스냅샷이고 어떻게 여기까지 왔는지를 남기려고 보존한다 — **인용하지 마라.**
+
+**2026-08-18 · 작업 브랜치 4종 병합 직후 `main`에서 재실측 — 이 수치가 현행이다:**
+
+```
+backend 전체:  659 passed, 0 failed   (145초)   ← 장중(브레인 코디네이터·fts·cp949)+AITS(fit·매니페스트) 합산
+  ruff check .                          → All checks passed
+  generate_api.py --check               → Generated files are current
+  render_screen_injection_map.py --check→ Generated screen injection map is current
+  render_screen_card_facts.py --check   → Generated screen card facts are current
+app:
+  npm test                              → fail 0 (110건, node --test)
+  npm run verify                        → 검증 1~13 전부 통과 (1b 부팅바·9d 닫기→백그라운드·
+                                          10 카드 배치·11 크기 불변·12 컬럼 fold·13 차트 카드 포함)
+                                          확장 p95 33.3ms / max 50.1ms · 수축 p95 16.8ms
+```
+
+> **한글 경로 워크트리에서 드러난 cp949 환경 의존 결함 2건은 장중 브랜치에서 닫혔다**
+> (§5 부수 기록 참조). 위 수치는 병합된 `main`(ASCII 경로)에서 돌린 결과다.
 
 **2026-08-15 · 재검증:**
 
@@ -45,7 +67,7 @@ backend 전체:  517 passed, 0 failed   (113초)
 이 브랜치는 `main`에 없는 미커밋 작업(계좌 모듈, 셀렉터 수정, 화면기획서)을 포함한다. 517은
 그 상태의 수치이지 `main`의 수치가 아니다.
 
-**2026-08-17 (2차) · 액션 2·3·4 구현 후 — 이 수치가 현행이다:**
+**2026-08-17 (2차) · 액션 2·3·4 구현 후:**
 
 ```
 backend 전체:  614 passed, 0 failed   (121초)   ← 브레인 결선으로 +11
@@ -242,11 +264,12 @@ close가 lifespan에 대칭으로 붙었고 `app.state.brain_*`로 readiness가 
 > 목적은 만족하지만 ADR이 지정한 큐는 아니다.** 따라서 3단계(shutdown 시 신규 enqueue
 > 차단 → checkpoint → writer cancel)도 결선된 적이 없다. 아래 후속 16~17번.
 
-**아직 사실이 아닌 것**: `plan.md`와 ADR이 적어온 *"검색은 그래프 순회 + `fts` BM25만"* 은
-**현재 코드와 다르다.** `_SEARCH_ENTITIES`는 여전히
-`WHERE lower(e.name) CONTAINS lower($query) OR ...` **부분문자열 스캔**이다 —
-랭킹이 없다. `fts` 확장은 이제 로드되지만 **검색 쿼리가 그걸 안 쓴다.**
-(`INSTALL fts`·`LOAD fts`는 이 빌드에서 실제로 성공한다 — 미구현이지 불가능이 아니다.)
+~~**아직 사실이 아닌 것**: "검색은 그래프 순회 + `fts` BM25만"은 현재 코드와 다르다~~ →
+**2026-08-18에 사실이 됐다.** `search_entities()`가 `QUERY_FTS_INDEX` BM25 랭킹을 쓰고
+(fts 미로드 시 CONTAINS 폴백), 인덱스는 `load_fts_extension()`이 스키마 확인 후 1회 생성한다
+(stemmer 'none', 라이브 인덱스 — 삽입분 자동 반영, 재오픈 시 재생성 불필요, 전부 tmp DB 실증).
+**⚠ 단 fts는 완전 토큰 매칭이다** — "SK하이닉스"를 "하이닉스"로 못 찾는다(CONTAINS는 찾았다).
+ADR §7의 recall 게이트가 후속으로 필요하다 (§5 신규 19번).
 
 **환경 제약**: `ladybug.Database()`는 네이티브 공유 라이브러리를 찾아야 열린다.
 못 찾으면 `RuntimeError: Could not find lbug C API shared library`.
@@ -280,7 +303,7 @@ soul.md §7의 굴절층·데이터층 분리는 실측 결과 개선 없음 —
 | # | 작업 | 이유 / 시작점 |
 |---|---|---|
 | 1 | ~~**갈래 A·B 조율**~~ → **의도적으로 둘로 간다** | 통합을 검토하고 기각했다. 전제가 다르다 — `AT-CV-005`는 스키마를 아는 키움 manifest 파생, MCP는 상류 스키마를 모르는 게 전제다. **렌더러가 둘이 되는 대가를 알고 받았다.** 아래 "결정 — MCP 봉투와 AT-CV-005는 별개로 간다" 참조 |
-| 2 | **브레인 FastAPI 결선** → **`GraphStore`까지만 완료** (2026-08-17) | `lifespan.py`의 `_open_brain`/`_teardown_brain`. **기본 비활성**(`brain_enabled=false`) — 브레인은 키움과 무관한 선택 기능이고, 켜지 않은 배포·테스트가 DB 파일을 건드리지 않게 했다. 락은 `BrainProcessLock`(DB 경로 해시 키). 락 경합은 **기동을 막고**(ADR §11), 네이티브 런타임 부재는 **강등**한다(`brain_last_error`). **`IngestionCoordinator`는 미결선** — 후속 16번 |
+| 2 | **브레인 FastAPI 결선** → **`GraphStore`까지만 완료** (2026-08-17) | `lifespan.py`의 `_open_brain`/`_teardown_brain`. **기본 비활성**(`brain_enabled=false`) — 브레인은 키움과 무관한 선택 기능이고, 켜지 않은 배포·테스트가 DB 파일을 건드리지 않게 했다. 락은 `BrainProcessLock`(DB 경로 해시 키). 락 경합은 **기동을 막고**(ADR §11), 네이티브 런타임 부재는 **강등**한다(`brain_last_error`). ~~**`IngestionCoordinator`는 미결선** — 후속 16번~~ → **2026-08-18 결선 완료** (16·17번 참조) |
 | 3 | ~~**CLI 연동 마무리**~~ → **완료** (2026-08-17) | `claude -p` → `athena-mcp serve` → 게이트웨이로 `athena__render_canvas` **실제 집행됨**. 원문 `spike/captures/S4-gateway-cli-roundtrip.ndjson`, 보고서 `spike/cli-pipe/gateway/RESULT.md` |
 | 4 | ~~**stream-json 파서**~~ → **완료** (2026-08-17) | `app/lib/main/stream-json-parser.js`. 테스트 29건 전부 실왕복 캡처로 검증(지어낸 픽스처 0건) |
 | 5 | **W3 캔버스 어댑터** — upstream 출력 → 캔버스 데이터 | 미착수. `stream.py`가 여기서 첫 프로덕션 호출자를 얻는다. 계약 형상은 이미 일치(`canvas.py` 스트림 스키마 ↔ `stream.py` 레코드) |
@@ -295,13 +318,25 @@ soul.md §7의 굴절층·데이터층 분리는 실측 결과 개선 없음 —
 | # | 작업 | 근거 |
 |---|---|---|
 | 11 | **`render_canvas`가 캔버스별 `data` 스키마를 모델에 안 알려준다** | `_RENDER_CANVAS_INPUT_SCHEMA`가 `data`를 `{"type":"object"}`로만 선언한다. 실왕복에서 모델이 `table` 형상을 맞추는 데 **3회** 걸렸다(지연·토큰 3배). 실패 메시지는 정확했지만 스키마를 미리 주면 1회다. `canvas_type`별 `oneOf` 스키마가 답 |
-| 12 | **`fts` 로드는 됐는데 검색이 안 쓴다** | §4-B 참조. `_SEARCH_ENTITIES`가 `CONTAINS` 스캔이라 랭킹이 없다. 문서가 오래 "BM25"라고 말해왔다 |
-| 13 | **스폰된 `claude` 프로세스의 생애주기 관리가 없다** | Esc가 UI 반영만 막고 `kill()`을 안 한다. 왕복 타임아웃도, 동시 실행 상한/큐도 없다 — 연속 질의하면 프로세스가 쌓인다 |
+| 12 | ~~**`fts` 로드는 됐는데 검색이 안 쓴다**~~ → **결선 완료** (2026-08-18) | `load_fts_extension()`이 인덱스(`CREATE_FTS_INDEX`, stemmer 'none', 라이브 인덱스)까지 만들고 `search_entities()`가 `QUERY_FTS_INDEX` BM25 랭킹을 쓴다. fts 미로드 시 CONTAINS 폴백 유지. **⚠ 실증에서 드러난 의미 변화**: fts는 완전 토큰 매칭이라 "SK하이닉스"를 "하이닉스"로 못 찾는다(CONTAINS는 찾았다) — ADR §7이 예정한 recall 게이트가 후속으로 필요하다(아래 신규 19번) |
+| 13 | ~~**스폰된 `claude` 프로세스의 생애주기 관리가 없다**~~ → **닫힘** (2026-08-17 대부분 + 2026-08-18 잔여) | Esc→`killTree()`(트리 전체) · 타임아웃 180초 · 활성 1개 선점(`activeLiveQuery`)은 2026-08-17에, 마지막 잔여였던 **stdout 누적 상한**(5MB, `MAX_STDOUT_BYTES`, 초과 시 killTree + 오류 표면화 + 테스트 2건)은 2026-08-18에 닫혔다. 큐 대신 선점 방식 — `app/README.md` |
 | 14 | **실배선을 자동 검증이 안 잡는다** | `npm run verify`는 `ATHENA_CANVAS_SOURCE=fixture` 고정이다(쿼터·43초·비결정성 때문에 의도된 분리). 실배선 회귀는 `probe_live_spawn.js` 수동 실행뿐 |
-| 15 | **실배선이 그리는 카드는 2종뿐** | `mcp-table`·`free`(+`notice`). 스트림·리더는 여전히 픽스처 전용이다. 카드 12종 중 실데이터가 닿는 게 2종이라는 뜻 |
-| 16 | **`IngestionCoordinator`를 lifespan에 결선** | ADR §4.2 2·3단계. `lifespan.py`에 참조 0건이다. 지금 결선된 writer queue는 `GraphStore._owner`(스레드풀)이지 ADR이 지정한 `asyncio.Queue` + 전용 writer task가 아니다 |
-| 17 | **`IngestionCoordinator.enqueue()`가 shutdown을 안 본다** | `_stopping`은 `_writer_loop()`의 `while not self._stopping`에서만 읽힌다. `enqueue()`/`_queue_job()`은 안 본다 — ADR §4.2 3단계 "신규 enqueue 차단"과 어긋난다. **오늘은 도달 불가**(16번이 안 돼 있어 코디네이터가 안 뜬다). 16번을 하기 **전에** 닫아야 한다 |
-| 18 | **프롬프트 인젝션 (HIGH) — 기한이 도래했다** | `00-인수인계.md` 함정 ②가 *"CLI 통합 시점에 대응"*이라고 미뤄뒀는데, **그 시점이 방금 왔다.** upstream 본문(뉴스·공시)이 LLM을 거쳐 `tool_use.input`으로 되돌아오는 경로가 이제 실제로 존재한다. 이번 결선에서 **아무 대응도 하지 않았다** |
+| 15 | ~~**실배선이 그리는 카드는 2종뿐**~~ → **4종** (2026-08-17 W3-lite, 이 행은 2026-08-18 동기화) | `mcp-table`·`free`·`notice`에 더해 `stream`·`reader`가 실배선에 결선됐다(`app/README.md` "실배선 스트림·리더"). **안 열린 건 `timeline` 하나뿐** — 액션 6과 동일. 단 stream/reader 실배선은 실왕복 캡처 검증이 아직이다(README 명시) |
+| 16 | ~~**`IngestionCoordinator`를 lifespan에 결선**~~ → **결선 완료** (2026-08-18) | `_open_brain()`이 ADR §4.2 1단계 순서로 `HistoryStore.open()` + `IngestionCoordinator.start()`를 붙였고 `_teardown_brain()`이 3단계 순서(coordinator.stop → history.close → store.close → lock 해제)로 내린다. ingestion 실패는 fts와 같은 best-effort 강등(`ingestion_last_error`). `brain_history_db_path` 설정 신설. **⚠ 코디네이터는 아직 빈 HistoryStore 위에서 돈다** — `upsert_chat`/`upsert_completed_trade` 호출자가 저장소 전체에 0건. 실데이터 파이프라인은 후속(아래 신규 20번) |
+| 17 | ~~**`IngestionCoordinator.enqueue()`가 shutdown을 안 본다**~~ → **닫힘** (2026-08-18, 16번보다 먼저 처리) | `_shutting_down` 별도 플래그 — `_stopping` 재사용 시 drain 중 writer가 조기 이탈하는 결함을 재현으로 확인하고 분리했다. `enqueue()` 이중 체크(진입 시 + `_queue_job` 반환), 내부 재적재(`wait=False`)는 안 막는다. stop() 반환 후 재시작 enqueue 허용(기존 재시작 계약 유지). 테스트 2건 |
+| 18 | **프롬프트 인젝션 (HIGH) — 부분 완화 진전, 미해결 유지** (2026-08-18 동기화) | ~~"이번 결선에서 아무 대응도 하지 않았다"~~는 낡았다 — **응답 본문 라벨**(2026-08-17, `_label_upstream_result`)과 **위조 마커 무해화**(2026-08-18, `_defuse_embedded_markers` + 테스트 3건)가 붙었다. 남은 것: `structuredContent` 무라벨 · 내용 기반 탐지 미구현. 라벨은 완화이지 방어가 아니다 — 게이트는 여전히 툴별 allowlist (`SECURITY.md` §3) |
+
+### 2026-08-18 실행에서 새로 열린 것
+
+| # | 작업 | 근거 |
+|---|---|---|
+| 19 | **fts recall 게이트** — 토큰 매칭 전환의 품질 검증 | 액션 12를 닫으면서 검색 의미가 바뀌었다(부분문자열 → 완전 토큰). ADR §7이 예정한 대로 고정 corpus top-k recall을 검증하고, 미달 시 UI에 "키워드 검색" 한계를 표시하는 게이트가 필요하다. `store.py` docstring에 의미 변화 명시됨 |
+| 20 | **브레인 실데이터 파이프라인** — HistoryStore 쓰기 호출자 0건 | 액션 16의 코디네이터는 **빈 HistoryStore 위에서 돈다.** `upsert_chat`/`upsert_completed_trade`를 부르는 곳이 brain/tests 밖에 없다 — 채팅·체결 캡처가 히스토리에 쓰는 파이프라인이 없으면 그래프는 영원히 비어 있다. `lifespan.py` `_open_brain` docstring에 명시 |
+
+> 부수 기록: 2026-08-17의 "614 passed"는 **ASCII 경로 워크트리 전제**였다. 한글 경로("장중")
+> 워크트리에서 upstream 서브프로세스 stderr의 cp949 바이트가 utf-8 strict 디코드를 죽이는
+> 환경 의존 결함 2건이 드러나 격리 워크트리 재현으로 증명 후 닫았다(`client.py`
+> `read_log_text()` — errors="replace", 회귀 테스트 포함).
 
 ### 2026-08-18 질의응답 결정 — 카드 배치·생애주기
 
@@ -464,11 +499,13 @@ MCP는 **상류 스키마를 모르는 것이 전제**다(그래서 `result.py`�
 "의도적으로 둘"로 확정됐다.** 나중에 합치려면 MCP 형상 7종이 6장에 실제로 앉는지
 매핑 검증부터 해야 한다 — 이번엔 안 했다.
 
-### 미룬 것 — MCP env 암호화 (방향만 확정)
+### ~~미룬 것~~ → 닫힘 — MCP env 암호화 (2026-08-17 커밋 `be9c855`, 이 절은 2026-08-18 동기화)
 
 레지스트리엔 env 키 이름만 남기고, 값은 Electron `safeStorage`(DPAPI)에 넣고,
-spawn 시점에 앱이 환경변수로 주입한다. **구현은 안 했다** — 사용자가 먼저 앱을
-써보기로 했다.
+spawn 시점에 앱이 환경변수로 주입한다. ~~**구현은 안 했다**~~ → **구현됐다** —
+`app/lib/main/mcp-env.js`가 safeStorage로 암호화하고, 부팅 시와 `mcp-list` 호출마다
+`migratePlaintextEnv()`가 남은 평문을 멱등하게 걷어낸다(`app/README.md` "남은 문제" 절).
+이 절이 "미룬 것"으로 남아 있던 건 문서 갱신 누락이었다.
 
 **그때까지 넣는 키는 평문으로 디스크에 남는다**(`~/.athena/mcp_servers.json`).
 나중에 암호화를 켜도 그 전에 저장된 값은 자동으로 옮겨가지 않는다 — 재등록하거나

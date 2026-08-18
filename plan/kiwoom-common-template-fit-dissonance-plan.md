@@ -237,7 +237,7 @@ G001.5 완료조건을 **세 개의 독립 플래그**로 분리한다(하나의
 | 데이터 훑기 · AITS 조사 | **완료**(§1) | — | — | — | — |
 | **G001.5 Paper 선행 디자인 · 이질감 게이트** | 대기 | Paper artboard(또는 폴백) 12~15(+≥20), `kiwoom-fit-dissonance-scorecard.json`, `kiwoom-screen-overrides.json`, `kiwoom-free-canvas-registry.json` | Paper MCP 재연결 1회 시도 기록, WS `STRUCTURAL_MISMATCH` 정규식 확정(§2.2), width anchor 5개 픽셀 보정 1회(§2.6) | `gate_complete=true` + `design_medium`·`rater_mode` 필드 존재(값 무관, 단 §8-1 사용자 답변 전 `fallback`으로 자동 진입 금지) | `python backend/scripts/fit_dissonance_check.py --check`(§6.3) |
 | G002 Normalized screen contracts | 대기 | 기존(rendering-plan §13 G002) + override/rule/free-canvas 로드 + 반증 fixture(§6.1) + kt00001 섹션별 occurrence 커버리지 | **G001.5 `gate_complete=true`**(`design_medium`은 `fallback`도 허용) | rendering-plan §13 G002 기준 그대로 + 반증 fixture green | rendering-plan §15 backend 명령 |
-| G002.5 Selector hardening | **재검증 필요** — 최신 실측 `selector+api 161 passed`(green), 구 문서의 "76 passed, 22 failed"는 stale | 기존과 동일 | — | `pytest tests/unit/test_selector_core.py tests/unit/test_selector_eval.py -q` = `98 passed, 0 failed`(등가) | 위 명령부터 재실행해 green 재확인 |
+| G002.5 Selector hardening | **재검증 완료 (2026-08-18)** — `test_selector_core + test_selector_eval` 재실행 = `127 passed, 0 failed`(36.5s). 구 문서의 "76 passed, 22 failed"와 "98 passed" 완료조건은 둘 다 stale — 22건 실패는 split-detail 라우팅 재설계로 **구조에서 제거**됐고(`plan.md` §3, handoff §7-1과 일치), 테스트 수는 127로 늘었다 | 기존과 동일 | — | `pytest tests/unit/test_selector_core.py tests/unit/test_selector_eval.py -q` = `127 passed, 0 failed` | 위 명령 재실행 (2026-08-18 green 확인됨) |
 | **G003 Shared Athena canvas 렌더러 구현** | 대기 | facts/table/event_stream/status/action/order_receipt primitive + 상태 shell | **G002 완료 + `design_medium == paper`(하드 게이트, 신설)** — fallback 상태로는 착수 불가 | rendering-plan §13 G003 기준 그대로 | rendering-plan §15 명령 |
 | G004 Electron IPC/backend 통합 | 대기, 변경 없음 | preload/contextBridge, IPC allowlist | G003 | rendering-plan §13 G004 기준 그대로 | rendering-plan §15 명령 |
 | G005 전수 검증 | 대기 | 301/301 정의 resolution + `data-field-id`/`data-section-id` sentinel(§6.1) + row-count 지표(§2.2) | G004 | rendering-plan §13 G005 기준 + 반증 fixture 유지 + `fit_dissonance_check.py --check` green | 위 + `--check` |
@@ -594,6 +594,14 @@ backend/ref/kiwoom-order-popup-checklist.json   (order 12 전용 체크리스트
 ---
 
 ## 9. 주문 팝업 창 (Order Popup) — 공통 캔버스에서 분리, 단일 인스턴스로 안전 격리
+
+> **⚠ 폐기 고지 (2026-08-18 삽입)** — 이 절이 설계한 **독립 팝업 창(3번째 창)은 폐기가 정본이다.**
+> 2026-08-17 AITS 커버리지 감사 §9 결정 ①이 주문 확인을 **대화 창 모드 단독**으로 확정했다
+> (ActionCard는 표시 전용으로 축소). "창은 둘뿐" 원칙은 5개 문서가 일치한다 — `GLOSSARY.md`
+> §1·§12("팝업창"은 폐기어), `CLAUDE.md` §2, `plan.md` 병합 판단 1·3, `plan/AGENTS.md` 문서 표,
+> `window-api-manual.md` 머리 고지. 아래 본문은 **사료로 보존**한다 — 주문 확인 *모드*를 구현할
+> 때 안전 격리 요구사항(확인 게이트 · 멱등성 · confirm 중 강제종료 차단)은 여전히 유효한
+> 참고자료이고, `ScreenDefinition` 생성 유지(§9.6)도 그대로 유효하다.
 
 > 반영 지시: "셀렉터에서 order가 있는 건 맞다. 다만 주문 관련 화면은 팝업으로 별도 화면을 만들어라." 12개 order TR(kt10000/1/2/3/6/7/8/9, kt50000/1/2/3)을 공통 캔버스(Adaptive Record Canvas / Live Stream Canvas / Schema-driven Request Sheet) 렌더링 **경로**에서 빼고, 독립 팝업 창(3번째 창)으로 분리한다. **`ScreenDefinition` 생성 자체는 빼지 않는다 — §9.6 참조.**
 > 개정 이력: v1(초안) → **v2(safety/design/contract 3렌즈 병렬 검토, BLOCKER 9건 + MAJOR 9건 반영 — 자격증명 데이터플로우 신설, 싱글턴 가드 신설, confirm 중 강제종료 차단, 유리두께 배후-밀도 규칙으로 정정, 규범 문서 4종 동시 개정으로 선결조건 재배치, ScreenDocument.state 매핑 명시, primitive 모듈 재사용 강제, 301/289 리터럴 치환문 제공, resolver.py 인용 정정)**. 이 문서는 v2이며 이전 버전을 대체한다.
@@ -1017,6 +1025,14 @@ scripts/dev-start.*         — 신규(`[측정 필요]`, 이름/형식 미정).
 ---
 
 ## 10. 설정 창 (Settings Window) — 독립 창
+
+> **⚠ 폐기 고지 (2026-08-18 삽입)** — 이 절이 설계한 **설정 독립 창(`settingsWin`)은 삭제됐고
+> 폐기가 정본이다.** 브랜치 병합(2026-08-17, `plan.md` 병합 판단 1·3)에서 `app/settings.*`
+> 4파일을 삭제했고, 설정은 대화 창의 `#settings` 모드로 옮겨졌다. 주의: 아래 §10.2의 v8 정정
+> 블록이 근거로 삼은 `GLOSSARY.md` §1 "일시 표면" 구분 **자체도 이후 폐기됐다** — 현행
+> `GLOSSARY.md` §12는 "설정창" · "팝업창" · "일시 표면" 셋 다 폐기어로 지정한다. 즉 v8 정정도
+> 다시 낡았다. 본문의 IPC · API 매핑은 어느 표면이 어느 엔드포인트를 부르는지에 한해 참고
+> 가치가 있다. 정본은 `GLOSSARY.md` §1.
 
 > 반영 지시(v6, 최초): "계좌 설정 같은건 설정 창에서 따로 하게 만들어줘. 채팅창에 동그란 원이있던데 그거 누르면 설정창으로 들어가게 만들어줘"
 > 반영 지시(v7, 뒤집음): "설정 창은 대화창의 ●을 누르면 앱 관련 설정이 뜨는 별도의 창이다."
