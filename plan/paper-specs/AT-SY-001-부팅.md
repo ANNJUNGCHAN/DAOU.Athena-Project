@@ -50,14 +50,12 @@ Mockup Area (1508×1080, bg #0A0B0E, 다크 배경 + 2개 방사형 Glow — Des
   Sequence (1268×320) — 4단계 비주얼을 나란히 배치한 4개 컬럼(각 292×320, 중앙 정렬)
     컬럼1: Rectangle 16×3 (발광점/짧은 선) — brand색, 글로우
     컬럼2: Rectangle 292×3 (전체 폭 선, 좌우 페이드 그라데이션) — brand색, 글로우
-    컬럼3: Rectangle 292×96 (모서리 둥근 유리 패널, 텍스트/콘텐츠 없음 — 세로 전개 중간 상태)
-    컬럼4: Frame 292×196 (완성된 창)
-      Frame 290×143 (본문 영역, 중앙 정렬)
-        Frame 104×20
-          Text "ATHENA" — 로고
-      Frame 290×52 (하단 입력 바, 상단 보더 구분선)
-        Rectangle 2×17 — 입력 커서 (brand색, 글로우)
-        Text "무엇이든 물어보세요" — placeholder
+    컬럼3: Frame 292×38 (채팅창 크기 유리 바, 72% — 콘텐츠 없음) ← 2026-08-18 재작업
+    컬럼4: Frame 292×38 (확정된 채팅바 — 컬럼3과 동일 크기) ← 2026-08-18 재작업
+      그립 노브 14×2 (상단 중앙, 백색 14%)
+      점 5×5 (brand색, 글로우)
+      Text "ATHENA" — font-title 10px, tracking 0.3em (입력줄에 적히는 이름)
+      커서 1.5×9 (brand색, 글로우)
   Timeline (1268×44)
     Rectangle 1268×1 — 상단 구분선
     Frame 1268×16 — 4개 타임스탬프, flex row, 각 grow
@@ -80,13 +78,17 @@ Mockup Area (1508×1080, bg #0A0B0E, 다크 배경 + 2개 방사형 Glow — Des
 **Sequence** (`left-30 top-125` → x=120 y=500, width 317 unit=1268px, height 80 unit=320px, `flex items-center gap-8.5` → 4개 컬럼, 각 292px, gap 34px, 각 컬럼 내부 `items-center justify-center` 세로 중앙):
 - 컬럼1 (1단계 발광점): `w-4 h-0.75`(16×3px), `rounded-full`, `bg-brand`(`--color-brand`=#EE137B), `box-shadow: #EE137BF2 0 0 22px`(95% 알파 글로우).
 - 컬럼2 (2단계 가로 확장): `[width:100%] h-0.75`(292×3px), `rounded-full`, `box-shadow: #EE137BD9 0 0 26px`(85% 알파 글로우), 배경은 선형 그라데이션 90deg — 좌 0% 투명 브랜드색 → 22% 불투명 브랜드색 → 78% 불투명 브랜드색 → 100% 투명 브랜드색 (양끝 페이드).
-- 컬럼3 (3단계 세로 전개): `[width:100%] h-24`(292×96px), `rounded-[18px]`, `box-shadow: #FFFFFF66 0 1.5px 0 inset, #00000094 0 20px 50px`(inset 하이라이트 40% + 드롭섀도 58%), `border border-solid border-[#FFFFFF33]`(20% 알파), 배경 45deg 선형 그라데이션(다크 네이비 계열, 알파 70%→80%→16%) — 스펙 텍스트대로 "유리 불투명도 72%"에 대응하는 중간 톤.
-- 컬럼4 (4단계 창 확정, 전체 292×196px):
-  - 바깥 프레임: `rounded-[20px]`, `overflow-clip`, `box-shadow: #FFFFFF94 0 2px 0 inset, #FFFFFF09 0 0 0 4px, #000000B8 0 40px 90px`(inset 하이라이트 58% + 4px 아웃라인 3.5% + 큰 드롭섀도 72%), `border border-solid border-[#FFFFFF4D]`(30% 알파), 배경 45deg 선형 그라데이션(알파 90%→95.7%→20%) — 3단계보다 더 불투명/진한 유리.
-  - 본문(290×143px, `flex items-center justify-center px-5`): "ATHENA" 로고, `font-title`, `tracking-[0.4em]`, color `#F2F4F899`(60% 알파), size 16px, line-height 5 unit=20px, `pl-[0.4em]` 보정.
-  - 하단 입력 바(290×52px, `h-13`, `flex items-center px-5 gap-3`, 상단 `border-t border-t-solid border-t-[#FFFFFF21]`(13% 알파)):
-    - 커서: `w-0.5 h-4.25`(2×17px), `bg-brand`, `box-shadow: #EE137BE6 0 0 12px`.
-    - placeholder 텍스트 "무엇이든 물어보세요": `font-kr`, color `#F2F4F870`(44% 알파), size `text-label`=14px, line-height 4.5 unit=18px.
+- 컬럼3 (3단계 세로 전개, **2026-08-18 재작업**): 292×38px — **채팅창(1560×204) 비율 그대로의
+  축소 바**(292×38 ≈ 7.68:1). `border-radius 4px`, `border 1px #FFFFFF33`(20% 알파),
+  `box-shadow: #FFFFFF66 0 1.5px 0 inset, #00000094 0 20px 50px`, 배경 45deg 선형
+  그라데이션(알파 70%→80%→16%) — "유리 불투명도 72%" 중간 톤. 콘텐츠 없음.
+- 컬럼4 (4단계 창 확정, **2026-08-18 재작업**): 292×38px — **컬럼3과 동일 크기**(모든 단계가
+  채팅창과 같은 크기라는 원칙). `border-radius 4px`, `border 1px #FFFFFF4D`(30% 알파),
+  `box-shadow: #FFFFFF94 0 2px 0 inset, #FFFFFF09 0 0 0 4px, #000000B8 0 40px 90px`,
+  배경 45deg 선형 그라데이션(알파 90%→95.7%→20%) — 3단계보다 진한 유리. 내부는 실제
+  채팅바의 축소 재현: 그립 노브(14×2, 상단 중앙, #FFFFFF24) · 점(5×5, brand, 글로우) ·
+  "ATHENA"(`font-title` 10px, tracking 0.3em, #F2F4F8D9) · 커서(1.5×9, brand, 글로우).
+  이전 판(292×196 "상단 로고 + 하단 입력줄" 세로 창 + placeholder)은 폐기.
 
 **Timeline** (`left-30 top-218` → x=120 y=872, width 317 unit=1268px, height 11 unit=44px, `flex flex-col gap-2.75` → gap 11px):
 - 상단 구분선: 1268×1px, `bg-[#FFFFFF33]`(20% 알파).
@@ -160,5 +162,19 @@ Timeline:
 - 확정(+620ms) 직후 입력줄에 ATHENA가 한 자씩 적혔다가(+660ms~) 지워지고 placeholder로
   돌아온 뒤(+1160ms) 실제 창으로 스왑한다(+1360ms). 1~3단계 타이밍·이징은 보드 그대로.
 - 구현·검증: `app/chat.js` 부팅 시퀀서, `app/verify.js` 검증1b(`bootBar` DOM 표집),
-  `app/README.md` 부팅 절. **컬럼4 목업(1M-0)은 이 재정의와 어긋난 상태다 — Paper 보드
-  재작업이 남은 일이다**(plan.md 다음 수).
+  `app/README.md` 부팅 절.
+
+### 크기 원칙 추가 + 보드 재작업 (2026-08-18 2차 지시)
+
+> "발광점 표시 > 가로확장까지는 맞는데, 이 모든 게 다 채팅창과 동일한 크기여야 하고,
+> 세로 전개도 채팅창과 같은 크기, 창 확정도 채팅창과 같은 크기여야 해"
+
+- **원칙: 1~4단계 전 구간에서 부팅 표면은 채팅창과 동일한 크기다** — 채팅창보다 크거나
+  작게 확정되는 단계가 없다.
+- **앱은 이미 준수** — `app/probe-boot-bounds.js` 실측(2026-08-18): 부팅 내내 창 bounds가
+  chatBaseH(1560×204)로 고정. 최초 실행에서 이후 커지는 것은 부팅이 아니라 온보딩
+  (AT-SY-002) 전환이다.
+- **보드(1M-0)를 같은 날 재작업했다**: 컬럼3(292×96)·컬럼4(292×196 세로 창)를 채팅창
+  비율의 동일 크기 바 2개(각 292×38)로 교체, 스펙 패널 3·4단계 설명과 각주(총 소요
+  1360ms · 크기 동일 원칙) 갱신. 위 "레이아웃 · 스타일" 절 참조. 문서 상단의 스크린샷
+  경로 2건은 재작업 전 캡처라 낡았다.
