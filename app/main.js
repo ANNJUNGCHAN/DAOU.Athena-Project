@@ -8,6 +8,7 @@ const fs = require('fs');
 const onboarding = require('./lib/main/onboarding');
 const cliAccounts = require('./lib/main/cli-accounts');
 const accounts = require('./lib/main/accounts');
+const prefs = require('./lib/main/prefs');
 const mcpCli = require('./lib/main/mcp-cli');
 const mcpEnv = require('./lib/main/mcp-env');
 // 결정 D1의 실배선 — claude -p 스폰 + stream-json 파싱 + .mcp.json 생성.
@@ -549,6 +550,27 @@ ipcMain.handle('athena:onboarding-state', handleOnboardingState);
 ipcMain.handle('athena:onboarding-advance', handleOnboardingAdvance);
 
 // ---------------------------------------------------------------------------
+// 화면 설정 (autoExpandCanvas/autoGrowChat) — 복구된 baa7e0e 계약(2026-08-18,
+// app/README.md L599-608 참조). IPC 채널 이름·set 시 chatWin 브로드캐스트는
+// 원본 그대로다 — 저장 파일명만 athena-prefs.json 관례로 바꿨다(lib/main/prefs.js).
+// ---------------------------------------------------------------------------
+
+function handlePrefsGet() {
+  return prefs.get();
+}
+
+function handlePrefsSet(e, patch) {
+  const next = prefs.set(patch || {});
+  // 설정 카드는 대화 창 안의 같은 렌더러다(#settings 패널) — 그래도 원본과 같이
+  // chatWin에 명시적으로 방송한다. 다른 진입점이 생겨도 이 계약이 그대로 맞는다.
+  if (chatWin && !chatWin.isDestroyed()) chatWin.webContents.send('athena:prefs-changed', next);
+  return next;
+}
+
+ipcMain.handle('athena:settings:prefs:get', handlePrefsGet);
+ipcMain.handle('athena:settings:prefs:set', handlePrefsSet);
+
+// ---------------------------------------------------------------------------
 // CLI 계정 (AT-SY-002)
 // ---------------------------------------------------------------------------
 
@@ -748,6 +770,8 @@ module.exports = {
   settingsHandlers: {
     onboardingState: handleOnboardingState,
     onboardingAdvance: handleOnboardingAdvance,
+    prefsGet: handlePrefsGet,
+    prefsSet: handlePrefsSet,
     cliList: handleCliList,
     cliLogin: handleCliLogin,
     cliSetActive: handleCliSetActive,

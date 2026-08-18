@@ -6,6 +6,7 @@ spawn해 spawn -> initialize -> list_tools -> call_tool 왕복을 검증한다
 from __future__ import annotations
 
 import asyncio
+import os
 import sys
 from pathlib import Path
 
@@ -17,6 +18,7 @@ from athena_mcp.client import (
     ResponseTooLargeError,
     ServerCrashedError,
     UpstreamServerHandle,
+    read_log_text,
 )
 from athena_mcp.consent import ConsentNotGrantedError, ConsentStore
 from athena_mcp.registry import SECRET_SENTINEL, MissingSecretEnvError, ServerEntry
@@ -129,11 +131,63 @@ async def test_per_server_log_file_created_and_contains_lifecycle_events(tmp_pat
     try:
         await handle.start()
         assert handle.log_path.exists()
-        text = handle.log_path.read_text(encoding="utf-8")
+        # strict utf-8이 아니라 handle.read_log() — 이 로그엔 upstream
+        # 서브프로세스가 stderr에 직접 쓴, 임의 인코딩일 수 있는 바이트가 섞여
+        # 있다(US-011, read_log_text() 참고). 한글 경로 워크트리에서 실측됨.
+        text = handle.read_log()
         assert "started" in text
         assert "fixture" in text
     finally:
         await handle.close()
+
+
+def test_read_log_text_replaces_undecodable_bytes_instead_of_crashing(tmp_path):
+    """US-011 회귀 — `errlog`가 upstream 서브프로세스에 그대로 넘어가는 파일
+    디스크립터라, 자식이 우리 로그 UTF-8 텍스트 사이에 임의 인코딩 바이트를
+    섞어 써도 막을 수 없다(예: cp949 로케일 자식이 stderr에 쓴 한글 경로).
+    실측 재현: '\xc0\xe5\xc1\xdf'는 "장중"의 cp949 인코딩이고, utf-8로는
+    유효하지 않은 바이트열이다 — strict 디코드는 여기서 죽는다."""
+    log_path = tmp_path / "fixture.log"
+    valid_prefix = b"[2026-08-18T00:00:00+00:00] started alias=fixture\n"
+    # 실제 침입 경로 그대로: 경로 문자열 중간에만 cp949 바이트가 끼어든다.
+    forged_cp949_stderr = b"C:\\...\\DAOU.Athena\\" + b"\xc0\xe5\xc1\xdf" + b"\\backend\r\n"
+    valid_suffix_text = "[2026-08-18T00:00:01+00:00] self_reported_version='1.28.1' "
+    valid_suffix_text += "(자가보고, 신뢰 금지)\n"
+    valid_suffix = valid_suffix_text.encode()
+    log_path.write_bytes(valid_prefix + forged_cp949_stderr + valid_suffix)
+
+    text = read_log_text(log_path)  # 크래시하지 않는다 — strict였다면 여기서 UnicodeDecodeError
+
+    assert "started alias=fixture" in text  # 앞뒤 유효 UTF-8 내용은 보존된다
+    assert "자가보고, 신뢰 금지" in text
+    assert "\ufffd" in text  # 깨진 바이트는 조용히 지워지지 않고 U+FFFD로 남는다
+
+
+async def test_pump_stderr_writes_valid_utf8_log_even_with_cp949_bytes(tmp_path):
+    """US-011 회귀 — **기록 시점** 방어. `_pump_stderr()`는 upstream 서브
+    프로세스가 stderr에 쓴 바이트를(예: cp949 로케일 자식이 쓴 한글 경로)
+    파이프로 직접 받아 `errors="replace"`로 디코드한 뒤에만 로그 파일에 쓴다
+    — 그 결과 로그 파일 자체가 항상 유효한 UTF-8이라, 위 회귀 테스트처럼
+    관대하게 읽지 않고 **strict** `read_text(encoding="utf-8")`로 읽어도
+    죽지 않는다(이중 방어의 첫 번째 층 — `read_log_text()`는 두 번째 층)."""
+    entry = ServerEntry(alias="fixture", command=sys.executable, args=[], env={})
+    store = _approved_store(tmp_path, "fixture")
+    handle = UpstreamServerHandle(entry, store, log_dir=tmp_path / "logs")
+
+    read_fd, write_fd = os.pipe()
+    # 자식 프로세스가 stderr에 직접 쓰는 상황을 그대로 흉내낸다:
+    # 경로 문자열 중간에 실측 그대로의 cp949 바이트("장중")가 끼어든다.
+    forged_cp949 = bytes([0xC0, 0xE5, 0xC1, 0xDF])
+    os.write(write_fd, b"C:\\...\\DAOU.Athena\\" + forged_cp949 + b"\\backend\r\n")
+    os.write(write_fd, "정상 UTF-8 줄도 같은 스트림에 있다\n".encode())
+    os.close(write_fd)  # EOF — pump 루프가 이걸로 끝난다
+
+    await handle._pump_stderr(read_fd)
+
+    # strict로도 안 죽는다 — 기록 시점에 이미 안전한 UTF-8로 바뀌어 있다.
+    text = handle.log_path.read_text(encoding="utf-8")
+    assert chr(0xFFFD) in text
+    assert "정상 UTF-8 줄도 같은 스트림에 있다" in text
 
 
 async def test_healthcheck_true_while_alive(tmp_path, entry):
