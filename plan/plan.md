@@ -1,6 +1,6 @@
 # Athena 진행 상황 및 재개 계획
 
-> 최종 갱신: 2026-08-17 · 브랜치 `main` — **작업 브랜치 4종이 전부 `main`에 병합됐다**
+> 최종 갱신: 2026-08-18 · 브랜치 `main` — **작업 브랜치 4종이 전부 `main`에 병합됐다**
 >
 > **다음 세션은 이 파일부터 읽는다.** 여기에는 *지금 상태 / 검증된 사실 / 다음 수*만 적는다.
 > 설계 근거와 함정 목록은 [`plan/00-인수인계.md`](00-인수인계.md)에 있다. 중복하지 않는다.
@@ -300,6 +300,26 @@ close가 lifespan에 대칭으로 붙었고 `app.state.brain_*`로 readiness가 
 | 16 | **`IngestionCoordinator`를 lifespan에 결선** | ADR §4.2 2·3단계. `lifespan.py`에 참조 0건이다. 지금 결선된 writer queue는 `GraphStore._owner`(스레드풀)이지 ADR이 지정한 `asyncio.Queue` + 전용 writer task가 아니다 |
 | 17 | **`IngestionCoordinator.enqueue()`가 shutdown을 안 본다** | `_stopping`은 `_writer_loop()`의 `while not self._stopping`에서만 읽힌다. `enqueue()`/`_queue_job()`은 안 본다 — ADR §4.2 3단계 "신규 enqueue 차단"과 어긋난다. **오늘은 도달 불가**(16번이 안 돼 있어 코디네이터가 안 뜬다). 16번을 하기 **전에** 닫아야 한다 |
 | 18 | **프롬프트 인젝션 (HIGH) — 기한이 도래했다** | `00-인수인계.md` 함정 ②가 *"CLI 통합 시점에 대응"*이라고 미뤄뒀는데, **그 시점이 방금 왔다.** upstream 본문(뉴스·공시)이 LLM을 거쳐 `tool_use.input`으로 되돌아오는 경로가 이제 실제로 존재한다. 이번 결선에서 **아무 대응도 하지 않았다** |
+
+### 2026-08-18 — 부팅 4단계 재정의 · 창 제어 버튼 (사용자 지시 2건)
+
+- **부팅(AT-SY-001) 4단계 재작업**: 전개의 종착이 "상단 로고 + 하단 입력줄" 2분할이
+  아니라 **평소 채팅바의 1:1 복제**가 됐고, 확정된 바의 입력줄에 ATHENA가 적혔다가
+  placeholder로 돌아온 뒤 스왑한다(+1360ms). 근거·타임라인은
+  `plan/paper-specs/AT-SY-001-부팅.md` "4단계 재정의" · `app/README.md` 부팅 절.
+- **창 제어 버튼(AT-CH-001)**: 우상단 − · □ · ×. 최대화는 chatBaseH↔chatMaxH 토글
+  (OS maximize 기각), 닫기는 두 창 숨김 + 백그라운드 유지 + 트레이 복귀.
+  `plan/paper-specs/AT-CH-001-창-조작-이력.md` "추가" 절.
+- **실측 (2026-08-18, orca 워크스페이스)**: `npm run verify` 검증 1~9d 전부 통과 —
+  신설 검증 1b(`bootBar` — ATHENA 쓰고 지움을 DOM 표집으로 단언) ·
+  9d(`closeToBackground`) 포함. `npm run verify:settings`는 이 워크스페이스에
+  `backend/.venv`가 없어 mcp.* 절만 ENOENT로 미실측(환경 문제, 코드 무관) —
+  리포트는 커밋본(완전 증거) 유지.
+
+| # | 작업 | 근거 |
+|---|---|---|
+| 19 | **Paper 보드 8쪽(1M-0) 컬럼4 재작업** | 목업이 폐기된 "로고+입력줄 2분할 창"을 그대로 그리고 있다 — 채팅바 확정+이름쓰기로 갱신 필요 |
+| 20 | **Paper 보드 40쪽(6RX-0)에 창 제어 버튼 반영** | 장표에 − · □ · × 크롬과 닫기(백그라운드 유지)·트레이가 없다 |
 
 ### Paper 화면설계서 정합 (2026-08-17)
 
