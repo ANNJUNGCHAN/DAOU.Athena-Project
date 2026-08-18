@@ -13,6 +13,8 @@ TR에 매칭된 화면은 manifest가 즉시 불러온다(공통화면의 강점
 
 **카드 12종은 늘지 않는다.** 전부 기존 카드(주로 CompoundCard) 위 **렌즈 변형**이다 —
 차트 렌즈 계약([`chart-lens-spec.md`](chart-lens-spec.md))과 같은 층위.
+차트 카드 컨트롤(주기·차트모양·보조지표 35종·매물대·드로잉·수정주가·전체화면·수치조회창)의
+동작 전수는 [`chart-card-control-spec.md`](chart-card-control-spec.md)가 계약 기준이다.
 
 ## 구성 (아트보드 19장)
 
