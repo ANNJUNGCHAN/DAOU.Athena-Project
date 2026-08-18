@@ -483,7 +483,9 @@ issued.
 ```
 
 Clients must treat `plan_token` as opaque. They must not decode, edit, merge, or
-reuse fields from it to construct another request.
+reuse fields from it to construct another request. It is also single-use: `call`
+accepts it exactly once, including on a failed attempt (see
+[Single-use enforcement](#single-use-enforcement)).
 
 ### Ambiguity and no-match behavior
 
@@ -644,6 +646,40 @@ Any mismatch fails closed. `call` accepts no operation identity, path, group ID,
 or arguments from the client, so the model cannot switch targets after
 resolution.
 
+### Single-use enforcement
+
+**Decision (2026-08-18):** a `plan_token` may be spent by `call` exactly once.
+Two calls to `athena_call` with the same `plan_token` - sequential or
+concurrent - resolve the first and reject the second with `PLAN_ALREADY_USED`
+(HTTP 409). The rationale is cost: nothing legitimate calls the same resolved
+operation twice inside the answer to one question, and every call this
+selector dispatches spends Kiwoom's shared upstream allowance for no new
+information the first call didn't already return. Asking the same question
+again in a new turn is not blocked - it goes through `resolve` again, gets a
+new signed plan with a new nonce, and calls cleanly.
+
+The server marks the plan's nonce spent immediately after signature
+verification succeeds and **before** any upstream dispatch, not after a
+successful response. This means a token is consumed even when the call then
+fails upstream - timeout, rate limit, connection reset. That trade is
+accepted deliberately: letting an ambiguous failure re-arm the same token
+would reopen the exact double-spend this policy exists to close. Recovery
+from that failure is the same as recovery from `EXPIRED_PLAN` or
+`STALE_PLAN` - call `athena_resolve` again for a fresh `plan_token` - never a
+retry of the same one. This applies uniformly to query, order, and websocket
+plans; an order plan already carries its own `Idempotency-Key` contract, and
+this enforcement sits in front of it rather than replacing it.
+
+Nonces are tracked in a process-local, size-capped cache keyed by the plan's
+nonce (`SelectorService._consumed_nonces`). An entry is evicted once its own
+`exp` has passed - a token past its expiry is already rejected by signature
+verification before this cache is ever consulted, so pruning it here opens no
+replay window - or when the cache is full, oldest first. Restarting the
+process, which already invalidates every outstanding plan through the
+process-local signing key, clears this cache along with it; a multi-worker
+deployment would need this cache made as shared as the signing secret, which
+is why CLAUDE.md SS7 keeps this service to one worker.
+
 ## `athena_call`
 
 ### Request
@@ -776,6 +812,7 @@ similar Korean operation.
 | Malformed token or invalid signature | `INVALID_PLAN` | 400 | Resolve again; do not alter the token. |
 | Plan expired | `EXPIRED_PLAN` | 410 | Resolve again with current intent and arguments. |
 | Catalog/schema changed after resolution | `STALE_PLAN` | 409 | Search/describe/resolve against the current catalog. |
+| `plan_token` already spent by a prior `call`, including one that failed upstream | `PLAN_ALREADY_USED` | 409 | Resolve again; never resend the same token. |
 
 No error may silently fall back to the first search result or a large base
 response. No failed resolution returns a plan token.
@@ -859,7 +896,9 @@ WebSocket subscriptions need an explicit intent="order" or intent="websocket" on
 both search and resolve; a vague question never reaches them. A WebSocket call
 sends one registration frame and returns its acknowledgement, not the stream -
 subscribe the caller to WS /api/v1/ws/stream separately for the events it turns
-on. OAuth and U.S.-only operations are unavailable.
+on. OAuth and U.S.-only operations are unavailable. Each plan_token may be
+called exactly once, even if that call fails - never retry the same token;
+resolve again for a new one.
 ```
 
 Adapter requirements:
@@ -873,7 +912,8 @@ Adapter requirements:
 4. Never transform `operation_ref`, particularly case-sensitive WebSocket IDs.
 5. Treat plan tokens as opaque and avoid normal logs, telemetry labels, or model
    summaries that reproduce them.
-6. Do not retry an expired or stale token. Run resolution again.
+6. Do not retry an expired, stale, or already-used token, including one whose call
+   just failed upstream. Run resolution again for a new `plan_token` in every case.
 7. Order and WebSocket plans go through the same `resolve`/`call` pair as a
    read; only the intent argument, the order confirmation/idempotency headers,
    and (for orders) the `Authorization` header differ. Do not build a second,
@@ -894,6 +934,9 @@ Operational rules:
 
 - Do not spend calls to compare candidates. Compare `search` results and
   `describe` contracts locally.
+- A resolved `plan_token` is single-use (see
+  [Single-use enforcement](#single-use-enforcement)). Never call it twice,
+  including as a retry after a failure; resolve again for a new one.
 - Independent query plans may run concurrently, but Athena's shared limiter
   remains authoritative. The service is designed around at most five concurrent
   distinct query calls and Kiwoom's five-calls-per-second constraint.
@@ -1044,6 +1087,10 @@ update:
   registration mints no plan to continue in the first place;
 - a plan is bound to the account that resolved it and fails `INVALID_PLAN` if
   replayed under another;
+- a plan_token is single-use: a second `call` with the same token fails
+  `PLAN_ALREADY_USED` regardless of whether the first attempt succeeded,
+  failed upstream, or is still in flight, for query, order, and websocket
+  plans alike;
 - base/detail selection rules and published score thresholds, including the
   ambiguity-margin name tie-break and the realtime corroboration cap;
 - catalog version changes whenever identities, searchable metadata, lexicon, or

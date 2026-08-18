@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections import OrderedDict
 from typing import Any
 
 from fastapi import Request, Response
@@ -16,10 +17,11 @@ from .errors import (
     DetailGroupRequiredError,
     InvalidArgumentsError,
     OperationNotFoundError,
+    PlanAlreadyUsedError,
     PreferredOperationError,
     UnsupportedOperationError,
 )
-from .plans import PlanSigner
+from .plans import PlanSigner, VerifiedPlan
 from .policy import select_operation
 from .ranking import rank_documents, search_catalog
 from .schemas import (
@@ -106,10 +108,23 @@ def _continuation_request(request: Request, *, cont_yn: str, next_key: str | Non
     return Request(scope, receive=request.receive)
 
 
+# Bound on the process-local single-use nonce cache. The shared limiter caps upstream
+# traffic at 5 calls/second and a plan's TTL is at most 600 seconds (CLAUDE.md SS7), so
+# even every plan in flight for the full allowed lifetime is on the order of 3,000
+# entries; this leaves generous headroom without letting an abusive client grow the
+# cache without bound.
+_NONCE_CACHE_LIMIT = 4096
+
+
 class SelectorService:
     def __init__(self, catalog: OperationCatalog, signer: PlanSigner) -> None:
         self.catalog = catalog
         self.signer = signer
+        # Nonces already spent by call(), mapped to the spending plan's own exp so a
+        # swept entry is provably safe to drop: PlanSigner.verify() already refuses any
+        # token past its exp before this cache is ever consulted, so a token that could
+        # still replay is never pruned. Insertion order backs the FIFO size cap.
+        self._consumed_nonces: OrderedDict[str, int] = OrderedDict()
 
     def search(self, request: SearchRequest) -> SearchResponse:
         return search_catalog(self.catalog, request)
@@ -275,6 +290,31 @@ class SelectorService:
             response_mode=request.response_mode,
         )
 
+    def _consume_nonce(self, plan: VerifiedPlan) -> None:
+        """Mark ``plan``'s nonce spent, or refuse a replay of an already-spent one.
+
+        Must run after signature verification succeeds and before any upstream dispatch:
+        marking here, not after a successful response, means a token that fails upstream
+        (timeout, rate limit) is still burned. That trade is the accepted cost of closing
+        the double-spend this enforces (2026-08-18) — see docs/LLM_API_SELECTION.md.
+
+        No lock guards the check-then-mark: both run synchronously with no ``await``
+        between them, and this process runs a single uvicorn worker on one event loop
+        (CLAUDE.md SS7), so no other coroutine can observe the cache between the two.
+        """
+        now = self.signer.now()
+        expired = [nonce for nonce, exp in self._consumed_nonces.items() if exp <= now]
+        for nonce in expired:
+            del self._consumed_nonces[nonce]
+        if plan.nonce in self._consumed_nonces:
+            raise PlanAlreadyUsedError(
+                "Plan token was already used; call athena_resolve again for a new "
+                "plan_token before calling athena_call"
+            )
+        if len(self._consumed_nonces) >= _NONCE_CACHE_LIMIT:
+            self._consumed_nonces.popitem(last=False)
+        self._consumed_nonces[plan.nonce] = int(plan.expires_at.timestamp())
+
     async def call(
         self,
         call: CallRequest,
@@ -290,6 +330,7 @@ class SelectorService:
         idempotency_key: str | None = None,
     ) -> CallResponse:
         plan = self.signer.verify(call.plan_token, self.catalog, expected_account=account)
+        self._consume_nonce(plan)
         document = self.catalog.find_exact(plan.operation_ref)
         if document is None or not document.generic_callable:
             raise UnsupportedOperationError("Operation cannot be called by the generic selector")

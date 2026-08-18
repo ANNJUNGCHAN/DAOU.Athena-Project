@@ -52,7 +52,8 @@ _TOOL_SPECS = (
         "athena_resolve",
         "Select an operation, validate arguments, and issue a short-lived signed plan. Pass "
         "the same intent used to search: resolve ranks the question again, against that "
-        "surface only.",
+        "surface only. The returned plan_token is single-use: call athena_call with it "
+        "exactly once, never twice for the same answer.",
         ResolveRequest,
         ResolveResponse,
     ),
@@ -60,7 +61,11 @@ _TOOL_SPECS = (
         "athena_call",
         "Execute the operation and arguments sealed in a signed plan. A websocket plan sends "
         "one registration frame and returns its acknowledgement; the events it turns on "
-        "arrive out of band on the stream endpoint, never in this response.",
+        "arrive out of band on the stream endpoint, never in this response. plan_token is "
+        "single-use: it is consumed on this call even if the request then fails (timeout, "
+        "rate limit), so a failed call cannot be retried with the same token — call "
+        "athena_resolve again for a new one. A repeated call with an already-used token is "
+        "rejected with PLAN_ALREADY_USED.",
         CallRequest,
         CallResponse,
     ),

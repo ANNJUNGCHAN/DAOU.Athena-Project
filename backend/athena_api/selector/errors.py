@@ -63,3 +63,15 @@ class ExpiredPlanError(InvalidPlanError):
 
 class StalePlanError(InvalidPlanError):
     code = "STALE_PLAN"
+
+
+class PlanAlreadyUsedError(InvalidPlanError):
+    """The plan's nonce was already spent by a prior ``call``.
+
+    A signature-valid, unexpired token can still be unusable: a plan is single-use by
+    policy (2026-08-18), not just by cryptographic validity, so a replay of the same
+    token — even one that never reached upstream because the first attempt failed —
+    is rejected here rather than dispatched a second time.
+    """
+
+    code = "PLAN_ALREADY_USED"
