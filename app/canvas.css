@@ -142,6 +142,33 @@ table.fin-table { width: 100%; border-collapse: collapse; font-variant-numeric: 
 .chart-vp-bar { position: absolute; right: 0; background: rgba(138, 63, 252, 0.22); }
 .chart-vp-bar.is-poc { background: rgba(220, 0, 4, 0.34); }
 
+/* ---- 드로잉 1판(CC-105, spec §5) — 확장 모드 전용 좌측 세로 도구바 + SVG 오버레이 ---- */
+.chart-drawbar {
+  position: absolute; top: 8px; left: 8px; width: 42px;
+  display: none; flex-direction: column; gap: 4px;
+  padding: 6px 5px;
+  background: rgba(29, 34, 44, 0.92);
+  border: 1px solid var(--color-k-line-soft);
+  border-radius: 6px;
+  z-index: 4;
+}
+.chart-drawbar.is-visible { display: flex; }
+.chart-drawbar-btn {
+  appearance: none; border: none; border-radius: 4px;
+  width: 32px; height: 28px;
+  background: transparent; color: var(--color-k-dim);
+  font-family: var(--font-mono); font-size: 13px; line-height: 1;
+  cursor: pointer;
+}
+.chart-drawbar-btn:hover:not(:disabled) { background: rgba(255, 255, 255, 0.07); color: var(--color-k-text); }
+.chart-drawbar-btn.is-active { background: rgba(255, 255, 255, 0.12); color: var(--color-k-text); }
+.chart-drawbar-btn.is-unimplemented { opacity: 0.35; cursor: default; }
+
+.chart-draw-svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 3;
+}
+
 /* ---- 차트 툴바(CC-102) — spec §0: 좌 주기 탭 / 우 차트모양·보조지표·구분선·수정주가·전체화면 ---- */
 .chart-toolbar {
   flex-shrink: 0;

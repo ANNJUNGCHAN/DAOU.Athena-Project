@@ -32,6 +32,7 @@ const { DEFAULT_INDICATOR_VISIBLE, defaultParamsFor } = require('./chart-indicat
 const { sma, bollinger, rsi, macd } = require('./chart-indicators');
 const { volumeProfile } = require('./chart-volume-profile');
 const { createAuthoringStore, periodToken } = require('./chart-authoring-store');
+const { createDrawingLayer } = require('./chart-drawings');
 
 const UP_COLOR = '#FF5C5C';
 const DOWN_COLOR = '#4D9FFF';
@@ -173,6 +174,7 @@ async function createChartCard(container, opts) {
   let currentBars = dailyBars;
   let priceSeries = null;
   let volumeSeries = null;
+  let drawLayer = null; // CC-105 — buildPriceSeries보다 늦게 만들어져서 let 선언
 
   // 가격 pane(0)과 거래량 pane(1) 분리는 CC-101 계약이다(부록 C.3). 형식 전환마다
   // 가격 시리즈를 통째로 갈아끼우는데(candle↔bar↔line↔area는 addSeries()로만
@@ -218,6 +220,11 @@ async function createChartCard(container, opts) {
       volumeSeries.moveToPane(1);
     }
     if (chart.panes()[1]) chart.panes()[1].setHeight(80);
+    // 수평선(priceLine)은 시리즈 소속이라 재생성 때 같이 사라진다 — 다시 붙인다(CC-105).
+    if (drawLayer) {
+      drawLayer.reattachPriceLines();
+      drawLayer.renderAll();
+    }
     return priceSeries;
   }
 
@@ -232,6 +239,15 @@ async function createChartCard(container, opts) {
   chart.priceScale('left', 1).applyOptions({ visible: false });
 
   buildPriceSeries(currentForm);
+
+  // ---------- 드로잉 1판(CC-105) — 확장 모드 게이트, 수평선·추세선 ----------
+  drawLayer = createDrawingLayer({
+    chart,
+    getPriceSeries: () => priceSeries,
+    container: priceWrap,
+    onChange: () => saveAuthoring(),
+  });
+  priceWrap.appendChild(drawLayer.toolbar);
 
   // ---------- 보조지표 패널(CC-103) — spec §3·§4 ----------
   // indicatorState.visible/params는 chart-indicator-panel.js와 공유하는 같은
@@ -476,7 +492,7 @@ async function createChartCard(container, opts) {
       volumeProfileOn,
       visible: indicatorState.visible,
       params: indicatorState.params,
-      drawings: [], // CC-105가 채운다
+      drawings: drawLayer ? drawLayer.toJSON() : [],
     });
   }
 
@@ -502,6 +518,7 @@ async function createChartCard(container, opts) {
     applyOverlayIndicators();
     applyVolMaIndicator();
     applyPaneIndicators();
+    if (drawLayer) drawLayer.load(saved.drawings);
     return true;
   }
 
@@ -543,7 +560,10 @@ async function createChartCard(container, opts) {
     recomputePaneIndicatorData();
     // priceToCoordinate()는 fitContent() 이후 렌더가 실제로 갱신돼야 정확하다
     // (같은 틱에서 읽으면 이전 스케일값을 돌려줄 수 있다 — 실측 방어).
-    requestAnimationFrame(() => renderVolumeProfile());
+    requestAnimationFrame(() => {
+      renderVolumeProfile();
+      if (drawLayer) drawLayer.renderAll(); // 추세선 재투영(주기 전환·데이터 갱신)
+    });
   }
 
   // 기본 on(이평선·거래량MA) 초기 적용 — 패널·데이터 로드보다 먼저 시리즈를
@@ -628,6 +648,9 @@ async function createChartCard(container, opts) {
     card.classList.toggle('is-expanded', isFullscreen);
     if (grid) grid.classList.toggle('has-expanded', isFullscreen);
     toolbar.setFullscreenLabel(isFullscreen);
+    // 드로잉 게이트(CC-105) — 확장 모드에서만 도구바·입력 활성. 복귀 시
+    // 미완성 점 폐기·저장 목록 보존은 layer가 setEnabled(false)에서 처리.
+    if (drawLayer) drawLayer.setEnabled(isFullscreen);
     // 진입·복귀 둘 다 재측정한다 — 복귀만 요구되지만(§7) 그리드 점유 진입도
     // 카드 높이가 바뀌는 순간이라 같은 처리가 필요하다(실측: 진입 직후에도
     // autoSize의 ResizeObserver가 트랜지션 중간값을 잡아 캔버스가 찌그러짐).
@@ -637,6 +660,7 @@ async function createChartCard(container, opts) {
   function destroy() {
     toolbar.destroy();
     indicatorPanel.destroy();
+    if (drawLayer) drawLayer.destroy();
     const card = container.closest('.card');
     const grid = container.closest('.grid');
     if (card) card.classList.remove('is-expanded');

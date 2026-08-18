@@ -30,8 +30,18 @@ function authoringKey(symbol, token) {
   return `${KEY_PREFIX}.${symbol}.${token}`;
 }
 
-// state: {form, volumeProfileOn, visible: Set|Array, params: {[id]: {...}}, drawings?: []}
-// → 직렬화 가능한 화이트리스트 평면 객체.
+// 드로잉 슬롯 스키마(CC-105): {hlines: [{id, price}], lines: [{id, a, b}]}.
+// 배열이나 비객체가 들어오면 빈 구조로 정규화한다.
+function normalizeDrawings(d) {
+  if (!d || typeof d !== 'object' || Array.isArray(d)) return { hlines: [], lines: [] };
+  return {
+    hlines: Array.isArray(d.hlines) ? d.hlines : [],
+    lines: Array.isArray(d.lines) ? d.lines : [],
+  };
+}
+
+// state: {form, volumeProfileOn, visible: Set|Array, params: {[id]: {...}},
+//         drawings?: {hlines, lines}} → 직렬화 가능한 화이트리스트 평면 객체.
 function serializeAuthoring(state) {
   const s = state || {};
   const visible = Array.from(s.visible || []).filter((v) => typeof v === 'string');
@@ -46,7 +56,7 @@ function serializeAuthoring(state) {
     form: FORMS.has(s.form) ? s.form : 'candle',
     volumeProfileOn: !!s.volumeProfileOn,
     indicators: { visible, params },
-    drawings: Array.isArray(s.drawings) ? s.drawings : [], // CC-105가 채운다
+    drawings: normalizeDrawings(s.drawings),
   };
 }
 
@@ -73,7 +83,7 @@ function deserializeAuthoring(raw) {
       visible: ind.visible.filter((v) => typeof v === 'string'),
       params: ind.params && typeof ind.params === 'object' ? ind.params : {},
     },
-    drawings: Array.isArray(obj.drawings) ? obj.drawings : [],
+    drawings: normalizeDrawings(obj.drawings),
   };
 }
 
