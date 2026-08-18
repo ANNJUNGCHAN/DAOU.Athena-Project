@@ -609,6 +609,34 @@ app.whenReady().then(async () => {
   };
   console.log('[verify] 검증10(카드 배치·생애주기):', JSON.stringify(report.cardLayout));
 
+  // ---------- 검증 11: 창 이동(빈 유리 드래그)이 크기를 바꾸지 않는다 ----------
+  // 사용자 보고(2026-08-18): 화면 아무 곳이나 클릭하면 창이 늘어난다. 빈 유리
+  // mousedown → athena:window-drag start → main.js가 16ms 폴링으로 setPosition을
+  // 호출하는데, DPI 배율 화면에서 setPosition은 DIP↔물리 px 반올림을 왕복하며
+  // 크기를 누적 변형시킨다. 제자리 클릭(이동 0px)을 재현한다 — 700ms 홀드면
+  // 폴링 ~40회라 누적이 있으면 반드시 드러난다.
+  const { screen: elScreen } = require('electron');
+  const dragBefore = chatWin.getBounds();
+  await chatWin.webContents.executeJavaScript(
+    "require('electron').ipcRenderer.send('athena:window-drag', { phase: 'start' })"
+  );
+  await wait(700);
+  await chatWin.webContents.executeJavaScript(
+    "require('electron').ipcRenderer.send('athena:window-drag', { phase: 'end' })"
+  );
+  await wait(150);
+  const dragAfter = chatWin.getBounds();
+  report.dragNoResize = {
+    scaleFactor: elScreen.getPrimaryDisplay().scaleFactor,
+    before: dragBefore,
+    after: dragAfter,
+    // 크기 불변이 핵심 단언. 위치는 검증 중 실제 마우스가 움직이면 정당하게
+    // 변할 수 있어 참고 수치로만 남긴다(공유 데스크톱).
+    sizeUnchanged: dragBefore.width === dragAfter.width && dragBefore.height === dragAfter.height,
+    positionDelta: { x: dragAfter.x - dragBefore.x, y: dragAfter.y - dragBefore.y },
+  };
+  console.log('[verify] 검증11(제자리 클릭 크기 불변):', JSON.stringify(report.dragNoResize));
+
   report.finishedAt = new Date().toISOString();
   fs.writeFileSync(path.join(CAPTURES, 'VERIFY-REPORT.json'), JSON.stringify(report, null, 2));
   console.log('[verify] 리포트 저장:', path.join(CAPTURES, 'VERIFY-REPORT.json'));

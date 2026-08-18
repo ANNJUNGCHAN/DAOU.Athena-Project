@@ -199,11 +199,29 @@ ipcMain.on('athena:window-drag', (e, { phase } = {}) => {
   if (!win || win.isDestroyed()) return;
   endWindowDrag();
   const startCursor = screen.getCursorScreenPoint();
-  const [startX, startY] = win.getPosition();
+  const startBounds = win.getBounds();
+  let lastDx = 0;
+  let lastDy = 0;
   winDragTimer = setInterval(() => {
     if (win.isDestroyed()) { endWindowDrag(); return; }
     const c = screen.getCursorScreenPoint();
-    win.setPosition(startX + (c.x - startCursor.x), startY + (c.y - startCursor.y));
+    const dx = c.x - startCursor.x;
+    const dy = c.y - startCursor.y;
+    // 커서가 안 움직였으면 no-op — 제자리 클릭이 창을 건드리면 안 된다.
+    if (dx === lastDx && dy === lastDy) return;
+    lastDx = dx;
+    lastDy = dy;
+    // setPosition이 아니라 **크기를 고정한 setBounds**를 쓴다. DPI 배율 화면에서
+    // setPosition은 DIP↔물리 px 반올림을 왕복하며 크기를 누적 변형시킨다 —
+    // 배율 1.5에서 제자리 클릭 700ms 홀드만으로 1561×205 → 1613×231 실측
+    // (2026-08-18, verify 검증 11로 재현·회귀 가드). 시작 크기를 매 틱 다시
+    // 명시하면 왕복 반올림이 누적될 자리가 없다.
+    win.setBounds({
+      x: startBounds.x + dx,
+      y: startBounds.y + dy,
+      width: startBounds.width,
+      height: startBounds.height,
+    });
   }, 16);
 });
 
