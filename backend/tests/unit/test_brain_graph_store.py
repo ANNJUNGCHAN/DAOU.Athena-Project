@@ -303,10 +303,71 @@ async def test_relation_id_replaces_old_endpoints_and_preserves_stored_direction
 async def test_load_fts_extension_activates_the_official_package(store: GraphStore) -> None:
     """Regression guard for ADR §4.2's "fts 로드" lifespan step (lifespan.py:_open_brain).
 
-    Only activation is covered here — search_entities is still a substring scan; see
-    brain/AGENTS.md and plan.md §4-B for the documented gap.
+    load_fts_extension() now also (re)creates the entity search index it queries; see
+    test_load_fts_extension_creates_a_live_bm25_ranked_index below for the ranked-query
+    behavior this unlocks in search_entities.
     """
     await store.load_fts_extension()
+    assert store._fts_index_ready is True
+    # Idempotent: a second call on an already-loaded store must not raise (index already
+    # exists — CREATE_FTS_INDEX errors on a duplicate name, so this exercises the
+    # SHOW_INDEXES-guarded skip path).
+    await store.load_fts_extension()
+
+
+async def test_load_fts_extension_creates_a_live_bm25_ranked_index(store: GraphStore) -> None:
+    """ADR §4.2 step 4 / §7: once load_fts_extension() succeeds, search_entities() ranks
+    by BM25 relevance instead of the lower(x) CONTAINS scan. Verified empirically against
+    ladybug 0.19.1 (no fts query syntax precedent existed in this repo before this) — see
+    store.py's load_fts_extension docstring for what was checked and how.
+    """
+    await store.upsert_entity(entity("security:005930", "삼성전자", kind=EntityKind.SECURITY))
+    await store.upsert_entity(
+        Entity(
+            id="theme:semiconductor",
+            kind=EntityKind.THEME,
+            name="반도체 테마",
+            attributes={"note": "삼성전자 관련 테마"},
+            created_at=NOW,
+            updated_at=NOW,
+        )
+    )
+    await store.load_fts_extension()
+
+    # Exact-name match outranks a secondary mention buried in an attributes note.
+    hits = await store.search_entities("삼성전자")
+    assert [hit.id for hit in hits] == ["security:005930", "theme:semiconductor"]
+
+    # A whole-term query with no match returns empty, not an error.
+    assert await store.search_entities("없는단어") == ()
+
+    # A newly-created entity is picked up by the same live index without a rebuild.
+    await store.upsert_entity(entity("theme:foundry", "파운드리"))
+    assert [hit.id for hit in await store.search_entities("파운드리")] == ["theme:foundry"]
+
+
+async def test_search_entities_falls_back_to_contains_scan_when_fts_is_not_loaded(
+    store: GraphStore,
+) -> None:
+    """The CONTAINS scan (pre-fts behavior) stays intact for stores that never call
+    load_fts_extension() — e.g. a degraded brain where the fts package failed to load
+    (lifespan.py's fts_last_error path). fts/BM25 and CONTAINS are not equivalent (BM25
+    matches whole tokens, not substrings — see load_fts_extension's docstring), so this
+    is a real behavioral fallback, not a strict superset.
+    """
+    await store.upsert_entity(
+        Entity(
+            id="security:005930",
+            kind=EntityKind.SECURITY,
+            name="SK하이닉스",
+            created_at=NOW,
+            updated_at=NOW,
+        )
+    )
+    assert store._fts_index_ready is False
+    # "하이닉스" is a bare substring of "SK하이닉스", not its own token — CONTAINS matches
+    # it; a fts/BM25 query would not (empirically confirmed while building this fallback).
+    assert [hit.id for hit in await store.search_entities("하이닉스")] == ["security:005930"]
 
 
 async def test_reset_deletes_projection_and_restores_schema_metadata(store: GraphStore) -> None:
