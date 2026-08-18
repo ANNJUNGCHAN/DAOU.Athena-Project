@@ -213,6 +213,12 @@ class GatewayRunner:
                 await self.gateway.disconnect(alias)
             except Exception:
                 pass
+        # 키움 셀렉터 4툴이 쓰는 백엔드 루프백 클라이언트도 같이 정리한다 —
+        # upstream 핸들과 달리 `disconnect()` 순회에 안 걸리는 별도 자원이다.
+        try:
+            await self.gateway.selector_http_client.aclose()
+        except Exception:
+            pass
 
     # -- 백그라운드 헬스체크 슈퍼바이저 (모듈 docstring 참고) ---------------------
 

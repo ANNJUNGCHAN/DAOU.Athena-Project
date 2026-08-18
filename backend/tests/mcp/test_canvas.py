@@ -93,3 +93,56 @@ def test_free_canvas_type_never_falls_back():
     assert result.canvas_type == "free"
     assert result.fell_back is False
     assert result.fallback_reason is None
+
+
+# ---------------------------------------------------------------------------
+# 차트 — app/lib/chart-card.js 소비 형상(symbol/name/bars[time,o,h,l,c,volume])
+# ---------------------------------------------------------------------------
+
+
+def test_chart_payload_valid_with_volume():
+    data = {
+        "symbol": "005930",
+        "name": "삼성전자",
+        "bars": [
+            {"time": "2026-08-14", "open": 71000, "high": 72000, "low": 70500, "close": 71500,
+             "volume": 12345678},
+        ],
+    }
+    result = canvas.validate_canvas_payload("chart", data)
+    assert result.canvas_type == "chart"
+    assert result.fell_back is False
+    assert result.fallback_reason is None
+
+
+def test_chart_payload_valid_without_optional_fields():
+    """volume·name은 선택이다 — 없어도 유효하다."""
+    data = {
+        "symbol": "005930",
+        "bars": [{"time": "2026-08-14", "open": 1, "high": 2, "low": 0.5, "close": 1.5}],
+    }
+    result = canvas.validate_canvas_payload("chart", data)
+    assert result.fell_back is False
+
+
+def test_chart_payload_missing_symbol_falls_back_to_free():
+    data = {"bars": [{"time": "2026-08-14", "open": 1, "high": 2, "low": 0.5, "close": 1.5}]}
+    result = canvas.validate_canvas_payload("chart", data)
+    assert result.canvas_type == "free"
+    assert result.fell_back is True
+    assert "chart" in result.fallback_reason
+
+
+def test_chart_payload_empty_bars_falls_back_to_free():
+    """bars는 최소 1개 이상이어야 한다 — 빈 배열은 무효다."""
+    data = {"symbol": "005930", "bars": []}
+    result = canvas.validate_canvas_payload("chart", data)
+    assert result.canvas_type == "free"
+    assert result.fell_back is True
+
+
+def test_chart_payload_bar_missing_required_field_falls_back_to_free():
+    data = {"symbol": "005930", "bars": [{"time": "2026-08-14", "open": 1, "high": 2, "low": 0.5}]}
+    result = canvas.validate_canvas_payload("chart", data)
+    assert result.canvas_type == "free"
+    assert result.fell_back is True
