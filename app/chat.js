@@ -1,8 +1,10 @@
-// 대화 창 렌더러. nodeIntegration:true / contextIsolation:false — spike/electron-glass 패턴 그대로.
-const { ipcRenderer, webFrame } = require('electron');
-const onboarding = require('./lib/onboarding');
-const authScreen = require('./lib/auth-screen');
-const settingsCards = require('./lib/settings-cards');
+// 대화 창 렌더러. nodeIntegration:false / contextIsolation:true(2026-08-18 렌더러
+// 격리, 클로드 데스크탑 방식) — preload.js의 window.athena 다리로만 main과
+// 통신한다. lib/*.js는 chat.html이 <script> 태그로 미리 로드해 window.AthenaLib에
+// 얹어둔 전역이다(require 없음 — nodeIntegration:false라 브라우저에 require가 없다).
+const onboarding = window.AthenaLib.Onboarding;
+const authScreen = window.AthenaLib.AuthScreen;
+const settingsCards = window.AthenaLib.SettingsCards;
 
 const $boot = document.getElementById('boot');
 const $bootLine = document.getElementById('bootLine');
@@ -45,11 +47,11 @@ let onboardCleanup = null; // 현재 노출 중인 온보딩/인증 화면의 �
 let prefs = { autoExpandCanvas: true, autoGrowChat: true };
 async function loadPrefs() {
   try {
-    const next = await ipcRenderer.invoke('athena:settings:prefs:get');
+    const next = await window.athena.invoke('athena:settings:prefs:get');
     if (next) prefs = next;
   } catch { /* 채널 없음 — 기본값 유지 */ }
 }
-ipcRenderer.on('athena:prefs-changed', (e, next) => { if (next) prefs = next; });
+window.athena.on('athena:prefs-changed', (next) => { if (next) prefs = next; });
 
 // ---------- 부팅(AT-SY-001) — 4단계 생성 시퀀스 ----------
 // 발광점(0ms) → 가로 확장(+180ms) → 세로 전개(+420ms, 유리 72%) → 창 확정(+620ms).
@@ -62,7 +64,7 @@ ipcRenderer.on('athena:prefs-changed', (e, next) => { if (next) prefs = next; })
 // prefers-reduced-motion이면 시퀀스를 건너뛰고 즉시 완료 상태로 간다(접근성 3종은
 // 직접 구현한다 — CLAUDE.md §2).
 window.addEventListener('DOMContentLoaded', () => {
-  const onboardStatePromise = ipcRenderer.invoke('athena:onboarding-state').catch(() => {
+  const onboardStatePromise = window.athena.invoke('athena:onboarding-state').catch(() => {
     // 채널이 아직 없거나 실패하면 "온보딩 필요"로 가정한다 — 온보딩을 건너
     // 뛰고 정상 대화 화면을 보여주는 쪽이 훨씬 위험하다("건너뛰기 없음"
     // 원칙, AT-SY-002/003). 이 fail-closed 결정은 발명이다 — 리포트 참고.
@@ -119,7 +121,7 @@ window.addEventListener('DOMContentLoaded', () => {
 // 하나를 재사용한다(plan/paper-specs/00-통합-계획.md §1.1/§1.5).
 async function onboardAdvance(step) {
   try {
-    const res = await ipcRenderer.invoke('athena:onboarding-advance', { step });
+    const res = await window.athena.invoke('athena:onboarding-advance', { step });
     return !!(res && res.ok);
   } catch (err) {
     return false;
@@ -130,7 +132,7 @@ function startOnboarding(step) {
   $onboard.hidden = false;
   manualOverride = true; // 온보딩 동안은 대화 이력 기반 자동 성장 로직이 개입하지 않는다
   syncMaxButton(); // 모드가 높이 소유권을 가져간다 — 최대화 버튼 비활성
-  ipcRenderer.send('athena:set-chat-height', { height: layout.chatMaxH, manual: false });
+  window.athena.send('athena:set-chat-height', { height: layout.chatMaxH, manual: false });
   // 스펙 전체에 "1 / 3" 화면이 없다(00-통합-계획.md §7-2 열린 질문) — main이
   // step:1을 돌려줘도 CLI 연결(2/3)부터 시작한다. 발명 — 리포트에 명시.
   showOnboardingStep(step === 3 ? 3 : 2);
@@ -174,13 +176,13 @@ function finishOnboarding() {
   syncMaxButton(); // 높이 소유권 반환 — 최대화 버튼 재활성
   // main이 done:true 응답 시 스스로 축소한다(house rule IPC 계약) — 이 호출은
   // 그 경로가 아직 없거나 실패했을 때를 위한 방어적 폴백이다.
-  ipcRenderer.send('athena:set-chat-height', { height: layout.chatBaseH, manual: false });
+  window.athena.send('athena:set-chat-height', { height: layout.chatBaseH, manual: false });
   $input.focus();
   scheduleHeightSync();
 }
 
 // ---------- 초기 레이아웃 정보 수신 ----------
-ipcRenderer.on('athena:init', (e, payload) => {
+window.athena.on('athena:init', (payload) => {
   layout = payload;
   canvasSource = payload.canvasSource || 'live';
   currentHeight = layout.chatBaseH;
@@ -198,7 +200,7 @@ function applyGlassFraction(frac) {
 
 window.addEventListener('resize', () => {
   // innerHeight는 CSS px — 창 bounds(물리 px)와 비교하려면 줌 배율을 되돌린다.
-  currentHeight = Math.round(window.innerHeight * webFrame.getZoomFactor());
+  currentHeight = Math.round(window.innerHeight * window.athena.getZoomFactor());
   const growable = Math.max(1, layout.chatMaxH - layout.chatBaseH);
   const frac = Math.min(1, Math.max(0, (currentHeight - layout.chatBaseH) / growable));
   applyGlassFraction(frac);
@@ -244,7 +246,7 @@ function scheduleHeightSync() {
     // 키우는 자동 요청뿐이다. 수동 리사이즈(그립 드래그)는 이 경로를 안 탄다.
     if (!manualOverride && prefs.autoGrowChat) {
       const need = measureNeededHeight();
-      ipcRenderer.send('athena:set-chat-height', { height: need, manual: false });
+      window.athena.send('athena:set-chat-height', { height: need, manual: false });
     }
     scrollHistoryToBottom();
   });
@@ -256,11 +258,11 @@ function measureNeededHeight() {
   const inputH = inputRow ? inputRow.getBoundingClientRect().height : 64;
   const histNeeded = $history.scrollHeight + 16; // padding
   // 측정은 CSS px, 창 높이는 물리 px — 줌 배율을 곱해 보낸다(main의 clamp와 단위 일치).
-  return Math.round((gripH + inputH + histNeeded) * webFrame.getZoomFactor());
+  return Math.round((gripH + inputH + histNeeded) * window.athena.getZoomFactor());
 }
 
 // 줌 배율이 바뀌면 같은 내용이라도 필요한 창 높이가 달라진다 — 다시 재서 요청한다.
-ipcRenderer.on('athena:zoom-changed', () => scheduleHeightSync());
+window.athena.on('athena:zoom-changed', () => scheduleHeightSync());
 
 // ---------- 수동 리사이즈 (그립 드래그) ----------
 let dragging = false;
@@ -276,7 +278,7 @@ window.addEventListener('mousemove', (e) => {
   if (!dragging) return;
   const delta = dragStartScreenY - e.screenY; // 위로 끌수록(스크린Y 감소) 커진다
   const h = Math.round(dragStartHeight + delta);
-  ipcRenderer.send('athena:set-chat-height', { height: h, manual: true });
+  window.athena.send('athena:set-chat-height', { height: h, manual: true });
 });
 window.addEventListener('mouseup', () => {
   if (!dragging) return;
@@ -404,14 +406,14 @@ async function runQueryLive(text) {
     renderProgress();
     scheduleHeightSync();
   };
-  ipcRenderer.on('athena:live-canvas-added', onLiveCanvasAdded);
+  const unsubscribeLiveCanvasAdded = window.athena.on('athena:live-canvas-added', onLiveCanvasAdded);
 
   let result;
   try {
-    result = await ipcRenderer.invoke('athena__render_canvas', { source: 'live', query: text, expand: prefs.autoExpandCanvas });
+    result = await window.athena.invoke('athena__render_canvas', { source: 'live', query: text, expand: prefs.autoExpandCanvas });
   } finally {
     clearInterval(tick);
-    ipcRenderer.removeListener('athena:live-canvas-added', onLiveCanvasAdded);
+    unsubscribeLiveCanvasAdded();
   }
   if (myToken !== abortToken) return;
 
@@ -466,7 +468,6 @@ async function runQueryFixture(text) {
 
   const qLine = document.createElement('div');
   qLine.className = 'turn';
-  qLine.innerHTML = ''; // 콘텐츠는 아래서 textContent로만 채운다
   const qText = document.createElement('div');
   qText.className = 'turn-q';
   qText.textContent = text;
@@ -516,7 +517,7 @@ async function runQueryFixture(text) {
 
     // 픽스처 어댑터 — main.js의 source:'fixture' 분기로 간다(위 runQueryLive의
     // 실배선 호출과 짝을 이룬다. 여긴 명시적으로 fixture를 요청한 경로다).
-    await ipcRenderer.invoke('athena__render_canvas', { source: 'fixture', type, expand: prefs.autoExpandCanvas && !opened });
+    await window.athena.invoke('athena__render_canvas', { source: 'fixture', type, expand: prefs.autoExpandCanvas && !opened });
     opened = true;
 
     trEls[type].classList.add('done');
@@ -547,7 +548,7 @@ async function runQueryFixture(text) {
     const chip = document.createElement('span');
     chip.className = 'chip';
     chip.textContent = CARD_PLAN[type].label;
-    chip.addEventListener('click', () => ipcRenderer.send('athena:highlight-canvas', type));
+    chip.addEventListener('click', () => window.athena.send('athena:highlight-canvas', type));
     meta.appendChild(chip);
   }
   const trace = document.createElement('span');
@@ -589,7 +590,7 @@ function openSettings() {
   $settings.hidden = false;
   manualOverride = true; // 설정 동안은 이력 기반 자동 성장이 개입하지 않는다
   syncMaxButton(); // 모드가 높이 소유권을 가져간다 — 최대화 버튼 비활성
-  ipcRenderer.send('athena:set-chat-height', { height: layout.chatMaxH, manual: false });
+  window.athena.send('athena:set-chat-height', { height: layout.chatMaxH, manual: false });
   settingsCards.renderScreen($settingsGrid);
   settingsCards.renderAccounts($settingsGrid);
   settingsCards.renderMcp($settingsGrid);
@@ -603,7 +604,7 @@ function closeSettings() {
   $app.hidden = false;
   manualOverride = false;
   syncMaxButton(); // 높이 소유권 반환 — 최대화 버튼 재활성
-  ipcRenderer.send('athena:set-chat-height', { height: layout.chatBaseH, manual: false });
+  window.athena.send('athena:set-chat-height', { height: layout.chatBaseH, manual: false });
   $input.focus();
 }
 
@@ -642,7 +643,7 @@ $input.addEventListener('keydown', (e) => {
 // 트레이(main.js). 온보딩·설정 모드가 열려 있는 동안 높이는 모드 소유라 최대화
 // 토글은 개입하지 않는다.
 $winMin.addEventListener('click', () => {
-  ipcRenderer.send('athena:minimize-windows');
+  window.athena.send('athena:minimize-windows');
 });
 $winMax.addEventListener('click', () => {
   if (settingsOpen || !$onboard.hidden) return; // 모드가 높이를 소유 중 — disabled의 백스톱
@@ -653,15 +654,15 @@ $winMax.addEventListener('click', () => {
     // 리사이즈만 남는다(2026-08-18 리뷰 지적) — 자동 성장은 manualOverride 해제로
     // 다음 내용 변화부터 재개되는 것으로 충분하다.
     manualOverride = false;
-    ipcRenderer.send('athena:set-chat-height', { height: layout.chatBaseH, manual: false });
+    window.athena.send('athena:set-chat-height', { height: layout.chatBaseH, manual: false });
   } else {
     manualOverride = true; // 그립 드래그와 같은 문법 — 자동 성장이 덮어쓰지 않는다
-    ipcRenderer.send('athena:set-chat-height', { height: layout.chatMaxH, manual: true });
+    window.athena.send('athena:set-chat-height', { height: layout.chatMaxH, manual: true });
   }
   $input.focus();
 });
 $winClose.addEventListener('click', () => {
-  ipcRenderer.send('athena:close-windows');
+  window.athena.send('athena:close-windows');
 });
 
 // ---------- 창 기본 기능 (2026-08-17) — frame:false라 OS 타이틀바가 없어 직접 배선 ----------
@@ -670,23 +671,23 @@ document.addEventListener('keydown', (e) => {
   if (!(e.ctrlKey || e.metaKey) || e.altKey) return;
   if (e.key === '=' || e.key === '+') {
     e.preventDefault();
-    ipcRenderer.send('athena:zoom', { dir: 'in' });
+    window.athena.send('athena:zoom', { dir: 'in' });
   } else if (e.key === '-' || e.key === '_') {
     e.preventDefault();
-    ipcRenderer.send('athena:zoom', { dir: 'out' });
+    window.athena.send('athena:zoom', { dir: 'out' });
   } else if (e.key === '0') {
     e.preventDefault();
-    ipcRenderer.send('athena:zoom', { dir: 'reset' });
+    window.athena.send('athena:zoom', { dir: 'reset' });
   } else if (e.key === 'm' || e.key === 'M') {
     e.preventDefault();
-    ipcRenderer.send('athena:minimize-windows');
+    window.athena.send('athena:minimize-windows');
   }
 });
 
 window.addEventListener('wheel', (e) => {
   if (!e.ctrlKey) return;
   e.preventDefault();
-  ipcRenderer.send('athena:zoom', { dir: e.deltaY < 0 ? 'in' : 'out' });
+  window.athena.send('athena:zoom', { dir: e.deltaY < 0 ? 'in' : 'out' });
 }, { passive: false });
 
 // 창 이동 — 빈 유리 표면(이력 여백·입력줄 여백·설정/온보딩 배경)을 잡고 끈다.
@@ -697,9 +698,9 @@ function bindWindowDrag(el) {
   if (!el) return;
   el.addEventListener('mousedown', (e) => {
     if (e.button !== 0 || e.target !== el) return;
-    ipcRenderer.send('athena:window-drag', { phase: 'start' });
+    window.athena.send('athena:window-drag', { phase: 'start' });
     const end = () => {
-      ipcRenderer.send('athena:window-drag', { phase: 'end' });
+      window.athena.send('athena:window-drag', { phase: 'end' });
       window.removeEventListener('mouseup', end);
       window.removeEventListener('blur', end);
     };
@@ -723,14 +724,14 @@ document.addEventListener('keydown', (e) => {
     }
     if (state !== 'idle') {
       abortToken++; // 중단 — UI 반영 차단
-      ipcRenderer.send('athena:abort-live-query'); // 실배선 프로세스 트리도 실제로 죽인다
+      window.athena.send('athena:abort-live-query'); // 실배선 프로세스 트리도 실제로 죽인다
       state = 'idle';
       setDot(null);
       setLocked(false);
       if (liveProgressEl) { liveProgressEl.remove(); liveProgressEl = null; }
       scheduleHeightSync();
     } else {
-      ipcRenderer.send('athena:collapse-canvas');
+      window.athena.send('athena:collapse-canvas');
     }
   }
 });

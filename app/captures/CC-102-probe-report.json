@@ -82,7 +82,7 @@
   "adjustedToggle": {
     "before": "수정주가",
     "after": "원주가",
-    "noteBefore": "서버 보정(upd_stkpc_tp) 미연결 — 목업 동일 데이터",
+    "noteBefore": "서버 보정(upd_stkpc_tp) 미연결 — 목업 동일 데이터 · 저작 상태 로컬 저장 1판 — 백엔드 영속은 후속 라운드",
     "notePresent": true
   },
   "fullscreen": {

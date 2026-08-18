@@ -1,3 +1,8 @@
+// IIFE 스코프 격리(2026-08-18 렌더러 격리) — <script> 태그는 top-level const/function을
+// 문서 전체가 공유하는 하나의 스크립트 스코프에 넣는다(require()의 모듈별 격리와 다르다).
+// el/sanitize 같은 흔한 이름이 파일 간에 충돌해 SyntaxError가 났다(실측, diag-isolation.js).
+// CJS(require)는 이 IIFE 밖에서도 동일하게 동작한다 — Node의 모듈 래퍼가 이미 함수 스코프다.
+(function () {
 'use strict';
 
 // 보조지표 패널(CC-103) — plan/chart-card-control-spec.md §3·§4.
@@ -10,7 +15,11 @@
 // 이 모듈은 DOM/상호작용만 맡는다. 실제 지표 계산·시리즈 재생성은 chart-card.js가
 // 콜백 안에서 한다(관심사 분리, chart-toolbar.js와 같은 패턴).
 
-const { INDICATOR_DEFS } = require('./chart-indicator-registry');
+// UMD 헤드(2026-08-18 렌더러 격리) — node --test(CommonJS)면 require, <script>
+// 태그 전역 로딩(nodeIntegration:false)이면 window.AthenaLib를 쓴다.
+const { INDICATOR_DEFS } = (typeof module !== 'undefined' && module.exports)
+  ? require('./chart-indicator-registry')
+  : window.AthenaLib.ChartIndicatorRegistry;
 
 function el(tag, className, text) {
   const n = document.createElement(tag);
@@ -211,4 +220,12 @@ function createIndicatorPanel(opts) {
   return { panel, open, close, destroy, syncFromState };
 }
 
-module.exports = { createIndicatorPanel };
+const __exports = { createIndicatorPanel };
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = __exports;
+} else {
+  window.AthenaLib = window.AthenaLib || {};
+  window.AthenaLib.ChartIndicatorPanel = __exports;
+}
+
+})();

@@ -29,7 +29,7 @@
       80,
       28
     ],
-    "maxOverlapPx": 0,
+    "maxOverlapPx": 0.0000152587890625,
     "noOverlap": true
   },
   "rsiOn": {

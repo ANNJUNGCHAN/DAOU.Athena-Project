@@ -1,3 +1,8 @@
+// IIFE 스코프 격리(2026-08-18 렌더러 격리) — <script> 태그는 top-level const/function을
+// 문서 전체가 공유하는 하나의 스크립트 스코프에 넣는다(require()의 모듈별 격리와 다르다).
+// el/sanitize 같은 흔한 이름이 파일 간에 충돌해 SyntaxError가 났다(실측, diag-isolation.js).
+// CJS(require)는 이 IIFE 밖에서도 동일하게 동작한다 — Node의 모듈 래퍼가 이미 함수 스코프다.
+(function () {
 // spike/stream-adapter/adapter.py 의 sanitize 규칙을 JS로 포팅.
 // 순서 고정: strip_tags 먼저, unescape_entities 나중.
 // (반대로 하면 &lt;b&gt; 같은 이스케이프된 문자열이 언이스케이프 단계에서
@@ -46,4 +51,14 @@ function sanitize(text) {
   return unescapeEntities(stripTags(text));
 }
 
-module.exports = { sanitize, stripTags, unescapeEntities };
+// UMD 각주(2026-08-18 렌더러 격리) — node --test(CommonJS)와 <script> 태그
+// 전역 로딩(nodeIntegration:false) 양쪽에서 같은 파일이 동작해야 한다.
+const __exports = { sanitize, stripTags, unescapeEntities };
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = __exports;
+} else {
+  window.AthenaLib = window.AthenaLib || {};
+  window.AthenaLib.Sanitize = __exports;
+}
+
+})();

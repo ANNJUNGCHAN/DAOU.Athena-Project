@@ -2,10 +2,16 @@
 // `npm run verify:settings-cards`.
 //
 // 렌더러 쪽 IPC 호출부를 그대로 둔 채(athena:account-register 등 호출부 코드는
-// 수정하지 않음) `ipcRenderer.invoke` 응답만 렌더러 컨텍스트 안에서 임시로 스텁해,
-// 목록·등록 시트·주문 API 게이트·probe 시트가 스펙대로 그려지는지 스크린샷으로
-// 남긴다. 스텁 데이터는 이 스크립트에만 존재하고 앱 코드(lib/settings-cards.js)에는
-// 목업이 전혀 없다.
+// 수정하지 않음) IPC 응답만 스텁해, 목록·등록 시트·주문 API 게이트·probe 시트가
+// 스펙대로 그려지는지 스크린샷으로 남긴다. 스텁 데이터는 이 스크립트에만 존재하고
+// 앱 코드(lib/settings-cards.js)에는 목업이 전혀 없다.
+//
+// 2026-08-18 렌더러 격리 이후: 예전에는 렌더러 컨텍스트 안에서
+// `ipcRenderer.invoke`를 직접 몽키패치했다(require('electron')가 가능했으므로).
+// contextIsolation:true 아래서는 preload.js의 contextBridge가 window.athena를
+// 깊이 동결해 노출하므로 렌더러 쪽에서 재할당이 안 통한다 — 대신 **main
+// 프로세스에서 ipcMain 핸들러 자체를 스텁으로 바꿔치운다**(installStubHandlers).
+// 렌더러 호출부(athena:account-register 등)는 여전히 그대로다.
 //
 // 대상 창은 **대화 창**이다. 설정은 새 창도 캔버스도 아니라 대화 창의 모드다
 // (ui/DESIGN-SOUL.md:100, GLOSSARY.md §1). 2026-08-16 이전에는 캔버스 창을
@@ -15,7 +21,7 @@
 // 라는 계약을 본다. 이 스크립트는 그 안쪽의 **카드 상태들**을 본다. 역할이 다르다.
 process.env.ATHENA_NO_AUTOSTART = '1';
 
-const { app } = require('electron');
+const { app, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
@@ -28,11 +34,25 @@ async function shot(win, name) {
   fs.writeFileSync(path.join(CAPTURES, name), img.toPNG());
 }
 
-const STUB_JS = `
-(() => {
-  const { ipcRenderer } = require('electron');
-  if (ipcRenderer.__origInvoke) return 'already-stubbed';
-  ipcRenderer.__origInvoke = ipcRenderer.invoke.bind(ipcRenderer);
+// 클릭 대상을 못 찾으면 'NOT FOUND: ...'를 돌려주는 executeJavaScript 결과들을
+// 한곳에 모은다 — 예전에는 콘솔에 찍히기만 하고 exit code에는 반영되지 않아
+// CI에서 조용히 초록으로 통과했다(실패가 로그에 묻힘).
+const failures = [];
+async function clickAndLog(win, label, script) {
+  const result = await win.webContents.executeJavaScript(script);
+  console.log(`[verify-settings] ${label}:`, result);
+  if (typeof result === 'string' && result.startsWith('NOT FOUND')) {
+    failures.push(`${label}: ${result}`);
+  }
+  return result;
+}
+
+// main 프로세스에서 ipcMain 핸들러를 스텁으로 갈아끼운다(2026-08-18 렌더러
+// 격리 — 렌더러 쪽 window.athena는 contextBridge가 동결해 몽키패치 불가).
+// main.js가 require 시점에 이미 등록해둔 원본 핸들러를 removeHandler로 걷어내고
+// 같은 채널에 스텁을 건다. athena__render_canvas는 건드리지 않는다(이 스크립트가
+// 부르지 않는다).
+function installStubHandlers() {
   const accounts = [
     { id: 'a1', alias: '모의-주력', connected: true, active: true, orderApi: false, tokenState: 'ready', appKeyChars: 40, secretKeyChars: 64 },
     { id: 'a2', alias: '모의-테스트', connected: false, active: false, orderApi: false, tokenState: 'needed', appKeyChars: 40, secretKeyChars: 64 },
@@ -51,30 +71,33 @@ const STUB_JS = `
     { name: 'get_market_fundamental_by_date', description: '일자별 PER·PBR·배당수익률 조회', allowed: false },
     { name: 'datalab_shopping_keyword_by_device_and_gender_breakdown', description: '네이버 데이터랩 쇼핑 키워드 성별·기기 세분화 조회', allowed: false },
   ];
-  ipcRenderer.invoke = async (channel, arg) => {
-    if (channel === 'athena:account-list') return { accounts };
-    if (channel === 'athena:account-register') return { ok: true, id: 'a3' };
-    if (channel === 'athena:account-set-active') { for (const a of accounts) a.active = (a.id === arg.id); return { ok: true }; }
-    if (channel === 'athena:order-api-set') return { ok: true, checklist: [ { key:'orderApi', label:'주문 API 허용 (토글)', met: !!arg.enabled }, { key:'token', label:'로컬 인증 토큰 설정', met: true } ] };
-    if (channel === 'athena:mcp-list') return { servers };
-    if (channel === 'athena:mcp-stage-snippet') return { ok: true, staged: [
+  const stubs = {
+    'athena:account-list': async () => ({ accounts }),
+    'athena:account-register': async () => ({ ok: true, id: 'a3' }),
+    'athena:account-set-active': async (e, arg) => { for (const a of accounts) a.active = (a.id === arg.id); return { ok: true }; },
+    'athena:order-api-set': async (e, arg) => ({ ok: true, checklist: [ { key: 'orderApi', label: '주문 API 허용 (토글)', met: !!arg.enabled }, { key: 'token', label: '로컬 인증 토큰 설정', met: true } ] }),
+    'athena:mcp-list': async () => ({ servers }),
+    'athena:mcp-stage-snippet': async () => ({ ok: true, staged: [
       { alias: 'drfirst-korea-stock-mcp', originalName: '@drfirst/korea-stock-mcp', command: 'npx', args: ['-y', '@drfirst/korea-stock-mcp'], envKeys: ['NAVER_CLIENT_ID', 'NODE_OPTIONS'], risks: ['위험한 환경변수 키 사용 (NODE_OPTIONS) — 값은 표시하지 않지만 인터프리터가 암묵적으로 로드하는 코드 경로일 수 있다'] },
-    ] };
-    if (channel === 'athena:mcp-register') return { ok: true, alias: arg.staged.alias };
-    if (channel === 'athena:mcp-approve') return { ok: true };
-    if (channel === 'athena:mcp-probe') return { ok: true, protocolVersion: '2025-11-25', encodingCorrupt: false, tools: probeTools };
-    if (channel === 'athena:mcp-allow-tool') { const t = probeTools.find((x) => x.name === arg.tool); if (t) t.allowed = arg.allowed; return { ok: true }; }
-    if (channel === 'athena__render_canvas') return ipcRenderer.__origInvoke(channel, arg);
-    return ipcRenderer.__origInvoke(channel, arg);
+    ] }),
+    'athena:mcp-register': async (e, arg) => ({ ok: true, alias: arg.staged.alias }),
+    'athena:mcp-approve': async () => ({ ok: true }),
+    'athena:mcp-probe': async () => ({ ok: true, protocolVersion: '2025-11-25', encodingCorrupt: false, tools: probeTools }),
+    'athena:mcp-allow-tool': async (e, arg) => { const t = probeTools.find((x) => x.name === arg.tool); if (t) t.allowed = arg.allowed; return { ok: true }; },
   };
-  return 'stubbed';
-})();
-`;
+  for (const [channel, handler] of Object.entries(stubs)) {
+    ipcMain.removeHandler(channel);
+    ipcMain.handle(channel, handler);
+  }
+  return Object.keys(stubs);
+}
 
 // MCP 카드만 다시 그린다 — buildCardShell이 기존 .card.mcp를 제거하고 새로 붙인다.
+// window.AthenaLib.SettingsCards는 chat.html이 <script> 태그로 미리 로드해둔
+// 전역이다(require 없음, nodeIntegration:false).
 async function rerenderMcpCard(win) {
   await win.webContents.executeJavaScript(
-    "require('./lib/settings-cards').renderMcp(document.getElementById('settingsGrid'))"
+    "window.AthenaLib.SettingsCards.renderMcp(document.getElementById('settingsGrid'))"
   );
   await wait(300);
 }
@@ -93,14 +116,16 @@ function clickByText(selector, text) {
 
 app.whenReady().then(async () => {
   const mainMod = require('./main.js');
+  // ---------- main 프로세스의 ipcMain 핸들러를 스텁으로 갈아끼운다 ----------
+  // 카드가 그려지기 *전에* 심어야 한다 — 설정 모드를 여는 순간 카드가 목록을
+  // 부른다. createWindows() 전에 걸어도 무방하다(핸들러는 main.js require
+  // 시점에 이미 등록됐고, 렌더러는 아직 아무것도 부르지 않았다).
+  const stubbedChannels = installStubHandlers();
+  console.log('[verify-settings] stub install:', stubbedChannels);
+
   await mainMod.createWindows();
   const { chatWin } = mainMod.getWins();
   await wait(600);
-
-  // ---------- 렌더러 컨텍스트 안에서 ipcRenderer.invoke만 임시 스텁 ----------
-  // 카드가 그려지기 *전에* 심어야 한다 — 설정 모드를 여는 순간 카드가 목록을 부른다.
-  const stubResult = await chatWin.webContents.executeJavaScript(STUB_JS);
-  console.log('[verify-settings] stub install:', stubResult);
 
   // ---------- 설정 모드를 연다 — 새 창이 아니라 이 창이 변한다 ----------
   // 점 클릭이 계좌·MCP 카드를 한 번에 그린다(chat.js openSettings).
@@ -108,23 +133,23 @@ app.whenReady().then(async () => {
   await wait(500);
   await shot(chatWin, 'SETTINGS-03-accounts-list.png');
 
-  console.log('[verify-settings] open register sheet:', await chatWin.webContents.executeJavaScript(clickByText('.card.accounts button', '+ 계좌 등록')));
+  await clickAndLog(chatWin, 'open register sheet', clickByText('.card.accounts button', '+ 계좌 등록'));
   await wait(200);
   await shot(chatWin, 'SETTINGS-04-accounts-register-sheet.png');
-  console.log('[verify-settings] close register sheet:', await chatWin.webContents.executeJavaScript(clickByText('.card.accounts .uk-sheet button', '취소')));
+  await clickAndLog(chatWin, 'close register sheet', clickByText('.card.accounts .uk-sheet button', '취소'));
   await wait(200);
 
-  console.log('[verify-settings] open order-api sheet:', await chatWin.webContents.executeJavaScript(clickByText('.card.accounts .uk-pill', 'OFF')));
+  await clickAndLog(chatWin, 'open order-api sheet', clickByText('.card.accounts .uk-pill', 'OFF'));
   await wait(200);
   await shot(chatWin, 'SETTINGS-05-orderapi-sheet.png');
-  console.log('[verify-settings] click activate:', await chatWin.webContents.executeJavaScript(clickByText('.card.accounts .uk-sheet button', '활성화')));
+  await clickAndLog(chatWin, 'click activate', clickByText('.card.accounts .uk-sheet button', '활성화'));
   await wait(300);
   await shot(chatWin, 'SETTINGS-06-orderapi-after-activate.png');
 
   await rerenderMcpCard(chatWin);
   await shot(chatWin, 'SETTINGS-07-mcp-list.png');
 
-  console.log('[verify-settings] open mcp register sheet:', await chatWin.webContents.executeJavaScript(clickByText('.card.mcp button', '+ 서버 등록')));
+  await clickAndLog(chatWin, 'open mcp register sheet', clickByText('.card.mcp button', '+ 서버 등록'));
   await wait(200);
   await shot(chatWin, 'SETTINGS-08-mcp-register-sheet-empty.png');
 
@@ -135,15 +160,15 @@ app.whenReady().then(async () => {
       ta.dispatchEvent(new Event('input', { bubbles: true }));
     })();
   `);
-  console.log('[verify-settings] analyze snippet:', await chatWin.webContents.executeJavaScript(clickByText('.card.mcp .uk-sheet button', '분석')));
+  await clickAndLog(chatWin, 'analyze snippet', clickByText('.card.mcp .uk-sheet button', '분석'));
   await wait(300);
   await shot(chatWin, 'SETTINGS-09-mcp-register-sheet-staged.png');
-  console.log('[verify-settings] approve staged server:', await chatWin.webContents.executeJavaScript(clickByText('.card.mcp .uk-sheet button', '승인')));
+  await clickAndLog(chatWin, 'approve staged server', clickByText('.card.mcp .uk-sheet button', '승인'));
   await wait(300);
   await shot(chatWin, 'SETTINGS-10-mcp-register-sheet-after-approve.png');
 
   await rerenderMcpCard(chatWin);
-  console.log('[verify-settings] open probe sheet (pykrx row):', await chatWin.webContents.executeJavaScript(`
+  await clickAndLog(chatWin, 'open probe sheet (pykrx row)', `
     (() => {
       const rows = Array.from(document.querySelectorAll('.card.mcp .uk-row.is-clickable'));
       const r = rows.find((row) => row.textContent.includes('pykrx'));
@@ -151,11 +176,11 @@ app.whenReady().then(async () => {
       r.click();
       return 'clicked';
     })();
-  `));
+  `);
   await wait(300);
   await shot(chatWin, 'SETTINGS-11-mcp-probe-sheet.png');
 
-  console.log('[verify-settings] toggle a checkbox:', await chatWin.webContents.executeJavaScript(`
+  await clickAndLog(chatWin, 'toggle a checkbox', `
     (() => {
       const cbs = Array.from(document.querySelectorAll('.card.mcp .uk-sheet .uk-check:not(.is-disabled)'));
       const target = cbs.find((c) => !c.classList.contains('is-checked'));
@@ -163,26 +188,26 @@ app.whenReady().then(async () => {
       target.click();
       return 'clicked';
     })();
-  `));
+  `);
   await wait(150);
   await shot(chatWin, 'SETTINGS-12-mcp-probe-sheet-toggled.png');
 
   // 닫기 경고(D8, 2026-08-17 실사용 사고 재발 방지) — 체크박스를 건드린 뒤
   // "선택 허용"을 누르지 않은 채 닫으려 하면, 바로 닫지 말고 인라인으로
   // 경고해야 한다. 커밋 전에 이 갈래부터 확인한다.
-  console.log('[verify-settings] close probe sheet with unsaved change (expect warning bar):', await chatWin.webContents.executeJavaScript(clickByText('.card.mcp .uk-sheet-close', '닫기')));
+  await clickAndLog(chatWin, 'close probe sheet with unsaved change (expect warning bar)', clickByText('.card.mcp .uk-sheet-close', '닫기'));
   await wait(150);
   await shot(chatWin, 'SETTINGS-12b-mcp-probe-sheet-close-warning-dirty.png');
   console.log('[verify-settings] warning bar present (dirty):', await chatWin.webContents.executeJavaScript(
     "!!document.querySelector('.card.mcp .uk-close-warn')"
   ));
-  console.log('[verify-settings] dismiss warning (계속 편집):', await chatWin.webContents.executeJavaScript(clickByText('.card.mcp .uk-close-warn button', '계속 편집')));
+  await clickAndLog(chatWin, 'dismiss warning (계속 편집)', clickByText('.card.mcp .uk-close-warn button', '계속 편집'));
   await wait(150);
   console.log('[verify-settings] sheet still open after 계속 편집:', await chatWin.webContents.executeJavaScript(
     "!!document.querySelector('.card.mcp .uk-sheet')"
   ));
 
-  console.log('[verify-settings] commit 선택 허용:', await chatWin.webContents.executeJavaScript(clickByText('.card.mcp .uk-sheet button', '선택 허용')));
+  await clickAndLog(chatWin, 'commit 선택 허용', clickByText('.card.mcp .uk-sheet button', '선택 허용'));
   await wait(400);
   await shot(chatWin, 'SETTINGS-13-mcp-probe-sheet-committed.png');
 
@@ -196,13 +221,13 @@ app.whenReady().then(async () => {
     })();
   `));
   await wait(150);
-  console.log('[verify-settings] close probe sheet with 0 allowed (expect warning):', await chatWin.webContents.executeJavaScript(clickByText('.card.mcp .uk-sheet-close', '닫기')));
+  await clickAndLog(chatWin, 'close probe sheet with 0 allowed (expect warning)', clickByText('.card.mcp .uk-sheet-close', '닫기'));
   await wait(150);
   await shot(chatWin, 'SETTINGS-14-mcp-probe-sheet-close-warning-zero.png');
   console.log('[verify-settings] warning bar text (zero-allowed):', await chatWin.webContents.executeJavaScript(
     "(document.querySelector('.card.mcp .uk-close-warn .uk-warnbox-body') || {}).textContent || 'NOT FOUND'"
   ));
-  console.log('[verify-settings] force close anyway (그냥 닫기):', await chatWin.webContents.executeJavaScript(clickByText('.card.mcp .uk-close-warn button', '그냥 닫기')));
+  await clickAndLog(chatWin, 'force close anyway (그냥 닫기)', clickByText('.card.mcp .uk-close-warn button', '그냥 닫기'));
   await wait(150);
   console.log('[verify-settings] sheet closed after force-close:', await chatWin.webContents.executeJavaScript(
     "!document.querySelector('.card.mcp .uk-sheet')"
@@ -210,5 +235,12 @@ app.whenReady().then(async () => {
 
   console.log('[verify-settings] all captures written to app/captures/SETTINGS-*.png');
   await wait(200);
+
+  if (failures.length) {
+    console.error(`[verify-settings] 실패 ${failures.length}건 — 요소를 찾지 못했다:`);
+    for (const f of failures) console.error(`  - ${f}`);
+    app.exit(1);
+    return;
+  }
   app.quit();
 });

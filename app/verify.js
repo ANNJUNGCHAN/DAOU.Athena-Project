@@ -170,6 +170,14 @@ async function traceBootBar(chatWin, timeoutMs = 5000) {
 app.whenReady().then(async () => {
   dlog('whenReady fired');
   const report = { startedAt: new Date().toISOString() };
+  // 검증 블록들이 이미 계산하는 명시적 pass 불리언을 모아 exit code에 반영한다
+  // (이전엔 리포트 JSON에만 남고 CI는 항상 exit 0으로 끝났다). 애매한 항목
+  // (프레임 fps 수치, 상태 의존적 정보성 필드 등)은 아래 각 지점에서 의도적으로
+  // 제외하고 주석으로 남긴다 — 리포트 JSON 형상 자체는 바꾸지 않는다.
+  const failures = [];
+  function assertOk(label, cond) {
+    if (!cond) failures.push(label);
+  }
   const mainMod = require('./main.js');
   dlog('main.js required');
 
@@ -208,6 +216,13 @@ app.whenReady().then(async () => {
     '| 모드 배타성:', boot.exactlyOneModeVisible,
     '| 부팅바 이름쓰기:', JSON.stringify(bootBar)
   );
+  // canvasVisibleAtBoot는 false가 정상이다(부팅 시 캔버스 창은 숨어 있어야 한다) —
+  // 단언 대상에서 제외한다.
+  assertOk('boot: chat window visible at boot', report.bootChatOnly.chatVisibleAtBoot === true);
+  assertOk('boot: chat reached a mode after boot sequence', report.bootChatOnly.chatBootedAfterBoot === true);
+  assertOk('boot: exactly one mode panel visible (no overlap)', report.bootChatOnly.exactlyOneModeVisible === true);
+  assertOk('boot: boot bar wrote full name then returned to placeholder', report.bootChatOnly.bootBarWritesName === true);
+  assertOk('boot: booted into chat(app) mode, not onboarding (verify profile isolation)', report.bootChatOnly.bootedIntoChatMode === true);
 
   // ---------- 검증 2: 점 → 캔버스 확장/수축, 프레임 실측 ----------
   const dotBefore = await mainMod.getDotScreenPoint();
@@ -251,6 +266,9 @@ app.whenReady().then(async () => {
   await wait(200);
   await shot(chatWin, '04-collapsed-back-to-chat.png');
   report.afterCollapse = { canvasVisible: canvasWin.isVisible() };
+  assertOk('collapse: canvas hidden after collapseCanvasWindow()', report.afterCollapse.canvasVisible === false);
+  // expand/collapse 프레임 stats(p50/p95/max)는 공유 데스크톱 환경이라 실행마다
+  // 흔들린다(CLAUDE.md §9) — 수치는 리포트에 남기되 pass/fail 단언에서는 뺀다.
 
   // ---------- 검증 3: 두 창 독립 이동/리사이즈 ----------
   const initial = { canvas: canvasWin.getBounds(), chat: chatWin.getBounds() };
@@ -281,6 +299,8 @@ app.whenReady().then(async () => {
       near(afterChatResize.canvas.width, afterCanvasMove.canvas.width) && near(afterChatResize.canvas.height, afterCanvasMove.canvas.height),
   };
   console.log('[verify] 독립성 체크:', JSON.stringify(report.independence.canvasMovedButChatUnchanged), JSON.stringify(report.independence.chatResizedButCanvasUnchanged));
+  assertOk('independence: canvas move does not affect chat bounds', report.independence.canvasMovedButChatUnchanged === true);
+  assertOk('independence: chat resize does not affect canvas bounds', report.independence.chatResizedButCanvasUnchanged === true);
 
   // ---------- 검증 4: 접근성 3종 (CDP Emulation.setEmulatedMedia) ----------
   // 다시 캔버스를 채워서 유리 표면이 실제로 보이는 상태에서 캡처한다.
@@ -369,6 +389,10 @@ app.whenReady().then(async () => {
     cardChipCount: chipCount,
   };
   console.log('[verify] 검증5(E2E Enter 트리거):', JSON.stringify(report.e2eTrigger));
+  assertOk('e2e: reached done state (.turn-a appeared)', report.e2eTrigger.reachedDoneState === true);
+  assertOk('e2e: chat grew taller than pre-query height', report.e2eTrigger.grewTallerThanBase === true);
+  // finalAnswerText/cardChipCount는 fixture 응답 내용에 좌우되는 정보성 필드라
+  // 단언에서 뺀다.
 
   // ---------- 검증 6: 그립 드래그로 수동 리사이즈 ----------
   const beforeDrag = chatWin.getBounds();
@@ -389,6 +413,8 @@ app.whenReady().then(async () => {
     bottomEdgePinned: near(beforeDrag.y + beforeDrag.height, afterDrag.y + afterDrag.height),
   };
   console.log('[verify] 검증6(수동 리사이즈):', JSON.stringify(report.manualResize));
+  assertOk('manualResize: grip drag grew chat height', report.manualResize.grewByDrag === true);
+  assertOk('manualResize: bottom edge stayed pinned while resizing', report.manualResize.bottomEdgePinned === true);
 
   // ---------- 검증 7: 설정을 열어도 창은 둘이다 ----------
   // ui/soul.md §3·§8 — 창은 둘뿐이고 창 3개 이상은 즉시 탈락이다. 설정은 새 창이
@@ -469,6 +495,11 @@ app.whenReady().then(async () => {
     gridEmptiedOnClose: chatAfterClose.gridEmptied === true,
   };
   console.log('[verify] 검증7(설정 모드):', JSON.stringify(report.settingsSurface));
+  // settingsSurface는 전부 참이 기대값인 불리언들이다(noTrIdLeak/noBearerLeak
+  // 포함 — 자격증명 화면 유출 가드) — 일괄 단언한다.
+  for (const [key, val] of Object.entries(report.settingsSurface)) {
+    assertOk(`settingsSurface.${key}`, val === true);
+  }
 
   // ---------- 검증 8: 커맨드바로도 설정에 도달한다 ----------
   // GLOSSARY.md §1 — 점 클릭은 "추가" 진입로다. 커맨드바 경로가 없으면 soul.md §8 탈락 조건.
@@ -510,6 +541,10 @@ app.whenReady().then(async () => {
     turnCountAfter: chatAfterCmd.turnCount,
   };
   console.log('[verify] 검증8(커맨드바 진입):', JSON.stringify(report.settingsCommandBar));
+  // turnCountBefore/turnCountAfter는 숫자 참고값이라 제외하고, 나머지 불리언만 단언한다.
+  for (const [key, val] of Object.entries(report.settingsCommandBar)) {
+    if (typeof val === 'boolean') assertOk(`settingsCommandBar.${key}`, val === true);
+  }
 
   // ---------- 검증 9: 창 기본 기능 (2026-08-17) — 줌 · 이동 앵커 · 최소화/복원 ----------
   // frame:false·타이틀바 없음이라 main.js에 직접 배선한 기능들이다. 커서 폴링
@@ -517,7 +552,7 @@ app.whenReady().then(async () => {
   // 옮겨진 상태)를 setBounds로 재현해 "다음 높이 변경이 창을 부팅 좌표로
   // 되돌리지 않는다"(앵커 동기화)를 단언한다.
   const sendFromChat = (channel, payload) => chatWin.webContents.executeJavaScript(
-    `require('electron').ipcRenderer.send('${channel}', ${JSON.stringify(payload)})`
+    `window.athena.send('${channel}', ${JSON.stringify(payload)})`
   );
 
   // 9a — 줌: 두 창이 같은 배율로 움직이고, reset으로 1.0에 돌아온다
@@ -574,6 +609,11 @@ app.whenReady().then(async () => {
     restorePairsBoth: restoredPair.chat && restoredPair.canvas,
   };
   console.log('[verify] 검증9(창 기본 기능):', JSON.stringify(report.windowBasics));
+  assertOk('windowBasics: zoom-in syncs both windows', report.windowBasics.zoomInSyncsBothWindows === true);
+  assertOk('windowBasics: zoom reset returns to 1.0', report.windowBasics.zoomResetReturnsTo1 === true);
+  assertOk('windowBasics: move anchor kept after height change', report.windowBasics.movedAnchorKept === true);
+  assertOk('windowBasics: minimize lowers both windows', report.windowBasics.minimizeLowersBoth === true);
+  assertOk('windowBasics: restore pairs both windows', report.windowBasics.restorePairsBoth === true);
 
   // 9d — 닫기(백그라운드 유지, 2026-08-18): 두 창이 숨고 프로세스는 산다. 복귀는
   // 트레이 클릭과 같은 함수 참조(restoreFromBackground)를 직접 부른다 — 실제
@@ -592,6 +632,11 @@ app.whenReady().then(async () => {
     canvasRestoredWithPair: !canvasVisibleBeforeClose || canvasWin.isVisible(),
   };
   console.log('[verify] 검증9d(닫기→백그라운드→복귀):', JSON.stringify(report.closeToBackground));
+  // canvasVisibleBeforeClose는 이 시점의 상태를 기록하는 값이라(캔버스가 항상
+  // 열려 있어야 한다는 계약이 아니다) 단언에서 뺀다 — 아래 세 값이 실제 계약이다.
+  assertOk('closeToBackground: both windows hidden after close', report.closeToBackground.bothHiddenAfterClose === true);
+  assertOk('closeToBackground: chat restored from tray path', report.closeToBackground.chatRestored === true);
+  assertOk('closeToBackground: canvas restored with its pair', report.closeToBackground.canvasRestoredWithPair === true);
 
   // ---------- 검증 10: 카드 배치·생애주기 규칙 (2026-08-18) ----------
   // 규칙 원본: plan/canvas-taxonomy.md "배치·생애주기 규칙". 폭은 형상이 정하고
@@ -676,6 +721,12 @@ app.whenReady().then(async () => {
     afterBudget,
   };
   console.log('[verify] 검증10(카드 배치·생애주기):', JSON.stringify(report.cardLayout));
+  assertOk('cardLayout: arrival order matches send order', report.cardLayout.arrivalOrderIsSendOrder === true);
+  assertOk('cardLayout: shape-grammar widths correct on arrival', report.cardLayout.grammarWidthsCorrect === true);
+  assertOk('cardLayout: layout hint promotes stream to full width', report.cardLayout.hintPromotedStreamToFull === true);
+  assertOk('cardLayout: invalid layout hint falls back to half width', report.cardLayout.invalidHintFallsBackToHalf === true);
+  assertOk('cardLayout: drop_types curation removed table card', report.cardLayout.dropTypesRemovedTable === true);
+  assertOk('cardLayout: height budget evicts oldest card first', report.cardLayout.budgetEnforcedOldestFirst === true);
 
   // ---------- 검증 11: 창 이동(빈 유리 드래그)이 크기를 바꾸지 않는다 ----------
   // 사용자 보고(2026-08-18): 화면 아무 곳이나 클릭하면 창이 늘어난다. 빈 유리
@@ -686,11 +737,11 @@ app.whenReady().then(async () => {
   const { screen: elScreen } = require('electron');
   const dragBefore = chatWin.getBounds();
   await chatWin.webContents.executeJavaScript(
-    "require('electron').ipcRenderer.send('athena:window-drag', { phase: 'start' })"
+    "window.athena.send('athena:window-drag', { phase: 'start' })"
   );
   await wait(700);
   await chatWin.webContents.executeJavaScript(
-    "require('electron').ipcRenderer.send('athena:window-drag', { phase: 'end' })"
+    "window.athena.send('athena:window-drag', { phase: 'end' })"
   );
   await wait(150);
   const dragAfter = chatWin.getBounds();
@@ -704,6 +755,10 @@ app.whenReady().then(async () => {
     positionDelta: { x: dragAfter.x - dragBefore.x, y: dragAfter.y - dragBefore.y },
   };
   console.log('[verify] 검증11(제자리 클릭 크기 불변):', JSON.stringify(report.dragNoResize));
+  // 제자리 클릭만으로 창이 자라던 실제 버그(5e0a9ab)의 회귀 가드 — 핵심 단언.
+  assertOk('dragNoResize: in-place click leaves window size unchanged', report.dragNoResize.sizeUnchanged === true);
+  // positionDelta는 공유 데스크톱에서 실제 커서가 움직이면 정당하게 바뀔 수
+  // 있는 참고 수치라 단언에서 뺀다(파일 상단 주석 참고).
 
   // ---------- 검증 12: §5.3.1 컬럼 우선순위 흡수(2층) — table 카드가 1560px에서 접힌다 ----------
   // claude -p 실배선 없이(quota 0) canvas.js의 'athena:add-canvas-live' 경로에 실제
@@ -754,6 +809,9 @@ app.whenReady().then(async () => {
     foldDataset: foldProbe && foldProbe.foldDataset,
   };
   console.log('[verify] 검증12(컬럼 우선순위 fold):', JSON.stringify(report.tableColumnFold));
+  assertOk('tableColumnFold: table card rendered', report.tableColumnFold.cardRendered === true);
+  assertOk('tableColumnFold: visible columns folded below total', report.tableColumnFold.foldedBelowTotal === true);
+  assertOk('tableColumnFold: header cell count matches every row', report.tableColumnFold.headerMatchesEveryRow === true);
 
   // ---- 검증13(CC-106): 차트 카드 — 마운트·툴바·지표 토글·매물대 스모크 ----
   // 깊은 상호작용(형식 전환·저작 영속·드로잉)은 probe-chart-*.js 4종이 전담한다 —
@@ -797,11 +855,34 @@ app.whenReady().then(async () => {
     measured: chartProbe,
   };
   console.log('[verify] 검증13(차트 카드):', JSON.stringify(report.chartCard));
+  assertOk('chartCard: card rendered', report.chartCard.cardRendered === true);
+  assertOk('chartCard: period tabs match 일,주,월,년,분,틱', report.chartCard.periodTabsOk === true);
+  assertOk('chartCard: price/volume panes separated', report.chartCard.paneSeparated === true);
+  assertOk('chartCard: 35 indicator rows present', report.chartCard.indicatorRows35 === true);
+  assertOk('chartCard: 24 volume-profile bars present', report.chartCard.volumeProfileBars24 === true);
 
   report.finishedAt = new Date().toISOString();
   fs.writeFileSync(path.join(CAPTURES, 'VERIFY-REPORT.json'), JSON.stringify(report, null, 2));
   console.log('[verify] 리포트 저장:', path.join(CAPTURES, 'VERIFY-REPORT.json'));
 
+  if (failures.length) {
+    console.error(`[verify] 실패 단언 ${failures.length}건:`);
+    for (const f of failures) console.error(`  - ${f}`);
+  } else {
+    console.log('[verify] 전 단언 통과');
+  }
+  // 실측(2026-08-18, 최소 재현 스크립트로 확인): 이 Electron 43.x/Windows
+  // 조합에서 process.exitCode를 세팅한 뒤 app.quit()으로 끝내면 **항상 exit 0**
+  // 이다 — app.quit()의 정상 종료 경로가 process.exitCode를 무시한다. probe-
+  // chart-*.js가 이미 쓰는 패턴(성공은 app.quit(), 실패는 app.exit(1) 직접
+  // 호출)을 그대로 따라야 실제로 exit code가 반영된다. process.exitCode도
+  // 참고용으로 같이 세팅해둔다(의미는 맞고, 다른 종료 경로를 타면 쓰인다).
+  process.exitCode = failures.length ? 1 : 0;
+
   await wait(200);
-  dlog('quitting'); app.quit();
+  if (failures.length) {
+    dlog('quitting with failures'); app.exit(1);
+  } else {
+    dlog('quitting'); app.quit();
+  }
 });

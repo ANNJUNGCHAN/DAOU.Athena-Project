@@ -29,8 +29,8 @@
         "connected": true,
         "accounts": [
           {
-            "id": "claude:ajc227ung@gmail.com",
-            "label": "ajc227ung@gmail.com",
+            "id": "claude:j227ung@naver.com",
+            "label": "j227ung@naver.com",
             "active": true
           }
         ]
@@ -48,12 +48,12 @@
     "launched": false,
     "message": "알 수 없는 CLI다"
   },
-  "cli.login.gemini(notInstalled)": {
+  "cli.login.gemini(unknownProvider)": {
     "ok": false,
     "launched": false,
     "message": "알 수 없는 CLI다"
   },
-  "cli.login.grok(notInstalled)": {
+  "cli.login.grok(unknownProvider)": {
     "ok": false,
     "launched": false,
     "message": "알 수 없는 CLI다"
@@ -77,12 +77,12 @@
   },
   "account.register.ok(stubbedNetwork)": {
     "ok": true,
-    "id": "d5ab557f-885e-4d72-99f6-e2a3a354f072"
+    "id": "ee7ac939-4a0c-4c74-8a03-144142226566"
   },
   "account.list.afterRegister": {
     "accounts": [
       {
-        "id": "d5ab557f-885e-4d72-99f6-e2a3a354f072",
+        "id": "ee7ac939-4a0c-4c74-8a03-144142226566",
         "alias": "검증-성공계좌",
         "connected": true,
         "active": true,
@@ -111,7 +111,7 @@
   "account.list.afterOrderApiOn": {
     "accounts": [
       {
-        "id": "d5ab557f-885e-4d72-99f6-e2a3a354f072",
+        "id": "ee7ac939-4a0c-4c74-8a03-144142226566",
         "alias": "검증-성공계좌",
         "connected": true,
         "active": true,
@@ -139,8 +139,8 @@
   },
   "auth-token-status": {
     "state": "ready",
-    "expiresInSec": 2315428962,
-    "issuedAt": "2026-08-17T16:17:17.086Z"
+    "expiresInSec": 2315365118,
+    "issuedAt": "2026-08-18T10:01:20.673Z"
   },
   "auth-token-refresh": {
     "ok": true,

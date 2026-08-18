@@ -15,6 +15,9 @@ const mcpEnv = require('./lib/main/mcp-env');
 const { runClaudeQuery } = require('./lib/main/claude-runner');
 const { ensureMcpConfig } = require('./lib/main/mcp-config');
 const { buildLivePrompt } = require('./lib/main/live-prompt');
+// 목업 데이터 로더 — 렌더러 격리 이관(2026-08-18). canvas.js가 더는 fs를
+// 직접 못 쓴다 — athena:load-fixture가 이 모듈을 대신 호출해준다.
+const mockdata = require('./lib/main/mockdata');
 
 const MDEBUGLOG = path.join(__dirname, 'captures', 'main-debug.log');
 function mdlog(msg) {
@@ -31,6 +34,13 @@ mdlog('module loaded, ATHENA_NO_AUTOSTART: ' + process.env.ATHENA_NO_AUTOSTART);
 app.on('window-all-closed', () => {
   mdlog('window-all-closed fired (no-op)');
 });
+
+// OS 레벨 종료(Alt+F4, 트레이 "종료", verify 하네스의 app.quit())와 캔버스 창의
+// 개별 OS 닫기(Alt+F4를 캔버스 창에 대고 누르는 경우)를 구분하는 플래그.
+// frame:false는 Alt+F4를 못 막는다 — canvasWin의 'close' 핸들러가 이 플래그를
+// 보고 진짜 종료 중이 아니면 preventDefault()로 백그라운드 전환으로 돌린다.
+let isQuitting = false;
+app.on('before-quit', () => { isQuitting = true; });
 
 // ---------- 설계 치수 (ui/round-1R/two-windows.md E3 확정안) ----------
 const DESIGN = {
@@ -83,7 +93,16 @@ function commonWinOpts(bounds) {
     // "뒤가 비치며 블러"가 성립한다. transparent:true는 기본으로 켜지 않는다(W2 지시) —
     // 블러 없는 완전 투명만 주기 때문.
     backgroundMaterial: 'acrylic',
-    webPreferences: { nodeIntegration: true, contextIsolation: false },
+    // 렌더러 격리(2026-08-18, 클로드 데스크탑 방식) — nodeIntegration:false +
+    // contextIsolation:true + preload.js의 contextBridge 다리만 남긴다.
+    // sandbox:true도 켠 채로 동작한다(preload가 require('electron')만 쓴다 —
+    // 실측: npm test 110건 + npm run verify 전체 통과, 흔들리면 여기 주석에 사유를 남기고 끈다).
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
+      sandbox: true,
+      preload: path.join(__dirname, 'preload.js'),
+    },
   };
 }
 
@@ -142,6 +161,16 @@ async function createWindows() {
   });
 
   chatWin.on('closed', () => app.quit());
+  // Alt+F4 등 OS 닫기가 캔버스 창에 직접 오면(원래는 프레임이 없어 막을 방법이
+  // 없었다 — 창이 재생성 없이 그냥 사라졌다) hideToBackground()와 같은 의미론으로
+  // 흡수한다: 숨기고 canvasVisible=false, 트레이로 복귀 가능한 상태를 유지한다.
+  // isQuitting이면(before-quit 이후) 진짜 종료 경로이므로 막지 않는다.
+  canvasWin.on('close', (event) => {
+    if (isQuitting) return;
+    event.preventDefault();
+    canvasWin.hide();
+    canvasVisible = false;
+  });
   canvasWin.on('closed', () => { canvasVisible = false; });
 
   // ---------- 창 기본 기능 (2026-08-17) — frame:false라 OS 타이틀바가 없어 직접 배선 ----------
@@ -341,6 +370,7 @@ ipcMain.on('athena:set-chat-height', (e, { height }) => setChatHeight(height));
 
 // ---------- 점 → 캔버스 확장/수축 (spike v2.js 이식) ----------
 async function getDotScreenPoint() {
+  if (!chatWin || chatWin.isDestroyed()) return null;
   const rect = await chatWin.webContents.executeJavaScript(
     "(() => { const r = document.getElementById('dot').getBoundingClientRect(); return {x: r.left + r.width/2, y: r.top + r.height/2}; })()"
   );
@@ -362,7 +392,9 @@ function rmaxFor(cx, cy) {
 }
 
 async function expandCanvasWindow() {
+  if (!chatWin || chatWin.isDestroyed() || !canvasWin || canvasWin.isDestroyed()) return null;
   const dotScreen = await getDotScreenPoint();
+  if (!dotScreen) return null;
   const { cx, cy } = canvasLocalFromScreen(dotScreen);
   const rmax = rmaxFor(cx, cy);
 
@@ -383,7 +415,9 @@ async function expandCanvasWindow() {
 
 async function collapseCanvasWindow() {
   if (!canvasVisible) return;
+  if (!chatWin || chatWin.isDestroyed() || !canvasWin || canvasWin.isDestroyed()) return null;
   const dotScreen = await getDotScreenPoint();
+  if (!dotScreen) return null;
   const { cx, cy } = canvasLocalFromScreen(dotScreen);
   const rmax = rmaxFor(cx, cy);
 
@@ -466,7 +500,9 @@ async function runLiveQuery(query, expand) {
     onCanvasResult: (r) => {
       if (expand && !expandTriggered && !canvasVisible) {
         expandTriggered = true;
-        expandCanvasWindow(); // fire-and-forget — 카드 전송을 막지 않는다
+        // fire-and-forget — 카드 전송을 막지 않는다. 실패는 콘솔에 안 뜨고
+        // 조용히 삼켜지던 unhandledRejection이었다 — mdlog로 남긴다.
+        expandCanvasWindow().catch((err) => mdlog(`expandCanvasWindow 실패: ${String((err && err.message) || err)}`));
       }
       sendLiveCanvasResult(r);
       if (r.envelope && r.envelope.canvas_type) canvasTypesSeen.push(r.envelope.canvas_type);
@@ -569,6 +605,17 @@ function handlePrefsSet(e, patch) {
 
 ipcMain.handle('athena:settings:prefs:get', handlePrefsGet);
 ipcMain.handle('athena:settings:prefs:set', handlePrefsSet);
+
+// ---------------------------------------------------------------------------
+// 픽스처 로더 (2026-08-18 렌더러 격리 이관) — canvas.js의 목업 카드 3종
+// (stream/reader/table) + 차트 카드가 쓰던 lib/mockdata.js의 fs 읽기를
+// main으로 옮겼다. source:'fixture' 경로에서만 쓰인다(verify.js 전용).
+// ---------------------------------------------------------------------------
+function handleLoadFixture(e, { kind } = {}) {
+  return mockdata.loadFixture(kind);
+}
+
+ipcMain.handle('athena:load-fixture', handleLoadFixture);
 
 // ---------------------------------------------------------------------------
 // CLI 계정 (AT-SY-002)
@@ -772,6 +819,7 @@ module.exports = {
     onboardingAdvance: handleOnboardingAdvance,
     prefsGet: handlePrefsGet,
     prefsSet: handlePrefsSet,
+    loadFixture: handleLoadFixture,
     cliList: handleCliList,
     cliLogin: handleCliLogin,
     cliSetActive: handleCliSetActive,

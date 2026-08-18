@@ -1,3 +1,8 @@
+// IIFE 스코프 격리(2026-08-18 렌더러 격리) — <script> 태그는 top-level const/function을
+// 문서 전체가 공유하는 하나의 스크립트 스코프에 넣는다(require()의 모듈별 격리와 다르다).
+// el/sanitize 같은 흔한 이름이 파일 간에 충돌해 SyntaxError가 났다(실측, diag-isolation.js).
+// CJS(require)는 이 IIFE 밖에서도 동일하게 동작한다 — Node의 모듈 래퍼가 이미 함수 스코프다.
+(function () {
 // 온보딩 2/3(CLI 연결)·3/3(계좌 연결) 화면. AT-SY-002 / AT-SY-003.
 //
 // 이 화면들은 새 창이 아니다 — 대화 창이 chatMaxH로 확장된 상태의 콘텐츠다
@@ -9,14 +14,15 @@
 // 않는다. 전부 el()/textContent.
 //
 // 비밀값 계약(house rule 2 · AT-ST-007): APP KEY/SECRET KEY 값은 입력 요소에서
-// ipcRenderer.invoke() 호출 인자로 "직접" 읽어 넘긴다 — 어떤 JS 변수에도 값
+// window.athena.invoke() 호출 인자로 "직접" 읽어 넘긴다 — 어떤 JS 변수에도 값
 // 자체를 담아두지 않는다(길이만 읽어 카운터를 표시한다). 저장 성공/실패와
 // 무관하게 클릭 직후 입력 필드도 곧바로 비운다.
 
-const { ipcRenderer } = require('electron');
+// UMD 헤드(2026-08-18 렌더러 격리) — ipcRenderer는 window.athena 다리로
+// 대체한다(preload.js). ui-kit require는 node --test/<script> 태그 겸용.
 const {
   el, row, statusDot, badge, button, progressDots, errorNote, clear,
-} = require('./ui-kit');
+} = (typeof module !== 'undefined' && module.exports) ? require('./ui-kit') : window.AthenaLib.UiKit;
 
 // CLI 로그인이 연 브라우저가 끝내 결과를 통보하지 않을 때의 안전장치 — 디자인에
 // 없는 상태다(AT-SY-002 Open question 6). 이 타임아웃과 오류 문구는 발명이다.
@@ -145,7 +151,7 @@ function renderCliStep(root, { onContinue }) {
   async function doConnect(p) {
     clear(errSlot);
     try {
-      const res = await ipcRenderer.invoke('athena:cli-login', { providerId: p.id });
+      const res = await window.athena.invoke('athena:cli-login', { providerId: p.id });
       if (!res || !res.ok) {
         errSlot.appendChild(errorNote(`${p.name} 로그인을 시작하지 못했습니다.${res && res.message ? ' ' + res.message : ''}`));
         return;
@@ -168,7 +174,7 @@ function renderCliStep(root, { onContinue }) {
   async function setActive(accountId) {
     clear(errSlot);
     try {
-      const res = await ipcRenderer.invoke('athena:cli-set-active', { accountId });
+      const res = await window.athena.invoke('athena:cli-set-active', { accountId });
       if (!res || !res.ok) { errSlot.appendChild(errorNote('활성 계정 전환에 실패했습니다.')); return; }
       await load();
     } catch (err) {
@@ -179,7 +185,7 @@ function renderCliStep(root, { onContinue }) {
   async function load() {
     clear(errSlot);
     try {
-      const data = await ipcRenderer.invoke('athena:cli-list');
+      const data = await window.athena.invoke('athena:cli-list');
       lastProviders = (data && data.providers) || [];
     } catch (err) {
       lastProviders = CLI_FALLBACK_ORDER.map((id) => ({ id, name: CLI_FALLBACK_NAME[id], connected: false, accounts: [] }));
@@ -188,13 +194,13 @@ function renderCliStep(root, { onContinue }) {
     renderAll();
   }
 
-  function onChanged(e, data) {
+  function onChanged(data) {
     for (const t of pending.values()) clearTimeout(t);
     pending.clear();
     lastProviders = (data && data.providers) || [];
     renderAll();
   }
-  ipcRenderer.on('athena:cli-changed', onChanged);
+  const unsubscribeCliChanged = window.athena.on('athena:cli-changed', onChanged);
 
   continueBtn.addEventListener('click', async () => {
     continueBtn.disabled = true;
@@ -210,7 +216,7 @@ function renderCliStep(root, { onContinue }) {
 
   return function cleanup() {
     destroyed = true;
-    ipcRenderer.removeListener('athena:cli-changed', onChanged);
+    unsubscribeCliChanged();
     for (const t of pending.values()) clearTimeout(t);
     pending.clear();
   };
@@ -318,7 +324,7 @@ function renderAccountStep(root, { onRegistered }) {
     clear(errSlot);
     try {
       // 값은 여기서만, invoke() 인자 리터럴 안에서 딱 한 번 읽는다 — 변수에 담지 않는다.
-      const res = await ipcRenderer.invoke('athena:account-register', {
+      const res = await window.athena.invoke('athena:account-register', {
         alias: aliasInput.value.trim() || undefined,
         appKey: appKeyInput.value,
         secretKey: secretKeyInput.value,
@@ -342,4 +348,13 @@ function renderAccountStep(root, { onRegistered }) {
   return function cleanup() {};
 }
 
-module.exports = { renderCliStep, renderAccountStep };
+// UMD 각주(2026-08-18 렌더러 격리) — sanitize.js와 같은 패턴.
+const __exports = { renderCliStep, renderAccountStep };
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = __exports;
+} else {
+  window.AthenaLib = window.AthenaLib || {};
+  window.AthenaLib.Onboarding = __exports;
+}
+
+})();
