@@ -259,11 +259,19 @@ IPC) "카드 N개 렌더됨"으로 갱신한다 — 43초짜리 왕복 동안 �
   - ~~**다중 세션도 없다.**~~ → **해소됐다(같은 커밋).** 새 실배선 질의가
     이전 프로세스를 먼저 트리째 끊는다 — 활성 프로세스는 항상 정확히 하나다
     (`main.js` `activeLiveQuery` 선점 규칙).
-- ~~**응답 크기/시간 상한이 없다.**~~ → **시간 상한은 생겼다(같은 커밋).**
+- ~~**응답 크기/시간 상한이 없다.**~~ → **시간 상한은 생겼다(같은 커밋), 응답
+  크기 상한도 생겼다(2026-08-18).**
   왕복 기본 타임아웃 180초(`DEFAULT_TIMEOUT_MS` — 실측 최대 43초 + DART 다중
   호출 ~60초의 3배 여유). 넘기면 트리를 죽이고 `timedOut:true`로 실패를
-  정직하게 보고한다. **응답 크기 상한은 여전히 없다** — `athena_mcp`의
-  post-parse 상한이 1차 방어이고, 앱 쪽 스트림 버퍼 상한은 미구현이다.
+  정직하게 보고한다. stdout 누적 총량 상한도 같은 자리(`claude-runner.js`)에
+  생겼다 — `MAX_STDOUT_BYTES`(5,000,000바이트, `athena_mcp`의 post-parse
+  상한 500만 자와 같은 자릿수). `child.stdout`의 `data` 핸들러가 청크마다
+  누적 바이트를 세다가 넘으면 `killedBy = 'stdout-cap'`으로 표시하고
+  timeout/abort와 같은 `killTree()` 경로로 프로세스 트리를 죽인다. 결과
+  객체에 `stdoutCapped:true`가 실리고, 에러 메시지는 기존 실패 표면화 경로
+  (대화 창의 `실패 — ${result.error}` 텍스트, `chat.js`)를 그대로 탄다 — 새
+  UI를 만들지 않았다. `athena_mcp`의 post-parse 상한이 1차 방어, 이건 앱 쪽
+  2차 방어다.
 - **`.mcp.json`은 매 라이브 질의마다 다시 쓰지 않는다** — `liveMcpConfig`를
   프로세스 생애주기 동안 캐시한다. 백엔드 venv 경로가 앱 실행 중 바뀌는 시나리오는
   없다고 가정했다(재시작하면 다시 생성된다).
@@ -596,16 +604,24 @@ Enter)을 그대로 시뮬레이션했다. `athena__render_canvas` 인터페이�
 
 ### 미구현 · 단순화한 것 (숨기지 않고 명시)
 
-- **⚠ 브랜치 병합에서 버린 기능 1건 — "옮기겠다"고 커밋에 써놓고 안 옮겼다.**
+- ~~**⚠ 브랜치 병합에서 버린 기능 1건 — "옮기겠다"고 커밋에 써놓고 안 옮겼다.**~~
+  → **복구했다(2026-08-18).**
   병합 커밋 `c0d874b`(`merge: ANNJUNGCHAN/Call을 병합한다`)의 본문은
   *"버려진 것: 화면 설정(autoExpandCanvas/autoGrowChat), 커맨드바 설정 호출 정규식.
   **둘 다 후속 커밋에서 모드 구현에 옮긴다**"*라고 적었다.
   실제로는 **커맨드바 정규식만 옮겼고**(`chat.js`의 `SETTINGS_COMMAND`)
-  **화면 설정은 안 옮겼다.** 지금 코드에 `autoExpandCanvas`/`autoGrowChat`은 0건이다.
-  원본 구현은 `git show baa7e0e -- app/main.js`에 있다(약 40줄 + IPC 2채널 + 체크박스 2개).
-  되살릴 때는 `PREFS_FILE`을 그때처럼 `settings.json`으로 두지 말고
-  **`athena-prefs.json`으로 바꿔라** — `app/lib/main/`의 다른 모듈이 전부
-  `athena-*.json` 관례를 쓴다(`accounts.js`, `onboarding.js`, `secrets.js`, `cli-accounts.js`).
+  **화면 설정은 안 옮겼었다** — 되살리기 전까지 `autoExpandCanvas`/`autoGrowChat`은
+  0건이었다. 원본 구현은 `git show baa7e0e -- app/main.js`에 있었다(약 40줄 +
+  IPC 2채널 + 체크박스 2개). 되살리며 `PREFS_FILE`은 그때의 `settings.json` 대신
+  **`athena-prefs.json`**으로 바꿨다(`app/lib/main/prefs.js` — `accounts.js`/
+  `onboarding.js`/`secrets.js`/`cli-accounts.js`와 같은 `athena-*.json` 관례,
+  tmp-then-rename 원자적 쓰기). IPC 채널(`athena:settings:prefs:get`/`:set`,
+  이벤트 `athena:prefs-changed`)은 원본 계약 그대로다. UI는 새 창이 아니라
+  설정 모드 안의 "화면" 카드(`lib/settings-cards.js` `renderScreen()`, 계좌·MCP
+  카드와 같은 토글 컴포넌트) — 토글은 `chat.js`의 실제 동작을 게이트한다:
+  `autoExpandCanvas`는 `runQueryLive`/`runQueryFixture`의 `render_canvas` 호출
+  `expand` 값을, `autoGrowChat`은 `scheduleHeightSync()`의 자동 `set-chat-height`
+  요청을 막는다(꺼도 그립 수동 리사이즈·하단 고정 스크롤은 그대로 동작).
 - **카드 갱신 신선도**는 카드 헤더에 "HH:MM:SS 기준"으로 표시하지만, 실시간 재갱신
   로직(폴링/WebSocket)은 없다 — 목업 데이터라 시점이 고정.
 - **카드 칩 클릭 시 해당 카드 강조**는 구현했지만(`athena:highlight-canvas`),

@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-08-17T16:16:55.557Z",
+  "startedAt": "2026-08-18T01:05:33.040Z",
   "layout": {
     "scale": 1,
     "screen": {
@@ -23,8 +23,8 @@
         "height": 312
       },
       "idle": {
-        "width": 2340,
-        "height": 336
+        "width": 2346,
+        "height": 312
       }
     },
     "chatBootedAfterBoot": true,
@@ -46,18 +46,18 @@
     "ok": true
   },
   "expand": {
-    "frameCount": 29,
-    "p50": 16.700000000000045,
+    "frameCount": 30,
+    "p50": 16.699999999999818,
     "p95": 33.399999999999864,
-    "max": 33.40000000000009,
-    "min": 8.400000000000091
+    "max": 50.299999999999955,
+    "min": 16.399999999999864
   },
   "collapse": {
     "frameCount": 35,
     "p50": 16.699999999999818,
-    "p95": 16.799999999999272,
-    "max": 16.799999999999272,
-    "min": 16.600000000000364
+    "p95": 16.800000000000182,
+    "max": 17,
+    "min": 16.400000000000546
   },
   "afterCollapse": {
     "canvasVisible": false
@@ -193,5 +193,5 @@
     "minimizeLowersBoth": true,
     "restorePairsBoth": true
   },
-  "finishedAt": "2026-08-17T16:17:13.786Z"
+  "finishedAt": "2026-08-18T01:05:51.115Z"
 }
