@@ -294,15 +294,15 @@ exhaustive table of which API feeds which common screen card.
 | `detail:ka10004:sell_bid_prices` | `ka10004` | 매도 10단계 호가 (주식호가요청) | `POST /api/v1/tr/quotes/ka10004/detail/sell_bid_prices` | `post_tr_quotes_ka10004_detail_sell_bid_prices` | 1 | 10 | — | — |
 | `detail:ka10004:sell_bid_quantities` | `ka10004` | 매도 10단계 잔량 (주식호가요청) | `POST /api/v1/tr/quotes/ka10004/detail/sell_bid_quantities` | `post_tr_quotes_ka10004_detail_sell_bid_quantities` | 1 | 10 | — | — |
 | `detail:ka10004:snapshot_time` | `ka10004` | 호가 스냅샷 시각 (주식호가요청) | `POST /api/v1/tr/quotes/ka10004/detail/snapshot_time` | `post_tr_quotes_ka10004_detail_snapshot_time` | 1 | 1 | — | — |
-| `detail:ka10007:bid_changes` | `ka10007` | ka10007 ten-level bid changes (시세표성정보요청) | `POST /api/v1/tr/quotes/ka10007/detail/bid_changes` | `post_tr_quotes_ka10007_detail_bid_changes` | 1 | 20 | — | — |
-| `detail:ka10007:bid_prices` | `ka10007` | ka10007 ten-level bid prices (시세표성정보요청) | `POST /api/v1/tr/quotes/ka10007/detail/bid_prices` | `post_tr_quotes_ka10007_detail_bid_prices` | 1 | 20 | — | — |
-| `detail:ka10007:bid_quantities` | `ka10007` | ka10007 ten-level bid quantities (시세표성정보요청) | `POST /api/v1/tr/quotes/ka10007/detail/bid_quantities` | `post_tr_quotes_ka10007_detail_bid_quantities` | 1 | 20 | — | — |
-| `detail:ka10007:expected_market` | `ka10007` | ka10007 expected market state (시세표성정보요청) | `POST /api/v1/tr/quotes/ka10007/detail/expected_market` | `post_tr_quotes_ka10007_detail_expected_market` | 1 | 10 | — | — |
-| `detail:ka10007:identity` | `ka10007` | ka10007 identity and timestamp (시세표성정보요청) | `POST /api/v1/tr/quotes/ka10007/detail/identity` | `post_tr_quotes_ka10007_detail_identity` | 1 | 4 | — | — |
-| `detail:ka10007:liquidity_provider` | `ka10007` | ka10007 liquidity-provider quantities (시세표성정보요청) | `POST /api/v1/tr/quotes/ka10007/detail/liquidity_provider` | `post_tr_quotes_ka10007_detail_liquidity_provider` | 1 | 20 | — | — |
-| `detail:ka10007:order_counts` | `ka10007` | ka10007 bid order counts (시세표성정보요청) | `POST /api/v1/tr/quotes/ka10007/detail/order_counts` | `post_tr_quotes_ka10007_detail_order_counts` | 1 | 10 | — | — |
-| `detail:ka10007:session` | `ka10007` | ka10007 session prices and trading totals (시세표성정보요청) | `POST /api/v1/tr/quotes/ka10007/detail/session` | `post_tr_quotes_ka10007_detail_session` | 1 | 16 | — | — |
-| `detail:ka10007:totals` | `ka10007` | ka10007 aggregate order-book totals (시세표성정보요청) | `POST /api/v1/tr/quotes/ka10007/detail/totals` | `post_tr_quotes_ka10007_detail_totals` | 1 | 4 | — | — |
+| `detail:ka10007:bid_changes` | `ka10007` | 매도·매수 10단계 호가 직전대비 (시세표성정보요청) | `POST /api/v1/tr/quotes/ka10007/detail/bid_changes` | `post_tr_quotes_ka10007_detail_bid_changes` | 1 | 20 | — | — |
+| `detail:ka10007:bid_prices` | `ka10007` | 매도·매수 10단계 호가 (시세표성정보요청) | `POST /api/v1/tr/quotes/ka10007/detail/bid_prices` | `post_tr_quotes_ka10007_detail_bid_prices` | 1 | 20 | — | — |
+| `detail:ka10007:bid_quantities` | `ka10007` | 매도·매수 10단계 호가잔량 (시세표성정보요청) | `POST /api/v1/tr/quotes/ka10007/detail/bid_quantities` | `post_tr_quotes_ka10007_detail_bid_quantities` | 1 | 20 | — | — |
+| `detail:ka10007:expected_market` | `ka10007` | 전일 시세·가격제한 및 등락 현황 (시세표성정보요청) | `POST /api/v1/tr/quotes/ka10007/detail/expected_market` | `post_tr_quotes_ka10007_detail_expected_market` | 1 | 10 | — | — |
+| `detail:ka10007:identity` | `ka10007` | 종목 식별 및 시각 (시세표성정보요청) | `POST /api/v1/tr/quotes/ka10007/detail/identity` | `post_tr_quotes_ka10007_detail_identity` | 1 | 4 | — | — |
+| `detail:ka10007:liquidity_provider` | `ka10007` | LP 매도·매수 10단계 호가잔량 (시세표성정보요청) | `POST /api/v1/tr/quotes/ka10007/detail/liquidity_provider` | `post_tr_quotes_ka10007_detail_liquidity_provider` | 1 | 20 | — | — |
+| `detail:ka10007:order_counts` | `ka10007` | 매도·매수 5단계 호가건수 (시세표성정보요청) | `POST /api/v1/tr/quotes/ka10007/detail/order_counts` | `post_tr_quotes_ka10007_detail_order_counts` | 1 | 10 | — | — |
+| `detail:ka10007:session` | `ka10007` | 당일 시세 및 예상체결 현황 (시세표성정보요청) | `POST /api/v1/tr/quotes/ka10007/detail/session` | `post_tr_quotes_ka10007_detail_session` | 1 | 16 | — | — |
+| `detail:ka10007:totals` | `ka10007` | 호가 총잔량 및 총건수 (시세표성정보요청) | `POST /api/v1/tr/quotes/ka10007/detail/totals` | `post_tr_quotes_ka10007_detail_totals` | 1 | 4 | — | — |
 | `detail:ka10087:aggregate_totals` | `ka10087` | 정규장 및 시간외 호가 총잔량 (시간외단일가요청) | `POST /api/v1/tr/quotes/ka10087/detail/aggregate_totals` | `post_tr_quotes_ka10087_detail_aggregate_totals` | 1 | 10 | — | — |
 | `detail:ka10087:buy_bid_changes` | `ka10087` | 시간외 단일가 매수 잔량 대비 (시간외단일가요청) | `POST /api/v1/tr/quotes/ka10087/detail/buy_bid_changes` | `post_tr_quotes_ka10087_detail_buy_bid_changes` | 1 | 5 | — | — |
 | `detail:ka10087:buy_bid_prices` | `ka10087` | 시간외 단일가 매수 호가 (시간외단일가요청) | `POST /api/v1/tr/quotes/ka10087/detail/buy_bid_prices` | `post_tr_quotes_ka10087_detail_buy_bid_prices` | 1 | 5 | — | — |
