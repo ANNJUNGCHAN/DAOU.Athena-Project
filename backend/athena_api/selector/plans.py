@@ -55,6 +55,10 @@ class VerifiedPlan:
     question_hash: str
     expires_at: datetime
     account: str
+    # Exposed so a caller (SelectorService) can enforce single-use without re-parsing
+    # the token; PlanSigner itself stays stateless and never tracks which nonces were
+    # already spent.
+    nonce: str
 
 
 class PlanSigner:
@@ -74,6 +78,15 @@ class PlanSigner:
         self.ttl_seconds = ttl_seconds
         self._clock = clock
         self._nonce_factory = nonce_factory
+
+    def now(self) -> int:
+        """This signer's own clock, truncated to the second it signs and verifies against.
+
+        Exposed so a caller that tracks single-use nonces (SelectorService) can prune its
+        cache against the same time reference PlanSigner uses for expiry, instead of a
+        wall clock that would disagree with an injected test clock.
+        """
+        return int(self._clock())
 
     def issue(
         self,
@@ -170,6 +183,8 @@ class PlanSigner:
             raise InvalidPlanError("Plan continuation flag is invalid")
         if not isinstance(payload["question_hash"], str) or len(payload["question_hash"]) != 64:
             raise InvalidPlanError("Plan question hash is invalid")
+        if not isinstance(payload["nonce"], str) or not payload["nonce"]:
+            raise InvalidPlanError("Plan nonce is invalid")
         return VerifiedPlan(
             operation_ref=operation_ref,
             arguments=arguments,
@@ -178,6 +193,7 @@ class PlanSigner:
             question_hash=payload["question_hash"],
             expires_at=datetime.fromtimestamp(payload["exp"], tz=UTC),
             account=payload["account"],
+            nonce=payload["nonce"],
         )
 
     def refresh(

@@ -187,7 +187,12 @@ class ResolveResponse(StrictModel):
     status: Literal["resolved"] = "resolved"
     catalog_version: str
     operation_ref: str
-    plan_token: str
+    plan_token: str = Field(
+        description=(
+            "Opaque signed plan. Single-use: athena_call accepts it exactly once, "
+            "including on a failed attempt. Resolve again for another plan_token."
+        )
+    )
     expires_at: datetime
     selection_reasons: list[ReasonCode]
     required_arguments_satisfied: bool
@@ -195,7 +200,14 @@ class ResolveResponse(StrictModel):
 
 
 class CallRequest(StrictModel):
-    plan_token: str = Field(min_length=1)
+    plan_token: str = Field(
+        min_length=1,
+        description=(
+            "Single-use signed plan from athena_resolve. Consumed by this call whether "
+            "or not it then succeeds upstream; a repeat with the same token is rejected "
+            "with PLAN_ALREADY_USED. Resolve again for a new plan_token."
+        ),
+    )
 
 
 class ContinuationOutput(StrictModel):

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import replace
+from datetime import UTC, datetime
 from pathlib import Path
 
 import pytest
@@ -18,13 +19,14 @@ from athena_api.selector.errors import (
     InvalidPlanError,
     NoConfidentMatchError,
     OperationNotFoundError,
+    PlanAlreadyUsedError,
     PreferredOperationError,
     StalePlanError,
     UnknownDetailGroupError,
 )
 from athena_api.selector.lexicon import synonym_only_tokens
 from athena_api.selector.normalization import tokenize
-from athena_api.selector.plans import PlanSigner
+from athena_api.selector.plans import PlanSigner, VerifiedPlan
 from athena_api.selector.policy import select_operation
 from athena_api.selector.ranking import (
     _MINIMUM_SURFACE,
@@ -44,7 +46,7 @@ from athena_api.selector.schemas import (
     ScoreContribution,
     SearchRequest,
 )
-from athena_api.selector.service import SelectorService
+from athena_api.selector.service import _NONCE_CACHE_LIMIT, SelectorService
 
 BACKEND = Path(__file__).resolve().parents[2]
 
@@ -454,6 +456,151 @@ async def test_call_executes_only_the_signed_operation_and_returns_next_plan(ser
     next_plan = service.signer.verify(result.continuation.next_plan_token, service.catalog)
     assert next_plan.cont_yn == "Y"
     assert next_plan.next_key == "NEXT-1"
+
+
+class _CountingClient:
+    """Records how many times the upstream would have been hit."""
+
+    def __init__(self) -> None:
+        self.calls = 0
+
+    async def post_with_headers(self, tr_id, path, body, options):
+        self.calls += 1
+        return ResponseEnvelope(body={"cur_prc": "70000"}, cont_yn="N", next_key=None)
+
+
+class _FailingClient:
+    """Simulates an upstream timeout, so the plan is spent before any response exists."""
+
+    async def post_with_headers(self, tr_id, path, body, options):
+        raise RuntimeError("upstream timeout")
+
+
+def _incrementing_signer() -> PlanSigner:
+    counter = iter(range(10_000))
+    return PlanSigner(b"selector-test-secret", nonce_factory=lambda: f"nonce-{next(counter)}")
+
+
+def _blank_request() -> Request:
+    return Request({"type": "http", "method": "POST", "path": "/", "headers": []})
+
+
+@pytest.mark.asyncio
+async def test_call_rejects_a_replayed_plan_token(catalog) -> None:
+    """A resolved plan_token is single-use (decision 2026-08-18): a second call() with the
+    same token is refused and never reaches the upstream client a second time."""
+    service = SelectorService(catalog, _incrementing_signer())
+    resolved = service.resolve(
+        ResolveRequest(
+            question="detail:ka10001:current_trading", arguments={"stk_cd": "005930"}
+        )
+    )
+    client = _CountingClient()
+    request = _blank_request()
+
+    call_request = CallRequest(plan_token=resolved.plan_token)
+    first = await service.call(call_request, request, Response(), client)
+    assert first.data["cur_prc"] == "70000"
+    assert client.calls == 1
+
+    with pytest.raises(PlanAlreadyUsedError):
+        await service.call(call_request, request, Response(), client)
+    assert client.calls == 1
+
+
+@pytest.mark.asyncio
+async def test_call_burns_the_token_even_when_the_upstream_call_then_fails(catalog) -> None:
+    """The nonce is marked spent before dispatch, so a timed-out first call cannot be
+    retried with the same token - the caller must resolve again for a new one."""
+    service = SelectorService(catalog, _incrementing_signer())
+    resolved = service.resolve(
+        ResolveRequest(
+            question="detail:ka10001:current_trading", arguments={"stk_cd": "005930"}
+        )
+    )
+    request = _blank_request()
+
+    with pytest.raises(RuntimeError):
+        await service.call(
+            CallRequest(plan_token=resolved.plan_token), request, Response(), _FailingClient()
+        )
+
+    with pytest.raises(PlanAlreadyUsedError):
+        await service.call(
+            CallRequest(plan_token=resolved.plan_token), request, Response(), _FailingClient()
+        )
+
+
+@pytest.mark.asyncio
+async def test_a_fresh_resolve_for_the_same_question_calls_cleanly(catalog) -> None:
+    """Asking the same question again is allowed: a new resolve mints a new nonce, so the
+    resulting plan_token is unrelated to any previously spent one."""
+    service = SelectorService(catalog, _incrementing_signer())
+    client = _CountingClient()
+    request = _blank_request()
+
+    for _ in range(2):
+        resolved = service.resolve(
+            ResolveRequest(
+                question="detail:ka10001:current_trading", arguments={"stk_cd": "005930"}
+            )
+        )
+        result = await service.call(
+            CallRequest(plan_token=resolved.plan_token), request, Response(), client
+        )
+        assert result.data["cur_prc"] == "70000"
+
+    assert client.calls == 2
+
+
+def _fixture_plan(nonce: str, *, exp: float) -> VerifiedPlan:
+    return VerifiedPlan(
+        operation_ref="detail:ka10001:current_trading",
+        arguments={},
+        cont_yn="N",
+        next_key=None,
+        question_hash="0" * 64,
+        expires_at=datetime.fromtimestamp(exp, tz=UTC),
+        account="",
+        nonce=nonce,
+    )
+
+
+def test_consume_nonce_rejects_replay_and_sweeps_expired_entries_on_access(catalog) -> None:
+    """Pruning only ever drops an entry whose own exp has passed - a token that far gone
+    already fails PlanSigner.verify() before this cache is consulted, so nothing is lost
+    that could still be replayed."""
+    now = [1_000.0]
+    signer = PlanSigner(b"selector-test-secret", clock=lambda: now[0])
+    service = SelectorService(catalog, signer)
+
+    first = _fixture_plan("a", exp=1_010.0)
+    service._consume_nonce(first)
+    assert "a" in service._consumed_nonces
+
+    with pytest.raises(PlanAlreadyUsedError):
+        service._consume_nonce(first)
+
+    now[0] = 1_020.0  # past "a"'s exp
+    second = _fixture_plan("b", exp=1_030.0)
+    service._consume_nonce(second)
+    assert "a" not in service._consumed_nonces
+    assert "b" in service._consumed_nonces
+
+
+def test_consume_nonce_cache_stays_bounded_and_evicts_oldest_first(catalog) -> None:
+    signer = PlanSigner(b"selector-test-secret", clock=lambda: 1_000.0)
+    service = SelectorService(catalog, signer)
+    far_future = 1_000_000.0  # never pruned within this test
+
+    for index in range(_NONCE_CACHE_LIMIT):
+        service._consume_nonce(_fixture_plan(f"n{index}", exp=far_future))
+    assert len(service._consumed_nonces) == _NONCE_CACHE_LIMIT
+
+    service._consume_nonce(_fixture_plan("overflow", exp=far_future))
+    assert len(service._consumed_nonces) == _NONCE_CACHE_LIMIT
+    assert "n0" not in service._consumed_nonces
+    assert "overflow" in service._consumed_nonces
 
 
 @pytest.mark.parametrize(
