@@ -17,5 +17,8 @@
   "license": "ISC",
   "devDependencies": {
     "electron": "^43.4.0"
+  },
+  "dependencies": {
+    "lightweight-charts": "^5.2.1"
   }
 }

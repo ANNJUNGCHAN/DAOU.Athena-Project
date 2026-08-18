@@ -61,6 +61,10 @@ html, body { background: transparent; }
 .card.mcp-table { order: 4; grid-column: 1 / -1; }
 .card.free { order: 5; grid-column: 1 / -1; }
 .card.notice { order: 6; grid-column: 1 / -1; min-height: unset; }
+/* 차트 카드(CC-101) — 캔들+거래량 pane이 필요한 높이라 표/자유 카드처럼
+   폭 전체를 쓰고, 다른 카드보다 크게 연다(lightweight-charts는 컨테이너
+   실측 높이가 있어야 그린다 — max-height:360px 그대로면 거래량 pane이 짓눌린다). */
+.card.chart { order: 3; grid-column: 1 / -1; min-height: 420px; max-height: 520px; }
 .card.highlight {
   border-color: var(--color-brand);
   box-shadow: 0 0 0 1px rgba(238, 19, 123, 0.5), 0 0 24px rgba(238, 19, 123, 0.25);
@@ -109,6 +113,13 @@ table.fin-table { width: 100%; border-collapse: collapse; font-variant-numeric: 
 .fin-table th, .fin-table td { padding: 5px 10px; text-align: right; border-bottom: 1px solid var(--color-k-line-soft); white-space: nowrap; }
 .fin-table th:first-child, .fin-table td:first-child { text-align: left; }
 .fin-table thead th { position: sticky; top: 0; background: rgba(29, 34, 44, 0.96); color: var(--color-k-dim); font-weight: 400; font-family: var(--font-strong); }
+
+/* ---- 차트(CC-101) ---- */
+/* .card-body는 overflow:auto인데 lightweight-charts autoSize는 스크롤 컨테이너
+   높이를 재는 순간 캔버스 높이가 흔들릴 수 있어(auto가 컨텐츠 높이에 반응) 카드
+   본문을 채우는 고정 높이 래퍼를 둔다. */
+.chart-card-body { height: 100%; min-height: 380px; display: flex; flex-direction: column; }
+.chart-price-pane { flex: 1; min-height: 0; width: 100%; }
 
 /* ---- 자유 카드 — 스키마를 가정하지 않는 재귀 key/value 트리 (W4 최소 구현) ---- */
 .free-tree-dl { margin: 0 0 6px; display: grid; grid-template-columns: minmax(90px, max-content) 1fr; gap: 3px 12px; }
