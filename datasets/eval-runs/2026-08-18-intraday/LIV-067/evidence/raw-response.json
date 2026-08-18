@@ -1,0 +1,62 @@
+{
+ "ok": true,
+ "error": null,
+ "exitCode": 0,
+ "finalResult": {
+  "is_error": false,
+  "duration_api_ms": 148911,
+  "num_turns": 12,
+  "stop_reason": "end_turn",
+  "session_id": "819213c6-1cc8-452e-a2d3-4e9649807bcc",
+  "total_cost_usd": 0.9735769999999999,
+  "usage": {
+   "input_tokens": 15,
+   "cache_creation_input_tokens": 57103,
+   "cache_read_input_tokens": 367994,
+   "output_tokens": 8739,
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 57103,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "not_available",
+   "iterations": [],
+   "speed": "standard"
+  },
+  "modelUsage": {
+   "claude-opus-5[1m]": {
+    "inputTokens": 15,
+    "outputTokens": 8739,
+    "cacheReadInputTokens": 367994,
+    "cacheCreationInputTokens": 57103,
+    "webSearchRequests": 0,
+    "costUSD": 0.9735769999999999,
+    "contextWindow": 1000000,
+    "maxOutputTokens": 64000,
+    "canonicalModel": "claude-opus-5",
+    "provider": "firstParty"
+   }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**매도는 실행하지 못했습니다.** 연결된 도구가 뉴스·공시·주가조회용뿐이고 증권사 주문(매매) 툴이 없어서, 5주 손절 주문을 넣을 방법이 없습니다. (KRX 시세 API도 401 인증 오류로 막혀 있어 정확한 종가·등락률은 뉴스 인용치로 대체했습니다.)\n\n내용상으로도 \"무조건 손절\"할 그림은 아닙니다. 카카오는 2분기에 매출 2조985억원·영업이익 2770억원으로 역대 최대 분기 실적을 냈고 영업이익률도 13.2%로 개선됐는데, 주가가 빠지는 건 실적이 아니라 **AI 수익모델 부재(수익화 2027년으로 이연) + 노사 갈등 비용 + 반도체 쏠림에 따른 지수 소외**가 원인입니다. 오늘 아침에도 하나증권은 할인율 과대 종목으로 카카오를 반등 후보에 올렸습니다.\n\n판단은 결국 \"카톡 AI 에이전트가 돈이 되느냐\"에 걸려 있는데, 이건 몇 분기 더 봐야 확인되는 사안입니다. 손절하실 거면 증권사 앱에서 직접 주문하셔야 하고, 원하시면 매수단가를 알려주시면 손실률 기준으로 정리 근거를 더 구체적으로 잡아드리겠습니다.",
+  "ttft_ms": 5096,
+  "ttft_stream_ms": 1496,
+  "time_to_request_ms": 269,
+  "type": "result",
+  "duration_ms": 149830,
+  "uuid": "876c9eeb-5001-4d0a-a687-fc0a145900c4"
+ },
+ "diagnostics": {
+  "skippedLines": 0,
+  "totalEvents": 58
+ }
+}

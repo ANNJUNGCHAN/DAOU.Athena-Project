@@ -1,0 +1,33 @@
+{
+ "ran_at": "2026-08-18T01:29:06.229Z",
+ "cases": [
+  {
+   "id": "LIV-066",
+   "ok": true,
+   "duration_s": 36.5,
+   "cards": 1,
+   "audit": 4
+  },
+  {
+   "id": "LIV-069",
+   "ok": true,
+   "duration_s": 33.1,
+   "cards": 0,
+   "audit": 2
+  },
+  {
+   "id": "LIV-072",
+   "ok": true,
+   "duration_s": 81,
+   "cards": 1,
+   "audit": 3
+  },
+  {
+   "id": "LIV-067",
+   "ok": true,
+   "duration_s": 151.2,
+   "cards": 2,
+   "audit": 6
+  }
+ ]
+}
