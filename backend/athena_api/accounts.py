@@ -48,7 +48,6 @@ class AccountRuntime:
     data_client: KiwoomClient
     order_client: KiwoomClient
     ws_client: KiwoomWsClient | None = None
-    ws_last_error: Any = None
     ready: bool = False
     # None means unrestricted; a set is an allowlist checked before any order leaves.
     order_scopes: frozenset[OrderScope] | None = None
