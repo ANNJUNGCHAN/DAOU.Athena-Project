@@ -7,6 +7,12 @@ const settingsCards = require('./lib/settings-cards');
 const $boot = document.getElementById('boot');
 const $bootLine = document.getElementById('bootLine');
 const $bootPanel = document.getElementById('bootPanel');
+const $bootName = document.getElementById('bootName');
+const $bootPh = document.getElementById('bootPh');
+const $winControls = document.getElementById('winControls');
+const $winMin = document.getElementById('winMin');
+const $winMax = document.getElementById('winMax');
+const $winClose = document.getElementById('winClose');
 const $app = document.getElementById('app');
 const $history = document.getElementById('history');
 const $input = document.getElementById('input');
@@ -32,10 +38,13 @@ let abortToken = 0;
 let onboardCleanup = null; // 현재 노출 중인 온보딩/인증 화면의 정리 함수(리스너·타이머 해제)
 
 // ---------- 부팅(AT-SY-001) — 4단계 생성 시퀀스 ----------
-// 기획안 8쪽 그대로: 발광점(0ms) → 가로 확장(+180ms) → 세로 전개(+420ms, 유리 72%)
-// → 창 확정(+620ms, 로고·입력줄·브랜드 커서). 이징 cubic-bezier(.2,0,0,1).
-// 이전 판의 게이지 바 + "1 / 3" 프레이밍(D4)은 2026-08-17 사용자 지시("기획안대로
-// 똑같이")로 폐기했다 — 온보딩 자동 전환(최초 실행 시 AT-SY-002)은 그대로다.
+// 발광점(0ms) → 가로 확장(+180ms) → 세로 전개(+420ms, 유리 72%) → 창 확정(+620ms).
+// 이징 cubic-bezier(.2,0,0,1). 4단계는 2026-08-18 사용자 지시로 재정의됐다:
+// 전개의 종착은 별도 로고 화면이 아니라 **평소 채팅바 그 자체**다 — 확정된 바의
+// 입력줄에 ATHENA가 한 자씩 적혔다가(+660ms~) 지워지고 placeholder로 돌아온 뒤
+// (+1160ms) 실제 창으로 스왑한다(+1360ms). 부팅의 최대 크기는 채팅창(chatBaseH)을
+// 넘지 않는다. 이전 판의 "상단 로고 + 하단 입력줄" 2분할 확정 화면은 폐기.
+// 온보딩 자동 전환(최초 실행 시 AT-SY-002)은 그대로다.
 // prefers-reduced-motion이면 시퀀스를 건너뛰고 즉시 완료 상태로 간다(접근성 3종은
 // 직접 구현한다 — CLAUDE.md §2).
 window.addEventListener('DOMContentLoaded', () => {
@@ -48,9 +57,14 @@ window.addEventListener('DOMContentLoaded', () => {
 
   const finishBoot = async () => {
     $boot.hidden = true;
+    $winControls.hidden = false; // 창 크롬은 창이 확정된 뒤에만 존재한다(부팅 연출 보호)
     const onboardState = await onboardStatePromise;
     if (onboardState && onboardState.needed) {
       startOnboarding(onboardState.step);
+    } else if (settingsOpen || !$onboard.hidden) {
+      // 부팅이 끝나기 전에 다른 모드가 먼저 열렸다 — 사람 조작으로는 불가능하고
+      // 자동화(verify-settings-cards.js가 600ms 시점에 점을 클릭)만 밟는 경로다.
+      // #app을 다시 드러내면 모드 배타성이 깨진다(GLOSSARY §1) — 모드에 양보한다.
     } else {
       $app.hidden = false;
       $input.focus();
@@ -66,10 +80,21 @@ window.addEventListener('DOMContentLoaded', () => {
   // 1단계(0ms)는 CSS 초기 상태(발광점 16px)다. 이후 단계는 시각 경계에 클래스 토글.
   setTimeout(() => $bootLine.classList.add('expand'), 180); // 2단계 — 가로 확장
   setTimeout(() => $bootPanel.classList.add('unfold'), 420); // 3단계 — 세로 전개(72%)
-  setTimeout(() => $bootPanel.classList.add('final'), 620); // 4단계 — 창 확정
-  // 4단계 유리 전환(160ms)이 정착한 직후 실제 대화 창으로 바꿔치운다 — 부팅 패널의
-  // 최종 유리(0.82)와 .app 기본 유리가 같은 값이라 이음새가 보이지 않는다.
-  setTimeout(finishBoot, 800);
+  setTimeout(() => $bootPanel.classList.add('final'), 620); // 4단계 — 채팅바 확정
+  // 4단계 후반부(2026-08-18 재정의) — 확정된 바가 입력줄에 제 이름을 쓴다.
+  // 한 자씩 40ms(텍스트 추가는 유리 페이드가 아니다), 다 쓰고 300ms 들었다가
+  // 지우고 placeholder를 드러낸다 — "다시 채팅바로 돌아온다".
+  'ATHENA'.split('').forEach((ch, i) => {
+    setTimeout(() => { $bootName.textContent += ch; }, 660 + i * 40);
+  });
+  setTimeout(() => {
+    $bootName.textContent = '';
+    $bootPh.hidden = false;
+  }, 1160);
+  // placeholder 상태가 한 박자(200ms) 정착한 뒤 실제 대화 창으로 바꿔치운다 — 부팅
+  // 바의 최종 유리(0.82)·그립·점·입력줄이 전부 .app과 같은 값이라 이음새가 보이지
+  // 않는다. 200ms는 verify.js의 60ms 폴링이 이 상태를 놓치지 않는 하한이기도 하다.
+  setTimeout(finishBoot, 1360);
 });
 
 // ---------- 온보딩(AT-SY-002/003) · 인증(AT-CV-OAUTH) 상태 머신 ----------
@@ -89,6 +114,7 @@ async function onboardAdvance(step) {
 function startOnboarding(step) {
   $onboard.hidden = false;
   manualOverride = true; // 온보딩 동안은 대화 이력 기반 자동 성장 로직이 개입하지 않는다
+  syncMaxButton(); // 모드가 높이 소유권을 가져간다 — 최대화 버튼 비활성
   ipcRenderer.send('athena:set-chat-height', { height: layout.chatMaxH, manual: false });
   // 스펙 전체에 "1 / 3" 화면이 없다(00-통합-계획.md §7-2 열린 질문) — main이
   // step:1을 돌려줘도 CLI 연결(2/3)부터 시작한다. 발명 — 리포트에 명시.
@@ -130,6 +156,7 @@ function finishOnboarding() {
   $onboard.hidden = true;
   $app.hidden = false;
   manualOverride = false;
+  syncMaxButton(); // 높이 소유권 반환 — 최대화 버튼 재활성
   // main이 done:true 응답 시 스스로 축소한다(house rule IPC 계약) — 이 호출은
   // 그 경로가 아직 없거나 실패했을 때를 위한 방어적 폴백이다.
   ipcRenderer.send('athena:set-chat-height', { height: layout.chatBaseH, manual: false });
@@ -160,7 +187,26 @@ window.addEventListener('resize', () => {
   const growable = Math.max(1, layout.chatMaxH - layout.chatBaseH);
   const frac = Math.min(1, Math.max(0, (currentHeight - layout.chatBaseH) / growable));
   applyGlassFraction(frac);
+  syncMaxButton();
 });
+
+// 최대화 버튼의 상태(확장/복귀/비활성)를 실제 창 상태에서 파생한다 — 버튼이 자기
+// 기억이 아니라 창의 현재 상태를 말하게 한다(정보 정직성). 설정·온보딩 모드가
+// 높이를 소유하는 동안은 disabled로 디밍한다 — "복귀" 아이콘을 보여주면서 클릭을
+// 조용히 무시하는 것은 라벨이 거짓말하는 상태다(2026-08-18 리뷰 지적).
+// resize 이벤트 외에 모드 열림/닫힘 지점 4곳에서도 직접 호출한다 — 창이 이미
+// chatMaxH라 리사이즈가 안 일어나는 경우에도 상태가 맞아야 한다.
+function syncMaxButton() {
+  const modeOwnsHeight = settingsOpen || !$onboard.hidden;
+  const atMax = currentHeight >= layout.chatMaxH - 2;
+  $winMax.disabled = modeOwnsHeight;
+  $winMax.classList.toggle('is-max', atMax && !modeOwnsHeight);
+  const label = modeOwnsHeight
+    ? '지금은 설정·온보딩이 창 높이를 관리한다'
+    : atMax ? '기본 높이로 복귀' : '최대 높이로 확장';
+  $winMax.title = label;
+  $winMax.setAttribute('aria-label', label);
+}
 
 // ---------- 이력 스크롤 — 하단 고정(stick-to-bottom) ----------
 // .history가 overflow-y:auto로 바뀌었다(chat.css) — 창이 chatMaxH까지 자란 뒤에는
@@ -525,6 +571,7 @@ function openSettings() {
   $app.hidden = true;
   $settings.hidden = false;
   manualOverride = true; // 설정 동안은 이력 기반 자동 성장이 개입하지 않는다
+  syncMaxButton(); // 모드가 높이 소유권을 가져간다 — 최대화 버튼 비활성
   ipcRenderer.send('athena:set-chat-height', { height: layout.chatMaxH, manual: false });
   settingsCards.renderAccounts($settingsGrid);
   settingsCards.renderMcp($settingsGrid);
@@ -537,6 +584,7 @@ function closeSettings() {
   $settings.hidden = true;
   $app.hidden = false;
   manualOverride = false;
+  syncMaxButton(); // 높이 소유권 반환 — 최대화 버튼 재활성
   ipcRenderer.send('athena:set-chat-height', { height: layout.chatBaseH, manual: false });
   $input.focus();
 }
@@ -566,6 +614,36 @@ $input.addEventListener('keydown', (e) => {
     }
     runQuery(text);
   }
+});
+
+// ---------- 창 제어 버튼 (AT-CH-001, 2026-08-18) — 우상단 3버튼 ----------
+// 최소화 = 기존 Ctrl+M과 같은 IPC(두 창 한 몸). 최대화 = 이 앱에서 창의 최대는
+// OS 전체화면이 아니라 설계 최대 높이(chatMaxH, E3)다 — 그립 드래그와 같은 높이
+// 배선으로 chatBaseH↔chatMaxH를 오간다. 닫기 = 종료가 아니라 두 창을 숨기고
+// 프로세스를 백그라운드에 남긴다(사용자 지시 "백그라운드는 살아있음") — 복귀는
+// 트레이(main.js). 온보딩·설정 모드가 열려 있는 동안 높이는 모드 소유라 최대화
+// 토글은 개입하지 않는다.
+$winMin.addEventListener('click', () => {
+  ipcRenderer.send('athena:minimize-windows');
+});
+$winMax.addEventListener('click', () => {
+  if (settingsOpen || !$onboard.hidden) return; // 모드가 높이를 소유 중 — disabled의 백스톱
+  const atMax = currentHeight >= layout.chatMaxH - 2;
+  if (atMax) {
+    // 라벨이 약속한 대로 기본 높이로 내려간다. 여기서 scheduleHeightSync()를 부르면
+    // measureNeededHeight()가 이력 자연 높이로 즉시 재확장해 "수축→재확장" 이중
+    // 리사이즈만 남는다(2026-08-18 리뷰 지적) — 자동 성장은 manualOverride 해제로
+    // 다음 내용 변화부터 재개되는 것으로 충분하다.
+    manualOverride = false;
+    ipcRenderer.send('athena:set-chat-height', { height: layout.chatBaseH, manual: false });
+  } else {
+    manualOverride = true; // 그립 드래그와 같은 문법 — 자동 성장이 덮어쓰지 않는다
+    ipcRenderer.send('athena:set-chat-height', { height: layout.chatMaxH, manual: true });
+  }
+  $input.focus();
+});
+$winClose.addEventListener('click', () => {
+  ipcRenderer.send('athena:close-windows');
 });
 
 // ---------- 창 기본 기능 (2026-08-17) — frame:false라 OS 타이틀바가 없어 직접 배선 ----------

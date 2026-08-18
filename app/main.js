@@ -1,5 +1,5 @@
 // Athena W2 — 두 창 Electron 셸. spike/electron-glass/v2.js·v3.js 이식.
-const { app, BrowserWindow, ipcMain, screen } = require('electron');
+const { app, BrowserWindow, ipcMain, screen, Tray, Menu, nativeImage } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
@@ -229,6 +229,74 @@ ipcMain.on('athena:window-drag', (e, { phase } = {}) => {
 ipcMain.on('athena:minimize-windows', () => {
   if (canvasVisible && canvasWin && !canvasWin.isDestroyed()) canvasWin.minimize();
   if (chatWin && !chatWin.isDestroyed()) chatWin.minimize();
+});
+
+// ---------- 닫기(백그라운드 유지) + 트레이 복귀 (AT-CH-001, 2026-08-18) ----------
+// 닫기 버튼은 종료가 아니다 — 두 창을 숨기고 프로세스(세션·자격증명·감시)는 그대로
+// 산다(사용자 지시 "백그라운드는 살아있음"). 숨은 창은 작업 표시줄에도 없으므로
+// 복귀 경로가 반드시 필요하다 — 그게 이 트레이다(브랜드 점 아이콘, 클릭=열기).
+// Alt+F4 등 OS close 이벤트는 가로채지 않는다 — 그쪽은 여전히 진짜 종료다
+// (chatWin 'closed' → app.quit()). 트레이 메뉴 "종료"도 같은 길로 나간다.
+let tray = null;
+
+// 이미지 에셋 없이 브랜드 점(#EE137B)을 16×16 비트맵으로 직접 그린다 — 대화 창의
+// 점(.dot)과 같은 시각 언어다. BGRA + 프리멀티플라이(합성 시 검은 테두리 방지).
+function buildTrayIcon() {
+  const size = 16;
+  const buf = Buffer.alloc(size * size * 4);
+  const c = (size - 1) / 2;
+  const r = 6.2;
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      const a = Math.max(0, Math.min(1, r - Math.hypot(x - c, y - c) + 0.5)); // 1px 안티앨리어스
+      const i = (y * size + x) * 4;
+      buf[i] = Math.round(0x7b * a); // B
+      buf[i + 1] = Math.round(0x13 * a); // G
+      buf[i + 2] = Math.round(0xee * a); // R
+      buf[i + 3] = Math.round(255 * a); // A
+    }
+  }
+  return nativeImage.createFromBitmap(buf, { width: size, height: size });
+}
+
+function restoreFromBackground() {
+  if (!chatWin || chatWin.isDestroyed()) return;
+  // 캔버스가 세션에서 열려 있던 상태였다면 짝으로 같이 돌아온다 — 캔버스 먼저,
+  // 대화 창이 위로(two-windows.md E3 z순서 계약).
+  if (canvasVisible && canvasWin && !canvasWin.isDestroyed()) {
+    if (canvasWin.isMinimized()) canvasWin.restore();
+    canvasWin.show();
+  }
+  if (chatWin.isMinimized()) chatWin.restore();
+  chatWin.show();
+  chatWin.focus();
+  chatWin.moveTop();
+}
+
+function hideToBackground() {
+  if (canvasVisible && canvasWin && !canvasWin.isDestroyed()) canvasWin.hide();
+  if (chatWin && !chatWin.isDestroyed()) chatWin.hide();
+}
+
+function ensureTray() {
+  if (tray) return;
+  tray = new Tray(buildTrayIcon());
+  tray.setToolTip('Athena');
+  tray.on('click', restoreFromBackground);
+  tray.setContextMenu(Menu.buildFromTemplate([
+    { label: '열기', click: restoreFromBackground },
+    { type: 'separator' },
+    { label: '종료', click: () => app.quit() },
+  ]));
+}
+
+app.on('will-quit', () => {
+  if (tray) { tray.destroy(); tray = null; }
+});
+
+ipcMain.on('athena:close-windows', () => {
+  ensureTray(); // 숨기기 전에 복귀 경로부터 확보한다 — 순서가 안전장치다
+  hideToBackground();
 });
 
 // ---------- 줌(화면 확대/축소) — 두 창 동기, Ctrl+= / Ctrl+- / Ctrl+0 / Ctrl+휠 ----------
@@ -671,6 +739,9 @@ module.exports = {
   getDotScreenPoint,
   getWins: () => ({ chatWin, canvasWin }),
   getLayout: () => layout,
+  // 트레이 클릭과 동일한 복귀 경로 — verify.js가 닫기(백그라운드 유지)를 검증할 때
+  // 실제 트레이 클릭을 자동화할 수 없어 같은 함수 참조를 직접 부른다.
+  restoreFromBackground,
   // 설정·온보딩 IPC 핸들러 — 실제 ipcMain.handle에 연결된 것과 동일한 함수
   // 참조다(테스트용 별도 mock이 아니다). 검증 스크립트가 렌더러/IPC 왕복 없이
   // 직접 호출해 반환 모양을 확인할 수 있게 노출한다.
