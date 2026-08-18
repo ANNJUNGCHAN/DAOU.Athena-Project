@@ -370,6 +370,87 @@ async def test_call_tool_cancellation_propagates_and_is_not_treated_as_crash(tmp
         await handle.close()
 
 
+# ---------------------------------------------------------------------------
+# _join_task() — 바깥 취소를 삼키지 않는지 (결함 3 회귀)
+#
+# 실제 `asyncio.Task`끼리는 `await task` 지점에서 바깥 코루틴이 취소되면
+# `Task.cancel()`의 `_fut_waiter` 위임 메커니즘 때문에 조인 대상 태스크 자신도
+# 함께 취소되어(`task.cancelled()`가 True가 됨) 결정적으로 구분 재현하기 매우
+# 까다로운 레이스다. 그래서 `cancelled()`를 직접 통제할 수 있는 최소 가짜
+# 객체로 `_join_task()`의 분기 로직 자체(`if not task.cancelled(): raise`)를
+# 검증한다 — 실제 프로세스 타이밍 레이스를 재현하는 대신, 그 로직이 두 입력
+# 각각에 대해 옳게 동작하는지를 결정적으로 고정한다.
+# ---------------------------------------------------------------------------
+
+
+async def test_join_task_reraises_cancelled_error_when_joined_task_was_not_itself_cancelled(
+    tmp_path,
+):
+    """조인 대상(`task`) 자신은 취소로 끝난 게 아닌데도 `await task`에서
+    CancelledError가 나는 경우 — 이 코루틴을 감싼 바깥 스코프가 취소된
+    경우다. 예전 코드(`except (CancelledError, Exception): pass`)는 이것도
+    무조건 삼켜서, 헬스체크 슈퍼바이저 취소 -> restart() -> close() ->
+    _join_task 경로에서 바깥 취소가 증발해 `serve_stdio` 종료가 무기한
+    걸릴 수 있었다."""
+    store = ConsentStore(path=tmp_path / "consent.json")
+    handle = UpstreamServerHandle(
+        ServerEntry(alias="x", command="noop"), store, log_dir=tmp_path / "logs"
+    )
+
+    class _NotCancelledTask:
+        def cancelled(self) -> bool:
+            return False
+
+        def __await__(self):
+            raise asyncio.CancelledError()
+            yield  # pragma: no cover — __await__는 제너레이터여야 하지만 위에서 이미 raise한다
+
+    handle._task = _NotCancelledTask()  # type: ignore[assignment]  # noqa: SLF001
+    with pytest.raises(asyncio.CancelledError):
+        await handle._join_task()  # noqa: SLF001
+
+
+async def test_join_task_swallows_cancelled_error_when_joined_task_was_itself_cancelled(tmp_path):
+    """반대 경우 — 조인 대상 자신이 취소로 끝난 경우(예: 세션 수명주기 태스크가
+    실제로 취소돼 완료된 경우)는 예전처럼 삼켜야 한다. 종료 과정의 정상적인
+    잡음이지 막을 이유가 없다."""
+    store = ConsentStore(path=tmp_path / "consent.json")
+    handle = UpstreamServerHandle(
+        ServerEntry(alias="x", command="noop"), store, log_dir=tmp_path / "logs"
+    )
+
+    class _CancelledTask:
+        def cancelled(self) -> bool:
+            return True
+
+        def __await__(self):
+            raise asyncio.CancelledError()
+            yield  # pragma: no cover
+
+    handle._task = _CancelledTask()  # type: ignore[assignment]  # noqa: SLF001
+    await handle._join_task()  # noqa: SLF001 — raise하지 않으면 통과
+
+
+async def test_join_task_still_swallows_plain_exceptions(tmp_path):
+    """CancelledError 분기를 따로 뺐다고 해서 그 외 일반 예외까지 새면
+    안 된다 — 종료 중 잡음은 여전히 삼킨다(기존 계약 유지)."""
+    store = ConsentStore(path=tmp_path / "consent.json")
+    handle = UpstreamServerHandle(
+        ServerEntry(alias="x", command="noop"), store, log_dir=tmp_path / "logs"
+    )
+
+    class _BoomTask:
+        def cancelled(self) -> bool:
+            return False
+
+        def __await__(self):
+            raise RuntimeError("정리 중 잡음")
+            yield  # pragma: no cover
+
+    handle._task = _BoomTask()  # type: ignore[assignment]  # noqa: SLF001
+    await handle._join_task()  # noqa: SLF001 — raise하지 않으면 통과
+
+
 async def test_restart_respects_max_restarts(tmp_path):
     entry = ServerEntry(
         alias="always-crashes",

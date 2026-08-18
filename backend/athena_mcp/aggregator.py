@@ -158,8 +158,21 @@ class ToolAggregator:
         )
 
     def rename_alias(self, old_alias: str, new_alias: str) -> UpdateResult:
-        """노출 목록만 새 별칭으로 옮긴다. 옛 qualified_name의 리졸루션 항목은
-        지우지 않는다 — in-flight 호출이 안 깨지게 하기 위해서다."""
+        """노출 목록을 새 별칭으로 옮기고, 옛 qualified_name의 리졸루션 항목은
+        **지우지 않되 새 별칭을 가리키도록 갱신한다** — 옛 이름은 새 별칭으로
+        포워딩된다.
+
+        이전 판은 "지우지 않는다"까지만 하고 갱신은 안 했다 — 그래서 옛
+        qualified_name(`옛별칭__툴`)을 `resolve()`하면 여전히 `alias=옛별칭`인
+        `ResolvedTarget`이 나왔다. `server.py`의 `AthenaGateway.rename_alias()`는
+        승인(`consent_store`)과 핸들(`handles`)을 옛 별칭에서 **걷어 새 별칭으로
+        옮기므로**, rename 직후 옛 별칭은 승인 기록도 핸들도 없다 — 옛
+        qualified_name으로 온 in-flight 호출이 `resolve()`까지는 성공해도
+        그 뒤 `is_tool_allowed(옛 별칭, ...)`와 `handles.get(옛 별칭)`이 둘 다
+        실패해 `gateway_blocked`로 떨어졌다. "in-flight 호출이 안 깨진다"는
+        보장은 이름이 남아있는 것만으로는 부족하고, 그 이름이 **살아있는**
+        별칭으로 풀려야 성립한다.
+        """
         old_tools = self._exposed_by_alias.get(old_alias, [])
         renamed = [
             QualifiedTool(
@@ -175,13 +188,19 @@ class ToolAggregator:
         # 한다 — 아직 connect되지 않아(= 노출 목록이 비어) 집계에 없는 별칭을
         # rename하는 건 정상 흐름이고, 여기서 KeyError로 터지면 안 된다.
         self._exposed_by_alias.pop(old_alias, None)
-        # 옛 별칭의 노출 리스트는 지우지만, _resolution_table은 그대로 둔다
-        # (일부러 지우지 않음 — 옛 qualified_name으로 온 in-flight 호출을 위해).
         self._exposed_by_alias[new_alias] = renamed
         for qt in renamed:
             self._resolution_table[qt.qualified_name] = ResolvedTarget(
                 alias=new_alias, upstream_name=qt.upstream_name
             )
+        # 옛 별칭을 가리키던 리졸루션 항목(옛 qualified_name들 — 이번 rename
+        # 대상 툴뿐 아니라, 예전 rename에서 넘어와 여전히 옛 별칭을 가리키고
+        # 있던 체인도 포함)은 지우지 않고 전부 새 별칭을 가리키도록 갱신한다.
+        for qname, target in list(self._resolution_table.items()):
+            if target.alias == old_alias:
+                self._resolution_table[qname] = ResolvedTarget(
+                    alias=new_alias, upstream_name=target.upstream_name
+                )
         self._notify_changed()
         return UpdateResult(alias=new_alias, committed=True, tool_count=len(renamed))
 
