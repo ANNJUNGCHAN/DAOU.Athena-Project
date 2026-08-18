@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-08-18T01:53:12.575Z",
+  "startedAt": "2026-08-18T05:23:47.242Z",
   "layout": {
     "scale": 1,
     "screen": {
@@ -46,18 +46,18 @@
     "ok": true
   },
   "expand": {
-    "frameCount": 32,
-    "p50": 16.699999999999818,
-    "p95": 33.30000000000018,
-    "max": 33.399999999999864,
-    "min": 16.40000000000009
+    "frameCount": 31,
+    "p50": 16.700000000000045,
+    "p95": 33.40000000000009,
+    "max": 50,
+    "min": 8.299999999999955
   },
   "collapse": {
-    "frameCount": 35,
+    "frameCount": 34,
     "p50": 16.699999999999818,
-    "p95": 16.700000000000728,
-    "max": 16.800000000000182,
-    "min": 16.599999999999454
+    "p95": 17,
+    "max": 33.29999999999973,
+    "min": 8.300000000000182
   },
   "afterCollapse": {
     "canvasVisible": false
@@ -235,5 +235,25 @@
       "clientHeight": 404
     }
   },
-  "finishedAt": "2026-08-18T01:53:32.578Z"
+  "dragNoResize": {
+    "scaleFactor": 1.5,
+    "before": {
+      "x": 180,
+      "y": 887,
+      "width": 1561,
+      "height": 205
+    },
+    "after": {
+      "x": 180,
+      "y": 887,
+      "width": 1561,
+      "height": 205
+    },
+    "sizeUnchanged": true,
+    "positionDelta": {
+      "x": 0,
+      "y": 0
+    }
+  },
+  "finishedAt": "2026-08-18T05:24:06.462Z"
 }
