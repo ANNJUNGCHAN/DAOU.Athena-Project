@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-08-18T11:58:33.749Z",
+  "startedAt": "2026-08-18T14:05:26.295Z",
   "layout": {
     "scale": 1,
     "screen": {
@@ -54,18 +54,18 @@
     "ok": true
   },
   "expand": {
-    "frameCount": 34,
+    "frameCount": 32,
     "p50": 16.699999999999818,
-    "p95": 16.799999999999955,
-    "max": 16.800000000000182,
-    "min": 16.5
+    "p95": 16.800000000000182,
+    "max": 49.90000000000009,
+    "min": 16.59999999999991
   },
   "collapse": {
-    "frameCount": 34,
+    "frameCount": 35,
     "p50": 16.699999999999818,
-    "p95": 16.899999999999636,
-    "max": 34.69999999999982,
-    "min": 15.600000000000364
+    "p95": 16.800000000000182,
+    "max": 16.800000000000182,
+    "min": 16.5
   },
   "afterCollapse": {
     "canvasVisible": false
@@ -323,6 +323,12 @@
       "vpBars": 24
     }
   },
+  "liveChartCard": {
+    "cardRendered": true,
+    "replacedMockChartCard": true,
+    "canvasMounted": true,
+    "titleText": "검증13b 실배선 차트"
+  },
   "windowPlacement": {
     "beforePlacement": {
       "canvas": {
@@ -480,5 +486,5 @@
     "rejectedPatchesDidNotChangeFile": true,
     "nullRemovesModelLine": true
   },
-  "finishedAt": "2026-08-18T11:59:01.917Z"
+  "finishedAt": "2026-08-18T14:05:55.569Z"
 }

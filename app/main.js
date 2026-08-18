@@ -21,6 +21,9 @@ const { buildLivePrompt } = require('./lib/main/live-prompt');
 // 목업 데이터 로더 — 렌더러 격리 이관(2026-08-18). canvas.js가 더는 fs를
 // 직접 못 쓴다 — athena:load-fixture가 이 모듈을 대신 호출해준다.
 const mockdata = require('./lib/main/mockdata');
+// 백엔드(FastAPI/uvicorn) 자동 기동 — 헬스체크 후 죽어 있을 때만 스폰한다(중복
+// 스폰 금지, lib/main/backend-launcher.js 상단 주석 참고).
+const backendLauncher = require('./lib/main/backend-launcher');
 
 const MDEBUGLOG = path.join(__dirname, 'captures', 'main-debug.log');
 function mdlog(msg) {
@@ -43,7 +46,12 @@ app.on('window-all-closed', () => {
 // frame:false는 Alt+F4를 못 막는다 — canvasWin의 'close' 핸들러가 이 플래그를
 // 보고 진짜 종료 중이 아니면 preventDefault()로 백그라운드 전환으로 돌린다.
 let isQuitting = false;
-app.on('before-quit', () => { isQuitting = true; });
+app.on('before-quit', () => {
+  isQuitting = true;
+  // 우리가 스폰했을 때만 죽인다(backend-launcher.js의 backendChild 판정) — 사용자가
+  // 별도 콘솔에서 수동 기동한 백엔드 인스턴스는 이 앱의 생애주기와 무관하게 산다.
+  backendLauncher.shutdownBackend();
+});
 
 // ---------- 설계 치수 (ui/round-1R/two-windows.md E3 확정안) ----------
 const DESIGN = {
@@ -1054,6 +1062,12 @@ if (!process.env.ATHENA_NO_AUTOSTART) {
     createWindows();
     mcpEnv.migratePlaintextEnv().catch((err) => {
       mdlog(`부팅 시 mcp-env 마이그레이션 실패: ${String((err && err.message) || err)}`);
+    });
+    // 백엔드 자동 기동 — fire-and-forget, createWindows()를 막지 않는다. 이미
+    // 떠 있으면(사용자가 수동 기동) 손대지 않는다 — backend-launcher.js의
+    // 헬스체크 우선 판정이 중복 스폰을 막는다.
+    backendLauncher.ensureBackend({ mdlog }).catch((err) => {
+      mdlog(`ensureBackend 실패: ${String((err && err.message) || err)}`);
     });
   });
 }
