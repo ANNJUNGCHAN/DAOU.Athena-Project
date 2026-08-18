@@ -75,7 +75,13 @@ TR을 **화면 단위가 아니라 데이터 형상 단위**로 접는다.
 ## 배치·생애주기 규칙 (2026-08-18 확정)
 
 라운드 2로 미뤄뒀던 배치 규칙을 질의응답으로 확정했다(35쪽 장표 미해결 해소).
-이 절이 규칙의 원본이다. 앱 반영은 `plan/plan.md` 다음 수 19 — 미착수.
+이 절이 규칙의 원본이다. **앱 반영 완료(2026-08-18)** — 폭 문법·도착순은
+`app/canvas.css`(w-half/w-full) + `app/lib/canvas-layout.js`(순수 로직, node --test
+9건), 힌트·큐레이션 계약은 `backend/athena_mcp/server.py`(`layout`·`drop_types`,
+pytest 2건), 집행은 `app/canvas.js`. 증거는 `npm run verify` 검증 10(도착순·폭
+문법·힌트 승격/폴백·drop_types·예산 집행 전부 초록, `app/captures/VERIFY-REPORT.json`
+`cardLayout`). 실배선에서 모델이 힌트·드롭을 실제로 쓰는지는 미실측(자동 verify는
+픽스처 고정 — plan.md 다음 수 14와 같은 제약).
 
 1. **형상별 폭 문법 (기본, 결정적).** 컴팩트 형상(스트림·리더·스냅샷·이벤트 로그)은
    반폭 2열, 넓은 형상(테이블·시계열·호가·히트맵)은 전폭. 배치 순서는 도착순 위→아래.

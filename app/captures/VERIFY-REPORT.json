@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-08-17T16:16:55.557Z",
+  "startedAt": "2026-08-18T01:53:12.575Z",
   "layout": {
     "scale": 1,
     "screen": {
@@ -46,18 +46,18 @@
     "ok": true
   },
   "expand": {
-    "frameCount": 29,
-    "p50": 16.700000000000045,
-    "p95": 33.399999999999864,
-    "max": 33.40000000000009,
-    "min": 8.400000000000091
+    "frameCount": 32,
+    "p50": 16.699999999999818,
+    "p95": 33.30000000000018,
+    "max": 33.399999999999864,
+    "min": 16.40000000000009
   },
   "collapse": {
     "frameCount": 35,
     "p50": 16.699999999999818,
-    "p95": 16.799999999999272,
-    "max": 16.799999999999272,
-    "min": 16.600000000000364
+    "p95": 16.700000000000728,
+    "max": 16.800000000000182,
+    "min": 16.599999999999454
   },
   "afterCollapse": {
     "canvasVisible": false
@@ -193,5 +193,47 @@
     "minimizeLowersBoth": true,
     "restorePairsBoth": true
   },
-  "finishedAt": "2026-08-17T16:17:13.786Z"
+  "cardLayout": {
+    "arrivalOrder": [
+      "stream",
+      "table",
+      "reader"
+    ],
+    "arrivalOrderIsSendOrder": true,
+    "grammarWidths": [
+      "half",
+      "full",
+      "half"
+    ],
+    "grammarWidthsCorrect": true,
+    "hintPromotedStreamToFull": true,
+    "promotedOrder": [
+      "table",
+      "reader",
+      "stream"
+    ],
+    "invalidHintFallsBackToHalf": true,
+    "dropTypesRemovedTable": true,
+    "curatedOrder": [
+      "stream",
+      "reader"
+    ],
+    "budgetEnforcedOldestFirst": true,
+    "afterBudget": {
+      "order": [
+        "reader",
+        "table",
+        "free"
+      ],
+      "widths": [
+        "half",
+        "full",
+        "full"
+      ],
+      "count": 3,
+      "scrollHeight": 832,
+      "clientHeight": 404
+    }
+  },
+  "finishedAt": "2026-08-18T01:53:32.578Z"
 }

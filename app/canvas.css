@@ -86,16 +86,27 @@ html, body { background: transparent; }
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.13), 0 12px 32px rgba(0, 0, 0, 0.35);
   transition: box-shadow var(--dur-base) var(--ease), border-color var(--dur-base) var(--ease);
 }
-.card.stream { order: 1; }
-.card.reader { order: 2; }
-.card.table { order: 3; grid-column: 1 / -1; }
-/* ---- 실배선 카드 — mcp-table(공통 테이블 신규④) · free(자유 카드) ---- */
-.card.mcp-table { order: 4; grid-column: 1 / -1; }
-.card.free { order: 5; grid-column: 1 / -1; }
-.card.notice { order: 6; grid-column: 1 / -1; min-height: unset; }
+/* 폭 문법 — 폭은 형상이 정하고(w-half/w-full, lib/canvas-layout.js) 순서는 도착순
+ * (DOM 순서)이다. canvas-taxonomy "배치·생애주기 규칙 (2026-08-18 확정)".
+ * 이전 판의 타입 고정 order(스트림1→…→알림6)는 규칙 확정으로 제거했다 — 규칙은
+ * "도착 순서대로 위→아래"다. AI layout 힌트는 폭 등급 승격·강등만 한다. */
+.card.w-full { grid-column: 1 / -1; }
+.card.notice { min-height: unset; }
 .card.highlight {
   border-color: var(--color-brand);
   box-shadow: 0 0 0 1px rgba(238, 19, 123, 0.5), 0 0 24px rgba(238, 19, 123, 0.25);
+}
+
+/* 굴절층·데이터층 분리(soul.md §7 완화책 · plan.md 다음 수 7) — 확장/수축
+ * 애니메이션 동안 카드 유리를 "정적 프로스트"로 굽는다: backdrop-filter를 끄고
+ * 알파를 올려 서리를 근사한다. 굴절 재계산이 sheen(전면 blur 변조) 하나로
+ * 격리되고 카드(데이터층)는 정적이 된다. 정지 상태 카드는 여전히 진짜 유리다
+ * (2026-08-17 카드 유리화 유지). 켜고 끄는 건 canvas.js의
+ * athena:glass-separation IPC — A/B 실측(verify:glass)이 채택을 판정한다. */
+.mosaic.frost-baked .card {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: rgba(36, 42, 54, 0.86);
 }
 
 .card-head {
