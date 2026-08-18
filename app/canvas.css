@@ -6,11 +6,13 @@ html, body { background: transparent; }
      "캔버스는 불투명"은 2026-08-14에 폐기된 결론이다(liquid-glass.md:99).
      재료는 창 레벨의 backgroundMaterial:'acrylic'이 준다(main.js commonWinOpts) —
      여기 값은 그 위에 얹는 **유리 두께**다.
-     §7: "유리 두께는 고정값이 아니다. 뒤에 있는 것의 정보 밀도와 밝기에 비례해
-     두꺼워진다 — 어두운 데스크톱 위 ~0.82, 데이터 캔버스 위 ~0.97."
-     캔버스는 광량 3단(데스크톱→창→캔버스) 중 가장 두꺼운 단계다. 얇게 만들면
-     뒤가 비쳐 숫자가 겹쳐 읽히고 그건 §8 "정보 정직성" 위반이다. */
-  background-color: rgba(29, 34, 44, 0.97);
+     2026-08-18 전체 하향(사용자 지시 "그냥 검은 창 같다 — 최대한 뒤가 비치게"):
+     0.97은 acrylic 위에서 사실상 불투명 검정이었다. 창 표면은 0.50으로 내려 뒤
+     데스크톱이 실제로 굴절돼 비치게 한다. §8 정보 정직성(숫자 겹침 금지)은 창
+     표면이 아니라 **카드**가 담당한다 — 카드는 자체 backdrop-filter blur + 자기
+     배경을 가져서 숫자 밑은 항상 서리유리다. 광량 3단(데스크톱→창 0.30→캔버스
+     0.50)의 순서는 유지된다 — 스케일만 내려갔다. */
+  background-color: rgba(29, 34, 44, 0.50);
   /* 리퀴드 글라스는 검정 평면이 아니다(2026-08-17 사용자 지시 — "애플의 리퀴드
    * 글라스라는 사실을 명심해"). 두께 0.97은 규범값이라 유지하되, 표면에 무채색
    * (백색 알파만 — 틴트 금지) 광량 변화를 깔아 카드 유리(backdrop-filter)가 실제로
@@ -71,7 +73,9 @@ html, body { background: transparent; }
  * 깊이는 값으로 만든다(§7) — 경계는 테두리가 아니라 상단 인셋 하이라이트(광량) +
  * 드롭섀도가 긋고, 테두리는 유리 가장자리 두께 암시 수준으로만 남긴다. */
 .card {
-  background: rgba(36, 42, 54, 0.55);
+  /* 2026-08-18 하향: 창 표면(0.50)이 얇아진 만큼 카드도 0.45로 내린다 — 숫자
+   * 가독은 알파가 아니라 blur가 지킨다(카드 뒤는 항상 서리유리로 뭉개진다). */
+  background: rgba(36, 42, 54, 0.45);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgba(255, 255, 255, 0.06);
@@ -110,7 +114,7 @@ html, body { background: transparent; }
 .mosaic.frost-baked .card {
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
-  background: rgba(36, 42, 54, 0.86);
+  background: rgba(36, 42, 54, 0.78);
 }
 
 .card-head {

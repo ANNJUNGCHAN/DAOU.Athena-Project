@@ -100,10 +100,11 @@ function commonWinOpts(bounds) {
     // 2026-08-18 실측(qa-win-arrow.json): resizable:false에서는 Win+←/→/↑가 OS에
     // 선점돼 before-input-event에 아예 안 온다(mdlog 도달 0건 — Win+↓ 최소화만
     // OS가 실행). Windows 스냅(Win+방향키)이 이 앱에서 통하려면 창이 OS 스냅
-    // 대상이어야 하므로 resizable:true로 승급한다. **크기는 여전히 불변이다** —
-    // 생성 직후 setMinimumSize=setMaximumSize 잠금(아래 lockWindowSize)이 OS든
-    // 사용자든 크기를 못 바꾸게 막고, OS가 스냅으로 "옮긴" 결과는 moved/maximize/
-    // minimize 이벤트에서 받아 짝을 정착시킨다.
+    // 대상이어야 하므로 resizable:true다.
+    // 2026-08-18 2차(사용자 지시): 크기 잠금(min=max)을 걷어냈다 — **두 창 모두
+    // 가로·세로 자유 리사이즈**가 사양이다. 하한(setMinimumSize)만 남기고 상한은
+    // 없다. OS 스냅과 사용자 리사이즈의 구분은 handleForeignArrange의 반절 스냅
+    // 기하 판별(looksLikeOsSnapHalf)이 맡는다.
     resizable: true,
     show: false,
     // alwaysOnTop을 걸지 않는다(2026-08-17 결정) — 스파이크 시절 값이었지만, 다른
@@ -152,20 +153,23 @@ async function createWindows() {
   canvasWin = new BrowserWindow(commonWinOpts({
     x: layout.originX, y: layout.originY, width: layout.canvasW, height: layout.canvasH,
   }));
-  lockWindowSize(canvasWin, layout.canvasW, layout.canvasH);
+  // 크기 잠금 해제(2026-08-18 사용자 지시 — "무조건 가로세로 모두 조정 가능해야
+  // 한다"). E3 치수(1560×800)는 부팅 기본값일 뿐 불변 계약이 아니다. 하한은
+  // 카드 1장 + 여백이 성립하는 최소 면적.
+  canvasWin.setMinimumSize(480, 320);
   canvasWin.loadFile('canvas.html');
   mdlog('canvasWin created + loadFile called');
 
   chatWin = new BrowserWindow(commonWinOpts({
     x: layout.originX, y: chatBottom - chatHeight, width: layout.chatW, height: chatHeight,
   }));
-  // 채팅창은 높이만 가동 범위(chatBaseH~chatMaxH)로 연다 — 폭은 고정. 완전
-  // 잠금(min=max)이면 Win+↑의 OS maximize가 이벤트도 없이 무시된다(2026-08-18
-  // qa-win-arrow 실측). 범위를 열어두면 maximize 이벤트가 와서 렌더러 토글로
-  // 위임할 수 있고, OS가 스냅으로 높이를 건드려도 handleForeignArrange가 즉시
-  // 앱 레이아웃으로 되돌린다.
-  chatWin.setMinimumSize(layout.chatW, layout.chatBaseH);
-  chatWin.setMaximumSize(layout.chatW, layout.chatMaxH);
+  // 채팅창도 폭·높이 모두 유동이다(2026-08-18 사용자 지시). 상한을 걸지 않는다 —
+  // chatBaseH~chatMaxH는 자동 성장(setChatHeight)의 가동 범위일 뿐이고, 사용자가
+  // OS 모서리 리사이즈로 그 밖에 두면 handleForeignArrange가 수용하고 렌더러에
+  // manualOverride를 알린다(athena:manual-resize). 하한은 그립+입력줄이 성립하는
+  // 크기. 완전 잠금(min=max)이면 Win+↑의 OS maximize가 이벤트도 없이 무시된다는
+  // 실측(qa-win-arrow)은 여전히 유효하다 — 지금은 잠금 자체가 없다.
+  chatWin.setMinimumSize(480, Math.min(160, layout.chatBaseH));
   chatWin.loadFile('chat.html');
   mdlog('chatWin created + loadFile called');
 
@@ -258,11 +262,6 @@ async function createWindows() {
 // settlingSnap 가드: placeWindows의 setBounds가 다시 moved를 발화시키는 재진입을 막는다.
 let settlingSnap = false;
 
-function lockWindowSize(win, w, h) {
-  win.setMinimumSize(w, h);
-  win.setMaximumSize(w, h);
-}
-
 // 앱이 마지막으로 지정한 bounds. 여기서 벗어난 moved/resized는 전부 OS 주도
 // (Win+←/→ 스냅 등)다 — frame:false라 사용자가 OS 경로로 창을 움직일 방법은
 // 스냅뿐이고, 앱 주도 이동(드래그 폴링·setChatHeight·placeWindows·centerWindows)은
@@ -280,6 +279,21 @@ function boundsDiffer(a, b) {
     || Math.abs(a.width - b.width) > 2 || Math.abs(a.height - b.height) > 2;
 }
 
+// 반절 스냅 기하 판별(2026-08-18 자유 리사이즈 승급) — Win+←/→ 스냅의 결과는
+// "높이≈workArea 전체, 폭≈절반, 좌/우 가장자리 접변"이라는 뚜렷한 기하를 남긴다.
+// 이 기하와 일치할 때만 OS 스냅으로 판정한다. 이전 판은 기대 좌표에서 벗어난
+// 모든 변화를 스냅으로 정착시켰는데, 자유 리사이즈가 열린 뒤에는 그 대다수가
+// 사용자 모서리 리사이즈라 — 정착이 곧 "방금 조절한 크기를 설계 치수로 되돌리는
+// 버그"가 된다.
+function looksLikeOsSnapHalf(actual, wa) {
+  const t = 8;
+  const nearlyFullH = Math.abs(actual.height - wa.height) <= t;
+  const nearlyHalfW = Math.abs(actual.width - Math.round(wa.width / 2)) <= t;
+  const atLeft = Math.abs(actual.x - wa.x) <= t;
+  const atRight = Math.abs((actual.x + actual.width) - (wa.x + wa.width)) <= t;
+  return nearlyFullH && nearlyHalfW && (atLeft || atRight);
+}
+
 function handleForeignArrange(win) {
   if (settlingSnap) return;
   if (!win || win.isDestroyed() || win.isMinimized() || win.isMaximized()) return;
@@ -288,6 +302,19 @@ function handleForeignArrange(win) {
   if (!boundsDiffer(expectedBounds.get(win), actual)) return;
   const display = screen.getDisplayMatching(actual);
   const wa = display.workArea;
+  if (!looksLikeOsSnapHalf(actual, wa)) {
+    // 사용자 모서리 리사이즈(또는 OS 주도의 기타 이동) — 새 크기·위치를 그대로
+    // 수용한다. 대화 창이면 높이 앵커·수동 상태를 함께 정리한다: 높이 상태의
+    // 소유자는 렌더러이므로(chat.js) manualOverride를 켜라고 알려 자동 성장이
+    // 방금의 사용자 크기를 덮어쓰지 않게 한다.
+    noteAppBounds(win);
+    if (win === chatWin) {
+      chatHeight = actual.height;
+      syncChatAnchor();
+      chatWin.webContents.send('athena:manual-resize');
+    }
+    return;
+  }
   const dir = (actual.x + actual.width / 2) < (wa.x + wa.width / 2) ? 'left' : 'right';
   mdlog(`os-arrange 감지(${win === chatWin ? 'chat' : 'canvas'}): ${JSON.stringify(actual)} -> ${dir} 정착`);
   settlingSnap = true;
@@ -583,7 +610,9 @@ function setChatHeight(height) {
   if (clamped === chatHeight) return;
   chatHeight = clamped;
   const y = chatBottom - chatHeight;
-  chatWin.setBounds({ x: chatX, y, width: layout.chatW, height: chatHeight });
+  // 폭은 더 이상 설계 상수가 아니다(2026-08-18 자유 리사이즈) — 자동 성장·모드
+  // 전환이 사용자가 넓힌 폭을 layout.chatW로 되감으면 안 된다. 현재 폭을 유지한다.
+  chatWin.setBounds({ x: chatX, y, width: chatWin.getBounds().width, height: chatHeight });
   noteAppBounds(chatWin);
   if (canvasVisible) chatWin.moveTop(); // 확장 시 캔버스 창 위로 올라탄다(two-windows.md E3-확장)
 }
