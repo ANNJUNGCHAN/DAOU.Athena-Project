@@ -383,19 +383,23 @@ async function createChartCard(container, opts) {
     recomputePaneIndicatorData();
   }
 
+  // 지표 배열(워밍업 null 포함) → lightweight-charts 라인 데이터. null은 버린다.
+  function toLineData(times, values) {
+    return times.map((t, i) => ({ time: t, value: values[i] })).filter((d) => d.value != null);
+  }
+
   function recomputeOverlayData() {
     if (!currentBars.length) return;
     const closes = currentBars.map((b) => Number(b.close));
     const times = currentBars.map((b) => b.time);
     for (const { period, series } of maSeriesList) {
-      const vals = sma(closes, period);
-      series.setData(times.map((t, i) => ({ time: t, value: vals[i] })).filter((d) => d.value != null));
+      series.setData(toLineData(times, sma(closes, period)));
     }
     if (bollSeriesGroup) {
       const { upper, middle, lower } = bollinger(closes, indicatorState.params.boll.period, indicatorState.params.boll.mult);
-      bollSeriesGroup.upper.setData(times.map((t, i) => ({ time: t, value: upper[i] })).filter((d) => d.value != null));
-      bollSeriesGroup.middle.setData(times.map((t, i) => ({ time: t, value: middle[i] })).filter((d) => d.value != null));
-      bollSeriesGroup.lower.setData(times.map((t, i) => ({ time: t, value: lower[i] })).filter((d) => d.value != null));
+      bollSeriesGroup.upper.setData(toLineData(times, upper));
+      bollSeriesGroup.middle.setData(toLineData(times, middle));
+      bollSeriesGroup.lower.setData(toLineData(times, lower));
     }
   }
 
@@ -404,8 +408,7 @@ async function createChartCard(container, opts) {
     const volumes = currentBars.map((b) => Number(b.volume));
     const times = currentBars.map((b) => b.time);
     for (const { period, series } of volMaSeriesList) {
-      const vals = sma(volumes, period);
-      series.setData(times.map((t, i) => ({ time: t, value: vals[i] })).filter((d) => d.value != null));
+      series.setData(toLineData(times, sma(volumes, period)));
     }
   }
 
@@ -414,14 +417,13 @@ async function createChartCard(container, opts) {
     const closes = currentBars.map((b) => Number(b.close));
     const times = currentBars.map((b) => b.time);
     if (rsiLine) {
-      const vals = rsi(closes, indicatorState.params.rsi.period);
-      rsiLine.setData(times.map((t, i) => ({ time: t, value: vals[i] })).filter((d) => d.value != null));
+      rsiLine.setData(toLineData(times, rsi(closes, indicatorState.params.rsi.period)));
     }
     if (macdLine) {
       const p = indicatorState.params.macd;
       const { macd: line, signal, histogram } = macd(closes, p.shortP, p.longP, p.signalP);
-      macdLine.setData(times.map((t, i) => ({ time: t, value: line[i] })).filter((d) => d.value != null));
-      macdSignalLine.setData(times.map((t, i) => ({ time: t, value: signal[i] })).filter((d) => d.value != null));
+      macdLine.setData(toLineData(times, line));
+      macdSignalLine.setData(toLineData(times, signal));
       macdHistSeries.setData(
         times
           .map((t, i) => ({ time: t, value: histogram[i], color: histogram[i] >= 0 ? withAlpha(UP_COLOR, 0.6) : withAlpha(DOWN_COLOR, 0.6) }))
@@ -672,6 +674,8 @@ async function createChartCard(container, opts) {
   return { chart, setForm, setData, applyPeriod, applyAdjusted, toggleFullscreen, destroy };
 }
 
+// 외부 소비자는 canvas.js(createChartCard)와 chart-card.test.js(순수 변환 + 등락색)
+// 뿐이다 — 나머지 상수는 내부 구현 세부라 내보내지 않는다(deslop 2026-08-18).
 module.exports = {
   createChartCard,
   toCandleSeriesData,
@@ -679,9 +683,4 @@ module.exports = {
   withAlpha,
   UP_COLOR,
   DOWN_COLOR,
-  NAVY_COLOR,
-  GRID_COLOR,
-  CROSSHAIR_COLOR,
-  AXIS_TEXT_COLOR,
-  PRICE_FORMAT,
 };

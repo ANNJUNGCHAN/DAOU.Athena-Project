@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-08-18T03:02:37.595Z",
+  "startedAt": "2026-08-18T03:07:33.102Z",
   "layout": {
     "scale": 1,
     "screen": {
@@ -23,8 +23,8 @@
         "height": 312
       },
       "idle": {
-        "width": 2346,
-        "height": 312
+        "width": 2340,
+        "height": 336
       }
     },
     "chatBootedAfterBoot": true,
@@ -46,18 +46,18 @@
     "ok": true
   },
   "expand": {
-    "frameCount": 27,
+    "frameCount": 30,
     "p50": 16.700000000000045,
-    "p95": 33.399999999999864,
-    "max": 50.03800000000001,
-    "min": 16.59999999999991
+    "p95": 33.5,
+    "max": 50,
+    "min": 16.5
   },
   "collapse": {
     "frameCount": 35,
     "p50": 16.699999999999818,
-    "p95": 16.800000000000182,
+    "p95": 16.700000000000728,
     "max": 16.800000000000182,
-    "min": 16.5
+    "min": 16.599999999999454
   },
   "afterCollapse": {
     "canvasVisible": false
@@ -211,7 +211,21 @@
     "periodTabsOk": true,
     "paneSeparated": true,
     "indicatorRows35": true,
-    "volumeProfileBars24": true
+    "volumeProfileBars24": true,
+    "measured": {
+      "cardPresent": true,
+      "tabs": [
+        "일",
+        "주",
+        "월",
+        "년",
+        "분",
+        "틱"
+      ],
+      "paneRows": 4,
+      "indicatorRows": 35,
+      "vpBars": 24
+    }
   },
-  "finishedAt": "2026-08-18T03:02:56.866Z"
+  "finishedAt": "2026-08-18T03:07:52.651Z"
 }
