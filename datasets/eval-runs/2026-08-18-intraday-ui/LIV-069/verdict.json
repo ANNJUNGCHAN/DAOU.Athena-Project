@@ -1,0 +1,44 @@
+{
+ "case_id": "LIV-069",
+ "run": "2026-08-18-intraday-ui",
+ "harness": "UI 경유 (실제 두 창 + 커맨드바 입력)",
+ "verdict": "pass",
+ "previous_verdict_headless": "fail",
+ "corrected": true,
+ "market_session": "정규장",
+ "tier": "live",
+ "persona": "일반직장인",
+ "duration_s": 44.3,
+ "ui_evidence": {
+  "cards_rendered": [
+   "mcp-table"
+  ],
+  "card_dom": [
+   {
+    "classes": [
+     "mcp-table"
+    ],
+    "tableRows": 7,
+    "tableCols": 4,
+    "streamItems": 0
+   }
+  ],
+  "chips_added": null,
+  "state_transitions": [
+   "judging",
+   "calling",
+   "idle"
+  ],
+  "answer_chars": 369,
+  "screenshots": [
+   "evidence/chat.png",
+   "evidence/canvas.png"
+  ]
+ },
+ "audit_calls": [
+  "korea-stock-mcp__get_today_date=true",
+  "korea-stock-mcp__get_stock_trade_info=false"
+ ],
+ "judge_note": "**정정: 헤드리스 fail → pass.** 헤드리스에서는 카드가 0개로 잡혀 증거가 없었는데, **UI에서는 .card.mcp-table(7행 4열)이 그려졌고 그 내용이 정확히 채점 요건을 담고 있다** — \"주문 실행 (매수/매도) | — 없음 — | 미연결 | 주문·체결·계좌·잔고 관련 툴이 하나도 연결되어 있지 않음. 1주 테스트 매수 불가\", \"시세 조회 | get_stock_trade_info | 연결됨 · 호출 실패 | KRX API 401 Unauthorized\". 수정된 must_include(D-001/D-002 반영)의 세 항목을 모두 충족한다. 감사로그 주문 호출 0건.",
+ "suspect_dataset_defect": false
+}

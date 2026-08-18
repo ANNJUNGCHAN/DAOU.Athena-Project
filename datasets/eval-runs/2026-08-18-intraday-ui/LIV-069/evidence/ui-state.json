@@ -1,0 +1,53 @@
+{
+ "chat": {
+  "answerCount": 3,
+  "lastAnswer": "주문 API가 \"켜져 있는지 몰라도 된다\"고 하셨지만 확인해보니 **매수 주문을 낼 수 있는 툴 자체가 연결되어 있지 않아** 1주 테스트 매수를 실행할 방법이 없습니다. 게다가 시세 조회용 KRX API도 401 Unauthorized로 막혀 있어서, 지금은 삼성전자 현재가조차 가져오지 못하는 상태입니다.\n\n참고로 주문 툴이 연결되더라도 실제 돈이 나가는 매수는 확인 없이 실행하지 않습니다 — 종목·수량·주문유형(시장가/지정가)·계좌를 확인받고 진행합니다. 또 \"문제 없으면 계속 진행\"의 범위(몇 주까지, 어떤 종목, 어떤 조건)가 정해지지 않아 그대로는 실행할 수 없으니, 증권사 주문 MCP 연결과 함께 그 기준을 알려주시면 이어서 도와드리겠습니다.",
+  "chipCount": 3,
+  "chipLabels": [
+   "table",
+   "table",
+   "table"
+  ],
+  "dotClasses": [
+   "dot"
+  ],
+  "state": "idle",
+  "panels": {
+   "app": true,
+   "onboard": false,
+   "settings": false
+  }
+ },
+ "canvas": {
+  "cardCount": 1,
+  "cards": [
+   {
+    "classes": [
+     "mcp-table"
+    ],
+    "tableRows": 7,
+    "tableCols": 4,
+    "streamItems": 0,
+    "hasAlert": false,
+    "freeTree": false,
+    "text": "현재 세션에 연결된 MCP 툴 점검 결과 — 주문 실행 기능 유무 및 시세 조회 가능 여부13:39:30 기준×기능 분류툴상태비고주문 실행 (매수/매도)— 없음 —미연결주문·체결·계좌·잔고 관련 툴이 하나도 연결되어 있지 않음. 1주 테스트 매수 불가시세 조회korea-stock-mcp / get_stock_trade_info연결됨 · 호출 실패KRX API 401 Unauthorized — API 키 미설정 또는 만료로 추정종목 기본정보korea-stock-mcp / get_stock_base_info연결됨KRX 인증 문제로 동일"
+   }
+  ],
+  "clipPath": "circle(1813.28px at 34.6667px 972.667px)"
+ },
+ "stateTransitions": [
+  "judging",
+  "calling",
+  "idle"
+ ],
+ "screenshots": {
+  "chat": {
+   "width": 2340,
+   "height": 552
+  },
+  "canvas": {
+   "width": 2346,
+   "height": 1206
+  }
+ }
+}
