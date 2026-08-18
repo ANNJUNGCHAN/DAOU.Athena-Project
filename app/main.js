@@ -10,6 +10,7 @@ const cliAccounts = require('./lib/main/cli-accounts');
 const accounts = require('./lib/main/accounts');
 const prefs = require('./lib/main/prefs');
 const modelPrefs = require('./lib/main/model-prefs');
+const codexConfig = require('./lib/main/codex-config');
 const { computePlacement } = require('./lib/main/window-placement');
 const mcpCli = require('./lib/main/mcp-cli');
 const mcpEnv = require('./lib/main/mcp-env');
@@ -833,21 +834,32 @@ ipcMain.handle('athena:settings:prefs:get', handlePrefsGet);
 ipcMain.handle('athena:settings:prefs:set', handlePrefsSet);
 
 // ---------------------------------------------------------------------------
-// 모델 설정(모델·추론강도) — lib/main/model-prefs.js. 검증은 그 모듈이 한다,
-// 여기선 성공 시 방송만 담당한다(prefs와 같은 문법 — chatWin이 같은 렌더러의
-// #settings 패널이라도 명시적으로 보낸다).
+// 모델 설정(모델·추론강도) — 공급자별로 저장소가 다르다(2026-08-18 Codex 실결선).
+// claude는 lib/main/model-prefs.js(athena-model.json, userData 아래) —
+// 이 앱만의 설정이다. codex는 lib/main/codex-config.js($CODEX_HOME/config.toml)
+// — Codex 본인의 설정 파일에 직접 쓴다, 이 앱 밖에서 codex를 쓸 때도 적용되는
+// 전역 기본값이다. 검증은 각 모듈이 한다, 여기선 라우팅 + 성공 시 병합·방송만
+// 담당한다(prefs와 같은 문법 — chatWin이 같은 렌더러의 #settings 패널이라도
+// 명시적으로 보낸다).
+// IPC 계약은 그대로: athena:model-get/-set → { claude: {model,effort},
+// codex: {model,effort} }.
 // ---------------------------------------------------------------------------
 
 function handleModelGet() {
-  return modelPrefs.get();
+  const { claude } = modelPrefs.get();
+  const { model, effort } = codexConfig.readModelSettings();
+  return { claude, codex: { model, effort } };
 }
 
 function handleModelSet(e, payload = {}) {
-  const result = modelPrefs.set(payload);
-  if (result.ok && chatWin && !chatWin.isDestroyed()) {
-    chatWin.webContents.send('athena:model-changed', result.state);
+  const { provider, patch } = payload || {};
+  const result = provider === 'codex' ? codexConfig.writeModelSettings(patch || {}) : modelPrefs.set(payload);
+  if (!result.ok) return result;
+  const state = handleModelGet();
+  if (chatWin && !chatWin.isDestroyed()) {
+    chatWin.webContents.send('athena:model-changed', state);
   }
-  return result;
+  return { ok: true, state };
 }
 
 ipcMain.handle('athena:model-get', handleModelGet);

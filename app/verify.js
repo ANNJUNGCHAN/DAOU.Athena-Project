@@ -54,6 +54,15 @@ fs.writeFileSync(
 );
 app.setPath('userData', VERIFY_PROFILE);
 
+// Codex 설정 격리 — codex-config.js는 userData가 아니라 CODEX_HOME/config.toml에
+// 직접 쓴다(2026-08-18 실결선). 검증15 확장이 실제 파일 쓰기를 하므로, 이 머신의
+// 진짜 ~/.codex/config.toml을 절대 건드리면 안 된다. cli-accounts.js의
+// detectCodex()도 이 값을 읽으므로 require('./main.js')보다 먼저 세팅한다 —
+// Codex가 이 격리 디렉토리에선 항상 미연결로 보이지만, 검증7의 모델 패널
+// 단언(modelPanelHasClaudeAccountRow 등)은 Claude 쪽만 보므로 간섭이 없다.
+process.env.CODEX_HOME = path.join(VERIFY_PROFILE, '.codex-home');
+fs.mkdirSync(process.env.CODEX_HOME, { recursive: true });
+
 const DEBUGLOG = path.join(CAPTURES, 'verify-debug.log');
 fs.writeFileSync(DEBUGLOG, `start ${new Date().toISOString()}\n`);
 function dlog(msg) { fs.appendFileSync(DEBUGLOG, `${new Date().toISOString()} ${msg}\n`); }
@@ -1060,6 +1069,44 @@ app.whenReady().then(async () => {
   assertOk('modelPrefs: rejects model with leading dash', report.modelPrefs.rejectsLeadingDash === true);
   assertOk('modelPrefs: rejects invalid effort value', report.modelPrefs.rejectsInvalidEffort === true);
   assertOk('modelPrefs: rejected patches do not overwrite prior valid values', report.modelPrefs.rejectedValuesDidNotOverwrite === true);
+
+  // ---------- 검증 15 확장: Codex 설정 실결선 (lib/main/codex-config.js) ----------
+  // Codex는 userData가 아니라 CODEX_HOME/config.toml에 직접 쓴다 — 위에서
+  // CODEX_HOME을 검증 전용 디렉토리로 격리했으므로(이 머신의 실제 Codex 세션에
+  // 손대지 않는다) 여기서 실제 파일 I/O를 안전하게 검증할 수 있다.
+  const codexConfigPath = path.join(process.env.CODEX_HOME, 'config.toml');
+  const codexSetOk = mainMod.settingsHandlers.modelSet(null, { provider: 'codex', patch: { model: 'gpt-5-codex', effort: 'medium' } });
+  const codexGetAfterSet = mainMod.settingsHandlers.modelGet();
+  const codexConfigAfterSet = fs.existsSync(codexConfigPath) ? fs.readFileSync(codexConfigPath, 'utf-8') : '';
+  // 무효 모델(선두 '-')·무효 effort(화이트리스트 밖)는 codex-config.js가
+  // 파일을 건드리기 전에 거부한다 — 부분 적용이 없어야 한다.
+  const codexSetRejectInvalidModel = mainMod.settingsHandlers.modelSet(null, { provider: 'codex', patch: { model: '-bad-flag-like' } });
+  const codexSetRejectInvalidEffort = mainMod.settingsHandlers.modelSet(null, { provider: 'codex', patch: { effort: 'not-a-real-effort' } });
+  const codexConfigAfterRejects = fs.existsSync(codexConfigPath) ? fs.readFileSync(codexConfigPath, 'utf-8') : '';
+  const codexSetNullRemovesModel = mainMod.settingsHandlers.modelSet(null, { provider: 'codex', patch: { model: null } });
+  const codexConfigAfterNull = fs.existsSync(codexConfigPath) ? fs.readFileSync(codexConfigPath, 'utf-8') : '';
+
+  report.codexConfig = {
+    setOk: codexSetOk,
+    getAfterSet: codexGetAfterSet,
+    configPath: codexConfigPath,
+    configOnDiskAfterSet: codexConfigAfterSet,
+    savedCorrectly: codexSetOk.ok === true && codexGetAfterSet.codex.model === 'gpt-5-codex' && codexGetAfterSet.codex.effort === 'medium',
+    persistedToConfigToml: /^model = "gpt-5-codex"$/m.test(codexConfigAfterSet) && /^model_reasoning_effort = "medium"$/m.test(codexConfigAfterSet),
+    rejectsInvalidModel: codexSetRejectInvalidModel.ok === false,
+    rejectsInvalidEffort: codexSetRejectInvalidEffort.ok === false,
+    rejectedPatchesDidNotChangeFile: codexConfigAfterRejects === codexConfigAfterSet,
+    nullRemovesModelLine: codexSetNullRemovesModel.ok === true
+      && !/^model = /m.test(codexConfigAfterNull)
+      && /^model_reasoning_effort = "medium"$/m.test(codexConfigAfterNull),
+  };
+  console.log('[verify] 검증15 확장(Codex 설정):', JSON.stringify(report.codexConfig));
+  assertOk('codexConfig: model-set saves codex model/effort', report.codexConfig.savedCorrectly === true);
+  assertOk('codexConfig: persisted to CODEX_HOME/config.toml on disk', report.codexConfig.persistedToConfigToml === true);
+  assertOk('codexConfig: rejects invalid model (leading dash)', report.codexConfig.rejectsInvalidModel === true);
+  assertOk('codexConfig: rejects invalid effort value', report.codexConfig.rejectsInvalidEffort === true);
+  assertOk('codexConfig: rejected patches leave config.toml unchanged', report.codexConfig.rejectedPatchesDidNotChangeFile === true);
+  assertOk('codexConfig: null patch removes model line, preserves effort line', report.codexConfig.nullRemovesModelLine === true);
 
   report.finishedAt = new Date().toISOString();
   fs.writeFileSync(path.join(CAPTURES, 'VERIFY-REPORT.json'), JSON.stringify(report, null, 2));

@@ -990,19 +990,32 @@ Paper 43쪽 확정안 세 가지를 결선했다 — 설정 사이드바, 모델
 - 계좌·MCP 항목의 배지는 각 목록 채널(`athena:account-list`/`athena:mcp-list`)을
   다시 불러 개수를 채운다(`refreshNavCount`) — nav 자체는 카드 내용을 모른다.
 
-### 모델 설정 — `--model`/`--effort` 결선
+### 모델 설정 — `--model`/`--effort` 결선, Codex는 `config.toml` 실결선(2026-08-18)
 
-`lib/main/model-prefs.js`가 `athena-model.json`(userData)에 `{claude:{model,effort},
-codex:{model,effort}}`를 저장한다. `main.js`의 `runLiveQuery()`가 매 질의마다
-`modelPrefs.get().claude`를 읽어 `claude-runner.js buildArgs()`에 넘긴다 —
-값이 `null`이면 `--model`/`--effort` 인자 자체를 안 붙여 `claude -p` CLI 기본값을
-쓴다. Codex는 **저장만** 한다 — 이 앱의 질의 실행은 `claude -p` 하나뿐이라 Codex
-설정을 실제로 소비하는 경로가 아직 없다(설정 화면 정직성 노트에 명시).
+공급자별로 저장소가 다르다. **Claude**는 `lib/main/model-prefs.js`가
+`athena-model.json`(userData)에 `{claude:{model,effort}}`를 저장한다.
+`main.js`의 `runLiveQuery()`가 매 질의마다 `modelPrefs.get().claude`를 읽어
+`claude-runner.js buildArgs()`에 넘긴다 — 값이 `null`이면 `--model`/`--effort`
+인자 자체를 안 붙여 `claude -p` CLI 기본값을 쓴다.
+
+**Codex**는 이 앱의 userData가 아니라 `lib/main/codex-config.js`가
+`$CODEX_HOME/config.toml`(CODEX_HOME 미설정 시 `~/.codex/config.toml`,
+`cli-accounts.js`의 `detectCodex()`와 같은 경로 규칙)에 **직접** 쓴다 —
+최상위 키 `model`(string) · `model_reasoning_effort`(공급자 화이트리스트, 아래).
+이 앱 밖에서 `codex` CLI를 직접 쓸 때도 적용되는 전역 기본값이다. 단, 이 앱의
+질의 실행 결선은 여전히 `claude -p` 하나뿐이라 Codex 모델은 이 앱 안에서
+소비되지 않는다(설정 화면 정직성 노트에 명시). 외부 프로그램이 관리하는 파일이라
+전체 TOML을 재직렬화하지 않는다 — `model`/`model_reasoning_effort` 두 라인만
+in-place로 패치하고, 주석·미지 키·`[섹션]`은 바이트 그대로 보존한다. 대상은
+**최상위(top-level, 첫 `[section]` 헤더 이전) 키만**이다 — `[profile.default]`
+아래 동명 `model` 키는 건드리지 않는다(사용자 프로필별 값을 오독해 덮어쓰는 사고
+방지). 값이 `null`이면 그 라인을 제거한다(codex CLI 자체 기본값으로 되돌림).
 
 값 검증은 저장 전에 거부한다(조용히 버리지 않는다) — 모델명은 영문·숫자·점·
 하이픈·대괄호 64자 이내에 선두 `-` 금지(`claude` 인자 파서가 값을 플래그로
-오독하는 걸 막는다), effort는 공급자별 화이트리스트
-(`claude`: low/medium/high/xhigh/max, `codex`: minimal/low/medium/high/xhigh)다.
+오독하는 걸 막는다, `isValidModel`은 두 공급자가 공유), effort는 공급자별
+화이트리스트(`claude`: low/medium/high/xhigh/max — `model-prefs.js`, `codex`:
+minimal/low/medium/high/xhigh — `codex-config.js`)다.
 
 모델 패널(`lib/settings-cards.js` `renderModel`/`buildModelSection`)은 Claude·
 Codex 섹션마다 **다계정 목록**을 그린다(`athena:cli-list`의 `accounts[]`, 2~3개
