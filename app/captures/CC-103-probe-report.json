@@ -1,0 +1,76 @@
+{
+  "panelOpen": {
+    "disabledBefore": false,
+    "panelPresent": true,
+    "totalRows": 35,
+    "implementedCount": 5,
+    "unimplementedCount": 30,
+    "allUnimplementedBadged": true,
+    "sectionTitles": [
+      "상단 지표",
+      "하단 지표"
+    ],
+    "defaultOnLabels": [
+      "이평선",
+      "거래량MA"
+    ],
+    "volumeProfileRowInFooter": true,
+    "volumeProfileDefaultOff": true
+  },
+  "bollOn": {
+    "isOn": true,
+    "ariaChecked": "true"
+  },
+  "paneSeparationAfterBoll": {
+    "rowCount": 4,
+    "rowHeights": [
+      221,
+      1,
+      80,
+      28
+    ],
+    "maxOverlapPx": 0,
+    "noOverlap": true
+  },
+  "rsiOn": {
+    "isOn": true,
+    "rowCountBefore": 4
+  },
+  "paneSeparationAfterRsi": {
+    "rowCount": 6,
+    "rowHeights": [
+      201,
+      1,
+      73,
+      1,
+      27,
+      28
+    ],
+    "maxOverlapPx": 0.0000152587890625,
+    "noOverlap": true
+  },
+  "volumeProfileOn": {
+    "isOn": true
+  },
+  "volumeProfileOverlay": {
+    "overlayPresent": true,
+    "displayed": true,
+    "barCount": 24,
+    "pocBarCount": 1,
+    "pocColor": "rgba(220, 0, 4, 0.34)",
+    "normalColor": "rgba(138, 63, 252, 0.22)"
+  },
+  "paneSeparationAfterFormSwitch": {
+    "rowCount": 6,
+    "rowHeights": [
+      193,
+      1,
+      78,
+      1,
+      30,
+      28
+    ],
+    "maxOverlapPx": 0,
+    "noOverlap": true
+  }
+}

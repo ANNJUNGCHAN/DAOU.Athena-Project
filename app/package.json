@@ -11,11 +11,15 @@
     "verify:glass": "electron verify-glass-separation.js",
     "verify:settings": "electron verify-settings.js",
     "verify:settings-cards": "electron verify-settings-cards.js",
+    "capture:wide15": "electron capture-wide15.js",
     "verify:live": "node ../spike/cli-pipe/gateway/probe_live_spawn.js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "electron": "^43.4.0"
+  },
+  "dependencies": {
+    "lightweight-charts": "^5.2.1"
   }
 }

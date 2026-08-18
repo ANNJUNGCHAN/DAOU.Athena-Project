@@ -20,6 +20,19 @@ def _json(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def _strip_column_priority(response_fields: dict[str, Any]) -> dict[str, Any]:
+    """§5.3.1 column_priority는 generate_api.py가 계약(모델) 필드 위에 추가로 굽는 enrichment다
+    (backend/scripts/generate_api.py의 column_priority_ranking) — 계약 필드 자체와는 무관하므로
+    contract-exactness 비교(`_model_aliases`와의 동등 비교)에서는 제외한다."""
+    return {
+        **response_fields,
+        "data": [
+            {k: v for k, v in container.items() if k != "column_priority"}
+            for container in response_fields.get("data", [])
+        ],
+    }
+
+
 def _model_aliases(model: type[BaseModel]) -> dict[str, Any]:
     top_level: list[str] = []
     data: list[dict[str, Any]] = []
@@ -174,7 +187,10 @@ def test_every_common_screen_mapping_has_exact_contract_fields_and_provenance() 
             else spec.response_model
         )
         assert mapping["fields"]["request"] == _model_aliases(spec.request_model)
-        assert mapping["fields"]["response"] == _model_aliases(response_model)
+        actual_response = _strip_column_priority(mapping["fields"]["response"])
+        assert actual_response == _model_aliases(response_model)
+        for container in mapping["fields"]["response"].get("data", []):
+            assert sorted(container["column_priority"]) == sorted(container["field_aliases"])
         assert mapping["presentation"]["shape"] == profile_by_id[tr_id]["shape"]
         assert required_provenance <= set(mapping["provenance"])
         assert mapping["provenance"]["inventory"]["operation_id"] == tr_id

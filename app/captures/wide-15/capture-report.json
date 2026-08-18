@@ -1,0 +1,354 @@
+{
+  "generatedAt": "2026-08-18T04:30:40.710Z",
+  "method": "app/capture-wide15.js — verify.js 검증10(app/verify.js:528-573) 경로를 15 TR 전부로 확장. canvasWin에 athena:add-canvas-live를 직접 주입 → renderMcpTable → webContents.capturePage().",
+  "canvasWidthPx": 1560,
+  "trCount": 15,
+  "allMatchFoldSummary": true,
+  "entries": [
+    {
+      "index": 1,
+      "file": "01-ka10095.png",
+      "mappingId": "base:ka10095",
+      "trId": "ka10095",
+      "totalColumns": 63,
+      "cardRendered": true,
+      "visibleColumns": 13,
+      "hiddenColumns": 50,
+      "foldedBelowTotal": true,
+      "headerMatchesEveryRow": true,
+      "foldDataset": {
+        "total": "63",
+        "visible": "13",
+        "hidden": "50"
+      },
+      "matchesFoldSummary": true,
+      "foldSummaryExpected": {
+        "total_columns": 63,
+        "visible_columns": 13,
+        "hidden_columns": 50
+      }
+    },
+    {
+      "index": 2,
+      "file": "02-kt00015.png",
+      "mappingId": "base:kt00015",
+      "trId": "kt00015",
+      "totalColumns": 51,
+      "cardRendered": true,
+      "visibleColumns": 13,
+      "hiddenColumns": 38,
+      "foldedBelowTotal": true,
+      "headerMatchesEveryRow": true,
+      "foldDataset": {
+        "total": "51",
+        "visible": "13",
+        "hidden": "38"
+      },
+      "matchesFoldSummary": true,
+      "foldSummaryExpected": {
+        "total_columns": 51,
+        "visible_columns": 13,
+        "hidden_columns": 38
+      }
+    },
+    {
+      "index": 3,
+      "file": "03-ka30005.png",
+      "mappingId": "base:ka30005",
+      "trId": "ka30005",
+      "totalColumns": 39,
+      "cardRendered": true,
+      "visibleColumns": 13,
+      "hiddenColumns": 26,
+      "foldedBelowTotal": true,
+      "headerMatchesEveryRow": true,
+      "foldDataset": {
+        "total": "39",
+        "visible": "13",
+        "hidden": "26"
+      },
+      "matchesFoldSummary": true,
+      "foldSummaryExpected": {
+        "total_columns": 39,
+        "visible_columns": 13,
+        "hidden_columns": 26
+      }
+    },
+    {
+      "index": 4,
+      "file": "04-ka10075.png",
+      "mappingId": "base:ka10075",
+      "trId": "ka10075",
+      "totalColumns": 30,
+      "cardRendered": true,
+      "visibleColumns": 13,
+      "hiddenColumns": 17,
+      "foldedBelowTotal": true,
+      "headerMatchesEveryRow": true,
+      "foldDataset": {
+        "total": "30",
+        "visible": "13",
+        "hidden": "17"
+      },
+      "matchesFoldSummary": true,
+      "foldSummaryExpected": {
+        "total_columns": 30,
+        "visible_columns": 13,
+        "hidden_columns": 17
+      }
+    },
+    {
+      "index": 5,
+      "file": "05-ka10015.png",
+      "mappingId": "base:ka10015",
+      "trId": "ka10015",
+      "totalColumns": 30,
+      "cardRendered": true,
+      "visibleColumns": 13,
+      "hiddenColumns": 17,
+      "foldedBelowTotal": true,
+      "headerMatchesEveryRow": true,
+      "foldDataset": {
+        "total": "30",
+        "visible": "13",
+        "hidden": "17"
+      },
+      "matchesFoldSummary": true,
+      "foldSummaryExpected": {
+        "total_columns": 30,
+        "visible_columns": 13,
+        "hidden_columns": 17
+      }
+    },
+    {
+      "index": 6,
+      "file": "06-kt50032.png",
+      "mappingId": "detail:kt50032:gold_trade_history",
+      "trId": "kt50032",
+      "totalColumns": 24,
+      "cardRendered": true,
+      "visibleColumns": 13,
+      "hiddenColumns": 11,
+      "foldedBelowTotal": true,
+      "headerMatchesEveryRow": true,
+      "foldDataset": {
+        "total": "24",
+        "visible": "13",
+        "hidden": "11"
+      },
+      "matchesFoldSummary": true,
+      "foldSummaryExpected": {
+        "total_columns": 24,
+        "visible_columns": 13,
+        "hidden_columns": 11
+      }
+    },
+    {
+      "index": 7,
+      "file": "07-kt00018.png",
+      "mappingId": "detail:kt00018:holdings",
+      "trId": "kt00018",
+      "totalColumns": 23,
+      "cardRendered": true,
+      "visibleColumns": 13,
+      "hiddenColumns": 10,
+      "foldedBelowTotal": true,
+      "headerMatchesEveryRow": true,
+      "foldDataset": {
+        "total": "23",
+        "visible": "13",
+        "hidden": "10"
+      },
+      "matchesFoldSummary": true,
+      "foldSummaryExpected": {
+        "total_columns": 23,
+        "visible_columns": 13,
+        "hidden_columns": 10
+      }
+    },
+    {
+      "index": 8,
+      "file": "08-kt00009.png",
+      "mappingId": "detail:kt00009:order_execution_status",
+      "trId": "kt00009",
+      "totalColumns": 22,
+      "cardRendered": true,
+      "visibleColumns": 13,
+      "hiddenColumns": 9,
+      "foldedBelowTotal": true,
+      "headerMatchesEveryRow": true,
+      "foldDataset": {
+        "total": "22",
+        "visible": "13",
+        "hidden": "9"
+      },
+      "matchesFoldSummary": true,
+      "foldSummaryExpected": {
+        "total_columns": 22,
+        "visible_columns": 13,
+        "hidden_columns": 9
+      }
+    },
+    {
+      "index": 9,
+      "file": "09-kt50075.png",
+      "mappingId": "base:kt50075",
+      "trId": "kt50075",
+      "totalColumns": 22,
+      "cardRendered": true,
+      "visibleColumns": 13,
+      "hiddenColumns": 9,
+      "foldedBelowTotal": true,
+      "headerMatchesEveryRow": true,
+      "foldDataset": {
+        "total": "22",
+        "visible": "13",
+        "hidden": "9"
+      },
+      "matchesFoldSummary": true,
+      "foldSummaryExpected": {
+        "total_columns": 22,
+        "visible_columns": 13,
+        "hidden_columns": 9
+      }
+    },
+    {
+      "index": 10,
+      "file": "10-kt50031.png",
+      "mappingId": "base:kt50031",
+      "trId": "kt50031",
+      "totalColumns": 22,
+      "cardRendered": true,
+      "visibleColumns": 13,
+      "hiddenColumns": 9,
+      "foldedBelowTotal": true,
+      "headerMatchesEveryRow": true,
+      "foldDataset": {
+        "total": "22",
+        "visible": "13",
+        "hidden": "9"
+      },
+      "matchesFoldSummary": true,
+      "foldSummaryExpected": {
+        "total_columns": 22,
+        "visible_columns": 13,
+        "hidden_columns": 9
+      }
+    },
+    {
+      "index": 11,
+      "file": "11-kt50030.png",
+      "mappingId": "base:kt50030",
+      "trId": "kt50030",
+      "totalColumns": 22,
+      "cardRendered": true,
+      "visibleColumns": 13,
+      "hiddenColumns": 9,
+      "foldedBelowTotal": true,
+      "headerMatchesEveryRow": true,
+      "foldDataset": {
+        "total": "22",
+        "visible": "13",
+        "hidden": "9"
+      },
+      "matchesFoldSummary": true,
+      "foldSummaryExpected": {
+        "total_columns": 22,
+        "visible_columns": 13,
+        "hidden_columns": 9
+      }
+    },
+    {
+      "index": 12,
+      "file": "12-kt00007.png",
+      "mappingId": "base:kt00007",
+      "trId": "kt00007",
+      "totalColumns": 22,
+      "cardRendered": true,
+      "visibleColumns": 13,
+      "hiddenColumns": 9,
+      "foldedBelowTotal": true,
+      "headerMatchesEveryRow": true,
+      "foldDataset": {
+        "total": "22",
+        "visible": "13",
+        "hidden": "9"
+      },
+      "matchesFoldSummary": true,
+      "foldSummaryExpected": {
+        "total_columns": 22,
+        "visible_columns": 13,
+        "hidden_columns": 9
+      }
+    },
+    {
+      "index": 13,
+      "file": "13-ka10086.png",
+      "mappingId": "base:ka10086",
+      "trId": "ka10086",
+      "totalColumns": 22,
+      "cardRendered": true,
+      "visibleColumns": 13,
+      "hiddenColumns": 9,
+      "foldedBelowTotal": true,
+      "headerMatchesEveryRow": true,
+      "foldDataset": {
+        "total": "22",
+        "visible": "13",
+        "hidden": "9"
+      },
+      "matchesFoldSummary": true,
+      "foldSummaryExpected": {
+        "total_columns": 22,
+        "visible_columns": 13,
+        "hidden_columns": 9
+      }
+    },
+    {
+      "index": 14,
+      "file": "14-ka10030.png",
+      "mappingId": "base:ka10030",
+      "trId": "ka10030",
+      "totalColumns": 22,
+      "cardRendered": true,
+      "visibleColumns": 13,
+      "hiddenColumns": 9,
+      "foldedBelowTotal": true,
+      "headerMatchesEveryRow": true,
+      "foldDataset": {
+        "total": "22",
+        "visible": "13",
+        "hidden": "9"
+      },
+      "matchesFoldSummary": true,
+      "foldSummaryExpected": {
+        "total_columns": 22,
+        "visible_columns": 13,
+        "hidden_columns": 9
+      }
+    },
+    {
+      "index": 15,
+      "file": "15-ka10063.png",
+      "mappingId": "base:ka10063",
+      "trId": "ka10063",
+      "totalColumns": 21,
+      "cardRendered": true,
+      "visibleColumns": 13,
+      "hiddenColumns": 8,
+      "foldedBelowTotal": true,
+      "headerMatchesEveryRow": true,
+      "foldDataset": {
+        "total": "21",
+        "visible": "13",
+        "hidden": "8"
+      },
+      "matchesFoldSummary": true,
+      "foldSummaryExpected": {
+        "total_columns": 21,
+        "visible_columns": 13,
+        "hidden_columns": 8
+      }
+    }
+  ]
+}

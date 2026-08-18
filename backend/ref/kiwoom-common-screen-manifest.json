@@ -382,6 +382,47 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "name",
+                "type",
+                "values",
+                "item",
+                "10",
+                "9001",
+                "27",
+                "28",
+                "302",
+                "9201",
+                "907",
+                "9203",
+                "9205",
+                "912",
+                "913",
+                "900",
+                "901",
+                "902",
+                "903",
+                "904",
+                "905",
+                "906",
+                "908",
+                "909",
+                "910",
+                "911",
+                "914",
+                "915",
+                "938",
+                "939",
+                "919",
+                "920",
+                "921",
+                "922",
+                "923",
+                "10010",
+                "2134",
+                "2135",
+                "2136"
+              ],
               "container_alias": "data",
               "field_aliases": [
                 "type",
@@ -500,6 +541,39 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "name",
+                "type",
+                "values",
+                "item",
+                "10",
+                "9001",
+                "27",
+                "28",
+                "302",
+                "9201",
+                "307",
+                "917",
+                "916",
+                "930",
+                "931",
+                "932",
+                "933",
+                "945",
+                "946",
+                "950",
+                "951",
+                "8019",
+                "957",
+                "958",
+                "918",
+                "990",
+                "991",
+                "992",
+                "993",
+                "959",
+                "924"
+              ],
               "container_alias": "data",
               "field_aliases": [
                 "type",
@@ -610,6 +684,31 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "name",
+                "type",
+                "values",
+                "item",
+                "10",
+                "13",
+                "11",
+                "12",
+                "25",
+                "27",
+                "28",
+                "14",
+                "16",
+                "17",
+                "18",
+                "26",
+                "29",
+                "30",
+                "31",
+                "32",
+                "311",
+                "567",
+                "568"
+              ],
               "container_alias": "data",
               "field_aliases": [
                 "type",
@@ -712,6 +811,55 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "name",
+                "type",
+                "values",
+                "item",
+                "10",
+                "20",
+                "13",
+                "11",
+                "12",
+                "25",
+                "27",
+                "28",
+                "14",
+                "16",
+                "17",
+                "18",
+                "15",
+                "26",
+                "29",
+                "30",
+                "31",
+                "32",
+                "311",
+                "567",
+                "568",
+                "228",
+                "290",
+                "691",
+                "851",
+                "1890",
+                "1891",
+                "1892",
+                "1030",
+                "1031",
+                "1032",
+                "1071",
+                "1072",
+                "1313",
+                "1315",
+                "1316",
+                "1314",
+                "1497",
+                "1498",
+                "620",
+                "732",
+                "852",
+                "9081"
+              ],
               "container_alias": "data",
               "field_aliases": [
                 "type",
@@ -838,6 +986,14 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "name",
+                "type",
+                "values",
+                "item",
+                "27",
+                "28"
+              ],
               "container_alias": "data",
               "field_aliases": [
                 "type",
@@ -923,6 +1079,175 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "name",
+                "type",
+                "values",
+                "item",
+                "13",
+                "215",
+                "21",
+                "216",
+                "41",
+                "61",
+                "81",
+                "51",
+                "71",
+                "91",
+                "42",
+                "62",
+                "82",
+                "52",
+                "72",
+                "92",
+                "43",
+                "63",
+                "83",
+                "53",
+                "73",
+                "93",
+                "44",
+                "64",
+                "84",
+                "54",
+                "74",
+                "94",
+                "45",
+                "65",
+                "85",
+                "55",
+                "75",
+                "95",
+                "46",
+                "66",
+                "86",
+                "56",
+                "76",
+                "96",
+                "47",
+                "67",
+                "87",
+                "57",
+                "77",
+                "97",
+                "48",
+                "68",
+                "88",
+                "58",
+                "78",
+                "98",
+                "49",
+                "69",
+                "89",
+                "59",
+                "79",
+                "99",
+                "50",
+                "70",
+                "60",
+                "90",
+                "80",
+                "100",
+                "121",
+                "122",
+                "125",
+                "126",
+                "23",
+                "24",
+                "128",
+                "129",
+                "138",
+                "139",
+                "200",
+                "201",
+                "238",
+                "291",
+                "292",
+                "293",
+                "294",
+                "295",
+                "621",
+                "631",
+                "622",
+                "632",
+                "623",
+                "633",
+                "624",
+                "634",
+                "625",
+                "635",
+                "626",
+                "636",
+                "627",
+                "637",
+                "628",
+                "638",
+                "629",
+                "639",
+                "630",
+                "640",
+                "299",
+                "6044",
+                "6045",
+                "6046",
+                "6047",
+                "6048",
+                "6049",
+                "6050",
+                "6051",
+                "6052",
+                "6053",
+                "6054",
+                "6055",
+                "6056",
+                "6057",
+                "6058",
+                "6059",
+                "6060",
+                "6061",
+                "6062",
+                "6063",
+                "6064",
+                "6065",
+                "6066",
+                "6067",
+                "6068",
+                "6069",
+                "6070",
+                "6071",
+                "6072",
+                "6073",
+                "6074",
+                "6075",
+                "6076",
+                "6077",
+                "6078",
+                "6079",
+                "6080",
+                "6081",
+                "6082",
+                "6083",
+                "6084",
+                "6085",
+                "6086",
+                "6087",
+                "6100",
+                "6101",
+                "6102",
+                "6103",
+                "6104",
+                "6105",
+                "6106",
+                "6107",
+                "6108",
+                "6109",
+                "6110",
+                "6111",
+                "6112",
+                "6113",
+                "6114",
+                "6115"
+              ],
               "container_alias": "data",
               "field_aliases": [
                 "type",
@@ -1169,6 +1494,17 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "name",
+                "type",
+                "values",
+                "item",
+                "21",
+                "131",
+                "132",
+                "135",
+                "136"
+              ],
               "container_alias": "data",
               "field_aliases": [
                 "type",
@@ -1257,6 +1593,69 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "name",
+                "type",
+                "values",
+                "item",
+                "141",
+                "161",
+                "166",
+                "146",
+                "271",
+                "151",
+                "171",
+                "176",
+                "156",
+                "281",
+                "142",
+                "162",
+                "167",
+                "147",
+                "272",
+                "152",
+                "172",
+                "177",
+                "157",
+                "282",
+                "143",
+                "163",
+                "168",
+                "148",
+                "273",
+                "153",
+                "173",
+                "178",
+                "158",
+                "283",
+                "144",
+                "164",
+                "169",
+                "149",
+                "274",
+                "154",
+                "174",
+                "179",
+                "159",
+                "284",
+                "145",
+                "165",
+                "170",
+                "150",
+                "275",
+                "155",
+                "175",
+                "180",
+                "160",
+                "285",
+                "261",
+                "262",
+                "263",
+                "264",
+                "267",
+                "268",
+                "337"
+              ],
               "container_alias": "data",
               "field_aliases": [
                 "type",
@@ -1397,6 +1796,27 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "name",
+                "type",
+                "values",
+                "item",
+                "10",
+                "20",
+                "13",
+                "11",
+                "12",
+                "25",
+                "667",
+                "668",
+                "669",
+                "36",
+                "37",
+                "38",
+                "39",
+                "265",
+                "266"
+              ],
               "container_alias": "data",
               "field_aliases": [
                 "type",
@@ -1495,6 +1915,19 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "name",
+                "type",
+                "values",
+                "item",
+                "10",
+                "20",
+                "13",
+                "11",
+                "12",
+                "25",
+                "15"
+              ],
               "container_alias": "data",
               "field_aliases": [
                 "type",
@@ -1585,6 +2018,16 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "name",
+                "type",
+                "values",
+                "item",
+                "10",
+                "25",
+                "11",
+                "12"
+              ],
               "container_alias": "data",
               "field_aliases": [
                 "type",
@@ -1671,6 +2114,24 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "name",
+                "type",
+                "values",
+                "item",
+                "10",
+                "20",
+                "13",
+                "11",
+                "12",
+                "25",
+                "14",
+                "16",
+                "17",
+                "18",
+                "15",
+                "26"
+              ],
               "container_alias": "data",
               "field_aliases": [
                 "type",
@@ -1766,6 +2227,26 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "name",
+                "type",
+                "values",
+                "item",
+                "10",
+                "20",
+                "13",
+                "11",
+                "12",
+                "25",
+                "14",
+                "252",
+                "251",
+                "253",
+                "255",
+                "254",
+                "256",
+                "257"
+              ],
               "container_alias": "data",
               "field_aliases": [
                 "type",
@@ -1863,6 +2344,22 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "name",
+                "type",
+                "values",
+                "item",
+                "307",
+                "297",
+                "592",
+                "593",
+                "305",
+                "306",
+                "689",
+                "594",
+                "382",
+                "370"
+              ],
               "container_alias": "data",
               "field_aliases": [
                 "type",
@@ -1956,6 +2453,22 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "name",
+                "type",
+                "values",
+                "item",
+                "10",
+                "20",
+                "670",
+                "671",
+                "672",
+                "673",
+                "674",
+                "675",
+                "676",
+                "706"
+              ],
               "container_alias": "data",
               "field_aliases": [
                 "type",
@@ -2049,6 +2562,15 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "name",
+                "type",
+                "values",
+                "item",
+                "20",
+                "215",
+                "214"
+              ],
               "container_alias": "data",
               "field_aliases": [
                 "type",
@@ -2135,6 +2657,18 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "name",
+                "type",
+                "values",
+                "item",
+                "20",
+                "667",
+                "668",
+                "669",
+                "666",
+                "1211"
+              ],
               "container_alias": "data",
               "field_aliases": [
                 "type",
@@ -2224,6 +2758,29 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "name",
+                "type",
+                "values",
+                "item",
+                "10",
+                "20",
+                "13",
+                "25",
+                "11",
+                "12",
+                "215",
+                "214",
+                "216",
+                "202",
+                "204",
+                "206",
+                "208",
+                "210",
+                "211",
+                "212",
+                "213"
+              ],
               "container_alias": "data",
               "field_aliases": [
                 "type",
@@ -2324,6 +2881,31 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "name",
+                "type",
+                "values",
+                "item",
+                "13",
+                "9001",
+                "14",
+                "302",
+                "9068",
+                "9008",
+                "9075",
+                "1221",
+                "1223",
+                "1224",
+                "1225",
+                "1236",
+                "1237",
+                "1238",
+                "1239",
+                "1489",
+                "1490",
+                "9069",
+                "1279"
+              ],
               "container_alias": "data",
               "field_aliases": [
                 "type",
@@ -2590,6 +3172,20 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_nm",
+                "stk_cd",
+                "dt",
+                "tm",
+                "bigd_rank",
+                "rank_chg",
+                "rank_chg_sign",
+                "past_curr_prc",
+                "base_comp_sign",
+                "base_comp_chgr",
+                "prev_base_sign",
+                "prev_base_chgr"
+              ],
               "container_alias": "item_inq_rank",
               "field_aliases": [
                 "stk_nm",
@@ -2665,6 +3261,10 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "name",
+                "gcod"
+              ],
               "container_alias": "nofi",
               "field_aliases": [
                 "gcod",
@@ -2733,6 +3333,11 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cod2",
+                "bgb",
+                "bgb_clr"
+              ],
               "container_alias": "nofj",
               "field_aliases": [
                 "cod2",
@@ -2802,6 +3407,18 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "buy_uv",
+                "rmnd_qty",
+                "evltv_prft",
+                "prft_rt",
+                "evlt_amt",
+                "buy_wght",
+                "evlt_wght"
+              ],
               "container_alias": "day_bal_rt",
               "field_aliases": [
                 "cur_prc",
@@ -2885,6 +3502,20 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cur_prc",
+                "pred_pre",
+                "acc_trde_qty",
+                "acc_trde_prica",
+                "stex_tp",
+                "tm",
+                "cntr_str",
+                "pre_rt",
+                "pri_sel_bid_unit",
+                "pri_buy_bid_unit",
+                "cntr_trde_qty",
+                "sign"
+              ],
               "container_alias": "cntr_infr",
               "field_aliases": [
                 "tm",
@@ -2962,6 +3593,25 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "trde_qty",
+                "flu_rt",
+                "high_pric",
+                "low_pric",
+                "open_pric",
+                "trde_prica",
+                "close_pric",
+                "for_netprps",
+                "orgn_netprps",
+                "ind_netprps",
+                "date",
+                "pre",
+                "for_poss",
+                "for_wght",
+                "crd_remn_rt",
+                "frgn",
+                "prm"
+              ],
               "container_alias": "stk_ddwkmm",
               "field_aliases": [
                 "date",
@@ -3112,6 +3762,19 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "pred_pre",
+                "trde_qty",
+                "dt",
+                "close_pric",
+                "limit_exh_rt",
+                "wght",
+                "gain_pos_stkcnt",
+                "chg_qty",
+                "poss_stkcnt",
+                "frgnr_limit",
+                "frgnr_limit_irds"
+              ],
               "container_alias": "stk_frgnr",
               "field_aliases": [
                 "dt",
@@ -3264,6 +3927,20 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "flu_rt",
+                "pred_pre_sig",
+                "high_pric",
+                "low_pric",
+                "open_pric",
+                "acc_trde_qty",
+                "fpr_sel_bid",
+                "fpr_buy_bid"
+              ],
               "container_alias": "newstk_recvrht_mrpr",
               "field_aliases": [
                 "stk_cd",
@@ -3343,6 +4020,20 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cur_prc",
+                "pred_pre",
+                "trde_qty",
+                "pred_pre_sig",
+                "dt",
+                "pre",
+                "new",
+                "rpya",
+                "remn",
+                "amt",
+                "shr_rt",
+                "remn_rt"
+              ],
               "container_alias": "crd_trde_trend",
               "field_aliases": [
                 "dt",
@@ -3423,6 +4114,19 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "pred_pre",
+                "trde_qty",
+                "flu_rt",
+                "pred_pre_sig",
+                "dt",
+                "close_pric",
+                "trde_wght",
+                "shrts_qty",
+                "ovr_shrts_qty",
+                "shrts_trde_prica",
+                "shrts_avg_pric"
+              ],
               "container_alias": "shrts_trnsn",
               "field_aliases": [
                 "dt",
@@ -3500,6 +4204,38 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "pred_pre",
+                "trde_qty",
+                "flu_rt",
+                "pred_pre_sig",
+                "dt",
+                "trde_prica",
+                "close_pric",
+                "cntr_str",
+                "for_netprps",
+                "orgn_netprps",
+                "ind_netprps",
+                "prid_trde_qty",
+                "for_poss",
+                "for_wght",
+                "frgn",
+                "crd_remn_rt",
+                "prm",
+                "bf_mkrt_trde_qty",
+                "opmr_trde_qty",
+                "af_mkrt_trde_qty",
+                "tot_3",
+                "bf_mkrt_trde_wght",
+                "opmr_trde_wght",
+                "af_mkrt_trde_wght",
+                "bf_mkrt_trde_prica",
+                "bf_mkrt_trde_prica_wght",
+                "opmr_trde_prica",
+                "opmr_trde_prica_wght",
+                "af_mkrt_trde_prica",
+                "af_mkrt_trde_prica_wght"
+              ],
               "container_alias": "daly_trde_dtl",
               "field_aliases": [
                 "dt",
@@ -3603,6 +4339,20 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "trde_qty",
+                "flu_rt",
+                "pred_pre_sig",
+                "high_pric",
+                "low_pric",
+                "sel_bid",
+                "buy_bid",
+                "pred_trde_qty_pre_rt"
+              ],
               "container_alias": "ntl_pric",
               "field_aliases": [
                 "stk_cd",
@@ -3687,6 +4437,22 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "trde_qty",
+                "flu_rt",
+                "pred_pre_sig",
+                "sel_bid",
+                "buy_bid",
+                "sel_req",
+                "buy_req",
+                "pred_trde_qty",
+                "stk_infr",
+                "cnt"
+              ],
               "container_alias": "updown_pric",
               "field_aliases": [
                 "stk_cd",
@@ -3772,6 +4538,19 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "trde_qty",
+                "flu_rt",
+                "pred_pre_sig",
+                "sel_bid",
+                "buy_bid",
+                "tdy_high_pric",
+                "tdy_low_pric"
+              ],
               "container_alias": "high_low_pric_alacc",
               "field_aliases": [
                 "stk_cd",
@@ -3857,6 +4636,19 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "trde_qty",
+                "flu_rt",
+                "pred_pre_sig",
+                "base_pric",
+                "stk_cls",
+                "base_pre",
+                "jmp_rt"
+              ],
               "container_alias": "pric_jmpflu",
               "field_aliases": [
                 "stk_cd",
@@ -3938,6 +4730,18 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "trde_qty",
+                "pred_pre_sig",
+                "tot_sel_req",
+                "tot_buy_req",
+                "netprps_req",
+                "buy_rt"
+              ],
               "container_alias": "bid_req_upper",
               "field_aliases": [
                 "stk_cd",
@@ -4019,6 +4823,18 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "pred_pre_sig",
+                "sdnin_rt",
+                "int",
+                "sdnin_qty",
+                "now",
+                "tot_buy_qty"
+              ],
               "container_alias": "bid_req_sdnin",
               "field_aliases": [
                 "stk_cd",
@@ -4099,6 +4915,18 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "pred_pre_sig",
+                "tot_sel_req",
+                "tot_buy_req",
+                "sdnin_rt",
+                "int",
+                "now_rt"
+              ],
               "container_alias": "req_rt_sdnin",
               "field_aliases": [
                 "stk_cd",
@@ -4181,6 +5009,18 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "flu_rt",
+                "pred_pre_sig",
+                "now_trde_qty",
+                "sdnin_rt",
+                "prev_trde_qty",
+                "sdnin_qty"
+              ],
               "container_alias": "trde_qty_sdnin",
               "field_aliases": [
                 "stk_cd",
@@ -4259,6 +5099,18 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "flu_rt",
+                "pred_pre_sig",
+                "sel_bid",
+                "buy_bid",
+                "now_trde_qty",
+                "prev_trde_qty"
+              ],
               "container_alias": "trde_qty_updt",
               "field_aliases": [
                 "stk_cd",
@@ -4339,6 +5191,19 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "flu_rt",
+                "pred_pre_sig",
+                "now_trde_qty",
+                "pric_strt",
+                "pric_end",
+                "prps_qty",
+                "prps_rt"
+              ],
               "container_alias": "prps_cnctr",
               "field_aliases": [
                 "stk_cd",
@@ -4416,6 +5281,17 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "flu_rt",
+                "pred_pre_sig",
+                "sel_bid",
+                "now_trde_qty",
+                "per"
+              ],
               "container_alias": "high_low_per",
               "field_aliases": [
                 "stk_cd",
@@ -4498,6 +5374,20 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "flu_rt",
+                "pred_pre_sig",
+                "cntr_str",
+                "now_trde_qty",
+                "sel_req",
+                "buy_req",
+                "stk_cls",
+                "cnt"
+              ],
               "container_alias": "pred_pre_flu_rt_upper",
               "field_aliases": [
                 "stk_cls",
@@ -4583,6 +5473,20 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "flu_rt",
+                "pred_pre_sig",
+                "high_pric",
+                "low_pric",
+                "open_pric",
+                "cntr_str",
+                "now_trde_qty",
+                "open_pric_pre"
+              ],
               "container_alias": "open_pric_pre_flu_rt",
               "field_aliases": [
                 "stk_cd",
@@ -4666,6 +5570,20 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "pred_pre",
+                "flu_rt",
+                "pred_pre_sig",
+                "sel_bid",
+                "buy_bid",
+                "sel_req",
+                "buy_req",
+                "base_pric",
+                "exp_cntr_pric",
+                "exp_cntr_qty"
+              ],
               "container_alias": "exp_cntr_flu_rt_upper",
               "field_aliases": [
                 "stk_cd",
@@ -4751,6 +5669,30 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "trde_qty",
+                "flu_rt",
+                "pred_pre_sig",
+                "trde_tern_rt",
+                "pred_rt",
+                "trde_amt",
+                "opmr_trde_qty",
+                "af_mkrt_trde_qty",
+                "bf_mkrt_trde_qty",
+                "opmr_pred_rt",
+                "opmr_trde_rt",
+                "opmr_trde_amt",
+                "af_mkrt_pred_rt",
+                "af_mkrt_trde_rt",
+                "af_mkrt_trde_amt",
+                "bf_mkrt_pred_rt",
+                "bf_mkrt_trde_rt",
+                "bf_mkrt_trde_amt"
+              ],
               "container_alias": "tdy_trde_qty_upper",
               "field_aliases": [
                 "stk_cd",
@@ -4842,6 +5784,14 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "trde_qty",
+                "pred_pre_sig"
+              ],
               "container_alias": "pred_trde_qty_upper",
               "field_aliases": [
                 "stk_cd",
@@ -4915,6 +5865,21 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "flu_rt",
+                "pred_pre_sig",
+                "trde_prica",
+                "sel_bid",
+                "buy_bid",
+                "now_trde_qty",
+                "pred_trde_qty",
+                "now_rank",
+                "pred_rank"
+              ],
               "container_alias": "trde_prica_upper",
               "field_aliases": [
                 "stk_cd",
@@ -4998,6 +5963,19 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "flu_rt",
+                "pred_pre_sig",
+                "now_trde_qty",
+                "sel_req",
+                "buy_req",
+                "crd_rt",
+                "stk_infr"
+              ],
               "container_alias": "crd_rt_upper",
               "field_aliases": [
                 "stk_infr",
@@ -5077,6 +6055,19 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "trde_qty",
+                "pred_pre_sig",
+                "rank",
+                "sel_bid",
+                "buy_bid",
+                "netprps_qty",
+                "gain_pos_stkcnt"
+              ],
               "container_alias": "for_dt_trde_upper",
               "field_aliases": [
                 "rank",
@@ -5156,6 +6147,21 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "pred_pre_sig",
+                "limit_exh_rt",
+                "dm1",
+                "dm2",
+                "dm3",
+                "tot",
+                "pred_pre_1",
+                "pred_pre_2",
+                "pred_pre_3"
+              ],
               "container_alias": "for_cont_nettrde_upper",
               "field_aliases": [
                 "stk_cd",
@@ -5236,6 +6242,20 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "trde_qty",
+                "pred_pre_sig",
+                "rank",
+                "limit_exh_rt",
+                "gain_pos_stkcnt",
+                "poss_stkcnt",
+                "base_limit_exh_rt",
+                "exh_rt_incrs"
+              ],
               "container_alias": "for_limit_exh_rt_incrs_upper",
               "field_aliases": [
                 "rank",
@@ -5317,6 +6337,21 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "trde_qty",
+                "flu_rt",
+                "pred_pre_sig",
+                "trde_prica",
+                "rank",
+                "sel_trde_qty",
+                "buy_trde_qty",
+                "netprps_prica",
+                "netprps_trde_qty"
+              ],
               "container_alias": "frgn_wicket_trde_upper",
               "field_aliases": [
                 "rank",
@@ -5399,6 +6434,13 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "rank",
+                "buy_qty",
+                "sell_qty",
+                "mmcm_nm",
+                "acc_netprps_qty"
+              ],
               "container_alias": "stk_sec_rank",
               "field_aliases": [
                 "rank",
@@ -5477,6 +6519,20 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "flu_rt",
+                "rank",
+                "buy_amt",
+                "sell_amt",
+                "prid_trde_qty",
+                "buy_trde_qty",
+                "sel_trde_qty",
+                "netprps_amt",
+                "netprps",
+                "prid_stkpc_flu"
+              ],
               "container_alias": "sec_trde_upper",
               "field_aliases": [
                 "rank",
@@ -5560,6 +6616,11 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "rank",
+                "mmcm_nm",
+                "mmcm_cd"
+              ],
               "container_alias": "netprps_trde_ori_rank",
               "field_aliases": [
                 "rank",
@@ -5636,6 +6697,17 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "pred_pre",
+                "dt",
+                "pre_sig",
+                "close_pric",
+                "buy_qty",
+                "netprps_qty",
+                "sel_qty",
+                "trde_wght",
+                "trde_qty_sum"
+              ],
               "container_alias": "trde_ori_prps_anly",
               "field_aliases": [
                 "dt",
@@ -5714,6 +6786,12 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "netprps_qty",
+                "netprps_amt"
+              ],
               "container_alias": "daly_orgn_trde_stk",
               "field_aliases": [
                 "stk_cd",
@@ -5787,6 +6865,19 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "pred_pre",
+                "trde_qty",
+                "flu_rt",
+                "dt",
+                "pre_sig",
+                "close_pric",
+                "limit_exh_rt",
+                "orgn_dt_acc",
+                "orgn_daly_nettrde_qty",
+                "for_dt_acc",
+                "for_daly_nettrde_qty"
+              ],
               "container_alias": "stk_orgn_trde_trnsn",
               "field_aliases": [
                 "dt",
@@ -5865,6 +6956,21 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cur_prc",
+                "pred_pre",
+                "trde_qty",
+                "flu_rt",
+                "pred_pre_sig",
+                "acc_trde_qty",
+                "cntr_tm",
+                "acc_trde_prica",
+                "stex_tp",
+                "cntr_str",
+                "cntr_str_5min",
+                "cntr_str_20min",
+                "cntr_str_60min"
+              ],
               "container_alias": "cntr_str_tm",
               "field_aliases": [
                 "cntr_tm",
@@ -5943,6 +7049,20 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cur_prc",
+                "pred_pre",
+                "trde_qty",
+                "flu_rt",
+                "pred_pre_sig",
+                "dt",
+                "acc_trde_qty",
+                "acc_trde_prica",
+                "cntr_str",
+                "cntr_str_5min",
+                "cntr_str_20min",
+                "cntr_str_60min"
+              ],
               "container_alias": "cntr_str_daly",
               "field_aliases": [
                 "dt",
@@ -6020,6 +7140,16 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "dt",
+                "delta",
+                "iv",
+                "gam",
+                "theta",
+                "vega",
+                "law",
+                "lp"
+              ],
               "container_alias": "elwdaly_snst_ix",
               "field_aliases": [
                 "dt",
@@ -6093,6 +7223,18 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cur_prc",
+                "cntr_tm",
+                "delta",
+                "iv",
+                "gam",
+                "theta",
+                "vega",
+                "law",
+                "elwtheory_pric",
+                "lp"
+              ],
               "container_alias": "elwsnst_ix_array",
               "field_aliases": [
                 "cntr_tm",
@@ -6171,6 +7313,28 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cur_prc",
+                "pred_pre",
+                "trde_qty",
+                "flu_rt",
+                "inds_cd",
+                "ind_netprps",
+                "orgn_netprps",
+                "inds_nm",
+                "pre_smbol",
+                "sc_netprps",
+                "insrnc_netprps",
+                "invtrt_netprps",
+                "bank_netprps",
+                "jnsinkm_netprps",
+                "endw_netprps",
+                "etc_corp_netprps",
+                "frgnr_netprps",
+                "native_trmt_frgnr_netprps",
+                "natn_netprps",
+                "samo_fund_netprps"
+              ],
               "container_alias": "inds_netprps",
               "field_aliases": [
                 "inds_cd",
@@ -6261,6 +7425,19 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "flu_rt",
+                "pred_pre_sig",
+                "tm",
+                "trde_ori_nm",
+                "tp",
+                "mont_trde_qty",
+                "acc_netprps"
+              ],
               "container_alias": "trde_ori_mont_trde_qty",
               "field_aliases": [
                 "tm",
@@ -6337,6 +7514,16 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "buy_qty",
+                "sell_qty",
+                "sel_scesn_tm",
+                "sel_upper_scesn_ori",
+                "buy_scesn_tm",
+                "buy_upper_scesn_ori",
+                "qry_dt",
+                "qry_tm"
+              ],
               "container_alias": "tdy_upper_scesn_ori",
               "field_aliases": [
                 "sel_scesn_tm",
@@ -6422,6 +7609,22 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "acc_trde_qty",
+                "stex_tp",
+                "open_pric_pre_flu_rt",
+                "motn_pric",
+                "dynm_dispty_rt",
+                "trde_cntr_proc_time",
+                "virelis_time",
+                "viaplc_tp",
+                "dynm_stdpc",
+                "static_stdpc",
+                "static_dispty_rt",
+                "vimotn_cnt"
+              ],
               "container_alias": "motn_stk",
               "field_aliases": [
                 "stk_cd",
@@ -6502,6 +7705,16 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "pred_pre",
+                "flu_rt",
+                "pred_pre_sig",
+                "acc_trde_qty",
+                "cntr_tm",
+                "acc_trde_prica",
+                "cntr_qty",
+                "cntr_pric"
+              ],
               "container_alias": "tdy_pred_cntr_qty",
               "field_aliases": [
                 "cntr_tm",
@@ -6580,6 +7793,19 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "pre_sig",
+                "pre_rt",
+                "netslmt_qty",
+                "netslmt_amt",
+                "prsm_avg_pric",
+                "avg_pric_pre",
+                "dt_trde_qty"
+              ],
               "container_alias": "invsr_daly_trde_stk",
               "field_aliases": [
                 "stk_cd",
@@ -6660,6 +7886,28 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cur_prc",
+                "pred_pre",
+                "flu_rt",
+                "dt",
+                "pre_sig",
+                "acc_trde_qty",
+                "acc_trde_prica",
+                "orgn",
+                "ind_invsr",
+                "frgnr_invsr",
+                "insrnc",
+                "invtrt",
+                "bank",
+                "penfnd_etc",
+                "natn",
+                "etc_corp",
+                "fnnc_invt",
+                "etc_fnnc",
+                "samo_fund",
+                "natfor"
+              ],
               "container_alias": "stk_invsr_orgn",
               "field_aliases": [
                 "dt",
@@ -6749,6 +7997,25 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cur_prc",
+                "pred_pre",
+                "dt",
+                "acc_trde_prica",
+                "orgn",
+                "ind_invsr",
+                "frgnr_invsr",
+                "insrnc",
+                "invtrt",
+                "bank",
+                "penfnd_etc",
+                "natn",
+                "etc_corp",
+                "fnnc_invt",
+                "etc_fnnc",
+                "samo_fund",
+                "natfor"
+              ],
               "container_alias": "stk_invsr_orgn_chart",
               "field_aliases": [
                 "dt",
@@ -6836,6 +8103,21 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "orgn",
+                "ind_invsr",
+                "frgnr_invsr",
+                "insrnc",
+                "invtrt",
+                "bank",
+                "penfnd_etc",
+                "natn",
+                "etc_corp",
+                "fnnc_invt",
+                "etc_fnnc",
+                "samo_fund",
+                "natfor"
+              ],
               "container_alias": "stk_invsr_orgn_tot",
               "field_aliases": [
                 "ind_invsr",
@@ -6920,6 +8202,24 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "flu_rt",
+                "pre_sig",
+                "acc_trde_qty",
+                "rank",
+                "orgn_nettrde_qty",
+                "orgn_nettrde_amt",
+                "nettrde_qty",
+                "nettrde_amt",
+                "orgn_nettrde_avg_pric",
+                "for_nettrde_qty",
+                "for_nettrde_amt",
+                "for_nettrde_avg_pric"
+              ],
               "container_alias": "eql_nettrde_rank",
               "field_aliases": [
                 "stk_cd",
@@ -7006,6 +8306,29 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "flu_rt",
+                "pre_sig",
+                "acc_trde_qty",
+                "buy_qty",
+                "sell_qty",
+                "buy_amt",
+                "sell_amt",
+                "netprps_qty",
+                "netprps_amt",
+                "netprps_amt_irds",
+                "buy_amt_irds",
+                "sell_amt_irds",
+                "buy_qty_irds",
+                "sell_qty_irds",
+                "prev_netprps_amt",
+                "prev_pot_netprps_qty",
+                "netprps_irds"
+              ],
               "container_alias": "opmr_invsr_trde",
               "field_aliases": [
                 "stk_cd",
@@ -7095,6 +8418,17 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "tm",
+                "orgn",
+                "frgnr_invsr",
+                "invtrt",
+                "insrnc",
+                "bank",
+                "penfnd_etc",
+                "etc_corp",
+                "natn"
+              ],
               "container_alias": "opmr_invsr_trde_chart",
               "field_aliases": [
                 "tm",
@@ -7172,6 +8506,13 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "buy_qty",
+                "sel_qty",
+                "netslmt"
+              ],
               "container_alias": "opmr_invsr_trde_upper",
               "field_aliases": [
                 "stk_cd",
@@ -7245,6 +8586,27 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "trde_qty",
+                "flu_rt",
+                "pre_sig",
+                "orgn",
+                "ind_invsr",
+                "frgnr_invsr",
+                "insrnc",
+                "invtrt",
+                "bank",
+                "penfnd_etc",
+                "natn",
+                "etc_corp",
+                "fnnc_invt",
+                "etc_fnnc",
+                "samo_fund"
+              ],
               "container_alias": "opaf_invsr_trde",
               "field_aliases": [
                 "stk_cd",
@@ -7331,6 +8693,14 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "dt",
+                "dbrt_trde_cntrcnt",
+                "dbrt_trde_rpy",
+                "rmnd",
+                "remn_amt",
+                "dbrt_trde_irds"
+              ],
               "container_alias": "dbrt_trde_trnsn",
               "field_aliases": [
                 "dt",
@@ -7404,6 +8774,14 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_nm",
+                "stk_cd",
+                "dbrt_trde_cntrcnt",
+                "dbrt_trde_rpy",
+                "rmnd",
+                "remn_amt"
+              ],
               "container_alias": "dbrt_trde_upper_10stk",
               "field_aliases": [
                 "stk_nm",
@@ -7484,6 +8862,22 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_nm",
+                "stk_cd",
+                "cntr_qty",
+                "cntr_pric",
+                "loan_dt",
+                "crd_tp",
+                "tdy_trde_cmsn",
+                "tdy_trde_tax",
+                "buy_uv",
+                "tdy_sel_pl",
+                "pl_rt",
+                "wthd_alowa",
+                "stk_cd_1",
+                "tdy_sel_pl_1"
+              ],
               "container_alias": "dt_stk_div_rlzt_pl",
               "field_aliases": [
                 "stk_nm",
@@ -7565,6 +8959,22 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_nm",
+                "stk_cd",
+                "dt",
+                "cntr_qty",
+                "cntr_pric",
+                "loan_dt",
+                "crd_tp",
+                "tdy_trde_cmsn",
+                "tdy_trde_tax",
+                "buy_uv",
+                "tdy_sel_pl",
+                "pl_rt",
+                "wthd_alowa",
+                "tdy_htssel_cmsn"
+              ],
               "container_alias": "dt_stk_rlzt_pl",
               "field_aliases": [
                 "dt",
@@ -7645,6 +9055,14 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "dt",
+                "tdy_trde_cmsn",
+                "tdy_trde_tax",
+                "buy_amt",
+                "sell_amt",
+                "tdy_sel_pl"
+              ],
               "container_alias": "dt_rlzt_pl",
               "field_aliases": [
                 "dt",
@@ -7724,6 +9142,38 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "acnt_no",
+                "ord_no",
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "cntr_qty",
+                "sel_bid",
+                "buy_bid",
+                "stex_tp",
+                "tm",
+                "cntr_pric",
+                "io_tp_nm",
+                "ord_qty",
+                "trde_tp",
+                "tdy_trde_cmsn",
+                "tdy_trde_tax",
+                "orig_ord_no",
+                "ind_invsr",
+                "ord_stt",
+                "ord_pric",
+                "stex_tp_txt",
+                "mang_empno",
+                "oso_qty",
+                "cntr_no",
+                "sor_yn",
+                "stop_pric",
+                "tsk_tp",
+                "cntr_tot_amt",
+                "unit_cntr_pric",
+                "unit_cntr_qty"
+              ],
               "container_alias": "oso",
               "field_aliases": [
                 "acnt_no",
@@ -7823,6 +9273,27 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "ord_no",
+                "stk_nm",
+                "stk_cd",
+                "cntr_qty",
+                "stex_tp",
+                "cntr_pric",
+                "io_tp_nm",
+                "ord_qty",
+                "trde_tp",
+                "tdy_trde_cmsn",
+                "tdy_trde_tax",
+                "orig_ord_no",
+                "ord_pric",
+                "ord_stt",
+                "ord_tm",
+                "stex_tp_txt",
+                "oso_qty",
+                "sor_yn",
+                "stop_pric"
+              ],
               "container_alias": "cntr",
               "field_aliases": [
                 "ord_no",
@@ -7907,6 +9378,17 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_nm",
+                "stk_cd",
+                "cntr_qty",
+                "cntr_pric",
+                "tdy_trde_cmsn",
+                "tdy_trde_tax",
+                "buy_uv",
+                "tdy_sel_pl",
+                "pl_rt"
+              ],
               "container_alias": "tdy_rlzt_pl_dtl",
               "field_aliases": [
                 "stk_nm",
@@ -7985,6 +9467,17 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cur_prc",
+                "pred_pre",
+                "flu_rt",
+                "dt",
+                "pre_sig",
+                "acc_trde_qty",
+                "buy_qty",
+                "sell_qty",
+                "netprps_qty"
+              ],
               "container_alias": "sec_stk_trde_trend",
               "field_aliases": [
                 "dt",
@@ -8061,6 +9554,16 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cur_prc",
+                "pred_pre",
+                "trde_qty",
+                "pred_pre_sig",
+                "high_pric",
+                "low_pric",
+                "open_pric",
+                "cntr_tm"
+              ],
               "container_alias": "stk_tic_chart_qry",
               "field_aliases": [
                 "cur_prc",
@@ -8139,6 +9642,16 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cur_prc",
+                "pred_pre",
+                "trde_qty",
+                "pred_pre_sig",
+                "high_pric",
+                "low_pric",
+                "open_pric",
+                "cntr_tm"
+              ],
               "container_alias": "stk_min_pole_chart_qry",
               "field_aliases": [
                 "cur_prc",
@@ -8215,6 +9728,18 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cur_prc",
+                "pred_pre",
+                "trde_qty",
+                "pred_pre_sig",
+                "dt",
+                "high_pric",
+                "low_pric",
+                "open_pric",
+                "trde_prica",
+                "trde_tern_rt"
+              ],
               "container_alias": "stk_dt_pole_chart_qry",
               "field_aliases": [
                 "cur_prc",
@@ -8293,6 +9818,18 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cur_prc",
+                "pred_pre",
+                "trde_qty",
+                "pred_pre_sig",
+                "dt",
+                "high_pric",
+                "low_pric",
+                "open_pric",
+                "trde_prica",
+                "trde_tern_rt"
+              ],
               "container_alias": "stk_stk_pole_chart_qry",
               "field_aliases": [
                 "cur_prc",
@@ -8371,6 +9908,18 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cur_prc",
+                "pred_pre",
+                "trde_qty",
+                "pred_pre_sig",
+                "dt",
+                "high_pric",
+                "low_pric",
+                "open_pric",
+                "trde_prica",
+                "trde_tern_rt"
+              ],
               "container_alias": "stk_mth_pole_chart_qry",
               "field_aliases": [
                 "cur_prc",
@@ -8450,6 +9999,20 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cur_prc",
+                "pred_pre",
+                "acc_trde_qty",
+                "acc_trde_prica",
+                "stex_tp",
+                "tm",
+                "cntr_str",
+                "pre_rt",
+                "pri_sel_bid_unit",
+                "pri_buy_bid_unit",
+                "cntr_trde_qty",
+                "sign"
+              ],
               "container_alias": "tdy_pred_cntr",
               "field_aliases": [
                 "tm",
@@ -8527,6 +10090,25 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "dt",
+                "loan_dt",
+                "crd_tp",
+                "tdy_trde_cmsn",
+                "tdy_trde_tax",
+                "pur_amt",
+                "tdy_sel_pl",
+                "rmnd_qty",
+                "expr_dt",
+                "setl_remn",
+                "pur_pric",
+                "clrn_alow_qty",
+                "crd_amt",
+                "crd_int"
+              ],
               "container_alias": "acnt_prft_rt",
               "field_aliases": [
                 "dt",
@@ -8611,6 +10193,30 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "trde_qty",
+                "flu_rt",
+                "high_pric",
+                "low_pric",
+                "open_pric",
+                "close_pric",
+                "orgn",
+                "for_netprps",
+                "orgn_netprps",
+                "ind_netprps",
+                "date",
+                "pred_rt",
+                "crd_rt",
+                "frgn",
+                "prm",
+                "for_poss",
+                "for_wght",
+                "crd_remn_rt",
+                "amt_mn",
+                "ind",
+                "for_qty",
+                "for_rt"
+              ],
               "container_alias": "daly_stkpc",
               "field_aliases": [
                 "date",
@@ -8698,6 +10304,22 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "ord_no",
+                "cur_prc",
+                "cntr_qty",
+                "stex_tp",
+                "io_tp_nm",
+                "ord_qty",
+                "trde_tp",
+                "ord_pric",
+                "ord_stt",
+                "stex_tp_txt",
+                "sell_tp",
+                "osop_qty"
+              ],
               "container_alias": "osop",
               "field_aliases": [
                 "stk_cd",
@@ -8779,6 +10401,15 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cur_prc",
+                "trde_qty",
+                "dt",
+                "high_pric",
+                "low_pric",
+                "open_pric",
+                "trde_prica"
+              ],
               "container_alias": "stk_yr_pole_chart_qry",
               "field_aliases": [
                 "cur_prc",
@@ -8852,6 +10483,71 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "trde_qty",
+                "flu_rt",
+                "pred_pre_sig",
+                "dt",
+                "high_pric",
+                "low_pric",
+                "open_pric",
+                "trde_prica",
+                "cntr_tm",
+                "cntr_qty",
+                "sel_bid",
+                "buy_bid",
+                "cntr_str",
+                "close_pric",
+                "base_pric",
+                "exp_cntr_pric",
+                "tot_sel_req",
+                "tot_buy_req",
+                "upl_pric",
+                "lst_pric",
+                "exp_cntr_qty",
+                "delta",
+                "stkcnt",
+                "theory_pric",
+                "gam",
+                "theta",
+                "vega",
+                "law",
+                "cap",
+                "fav",
+                "mac",
+                "tot_sel_cnt",
+                "tot_buy_cnt",
+                "prty",
+                "elwexec_pric",
+                "cnvt_rt",
+                "innr_vltl",
+                "pred_trde_qty_pre",
+                "sel_1th_bid",
+                "sel_2th_bid",
+                "sel_3th_bid",
+                "sel_4th_bid",
+                "sel_5th_bid",
+                "buy_1th_bid",
+                "buy_2th_bid",
+                "buy_3th_bid",
+                "buy_4th_bid",
+                "buy_5th_bid",
+                "bid_tm",
+                "pri_sel_req",
+                "pri_buy_req",
+                "pri_sel_cnt",
+                "pri_buy_cnt",
+                "gear",
+                "pl_qutr",
+                "cap_support",
+                "elwexpr_dt",
+                "cntr_engg",
+                "cntr_pred_pre"
+              ],
               "container_alias": "atn_stk_infr",
               "field_aliases": [
                 "stk_cd",
@@ -8985,6 +10681,21 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "flu_rt",
+                "pred_pre_sig",
+                "acc_trde_qty",
+                "acc_trde_prica",
+                "rank",
+                "sel_tot_req",
+                "buy_tot_req",
+                "tdy_close_pric",
+                "tdy_close_pric_flu_rt"
+              ],
               "container_alias": "ovt_sigpric_flu_rt_rank",
               "field_aliases": [
                 "rank",
@@ -9063,6 +10774,22 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "name",
+                "code",
+                "marketCode",
+                "listCount",
+                "auditInfo",
+                "regDay",
+                "lastPrice",
+                "state",
+                "marketName",
+                "upName",
+                "upSizeName",
+                "companyClassName",
+                "orderWarning",
+                "nxtEnable"
+              ],
               "container_alias": "list",
               "field_aliases": [
                 "code",
@@ -9214,6 +10941,12 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "name",
+                "code",
+                "marketCode",
+                "group"
+              ],
               "container_alias": "list",
               "field_aliases": [
                 "marketCode",
@@ -9281,6 +11014,11 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "name",
+                "code",
+                "gb"
+              ],
               "container_alias": "list",
               "field_aliases": [
                 "code",
@@ -9356,6 +11094,27 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "rank",
+                "orgn_nettrde_amt",
+                "orgn_nettrde_qty",
+                "nettrde_qty",
+                "nettrde_amt",
+                "prid_stkpc_flu_rt",
+                "orgn_cont_netprps_dys",
+                "orgn_cont_netprps_qty",
+                "orgn_cont_netprps_amt",
+                "frgnr_nettrde_qty",
+                "frgnr_nettrde_amt",
+                "frgnr_cont_netprps_dys",
+                "frgnr_cont_netprps_qty",
+                "frgnr_cont_netprps_amt",
+                "tot_cont_netprps_dys",
+                "tot_cont_nettrde_qty",
+                "tot_cont_netprps_amt"
+              ],
               "container_alias": "orgn_frgnr_cont_trde_prst",
               "field_aliases": [
                 "rank",
@@ -9442,6 +11201,19 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_nm",
+                "stk_cd",
+                "buy_qty",
+                "sell_qty",
+                "sell_amt",
+                "buy_amt",
+                "prft_rt",
+                "pl_amt",
+                "buy_avg_pric",
+                "sel_avg_pric",
+                "cmsn_alm_tax"
+              ],
               "container_alias": "tdy_trde_diary",
               "field_aliases": [
                 "stk_nm",
@@ -9524,6 +11296,10 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "name",
+                "seq"
+              ],
               "container_alias": "data",
               "field_aliases": [
                 "seq",
@@ -9599,6 +11375,18 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "10",
+                "13",
+                "25",
+                "11",
+                "12",
+                "9001",
+                "302",
+                "16",
+                "17",
+                "18"
+              ],
               "container_alias": "data",
               "field_aliases": [
                 "9001",
@@ -9683,12 +11471,16 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "jmcode"
+              ],
               "container_alias": "data",
               "field_aliases": [
                 "jmcode"
               ]
             },
             {
+              "column_priority": [],
               "container_alias": "data",
               "field_aliases": []
             }
@@ -9832,6 +11624,20 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "flu_rt",
+                "pred_pre_sig",
+                "high_pric",
+                "low_pric",
+                "open_pric",
+                "sel_bid",
+                "buy_bid",
+                "now_trde_qty"
+              ],
               "container_alias": "inds_stkpc",
               "field_aliases": [
                 "stk_cd",
@@ -9909,6 +11715,23 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "trde_qty",
+                "flu_rt",
+                "pre_sig",
+                "trde_prica",
+                "wght",
+                "upl",
+                "rising",
+                "stdns",
+                "fall",
+                "lst",
+                "flo_stk_num"
+              ],
               "container_alias": "all_inds_idex",
               "field_aliases": [
                 "stk_cd",
@@ -9990,6 +11813,16 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cur_prc",
+                "pred_pre",
+                "trde_qty",
+                "pred_pre_sig",
+                "high_pric",
+                "low_pric",
+                "open_pric",
+                "cntr_tm"
+              ],
               "container_alias": "inds_tic_chart_qry",
               "field_aliases": [
                 "cur_prc",
@@ -10066,6 +11899,17 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cur_prc",
+                "pred_pre",
+                "trde_qty",
+                "pred_pre_sig",
+                "high_pric",
+                "low_pric",
+                "open_pric",
+                "acc_trde_qty",
+                "cntr_tm"
+              ],
               "container_alias": "inds_min_pole_qry",
               "field_aliases": [
                 "cur_prc",
@@ -10142,6 +11986,15 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cur_prc",
+                "trde_qty",
+                "dt",
+                "high_pric",
+                "low_pric",
+                "open_pric",
+                "trde_prica"
+              ],
               "container_alias": "inds_dt_pole_qry",
               "field_aliases": [
                 "cur_prc",
@@ -10216,6 +12069,15 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cur_prc",
+                "trde_qty",
+                "dt",
+                "high_pric",
+                "low_pric",
+                "open_pric",
+                "trde_prica"
+              ],
               "container_alias": "inds_stk_pole_qry",
               "field_aliases": [
                 "cur_prc",
@@ -10290,6 +12152,15 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cur_prc",
+                "trde_qty",
+                "dt",
+                "high_pric",
+                "low_pric",
+                "open_pric",
+                "trde_prica"
+              ],
               "container_alias": "inds_mth_pole_qry",
               "field_aliases": [
                 "cur_prc",
@@ -10364,6 +12235,15 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cur_prc",
+                "trde_qty",
+                "dt",
+                "high_pric",
+                "low_pric",
+                "open_pric",
+                "trde_prica"
+              ],
               "container_alias": "inds_yr_pole_qry",
               "field_aliases": [
                 "cur_prc",
@@ -10440,6 +12320,14 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "dt",
+                "dbrt_trde_cntrcnt",
+                "dbrt_trde_rpy",
+                "rmnd",
+                "remn_amt",
+                "dbrt_trde_irds"
+              ],
               "container_alias": "dbrt_trde_trnsn",
               "field_aliases": [
                 "dt",
@@ -10519,6 +12407,18 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "trde_qty",
+                "pre_sig",
+                "rank",
+                "base_pre",
+                "jmp_rt",
+                "trde_end_elwbase_pric"
+              ],
               "container_alias": "elwpric_jmpflu",
               "field_aliases": [
                 "stk_cd",
@@ -10599,6 +12499,16 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "trde_qty",
+                "flu_rt",
+                "buy_trde_qty",
+                "sel_trde_qty",
+                "netprps",
+                "stkpc_flu"
+              ],
               "container_alias": "trde_ori_elwnettrde_upper",
               "field_aliases": [
                 "stk_cd",
@@ -10673,6 +12583,18 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cur_prc",
+                "pred_pre",
+                "trde_qty",
+                "flu_rt",
+                "dt",
+                "trde_prica",
+                "pre_tp",
+                "wght",
+                "chg_qty",
+                "lprmnd_qty"
+              ],
               "container_alias": "elwlpposs_daly_trnsn",
               "field_aliases": [
                 "dt",
@@ -10752,6 +12674,23 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "trde_qty",
+                "flu_rt",
+                "dispty_rt",
+                "basis",
+                "theory_pric",
+                "pre_tp",
+                "isscomp_nm",
+                "sqnc",
+                "base_aset_nm",
+                "rght_tp",
+                "srvive_dys"
+              ],
               "container_alias": "elwdispty_rt",
               "field_aliases": [
                 "stk_cd",
@@ -10836,6 +12775,47 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "trde_qty",
+                "flu_rt",
+                "trde_prica",
+                "sel_bid",
+                "buy_bid",
+                "expr_dt",
+                "pred_trde_qty",
+                "delta",
+                "dispty_rt",
+                "pre_tp",
+                "theory_pric",
+                "lpmmcm_nm_1",
+                "isscomp_nm",
+                "sqnc",
+                "base_aset_nm",
+                "rght_tp",
+                "prty",
+                "innr_vltl",
+                "exec_pric",
+                "cnvt_rt",
+                "lpposs_rt",
+                "srvive_dys",
+                "lpmmcm_nm",
+                "lpmmcm_nm_2",
+                "trde_qty_pre",
+                "gear_rt",
+                "pl_qutr_rt",
+                "cfp",
+                "lvrg",
+                "pl_qutr_pt",
+                "fin_trde_dt",
+                "flo_dt",
+                "lpinitlast_suply_dt",
+                "xraymont_cntr_qty_arng_trde_tp",
+                "xraymont_cntr_qty_profa_100tp"
+              ],
               "container_alias": "elwcnd_qry",
               "field_aliases": [
                 "stk_cd",
@@ -10942,6 +12922,19 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "trde_qty",
+                "flu_rt",
+                "pre_sig",
+                "trde_prica",
+                "rank",
+                "sel_req",
+                "buy_req"
+              ],
               "container_alias": "elwflu_rt_rank",
               "field_aliases": [
                 "rank",
@@ -11020,6 +13013,20 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "trde_qty",
+                "flu_rt",
+                "pre_sig",
+                "trde_prica",
+                "rank",
+                "sel_req",
+                "buy_req",
+                "netprps_req"
+              ],
               "container_alias": "elwreq_rank",
               "field_aliases": [
                 "stk_cd",
@@ -11097,6 +13104,16 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "flu_rt",
+                "pre_sig",
+                "acc_trde_qty",
+                "alacc_rt"
+              ],
               "container_alias": "elwalacc_rt",
               "field_aliases": [
                 "stk_cd",
@@ -11172,6 +13189,12 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "for_netprps_qty",
+                "orgn_netprps_qty",
+                "etfprft_rt",
+                "cntr_prft_rt"
+              ],
               "container_alias": "etfprft_rt_lst",
               "field_aliases": [
                 "etfprft_rt",
@@ -11304,6 +13327,22 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cur_prc",
+                "pred_pre",
+                "trde_qty",
+                "pre_sig",
+                "acc_trde_prica",
+                "pre_rt",
+                "nav",
+                "cntr_dt",
+                "trace_eor_rt",
+                "navidex_dispty_rt",
+                "navetfdispty_rt",
+                "trace_cur_prc",
+                "trace_pred_pre",
+                "trace_pre_sig"
+              ],
               "container_alias": "etfdaly_trnsn",
               "field_aliases": [
                 "cntr_dt",
@@ -11388,6 +13427,26 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "pred_pre",
+                "trde_qty",
+                "pre_sig",
+                "close_pric",
+                "pre_rt",
+                "stk_cls",
+                "nav",
+                "trace_eor_rt",
+                "trace_idex",
+                "txbs",
+                "dvid_bf_base",
+                "pred_dvida",
+                "trace_idex_nm",
+                "drng",
+                "trace_idex_cd",
+                "trace_flu_rt"
+              ],
               "container_alias": "etfall_mrpr",
               "field_aliases": [
                 "stk_cd",
@@ -11471,6 +13530,22 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "pred_pre",
+                "trde_qty",
+                "flu_rt",
+                "pre_sig",
+                "trde_prica",
+                "tm",
+                "close_pric",
+                "nav",
+                "trace_idex",
+                "navidex",
+                "navetf",
+                "trace",
+                "trace_idex_pred_pre",
+                "trace_idex_pred_pre_sig"
+              ],
               "container_alias": "etftisl_trnsn",
               "field_aliases": [
                 "tm",
@@ -11555,6 +13630,14 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cur_prc",
+                "pred_pre",
+                "trde_qty",
+                "pre_sig",
+                "cntr_tm",
+                "stex_tp"
+              ],
               "container_alias": "etftisl_cntr_array",
               "field_aliases": [
                 "cntr_tm",
@@ -11632,6 +13715,15 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "dt",
+                "acc_trde_qty",
+                "cur_prc_n",
+                "pred_pre_n",
+                "for_netprps_qty",
+                "orgn_netprps_qty",
+                "pre_sig_n"
+              ],
               "container_alias": "etfnetprps_qty_array",
               "field_aliases": [
                 "dt",
@@ -11709,6 +13801,20 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "base_pric",
+                "nav",
+                "dispty_rt",
+                "wonju_pric",
+                "trace_eor_rt",
+                "stkcnt",
+                "repl_pric",
+                "navpred_pre",
+                "navflu_rt",
+                "for_rmnd_qty",
+                "conv_pric",
+                "drstk"
+              ],
               "container_alias": "etfnavarray",
               "field_aliases": [
                 "nav",
@@ -11786,6 +13892,13 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cur_prc",
+                "pred_pre",
+                "trde_qty",
+                "pre_sig",
+                "for_netprps"
+              ],
               "container_alias": "etftisl_trnsn",
               "field_aliases": [
                 "cur_prc",
@@ -11856,6 +13969,21 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "pred_pre",
+                "trde_qty",
+                "flu_rt",
+                "pre_sig",
+                "acc_trde_prica",
+                "tm",
+                "cntr_str",
+                "cntr_pric",
+                "trde_tern_rt",
+                "cntr_trde_qty",
+                "pri_sel_bid_unit",
+                "pri_buy_bid_unit",
+                "trde_pre"
+              ],
               "container_alias": "gold_cntr",
               "field_aliases": [
                 "cntr_pric",
@@ -11935,6 +14063,21 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cur_prc",
+                "pred_pre",
+                "trde_qty",
+                "flu_rt",
+                "dt",
+                "high_pric",
+                "low_pric",
+                "open_pric",
+                "pre_sig",
+                "acc_trde_prica",
+                "orgn_netprps",
+                "for_netprps",
+                "ind_netprps"
+              ],
               "container_alias": "gold_daly_trnsn",
               "field_aliases": [
                 "cur_prc",
@@ -12015,6 +14158,17 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cur_prc",
+                "pred_pre",
+                "trde_qty",
+                "pred_pre_sig",
+                "dt",
+                "high_pric",
+                "low_pric",
+                "open_pric",
+                "cntr_tm"
+              ],
               "container_alias": "gds_tic_chart_qry",
               "field_aliases": [
                 "cur_prc",
@@ -12091,6 +14245,18 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cur_prc",
+                "pred_pre",
+                "trde_qty",
+                "pred_pre_sig",
+                "dt",
+                "high_pric",
+                "low_pric",
+                "open_pric",
+                "acc_trde_qty",
+                "cntr_tm"
+              ],
               "container_alias": "gds_min_chart_qry",
               "field_aliases": [
                 "cur_prc",
@@ -12168,6 +14334,16 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cur_prc",
+                "pred_pre_sig",
+                "dt",
+                "high_pric",
+                "low_pric",
+                "open_pric",
+                "acc_trde_qty",
+                "acc_trde_prica"
+              ],
               "container_alias": "gds_day_chart_qry",
               "field_aliases": [
                 "cur_prc",
@@ -12243,6 +14419,15 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cur_prc",
+                "dt",
+                "high_pric",
+                "low_pric",
+                "open_pric",
+                "acc_trde_qty",
+                "acc_trde_prica"
+              ],
               "container_alias": "gds_week_chart_qry",
               "field_aliases": [
                 "cur_prc",
@@ -12317,6 +14502,15 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cur_prc",
+                "dt",
+                "high_pric",
+                "low_pric",
+                "open_pric",
+                "acc_trde_qty",
+                "acc_trde_prica"
+              ],
               "container_alias": "gds_month_chart_qry",
               "field_aliases": [
                 "cur_prc",
@@ -12389,6 +14583,16 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stex_tp",
+                "exp_cntr_pric",
+                "exp_pred_pre",
+                "exp_flu_rt",
+                "exp_acc_trde_qty",
+                "exp_cntr_trde_qty",
+                "exp_tm",
+                "exp_pre_sig"
+              ],
               "container_alias": "gold_expt_exec",
               "field_aliases": [
                 "exp_cntr_pric",
@@ -12463,6 +14667,17 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "pred_pre",
+                "trde_qty",
+                "pred_pre_sig",
+                "dt",
+                "high_pric",
+                "low_pric",
+                "open_pric",
+                "cntr_tm",
+                "cntr_pric"
+              ],
               "container_alias": "gds_tic_chart_qry",
               "field_aliases": [
                 "cntr_pric",
@@ -12538,6 +14753,19 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "pred_pre",
+                "trde_qty",
+                "pred_pre_sig",
+                "dt",
+                "high_pric",
+                "low_pric",
+                "open_pric",
+                "acc_trde_qty",
+                "cntr_tm",
+                "acc_trde_prica",
+                "cntr_pric"
+              ],
               "container_alias": "gds_min_chart_qry",
               "field_aliases": [
                 "cntr_pric",
@@ -12684,6 +14912,23 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "pred_pre",
+                "trde_qty",
+                "flu_rt",
+                "pre_sig",
+                "acc_trde_prica",
+                "stex_tp",
+                "tm",
+                "cntr_str",
+                "cntr_pric",
+                "trde_tern_rt",
+                "cntr_trde_qty",
+                "pri_sel_bid_unit",
+                "pri_buy_bid_unit",
+                "trde_pre",
+                "lpmmcm_nm_1"
+              ],
               "container_alias": "gold_bid",
               "field_aliases": [
                 "cntr_pric",
@@ -12762,6 +15007,26 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_nm",
+                "stk_cd",
+                "buy_uv",
+                "all_dfrt_trst_sell_qty",
+                "sell_qty_irds",
+                "all_dfrt_trst_sell_amt",
+                "sell_amt_irds",
+                "all_dfrt_trst_buy_qty",
+                "buy_qty_irds",
+                "all_dfrt_trst_buy_amt",
+                "buy_amt_irds",
+                "all_dfrt_trst_netprps_qty",
+                "all_dfrt_trst_netprps_amt",
+                "netprps_amt_irds",
+                "acc_netprps_qty",
+                "netprps_qty_irds",
+                "sell_uv",
+                "acc_netprps_amt"
+              ],
               "container_alias": "inve_trad_stat",
               "field_aliases": [
                 "all_dfrt_trst_sell_qty",
@@ -12850,6 +15115,17 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "flu_rt",
+                "flu_sig",
+                "dt_prft_rt",
+                "thema_grp_cd",
+                "thema_nm",
+                "stk_num",
+                "rising_stk_num",
+                "fall_stk_num",
+                "main_stk"
+              ],
               "container_alias": "thema_grp",
               "field_aliases": [
                 "thema_grp_cd",
@@ -12926,6 +15202,20 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "flu_rt",
+                "acc_trde_qty",
+                "sel_bid",
+                "buy_bid",
+                "sel_req",
+                "buy_req",
+                "flu_sig",
+                "dt_prft_rt_n"
+              ],
               "container_alias": "thema_comp_stk",
               "field_aliases": [
                 "stk_cd",
@@ -13008,6 +15298,19 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "flu_rt",
+                "acc_trde_qty",
+                "rank",
+                "flu_sig",
+                "prm_sell_amt",
+                "prm_buy_amt",
+                "prm_netprps_amt"
+              ],
               "container_alias": "prm_netprps_upper_50",
               "field_aliases": [
                 "rank",
@@ -13086,6 +15389,19 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "pred_pre",
+                "flu_sig",
+                "netprps_prica",
+                "buy_cntr_qty",
+                "buy_cntr_amt",
+                "sel_cntr_qty",
+                "sel_cntr_amt",
+                "all_trde_rt"
+              ],
               "container_alias": "stk_prm_trde_prst",
               "field_aliases": [
                 "stk_cd",
@@ -13172,6 +15488,26 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cntr_tm",
+                "basis",
+                "kospi200",
+                "dfrt_trde_sel",
+                "dfrt_trde_buy",
+                "dfrt_trde_netprps",
+                "ndiffpro_trde_sel",
+                "ndiffpro_trde_buy",
+                "ndiffpro_trde_netprps",
+                "dfrt_trde_sell_qty",
+                "dfrt_trde_buy_qty",
+                "dfrt_trde_netprps_qty",
+                "ndiffpro_trde_sell_qty",
+                "ndiffpro_trde_buy_qty",
+                "ndiffpro_trde_netprps_qty",
+                "all_sel",
+                "all_buy",
+                "all_netprps"
+              ],
               "container_alias": "prm_trde_trnsn",
               "field_aliases": [
                 "cntr_tm",
@@ -13256,6 +15592,15 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "dt",
+                "buy_dfrt_trde_qty",
+                "buy_dfrt_trde_amt",
+                "buy_dfrt_trde_irds_amt",
+                "sel_dfrt_trde_qty",
+                "sel_dfrt_trde_amt",
+                "sel_dfrt_trde_irds_amt"
+              ],
               "container_alias": "prm_trde_dfrt_remn_trnsn",
               "field_aliases": [
                 "dt",
@@ -13331,6 +15676,17 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "dt",
+                "basis",
+                "kospi200",
+                "dfrt_trde_tdy",
+                "dfrt_trde_acc",
+                "ndiffpro_trde_tdy",
+                "ndiffpro_trde_acc",
+                "all_tdy",
+                "all_acc"
+              ],
               "container_alias": "prm_trde_acc_trnsn",
               "field_aliases": [
                 "dt",
@@ -13407,6 +15763,26 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cur_prc",
+                "pred_pre",
+                "trde_qty",
+                "flu_rt",
+                "pre_sig",
+                "stex_tp",
+                "tm",
+                "prm_sell_amt",
+                "prm_buy_amt",
+                "prm_netprps_amt",
+                "base_pric_tm",
+                "dbrt_trde_rpy_sum",
+                "prm_netprps_amt_irds",
+                "prm_sell_qty",
+                "prm_buy_qty",
+                "prm_netprps_qty",
+                "prm_netprps_qty_irds",
+                "remn_rcvord_sum"
+              ],
               "container_alias": "stk_tm_prm_trde_trnsn",
               "field_aliases": [
                 "tm",
@@ -13494,6 +15870,24 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "for_netprps_qty",
+                "orgn_netprps_qty",
+                "for_netslmt_stk_cd",
+                "for_netslmt_stk_nm",
+                "for_netslmt_amt",
+                "for_netslmt_qty",
+                "for_netprps_stk_cd",
+                "for_netprps_stk_nm",
+                "for_netprps_amt",
+                "orgn_netslmt_stk_cd",
+                "orgn_netslmt_stk_nm",
+                "orgn_netslmt_amt",
+                "orgn_netslmt_qty",
+                "orgn_netprps_stk_cd",
+                "orgn_netprps_stk_nm",
+                "orgn_netprps_amt"
+              ],
               "container_alias": "frgnr_orgn_trde_upper",
               "field_aliases": [
                 "for_netslmt_stk_cd",
@@ -13579,6 +15973,26 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cntr_tm",
+                "basis",
+                "kospi200",
+                "dfrt_trde_sel",
+                "dfrt_trde_buy",
+                "dfrt_trde_netprps",
+                "ndiffpro_trde_sel",
+                "ndiffpro_trde_buy",
+                "ndiffpro_trde_netprps",
+                "dfrt_trde_sell_qty",
+                "dfrt_trde_buy_qty",
+                "dfrt_trde_netprps_qty",
+                "ndiffpro_trde_sell_qty",
+                "ndiffpro_trde_buy_qty",
+                "ndiffpro_trde_netprps_qty",
+                "all_sel",
+                "all_buy",
+                "all_netprps"
+              ],
               "container_alias": "prm_trde_trnsn",
               "field_aliases": [
                 "cntr_tm",
@@ -13663,6 +16077,14 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_nm",
+                "stk_cd",
+                "dbrt_trde_cntrcnt",
+                "dbrt_trde_rpy",
+                "rmnd",
+                "remn_amt"
+              ],
               "container_alias": "dbrt_trde_prps",
               "field_aliases": [
                 "stk_nm",
@@ -13736,6 +16158,26 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cur_prc",
+                "pred_pre",
+                "trde_qty",
+                "flu_rt",
+                "dt",
+                "pre_sig",
+                "stex_tp",
+                "prm_sell_amt",
+                "prm_buy_amt",
+                "prm_netprps_amt",
+                "base_pric_tm",
+                "dbrt_trde_rpy_sum",
+                "prm_netprps_amt_irds",
+                "prm_sell_qty",
+                "prm_buy_qty",
+                "prm_netprps_qty",
+                "prm_netprps_qty_irds",
+                "remn_rcvord_sum"
+              ],
               "container_alias": "stk_daly_prm_trde_trnsn",
               "field_aliases": [
                 "dt",
@@ -13820,6 +16262,16 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "dt",
+                "entr",
+                "repl_amt",
+                "prsm_dpst_aset_amt",
+                "grnt_use_amt",
+                "crd_loan",
+                "ls_grnt",
+                "prsm_dpst_aset_amt_bncr_skip"
+              ],
               "container_alias": "daly_prsm_dpst_aset_amt_prst",
               "field_aliases": [
                 "dt",
@@ -13958,6 +16410,30 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "ord_no",
+                "stk_cd",
+                "stk_nm",
+                "cntr_qty",
+                "dmst_stex_tp",
+                "io_tp_nm",
+                "loan_dt",
+                "trde_tp",
+                "crd_tp",
+                "ord_qty",
+                "ord_uv",
+                "cnfm_qty",
+                "cntr_uv",
+                "comm_ord_tp",
+                "cond_uv",
+                "rsrv_tp",
+                "ord_remnq",
+                "acpt_tp",
+                "ord_tm",
+                "ori_ord",
+                "mdfy_cncl",
+                "cnfm_tm"
+              ],
               "container_alias": "acnt_ord_cntr_prps_dtl",
               "field_aliases": [
                 "ord_no",
@@ -14045,6 +16521,23 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "loan_dt",
+                "crd_tp",
+                "cmsn",
+                "seq",
+                "exct_amt",
+                "qty",
+                "engg_amt",
+                "sell_tp",
+                "trde_tax",
+                "incm_tax",
+                "rstx",
+                "unp",
+                "resi_tax"
+              ],
               "container_alias": "acnt_nxdy_setl_frcs_prps_array",
               "field_aliases": [
                 "seq",
@@ -14137,6 +16630,59 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_nm",
+                "stk_cd",
+                "io_tp_nm",
+                "loan_dt",
+                "cmsn",
+                "exct_amt",
+                "cntr_dt",
+                "trde_dt",
+                "rmrk_nm",
+                "entra_remn",
+                "crnc_cd",
+                "trde_amt",
+                "dly_sum",
+                "orig_deal_no",
+                "uncl_ocr",
+                "rpym_sum",
+                "rcpy_no",
+                "prcsr",
+                "trde_no",
+                "crd_deal_tp_nm",
+                "loan_amt_rpya",
+                "fc_trde_amt",
+                "fc_exct_amt",
+                "trde_ocr_tp",
+                "trde_kind_nm",
+                "trde_agri_tax",
+                "rpy_diffa",
+                "fc_trde_tax",
+                "fc_entra",
+                "mdia_tp_nm",
+                "io_tp",
+                "trde_qty_jwa_cnt",
+                "int_ls_usfe",
+                "fc_cmsn",
+                "fc_dly_sum",
+                "vlbl_nowrm",
+                "proc_tm",
+                "isin_cd",
+                "stex_cd",
+                "stex_nm",
+                "trde_unit",
+                "incm_resi_tax",
+                "proc_brch",
+                "trde_stle",
+                "txon_base_pric",
+                "tax_sum_cmsn",
+                "frgn_pay_txam",
+                "fc_uncl_ocr",
+                "rpym_sum_fr",
+                "rcpmnyer",
+                "trde_prtc_tp"
+              ],
               "container_alias": "trst_ovrl_trde_prps_array",
               "field_aliases": [
                 "trde_dt",
@@ -14779,6 +17325,15 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "pred_close_pric",
+                "repl_pric",
+                "crd_assr_rt",
+                "crd_limit_over_yn",
+                "crd_limit_over_txt"
+              ],
               "container_alias": "crd_loan_pos_stk",
               "field_aliases": [
                 "stk_cd",
@@ -15239,6 +17794,30 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "ord_no",
+                "stk_cd",
+                "stk_nm",
+                "cntr_qty",
+                "dmst_stex_tp",
+                "io_tp_nm",
+                "trde_tp",
+                "ord_qty",
+                "ord_uv",
+                "cnfm_qty",
+                "orig_ord_no",
+                "cntr_uv",
+                "comm_ord_tp",
+                "cond_uv",
+                "rsrv_tp",
+                "ord_remnq",
+                "stk_bond_tp",
+                "crd_deal_tp",
+                "mdfy_cncl_tp",
+                "data_send_end_tp",
+                "mrkt_deal_tp",
+                "dcd_tp_nm"
+              ],
               "container_alias": "acnt_ord_cntr_prst",
               "field_aliases": [
                 "stk_bond_tp",
@@ -15332,6 +17911,30 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "ord_no",
+                "stk_cd",
+                "stk_nm",
+                "cntr_qty",
+                "dmst_stex_tp",
+                "io_tp_nm",
+                "loan_dt",
+                "trde_tp",
+                "crd_tp",
+                "ord_qty",
+                "ord_uv",
+                "cnfm_qty",
+                "cntr_uv",
+                "comm_ord_tp",
+                "cond_uv",
+                "rsrv_tp",
+                "ord_remnq",
+                "acpt_tp",
+                "ord_tm",
+                "ori_ord",
+                "mdfy_cncl",
+                "cnfm_tm"
+              ],
               "container_alias": "acnt_ord_cntr_prps_dtl",
               "field_aliases": [
                 "ord_no",
@@ -15426,6 +18029,30 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "ord_no",
+                "stk_cd",
+                "stk_nm",
+                "cntr_qty",
+                "dmst_stex_tp",
+                "io_tp_nm",
+                "trde_tp",
+                "ord_qty",
+                "ord_uv",
+                "cnfm_qty",
+                "orig_ord_no",
+                "cntr_uv",
+                "comm_ord_tp",
+                "cond_uv",
+                "rsrv_tp",
+                "ord_remnq",
+                "stk_bond_tp",
+                "crd_deal_tp",
+                "mdfy_cncl_tp",
+                "data_send_end_tp",
+                "mrkt_deal_tp",
+                "dcd_tp_nm"
+              ],
               "container_alias": "acnt_ord_oso_prst",
               "field_aliases": [
                 "stk_bond_tp",
@@ -17816,6 +20443,16 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "buy_qty",
+                "sell_qty",
+                "sel_scesn_tm",
+                "sel_upper_scesn_ori",
+                "buy_scesn_tm",
+                "buy_upper_scesn_ori",
+                "qry_dt",
+                "qry_tm"
+              ],
               "container_alias": "tdy_main_trde_ori",
               "field_aliases": [
                 "sel_scesn_tm",
@@ -18800,6 +21437,15 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cur_prc_n",
+                "pred_pre_n",
+                "pred_pre_sig_n",
+                "flu_rt_n",
+                "acc_trde_qty_n",
+                "tm_n",
+                "trde_qty_n"
+              ],
               "container_alias": "inds_cur_prc_tm",
               "field_aliases": [
                 "tm_n",
@@ -19161,6 +21807,14 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "cur_prc_n",
+                "pred_pre_n",
+                "pred_pre_sig_n",
+                "flu_rt_n",
+                "acc_trde_qty_n",
+                "dt_n"
+              ],
               "container_alias": "inds_cur_prc_daly_rept",
               "field_aliases": [
                 "dt_n",
@@ -20460,6 +23114,22 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "pymn_alow_amt",
+                "crnc_cd",
+                "dly_amt",
+                "fx_entr",
+                "fc_krw_repl_evlta",
+                "fc_trst_profa",
+                "pymn_alow_amt_entr",
+                "ord_alow_amt_entr",
+                "fc_uncla",
+                "fc_ch_uncla",
+                "d1_fx_entr",
+                "d2_fx_entr",
+                "d3_fx_entr",
+                "d4_fx_entr"
+              ],
               "container_alias": "stk_entr_prst",
               "field_aliases": [
                 "crnc_cd",
@@ -20759,6 +23429,23 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "loan_dt",
+                "pl_rt",
+                "pur_amt",
+                "rmnd_qty",
+                "evlt_amt",
+                "pl_amt",
+                "setl_remn",
+                "avg_prc",
+                "pred_buyq",
+                "pred_sellq",
+                "tdy_buyq",
+                "tdy_sellq"
+              ],
               "container_alias": "stk_acnt_evlt_prst",
               "field_aliases": [
                 "stk_cd",
@@ -21195,6 +23882,21 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "loan_dt",
+                "crd_tp",
+                "buy_uv",
+                "pur_amt",
+                "pl_rt",
+                "expr_dt",
+                "evlt_amt",
+                "evltv_prft",
+                "setl_remn",
+                "cur_qty"
+              ],
               "container_alias": "stk_cntr_remn",
               "field_aliases": [
                 "crd_tp",
@@ -21360,6 +24062,30 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "ord_no",
+                "stk_cd",
+                "stk_nm",
+                "cntr_tm",
+                "cntr_qty",
+                "dmst_stex_tp",
+                "io_tp_nm",
+                "trde_tp",
+                "ord_qty",
+                "ord_uv",
+                "cnfm_qty",
+                "orig_ord_no",
+                "cntr_uv",
+                "comm_ord_tp",
+                "cond_uv",
+                "stk_bond_tp",
+                "acpt_tp",
+                "crd_deal_tp",
+                "mdfy_cncl_tp",
+                "cntr_no",
+                "rsrv_oppo",
+                "setl_tp"
+              ],
               "container_alias": "acnt_ord_cntr_prst_array",
               "field_aliases": [
                 "stk_bond_tp",
@@ -23528,6 +26254,31 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "crd_tp",
+                "pur_amt",
+                "evltv_prft",
+                "prft_rt",
+                "pred_close_pric",
+                "rmnd_qty",
+                "evlt_amt",
+                "pur_pric",
+                "pred_buyq",
+                "pred_sellq",
+                "tdy_buyq",
+                "tdy_sellq",
+                "tax",
+                "trde_able_qty",
+                "pur_cmsn",
+                "sell_cmsn",
+                "sum_cmsn",
+                "poss_rt",
+                "crd_tp_nm",
+                "crd_loan_dt"
+              ],
               "container_alias": "acnt_evlt_remn_indv_tot",
               "field_aliases": [
                 "stk_cd",
@@ -23690,6 +26441,24 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_cd",
+                "stk_nm",
+                "cur_prc",
+                "buy_qty",
+                "sell_qty",
+                "cmsn",
+                "avg_prc",
+                "qty",
+                "real_qty",
+                "est_amt",
+                "est_lspft",
+                "est_ratio",
+                "vlad_tax",
+                "book_amt2",
+                "pl_prch_prc",
+                "able_qty"
+              ],
               "container_alias": "gold_acnt_evlt_prst",
               "field_aliases": [
                 "stk_cd",
@@ -23848,6 +26617,32 @@
         "response": {
           "data": [
             {
+              "column_priority": [
+                "stk_nm",
+                "stk_cd",
+                "cmsn",
+                "exct_amt",
+                "cntr_dt",
+                "rmrk_nm",
+                "dly_sum",
+                "entra_remn",
+                "orig_deal_no",
+                "uncl_ocr",
+                "rpym_sum",
+                "rcpy_no",
+                "prcsr",
+                "deal_dt",
+                "deal_no",
+                "deal_qty",
+                "gold_spot_vat",
+                "mdia_nm",
+                "uv_exrt",
+                "spot_remn",
+                "proc_time",
+                "deal_amt",
+                "tax_tot_amt",
+                "proc_brch_nm"
+              ],
               "container_alias": "gold_trde_hist",
               "field_aliases": [
                 "deal_dt",
@@ -23940,7 +26735,7 @@
     },
     "response_projections": {
       "path": "ref/response-projections.json",
-      "sha256": "c0ab352d28deae3ff905389946e29714c6e5bf260e019b211542f48109ae7f17"
+      "sha256": "15a4ca79dde251af142ae04fa453c3f62c949cb11e9a5b93063b43183f3c4afd"
     }
   },
   "version": 1

@@ -34,4 +34,13 @@ function loadReaderMarkdown() {
   return fs.readFileSync(path.join(APP_DATA_DIR, 'reader-mock.md'), 'utf-8');
 }
 
-module.exports = { loadStreamItems, loadFinancialStatement, loadReaderMarkdown };
+// ⑤ 차트 카드(CC-101) — app/data/chart-mock-ohlcv.json. spike 캡처가 아니라
+// 이 작업에서 새로 만든 절차적 목업이다(파일 _meta.note에 "정직한 목업" 명시,
+// 실데이터 연결은 G004). bars: [{time,open,high,low,close,volume}, ...] 일봉 240개.
+function loadChartOhlcv() {
+  const p = path.join(APP_DATA_DIR, 'chart-mock-ohlcv.json');
+  const payload = JSON.parse(fs.readFileSync(p, 'utf-8'));
+  return payload; // {_meta, bars}
+}
+
+module.exports = { loadStreamItems, loadFinancialStatement, loadReaderMarkdown, loadChartOhlcv };

@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-08-18T05:23:47.242Z",
+  "startedAt": "2026-08-18T07:04:28.680Z",
   "layout": {
     "scale": 1,
     "screen": {
@@ -46,17 +46,17 @@
     "ok": true
   },
   "expand": {
-    "frameCount": 31,
+    "frameCount": 30,
     "p50": 16.700000000000045,
-    "p95": 33.40000000000009,
+    "p95": 33.299999999999955,
     "max": 50,
-    "min": 8.299999999999955
+    "min": 16.5
   },
   "collapse": {
     "frameCount": 34,
     "p50": 16.699999999999818,
-    "p95": 17,
-    "max": 33.29999999999973,
+    "p95": 24.899999999999636,
+    "max": 33.5,
     "min": 8.300000000000182
   },
   "afterCollapse": {
@@ -255,5 +255,39 @@
       "y": 0
     }
   },
-  "finishedAt": "2026-08-18T05:24:06.462Z"
+  "tableColumnFold": {
+    "trId": "ka10095",
+    "totalColumns": 63,
+    "cardRendered": true,
+    "visibleColumns": 13,
+    "foldedBelowTotal": true,
+    "headerMatchesEveryRow": true,
+    "foldDataset": {
+      "total": "63",
+      "visible": "13",
+      "hidden": "50"
+    }
+  },
+  "chartCard": {
+    "cardRendered": true,
+    "periodTabsOk": true,
+    "paneSeparated": true,
+    "indicatorRows35": true,
+    "volumeProfileBars24": true,
+    "measured": {
+      "cardPresent": true,
+      "tabs": [
+        "일",
+        "주",
+        "월",
+        "년",
+        "분",
+        "틱"
+      ],
+      "paneRows": 4,
+      "indicatorRows": 35,
+      "vpBars": 24
+    }
+  },
+  "finishedAt": "2026-08-18T07:04:51.520Z"
 }

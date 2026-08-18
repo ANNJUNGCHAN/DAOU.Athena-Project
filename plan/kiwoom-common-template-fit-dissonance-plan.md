@@ -130,7 +130,7 @@
 |---|---|---|---|
 | `OVERFLOW_WIDTH` | table 섹션 컬럼 수 > 12(경고)/20(실패) **[임계값 provisional, §2.6]** | ka10095(63), kt00015(51), ka30005(39), ka10075(30), ka10015(30); n=150 중 20열 초과 12개 | 자동 |
 | `FACTS_DENSITY_EXCEEDED` | facts 섹션 필드 수 > 12(경고)/20(실패) **[provisional]** | ka10007(124), kt00001(83), ka10004(69), ka30012(65) | 자동 |
-| `STRUCTURAL_MISMATCH` | **(REST)** 동일 TR 내 형제 detail group이 동일 크기 숫자 접미사 필드군을 공유하는데 분리됨. **(WS 확장)** flat `f_<id>` 필드 집합이 (a) 공통 인덱스(레벨 1~N)를 공유하고 (b) 동일 인덱스 내 역할군(가격/잔량/증감 등, `kiwoom-tr-inventory.json` 라벨/설명 메타데이터로 판정)이 반복되면 "사다리 가족"으로 간주 — response-projections의 명명된 group이 없으므로 형제 group 판정을 **FID 라벨 정규식 매칭 + 인덱스 카운트 일치**로 대체 | ka10007 bid_prices/qty/changes(REST), 0D/0F/0B(WS), ka10173(이형 envelope 반례) | 자동(패턴), 최종 확인 사람. **정규식 패턴·최소 반복 임계값은 [측정 필요] — G001.5 착수 전 0D/0F/0B 실제 FID 라벨 대조로 확정해야 하는 선행조건으로 고정** |
+| `STRUCTURAL_MISMATCH` | **(REST)** 동일 TR 내 형제 detail group이 동일 크기 숫자 접미사 필드군을 공유하는데 분리됨. **(WS 확장)** flat `f_<id>` 필드 집합이 (a) 공통 인덱스(레벨 1~N)를 공유하고 (b) 동일 인덱스 내 역할군(가격/잔량/증감 등, `kiwoom-tr-inventory.json` 라벨/설명 메타데이터로 판정)이 반복되면 "사다리 가족"으로 간주 — response-projections의 명명된 group이 없으므로 형제 group 판정을 **FID 라벨 정규식 매칭 + 인덱스 카운트 일치**로 대체 | ka10007 bid_prices/qty/changes(REST), 0D/0F/0B(WS), ka10173(이형 envelope 반례) | 자동(패턴), 최종 확인 사람. **정규식 패턴·최소 반복 임계값은 [측정 필요] — G001.5 착수 전 0D/0F/0B 실제 FID 라벨 대조로 확정해야 하는 선행조건으로 고정** **(2026-08-18 확정: kor 라벨에서 `\d{1,2}` 추출 → 숫자 제거한 나머지를 base(역할군)로 그룹핑 → base당 idx 집합 ≥3(min_repeat_threshold)이고 동일 idx 시그니처를 공유하는 base가 ≥2개면 사다리 가족. 매치: 0D 120/163 leaf필드(12역할군, 1가족), 0F 50/57(10역할군, 1가족), 0B 0/43(비사다리 — §2.4 anchor의 "WS 최대폭" 표본 전제 재검토 필요), 반례 ka10173도 0/5로 정확히 필터링. 근거 backend/ref/ws-ladder-regex-calibration.json)** |
 | `STREAM_FIELD_EXCEEDED` | event_stream 필드 > 20 **이고** 위 `STRUCTURAL_MISMATCH`(WS 사다리)에 해당하지 **않는** 경우만(§5.3.2 병합 규칙의 비사다리 분기가 절삭 대신 방치되면 이 코드) | 비사다리형 WS payload | 자동 |
 | `FORMATTER_MISSING` | semanticType=unknown이고 override formatter도 없는 필드 비율 > 30%(섹션 기준) | unknown 27% baseline | 자동 |
 | `LABEL_MISSING`/`TR_ID_LEAKAGE` | title/필드 라벨이 TR ID 정규식(`^k[at]\d+`)과 매치되거나 title_ko 없음 | ka10007 legacy 9그룹 전부 title_ko 없음 | 자동, zero-tolerance |
@@ -216,6 +216,8 @@ fit=0 발견
 
 G001.5 내 G002 착수 전 게이트: width anchor 5개(ka10095/kt00015/ka30005/ka10075/ka10015)에 대해 **(라벨 글자수 × 평균 자폭 + padding) 픽셀 추정을 1회 계산**해 count 임계값(12/20)이 1560×800 캔버스에서 유효한 proxy인지 확인한다. 컬럼 개수 15개짜리 좁은 숫자 테이블이 8개짜리 넓은 텍스트 테이블보다 실제로는 덜 넘칠 수 있다는 역전 가능성이 있으므로, count 기반 지표는 조악한 proxy임을 인지하고 보정한다. 재보정하지 않고 진행할 경우 그 사실을 `provenance`에 명시적으로 기록한다(침묵 금지).
 
+**(2026-08-18 보정 완료: proxy 부분 유효 — 5개 anchor 전부 방향(오버플로 여부)은 맞으나 정밀도는 부정확. 픽셀 추정 기준 1560px에서 스크롤 없이 보이는 컬럼은 5개 전부 ~13개인데 FAIL 임계값은 20이라, 13~19컬럼 구간 테이블은 실제로 이미 오버플로 중이어도 WARN에만 걸릴 위험이 있다. 이번 5개 anchor는 라벨이 짧아(2~8자) 대부분 데이터 셀 최소폭 90px 바닥값에 걸려 컬럼폭이 114~120px로 균일했고, 그 결과 §2.6이 우려한 역전(좁은 숫자 다수 vs 넓은 텍스트 소수)은 이번 표본에서 관측되지 않았다 — 텍스트형 라벨이 긴 테이블로 추가 검증 필요. 20 하드 블로커로 삼지 않고 WARN 12 유지·FAIL 14~15 하향을 권고안으로 기록. 근거 backend/ref/width-anchor-pixel-calibration.json)**
+
 ### 2.7 자동 지표 ↔ 사람 판단 분리
 
 | 자동(기계) | 사람만 가능 |
@@ -241,6 +243,12 @@ G001.5 완료조건을 **세 개의 독립 플래그**로 분리한다(하나의
 | G005 전수 검증 | 대기 | 301/301 정의 resolution + `data-field-id`/`data-section-id` sentinel(§6.1) + row-count 지표(§2.2) | G004 | rendering-plan §13 G005 기준 + 반증 fixture 유지 + `fit_dissonance_check.py --check` green | 위 + `--check` |
 | G006 Paper 최종 동기화 | 대기 — **역할 축소**: `design_medium`이 이미 G003 이전에 `paper`로 전환되어 있으므로, G006은 구현 완료 후 Paper 아트보드의 잔여 상태 variant(loading/empty/error/auth/order-confirm/OAuth)만 보완하는 순수 대조 단계다 | 기존과 동일 | G005 | rendering-plan §13 G006 기준 그대로 | rendering-plan §15 명령 |
 | G007 Closeout | 대기 — **완료조건에 §7 Athena 용량 목표 + rater_mode 재검증 추가**(신설) | 기존과 동일 | G006 | rendering-plan §13 G007 기준 + §7 용량 상한 + (`rater_mode==intra_rater_fallback`이면 anchor 부분집합 ≥13개 독립 재검증 완료) | rendering-plan §15 명령 + 위 추가 항목 수동 확인 |
+
+> **2026-08-18 이관 기록 (사용자 결정)**: `fit_dissonance_check.py` 최초 전수 실행이 zero-tolerance 82건을
+> 잡았고 **전부 `FORMATTER_MISSING`**(semanticType unknown + override 부재)이다. LABEL_MISSING/TR_ID_LEAKAGE는
+> 0건(ka10007 title_ko 해소 확인). 포맷터·오버라이드 정의는 G002(정규화 화면 계약) 소관이므로 **82건 해소를
+> G002 착수 조건으로 이관**한다 — G001.5 `gate_complete`의 fit 비율 게이트는 G002의 포맷터 작업 후 재판정한다.
+> 근거: `backend/ref/kiwoom-fit-dissonance-scorecard.json`(2026-08-18), 감사 충실성 라운드 회귀 기록.
 
 수량 불변식(186+115=301, 264/23/12/2, exclusion 22) 불변.
 

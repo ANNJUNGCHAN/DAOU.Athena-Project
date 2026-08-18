@@ -637,6 +637,99 @@ app.whenReady().then(async () => {
   };
   console.log('[verify] 검증11(제자리 클릭 크기 불변):', JSON.stringify(report.dragNoResize));
 
+  // ---------- 검증 12: §5.3.1 컬럼 우선순위 흡수(2층) — table 카드가 1560px에서 접힌다 ----------
+  // claude -p 실배선 없이(quota 0) canvas.js의 'athena:add-canvas-live' 경로에 실제
+  // ka10095(63컬럼, backend/ref/kiwoom-common-screen-manifest.json column_priority 그대로
+  // 추출한 app/data/wide-table-fold-fixtures.json)를 직접 주입해 app/lib/column-fold.js가
+  // 실제 렌더 DOM에서도 fold를 발동시키는지 확인한다 — main.js를 거치지 않고 canvasWin에
+  // 바로 IPC를 보내므로 fixture/live 소스 분기와 무관하다(순수 렌더러 단 검증).
+  const wideFixtures = JSON.parse(
+    fs.readFileSync(path.join(__dirname, 'data', 'wide-table-fold-fixtures.json'), 'utf-8')
+  );
+  const ka10095Fixture = wideFixtures.trs.find((t) => t.mapping_id === 'base:ka10095');
+  const mockRow = {};
+  for (const col of ka10095Fixture.columns) mockRow[col.key] = `v:${col.key}`;
+  await canvasWin.webContents.send('athena:add-canvas-live', {
+    status: 'success',
+    envelope: {
+      canvas_type: 'table',
+      fell_back: false,
+      caption: `${ka10095Fixture.name_ko} 검증용`,
+      data: { columns: ka10095Fixture.columns, rows: [mockRow, mockRow] },
+    },
+  });
+  await wait(300);
+  const foldProbe = await canvasWin.webContents.executeJavaScript(`
+    (() => {
+      const card = document.querySelector('#grid .card.mcp-table');
+      if (!card) return null;
+      return {
+        headerCellCount: card.querySelectorAll('thead th').length,
+        rowCellCounts: Array.from(card.querySelectorAll('tbody tr')).map((tr) => tr.children.length),
+        foldDataset: (() => {
+          const t = card.querySelector('table.fin-table');
+          return t ? { total: t.dataset.totalColumns, visible: t.dataset.visibleColumns, hidden: t.dataset.hiddenColumns } : null;
+        })(),
+      };
+    })()
+  `);
+  await shot(canvasWin, '18-table-column-fold-ka10095.png');
+
+  report.tableColumnFold = {
+    trId: ka10095Fixture.tr_id,
+    totalColumns: ka10095Fixture.total_columns,
+    cardRendered: foldProbe !== null,
+    visibleColumns: foldProbe && foldProbe.headerCellCount,
+    foldedBelowTotal: foldProbe !== null && foldProbe.headerCellCount < ka10095Fixture.total_columns,
+    headerMatchesEveryRow: foldProbe !== null
+      && foldProbe.rowCellCounts.every((n) => n === foldProbe.headerCellCount),
+    foldDataset: foldProbe && foldProbe.foldDataset,
+  };
+  console.log('[verify] 검증12(컬럼 우선순위 fold):', JSON.stringify(report.tableColumnFold));
+
+  // ---- 검증13(CC-106): 차트 카드 — 마운트·툴바·지표 토글·매물대 스모크 ----
+  // 깊은 상호작용(형식 전환·저작 영속·드로잉)은 probe-chart-*.js 4종이 전담한다 —
+  // 여기서는 회귀 게이트로서 "카드가 뜨고, 툴바가 계약대로 있고, 매물대가 켜진다"
+  // 만 매 verify마다 실측한다.
+  await canvasWin.webContents.executeJavaScript(`window.addCard('chart')`);
+  await wait(1500); // 동적 import + 비동기 마운트
+  const chartProbe = await canvasWin.webContents.executeJavaScript(`(async () => {
+    const card = document.querySelector('.card.chart');
+    if (!card) return null;
+    const tabs = Array.from(card.querySelectorAll('.chart-toolbar-tab')).map(b => b.textContent);
+    const paneRows = Array.from(card.querySelectorAll('.chart-price-pane table tr'))
+      .map(tr => tr.getBoundingClientRect()).filter(r => r.height > 0).length;
+    const indBtn = Array.from(card.querySelectorAll('.chart-toolbar-btn')).find(b => b.textContent.includes('∿'));
+    // 마운트 실패(예: lightweight-charts 미설치)면 카드는 있어도 툴바가 없다 —
+    // 여기서 클릭하면 TypeError가 unhandledRejection으로 새서 verify가 영원히
+    // 안 끝난다(2026-08-18 병합 검증에서 실제 재현). 실패는 수치로 보고한다.
+    if (!indBtn) return { cardPresent: true, tabs, paneRows, indicatorRows: 0, vpBars: 0, toolbarMissing: true };
+    indBtn.click();
+    await new Promise(r => setTimeout(r, 150));
+    const panel = card.querySelector('.chart-indicator-panel');
+    const indicatorRows = panel ? panel.querySelectorAll('.chart-ind-row').length : 0;
+    const vpRow = panel && panel.querySelector('.chart-ind-vp-row');
+    if (vpRow) vpRow.click();
+    await new Promise(r => setTimeout(r, 300));
+    const vpBars = card.querySelectorAll('.chart-volume-profile-overlay .chart-vp-bar').length;
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+    await new Promise(r => setTimeout(r, 100));
+    return { cardPresent: true, tabs, paneRows, indicatorRows, vpBars };
+  })()`);
+  await wait(200);
+  await shot(canvasWin, '19-chart-card.png');
+  report.chartCard = {
+    cardRendered: chartProbe !== null,
+    periodTabsOk: chartProbe !== null && chartProbe.tabs.join(',') === '일,주,월,년,분,틱',
+    paneSeparated: chartProbe !== null && chartProbe.paneRows >= 3, // 가격+구분+거래량 이상
+    indicatorRows35: chartProbe !== null && chartProbe.indicatorRows === 35,
+    volumeProfileBars24: chartProbe !== null && chartProbe.vpBars === 24,
+    // 실측 수치도 그대로 남긴다 — 불리언만으로는 미래 회귀의 원인 추적이 어렵다
+    // (아키텍트 검증 권고, 2026-08-18. 형제 검증 블록과 기록 밀도 정합).
+    measured: chartProbe,
+  };
+  console.log('[verify] 검증13(차트 카드):', JSON.stringify(report.chartCard));
+
   report.finishedAt = new Date().toISOString();
   fs.writeFileSync(path.join(CAPTURES, 'VERIFY-REPORT.json'), JSON.stringify(report, null, 2));
   console.log('[verify] 리포트 저장:', path.join(CAPTURES, 'VERIFY-REPORT.json'));

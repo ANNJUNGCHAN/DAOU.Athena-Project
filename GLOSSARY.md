@@ -133,6 +133,16 @@ FactsCard(114) · TableCard(121) · CompoundCard(29) · EventCard(23) · ActionC
 
 > ⚠ **"공통 캔버스"는 두 뜻으로 쓰인다.** §12 참조.
 
+### 차트 렌즈 용어 (`plan/chart-lens-spec.md`, 2026-08-18 등록)
+
+| 용어 | 정의 |
+|---|---|
+| **렌즈** | 카드(데이터 표현 공통 UI) 위에 선택적으로 얹는 **표현/상호작용 계층**. 카드는 완전성 계층이고 렌즈는 그 위의 선택 계층이다 — 두 개념은 경쟁하지 않는다(spec §9). 시계열 렌즈 = AT-CV-002 |
+| **저작 계층** | 시계열 렌즈와 별개 층위. 사용자가 차트에 **추가·기록**하는 상호작용 계층(chart-lens-spec §1) |
+| **저작 상태** | 저작 계층에 쌓이는 사용자 산출물의 총칭 — 지표·드로잉·차트형식·매물대 선택. 종목×주기 키로 영속한다. **표시 상태**(줌·팬 등 비영속)와 구분한다(chart-lens-spec §3.1) |
+| **드로잉 도구** | 저작 계층의 도형 입력 7종(추세선·수평선·피보나치·십자선·광선·사각형·타원 — AITS 실측, chart-lens-aits-survey) |
+| **차트형식** | 시계열 본체의 렌더 형식. 선택 가능 4종(바·캔들·라인·영역, AITS 실측) — 카드 종류가 아니라 CompoundCard(charts)의 파라미터다 |
+
 ---
 
 ## 3. 리퀴드 글래스 — 재료 어휘
@@ -218,6 +228,23 @@ FactsCard(114) · TableCard(121) · CompoundCard(29) · EventCard(23) · ActionC
 | **ScreenDocument** | 런타임 결과 문서. state(loading/ready/empty/error/unavailable/auth_required/action_required) + section(facts/table/event_stream/status/action/order_receipt). 설계 확정, 미구현 |
 | **초당 5건 (호출 예산)** | 롤링 1초 최대 5건, 같은 API ID는 1건. REST·WebSocket 제어·주문이 **하나의 리미터**를 공유한다. UI 설계 제약이기도 하다 |
 | **fail-closed** | 자격증명이 없으면 데이터 라우트가 503을 낸다. 조용한 빈 결과는 없다 |
+
+### ka10007(시세표성정보요청) detail 9그룹 한국어 제목 — 2026-08-18 확정
+
+출처: `backend/ref/kiwoom-tr-inventory.json`의 키움 공식 필드 라벨(`kor`) 실측. 제목은 공식 용어의
+조합으로만 짓고 자체 작명하지 않는다. TR ID 노출(zero-tolerance `TR_ID_LEAKAGE`) 해소용 `title_ko`.
+
+| group id | title_ko | 근거 필드(공식 라벨) |
+|---|---|---|
+| identity | 종목·일시 정보 | 종목명·종목코드·날짜·시간 |
+| expected_market | 현재가·전일 시세·가격제한 | 현재가·등락률·전일비·전일종가·상한가·하한가·상장주식수 |
+| session | 당일 시세·예상 체결 | 시가·고가·저가·거래량·거래대금·예상체결가·예상체결량 |
+| bid_prices | 매도·매수 10호가 | 매도1~10호가·매수1~10호가 |
+| bid_quantities | 매도·매수 10호가 잔량 | 매도/매수N호가잔량 |
+| bid_changes | 매도·매수 10호가 직전대비 | 매도/매수N호가직전대비 |
+| order_counts | 매도·매수 5호가 건수 | 매도/매수1~5호가건수 |
+| liquidity_provider | LP 매도·매수 10호가 잔량 | LP매도/LP매수N호가잔량 |
+| totals | 총매도·총매수 잔량·건수 | 총매수잔량·총매도잔량·총매수건수·총매도건수 |
 
 ---
 

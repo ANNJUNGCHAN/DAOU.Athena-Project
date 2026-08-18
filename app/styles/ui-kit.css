@@ -202,3 +202,21 @@
 @media (prefers-reduced-motion: reduce) {
   .uk-btn { transition: none; }
 }
+
+/* ---- 카드 닫기 X — 두 창 공용(캔버스 카드·설정 카드) ----
+   settings-cards.css에서 이동(2026-08-18): 캔버스 창이 그 파일을 로드하지 않아
+   기본 브라우저 버튼(박스)으로 떨어지던 결함 수정. 조용한 고스트 아이콘 —
+   평소엔 희미하게, 호버에서만 원형 배경으로 존재를 드러낸다. */
+.uk-card-close {
+  width: 22px; height: 22px; margin-left: 10px; padding: 0;
+  border: 0; border-radius: 50%;
+  background: none; color: var(--color-k-faint);
+  opacity: 0.75;
+  cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: color 120ms var(--ease, ease), background-color 120ms var(--ease, ease), opacity 120ms var(--ease, ease);
+}
+.uk-card-close:hover { color: var(--color-k-text); background: rgba(255, 255, 255, 0.07); opacity: 1; }
+.uk-card-close:active { background: rgba(255, 255, 255, 0.12); }
+.uk-card-close:focus-visible { outline: 1px solid var(--color-k-dim); outline-offset: 1px; opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .uk-card-close { transition: none; } }

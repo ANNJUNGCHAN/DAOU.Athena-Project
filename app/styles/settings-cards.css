@@ -329,12 +329,5 @@
 /* ---- 카드별 닫기 (D7 — 계좌·MCP·stream·reader·table 5종 공용) ----
    카드의 진짜 액션(등록·붙여넣기)과 경쟁하지 않도록 구분선 뒤 조용한
    자리에 둔다 — 아이콘만, 배경 없음, 무채색. */
-.uk-card-close {
-  width: 20px; height: 20px; margin-left: 4px; padding-left: 14px;
-  border: 0; border-left: 1px solid var(--color-k-line-soft);
-  background: none; color: var(--color-k-faint);
-  font-family: var(--font-mono); font-size: 14px; line-height: 1;
-  cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-.uk-card-close:hover { color: var(--color-k-text); }
+/* .uk-card-close는 styles/ui-kit.css로 이동(2026-08-18) — 캔버스 창이 이 파일을
+   로드하지 않아 카드 X가 기본 브라우저 버튼으로 렌더되던 결함의 수정. */
