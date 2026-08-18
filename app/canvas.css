@@ -14,7 +14,7 @@ html, body { background: transparent; }
      0.50)의 순서는 유지된다 — 스케일만 내려갔다. */
   background-color: rgba(29, 34, 44, 0.50);
   /* 리퀴드 글라스는 검정 평면이 아니다(2026-08-17 사용자 지시 — "애플의 리퀴드
-   * 글라스라는 사실을 명심해"). 두께 0.97은 규범값이라 유지하되, 표면에 무채색
+   * 글라스라는 사실을 명심해"). 두께 0.50(2026-08-18 하향 후 현행값) 위에 무채색
    * (백색 알파만 — 틴트 금지) 광량 변화를 깔아 카드 유리(backdrop-filter)가 실제로
    * 굴절할 것을 만든다 — soul.md §7 "유리 뒤에는 반드시 굴절할 것이 있다".
    * 균일한 단색 위의 blur는 눈에 보이지 않아 유리가 아니라 평면으로 읽힌다. */
@@ -147,15 +147,19 @@ html, body { background: transparent; }
 .stream-more { color: var(--color-k-faint); font-size: 12px; padding-top: 4px; }
 
 /* ---- 리더(마크다운) ---- */
-.md-h1 { font-family: var(--font-strong); font-size: 15px; margin: 4px 0 8px; }
+/* 15→13px (2026-08-18) — 카드 안 콘텐츠 제목이 카드 자신의 제목(.card-title 14px)보다
+   크면 위계가 뒤집힌다. 카드 안 텍스트는 card-title을 넘지 않는다. */
+.md-h1 { font-family: var(--font-strong); font-size: 13px; margin: 4px 0 8px; }
 .md-h2 { font-family: var(--font-strong); font-size: 13px; margin: 10px 0 6px; color: var(--color-k-dim); }
 .md-p { font-size: 12.5px; line-height: 1.6; color: var(--color-k-text); margin: 0 0 8px; }
 .md-list { margin: 0 0 8px 18px; padding: 0; font-size: 12.5px; line-height: 1.6; }
-.md-table { border-collapse: collapse; width: 100%; font-size: 11.5px; margin: 4px 0 10px; }
+.md-table { border-collapse: collapse; width: 100%; font-size: 12px; margin: 4px 0 10px; } /* 11.5→12 — 공시 표는 판단 자료다(12px 하한) */
 .md-table td { border: 1px solid var(--color-k-line-soft); padding: 3px 6px; color: var(--color-k-dim); vertical-align: top; }
 
 /* ---- 공통 테이블 ---- */
-.fin-meta { font-family: var(--font-mono); font-size: 11px; color: var(--color-k-faint); margin-bottom: 8px; }
+/* 금융 판단에 직접 쓰이는 텍스트는 12px 하한(2026-08-18 디자인 비판 — soul.md §8
+   "숫자가 안 읽히면 실패"가 corp_code·사업연도 같은 컨텍스트에도 적용된다). */
+.fin-meta { font-family: var(--font-mono); font-size: 12px; color: var(--color-k-faint); margin-bottom: 8px; }
 table.fin-table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: 12.5px; }
 .fin-table th, .fin-table td { padding: 5px 10px; text-align: right; border-bottom: 1px solid var(--color-k-line-soft); white-space: nowrap; }
 .fin-table th:first-child, .fin-table td:first-child { text-align: left; }
@@ -323,7 +327,9 @@ table.fin-table { width: 100%; border-collapse: collapse; font-variant-numeric: 
 .chart-ind-row.is-on .chart-ind-check { background: var(--color-k-text); border-color: var(--color-k-text); }
 .chart-ind-label { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .chart-ind-badge {
-  flex-shrink: 0; font-family: var(--font-mono); font-size: 9.5px; color: var(--color-k-faint);
+  /* 9.5→12px (2026-08-18) — 지표에 어떤 파라미터가 걸려 있는지는 판단 자료다.
+   * 저장소에서 가장 작은 글자가 하필 이 자리였다(§8 정보 정직성 위반 지적). */
+  flex-shrink: 0; font-family: var(--font-mono); font-size: 12px; color: var(--color-k-faint);
   border: 1px solid var(--color-k-line-soft); border-radius: 4px; padding: 1px 4px;
 }
 

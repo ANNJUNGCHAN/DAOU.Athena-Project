@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-08-18T14:06:39.619Z",
+  "startedAt": "2026-08-18T14:48:43.386Z",
   "layout": {
     "scale": 1,
     "screen": {
@@ -54,18 +54,18 @@
     "ok": true
   },
   "expand": {
-    "frameCount": 32,
+    "frameCount": 33,
     "p50": 16.699999999999818,
-    "p95": 33.30000000000018,
+    "p95": 16.799999999999955,
     "max": 33.399999999999864,
-    "min": 16.5
+    "min": 16.300000000000182
   },
   "collapse": {
     "frameCount": 35,
     "p50": 16.699999999999818,
     "p95": 16.800000000000182,
     "max": 16.800000000000182,
-    "min": 16.599999999999454
+    "min": 16.5
   },
   "afterCollapse": {
     "canvasVisible": false
@@ -480,5 +480,5 @@
     "rejectedPatchesDidNotChangeFile": true,
     "nullRemovesModelLine": true
   },
-  "finishedAt": "2026-08-18T14:07:08.431Z"
+  "finishedAt": "2026-08-18T14:49:11.663Z"
 }
