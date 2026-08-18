@@ -190,12 +190,17 @@ window.athena.on('athena:init', (payload) => {
   applyGlassFraction(0);
 });
 
-// ---------- 유리 두께 보간 (기본 0.82 ↔ 확장 0.97) ----------
+// ---------- 유리 두께 보간 (기본 0.30 ↔ 확장 0.55) ----------
 // two-windows.md의 굴절값(0.46→0.17)은 창 자체의 네이티브 재질 강도를 말하며
 // Electron backgroundMaterial API로는 런타임 파라미터화가 안 된다(chat.css 주석
 // 참조) — 여기서는 실제로 조절 가능한 알파만 보간한다.
+// 2026-08-18 전체 스케일 하향(사용자 지시 "그냥 검은 창 같다 — 뒤가 비쳐야 한다"):
+// 0.82↔0.97은 acrylic 위에서 사실상 불투명 검정으로 읽혔다. 블러(가독성)는
+// 네이티브 acrylic이 담당하므로 틴트 알파는 낮춰도 텍스트 대비가 성립한다.
+// "뒤 정보 밀도에 비례해 두꺼워진다"(soul.md §7)는 유지 — 기본(데스크톱 뒤)
+// 0.30, 확장(캔버스 뒤) 0.55.
 function applyGlassFraction(frac) {
-  const alpha = 0.82 + (0.97 - 0.82) * frac;
+  const alpha = 0.30 + (0.55 - 0.30) * frac;
   document.documentElement.style.setProperty('--glass-alpha', alpha.toFixed(3));
 }
 
@@ -207,6 +212,11 @@ window.addEventListener('resize', () => {
   applyGlassFraction(frac);
   syncMaxButton();
 });
+
+// OS 모서리 리사이즈(2026-08-18 자유 리사이즈 승급) — main의 handleForeignArrange가
+// 사용자 리사이즈를 수용하면서 보낸다. 그립 드래그와 같은 "수동" 문법으로 취급해
+// 다음 내용 변화의 자동 성장이 방금의 사용자 크기를 덮어쓰지 않게 한다.
+window.athena.on('athena:manual-resize', () => { manualOverride = true; });
 
 // 최대화 버튼의 상태(확장/복귀/비활성)를 실제 창 상태에서 파생한다 — 버튼이 자기
 // 기억이 아니라 창의 현재 상태를 말하게 한다(정보 정직성). 설정·온보딩 모드가
@@ -398,7 +408,9 @@ async function runQueryLive(text) {
     progText.textContent = `${base} · ${elapsedText()} 경과`;
     setLocked(true, `${base} · ${elapsedText()} 경과`);
   };
-  const tick = setInterval(renderProgress, 1000); // 진행이 눈에 보이게 — 조용히 멈춘 것처럼 보이면 안 된다
+  // 100ms 간격 — 표기는 소수 1자리(29.3s)인데 1초 간격으로 갱신하면 소수 자리가
+  // 항상 .0으로만 보여 정수 표시와 구별되지 않았다(2026-08-18 사용자 지시).
+  const tick = setInterval(renderProgress, 100); // 진행이 눈에 보이게 — 조용히 멈춘 것처럼 보이면 안 된다
 
   const onLiveCanvasAdded = () => {
     if (myToken !== abortToken) return;

@@ -1011,8 +1011,12 @@ app.whenReady().then(async () => {
     pairMovedTogetherOnLeft: near(afterLeft.chat.x, afterLeft.canvas.x),
     pairMovedTogetherOnRight: near(afterRight.chat.x, afterRight.canvas.x),
     leftDiffersFromRight: afterLeft.canvas.x !== afterRight.canvas.x,
-    sizeUnchangedOnLeft: afterLeft.canvas.width === beforePlacement.canvas.width && afterLeft.canvas.height === beforePlacement.canvas.height,
-    sizeUnchangedOnRight: afterRight.canvas.width === beforePlacement.canvas.width && afterRight.canvas.height === beforePlacement.canvas.height,
+    // near() ±2px — 이 파일의 다른 bounds 비교와 같은 관례다(acrylic + DPI 배율에서
+    // setBounds 요청값과 getBounds 실측값이 1px 안팎 어긋나는 실측, 검증3 주석).
+    // 자유 리사이즈 승급(2026-08-18)으로 min=max 잠금이 사라져 이 편차를 OS가
+    // 눌러주지 않게 됐다 — 정확 일치 요구는 계약이 아니라 잠금의 부수 효과였다.
+    sizeUnchangedOnLeft: near(afterLeft.canvas.width, beforePlacement.canvas.width) && near(afterLeft.canvas.height, beforePlacement.canvas.height),
+    sizeUnchangedOnRight: near(afterRight.canvas.width, beforePlacement.canvas.width) && near(afterRight.canvas.height, beforePlacement.canvas.height),
     maximizedViaWindowKey: afterMaximize.height > chatHeightBeforeMax,
     maximizedReachedChatMaxH: near(afterMaximize.height, layout.chatMaxH),
     restoredViaWindowKey: near(afterRestore.height, layout.chatBaseH),

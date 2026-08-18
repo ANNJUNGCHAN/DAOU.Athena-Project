@@ -23,7 +23,8 @@ html, body { background: transparent; }
     rgba(238, 19, 123, 0) 0%, #ee137b 22%, #ee137b 78%, rgba(238, 19, 123, 0) 100%);
   box-shadow: 0 0 26px rgba(238, 19, 123, 0.85);
 }
-/* 3단계 — 선을 축으로 위아래 전개. 유리 불투명도 72%(최종값보다 낮음).
+/* 3단계 — 선을 축으로 위아래 전개. 유리 불투명도는 최종값의 ~72%(스펙의 "최종보다
+ * 낮은 중간값" 의미 유지 — 2026-08-18 유리 전체 하향으로 절대값은 0.22가 됐다).
  * visibility 토글은 opacity 페이드가 아니다 — "투명도 페이드 금지" 준수. */
 .boot-panel {
   position: absolute; left: 0; right: 0; top: 50%;
@@ -32,7 +33,7 @@ html, body { background: transparent; }
   visibility: hidden;
   display: flex; flex-direction: column;
   border-radius: 20px;
-  background: rgba(23, 27, 36, 0.72);
+  background: rgba(23, 27, 36, 0.22);
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.4), 0 20px 50px rgba(0, 0, 0, 0.58);
   overflow: hidden;
@@ -42,9 +43,9 @@ html, body { background: transparent; }
     box-shadow 160ms cubic-bezier(0.2, 0, 0, 1);
 }
 .boot-panel.unfold { visibility: visible; height: 100%; }
-/* 4단계 — 유리 불투명도 최종값(.app 기본 --glass-alpha 0.82와 동일), 로고·입력줄 표시 */
+/* 4단계 — 유리 불투명도 최종값(.app 기본 --glass-alpha 0.30와 동일), 로고·입력줄 표시 */
 .boot-panel.final {
-  background: rgba(23, 27, 36, 0.82);
+  background: rgba(23, 27, 36, 0.30);
   border-color: rgba(255, 255, 255, 0.3);
   box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.58), 0 40px 90px rgba(0, 0, 0, 0.72);
 }
@@ -186,11 +187,17 @@ html, body { background: transparent; }
 .app {
   position: fixed; inset: 0;
   display: flex; flex-direction: column;
-  /* 유리 두께 — 기본(뒤=데스크톱) 0.82. --glass-alpha는 창 높이에 따라 JS가 연속 보간한다. */
-  background: rgba(23, 27, 36, var(--glass-alpha, 0.82));
+  /* 유리 두께 — 기본(뒤=데스크톱) 0.30. --glass-alpha는 창 높이에 따라 JS가 연속
+   * 보간한다(0.30↔0.55, chat.js applyGlassFraction).
+   * 2026-08-18 하향(사용자 지시 "그냥 검은 창 같다"): 가독성 블러는 네이티브
+   * acrylic이 담당하므로 틴트 알파는 뒤가 실제로 비치는 수준까지 내린다 —
+   * 유리로 읽히려면 굴절 대상(데스크톱)이 보여야 한다. */
+  background: rgba(23, 27, 36, var(--glass-alpha, 0.30));
   border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.45);
+  /* 투명해질수록 윤곽은 광량으로 세운다 — 테두리 소폭 승급 + 유리 윗면 스펙큘러
+   * (상단 인셋 하이라이트). 깊이는 값으로 만든다(soul.md §7). */
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 30px 70px rgba(0, 0, 0, 0.45);
   overflow: hidden;
 }
 

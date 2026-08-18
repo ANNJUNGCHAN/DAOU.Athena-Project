@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-08-18T11:58:33.749Z",
+  "startedAt": "2026-08-18T14:06:39.619Z",
   "layout": {
     "scale": 1,
     "screen": {
@@ -23,7 +23,7 @@
         "height": 311
       },
       "idle": {
-        "width": 2340,
+        "width": 2345,
         "height": 333
       }
     },
@@ -54,18 +54,18 @@
     "ok": true
   },
   "expand": {
-    "frameCount": 34,
+    "frameCount": 32,
     "p50": 16.699999999999818,
-    "p95": 16.799999999999955,
-    "max": 16.800000000000182,
+    "p95": 33.30000000000018,
+    "max": 33.399999999999864,
     "min": 16.5
   },
   "collapse": {
-    "frameCount": 34,
+    "frameCount": 35,
     "p50": 16.699999999999818,
-    "p95": 16.899999999999636,
-    "max": 34.69999999999982,
-    "min": 15.600000000000364
+    "p95": 16.800000000000182,
+    "max": 16.800000000000182,
+    "min": 16.599999999999454
   },
   "afterCollapse": {
     "canvasVisible": false
@@ -81,7 +81,7 @@
       "chat": {
         "x": 180,
         "y": 856,
-        "width": 1561,
+        "width": 1564,
         "height": 223
       }
     },
@@ -89,13 +89,13 @@
       "canvas": {
         "x": 260,
         "y": 74,
-        "width": 1561,
-        "height": 801
+        "width": 1564,
+        "height": 803
       },
       "chat": {
         "x": 180,
         "y": 856,
-        "width": 1561,
+        "width": 1564,
         "height": 223
       }
     },
@@ -103,13 +103,13 @@
       "canvas": {
         "x": 260,
         "y": 74,
-        "width": 1561,
-        "height": 801
+        "width": 1564,
+        "height": 803
       },
       "chat": {
         "x": 180,
         "y": 856,
-        "width": 1561,
+        "width": 1565,
         "height": 323
       }
     },
@@ -134,26 +134,26 @@
     },
     "boundsAfterQuery": {
       "x": 180,
-      "y": 830,
-      "width": 1561,
-      "height": 251
+      "y": 831,
+      "width": 1564,
+      "height": 250
     },
     "grewTallerThanBase": true,
-    "grownByPx": 46,
+    "grownByPx": 45,
     "finalAnswerText": "캔버스 창에 스트림, 리더, 공통 테이블을 띄웠습니다.",
     "cardChipCount": 3
   },
   "manualResize": {
     "beforeDrag": {
       "x": 180,
-      "y": 830,
-      "width": 1561,
-      "height": 251
+      "y": 831,
+      "width": 1564,
+      "height": 250
     },
     "afterDrag": {
       "x": 180,
-      "y": 670,
-      "width": 1561,
+      "y": 671,
+      "width": 1565,
       "height": 411
     },
     "grewByDrag": true,
@@ -266,21 +266,21 @@
       ],
       "count": 3,
       "scrollHeight": 832,
-      "clientHeight": 402
+      "clientHeight": 403
     }
   },
   "dragNoResize": {
     "scaleFactor": 1.5,
     "before": {
       "x": 180,
-      "y": 884,
-      "width": 1561,
+      "y": 886,
+      "width": 1574,
       "height": 205
     },
     "after": {
       "x": 180,
-      "y": 884,
-      "width": 1561,
+      "y": 886,
+      "width": 1574,
       "height": 205
     },
     "sizeUnchanged": true,
@@ -342,13 +342,13 @@
       "canvas": {
         "x": -300,
         "y": 74,
-        "width": 1561,
+        "width": 1562,
         "height": 801
       },
       "chat": {
         "x": -300,
         "y": 874,
-        "width": 1561,
+        "width": 1562,
         "height": 205
       }
     },
@@ -369,13 +369,13 @@
     "afterMaximize": {
       "x": 660,
       "y": 291,
-      "width": 1561,
+      "width": 1562,
       "height": 789
     },
     "afterRestore": {
       "x": 660,
       "y": 876,
-      "width": 1561,
+      "width": 1563,
       "height": 205
     },
     "afterCenter": {
@@ -388,8 +388,8 @@
       "chat": {
         "x": 180,
         "y": 875,
-        "width": 1561,
-        "height": 206
+        "width": 1562,
+        "height": 205
       }
     },
     "pairMovedTogetherOnLeft": true,
@@ -471,7 +471,7 @@
         "effort": "medium"
       }
     },
-    "configPath": "C:\\Projects\\DAOU.Athena\\app\\.verify-profile\\.codex-home\\config.toml",
+    "configPath": "C:\\Users\\ajc22\\orca\\workspaces\\DAOU.Athena\\디자인\\app\\.verify-profile\\.codex-home\\config.toml",
     "configOnDiskAfterSet": "model = \"gpt-5-codex\"\nmodel_reasoning_effort = \"medium\"",
     "savedCorrectly": true,
     "persistedToConfigToml": true,
@@ -480,5 +480,5 @@
     "rejectedPatchesDidNotChangeFile": true,
     "nullRemovesModelLine": true
   },
-  "finishedAt": "2026-08-18T11:59:01.917Z"
+  "finishedAt": "2026-08-18T14:07:08.431Z"
 }
