@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-17T23:31:59.261Z",
+  "generatedAt": "2026-08-18T04:30:40.742Z",
   "method": "mapping_id 사전순 정렬 → sha256(mapping_id) 오름차순으로 W01~W15 배정 (결정적 순열).",
   "mapping": [
     {

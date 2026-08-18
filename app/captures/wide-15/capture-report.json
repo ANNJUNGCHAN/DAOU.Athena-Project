@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-17T23:31:59.233Z",
+  "generatedAt": "2026-08-18T04:30:40.710Z",
   "method": "app/capture-wide15.js — verify.js 검증10(app/verify.js:528-573) 경로를 15 TR 전부로 확장. canvasWin에 athena:add-canvas-live를 직접 주입 → renderMcpTable → webContents.capturePage().",
   "canvasWidthPx": 1560,
   "trCount": 15,
