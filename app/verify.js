@@ -608,6 +608,9 @@ app.whenReady().then(async () => {
     paneSeparated: chartProbe !== null && chartProbe.paneRows >= 3, // 가격+구분+거래량 이상
     indicatorRows35: chartProbe !== null && chartProbe.indicatorRows === 35,
     volumeProfileBars24: chartProbe !== null && chartProbe.vpBars === 24,
+    // 실측 수치도 그대로 남긴다 — 불리언만으로는 미래 회귀의 원인 추적이 어렵다
+    // (아키텍트 검증 권고, 2026-08-18. 형제 검증 블록과 기록 밀도 정합).
+    measured: chartProbe,
   };
   console.log('[verify] 검증11(차트 카드):', JSON.stringify(report.chartCard));
 
