@@ -248,6 +248,15 @@ async function createWindows() {
   wireWindowsKeyShortcuts(canvasWin);
   wireOsSnapEvents(chatWin);
   wireOsSnapEvents(canvasWin);
+
+  // 상단 모서리는 그립 우선(2026-08-19 결정, 질의응답) — 채팅창 상단 10px에서
+  // 앱 손잡이(#grip: 클램프·유리 보간)와 OS 네이티브 엣지 리사이즈(무제한·무보간)가
+  // 같은 픽셀을 놓고 경합하던 비결정성 해소. will-resize의 edge 인자로 순수 상단발
+  // 리사이즈만 막는다 — 좌/우/아래와 모서리(대각)는 네이티브 자유 리사이즈 유지.
+  // setBounds에는 이 이벤트가 오지 않으므로(Electron 문서) 그립 경로는 영향 없다.
+  chatWin.on('will-resize', (event, newBounds, details) => {
+    if (details && details.edge === 'top') event.preventDefault();
+  });
 }
 
 // ---------- OS 스냅 이벤트 정착 (2026-08-18 승급 — qa-win-arrow.json 실측 근거) ----------
@@ -604,9 +613,17 @@ ipcMain.on('athena:zoom', (e, { dir } = {}) => applyUiZoom(dir));
 // 기본 높이로 되돌려야 한다(IPC 계약 — "when done is true, main returns the
 // chat window to base height itself"). 기존 수동 리사이즈 핸들러와 정확히
 // 같은 clamp·이동 로직을 공유한다.
-function setChatHeight(height) {
+function setChatHeight(height, { manual = false } = {}) {
   if (!chatWin || chatWin.isDestroyed()) return;
-  const clamped = Math.max(layout.chatBaseH, Math.min(layout.chatMaxH, Math.round(height)));
+  // 수동 요청(그립 드래그·□ 복원)은 표준 최대(chatMaxH)를 넘어 workArea까지
+  // 허용한다(2026-08-19 결정 — □ 토글이 "마지막 수동 높이"를 기억·복원하는
+  // Windows 복원 사각형 의미론. OS 엣지 리사이즈로 chatMaxH를 넘긴 크기를 앱
+  // 경로가 복원할 수 있어야 한다). 자동 성장은 여전히 chatMaxH 캡 — 내용이
+  // 길다고 창이 화면을 다 먹으면 안 된다.
+  const maxH = manual
+    ? Math.max(layout.chatMaxH, screen.getDisplayMatching(chatWin.getBounds()).workArea.height)
+    : layout.chatMaxH;
+  const clamped = Math.max(layout.chatBaseH, Math.min(maxH, Math.round(height)));
   if (clamped === chatHeight) return;
   chatHeight = clamped;
   const y = chatBottom - chatHeight;
@@ -617,7 +634,7 @@ function setChatHeight(height) {
   if (canvasVisible) chatWin.moveTop(); // 확장 시 캔버스 창 위로 올라탄다(two-windows.md E3-확장)
 }
 
-ipcMain.on('athena:set-chat-height', (e, { height }) => setChatHeight(height));
+ipcMain.on('athena:set-chat-height', (e, { height, manual }) => setChatHeight(height, { manual: !!manual }));
 
 // ---------- 점 → 캔버스 확장/수축 (spike v2.js 이식) ----------
 async function getDotScreenPoint() {

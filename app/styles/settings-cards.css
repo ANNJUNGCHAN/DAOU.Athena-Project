@@ -44,7 +44,7 @@
    * 였고 대화 창 모드의 카드류는 전부 평면 rgba였다 — canvas.css .card와 같은
    * 처방(알파 0.45 + blur 14px)으로 재질을 통일한다. 유리 위 유리(#settings 자체가
    * .app 유리)는 two-windows.md 정정 2가 이미 감수한 비용이다. */
-  background: rgba(36, 42, 54, 0.45);
+  background: rgba(36, 42, 54, var(--glass-card)); /* SSOT: tokens.css 유리 사다리 */
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid var(--color-k-line);
@@ -97,14 +97,14 @@
 .card.screen .card-body, .card.model .card-body { padding: 0 18px; }
 
 .uk-settings-title { display: flex; align-items: baseline; gap: 12px; min-width: 0; }
-.uk-settings-name { font-family: var(--font-strong); font-size: 14px; color: var(--color-k-text); white-space: nowrap; }
-.uk-settings-count { font-family: var(--font-mono); font-size: 12px; color: var(--color-k-faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.uk-settings-name { font-family: var(--font-strong); font-size: var(--text-md); color: var(--color-k-text); white-space: nowrap; }
+.uk-settings-count { font-family: var(--font-mono); font-size: var(--text-sm); color: var(--color-k-faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .uk-settings-actions { display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
 .uk-settings-note {
   padding: 8px 18px;
   background: rgba(29, 34, 44, 0.35);
   font-family: var(--font-body);
-  font-size: 12px;
+  font-size: var(--text-sm);
   color: var(--color-k-faint);
   display: flex;
   flex-direction: column;
@@ -123,7 +123,7 @@
 .uk-col-head span {
   font-family: var(--font-body);
   letter-spacing: 0.08em;
-  font-size: 11px;
+  font-size: var(--text-xs);
   color: var(--color-k-faint);
 }
 .uk-row {
@@ -136,9 +136,9 @@
 }
 .uk-row.is-clickable { cursor: pointer; }
 .uk-row.is-clickable:hover { background: rgb(255 255 255 / 3%); }
-.uk-cell-strong { font-family: var(--font-body); font-size: 13px; color: var(--color-k-text); }
-.uk-mono-faint { font-family: var(--font-mono); font-size: 12px; color: var(--color-k-faint); }
-.uk-cmd { font-family: var(--font-mono); font-size: 11px; color: var(--color-k-faint); white-space: normal; word-break: break-all; }
+.uk-cell-strong { font-family: var(--font-body); font-size: var(--text-base); color: var(--color-k-text); }
+.uk-mono-faint { font-family: var(--font-mono); font-size: var(--text-sm); color: var(--color-k-faint); }
+.uk-cmd { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-k-faint); white-space: normal; word-break: break-all; }
 /* 유리화(2026-08-18) — 평면 rgba를 canvas 카드와 같은 재질로. 명령 문자열 가독은
    blur가 뒤를 뭉개므로 유지된다. */
 .uk-cmd-box { padding: 10px 12px; border-radius: 6px; background: rgba(29, 34, 44, 0.55); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid var(--color-k-line-soft); }
@@ -156,10 +156,10 @@
 .uk-col-mcpstatus { flex: 0 0 130px; }
 .uk-col-mcptools { flex: 0 0 100px; }
 .uk-col-mcpcmd { flex: 1; }
-.uk-mcp-warning { font-family: var(--font-body); font-size: 11px; color: var(--color-warn); margin-top: 2px; }
+.uk-mcp-warning { font-family: var(--font-body); font-size: var(--text-xs); color: var(--color-warn); margin-top: 2px; }
 
 /* 필(pill) — 상태 표시 공용, 색은 상태에만 쓴다 */
-.uk-pill { display: inline-flex; align-items: center; height: 20px; padding: 0 8px; border-radius: 999px; font-family: var(--font-body); font-size: 11px; white-space: nowrap; }
+.uk-pill { display: inline-flex; align-items: center; height: 20px; padding: 0 8px; border-radius: 999px; font-family: var(--font-body); font-size: var(--text-xs); white-space: nowrap; }
 .uk-pill.is-clickable { cursor: pointer; }
 .uk-pill.tone-ok { background: rgb(95 206 63 / 12%); color: var(--color-ok); }
 .uk-pill.tone-warn { background: rgb(255 152 56 / 12%); color: var(--color-warn); }
@@ -187,14 +187,14 @@
 .uk-bullets { display: flex; flex-direction: column; gap: 8px; }
 .uk-bullet-item { display: flex; align-items: flex-start; gap: 8px; }
 .uk-bullet-dot { width: 4px; height: 4px; margin-top: 7px; border-radius: 999px; background: var(--color-k-faint); flex: none; }
-.uk-bullet-text { font-family: var(--font-body); font-size: 13px; line-height: 19px; color: var(--color-k-dim); }
+.uk-bullet-text { font-family: var(--font-body); font-size: var(--text-base); line-height: 19px; color: var(--color-k-dim); }
 
 .uk-field-group { margin-bottom: 20px; }
 .uk-field-group:last-child { margin-bottom: 0; }
-.uk-field-label { font-family: var(--font-body); font-size: 13px; color: var(--color-k-dim); display: block; margin-bottom: 6px; }
+.uk-field-label { font-family: var(--font-body); font-size: var(--text-base); color: var(--color-k-dim); display: block; margin-bottom: 6px; }
 .uk-field-row { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 6px; }
-.uk-field-hint { font-family: var(--font-mono); font-size: 12px; color: var(--color-k-faint); }
-.uk-field-hint-static { font-family: var(--font-body); font-size: 12px; color: var(--color-k-faint); margin-top: 4px; }
+.uk-field-hint { font-family: var(--font-mono); font-size: var(--text-sm); color: var(--color-k-faint); }
+.uk-field-hint-static { font-family: var(--font-body); font-size: var(--text-sm); color: var(--color-k-faint); margin-top: 4px; }
 
 .uk-input {
   width: 100%;
@@ -205,7 +205,7 @@
   border: 1px solid var(--color-k-line);
   color: var(--color-k-text);
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: var(--text-md);
 }
 .uk-input::placeholder { color: var(--color-k-faint); }
 .uk-input-mono { font-family: var(--font-mono); letter-spacing: 3px; }
@@ -224,7 +224,7 @@
   border: 1px solid var(--color-k-line);
   color: var(--color-k-text);
   font-family: var(--font-mono);
-  font-size: 12.5px;
+  font-size: var(--text-base);
   resize: vertical;
 }
 .uk-textarea::placeholder { color: var(--color-k-faint); }
@@ -233,22 +233,22 @@
 .uk-status-row { display: flex; align-items: center; gap: 8px; min-height: 18px; }
 .uk-status-dot { width: 6px; height: 6px; border-radius: 999px; background: var(--color-k-dim); flex: none; }
 .uk-status-dot.is-busy { background: var(--color-brand); }
-.uk-status-text { font-family: var(--font-body); font-size: 13px; color: var(--color-k-dim); }
+.uk-status-text { font-family: var(--font-body); font-size: var(--text-base); color: var(--color-k-dim); }
 
 /* ---- 주문 API 게이트 시트 ---- */
 .uk-split { display: flex; gap: 24px; padding: 4px 0; }
 .uk-split-col { flex: 1; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
-.uk-split-head { display: flex; align-items: center; gap: 8px; font-family: var(--font-strong); font-size: 13px; color: var(--color-k-dim); }
+.uk-split-head { display: flex; align-items: center; gap: 8px; font-family: var(--font-strong); font-size: var(--text-base); color: var(--color-k-dim); }
 .uk-dot-warn { width: 6px; height: 6px; border-radius: 999px; background: var(--color-warn); flex: none; }
 .uk-dot-dim { width: 6px; height: 6px; border-radius: 999px; background: var(--color-k-dim); flex: none; }
 .uk-tr-row { display: flex; gap: 10px; align-items: baseline; }
-.uk-tr-code { font-family: var(--font-mono); width: 96px; flex: none; color: var(--color-k-dim); font-size: 12px; } /* 11→12 — TR 코드는 판단 자료(12px 하한, 2026-08-18) */
-.uk-tr-name { font-family: var(--font-strong); width: 64px; flex: none; color: var(--color-k-text); font-size: 13px; }
-.uk-tr-actions { font-family: var(--font-body); color: var(--color-k-dim); font-size: 12px; }
-.uk-tr-foot { font-family: var(--font-body); color: var(--color-k-faint); font-size: 11px; padding-top: 4px; }
+.uk-tr-code { font-family: var(--font-mono); width: 96px; flex: none; color: var(--color-k-dim); font-size: var(--text-sm); } /* 11→12 — TR 코드는 판단 자료(12px 하한, 2026-08-18) */
+.uk-tr-name { font-family: var(--font-strong); width: 64px; flex: none; color: var(--color-k-text); font-size: var(--text-base); }
+.uk-tr-actions { font-family: var(--font-body); color: var(--color-k-dim); font-size: var(--text-sm); }
+.uk-tr-foot { font-family: var(--font-body); color: var(--color-k-faint); font-size: var(--text-xs); padding-top: 4px; }
 .uk-closed-item { display: flex; flex-direction: column; gap: 3px; }
-.uk-closed-title { font-family: var(--font-strong); color: #F2F4F8; font-size: 14px; }
-.uk-closed-desc { font-family: var(--font-body); color: var(--color-k-dim); font-size: 12px; }
+.uk-closed-title { font-family: var(--font-strong); color: #F2F4F8; font-size: var(--text-md); }
+.uk-closed-desc { font-family: var(--font-body); color: var(--color-k-dim); font-size: var(--text-sm); }
 
 .uk-toggle-row {
   display: flex;
@@ -259,8 +259,8 @@
   border-top: 1px solid var(--color-k-line-soft);
   border-bottom: 1px solid var(--color-k-line-soft);
 }
-.uk-toggle-label { font-family: var(--font-strong); font-size: 14px; color: var(--color-k-text); }
-.uk-toggle-sub { font-family: var(--font-body); font-size: 12px; color: var(--color-k-faint); margin-top: 4px; }
+.uk-toggle-label { font-family: var(--font-strong); font-size: var(--text-md); color: var(--color-k-text); }
+.uk-toggle-sub { font-family: var(--font-body); font-size: var(--text-sm); color: var(--color-k-faint); margin-top: 4px; }
 .uk-toggle {
   width: 44px; height: 24px; padding: 0; flex: none;
   border-radius: 999px;
@@ -285,23 +285,23 @@
   padding: 12px 14px; border-radius: 8px; background: rgba(29, 34, 44, 0.35);
 }
 .uk-checklist-row { display: flex; align-items: center; justify-content: space-between; }
-.uk-checklist-label { display: flex; align-items: center; gap: 8px; font-family: var(--font-body); font-size: 13px; color: var(--color-k-text); }
-.uk-revert-note { font-family: var(--font-body); font-size: 12px; color: var(--color-k-dim); padding-top: 8px; }
+.uk-checklist-label { display: flex; align-items: center; gap: 8px; font-family: var(--font-body); font-size: var(--text-base); color: var(--color-k-text); }
+.uk-revert-note { font-family: var(--font-body); font-size: var(--text-sm); color: var(--color-k-dim); padding-top: 8px; }
 
 /* ---- MCP 등록 시트 ---- */
 .uk-alias-list { display: flex; flex-direction: column; border-radius: 6px; overflow: hidden; border: 1px solid var(--color-k-line-soft); }
 .uk-alias-row { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 1px solid var(--color-k-line-soft); background: rgba(29, 34, 44, 0.72); }
 .uk-alias-row:last-child { border-bottom: none; }
 .uk-alias-arrow { color: var(--color-k-faint); font-family: var(--font-mono); }
-.uk-staged-alias { font-family: var(--font-mono); font-size: 13px; color: var(--color-k-text); }
+.uk-staged-alias { font-family: var(--font-mono); font-size: var(--text-base); color: var(--color-k-text); }
 .uk-gate-target { display: flex; align-items: center; gap: 10px; padding: 6px 0 4px; }
 .uk-pill-list { display: flex; flex-wrap: wrap; gap: 8px; }
 .uk-warnbox { display: flex; gap: 10px; padding: 10px 12px; border-radius: 8px; background: rgb(255 152 56 / 12%); border: 1px solid rgb(255 152 56 / 32%); }
 .uk-warnbox-icon {
   width: 20px; height: 20px; border-radius: 999px; background: var(--color-warn); color: #3A2200;
-  display: flex; align-items: center; justify-content: center; font-family: var(--font-strong); font-size: 12px; flex: none;
+  display: flex; align-items: center; justify-content: center; font-family: var(--font-strong); font-size: var(--text-sm); flex: none;
 }
-.uk-warnbox-body { font-family: var(--font-body); font-size: 12px; color: var(--color-k-dim); }
+.uk-warnbox-body { font-family: var(--font-body); font-size: var(--text-sm); color: var(--color-k-dim); }
 
 /* probe 시트 닫기 확인 — .uk-warnbox 그대로 쓰되 본문을 늘리고 버튼을 오른쪽에
    붙인다(D8). 새 색·새 형태를 만들지 않는다 — risks 경고와 같은 자리다. */
@@ -317,8 +317,8 @@
 .uk-col-toolallow { flex: 0 0 120px; text-align: right; display: flex; justify-content: flex-end; white-space: nowrap; }
 .is-dim { color: #4A5566 !important; }
 .uk-row-oversized { background: rgb(255 152 56 / 5%); }
-.uk-oversized-note { font-family: var(--font-body); font-size: 11px; color: var(--color-warn); }
-.uk-probe-notes { display: flex; flex-direction: column; gap: 6px; padding: 10px 0; font-family: var(--font-body); font-size: 12px; color: var(--color-k-dim); }
+.uk-oversized-note { font-family: var(--font-body); font-size: var(--text-xs); color: var(--color-warn); }
+.uk-probe-notes { display: flex; flex-direction: column; gap: 6px; padding: 10px 0; font-family: var(--font-body); font-size: var(--text-sm); color: var(--color-k-dim); }
 .uk-note-ok { color: var(--color-ok); font-family: var(--font-strong); }
 .uk-note-dim { color: var(--color-k-faint); font-family: var(--font-strong); }
 .uk-flex-spacer { flex: 1; }
@@ -327,7 +327,7 @@
 .uk-check {
   width: 16px; height: 16px; flex: none; border-radius: 2px; border: 1px solid #3A4150;
   background: transparent; display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-strong); font-size: 11px; color: #12331A; cursor: pointer; padding: 0;
+  font-family: var(--font-strong); font-size: var(--text-xs); color: #12331A; cursor: pointer; padding: 0;
 }
 .uk-check.is-checked { background: var(--color-ok); border-color: var(--color-ok); }
 .uk-check.is-disabled { border-color: rgb(58 65 80 / 40%); color: #3A4150; cursor: default; }
@@ -337,14 +337,14 @@
 .uk-row-delete {
   width: 20px; height: 20px; padding: 0; border: 0; border-radius: 4px;
   background: none; color: var(--color-k-faint);
-  font-family: var(--font-mono); font-size: 15px; line-height: 1;
+  font-family: var(--font-mono); font-size: var(--text-lg); line-height: 1;
   cursor: pointer; display: flex; align-items: center; justify-content: center;
 }
 .uk-row-delete:hover:not(:disabled) { color: var(--color-warn); background: rgb(255 152 56 / 10%); }
 .uk-row-delete:disabled { color: rgb(107 116 128 / 40%); cursor: default; }
 
 .uk-row-confirm { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
-.uk-row-confirm-msg { font-family: var(--font-body); font-size: 12.5px; color: var(--color-k-dim); }
+.uk-row-confirm-msg { font-family: var(--font-body); font-size: var(--text-base); color: var(--color-k-dim); }
 /* 삭제 확정 버튼 — ghost 위에 경고색을 얹는다. primary(브랜드색)는 쓰지
    않는다(MCP 카드는 "+ 서버 등록"이 이미 화면 내 유일한 브랜드색 자리다,
    AT-ST-004 Desc 1.2). */
@@ -372,7 +372,7 @@
   gap: 8px;
 }
 .uk-a11y-row { display: flex; align-items: center; gap: 10px; }
-.uk-a11y-label { font-family: var(--font-body); font-size: 13px; color: var(--color-k-text); flex: 1; }
+.uk-a11y-label { font-family: var(--font-body); font-size: var(--text-base); color: var(--color-k-text); flex: 1; }
 
 /* =========================================================================
    모델 카드 (2026-08-18, 다계정 요건 추가) — Claude/Codex 섹션(계정 목록 ·
@@ -402,7 +402,7 @@
   padding: 4px 8px;
   border-radius: 6px;
   font-family: var(--font-body);
-  font-size: 13px;
+  font-size: var(--text-base);
   color: var(--color-k-text);
 }
 button.uk-model-account-row {
@@ -416,7 +416,7 @@ button.uk-model-account-row {
 button.uk-model-account-row:hover { background: rgb(255 255 255 / 5%); }
 button.uk-model-account-row:focus-visible { outline: 2px solid rgb(255 255 255 / 55%); outline-offset: -2px; }
 .uk-model-account-label { flex: none; }
-.uk-model-connect-label { font-family: var(--font-body); font-size: 12px; color: var(--color-k-dim); }
+.uk-model-connect-label { font-family: var(--font-body); font-size: var(--text-sm); color: var(--color-k-dim); }
 .uk-model-account-connect:hover .uk-model-connect-label { color: var(--color-k-text); }
 @media (prefers-reduced-motion: reduce) {
   button.uk-model-account-row { transition: none; }
@@ -432,7 +432,7 @@ button.uk-model-account-row:focus-visible { outline: 2px solid rgb(255 255 255 /
   border: 1px solid rgb(255 255 255 / 14%);
   color: var(--color-k-dim);
   font-family: var(--font-body);
-  font-size: 12px;
+  font-size: var(--text-sm);
 }
 .uk-btn.uk-chip:hover:not(:disabled) { background: rgb(255 255 255 / 10%); }
 .uk-btn.uk-chip.is-pressed {

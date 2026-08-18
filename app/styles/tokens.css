@@ -18,6 +18,14 @@
   --color-k-dim: #9aa2b1;
   --color-k-faint: #6b7480;
 
+  /* 텍스트 밝기 알파 변형 — 2026-08-19 결정(질의응답): 온보딩·인증·설정 화면군이
+     쓰던 rgb(242 244 248 / N%)·rgb(230 232 238 / N%) 리터럴 11종을 4단으로 접는다.
+     새 알파가 필요하면 단계를 늘리지 말고 가장 가까운 단계를 쓴다. */
+  --color-k-bright: rgb(242 244 248 / 92%);
+  --color-k-soft: rgb(230 232 238 / 62%);
+  --color-k-hint: rgb(230 232 238 / 45%);
+  --color-k-ghost: rgb(230 232 238 / 30%);
+
   /* 가격 의미색 */
   --color-up: #ff5c5c;
   --color-down: #4d9fff;
@@ -32,6 +40,16 @@
   --color-warn: #ff9838;
   --color-info: #4d9fff;
 
+  /* 유리 사다리 — 2026-08-19 결정(질의응답): "광량 3단 고정·같은 단계 값 동일"
+     규범을 현실의 값 사다리로 개정하고 여기를 SSOT로 삼는다(soul.md §7 완화책 2 개정).
+     순서 계약: window < card < canvas < window-max. verify.js 검증16이 이 값과
+     실제 표면 렌더 값의 일치·순서를 단언한다 — 값을 바꾸려면 여기만 바꾼다.
+     카드가 캔버스 창보다 얇은 이유: 카드는 blur(14px)라는 별도 축을 함께 갖는다. */
+  --glass-window: 0.30;      /* 대화 창 기본(뒤=데스크톱) */
+  --glass-card: 0.45;        /* 카드 — backdrop-filter blur(14px)와 짝 */
+  --glass-canvas: 0.50;      /* 캔버스 창 표면 */
+  --glass-window-max: 0.55;  /* 대화 창 확장(뒤=캔버스) */
+
   --ease: cubic-bezier(.2, 0, 0, 1);
   --dur-fast: 120ms;
   --dur-base: 180ms;
@@ -41,6 +59,20 @@
   --font-strong: 'Daki B', -apple-system, 'Segoe UI', sans-serif;
   --font-display: 'Daki Title', -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, 'Cascadia Code', monospace;
+
+  /* 글자 크기 스케일 — 2026-08-19 결정(질의응답): 0.5px 단위 임의값 12종 난립을
+     유한 단계로 접는다. 규칙: 금융 판단에 직접 쓰이는 텍스트는 --text-sm(12px) 이상,
+     --text-xs 이하는 순수 장식·보조 힌트에만. 새 값이 필요하면 단계를 늘리지 말고
+     가장 가까운 단계를 쓴다(soul.md §7 "타이포는 극도로 절제"). */
+  --text-2xs: 10px;
+  --text-xs: 11px;
+  --text-sm: 12px;
+  --text-base: 13px;
+  --text-md: 14px;
+  --text-lg: 15px;
+  --text-xl: 20px;
+  --text-display: 28px;
+  --text-hero: 72px;
 }
 
 * { box-sizing: border-box; }
