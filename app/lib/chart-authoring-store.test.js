@@ -36,13 +36,15 @@ test('직렬화 왕복 — 4종 상태가 보존된다', () => {
     volumeProfileOn: true,
     visible: new Set(['ma', 'boll']),
     params: { ma: { periods: [5, 20] }, boll: { period: 20, mult: 2 } },
-    drawings: [],
+    drawings: { hlines: [{ id: 'h1', price: 70000 }], lines: [] },
   };
   const restored = deserializeAuthoring(JSON.stringify(serializeAuthoring(state)));
   assert.equal(restored.form, 'bar');
   assert.equal(restored.volumeProfileOn, true);
   assert.deepEqual(restored.indicators.visible.sort(), ['boll', 'ma']);
   assert.deepEqual(restored.indicators.params.boll, { period: 20, mult: 2 });
+  assert.equal(restored.drawings.hlines.length, 1);
+  assert.equal(restored.drawings.hlines[0].price, 70000);
 });
 
 test('스키마 화이트리스트 — 직렬화 결과에 지표·형식·매물대·드로잉 외 키가 없다', () => {
