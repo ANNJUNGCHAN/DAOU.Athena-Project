@@ -230,10 +230,23 @@ window.athena.on('athena:init', (payload) => {
 const rootStyles = getComputedStyle(document.documentElement);
 const GLASS_WINDOW = parseFloat(rootStyles.getPropertyValue('--glass-window')) || 0.30;
 const GLASS_WINDOW_MAX = parseFloat(rootStyles.getPropertyValue('--glass-window-max')) || 0.55;
+// 휘도 감지-적응(2026-08-19) — 높이 보간과 밝기 하한의 합성: 최종 두께는
+// max(높이 보간값, 밝기 하한)이다. 어두운 배경에선 하한이 GLASS_WINDOW라 기존
+// 동작 그대로이고, 밝은 배경에선 하한이 0.72까지 올라가 dim 텍스트 소실(검증
+// 보드 45 실측)을 막는다.
+let glassFrac = 0;
+let glassBrightFloor = GLASS_WINDOW;
 function applyGlassFraction(frac) {
-  const alpha = GLASS_WINDOW + (GLASS_WINDOW_MAX - GLASS_WINDOW) * frac;
+  glassFrac = frac;
+  const interpolated = GLASS_WINDOW + (GLASS_WINDOW_MAX - GLASS_WINDOW) * frac;
+  const alpha = Math.max(interpolated, glassBrightFloor);
   document.documentElement.style.setProperty('--glass-alpha', alpha.toFixed(3));
 }
+window.athena.on('athena:backdrop-luminance', ({ windowAlpha } = {}) => {
+  if (!Number.isFinite(windowAlpha)) return;
+  glassBrightFloor = windowAlpha;
+  applyGlassFraction(glassFrac); // 현재 높이 상태에 새 하한을 즉시 합성 — 전이는 CSS(600ms)가 맡는다
+});
 
 window.addEventListener('resize', () => {
   // innerHeight는 CSS px — 창 bounds(물리 px)와 비교하려면 줌 배율을 되돌린다.
@@ -827,8 +840,10 @@ function bindWindowDrag(el) {
   el.addEventListener('mousedown', (e) => {
     if (e.button !== 0 || e.target !== el) return;
     window.athena.send('athena:window-drag', { phase: 'start' });
+    document.body.style.cursor = 'grabbing'; // 잡는 중 — hover의 grab(chat.css)과 짝(2026-08-19)
     const end = () => {
       window.athena.send('athena:window-drag', { phase: 'end' });
+      document.body.style.cursor = '';
       window.removeEventListener('mouseup', end);
       window.removeEventListener('blur', end);
     };

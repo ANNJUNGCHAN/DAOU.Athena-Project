@@ -36,6 +36,14 @@ function easeInCubic(t) { return t * t * t; }
 // - cards: 'live'(현행 — 카드 backdrop-filter 유지)
 //          | 'baked'(애니메이션 동안 카드를 정적 프로스트로 굽는다, canvas.css .frost-baked)
 let glassSeparation = { sheen: 'modulate', cards: 'live' };
+// 휘도 감지-적응(2026-08-19) — main이 보내는 밝기 기반 유리 두께를 .mosaic에
+// 반영한다. canvas.css가 var(--glass-canvas-live, var(--glass-canvas))를 읽으므로
+// 이벤트가 안 오면(fixture 검증) 토큰 기본값 그대로다 — 검증16 결정론 유지.
+window.athena.on('athena:backdrop-luminance', ({ canvasAlpha } = {}) => {
+  if (!Number.isFinite(canvasAlpha)) return;
+  document.documentElement.style.setProperty('--glass-canvas-live', canvasAlpha.toFixed(3));
+});
+
 window.athena.on('athena:glass-separation', (payload) => {
   glassSeparation = {
     sheen: payload && payload.sheen === 'bake' ? 'bake' : 'modulate',
