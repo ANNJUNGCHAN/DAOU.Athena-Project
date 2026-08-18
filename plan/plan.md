@@ -1,6 +1,6 @@
 # Athena 진행 상황 및 재개 계획
 
-> 최종 갱신: 2026-08-17 · 브랜치 `main` — **작업 브랜치 4종이 전부 `main`에 병합됐다**
+> 최종 갱신: 2026-08-18 · 브랜치 `main` — **작업 브랜치 4종이 전부 `main`에 병합됐다**
 >
 > **다음 세션은 이 파일부터 읽는다.** 여기에는 *지금 상태 / 검증된 사실 / 다음 수*만 적는다.
 > 설계 근거와 함정 목록은 [`plan/00-인수인계.md`](00-인수인계.md)에 있다. 중복하지 않는다.
@@ -283,7 +283,7 @@ close가 lifespan에 대칭으로 붙었고 `app.state.brain_*`로 readiness가 
 | 4 | ~~**stream-json 파서**~~ → **완료** (2026-08-17) | `app/lib/main/stream-json-parser.js`. 테스트 29건 전부 실왕복 캡처로 검증(지어낸 픽스처 0건) |
 | 5 | **W3 캔버스 어댑터** — upstream 출력 → 캔버스 데이터 | 미착수. `stream.py`가 여기서 첫 프로덕션 호출자를 얻는다. 계약 형상은 이미 일치(`canvas.py` 스트림 스키마 ↔ `stream.py` 레코드) |
 | 6 | **타임라인 캔버스** | 계획은 "타임라인부터"인데 `app/canvas.js`에 timeline 분기 자체가 없다(stream/reader/table만). 가격축은 KRX 승인 전까지 pykrx로 잠정 |
-| 7 | **프레임 최적화** — 굴절층/데이터층 분리 | soul.md가 "모션이 곧 재료"라고 한 설계 |
+| 7 | **프레임 최적화** — 굴절층/데이터층 분리 | soul.md가 "모션이 곧 재료"라고 한 설계. **진행 방식 확정(2026-08-18 질의응답): 프로토타입 실측 먼저** — 스파이크로 분리를 구현해 동일 조건 A/B 프레임 재측정, 수치로 채택 판정 |
 | 8 | 캔버스 설계 라운드 | 근거 ①②④ 확보됨. soul.md §9 프로세스로 |
 | 9 | 파수꾼·조사관 착수 | `plan/감시에이전트-실행계획.md`. 주문 자동집행 없음(결정 3) |
 | 10 | MCP 어댑터에 `detail_group` 반영 | 4툴을 MCP로 노출할 때 `describe.detail_groups` → `resolve.detail_group` 경로 필수 (`docs/LLM_API_SELECTION.md`). 현재 `athena_mcp`에 selector 참조 **0건** |
@@ -300,6 +300,16 @@ close가 lifespan에 대칭으로 붙었고 `app.state.brain_*`로 readiness가 
 | 16 | **`IngestionCoordinator`를 lifespan에 결선** | ADR §4.2 2·3단계. `lifespan.py`에 참조 0건이다. 지금 결선된 writer queue는 `GraphStore._owner`(스레드풀)이지 ADR이 지정한 `asyncio.Queue` + 전용 writer task가 아니다 |
 | 17 | **`IngestionCoordinator.enqueue()`가 shutdown을 안 본다** | `_stopping`은 `_writer_loop()`의 `while not self._stopping`에서만 읽힌다. `enqueue()`/`_queue_job()`은 안 본다 — ADR §4.2 3단계 "신규 enqueue 차단"과 어긋난다. **오늘은 도달 불가**(16번이 안 돼 있어 코디네이터가 안 뜬다). 16번을 하기 **전에** 닫아야 한다 |
 | 18 | **프롬프트 인젝션 (HIGH) — 기한이 도래했다** | `00-인수인계.md` 함정 ②가 *"CLI 통합 시점에 대응"*이라고 미뤄뒀는데, **그 시점이 방금 왔다.** upstream 본문(뉴스·공시)이 LLM을 거쳐 `tool_use.input`으로 되돌아오는 경로가 이제 실제로 존재한다. 이번 결선에서 **아무 대응도 하지 않았다** |
+
+### 2026-08-18 질의응답 결정 — 카드 배치·생애주기
+
+35쪽 장표의 미해결 2건을 질의응답으로 확정했다. 배치 규칙 원본은
+[`plan/canvas-taxonomy.md`](canvas-taxonomy.md) "배치·생애주기 규칙 (2026-08-18 확정)",
+굴절층 진행 방식은 위 다음 수 7에 반영.
+
+| # | 작업 | 근거 |
+|---|---|---|
+| 19 | **카드 배치·생애주기 규칙 앱 반영** | 형상별 폭 문법 + AI 폭 등급 힌트 + 턴별 큐레이션 + 높이 예산(뷰포트 2배·최소 3장) 안전망. 현행 `canvas.js`는 같은 타입 교체·누적뿐 — 큐레이션·힌트·예산 전부 미구현 |
 
 ### Paper 화면설계서 정합 (2026-08-17)
 
