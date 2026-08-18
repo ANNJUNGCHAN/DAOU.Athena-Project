@@ -230,6 +230,7 @@ const CARD_PLAN = {
   stream: { label: '스트림', tool: 'search_news', toolLabel: '뉴스 검색' },
   reader: { label: '리더', tool: 'download_document', toolLabel: '공시 원문 조회' },
   table: { label: '공통 테이블', tool: 'get_financial_statement', toolLabel: '재무제표 조회' },
+  chart: { label: '차트', tool: 'get_stock_chart', toolLabel: '주가 차트 조회' },
   // AT-ST-001/AT-ST-004 제어 카드 트리거 — 카드 자체는 canvas.js가 그린다
   // (00-통합-계획.md §4.1). tool 코드는 실제 TR/MCP 툴 이름이 아직 없어 이
   // 대화 창 진행 표시용으로만 쓰는 자리표시자다 — 발명, 리포트에 명시.
@@ -247,6 +248,7 @@ const CANVAS_TYPE_LABELS = {
   'mcp-table': '공통 테이블',
   stream: '스트림',
   reader: '리더',
+  chart: '차트',
   free: '자유 카드',
   notice: '알림',
 };
@@ -263,6 +265,7 @@ function pickCardTypes(text) {
   if (/뉴스|스트림|news/i.test(t)) picked.push('stream');
   if (/공시|리더|마크다운|reader/i.test(t)) picked.push('reader');
   if (/재무|표|테이블|table/i.test(t)) picked.push('table');
+  if (/차트|캔들|봉차트|chart/i.test(t)) picked.push('chart');
   if (/계좌|account/i.test(t)) picked.push('accounts');
   if (/MCP|엠씨피/i.test(t)) picked.push('mcp');
   // 키워드가 하나도 안 걸리면 기본값 — 3종 모두 (모자이크 데모)

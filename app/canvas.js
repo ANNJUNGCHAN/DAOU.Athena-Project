@@ -3,9 +3,15 @@
 const { ipcRenderer, webFrame } = require('electron');
 const { sanitize } = require('./lib/sanitize');
 const { renderMarkdownInto } = require('./lib/markdown');
-const { loadStreamItems, loadFinancialStatement, loadReaderMarkdown } = require('./lib/mockdata');
+const { loadStreamItems, loadFinancialStatement, loadReaderMarkdown, loadChartOhlcv } = require('./lib/mockdata');
 const { errorNote } = require('./lib/ui-kit');
 const { widthGradeFor, dropTargetsFor, exceedsHeightBudget, MIN_CARDS } = require('./lib/canvas-layout');
+const { foldColumns } = require('./lib/column-fold');
+const { createChartCard } = require('./lib/chart-card');
+
+// 카드별 destroy 콜백 — closeCard가 lightweight-charts 인스턴스를 누수 없이
+// 정리하도록 카드 DOM 노드에 매달아둔다(WeakMap: 카드가 GC되면 콜백도 같이 사라짐).
+const cardDestroyers = new WeakMap();
 
 const mosaic = document.getElementById('mosaic');
 const sheen = document.getElementById('sheen');
@@ -174,13 +180,20 @@ function renderLiveNotice(message) {
 // GLOSSARY.md §2 신규④ "공통 테이블 — 스키마 불특정 레코드. '부모'이자 기본값".
 function renderMcpTable(envelope) {
   const { body } = makeCard('mcp-table', envelope.caption || '공통 테이블', envelope.layout);
-  const cols = (envelope.data && Array.isArray(envelope.data.columns)) ? envelope.data.columns : [];
+  const rawCols = (envelope.data && Array.isArray(envelope.data.columns)) ? envelope.data.columns : [];
   const rows = (envelope.data && Array.isArray(envelope.data.rows)) ? envelope.data.rows : [];
 
-  if (!cols.length || !rows.length) {
+  if (!rawCols.length || !rows.length) {
     body.appendChild(errorNote('빈 테이블 — columns 또는 rows가 없다.'));
     return;
   }
+
+  // §5.3.1 컬럼 우선순위 흡수(2층): columns는 이미 백엔드가 §5.3.1 규칙(식별 컬럼
+  // 고정 + 실측 alias 빈도 tie-break, backend/scripts/generate_api.py의
+  // column_priority_ranking)으로 정렬해 보낸다고 가정한다 — 여기서는 그 순서 위에서
+  // 1560px 캔버스 폭 기준으로 접기만 한다(app/lib/column-fold.js). ka10095(63컬럼)
+  // 같은 넓은 표가 스크롤 없이 fold되어 보이는 게 이 단계의 목표다.
+  const { visible: cols, hidden } = foldColumns(rawCols);
 
   const table = document.createElement('table');
   table.className = 'fin-table';
@@ -207,6 +220,13 @@ function renderMcpTable(envelope) {
   }
   table.appendChild(tbody);
   body.appendChild(table);
+
+  // 접힘 사실은 데이터 속성으로만 남긴다(검증·캡처 리포트가 기계로 읽는다).
+  // 표시 텍스트("접힌 컬럼 N개 …")는 2026-08-18 사용자 결정으로 제거 —
+  // 정보 정직성(ui/soul.md §8)은 기계 검증 가능성으로 유지한다.
+  table.dataset.totalColumns = String(rawCols.length);
+  table.dataset.visibleColumns = String(cols.length);
+  table.dataset.hiddenColumns = String(hidden.length);
 }
 
 // ---------- 실배선 스트림(신규①) — MCP render_canvas의 실제 stream 응답 ----------
@@ -383,6 +403,11 @@ function freshLabel() {
 // 쓰는 채널을 그대로 재사용한다.
 function closeCard(card) {
   const parent = card.parentElement;
+  const destroy = cardDestroyers.get(card);
+  if (destroy) {
+    try { destroy(); } catch (err) { /* 카드가 이미 언마운트된 경우 등 — 닫기 자체는 막지 않는다 */ }
+    cardDestroyers.delete(card);
+  }
   card.remove();
   if (parent && !parent.querySelector('.card')) {
     ipcRenderer.send('athena:collapse-canvas');
@@ -395,7 +420,22 @@ function cardCloseButton(card) {
   b.className = 'uk-card-close';
   b.setAttribute('aria-label', '카드 닫기');
   b.title = '이 카드 닫기';
-  b.textContent = '×';
+  // 문자 '×' 대신 스트로크 SVG — 폰트에 따라 흔들리지 않는 정밀한 X.
+  // createElementNS는 DOM 노드 생성이므로 innerHTML 금지 원칙(CLAUDE.md §6)과 무관.
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', '0 0 10 10');
+  svg.setAttribute('width', '10');
+  svg.setAttribute('height', '10');
+  svg.setAttribute('aria-hidden', 'true');
+  for (const d of ['M1.2 1.2 L8.8 8.8', 'M8.8 1.2 L1.2 8.8']) {
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', d);
+    path.setAttribute('stroke', 'currentColor');
+    path.setAttribute('stroke-width', '1.3');
+    path.setAttribute('stroke-linecap', 'round');
+    svg.appendChild(path);
+  }
+  b.appendChild(svg);
   b.addEventListener('click', () => closeCard(card));
   return b;
 }
@@ -449,9 +489,31 @@ function addCard(type) {
   if (type === 'stream') return renderStream();
   if (type === 'reader') return renderReader();
   if (type === 'table') return renderTable();
+  if (type === 'chart') return renderChartCard();
   // 계좌·MCP 카드는 여기 없다. 2026-08-16에 대화 창의 설정 모드로 옮겼다 —
   // 설정은 데이터 출력이 아니라 "앱 자신"이고, 설정을 만지는 동안 사용자는
   // 채팅을 치지 않는다(ui/DESIGN-SOUL.md:100). 렌더는 chat.js `openSettings`.
+}
+
+// ⑤ 차트 카드(CC-101) — CompoundCard(charts) 위 시계열 렌즈. 카드 제목은
+// TR ID를 노출하지 않는다("일봉 — 삼성전자", CLAUDE.md §5.3.1 관례와 같은 이유로
+// 내부 코드를 화면에 흘리지 않는다). lightweight-charts 마운트는 비동기(동적
+// import, lib/chart-card.js 상단 주석)라 makeCard로 카드 뼈대를 먼저 세우고
+// 그 안에서 await한다 — 다른 렌더러(renderStream 등)와 달리 이 함수만 async다.
+async function renderChartCard() {
+  const { card, body } = makeCard('chart', '일봉 — 삼성전자');
+  const chartBody = document.createElement('div');
+  chartBody.className = 'chart-card-body';
+  body.appendChild(chartBody);
+  try {
+    const { bars } = loadChartOhlcv();
+    const instance = await createChartCard(chartBody, { symbol: '005930', name: '삼성전자', ohlcv: bars });
+    // 닫기 버튼(closeCard)이 lightweight-charts를 정리하도록 카드 자체에 매단다.
+    cardDestroyers.set(card, instance.destroy);
+  } catch (err) {
+    chartBody.remove();
+    body.appendChild(errorNote(`차트를 그리지 못했다 — ${err && err.message ? err.message : String(err)}`));
+  }
 }
 
 // ① 스트림 — sanitize한 문자열은 절대 innerHTML로 넣지 않는다. textContent로만.
@@ -524,7 +586,7 @@ function renderReader() {
 
 // ④ 공통 테이블 — 재무제표(재무상태표) 스냅샷
 function renderTable() {
-  const { body } = makeCard('table', '공통 테이블 · 재무제표(연결)');
+  const { body } = makeCard('table', '재무제표(연결)');
   const { meta, list } = loadFinancialStatement();
   const rows = list.filter((r) => r.sj_nm === '재무상태표');
 

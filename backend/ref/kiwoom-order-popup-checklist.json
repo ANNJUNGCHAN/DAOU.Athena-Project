@@ -1,0 +1,52 @@
+{
+  "items": {
+    "1_safe_state_transition": {
+      "reason": "app/order-popup.js, app/order-preload.js, app/main.js의 order 팝업 구현 산출물이 아직 저장소에 없다(§9.8) — 런타임/DOM 기반 항목은 구현 후에만 자동 판정 가능. 사람 판정 항목이 아니라 '미착수'로 정직하게 pending 표시한다.",
+      "status": "pending",
+      "title": "안전 상태 전이 — draft 렌더/새로고침/재오픈 시 call_order_tr 호출 0회"
+    },
+    "2_field_whitelist": {
+      "reason": "app/order-popup.js, app/order-preload.js, app/main.js의 order 팝업 구현 산출물이 아직 저장소에 없다(§9.8) — 런타임/DOM 기반 항목은 구현 후에만 자동 판정 가능. 사람 판정 항목이 아니라 '미착수'로 정직하게 pending 표시한다.",
+      "status": "pending",
+      "title": "필드 화이트리스트 — 렌더링 필드가 registry.py TR별 필드와 12/12 일치"
+    },
+    "3_sensitive_field_scan": {
+      "hits": [],
+      "method": "manifest request/response 필드 alias+kor 라벨 키워드 스캔(정적, backend/ref/kiwoom-tr-inventory.json)",
+      "status": "pass",
+      "title": "민감정보 비노출 — 계좌번호·비밀번호류 키워드 스캔"
+    },
+    "4_tr_id_not_leaked": {
+      "reason": "app/order-popup.js, app/order-preload.js, app/main.js의 order 팝업 구현 산출물이 아직 저장소에 없다(§9.8) — 런타임/DOM 기반 항목은 구현 후에만 자동 판정 가능. 사람 판정 항목이 아니라 '미착수'로 정직하게 pending 표시한다.",
+      "status": "pending",
+      "title": "TR ID 비노출 — 렌더링 DOM에 원시 TR 코드 0건"
+    },
+    "5_duplicate_submit_lock": {
+      "reason": "app/order-popup.js, app/order-preload.js, app/main.js의 order 팝업 구현 산출물이 아직 저장소에 없다(§9.8) — 런타임/DOM 기반 항목은 구현 후에만 자동 판정 가능. 사람 판정 항목이 아니라 '미착수'로 정직하게 pending 표시한다.",
+      "status": "pending",
+      "title": "중복 제출/폼 잠금 — confirm 진입 후 재클릭 재호출 불가"
+    },
+    "6_in_doubt_timeout_states": {
+      "reason": "app/order-popup.js, app/order-preload.js, app/main.js의 order 팝업 구현 산출물이 아직 저장소에 없다(§9.8) — 런타임/DOM 기반 항목은 구현 후에만 자동 판정 가능. 사람 판정 항목이 아니라 '미착수'로 정직하게 pending 표시한다.",
+      "status": "pending",
+      "title": "in_doubt/타임아웃 표현 — 거부/타임아웃/in_doubt 3종 구분 렌더"
+    },
+    "7_accessibility_fallback": {
+      "reason": "app/order-popup.js, app/order-preload.js, app/main.js의 order 팝업 구현 산출물이 아직 저장소에 없다(§9.8) — 런타임/DOM 기반 항목은 구현 후에만 자동 판정 가능. 사람 판정 항목이 아니라 '미착수'로 정직하게 pending 표시한다.",
+      "status": "pending",
+      "title": "접근성 3종 폴백 — reduced-transparency/contrast/motion"
+    },
+    "8_magenta_exclusivity": {
+      "reason": "app/order-popup.js, app/order-preload.js, app/main.js의 order 팝업 구현 산출물이 아직 저장소에 없다(§9.8) — 런타임/DOM 기반 항목은 구현 후에만 자동 판정 가능. 사람 판정 항목이 아니라 '미착수'로 정직하게 pending 표시한다.",
+      "status": "pending",
+      "title": "마젠타 배타성 — 팝업 열림 중 다른 두 창 마젠타 0곳"
+    }
+  },
+  "scored_mapping_count": 12,
+  "summary": {
+    "fail": 0,
+    "pass": 1,
+    "pending": 7,
+    "total": 8
+  }
+}

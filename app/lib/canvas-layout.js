@@ -12,6 +12,7 @@ const CARD_WIDTH_GRADE = {
   reader: 'half',
   table: 'full',
   'mcp-table': 'full',
+  chart: 'full',
   free: 'full',
   notice: 'full',
 };
@@ -30,6 +31,7 @@ const DROP_TYPE_MAP = {
   stream: ['stream'],
   reader: ['reader'],
   table: ['table', 'mcp-table'],
+  chart: ['chart'],
   free: ['free'],
   timeline: [],
 };

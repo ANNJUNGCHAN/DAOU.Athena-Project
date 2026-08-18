@@ -8,3 +8,9 @@ captures/*.log
 # 검증이 이 머신의 개인 상태(계좌·온보딩·비밀값)에 의존하지 않게 하는 격리 장치다.
 .verify-profile/
 .verify-glass-profile/
+.capture-wide15-profile/
+.probe-chart-profile/
+.probe-chart-indicators-profile/
+.probe-chart-toolbar-profile/
+.probe-chart-authoring-profile/
+.probe-chart-drawing-profile/
