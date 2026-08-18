@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-08-18T07:04:28.680Z",
+  "startedAt": "2026-08-18T07:13:02.125Z",
   "layout": {
     "scale": 1,
     "screen": {
@@ -36,6 +36,14 @@
       "onboard": false,
       "settings": false
     },
+    "bootBar": {
+      "sawFullName": true,
+      "sawPhAfterName": true,
+      "maxName": "ATHENA",
+      "reducedMotion": false,
+      "pass": true
+    },
+    "bootBarWritesName": true,
     "bootedIntoChatMode": true
   },
   "dotScreenPoint": {
@@ -48,16 +56,16 @@
   "expand": {
     "frameCount": 30,
     "p50": 16.700000000000045,
-    "p95": 33.299999999999955,
-    "max": 50,
-    "min": 16.5
+    "p95": 33.29999999999973,
+    "max": 33.299999999999955,
+    "min": 16.59999999999991
   },
   "collapse": {
-    "frameCount": 34,
+    "frameCount": 35,
     "p50": 16.699999999999818,
-    "p95": 24.899999999999636,
-    "max": 33.5,
-    "min": 8.300000000000182
+    "p95": 16.800000000000182,
+    "max": 16.800000000000182,
+    "min": 16.5
   },
   "afterCollapse": {
     "canvasVisible": false
@@ -193,6 +201,16 @@
     "minimizeLowersBoth": true,
     "restorePairsBoth": true
   },
+  "closeToBackground": {
+    "canvasVisibleBeforeClose": true,
+    "bothHiddenAfterClose": true,
+    "visibleAfterClose": {
+      "chat": false,
+      "canvas": false
+    },
+    "chatRestored": true,
+    "canvasRestoredWithPair": true
+  },
   "cardLayout": {
     "arrivalOrder": [
       "stream",
@@ -289,5 +307,5 @@
       "vpBars": 24
     }
   },
-  "finishedAt": "2026-08-18T07:04:51.520Z"
+  "finishedAt": "2026-08-18T07:13:26.278Z"
 }

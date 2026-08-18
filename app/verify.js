@@ -125,6 +125,48 @@ async function waitForChatBooted(chatWin, timeoutMs = 5000) {
   };
 }
 
+// 부팅 4단계 재정의(2026-08-18) 실측 — 확정된 채팅바의 입력줄에 ATHENA가 적혔다가
+// 지워지고 placeholder로 돌아오는지, 부팅이 끝날 때까지 DOM을 60ms 간격으로
+// 표집한다. 스크린샷은 타이밍 레이스가 있어 상태 자체를 잰다. reduced-motion
+// 환경이면 시퀀스가 통째로 생략되는 게 스펙이므로 그 사실을 함께 기록한다.
+async function traceBootBar(chatWin, timeoutMs = 5000) {
+  const probe = `(() => {
+    const boot = document.getElementById('boot');
+    const name = document.getElementById('bootName');
+    const ph = document.getElementById('bootPh');
+    return {
+      booting: !!boot && !boot.hidden,
+      name: name ? name.textContent : '',
+      phVisible: !!ph && !ph.hidden,
+      reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+    };
+  })()`;
+  const t0 = Date.now();
+  let sawFullName = false;
+  let sawPhAfterName = false;
+  let maxName = '';
+  let reducedMotion = false;
+  while (Date.now() - t0 < timeoutMs) {
+    let s;
+    try { s = await chatWin.webContents.executeJavaScript(probe); } catch { break; }
+    reducedMotion = s.reducedMotion;
+    if (!s.booting) break;
+    if (s.name.length > maxName.length) maxName = s.name;
+    if (s.name === 'ATHENA') sawFullName = true;
+    if (sawFullName && s.name === '' && s.phVisible) sawPhAfterName = true;
+    await wait(60);
+  }
+  return {
+    sawFullName,
+    sawPhAfterName,
+    maxName,
+    reducedMotion,
+    // 판정 — 모션이 살아 있으면 "이름을 다 썼고, 지운 뒤 placeholder로 돌아왔다"
+    // 둘 다 관측돼야 한다. reduced-motion이면 생략 자체가 스펙 준수다.
+    pass: reducedMotion || (sawFullName && sawPhAfterName),
+  };
+}
+
 app.whenReady().then(async () => {
   dlog('whenReady fired');
   const report = { startedAt: new Date().toISOString() };
@@ -139,16 +181,23 @@ app.whenReady().then(async () => {
   report.layout = layout;
 
   // ---------- 검증 1: 부팅 — 대화 창만 뜬다 ----------
+  // 부팅 바 연출 표집(1b)은 스크린샷보다 먼저 걸어둔다 — shot()이 수백 ms를 먹는
+  // 동안 타이핑 구간(+660~+1160ms)이 지나가버리는 레이스를 피한다.
+  const bootBarPromise = traceBootBar(chatWin);
   await wait(200);
   report.bootChatOnly = { canvasVisibleAtBoot: canvasWin.isVisible(), chatVisibleAtBoot: chatWin.isVisible() };
   dlog('before shot 01'); const s1 = await shot(chatWin, '01-boot-sequence.png'); dlog('after shot 01');
   const boot = await waitForChatBooted(chatWin);
+  const bootBar = await bootBarPromise;
   dlog('boot done, before shot 02'); const s2 = await shot(chatWin, '02-chat-only-idle.png'); dlog('after shot 02');
   report.bootChatOnly.shots = { boot: s1, idle: s2 };
   report.bootChatOnly.chatBootedAfterBoot = boot.booted;
   report.bootChatOnly.bootMode = boot.mode;
   report.bootChatOnly.exactlyOneModeVisible = boot.exactlyOneModeVisible;
   report.bootChatOnly.panels = boot.panels;
+  // 1b — 부팅 4단계 재정의(2026-08-18): 채팅바가 제 이름을 쓰고 되돌아온다
+  report.bootChatOnly.bootBar = bootBar;
+  report.bootChatOnly.bootBarWritesName = bootBar.pass;
   // 검증 전용 프로필은 온보딩을 완료로 심는다(파일 상단 참조) — 그러므로 여기서
   // 기대하는 모드는 'app'이다. 'onboard'가 나오면 프로필 격리가 깨진 것이고,
   // 그 상태의 검증 5~8은 숨은 DOM을 재는 것이라 믿으면 안 된다.
@@ -156,7 +205,8 @@ app.whenReady().then(async () => {
   console.log(
     '[verify] 검증1 완료 — 부팅 시 캔버스 창 표시 여부:', canvasWin.isVisible(),
     '| 대화 창 부팅:', boot.booted, '| 모드:', boot.mode,
-    '| 모드 배타성:', boot.exactlyOneModeVisible
+    '| 모드 배타성:', boot.exactlyOneModeVisible,
+    '| 부팅바 이름쓰기:', JSON.stringify(bootBar)
   );
 
   // ---------- 검증 2: 점 → 캔버스 확장/수축, 프레임 실측 ----------
@@ -524,6 +574,24 @@ app.whenReady().then(async () => {
     restorePairsBoth: restoredPair.chat && restoredPair.canvas,
   };
   console.log('[verify] 검증9(창 기본 기능):', JSON.stringify(report.windowBasics));
+
+  // 9d — 닫기(백그라운드 유지, 2026-08-18): 두 창이 숨고 프로세스는 산다. 복귀는
+  // 트레이 클릭과 같은 함수 참조(restoreFromBackground)를 직접 부른다 — 실제
+  // 트레이 클릭은 자동화로 만들 수 없다(정직 표기: 아이콘 클릭 자체는 미실측).
+  const canvasVisibleBeforeClose = canvasWin.isVisible();
+  await sendFromChat('athena:close-windows');
+  await wait(400);
+  const hiddenPair = { chat: chatWin.isVisible(), canvas: canvasWin.isVisible() };
+  mainMod.restoreFromBackground();
+  await wait(400);
+  report.closeToBackground = {
+    canvasVisibleBeforeClose,
+    bothHiddenAfterClose: !hiddenPair.chat && !hiddenPair.canvas,
+    visibleAfterClose: hiddenPair,
+    chatRestored: chatWin.isVisible(),
+    canvasRestoredWithPair: !canvasVisibleBeforeClose || canvasWin.isVisible(),
+  };
+  console.log('[verify] 검증9d(닫기→백그라운드→복귀):', JSON.stringify(report.closeToBackground));
 
   // ---------- 검증 10: 카드 배치·생애주기 규칙 (2026-08-18) ----------
   // 규칙 원본: plan/canvas-taxonomy.md "배치·생애주기 규칙". 폭은 형상이 정하고

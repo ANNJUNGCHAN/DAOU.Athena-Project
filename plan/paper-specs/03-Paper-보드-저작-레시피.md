@@ -6,6 +6,12 @@
 > 서버 목록) · `QT-0`(22 · 비밀값 원칙) 두 보드의 `get_jsx`/`get_tree_summary` 실제 결과,
 > `get_basic_info`가 반환한 22개 아트보드 좌표다. 이 문서를 쓴 에이전트는 Paper에
 > **read-only**로 접근했다 — 아래 시퀀스는 실행되지 않았다.
+>
+> **2026-08-18 실집행 정정**: 보드 8쪽(1M-0)·40쪽(6RX-0) 편집에서 이 레시피를 실제로
+> 집행하며 두 가지가 실측으로 갱신됐다. ① **`write_html`의 `style` 문자열은 반드시
+> 케밥케이스 CSS여야 한다** — 초판 예제들의 camelCase는 대부분 조용히 버려진다(함정 11,
+> 예제 전부 케밥케이스로 정정 완료). ② `write_html` 반환값에는 `createdNodes` 배열로
+> 새 노드 ID가 온다(함정 8 갱신 — get_children 우회가 필요 없다).
 
 ---
 
@@ -182,7 +188,7 @@ update_styles {
 write_html {
   "targetNodeId": "<ARTBOARD_ID>",
   "mode": "insert-children",
-  "html": "<div layer-name=\"Mockup Area\" style=\"display:flex;flexGrow:1;flexBasis:0%;height:100%;position:relative;overflow:clip;backgroundColor:#0A0B0E;boxSizing:border-box;\"></div>"
+  "html": "<div layer-name=\"Mockup Area\" style=\"display:flex;flex-grow:1;flex-basis:0%;height:100%;position:relative;overflow:clip;background-color:#0A0B0E;box-sizing:border-box;\"></div>"
 }
 ```
 → `<MOCKUP_ID>`
@@ -212,7 +218,7 @@ duplicate_nodes {
 write_html {
   "targetNodeId": "<MOCKUP_ID>",
   "mode": "insert-children",
-  "html": "<div layer-name=\"Caption\" style=\"position:absolute;left:100px;top:112px;width:1000px;display:flex;flexDirection:column;gap:11px;boxSizing:border-box;\"><div layer-name=\"화면ID\" style=\"color:#FFFFFF6B;fontFamily:var(--font-mono);fontSize:14px;letterSpacing:0.2em;lineHeight:18px;\">AT-XX-NNN</div><div layer-name=\"제목\" style=\"color:#F2F4F8;fontFamily:var(--font-title);fontSize:30px;letterSpacing:-0.02em;lineHeight:36px;\">화면 제목</div><div layer-name=\"설명\" style=\"color:#FFFFFF8A;fontFamily:var(--font-kr);fontSize:15px;lineHeight:25px;\">한 문장 설명.</div></div>"
+  "html": "<div layer-name=\"Caption\" style=\"position:absolute;left:100px;top:112px;width:1000px;display:flex;flex-direction:column;gap:11px;box-sizing:border-box;\"><div layer-name=\"화면ID\" style=\"color:#FFFFFF6B;font-family:var(--font-mono);font-size:14px;letter-spacing:0.2em;line-height:18px;\">AT-XX-NNN</div><div layer-name=\"제목\" style=\"color:#F2F4F8;font-family:var(--font-title);font-size:30px;letter-spacing:-0.02em;line-height:36px;\">화면 제목</div><div layer-name=\"설명\" style=\"color:#FFFFFF8A;font-family:var(--font-kr);font-size:15px;line-height:25px;\">한 문장 설명.</div></div>"
 }
 ```
 
@@ -222,7 +228,7 @@ write_html {
 write_html {
   "targetNodeId": "<MOCKUP_ID>",
   "mode": "insert-children",
-  "html": "<div layer-name=\"<화면별 카드 이름>\" style=\"position:absolute;left:100px;top:300px;width:1308px;display:flex;flexDirection:column;overflow:clip;boxSizing:border-box;backgroundColor:#171B24F0;borderRadius:20px;borderTop:1px solid #FFFDF86B;borderLeft:1px solid var(--color-k-line);borderRight:1px solid var(--color-k-line);borderBottom:1px solid var(--color-k-line);boxShadow:inset 0 0 80px #FFF0D61A, 0 40px 90px #14100A85;\"></div>"
+  "html": "<div layer-name=\"<화면별 카드 이름>\" style=\"position:absolute;left:100px;top:300px;width:1308px;display:flex;flex-direction:column;overflow:clip;box-sizing:border-box;background-color:#171B24F0;border-radius:20px;border-top:1px solid #FFFDF86B;border-left:1px solid var(--color-k-line);border-right:1px solid var(--color-k-line);border-bottom:1px solid var(--color-k-line);box-shadow:inset 0 0 80px #FFF0D61A, 0 40px 90px #14100A85;\"></div>"
 }
 ```
 → `<CARD_ID>`. 이후 헤더 행 1개, 컬럼헤더 행 1개, 데이터 행 각각 1콜씩 — 가이드의
@@ -250,7 +256,7 @@ set_text_content { "updates": [ { "nodeId": "<새 배지 Text ID>", "textContent
 write_html {
   "targetNodeId": "<MOCKUP_ID>",
   "mode": "insert-children",
-  "html": "<div layer-name=\"Spec Strip\" style=\"position:absolute;left:100px;top:<카드하단+22px>px;width:1308px;display:flex;paddingTop:22px;borderTop:1px solid #FFFFFF24;boxSizing:border-box;\"><div style=\"display:flex;flexDirection:column;flexGrow:1;flexBasis:0%;gap:7px;\"><div style=\"color:#FFFFFF5C;fontFamily:var(--font-kr);fontSize:11px;letterSpacing:0.14em;lineHeight:14px;\">라벨1</div><div style=\"color:var(--color-k-text);fontFamily:var(--font-kr);fontSize:15px;lineHeight:20px;\">값1</div></div></div>"
+  "html": "<div layer-name=\"Spec Strip\" style=\"position:absolute;left:100px;top:<카드하단+22px>px;width:1308px;display:flex;padding-top:22px;border-top:1px solid #FFFFFF24;box-sizing:border-box;\"><div style=\"display:flex;flex-direction:column;flex-grow:1;flex-basis:0%;gap:7px;\"><div style=\"color:#FFFFFF5C;font-family:var(--font-kr);font-size:11px;letter-spacing:0.14em;line-height:14px;\">라벨1</div><div style=\"color:var(--color-k-text);font-family:var(--font-kr);font-size:15px;line-height:20px;\">값1</div></div></div>"
 }
 ```
 나머지 3개 column은 같은 부모(`<STRIP_ID>`)에 별도 `write_html` insert-children으로
@@ -262,7 +268,7 @@ write_html {
 write_html {
   "targetNodeId": "<ARTBOARD_ID>",
   "mode": "insert-children",
-  "html": "<div layer-name=\"Spec Panel\" style=\"width:412px;flexShrink:0;height:100%;display:flex;flexDirection:column;backgroundColor:#FFFFFF;borderLeft:1px solid var(--color-doc-line);boxSizing:border-box;\"><div style=\"height:44px;flexShrink:0;display:flex;alignItems:center;justifyContent:center;backgroundColor:var(--color-doc-ink);boxSizing:border-box;\"><div style=\"color:#FFFFFF;fontFamily:var(--font-kr-bold);fontSize:19px;letterSpacing:-0.005em;lineHeight:24px;\">화면 제목</div></div></div>"
+  "html": "<div layer-name=\"Spec Panel\" style=\"width:412px;flex-shrink:0;height:100%;display:flex;flex-direction:column;background-color:#FFFFFF;border-left:1px solid var(--color-doc-line);box-sizing:border-box;\"><div style=\"height:44px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background-color:var(--color-doc-ink);box-sizing:border-box;\"><div style=\"color:#FFFFFF;font-family:var(--font-kr-bold);font-size:19px;letter-spacing:-0.005em;line-height:24px;\">화면 제목</div></div></div>"
 }
 ```
 → `<SPEC_PANEL_ID>`.
@@ -273,7 +279,7 @@ write_html {
 write_html {
   "targetNodeId": "<SPEC_PANEL_ID>",
   "mode": "insert-children",
-  "html": "<div style=\"paddingInline:14px;paddingTop:14px;width:100%;flexShrink:0;boxSizing:border-box;\"><div style=\"borderTop:1px solid #999999;boxSizing:border-box;\"><div style=\"height:36px;display:flex;alignItems:center;width:100%;borderBottom:1px solid #DDDDDD;boxSizing:border-box;\"><div style=\"width:104px;flexShrink:0;height:36px;display:flex;alignItems:center;paddingLeft:12px;backgroundColor:#F2F2F2;boxSizing:border-box;\"><div style=\"color:#111111;fontFamily:var(--font-kr-bold);fontSize:14px;lineHeight:18px;\">화면 ID</div></div><div style=\"flexGrow:1;flexBasis:0%;paddingLeft:14px;boxSizing:border-box;\"><div style=\"color:#111111;fontFamily:var(--font-kr);fontSize:14px;lineHeight:18px;\">AT-XX-NNN</div></div></div></div></div>"
+  "html": "<div style=\"padding-inline:14px;padding-top:14px;width:100%;flex-shrink:0;box-sizing:border-box;\"><div style=\"border-top:1px solid #999999;box-sizing:border-box;\"><div style=\"height:36px;display:flex;align-items:center;width:100%;border-bottom:1px solid #DDDDDD;box-sizing:border-box;\"><div style=\"width:104px;flex-shrink:0;height:36px;display:flex;align-items:center;padding-left:12px;background-color:#F2F2F2;box-sizing:border-box;\"><div style=\"color:#111111;font-family:var(--font-kr-bold);font-size:14px;line-height:18px;\">화면 ID</div></div><div style=\"flex-grow:1;flex-basis:0%;padding-left:14px;box-sizing:border-box;\"><div style=\"color:#111111;font-family:var(--font-kr);font-size:14px;line-height:18px;\">AT-XX-NNN</div></div></div></div></div>"
 }
 ```
 "화면 명"·"위치" 행도 각각 같은 형태로 이어서 추가(마지막 "위치" 행만
@@ -285,7 +291,7 @@ write_html {
 write_html {
   "targetNodeId": "<SPEC_PANEL_ID>",
   "mode": "insert-children",
-  "html": "<div style=\"height:34px;flexShrink:0;display:flex;alignItems:center;paddingInline:14px;width:100%;backgroundColor:#E8E8E8;boxSizing:border-box;\"><div style=\"color:#111111;fontFamily:var(--font-kr-bold);fontSize:15px;lineHeight:18px;\">Description</div></div>"
+  "html": "<div style=\"height:34px;flex-shrink:0;display:flex;align-items:center;padding-inline:14px;width:100%;background-color:#E8E8E8;box-sizing:border-box;\"><div style=\"color:#111111;font-family:var(--font-kr-bold);font-size:15px;line-height:18px;\">Description</div></div>"
 }
 ```
 
@@ -295,7 +301,7 @@ write_html {
 write_html {
   "targetNodeId": "<SPEC_PANEL_ID>",
   "mode": "insert-children",
-  "html": "<div layer-name=\"Desc List\" style=\"flexGrow:1;flexBasis:0%;display:flex;flexDirection:column;paddingInline:14px;paddingTop:10px;width:100%;boxSizing:border-box;\"></div>"
+  "html": "<div layer-name=\"Desc List\" style=\"flex-grow:1;flex-basis:0%;display:flex;flex-direction:column;padding-inline:14px;padding-top:10px;width:100%;box-sizing:border-box;\"></div>"
 }
 ```
 → `<DESC_LIST_ID>`, 그다음 행 하나씩:
@@ -303,7 +309,7 @@ write_html {
 write_html {
   "targetNodeId": "<DESC_LIST_ID>",
   "mode": "insert-children",
-  "html": "<div style=\"display:flex;alignItems:flex-start;gap:10px;paddingBlock:9px;borderBottom:1px solid #EAEAEA;boxSizing:border-box;\"><div style=\"width:26px;flexShrink:0;textAlign:right;fontFamily:var(--font-kr-bold);fontSize:14px;lineHeight:18px;color:#111111;\">1</div><div style=\"flexGrow:1;flexBasis:0%;display:flex;flexDirection:column;gap:3px;boxSizing:border-box;\"><div style=\"color:#111111;fontFamily:var(--font-kr-bold);fontSize:14px;lineHeight:18px;\">항목 제목</div><div style=\"color:#333333;fontFamily:var(--font-kr);fontSize:13px;lineHeight:20px;\">: 설명 1줄</div></div></div>"
+  "html": "<div style=\"display:flex;align-items:flex-start;gap:10px;padding-block:9px;border-bottom:1px solid #EAEAEA;box-sizing:border-box;\"><div style=\"width:26px;flex-shrink:0;text-align:right;font-family:var(--font-kr-bold);font-size:14px;line-height:18px;color:#111111;\">1</div><div style=\"flex-grow:1;flex-basis:0%;display:flex;flex-direction:column;gap:3px;box-sizing:border-box;\"><div style=\"color:#111111;font-family:var(--font-kr-bold);font-size:14px;line-height:18px;\">항목 제목</div><div style=\"color:#333333;font-family:var(--font-kr);font-size:13px;line-height:20px;\">: 설명 1줄</div></div></div>"
 }
 ```
 마지막 행만 `borderBottom` 생략. 그 뒤 각주 블록(회색 `#666666` / 경고
@@ -315,7 +321,7 @@ write_html {
 write_html {
   "targetNodeId": "<SPEC_PANEL_ID>",
   "mode": "insert-children",
-  "html": "<div style=\"height:38px;flexShrink:0;display:flex;alignItems:center;justifyContent:flex-end;paddingInline:16px;width:100%;boxSizing:border-box;\"><div style=\"color:#888888;fontFamily:var(--font-kr);fontSize:14px;lineHeight:18px;\">23</div></div>"
+  "html": "<div style=\"height:38px;flex-shrink:0;display:flex;align-items:center;justify-content:flex-end;padding-inline:16px;width:100%;box-sizing:border-box;\"><div style=\"color:#888888;font-family:var(--font-kr);font-size:14px;line-height:18px;\">23</div></div>"
 }
 ```
 
@@ -350,10 +356,9 @@ finish_working_on_nodes {}
    반드시 확인. 오타나 컨텍스트에 안 맞는 속성은 에러 없이 사라진다.
 7. **`finish_working_on_nodes`는 선택이 아니라 필수.** 인자 없이 호출하면 작업 중이던
    모든 아트보드의 작업 표시가 해제된다.
-8. **`write_html`의 반환값에 새 노드 ID가 있는지 이 조사로는 확인 못 했다.** 없다면
-   매 스텝 뒤 `get_children`으로 방금 만든 자식의 ID를 직접 확보해야 다음 단계
-   `targetNodeId`를 채울 수 있다 — 이 확인을 건너뛰고 ID를 추측하면 다음 콜이
-   실패한다.
+8. ~~**`write_html`의 반환값에 새 노드 ID가 있는지 이 조사로는 확인 못 했다.**~~
+   → **확인됐다(2026-08-18 실집행).** 응답의 `createdNodes` 배열에 생성된 모든
+   노드(자손 포함)의 ID·이름·컴포넌트·좌표가 온다. `get_children` 우회는 불필요하다.
 9. **폰트는 이미 로드돼 있다** (`Daki`, `Daki B`, `Daki Title`, `Geist Mono` —
    `get_basic_info.fontFamilies`). 새 폰트를 쓰지 않는 한 `get_font_family_info`
    재확인은 생략 가능(가이드 규칙 1 "이미 로드된 폰트 우선").
@@ -369,6 +374,17 @@ finish_working_on_nodes {}
     `ignoredStyles` 같은 실패 신호조차 없다. **기존 노드 재현은 `duplicate_nodes`
     복제로 — 왕복 자체가 없다.** 새 복합값을 손으로 쓸 때만 각도 선행으로 쓰고
     직후 `get_computed_styles`로 검증한다.
+12. **`write_html`의 `style` 문자열은 케밥케이스 CSS만 쓴다 — camelCase는 조용히
+    버려진다** (실측 2026-08-18, 보드 8쪽 재작업). `style="backgroundColor:#fff;
+    borderRadius:4px"`처럼 쓰면 에러 없이 생성되지만 `get_computed_styles`로 확인하면
+    width/height/display/gap/position 계열만 살아남고 배경·보더·그림자·패딩·타이포는
+    전부 소실돼 있다 — **보이지 않는 유리**가 만들어진다. 반드시
+    `style="background-color:#fff;border-radius:4px"`로 쓸 것. **혼동 주의**:
+    `update_styles`·`create_artboard`의 `styles` JSON 객체는 반대로 **camelCase가
+    정식**이다(React.CSSProperties 문법). 표면마다 문법이 다르다 — html 문자열은
+    케밥, JSON 객체는 camel. camelCase로 이미 써버렸다면 `update_styles`로 같은
+    스타일을 재적용해 복구할 수 있다(보드 8쪽이 실제로 이 경로로 복구됐다). 쓰고
+    나면 `get_computed_styles`로 핵심 속성이 실제로 붙었는지 확인하는 것이 값싸다.
 
 ---
 
