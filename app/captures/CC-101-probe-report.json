@@ -1,0 +1,24 @@
+{
+  "before": 0,
+  "after": {
+    "cardPresent": true,
+    "title": "일봉 — 삼성전자",
+    "canvasElementCount": 11,
+    "priceWrapPresent": true,
+    "priceWrapRect": {
+      "x": 36.66666793823242,
+      "y": 66,
+      "width": 1490.666748046875,
+      "height": 380.3333435058594,
+      "top": 66,
+      "right": 1527.3334159851074,
+      "bottom": 446.3333435058594,
+      "left": 36.66666793823242
+    },
+    "errorNotePresent": false
+  },
+  "afterClose": {
+    "cardStillPresent": false,
+    "canvasNodesRemaining": 0
+  }
+}

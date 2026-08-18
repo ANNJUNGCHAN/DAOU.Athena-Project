@@ -3,9 +3,14 @@
 const { ipcRenderer, webFrame } = require('electron');
 const { sanitize } = require('./lib/sanitize');
 const { renderMarkdownInto } = require('./lib/markdown');
-const { loadStreamItems, loadFinancialStatement, loadReaderMarkdown } = require('./lib/mockdata');
+const { loadStreamItems, loadFinancialStatement, loadReaderMarkdown, loadChartOhlcv } = require('./lib/mockdata');
 const { errorNote } = require('./lib/ui-kit');
 const { foldColumns } = require('./lib/column-fold');
+const { createChartCard } = require('./lib/chart-card');
+
+// 카드별 destroy 콜백 — closeCard가 lightweight-charts 인스턴스를 누수 없이
+// 정리하도록 카드 DOM 노드에 매달아둔다(WeakMap: 카드가 GC되면 콜백도 같이 사라짐).
+const cardDestroyers = new WeakMap();
 
 const mosaic = document.getElementById('mosaic');
 const sheen = document.getElementById('sheen');
@@ -357,6 +362,11 @@ function freshLabel() {
 // 쓰는 채널을 그대로 재사용한다.
 function closeCard(card) {
   const parent = card.parentElement;
+  const destroy = cardDestroyers.get(card);
+  if (destroy) {
+    try { destroy(); } catch (err) { /* 카드가 이미 언마운트된 경우 등 — 닫기 자체는 막지 않는다 */ }
+    cardDestroyers.delete(card);
+  }
   card.remove();
   if (parent && !parent.querySelector('.card')) {
     ipcRenderer.send('athena:collapse-canvas');
@@ -420,9 +430,31 @@ function addCard(type) {
   if (type === 'stream') return renderStream();
   if (type === 'reader') return renderReader();
   if (type === 'table') return renderTable();
+  if (type === 'chart') return renderChartCard();
   // 계좌·MCP 카드는 여기 없다. 2026-08-16에 대화 창의 설정 모드로 옮겼다 —
   // 설정은 데이터 출력이 아니라 "앱 자신"이고, 설정을 만지는 동안 사용자는
   // 채팅을 치지 않는다(ui/DESIGN-SOUL.md:100). 렌더는 chat.js `openSettings`.
+}
+
+// ⑤ 차트 카드(CC-101) — CompoundCard(charts) 위 시계열 렌즈. 카드 제목은
+// TR ID를 노출하지 않는다("일봉 — 삼성전자", CLAUDE.md §5.3.1 관례와 같은 이유로
+// 내부 코드를 화면에 흘리지 않는다). lightweight-charts 마운트는 비동기(동적
+// import, lib/chart-card.js 상단 주석)라 makeCard로 카드 뼈대를 먼저 세우고
+// 그 안에서 await한다 — 다른 렌더러(renderStream 등)와 달리 이 함수만 async다.
+async function renderChartCard() {
+  const { card, body } = makeCard('chart', '일봉 — 삼성전자');
+  const chartBody = document.createElement('div');
+  chartBody.className = 'chart-card-body';
+  body.appendChild(chartBody);
+  try {
+    const { bars } = loadChartOhlcv();
+    const instance = await createChartCard(chartBody, { symbol: '005930', name: '삼성전자', ohlcv: bars });
+    // 닫기 버튼(closeCard)이 lightweight-charts를 정리하도록 카드 자체에 매단다.
+    cardDestroyers.set(card, instance.destroy);
+  } catch (err) {
+    chartBody.remove();
+    body.appendChild(errorNote(`차트를 그리지 못했다 — ${err && err.message ? err.message : String(err)}`));
+  }
 }
 
 // ① 스트림 — sanitize한 문자열은 절대 innerHTML로 넣지 않는다. textContent로만.
