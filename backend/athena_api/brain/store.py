@@ -11,12 +11,22 @@ import json
 import os
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
+from datetime import datetime, timedelta
 from functools import partial
 from pathlib import Path
 from types import ModuleType
 from typing import Any, Final
 
-from .ontology import Claim, Entity, Relation, SourceRecord
+from .ontology import Claim, Entity, Relation, RelationKind, SourceRecord
+
+# Single fixed investor-profile entity for this single-user local app (ADR §2(c)). No
+# discovery, no per-caller id -- this is the only id investor_profile_summary() reads.
+INVESTOR_PROFILE_ENTITY_ID: Final = "investor-profile:default"
+_PROFILE_RELATION_KINDS: Final = (
+    RelationKind.PREFERS,
+    RelationKind.AVOIDS,
+    RelationKind.INTERESTED_IN,
+)
 
 SCHEMA_VERSION: Final = 1
 MAX_SEARCH_LIMIT: Final = 100
@@ -169,6 +179,23 @@ LIMIT $limit
 """
     for depth in range(1, MAX_NEIGHBORHOOD_DEPTH + 1)
 }
+# graph.investor_profile_summary (ADR §6.2 allowlist). Deterministic read-time
+# aggregation only -- pure count/date-window filter, no model calls and none of the
+# similarity machinery ADR §7 bans
+# (ADR §7). PREFERS/AVOIDS/INTERESTED_IN out-edges from the single fixed
+# investor_profile entity, joined to the Claim(s) that support each target within the
+# window, grouped per target. Sort is fully deterministic: latest observation desc,
+# then supporting-claim count desc, then id for a stable tiebreak.
+_INVESTOR_PROFILE_SUMMARY_QUERY: Final = """
+MATCH (owner:Entity {id: $profile_id})-[rel:RELATES_TO]->(target:Entity)<-[:ABOUT]-(c:Claim)
+WHERE rel.kind IN $relation_kinds AND c.observed_at >= $window_start
+WITH target, rel, count(c) AS claim_count, max(c.observed_at) AS latest_observed_at,
+     avg(c.confidence) AS average_confidence
+RETURN target.id AS entity_id, target.kind AS entity_kind, target.name AS entity_name,
+       rel.kind AS relation_kind, claim_count, latest_observed_at, average_confidence
+ORDER BY latest_observed_at DESC, claim_count DESC, target.id
+LIMIT $limit
+"""
 
 
 @dataclass(frozen=True, slots=True)
@@ -193,6 +220,17 @@ class NeighborhoodEdge:
     relation_id: str
     kind: str
     confidence: float
+
+
+@dataclass(frozen=True, slots=True)
+class InvestorProfileSummaryEntry:
+    entity_id: str
+    entity_kind: str
+    entity_name: str
+    relation_kind: str
+    claim_count: int
+    latest_observed_at: str
+    average_confidence: float
 
 
 def _json(value: Any) -> str:
@@ -688,6 +726,43 @@ class GraphStore:
                     confidence=float(relation["confidence"]),
                 )
         return tuple(edges[key] for key in sorted(edges))
+
+    async def investor_profile_summary(
+        self, *, now: datetime, window_days: int = 90, limit: int = 50
+    ) -> tuple[InvestorProfileSummaryEntry, ...]:
+        """Read-time aggregation over the fixed investor_profile entity (ADR §2(c)).
+
+        ``now`` is caller-supplied so the window boundary is deterministic and
+        reproducible in tests -- this method never reads the wall clock itself.
+        """
+        if now.tzinfo is None or now.utcoffset() != timedelta(0):
+            raise ValueError("now must be UTC-aware")
+        if not 1 <= window_days <= 3650:
+            raise ValueError("window_days must be between 1 and 3650")
+        if not 1 <= limit <= 500:
+            raise ValueError("limit must be between 1 and 500")
+        window_start = now - timedelta(days=window_days)
+        rows = await self._execute(
+            _INVESTOR_PROFILE_SUMMARY_QUERY,
+            {
+                "profile_id": INVESTOR_PROFILE_ENTITY_ID,
+                "relation_kinds": [kind.value for kind in _PROFILE_RELATION_KINDS],
+                "window_start": _timestamp(window_start),
+                "limit": limit,
+            },
+        )
+        return tuple(
+            InvestorProfileSummaryEntry(
+                entity_id=str(row["entity_id"]),
+                entity_kind=str(row["entity_kind"]),
+                entity_name=str(row["entity_name"]),
+                relation_kind=str(row["relation_kind"]),
+                claim_count=int(row["claim_count"]),
+                latest_observed_at=str(row["latest_observed_at"]),
+                average_confidence=float(row["average_confidence"]),
+            )
+            for row in rows
+        )
 
     async def reset_projection(self) -> None:
         async with self._lock:

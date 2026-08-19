@@ -162,6 +162,41 @@ function shutdownBackend() {
   }
 }
 
+// ---------- 리셋(전체 삭제) 후 재기동 — .omc/plans/plan-chat-graph-pipeline.md §2(f) ----------
+// 전역 child.on('exit')(위, ensureBackend 안)은 절대 건드리지 않는다 — 여긴 그
+// 훅과 별개로, 리셋 IPC 핸들러가 명시적으로 부를 때만 동작하는 **추가** 1회성
+// 리스너다(같은 EventEmitter에 리스너를 여러 개 다는 것은 정상 Node 동작이라
+// 기존 훅과 충돌하지 않는다). awaitChildExit은 순수 함수(어떤 EventEmitter든
+// 받는다)라 실제 프로세스 없이 단위 테스트할 수 있다.
+function awaitChildExit(child) {
+  if (!child) return Promise.resolve(false);
+  return new Promise((resolve) => {
+    child.once('exit', () => resolve(true));
+  });
+}
+
+// 백엔드의 POST /api/v1/brain/reset-and-restart가 200을 반환한 뒤 호출한다.
+// (a) 이 프로세스가 스폰한 인스턴스가 아니면(backendChild 없음) 아무것도 하지
+//     않는다 — 재기동은 그 인스턴스를 띄운 쪽(사용자 콘솔)의 몫이다. 자동 재시도
+//     없음(기각 — 계획 §6 "비자가스폰 재기동 UX는 범위 밖").
+// (b) 스폰한 인스턴스면 그 프로세스 자신이 이미 SIGTERM으로 죽어가는 중이다
+//     (backend/athena_api/api/brain.py의 reset 라우트가 응답 flush 후 스스로
+//     보낸다) — exit을 1회성으로 기다렸다가 **명시적으로** ensureBackend()를
+//     다시 부른다(자동 재스폰 훅이 아니라 이 함수가 매번 의도적으로 부른다).
+// ensureBackendFn은 테스트 주입 지점 — 기본값은 실제 ensureBackend다.
+async function restartAfterReset({ mdlog, ensureBackendFn = ensureBackend } = {}) {
+  const log = typeof mdlog === 'function' ? mdlog : () => {};
+  if (!backendChild) {
+    log('restartAfterReset: 이 앱이 스폰한 백엔드가 아니다 — 수동 재시작 필요');
+    return { selfSpawned: false, restarted: false };
+  }
+  log('restartAfterReset: 자가스폰 백엔드 — 프로세스 종료를 기다린다');
+  await awaitChildExit(backendChild);
+  log('restartAfterReset: 종료 확인 — ensureBackend()를 명시적으로 재호출한다');
+  const ensureResult = await ensureBackendFn({ mdlog });
+  return { selfSpawned: true, restarted: !!(ensureResult && ensureResult.ok), ensureResult };
+}
+
 module.exports = {
   HEALTH_URL,
   HEALTH_HOST,
@@ -175,6 +210,11 @@ module.exports = {
   checkHealth,
   ensureBackend,
   shutdownBackend,
+  awaitChildExit,
+  restartAfterReset,
   // 테스트/진단 전용 — 실제 child 핸들은 절대 노출하지 않는다(트리 kill 경로를 우회 못 하게).
   hasSpawnedChild: () => backendChild !== null,
+  // 테스트 전용 — restartAfterReset의 self-spawn 분기를 실제 프로세스 없이
+  // 재현하기 위한 훅(history-sink.js의 _resetBrainReadyCacheForTest와 같은 패턴).
+  _setBackendChildForTest: (child) => { backendChild = child; },
 };

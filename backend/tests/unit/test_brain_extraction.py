@@ -368,15 +368,23 @@ async def test_ingestion_extraction_failure_retries_without_advancing_cursor(
         await history.create_job(JobTrigger.MANUAL, now=NOW)
         with pytest.raises(ExtractionError, match="request failed"):
             await coordinator.run_next()
-        assert await history.cursor("chat_history") == 0
+        # chat_message is not in EXTRACTABLE_SOURCE_KINDS, so chat_history's adapter pass
+        # (upsert_source only, no project_source) already finished and advanced its cursor
+        # before the failure -- the failure is the conversation rollup's extraction call,
+        # which happens later in conversation_history and left that cursor at 0.
+        assert await history.cursor("chat_history") == 1
+        assert await history.cursor("conversation_history") == 0
 
         await history.create_job(JobTrigger.RETRY, now=NOW)
         report = await coordinator.run_next()
         assert report is not None
+        # Only the conversation rollup projects on retry -- chat_history has nothing new.
         assert report.total_projected == 1
         assert await history.cursor("chat_history") == 1
         summary = await graph.summary()
-        assert (summary.sources, summary.claims, summary.relations) == (1, 1, 1)
+        # 2 sources: the chat_message (provenance only) and the conversation rollup that
+        # was actually extracted.
+        assert (summary.sources, summary.claims, summary.relations) == (2, 1, 1)
     finally:
         await graph.close()
         await history.close()

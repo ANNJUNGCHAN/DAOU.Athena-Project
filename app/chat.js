@@ -64,6 +64,13 @@ async function loadPrefs() {
 }
 window.athena.on('athena:prefs-changed', (next) => { if (next) { prefs = next; applyFontSize(); } });
 
+// ---------- "기록 안 됨" 배지 — 채팅 저장 실패 신호(2026-08-19, plan-chat-graph-pipeline.md §2(g)) ----------
+// 순수 로직은 lib/history-badge.js(node --test로 단위 테스트) — 여기는 IPC 구독과
+// runQueryLive의 턴 경계 연결만 한다.
+const historyBadge = window.AthenaLib.HistoryBadge;
+const saveFailedRouter = historyBadge.createSaveFailedRouter();
+window.athena.on('athena:history-save-failed', (payload) => saveFailedRouter.handleFailure(payload));
+
 // ---------- 부팅(AT-SY-001) — 4단계 생성 시퀀스 ----------
 // 발광점(0ms) → 가로 확장(+180ms) → 세로 전개(+420ms, 유리 72%) → 창 확정(+620ms).
 // 이징 cubic-bezier(.2,0,0,1). 4단계는 2026-08-18 사용자 지시로 재정의됐다:
@@ -440,6 +447,9 @@ async function runQueryLive(text) {
   $history.appendChild(qLine);
   scrollHistoryToBottom(true); // 새 질문은 무조건 바닥으로 — 위에서 읽던 중이어도 새 턴이 우선이다
   scheduleHeightSync();
+  // 새 턴 시작 — "기록 안 됨" 배지가 붙을 줄 참조를 갱신(main이 진입 직후 role:user
+  // 저장을 이미 시도하므로 여기서부터 실패 이벤트가 올 수 있다).
+  saveFailedRouter.startTurn(qLine);
 
   state = 'judging';
   setDot('judging');
@@ -521,6 +531,7 @@ async function runQueryLive(text) {
   aLine.appendChild(meta);
 
   $history.appendChild(aLine);
+  saveFailedRouter.setAssistantLine(aLine);
   scheduleHeightSync();
   $input.focus();
 
@@ -672,6 +683,7 @@ function openSettings() {
     accounts: settingsCards.renderAccounts,
     mcp: settingsCards.renderMcp,
     model: settingsCards.renderModel,
+    history: settingsCards.renderHistory,
   };
   settingsCards.renderNav($settingsNav, $settingsGrid, {
     onSelect: (key, grid) => {
@@ -706,6 +718,65 @@ function isSettingsCommand(text) {
   return SETTINGS_COMMAND.test(text.trim());
 }
 
+// ---------- 대화 모드 HISTORY_COMMAND — 채팅→그래프 파이프라인 단계 5 ----------
+// (.omc/plans/plan-chat-graph-pipeline.md §2(e)) LLM을 거치지 않는다 — SETTINGS_COMMAND와
+// 같은 결정론적 클라이언트 가로채기다. 같은 실측 함정을 그대로 물려받는다:
+// `\b`는 한글 뒤에서 성립하지 않는다(한글은 \w가 아니다) — 쓰지 않는다.
+// 단독 호출어(이력/채팅 이력/성향/히스토리)는 문자열 전체 일치, 나머지는 동사구.
+const HISTORY_COMMAND =
+  /^(이력|채팅\s*이력|성향|투자\s*성향|히스토리|history)\s*[?!.]*$|채팅\s*(이력|기록)\s*(을|를)?\s*(보여|열어|줘|줄래)|투자\s*성향\s*(보여|알려|줘|줄래)/i;
+
+function isHistoryCommand(text) {
+  return HISTORY_COMMAND.test(text.trim());
+}
+
+// "성향"이 들어간 호출은 profile-summary, 그 외(이력/채팅 이력/히스토리)는 chats.
+function historyCommandKind(text) {
+  return /성향/.test(text) ? 'profile-summary' : 'chats';
+}
+
+// LLM 미경유 — 로컬 IPC(athena:brain-history-query)만 왕복한다. main이 backend를
+// 조회해 ④ 공통 테이블 카드 봉투로 접어 캔버스에 직접 보낸다(main.js
+// sendLiveCanvasResult 재사용, 신규 카드 타입 0개). 실패해도 카드 없이 정직한
+// 안내 텍스트만 남긴다(CLAUDE.md §4 — 조용히 삼키지 않는다).
+async function runHistoryCommand(text) {
+  const myToken = ++abortToken;
+  manualOverride = false;
+
+  const qLine = document.createElement('div');
+  qLine.className = 'turn';
+  const qText = document.createElement('div');
+  qText.className = 'turn-q';
+  qText.textContent = text;
+  qLine.appendChild(qText);
+  $history.appendChild(qLine);
+  scrollHistoryToBottom(true);
+  scheduleHeightSync();
+
+  const kind = historyCommandKind(text);
+  const label = kind === 'profile-summary' ? '투자 성향 요약' : '채팅 이력';
+
+  let result;
+  try {
+    result = await window.athena.invoke('athena:brain-history-query', { kind, expand: prefs.autoExpandCanvas });
+  } catch (err) {
+    result = { ok: false, error: String((err && err.message) || err) };
+  }
+  if (myToken !== abortToken) return;
+
+  const aLine = document.createElement('div');
+  aLine.className = 'turn';
+  const aText = document.createElement('div');
+  aText.className = 'turn-a';
+  aText.textContent = result && result.ok
+    ? `캔버스 창에 ${withEulReul(label)} 띄웠습니다.`
+    : `${label}을 불러올 수 없다 — ${(result && result.error) || '알 수 없는 오류'}`;
+  aLine.appendChild(aText);
+  $history.appendChild(aLine);
+  scheduleHeightSync();
+  $input.focus();
+}
+
 $dot.addEventListener('click', () => { openSettings(); });
 
 // ---------- 입력 ----------
@@ -715,6 +786,10 @@ $input.addEventListener('keydown', (e) => {
     $input.value = '';
     if (isSettingsCommand(text)) {
       openSettings();
+      return;
+    }
+    if (isHistoryCommand(text)) {
+      runHistoryCommand(text);
       return;
     }
     runQuery(text);

@@ -18,7 +18,17 @@ from .history import (
     SourceChange,
     utc_now,
 )
-from .ontology import SourceRecord
+from .ontology import SourceKind, SourceRecord
+
+# Extraction over a single chat_message (no prior turns) is structurally low-signal for
+# propensity inference -- "응 그거 좋아" means nothing without the message it answers, and
+# propensity inference is the whole point. Only these kinds reach `project_source`;
+# CHAT_MESSAGE deliberately stays out so nobody re-adds it without a review catching this
+# comment. `upsert_source` still runs for every kind below and CHAT_MESSAGE alike, so raw
+# provenance (Claim SUPPORTED_BY targets) is unaffected.
+EXTRACTABLE_SOURCE_KINDS: frozenset[SourceKind] = frozenset(
+    {SourceKind.CONVERSATION, SourceKind.TRADE, SourceKind.RESEARCH}
+)
 
 
 class SourceAdapter(Protocol):
@@ -53,6 +63,15 @@ class CompletedTradeHistoryAdapter:
 
     async def fetch_after(self, cursor: int, limit: int) -> tuple[SourceChange, ...]:
         return await self.history.trade_changes(cursor, limit=limit)
+
+
+@dataclass(frozen=True, slots=True)
+class ConversationHistoryAdapter:
+    history: HistoryStore
+    name: str = "conversation_history"
+
+    async def fetch_after(self, cursor: int, limit: int) -> tuple[SourceChange, ...]:
+        return await self.history.conversation_changes(cursor, limit=limit)
 
 
 @dataclass(frozen=True, slots=True)
@@ -92,6 +111,7 @@ class IngestionCoordinator:
         configured_adapters = adapters or (
             ChatHistoryAdapter(history),
             CompletedTradeHistoryAdapter(history),
+            ConversationHistoryAdapter(history),
         )
         names = tuple(adapter.name for adapter in configured_adapters)
         if len(set(names)) != len(names):
@@ -269,6 +289,13 @@ class IngestionCoordinator:
     async def _execute_claimed_job(self, job: IngestionJob) -> IngestionReport:
         reports: list[AdapterIngestionReport] = []
         try:
+            # Roll chat_message turns up into `conversation` sources before any adapter
+            # runs, so this job's own rollup output is what conversation_history sees below
+            # -- one pass, no separate pipeline. A rollup failure fails the whole job
+            # (falls into the except below) rather than letting adapters extract from a
+            # stale rollup: extraction quality depends on the rollup having succeeded, so a
+            # quiet partial success here is worse than a retried job.
+            await self._history.compact_conversations(now=self._clock())
             for adapter in self._adapters:
                 reports.append(await self._run_adapter(adapter))
         except asyncio.CancelledError:
@@ -317,7 +344,10 @@ class IngestionCoordinator:
                 break
             for change in changes:
                 await self._graph.upsert_source(change.record)
-                if self._source_projector is not None:
+                if (
+                    self._source_projector is not None
+                    and change.record.kind in EXTRACTABLE_SOURCE_KINDS
+                ):
                     await self._source_projector.project_source(change.record)
                 cursor = await self._history.advance_cursor(adapter.name, change.seq)
                 projected += 1

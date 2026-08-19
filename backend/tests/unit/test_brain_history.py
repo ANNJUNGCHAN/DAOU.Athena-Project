@@ -15,8 +15,10 @@ from athena_api.brain import (
     JobStatus,
     JobTrigger,
     RetryPolicy,
+    SourceKind,
     TradeSide,
 )
+from athena_api.brain.history import MAX_TRANSCRIPT_CHARS
 
 NOW = datetime(2026, 8, 15, 3, 0, tzinfo=UTC)
 
@@ -29,6 +31,18 @@ def chat(message_id: str = "message-1", *, text: str = "반도체를 조사해 �
         text=text,
         occurred_at=NOW,
         metadata={"language": "ko"},
+    )
+
+
+def chat_turn(
+    message_id: str, conversation_id: str, role: ChatRole, text: str, occurred_at: datetime
+) -> ChatHistoryRecord:
+    return ChatHistoryRecord(
+        message_id=message_id,
+        conversation_id=conversation_id,
+        role=role,
+        text=text,
+        occurred_at=occurred_at,
     )
 
 
@@ -294,3 +308,189 @@ async def test_sqlite_work_does_not_block_event_loop(
     await asyncio.sleep(0)
     assert time.perf_counter() - heartbeat < 0.03
     await write
+
+
+# --- conversation rollup: conversations() / compact_conversations() --------------------
+
+
+async def test_conversations_aggregates_and_orders_by_recency(history: HistoryStore) -> None:
+    await history.upsert_chat(
+        chat_turn("msg-a1", "conv-a", ChatRole.USER, "a1", NOW), changed_at=NOW
+    )
+    await history.upsert_chat(
+        chat_turn("msg-a2", "conv-a", ChatRole.ASSISTANT, "a2", NOW + timedelta(seconds=1)),
+        changed_at=NOW + timedelta(seconds=1),
+    )
+    await history.upsert_chat(
+        chat_turn("msg-b1", "conv-b", ChatRole.USER, "b1", NOW + timedelta(seconds=5)),
+        changed_at=NOW + timedelta(seconds=5),
+    )
+
+    summaries = await history.conversations()
+    assert [summary.conversation_id for summary in summaries] == ["conv-b", "conv-a"]
+    conv_a = next(summary for summary in summaries if summary.conversation_id == "conv-a")
+    assert conv_a.message_count == 2
+    assert conv_a.first_occurred_at == NOW
+    assert conv_a.last_occurred_at == NOW + timedelta(seconds=1)
+
+
+async def test_conversations_rejects_out_of_bounds_limit(history: HistoryStore) -> None:
+    with pytest.raises(ValueError, match="limit"):
+        await history.conversations(limit=0)
+    with pytest.raises(ValueError, match="limit"):
+        await history.conversations(limit=501)
+
+
+async def test_compact_conversations_renders_role_labelled_transcript(
+    history: HistoryStore,
+) -> None:
+    await history.upsert_chat(
+        chat_turn("msg-1", "conv-transcript", ChatRole.USER, "반도체 어때?", NOW),
+        changed_at=NOW,
+    )
+    await history.upsert_chat(
+        chat_turn(
+            "msg-2",
+            "conv-transcript",
+            ChatRole.ASSISTANT,
+            "좋아 보입니다",
+            NOW + timedelta(seconds=1),
+        ),
+        changed_at=NOW + timedelta(seconds=1),
+    )
+
+    updated = await history.compact_conversations(now=NOW + timedelta(seconds=2))
+    assert updated == ("conversation:conv-transcript",)
+
+    changes = await history.conversation_changes(0, limit=10)
+    assert len(changes) == 1
+    record = changes[0].record
+    assert record.kind is SourceKind.CONVERSATION
+    assert record.text == "user: 반도체 어때?\nassistant: 좋아 보입니다\n"
+    assert record.locator == "conversation:conv-transcript"
+    assert record.occurred_at == NOW + timedelta(seconds=1)
+    assert record.attributes["conversation"] == {
+        "conversation_id": "conv-transcript",
+        "message_count": 2,
+        "included_message_count": 2,
+        "truncated": False,
+    }
+
+
+async def test_transcript_budget_stays_under_the_ontology_bound() -> None:
+    """The budget only works if it is actually below what SourceRecord.text accepts."""
+    assert MAX_TRANSCRIPT_CHARS < 10_000
+
+
+async def test_long_conversation_is_windowed_instead_of_wedging_ingestion(
+    history: HistoryStore,
+) -> None:
+    """A conversation past the ontology text bound must still roll up.
+
+    Without the budget the oversized row fails SourceRecord validation on the way back
+    out, the rollup raises, and -- since a rollup failure fails the whole job -- one long
+    conversation would permanently stop ingestion for every conversation.
+    """
+    filler = "가" * 500
+    total = 40  # 40 * ~500 chars >> MAX_TRANSCRIPT_CHARS
+    for index in range(total):
+        await history.upsert_chat(
+            chat_turn(
+                f"long-{index}",
+                "conv-long",
+                ChatRole.USER if index % 2 == 0 else ChatRole.ASSISTANT,
+                f"{index} {filler}",
+                NOW + timedelta(seconds=index),
+            ),
+            changed_at=NOW + timedelta(seconds=index),
+        )
+
+    updated = await history.compact_conversations(now=NOW + timedelta(seconds=total))
+    assert updated == ("conversation:conv-long",)
+
+    # Deserializing through SourceRecord is the step that used to blow up.
+    changes = await history.conversation_changes(0, limit=10)
+    record = changes[0].record
+    assert len(record.text) <= MAX_TRANSCRIPT_CHARS
+    conversation = record.attributes["conversation"]
+    assert conversation["message_count"] == total
+    assert conversation["truncated"] is True
+    assert 0 < conversation["included_message_count"] < total
+    # The window keeps the newest turns -- those are what give a follow-up its meaning.
+    assert f"{total - 1} " in record.text
+    assert not record.text.startswith("user: 0 ")
+
+
+async def test_single_turn_longer_than_the_budget_still_produces_a_transcript(
+    history: HistoryStore,
+) -> None:
+    """Emitting nothing would silently drop the conversation from extraction entirely.
+
+    Reachability note: `ChatHistoryRecord.text` is itself `LongText` (max 10_000), so a
+    single stored turn can never exceed that. The band this branch actually serves is
+    `MAX_TRANSCRIPT_CHARS < len(turn) <= 10_000`, which is why the budget sits below the
+    ontology bound rather than at it.
+    """
+    oversized = "나" * (MAX_TRANSCRIPT_CHARS + 500)
+    assert len(oversized) <= 10_000
+    await history.upsert_chat(
+        chat_turn("huge-1", "conv-huge", ChatRole.USER, oversized, NOW),
+        changed_at=NOW,
+    )
+
+    updated = await history.compact_conversations(now=NOW + timedelta(seconds=1))
+    assert updated == ("conversation:conv-huge",)
+
+    changes = await history.conversation_changes(0, limit=10)
+    record = changes[0].record
+    assert 0 < len(record.text) <= MAX_TRANSCRIPT_CHARS
+    assert record.attributes["conversation"]["included_message_count"] == 1
+
+
+async def test_compact_conversations_is_idempotent_until_new_messages_arrive(
+    history: HistoryStore,
+) -> None:
+    await history.upsert_chat(
+        chat_turn("msg-1", "conv-idem", ChatRole.USER, "첫 메시지", NOW), changed_at=NOW
+    )
+
+    first = await history.compact_conversations(now=NOW + timedelta(seconds=1))
+    assert first == ("conversation:conv-idem",)
+
+    unchanged = await history.compact_conversations(now=NOW + timedelta(seconds=2))
+    assert unchanged == ()
+    assert len(await history.conversation_changes(0, limit=10)) == 1
+
+    await history.upsert_chat(
+        chat_turn(
+            "msg-2", "conv-idem", ChatRole.ASSISTANT, "둘째 메시지", NOW + timedelta(seconds=3)
+        ),
+        changed_at=NOW + timedelta(seconds=3),
+    )
+    grown = await history.compact_conversations(now=NOW + timedelta(seconds=4))
+    assert grown == ("conversation:conv-idem",)
+    changes = await history.conversation_changes(0, limit=10)
+    assert len(changes) == 2
+    assert changes[-1].revision == 2
+
+
+async def test_compact_conversations_is_noop_with_no_chat_messages(
+    history: HistoryStore,
+) -> None:
+    assert await history.compact_conversations(now=NOW) == ()
+    assert await history.conversation_changes(0, limit=10) == ()
+
+
+async def test_compact_conversations_does_not_reconsume_its_own_output(
+    history: HistoryStore,
+) -> None:
+    await history.upsert_chat(
+        chat_turn("msg-1", "conv-loop", ChatRole.USER, "loop check", NOW), changed_at=NOW
+    )
+    await history.compact_conversations(now=NOW + timedelta(seconds=1))
+    # A second pass must still see exactly one chat-derived conversation, not two --
+    # `conversation:conv-loop` (the source this just wrote) shares its locator string with
+    # the chat_message rows but must not be read back as another chat_message locator.
+    again = await history.compact_conversations(now=NOW + timedelta(seconds=2))
+    assert again == ()
+    assert len(await history.conversation_changes(0, limit=10)) == 1

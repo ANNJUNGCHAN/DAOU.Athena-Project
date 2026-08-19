@@ -328,6 +328,13 @@ html, body { background: transparent; }
 }
 .chip:hover { border-color: var(--color-k-dim); color: var(--color-k-text); }
 
+/* "기록 안 됨" — 채팅 저장 실패 배지(2026-08-19, plan-chat-graph-pipeline.md §2(g)).
+ * 트레이스 라인(.turn-meta) 부속 텍스트일 뿐, 새 유리 레이어·토스트·모달·애니메이션이
+ * 아니다. 무채색·기존 12px 하한 토큰(--text-sm, .turn-meta 상속)만 재사용한다. */
+.save-failed-badge {
+  color: var(--color-k-faint);
+}
+
 /* ---------- 설정 진입 코치마크 (2026-08-19 결정 — 최초 1회, chat.js maybeShowCoachmark) ----------
  * 점(#dot) 바로 위에 뜨는 유리 칩. 등장 애니메이션 없음(페이드 등장 유리 금지, soul.md §7).
  * 아무 입력·클릭이면 사라지고 다시 안 나온다(localStorage 1회 플래그). */

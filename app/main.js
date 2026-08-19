@@ -31,6 +31,10 @@ const backendLauncher = require('./lib/main/backend-launcher');
 // 휘도 감지-적응의 순수 계산부(2026-08-19) — 캡처·타이머는 아래
 // startBackdropSampling()이, 계산·매핑은 이 모듈이 담당한다(단위 테스트 9건).
 const backdropLuma = require('./lib/main/backdrop-luma');
+// 채팅 → HistoryStore 영속 훅(.omc/plans/plan-chat-graph-pipeline.md §2(a)/(g)).
+// fire-and-forget — 절대 await로 채팅 UX를 막지 않는다(모듈 상단 주석 참조).
+const historySink = require('./lib/main/history-sink');
+const crypto = require('crypto');
 
 const MDEBUGLOG = path.join(__dirname, 'captures', 'main-debug.log');
 function mdlog(msg) {
@@ -948,8 +952,38 @@ let activeLiveQuery = null;
 // 앱 재시작 시 null — 대화는 앱 수명 단위다(디스크에 세션 키를 남기지 않는다).
 let liveSessionId = null;
 
+// history-sink conversation_id — **앱 세션 단위로 고정한다. liveSessionId를 쓰지 않는다.**
+// 계획 §2(a)는 liveSessionId 재사용을 제안했지만 실배선 E2E가 그 전제를 뒤집었다
+// (PROBE-BRAIN-CHAT-E2E.json, 2026-08-19): `claude -p --resume`은 매 성공 왕복마다
+// 세션을 포크해 새 id를 발급하므로, 질의 진입 시점(role:user)과 응답 반환 시점
+// (role:assistant) 사이에 liveSessionId가 바뀐다. 그 결과 **같은 한 턴의 두 메시지가
+// 서로 다른 conversation_id로 갈렸다**(user 0a1fe408… / assistant 5ff6842e…) — 프로브가
+// sameConversationLocator:false로 잡아낸 결함이다. 조회(GET /chats?conversation_id=)는
+// 반쪽 턴만 돌려주고 그래프의 대화 묶음도 턴마다 쪼개진다.
+// liveSessionId는 애초에 대화 식별자가 아니라 재개용 커서다. 위 843행 주석이 이미
+// "대화는 앱 수명 단위다"라고 적고 있으니, 대화 id는 앱 세션에 고정하는 게 맞다.
+const historyAppSessionId = crypto.randomUUID();
+
+function historyConversationId() {
+  return historyAppSessionId;
+}
+
+// 저장 실패를 렌더러의 "기록 안 됨" 배지로 전달(계획 §2(g), 함정 ⑫ — messageId/role만
+// 싣고 본문은 절대 넘기지 않는다).
+function emitHistorySaveFailed({ messageId, role }) {
+  if (chatWin && !chatWin.isDestroyed()) {
+    chatWin.webContents.send('athena:history-save-failed', { messageId, role });
+  }
+}
+
 async function runLiveQuery(query, expand) {
   const { dir, configFile } = getLiveMcpConfig();
+
+  // 사용자 질의 진입 직후 role:user 1건 — fire-and-forget(호출을 await하지 않는다).
+  historySink.saveChatMessage(
+    { conversationId: historyConversationId(), text: query, role: 'user' },
+    { onSaveFailed: emitHistorySaveFailed, mdlog },
+  );
 
   // 이전 질의 프로세스가 아직 살아 있으면 먼저 트리째 끊는다 — 새 질의가 항상 선점한다.
   if (activeLiveQuery) {
@@ -1014,6 +1048,15 @@ async function runLiveQuery(query, expand) {
     ? result.finalResult.result
     : null;
 
+  // 응답 산출 직후 role:assistant 1건 — null이면 스킵(계획 §2(a)). 여기도
+  // fire-and-forget — 반환을 막지 않는다.
+  if (answerText !== null) {
+    historySink.saveChatMessage(
+      { conversationId: historyConversationId(), text: answerText, role: 'assistant' },
+      { onSaveFailed: emitHistorySaveFailed, mdlog },
+    );
+  }
+
   return {
     ok: !!result.ok,
     source: 'live',
@@ -1046,6 +1089,135 @@ ipcMain.handle('athena__render_canvas', async (e, payload = {}) => {
     return { ok: false, source: 'live', error: '질의가 비어 있다' };
   }
   return runLiveQuery(query, expand);
+});
+
+// ---------------------------------------------------------------------------
+// 채팅→그래프 파이프라인 단계 5 — 커맨드바 HISTORY_COMMAND + 설정 모드
+// "성향・이력"(.omc/plans/plan-chat-graph-pipeline.md §2(e)/(f)). LLM을 거치지
+// 않는다 — chat.js가 정규식으로 직접 가로챈 뒤 이 IPC로 backend를 조회/조작한다.
+// history-sink.js가 이미 쥔 backend URL·bearer 토큰 접근을 그대로 재사용한다
+// (CLAUDE.md §0 "자격증명은 프로세스 메모리에만" — 여기서 새로 읽지 않는다).
+// ---------------------------------------------------------------------------
+
+async function fetchBrainJson(path, { params } = {}) {
+  const token = historySink.getBearerToken();
+  if (!token) return { ok: false, error: '로컬 베어러 토큰이 설정되지 않았다' };
+  const url = new URL(path, historySink.getBackendUrl());
+  if (params) {
+    for (const [k, v] of Object.entries(params)) {
+      if (v !== null && v !== undefined) url.searchParams.set(k, String(v));
+    }
+  }
+  let res;
+  try {
+    res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+  } catch (err) {
+    return { ok: false, error: `요청 실패 — ${String((err && err.message) || err)}` };
+  }
+  if (!res.ok) return { ok: false, error: `백엔드 응답 ${res.status}`, status: res.status };
+  const body = await res.json().catch(() => null);
+  return { ok: true, body };
+}
+
+ipcMain.handle('athena:brain-status', async () => {
+  const result = await fetchBrainJson('/api/v1/brain/status');
+  if (!result.ok) return { ok: false, error: result.error };
+  return { ok: true, ...result.body };
+});
+
+// ④ 공통 테이블 카드 봉투로 접는다 — canvas.js의 renderMcpTable(envelope)이
+// 이미 그리는 {canvas_type:'table', data:{columns,rows}} 그대로다. 신규 카드
+// 타입은 0개(계획 §2(d) "신규 카드 타입 0개").
+function chatsToTableEnvelope(messages) {
+  return {
+    canvas_type: 'table',
+    caption: '채팅 이력',
+    fell_back: false,
+    data: {
+      columns: [
+        { key: 'occurred_at', label: '시각' },
+        { key: 'role', label: '역할' },
+        { key: 'text', label: '내용' },
+      ],
+      rows: messages.map((m) => ({
+        occurred_at: m.occurred_at,
+        role: m.role,
+        text: m.text,
+      })),
+    },
+  };
+}
+
+function profileSummaryToTableEnvelope(entries) {
+  return {
+    canvas_type: 'table',
+    caption: '투자 성향 요약',
+    fell_back: false,
+    data: {
+      columns: [
+        { key: 'entity_name', label: '대상' },
+        { key: 'relation_kind', label: '관계' },
+        { key: 'claim_count', label: '관측 수(90일)' },
+        { key: 'latest_observed_at', label: '최신 관측일' },
+        { key: 'average_confidence', label: '평균 확신도' },
+      ],
+      rows: entries.map((e2) => ({
+        entity_name: e2.entity_name,
+        relation_kind: e2.relation_kind,
+        claim_count: e2.claim_count,
+        latest_observed_at: e2.latest_observed_at,
+        average_confidence: e2.average_confidence,
+      })),
+    },
+  };
+}
+
+ipcMain.handle('athena:brain-history-query', async (e, payload = {}) => {
+  const kind = payload.kind === 'profile-summary' ? 'profile-summary' : 'chats';
+  const params = kind === 'chats'
+    ? { conversation_id: historyConversationId(), limit: 100 }
+    : { window_days: 90, limit: 50 };
+  const result = await fetchBrainJson(`/api/v1/brain/${kind}`, { params });
+  if (!result.ok) return { ok: false, error: result.error };
+  const envelope = kind === 'chats'
+    ? chatsToTableEnvelope((result.body && result.body.messages) || [])
+    : profileSummaryToTableEnvelope((result.body && result.body.entries) || []);
+  if (payload.expand && !canvasVisible) await expandCanvasWindow();
+  sendLiveCanvasResult({ status: 'success', envelope });
+  return { ok: true, count: envelope.data.rows.length };
+});
+
+// 전체 삭제(계획 §2(f)) — 백엔드가 teardown→파일 삭제→200 flush 후 스스로
+// SIGTERM을 보낸다(brain.py post_brain_reset_and_restart). 여기는 그 200을
+// 받은 뒤 (a) 이 앱이 스폰한 인스턴스인지 판정 (b) 스폰했다면 종료를 1회성으로
+// 기다렸다가 명시적으로 ensureBackend()를 재호출한다 — backend-launcher.js의
+// restartAfterReset()이 그 순서를 캡슐화한다(전역 exit 훅은 무변경).
+ipcMain.handle('athena:brain-reset', async () => {
+  const token = historySink.getBearerToken();
+  if (!token) return { ok: false, error: '로컬 베어러 토큰이 설정되지 않았다' };
+  let res;
+  try {
+    res = await fetch(`${historySink.getBackendUrl()}/api/v1/brain/reset-and-restart`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  } catch (err) {
+    return { ok: false, error: `요청 실패 — ${String((err && err.message) || err)}` };
+  }
+  if (!res.ok) return { ok: false, error: `백엔드 응답 ${res.status}` };
+  const body = await res.json().catch(() => null);
+
+  const restart = await backendLauncher.restartAfterReset({ mdlog });
+  // 재기동된 백엔드는 처음엔 새 빈 브레인이다 — history-sink의 캐시된
+  // brainReadyCache가 리셋 전 값(true)을 그대로 물고 있으면 다음 채팅 저장
+  // 시도가 아직 안 열린 store를 향할 수 있다. fire-and-forget으로 재확인한다.
+  historySink.refreshBrainReady({ mdlog }).catch(() => {});
+  return {
+    ok: true,
+    selfSpawned: restart.selfSpawned,
+    restarted: restart.restarted,
+    deletedFiles: (body && body.deleted_files) || [],
+  };
 });
 
 // ---------------------------------------------------------------------------
@@ -1313,9 +1485,11 @@ if (!process.env.ATHENA_NO_AUTOSTART) {
     // 백엔드 자동 기동 — fire-and-forget, createWindows()를 막지 않는다. 이미
     // 떠 있으면(사용자가 수동 기동) 손대지 않는다 — backend-launcher.js의
     // 헬스체크 우선 판정이 중복 스폰을 막는다.
-    backendLauncher.ensureBackend({ mdlog }).catch((err) => {
-      mdlog(`ensureBackend 실패: ${String((err && err.message) || err)}`);
-    });
+    backendLauncher.ensureBackend({ mdlog })
+      .then(() => historySink.refreshBrainReady({ mdlog }))
+      .catch((err) => {
+        mdlog(`ensureBackend 실패: ${String((err && err.message) || err)}`);
+      });
   });
 }
 

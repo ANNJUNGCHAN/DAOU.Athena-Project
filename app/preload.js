@@ -40,6 +40,11 @@ const INVOKE_CHANNELS = new Set([
   'athena:routine-confirm',
   'athena:routine-cancel',
   'athena:order-execute',
+  // 채팅→그래프 파이프라인 단계 5(.omc/plans/plan-chat-graph-pipeline.md §2(e)/(f))
+  // — 대화 모드 HISTORY_COMMAND 조회, 설정 모드 "성향・이력" 상태·전체 삭제.
+  'athena:brain-status',
+  'athena:brain-history-query',
+  'athena:brain-reset',
 ]);
 
 const SEND_CHANNELS = new Set([
@@ -85,6 +90,9 @@ const ON_CHANNELS = new Set([
   // 루틴 알림(능동 에이전트 P2) — main의 RoutineFeed가 백엔드 WS에서 받은
   // 발화·만료·복원실패 이벤트를 능동 턴으로 전달한다.
   'athena:routine-event',
+  // 채팅 저장 실패 신호(2026-08-19, plan-chat-graph-pipeline.md §2(g)) —
+  // history-sink의 POST가 실패하면 main이 {messageId, role}만 보낸다(본문 없음).
+  'athena:history-save-failed',
 ]);
 
 contextBridge.exposeInMainWorld('athena', {
