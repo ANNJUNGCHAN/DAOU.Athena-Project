@@ -918,3 +918,20 @@ html, body { background: transparent; }
   .turn-agent { transition: none; }
   .turn-agent.is-in, .turn-agent { backdrop-filter: blur(12px); }
 }
+
+/* 루틴 승인 카드 (P3) */
+.routine-approval { border-left-color: rgba(230, 232, 238, 0.4); }
+.routine-mode-line { margin: 4px 0; }
+.routine-approval-actions { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
+.routine-btn {
+  font-family: var(--font-kr, inherit);
+  font-size: var(--text-sm, 13px);
+  color: var(--color-k-text, #e6e8ee);
+  background: transparent;
+  border: 1px solid rgba(230, 232, 238, 0.35);
+  border-radius: 8px;
+  padding: 6px 20px;
+  cursor: pointer;
+}
+.routine-btn-approve { background: rgba(230, 232, 238, 0.9); color: #10131a; border-color: transparent; }
+.routine-btn:disabled { opacity: 0.4; cursor: default; }

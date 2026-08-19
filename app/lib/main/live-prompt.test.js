@@ -96,11 +96,14 @@ test('buildLivePrompt: 조회 규율 — 명시 출처·상대 날짜·원문 �
   assert.ok(p.includes('인용한 출처를 답변에 남긴다'));
 });
 
-test('buildLivePrompt: 주문·자동화 정책 — 실행 툴 없음·지속 감시 없음 (확정 결정 3)', () => {
+test('buildLivePrompt: 주문·자동화 정책 v3b — 실행 툴 없음·루틴은 제안만 (P3)', () => {
   const p = buildLivePrompt('x');
   assert.ok(p.includes('주문·자동화 정책'));
   assert.ok(p.includes('주문(매수·매도·정정·취소)을 실행하는 툴이'));
-  assert.ok(p.includes('예약됐다고 확인하지 마라'));
+  assert.ok(p.includes('athena_routine'));
+  assert.ok(p.includes('승인 카드'));
+  assert.ok(p.includes('등록됐다·예약됐다고'));
+  assert.ok(p.includes('감시 방식'));
 });
 
 test('buildLivePrompt: timeline 스키마 힌트 — 부분 데이터 허용 (2026-08-19 QA LIV-046)', () => {
