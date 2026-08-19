@@ -1006,8 +1006,47 @@ function emitHistorySaveFailed({ messageId, role }) {
   }
 }
 
+// 시맨틱 캐시 + 리플레이(2026-08-19 "아직 느리다") — 같은 질문 2회차부터 모델을
+// 태우지 않는다. 판정만 재사용, 데이터는 매번 새로 조회(query-cache.js/fast-path.js).
+const { QueryCache } = require('./lib/main/query-cache');
+const fastPath = require('./lib/main/fast-path');
+const liveQueryCache = new QueryCache();
+
 async function runLiveQuery(query, expand) {
   const { dir, configFile } = getLiveMcpConfig();
+
+  // 빠른 경로 — 캐시된 판정이 있으면 claude -p를 스폰하지 않는다. 카드는
+  // 백엔드가 사이드 채널로 밀고(캔버스 먼저), 답변은 결정론 템플릿이다.
+  const cachedJudgment = liveQueryCache.get(query);
+  if (cachedJudgment) {
+    const replay = await fastPath.runCachedReplay({
+      judgment: cachedJudgment,
+      backendBase: BACKEND_HTTP_BASE,
+    });
+    if (replay.ok) {
+      mdlog(`캐시 리플레이 적중 — ${replay.durationMs}ms (모델 무호출)`);
+      historySink.saveChatMessage(
+        { conversationId: historyConversationId(), text: query, role: 'user' },
+        { onSaveFailed: emitHistorySaveFailed, mdlog },
+      );
+      historySink.saveChatMessage(
+        { conversationId: historyConversationId(), text: replay.answerText, role: 'assistant' },
+        { onSaveFailed: emitHistorySaveFailed, mdlog },
+      );
+      return {
+        ok: true,
+        source: 'live-cache',
+        error: null,
+        answerText: replay.answerText,
+        canvasTypes: [cachedJudgment.canvasType],
+        diagnostics: null,
+        durationMs: replay.durationMs,
+      };
+    }
+    // 리플레이 실패 — 낡은 판정일 수 있다. 무효화하고 정상 경로로 폴백한다.
+    liveQueryCache.invalidate(query);
+    mdlog(`캐시 리플레이 실패 — 정상 경로 폴백: ${replay.reason}`);
+  }
 
   // 사용자 질의 진입 직후 role:user 1건 — fire-and-forget(호출을 await하지 않는다).
   historySink.saveChatMessage(
@@ -1027,6 +1066,9 @@ async function runLiveQuery(query, expand) {
   // 실제로 가능하다 — 그때 빈 유리창을 열어두지 않는다.
   let expandTriggered = false;
   const canvasTypesSeen = [];
+  // 판정 캡처(시맨틱 캐시 재료) — onEvent가 채우고 성공 왕복 뒤에만 저장한다.
+  let capturedResolveInput = null;
+  let capturedRenderInput = null;
   const resumeSessionId = liveSessionId;
   // 설정 화면 모델 패널(lib/main/model-prefs.js) 값 — null이면 buildArgs가
   // --model/--effort를 안 붙여 claude CLI 기본값을 쓴다.
@@ -1041,6 +1083,19 @@ async function runLiveQuery(query, expand) {
     model,
     effort,
     onSpawn: (h) => { myHandle = h; activeLiveQuery = h; },
+    // 판정 캡처(시맨틱 캐시) — 모델이 실제로 내린 해석(resolve 인자·카드 구성)을
+    // 스트림에서 줍는다. 저장은 성공 왕복 뒤에만 한다(아래).
+    onEvent: (ev) => {
+      if (!ev || ev.type !== 'assistant' || !ev.message || !Array.isArray(ev.message.content)) return;
+      for (const block of ev.message.content) {
+        if (!block || block.type !== 'tool_use' || !block.input) continue;
+        if (String(block.name || '').endsWith('athena_resolve')) {
+          capturedResolveInput = block.input;
+        } else if (String(block.name || '').endsWith('athena__render_canvas') && block.input.plan_token) {
+          capturedRenderInput = block.input;
+        }
+      }
+    },
     onCanvasResult: (r) => {
       if (r.status === 'pushed') {
         // 카드는 사이드 채널(startCanvasFeed)로 이미 도착했다 — 여기선 집계만.
@@ -1079,6 +1134,19 @@ async function runLiveQuery(query, expand) {
   // finalResult.result는 claude -p의 마지막 assistant 텍스트다(RESULT.md의
   // type:"result" 이벤트) — 목업 시절의 정형화된 "캔버스 창에 ~ 띄웠습니다"
   // 문장 대신, 실제로 Claude가 쓴 답변을 그대로 보여준다.
+  // 판정 저장(시맨틱 캐시) — 성공 + plan_token 렌더가 실제로 일어난 왕복만.
+  // 같은 질문 2회차부터 모델 무호출 리플레이의 재료가 된다(runLiveQuery 진입부).
+  if (result.ok && capturedResolveInput && capturedRenderInput
+      && (capturedRenderInput.canvas_type === 'chart' || capturedRenderInput.canvas_type === 'table')) {
+    liveQueryCache.set(query, {
+      resolveQuestion: capturedResolveInput.question,
+      resolveArgs: capturedResolveInput.arguments || {},
+      canvasType: capturedRenderInput.canvas_type,
+      data: capturedRenderInput.data || {},
+      caption: capturedRenderInput.caption || null,
+    });
+  }
+
   const answerText = result.finalResult && typeof result.finalResult.result === 'string'
     ? result.finalResult.result
     : null;
