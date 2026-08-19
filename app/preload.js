@@ -39,6 +39,7 @@ const INVOKE_CHANNELS = new Set([
   'athena:routines-list',
   'athena:routine-confirm',
   'athena:routine-cancel',
+  'athena:order-execute',
 ]);
 
 const SEND_CHANNELS = new Set([

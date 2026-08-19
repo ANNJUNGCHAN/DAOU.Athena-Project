@@ -269,7 +269,7 @@ window.athena.on('athena:manual-resize', () => { manualOverride = true; });
 // resize 이벤트 외에 모드 열림/닫힘 지점 4곳에서도 직접 호출한다 — 창이 이미
 // chatMaxH라 리사이즈가 안 일어나는 경우에도 상태가 맞아야 한다.
 function syncMaxButton() {
-  const modeOwnsHeight = settingsOpen || !$onboard.hidden;
+  const modeOwnsHeight = settingsOpen || orderOpen || !$onboard.hidden;
   const atMax = currentHeight >= layout.chatMaxH - 2;
   $winMax.disabled = modeOwnsHeight;
   $winMax.classList.toggle('is-max', atMax && !modeOwnsHeight);
@@ -742,7 +742,7 @@ function restoreFromMax() {
 }
 
 function toggleMaxHeight() {
-  if (settingsOpen || !$onboard.hidden) return; // 모드가 높이를 소유 중 — disabled의 백스톱
+  if (settingsOpen || orderOpen || !$onboard.hidden) return; // 모드가 높이를 소유 중 — disabled의 백스톱
   const over = currentHeight > layout.chatMaxH + 2;
   const atMax = !over && currentHeight >= layout.chatMaxH - 2;
   if (over) {
@@ -765,7 +765,7 @@ function toggleMaxHeight() {
 // Windows의 "restore-then-minimize" 의미론 — 최대화(이상) 상태면 직전 크기로 복원,
 // 아니면 두 창을 최소화한다.
 function restoreOrMinimize() {
-  if (settingsOpen || !$onboard.hidden) return; // 모드가 높이를 소유 중 — disabled의 백스톱
+  if (settingsOpen || orderOpen || !$onboard.hidden) return; // 모드가 높이를 소유 중 — disabled의 백스톱
   if (currentHeight >= layout.chatMaxH - 2) {
     restoreFromMax();
   } else {
@@ -864,7 +864,11 @@ bindWindowDrag($onboardBody);
 
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
-    // 설정 모드가 떠 있으면 그것부터 닫는다 — 지금 눈앞에 있는 것이 먼저다.
+    // 주문 티켓·설정 모드가 떠 있으면 그것부터 닫는다 — 지금 눈앞에 있는 것이 먼저다.
+    if (orderOpen) {
+      closeOrderTicket();
+      return;
+    }
     if (settingsOpen) {
       closeSettings();
       return;
@@ -945,6 +949,22 @@ function renderAgentTurn(event) {
   body.className = 'agent-body';
   body.textContent = model.body;
   box.appendChild(body);
+
+  // 발화 턴 → 주문 티켓 직행 경로(P4, LIV-066 시나리오의 정답 구조).
+  // 티켓을 여는 것뿐 — 주문은 티켓 안에서 사람이 실행한다.
+  if (model.kind === 'fired') {
+    const actions = document.createElement('div');
+    actions.className = 'routine-approval-actions';
+    const openBtn = document.createElement('button');
+    openBtn.type = 'button';
+    openBtn.className = 'routine-btn';
+    openBtn.textContent = '주문 티켓 열기';
+    openBtn.addEventListener('click', () => {
+      openOrderTicket(orderTicketLib.buildPrefill(event));
+    });
+    actions.appendChild(openBtn);
+    box.appendChild(actions);
+  }
 
   line.appendChild(box);
   $history.appendChild(line);
@@ -1077,3 +1097,183 @@ function renderApprovalCard(r) {
 }
 
 refreshRoutineDrafts();
+
+// ---------- 주문 확인 모드 — #order (P4, 2026-08-19) ----------
+// 유일하게 미착수였던 모드의 실체(GLOSSARY §1). 온보딩·설정과 같은 형제 패널
+// 문법 — 열리면 #app이 물러나고 높이는 모드가 소유한다. 프리필은 AI(루틴
+// 발화)가, 방향·수량·실행은 사람만. 집행은 기존 3중 게이트 백엔드 라우트
+// 그대로(새 주문 경로 없음), IN_DOUBT(409)는 재전송하지 않는다.
+const orderTicketLib = window.AthenaLib.OrderTicket;
+const $order = document.getElementById('order');
+const $orderBody = document.getElementById('orderBody');
+let orderOpen = false;
+
+function openOrderTicket(prefill) {
+  if (orderOpen || settingsOpen || !$onboard.hidden) return;
+  orderOpen = true;
+  $app.hidden = true;
+  $order.hidden = false;
+  manualOverride = true;
+  syncMaxButton();
+  window.athena.send('athena:set-chat-height', { height: layout.chatMaxH, manual: false });
+  renderOrderTicket(prefill);
+}
+
+function closeOrderTicket() {
+  if (!orderOpen) return;
+  orderOpen = false;
+  $orderBody.replaceChildren();
+  $order.hidden = true;
+  $app.hidden = false;
+  manualOverride = false;
+  syncMaxButton();
+  window.athena.send('athena:set-chat-height', { height: layout.chatBaseH, manual: false });
+  $input.focus();
+}
+
+function _ticketRow(label, value) {
+  const row = document.createElement('div');
+  row.className = 'ticket-row';
+  const l = document.createElement('span');
+  l.className = 'ticket-label';
+  l.textContent = label;
+  const v = document.createElement('span');
+  v.className = 'ticket-value';
+  v.textContent = value;
+  row.append(l, v);
+  return row;
+}
+
+async function renderOrderTicket(prefill) {
+  $orderBody.replaceChildren();
+  const ticket = orderTicketLib.createTicket(prefill || null);
+
+  const card = document.createElement('div');
+  card.className = 'ticket-card';
+  if (prefill) {
+    card.appendChild(_ticketRow('종목', prefill.symbol));
+    card.appendChild(_ticketRow('사유', prefill.reason || '-'));
+    if (prefill.observed != null) {
+      // 시점 정직성 — 프리필 값은 발화 시점 값임을 라벨로 드러낸다.
+      card.appendChild(
+        _ticketRow('발화 시점 관측값', `${prefill.observed} (집행 전 재확인 필요)`)
+      );
+    }
+  }
+
+  // 방향 — 사람이 고른다(프리필 아님).
+  const sideRow = document.createElement('div');
+  sideRow.className = 'ticket-row';
+  const sideLabel = document.createElement('span');
+  sideLabel.className = 'ticket-label';
+  sideLabel.textContent = '방향';
+  const buyBtn = document.createElement('button');
+  buyBtn.type = 'button';
+  buyBtn.className = 'routine-btn';
+  buyBtn.textContent = '매수';
+  const sellBtn = document.createElement('button');
+  sellBtn.type = 'button';
+  sellBtn.className = 'routine-btn';
+  sellBtn.textContent = '매도';
+  sideRow.append(sideLabel, buyBtn, sellBtn);
+  card.appendChild(sideRow);
+
+  const qtyRow = document.createElement('div');
+  qtyRow.className = 'ticket-row';
+  const qtyLabel = document.createElement('span');
+  qtyLabel.className = 'ticket-label';
+  qtyLabel.textContent = '수량 · 시장가';
+  const qtyInput = document.createElement('input');
+  qtyInput.type = 'number';
+  qtyInput.min = '1';
+  qtyInput.className = 'ticket-qty';
+  qtyRow.append(qtyLabel, qtyInput);
+  card.appendChild(qtyRow);
+
+  // 게이트 상태 — 활성 계좌의 주문 API 여부를 정직하게 보여준다.
+  const gateLine = document.createElement('div');
+  gateLine.className = 'agent-source';
+  card.appendChild(gateLine);
+  let gateBlocked = '계좌 확인 중…';
+  gateLine.textContent = gateBlocked;
+  try {
+    const res = await window.athena.invoke('athena:account-list');
+    const accounts = (res && res.accounts) || [];
+    const active = accounts.find((a) => a.active) || accounts[0] || null;
+    gateBlocked = orderTicketLib.gateBlocker(active);
+  } catch {
+    gateBlocked = orderTicketLib.gateBlocker(null);
+  }
+  gateLine.textContent = gateBlocked
+    ? `지금은 실행할 수 없음: ${gateBlocked}`
+    : '주문 API 활성 — 실행 시 확인 게이트·멱등키가 적용됩니다 (모의계좌)';
+
+  const status = document.createElement('div');
+  status.className = 'agent-body';
+
+  const execRow = document.createElement('div');
+  execRow.className = 'routine-approval-actions';
+  const execBtn = document.createElement('button');
+  execBtn.type = 'button';
+  execBtn.className = 'routine-btn routine-btn-approve';
+  execBtn.textContent = '주문 실행';
+  const closeBtn = document.createElement('button');
+  closeBtn.type = 'button';
+  closeBtn.className = 'routine-btn';
+  closeBtn.textContent = '닫기 (Esc)';
+  execRow.append(execBtn, closeBtn);
+  card.append(execRow, status);
+  $orderBody.appendChild(card);
+
+  const syncExec = () => {
+    execBtn.disabled = !!gateBlocked || !ticket.side || !Number(qtyInput.value)
+      || ticket.state === 'done' || ticket.state === 'in_doubt';
+  };
+  syncExec();
+
+  buyBtn.addEventListener('click', () => {
+    ticket.side = 'buy';
+    buyBtn.classList.add('routine-btn-approve');
+    sellBtn.classList.remove('routine-btn-approve');
+    syncExec();
+  });
+  sellBtn.addEventListener('click', () => {
+    ticket.side = 'sell';
+    sellBtn.classList.add('routine-btn-approve');
+    buyBtn.classList.remove('routine-btn-approve');
+    syncExec();
+  });
+  qtyInput.addEventListener('input', syncExec);
+  closeBtn.addEventListener('click', closeOrderTicket);
+
+  execBtn.addEventListener('click', async () => {
+    if (execBtn.disabled) return;
+    let payload;
+    try {
+      ticket.qty = Number(qtyInput.value);
+      payload = orderTicketLib.buildOrderPayload(ticket);
+    } catch (err) {
+      status.textContent = `입력 오류: ${err.message}`;
+      return;
+    }
+    orderTicketLib.transition(ticket, 'executing');
+    execBtn.disabled = true;
+    status.textContent = '집행 중… (무재시도 — 응답을 기다립니다)';
+    const res = await window.athena.invoke('athena:order-execute', {
+      trId: payload.tr_id,
+      body: payload.body,
+      idempotencyKey: orderTicketLib.newIdempotencyKey(),
+    });
+    const outcome = orderTicketLib.interpretExecuteStatus((res && res.status) || 0);
+    orderTicketLib.transition(ticket, outcome === 'done' ? 'done'
+      : outcome === 'in_doubt' ? 'in_doubt' : 'failed');
+    if (outcome === 'done') {
+      status.textContent = '주문 접수됨 — 체결은 계좌에서 확인하세요.';
+    } else if (outcome === 'in_doubt') {
+      status.textContent = '확인 중(IN_DOUBT) — 중복 방지를 위해 재전송하지 않습니다. 계좌에서 접수 여부를 확인하세요.';
+    } else {
+      status.textContent = `실행 실패: ${(res && res.error) || 'HTTP ' + ((res && res.status) || '?')} — 재시도하려면 다시 실행을 누르세요(새 멱등키).`;
+      syncExec();
+    }
+  });
+}

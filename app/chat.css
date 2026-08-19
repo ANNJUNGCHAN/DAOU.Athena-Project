@@ -935,3 +935,10 @@ html, body { background: transparent; }
 }
 .routine-btn-approve { background: rgba(230, 232, 238, 0.9); color: #10131a; border-color: transparent; }
 .routine-btn:disabled { opacity: 0.4; cursor: default; }
+
+/* 주문 티켓 (P4) */
+.ticket-card { display: flex; flex-direction: column; gap: 10px; padding: 18px 20px; border-radius: 12px; background: rgba(29, 34, 44, 0.6); border: 1px solid rgba(230, 232, 238, 0.12); }
+.ticket-row { display: flex; align-items: center; gap: 12px; }
+.ticket-label { width: 140px; flex-shrink: 0; font-size: var(--text-2xs, 11px); color: var(--color-k-dim, #9aa2b1); }
+.ticket-value { font-family: var(--font-mono); font-size: var(--text-sm, 13px); color: var(--color-k-text, #e6e8ee); }
+.ticket-qty { width: 120px; font-family: var(--font-mono); font-size: var(--text-sm, 13px); color: var(--color-k-text, #e6e8ee); background: rgba(16, 19, 26, 0.5); border: 1px solid rgba(230, 232, 238, 0.25); border-radius: 8px; padding: 6px 10px; }
