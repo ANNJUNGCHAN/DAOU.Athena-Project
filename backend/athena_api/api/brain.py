@@ -38,6 +38,7 @@ _NOT_LLM_EXPOSED = {"x-athena-llm-exposed": False}
 _DEFAULT_PROFILE_WINDOW_DAYS = 90
 _DEFAULT_PROFILE_LIMIT = 50
 _DEFAULT_CHATS_LIMIT = 100
+_DEFAULT_CONVERSATIONS_LIMIT = 50
 
 
 def _require_history(request: Request) -> HistoryStore:
@@ -94,6 +95,21 @@ class ChatHistoryResponse(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     messages: list[ChatMessageOut]
+
+
+class ConversationSummaryOut(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    conversation_id: str
+    message_count: int
+    first_occurred_at: datetime
+    last_occurred_at: datetime
+
+
+class ConversationsResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    conversations: list[ConversationSummaryOut]
 
 
 class ProfileSummaryEntryOut(BaseModel):
@@ -208,6 +224,38 @@ async def get_brain_chats(
                 occurred_at=message.occurred_at,
             )
             for message in messages
+        ]
+    )
+
+
+@router.get(
+    "/conversations",
+    summary="대화 목록 조회(건수·시각만, 본문 없음)",
+    operation_id="get_brain_conversations",
+    response_model=ConversationsResponse,
+    openapi_extra={
+        **_NOT_LLM_EXPOSED,
+        "x-athena-side-effect": "none",
+    },
+)
+async def get_brain_conversations(
+    request: Request,
+    authorization: Annotated[str, Header(alias="Authorization")],
+    limit: int = _DEFAULT_CONVERSATIONS_LIMIT,
+) -> ConversationsResponse:
+    """List conversations by id/count/timestamps only -- trap 12: never the transcript body."""
+    require_local_bearer(request, authorization)
+    history = _require_history(request)
+    summaries = await history.conversations(limit=limit)
+    return ConversationsResponse(
+        conversations=[
+            ConversationSummaryOut(
+                conversation_id=summary.conversation_id,
+                message_count=summary.message_count,
+                first_occurred_at=summary.first_occurred_at,
+                last_occurred_at=summary.last_occurred_at,
+            )
+            for summary in summaries
         ]
     )
 

@@ -36,7 +36,7 @@
 **2026-08-19 (그래프) · 채팅→그래프 파이프라인 결선 후 재실측 — 이 수치가 현행이다:**
 
 ```
-backend:  755 passed, 0 failed (직렬 172.6초)
+backend:  769 passed, 0 failed (직렬 220.6초)
   ruff check . → All checks passed | generate_api.py --check → current (생성물 무접촉)
 app:
   npm test        → 197건 통과 (기존 176 + history-sink 9 · history-badge 7 · 리셋 배선 5)
@@ -132,6 +132,32 @@ app:
     규칙이고 `caplog` 테스트가 강제한다.
   - 회귀 방지: `test_no_audit_body_settings_exist`가 `audit` 이름의 설정이 생기면 실패한다
     (upstream을 베껴 되살리는 것을 막는 장치). 테스트 23건 신설.
+- **채팅 로그 → 그래프 이관 단위 재설계 (2026-08-19 · Open WebUI 비교 판단)**.
+  "채팅 로그를 어떻게 저장하고 어떻게 그래프로 옮길 것인가"를 다시 따져 **저장은 옳고 옮기는
+  단위가 틀렸다**고 판정했다.
+  - **Open WebUI 실측**(`models/chats.py`, `internal/db.py`, `env.py`): 대화 1건 = `chat` 테이블 행
+    1개이고 대화 전체가 `chat` JSON 컬럼에 통째로 들어간다(`history.messages` 딕셔너리 +
+    `currentId`로 분기 트리). 성능 때문에 정규화 `chat_message` 행을 나중에 덧대 이중 쓰기 중이고
+    읽기는 정규화 우선·JSON 폴백. 기본 SQLite(`backend/data/webui.db`), SQLAlchemy+Alembic,
+    SQLCipher 암호화 옵션. **보존 정책은 없다**(사용자가 지울 때까지 영구).
+  - **저장 계층 판정: 우리가 낫다.** 우리는 처음부터 메시지 1건 = 행 1개(`source_records`)에
+    fingerprint + append-only `source_changes`까지 있다. 저들이 지금 겪는 "JSON 덩어리 → 정규화"
+    마이그레이션이 우리에겐 없다. **바꾸지 않는다.**
+  - **이관 계층 판정: 결함이다.** `ingestion.py:318-321`이 변경분을 레코드 하나씩 돌며
+    `project_source(change.record)`를 부르고, `extraction.py:376`은 그 레코드의 `text` 하나만
+    LLM에 싣는다. 즉 **성향 추출이 문맥 없는 단일 메시지만 본다.** "응 그거 좋아"는 이전 턴 없이
+    무의미하고, 목적이 성향 판별인데 구조적으로 품질이 안 나온다. 게다가 "차트 그려줘"처럼 신호 0인
+    메시지까지 전부 로컬 CLI spawn 1회를 쓴다.
+  - **해결책이 이미 스키마에 있었다**: `SourceKind.CONVERSATION`(`ontology.py:57`)이 정의돼 있는데
+    **한 번도 쓰인 적이 없다.** 설계가 대화 단위 소스를 예상해뒀는데 우리가 `chat_message`만 썼다.
+  - **채택 설계 — 2단 소스**(온톨로지·스키마 버전 변경 0): `chat_message`는 원본으로 계속 쌓되
+    **추출 대상에서 뺀다**(그래프 SourceRecord 노드로는 계속 올라가 Claim의 `SUPPORTED_BY` 근거가
+    된다). 대화를 전사(transcript)로 롤업한 `conversation` 소스를 만들고 **그것만 추출 대상**으로
+    삼는다. 롤업은 기존 `_upsert_source`를 재사용하므로 `source_changes` → 커서 → 어댑터라는
+    **기존 경로를 그대로 탄다** — 별도 파이프라인이 아니다. 여기서 Open WebUI가 참고가 된다:
+    **저장은 쪼개는 게 맞고, 의미를 읽을 때는 저들처럼 대화 덩어리가 맞다.**
+  - 부수 결함: 대화 목록을 만들 수단이 없었다(`chats_for_conversation`은 id를 이미 알아야 한다).
+    DISTINCT 집계 조회를 신설한다 — 이력 카드가 반쪽이던 원인.
 - **미완(정직)**: ① **노션 문서화는 하지 않는다** — 사용자 지시로 범위에서 제외(2026-08-19).
   ② 보존기간·세분화 삭제 UI,
   감시 에이전트의 그래프 소비(알림)는 **명시적 범위 밖**. ③ 집계 쿼리 성능 수용 기준 없음(후속 실측).

@@ -105,6 +105,27 @@ class StoredChatMessage:
 
 
 @dataclass(frozen=True, slots=True)
+class ConversationSummary:
+    conversation_id: str
+    message_count: int
+    first_occurred_at: datetime
+    last_occurred_at: datetime
+
+
+# Fixed so the LLM extracting propensity signals can tell speakers apart -- pinned by
+# test_brain_history.py::test_compact_conversations_renders_role_labelled_transcript.
+_CONVERSATION_TRANSCRIPT_LINE_FORMAT: Final = "{role}: {text}"
+
+
+def _render_conversation_transcript(messages: tuple[StoredChatMessage, ...]) -> str:
+    lines = [
+        _CONVERSATION_TRANSCRIPT_LINE_FORMAT.format(role=message.role.value, text=message.text)
+        for message in messages
+    ]
+    return "\n".join(lines) + "\n"
+
+
+@dataclass(frozen=True, slots=True)
 class SourceChange:
     seq: int
     revision: int
@@ -523,6 +544,9 @@ class HistoryStore:
     async def trade_changes(self, after_seq: int, *, limit: int) -> tuple[SourceChange, ...]:
         return await self._changes(SourceKind.TRADE, after_seq, limit)
 
+    async def conversation_changes(self, after_seq: int, *, limit: int) -> tuple[SourceChange, ...]:
+        return await self._changes(SourceKind.CONVERSATION, after_seq, limit)
+
     async def _changes(
         self, source_kind: SourceKind, after_seq: int, limit: int
     ) -> tuple[SourceChange, ...]:
@@ -606,6 +630,110 @@ class HistoryStore:
             text=str(row["text"]),
             occurred_at=_parse_timestamp(row["occurred_at"]),
         )
+
+    async def conversations(self, *, limit: int = 50) -> tuple[ConversationSummary, ...]:
+        """Distinct chat_message locators, most recently active first.
+
+        Deterministic tiebreak on locator (== conversation id) when last_occurred_at ties,
+        so pagination/order is stable across repeated calls.
+        """
+        if not 1 <= limit <= MAX_BATCH_SIZE:
+            raise ValueError(f"limit must be between 1 and {MAX_BATCH_SIZE}")
+        return await self._call(self._conversations_sync, limit)
+
+    def _conversations_sync(self, limit: int) -> tuple[ConversationSummary, ...]:
+        rows = (
+            self._db()
+            .execute(
+                "SELECT locator, COUNT(*) AS message_count, "
+                "MIN(occurred_at) AS first_occurred_at, MAX(occurred_at) AS last_occurred_at "
+                "FROM source_records WHERE source_kind = ? AND locator IS NOT NULL "
+                "GROUP BY locator ORDER BY last_occurred_at DESC, locator ASC LIMIT ?",
+                (SourceKind.CHAT_MESSAGE.value, limit),
+            )
+            .fetchall()
+        )
+        return tuple(self._row_to_conversation_summary(row) for row in rows)
+
+    @staticmethod
+    def _row_to_conversation_summary(row: sqlite3.Row) -> ConversationSummary:
+        locator = str(row["locator"])
+        return ConversationSummary(
+            conversation_id=locator.removeprefix("conversation:"),
+            message_count=int(row["message_count"]),
+            first_occurred_at=_parse_timestamp(row["first_occurred_at"]),
+            last_occurred_at=_parse_timestamp(row["last_occurred_at"]),
+        )
+
+    async def compact_conversations(self, *, now: datetime | None = None) -> tuple[str, ...]:
+        """Roll every chat_message conversation up into one `conversation` source.
+
+        Reads only `chat_message` rows -- never re-reads the `conversation` rows this
+        writes, even though both share the same locator string, because the read query
+        below filters on `source_kind = chat_message`. This keeps the rollup a one-shot
+        projection instead of a self-feeding loop.
+
+        Idempotent via `_upsert_source`'s existing fingerprint check: an unchanged
+        conversation produces the same fingerprint, so revision/`source_changes` do not
+        advance and this returns no id for it. Locators are enumerated from chat_message
+        rows themselves, so a store with zero chat_message rows yields zero locators and
+        this is a no-op.
+        """
+        changed_at = now or utc_now()
+        _require_utc(changed_at, "now")
+        locators = await self._call(self._conversation_locators_sync)
+        updated: list[str] = []
+        for locator in locators:
+            conversation_id = locator.removeprefix("conversation:")
+            messages = await self._call(
+                self._all_chat_messages_for_locator_sync, conversation_id, locator
+            )
+            if not messages:
+                continue
+            transcript = _render_conversation_transcript(messages)
+            result = await self._upsert_source(
+                source_id=f"conversation:{conversation_id}",
+                source_kind=SourceKind.CONVERSATION,
+                text=transcript,
+                locator=locator,
+                occurred_at=messages[-1].occurred_at,
+                attributes={
+                    "conversation": {
+                        "conversation_id": conversation_id,
+                        "message_count": len(messages),
+                    }
+                },
+                changed_at=changed_at,
+            )
+            if result.changed:
+                updated.append(result.source_id)
+        return tuple(updated)
+
+    def _conversation_locators_sync(self) -> tuple[str, ...]:
+        rows = (
+            self._db()
+            .execute(
+                "SELECT DISTINCT locator FROM source_records "
+                "WHERE source_kind = ? AND locator IS NOT NULL ORDER BY locator",
+                (SourceKind.CHAT_MESSAGE.value,),
+            )
+            .fetchall()
+        )
+        return tuple(str(row["locator"]) for row in rows)
+
+    def _all_chat_messages_for_locator_sync(
+        self, conversation_id: str, locator: str
+    ) -> tuple[StoredChatMessage, ...]:
+        rows = (
+            self._db()
+            .execute(
+                "SELECT source_id, text, occurred_at, metadata_json FROM source_records "
+                "WHERE source_kind = ? AND locator = ? ORDER BY occurred_at, source_id",
+                (SourceKind.CHAT_MESSAGE.value, locator),
+            )
+            .fetchall()
+        )
+        return tuple(self._row_to_chat_message(conversation_id, row) for row in rows)
 
     async def cursor(self, adapter_name: str) -> int:
         _validate_adapter_name(adapter_name)
