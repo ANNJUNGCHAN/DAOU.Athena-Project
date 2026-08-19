@@ -1,0 +1,77 @@
+{
+ "case_id": "LIV-020",
+ "tier": "live",
+ "persona": "개인투자자",
+ "question": "레인보우로보틱스가 삼성전자한테 완전히 인수됐다는 뉴스를 봤는데, 진짜로 최대주주가 삼성전자로 바뀌었다는 공시가 실제로 나왔는지 dart나 korea-stock으로 확인해줄 수 있어?",
+ "attachment": null,
+ "sent_text": "레인보우로보틱스가 삼성전자한테 완전히 인수됐다는 뉴스를 봤는데, 진짜로 최대주주가 삼성전자로 바뀌었다는 공시가 실제로 나왔는지 dart나 korea-stock으로 확인해줄 수 있어?",
+ "ran_at": "2026-08-19T01:44:26.444Z",
+ "duration_s": 84.1,
+ "first_card_ms": 76497,
+ "completed": true,
+ "timed_out": false,
+ "answer_chars": 308,
+ "chip_count_total": 11,
+ "chip_count_added": 1,
+ "chip_labels_added": [
+  "공통 테이블"
+ ],
+ "chip_labels_total": [
+  "공통 테이블",
+  "공통 테이블",
+  "공통 테이블",
+  "스트림",
+  "공통 테이블",
+  "스트림",
+  "공통 테이블",
+  "스트림",
+  "공통 테이블",
+  "스트림",
+  "공통 테이블"
+ ],
+ "state_transitions": [
+  {
+   "state": "judging",
+   "at_ms": 1
+  },
+  {
+   "state": "calling",
+   "at_ms": 76497
+  },
+  {
+   "state": "idle",
+   "at_ms": 84101
+  }
+ ],
+ "card_types_rendered": [
+  "mcp-table.w-full"
+ ],
+ "canvas_card_count": 1,
+ "canvas_cards_pre": 0,
+ "audit_calls": [
+  "korea-stock-mcp__get_corp_code=true",
+  "korea-stock-mcp__get_disclosure_list=true",
+  "korea-stock-mcp__get_disclosure=true"
+ ],
+ "judge": {
+  "must_include": [
+   "naver-search-2로 찾은 실제 인수 관련 뉴스 기사 내용을 구체적으로 인용",
+   "korea-stock-mcp 공시 조회로 확인한 실제 최대주주 변경(또는 지분 취득) 공시 존재 여부와 날짜",
+   "뉴스의 '인수' 표현이 공시상 사실(완전 인수인지 지분 일부 취득/최대주주 변경인지)과 정확히 일치하는지 구분해서 서술"
+  ],
+  "must_not_include": [
+   "뉴스 제목만 보고 공시 확인 없이 '최대주주가 바뀌었다'고 단정",
+   "공시를 조회하지 않고 일반론으로 답함",
+   "실제 지분율·날짜를 임의로 지어냄"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=naver-search-2 tool=search_news success=true 행이 있다",
+   "audit-log에 alias=korea-stock-mcp tool=get_disclosure_list success=true 행이 있다",
+   "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 1개 이상 있다"
+  ]
+ }
+}

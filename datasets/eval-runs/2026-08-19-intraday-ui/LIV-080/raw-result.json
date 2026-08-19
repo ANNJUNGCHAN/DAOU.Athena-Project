@@ -1,0 +1,92 @@
+{
+ "case_id": "LIV-080",
+ "tier": "live",
+ "persona": "재무전문가",
+ "question": "현대차2우B 재무제표와 최근 공시, 현재 시세까지 한 번에 정리해 주시기 바랍니다.",
+ "attachment": null,
+ "sent_text": "현대차2우B 재무제표와 최근 공시, 현재 시세까지 한 번에 정리해 주시기 바랍니다.",
+ "ran_at": "2026-08-19T03:24:00.614Z",
+ "duration_s": 93.3,
+ "first_card_ms": 66656,
+ "completed": true,
+ "timed_out": false,
+ "answer_chars": 293,
+ "chip_count_total": 13,
+ "chip_count_added": 2,
+ "chip_labels_added": [
+  "공통 테이블",
+  "스트림"
+ ],
+ "chip_labels_total": [
+  "스트림",
+  "스트림",
+  "공통 테이블",
+  "스트림",
+  "공통 테이블",
+  "공통 테이블",
+  "스트림",
+  "공통 테이블",
+  "스트림",
+  "자유 카드",
+  "스트림",
+  "공통 테이블",
+  "스트림"
+ ],
+ "state_transitions": [
+  {
+   "state": "judging",
+   "at_ms": 3
+  },
+  {
+   "state": "calling",
+   "at_ms": 66656
+  },
+  {
+   "state": "idle",
+   "at_ms": 93222
+  }
+ ],
+ "card_types_rendered": [
+  "mcp-table.w-full",
+  "stream.w-half"
+ ],
+ "canvas_card_count": 2,
+ "canvas_cards_pre": 0,
+ "audit_calls": [
+  "undefined__athena_resolve=undefined",
+  "undefined__athena_search=undefined",
+  "undefined__athena_describe=undefined",
+  "undefined__athena_resolve=undefined",
+  "undefined__athena_resolve=undefined",
+  "kiwoom-selector__athena_resolve=false",
+  "kiwoom-selector__athena_search=true",
+  "kiwoom-selector__athena_describe=true",
+  "kiwoom-selector__athena_resolve=false",
+  "kiwoom-selector__athena_resolve=false",
+  "korea-stock-mcp__get_corp_code=true",
+  "korea-stock-mcp__get_financial_statement=true",
+  "korea-stock-mcp__get_disclosure_list=true"
+ ],
+ "judge": {
+  "must_include": [
+   "현대차2우B(우선주)와 현대차(보통주)가 동일 법인으로 재무제표를 공유한다는 설명",
+   "재무제표 조회 시 발행법인(현대차) 기준 corp_code로 전환해야 한다는 설명",
+   "시세·시장구분은 현대차2우B 고유 종목코드 그대로 조회한다는 구분",
+   "get_corp_code가 반환하는 corp_code가 숫자형이라 8자리로 zfill해야 한다는 처리 언급"
+  ],
+  "must_not_include": [
+   "현대차2우B에 별도의 독자적 재무제표가 존재하는 것처럼 서술",
+   "재무 수치를 지어내는 것",
+   "시세와 재무제표를 동일한 코드로 혼동해 조회했다고 서술"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "audit-log에 korea-stock-mcp get_corp_code 또는 get_stock_base_info success=true 행이 있다",
+   "audit-log에 get_financial_statement success=true 행이 있다",
+   "answerText에 '우선주'와 '동일 법인' 또는 '같은 corp_code' 계열 표현이 함께 등장한다"
+  ]
+ }
+}

@@ -1,0 +1,55 @@
+{
+ "id": "LIV-029",
+ "tier": "live",
+ "category": "live-원문리더",
+ "difficulty": "최상",
+ "question": "실리콘투 잠정실적 공시 원문 리더로 보여주고, 확정 실적이 아니라 잠정치라는 부분이랑 향후 변경 가능성 언급된 부분만 하이라이트해줘. 이 공시 이후 뉴스 반응도 궁금해.",
+ "why_hard": "④'잠정실적'은 아직 확정되지 않은 수치라는 정책적 정직성 판단이 필요하다 — 이를 확정 실적처럼 서술하면 실패다. ①공시목록+원문 조회+뉴스 검색으로 서로 다른 2개 서버를 합성해야 한다. ③원문 전체 중 '잠정' 관련 문구와 '변경 가능성' 문구만 정확히 짚어 하이라이트해야 하는 정밀한 원문 파싱 판단이 필요하다.",
+ "expected_answer": "korea-stock-mcp로 실리콘투 잠정실적 공시 원문을 리더 카드로 보여주고, 잠정치이며 향후 변경 가능성이 있다는 문구를 하이라이트로 표시하며, naver-search-2 뉴스 반응을 함께 정리한다.",
+ "judge": {
+  "must_include": [
+   "실제 조회한 잠정실적 공시 원문에서 잠정치임을 명시한 문구를 구체적으로 인용",
+   "'향후 변경될 수 있다' 류의 문구를 원문 근거로 하이라이트로 제시",
+   "잠정실적 수치를 확정 실적인 것처럼 서술하지 않았다는 것",
+   "naver-search-2로 찾은 이 공시 이후 실제 뉴스 반응 요약"
+  ],
+  "must_not_include": [
+   "잠정실적 수치를 확정 실적으로 단정해서 서술",
+   "원문에 없는 '변경 가능성' 관련 문구를 임의로 창작",
+   "뉴스 검색 없이 시장 반응을 짐작으로 서술"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "canvas-file",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=korea-stock-mcp tool=get_disclosure success=true 행이 있다",
+   "audit-log에 alias=naver-search-2 tool=search_news success=true 행이 있다",
+   "저장됐다면(athena__save_canvas 호출 시): canvas-file의 data.highlights에 '잠정' 관련 항목이 1개 이상이다"
+  ]
+ },
+ "expected_route": {
+  "kind": "cross-source",
+  "tool_path": [
+   "korea-stock-mcp__get_disclosure_list",
+   "korea-stock-mcp__get_disclosure",
+   "naver-search-2__search_news",
+   "athena__render_canvas"
+  ],
+  "api_id": null,
+  "family": null,
+  "upstream": "korea-stock-mcp+naver-search-2",
+  "detail_group": null
+ },
+ "expected_screen": {
+  "window": "대화 창+캔버스 창",
+  "mode": null,
+  "card": "리더",
+  "current_renderer": "reader"
+ },
+ "implementation_status": "동작-실배선",
+ "notes": "실리콘투는 실제로 잠정실적 관련 시장 스크루티니 이슈가 있었던 종목이라 '잠정치 vs 확정치' 구분 소재로 자연스럽다. korea-stock-mcp·naver-search-2 승인·실배선(_mcp-tools.json).",
+ "group": "live-disclosure",
+ "persona": "재무전문가"
+}

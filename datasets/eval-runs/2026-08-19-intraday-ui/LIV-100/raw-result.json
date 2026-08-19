@@ -1,0 +1,78 @@
+{
+ "case_id": "LIV-100",
+ "tier": "live",
+ "persona": "CFO",
+ "question": "설정 화면에서 네이버 검색 서버 중 아직 승인되지 않은 서버가 하나 확인됩니다. 해당 서버의 연결 테스트를 실행하면 결과가 즉시 나옵니까? 그리고 그 과정에서 '서버 시작 승인' 버튼이 표시되더라도 이를 눌러서는 안 되는 이유는 무엇입니까?",
+ "attachment": null,
+ "harness": "run-cases-appmode.js",
+ "procedure": true,
+ "ran_at": "2026-08-19T04:13:58.883Z",
+ "duration_s": 7.2,
+ "completed": true,
+ "error": null,
+ "observations": {
+  "open_row": "clicked (clickable=true)",
+  "server_rows": [
+   {
+    "classes": [
+     "uk-row",
+     "is-clickable"
+    ],
+    "text": "dart-mcp연결됨5개uv --directory C:\\Users\\USER\\Downloads\\dart-mcp run dart.py×"
+   },
+   {
+    "classes": [
+     "uk-row",
+     "is-clickable"
+    ],
+    "text": "korea-stock-mcp연결됨8개npx -y korea-stock-mcp@latest×"
+   },
+   {
+    "classes": [
+     "uk-row",
+     "is-clickable"
+    ],
+    "text": "naver-search-2연결됨2개npx -y @isnow890/naver-search-mcp×"
+   },
+   {
+    "classes": [
+     "uk-row",
+     "is-clickable"
+    ],
+    "text": "naver-search승인 대기0개npx -y @isnow890/naver-search-mcp×"
+   }
+  ],
+  "sheet_present": true,
+  "sheet_text_head": "probe 결과 · naver-search닫기ConsentNotGrantedError: 'naver-search' 서버는 아직 승인되지 않았다 — 명령 실행(spawn) 자체가 금지된다서버 시작 승인 후 재시도",
+  "sheet_buttons": [
+   "닫기",
+   "서버 시작 승인 후 재시도"
+  ],
+  "retry_after_approve_button": true,
+  "naver_search_registry_state": {
+   "unreadable": true
+  }
+ },
+ "judge": {
+  "must_include": [
+   "naver-search는 approved:false이므로 athena:mcp-probe가 require_server_approved() 게이트에서 실패한다",
+   "실패 화면에는 errorNote와 '서버 시작 승인 후 재시도' 버튼이 함께 뜬다",
+   "이 버튼을 누르면 실제로 athena:mcp-approve가 호출돼 naver-search가 영구히 승인 상태로 바뀐다",
+   "이 테스트는 관찰만 하고 버튼을 누르지 않아야 naver-search가 계속 approved:false로 남는다"
+  ],
+  "must_not_include": [
+   "probe가 정상적으로 툴 목록을 반환했다는 서술",
+   "'재시도' 버튼을 눌러 승인까지 진행했다는 서술",
+   "naver-search와 naver-search-2를 혼동해 같은 서버로 취급하는 서술"
+  ],
+  "verify_via": [
+   "ui-state",
+   "screenshot",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "ui-state: probe 시트에 errorNote와 '서버 시작 승인 후 재시도' 버튼이 렌더된다",
+   "audit-log(_mcp-tools.json 재조회): naver-search 별칭이 테스트 이후에도 approved:false로 유지된다"
+  ]
+ }
+}

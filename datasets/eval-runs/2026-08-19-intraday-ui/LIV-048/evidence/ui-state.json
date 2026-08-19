@@ -1,0 +1,62 @@
+{
+ "chat": {
+  "answerCount": 2,
+  "lastAnswer": "삼성전자의 가장 최근 자기주식 처분 결정 공시는 2026-07-13 접수된 주요사항보고서로, 원문 항목을 표 카드로 정리했습니다. 임원 등 928명에게 성과급으로 보통주 1,132,477주(주당 285,000원, 총 약 3,228억 원)를 당일 지급하는 내용입니다. 직전인 7/7에도 같은 유형의 공시가 한 건 더 있으니 필요하면 그 원문도 열어드릴 수 있습니다.",
+  "chipCount": 2,
+  "chipLabels": [
+   "리더",
+   "공통 테이블"
+  ],
+  "dotClasses": [
+   "dot"
+  ],
+  "state": "idle",
+  "panels": {
+   "app": true,
+   "onboard": false,
+   "settings": false
+  }
+ },
+ "canvas": {
+  "cardCount": 1,
+  "cards": [
+   {
+    "classes": [
+     "mcp-table",
+     "w-full"
+    ],
+    "tableRows": 15,
+    "tableCols": 2,
+    "streamItems": 0,
+    "hasAlert": false,
+    "freeTree": false,
+    "text": "삼성전자 주요사항보고서(자기주식 처분 결정) 원문 정리 — 2026-07-13 접수 (접수번호 20260713000395)11:44:08 기준항목내용1. 처분예정주식보통주식 1,132,477주 (기타주식 없음)2. 처분 대상 주식가격보통주식 285,000원3. 처분예정금액322,755,945,000원 (약 3,228억 원)4. 처분예정기간2026-07-13 ~ 2026-07-13 (당일)5. 처분목적임원 등 성과급의 자기주식 지급6. 처분방법기타 1,132,477주 (주주균등처분·시간외대량매매·장외처분 해당 없음)7. 처분상대방임원"
+   }
+  ],
+  "clipPath": "circle(1373.69px at 34.5062px 737.973px)"
+ },
+ "stateTransitions": [
+  {
+   "state": "judging",
+   "at_ms": 4
+  },
+  {
+   "state": "calling",
+   "at_ms": 78519
+  },
+  {
+   "state": "idle",
+   "at_ms": 83644
+  }
+ ],
+ "screenshots": {
+  "chat": {
+   "width": 2354,
+   "height": 647
+  },
+  "canvas": {
+   "width": 2343,
+   "height": 1205
+  }
+ }
+}

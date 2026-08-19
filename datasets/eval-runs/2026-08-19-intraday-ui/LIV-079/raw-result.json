@@ -1,0 +1,80 @@
+{
+ "case_id": "LIV-079",
+ "tier": "live",
+ "persona": "일반직장인",
+ "question": "한국ANKOR유전 종목 최근 뉴스랑 공시, 그리고 지금 시장구분(코스피/코스닥)까지 정리해줘.",
+ "attachment": null,
+ "sent_text": "한국ANKOR유전 종목 최근 뉴스랑 공시, 그리고 지금 시장구분(코스피/코스닥)까지 정리해줘.",
+ "ran_at": "2026-08-19T03:22:45.499Z",
+ "duration_s": 70.9,
+ "first_card_ms": 40373,
+ "completed": true,
+ "timed_out": false,
+ "answer_chars": 271,
+ "chip_count_total": 11,
+ "chip_count_added": 2,
+ "chip_labels_added": [
+  "자유 카드",
+  "스트림"
+ ],
+ "chip_labels_total": [
+  "스트림",
+  "스트림",
+  "공통 테이블",
+  "스트림",
+  "공통 테이블",
+  "공통 테이블",
+  "스트림",
+  "공통 테이블",
+  "스트림",
+  "자유 카드",
+  "스트림"
+ ],
+ "state_transitions": [
+  {
+   "state": "judging",
+   "at_ms": 1
+  },
+  {
+   "state": "calling",
+   "at_ms": 40367
+  },
+  {
+   "state": "idle",
+   "at_ms": 70843
+  }
+ ],
+ "card_types_rendered": [
+  "free.w-full",
+  "stream.w-half"
+ ],
+ "canvas_card_count": 2,
+ "canvas_cards_pre": 0,
+ "audit_calls": [
+  "korea-stock-mcp__get_corp_code=true",
+  "korea-stock-mcp__get_market_type=true",
+  "korea-stock-mcp__get_disclosure_list=true",
+  "naver-search-2__search_news=true"
+ ],
+ "judge": {
+  "must_include": [
+   "시장구분(코스피/코스닥) 조회 결과를 제시했다는 서술",
+   "공시 조회 결과(있으면 요약, 없으면 없다는 사실)를 정직하게 제시",
+   "뉴스 검색 결과가 적거나 없을 수 있다는 점을 인정하고 빈 결과를 지어내지 않는다는 서술"
+  ],
+  "must_not_include": [
+   "존재하지 않는 뉴스 기사를 지어내 제시",
+   "뉴스 결과 0건을 '조회 실패·오류'로 잘못 서술",
+   "시장구분·공시 조회를 생략하고 뉴스만 언급"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=korea-stock-mcp tool=get_market_type success=true 행이 있다",
+   "audit-log에 disclosure 계열 tool success=true 행이 있다",
+   "audit-log에 alias=naver-search-2 tool=search_news 행이 success=true로 존재한다(결과 0건 여부와 무관)"
+  ]
+ }
+}

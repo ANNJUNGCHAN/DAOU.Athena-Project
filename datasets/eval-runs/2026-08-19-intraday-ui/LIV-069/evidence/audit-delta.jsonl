@@ -1,0 +1,6 @@
+{"ts":"2026-08-19T03:09:44.135346+00:00","tool":"athena_search","backend_ms":0}
+{"ts":"2026-08-19T03:09:47.526113+00:00","tool":"athena_describe","backend_ms":0}
+{"ts":"2026-08-19T03:09:50.661710+00:00","tool":"athena_resolve","backend_ms":15}
+{"ts":"2026-08-19T03:09:44.136346+00:00","alias":"kiwoom-selector","tool":"athena_search","success":true}
+{"ts":"2026-08-19T03:09:47.526113+00:00","alias":"kiwoom-selector","tool":"athena_describe","success":true}
+{"ts":"2026-08-19T03:09:50.662710+00:00","alias":"kiwoom-selector","tool":"athena_resolve","success":false}

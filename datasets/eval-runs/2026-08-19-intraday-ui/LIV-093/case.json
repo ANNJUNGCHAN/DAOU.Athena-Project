@@ -1,0 +1,48 @@
+{
+ "id": "LIV-093",
+ "tier": "live",
+ "category": "live-Esc분기",
+ "difficulty": "최상",
+ "question": "질의가 끝나고 캔버스 창에 카드가 몇 개 떠 있는 idle 상태에서, 저장하지 않고 Esc로 캔버스를 접었습니다. 이후 캔버스를 다시 열면 그 카드들이 그대로 남아 있습니까?",
+ "why_hard": "idle에서의 Esc가 단순히 창을 숨기는 게 아니라 athena:clear-canvases로 캔버스 데이터 자체를 지운다는, UI 애니메이션과 데이터 파괴가 한 IPC 흐름에 묶여 있는 비직관적 결합을 짚어야 한다(⑤ 데이터 유실이라는 부분실패를 인지해야 함, ⑥ 저장 여부에 따라 카드 존속이 갈리는 배치 판단).",
+ "expected_answer": "아니다 — idle에서의 Esc는 athena:collapse-canvas를 보내고, 접기 애니메이션 후 canvasWin.hide()와 함께 athena:clear-canvases가 전송돼 렌더링된 카드를 전부 지운다. athena__save_canvas로 미리 저장하지 않은 카드는 이 시점에 복구 불가능하게 사라진다.",
+ "judge": {
+  "must_include": [
+   "idle 상태의 Esc는 세 번째 분기(athena:collapse-canvas)를 탄다",
+   "collapseCanvasWindow()는 접기 애니메이션 후 canvasWin.hide()와 함께 athena:clear-canvases를 보내 카드를 실제로 지운다",
+   "athena__save_canvas로 저장해두지 않은 카드는 이 Esc로 복구 불가능하게 사라진다",
+   "다시 캔버스를 열면 이전 카드가 아니라 빈 상태에서 시작한다"
+  ],
+  "must_not_include": [
+   "Esc가 카드를 지우지 않고 단순히 숨기기만 한다는 서술",
+   "다시 열면 이전 카드가 그대로 복원된다는 오답"
+  ],
+  "verify_via": [
+   "ui-state",
+   "screenshot",
+   "canvas-file"
+  ],
+  "auto_checks": [
+   "ui-state: Esc 이후 canvasWin이 hidden 상태다",
+   "canvas-file: athena__save_canvas로 저장하지 않았다면 ~/.athena/canvases/에 해당 카드 파일이 없다"
+  ]
+ },
+ "expected_route": {
+  "kind": "app-mode",
+  "tool_path": [],
+  "api_id": null,
+  "family": null,
+  "detail_group": null,
+  "upstream": null
+ },
+ "expected_screen": {
+  "window": "대화 창",
+  "mode": null,
+  "card": null,
+  "current_renderer": null
+ },
+ "implementation_status": "동작-실배선",
+ "notes": "main.js L200-213 collapseCanvasWindow()가 hide() 직후 athena:clear-canvases를 전송 — 접기가 곧 카드 삭제임을 실측.",
+ "group": "live-appmode",
+ "persona": "리서치원"
+}

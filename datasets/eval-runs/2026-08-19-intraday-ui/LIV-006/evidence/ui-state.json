@@ -1,0 +1,65 @@
+{
+ "chat": {
+  "answerCount": 5,
+  "lastAnswer": "현대자동차의 2025 사업보고서(연결) 기준 유동비율은 136.35%(유동자산 120.78조 원 ÷ 유동부채 88.58조 원)로, 전년 145.6%보다 다소 낮아졌습니다. 다만 \"200% 미만 = 위험\"은 오래된 교과서식 기준이라 그대로 적용하긴 어렵습니다 — 실무에서는 100% 이상이면 단기지급능력에 큰 문제가 없다고 보는 게 일반적이고, 특히 현대차처럼 금융(할부·리스) 사업을 포함한 대형 제조사는 업종 특성상 100~150%대가 정상 범위여서 136%를 위험 신호로 보기는 어렵습니다.",
+  "chipCount": 5,
+  "chipLabels": [
+   "공통 테이블",
+   "공통 테이블",
+   "공통 테이블",
+   "공통 테이블",
+   "공통 테이블"
+  ],
+  "dotClasses": [
+   "dot"
+  ],
+  "state": "idle",
+  "panels": {
+   "app": true,
+   "onboard": false,
+   "settings": false
+  }
+ },
+ "canvas": {
+  "cardCount": 1,
+  "cards": [
+   {
+    "classes": [
+     "mcp-table",
+     "w-full"
+    ],
+    "tableRows": 3,
+    "tableCols": 3,
+    "streamItems": 0,
+    "hasAlert": false,
+    "freeTree": false,
+    "text": "현대자동차 연결 유동비율 — 2025 사업연도 사업보고서(제58기, 연결재무상태표) 기준, 단위: 조원10:30:31 기준항목제58기(2025년말)제57기(2024년말)유동자산(조원)120.78115.76유동부채(조원)88.5879.51유동비율(%)136.35145.6"
+   }
+  ],
+  "clipPath": "circle(1375.33px at 34.5062px 741.027px)"
+ },
+ "stateTransitions": [
+  {
+   "state": "judging",
+   "at_ms": 2
+  },
+  {
+   "state": "calling",
+   "at_ms": 32428
+  },
+  {
+   "state": "idle",
+   "at_ms": 39954
+  }
+ ],
+ "screenshots": {
+  "chat": {
+   "width": 2367,
+   "height": 1182
+  },
+  "canvas": {
+   "width": 2343,
+   "height": 1205
+  }
+ }
+}

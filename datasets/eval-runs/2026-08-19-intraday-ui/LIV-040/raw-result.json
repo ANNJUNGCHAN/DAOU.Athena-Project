@@ -1,0 +1,75 @@
+{
+ "case_id": "LIV-040",
+ "tier": "live",
+ "persona": "전업투자자",
+ "question": "카카오랑 카카오페이 중에 누가 더 최근에 공시를 냈는지 정확한 순서로 비교해줘. 접수일이 같은 날짜로 나오면 그걸로 끝내지 말고 제대로 가려줘.",
+ "attachment": null,
+ "sent_text": "카카오랑 카카오페이 중에 누가 더 최근에 공시를 냈는지 정확한 순서로 비교해줘. 접수일이 같은 날짜로 나오면 그걸로 끝내지 말고 제대로 가려줘.",
+ "ran_at": "2026-08-19T02:08:44.026Z",
+ "duration_s": 39.9,
+ "first_card_ms": 33961,
+ "completed": true,
+ "timed_out": false,
+ "answer_chars": 263,
+ "chip_count_total": 9,
+ "chip_count_added": 1,
+ "chip_labels_added": [
+  "공통 테이블"
+ ],
+ "chip_labels_total": [
+  "공통 테이블",
+  "스트림",
+  "스트림",
+  "공통 테이블",
+  "공통 테이블",
+  "공통 테이블",
+  "공통 테이블",
+  "공통 테이블",
+  "공통 테이블"
+ ],
+ "state_transitions": [
+  {
+   "state": "judging",
+   "at_ms": 4
+  },
+  {
+   "state": "calling",
+   "at_ms": 33942
+  },
+  {
+   "state": "idle",
+   "at_ms": 39875
+  }
+ ],
+ "card_types_rendered": [
+  "mcp-table.w-full"
+ ],
+ "canvas_card_count": 1,
+ "canvas_cards_pre": 0,
+ "audit_calls": [
+  "korea-stock-mcp__get_corp_code=true",
+  "korea-stock-mcp__get_disclosure_list=true",
+  "korea-stock-mcp__get_disclosure_list=true"
+ ],
+ "judge": {
+  "must_include": [
+   "카카오·카카오페이 각각의 최신 공시 rcept_dt를 개별적으로 확인",
+   "rcept_dt가 날짜 단위라 시각 정보가 없다는 한계를 인지",
+   "두 회사의 접수일이 같은 경우 rcept_no 등 보조 기준으로 순서를 가렸다는 근거",
+   "최종적으로 어느 회사가 더 최근인지 명확히 결론"
+  ],
+  "must_not_include": [
+   "접수일이 같을 때 아무 근거 없이 임의로 한쪽을 더 최근이라 단정",
+   "corp_code를 8자리로 정규화하지 않고 그대로 사용"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=korea-stock-mcp tool=get_disclosure_list success=true 행이 2개 이상 있다",
+   "chat-answer에 두 회사 각각의 접수일(날짜)이 모두 언급된다",
+   "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 1개 이상 있다"
+  ]
+ }
+}

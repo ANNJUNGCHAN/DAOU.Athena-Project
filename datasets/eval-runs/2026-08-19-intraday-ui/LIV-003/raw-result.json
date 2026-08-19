@@ -1,0 +1,69 @@
+{
+ "case_id": "LIV-003",
+ "tier": "live",
+ "persona": "개인투자자",
+ "question": "카카오하고 네이버, 최근 사업연도 순이익률 비교하면 어느 쪽이 더 잘 벌었어?",
+ "attachment": null,
+ "sent_text": "카카오하고 네이버, 최근 사업연도 순이익률 비교하면 어느 쪽이 더 잘 벌었어?",
+ "ran_at": "2026-08-19T01:28:32.408Z",
+ "duration_s": 33.9,
+ "first_card_ms": 28391,
+ "completed": true,
+ "timed_out": false,
+ "answer_chars": 177,
+ "chip_count_total": 3,
+ "chip_count_added": 1,
+ "chip_labels_added": [
+  "공통 테이블"
+ ],
+ "chip_labels_total": [
+  "공통 테이블",
+  "공통 테이블",
+  "공통 테이블"
+ ],
+ "state_transitions": [
+  {
+   "state": "judging",
+   "at_ms": 3
+  },
+  {
+   "state": "calling",
+   "at_ms": 28391
+  },
+  {
+   "state": "idle",
+   "at_ms": 33913
+  }
+ ],
+ "card_types_rendered": [
+  "mcp-table.w-full"
+ ],
+ "canvas_card_count": 1,
+ "canvas_cards_pre": 0,
+ "audit_calls": [
+  "korea-stock-mcp__get_corp_code=true",
+  "korea-stock-mcp__get_corp_code=true",
+  "korea-stock-mcp__get_financial_statement=true",
+  "korea-stock-mcp__get_financial_statement=true"
+ ],
+ "judge": {
+  "must_include": [
+   "get_today_date(또는 동등 시각 확인)로 '최근 사업연도'가 2025년임을 근거 있게 판단했다",
+   "카카오·네이버 각각 corp_code를 8자리로 확보해 사용했다",
+   "당기순이익÷매출액×100 계산 과정을 두 회사 각각 보여줬다",
+   "손익계산서 값만 골랐다는 근거(또는 sj_nm 지정)가 드러나 다른 재무제표의 동일 계정명과 혼동하지 않았다"
+  ],
+  "must_not_include": [
+   "두 회사 중 한 곳만 조회하고 나머지는 추정치로 채움",
+   "'최근 사업연도'를 근거 없이 2024년 등으로 단정"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 2개 이상 있다",
+   "audit-log에 alias=korea-stock-mcp tool=get_financial_statement success=true 행이 2개 이상 있다"
+  ]
+ }
+}

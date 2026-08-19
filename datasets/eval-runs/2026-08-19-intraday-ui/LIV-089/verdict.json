@@ -1,0 +1,49 @@
+{
+ "case_id": "LIV-089",
+ "run": "2026-08-19-intraday-ui",
+ "verdict": "pass",
+ "auto_checks": [
+  {
+   "check": "ui-state: #settings.hidden===false, #app.hidden===true",
+   "ok": true,
+   "evidence": "raw-result.json observations.settings_visible_after_enter=true, observations.app_hidden_after_enter=true; evidence/chat-after-enter.png — 설정 화면 전체 렌더, 대화/입력 UI 없음"
+  },
+  {
+   "check": "audit-log: 이 turn에 대해 신규 upstream MCP 호출이 0건이다",
+   "ok": true,
+   "evidence": "raw-result.json observations.upstream_audit_calls=0, observations.audit_delta=[]"
+  }
+ ],
+ "must_not_include": [
+  {
+   "item": "삼성전자 시세가 조회돼 답변에 포함됐다는 서술",
+   "violated": false,
+   "evidence": "observations.new_answers=0, new_turn_q=0 — 답변 자체가 생성되지 않음; chat-after-enter.png에도 시세 데이터 없음"
+  },
+  {
+   "item": "이 문장이 정상적으로 live 질의로 처리됐다는 오답",
+   "violated": false,
+   "evidence": "observations.settings_visible_after_enter=true — live 질의가 아니라 설정 화면이 열렸음이 관측값으로 확인됨"
+  }
+ ],
+ "must_include": [
+  {
+   "item": "ui-state: #settings.hidden===false, #app.hidden===true (설정 화면이 열린다)",
+   "ok": true,
+   "evidence": "observations.settings_visible_after_enter=true ↔ #settings.hidden===false; observations.app_hidden_after_enter=true ↔ #app.hidden===true"
+  },
+  {
+   "item": "이 turn에서 시세 조회가 실행되지 않는다 — audit-log에 신규 upstream 호출 0건",
+   "ok": true,
+   "evidence": "observations.upstream_audit_calls=0, audit_delta=[]"
+  },
+  {
+   "item": "삼성전자 시세 데이터가 화면 어디에도 나타나지 않는다",
+   "ok": true,
+   "evidence": "chat-after-enter.png — 화면 전체가 설정 패널(화면/계좌/MCP 서버/모델 탭)뿐, 시세 데이터 없음; observations.new_answers=0으로 답변 자체가 생성되지 않아 시세를 표시할 여지가 구조적으로 없음"
+  }
+ ],
+ "judge_note": "'계좌 연결'이라는 부분 문자열이 비앵커 정규식 대안에 걸려 설정 화면이 열리고 삼성전자 시세 질의는 이 turn에서 아예 실행되지 않았다(observations: settings_visible_after_enter=true, app_hidden_after_enter=true, upstream_audit_calls=0). 스크린샷도 설정 화면만 보여주며 시세 데이터가 없다. case의 expected_answer('아니다 — 설정 화면이 열려버려 시세 조회는 실행되지 않는다')와 관측된 실제 앱 동작이 정확히 일치. auto_checks·must_not_include·must_include 전부 충족하여 pass.",
+ "suspect_dataset_defect": false,
+ "duration_s": 4.6
+}

@@ -1,0 +1,59 @@
+{
+ "case_id": "LIV-021",
+ "run": "2026-08-19-intraday-ui",
+ "verdict": "fail",
+ "auto_checks": [
+  {
+   "check": "audit-log에 alias=naver-search-2 tool=search_news success=true 행이 있다",
+   "ok": true,
+   "evidence": "audit-delta.jsonl:7 {alias:naver-search-2, tool:search_news, success:true}"
+  },
+  {
+   "check": "audit-log에 alias=korea-stock-mcp tool=get_disclosure success=true 행이 있다",
+   "ok": true,
+   "evidence": "audit-delta.jsonl:5-6 get_disclosure success=true 2건"
+  },
+  {
+   "check": "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 1개 이상 있다",
+   "ok": true,
+   "evidence": "audit-delta.jsonl:1 get_corp_code success=true"
+  }
+ ],
+ "must_not_include": [
+  {
+   "item": "공시 조회 없이 뉴스 내용만으로 행사금액·행사일을 확정적으로 제시",
+   "violated": false,
+   "evidence": "chat-answer.txt — get_disclosure 2건을 호출해 얻은 공시 원문 수치(취득일·권면금액)를 근거로 제시"
+  },
+  {
+   "item": "확인 안 된 사실을 확인된 것처럼 서술",
+   "violated": false,
+   "evidence": "chat-answer.txt: '뉴스의 콜옵션 조기 행사는 이 만기전 취득을 가리키는 것으로 보입니다'로 표현 차이를 명시하며 단정하지 않음"
+  },
+  {
+   "item": "임의의 금액·날짜 수치를 지어냄",
+   "violated": false,
+   "evidence": "chat-answer.txt 수치(99,999,967,452원·2025-01-10·2025-05-23 등)가 ui-state.json canvas 테이블(공시 원문 발췌)과 일치"
+  }
+ ],
+ "must_include": [
+  {
+   "item": "naver-search-2로 찾은 콜옵션 관련 뉴스 언급 내용 인용",
+   "ok": false,
+   "evidence": "chat-answer.txt 전문(347자)에 뉴스 검색으로 실제로 찾은 구체 내용(기사 제목·매체명·일자 등)이 전혀 없다. '뉴스의 콜옵션 조기 행사'라는 표현은 사용자 질문 문면을 그대로 재사용한 것일 뿐, naver-search-2__search_news(audit-delta.jsonl:7, success=true) 검색 결과에서 실제로 찾아낸 내용을 인용한 부분이 없다"
+  },
+  {
+   "item": "korea-stock-mcp 공시 원문에서 확인한 실제 행사금액·행사일(확인됐다면)",
+   "ok": true,
+   "evidence": "chat-answer.txt: '1차는 2025-01-10 취득...권면 약 1,000억 원...2차는 2025-05-23 결정·2025-07-10 취득(2025년 1월 발행 CB, 권면 약 1,000억 원)'"
+  },
+  {
+   "item": "공시로 확인이 안 될 경우 '확인 불가'라고 정직하게 답했다는 조건부 서술",
+   "ok": true,
+   "evidence": "chat-answer.txt: 공시는 확인됐으나 '공시상 형식은 콜옵션 행사라는 표현 대신 사채권자와의 별도 합의에 따른 만기전 취득으로 기재되어 있어'라며 뉴스 표현과 공시 용어의 차이를 정직하게 구분해 서술"
+  }
+ ],
+ "judge_note": "auto_checks 3건과 must_not_include 3건은 모두 통과하지만, must_include #1(naver-search-2로 찾은 뉴스 언급 내용 인용)이 증거에 없어 fail이다. audit-delta.jsonl상 naver-search-2__search_news는 실제로 호출·성공했으나, 최종 답변은 그 검색 결과를 인용하지 않고 사용자 질문 문면의 표현('콜옵션 조기 행사')만 재사용했다. 부가로 expected_screen.card='리더'(reader)이나 실제 렌더된 카드는 mcp-table(공통 테이블)이라 카드 유형도 기대와 다르다(judge.auto_checks·must_include에 카드 유형 체크 항목은 없어 verdict에는 반영하지 않음, 참고 사항으로만 기록).",
+ "suspect_dataset_defect": false,
+ "duration_s": 96.3
+}

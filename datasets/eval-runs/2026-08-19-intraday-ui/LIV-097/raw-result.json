@@ -1,0 +1,82 @@
+{
+ "case_id": "LIV-097",
+ "tier": "live",
+ "persona": "애널리스트",
+ "question": "온보딩 3/3에서 계좌 등록 직후 토큰이 'ready'로 표시되며 다음 화면으로 자동 전환되려는 순간, 전환 직전에 '연결 해제' 버튼을 눌렀습니다. 이 조작이 온보딩을 인증되지 않은 상태로 종료시키는 것을 방지합니까?",
+ "attachment": null,
+ "harness": "run-cases-appmode.js",
+ "procedure": true,
+ "ran_at": "2026-08-19T03:47:28.494Z",
+ "duration_s": 43.3,
+ "completed": true,
+ "error": null,
+ "observations": {
+  "revoke_clicked": false,
+  "pre_click_dump": {
+   "panels": {
+    "app": false,
+    "onboard": true,
+    "settings": false
+   },
+   "bodyText": "3 / 3증권 계좌를 연결합니다키움 모의투자 계좌를 연결합니다. 앱키는 이 컴퓨터의 자격증명 저장소에만 저장되고 화면에 다시 나타나지 않습니다.별칭선택이 컴퓨터에서만 쓰는 이름이다. 증권사 계좌번호가 아니다.APP KEY붙여넣기만 지원한다. 입력한 값은 저장 후 다시 표시되지 않는다.SECRET KEY값이 아니라 문자 수만 보여준다 — 오타는 잡되 값은 노출하지 않는다.저장 위치Windows 자격증명 저장소(DPAPI)에 암호화되어 저장됩니다. 앱 화면·로그·스크린샷 어디에도 값이 다시 나타나지 않습니다.여기서 등록한 계좌가 활성 계좌가 됩니다. 계좌는 나중에 더 추가할 수 있고, 활성은 항상 하나입니다.검증에 성공한 키만 저장됩니다. 실패하면 다음으로 넘어가지 않습니다.검증 후 시작",
+   "kicker": null,
+   "dots": 0,
+   "clickableAccountRow": false,
+   "switchNodes": 0,
+   "buttons": [
+    "검증 후 시작"
+   ]
+  },
+  "at_2400ms": {
+   "panels": {
+    "app": false,
+    "onboard": true,
+    "settings": false
+   },
+   "bodyText": "3 / 3증권 계좌를 연결합니다키움 모의투자 계좌를 연결합니다. 앱키는 이 컴퓨터의 자격증명 저장소에만 저장되고 화면에 다시 나타나지 않습니다.별칭선택이 컴퓨터에서만 쓰는 이름이다. 증권사 계좌번호가 아니다.APP KEY붙여넣기만 지원한다. 입력한 값은 저장 후 다시 표시되지 않는다.SECRET KEY값이 아니라 문자 수만 보여준다 — 오타는 잡되 값은 노출하지 않는다.저장 위치Windows 자격증명 저장소(DPAPI)에 암호화되어 저장됩니다. 앱 화면·로그·스크린샷 어디에도 값이 다시 나타나지 않습니다.여기서 등록한 계좌가 활성 계좌가 됩니다. 계좌는 나중에 더 추가할 수 있고, 활성은 항상 하나입니다.검증에 성공한 키만 저장됩니다. 실패하면 다음으로 넘어가지 않습니다.검증 후 시작",
+   "kicker": null,
+   "dots": 0,
+   "clickableAccountRow": false,
+   "switchNodes": 0,
+   "buttons": [
+    "검증 후 시작"
+   ]
+  },
+  "later": {
+   "panels": {
+    "app": false,
+    "onboard": true,
+    "settings": false
+   },
+   "bodyText": "3 / 3증권 계좌를 연결합니다키움 모의투자 계좌를 연결합니다. 앱키는 이 컴퓨터의 자격증명 저장소에만 저장되고 화면에 다시 나타나지 않습니다.별칭선택이 컴퓨터에서만 쓰는 이름이다. 증권사 계좌번호가 아니다.APP KEY붙여넣기만 지원한다. 입력한 값은 저장 후 다시 표시되지 않는다.SECRET KEY값이 아니라 문자 수만 보여준다 — 오타는 잡되 값은 노출하지 않는다.저장 위치Windows 자격증명 저장소(DPAPI)에 암호화되어 저장됩니다. 앱 화면·로그·스크린샷 어디에도 값이 다시 나타나지 않습니다.여기서 등록한 계좌가 활성 계좌가 됩니다. 계좌는 나중에 더 추가할 수 있고, 활성은 항상 하나입니다.검증에 성공한 키만 저장됩니다. 실패하면 다음으로 넘어가지 않습니다.검증 후 시작",
+   "kicker": null,
+   "dots": 0,
+   "clickableAccountRow": false,
+   "switchNodes": 0,
+   "buttons": [
+    "검증 후 시작"
+   ]
+  },
+  "click_epoch_ms": 1787111285462
+ },
+ "judge": {
+  "must_include": [
+   "autoContinueTimer는 ready 시점에 한 번만 걸리고, doRevoke()는 이 타이머를 clearTimeout하지 않는다",
+   "연결 해제로 currentState가 needed로 바뀌어도 이미 걸린 타이머는 취소되지 않는다",
+   "2.4초 경과 시 proceed()는 이 시점의 currentState 값을 검사하지 않고 무조건 onContinue()를 실행한다",
+   "결과적으로 온보딩은 완료 화면(#app)으로 넘어가지만 실제 인증 토큰은 없는(needed) 상태로 남는다"
+  ],
+  "must_not_include": [
+   "연결 해제를 누르면 자동 진행이 취소된다는 서술",
+   "온보딩이 인증 필요 상태를 감지해 3/3에 계속 머문다는 오답"
+  ],
+  "verify_via": [
+   "ui-state",
+   "screenshot"
+  ],
+  "auto_checks": [
+   "ui-state: 연결 해제 클릭 후 2.4초 경과 시점에 #onboard가 hidden으로 바뀌고 #app이 노출된다",
+   "ui-state: 그 시점 인증 상태는 needed(연결 해제 결과)였다"
+  ]
+ }
+}

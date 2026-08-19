@@ -1,0 +1,53 @@
+{
+ "id": "LIV-055",
+ "tier": "live",
+ "category": "live-UX결합",
+ "difficulty": "최상",
+ "question": "기아 관련 최근 공시랑 뉴스를 각각 표랑 스트림 카드로 정리해달라고 치고 나서, 카드가 하나도 뜨기 전에 곧바로 Esc를 눌렀어. 무슨 일이 일어나야 정상이야?",
+ "why_hard": "korea-stock-mcp 공시목록(→table)과 naver-search-2 뉴스(→stream) 두 소스를 순차 호출한 뒤 각각 render_canvas를 부르는 3회 이상 합성(①)이 필요한 요청이라 judging→calling 구간이 상대적으로 길게 유지된다. 이 구간 중 Esc를 누르면 캔버스를 접는 게 아니라 실제로 abortToken을 올리고 athena:abort-live-query IPC로 프로세스 트리를 kill해야 하는 정책 판단(④)이 핵심이며, abort 시점까지 이미 렌더된 카드는 지우지 않고 남겨야 하는 부분 결과 처리(⑤)까지 걸린다. idle 상태의 Esc(캔버스 접기)와 동작이 갈리는 카드/상태 배치 판단(⑥)도 필요하다.",
+ "expected_answer": "질의가 judging 또는 calling 상태로 진행되는 동안 Esc를 누르면 캔버스 접기가 아니라 abort-live-query IPC로 실제 프로세스가 종료되고 상태가 idle로 돌아가며, 그 시점까지 이미 렌더된 카드가 있다면 지워지지 않고 그대로 남는다.",
+ "judge": {
+  "must_include": [
+   "judging 또는 calling 상태에서 Esc를 누르면 athena:abort-live-query IPC가 호출되고 abortToken이 증가한다는 근거",
+   "abort 이후 대화 상태가 idle로 전환되고 더 이상 새 카드가 추가되지 않는다는 확인",
+   "abort 시점까지 이미 렌더된 카드(있다면)는 삭제되지 않고 유지된다는 설명",
+   "이 동작이 idle 상태에서의 Esc(캔버스 접기, athena:collapse-canvas)와는 다른 분기라는 구분"
+  ],
+  "must_not_include": [
+   "judging/calling 중 Esc가 캔버스 접기(athena:collapse-canvas)로 잘못 처리됨",
+   "abort 후에도 백그라운드 프로세스가 계속 돌아 뒤늦게 새 카드가 나타남",
+   "abort 시 이미 렌더된 부분 결과 카드까지 함께 삭제됨"
+  ],
+  "verify_via": [
+   "ui-state",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "judging 또는 calling 상태에서 Esc 입력 시 IPC 채널이 athena:abort-live-query다(athena:collapse-canvas가 아니다)",
+   "abort 후 #dot 클래스가 idle이다",
+   "abort 이전에 이미 렌더된 카드 DOM 노드가 abort 후에도 캔버스 창에 남아있다"
+  ]
+ },
+ "expected_route": {
+  "kind": "cross-source",
+  "api_id": null,
+  "detail_group": null,
+  "family": null,
+  "upstream": "korea-stock-mcp",
+  "tool_path": [
+   "korea-stock-mcp__get_disclosure_list",
+   "naver-search-2__search_news",
+   "athena__render_canvas"
+  ]
+ },
+ "expected_screen": {
+  "window": "대화 창+캔버스 창",
+  "mode": null,
+  "card": null,
+  "current_renderer": null
+ },
+ "implementation_status": "동작-실배선",
+ "notes": "Esc 3분기(설정 닫기/abort/캔버스 접기)는 digest §2 chat.js 실측 그대로. abort는 athena:abort-live-query IPC → killTree()(Windows taskkill /PID /T /F, digest §6)로 실제 프로세스 트리를 종료한다. 이 케이스는 evaluator가 judging/calling 구간에 수동으로 Esc를 눌러 관찰해야 하는 상호작용형 검증이라 명시한다.",
+ "group": "live-render",
+ "persona": "일반직장인"
+}

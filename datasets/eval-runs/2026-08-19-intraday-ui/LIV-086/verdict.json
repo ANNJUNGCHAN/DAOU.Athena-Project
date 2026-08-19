@@ -1,0 +1,64 @@
+{
+ "case_id": "LIV-086",
+ "run": "2026-08-19-intraday-ui",
+ "verdict": "fail",
+ "auto_checks": [
+  {
+   "check": "answerText에 '180초' 또는 '시간 제한'·'타임아웃' 계열 표현이 등장한다",
+   "ok": false,
+   "evidence": "evidence/chat-answer.txt 전문에 '180초'·'시간 제한'·'타임아웃' 및 그 계열 표현이 전혀 없음"
+  },
+  {
+   "check": "audit-log에 disclosure 계열 tool 호출 행이 5개 이상 존재한다",
+   "ok": true,
+   "evidence": "evidence/audit-delta.jsonl: get_disclosure_list success=true 19건"
+  },
+  {
+   "check": "answerText에 완료되지 못한 종목이 있다면 '결측'·'미완료' 계열로 명시되고 임의 공시 내용으로 채워지지 않는다",
+   "ok": true,
+   "evidence": "evidence/ui-state.json canvas.cards[0].tableRows=20 — 20개 종목 전부 표에 담겼고 각 행 내용이 종목별로 구체적(크래프톤 자기주식 취득, 셀트리온 CTP44 임상변경, POSCO홀딩스 타법인주식 처분 등)이라 결측·임의채움 정황 없음(해당 없음으로 처리)"
+  },
+  {
+   "check": "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 1개 이상 있다",
+   "ok": true,
+   "evidence": "evidence/audit-delta.jsonl: get_corp_code success=true 19건(+실패 1건 후 재시도 성공 1건)"
+  }
+ ],
+ "must_not_include": [
+  {
+   "item": "20개 종목 전부가 문제없이 즉시 다 완료된다고 단정",
+   "violated": false,
+   "evidence": null
+  },
+  {
+   "item": "조회하지 못한 종목의 공시 내용을 지어내 채워 넣음",
+   "violated": false,
+   "evidence": "표 20행 모두 종목별로 상이한 구체 공시 내용이 담겨 임의 채움 정황 없음"
+  },
+  {
+   "item": "180초 상한 존재를 언급하지 않고 넘어감",
+   "violated": true,
+   "evidence": "evidence/chat-answer.txt에 180초 상한을 전혀 언급하지 않고 결과만 보고함 — 이 항목이 정확히 지적하는 상황에 해당"
+  }
+ ],
+ "must_include": [
+  {
+   "item": "20개 종목 각각을 개별 조회해야 해서 다수(20회 이상)의 순차 호출이 필요하다는 인지",
+   "ok": false,
+   "evidence": "evidence/chat-answer.txt: '20개 종목 전부 DART에서... 조회해 표 한 장으로 브리핑했습니다'라고만 서술 — 20회 이상의 순차 호출이 필요했다는 인지·언급이 없음"
+  },
+  {
+   "item": "전체 질의에 180초 시간 상한이 있고 타임아웃 시 프로세스가 강제 종료된다는 설명",
+   "ok": false,
+   "evidence": "evidence/chat-answer.txt에 180초 시간 상한이나 타임아웃 강제종료 관련 서술이 전혀 없음"
+  },
+  {
+   "item": "20건 전부를 한 번에 다 마치기 어려울 수 있다는 위험 안내 또는 실제로 일부만 완료됐다는 정직한 보고",
+   "ok": false,
+   "evidence": "evidence/chat-answer.txt에 위험 안내가 전혀 없음 — 실제로는 20건 전부 완료됐으나(정직한 보고 자체는 문제 없음) 사전 위험 인지·안내라는 요건이 답변 어디에도 없음"
+  }
+ ],
+ "judge_note": "실제로는 20개 종목 전부(표 20행)를 136.3초 만에 정상 완료했고 공시 내용도 종목별로 구체적이라 사실 관계상 결함은 없다. 그러나 이 케이스가 명시적으로 요구하는 '180초 시간 상한 인지·위험 안내'(must_include #1·#2, auto_check[0])가 답변 어디에도 없다 — 사전에 위험을 안내하지도, 20회 이상 순차 호출이 필요하다는 인지도 드러내지 않았다. must_not_include #3('180초 상한 존재를 언급하지 않고 넘어감')이 정확히 위반됐다. (참고: 이전 verdict.json은 claude -p 월간 지출 한도 초과(blocked-env)로 실패했던 구 실행 증거 기준의 stale 값이었다 — 이번 채점은 재실행으로 갱신된 현재 evidence/ 기준.)",
+ "suspect_dataset_defect": false,
+ "duration_s": 136.3
+}

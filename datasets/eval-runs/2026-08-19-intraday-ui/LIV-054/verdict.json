@@ -1,0 +1,23 @@
+{
+ "case_id": "LIV-054",
+ "run": "2026-08-19-intraday-ui",
+ "verdict": "dataset-defect",
+ "auto_checks": [
+  {"check": "audit-log에 alias=naver-search-2 tool=search_news success=true 행과 alias=dart-mcp tool=search_json_financial_data success=true 행이 각각 있다", "ok": false, "evidence": "evidence/audit-delta.jsonl:1-3 — naver-search-2/search_news success=true는 있으나, 재무 데이터는 alias=korea-stock-mcp tool=get_financial_statement(및 get_corp_code)로 조회됨. dart-mcp/search_json_financial_data 행은 없음"},
+  {"check": "캔버스 창에 stream 카드 1개와 mcp-table 카드 1개가 각각 렌더된다(카드 칩 2개, 값이 stream/table)", "ok": true, "evidence": "evidence/ui-state.json canvas.cards[0].classes=[stream,w-half], cards[1].classes=[mcp-table,w-full]; chip_labels_added=[스트림,공통 테이블]"},
+  {"check": "mcp-table 카드 DOM에 '빈 테이블' 에러 노트가 없다", "ok": true, "evidence": "evidence/ui-state.json cards[1].tableRows=4, tableCols=4, hasAlert=false — 에러 노트 텍스트 없음"}
+ ],
+ "must_not_include": [
+  {"item": "뉴스와 재무 데이터를 하나의 카드(예: free)에 뭉뚱그려 넣음", "violated": false, "evidence": "evidence/ui-state.json 카드 2개가 stream/mcp-table로 분리 렌더됨, 둘 다 freeTree=false"},
+  {"item": "재무 데이터를 stream 레코드 형식으로 잘못 렌더", "violated": false, "evidence": "재무 데이터는 mcp-table 카드(classes=[mcp-table,w-full], tableRows=4/tableCols=4)로 렌더됨"},
+  {"item": "재무 수치를 실제 응답에 없는 값으로 창작", "violated": false, "evidence": "evidence/chat-answer.txt 수치(매출 2조9,387억·영업이익 328억·순이익 365억)가 evidence/canvas.png 표 값과 정확히 일치, 창작 징후 없음"}
+ ],
+ "must_include": [
+  {"item": "뉴스는 stream 카드, 재무 항목은 mcp-table 카드로 각각 올바르게 분리 렌더됐다는 확인(카드 2개)", "ok": true, "evidence": "evidence/ui-state.json canvas.cardCount=2, classes=[stream,w-half]/[mcp-table,w-full]"},
+  {"item": "mcp-table의 columns가 매출·영업이익 등 한글 label로 명시적으로 구성됐다는 근거", "ok": false, "evidence": "evidence/canvas.png 표 헤더는 '항목/제55기(2025)/제54기(2024)/제53기(2023)'(기수가 컬럼) — '매출액'/'영업이익'은 '항목' 컬럼 안의 행 값(수익(매출액), 영업이익(손실))으로만 나타나고 컬럼 레이블 자체는 아님"},
+  {"item": "두 카드 모두 fell_back 없이 정상 렌더됐다는 확인", "ok": true, "evidence": "evidence/ui-state.json cards[0],[1] 모두 hasAlert=false, freeTree=false"}
+ ],
+ "judge_note": "auto_check #1과 must_include #2가 모두 case.json expected_route(dart-mcp__search_json_financial_data, 마크다운 표를 items-as-columns로 재구성)를 전제로 한다. 그러나 실행에서는 korea-stock-mcp__get_corp_code+get_financial_statement로 재무 데이터를 조회했다(evidence/audit-delta.jsonl) — 이는 같은 배치에서 이미 pass 판정된 LIV-001(재무제표, korea-stock-mcp)과 LIV-047/048/049/052/053(공시 조회, 전부 korea-stock-mcp)이 보여주는 이 앱의 실제 표준 경로와 정확히 일치한다. dart-mcp는 이 배치 어느 케이스에서도 호출되지 않았다 — 케이스의 dart-mcp 전제가 실측과 다르다. defect-queue.md D-005('auto_check가 특정 서버를 못박아 합리적 선택을 탈락시킴', LIV-074)와 동일 유형의 결함이다. must_include #2(항목-as-컬럼 재구성) 미충족도 같은 원인 — korea-stock-mcp 응답은 기수-as-컬럼 형태로 와서애초에 dart-mcp의 markdown-wrap 재구성 시나리오 자체가 발생하지 않았다. 카드 분리·수치 정확성(must_include #1·#3, must_not_include 전체)은 이상 없음 — 앱 결함이 아니라 케이스의 업스트림 전제 결함으로 판단해 제외한다.",
+ "suspect_dataset_defect": true,
+ "duration_s": 96.2
+}

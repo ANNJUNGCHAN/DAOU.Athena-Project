@@ -1,0 +1,72 @@
+{
+ "case_id": "LIV-052",
+ "tier": "live",
+ "persona": "재무전문가",
+ "question": "카카오 최근 공시 목록을 표로 정리해 주시고, 그중 정정공시(기재정정)가 있다면 해당 원문은 별도로 리더 카드로 열어 주십시오.",
+ "attachment": null,
+ "sent_text": "카카오 최근 공시 목록을 표로 정리해 주시고, 그중 정정공시(기재정정)가 있다면 해당 원문은 별도로 리더 카드로 열어 주십시오.",
+ "ran_at": "2026-08-19T02:47:53.236Z",
+ "duration_s": 105.3,
+ "first_card_ms": 47419,
+ "completed": true,
+ "timed_out": false,
+ "answer_chars": 347,
+ "chip_count_total": 2,
+ "chip_count_added": 2,
+ "chip_labels_added": [
+  "공통 테이블",
+  "리더"
+ ],
+ "chip_labels_total": [
+  "공통 테이블",
+  "리더"
+ ],
+ "state_transitions": [
+  {
+   "state": "judging",
+   "at_ms": 7
+  },
+  {
+   "state": "calling",
+   "at_ms": 47419
+  },
+  {
+   "state": "idle",
+   "at_ms": 105177
+  }
+ ],
+ "card_types_rendered": [
+  "mcp-table.w-full",
+  "reader.w-half"
+ ],
+ "canvas_card_count": 2,
+ "canvas_cards_pre": 0,
+ "audit_calls": [
+  "korea-stock-mcp__get_corp_code=true",
+  "korea-stock-mcp__get_disclosure_list=true",
+  "korea-stock-mcp__get_disclosure=true",
+  "korea-stock-mcp__get_disclosure=true"
+ ],
+ "judge": {
+  "must_include": [
+   "공시 목록 전체가 mcp-table 카드로 렌더됐다는 확인",
+   "report_nm에 '[기재정정]' 표기가 있는 항목만 정정공시로 식별했다는 근거",
+   "정정공시가 있을 때만 reader 카드를 추가로 만들었다는 확인(없으면 표만)"
+  ],
+  "must_not_include": [
+   "정정공시가 없는데도 reader 카드를 억지로 만들어 냄",
+   "정정 여부를 판단하지 않고 아무 공시나 리더로 열어버림",
+   "표 카드를 생략하고 정정공시 원문만 단독으로 보여줌"
+  ],
+  "verify_via": [
+   "ui-state",
+   "audit-log",
+   "chat-answer"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=korea-stock-mcp tool=get_disclosure_list success=true 행이 있다",
+   "렌더된 mcp-table 카드가 canvas_type=table, fell_back=false다",
+   "정정공시가 존재하면 reader 카드가 추가로 1개 더 렌더된다(카드 칩 2개)"
+  ]
+ }
+}

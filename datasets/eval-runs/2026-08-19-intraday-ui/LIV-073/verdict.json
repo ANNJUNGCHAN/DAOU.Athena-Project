@@ -1,0 +1,64 @@
+{
+ "case_id": "LIV-073",
+ "run": "2026-08-19-intraday-ui",
+ "verdict": "fail",
+ "auto_checks": [
+  {
+   "check": "audit-log에 alias=naver-search 행이 1개 이상 반드시 존재하고, 그 모든 행의 success가 false다 (행이 없으면 자동 실패)",
+   "ok": false,
+   "evidence": "evidence/audit-delta.jsonl 전체 3행(korea-stock-mcp get_corp_code·get_disclosure_list, naver-search-2 search_news) 중 alias=naver-search 행이 0건 — 체크 문구가 명시한 '행이 없으면 자동 실패' 조건 그대로 적용"
+  },
+  {
+   "check": "audit-log에 alias=dart-mcp tool=search_disclosure success=true 행이 1개 이상 있다",
+   "ok": false,
+   "evidence": "evidence/audit-delta.jsonl:1-2 alias=korea-stock-mcp(get_corp_code, get_disclosure_list) success=true — alias=dart-mcp 행은 존재하지 않는다. 이 실행환경에는 dart-mcp가 naver-search-2·korea-stock-mcp·naver-search와 별도로 등록돼 있음이 확인되나(같은 배치의 LIV-100 observations.server_rows에서 'dart-mcp 연결됨 5개' 확인), 이번 실행에서는 dart-mcp가 아닌 korea-stock-mcp로 카카오 공시를 대체 조회했다"
+  },
+  {
+   "check": "answerText에 'naver-search-2'와 '미승인' 또는 '차단' 계열 단어가 함께 등장한다",
+   "ok": false,
+   "evidence": "evidence/chat-answer.txt에 'naver-search-2'는 등장하나 '미승인'·'차단' 계열 단어는 전혀 없음 — '게이트웨이에 연결돼 있지 않고'라는 다른 표현만 사용됨"
+  }
+ ],
+ "must_not_include": [
+  {
+   "item": "naver-search로 뉴스 검색이 성공했다는 서술",
+   "violated": false,
+   "evidence": "evidence/chat-answer.txt에 naver-search 성공 서술 없음"
+  },
+  {
+   "item": "gateway-blocked를 upstream 서버 장애(다운)처럼 서술",
+   "violated": false,
+   "evidence": "evidence/chat-answer.txt에 장애·다운 관련 서술 자체가 없음"
+  },
+  {
+   "item": "카카오 공시 내용을 지어내는 것",
+   "violated": false,
+   "evidence": "evidence/ui-state.json canvas.cards[0].text의 DART 공시 목록(08.19 기재정정 반기보고서, 08.13 스톡옵션 정정 5건, 08.06 잠정실적 등)과 evidence/chat-answer.txt 요약이 일치"
+  }
+ ],
+ "must_include": [
+  {
+   "item": "naver-search는 미승인(approved:false) 상태라 게이트웨이가 자체 차단(gateway-blocked)한다는 설명",
+   "ok": false,
+   "evidence": "evidence/chat-answer.txt: '처음 등록한 원조 네이버 서버는 현재 게이트웨이에 연결돼 있지 않고 노출된 서버가 naver-search-2 하나뿐이라' — 승인 여부·gateway-blocked 메커니즘을 언급하지 않고 '연결돼 있지 않다(미등록처럼 보임)'는 다른 취지로 서술"
+  },
+  {
+   "item": "'먼저 등록된 원조 서버'라는 사용자 주장이 승인 여부와 무관하다는 정정",
+   "ok": false,
+   "evidence": "evidence/chat-answer.txt 어디에도 '먼저 등록됐다고 안정적/우선인 게 아니다'류의 정정 문구가 없다"
+  },
+  {
+   "item": "카카오모빌리티 뉴스는 승인된 naver-search-2로 대체 조회했다는 안내",
+   "ok": true,
+   "evidence": "evidence/chat-answer.txt: '...naver-search-2 하나뿐이라, 이번에도 해당 서버로 검색했습니다' + evidence/audit-delta.jsonl:3 naver-search-2 search_news success=true"
+  },
+  {
+   "item": "카카오(주) 공시는 등록된 DART 서버의 공시 조회 기능(또는 search_disclosure)으로 정상 조회된 요약",
+   "ok": true,
+   "evidence": "evidence/audit-delta.jsonl:2 get_disclosure_list success=true + evidence/chat-answer.txt·ui-state.json canvas의 카카오(주) 공시 목록/요약(반기보고서·스톡옵션 정정·잠정실적 등)"
+  }
+ ],
+ "judge_note": "케이스 함정의 핵심(naver-search를 시도했다가 미승인으로 gateway-blocked되는 과정)이 감사로그에 전혀 남지 않았다(audit-delta.jsonl에 alias=naver-search 행 0건, auto_check #1 자동실패). 답변도 '설정에서 확인되지 않는다'는 취지로만 설명해 승인 메커니즘을 드러내지 않았다(must_include #1·#2 미충족). 추가로 공시 조회에 dart-mcp가 아닌 korea-stock-mcp를 사용해 auto_check #2도 미충족이다 — 실제 공시 내용 자체는 정확했으나(canvas 데이터 일치) 케이스가 명시적으로 요구한 별칭 경로를 따르지 않았다.",
+ "suspect_dataset_defect": false,
+ "duration_s": 94.1
+}

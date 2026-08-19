@@ -1,0 +1,46 @@
+{
+ "id": "LIV-088",
+ "tier": "live",
+ "category": "live-설정진입",
+ "difficulty": "최상",
+ "question": "'세팅 좀 열어줘'라고 입력해 보았습니다. '세팅'도 설정의 동의어 목록에 포함되어 있던데, 이 경우에도 설정 화면으로 연결되어야 하는 것 아닙니까?",
+ "why_hard": "동의어 그룹(세팅/셋팅/환경설정/settings/config)은 정규식 첫 번째 '단독 정확일치' 대안에서만 인식되고, '~열어줘' 동사구 대안은 '설정'이라는 리터럴만 잡는다는 두 대안의 비대칭 구조를 정확히 구분해야 한다(④ 정책 판단, 다분기 정규식 해석) — 동의어가 매치된다고 넘겨짚으면 오답이다.",
+ "expected_answer": "아니다 — 동의어 그룹은 단독 정확일치 대안에서만 인식되고, 동사구 대안은 '설정'이라는 리터럴만 잡아 '세팅'에는 반응하지 않는다. 두 대안 다 미매치라 설정 패널은 열리지 않고 이 문장이 일반 질의로 넘어간다.",
+ "judge": {
+  "must_include": [
+   "ui-state: '세팅 좀 열어줘' 입력 후 #settings 패널이 열리지 않는다",
+   "이 문장이 일반 질의로 전달돼 대화 이력(turn-q)에 그대로 기록된다",
+   "답변 텍스트가 설정 화면을 열었다고 주장하지 않는다"
+  ],
+  "must_not_include": [
+   "'세팅'이 '설정'과 완전히 동등하게 모든 대안에서 인식된다는 서술",
+   "설정 화면이 열렸다는 오답"
+  ],
+  "verify_via": [
+   "ui-state",
+   "chat-answer"
+  ],
+  "auto_checks": [
+   "ui-state: #settings.hidden===true 유지",
+   "chat-answer: '세팅 좀 열어줘'가 그대로 질의 텍스트로 전달돼 turn-q에 기록된다"
+  ]
+ },
+ "expected_route": {
+  "kind": "chat-only",
+  "tool_path": [],
+  "api_id": null,
+  "family": null,
+  "detail_group": null,
+  "upstream": null
+ },
+ "expected_screen": {
+  "window": "대화 창",
+  "mode": null,
+  "card": null,
+  "current_renderer": null
+ },
+ "implementation_status": "동작-실배선",
+ "notes": "chat.js L513-514 실측 — node로 '세팅 좀 열어줘'/'세팅창 열어줘' 모두 SETTINGS_COMMAND.test() false 확인.",
+ "group": "live-appmode",
+ "persona": "재무전문가"
+}

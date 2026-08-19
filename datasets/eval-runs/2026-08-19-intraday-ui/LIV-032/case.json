@@ -1,0 +1,56 @@
+{
+ "id": "LIV-032",
+ "tier": "live",
+ "category": "live-상대날짜",
+ "difficulty": "최상",
+ "question": "카카오페이 상장일로부터 오늘까지 며칠이나 지났는지 계산해주고, 그동안 낸 공시가 총 몇 건인지 정확한 숫자로 알려줘.",
+ "why_hard": "상장일 확보 경로인 get_stock_base_info는 KRX 키 승인 대기로 항상 거부되는 툴이라(⑤, 실측 'KRX request error'/HTTP401) 정직하게 실패를 알리고 며칠 지났는지 계산은 불가로 남겨야 한다(③, 날짜 산술 자체가 막힘). 반면 같은 질문의 뒷부분(총 공시 건수)은 같은 서버의 get_disclosure_list가 주는 total_count로 답이 가능해, 한 질문 안에서 성공한 leg와 실패한 leg를 구분해서 보고해야 한다(④, 정직한 부분 실패 보고). 오늘 날짜·corp_code 정규화까지 포함하면 툴이 4개 합성된다(①).",
+ "expected_answer": "상장일 조회(get_stock_base_info)는 KRX 승인 대기 오류로 실패해 상장일 기준 경과일수는 계산할 수 없다고 밝히고, 대신 get_disclosure_list의 total_count로 확인된 누적 공시 총건수는 정확히 보고한다.",
+ "judge": {
+  "must_include": [
+   "get_stock_base_info 호출이 KRX 인증/승인 문제로 실패했다는 사실을 명시",
+   "상장일 기준 경과일수는 계산할 수 없다고 정직하게 밝힘",
+   "공시 총건수는 get_disclosure_list의 total_count 등 실제 조회 근거로 제시",
+   "corp_code를 8자리로 정규화했다는 근거"
+  ],
+  "must_not_include": [
+   "상장일이나 경과일수를 임의의 숫자로 지어냄",
+   "KRX 실패를 언급하지 않고 답변을 마무리"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "audit-log",
+   "upstream-log"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=korea-stock-mcp tool=get_stock_base_info success=false 행이 1개 이상 있다",
+   "audit-log에 alias=korea-stock-mcp tool=get_disclosure_list success=true 행이 1개 이상 있다",
+   "chat-answer에 'KRX' 또는 '승인' 관련 실패 사유가 언급된다",
+   "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 1개 이상 있다"
+  ]
+ },
+ "expected_route": {
+  "kind": "mcp-upstream",
+  "tool_path": [
+   "korea-stock-mcp__get_today_date",
+   "korea-stock-mcp__get_corp_code",
+   "korea-stock-mcp__get_stock_base_info",
+   "korea-stock-mcp__get_disclosure_list",
+   "athena__render_canvas"
+  ],
+  "api_id": null,
+  "detail_group": null,
+  "family": null,
+  "upstream": "korea-stock-mcp"
+ },
+ "expected_screen": {
+  "window": "대화 창+캔버스 창",
+  "mode": null,
+  "card": "free",
+  "current_renderer": "free"
+ },
+ "implementation_status": "차단-외부요인",
+ "notes": "get_stock_base_info 실패는 spike/captures/S2B-jjlabsio-stock-base-info.json 'KRX request error' + CAPTURE-S2B-jjlabsio.md가 KRX 원본 API HTTP401 'Unauthorized API Call'로 원인 확정. get_disclosure_list의 total_count 필드는 S2B-jjlabsio-disclosure-list.json에서 확인.",
+ "group": "live-temporal",
+ "persona": "전업투자자"
+}

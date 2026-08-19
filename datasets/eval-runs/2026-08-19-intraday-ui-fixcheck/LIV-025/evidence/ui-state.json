@@ -1,0 +1,64 @@
+{
+ "chat": {
+  "answerCount": 4,
+  "lastAnswer": "**최근 인수·합병 공시가 없어 리더로 보여드릴 원문이 없습니다.** DART에서 지누스(013890)의 최근 1년(2025-08-19~2026-08-19) 공시 57건을 전수 확인했지만 합병·주식교환·영업양수도·공개매수 등 M&A에 해당하는 공시는 한 건도 없었고, 주요사항보고서는 2026-02-20 감자결정 1건뿐입니다(매수청구권 조항이 있는 M&A 문서 아님). 원하시면 감자결정 공시 원문을 대신 리더로 보여드리거나, 조회 기간을 더 과거로 넓혀 확인해 드릴 수 있습니다.",
+  "chipCount": 4,
+  "chipLabels": [
+   "공통 테이블",
+   "공통 테이블",
+   "공통 테이블",
+   "공통 테이블"
+  ],
+  "dotClasses": [
+   "dot"
+  ],
+  "state": "idle",
+  "panels": {
+   "app": true,
+   "onboard": false,
+   "settings": false
+  }
+ },
+ "canvas": {
+  "cardCount": 1,
+  "cards": [
+   {
+    "classes": [
+     "mcp-table",
+     "w-full"
+    ],
+    "tableRows": 3,
+    "tableCols": 2,
+    "streamItems": 0,
+    "hasAlert": false,
+    "freeTree": false,
+    "text": "지누스(013890) 인수·합병 공시 확인 결과 — DART 최근 1년(2025-08-19~2026-08-19) 공시 57건 전수 확인13:22:46 기준확인 항목결과합병·주식교환·영업양수도·공개매수 등 M&A 공시없음 (최근 1년 57건 중 0건)주요사항보고서(최근 1년)감자결정 1건만 존재 (2026-02-20, 접수번호 20260220001622) — M&A 아님그 외 주요 공시주식소각·배당결정(2026-02-06), 채무보증결정 수건, 정기보고서 등 — 모두 M&A와 무관"
+   }
+  ],
+  "clipPath": "circle(1375.33px at 34.5062px 741.027px)"
+ },
+ "stateTransitions": [
+  {
+   "state": "judging",
+   "at_ms": 4
+  },
+  {
+   "state": "calling",
+   "at_ms": 46357
+  },
+  {
+   "state": "idle",
+   "at_ms": 51883
+  }
+ ],
+ "screenshots": {
+  "chat": {
+   "width": 2363,
+   "height": 1182
+  },
+  "canvas": {
+   "width": 2343,
+   "height": 1205
+  }
+ }
+}

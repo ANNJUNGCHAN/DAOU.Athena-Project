@@ -1,0 +1,47 @@
+{
+ "chat": {
+  "answerCount": 7,
+  "lastAnswer": "아닙니다 — 그 문장 역시 설정 화면으로 연결되지 않고, 저에게 일반 질문으로 전달되어 제가 텍스트로 모델을 추천하는 답변을 하게 됩니다. 커맨드바의 자연어 입력은 화면 전환 트리거가 아니라 에이전트 질의로 처리되며, 저에게는 설정 화면을 열거나 앱의 모델 설정을 바꾸는 기능이 없습니다. 실제로 모델을 바꾸시려면 앱의 설정 메뉴에서 직접 선택하셔야 하고, 어떤 모델이 적합한지 추천이 필요하시면 용도(속도 중심인지, 분석 품질 중심인지)를 알려주시면 답변으로 추천해 드리겠습니다.",
+  "chipCount": 5,
+  "chipLabels": [
+   "공통 테이블",
+   "스트림",
+   "스트림",
+   "공통 테이블",
+   "공통 테이블"
+  ],
+  "dotClasses": [
+   "dot"
+  ],
+  "state": "idle",
+  "panels": {
+   "app": true,
+   "onboard": false,
+   "settings": false
+  }
+ },
+ "canvas": {
+  "cardCount": 0,
+  "cards": [],
+  "clipPath": "circle(0px at 34.5062px 740.263px)"
+ },
+ "stateTransitions": [
+  {
+   "state": "judging",
+   "at_ms": 0
+  },
+  {
+   "state": "idle",
+   "at_ms": 14003
+  }
+ ],
+ "screenshots": {
+  "chat": {
+   "width": 2364,
+   "height": 1182
+  },
+  "canvas": {
+   "error": "capture timeout"
+  }
+ }
+}

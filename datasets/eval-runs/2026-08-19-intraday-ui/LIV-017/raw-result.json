@@ -1,0 +1,77 @@
+{
+ "case_id": "LIV-017",
+ "tier": "live",
+ "persona": "CFO",
+ "question": "카카오게임즈 전환사채 발행 공시 원문을 확인해 주시고, 발행조건과 전환가액을 표로 깔끔하게 정리해 주시기 바랍니다. 아울러 시장에서 이번 발행을 어떻게 평가하고 있는지 관련 뉴스도 함께 확인 부탁드립니다.",
+ "attachment": null,
+ "sent_text": "카카오게임즈 전환사채 발행 공시 원문을 확인해 주시고, 발행조건과 전환가액을 표로 깔끔하게 정리해 주시기 바랍니다. 아울러 시장에서 이번 발행을 어떻게 평가하고 있는지 관련 뉴스도 함께 확인 부탁드립니다.",
+ "ran_at": "2026-08-19T01:40:21.478Z",
+ "duration_s": 142.3,
+ "first_card_ms": 90567,
+ "completed": true,
+ "timed_out": false,
+ "answer_chars": 406,
+ "chip_count_total": 8,
+ "chip_count_added": 2,
+ "chip_labels_added": [
+  "공통 테이블",
+  "스트림"
+ ],
+ "chip_labels_total": [
+  "공통 테이블",
+  "공통 테이블",
+  "공통 테이블",
+  "스트림",
+  "공통 테이블",
+  "스트림",
+  "공통 테이블",
+  "스트림"
+ ],
+ "state_transitions": [
+  {
+   "state": "judging",
+   "at_ms": 0
+  },
+  {
+   "state": "calling",
+   "at_ms": 90567
+  },
+  {
+   "state": "idle",
+   "at_ms": 142278
+  }
+ ],
+ "card_types_rendered": [
+  "mcp-table.w-full",
+  "stream.w-half"
+ ],
+ "canvas_card_count": 2,
+ "canvas_cards_pre": 0,
+ "audit_calls": [
+  "korea-stock-mcp__get_disclosure_list=true",
+  "korea-stock-mcp__get_disclosure=true",
+  "naver-search-2__search_news=true"
+ ],
+ "judge": {
+  "must_include": [
+   "실제 조회한 전환사채 발행 공시의 핵심 조건(발행금액·전환가액 등 원문 근거)을 구체적으로 인용",
+   "공시 원문이 비정형 서술형이라 표(columns/rows) 스키마로 억지로 변환하면 정보가 깨지거나 free로 폴백될 수 있다는 설명",
+   "naver-search-2로 찾은 실제 시장 반응(뉴스) 요약"
+  ],
+  "must_not_include": [
+   "존재하지 않는 표 컬럼·행 데이터를 지어내 mcp-table 형태로 꾸며 제시",
+   "공시 원문을 조회하지 않고 일반론만 답함",
+   "전환사채 발행조건 수치를 임의로 창작"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "canvas-file",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=dart-mcp tool=search_disclosure success=true 행이 있다",
+   "저장됐다면(athena__save_canvas 호출 시): canvas-file의 canvas_type이 table로 강제된 경우 fell_back이 true이거나, canvas_type이 애초에 reader/free다",
+   "audit-log에 alias=naver-search-2 tool=search_news success=true 행이 있다"
+  ]
+ }
+}

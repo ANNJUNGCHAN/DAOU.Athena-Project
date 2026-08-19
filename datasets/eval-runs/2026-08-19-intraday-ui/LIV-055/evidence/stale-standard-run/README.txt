@@ -1,0 +1,1 @@
+이 파일들은 표준 하네스(run-cases-ui.js)가 질문 원문을 커맨드바에 그대로 입력한 1차 실행의 증거다 — 이 케이스는 상호작용형(Esc 타이밍)이라 그 실행은 전제 미재현(blocked-env)이었다. 유효 증거는 상위 디렉토리의 chat-after-esc.png와 raw-result.json의 observations(run-cases-appmode.js 전용 절차, 2026-08-19 재실행)다.

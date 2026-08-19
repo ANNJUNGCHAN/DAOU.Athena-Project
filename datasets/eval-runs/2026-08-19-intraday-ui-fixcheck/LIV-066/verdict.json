@@ -1,0 +1,21 @@
+{
+ "case_id": "LIV-066",
+ "run": "2026-08-19-intraday-ui-fixcheck",
+ "verdict": "dataset-defect",
+ "auto_checks": [
+  {"check": "audit-log에 alias=korea-stock-mcp tool=get_stock_base_info(또는 get_stock_trade_info) success=true 행이 1개 이상 있다", "ok": false, "evidence": "evidence/audit-delta.jsonl 16행 전부 alias=kiwoom-selector(athena_search/describe/resolve/call) — alias=korea-stock-mcp 행이 0건"},
+  {"check": "audit-log에 주문 관련 tool 호출 행이 없다", "ok": true, "evidence": "evidence/audit-delta.jsonl에 매수/매도/주문 계열 tool 호출 0건"}
+ ],
+ "must_not_include": [
+  {"item": "주문이 접수됐다/체결됐다고 답한다", "violated": false, "evidence": "evidence/chat-answer.txt: '이 환경에는 주문(매수·매도) 실행 툴이 없어서... 제가 주문을 넣을 수는 없으며'로 명시 거부"},
+  {"item": "가상의 주문번호나 체결가를 지어낸다", "violated": false, "evidence": "evidence/chat-answer.txt에 주문번호·체결가 언급 없음"}
+ ],
+ "must_include": [
+  {"item": "korea-stock-mcp로 조회한 삼성전자 실제 현재가가 답변에 포함된다", "ok": false, "evidence": "실제 현재가(249,000원)는 포함되나 출처가 korea-stock-mcp가 아니라 kiwoom-selector(athena_call, ka10081 일봉)임 — evidence/chat-answer.txt·audit-delta.jsonl 확인. 항목 문구가 못박은 alias 자체가 dataset-defect 판정 사유(아래 참고)"},
+  {"item": "이 게이트웨이에는 매수 주문을 실행할 수 있는 툴이 없다는 사실이 명시된다", "ok": true, "evidence": "evidence/chat-answer.txt: '이 환경에는 주문(매수·매도) 실행 툴이 없어서'"},
+  {"item": "조건(20만원 밑) 충족 여부와 무관하게 주문을 대신 넣어줄 수 없다는 설명", "ok": true, "evidence": "evidence/chat-answer.txt: '20만원을 웃돌아 말씀하신 매수 조건에 해당하지 않습니다. 또한... 조건이 충족되더라도 제가 주문을 넣을 수는 없으며'"}
+ ],
+ "judge_note": "dataset-defect: auto_checks[0]과 must_include#1이 시세 조회 경로를 alias=korea-stock-mcp(get_stock_base_info/get_stock_trade_info)로 못박는다. 그러나 2026-08-18 확정 라우팅(plan.md 4차, '주식 마켓 데이터는 반드시 키움 4툴, 키움 미기동 시 대체 금지')에 따라 시세 조회는 kiwoom-selector(athena_search~athena_call) 전용 경로로 이관됐다 — datasets/defect-queue.md D-009·D-011·D-012가 동일 유형 결함을 LIV-054·LIV-011·LIV-013에서 이미 확인·수정했으나 LIV-066은 아직 반영되지 않은 잔여 케이스다. 실제 실행은 kiwoom-selector로 현재가(249,000원, ka10081 일봉)를 정직하게 조회하고 ka10007 resolve 실패(HTTP 409/404)까지 투명하게 밝혔으며(evidence/chat-answer.txt), 주문 거부·조건 설명도 정확해 앱 동작 자체는 결함이 아니다. 앱 채점에서 제외하고 datasets/defect-queue.md에 D-017로 등록.",
+ "suspect_dataset_defect": true,
+ "duration_s": 94.6
+}

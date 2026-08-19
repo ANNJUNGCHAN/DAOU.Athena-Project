@@ -1,0 +1,54 @@
+{
+ "id": "LIV-040",
+ "tier": "live",
+ "category": "live-정렬판단",
+ "difficulty": "최상",
+ "question": "카카오랑 카카오페이 중에 누가 더 최근에 공시를 냈는지 정확한 순서로 비교해줘. 접수일이 같은 날짜로 나오면 그걸로 끝내지 말고 제대로 가려줘.",
+ "why_hard": "get_disclosure_list의 rcept_dt는 날짜만 주고 시각이 없어서, 두 회사의 최신 공시가 같은 날 접수됐다면 rcept_dt만으로는 순서를 가릴 수 없고 rcept_no(접수번호, 사실상 시퀀스)를 보조 정렬키로 써야 한다(③, 원자료 시간 정밀도 한계 추론). 두 회사 각각 corp_code 변환과 disclosure_list 조회가 필요해 툴이 4개 합성된다(①). 접수일이 같을 가능성을 대비하지 않으면 잘못된 순서를 단정하게 된다(⑤).",
+ "expected_answer": "카카오·카카오페이 각각의 최신 공시 rcept_dt를 비교하고, 날짜가 같다면 rcept_no를 보조 기준으로 삼아 어느 쪽이 더 최근인지 정확히 판정해 보고한다.",
+ "judge": {
+  "must_include": [
+   "카카오·카카오페이 각각의 최신 공시 rcept_dt를 개별적으로 확인",
+   "rcept_dt가 날짜 단위라 시각 정보가 없다는 한계를 인지",
+   "두 회사의 접수일이 같은 경우 rcept_no 등 보조 기준으로 순서를 가렸다는 근거",
+   "최종적으로 어느 회사가 더 최근인지 명확히 결론"
+  ],
+  "must_not_include": [
+   "접수일이 같을 때 아무 근거 없이 임의로 한쪽을 더 최근이라 단정",
+   "corp_code를 8자리로 정규화하지 않고 그대로 사용"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=korea-stock-mcp tool=get_disclosure_list success=true 행이 2개 이상 있다",
+   "chat-answer에 두 회사 각각의 접수일(날짜)이 모두 언급된다",
+   "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 1개 이상 있다"
+  ]
+ },
+ "expected_route": {
+  "kind": "mcp-upstream",
+  "tool_path": [
+   "korea-stock-mcp__get_corp_code",
+   "korea-stock-mcp__get_disclosure_list",
+   "korea-stock-mcp__get_corp_code",
+   "korea-stock-mcp__get_disclosure_list",
+   "athena__render_canvas"
+  ],
+  "api_id": null,
+  "detail_group": null,
+  "family": null,
+  "upstream": "korea-stock-mcp"
+ },
+ "expected_screen": {
+  "window": "대화 창+캔버스 창",
+  "mode": null,
+  "card": "mcp-table",
+  "current_renderer": "mcp-table"
+ },
+ "implementation_status": "동작-실배선",
+ "notes": "get_disclosure_list의 rcept_dt(날짜만, 시각 없음)·rcept_no 필드는 _digest.md §5(스트림 정규화 절)와 S2B-jjlabsio-disclosure-list.json 응답 형상에서 확인. corp_code 8자리 zfill 필요는 CAPTURE-S2B-jjlabsio.md #4.",
+ "group": "live-temporal",
+ "persona": "전업투자자"
+}

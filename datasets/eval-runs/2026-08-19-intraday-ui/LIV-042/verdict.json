@@ -1,0 +1,23 @@
+{
+ "case_id": "LIV-042",
+ "run": "2026-08-19-intraday-ui",
+ "verdict": "fail",
+ "auto_checks": [
+  {"check": "audit-log에 alias=korea-stock-mcp tool=get_financial_statement success=true 행이 있다", "ok": true, "evidence": "evidence/audit-delta.jsonl:2"},
+  {"check": "chat-answer에 thstrm/frmtrm/bfefrmtrm 관련 라벨 확인 서술이 등장한다", "ok": true, "evidence": "evidence/chat-answer.txt: '당기 컬럼은 \"제 78 기\"(2025년), 전기는 \"제 77 기\"(2024년), 전전기는 \"제 76 기\"(2023년)'"},
+  {"check": "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 1개 이상 있다", "ok": true, "evidence": "evidence/audit-delta.jsonl:1"}
+ ],
+ "must_not_include": [
+  {"item": "컬럼 위치(왼쪽=최신)를 라벨 확인 없이 그대로 가정", "violated": false, "evidence": "evidence/chat-answer.txt에 라벨 확인 서술 존재('컬럼명 검증 결과')"},
+  {"item": "매출액 계정이 여러 개 잡혔는데 어떤 걸 썼는지 언급 없이 하나만 제시", "violated": false, "evidence": "'연결 기준 매출액'이라고 산정 기준을 명시함"}
+ ],
+ "must_include": [
+  {"item": "thstrm_nm/frmtrm_nm/bfefrmtrm_nm 등 실제 라벨을 확인해 컬럼 순서를 검증했다는 근거", "ok": true, "evidence": "evidence/chat-answer.txt: '당기 컬럼은 \"제 78 기\"(2025년), 전기는 \"제 77 기\"(2024년), 전전기는 \"제 76 기\"(2023년)'"},
+  {"item": "컬럼 위치만으로 최신순을 단정하지 않았다는 언급", "ok": true, "evidence": "evidence/chat-answer.txt: '컬럼명 검증 결과... 실제로 왼쪽(당기)이 최신 연도가 맞았습니다' — 가정이 아니라 검증했다는 표현"},
+  {"item": "매출액을 최신 연도부터 오래된 연도 순으로 재배열해 제시", "ok": true, "evidence": "evidence/chat-answer.txt·evidence/ui-state.json 표: '최신 순으로 2025년 97.15조 원, 2024년 66.19조 원, 2023년 32.77조 원'"},
+  {"item": "오늘 날짜 기준으로 이미 제출됐을 보고서를 선택했다는 근거", "ok": false, "evidence": "evidence/audit-delta.jsonl에 get_today_date 호출 행이 없음(get_corp_code·get_financial_statement 2건뿐, raw-result.json audit_calls도 동일 2건). evidence/chat-answer.txt에도 '오늘'·'날짜'·제출 시점 확인 서술이 전혀 없음 — 결과적으로 2025년 사업보고서(접수 2026-03-17)를 선택한 것은 맞지만 그 선택이 날짜 확인에 근거했다는 증거가 없음"}
+ ],
+ "judge_note": "라벨 검증·재배열 항목은 근거와 함께 충족되나, '오늘 날짜 기준 이미 제출된 보고서 선택'에 대한 근거가 감사로그·답변 어디에도 없다(get_today_date 미호출, expected_route 4단계 중 1단계 누락). 최종 결과가 우연히 올바른 연도(2025년, 이미 제출됨)를 골랐다고 해도 날짜 확인 근거 자체가 부재하므로 해당 must_include 항목은 X — 부분점수 없음 규칙에 따라 전체 fail.",
+ "suspect_dataset_defect": false,
+ "duration_s": 40.2
+}

@@ -1,0 +1,53 @@
+{
+ "id": "LIV-046",
+ "tier": "live",
+ "category": "live-스키마함정",
+ "difficulty": "최상",
+ "question": "삼성SDI 최근 공시랑 관련 뉴스를 시간순으로 한 축에 맞춰서 타임라인 카드로 만들어줄 수 있어?",
+ "why_hard": "canvas_type='timeline' 스키마는 price_series 또는 events 중 하나만 있어도 유효하다(anyOf). korea-stock-mcp 공시목록과 naver-search-2 뉴스, 두 서로 다른 업스트림을 합쳐야 하는 3회 이상 툴 합성(①)이 필요하고, 공시(day 정밀도)와 뉴스(second 정밀도)의 실제 시간 해상도를 원자료에서 그대로 읽어 레코드별로 구분해야 하는 시간 추론(③)이 걸린다. 더 결정적으로: 이 타임라인 페이로드는 게이트웨이 스키마 검증을 통과해 fell_back=false로 반환되더라도, 앱의 addLiveCard()는 canvas_type이 table/stream/reader일 때만 전용 렌더러를 쓰고 그 외(timeline 포함)는 전부 renderFreeCanvas로 떨어뜨린다 — 설계 카드(타임라인)와 오늘 실제 렌더러(free)가 갈리는 간극을 스스로 알아채야 하는 카드 배치 판단(⑥)이 핵심 함정이다.",
+ "expected_answer": "공시 목록과 뉴스를 하나의 이벤트 축으로 합쳐 canvas_type='timeline'으로 렌더를 시도하되, 공시는 day 정밀도·뉴스는 second 정밀도로 각각 정확히 표기하고, 오늘 앱에서는 timeline 전용 렌더러가 없어 free 카드(JSON 트리)로 보인다는 점을 사용자에게 밝힌다.",
+ "judge": {
+  "must_include": [
+   "canvas_type을 timeline으로 구성했고 events[] 배열에 공시·뉴스를 합쳤다는 근거",
+   "공시 레코드는 ts_precision을 day로, 뉴스 레코드는 second로 실제와 다르게 지어내지 않고 정확히 구분했다는 확인",
+   "게이트웨이 스키마 검증 자체는 통과(fell_back=false)하더라도 앱에는 timeline 전용 렌더러가 없어 오늘은 free 카드로 보인다는 사실을 사용자에게 알렸다는 근거"
+  ],
+  "must_not_include": [
+   "timeline이 오늘 앱에서 전용 카드로 예쁘게 그려진다고 잘못 안내",
+   "공시(day 정밀도)에 없는 시각을 00:00:00처럼 지어내 second로 표기",
+   "뉴스와 공시를 합치지 않고 둘 중 하나만으로 임의로 답변을 축소"
+  ],
+  "verify_via": [
+   "ui-state",
+   "chat-answer",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=korea-stock-mcp tool=get_disclosure_list success=true 행과 alias=naver-search-2 tool=search_news success=true 행이 각각 있다",
+   "렌더된 카드가 makeCard('free', ...) 골격(JSON 트리)으로 나타나고 전용 timeline 레이아웃이 아니다",
+   "chat-answer 텍스트에 timeline이 오늘 free로 보인다는 설명이 포함돼 있다"
+  ]
+ },
+ "expected_route": {
+  "kind": "cross-source",
+  "api_id": null,
+  "detail_group": null,
+  "family": null,
+  "upstream": "korea-stock-mcp",
+  "tool_path": [
+   "korea-stock-mcp__get_disclosure_list",
+   "naver-search-2__search_news",
+   "athena__render_canvas"
+  ]
+ },
+ "expected_screen": {
+  "window": "대화 창+캔버스 창",
+  "mode": null,
+  "card": "타임라인",
+  "current_renderer": "free"
+ },
+ "implementation_status": "동작-실배선",
+ "notes": "canvas.py TIMELINE_SCHEMA(anyOf price_series/events, L70-93)는 events만으로도 유효. app/canvas.js addLiveCard()(L103-106 실측)는 canvas_type이 table/stream/reader일 때만 전용 분기이고 나머지는 전부 renderFreeCanvas — timeline은 이 세 분기 밖이라 fell_back=false여도 free로 렌더된다(디지스트 §5 '타임라인 카드 미배선'과 일치하는 코드 레벨 확인). get_disclosure_list의 rcept_dt는 날짜만(시간 없음, S2B-jjlabsio-disclosure-list.json 실측) — day precision 필수.",
+ "group": "live-render",
+ "persona": "개인투자자"
+}

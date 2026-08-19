@@ -1,0 +1,54 @@
+{
+ "case_id": "LIV-092",
+ "run": "2026-08-19-intraday-ui",
+ "verdict": "pass",
+ "auto_checks": [
+  {
+   "check": "ui-state: 첫 Esc 직후 #settings.hidden===true, #app.hidden===false로 복귀",
+   "ok": true,
+   "evidence": "raw-result.json observations.settings_closed_by_first_esc=true, app_visible_after_first_esc=true"
+  },
+  {
+   "check": "ui-state: 이후 대화 이력에 정상적인 turn-a(답변) 노드가 추가된다",
+   "ok": true,
+   "evidence": "observations.query_completed_with_answer=true, final_state=\"idle\"; evidence/chat-final.png — 삼성전자 공시 요약 답변과 '스트림' 칩이 정상 추가됨"
+  }
+ ],
+ "must_not_include": [
+  {
+   "item": "첫 Esc가 진행 중이던 질의를 즉시 취소했다는 서술",
+   "violated": false,
+   "evidence": "observations.query_state_after_first_esc=\"judging\" — 첫 Esc 직후에도 질의가 취소되지 않고 계속 진행 중; chat-after-first-esc.png에 'Claude에게 물어보는 중 · 3.9s 경과' 진행줄이 여전히 표시됨"
+  },
+  {
+   "item": "점(#dot)이 judging 중에는 클릭이 안 먹는다는 오답",
+   "violated": false,
+   "evidence": "observations.state_when_dot_clicked=\"judging\", settings_opened_during_query=true — judging 중에도 점 클릭으로 설정 화면이 정상적으로 열림"
+  }
+ ],
+ "must_include": [
+  {
+   "item": "$dot 클릭 리스너에는 state 가드가 없어 조회 중에도 설정 화면을 열 수 있다",
+   "ok": true,
+   "evidence": "observations.state_when_dot_clicked=\"judging\", settings_opened_during_query=true; evidence/chat-settings-during-query.png — judging 중 설정 화면이 정상 렌더"
+  },
+  {
+   "item": "Esc 핸들러는 settingsOpen이 true면 무조건 그것부터 닫고 즉시 return한다",
+   "ok": true,
+   "evidence": "observations.settings_closed_by_first_esc=true, app_visible_after_first_esc=true — 첫 Esc가 설정만 닫음(질의 취소 아님)"
+  },
+  {
+   "item": "첫 Esc로는 abortToken이 증가하지 않아 백그라운드 질의는 중단되지 않는다",
+   "ok": true,
+   "evidence": "observations.query_state_after_first_esc=\"judging\"(여전히 진행 중); chat-after-first-esc.png에 'Claude에게 물어보는 중 · 3.9s 경과'와 'ESC 중단' 힌트가 살아있음 — 중단되지 않았음을 확인"
+  },
+  {
+   "item": "설정을 닫으면 원래의 진행줄/카드가 다시 나타나고 질의가 정상적으로 이어져 완료된다",
+   "ok": true,
+   "evidence": "observations.query_completed_with_answer=true, final_state=\"idle\"; chat-final.png — 삼성전자 최근 공시 30건 요약 답변과 '스트림' 칩(claude -p · 53.3s)이 정상 표시됨"
+  }
+ ],
+ "judge_note": "judging 중 점(#dot) 클릭으로 설정 화면이 열렸고(state_when_dot_clicked=judging, settings_opened_during_query=true), 첫 Esc는 설정만 닫았을 뿐 백그라운드 질의는 취소되지 않고 계속 진행됐다(query_state_after_first_esc=judging, chat-after-first-esc.png의 'ESC 중단' 진행줄). 설정을 닫은 뒤 질의는 정상적으로 완료되어 스트림 카드 답변이 추가됐다(chat-final.png). case의 expected_answer('아니다 — 첫 Esc는 설정만 닫고 질의는 계속 진행돼 완료된다')와 관측값이 정확히 일치. auto_checks·must_not_include·must_include 전부 충족하여 pass.",
+ "suspect_dataset_defect": false,
+ "duration_s": 58.9
+}

@@ -1,0 +1,61 @@
+{
+ "chat": {
+  "answerCount": 2,
+  "lastAnswer": "서버 목록과 확인 가능한 등록 정보를 표로 정리했습니다. 로컬 `.mcp.json`에는 athena 서버만 등록돼 있고(환경변수는 비시크릿인 PYTHONPATH뿐), DART를 포함한 dart-mcp·korea-stock-mcp·naver-search-2는 athena 뒤의 업스트림 서버라 등록 원문·API 키가 앱 내부 암호화 저장소에 있어 조회 툴이 제공되지 않습니다. 시크릿 환경변수 값은 지난번 설명대로 평문으로 꺼내 보여줄 수 없으며, 유효성 확인이 필요하면 해당 서버로 실제 조회를 한 번 성공시키는 방식으로 검증해 드릴 수 있습니다.",
+  "chipCount": 1,
+  "chipLabels": [
+   "공통 테이블"
+  ],
+  "dotClasses": [
+   "dot"
+  ],
+  "state": "idle",
+  "panels": {
+   "app": true,
+   "onboard": false,
+   "settings": false
+  }
+ },
+ "canvas": {
+  "cardCount": 1,
+  "cards": [
+   {
+    "classes": [
+     "mcp-table",
+     "w-full"
+    ],
+    "tableRows": 4,
+    "tableCols": 5,
+    "streamItems": 0,
+    "hasAlert": false,
+    "freeTree": false,
+    "text": "MCP 서버 등록 현황 — 시크릿 환경변수 값은 암호화 저장되어 원문 표시 불가12:05:19 기준서버등록 위치실행 커맨드환경변수위험 경고athena로컬 .mcp.jsonC:\\Projects\\DAOU.Athena\\backend\\.venv\\Scripts\\python.exe -m athena_mcp servePYTHONPATH=C:\\Projects\\DAOU.Athena\\backend (비시크릿, 평문)—dart-mcpathena 업스트림 (앱 내부 암호화 저장소)(앱 내부 등록 — 조회 툴 미제공)DART API 키 등 시크릿: 암호화"
+   }
+  ],
+  "clipPath": "circle(1372.87px at 34.5062px 736.446px)"
+ },
+ "stateTransitions": [
+  {
+   "state": "judging",
+   "at_ms": 4
+  },
+  {
+   "state": "calling",
+   "at_ms": 38087
+  },
+  {
+   "state": "idle",
+   "at_ms": 44151
+  }
+ ],
+ "screenshots": {
+  "chat": {
+   "width": 2352,
+   "height": 887
+  },
+  "canvas": {
+   "width": 2343,
+   "height": 1205
+  }
+ }
+}

@@ -1,0 +1,21 @@
+{
+ "case_id": "LIV-007",
+ "run": "2026-08-19-intraday-ui",
+ "verdict": "pass",
+ "auto_checks": [
+  {"check": "audit-log에 alias=korea-stock-mcp tool=get_financial_statement success=true 행이 1개 이상", "ok": true, "evidence": "evidence/audit-delta.jsonl:2 {\"alias\":\"korea-stock-mcp\",\"tool\":\"get_financial_statement\",\"success\":true}"},
+  {"check": "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 1개 이상", "ok": true, "evidence": "evidence/audit-delta.jsonl:1 {\"alias\":\"korea-stock-mcp\",\"tool\":\"get_corp_code\",\"success\":true}"}
+ ],
+ "must_not_include": [
+  {"item": "fs_div=OFS(별도재무제표)로 조회해놓고 '연결' 기준이라고 답변", "violated": false, "evidence": "evidence/chat-answer.txt: 'LG화학의 연결(CFS) 기준 자기자본비율은'; evidence/ui-state.json canvas.cards[0].text: 'LG화학 연결 자기자본비율 — 2025 사업보고서(연결재무상태표, CFS) 기준' — CFS로 명시, OFS 언급 없음"},
+  {"item": "실측 없이 자기자본비율 수치를 임의로 제시", "violated": false, "evidence": "evidence/audit-delta.jsonl:1-2에 get_corp_code·get_financial_statement 성공 행 존재, 캔버스 표에 제23~25기 3개년 실측 수치(자본총계·자산총계·비율) 병기"}
+ ],
+ "must_include": [
+  {"item": "fs_div를 CFS(연결)로 명시적으로 지정했다는 근거(OFS와 혼동하지 않았다)", "ok": true, "evidence": "evidence/chat-answer.txt: '연결(CFS) 기준'; evidence/ui-state.json canvas.cards[0].text: '2025 사업보고서(연결재무상태표, CFS) 기준'"},
+  {"item": "자본총계÷자산총계×100 계산 과정과 결과를 제시했다", "ok": true, "evidence": "evidence/chat-answer.txt: '자기자본비율은 2025 사업보고서 기준 46.61%(자본총계 47.11조 원 ÷ 자산총계 101.06조 원)입니다'"},
+  {"item": "재무상태표(BS)의 자본총계를 썼다는 근거(자본변동표의 중복 '자본총계' 행과 혼동하지 않았다)", "ok": true, "evidence": "evidence/ui-state.json canvas.cards[0].text: 'LG화학 연결 자기자본비율 — 2025 사업보고서(연결재무상태표, CFS) 기준' — '연결재무상태표'로 명시, 자본변동표 언급 없음"}
+ ],
+ "judge_note": "auto_checks 2건 통과, must_not_include 위반 없음, must_include 3건 모두 chat-answer/canvas 텍스트로 직접 확인됨. CFS·연결재무상태표를 명시해 OFS·자본변동표 혼동 없이 계산했다.",
+ "suspect_dataset_defect": false,
+ "duration_s": 27.9
+}

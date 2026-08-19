@@ -1,0 +1,55 @@
+{
+ "id": "LIV-021",
+ "tier": "live",
+ "category": "live-뉴스교차",
+ "difficulty": "최상",
+ "question": "엘앤에프가 전환사채 콜옵션을 조기에 행사했다는 얘기가 뉴스에 도는데, 실제로 그런 공시가 확인되나요? 확인되면 콜옵션 행사 금액이랑 시기도 알려주세요.",
+ "why_hard": "①뉴스 검색→법인 식별→공시목록→원문 조회로 4개 이상 툴 합성이 필요하다. ③'조기 행사'라는 뉴스 표현이 실제 공시 원문의 행사일·행사금액과 정확히 맞는지 대조하는 시간·산술 판단이 필요하다. ⑤뉴스에 언급된 내용이 공시로 확인 안 되면 '확인 불가'로 정직하게 답해야 하는 부분실패 처리가 걸려 있다.",
+ "expected_answer": "naver-search-2 뉴스에서 콜옵션 조기 행사 관련 언급을 찾고, korea-stock-mcp 공시 원문에서 실제 행사금액과 행사일을 확인해 뉴스 내용과 대조한다. 공시로 확인이 안 되면 확인 불가라고 정직하게 답한다.",
+ "judge": {
+  "must_include": [
+   "naver-search-2로 찾은 콜옵션 관련 뉴스 언급 내용 인용",
+   "korea-stock-mcp 공시 원문에서 확인한 실제 행사금액·행사일(확인됐다면)",
+   "공시로 확인이 안 될 경우 '확인 불가'라고 정직하게 답했다는 조건부 서술"
+  ],
+  "must_not_include": [
+   "공시 조회 없이 뉴스 내용만으로 행사금액·행사일을 확정적으로 제시",
+   "확인 안 된 사실을 확인된 것처럼 서술",
+   "임의의 금액·날짜 수치를 지어냄"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "audit-log",
+   "canvas-file"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=naver-search-2 tool=search_news success=true 행이 있다",
+   "audit-log에 alias=korea-stock-mcp tool=get_disclosure success=true 행이 있다",
+   "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 1개 이상 있다"
+  ]
+ },
+ "expected_route": {
+  "kind": "cross-source",
+  "tool_path": [
+   "naver-search-2__search_news",
+   "korea-stock-mcp__get_corp_code",
+   "korea-stock-mcp__get_disclosure_list",
+   "korea-stock-mcp__get_disclosure",
+   "athena__render_canvas"
+  ],
+  "api_id": null,
+  "family": null,
+  "upstream": "naver-search-2+korea-stock-mcp",
+  "detail_group": null
+ },
+ "expected_screen": {
+  "window": "대화 창+캔버스 창",
+  "mode": null,
+  "card": "리더",
+  "current_renderer": "reader"
+ },
+ "implementation_status": "동작-실배선",
+ "notes": "엘앤에프는 실제 전환사채 발행 이력이 있는 배터리 소재사라 콜옵션 행사 여부를 뉴스-공시로 교차검증하는 소재로 자연스러움(질문 자체는 '뉴스에 도는 얘기' 가정형이라 사실관계 단정 없이 설계). naver-search-2·korea-stock-mcp 승인·실배선(_mcp-tools.json).",
+ "group": "live-disclosure",
+ "persona": "브로커"
+}

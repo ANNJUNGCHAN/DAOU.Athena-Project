@@ -1,0 +1,1168 @@
+{
+ "runs": [
+  {
+   "ran_at": "2026-08-19T01:26:04.015Z",
+   "boot": {
+    "booted": true,
+    "panels": {
+     "boot": false,
+     "app": true,
+     "onboard": false,
+     "settings": false
+    }
+   },
+   "case_ids": [
+    "LIV-004"
+   ]
+  },
+  {
+   "ran_at": "2026-08-19T01:34:32.031Z",
+   "boot": {
+    "booted": true,
+    "panels": {
+     "boot": false,
+     "app": true,
+     "onboard": false,
+     "settings": false
+    }
+   },
+   "case_ids": [
+    "LIV-001",
+    "LIV-002",
+    "LIV-003",
+    "LIV-005",
+    "LIV-006",
+    "LIV-007",
+    "LIV-008",
+    "LIV-009",
+    "LIV-010",
+    "LIV-011"
+   ]
+  },
+  {
+   "ran_at": "2026-08-19T01:47:35.256Z",
+   "boot": {
+    "booted": true,
+    "panels": {
+     "boot": false,
+     "app": true,
+     "onboard": false,
+     "settings": false
+    }
+   },
+   "case_ids": [
+    "LIV-012",
+    "LIV-013",
+    "LIV-014",
+    "LIV-015",
+    "LIV-016",
+    "LIV-017",
+    "LIV-018",
+    "LIV-019",
+    "LIV-020",
+    "LIV-021"
+   ]
+  },
+  {
+   "ran_at": "2026-08-19T02:01:18.383Z",
+   "boot": {
+    "booted": true,
+    "panels": {
+     "boot": false,
+     "app": true,
+     "onboard": false,
+     "settings": false
+    }
+   },
+   "case_ids": [
+    "LIV-022",
+    "LIV-023",
+    "LIV-024",
+    "LIV-025",
+    "LIV-026",
+    "LIV-027",
+    "LIV-028",
+    "LIV-029",
+    "LIV-030",
+    "LIV-031"
+   ]
+  },
+  {
+   "ran_at": "2026-08-19T02:10:50.542Z",
+   "boot": {
+    "booted": true,
+    "panels": {
+     "boot": false,
+     "app": true,
+     "onboard": false,
+     "settings": false
+    }
+   },
+   "case_ids": [
+    "LIV-032",
+    "LIV-033",
+    "LIV-034",
+    "LIV-035",
+    "LIV-036",
+    "LIV-037",
+    "LIV-038",
+    "LIV-039",
+    "LIV-040",
+    "LIV-041"
+   ]
+  },
+  {
+   "ran_at": "2026-08-19T03:03:18.289Z",
+   "boot": {
+    "booted": true,
+    "panels": {
+     "boot": false,
+     "app": true,
+     "onboard": false,
+     "settings": false
+    }
+   },
+   "case_ids": [
+    "LIV-052",
+    "LIV-053",
+    "LIV-054",
+    "LIV-055",
+    "LIV-056",
+    "LIV-057",
+    "LIV-058",
+    "LIV-059",
+    "LIV-060",
+    "LIV-061"
+   ]
+  },
+  {
+   "ran_at": "2026-08-19T03:12:44.785Z",
+   "boot": {
+    "booted": true,
+    "panels": {
+     "boot": false,
+     "app": true,
+     "onboard": false,
+     "settings": false
+    }
+   },
+   "case_ids": [
+    "LIV-062",
+    "LIV-063",
+    "LIV-064",
+    "LIV-065",
+    "LIV-066",
+    "LIV-067",
+    "LIV-068",
+    "LIV-069",
+    "LIV-070",
+    "LIV-071"
+   ]
+  },
+  {
+   "ran_at": "2026-08-19T03:26:40.504Z",
+   "boot": {
+    "booted": true,
+    "panels": {
+     "boot": false,
+     "app": true,
+     "onboard": false,
+     "settings": false
+    }
+   },
+   "case_ids": [
+    "LIV-072",
+    "LIV-073",
+    "LIV-074",
+    "LIV-075",
+    "LIV-076",
+    "LIV-077",
+    "LIV-078",
+    "LIV-079",
+    "LIV-080",
+    "LIV-081"
+   ]
+  },
+  {
+   "ran_at": "2026-08-19T03:33:49.275Z",
+   "boot": {
+    "booted": true,
+    "panels": {
+     "boot": false,
+     "app": true,
+     "onboard": false,
+     "settings": false
+    }
+   },
+   "case_ids": [
+    "LIV-082",
+    "LIV-083",
+    "LIV-084",
+    "LIV-085",
+    "LIV-086",
+    "LIV-087",
+    "LIV-088",
+    "LIV-090"
+   ]
+  },
+  {
+   "ran_at": "2026-08-19T03:43:35.135Z",
+   "boot": {
+    "booted": true,
+    "panels": {
+     "boot": false,
+     "app": true,
+     "onboard": false,
+     "settings": false
+    }
+   },
+   "case_ids": [
+    "LIV-050",
+    "LIV-051"
+   ]
+  },
+  {
+   "ran_at": "2026-08-19T03:46:53.510Z",
+   "harness": "appmode",
+   "case_ids": [
+    "LIV-089",
+    "LIV-091",
+    "LIV-092",
+    "LIV-093",
+    "LIV-094",
+    "LIV-098",
+    "LIV-099",
+    "LIV-100"
+   ]
+  },
+  {
+   "ran_at": "2026-08-19T03:47:05.931Z",
+   "harness": "appmode",
+   "case_ids": [
+    "LIV-095"
+   ]
+  },
+  {
+   "ran_at": "2026-08-19T03:47:17.934Z",
+   "harness": "appmode",
+   "case_ids": [
+    "LIV-096"
+   ]
+  },
+  {
+   "ran_at": "2026-08-19T03:48:11.795Z",
+   "harness": "appmode",
+   "case_ids": [
+    "LIV-097"
+   ]
+  },
+  {
+   "ran_at": "2026-08-19T04:05:39.943Z",
+   "boot": {
+    "booted": true,
+    "panels": {
+     "boot": false,
+     "app": true,
+     "onboard": false,
+     "settings": false
+    }
+   },
+   "case_ids": [
+    "LIV-083",
+    "LIV-084",
+    "LIV-085",
+    "LIV-086",
+    "LIV-087",
+    "LIV-088",
+    "LIV-090"
+   ]
+  },
+  {
+   "ran_at": "2026-08-19T04:13:41.920Z",
+   "boot": {
+    "booted": true,
+    "panels": {
+     "boot": false,
+     "app": true,
+     "onboard": false,
+     "settings": false
+    }
+   },
+   "case_ids": [
+    "LIV-023",
+    "LIV-073"
+   ]
+  },
+  {
+   "ran_at": "2026-08-19T04:14:06.066Z",
+   "harness": "appmode",
+   "case_ids": [
+    "LIV-098",
+    "LIV-100"
+   ]
+  },
+  {
+   "ran_at": "2026-08-19T04:14:15.542Z",
+   "harness": "appmode",
+   "case_ids": [
+    "LIV-096"
+   ]
+  },
+  {
+   "ran_at": "2026-08-19T04:45:14.743Z",
+   "harness": "appmode",
+   "case_ids": [
+    "LIV-055"
+   ]
+  }
+ ],
+ "cases": [
+  {
+   "id": "LIV-004",
+   "completed": true,
+   "duration_s": 41.8,
+   "first_card_ms": 36580,
+   "cards": [
+    "mcp-table.w-full"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-001",
+   "completed": true,
+   "duration_s": 50.2,
+   "first_card_ms": 46209,
+   "cards": [
+    "mcp-table.w-full"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-002",
+   "completed": true,
+   "duration_s": 34,
+   "first_card_ms": 29976,
+   "cards": [
+    "mcp-table.w-full"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-003",
+   "completed": true,
+   "duration_s": 33.9,
+   "first_card_ms": 28391,
+   "cards": [
+    "mcp-table.w-full"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-005",
+   "completed": true,
+   "duration_s": 44.2,
+   "first_card_ms": 40195,
+   "cards": [
+    "mcp-table.w-full"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-006",
+   "completed": true,
+   "duration_s": 40,
+   "first_card_ms": 32429,
+   "cards": [
+    "mcp-table.w-full"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-007",
+   "completed": true,
+   "duration_s": 27.9,
+   "first_card_ms": 23959,
+   "cards": [
+    "mcp-table.w-full"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-008",
+   "completed": true,
+   "duration_s": 30.5,
+   "first_card_ms": 25923,
+   "cards": [
+    "mcp-table.w-full"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-009",
+   "completed": true,
+   "duration_s": 31.9,
+   "first_card_ms": 25840,
+   "cards": [
+    "mcp-table.w-full"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-010",
+   "completed": true,
+   "duration_s": 52.8,
+   "first_card_ms": 48204,
+   "cards": [
+    "mcp-table.w-full"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-011",
+   "completed": true,
+   "duration_s": 66.6,
+   "first_card_ms": 42427,
+   "cards": [
+    "stream.w-half"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-012",
+   "completed": true,
+   "duration_s": 38.2,
+   "first_card_ms": 34103,
+   "cards": [
+    "mcp-table.w-full"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-013",
+   "completed": true,
+   "duration_s": 73.7,
+   "first_card_ms": 68195,
+   "cards": [
+    "mcp-table.w-full"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-014",
+   "completed": true,
+   "duration_s": 54,
+   "first_card_ms": 32389,
+   "cards": [
+    "mcp-table.w-full"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-015",
+   "completed": true,
+   "duration_s": 35.9,
+   "first_card_ms": 30383,
+   "cards": [
+    "stream.w-half"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-016",
+   "completed": true,
+   "duration_s": 104.7,
+   "first_card_ms": 68117,
+   "cards": [
+    "mcp-table.w-full",
+    "stream.w-half"
+   ],
+   "chips_added": 2
+  },
+  {
+   "id": "LIV-017",
+   "completed": true,
+   "duration_s": 142.3,
+   "first_card_ms": 90567,
+   "cards": [
+    "mcp-table.w-full",
+    "stream.w-half"
+   ],
+   "chips_added": 2
+  },
+  {
+   "id": "LIV-018",
+   "completed": true,
+   "duration_s": 38,
+   "first_card_ms": 33957,
+   "cards": [
+    "mcp-table.w-full"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-019",
+   "completed": true,
+   "duration_s": 52.2,
+   "first_card_ms": 46080,
+   "cards": [
+    "stream.w-half"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-020",
+   "completed": true,
+   "duration_s": 84.1,
+   "first_card_ms": 76497,
+   "cards": [
+    "mcp-table.w-full"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-021",
+   "completed": true,
+   "duration_s": 96.3,
+   "first_card_ms": 90230,
+   "cards": [
+    "mcp-table.w-full"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-022",
+   "completed": true,
+   "duration_s": 87.7,
+   "first_card_ms": 45426,
+   "cards": [
+    "mcp-table.w-full",
+    "stream.w-half"
+   ],
+   "chips_added": 2
+  },
+  {
+   "id": "LIV-024",
+   "completed": true,
+   "duration_s": 45.9,
+   "first_card_ms": 40354,
+   "cards": [
+    "mcp-table.w-full"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-025",
+   "completed": true,
+   "duration_s": 44.5,
+   "first_card_ms": 37982,
+   "cards": [
+    "mcp-table.w-full"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-026",
+   "completed": true,
+   "duration_s": 68,
+   "first_card_ms": 41936,
+   "cards": [
+    "mcp-table.w-full",
+    "stream.w-half"
+   ],
+   "chips_added": 2
+  },
+  {
+   "id": "LIV-027",
+   "completed": true,
+   "duration_s": 142.4,
+   "first_card_ms": 134830,
+   "cards": [
+    "reader.w-half"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-028",
+   "completed": true,
+   "duration_s": 88.3,
+   "first_card_ms": 78187,
+   "cards": [
+    "reader.w-half"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-029",
+   "completed": true,
+   "duration_s": 98.3,
+   "first_card_ms": 62596,
+   "cards": [
+    "reader.w-half",
+    "stream.w-half"
+   ],
+   "chips_added": 2
+  },
+  {
+   "id": "LIV-030",
+   "completed": true,
+   "duration_s": 32.5,
+   "first_card_ms": 30127,
+   "cards": [
+    "mcp-table.w-full"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-031",
+   "completed": true,
+   "duration_s": 73.9,
+   "first_card_ms": 65886,
+   "cards": [
+    "stream.w-half"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-032",
+   "completed": true,
+   "duration_s": 45.4,
+   "first_card_ms": 41406,
+   "cards": [
+    "mcp-table.w-full"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-033",
+   "completed": true,
+   "duration_s": 42,
+   "first_card_ms": 38014,
+   "cards": [
+    "stream.w-half"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-034",
+   "completed": true,
+   "duration_s": 94.6,
+   "first_card_ms": 90114,
+   "cards": [
+    "stream.w-half"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-035",
+   "completed": true,
+   "duration_s": 44,
+   "first_card_ms": 39950,
+   "cards": [
+    "mcp-table.w-full"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-036",
+   "completed": true,
+   "duration_s": 40.1,
+   "first_card_ms": null,
+   "cards": [],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-037",
+   "completed": true,
+   "duration_s": 57.9,
+   "first_card_ms": 48331,
+   "cards": [
+    "mcp-table.w-full"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-038",
+   "completed": true,
+   "duration_s": 30.4,
+   "first_card_ms": null,
+   "cards": [],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-039",
+   "completed": true,
+   "duration_s": 49.9,
+   "first_card_ms": 43861,
+   "cards": [
+    "mcp-table.w-full"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-040",
+   "completed": true,
+   "duration_s": 39.9,
+   "first_card_ms": 33961,
+   "cards": [
+    "mcp-table.w-full"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-041",
+   "completed": true,
+   "duration_s": 78.5,
+   "first_card_ms": 72512,
+   "cards": [
+    "stream.w-half"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-052",
+   "completed": true,
+   "duration_s": 105.3,
+   "first_card_ms": 47419,
+   "cards": [
+    "mcp-table.w-full",
+    "reader.w-half"
+   ],
+   "chips_added": 2
+  },
+  {
+   "id": "LIV-053",
+   "completed": true,
+   "duration_s": 150.7,
+   "first_card_ms": null,
+   "cards": [],
+   "chips_added": 2
+  },
+  {
+   "id": "LIV-054",
+   "completed": true,
+   "duration_s": 96.2,
+   "first_card_ms": 70063,
+   "cards": [
+    "stream.w-half",
+    "mcp-table.w-full"
+   ],
+   "chips_added": 2
+  },
+  {
+   "id": "LIV-056",
+   "completed": true,
+   "duration_s": 116.6,
+   "first_card_ms": 54090,
+   "cards": [
+    "stream.w-half",
+    "mcp-table.w-full"
+   ],
+   "chips_added": 2
+  },
+  {
+   "id": "LIV-057",
+   "completed": true,
+   "duration_s": 74.1,
+   "first_card_ms": 45996,
+   "cards": [
+    "mcp-table.w-full"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-058",
+   "completed": true,
+   "duration_s": 36,
+   "first_card_ms": null,
+   "cards": [],
+   "chips_added": 0
+  },
+  {
+   "id": "LIV-059",
+   "completed": true,
+   "duration_s": 76.5,
+   "first_card_ms": 68376,
+   "cards": [
+    "stream.w-half"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-060",
+   "completed": true,
+   "duration_s": 54.1,
+   "first_card_ms": 48052,
+   "cards": [
+    "mcp-table.w-full"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-061",
+   "completed": true,
+   "duration_s": 122.2,
+   "first_card_ms": 78057,
+   "cards": [
+    "reader.w-half",
+    "stream.w-half"
+   ],
+   "chips_added": 2
+  },
+  {
+   "id": "LIV-062",
+   "completed": true,
+   "duration_s": 73.3,
+   "first_card_ms": null,
+   "cards": [],
+   "chips_added": 0
+  },
+  {
+   "id": "LIV-063",
+   "completed": true,
+   "duration_s": 44.2,
+   "first_card_ms": 38141,
+   "cards": [
+    "mcp-table.w-full"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-064",
+   "completed": true,
+   "duration_s": 30.4,
+   "first_card_ms": null,
+   "cards": [],
+   "chips_added": 0
+  },
+  {
+   "id": "LIV-065",
+   "completed": true,
+   "duration_s": 13.6,
+   "first_card_ms": null,
+   "cards": [],
+   "chips_added": 0
+  },
+  {
+   "id": "LIV-066",
+   "completed": true,
+   "duration_s": 42.1,
+   "first_card_ms": null,
+   "cards": [],
+   "chips_added": 0
+  },
+  {
+   "id": "LIV-067",
+   "completed": true,
+   "duration_s": 50.2,
+   "first_card_ms": 40132,
+   "cards": [
+    "stream.w-half"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-068",
+   "completed": true,
+   "duration_s": 19.9,
+   "first_card_ms": null,
+   "cards": [],
+   "chips_added": 0
+  },
+  {
+   "id": "LIV-069",
+   "completed": true,
+   "duration_s": 32.6,
+   "first_card_ms": null,
+   "cards": [],
+   "chips_added": 0
+  },
+  {
+   "id": "LIV-070",
+   "completed": true,
+   "duration_s": 94.3,
+   "first_card_ms": 70790,
+   "cards": [
+    "stream.w-half"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-071",
+   "completed": true,
+   "duration_s": 23.9,
+   "first_card_ms": null,
+   "cards": [],
+   "chips_added": 0
+  },
+  {
+   "id": "LIV-072",
+   "completed": true,
+   "duration_s": 25,
+   "first_card_ms": null,
+   "cards": [],
+   "chips_added": 0
+  },
+  {
+   "id": "LIV-074",
+   "completed": true,
+   "duration_s": 116.8,
+   "first_card_ms": 50325,
+   "cards": [
+    "stream.w-half",
+    "mcp-table.w-full"
+   ],
+   "chips_added": 2
+  },
+  {
+   "id": "LIV-075",
+   "completed": true,
+   "duration_s": 69.7,
+   "first_card_ms": 48225,
+   "cards": [
+    "stream.w-half",
+    "mcp-table.w-full"
+   ],
+   "chips_added": 2
+  },
+  {
+   "id": "LIV-076",
+   "completed": true,
+   "duration_s": 36.2,
+   "first_card_ms": null,
+   "cards": [],
+   "chips_added": 0
+  },
+  {
+   "id": "LIV-077",
+   "completed": true,
+   "duration_s": 102.6,
+   "first_card_ms": 42634,
+   "cards": [
+    "mcp-table.w-full",
+    "stream.w-half"
+   ],
+   "chips_added": 2
+  },
+  {
+   "id": "LIV-078",
+   "completed": true,
+   "duration_s": 110.5,
+   "first_card_ms": 66729,
+   "cards": [
+    "mcp-table.w-full",
+    "stream.w-half"
+   ],
+   "chips_added": 2
+  },
+  {
+   "id": "LIV-079",
+   "completed": true,
+   "duration_s": 70.9,
+   "first_card_ms": 40373,
+   "cards": [
+    "free.w-full",
+    "stream.w-half"
+   ],
+   "chips_added": 2
+  },
+  {
+   "id": "LIV-080",
+   "completed": true,
+   "duration_s": 93.3,
+   "first_card_ms": 66656,
+   "cards": [
+    "mcp-table.w-full",
+    "stream.w-half"
+   ],
+   "chips_added": 2
+  },
+  {
+   "id": "LIV-081",
+   "completed": true,
+   "duration_s": 58.1,
+   "first_card_ms": 45891,
+   "cards": [
+    "mcp-table.w-full",
+    "free.w-full"
+   ],
+   "chips_added": 2
+  },
+  {
+   "id": "LIV-082",
+   "completed": true,
+   "duration_s": 180.2,
+   "first_card_ms": 167987,
+   "cards": [
+    "stream.w-half"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-050",
+   "completed": true,
+   "duration_s": 181.6,
+   "first_card_ms": 30702,
+   "cards": [
+    "mcp-table.w-full"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-051",
+   "completed": true,
+   "duration_s": 84.5,
+   "first_card_ms": 46379,
+   "cards": [
+    "stream.w-half",
+    "reader.w-half"
+   ],
+   "chips_added": 2
+  },
+  {
+   "id": "LIV-089",
+   "completed": true,
+   "duration_s": 4.6
+  },
+  {
+   "id": "LIV-091",
+   "completed": true,
+   "duration_s": 5.8
+  },
+  {
+   "id": "LIV-092",
+   "completed": true,
+   "duration_s": 58.9
+  },
+  {
+   "id": "LIV-093",
+   "completed": true,
+   "duration_s": 54.2
+  },
+  {
+   "id": "LIV-094",
+   "completed": true,
+   "duration_s": 29.8
+  },
+  {
+   "id": "LIV-099",
+   "completed": true,
+   "duration_s": 23.8
+  },
+  {
+   "id": "LIV-095",
+   "completed": true,
+   "duration_s": 1.6
+  },
+  {
+   "id": "LIV-097",
+   "completed": true,
+   "duration_s": 43.3
+  },
+  {
+   "id": "LIV-083",
+   "completed": true,
+   "duration_s": 91.8,
+   "first_card_ms": 82538,
+   "cards": [
+    "mcp-table.w-full"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-084",
+   "completed": true,
+   "duration_s": 128.7,
+   "first_card_ms": 76469,
+   "cards": [
+    "stream.w-half"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-085",
+   "completed": true,
+   "duration_s": 92,
+   "first_card_ms": 75842,
+   "cards": [
+    "stream.w-half",
+    "mcp-table.w-full"
+   ],
+   "chips_added": 2
+  },
+  {
+   "id": "LIV-086",
+   "completed": true,
+   "duration_s": 136.3,
+   "first_card_ms": 130196,
+   "cards": [
+    "mcp-table.w-full"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-087",
+   "completed": true,
+   "duration_s": 13.8,
+   "first_card_ms": null,
+   "cards": [],
+   "chips_added": 0
+  },
+  {
+   "id": "LIV-088",
+   "completed": true,
+   "duration_s": 15.8,
+   "first_card_ms": null,
+   "cards": [],
+   "chips_added": 0
+  },
+  {
+   "id": "LIV-090",
+   "completed": true,
+   "duration_s": 14,
+   "first_card_ms": null,
+   "cards": [],
+   "chips_added": 0
+  },
+  {
+   "id": "LIV-023",
+   "completed": true,
+   "duration_s": 109.5,
+   "first_card_ms": 73801,
+   "cards": [
+    "stream.w-half",
+    "reader.w-half"
+   ],
+   "chips_added": 2
+  },
+  {
+   "id": "LIV-073",
+   "completed": true,
+   "duration_s": 94.1,
+   "first_card_ms": 49849,
+   "cards": [
+    "stream.w-half"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-098",
+   "completed": true,
+   "duration_s": 8.9
+  },
+  {
+   "id": "LIV-100",
+   "completed": true,
+   "duration_s": 7.2
+  },
+  {
+   "id": "LIV-096",
+   "completed": true,
+   "duration_s": 2.1
+  },
+  {
+   "id": "LIV-055",
+   "completed": true,
+   "duration_s": 23.1
+  }
+ ]
+}

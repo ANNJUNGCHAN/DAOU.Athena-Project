@@ -1,0 +1,24 @@
+{
+ "case_id": "LIV-047",
+ "run": "2026-08-19-intraday-ui",
+ "verdict": "fail",
+ "auto_checks": [
+  {"check": "audit-log에 alias=korea-stock-mcp tool=get_disclosure_list success=true 행이 있다", "ok": true, "evidence": "evidence/audit-delta.jsonl:3 {tool:get_disclosure_list, success:true}"},
+  {"check": "렌더된 reader 카드 DOM에 not_found/processing_delayed 안내 노트가 있거나, 당일 공시가 실제로 없으면 그렇게 답한 chat-answer가 있다", "ok": true, "evidence": "evidence/chat-answer.txt: '오늘(2026-08-19) 카카오뱅크가 새로 낸 공시는 없습니다(DART 조회 결과 0건)'"},
+  {"check": "렌더된 카드에 '빈 리더 — body_markdown이 없다' 에러 노트가 없다", "ok": true, "evidence": "evidence/ui-state.json canvas.cards[0]: hasAlert=false, 실제 IR 공시 원문 텍스트 존재"},
+  {"check": "get_disclosure_list 응답에 대상 유형 공시가 1건 이상 존재하면 get_disclosure success=true 행이 있다", "ok": true, "evidence": "evidence/audit-delta.jsonl:4 get_disclosure success=true (대체로 조회한 8/18 IR 공시)"}
+ ],
+ "must_not_include": [
+  {"item": "당일 공시가 없는데도 있는 것처럼 원문을 창작해 리더 카드에 채움", "violated": false, "evidence": "evidence/chat-answer.txt가 '오늘 새로 낸 공시는 없습니다'라고 명시하고, 카드는 실제 8/18자 IR 공시 원문(날짜 명기)이라 창작이 아님"},
+  {"item": "error_state를 쓰지 않고 빈 body_markdown으로 스키마 위반을 일으켜 불필요한 free 폴백을 유발", "violated": false, "evidence": "evidence/ui-state.json canvas.cards[0].classes=['reader','w-half']로 정상 렌더, free 폴백 아님"},
+  {"item": "get_disclosure_list 결과 확인 없이 바로 원문이 있다고 단정", "violated": false, "evidence": "evidence/audit-delta.jsonl에서 get_disclosure_list(행2-3)가 get_disclosure(행4)보다 선행"}
+ ],
+ "must_include": [
+  {"item": "get_disclosure_list로 당일 공시 존재 여부를 먼저 확인했다는 근거", "ok": true, "evidence": "evidence/audit-delta.jsonl:2-3 get_disclosure_list 호출(1차 실패 후 재시도 성공), evidence/chat-answer.txt: 'DART 조회 결과 0건'"},
+  {"item": "원문이 아직 처리되지 않았거나 없을 때 error_state를 processing_delayed 또는 not_found로 명시했다는 설명", "ok": false, "evidence": "evidence/ui-state.json canvas.cards[0]에 error_state/not_found/processing_delayed 표기가 전혀 없고 hasAlert=false — 대신 어제(8/18)자 다른 공시(기업설명회 IR 안내) 원문 전체가 그대로 렌더됨. error_state를 쓰는 대신 대체 콘텐츠로 요건을 우회했다는 근거만 있고, error_state 사용 근거는 없다"},
+  {"item": "body_markdown에 존재하지 않는 공시 내용을 임의로 지어내지 않았다는 확인", "ok": true, "evidence": "evidence/ui-state.json 카드 텍스트가 실제 8/18 IR 공시 원문(접수번호 20260818800233)과 일치, 지어낸 내용 아님"}
+ ],
+ "judge_note": "당일(8/19) 공시가 없다는 사실 자체는 정확히 확인했으나, 케이스가 요구한 error_state(not_found/processing_delayed) 대신 전날(8/18) 다른 공시를 리더 카드에 그대로 대체 렌더했다. must_include #2를 뒷받침할 error_state 증거가 카드/DOM 어디에도 없어 fail — 이는 이 케이스가 정확히 겨냥한 함정(why_hard ⑥, error_state를 안 쓰고 다른 내용으로 카드를 채워 우회)과 동일한 패턴이다.",
+ "suspect_dataset_defect": false,
+ "duration_s": 44.8
+}

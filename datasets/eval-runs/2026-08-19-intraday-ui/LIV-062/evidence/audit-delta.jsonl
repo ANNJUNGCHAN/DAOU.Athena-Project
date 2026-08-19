@@ -1,0 +1,10 @@
+{"ts":"2026-08-19T03:03:57.614110+00:00","tool":"athena_search","backend_ms":156}
+{"ts":"2026-08-19T03:04:00.409449+00:00","tool":"athena_describe","backend_ms":15}
+{"ts":"2026-08-19T03:04:14.836132+00:00","tool":"athena_resolve","backend_ms":141}
+{"ts":"2026-08-19T03:04:18.316599+00:00","tool":"athena_resolve","backend_ms":0}
+{"ts":"2026-08-19T03:04:23.342676+00:00","tool":"athena_resolve","backend_ms":141}
+{"ts":"2026-08-19T03:03:57.615105+00:00","alias":"kiwoom-selector","tool":"athena_search","success":true}
+{"ts":"2026-08-19T03:04:00.410448+00:00","alias":"kiwoom-selector","tool":"athena_describe","success":true}
+{"ts":"2026-08-19T03:04:14.837136+00:00","alias":"kiwoom-selector","tool":"athena_resolve","success":false}
+{"ts":"2026-08-19T03:04:18.316599+00:00","alias":"kiwoom-selector","tool":"athena_resolve","success":false}
+{"ts":"2026-08-19T03:04:23.343679+00:00","alias":"kiwoom-selector","tool":"athena_resolve","success":false}

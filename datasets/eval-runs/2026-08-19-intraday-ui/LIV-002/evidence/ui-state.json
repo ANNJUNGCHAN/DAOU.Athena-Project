@@ -1,0 +1,62 @@
+{
+ "chat": {
+  "answerCount": 2,
+  "lastAnswer": "2025 사업연도 사업보고서(연결) 기준 영업이익률은 SK하이닉스가 48.59%(매출 97.15조 원, 영업이익 47.21조 원)로 삼성전기의 8.07%(매출 11.31조 원, 영업이익 0.91조 원)보다 약 40.5%p 높습니다. 메모리 초호황으로 SK하이닉스의 수익성이 압도적으로 우위입니다.",
+  "chipCount": 2,
+  "chipLabels": [
+   "공통 테이블",
+   "공통 테이블"
+  ],
+  "dotClasses": [
+   "dot"
+  ],
+  "state": "idle",
+  "panels": {
+   "app": true,
+   "onboard": false,
+   "settings": false
+  }
+ },
+ "canvas": {
+  "cardCount": 1,
+  "cards": [
+   {
+    "classes": [
+     "mcp-table",
+     "w-full"
+    ],
+    "tableRows": 2,
+    "tableCols": 6,
+    "streamItems": 0,
+    "hasAlert": false,
+    "freeTree": false,
+    "text": "SK하이닉스 vs 삼성전기 영업이익률 비교 — 2025 사업연도 사업보고서(연결) 기준, 단위: 조원10:28:24 기준회사고유번호기수매출액(조원)영업이익(조원)영업이익률(%)SK하이닉스00164779제78기(2025)97.1547.2148.59삼성전기00126371제53기(2025)11.310.918.07"
+   }
+  ],
+  "clipPath": "circle(1373.69px at 34.5062px 737.973px)"
+ },
+ "stateTransitions": [
+  {
+   "state": "judging",
+   "at_ms": 4
+  },
+  {
+   "state": "calling",
+   "at_ms": 29969
+  },
+  {
+   "state": "idle",
+   "at_ms": 33954
+  }
+ ],
+ "screenshots": {
+  "chat": {
+   "width": 2354,
+   "height": 602
+  },
+  "canvas": {
+   "width": 2343,
+   "height": 1205
+  }
+ }
+}

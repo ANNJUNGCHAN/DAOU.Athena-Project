@@ -1,0 +1,23 @@
+{
+ "case_id": "LIV-046",
+ "run": "2026-08-19-intraday-ui-fixcheck",
+ "verdict": "fail",
+ "auto_checks": [
+  {"check": "audit-log에 alias=korea-stock-mcp tool=get_disclosure_list success=true 행과 alias=naver-search-2 tool=search_news success=true 행이 각각 있다", "ok": true, "evidence": "evidence/audit-delta.jsonl:3 (get_disclosure_list success=true), :4 (search_news success=true)"},
+  {"check": "렌더된 카드가 makeCard('free', ...) 골격(JSON 트리)으로 나타나고 전용 timeline 레이아웃이 아니다", "ok": true, "evidence": "evidence/ui-state.json canvas.cards[0].classes=['free','w-full'], freeTree=true, text에 'eventsts2026-08-11ts_precisiondaysourceDARTtitle...' 형태의 키-값 JSON 트리; evidence/canvas.png에서도 events/ts/ts_precision/source/title/url/summary/tickers/kind 필드가 트리로 렌더됨을 육안 확인"},
+  {"check": "chat-answer 텍스트에 timeline이 오늘 free로 보인다는 설명이 포함돼 있다", "ok": false, "evidence": "evidence/chat-answer.txt 전문(302자)에 free·JSON 트리·전용 렌더러 부재에 대한 언급이 전혀 없음 — '...한 시간축의 타임라인 카드로 만들었습니다'라고만 서술하고 끝남"}
+ ],
+ "must_not_include": [
+  {"item": "timeline이 오늘 앱에서 전용 카드로 예쁘게 그려진다고 잘못 안내", "violated": false, "evidence": "명시적으로 '전용 카드로 예쁘게 그려진다'고 서술하지는 않음 — 다만 렌더 방식에 대한 언급 자체가 없어 must_include #3 미충족으로 별도 처리"},
+  {"item": "공시(day 정밀도)에 없는 시각을 00:00:00처럼 지어내 second로 표기", "violated": false, "evidence": "evidence/canvas.png·ui-state.json 모두 DART 이벤트에 ts_precision='day'로 정확히 표기(시각 지어내지 않음)"},
+  {"item": "뉴스와 공시를 합치지 않고 둘 중 하나만으로 임의로 답변을 축소", "violated": false, "evidence": "evidence/chat-answer.txt: 'DART 공시 4건... 과 오늘(08-19) 네이버 뉴스 6건을 한 시간축의 타임라인 카드로 만들었습니다' — 양쪽 다 포함"}
+ ],
+ "must_include": [
+  {"item": "canvas_type을 timeline으로 구성했고 events[] 배열에 공시·뉴스를 합쳤다는 근거", "ok": true, "evidence": "evidence/ui-state.json canvas card 헤더 텍스트 '삼성SDI(006400) 최근 공시(DART, 2026-08-05~08-19) + 관련 뉴스(네이버, 08-19) 통합 타임라인' + chat-answer.txt에 공시 4건·뉴스 6건 통합 서술"},
+  {"item": "공시 레코드는 ts_precision을 day로, 뉴스 레코드는 second로 실제와 다르게 지어내지 않고 정확히 구분했다는 확인", "ok": false, "evidence": "evidence/ui-state.json에 캡처된 텍스트는 DART 이벤트 2건(ts_precision=day)까지만 잘려 있어 뉴스 레코드의 ts_precision=second 표기 여부를 증거로 확인할 수 없음 — 인용할 증거가 없어 무효(=X) 처리(로드맵 §7)"},
+  {"item": "게이트웨이 스키마 검증 자체는 통과(fell_back=false)하더라도 앱에는 timeline 전용 렌더러가 없어 오늘은 free 카드로 보인다는 사실을 사용자에게 알렸다는 근거", "ok": false, "evidence": "evidence/chat-answer.txt에 해당 설명 전무 — 사용자는 답변만 보고 '타임라인 카드'가 정상적으로 만들어졌다고 오해할 소지가 있음"}
+ ],
+ "judge_note": "korea-stock-mcp get_disclosure_list·naver-search-2 search_news 호출은 성공했고 캔버스는 실제로 free(JSON 트리)로 렌더돼 앱 동작 자체(timeline→free 폴백)는 설계대로였다. 그러나 chat-answer가 이 렌더링 간극(오늘은 timeline 전용 카드가 아니라 free JSON 트리로 보인다는 사실)을 사용자에게 전혀 알리지 않아 auto_check[2]·must_include[3]이 미충족 — fail.",
+ "suspect_dataset_defect": false,
+ "duration_s": 80.2
+}

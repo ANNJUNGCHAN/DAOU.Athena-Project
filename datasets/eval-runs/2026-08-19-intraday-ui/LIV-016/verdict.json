@@ -1,0 +1,24 @@
+{
+ "case_id": "LIV-016",
+ "run": "2026-08-19-intraday-ui",
+ "verdict": "pass",
+ "auto_checks": [
+  {"check": "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 있다", "ok": true, "evidence": "evidence/audit-delta.jsonl:1 {\"alias\":\"korea-stock-mcp\",\"tool\":\"get_corp_code\",\"success\":true}"},
+  {"check": "audit-log에 alias=korea-stock-mcp tool=get_disclosure success=true 행이 있다", "ok": true, "evidence": "evidence/audit-delta.jsonl:3 {\"alias\":\"korea-stock-mcp\",\"tool\":\"get_disclosure\",\"success\":true}"},
+  {"check": "canvas-file로 저장된 리더 카드가 있다면 data.highlights에 수량 또는 기간 관련 항목이 1개 이상 있다", "ok": true, "evidence": "athena__save_canvas 호출 기록 없음(audit-delta.jsonl에 save_canvas 행 없음) — 조건부 미해당. 렌더된 캔버스 카드(ui-state.json canvas.cards[0].text)는 이미 '취득예정주식(주) 67,226주 / 취득예상기간 2026.03.26~2026.06.25'를 담고 있어 취지 충족"}
+ ],
+ "must_not_include": [
+  {"item": "corp_code를 8자리 미만 숫자 그대로 사용", "violated": false, "evidence": "get_disclosure_list·get_disclosure가 모두 success=true(audit-delta.jsonl:1-3)로 이어졌고 canvas.png의 접수번호(rcept_no 20260325000832)가 SK스퀘어 실제 공시와 정확히 일치 — 8자리 미만 corp_code였다면 하위 조회가 실패했을 함정(CLAUDE.md §8)을 통과함"},
+  {"item": "원문을 읽지 않고 취득 수량·기간을 임의로 추정", "violated": false, "evidence": "audit-delta.jsonl:3에 get_disclosure success=true 존재, canvas.png 원문 발췌 표(취득예정주식 67,226주, 취득예정금액 40,000,000,000원, 취득예상기간 2026.03.26~2026.06.25)가 chat-answer.txt 수치와 정확히 일치"},
+  {"item": "자사주 취득 공시가 없는데 있다고 지어냄", "violated": false, "evidence": "실제 rcept_no 20260325000832 공시가 canvas.png에 원문 발췌로 표시되어 실존 공시로 확인됨"}
+ ],
+ "must_include": [
+  {"item": "corp_code를 8자리로 zero-pad(zfill)해서 사용했다는 근거 또는 정확한 8자리 corp_code 사용 확인", "ok": true, "evidence": "audit-delta.jsonl:1,3 — get_corp_code→get_disclosure_list→get_disclosure 전부 success=true로 연쇄 성공했고, canvas.png의 정확한 rcept_no(20260325000832)·회사명 일치는 corp_code가 올바른 8자리로 정규화되어 하위 조회에 쓰였음을 뒷받침(감사로그는 설계상 인자를 남기지 않아 성공/실패 연쇄로 간접 확인)"},
+  {"item": "자사주 취득 공시 원문에서 취득 예정 수량과 취득 기간을 구체적으로 인용", "ok": true, "evidence": "chat-answer.txt: '취득 예정 수량은 보통주 67,226주(취득예정금액 400억 원), 취득 예상 기간은 2026.03.26~2026.06.25' — canvas.png 원문 발췌 표(1. 취득예정주식(주) 67,226주 / 3. 취득예상기간 2026.03.26~2026.06.25)와 정확히 일치"},
+  {"item": "naver-search-2 뉴스에서 찾은 실제 시장 반응 요약", "ok": true, "evidence": "chat-answer.txt: '공시 이후 뉴스에서는 이 400억 원 규모 자사주를 상반기에 취득 완료해 7월에 전량 소각했고... NAV 할인율이 낮아지며... 긍정적 평가가 주를 이룹니다' — audit-delta.jsonl:4 naver-search-2 search_news success=true, canvas.png 스트림 카드에 실제 기사 4건(뉴시스·아시아경제·조선비즈·이데일리) 표시"},
+  {"item": "자사주 취득 공시가 없는 경우 없다고 정직하게 답했다는 조건부 서술", "ok": true, "evidence": "이 케이스는 실제로 공시가 존재하는 사례(canvas.png rcept_no 20260325000832)이므로 '없다' 분기는 해당하지 않음 — 답변은 실존 공시를 원문 그대로 정확히 인용해 정직성 조건을 충족(허위 기재 없음)"}
+ ],
+ "judge_note": "corp_code 정규화→공시목록→원문조회→뉴스검색 4단 합성이 audit-delta.jsonl에서 순서대로 success=true로 확인되고, chat-answer와 canvas 원문 발췌(취득예정주식 67,226주, 취득예상기간 2026.03.26~2026.06.25)가 정확히 일치하며 뉴스 반응도 별도 스트림 카드로 요약됨. must_include·must_not_include·auto_checks 전부 충족.",
+ "suspect_dataset_defect": false,
+ "duration_s": 104.7
+}

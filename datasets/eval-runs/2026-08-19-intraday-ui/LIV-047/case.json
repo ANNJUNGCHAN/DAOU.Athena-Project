@@ -1,0 +1,54 @@
+{
+ "id": "LIV-047",
+ "tier": "live",
+ "category": "live-스키마함정",
+ "difficulty": "최상",
+ "question": "카카오뱅크가 오늘 새로 낸 공시 있으면 그 원문을 리더 카드로 열어서 보여줘.",
+ "why_hard": "READER_SCHEMA는 title·body_markdown을 필수로 요구하면서 error_state로 not_found/processing_delayed를 구분하게 설계돼 있다(당일 접수 공시는 문서 미존재로 별도 에러 상태가 필요하다는 실측 정정). 오늘 접수된 공시는 get_disclosure_list에 항목은 잡히지만 get_disclosure로 원문 조회 시 아직 처리되지 않았을 수 있다는 부분실패(⑤) 케이스이고, get_disclosure_list(목록)와 get_disclosure(원문)를 순서대로 올바르게 골라 쓰는 후보 선택(②)도 필요하다. 여기서 error_state를 안 쓰고 그냥 빈 문자열이나 지어낸 안내문을 body_markdown에 채우면 canvas.js가 error_state를 먼저 검사하는 로직을 우회하게 돼 카드 배치가 틀린다(⑥).",
+ "expected_answer": "get_disclosure_list로 카카오뱅크의 당일 공시 항목을 확인한 뒤 get_disclosure로 원문을 시도하고, 아직 처리되지 않았다면 body_markdown을 임의로 지어내는 대신 canvas_type='reader'의 error_state를 'processing_delayed'(또는 문서가 없으면 'not_found')로 명시해 리더 카드에 정확한 안내가 뜨게 한다.",
+ "judge": {
+  "must_include": [
+   "get_disclosure_list로 당일 공시 존재 여부를 먼저 확인했다는 근거",
+   "원문이 아직 처리되지 않았거나 없을 때 error_state를 processing_delayed 또는 not_found로 명시했다는 설명",
+   "body_markdown에 존재하지 않는 공시 내용을 임의로 지어내지 않았다는 확인"
+  ],
+  "must_not_include": [
+   "당일 공시가 없는데도 있는 것처럼 원문을 창작해 리더 카드에 채움",
+   "error_state를 쓰지 않고 빈 body_markdown으로 스키마 위반을 일으켜 불필요한 free 폴백을 유발",
+   "get_disclosure_list 결과 확인 없이 바로 원문이 있다고 단정"
+  ],
+  "verify_via": [
+   "ui-state",
+   "audit-log",
+   "chat-answer"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=korea-stock-mcp tool=get_disclosure_list success=true 행이 있다",
+   "렌더된 reader 카드 DOM에 'not_found' 또는 'processing_delayed' 안내 노트가 있거나, 당일 공시가 실제로 없으면 그렇게 답한 chat-answer가 있다",
+   "렌더된 카드에 '빈 리더 — body_markdown이 없다' 에러 노트가 없다(스키마 위반으로 인한 우발적 free 폴백이 아니다)",
+   "get_disclosure_list 응답에 대상 유형 공시가 1건 이상 존재하면, audit-log에 alias=korea-stock-mcp tool=get_disclosure success=true 행이 반드시 있다"
+  ]
+ },
+ "expected_route": {
+  "kind": "mcp-upstream",
+  "api_id": null,
+  "detail_group": null,
+  "family": null,
+  "upstream": "korea-stock-mcp",
+  "tool_path": [
+   "korea-stock-mcp__get_disclosure_list",
+   "korea-stock-mcp__get_disclosure",
+   "athena__render_canvas"
+  ]
+ },
+ "expected_screen": {
+  "window": "대화 창+캔버스 창",
+  "mode": null,
+  "card": "리더",
+  "current_renderer": "reader"
+ },
+ "implementation_status": "동작-실배선",
+ "notes": "READER_SCHEMA(canvas.py L57-68)의 error_state enum과 그 docstring 주석 '당일 접수 공시는 문서 미존재로 별도 에러 상태가 필요하다'가 근거. app/canvas.js renderLiveReader()(L230-244)는 error_state가 not_found/processing_delayed면 body_markdown보다 먼저 그 안내를 렌더한다.",
+ "group": "live-render",
+ "persona": "일반직장인"
+}

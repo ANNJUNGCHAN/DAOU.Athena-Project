@@ -1,0 +1,57 @@
+{
+ "case_id": "LIV-088",
+ "tier": "live",
+ "persona": "재무전문가",
+ "question": "'세팅 좀 열어줘'라고 입력해 보았습니다. '세팅'도 설정의 동의어 목록에 포함되어 있던데, 이 경우에도 설정 화면으로 연결되어야 하는 것 아닙니까?",
+ "attachment": null,
+ "sent_text": "'세팅 좀 열어줘'라고 입력해 보았습니다. '세팅'도 설정의 동의어 목록에 포함되어 있던데, 이 경우에도 설정 화면으로 연결되어야 하는 것 아닙니까?",
+ "ran_at": "2026-08-19T04:04:29.892Z",
+ "duration_s": 15.8,
+ "first_card_ms": null,
+ "completed": true,
+ "timed_out": false,
+ "answer_chars": 338,
+ "chip_count_total": 5,
+ "chip_count_added": 0,
+ "chip_labels_added": [],
+ "chip_labels_total": [
+  "공통 테이블",
+  "스트림",
+  "스트림",
+  "공통 테이블",
+  "공통 테이블"
+ ],
+ "state_transitions": [
+  {
+   "state": "judging",
+   "at_ms": 32
+  },
+  {
+   "state": "idle",
+   "at_ms": 15745
+  }
+ ],
+ "card_types_rendered": [],
+ "canvas_card_count": 0,
+ "canvas_cards_pre": 0,
+ "audit_calls": [],
+ "judge": {
+  "must_include": [
+   "ui-state: '세팅 좀 열어줘' 입력 후 #settings 패널이 열리지 않는다",
+   "이 문장이 일반 질의로 전달돼 대화 이력(turn-q)에 그대로 기록된다",
+   "답변 텍스트가 설정 화면을 열었다고 주장하지 않는다"
+  ],
+  "must_not_include": [
+   "'세팅'이 '설정'과 완전히 동등하게 모든 대안에서 인식된다는 서술",
+   "설정 화면이 열렸다는 오답"
+  ],
+  "verify_via": [
+   "ui-state",
+   "chat-answer"
+  ],
+  "auto_checks": [
+   "ui-state: #settings.hidden===true 유지",
+   "chat-answer: '세팅 좀 열어줘'가 그대로 질의 텍스트로 전달돼 turn-q에 기록된다"
+  ]
+ }
+}

@@ -1,0 +1,62 @@
+{
+ "case_id": "LIV-076",
+ "tier": "live",
+ "persona": "일반직장인",
+ "question": "환율 알림용으로 MCP 서버를 이렇게 만들었는데(아래 참고), 설정의 MCP 서버 등록 시트에 붙여넣고 분석을 눌렀어. 이어서 연결 테스트 창을 열고 툴을 하나도 허용 안 한 채로 닫으려고 하는데, 각 단계에서 뭐가 정상 동작이어야 해?",
+ "attachment": "{ \"mcpServers\": { \"fx-alert\": { \"command\": \"node\", \"args\": [\"fx-server.js\"], \"env\": { \"NODE_OPTIONS\": \"--require ./inject.js\", \"FX_API_KEY\": \"abcd1234\" } } } }",
+ "sent_text": "환율 알림용으로 MCP 서버를 이렇게 만들었는데(아래 참고), 설정의 MCP 서버 등록 시트에 붙여넣고 분석을 눌렀어. 이어서 연결 테스트 창을 열고 툴을 하나도 허용 안 한 채로 닫으려고 하는데, 각 단계에서 뭐가 정상 동작이어야 해?\n\n{ \"mcpServers\": { \"fx-alert\": { \"command\": \"node\", \"args\": [\"fx-server.js\"], \"env\": { \"NODE_OPTIONS\": \"--require ./inject.js\", \"FX_API_KEY\": \"abcd1234\" } } } }",
+ "ran_at": "2026-08-19T03:18:07.217Z",
+ "duration_s": 36.2,
+ "first_card_ms": null,
+ "completed": true,
+ "timed_out": false,
+ "answer_chars": 1373,
+ "chip_count_total": 5,
+ "chip_count_added": 0,
+ "chip_labels_added": [],
+ "chip_labels_total": [
+  "스트림",
+  "스트림",
+  "공통 테이블",
+  "스트림",
+  "공통 테이블"
+ ],
+ "state_transitions": [
+  {
+   "state": "judging",
+   "at_ms": 0
+  },
+  {
+   "state": "idle",
+   "at_ms": 36180
+  }
+ ],
+ "card_types_rendered": [],
+ "canvas_card_count": 0,
+ "canvas_cards_pre": 0,
+ "audit_calls": [],
+ "judge": {
+  "must_include": [
+   "NODE_OPTIONS가 위험 env 키 이름 목록에 해당해 경고가 뜬다는 설명",
+   "이 스캔은 값이 아니라 키 이름만 대조한다는 설명(FX_API_KEY 값은 스캔 대상 아님)",
+   "경고는 차단이 아니라 알림이라 스테이징 자체는 진행된다는 설명",
+   "서버 프로세스는 사용자가 '승인'해야만 spawn된다는 등록/승인 두 단계 구분",
+   "연결 테스트(probe) 창에서 허용 툴 0개로 닫으려 하면 인라인 경고가 뜬다는 설명"
+  ],
+  "must_not_include": [
+   "위험 패턴이 있다는 이유로 등록 자체를 완전히 거부",
+   "경고 없이 즉시 승인·spawn됐다고 서술",
+   "FX_API_KEY 값을 스캔·노출하는 것처럼 서술"
+  ],
+  "verify_via": [
+   "ui-state",
+   "screenshot",
+   "chat-answer"
+  ],
+  "auto_checks": [
+   "ui-state: 스테이징 시트 staged[0].risks에 NODE_OPTIONS 관련 위험 항목이 존재한다",
+   "ui-state: probe 시트에서 허용 툴 0개로 닫기 시도 시 인라인 경고(closeWarnBar)가 표시된다",
+   "ui-state: 시트 어디에도 FX_API_KEY 값(abcd1234)이 노출되지 않는다(키 이름만 표시)"
+  ]
+ }
+}

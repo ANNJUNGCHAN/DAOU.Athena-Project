@@ -1,0 +1,22 @@
+{
+ "case_id": "LIV-001",
+ "run": "2026-08-19-intraday-ui",
+ "verdict": "pass",
+ "auto_checks": [
+  {"check": "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 1개 이상 있다", "ok": true, "evidence": "evidence/audit-delta.jsonl:1 — {alias:korea-stock-mcp, tool:get_corp_code, success:true}"},
+  {"check": "audit-log에 alias=korea-stock-mcp tool=get_financial_statement success=true 행이 1개 이상 있다", "ok": true, "evidence": "evidence/audit-delta.jsonl:2-4 — get_financial_statement success=true ×3"}
+ ],
+ "must_not_include": [
+  {"item": "자본변동표의 소계성 '자본총계'를 그대로 분모로 써서 비율이 비정상적으로 커지는 오류", "violated": false, "evidence": "evidence/canvas.png 표: 자본총계(조원) 363.68/402.19/436.32 — case.json notes의 재무상태표(BS) 정상값(363,677,865/402,192,070/436,320,337백만원)과 일치, 자본변동표 소액 중복행(897,514백만원 등) 미사용"},
+  {"item": "실측 없이 임의 수치를 날조", "violated": false, "evidence": "evidence/chat-answer.txt·canvas.png 수치(부채총계 92.23/112.34/130.62조원, 자본총계 363.68/402.19/436.32조원)가 case.json notes 실측치(92,228,115/112,339,878/130,621,773백만원 등)와 정확히 일치"}
+ ],
+ "must_include": [
+  {"item": "부채총계÷자본총계×100 계산식 또는 그와 동치인 산식을 명시했다", "ok": true, "evidence": "evidence/canvas.png 표: 부채총계(조원)/자본총계(조원)/부채비율(%) 열이 연도별로 병기 — 92.23/363.68→25.36, 112.34/402.19→27.93, 130.62/436.32→29.94 (분자·분모·결과가 행별로 정렬돼 산식과 동치)"},
+  {"item": "3개년(제55/56/57기 또는 2023/2024/2025) 수치를 각각 구분해 제시했다", "ok": true, "evidence": "evidence/canvas.png 표에 2023(제55기)/2024(제56기)/2025(제57기) 3행이 각각 구분돼 제시됨"},
+  {"item": "부채비율이 매년 상승(2023<2024<2025)했다는 방향을 정확히 짚었다", "ok": true, "evidence": "evidence/chat-answer.txt: '부채비율은 25.36% → 27.93% → 29.94%로 2년 연속 상승했습니다'"},
+  {"item": "재무상태표(BS) 기준 자본총계를 썼다는 점 또는 자본변동표에 동일 계정명이 중복된다는 점을 인지했다는 근거가 드러난다", "ok": true, "evidence": "evidence/chat-answer.txt: '사업보고서 연결재무상태표 기준 부채비율은' — 캔버스 표 제목에도 '(연결재무상태표) 기준' 명시"}
+ ],
+ "judge_note": "must_include 4개 항목 모두 chat-answer/canvas에서 문자 그대로 확인됨. must_not_include 위반 없음, auto_checks 2건 모두 통과. pass.",
+ "suspect_dataset_defect": false,
+ "duration_s": 50.2
+}

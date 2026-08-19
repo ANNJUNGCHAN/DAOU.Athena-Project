@@ -1,0 +1,55 @@
+{
+ "id": "LIV-086",
+ "tier": "live",
+ "category": "live-에러구분",
+ "difficulty": "최상",
+ "question": "기아, LG화학, POSCO홀딩스, KB금융, 신한지주, 셀트리온, 한국전력, 현대모비스, SK이노베이션, 삼성물산, 롯데케미칼, 한화솔루션, 두산에너빌리티, 크래프톤, 하나금융지주, 우리금융지주, 삼성에스디에스, 넷마블, 코웨이, LS일렉트릭 이렇게 20개 종목 최근 공시를 전부 하나하나 찾아서 한 번에 브리핑해줘.",
+ "why_hard": "①20개 종목 각각을 개별 조회해야 해서 최소 20회 이상의 순차 툴 호출이 필요하고, ③180초라는 시간 상한 안에 처리 가능한 현실적 건수를 가늠하는 시간 추론이 필요하며, ⑤타임아웃 도달 시 프로세스가 강제 종료(killTree)될 위험을 인지하고 부분 결과를 정직하게 처리해야 한다.",
+ "expected_answer": "20개 종목 각각을 개별 조회해야 해서 20회 이상의 순차 호출이 필요하고, 전체 질의는 180초 시간 상한이 있어 다 마치기 전에 타임아웃으로 프로세스가 강제 종료될 위험이 크다는 점을 미리 안내한다. 완료되지 못한 종목은 완료된 것처럼 지어내지 않고, 나눠서 요청하는 것을 제안한다.",
+ "judge": {
+  "must_include": [
+   "20개 종목 각각을 개별 조회해야 해서 다수(20회 이상)의 순차 호출이 필요하다는 인지",
+   "전체 질의에 180초 시간 상한이 있고 타임아웃 시 프로세스가 강제 종료된다는 설명",
+   "20건 전부를 한 번에 다 마치기 어려울 수 있다는 위험 안내 또는 실제로 일부만 완료됐다는 정직한 보고"
+  ],
+  "must_not_include": [
+   "20개 종목 전부가 문제없이 즉시 다 완료된다고 단정",
+   "조회하지 못한 종목의 공시 내용을 지어내 채워 넣음",
+   "180초 상한 존재를 언급하지 않고 넘어감"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "answerText에 '180초' 또는 '시간 제한'·'타임아웃' 계열 표현이 등장한다",
+   "audit-log에 disclosure 계열 tool 호출 행이 5개 이상 존재한다",
+   "answerText에 완료되지 못한 종목이 있다면 '결측'·'미완료' 계열로 명시되고 임의 공시 내용으로 채워지지 않는다",
+   "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 1개 이상 있다"
+  ]
+ },
+ "expected_route": {
+  "kind": "mcp-upstream",
+  "tool_path": [
+   "korea-stock-mcp__get_corp_code",
+   "dart-mcp__search_disclosure",
+   "korea-stock-mcp__get_corp_code",
+   "dart-mcp__search_disclosure",
+   "athena__render_canvas"
+  ],
+  "upstream": "korea-stock-mcp+dart-mcp",
+  "api_id": null,
+  "family": null,
+  "detail_group": null
+ },
+ "expected_screen": {
+  "window": "대화 창+캔버스 창",
+  "mode": null,
+  "card": "free",
+  "current_renderer": "free"
+ },
+ "implementation_status": "동작-실배선",
+ "notes": "_digest.md §6: claude-runner 타임아웃 180초 + Esc/타임아웃 시 killTree(taskkill /PID /T /F) — 대량 순차 호출로 실측 도달 유도.",
+ "group": "live-gate",
+ "persona": "브로커"
+}

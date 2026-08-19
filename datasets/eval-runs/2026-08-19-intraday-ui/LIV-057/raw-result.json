@@ -1,0 +1,75 @@
+{
+ "case_id": "LIV-057",
+ "tier": "live",
+ "persona": "브로커",
+ "question": "SK바이오사이언스 최근 공시 목록 표로 만들어주고, 나중에 다시 보게 '공시목록-SK바이오사이언스'라는 이름으로 저장까지 해줘.",
+ "attachment": null,
+ "sent_text": "SK바이오사이언스 최근 공시 목록 표로 만들어주고, 나중에 다시 보게 '공시목록-SK바이오사이언스'라는 이름으로 저장까지 해줘.",
+ "ran_at": "2026-08-19T02:56:38.492Z",
+ "duration_s": 74.1,
+ "first_card_ms": 45996,
+ "completed": true,
+ "timed_out": false,
+ "answer_chars": 209,
+ "chip_count_total": 9,
+ "chip_count_added": 1,
+ "chip_labels_added": [
+  "공통 테이블"
+ ],
+ "chip_labels_total": [
+  "공통 테이블",
+  "리더",
+  "스트림",
+  "리더",
+  "스트림",
+  "공통 테이블",
+  "스트림",
+  "공통 테이블",
+  "공통 테이블"
+ ],
+ "state_transitions": [
+  {
+   "state": "judging",
+   "at_ms": 1
+  },
+  {
+   "state": "calling",
+   "at_ms": 45983
+  },
+  {
+   "state": "idle",
+   "at_ms": 74103
+  }
+ ],
+ "card_types_rendered": [
+  "mcp-table.w-full"
+ ],
+ "canvas_card_count": 1,
+ "canvas_cards_pre": 0,
+ "audit_calls": [
+  "korea-stock-mcp__get_corp_code=true",
+  "korea-stock-mcp__get_disclosure_list=true"
+ ],
+ "judge": {
+  "must_include": [
+   "mcp-table 카드가 canvas_type=table, fell_back=false로 정상 렌더됐다는 확인",
+   "athena__save_canvas가 사용자가 지정한 이름('공시목록-SK바이오사이언스' 또는 동등 이름)으로 실제 호출됐다는 근거",
+   "저장된 canvas-file에 화면에 뜬 것과 같은 data(공시 목록)가 그대로 남아있다는 확인"
+  ],
+  "must_not_include": [
+   "save_canvas를 실제로 호출하지 않고 '저장했다'고만 답변함",
+   "저장 파일명에 사용자가 요청하지 않은 경로 문자(../ 등)를 임의로 추가함",
+   "저장된 데이터가 화면에 렌더된 표 데이터와 다른 내용으로 바뀜"
+  ],
+  "verify_via": [
+   "canvas-file",
+   "ui-state"
+  ],
+  "auto_checks": [
+   "~/.athena/canvases/공시목록-SK바이오사이언스.json 파일이 존재한다",
+   "canvas-file의 canvas_type이 table이고 fell_back이 false다",
+   "canvas-file의 saved_at 필드가 ISO 형식 타임스탬프로 존재한다",
+   "저장된 canvas-file의 rows 개수와 값이 get_disclosure_list 원본 응답과 일치한다"
+  ]
+ }
+}

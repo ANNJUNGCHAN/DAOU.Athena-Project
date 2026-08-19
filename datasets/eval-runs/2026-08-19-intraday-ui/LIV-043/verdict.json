@@ -1,0 +1,22 @@
+{
+ "case_id": "LIV-043",
+ "run": "2026-08-19-intraday-ui",
+ "verdict": "fail",
+ "auto_checks": [
+  {"check": "audit-log에 alias=korea-stock-mcp tool=get_disclosure_list success=true 행이 1개 이상 있다", "ok": true, "evidence": "evidence/audit-delta.jsonl:2,3"},
+  {"check": "chat-answer에 결과가 50건(또는 실제 확보된 건수)이고 오래된 순으로 정렬돼 있다는 서술이 있다", "ok": true, "evidence": "evidence/chat-answer.txt: '최신 50건(2026-05-08 ~ 2026-08-18 접수분)을 추출해 오래된 순으로 표에 정리'; evidence/ui-state.json tableRows:50"},
+  {"check": "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 1개 이상 있다", "ok": true, "evidence": "evidence/audit-delta.jsonl:1"}
+ ],
+ "must_not_include": [
+  {"item": "sort_mth='asc'로 조회해 나온 최초(가장 오래된) 50건을 그대로 '최근 50건'이라 제시", "violated": false, "evidence": "표에 실제로 나온 날짜는 2026-05-08~2026-08-18로 오늘(2026-08-19) 직전 구간 — 기아 설립 이후 최초 50건(수십 년 전)이 아니므로 이 항목 자체는 위반 아님"},
+  {"item": "50건 미만이 조회됐는데도 부족함을 언급하지 않고 결과를 그대로 제시", "violated": false, "evidence": "evidence/ui-state.json tableRows:50 — 50건 정확히 확보"}
+ ],
+ "must_include": [
+  {"item": "sort_mth='asc'로 바로 조회하면 최근 50건이 아니라 최초 50건이 잡힌다는 함정을 인지", "ok": false, "evidence": "evidence/chat-answer.txt: 'API 문서에는 기본값이 내림차순(desc)이라고 되어 있었지만 실제 응답은 오래된 날짜부터 오는 오름차순이었습니다' — 이 주장은 spike/captures/S2-jjlabsio-tools.json(sort_mth 필드 설명 '기본값: desc')과 spike/captures/S2B-jjlabsio-disclosure-list.json(sort/sort_mth 파라미터를 아예 지정하지 않은 실제 호출에서 rcept_dt=20260814가 최상단으로, 즉 실측 기본값이 내림차순임을 확인)로 반증됨. 즉 답변은 'sort_mth=asc를 명시하면 최초 50건이 잡힌다'는 요구된 함정 인지가 아니라, 사실과 반대로 '기본값 자체가 오름차순'이라는 근거 없는 주장을 하고 있어 요구된 구체 요소 불충족"},
+  {"item": "desc(최신순)로 최근 50건을 먼저 확보한 뒤 클라이언트에서 순서를 뒤집었다는 처리 근거", "ok": false, "evidence": "evidence/chat-answer.txt는 정반대로 '실제 응답이 오름차순이라 마지막 페이지에서 최신 50건을 추출'했다고 서술 — desc로 확보 후 reverse가 아니라, 모델이 주장하는 asc 데이터를 그대로 사용했다는 서술로 요구 사항과 배치됨"},
+  {"item": "page_count 또는 total_count로 50건이 실제로 충분히 확보되는지 확인했다는 근거", "ok": true, "evidence": "evidence/chat-answer.txt: '전체 485건 중 마지막 페이지에서 최신 50건... 추출' — total_count(485) 확인 근거 있음"}
+ ],
+ "judge_note": "auto_checks·must_not_include는 표면적 결과(50건, 최근 구간, 오래된 순 표시)만으로는 통과하지만, 답변의 핵심 추론('실제 API 기본값이 오름차순')이 이 저장소의 실측 증거(spike/captures/S2-jjlabsio-tools.json의 sort_mth 기본값 desc 명시, spike/captures/S2B-jjlabsio-disclosure-list.json의 무정렬 실호출 결과가 내림차순)와 정면으로 배치된다. 이 케이스가 시험하려는 정확한 함정(sort_mth=asc 명시 시 최초 50건이 잡히는 함정)을 올바르게 설명하지 못했고, 대신 사실과 다른 '기본값이 asc'라는 근거로 최종 표를 구성했다고 스스로 밝혔다 — 결과 표가 우연히 그럴듯해 보여도 경로/설명 근거가 실측과 모순되므로 fail.",
+ "suspect_dataset_defect": false,
+ "duration_s": 75.7
+}

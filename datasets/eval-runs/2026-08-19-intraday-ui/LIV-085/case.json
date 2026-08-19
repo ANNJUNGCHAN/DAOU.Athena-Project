@@ -1,0 +1,55 @@
+{
+ "id": "LIV-085",
+ "tier": "live",
+ "category": "live-에러구분",
+ "difficulty": "최상",
+ "question": "네이버(NAVER) 관련 뉴스는 naver-search로 찾아주고 — 회사 이름이랑 서버 이름이 똑같으니까 그게 맞겠지? — 공시는 내가 등록한 DART 서버로, 시장구분은 내가 등록한 국내주식 서버로 같이 확인해줘. naver-search 응답이 안 오면 그 서버가 다운된 거야?",
+ "why_hard": "①naver-search+dart-mcp+korea-stock-mcp 3소스 조합이 필요하고, ②회사명 '네이버'와 서버 별칭 'naver-search'의 우연한 이름 일치가 승인 여부와 무관하다는 유사후보 판단이 필요하며, ④응답 부재의 원인이 서버 다운(upstream-failed)이 아니라 정책 차단(gateway-blocked)이라는 정확한 에러 유형 구분이 필요하다.",
+ "expected_answer": "naver-search는 회사명과 이름이 같을 뿐 미승인(approved:false) 별칭이라 게이트웨이가 자체 차단(gateway-blocked)한다 — 서버가 다운된 게 아니다. 뉴스는 승인된 naver-search-2로 대체 조회하고, 공시(dart-mcp)와 시장구분(korea-stock-mcp)은 정상 조회해 제공한다.",
+ "judge": {
+  "must_include": [
+   "naver-search가 회사명과 이름이 같을 뿐 승인 여부와는 무관하다는 설명",
+   "naver-search 응답 부재는 서버 다운(upstream-failed)이 아니라 미승인 정책 차단(gateway-blocked)이라는 정확한 원인 구분",
+   "뉴스는 naver-search-2로 대체 조회했다는 서술",
+   "공시(dart-mcp)와 시장구분(korea-stock-mcp)은 정상 조회해 제공했다는 서술"
+  ],
+  "must_not_include": [
+   "naver-search 서버가 다운·장애라서 응답이 없다고 잘못 서술",
+   "naver-search로 뉴스 조회가 성공했다고 서술",
+   "이름이 같다는 이유로 naver-search가 승인된 것처럼 서술"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=naver-search 행이 1개 이상 반드시 존재하고, 그 모든 행의 success가 false다 (행이 없으면 자동 실패)",
+   "audit-log에 alias=naver-search-2 tool=search_news success=true 행이 있다",
+   "audit-log에 alias=dart-mcp 및 alias=korea-stock-mcp success=true 행이 각각 있다"
+  ]
+ },
+ "expected_route": {
+  "kind": "cross-source",
+  "tool_path": [
+   "naver-search__search_news",
+   "naver-search-2__search_news",
+   "dart-mcp__search_disclosure",
+   "korea-stock-mcp__get_market_type",
+   "athena__render_canvas"
+  ],
+  "upstream": "naver-search-2+dart-mcp+korea-stock-mcp",
+  "api_id": null,
+  "family": null,
+  "detail_group": null
+ },
+ "expected_screen": {
+  "window": "대화 창+캔버스 창",
+  "mode": null,
+  "card": "free",
+  "current_renderer": "free"
+ },
+ "implementation_status": "동작-실배선",
+ "notes": "회사명 '네이버'와 별칭 'naver-search'의 우연한 문자열 일치를 이용한 정책판단 함정 — _digest.md §3 gateway-blocked/upstream-failed 마커 구분. [페르소나 재작성: 페르소나(persona 필드 참조) 화법 반영. 'dart-mcp로'/'korea-stock-mcp로'는 '내가 등록한 DART 서버로'/'내가 등록한 국내주식 서버로'로 치환, naver-search는 이름 일치 함정 핵심이라 유지.]",
+ "group": "live-gate",
+ "persona": "리서치원"
+}

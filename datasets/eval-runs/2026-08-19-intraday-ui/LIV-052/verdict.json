@@ -1,0 +1,23 @@
+{
+ "case_id": "LIV-052",
+ "run": "2026-08-19-intraday-ui",
+ "verdict": "pass",
+ "auto_checks": [
+  {"check": "audit-log에 alias=korea-stock-mcp tool=get_disclosure_list success=true 행이 있다", "ok": true, "evidence": "evidence/audit-delta.jsonl:2 get_disclosure_list success=true"},
+  {"check": "렌더된 mcp-table 카드가 canvas_type=table, fell_back=false다", "ok": true, "evidence": "evidence/ui-state.json canvas.cards[0].classes=['mcp-table','w-full'], hasAlert=false, tableRows=30"},
+  {"check": "정정공시가 존재하면 reader 카드가 추가로 1개 더 렌더된다(카드 칩 2개)", "ok": true, "evidence": "evidence/ui-state.json canvas.cardCount=2, chat.chipLabels=['공통 테이블','리더']"}
+ ],
+ "must_not_include": [
+  {"item": "정정공시가 없는데도 reader 카드를 억지로 만들어 냄", "violated": false, "evidence": "실제 정정공시 8건이 존재(evidence/chat-answer.txt '기재정정은...총 8건'), reader는 그중 실재 원문"},
+  {"item": "정정 여부를 판단하지 않고 아무 공시나 리더로 열어버림", "violated": false, "evidence": "reader 카드 텍스트가 '[기재정정] 반기보고서' 정정신고 원문 그 자체(evidence/ui-state.json cards[1])"},
+  {"item": "표 카드를 생략하고 정정공시 원문만 단독으로 보여줌", "violated": false, "evidence": "evidence/ui-state.json canvas.cardCount=2로 표+리더 둘 다 렌더"}
+ ],
+ "must_include": [
+  {"item": "공시 목록 전체가 mcp-table 카드로 렌더됐다는 확인", "ok": true, "evidence": "evidence/ui-state.json cards[0].classes=['mcp-table','w-full'], text '카카오(035720) 최근 공시 목록 (2026-05-19 ~ 2026-08-19, DART 최근 30건)'"},
+  {"item": "report_nm에 '[기재정정]' 표기가 있는 항목만 정정공시로 식별했다는 근거", "ok": true, "evidence": "evidence/chat-answer.txt '기재정정은 8/19 반기보고서 정정을 비롯해...총 8건', evidence/ui-state.json 표 텍스트에도 '[기재정정]반기보고서' 표기 확인"},
+  {"item": "정정공시가 있을 때만 reader 카드를 추가로 만들었다는 확인(없으면 표만)", "ok": true, "evidence": "evidence/ui-state.json cards[1].classes=['reader','w-half'], text '정 정 신 고(보고) — 카카오 반기보고서'"}
+ ],
+ "judge_note": "목록은 mcp-table(30건)로, 정정공시(8건 중 최신 1건)는 별도 reader 카드로 정확히 분리 렌더됐고 report_nm의 [기재정정] 식별 근거도 답변에 명시됐다. 3항목 모두 증거로 확인돼 pass.",
+ "suspect_dataset_defect": false,
+ "duration_s": 105.3
+}

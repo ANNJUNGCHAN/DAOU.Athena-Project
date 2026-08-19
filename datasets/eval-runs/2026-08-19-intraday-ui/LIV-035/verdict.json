@@ -1,0 +1,59 @@
+{
+ "case_id": "LIV-035",
+ "run": "2026-08-19-intraday-ui",
+ "verdict": "fail",
+ "auto_checks": [
+  {
+   "check": "audit-log에 alias=korea-stock-mcp tool=get_financial_statement success=true 행이 있다",
+   "ok": true,
+   "evidence": "audit-delta.jsonl:2-3"
+  },
+  {
+   "check": "chat-answer에 두 개의 영업이익률 수치(당기/전기)가 모두 등장한다",
+   "ok": true,
+   "evidence": "chat-answer.txt: '영업이익률은 당기(제24기, 2025년) 2.78%, 전기(제23기, 2024년) 3.90%로 계산됩니다'"
+  },
+  {
+   "check": "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 1개 이상 있다",
+   "ok": true,
+   "evidence": "audit-delta.jsonl:1"
+  }
+ ],
+ "must_not_include": [
+  {
+   "item": "아직 제출되지 않았을 미래 시점의 보고서를 요청",
+   "violated": false,
+   "evidence": "2025 사업보고서(제24기)는 2026년 3월경 이미 제출됐을 연차보고서로, 미래 시점 요청이 아님"
+  },
+  {
+   "item": "단순 전일 대비 등락률이나 매출액 증가율을 영업이익률로 착각",
+   "violated": false,
+   "evidence": "chat-answer.txt에 매출 증가율(1.7%)과 영업이익률(2.78%/3.90%)을 명확히 구분해 제시"
+  }
+ ],
+ "must_include": [
+  {
+   "item": "오늘 날짜를 근거로 이미 제출됐을 법한 bsns_year/reprt_code를 선택했다는 설명",
+   "ok": false,
+   "evidence": "audit-delta.jsonl 3행(get_corp_code, get_financial_statement×2) 어디에도 get_today_date/get_current_date 호출이 없고, chat-answer.txt에도 오늘 날짜·제출 시점을 근거로 보고서를 골랐다는 서술이 없음 — 'LG전자 2025 사업보고서 기준으로'라고만 제시"
+  },
+  {
+   "item": "매출액·영업이익 계정을 각각 특정해 당기(thstrm)·전기(frmtrm) 값을 모두 사용",
+   "ok": true,
+   "evidence": "evidence/ui-state.json canvas 카드: 매출액 89조 2,009억원(당기)/87조 7,282억원(전기), 영업이익 2조 4,784억원(당기)/3조 4,197억원(전기)"
+  },
+  {
+   "item": "영업이익률(영업이익/매출액) 공식을 두 시점에 각각 적용해 비교",
+   "ok": true,
+   "evidence": "chat-answer.txt: '영업이익률은 당기(제24기, 2025년) 2.78%, 전기(제23기, 2024년) 3.90%로 계산됩니다 ... 전기 대비 1.12%p 나빠졌습니다'"
+  },
+  {
+   "item": "결과 리스트가 비어 있거나 필요한 계정이 없을 경우의 처리 방침 언급",
+   "ok": false,
+   "evidence": "chat-answer.txt·evidence/ui-state.json 어디에도 빈 리스트·계정 누락 시 처리 방침에 대한 언급이 없음"
+  }
+ ],
+ "judge_note": "get_today_date/get_current_date 등 오늘 날짜 조회 툴을 이 케이스 구간에서 한 번도 호출하지 않았고(audit-delta.jsonl 3행 모두 get_corp_code·get_financial_statement) chat-answer.txt에도 오늘 날짜를 근거로 보고서 기간(bsns_year/reprt_code)을 골랐다는 설명이 없다 — case.json이 요구한 3단 합성(get_today_date→get_corp_code→get_financial_statement) 중 첫 단계에 대한 근거·설명이 빠졌다. 계정 누락/빈 리스트 처리 방침 언급도 없다. must_include 2건 미충족으로 fail.",
+ "suspect_dataset_defect": false,
+ "duration_s": 44
+}

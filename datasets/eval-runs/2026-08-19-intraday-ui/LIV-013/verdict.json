@@ -1,0 +1,59 @@
+{
+ "case_id": "LIV-013",
+ "run": "2026-08-19-intraday-ui",
+ "verdict": "dataset-defect",
+ "auto_checks": [
+  {
+   "check": "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 1개 이상 있다",
+   "ok": true,
+   "evidence": "evidence/audit-delta.jsonl:15 {\"alias\":\"korea-stock-mcp\",\"tool\":\"get_corp_code\",\"success\":true}"
+  },
+  {
+   "check": "audit-log에 alias=korea-stock-mcp tool=get_market_type success=true 행이 1개 이상 있다",
+   "ok": true,
+   "evidence": "evidence/audit-delta.jsonl:16 {\"alias\":\"korea-stock-mcp\",\"tool\":\"get_market_type\",\"success\":true}"
+  },
+  {
+   "check": "audit-log에 alias=korea-stock-mcp tool=get_stock_trade_info 행이 1개 이상 있다(success 여부와 무관하게 시도 확인)",
+   "ok": false,
+   "evidence": "evidence/audit-delta.jsonl 전체 17행 중 get_stock_trade_info 행 0건. 시세는 kiwoom-selector athena_resolve 5회 시도(전부 success=false, 행10-14)로 처리됐고 korea-stock-mcp는 호출되지 않았다"
+  }
+ ],
+ "must_not_include": [
+  {
+   "item": "market 파라미터에 'K'/'Y' 원본 코드를 그대로 넣거나 corp_code와 stock_code를 서로 바꿔 씀",
+   "violated": false,
+   "evidence": "evidence/audit-delta.jsonl:15-16 get_corp_code·get_market_type 모두 success=true, evidence/chat-answer.txt에 '카카오게임즈(293490)는 코스닥 상장 종목입니다'로 정확히 도출됨"
+  },
+  {
+   "item": "시세 조회 실패를 숨기고 가짜 종가·등락률을 제시",
+   "violated": false,
+   "evidence": "evidence/chat-answer.txt: '종가·등락률 조회는... 계속 HTTP 409/404(\"Selector request failed\")로 실패해 가져오지 못했습니다' — 정직 보고, 가짜 수치 없음"
+  }
+ ],
+ "must_include": [
+  {
+   "item": "get_corp_code로 확보한 corp_code(8자리)는 get_market_type에, stock_code(6자리)는 get_stock_trade_info의 codeList에 각각 정확히 사용했다",
+   "ok": false,
+   "evidence": "get_market_type에는 정확히 사용돼 코스닥 확인에 성공했으나(evidence/audit-delta.jsonl:16), get_stock_trade_info 자체가 시도되지 않아 stock_code 사용 여부를 판정할 근거가 없음"
+  },
+  {
+   "item": "get_market_type으로 카카오게임즈의 상장시장(K=코스닥)을 먼저 확인했다는 근거",
+   "ok": true,
+   "evidence": "evidence/audit-delta.jsonl:16 get_market_type success=true; evidence/chat-answer.txt: '카카오게임즈(293490)는 코스닥 상장 종목입니다'; evidence/ui-state.json canvas.text: '상장 시장 코스닥(K)'"
+  },
+  {
+   "item": "K를 KOSDAQ 같은 get_stock_trade_info의 market enum 값으로 정확히 변환해 사용했다(원본 코드를 그대로 넣지 않았다)",
+   "ok": false,
+   "evidence": "get_stock_trade_info 자체가 호출되지 않아(korea-stock-mcp 경로 미사용, kiwoom-selector 경로로 별도 처리) market enum 변환 여부를 확인할 근거가 없음"
+  },
+  {
+   "item": "시세 조회 결과(성공이든 KRX request error든)를 실측 없이 단정하지 않고 정직하게 보고했다",
+   "ok": true,
+   "evidence": "evidence/chat-answer.txt: '키움 백엔드가 정상 기동되지 않은 것으로 보이니, 백엔드 확인 후 다시 요청해 주세요' — 단정 없이 정직 보고"
+  }
+ ],
+ "judge_note": "dataset-defect. LIV-011과 동일 근거. auto_checks[2](korea-stock-mcp get_stock_trade_info)는 '시세 조회=korea-stock-mcp' 전제인데, plan/plan.md 4차(2026-08-18)에 '라이브 프롬프트에 주식 마켓 데이터(시세·차트·호가·체결·순위·잔고)는 반드시 키움 4툴, 외부 MCP는 투자정보 전용, 키움 미기동 시 대체 금지' 명시가 확정돼 있다(plan/plan.md:106-107). 이 run(2026-08-19)은 그 결정 이후라 종가·등락률(시세) 조회는 kiwoom-selector 전용이고 korea-stock-mcp 대체가 금지된다. 실행 증거는 정확히 이 규칙대로 kiwoom-selector athena_resolve를 5회 시도해 전부 실패했고, 정직하게 실패를 보고했다 — '키움 미기동 시 대체 금지' 준수. 상장시장 확인(get_corp_code→get_market_type, 코스닥 확인)은 '투자정보' 성격이라 korea-stock-mcp로 정상 처리돼 must_include[1]을 충족한다. 케이스의 시세 관련 트랩(K→KOSDAQ enum 변환)은 현재 아키텍처에서 애초에 검증 불가능한 전제가 됐다. expected_screen.card='notice'도 실제 렌더(mcp-table)와 다른데, 이 또한 같은 전제 노후화의 부산물로 보인다.",
+ "suspect_dataset_defect": true,
+ "duration_s": 73.7
+}

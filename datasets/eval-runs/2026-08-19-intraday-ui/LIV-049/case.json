@@ -1,0 +1,54 @@
+{
+ "id": "LIV-049",
+ "tier": "live",
+ "category": "live-폴백유도",
+ "difficulty": "최상",
+ "question": "LG에너지솔루션이 최근 낸 유상증자나 전환사채 관련 공시가 있으면, 그 공시 원문을 표로 정리해서 보여줘.",
+ "why_hard": "get_disclosure_list로 후보 공시를 찾은 뒤 get_disclosure로 원문을 받는 순서 판단(②)이 필요하고, DART get_disclosure는 회사·공시 종류와 무관하게 항상 XML→JSON 변환 트리를 반환하는 도구라 이번에도 같은 스키마 불일치(A6)가 재현된다 — '표로' 요청을 받아도 free가 정답인 카드 배치 함정(⑥)이며, 유상증자 공시가 애초에 없을 수도 있다는 부분실패(⑤) 가능성까지 판단해야 한다.",
+ "expected_answer": "get_disclosure_list에서 유상증자·전환사채 관련 공시를 먼저 찾고, 있으면 get_disclosure로 원문을 받되 역시 중첩 트리 구조라 표로 만들 수 없어 free 카드로 보여주며, 해당 공시가 없다면 없다고 정직하게 답한다.",
+ "judge": {
+  "must_include": [
+   "get_disclosure_list로 유상증자·전환사채 관련 공시 유무를 먼저 확인했다는 근거",
+   "해당 공시가 있을 경우 get_disclosure 원문이 중첩 트리 구조라 표로 변환할 수 없다는 설명",
+   "canvas_type이 free로 렌더됐다는 확인(해당 공시가 있는 경우)"
+  ],
+  "must_not_include": [
+   "공시가 없는데도 있다고 지어내 원문을 창작함",
+   "중첩 구조를 억지로 표로 만들어 원문 의미를 왜곡함",
+   "get_disclosure_list 조회 없이 바로 get_disclosure를 임의의 rcept_no로 호출"
+  ],
+  "verify_via": [
+   "ui-state",
+   "audit-log",
+   "chat-answer"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=korea-stock-mcp tool=get_disclosure_list success=true 행이 있다",
+   "해당 공시가 존재하면 렌더된 카드가 free이고 mcp-table이 아니다",
+   "chat-answer 텍스트가 공시 유무와 표 불가 사유(중첩 구조) 중 최소 하나를 명시한다",
+   "get_disclosure_list 응답에 대상 유형 공시가 1건 이상 존재하면, audit-log에 alias=korea-stock-mcp tool=get_disclosure success=true 행이 반드시 있다"
+  ]
+ },
+ "expected_route": {
+  "kind": "mcp-upstream",
+  "api_id": null,
+  "detail_group": null,
+  "family": null,
+  "upstream": "korea-stock-mcp",
+  "tool_path": [
+   "korea-stock-mcp__get_disclosure_list",
+   "korea-stock-mcp__get_disclosure",
+   "athena__render_canvas"
+  ]
+ },
+ "expected_screen": {
+  "window": "대화 창+캔버스 창",
+  "mode": null,
+  "card": "free",
+  "current_renderer": "free"
+ },
+ "implementation_status": "동작-실배선",
+ "notes": "get_disclosure의 DART XML→JSON 중첩 트리 변환은 회사와 무관하게 도구 자체의 일반 동작이다(S2B-jjlabsio-disclosure-SMALL.json에서 구조적으로 확인된 메커니즘, canvas.py TABLE_SCHEMA는 rows가 평평한 object 배열이어야 함). LG에너지솔루션 개별 공시 존재 여부·구체 수치는 실행 시점 실측 대상이라 채점하지 않는다(README '시장 실값은 채점하지 않는다').",
+ "group": "live-render",
+ "persona": "브로커"
+}

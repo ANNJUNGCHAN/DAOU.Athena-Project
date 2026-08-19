@@ -1,0 +1,66 @@
+{
+ "case_id": "LIV-096",
+ "tier": "live",
+ "persona": "CFO",
+ "question": "온보딩 마지막 단계(3/3)에서 계좌 등록 후 '키움 인증이 연결되었습니다' 화면이 뜬 상태로, 다른 계좌로 전환하고자 '계좌' 행을 클릭했습니다. 계좌 전환 목록 화면으로 연결되는 것이 맞습니까?",
+ "attachment": null,
+ "harness": "run-cases-appmode.js",
+ "procedure": true,
+ "ran_at": "2026-08-19T04:14:13.412Z",
+ "duration_s": 2.1,
+ "completed": true,
+ "error": null,
+ "observations": {
+  "step3": {
+   "panels": {
+    "app": false,
+    "onboard": true,
+    "settings": false
+   },
+   "bodyText": "3 / 3증권 계좌를 연결합니다키움 모의투자 계좌를 연결합니다. 앱키는 이 컴퓨터의 자격증명 저장소에만 저장되고 화면에 다시 나타나지 않습니다.별칭선택이 컴퓨터에서만 쓰는 이름이다. 증권사 계좌번호가 아니다.APP KEY붙여넣기만 지원한다. 입력한 값은 저장 후 다시 표시되지 않는다.SECRET KEY값이 아니라 문자 수만 보여준다 — 오타는 잡되 값은 노출하지 않는다.저장 위치Windows 자격증명 저장소(DPAPI)에 암호화되어 저장됩니다. 앱 화면·로그·스크린샷 어디에도 값이 다시 나타나지 않습니다.여기서 등록한 계좌가 활성 계좌가 됩니다. 계좌는 나중에 더 추가할 수 있고, 활성은 항상 하나입니다.검증에 성공한 키만 저장됩니다. 실패하면 다음으로 넘어가지 않습니다.검증 후 시작",
+   "kicker": null,
+   "dots": 0,
+   "clickableAccountRow": false,
+   "switchNodes": 0,
+   "buttons": [
+    "검증 후 시작"
+   ]
+  },
+  "click_account_row": "NOT FOUND: 계좌 행 | candidates=onb-input-row:선택 || onb-input-row: || onb-input-row:",
+  "after_click": {
+   "panels": {
+    "app": false,
+    "onboard": true,
+    "settings": false
+   },
+   "bodyText": "3 / 3증권 계좌를 연결합니다키움 모의투자 계좌를 연결합니다. 앱키는 이 컴퓨터의 자격증명 저장소에만 저장되고 화면에 다시 나타나지 않습니다.별칭선택이 컴퓨터에서만 쓰는 이름이다. 증권사 계좌번호가 아니다.APP KEY붙여넣기만 지원한다. 입력한 값은 저장 후 다시 표시되지 않는다.SECRET KEY값이 아니라 문자 수만 보여준다 — 오타는 잡되 값은 노출하지 않는다.저장 위치Windows 자격증명 저장소(DPAPI)에 암호화되어 저장됩니다. 앱 화면·로그·스크린샷 어디에도 값이 다시 나타나지 않습니다.여기서 등록한 계좌가 활성 계좌가 됩니다. 계좌는 나중에 더 추가할 수 있고, 활성은 항상 하나입니다.검증에 성공한 키만 저장됩니다. 실패하면 다음으로 넘어가지 않습니다.검증 후 시작",
+   "kicker": null,
+   "dots": 0,
+   "clickableAccountRow": false,
+   "switchNodes": 0,
+   "buttons": [
+    "검증 후 시작"
+   ]
+  }
+ },
+ "judge": {
+  "must_include": [
+   "embedded:true일 때는 계좌 행에 is-clickable 클래스와 click 리스너가 붙지 않아 클릭이 아무 반응도 하지 않는다",
+   "openSwitch()는 embedded가 true면 첫 줄에서 즉시 return하므로 호출돼도 무시된다",
+   "chat.js 전체에서 renderAuthTokenStatus는 온보딩 3/3 직후 embedded:true로만 호출되고 embedded:false 호출부는 코드베이스에 없다",
+   "결과적으로 '계좌 전환' 하위 화면은 오늘 이 앱에서 어떤 사용자 경로로도 도달 불가능하다"
+  ],
+  "must_not_include": [
+   "계좌 행 클릭으로 전환 화면이 열렸다는 서술",
+   "설정(#settings)의 계좌 카드와 이 인증 화면의 계좌 전환을 같은 경로로 혼동하는 서술"
+  ],
+  "verify_via": [
+   "ui-state",
+   "screenshot"
+  ],
+  "auto_checks": [
+   "ui-state: 계좌 행 DOM에 is-clickable 클래스가 없다",
+   "ui-state: 클릭 후에도 body 안에 switch-list/switch-row 노드가 생기지 않는다"
+  ]
+ }
+}
