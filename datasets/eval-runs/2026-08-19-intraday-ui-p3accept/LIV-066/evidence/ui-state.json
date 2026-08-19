@@ -1,0 +1,61 @@
+{
+ "chat": {
+  "answerCount": 1,
+  "lastAnswer": "실패 — 왕복 타임아웃(180s) — claude 프로세스 트리를 종료했다",
+  "chipCount": 1,
+  "chipLabels": [
+   "차트"
+  ],
+  "dotClasses": [
+   "dot"
+  ],
+  "state": "idle",
+  "panels": {
+   "app": true,
+   "onboard": false,
+   "settings": false
+  }
+ },
+ "canvas": {
+  "cardCount": 1,
+  "cards": [
+   {
+    "classes": [
+     "chart",
+     "w-full"
+    ],
+    "tableRows": 0,
+    "tableCols": 0,
+    "streamItems": 0,
+    "hasAlert": false,
+    "freeTree": false,
+    "text": "삼성전자(005930) 최근 일봉 — 2026-08-19 현재가 247,500원18:09:39 기준일주월년분틱▦ ▾∿ ▾수정주가⛶서버 보정(upd_stkpc_tp) 미연결 — 목업 동일 데이터 · 저작 상태 로컬 저장 1판 — 백엔드 영속은 후속 라운드MA5MA10MA20MA60MA120a#tv-attr-logo{--fill:#131722;--stroke:#fff;position:absolute;left:10px;bottom:10px;height:19px;width:35px;margin:0;padding:0;border:0;z-in"
+   }
+  ],
+  "clipPath": "circle(1278.14px at 133.743px 715.072px)"
+ },
+ "stateTransitions": [
+  {
+   "state": "judging",
+   "at_ms": 5
+  },
+  {
+   "state": "calling",
+   "at_ms": 173647
+  },
+  {
+   "state": "idle",
+   "at_ms": 182363
+  }
+ ],
+ "screenshots": {
+  "chat": {
+   "width": 2354,
+   "height": 437
+  },
+  "canvas": {
+   "width": 2343,
+   "height": 1205
+  }
+ }
+}

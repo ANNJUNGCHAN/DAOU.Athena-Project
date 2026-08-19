@@ -493,13 +493,14 @@ LIV-062 UI 실행의 답변 첫 문장: *"확인해보니 작업 디렉터리의
   "kiwoom-selector(athena_search~athena_call) 경로 시도 및 실제 현재가 수치 포함"으로
   교체(`datasets/앱-검증-200.jsonl` LIV-066, 미적용 — 별도 커밋 필요).
 
-### D-017 · LIV-066 — auto_check가 korea-stock-mcp 시세 조회를 못박음 (D-011 유형 잔여) [수정 필요]
+### D-017 · LIV-066 — auto_check가 korea-stock-mcp 시세 조회를 못박음 (D-011 유형 잔여) [수정함]
 
 - **증상**: auto_check가 korea-stock-mcp 조회 성공을 요구하나, 2026-08-18 확정 라우팅
   (시세는 키움 4툴 전용)에 따라 앱은 kiwoom-selector 경로만 탄다.
 - **실행 증거** (`2026-08-19-intraday-ui-fixcheck/LIV-066`): kiwoom-selector로 조회해
   chart 카드까지 정상 렌더 — 데이터셋 전제만 낡았다.
 - **조치안**: D-011과 동일 — "kiwoom-selector 경로 시도"로 교체.
+- 적용한 수정(D-017, 2026-08-19): auto_check의 korea-stock-mcp 시세 못박기를 kiwoom-selector 4툴 시도 확인으로 교체. validate.py exit 0.
 
 ---
 

@@ -1,0 +1,40 @@
+{
+ "runs": [
+  {
+   "ran_at": "2026-08-19T09:10:44.093Z",
+   "boot": {
+    "booted": true,
+    "panels": {
+     "boot": false,
+     "app": true,
+     "onboard": false,
+     "settings": false
+    }
+   },
+   "case_ids": [
+    "LIV-066",
+    "LIV-070"
+   ]
+  }
+ ],
+ "cases": [
+  {
+   "id": "LIV-066",
+   "completed": true,
+   "duration_s": 182.4,
+   "first_card_ms": 173697,
+   "cards": [
+    "chart.w-full"
+   ],
+   "chips_added": 1
+  },
+  {
+   "id": "LIV-070",
+   "completed": true,
+   "duration_s": 32.2,
+   "first_card_ms": null,
+   "cards": [],
+   "chips_added": 0
+  }
+ ]
+}
