@@ -84,6 +84,17 @@ function buildLivePrompt(query) {
     'N개 기준"임을 답변에 밝힌다. 데이터 후처리(계산·정렬·집계)가 필요하면 툴',
     '재호출이나 카드의 표현력으로 해결하고, 그걸로 안 되면 안 된다고 말한다.',
     '',
+    // 데이터 지름길(v3d, 2026-08-19 사용자 지시 "캔버스 먼저 구성 → 필요 정보만
+    // 뽑아 답변"): 차트·표는 데이터가 모델을 거치지 않는다 — 게이트웨이가 채운다.
+    '차트·표 카드의 최우선 경로 — 키움 조회로 chart/table 카드를 그릴 때는',
+    'athena_call로 데이터를 읽어오지 마라. athena_resolve가 준 plan_token을 그대로',
+    'athena__render_canvas에 넘겨라: {canvas_type:"chart", plan_token:"...",',
+    'data:{"symbol":"005930","name":"삼성전자"}, caption:"..."} — 게이트웨이가',
+    '데이터를 직접 실행·변환해 카드를 채우고, 응답의 summary(rows_kept·기간·',
+    'latest_close)를 돌려준다. 채팅 답변은 그 summary로만 쓴다(trimmed:true면',
+    '"최근 N봉 기준"을 밝힌다). athena_call은 카드가 필요 없는 단답 확인이나',
+    'chart/table 외 카드를 직접 구성할 때만 쓴다.',
+    '',
     '조회한 데이터는 반드시 athena__render_canvas 툴로 캔버스에 그린다:',
     '- 같은 필드가 반복되는 목록/표 데이터 → canvas_type "table",',
     '  data는 {"columns":[{"key":"...","label":"..."}, ...], "rows":[{키:값, ...}, ...]}',

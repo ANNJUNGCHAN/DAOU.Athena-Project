@@ -108,3 +108,26 @@ test('restartAfterReset: 자가스폰이지만 재기동 실패(ensureBackend ok
   assert.equal(result.restarted, false);
   _setBackendChildForTest(null);
 });
+
+test('readLocalBearerToken: backend/.env에서 토큰을 읽는다 (따옴표 벗김)', () => {
+  const os = require('node:os');
+  const fsm = require('node:fs');
+  const pathm = require('node:path');
+  const dir = fsm.mkdtempSync(pathm.join(os.tmpdir(), 'athena-env-'));
+  fsm.writeFileSync(pathm.join(dir, '.env'), ['FOO=1', 'ATHENA_LOCAL_BEARER_TOKEN="tok-abc"', ''].join('\n'));
+  const { readLocalBearerToken } = require('./backend-launcher');
+  assert.equal(readLocalBearerToken(dir), 'tok-abc');
+  fsm.rmSync(dir, { recursive: true, force: true });
+});
+
+test('readLocalBearerToken: .env 없음/키 없음이면 null — 루프백 게이트 배포', () => {
+  const os = require('node:os');
+  const fsm = require('node:fs');
+  const pathm = require('node:path');
+  const { readLocalBearerToken } = require('./backend-launcher');
+  const empty = fsm.mkdtempSync(pathm.join(os.tmpdir(), 'athena-noenv-'));
+  assert.equal(readLocalBearerToken(empty), null);
+  fsm.writeFileSync(pathm.join(empty, '.env'), 'OTHER=1' + '\n');
+  assert.equal(readLocalBearerToken(empty), null);
+  fsm.rmSync(empty, { recursive: true, force: true });
+});

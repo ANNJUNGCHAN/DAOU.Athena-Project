@@ -292,3 +292,25 @@ test('StreamJsonSession: 비JSON 라인은 건너뛰고 skippedLines로 센다',
   assert.equal(events.length, 2);
   assert.equal(session.diagnostics().skippedLines, 1);
 });
+
+test('classifyCanvasBlock: pushed 봉투는 별도 상태 — 카드 이중 렌더 방지 (2026-08-19 데이터 지름길)', () => {
+  const { StreamJsonSession } = require('./stream-json-parser');
+  const s = new StreamJsonSession();
+  const results = [];
+  const toolUse = JSON.stringify({ type: 'assistant', message: { content: [
+    { type: 'tool_use', id: 'tu-p', name: 'mcp__athena__athena__render_canvas', input: {} },
+  ] } });
+  const toolResult = JSON.stringify({ type: 'user', message: { content: [
+    { type: 'tool_result', tool_use_id: 'tu-p', content: JSON.stringify({
+      canvas_type: 'chart', pushed: true, fell_back: false,
+      summary: { rows_kept: 240, latest_close: 247500 },
+    }) },
+  ] } });
+  s.feed(`${toolUse}
+${toolResult}
+`, { onCanvasResult: (r) => results.push(r) });
+  assert.equal(results.length, 1);
+  assert.equal(results[0].status, 'pushed');
+  assert.equal(results[0].envelope.canvas_type, 'chart');
+  assert.equal(results[0].envelope.summary.latest_close, 247500);
+});

@@ -293,6 +293,9 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
         _publish_default(app, None)
         _publish_brain(app, None)
         _publish_routines(app, None)
+        # 캔버스 사이드 채널(api/canvas_push.py) — 자격증명·루틴과 무관한 로컬
+        # 배관이라 무조건 만든다. 소비자는 단일 앱 인스턴스(routine_events와 동형).
+        app.state.canvas_events = asyncio.Queue(50)
         http_client: httpx.AsyncClient | None = None
         locks: list[CredentialProcessLock] = []
         brain: BrainRuntime | None = None

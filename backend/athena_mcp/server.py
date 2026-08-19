@@ -30,7 +30,7 @@ import httpx
 import mcp.types as types
 from mcp.server.lowlevel import Server
 
-from athena_mcp import quirks, routine_tools, selector_tools
+from athena_mcp import canvas_data, quirks, routine_tools, selector_tools
 from athena_mcp.aggregator import (
     ResolvedTarget,
     ToolAggregator,
@@ -116,6 +116,18 @@ _RENDER_CANVAS_INPUT_SCHEMA: dict[str, Any] = {
     "properties": {
         "canvas_type": _CANVAS_TYPE_PROPERTY,
         "data": _DATA_PROPERTY,
+        # 데이터 지름길(2026-08-19, canvas_data.py) — 캔버스 우선·모델 무통과.
+        "plan_token": {
+            "type": ["string", "null"],
+            "description": (
+                "선택: athena_resolve가 발급한 조회 plan_token. 주면 게이트웨이가 "
+                "직접 실행해 chart/table 카드 데이터를 채운다 — athena_call로 "
+                "데이터를 먼저 읽어올 필요가 없다(그만큼 빠르다). 이때 data에는 "
+                "chart면 {symbol, name}만 넣으면 되고, 응답의 summary(최신값·"
+                "기간·행수)로 채팅에 답하면 된다. 토큰은 1회용이라 이 호출로 "
+                "소비된다."
+            ),
+        },
         "caption": {"type": ["string", "null"]},
         # 배치·생애주기 규칙(plan/canvas-taxonomy.md, 2026-08-18 확정)의 모델
         # 접점 둘. 판정은 게이트웨이가 한다 — 무효값은 거부가 아니라 무시/필터다
@@ -317,6 +329,19 @@ class AthenaGateway:
         """
         name = qualified_or_builtin_name
         if name == RENDER_CANVAS_TOOL:
+            if arguments.get("plan_token"):
+                # 데이터 지름길(canvas_data.py) — 게이트웨이가 plan을 직접 실행해
+                # 봉투를 채운다. 백엔드 왕복이 생기므로 셀렉터와 같은 최소 감사
+                # (시각·툴명·성공여부만)를 남긴다.
+                result = await canvas_data.render_with_plan(
+                    arguments,
+                    self.selector_http_client,
+                    call_timeout_seconds=selector_tools._CALL_TIMEOUT_SECONDS,  # noqa: SLF001 — 같은 패키지의 계약 상수
+                )
+                self._audit_log("kiwoom-selector").record(
+                    "kiwoom-selector", "render_canvas_plan", success=not result.isError
+                )
+                return result
             return _render_canvas(arguments)
         if name == SAVE_CANVAS_TOOL:
             return _save_canvas(arguments, self.canvas_save_dir)
@@ -703,7 +728,9 @@ def _builtin_tool_defs() -> list[types.Tool]:
         types.Tool(
             name=RENDER_CANVAS_TOOL,
             description="5종 캔버스(stream/reader/timeline/table/chart) 또는 free로 "
-            "렌더링한다. 스키마 불일치 시 free로 폴백하고 그 사실을 응답에 남긴다.",
+            "렌더링한다. 스키마 불일치 시 free로 폴백하고 그 사실을 응답에 남긴다. "
+            "chart/table 카드는 plan_token(athena_resolve 발급)을 주면 게이트웨이가 "
+            "데이터를 직접 채운다 — athena_call을 건너뛰는 가장 빠른 경로다.",
             inputSchema=_RENDER_CANVAS_INPUT_SCHEMA,
         ),
         types.Tool(

@@ -23,6 +23,7 @@
 'use strict';
 
 const fs = require('fs');
+const path = require('path');
 const { spawn } = require('child_process');
 const { BACKEND_DIR, PYTHON_EXE } = require('./mcp-config');
 
@@ -197,7 +198,29 @@ async function restartAfterReset({ mdlog, ensureBackendFn = ensureBackend } = {}
   return { selfSpawned: true, restarted: !!(ensureResult && ensureResult.ok), ensureResult };
 }
 
+// 백엔드 로컬 베어러 토큰 조달(2026-08-19 캔버스 사이드 채널 실측 결함) —
+// backend/.env에 ATHENA_LOCAL_BEARER_TOKEN이 설정된 배포에서는 WS 인증이
+// 모드 A(토큰 필수, 루프백도 우회 불가)가 되는데, 앱 프로세스에는 그 토큰이
+// 없어 루틴·캔버스 피드가 인증 대기에 걸려 조용히 죽는다(실측: 전달 0건).
+// 같은 저장소·같은 사용자·같은 머신의 로컬 구성 파일이므로 앱이 읽어
+// **메모리에만** 올린다 — 로깅·직렬화 금지(CLAUDE.md §1).
+function readLocalBearerToken(backendDir) {
+  try {
+    const envPath = path.join(backendDir || BACKEND_DIR, '.env');
+    const text = fs.readFileSync(envPath, 'utf8');
+    for (const line of text.split(/\r?\n/)) {
+      const m = /^\s*ATHENA_LOCAL_BEARER_TOKEN\s*=\s*(.+?)\s*$/.exec(line);
+      if (m) {
+        const raw = m[1].replace(/^["']|["']$/g, '');
+        return raw || null;
+      }
+    }
+  } catch { /* .env 없음 — 토큰 미설정 배포(루프백 게이트) */ }
+  return null;
+}
+
 module.exports = {
+  readLocalBearerToken,
   HEALTH_URL,
   HEALTH_HOST,
   HEALTH_PORT,
