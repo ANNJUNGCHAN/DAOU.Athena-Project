@@ -1055,8 +1055,12 @@ app.whenReady().then(async () => {
     pairMovedTogetherOnLeft: near(afterLeft.chat.x, afterLeft.canvas.x),
     pairMovedTogetherOnRight: near(afterRight.chat.x, afterRight.canvas.x),
     leftDiffersFromRight: afterLeft.canvas.x !== afterRight.canvas.x,
-    sizeUnchangedOnLeft: afterLeft.canvas.width === beforePlacement.canvas.width && afterLeft.canvas.height === beforePlacement.canvas.height,
-    sizeUnchangedOnRight: afterRight.canvas.width === beforePlacement.canvas.width && afterRight.canvas.height === beforePlacement.canvas.height,
+    // near() ±2px — 이 파일의 다른 bounds 비교와 같은 관례다(acrylic + DPI 배율에서
+    // setBounds 요청값과 getBounds 실측값이 1px 안팎 어긋나는 실측, 검증3 주석).
+    // 자유 리사이즈 승급(2026-08-18)으로 min=max 잠금이 사라져 이 편차를 OS가
+    // 눌러주지 않게 됐다 — 정확 일치 요구는 계약이 아니라 잠금의 부수 효과였다.
+    sizeUnchangedOnLeft: near(afterLeft.canvas.width, beforePlacement.canvas.width) && near(afterLeft.canvas.height, beforePlacement.canvas.height),
+    sizeUnchangedOnRight: near(afterRight.canvas.width, beforePlacement.canvas.width) && near(afterRight.canvas.height, beforePlacement.canvas.height),
     maximizedViaWindowKey: afterMaximize.height > chatHeightBeforeMax,
     maximizedReachedChatMaxH: near(afterMaximize.height, layout.chatMaxH),
     restoredViaWindowKey: near(afterRestore.height, layout.chatBaseH),
@@ -1151,6 +1155,62 @@ app.whenReady().then(async () => {
   assertOk('codexConfig: rejects invalid effort value', report.codexConfig.rejectsInvalidEffort === true);
   assertOk('codexConfig: rejected patches leave config.toml unchanged', report.codexConfig.rejectedPatchesDidNotChangeFile === true);
   assertOk('codexConfig: null patch removes model line, preserves effort line', report.codexConfig.nullRemovesModelLine === true);
+
+  // ---------- 검증 16: 유리 사다리 SSOT (2026-08-19 결정 — 질의응답) ----------
+  // "광량 3단 고정" 규범을 값 사다리로 개정하면서 값의 SSOT를 tokens.css의
+  // --glass-* 4변수로 박았다(soul.md §7 완화책 2 개정). 여기서는 (a) 두 창이
+  // 같은 토큰을 읽는지, (b) 실제 표면 렌더 값이 토큰과 일치하는지, (c) 사다리
+  // 순서 계약(window < card < canvas < window-max)이 성립하는지를 단언한다 —
+  // 값을 CSS 어딘가에 하드코드해 사다리가 두 벌이 되는 회귀를 잡는 게 목적이다.
+  const readTokens = `(() => {
+    const s = getComputedStyle(document.documentElement);
+    return {
+      window: parseFloat(s.getPropertyValue('--glass-window')),
+      card: parseFloat(s.getPropertyValue('--glass-card')),
+      canvas: parseFloat(s.getPropertyValue('--glass-canvas')),
+      windowMax: parseFloat(s.getPropertyValue('--glass-window-max')),
+    };
+  })()`;
+  const chatTokens = await chatWin.webContents.executeJavaScript(readTokens);
+  const canvasTokens = await canvasWin.webContents.executeJavaScript(readTokens);
+  // 캔버스 창에 카드 하나를 띄워 실측한다(이전 검증들이 카드를 정리했을 수 있다).
+  canvasWin.webContents.send('athena:add-canvas', { type: 'stream' });
+  await wait(400);
+  const alphaOf = (rgba) => {
+    const m = /rgba?\(\s*\d+\s*,\s*\d+\s*,\s*\d+\s*(?:,\s*([0-9.]+))?\)/.exec(rgba || '');
+    return m ? (m[1] === undefined ? 1 : parseFloat(m[1])) : NaN;
+  };
+  const surfaceAlphas = await canvasWin.webContents.executeJavaScript(`(() => {
+    const mosaic = getComputedStyle(document.querySelector('.mosaic')).backgroundColor;
+    const card = document.querySelector('.card');
+    return { mosaic, card: card ? getComputedStyle(card).backgroundColor : null };
+  })()`);
+  const chatAppAlpha = await chatWin.webContents.executeJavaScript(
+    "getComputedStyle(document.querySelector('.app')).backgroundColor"
+  );
+  const nearAlpha = (a, b) => Number.isFinite(a) && Math.abs(a - b) <= 0.02;
+  report.glassLadder = {
+    chatTokens, canvasTokens,
+    mosaicAlpha: alphaOf(surfaceAlphas.mosaic),
+    cardAlpha: alphaOf(surfaceAlphas.card),
+    chatAppAlpha: alphaOf(chatAppAlpha),
+    tokensMatchAcrossWindows:
+      chatTokens.window === canvasTokens.window && chatTokens.card === canvasTokens.card
+      && chatTokens.canvas === canvasTokens.canvas && chatTokens.windowMax === canvasTokens.windowMax,
+    ladderOrdered:
+      chatTokens.window < chatTokens.card && chatTokens.card < chatTokens.canvas
+      && chatTokens.canvas < chatTokens.windowMax,
+    mosaicMatchesToken: nearAlpha(alphaOf(surfaceAlphas.mosaic), canvasTokens.canvas),
+    cardMatchesToken: nearAlpha(alphaOf(surfaceAlphas.card), canvasTokens.card),
+    // 대화 창은 기본 높이 상태 — --glass-alpha 보간의 하한이 곧 --glass-window여야 한다.
+    chatAppMatchesWindowToken: nearAlpha(alphaOf(chatAppAlpha), chatTokens.window),
+  };
+  console.log('[verify] 검증16(유리 사다리):', JSON.stringify(report.glassLadder));
+  assertOk('glassLadder: tokens identical across both windows', report.glassLadder.tokensMatchAcrossWindows === true);
+  assertOk('glassLadder: window < card < canvas < window-max', report.glassLadder.ladderOrdered === true);
+  assertOk('glassLadder: canvas surface renders --glass-canvas', report.glassLadder.mosaicMatchesToken === true);
+  assertOk('glassLadder: card renders --glass-card', report.glassLadder.cardMatchesToken === true);
+  assertOk('glassLadder: chat app renders --glass-window at base height', report.glassLadder.chatAppMatchesWindowToken === true);
 
   report.finishedAt = new Date().toISOString();
   fs.writeFileSync(path.join(CAPTURES, 'VERIFY-REPORT.json'), JSON.stringify(report, null, 2));

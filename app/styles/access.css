@@ -12,8 +12,20 @@
     background: var(--color-k-panel2) !important;
   }
   /* 캔버스 카드는 .glass가 아니라 개별 rgba 채움이라 별도로 불투명화한다.
-   * 2026-08-17부터 카드가 진짜 유리(backdrop-filter)가 됐으므로 굴절도 같이 끈다. */
-  .card {
+   * 2026-08-17부터 카드가 진짜 유리(backdrop-filter)가 됐으므로 굴절도 같이 끈다.
+   * 참고: Apple 규범(liquid-glass.md §4)은 "더 서리 끼게(frostier)"를 말하지만
+   * Athena는 의도적으로 **완전 불투명**을 택한다 — 가독이 유리 물성보다 위다
+   * (soul.md §8 정보 정직성). 문서-코드 어긋남 지적(2026-08-18 디자인 비판)에
+   * 대한 답으로 여기 명문화한다.
+   * 2026-08-18 유리화로 늘어난 표면(설정 카드·시트·cmd-box·온보딩 CLI 카드·
+   * 인증 타이머 카드·원칙 패널)도 같은 폴백을 받는다. */
+  .card,
+  .uk-sheet,
+  .uk-cmd-box,
+  .uk-principles,
+  .onb-cli-card,
+  .auth-timer-card,
+  .coachmark {
     background: var(--color-k-panel3) !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
@@ -31,6 +43,8 @@
     border: 1px solid var(--color-k-text) !important;
   }
   .glass-sheen { display: none !important; }
+  /* 경계 hover 광량은 장식적 신호다 — 대비 모드에선 리사이즈 커서가 신호를 대신한다 */
+  .edge-glow { display: none !important; }
   body, .md-p, .stream-item, td, th {
     color: #ffffff !important;
   }
