@@ -15,17 +15,36 @@ html, body { background: transparent; }
   /* SSOT: tokens.css 유리 사다리. --glass-canvas-live는 휘도 감지-적응(canvas.js,
      2026-08-19)의 런타임 오버라이드 — 밝은 배경에서 0.72까지 올라간다. 이벤트가
      없으면(fixture 검증) 토큰 기본값 그대로다. 전이 600ms는 opacity 페이드가
-     아니라 두께 변조(리퀴드 글래스 적응성) — 급변은 깜빡임으로 보인다(palette.md). */
+     아니라 두께 변조(리퀴드 글래스 적응성) — 급변은 깜빡임으로 보인다(palette.md).
+     backgroundColor는 verify.js 검증16이 직접 읽는 SSOT 값 — background 축약형으로
+     되돌려 아래 background-image와 합치지 마라. */
   background-color: rgba(29, 34, 44, var(--glass-canvas-live, var(--glass-canvas)));
-  transition: background-color 600ms var(--ease);
+  transition: background-color 600ms var(--ease), background-image 600ms var(--ease);
   /* 리퀴드 글라스는 검정 평면이 아니다(2026-08-17 사용자 지시 — "애플의 리퀴드
    * 글라스라는 사실을 명심해"). 두께 0.50(2026-08-18 하향 후 현행값) 위에 무채색
    * (백색 알파만 — 틴트 금지) 광량 변화를 깔아 카드 유리(backdrop-filter)가 실제로
    * 굴절할 것을 만든다 — soul.md §7 "유리 뒤에는 반드시 굴절할 것이 있다".
-   * 균일한 단색 위의 blur는 눈에 보이지 않아 유리가 아니라 평면으로 읽힌다. */
+   * 균일한 단색 위의 blur는 눈에 보이지 않아 유리가 아니라 평면으로 읽힌다.
+   * 2026-08-19 흡수·스펙큘러 추가: 첫 레이어는 115° 정적 스윕(스펙큘러), 둘째는
+   * 135° 3단 흡수 그라디언트(다크 스톱 α+0.08 → α → 다음 유리 톤(panel3) α+0.04) —
+   * 이 창도 두 창 중 하나라 .app과 같은 문법을 쓴다. 기존 라디얼 하이라이트 2장은
+   * 그대로 아래에 남겨 산란(scatter) 역할을 유지한다. */
   background-image:
+    linear-gradient(115deg, transparent 32%, rgba(255, 253, 248, 0.11) 43%, transparent 58%),
+    linear-gradient(135deg,
+      rgba(29, 34, 44, calc(var(--glass-canvas-live, var(--glass-canvas)) + 0.08)) 0%,
+      rgba(29, 34, 44, var(--glass-canvas-live, var(--glass-canvas))) 46%,
+      rgba(36, 42, 54, calc(var(--glass-canvas-live, var(--glass-canvas)) + 0.04)) 100%),
     radial-gradient(820px 480px at 22% 12%, rgba(255, 255, 255, 0.05), transparent 70%),
     radial-gradient(720px 520px at 78% 88%, rgba(255, 255, 255, 0.035), transparent 70%);
+  /* 렌징(2026-08-19) — .app과 같은 4요소. 창 전체가 유리 표면이므로 자기 경계에
+     인셋으로 건다(inset shadow는 항상 콘텐츠보다 아래 페인트돼 카드·숫자를 가리지
+     않는다). */
+  box-shadow:
+    inset 0 1px 0 rgba(255, 253, 248, 0.58),
+    inset 1px 0 0 rgba(255, 253, 248, 0.15),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.40),
+    inset 0 0 70px rgba(255, 240, 214, 0.05);
   will-change: clip-path;
   overflow: hidden;
 }
@@ -85,8 +104,23 @@ html, body { background: transparent; }
  * 드롭섀도가 긋고, 테두리는 유리 가장자리 두께 암시 수준으로만 남긴다. */
 .card {
   /* 2026-08-18 하향: 창 표면(--glass-canvas)이 얇아진 만큼 카드도 --glass-card로 —
-   * 숫자 가독은 알파가 아니라 blur가 지킨다(카드 뒤는 항상 서리유리로 뭉개진다). */
-  background: rgba(36, 42, 54, var(--glass-card)); /* SSOT: tokens.css 유리 사다리 */
+   * 숫자 가독은 알파가 아니라 blur가 지킨다(카드 뒤는 항상 서리유리로 뭉개진다).
+   * backgroundColor는 verify.js 검증16 cardMatchesToken이 직접 읽는 SSOT 값 —
+   * background 축약형으로 되돌려 아래 background-image와 합치지 마라(합치면
+   * backgroundColor가 transparent가 돼 검증16이 깨진다). */
+  background-color: rgba(36, 42, 54, var(--glass-card)); /* SSOT: tokens.css 유리 사다리 */
+  /* 2026-08-19 흡수·스펙큘러 — .app/.mosaic와 같은 문법(115° 정적 스윕 + 135° 3단
+   * 흡수 그라디언트). 다크 스톱 3번째 톤(43,50,64)은 새 토큰이 아니라 panel→panel2→
+   * panel3 델타(+7,+8,+10 계열)를 그대로 이어 외삽한 값이다 — 카드보다 한 단계
+   * 더 밝은 "다음 유리"가 없어 직접 계산했다(신규 토큰 추가는 tokens.css SSOT만).
+   * background-image는 항상 콘텐츠(.card-head/.card-body)보다 아래에 페인트되므로
+   * 숫자 가독(§8)에 영향 없다. */
+  background-image:
+    linear-gradient(115deg, transparent 32%, rgba(255, 253, 248, 0.13) 43%, transparent 58%),
+    linear-gradient(135deg,
+      rgba(36, 42, 54, calc(var(--glass-card) + 0.08)) 0%,
+      rgba(36, 42, 54, var(--glass-card)) 46%,
+      rgba(43, 50, 64, calc(var(--glass-card) + 0.04)) 100%);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgba(255, 255, 255, 0.06);
@@ -96,9 +130,15 @@ html, body { background: transparent; }
   max-height: 360px;
   display: flex; flex-direction: column;
   overflow: hidden;
-  /* 상단 인셋 하이라이트 = 유리 윗면에 맺히는 빛(애플 리퀴드 글라스의 스펙큘러).
-   * 광량으로 깊이를 만들고 테두리는 뒤로 물린다(§7 "깊이는 값으로"). */
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.13), 0 12px 32px rgba(0, 0, 0, 0.35);
+  /* 렌징 4요소 + 접지(contact shadow) — 광량으로 깊이를 만들고 테두리는 뒤로
+   * 물린다(§7 "깊이는 값으로"). 접지 그림자는 순수 검정이 아니라 배경의 따뜻한
+   * 톤(rgba(6,8,12,…))으로 물들인다(palette.md 밝은 배경 해법). */
+  box-shadow:
+    inset 0 1px 0 rgba(255, 253, 248, 0.62),
+    inset 1px 0 0 rgba(255, 253, 248, 0.17),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.42),
+    inset 0 0 54px rgba(255, 240, 214, 0.07),
+    0 24px 60px rgba(6, 8, 12, 0.55);
   transition: box-shadow var(--dur-base) var(--ease), border-color var(--dur-base) var(--ease);
 }
 /* 폭 문법 — 폭은 형상이 정하고(w-half/w-full, lib/canvas-layout.js) 순서는 도착순
@@ -136,6 +176,8 @@ html, body { background: transparent; }
   font-family: var(--font-strong);
   font-size: var(--text-md);
   letter-spacing: 0.3px;
+  /* 각인(engraving, 2026-08-19) — 카드 유리 위가 아니라 안에 새겨진 것처럼. */
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
 }
 .card-fresh {
   font-family: var(--font-mono);
@@ -148,13 +190,26 @@ html, body { background: transparent; }
 .card-head-right { display: flex; align-items: center; gap: 10px; }
 
 .card-body { flex: 1; min-height: 0; overflow: auto; }
+/* 2026-08-19 QA 결함 #5 — 하단에서 반쯤 잘린 글리프가 다른 글자로 오독된다
+   (주주균등처분→조조규등처부 실측). 스크롤이 있을 때만(.is-clipped, canvas.js)
+   잘림 지점을 페이드로 정직하게 표시한다. sticky라 스크롤을 따라온다. */
+.card-body.is-clipped::after {
+  content: '';
+  position: sticky;
+  bottom: -1px;
+  display: block;
+  height: 18px;
+  margin-top: -18px;
+  background: linear-gradient(to bottom, rgba(23, 27, 36, 0), rgba(23, 27, 36, 0.94));
+  pointer-events: none;
+}
 
 /* ---- 스트림 ---- */
 .stream-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 7px; }
 .stream-item { display: flex; gap: 10px; align-items: baseline; font-size: var(--text-base); }
 .stream-time { font-family: var(--font-mono); color: var(--color-k-faint); flex-shrink: 0; width: 76px; }
 .stream-source { color: var(--color-k-dim); flex-shrink: 0; width: 92px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.stream-title { color: var(--color-k-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.stream-title { color: var(--color-k-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6); }
 .stream-more { color: var(--color-k-faint); font-size: var(--text-sm); padding-top: 4px; }
 
 /* ---- 리더(마크다운) ---- */
@@ -162,7 +217,7 @@ html, body { background: transparent; }
    크면 위계가 뒤집힌다. 카드 안 텍스트는 card-title을 넘지 않는다. */
 .md-h1 { font-family: var(--font-strong); font-size: var(--text-base); margin: 4px 0 8px; }
 .md-h2 { font-family: var(--font-strong); font-size: var(--text-base); margin: 10px 0 6px; color: var(--color-k-dim); }
-.md-p { font-size: var(--text-base); line-height: 1.6; color: var(--color-k-text); margin: 0 0 8px; }
+.md-p { font-size: var(--text-base); line-height: 1.6; color: var(--color-k-text); margin: 0 0 8px; text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6); }
 .md-list { margin: 0 0 8px 18px; padding: 0; font-size: var(--text-base); line-height: 1.6; }
 .md-table { border-collapse: collapse; width: 100%; font-size: var(--text-sm); margin: 4px 0 10px; } /* 11.5→12 — 공시 표는 판단 자료다(12px 하한) */
 .md-table td { border: 1px solid var(--color-k-line-soft); padding: 3px 6px; color: var(--color-k-dim); vertical-align: top; }
@@ -172,7 +227,7 @@ html, body { background: transparent; }
    "숫자가 안 읽히면 실패"가 corp_code·사업연도 같은 컨텍스트에도 적용된다). */
 .fin-meta { font-family: var(--font-mono); font-size: var(--text-sm); color: var(--color-k-faint); margin-bottom: 8px; }
 table.fin-table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: var(--text-base); }
-.fin-table th, .fin-table td { padding: 5px 10px; text-align: right; border-bottom: 1px solid var(--color-k-line-soft); white-space: nowrap; }
+.fin-table th, .fin-table td { padding: 5px 10px; text-align: right; border-bottom: 1px solid var(--color-k-line-soft); white-space: nowrap; text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6); }
 .fin-table th:first-child, .fin-table td:first-child { text-align: left; }
 .fin-table thead th { position: sticky; top: 0; background: rgba(29, 34, 44, 0.96); color: var(--color-k-dim); font-weight: 400; font-family: var(--font-strong); }
 
@@ -203,6 +258,19 @@ table.fin-table { width: 100%; border-collapse: collapse; font-variant-numeric: 
 }
 .chart-vp-bar { position: absolute; right: 0; background: rgba(138, 63, 252, 0.22); }
 .chart-vp-bar.is-poc { background: rgba(220, 0, 4, 0.34); }
+
+/* TradingView attribution 스크림(2026-08-19 QA 결함 #3) — lightweight-charts
+   기본 좌하단 로고가 거래량 막대와 배경 없이 겹친다. 로고 자체(캔버스 픽셀)는
+   못 건드리므로 자리에 작은 유리 칩을 깔아 시각적으로 분리한다 — 무채색,
+   pointer-events:none(로고 클릭은 캔버스로 통과). */
+.chart-attribution-scrim {
+  position: absolute; left: 2px; bottom: 2px;
+  width: 112px; height: 22px;
+  border-radius: 6px;
+  background: rgba(23, 27, 36, 0.55);
+  pointer-events: none;
+  z-index: 2;
+}
 
 /* ---- 드로잉 1판(CC-105, spec §5) — 확장 모드 전용 좌측 세로 도구바 + SVG 오버레이 ---- */
 .chart-drawbar {

@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-08-19T09:36:29.960Z",
+  "startedAt": "2026-08-19T10:03:20.466Z",
   "layout": {
     "scale": 1,
     "screen": {
@@ -8,23 +8,24 @@
     },
     "canvasW": 1560,
     "canvasH": 800,
-    "chatW": 1560,
-    "chatBaseH": 204,
+    "chatW": 900,
+    "chatBaseH": 248,
     "chatMaxH": 788,
     "originX": 180,
-    "originY": 74
+    "originY": 52,
+    "chatOriginX": 510
   },
   "bootChatOnly": {
     "canvasVisibleAtBoot": false,
     "chatVisibleAtBoot": true,
     "shots": {
       "boot": {
-        "width": 2343,
-        "height": 311
+        "width": 1353,
+        "height": 377
       },
       "idle": {
-        "width": 2345,
-        "height": 333
+        "width": 1355,
+        "height": 399
       }
     },
     "chatBootedAfterBoot": true,
@@ -47,25 +48,25 @@
     "bootedIntoChatMode": true
   },
   "dotScreenPoint": {
-    "x": 214.66666793823242,
-    "y": 1045.6666717529297
+    "x": 540.6666679382324,
+    "y": 1071.3333435058594
   },
   "osCaptureAttempted": {
     "ok": true
   },
   "expand": {
-    "frameCount": 31,
-    "p50": 18,
-    "p95": 35.5,
-    "max": 35.899999999999864,
-    "min": 1
+    "frameCount": 32,
+    "p50": 16.699999999999818,
+    "p95": 33.299999999999955,
+    "max": 33.299999999999955,
+    "min": 16.5
   },
   "collapse": {
-    "frameCount": 31,
-    "p50": 18,
-    "p95": 21.800000000000182,
-    "max": 36.29999999999927,
-    "min": 17.200000000000728
+    "frameCount": 35,
+    "p50": 16.699999999999818,
+    "p95": 16.800000000000182,
+    "max": 16.800000000000182,
+    "min": 16.5
   },
   "afterCollapse": {
     "canvasVisible": false
@@ -74,43 +75,43 @@
     "initial": {
       "canvas": {
         "x": 180,
-        "y": 74,
+        "y": 52,
         "width": 1563,
         "height": 803
       },
       "chat": {
-        "x": 180,
-        "y": 856,
-        "width": 1564,
-        "height": 223
+        "x": 510,
+        "y": 834,
+        "width": 904,
+        "height": 267
       }
     },
     "afterCanvasMove": {
       "canvas": {
         "x": 260,
-        "y": 74,
+        "y": 52,
         "width": 1564,
         "height": 803
       },
       "chat": {
-        "x": 180,
-        "y": 856,
-        "width": 1564,
-        "height": 223
+        "x": 510,
+        "y": 834,
+        "width": 904,
+        "height": 267
       }
     },
     "afterChatResize": {
       "canvas": {
         "x": 260,
-        "y": 74,
+        "y": 52,
         "width": 1564,
         "height": 803
       },
       "chat": {
-        "x": 180,
-        "y": 856,
-        "width": 1565,
-        "height": 323
+        "x": 510,
+        "y": 834,
+        "width": 905,
+        "height": 367
       }
     },
     "canvasMovedButChatUnchanged": true,
@@ -127,16 +128,16 @@
   "e2eTrigger": {
     "reachedDoneState": true,
     "boundsBeforeQuery": {
-      "x": 180,
-      "y": 874,
-      "width": 1561,
-      "height": 205
+      "x": 510,
+      "y": 852,
+      "width": 901,
+      "height": 249
     },
     "boundsAfterQuery": {
-      "x": 180,
-      "y": 831,
-      "width": 1564,
-      "height": 250
+      "x": 510,
+      "y": 809,
+      "width": 904,
+      "height": 294
     },
     "grewTallerThanBase": true,
     "grownByPx": 45,
@@ -145,16 +146,16 @@
   },
   "manualResize": {
     "beforeDrag": {
-      "x": 180,
-      "y": 831,
-      "width": 1564,
-      "height": 250
+      "x": 510,
+      "y": 809,
+      "width": 904,
+      "height": 294
     },
     "afterDrag": {
-      "x": 180,
-      "y": 671,
-      "width": 1565,
-      "height": 411
+      "x": 510,
+      "y": 649,
+      "width": 905,
+      "height": 455
     },
     "grewByDrag": true,
     "bottomEdgePinned": true
@@ -272,16 +273,16 @@
   "dragNoResize": {
     "scaleFactor": 1.5,
     "before": {
-      "x": 180,
-      "y": 883,
-      "width": 1573,
-      "height": 205
+      "x": 510,
+      "y": 864,
+      "width": 914,
+      "height": 249
     },
     "after": {
-      "x": 180,
-      "y": 883,
-      "width": 1573,
-      "height": 205
+      "x": 510,
+      "y": 864,
+      "width": 914,
+      "height": 249
     },
     "sizeUnchanged": true,
     "positionDelta": {
@@ -333,69 +334,69 @@
     "beforePlacement": {
       "canvas": {
         "x": 180,
-        "y": 74,
+        "y": 52,
         "width": 1561,
         "height": 801
       },
       "chat": {
-        "x": 180,
-        "y": 874,
-        "width": 1561,
-        "height": 205
+        "x": 510,
+        "y": 852,
+        "width": 901,
+        "height": 249
       }
     },
     "afterLeft": {
       "canvas": {
         "x": -300,
-        "y": 74,
+        "y": 52,
         "width": 1562,
         "height": 801
       },
       "chat": {
-        "x": -300,
-        "y": 874,
-        "width": 1562,
-        "height": 205
+        "x": 30,
+        "y": 852,
+        "width": 901,
+        "height": 249
       }
     },
     "afterRight": {
       "canvas": {
         "x": 660,
-        "y": 74,
+        "y": 52,
         "width": 1561,
         "height": 801
       },
       "chat": {
-        "x": 660,
-        "y": 874,
-        "width": 1561,
-        "height": 205
+        "x": 990,
+        "y": 852,
+        "width": 901,
+        "height": 249
       }
     },
     "afterMaximize": {
-      "x": 660,
-      "y": 291,
-      "width": 1562,
+      "x": 990,
+      "y": 313,
+      "width": 902,
       "height": 789
     },
     "afterRestore": {
-      "x": 660,
-      "y": 876,
-      "width": 1563,
-      "height": 205
+      "x": 990,
+      "y": 854,
+      "width": 903,
+      "height": 249
     },
     "afterCenter": {
       "canvas": {
         "x": 180,
-        "y": 74,
+        "y": 52,
         "width": 1561,
         "height": 801
       },
       "chat": {
-        "x": 180,
-        "y": 875,
-        "width": 1562,
-        "height": 205
+        "x": 510,
+        "y": 853,
+        "width": 902,
+        "height": 249
       }
     },
     "pairMovedTogetherOnLeft": true,
@@ -510,7 +511,7 @@
   },
   "agentTurn": {
     "present": true,
-    "badge": "18:31 발화",
+    "badge": "18:57 발화",
     "mode": "실시간 (WS)",
     "source": "루틴 '검증 루틴' · 에이전트 발화 — 묻지 않은 턴입니다",
     "body": "005930 조건 도달 — 관측값 5.3 (임계 5). 값은 발화 시점 기준입니다 — 최신 확인은 다시 물어봐 주세요.",
@@ -523,5 +524,9 @@
     "execDisabled": true,
     "windowCount": 2
   },
-  "finishedAt": "2026-08-19T09:37:07.275Z"
+  "captureIntegrity": {
+    "totalShots": 20,
+    "duplicates": []
+  },
+  "finishedAt": "2026-08-19T10:03:54.658Z"
 }

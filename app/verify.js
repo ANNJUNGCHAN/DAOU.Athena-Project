@@ -20,6 +20,7 @@ process.env.ATHENA_CANVAS_SOURCE = 'fixture';
 const { app, ipcMain, BrowserWindow } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const crypto = require('crypto');
 const { execFileSync } = require('child_process');
 
 const CAPTURES = path.join(__dirname, 'captures');
@@ -84,9 +85,24 @@ function stats(timestamps) {
   };
 }
 
+// 2026-08-19 QA 결함 #2 원인: capturePage()는 컴포지터가 "지금 들고 있는" 프레임을
+// 돌려준다 — 직전 DOM/캔버스 변경(특히 lightweight-charts 같은 rAF 기반 캔버스
+// 재도장)이 아직 커밋되지 않았으면 이전 프레임이 그대로 찍힌다. 실측: 19-chart-
+// card.png와 20-live-chart-card.png가 MD5까지 완전히 동일했다 — 카드 제목 텍스트가
+// 달랐는데도 픽셀이 같았다는 건 캡처 자체가 새 프레임을 못 받은 것이지 렌더가
+// 실제로 실패한 게 아니다(각 검증의 executeJavaScript 프로브는 옳은 값을 읽었다).
+// 캡처 직전 rAF 2회를 기다려 컴포지터가 최신 프레임을 실제로 제출했음을 강제한다.
+// captureLog는 재발 방지 단언(§검증17)이 읽는다 — 같은 창을 연속으로 찍은 캡처가
+// 완전히 동일한 PNG가 되면 캡처 타이밍 회귀로 본다.
+const captureLog = [];
 async function shot(win, name) {
+  await win.webContents.executeJavaScript(
+    'new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))'
+  );
   const img = await win.webContents.capturePage();
-  fs.writeFileSync(path.join(CAPTURES, name), img.toPNG());
+  const buf = img.toPNG();
+  fs.writeFileSync(path.join(CAPTURES, name), buf);
+  captureLog.push({ name, hash: crypto.createHash('md5').update(buf).digest('hex'), winTitle: win.getTitle() });
   return img.getSize();
 }
 
@@ -295,7 +311,7 @@ app.whenReady().then(async () => {
   // 원위치
   canvasWin.setBounds({ ...canvasWin.getBounds(), x: canvasWin.getBounds().x - 80 });
   mainMod.noteAppBounds(canvasWin);
-  chatWin.setBounds({ x: layout.originX, y: (layout.originY + layout.canvasH + layout.chatBaseH) - layout.chatBaseH, width: layout.chatW, height: layout.chatBaseH });
+  chatWin.setBounds({ x: layout.chatOriginX, y: (layout.originY + layout.canvasH + layout.chatBaseH) - layout.chatBaseH, width: layout.chatW, height: layout.chatBaseH });
   mainMod.noteAppBounds(chatWin);
   await wait(150);
 
@@ -1052,8 +1068,11 @@ app.whenReady().then(async () => {
 
   report.windowPlacement = {
     beforePlacement, afterLeft, afterRight, afterMaximize, afterRestore, afterCenter,
-    pairMovedTogetherOnLeft: near(afterLeft.chat.x, afterLeft.canvas.x),
-    pairMovedTogetherOnRight: near(afterRight.chat.x, afterRight.canvas.x),
+    // AT-CH-001R(2026-08-19): chatW(900) < canvasW(1560) — "짝으로 움직인다"의
+    // 계약은 x 동일이 아니라 **대화 창이 캔버스 폭의 중앙**이다(window-placement.js).
+    // 구판(chatW==canvasW)에서 x 동일 비교는 이 계약의 특수 사례였다.
+    pairMovedTogetherOnLeft: near(afterLeft.chat.x, afterLeft.canvas.x + Math.round((afterLeft.canvas.width - afterLeft.chat.width) / 2)),
+    pairMovedTogetherOnRight: near(afterRight.chat.x, afterRight.canvas.x + Math.round((afterRight.canvas.width - afterRight.chat.width) / 2)),
     leftDiffersFromRight: afterLeft.canvas.x !== afterRight.canvas.x,
     // near() ±2px — 이 파일의 다른 bounds 비교와 같은 관례다(acrylic + DPI 배율에서
     // setBounds 요청값과 getBounds 실측값이 1px 안팎 어긋나는 실측, 검증3 주석).
@@ -1282,6 +1301,30 @@ app.whenReady().then(async () => {
     "(() => { const o = document.getElementById('order'); const a = document.getElementById('app'); return o.hidden && !a.hidden; })()"
   );
   assertOk('orderTicket: Esc 복귀', orderClosed === true);
+
+  // ---------- 검증 18: 캡처 신뢰성 — 연속 캡처 중복 감지 (2026-08-19 QA 결함 #2 재발 방지,
+  // 디자인 갈래에서는 검증17이었다 — 병합 시 능동 턴 검증17과 번호가 겹쳐 18로 재부여) ----------
+  // 같은 창을 연속으로 찍은 두 캡처가 MD5까지 완전히 같으면, 둘 중 하나(대개
+  // 나중 것)는 화면이 바뀌기 전 프레임을 찍은 것이다 — 파일명이 주장하는 화면을
+  // 실제로 담지 못했다는 뜻이라 값 자체가 신뢰 불가다. shot()의 rAF 2회 대기로
+  // 근본 원인은 고쳤지만, 이 단언은 회귀를 잡는 감지망이다(완화가 아니라 추가).
+  // 03b→04는 예외로 허용한다 — 대화 창의 유휴 입력줄은 캔버스 창이 펼쳐져 있든
+  // 접혔든 자기 자신은 안 바뀐다(캔버스 가시성은 대화 창 DOM에 영향이 없다,
+  // 실측 확인: 두 캡처가 픽셀 단위로 동일 — 새 턴도, 부팅 애니메이션도 그 사이에
+  // 없다). 여기서 빼지 않으면 "정상적으로 안 바뀌는 화면"까지 결함으로 오탐한다.
+  const EXPECTED_IDENTICAL = new Set(['03b-chat-during-mosaic.png>>>04-collapsed-back-to-chat.png']);
+  const dupCaptures = [];
+  for (let i = 1; i < captureLog.length; i++) {
+    const prev = captureLog[i - 1];
+    const cur = captureLog[i];
+    if (EXPECTED_IDENTICAL.has(`${prev.name}>>>${cur.name}`)) continue;
+    if (prev.winTitle === cur.winTitle && prev.hash === cur.hash) {
+      dupCaptures.push({ prev: prev.name, cur: cur.name, hash: cur.hash });
+    }
+  }
+  report.captureIntegrity = { totalShots: captureLog.length, duplicates: dupCaptures };
+  console.log('[verify] 검증18(캡처 신뢰성):', JSON.stringify(report.captureIntegrity));
+  assertOk('captureIntegrity: no adjacent same-window capture is byte-identical', dupCaptures.length === 0);
 
   report.finishedAt = new Date().toISOString();
   fs.writeFileSync(path.join(CAPTURES, 'VERIFY-REPORT.json'), JSON.stringify(report, null, 2));

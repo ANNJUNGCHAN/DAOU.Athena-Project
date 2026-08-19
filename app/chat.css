@@ -67,11 +67,33 @@ html, body { background: transparent; }
 .boot-body { flex: 1; } /* 빈 이력 자리 — 평소의 빈 채팅바와 같은 무지 유리 */
 .boot-inputbar {
   flex-shrink: 0;
-  height: 64px; /* 실제 .input-row와 동일 치수 — 부팅 창이 곧 대화 창이다 */
-  display: flex; align-items: center; gap: 16px;
-  padding: 0 28px;
+  height: 100px; /* 실제 .input-stack(입력줄 52 + 스트립 48)과 동일 — 부팅 창이 곧 대화 창이다 */
+  display: flex; flex-direction: column; align-items: stretch;
   border-top: 1px solid var(--color-k-line-soft);
   visibility: hidden;
+}
+.boot-input-line {
+  height: 52px; flex-shrink: 0;
+  display: flex; align-items: center; gap: 16px;
+  padding: 0 28px;
+}
+.boot-strip {
+  height: 48px; flex-shrink: 0;
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 24px 8px 24px;
+}
+.boot-pill {
+  display: flex; align-items: center;
+  height: 28px; padding: 0 12px; flex-shrink: 0;
+  border-radius: 999px;
+  border: 1px solid rgb(255 255 255 / 14%);
+  background: rgba(29, 34, 44, 0.45);
+  box-shadow: inset 0 1px 0 rgba(255, 253, 248, 0.28);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.1em;
+  color: var(--color-k-bright);
+  white-space: nowrap;
 }
 .boot-panel.final .boot-grip,
 .boot-panel.final .boot-inputbar { visibility: visible; }
@@ -90,8 +112,9 @@ html, body { background: transparent; }
 .boot-name:empty { display: none; } /* 빈 상태에서 letter-spacing 잔여폭이 커서를 밀지 않게 */
 .boot-cursor {
   width: 2px; height: 17px; flex-shrink: 0;
-  background: var(--color-brand);
-  box-shadow: 0 0 12px rgba(238, 19, 123, 0.9);
+  /* 실제 캐럿과 동일한 무채색(보드 11 "입력 커서는 무채색") — 마젠타는 점 하나뿐 */
+  background: var(--color-k-text);
+  box-shadow: 0 0 10px rgba(230, 232, 238, 0.7);
 }
 /* 타이핑 중에는 커서가 글자 끝에, 지워진 뒤에는 placeholder가 커서에 붙는다 —
  * 실제 입력창의 캐럿 문법을 흉내낸다(flex gap 16px를 되무른다). */
@@ -135,11 +158,15 @@ html, body { background: transparent; }
   padding: 0;
   appearance: none;
   cursor: pointer;
-  color: var(--color-k-hint);
+  /* 2026-08-19 QA 결함 #4(중대) — 유휴 45%(--color-k-hint)는 유리 위에서 잘 안
+   * 보인다는 실측 지적(02-chat-only-idle.png). 62%(--color-k-soft)로 한 단계
+   * 올린다 — 여전히 무채색, 새 토큰 없음. */
+  color: var(--color-k-soft);
   transition: background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
 }
-.win-btn:hover { background: rgba(255, 255, 255, 0.08); color: var(--color-k-bright); }
-.win-btn:active { background: rgba(255, 255, 255, 0.13); }
+/* hover 강화 — 배경 8%→14%, 눌림 13%→20% (같은 지적, 병행 조치). */
+.win-btn:hover { background: rgba(255, 255, 255, 0.14); color: var(--color-k-bright); }
+.win-btn:active { background: rgba(255, 255, 255, 0.20); }
 .win-btn:focus-visible { outline: 2px solid var(--color-k-text); outline-offset: 1px; }
 /* 모드(설정·온보딩)가 창 높이를 소유하는 동안 최대화 버튼은 비활성이다 —
  * 라벨이 약속한 동작을 못 하는 버튼을 멀쩡해 보이게 두면 정보 정직성 위반이다
@@ -192,15 +219,36 @@ html, body { background: transparent; }
    * 2026-08-18 하향(사용자 지시 "그냥 검은 창 같다"): 가독성 블러는 네이티브
    * acrylic이 담당하므로 틴트 알파는 뒤가 실제로 비치는 수준까지 내린다 —
    * 유리로 읽히려면 굴절 대상(데스크톱)이 보여야 한다. */
-  background: rgba(23, 27, 36, var(--glass-alpha, var(--glass-window))); /* SSOT: tokens.css 유리 사다리 */
+  /* --glass-alpha(배경색)는 verify.js 검증16이 getComputedStyle().backgroundColor로
+   * 직접 읽는 SSOT 값이다 — background 축약형으로 되돌려 background-image와 합치지
+   * 마라(합치면 backgroundColor가 transparent가 돼 검증16이 깨진다). 흡수(2026-08-19
+   * 리퀴드 글래스 실구현)는 별도 background-image 레이어로 얹는다: 135° 그라디언트로
+   * 다크 스톱이 3단(A1=α+0.08 시작 → α 중앙 46% → A3=α+0.04, 다음 유리 토큰(panel2)
+   * 톤으로 끝) 흘러 평면 단색이 아니라 두께가 있는 유리로 읽히게 한다(palette.md
+   * "흡수되는 것은 명도이지 색조가 아니다"). 스펙큘러(115° 스윕)는 같은
+   * background-image에 얹힌 첫 레이어 — 별도 ::before 대신 배경 레이어로 두면 항상
+   * 텍스트 아래에 그려져 가독을 해치지 않는다(paint order: background < content). */
+  background-color: rgba(23, 27, 36, var(--glass-alpha, var(--glass-window))); /* SSOT: tokens.css 유리 사다리 */
+  background-image:
+    linear-gradient(115deg, transparent 32%, rgba(255, 253, 248, 0.12) 43%, transparent 58%),
+    linear-gradient(135deg,
+      rgba(23, 27, 36, calc(var(--glass-alpha, var(--glass-window)) + 0.08)) 0%,
+      rgba(23, 27, 36, var(--glass-alpha, var(--glass-window))) 46%,
+      rgba(29, 34, 44, calc(var(--glass-alpha, var(--glass-window)) + 0.04)) 100%);
   /* 휘도 감지-적응(2026-08-19)의 두께 전이 — opacity 페이드가 아니라 재료의
    * 연속 적응이다(liquid-glass.md §1). 높이 보간(그립)도 같은 전이를 탄다. */
-  transition: background-color 600ms var(--ease);
+  transition: background-color 600ms var(--ease), background-image 600ms var(--ease);
   border-radius: 20px;
   /* 투명해질수록 윤곽은 광량으로 세운다 — 테두리 소폭 승급 + 유리 윗면 스펙큘러
-   * (상단 인셋 하이라이트). 깊이는 값으로 만든다(soul.md §7). */
+   * (상단 인셋 하이라이트). 깊이는 값으로 만든다(soul.md §7). 렌징 4요소(2026-08-19):
+   * 상단 엣지 하이라이트(밝게) · 좌측 엣지(약하게) · 하단 그림자(어둡게) · 웜 이너 글로우. */
   border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 30px 70px rgba(0, 0, 0, 0.45);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 253, 248, 0.60),
+    inset 1px 0 0 rgba(255, 253, 248, 0.16),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.40),
+    inset 0 0 60px rgba(255, 240, 214, 0.06),
+    0 30px 70px rgba(0, 0, 0, 0.45);
   overflow: hidden;
 }
 
@@ -258,6 +306,9 @@ html, body { background: transparent; }
   font-size: var(--text-lg);
   line-height: 1.5;
   color: var(--color-k-text);
+  /* 각인(engraving) — 텍스트가 유리 위가 아니라 안에 있는 것처럼(palette.md 밝은
+     배경 해법 §각인). 유리 두께가 얇아지는 상태(창 최소 높이)에서도 대비를 지킨다. */
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
 }
 .turn-meta {
   display: flex; align-items: center; gap: 10px;
@@ -283,7 +334,7 @@ html, body { background: transparent; }
 .coachmark {
   position: fixed;
   left: 24px;
-  bottom: 74px; /* 입력줄(64px) 바로 위 */
+  bottom: 110px; /* 입력 스택(입력줄 52 + 스트립 48) 바로 위 */
   z-index: 7; /* win-controls(6) 위 — 최초 1회뿐인 안내가 크롬에 깔리면 안 된다 */
   padding: 8px 14px;
   border-radius: 10px;
@@ -291,7 +342,11 @@ html, body { background: transparent; }
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgb(255 255 255 / 18%);
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / 14%), 0 10px 28px rgb(0 0 0 / 45%);
+  /* 렌징(2026-08-19) — 상단 하이라이트를 웜 오프화이트로, 좌측 엣지·접지 유지. */
+  box-shadow:
+    inset 0 1px 0 rgba(255, 253, 248, 0.55),
+    inset 1px 0 0 rgba(255, 253, 248, 0.14),
+    0 10px 28px rgb(0 0 0 / 45%);
   font-family: var(--font-body);
   font-size: var(--text-base);
   color: var(--color-k-text);
@@ -312,15 +367,92 @@ html, body { background: transparent; }
 .tr-code.done { color: var(--color-ok); }
 .tr-fail { color: var(--color-warn); }
 
-/* ---------- 입력 줄 — 자리를 지킨다 ---------- */
+/* ---------- 커맨드 카드 하단(AT-CH-001R) — 입력줄 + 컨트롤 스트립 ---------- */
+.input-stack {
+  flex-shrink: 0;
+  display: flex; flex-direction: column;
+  position: relative; /* 모델 팝오버의 anchor */
+}
 .input-row {
   flex-shrink: 0;
   display: flex; align-items: center; gap: 16px;
   padding: 0 28px;
-  height: 64px;
+  height: 52px;
   border-top: 1px solid var(--color-k-line-soft);
-  cursor: grab; /* 빈 여백을 잡으면 창 이동 — .input(text)·.dot(pointer)이 자식에서 복원 */
+  cursor: grab; /* 빈 여백을 잡으면 창 이동 — .input(text)이 자식에서 복원 */
 }
+.control-strip {
+  flex-shrink: 0;
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 24px 8px 24px;
+  height: 48px;
+  cursor: grab; /* 빈 여백 드래그로 창 이동 — 필·점은 자식에서 커서 복원 */
+}
+.strip-spacer { flex: 1; }
+.pill {
+  display: flex; align-items: center; gap: 8px;
+  height: 28px; padding: 0 12px; flex-shrink: 0;
+  border-radius: 999px;
+  border: 1px solid rgb(255 255 255 / 14%);
+  background: rgba(29, 34, 44, 0.45);
+  box-shadow: inset 0 1px 0 rgba(255, 253, 248, 0.28);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.1em;
+  color: var(--color-k-bright);
+  white-space: nowrap;
+  cursor: pointer;
+  appearance: none;
+}
+.pill:hover { border-color: var(--color-k-dim); }
+.pill:focus-visible { outline: 2px solid var(--color-k-text); outline-offset: 2px; }
+
+/* 모델 팝오버 — 카드 단계 유리(0.45+blur 14, tokens.css 사다리). 무채색.
+ * 페이드 등장 금지 — hidden 토글로 나타난다(soul.md §7). */
+.model-popover {
+  position: absolute;
+  right: 20px;
+  bottom: 52px; /* 컨트롤 스트립 바로 위 */
+  z-index: 8;
+  width: 240px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(23, 27, 36, 0.53) 0%, rgba(23, 27, 36, 0.45) 46%, rgba(29, 34, 44, 0.49) 100%);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgb(255 255 255 / 13%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 253, 248, 0.5),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.38),
+    0 24px 60px rgba(6, 8, 12, 0.6);
+  display: flex; flex-direction: column; gap: 8px;
+}
+.model-popover[hidden] { display: none; }
+.model-popover .mp-title {
+  font-family: var(--font-strong);
+  font-size: var(--text-sm);
+  color: var(--color-k-bright);
+  text-shadow: 0 1px 5px rgb(0 0 0 / 60%);
+}
+.model-popover .mp-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.model-popover .mp-chip {
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--color-k-line);
+  background: rgba(255, 255, 255, 0.05);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-k-soft);
+  cursor: pointer;
+  appearance: none;
+}
+.model-popover .mp-chip:hover { border-color: var(--color-k-dim); color: var(--color-k-text); }
+.model-popover .mp-chip.on {
+  border-color: rgb(255 255 255 / 45%);
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--color-k-bright);
+}
+.model-popover .mp-sep { height: 1px; background: rgb(255 255 255 / 8%); }
 /* 점 — 세 역할을 겸한다.
  * 1) 상태 표시기(idle/judging/calling)
  * 2) 캔버스 확장·수축 원형 클립의 기하 원점(main.js getDotScreenPoint)
@@ -363,11 +495,17 @@ html, body { background: transparent; }
   flex: 1;
   background: transparent; border: none; outline: none;
   color: var(--color-k-text);
-  caret-color: var(--color-brand); /* AT-SY-001 4단계 — "입력 커서는 브랜드 색" */
+  /* AT-CH-001 보드 11 사양 "입력 커서는 무채색. 브랜드 색은 점 하나뿐이다" —
+   * 구판의 브랜드 캐럿(AT-SY-001 초안)은 점과 마젠타 2개가 돼 palette.md
+   * "한 화면에 마젠타는 한 곳"과 모순이었다(2026-08-19 정합). */
+  caret-color: var(--color-k-text);
   font-family: var(--font-body);
   font-size: var(--text-lg);
 }
-.input::placeholder { color: var(--color-k-faint); }
+/* 2026-08-19 QA 결함 #4(중대) — --color-k-faint(#6b7480)는 유리 위에서 평시에도
+ * 잘 안 읽힌다는 실측 지적(02-chat-only-idle.png). 무채색 원칙 안에서 한 단계
+ * 밝은 --color-k-dim으로 올린다(신규 색 없음, 기존 텍스트 위계 재사용). */
+.input::placeholder { color: var(--color-k-dim); }
 .input:disabled { color: var(--color-k-faint); }
 
 .lock-hint {
@@ -473,6 +611,11 @@ html, body { background: transparent; }
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgb(255 255 255 / 16%);
   overflow: hidden;
+  /* 렌징(2026-08-19) — "모든 유리 표면에" 적용(리퀴드 글래스 실구현 지시). */
+  box-shadow:
+    inset 0 1px 0 rgba(255, 253, 248, 0.55),
+    inset 1px 0 0 rgba(255, 253, 248, 0.14),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.35);
 }
 .onb-cli-card-head {
   height: 48px;
@@ -636,6 +779,13 @@ html, body { background: transparent; }
   display: flex;
   flex-direction: column;
   gap: 10px;
+  /* 렌징(2026-08-19) — "모든 유리 표면에" 적용. 큰 숫자가 얹히는 카드라 웜 이너
+     글로우까지 얹어 canvas.css .card와 같은 두께로 읽히게 한다. */
+  box-shadow:
+    inset 0 1px 0 rgba(255, 253, 248, 0.60),
+    inset 1px 0 0 rgba(255, 253, 248, 0.16),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.40),
+    inset 0 0 54px rgba(255, 240, 214, 0.06);
 }
 .auth-timer-label {
   font-family: var(--font-body);
@@ -652,6 +802,8 @@ html, body { background: transparent; }
   letter-spacing: -1px;
   color: var(--color-k-text);
   white-space: nowrap;
+  /* 각인(engraving) — 큰 숫자는 본문보다 그림자를 더 깊게(palette.md 각인 물리). */
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.66);
 }
 .auth-timer-digits.is-warn { color: var(--color-warn); }
 .auth-timer-digits.is-dim { color: var(--color-k-ghost); }
