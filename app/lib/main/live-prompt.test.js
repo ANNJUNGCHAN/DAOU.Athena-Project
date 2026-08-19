@@ -109,3 +109,10 @@ test('buildLivePrompt: timeline 스키마 힌트 — 부분 데이터 허용 (20
   assert.ok(p.includes('"price_series"'));
   assert.ok(p.includes('"events"'));
 });
+
+test('buildLivePrompt: 감시 방식 이분법 고지 — WS만 실시간, 공시·뉴스는 주기 (실행계획 §8)', () => {
+  const p = buildLivePrompt('x');
+  assert.ok(p.includes('웹소켓 시세 계열'));
+  assert.ok(p.includes('주기 확인 대상'));
+  assert.ok(p.includes('실시간 공시 감시'));
+});

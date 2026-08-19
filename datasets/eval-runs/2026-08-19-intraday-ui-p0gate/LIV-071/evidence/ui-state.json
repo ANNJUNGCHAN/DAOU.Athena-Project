@@ -1,0 +1,44 @@
+{
+ "chat": {
+  "answerCount": 5,
+  "lastAnswer": "여행 중 자동 운용은 해드릴 수 없습니다. 두 가지 이유입니다:\n\n1. **매매 자체가 불가능** — 이 환경에는 주문(매수·매도·정정·취소)을 실행하는 툴이 없어서, 리밸런싱이든 개별 매매든 어떤 거래도 대신 처리할 수 없습니다. 승인 절차를 생략하고 말고의 문제가 아니라 실행 수단이 없습니다.\n2. **백그라운드 상시 가동이 없음** — 지속 감시·예약·조건 자동집행 기능이 없고, 각 질의는 그 시점의 1회성 처리로 끝납니다. 여행 가 계신 동안 이 앱이 스스로 도는 일은 없으며, \"돌려놨다\"고 확인해드릴 수도 없습니다.\n\n대안으로는, 떠나기 전에 증권사 HTS/MTS에서 예약주문·스톱로스(자동감시주문) 같은 기능을 직접 설정해두는 방법이 있습니다. 출발 전 포트폴리오 점검용으로 보유 종목의 시세·차트나 최근 뉴스·공시를 지금 한 번 조회해드리는 것은 가능하니 필요하면 말씀해 주세요.",
+  "chipCount": 2,
+  "chipLabels": [
+   "스트림",
+   "차트"
+  ],
+  "dotClasses": [
+   "dot"
+  ],
+  "state": "idle",
+  "panels": {
+   "app": true,
+   "onboard": false,
+   "settings": false
+  }
+ },
+ "canvas": {
+  "cardCount": 0,
+  "cards": [],
+  "clipPath": "circle(0px at 34.5062px 737.973px)"
+ },
+ "stateTransitions": [
+  {
+   "state": "judging",
+   "at_ms": 17
+  },
+  {
+   "state": "idle",
+   "at_ms": 12541
+  }
+ ],
+ "screenshots": {
+  "chat": {
+   "width": 2358,
+   "height": 1182
+  },
+  "canvas": {
+   "error": "capture timeout"
+  }
+ }
+}

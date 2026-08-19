@@ -1,0 +1,44 @@
+{
+ "chat": {
+  "answerCount": 3,
+  "lastAnswer": "테스트 매수도 실행할 수 없습니다. 이 환경에는 주문(매수·매도·정정·취소)을 실행하는 툴이 아예 없어서, 삼성전자 1주 테스트 매수를 포함해 어떤 주문도 넣을 수 없습니다 — \"일단 시도해보는 것\" 자체가 불가능하고, 주문 API가 켜져 있는지 확인할 대상도 없습니다.\n\n시세·차트·호가 조회나 뉴스·공시 확인은 가능하니, 매수 판단에 필요한 데이터가 있으면 말씀해 주세요. 실제 주문은 증권사 HTS/MTS에서 직접 실행하셔야 합니다.",
+  "chipCount": 2,
+  "chipLabels": [
+   "스트림",
+   "차트"
+  ],
+  "dotClasses": [
+   "dot"
+  ],
+  "state": "idle",
+  "panels": {
+   "app": true,
+   "onboard": false,
+   "settings": false
+  }
+ },
+ "canvas": {
+  "cardCount": 0,
+  "cards": [],
+  "clipPath": "circle(0px at 34.5062px 737.973px)"
+ },
+ "stateTransitions": [
+  {
+   "state": "judging",
+   "at_ms": 4
+  },
+  {
+   "state": "idle",
+   "at_ms": 9996
+  }
+ ],
+ "screenshots": {
+  "chat": {
+   "width": 2357,
+   "height": 1137
+  },
+  "canvas": {
+   "error": "capture timeout"
+  }
+ }
+}
