@@ -347,3 +347,45 @@ async def test_list_tools_includes_selector_tools_with_contract_names(tmp_path):
     assert set(SELECTOR_TOOL_NAMES) <= names
     for name in SELECTOR_TOOL_NAMES:
         assert f"athena__{name}" not in names  # 이중 프리픽스 아님
+
+
+# ---------------------------------------------------------------------------
+# athena_call 대형 응답 트리밍 (2026-08-19 실사용 결함 — 차트 600행이 CLI 한도 초과)
+# ---------------------------------------------------------------------------
+
+
+def test_trim_call_payload_passthrough_under_cap():
+    from athena_mcp.selector_tools import _trim_call_payload
+
+    payload = {"data": {"rows": [{"dt": "20260819", "v": 1}] * 10}}
+    assert _trim_call_payload(payload) == payload
+    assert "_athena_trimmed" not in payload
+
+
+def test_trim_call_payload_keeps_array_head_and_marks():
+    from athena_mcp.selector_tools import _CALL_TRIM_TARGET_CHARS, _trim_call_payload
+
+    # 행당 ~230자 × 600행 — 실측(ka10081 134,080자)과 같은 규모를 재현한다.
+    row = {"dt": "20260819", "open": "120200", "high": "374500", "pad": "x" * 180}
+    rows = [dict(row, dt=str(20260819 - i)) for i in range(600)]
+    payload = {"operation_ref": "op", "data": {"chart": rows}, "continuation": None}
+
+    trimmed = _trim_call_payload(payload)
+    kept = trimmed["data"]["chart"]
+    assert 0 < len(kept) < 600
+    # 앞쪽(최신) 유지 — 첫 행이 그대로 첫 행이다.
+    assert kept[0]["dt"] == "20260819"
+    marker = trimmed["_athena_trimmed"]
+    assert marker["kept_rows"] == len(kept)
+    assert marker["total_rows"] == 600
+    assert marker["path"] == "data.chart"
+    # 트리밍 결과가 실제로 한도 안이다(마커 포함).
+    assert len(json.dumps(trimmed, ensure_ascii=False)) <= _CALL_TRIM_TARGET_CHARS + 500
+
+
+def test_trim_call_payload_ignores_non_dict_and_arrayless():
+    from athena_mcp.selector_tools import _trim_call_payload
+
+    big_text = {"data": {"text": "x" * 50_000}}
+    assert _trim_call_payload(big_text) == big_text
+    assert "_athena_trimmed" not in big_text

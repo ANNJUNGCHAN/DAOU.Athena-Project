@@ -356,9 +356,81 @@ _DESCRIPTION_BY_TOOL: dict[str, str] = {
     CALL_TOOL: (
         "4/4단계 — 서명된 계획을 실행한다. 웹소켓 계획은 등록 프레임 하나를 보내고 "
         "그 확인 응답만 돌려준다 — 구독 이벤트는 이 응답에 없고 별도 WS 스트림으로 "
-        f"온다. {_FLOW_NOTE} 같은 토큰을 재사용하면 서버가 PLAN_ALREADY_USED로 거부한다."
+        f"온다. {_FLOW_NOTE} 같은 토큰을 재사용하면 서버가 PLAN_ALREADY_USED로 거부한다. "
+        "대형 응답(차트 이력 등)은 게이트웨이가 가장 큰 배열의 앞쪽(최신)만 남기고 "
+        "_athena_trimmed 마커를 붙인다 — 남은 행으로 즉시 진행하고 다른 주기 "
+        "오퍼레이션을 다시 찾지 마라."
     ),
 }
+
+
+# ---------- athena_call 대형 응답 트리밍 (2026-08-19 실사용 결함) ----------
+# "삼성전자 차트" 질의에서 ka10081(일봉)이 600행·134,080자를 반환해 claude CLI의
+# 툴 결과 한도를 넘었고, 모델이 일→주→월→연봉 4TR을 헛돌며 166초를 태웠다
+# (감사 로그 13:05~13:08 실측). REST 응답 자체는 불변이고 **LLM 표면에서만**
+# 다듬는다 — 카드 렌더에는 최근 수백 행이면 충분하다. 배열 앞쪽을 남기는 이유:
+# 키움 차트류는 최신이 앞이다(ka10081 실측: first=20260819, last=20240229),
+# 랭킹류도 앞쪽이 상위다. 잘림은 payload에 _athena_trimmed로 정직하게 밝힌다.
+_CALL_TRIM_TARGET_CHARS = 40_000
+
+
+def _trim_call_payload(payload: Any) -> Any:
+    """직렬화가 한도를 넘으면 가장 큰 리스트를 앞에서부터 예산만큼 남긴다.
+
+    구조를 모르는 payload에도 안전하다: dict 트리에서 가장 큰 리스트 하나만
+    다듬고, 리스트가 없거나 한도 이하면 원본 그대로 돌려준다(결정적 — 무작위성
+    없음). 트리밍 시 최상위에 `_athena_trimmed` 마커를 추가한다.
+    """
+    serialized = json.dumps(payload, ensure_ascii=False)
+    if len(serialized) <= _CALL_TRIM_TARGET_CHARS or not isinstance(payload, dict):
+        return payload
+
+    best_path: list[str] | None = None
+    best_len = 0
+
+    def walk(node: Any, path: list[str]) -> None:
+        nonlocal best_path, best_len
+        if isinstance(node, dict):
+            for key, value in node.items():
+                walk(value, [*path, key])
+        elif isinstance(node, list) and len(node) > best_len:
+            best_path = path
+            best_len = len(node)
+
+    walk(payload, [])
+    if not best_path or best_len < 2:
+        return payload
+
+    parent: Any = payload
+    for key in best_path[:-1]:
+        parent = parent[key]
+    array = parent[best_path[-1]]
+
+    array_chars = len(json.dumps(array, ensure_ascii=False))
+    budget = _CALL_TRIM_TARGET_CHARS - (len(serialized) - array_chars)
+    kept = 0
+    acc = 2  # "[]"
+    for item in array:
+        item_chars = len(json.dumps(item, ensure_ascii=False)) + 1
+        if kept > 0 and acc + item_chars > budget:
+            break
+        acc += item_chars
+        kept += 1
+    kept = max(kept, 1)
+    if kept >= len(array):
+        return payload
+
+    parent[best_path[-1]] = array[:kept]
+    payload["_athena_trimmed"] = {
+        "path": ".".join(best_path),
+        "kept_rows": kept,
+        "total_rows": best_len,
+        "note": (
+            "LLM 표면 한도로 배열 앞쪽만 남겼다(차트류는 최신이 앞 — 실측). "
+            "남은 행으로 즉시 진행하고, 답변에 '최근 " f"{kept}행 기준'임을 밝혀라."
+        ),
+    }
+    return payload
 
 
 def builtin_tool_defs() -> list[types.Tool]:
@@ -477,5 +549,8 @@ async def dispatch(
 
     if cache is not None:
         cache.put(name, arguments, payload)  # resolve/call은 게이트로 걸러 무시된다
+
+    if name == CALL_TOOL:
+        payload = _trim_call_payload(payload)
 
     return _success(payload)
