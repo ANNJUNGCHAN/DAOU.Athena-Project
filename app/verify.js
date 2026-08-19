@@ -1212,6 +1212,77 @@ app.whenReady().then(async () => {
   assertOk('glassLadder: card renders --glass-card', report.glassLadder.cardMatchesToken === true);
   assertOk('glassLadder: chat app renders --glass-window at base height', report.glassLadder.chatAppMatchesWindowToken === true);
 
+  // ---------- 검증 17: 능동 턴·주문 티켓 (2026-08-19 능동 에이전트 — 쿼터 0) ----------
+  // 합성 발화 이벤트를 IPC로 주입해 P2~P4 렌더 계약을 픽스처로 검증한다:
+  // 능동 턴(발화 배지·방식 표기·소스 라벨·시점 고지) → 티켓 직행 버튼 →
+  // 모드 전이(#order 표시·#app 후퇴·창은 둘) → 게이트 잠금 → Esc 복귀.
+  chatWin.webContents.send('athena:routine-event', {
+    type: 'routine-fired',
+    routine_id: 'vr1',
+    symbol: '005930',
+    source: 'price.change_rate',
+    mode: 'realtime-ws',
+    observed: 5.3,
+    threshold: 5.0,
+    note: '검증 루틴',
+    fired_at: new Date(Date.now() - 6 * 60 * 1000).toISOString(),
+  });
+  await wait(400);
+  report.agentTurn = await chatWin.webContents.executeJavaScript(`(() => {
+    const t = document.querySelector('.turn-agent.agent-fired');
+    if (!t) return { present: false };
+    return {
+      present: true,
+      badge: (t.querySelector('.agent-badge') || {}).textContent || null,
+      mode: (t.querySelector('.agent-mode') || {}).textContent || null,
+      source: (t.querySelector('.agent-source') || {}).textContent || null,
+      body: (t.querySelector('.agent-body') || {}).textContent || null,
+      hasTicketButton: !!Array.from(t.querySelectorAll('button'))
+        .find((b) => b.textContent.includes('주문 티켓')),
+    };
+  })()`);
+  console.log('[verify] 검증17(능동 턴):', JSON.stringify(report.agentTurn));
+  assertOk('agentTurn: renders', report.agentTurn.present === true);
+  assertOk('agentTurn: 발화 시각 배지', /발화$/.test(report.agentTurn.badge || ''));
+  assertOk('agentTurn: 방식 표기(실시간 WS)', (report.agentTurn.mode || '').includes('실시간'));
+  assertOk('agentTurn: 소스 라벨(묻지 않은 턴)', (report.agentTurn.source || '').includes('묻지 않은 턴'));
+  assertOk('agentTurn: 시점 고지(발화 시점 기준)', (report.agentTurn.body || '').includes('발화 시점'));
+  assertOk('agentTurn: 티켓 직행 버튼', report.agentTurn.hasTicketButton === true);
+
+  await chatWin.webContents.executeJavaScript(`(() => {
+    const t = document.querySelector('.turn-agent.agent-fired');
+    const b = Array.from(t.querySelectorAll('button')).find((x) => x.textContent.includes('주문 티켓'));
+    b.click();
+  })()`);
+  await wait(600);
+  report.orderTicket = await chatWin.webContents.executeJavaScript(`(() => {
+    const vis = (id) => { const n = document.getElementById(id); return !!n && !n.hidden; };
+    const execBtn = Array.from(document.querySelectorAll('#orderBody button'))
+      .find((x) => x.textContent.includes('주문 실행'));
+    return {
+      orderVisible: vis('order'),
+      appHidden: !vis('app'),
+      firedAtLabel: !!Array.from(document.querySelectorAll('#orderBody .ticket-label'))
+        .find((l) => l.textContent.includes('발화 시점')),
+      execDisabled: execBtn ? execBtn.disabled : null,
+    };
+  })()`);
+  report.orderTicket.windowCount = BrowserWindow.getAllWindows().length;
+  console.log('[verify] 검증17(주문 티켓):', JSON.stringify(report.orderTicket));
+  assertOk('orderTicket: 모드 전이(#order 표시·#app 후퇴)',
+    report.orderTicket.orderVisible === true && report.orderTicket.appHidden === true);
+  assertOk('orderTicket: 창은 둘', report.orderTicket.windowCount === 2);
+  assertOk('orderTicket: 발화 시점 라벨(시점 정직성)', report.orderTicket.firedAtLabel === true);
+  assertOk('orderTicket: 게이트 잠금(주문 API 부재 시 실행 비활성)', report.orderTicket.execDisabled === true);
+  await chatWin.webContents.executeJavaScript(
+    "document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))"
+  );
+  await wait(300);
+  const orderClosed = await chatWin.webContents.executeJavaScript(
+    "(() => { const o = document.getElementById('order'); const a = document.getElementById('app'); return o.hidden && !a.hidden; })()"
+  );
+  assertOk('orderTicket: Esc 복귀', orderClosed === true);
+
   report.finishedAt = new Date().toISOString();
   fs.writeFileSync(path.join(CAPTURES, 'VERIFY-REPORT.json'), JSON.stringify(report, null, 2));
   console.log('[verify] 리포트 저장:', path.join(CAPTURES, 'VERIFY-REPORT.json'));

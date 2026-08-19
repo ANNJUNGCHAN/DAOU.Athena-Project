@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-08-19T04:50:54.799Z",
+  "startedAt": "2026-08-19T09:01:05.467Z",
   "layout": {
     "scale": 1,
     "screen": {
@@ -54,18 +54,18 @@
     "ok": true
   },
   "expand": {
-    "frameCount": 18,
-    "p50": 16.700000000000273,
-    "p95": 83.40000000000009,
-    "max": 83.40000000000009,
-    "min": 8.5
+    "frameCount": 30,
+    "p50": 16.699999999999818,
+    "p95": 33.30000000000018,
+    "max": 50,
+    "min": 16.40000000000009
   },
   "collapse": {
-    "frameCount": 1,
-    "p50": null,
-    "p95": null,
-    "max": null,
-    "min": null
+    "frameCount": 35,
+    "p50": 16.699999999999818,
+    "p95": 16.800000000000182,
+    "max": 16.800000000000182,
+    "min": 16.5
   },
   "afterCollapse": {
     "canvasVisible": false
@@ -508,5 +508,20 @@
     "cardMatchesToken": true,
     "chatAppMatchesWindowToken": true
   },
-  "finishedAt": "2026-08-19T04:51:37.304Z"
+  "agentTurn": {
+    "present": true,
+    "badge": "17:55 발화",
+    "mode": "실시간 (WS)",
+    "source": "루틴 '검증 루틴' · 에이전트 발화 — 묻지 않은 턴입니다",
+    "body": "005930 조건 도달 — 관측값 5.3 (임계 5). 값은 발화 시점 기준입니다 — 최신 확인은 다시 물어봐 주세요.",
+    "hasTicketButton": true
+  },
+  "orderTicket": {
+    "orderVisible": true,
+    "appHidden": true,
+    "firedAtLabel": true,
+    "execDisabled": true,
+    "windowCount": 2
+  },
+  "finishedAt": "2026-08-19T09:01:37.284Z"
 }
