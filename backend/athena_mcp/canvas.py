@@ -26,6 +26,17 @@ W1은 게이트웨이 골격이고 캔버스 전면 설계는 W3 몫이다(`plan
   `ohlcv[i]: {time, open, high, low, close, volume}`)을 그대로 따르되, 캔버스
   계약 레벨에서는 `ohlcv`를 `bars`로 부른다(canvas.py의 다른 배열 필드들과
   이름 규칙을 맞춘 것 — 렌더러 쪽 매핑은 이 모듈이 관여하지 않는다).
+- **facts** / **compound** (P1a, `plan/공통화면-템플릿-실행계획-2026-08-20.md`):
+  공통 API 카드 6종(`plan/kiwoom-common-screen-spec.md` §3)의 FactsCard(114)·
+  CompoundCard(29)와 같은 계약이다. `facts`는 컨테이너 없는 스칼라 key/value
+  응답을 key/value grid로(응답 top-level 1~20 필드, §3.1), `compound`는 facts
+  헤더 하나 + 표 하나(§3.3, "이름과 달리 다중 표가 아니다" — 컨테이너 항상
+  정확히 1개)로 편다. `compound.header`는 `facts.fields`와 같은 필드 계약을,
+  `compound.table`은 `table` 캔버스와 같은 필드 계약을 그대로 재사용해 세
+  스키마가 서로 드리프트하지 않게 한다. 이 시점(P1a)에는 아직 런타임 소비자가
+  없다 — `backend/athena_api/canvas_transform.py`의 `build_facts`/
+  `build_compound_generic`이 이 스키마를 채우는 순수 변환이고, 콜드/캐시 경로
+  결선은 P1b가 한다.
 """
 
 from __future__ import annotations
@@ -35,7 +46,7 @@ from typing import Any, Literal
 
 import jsonschema
 
-CanvasType = Literal["stream", "reader", "timeline", "table", "chart", "free"]
+CanvasType = Literal["stream", "reader", "timeline", "table", "chart", "facts", "compound", "free"]
 
 _STREAM_RECORD_SCHEMA: dict[str, Any] = {
     "type": "object",
@@ -137,12 +148,41 @@ CHART_SCHEMA: dict[str, Any] = {
     },
 }
 
+_FACTS_FIELD_SCHEMA: dict[str, Any] = {
+    "type": "object",
+    "required": ["key", "value"],
+    "properties": {
+        "key": {"type": "string"},
+        "label": {"type": ["string", "null"]},
+        "value": {"type": ["string", "number", "boolean", "null"]},
+    },
+}
+
+FACTS_SCHEMA: dict[str, Any] = {
+    "type": "object",
+    "required": ["fields"],
+    "properties": {
+        "fields": {"type": "array", "items": _FACTS_FIELD_SCHEMA, "minItems": 1},
+    },
+}
+
+COMPOUND_SCHEMA: dict[str, Any] = {
+    "type": "object",
+    "required": ["header", "table"],
+    "properties": {
+        "header": {"type": "array", "items": _FACTS_FIELD_SCHEMA, "minItems": 1},
+        "table": TABLE_SCHEMA,
+    },
+}
+
 CANVAS_SCHEMAS: dict[str, dict[str, Any]] = {
     "stream": STREAM_SCHEMA,
     "reader": READER_SCHEMA,
     "timeline": TIMELINE_SCHEMA,
     "table": TABLE_SCHEMA,
     "chart": CHART_SCHEMA,
+    "facts": FACTS_SCHEMA,
+    "compound": COMPOUND_SCHEMA,
 }
 
 
