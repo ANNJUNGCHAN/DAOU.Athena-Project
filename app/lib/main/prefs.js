@@ -13,7 +13,11 @@ const fs = require('fs');
 const path = require('path');
 const { app } = require('electron');
 
-const PREF_DEFAULTS = { autoExpandCanvas: true, autoGrowChat: true };
+const PREF_DEFAULTS = { autoExpandCanvas: true, autoGrowChat: true, fontSize: 'md' };
+
+// 글자 크기 5단계(2026-08-19 사용자 지시 "글자가 너무 큼") — 값은 tokens.css의
+// :root[data-font-size=...] 토큰 세트 키다. 두 렌더러가 <html> dataset으로 적용한다.
+const FONT_SIZES = ['xs', 'sm', 'md', 'lg', 'xl'];
 
 function statePath() {
   return path.join(app.getPath('userData'), 'athena-prefs.json');
@@ -24,7 +28,11 @@ function readState() {
     const raw = JSON.parse(fs.readFileSync(statePath(), 'utf-8'));
     const out = { ...PREF_DEFAULTS };
     for (const key of Object.keys(PREF_DEFAULTS)) {
-      if (typeof raw[key] === 'boolean') out[key] = raw[key];
+      if (typeof PREF_DEFAULTS[key] === 'boolean') {
+        if (typeof raw[key] === 'boolean') out[key] = raw[key];
+      } else if (key === 'fontSize') {
+        if (FONT_SIZES.includes(raw[key])) out[key] = raw[key];
+      }
     }
     return out;
   } catch {
@@ -45,15 +53,20 @@ function get() {
   return readState();
 }
 
-// athena:settings:prefs:set(patch) -> 저장된 최종 상태. boolean이 아닌 키는 무시한다
-// (baa7e0e의 readPrefs 검증 규칙 그대로 — 잘못된 값으로 상태가 오염되지 않는다).
+// athena:settings:prefs:set(patch) -> 저장된 최종 상태. 검증을 통과하지 못한 키는
+// 무시한다(baa7e0e의 readPrefs 검증 규칙 계승 — 잘못된 값으로 상태가 오염되지 않는다).
 function set(patch) {
   const next = { ...readState() };
   for (const key of Object.keys(PREF_DEFAULTS)) {
-    if (typeof (patch && patch[key]) === 'boolean') next[key] = patch[key];
+    const v = patch && patch[key];
+    if (typeof PREF_DEFAULTS[key] === 'boolean') {
+      if (typeof v === 'boolean') next[key] = v;
+    } else if (key === 'fontSize') {
+      if (FONT_SIZES.includes(v)) next[key] = v;
+    }
   }
   writeState(next);
   return next;
 }
 
-module.exports = { get, set, PREF_DEFAULTS };
+module.exports = { get, set, PREF_DEFAULTS, FONT_SIZES };
