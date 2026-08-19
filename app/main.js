@@ -438,17 +438,37 @@ function looksLikeOsSnapHalf(actual, wa) {
 function handleForeignArrange(win) {
   if (settlingSnap) return;
   if (!win || win.isDestroyed() || win.isMinimized() || win.isMaximized()) return;
-  if (winDragTimer) { noteAppBounds(win); return; } // 드래그 중 이동은 앱 주도다
   const actual = win.getBounds();
-  if (!boundsDiffer(expectedBounds.get(win), actual)) return;
+  const prev = expectedBounds.get(win);
+  if (!boundsDiffer(prev, actual)) return;
   const display = screen.getDisplayMatching(actual);
   const wa = display.workArea;
   if (!looksLikeOsSnapHalf(actual, wa)) {
-    // 사용자 모서리 리사이즈(또는 OS 주도의 기타 이동) — 새 크기·위치를 그대로
+    noteAppBounds(win);
+    // 순수 이동(크기 불변) = 네이티브 캡션 드래그(2026-08-19 표준화). 창 짝은
+    // 한 몸이다 — OS는 잡힌 창 하나만 옮기므로 상대 창을 같은 델타로 정착시킨다
+    // (Win+←/→ 스냅 정착과 같은 문법). 상대 창 이동은 noteAppBounds로 앱 주도
+    // 표시를 하므로 서로를 되따라가는 재귀가 없다.
+    const pureMove = prev
+      && Math.abs(actual.width - prev.width) <= 2
+      && Math.abs(actual.height - prev.height) <= 2;
+    if (pureMove) {
+      const dx = actual.x - prev.x;
+      const dy = actual.y - prev.y;
+      const other = win === chatWin ? canvasWin : chatWin;
+      if (other && !other.isDestroyed() && !other.isMinimized() && (dx !== 0 || dy !== 0)) {
+        const ob = other.getBounds();
+        other.setBounds({ x: ob.x + dx, y: ob.y + dy, width: ob.width, height: ob.height });
+        noteAppBounds(other);
+      }
+      syncChatAnchor();
+      mdlog(`창 드래그 정착(${win === chatWin ? 'chat' : 'canvas'}): 짝 팔로우 (${dx},${dy})`);
+      return;
+    }
+    // 사용자 모서리 리사이즈(또는 OS 주도의 기타 변형) — 새 크기·위치를 그대로
     // 수용한다. 대화 창이면 높이 앵커·수동 상태를 함께 정리한다: 높이 상태의
     // 소유자는 렌더러이므로(chat.js) manualOverride를 켜라고 알려 자동 성장이
     // 방금의 사용자 크기를 덮어쓰지 않게 한다.
-    noteAppBounds(win);
     if (win === chatWin) {
       chatHeight = actual.height;
       syncChatAnchor();
@@ -508,50 +528,16 @@ function wireOsSnapEvents(win) {
   });
 }
 
-// ---------- 창 이동 — 빈 유리 표면을 잡고 끈다 ----------
-// -webkit-app-region:drag를 쓰지 않는 이유: 드래그 영역은 wheel/선택 이벤트를
-// 삼켜 이력 스크롤과 충돌하고, verify.js가 두 창 bounds 독립성을 단언하므로
-// 창별로 정밀하게 시작/끝을 제어해야 한다. 렌더러가 빈 배경 mousedown에서
-// start를 보내면, 커서를 폴링해 그 창 하나만 따라 움직인다(줌·DPI 무관 —
-// 스크린 좌표만 쓴다).
-let winDragTimer = null;
-
-function endWindowDrag() {
-  if (winDragTimer) { clearInterval(winDragTimer); winDragTimer = null; }
-}
-
-ipcMain.on('athena:window-drag', (e, { phase } = {}) => {
-  if (phase !== 'start') { endWindowDrag(); return; }
-  const win = BrowserWindow.fromWebContents(e.sender);
-  if (!win || win.isDestroyed()) return;
-  endWindowDrag();
-  const startCursor = screen.getCursorScreenPoint();
-  const startBounds = win.getBounds();
-  let lastDx = 0;
-  let lastDy = 0;
-  winDragTimer = setInterval(() => {
-    if (win.isDestroyed()) { endWindowDrag(); return; }
-    const c = screen.getCursorScreenPoint();
-    const dx = c.x - startCursor.x;
-    const dy = c.y - startCursor.y;
-    // 커서가 안 움직였으면 no-op — 제자리 클릭이 창을 건드리면 안 된다.
-    if (dx === lastDx && dy === lastDy) return;
-    lastDx = dx;
-    lastDy = dy;
-    // setPosition이 아니라 **크기를 고정한 setBounds**를 쓴다. DPI 배율 화면에서
-    // setPosition은 DIP↔물리 px 반올림을 왕복하며 크기를 누적 변형시킨다 —
-    // 배율 1.5에서 제자리 클릭 700ms 홀드만으로 1561×205 → 1613×231 실측
-    // (2026-08-18, verify 검증 11로 재현·회귀 가드). 시작 크기를 매 틱 다시
-    // 명시하면 왕복 반올림이 누적될 자리가 없다.
-    win.setBounds({
-      x: startBounds.x + dx,
-      y: startBounds.y + dy,
-      width: startBounds.width,
-      height: startBounds.height,
-    });
-    noteAppBounds(win); // 드래그도 앱 주도 이동이다 — OS 배치 감지의 기준점 갱신
-  }, 16);
-});
+// ---------- 창 이동 — 네이티브 캡션(-webkit-app-region) (2026-08-19 표준화) ----------
+// 구판은 렌더러 mousedown → 커서 폴링(athena:window-drag)으로 창을 옮겼다 —
+// 지연·비네이티브 감각·가장자리 끌기 스냅 부재로 폐기(사용자 지시 "평범한
+// 앱처럼"). 드래그 손잡이는 CSS가 선언한다: 대화 창 컨트롤 스트립·설정/주문
+// 헤더(chat.css), 캔버스 상단 스트립 #dragStrip(canvas.css). 이동 자체는
+// OS(DWM)가 수행하므로 네이티브 타이틀바와 같은 감각이고 가장자리 끌기 스냅도
+// 함께 생겼다. 본문(.history)은 더 이상 손잡이가 아니다 — 텍스트 선택 복원.
+// OS가 옮기는 건 잡힌 창 하나뿐이므로, 짝 정착은 handleForeignArrange의
+// 순수 이동 분기가 맡는다(위 참조). 구판의 DPI 성장 버그(5e0a9ab)는 폴링
+// 경로 자체가 사라져 소멸 — 검증11이 회귀 가드를 계승한다.
 
 // ---------- 최소화(창 내리기) — 두 창을 한 몸으로 내린다. 복원은 restore 핸들러가 짝 맞춘다 ----------
 ipcMain.on('athena:minimize-windows', () => {

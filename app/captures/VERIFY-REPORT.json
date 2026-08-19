@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-08-19T11:46:42.376Z",
+  "startedAt": "2026-08-19T12:30:11.530Z",
   "layout": {
     "scale": 1,
     "screen": {
@@ -25,7 +25,7 @@
       },
       "idle": {
         "width": 1355,
-        "height": 399
+        "height": 429
       }
     },
     "chatBootedAfterBoot": true,
@@ -49,24 +49,24 @@
   },
   "dotScreenPoint": {
     "x": 540.6666679382324,
-    "y": 1071.3333435058594
+    "y": 1072.3333435058594
   },
   "osCaptureAttempted": {
     "ok": true
   },
   "expand": {
-    "frameCount": 17,
-    "p50": 16.799999999999727,
-    "p95": 100.09999999999991,
-    "max": 100.09999999999991,
-    "min": 16.59999999999991
+    "frameCount": 32,
+    "p50": 16.699999999999818,
+    "p95": 33.299999999999955,
+    "max": 33.299999999999955,
+    "min": 16.5
   },
   "collapse": {
-    "frameCount": 34,
+    "frameCount": 35,
     "p50": 16.699999999999818,
-    "p95": 16.700000000000728,
-    "max": 33.599999999999454,
-    "min": 16.399999999999636
+    "p95": 16.800000000000182,
+    "max": 16.899999999999636,
+    "min": 16.400000000000546
   },
   "afterCollapse": {
     "canvasVisible": false
@@ -81,9 +81,9 @@
       },
       "chat": {
         "x": 510,
-        "y": 834,
+        "y": 815,
         "width": 904,
-        "height": 267
+        "height": 286
       }
     },
     "afterCanvasMove": {
@@ -95,9 +95,9 @@
       },
       "chat": {
         "x": 510,
-        "y": 834,
+        "y": 815,
         "width": 904,
-        "height": 267
+        "height": 286
       }
     },
     "afterChatResize": {
@@ -109,9 +109,9 @@
       },
       "chat": {
         "x": 510,
-        "y": 834,
+        "y": 815,
         "width": 905,
-        "height": 367
+        "height": 387
       }
     },
     "canvasMovedButChatUnchanged": true,
@@ -135,27 +135,27 @@
     },
     "boundsAfterQuery": {
       "x": 510,
-      "y": 809,
+      "y": 733,
       "width": 904,
-      "height": 294
+      "height": 370
     },
     "grewTallerThanBase": true,
-    "grownByPx": 45,
+    "grownByPx": 121,
     "finalAnswerText": "캔버스 창에 스트림, 리더, 공통 테이블을 띄웠습니다.",
     "cardChipCount": 3
   },
   "manualResize": {
     "beforeDrag": {
       "x": 510,
-      "y": 809,
+      "y": 733,
       "width": 904,
-      "height": 294
+      "height": 370
     },
     "afterDrag": {
       "x": 510,
-      "y": 649,
+      "y": 573,
       "width": 905,
-      "height": 455
+      "height": 531
     },
     "grewByDrag": true,
     "bottomEdgePinned": true
@@ -271,24 +271,41 @@
       "clientHeight": 403
     }
   },
-  "dragNoResize": {
+  "dragStandard": {
     "scaleFactor": 1.5,
-    "before": {
-      "x": 510,
-      "y": 861,
-      "width": 913,
-      "height": 249
-    },
-    "after": {
-      "x": 510,
-      "y": 861,
-      "width": 913,
-      "height": 249
-    },
+    "oldChannelDead": true,
     "sizeUnchanged": true,
-    "positionDelta": {
-      "x": 0,
-      "y": 0
+    "appRegions": {
+      "strip": "drag",
+      "dot": "no-drag",
+      "pill": "no-drag",
+      "grip": "no-drag",
+      "winBtn": "no-drag",
+      "history": "none",
+      "settingsHead": "drag"
+    },
+    "canvasStripRegion": "drag",
+    "pairFollow": {
+      "cvBefore": {
+        "x": 180,
+        "y": 52,
+        "width": 1566,
+        "height": 803
+      },
+      "cvAfter": {
+        "x": 240,
+        "y": 92,
+        "width": 1567,
+        "height": 803
+      },
+      "cvRestored": {
+        "x": 180,
+        "y": 52,
+        "width": 1568,
+        "height": 803
+      },
+      "pairFollowed": true,
+      "pairReturned": true
     }
   },
   "tableColumnFold": {
@@ -512,7 +529,7 @@
   },
   "agentTurn": {
     "present": true,
-    "badge": "20:41 발화",
+    "badge": "21:24 발화",
     "mode": "실시간 (WS)",
     "source": "루틴 '검증 루틴' · 에이전트 발화 — 묻지 않은 턴입니다",
     "body": "005930 조건 도달 — 관측값 5.3 (임계 5). 값은 발화 시점 기준입니다 — 최신 확인은 다시 물어봐 주세요.",
@@ -540,5 +557,5 @@
     "noDuplicateMetaOnALine": true
   },
   "historyChannelAllowed": true,
-  "finishedAt": "2026-08-19T11:47:20.971Z"
+  "finishedAt": "2026-08-19T12:30:47.474Z"
 }

@@ -921,33 +921,9 @@ window.addEventListener('wheel', (e) => {
   window.athena.send('athena:zoom', { dir: e.deltaY < 0 ? 'in' : 'out' });
 }, { passive: false });
 
-// 창 이동 — 빈 유리 표면(이력 여백·입력줄 여백·설정/온보딩 배경)을 잡고 끈다.
-// e.target === el 조건이 핵심이다: 턴 텍스트·입력창·버튼 등 자식 위에서는
-// 시작하지 않아 선택/클릭/스크롤과 충돌하지 않는다. 실제 이동은 main.js가
-// 커서를 폴링해 수행한다(athena:window-drag).
-function bindWindowDrag(el) {
-  if (!el) return;
-  el.addEventListener('mousedown', (e) => {
-    if (e.button !== 0 || e.target !== el) return;
-    window.athena.send('athena:window-drag', { phase: 'start' });
-    document.body.style.cursor = 'grabbing'; // 잡는 중 — hover의 grab(chat.css)과 짝(2026-08-19)
-    const end = () => {
-      window.athena.send('athena:window-drag', { phase: 'end' });
-      document.body.style.cursor = '';
-      window.removeEventListener('mouseup', end);
-      window.removeEventListener('blur', end);
-    };
-    window.addEventListener('mouseup', end);
-    window.addEventListener('blur', end);
-  });
-}
-bindWindowDrag($history);
-bindWindowDrag(document.querySelector('.input-row'));
-bindWindowDrag(document.getElementById('controlStrip'));
-bindWindowDrag($settings);
-bindWindowDrag(document.querySelector('.settings-head'));
-bindWindowDrag($onboard);
-bindWindowDrag($onboardBody);
+// 창 이동은 네이티브 캡션이다(2026-08-19 표준화) — 손잡이는 chat.css의
+// -webkit-app-region 선언(컨트롤 스트립·설정/주문 헤더)이고 JS 드래그 경로는
+// 폐기됐다. 본문(.history)은 손잡이가 아니라 텍스트 선택이 된다.
 
 // ---------- 컨트롤 스트립(AT-CH-001R, Paper 47쪽) — CLI 필 · 모델 필 · 팝오버 ----------
 // 실기능만 올린다(soul.md §7): CLI 필은 runQuery의 실행기(claude -p) 표시이자
