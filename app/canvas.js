@@ -732,21 +732,6 @@ window.addEventListener('wheel', (e) => {
   window.athena.send('athena:zoom', { dir: e.deltaY < 0 ? 'in' : 'out' });
 }, { passive: false });
 
-// 창 이동 — 카드가 없는 빈 유리 표면(grid 여백)을 잡고 끈다. e.target 조건으로
-// 카드 내부 스크롤·선택과 충돌하지 않는다.
-function bindWindowDrag(el) {
-  if (!el) return;
-  el.addEventListener('mousedown', (e) => {
-    if (e.button !== 0 || e.target !== el) return;
-    window.athena.send('athena:window-drag', { phase: 'start' });
-    const end = () => {
-      window.athena.send('athena:window-drag', { phase: 'end' });
-      window.removeEventListener('mouseup', end);
-      window.removeEventListener('blur', end);
-    };
-    window.addEventListener('mouseup', end);
-    window.addEventListener('blur', end);
-  });
-}
-bindWindowDrag(grid);
-bindWindowDrag(mosaic);
+// 창 이동은 네이티브 캡션이다(2026-08-19 표준화) — 손잡이는 canvas.html의
+// 상단 스트립(#dragStrip, canvas.css -webkit-app-region:drag)이고 JS 드래그
+// 경로는 폐기됐다. 카드·여백의 스크롤·선택은 이제 드래그와 충돌 여지가 없다.

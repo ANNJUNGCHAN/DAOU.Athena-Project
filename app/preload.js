@@ -48,7 +48,6 @@ const INVOKE_CHANNELS = new Set([
 ]);
 
 const SEND_CHANNELS = new Set([
-  'athena:window-drag',
   'athena:minimize-windows',
   'athena:close-windows',
   'athena:zoom',

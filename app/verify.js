@@ -842,37 +842,66 @@ app.whenReady().then(async () => {
   assertOk('cardLayout: drop_types curation removed table card', report.cardLayout.dropTypesRemovedTable === true);
   assertOk('cardLayout: height budget evicts oldest card first', report.cardLayout.budgetEnforcedOldestFirst === true);
 
-  // ---------- 검증 11: 창 이동(빈 유리 드래그)이 크기를 바꾸지 않는다 ----------
-  // 사용자 보고(2026-08-18): 화면 아무 곳이나 클릭하면 창이 늘어난다. 빈 유리
-  // mousedown → athena:window-drag start → main.js가 16ms 폴링으로 setPosition을
-  // 호출하는데, DPI 배율 화면에서 setPosition은 DIP↔물리 px 반올림을 왕복하며
-  // 크기를 누적 변형시킨다. 제자리 클릭(이동 0px)을 재현한다 — 700ms 홀드면
-  // 폴링 ~40회라 누적이 있으면 반드시 드러난다.
+  // ---------- 검증 11: 창 이동 표준화 — 네이티브 캡션 · JS 드래그 폐기 · 짝 팔로우 ----------
+  // 2026-08-19 사용자 지시("평범한 앱처럼"): 커서 폴링 드래그(athena:window-drag)를
+  // 폐기하고 -webkit-app-region 캡션으로 전환했다. 실제 캡션 드래그는 실물 마우스가
+  // 필요해 자동화로 못 돌린다(검증9와 같은 제약) — 대신 계약 3종을 단언한다:
+  // (a) 옛 채널이 죽어 있다(allowlist 제거 — send가 던진다) + 크기 불변(구판 DPI
+  //     성장 버그 5e0a9ab 회귀 가드 계승), (b) 캡션/구멍 CSS 계약, (c) 짝 팔로우 —
+  // noteAppBounds 없는 순수 이동(사용자 드래그 재현)이 짝 창을 같은 델타로 정착.
   const { screen: elScreen } = require('electron');
   const dragBefore = chatWin.getBounds();
-  await chatWin.webContents.executeJavaScript(
-    "window.athena.send('athena:window-drag', { phase: 'start' })"
+  const oldChannelDead = await chatWin.webContents.executeJavaScript(
+    "(() => { try { window.athena.send('athena:window-drag', { phase: 'start' }); return false; } catch { return true; } })()"
   );
-  await wait(700);
-  await chatWin.webContents.executeJavaScript(
-    "window.athena.send('athena:window-drag', { phase: 'end' })"
-  );
-  await wait(150);
+  await wait(400);
   const dragAfter = chatWin.getBounds();
-  report.dragNoResize = {
+  const appRegions = await chatWin.webContents.executeJavaScript(`(() => {
+    const reg = (sel) => {
+      const el = document.querySelector(sel);
+      if (!el) return null;
+      const cs = getComputedStyle(el);
+      return (cs.getPropertyValue('app-region') || cs.getPropertyValue('-webkit-app-region') || '').trim();
+    };
+    return { strip: reg('#controlStrip'), dot: reg('#controlStrip .dot'), pill: reg('#cliPill'),
+             grip: reg('#grip'), winBtn: reg('.win-btn'), history: reg('#history'),
+             settingsHead: reg('#settings .settings-head') };
+  })()`);
+  const canvasStripRegion = await canvasWin.webContents.executeJavaScript(
+    "(() => { const cs = getComputedStyle(document.getElementById('dragStrip')); return (cs.getPropertyValue('app-region') || cs.getPropertyValue('-webkit-app-region') || '').trim(); })()"
+  );
+  // (c) 짝 팔로우 — 의도적으로 noteAppBounds를 생략한 setBounds = 외부(사용자) 이동.
+  // handleForeignArrange(디바운스 120ms)가 순수 이동으로 판정해 캔버스를 정착시킨다.
+  const cvBefore = canvasWin.getBounds();
+  const chBefore = chatWin.getBounds();
+  chatWin.setBounds({ x: chBefore.x + 60, y: chBefore.y + 40, width: chBefore.width, height: chBefore.height });
+  await wait(450);
+  const cvAfter = canvasWin.getBounds();
+  const pairFollowed = near(cvAfter.x, cvBefore.x + 60) && near(cvAfter.y, cvBefore.y + 40);
+  // 원위치 — 같은 외부 이동 경로로 되돌리면 짝도 같이 돌아온다.
+  chatWin.setBounds({ x: chBefore.x, y: chBefore.y, width: chBefore.width, height: chBefore.height });
+  await wait(450);
+  const cvRestored = canvasWin.getBounds();
+  const pairReturned = near(cvRestored.x, cvBefore.x) && near(cvRestored.y, cvBefore.y);
+  report.dragStandard = {
     scaleFactor: elScreen.getPrimaryDisplay().scaleFactor,
-    before: dragBefore,
-    after: dragAfter,
-    // 크기 불변이 핵심 단언. 위치는 검증 중 실제 마우스가 움직이면 정당하게
-    // 변할 수 있어 참고 수치로만 남긴다(공유 데스크톱).
+    oldChannelDead,
     sizeUnchanged: dragBefore.width === dragAfter.width && dragBefore.height === dragAfter.height,
-    positionDelta: { x: dragAfter.x - dragBefore.x, y: dragAfter.y - dragBefore.y },
+    appRegions, canvasStripRegion,
+    pairFollow: { cvBefore, cvAfter, cvRestored, pairFollowed, pairReturned },
   };
-  console.log('[verify] 검증11(제자리 클릭 크기 불변):', JSON.stringify(report.dragNoResize));
-  // 제자리 클릭만으로 창이 자라던 실제 버그(5e0a9ab)의 회귀 가드 — 핵심 단언.
-  assertOk('dragNoResize: in-place click leaves window size unchanged', report.dragNoResize.sizeUnchanged === true);
-  // positionDelta는 공유 데스크톱에서 실제 커서가 움직이면 정당하게 바뀔 수
-  // 있는 참고 수치라 단언에서 뺀다(파일 상단 주석 참고).
+  console.log('[verify] 검증11(창 이동 표준화):', JSON.stringify(report.dragStandard));
+  assertOk('dragStandard: 옛 JS 드래그 채널이 죽어 있다(allowlist 거부)', oldChannelDead === true);
+  assertOk('dragStandard: 크기 불변(5e0a9ab 회귀 가드 계승)', report.dragStandard.sizeUnchanged === true);
+  assertOk('dragStandard: 컨트롤 스트립 = 캡션(drag)', appRegions.strip === 'drag');
+  assertOk('dragStandard: 점·필·grip·창 버튼 = no-drag 구멍',
+    appRegions.dot === 'no-drag' && appRegions.pill === 'no-drag'
+    && appRegions.grip === 'no-drag' && appRegions.winBtn === 'no-drag');
+  assertOk('dragStandard: 본문(.history)은 손잡이가 아니다', appRegions.history !== 'drag');
+  assertOk('dragStandard: 설정 헤더 = 캡션(drag)', appRegions.settingsHead === 'drag');
+  assertOk('dragStandard: 캔버스 상단 스트립 = 캡션(drag)', canvasStripRegion === 'drag');
+  assertOk('dragStandard: 외부 순수 이동 시 짝 팔로우(같은 델타 정착)', pairFollowed === true);
+  assertOk('dragStandard: 복귀 이동도 짝 유지', pairReturned === true);
 
   // ---------- 검증 12: §5.3.1 컬럼 우선순위 흡수(2층) — table 카드가 1560px에서 접힌다 ----------
   // claude -p 실배선 없이(quota 0) canvas.js의 'athena:add-canvas-live' 경로에 실제
