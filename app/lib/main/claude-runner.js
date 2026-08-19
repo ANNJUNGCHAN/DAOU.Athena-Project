@@ -31,6 +31,7 @@
 const { spawn } = require('child_process');
 const { StreamJsonSession } = require('./stream-json-parser');
 const mcpEnv = require('./mcp-env');
+const { killTree } = require('./proc-utils');
 
 const RENDER_CANVAS_ALLOWED_TOOL = 'mcp__athena__athena__render_canvas';
 // `mcp__<서버명>` 형태는 그 서버의 모든 툴을 허용한다(Claude Code 권한 규칙 —
@@ -48,19 +49,6 @@ const DEFAULT_TIMEOUT_MS = 180_000;
 // 메모리가 무한정 자라지 않게 한다. 5,000,000바이트 — backend post-parse
 // 상한(500만 자, ASCII 기준 대략 5MB)과 같은 자릿수로 맞췄다.
 const MAX_STDOUT_BYTES = 5_000_000;
-
-// claude.exe만 죽이면 그 자식(athena-mcp serve → upstream N개)이 고아로 남을 수
-// 있다 — Windows는 taskkill /T로 프로세스 트리를 통째로 끊는다.
-function killTree(child) {
-  if (!child || child.exitCode !== null || child.signalCode !== null) return;
-  if (process.platform === 'win32') {
-    try {
-      spawn('taskkill', ['/PID', String(child.pid), '/T', '/F'], { windowsHide: true, stdio: 'ignore' });
-    } catch { /* 이미 죽어 있으면 그만 */ }
-  } else {
-    try { child.kill('SIGTERM'); } catch { /* 동일 */ }
-  }
-}
 
 function buildArgs({ prompt, configFile, allowedTools, resumeSessionId, model, effort }) {
   const args = [

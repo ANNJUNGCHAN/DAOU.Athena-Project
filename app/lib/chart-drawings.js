@@ -157,7 +157,7 @@ function createDrawingLayer(deps) {
 
   // ---- 추세선: SVG 재투영 렌더.
   function renderAll() {
-    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    svg.replaceChildren();
     const series = getPriceSeries();
     if (!series) return;
     const toX = (t) => chart.timeScale().timeToCoordinate(t);

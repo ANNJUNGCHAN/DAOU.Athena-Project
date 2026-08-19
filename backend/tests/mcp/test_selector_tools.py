@@ -10,8 +10,6 @@ from pathlib import Path
 import httpx
 from mcp import types as mcp_types
 
-from athena_mcp.consent import ConsentStore
-from athena_mcp.registry import ServerRegistry
 from athena_mcp.result import ERROR_ORIGIN_META_KEY
 from athena_mcp.selector_tools import (
     CALL_TOOL,
@@ -20,20 +18,10 @@ from athena_mcp.selector_tools import (
     SEARCH_TOOL,
     SELECTOR_TOOL_NAMES,
 )
-from athena_mcp.server import AthenaGateway, build_mcp_server
+from athena_mcp.server import build_mcp_server
 
-
-def _gateway(tmp_path: Path, handler) -> AthenaGateway:
-    client = httpx.AsyncClient(
-        transport=httpx.MockTransport(handler), base_url="http://backend.test"
-    )
-    return AthenaGateway(
-        registry=ServerRegistry(path=tmp_path / "reg.json"),
-        consent_store=ConsentStore(path=tmp_path / "consent.json"),
-        audit_log_dir=tmp_path / "audit",
-        canvas_save_dir=tmp_path / "canvases",
-        selector_http_client=client,
-    )
+# `_gateway` 헬퍼는 tests/mcp/conftest.py의 `make_gateway` 픽스처로 옮겼다
+# (2026-08-20 포니테일 감사 — 4파일 중복 제거).
 
 
 # ---------------------------------------------------------------------------
@@ -41,7 +29,7 @@ def _gateway(tmp_path: Path, handler) -> AthenaGateway:
 # ---------------------------------------------------------------------------
 
 
-async def test_search_happy_path_proxies_arguments_and_response(tmp_path):
+async def test_search_happy_path_proxies_arguments_and_response(tmp_path, make_gateway):
     def handler(request: httpx.Request) -> httpx.Response:
         assert request.method == "POST"
         assert request.url.path == "/api/v1/llm/tools/search"
@@ -51,7 +39,7 @@ async def test_search_happy_path_proxies_arguments_and_response(tmp_path):
             json={"catalog_version": "v1", "normalized_query": "삼성전자 현재가", "results": []},
         )
 
-    gw = _gateway(tmp_path, handler)
+    gw = make_gateway(handler)
     result = await gw.dispatch_call(SEARCH_TOOL, {"query": "삼성전자 현재가"})
 
     assert result.isError is False
@@ -60,20 +48,20 @@ async def test_search_happy_path_proxies_arguments_and_response(tmp_path):
     assert payload["results"] == []
 
 
-async def test_describe_happy_path(tmp_path):
+async def test_describe_happy_path(tmp_path, make_gateway):
     def handler(request: httpx.Request) -> httpx.Response:
         assert request.url.path == "/api/v1/llm/tools/describe"
         assert json.loads(request.content) == {"operation_ref": "ka10001"}
         return httpx.Response(200, json={"operation_ref": "ka10001", "kind": "query"})
 
-    gw = _gateway(tmp_path, handler)
+    gw = make_gateway(handler)
     result = await gw.dispatch_call(DESCRIBE_TOOL, {"operation_ref": "ka10001"})
 
     assert result.isError is False
     assert json.loads(result.content[0].text)["operation_ref"] == "ka10001"
 
 
-async def test_resolve_happy_path(tmp_path):
+async def test_resolve_happy_path(tmp_path, make_gateway):
     def handler(request: httpx.Request) -> httpx.Response:
         assert request.url.path == "/api/v1/llm/tools/resolve"
         return httpx.Response(
@@ -90,14 +78,14 @@ async def test_resolve_happy_path(tmp_path):
             },
         )
 
-    gw = _gateway(tmp_path, handler)
+    gw = make_gateway(handler)
     result = await gw.dispatch_call(RESOLVE_TOOL, {"question": "삼성전자 현재가"})
 
     assert result.isError is False
     assert json.loads(result.content[0].text)["plan_token"] == "tok-abc"
 
 
-async def test_call_happy_path(tmp_path):
+async def test_call_happy_path(tmp_path, make_gateway):
     def handler(request: httpx.Request) -> httpx.Response:
         assert request.url.path == "/api/v1/llm/tools/call"
         assert json.loads(request.content) == {"plan_token": "tok-abc"}
@@ -106,7 +94,7 @@ async def test_call_happy_path(tmp_path):
             json={"operation_ref": "ka10001", "data": {}, "continuation": {"cont_yn": "N"}},
         )
 
-    gw = _gateway(tmp_path, handler)
+    gw = make_gateway(handler)
     result = await gw.dispatch_call(CALL_TOOL, {"plan_token": "tok-abc"})
 
     assert result.isError is False
@@ -117,11 +105,11 @@ async def test_call_happy_path(tmp_path):
 # ---------------------------------------------------------------------------
 
 
-async def test_backend_not_running_gives_clear_actionable_message(tmp_path):
+async def test_backend_not_running_gives_clear_actionable_message(tmp_path, make_gateway):
     def handler(request: httpx.Request) -> httpx.Response:
         raise httpx.ConnectError("connection refused", request=request)
 
-    gw = _gateway(tmp_path, handler)
+    gw = make_gateway(handler)
     result = await gw.dispatch_call(SEARCH_TOOL, {"query": "x"})
 
     assert result.isError is True
@@ -137,11 +125,11 @@ async def test_backend_not_running_gives_clear_actionable_message(tmp_path):
 # ---------------------------------------------------------------------------
 
 
-async def test_4xx_error_detail_is_forwarded(tmp_path):
+async def test_4xx_error_detail_is_forwarded(tmp_path, make_gateway):
     def handler(request: httpx.Request) -> httpx.Response:
         return httpx.Response(409, json={"detail": "PLAN_ALREADY_USED"})
 
-    gw = _gateway(tmp_path, handler)
+    gw = make_gateway(handler)
     result = await gw.dispatch_call(CALL_TOOL, {"plan_token": "used"})
 
     assert result.isError is True
@@ -150,11 +138,11 @@ async def test_4xx_error_detail_is_forwarded(tmp_path):
     assert result.meta[ERROR_ORIGIN_META_KEY] == "upstream-failed"
 
 
-async def test_5xx_error_detail_is_forwarded(tmp_path):
+async def test_5xx_error_detail_is_forwarded(tmp_path, make_gateway):
     def handler(request: httpx.Request) -> httpx.Response:
         return httpx.Response(503, json={"detail": "credentials unavailable"})
 
-    gw = _gateway(tmp_path, handler)
+    gw = make_gateway(handler)
     result = await gw.dispatch_call(SEARCH_TOOL, {"query": "x"})
 
     assert result.isError is True
@@ -167,14 +155,14 @@ async def test_5xx_error_detail_is_forwarded(tmp_path):
 # ---------------------------------------------------------------------------
 
 
-async def test_timeout_does_not_retry(tmp_path):
+async def test_timeout_does_not_retry(tmp_path, make_gateway):
     calls: list[httpx.Request] = []
 
     def handler(request: httpx.Request) -> httpx.Response:
         calls.append(request)
         raise httpx.ReadTimeout("timed out", request=request)
 
-    gw = _gateway(tmp_path, handler)
+    gw = make_gateway(handler)
     result = await gw.dispatch_call(RESOLVE_TOOL, {"question": "x"})
 
     assert result.isError is True
@@ -182,33 +170,33 @@ async def test_timeout_does_not_retry(tmp_path):
     assert result.meta[ERROR_ORIGIN_META_KEY] == "upstream-failed"
 
 
-async def test_connect_error_does_not_retry(tmp_path):
+async def test_connect_error_does_not_retry(tmp_path, make_gateway):
     calls: list[httpx.Request] = []
 
     def handler(request: httpx.Request) -> httpx.Response:
         calls.append(request)
         raise httpx.ConnectError("refused", request=request)
 
-    gw = _gateway(tmp_path, handler)
+    gw = make_gateway(handler)
     await gw.dispatch_call(SEARCH_TOOL, {"query": "x"})
 
     assert len(calls) == 1
 
 
-async def test_5xx_failure_does_not_retry(tmp_path):
+async def test_5xx_failure_does_not_retry(tmp_path, make_gateway):
     calls: list[httpx.Request] = []
 
     def handler(request: httpx.Request) -> httpx.Response:
         calls.append(request)
         return httpx.Response(500, json={"detail": "boom"})
 
-    gw = _gateway(tmp_path, handler)
+    gw = make_gateway(handler)
     await gw.dispatch_call(SEARCH_TOOL, {"query": "x"})
 
     assert len(calls) == 1
 
 
-async def test_call_timeout_does_not_retry_even_though_order_risk_is_higher(tmp_path):
+async def test_call_timeout_does_not_retry_even_though_order_risk_is_higher(tmp_path, make_gateway):
     """athena_call은 실제 키움 upstream(주문 포함)을 트리거할 수 있는 자리라
     재시도 금지가 가장 중요한 지점이다 — 타임아웃이어도 단 한 번만 시도한다."""
     calls: list[httpx.Request] = []
@@ -217,7 +205,7 @@ async def test_call_timeout_does_not_retry_even_though_order_risk_is_higher(tmp_
         calls.append(request)
         raise httpx.ReadTimeout("timed out", request=request)
 
-    gw = _gateway(tmp_path, handler)
+    gw = make_gateway(handler)
     result = await gw.dispatch_call(CALL_TOOL, {"plan_token": "tok-1"})
 
     assert result.isError is True
@@ -229,11 +217,11 @@ async def test_call_timeout_does_not_retry_even_though_order_risk_is_higher(tmp_
 # ---------------------------------------------------------------------------
 
 
-async def test_audit_log_records_success(tmp_path):
+async def test_audit_log_records_success(tmp_path, make_gateway):
     def handler(request: httpx.Request) -> httpx.Response:
         return httpx.Response(200, json={"results": []})
 
-    gw = _gateway(tmp_path, handler)
+    gw = make_gateway(handler)
     await gw.dispatch_call(SEARCH_TOOL, {"query": "x"})
 
     entries = gw._audit_log("kiwoom-selector").read_all()
@@ -244,11 +232,11 @@ async def test_audit_log_records_success(tmp_path):
     assert set(entries[0]) == {"ts", "alias", "tool", "success"}
 
 
-async def test_audit_log_records_failure(tmp_path):
+async def test_audit_log_records_failure(tmp_path, make_gateway):
     def handler(request: httpx.Request) -> httpx.Response:
         raise httpx.ConnectError("refused", request=request)
 
-    gw = _gateway(tmp_path, handler)
+    gw = make_gateway(handler)
     await gw.dispatch_call(SEARCH_TOOL, {"query": "x"})
 
     entries = gw._audit_log("kiwoom-selector").read_all()
@@ -256,14 +244,14 @@ async def test_audit_log_records_failure(tmp_path):
     assert entries[0]["success"] is False
 
 
-async def test_audit_log_never_contains_plan_token_or_arguments(tmp_path):
+async def test_audit_log_never_contains_plan_token_or_arguments(tmp_path, make_gateway):
     def handler(request: httpx.Request) -> httpx.Response:
         return httpx.Response(
             200,
             json={"operation_ref": "ka10001", "data": {}, "continuation": {"cont_yn": "N"}},
         )
 
-    gw = _gateway(tmp_path, handler)
+    gw = make_gateway(handler)
     secret_token = "super-secret-plan-token-xyz"
     await gw.dispatch_call(CALL_TOOL, {"plan_token": secret_token})
 
@@ -280,11 +268,11 @@ def _timing_log_path(tmp_path: Path) -> Path:
     return tmp_path / "audit" / "kiwoom-selector-timing.jsonl"
 
 
-async def test_timing_log_records_one_line_per_call(tmp_path):
+async def test_timing_log_records_one_line_per_call(tmp_path, make_gateway):
     def handler(request: httpx.Request) -> httpx.Response:
         return httpx.Response(200, json={"results": []})
 
-    gw = _gateway(tmp_path, handler)
+    gw = make_gateway(handler)
     await gw.dispatch_call(SEARCH_TOOL, {"query": "삼성전자 현재가"})
 
     lines = _timing_log_path(tmp_path).read_text(encoding="utf-8").splitlines()
@@ -296,14 +284,14 @@ async def test_timing_log_records_one_line_per_call(tmp_path):
     assert entry["backend_ms"] >= 0
 
 
-async def test_timing_log_never_contains_plan_token_or_arguments(tmp_path):
+async def test_timing_log_never_contains_plan_token_or_arguments(tmp_path, make_gateway):
     def handler(request: httpx.Request) -> httpx.Response:
         return httpx.Response(
             200,
             json={"operation_ref": "ka10001", "data": {}, "continuation": {"cont_yn": "N"}},
         )
 
-    gw = _gateway(tmp_path, handler)
+    gw = make_gateway(handler)
     secret_token = "super-secret-plan-token-xyz"
     await gw.dispatch_call(CALL_TOOL, {"plan_token": secret_token})
 
@@ -312,7 +300,7 @@ async def test_timing_log_never_contains_plan_token_or_arguments(tmp_path):
     assert "data" not in json.loads(raw_log_text.splitlines()[0])
 
 
-async def test_timing_log_records_even_on_upstream_failure(tmp_path):
+async def test_timing_log_records_even_on_upstream_failure(tmp_path, make_gateway):
     """백엔드 왕복 소요는 실패해도 의미 있는 신호다(재시도가 없으니 "실패까지
     걸린 시간"도 3분해의 일부) — 감사 로그와 달리 success 필드가 없으니 실패
     시에도 그냥 한 줄 남는다."""
@@ -320,7 +308,7 @@ async def test_timing_log_records_even_on_upstream_failure(tmp_path):
     def handler(request: httpx.Request) -> httpx.Response:
         raise httpx.ConnectError("refused", request=request)
 
-    gw = _gateway(tmp_path, handler)
+    gw = make_gateway(handler)
     await gw.dispatch_call(SEARCH_TOOL, {"query": "x"})
 
     lines = _timing_log_path(tmp_path).read_text(encoding="utf-8").splitlines()
@@ -333,11 +321,11 @@ async def test_timing_log_records_even_on_upstream_failure(tmp_path):
 # ---------------------------------------------------------------------------
 
 
-async def test_list_tools_includes_selector_tools_with_contract_names(tmp_path):
+async def test_list_tools_includes_selector_tools_with_contract_names(tmp_path, make_gateway):
     def handler(request: httpx.Request) -> httpx.Response:
         return httpx.Response(200, json={})
 
-    gw = _gateway(tmp_path, handler)
+    gw = make_gateway(handler)
     server = build_mcp_server(gw)
     handler_fn = server.request_handlers[mcp_types.ListToolsRequest]
 

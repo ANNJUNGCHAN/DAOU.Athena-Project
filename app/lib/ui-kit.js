@@ -158,7 +158,41 @@ function errorNote(message) {
 }
 
 function clear(node) {
-  while (node.firstChild) node.removeChild(node.firstChild);
+  node.replaceChildren();
+}
+
+// 카드 제거 + 그리드가 비면 캔버스 접기(D7) — canvas.js·settings-cards.js의
+// closeCard가 각자 손으로 들고 있던 공통 핵심(부모에서 remove → 그리드에
+// .card가 0개면 athena:collapse-canvas). lightweight-charts destroy 같은
+// 카드별 부수 정리는 호출자가 이 헬퍼를 부르기 전에 따로 한다(포니테일 감사).
+function removeCardAndMaybeCollapse(card) {
+  const parent = card.parentElement;
+  card.remove();
+  if (parent && !parent.querySelector('.card')) {
+    window.athena.send('athena:collapse-canvas');
+  }
+}
+
+// 바깥 클릭(mousedown, capture)·Escape로 닫히는 오버레이 배선 — chart-toolbar.js의
+// 드롭다운과 chart-indicator-panel.js의 보조지표 패널이 완전히 동일한 리스너
+// 쌍을 각자 달고 있었다(포니테일 감사). 모듈 싱글턴 관리·패널 재사용 여부처럼
+// 둘이 실제로 다른 부분은 그대로 호출자에 남겨둔다 — 억지 통합은 하지 않는다.
+// capture:true — 카드 스크롤·다른 버튼 클릭보다 먼저 판단해 즉시 닫는다.
+// 반환값은 리스너를 떼는 cleanup 함수 — 닫힘 시점에 호출자가 부른다.
+function bindOutsideCloseAndEscape(panel, anchorBtn, onClose) {
+  const onOutside = (e) => {
+    if (panel.contains(e.target) || anchorBtn.contains(e.target)) return;
+    onClose();
+  };
+  const onEscape = (e) => {
+    if (e.key === 'Escape') onClose();
+  };
+  document.addEventListener('mousedown', onOutside, true);
+  document.addEventListener('keydown', onEscape, true);
+  return () => {
+    document.removeEventListener('mousedown', onOutside, true);
+    document.removeEventListener('keydown', onEscape, true);
+  };
 }
 
 const __exports = {
@@ -175,6 +209,8 @@ const __exports = {
   emptyState,
   errorNote,
   clear,
+  removeCardAndMaybeCollapse,
+  bindOutsideCloseAndEscape,
 };
 
 // UMD 각주(2026-08-18 렌더러 격리) — sanitize.js와 같은 패턴.

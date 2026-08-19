@@ -19,6 +19,7 @@ const path = require('path');
 const crypto = require('crypto');
 const { app } = require('electron');
 const secrets = require('./secrets');
+const { writeJsonAtomic } = require('./json-store');
 
 const KIWOOM_HOST = 'mockapi.kiwoom.com';
 const TOKEN_PATH = '/oauth2/token';
@@ -41,11 +42,53 @@ function readState() {
 }
 
 function writeState(state) {
-  const p = statePath();
-  fs.mkdirSync(path.dirname(p), { recursive: true });
-  const tmp = `${p}.tmp`;
-  fs.writeFileSync(tmp, JSON.stringify(state, null, 2), 'utf-8');
-  fs.renameSync(tmp, p);
+  writeJsonAtomic(statePath(), state);
+}
+
+// ---------------------------------------------------------------------------
+// 키움 REST 호출 공용 골격 — hostname/timeout/on-timeout/on-error/write/end를
+// issueKiwoomToken·revokeKiwoomToken이 반복하던 부분만 뽑았다(2026-08-20
+// 포니테일 감사). statusCode·parsed만 돌려주고 판정(ok/reason 결정)은 각
+// 호출부에 남긴다. 타임아웃·연결 에러·JSON 파싱 실패는 모두 statusCode:0·
+// parsed:null로 뭉뚱그린다 — 호출부의 기존 "statusCode가 2xx가 아니면
+// network" 판정이 그대로 이 경우도 처리하므로 동작은 이전과 같다.
+// ---------------------------------------------------------------------------
+
+function postKiwoomJson({ path: reqPath, apiId, extraHeaders, body }) {
+  return new Promise((resolve) => {
+    const bodyStr = JSON.stringify(body);
+    const req = https.request(
+      {
+        hostname: KIWOOM_HOST,
+        path: reqPath,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+          'api-id': apiId,
+          'Content-Length': Buffer.byteLength(bodyStr),
+          ...extraHeaders,
+        },
+        timeout: 10000,
+      },
+      (res) => {
+        let data = '';
+        res.on('data', (chunk) => { data += chunk; });
+        res.on('end', () => {
+          let parsed = null;
+          try {
+            parsed = JSON.parse(data);
+          } catch {
+            parsed = null;
+          }
+          resolve({ statusCode: res.statusCode, parsed });
+        });
+      },
+    );
+    req.on('timeout', () => { req.destroy(); resolve({ statusCode: 0, parsed: null }); });
+    req.on('error', () => resolve({ statusCode: 0, parsed: null }));
+    req.write(bodyStr);
+    req.end();
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -55,68 +98,32 @@ function writeState(state) {
 // ---------------------------------------------------------------------------
 
 function issueKiwoomToken(appKey, secretKey) {
-  return new Promise((resolve) => {
-    const body = JSON.stringify({
-      grant_type: 'client_credentials',
-      appkey: appKey,
-      secretkey: secretKey,
-    });
-    const req = https.request(
-      {
-        hostname: KIWOOM_HOST,
-        path: TOKEN_PATH,
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-          'api-id': TOKEN_API_ID,
-          'Content-Length': Buffer.byteLength(body),
-        },
-        timeout: 10000,
-      },
-      (res) => {
-        let data = '';
-        res.on('data', (chunk) => { data += chunk; });
-        res.on('end', () => {
-          if (res.statusCode === 429) {
-            resolve({ ok: false, reason: 'ratelimit' });
-            return;
-          }
-          if (res.statusCode < 200 || res.statusCode >= 300) {
-            resolve({ ok: false, reason: 'network' });
-            return;
-          }
-          let parsed;
-          try {
-            parsed = JSON.parse(data);
-          } catch {
-            resolve({ ok: false, reason: 'network' });
-            return;
-          }
-          const returnCode = parsed.return_code == null ? '' : String(parsed.return_code);
-          if (returnCode !== '' && returnCode !== '0') {
-            // 레이트리밋을 구분할 별도 return_code 세트가 문서화돼 있지 않다
-            // (AT-ST-003 데이터 계약이 이미 기록한 갭 — 실제 백엔드도 이 실패를
-            // 세분화하지 않는다). return_msg의 한국어 키워드로 최선의 추정만 한다.
-            const msg = String(parsed.return_msg || '');
-            if (/초과|제한|과다/.test(msg)) {
-              resolve({ ok: false, reason: 'ratelimit' });
-            } else {
-              resolve({ ok: false, reason: 'auth' });
-            }
-            return;
-          }
-          if (typeof parsed.token !== 'string' || !parsed.token || !parsed.expires_dt) {
-            resolve({ ok: false, reason: 'network' });
-            return;
-          }
-          resolve({ ok: true, token: parsed.token, expiresDt: String(parsed.expires_dt) });
-        });
-      },
-    );
-    req.on('timeout', () => { req.destroy(); resolve({ ok: false, reason: 'network' }); });
-    req.on('error', () => resolve({ ok: false, reason: 'network' }));
-    req.write(body);
-    req.end();
+  return postKiwoomJson({
+    path: TOKEN_PATH,
+    apiId: TOKEN_API_ID,
+    body: { grant_type: 'client_credentials', appkey: appKey, secretkey: secretKey },
+  }).then(({ statusCode, parsed }) => {
+    if (statusCode === 429) {
+      return { ok: false, reason: 'ratelimit' };
+    }
+    if (statusCode < 200 || statusCode >= 300 || !parsed) {
+      return { ok: false, reason: 'network' };
+    }
+    const returnCode = parsed.return_code == null ? '' : String(parsed.return_code);
+    if (returnCode !== '' && returnCode !== '0') {
+      // 레이트리밋을 구분할 별도 return_code 세트가 문서화돼 있지 않다
+      // (AT-ST-003 데이터 계약이 이미 기록한 갭 — 실제 백엔드도 이 실패를
+      // 세분화하지 않는다). return_msg의 한국어 키워드로 최선의 추정만 한다.
+      const msg = String(parsed.return_msg || '');
+      if (/초과|제한|과다/.test(msg)) {
+        return { ok: false, reason: 'ratelimit' };
+      }
+      return { ok: false, reason: 'auth' };
+    }
+    if (typeof parsed.token !== 'string' || !parsed.token || !parsed.expires_dt) {
+      return { ok: false, reason: 'network' };
+    }
+    return { ok: true, token: parsed.token, expiresDt: String(parsed.expires_dt) };
   });
 }
 
@@ -142,53 +149,23 @@ function normalizeReturnCode(value) {
 // upstream을 실제로 호출하는 유일한 참조 구현)가 실어 보내는 것과 동일하게
 // 채운다.
 function revokeKiwoomToken(appKey, secretKey, token) {
-  return new Promise((resolve) => {
-    const body = JSON.stringify({ appkey: appKey, secretkey: secretKey, token });
-    const req = https.request(
-      {
-        hostname: KIWOOM_HOST,
-        path: REVOKE_PATH,
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-          'api-id': REVOKE_API_ID,
-          authorization: `Bearer ${token}`,
-          'Content-Length': Buffer.byteLength(body),
-        },
-        timeout: 10000,
-      },
-      (res) => {
-        let data = '';
-        res.on('data', (chunk) => { data += chunk; });
-        res.on('end', () => {
-          if (res.statusCode < 200 || res.statusCode >= 300) {
-            resolve({ ok: false, reason: 'network' });
-            return;
-          }
-          let parsed;
-          try {
-            parsed = JSON.parse(data);
-          } catch {
-            resolve({ ok: false, reason: 'network' });
-            return;
-          }
-          if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed) || !('return_code' in parsed)) {
-            resolve({ ok: false, reason: 'network' });
-            return;
-          }
-          const returnCode = normalizeReturnCode(parsed.return_code);
-          if (returnCode !== '0') {
-            resolve({ ok: false, reason: 'auth' });
-            return;
-          }
-          resolve({ ok: true });
-        });
-      },
-    );
-    req.on('timeout', () => { req.destroy(); resolve({ ok: false, reason: 'network' }); });
-    req.on('error', () => resolve({ ok: false, reason: 'network' }));
-    req.write(body);
-    req.end();
+  return postKiwoomJson({
+    path: REVOKE_PATH,
+    apiId: REVOKE_API_ID,
+    extraHeaders: { authorization: `Bearer ${token}` },
+    body: { appkey: appKey, secretkey: secretKey, token },
+  }).then(({ statusCode, parsed }) => {
+    if (statusCode < 200 || statusCode >= 300) {
+      return { ok: false, reason: 'network' };
+    }
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed) || !('return_code' in parsed)) {
+      return { ok: false, reason: 'network' };
+    }
+    const returnCode = normalizeReturnCode(parsed.return_code);
+    if (returnCode !== '0') {
+      return { ok: false, reason: 'auth' };
+    }
+    return { ok: true };
   });
 }
 

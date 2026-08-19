@@ -32,47 +32,9 @@ const REPO = path.join(__dirname, '..');
 const DATASET = path.join(REPO, 'datasets', '앱-검증-200.jsonl');
 const AUDIT_DIR = path.join(app.getPath('home'), '.athena', 'audit');
 
-function loadCases() {
-  const out = new Map();
-  for (const line of fs.readFileSync(DATASET, 'utf8').split('\n')) {
-    const t = line.trim();
-    if (!t) continue;
-    const c = JSON.parse(t);
-    out.set(c.id, c);
-  }
-  return out;
-}
-
-// audit 로그는 append-only JSONL이다. 실행 전후 행 수를 재서 delta만 뽑는다 —
-// 그 케이스가 실제로 어떤 upstream 툴을 불렀는지가 여기서만 확인된다.
-function auditSnapshot() {
-  const snap = {};
-  if (!fs.existsSync(AUDIT_DIR)) return snap;
-  for (const f of fs.readdirSync(AUDIT_DIR)) {
-    if (!f.endsWith('.jsonl')) continue;
-    const lines = fs.readFileSync(path.join(AUDIT_DIR, f), 'utf8').split('\n').filter(Boolean);
-    snap[f] = lines.length;
-  }
-  return snap;
-}
-
-function auditDelta(before) {
-  const rows = [];
-  if (!fs.existsSync(AUDIT_DIR)) return rows;
-  for (const f of fs.readdirSync(AUDIT_DIR)) {
-    if (!f.endsWith('.jsonl')) continue;
-    const lines = fs.readFileSync(path.join(AUDIT_DIR, f), 'utf8').split('\n').filter(Boolean);
-    for (const l of lines.slice(before[f] || 0)) {
-      try { rows.push(JSON.parse(l)); } catch { rows.push({ raw: l }); }
-    }
-  }
-  return rows;
-}
-
-function stamp(d) {
-  const p = (n) => String(n).padStart(2, '0');
-  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
-}
+// 케이스 로더 · audit 스냅샷/델타 · 날짜 스탬프는 run-cases-ui.js·run-cases-appmode.js와
+// 공용이다 — app/lib/main/eval-harness.js 참조.
+const { loadCases, auditSnapshot, auditDelta, stampDir } = require('./lib/main/eval-harness');
 
 app.whenReady().then(async () => {
   const argv = process.argv.slice(2).filter((a) => !a.startsWith('--'));
@@ -87,13 +49,13 @@ app.whenReady().then(async () => {
     return;
   }
 
-  const cases = loadCases();
+  const cases = loadCases(DATASET);
   const { runClaudeQuery } = require('./lib/main/claude-runner');
   const { ensureMcpConfig } = require('./lib/main/mcp-config');
   const { buildLivePrompt } = require('./lib/main/live-prompt');
   const { dir, configFile } = ensureMcpConfig(app.getPath('userData'));
 
-  const runDir = path.join(REPO, 'datasets', 'eval-runs', `${stamp(new Date())}-intraday`);
+  const runDir = path.join(REPO, 'datasets', 'eval-runs', `${stampDir(new Date())}-intraday`);
   fs.mkdirSync(runDir, { recursive: true });
 
   const index = [];
@@ -109,7 +71,7 @@ app.whenReady().then(async () => {
     const evDir = path.join(caseDir, 'evidence');
     fs.mkdirSync(evDir, { recursive: true });
 
-    const before = auditSnapshot();
+    const before = auditSnapshot(AUDIT_DIR);
     const startedAt = new Date();
     const canvasResults = [];
 
@@ -120,7 +82,7 @@ app.whenReady().then(async () => {
       onCanvasResult: (r) => { canvasResults.push(r); },
     });
 
-    const delta = auditDelta(before);
+    const delta = auditDelta(AUDIT_DIR, before);
     const elapsed = (Date.now() - startedAt.getTime()) / 1000;
 
     // `runClaudeQuery`는 answerText를 직접 주지 않는다 — main.js:291이 하듯

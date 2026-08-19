@@ -35,37 +35,9 @@ const QUERY_TIMEOUT_MS = 260000; // 앱 자체 왕복 상한이 180s. 렌더까�
 
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
-function loadCases() {
-  const out = new Map();
-  for (const line of fs.readFileSync(DATASET, 'utf8').split('\n')) {
-    const t = line.trim();
-    if (t) { const c = JSON.parse(t); out.set(c.id, c); }
-  }
-  return out;
-}
-
-function auditSnapshot() {
-  const snap = {};
-  if (!fs.existsSync(AUDIT_DIR)) return snap;
-  for (const f of fs.readdirSync(AUDIT_DIR)) {
-    if (!f.endsWith('.jsonl')) continue;
-    snap[f] = fs.readFileSync(path.join(AUDIT_DIR, f), 'utf8').split('\n').filter(Boolean).length;
-  }
-  return snap;
-}
-
-function auditDelta(before) {
-  const rows = [];
-  if (!fs.existsSync(AUDIT_DIR)) return rows;
-  for (const f of fs.readdirSync(AUDIT_DIR)) {
-    if (!f.endsWith('.jsonl')) continue;
-    const lines = fs.readFileSync(path.join(AUDIT_DIR, f), 'utf8').split('\n').filter(Boolean);
-    for (const l of lines.slice(before[f] || 0)) {
-      try { rows.push(JSON.parse(l)); } catch { rows.push({ raw: l }); }
-    }
-  }
-  return rows;
-}
+// 케이스 로더 · audit 스냅샷/델타 · 날짜 스탬프는 run-cases.js·run-cases-appmode.js와
+// 공용이다 — app/lib/main/eval-harness.js 참조.
+const { loadCases, auditSnapshot, auditDelta, stampDir } = require('./lib/main/eval-harness');
 
 // verify.js:104의 부팅 판정과 같은 기준 — #boot가 사라지고 #app 또는 #onboard가 보이면 완료.
 async function waitForChatBooted(chatWin, timeoutMs = 15000) {
@@ -157,11 +129,6 @@ function mergeRunIndex(runDir, boot, newCases) {
 // 돌리지 않는다. 첫 카드 도달 시각(first_card_ms) 계측용.
 const CANVAS_COUNT_PROBE = "document.querySelectorAll('#grid > .card').length";
 
-function stampDir(d) {
-  const p = (n) => String(n).padStart(2, '0');
-  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
-}
-
 app.whenReady().then(async () => {
   const ids = process.argv.slice(2).filter((a) => !a.startsWith('--'));
   if (!ids.length) {
@@ -170,7 +137,7 @@ app.whenReady().then(async () => {
     return;
   }
 
-  const cases = loadCases();
+  const cases = loadCases(DATASET);
   const mainMod = require('./main.js');
   await mainMod.createWindows();
   const { chatWin, canvasWin } = mainMod.getWins();
@@ -215,7 +182,7 @@ app.whenReady().then(async () => {
     const startedAt = new Date();
     try {
 
-    const auditBefore = auditSnapshot();
+    const auditBefore = auditSnapshot(AUDIT_DIR);
     const pre = await chatWin.webContents.executeJavaScript(CHAT_PROBE);
     // Esc 접기가 grid를 비우므로 보통 0이지만, 접기 실패로 잔류 카드가 있으면
     // 이 값 이후의 카드만 이 케이스 것으로 귀속한다.
@@ -253,7 +220,7 @@ app.whenReady().then(async () => {
     // 카드가 그려질 시간을 조금 더 준다(마지막 카드 IPC가 답변 직후 도착할 수 있다).
     await wait(1500);
     const canvasState = await canvasWin.webContents.executeJavaScript(CANVAS_PROBE);
-    const delta = auditDelta(auditBefore);
+    const delta = auditDelta(AUDIT_DIR, auditBefore);
 
     const chatSize = await shot(chatWin, path.join(evDir, 'chat.png'));
     const canvasSize = await shot(canvasWin, path.join(evDir, 'canvas.png'));

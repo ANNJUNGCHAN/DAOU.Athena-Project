@@ -33,7 +33,7 @@
 // 대체한다(preload.js). ui-kit require는 node --test/<script> 태그 겸용.
 const {
   el, row, statusDot, badge, arrowIcon, button, progressDots, labeledRow,
-  sheet, secretMask, emptyState, errorNote, clear,
+  sheet, secretMask, emptyState, errorNote, clear, removeCardAndMaybeCollapse,
 } = (typeof module !== 'undefined' && module.exports) ? require('./ui-kit') : window.AthenaLib.UiKit;
 
 // ---------------------------------------------------------------------------
@@ -171,14 +171,8 @@ function deleteConfirmBar(message) {
 // 빈 유리창을 화면에 남겨두지 않고 캔버스 자체를 접는다 — Esc가 쓰는 채널
 // (athena:collapse-canvas)을 그대로 재사용한다. canvas.js의 3개 카드(stream/
 // reader/table)도 같은 채널·같은 스타일로 닫기를 단다(일관성 판단, 보고서
-// 참고).
-function closeCard(card) {
-  const parent = card.parentElement;
-  card.remove();
-  if (parent && !parent.querySelector('.card')) {
-    window.athena.send('athena:collapse-canvas');
-  }
-}
+// 참고). 핵심 로직은 canvas.js와 공유해 ui-kit.js의 removeCardAndMaybeCollapse로
+// 옮겼다(포니테일 감사).
 
 // 카드 헤더의 실제 액션(등록·스니펫 붙여넣기)과 경쟁하지 않게 구분선 뒤
 // 조용한 자리에 둔다 — canvas.css의 .uk-card-close가 그 시각적 거리를 만든다.
@@ -187,7 +181,7 @@ function cardCloseButton(card) {
   b.type = 'button';
   b.setAttribute('aria-label', '카드 닫기');
   b.title = '이 카드 닫기';
-  b.addEventListener('click', () => closeCard(card));
+  b.addEventListener('click', () => removeCardAndMaybeCollapse(card));
   return b;
 }
 

@@ -36,37 +36,9 @@ const ONBOARD_CASES = new Set(['LIV-095', 'LIV-096', 'LIV-097']);
 
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
-function loadCases() {
-  const out = new Map();
-  for (const line of fs.readFileSync(DATASET, 'utf8').split('\n')) {
-    const t = line.trim();
-    if (t) { const c = JSON.parse(t); out.set(c.id, c); }
-  }
-  return out;
-}
-
-function auditSnapshot() {
-  const snap = {};
-  if (!fs.existsSync(AUDIT_DIR)) return snap;
-  for (const f of fs.readdirSync(AUDIT_DIR)) {
-    if (!f.endsWith('.jsonl')) continue;
-    snap[f] = fs.readFileSync(path.join(AUDIT_DIR, f), 'utf8').split('\n').filter(Boolean).length;
-  }
-  return snap;
-}
-
-function auditDelta(before) {
-  const rows = [];
-  if (!fs.existsSync(AUDIT_DIR)) return rows;
-  for (const f of fs.readdirSync(AUDIT_DIR)) {
-    if (!f.endsWith('.jsonl')) continue;
-    const lines = fs.readFileSync(path.join(AUDIT_DIR, f), 'utf8').split('\n').filter(Boolean);
-    for (const l of lines.slice(before[f] || 0)) {
-      try { rows.push(JSON.parse(l)); } catch { rows.push({ raw: l }); }
-    }
-  }
-  return rows;
-}
+// 케이스 로더 · audit 스냅샷/델타 · 날짜 스탬프는 run-cases.js·run-cases-ui.js와
+// 공용이다 — app/lib/main/eval-harness.js 참조.
+const { loadCases, auditSnapshot, auditDelta, stampDir } = require('./lib/main/eval-harness');
 
 function canvasFilesSnapshot() {
   if (!fs.existsSync(CANVASES_DIR)) return [];
@@ -88,11 +60,6 @@ async function shot(win, file) {
   const img = await win.webContents.capturePage();
   fs.writeFileSync(file, img.toPNG());
   return img.getSize();
-}
-
-function stampDir(d) {
-  const p = (n) => String(n).padStart(2, '0');
-  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
 }
 
 // ---------- 렌더러 프로브 (run-cases-ui.js와 동일 기준) ----------
@@ -206,13 +173,13 @@ function restoreOnboarding(backup) {
 
 async function caseLIV089(ctx) {
   const { chatWin, evDir, question } = ctx;
-  const auditBefore = auditSnapshot();
+  const auditBefore = auditSnapshot(AUDIT_DIR);
   const pre = await chatWin.webContents.executeJavaScript(CHAT_PROBE);
   await typeAndEnter(chatWin, question);
   await wait(3000);
   const post = await chatWin.webContents.executeJavaScript(CHAT_PROBE);
   await shot(chatWin, path.join(evDir, 'chat-after-enter.png'));
-  const delta = auditDelta(auditBefore);
+  const delta = auditDelta(AUDIT_DIR, auditBefore);
   // 정리 — 설정이 열렸으면 Esc로 닫는다.
   await pressEsc(chatWin);
   await wait(500);
@@ -460,7 +427,7 @@ async function caseLIV098(ctx) {
 
 async function caseLIV099(ctx) {
   const { chatWin, evDir } = ctx;
-  const auditBefore = auditSnapshot();
+  const auditBefore = auditSnapshot(AUDIT_DIR);
   await clickDot(chatWin);
   await wait(600);
   await clickNavItem(chatWin, 'MCP 서버');
@@ -532,7 +499,7 @@ async function caseLIV099(ctx) {
   await wait(300);
   await pressEsc(chatWin);
   await wait(500);
-  const delta = auditDelta(auditBefore);
+  const delta = auditDelta(AUDIT_DIR, auditBefore);
   const checkedCount = (d) => d && d.checks ? d.checks.filter((c) => c.classes.includes('is-checked')).length : null;
   return {
     observations: {
@@ -760,7 +727,7 @@ app.whenReady().then(async () => {
     return;
   }
 
-  const cases = loadCases();
+  const cases = loadCases(DATASET);
 
   // 온보딩 케이스는 부팅 전에 상태 파일을 조작한다.
   let onboardBackup = null;

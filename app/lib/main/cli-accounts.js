@@ -31,6 +31,7 @@ const os = require('os');
 const path = require('path');
 const { spawn } = require('child_process');
 const { app } = require('electron');
+const { writeJsonAtomic } = require('./json-store');
 
 // 고정 순서 규칙(AT-SY-002 Description 2)은 유지한다 — Claude 다음 Codex.
 // Gemini·Grok이 빠진 이유는 위 D6 주석 참고.
@@ -65,11 +66,7 @@ function readState() {
 }
 
 function writeState(state) {
-  const p = statePath();
-  fs.mkdirSync(path.dirname(p), { recursive: true });
-  const tmp = `${p}.tmp`;
-  fs.writeFileSync(tmp, JSON.stringify(state, null, 2), 'utf-8');
-  fs.renameSync(tmp, p);
+  writeJsonAtomic(statePath(), state);
 }
 
 // ---------------------------------------------------------------------------

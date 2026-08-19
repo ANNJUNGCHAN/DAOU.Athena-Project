@@ -27,6 +27,7 @@
 const fs = require('fs');
 const path = require('path');
 const { app } = require('electron');
+const { writeJsonAtomic } = require('./json-store');
 
 const DEFAULT_STATE = {
   claude: { model: null, effort: null },
@@ -77,11 +78,7 @@ function readState() {
 }
 
 function writeState(state) {
-  const p = statePath();
-  fs.mkdirSync(path.dirname(p), { recursive: true });
-  const tmp = `${p}.tmp`;
-  fs.writeFileSync(tmp, JSON.stringify(state, null, 2), 'utf-8');
-  fs.renameSync(tmp, p);
+  writeJsonAtomic(statePath(), state);
 }
 
 // athena:model-get -> { claude: {model, effort} } — main.js의 handleModelGet이
