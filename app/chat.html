@@ -121,6 +121,12 @@
        밖 고정 오버레이다(모드가 바뀌어도 그대로). 부팅 연출 중에는 숨겼다가
        finishBoot에서 드러난다. 닫기는 종료가 아니다 — 두 창을 숨기고 프로세스는
        백그라운드에 남는다(트레이에서 복귀, main.js). -->
+  <!-- 타이틀바 — 맨 위 32px 네이티브 캡션(2026-08-19, "다른 앱들처럼 맨 위를
+       끌면 끌리게, 보이게"). 모드 무관 상시 창 크롬이라 #app/#onboard/#settings/
+       #order 밖 고정 오버레이다(styles/ui-kit.css .titlebar). 부팅 연출 중에는
+       winControls처럼 숨긴다 — finishBoot가 드러낸다. -->
+  <div id="dragStrip" class="titlebar" hidden aria-hidden="true"><span class="titlebar-label">Athena — 대화</span></div>
+
   <div id="winControls" class="win-controls" hidden>
     <button id="winMin" class="win-btn" type="button" aria-label="최소화" title="최소화 (Ctrl+M)"><span class="win-ic-min"></span></button>
     <button id="winMax" class="win-btn" type="button" aria-label="최대 높이로 확장" title="최대 높이로 확장"><span class="win-ic-max"></span></button>

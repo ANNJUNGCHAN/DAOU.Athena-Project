@@ -64,6 +64,26 @@ function smooth(prev, next, k = 0.35) {
   return prev + (next - prev) * k;
 }
 
+// 계단화 + 체류(2026-08-19 사용자 보고 "투명도가 막 바뀐다"): 연속 b값을 그대로
+// 쓰면 배경 콘텐츠가 움직일 때마다(터미널 스크롤·영상) 유리가 2초 주기로 숨 쉬듯
+// 변한다. b를 3계단(0 / 0.5 / 1)으로 양자화하고, **다른 계단이 dwell회 연속**
+// 유지될 때만 전환한다 — 전환은 드물고 뚜렷하게. 경계에서 계단이 교대하면 체류
+// 카운트가 리셋돼 현 계단에 머문다(히스테리시스).
+function createBrightnessStepper({ dwell = 3 } = {}) {
+  let current = null;
+  let candidate = null;
+  let count = 0;
+  const stepOf = (b) => (b < 0.25 ? 0 : b < 0.75 ? 0.5 : 1);
+  return function step(b) {
+    const s = stepOf(b);
+    if (current === null) { current = s; return current; }
+    if (s === current) { candidate = null; count = 0; return current; }
+    if (s === candidate) { count += 1; } else { candidate = s; count = 1; }
+    if (count >= dwell) { current = s; candidate = null; count = 0; }
+    return current;
+  };
+}
+
 // 화면 좌표 rect → 썸네일 좌표 rect (버림/올림으로 창 영역을 보수적으로 넉넉히 제외)
 function scaleRect(rect, scaleX, scaleY) {
   return {
@@ -82,5 +102,6 @@ module.exports = {
   lumaToBrightness,
   brightnessToAlpha,
   smooth,
+  createBrightnessStepper,
   scaleRect,
 };

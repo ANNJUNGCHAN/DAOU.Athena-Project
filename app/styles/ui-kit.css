@@ -248,3 +248,28 @@
 .uk-card-close:active { background: rgba(255, 255, 255, 0.12); }
 .uk-card-close:focus-visible { outline: 1px solid var(--color-k-dim); outline-offset: 1px; opacity: 1; }
 @media (prefers-reduced-motion: reduce) { .uk-card-close { transition: none; } }
+
+/* 타이틀바(2026-08-19, 사용자 지시 — Codex 캡처의 상단 띠 참조: "다른 앱들처럼
+ * 맨 위를 끌면 끌리게, 보이게") — 두 창 공통 창 크롬이다. 전체가 네이티브
+ * 캡션(-webkit-app-region: drag)이라 이동은 OS(DWM)가 수행한다(가장자리 끌기
+ * 스냅 포함). 메뉴·기능은 올리지 않는다(§8 상시 툴바 탈락 조건 — 이건 기능
+ * 바가 아니라 창 크롬이다). 깊이는 값으로: 유리 위 한 단계 어두운 무채색 띠
+ * + 헤어라인. 겹치는 실기능(창 버튼)은 no-drag 구멍. */
+.titlebar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 32px;
+  display: flex; align-items: center;
+  padding: 0 14px;
+  z-index: 7;
+  -webkit-app-region: drag;
+  cursor: grab;
+  background: rgba(8, 10, 14, 0.28);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+.titlebar-label {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.45);
+  letter-spacing: 0.02em;
+  user-select: none;
+}

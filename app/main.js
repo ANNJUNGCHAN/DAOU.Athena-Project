@@ -717,6 +717,9 @@ let backdropTimer = null;
 let smoothedLuma = null;
 let sampleFailures = 0;
 let lastSent = null;
+// 계단화 스테퍼(2026-08-19 사용자 보고 "투명도가 막 바뀐다") — 3계단×3연속(6초)
+// 일 때만 전환. 연속값 직결은 배경이 움직일 때마다 유리가 숨 쉬는 결함이었다.
+const brightnessStepper = backdropLuma.createBrightnessStepper({ dwell: 3 });
 
 async function sampleBackdropOnce() {
   if (!chatWin || chatWin.isDestroyed()) return;
@@ -744,7 +747,7 @@ async function sampleBackdropOnce() {
     if (luma === null) return; // 창이 화면을 다 덮어 판정 불가 — 이전 값 유지
     sampleFailures = 0;
     smoothedLuma = backdropLuma.smooth(smoothedLuma, luma);
-    const b = backdropLuma.lumaToBrightness(smoothedLuma);
+    const b = brightnessStepper(backdropLuma.lumaToBrightness(smoothedLuma));
     sendBackdropAlphas({
       brightness: b,
       windowAlpha: backdropLuma.brightnessToAlpha(b, 0.30),
