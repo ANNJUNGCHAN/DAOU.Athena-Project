@@ -20,6 +20,11 @@ from athena_api.kiwoom import (
     TokenManager,
 )
 from athena_api.process_lock import BrainProcessLock, CredentialProcessLock
+from athena_api.routines.runtime import (
+    RoutinesRuntime,
+    open_routines,
+    teardown_routines,
+)
 
 
 @dataclass(slots=True)
@@ -145,6 +150,13 @@ async def _open_brain(settings: Settings) -> BrainRuntime:
         raise
 
 
+def _publish_routines(app: FastAPI, routines: "RoutinesRuntime | None") -> None:
+    app.state.routines_runtime = routines
+    app.state.routines_ready = routines is not None and routines.ready
+    app.state.routines_last_error = routines.last_error if routines is not None else None
+    app.state.routine_events = routines.events if routines is not None else None
+
+
 async def _teardown_brain(app: FastAPI, brain: BrainRuntime | None) -> None:
     if brain is not None:
         # ADR §4.2 step 3: reject new enqueue -> drain/checkpoint -> writer cancel and
@@ -208,9 +220,11 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
         app.state.kiwoom_default_account = runtime_settings.kiwoom_default_account
         _publish_default(app, None)
         _publish_brain(app, None)
+        _publish_routines(app, None)
         http_client: httpx.AsyncClient | None = None
         locks: list[CredentialProcessLock] = []
         brain: BrainRuntime | None = None
+        routines: RoutinesRuntime | None = None
         try:
             if runtime_settings.has_credentials:
                 http_client = httpx.AsyncClient()
@@ -245,15 +259,34 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
             if runtime_settings.brain_enabled:
                 brain = await _open_brain(runtime_settings)
                 _publish_brain(app, brain)
+            if runtime_settings.routines_enabled:
+                # 루틴은 키움과 독립 기능이지만, 실시간 트랙·양보 판정은 기본
+                # 계정 런타임의 WS·리미터를 빌린다(리미터는 하나 — CLAUDE.md §7).
+                default_rt = runtimes.get(
+                    runtime_settings.kiwoom_default_account or ""
+                ) or next(iter(runtimes.values()), None)
+                routines = await open_routines(
+                    runtime_settings,
+                    ws_client=default_rt.ws_client if default_rt is not None else None,
+                    headroom=(
+                        default_rt.rate_limiter.headroom
+                        if default_rt is not None
+                        else None
+                    ),
+                )
+                _publish_routines(app, routines)
         except BaseException:
             await _teardown(app, runtimes, http_client, locks)
             await _teardown_brain(app, brain)
+            await teardown_routines(routines)
             raise
         try:
             yield
         finally:
             await _teardown(app, runtimes, http_client, locks)
             await _teardown_brain(app, brain)
+            await teardown_routines(routines)
+            _publish_routines(app, None)
 
     return lifespan
 
