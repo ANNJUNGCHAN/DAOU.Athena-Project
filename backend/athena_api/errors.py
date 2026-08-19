@@ -126,3 +126,25 @@ def install_exception_handlers(app: FastAPI) -> None:
             status_code=502,
             content={"detail": "Kiwoom WebSocket upstream request failed"},
         )
+
+    from athena_api.routines.rules import RoutineValidationError
+    from athena_api.routines.store import RoutineTransitionError
+
+    @app.exception_handler(RoutineValidationError)
+    async def routine_validation_handler(
+        _request: Request, exc: RoutineValidationError
+    ) -> JSONResponse:
+        # 메시지는 rules.py가 만든 도메인 문장뿐 — upstream 원문이 흐르지 않는다.
+        return JSONResponse(
+            status_code=422,
+            content={"detail": "루틴 조건이 유효하지 않다", "message": str(exc)},
+        )
+
+    @app.exception_handler(RoutineTransitionError)
+    async def routine_transition_handler(
+        _request: Request, exc: RoutineTransitionError
+    ) -> JSONResponse:
+        return JSONResponse(
+            status_code=409,
+            content={"detail": "루틴 상태 전이가 허용되지 않는다", "message": str(exc)},
+        )

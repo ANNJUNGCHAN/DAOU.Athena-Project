@@ -101,6 +101,18 @@ class Settings(BaseSettings):
     brain_history_db_path: Path = Field(
         default_factory=lambda: Path.home() / ".athena" / "brain-history.sqlite3"
     )
+    # 능동 에이전트 루틴(감시·알림) — 기본 비활성. 켜지 않은 배포·테스트는 루틴
+    # 파일을 만들지 않는다. 실행계획 P1 (plan/능동-에이전트-실행계획-2026-08-19.md).
+    routines_enabled: bool = False
+    routines_poll_interval_seconds: float = 300.0
+    routines_store_path: Path = Field(
+        default_factory=lambda: Path.home() / ".athena" / "routines" / "routines.json"
+    )
+    routines_ledger_path: Path = Field(
+        default_factory=lambda: Path.home() / ".athena" / "routines" / "ledger.jsonl"
+    )
+    # DART 공시 폴러 키 — 없으면 periodic 공시 루틴만 강등(realtime은 무관).
+    dart_api_key: SecretStr | None = None
 
     @field_validator("local_bearer_token", mode="before")
     @classmethod
