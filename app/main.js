@@ -843,13 +843,20 @@ let activeLiveQuery = null;
 // 앱 재시작 시 null — 대화는 앱 수명 단위다(디스크에 세션 키를 남기지 않는다).
 let liveSessionId = null;
 
-// history-sink conversation_id — liveSessionId가 아직 없는 첫 턴(들)을 위한
-// 앱 세션 단위 폴백(계획 §2(a) "liveSessionId가 null인 첫 턴 처리"). liveSessionId가
-// 생기면(첫 성공 왕복 이후) 그쪽을 쓴다 — 둘 다 프로세스 메모리에만 있다.
+// history-sink conversation_id — **앱 세션 단위로 고정한다. liveSessionId를 쓰지 않는다.**
+// 계획 §2(a)는 liveSessionId 재사용을 제안했지만 실배선 E2E가 그 전제를 뒤집었다
+// (PROBE-BRAIN-CHAT-E2E.json, 2026-08-19): `claude -p --resume`은 매 성공 왕복마다
+// 세션을 포크해 새 id를 발급하므로, 질의 진입 시점(role:user)과 응답 반환 시점
+// (role:assistant) 사이에 liveSessionId가 바뀐다. 그 결과 **같은 한 턴의 두 메시지가
+// 서로 다른 conversation_id로 갈렸다**(user 0a1fe408… / assistant 5ff6842e…) — 프로브가
+// sameConversationLocator:false로 잡아낸 결함이다. 조회(GET /chats?conversation_id=)는
+// 반쪽 턴만 돌려주고 그래프의 대화 묶음도 턴마다 쪼개진다.
+// liveSessionId는 애초에 대화 식별자가 아니라 재개용 커서다. 위 843행 주석이 이미
+// "대화는 앱 수명 단위다"라고 적고 있으니, 대화 id는 앱 세션에 고정하는 게 맞다.
 const historyAppSessionId = crypto.randomUUID();
 
 function historyConversationId() {
-  return liveSessionId || historyAppSessionId;
+  return historyAppSessionId;
 }
 
 // 저장 실패를 렌더러의 "기록 안 됨" 배지로 전달(계획 §2(g), 함정 ⑫ — messageId/role만
