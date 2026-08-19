@@ -20,6 +20,7 @@ BEARER = "local-test-bearer"
 CHAT_PATH = "/api/v1/brain/chat"
 STATUS_PATH = "/api/v1/brain/status"
 CHATS_PATH = "/api/v1/brain/chats"
+CONVERSATIONS_PATH = "/api/v1/brain/conversations"
 PROFILE_SUMMARY_PATH = "/api/v1/brain/profile-summary"
 RESET_PATH = "/api/v1/brain/reset-and-restart"
 SECRET_MARKER = "지난주에 삼성전자 100주를 매수하고 싶다는 비밀스러운 계획"
@@ -105,6 +106,18 @@ def test_chats_requires_bearer_header() -> None:
     assert response.status_code == 422
 
 
+def test_conversations_requires_bearer_header() -> None:
+    with _disabled_client() as client:
+        response = client.get(CONVERSATIONS_PATH)
+    assert response.status_code == 422
+
+
+def test_conversations_rejects_wrong_bearer() -> None:
+    with _disabled_client() as client:
+        response = client.get(CONVERSATIONS_PATH, headers={"Authorization": "Bearer nope"})
+    assert response.status_code == 401
+
+
 def test_profile_summary_requires_bearer_header() -> None:
     with _disabled_client() as client:
         response = client.get(PROFILE_SUMMARY_PATH)
@@ -148,6 +161,14 @@ def test_chats_503s_while_brain_disabled() -> None:
             CHATS_PATH,
             headers={"Authorization": f"Bearer {BEARER}"},
             params={"conversation_id": "conv:1"},
+        )
+    assert response.status_code == 503
+
+
+def test_conversations_503s_while_brain_disabled() -> None:
+    with _disabled_client() as client:
+        response = client.get(
+            CONVERSATIONS_PATH, headers={"Authorization": f"Bearer {BEARER}"}
         )
     assert response.status_code == 503
 
@@ -234,6 +255,45 @@ def test_chat_round_trip_and_status_and_no_body_leak_in_logs(
         assert messages[0]["text"] == SECRET_MARKER
 
     # Trap ⑫: the chat body must never reach any log record, success or otherwise.
+    for record in caplog.records:
+        assert SECRET_MARKER not in record.getMessage()
+
+
+def test_conversations_lists_ids_counts_and_timestamps_without_transcript_body(
+    tmp_path: Path, ladybug_dll_dir: Path | None, caplog: pytest.LogCaptureFixture
+) -> None:
+    if ladybug_dll_dir is None:
+        pytest.skip("no local ladybug native runtime available on this machine")
+    app = create_app(_brain_settings(tmp_path))
+    occurred_at = datetime.now(UTC)
+    with caplog.at_level(logging.INFO), TestClient(app) as client:
+        client.post(
+            CHAT_PATH,
+            headers={"Authorization": f"Bearer {BEARER}"},
+            json={
+                "conversation_id": "conv:list-me",
+                "role": "user",
+                "text": SECRET_MARKER,
+                "message_id": "msg:list-1",
+                "occurred_at": occurred_at.isoformat(),
+            },
+        )
+
+        response = client.get(
+            CONVERSATIONS_PATH, headers={"Authorization": f"Bearer {BEARER}"}
+        )
+    assert response.status_code == 200
+    body = response.json()
+    assert body["conversations"] == [
+        {
+            "conversation_id": "conv:list-me",
+            "message_count": 1,
+            "first_occurred_at": body["conversations"][0]["first_occurred_at"],
+            "last_occurred_at": body["conversations"][0]["last_occurred_at"],
+        }
+    ]
+    # Trap 12: the list response and its logs must never carry the transcript body.
+    assert SECRET_MARKER not in response.text
     for record in caplog.records:
         assert SECRET_MARKER not in record.getMessage()
 
