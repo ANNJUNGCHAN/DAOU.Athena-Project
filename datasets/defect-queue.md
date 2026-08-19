@@ -209,7 +209,7 @@ UI에서는 `.card.mcp-table`이 그려졌고 **그 표 안에 채점 요건이 
   canvas_type과 안 맞거나 원문 식별자가 칩에 그대로 노출됨"으로 반전
   (`datasets/앱-검증-200.jsonl` LIV-056).
 
-### H-003 · LIV-055 — Esc 분기 케이스를 배치 하네스가 대화형 텍스트로만 실행함 [확인 필요]
+### H-003 · LIV-055 — Esc 분기 케이스를 배치 하네스가 대화형 텍스트로만 실행함 [해소됨]
 
 - **증상**: `notes`가 "evaluator가 judging/calling 구간에 수동으로 Esc를 눌러 관찰해야
   하는 상호작용형 검증"이라고 명시하는데, `2026-08-19-intraday-ui` 배치는 `question` 원문
@@ -408,7 +408,7 @@ LIV-062 UI 실행의 답변 첫 문장: *"확인해보니 작업 디렉터리의
   `audit-log`를 빼야 한다. `--tool` 능동 probe 경로를 검증하고 싶다면 별도 케이스로
   CLI 직접 호출(`athena-mcp probe <alias> --tool ...`)을 전제로 새로 세워야 한다.
 
-### H-005 · LIV-098 — 하네스가 분석 완료(~850ms) 전에 증거를 캡처함 [수정 필요]
+### H-005 · LIV-098 — 하네스가 분석 완료(~850ms) 전에 증거를 캡처함 [수정함]
 
 - **증상**: `app/run-cases-appmode.js`(L399-402)가 'MCP 서버 등록' 시트의 '분석' 버튼을
   클릭한 뒤 **800ms만 대기**하고 `staged`/스크린샷을 캡처한다. 그런데
@@ -426,7 +426,7 @@ LIV-062 UI 실행의 답변 첫 문장: *"확인해보니 작업 디렉터리의
   때까지(또는 `staged`/`analyzeErrBox` DOM에 내용이 생길 때까지) 폴링하는 방식으로 교체.
   계좌 등록 카드가 이미 쓰는 "토큰 발급 확인 중…" 폴링 패턴을 재사용할 수 있다.
 
-### H-006 · LIV-100 — 하네스 정규식 오매칭 + 미승인 naver-search 픽스처가 이 환경에 부재 [수정 필요]
+### H-006 · LIV-100 — 하네스 정규식 오매칭 + 미승인 naver-search 픽스처가 이 환경에 부재 [수정함]
 
 - **증상**: 케이스 전제는 "네이버 검색 서버 중 아직 승인되지 않은 서버가 하나 확인된다"이다.
   그런데 이번 실행 환경의 등록 서버는 `dart-mcp`·`korea-stock-mcp`·`naver-search-2`
@@ -500,4 +500,18 @@ LIV-062 UI 실행의 답변 첫 문장: *"확인해보니 작업 디렉터리의
 - **실행 증거** (`2026-08-19-intraday-ui-fixcheck/LIV-066`): kiwoom-selector로 조회해
   chart 카드까지 정상 렌더 — 데이터셋 전제만 낡았다.
 - **조치안**: D-011과 동일 — "kiwoom-selector 경로 시도"로 교체.
+
+---
+
+## 2026-08-19 후속 해소 기록 (같은 날 오후)
+
+- **H-003 해소**: run-cases-appmode.js에 caseLIV055 전용 절차(카드 유발 질의 → judging 중
+  Esc → 10초 늦은 카드 감시) 추가 후 재실행 — 중단 분기 정상 관측, 재채점 pass.
+  구식 표준 하네스 증거는 evidence/stale-standard-run/으로 격리(README.txt 포함).
+- **H-005 수정**: 고정 800ms 대기 → 스테이징 결과(warnbox 또는 quote-fetcher 텍스트)
+  폴링(최대 15초)으로 교체. 재실행에서 위험 경고 2건 정상 캡처, 사후 레지스트리 증거로 pass.
+- **H-006 수정**: 행 매칭을 텍스트 시작 일치로 교체(argsPreview 부분매치 오류 해소) +
+  registry 파싱을 dict 구조·consent.json 정본으로 정정 + 미승인 naver-search 픽스처를
+  레지스트리에 복원(~/.athena/mcp_servers.json — 백업 .bak-qa20260819, consent는 원래
+  미승인 유지). 재실행 pass.
 
