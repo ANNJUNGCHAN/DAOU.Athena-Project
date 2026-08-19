@@ -1,10 +1,10 @@
-"""Authenticated downstream fanout of Kiwoom REAL WebSocket events.
+"""루틴 알림 다운스트림 — /api/v1/ws/routines.
 
-이 엔드포인트는 키움 REAL 이벤트 전용이다 — 루틴 알림은 별도 라우트
-(`routines_ws.py`)로 분리한다(의미를 섞으면 클라이언트 파싱 책임이 흐려진다).
-인증 의미론은 `ws_auth.authenticate_downstream_ws`로 추출됐다(동작 불변 —
-기존 테스트 전건이 고정).
+스케줄러가 넣는 발화·만료·복원실패 이벤트를 앱(Electron 메인)에 push한다.
+인증은 stream과 같은 배타 2모드(`ws_auth`). 소비자는 단일 앱 인스턴스
+전제라 큐를 팬아웃하지 않고 그대로 비운다.
 """
+
 from __future__ import annotations
 
 import asyncio
@@ -12,18 +12,21 @@ import asyncio
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 
 from athena_api.api.ws_auth import authenticate_downstream_ws
-from athena_api.dependencies import KiwoomWsClientDep
 
-router = APIRouter(tags=["Kiwoom WebSocket stream"])
+router = APIRouter(tags=["routine notifications"])
 
 
-@router.websocket("/api/v1/ws/stream", name="kiwoom_real_stream")
-async def kiwoom_real_stream(websocket: WebSocket, client: KiwoomWsClientDep) -> None:
+@router.websocket("/api/v1/ws/routines", name="routine_notifications")
+async def routine_notifications(websocket: WebSocket) -> None:
     await websocket.accept()
     if not await authenticate_downstream_ws(websocket):
         return
+    queue = getattr(websocket.app.state, "routine_events", None)
+    if queue is None:
+        # 루틴 비활성 배포 — 조용한 무한대기 대신 정직하게 닫는다(1013 = try later).
+        await websocket.close(code=1013)
+        return
 
-    queue = client.subscribe_events()
     try:
         while True:
             event_task = asyncio.create_task(queue.get())
@@ -53,5 +56,3 @@ async def kiwoom_real_stream(websocket: WebSocket, client: KiwoomWsClientDep) ->
                 await asyncio.gather(*child_tasks, return_exceptions=True)
     except WebSocketDisconnect:
         pass
-    finally:
-        client.unsubscribe_events(queue)
