@@ -35,6 +35,10 @@ const INVOKE_CHANNELS = new Set([
   'athena:mcp-allow-tool',
   'athena:mcp-remove',
   'athena:load-fixture',
+  // 루틴(능동 에이전트 P2) — confirm/cancel은 사람 클릭 전용 경로다.
+  'athena:routines-list',
+  'athena:routine-confirm',
+  'athena:routine-cancel',
 ]);
 
 const SEND_CHANNELS = new Set([
@@ -77,6 +81,9 @@ const ON_CHANNELS = new Set([
   // 휘도 감지-적응(2026-08-19) — main의 startBackdropSampling()이 2초 주기로
   // 배경 밝기에서 계산한 표면별 유리 두께를 두 창에 보낸다.
   'athena:backdrop-luminance',
+  // 루틴 알림(능동 에이전트 P2) — main의 RoutineFeed가 백엔드 WS에서 받은
+  // 발화·만료·복원실패 이벤트를 능동 턴으로 전달한다.
+  'athena:routine-event',
 ]);
 
 contextBridge.exposeInMainWorld('athena', {

@@ -872,3 +872,49 @@ html, body { background: transparent; }
   .settings-nav-item.is-selected { background: rgb(255 255 255 / 22%); }
   .settings-nav-item:focus-visible { outline-color: #ffffff; }
 }
+
+/* ---------- 능동 턴 (능동 에이전트 P2, 2026-08-19) ---------- */
+/* 등장은 페이드가 아니라 굴절 변조다(liquid-glass §1) — backdrop-filter가
+   0에서 목표치로 오른다. 좌측 유도선·배지 외 액센트 없음(soul.md §7). */
+.turn-agent {
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(29, 34, 44, 0.55);
+  border-left: 3px solid rgba(255, 152, 56, 0.8);
+  border-top: 1px solid rgba(230, 232, 238, 0.10);
+  border-right: 1px solid rgba(230, 232, 238, 0.10);
+  border-bottom: 1px solid rgba(230, 232, 238, 0.10);
+  backdrop-filter: blur(0px);
+  transition: backdrop-filter 600ms ease;
+}
+.turn-agent.is-in { backdrop-filter: blur(12px); }
+.agent-head { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+.agent-badge {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs, 11px);
+  color: var(--color-warn, #ff9838);
+  border: 1px solid rgba(255, 152, 56, 0.55);
+  border-radius: 999px;
+  padding: 1px 8px;
+}
+.agent-mode { font-size: var(--text-2xs, 11px); color: var(--color-k-dim, #9aa2b1); }
+.agent-rel { font-family: var(--font-mono); font-size: var(--text-2xs, 11px); color: var(--color-k-faint, #6b7480); }
+.agent-source { font-size: var(--text-2xs, 11px); color: var(--color-k-dim, #9aa2b1); margin-bottom: 4px; }
+.agent-body { font-size: var(--text-sm, 13px); color: var(--color-k-text, #e6e8ee); line-height: 1.5; }
+.turn-agent.agent-restore-failed { border-left-color: var(--color-warn, #ff9838); background: rgba(255, 152, 56, 0.10); }
+
+.routine-chip {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs, 11px);
+  color: var(--color-k-dim, #9aa2b1);
+  border: 1px solid rgba(154, 162, 177, 0.45);
+  border-radius: 999px;
+  padding: 3px 10px;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .turn-agent { transition: none; }
+  .turn-agent.is-in, .turn-agent { backdrop-filter: blur(12px); }
+}

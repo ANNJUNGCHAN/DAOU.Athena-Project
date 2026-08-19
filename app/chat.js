@@ -878,3 +878,80 @@ document.addEventListener('keydown', (e) => {
     }
   }
 });
+
+// ---------- 능동 턴 · 활성 루틴 칩 (능동 에이전트 P2, 2026-08-19) ----------
+// 백엔드 파수꾼의 발화가 여기서 대화 이력에 들어온다 — 사용자 질의 없이
+// 나타나는 유일한 턴 종류(GLOSSARY '능동 턴'). 본문은 결정론 템플릿
+// (lib/routine-turn.js — LLM 0)이고, 발화 시각 배지·방식 표기·소스 라벨이
+// 필수 계약이다(시점 정직성). 렌더는 전부 textContent — innerHTML 0건 유지.
+const routineTurnLib = window.AthenaLib.RoutineTurn;
+const $routineChip = document.getElementById('routineChip');
+
+async function refreshRoutineChip() {
+  if (!$routineChip) return;
+  try {
+    const res = await window.athena.invoke('athena:routines-list');
+    const routines = res && res.ok && res.data && Array.isArray(res.data.routines)
+      ? res.data.routines : [];
+    const active = routines.filter((r) => r.status === 'active').length;
+    $routineChip.hidden = active === 0;
+    $routineChip.textContent = `감시 ${active} 활성`;
+  } catch {
+    // 백엔드 미기동·루틴 비활성 — 칩을 숨긴다(없는 감시를 있다고 표시하지 않는다).
+    $routineChip.hidden = true;
+  }
+}
+
+function renderAgentTurn(event) {
+  const model = routineTurnLib.buildTurnModel(event, Date.now());
+  const line = document.createElement('div');
+  line.className = 'turn';
+  const box = document.createElement('div');
+  box.className = `turn-agent agent-${model.kind}`;
+
+  const head = document.createElement('div');
+  head.className = 'agent-head';
+  if (model.badge) {
+    const badge = document.createElement('span');
+    badge.className = 'agent-badge';
+    badge.textContent = model.badge;
+    head.appendChild(badge);
+  }
+  if (model.modeText) {
+    const mode = document.createElement('span');
+    mode.className = 'agent-mode';
+    mode.textContent = model.modeText;
+    head.appendChild(mode);
+  }
+  if (model.relative) {
+    const rel = document.createElement('span');
+    rel.className = 'agent-rel';
+    rel.textContent = `지금 확인 · ${model.relative}`;
+    head.appendChild(rel);
+  }
+  if (head.childNodes.length) box.appendChild(head);
+
+  if (model.sourceLabel) {
+    const src = document.createElement('div');
+    src.className = 'agent-source';
+    src.textContent = model.sourceLabel;
+    box.appendChild(src);
+  }
+  const body = document.createElement('div');
+  body.className = 'agent-body';
+  body.textContent = model.body;
+  box.appendChild(body);
+
+  line.appendChild(box);
+  $history.appendChild(line);
+  // 등장은 굴절 변조 — chat.css의 .turn-agent 전이. reduced-motion이면 즉시.
+  requestAnimationFrame(() => box.classList.add('is-in'));
+  $history.scrollTop = $history.scrollHeight;
+  scheduleHeightSync();
+}
+
+window.athena.on('athena:routine-event', (event) => {
+  renderAgentTurn(event);
+  refreshRoutineChip();
+});
+refreshRoutineChip();
