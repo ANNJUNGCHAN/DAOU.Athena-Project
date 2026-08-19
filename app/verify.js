@@ -548,9 +548,11 @@ app.whenReady().then(async () => {
     // 대화 창이 설정 모드로 바뀐다
     renderedInChatWindow: chatProbe.settingsVisible === true && chatProbe.url === 'chat.html',
     chatModeSteppedAside: chatProbe.appHidden === true,
-    // 사이드바 nav — 존재 + 항목 4개(화면·계좌·MCP 서버·모델) + 기본 선택은 '화면'
+    // 사이드바 nav — 존재 + 항목 5개(화면·계좌·MCP 서버·모델·성향・이력, 채팅→그래프
+    // 파이프라인 단계 5로 늘었다 — .omc/plans/plan-chat-graph-pipeline.md §2(e)) +
+    // 기본 선택은 '화면'
     navExists: navProbe.navExists === true,
-    navHasFourItems: navProbe.navItemCount === 4,
+    navHasFiveItems: navProbe.navItemCount === 5,
     defaultPanelIsScreen: navProbe.screenCardCount === 1,
     // nav에서 각 항목을 고르면 그 카드 하나만 뜬다
     accountsPanelOnNavSelect: accountsPanelCardCount === 1,
@@ -1211,6 +1213,76 @@ app.whenReady().then(async () => {
   assertOk('glassLadder: canvas surface renders --glass-canvas', report.glassLadder.mosaicMatchesToken === true);
   assertOk('glassLadder: card renders --glass-card', report.glassLadder.cardMatchesToken === true);
   assertOk('glassLadder: chat app renders --glass-window at base height', report.glassLadder.chatAppMatchesWindowToken === true);
+
+  // ---------- 검증17: "기록 안 됨" 배지 — 채팅 저장 실패 신호(2026-08-19) ----------
+  // verify.js는 항상 fixture 경로(ATHENA_CANVAS_SOURCE=fixture)라 runQueryLive를
+  // 안 타므로(§CLAUDE.md §9 "픽스처 경로만 타서 못 잡는 것"과 같은 구조적 한계),
+  // 실제 backend/claude -p 왕복 없이 chat.js가 실제로 로드한
+  // window.AthenaLib.HistoryBadge 모듈 자체를 렌더러 안에서 직접 구동한다 —
+  // main.js의 IPC 배선(athena:history-save-failed → saveFailedRouter.handleFailure)은
+  // 별도로 preload.js의 ON_CHANNELS allowlist 통과 여부만 확인한다(실제 스트림은
+  // node --test의 lib/history-badge.test.js가 순수 로직을 이미 촘촘히 검증했다).
+  const badgeCheck = await chatWin.webContents.executeJavaScript(`(() => {
+    const HistoryBadge = window.AthenaLib && window.AthenaLib.HistoryBadge;
+    if (!HistoryBadge) return { moduleLoaded: false };
+    const router = HistoryBadge.createSaveFailedRouter();
+
+    const qLine = document.createElement('div');
+    qLine.className = 'turn';
+    document.body.appendChild(qLine); // isConnected:true를 얻으려면 실제 문서에 붙어야 한다
+    router.startTurn(qLine);
+
+    // assistant 실패가 aLine 생성보다 먼저 오는 레이스(main이 fire-and-forget이라
+    // 실제로 가능 — history-badge.test.js가 이미 단위로 잡은 경로)까지 같은
+    // 렌더러 컨텍스트에서 재현한다.
+    router.handleFailure({ messageId: 'verify17-a', role: 'assistant' });
+    const pendingBeforeALine = router._debugState().pendingAssistantBadge === true;
+
+    const aLine = document.createElement('div');
+    aLine.className = 'turn';
+    document.body.appendChild(aLine);
+    router.setAssistantLine(aLine);
+
+    router.handleFailure({ messageId: 'verify17-u', role: 'user' });
+
+    const qBadge = qLine.querySelector('.save-failed-badge');
+    const aBadge = aLine.querySelector('.save-failed-badge');
+    const result = {
+      moduleLoaded: true,
+      pendingBeforeALine,
+      userBadgeText: qBadge ? qBadge.textContent : null,
+      assistantBadgeText: aBadge ? aBadge.textContent : null,
+      userBadgeInsideTurnMeta: !!(qBadge && qBadge.closest('.turn-meta')),
+      assistantBadgeInsideTurnMeta: !!(aBadge && aBadge.closest('.turn-meta')),
+      noDuplicateMetaOnQLine: qLine.querySelectorAll('.turn-meta').length === 1,
+      noDuplicateMetaOnALine: aLine.querySelectorAll('.turn-meta').length === 1,
+    };
+    qLine.remove();
+    aLine.remove(); // 검증용 DOM 정리 — 다음 검증에 남지 않게
+    return result;
+  })()`);
+  report.historySaveFailedBadge = badgeCheck;
+  console.log('[verify] 검증17("기록 안 됨" 배지):', JSON.stringify(report.historySaveFailedBadge));
+  assertOk('historyBadge: HistoryBadge 모듈이 chat.html에 실제로 로드됐다', badgeCheck.moduleLoaded === true);
+  assertOk('historyBadge: assistant 실패가 aLine 생성보다 먼저 오면 pending으로 흡수된다', badgeCheck.pendingBeforeALine === true);
+  assertOk('historyBadge: role:user 배지 텍스트 — "기록 안 됨"', badgeCheck.userBadgeText === '기록 안 됨');
+  assertOk('historyBadge: role:assistant 배지 텍스트(pending 흡수 후 적용) — "기록 안 됨"', badgeCheck.assistantBadgeText === '기록 안 됨');
+  assertOk('historyBadge: 배지는 트레이스 라인(.turn-meta) 부속이다 — 독립 유리 레이어 아님', badgeCheck.userBadgeInsideTurnMeta === true && badgeCheck.assistantBadgeInsideTurnMeta === true);
+  assertOk('historyBadge: 줄마다 .turn-meta는 하나뿐 — 중복 생성 없음', badgeCheck.noDuplicateMetaOnQLine === true && badgeCheck.noDuplicateMetaOnALine === true);
+
+  // preload allowlist — 렌더러가 athena:history-save-failed를 구독할 수 있어야
+  // main의 IPC가 실제로 chat.js에 닿는다(모듈 로직과 별개로 배선 자체를 확인).
+  const historyChannelAllowed = await chatWin.webContents.executeJavaScript(`(() => {
+    try {
+      const unsubscribe = window.athena.on('athena:history-save-failed', () => {});
+      unsubscribe();
+      return true;
+    } catch {
+      return false;
+    }
+  })()`);
+  report.historyChannelAllowed = historyChannelAllowed;
+  assertOk('historyBadge: preload allowlist가 athena:history-save-failed를 통과시킨다', historyChannelAllowed === true);
 
   report.finishedAt = new Date().toISOString();
   fs.writeFileSync(path.join(CAPTURES, 'VERIFY-REPORT.json'), JSON.stringify(report, null, 2));

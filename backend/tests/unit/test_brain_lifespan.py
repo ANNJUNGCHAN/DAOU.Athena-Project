@@ -5,15 +5,16 @@ check -> fts load -> readiness. The single-writer queue itself is GraphStore's e
 one-worker ThreadPoolExecutor (store.py); this file only tests the FastAPI seam around it.
 """
 
+import asyncio
 import os
 from pathlib import Path
 
 import pytest
 from fastapi import FastAPI
 
-from athena_api.brain import GraphStore, HistoryStore
+from athena_api.brain import GraphStore, HistoryStore, IngestionCoordinator, JobTrigger
 from athena_api.config import Settings
-from athena_api.lifespan import _open_brain, build_lifespan
+from athena_api.lifespan import _open_brain, _teardown_brain, build_lifespan
 from athena_api.process_lock import BrainProcessLock
 
 
@@ -223,3 +224,86 @@ async def test_open_brain_raises_immediately_when_the_lock_is_already_held(
             await _open_brain(settings)
     finally:
         contender.release()
+
+
+# --- extraction injection (gap b, ADR §2(b')) -----------------------------------------
+
+
+async def test_extraction_is_disabled_by_default(
+    tmp_path: Path, ladybug_dll_dir: Path | None
+) -> None:
+    if ladybug_dll_dir is None:
+        pytest.skip("no local ladybug native runtime available on this machine")
+    app = FastAPI()
+    settings = _brain_settings(tmp_path)
+    async with build_lifespan(settings)(app):
+        assert app.state.brain_extraction_enabled is False
+    assert app.state.brain_extraction_enabled is False
+
+
+async def test_extraction_is_injected_into_the_coordinator_when_argv_is_configured(
+    tmp_path: Path, ladybug_dll_dir: Path | None
+) -> None:
+    """ATHENA_BRAIN_EXTRACTION_LLM_ARGV configured -> IngestionCoordinator gets a real
+    ExtractionService source_projector, not the None default (lifespan.py _open_brain).
+    """
+    if ladybug_dll_dir is None:
+        pytest.skip("no local ladybug native runtime available on this machine")
+    app = FastAPI()
+    settings = _brain_settings(
+        tmp_path, brain_extraction_llm_argv=["python", "-c", "pass"]
+    )
+    async with build_lifespan(settings)(app):
+        assert app.state.brain_extraction_enabled is True
+        assert app.state.brain_ingestion_ready is True
+    # The coordinator itself is not published on app.state; re-open directly to inspect
+    # the wiring the same way the fixture above only observes through app.state.
+    brain = await _open_brain(settings)
+    try:
+        assert brain.extraction_enabled is True
+        assert brain.coordinator is not None
+        assert brain.coordinator._source_projector is not None  # noqa: SLF001
+    finally:
+        await _teardown_brain(FastAPI(), brain)
+
+
+# --- hourly self-enqueue (G005) ---------------------------------------------------------
+
+
+async def test_hourly_self_enqueue_calls_coordinator_enqueue_on_a_fast_tick(
+    tmp_path: Path, ladybug_dll_dir: Path | None, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    if ladybug_dll_dir is None:
+        pytest.skip("no local ladybug native runtime available on this machine")
+    calls: list[JobTrigger] = []
+    original_enqueue = IngestionCoordinator.enqueue
+
+    async def spy_enqueue(self: IngestionCoordinator, trigger: JobTrigger):
+        calls.append(trigger)
+        return await original_enqueue(self, trigger)
+
+    monkeypatch.setattr(IngestionCoordinator, "enqueue", spy_enqueue)
+    settings = _brain_settings(tmp_path)
+    brain = await _open_brain(settings, hourly_interval_seconds=0.02)
+    try:
+        for _ in range(50):
+            await asyncio.sleep(0.02)
+            if JobTrigger.HOURLY in calls:
+                break
+        assert JobTrigger.HOURLY in calls
+    finally:
+        await _teardown_brain(FastAPI(), brain)
+
+
+async def test_hourly_task_is_cancelled_symmetrically_with_the_app_lifespan(
+    tmp_path: Path, ladybug_dll_dir: Path | None
+) -> None:
+    if ladybug_dll_dir is None:
+        pytest.skip("no local ladybug native runtime available on this machine")
+    app = FastAPI()
+    settings = _brain_settings(tmp_path)
+    async with build_lifespan(settings)(app):
+        pass
+    # _teardown_brain must have cancelled the hourly task before returning -- nothing
+    # left running that could still call the now-stopped coordinator.
+    assert app.state.brain_ingestion_ready is False

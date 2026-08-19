@@ -24,7 +24,9 @@ from .history import (
     JobTrigger,
     RetryPolicy,
     SourceChange,
+    StoredChatMessage,
     TradeSide,
+    utc_now,
 )
 from .ingestion import (
     AdapterIngestionReport,
@@ -45,9 +47,17 @@ from .ontology import (
     SourceKind,
     SourceRecord,
 )
-from .store import EntitySearchHit, GraphStore, GraphSummary, NeighborhoodEdge
+from .store import (
+    INVESTOR_PROFILE_ENTITY_ID,
+    EntitySearchHit,
+    GraphStore,
+    GraphSummary,
+    InvestorProfileSummaryEntry,
+    NeighborhoodEdge,
+)
 
 __all__ = [
+    "INVESTOR_PROFILE_ENTITY_ID",
     "AdapterIngestionReport",
     "ChatHistoryAdapter",
     "ChatHistoryRecord",
@@ -73,6 +83,7 @@ __all__ = [
     "IngestionCoordinator",
     "IngestionJob",
     "IngestionReport",
+    "InvestorProfileSummaryEntry",
     "JobStatus",
     "JobTrigger",
     "LocalCommandStructuredLlm",
@@ -85,8 +96,10 @@ __all__ = [
     "SourceChange",
     "SourceKind",
     "SourceRecord",
+    "StoredChatMessage",
     "TradeSide",
     "StructuredLlmClient",
     "extraction_request_id",
     "parse_extraction_response",
+    "utc_now",
 ]

@@ -96,6 +96,15 @@ class HistoryUpsertResult:
 
 
 @dataclass(frozen=True, slots=True)
+class StoredChatMessage:
+    message_id: str
+    conversation_id: str
+    role: ChatRole
+    text: str
+    occurred_at: datetime
+
+
+@dataclass(frozen=True, slots=True)
 class SourceChange:
     seq: int
     revision: int
@@ -553,6 +562,49 @@ class HistoryStore:
                 occurred_at=_parse_timestamp(row["occurred_at"]),
                 ingested_at=_parse_timestamp(row["changed_at"]),
             ),
+        )
+
+    async def chats_for_conversation(
+        self, conversation_id: str, *, limit: int = 100
+    ) -> tuple[StoredChatMessage, ...]:
+        """Read back stored chat turns for one conversation, oldest first.
+
+        Reads ``source_records`` (current revision only, not the append-only change
+        log) filtered by the same ``locator`` upsert_chat writes -- no separate chat
+        table, no duplicate write path.
+        """
+        if not conversation_id.strip():
+            raise ValueError("conversation_id must not be blank")
+        if not 1 <= limit <= MAX_BATCH_SIZE:
+            raise ValueError(f"limit must be between 1 and {MAX_BATCH_SIZE}")
+        return await self._call(self._chats_for_conversation_sync, conversation_id, limit)
+
+    def _chats_for_conversation_sync(
+        self, conversation_id: str, limit: int
+    ) -> tuple[StoredChatMessage, ...]:
+        rows = (
+            self._db()
+            .execute(
+                "SELECT source_id, text, occurred_at, metadata_json FROM source_records "
+                "WHERE source_kind = ? AND locator = ? ORDER BY occurred_at, source_id LIMIT ?",
+                (SourceKind.CHAT_MESSAGE.value, f"conversation:{conversation_id}", limit),
+            )
+            .fetchall()
+        )
+        return tuple(self._row_to_chat_message(conversation_id, row) for row in rows)
+
+    @staticmethod
+    def _row_to_chat_message(conversation_id: str, row: sqlite3.Row) -> StoredChatMessage:
+        source_id = str(row["source_id"])
+        message_id = source_id.removeprefix("chat:")
+        attributes = json.loads(row["metadata_json"])
+        chat = attributes["chat"]
+        return StoredChatMessage(
+            message_id=message_id,
+            conversation_id=conversation_id,
+            role=ChatRole(chat["role"]),
+            text=str(row["text"]),
+            occurred_at=_parse_timestamp(row["occurred_at"]),
         )
 
     async def cursor(self, adapter_name: str) -> int:
