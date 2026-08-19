@@ -2,16 +2,15 @@
 
 이 엔드포인트는 키움 REAL 이벤트 전용이다 — 루틴 알림은 별도 라우트
 (`routines_ws.py`)로 분리한다(의미를 섞으면 클라이언트 파싱 책임이 흐려진다).
-인증 의미론은 `ws_auth.authenticate_downstream_ws`로 추출됐다(동작 불변 —
-기존 테스트 전건이 고정).
+인증 의미론은 `ws_auth.authenticate_downstream_ws`로, 이벤트 펌프는
+`ws_pump.pump_queue_to_websocket`로 추출됐다(동작 불변 — 기존 테스트 전건이 고정).
 """
 from __future__ import annotations
 
-import asyncio
-
-from fastapi import APIRouter, WebSocket, WebSocketDisconnect
+from fastapi import APIRouter, WebSocket
 
 from athena_api.api.ws_auth import authenticate_downstream_ws
+from athena_api.api.ws_pump import pump_queue_to_websocket
 from athena_api.dependencies import KiwoomWsClientDep
 
 router = APIRouter(tags=["Kiwoom WebSocket stream"])
@@ -25,33 +24,6 @@ async def kiwoom_real_stream(websocket: WebSocket, client: KiwoomWsClientDep) ->
 
     queue = client.subscribe_events()
     try:
-        while True:
-            event_task = asyncio.create_task(queue.get())
-            receive_task = asyncio.create_task(websocket.receive())
-            child_tasks = (event_task, receive_task)
-            try:
-                done, pending = await asyncio.wait(
-                    child_tasks, return_when=asyncio.FIRST_COMPLETED
-                )
-                cancelled_by_shutdown = any(task.cancelled() for task in done)
-                for task in pending:
-                    task.cancel()
-                if pending:
-                    await asyncio.gather(*pending, return_exceptions=True)
-                if cancelled_by_shutdown:
-                    break
-                if receive_task in done:
-                    message = receive_task.result()
-                    if message["type"] == "websocket.disconnect":
-                        break
-                if event_task in done:
-                    await websocket.send_json(event_task.result())
-            finally:
-                for task in child_tasks:
-                    if not task.done():
-                        task.cancel()
-                await asyncio.gather(*child_tasks, return_exceptions=True)
-    except WebSocketDisconnect:
-        pass
+        await pump_queue_to_websocket(websocket, queue)
     finally:
         client.unsubscribe_events(queue)

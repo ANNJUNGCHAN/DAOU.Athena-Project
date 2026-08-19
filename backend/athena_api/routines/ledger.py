@@ -28,10 +28,6 @@ class RoutineLedger:
         self._path = path
         self._path.parent.mkdir(parents=True, exist_ok=True)
 
-    @property
-    def path(self) -> Path:
-        return self._path
-
     def record(
         self,
         verdict: Verdict,

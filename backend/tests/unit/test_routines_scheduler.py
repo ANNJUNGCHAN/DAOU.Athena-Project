@@ -253,7 +253,7 @@ async def test_notify_drops_oldest_when_queue_full(tmp_path):
     from athena_api.routines.runtime import _notify_factory
 
     q: asyncio.Queue = asyncio.Queue(2)
-    notify = await _notify_factory(q)
+    notify = _notify_factory(q)
     for i in range(4):
         await notify({"n": i})
     got = [q.get_nowait()["n"], q.get_nowait()["n"]]
