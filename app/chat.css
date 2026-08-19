@@ -216,6 +216,9 @@ html, body { background: transparent; }
 .app {
   position: fixed; inset: 0;
   display: flex; flex-direction: column;
+  /* 콘텐츠는 타이틀바(32px, ui-kit.css) 아래에서 시작한다 — 유리 자체(inset:0)는
+   * 바 뒤까지 이어져 크롬이 유리 위 값 단계로 얹힌다. */
+  padding-top: 32px;
   /* 유리 두께 — 기본(뒤=데스크톱) 0.30. --glass-alpha는 창 높이에 따라 JS가 연속
    * 보간한다(0.30↔0.55, chat.js applyGlassFraction).
    * 2026-08-18 하향(사용자 지시 "그냥 검은 창 같다"): 가독성 블러는 네이티브
@@ -392,13 +395,9 @@ html, body { background: transparent; }
   display: flex; align-items: center; gap: 10px;
   padding: 0 24px 8px 24px;
   height: 48px;
-  /* 커맨드 카드의 크롬 행 = 네이티브 캡션(창 이동 손잡이, 2026-08-19 표준화).
-   * 이동은 OS(DWM)가 수행한다 — 가장자리 끌기 스냅 포함. 점·필은 아래 no-drag
-   * 구멍으로 클릭이 산다. */
-  -webkit-app-region: drag;
-  cursor: grab;
+  /* 캡션이 아니다(2026-08-19 개정 — 사용자: "왜 모델 필이 있는 곳에서 끌게
+   * 하냐, 다른 앱들처럼"). 창 이동 손잡이는 맨 위 .drag-strip 하나다. */
 }
-.control-strip .dot, .control-strip .pill { -webkit-app-region: no-drag; }
 .strip-spacer { flex: 1; }
 .pill {
   display: flex; align-items: center; gap: 8px;

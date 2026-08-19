@@ -12,9 +12,8 @@
   <div id="mosaic" class="mosaic glass">
     <div id="grid" class="grid"></div>
   </div>
-  <!-- 창 이동 손잡이 — 네이티브 캡션(2026-08-19 표준화). 시각 요소가 아니라
-       순수 히트 영역이다(장식 유리 금지, soul.md §7). canvas.css .drag-strip. -->
-  <div id="dragStrip" class="drag-strip" aria-hidden="true"></div>
+  <!-- 타이틀바 — 맨 위 32px 네이티브 캡션(2026-08-19 창 크롬, ui-kit.css .titlebar). -->
+  <div id="dragStrip" class="titlebar" aria-hidden="true"><span class="titlebar-label">Athena — 캔버스</span></div>
   <div class="glass-sheen" id="sheen" aria-hidden="true"></div>
 <!-- 렌더러 격리(2026-08-18, CLAUDE.md §6) — nodeIntegration:false라 require가
      없다. lib/*.js는 UMD 각주로 window.AthenaLib에 전역을 얹는 순수 <script>다.

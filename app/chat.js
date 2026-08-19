@@ -93,6 +93,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const finishBoot = async () => {
     $boot.hidden = true;
     $winControls.hidden = false; // 창 크롬은 창이 확정된 뒤에만 존재한다(부팅 연출 보호)
+    document.getElementById('dragStrip').hidden = false; // 타이틀바도 같은 크롬이다
     const onboardState = await onboardStatePromise;
     if (onboardState && onboardState.needed) {
       startOnboarding(onboardState.step);
@@ -325,13 +326,17 @@ function scheduleHeightSync() {
 }
 
 function measureNeededHeight() {
+  // 타이틀바(2026-08-19) — 창 크롬이 32px를 차지하므로 필요 높이에 포함한다.
+  // 안 하면 콘텐츠가 그만큼 임계를 못 넘어 자동 성장이 죽는다(검증5 실측).
+  const bar = document.getElementById('dragStrip');
+  const barH = (bar && bar.offsetHeight) || 32;
   const gripH = $grip.getBoundingClientRect().height;
   // AT-CH-001R — 입력 영역은 이제 2행(입력줄 52 + 컨트롤 스트립 48) 스택이다.
   const inputStack = document.querySelector('.input-stack');
   const inputH = inputStack ? inputStack.getBoundingClientRect().height : 100;
   const histNeeded = $history.scrollHeight + 16; // padding
   // 측정은 CSS px, 창 높이는 물리 px — 줌 배율을 곱해 보낸다(main의 clamp와 단위 일치).
-  return Math.round((gripH + inputH + histNeeded) * window.athena.getZoomFactor());
+  return Math.round((barH + gripH + inputH + histNeeded) * window.athena.getZoomFactor());
 }
 
 // 줌 배율이 바뀌면 같은 내용이라도 필요한 창 높이가 달라진다 — 다시 재서 요청한다.

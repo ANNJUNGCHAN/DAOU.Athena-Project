@@ -863,7 +863,7 @@ app.whenReady().then(async () => {
       const cs = getComputedStyle(el);
       return (cs.getPropertyValue('app-region') || cs.getPropertyValue('-webkit-app-region') || '').trim();
     };
-    return { strip: reg('#controlStrip'), dot: reg('#controlStrip .dot'), pill: reg('#cliPill'),
+    return { strip: reg('#dragStrip'), controlStrip: reg('#controlStrip'),
              grip: reg('#grip'), winBtn: reg('.win-btn'), history: reg('#history'),
              settingsHead: reg('#settings .settings-head') };
   })()`);
@@ -893,10 +893,10 @@ app.whenReady().then(async () => {
   console.log('[verify] 검증11(창 이동 표준화):', JSON.stringify(report.dragStandard));
   assertOk('dragStandard: 옛 JS 드래그 채널이 죽어 있다(allowlist 거부)', oldChannelDead === true);
   assertOk('dragStandard: 크기 불변(5e0a9ab 회귀 가드 계승)', report.dragStandard.sizeUnchanged === true);
-  assertOk('dragStandard: 컨트롤 스트립 = 캡션(drag)', appRegions.strip === 'drag');
-  assertOk('dragStandard: 점·필·grip·창 버튼 = no-drag 구멍',
-    appRegions.dot === 'no-drag' && appRegions.pill === 'no-drag'
-    && appRegions.grip === 'no-drag' && appRegions.winBtn === 'no-drag');
+  assertOk('dragStandard: 대화 창 맨 위 스트립 = 캡션(drag)', appRegions.strip === 'drag');
+  assertOk('dragStandard: grip 중앙·창 버튼 = no-drag 구멍',
+    appRegions.grip === 'no-drag' && appRegions.winBtn === 'no-drag');
+  assertOk('dragStandard: 컨트롤 스트립은 캡션이 아니다(2026-08-19 개정 — 맨 위만)', appRegions.controlStrip !== 'drag');
   assertOk('dragStandard: 본문(.history)은 손잡이가 아니다', appRegions.history !== 'drag');
   assertOk('dragStandard: 설정 헤더 = 캡션(drag)', appRegions.settingsHead === 'drag');
   assertOk('dragStandard: 캔버스 상단 스트립 = 캡션(drag)', canvasStripRegion === 'drag');

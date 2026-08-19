@@ -5,6 +5,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const {
   BRIGHT_ALPHA,
+  createBrightnessStepper,
   computeAverageLuminance,
   lumaToBrightness,
   brightnessToAlpha,
@@ -92,4 +93,38 @@ test('scaleRect: 창 영역을 보수적으로(넉넉히) 썸네일 좌표로 �
   // 반올림 경계 — floor(x)·ceil(size)라 원 영역을 절대 덜 덮지 않는다
   const r2 = scaleRect({ x: 15, y: 15, width: 15, height: 15 }, 0.1, 0.1);
   assert.deepEqual(r2, { x: 1, y: 1, width: 2, height: 2 });
+});
+
+// ---------- 계단화 + 체류 (2026-08-19 "투명도가 막 바뀐다" 수정) ----------
+
+test('계단화: 첫 관측은 즉시 채택, 다른 계단은 dwell 연속일 때만 전환', () => {
+  const step = createBrightnessStepper({ dwell: 3 });
+  assert.equal(step(0.1), 0);
+  assert.equal(step(0.9), 0); // 1회 — 유지
+  assert.equal(step(0.9), 0); // 2회 — 유지
+  assert.equal(step(0.9), 1); // 3연속 — 전환
+});
+
+test('계단화: 경계 교대는 체류 리셋 — 현 계단에 머문다(숨쉬기 방지의 핵심)', () => {
+  const step = createBrightnessStepper({ dwell: 3 });
+  step(0.1);
+  assert.equal(step(0.9), 0);
+  assert.equal(step(0.1), 0);
+  assert.equal(step(0.9), 0);
+  assert.equal(step(0.1), 0);
+  assert.equal(step(0.9), 0); // 교대가 계속되는 한 영원히 0
+});
+
+test('계단화: 같은 계단 안의 연속 변화(0.3→0.6 경계 미만 흔들림)는 전환 없음', () => {
+  const step = createBrightnessStepper({ dwell: 2 });
+  assert.equal(step(0.3), 0.5);
+  assert.equal(step(0.6), 0.5);
+  assert.equal(step(0.4), 0.5);
+});
+
+test('계단화: 중간 계단(0.5)에서 밝음(1)으로도 같은 규칙', () => {
+  const step = createBrightnessStepper({ dwell: 2 });
+  assert.equal(step(0.5), 0.5);
+  assert.equal(step(0.9), 0.5); // 1회
+  assert.equal(step(0.9), 1);   // 2연속 — 전환
 });

@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-08-19T12:30:11.530Z",
+  "startedAt": "2026-08-19T12:50:10.246Z",
   "layout": {
     "scale": 1,
     "screen": {
@@ -25,7 +25,7 @@
       },
       "idle": {
         "width": 1355,
-        "height": 429
+        "height": 399
       }
     },
     "chatBootedAfterBoot": true,
@@ -49,7 +49,7 @@
   },
   "dotScreenPoint": {
     "x": 540.6666679382324,
-    "y": 1072.3333435058594
+    "y": 1071.3333435058594
   },
   "osCaptureAttempted": {
     "ok": true
@@ -57,16 +57,16 @@
   "expand": {
     "frameCount": 32,
     "p50": 16.699999999999818,
-    "p95": 33.299999999999955,
-    "max": 33.299999999999955,
-    "min": 16.5
+    "p95": 16.800000000000182,
+    "max": 50,
+    "min": 16.59999999999991
   },
   "collapse": {
     "frameCount": 35,
     "p50": 16.699999999999818,
     "p95": 16.800000000000182,
-    "max": 16.899999999999636,
-    "min": 16.400000000000546
+    "max": 16.800000000000182,
+    "min": 16.599999999999454
   },
   "afterCollapse": {
     "canvasVisible": false
@@ -81,9 +81,9 @@
       },
       "chat": {
         "x": 510,
-        "y": 815,
+        "y": 834,
         "width": 904,
-        "height": 286
+        "height": 267
       }
     },
     "afterCanvasMove": {
@@ -95,9 +95,9 @@
       },
       "chat": {
         "x": 510,
-        "y": 815,
+        "y": 834,
         "width": 904,
-        "height": 286
+        "height": 267
       }
     },
     "afterChatResize": {
@@ -109,9 +109,9 @@
       },
       "chat": {
         "x": 510,
-        "y": 815,
+        "y": 834,
         "width": 905,
-        "height": 387
+        "height": 367
       }
     },
     "canvasMovedButChatUnchanged": true,
@@ -135,27 +135,27 @@
     },
     "boundsAfterQuery": {
       "x": 510,
-      "y": 733,
+      "y": 809,
       "width": 904,
-      "height": 370
+      "height": 294
     },
     "grewTallerThanBase": true,
-    "grownByPx": 121,
+    "grownByPx": 45,
     "finalAnswerText": "캔버스 창에 스트림, 리더, 공통 테이블을 띄웠습니다.",
     "cardChipCount": 3
   },
   "manualResize": {
     "beforeDrag": {
       "x": 510,
-      "y": 733,
+      "y": 809,
       "width": 904,
-      "height": 370
+      "height": 294
     },
     "afterDrag": {
       "x": 510,
-      "y": 573,
+      "y": 649,
       "width": 905,
-      "height": 531
+      "height": 455
     },
     "grewByDrag": true,
     "bottomEdgePinned": true
@@ -267,7 +267,7 @@
         "full"
       ],
       "count": 3,
-      "scrollHeight": 832,
+      "scrollHeight": 856,
       "clientHeight": 403
     }
   },
@@ -277,8 +277,7 @@
     "sizeUnchanged": true,
     "appRegions": {
       "strip": "drag",
-      "dot": "no-drag",
-      "pill": "no-drag",
+      "controlStrip": "none",
       "grip": "no-drag",
       "winBtn": "no-drag",
       "history": "none",
@@ -529,7 +528,7 @@
   },
   "agentTurn": {
     "present": true,
-    "badge": "21:24 발화",
+    "badge": "21:44 발화",
     "mode": "실시간 (WS)",
     "source": "루틴 '검증 루틴' · 에이전트 발화 — 묻지 않은 턴입니다",
     "body": "005930 조건 도달 — 관측값 5.3 (임계 5). 값은 발화 시점 기준입니다 — 최신 확인은 다시 물어봐 주세요.",
@@ -557,5 +556,5 @@
     "noDuplicateMetaOnALine": true
   },
   "historyChannelAllowed": true,
-  "finishedAt": "2026-08-19T12:30:47.474Z"
+  "finishedAt": "2026-08-19T12:50:45.851Z"
 }

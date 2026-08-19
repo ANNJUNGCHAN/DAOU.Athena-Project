@@ -65,7 +65,8 @@ html, body { background: transparent; }
   grid-template-columns: 1fr 1fr;
   grid-auto-rows: min-content;
   gap: 16px;
-  padding: 20px;
+  /* 상단은 타이틀바(32px) 아래에서 시작한다 — 카드가 크롬에 깔리지 않게. */
+  padding: 44px 20px 20px;
   align-content: start;
   /* 카드가 창보다 많이 쌓이면 스크롤 — 2026-08-17 디자인 리뷰 [HIGH] 정정.
    * 이전 판은 부모 .mosaic의 overflow:hidden에 잘려 4번째 카드부터 영구히
@@ -453,15 +454,4 @@ table.fin-table { width: 100%; border-collapse: collapse; font-variant-numeric: 
 .free-tree-scalar { font-size: var(--text-base); color: var(--color-k-text); font-variant-numeric: tabular-nums; }
 
 
-/* 창 이동 손잡이(2026-08-19 표준화) — 상단 14px이 네이티브 캡션이다.
- * 이동은 OS(DWM)가 수행한다(가장자리 끌기 스냅 포함). 보이지 않는 순수 히트
- * 영역 — 장식 유리 금지(soul.md §7)라 시각 요소를 얹지 않는다. 카드 상호작용은
- * 모자이크 패딩(≥14px) 아래에서 시작하므로 겹치지 않는다. */
-.drag-strip {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  height: 14px;
-  z-index: 7;
-  -webkit-app-region: drag;
-  cursor: grab;
-}
+/* .titlebar(창 크롬·이동 캡션)은 두 창 공용 — styles/ui-kit.css가 정의한다. */
