@@ -329,6 +329,34 @@ async function routineHttp(method, path) {
   return { ok: true, data: body };
 }
 
+// 주문 집행 프록시(P4) — 기존 3중 게이트 라우트로의 단일 전달. **무재시도**:
+// 타임아웃·오류 어느 쪽도 재전송하지 않는다(중복 주문 방지 — CLAUDE.md §1).
+// 로컬 베어러는 이 앱이 보관하지 않는다 — 미설정 배포에서는 백엔드가 정직하게
+// 거부하고 그 상태가 티켓에 그대로 표시된다.
+ipcMain.handle('athena:order-execute', async (_e, { trId, body, idempotencyKey }) => {
+  if (!/^kt1000[01]$/.test(String(trId))) {
+    return { ok: false, status: 0, error: '허용되지 않는 주문 TR' };
+  }
+  try {
+    const res = await fetch(`${BACKEND_HTTP_BASE}/api/v1/order/${trId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Athena-Confirm': 'true',
+        'Idempotency-Key': String(idempotencyKey || ''),
+        Authorization: `Bearer ${process.env.ATHENA_LOCAL_BEARER_TOKEN || ''}`,
+      },
+      body: JSON.stringify(body || {}),
+    });
+    const data = await res.json().catch(() => ({}));
+    return res.ok
+      ? { ok: true, status: res.status, data }
+      : { ok: false, status: res.status, error: data.detail || `HTTP ${res.status}` };
+  } catch (e) {
+    return { ok: false, status: 0, error: String((e && e.message) || e) };
+  }
+});
+
 ipcMain.handle('athena:routines-list', async () => {
   try { return await routineHttp('GET', '/api/v1/routines'); }
   catch (e) { return { ok: false, error: String((e && e.message) || e) }; }

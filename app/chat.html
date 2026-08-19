@@ -82,6 +82,18 @@
     </div>
   </div>
 
+  <!-- 주문 확인 모드(AT-CH-009, 2026-08-19 능동 에이전트 P4) — 유일하게 미착수였던
+       모드의 실체. 온보딩·설정과 같은 형제 패널 문법: 열리면 #app이 물러나고
+       창이 chatMaxH로 자란다. 프리필은 AI(루틴)가, 실행 버튼은 사람만
+       (확정 결정 2·3). chat.js openOrderTicket()/closeOrderTicket()가 그린다. -->
+  <div id="order" class="app glass" hidden>
+    <div class="settings-head">
+      <span class="settings-title">주문 티켓</span>
+      <span class="settings-hint">Esc 닫기 — 실행 전에는 아무 일도 일어나지 않습니다</span>
+    </div>
+    <div id="orderBody" class="settings-grid"></div>
+  </div>
+
   <!-- 창 제어(AT-CH-001, 2026-08-18) — frame:false라 OS 타이틀바가 없어 직접 배선한
        세 버튼. 특정 모드의 부품이 아니라 **창의 크롬**이므로 #app/#onboard/#settings
        밖 고정 오버레이다(모드가 바뀌어도 그대로). 부팅 연출 중에는 숨겼다가
@@ -103,6 +115,7 @@
 <script src="lib/onboarding.js"></script>
 <script src="lib/auth-screen.js"></script>
 <script src="lib/routine-turn.js"></script>
+<script src="lib/order-ticket.js"></script>
 <script src="lib/settings-cards.js"></script>
 <script src="chat.js"></script>
 </body>
