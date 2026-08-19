@@ -30,7 +30,7 @@ import httpx
 import mcp.types as types
 from mcp.server.lowlevel import Server
 
-from athena_mcp import quirks, selector_tools
+from athena_mcp import quirks, routine_tools, selector_tools
 from athena_mcp.aggregator import (
     ResolvedTarget,
     ToolAggregator,
@@ -327,6 +327,14 @@ class AthenaGateway:
         # 절 참고 — RENDER_CANVAS_TOOL/SAVE_CANVAS_TOOL과 같은 우선순위 패턴).
         if name in selector_tools.SELECTOR_TOOL_NAMES:
             return await self._dispatch_selector_tool(name, arguments)
+        if name == routine_tools.ROUTINE_TOOL:
+            # 셀렉터 4툴과 같은 빌트인 우선순위·같은 감사 최소 원칙(시각·
+            # 툴명·성공여부만 — 조건·인자는 로그에 닿지 않는다).
+            result = await routine_tools.dispatch(arguments, self.selector_http_client)
+            self._audit_log("routine").record(
+                "routine", routine_tools.ROUTINE_TOOL, success=not result.isError
+            )
+            return result
 
         try:
             target = self.aggregator.resolve(name)
@@ -709,6 +717,9 @@ def _builtin_tool_defs() -> list[types.Tool]:
         # 여기 인라인하면 이 파일이 비대해진다 — canvas.py를 별도 모듈로 뺀
         # 것과 같은 이유).
         *selector_tools.builtin_tool_defs(),
+        # 루틴 제안·조회 툴(능동 에이전트 P3) — 같은 "우리가 관리하는 툴"
+        # 범주. draft/list만 — 상태 변경은 사람 전용(routine_tools.py 참고).
+        *routine_tools.builtin_tool_defs(),
     ]
 
 

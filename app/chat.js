@@ -512,6 +512,10 @@ async function runQueryLive(text) {
   $history.appendChild(aLine);
   scheduleHeightSync();
   $input.focus();
+
+  // 방금 턴에서 모델이 athena_routine(draft)로 제안했을 수 있다 — 승인 카드는
+  // 스트림 파싱이 아니라 백엔드 목록 재조회로 결정론적으로 띄운다(P3).
+  refreshRoutineDrafts();
 }
 
 // ---------- 픽스처 어댑터 — 검증 전용, 명시적으로 선택했을 때만 탄다 ----------
@@ -955,3 +959,121 @@ window.athena.on('athena:routine-event', (event) => {
   refreshRoutineChip();
 });
 refreshRoutineChip();
+
+// ---------- 루틴 승인 카드 (P3, 2026-08-19) ----------
+// 모델은 draft 제안만 할 수 있다(athena_routine — confirm/cancel 액션 자체가
+// 없다). 사람이 이 카드의 [승인]을 눌러야 감시가 시작된다. [승인] 클릭은
+// LLM 재스폰 없이 렌더러가 백엔드 confirm을 직접 부른다(~200ms — C1 결정).
+// 방식 행은 필수다(§8 고지 의무 — verify 검증 대상).
+const shownDraftIds = new Set();
+
+async function refreshRoutineDrafts() {
+  let routines;
+  try {
+    const res = await window.athena.invoke('athena:routines-list');
+    routines = res && res.ok && res.data && Array.isArray(res.data.routines)
+      ? res.data.routines : [];
+  } catch { return; }
+  for (const r of routines) {
+    if (r.status !== 'draft' || shownDraftIds.has(r.id)) continue;
+    shownDraftIds.add(r.id);
+    renderApprovalCard(r);
+  }
+}
+
+function approvalModeLine(r) {
+  const modeText = routineTurnLib.describeMode(r.mode);
+  const suffix = r.mode === 'periodic' ? ' — 최대 폴링 주기만큼 지연' : ' — 틱 즉시';
+  const exp = r.experimental_source ? ' · [실값 미확인 필드]' : '';
+  return `방식 ${modeText}${suffix}${exp}`;
+}
+
+function renderApprovalCard(r) {
+  const line = document.createElement('div');
+  line.className = 'turn';
+  const card = document.createElement('div');
+  card.className = 'turn-agent routine-approval';
+
+  const head = document.createElement('div');
+  head.className = 'agent-head';
+  const title = document.createElement('span');
+  title.className = 'agent-source';
+  title.textContent = '루틴 제안 — 승인 전에는 실재하지 않습니다';
+  head.appendChild(title);
+  card.appendChild(head);
+
+  const note = document.createElement('div');
+  note.className = 'agent-body';
+  note.textContent = r.note;
+  card.appendChild(note);
+
+  const mode = document.createElement('div');
+  mode.className = 'agent-mode routine-mode-line';
+  mode.textContent = approvalModeLine(r);
+  card.appendChild(mode);
+
+  if (r.activation_blocker) {
+    const blocker = document.createElement('div');
+    blocker.className = 'agent-source';
+    blocker.textContent = `지금은 켤 수 없음: ${r.activation_blocker}`;
+    card.appendChild(blocker);
+  }
+
+  const notice = document.createElement('div');
+  notice.className = 'agent-source';
+  notice.textContent = '승인해도 주문은 자동 집행되지 않습니다 — 조건 도달 시 알림이 옵니다.';
+  card.appendChild(notice);
+
+  const row = document.createElement('div');
+  row.className = 'routine-approval-actions';
+  const status = document.createElement('span');
+  status.className = 'agent-mode';
+
+  const approve = document.createElement('button');
+  approve.type = 'button';
+  approve.className = 'routine-btn routine-btn-approve';
+  approve.textContent = '승인';
+  approve.disabled = !!r.activation_blocker;
+  approve.addEventListener('click', async () => {
+    approve.disabled = true;
+    cancel.disabled = true;
+    const res = await window.athena.invoke('athena:routine-confirm', { id: r.id });
+    if (res && res.ok) {
+      status.textContent = '활성 — 감시가 시작됐습니다';
+      refreshRoutineChip();
+    } else {
+      status.textContent = `승인 실패: ${(res && res.error) || '알 수 없는 오류'}`;
+      approve.disabled = !!r.activation_blocker;
+      cancel.disabled = false;
+    }
+  });
+
+  const cancel = document.createElement('button');
+  cancel.type = 'button';
+  cancel.className = 'routine-btn';
+  cancel.textContent = '취소';
+  cancel.addEventListener('click', async () => {
+    approve.disabled = true;
+    cancel.disabled = true;
+    const res = await window.athena.invoke('athena:routine-cancel', { id: r.id });
+    status.textContent = res && res.ok ? '취소됨' : `취소 실패: ${(res && res.error) || '오류'}`;
+  });
+
+  const edit = document.createElement('span');
+  edit.className = 'agent-mode';
+  edit.textContent = '수정은 커맨드바에 다시 말하면 됩니다';
+
+  row.appendChild(approve);
+  row.appendChild(cancel);
+  row.appendChild(edit);
+  row.appendChild(status);
+  card.appendChild(row);
+
+  line.appendChild(card);
+  $history.appendChild(line);
+  requestAnimationFrame(() => card.classList.add('is-in'));
+  $history.scrollTop = $history.scrollHeight;
+  scheduleHeightSync();
+}
+
+refreshRoutineDrafts();
