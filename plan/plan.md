@@ -1,6 +1,11 @@
 # Athena 진행 상황 및 재개 계획
 
-> 최종 갱신: 2026-08-19 · 브랜치 `main` — **`디자인` 브랜치 병합 완료.** 두 갈래가 합류했다:
+> 최종 갱신: 2026-08-19 · 브랜치 `그래프` — **채팅→그래프 파이프라인 결선 완료.**
+> 합의 계획(`.omc/plans/plan-chat-graph-pipeline.md`, Planner→Architect→Critic 4라운드)을 실행해
+> 브레인의 **gap 2건**(채팅 쓰기 경로 부재 · extraction 미주입)을 닫고 ADR 게이트 G005
+> (hourly scheduler · local-only 조회 API)를 완성했다. 상세는 §1의 맨 위 블록.
+>
+> 아래는 그 이전 상태다 — **`디자인` 브랜치 병합 완료.** 두 갈래가 합류했다:
 > ① 전 구간 지연 최적화(합의 계획 `.omc/plans/plan-latency-optimization.md`) — 진단 보고서는
 > [`plan/latency-audit-2026-08-19.md`](latency-audit-2026-08-19.md), "백엔드가 느리다"는
 > 전제가 반증됐다(백엔드 몫 0.2초, 병목은 모델 왕복). ② 디자인 갈래(디자인 비판 →
@@ -28,7 +33,60 @@
 > 번호는 **갈래별로 독립**이다 — `main` 갈래(4차 키움·5차 지연)와 `디자인` 갈래
 > (4차 리사이즈~7차 휘도)가 같은 날짜에 병렬로 진행됐다. 병합 직후 재실측이 맨 위다.
 
-**2026-08-19 (병합) · `디자인` → `main` 병합 직후 재실측 — 이 수치가 현행이다:**
+**2026-08-19 (그래프) · 채팅→그래프 파이프라인 결선 후 재실측 — 이 수치가 현행이다:**
+
+```
+backend:  732 passed, 0 failed (직렬 213.6초)
+  ruff check . → All checks passed | generate_api.py --check → current (생성물 무접촉)
+app:
+  npm test        → 197건 통과 (기존 176 + history-sink 9 · history-badge 7 · 리셋 배선 5)
+  npm run verify  → 검증 1~17 전 단언 통과 · exit 0 (검증17 "기록 안 됨" 배지 신설)
+```
+
+**2026-08-19 (그래프) 세션 기록 — 채팅 이력 → LadybugDB 성향 파이프라인:**
+
+- **닫은 gap은 정확히 2건이었다**(노션 "GraphDB 사용 현황" 실측 문서 + `lifespan.py:80-90` docstring
+  근거): ① 채팅→`HistoryStore` **쓰기 경로 자체 부재**(`upsert_chat` 프로덕션 호출 0건)
+  ② `_open_brain`이 `IngestionCoordinator`를 `source_projector` 없이 생성 → **추출 0건**.
+  두 gap은 독립이고 순서는 ①→②다.
+- **배치·요약 API는 신규 발명이 아니라 ADR §9 게이트 G005의 완성**이다. `JobTrigger.HOURLY`는
+  `history.py:39-43`에, `GraphStore.summary()`는 `store.py:635`에 **이미 있었다** — 없던 것은
+  주기 호출 타이머 하나와 loopback 라우트뿐. 그래서 APScheduler 등 신규 의존성은 0건이다.
+- **채팅 삽입 지점은 renderer가 아니라 main 프로세스**(실측): `app/main.js:842` `runLiveQuery`
+  진입의 `query`, `:904-906`의 `answerText`. `claude-runner.js`가 stream-json을 이미
+  `finalResult`로 조립해줘서 CLI stdout 후킹이 불필요했다. `answerText`는 null일 수 있어 스킵한다.
+- **성향은 저장 시점이 아니라 읽기 시점에 계산한다.** Claim은 append-only로 쌓고
+  `graph.investor_profile_summary`(신규 고정 템플릿, ADR §6.2 allowlist 등재)가 90일 윈도우
+  관측 수 · 최신 관측일 · 평균 confidence를 낸다. 정렬은 **최신 관측일 desc → 카운트 desc → id**로
+  완전 결정론이다. 초안의 latest-wins는 기각했다 — 한 번 스친 발언이 누적 관측을 뒤집는다.
+  순수 카운트/기간 필터라 ADR §7(벡터·임베딩·모델 호출 금지)을 어기지 않는다.
+- **온톨로지는 v1 그대로**다. `investor_profile`/`preference`/`risk_signal` + `PREFERS`/`AVOIDS`/
+  `INTERESTED_IN`이 **이미 스키마에 있었고 한 번도 채워진 적이 없었을 뿐**이라 버전 bump가 없다.
+- **전체 삭제는 핫스왑이 아니라 프로세스 재시작을 요구한다** — `GraphStore.open()`/`HistoryStore.open()`
+  은 `_closed`면 `RuntimeError`(일회용 객체)이고 ADR §11이 "한 번만 open/close"를 못박는다.
+  `POST /api/v1/brain/reset-and-restart`는 기존 `_teardown_brain` 로직만 호출하고 파일
+  (sqlite3 + **`-wal`·`-shm`** + lbug, `unlink(missing_ok=True)`) 삭제 후 종료 신호를 낸다.
+  Electron 재기동은 **리셋 IPC 핸들러 안에서만** `once('exit')` 대기 후 `ensureBackend()`를
+  명시적으로 재호출한다 — `backend-launcher.js:137-140`의 전역 exit 훅은 재스폰을 안 하며,
+  거기에 자동 재스폰을 붙이는 것은 **크래시 루프 리스크**라 기각했다. 비자가스폰이면 "수동 재시작
+  필요"를 정직하게 안내한다.
+- **침묵 유실 금지**: 저장 실패 시 `athena:history-save-failed` IPC → 회색 무채색 "기록 안 됨" 배지.
+  단 `brain_ready=false`(기본)면 저장 시도도 배지도 없다 — "해당 없음"과 "실패"는 다른 상태다.
+- **LLM 노출 툴은 여전히 정확히 4개**다. 브레인 라우트 5개는 전부 `x-athena-llm-exposed: false`이고,
+  selector 카탈로그는 `generate_api.py` 생성 레지스트리에서만 빌드돼(`catalog.py:1,14`)
+  구조적으로 브레인을 대상 삼을 수 없다 — `HISTORY_COMMAND` 미매치 폴스루가 원천 안전한 이유다.
+- **함정 ⑫ 재확인**: `athena_api`에는 요청 바디를 찍는 미들웨어가 0건이다. 즉 현재 안전은
+  "마스킹 로직 덕"이 아니라 **"아무도 로깅을 안 하기 때문"**이다. 그래서 신규 핸들러는
+  `text`/`query`를 `logger.*`에 넣지 않고 `source_id`/`role`만 남기며, `caplog` 테스트로 강제한다.
+- **신규 실측 함정**: 이 워크트리는 한글 경로라 **`pytest -n auto`(xdist)가 워커 부팅에 실패한다**
+  (`EOFError: expected 1 bytes, got 0`, execnet bootstrap). 직렬로 돌려야 한다(213초).
+  CLAUDE.md §9의 병렬 규약은 ASCII 경로 전제다.
+- **미완(정직)**: ① **노션 문서 갱신 미완** — MCP 토큰 만료로 전송 실패, 재인증 후 처리 필요
+  (기존 "GraphDB 사용 현황" 정정 + 하위 설계 페이지 신설). ② 실배선 E2E(실제 `claude -p` 왕복 후
+  SQLite 2행 확인)는 미실행 — `npm run verify`는 항상 fixture 경로다. ③ 보존기간·세분화 삭제 UI,
+  감시 에이전트의 그래프 소비(알림)는 **명시적 범위 밖**. ④ 집계 쿼리 성능 수용 기준 없음(후속 실측).
+
+**2026-08-19 (병합) · `디자인` → `main` 병합 직후 재실측:**
 
 ```
 backend:  708 passed, 0 failed (병렬 55.9초 · pytest-xdist -n auto --dist loadgroup)

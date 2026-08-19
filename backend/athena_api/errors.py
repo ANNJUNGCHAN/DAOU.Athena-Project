@@ -26,6 +26,14 @@ class OrderScopeError(KiwoomError):
     """The addressed account is not permitted to place this family of order."""
 
 
+class BrainError(RuntimeError):
+    """Base error safe to translate at the investment-brain HTTP boundary."""
+
+
+class BrainNotReadyError(BrainError):
+    """The investment-brain runtime (history store or graph projection) is not ready."""
+
+
 class KiwoomApiError(KiwoomError):
     def __init__(self, code: str, message: str, http_status: int) -> None:
         super().__init__(f"Kiwoom request failed with code {code}")
@@ -125,4 +133,10 @@ def install_exception_handlers(app: FastAPI) -> None:
         return JSONResponse(
             status_code=502,
             content={"detail": "Kiwoom WebSocket upstream request failed"},
+        )
+
+    @app.exception_handler(BrainNotReadyError)
+    async def brain_not_ready_handler(_request: Request, _exc: BrainNotReadyError) -> JSONResponse:
+        return JSONResponse(
+            status_code=503, content={"detail": "Investment brain is not ready"}
         )

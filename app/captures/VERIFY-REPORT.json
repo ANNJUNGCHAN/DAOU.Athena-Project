@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-08-19T00:52:53.859Z",
+  "startedAt": "2026-08-19T04:23:36.452Z",
   "layout": {
     "scale": 1,
     "screen": {
@@ -54,18 +54,18 @@
     "ok": true
   },
   "expand": {
-    "frameCount": 34,
-    "p50": 16.699999999999818,
-    "p95": 16.799999999999955,
-    "max": 16.800000000000182,
+    "frameCount": 29,
+    "p50": 16.700000000000045,
+    "p95": 33.40000000000009,
+    "max": 50,
     "min": 16.59999999999991
   },
   "collapse": {
     "frameCount": 35,
     "p50": 16.699999999999818,
     "p95": 16.800000000000182,
-    "max": 16.899999999999636,
-    "min": 16.399999999999636
+    "max": 16.800000000000182,
+    "min": 16.5
   },
   "afterCollapse": {
     "canvasVisible": false
@@ -166,7 +166,7 @@
     "renderedInChatWindow": true,
     "chatModeSteppedAside": true,
     "navExists": true,
-    "navHasFourItems": true,
+    "navHasFiveItems": true,
     "defaultPanelIsScreen": true,
     "accountsPanelOnNavSelect": true,
     "mcpPanelOnNavSelect": true,
@@ -189,7 +189,8 @@
       "화면",
       "계좌",
       "MCP 서버",
-      "모델"
+      "모델",
+      "성향・이력"
     ]
   },
   "settingsCommandBar": {
@@ -477,7 +478,7 @@
         "effort": "medium"
       }
     },
-    "configPath": "C:\\Projects\\DAOU.Athena\\app\\.verify-profile\\.codex-home\\config.toml",
+    "configPath": "C:\\Users\\ajc22\\orca\\workspaces\\DAOU.Athena\\그래프\\app\\.verify-profile\\.codex-home\\config.toml",
     "configOnDiskAfterSet": "model = \"gpt-5-codex\"\nmodel_reasoning_effort = \"medium\"",
     "savedCorrectly": true,
     "persistedToConfigToml": true,
@@ -508,5 +509,16 @@
     "cardMatchesToken": true,
     "chatAppMatchesWindowToken": true
   },
-  "finishedAt": "2026-08-19T00:53:23.918Z"
+  "historySaveFailedBadge": {
+    "moduleLoaded": true,
+    "pendingBeforeALine": true,
+    "userBadgeText": "기록 안 됨",
+    "assistantBadgeText": "기록 안 됨",
+    "userBadgeInsideTurnMeta": true,
+    "assistantBadgeInsideTurnMeta": true,
+    "noDuplicateMetaOnQLine": true,
+    "noDuplicateMetaOnALine": true
+  },
+  "historyChannelAllowed": true,
+  "finishedAt": "2026-08-19T04:24:07.216Z"
 }

@@ -101,6 +101,37 @@ class Settings(BaseSettings):
     brain_history_db_path: Path = Field(
         default_factory=lambda: Path.home() / ".athena" / "brain-history.sqlite3"
     )
+    # Explicit argv for the local structured-extraction command (e.g. a local claude CLI
+    # invocation). Empty means extraction is disabled -- IngestionCoordinator still
+    # projects raw SourceRecords, it just never derives Entity/Claim/Relation from them.
+    # No implicit discovery: this is the only way extraction turns on (ADR §4, gap b).
+    brain_extraction_llm_argv: list[str] = []
+    # Hourly self-enqueue period for IngestionCoordinator (ADR §9 gate G005). Manual runs
+    # still go through the existing enqueue(JobTrigger.MANUAL) path unaffected by this.
+    brain_ingest_interval_minutes: int = 60
+
+    @field_validator("brain_extraction_llm_argv", mode="before")
+    @classmethod
+    def parse_brain_extraction_llm_argv(cls, value: object) -> object:
+        """Accept the JSON-array form from either an env var or a direct keyword."""
+        if not isinstance(value, str):
+            return value
+        text = value.strip()
+        if not text:
+            return []
+        try:
+            return json.loads(text)
+        except json.JSONDecodeError as exc:
+            raise ValueError(
+                "brain_extraction_llm_argv must be a JSON array of strings"
+            ) from exc
+
+    @field_validator("brain_ingest_interval_minutes")
+    @classmethod
+    def validate_brain_ingest_interval_minutes(cls, value: int) -> int:
+        if value <= 0:
+            raise ValueError("brain_ingest_interval_minutes must be positive")
+        return value
 
     @field_validator("local_bearer_token", mode="before")
     @classmethod
