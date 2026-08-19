@@ -526,6 +526,24 @@ function makeCard(type, title, layoutHint) {
   card.appendChild(body);
   grid.appendChild(card);
   enforceHeightBudget();
+  // 2026-08-19 QA 결함 #2 실제 원인 — .grid는 overflow-y:auto라 카드가 쌓여
+  // 뷰포트를 넘기면, 새/갱신 카드가 스크롤 위치 밖(화면 아래)에 조용히 붙는다.
+  // scrollTop을 아무도 옮기지 않으니 사용자는 새 카드가 도착한 줄도 모른다 —
+  // capturePage() 캡처가 "안 바뀐 것처럼" 보인 진짜 이유였다(19-chart-card.png /
+  // 20-live-chart-card.png가 MD5까지 같았던 것 — 캔버스 자체는 매번 옳게 갱신됐고,
+  // 화면에 안 보이는 위치에 있었을 뿐). 캡처 버그가 아니라 실사용에서도 새 카드가
+  // 안 보일 수 있는 결함이라 여기(카드 생성 지점)에서 고친다.
+  card.scrollIntoView({ block: 'nearest' });
+  // 2026-08-19 QA 결함 #5 — 하단 경계에서 반쯤 잘린 글리프가 다른 글자로 읽힌다
+  // (픽스처 원문 "주주균등처분(주)"이 03-mosaic-expanded.png에서 "조조규등처부(조)"로
+  // 보였다 — 인코딩이 아니라 descender 절단). 스크롤이 실제로 생겼을 때만
+  // .is-clipped를 붙여 CSS 페이드(잘림의 정직한 표시)를 켠다. 내용이 다 보이면
+  // 페이드도 없다 — 정보 정직성 우선.
+  const syncClipped = () => {
+    body.classList.toggle('is-clipped', body.scrollHeight > body.clientHeight + 1);
+  };
+  new ResizeObserver(syncClipped).observe(body);
+  new MutationObserver(syncClipped).observe(body, { childList: true, subtree: true });
   return { card, body };
 }
 

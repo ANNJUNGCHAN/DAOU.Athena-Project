@@ -135,11 +135,15 @@ html, body { background: transparent; }
   padding: 0;
   appearance: none;
   cursor: pointer;
-  color: var(--color-k-hint);
+  /* 2026-08-19 QA 결함 #4(중대) — 유휴 45%(--color-k-hint)는 유리 위에서 잘 안
+   * 보인다는 실측 지적(02-chat-only-idle.png). 62%(--color-k-soft)로 한 단계
+   * 올린다 — 여전히 무채색, 새 토큰 없음. */
+  color: var(--color-k-soft);
   transition: background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
 }
-.win-btn:hover { background: rgba(255, 255, 255, 0.08); color: var(--color-k-bright); }
-.win-btn:active { background: rgba(255, 255, 255, 0.13); }
+/* hover 강화 — 배경 8%→14%, 눌림 13%→20% (같은 지적, 병행 조치). */
+.win-btn:hover { background: rgba(255, 255, 255, 0.14); color: var(--color-k-bright); }
+.win-btn:active { background: rgba(255, 255, 255, 0.20); }
 .win-btn:focus-visible { outline: 2px solid var(--color-k-text); outline-offset: 1px; }
 /* 모드(설정·온보딩)가 창 높이를 소유하는 동안 최대화 버튼은 비활성이다 —
  * 라벨이 약속한 동작을 못 하는 버튼을 멀쩡해 보이게 두면 정보 정직성 위반이다
@@ -192,15 +196,36 @@ html, body { background: transparent; }
    * 2026-08-18 하향(사용자 지시 "그냥 검은 창 같다"): 가독성 블러는 네이티브
    * acrylic이 담당하므로 틴트 알파는 뒤가 실제로 비치는 수준까지 내린다 —
    * 유리로 읽히려면 굴절 대상(데스크톱)이 보여야 한다. */
-  background: rgba(23, 27, 36, var(--glass-alpha, var(--glass-window))); /* SSOT: tokens.css 유리 사다리 */
+  /* --glass-alpha(배경색)는 verify.js 검증16이 getComputedStyle().backgroundColor로
+   * 직접 읽는 SSOT 값이다 — background 축약형으로 되돌려 background-image와 합치지
+   * 마라(합치면 backgroundColor가 transparent가 돼 검증16이 깨진다). 흡수(2026-08-19
+   * 리퀴드 글래스 실구현)는 별도 background-image 레이어로 얹는다: 135° 그라디언트로
+   * 다크 스톱이 3단(A1=α+0.08 시작 → α 중앙 46% → A3=α+0.04, 다음 유리 토큰(panel2)
+   * 톤으로 끝) 흘러 평면 단색이 아니라 두께가 있는 유리로 읽히게 한다(palette.md
+   * "흡수되는 것은 명도이지 색조가 아니다"). 스펙큘러(115° 스윕)는 같은
+   * background-image에 얹힌 첫 레이어 — 별도 ::before 대신 배경 레이어로 두면 항상
+   * 텍스트 아래에 그려져 가독을 해치지 않는다(paint order: background < content). */
+  background-color: rgba(23, 27, 36, var(--glass-alpha, var(--glass-window))); /* SSOT: tokens.css 유리 사다리 */
+  background-image:
+    linear-gradient(115deg, transparent 32%, rgba(255, 253, 248, 0.12) 43%, transparent 58%),
+    linear-gradient(135deg,
+      rgba(23, 27, 36, calc(var(--glass-alpha, var(--glass-window)) + 0.08)) 0%,
+      rgba(23, 27, 36, var(--glass-alpha, var(--glass-window))) 46%,
+      rgba(29, 34, 44, calc(var(--glass-alpha, var(--glass-window)) + 0.04)) 100%);
   /* 휘도 감지-적응(2026-08-19)의 두께 전이 — opacity 페이드가 아니라 재료의
    * 연속 적응이다(liquid-glass.md §1). 높이 보간(그립)도 같은 전이를 탄다. */
-  transition: background-color 600ms var(--ease);
+  transition: background-color 600ms var(--ease), background-image 600ms var(--ease);
   border-radius: 20px;
   /* 투명해질수록 윤곽은 광량으로 세운다 — 테두리 소폭 승급 + 유리 윗면 스펙큘러
-   * (상단 인셋 하이라이트). 깊이는 값으로 만든다(soul.md §7). */
+   * (상단 인셋 하이라이트). 깊이는 값으로 만든다(soul.md §7). 렌징 4요소(2026-08-19):
+   * 상단 엣지 하이라이트(밝게) · 좌측 엣지(약하게) · 하단 그림자(어둡게) · 웜 이너 글로우. */
   border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 30px 70px rgba(0, 0, 0, 0.45);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 253, 248, 0.60),
+    inset 1px 0 0 rgba(255, 253, 248, 0.16),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.40),
+    inset 0 0 60px rgba(255, 240, 214, 0.06),
+    0 30px 70px rgba(0, 0, 0, 0.45);
   overflow: hidden;
 }
 
@@ -258,6 +283,9 @@ html, body { background: transparent; }
   font-size: var(--text-lg);
   line-height: 1.5;
   color: var(--color-k-text);
+  /* 각인(engraving) — 텍스트가 유리 위가 아니라 안에 있는 것처럼(palette.md 밝은
+     배경 해법 §각인). 유리 두께가 얇아지는 상태(창 최소 높이)에서도 대비를 지킨다. */
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
 }
 .turn-meta {
   display: flex; align-items: center; gap: 10px;
@@ -291,7 +319,11 @@ html, body { background: transparent; }
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgb(255 255 255 / 18%);
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / 14%), 0 10px 28px rgb(0 0 0 / 45%);
+  /* 렌징(2026-08-19) — 상단 하이라이트를 웜 오프화이트로, 좌측 엣지·접지 유지. */
+  box-shadow:
+    inset 0 1px 0 rgba(255, 253, 248, 0.55),
+    inset 1px 0 0 rgba(255, 253, 248, 0.14),
+    0 10px 28px rgb(0 0 0 / 45%);
   font-family: var(--font-body);
   font-size: var(--text-base);
   color: var(--color-k-text);
@@ -367,7 +399,10 @@ html, body { background: transparent; }
   font-family: var(--font-body);
   font-size: var(--text-lg);
 }
-.input::placeholder { color: var(--color-k-faint); }
+/* 2026-08-19 QA 결함 #4(중대) — --color-k-faint(#6b7480)는 유리 위에서 평시에도
+ * 잘 안 읽힌다는 실측 지적(02-chat-only-idle.png). 무채색 원칙 안에서 한 단계
+ * 밝은 --color-k-dim으로 올린다(신규 색 없음, 기존 텍스트 위계 재사용). */
+.input::placeholder { color: var(--color-k-dim); }
 .input:disabled { color: var(--color-k-faint); }
 
 .lock-hint {
@@ -473,6 +508,11 @@ html, body { background: transparent; }
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgb(255 255 255 / 16%);
   overflow: hidden;
+  /* 렌징(2026-08-19) — "모든 유리 표면에" 적용(리퀴드 글래스 실구현 지시). */
+  box-shadow:
+    inset 0 1px 0 rgba(255, 253, 248, 0.55),
+    inset 1px 0 0 rgba(255, 253, 248, 0.14),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.35);
 }
 .onb-cli-card-head {
   height: 48px;
@@ -636,6 +676,13 @@ html, body { background: transparent; }
   display: flex;
   flex-direction: column;
   gap: 10px;
+  /* 렌징(2026-08-19) — "모든 유리 표면에" 적용. 큰 숫자가 얹히는 카드라 웜 이너
+     글로우까지 얹어 canvas.css .card와 같은 두께로 읽히게 한다. */
+  box-shadow:
+    inset 0 1px 0 rgba(255, 253, 248, 0.60),
+    inset 1px 0 0 rgba(255, 253, 248, 0.16),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.40),
+    inset 0 0 54px rgba(255, 240, 214, 0.06);
 }
 .auth-timer-label {
   font-family: var(--font-body);
@@ -652,6 +699,8 @@ html, body { background: transparent; }
   letter-spacing: -1px;
   color: var(--color-k-text);
   white-space: nowrap;
+  /* 각인(engraving) — 큰 숫자는 본문보다 그림자를 더 깊게(palette.md 각인 물리). */
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.66);
 }
 .auth-timer-digits.is-warn { color: var(--color-warn); }
 .auth-timer-digits.is-dim { color: var(--color-k-ghost); }

@@ -43,6 +43,22 @@
     border: 1px solid var(--color-k-text) !important;
   }
   .glass-sheen { display: none !important; }
+  /* 2026-08-19 리퀴드 글래스 실구현으로 카드류에도 흡수 그라디언트·스펙큘러
+   * (background-image)가 생겼다 — .glass는 위에서 이미 덮이지만 카드류는 별도
+   * 클래스라 빠져 있었다(reduced-transparency 블록엔 이미 있던 목록과 동일 대상).
+   * background 축약형 !important가 image를 통째로 지우고, 테두리를 흰색으로
+   * 강화한다("contrast에서 테두리 강화"). */
+  .card,
+  .uk-sheet,
+  .uk-cmd-box,
+  .uk-principles,
+  .onb-cli-card,
+  .auth-timer-card,
+  .coachmark {
+    background: #000000 !important;
+    border-color: #ffffff !important;
+    box-shadow: none !important;
+  }
   /* 경계 hover 광량은 장식적 신호다 — 대비 모드에선 리사이즈 커서가 신호를 대신한다 */
   .edge-glow { display: none !important; }
   body, .md-p, .stream-item, td, th {
@@ -52,6 +68,16 @@
   .up { color: #ff8f8f !important; }
   .down { color: #86bbff !important; }
   .k-line { border-color: #ffffff !important; }
+  /* 2026-08-19 QA 결함 #1(치명) — placeholder는 자기 자신의 color 규칙
+   * (.input::placeholder 등, chat.css/settings-cards.css)이 위 `body{color:#fff}`
+   * 보다 명시도가 높아 고대비 모드에서도 --color-k-faint(가장 어두운 무채색)로
+   * 남아 있었다. 모든 placeholder를 한 번에 잡는다 — 요소별로 나열하면 새
+   * 입력창이 늘 때마다 또 빠질 수 있다. secondary 텍스트(.dim/.faint)와 같은
+   * 값으로 맞춘다(placeholder는 본문보다 한 단계 낮은 위계가 맞다). */
+  ::placeholder {
+    color: #d0d3da !important;
+    opacity: 1 !important; /* 일부 UA가 placeholder color에 자체 opacity를 곱한다 */
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
