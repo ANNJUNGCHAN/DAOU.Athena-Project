@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-08-19T00:52:53.859Z",
+  "startedAt": "2026-08-19T03:15:44.688Z",
   "layout": {
     "scale": 1,
     "screen": {
@@ -54,18 +54,18 @@
     "ok": true
   },
   "expand": {
-    "frameCount": 34,
+    "frameCount": 29,
     "p50": 16.699999999999818,
-    "p95": 16.799999999999955,
-    "max": 16.800000000000182,
-    "min": 16.59999999999991
+    "p95": 33.299999999999955,
+    "max": 66.80000000000018,
+    "min": 16.5
   },
   "collapse": {
-    "frameCount": 35,
+    "frameCount": 34,
     "p50": 16.699999999999818,
     "p95": 16.800000000000182,
-    "max": 16.899999999999636,
-    "min": 16.399999999999636
+    "max": 33.29999999999927,
+    "min": 16.599999999999454
   },
   "afterCollapse": {
     "canvasVisible": false
@@ -477,7 +477,7 @@
         "effort": "medium"
       }
     },
-    "configPath": "C:\\Projects\\DAOU.Athena\\app\\.verify-profile\\.codex-home\\config.toml",
+    "configPath": "C:\\Users\\ajc22\\orca\\workspaces\\DAOU.Athena\\디자인\\app\\.verify-profile\\.codex-home\\config.toml",
     "configOnDiskAfterSet": "model = \"gpt-5-codex\"\nmodel_reasoning_effort = \"medium\"",
     "savedCorrectly": true,
     "persistedToConfigToml": true,
@@ -508,5 +508,9 @@
     "cardMatchesToken": true,
     "chatAppMatchesWindowToken": true
   },
-  "finishedAt": "2026-08-19T00:53:23.918Z"
+  "captureIntegrity": {
+    "totalShots": 20,
+    "duplicates": []
+  },
+  "finishedAt": "2026-08-19T03:16:18.489Z"
 }

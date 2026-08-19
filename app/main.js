@@ -140,6 +140,17 @@ function commonWinOpts(bounds) {
       contextIsolation: true,
       sandbox: true,
       preload: path.join(__dirname, 'preload.js'),
+      // 2026-08-19 QA 결함 #2 원인 격리 — 두 창은 서로 포커스를 주고받는 게
+      // 정상 사용 패턴이다(대화 창에 타이핑하는 동안 캔버스 창은 배경에 있다).
+      // 기본값(true)에서는 배경/비포커스 창의 컴포지터 프레임 생성이 스로틀돼
+      // capturePage()가 hide()→show() 직후 몇 프레임을 묵은 프레임으로 돌려줄
+      // 수 있다(verify.js 19/20 캡처가 검증9d의 배경 전환 이후 검증10 시점
+      // 프레임에 고정된 채 안 바뀐 실측 — DOM/JS 상태는 매번 옳았는데 캡처만
+      // 굳어 있었다, 즉 렌더 실패가 아니라 캡처 스로틀링이었다). 실사용에서도
+      // 같은 스로틀이 "캔버스 창이 배경에 있는 동안 실시간 데이터가 안 갱신되는
+      // 것처럼 보이는" 잠재 결함이라 검증 스크립트뿐 아니라 여기(생성 옵션)에서
+      // 고친다.
+      backgroundThrottling: false,
     },
   };
 }
