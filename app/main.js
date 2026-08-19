@@ -988,6 +988,8 @@ function handlePrefsSet(e, patch) {
   // 설정 카드는 대화 창 안의 같은 렌더러다(#settings 패널) — 그래도 원본과 같이
   // chatWin에 명시적으로 방송한다. 다른 진입점이 생겨도 이 계약이 그대로 맞는다.
   if (chatWin && !chatWin.isDestroyed()) chatWin.webContents.send('athena:prefs-changed', next);
+  // fontSize(2026-08-19)는 캔버스 창 텍스트에도 적용된다 — 두 창 모두에 방송.
+  if (canvasWin && !canvasWin.isDestroyed()) canvasWin.webContents.send('athena:prefs-changed', next);
   return next;
 }
 

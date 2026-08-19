@@ -45,14 +45,24 @@ let onboardCleanup = null; // 현재 노출 중인 온보딩/인증 화면의 �
 // (app/README.md L599-608). 기본값은 원본과 동일 — 채널·기본값을 못 받아도
 // 두 동작 모두 이전과 같은 "항상 켜짐"으로 동작한다(fail-open, 새 기능이라
 // 실패가 기존 동작을 축소시키면 안 된다).
-let prefs = { autoExpandCanvas: true, autoGrowChat: true };
+let prefs = { autoExpandCanvas: true, autoGrowChat: true, fontSize: 'md' };
+// 글자 크기 5단계(2026-08-19) — tokens.css의 :root[data-font-size=...] 토큰 세트를
+// 켠다. md는 기본 토큰이므로 속성을 지워 :root 값으로 돌아간다. 텍스트 크기가
+// 바뀌면 필요한 창 높이도 바뀌므로 auto-grow 재측정을 건다.
+function applyFontSize() {
+  const v = prefs.fontSize;
+  if (v && v !== 'md') document.documentElement.dataset.fontSize = v;
+  else delete document.documentElement.dataset.fontSize;
+  if (typeof scheduleHeightSync === 'function') scheduleHeightSync();
+}
 async function loadPrefs() {
   try {
     const next = await window.athena.invoke('athena:settings:prefs:get');
     if (next) prefs = next;
   } catch { /* 채널 없음 — 기본값 유지 */ }
+  applyFontSize();
 }
-window.athena.on('athena:prefs-changed', (next) => { if (next) prefs = next; });
+window.athena.on('athena:prefs-changed', (next) => { if (next) { prefs = next; applyFontSize(); } });
 
 // ---------- 부팅(AT-SY-001) — 4단계 생성 시퀀스 ----------
 // 발광점(0ms) → 가로 확장(+180ms) → 세로 전개(+420ms, 유리 72%) → 창 확정(+620ms).

@@ -15,6 +15,21 @@ async function loadFixture(kind) {
   return window.athena.invoke('athena:load-fixture', { kind });
 }
 
+// ---------- 글자 크기 5단계 (2026-08-19, 설정 › 화면 › 글자 크기) ----------
+// chat.js와 같은 문법 — tokens.css의 :root[data-font-size=...] 토큰 세트를 켠다.
+// md는 기본 토큰이라 속성을 지운다. 부팅 시 1회 조회 + prefs-changed 방송 반영.
+function applyFontSizePref(p) {
+  const v = p && p.fontSize;
+  if (v && v !== 'md') document.documentElement.dataset.fontSize = v;
+  else delete document.documentElement.dataset.fontSize;
+}
+(async () => {
+  try {
+    applyFontSizePref(await window.athena.invoke('athena:settings:prefs:get'));
+  } catch { /* 채널 없음 — 기본 크기 유지 */ }
+})();
+window.athena.on('athena:prefs-changed', (next) => applyFontSizePref(next));
+
 // 카드별 destroy 콜백 — closeCard가 lightweight-charts 인스턴스를 누수 없이
 // 정리하도록 카드 DOM 노드에 매달아둔다(WeakMap: 카드가 GC되면 콜백도 같이 사라짐).
 const cardDestroyers = new WeakMap();
