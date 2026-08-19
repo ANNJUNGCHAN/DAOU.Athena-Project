@@ -44,9 +44,11 @@ into one app.
   first. Levels: `ATHENA_LOG_LEVEL` globally, `ATHENA_SRC_LOG_LEVELS` per subsystem
   (`{"brain":"DEBUG"}`; unknown keys fail startup), `ATHENA_LOG_FORMAT=text|json`.
   Never log a request/response body, chat text, or credential — log identifiers
-  (`source_id`, `role`, counts) instead. `SecretRedactingFilter` scrubs known credential
-  *values* as a backstop, but it cannot recognise chat text, so bodies stay a code rule
-  enforced by `tests/unit/test_logging_config.py` and `tests/api/test_brain_api.py`.
+  (`source_id`, `role`, counts) instead. `SecretRedactingFilter` is a backstop with two
+  layers — known credential *values* from `Settings`, plus credential *shapes*
+  (`Bearer <x>`, `access_token=<x>`) because the Kiwoom access token is issued at runtime
+  and never appears in `Settings`. Neither layer can recognise chat text, so bodies stay a
+  code rule enforced by `tests/unit/test_logging_config.py` and `tests/api/test_brain_api.py`.
   Do not add audit settings that capture bodies — Open WebUI's `AUDIT_LOG_LEVEL=
   REQUEST_RESPONSE` shape is explicitly rejected here (CLAUDE.md §1 trap ⑫); a test asserts
   no `audit`-named setting exists.
