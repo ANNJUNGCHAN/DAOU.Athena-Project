@@ -151,9 +151,8 @@ async def _open_brain(settings: Settings) -> BrainRuntime:
 
 
 def _publish_routines(app: FastAPI, routines: "RoutinesRuntime | None") -> None:
+    # ready/last_error는 API가 runtime에서 직접 읽는다 — app.state 미러를 두지 않는다.
     app.state.routines_runtime = routines
-    app.state.routines_ready = routines is not None and routines.ready
-    app.state.routines_last_error = routines.last_error if routines is not None else None
     app.state.routine_events = routines.events if routines is not None else None
 
 

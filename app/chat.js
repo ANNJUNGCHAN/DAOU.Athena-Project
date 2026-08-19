@@ -910,6 +910,24 @@ async function refreshRoutineChip() {
   }
 }
 
+// 능동 턴·승인 카드·주문 티켓이 공유하는 DOM 조립 헬퍼 — 렌더는 textContent만.
+function _btn(label, className) {
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.className = className;
+  b.textContent = label;
+  return b;
+}
+
+function _mountTurn(line, el) {
+  line.appendChild(el);
+  $history.appendChild(line);
+  // 등장은 굴절 변조 — chat.css의 .turn-agent 전이. reduced-motion이면 즉시.
+  requestAnimationFrame(() => el.classList.add('is-in'));
+  $history.scrollTop = $history.scrollHeight;
+  scheduleHeightSync();
+}
+
 function renderAgentTurn(event) {
   const model = routineTurnLib.buildTurnModel(event, Date.now());
   const line = document.createElement('div');
@@ -955,10 +973,7 @@ function renderAgentTurn(event) {
   if (model.kind === 'fired') {
     const actions = document.createElement('div');
     actions.className = 'routine-approval-actions';
-    const openBtn = document.createElement('button');
-    openBtn.type = 'button';
-    openBtn.className = 'routine-btn';
-    openBtn.textContent = '주문 티켓 열기';
+    const openBtn = _btn('주문 티켓 열기', 'routine-btn');
     openBtn.addEventListener('click', () => {
       openOrderTicket(orderTicketLib.buildPrefill(event));
     });
@@ -966,12 +981,7 @@ function renderAgentTurn(event) {
     box.appendChild(actions);
   }
 
-  line.appendChild(box);
-  $history.appendChild(line);
-  // 등장은 굴절 변조 — chat.css의 .turn-agent 전이. reduced-motion이면 즉시.
-  requestAnimationFrame(() => box.classList.add('is-in'));
-  $history.scrollTop = $history.scrollHeight;
-  scheduleHeightSync();
+  _mountTurn(line, box);
 }
 
 window.athena.on('athena:routine-event', (event) => {
@@ -1049,10 +1059,7 @@ function renderApprovalCard(r) {
   const status = document.createElement('span');
   status.className = 'agent-mode';
 
-  const approve = document.createElement('button');
-  approve.type = 'button';
-  approve.className = 'routine-btn routine-btn-approve';
-  approve.textContent = '승인';
+  const approve = _btn('승인', 'routine-btn routine-btn-approve');
   approve.disabled = !!r.activation_blocker;
   approve.addEventListener('click', async () => {
     approve.disabled = true;
@@ -1068,10 +1075,7 @@ function renderApprovalCard(r) {
     }
   });
 
-  const cancel = document.createElement('button');
-  cancel.type = 'button';
-  cancel.className = 'routine-btn';
-  cancel.textContent = '취소';
+  const cancel = _btn('취소', 'routine-btn');
   cancel.addEventListener('click', async () => {
     approve.disabled = true;
     cancel.disabled = true;
@@ -1089,11 +1093,7 @@ function renderApprovalCard(r) {
   row.appendChild(status);
   card.appendChild(row);
 
-  line.appendChild(card);
-  $history.appendChild(line);
-  requestAnimationFrame(() => card.classList.add('is-in'));
-  $history.scrollTop = $history.scrollHeight;
-  scheduleHeightSync();
+  _mountTurn(line, card);
 }
 
 refreshRoutineDrafts();
@@ -1167,14 +1167,8 @@ async function renderOrderTicket(prefill) {
   const sideLabel = document.createElement('span');
   sideLabel.className = 'ticket-label';
   sideLabel.textContent = '방향';
-  const buyBtn = document.createElement('button');
-  buyBtn.type = 'button';
-  buyBtn.className = 'routine-btn';
-  buyBtn.textContent = '매수';
-  const sellBtn = document.createElement('button');
-  sellBtn.type = 'button';
-  sellBtn.className = 'routine-btn';
-  sellBtn.textContent = '매도';
+  const buyBtn = _btn('매수', 'routine-btn');
+  const sellBtn = _btn('매도', 'routine-btn');
   sideRow.append(sideLabel, buyBtn, sellBtn);
   card.appendChild(sideRow);
 
@@ -1213,14 +1207,8 @@ async function renderOrderTicket(prefill) {
 
   const execRow = document.createElement('div');
   execRow.className = 'routine-approval-actions';
-  const execBtn = document.createElement('button');
-  execBtn.type = 'button';
-  execBtn.className = 'routine-btn routine-btn-approve';
-  execBtn.textContent = '주문 실행';
-  const closeBtn = document.createElement('button');
-  closeBtn.type = 'button';
-  closeBtn.className = 'routine-btn';
-  closeBtn.textContent = '닫기 (Esc)';
+  const execBtn = _btn('주문 실행', 'routine-btn routine-btn-approve');
+  const closeBtn = _btn('닫기 (Esc)', 'routine-btn');
   execRow.append(execBtn, closeBtn);
   card.append(execRow, status);
   $orderBody.appendChild(card);

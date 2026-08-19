@@ -1,6 +1,6 @@
 # Athena 진행 상황 및 재개 계획
 
-> 최종 갱신: 2026-08-19 (6차 — R1 live 100건 실앱 QA·채점·개선 완료, §1 첫 블록) · 브랜치 `main`
+> 최종 갱신: 2026-08-19 (7차 — 능동 에이전트 P0~P4 결선·검토 APPROVE·deslop 재검증, §1 첫 블록) · 브랜치 `main`
 > — **`디자인` 브랜치 병합 완료.** 두 갈래가 합류했다:
 > ① 전 구간 지연 최적화(합의 계획 `.omc/plans/plan-latency-optimization.md`) — 진단 보고서는
 > [`plan/latency-audit-2026-08-19.md`](latency-audit-2026-08-19.md), "백엔드가 느리다"는
@@ -40,6 +40,20 @@ app:      npm test → 197건 통과 (190→197: order-ticket 7) · npm run veri
 P0 게이트(-p0gate run): LIV-067~071 5/5 정직 응답 — 기준선 전패 → 지어내기 0건
 P3 인수(-p3accept run): LIV-070 통과(athena_routine 초안 + 승인·주기·비집행 3고지 정답 구조) ·
   LIV-066 타임아웃(182s — 기존 꼬리 지연 결함, 다음 수 24의 새 증거. 회귀 아님)
+```
+
+**2026-08-19 (7차 보강) · architect 검토 APPROVE(발견 0) → deslop → 재검증:**
+
+```
+deslop:   WS 이벤트 펌프 복붙 26줄 → api/ws_pump.py 단일화(stream·routines_ws 공유) ·
+          chat.js _btn/_mountTurn 헬퍼(버튼 7벌·턴 부착 꼬리 2벌 접음) ·
+          죽은 코드 3건 삭제(app.state 루틴 미러 2줄 · ledger.path property ·
+          _notify_factory 불필요 async — 테스트 호출부 await 동반 수정)
+재검증:   backend 771 passed(loadgroup 59.2초 · 직렬 197.8초) · ruff clean ·
+          generate --check current · app 197 · verify 검증 1~17 전 단언 통과
+함정 재확인: 맨 `-n auto`(dist=load)는 test_accounts가 %TEMP% 지문 락에서
+  자기충돌한다(5~6건 플레이크 실측 — 실행 중 백엔드 탓이 아니었다).
+  기존 규약대로 `--dist loadgroup` 필수(addopts 미기재, 이 문서 §2 실측 참조).
 ```
 
 **2026-08-19 (7차) 세션 기록 — ralph 루프(사용자 "구현시작"), 실행계획 v4+§8 집행:**

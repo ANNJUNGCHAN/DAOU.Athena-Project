@@ -69,7 +69,7 @@ class RoutinesRuntime:
         return None
 
 
-async def _notify_factory(queue: asyncio.Queue[dict[str, Any]]):
+def _notify_factory(queue: asyncio.Queue[dict[str, Any]]):
     async def notify(event: dict[str, Any]) -> None:
         # 큐가 가득 차도 감시 루프를 막지 않는다 — 가장 오래된 것을 버리고 넣는다.
         while True:
@@ -93,7 +93,7 @@ async def open_routines(
     store = RoutineStore(settings.routines_store_path)
     ledger = RoutineLedger(settings.routines_ledger_path)
     engine = TriggerEngine(ledger=ledger)
-    notify = await _notify_factory(events)
+    notify = _notify_factory(events)
 
     report = store.load()
     http_client: httpx.AsyncClient | None = None
