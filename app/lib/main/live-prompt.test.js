@@ -106,6 +106,15 @@ test('buildLivePrompt: 주문·자동화 정책 v3b — 실행 툴 없음·루�
   assert.ok(p.includes('감시 방식'));
 });
 
+test('buildLivePrompt: 실행 환경 제약 v3c — Bash 없음·승인 절차 없음·잘린 결과 대응 (2026-08-19 실사용 결함)', () => {
+  const p = buildLivePrompt('x');
+  assert.ok(p.includes('실행 환경 제약'));
+  assert.ok(p.includes('Bash'));
+  assert.ok(p.includes('승인해 주시면'));       // 금지 표현을 명시적으로 지목
+  assert.ok(p.includes('접근할 수단은 없다'));
+  assert.ok(p.includes('받은 부분만으로 즉시 카드를'));
+});
+
 test('buildLivePrompt: timeline 스키마 힌트 — 부분 데이터 허용 (2026-08-19 QA LIV-046)', () => {
   const p = buildLivePrompt('x');
   assert.ok(p.includes('"timeline"'));
