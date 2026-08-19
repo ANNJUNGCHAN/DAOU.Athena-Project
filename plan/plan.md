@@ -36,7 +36,7 @@
 **2026-08-19 (그래프) · 채팅→그래프 파이프라인 결선 후 재실측 — 이 수치가 현행이다:**
 
 ```
-backend:  732 passed, 0 failed (직렬 213.6초)
+backend:  752 passed, 0 failed (직렬 165.2초)
   ruff check . → All checks passed | generate_api.py --check → current (생성물 무접촉)
 app:
   npm test        → 197건 통과 (기존 176 + history-sink 9 · history-badge 7 · 리셋 배선 5)
@@ -106,6 +106,26 @@ app:
   - 부수: 1차 증거의 한글이 깨져 있었다 — 파이썬 `print()`가 Windows 콘솔 인코딩(cp949)으로
     나간 것이라 DB가 아니라 **증거 수집 경로의 결함**이었다. `PYTHONIOENCODING=utf-8` 고정으로
     해소(§8 함정). 검증하다 같은 함정에 한 번 더 빠질 뻔했다 — **파일을 열어서 확인해야 한다.**
+- **로그 관리 도입 (Open WebUI 조사 반영)** — `athena_api/logging_config.py` 신설.
+  조사 대상은 Open WebUI(`backend/open_webui/env.py`, `utils/logger.py`) 실제 소스다.
+  - **가져온 것**: 전역 레벨(`ATHENA_LOG_LEVEL`) + **서브시스템별 오버라이드**
+    (`ATHENA_SRC_LOG_LEVELS='{"brain":"DEBUG"}'` — api/brain/kiwoom/selector/mcp/uvicorn) +
+    `ATHENA_LOG_FORMAT=text|json`(JSON은 줄당 객체 하나, upstream `_json_sink` 형태) + stdout 단일 싱크.
+    ※ upstream의 `SRC_LOG_LEVELS`는 현재 빈 dict에 *"Legacy variable, do not remove"* 주석이
+    달린 껍데기다 — 개념만 맞고 구현은 우리가 새로 했다.
+  - **안 가져온 것과 이유**: ① **Loguru** — 의존성이 늘고, 우리 자체 `getLogger` 호출은 2곳뿐이며
+    정작 중요한 uvicorn/FastAPI 레코드는 stdlib로 나온다. ② **본문을 담는 감사 로그** —
+    upstream `AUDIT_LOG_LEVEL=REQUEST_RESPONSE`는 `request_object`/`response_object`를
+    **무마스킹으로** 로테이션 파일에 쓴다. 시사적인 건 upstream 자신의 기본
+    `AUDIT_EXCLUDED_PATHS`가 `/chats,/chat,/folders`라는 점 — 채팅 본문이 민감하다는 걸 알고
+    기본 제외한다. 우리는 함정 ⑫가 그걸 기본값이 아니라 **금지**로 못박으므로 아예 만들지 않는다.
+    ③ **디스크 싱크·로테이션** — 로컬 단일 사용자 앱이라 스크럽할 운영자가 없고, 그 파일 자체가
+    함정 ⑫가 경고하는 산출물이 된다.
+  - **`SecretRedactingFilter`**: 이 프로세스가 아는 비밀값(로컬 베어러·app_key·secret_key)을
+    포맷된 메시지에서 치환한다. f-string 호출부도 덮는다. **채팅 본문은 못 잡는다**(임의 사용자
+    텍스트라 형태가 없다) — 본문 금지는 코드 규칙이고 `caplog` 테스트가 강제한다.
+  - 회귀 방지: `test_no_audit_body_settings_exist`가 `audit` 이름의 설정이 생기면 실패한다
+    (upstream을 베껴 되살리는 것을 막는 장치). 테스트 20건 신설.
 - **미완(정직)**: ① **노션 문서화는 하지 않는다** — 사용자 지시로 범위에서 제외(2026-08-19).
   ② 보존기간·세분화 삭제 UI,
   감시 에이전트의 그래프 소비(알림)는 **명시적 범위 밖**. ③ 집계 쿼리 성능 수용 기준 없음(후속 실측).
