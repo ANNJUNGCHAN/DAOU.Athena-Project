@@ -23,10 +23,15 @@
       <div class="boot-grip"></div>
       <div class="boot-body"></div>
       <div class="boot-inputbar">
-        <span class="boot-dot"></span>
-        <span class="boot-name" id="bootName"></span>
-        <span class="boot-cursor"></span>
-        <span class="boot-ph" id="bootPh" hidden>무엇이든 물어보세요</span>
+        <div class="boot-input-line">
+          <span class="boot-name" id="bootName"></span>
+          <span class="boot-cursor"></span>
+          <span class="boot-ph" id="bootPh" hidden>무엇이든 물어보세요</span>
+        </div>
+        <div class="boot-strip">
+          <span class="boot-dot"></span>
+          <span class="boot-pill">CLAUDE</span>
+        </div>
       </div>
     </div>
   </div>
@@ -36,23 +41,39 @@
 
     <div class="history" id="history"></div>
 
-    <div class="input-row">
-      <!-- 점은 세 역할을 겸한다: 대화 상태 표시 · 캔버스 확장 애니메이션의 중심점 ·
-           설정 진입(GLOSSARY.md §1). 누르면 새 창이 뜨는 게 아니라 **이 창이 설정
-           모드로 바뀐다**(ui/DESIGN-SOUL.md:100, ui/soul.md §3). 커맨드바("설정",
-           "계좌 관리")가 동등한 진입로이고, 점으로만 갈 수 있으면 §8 탈락 조건이다. -->
-      <button
-        class="dot"
-        id="dot"
-        type="button"
-        aria-label="설정 열기"
-        title="설정"
-      ></button>
-      <input id="input" class="input" placeholder="무엇이든 물어보세요… (Enter: 질문, Esc: 캔버스 접기)" autofocus />
-      <div class="lock-hint" id="lockHint" hidden>
-        <span id="lockText">답변 중…</span>
-        <span class="esc">ESC 중단</span>
+    <!-- 커맨드 카드(AT-CH-001R, 2026-08-19 · Paper 47쪽) — 입력줄과 컨트롤
+         스트립의 2행 구조. 스트립에는 **실기능만** 올린다(soul.md §7 — 없는
+         기능을 암시하는 장식 UI 금지): 점(설정)·CLI 필·모델 필. -->
+    <div class="input-stack" id="inputStack">
+      <div class="input-row">
+        <input id="input" class="input" placeholder="무엇이든 물어보세요… (Enter: 질문, Esc: 캔버스 접기)" autofocus />
+        <div class="lock-hint" id="lockHint" hidden>
+          <span id="lockText">답변 중…</span>
+          <span class="esc">ESC 중단</span>
+        </div>
       </div>
+      <div class="control-strip" id="controlStrip">
+        <!-- 점은 세 역할을 겸한다: 대화 상태 표시 · 캔버스 확장 애니메이션의 중심점 ·
+             설정 진입(GLOSSARY.md §1). 누르면 새 창이 뜨는 게 아니라 **이 창이 설정
+             모드로 바뀐다**(ui/DESIGN-SOUL.md:100, ui/soul.md §3). 커맨드바("설정",
+             "계좌 관리")가 동등한 진입로이고, 점으로만 갈 수 있으면 §8 탈락 조건이다. -->
+        <button
+          class="dot"
+          id="dot"
+          type="button"
+          aria-label="설정 열기"
+          title="설정"
+        ></button>
+        <!-- CLI 필 — runQuery의 실제 실행기(claude -p)를 표시한다. 클릭=설정 모드
+             (전환·계정은 거기서). 표시가 실행기와 어긋나면 정보 정직성 위반이다. -->
+        <button id="cliPill" class="pill" type="button" title="활성 CLI — 설정에서 전환">CLAUDE</button>
+        <span class="strip-spacer"></span>
+        <!-- 모델 필 — athena:model-get 실상태 표시, 클릭=인라인 팝오버(새 창 아님). -->
+        <button id="modelPill" class="pill" type="button" title="모델 · 추론 노력">기본 모델</button>
+      </div>
+      <!-- 모델 팝오버 — 창 안 오버레이. 유리 0.45+blur(카드 단계), 무채색.
+           페이드 등장 금지(soul.md §7) — display 토글로 나타난다. -->
+      <div id="modelPopover" class="model-popover" hidden></div>
     </div>
   </div>
 

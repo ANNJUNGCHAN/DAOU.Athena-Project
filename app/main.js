@@ -60,10 +60,14 @@ app.on('before-quit', () => {
   backendLauncher.shutdownBackend();
 });
 
-// ---------- 설계 치수 (ui/round-1R/two-windows.md E3 확정안) ----------
+// ---------- 설계 치수 (ui/round-1R/two-windows.md E3 확정안 + 정정 4) ----------
+// 2026-08-19 AT-CH-001R(사용자 지시, Paper 47쪽): 대화 창을 전폭 바(1560×204)에서
+// 컴팩트 커맨드 카드(900×248)로. 폭이 canvasW와 달라지므로 대화 창은 캔버스 창
+// 폭의 중앙에 정렬한다(chatOriginX). 248 = 그립 14 + 이력 ~86 + 입력줄 52 +
+// 컨트롤 스트립 48 + 여백.
 const DESIGN = {
   canvasW: 1560, canvasH: 800,
-  chatW: 1560, chatBaseH: 204, chatMaxH: 788,
+  chatW: 900, chatBaseH: 248, chatMaxH: 788,
 };
 
 function wait(ms) { return new Promise((r) => setTimeout(r, ms)); }
@@ -86,7 +90,9 @@ function computeLayout() {
   const chatW = Math.round(DESIGN.chatW * scale);
   const originX = Math.floor((sw - canvasW) / 2);
   const originY = Math.max(0, Math.floor((sh - (canvasH + chatBaseH)) / 2));
-  return { scale, screen: { sw, sh }, canvasW, canvasH, chatW, chatBaseH, chatMaxH, originX, originY };
+  // 대화 창 x — chatW가 canvasW보다 좁아진 뒤(AT-CH-001R)로는 캔버스 폭의 중앙.
+  const chatOriginX = originX + Math.floor((canvasW - chatW) / 2);
+  return { scale, screen: { sw, sh }, canvasW, canvasH, chatW, chatBaseH, chatMaxH, originX, originY, chatOriginX };
 }
 
 let layout;
@@ -159,7 +165,7 @@ async function createWindows() {
   mdlog('createWindows start');
   layout = computeLayout();
   chatBottom = layout.originY + layout.canvasH + layout.chatBaseH;
-  chatX = layout.originX;
+  chatX = layout.chatOriginX;
   chatHeight = layout.chatBaseH;
   mdlog('layout computed ' + JSON.stringify(layout));
 
@@ -187,7 +193,7 @@ async function createWindows() {
   mdlog('canvasWin created + loadFile called');
 
   chatWin = new BrowserWindow(commonWinOpts({
-    x: layout.originX, y: chatBottom - chatHeight, width: layout.chatW, height: chatHeight,
+    x: chatX, y: chatBottom - chatHeight, width: layout.chatW, height: chatHeight,
   }));
   // 채팅창도 폭·높이 모두 유동이다(2026-08-18 사용자 지시). 상한을 걸지 않는다 —
   // chatBaseH~chatMaxH는 자동 성장(setChatHeight)의 가동 범위일 뿐이고, 사용자가
@@ -516,11 +522,11 @@ function centerWindows() {
   if (!chatWin || chatWin.isDestroyed() || !canvasWin || canvasWin.isDestroyed()) return;
   canvasWin.setBounds({ x: layout.originX, y: layout.originY, width: layout.canvasW, height: layout.canvasH });
   const bottom = layout.originY + layout.canvasH + layout.chatBaseH;
-  chatWin.setBounds({ x: layout.originX, y: bottom - chatHeight, width: layout.chatW, height: chatHeight });
+  chatWin.setBounds({ x: layout.chatOriginX, y: bottom - chatHeight, width: layout.chatW, height: chatHeight });
   noteAppBounds(canvasWin);
   noteAppBounds(chatWin);
   chatBottom = bottom;
-  chatX = layout.originX;
+  chatX = layout.chatOriginX;
   syncChatAnchor();
 }
 

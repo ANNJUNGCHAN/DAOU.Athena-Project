@@ -311,7 +311,7 @@ app.whenReady().then(async () => {
   // 원위치
   canvasWin.setBounds({ ...canvasWin.getBounds(), x: canvasWin.getBounds().x - 80 });
   mainMod.noteAppBounds(canvasWin);
-  chatWin.setBounds({ x: layout.originX, y: (layout.originY + layout.canvasH + layout.chatBaseH) - layout.chatBaseH, width: layout.chatW, height: layout.chatBaseH });
+  chatWin.setBounds({ x: layout.chatOriginX, y: (layout.originY + layout.canvasH + layout.chatBaseH) - layout.chatBaseH, width: layout.chatW, height: layout.chatBaseH });
   mainMod.noteAppBounds(chatWin);
   await wait(150);
 
@@ -1068,8 +1068,11 @@ app.whenReady().then(async () => {
 
   report.windowPlacement = {
     beforePlacement, afterLeft, afterRight, afterMaximize, afterRestore, afterCenter,
-    pairMovedTogetherOnLeft: near(afterLeft.chat.x, afterLeft.canvas.x),
-    pairMovedTogetherOnRight: near(afterRight.chat.x, afterRight.canvas.x),
+    // AT-CH-001R(2026-08-19): chatW(900) < canvasW(1560) — "짝으로 움직인다"의
+    // 계약은 x 동일이 아니라 **대화 창이 캔버스 폭의 중앙**이다(window-placement.js).
+    // 구판(chatW==canvasW)에서 x 동일 비교는 이 계약의 특수 사례였다.
+    pairMovedTogetherOnLeft: near(afterLeft.chat.x, afterLeft.canvas.x + Math.round((afterLeft.canvas.width - afterLeft.chat.width) / 2)),
+    pairMovedTogetherOnRight: near(afterRight.chat.x, afterRight.canvas.x + Math.round((afterRight.canvas.width - afterRight.chat.width) / 2)),
     leftDiffersFromRight: afterLeft.canvas.x !== afterRight.canvas.x,
     // near() ±2px — 이 파일의 다른 bounds 비교와 같은 관례다(acrylic + DPI 배율에서
     // setBounds 요청값과 getBounds 실측값이 1px 안팎 어긋나는 실측, 검증3 주석).

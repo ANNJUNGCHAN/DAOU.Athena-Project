@@ -67,11 +67,33 @@ html, body { background: transparent; }
 .boot-body { flex: 1; } /* 빈 이력 자리 — 평소의 빈 채팅바와 같은 무지 유리 */
 .boot-inputbar {
   flex-shrink: 0;
-  height: 64px; /* 실제 .input-row와 동일 치수 — 부팅 창이 곧 대화 창이다 */
-  display: flex; align-items: center; gap: 16px;
-  padding: 0 28px;
+  height: 100px; /* 실제 .input-stack(입력줄 52 + 스트립 48)과 동일 — 부팅 창이 곧 대화 창이다 */
+  display: flex; flex-direction: column; align-items: stretch;
   border-top: 1px solid var(--color-k-line-soft);
   visibility: hidden;
+}
+.boot-input-line {
+  height: 52px; flex-shrink: 0;
+  display: flex; align-items: center; gap: 16px;
+  padding: 0 28px;
+}
+.boot-strip {
+  height: 48px; flex-shrink: 0;
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 24px 8px 24px;
+}
+.boot-pill {
+  display: flex; align-items: center;
+  height: 28px; padding: 0 12px; flex-shrink: 0;
+  border-radius: 999px;
+  border: 1px solid rgb(255 255 255 / 14%);
+  background: rgba(29, 34, 44, 0.45);
+  box-shadow: inset 0 1px 0 rgba(255, 253, 248, 0.28);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.1em;
+  color: var(--color-k-bright);
+  white-space: nowrap;
 }
 .boot-panel.final .boot-grip,
 .boot-panel.final .boot-inputbar { visibility: visible; }
@@ -90,8 +112,9 @@ html, body { background: transparent; }
 .boot-name:empty { display: none; } /* 빈 상태에서 letter-spacing 잔여폭이 커서를 밀지 않게 */
 .boot-cursor {
   width: 2px; height: 17px; flex-shrink: 0;
-  background: var(--color-brand);
-  box-shadow: 0 0 12px rgba(238, 19, 123, 0.9);
+  /* 실제 캐럿과 동일한 무채색(보드 11 "입력 커서는 무채색") — 마젠타는 점 하나뿐 */
+  background: var(--color-k-text);
+  box-shadow: 0 0 10px rgba(230, 232, 238, 0.7);
 }
 /* 타이핑 중에는 커서가 글자 끝에, 지워진 뒤에는 placeholder가 커서에 붙는다 —
  * 실제 입력창의 캐럿 문법을 흉내낸다(flex gap 16px를 되무른다). */
@@ -311,7 +334,7 @@ html, body { background: transparent; }
 .coachmark {
   position: fixed;
   left: 24px;
-  bottom: 74px; /* 입력줄(64px) 바로 위 */
+  bottom: 110px; /* 입력 스택(입력줄 52 + 스트립 48) 바로 위 */
   z-index: 7; /* win-controls(6) 위 — 최초 1회뿐인 안내가 크롬에 깔리면 안 된다 */
   padding: 8px 14px;
   border-radius: 10px;
@@ -344,15 +367,92 @@ html, body { background: transparent; }
 .tr-code.done { color: var(--color-ok); }
 .tr-fail { color: var(--color-warn); }
 
-/* ---------- 입력 줄 — 자리를 지킨다 ---------- */
+/* ---------- 커맨드 카드 하단(AT-CH-001R) — 입력줄 + 컨트롤 스트립 ---------- */
+.input-stack {
+  flex-shrink: 0;
+  display: flex; flex-direction: column;
+  position: relative; /* 모델 팝오버의 anchor */
+}
 .input-row {
   flex-shrink: 0;
   display: flex; align-items: center; gap: 16px;
   padding: 0 28px;
-  height: 64px;
+  height: 52px;
   border-top: 1px solid var(--color-k-line-soft);
-  cursor: grab; /* 빈 여백을 잡으면 창 이동 — .input(text)·.dot(pointer)이 자식에서 복원 */
+  cursor: grab; /* 빈 여백을 잡으면 창 이동 — .input(text)이 자식에서 복원 */
 }
+.control-strip {
+  flex-shrink: 0;
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 24px 8px 24px;
+  height: 48px;
+  cursor: grab; /* 빈 여백 드래그로 창 이동 — 필·점은 자식에서 커서 복원 */
+}
+.strip-spacer { flex: 1; }
+.pill {
+  display: flex; align-items: center; gap: 8px;
+  height: 28px; padding: 0 12px; flex-shrink: 0;
+  border-radius: 999px;
+  border: 1px solid rgb(255 255 255 / 14%);
+  background: rgba(29, 34, 44, 0.45);
+  box-shadow: inset 0 1px 0 rgba(255, 253, 248, 0.28);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.1em;
+  color: var(--color-k-bright);
+  white-space: nowrap;
+  cursor: pointer;
+  appearance: none;
+}
+.pill:hover { border-color: var(--color-k-dim); }
+.pill:focus-visible { outline: 2px solid var(--color-k-text); outline-offset: 2px; }
+
+/* 모델 팝오버 — 카드 단계 유리(0.45+blur 14, tokens.css 사다리). 무채색.
+ * 페이드 등장 금지 — hidden 토글로 나타난다(soul.md §7). */
+.model-popover {
+  position: absolute;
+  right: 20px;
+  bottom: 52px; /* 컨트롤 스트립 바로 위 */
+  z-index: 8;
+  width: 240px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(23, 27, 36, 0.53) 0%, rgba(23, 27, 36, 0.45) 46%, rgba(29, 34, 44, 0.49) 100%);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgb(255 255 255 / 13%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 253, 248, 0.5),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.38),
+    0 24px 60px rgba(6, 8, 12, 0.6);
+  display: flex; flex-direction: column; gap: 8px;
+}
+.model-popover[hidden] { display: none; }
+.model-popover .mp-title {
+  font-family: var(--font-strong);
+  font-size: var(--text-sm);
+  color: var(--color-k-bright);
+  text-shadow: 0 1px 5px rgb(0 0 0 / 60%);
+}
+.model-popover .mp-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.model-popover .mp-chip {
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--color-k-line);
+  background: rgba(255, 255, 255, 0.05);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-k-soft);
+  cursor: pointer;
+  appearance: none;
+}
+.model-popover .mp-chip:hover { border-color: var(--color-k-dim); color: var(--color-k-text); }
+.model-popover .mp-chip.on {
+  border-color: rgb(255 255 255 / 45%);
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--color-k-bright);
+}
+.model-popover .mp-sep { height: 1px; background: rgb(255 255 255 / 8%); }
 /* 점 — 세 역할을 겸한다.
  * 1) 상태 표시기(idle/judging/calling)
  * 2) 캔버스 확장·수축 원형 클립의 기하 원점(main.js getDotScreenPoint)
@@ -395,7 +495,10 @@ html, body { background: transparent; }
   flex: 1;
   background: transparent; border: none; outline: none;
   color: var(--color-k-text);
-  caret-color: var(--color-brand); /* AT-SY-001 4단계 — "입력 커서는 브랜드 색" */
+  /* AT-CH-001 보드 11 사양 "입력 커서는 무채색. 브랜드 색은 점 하나뿐이다" —
+   * 구판의 브랜드 캐럿(AT-SY-001 초안)은 점과 마젠타 2개가 돼 palette.md
+   * "한 화면에 마젠타는 한 곳"과 모순이었다(2026-08-19 정합). */
+  caret-color: var(--color-k-text);
   font-family: var(--font-body);
   font-size: var(--text-lg);
 }
