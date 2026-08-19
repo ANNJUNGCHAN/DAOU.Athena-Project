@@ -86,3 +86,26 @@ test('buildLivePrompt: chart 힌트 — 키움 ka10081 응답 필드 매핑과 �
   assert.ok(p.includes('trde_qty→volume'));
   assert.ok(p.includes('오름차순'));
 });
+
+test('buildLivePrompt: 조회 규율 — 명시 출처·상대 날짜·원문 확인·교차 출처 (2026-08-19 QA)', () => {
+  const p = buildLivePrompt('x');
+  assert.ok(p.includes('조회 규율'));
+  assert.ok(p.includes('조용한 대체 금지'));
+  assert.ok(p.includes('날짜 확인 툴'));
+  assert.ok(p.includes('원문 조회 툴로 본문을 확인'));
+  assert.ok(p.includes('인용한 출처를 답변에 남긴다'));
+});
+
+test('buildLivePrompt: 주문·자동화 정책 — 실행 툴 없음·지속 감시 없음 (확정 결정 3)', () => {
+  const p = buildLivePrompt('x');
+  assert.ok(p.includes('주문·자동화 정책'));
+  assert.ok(p.includes('주문(매수·매도·정정·취소)을 실행하는 툴이'));
+  assert.ok(p.includes('예약됐다고 확인하지 마라'));
+});
+
+test('buildLivePrompt: timeline 스키마 힌트 — 부분 데이터 허용 (2026-08-19 QA LIV-046)', () => {
+  const p = buildLivePrompt('x');
+  assert.ok(p.includes('"timeline"'));
+  assert.ok(p.includes('"price_series"'));
+  assert.ok(p.includes('"events"'));
+});

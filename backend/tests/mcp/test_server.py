@@ -744,3 +744,22 @@ async def test_dispatch_call_unsupported_content_block_is_marked_upstream_failed
 
     assert result.isError is True
     assert result.meta[ERROR_ORIGIN_META_KEY] == "upstream-failed"
+
+
+def test_render_canvas_data_description_lists_all_shapes():
+    """액션 11(2026-08-19) — `data`의 형상 안내문이 CANVAS_SCHEMAS 전 타입을
+    커버해야 한다. 안내문은 CANVAS_SCHEMAS에서 생성되므로 이 테스트는 "새 캔버스
+    타입을 추가하면 안내문에도 자동 반영된다"는 계약의 핀이다. oneOf 강제가
+    아니라 description인 이유는 _CANVAS_TYPE_PROPERTY 주석 참조(폴백 보호)."""
+    from athena_mcp.canvas import CANVAS_SCHEMAS
+    from athena_mcp.server import _RENDER_CANVAS_INPUT_SCHEMA, _SAVE_CANVAS_INPUT_SCHEMA
+
+    desc = _RENDER_CANVAS_INPUT_SCHEMA["properties"]["data"]["description"]
+    for name, schema in CANVAS_SCHEMAS.items():
+        assert f"- {name}:" in desc
+        for req in schema.get("required", []):
+            assert req in desc
+    assert "free" in desc
+    # 검증 동작 자체는 그대로여야 한다 — 안내문은 판정에 관여하지 않는다.
+    assert _RENDER_CANVAS_INPUT_SCHEMA["properties"]["data"]["type"] == "object"
+    assert _SAVE_CANVAS_INPUT_SCHEMA["properties"]["data"]["description"] == desc

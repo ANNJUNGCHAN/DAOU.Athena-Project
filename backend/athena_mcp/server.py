@@ -75,12 +75,47 @@ _CANVAS_TYPE_PROPERTY: dict[str, Any] = {
     ),
 }
 
+# `data`에 canvas_type별 형상 요약을 description으로 싣는다(plan.md 액션 11).
+# oneOf 강제 검증이 아니라 **안내문**인 이유: canvas_type enum을 안 거는 것과
+# 같은 근거다 — SDK 사전 검증이 폴백 경로를 죽인다. 판정은 여전히
+# `validate_canvas_payload()`가 한다. 실측 근거: 형상 힌트 없이는 모델이 table
+# 형상을 맞추는 데 3회 걸렸고(2026-08-17 S4), 2026-08-19 100건 QA에서 지연의
+# 지배 요인이 "마지막 툴 호출 → 완료" 꼬리 구간(p50 기준 총 52초 중 첫 툴
+# 이후가 대부분)으로 실측됐다 — 재시도 1회가 곧 수십 초다.
+# CANVAS_SCHEMAS에서 생성하므로 스키마가 바뀌면 이 안내문도 따라온다(드리프트 없음).
+def _data_shape_hint() -> str:
+    lines = ["canvas_type별 data 형상 요약 — 불일치 시 free로 폴백된다:"]
+    for name, schema in CANVAS_SCHEMAS.items():
+        required = set(schema.get("required", []))
+        parts: list[str] = []
+        for key, sub in schema.get("properties", {}).items():
+            mark = "필수" if key in required else "선택"
+            if sub.get("type") == "array" and isinstance(sub.get("items"), dict):
+                item = sub["items"]
+                item_req = ", ".join(item.get("required", [])) or "-"
+                item_all = ", ".join(item.get("properties", {}))
+                parts.append(f"{key}({mark}, 배열 — 항목 필수: {item_req} / 전체: {item_all})")
+            else:
+                parts.append(f"{key}({mark})")
+        suffix = ""
+        if schema.get("anyOf"):
+            alts = " 또는 ".join(
+                "+".join(alt.get("required", [])) for alt in schema["anyOf"]
+            )
+            suffix = f" [{alts} 중 하나는 필수]"
+        lines.append(f"- {name}: {'; '.join(parts)}{suffix}")
+    lines.append("- free: 임의 구조 허용")
+    return "\n".join(lines)
+
+
+_DATA_PROPERTY: dict[str, Any] = {"type": "object", "description": _data_shape_hint()}
+
 _RENDER_CANVAS_INPUT_SCHEMA: dict[str, Any] = {
     "type": "object",
     "required": ["canvas_type", "data"],
     "properties": {
         "canvas_type": _CANVAS_TYPE_PROPERTY,
-        "data": {"type": "object"},
+        "data": _DATA_PROPERTY,
         "caption": {"type": ["string", "null"]},
         # 배치·생애주기 규칙(plan/canvas-taxonomy.md, 2026-08-18 확정)의 모델
         # 접점 둘. 판정은 게이트웨이가 한다 — 무효값은 거부가 아니라 무시/필터다
@@ -111,7 +146,7 @@ _SAVE_CANVAS_INPUT_SCHEMA: dict[str, Any] = {
     "required": ["canvas_type", "data", "name"],
     "properties": {
         "canvas_type": _CANVAS_TYPE_PROPERTY,
-        "data": {"type": "object"},
+        "data": _DATA_PROPERTY,
         "name": {"type": "string"},
         "caption": {"type": ["string", "null"]},
     },

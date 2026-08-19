@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-08-19T00:52:53.859Z",
+  "startedAt": "2026-08-19T04:50:54.799Z",
   "layout": {
     "scale": 1,
     "screen": {
@@ -54,18 +54,18 @@
     "ok": true
   },
   "expand": {
-    "frameCount": 34,
-    "p50": 16.699999999999818,
-    "p95": 16.799999999999955,
-    "max": 16.800000000000182,
-    "min": 16.59999999999991
+    "frameCount": 18,
+    "p50": 16.700000000000273,
+    "p95": 83.40000000000009,
+    "max": 83.40000000000009,
+    "min": 8.5
   },
   "collapse": {
-    "frameCount": 35,
-    "p50": 16.699999999999818,
-    "p95": 16.800000000000182,
-    "max": 16.899999999999636,
-    "min": 16.399999999999636
+    "frameCount": 1,
+    "p50": null,
+    "p95": null,
+    "max": null,
+    "min": null
   },
   "afterCollapse": {
     "canvasVisible": false
@@ -508,5 +508,5 @@
     "cardMatchesToken": true,
     "chatAppMatchesWindowToken": true
   },
-  "finishedAt": "2026-08-19T00:53:23.918Z"
+  "finishedAt": "2026-08-19T04:51:37.304Z"
 }

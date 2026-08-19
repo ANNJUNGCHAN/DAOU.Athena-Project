@@ -120,11 +120,42 @@ const CANVAS_PROBE = `(() => {
   };
 })()`;
 
-async function shot(win, file) {
-  const img = await win.webContents.capturePage();
-  fs.writeFileSync(file, img.toPNG());
-  return img.getSize();
+// capturePage가 영영 안 돌아오는 행이 실측됐다(2026-08-19 LIV-047 — GPU 캐시
+// 실패 상태에서 canvas 캡처 중 프로세스 사망, 배치 전체 정지). 캡처 실패가
+// 배치를 죽이면 안 된다 — 타임아웃과 예외를 값으로 돌린다.
+async function shot(win, file, timeoutMs = 15000) {
+  try {
+    const img = await Promise.race([
+      win.webContents.capturePage(),
+      new Promise((_, rej) => setTimeout(() => rej(new Error('capture timeout')), timeoutMs)),
+    ]);
+    fs.writeFileSync(file, img.toPNG());
+    return img.getSize();
+  } catch (e) {
+    return { error: String((e && e.message) || e) };
+  }
 }
+
+// 배치를 나눠 여러 번 호출해도 run-index.json이 누적되게 병합한다 — 이전에는
+// 마지막 호출이 덮어써서 앞 배치 기록이 사라졌다(100건 배치 실행에서 발견).
+function mergeRunIndex(runDir, boot, newCases) {
+  const p = path.join(runDir, 'run-index.json');
+  let prev = { runs: [], cases: [] };
+  if (fs.existsSync(p)) {
+    try {
+      const old = JSON.parse(fs.readFileSync(p, 'utf8'));
+      prev.cases = old.cases || [];
+      prev.runs = old.runs || (old.ran_at ? [{ ran_at: old.ran_at, boot: old.boot }] : []);
+    } catch { /* 손상된 인덱스는 새로 시작 */ }
+  }
+  prev.runs.push({ ran_at: new Date().toISOString(), boot, case_ids: newCases.map((c) => c.id) });
+  prev.cases = prev.cases.filter((c) => !newCases.some((n) => n.id === c.id)).concat(newCases);
+  fs.writeFileSync(p, JSON.stringify(prev, null, 1), 'utf8');
+}
+
+// 가벼운 캔버스 카드 수 프로브 — 대기 루프에서 매 회 돌므로 CANVAS_PROBE 전체를
+// 돌리지 않는다. 첫 카드 도달 시각(first_card_ms) 계측용.
+const CANVAS_COUNT_PROBE = "document.querySelectorAll('#grid > .card').length";
 
 function stampDir(d) {
   const p = (n) => String(n).padStart(2, '0');
@@ -145,7 +176,10 @@ app.whenReady().then(async () => {
   const { chatWin, canvasWin } = mainMod.getWins();
 
   const boot = await waitForChatBooted(chatWin);
-  const runDir = path.join(REPO, 'datasets', 'eval-runs', `${stampDir(new Date())}-intraday-ui`);
+  // ATHENA_RUN_SUFFIX: 수정 검증 런을 기준선 런과 분리한다(예: '-fixcheck').
+  // 없으면 기존 이름 그대로 — 기준선 디렉토리를 덮어쓰는 사고를 막는 장치다.
+  const runDir = path.join(REPO, 'datasets', 'eval-runs',
+    `${stampDir(new Date())}-intraday-ui${process.env.ATHENA_RUN_SUFFIX || ''}`);
   fs.mkdirSync(runDir, { recursive: true });
   fs.writeFileSync(path.join(runDir, 'boot.json'), JSON.stringify(boot, null, 1), 'utf8');
   if (!boot.booted) {
@@ -165,15 +199,27 @@ app.whenReady().then(async () => {
   for (const id of ids) {
     const c = cases.get(id);
     if (!c) { process.stdout.write(`SKIP ${id}\n`); continue; }
-
+    // 창이 죽었으면 이 인보케이션은 회복 불능이다 — 부분 기록을 남기고 즉시
+    // 나가서 다음 배치 인보케이션(새 앱 인스턴스)이 이어가게 한다.
+    if (chatWin.isDestroyed() || chatWin.webContents.isDestroyed()
+      || canvasWin.isDestroyed() || canvasWin.webContents.isDestroyed()) {
+      process.stdout.write(`WINDOW-DEAD before ${id} — 배치 중단\n`);
+      mergeRunIndex(runDir, boot, index);
+      app.exit(5);
+      return;
+    }
     const userText = c.attachment ? `${c.question}\n\n${c.attachment}` : c.question;
     const caseDir = path.join(runDir, id);
     const evDir = path.join(caseDir, 'evidence');
     fs.mkdirSync(evDir, { recursive: true });
+    const startedAt = new Date();
+    try {
 
     const auditBefore = auditSnapshot();
     const pre = await chatWin.webContents.executeJavaScript(CHAT_PROBE);
-    const startedAt = new Date();
+    // Esc 접기가 grid를 비우므로 보통 0이지만, 접기 실패로 잔류 카드가 있으면
+    // 이 값 이후의 카드만 이 케이스 것으로 귀속한다.
+    const preCanvasCount = await canvasWin.webContents.executeJavaScript(CANVAS_COUNT_PROBE);
 
     // 커맨드바에 실제로 타이핑하고 Enter — verify.js:278과 같은 경로.
     await chatWin.webContents.executeJavaScript(`(() => {
@@ -183,14 +229,20 @@ app.whenReady().then(async () => {
     })();`);
 
     // 상태 전이를 관찰하며 완료를 기다린다. 완료 판정은 두 조건의 AND —
-    // 답변 turn이 늘었고, 3상태가 idle로 돌아왔다.
+    // 답변 turn이 늘었고, 3상태가 idle로 돌아왔다. 전이·첫 카드에 타임스탬프를
+    // 남긴다(지연 분석용 — 어디서 시간이 갔는지는 이 계측 없이는 알 수 없다).
     const seenStates = [];
     let post = null;
+    let firstCardMs = null;
     const t0 = Date.now();
     while (Date.now() - t0 < QUERY_TIMEOUT_MS) {
       post = await chatWin.webContents.executeJavaScript(CHAT_PROBE);
-      if (!seenStates.length || seenStates[seenStates.length - 1] !== post.state) {
-        seenStates.push(post.state);
+      if (!seenStates.length || seenStates[seenStates.length - 1].state !== post.state) {
+        seenStates.push({ state: post.state, at_ms: Date.now() - t0 });
+      }
+      if (firstCardMs === null) {
+        const n = await canvasWin.webContents.executeJavaScript(CANVAS_COUNT_PROBE);
+        if (n > preCanvasCount) firstCardMs = Date.now() - t0;
       }
       if (post.answerCount > pre.answerCount && post.state === 'idle') break;
       await wait(500);
@@ -214,11 +266,13 @@ app.whenReady().then(async () => {
     fs.writeFileSync(path.join(evDir, 'audit-delta.jsonl'),
       delta.map((r) => JSON.stringify(r)).join('\n') + (delta.length ? '\n' : ''), 'utf8');
 
-    const cardTypes = canvasState.cards.map((x) => x.classes.join('.'));
+    // 잔류 카드 보호 — preCanvasCount 이후의 카드만 이 케이스 것으로 귀속한다.
+    const cardTypes = canvasState.cards.slice(preCanvasCount).map((x) => x.classes.join('.'));
     fs.writeFileSync(path.join(caseDir, 'raw-result.json'), JSON.stringify({
       case_id: id, tier: c.tier, persona: c.persona,
       question: c.question, attachment: c.attachment || null, sent_text: userText,
       ran_at: startedAt.toISOString(), duration_s: Number(elapsed.toFixed(1)),
+      first_card_ms: firstCardMs,
       completed, timed_out: !completed,
       answer_chars: ((post && post.lastAnswer) || '').length,
       // 칩은 대화 이력이라 케이스가 쌓일수록 누적된다 — 이 케이스가 만든 칩만 보려면
@@ -230,23 +284,57 @@ app.whenReady().then(async () => {
       state_transitions: seenStates,
       card_types_rendered: cardTypes,
       canvas_card_count: canvasState.cardCount,
+      canvas_cards_pre: preCanvasCount,
       audit_calls: delta.map((r) => `${r.alias}__${r.tool}=${r.success}`),
       judge: c.judge,
     }, null, 1), 'utf8');
 
     const chipsAdded = post && pre ? post.chipCount - pre.chipCount : null;
     index.push({ id, completed, duration_s: Number(elapsed.toFixed(1)),
-      cards: cardTypes, chips_added: chipsAdded });
-    process.stdout.write(`DONE ${id} completed=${completed} ${elapsed.toFixed(1)}s cards=[${cardTypes.join(', ')}] chips+${chipsAdded} states=${seenStates.join('>')}\n`);
+      first_card_ms: firstCardMs, cards: cardTypes, chips_added: chipsAdded });
+    process.stdout.write(`DONE ${id} completed=${completed} ${elapsed.toFixed(1)}s firstCard=${firstCardMs === null ? '-' : (firstCardMs / 1000).toFixed(1) + 's'} cards=[${cardTypes.join(', ')}] chips+${chipsAdded} states=${seenStates.map((s) => s.state).join('>')}\n`);
 
     // 다음 케이스를 위한 상태 리셋 — Esc로 캔버스를 접는다(idle에서의 Esc 분기).
     await chatWin.webContents.executeJavaScript(
       "document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))");
     await wait(2000);
+    } catch (e) {
+      // 케이스 하나의 실패(캡처 행·렌더러 사망 등)가 배치 전체를 죽이면 안 된다.
+      const msg = String((e && e.stack) || e);
+      try {
+        fs.writeFileSync(path.join(caseDir, 'raw-result.json'), JSON.stringify({
+          case_id: id, tier: c.tier, persona: c.persona, question: c.question,
+          ran_at: startedAt.toISOString(),
+          completed: false, harness_error: msg, judge: c.judge,
+        }, null, 1), 'utf8');
+      } catch { /* 디스크 실패까지 겹친 경우 — 콘솔 기록만 남는다 */ }
+      index.push({ id, completed: false, harness_error: msg.slice(0, 200) });
+      process.stdout.write(`ERROR ${id} ${msg.slice(0, 160)}\n`);
+    }
   }
 
-  fs.writeFileSync(path.join(runDir, 'run-index.json'),
-    JSON.stringify({ ran_at: new Date().toISOString(), boot, cases: index }, null, 1), 'utf8');
+  mergeRunIndex(runDir, boot, index);
+
+  // 평가-로드맵 §2 — 실행 환경 기록. 배치 첫 호출에서만 쓴다.
+  const manifestPath = path.join(runDir, 'manifest.json');
+  if (!fs.existsSync(manifestPath)) {
+    let commit = null;
+    try {
+      commit = require('child_process')
+        .execSync('git rev-parse HEAD', { cwd: REPO, encoding: 'utf8' }).trim();
+    } catch { /* git 없이도 실행은 성립한다 */ }
+    let modelPrefs = null;
+    try {
+      modelPrefs = JSON.parse(fs.readFileSync(
+        path.join(app.getPath('userData'), 'athena-model.json'), 'utf8'));
+    } catch { /* 기본 모델 */ }
+    fs.writeFileSync(manifestPath, JSON.stringify({
+      commit, model_prefs: modelPrefs,
+      dataset: path.basename(DATASET),
+      started_at: new Date().toISOString(),
+      harness: 'run-cases-ui.js',
+    }, null, 1), 'utf8');
+  }
   process.stdout.write(`WROTE ${runDir}\n`);
   app.exit(0);
 });
