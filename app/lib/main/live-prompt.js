@@ -94,6 +94,9 @@ function buildLivePrompt(query) {
     'latest_close)를 돌려준다. 채팅 답변은 그 summary로만 쓴다(trimmed:true면',
     '"최근 N봉 기준"을 밝힌다). athena_call은 카드가 필요 없는 단답 확인이나',
     'chart/table 외 카드를 직접 구성할 때만 쓴다.',
+    // (v3e로 "describe 생략" 지침을 넣으려다 철회 — W3 실측에서 이미 기각된
+    // 규칙이다: 인자 목록이 describe에만 있어 생략하면 추측→resolve 거부 루프로
+    // 턴이 18→31로 악화됐다. 위 "describe를 건너뛰지 마라" 규칙이 유효하다.)
     '',
     '조회한 데이터는 반드시 athena__render_canvas 툴로 캔버스에 그린다:',
     '- 같은 필드가 반복되는 목록/표 데이터 → canvas_type "table",',
