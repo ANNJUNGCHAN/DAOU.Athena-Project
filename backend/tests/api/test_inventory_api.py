@@ -17,7 +17,8 @@ from fastapi import HTTPException, Request, Response
 from fastapi.testclient import TestClient
 from starlette.websockets import WebSocketDisconnect
 
-from athena_api.api.stream import _valid_bearer, kiwoom_real_stream
+from athena_api.api.stream import kiwoom_real_stream
+from athena_api.api.ws_auth import _valid_bearer
 from athena_api.config import Settings
 from athena_api.dependencies import (
     require_kiwoom_client,
@@ -134,8 +135,10 @@ def test_inventory_partition_and_static_openapi_coverage() -> None:
                 assert operation["x-athena-llm-exposed"] is False
     assert len(operation_ids) == len(set(operation_ids))
     # 301 generated (149 unsplit query bases + 115 projections + 12 order + 23 websocket
-    # + 2 oauth) plus 14 service routes. Matches the common-screen manifest's routable count.
-    assert len(operation_ids) == 315
+    # + 2 oauth) plus 18 service routes. Matches the common-screen manifest's routable count.
+    # 2026-08-19: 315 → 319 — routines 4라우트(draft/confirm/cancel/list) 신설
+    # (plan/능동-에이전트-실행계획-2026-08-19.md §7-6, ralplan 합의).
+    assert len(operation_ids) == 319
     assert "get_internal_oauth_status" in operation_ids
     manifest = json.loads(
         (BACKEND / "ref" / "kiwoom-common-screen-manifest.json").read_text(encoding="utf-8")
