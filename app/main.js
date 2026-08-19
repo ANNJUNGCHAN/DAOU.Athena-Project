@@ -3,7 +3,7 @@
 // require()들도 이 시각 이후 비용이므로, "창 표시까지" 수치는 require 체인
 // 전체를 포함한다(가장 이른 지점에서 찍어야 실제 부팅 지연을 반영한다).
 const MODULE_LOAD_AT = Date.now();
-const { app, BrowserWindow, ipcMain, screen, Tray, Menu, nativeImage } = require('electron');
+const { app, BrowserWindow, ipcMain, screen, Tray, Menu, nativeImage, desktopCapturer } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
@@ -28,6 +28,9 @@ const mockdata = require('./lib/main/mockdata');
 // 백엔드(FastAPI/uvicorn) 자동 기동 — 헬스체크 후 죽어 있을 때만 스폰한다(중복
 // 스폰 금지, lib/main/backend-launcher.js 상단 주석 참고).
 const backendLauncher = require('./lib/main/backend-launcher');
+// 휘도 감지-적응의 순수 계산부(2026-08-19) — 캡처·타이머는 아래
+// startBackdropSampling()이, 계산·매핑은 이 모듈이 담당한다(단위 테스트 9건).
+const backdropLuma = require('./lib/main/backdrop-luma');
 
 const MDEBUGLOG = path.join(__dirname, 'captures', 'main-debug.log');
 function mdlog(msg) {
@@ -112,10 +115,11 @@ function commonWinOpts(bounds) {
     // 2026-08-18 실측(qa-win-arrow.json): resizable:false에서는 Win+←/→/↑가 OS에
     // 선점돼 before-input-event에 아예 안 온다(mdlog 도달 0건 — Win+↓ 최소화만
     // OS가 실행). Windows 스냅(Win+방향키)이 이 앱에서 통하려면 창이 OS 스냅
-    // 대상이어야 하므로 resizable:true로 승급한다. **크기는 여전히 불변이다** —
-    // 생성 직후 setMinimumSize=setMaximumSize 잠금(아래 lockWindowSize)이 OS든
-    // 사용자든 크기를 못 바꾸게 막고, OS가 스냅으로 "옮긴" 결과는 moved/maximize/
-    // minimize 이벤트에서 받아 짝을 정착시킨다.
+    // 대상이어야 하므로 resizable:true다.
+    // 2026-08-18 2차(사용자 지시): 크기 잠금(min=max)을 걷어냈다 — **두 창 모두
+    // 가로·세로 자유 리사이즈**가 사양이다. 하한(setMinimumSize)만 남기고 상한은
+    // 없다. OS 스냅과 사용자 리사이즈의 구분은 handleForeignArrange의 반절 스냅
+    // 기하 판별(looksLikeOsSnapHalf)이 맡는다.
     resizable: true,
     show: false,
     // alwaysOnTop을 걸지 않는다(2026-08-17 결정) — 스파이크 시절 값이었지만, 다른
@@ -164,20 +168,23 @@ async function createWindows() {
   canvasWin = new BrowserWindow(commonWinOpts({
     x: layout.originX, y: layout.originY, width: layout.canvasW, height: layout.canvasH,
   }));
-  lockWindowSize(canvasWin, layout.canvasW, layout.canvasH);
+  // 크기 잠금 해제(2026-08-18 사용자 지시 — "무조건 가로세로 모두 조정 가능해야
+  // 한다"). E3 치수(1560×800)는 부팅 기본값일 뿐 불변 계약이 아니다. 하한은
+  // 카드 1장 + 여백이 성립하는 최소 면적.
+  canvasWin.setMinimumSize(480, 320);
   canvasWin.loadFile('canvas.html');
   mdlog('canvasWin created + loadFile called');
 
   chatWin = new BrowserWindow(commonWinOpts({
     x: layout.originX, y: chatBottom - chatHeight, width: layout.chatW, height: chatHeight,
   }));
-  // 채팅창은 높이만 가동 범위(chatBaseH~chatMaxH)로 연다 — 폭은 고정. 완전
-  // 잠금(min=max)이면 Win+↑의 OS maximize가 이벤트도 없이 무시된다(2026-08-18
-  // qa-win-arrow 실측). 범위를 열어두면 maximize 이벤트가 와서 렌더러 토글로
-  // 위임할 수 있고, OS가 스냅으로 높이를 건드려도 handleForeignArrange가 즉시
-  // 앱 레이아웃으로 되돌린다.
-  chatWin.setMinimumSize(layout.chatW, layout.chatBaseH);
-  chatWin.setMaximumSize(layout.chatW, layout.chatMaxH);
+  // 채팅창도 폭·높이 모두 유동이다(2026-08-18 사용자 지시). 상한을 걸지 않는다 —
+  // chatBaseH~chatMaxH는 자동 성장(setChatHeight)의 가동 범위일 뿐이고, 사용자가
+  // OS 모서리 리사이즈로 그 밖에 두면 handleForeignArrange가 수용하고 렌더러에
+  // manualOverride를 알린다(athena:manual-resize). 하한은 그립+입력줄이 성립하는
+  // 크기. 완전 잠금(min=max)이면 Win+↑의 OS maximize가 이벤트도 없이 무시된다는
+  // 실측(qa-win-arrow)은 여전히 유효하다 — 지금은 잠금 자체가 없다.
+  chatWin.setMinimumSize(480, Math.min(160, layout.chatBaseH));
   chatWin.loadFile('chat.html');
   mdlog('chatWin created + loadFile called');
 
@@ -257,6 +264,18 @@ async function createWindows() {
   wireWindowsKeyShortcuts(canvasWin);
   wireOsSnapEvents(chatWin);
   wireOsSnapEvents(canvasWin);
+
+  // 상단 모서리는 그립 우선(2026-08-19 결정, 질의응답) — 채팅창 상단 10px에서
+  // 앱 손잡이(#grip: 클램프·유리 보간)와 OS 네이티브 엣지 리사이즈(무제한·무보간)가
+  // 같은 픽셀을 놓고 경합하던 비결정성 해소. will-resize의 edge 인자로 순수 상단발
+  // 리사이즈만 막는다 — 좌/우/아래와 모서리(대각)는 네이티브 자유 리사이즈 유지.
+  // setBounds에는 이 이벤트가 오지 않으므로(Electron 문서) 그립 경로는 영향 없다.
+  chatWin.on('will-resize', (event, newBounds, details) => {
+    if (details && details.edge === 'top') event.preventDefault();
+  });
+
+  // 휘도 감지-적응 시작(2026-08-19) — 두 창이 다 뜬 뒤에만. fixture면 내부에서 no-op.
+  startBackdropSampling();
 }
 
 // ---------- OS 스냅 이벤트 정착 (2026-08-18 승급 — qa-win-arrow.json 실측 근거) ----------
@@ -270,11 +289,6 @@ async function createWindows() {
 //   minimize             → 짝 창도 함께 내린다(복원 짝맞춤은 기존 restore 핸들러).
 // settlingSnap 가드: placeWindows의 setBounds가 다시 moved를 발화시키는 재진입을 막는다.
 let settlingSnap = false;
-
-function lockWindowSize(win, w, h) {
-  win.setMinimumSize(w, h);
-  win.setMaximumSize(w, h);
-}
 
 // 앱이 마지막으로 지정한 bounds. 여기서 벗어난 moved/resized는 전부 OS 주도
 // (Win+←/→ 스냅 등)다 — frame:false라 사용자가 OS 경로로 창을 움직일 방법은
@@ -293,6 +307,21 @@ function boundsDiffer(a, b) {
     || Math.abs(a.width - b.width) > 2 || Math.abs(a.height - b.height) > 2;
 }
 
+// 반절 스냅 기하 판별(2026-08-18 자유 리사이즈 승급) — Win+←/→ 스냅의 결과는
+// "높이≈workArea 전체, 폭≈절반, 좌/우 가장자리 접변"이라는 뚜렷한 기하를 남긴다.
+// 이 기하와 일치할 때만 OS 스냅으로 판정한다. 이전 판은 기대 좌표에서 벗어난
+// 모든 변화를 스냅으로 정착시켰는데, 자유 리사이즈가 열린 뒤에는 그 대다수가
+// 사용자 모서리 리사이즈라 — 정착이 곧 "방금 조절한 크기를 설계 치수로 되돌리는
+// 버그"가 된다.
+function looksLikeOsSnapHalf(actual, wa) {
+  const t = 8;
+  const nearlyFullH = Math.abs(actual.height - wa.height) <= t;
+  const nearlyHalfW = Math.abs(actual.width - Math.round(wa.width / 2)) <= t;
+  const atLeft = Math.abs(actual.x - wa.x) <= t;
+  const atRight = Math.abs((actual.x + actual.width) - (wa.x + wa.width)) <= t;
+  return nearlyFullH && nearlyHalfW && (atLeft || atRight);
+}
+
 function handleForeignArrange(win) {
   if (settlingSnap) return;
   if (!win || win.isDestroyed() || win.isMinimized() || win.isMaximized()) return;
@@ -301,6 +330,19 @@ function handleForeignArrange(win) {
   if (!boundsDiffer(expectedBounds.get(win), actual)) return;
   const display = screen.getDisplayMatching(actual);
   const wa = display.workArea;
+  if (!looksLikeOsSnapHalf(actual, wa)) {
+    // 사용자 모서리 리사이즈(또는 OS 주도의 기타 이동) — 새 크기·위치를 그대로
+    // 수용한다. 대화 창이면 높이 앵커·수동 상태를 함께 정리한다: 높이 상태의
+    // 소유자는 렌더러이므로(chat.js) manualOverride를 켜라고 알려 자동 성장이
+    // 방금의 사용자 크기를 덮어쓰지 않게 한다.
+    noteAppBounds(win);
+    if (win === chatWin) {
+      chatHeight = actual.height;
+      syncChatAnchor();
+      chatWin.webContents.send('athena:manual-resize');
+    }
+    return;
+  }
   const dir = (actual.x + actual.width / 2) < (wa.x + wa.width / 2) ? 'left' : 'right';
   mdlog(`os-arrange 감지(${win === chatWin ? 'chat' : 'canvas'}): ${JSON.stringify(actual)} -> ${dir} 정착`);
   settlingSnap = true;
@@ -563,6 +605,85 @@ ipcMain.on('athena:close-windows', () => {
   hideToBackground();
 });
 
+// ---------- 휘도 감지-적응 (2026-08-19 구현 — palette.md "채택" 스펙의 실결선) ----------
+// 검증 보드 45가 실측으로 증명한 결함의 해소: 밝은 배경화면 위에서 유리 0.30은
+// dim 계층 텍스트를 소실시킨다. 2초 저빈도 폴링으로 데스크톱 썸네일을 떠서
+// **우리 창 영역을 제외한**(화면 캡처에는 우리 창 자신도 찍힌다) 평균 휘도를 재고,
+// EMA 스무딩 후 두 렌더러에 표면별 유리 두께를 보낸다. 렌더러는 CSS 전이(600ms)로
+// 부드럽게 따라간다 — 이건 opacity 페이드가 아니라 리퀴드 글래스의 정의 그 자체
+// ("배경에 따라 tint를 연속적으로 조정", liquid-glass.md §1 적응성)다.
+// fixture(자동 검증) 실행에서는 돌리지 않는다 — 캡처·검증16 결정론 보호.
+// 연속 실패 3회면 폴백 0.55 고정(부록 A2: 가독성이 감지 성공 여부에 걸리면 안 된다).
+let backdropTimer = null;
+let smoothedLuma = null;
+let sampleFailures = 0;
+let lastSent = null;
+
+async function sampleBackdropOnce() {
+  if (!chatWin || chatWin.isDestroyed()) return;
+  try {
+    const display = screen.getDisplayMatching(chatWin.getBounds());
+    const thumbW = 240;
+    const thumbH = Math.max(1, Math.round(thumbW * display.bounds.height / display.bounds.width));
+    const sources = await desktopCapturer.getSources({ types: ['screen'], thumbnailSize: { width: thumbW, height: thumbH } });
+    const source = sources.find((s) => String(s.display_id) === String(display.id)) || sources[0];
+    if (!source || source.thumbnail.isEmpty()) throw new Error('빈 썸네일');
+    const size = source.thumbnail.getSize();
+    const scaleX = size.width / display.bounds.width;
+    const scaleY = size.height / display.bounds.height;
+    const exclude = [];
+    for (const w of [chatWin, canvasWin]) {
+      if (w && !w.isDestroyed() && w.isVisible() && !w.isMinimized()) {
+        const b = w.getBounds();
+        exclude.push(backdropLuma.scaleRect(
+          { x: b.x - display.bounds.x, y: b.y - display.bounds.y, width: b.width, height: b.height },
+          scaleX, scaleY
+        ));
+      }
+    }
+    const luma = backdropLuma.computeAverageLuminance(source.thumbnail.toBitmap(), size.width, size.height, exclude);
+    if (luma === null) return; // 창이 화면을 다 덮어 판정 불가 — 이전 값 유지
+    sampleFailures = 0;
+    smoothedLuma = backdropLuma.smooth(smoothedLuma, luma);
+    const b = backdropLuma.lumaToBrightness(smoothedLuma);
+    sendBackdropAlphas({
+      brightness: b,
+      windowAlpha: backdropLuma.brightnessToAlpha(b, 0.30),
+      canvasAlpha: backdropLuma.brightnessToAlpha(b, 0.50),
+    });
+  } catch (err) {
+    sampleFailures += 1;
+    if (sampleFailures === 3) {
+      // 폴백 — 감지가 계속 실패하면 중간 두께로 고정한다. 가독성을 감지 성공
+      // 여부에 걸어두지 않는다(palette.md). mdlog로 원인은 남긴다.
+      mdlog(`휘도 샘플링 3연속 실패 — 폴백 0.55 고정: ${String((err && err.message) || err)}`);
+      sendBackdropAlphas({ brightness: null, windowAlpha: 0.55, canvasAlpha: 0.55, fallback: true });
+    }
+  }
+}
+
+function sendBackdropAlphas(payload) {
+  // 0.01 미만의 변화는 보내지 않는다 — 렌더러 전이가 미세 진동하지 않게.
+  if (lastSent && payload.windowAlpha !== undefined
+    && Math.abs(lastSent.windowAlpha - payload.windowAlpha) < 0.01
+    && Math.abs(lastSent.canvasAlpha - payload.canvasAlpha) < 0.01) return;
+  lastSent = payload;
+  for (const w of [chatWin, canvasWin]) {
+    if (w && !w.isDestroyed()) w.webContents.send('athena:backdrop-luminance', payload);
+  }
+}
+
+function startBackdropSampling() {
+  if (backdropTimer) return;
+  if (process.env.ATHENA_CANVAS_SOURCE === 'fixture') return; // 자동 검증 결정론 보호
+  sampleBackdropOnce();
+  backdropTimer = setInterval(sampleBackdropOnce, 2000);
+}
+
+app.on('will-quit', () => {
+  if (backdropTimer) { clearInterval(backdropTimer); backdropTimer = null; }
+});
+
 // ---------- 줌(화면 확대/축소) — 두 창 동기, Ctrl+= / Ctrl+- / Ctrl+0 / Ctrl+휠 ----------
 // 창 크기는 그대로 두고 콘텐츠 배율만 바꾼다(브라우저 줌과 같은 문법). 렌더러의
 // CSS px 좌표 계약이 배율만큼 어긋나는 지점은 정확히 세 곳이고 각자 보정한다:
@@ -590,18 +711,28 @@ ipcMain.on('athena:zoom', (e, { dir } = {}) => applyUiZoom(dir));
 // 기본 높이로 되돌려야 한다(IPC 계약 — "when done is true, main returns the
 // chat window to base height itself"). 기존 수동 리사이즈 핸들러와 정확히
 // 같은 clamp·이동 로직을 공유한다.
-function setChatHeight(height) {
+function setChatHeight(height, { manual = false } = {}) {
   if (!chatWin || chatWin.isDestroyed()) return;
-  const clamped = Math.max(layout.chatBaseH, Math.min(layout.chatMaxH, Math.round(height)));
+  // 수동 요청(그립 드래그·□ 복원)은 표준 최대(chatMaxH)를 넘어 workArea까지
+  // 허용한다(2026-08-19 결정 — □ 토글이 "마지막 수동 높이"를 기억·복원하는
+  // Windows 복원 사각형 의미론. OS 엣지 리사이즈로 chatMaxH를 넘긴 크기를 앱
+  // 경로가 복원할 수 있어야 한다). 자동 성장은 여전히 chatMaxH 캡 — 내용이
+  // 길다고 창이 화면을 다 먹으면 안 된다.
+  const maxH = manual
+    ? Math.max(layout.chatMaxH, screen.getDisplayMatching(chatWin.getBounds()).workArea.height)
+    : layout.chatMaxH;
+  const clamped = Math.max(layout.chatBaseH, Math.min(maxH, Math.round(height)));
   if (clamped === chatHeight) return;
   chatHeight = clamped;
   const y = chatBottom - chatHeight;
-  chatWin.setBounds({ x: chatX, y, width: layout.chatW, height: chatHeight });
+  // 폭은 더 이상 설계 상수가 아니다(2026-08-18 자유 리사이즈) — 자동 성장·모드
+  // 전환이 사용자가 넓힌 폭을 layout.chatW로 되감으면 안 된다. 현재 폭을 유지한다.
+  chatWin.setBounds({ x: chatX, y, width: chatWin.getBounds().width, height: chatHeight });
   noteAppBounds(chatWin);
   if (canvasVisible) chatWin.moveTop(); // 확장 시 캔버스 창 위로 올라탄다(two-windows.md E3-확장)
 }
 
-ipcMain.on('athena:set-chat-height', (e, { height }) => setChatHeight(height));
+ipcMain.on('athena:set-chat-height', (e, { height, manual }) => setChatHeight(height, { manual: !!manual }));
 
 // ---------- 점 → 캔버스 확장/수축 (spike v2.js 이식) ----------
 async function getDotScreenPoint() {

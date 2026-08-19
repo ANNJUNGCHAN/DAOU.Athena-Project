@@ -87,6 +87,7 @@ window.addEventListener('DOMContentLoaded', () => {
       $app.hidden = false;
       $input.focus();
       scheduleHeightSync();
+      maybeShowCoachmark();
     }
   };
 
@@ -110,8 +111,9 @@ window.addEventListener('DOMContentLoaded', () => {
     $bootPh.hidden = false;
   }, 1160);
   // placeholder 상태가 한 박자(200ms) 정착한 뒤 실제 대화 창으로 바꿔치운다 — 부팅
-  // 바의 최종 유리(0.82)·그립·점·입력줄이 전부 .app과 같은 값이라 이음새가 보이지
-  // 않는다. 200ms는 verify.js의 60ms 폴링이 이 상태를 놓치지 않는 하한이기도 하다.
+  // 바의 최종 유리(0.30 — 2026-08-18 하향 후 현행)·그립·점·입력줄이 전부 .app과 같은
+  // 값이라 이음새가 보이지 않는다. 200ms는 verify.js의 60ms 폴링이 이 상태를 놓치지
+  // 않는 하한이기도 하다.
   setTimeout(finishBoot, 1360);
 });
 
@@ -180,6 +182,31 @@ function finishOnboarding() {
   window.athena.send('athena:set-chat-height', { height: layout.chatBaseH, manual: false });
   $input.focus();
   scheduleHeightSync();
+  maybeShowCoachmark(); // 최초 실행은 온보딩을 지나므로 여기가 첫 대화 화면이다
+}
+
+// ---------- 설정 진입 코치마크 (2026-08-19 결정 — 최초 1회) ----------
+// soul.md "설정 아이콘을 찾아 헤매는 경험은 Athena에 없다"의 실측 반례(디자인 비판
+// 2026-08-18: 점 호버 툴팁과 '설정' 타이핑 둘 다 사전 지식이 필요한 무발견 경로)에
+// 대한 답. 두 진입로(점·커맨드바)를 한 문장으로 1회만 알린다. localStorage 플래그로
+// 다시 안 나오고, fixture(자동 검증) 실행에선 띄우지 않는다 — 캡처 결정론 보호.
+function maybeShowCoachmark() {
+  if (canvasSource === 'fixture') return;
+  try { if (localStorage.getItem('athena-coachmark-settings-v1')) return; } catch { return; }
+  if (document.querySelector('.coachmark')) return;
+  const mark = document.createElement('div');
+  mark.className = 'coachmark';
+  mark.textContent = '이 점이 설정입니다 — 누르거나, "설정"이라고 입력해도 열립니다';
+  document.body.appendChild(mark);
+  const dismiss = () => {
+    try { localStorage.setItem('athena-coachmark-settings-v1', '1'); } catch { /* 플래그 실패 시 다음 부팅에 한 번 더 뜬다 — 치명적이지 않다 */ }
+    mark.remove();
+    window.removeEventListener('pointerdown', dismiss, true);
+    window.removeEventListener('keydown', dismiss, true);
+  };
+  window.addEventListener('pointerdown', dismiss, true);
+  window.addEventListener('keydown', dismiss, true);
+  setTimeout(() => { if (mark.isConnected) dismiss(); }, 8000);
 }
 
 // ---------- 초기 레이아웃 정보 수신 ----------
@@ -190,14 +217,36 @@ window.athena.on('athena:init', (payload) => {
   applyGlassFraction(0);
 });
 
-// ---------- 유리 두께 보간 (기본 0.82 ↔ 확장 0.97) ----------
+// ---------- 유리 두께 보간 (기본 0.30 ↔ 확장 0.55) ----------
 // two-windows.md의 굴절값(0.46→0.17)은 창 자체의 네이티브 재질 강도를 말하며
 // Electron backgroundMaterial API로는 런타임 파라미터화가 안 된다(chat.css 주석
 // 참조) — 여기서는 실제로 조절 가능한 알파만 보간한다.
+// 2026-08-18 전체 스케일 하향(사용자 지시 "그냥 검은 창 같다 — 뒤가 비쳐야 한다"):
+// 0.82↔0.97은 acrylic 위에서 사실상 불투명 검정으로 읽혔다. 블러(가독성)는
+// 네이티브 acrylic이 담당하므로 틴트 알파는 낮춰도 텍스트 대비가 성립한다.
+// "뒤 정보 밀도에 비례해 두꺼워진다"(soul.md §7)는 유지.
+// 2026-08-19: 값의 SSOT는 tokens.css 유리 사다리(--glass-window/--glass-window-max)다
+// — 여기 하드코드하면 CSS와 두 벌이 된다(verify 검증16이 사다리 일치를 단언한다).
+const rootStyles = getComputedStyle(document.documentElement);
+const GLASS_WINDOW = parseFloat(rootStyles.getPropertyValue('--glass-window')) || 0.30;
+const GLASS_WINDOW_MAX = parseFloat(rootStyles.getPropertyValue('--glass-window-max')) || 0.55;
+// 휘도 감지-적응(2026-08-19) — 높이 보간과 밝기 하한의 합성: 최종 두께는
+// max(높이 보간값, 밝기 하한)이다. 어두운 배경에선 하한이 GLASS_WINDOW라 기존
+// 동작 그대로이고, 밝은 배경에선 하한이 0.72까지 올라가 dim 텍스트 소실(검증
+// 보드 45 실측)을 막는다.
+let glassFrac = 0;
+let glassBrightFloor = GLASS_WINDOW;
 function applyGlassFraction(frac) {
-  const alpha = 0.82 + (0.97 - 0.82) * frac;
+  glassFrac = frac;
+  const interpolated = GLASS_WINDOW + (GLASS_WINDOW_MAX - GLASS_WINDOW) * frac;
+  const alpha = Math.max(interpolated, glassBrightFloor);
   document.documentElement.style.setProperty('--glass-alpha', alpha.toFixed(3));
 }
+window.athena.on('athena:backdrop-luminance', ({ windowAlpha } = {}) => {
+  if (!Number.isFinite(windowAlpha)) return;
+  glassBrightFloor = windowAlpha;
+  applyGlassFraction(glassFrac); // 현재 높이 상태에 새 하한을 즉시 합성 — 전이는 CSS(600ms)가 맡는다
+});
 
 window.addEventListener('resize', () => {
   // innerHeight는 CSS px — 창 bounds(물리 px)와 비교하려면 줌 배율을 되돌린다.
@@ -207,6 +256,11 @@ window.addEventListener('resize', () => {
   applyGlassFraction(frac);
   syncMaxButton();
 });
+
+// OS 모서리 리사이즈(2026-08-18 자유 리사이즈 승급) — main의 handleForeignArrange가
+// 사용자 리사이즈를 수용하면서 보낸다. 그립 드래그와 같은 "수동" 문법으로 취급해
+// 다음 내용 변화의 자동 성장이 방금의 사용자 크기를 덮어쓰지 않게 한다.
+window.athena.on('athena:manual-resize', () => { manualOverride = true; });
 
 // 최대화 버튼의 상태(확장/복귀/비활성)를 실제 창 상태에서 파생한다 — 버튼이 자기
 // 기억이 아니라 창의 현재 상태를 말하게 한다(정보 정직성). 설정·온보딩 모드가
@@ -398,7 +452,9 @@ async function runQueryLive(text) {
     progText.textContent = `${base} · ${elapsedText()} 경과`;
     setLocked(true, `${base} · ${elapsedText()} 경과`);
   };
-  const tick = setInterval(renderProgress, 1000); // 진행이 눈에 보이게 — 조용히 멈춘 것처럼 보이면 안 된다
+  // 100ms 간격 — 표기는 소수 1자리(29.3s)인데 1초 간격으로 갱신하면 소수 자리가
+  // 항상 .0으로만 보여 정수 표시와 구별되지 않았다(2026-08-18 사용자 지시).
+  const tick = setInterval(renderProgress, 100); // 진행이 눈에 보이게 — 조용히 멈춘 것처럼 보이면 안 된다
 
   const onLiveCanvasAdded = () => {
     if (myToken !== abortToken) return;
@@ -663,31 +719,51 @@ $input.addEventListener('keydown', (e) => {
 // 두 함수를 공유한다 — main이 setChatHeight를 직접 부르면(구판) 이 상태들과
 // 어긋난다(팀리드 지시). Win+←/→·Ctrl+Alt+←/→는 렌더러 상태와 무관한 순수 위치
 // 이동이라 여전히 IPC(athena:place-windows)로 main이 직접 처리한다.
+// 마지막 수동 높이 기억(2026-08-19 결정, 질의응답) — Windows 복원 사각형 의미론.
+// □(확장 토글)는 이제 "확장 ↔ 직전 크기"다. 사용자가 그립·OS 엣지로 만든 커스텀
+// 크기를 □가 조용히 204px로 붕괴시키던 결함(디자인 비판 2026-08-18)의 해소.
+// 표준 최대(chatMaxH)를 넘긴 크기에서 □를 누르면 표준 최대로 접되 원크기를
+// 복원값으로 기억한다 — 다시 누르면 돌아온다.
+let lastRestoreHeight = null;
+
+function restoreFromMax() {
+  const target = lastRestoreHeight && lastRestoreHeight > layout.chatBaseH + 2
+    ? lastRestoreHeight
+    : layout.chatBaseH;
+  lastRestoreHeight = null;
+  // 기본 높이로 돌아가면 자동 성장 재개(manualOverride 해제), 커스텀 크기로
+  // 돌아가면 그 크기를 보호한다(그립 드래그와 같은 문법).
+  manualOverride = target !== layout.chatBaseH;
+  window.athena.send('athena:set-chat-height', { height: target, manual: manualOverride });
+}
+
 function toggleMaxHeight() {
   if (settingsOpen || !$onboard.hidden) return; // 모드가 높이를 소유 중 — disabled의 백스톱
-  const atMax = currentHeight >= layout.chatMaxH - 2;
-  if (atMax) {
-    // 라벨이 약속한 대로 기본 높이로 내려간다. 여기서 scheduleHeightSync()를 부르면
-    // measureNeededHeight()가 이력 자연 높이로 즉시 재확장해 "수축→재확장" 이중
-    // 리사이즈만 남는다(2026-08-18 리뷰 지적) — 자동 성장은 manualOverride 해제로
-    // 다음 내용 변화부터 재개되는 것으로 충분하다.
-    manualOverride = false;
-    window.athena.send('athena:set-chat-height', { height: layout.chatBaseH, manual: false });
+  const over = currentHeight > layout.chatMaxH + 2;
+  const atMax = !over && currentHeight >= layout.chatMaxH - 2;
+  if (over) {
+    // 표준 최대보다 크게 늘린 상태 — 표준 최대로 접고 원크기를 기억한다.
+    lastRestoreHeight = currentHeight;
+    manualOverride = true;
+    window.athena.send('athena:set-chat-height', { height: layout.chatMaxH, manual: true });
+  } else if (atMax) {
+    // scheduleHeightSync()를 부르지 않는 이유는 구판 주석 그대로 — 수축 직후
+    // 자연 높이 재확장이 끼어드는 이중 리사이즈 방지(2026-08-18 리뷰 지적).
+    restoreFromMax();
   } else {
+    lastRestoreHeight = currentHeight > layout.chatBaseH + 2 ? currentHeight : null;
     manualOverride = true; // 그립 드래그와 같은 문법 — 자동 성장이 덮어쓰지 않는다
     window.athena.send('athena:set-chat-height', { height: layout.chatMaxH, manual: true });
   }
   $input.focus();
 }
 
-// Windows의 "restore-then-minimize" 의미론 — 최대화 상태면 기본 높이로 복원,
-// 아니면(이미 기본 높이) 두 창을 최소화한다.
+// Windows의 "restore-then-minimize" 의미론 — 최대화(이상) 상태면 직전 크기로 복원,
+// 아니면 두 창을 최소화한다.
 function restoreOrMinimize() {
   if (settingsOpen || !$onboard.hidden) return; // 모드가 높이를 소유 중 — disabled의 백스톱
-  const atMax = currentHeight >= layout.chatMaxH - 2;
-  if (atMax) {
-    manualOverride = false;
-    window.athena.send('athena:set-chat-height', { height: layout.chatBaseH, manual: false });
+  if (currentHeight >= layout.chatMaxH - 2) {
+    restoreFromMax();
   } else {
     window.athena.send('athena:minimize-windows');
   }
@@ -764,8 +840,10 @@ function bindWindowDrag(el) {
   el.addEventListener('mousedown', (e) => {
     if (e.button !== 0 || e.target !== el) return;
     window.athena.send('athena:window-drag', { phase: 'start' });
+    document.body.style.cursor = 'grabbing'; // 잡는 중 — hover의 grab(chat.css)과 짝(2026-08-19)
     const end = () => {
       window.athena.send('athena:window-drag', { phase: 'end' });
+      document.body.style.cursor = '';
       window.removeEventListener('mouseup', end);
       window.removeEventListener('blur', end);
     };

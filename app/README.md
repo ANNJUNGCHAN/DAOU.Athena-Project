@@ -1,8 +1,9 @@
 # Athena W2 — 두 창 Electron 셸
 
 `plan/mcp-실행계획.md` W2 / `ui/round-1R/two-windows.md` E3 확정안의 첫 코드 구현.
-캔버스 창(1560×800, 위) + 대화 창(1560×204~788, 아래) — OS 레벨로 분리된 두 개의
-독립 창. `spike/electron-glass/v2.js`·`v3.js`·`canvas.html`을 읽고 이식했다(처음부터
+캔버스 창(부팅 기본 1560×800, 위) + 대화 창(부팅 기본 1560×204~788, 아래) — OS 레벨로
+분리된 두 개의 독립 창. **두 창 모두 가로·세로 자유 리사이즈**(2026-08-18, two-windows.md
+정정 3 — 치수는 부팅 기본값이지 불변 계약이 아니다). `spike/electron-glass/v2.js`·`v3.js`·`canvas.html`을 읽고 이식했다(처음부터
 새로 안 짬). React·번들러 없음, 순수 HTML/CSS/JS + Electron.
 
 ## 실행법
@@ -938,11 +939,12 @@ Enter)을 그대로 시뮬레이션했다. `athena__render_canvas` 인터페이�
 - **대화 창 sheen의 "굴절 0.46→0.17" 값은 구현하지 않았다.** two-windows.md는 이 값을
   창 자체의 네이티브 유리 재질 강도로 서술하는데, Electron `backgroundMaterial` API는
   런타임에 블러 반경을 파라미터화하는 수단을 주지 않는다(on/off + 타입만). 실제로 조절
-  가능한 값(`--glass-alpha`, 0.82↔0.97)만 구현했다 — 자세한 이유는 `chat.css` 주석.
+  가능한 값(`--glass-alpha`, 0.30↔0.55 — 2026-08-18 전체 하향, two-windows.md 정정 3)만
+  구현했다 — 자세한 이유는 `chat.css` 주석.
   이건 "구현 중 발견한 버그" 3번과 같은 뿌리의 문제라 같이 정리했다.
 - **밝은 배경화면 적응(`palette.md`의 색조 감지)**은 W2 범위가 아니라(다음 웨이브
   대상) 구현하지 않았다. 유리 알파값은 고정 곡선(뒤가 데스크톱/캔버스인지에 따른
-  0.82~0.97)만 쓴다.
+  0.30~0.55)만 쓴다.
 - ~~**백엔드 연동 없음**~~ — **더 이상 사실이 아니다.** 설정·온보딩 화면군이 들어오면서
   실제 백엔드에 붙었다. 아래 "설정·온보딩 화면군" 절 참조.
 - **리더 캔버스 원문이 중간에 잘린다** — 위 "리더 캔버스 데이터의 제약" 참조. 캡처
@@ -1136,17 +1138,23 @@ Win+←/→/↑/↓가 이 앱에서 OS 표준 창 단축키와 같은 뜻으로
 `qa-win-arrow.ps1` → `captures/qa-win-arrow.json`).** 원래 1차 경로는
 `before-input-event`(`wireWindowsKeyShortcuts`)였는데, **Win+방향키는 OS가
 항상 선점해 이 핸들러에 아예 도달하지 않는다**(mdlog 도달 0건 — resizable
-여부와 무관). 그래서 **스냅 대상화로 승급했다**: `resizable:true` + 크기
-잠금(캔버스는 min=max 완전 잠금, 채팅창은 폭 고정 + 높이만
-chatBaseH~chatMaxH 범위)으로 창을 OS 스냅 대상으로 만들고, OS가 창을 움직인
-**결과**를 앱이 받아 정착시킨다:
+여부와 무관). 그래서 **스냅 대상화로 승급했다**: `resizable:true`로 창을 OS
+스냅 대상으로 만들고, OS가 창을 움직인 **결과**를 앱이 받아 정착시킨다.
+(구판의 크기 잠금 — 캔버스 min=max, 채팅창 폭 고정 — 은 2026-08-18 자유
+리사이즈 승급으로 제거됐다. 하한(`setMinimumSize`)만 남는다: 캔버스 480×320,
+채팅창 480×160.)
 
 - **Win+←/→** → OS가 포커스 창을 스냅 이동/리사이즈 → `move`/`resize` 디바운스
   + `expectedBounds` 대조(`handleForeignArrange` — 앱이 마지막으로 지정한
-  bounds와 다르면 OS 주도)로 감지 → `placeWindows(left|right)`가 짝 전체를 그
-  절반의 앱 레이아웃(크기 불변)으로 정착. `win.snapped` 플래그는 크기 잠금
-  창에서 서지 않는 것이 실측됐고, 키보드 스냅은 드래그 모달 루프가 없어
-  과거형 이벤트(`moved`/`resized`)도 안 온다 — 현재형+디바운스가 정답이었다.
+  bounds와 다르면 OS 주도)로 감지. **반절 스냅 기하 판별(`looksLikeOsSnapHalf` —
+  높이≈workArea 전체, 폭≈절반, 좌/우 접변)과 일치할 때만** `placeWindows(left|right)`가
+  짝 전체를 그 절반의 앱 레이아웃으로 정착한다. 일치하지 않는 변화는 사용자
+  모서리 리사이즈로 보고 그대로 수용한다(수용 시 채팅창은 `athena:manual-resize`로
+  렌더러 manualOverride를 켜 자동 성장이 사용자 크기를 되감지 않게 한다) —
+  이 구분이 없으면 모든 사용자 리사이즈가 스냅으로 오인돼 설계 치수로 되돌아간다.
+  `win.snapped` 플래그는 크기 잠금 창에서 서지 않는 것이 실측됐고, 키보드
+  스냅은 드래그 모달 루프가 없어 과거형 이벤트(`moved`/`resized`)도 안 온다 —
+  현재형+디바운스가 정답이었다.
 - **Win+↑** → OS maximize 이벤트 → 즉시 `unmaximize` + 렌더러 위임. 위임은
   `unmaximize` 완료 후로 지연한다 — 복원 setBounds가 비동기라 먼저 보내면
   렌더러의 토글을 복원이 덮어써 "2회차 토글이 안 먹는" 경쟁이 실측됐다(3차).
@@ -1154,6 +1162,38 @@ chatBaseH~chatMaxH 범위)으로 창을 OS 스냅 대상으로 만들고, OS가 
   최대화된다(네이티브 동작과 일치).
 - **Win+↓** → OS가 포커스 창을 최소화 → `minimize` 이벤트에서 짝 창도 함께
   내린다(복원 짝맞춤은 기존 restore 핸들러).
+
+**자유 리사이즈 후속 3건 (2026-08-19, 질의응답 결정 — plan/디자인-비판-2026-08-18.md §4):**
+
+- **경계 hover 광량** — 리사이즈 가능함을 알리는 신호가 0개라는 지적의 해소.
+  `lib/edge-glow.js`(두 창 공용, 자기 초기화)가 마우스가 창 경계 14px 안에 오면
+  그 변을 밝힌다. 상시 크롬 없음, 무채색, prefers-contrast에서 숨김(access.css).
+- **상단은 그립 우선** — 채팅창 상단 10px에서 그립과 OS 엣지 리사이즈가 경합하던
+  비결정성 해소. `main.js`가 `will-resize`의 `edge==='top'`만 preventDefault —
+  좌/우/아래·모서리는 네이티브 자유 리사이즈 그대로다.
+- **□ 토글의 복원 의미론** — Windows 복원 사각형처럼 "확장 ↔ 직전 크기"로 동작한다
+  (chat.js `lastRestoreHeight`). 표준 최대(chatMaxH)를 넘긴 커스텀 크기에서 □를
+  누르면 표준 최대로 접고 원크기를 기억, 다시 누르면 돌아온다. 이를 위해
+  `setChatHeight`의 수동 요청(manual:true)은 chatMaxH가 아니라 workArea 높이까지
+  허용한다 — 자동 성장 캡은 여전히 chatMaxH.
+
+**설정 진입 코치마크 (2026-08-19)** — 최초 1회, 점·커맨드바 두 진입로를 한 문장으로
+알린다(chat.js `maybeShowCoachmark`, localStorage 플래그). fixture(자동 검증)
+실행에선 뜨지 않는다 — 캡처 결정론 보호.
+
+**휘도 감지-적응 (2026-08-19)** — palette.md "채택" 스펙의 실결선. Paper 보드 45가
+밝은 배경 위 유리 0.30에서 dim 텍스트 소실을 실측한 것이 근거다.
+`main.js startBackdropSampling()`: desktopCapturer 썸네일에서 **자기 창 영역을
+제외**하고(화면 캡처에는 우리 창도 찍힌다) 평균 휘도를 재고, 2초 폴링 + EMA
+스무딩 후 `athena:backdrop-luminance`로 표면별 두께를 방송한다 — 창 0.30→최대
+0.72, 캔버스 창 0.50→0.72. 렌더러는 600ms 전이(opacity 페이드가 아니라 두께
+변조). 폴백: 3연속 실패 시 0.55 고정. 계산부는 `lib/main/backdrop-luma.js`
+(단위 테스트 9건), 실측은 `probe-backdrop-luma.js`(captures/backdrop-luma-probe.json
+— 어두운 데스크톱에서 b=0 판정·이벤트 왕복 확인). fixture 실행에선 루프를 아예
+안 돌린다 — 검증16(유리 사다리) 결정론 보호.
+
+**부수(2026-08-19)** — 창 이동 커서 신호(.history/.input-row hover grab · 드래그 중
+grabbing), 캔버스 900px 이하 1열 접힘(canvas.css @media — Paper 보드 46 명세와 짝).
 
 `globalShortcut`은 다른 앱과 전역 충돌 위험이 있어(electron#9206) 여전히 쓰지
 않는다. `before-input-event` 배선은 무해한 백스톱으로 남긴다(도달하면 처리).

@@ -70,6 +70,13 @@ const ON_CHANNELS = new Set([
   // 소유하므로(chat.js manualOverride 등) main이 setChatHeight를 직접 부르지
   // 않고 이 이벤트로 chat.js의 □ 버튼과 같은 로컬 경로를 태운다(2026-08-18).
   'athena:window-key',
+  // OS 모서리 리사이즈 수용 알림(2026-08-18 자유 리사이즈) — main의
+  // handleForeignArrange가 사용자 리사이즈를 수용할 때 렌더러의 manualOverride를
+  // 켜서 자동 성장이 사용자 크기를 되감지 않게 한다(chat.js).
+  'athena:manual-resize',
+  // 휘도 감지-적응(2026-08-19) — main의 startBackdropSampling()이 2초 주기로
+  // 배경 밝기에서 계산한 표면별 유리 두께를 두 창에 보낸다.
+  'athena:backdrop-luminance',
 ]);
 
 contextBridge.exposeInMainWorld('athena', {
