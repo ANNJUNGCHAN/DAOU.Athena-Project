@@ -141,3 +141,84 @@ def build_table(payload: Any) -> tuple[dict[str, Any], dict[str, Any]] | str:
     return data, meta
 
 
+# FactsCard/CompoundCard 헤더에 남기는 필드 수 상한. 실측 최대 20
+# (kiwoom-common-screen-spec.md §3.1, p90 15) — 여유를 두고 40으로 잡는다.
+# compound 헤더는 실측 2~9(§3.3)로 더 작지만, 별도 상수를 만들 만큼 다르지 않다.
+FACTS_FIELDS_MAX = 40
+
+
+def _scalar_items(payload: Any) -> list[tuple[str, Any]] | None:
+    """dict의 최상위 스칼라(비-dict·비-list) 필드만 순서 보존해 뽑는다.
+
+    manifest 실측(29개 CompoundCard 매핑 전수, 2026-08-20) 결과 컨테이너를 감싸는
+    별도 wrapper 없이 스칼라 필드와 리스트 컨테이너가 항상 같은 depth에 있다 —
+    그래서 얕은(top-level만) 추출로 충분하다. 이 가정이 깨지는 응답은 명시적
+    실패로 남는다(추측으로 깊이 파고들지 않는다, CLAUDE.md §3).
+    """
+    if not isinstance(payload, dict):
+        return None
+    return [
+        (key, value) for key, value in payload.items() if not isinstance(value, (dict, list))
+    ]
+
+
+def build_facts(payload: Any) -> tuple[dict[str, Any], dict[str, Any]] | str:
+    """키움 스칼라 응답 → facts 봉투(key/value grid). 실패 시 사유 문자열.
+
+    FactsCard(spec §3.1)는 컨테이너가 없다 — 리스트/딕셔너리 값은 스칼라가
+    아니므로 제외한다(그런 값이 섞여 있으면 compound/table이 맞는 레이아웃이라는
+    신호다. build_compound_generic/build_table 참조).
+    """
+    items = _scalar_items(payload)
+    if items is None:
+        return "응답이 객체가 아니다 — facts는 스칼라 key/value 응답을 기대한다"
+    if not items:
+        return "응답에서 스칼라 필드를 찾지 못했다"
+
+    kept = items[:FACTS_FIELDS_MAX]
+    fields = [{"key": key, "label": key, "value": value} for key, value in kept]
+    data = {"fields": fields}
+    meta = {
+        "fields_total": len(items),
+        "fields_kept": len(kept),
+        "trimmed": len(items) > len(kept),
+    }
+    return data, meta
+
+
+def build_compound_generic(payload: Any) -> tuple[dict[str, Any], dict[str, Any]] | str:
+    """키움 compound 응답(스칼라 헤더 + 리스트 1개) → compound 봉투. 실패 시 사유.
+
+    CompoundCard(spec §3.3)는 "이름과 달리 다중 표가 아니다" — facts 헤더 하나 +
+    표 하나로 고정이다. 헤더는 build_facts와, 표는 build_table과 같은 필드
+    계약을 재사용해 세 변환이 서로 드리프트하지 않게 한다.
+    """
+    header_items = _scalar_items(payload)
+    if header_items is None:
+        return "응답이 객체가 아니다 — compound는 스칼라 헤더 + 리스트 하나를 기대한다"
+    if not header_items:
+        return "응답에서 헤더로 쓸 스칼라 필드를 찾지 못했다"
+
+    rows = _largest_dict_array(payload)
+    if not rows:
+        return "응답에서 표로 쓸 행 배열을 찾지 못했다"
+
+    header_kept = header_items[:FACTS_FIELDS_MAX]
+    header = [{"key": key, "label": key, "value": value} for key, value in header_kept]
+
+    table_rows = rows[:TABLE_ROWS_MAX]
+    columns = [{"key": key, "label": key} for key in table_rows[0].keys()]
+    table = {"columns": columns, "rows": table_rows}
+
+    data = {"header": header, "table": table}
+    meta = {
+        "header_fields_total": len(header_items),
+        "header_fields_kept": len(header_kept),
+        "table_rows_total": len(rows),
+        "table_rows_kept": len(table_rows),
+        "table_trimmed": len(rows) > len(table_rows),
+        "table_columns": [column["key"] for column in columns],
+    }
+    return data, meta
+
+
