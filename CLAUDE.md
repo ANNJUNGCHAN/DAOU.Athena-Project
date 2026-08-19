@@ -125,9 +125,13 @@
 - **리미터는 하나**다. REST · WebSocket 제어 · 주문이 공유한다. 롤링 1초에 최대 5건, 같은 API ID는
   1건. 트랜스포트별 리미터를 추가하지 마라.
 - 자격증명이 없으면 데이터 라우트는 **503으로 fail-closed**. 조용한 빈 결과 금지.
-- LLM에 노출하는 툴은 **정확히 4개**(`athena_search` / `athena_describe` / `athena_resolve` /
-  `athena_call`). 323개 오퍼레이션을 평평한 툴로 풀지 말고, OpenAPI 전문을 모델 컨텍스트에
-  넣지 마라. `llm_get_manifest`는 다섯 번째 툴이 아니다.
+- LLM에 노출하는 **키움 셀렉터 툴은 정확히 4개**(`athena_search` / `athena_describe` /
+  `athena_resolve` / `athena_call`). 323개 오퍼레이션을 평평한 툴로 풀지 말고, OpenAPI
+  전문을 모델 컨텍스트에 넣지 마라. `llm_get_manifest`는 다섯 번째 툴이 아니다.
+  **게이트웨이 자체 관리 툴**(`athena__render_canvas` / `athena__save_canvas` /
+  `athena_routine`)은 이 4개 제약과 별개 범주다 — 단 표면 최소화 원칙은 같다: 새 툴은
+  기존 툴의 액션 파라미터로 접을 수 없을 때만 추가하고, 상태를 바꾸는 액션(등록·취소)은
+  모델에 노출하지 않는다(제안·조회만).
 - 셀렉터 랭킹은 **결정적이고 설명 가능해야** 한다. 임베딩 · 모델 호출 · 무작위성 금지.
 - 브레인은 LadybugDB **단일 소유자**를 통해서만 쓴다. 히스토리가 원본이고 그래프는 재구축 가능한
   **투영**이다.
