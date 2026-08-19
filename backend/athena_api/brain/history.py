@@ -96,6 +96,77 @@ class HistoryUpsertResult:
 
 
 @dataclass(frozen=True, slots=True)
+class StoredChatMessage:
+    message_id: str
+    conversation_id: str
+    role: ChatRole
+    text: str
+    occurred_at: datetime
+
+
+@dataclass(frozen=True, slots=True)
+class ConversationSummary:
+    conversation_id: str
+    message_count: int
+    first_occurred_at: datetime
+    last_occurred_at: datetime
+
+
+# Fixed so the LLM extracting propensity signals can tell speakers apart -- pinned by
+# test_brain_history.py::test_compact_conversations_renders_role_labelled_transcript.
+_CONVERSATION_TRANSCRIPT_LINE_FORMAT: Final = "{role}: {text}"
+
+# Hard ceiling on a rendered transcript. `SourceRecord.text` is `LongText`
+# (ontology.py: max_length=10_000) and a real conversation blows past that in a few dozen
+# turns. Without a budget the oversized row would fail `SourceRecord` validation on the way
+# back out, the rollup would raise, and -- because a rollup failure fails the whole job by
+# design -- a single long conversation would permanently wedge ingestion for *everything*.
+# So the window slides instead: keep the most recent whole turns that fit.
+#
+# Dropping older turns loses nothing durable. Claims are append-only in the graph, so
+# whatever was extracted from earlier turns is already stored and stays stored; the window
+# only bounds what the *next* extraction pass re-reads for context.
+#
+# Kept a little under the ontology bound so the JSON attributes and any future prefix have
+# headroom. test_transcript_budget_stays_under_the_ontology_bound pins the relationship.
+MAX_TRANSCRIPT_CHARS: Final = 9_000
+_TRUNCATION_MARKER: Final = "…"
+
+
+def _render_conversation_transcript(
+    messages: tuple[StoredChatMessage, ...], *, max_chars: int = MAX_TRANSCRIPT_CHARS
+) -> tuple[str, int]:
+    """Render the most recent turns that fit in ``max_chars``.
+
+    Returns ``(transcript, included_message_count)``. Walks newest-first so the turns
+    nearest the current one -- the ones that give a follow-up like "응 그거 좋아" its
+    meaning -- are the ones that survive.
+    """
+    lines: list[str] = []
+    used = 0
+    for message in reversed(messages):
+        line = _CONVERSATION_TRANSCRIPT_LINE_FORMAT.format(
+            role=message.role.value, text=message.text
+        )
+        cost = len(line) + 1  # the newline this line will contribute
+        if used + cost > max_chars:
+            break
+        lines.append(line)
+        used += cost
+    if not lines:
+        # A single turn longer than the whole budget: keep its tail rather than emitting
+        # nothing, so an extraction still has something to work with.
+        newest = messages[-1]
+        line = _CONVERSATION_TRANSCRIPT_LINE_FORMAT.format(
+            role=newest.role.value, text=newest.text
+        )
+        keep = max_chars - len(_TRUNCATION_MARKER) - 1
+        lines.append(_TRUNCATION_MARKER + line[-keep:])
+    lines.reverse()
+    return "\n".join(lines) + "\n", len(lines)
+
+
+@dataclass(frozen=True, slots=True)
 class SourceChange:
     seq: int
     revision: int
@@ -514,6 +585,9 @@ class HistoryStore:
     async def trade_changes(self, after_seq: int, *, limit: int) -> tuple[SourceChange, ...]:
         return await self._changes(SourceKind.TRADE, after_seq, limit)
 
+    async def conversation_changes(self, after_seq: int, *, limit: int) -> tuple[SourceChange, ...]:
+        return await self._changes(SourceKind.CONVERSATION, after_seq, limit)
+
     async def _changes(
         self, source_kind: SourceKind, after_seq: int, limit: int
     ) -> tuple[SourceChange, ...]:
@@ -554,6 +628,162 @@ class HistoryStore:
                 ingested_at=_parse_timestamp(row["changed_at"]),
             ),
         )
+
+    async def chats_for_conversation(
+        self, conversation_id: str, *, limit: int = 100
+    ) -> tuple[StoredChatMessage, ...]:
+        """Read back stored chat turns for one conversation, oldest first.
+
+        Reads ``source_records`` (current revision only, not the append-only change
+        log) filtered by the same ``locator`` upsert_chat writes -- no separate chat
+        table, no duplicate write path.
+        """
+        if not conversation_id.strip():
+            raise ValueError("conversation_id must not be blank")
+        if not 1 <= limit <= MAX_BATCH_SIZE:
+            raise ValueError(f"limit must be between 1 and {MAX_BATCH_SIZE}")
+        return await self._call(self._chats_for_conversation_sync, conversation_id, limit)
+
+    def _chats_for_conversation_sync(
+        self, conversation_id: str, limit: int
+    ) -> tuple[StoredChatMessage, ...]:
+        rows = (
+            self._db()
+            .execute(
+                "SELECT source_id, text, occurred_at, metadata_json FROM source_records "
+                "WHERE source_kind = ? AND locator = ? ORDER BY occurred_at, source_id LIMIT ?",
+                (SourceKind.CHAT_MESSAGE.value, f"conversation:{conversation_id}", limit),
+            )
+            .fetchall()
+        )
+        return tuple(self._row_to_chat_message(conversation_id, row) for row in rows)
+
+    @staticmethod
+    def _row_to_chat_message(conversation_id: str, row: sqlite3.Row) -> StoredChatMessage:
+        source_id = str(row["source_id"])
+        message_id = source_id.removeprefix("chat:")
+        attributes = json.loads(row["metadata_json"])
+        chat = attributes["chat"]
+        return StoredChatMessage(
+            message_id=message_id,
+            conversation_id=conversation_id,
+            role=ChatRole(chat["role"]),
+            text=str(row["text"]),
+            occurred_at=_parse_timestamp(row["occurred_at"]),
+        )
+
+    async def conversations(self, *, limit: int = 50) -> tuple[ConversationSummary, ...]:
+        """Distinct chat_message locators, most recently active first.
+
+        Deterministic tiebreak on locator (== conversation id) when last_occurred_at ties,
+        so pagination/order is stable across repeated calls.
+        """
+        if not 1 <= limit <= MAX_BATCH_SIZE:
+            raise ValueError(f"limit must be between 1 and {MAX_BATCH_SIZE}")
+        return await self._call(self._conversations_sync, limit)
+
+    def _conversations_sync(self, limit: int) -> tuple[ConversationSummary, ...]:
+        rows = (
+            self._db()
+            .execute(
+                "SELECT locator, COUNT(*) AS message_count, "
+                "MIN(occurred_at) AS first_occurred_at, MAX(occurred_at) AS last_occurred_at "
+                "FROM source_records WHERE source_kind = ? AND locator IS NOT NULL "
+                "GROUP BY locator ORDER BY last_occurred_at DESC, locator ASC LIMIT ?",
+                (SourceKind.CHAT_MESSAGE.value, limit),
+            )
+            .fetchall()
+        )
+        return tuple(self._row_to_conversation_summary(row) for row in rows)
+
+    @staticmethod
+    def _row_to_conversation_summary(row: sqlite3.Row) -> ConversationSummary:
+        locator = str(row["locator"])
+        return ConversationSummary(
+            conversation_id=locator.removeprefix("conversation:"),
+            message_count=int(row["message_count"]),
+            first_occurred_at=_parse_timestamp(row["first_occurred_at"]),
+            last_occurred_at=_parse_timestamp(row["last_occurred_at"]),
+        )
+
+    async def compact_conversations(self, *, now: datetime | None = None) -> tuple[str, ...]:
+        """Roll every chat_message conversation up into one `conversation` source.
+
+        Reads only `chat_message` rows -- never re-reads the `conversation` rows this
+        writes, even though both share the same locator string, because the read query
+        below filters on `source_kind = chat_message`. This keeps the rollup a one-shot
+        projection instead of a self-feeding loop.
+
+        Idempotent via `_upsert_source`'s existing fingerprint check: an unchanged
+        conversation produces the same fingerprint, so revision/`source_changes` do not
+        advance and this returns no id for it. Locators are enumerated from chat_message
+        rows themselves, so a store with zero chat_message rows yields zero locators and
+        this is a no-op.
+
+        The transcript is bounded to `MAX_TRANSCRIPT_CHARS` (most recent whole turns) --
+        see that constant for why an unbounded transcript would eventually wedge ingestion
+        for every conversation, not just the long one.
+        """
+        changed_at = now or utc_now()
+        _require_utc(changed_at, "now")
+        locators = await self._call(self._conversation_locators_sync)
+        updated: list[str] = []
+        for locator in locators:
+            conversation_id = locator.removeprefix("conversation:")
+            messages = await self._call(
+                self._all_chat_messages_for_locator_sync, conversation_id, locator
+            )
+            if not messages:
+                continue
+            transcript, included = _render_conversation_transcript(messages)
+            result = await self._upsert_source(
+                source_id=f"conversation:{conversation_id}",
+                source_kind=SourceKind.CONVERSATION,
+                text=transcript,
+                locator=locator,
+                occurred_at=messages[-1].occurred_at,
+                attributes={
+                    "conversation": {
+                        "conversation_id": conversation_id,
+                        "message_count": len(messages),
+                        # Recorded rather than inferred: a reader of the graph must be able
+                        # to see that this source covers only the tail of a longer
+                        # conversation instead of assuming it is the whole thing.
+                        "included_message_count": included,
+                        "truncated": included < len(messages),
+                    }
+                },
+                changed_at=changed_at,
+            )
+            if result.changed:
+                updated.append(result.source_id)
+        return tuple(updated)
+
+    def _conversation_locators_sync(self) -> tuple[str, ...]:
+        rows = (
+            self._db()
+            .execute(
+                "SELECT DISTINCT locator FROM source_records "
+                "WHERE source_kind = ? AND locator IS NOT NULL ORDER BY locator",
+                (SourceKind.CHAT_MESSAGE.value,),
+            )
+            .fetchall()
+        )
+        return tuple(str(row["locator"]) for row in rows)
+
+    def _all_chat_messages_for_locator_sync(
+        self, conversation_id: str, locator: str
+    ) -> tuple[StoredChatMessage, ...]:
+        rows = (
+            self._db()
+            .execute(
+                "SELECT source_id, text, occurred_at, metadata_json FROM source_records "
+                "WHERE source_kind = ? AND locator = ? ORDER BY occurred_at, source_id",
+                (SourceKind.CHAT_MESSAGE.value, locator),
+            )
+            .fetchall()
+        )
+        return tuple(self._row_to_chat_message(conversation_id, row) for row in rows)
 
     async def cursor(self, adapter_name: str) -> int:
         _validate_adapter_name(adapter_name)

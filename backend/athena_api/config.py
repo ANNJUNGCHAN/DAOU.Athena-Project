@@ -15,6 +15,12 @@ KIWOOM_MOCK_BASE_URL = "https://mockapi.kiwoom.com"
 LEGACY_ACCOUNT_ALIAS = "default"
 ACCOUNT_ALIAS_PATTERN = re.compile(r"^[a-z0-9][a-z0-9_-]{0,31}$")
 
+# 로그 서브시스템 키. 실제 로거 이름 매핑은 logging_config.SUBSYSTEM_LOGGERS에 있다 —
+# 여기 두는 이유는 설정 검증이 logging_config를 import하면 순환이 되기 때문이다.
+# 두 곳이 어긋나지 않는 것은 test_logging_config.py가 강제한다.
+LOG_SUBSYSTEMS = frozenset({"api", "brain", "kiwoom", "selector", "mcp", "uvicorn"})
+_LOG_LEVEL_NAMES = frozenset({"CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG", "NOTSET"})
+
 
 class OrderScope(StrEnum):
     """The three order families Kiwoom's REST surface actually exposes.
@@ -113,6 +119,100 @@ class Settings(BaseSettings):
     )
     # DART 공시 폴러 키 — 없으면 periodic 공시 루틴만 강등(realtime은 무관).
     dart_api_key: SecretStr | None = None
+    # Explicit argv for the local structured-extraction command (e.g. a local claude CLI
+    # invocation). Empty means extraction is disabled -- IngestionCoordinator still
+    # projects raw SourceRecords, it just never derives Entity/Claim/Relation from them.
+    # No implicit discovery: this is the only way extraction turns on (ADR §4, gap b).
+    brain_extraction_llm_argv: list[str] = []
+    # Hourly self-enqueue period for IngestionCoordinator (ADR §9 gate G005). Manual runs
+    # still go through the existing enqueue(JobTrigger.MANUAL) path unaffected by this.
+    brain_ingest_interval_minutes: int = 60
+
+    @field_validator("brain_extraction_llm_argv", mode="before")
+    @classmethod
+    def parse_brain_extraction_llm_argv(cls, value: object) -> object:
+        """Accept the JSON-array form from either an env var or a direct keyword."""
+        if not isinstance(value, str):
+            return value
+        text = value.strip()
+        if not text:
+            return []
+        try:
+            return json.loads(text)
+        except json.JSONDecodeError as exc:
+            raise ValueError(
+                "brain_extraction_llm_argv must be a JSON array of strings"
+            ) from exc
+
+    @field_validator("brain_ingest_interval_minutes")
+    @classmethod
+    def validate_brain_ingest_interval_minutes(cls, value: int) -> int:
+        if value <= 0:
+            raise ValueError("brain_ingest_interval_minutes must be positive")
+        return value
+
+    # --- 로깅 (logging_config.py가 소비) ------------------------------------------
+    # Open WebUI의 GLOBAL_LOG_LEVEL / LOG_FORMAT 계약을 이 저장소 접두사로 옮긴 것.
+    # 감사(audit) 로그 관련 설정은 **의도적으로 없다** — 본문을 남기는 감사 로그를 두지
+    # 않기 때문이다(CLAUDE.md §1 함정 ⑫). 근거는 logging_config.py 모듈 docstring.
+    log_level: str = "INFO"
+    log_format: str = "text"
+    # 서브시스템별 레벨 오버라이드. JSON 객체 문자열 또는 dict.
+    # 예: ATHENA_SRC_LOG_LEVELS='{"brain":"DEBUG"}'
+    src_log_levels: dict[str, str] = {}
+
+    @field_validator("log_level", "log_format", mode="before")
+    @classmethod
+    def normalize_log_enum(cls, value: object) -> object:
+        return value.strip() if isinstance(value, str) else value
+
+    @field_validator("log_level")
+    @classmethod
+    def validate_log_level(cls, value: str) -> str:
+        level = value.upper()
+        if level not in _LOG_LEVEL_NAMES:
+            raise ValueError(f"log_level must be one of {sorted(_LOG_LEVEL_NAMES)}")
+        return level
+
+    @field_validator("log_format")
+    @classmethod
+    def validate_log_format(cls, value: str) -> str:
+        fmt = value.lower()
+        if fmt not in {"text", "json"}:
+            raise ValueError("log_format must be 'text' or 'json'")
+        return fmt
+
+    @field_validator("src_log_levels", mode="before")
+    @classmethod
+    def parse_src_log_levels(cls, value: object) -> object:
+        if not isinstance(value, str):
+            return value
+        text = value.strip()
+        if not text:
+            return {}
+        try:
+            return json.loads(text)
+        except json.JSONDecodeError as exc:
+            raise ValueError(
+                "src_log_levels must be a JSON object of subsystem -> level"
+            ) from exc
+
+    @field_validator("src_log_levels")
+    @classmethod
+    def validate_src_log_levels(cls, value: dict[str, str]) -> dict[str, str]:
+        # Unknown keys are rejected rather than ignored: a typo'd subsystem that silently
+        # does nothing is how "why is my debug logging not working" afternoons happen.
+        normalized: dict[str, str] = {}
+        for key, level in value.items():
+            if key not in LOG_SUBSYSTEMS:
+                raise ValueError(
+                    f"unknown log subsystem '{key}'; known: {sorted(LOG_SUBSYSTEMS)}"
+                )
+            upper = str(level).upper()
+            if upper not in _LOG_LEVEL_NAMES:
+                raise ValueError(f"log level for '{key}' must be one of {sorted(_LOG_LEVEL_NAMES)}")
+            normalized[key] = upper
+        return normalized
 
     @field_validator("local_bearer_token", mode="before")
     @classmethod

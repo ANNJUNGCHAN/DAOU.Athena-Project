@@ -1,8 +1,11 @@
 # Athena 진행 상황 및 재개 계획
 
-> 최종 갱신: 2026-08-19 (2차 병합 — main 7차 능동 에이전트 P0~P4 + 디자인 8~10차
-> 리퀴드 글래스 전면 교체·커맨드 카드·글자 크기 5단계 합류, §1 첫 블록) · 브랜치 `main`
-> — **`디자인` 브랜치 병합 완료.** 두 갈래가 합류했다:
+> 최종 갱신: 2026-08-19 (3차 병합 — `그래프` 채팅→LadybugDB 성향 파이프라인 합류:
+> gap 2건 폐쇄·ADR 게이트 G005 완성·Open WebUI 방식 로그 관리. 직전 2차 병합은
+> main 7차 능동 에이전트 P0~P4 + 디자인 8~10차 리퀴드 글래스·커맨드 카드·글자 크기.
+> §1 첫 블록이 병합 재실측) · 브랜치 `main`
+>
+> 아래는 그 이전 상태다 — **`디자인` 브랜치 병합 완료.** 두 갈래가 합류했다:
 > ① 전 구간 지연 최적화(합의 계획 `.omc/plans/plan-latency-optimization.md`) — 진단 보고서는
 > [`plan/latency-audit-2026-08-19.md`](latency-audit-2026-08-19.md), "백엔드가 느리다"는
 > 전제가 반증됐다(백엔드 몫 0.2초, 병목은 모델 왕복). ② 디자인 갈래(디자인 비판 →
@@ -30,7 +33,24 @@
 > 번호는 **갈래별로 독립**이다 — `main` 갈래(4차 키움·5차 지연)와 `디자인` 갈래
 > (4차 리사이즈~7차 휘도)가 같은 날짜에 병렬로 진행됐다. 병합 직후 재실측이 맨 위다.
 
-**2026-08-19 (2차 병합) · `디자인`(8~10차) → `main`(7차) 병합 직후 재실측 — 이 수치가 현행이다:**
+**2026-08-19 (3차 병합) · `그래프`(채팅→그래프 파이프라인) → `main` 병합 직후 재실측 — 이 수치가 현행이다:**
+
+```
+backend: 835 passed, 0 failed (loadgroup 60.8초 · 771 + brain·logging 계열 +64) ·
+         ruff clean · generate --check current · 오퍼레이션 계약 319 → 325(brain 6라우트,
+         LLM 비노출 — 셀렉터 표면은 여전히 4툴)
+app:     npm test → 220건 통과, fail 0 (198 + history-sink 9·history-badge 7·리셋 배선 5 외)
+         npm run verify → 검증 1~19 전 단언 통과 · exit 0
+           검증17 능동 턴·주문 티켓(main) · 검증18 캡처 신뢰성(디자인) ·
+           검증19 "기록 안 됨" 배지(그래프 갈래의 검증17을 번호 충돌로 재부여)
+충돌 해소 6파일: preload.js(IPC 채널 합집합: 루틴 4+주문 1 ∪ 브레인 3+저장실패 1) ·
+         errors.py(핸들러 3계 공존: 루틴 422/409 + 브레인 503) · config.py(루틴 설정 +
+         브레인 추출·로깅 설정 병렬) · test_inventory(319+6=325, 근거 주석 병합) ·
+         verify.js(검증 번호 재부여) · plan.md(세 갈래 실측 블록 보존).
+         나머지는 -X ignore-cr-at-eol로 자동 병합(개행 차이 소거).
+```
+
+**2026-08-19 (2차 병합) · `디자인`(8~10차) → `main`(7차) 병합 직후 재실측:**
 
 ```
 app:  npm test → 198건 통과, fail 0 (main 197 + 디자인 window-placement 추가분 합류)
@@ -183,6 +203,150 @@ app:
 - **UX QA 5건 수정**: 고대비 `::placeholder` 예외(치명) · 캡처 신뢰성(치명) · TradingView 로고
   스크림(라이선스 유지) · 평시 placeholder/창 컨트롤 대비 · 카드 하단 글리프 절단 오독
   (주주균등처분→조조규등처부로 보이던 것 — `.is-clipped` 페이드로 잘림을 정직 표시).
+
+**2026-08-19 (그래프) · 채팅→그래프 파이프라인 결선 후 재실측:**
+
+```
+backend:  772 passed, 0 failed (직렬 172.8초)
+  ruff check . → All checks passed | generate_api.py --check → current (생성물 무접촉)
+app:
+  npm test        → 197건 통과 (기존 176 + history-sink 9 · history-badge 7 · 리셋 배선 5)
+  npm run verify  → 검증 1~17 전 단언 통과 · exit 0 (검증17 "기록 안 됨" 배지 신설)
+```
+
+**2026-08-19 (그래프) 세션 기록 — 채팅 이력 → LadybugDB 성향 파이프라인:**
+
+- **닫은 gap은 정확히 2건이었다**(노션 "GraphDB 사용 현황" 실측 문서 + `lifespan.py:80-90` docstring
+  근거): ① 채팅→`HistoryStore` **쓰기 경로 자체 부재**(`upsert_chat` 프로덕션 호출 0건)
+  ② `_open_brain`이 `IngestionCoordinator`를 `source_projector` 없이 생성 → **추출 0건**.
+  두 gap은 독립이고 순서는 ①→②다.
+- **배치·요약 API는 신규 발명이 아니라 ADR §9 게이트 G005의 완성**이다. `JobTrigger.HOURLY`는
+  `history.py:39-43`에, `GraphStore.summary()`는 `store.py:635`에 **이미 있었다** — 없던 것은
+  주기 호출 타이머 하나와 loopback 라우트뿐. 그래서 APScheduler 등 신규 의존성은 0건이다.
+- **채팅 삽입 지점은 renderer가 아니라 main 프로세스**(실측): `app/main.js:842` `runLiveQuery`
+  진입의 `query`, `:904-906`의 `answerText`. `claude-runner.js`가 stream-json을 이미
+  `finalResult`로 조립해줘서 CLI stdout 후킹이 불필요했다. `answerText`는 null일 수 있어 스킵한다.
+- **성향은 저장 시점이 아니라 읽기 시점에 계산한다.** Claim은 append-only로 쌓고
+  `graph.investor_profile_summary`(신규 고정 템플릿, ADR §6.2 allowlist 등재)가 90일 윈도우
+  관측 수 · 최신 관측일 · 평균 confidence를 낸다. 정렬은 **최신 관측일 desc → 카운트 desc → id**로
+  완전 결정론이다. 초안의 latest-wins는 기각했다 — 한 번 스친 발언이 누적 관측을 뒤집는다.
+  순수 카운트/기간 필터라 ADR §7(벡터·임베딩·모델 호출 금지)을 어기지 않는다.
+- **온톨로지는 v1 그대로**다. `investor_profile`/`preference`/`risk_signal` + `PREFERS`/`AVOIDS`/
+  `INTERESTED_IN`이 **이미 스키마에 있었고 한 번도 채워진 적이 없었을 뿐**이라 버전 bump가 없다.
+- **전체 삭제는 핫스왑이 아니라 프로세스 재시작을 요구한다** — `GraphStore.open()`/`HistoryStore.open()`
+  은 `_closed`면 `RuntimeError`(일회용 객체)이고 ADR §11이 "한 번만 open/close"를 못박는다.
+  `POST /api/v1/brain/reset-and-restart`는 기존 `_teardown_brain` 로직만 호출하고 파일
+  (sqlite3 + **`-wal`·`-shm`** + lbug, `unlink(missing_ok=True)`) 삭제 후 종료 신호를 낸다.
+  Electron 재기동은 **리셋 IPC 핸들러 안에서만** `once('exit')` 대기 후 `ensureBackend()`를
+  명시적으로 재호출한다 — `backend-launcher.js:137-140`의 전역 exit 훅은 재스폰을 안 하며,
+  거기에 자동 재스폰을 붙이는 것은 **크래시 루프 리스크**라 기각했다. 비자가스폰이면 "수동 재시작
+  필요"를 정직하게 안내한다.
+- **침묵 유실 금지**: 저장 실패 시 `athena:history-save-failed` IPC → 회색 무채색 "기록 안 됨" 배지.
+  단 `brain_ready=false`(기본)면 저장 시도도 배지도 없다 — "해당 없음"과 "실패"는 다른 상태다.
+- **LLM 노출 툴은 여전히 정확히 4개**다. 브레인 라우트 5개는 전부 `x-athena-llm-exposed: false`이고,
+  selector 카탈로그는 `generate_api.py` 생성 레지스트리에서만 빌드돼(`catalog.py:1,14`)
+  구조적으로 브레인을 대상 삼을 수 없다 — `HISTORY_COMMAND` 미매치 폴스루가 원천 안전한 이유다.
+- **함정 ⑫ 재확인**: `athena_api`에는 요청 바디를 찍는 미들웨어가 0건이다. 즉 현재 안전은
+  "마스킹 로직 덕"이 아니라 **"아무도 로깅을 안 하기 때문"**이다. 그래서 신규 핸들러는
+  `text`/`query`를 `logger.*`에 넣지 않고 `source_id`/`role`만 남기며, `caplog` 테스트로 강제한다.
+- **신규 실측 함정**: 이 워크트리는 한글 경로라 **`pytest -n auto`(xdist)가 워커 부팅에 실패한다**
+  (`EOFError: expected 1 bytes, got 0`, execnet bootstrap). 직렬로 돌려야 한다(213초).
+  CLAUDE.md §9의 병렬 규약은 ASCII 경로 전제다.
+- **교차 대조가 잡은 결함 1건(수정 완료)**: 구현은 배치 주기·수동 실행·실행 시각을 "아직 제공하지
+  않는다"로 정직하게 적었는데 **Paper 보드 48은 그것들이 동작하는 것처럼 그리고 있었다**(마지막/다음
+  실행 시각, "지금 실행" 버튼, ③ 재기동 게이지). soul.md §7 "없는 기능을 암시하는 장식 UI" 위반이다.
+  보드 48에 **"부분 구현" 배지 + 미구현 항목 명시**를 추가해 해소했다. 리뷰어는 US-006(구현)과
+  US-007(디자인)을 각각 봤기 때문에 이 불일치를 못 잡았다 — **장표와 구현은 반드시 교차 대조한다.**
+- **설정 섹션에서 실제로 동작하는 것은 "전체 삭제" 하나다.** 배치 주기는 표시만 하고
+  (`ATHENA_BRAIN_INGEST_INTERVAL_MINUTES`로 관리), 수동 실행 라우트는 백엔드에 없어 버튼을 만들지
+  않았다. `BrainStatusResponse`가 4필드(ready/ingestion_ready/extraction_enabled/fts_ready)뿐이라
+  실행 시각도 못 준다.
+- **실배선 E2E 실행 완료 — 그리고 결함 1건을 잡았다** (`app/probe-brain-chat-e2e.js`,
+  증거 `spike/cli-pipe/gateway/PROBE-BRAIN-CHAT-E2E.json`). 임시 브레인 DB + 별도 포트(8011)로
+  백엔드를 띄우고 Electron에서 실제 질의 1건을 `claude -p`에 태운 뒤 SQLite를 직접 조회했다.
+  - **1차: `pass:false`.** 2행은 들어갔지만 **user와 assistant의 conversation_id가 달랐다**
+    (`0a1fe408…` vs `5ff6842e…`). 원인: `claude -p --resume`이 매 성공 왕복마다 세션을 포크해
+    `liveSessionId`를 갱신하는데, role:user는 질의 진입 시점에·role:assistant는 반환 시점에
+    저장되므로 그 사이에 값이 바뀐다. 계획 §2(a)의 "liveSessionId를 conversation_id로 재사용"
+    전제가 **실측으로 뒤집혔다** — liveSessionId는 대화 식별자가 아니라 재개용 커서다.
+    조회(`GET /chats?conversation_id=`)가 반쪽 턴만 돌려주고 그래프 대화 묶음도 턴마다 쪼개진다.
+  - **수정**: conversation_id를 앱 세션 단위(`historyAppSessionId`)로 고정. `main.js:843` 주석이
+    이미 "대화는 앱 수명 단위다"라고 적고 있었으니 원래 이쪽이 맞았다.
+  - **2차: `pass:true`** — 2행(user·assistant)·동일 conversation_id·한글 원문 보존·
+    실응답("2") 확인. app npm test 197/197 유지.
+  - 부수: 1차 증거의 한글이 깨져 있었다 — 파이썬 `print()`가 Windows 콘솔 인코딩(cp949)으로
+    나간 것이라 DB가 아니라 **증거 수집 경로의 결함**이었다. `PYTHONIOENCODING=utf-8` 고정으로
+    해소(§8 함정). 검증하다 같은 함정에 한 번 더 빠질 뻔했다 — **파일을 열어서 확인해야 한다.**
+- **로그 관리 도입 (Open WebUI 조사 반영)** — `athena_api/logging_config.py` 신설.
+  조사 대상은 Open WebUI(`backend/open_webui/env.py`, `utils/logger.py`) 실제 소스다.
+  - **가져온 것**: 전역 레벨(`ATHENA_LOG_LEVEL`) + **서브시스템별 오버라이드**
+    (`ATHENA_SRC_LOG_LEVELS='{"brain":"DEBUG"}'` — api/brain/kiwoom/selector/mcp/uvicorn) +
+    `ATHENA_LOG_FORMAT=text|json`(JSON은 줄당 객체 하나, upstream `_json_sink` 형태) + stdout 단일 싱크.
+    ※ upstream의 `SRC_LOG_LEVELS`는 현재 빈 dict에 *"Legacy variable, do not remove"* 주석이
+    달린 껍데기다 — 개념만 맞고 구현은 우리가 새로 했다.
+  - **안 가져온 것과 이유**: ① **Loguru** — 의존성이 늘고, 우리 자체 `getLogger` 호출은 2곳뿐이며
+    정작 중요한 uvicorn/FastAPI 레코드는 stdlib로 나온다. ② **본문을 담는 감사 로그** —
+    upstream `AUDIT_LOG_LEVEL=REQUEST_RESPONSE`는 `request_object`/`response_object`를
+    **무마스킹으로** 로테이션 파일에 쓴다. 시사적인 건 upstream 자신의 기본
+    `AUDIT_EXCLUDED_PATHS`가 `/chats,/chat,/folders`라는 점 — 채팅 본문이 민감하다는 걸 알고
+    기본 제외한다. 우리는 함정 ⑫가 그걸 기본값이 아니라 **금지**로 못박으므로 아예 만들지 않는다.
+    ③ **디스크 싱크·로테이션** — 로컬 단일 사용자 앱이라 스크럽할 운영자가 없고, 그 파일 자체가
+    함정 ⑫가 경고하는 산출물이 된다.
+  - **`SecretRedactingFilter` — 2계층**. ① **값 매칭**: 이 프로세스가 아는 비밀값(로컬
+    베어러·app_key·secret_key)을 포맷된 메시지에서 치환(f-string 호출부도 덮는다).
+    ② **형태 매칭**(`Bearer <x>`, `access_token=<x>` 등). ②가 왜 필요한가 —
+    **키움 액세스 토큰은 `TokenManager`가 기동 후 발급하고 `Bearer {token}`으로 렌더된다**
+    (`kiwoom/auth.py:84`). 즉 `Settings`에 없어서 ①만으로는 원천적으로 못 잡는다.
+    이 빈틈은 초판 구현에 실제로 있었고, Open WebUI 조사(정규식 마스킹 제안)가 짚어서 메웠다.
+    대가는 무해한 리터럴까지 지울 수 있다는 것인데, 살아 있는 토큰을 흘리는 것보다 낫다.
+    **둘 다 채팅 본문은 못 잡는다**(임의 사용자 텍스트라 형태가 없다) — 본문 금지는 코드
+    규칙이고 `caplog` 테스트가 강제한다.
+  - 회귀 방지: `test_no_audit_body_settings_exist`가 `audit` 이름의 설정이 생기면 실패한다
+    (upstream을 베껴 되살리는 것을 막는 장치). 테스트 23건 신설.
+- **채팅 로그 → 그래프 이관 단위 재설계 (2026-08-19 · Open WebUI 비교 판단)**.
+  "채팅 로그를 어떻게 저장하고 어떻게 그래프로 옮길 것인가"를 다시 따져 **저장은 옳고 옮기는
+  단위가 틀렸다**고 판정했다.
+  - **Open WebUI 실측**(`models/chats.py`, `internal/db.py`, `env.py`): 대화 1건 = `chat` 테이블 행
+    1개이고 대화 전체가 `chat` JSON 컬럼에 통째로 들어간다(`history.messages` 딕셔너리 +
+    `currentId`로 분기 트리). 성능 때문에 정규화 `chat_message` 행을 나중에 덧대 이중 쓰기 중이고
+    읽기는 정규화 우선·JSON 폴백. 기본 SQLite(`backend/data/webui.db`), SQLAlchemy+Alembic,
+    SQLCipher 암호화 옵션. **보존 정책은 없다**(사용자가 지울 때까지 영구).
+  - **저장 계층 판정: 우리가 낫다.** 우리는 처음부터 메시지 1건 = 행 1개(`source_records`)에
+    fingerprint + append-only `source_changes`까지 있다. 저들이 지금 겪는 "JSON 덩어리 → 정규화"
+    마이그레이션이 우리에겐 없다. **바꾸지 않는다.**
+  - **이관 계층 판정: 결함이다.** `ingestion.py:318-321`이 변경분을 레코드 하나씩 돌며
+    `project_source(change.record)`를 부르고, `extraction.py:376`은 그 레코드의 `text` 하나만
+    LLM에 싣는다. 즉 **성향 추출이 문맥 없는 단일 메시지만 본다.** "응 그거 좋아"는 이전 턴 없이
+    무의미하고, 목적이 성향 판별인데 구조적으로 품질이 안 나온다. 게다가 "차트 그려줘"처럼 신호 0인
+    메시지까지 전부 로컬 CLI spawn 1회를 쓴다.
+  - **해결책이 이미 스키마에 있었다**: `SourceKind.CONVERSATION`(`ontology.py:57`)이 정의돼 있는데
+    **한 번도 쓰인 적이 없다.** 설계가 대화 단위 소스를 예상해뒀는데 우리가 `chat_message`만 썼다.
+  - **채택 설계 — 2단 소스**(온톨로지·스키마 버전 변경 0): `chat_message`는 원본으로 계속 쌓되
+    **추출 대상에서 뺀다**(그래프 SourceRecord 노드로는 계속 올라가 Claim의 `SUPPORTED_BY` 근거가
+    된다). 대화를 전사(transcript)로 롤업한 `conversation` 소스를 만들고 **그것만 추출 대상**으로
+    삼는다. 롤업은 기존 `_upsert_source`를 재사용하므로 `source_changes` → 커서 → 어댑터라는
+    **기존 경로를 그대로 탄다** — 별도 파이프라인이 아니다. 여기서 Open WebUI가 참고가 된다:
+    **저장은 쪼개는 게 맞고, 의미를 읽을 때는 저들처럼 대화 덩어리가 맞다.**
+  - 부수 결함: 대화 목록을 만들 수단이 없었다(`chats_for_conversation`은 id를 이미 알아야 한다).
+    DISTINCT 집계 조회를 신설한다 — 이력 카드가 반쪽이던 원인.
+  - **구현 중 드러난 시한폭탄 1건(수정 완료)**: 전사에 길이 상한이 없었다. `SourceRecord.text`는
+    `LongText`(10,000자, `ontology.py:26`)인데 실제 대화는 수십 턴이면 넘는다. 넘는 순간 그 행이
+    `SourceRecord`로 역직렬화될 때 검증 실패 → 롤업 예외 → **롤업 실패는 잡 전체를 실패시키게 설계했으므로
+    대화 하나 때문에 모든 대화의 적재가 영구 정지**한다. 구현자가 정직하게 보고해 잡혔다.
+    → `MAX_TRANSCRIPT_CHARS`(9,000, 온톨로지 상한 아래) 예산 안에서 **최근 턴부터 채우는 슬라이딩
+    윈도우**로 수정. 오래된 턴이 창 밖으로 나가도 잃는 게 없다 — Claim은 그래프에 append-only로
+    남아 있고 창은 *다음* 추출이 다시 읽을 문맥만 제한한다. `included_message_count`·`truncated`를
+    속성에 기록해 그래프 독자가 "이건 대화의 꼬리만"임을 알 수 있게 했다(추측하게 두지 않는다).
+    회귀 테스트 3건으로 고정.
+    - 부수 실측: `ChatHistoryRecord.text`도 10,000자 상한이라 **단일 메시지는 그 이상이 될 수 없다.**
+      따라서 단일 턴 초과 분기가 실제로 담당하는 구간은 9,000 < len ≤ 10,000이다 — 예산을 온톨로지
+      상한과 같게 두지 않고 아래에 둔 이유다.
+  - 남은 리스크(미조치): `compact_conversations()`가 매 잡마다 **모든** 대화를 LIMIT 없이 순회한다.
+    내용 불변이면 fingerprint 일치로 즉시 no-op이라 비용은 낮지만 0은 아니다 — 대화 수가 크게
+    늘면 재검토한다(현재 실측 근거 없음).
+- **미완(정직)**: ① **노션 문서화는 하지 않는다** — 사용자 지시로 범위에서 제외(2026-08-19).
+  ② 보존기간·세분화 삭제 UI,
+  감시 에이전트의 그래프 소비(알림)는 **명시적 범위 밖**. ③ 집계 쿼리 성능 수용 기준 없음(후속 실측).
 
 **2026-08-19 (병합) · `디자인` → `main` 병합 직후 재실측:**
 

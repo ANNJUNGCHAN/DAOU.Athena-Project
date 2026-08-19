@@ -1,0 +1,80 @@
+{
+  "purpose": "실배선 E2E — claude -p 왕복 후 SQLite(source_records)에 chat_message user+assistant 2행 확인",
+  "ranAt": "2026-08-19T05:27:02.850Z",
+  "tmpRoot": "C:\\Users\\ajc22\\AppData\\Local\\Temp\\athena-brain-e2e-m1C9Kz",
+  "backendUrl": "http://127.0.0.1:8011",
+  "steps": {
+    "backendSpawn": {
+      "healthy": true,
+      "elapsedMs": 3317,
+      "stdoutTail": "INFO:     127.0.0.1:59748 - \"GET /api/v1/llm/manifest HTTP/1.1\" 200 OK\r\n",
+      "stderrTail": "INFO:     Started server process [49932]\r\nINFO:     Waiting for application startup.\r\nINFO:     Application startup complete.\r\nINFO:     Uvicorn running on http://127.0.0.1:8011 (Press CTRL+C to quit)\r\n"
+    },
+    "brainStatus": {
+      "status": 200,
+      "ok": true,
+      "body": {
+        "ready": true,
+        "ingestion_ready": true,
+        "extraction_enabled": false,
+        "fts_ready": true
+      }
+    },
+    "brainReadyCacheRefreshed": true,
+    "liveQuery": {
+      "query": "1+1은 얼마야? 숫자로만 짧게 대답해줘",
+      "elapsedMs": 5474,
+      "result": {
+        "ok": true,
+        "source": "live",
+        "error": null,
+        "answerText": "2",
+        "canvasTypes": [],
+        "diagnostics": {
+          "skippedLines": 0,
+          "totalEvents": 4
+        },
+        "durationMs": 1774
+      },
+      "error": null
+    },
+    "sqliteQuery": {
+      "ok": true,
+      "error": null,
+      "result": {
+        "rowCount": 2,
+        "rows": [
+          {
+            "source_id": "chat:246cee9b-958f-473d-9b7b-b05d9e53c5fe",
+            "source_kind": "chat_message",
+            "locator": "conversation:9b200c25-3841-44d7-912a-f6cb153d0742",
+            "text": "1+1은 얼마야? 숫자로만 짧게 대답해줘",
+            "metadata_json": "{\"chat\":{\"conversation_id\":\"9b200c25-3841-44d7-912a-f6cb153d0742\",\"role\":\"user\"},\"metadata\":{}}",
+            "occurred_at": "2026-08-19T05:27:09.501000Z"
+          },
+          {
+            "source_id": "chat:834458ad-38bb-48ce-8804-3992bf36bc85",
+            "source_kind": "chat_message",
+            "locator": "conversation:9b200c25-3841-44d7-912a-f6cb153d0742",
+            "text": "2",
+            "metadata_json": "{\"chat\":{\"conversation_id\":\"9b200c25-3841-44d7-912a-f6cb153d0742\",\"role\":\"assistant\"},\"metadata\":{}}",
+            "occurred_at": "2026-08-19T05:27:14.967000Z"
+          }
+        ]
+      }
+    }
+  },
+  "judgement": {
+    "answerTextWasNull": false,
+    "expectedRowCount": 2,
+    "actualRowCount": 2,
+    "hasUserRow": true,
+    "hasAssistantRow": true,
+    "sameConversationLocator": true,
+    "roles": [
+      "user",
+      "assistant"
+    ]
+  },
+  "pass": true
+}

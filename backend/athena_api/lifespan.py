@@ -1,5 +1,6 @@
 """Application resource lifecycle."""
 
+import asyncio
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager, suppress
 from dataclasses import dataclass
@@ -8,7 +9,14 @@ import httpx
 from fastapi import FastAPI
 
 from athena_api.accounts import AccountRuntime
-from athena_api.brain import GraphStore, HistoryStore, IngestionCoordinator
+from athena_api.brain import (
+    ExtractionService,
+    GraphStore,
+    HistoryStore,
+    IngestionCoordinator,
+    JobTrigger,
+    LocalCommandStructuredLlm,
+)
 from athena_api.config import KiwoomAccount, Settings, get_settings
 from athena_api.errors import KiwoomAuthError
 from athena_api.kiwoom import (
@@ -41,6 +49,21 @@ class BrainRuntime:
     coordinator: IngestionCoordinator | None = None
     ingestion_ready: bool = False
     ingestion_last_error: str | None = None
+    extraction_enabled: bool = False
+    hourly_task: asyncio.Task[None] | None = None
+
+
+async def _hourly_ingest_loop(coordinator: IngestionCoordinator, interval_seconds: float) -> None:
+    """Self-enqueue JobTrigger.HOURLY on a fixed period (ADR §9 gate G005).
+
+    Manual runs still use the pre-existing enqueue(JobTrigger.MANUAL) path unaffected by
+    this. Cancellation must propagate: _teardown_brain cancels and awaits this task
+    before stopping the coordinator, so CancelledError here is the ordinary shutdown
+    path, not a failure to swallow.
+    """
+    while True:
+        await asyncio.sleep(interval_seconds)
+        await coordinator.enqueue(JobTrigger.HOURLY)
 
 
 def _publish_default(app: FastAPI, runtime: AccountRuntime | None) -> None:
@@ -72,9 +95,24 @@ def _publish_brain(app: FastAPI, brain: BrainRuntime | None) -> None:
     app.state.brain_ingestion_last_error = (
         brain.ingestion_last_error if brain is not None else None
     )
+    app.state.brain_extraction_enabled = brain is not None and brain.extraction_enabled
+    # ingestion_ready is only ever True while history.open() succeeded and stayed open
+    # (see _open_brain: the except branch that sets ingestion_last_error always closes
+    # history again) -- so gating this the same way brain_store is gated on brain.ready
+    # guarantees a non-None value here is actually open.
+    app.state.brain_history = (
+        brain.history if brain is not None and brain.ingestion_ready else None
+    )
+    # Raw runtime handle for the reset-and-restart route (brain.py): it needs the actual
+    # BrainRuntime object to call _teardown_brain, not the flattened read-only views above.
+    # None whenever the runtime itself is None, independent of brain.ready/ingestion_ready
+    # -- a degraded-but-open runtime must still be reachable for teardown.
+    app.state.brain_runtime = brain
 
 
-async def _open_brain(settings: Settings) -> BrainRuntime:
+async def _open_brain(
+    settings: Settings, *, hourly_interval_seconds: float | None = None
+) -> BrainRuntime:
     """Best-effort brain startup: a missing native runtime degrades, lock contention does not.
 
     ADR investment-brain-architecture.md §4.1 makes this process the graph projection's
@@ -104,6 +142,10 @@ async def _open_brain(settings: Settings) -> BrainRuntime:
     `except BaseException` below is only for that escape path: it does not change the
     demotion semantics above, it just unwinds whatever was acquired so far before
     re-raising so the caller's abort path still fires.
+
+    ``hourly_interval_seconds`` overrides ``settings.brain_ingest_interval_minutes`` for
+    tests that need a fast self-enqueue tick without waiting real minutes; production
+    callers leave it unset.
     """
     lock = BrainProcessLock.for_db_path(settings.brain_db_path, label=str(settings.brain_db_path))
     lock.acquire()
@@ -128,7 +170,11 @@ async def _open_brain(settings: Settings) -> BrainRuntime:
             brain.fts_ready = True
         try:
             await history.open()
-            coordinator = IngestionCoordinator(history, store)
+            source_projector = None
+            if settings.brain_extraction_llm_argv:
+                client = LocalCommandStructuredLlm(tuple(settings.brain_extraction_llm_argv))
+                source_projector = ExtractionService(client, store)
+            coordinator = IngestionCoordinator(history, store, source_projector=source_projector)
             await coordinator.start()
         except Exception as exc:
             brain.ingestion_last_error = str(exc)
@@ -136,8 +182,22 @@ async def _open_brain(settings: Settings) -> BrainRuntime:
         else:
             brain.coordinator = coordinator
             brain.ingestion_ready = True
+            brain.extraction_enabled = source_projector is not None
+            interval_seconds = (
+                hourly_interval_seconds
+                if hourly_interval_seconds is not None
+                else settings.brain_ingest_interval_minutes * 60
+            )
+            brain.hourly_task = asyncio.create_task(
+                _hourly_ingest_loop(coordinator, interval_seconds),
+                name="athena-brain-hourly-ingest",
+            )
         return brain
     except BaseException:
+        if brain.hourly_task is not None:
+            brain.hourly_task.cancel()
+            with suppress(BaseException):
+                await brain.hourly_task
         if coordinator is not None:
             with suppress(BaseException):
                 await coordinator.stop()
@@ -158,6 +218,14 @@ def _publish_routines(app: FastAPI, routines: "RoutinesRuntime | None") -> None:
 
 async def _teardown_brain(app: FastAPI, brain: BrainRuntime | None) -> None:
     if brain is not None:
+        # The hourly self-enqueue timer must stop before IngestionCoordinator.stop()
+        # begins rejecting new enqueue() calls (ADR §4.2 step 3) -- otherwise a tick that
+        # fires mid-teardown races enqueue()'s own shutdown check. Symmetric with how the
+        # timer is only started once the coordinator itself is up in _open_brain.
+        if brain.hourly_task is not None:
+            brain.hourly_task.cancel()
+            with suppress(asyncio.CancelledError):
+                await brain.hourly_task
         # ADR §4.2 step 3: reject new enqueue -> drain/checkpoint -> writer cancel and
         # await -> DB close -> lock release. IngestionCoordinator.stop() implements the
         # first three; it must finish before the stores it writes through are closed.
@@ -217,6 +285,11 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
         runtimes: dict[str, AccountRuntime] = {}
         app.state.kiwoom_accounts = runtimes
         app.state.kiwoom_default_account = runtime_settings.kiwoom_default_account
+        # Injection point for brain.py's reset-and-restart route: None means "send this
+        # process a real SIGTERM" (production default, see brain.py's _default_shutdown_hook).
+        # Tests overwrite this attribute directly on the TestClient's app instance so the
+        # test process never actually gets killed.
+        app.state.brain_shutdown_hook = None
         _publish_default(app, None)
         _publish_brain(app, None)
         _publish_routines(app, None)

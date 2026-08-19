@@ -135,10 +135,15 @@ def test_inventory_partition_and_static_openapi_coverage() -> None:
                 assert operation["x-athena-llm-exposed"] is False
     assert len(operation_ids) == len(set(operation_ids))
     # 301 generated (149 unsplit query bases + 115 projections + 12 order + 23 websocket
-    # + 2 oauth) plus 18 service routes. Matches the common-screen manifest's routable count.
-    # 2026-08-19: 315 → 319 — routines 4라우트(draft/confirm/cancel/list) 신설
-    # (plan/능동-에이전트-실행계획-2026-08-19.md §7-6, ralplan 합의).
-    assert len(operation_ids) == 319
+    # + 2 oauth) plus 24 service routes. The generated 301 still matches the common-screen
+    # manifest's routable count below. 2026-08-19 병합 누계: 315 → 319(routines 4라우트
+    # draft/confirm/cancel/list — plan/능동-에이전트-실행계획-2026-08-19.md §7-6) →
+    # 325(brain 6라우트: chat ingest, status, chats, conversations, profile-summary,
+    # reset-and-restart — conversations added for the chat_message -> conversation rollup
+    # so a conversation list can be built without already knowing a conversation id).
+    # None of these are LLM-exposed -- the llm_exposed assertion further down is what
+    # pins the selector surface at 4 tools.
+    assert len(operation_ids) == 325
     assert "get_internal_oauth_status" in operation_ids
     manifest = json.loads(
         (BACKEND / "ref" / "kiwoom-common-screen-manifest.json").read_text(encoding="utf-8")

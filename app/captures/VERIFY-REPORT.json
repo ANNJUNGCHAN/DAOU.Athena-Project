@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-08-19T10:03:20.466Z",
+  "startedAt": "2026-08-19T11:46:42.376Z",
   "layout": {
     "scale": 1,
     "screen": {
@@ -55,18 +55,18 @@
     "ok": true
   },
   "expand": {
-    "frameCount": 32,
-    "p50": 16.699999999999818,
-    "p95": 33.299999999999955,
-    "max": 33.299999999999955,
-    "min": 16.5
+    "frameCount": 17,
+    "p50": 16.799999999999727,
+    "p95": 100.09999999999991,
+    "max": 100.09999999999991,
+    "min": 16.59999999999991
   },
   "collapse": {
-    "frameCount": 35,
+    "frameCount": 34,
     "p50": 16.699999999999818,
-    "p95": 16.800000000000182,
-    "max": 16.800000000000182,
-    "min": 16.5
+    "p95": 16.700000000000728,
+    "max": 33.599999999999454,
+    "min": 16.399999999999636
   },
   "afterCollapse": {
     "canvasVisible": false
@@ -167,7 +167,7 @@
     "renderedInChatWindow": true,
     "chatModeSteppedAside": true,
     "navExists": true,
-    "navHasFourItems": true,
+    "navHasFiveItems": true,
     "defaultPanelIsScreen": true,
     "accountsPanelOnNavSelect": true,
     "mcpPanelOnNavSelect": true,
@@ -190,7 +190,8 @@
       "화면",
       "계좌",
       "MCP 서버",
-      "모델"
+      "모델",
+      "성향・이력"
     ]
   },
   "settingsCommandBar": {
@@ -274,14 +275,14 @@
     "scaleFactor": 1.5,
     "before": {
       "x": 510,
-      "y": 864,
-      "width": 914,
+      "y": 861,
+      "width": 913,
       "height": 249
     },
     "after": {
       "x": 510,
-      "y": 864,
-      "width": 914,
+      "y": 861,
+      "width": 913,
       "height": 249
     },
     "sizeUnchanged": true,
@@ -511,7 +512,7 @@
   },
   "agentTurn": {
     "present": true,
-    "badge": "18:57 발화",
+    "badge": "20:41 발화",
     "mode": "실시간 (WS)",
     "source": "루틴 '검증 루틴' · 에이전트 발화 — 묻지 않은 턴입니다",
     "body": "005930 조건 도달 — 관측값 5.3 (임계 5). 값은 발화 시점 기준입니다 — 최신 확인은 다시 물어봐 주세요.",
@@ -528,5 +529,16 @@
     "totalShots": 20,
     "duplicates": []
   },
-  "finishedAt": "2026-08-19T10:03:54.658Z"
+  "historySaveFailedBadge": {
+    "moduleLoaded": true,
+    "pendingBeforeALine": true,
+    "userBadgeText": "기록 안 됨",
+    "assistantBadgeText": "기록 안 됨",
+    "userBadgeInsideTurnMeta": true,
+    "assistantBadgeInsideTurnMeta": true,
+    "noDuplicateMetaOnQLine": true,
+    "noDuplicateMetaOnALine": true
+  },
+  "historyChannelAllowed": true,
+  "finishedAt": "2026-08-19T11:47:20.971Z"
 }

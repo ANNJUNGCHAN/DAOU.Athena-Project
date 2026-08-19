@@ -8,6 +8,7 @@ from pathlib import Path
 import pytest
 
 from athena_api.brain import (
+    EXTRACTABLE_SOURCE_KINDS,
     ChatHistoryRecord,
     ChatRole,
     CompletedTradeRecord,
@@ -17,6 +18,7 @@ from athena_api.brain import (
     JobStatus,
     JobTrigger,
     RetryPolicy,
+    SourceKind,
     SourceRecord,
     TradeSide,
 )
@@ -80,6 +82,14 @@ class ConcurrencyTrackingProjection:
 
     async def reset_projection(self) -> None:
         await self._graph.reset_projection()
+
+
+class RecordingProjector:
+    def __init__(self) -> None:
+        self.projected_kinds: list[SourceKind] = []
+
+    async def project_source(self, source: SourceRecord) -> None:
+        self.projected_kinds.append(source.kind)
 
 
 class FailAfterResetProjection:
@@ -169,8 +179,10 @@ async def test_chat_and_completed_trade_incrementally_project_into_real_graph(st
     assert first is not None
     assert first.job_id == first_job.id
     assert first.status is JobStatus.SUCCEEDED
-    assert first.total_projected == 2
-    assert (await graph.summary()).sources == 2
+    # 2 raw sources (chat + trade) plus the conversation rollup compact_conversations()
+    # produces for the one chat conversation before adapters run.
+    assert first.total_projected == 3
+    assert (await graph.summary()).sources == 3
 
     await coordinator.enqueue(JobTrigger.HOURLY)
     unchanged = await coordinator.run_next()
@@ -183,8 +195,10 @@ async def test_chat_and_completed_trade_incrementally_project_into_real_graph(st
     clock.advance(timedelta(seconds=1))
     await coordinator.enqueue(JobTrigger.HOURLY)
     changed = await coordinator.run_next()
-    assert changed is not None and changed.total_projected == 1
-    assert (await graph.summary()).sources == 2
+    # The edited chat_message and the conversation rollup it changes both re-project (the
+    # conversation's fingerprint changes too, since its transcript now includes the edit).
+    assert changed is not None and changed.total_projected == 2
+    assert (await graph.summary()).sources == 3
 
 
 async def test_mid_batch_failure_retries_from_last_success_without_duplicates(stores) -> None:
@@ -209,14 +223,19 @@ async def test_mid_batch_failure_retries_from_last_success_without_duplicates(st
     assert failed_attempt is not None
     assert failed_attempt.status is JobStatus.RETRY_WAIT
     assert await history.cursor("chat_history") == first.change_seq
+    # The conversation rollup itself already succeeded (it only touches history metadata),
+    # but the chat_history adapter failed on message-2 before conversation_history ever ran,
+    # so the graph only has message-1 -- the rolled-up conversation isn't projected yet.
     assert (await graph.summary()).sources == 1
 
     clock.advance(timedelta(seconds=1))
     retry = await coordinator.run_next()
     assert retry is not None
     assert retry.job_id == job.id
-    assert retry.total_projected == 1
-    assert (await graph.summary()).sources == 2
+    # message-2 (resumed) plus the conversation rollup, which conversation_history now
+    # reaches for the first time.
+    assert retry.total_projected == 2
+    assert (await graph.summary()).sources == 3
     assert (await history.get_job(job.id)).status is JobStatus.SUCCEEDED
 
 
@@ -243,9 +262,11 @@ async def test_cancellation_persists_retry_and_replays_idempotently(stores) -> N
     clock.advance(timedelta(seconds=1))
     recovery = IngestionCoordinator(history, graph, retry_policy=policy, clock=clock)
     report = await recovery.run_next()
-    assert report is not None and report.total_projected == 1
+    # message-1 (resumed, same fingerprint so a no-op re-upsert) plus the conversation
+    # rollup, which conversation_history reaches for the first time on this retry.
+    assert report is not None and report.total_projected == 2
     assert await history.cursor("chat_history") == change.change_seq
-    assert (await graph.summary()).sources == 1
+    assert (await graph.summary()).sources == 2
     assert (await history.get_job(job.id)).status is JobStatus.SUCCEEDED
 
 
@@ -282,7 +303,8 @@ async def test_bounded_queue_backpressures_concurrent_producers_and_single_write
     await coordinator.stop()
 
     assert tracker.max_active == 1
-    assert (await graph.summary()).sources == 5
+    # 5 chat messages plus the one conversation rollup they compact into.
+    assert (await graph.summary()).sources == 6
     assert (await history.get_job(first.id)).status is JobStatus.SUCCEEDED
     assert (await history.get_job(second.id)).status is JobStatus.SUCCEEDED
 
@@ -294,7 +316,9 @@ async def test_bounded_queue_backpressures_concurrent_producers_and_single_write
     await coordinator.start()
     await coordinator.drain()
     await coordinator.stop()
-    assert (await graph.summary()).sources == 6
+    # +1 new chat message; the conversation rollup revises its existing source_id rather
+    # than adding a new one, so the distinct-source count grows by 1, not 2.
+    assert (await graph.summary()).sources == 7
     assert (await history.get_job(restarted_job.id)).status is JobStatus.SUCCEEDED
     assert tracker.max_active == 1
 
@@ -356,7 +380,8 @@ async def test_enqueue_is_rejected_while_stop_is_draining(stores) -> None:
     # The rejected enqueue() raised before ever calling history.create_job(), so it left
     # no durable job behind for a future start() to pick up.
     assert await history.due_job_ids(now=NOW, limit=10) == ()
-    assert (await graph.summary()).sources == 1
+    # message-1 plus the conversation rollup it compacts into.
+    assert (await graph.summary()).sources == 2
 
 
 async def test_enqueue_works_again_once_stop_returns(stores) -> None:
@@ -413,9 +438,10 @@ async def test_rebuild_failure_restarts_from_zero_and_replays_authoritative_hist
     clock = ManualClock(NOW)
     initial = IngestionCoordinator(history, graph, clock=clock)
     await initial.enqueue(JobTrigger.MANUAL)
-    assert (await initial.run_next()).total_projected == 1
+    # message-rebuild plus the conversation rollup it compacts into.
+    assert (await initial.run_next()).total_projected == 2
     assert await history.cursor("chat_history") == change.change_seq
-    assert (await graph.summary()).sources == 1
+    assert (await graph.summary()).sources == 2
 
     interrupted = IngestionCoordinator(history, FailAfterResetProjection(graph), clock=clock)
     with pytest.raises(RuntimeError, match="deterministic reset interruption"):
@@ -441,9 +467,88 @@ async def test_rebuild_failure_restarts_from_zero_and_replays_authoritative_hist
         await restarted.start()
         await restarted.drain()
         await restarted.stop()
-        assert (await reopened_graph.summary()).sources == 1
+        # Both adapter cursors were reset by rebuild_projection(), so the replay re-derives
+        # message-rebuild (chat_history) and the already-recorded conversation rollup
+        # (conversation_history) into the freshly-reset graph.
+        assert (await reopened_graph.summary()).sources == 2
         assert await reopened_history.cursor("chat_history") == change.change_seq
         assert await reopened_history.due_job_ids(now=NOW, limit=10) == ()
     finally:
         await reopened_graph.close()
         await reopened_history.close()
+
+
+# --- conversation rollup wired into ingestion -------------------------------------------
+
+
+def test_extractable_source_kinds_excludes_chat_message() -> None:
+    assert SourceKind.CHAT_MESSAGE not in EXTRACTABLE_SOURCE_KINDS
+    assert EXTRACTABLE_SOURCE_KINDS == {
+        SourceKind.CONVERSATION,
+        SourceKind.TRADE,
+        SourceKind.RESEARCH,
+    }
+
+
+async def test_extraction_gate_skips_chat_message_but_projects_rolled_up_conversation(
+    stores,
+) -> None:
+    history, graph = stores
+    await history.upsert_chat(chat("message-1", "첫 메시지"), changed_at=NOW)
+    await history.upsert_chat(
+        chat("message-2", "둘째 메시지"), changed_at=NOW + timedelta(seconds=1)
+    )
+    clock = ManualClock(NOW + timedelta(seconds=1))
+    projector = RecordingProjector()
+    coordinator = IngestionCoordinator(history, graph, clock=clock, source_projector=projector)
+
+    job = await coordinator.enqueue(JobTrigger.MANUAL)
+    report = await coordinator.run_next()
+
+    assert report is not None
+    assert report.job_id == job.id
+    assert report.status is JobStatus.SUCCEEDED
+    # Both chat_message rows and the rolled-up conversation reach upsert_source (raw
+    # provenance kept for every kind), but project_source (extraction) only runs for the
+    # conversation rollup -- never for a lone, context-free chat_message.
+    assert projector.projected_kinds == [SourceKind.CONVERSATION]
+    assert (await graph.summary()).sources == 3  # 2 chat_message + 1 conversation
+
+
+async def test_extraction_gate_still_projects_completed_trades(stores) -> None:
+    history, graph = stores
+    await history.upsert_completed_trade(completed_trade(), changed_at=NOW)
+    clock = ManualClock(NOW)
+    projector = RecordingProjector()
+    coordinator = IngestionCoordinator(history, graph, clock=clock, source_projector=projector)
+
+    await coordinator.enqueue(JobTrigger.MANUAL)
+    report = await coordinator.run_next()
+
+    assert report is not None and report.status is JobStatus.SUCCEEDED
+    assert projector.projected_kinds == [SourceKind.TRADE]
+
+
+async def test_rollup_failure_fails_the_whole_job_before_any_adapter_runs(
+    stores, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    history, graph = stores
+    await history.upsert_chat(chat("message-1", "메시지"), changed_at=NOW)
+    clock = ManualClock(NOW)
+    coordinator = IngestionCoordinator(history, graph, clock=clock)
+
+    async def boom(*, now=None):
+        raise RuntimeError("deterministic rollup failure")
+
+    monkeypatch.setattr(history, "compact_conversations", boom)
+    job = await coordinator.enqueue(JobTrigger.MANUAL)
+
+    with pytest.raises(RuntimeError, match="deterministic rollup failure"):
+        await coordinator.run_next()
+
+    failed = await history.get_job(job.id)
+    assert failed is not None and failed.status is JobStatus.RETRY_WAIT
+    # A rollup failure must fail the job before any adapter advances -- no partial,
+    # silently-stale extraction pass.
+    assert await history.cursor("chat_history") == 0
+    assert (await graph.summary()).sources == 0

@@ -11,10 +11,14 @@ from athena_api.api import router as api_router
 from athena_api.config import Settings, get_settings
 from athena_api.errors import install_exception_handlers
 from athena_api.lifespan import build_lifespan
+from athena_api.logging_config import configure_logging
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
     runtime_settings = settings or get_settings()
+    # Before anything else can log: this installs the only stdout handler and the
+    # credential-redacting filter, so no startup line can predate the redaction.
+    configure_logging(runtime_settings)
     app = FastAPI(
         title=runtime_settings.app_name,
         version=runtime_settings.app_version,

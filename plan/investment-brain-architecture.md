@@ -149,6 +149,11 @@ template ID를 선택하고 모든 값은 parameter binding으로 전달한다.
 - `graph.evidence`
 - `graph.recommendation_context`
 - `graph.delete_projection`
+- `graph.investor_profile_summary` — 고정 investor_profile 엔티티(단일 사용자 로컬 앱)의
+  PREFERS/AVOIDS/INTERESTED_IN out-edge 대상 엔티티별 읽기 시점 시간윈도우 집계(최근 관측 Claim
+  수 · 최신 관측일 · 평균 confidence). 정렬은 최신 관측일 desc → 카운트 desc → id로 완전
+  결정론. 시간 기준(now)은 호출자 인자, 임베딩·모델 호출 없음 (`store.py`
+  `investor_profile_summary`).
 
 node/relationship table 이름, property 이름, sort expression처럼 parameterize할 수 없는 identifier는
 ontology registry의 고정 allowlist에서만 선택한다. free-form string interpolation, multi-statement

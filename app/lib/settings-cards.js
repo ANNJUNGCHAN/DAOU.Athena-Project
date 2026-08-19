@@ -243,6 +243,9 @@ const NAV_ITEMS = [
   { key: 'accounts', label: '계좌', countChannel: 'athena:account-list', countKey: 'accounts' },
   { key: 'mcp', label: 'MCP 서버', countChannel: 'athena:mcp-list', countKey: 'servers' },
   { key: 'model', label: '모델' },
+  // 채팅→그래프 파이프라인 단계 5(.omc/plans/plan-chat-graph-pipeline.md §2(e)) —
+  // 배치·전체 삭제는 카운트 배지가 없다(투자 성향은 "몇 개"로 셀 표가 아니다).
+  { key: 'history', label: '성향・이력' },
 ];
 
 async function refreshNavCount(item, badgeEl) {
@@ -1691,8 +1694,112 @@ async function refreshModelCard(card, head, body) {
   body.appendChild(note);
 }
 
+// =============================================================================
+// 성향・이력 — 채팅→그래프 파이프라인 단계 5(.omc/plans/plan-chat-graph-pipeline.md
+// §2(e)/(f)/3). 배치 주기·수동 실행·마지막/다음 실행은 지금 백엔드 상태 API
+// (GET /api/v1/brain/status)가 노출하지 않는다 — 조용히 지어내지 않고 "설정
+// 파일로 관리"/"아직 제공하지 않는다"로 정직하게 적는다(CLAUDE.md §4). 전체
+// 삭제만 실제로 동작한다: 확인 바(deleteConfirmBar, 계좌/MCP 카드와 같은
+// 컴포넌트) → athena:brain-reset → 진행/완료·재기동 안내.
+// =============================================================================
+
+function renderHistory(grid) {
+  const { card, head, body } = buildCardShell(grid, 'history');
+  return refreshHistoryCard(card, head, body);
+}
+
+async function refreshHistoryCard(card, head, body) {
+  let status;
+  try {
+    status = await window.athena.invoke('athena:brain-status');
+  } catch (err) {
+    status = { ok: false, error: String((err && err.message) || err) };
+  }
+  clear(head);
+  clear(body);
+
+  head.appendChild(row('uk-settings-title', [
+    el('span', 'uk-settings-name', '성향・이력'),
+  ]));
+  const actions = row('uk-settings-actions', []);
+  actions.appendChild(cardCloseButton(card));
+  head.appendChild(actions);
+
+  const readyPill = status && status.ok
+    ? pill(status.ready ? '브레인 준비됨' : '브레인 준비 안 됨', status.ready ? 'ok' : 'dim')
+    : pill('상태 조회 실패', 'warn');
+  body.appendChild(row('uk-toggle-row', [
+    el('span', 'uk-toggle-label', '브레인 상태'),
+    readyPill,
+  ]));
+  if (!(status && status.ok)) {
+    body.appendChild(errorNote((status && status.error) || '상태를 조회할 수 없다'));
+  }
+
+  const infoNote = el('div', 'uk-settings-note');
+  infoNote.appendChild(el('div', null, '배치 주기 — 설정 파일로 관리한다(ATHENA_BRAIN_INGEST_INTERVAL_MINUTES, 기본 60분). 이 화면은 값을 바꾸지 않는다.'));
+  infoNote.appendChild(el('div', null, '수동 실행 · 마지막/다음 실행 시각 — 상태 API가 아직 이 값을 노출하지 않아 이 화면에서 제공하지 않는다.'));
+  body.appendChild(infoNote);
+
+  const dangerNote = el('div', 'uk-settings-note');
+  dangerNote.appendChild(el('div', null, '전체 삭제 — 저장된 채팅 이력과 투자 성향 그래프를 모두 지우고 백엔드를 재기동한다. 되돌릴 수 없다.'));
+  body.appendChild(dangerNote);
+
+  const resultBox = el('div');
+  body.appendChild(resultBox);
+
+  const deleteRow = row('uk-btn-row-end', []);
+  const deleteBtn = button('ghost', '전체 삭제', { onClick: () => onDeleteClick() });
+  deleteBtn.classList.add('is-danger');
+  deleteRow.appendChild(deleteBtn);
+  body.appendChild(deleteRow);
+
+  function onDeleteClick() {
+    clear(resultBox);
+    const { bar, cancelBtn, confirmBtn } = deleteConfirmBar(
+      '채팅 이력과 투자 성향을 전부 삭제할까요? 되돌릴 수 없다.',
+    );
+    resultBox.appendChild(bar);
+    deleteBtn.disabled = true;
+    cancelBtn.addEventListener('click', () => {
+      clear(resultBox);
+      deleteBtn.disabled = false;
+    });
+    confirmBtn.addEventListener('click', async () => {
+      cancelBtn.disabled = true;
+      confirmBtn.disabled = true;
+      confirmBtn.querySelector('.uk-btn-label').textContent = '삭제 중…';
+      let res;
+      let threw = false;
+      try {
+        res = await window.athena.invoke('athena:brain-reset');
+      } catch (err) {
+        threw = true;
+        res = { ok: false, error: String((err && err.message) || err) };
+      }
+      clear(resultBox);
+      if (threw || !(res && res.ok)) {
+        resultBox.appendChild(errorNote((res && res.error) || '삭제에 실패했다'));
+        deleteBtn.disabled = false;
+        return;
+      }
+      const note = el('div', 'uk-settings-note');
+      if (res.selfSpawned) {
+        note.appendChild(el('div', null, res.restarted
+          ? '삭제 완료 — 브레인 재기동 중이거나 이미 재기동됐다.'
+          : '삭제 완료 — 브레인 재기동 확인에 실패했다. 수동으로 재시작해야 할 수 있다.'));
+      } else {
+        note.appendChild(el('div', null, '삭제 완료 — 이 앱이 스폰한 백엔드가 아니라 자동으로 재기동하지 않는다. 백엔드를 수동으로 재시작한다.'));
+      }
+      resultBox.appendChild(note);
+      // 삭제 직후엔 다시 누를 대상이 없다 — 재확인은 카드를 닫았다 다시 여는
+      // 것으로 한다(refreshHistoryCard가 최신 상태를 다시 조회한다).
+    });
+  }
+}
+
 // UMD 각주(2026-08-18 렌더러 격리) — sanitize.js와 같은 패턴.
-const __exports = { renderAccounts, renderMcp, renderScreen, renderModel, renderNav };
+const __exports = { renderAccounts, renderMcp, renderScreen, renderModel, renderHistory, renderNav };
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = __exports;
 } else {
