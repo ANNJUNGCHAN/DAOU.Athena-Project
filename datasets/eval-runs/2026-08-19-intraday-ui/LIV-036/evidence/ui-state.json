@@ -1,0 +1,65 @@
+{
+ "chat": {
+  "answerCount": 5,
+  "lastAnswer": "DART 2025 사업보고서의 **연결** 포괄손익계산서 기준으로, 한미반도체 매출액은 2024년(제45기) 5,589억원에서 2025년(제46기) 5,767억원으로 늘었습니다. 증가율은 **+3.18%**(약 178억원 증가)입니다. 두 해 모두 같은 보고서의 당기·전기 수치라 연결 기준으로 일관되게 비교한 값입니다.",
+  "chipCount": 5,
+  "chipLabels": [
+   "공통 테이블",
+   "스트림",
+   "스트림",
+   "공통 테이블",
+   "공통 테이블"
+  ],
+  "dotClasses": [
+   "dot"
+  ],
+  "state": "idle",
+  "panels": {
+   "app": true,
+   "onboard": false,
+   "settings": false
+  }
+ },
+ "canvas": {
+  "cardCount": 1,
+  "cards": [
+   {
+    "classes": [
+     "mcp-table",
+     "w-full"
+    ],
+    "tableRows": 1,
+    "tableCols": 4,
+    "streamItems": 0,
+    "hasAlert": false,
+    "freeTree": false,
+    "text": "한미반도체(042700) 연결 기준 매출액 — 2024년(제45기) vs 2025년(제46기), DART 2025 사업보고서11:06:05 기준항목2024년 (제45기)2025년 (제46기)증가율수익(매출액) — 연결5,589억 1,719만원 (558,917,191,547원)5,766억 8,462만원 (576,684,619,527원)+3.18%"
+   }
+  ],
+  "clipPath": "circle(1375.47px at 34.5062px 741.281px)"
+ },
+ "stateTransitions": [
+  {
+   "state": "judging",
+   "at_ms": 0
+  },
+  {
+   "state": "calling",
+   "at_ms": 35595
+  },
+  {
+   "state": "idle",
+   "at_ms": 40058
+  }
+ ],
+ "screenshots": {
+  "chat": {
+   "width": 2363,
+   "height": 1178
+  },
+  "canvas": {
+   "width": 2343,
+   "height": 1205
+  }
+ }
+}

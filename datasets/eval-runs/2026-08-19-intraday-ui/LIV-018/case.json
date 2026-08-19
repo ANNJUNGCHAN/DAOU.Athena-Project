@@ -1,0 +1,55 @@
+{
+ "id": "LIV-018",
+ "tier": "live",
+ "category": "live-공시검증",
+ "difficulty": "최상",
+ "question": "반도체 소재·부품 쪽 DB하이텍, 티씨케이, 이수페타시스 이 세 곳 중에 최근에 정정공시 낸 데가 있는지 각각 확인해줄 수 있어요?",
+ "why_hard": "①세 회사 각각 corp_code 변환+공시조회로 6회 이상 툴을 합성해야 한다. ②'정정공시'에 해당하는 공시 유형만 다른 공시 유형과 구분해서 걸러내는 판단이 필요하다. ⑤세 회사 중 일부만 있거나 전부 없을 수 있어 회사별로 독립적인 결과(있음/없음)를 정확히 구분해 보고해야 하는 부분실패 처리가 걸려 있다.",
+ "expected_answer": "DB하이텍·티씨케이·이수페타시스 세 회사 각각의 최근 공시 목록에서 정정공시 존재 여부를 확인해, 있으면 있다고 날짜·정정 사유와 함께, 없으면 없다고 회사별로 구분해 답한다.",
+ "judge": {
+  "must_include": [
+   "세 회사 각각 corp_code를 개별적으로 조회해 사용했다는 근거",
+   "회사별로 정정공시 존재 여부를 독립적으로 구분해 보고",
+   "정정공시가 있는 경우 실제 정정 날짜와 정정 사유를 구체적으로 인용"
+  ],
+  "must_not_include": [
+   "한 회사의 결과를 다른 회사에도 그대로 적용해 혼동",
+   "세 회사를 조회하지 않고 '있을 것 같다'는 추측성 답변",
+   "정정공시가 없는 회사를 있다고 지어냄"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 3개 이상 있다",
+   "audit-log에 alias=korea-stock-mcp tool=get_disclosure_list success=true 행이 3개 이상 있다"
+  ]
+ },
+ "expected_route": {
+  "kind": "mcp-upstream",
+  "tool_path": [
+   "korea-stock-mcp__get_corp_code",
+   "korea-stock-mcp__get_disclosure_list",
+   "korea-stock-mcp__get_corp_code",
+   "korea-stock-mcp__get_disclosure_list",
+   "korea-stock-mcp__get_corp_code",
+   "korea-stock-mcp__get_disclosure_list",
+   "athena__render_canvas"
+  ],
+  "api_id": null,
+  "family": null,
+  "upstream": "korea-stock-mcp",
+  "detail_group": null
+ },
+ "expected_screen": {
+  "window": "대화 창+캔버스 창",
+  "mode": null,
+  "card": "mcp-table",
+  "current_renderer": "mcp-table"
+ },
+ "implementation_status": "동작-실배선",
+ "notes": "korea-stock-mcp get_corp_code/get_disclosure_list 승인 목록 실존(_mcp-tools.json). 세 회사 배치 조회는 동일 툴 반복 호출이라 corp_code별 zfill(8) 정규화를 매번 반복해야 하는 함정도 내포. 이 케이스에서 식별된 정정공시(있다면)는 별도 케이스에서 원문 대조로 이어진다.",
+ "group": "live-disclosure",
+ "persona": "애널리스트"
+}

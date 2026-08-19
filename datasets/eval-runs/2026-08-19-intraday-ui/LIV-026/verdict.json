@@ -1,0 +1,25 @@
+{
+ "case_id": "LIV-026",
+ "run": "2026-08-19-intraday-ui",
+ "verdict": "fail",
+ "auto_checks": [
+  {"check": "audit-log에 alias=korea-stock-mcp tool=get_disclosure success=true 행이 있다", "ok": false, "evidence": "audit-delta.jsonl: get_corp_code, get_disclosure_list, search_news 3행뿐 — get_disclosure 행 없음"},
+  {"check": "audit-log에 alias=korea-stock-mcp tool=get_financial_statement 행이 있다", "ok": false, "evidence": "audit-delta.jsonl: get_financial_statement 행 없음"},
+  {"check": "audit-log에 alias=naver-search-2 tool=search_news success=true 행이 있다", "ok": true, "evidence": "audit-delta.jsonl:3 {\"alias\":\"naver-search-2\",\"tool\":\"search_news\",\"success\":true}"},
+  {"check": "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 1개 이상 있다", "ok": true, "evidence": "audit-delta.jsonl:1 {\"alias\":\"korea-stock-mcp\",\"tool\":\"get_corp_code\",\"success\":true}"}
+ ],
+ "must_not_include": [
+  {"item": "계산 과정 없이 '큰 규모다' 같은 정성적 표현만 제시", "violated": false, "evidence": null},
+  {"item": "계약금액이나 매출액 수치를 조회 없이 임의로 창작", "violated": false, "evidence": null},
+  {"item": "관련 공시가 없는데 있다고 지어냄", "violated": false, "evidence": null}
+ ],
+ "must_include": [
+  {"item": "실제 조회한 공급·수출계약 공시 원문에서 계약금액을 구체적으로 인용", "ok": false, "evidence": "chat-answer.txt: 계약 자체가 '없다'는 결론이라 인용된 계약금액 없음 — get_disclosure 미호출과 정합"},
+  {"item": "계약금액을 최근 매출액과 대조해 비율(%)을 계산하는 과정과 결과를 명시", "ok": false, "evidence": "chat-answer.txt / ui-state.json 캔버스 표: '매출 대비 비율 산출 불가' — 비율 계산 자체가 없음, get_financial_statement 미호출과 정합"},
+  {"item": "naver-search-2로 찾은 실제 관련 뉴스 반응 요약", "ok": true, "evidence": "ui-state.json canvas.cards[1].text: '08.10 글로벌이코노미 불닭으로 세계 입맛 잡은 삼양...', '08.03 조선비즈 삼양식품, 불닭 업고 영토 확장...' 등 날짜·매체·기사 구체 인용"},
+  {"item": "관련 공시가 없는 경우 없다고 정직하게 답했다는 조건부 서술", "ok": true, "evidence": "chat-answer.txt: '삼양식품은 최근 1년(2025.08~2026.08) DART 공시 62건 중 ... 대규모 공급·수출계약 공시가 한 건도 없어'"}
+ ],
+ "judge_note": "auto_checks 4개 중 get_disclosure·get_financial_statement 2개가 아예 호출되지 않아 1단계에서 fail. 답변은 '공급·수출계약 공시 없음'으로 결론지었는데, expected_answer는 계약금액 대 매출 비율 계산을 전제하고 있어 must_include 1·2도 충족 불가. 다만 must_include #4(공시 없으면 정직하게 답함)는 이 케이스의 정당한 분기로 설계돼 있어, auto_checks가 '있음' 분기만 강제하는 것과 구조적으로 충돌한다 — '없음'이 실제로 맞는 답이라면 이 케이스는 auto_checks 설계상 영원히 fail만 받을 수밖에 없다.",
+ "suspect_dataset_defect": true,
+ "duration_s": 68
+}

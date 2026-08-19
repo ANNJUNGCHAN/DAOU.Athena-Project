@@ -1,0 +1,70 @@
+{
+ "case_id": "LIV-024",
+ "tier": "live",
+ "persona": "개인투자자",
+ "question": "코스모신소재가 감자(자본감소)를 한다는 소문이 뉴스에 있던데, 진짜 공시가 났는지 확인해주고 났으면 감자비율이 몇 대 몇인지도 알려줘.",
+ "attachment": null,
+ "sent_text": "코스모신소재가 감자(자본감소)를 한다는 소문이 뉴스에 있던데, 진짜 공시가 났는지 확인해주고 났으면 감자비율이 몇 대 몇인지도 알려줘.",
+ "ran_at": "2026-08-19T01:50:51.836Z",
+ "duration_s": 45.9,
+ "first_card_ms": 40354,
+ "completed": true,
+ "timed_out": false,
+ "answer_chars": 278,
+ "chip_count_total": 5,
+ "chip_count_added": 1,
+ "chip_labels_added": [
+  "공통 테이블"
+ ],
+ "chip_labels_total": [
+  "공통 테이블",
+  "스트림",
+  "스트림",
+  "공통 테이블",
+  "공통 테이블"
+ ],
+ "state_transitions": [
+  {
+   "state": "judging",
+   "at_ms": 4
+  },
+  {
+   "state": "calling",
+   "at_ms": 40353
+  },
+  {
+   "state": "idle",
+   "at_ms": 45898
+  }
+ ],
+ "card_types_rendered": [
+  "mcp-table.w-full"
+ ],
+ "canvas_card_count": 1,
+ "canvas_cards_pre": 0,
+ "audit_calls": [
+  "korea-stock-mcp__get_corp_code=true",
+  "korea-stock-mcp__get_disclosure_list=true",
+  "korea-stock-mcp__get_disclosure=true"
+ ],
+ "judge": {
+  "must_include": [
+   "naver-search-2로 찾은 감자 관련 뉴스 언급 내용 인용",
+   "dart-mcp 공시 검색에서 확인한 실제 감자비율(확인됐다면 구체 수치)",
+   "공시로 확인되지 않을 경우 '소문 수준'이라고 정직하게 구분해서 답했다는 조건부 서술"
+  ],
+  "must_not_include": [
+   "공시 조회 없이 뉴스만으로 감자비율을 확정적으로 제시",
+   "실제 원문에 없는 감자비율 수치를 지어냄",
+   "감자 공시가 없는데 있다고 단정"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=naver-search-2 tool=search_news success=true 행이 있다",
+   "audit-log에 alias=dart-mcp tool=search_disclosure 행이 있다"
+  ]
+ }
+}

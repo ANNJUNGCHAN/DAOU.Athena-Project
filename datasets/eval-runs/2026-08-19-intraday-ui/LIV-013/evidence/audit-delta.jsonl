@@ -1,0 +1,16 @@
+{"ts":"2026-08-19T01:35:46.414662+00:00","tool":"athena_search","backend_ms":108}
+{"ts":"2026-08-19T01:35:48.066909+00:00","tool":"athena_describe","backend_ms":15}
+{"ts":"2026-08-19T01:35:56.953081+00:00","tool":"athena_resolve","backend_ms":94}
+{"ts":"2026-08-19T01:36:02.975157+00:00","tool":"athena_resolve","backend_ms":108}
+{"ts":"2026-08-19T01:36:08.312112+00:00","tool":"athena_resolve","backend_ms":0}
+{"ts":"2026-08-19T01:36:13.183908+00:00","tool":"athena_resolve","backend_ms":109}
+{"ts":"2026-08-19T01:36:31.529320+00:00","tool":"athena_resolve","backend_ms":140}
+{"ts":"2026-08-19T01:35:46.415663+00:00","alias":"kiwoom-selector","tool":"athena_search","success":true}
+{"ts":"2026-08-19T01:35:48.067907+00:00","alias":"kiwoom-selector","tool":"athena_describe","success":true}
+{"ts":"2026-08-19T01:35:56.953081+00:00","alias":"kiwoom-selector","tool":"athena_resolve","success":false}
+{"ts":"2026-08-19T01:36:02.976155+00:00","alias":"kiwoom-selector","tool":"athena_resolve","success":false}
+{"ts":"2026-08-19T01:36:08.312112+00:00","alias":"kiwoom-selector","tool":"athena_resolve","success":false}
+{"ts":"2026-08-19T01:36:13.184910+00:00","alias":"kiwoom-selector","tool":"athena_resolve","success":false}
+{"ts":"2026-08-19T01:36:31.530321+00:00","alias":"kiwoom-selector","tool":"athena_resolve","success":false}
+{"ts":"2026-08-19T01:36:24.070766+00:00","alias":"korea-stock-mcp","tool":"get_corp_code","success":true}
+{"ts":"2026-08-19T01:36:26.145179+00:00","alias":"korea-stock-mcp","tool":"get_market_type","success":true}

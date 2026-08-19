@@ -1,0 +1,50 @@
+{
+ "id": "LIV-041",
+ "tier": "live",
+ "category": "live-정렬판단",
+ "difficulty": "최상",
+ "question": "네이버 뉴스에서 알테오젠을 유사도순으로 받은 다음, 실제 발행 시각 기준으로 다시 정렬해서 스트림 카드로 보여줘. 여러 매체가 제목까지 똑같이 베낀 중복 기사는 하나로 합쳐줘.",
+ "why_hard": "sort='sim'은 유사도순이라 발행 시각과 무관하게 뒤섞여 오므로, 각 기사의 pubDate(RFC822)를 직접 파싱해 시간순으로 다시 정렬해야 한다(③). 유사도순 결과에는 여러 매체가 제목을 완전히 동일하게 재배포한 중복 기사가 실제로 섞여 나오는데(실측 100건 중 15건, 7개 그룹), 이를 감지해 하나로 합치는 판단이 필요하다(⑤). 최종적으로 ts/source/title/url 스키마에 맞춰 스트림 카드로 구성할지, 자유 카드로 갈지 판단해야 한다(⑥).",
+ "expected_answer": "sort='sim'으로 받은 결과의 pubDate를 파싱해 발행 시각순으로 재정렬하고, 제목이 완전히 동일한 중복 기사(다른 매체 재배포)는 하나로 병합한 뒤 stream 스키마(ts/source/title/url)에 맞춰 카드로 보여준다.",
+ "judge": {
+  "must_include": [
+   "sort='sim' 결과가 시간순이 아니라는 점을 인지하고 pubDate 기준으로 재정렬했다는 근거",
+   "제목이 동일하게 재배포된 기사를 감지해 중복 병합했다는 근거",
+   "pubDate(RFC822, KST)를 실제로 파싱해 ts로 변환했다는 처리 근거",
+   "stream 카드 스키마(ts/source/title/url)에 맞춰 데이터를 구성했다는 언급"
+  ],
+  "must_not_include": [
+   "API가 반환한 순서를 시간순으로 그대로 믿고 재정렬 없이 제시",
+   "제목이 동일한 중복 기사를 별개 기사로 그대로 여러 건 나열"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=naver-search-2 tool=search_news success=true 행이 있다",
+   "chat-answer 또는 canvas 데이터에서 중복 제목 기사가 하나로 합쳐져 있다"
+  ]
+ },
+ "expected_route": {
+  "kind": "mcp-upstream",
+  "tool_path": [
+   "naver-search-2__search_news",
+   "athena__render_canvas"
+  ],
+  "api_id": null,
+  "detail_group": null,
+  "family": null,
+  "upstream": "naver-search-2"
+ },
+ "expected_screen": {
+  "window": "대화 창+캔버스 창",
+  "mode": null,
+  "card": "스트림",
+  "current_renderer": "stream"
+ },
+ "implementation_status": "동작-실배선",
+ "notes": "sort=sim에서 15/100건이 7개 그룹으로 제목 완전 동일 재배포됨은 CAPTURE-S2B-naver.md 중복도 측정 실측(예: '삼성전자 상반기 D램 점유율...' 기사가 biz.chosun.com/yna.co.kr/news.sbs.co.kr 3개 매체). 게이트웨이 자체는 dedupe를 자동 호출하지 않아(_digest.md §5 '프로덕션 호출자 0건') 모델이 직접 처리해야 함. [리뷰 반영: 질문의 API 파라미터 표기 제거 — judge의 sort 관련 채점은 유지]",
+ "group": "live-temporal",
+ "persona": "브로커"
+}

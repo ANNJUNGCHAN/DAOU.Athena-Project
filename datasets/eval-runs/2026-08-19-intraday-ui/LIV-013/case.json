@@ -1,0 +1,54 @@
+{
+ "id": "LIV-013",
+ "tier": "live",
+ "category": "live-corp_code함정",
+ "difficulty": "최상",
+ "question": "카카오게임즈 오늘 기준 종가랑 등락률 좀 볼 수 있을까? 상장 시장부터 정확히 확인하고 가져와줘.",
+ "why_hard": "① corp_code 조회+시장구분 조회+시세 조회+렌더로 4회 이상 툴을 합성해야 하고, ② get_corp_code가 함께 반환하는 corp_code(8자리, get_market_type용)와 stock_code(6자리, get_stock_trade_info의 codeList용)를 정확히 구분해 쓰면서 get_market_type이 돌려주는 시장코드(Y/K/N/E)를 get_stock_trade_info가 요구하는 market enum(KOSPI/KOSDAQ/KONEX)으로 변환해야 하며, ⑤ KRX 21 엔드포인트가 활용신청 미승인이라 시세 조회 자체가 실패할 가능성이 높아 이를 정직하게 보고해야 한다.",
+ "expected_answer": "카카오게임즈는 코스닥(get_market_type의 K) 상장이라 get_stock_trade_info 호출 시 market을 KOSDAQ으로 지정해야 하지만, KRX 시세 조회는 활용신청 승인 여부가 확인되지 않아 'KRX request error'로 실패할 수 있고 그 경우 실패 사실을 그대로 알려야 한다.",
+ "judge": {
+  "must_include": [
+   "get_corp_code로 확보한 corp_code(8자리)는 get_market_type에, stock_code(6자리)는 get_stock_trade_info의 codeList에 각각 정확히 사용했다",
+   "get_market_type으로 카카오게임즈의 상장시장(K=코스닥)을 먼저 확인했다는 근거",
+   "K를 KOSDAQ 같은 get_stock_trade_info의 market enum 값으로 정확히 변환해 사용했다(원본 코드를 그대로 넣지 않았다)",
+   "시세 조회 결과(성공이든 KRX request error든)를 실측 없이 단정하지 않고 정직하게 보고했다"
+  ],
+  "must_not_include": [
+   "market 파라미터에 'K'/'Y' 원본 코드를 그대로 넣거나 corp_code와 stock_code를 서로 바꿔 씀",
+   "시세 조회 실패를 숨기고 가짜 종가·등락률을 제시"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "audit-log",
+   "ui-state"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 1개 이상 있다",
+   "audit-log에 alias=korea-stock-mcp tool=get_market_type success=true 행이 1개 이상 있다",
+   "audit-log에 alias=korea-stock-mcp tool=get_stock_trade_info 행이 1개 이상 있다(success 여부와 무관하게 시도 확인)"
+  ]
+ },
+ "expected_route": {
+  "kind": "cross-source",
+  "tool_path": [
+   "korea-stock-mcp__get_corp_code",
+   "korea-stock-mcp__get_market_type",
+   "korea-stock-mcp__get_stock_trade_info",
+   "athena__render_canvas"
+  ],
+  "family": null,
+  "api_id": null,
+  "detail_group": null,
+  "upstream": "korea-stock-mcp"
+ },
+ "expected_screen": {
+  "window": "대화 창+캔버스 창",
+  "mode": null,
+  "card": "notice",
+  "current_renderer": "notice"
+ },
+ "implementation_status": "차단-외부요인",
+ "notes": "KRX 21 엔드포인트 활용신청 미승인으로 get_stock_base_info/get_stock_trade_info 전부 'KRX request error' 실측(spike/captures/S2B-jjlabsio-stock-base-info.json, -stock-trade-info.json, market=KOSPI/codeList=[005930]에서도 재현) — 카카오게임즈도 동일 상류 제약을 받을 것으로 예상(_digest.md §4). get_market_type의 market 코드(Y/K/N/E)와 get_stock_trade_info의 market enum(KOSPI/KOSDAQ/KONEX)이 서로 다른 어휘 체계임은 S2B-jjlabsio-market-type.json({\"market\":\"Y\"})과 S2-jjlabsio-tools.json 스키마 대조로 확인. get_corp_code가 corp_code·stock_code를 선행 0 없는 숫자로 함께 반환함은 S2B-jjlabsio-corp-code.json 실측.",
+ "group": "live-finance",
+ "persona": "브로커"
+}

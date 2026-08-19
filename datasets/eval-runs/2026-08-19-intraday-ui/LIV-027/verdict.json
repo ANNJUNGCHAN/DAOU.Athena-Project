@@ -1,0 +1,23 @@
+{
+ "case_id": "LIV-027",
+ "run": "2026-08-19-intraday-ui",
+ "verdict": "pass",
+ "auto_checks": [
+  {"check": "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 있다", "ok": true, "evidence": "audit-delta.jsonl:1 {\"alias\":\"korea-stock-mcp\",\"tool\":\"get_corp_code\",\"success\":true}"},
+  {"check": "audit-log에 alias=korea-stock-mcp tool=get_disclosure success=true 행이 있다", "ok": true, "evidence": "audit-delta.jsonl:3 {\"alias\":\"korea-stock-mcp\",\"tool\":\"get_disclosure\",\"success\":true}"},
+  {"check": "저장됐다면 canvas-file의 data.highlights에 매각 수량 또는 사유 관련 항목이 1개 이상 있다", "ok": true, "evidence": "athena__save_canvas 호출 없음(canvas-file 미생성, evidence 디렉터리에 canvas json 없음) — 조건 미해당이므로 스킵. 대신 캔버스 카드 자체에 하이라이트 존재(ui-state.json canvas.cards[0].text: '하이라이트: 매각 수량: ... · 매각 사유: ...')로 취지 충족"}
+ ],
+ "must_not_include": [
+  {"item": "corp_code를 8자리 미만 숫자 그대로 사용해 조회 실패 가능성을 무시", "violated": false, "evidence": null},
+  {"item": "매각 수량·사유를 원문 근거 없이 임의로 서술", "violated": false, "evidence": null},
+  {"item": "지분 매각 공시가 없는데 있다고 지어냄", "violated": false, "evidence": null}
+ ],
+ "must_include": [
+  {"item": "corp_code를 8자리로 zero-pad(zfill)해서 사용했다는 명시적 근거", "ok": true, "evidence": "chat-answer.txt: '법인고유번호 01061327(8자리)로 조회해 리더에 띄웠습니다' — 8자리 명시"},
+  {"item": "지분 매각 공시 원문에서 매각 수량을 구체적으로 인용", "ok": true, "evidence": "chat-answer.txt: '매각 수량은 특별관계자 포함 합계 5,532,987주(지분율 68.13%→59.69%, -8.44%p)'; ui-state.json canvas.cards[0].text에도 동일 수치 하이라이트로 재확인"},
+  {"item": "지분 매각 사유를 원문 근거로 인용하며 하이라이트로 표시", "ok": true, "evidence": "ui-state.json canvas.cards[0].text: '하이라이트: ... · 매각 사유: 보고자의 장내매도(시간외매매)·특별관계자 장내매도·특별관계자 변동 — 매매대금 일부는 주식담보대출 상환에 사용 예정'"}
+ ],
+ "judge_note": "corp_code 8자리 zero-pad를 답변에 명시적으로 언급했고, 매각 수량·사유 모두 캔버스 리더 카드에 '하이라이트' 라벨로 원문 근거와 함께 제시됐다. auto_checks·must_not_include·must_include 전부 충족.",
+ "suspect_dataset_defect": false,
+ "duration_s": 142.4
+}

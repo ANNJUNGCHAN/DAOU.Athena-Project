@@ -1,0 +1,73 @@
+{
+ "case_id": "LIV-041",
+ "tier": "live",
+ "persona": "브로커",
+ "question": "네이버 뉴스에서 알테오젠을 유사도순으로 받은 다음, 실제 발행 시각 기준으로 다시 정렬해서 스트림 카드로 보여줘. 여러 매체가 제목까지 똑같이 베낀 중복 기사는 하나로 합쳐줘.",
+ "attachment": null,
+ "sent_text": "네이버 뉴스에서 알테오젠을 유사도순으로 받은 다음, 실제 발행 시각 기준으로 다시 정렬해서 스트림 카드로 보여줘. 여러 매체가 제목까지 똑같이 베낀 중복 기사는 하나로 합쳐줘.",
+ "ran_at": "2026-08-19T02:09:28.226Z",
+ "duration_s": 78.5,
+ "first_card_ms": 72512,
+ "completed": true,
+ "timed_out": false,
+ "answer_chars": 266,
+ "chip_count_total": 10,
+ "chip_count_added": 1,
+ "chip_labels_added": [
+  "스트림"
+ ],
+ "chip_labels_total": [
+  "공통 테이블",
+  "스트림",
+  "스트림",
+  "공통 테이블",
+  "공통 테이블",
+  "공통 테이블",
+  "공통 테이블",
+  "공통 테이블",
+  "공통 테이블",
+  "스트림"
+ ],
+ "state_transitions": [
+  {
+   "state": "judging",
+   "at_ms": 0
+  },
+  {
+   "state": "calling",
+   "at_ms": 72511
+  },
+  {
+   "state": "idle",
+   "at_ms": 78463
+  }
+ ],
+ "card_types_rendered": [
+  "stream.w-half"
+ ],
+ "canvas_card_count": 1,
+ "canvas_cards_pre": 0,
+ "audit_calls": [
+  "naver-search-2__search_news=true"
+ ],
+ "judge": {
+  "must_include": [
+   "sort='sim' 결과가 시간순이 아니라는 점을 인지하고 pubDate 기준으로 재정렬했다는 근거",
+   "제목이 동일하게 재배포된 기사를 감지해 중복 병합했다는 근거",
+   "pubDate(RFC822, KST)를 실제로 파싱해 ts로 변환했다는 처리 근거",
+   "stream 카드 스키마(ts/source/title/url)에 맞춰 데이터를 구성했다는 언급"
+  ],
+  "must_not_include": [
+   "API가 반환한 순서를 시간순으로 그대로 믿고 재정렬 없이 제시",
+   "제목이 동일한 중복 기사를 별개 기사로 그대로 여러 건 나열"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=naver-search-2 tool=search_news success=true 행이 있다",
+   "chat-answer 또는 canvas 데이터에서 중복 제목 기사가 하나로 합쳐져 있다"
+  ]
+ }
+}

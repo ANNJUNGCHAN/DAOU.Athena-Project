@@ -1,0 +1,64 @@
+{
+ "case_id": "LIV-012",
+ "tier": "live",
+ "persona": "개인투자자",
+ "question": "삼바 최근 사업보고서 매출액이랑 영업이익 좀 뽑아줄래?",
+ "attachment": null,
+ "sent_text": "삼바 최근 사업보고서 매출액이랑 영업이익 좀 뽑아줄래?",
+ "ran_at": "2026-08-19T01:34:53.853Z",
+ "duration_s": 38.2,
+ "first_card_ms": 34103,
+ "completed": true,
+ "timed_out": false,
+ "answer_chars": 148,
+ "chip_count_total": 1,
+ "chip_count_added": 1,
+ "chip_labels_added": [
+  "공통 테이블"
+ ],
+ "chip_labels_total": [
+  "공통 테이블"
+ ],
+ "state_transitions": [
+  {
+   "state": "judging",
+   "at_ms": 10
+  },
+  {
+   "state": "calling",
+   "at_ms": 34050
+  },
+  {
+   "state": "idle",
+   "at_ms": 38091
+  }
+ ],
+ "card_types_rendered": [
+  "mcp-table.w-full"
+ ],
+ "canvas_card_count": 1,
+ "canvas_cards_pre": 0,
+ "audit_calls": [
+  "dart-mcp__search_json_financial_data=true",
+  "dart-mcp__search_json_financial_data=true"
+ ],
+ "judge": {
+  "must_include": [
+   "'삼바'가 정식 회사명이 아니라는 점 또는 get_corp_code가 정확한 명칭 일치를 요구한다는 점을 인지했다는 근거",
+   "'삼성바이오로직스'라는 정식 법인명으로 '삼바' 시도 실패 이후 정식 법인명으로 재시도했다",
+   "매출액·영업이익 수치를 조회 결과에 근거해 제시했다(수치 날조 아님)"
+  ],
+  "must_not_include": [
+   "'삼바'를 그대로 corp_name에 넣고 빈 결과를 받았는데도 실패를 숨기고 임의 수치로 답변"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 1개 이상 있다",
+   "audit-log에 alias=korea-stock-mcp tool=get_financial_statement success=true 행이 1개 이상 있다",
+   "audit-log에 get_corp_code 호출 행이 2회 이상 기록된다"
+  ]
+ }
+}

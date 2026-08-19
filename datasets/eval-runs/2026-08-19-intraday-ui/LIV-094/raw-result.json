@@ -1,0 +1,42 @@
+{
+ "case_id": "LIV-094",
+ "tier": "live",
+ "persona": "재무전문가",
+ "question": "여러 카드가 필요한 질의 도중 첫 카드가 캔버스에 뜨고 진행줄이 '카드 1개 렌더됨'으로 바뀐 직후 Esc로 중단했습니다. 이미 뜬 카드는 어떻게 처리되며, 대화창에는 실패 안내가 남습니까?",
+ "attachment": null,
+ "harness": "run-cases-appmode.js",
+ "procedure": true,
+ "ran_at": "2026-08-19T03:45:46.641Z",
+ "duration_s": 29.8,
+ "completed": true,
+ "error": null,
+ "observations": {
+  "first_card_ms": 24828,
+  "cards_at_abort": 1,
+  "state_after_abort": "idle",
+  "new_answers_after_abort": 0,
+  "cards_after_abort": 1,
+  "canvas_visible_after_abort": true
+ },
+ "judge": {
+  "must_include": [
+   "abort 시 캔버스는 clear되지 않는다 — 이미 렌더링된 카드는 캔버스 창에 그대로 남는다",
+   "대화 창은 abortToken 불일치 가드 때문에 답변 turn 자체를 추가하지 않아 '실패' 안내조차 안 남는다",
+   "결과적으로 캔버스의 미완성 카드와 대화 이력의 무설명 상태가 서로 불일치한 채 남는다",
+   "이 상태에서 새 질의를 시작해도 남아있던 카드는 collapse를 거치지 않는 한 지워지지 않는다"
+  ],
+  "must_not_include": [
+   "남아있던 카드가 abort와 동시에 자동으로 지워졌다는 서술",
+   "대화 창에 '중단됨'이나 '실패' 안내 turn이 추가됐다는 오답"
+  ],
+  "verify_via": [
+   "ui-state",
+   "canvas-file",
+   "screenshot"
+  ],
+  "auto_checks": [
+   "ui-state: Esc 이후 #history에 새로운 turn-a 노드가 추가되지 않았다",
+   "ui-state: 캔버스 창에는 abort 직전까지 렌더된 카드 수가 그대로 유지된다"
+  ]
+ }
+}

@@ -1,0 +1,77 @@
+{
+ "case_id": "LIV-018",
+ "tier": "live",
+ "persona": "애널리스트",
+ "question": "반도체 소재·부품 쪽 DB하이텍, 티씨케이, 이수페타시스 이 세 곳 중에 최근에 정정공시 낸 데가 있는지 각각 확인해줄 수 있어요?",
+ "attachment": null,
+ "sent_text": "반도체 소재·부품 쪽 DB하이텍, 티씨케이, 이수페타시스 이 세 곳 중에 최근에 정정공시 낸 데가 있는지 각각 확인해줄 수 있어요?",
+ "ran_at": "2026-08-19T01:42:47.977Z",
+ "duration_s": 38,
+ "first_card_ms": 33957,
+ "completed": true,
+ "timed_out": false,
+ "answer_chars": 228,
+ "chip_count_total": 9,
+ "chip_count_added": 1,
+ "chip_labels_added": [
+  "공통 테이블"
+ ],
+ "chip_labels_total": [
+  "공통 테이블",
+  "공통 테이블",
+  "공통 테이블",
+  "스트림",
+  "공통 테이블",
+  "스트림",
+  "공통 테이블",
+  "스트림",
+  "공통 테이블"
+ ],
+ "state_transitions": [
+  {
+   "state": "judging",
+   "at_ms": 1
+  },
+  {
+   "state": "calling",
+   "at_ms": 33957
+  },
+  {
+   "state": "idle",
+   "at_ms": 37950
+  }
+ ],
+ "card_types_rendered": [
+  "mcp-table.w-full"
+ ],
+ "canvas_card_count": 1,
+ "canvas_cards_pre": 0,
+ "audit_calls": [
+  "korea-stock-mcp__get_corp_code=true",
+  "korea-stock-mcp__get_corp_code=true",
+  "korea-stock-mcp__get_corp_code=true",
+  "korea-stock-mcp__get_disclosure_list=true",
+  "korea-stock-mcp__get_disclosure_list=true",
+  "korea-stock-mcp__get_disclosure_list=true"
+ ],
+ "judge": {
+  "must_include": [
+   "세 회사 각각 corp_code를 개별적으로 조회해 사용했다는 근거",
+   "회사별로 정정공시 존재 여부를 독립적으로 구분해 보고",
+   "정정공시가 있는 경우 실제 정정 날짜와 정정 사유를 구체적으로 인용"
+  ],
+  "must_not_include": [
+   "한 회사의 결과를 다른 회사에도 그대로 적용해 혼동",
+   "세 회사를 조회하지 않고 '있을 것 같다'는 추측성 답변",
+   "정정공시가 없는 회사를 있다고 지어냄"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 3개 이상 있다",
+   "audit-log에 alias=korea-stock-mcp tool=get_disclosure_list success=true 행이 3개 이상 있다"
+  ]
+ }
+}

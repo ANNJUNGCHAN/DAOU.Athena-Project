@@ -1,0 +1,69 @@
+{
+ "case_id": "LIV-076",
+ "run": "2026-08-19-intraday-ui",
+ "verdict": "fail",
+ "auto_checks": [
+  {
+   "check": "ui-state: 스테이징 시트 staged[0].risks에 NODE_OPTIONS 관련 위험 항목이 존재한다",
+   "ok": false,
+   "evidence": "evidence/ui-state.json: chat.panels.settings=false, canvas.cardCount=0 — 설정 모드 자체가 열리지 않아 스테이징 시트가 렌더된 흔적이 없다. 답변 텍스트에서만 'NODE_OPTIONS 같은 …에는 경고 표시가 뜨는 게 바람직한 동작'이라고 가정형으로 서술할 뿐, 실제 시트 상태가 아니다"
+  },
+  {
+   "check": "ui-state: probe 시트에서 허용 툴 0개로 닫기 시도 시 인라인 경고(closeWarnBar)가 표시된다",
+   "ok": false,
+   "evidence": "evidence/ui-state.json에 probe/closeWarnBar 관련 필드나 흔적 없음 — 연결 테스트 창이 실제로 열린 적이 없다(chat.panels.settings=false)"
+  },
+  {
+   "check": "ui-state: 시트 어디에도 FX_API_KEY 값(abcd1234)이 노출되지 않는다(키 이름만 표시)",
+   "ok": true,
+   "evidence": "evidence/ui-state.json·chat-answer.txt 어디에도 'abcd1234' 문자열 없음 — 다만 시트 자체가 열리지 않아 검증이 공허하게 참(vacuous)인 수준"
+  }
+ ],
+ "must_not_include": [
+  {
+   "item": "위험 패턴이 있다는 이유로 등록 자체를 완전히 거부",
+   "violated": false,
+   "evidence": "chat-answer.txt: '이 설정은 그대로 등록하지 않는 게 좋습니다'라고 권고했지만 등록 절차 자체를 차단한다고 서술하지는 않음"
+  },
+  {
+   "item": "경고 없이 즉시 승인·spawn됐다고 서술",
+   "violated": false,
+   "evidence": "해당 서술 없음"
+  },
+  {
+   "item": "FX_API_KEY 값을 스캔·노출하는 것처럼 서술",
+   "violated": false,
+   "evidence": "chat-answer.txt: '시크릿처럼 보이는 값(FX_API_KEY)에는 경고 표시가 뜨는 게 바람직한 동작이고, 값은 마스킹돼야 합니다'로 값 비노출을 오히려 강조"
+  }
+ ],
+ "must_include": [
+  {
+   "item": "NODE_OPTIONS가 위험 env 키 이름 목록에 해당해 경고가 뜬다는 설명",
+   "ok": false,
+   "evidence": "chat-answer.txt는 '경고 표시가 뜨는 게 바람직한 동작'이라고 일반론·희망사항으로만 서술하고, 실제로 경고가 떴다는 관찰(ui-state 스테이징 시트)이 전혀 없다"
+  },
+  {
+   "item": "이 스캔은 값이 아니라 키 이름만 대조한다는 설명(FX_API_KEY 값은 스캔 대상 아님)",
+   "ok": false,
+   "evidence": "chat-answer.txt에 '키 이름만 대조한다'는 명시적 설명 없음(비밀값을 빼는 게 좋다는 일반적 보안 권고만 있음)"
+  },
+  {
+   "item": "경고는 차단이 아니라 알림이라 스테이징 자체는 진행된다는 설명",
+   "ok": false,
+   "evidence": "chat-answer.txt에 이 구분 서술 없음. 애초에 스테이징이 실제로 진행됐다는 증거(ui-state)도 없다"
+  },
+  {
+   "item": "서버 프로세스는 사용자가 '승인'해야만 spawn된다는 등록/승인 두 단계 구분",
+   "ok": true,
+   "evidence": "chat-answer.txt: '붙여넣고 분석 누른 직후 — 이 시점에는 서버가 실행되지 않아야 합니다' / '연결 테스트 창을 열 때 — 여기서 처음 서버 프로세스가 뜨고'로 등록(분석)과 실행(승인/probe) 단계를 구분해 서술"
+  },
+  {
+   "item": "연결 테스트(probe) 창에서 허용 툴 0개로 닫으려 하면 인라인 경고가 뜬다는 설명",
+   "ok": false,
+   "evidence": "chat-answer.txt에 probe를 0개 허용으로 닫을 때의 경고에 대한 명시적 서술이 없다(저장 상태 설명만 있음: '허용된 툴 0개' 상태가 저장된다는 서술은 있으나 '닫으려 할 때 경고가 뜬다'는 언급이 없음)"
+  }
+ ],
+ "judge_note": "질문은 사용자가 이미 수행한(수행할) 설정 화면 조작(등록 시트에 붙여넣기→분석→연결 테스트 창→툴 0개로 닫기)에 대해 '각 단계 정상 동작'을 묻는다. expected_screen.mode='설정'이 요구되지만 실행 결과 chat.panels.settings=false로 설정 모드 자체가 한 번도 열리지 않았고 캔버스 카드도 0장이다. 모델은 실제 스테이징/프로브 UI 상태를 관찰하지 않고 '이 프로젝트 디렉터리에는 .mcp.json과 예약 작업 파일만 있고 앱 구현 코드가 없어서, 위 내용은 실제 athena-shell 코드를 읽고 확인한 것이 아니라 기대되는 동작 기준'이라고 스스로 밝히며 일반론적 추정으로 답했다. auto_check가 요구하는 staged[0].risks·probe closeWarnBar 증거가 전혀 없고, must_include의 핵심 항목(값 아닌 키 이름 스캔 명시, 경고=알림이지 차단 아님, probe 0개 닫기 경고)도 관찰 근거 없이 충족되지 않아 fail.",
+ "suspect_dataset_defect": false,
+ "duration_s": 36.2
+}

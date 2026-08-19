@@ -1,0 +1,66 @@
+{
+ "case_id": "LIV-042",
+ "tier": "live",
+ "persona": "재무전문가",
+ "question": "SK하이닉스 재무제표를 조회했더니 금액이 세 컬럼(당기/전기/전전기)으로 나오는데, 왼쪽이 최신일 거라고 넘겨짚지 말고 실제 컬럼명이 가리키는 회계연도를 확인해서 매출액을 최신 연도부터 오래된 연도 순으로 정리해줘.",
+ "attachment": null,
+ "sent_text": "SK하이닉스 재무제표를 조회했더니 금액이 세 컬럼(당기/전기/전전기)으로 나오는데, 왼쪽이 최신일 거라고 넘겨짚지 말고 실제 컬럼명이 가리키는 회계연도를 확인해서 매출액을 최신 연도부터 오래된 연도 순으로 정리해줘.",
+ "ran_at": "2026-08-19T02:10:59.378Z",
+ "duration_s": 40.2,
+ "first_card_ms": 35842,
+ "completed": true,
+ "timed_out": false,
+ "answer_chars": 242,
+ "chip_count_total": 1,
+ "chip_count_added": 1,
+ "chip_labels_added": [
+  "공통 테이블"
+ ],
+ "chip_labels_total": [
+  "공통 테이블"
+ ],
+ "state_transitions": [
+  {
+   "state": "judging",
+   "at_ms": 9
+  },
+  {
+   "state": "calling",
+   "at_ms": 35841
+  },
+  {
+   "state": "idle",
+   "at_ms": 40185
+  }
+ ],
+ "card_types_rendered": [
+  "mcp-table.w-full"
+ ],
+ "canvas_card_count": 1,
+ "canvas_cards_pre": 0,
+ "audit_calls": [
+  "korea-stock-mcp__get_corp_code=true",
+  "korea-stock-mcp__get_financial_statement=true"
+ ],
+ "judge": {
+  "must_include": [
+   "thstrm_nm/frmtrm_nm/bfefrmtrm_nm 등 실제 라벨을 확인해 컬럼 순서를 검증했다는 근거",
+   "컬럼 위치만으로 최신순을 단정하지 않았다는 언급",
+   "매출액을 최신 연도부터 오래된 연도 순으로 재배열해 제시",
+   "오늘 날짜 기준으로 이미 제출됐을 보고서를 선택했다는 근거"
+  ],
+  "must_not_include": [
+   "컬럼 위치(왼쪽=최신)를 라벨 확인 없이 그대로 가정",
+   "매출액 계정이 여러 개 잡혔는데 어떤 걸 썼는지 언급 없이 하나만 제시"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=korea-stock-mcp tool=get_financial_statement success=true 행이 있다",
+   "chat-answer에 thstrm/frmtrm/bfefrmtrm 관련 라벨 확인 서술이 등장한다",
+   "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 1개 이상 있다"
+  ]
+ }
+}

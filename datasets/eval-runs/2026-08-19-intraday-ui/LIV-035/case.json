@@ -1,0 +1,53 @@
+{
+ "id": "LIV-035",
+ "tier": "live",
+ "category": "live-기간계산",
+ "difficulty": "최상",
+ "question": "LG전자 재무제표에서 매출액이랑 영업이익을 갖고 영업이익률을 당기랑 전기 두 시점으로 각각 계산해서, 전기 대비 좋아졌는지 나빠졌는지 알려줘.",
+ "why_hard": "get_financial_statement는 bsns_year·reprt_code를 정확히 지정해야 하는데, 아직 제출되지 않았을 미래 분기 보고서를 요청하지 않으려면 오늘 날짜를 먼저 확인해 '지금 시점에 이미 제출됐을 법한' 최근 보고서를 골라야 한다(①, get_today_date→get_corp_code→get_financial_statement 3단 합성). 응답은 계정과목별 평평한 레코드 배열이라 account_nm이 '매출액'인 행과 '영업이익'인 행을 각각 골라 thstrm_amount/frmtrm_amount로 나눠 비율을 두 번 계산해야 한다(③). 해당 회계연도·보고서 조합에 계정이 아예 없으면 빈 리스트가 올 수 있어 그 경우를 조용히 넘기면 안 된다(⑤).",
+ "expected_answer": "오늘 날짜 기준 이미 제출됐을 최근 보고서를 골라 get_financial_statement를 조회하고, 매출액·영업이익 행에서 thstrm_amount와 frmtrm_amount로 각각 영업이익률(영업이익/매출액)을 계산해 전기 대비 개선/악화 여부를 보고한다.",
+ "judge": {
+  "must_include": [
+   "오늘 날짜를 근거로 이미 제출됐을 법한 bsns_year/reprt_code를 선택했다는 설명",
+   "매출액·영업이익 계정을 각각 특정해 당기(thstrm)·전기(frmtrm) 값을 모두 사용",
+   "영업이익률(영업이익/매출액) 공식을 두 시점에 각각 적용해 비교",
+   "결과 리스트가 비어 있거나 필요한 계정이 없을 경우의 처리 방침 언급"
+  ],
+  "must_not_include": [
+   "아직 제출되지 않았을 미래 시점의 보고서를 요청",
+   "단순 전일 대비 등락률이나 매출액 증가율을 영업이익률로 착각"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=korea-stock-mcp tool=get_financial_statement success=true 행이 있다",
+   "chat-answer에 두 개의 영업이익률 수치(당기/전기)가 모두 등장한다",
+   "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 1개 이상 있다"
+  ]
+ },
+ "expected_route": {
+  "kind": "mcp-upstream",
+  "tool_path": [
+   "korea-stock-mcp__get_today_date",
+   "korea-stock-mcp__get_corp_code",
+   "korea-stock-mcp__get_financial_statement",
+   "athena__render_canvas"
+  ],
+  "api_id": null,
+  "detail_group": null,
+  "family": null,
+  "upstream": "korea-stock-mcp"
+ },
+ "expected_screen": {
+  "window": "대화 창+캔버스 창",
+  "mode": null,
+  "card": "mcp-table",
+  "current_renderer": "mcp-table"
+ },
+ "implementation_status": "동작-실배선",
+ "notes": "get_financial_statement 응답 형상(thstrm_amount/frmtrm_amount/account_nm 등)은 spike/captures/S2B-jjlabsio-financial-statement.json·CAPTURE-S2B-jjlabsio.md 확인. reprt_code enum(11013/11012/11014/11011)은 S2-jjlabsio-tools.json 스키마.",
+ "group": "live-temporal",
+ "persona": "재무전문가"
+}

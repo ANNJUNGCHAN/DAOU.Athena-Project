@@ -1,0 +1,59 @@
+{
+ "case_id": "LIV-100",
+ "run": "2026-08-19-intraday-ui",
+ "verdict": "pass",
+ "auto_checks": [
+  {
+   "check": "ui-state: probe 시트에 errorNote와 '서버 시작 승인 후 재시도' 버튼이 렌더된다",
+   "ok": true,
+   "evidence": "raw-result.json observations.sheet_text_head=\"probe 결과 · naver-search닫기ConsentNotGrantedError: 'naver-search' 서버는 아직 승인되지 않았다 — 명령 실행(spawn) 자체가 금지된다서버 시작 승인 후 재시도\", observations.sheet_buttons=['닫기','서버 시작 승인 후 재시도'], observations.retry_after_approve_button=true — evidence/probe-unapproved.png에서도 'probe 결과 · naver-search' 제목, ConsentNotGrantedError 경고 박스, '서버 시작 승인 후 재시도' 버튼이 모두 시각적으로 확인된다"
+  },
+  {
+   "check": "audit-log(_mcp-tools.json 재조회): naver-search 별칭이 테스트 이후에도 approved:false로 유지된다",
+   "ok": true,
+   "evidence": "실행 시점 관측(observations.naver_search_registry_state={unreadable:true})은 하네스의 mcp_servers.json 스키마 파싱 버그(servers를 배열로 가정하지만 실제는 별칭 키 dict)로 깨졌었다. evidence/post-hoc-registry-evidence.json으로 사후 보완: consent_naver_search_approved=false, registry_has_naver_search=true, naver_search_log_exists=false. 이 자리에서 지속 상태 파일을 직접 재확인해 동일 결과를 재현했다 — ~/.athena/consent.json의 naver-search 레코드는 approved:false·approved_at:null·approved_tools:[](naver-search-2는 별개로 approved:true — 혼동 없음), ~/.athena/mcp_servers.json.servers에 naver-search 등록은 유지돼 있으나(source=claude_desktop_snippet, notes='QA 픽스처 — 미승인 잔재 별칭... 2026-08-19 복원'), ~/.athena/logs/에 naver-search.log는 없다(dart-mcp.log·korea-stock-mcp.log·naver-search-2.log만 존재 — spawn 0). 하네스가 '서버 시작 승인 후 재시도' 버튼을 클릭하지 않고 '닫기'만 눌렀다는 절차 증거와도 정합"
+  }
+ ],
+ "must_not_include": [
+  {
+   "item": "probe가 정상적으로 툴 목록을 반환했다는 서술",
+   "violated": false,
+   "evidence": "sheet_text_head는 ConsentNotGrantedError만 담고 있고 툴 목록·protocolVersion 등 정상 probe 결과 형식은 전혀 없다"
+  },
+  {
+   "item": "'재시도' 버튼을 눌러 승인까지 진행했다는 서술",
+   "violated": false,
+   "evidence": "run-cases-appmode.js:580 `clickByText(chatWin, '.card.mcp .uk-sheet-close', '닫기')`만 호출되고 '서버 시작 승인 후 재시도' 버튼에 대한 클릭 호출은 코드에 없다. 사후 재확인한 consent.json에서도 naver-search.approved=false로 남아 있어 승인 IPC가 호출되지 않았음이 확정된다"
+  },
+  {
+   "item": "naver-search와 naver-search-2를 혼동해 같은 서버로 취급하는 서술",
+   "violated": false,
+   "evidence": "observations.open_row='clicked (clickable=true)'이고 sheet_text_head 제목이 정확히 'probe 결과 · naver-search'로, naver-search-2가 아닌 대상 별칭을 정확히 열었다(하네스의 행 선택 로직도 `t.startsWith('naver-search') && !t.startsWith('naver-search-2')`로 구분해 선택함, run-cases-appmode.js:561-566). 사후 재확인한 consent.json에서도 naver-search(approved:false)와 naver-search-2(approved:true)가 별개 레코드로 분리돼 있어 혼동 없음이 재확인된다"
+  }
+ ],
+ "must_include": [
+  {
+   "item": "naver-search는 approved:false이므로 athena:mcp-probe가 require_server_approved() 게이트에서 실패한다",
+   "ok": true,
+   "evidence": "sheet_text_head: \"ConsentNotGrantedError: 'naver-search' 서버는 아직 승인되지 않았다 — 명령 실행(spawn) 자체가 금지된다\". 사후 재확인한 ~/.athena/consent.json도 naver-search.approved=false를 직접 보여준다"
+  },
+  {
+   "item": "실패 화면에는 errorNote와 '서버 시작 승인 후 재시도' 버튼이 함께 뜬다",
+   "ok": true,
+   "evidence": "sheet_buttons=['닫기','서버 시작 승인 후 재시도'] + evidence/probe-unapproved.png 시각 확인"
+  },
+  {
+   "item": "이 버튼을 누르면 실제로 athena:mcp-approve가 호출돼 naver-search가 영구히 승인 상태로 바뀐다",
+   "ok": true,
+   "evidence": "정적 코드 확인 — app/lib/settings-cards.js:1238-1240 `button('primary', '서버 시작 승인 후 재시도', { onClick: async () => { try { await window.athena.invoke('athena:mcp-approve', { alias }); } catch {} runProbe(); } })` — 해당 버튼의 onClick이 정확히 athena:mcp-approve를 호출한다"
+  },
+  {
+   "item": "이 테스트는 관찰만 하고 버튼을 누르지 않아야 naver-search가 계속 approved:false로 남는다",
+   "ok": true,
+   "evidence": "run-cases-appmode.js:579-583 코드와 observations 어디에도 '서버 시작 승인 후 재시도' 버튼 클릭 기록이 없다 — '닫기'만 클릭했다(관찰 전용 절차 준수). 이제 사후 재확인한 ~/.athena/consent.json으로 결과까지 직접 확정된다 — naver-search.approved=false·approved_at=null이 테스트 이후에도 그대로 유지됐다"
+  }
+ ],
+ "judge_note": "must_include 4건 전부 O, must_not_include 위반 0건은 최초 채점 때부터 확정돼 있었다. 유일한 미확인 항목은 auto_check #2의 '테스트 이후 approved:false 유지' — 실행 시점 하네스가 mcp_servers.json을 배열로 오가정해 재조회가 항상 TypeError로 죽는 파싱 버그 때문에 unreadable이었다. 이번에 evidence/post-hoc-registry-evidence.json(2026-08-19T13:35 사후 수집)과 이 판정 시점의 직접 재확인(~/.athena/consent.json, ~/.athena/mcp_servers.json, ~/.athena/logs/ 실물 조회)으로 보완했다 — consent.json의 naver-search 레코드가 approved:false·approved_at:null로 유지되고, logs/에 naver-search.log가 없다(스폰 0). naver-search-2(approved:true)와는 완전히 분리된 별개 레코드임도 재확인해 혼동 우려도 해소됐다. blocked-env였던 유일한 사유가 해소됐으므로 pass로 재판정한다.",
+ "suspect_dataset_defect": false,
+ "duration_s": 7.2
+}

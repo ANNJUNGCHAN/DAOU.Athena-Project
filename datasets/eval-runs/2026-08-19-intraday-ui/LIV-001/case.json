@@ -1,0 +1,51 @@
+{
+ "id": "LIV-001",
+ "tier": "live",
+ "category": "live-재무비교",
+ "difficulty": "최상",
+ "question": "삼성전자의 최근 3개 사업연도 사업보고서를 기준으로 연결 부채비율 변화를 연도별로 정리해 주시기 바랍니다.",
+ "why_hard": "① corp_code 조회+재무제표 조회+캔버스 렌더로 3회 이상 툴을 합성해야 하고, ② get_financial_statement에 sj_nm(재무상태표)을 지정하지 않으면 자본변동표에도 같은 '자본총계' 계정명이 지배기업지분·비지배지분·소계별로 여러 번 나와 최종 자본총계 행을 잘못 골라 부채비율이 틀어질 수 있으며, ③ thstrm/frmtrm/bfefrmtrm 세 기간 각각 부채비율(부채총계÷자본총계×100)을 계산해 연도별 추이를 만들어야 한다.",
+ "expected_answer": "삼성전자 연결 부채비율은 제55기(2023) 약 25.4%→제56기(2024) 약 27.9%→제57기(2025) 약 29.9%로 매년 소폭 상승했다. 자본변동표의 중복된 '자본총계' 행이 아니라 재무상태표(BS)의 자본총계를 기준으로 계산해야 한다.",
+ "judge": {
+  "must_include": [
+   "부채총계÷자본총계×100 계산식 또는 그와 동치인 산식을 명시했다",
+   "3개년(제55/56/57기 또는 2023/2024/2025) 수치를 각각 구분해 제시했다",
+   "부채비율이 매년 상승(2023<2024<2025)했다는 방향을 정확히 짚었다",
+   "재무상태표(BS) 기준 자본총계를 썼다는 점 또는 자본변동표에 동일 계정명이 중복된다는 점을 인지했다는 근거가 드러난다"
+  ],
+  "must_not_include": [
+   "자본변동표의 소계성 '자본총계'(예: 897,514백만원 등 소액 행)를 그대로 분모로 써서 비율이 비정상적으로 커지는 오류",
+   "실측 없이 임의 수치를 날조"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 1개 이상 있다",
+   "audit-log에 alias=korea-stock-mcp tool=get_financial_statement success=true 행이 1개 이상 있다"
+  ]
+ },
+ "expected_route": {
+  "kind": "cross-source",
+  "tool_path": [
+   "korea-stock-mcp__get_corp_code",
+   "korea-stock-mcp__get_financial_statement",
+   "athena__render_canvas"
+  ],
+  "family": null,
+  "api_id": null,
+  "detail_group": null,
+  "upstream": "korea-stock-mcp"
+ },
+ "expected_screen": {
+  "window": "대화 창+캔버스 창",
+  "mode": null,
+  "card": "mcp-table",
+  "current_renderer": "mcp-table"
+ },
+ "implementation_status": "동작-실배선",
+ "notes": "get_financial_statement(corp_code=00126380, bsns_year=2025, reprt_code=11011, fs_div=CFS) 실측(spike/captures/S2B-jjlabsio-financial-statement.json): 부채총계 130,621,773/112,339,878/92,228,115백만원, 자본총계 436,320,337/402,192,070/363,677,865백만원(제57/56/55기) → 부채비율 29.94%/27.93%/25.36%. 자본변동표에 자본총계 동일 계정명이 897,514·402,135,600·16,876,248·424,313,255·12,007,082·436,320,337·4,403,893백만원 등 8회 이상 중복 출현 확인.",
+ "group": "live-finance",
+ "persona": "CFO"
+}

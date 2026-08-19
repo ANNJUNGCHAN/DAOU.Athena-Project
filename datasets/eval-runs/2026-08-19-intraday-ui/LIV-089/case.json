@@ -1,0 +1,47 @@
+{
+ "id": "LIV-089",
+ "tier": "live",
+ "category": "live-설정진입",
+ "difficulty": "최상",
+ "question": "커맨드바에 '삼성전자 계좌 연결 상태 확인하면서 오늘 시세도 같이 보여줘'라고 입력했습니다. 이 경우 삼성전자 시세 조회까지 함께 이루어지는 것이 맞습니까?",
+ "why_hard": "네 번째 대안 '계좌\\s*(연결|설정|관리)'가 문장 전체가 아니라 부분 문자열에 앵커 없이 매치돼, 사용자의 실제 의도(시세 조회)와 무관하게 설정 화면을 열어버린다는 오탐을 잡아야 한다(④ 정책·보안 경계 판단이 아니라 UX 오탐이지만 동일한 무게의 정책 경계, ⑤ 원하던 데이터가 아예 조회되지 않는 완전한 의도 실패를 에러로 인지해야 함).",
+ "expected_answer": "아니다 — '계좌 연결'이라는 부분 문자열이 정규식 네 번째 대안에 걸려 문장 전체 의도와 무관하게 설정 화면이 열려버린다. 삼성전자 시세 조회는 이 turn에서 실행되지 않는다.",
+ "judge": {
+  "must_include": [
+   "ui-state: #settings.hidden===false, #app.hidden===true (설정 화면이 열린다)",
+   "이 turn에서 시세 조회가 실행되지 않는다 — audit-log에 신규 upstream 호출 0건",
+   "삼성전자 시세 데이터가 화면 어디에도 나타나지 않는다"
+  ],
+  "must_not_include": [
+   "삼성전자 시세가 조회돼 답변에 포함됐다는 서술",
+   "이 문장이 정상적으로 live 질의로 처리됐다는 오답"
+  ],
+  "verify_via": [
+   "ui-state",
+   "screenshot",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "ui-state: #settings.hidden===false, #app.hidden===true",
+   "audit-log: 이 turn에 대해 신규 upstream MCP 호출이 0건이다"
+  ]
+ },
+ "expected_route": {
+  "kind": "app-mode",
+  "tool_path": [],
+  "api_id": null,
+  "family": null,
+  "detail_group": null,
+  "upstream": null
+ },
+ "expected_screen": {
+  "window": "대화 창",
+  "mode": "settings",
+  "card": null,
+  "current_renderer": null
+ },
+ "implementation_status": "동작-실배선",
+ "notes": "chat.js L513-514 실측 — node로 '삼성전자 계좌 연결 상태 확인하면서 오늘 시세도 같이 보여줘'.test() → true 확인(비앵커 대안이라 문장 어디든 매치).",
+ "group": "live-appmode",
+ "persona": "애널리스트"
+}

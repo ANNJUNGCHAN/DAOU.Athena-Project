@@ -1,0 +1,68 @@
+{
+ "case_id": "LIV-032",
+ "tier": "live",
+ "persona": "전업투자자",
+ "question": "카카오페이 상장일로부터 오늘까지 며칠이나 지났는지 계산해주고, 그동안 낸 공시가 총 몇 건인지 정확한 숫자로 알려줘.",
+ "attachment": null,
+ "sent_text": "카카오페이 상장일로부터 오늘까지 며칠이나 지났는지 계산해주고, 그동안 낸 공시가 총 몇 건인지 정확한 숫자로 알려줘.",
+ "ran_at": "2026-08-19T02:01:26.931Z",
+ "duration_s": 45.4,
+ "first_card_ms": 41406,
+ "completed": true,
+ "timed_out": false,
+ "answer_chars": 158,
+ "chip_count_total": 1,
+ "chip_count_added": 1,
+ "chip_labels_added": [
+  "공통 테이블"
+ ],
+ "chip_labels_total": [
+  "공통 테이블"
+ ],
+ "state_transitions": [
+  {
+   "state": "judging",
+   "at_ms": 1948
+  },
+  {
+   "state": "calling",
+   "at_ms": 41406
+  },
+  {
+   "state": "idle",
+   "at_ms": 45286
+  }
+ ],
+ "card_types_rendered": [
+  "mcp-table.w-full"
+ ],
+ "canvas_card_count": 1,
+ "canvas_cards_pre": 0,
+ "audit_calls": [
+  "korea-stock-mcp__get_corp_code=true",
+  "korea-stock-mcp__get_disclosure_list=true"
+ ],
+ "judge": {
+  "must_include": [
+   "get_stock_base_info 호출이 KRX 인증/승인 문제로 실패했다는 사실을 명시",
+   "상장일 기준 경과일수는 계산할 수 없다고 정직하게 밝힘",
+   "공시 총건수는 get_disclosure_list의 total_count 등 실제 조회 근거로 제시",
+   "corp_code를 8자리로 정규화했다는 근거"
+  ],
+  "must_not_include": [
+   "상장일이나 경과일수를 임의의 숫자로 지어냄",
+   "KRX 실패를 언급하지 않고 답변을 마무리"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "audit-log",
+   "upstream-log"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=korea-stock-mcp tool=get_stock_base_info success=false 행이 1개 이상 있다",
+   "audit-log에 alias=korea-stock-mcp tool=get_disclosure_list success=true 행이 1개 이상 있다",
+   "chat-answer에 'KRX' 또는 '승인' 관련 실패 사유가 언급된다",
+   "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 1개 이상 있다"
+  ]
+ }
+}

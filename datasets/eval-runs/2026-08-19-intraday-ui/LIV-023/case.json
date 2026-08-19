@@ -1,0 +1,55 @@
+{
+ "id": "LIV-023",
+ "tier": "live",
+ "category": "live-뉴스교차",
+ "difficulty": "최상",
+ "question": "파마리서치 자사주 소각 얘기를 뉴스에서 본 것 같은데, 설정에 등록해 둔 네이버 검색 서버가 두 개 있잖아요. 그중에 예전부터 있던 구버전 걸로 검색해서 확인해 주시고, 진짜 소각했는지는 공시로도 봐 주세요.",
+ "why_hard": "②이름이 거의 같은 두 별칭(naver-search 미승인 vs naver-search-2 승인) 중 사용자가 명시적으로 미승인 쪽을 지정한다 — gateway-blocked를 인지하고 승인된 naver-search-2로 대신 조회해야 한다는 정책 판단(④)이 필요하다. ①뉴스 검색(대체 경로)+법인 식별+공시 조회까지 서로 다른 서버를 이어 3회 이상 합성해야 한다. ⑤자사주 소각 공시가 실제로 없을 수 있어 정직한 부분실패 처리가 걸려 있다.",
+ "expected_answer": "naver-search 별칭은 미승인이라 게이트웨이가 자체 거부하므로, 승인된 naver-search-2로 대신 뉴스를 검색하고, korea-stock-mcp 공시 조회로 실제 자사주 소각 여부를 확인해 답한다.",
+ "judge": {
+  "must_include": [
+   "naver-search(구버전) 별칭은 승인되지 않아 게이트웨이 단계에서 자체 거부(gateway-blocked)된다는 설명",
+   "대신 승인된 naver-search-2로 뉴스를 검색했다는 명시",
+   "korea-stock-mcp 공시 조회로 확인한 실제 자사주 소각 여부(있다면 소각 수량·날짜, 없다면 없다는 서술)"
+  ],
+  "must_not_include": [
+   "naver-search(구버전)로 검색이 성공했다고 서술",
+   "gateway-blocked를 upstream 오류인 것처럼 잘못 설명",
+   "공시 조회 없이 뉴스만으로 소각 사실을 확정"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "audit-log",
+   "upstream-log"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=naver-search 행이 1개 이상 반드시 존재하고, 그 모든 행의 success가 false다 (행이 없으면 자동 실패)",
+   "audit-log에 alias=naver-search-2 tool=search_news success=true 행이 있다",
+   "audit-log에 alias=korea-stock-mcp tool=get_disclosure_list 행이 있다",
+   "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 1개 이상 있다"
+  ]
+ },
+ "expected_route": {
+  "kind": "cross-source",
+  "tool_path": [
+   "naver-search-2__search_news",
+   "korea-stock-mcp__get_corp_code",
+   "korea-stock-mcp__get_disclosure_list",
+   "athena__render_canvas"
+  ],
+  "api_id": null,
+  "family": null,
+  "upstream": "naver-search-2+korea-stock-mcp",
+  "detail_group": null
+ },
+ "expected_screen": {
+  "window": "대화 창+캔버스 창",
+  "mode": null,
+  "card": "notice",
+  "current_renderer": "notice"
+ },
+ "implementation_status": "동작-실배선",
+ "notes": "naver-search(구 별칭)는 approved:false라 spawn 자체가 gateway-blocked된다(_mcp-tools.json, _digest.md gateway-blocked 3곳 중 '미승인 툴'). 승인된 naver-search-2로 대체해야 실제로 뉴스 검색이 완료된다. 기존 100건 HRD-092와 별칭 트랩 소재는 같으나, 이 케이스는 공시 교차검증이 본질이고 별칭 함정은 부차적 장애물이라 취지가 다름. [페르소나 재작성: 'naver-search(구버전)'라는 개발자식 별칭 표기를 없애고, '설정에 등록해 둔 네이버 검색 서버 두 개 중 구버전'이라는 사용자 어법으로 치환. 미승인 별칭을 명시적으로 지정해 gateway-blocked 후 승인된 별칭으로 대체해야 하는 라우팅 함정은 그대로 유지(assistant가 등록된 서버 목록에서 식별 가능).]",
+ "group": "live-disclosure",
+ "persona": "리서치원"
+}

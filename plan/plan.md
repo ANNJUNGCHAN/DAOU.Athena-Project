@@ -1,6 +1,7 @@
 # Athena 진행 상황 및 재개 계획
 
-> 최종 갱신: 2026-08-19 · 브랜치 `main` — **`디자인` 브랜치 병합 완료.** 두 갈래가 합류했다:
+> 최종 갱신: 2026-08-19 (6차 — R1 live 100건 실앱 QA·채점·개선 완료, §1 첫 블록) · 브랜치 `main`
+> — **`디자인` 브랜치 병합 완료.** 두 갈래가 합류했다:
 > ① 전 구간 지연 최적화(합의 계획 `.omc/plans/plan-latency-optimization.md`) — 진단 보고서는
 > [`plan/latency-audit-2026-08-19.md`](latency-audit-2026-08-19.md), "백엔드가 느리다"는
 > 전제가 반증됐다(백엔드 몫 0.2초, 병목은 모델 왕복). ② 디자인 갈래(디자인 비판 →
@@ -28,7 +29,41 @@
 > 번호는 **갈래별로 독립**이다 — `main` 갈래(4차 키움·5차 지연)와 `디자인` 갈래
 > (4차 리사이즈~7차 휘도)가 같은 날짜에 병렬로 진행됐다. 병합 직후 재실측이 맨 위다.
 
-**2026-08-19 (병합) · `디자인` → `main` 병합 직후 재실측 — 이 수치가 현행이다:**
+**2026-08-19 (6차) · R1 live 전수 100건 실앱 QA + 개선 결선 후 재실측 — 이 수치가 현행이다:**
+
+```
+backend:  709 passed, 0 failed (병렬 79.5초 · server.py 스키마 힌트 테스트 +1)
+  ruff check . → All checks passed | generate_api.py --check → current
+app:      npm test → 178건 통과 (175 + live-prompt v2 계약 3)
+          npm run verify → 1회차: 검증1b(bootBar) 단언 1건 실패(부팅 표집 타이밍 —
+          병합 세션 검증14와 같은 공유 데스크톱 간헐) → 2회차: 전 단언 통과 · exit 0
+R1 평가 (datasets/eval-runs/2026-08-19-intraday-ui — 증거 100케이스 전량 커밋):
+  판정: pass 35 · fail 54 · dataset-defect 10 · blocked-env 1 (실행분 pass율 39.3%)
+  그룹: appmode 100% ↔ adversarial 13.3%(절대 기준 100% 그룹 — 최우선 결함)
+  지연(89건): 총 p50 57.9s / p95 142.4s · 첫 카드 p50 46.4s ·
+  지배 요인 = 마지막 툴 후 "꼬리"(카드 페이로드·답변 생성, 50~155s) — 백엔드 몫 0.1~0.2s 재확인
+  개선 후 fixcheck(실패 9 재실행): 3 pass 전환 · 5 부분 개선 (…-fixcheck/)
+```
+
+**2026-08-19 (6차) 세션 기록 — 100건 실앱 QA(사용자 지시: 실행·캡처·채점·개선·지연 분석):**
+
+- **하네스**: `run-cases-ui.js` 계측 확장(첫 카드 시각·전이 타임스탬프·인덱스 병합·캡처
+  타임아웃·창 사망 복구) + **앱모드 전용 드라이버 신설**(`run-cases-appmode.js`, Esc 분기·
+  온보딩 상태 조작·MCP 시트 12건) + 집계기(`datasets/aggregate_run.py`).
+- **실패 지배 패턴은 모델 행동 규율**(셸은 appmode 100%로 견고): ① 명시 출처 조용한 대체
+  16건 ② 주문·자동화 정책 오설명 6건(보안 관련 — "매수 진행하겠다"류) ③ 상대 날짜 추측
+  ④ 원문 미조회 결론 ⑤ 한계 미고지. 상세 분류·근거는 run의 `summary.md`.
+- **개선 결선 2건**: live-prompt v2(조회 규율 4 + 주문·자동화 정책 고지 + timeline 힌트,
+  테스트 3건) · render_canvas `data` 형상 안내문(CANVAS_SCHEMAS 생성, 액션 11 — oneOf
+  강제가 아니라 안내문인 이유는 폴백 보호, server.py 주석). fixcheck 재실행으로 델타 실측.
+- **앱 확정 결함 1건 신규**: LIV-050 — upstream 전부 성공 후 180s 상한에서 답변이 타임아웃
+  문구로 대체(응답 생성 자체가 예산 초과). 꼬리 지연과 같은 뿌리 — 아래 다음 수.
+- **운영 사고 2건 정직 기록**: 배치 중 월간 지출 한도 도달(7건 blocked → 기준선 프롬프트
+  stash 복원 후 재시도 정산) · Electron 1회 사망(LIV-047 캡처 행 → 하네스 가드 후 재발 0).
+- **데이터셋 결함 D-007~D-017** (11건): 6건 당일 수정(validate exit 0), 5건 수정 대기.
+  공통 유형 = 특정 서버·툴 못박기가 키움 라우팅·동의 게이트 구조와 충돌.
+
+**2026-08-19 (병합) · `디자인` → `main` 병합 직후 재실측:**
 
 ```
 backend:  708 passed, 0 failed (병렬 55.9초 · pytest-xdist -n auto --dist loadgroup)
@@ -587,6 +622,15 @@ soul.md §7의 굴절층·데이터층 분리는 실측 결과 개선 없음 —
 | 16 | ~~**`IngestionCoordinator`를 lifespan에 결선**~~ → **결선 완료** (2026-08-18) | `_open_brain()`이 ADR §4.2 1단계 순서로 `HistoryStore.open()` + `IngestionCoordinator.start()`를 붙였고 `_teardown_brain()`이 3단계 순서(coordinator.stop → history.close → store.close → lock 해제)로 내린다. ingestion 실패는 fts와 같은 best-effort 강등(`ingestion_last_error`). `brain_history_db_path` 설정 신설. **⚠ 코디네이터는 아직 빈 HistoryStore 위에서 돈다** — `upsert_chat`/`upsert_completed_trade` 호출자가 저장소 전체에 0건. 실데이터 파이프라인은 후속(아래 신규 20번) |
 | 17 | ~~**`IngestionCoordinator.enqueue()`가 shutdown을 안 본다**~~ → **닫힘** (2026-08-18, 16번보다 먼저 처리) | `_shutting_down` 별도 플래그 — `_stopping` 재사용 시 drain 중 writer가 조기 이탈하는 결함을 재현으로 확인하고 분리했다. `enqueue()` 이중 체크(진입 시 + `_queue_job` 반환), 내부 재적재(`wait=False`)는 안 막는다. stop() 반환 후 재시작 enqueue 허용(기존 재시작 계약 유지). 테스트 2건 |
 | 18 | **프롬프트 인젝션 (HIGH) — 부분 완화 진전, 미해결 유지** (2026-08-18 동기화) | ~~"이번 결선에서 아무 대응도 하지 않았다"~~는 낡았다 — **응답 본문 라벨**(2026-08-17, `_label_upstream_result`)과 **위조 마커 무해화**(2026-08-18, `_defuse_embedded_markers` + 테스트 3건)가 붙었다. 남은 것: `structuredContent` 무라벨 · 내용 기반 탐지 미구현. 라벨은 완화이지 방어가 아니다 — 게이트는 여전히 툴별 allowlist (`SECURITY.md` §3) |
+
+### 2026-08-19 R1 100건 QA에서 새로 열린 것
+
+| # | 작업 | 근거 |
+|---|---|---|
+| 23 | **adversarial·gate 규율의 구조 레벨 강제** — 프롬프트 규율은 3/9만 회복했다. 출처 지목 질의의 라우팅 검증, 원문 미조회 시 결론 보류, 주문·자동화 정책의 게이트웨이 응답 레벨 고지를 검토 | run `2026-08-19-intraday-ui/summary.md` §3·§7 — adversarial 13.3%(절대 기준 100%) |
+| 24 | **LIV-050 응답 생성 시간 예산** — upstream 전부 성공 후 180s 상한에서 답변이 타임아웃 문구로 대체. 꼬리 지연(카드 페이로드 생성)과 같은 뿌리 — 스키마 힌트(액션 11 결선)의 효과 재실측 후, 남으면 타임아웃 시 부분 결과 보존 설계 | summary.md §3 부수 확정 결함 |
+| 25 | **데이터셋 결함 잔여 5건 수정** — D-008(LIV-077)·D-014(095)·D-015(097)·D-016(023/073)·D-017(066). 공통 유형: 못박기 vs 라우팅·게이트 구조 | defect-queue.md |
+| 26 | **LIV-096 하네스 한계** — 온보딩 3/3 "인증 연결됨" 상태 재현 불가로 blocked-env 잔존. 온보딩 상태 주입 방법 설계 필요 | run-cases-appmode.js caseLIV096 |
 
 ### 2026-08-18 실행에서 새로 열린 것
 

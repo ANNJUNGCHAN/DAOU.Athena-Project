@@ -1,0 +1,72 @@
+{
+ "case_id": "LIV-025",
+ "tier": "live",
+ "persona": "애널리스트",
+ "question": "지누스 관련해서 최근 인수·합병 공시가 있었다면 원문 전체를 리더로 보여주고, 매수청구권(반대주주 주식매수청구권) 관련 조항만 하이라이트해줘.",
+ "attachment": null,
+ "sent_text": "지누스 관련해서 최근 인수·합병 공시가 있었다면 원문 전체를 리더로 보여주고, 매수청구권(반대주주 주식매수청구권) 관련 조항만 하이라이트해줘.",
+ "ran_at": "2026-08-19T01:51:42.066Z",
+ "duration_s": 44.5,
+ "first_card_ms": 37982,
+ "completed": true,
+ "timed_out": false,
+ "answer_chars": 302,
+ "chip_count_total": 6,
+ "chip_count_added": 1,
+ "chip_labels_added": [
+  "공통 테이블"
+ ],
+ "chip_labels_total": [
+  "공통 테이블",
+  "스트림",
+  "스트림",
+  "공통 테이블",
+  "공통 테이블",
+  "공통 테이블"
+ ],
+ "state_transitions": [
+  {
+   "state": "judging",
+   "at_ms": 1
+  },
+  {
+   "state": "calling",
+   "at_ms": 37973
+  },
+  {
+   "state": "idle",
+   "at_ms": 44462
+  }
+ ],
+ "card_types_rendered": [
+  "mcp-table.w-full"
+ ],
+ "canvas_card_count": 1,
+ "canvas_cards_pre": 0,
+ "audit_calls": [
+  "korea-stock-mcp__get_corp_code=true",
+  "korea-stock-mcp__get_disclosure_list=true"
+ ],
+ "judge": {
+  "must_include": [
+   "실제 조회한 지누스 관련 인수·합병 공시 원문의 핵심 내용을 인용",
+   "매수청구권(반대주주 주식매수청구권) 관련 조항을 원문에서 정확히 짚어 하이라이트로 제시",
+   "관련 공시가 없는 경우 없다고 정직하게 답했다는 조건부 서술"
+  ],
+  "must_not_include": [
+   "원문에 없는 매수청구권 조건(행사가·행사기간 등)을 임의로 지어냄",
+   "인수·합병 공시가 없는데 있다고 단정",
+   "원문 전체 대신 요약만 하고 리더 카드 원문 자체를 생략"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "canvas-file",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=korea-stock-mcp tool=get_disclosure success=true 행이 있다",
+   "저장됐다면(athena__save_canvas 호출 시): canvas-file의 canvas_type이 reader이고 fell_back이 false이며 data.highlights가 1개 이상이다",
+   "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 1개 이상 있다"
+  ]
+ }
+}

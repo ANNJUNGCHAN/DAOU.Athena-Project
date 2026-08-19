@@ -1,0 +1,83 @@
+{
+ "case_id": "LIV-029",
+ "tier": "live",
+ "persona": "재무전문가",
+ "question": "실리콘투 잠정실적 공시 원문 리더로 보여주고, 확정 실적이 아니라 잠정치라는 부분이랑 향후 변경 가능성 언급된 부분만 하이라이트해줘. 이 공시 이후 뉴스 반응도 궁금해.",
+ "attachment": null,
+ "sent_text": "실리콘투 잠정실적 공시 원문 리더로 보여주고, 확정 실적이 아니라 잠정치라는 부분이랑 향후 변경 가능성 언급된 부분만 하이라이트해줘. 이 공시 이후 뉴스 반응도 궁금해.",
+ "ran_at": "2026-08-19T01:57:41.504Z",
+ "duration_s": 98.3,
+ "first_card_ms": 62596,
+ "completed": true,
+ "timed_out": false,
+ "answer_chars": 349,
+ "chip_count_total": 12,
+ "chip_count_added": 2,
+ "chip_labels_added": [
+  "리더",
+  "스트림"
+ ],
+ "chip_labels_total": [
+  "공통 테이블",
+  "스트림",
+  "스트림",
+  "공통 테이블",
+  "공통 테이블",
+  "공통 테이블",
+  "공통 테이블",
+  "스트림",
+  "리더",
+  "리더",
+  "리더",
+  "스트림"
+ ],
+ "state_transitions": [
+  {
+   "state": "judging",
+   "at_ms": 10
+  },
+  {
+   "state": "calling",
+   "at_ms": 62595
+  },
+  {
+   "state": "idle",
+   "at_ms": 98277
+  }
+ ],
+ "card_types_rendered": [
+  "reader.w-half",
+  "stream.w-half"
+ ],
+ "canvas_card_count": 2,
+ "canvas_cards_pre": 0,
+ "audit_calls": [
+  "korea-stock-mcp__get_corp_code=true",
+  "korea-stock-mcp__get_disclosure_list=true",
+  "korea-stock-mcp__get_disclosure=true",
+  "naver-search-2__search_news=true"
+ ],
+ "judge": {
+  "must_include": [
+   "실제 조회한 잠정실적 공시 원문에서 잠정치임을 명시한 문구를 구체적으로 인용",
+   "'향후 변경될 수 있다' 류의 문구를 원문 근거로 하이라이트로 제시",
+   "잠정실적 수치를 확정 실적인 것처럼 서술하지 않았다는 것",
+   "naver-search-2로 찾은 이 공시 이후 실제 뉴스 반응 요약"
+  ],
+  "must_not_include": [
+   "잠정실적 수치를 확정 실적으로 단정해서 서술",
+   "원문에 없는 '변경 가능성' 관련 문구를 임의로 창작",
+   "뉴스 검색 없이 시장 반응을 짐작으로 서술"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "canvas-file",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=korea-stock-mcp tool=get_disclosure success=true 행이 있다",
+   "audit-log에 alias=naver-search-2 tool=search_news success=true 행이 있다",
+   "저장됐다면(athena__save_canvas 호출 시): canvas-file의 data.highlights에 '잠정' 관련 항목이 1개 이상이다"
+  ]
+ }
+}

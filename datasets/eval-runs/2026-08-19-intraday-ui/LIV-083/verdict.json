@@ -1,0 +1,64 @@
+{
+ "case_id": "LIV-083",
+ "run": "2026-08-19-intraday-ui",
+ "verdict": "fail",
+ "auto_checks": [
+  {
+   "check": "audit-log에 dart-mcp의 재무 조회 tool success=true 행이 5개 이상 있다",
+   "ok": false,
+   "evidence": "evidence/audit-delta.jsonl 5행 전부 alias=korea-stock-mcp(get_corp_code 1건+get_financial_statement 4건) — alias=dart-mcp 행 0건. 재무조회(get_financial_statement)만 세도 4건으로 '5개 이상' 미충족"
+  },
+  {
+   "check": "저장됐다면(athena__save_canvas 호출 시): canvas-file의 canvas_type이 table이다",
+   "ok": true,
+   "evidence": "athena__save_canvas 호출 흔적 없음(조건부 미해당) — 렌더된 카드는 evidence/ui-state.json canvas.cards[0].classes=[\"mcp-table\",\"w-full\"]"
+  },
+  {
+   "check": "answerText에 '%' 계산 흔적이 등장한다",
+   "ok": true,
+   "evidence": "evidence/chat-answer.txt: '2024Q1 23.2%에서 매 분기 개선되어 2026Q2 76.3%까지 상승'"
+  }
+ ],
+ "must_not_include": [
+  {
+   "item": "한 번의 호출로 10개 분기를 전부 받았다고 서술",
+   "violated": false,
+   "evidence": null
+  },
+  {
+   "item": "계산 없이 '이익률이 좋아졌다' 식으로 뭉뚱그림",
+   "violated": false,
+   "evidence": null
+  },
+  {
+   "item": "실제 매출·영업이익 수치를 지어냄",
+   "violated": false,
+   "evidence": "매출·영업이익 수치가 SK하이닉스 2024~2026 실적 추세(HBM 호황)와 정합적이고 조작 정황 없음"
+  }
+ ],
+ "must_include": [
+  {
+   "item": "10개 분기를 각각 개별 조회했다는 서술(단일 호출로 전체를 받지 않았다는 인지)",
+   "ok": false,
+   "evidence": "evidence/chat-answer.txt: 'DART 연결재무제표(분기·반기·사업보고서 4건)에서 산출' — 10개 분기를 각각 개별 조회한 것이 아니라 4건의 보고서 조회 + 2개 분기(2024Q4·2025Q4)는 연간−3분기누적으로 차감 산출했다고 명시. audit-delta.jsonl의 재무조회 호출도 4건뿐(5건 미만)"
+  },
+  {
+   "item": "영업이익률 계산식(영업이익/매출액×100)을 실제로 적용해 분기별 수치를 제시",
+   "ok": true,
+   "evidence": "evidence/ui-state.json canvas.cards[0].text: 분기별 매출액·영업이익·영업이익률(%) 10행이 실제 계산값으로 제시(예: 2024Q1 12.43/2.89/23.2, 2026Q2 79.32/60.54/76.3)"
+  },
+  {
+   "item": "결측 분기가 있으면 결측으로 명시하고 임의로 채우지 않았다는 서술",
+   "ok": true,
+   "evidence": "10개 분기 전부 값이 채워져 결측 자체가 발생하지 않음(해당 없음 — 위반 없음)"
+  },
+  {
+   "item": "결과를 표로 정리해 제시했다는 서술",
+   "ok": true,
+   "evidence": "evidence/chat-answer.txt: '...표로 정리했습니다' + evidence/ui-state.json canvas card classes=[\"mcp-table\",\"w-full\"], tableRows=10"
+  }
+ ],
+ "judge_note": "auto_check[0]이 명시한 'dart-mcp'는 이 실행에서 전혀 호출되지 않았다(0건, 전부 korea-stock-mcp) — 이 자체는 이 run에서 이미 확인된 기존 결함 패턴(defect-queue.md D-005/D-009/D-011~013, dart-mcp 못박기)과 같은 유형이라 suspect_dataset_defect로 표시한다. 다만 이와 별개로 must_include #1이 요구하는 '10개 분기를 각각 개별 조회'가 명확히 깨진다 — 모델 스스로 'DART 연결재무제표 4건'에서 산출했고 2개 분기는 차감으로 유도했다고 명시했으며, 실제 재무조회 호출도 4건(5건 미만)뿐이다. alias 완화만으로는 이 실패를 되돌릴 수 없어 fail로 유지한다.",
+ "suspect_dataset_defect": true,
+ "duration_s": 91.8
+}

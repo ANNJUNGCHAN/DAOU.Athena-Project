@@ -1,0 +1,12 @@
+{
+ "commit": "0bfdbce889733d9817108b4668ee5bf6ca9a88f3",
+ "model_prefs": {
+  "claude": {
+   "model": "fable",
+   "effort": "medium"
+  }
+ },
+ "dataset": "앱-검증-200.jsonl",
+ "started_at": "2026-08-19T04:29:31.484Z",
+ "harness": "run-cases-ui.js"
+}

@@ -1,0 +1,65 @@
+{
+ "case_id": "LIV-008",
+ "tier": "live",
+ "persona": "전업투자자",
+ "question": "포스코퓨처엠 작년 사업보고서 기준 매출액이랑 유동자산 둘 다 알고 싶어. 공시 요약으로 되는 대로 가져와줘.",
+ "attachment": null,
+ "sent_text": "포스코퓨처엠 작년 사업보고서 기준 매출액이랑 유동자산 둘 다 알고 싶어. 공시 요약으로 되는 대로 가져와줘.",
+ "ran_at": "2026-08-19T04:18:47.980Z",
+ "duration_s": 45.2,
+ "first_card_ms": 41158,
+ "completed": true,
+ "timed_out": false,
+ "answer_chars": 199,
+ "chip_count_total": 1,
+ "chip_count_added": 1,
+ "chip_labels_added": [
+  "공통 테이블"
+ ],
+ "chip_labels_total": [
+  "공통 테이블"
+ ],
+ "state_transitions": [
+  {
+   "state": "judging",
+   "at_ms": 8
+  },
+  {
+   "state": "calling",
+   "at_ms": 41106
+  },
+  {
+   "state": "idle",
+   "at_ms": 45168
+  }
+ ],
+ "card_types_rendered": [
+  "mcp-table.w-full"
+ ],
+ "canvas_card_count": 1,
+ "canvas_cards_pre": 0,
+ "audit_calls": [
+  "dart-mcp__get_current_date=true",
+  "dart-mcp__search_disclosure=true",
+  "dart-mcp__search_detailed_financial_data=true"
+ ],
+ "judge": {
+  "must_include": [
+   "매출액은 search_disclosure로, 유동자산은 search_detailed_financial_data(또는 search_json_financial_data)로 서로 다른 툴을 나눠 썼다",
+   "유동자산이 search_disclosure의 9개 고정 항목 목록에 없다는 점을 근거로 들었다",
+   "두 항목 모두 실제 조회 결과에 근거한 수치로 제시했다"
+  ],
+  "must_not_include": [
+   "유동자산을 search_disclosure의 requested_items로만 시도하고 안 나오는데도 값을 지어냄",
+   "매출액·유동자산을 서로 다른 회계연도/보고서에서 섞어와 시점이 안 맞는데도 그대로 병기"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=dart-mcp tool=search_disclosure success=true 행이 1개 이상 있다",
+   "audit-log에 alias=dart-mcp tool=search_detailed_financial_data 또는 tool=search_json_financial_data success=true 행이 1개 이상 있다"
+  ]
+ }
+}

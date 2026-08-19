@@ -1,0 +1,50 @@
+{
+ "id": "LIV-008",
+ "tier": "live",
+ "category": "live-재무추출",
+ "difficulty": "최상",
+ "question": "포스코퓨처엠 작년 사업보고서 기준 매출액이랑 유동자산 둘 다 알고 싶어. 공시 요약으로 되는 대로 가져와줘.",
+ "why_hard": "② 매출액은 search_disclosure의 requested_items 9개 고정 목록(매출액·영업이익·당기순이익·현금흐름 3종·자산/부채/자본총계)에 있어 그 툴로 되지만 유동자산은 그 목록에 없어 같은 질문 안에서도 서로 다른 dart-mcp 툴로 나눠 조회해야 한다는 판단이 필요하고, ① 두 dart-mcp 툴 호출+렌더로 3회 이상 툴을 합성해야 하며, ⑤ 한 툴로는 절반만 채워진다는 부분충족 상황을 정직하게 다뤄야 한다.",
+ "expected_answer": "매출액은 search_disclosure(requested_items=[매출액])로, 유동자산은 그 목록에 없어 search_detailed_financial_data(재무상태표)로 각각 조회해야 두 값을 다 얻을 수 있다.",
+ "judge": {
+  "must_include": [
+   "매출액은 search_disclosure로, 유동자산은 search_detailed_financial_data(또는 search_json_financial_data)로 서로 다른 툴을 나눠 썼다",
+   "유동자산이 search_disclosure의 9개 고정 항목 목록에 없다는 점을 근거로 들었다",
+   "두 항목 모두 실제 조회 결과에 근거한 수치로 제시했다"
+  ],
+  "must_not_include": [
+   "유동자산을 search_disclosure의 requested_items로만 시도하고 안 나오는데도 값을 지어냄",
+   "매출액·유동자산을 서로 다른 회계연도/보고서에서 섞어와 시점이 안 맞는데도 그대로 병기"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=dart-mcp tool=search_disclosure success=true 행이 1개 이상 있다",
+   "audit-log에 alias=dart-mcp tool=search_detailed_financial_data 또는 tool=search_json_financial_data success=true 행이 1개 이상 있다"
+  ]
+ },
+ "expected_route": {
+  "kind": "cross-source",
+  "tool_path": [
+   "dart-mcp__search_disclosure",
+   "dart-mcp__search_detailed_financial_data",
+   "athena__render_canvas"
+  ],
+  "family": null,
+  "api_id": null,
+  "detail_group": null,
+  "upstream": "dart-mcp"
+ },
+ "expected_screen": {
+  "window": "대화 창+캔버스 창",
+  "mode": null,
+  "card": "free",
+  "current_renderer": "free"
+ },
+ "implementation_status": "동작-실배선",
+ "notes": "search_disclosure requested_items 설명에 '사용 가능한 항목: 매출액, 영업이익, 당기순이익, 영업활동 현금흐름, 투자활동 현금흐름, 재무활동 현금흐름, 자산총계, 부채총계, 자본총계' 9개로 고정 명시(spike/captures/S2B-dartmcp-tools.json inputSchema description) — 유동자산은 이 목록 밖.",
+ "group": "live-finance",
+ "persona": "전업투자자"
+}

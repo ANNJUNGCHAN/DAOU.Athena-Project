@@ -1,0 +1,64 @@
+{
+ "chat": {
+  "answerCount": 4,
+  "lastAnswer": "개선되지 않았습니다 — 기아의 연결 부채비율은 2025 사업보고서 기준 61.76%(부채 37.79조/자본 61.19조 원)에서 2026년 반기말 65.14%(부채 42.14조/자본 64.69조 원)로 약 3.4%p 상승했습니다. 자본도 늘었지만 매입채무·미지급비용 등 유동부채가 더 빠르게 늘어난 영향입니다.",
+  "chipCount": 4,
+  "chipLabels": [
+   "공통 테이블",
+   "공통 테이블",
+   "공통 테이블",
+   "공통 테이블"
+  ],
+  "dotClasses": [
+   "dot"
+  ],
+  "state": "idle",
+  "panels": {
+   "app": true,
+   "onboard": false,
+   "settings": false
+  }
+ },
+ "canvas": {
+  "cardCount": 1,
+  "cards": [
+   {
+    "classes": [
+     "mcp-table",
+     "w-full"
+    ],
+    "tableRows": 2,
+    "tableCols": 5,
+    "streamItems": 0,
+    "hasAlert": false,
+    "freeTree": false,
+    "text": "기아 연결 부채비율 비교 — 2026 반기보고서(제83기 반기말) vs 2025 사업보고서(제82기말), 단위: 조원10:29:49 기준기준 시점보고서부채총계(조원)자본총계(조원)부채비율(%)2025년말(제82기)2025 사업보고서37.7961.1961.762026년 반기말(제83기)2026 반기보고서42.1464.6965.14"
+   }
+  ],
+  "clipPath": "circle(1374.51px at 34.5062px 739.5px)"
+ },
+ "stateTransitions": [
+  {
+   "state": "judging",
+   "at_ms": 3
+  },
+  {
+   "state": "calling",
+   "at_ms": 40195
+  },
+  {
+   "state": "idle",
+   "at_ms": 44199
+  }
+ ],
+ "screenshots": {
+  "chat": {
+   "width": 2363,
+   "height": 1022
+  },
+  "canvas": {
+   "width": 2343,
+   "height": 1205
+  }
+ }
+}

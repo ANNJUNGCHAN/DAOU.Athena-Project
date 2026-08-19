@@ -1,0 +1,70 @@
+{
+ "case_id": "LIV-045",
+ "tier": "live",
+ "persona": "일반직장인",
+ "question": "LG에너지솔루션 최근 두 달 동안 접수된 공시들, 접수일이랑 보고서명이랑 제출인까지 표로 쭉 뽑아줘.",
+ "attachment": null,
+ "sent_text": "LG에너지솔루션 최근 두 달 동안 접수된 공시들, 접수일이랑 보고서명이랑 제출인까지 표로 쭉 뽑아줘.",
+ "ran_at": "2026-08-19T02:14:13.478Z",
+ "duration_s": 43.9,
+ "first_card_ms": 38344,
+ "completed": true,
+ "timed_out": false,
+ "answer_chars": 212,
+ "chip_count_total": 4,
+ "chip_count_added": 1,
+ "chip_labels_added": [
+  "공통 테이블"
+ ],
+ "chip_labels_total": [
+  "공통 테이블",
+  "공통 테이블",
+  "공통 테이블",
+  "공통 테이블"
+ ],
+ "state_transitions": [
+  {
+   "state": "judging",
+   "at_ms": 1
+  },
+  {
+   "state": "calling",
+   "at_ms": 38343
+  },
+  {
+   "state": "idle",
+   "at_ms": 43903
+  }
+ ],
+ "card_types_rendered": [
+  "mcp-table.w-full"
+ ],
+ "canvas_card_count": 1,
+ "canvas_cards_pre": 0,
+ "audit_calls": [
+  "korea-stock-mcp__get_corp_code=true",
+  "korea-stock-mcp__get_disclosure_list=true"
+ ],
+ "judge": {
+  "must_include": [
+   "corp_code를 문자열 8자리로 zfill해서 조회했다는 근거(예: 앞자리 0 유지)",
+   "get_disclosure_list(목록)를 사용했고 단건 원문용 get_disclosure와 혼동하지 않았다는 확인",
+   "data.columns를 접수일·보고서명·제출인 등 한글 label로 직접 명시했다는 설명(자동 유도에 의존하지 않았다는 설명)",
+   "canvas_type이 table이고 fell_back이 false라는 확인"
+  ],
+  "must_not_include": [
+   "columns를 생략한 채 rows만 넘겨서 빈 테이블 에러를 냄",
+   "corp_code를 zfill 없이 숫자 그대로 사용해 조회 실패",
+   "get_disclosure를 반복 호출해 개별 원문을 억지로 표 행에 욱여넣음"
+  ],
+  "verify_via": [
+   "ui-state",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 있다",
+   "audit-log에 alias=korea-stock-mcp tool=get_disclosure_list success=true 행이 있다",
+   "렌더된 mcp-table 카드 DOM에 '빈 테이블 — columns 또는 rows가 없다' 에러 노트가 없다"
+  ]
+ }
+}

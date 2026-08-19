@@ -1,0 +1,54 @@
+{
+ "id": "LIV-025",
+ "tier": "live",
+ "category": "live-원문리더",
+ "difficulty": "최상",
+ "question": "지누스 관련해서 최근 인수·합병 공시가 있었다면 원문 전체를 리더로 보여주고, 매수청구권(반대주주 주식매수청구권) 관련 조항만 하이라이트해줘.",
+ "why_hard": "①corp_code 변환→공시 목록→원문 조회로 3회 이상 합성이 필요하다. ③공시 원문 전체 중에서 '매수청구권' 관련 조항만 정확히 골라 하이라이트로 지정해야 하는 정밀한 원문 파싱 판단이 필요하다. ⑤관련 공시가 없으면 없다고 정직하게 답해야 하는 부분실패 처리가 걸려 있다.",
+ "expected_answer": "korea-stock-mcp로 지누스의 인수·합병 관련 공시를 조회해 원문 전체를 리더 카드로 제시하고, 그중 매수청구권 관련 조항을 하이라이트로 표시한다. 관련 공시가 없으면 없다고 답한다.",
+ "judge": {
+  "must_include": [
+   "실제 조회한 지누스 관련 인수·합병 공시 원문의 핵심 내용을 인용",
+   "매수청구권(반대주주 주식매수청구권) 관련 조항을 원문에서 정확히 짚어 하이라이트로 제시",
+   "관련 공시가 없는 경우 없다고 정직하게 답했다는 조건부 서술"
+  ],
+  "must_not_include": [
+   "원문에 없는 매수청구권 조건(행사가·행사기간 등)을 임의로 지어냄",
+   "인수·합병 공시가 없는데 있다고 단정",
+   "원문 전체 대신 요약만 하고 리더 카드 원문 자체를 생략"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "canvas-file",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=korea-stock-mcp tool=get_disclosure success=true 행이 있다",
+   "저장됐다면(athena__save_canvas 호출 시): canvas-file의 canvas_type이 reader이고 fell_back이 false이며 data.highlights가 1개 이상이다",
+   "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 1개 이상 있다"
+  ]
+ },
+ "expected_route": {
+  "kind": "mcp-upstream",
+  "tool_path": [
+   "korea-stock-mcp__get_corp_code",
+   "korea-stock-mcp__get_disclosure_list",
+   "korea-stock-mcp__get_disclosure",
+   "athena__render_canvas"
+  ],
+  "api_id": null,
+  "family": null,
+  "upstream": "korea-stock-mcp",
+  "detail_group": null
+ },
+ "expected_screen": {
+  "window": "대화 창+캔버스 창",
+  "mode": null,
+  "card": "리더",
+  "current_renderer": "reader"
+ },
+ "implementation_status": "동작-실배선",
+ "notes": "reader 스키마의 highlights[] 필드를 실제로 채우는지가 채점 포인트(canvas.py 'reader' 스키마, _digest.md §게이트웨이 1). korea-stock-mcp 승인·실배선(_mcp-tools.json).",
+ "group": "live-disclosure",
+ "persona": "애널리스트"
+}

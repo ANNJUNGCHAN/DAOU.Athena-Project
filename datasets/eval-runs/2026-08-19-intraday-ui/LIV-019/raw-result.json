@@ -1,0 +1,76 @@
+{
+ "case_id": "LIV-019",
+ "tier": "live",
+ "persona": "일반직장인",
+ "question": "다음커뮤니케이션 최근 분기 공시 내역 좀 확인해줄 수 있어? 재무 관련해서 궁금한 게 있어서.",
+ "attachment": null,
+ "sent_text": "다음커뮤니케이션 최근 분기 공시 내역 좀 확인해줄 수 있어? 재무 관련해서 궁금한 게 있어서.",
+ "ran_at": "2026-08-19T01:43:30.114Z",
+ "duration_s": 52.2,
+ "first_card_ms": 46080,
+ "completed": true,
+ "timed_out": false,
+ "answer_chars": 292,
+ "chip_count_total": 10,
+ "chip_count_added": 1,
+ "chip_labels_added": [
+  "스트림"
+ ],
+ "chip_labels_total": [
+  "공통 테이블",
+  "공통 테이블",
+  "공통 테이블",
+  "스트림",
+  "공통 테이블",
+  "스트림",
+  "공통 테이블",
+  "스트림",
+  "공통 테이블",
+  "스트림"
+ ],
+ "state_transitions": [
+  {
+   "state": "judging",
+   "at_ms": 0
+  },
+  {
+   "state": "calling",
+   "at_ms": 46074
+  },
+  {
+   "state": "idle",
+   "at_ms": 52160
+  }
+ ],
+ "card_types_rendered": [
+  "stream.w-half"
+ ],
+ "canvas_card_count": 1,
+ "canvas_cards_pre": 0,
+ "audit_calls": [
+  "korea-stock-mcp__get_corp_code=false",
+  "korea-stock-mcp__get_corp_code=true",
+  "korea-stock-mcp__get_disclosure_list=true",
+  "korea-stock-mcp__get_disclosure_list=true"
+ ],
+ "judge": {
+  "must_include": [
+   "다음커뮤니케이션이 2014년 카카오와 합병되어 독립 상장법인으로는 더 이상 존재하지 않는다는 사실 안내",
+   "실제로 corp_code나 공시 목록을 조회했으나 유효한 최신 결과가 없었다는(또는 카카오 명의로 조회해야 한다는) 정직한 설명",
+   "존재하지 않는 법인의 가상 재무·공시 수치를 만들어내지 않았다는 것"
+  ],
+  "must_not_include": [
+   "다음커뮤니케이션이 현재도 독립적으로 상장돼 활발히 공시를 내고 있는 것처럼 서술",
+   "임의의 재무 수치나 공시 내용을 지어내 제시",
+   "합병 사실을 언급하지 않고 조회 실패만 얼버무림"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=korea-stock-mcp tool=get_corp_code 행이 1개 이상 있다",
+   "audit-log에 alias=dart-mcp tool=search_business_information 또는 alias=korea-stock-mcp tool=get_disclosure_list 행이 있다"
+  ]
+ }
+}

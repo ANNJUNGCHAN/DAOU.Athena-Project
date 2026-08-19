@@ -1,0 +1,77 @@
+{
+ "case_id": "LIV-016",
+ "tier": "live",
+ "persona": "리서치원",
+ "question": "SK스퀘어가 올해 자사주 취득 공시를 냈는지 확인하고 싶어. 냈으면 취득 예정 수량이랑 취득 기간을 원문에서 그대로 뽑아주고, 이 공시가 나온 뒤 주가 반응을 뉴스에서는 뭐라고 얘기하는지도 봐줘.",
+ "attachment": null,
+ "sent_text": "SK스퀘어가 올해 자사주 취득 공시를 냈는지 확인하고 싶어. 냈으면 취득 예정 수량이랑 취득 기간을 원문에서 그대로 뽑아주고, 이 공시가 나온 뒤 주가 반응을 뉴스에서는 뭐라고 얘기하는지도 봐줘.",
+ "ran_at": "2026-08-19T01:38:32.987Z",
+ "duration_s": 104.7,
+ "first_card_ms": 68117,
+ "completed": true,
+ "timed_out": false,
+ "answer_chars": 411,
+ "chip_count_total": 6,
+ "chip_count_added": 2,
+ "chip_labels_added": [
+  "공통 테이블",
+  "스트림"
+ ],
+ "chip_labels_total": [
+  "공통 테이블",
+  "공통 테이블",
+  "공통 테이블",
+  "스트림",
+  "공통 테이블",
+  "스트림"
+ ],
+ "state_transitions": [
+  {
+   "state": "judging",
+   "at_ms": 1
+  },
+  {
+   "state": "calling",
+   "at_ms": 68117
+  },
+  {
+   "state": "idle",
+   "at_ms": 104690
+  }
+ ],
+ "card_types_rendered": [
+  "mcp-table.w-full",
+  "stream.w-half"
+ ],
+ "canvas_card_count": 2,
+ "canvas_cards_pre": 0,
+ "audit_calls": [
+  "korea-stock-mcp__get_corp_code=true",
+  "korea-stock-mcp__get_disclosure_list=true",
+  "korea-stock-mcp__get_disclosure=true",
+  "naver-search-2__search_news=true"
+ ],
+ "judge": {
+  "must_include": [
+   "corp_code를 8자리로 zero-pad(zfill)해서 사용했다는 근거 또는 정확한 8자리 corp_code 사용 확인",
+   "자사주 취득 공시 원문에서 취득 예정 수량과 취득 기간을 구체적으로 인용",
+   "naver-search-2 뉴스에서 찾은 실제 시장 반응 요약",
+   "자사주 취득 공시가 없는 경우 없다고 정직하게 답했다는 조건부 서술"
+  ],
+  "must_not_include": [
+   "corp_code를 8자리 미만 숫자 그대로 사용",
+   "원문을 읽지 않고 취득 수량·기간을 임의로 추정",
+   "자사주 취득 공시가 없는데 있다고 지어냄"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "audit-log",
+   "canvas-file"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 있다",
+   "audit-log에 alias=korea-stock-mcp tool=get_disclosure success=true 행이 있다",
+   "canvas-file로 저장된 리더 카드가 있다면 data.highlights에 수량 또는 기간 관련 항목이 1개 이상 있다"
+  ]
+ }
+}

@@ -1,0 +1,24 @@
+{
+ "case_id": "LIV-055",
+ "run": "2026-08-19-intraday-ui",
+ "verdict": "pass",
+ "auto_checks": [
+  {"check": "judging 또는 calling 상태에서 Esc 입력 시 IPC 채널이 athena:abort-live-query다(athena:collapse-canvas가 아니다)", "ok": true, "evidence": "raw-result.json observations.state_when_esc='judging'(≠idle) — app/chat.js:868-878 keydown 분기는 state!=='idle'이면 abortToken++ 후 window.athena.send('athena:abort-live-query')만 쏘고, collapse-canvas는 else(state==='idle') 분기에만 있다. observations.state_after_esc='idle'로 이 분기가 실제로 실행됐음이 확인된다"},
+  {"check": "abort 후 #dot 클래스가 idle이다", "ok": true, "evidence": "raw-result.json observations.dot_classes_after_esc=['dot'] — 'judging'/'calling' 수식 클래스가 없다. app/chat.js:872 setDot(null)(abort 분기)이 setDot 정의(chat.js:402-405: classList.remove('judging','calling'))를 호출한 결과와 일치. app/chat.css:332-356: 기본 .dot(마젠타 정적 점)이 idle 표현이고 .dot.judging/.dot.calling만 애니메이션이 붙는다 — evidence/chat-after-esc.png도 애니메이션 없는 단일 점 + '(Enter: 질문, Esc: 캔버스 접기)' 플레이스홀더로 idle 화면을 보여준다"},
+  {"check": "abort 이전에 이미 렌더된 카드 DOM 노드가 abort 후에도 캔버스 창에 남아있다", "ok": true, "evidence": "raw-result.json observations.cards_before=0 — 질문 원문의 전제('카드가 하나도 뜨기 전에 곧바로 Esc') 그대로이므로 지워질 카드 자체가 없다(공허하게 참). app/main.js:919-925 athena:abort-live-query 핸들러는 activeLiveQuery.kill()만 하고 캔버스/카드 DOM을 전혀 건드리지 않으며, app/canvas.js 전체에 카드 삭제 함수(clearCanvas/removeCard류) 호출이 존재하지 않는다 — 카드가 있었어도 이 경로로는 지워지지 않았을 것이라는 구조적 근거"}
+ ],
+ "must_not_include": [
+  {"item": "judging/calling 중 Esc가 캔버스 접기(athena:collapse-canvas)로 잘못 처리됨", "violated": false, "evidence": "observations.state_when_esc='judging'이고 app/chat.js:868-878 분기상 collapse-canvas는 state==='idle'일 때만 발생 — judging 중 Esc는 abort 분기로만 간다. observations에 캔버스 접힘 흔적(canvas_visible_after_esc=false는 애초에 캔버스가 뜬 적이 없어서다) 외 collapse 경로 증거 없음"},
+  {"item": "abort 후에도 백그라운드 프로세스가 계속 돌아 뒤늦게 새 카드가 나타남", "violated": false, "evidence": "raw-result.json observations.late_cards_within_10s=0, claude_new_pids_remaining=[] — abort 이후 10초 관측 창에서 새 카드도 잔존 PID도 없다. app/main.js:919-925 activeLiveQuery.kill()이 실제 프로세스 트리를 종료한다는 코드와 부합"},
+  {"item": "abort 시 이미 렌더된 부분 결과 카드까지 함께 삭제됨", "violated": false, "evidence": "cards_before=0이라 삭제 사건 자체가 성립하지 않음. app/main.js:919-925 abort 핸들러가 canvas DOM을 건드리지 않는다는 코드 근거로 삭제 로직 부재도 확인됨"}
+ ],
+ "must_include": [
+  {"item": "judging 또는 calling 상태에서 Esc를 누르면 athena:abort-live-query IPC가 호출되고 abortToken이 증가한다는 근거", "ok": true, "evidence": "app/chat.js:868-870 (state!=='idle') { abortToken++; send('athena:abort-live-query') } + observations.state_when_esc='judging', state_after_esc='idle', dot_classes_after_esc=['dot'](같은 분기의 setDot(null) 결과)로 이 코드 경로가 실제 실행됐음을 간접 확인"},
+  {"item": "abort 이후 대화 상태가 idle로 전환되고 더 이상 새 카드가 추가되지 않는다는 확인", "ok": true, "evidence": "observations: state_after_esc='idle', final_state='idle', dot_classes_after_esc=['dot'], new_answers=0, late_cards_within_10s=0"},
+  {"item": "abort 시점까지 이미 렌더된 카드(있다면)는 삭제되지 않고 유지된다는 설명", "ok": true, "evidence": "cards_before=0(질문 전제와 일치, 공허하게 참) + app/main.js:919-925·app/canvas.js에 카드 삭제 로직 부재라는 구조적 근거로 '있었다면 유지됐을 것'이 코드 수준에서 성립"},
+  {"item": "이 동작이 idle 상태에서의 Esc(캔버스 접기, athena:collapse-canvas)와는 다른 분기라는 구분", "ok": true, "evidence": "app/chat.js:861-880: if(settingsOpen)→닫기, else if(state!=='idle')→abort-live-query, else→collapse-canvas의 3분기 구조. observations.state_when_esc='judging'(idle 아님)이 abort 분기를 탔고 collapse-canvas 분기와는 분리된 코드 경로임이 소스로 확정됨"}
+ ],
+ "judge_note": "재채점 사유: 직전 판정(blocked-env)은 evidence/stale-standard-run/(표준 하네스 run-cases-ui.js가 질문 원문을 그대로 커맨드바에 입력한 1차 실행 — Esc 키 입력 자체가 없어 전제 미재현)의 구식 증거를 근거로 삼은 오판정이었다. 이번 채점은 evidence/stale-standard-run/README.txt가 명시한 대로 그 산출물을 격리하고, 전용 절차(run-cases-appmode.js caseLIV055, ran_at=2026-08-19T04:44:51.644Z)로 재실행된 raw-result.json의 observations(judging 상태에서 실제 Esc를 누르고 상태를 관측)와 evidence/chat-after-esc.png를 유효 증거로 채택했다. observations(state_when_esc=judging→state_after_esc=idle, dot_classes_after_esc=[dot], late_cards_within_10s=0, claude_new_pids_remaining=[])는 app/chat.js:861-880 Esc 3분기 코드(설정 닫기/abort-live-query/collapse-canvas)와 app/main.js:919-925 abort 핸들러(activeLiveQuery.kill()만 수행, 캔버스 DOM 비접촉) 실동작과 정확히 부합한다. cards_before=0은 질문 원문의 전제('카드가 하나도 뜨기 전에 곧바로 Esc')와 일치하는 것으로, '이미 렌더된 카드 유지' 항목을 검증할 카드가 없다는 것은 관측 실패가 아니라 이 케이스가 설계한 정확한 경계 시나리오다 — abort 핸들러에 카드 삭제 로직이 코드상 전혀 없다는 구조적 근거로 그 항목도 O로 판정한다. auto_checks 3/3, must_not_include 위반 0/3, must_include 4/4 충족.",
+ "suspect_dataset_defect": false,
+ "duration_s": 23.1
+}

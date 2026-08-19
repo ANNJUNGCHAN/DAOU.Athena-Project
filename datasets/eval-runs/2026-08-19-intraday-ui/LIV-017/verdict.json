@@ -1,0 +1,23 @@
+{
+ "case_id": "LIV-017",
+ "run": "2026-08-19-intraday-ui",
+ "verdict": "fail",
+ "auto_checks": [
+  {"check": "audit-log에 alias=dart-mcp tool=search_disclosure success=true 행이 있다", "ok": false, "evidence": "evidence/audit-delta.jsonl 전 3행이 전부 alias=korea-stock-mcp(get_disclosure_list, get_disclosure)와 alias=naver-search-2(search_news)뿐이며 alias=dart-mcp 행이 0개다"},
+  {"check": "저장됐다면(athena__save_canvas 호출 시): canvas-file의 canvas_type이 table로 강제된 경우 fell_back이 true이거나, canvas_type이 애초에 reader/free다", "ok": true, "evidence": "audit-delta.jsonl에 save_canvas 호출 행이 없어 조건부 미해당(canvas-file 미생성)"},
+  {"check": "audit-log에 alias=naver-search-2 tool=search_news success=true 행이 있다", "ok": true, "evidence": "evidence/audit-delta.jsonl:3 {\"alias\":\"naver-search-2\",\"tool\":\"search_news\",\"success\":true}"}
+ ],
+ "must_not_include": [
+  {"item": "존재하지 않는 표 컬럼·행 데이터를 지어내 mcp-table 형태로 꾸며 제시", "violated": false, "evidence": "canvas.png 표 내용(사채 종류·총액 600억·전환가액 13,812원 등)이 chat-answer.txt 수치와 정확히 일치, get_disclosure success=true(audit-delta.jsonl:2)로 뒷받침"},
+  {"item": "공시 원문을 조회하지 않고 일반론만 답함", "violated": false, "evidence": "audit-delta.jsonl:1-2에 get_disclosure_list·get_disclosure success=true 존재, canvas.png에 rcept_no 20260529002244 원문 발췌 표시"},
+  {"item": "전환사채 발행조건 수치를 임의로 창작", "violated": false, "evidence": "구체적이고 일관된 수치(전환가액 13,812원/주, 전환대상 4,344,048주=4.66%, 만기 2029-06-19)가 chat-answer와 canvas 양쪽에서 일치"}
+ ],
+ "must_include": [
+  {"item": "실제 조회한 전환사채 발행 공시의 핵심 조건(발행금액·전환가액 등 원문 근거)을 구체적으로 인용", "ok": true, "evidence": "chat-answer.txt: '전환사채 600억 원(표면·만기이자율 0%, 만기 2029-06-19)... 전환가액은 13,812원/주로 보통주 4,344,048주(총주식의 4.66%)' — canvas.png 원문 발췌 표와 일치"},
+  {"item": "공시 원문이 비정형 서술형이라 표(columns/rows) 스키마로 억지로 변환하면 정보가 깨지거나 free로 폴백될 수 있다는 설명", "ok": false, "evidence": "chat-answer.txt 전문(854자, ui-state.json lastAnswer와 동일)에 표 스키마 강제 변환의 한계나 free 폴백 가능성에 대한 언급이 전혀 없음 — 사용자가 명시적으로 '표로 깔끔하게 정리'를 요청했음에도 이 판단 근거를 설명하지 않고 바로 mcp-table(14행×2열)로 렌더링만 함"},
+  {"item": "naver-search-2로 찾은 실제 시장 반응(뉴스) 요약", "ok": true, "evidence": "chat-answer.txt: '뉴스에서는 이 CB가 2,400억 원 제3자배정 유상증자와 묶여... 최대주주가 카카오에서 LAAA로 바뀐 딜의 일부로... 긍정적 평가가 우세... 다만 실적 부진(2분기 영업손실 230억 원) 속 신작 성과가 반등의 관건' — canvas.png 스트림 카드에 실제 기사 5건 표시"}
+ ],
+ "judge_note": "auto_checks 1이 요구하는 alias=dart-mcp tool=search_disclosure 행이 audit-delta.jsonl에 전혀 없다(실제로는 korea-stock-mcp get_disclosure_list/get_disclosure만 호출됨) — 기계 판정 단계에서 이미 실패. 또한 사용자가 '표로 정리'를 요청했음에도 비정형 공시 원문을 표로 강제 변환할 때의 정보 손실 위험이나 폴백 가능성을 설명한 대목이 chat-answer에 전무해 must_include 2건 중 1건도 미충족. 두 사유 모두 독립적으로 fail 사유.",
+ "suspect_dataset_defect": false,
+ "duration_s": 142.3
+}

@@ -1,0 +1,64 @@
+{
+ "case_id": "LIV-080",
+ "run": "2026-08-19-intraday-ui",
+ "verdict": "fail",
+ "auto_checks": [
+  {
+   "check": "audit-log에 korea-stock-mcp get_corp_code 또는 get_stock_base_info success=true 행이 있다",
+   "ok": true,
+   "evidence": "evidence/audit-delta.jsonl:11 {\"alias\":\"korea-stock-mcp\",\"tool\":\"get_corp_code\",\"success\":true}"
+  },
+  {
+   "check": "audit-log에 get_financial_statement success=true 행이 있다",
+   "ok": true,
+   "evidence": "evidence/audit-delta.jsonl:12 {\"alias\":\"korea-stock-mcp\",\"tool\":\"get_financial_statement\",\"success\":true}"
+  },
+  {
+   "check": "answerText에 '우선주'와 '동일 법인' 또는 '같은 corp_code' 계열 표현이 함께 등장한다",
+   "ok": false,
+   "evidence": "evidence/chat-answer.txt(622자, ui-state.json lastAnswer와 동일) 및 canvas 카드 텍스트(ui-state.json) 어디에도 '우선주'라는 단어가 등장하지 않음 — '발행사인 현대자동차 기준으로'라는 우회 표현만 존재"
+  }
+ ],
+ "must_not_include": [
+  {
+   "item": "현대차2우B에 별도의 독자적 재무제표가 존재하는 것처럼 서술",
+   "violated": false,
+   "evidence": null
+  },
+  {
+   "item": "재무 수치를 지어내는 것",
+   "violated": false,
+   "evidence": null
+  },
+  {
+   "item": "시세와 재무제표를 동일한 코드로 혼동해 조회했다고 서술",
+   "violated": false,
+   "evidence": "evidence/chat-answer.txt: '현재 시세는 조회하지 못했습니다' — 혼동 서술 없이 실패를 그대로 고지"
+  }
+ ],
+ "must_include": [
+  {
+   "item": "현대차2우B(우선주)와 현대차(보통주)가 동일 법인으로 재무제표를 공유한다는 설명",
+   "ok": false,
+   "evidence": "evidence/chat-answer.txt에 '발행사인 현대자동차 기준으로'라는 서술만 있고 '우선주'·'동일 법인' 단어 및 그 이유 설명이 없음"
+  },
+  {
+   "item": "재무제표 조회 시 발행법인(현대차) 기준 corp_code로 전환해야 한다는 설명",
+   "ok": false,
+   "evidence": "evidence/chat-answer.txt에 corp_code 전환 처리에 대한 언급 자체가 없음"
+  },
+  {
+   "item": "시세·시장구분은 현대차2우B 고유 종목코드 그대로 조회한다는 구분",
+   "ok": false,
+   "evidence": "evidence/chat-answer.txt: '다만 현재 시세는 조회하지 못했습니다 — 키움 조회 경로의 resolve 단계가 반복적으로 서버 오류(HTTP 409/404)를 반환해' — 시세 조회 자체가 실패해 구분 서술이 성립하지 않음"
+  },
+  {
+   "item": "get_corp_code가 반환하는 corp_code가 숫자형이라 8자리로 zfill해야 한다는 처리 언급",
+   "ok": false,
+   "evidence": "evidence/chat-answer.txt에 zfill·8자리 처리 언급이 전무함"
+  }
+ ],
+ "judge_note": "auto_check #3('우선주'+'동일 법인/같은 corp_code' 병기)이 실패한다 — 답변 전문(chat-answer.txt, ui-state.json 캔버스 카드 텍스트 포함)에 '우선주'라는 단어 자체가 한 번도 등장하지 않는다. must_include 4개 항목이 모두 문자 그대로 충족되지 않는다(발행법인 전환 근거·corp_code zfill 처리·우선주 개념 설명 부재, 시세 조회는 키움 selector 반복 오류로 아예 실패해 '구분 서술'도 성립 불가). 재무 수치 자체는 정직하게 제시했으나 judge가 요구하는 구체 요소가 문자로 없어 fail.",
+ "suspect_dataset_defect": false,
+ "duration_s": 93.3
+}

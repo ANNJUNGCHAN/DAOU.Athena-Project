@@ -1,0 +1,4039 @@
+[
+ {
+  "case_id": "LIV-001",
+  "group": "live-finance",
+  "persona": "CFO",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 50.2,
+  "first_card_ms": 46209,
+  "judging_ms": 46142,
+  "calling_ms": 3985,
+  "answer_chars": 196,
+  "cards": [
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 4,
+  "audit_timeline": [
+   {
+    "at_s": 17.9,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 22.5,
+    "alias": "korea-stock-mcp",
+    "tool": "get_financial_statement",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 23.7,
+    "alias": "korea-stock-mcp",
+    "tool": "get_financial_statement",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 24.6,
+    "alias": "korea-stock-mcp",
+    "tool": "get_financial_statement",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-002",
+  "group": "live-finance",
+  "persona": "애널리스트",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 34,
+  "first_card_ms": 29976,
+  "judging_ms": 29965,
+  "calling_ms": 3985,
+  "answer_chars": 165,
+  "cards": [
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 4,
+  "audit_timeline": [
+   {
+    "at_s": 11.2,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 11.4,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 16.8,
+    "alias": "korea-stock-mcp",
+    "tool": "get_financial_statement",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 17.4,
+    "alias": "korea-stock-mcp",
+    "tool": "get_financial_statement",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-003",
+  "group": "live-finance",
+  "persona": "개인투자자",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 33.9,
+  "first_card_ms": 28391,
+  "judging_ms": 28388,
+  "calling_ms": 5522,
+  "answer_chars": 177,
+  "cards": [
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 4,
+  "audit_timeline": [
+   {
+    "at_s": 11.1,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 11.3,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 18.1,
+    "alias": "korea-stock-mcp",
+    "tool": "get_financial_statement",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 18.7,
+    "alias": "korea-stock-mcp",
+    "tool": "get_financial_statement",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-004",
+  "group": "live-finance",
+  "persona": "전업투자자",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 41.8,
+  "first_card_ms": 36580,
+  "judging_ms": 36573,
+  "calling_ms": 5107,
+  "answer_chars": 214,
+  "cards": [
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 2,
+  "audit_timeline": [
+   {
+    "at_s": 23.0,
+    "alias": "dart-mcp",
+    "tool": "search_json_financial_data",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 25.4,
+    "alias": "dart-mcp",
+    "tool": "search_json_financial_data",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-005",
+  "group": "live-finance",
+  "persona": "재무전문가",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 44.2,
+  "first_card_ms": 40195,
+  "judging_ms": 40192,
+  "calling_ms": 4004,
+  "answer_chars": 173,
+  "cards": [
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 3,
+  "audit_timeline": [
+   {
+    "at_s": 12.8,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 17.7,
+    "alias": "korea-stock-mcp",
+    "tool": "get_financial_statement",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 18.7,
+    "alias": "korea-stock-mcp",
+    "tool": "get_financial_statement",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-006",
+  "group": "live-finance",
+  "persona": "개인투자자",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 40,
+  "first_card_ms": 32429,
+  "judging_ms": 32426,
+  "calling_ms": 7526,
+  "answer_chars": 276,
+  "cards": [
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 2,
+  "audit_timeline": [
+   {
+    "at_s": 15.0,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 18.3,
+    "alias": "korea-stock-mcp",
+    "tool": "get_financial_statement",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-007",
+  "group": "live-finance",
+  "persona": "CFO",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 27.9,
+  "first_card_ms": 23959,
+  "judging_ms": 23957,
+  "calling_ms": 3921,
+  "answer_chars": 215,
+  "cards": [
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 2,
+  "audit_timeline": [
+   {
+    "at_s": 10.9,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 14.0,
+    "alias": "korea-stock-mcp",
+    "tool": "get_financial_statement",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-008",
+  "group": "live-finance",
+  "persona": "전업투자자",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 30.5,
+  "first_card_ms": 25923,
+  "judging_ms": 25914,
+  "calling_ms": 4546,
+  "answer_chars": 198,
+  "cards": [
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 3,
+  "audit_timeline": [
+   {
+    "at_s": 12.4,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 15.7,
+    "alias": "korea-stock-mcp",
+    "tool": "get_financial_statement",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 16.6,
+    "alias": "korea-stock-mcp",
+    "tool": "get_financial_statement",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-009",
+  "group": "live-finance",
+  "persona": "애널리스트",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 31.9,
+  "first_card_ms": 25840,
+  "judging_ms": 25831,
+  "calling_ms": 6013,
+  "answer_chars": 183,
+  "cards": [
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 2,
+  "audit_timeline": [
+   {
+    "at_s": 11.7,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 15.2,
+    "alias": "korea-stock-mcp",
+    "tool": "get_financial_statement",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-010",
+  "group": "live-finance",
+  "persona": "CFO",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 52.8,
+  "first_card_ms": 48204,
+  "judging_ms": 48185,
+  "calling_ms": 4545,
+  "answer_chars": 227,
+  "cards": [
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 2,
+  "audit_timeline": [
+   {
+    "at_s": 14.5,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 18.9,
+    "alias": "korea-stock-mcp",
+    "tool": "get_financial_statement",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-011",
+  "group": "live-finance",
+  "persona": "일반직장인",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 66.6,
+  "first_card_ms": 42427,
+  "judging_ms": 42426,
+  "calling_ms": 24113,
+  "answer_chars": 323,
+  "cards": [
+   "stream.w-half"
+  ],
+  "audit_call_count": 7,
+  "audit_timeline": [
+   {
+    "at_s": 13.5,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 13.6,
+    "alias": "kiwoom-selector",
+    "tool": "athena_search",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 20.1,
+    "alias": "kiwoom-selector",
+    "tool": "athena_describe",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 20.9,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 46.8,
+    "alias": "kiwoom-selector",
+    "tool": "athena_resolve",
+    "success": false,
+    "backend_ms": null
+   },
+   {
+    "at_s": 53.4,
+    "alias": "kiwoom-selector",
+    "tool": "athena_resolve",
+    "success": false,
+    "backend_ms": null
+   },
+   {
+    "at_s": 58.9,
+    "alias": "kiwoom-selector",
+    "tool": "athena_resolve",
+    "success": false,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-012",
+  "group": "live-finance",
+  "persona": "개인투자자",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 38.2,
+  "first_card_ms": 34103,
+  "judging_ms": 34040,
+  "calling_ms": 4041,
+  "answer_chars": 148,
+  "cards": [
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 2,
+  "audit_timeline": [
+   {
+    "at_s": 20.7,
+    "alias": "dart-mcp",
+    "tool": "search_json_financial_data",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 26.5,
+    "alias": "dart-mcp",
+    "tool": "search_json_financial_data",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-013",
+  "group": "live-finance",
+  "persona": "브로커",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 73.7,
+  "first_card_ms": 68195,
+  "judging_ms": 68185,
+  "calling_ms": 5490,
+  "answer_chars": 213,
+  "cards": [
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 9,
+  "audit_timeline": [
+   {
+    "at_s": 10.3,
+    "alias": "kiwoom-selector",
+    "tool": "athena_search",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 11.9,
+    "alias": "kiwoom-selector",
+    "tool": "athena_describe",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 20.8,
+    "alias": "kiwoom-selector",
+    "tool": "athena_resolve",
+    "success": false,
+    "backend_ms": null
+   },
+   {
+    "at_s": 26.8,
+    "alias": "kiwoom-selector",
+    "tool": "athena_resolve",
+    "success": false,
+    "backend_ms": null
+   },
+   {
+    "at_s": 32.2,
+    "alias": "kiwoom-selector",
+    "tool": "athena_resolve",
+    "success": false,
+    "backend_ms": null
+   },
+   {
+    "at_s": 37.0,
+    "alias": "kiwoom-selector",
+    "tool": "athena_resolve",
+    "success": false,
+    "backend_ms": null
+   },
+   {
+    "at_s": 47.9,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 50.0,
+    "alias": "korea-stock-mcp",
+    "tool": "get_market_type",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 55.4,
+    "alias": "kiwoom-selector",
+    "tool": "athena_resolve",
+    "success": false,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-014",
+  "group": "live-finance",
+  "persona": "리서치원",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 54,
+  "first_card_ms": 32389,
+  "judging_ms": 32385,
+  "calling_ms": 21615,
+  "answer_chars": 253,
+  "cards": [
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 3,
+  "audit_timeline": [
+   {
+    "at_s": 16.1,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 18.6,
+    "alias": "dart-mcp",
+    "tool": "search_json_financial_data",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 38.9,
+    "alias": "dart-mcp",
+    "tool": "search_json_financial_data",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-015",
+  "group": "live-disclosure",
+  "persona": "리서치원",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 35.9,
+  "first_card_ms": 30383,
+  "judging_ms": 30376,
+  "calling_ms": 5524,
+  "answer_chars": 212,
+  "cards": [
+   "stream.w-half"
+  ],
+  "audit_call_count": 3,
+  "audit_timeline": [
+   {
+    "at_s": 12.6,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 15.6,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": false,
+    "backend_ms": null
+   },
+   {
+    "at_s": 20.3,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-016",
+  "group": "live-disclosure",
+  "persona": "리서치원",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 104.7,
+  "first_card_ms": 68117,
+  "judging_ms": 68116,
+  "calling_ms": 36573,
+  "answer_chars": 411,
+  "cards": [
+   "mcp-table.w-full",
+   "stream.w-half"
+  ],
+  "audit_call_count": 4,
+  "audit_timeline": [
+   {
+    "at_s": 9.8,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 13.1,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 16.8,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 41.7,
+    "alias": "naver-search-2",
+    "tool": "search_news",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-017",
+  "group": "live-disclosure",
+  "persona": "CFO",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 142.3,
+  "first_card_ms": 90567,
+  "judging_ms": 90567,
+  "calling_ms": 51711,
+  "answer_chars": 406,
+  "cards": [
+   "mcp-table.w-full",
+   "stream.w-half"
+  ],
+  "audit_call_count": 3,
+  "audit_timeline": [
+   {
+    "at_s": 12.8,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 16.7,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 93.3,
+    "alias": "naver-search-2",
+    "tool": "search_news",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-018",
+  "group": "live-disclosure",
+  "persona": "애널리스트",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 38,
+  "first_card_ms": 33957,
+  "judging_ms": 33956,
+  "calling_ms": 3993,
+  "answer_chars": 228,
+  "cards": [
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 6,
+  "audit_timeline": [
+   {
+    "at_s": 9.6,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 10.1,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 10.2,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 15.2,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 16.5,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 16.8,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-019",
+  "group": "live-disclosure",
+  "persona": "일반직장인",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 52.2,
+  "first_card_ms": 46080,
+  "judging_ms": 46074,
+  "calling_ms": 6086,
+  "answer_chars": 292,
+  "cards": [
+   "stream.w-half"
+  ],
+  "audit_call_count": 4,
+  "audit_timeline": [
+   {
+    "at_s": 10.1,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": false,
+    "backend_ms": null
+   },
+   {
+    "at_s": 17.7,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 23.5,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 29.6,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-020",
+  "group": "live-disclosure",
+  "persona": "개인투자자",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 84.1,
+  "first_card_ms": 76497,
+  "judging_ms": 76496,
+  "calling_ms": 7604,
+  "answer_chars": 308,
+  "cards": [
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 3,
+  "audit_timeline": [
+   {
+    "at_s": 11.4,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 16.2,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 21.5,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-021",
+  "group": "live-disclosure",
+  "persona": "브로커",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 96.3,
+  "first_card_ms": 90230,
+  "judging_ms": 90230,
+  "calling_ms": 6014,
+  "answer_chars": 347,
+  "cards": [
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 7,
+  "audit_timeline": [
+   {
+    "at_s": 10.7,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 14.1,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 24.2,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 34.1,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 34.3,
+    "alias": "naver-search-2",
+    "tool": "search_news",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 43.8,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 60.0,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-022",
+  "group": "live-disclosure",
+  "persona": "리서치원",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 87.7,
+  "first_card_ms": 45426,
+  "judging_ms": 45360,
+  "calling_ms": 42221,
+  "answer_chars": 487,
+  "cards": [
+   "mcp-table.w-full",
+   "stream.w-half"
+  ],
+  "audit_call_count": 4,
+  "audit_timeline": [
+   {
+    "at_s": 16.9,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 19.6,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 24.1,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 49.7,
+    "alias": "dart-mcp",
+    "tool": "search_business_information",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-023",
+  "group": "live-disclosure",
+  "persona": "리서치원",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 109.5,
+  "first_card_ms": 73801,
+  "judging_ms": 73786,
+  "calling_ms": 35615,
+  "answer_chars": 378,
+  "cards": [
+   "stream.w-half",
+   "reader.w-half"
+  ],
+  "audit_call_count": 5,
+  "audit_timeline": [
+   {
+    "at_s": 41.4,
+    "alias": "naver-search-2",
+    "tool": "search_news",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 42.0,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 47.3,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 51.4,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 56.9,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-024",
+  "group": "live-disclosure",
+  "persona": "개인투자자",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 45.9,
+  "first_card_ms": 40354,
+  "judging_ms": 40349,
+  "calling_ms": 5545,
+  "answer_chars": 278,
+  "cards": [
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 3,
+  "audit_timeline": [
+   {
+    "at_s": 8.9,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 11.7,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 16.6,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-025",
+  "group": "live-disclosure",
+  "persona": "애널리스트",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 44.5,
+  "first_card_ms": 37982,
+  "judging_ms": 37972,
+  "calling_ms": 6489,
+  "answer_chars": 302,
+  "cards": [
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 2,
+  "audit_timeline": [
+   {
+    "at_s": 8.9,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 11.5,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-026",
+  "group": "live-disclosure",
+  "persona": "브로커",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 68,
+  "first_card_ms": 41936,
+  "judging_ms": 41935,
+  "calling_ms": 26033,
+  "answer_chars": 317,
+  "cards": [
+   "mcp-table.w-full",
+   "stream.w-half"
+  ],
+  "audit_call_count": 3,
+  "audit_timeline": [
+   {
+    "at_s": 10.0,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 12.8,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 20.1,
+    "alias": "naver-search-2",
+    "tool": "search_news",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-027",
+  "group": "live-disclosure",
+  "persona": "재무전문가",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 142.4,
+  "first_card_ms": 134830,
+  "judging_ms": 134830,
+  "calling_ms": 7502,
+  "answer_chars": 389,
+  "cards": [
+   "reader.w-half"
+  ],
+  "audit_call_count": 3,
+  "audit_timeline": [
+   {
+    "at_s": 11.7,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 17.0,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 25.6,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-028",
+  "group": "live-disclosure",
+  "persona": "애널리스트",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 88.3,
+  "first_card_ms": 78187,
+  "judging_ms": 78185,
+  "calling_ms": 10036,
+  "answer_chars": 464,
+  "cards": [
+   "reader.w-half"
+  ],
+  "audit_call_count": 3,
+  "audit_timeline": [
+   {
+    "at_s": 13.7,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 16.5,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 23.2,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-029",
+  "group": "live-disclosure",
+  "persona": "재무전문가",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 98.3,
+  "first_card_ms": 62596,
+  "judging_ms": 62585,
+  "calling_ms": 35682,
+  "answer_chars": 349,
+  "cards": [
+   "reader.w-half",
+   "stream.w-half"
+  ],
+  "audit_call_count": 4,
+  "audit_timeline": [
+   {
+    "at_s": 10.5,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 13.9,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 16.3,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 65.6,
+    "alias": "naver-search-2",
+    "tool": "search_news",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-030",
+  "group": "live-temporal",
+  "persona": "전업투자자",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 32.5,
+  "first_card_ms": 30127,
+  "judging_ms": 30126,
+  "calling_ms": 2318,
+  "answer_chars": 155,
+  "cards": [
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 3,
+  "audit_timeline": [
+   {
+    "at_s": 15.6,
+    "alias": "korea-stock-mcp",
+    "tool": "get_today_date",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 16.0,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 20.7,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-031",
+  "group": "live-temporal",
+  "persona": "리서치원",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 73.9,
+  "first_card_ms": 65886,
+  "judging_ms": 65872,
+  "calling_ms": 7999,
+  "answer_chars": 354,
+  "cards": [
+   "stream.w-half"
+  ],
+  "audit_call_count": 3,
+  "audit_timeline": [
+   {
+    "at_s": 12.6,
+    "alias": "korea-stock-mcp",
+    "tool": "get_today_date",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 23.7,
+    "alias": "naver-search-2",
+    "tool": "search_news",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 41.2,
+    "alias": "naver-search-2",
+    "tool": "search_news",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-032",
+  "group": "live-temporal",
+  "persona": "전업투자자",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 45.4,
+  "first_card_ms": 41406,
+  "judging_ms": 39458,
+  "calling_ms": 3880,
+  "answer_chars": 158,
+  "cards": [
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 2,
+  "audit_timeline": [
+   {
+    "at_s": 20.1,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 23.6,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-033",
+  "group": "live-temporal",
+  "persona": "리서치원",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 42,
+  "first_card_ms": 38014,
+  "judging_ms": 38008,
+  "calling_ms": 3920,
+  "answer_chars": 259,
+  "cards": [
+   "stream.w-half"
+  ],
+  "audit_call_count": 4,
+  "audit_timeline": [
+   {
+    "at_s": 11.4,
+    "alias": "dart-mcp",
+    "tool": "get_current_date",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 11.4,
+    "alias": "korea-stock-mcp",
+    "tool": "get_today_date",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 24.0,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 26.7,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-034",
+  "group": "live-temporal",
+  "persona": "전업투자자",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 94.6,
+  "first_card_ms": 90114,
+  "judging_ms": 90109,
+  "calling_ms": 4463,
+  "answer_chars": 279,
+  "cards": [
+   "stream.w-half"
+  ],
+  "audit_call_count": 2,
+  "audit_timeline": [
+   {
+    "at_s": 9.7,
+    "alias": "naver-search-2",
+    "tool": "search_news",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 29.3,
+    "alias": "naver-search-2",
+    "tool": "search_news",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-035",
+  "group": "live-temporal",
+  "persona": "재무전문가",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 44,
+  "first_card_ms": 39950,
+  "judging_ms": 39934,
+  "calling_ms": 4018,
+  "answer_chars": 205,
+  "cards": [
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 3,
+  "audit_timeline": [
+   {
+    "at_s": 10.3,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 13.2,
+    "alias": "korea-stock-mcp",
+    "tool": "get_financial_statement",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 20.5,
+    "alias": "korea-stock-mcp",
+    "tool": "get_financial_statement",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-036",
+  "group": "live-temporal",
+  "persona": "재무전문가",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 40.1,
+  "first_card_ms": null,
+  "judging_ms": 35595,
+  "calling_ms": 4463,
+  "answer_chars": 179,
+  "cards": [],
+  "audit_call_count": 2,
+  "audit_timeline": [
+   {
+    "at_s": 10.2,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 14.6,
+    "alias": "korea-stock-mcp",
+    "tool": "get_financial_statement",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-037",
+  "group": "live-temporal",
+  "persona": "애널리스트",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 57.9,
+  "first_card_ms": 48331,
+  "judging_ms": 48329,
+  "calling_ms": 9515,
+  "answer_chars": 360,
+  "cards": [
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 2,
+  "audit_timeline": [
+   {
+    "at_s": 21.0,
+    "alias": "korea-stock-mcp",
+    "tool": "get_financial_statement",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 21.5,
+    "alias": "korea-stock-mcp",
+    "tool": "get_financial_statement",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-038",
+  "group": "live-temporal",
+  "persona": "CFO",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 30.4,
+  "first_card_ms": null,
+  "judging_ms": 25781,
+  "calling_ms": 4539,
+  "answer_chars": 218,
+  "cards": [],
+  "audit_call_count": 2,
+  "audit_timeline": [
+   {
+    "at_s": 9.8,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 13.2,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-039",
+  "group": "live-temporal",
+  "persona": "애널리스트",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 49.9,
+  "first_card_ms": 43861,
+  "judging_ms": 43849,
+  "calling_ms": 6036,
+  "answer_chars": 357,
+  "cards": [
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 5,
+  "audit_timeline": [
+   {
+    "at_s": 16.3,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 23.9,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 24.5,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 25.9,
+    "alias": "korea-stock-mcp",
+    "tool": "get_financial_statement",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 26.8,
+    "alias": "korea-stock-mcp",
+    "tool": "get_financial_statement",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-040",
+  "group": "live-temporal",
+  "persona": "전업투자자",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 39.9,
+  "first_card_ms": 33961,
+  "judging_ms": 33938,
+  "calling_ms": 5933,
+  "answer_chars": 263,
+  "cards": [
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 3,
+  "audit_timeline": [
+   {
+    "at_s": 11.5,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 16.2,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 16.5,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-041",
+  "group": "live-temporal",
+  "persona": "브로커",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 78.5,
+  "first_card_ms": 72512,
+  "judging_ms": 72511,
+  "calling_ms": 5952,
+  "answer_chars": 266,
+  "cards": [
+   "stream.w-half"
+  ],
+  "audit_call_count": 1,
+  "audit_timeline": [
+   {
+    "at_s": 10.2,
+    "alias": "naver-search-2",
+    "tool": "search_news",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-042",
+  "group": "live-temporal",
+  "persona": "재무전문가",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 40.2,
+  "first_card_ms": 35842,
+  "judging_ms": 35832,
+  "calling_ms": 4344,
+  "answer_chars": 242,
+  "cards": [
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 2,
+  "audit_timeline": [
+   {
+    "at_s": 22.2,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 25.1,
+    "alias": "korea-stock-mcp",
+    "tool": "get_financial_statement",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-043",
+  "group": "live-temporal",
+  "persona": "전업투자자",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 75.7,
+  "first_card_ms": 69718,
+  "judging_ms": 69713,
+  "calling_ms": 5995,
+  "answer_chars": 253,
+  "cards": [
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 3,
+  "audit_timeline": [
+   {
+    "at_s": 13.7,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 17.0,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 25.6,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-044",
+  "group": "live-render",
+  "persona": "개인투자자",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 65.9,
+  "first_card_ms": null,
+  "judging_ms": 59858,
+  "calling_ms": 6018,
+  "answer_chars": 186,
+  "cards": [],
+  "audit_call_count": 2,
+  "audit_timeline": [
+   {
+    "at_s": 11.7,
+    "alias": "korea-stock-mcp",
+    "tool": "get_financial_statement",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 21.8,
+    "alias": "korea-stock-mcp",
+    "tool": "get_financial_statement",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-045",
+  "group": "live-render",
+  "persona": "일반직장인",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 43.9,
+  "first_card_ms": 38344,
+  "judging_ms": 38342,
+  "calling_ms": 5560,
+  "answer_chars": 212,
+  "cards": [
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 2,
+  "audit_timeline": [
+   {
+    "at_s": 8.4,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 12.0,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-046",
+  "group": "live-render",
+  "persona": "개인투자자",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 156.1,
+  "first_card_ms": 90283,
+  "judging_ms": 90282,
+  "calling_ms": 65803,
+  "answer_chars": 270,
+  "cards": [
+   "stream.w-half"
+  ],
+  "audit_call_count": 3,
+  "audit_timeline": [
+   {
+    "at_s": 10.6,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 10.7,
+    "alias": "naver-search-2",
+    "tool": "search_news",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 15.7,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-047",
+  "group": "live-render",
+  "persona": "일반직장인",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 44.8,
+  "first_card_ms": 40272,
+  "judging_ms": 40134,
+  "calling_ms": 4603,
+  "answer_chars": 188,
+  "cards": [
+   "reader.w-half"
+  ],
+  "audit_call_count": 4,
+  "audit_timeline": [
+   {
+    "at_s": 16.8,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 20.8,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": false,
+    "backend_ms": null
+   },
+   {
+    "at_s": 24.6,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 30.7,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-048",
+  "group": "live-render",
+  "persona": "개인투자자",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 83.7,
+  "first_card_ms": 78575,
+  "judging_ms": 78515,
+  "calling_ms": 5125,
+  "answer_chars": 203,
+  "cards": [
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 3,
+  "audit_timeline": [
+   {
+    "at_s": 13.3,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 16.6,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 20.2,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-049",
+  "group": "live-render",
+  "persona": "브로커",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 86.8,
+  "first_card_ms": 80109,
+  "judging_ms": 80084,
+  "calling_ms": 6617,
+  "answer_chars": 301,
+  "cards": [
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 4,
+  "audit_timeline": [
+   {
+    "at_s": 10.5,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 13.2,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": false,
+    "backend_ms": null
+   },
+   {
+    "at_s": 17.0,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 27.2,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-050",
+  "group": "live-render",
+  "persona": "일반직장인",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 181.6,
+  "first_card_ms": 30702,
+  "judging_ms": 30589,
+  "calling_ms": 150912,
+  "answer_chars": 41,
+  "cards": [
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 10,
+  "audit_timeline": [
+   {
+    "at_s": 15.6,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 18.2,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 37.9,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 38.5,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 39.2,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 39.7,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 40.1,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 40.5,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 40.9,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 56.5,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-051",
+  "group": "live-render",
+  "persona": "리서치원",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 84.5,
+  "first_card_ms": 46379,
+  "judging_ms": 46373,
+  "calling_ms": 38037,
+  "answer_chars": 286,
+  "cards": [
+   "stream.w-half",
+   "reader.w-half"
+  ],
+  "audit_call_count": 2,
+  "audit_timeline": [
+   {
+    "at_s": 16.1,
+    "alias": "naver-search-2",
+    "tool": "search_news",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 60.2,
+    "alias": "naver-search-2",
+    "tool": "search_news",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-052",
+  "group": "live-render",
+  "persona": "재무전문가",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 105.3,
+  "first_card_ms": 47419,
+  "judging_ms": 47412,
+  "calling_ms": 57758,
+  "answer_chars": 347,
+  "cards": [
+   "mcp-table.w-full",
+   "reader.w-half"
+  ],
+  "audit_call_count": 4,
+  "audit_timeline": [
+   {
+    "at_s": 17.1,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 20.7,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 50.1,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 54.5,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-053",
+  "group": "live-render",
+  "persona": "리서치원",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 150.7,
+  "first_card_ms": null,
+  "judging_ms": 80305,
+  "calling_ms": 70383,
+  "answer_chars": 300,
+  "cards": [],
+  "audit_call_count": 7,
+  "audit_timeline": [
+   {
+    "at_s": 13.2,
+    "alias": "naver-search-2",
+    "tool": "search_news",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 13.6,
+    "alias": "naver-search-2",
+    "tool": "search_news",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 23.6,
+    "alias": "naver-search-2",
+    "tool": "search_news",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 83.7,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 86.9,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 92.0,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 99.6,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-054",
+  "group": "live-render",
+  "persona": "개인투자자",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 96.2,
+  "first_card_ms": 70063,
+  "judging_ms": 70058,
+  "calling_ms": 26071,
+  "answer_chars": 241,
+  "cards": [
+   "stream.w-half",
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 3,
+  "audit_timeline": [
+   {
+    "at_s": 11.0,
+    "alias": "naver-search-2",
+    "tool": "search_news",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 11.6,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 74.9,
+    "alias": "korea-stock-mcp",
+    "tool": "get_financial_statement",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-055",
+  "group": "live-render",
+  "persona": "일반직장인",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 17.9,
+  "first_card_ms": null,
+  "judging_ms": null,
+  "calling_ms": null,
+  "answer_chars": 539,
+  "cards": [],
+  "audit_call_count": 0,
+  "audit_timeline": []
+ },
+ {
+  "case_id": "LIV-056",
+  "group": "live-render",
+  "persona": "전업투자자",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 116.6,
+  "first_card_ms": 54090,
+  "judging_ms": 54078,
+  "calling_ms": 62458,
+  "answer_chars": 296,
+  "cards": [
+   "stream.w-half",
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 3,
+  "audit_timeline": [
+   {
+    "at_s": 11.0,
+    "alias": "naver-search-2",
+    "tool": "search_news",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 11.4,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 57.3,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-057",
+  "group": "live-render",
+  "persona": "브로커",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 74.1,
+  "first_card_ms": 45996,
+  "judging_ms": 45982,
+  "calling_ms": 28120,
+  "answer_chars": 209,
+  "cards": [
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 2,
+  "audit_timeline": [
+   {
+    "at_s": 8.8,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 12.3,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-058",
+  "group": "live-adversarial",
+  "persona": "개인투자자",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 36,
+  "first_card_ms": null,
+  "judging_ms": null,
+  "calling_ms": null,
+  "answer_chars": 720,
+  "cards": [],
+  "audit_call_count": 2,
+  "audit_timeline": [
+   {
+    "at_s": 12.6,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 16.2,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-059",
+  "group": "live-adversarial",
+  "persona": "리서치원",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 76.5,
+  "first_card_ms": 68376,
+  "judging_ms": 68349,
+  "calling_ms": 8061,
+  "answer_chars": 366,
+  "cards": [
+   "stream.w-half"
+  ],
+  "audit_call_count": 2,
+  "audit_timeline": [
+   {
+    "at_s": 11.5,
+    "alias": "naver-search-2",
+    "tool": "search_news",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 11.5,
+    "alias": "naver-search-2",
+    "tool": "search_webkr",
+    "success": false,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-060",
+  "group": "live-adversarial",
+  "persona": "브로커",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 54.1,
+  "first_card_ms": 48052,
+  "judging_ms": 48046,
+  "calling_ms": 6012,
+  "answer_chars": 265,
+  "cards": [
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 1,
+  "audit_timeline": [
+   {
+    "at_s": 15.4,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-061",
+  "group": "live-adversarial",
+  "persona": "일반직장인",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 122.2,
+  "first_card_ms": 78057,
+  "judging_ms": 78055,
+  "calling_ms": 44153,
+  "answer_chars": 384,
+  "cards": [
+   "reader.w-half",
+   "stream.w-half"
+  ],
+  "audit_call_count": 3,
+  "audit_timeline": [
+   {
+    "at_s": 17.4,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 17.5,
+    "alias": "naver-search-2",
+    "tool": "search_news",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 24.4,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-062",
+  "group": "live-adversarial",
+  "persona": "개인투자자",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 73.3,
+  "first_card_ms": null,
+  "judging_ms": null,
+  "calling_ms": null,
+  "answer_chars": 533,
+  "cards": [],
+  "audit_call_count": 5,
+  "audit_timeline": [
+   {
+    "at_s": 34.1,
+    "alias": "kiwoom-selector",
+    "tool": "athena_search",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 36.9,
+    "alias": "kiwoom-selector",
+    "tool": "athena_describe",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 51.4,
+    "alias": "kiwoom-selector",
+    "tool": "athena_resolve",
+    "success": false,
+    "backend_ms": null
+   },
+   {
+    "at_s": 54.8,
+    "alias": "kiwoom-selector",
+    "tool": "athena_resolve",
+    "success": false,
+    "backend_ms": null
+   },
+   {
+    "at_s": 59.9,
+    "alias": "kiwoom-selector",
+    "tool": "athena_resolve",
+    "success": false,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-063",
+  "group": "live-adversarial",
+  "persona": "전업투자자",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 44.2,
+  "first_card_ms": 38141,
+  "judging_ms": 38083,
+  "calling_ms": 6064,
+  "answer_chars": 306,
+  "cards": [
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 0,
+  "audit_timeline": []
+ },
+ {
+  "case_id": "LIV-064",
+  "group": "live-adversarial",
+  "persona": "브로커",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 30.4,
+  "first_card_ms": null,
+  "judging_ms": null,
+  "calling_ms": null,
+  "answer_chars": 723,
+  "cards": [],
+  "audit_call_count": 0,
+  "audit_timeline": []
+ },
+ {
+  "case_id": "LIV-065",
+  "group": "live-adversarial",
+  "persona": "일반직장인",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 13.6,
+  "first_card_ms": null,
+  "judging_ms": null,
+  "calling_ms": null,
+  "answer_chars": 491,
+  "cards": [],
+  "audit_call_count": 0,
+  "audit_timeline": []
+ },
+ {
+  "case_id": "LIV-066",
+  "group": "live-adversarial",
+  "persona": "개인투자자",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 42.1,
+  "first_card_ms": null,
+  "judging_ms": null,
+  "calling_ms": null,
+  "answer_chars": 466,
+  "cards": [],
+  "audit_call_count": 5,
+  "audit_timeline": [
+   {
+    "at_s": 14.5,
+    "alias": "kiwoom-selector",
+    "tool": "athena_resolve",
+    "success": false,
+    "backend_ms": null
+   },
+   {
+    "at_s": 17.9,
+    "alias": "kiwoom-selector",
+    "tool": "athena_search",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 19.8,
+    "alias": "kiwoom-selector",
+    "tool": "athena_describe",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 25.9,
+    "alias": "kiwoom-selector",
+    "tool": "athena_resolve",
+    "success": false,
+    "backend_ms": null
+   },
+   {
+    "at_s": 30.4,
+    "alias": "kiwoom-selector",
+    "tool": "athena_resolve",
+    "success": false,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-067",
+  "group": "live-adversarial",
+  "persona": "전업투자자",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 50.2,
+  "first_card_ms": 40132,
+  "judging_ms": 40125,
+  "calling_ms": 10086,
+  "answer_chars": 352,
+  "cards": [
+   "stream.w-half"
+  ],
+  "audit_call_count": 1,
+  "audit_timeline": [
+   {
+    "at_s": 14.2,
+    "alias": "naver-search-2",
+    "tool": "search_news",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-068",
+  "group": "live-adversarial",
+  "persona": "전업투자자",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 19.9,
+  "first_card_ms": null,
+  "judging_ms": null,
+  "calling_ms": null,
+  "answer_chars": 625,
+  "cards": [],
+  "audit_call_count": 0,
+  "audit_timeline": []
+ },
+ {
+  "case_id": "LIV-069",
+  "group": "live-adversarial",
+  "persona": "일반직장인",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 32.6,
+  "first_card_ms": null,
+  "judging_ms": null,
+  "calling_ms": null,
+  "answer_chars": 527,
+  "cards": [],
+  "audit_call_count": 3,
+  "audit_timeline": [
+   {
+    "at_s": 14.1,
+    "alias": "kiwoom-selector",
+    "tool": "athena_search",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 17.5,
+    "alias": "kiwoom-selector",
+    "tool": "athena_describe",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 20.6,
+    "alias": "kiwoom-selector",
+    "tool": "athena_resolve",
+    "success": false,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-070",
+  "group": "live-adversarial",
+  "persona": "개인투자자",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 94.3,
+  "first_card_ms": 70790,
+  "judging_ms": 70771,
+  "calling_ms": 23503,
+  "answer_chars": 672,
+  "cards": [
+   "stream.w-half"
+  ],
+  "audit_call_count": 2,
+  "audit_timeline": [
+   {
+    "at_s": 31.6,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 34.5,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-071",
+  "group": "live-adversarial",
+  "persona": "전업투자자",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 23.9,
+  "first_card_ms": null,
+  "judging_ms": null,
+  "calling_ms": null,
+  "answer_chars": 721,
+  "cards": [],
+  "audit_call_count": 0,
+  "audit_timeline": []
+ },
+ {
+  "case_id": "LIV-072",
+  "group": "live-adversarial",
+  "persona": "전업투자자",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 25,
+  "first_card_ms": null,
+  "judging_ms": null,
+  "calling_ms": null,
+  "answer_chars": 712,
+  "cards": [],
+  "audit_call_count": 0,
+  "audit_timeline": []
+ },
+ {
+  "case_id": "LIV-073",
+  "group": "live-gate",
+  "persona": "개인투자자",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 94.1,
+  "first_card_ms": 49849,
+  "judging_ms": 49839,
+  "calling_ms": 44221,
+  "answer_chars": 366,
+  "cards": [
+   "stream.w-half"
+  ],
+  "audit_call_count": 3,
+  "audit_timeline": [
+   {
+    "at_s": 14.6,
+    "alias": "naver-search-2",
+    "tool": "search_news",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 49.3,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 52.0,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-074",
+  "group": "live-gate",
+  "persona": "전업투자자",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 116.8,
+  "first_card_ms": 50325,
+  "judging_ms": 50322,
+  "calling_ms": 66450,
+  "answer_chars": 249,
+  "cards": [
+   "stream.w-half",
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 10,
+  "audit_timeline": [
+   {
+    "at_s": 17.6,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 17.8,
+    "alias": "kiwoom-selector",
+    "tool": "athena_search",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 20.8,
+    "alias": "kiwoom-selector",
+    "tool": "athena_describe",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 21.7,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 49.7,
+    "alias": "kiwoom-selector",
+    "tool": "athena_resolve",
+    "success": false,
+    "backend_ms": null
+   },
+   {
+    "at_s": 58.2,
+    "alias": "kiwoom-selector",
+    "tool": "athena_describe",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 79.6,
+    "alias": "kiwoom-selector",
+    "tool": "athena_resolve",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 80.6,
+    "alias": "kiwoom-selector",
+    "tool": "athena_resolve",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 88.9,
+    "alias": "kiwoom-selector",
+    "tool": "athena_call",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 94.7,
+    "alias": "kiwoom-selector",
+    "tool": "athena_call",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-075",
+  "group": "live-gate",
+  "persona": "재무전문가",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 69.7,
+  "first_card_ms": 48225,
+  "judging_ms": 48206,
+  "calling_ms": 21479,
+  "answer_chars": 250,
+  "cards": [
+   "stream.w-half",
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 3,
+  "audit_timeline": [
+   {
+    "at_s": 14.0,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 18.1,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 19.1,
+    "alias": "korea-stock-mcp",
+    "tool": "get_financial_statement",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-076",
+  "group": "live-gate",
+  "persona": "일반직장인",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 36.2,
+  "first_card_ms": null,
+  "judging_ms": null,
+  "calling_ms": null,
+  "answer_chars": 1373,
+  "cards": [],
+  "audit_call_count": 0,
+  "audit_timeline": []
+ },
+ {
+  "case_id": "LIV-077",
+  "group": "live-gate",
+  "persona": "CFO",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 102.6,
+  "first_card_ms": 42634,
+  "judging_ms": 42608,
+  "calling_ms": 59957,
+  "answer_chars": 243,
+  "cards": [
+   "mcp-table.w-full",
+   "stream.w-half"
+  ],
+  "audit_call_count": 7,
+  "audit_timeline": [
+   {
+    "at_s": 13.9,
+    "alias": "naver-search-2",
+    "tool": "search_news",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 14.8,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 15.0,
+    "alias": "kiwoom-selector",
+    "tool": "athena_search",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 18.7,
+    "alias": "kiwoom-selector",
+    "tool": "athena_describe",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 19.3,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 22.7,
+    "alias": "kiwoom-selector",
+    "tool": "athena_resolve",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 31.4,
+    "alias": "kiwoom-selector",
+    "tool": "athena_call",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-078",
+  "group": "live-gate",
+  "persona": "CFO",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 110.5,
+  "first_card_ms": 66729,
+  "judging_ms": 66721,
+  "calling_ms": 43736,
+  "answer_chars": 331,
+  "cards": [
+   "mcp-table.w-full",
+   "stream.w-half"
+  ],
+  "audit_call_count": 3,
+  "audit_timeline": [
+   {
+    "at_s": 27.2,
+    "alias": "korea-stock-mcp",
+    "tool": "get_financial_statement",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 27.4,
+    "alias": "naver-search-2",
+    "tool": "search_news",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 45.8,
+    "alias": "dart-mcp",
+    "tool": "search_disclosure",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-079",
+  "group": "live-gate",
+  "persona": "일반직장인",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 70.9,
+  "first_card_ms": 40373,
+  "judging_ms": 40366,
+  "calling_ms": 30476,
+  "answer_chars": 271,
+  "cards": [
+   "free.w-full",
+   "stream.w-half"
+  ],
+  "audit_call_count": 4,
+  "audit_timeline": [
+   {
+    "at_s": 13.9,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 14.1,
+    "alias": "naver-search-2",
+    "tool": "search_news",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 19.1,
+    "alias": "korea-stock-mcp",
+    "tool": "get_market_type",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 19.4,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-080",
+  "group": "live-gate",
+  "persona": "재무전문가",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 93.3,
+  "first_card_ms": 66656,
+  "judging_ms": 66653,
+  "calling_ms": 26566,
+  "answer_chars": 293,
+  "cards": [
+   "mcp-table.w-full",
+   "stream.w-half"
+  ],
+  "audit_call_count": 8,
+  "audit_timeline": [
+   {
+    "at_s": 18.4,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 19.4,
+    "alias": "kiwoom-selector",
+    "tool": "athena_resolve",
+    "success": false,
+    "backend_ms": null
+   },
+   {
+    "at_s": 27.9,
+    "alias": "korea-stock-mcp",
+    "tool": "get_financial_statement",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 28.2,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 32.6,
+    "alias": "kiwoom-selector",
+    "tool": "athena_search",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 36.2,
+    "alias": "kiwoom-selector",
+    "tool": "athena_describe",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 39.9,
+    "alias": "kiwoom-selector",
+    "tool": "athena_resolve",
+    "success": false,
+    "backend_ms": null
+   },
+   {
+    "at_s": 46.2,
+    "alias": "kiwoom-selector",
+    "tool": "athena_resolve",
+    "success": false,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-081",
+  "group": "live-gate",
+  "persona": "애널리스트",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 58.1,
+  "first_card_ms": 45891,
+  "judging_ms": 45878,
+  "calling_ms": 12105,
+  "answer_chars": 261,
+  "cards": [
+   "mcp-table.w-full",
+   "free.w-full"
+  ],
+  "audit_call_count": 4,
+  "audit_timeline": [
+   {
+    "at_s": 16.6,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 20.5,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 25.5,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 25.9,
+    "alias": "korea-stock-mcp",
+    "tool": "get_financial_statement",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-082",
+  "group": "live-gate",
+  "persona": "애널리스트",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 180.2,
+  "first_card_ms": 167987,
+  "judging_ms": 167908,
+  "calling_ms": 12238,
+  "answer_chars": 378,
+  "cards": [
+   "stream.w-half"
+  ],
+  "audit_call_count": 2,
+  "audit_timeline": [
+   {
+    "at_s": 25.1,
+    "alias": "naver-search-2",
+    "tool": "search_news",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 25.5,
+    "alias": "naver-search-2",
+    "tool": "search_news",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-083",
+  "group": "live-gate",
+  "persona": "애널리스트",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 91.8,
+  "first_card_ms": 82538,
+  "judging_ms": 82427,
+  "calling_ms": 9300,
+  "answer_chars": 241,
+  "cards": [
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 5,
+  "audit_timeline": [
+   {
+    "at_s": 29.4,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 36.0,
+    "alias": "korea-stock-mcp",
+    "tool": "get_financial_statement",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 55.5,
+    "alias": "korea-stock-mcp",
+    "tool": "get_financial_statement",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 56.8,
+    "alias": "korea-stock-mcp",
+    "tool": "get_financial_statement",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 57.6,
+    "alias": "korea-stock-mcp",
+    "tool": "get_financial_statement",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-084",
+  "group": "live-gate",
+  "persona": "리서치원",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 128.7,
+  "first_card_ms": 76469,
+  "judging_ms": 76442,
+  "calling_ms": 52221,
+  "answer_chars": 271,
+  "cards": [
+   "stream.w-half"
+  ],
+  "audit_call_count": 3,
+  "audit_timeline": [
+   {
+    "at_s": 29.0,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 29.2,
+    "alias": "naver-search-2",
+    "tool": "search_news",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 44.3,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-085",
+  "group": "live-gate",
+  "persona": "리서치원",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 92,
+  "first_card_ms": 75842,
+  "judging_ms": 75828,
+  "calling_ms": 16078,
+  "answer_chars": 381,
+  "cards": [
+   "stream.w-half",
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 5,
+  "audit_timeline": [
+   {
+    "at_s": 20.4,
+    "alias": "naver-search-2",
+    "tool": "search_news",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 20.9,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 23.4,
+    "alias": "dart-mcp",
+    "tool": "search_disclosure",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 32.5,
+    "alias": "dart-mcp",
+    "tool": "search_disclosure",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 32.7,
+    "alias": "korea-stock-mcp",
+    "tool": "get_market_type",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-086",
+  "group": "live-gate",
+  "persona": "브로커",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 136.3,
+  "first_card_ms": 130196,
+  "judging_ms": 130178,
+  "calling_ms": 6091,
+  "answer_chars": 282,
+  "cards": [
+   "mcp-table.w-full"
+  ],
+  "audit_call_count": 41,
+  "audit_timeline": [
+   {
+    "at_s": 21.2,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 21.4,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 22.0,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 22.4,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 23.1,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 23.3,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 23.9,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 24.5,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 25.2,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 25.5,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 25.9,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 26.6,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 27.4,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 27.6,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 28.0,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 28.7,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 29.5,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 29.7,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 30.2,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 30.4,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": false,
+    "backend_ms": null
+   },
+   {
+    "at_s": 39.5,
+    "alias": "korea-stock-mcp",
+    "tool": "get_corp_code",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 40.1,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 41.4,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 42.2,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 43.6,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 44.3,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 45.7,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 46.4,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 47.8,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 48.5,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 49.2,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 54.6,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 55.2,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 56.7,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 58.0,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 58.8,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 60.1,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 60.9,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 62.5,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 63.0,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   },
+   {
+    "at_s": 63.8,
+    "alias": "korea-stock-mcp",
+    "tool": "get_disclosure_list",
+    "success": true,
+    "backend_ms": null
+   }
+  ]
+ },
+ {
+  "case_id": "LIV-087",
+  "group": "live-appmode",
+  "persona": "브로커",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 13.8,
+  "first_card_ms": null,
+  "judging_ms": null,
+  "calling_ms": null,
+  "answer_chars": 230,
+  "cards": [],
+  "audit_call_count": 0,
+  "audit_timeline": []
+ },
+ {
+  "case_id": "LIV-088",
+  "group": "live-appmode",
+  "persona": "재무전문가",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 15.8,
+  "first_card_ms": null,
+  "judging_ms": null,
+  "calling_ms": null,
+  "answer_chars": 338,
+  "cards": [],
+  "audit_call_count": 0,
+  "audit_timeline": []
+ },
+ {
+  "case_id": "LIV-089",
+  "group": "live-appmode",
+  "persona": "애널리스트",
+  "harness": "run-cases-appmode.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 4.6,
+  "first_card_ms": null,
+  "judging_ms": null,
+  "calling_ms": null,
+  "answer_chars": null,
+  "cards": null,
+  "audit_call_count": 0,
+  "audit_timeline": []
+ },
+ {
+  "case_id": "LIV-090",
+  "group": "live-appmode",
+  "persona": "CFO",
+  "harness": "run-cases-ui.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 14,
+  "first_card_ms": null,
+  "judging_ms": null,
+  "calling_ms": null,
+  "answer_chars": 269,
+  "cards": [],
+  "audit_call_count": 0,
+  "audit_timeline": []
+ },
+ {
+  "case_id": "LIV-091",
+  "group": "live-appmode",
+  "persona": "CFO",
+  "harness": "run-cases-appmode.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 5.8,
+  "first_card_ms": null,
+  "judging_ms": null,
+  "calling_ms": null,
+  "answer_chars": null,
+  "cards": null,
+  "audit_call_count": 0,
+  "audit_timeline": []
+ },
+ {
+  "case_id": "LIV-092",
+  "group": "live-appmode",
+  "persona": "애널리스트",
+  "harness": "run-cases-appmode.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 58.9,
+  "first_card_ms": null,
+  "judging_ms": null,
+  "calling_ms": null,
+  "answer_chars": null,
+  "cards": null,
+  "audit_call_count": 0,
+  "audit_timeline": []
+ },
+ {
+  "case_id": "LIV-093",
+  "group": "live-appmode",
+  "persona": "리서치원",
+  "harness": "run-cases-appmode.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 54.2,
+  "first_card_ms": null,
+  "judging_ms": null,
+  "calling_ms": null,
+  "answer_chars": null,
+  "cards": null,
+  "audit_call_count": 0,
+  "audit_timeline": []
+ },
+ {
+  "case_id": "LIV-094",
+  "group": "live-appmode",
+  "persona": "재무전문가",
+  "harness": "run-cases-appmode.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 29.8,
+  "first_card_ms": null,
+  "judging_ms": null,
+  "calling_ms": null,
+  "answer_chars": null,
+  "cards": null,
+  "audit_call_count": 0,
+  "audit_timeline": []
+ },
+ {
+  "case_id": "LIV-095",
+  "group": "live-appmode",
+  "persona": "브로커",
+  "harness": "run-cases-appmode.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 1.6,
+  "first_card_ms": null,
+  "judging_ms": null,
+  "calling_ms": null,
+  "answer_chars": null,
+  "cards": null,
+  "audit_call_count": 0,
+  "audit_timeline": []
+ },
+ {
+  "case_id": "LIV-096",
+  "group": "live-appmode",
+  "persona": "CFO",
+  "harness": "run-cases-appmode.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 2.1,
+  "first_card_ms": null,
+  "judging_ms": null,
+  "calling_ms": null,
+  "answer_chars": null,
+  "cards": null,
+  "audit_call_count": 0,
+  "audit_timeline": []
+ },
+ {
+  "case_id": "LIV-097",
+  "group": "live-appmode",
+  "persona": "애널리스트",
+  "harness": "run-cases-appmode.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 43.3,
+  "first_card_ms": null,
+  "judging_ms": null,
+  "calling_ms": null,
+  "answer_chars": null,
+  "cards": null,
+  "audit_call_count": 0,
+  "audit_timeline": []
+ },
+ {
+  "case_id": "LIV-098",
+  "group": "live-appmode",
+  "persona": "재무전문가",
+  "harness": "run-cases-appmode.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 8.9,
+  "first_card_ms": null,
+  "judging_ms": null,
+  "calling_ms": null,
+  "answer_chars": null,
+  "cards": null,
+  "audit_call_count": 0,
+  "audit_timeline": []
+ },
+ {
+  "case_id": "LIV-099",
+  "group": "live-appmode",
+  "persona": "재무전문가",
+  "harness": "run-cases-appmode.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 23.8,
+  "first_card_ms": null,
+  "judging_ms": null,
+  "calling_ms": null,
+  "answer_chars": null,
+  "cards": null,
+  "audit_call_count": 0,
+  "audit_timeline": []
+ },
+ {
+  "case_id": "LIV-100",
+  "group": "live-appmode",
+  "persona": "CFO",
+  "harness": "run-cases-appmode.js",
+  "completed": true,
+  "timed_out": false,
+  "duration_s": 7.2,
+  "first_card_ms": null,
+  "judging_ms": null,
+  "calling_ms": null,
+  "answer_chars": null,
+  "cards": null,
+  "audit_call_count": 0,
+  "audit_timeline": []
+ }
+]

@@ -1,0 +1,54 @@
+{
+ "id": "LIV-003",
+ "tier": "live",
+ "category": "live-재무비교",
+ "difficulty": "최상",
+ "question": "카카오하고 네이버, 최근 사업연도 순이익률 비교하면 어느 쪽이 더 잘 벌었어?",
+ "why_hard": "① 오늘 날짜 확인+corp_code 2회+재무제표 2회+렌더로 6회 이상 툴을 합성해야 하고, ③ 오늘(2026-08-18) 기준 가장 최근에 제출된 사업보고서가 2025 사업연도(통상 익년 3월 제출)라는 시간 추론이 필요하며, ② sj_nm 미지정 시 '당기순이익' 계정명이 포괄손익계산서·현금흐름표·자본변동표에 중복 출현하므로 손익계산서 기준 값만 정확히 골라 순이익률(당기순이익÷매출액×100)을 계산해 비교해야 한다.",
+ "expected_answer": "get_today_date로 오늘이 2026-08-18임을 확인해 두 회사 모두 가장 최근 사업연도(2025년, 제출월 2026년 3월경)의 사업보고서 기준으로 순이익률을 계산해야 하며, 계정명 중복을 피해 손익계산서 값만 사용해 카카오와 네이버 중 어느 쪽이 더 높은지 조회 결과로만 판단해야 한다.",
+ "judge": {
+  "must_include": [
+   "get_today_date(또는 동등 시각 확인)로 '최근 사업연도'가 2025년임을 근거 있게 판단했다",
+   "카카오·네이버 각각 corp_code를 8자리로 확보해 사용했다",
+   "당기순이익÷매출액×100 계산 과정을 두 회사 각각 보여줬다",
+   "손익계산서 값만 골랐다는 근거(또는 sj_nm 지정)가 드러나 다른 재무제표의 동일 계정명과 혼동하지 않았다"
+  ],
+  "must_not_include": [
+   "두 회사 중 한 곳만 조회하고 나머지는 추정치로 채움",
+   "'최근 사업연도'를 근거 없이 2024년 등으로 단정"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 2개 이상 있다",
+   "audit-log에 alias=korea-stock-mcp tool=get_financial_statement success=true 행이 2개 이상 있다"
+  ]
+ },
+ "expected_route": {
+  "kind": "cross-source",
+  "tool_path": [
+   "korea-stock-mcp__get_today_date",
+   "korea-stock-mcp__get_corp_code",
+   "korea-stock-mcp__get_corp_code",
+   "korea-stock-mcp__get_financial_statement",
+   "korea-stock-mcp__get_financial_statement",
+   "athena__render_canvas"
+  ],
+  "family": null,
+  "api_id": null,
+  "detail_group": null,
+  "upstream": "korea-stock-mcp"
+ },
+ "expected_screen": {
+  "window": "대화 창+캔버스 창",
+  "mode": null,
+  "card": "mcp-table",
+  "current_renderer": "mcp-table"
+ },
+ "implementation_status": "동작-실배선",
+ "notes": "삼성전자 사례로 실측: 제57기(2025) 사업보고서 rcept_no=20260310002820, 접수일 2026-03-10(S2B-jjlabsio-financial-statement.json) — 2026-08-18 기준 가장 최근 확정 사업연도가 2025년임을 뒷받침. 계정명 중복은 동일 캡처에서 확인.",
+ "group": "live-finance",
+ "persona": "개인투자자"
+}

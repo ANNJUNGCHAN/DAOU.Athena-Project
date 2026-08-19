@@ -1,0 +1,49 @@
+{
+ "case_id": "LIV-031",
+ "run": "2026-08-19-intraday-ui",
+ "verdict": "pass",
+ "auto_checks": [
+  {
+   "check": "audit-log에 alias=korea-stock-mcp tool=get_today_date 또는 alias=dart-mcp tool=get_current_date success=true 행이 1개 이상 있다",
+   "ok": true,
+   "evidence": "audit-delta.jsonl:1 {\"alias\":\"korea-stock-mcp\",\"tool\":\"get_today_date\",\"success\":true}"
+  },
+  {
+   "check": "audit-log에 alias=naver-search-2 tool=search_news success=true 행이 1개 이상 있다",
+   "ok": true,
+   "evidence": "audit-delta.jsonl:2-3 search_news success=true ×2"
+  }
+ ],
+ "must_not_include": [
+  {
+   "item": "오늘 날짜를 조회하지 않고 지난달 마지막 날을 임의로 특정",
+   "violated": false,
+   "evidence": "audit-delta.jsonl:1에 get_today_date 호출 존재, chat-answer.txt: '오늘은 KST 기준 2026년 8월 19일이고, 지난달 마지막 날은 7월 31일(금)입니다'"
+  },
+  {
+   "item": "다른 날짜의 기사를 그날 기사인 것처럼 제시",
+   "violated": false,
+   "evidence": "evidence/ui-state.json canvas.cards[0].text — 4건 모두 '07.31' 날짜 표기, 다른 날짜 기사 혼입 없음"
+  }
+ ],
+ "must_include": [
+  {
+   "item": "오늘 날짜를 실제로 조회한 뒤 지난달 마지막 날짜를 구체적인 날짜로 계산해 제시",
+   "ok": true,
+   "evidence": "chat-answer.txt: '오늘은 KST 기준 2026년 8월 19일이고, 지난달 마지막 날은 7월 31일(금)입니다'"
+  },
+  {
+   "item": "search_news 결과의 pubDate를 그 특정 날짜와 정확히 대조했다는 근거",
+   "ok": true,
+   "evidence": "chat-answer.txt: '발행시각이 7월 31일인 기사만 걸러 4건을 캔버스에 올렸습니다 ... 발행일자 기준으로 7월 31일자만 수작업으로 걸렀습니다'; evidence/ui-state.json canvas 카드에 07.31 시각이 붙은 4건만 나열"
+  },
+  {
+   "item": "해당 날짜에 기사가 없으면 '없음'을 명시(가짜 기사로 채우지 않음)",
+   "ok": true,
+   "evidence": "실제로 7월 31일자 기사 4건이 존재하는 경우였고(evidence/ui-state.json canvas 카드 4건 전부 '07.31' 표기로 일관), 다른 날짜 기사로 채워 넣지 않았음이 확인돼 가짜 채움 금지 요건을 충족"
+  }
+ ],
+ "judge_note": "get_today_date로 오늘(2026-08-19)을 실제 조회해 지난달 마지막 날(7/31)을 계산했고, search_news 결과 중 07.31자 4건만 정확히 걸러 캔버스 스트림 카드에 올렸다. 네이버 뉴스 API의 날짜 필터 부재라는 한계도 chat-answer.txt에서 정직하게 고지했다. auto_checks·must_not_include·must_include 전부 충족해 pass.",
+ "suspect_dataset_defect": false,
+ "duration_s": 73.9
+}

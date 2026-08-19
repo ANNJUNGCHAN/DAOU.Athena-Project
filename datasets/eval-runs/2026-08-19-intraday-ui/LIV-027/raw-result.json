@@ -1,0 +1,76 @@
+{
+ "case_id": "LIV-027",
+ "tier": "live",
+ "persona": "재무전문가",
+ "question": "클래시스 최대주주나 특수관계인 지분 매각 관련 공시 있으면 원문 리더로 보여주고, 법인고유번호부터 정확히 8자리로 맞춰서 조회해줘. 매각 수량이랑 매각 사유 부분만 하이라이트해줘.",
+ "attachment": null,
+ "sent_text": "클래시스 최대주주나 특수관계인 지분 매각 관련 공시 있으면 원문 리더로 보여주고, 법인고유번호부터 정확히 8자리로 맞춰서 조회해줘. 매각 수량이랑 매각 사유 부분만 하이라이트해줘.",
+ "ran_at": "2026-08-19T01:53:42.592Z",
+ "duration_s": 142.4,
+ "first_card_ms": 134830,
+ "completed": true,
+ "timed_out": false,
+ "answer_chars": 389,
+ "chip_count_total": 9,
+ "chip_count_added": 1,
+ "chip_labels_added": [
+  "리더"
+ ],
+ "chip_labels_total": [
+  "공통 테이블",
+  "스트림",
+  "스트림",
+  "공통 테이블",
+  "공통 테이블",
+  "공통 테이블",
+  "공통 테이블",
+  "스트림",
+  "리더"
+ ],
+ "state_transitions": [
+  {
+   "state": "judging",
+   "at_ms": 0
+  },
+  {
+   "state": "calling",
+   "at_ms": 134830
+  },
+  {
+   "state": "idle",
+   "at_ms": 142332
+  }
+ ],
+ "card_types_rendered": [
+  "reader.w-half"
+ ],
+ "canvas_card_count": 1,
+ "canvas_cards_pre": 0,
+ "audit_calls": [
+  "korea-stock-mcp__get_corp_code=true",
+  "korea-stock-mcp__get_disclosure_list=true",
+  "korea-stock-mcp__get_disclosure=true"
+ ],
+ "judge": {
+  "must_include": [
+   "corp_code를 8자리로 zero-pad(zfill)해서 사용했다는 명시적 근거",
+   "지분 매각 공시 원문에서 매각 수량을 구체적으로 인용",
+   "지분 매각 사유를 원문 근거로 인용하며 하이라이트로 표시"
+  ],
+  "must_not_include": [
+   "corp_code를 8자리 미만 숫자 그대로 사용해 조회 실패 가능성을 무시",
+   "매각 수량·사유를 원문 근거 없이 임의로 서술",
+   "지분 매각 공시가 없는데 있다고 지어냄"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "canvas-file",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 있다",
+   "audit-log에 alias=korea-stock-mcp tool=get_disclosure success=true 행이 있다",
+   "저장됐다면(athena__save_canvas 호출 시): canvas-file의 data.highlights에 매각 수량 또는 사유 관련 항목이 1개 이상 있다"
+  ]
+ }
+}

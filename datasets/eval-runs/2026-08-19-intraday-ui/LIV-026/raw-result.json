@@ -1,0 +1,79 @@
+{
+ "case_id": "LIV-026",
+ "tier": "live",
+ "persona": "브로커",
+ "question": "삼양식품이 최근에 낸 대규모 공급계약이나 수출계약 관련 공시가 있으면 원문 그대로 리더로 띄워주고, 계약금액이 최근 매출 규모 대비 어느 정도인지도 짚어줘. 관련 뉴스 반응도 궁금해.",
+ "attachment": null,
+ "sent_text": "삼양식품이 최근에 낸 대규모 공급계약이나 수출계약 관련 공시가 있으면 원문 그대로 리더로 띄워주고, 계약금액이 최근 매출 규모 대비 어느 정도인지도 짚어줘. 관련 뉴스 반응도 궁금해.",
+ "ran_at": "2026-08-19T01:52:30.290Z",
+ "duration_s": 68,
+ "first_card_ms": 41936,
+ "completed": true,
+ "timed_out": false,
+ "answer_chars": 317,
+ "chip_count_total": 8,
+ "chip_count_added": 2,
+ "chip_labels_added": [
+  "공통 테이블",
+  "스트림"
+ ],
+ "chip_labels_total": [
+  "공통 테이블",
+  "스트림",
+  "스트림",
+  "공통 테이블",
+  "공통 테이블",
+  "공통 테이블",
+  "공통 테이블",
+  "스트림"
+ ],
+ "state_transitions": [
+  {
+   "state": "judging",
+   "at_ms": 0
+  },
+  {
+   "state": "calling",
+   "at_ms": 41935
+  },
+  {
+   "state": "idle",
+   "at_ms": 67968
+  }
+ ],
+ "card_types_rendered": [
+  "mcp-table.w-full",
+  "stream.w-half"
+ ],
+ "canvas_card_count": 2,
+ "canvas_cards_pre": 0,
+ "audit_calls": [
+  "korea-stock-mcp__get_corp_code=true",
+  "korea-stock-mcp__get_disclosure_list=true",
+  "naver-search-2__search_news=true"
+ ],
+ "judge": {
+  "must_include": [
+   "실제 조회한 공급·수출계약 공시 원문에서 계약금액을 구체적으로 인용",
+   "계약금액을 최근 매출액과 대조해 비율(%)을 계산하는 과정과 결과를 명시",
+   "naver-search-2로 찾은 실제 관련 뉴스 반응 요약",
+   "관련 공시가 없는 경우 없다고 정직하게 답했다는 조건부 서술"
+  ],
+  "must_not_include": [
+   "계산 과정 없이 '큰 규모다' 같은 정성적 표현만 제시",
+   "계약금액이나 매출액 수치를 조회 없이 임의로 창작",
+   "관련 공시가 없는데 있다고 지어냄"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "canvas-file",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=korea-stock-mcp tool=get_disclosure success=true 행이 있다",
+   "audit-log에 alias=korea-stock-mcp tool=get_financial_statement 행이 있다",
+   "audit-log에 alias=naver-search-2 tool=search_news success=true 행이 있다",
+   "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 1개 이상 있다"
+  ]
+ }
+}

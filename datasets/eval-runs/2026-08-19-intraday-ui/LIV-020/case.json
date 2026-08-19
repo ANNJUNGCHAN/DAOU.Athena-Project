@@ -1,0 +1,53 @@
+{
+ "id": "LIV-020",
+ "tier": "live",
+ "category": "live-뉴스교차",
+ "difficulty": "최상",
+ "question": "레인보우로보틱스가 삼성전자한테 완전히 인수됐다는 뉴스를 봤는데, 진짜로 최대주주가 삼성전자로 바뀌었다는 공시가 실제로 나왔는지 dart나 korea-stock으로 확인해줄 수 있어?",
+ "why_hard": "①naver-search-2 뉴스 검색→법인 식별→공시 목록 조회까지 2개 서버를 순서대로 합성해야 한다. ③뉴스에서 말하는 '인수'라는 표현이 실제 공시상 '최대주주 변경'을 의미하는지, 아니면 지분 일부 취득 수준인지 원문 근거로 구분해야 한다. ⑤뉴스 주장과 공시 목록의 표현 수위가 다를 수 있어 뉴스만 보고 사실을 과장하면 안 되는 부분실패 처리가 걸려 있다.",
+ "expected_answer": "naver-search-2 뉴스에서 확인한 인수 관련 보도 내용과, korea-stock-mcp 공시 목록에서 확인한 실제 최대주주 변경(또는 지분 취득) 공시 존재 여부·날짜를 대조해, 뉴스 표현이 공시 사실과 정확히 일치하는지 아니면 과장된 표현인지 구분해서 답한다.",
+ "judge": {
+  "must_include": [
+   "naver-search-2로 찾은 실제 인수 관련 뉴스 기사 내용을 구체적으로 인용",
+   "korea-stock-mcp 공시 조회로 확인한 실제 최대주주 변경(또는 지분 취득) 공시 존재 여부와 날짜",
+   "뉴스의 '인수' 표현이 공시상 사실(완전 인수인지 지분 일부 취득/최대주주 변경인지)과 정확히 일치하는지 구분해서 서술"
+  ],
+  "must_not_include": [
+   "뉴스 제목만 보고 공시 확인 없이 '최대주주가 바뀌었다'고 단정",
+   "공시를 조회하지 않고 일반론으로 답함",
+   "실제 지분율·날짜를 임의로 지어냄"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=naver-search-2 tool=search_news success=true 행이 있다",
+   "audit-log에 alias=korea-stock-mcp tool=get_disclosure_list success=true 행이 있다",
+   "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 1개 이상 있다"
+  ]
+ },
+ "expected_route": {
+  "kind": "cross-source",
+  "tool_path": [
+   "naver-search-2__search_news",
+   "korea-stock-mcp__get_corp_code",
+   "korea-stock-mcp__get_disclosure_list",
+   "athena__render_canvas"
+  ],
+  "api_id": null,
+  "family": null,
+  "upstream": "naver-search-2+korea-stock-mcp",
+  "detail_group": null
+ },
+ "expected_screen": {
+  "window": "대화 창+캔버스 창",
+  "mode": null,
+  "card": "mcp-table",
+  "current_renderer": "mcp-table"
+ },
+ "implementation_status": "동작-실배선",
+ "notes": "레인보우로보틱스에 대한 삼성전자의 실제 지분 투자·최대주주 이슈는 공개적으로 보도된 바 있어 뉴스-공시 교차검증 소재로 자연스러움. naver-search-2·korea-stock-mcp 둘 다 승인·실배선 확인(_mcp-tools.json).",
+ "group": "live-disclosure",
+ "persona": "개인투자자"
+}

@@ -1,0 +1,63 @@
+{
+ "chat": {
+  "answerCount": 3,
+  "lastAnswer": "2025 사업연도 사업보고서(연결) 기준 순이익률은 NAVER가 15.11%(영업수익 12.04조 원, 순이익 1.82조 원)로 카카오의 6.40%(영업수익 8.10조 원, 순이익 0.52조 원)를 크게 앞섭니다. 다만 카카오는 전년 순손실(-0.16조 원)에서 흑자 전환에 성공하며 수익성이 크게 개선된 해였습니다.",
+  "chipCount": 3,
+  "chipLabels": [
+   "공통 테이블",
+   "공통 테이블",
+   "공통 테이블"
+  ],
+  "dotClasses": [
+   "dot"
+  ],
+  "state": "idle",
+  "panels": {
+   "app": true,
+   "onboard": false,
+   "settings": false
+  }
+ },
+ "canvas": {
+  "cardCount": 1,
+  "cards": [
+   {
+    "classes": [
+     "mcp-table",
+     "w-full"
+    ],
+    "tableRows": 2,
+    "tableCols": 5,
+    "streamItems": 0,
+    "hasAlert": false,
+    "freeTree": false,
+    "text": "카카오 vs NAVER 순이익률 비교 — 2025 사업연도 사업보고서(연결) 기준, 단위: 조원10:29:00 기준회사기수영업수익(조원)당기순이익(조원)순이익률(%)NAVER제27기(2025)12.041.8215.11카카오제31기(2025)8.10.526.4"
+   }
+  ],
+  "clipPath": "circle(1373.69px at 34.5062px 737.973px)"
+ },
+ "stateTransitions": [
+  {
+   "state": "judging",
+   "at_ms": 3
+  },
+  {
+   "state": "calling",
+   "at_ms": 28391
+  },
+  {
+   "state": "idle",
+   "at_ms": 33913
+  }
+ ],
+ "screenshots": {
+  "chat": {
+   "width": 2358,
+   "height": 812
+  },
+  "canvas": {
+   "width": 2343,
+   "height": 1205
+  }
+ }
+}

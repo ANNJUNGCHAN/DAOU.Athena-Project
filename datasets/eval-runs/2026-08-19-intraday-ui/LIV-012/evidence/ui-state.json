@@ -1,0 +1,61 @@
+{
+ "chat": {
+  "answerCount": 1,
+  "lastAnswer": "삼성바이오로직스의 최근 사업보고서(2025 사업연도, 제15기 연결) 기준 매출액은 약 4조 5,570억 원, 영업이익은 약 2조 692억 원입니다. 당기순이익은 약 1조 7,844억 원이며, 영업이익률은 약 45% 수준입니다. 상세 내역은 캔버스 표를 참고하세요.",
+  "chipCount": 1,
+  "chipLabels": [
+   "공통 테이블"
+  ],
+  "dotClasses": [
+   "dot"
+  ],
+  "state": "idle",
+  "panels": {
+   "app": true,
+   "onboard": false,
+   "settings": false
+  }
+ },
+ "canvas": {
+  "cardCount": 1,
+  "cards": [
+   {
+    "classes": [
+     "mcp-table",
+     "w-full"
+    ],
+    "tableRows": 4,
+    "tableCols": 3,
+    "streamItems": 0,
+    "hasAlert": false,
+    "freeTree": false,
+    "text": "삼성바이오로직스 2025 사업보고서(제15기, 연결) 주요 손익 — 단위: 억 원10:35:27 기준항목금액(억 원)금액(원)매출액45,5704,556,971,695,180매출총이익25,1662,516,640,411,646영업이익20,6922,069,221,266,630당기순이익17,8441,784,352,060,593"
+   }
+  ],
+  "clipPath": "circle(1372.05px at 34.5062px 734.92px)"
+ },
+ "stateTransitions": [
+  {
+   "state": "judging",
+   "at_ms": 10
+  },
+  {
+   "state": "calling",
+   "at_ms": 34050
+  },
+  {
+   "state": "idle",
+   "at_ms": 38091
+  }
+ ],
+ "screenshots": {
+  "chat": {
+   "width": 2349,
+   "height": 432
+  },
+  "canvas": {
+   "width": 2343,
+   "height": 1205
+  }
+ }
+}

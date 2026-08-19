@@ -1,0 +1,48 @@
+{
+ "id": "LIV-087",
+ "tier": "live",
+ "category": "live-설정진입",
+ "difficulty": "최상",
+ "question": "커맨드바에 '설정해줘'라고만 치고 엔터를 눌렀어. 이러면 설정 화면이 뜨는 게 맞지?",
+ "why_hard": "SETTINGS_COMMAND 정규식의 동사구 대안이 '설정' 바로 뒤에 '열어/보여/띄워/줘/줄래' 중 하나가 와야 하는 리터럴 인접 매치라 '해줘'가 끼면 실패한다는 비직관적 경계를 알아야 하고(④ 정책 판단, 클라이언트 로컬 라우팅 정책), 미매치 시 이 문자열이 조용히 사라지지 않고 그대로 live 질의로 전달돼 judging 상태로 넘어간다는 후속 분기까지 함께 판단해야 한다(⑤ 부분실패 아님을 오판하지 않는 에러 경계 처리).",
+ "expected_answer": "아니다 — 두 번째 대안은 '설정' 바로 뒤에 '열어/보여/띄워/줘/줄래'가 곧바로 와야 하는데 '해줘'가 중간에 끼면서 매치가 깨진다. 설정 창은 열리지 않고, 이 문자열이 그대로 일반 질의로 Claude에게 전달돼 judging 상태로 전환된다.",
+ "judge": {
+  "must_include": [
+   "ui-state: '설정해줘' 입력 후 #settings 패널이 열리지 않고 #app이 그대로 유지된다",
+   "이 문장이 일반 live 질의로 처리된다(#dot이 judging 상태로 전환됐다가 idle 복귀)",
+   "답변 텍스트가 '설정 화면을 열었다'고 주장하지 않는다"
+  ],
+  "must_not_include": [
+   "'설정해줘'만으로 설정 화면이 열렸다는 서술",
+   "정규식이 매치되어 즉시 설정 모드로 전환됐다는 오답"
+  ],
+  "verify_via": [
+   "ui-state",
+   "screenshot",
+   "chat-answer"
+  ],
+  "auto_checks": [
+   "ui-state: #settings.hidden===true, #app.hidden===false 유지",
+   "ui-state: #dot classList에 judging이 추가됐다가 idle로 복귀",
+   "chat-answer: 결과 텍스트가 '설정 화면을 열었다'는 취지의 문장을 포함하지 않는다"
+  ]
+ },
+ "expected_route": {
+  "kind": "chat-only",
+  "tool_path": [],
+  "api_id": null,
+  "family": null,
+  "detail_group": null,
+  "upstream": null
+ },
+ "expected_screen": {
+  "window": "대화 창",
+  "mode": null,
+  "card": null,
+  "current_renderer": null
+ },
+ "implementation_status": "동작-실배선",
+ "notes": "chat.js L513-514 SETTINGS_COMMAND 정규식 실측: node로 '설정해줘'.test() → false 확인, 미매치 시 L531 runQuery(text)로 폴백.",
+ "group": "live-appmode",
+ "persona": "브로커"
+}

@@ -1,0 +1,21 @@
+{
+ "case_id": "LIV-006",
+ "run": "2026-08-19-intraday-ui",
+ "verdict": "pass",
+ "auto_checks": [
+  {"check": "audit-log에 alias=korea-stock-mcp tool=get_financial_statement success=true 행이 1개 이상", "ok": true, "evidence": "evidence/audit-delta.jsonl:2 {\"alias\":\"korea-stock-mcp\",\"tool\":\"get_financial_statement\",\"success\":true}"},
+  {"check": "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 1개 이상", "ok": true, "evidence": "evidence/audit-delta.jsonl:1 {\"alias\":\"korea-stock-mcp\",\"tool\":\"get_corp_code\",\"success\":true}"}
+ ],
+ "must_not_include": [
+  {"item": "200% 기준을 절대적 위험선으로 단정하며 근거 없이 위험/안전 확정 판정", "violated": false, "evidence": "evidence/chat-answer.txt: '\"200% 미만 = 위험\"은 오래된 교과서식 기준이라 그대로 적용하긴 어렵습니다 ... 업종 특성상 100~150%대가 정상 범위여서 136%를 위험 신호로 보기는 어렵습니다' — 절대선을 근거 없이 긍정하지 않고 업종 맥락으로 반박함"},
+  {"item": "유동자산·유동부채 수치를 조회 없이 추정으로 제시", "violated": false, "evidence": "evidence/audit-delta.jsonl:1-2에 get_corp_code→get_financial_statement 성공 행 존재, evidence/ui-state.json canvas.cards[0].text에 제58기(2025)/제57기(2024) 실측 수치(유동자산 120.78/115.76조, 유동부채 88.58/79.51조) 병기"}
+ ],
+ "must_include": [
+  {"item": "유동자산÷유동부채×100 계산 과정과 결과를 명시했다", "ok": true, "evidence": "evidence/chat-answer.txt: '유동비율은 136.35%(유동자산 120.78조 원 ÷ 유동부채 88.58조 원)로'"},
+  {"item": "corp_code를 정확히(8자리) 확보해 재무상태표 데이터를 조회했다는 근거", "ok": true, "evidence": "evidence/audit-delta.jsonl:1-2 get_corp_code 성공 후 get_financial_statement 성공(corp_code 없이는 후속 호출 불가), evidence/chat-answer.txt에 제58기/제57기 실제 보고서 수치 반영"},
+  {"item": "'200% 미만이면 위험'이라는 사용자 전제를 조회 수치·업종 맥락 없이 그대로 긍정하지 않고 유보적으로 다뤘다", "ok": true, "evidence": "evidence/chat-answer.txt: '실무에서는 100% 이상이면 단기지급능력에 큰 문제가 없다고 보는 게 일반적이고, 특히 현대차처럼 금융(할부·리스) 사업을 포함한 대형 제조사는 업종 특성상 100~150%대가 정상 범위'"}
+ ],
+ "judge_note": "auto_checks 2건 통과, must_not_include 위반 없음, must_include 3건 모두 chat-answer.txt 문구로 직접 확인됨. 200% 절대기준을 명시적으로 반박하며 현대차의 금융 자회사 보유 업종 특성을 근거로 유보적 판단을 제시했다.",
+ "suspect_dataset_defect": false,
+ "duration_s": 40
+}

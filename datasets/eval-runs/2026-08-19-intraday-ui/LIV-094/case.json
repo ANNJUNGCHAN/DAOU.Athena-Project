@@ -1,0 +1,48 @@
+{
+ "id": "LIV-094",
+ "tier": "live",
+ "category": "live-Esc분기",
+ "difficulty": "최상",
+ "question": "여러 카드가 필요한 질의 도중 첫 카드가 캔버스에 뜨고 진행줄이 '카드 1개 렌더됨'으로 바뀐 직후 Esc로 중단했습니다. 이미 뜬 카드는 어떻게 처리되며, 대화창에는 실패 안내가 남습니까?",
+ "why_hard": "abort가 캔버스 쪽 카드 렌더링(즉시 IPC 전달)과 대화창 쪽 답변 turn 추가(abortToken 가드로 막힘)를 서로 다르게 취급한다는 두 레이어의 불일치를 짚어야 하고(⑤ 부분실패 처리가 창마다 다르게 동작), 그 결과 캔버스엔 미완성 카드가 남고 대화 이력엔 아무 설명도 안 남는 두 창 간 정보 불일치를 판단해야 한다(⑥ 복수 창·카드 상태 배치 판단).",
+ "expected_answer": "캔버스는 abort로 자동으로 지워지지 않으므로(clear-canvases는 idle-collapse 경로 전용) 이미 렌더링된 카드 1개는 그대로 캔버스 창에 남는다. 반면 대화 창은 abortToken 불일치 가드 때문에 답변 turn 자체를 만들지 않아 '실패' 안내조차 남지 않고 조용히 idle로 돌아간다.",
+ "judge": {
+  "must_include": [
+   "abort 시 캔버스는 clear되지 않는다 — 이미 렌더링된 카드는 캔버스 창에 그대로 남는다",
+   "대화 창은 abortToken 불일치 가드 때문에 답변 turn 자체를 추가하지 않아 '실패' 안내조차 안 남는다",
+   "결과적으로 캔버스의 미완성 카드와 대화 이력의 무설명 상태가 서로 불일치한 채 남는다",
+   "이 상태에서 새 질의를 시작해도 남아있던 카드는 collapse를 거치지 않는 한 지워지지 않는다"
+  ],
+  "must_not_include": [
+   "남아있던 카드가 abort와 동시에 자동으로 지워졌다는 서술",
+   "대화 창에 '중단됨'이나 '실패' 안내 turn이 추가됐다는 오답"
+  ],
+  "verify_via": [
+   "ui-state",
+   "canvas-file",
+   "screenshot"
+  ],
+  "auto_checks": [
+   "ui-state: Esc 이후 #history에 새로운 turn-a 노드가 추가되지 않았다",
+   "ui-state: 캔버스 창에는 abort 직전까지 렌더된 카드 수가 그대로 유지된다"
+  ]
+ },
+ "expected_route": {
+  "kind": "app-mode",
+  "tool_path": [],
+  "api_id": null,
+  "family": null,
+  "detail_group": null,
+  "upstream": null
+ },
+ "expected_screen": {
+  "window": "대화 창+캔버스 창",
+  "mode": null,
+  "card": null,
+  "current_renderer": null
+ },
+ "implementation_status": "동작-실배선",
+ "notes": "chat.js L304-320 카드는 IPC 즉시 캔버스에 전달(abort와 무관), L320 return 가드는 대화창 답변 turn 추가만 막음 — 캔버스 clear는 main.js collapseCanvasWindow 경로에만 존재(실측).",
+ "group": "live-appmode",
+ "persona": "재무전문가"
+}

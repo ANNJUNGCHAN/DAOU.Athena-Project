@@ -1,0 +1,66 @@
+{
+ "chat": {
+  "answerCount": 6,
+  "lastAnswer": "오늘(2026-08-19) 기준 그저께인 **2026-08-17(월)** 하루 동안 네이버 뉴스에 나온 에코프로비엠 관련 기사는 **7건**이며, 위 캔버스에 시간순으로 정리했습니다. 모든 기사의 발행시각이 KST(+0900) 06:00~16:11 사이라 자정 경계(전후 기사는 08-18 06:00, 08-16 08:10)에 걸리는 건은 없었습니다. 내용은 2분기 실적 부진(영업이익 -61.4% 전망), 유럽·헝가리 공장과 BMW·벤츠 물량, LFP·미드니켈 개발, 공매도 잔고 증가 등입니다 — 출처: 네이버 뉴스 검색.",
+  "chipCount": 6,
+  "chipLabels": [
+   "공통 테이블",
+   "공통 테이블",
+   "공통 테이블",
+   "공통 테이블",
+   "스트림",
+   "스트림"
+  ],
+  "dotClasses": [
+   "dot"
+  ],
+  "state": "idle",
+  "panels": {
+   "app": true,
+   "onboard": false,
+   "settings": false
+  }
+ },
+ "canvas": {
+  "cardCount": 1,
+  "cards": [
+   {
+    "classes": [
+     "stream",
+     "w-half"
+    ],
+    "tableRows": 0,
+    "tableCols": 0,
+    "streamItems": 7,
+    "hasAlert": false,
+    "freeTree": false,
+    "text": "에코프로비엠(247540) 그저께(2026-08-17 월, KST 00:00~23:59) 하루 동안 나온 네이버 뉴스 7건 — pubDate +0900 기준 필터링, 자정 경계 기사 없음13:25:43 기준08.17 16:11한국경제코스닥으로 돌아온 개미…'천스닥' 재탈환 기대 커졌다08.17 16:00이데일리ESS 뜨자…中 턷밭 LFP 양극재, 韓 소재사들이 노린다08.17 13:32핀포인트뉴스에코프로비엠, BMW·벤츠 물량 확보…유럽 성장판 열린다08.17 13:22이데일리배터리주, 실적 부진 터널 지나나…EV서 ESS로 무게중"
+   }
+  ],
+  "clipPath": "circle(1375.74px at 34.5062px 741.79px)"
+ },
+ "stateTransitions": [
+  {
+   "state": "judging",
+   "at_ms": 1
+  },
+  {
+   "state": "calling",
+   "at_ms": 95786
+  },
+  {
+   "state": "idle",
+   "at_ms": 101934
+  }
+ ],
+ "screenshots": {
+  "chat": {
+   "width": 2363,
+   "height": 1182
+  },
+  "canvas": {
+   "width": 2343,
+   "height": 1205
+  }
+ }
+}

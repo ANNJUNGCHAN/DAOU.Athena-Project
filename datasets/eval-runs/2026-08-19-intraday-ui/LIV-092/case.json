@@ -1,0 +1,47 @@
+{
+ "id": "LIV-092",
+ "tier": "live",
+ "category": "live-Esc분기",
+ "difficulty": "최상",
+ "question": "질의가 judging 상태(진행줄이 도는 중)일 때 점(#dot)을 눌러 설정 화면을 열었습니다. 이 상태에서 Esc를 한 번 누르면 진행 중이던 질의도 함께 취소됩니까?",
+ "why_hard": "$dot 클릭에는 state 가드가 없어 조회 중에도 설정을 열 수 있다는 사실과, Esc 핸들러가 '설정 열림'을 최우선 분기로 검사해 judging/calling 여부는 아예 검사하지 않는다는 우선순위 규칙을 함께 알아야 한다(④ 정책 판단, 다분기 우선순위) — 첫 Esc가 중단으로 이어진다고 착각하기 쉬운 함정이다.",
+ "expected_answer": "아니다 — Esc 핸들러는 settingsOpen이 true면 그것부터 닫는 것을 최우선으로 하므로 첫 Esc는 closeSettings()만 실행한다. 백그라운드의 실배선 질의는 abortToken이 그대로라 계속 진행되고, 설정을 닫으면 원래 진행줄과 카드가 다시 보이며 결국 정상적으로 완료된다.",
+ "judge": {
+  "must_include": [
+   "$dot 클릭 리스너에는 state 가드가 없어 조회 중에도 설정 화면을 열 수 있다",
+   "Esc 핸들러는 settingsOpen이 true면 무조건 그것부터 닫고 즉시 return한다",
+   "첫 Esc로는 abortToken이 증가하지 않아 백그라운드 질의는 중단되지 않는다",
+   "설정을 닫으면 원래의 진행줄/카드가 다시 나타나고 질의가 정상적으로 이어져 완료된다"
+  ],
+  "must_not_include": [
+   "첫 Esc가 진행 중이던 질의를 즉시 취소했다는 서술",
+   "점(#dot)이 judging 중에는 클릭이 안 먹는다는 오답"
+  ],
+  "verify_via": [
+   "ui-state",
+   "screenshot"
+  ],
+  "auto_checks": [
+   "ui-state: 첫 Esc 직후 #settings.hidden===true, #app.hidden===false로 복귀",
+   "ui-state: 이후 대화 이력에 정상적인 turn-a(답변) 노드가 추가된다"
+  ]
+ },
+ "expected_route": {
+  "kind": "app-mode",
+  "tool_path": [],
+  "api_id": null,
+  "family": null,
+  "detail_group": null,
+  "upstream": null
+ },
+ "expected_screen": {
+  "window": "대화 창+캔버스 창",
+  "mode": null,
+  "card": null,
+  "current_renderer": null
+ },
+ "implementation_status": "동작-실배선",
+ "notes": "chat.js L520 $dot 클릭에 state 가드 없음, L536-541 Esc 첫 분기(설정 닫기)가 judging/calling 검사보다 우선 — 실측.",
+ "group": "live-appmode",
+ "persona": "애널리스트"
+}

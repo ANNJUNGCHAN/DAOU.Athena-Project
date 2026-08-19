@@ -1,0 +1,61 @@
+{
+ "chat": {
+  "answerCount": 1,
+  "lastAnswer": "DART 사업보고서(연결) 기준 셀트리온 매출액은 2023년 2조 1,764억 원에서 2024년 3조 5,573억 원으로 63.4% 증가했습니다. 반면 영업이익은 6,515억 원에서 4,920억 원으로 24.5% 감소했는데, 셀트리온헬스케어 합병에 따른 매출원가·판관비 급증(합병 관련 상각 포함)이 반영된 결과입니다. 이에 따라 영업이익률은 29.9%에서 13.8%로 낮아졌습니다.",
+  "chipCount": 1,
+  "chipLabels": [
+   "공통 테이블"
+  ],
+  "dotClasses": [
+   "dot"
+  ],
+  "state": "idle",
+  "panels": {
+   "app": true,
+   "onboard": false,
+   "settings": false
+  }
+ },
+ "canvas": {
+  "cardCount": 1,
+  "cards": [
+   {
+    "classes": [
+     "mcp-table",
+     "w-full"
+    ],
+    "tableRows": 3,
+    "tableCols": 4,
+    "streamItems": 0,
+    "hasAlert": false,
+    "freeTree": false,
+    "text": "셀트리온 연결 기준 매출액·영업이익 (2023 vs 2024, DART 사업보고서)10:25:54 기준항목2023년 (억원)2024년 (억원)증감률매출액21,76435,573+63.4%영업이익6,5154,920-24.5%영업이익률29.9%13.8%-16.1%p"
+   }
+  ],
+  "clipPath": "circle(1372.05px at 34.5062px 734.92px)"
+ },
+ "stateTransitions": [
+  {
+   "state": "judging",
+   "at_ms": 6
+  },
+  {
+   "state": "calling",
+   "at_ms": 36579
+  },
+  {
+   "state": "idle",
+   "at_ms": 41686
+  }
+ ],
+ "screenshots": {
+  "chat": {
+   "width": 2349,
+   "height": 437
+  },
+  "canvas": {
+   "width": 2343,
+   "height": 1205
+  }
+ }
+}

@@ -1,0 +1,70 @@
+{
+ "case_id": "LIV-035",
+ "tier": "live",
+ "persona": "재무전문가",
+ "question": "LG전자 재무제표에서 매출액이랑 영업이익을 갖고 영업이익률을 당기랑 전기 두 시점으로 각각 계산해서, 전기 대비 좋아졌는지 나빠졌는지 알려줘.",
+ "attachment": null,
+ "sent_text": "LG전자 재무제표에서 매출액이랑 영업이익을 갖고 영업이익률을 당기랑 전기 두 시점으로 각각 계산해서, 전기 대비 좋아졌는지 나빠졌는지 알려줘.",
+ "ran_at": "2026-08-19T02:04:41.054Z",
+ "duration_s": 44,
+ "first_card_ms": 39950,
+ "completed": true,
+ "timed_out": false,
+ "answer_chars": 205,
+ "chip_count_total": 4,
+ "chip_count_added": 1,
+ "chip_labels_added": [
+  "공통 테이블"
+ ],
+ "chip_labels_total": [
+  "공통 테이블",
+  "스트림",
+  "스트림",
+  "공통 테이블"
+ ],
+ "state_transitions": [
+  {
+   "state": "judging",
+   "at_ms": 3
+  },
+  {
+   "state": "calling",
+   "at_ms": 39937
+  },
+  {
+   "state": "idle",
+   "at_ms": 43955
+  }
+ ],
+ "card_types_rendered": [
+  "mcp-table.w-full"
+ ],
+ "canvas_card_count": 1,
+ "canvas_cards_pre": 0,
+ "audit_calls": [
+  "korea-stock-mcp__get_corp_code=true",
+  "korea-stock-mcp__get_financial_statement=true",
+  "korea-stock-mcp__get_financial_statement=true"
+ ],
+ "judge": {
+  "must_include": [
+   "오늘 날짜를 근거로 이미 제출됐을 법한 bsns_year/reprt_code를 선택했다는 설명",
+   "매출액·영업이익 계정을 각각 특정해 당기(thstrm)·전기(frmtrm) 값을 모두 사용",
+   "영업이익률(영업이익/매출액) 공식을 두 시점에 각각 적용해 비교",
+   "결과 리스트가 비어 있거나 필요한 계정이 없을 경우의 처리 방침 언급"
+  ],
+  "must_not_include": [
+   "아직 제출되지 않았을 미래 시점의 보고서를 요청",
+   "단순 전일 대비 등락률이나 매출액 증가율을 영업이익률로 착각"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=korea-stock-mcp tool=get_financial_statement success=true 행이 있다",
+   "chat-answer에 두 개의 영업이익률 수치(당기/전기)가 모두 등장한다",
+   "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 1개 이상 있다"
+  ]
+ }
+}

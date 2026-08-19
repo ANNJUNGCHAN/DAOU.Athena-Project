@@ -1,0 +1,51 @@
+{
+ "id": "LIV-009",
+ "tier": "live",
+ "category": "live-재무추출",
+ "difficulty": "최상",
+ "question": "에코프로비엠 최근 사업연도 영업이익률, 매출총이익률, 매출원가율까지 한꺼번에 계산해서 보여줘.",
+ "why_hard": "① 현재 날짜 확인+재무데이터 조회+렌더로 3회 이상 툴을 합성해야 하고, ③ 매출총이익률(매출총이익÷매출액×100)·매출원가율(매출원가÷매출액×100)·영업이익률(영업이익÷매출액×100) 세 비율을 동시에 계산해야 하며, ⑤ search_json_financial_data는 '당기 데이터만 표시'되는 제약이 있어 이 사실을 숨기지 않고 정직하게 고지해야 한다.",
+ "expected_answer": "search_json_financial_data(statement_type=IS)로 에코프로비엠 최근 사업연도 손익계산서를 받아 영업이익률·매출총이익률·매출원가율 세 지표를 계산할 수 있으며, 이 툴은 당기 데이터만 주므로 전년 비교가 필요하면 별도 연도로 다시 조회해야 한다.",
+ "judge": {
+  "must_include": [
+   "영업이익률·매출총이익률·매출원가율 세 지표 각각의 계산식과 결과를 모두 제시했다",
+   "search_json_financial_data가 당기 데이터만 반환한다는 제약을 언급했다",
+   "오늘 날짜 기준으로 '최근 사업연도'가 몇 년도인지 근거를 들어 판단했다",
+   "전기(직전 연도) 대비 개선/악화 비교를 별도 조회로 제시했다"
+  ],
+  "must_not_include": [
+   "세 비율 중 일부를 계산 없이 생략하거나 값을 지어냄",
+   "당기 데이터만 표시된다는 제약을 무시하고 존재하지 않는 전기 비교 수치를 만들어냄"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=dart-mcp tool=search_json_financial_data success=true 행이 1개 이상 있다",
+   "audit-log에 alias=dart-mcp tool=get_current_date success=true 행이 1개 이상 있다"
+  ]
+ },
+ "expected_route": {
+  "kind": "cross-source",
+  "tool_path": [
+   "dart-mcp__get_current_date",
+   "dart-mcp__search_json_financial_data",
+   "athena__render_canvas"
+  ],
+  "family": null,
+  "api_id": null,
+  "detail_group": null,
+  "upstream": "dart-mcp"
+ },
+ "expected_screen": {
+  "window": "대화 창+캔버스 창",
+  "mode": null,
+  "card": "free",
+  "current_renderer": "free"
+ },
+ "implementation_status": "동작-실배선",
+ "notes": "search_json_financial_data 출력 텍스트에 '표시 정보: 당기 데이터만 표시됨(전기/전전기 데이터는 제외됨)' 명시(spike/captures/S2B-dartmcp-search_json_financial_data-IS.json).",
+ "group": "live-finance",
+ "persona": "애널리스트"
+}

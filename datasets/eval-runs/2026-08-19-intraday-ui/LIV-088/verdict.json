@@ -1,0 +1,49 @@
+{
+ "case_id": "LIV-088",
+ "run": "2026-08-19-intraday-ui",
+ "verdict": "pass",
+ "auto_checks": [
+  {
+   "check": "ui-state: #settings.hidden===true 유지",
+   "ok": true,
+   "evidence": "evidence/ui-state.json: panels.settings=false (panels.app=true) — 설정 패널 미노출 유지"
+  },
+  {
+   "check": "chat-answer: '세팅 좀 열어줘'가 그대로 질의 텍스트로 전달돼 turn-q에 기록된다",
+   "ok": true,
+   "evidence": "evidence/chat.png 마지막 turn: \"'세팅 좀 열어줘'라고 입력해 보았습니다. '세팅'도 설정의 동의어 목록에 포함되어 있던데, 이 경우에도 설정 화면으로 연결되어야 하는 것 아닙니까?\" — sent_text(raw-result.json)와 동일 원문이 turn-q로 렌더링됨"
+  }
+ ],
+ "must_not_include": [
+  {
+   "item": "'세팅'이 '설정'과 완전히 동등하게 모든 대안에서 인식된다는 서술",
+   "violated": false,
+   "evidence": "evidence/chat-answer.txt 전문 확인 — 그런 서술 없음. 오히려 \"동의어 목록에 '세팅'이 있더라도... 이미 앱의 화면 전환 명령으로 처리되지 않은 것\"이라고 명시"
+  },
+  {
+   "item": "설정 화면이 열렸다는 오답",
+   "violated": false,
+   "evidence": "evidence/chat-answer.txt: \"'세팅 좀 열어줘' 역시 화면 연결로 이어질 수 없습니다\" — 설정 화면 오픈 주장 없음. evidence/ui-state.json panels.settings=false로도 뒷받침"
+  }
+ ],
+ "must_include": [
+  {
+   "item": "ui-state: '세팅 좀 열어줘' 입력 후 #settings 패널이 열리지 않는다",
+   "ok": true,
+   "evidence": "evidence/ui-state.json: panels.settings=false"
+  },
+  {
+   "item": "이 문장이 일반 질의로 전달돼 대화 이력(turn-q)에 그대로 기록된다",
+   "ok": true,
+   "evidence": "evidence/chat.png: 질의 원문 \"'세팅 좀 열어줘'라고 입력해 보았습니다...\"가 turn-q로 그대로 렌더링됨, evidence/audit-delta.jsonl은 0바이트(빈 파일)로 upstream 툴 호출 없이 순수 chat-only 경로였음을 뒷받침"
+  },
+  {
+   "item": "답변 텍스트가 설정 화면을 열었다고 주장하지 않는다",
+   "ok": true,
+   "evidence": "evidence/chat-answer.txt: \"아닙니다 — ... '세팅 좀 열어줘' 역시 화면 연결로 이어질 수 없습니다\" — 설정 화면을 열었다는 주장 부재, 오히려 열 수 없다고 명시"
+  }
+ ],
+ "judge_note": "auto_checks 2건, must_not_include 2건, must_include 3건 전부 evidence로 확인됨. #settings 패널은 panels.settings=false로 계속 닫혀 있었고, '세팅 좀 열어줘' 원문이 turn-q로 그대로 전달돼 일반 질의(chat-only, audit-delta 0바이트)로 처리됐으며, 답변은 설정 화면이 열렸다고 주장하지 않고 오히려 열 수 없다고 명시했다. expected_route(kind=chat-only, tool_path=[])와도 일치.",
+ "suspect_dataset_defect": false,
+ "duration_s": 16
+}

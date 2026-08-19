@@ -1,0 +1,61 @@
+{
+ "chat": {
+  "answerCount": 1,
+  "lastAnswer": "SK하이닉스의 최근 10개 분기(2024Q1~2026Q2) 영업이익률을 DART 연결재무제표(분기·반기·사업보고서 4건)에서 산출해 표로 정리했습니다. 영업이익률은 2024Q1 23.2%에서 매 분기 개선되어 2026Q2 76.3%까지 상승했으며, 분기 영업이익은 2.9조원에서 60.5조원으로 확대됐습니다. 각 분기값은 보고서의 3개월 실적을 사용했고, 2024Q4·2025Q4는 연간 실적에서 3분기 누적을 차감해 산출했습니다.",
+  "chipCount": 1,
+  "chipLabels": [
+   "공통 테이블"
+  ],
+  "dotClasses": [
+   "dot"
+  ],
+  "state": "idle",
+  "panels": {
+   "app": true,
+   "onboard": false,
+   "settings": false
+  }
+ },
+ "canvas": {
+  "cardCount": 1,
+  "cards": [
+   {
+    "classes": [
+     "mcp-table",
+     "w-full"
+    ],
+    "tableRows": 10,
+    "tableCols": 4,
+    "streamItems": 0,
+    "hasAlert": false,
+    "freeTree": false,
+    "text": "SK하이닉스(000660) 최근 10개 분기 영업이익률 — DART 연결재무제표 기준(2024Q1~2026Q2), Q4는 연간−3분기누적으로 산출12:57:30 기준분기매출액(조원)영업이익(조원)영업이익률(%)2024Q112.432.8923.22024Q216.425.4733.32024Q317.577.03402024Q419.778.0840.92025Q117.647.4442.22025Q222.239.2141.42025Q324.4511.3846.62025Q432.8319.1758.42026Q152.5837.6171.52026Q279.32"
+   }
+  ],
+  "clipPath": "circle(1372.05px at 34.5062px 734.92px)"
+ },
+ "stateTransitions": [
+  {
+   "state": "judging",
+   "at_ms": 11
+  },
+  {
+   "state": "calling",
+   "at_ms": 82438
+  },
+  {
+   "state": "idle",
+   "at_ms": 91738
+  }
+ ],
+ "screenshots": {
+  "chat": {
+   "width": 2349,
+   "height": 437
+  },
+  "canvas": {
+   "width": 2343,
+   "height": 1205
+  }
+ }
+}

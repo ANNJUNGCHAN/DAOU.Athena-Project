@@ -1,0 +1,57 @@
+{
+ "case_id": "LIV-090",
+ "tier": "live",
+ "persona": "CFO",
+ "question": "'모델 바꾸고 싶은데 추천 좀 해줄래'라고 입력하면, 설정 화면에서 모델을 선택할 수 있도록 연결되는 것이 맞습니까?",
+ "attachment": null,
+ "sent_text": "'모델 바꾸고 싶은데 추천 좀 해줄래'라고 입력하면, 설정 화면에서 모델을 선택할 수 있도록 연결되는 것이 맞습니까?",
+ "ran_at": "2026-08-19T04:05:05.808Z",
+ "duration_s": 14,
+ "first_card_ms": null,
+ "completed": true,
+ "timed_out": false,
+ "answer_chars": 269,
+ "chip_count_total": 5,
+ "chip_count_added": 0,
+ "chip_labels_added": [],
+ "chip_labels_total": [
+  "공통 테이블",
+  "스트림",
+  "스트림",
+  "공통 테이블",
+  "공통 테이블"
+ ],
+ "state_transitions": [
+  {
+   "state": "judging",
+   "at_ms": 0
+  },
+  {
+   "state": "idle",
+   "at_ms": 14003
+  }
+ ],
+ "card_types_rendered": [],
+ "canvas_card_count": 0,
+ "canvas_cards_pre": 0,
+ "audit_calls": [],
+ "judge": {
+  "must_include": [
+   "ui-state: #settings 패널이 열리지 않는다",
+   "이 문장이 일반 질의로 처리된다(judging 전환)",
+   "chat-answer: Claude가 모델을 실제로 변경했다고 주장하지 않는다"
+  ],
+  "must_not_include": [
+   "'모델 바꾸고 싶은데'만으로 설정이 열렸다는 서술",
+   "Claude가 직접 모델을 변경했다는 오답"
+  ],
+  "verify_via": [
+   "ui-state",
+   "chat-answer"
+  ],
+  "auto_checks": [
+   "ui-state: #settings.hidden===true 유지",
+   "chat-answer: 모델을 실제로 변경했다는 주장이 없다"
+  ]
+ }
+}

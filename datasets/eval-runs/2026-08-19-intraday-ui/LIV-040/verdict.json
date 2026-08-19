@@ -1,0 +1,59 @@
+{
+ "case_id": "LIV-040",
+ "run": "2026-08-19-intraday-ui",
+ "verdict": "pass",
+ "auto_checks": [
+  {
+   "check": "audit-log에 alias=korea-stock-mcp tool=get_disclosure_list success=true 행이 2개 이상 있다",
+   "ok": true,
+   "evidence": "evidence/audit-delta.jsonl:2,3 — 두 행 모두 tool=get_disclosure_list success=true"
+  },
+  {
+   "check": "chat-answer에 두 회사 각각의 접수일(날짜)이 모두 언급된다",
+   "ok": true,
+   "evidence": "evidence/chat-answer.txt: '오늘(2026-08-19) 접수된 [기재정정]반기보고서가 최신 공시이고, 카카오페이의 최신 공시는 8월 14일 반기보고서입니다'"
+  },
+  {
+   "check": "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 1개 이상 있다",
+   "ok": true,
+   "evidence": "evidence/audit-delta.jsonl:1 tool=get_corp_code success=true"
+  }
+ ],
+ "must_not_include": [
+  {
+   "item": "접수일이 같을 때 아무 근거 없이 임의로 한쪽을 더 최근이라 단정",
+   "violated": false,
+   "evidence": null
+  },
+  {
+   "item": "corp_code를 8자리로 정규화하지 않고 그대로 사용",
+   "violated": false,
+   "evidence": null
+  }
+ ],
+ "must_include": [
+  {
+   "item": "카카오·카카오페이 각각의 최신 공시 rcept_dt를 개별적으로 확인",
+   "ok": true,
+   "evidence": "evidence/chat-answer.txt: '오늘(2026-08-19) 접수된 [기재정정]반기보고서가 최신 공시이고, 카카오페이의 최신 공시는 8월 14일 반기보고서입니다'"
+  },
+  {
+   "item": "rcept_dt가 날짜 단위라 시각 정보가 없다는 한계를 인지",
+   "ok": true,
+   "evidence": "evidence/chat-answer.txt: '접수일이 겹치는 날도 DART 접수번호의 당일 순번으로 가려보면' — 날짜만으로는 순서를 가릴 수 없어 보조 키가 필요하다는 전제를 명시적으로 서술"
+  },
+  {
+   "item": "두 회사의 접수일이 같은 경우 rcept_no 등 보조 기준으로 순서를 가렸다는 근거",
+   "ok": true,
+   "evidence": "evidence/chat-answer.txt: '8월 14일(카카오 3797 > 카카오페이 3101), 8월 13일(카카오 1333 > 카카오페이 1204) 모두 카카오가 그날 더 늦게(=더 최근에) 접수했습니다'"
+  },
+  {
+   "item": "최종적으로 어느 회사가 더 최근인지 명확히 결론",
+   "ok": true,
+   "evidence": "evidence/chat-answer.txt: '카카오가 더 최근입니다' (첫 문장) + '일관되게 카카오 쪽이 앞섭니다' (마무리 문장)"
+  }
+ ],
+ "judge_note": "auto_checks 3건, must_include 4건 모두 chat-answer.txt에서 확인됨 — 두 회사 개별 rcept_dt, 동일 날짜 발생 시 rcept_no 순번 비교(구체적 접수번호 제시), 최종 결론 명확. must_not_include 위반 없음. pass.",
+ "suspect_dataset_defect": false,
+ "duration_s": 39.9
+}

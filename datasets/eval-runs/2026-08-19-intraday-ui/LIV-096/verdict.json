@@ -1,0 +1,54 @@
+{
+ "case_id": "LIV-096",
+ "run": "2026-08-19-intraday-ui",
+ "verdict": "blocked-env",
+ "auto_checks": [
+  {
+   "check": "ui-state: 계좌 행 DOM에 is-clickable 클래스가 없다",
+   "ok": false,
+   "evidence": "raw-result.json observations.click_account_row='NOT FOUND: 계좌 행' — step3와 after_click 덤프가 완전히 동일한 계좌 등록 입력 폼(버튼: '검증 후 시작')에 머물러 있어, 케이스가 전제하는 '키움 인증이 연결되었습니다'(renderAuthTokenStatus) 화면 자체에 도달하지 못했다. 확인 대상 DOM(계좌 행)이 이번 실행 화면에 존재하지 않아 이 체크를 확인할 수 없음"
+  },
+  {
+   "check": "ui-state: 클릭 후에도 body 안에 switch-list/switch-row 노드가 생기지 않는다",
+   "ok": false,
+   "evidence": "동일 사유 — 클릭 대상 '계좌' 행 자체가 이번 실행 화면에 없어(NOT FOUND) 클릭 시도가 유효하지 않았다"
+  }
+ ],
+ "must_not_include": [
+  {
+   "item": "계좌 행 클릭으로 전환 화면이 열렸다는 서술",
+   "violated": false,
+   "evidence": "after_click 관측이 step3와 동일 — 전환 화면 관련 변화 없음"
+  },
+  {
+   "item": "설정(#settings)의 계좌 카드와 이 인증 화면의 계좌 전환을 같은 경로로 혼동하는 서술",
+   "violated": false,
+   "evidence": "해당 서술 자체가 관측되지 않음(app-mode 절차라 서술이 없고, panels.settings=false로 설정 패널도 열리지 않았음)"
+  }
+ ],
+ "must_include": [
+  {
+   "item": "embedded:true일 때는 계좌 행에 is-clickable 클래스와 click 리스너가 붙지 않아 클릭이 아무 반응도 하지 않는다",
+   "ok": false,
+   "evidence": "이번 절차가 renderAuthTokenStatus 화면 자체에 도달하지 못해 런타임 DOM 증거가 없다. 정적 코드 확인(app/lib/auth-screen.js:150-153 `if (!embedded) { accRow.classList.add('is-clickable'); accRow.addEventListener('click', openSwitch); }`)은 주장과 일치하나, 이는 이번 run의 실행 증거를 대체하지 않으므로 이 항목은 무효(=X) 처리한다"
+  },
+  {
+   "item": "openSwitch()는 embedded가 true면 첫 줄에서 즉시 return하므로 호출돼도 무시된다",
+   "ok": false,
+   "evidence": "동일 사유 — 실행 증거 없음. 정적 코드 확인(app/lib/auth-screen.js:288-289 `async function openSwitch() { if (embedded || view === 'switch') return; ... }`)은 주장과 일치하나 실행 증거가 아니다"
+  },
+  {
+   "item": "chat.js 전체에서 renderAuthTokenStatus는 온보딩 3/3 직후 embedded:true로만 호출되고 embedded:false 호출부는 코드베이스에 없다",
+   "ok": true,
+   "evidence": "grep -rn \"renderAuthTokenStatus\" app 재실행 결과 호출부는 app/chat.js:163(showAuthConfirm, embedded:true) 단 한 곳뿐 — 화면 도달 여부와 무관하게 코드베이스 전수 검색으로 확정 가능한 정적 사실"
+  },
+  {
+   "item": "결과적으로 '계좌 전환' 하위 화면은 오늘 이 앱에서 어떤 사용자 경로로도 도달 불가능하다",
+   "ok": true,
+   "evidence": "위와 동일 근거 — embedded:false 호출부가 코드베이스에 없다는 사실은 정적 검색으로 확정된다"
+  }
+ ],
+ "judge_note": "하네스가 실제 앱키/시크릿키 검증을 거쳐 온보딩 3/3의 '키움 인증이 연결되었습니다' 화면까지 도달하지 못했다 — step3와 after_click 덤프가 완전히 동일한 계좌 등록 폼에 머물렀고 click_account_row='NOT FOUND: 계좌 행'이다. 케이스가 전제하는 화면 상태 자체가 이번 절차에서 재현되지 않아 auto_checks 2건과 must_include 앞 2건을 런타임 증거로 확인할 수 없다(증거 부재=fail 처리). 코드(app/lib/auth-screen.js accRow 조건부·openSwitch 가드, chat.js 유일 호출부)는 케이스 주장과 일치하지만 실행 증거를 대체하지 않는다. 앱·데이터셋 결함이 아니라 절차가 전제 상태(실키 검증 완료 후 화면)를 재현하지 못한 하네스 한계로 판단 — blocked-env. 재시도 시 계좌 등록(실제 키 검증)을 실제로 완료시켜 renderAuthTokenStatus 화면까지 도달하는 절차 보강이 필요하다.",
+ "suspect_dataset_defect": false,
+ "duration_s": 2.1
+}

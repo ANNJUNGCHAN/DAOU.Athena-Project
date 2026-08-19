@@ -1,0 +1,54 @@
+{
+ "id": "LIV-030",
+ "tier": "live",
+ "category": "live-상대날짜",
+ "difficulty": "최상",
+ "question": "오늘 날짜를 KST 기준으로 확인해서 이번 분기가 언제 시작됐는지부터 잡고, 삼성바이오로직스가 이번 분기 들어 지금까지 낸 정기공시(사업보고서·분기보고서·반기보고서류)가 몇 건인지 세줘. 같은 보고서의 정정공시는 중복으로 세지 말고.",
+ "why_hard": "오늘 날짜(KST)로부터 이번 분기 시작일을 스스로 계산해야 하고(③), get_disclosure_list의 pblntf_ty='A'(정기공시) 필터로 걸러도 report_nm에 '[기재정정]'이 붙은 최종정정 건이 같은 보고서를 중복으로 셀 위험이 있어 정직하게 걸러내야 한다(⑤). 오늘 날짜를 안 물어보고 '요즘'을 임의로 8월 중순쯤으로 추측하면 분기 경계 자체가 틀어지는데, get_today_date→get_corp_code→get_disclosure_list 3단이 합성돼야 이 판정이 가능하다(①).",
+ "expected_answer": "korea-stock-mcp의 get_today_date로 확인한 KST 오늘 날짜를 기준으로 이번 분기 시작일(예: 3분기면 7월 1일)을 잡고, get_disclosure_list(pblntf_ty='A', bgn_de=분기시작일)로 조회한 뒤 동일 보고서의 정정 건을 중복 제외한 순수 건수를 보고한다.",
+ "judge": {
+  "must_include": [
+   "korea-stock-mcp의 get_today_date로 확인한 KST 날짜를 근거로 이번 분기 시작일을 명시",
+   "get_disclosure_list에 pblntf_ty='A'(정기공시) 또는 이에 준하는 필터를 적용했음을 명시",
+   "동일 보고서의 정정공시를 중복 카운트하지 않았다는 처리 근거 서술",
+   "corp_code를 8자리로 정규화했다는 근거(예: zfill 처리)"
+  ],
+  "must_not_include": [
+   "오늘 날짜를 조회하지 않고 특정 날짜를 임의로 단정",
+   "정정공시를 원본과 별개 건으로 중복 집계"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=korea-stock-mcp tool=get_today_date success=true 행이 1개 이상 있다",
+   "audit-log에 alias=korea-stock-mcp tool=get_disclosure_list success=true 행이 1개 이상 있다",
+   "chat-answer에 회계분기 시작일(월/일)이 구체적으로 명시돼 있다",
+   "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 1개 이상 있다"
+  ]
+ },
+ "expected_route": {
+  "kind": "mcp-upstream",
+  "tool_path": [
+   "korea-stock-mcp__get_today_date",
+   "korea-stock-mcp__get_corp_code",
+   "korea-stock-mcp__get_disclosure_list",
+   "athena__render_canvas"
+  ],
+  "api_id": null,
+  "detail_group": null,
+  "family": null,
+  "upstream": "korea-stock-mcp"
+ },
+ "expected_screen": {
+  "window": "대화 창+캔버스 창",
+  "mode": null,
+  "card": "mcp-table",
+  "current_renderer": "mcp-table"
+ },
+ "implementation_status": "동작-실배선",
+ "notes": "get_today_date/get_corp_code/get_disclosure_list 전부 실측 성공(spike/captures/S2B-jjlabsio-today.json, -corp-code.json, -disclosure-list.json). get_disclosure_list의 pblntf_ty(A=정기공시)·bgn_de 파라미터는 spike/captures/S2-jjlabsio-tools.json 스키마로 확인. corp_code zfill(8) 필요는 CAPTURE-S2B-jjlabsio.md #4 실측 버그.",
+ "group": "live-temporal",
+ "persona": "전업투자자"
+}

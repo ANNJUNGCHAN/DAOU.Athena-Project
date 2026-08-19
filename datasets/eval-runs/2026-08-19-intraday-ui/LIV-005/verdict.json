@@ -1,0 +1,21 @@
+{
+ "case_id": "LIV-005",
+ "run": "2026-08-19-intraday-ui",
+ "verdict": "fail",
+ "auto_checks": [
+  {"check": "audit-log에 alias=korea-stock-mcp tool=get_financial_statement success=true 행이 1개 이상 있다", "ok": true, "evidence": "evidence/audit-delta.jsonl:2-3 — get_financial_statement success=true ×2"},
+  {"check": "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 1개 이상 있다", "ok": true, "evidence": "evidence/audit-delta.jsonl:1 — get_corp_code success=true"}
+ ],
+ "must_not_include": [
+  {"item": "손익계산서 항목(영업이익 등)을 반기(6개월)와 사업보고서(12개월) 그대로 비교해 기간 불일치를 무시함", "violated": false, "evidence": "evidence/chat-answer.txt·evidence/canvas.png 모두 부채총계/자본총계(재무상태표 항목)만 다루며 영업이익 등 손익 항목 비교는 등장하지 않음"},
+  {"item": "실측 없이 개선 여부를 단정", "violated": false, "evidence": "evidence/chat-answer.txt·evidence/canvas.png 수치(부채 37.79→42.14조, 자본 61.19→64.69조)가 get_financial_statement 조회 결과에 근거함"}
+ ],
+ "must_include": [
+  {"item": "reprt_code=11012(반기보고서) 재무상태표 하나로 당기(반기말)·전기(직전 사업연도말) 두 시점 부채비율을 모두 계산했다", "ok": false, "evidence": "evidence/audit-delta.jsonl에 get_financial_statement가 '1개'가 아니라 2회 기록됨(같은 기업 1곳뿐인데도). evidence/canvas.png 표 제목이 '2026 반기보고서(제83기 반기말) vs 2025 사업보고서(제82기말)'로 두 개의 별도 보고서를 병기해, 반기보고서 재무상태표 '하나로' 두 시점을 계산했다는 근거가 아니라 오히려 사업보고서(11011)를 별도로 또 조회했을 가능성을 시사함. LIV-001~003에서 확인된 패턴(회사·연도 1개당 get_financial_statement 1회)과 대조하면 LIV-005의 2회 호출은 반기보고서 1회로 끝내지 않았다는 정황 증거임 — '하나로 계산' 근거 부재"},
+  {"item": "부채총계÷자본총계×100 계산 과정을 두 시점 각각 보여줬다", "ok": true, "evidence": "evidence/canvas.png 표: 부채총계(조원)/자본총계(조원)/부채비율(%) 두 행(2025년말·2026년 반기말) 병기 — 37.79/61.19/61.76, 42.14/64.69/65.14"},
+  {"item": "개선(비율 하락) 또는 악화(비율 상승) 여부를 조회 결과에 근거해 명확히 판정했다", "ok": true, "evidence": "evidence/chat-answer.txt: '개선되지 않았습니다 — ... 61.76%에서... 65.14%로 약 3.4%p 상승했습니다'"}
+ ],
+ "judge_note": "이 케이스의 핵심 함정은 반기보고서(11012) 재무상태표 하나로 당기·전기 두 시점을 모두 얻을 수 있어 사업보고서(11011)를 별도로 부를 필요가 없다는 판단이다. 그런데 audit-delta에 get_financial_statement가 2회 기록되고 캔버스 표가 '2025 사업보고서'와 '2026 반기보고서'를 별도 출처처럼 병기해, 사업보고서를 중복 조회했을 가능성이 강하게 시사된다. '하나로 처리했다'는 명시적 근거가 없어 must_include #1이 무효(=X). 부채비율 계산과 개선 여부 판정 자체는 맞았으나 이 케이스가 테스트하려는 불필요한 추가 조회 회피를 통과했다는 증거가 없어 fail.",
+ "suspect_dataset_defect": false,
+ "duration_s": 44.2
+}

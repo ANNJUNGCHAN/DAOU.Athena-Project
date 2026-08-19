@@ -1,0 +1,55 @@
+{
+ "id": "LIV-039",
+ "tier": "live",
+ "category": "live-기간계산",
+ "difficulty": "최상",
+ "question": "포스코퓨처엠이 작년 이맘때(정확히 1년 전 오늘)와 비교해서 공시 건수가 늘었는지 줄었는지, 그리고 재무제표상 자본총계가 그 사이 얼마나 바뀌었는지 같이 알려줘.",
+ "why_hard": "'1년 전 오늘'을 정확한 날짜로 계산해 두 개의 서로 다른 기간(작년 같은 기간 vs 최근 1년)에 대해 각각 공시 건수를 세야 하고(③), get_today_date+corp_code+disclosure_list×2+financial_statement 5단이 합성된다(①). 자본총계 비교는 get_financial_statement의 thstrm_amount/frmtrm_amount로 별도 계산해야 한다. 공시 건수 추이와 자본총계 비교는 데이터 형태가 완전히 달라 하나의 표 스키마에 억지로 우겨넣으면 안 되고 free 카드로 갈지 판단해야 한다(⑥).",
+ "expected_answer": "오늘로부터 정확히 1년 전 날짜를 계산해 두 기간(최근 1년, 그 이전 1년)의 공시 건수를 각각 세어 증감을 보고하고, get_financial_statement의 thstrm_amount/frmtrm_amount로 자본총계 변화도 함께 제시한다.",
+ "judge": {
+  "must_include": [
+   "오늘 날짜에서 정확히 1년을 뺀 기준일을 구체적으로 계산",
+   "비교 대상 두 기간(최근 1년/그 이전 1년)의 공시 건수를 각각 별도로 집계",
+   "자본총계는 get_financial_statement의 당기·전기 값으로 별도 계산했다는 근거",
+   "공시건수 비교와 자본총계 비교가 서로 다른 데이터임을 구분해서 제시"
+  ],
+  "must_not_include": [
+   "두 기간의 길이를 다르게 잡아 건수를 비교",
+   "공시 건수 증감과 자본총계 증감을 하나의 수치로 뭉뚱그려 혼동"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=korea-stock-mcp tool=get_disclosure_list success=true 행이 2개 이상 있다",
+   "audit-log에 alias=korea-stock-mcp tool=get_financial_statement success=true 행이 있다",
+   "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 1개 이상 있다"
+  ]
+ },
+ "expected_route": {
+  "kind": "mcp-upstream",
+  "tool_path": [
+   "korea-stock-mcp__get_today_date",
+   "korea-stock-mcp__get_corp_code",
+   "korea-stock-mcp__get_disclosure_list",
+   "korea-stock-mcp__get_disclosure_list",
+   "korea-stock-mcp__get_financial_statement",
+   "athena__render_canvas"
+  ],
+  "api_id": null,
+  "detail_group": null,
+  "family": null,
+  "upstream": "korea-stock-mcp"
+ },
+ "expected_screen": {
+  "window": "대화 창+캔버스 창",
+  "mode": null,
+  "card": "free",
+  "current_renderer": "free"
+ },
+ "implementation_status": "동작-실배선",
+ "notes": "get_disclosure_list bgn_de/end_de로 임의 기간 지정 가능함은 S2-jjlabsio-tools.json 스키마. get_financial_statement thstrm/frmtrm 필드는 CAPTURE-S2B-jjlabsio.md 확인. 이질적 데이터(건수+금액)는 canvas.py table 스키마(rows 단일 구조)에 안 맞아 free 폴백이 정직한 선택.",
+ "group": "live-temporal",
+ "persona": "애널리스트"
+}

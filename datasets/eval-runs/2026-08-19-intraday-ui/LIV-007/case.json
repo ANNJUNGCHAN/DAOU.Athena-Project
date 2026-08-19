@@ -1,0 +1,50 @@
+{
+ "id": "LIV-007",
+ "tier": "live",
+ "category": "live-재무추출",
+ "difficulty": "최상",
+ "question": "LG화학의 연결 기준 자기자본비율을 계산해 주십시오. 별도재무제표가 아닌 연결 기준으로 반드시 확인 부탁드립니다.",
+ "why_hard": "② get_financial_statement의 fs_div는 OFS(별도)/CFS(연결) 두 값 중 정확히 하나를 골라야 하는데 이름이 비슷해 헷갈리기 쉽고 사용자가 명시적으로 '연결'을 요구했으므로 CFS를 정확히 지정해야 하며(안 그러면 완전히 다른 재무제표를 계산에 씀), ③ 자본총계÷자산총계×100 계산이 필요하고, ⑤ sj_nm 미지정 시 자본변동표의 반복되는 '자본총계' 행과 재무상태표의 자본총계를 혼동할 위험까지 함께 처리해야 한다.",
+ "expected_answer": "fs_div를 CFS(연결)로 정확히 지정해 재무상태표의 자본총계·자산총계를 가져온 뒤 자기자본비율(자본총계÷자산총계×100)을 계산해야 하며, OFS(별도)로 잘못 조회하면 사용자가 요청한 값과 다른 수치가 나온다.",
+ "judge": {
+  "must_include": [
+   "fs_div를 CFS(연결)로 명시적으로 지정했다는 근거(OFS와 혼동하지 않았다)",
+   "자본총계÷자산총계×100 계산 과정과 결과를 제시했다",
+   "재무상태표(BS)의 자본총계를 썼다는 근거(자본변동표의 중복 '자본총계' 행과 혼동하지 않았다)"
+  ],
+  "must_not_include": [
+   "fs_div=OFS(별도재무제표)로 조회해놓고 '연결' 기준이라고 답변",
+   "실측 없이 자기자본비율 수치를 임의로 제시"
+  ],
+  "verify_via": [
+   "chat-answer",
+   "audit-log"
+  ],
+  "auto_checks": [
+   "audit-log에 alias=korea-stock-mcp tool=get_financial_statement success=true 행이 1개 이상 있다",
+   "audit-log에 alias=korea-stock-mcp tool=get_corp_code success=true 행이 1개 이상 있다"
+  ]
+ },
+ "expected_route": {
+  "kind": "cross-source",
+  "tool_path": [
+   "korea-stock-mcp__get_corp_code",
+   "korea-stock-mcp__get_financial_statement",
+   "athena__render_canvas"
+  ],
+  "family": null,
+  "api_id": null,
+  "detail_group": null,
+  "upstream": "korea-stock-mcp"
+ },
+ "expected_screen": {
+  "window": "대화 창+캔버스 창",
+  "mode": null,
+  "card": "mcp-table",
+  "current_renderer": "mcp-table"
+ },
+ "implementation_status": "동작-실배선",
+ "notes": "fs_div enum(OFS/CFS) 스키마 실측(S2-jjlabsio-tools.json get_financial_statement inputSchema). 자본총계 계정명 중복은 S2B-jjlabsio-financial-statement.json에서 재무상태표 1회+자본변동표 다회 확인(회사 무관 동일 스키마 특성).",
+ "group": "live-finance",
+ "persona": "CFO"
+}
