@@ -180,6 +180,43 @@ def test_short_values_are_not_treated_as_secrets() -> None:
     assert filt.secret_count == 0
 
 
+def test_runtime_issued_kiwoom_token_is_redacted_by_shape() -> None:
+    """The gap value-matching alone leaves open.
+
+    TokenManager issues the Kiwoom access token after startup and KiwoomAuth renders it as
+    "Bearer <token>" (kiwoom/auth.py:84). It is never in Settings, so the exact-value layer
+    cannot know it -- only the shape layer catches this one.
+    """
+    handler = configure_logging(_settings())  # no Kiwoom creds configured at all
+    stream = _capture(handler)
+    runtime_token = "eyJhbGciOiJIUzI1NiJ9.issued-after-startup.9f3c1a"
+    logging.getLogger("athena_api.kiwoom").error("upstream call with Bearer %s", runtime_token)
+    output = stream.getvalue()
+    assert runtime_token not in output
+    assert REDACTED in output
+
+
+def test_token_shaped_key_values_are_redacted() -> None:
+    handler = configure_logging(_settings())
+    stream = _capture(handler)
+    logging.getLogger("athena_api.kiwoom").error(
+        "payload app_key=AKIA-not-a-real-key access_token: tok-9f3c1a2b"
+    )
+    output = stream.getvalue()
+    assert "AKIA-not-a-real-key" not in output
+    assert "tok-9f3c1a2b" not in output
+
+
+def test_shape_redaction_keeps_the_surrounding_line_readable() -> None:
+    """Redaction must not blank the whole line -- an unreadable log is its own outage."""
+    handler = configure_logging(_settings())
+    stream = _capture(handler)
+    logging.getLogger("athena_api.kiwoom").error("ka10081 failed with Bearer abc.def.ghi")
+    output = stream.getvalue()
+    assert "ka10081 failed with" in output
+    assert "abc.def.ghi" not in output
+
+
 def test_json_formatter_output_is_also_redacted() -> None:
     """Redaction is a filter on the handler, so it must apply to both formatters."""
     handler = configure_logging(_settings(log_format="json"))

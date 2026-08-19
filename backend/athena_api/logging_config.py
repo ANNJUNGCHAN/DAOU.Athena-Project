@@ -34,16 +34,22 @@ taken and what was deliberately left behind:
   rotate or scrub it.
 
 ``SecretRedactingFilter`` is the belt to the code rule's braces: even if some future call
-site interpolates a credential, the value never reaches stdout. It cannot detect chat
-bodies (they are arbitrary user text with no stable shape), so bodies stay a code-level
-rule enforced by test -- see ``tests/api/test_brain_api.py`` and
-``tests/unit/test_logging_config.py``.
+site interpolates a credential, the value never reaches stdout. It redacts both known
+values (from ``Settings``) and credential *shapes* -- the shape layer exists because the
+Kiwoom access token is issued at runtime by ``TokenManager`` and rendered as
+``Bearer <token>`` (``kiwoom/auth.py:84``), so it is never in ``Settings`` and value
+matching alone would miss it.
+
+Neither layer can detect chat bodies: they are arbitrary user text with no stable shape.
+Bodies therefore stay a code-level rule enforced by test -- see
+``tests/api/test_brain_api.py`` and ``tests/unit/test_logging_config.py``.
 """
 
 from __future__ import annotations
 
 import json
 import logging
+import re
 import sys
 from typing import Any
 
@@ -77,14 +83,35 @@ _TEXT_FORMAT = "%(asctime)s %(levelname)-8s %(name)s | %(message)s"
 _HANDLER_NAME = "athena-stdout"
 
 
-class SecretRedactingFilter(logging.Filter):
-    """Replace known credential values anywhere in a record before it is emitted.
+# Credential *shapes* that exist only at runtime and therefore cannot be matched by value.
+# The Kiwoom access token is the concrete case: TokenManager issues it after startup and
+# `KiwoomAuth.authorization` renders it as "Bearer <token>" (kiwoom/auth.py:84), so it is
+# never in Settings and exact-value matching alone would miss it.
+_PATTERN_REDACTIONS: tuple[tuple[re.Pattern[str], str], ...] = (
+    (re.compile(r"(?i)\bBearer\s+\S+"), f"Bearer {REDACTED}"),
+    (
+        re.compile(r"(?i)\b(app_?key|secret_?key|access_?token|refresh_?token)\b(\s*[=:]\s*)\S+"),
+        rf"\1\2{REDACTED}",
+    ),
+)
 
-    Operates on the *formatted* message and on ``record.args`` so both
-    ``logger.info("token=%s", tok)`` and ``logger.info(f"token={tok}")`` are covered.
-    Only exact-value matching: this filter knows the secrets this process holds
-    (bearer token, Kiwoom app/secret keys) and nothing else. It is not a heuristic
-    scrubber and must not be relied on to catch chat bodies -- see module docstring.
+
+class SecretRedactingFilter(logging.Filter):
+    """Scrub credentials out of a record before it is emitted.
+
+    Two layers, because neither alone is enough:
+
+    1. **Exact values** this process holds (local bearer, Kiwoom app/secret keys). Precise,
+       no false positives, but blind to anything issued after startup.
+    2. **Shapes** (``Bearer <x>``, ``access_token=<x>``, …). Catches the runtime-issued
+       Kiwoom access token, which never appears in ``Settings`` and so is invisible to
+       layer 1. Coarser -- it will also blank a harmless literal like ``Bearer <token>`` in
+       a docstring-ish log line, which is an acceptable trade for not leaking a live token.
+
+    Operates on the *formatted* message so both ``logger.info("t=%s", tok)`` and
+    ``logger.info(f"t={tok}")`` are covered. It still cannot recognise chat bodies -- those
+    are arbitrary user text with no stable shape, so bodies remain a code-level rule
+    enforced by test (see module docstring).
     """
 
     def __init__(self, secrets: tuple[str, ...] = ()) -> None:
@@ -101,19 +128,20 @@ class SecretRedactingFilter(logging.Filter):
         for secret in self._secrets:
             if secret in text:
                 text = text.replace(secret, REDACTED)
+        for pattern, replacement in _PATTERN_REDACTIONS:
+            text = pattern.sub(replacement, text)
         return text
 
     def filter(self, record: logging.LogRecord) -> bool:
-        if not self._secrets:
-            return True
         try:
             message = record.getMessage()
         except Exception:  # pragma: no cover - broken %-args should not kill logging
             return True
-        if any(secret in message for secret in self._secrets):
+        scrubbed = self._scrub(message)
+        if scrubbed != message:
             # Collapse to the already-formatted, scrubbed text: args are consumed here so
             # the handler's own formatting cannot re-introduce the raw value.
-            record.msg = self._scrub(message)
+            record.msg = scrubbed
             record.args = ()
         return True
 
