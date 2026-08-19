@@ -378,6 +378,36 @@ async function refreshScreenCard(card, head, body) {
   const growToggle = toggleSwitch(!!data.autoGrowChat, (next) => setPref('autoGrowChat', next));
   body.appendChild(row('uk-toggle-row', [growLabelCol, growToggle]));
 
+  // ---- 글자 크기 5단계 (2026-08-19 사용자 지시 "글자가 너무 큼") ----
+  // 값은 lib/main/prefs.js FONT_SIZES와 1:1 — tokens.css의 --text-* 토큰 세트를
+  // 통째로 바꾼다. UI 배율(zoom)과 달리 텍스트만 커지고 창·여백은 그대로다.
+  const FONT_SIZE_CHIPS = [
+    { value: 'xs', label: '매우 작음' },
+    { value: 'sm', label: '작음' },
+    { value: 'md', label: '보통' },
+    { value: 'lg', label: '큼' },
+    { value: 'xl', label: '매우 큼' },
+  ];
+  const fontLabelCol = el('div');
+  fontLabelCol.appendChild(el('div', 'uk-toggle-label', '글자 크기'));
+  fontLabelCol.appendChild(el('div', 'uk-toggle-sub', '두 창의 모든 텍스트에 적용된다'));
+  const fontChipRow = row('uk-chip-row', []);
+  const currentFont = data.fontSize || 'md';
+  const fontChips = [];
+  for (const c of FONT_SIZE_CHIPS) {
+    const b = button('ghost', c.label, {
+      onClick: async () => {
+        await setPref('fontSize', c.value);
+        for (const { btn, value } of fontChips) btn.classList.toggle('is-pressed', value === c.value);
+      },
+    });
+    b.classList.add('uk-chip');
+    if (c.value === currentFont) b.classList.add('is-pressed');
+    fontChips.push({ btn: b, value: c.value });
+    fontChipRow.appendChild(b);
+  }
+  body.appendChild(row('uk-toggle-row', [fontLabelCol, fontChipRow]));
+
   // ---- UI 배율 — 기존 Ctrl+=/Ctrl+-/Ctrl+휠(chat.js)과 같은 채널을 버튼으로 노출 ----
   const zoomLabelCol = el('div');
   zoomLabelCol.appendChild(el('div', 'uk-toggle-label', 'UI 배율'));

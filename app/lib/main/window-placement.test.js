@@ -8,17 +8,28 @@ const assert = require('node:assert/strict');
 const { computePlacement } = require('./window-placement');
 
 // 부팅 설계 치수(main.js DESIGN) 그대로 — chatHeight=chatBaseH는 "확장 안 된
-// 기본 대화 창" 상태를 뜻한다.
-const DIMS = { canvasW: 1560, canvasH: 800, chatW: 1560, chatBaseH: 204, chatHeight: 204 };
+// 기본 대화 창" 상태를 뜻한다. AT-CH-001R(2026-08-19): chatW 900 < canvasW 1560,
+// 대화 창은 캔버스 폭의 중앙에 정렬된다(chatX = x + (1560-900)/2 = x + 330).
+const DIMS = { canvasW: 1560, canvasH: 800, chatW: 900, chatBaseH: 248, chatHeight: 248 };
 
 test('computePlacement: left — 왼쪽 절반의 중앙에 짝을 배치한다', () => {
   const workArea = { x: 0, y: 0, width: 3840, height: 2160 };
   const p = computePlacement('left', workArea, DIMS);
   // 왼쪽 절반 폭 1920, 짝 폭 1560 -> 중앙 오프셋 (1920-1560)/2 = 180
   assert.equal(p.canvasBounds.x, 180);
-  assert.equal(p.chatBounds.x, 180);
+  assert.equal(p.chatBounds.x, 180 + 330); // 캔버스 폭 중앙 정렬
   assert.equal(p.canvasBounds.width, 1560);
   assert.equal(p.canvasBounds.height, 800);
+});
+
+test('computePlacement: 대화 창은 캔버스 폭의 중앙에 정렬된다(AT-CH-001R)', () => {
+  const workArea = { x: 0, y: 0, width: 3840, height: 2160 };
+  for (const dir of ['left', 'right']) {
+    const p = computePlacement(dir, workArea, DIMS);
+    const expected = p.canvasBounds.x + Math.round((DIMS.canvasW - DIMS.chatW) / 2);
+    assert.equal(p.chatBounds.x, expected);
+    assert.equal(p.chatX, expected);
+  }
 });
 
 test('computePlacement: right — 오른쪽 절반의 중앙에 짝을 배치한다', () => {
@@ -31,8 +42,8 @@ test('computePlacement: right — 오른쪽 절반의 중앙에 짝을 배치한
 test('computePlacement: 세로는 짝 높이(캔버스+chatBaseH) 기준으로 워크에어리어 중앙에 놓는다', () => {
   const workArea = { x: 0, y: 0, width: 3840, height: 2160 };
   const p = computePlacement('left', workArea, DIMS);
-  // pairH = 800+204=1004, (2160-1004)/2 = 578
-  assert.equal(p.canvasBounds.y, 578);
+  // pairH = 800+248=1048, (2160-1048)/2 = 556
+  assert.equal(p.canvasBounds.y, 556);
 });
 
 test('computePlacement: 절반 폭 < 창 폭이면 그 절반 중앙에 겹쳐 배치된다(음수 오프셋 허용)', () => {

@@ -45,14 +45,24 @@ let onboardCleanup = null; // 현재 노출 중인 온보딩/인증 화면의 �
 // (app/README.md L599-608). 기본값은 원본과 동일 — 채널·기본값을 못 받아도
 // 두 동작 모두 이전과 같은 "항상 켜짐"으로 동작한다(fail-open, 새 기능이라
 // 실패가 기존 동작을 축소시키면 안 된다).
-let prefs = { autoExpandCanvas: true, autoGrowChat: true };
+let prefs = { autoExpandCanvas: true, autoGrowChat: true, fontSize: 'md' };
+// 글자 크기 5단계(2026-08-19) — tokens.css의 :root[data-font-size=...] 토큰 세트를
+// 켠다. md는 기본 토큰이므로 속성을 지워 :root 값으로 돌아간다. 텍스트 크기가
+// 바뀌면 필요한 창 높이도 바뀌므로 auto-grow 재측정을 건다.
+function applyFontSize() {
+  const v = prefs.fontSize;
+  if (v && v !== 'md') document.documentElement.dataset.fontSize = v;
+  else delete document.documentElement.dataset.fontSize;
+  if (typeof scheduleHeightSync === 'function') scheduleHeightSync();
+}
 async function loadPrefs() {
   try {
     const next = await window.athena.invoke('athena:settings:prefs:get');
     if (next) prefs = next;
   } catch { /* 채널 없음 — 기본값 유지 */ }
+  applyFontSize();
 }
-window.athena.on('athena:prefs-changed', (next) => { if (next) prefs = next; });
+window.athena.on('athena:prefs-changed', (next) => { if (next) { prefs = next; applyFontSize(); } });
 
 // ---------- 부팅(AT-SY-001) — 4단계 생성 시퀀스 ----------
 // 발광점(0ms) → 가로 확장(+180ms) → 세로 전개(+420ms, 유리 72%) → 창 확정(+620ms).
@@ -309,8 +319,9 @@ function scheduleHeightSync() {
 
 function measureNeededHeight() {
   const gripH = $grip.getBoundingClientRect().height;
-  const inputRow = document.querySelector('.input-row');
-  const inputH = inputRow ? inputRow.getBoundingClientRect().height : 64;
+  // AT-CH-001R — 입력 영역은 이제 2행(입력줄 52 + 컨트롤 스트립 48) 스택이다.
+  const inputStack = document.querySelector('.input-stack');
+  const inputH = inputStack ? inputStack.getBoundingClientRect().height : 100;
   const histNeeded = $history.scrollHeight + 16; // padding
   // 측정은 CSS px, 창 높이는 물리 px — 줌 배율을 곱해 보낸다(main의 clamp와 단위 일치).
   return Math.round((gripH + inputH + histNeeded) * window.athena.getZoomFactor());
@@ -857,14 +868,118 @@ function bindWindowDrag(el) {
 }
 bindWindowDrag($history);
 bindWindowDrag(document.querySelector('.input-row'));
+bindWindowDrag(document.getElementById('controlStrip'));
 bindWindowDrag($settings);
 bindWindowDrag(document.querySelector('.settings-head'));
 bindWindowDrag($onboard);
 bindWindowDrag($onboardBody);
 
+// ---------- 컨트롤 스트립(AT-CH-001R, Paper 47쪽) — CLI 필 · 모델 필 · 팝오버 ----------
+// 실기능만 올린다(soul.md §7): CLI 필은 runQuery의 실행기(claude -p) 표시이자
+// 설정 진입로, 모델 필은 athena:model-get 실상태 표시이자 인라인 팝오버다.
+// 팝오버는 창 안 오버레이 — 새 창을 만들지 않는다(soul.md §3).
+const $cliPill = document.getElementById('cliPill');
+const $modelPill = document.getElementById('modelPill');
+const $modelPopover = document.getElementById('modelPopover');
+
+// lib/settings-cards.js의 CLAUDE_MODEL_CHIPS/CLAUDE_EFFORT_CHIPS와 같은 어휘 —
+// 팝오버는 설정 모델 카드의 빠른 진입로일 뿐 새 어휘를 만들지 않는다(값을
+// 바꾸려면 양쪽을 같이 바꾼다. UMD 모듈이 이 상수를 노출하지 않아 복제한다).
+const PILL_MODEL_CHIPS = [
+  { value: null, label: '기본' },
+  { value: 'fable', label: 'fable' },
+  { value: 'opus', label: 'opus' },
+  { value: 'sonnet', label: 'sonnet' },
+  { value: 'haiku', label: 'haiku' },
+];
+const PILL_EFFORT_CHIPS = [
+  { value: null, label: '기본' },
+  { value: 'low', label: 'low' },
+  { value: 'medium', label: 'medium' },
+  { value: 'high', label: 'high' },
+  { value: 'xhigh', label: 'xhigh' },
+  { value: 'max', label: 'max' },
+];
+
+let modelStateCache = null;
+
+function modelPillLabel(st) {
+  const c = (st && st.claude) || {};
+  const m = c.model ? c.model.toUpperCase() : '기본 모델';
+  return c.effort ? `${m} · ${c.effort}` : m;
+}
+
+async function refreshModelPill() {
+  try {
+    modelStateCache = await window.athena.invoke('athena:model-get');
+    $modelPill.textContent = modelPillLabel(modelStateCache);
+  } catch {
+    // 상태를 못 읽으면 라벨을 갱신하지 않는다 — 추측값을 쓰지 않는다(정보 정직성).
+  }
+  if (!$modelPopover.hidden) renderModelPopover();
+}
+
+function popoverSection(title, chips, currentValue, key) {
+  const t = document.createElement('div');
+  t.className = 'mp-title';
+  t.textContent = title;
+  $modelPopover.appendChild(t);
+  const row = document.createElement('div');
+  row.className = 'mp-row';
+  for (const c of chips) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'mp-chip' + (c.value === currentValue ? ' on' : '');
+    b.textContent = c.label;
+    b.addEventListener('click', async () => {
+      const res = await window.athena.invoke('athena:model-set', { provider: 'claude', patch: { [key]: c.value } });
+      if (res && res.ok === false) return; // 거부된 값은 상태를 안 바꾼다(model-prefs 검증)
+      await refreshModelPill();
+    });
+    row.appendChild(b);
+  }
+  $modelPopover.appendChild(row);
+}
+
+function renderModelPopover() {
+  const c = (modelStateCache && modelStateCache.claude) || { model: null, effort: null };
+  $modelPopover.textContent = '';
+  popoverSection('모델', PILL_MODEL_CHIPS, c.model, 'model');
+  const sep = document.createElement('div');
+  sep.className = 'mp-sep';
+  $modelPopover.appendChild(sep);
+  popoverSection('추론 노력', PILL_EFFORT_CHIPS, c.effort, 'effort');
+}
+
+function closeModelPopover() { $modelPopover.hidden = true; }
+
+$modelPill.addEventListener('click', async () => {
+  if ($modelPopover.hidden) {
+    await refreshModelPill();
+    renderModelPopover();
+    $modelPopover.hidden = false;
+  } else {
+    closeModelPopover();
+  }
+});
+// CLI 전환·계정은 설정 모드의 일이다 — 필은 진입로만 제공한다.
+$cliPill.addEventListener('click', () => openSettings());
+// 바깥 클릭으로 닫는다 — 필 클릭은 토글 핸들러가 처리하므로 제외.
+document.addEventListener('mousedown', (e) => {
+  if ($modelPopover.hidden) return;
+  if ($modelPopover.contains(e.target) || $modelPill.contains(e.target)) return;
+  closeModelPopover();
+});
+window.athena.on('athena:model-changed', () => refreshModelPill());
+refreshModelPill();
+
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
-    // 주문 티켓·설정 모드가 떠 있으면 그것부터 닫는다 — 지금 눈앞에 있는 것이 먼저다.
+    // 지금 눈앞에 있는 것이 먼저다 — 팝오버 → 주문 티켓 → 설정 순으로 닫는다.
+    if (!$modelPopover.hidden) {
+      closeModelPopover();
+      return;
+    }
     if (orderOpen) {
       closeOrderTicket();
       return;

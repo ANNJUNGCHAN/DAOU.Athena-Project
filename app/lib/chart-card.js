@@ -167,6 +167,16 @@ async function createChartCard(container, opts) {
   vpOverlay.className = 'chart-volume-profile-overlay';
   priceWrap.appendChild(vpOverlay);
 
+  // TradingView attribution(위 주석, 라이선스 요구) 로고는 캔버스 픽셀이라 CSS로
+  // 가리거나 지울 수 없다(그러면 라이선스 위반) — 하지만 기본 위치(좌하단)가
+  // 거래량 pane(1) 바닥과 겹쳐 배경 없이 막대 위에 얹힌다(2026-08-19 QA 결함
+  // #3). 로고 자리에만 작은 스크림을 깔아 데이터와 분리한다. pointer-events:none
+  // 이라 로고 클릭(라이선스가 요구하는 링크)은 그대로 캔버스로 통과한다.
+  const attributionScrim = document.createElement('div');
+  attributionScrim.className = 'chart-attribution-scrim';
+  attributionScrim.setAttribute('aria-hidden', 'true');
+  priceWrap.appendChild(attributionScrim);
+
   const chart = createChart(priceWrap, {
     autoSize: true,
     layout: {

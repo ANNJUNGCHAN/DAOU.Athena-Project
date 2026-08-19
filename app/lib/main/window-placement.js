@@ -34,12 +34,15 @@ function computePlacement(dir, workArea, dims) {
   const x = Math.round(regionX + (regionWidth - pairW) / 2);
   const y = Math.max(workArea.y, Math.round(workArea.y + (workArea.height - pairH) / 2));
   const chatBottom = y + dims.canvasH + dims.chatBaseH;
+  // AT-CH-001R(2026-08-19): chatW(900) < canvasW(1560) — 대화 창은 캔버스 폭의
+  // 중앙에 정렬한다. chatW==canvasW였던 구판에서는 chatX==x로 동일 값이었다.
+  const chatX = x + Math.round((dims.canvasW - dims.chatW) / 2);
 
   return {
     canvasBounds: { x, y, width: dims.canvasW, height: dims.canvasH },
-    chatBounds: { x, y: chatBottom - dims.chatHeight, width: dims.chatW, height: dims.chatHeight },
+    chatBounds: { x: chatX, y: chatBottom - dims.chatHeight, width: dims.chatW, height: dims.chatHeight },
     chatBottom,
-    chatX: x,
+    chatX,
   };
 }
 

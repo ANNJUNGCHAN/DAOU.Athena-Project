@@ -6,6 +6,13 @@
 - [Adopting Liquid Glass](https://developer.apple.com/documentation/technologyoverviews/adopting-liquid-glass) ← JS 렌더링, 본문 미확보. 동반 샘플 "Landmarks: Building an app with Liquid Glass" 존재
 - [Liquid Glass showcase: CNN (Meet with Apple)](https://developer.apple.com/videos/play/meet-with-apple/256/) ← 성능 실무 근거
 - Figma 커뮤니티 UI 킷 2건 — 로그인/JS 필요, 미열람
+- `C:\Projects\DAOU.Athena\ui\glass\` — 세션 219 한국어 전문(`철학.txt`) + 실물 캡처 5장 (2026-08-19 추가)
+
+> **시각 SSOT (2026-08-19):** Paper "Athena — 화면설계서"의 **`00R · 리퀴드 글래스 레시피`** 보드.
+> 유리 7재료(흡수·산란·렌징·반사·각인·접지·발광)와 사다리·금지 목록을 실물 유리로 보여준다.
+> **실측:** Paper 렌더러는 `backdrop-filter`를 렌더하지 않는다(선명 프로브로 확인). 목업의
+> 프로스트는 사전 블러 환경 워시 + 저대비 데이터 유령으로 시뮬레이션하고, 실제 산란은
+> 앱 CSS(acrylic + backdrop-filter)에서만 발생한다.
 
 ---
 
