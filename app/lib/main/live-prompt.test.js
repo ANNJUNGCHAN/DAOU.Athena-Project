@@ -115,6 +115,14 @@ test('buildLivePrompt: 실행 환경 제약 v3c — Bash 없음·승인 절차 �
   assert.ok(p.includes('받은 부분만으로 즉시 카드를'));
 });
 
+test('buildLivePrompt: 데이터 지름길 v3d — chart/table은 plan_token으로 render_canvas 직행 (2026-08-19)', () => {
+  const p = buildLivePrompt('x');
+  assert.ok(p.includes('athena_call로 데이터를 읽어오지 마라'));
+  assert.ok(p.includes('plan_token'));
+  assert.ok(p.includes('summary'));
+  assert.ok(p.includes('최근 N봉 기준'));
+});
+
 test('buildLivePrompt: timeline 스키마 힌트 — 부분 데이터 허용 (2026-08-19 QA LIV-046)', () => {
   const p = buildLivePrompt('x');
   assert.ok(p.includes('"timeline"'));

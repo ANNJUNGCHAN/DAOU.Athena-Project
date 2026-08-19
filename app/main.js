@@ -300,6 +300,9 @@ async function createWindows() {
 
   // 루틴 알림 구독 시작(2026-08-19 능동 에이전트 P2) — fixture면 내부에서 no-op.
   startRoutineFeed();
+  // 캔버스 사이드 채널 구독(2026-08-19 데이터 지름길) — 게이트웨이가 채운 카드가
+  // 모델 스트림을 안 타고 이 WS로 직접 온다("캔버스 먼저, 채팅은 요약만").
+  startCanvasFeed();
 }
 
 // ---------- 루틴 알림 — 백엔드 WS 구독 → 토스트 + 능동 턴 (실행계획 P2) ----------
@@ -311,6 +314,14 @@ const routineTurn = require('./lib/routine-turn');
 const BACKEND_HTTP_BASE = process.env.ATHENA_BACKEND_URL || 'http://127.0.0.1:8010';
 const BACKEND_WS_BASE = BACKEND_HTTP_BASE.replace(/^http/, 'ws');
 
+// 로컬 베어러 토큰 — backend/.env 설정 배포에서 WS 피드(루틴·캔버스) 인증과
+// history-sink(브레인 저장)가 이것을 쓴다. 메모리에만 존재(로깅 금지).
+if (!process.env.ATHENA_LOCAL_BEARER_TOKEN) {
+  const localToken = backendLauncher.readLocalBearerToken();
+  if (localToken) process.env.ATHENA_LOCAL_BEARER_TOKEN = localToken;
+}
+const LOCAL_BEARER_TOKEN = process.env.ATHENA_LOCAL_BEARER_TOKEN || null;
+
 let routineFeed = null;
 
 function startRoutineFeed() {
@@ -319,7 +330,7 @@ function startRoutineFeed() {
   if (routineFeed) return;
   routineFeed = new RoutineFeed({
     url: `${BACKEND_WS_BASE}/api/v1/ws/routines`,
-    token: null, // 로컬 기본 배포(토큰 미설정) — 백엔드 루프백 게이트가 지킨다
+    token: LOCAL_BEARER_TOKEN, // 토큰 설정 배포는 모드 A 인증 봉투, 미설정이면 루프백 게이트
     onEvent: (event) => {
       // 능동 턴은 항상 이력에 쌓인다 — 토스트를 놓쳐도 다음 열람 때 남아 있다.
       if (chatWin && !chatWin.isDestroyed()) {
@@ -338,6 +349,36 @@ function startRoutineFeed() {
 }
 
 app.on('will-quit', () => { if (routineFeed) routineFeed.stop(); });
+
+// ---------- 캔버스 사이드 채널 — 백엔드 WS 구독 → 카드 직접 렌더 (데이터 지름길) ----------
+// render_canvas(plan_token) 경로에서 게이트웨이가 채운 봉투는 모델 스트림(툴 결과)
+// 대신 이 채널로 온다 — CLI 잘림 한도와 무관하고, 모델이 답을 쓰는 동안 카드가
+// 먼저 뜬다(2026-08-19 사용자 지시 "캔버스 우선 구성 → 필요 정보만 뽑아 답변").
+let canvasFeed = null;
+
+function startCanvasFeed() {
+  if (process.env.ATHENA_CANVAS_SOURCE === 'fixture') return; // 검증 결정론 보호
+  if (canvasFeed) return;
+  canvasFeed = new RoutineFeed({
+    url: `${BACKEND_WS_BASE}/api/v1/ws/canvas`,
+    token: LOCAL_BEARER_TOKEN,
+    onEvent: (envelope) => {
+      if (!envelope || !envelope.canvas_type) return;
+      if (!canvasVisible) {
+        expandCanvasWindow().catch((err) => mdlog(`expandCanvasWindow(캔버스 푸시) 실패: ${String((err && err.message) || err)}`));
+      }
+      sendLiveCanvasResult({
+        toolUseId: 'canvas-push',
+        status: envelope.fell_back ? 'fallback' : 'success',
+        envelope,
+      });
+    },
+    onStatus: () => {},
+  });
+  canvasFeed.start();
+}
+
+app.on('will-quit', () => { if (canvasFeed) canvasFeed.stop(); });
 
 // 루틴 REST 프록시 — 렌더러는 백엔드에 직접 붙지 않는다(기존 IPC 관례).
 // confirm/cancel은 **사람 클릭 전용** 경로다(실행계획 §7-6 — 모델 툴에는 없다).
@@ -1001,6 +1042,11 @@ async function runLiveQuery(query, expand) {
     effort,
     onSpawn: (h) => { myHandle = h; activeLiveQuery = h; },
     onCanvasResult: (r) => {
+      if (r.status === 'pushed') {
+        // 카드는 사이드 채널(startCanvasFeed)로 이미 도착했다 — 여기선 집계만.
+        if (r.envelope && r.envelope.canvas_type) canvasTypesSeen.push(r.envelope.canvas_type);
+        return;
+      }
       if (expand && !expandTriggered && !canvasVisible) {
         expandTriggered = true;
         // fire-and-forget — 카드 전송을 막지 않는다. 실패는 콘솔에 안 뜨고

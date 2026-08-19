@@ -36,7 +36,24 @@ const turnTimeline = [];
 let firstCanvasMs = null;
 
 (async () => {
-  const startedAt = Date.now();
+  const sideChannel = { connected: false, received: [] };
+try {
+  // 토큰 설정 배포는 모드 A — 앱(routine-feed)과 같은 인증 봉투를 보낸다.
+  const localToken = require(
+    path.join(__dirname, '..', '..', '..', 'app', 'lib', 'main', 'backend-launcher.js')
+  ).readLocalBearerToken();
+  const ws = new WebSocket('ws://127.0.0.1:8010/api/v1/ws/canvas');
+  ws.onopen = () => {
+    sideChannel.connected = true;
+    if (localToken) ws.send(JSON.stringify({ type: 'auth', token: localToken }));
+  };
+  ws.onmessage = (ev) => {
+    try { sideChannel.received.push(JSON.parse(ev.data)); } catch { /* 무시 */ }
+  };
+  ws.onerror = () => {};
+} catch { /* Node<21 등 — 구독 없이 진행(리포트에 connected:false로 남는다) */ }
+
+const startedAt = Date.now();
   let lastEventAt = startedAt;
   const result = await runClaudeQuery({
     prompt: buildLivePrompt(QUERY),
@@ -80,14 +97,27 @@ let firstCanvasMs = null;
   });
 
   const elapsedMs = Date.now() - startedAt;
+  // 사이드 채널 수신분(2026-08-19 데이터 지름길) — 카드 봉투는 이제 툴 결과가
+  // 아니라 /api/v1/ws/canvas로 온다. 프로브가 앱 대신 구독해 실수신을 검증한다.
+  await new Promise((r) => setTimeout(r, 1500)); // 마지막 push 도착 여유
   const chartCanvases = canvases.filter(
     (c) => c && c.envelope && c.envelope.canvas_type === 'chart' && !c.envelope.fell_back
   );
   const kiwoomToolCalls = toolNames.filter((n) => /athena_(search|describe|resolve|call)/.test(n));
   const foreignStockCalls = toolNames.filter((n) => /korea-stock|pykrx|krx/i.test(n));
 
+  const side = sideChannel.received[0] || null;
   const report = {
     ok: result.ok,
+    sideChannel: {
+      connected: sideChannel.connected,
+      receivedCount: sideChannel.received.length,
+      canvasType: side && side.canvas_type,
+      barsLength: side && side.data && Array.isArray(side.data.bars) ? side.data.bars.length : null,
+      firstTime: side && side.data && side.data.bars && side.data.bars[0] ? side.data.bars[0].time : null,
+      lastTime: side && side.data && side.data.bars && side.data.bars.length
+        ? side.data.bars[side.data.bars.length - 1].time : null,
+    },
     exitCode: result.exitCode,
     error: result.error,
     elapsedMs,
@@ -117,7 +147,7 @@ let firstCanvasMs = null;
   fs.writeFileSync(outPath, JSON.stringify(report, null, 2), 'utf-8');
   console.log('[probe] report:', outPath);
   console.log('[probe] ok:', report.ok, '| exit:', report.exitCode,
-    '| chart:', report.chartCanvasCount, '| kiwoom calls:', kiwoomToolCalls.length,
+    '| chart:', report.chartCanvasCount, '| side:', report.sideChannel.receivedCount, 'bars:', report.sideChannel.barsLength, '| kiwoom calls:', kiwoomToolCalls.length,
     '| foreign stock calls:', foreignStockCalls.length, '| elapsed:', elapsedMs + 'ms');
   const pass = report.ok && report.chartCanvasCount > 0 && foreignStockCalls.length === 0;
   process.exit(pass ? 0 : 1);

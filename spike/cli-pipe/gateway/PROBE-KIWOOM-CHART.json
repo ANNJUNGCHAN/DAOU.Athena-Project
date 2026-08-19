@@ -1,382 +1,170 @@
 {
   "ok": true,
+  "sideChannel": {
+    "connected": true,
+    "receivedCount": 2,
+    "canvasType": "chart",
+    "barsLength": 240,
+    "firstTime": "2025-08-25",
+    "lastTime": "2026-08-19"
+  },
   "exitCode": 0,
   "error": null,
-  "elapsedMs": 108329,
-  "firstCanvasMs": 98421,
+  "elapsedMs": 27301,
+  "firstCanvasMs": 24019,
   "turnTimeline": [
     {
-      "atMs": 2132,
-      "deltaMs": 2132,
+      "atMs": 962,
+      "deltaMs": 962,
       "type": "system",
       "subtype": "init",
       "toolNames": []
     },
     {
-      "atMs": 9364,
-      "deltaMs": 7232,
+      "atMs": 3762,
+      "deltaMs": 2800,
       "type": "assistant",
       "toolNames": []
     },
     {
-      "atMs": 10525,
-      "deltaMs": 1161,
+      "atMs": 3885,
+      "deltaMs": 123,
       "type": "assistant",
       "toolNames": [
         "ToolSearch"
       ]
     },
     {
-      "atMs": 10544,
-      "deltaMs": 19,
+      "atMs": 3894,
+      "deltaMs": 9,
       "type": "user",
       "toolNames": []
     },
     {
-      "atMs": 10546,
-      "deltaMs": 2,
+      "atMs": 3938,
+      "deltaMs": 44,
       "type": "rate_limit_event",
       "toolNames": []
     },
     {
-      "atMs": 13808,
-      "deltaMs": 3262,
+      "atMs": 6746,
+      "deltaMs": 2808,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 6747,
+      "deltaMs": 1,
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "toolNames": []
+    },
+    {
+      "atMs": 6748,
+      "deltaMs": 1,
       "type": "assistant",
       "toolNames": []
     },
     {
-      "atMs": 13882,
-      "deltaMs": 74,
+      "atMs": 6761,
+      "deltaMs": 13,
       "type": "assistant",
       "toolNames": [
         "ToolSearch"
       ]
     },
     {
-      "atMs": 13901,
-      "deltaMs": 19,
+      "atMs": 6771,
+      "deltaMs": 10,
       "type": "user",
       "toolNames": []
     },
     {
-      "atMs": 17618,
-      "deltaMs": 3717,
+      "atMs": 9558,
+      "deltaMs": 2787,
       "type": "assistant",
       "toolNames": [
         "mcp__athena__athena_search"
       ]
     },
     {
-      "atMs": 18007,
-      "deltaMs": 389,
+      "atMs": 9683,
+      "deltaMs": 125,
       "type": "user",
       "toolNames": []
     },
     {
-      "atMs": 21006,
-      "deltaMs": 2999,
+      "atMs": 11641,
+      "deltaMs": 1958,
       "type": "assistant",
       "toolNames": [
         "mcp__athena__athena_describe"
       ]
     },
     {
-      "atMs": 21030,
-      "deltaMs": 24,
+      "atMs": 11653,
+      "deltaMs": 12,
       "type": "user",
       "toolNames": []
     },
     {
-      "atMs": 24554,
-      "deltaMs": 3524,
-      "type": "assistant",
-      "toolNames": [
-        "mcp__athena__athena_resolve"
-      ]
-    },
-    {
-      "atMs": 24741,
-      "deltaMs": 187,
-      "type": "user",
-      "toolNames": []
-    },
-    {
-      "atMs": 33324,
-      "deltaMs": 8583,
-      "type": "assistant",
-      "toolNames": [
-        "mcp__athena__athena_call"
-      ]
-    },
-    {
-      "atMs": 34025,
-      "deltaMs": 701,
-      "type": "user",
-      "toolNames": []
-    },
-    {
-      "atMs": 37723,
-      "deltaMs": 3698,
+      "atMs": 13561,
+      "deltaMs": 1908,
       "type": "system",
       "subtype": "thinking_tokens",
       "toolNames": []
     },
     {
-      "atMs": 39192,
-      "deltaMs": 1469,
-      "type": "system",
-      "subtype": "thinking_tokens",
-      "toolNames": []
-    },
-    {
-      "atMs": 40705,
-      "deltaMs": 1513,
-      "type": "system",
-      "subtype": "thinking_tokens",
-      "toolNames": []
-    },
-    {
-      "atMs": 42687,
-      "deltaMs": 1982,
-      "type": "system",
-      "subtype": "thinking_tokens",
-      "toolNames": []
-    },
-    {
-      "atMs": 44080,
-      "deltaMs": 1393,
-      "type": "system",
-      "subtype": "thinking_tokens",
-      "toolNames": []
-    },
-    {
-      "atMs": 45523,
-      "deltaMs": 1443,
-      "type": "system",
-      "subtype": "thinking_tokens",
-      "toolNames": []
-    },
-    {
-      "atMs": 46904,
-      "deltaMs": 1381,
-      "type": "system",
-      "subtype": "thinking_tokens",
-      "toolNames": []
-    },
-    {
-      "atMs": 48471,
-      "deltaMs": 1567,
-      "type": "system",
-      "subtype": "thinking_tokens",
-      "toolNames": []
-    },
-    {
-      "atMs": 49730,
-      "deltaMs": 1259,
-      "type": "system",
-      "subtype": "thinking_tokens",
-      "toolNames": []
-    },
-    {
-      "atMs": 50441,
-      "deltaMs": 711,
-      "type": "assistant",
-      "toolNames": []
-    },
-    {
-      "atMs": 51156,
-      "deltaMs": 715,
-      "type": "assistant",
-      "toolNames": []
-    },
-    {
-      "atMs": 51464,
-      "deltaMs": 308,
-      "type": "assistant",
-      "toolNames": [
-        "mcp__athena__athena_search"
-      ]
-    },
-    {
-      "atMs": 51605,
-      "deltaMs": 141,
-      "type": "user",
-      "toolNames": []
-    },
-    {
-      "atMs": 56288,
-      "deltaMs": 4683,
-      "type": "system",
-      "subtype": "thinking_tokens",
-      "toolNames": []
-    },
-    {
-      "atMs": 56288,
+      "atMs": 13561,
       "deltaMs": 0,
       "type": "system",
       "subtype": "thinking_tokens",
       "toolNames": []
     },
     {
-      "atMs": 56289,
-      "deltaMs": 1,
+      "atMs": 13561,
+      "deltaMs": 0,
       "type": "assistant",
       "toolNames": []
     },
     {
-      "atMs": 56298,
-      "deltaMs": 9,
-      "type": "assistant",
-      "toolNames": [
-        "mcp__athena__athena_describe"
-      ]
-    },
-    {
-      "atMs": 56310,
-      "deltaMs": 12,
-      "type": "user",
-      "toolNames": []
-    },
-    {
-      "atMs": 59771,
-      "deltaMs": 3461,
+      "atMs": 14791,
+      "deltaMs": 1230,
       "type": "assistant",
       "toolNames": [
         "mcp__athena__athena_resolve"
       ]
     },
     {
-      "atMs": 59885,
-      "deltaMs": 114,
+      "atMs": 14892,
+      "deltaMs": 101,
       "type": "user",
       "toolNames": []
     },
     {
-      "atMs": 62853,
-      "deltaMs": 2968,
-      "type": "system",
-      "subtype": "thinking_tokens",
-      "toolNames": []
-    },
-    {
-      "atMs": 64230,
-      "deltaMs": 1377,
-      "type": "system",
-      "subtype": "thinking_tokens",
-      "toolNames": []
-    },
-    {
-      "atMs": 65028,
-      "deltaMs": 798,
-      "type": "system",
-      "subtype": "thinking_tokens",
-      "toolNames": []
-    },
-    {
-      "atMs": 65031,
-      "deltaMs": 3,
-      "type": "assistant",
-      "toolNames": []
-    },
-    {
-      "atMs": 66059,
-      "deltaMs": 1028,
-      "type": "assistant",
-      "toolNames": [
-        "mcp__athena__athena_resolve"
-      ]
-    },
-    {
-      "atMs": 66072,
-      "deltaMs": 13,
-      "type": "user",
-      "toolNames": []
-    },
-    {
-      "atMs": 75503,
-      "deltaMs": 9431,
-      "type": "assistant",
-      "toolNames": [
-        "mcp__athena__athena_call"
-      ]
-    },
-    {
-      "atMs": 75580,
-      "deltaMs": 77,
-      "type": "user",
-      "toolNames": []
-    },
-    {
-      "atMs": 80976,
-      "deltaMs": 5396,
-      "type": "system",
-      "subtype": "thinking_tokens",
-      "toolNames": []
-    },
-    {
-      "atMs": 83138,
-      "deltaMs": 2162,
-      "type": "system",
-      "subtype": "thinking_tokens",
-      "toolNames": []
-    },
-    {
-      "atMs": 84528,
-      "deltaMs": 1390,
-      "type": "system",
-      "subtype": "thinking_tokens",
-      "toolNames": []
-    },
-    {
-      "atMs": 86098,
-      "deltaMs": 1570,
-      "type": "system",
-      "subtype": "thinking_tokens",
-      "toolNames": []
-    },
-    {
-      "atMs": 87550,
-      "deltaMs": 1452,
-      "type": "system",
-      "subtype": "thinking_tokens",
-      "toolNames": []
-    },
-    {
-      "atMs": 88998,
-      "deltaMs": 1448,
-      "type": "system",
-      "subtype": "thinking_tokens",
-      "toolNames": []
-    },
-    {
-      "atMs": 90499,
-      "deltaMs": 1501,
-      "type": "assistant",
-      "toolNames": []
-    },
-    {
-      "atMs": 98412,
-      "deltaMs": 7913,
+      "atMs": 23881,
+      "deltaMs": 8989,
       "type": "assistant",
       "toolNames": [
         "mcp__athena__athena__render_canvas"
       ]
     },
     {
-      "atMs": 98421,
-      "deltaMs": 9,
+      "atMs": 24019,
+      "deltaMs": 138,
       "type": "user",
       "toolNames": []
     },
     {
-      "atMs": 106152,
-      "deltaMs": 7731,
+      "atMs": 27117,
+      "deltaMs": 3098,
       "type": "assistant",
       "toolNames": []
     },
     {
-      "atMs": 106179,
-      "deltaMs": 27,
+      "atMs": 27132,
+      "deltaMs": 15,
       "type": "result",
       "subtype": "success",
       "toolNames": []
@@ -384,46 +172,30 @@
   ],
   "canvasCount": 1,
   "chartCanvasCount": 1,
-  "chartDataKeys": [
-    "symbol",
-    "name",
-    "bars"
-  ],
-  "chartBarsLength": 20,
+  "chartDataKeys": null,
+  "chartBarsLength": null,
   "toolNames": [
     "ToolSearch",
     "ToolSearch",
     "mcp__athena__athena_search",
     "mcp__athena__athena_describe",
     "mcp__athena__athena_resolve",
-    "mcp__athena__athena_call",
-    "mcp__athena__athena_search",
-    "mcp__athena__athena_describe",
-    "mcp__athena__athena_resolve",
-    "mcp__athena__athena_resolve",
-    "mcp__athena__athena_call",
     "mcp__athena__athena__render_canvas"
   ],
   "kiwoomToolCalls": [
     "mcp__athena__athena_search",
     "mcp__athena__athena_describe",
-    "mcp__athena__athena_resolve",
-    "mcp__athena__athena_call",
-    "mcp__athena__athena_search",
-    "mcp__athena__athena_describe",
-    "mcp__athena__athena_resolve",
-    "mcp__athena__athena_resolve",
-    "mcp__athena__athena_call"
+    "mcp__athena__athena_resolve"
   ],
   "foreignStockCalls": [],
   "eventTypeCounts": {
     "system/init": 1,
-    "assistant": 20,
-    "user": 12,
+    "assistant": 10,
+    "user": 6,
     "rate_limit_event": 1,
-    "system/thinking_tokens": 20,
+    "system/thinking_tokens": 4,
     "result/success": 1
   },
   "stderrHead": "",
-  "finalResultText": "삼성전자 최근 20거래일(2026-07-22 ~ 08-19) 일봉을 그렸습니다. 오늘은 247,500원으로 전일 대비 -21,000원(-7.82%), 8/11 이후 이어진 반등이 8/18 고점 288,000원에서 꺾여 이틀 연속 밀렸습니다.\n\n한 가지 밝혀둘 점 — 원래 지목한 일봉차트 오퍼레이션(ka10081)은 응답이 너무 커서 이 환경으로 전달되지 못했고, 같은 키움 REST의 일별주가(ka10086)로 대체해 조회했습니다."
+  "finalResultText": "삼성전자(005930) 일봉 차트를 캔버스에 그렸습니다.\n\n- 기간: 2025-08-25 ~ 2026-08-19 (전체 600봉 중 **최근 240봉 기준**으로 트리밍)\n- 최근 종가: **247,500원** (수정주가 적용, 키움 ka10081)"
 }

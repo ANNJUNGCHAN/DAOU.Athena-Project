@@ -177,6 +177,12 @@ function classifyCanvasBlock(block) {
     return { toolUseId: block.toolUseId, status: 'unparseable', raw: block, reason: envelopeResult.reason };
   }
   const envelope = envelopeResult.envelope;
+  // 데이터 지름길(2026-08-19, backend canvas_data.py) — pushed:true는 카드가
+  // 사이드 채널(WS /api/v1/ws/canvas)로 이미 앱에 도착했다는 뜻이다. 이 결과는
+  // 모델용 요약 전용이라 카드를 그리면 이중 렌더가 된다 — 별도 상태로 분류한다.
+  if (envelope.pushed === true) {
+    return { toolUseId: block.toolUseId, status: 'pushed', envelope };
+  }
   // ★ canvas_type은 응답값으로 읽는다 — 요청값이 아니다. S4 RESULT.md §5:
   // 실왕복 3회 중 2회가 요청 table에 대해 응답 free로 폴백했다.
   return {

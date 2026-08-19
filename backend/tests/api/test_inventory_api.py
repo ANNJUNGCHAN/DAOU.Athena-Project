@@ -140,10 +140,11 @@ def test_inventory_partition_and_static_openapi_coverage() -> None:
     # draft/confirm/cancel/list — plan/능동-에이전트-실행계획-2026-08-19.md §7-6) →
     # 325(brain 6라우트: chat ingest, status, chats, conversations, profile-summary,
     # reset-and-restart — conversations added for the chat_message -> conversation rollup
-    # so a conversation list can be built without already knowing a conversation id).
+    # so a conversation list can be built without already knowing a conversation id) →
+    # 326(canvas push 1 — 데이터 지름길 사이드 채널, api/canvas_push.py 2026-08-19).
     # None of these are LLM-exposed -- the llm_exposed assertion further down is what
     # pins the selector surface at 4 tools.
-    assert len(operation_ids) == 325
+    assert len(operation_ids) == 326
     assert "get_internal_oauth_status" in operation_ids
     manifest = json.loads(
         (BACKEND / "ref" / "kiwoom-common-screen-manifest.json").read_text(encoding="utf-8")
