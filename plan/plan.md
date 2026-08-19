@@ -90,10 +90,25 @@ app:
   (`ATHENA_BRAIN_INGEST_INTERVAL_MINUTES`로 관리), 수동 실행 라우트는 백엔드에 없어 버튼을 만들지
   않았다. `BrainStatusResponse`가 4필드(ready/ingestion_ready/extraction_enabled/fts_ready)뿐이라
   실행 시각도 못 준다.
-- **미완(정직)**: ① **노션 문서 갱신 미완** — MCP 토큰 만료로 전송 실패, 재인증 후 처리 필요
-  (기존 "GraphDB 사용 현황" 정정 + 하위 설계 페이지 신설). ② 실배선 E2E(실제 `claude -p` 왕복 후
-  SQLite 2행 확인)는 미실행 — `npm run verify`는 항상 fixture 경로다. ③ 보존기간·세분화 삭제 UI,
-  감시 에이전트의 그래프 소비(알림)는 **명시적 범위 밖**. ④ 집계 쿼리 성능 수용 기준 없음(후속 실측).
+- **실배선 E2E 실행 완료 — 그리고 결함 1건을 잡았다** (`app/probe-brain-chat-e2e.js`,
+  증거 `spike/cli-pipe/gateway/PROBE-BRAIN-CHAT-E2E.json`). 임시 브레인 DB + 별도 포트(8011)로
+  백엔드를 띄우고 Electron에서 실제 질의 1건을 `claude -p`에 태운 뒤 SQLite를 직접 조회했다.
+  - **1차: `pass:false`.** 2행은 들어갔지만 **user와 assistant의 conversation_id가 달랐다**
+    (`0a1fe408…` vs `5ff6842e…`). 원인: `claude -p --resume`이 매 성공 왕복마다 세션을 포크해
+    `liveSessionId`를 갱신하는데, role:user는 질의 진입 시점에·role:assistant는 반환 시점에
+    저장되므로 그 사이에 값이 바뀐다. 계획 §2(a)의 "liveSessionId를 conversation_id로 재사용"
+    전제가 **실측으로 뒤집혔다** — liveSessionId는 대화 식별자가 아니라 재개용 커서다.
+    조회(`GET /chats?conversation_id=`)가 반쪽 턴만 돌려주고 그래프 대화 묶음도 턴마다 쪼개진다.
+  - **수정**: conversation_id를 앱 세션 단위(`historyAppSessionId`)로 고정. `main.js:843` 주석이
+    이미 "대화는 앱 수명 단위다"라고 적고 있었으니 원래 이쪽이 맞았다.
+  - **2차: `pass:true`** — 2행(user·assistant)·동일 conversation_id·한글 원문 보존·
+    실응답("2") 확인. app npm test 197/197 유지.
+  - 부수: 1차 증거의 한글이 깨져 있었다 — 파이썬 `print()`가 Windows 콘솔 인코딩(cp949)으로
+    나간 것이라 DB가 아니라 **증거 수집 경로의 결함**이었다. `PYTHONIOENCODING=utf-8` 고정으로
+    해소(§8 함정). 검증하다 같은 함정에 한 번 더 빠질 뻔했다 — **파일을 열어서 확인해야 한다.**
+- **미완(정직)**: ① **노션 문서화는 하지 않는다** — 사용자 지시로 범위에서 제외(2026-08-19).
+  ② 보존기간·세분화 삭제 UI,
+  감시 에이전트의 그래프 소비(알림)는 **명시적 범위 밖**. ③ 집계 쿼리 성능 수용 기준 없음(후속 실측).
 
 **2026-08-19 (병합) · `디자인` → `main` 병합 직후 재실측:**
 
