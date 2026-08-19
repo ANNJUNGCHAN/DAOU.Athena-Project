@@ -70,13 +70,11 @@ def test_build_table_caps_rows_and_derives_columns():
     assert meta["trimmed"] is True
 
 
-def _client(handler) -> httpx.AsyncClient:
-    return httpx.AsyncClient(
-        transport=httpx.MockTransport(handler), base_url="http://backend.test"
-    )
+# `_client` 헬퍼는 tests/mcp/conftest.py의 `mock_http_client` 픽스처로 옮겼다
+# (2026-08-20 포니테일 감사 — 4파일 중복 제거).
 
 
-async def test_render_with_plan_chart_fills_envelope_and_summary(tmp_path: Path):
+async def test_render_with_plan_chart_fills_envelope_and_summary(tmp_path: Path, mock_http_client):
     seen = {}
 
     def handler(request: httpx.Request) -> httpx.Response:
@@ -97,7 +95,7 @@ async def test_render_with_plan_chart_fills_envelope_and_summary(tmp_path: Path)
             "plan_token": "tok-1",
             "data": {"symbol": "005930", "name": "삼성전자"},
         },
-        _client(handler),
+        mock_http_client(handler),
         call_timeout_seconds=5.0,
     )
     assert result.isError is False
@@ -119,46 +117,46 @@ async def test_render_with_plan_chart_fills_envelope_and_summary(tmp_path: Path)
     assert pushed["data"]["bars"][0]["time"] < pushed["data"]["bars"][-1]["time"]
 
 
-async def test_render_with_plan_requires_symbol_for_chart():
+async def test_render_with_plan_requires_symbol_for_chart(mock_http_client):
     def handler(_request: httpx.Request) -> httpx.Response:
         return httpx.Response(200, json={"data": {"rows": _chart_rows(3)}})
 
     result = await render_with_plan(
         {"canvas_type": "chart", "plan_token": "tok", "data": {}},
-        _client(handler),
+        mock_http_client(handler),
         call_timeout_seconds=5.0,
     )
     assert result.isError is True
     assert "data.symbol" in result.content[0].text
 
 
-async def test_render_with_plan_rejects_unsupported_canvas_type():
+async def test_render_with_plan_rejects_unsupported_canvas_type(mock_http_client):
     def handler(_request: httpx.Request) -> httpx.Response:
         raise AssertionError("호출되면 안 된다")
 
     result = await render_with_plan(
         {"canvas_type": "stream", "plan_token": "tok", "data": {}},
-        _client(handler),
+        mock_http_client(handler),
         call_timeout_seconds=5.0,
     )
     assert result.isError is True
     assert "chart" in result.content[0].text
 
 
-async def test_render_with_plan_surfaces_backend_error():
+async def test_render_with_plan_surfaces_backend_error(mock_http_client):
     def handler(_request: httpx.Request) -> httpx.Response:
         return httpx.Response(409, json={"detail": "PLAN_ALREADY_USED"})
 
     result = await render_with_plan(
         {"canvas_type": "table", "plan_token": "tok", "data": {}},
-        _client(handler),
+        mock_http_client(handler),
         call_timeout_seconds=5.0,
     )
     assert result.isError is True
     assert "409" in result.content[0].text
 
 
-async def test_render_with_plan_falls_back_to_inline_when_push_fails():
+async def test_render_with_plan_falls_back_to_inline_when_push_fails(mock_http_client):
     def handler(request: httpx.Request) -> httpx.Response:
         if request.url.path == "/api/v1/canvas/push":
             return httpx.Response(503, json={"detail": "채널 미준비"})
@@ -166,7 +164,7 @@ async def test_render_with_plan_falls_back_to_inline_when_push_fails():
 
     result = await render_with_plan(
         {"canvas_type": "chart", "plan_token": "tok", "data": {"symbol": "005930"}},
-        _client(handler),
+        mock_http_client(handler),
         call_timeout_seconds=5.0,
     )
     assert result.isError is False

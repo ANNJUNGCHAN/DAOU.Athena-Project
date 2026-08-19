@@ -26,6 +26,7 @@ const fs = require('fs');
 const path = require('path');
 const { spawn } = require('child_process');
 const { BACKEND_DIR, PYTHON_EXE } = require('./mcp-config');
+const { killTree } = require('./proc-utils');
 
 // backend/README.md "실행법"과 문자 그대로 일치하는 커맨드(포트·워커 수 포함) —
 // CLAUDE.md §7 "uvicorn 워커는 정확히 1개".
@@ -57,20 +58,6 @@ function decideAction({ healthy, venvExists }) {
 
 function venvExists() {
   return fs.existsSync(PYTHON_EXE);
-}
-
-// claude.exe만 죽이면 자식(uvicorn worker)이 고아로 남을 수 있다 — Windows는
-// taskkill /T로 프로세스 트리를 통째로 끊는다. claude-runner.js killTree와
-// 같은 패턴(app/lib/main/claude-runner.js).
-function killTree(child) {
-  if (!child || child.exitCode !== null || child.signalCode !== null) return;
-  if (process.platform === 'win32') {
-    try {
-      spawn('taskkill', ['/PID', String(child.pid), '/T', '/F'], { windowsHide: true, stdio: 'ignore' });
-    } catch { /* 이미 죽어 있으면 그만 */ }
-  } else {
-    try { child.kill('SIGTERM'); } catch { /* 동일 */ }
-  }
 }
 
 async function checkHealth(url = HEALTH_URL, timeoutMs = HEALTH_TIMEOUT_MS) {

@@ -14,6 +14,7 @@
 const fs = require('fs');
 const path = require('path');
 const { app, safeStorage } = require('electron');
+const { writeJsonAtomic } = require('./json-store');
 
 function storePath() {
   return path.join(app.getPath('userData'), 'athena-secrets.json');
@@ -31,11 +32,7 @@ function readStore() {
 // 원자적 쓰기 — registry.py의 tmp-then-replace 패턴과 동일한 이유(쓰다가
 // 죽어도 파일이 반쪽으로 남지 않는다).
 function writeStore(store) {
-  const p = storePath();
-  fs.mkdirSync(path.dirname(p), { recursive: true });
-  const tmp = `${p}.tmp`;
-  fs.writeFileSync(tmp, JSON.stringify(store, null, 2), 'utf-8');
-  fs.renameSync(tmp, p);
+  writeJsonAtomic(storePath(), store);
 }
 
 function isEncryptionAvailable() {
@@ -81,11 +78,6 @@ function getCharCount(namespace, key) {
   return entry ? entry.charCount : 0;
 }
 
-function hasValue(namespace, key) {
-  const store = readStore();
-  return !!(store[namespace] && store[namespace][key]);
-}
-
 function deleteValue(namespace, key) {
   const store = readStore();
   if (store[namespace]) {
@@ -107,7 +99,6 @@ module.exports = {
   setValue,
   getValue,
   getCharCount,
-  hasValue,
   deleteValue,
   deleteNamespace,
 };

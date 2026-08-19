@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import json
-import math
+import statistics
 from collections.abc import Iterable, Sequence
 from typing import Any
 
@@ -11,29 +11,21 @@ LIST_UI_PAGE_SIZE = 10
 QUANTILE_METHOD = "Hyndman-Fan type 7"
 
 
-def type7_quantile(values: Sequence[int | float], probability: float) -> float:
-    """Return the Hyndman-Fan type-7 sample quantile."""
-    if not values:
-        raise ValueError("A quantile requires at least one value")
-    if not 0 <= probability <= 1:
-        raise ValueError("Quantile probability must be between zero and one")
-    ordered = sorted(float(value) for value in values)
-    position = (len(ordered) - 1) * probability
-    lower = math.floor(position)
-    upper = math.ceil(position)
-    if lower == upper:
-        return ordered[lower]
-    fraction = position - lower
-    return ordered[lower] + fraction * (ordered[upper] - ordered[lower])
-
-
 def distribution(values: Sequence[int | float]) -> dict[str, int | float]:
-    """Summarize a population with type-7 quantiles and Tukey 1.5-IQR fences."""
+    """Summarize a population with type-7 quantiles and Tukey 1.5-IQR fences.
+
+    사분위는 stdlib `statistics.quantiles(method="inclusive")` — Hyndman-Fan
+    type 7과 동일하다(저장소 테스트 값 [7,15,36,39,40,41] → 20.25/37.5/39.75로
+    수치 검증, 2026-08-20 손구현 type7_quantile 대체). 단일값 모집단은 stdlib이
+    거부하므로(2점 미만 StatisticsError) 기존 계약대로 그 값 자체를 쓴다.
+    """
     if not values:
         raise ValueError("A distribution requires at least one value")
-    q1 = type7_quantile(values, 0.25)
-    median = type7_quantile(values, 0.5)
-    q3 = type7_quantile(values, 0.75)
+    ordered = sorted(float(value) for value in values)
+    if len(ordered) == 1:
+        q1 = median = q3 = ordered[0]
+    else:
+        q1, median, q3 = statistics.quantiles(ordered, n=4, method="inclusive")
     iqr = q3 - q1
     return {
         "count": len(values),

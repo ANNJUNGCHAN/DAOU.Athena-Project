@@ -54,7 +54,7 @@ function serializeAuthoring(state) {
   const params = {};
   for (const id of Object.keys(s.params || {})) {
     const p = s.params[id];
-    if (p && typeof p === 'object') params[id] = JSON.parse(JSON.stringify(p));
+    if (p && typeof p === 'object') params[id] = structuredClone(p);
   }
   return {
     v: SCHEMA_VERSION,

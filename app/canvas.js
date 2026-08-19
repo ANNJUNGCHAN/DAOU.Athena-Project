@@ -6,7 +6,7 @@
 // 옮겼다 — athena:load-fixture invoke로 파싱된 데이터만 받는다.
 const { sanitize } = window.AthenaLib.Sanitize;
 const { renderMarkdownInto } = window.AthenaLib.Markdown;
-const { errorNote } = window.AthenaLib.UiKit;
+const { errorNote, removeCardAndMaybeCollapse } = window.AthenaLib.UiKit;
 const { widthGradeFor, dropTargetsFor, exceedsHeightBudget, MIN_CARDS } = window.AthenaLib.CanvasLayout;
 const { foldColumns } = window.AthenaLib.ColumnFold;
 const { createChartCard } = window.AthenaLib.ChartCard;
@@ -461,16 +461,14 @@ function freshLabel() {
 // 마지막 카드를 닫으면 빈 유리창을 남기지 않고 캔버스 자체를 접는다 — Esc가
 // 쓰는 채널을 그대로 재사용한다.
 function closeCard(card) {
-  const parent = card.parentElement;
   const destroy = cardDestroyers.get(card);
   if (destroy) {
     try { destroy(); } catch (err) { /* 카드가 이미 언마운트된 경우 등 — 닫기 자체는 막지 않는다 */ }
     cardDestroyers.delete(card);
   }
-  card.remove();
-  if (parent && !parent.querySelector('.card')) {
-    window.athena.send('athena:collapse-canvas');
-  }
+  // 부모에서 remove → 그리드가 비면 캔버스 접기는 ui-kit.js의
+  // removeCardAndMaybeCollapse로 settings-cards.js와 공용화했다(포니테일 감사).
+  removeCardAndMaybeCollapse(card);
 }
 
 function cardCloseButton(card) {

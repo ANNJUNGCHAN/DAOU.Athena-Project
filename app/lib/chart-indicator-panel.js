@@ -20,6 +20,9 @@
 const { INDICATOR_DEFS } = (typeof module !== 'undefined' && module.exports)
   ? require('./chart-indicator-registry')
   : window.AthenaLib.ChartIndicatorRegistry;
+const { bindOutsideCloseAndEscape } = (typeof module !== 'undefined' && module.exports)
+  ? require('./ui-kit')
+  : window.AthenaLib.UiKit;
 
 function el(tag, className, text) {
   const n = document.createElement(tag);
@@ -175,23 +178,10 @@ function createIndicatorPanel(opts) {
     closeAnyOpenIndicatorPanel();
     anchorBtn.parentElement.appendChild(panel);
     anchorBtn.setAttribute('aria-expanded', 'true');
-    const onOutside = (e) => {
-      if (panel.contains(e.target) || anchorBtn.contains(e.target)) return;
-      closeAnyOpenIndicatorPanel();
-    };
-    const onEscape = (e) => {
-      if (e.key === 'Escape') closeAnyOpenIndicatorPanel();
-    };
-    document.addEventListener('mousedown', onOutside, true);
-    document.addEventListener('keydown', onEscape, true);
-    openPanelState = {
-      panel,
-      anchorBtn,
-      cleanup: () => {
-        document.removeEventListener('mousedown', onOutside, true);
-        document.removeEventListener('keydown', onEscape, true);
-      },
-    };
+    // 바깥 클릭·Escape로 닫힘 — chart-toolbar.js의 드롭다운과 동일한 배선이라
+    // ui-kit.js의 bindOutsideCloseAndEscape로 공용화했다(포니테일 감사).
+    const cleanup = bindOutsideCloseAndEscape(panel, anchorBtn, closeAnyOpenIndicatorPanel);
+    openPanelState = { panel, anchorBtn, cleanup };
   }
 
   function close() {

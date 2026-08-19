@@ -184,10 +184,6 @@ class TokenManager:
         await self._auth.revoke_token()
         return self.status()
 
-    def clear(self) -> dict[str, str | bool | None]:
-        self._auth.clear()
-        return self.status()
-
     def status(self) -> dict[str, str | bool | None]:
         expires_at = self._auth.expires_at
         return {

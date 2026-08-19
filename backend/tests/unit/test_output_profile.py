@@ -12,7 +12,6 @@ from athena_api.output_profile import (
     build_output_profile,
     canonical_json,
     distribution,
-    type7_quantile,
 )
 from scripts.generate_api import classify
 
@@ -54,12 +53,23 @@ def _inventory_sha256() -> str:
     return hashlib.sha256(INVENTORY_PATH.read_bytes()).hexdigest()
 
 
-def test_type7_quantile_interpolates_the_hyndman_fan_type_7_position() -> None:
-    values = [7, 15, 36, 39, 40, 41]
+def test_distribution_quantiles_match_hyndman_fan_type_7() -> None:
+    # 손구현 type7_quantile을 stdlib statistics.quantiles(method="inclusive")로
+    # 대체(2026-08-20) — 같은 값으로 type-7 보간 계약을 distribution 레벨에서 고정.
+    summary = distribution([7, 15, 36, 39, 40, 41])
 
-    assert type7_quantile(values, 0.25) == pytest.approx(20.25)
-    assert type7_quantile(values, 0.5) == pytest.approx(37.5)
-    assert type7_quantile(values, 0.75) == pytest.approx(39.75)
+    assert summary["q1"] == pytest.approx(20.25)
+    assert summary["median"] == pytest.approx(37.5)
+    assert summary["q3"] == pytest.approx(39.75)
+
+
+def test_distribution_single_value_population() -> None:
+    # stdlib quantiles는 2점 미만을 거부한다 — 단일값 모집단은 기존 계약대로
+    # q1=median=q3=그 값(가드 경로 고정).
+    summary = distribution([42])
+
+    assert summary["q1"] == summary["median"] == summary["q3"] == 42.0
+    assert summary["iqr"] == 0.0
 
 
 def test_distribution_reports_type7_quantiles_and_tukey_fences() -> None:

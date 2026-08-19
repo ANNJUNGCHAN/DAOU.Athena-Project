@@ -12,6 +12,12 @@
 // 이 모듈은 DOM 뼈대와 사용자 조작 → 콜백 연결만 한다. 실제 차트 재시리즈·
 // 재샘플·전체화면 그리드 전환은 chart-card.js가 콜백 안에서 한다(관심사 분리).
 
+// UMD 헤드(2026-08-18 렌더러 격리) — node --test(CommonJS)면 require, <script>
+// 태그 전역 로딩(nodeIntegration:false)이면 window.AthenaLib를 쓴다.
+const { bindOutsideCloseAndEscape } = (typeof module !== 'undefined' && module.exports)
+  ? require('./ui-kit')
+  : window.AthenaLib.UiKit;
+
 // 주기 탭 6개 — 고정 순서(spec §1). value는 chart-resample.js의 period 키와 맞춘다.
 const PERIOD_TABS = [
   { value: 'D', label: '일' },
@@ -78,25 +84,11 @@ function openDropdown(anchorBtn, items, onSelect, activeValue) {
   anchorBtn.parentElement.appendChild(panel);
   anchorBtn.setAttribute('aria-expanded', 'true');
 
-  const onOutside = (e) => {
-    if (panel.contains(e.target) || anchorBtn.contains(e.target)) return;
-    closeAnyOpenDropdown();
-  };
-  const onEscape = (e) => {
-    if (e.key === 'Escape') closeAnyOpenDropdown();
-  };
-  // capture:true — 카드 스크롤·다른 버튼 클릭보다 먼저 판단해 즉시 닫는다.
-  document.addEventListener('mousedown', onOutside, true);
-  document.addEventListener('keydown', onEscape, true);
+  // 바깥 클릭·Escape로 닫힘 — chart-indicator-panel.js의 패널과 동일한 배선이라
+  // ui-kit.js의 bindOutsideCloseAndEscape로 공용화했다(포니테일 감사).
+  const cleanup = bindOutsideCloseAndEscape(panel, anchorBtn, closeAnyOpenDropdown);
 
-  openDropdownState = {
-    panel,
-    anchorBtn,
-    cleanup: () => {
-      document.removeEventListener('mousedown', onOutside, true);
-      document.removeEventListener('keydown', onEscape, true);
-    },
-  };
+  openDropdownState = { panel, anchorBtn, cleanup };
 }
 
 let openDropdownState = null;
