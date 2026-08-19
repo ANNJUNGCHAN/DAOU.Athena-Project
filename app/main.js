@@ -3,7 +3,7 @@
 // require()들도 이 시각 이후 비용이므로, "창 표시까지" 수치는 require 체인
 // 전체를 포함한다(가장 이른 지점에서 찍어야 실제 부팅 지연을 반영한다).
 const MODULE_LOAD_AT = Date.now();
-const { app, BrowserWindow, ipcMain, screen, Tray, Menu, nativeImage, desktopCapturer } = require('electron');
+const { app, BrowserWindow, ipcMain, screen, Tray, Menu, nativeImage, desktopCapturer, Notification } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
@@ -276,7 +276,71 @@ async function createWindows() {
 
   // 휘도 감지-적응 시작(2026-08-19) — 두 창이 다 뜬 뒤에만. fixture면 내부에서 no-op.
   startBackdropSampling();
+
+  // 루틴 알림 구독 시작(2026-08-19 능동 에이전트 P2) — fixture면 내부에서 no-op.
+  startRoutineFeed();
 }
+
+// ---------- 루틴 알림 — 백엔드 WS 구독 → 토스트 + 능동 턴 (실행계획 P2) ----------
+// 백엔드가 상시 감시(파수꾼)를 돌리고, 앱은 표시만 담당한다. 본문은 결정론
+// 템플릿(lib/routine-turn.js — LLM 0)이라 지어낼 수 없다.
+const { RoutineFeed } = require('./lib/main/routine-feed');
+const routineTurn = require('./lib/routine-turn');
+
+const BACKEND_HTTP_BASE = process.env.ATHENA_BACKEND_URL || 'http://127.0.0.1:8010';
+const BACKEND_WS_BASE = BACKEND_HTTP_BASE.replace(/^http/, 'ws');
+
+let routineFeed = null;
+
+function startRoutineFeed() {
+  // 검증 결정론 보호 — verify.js(fixture)에서는 돌리지 않는다(backdrop 샘플링과 동일 문법).
+  if (process.env.ATHENA_CANVAS_SOURCE === 'fixture') return;
+  if (routineFeed) return;
+  routineFeed = new RoutineFeed({
+    url: `${BACKEND_WS_BASE}/api/v1/ws/routines`,
+    token: null, // 로컬 기본 배포(토큰 미설정) — 백엔드 루프백 게이트가 지킨다
+    onEvent: (event) => {
+      // 능동 턴은 항상 이력에 쌓인다 — 토스트를 놓쳐도 다음 열람 때 남아 있다.
+      if (chatWin && !chatWin.isDestroyed()) {
+        chatWin.webContents.send('athena:routine-event', event);
+      }
+      if (event && (event.type === 'routine-fired' || event.type === 'routine-restore-failed')) {
+        const toast = routineTurn.buildToast(event);
+        const n = new Notification({ title: toast.title, body: toast.body });
+        n.on('click', () => { restoreFromBackground(); });
+        n.show();
+      }
+    },
+    onStatus: () => {},
+  });
+  routineFeed.start();
+}
+
+app.on('will-quit', () => { if (routineFeed) routineFeed.stop(); });
+
+// 루틴 REST 프록시 — 렌더러는 백엔드에 직접 붙지 않는다(기존 IPC 관례).
+// confirm/cancel은 **사람 클릭 전용** 경로다(실행계획 §7-6 — 모델 툴에는 없다).
+async function routineHttp(method, path) {
+  const res = await fetch(`${BACKEND_HTTP_BASE}${path}`, { method });
+  const body = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return { ok: false, status: res.status, error: body.detail || `HTTP ${res.status}` };
+  }
+  return { ok: true, data: body };
+}
+
+ipcMain.handle('athena:routines-list', async () => {
+  try { return await routineHttp('GET', '/api/v1/routines'); }
+  catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
+});
+ipcMain.handle('athena:routine-confirm', async (_e, { id }) => {
+  try { return await routineHttp('POST', `/api/v1/routines/${encodeURIComponent(id)}/confirm`); }
+  catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
+});
+ipcMain.handle('athena:routine-cancel', async (_e, { id }) => {
+  try { return await routineHttp('POST', `/api/v1/routines/${encodeURIComponent(id)}/cancel`); }
+  catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
+});
 
 // ---------- OS 스냅 이벤트 정착 (2026-08-18 승급 — qa-win-arrow.json 실측 근거) ----------
 // resizable:true 승급으로 Windows가 Win+←/→(스냅)·Win+↑(최대화)·Win+↓(최소화)를
