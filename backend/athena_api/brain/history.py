@@ -116,13 +116,54 @@ class ConversationSummary:
 # test_brain_history.py::test_compact_conversations_renders_role_labelled_transcript.
 _CONVERSATION_TRANSCRIPT_LINE_FORMAT: Final = "{role}: {text}"
 
+# Hard ceiling on a rendered transcript. `SourceRecord.text` is `LongText`
+# (ontology.py: max_length=10_000) and a real conversation blows past that in a few dozen
+# turns. Without a budget the oversized row would fail `SourceRecord` validation on the way
+# back out, the rollup would raise, and -- because a rollup failure fails the whole job by
+# design -- a single long conversation would permanently wedge ingestion for *everything*.
+# So the window slides instead: keep the most recent whole turns that fit.
+#
+# Dropping older turns loses nothing durable. Claims are append-only in the graph, so
+# whatever was extracted from earlier turns is already stored and stays stored; the window
+# only bounds what the *next* extraction pass re-reads for context.
+#
+# Kept a little under the ontology bound so the JSON attributes and any future prefix have
+# headroom. test_transcript_budget_stays_under_the_ontology_bound pins the relationship.
+MAX_TRANSCRIPT_CHARS: Final = 9_000
+_TRUNCATION_MARKER: Final = "…"
 
-def _render_conversation_transcript(messages: tuple[StoredChatMessage, ...]) -> str:
-    lines = [
-        _CONVERSATION_TRANSCRIPT_LINE_FORMAT.format(role=message.role.value, text=message.text)
-        for message in messages
-    ]
-    return "\n".join(lines) + "\n"
+
+def _render_conversation_transcript(
+    messages: tuple[StoredChatMessage, ...], *, max_chars: int = MAX_TRANSCRIPT_CHARS
+) -> tuple[str, int]:
+    """Render the most recent turns that fit in ``max_chars``.
+
+    Returns ``(transcript, included_message_count)``. Walks newest-first so the turns
+    nearest the current one -- the ones that give a follow-up like "응 그거 좋아" its
+    meaning -- are the ones that survive.
+    """
+    lines: list[str] = []
+    used = 0
+    for message in reversed(messages):
+        line = _CONVERSATION_TRANSCRIPT_LINE_FORMAT.format(
+            role=message.role.value, text=message.text
+        )
+        cost = len(line) + 1  # the newline this line will contribute
+        if used + cost > max_chars:
+            break
+        lines.append(line)
+        used += cost
+    if not lines:
+        # A single turn longer than the whole budget: keep its tail rather than emitting
+        # nothing, so an extraction still has something to work with.
+        newest = messages[-1]
+        line = _CONVERSATION_TRANSCRIPT_LINE_FORMAT.format(
+            role=newest.role.value, text=newest.text
+        )
+        keep = max_chars - len(_TRUNCATION_MARKER) - 1
+        lines.append(_TRUNCATION_MARKER + line[-keep:])
+    lines.reverse()
+    return "\n".join(lines) + "\n", len(lines)
 
 
 @dataclass(frozen=True, slots=True)
@@ -678,6 +719,10 @@ class HistoryStore:
         advance and this returns no id for it. Locators are enumerated from chat_message
         rows themselves, so a store with zero chat_message rows yields zero locators and
         this is a no-op.
+
+        The transcript is bounded to `MAX_TRANSCRIPT_CHARS` (most recent whole turns) --
+        see that constant for why an unbounded transcript would eventually wedge ingestion
+        for every conversation, not just the long one.
         """
         changed_at = now or utc_now()
         _require_utc(changed_at, "now")
@@ -690,7 +735,7 @@ class HistoryStore:
             )
             if not messages:
                 continue
-            transcript = _render_conversation_transcript(messages)
+            transcript, included = _render_conversation_transcript(messages)
             result = await self._upsert_source(
                 source_id=f"conversation:{conversation_id}",
                 source_kind=SourceKind.CONVERSATION,
@@ -701,6 +746,11 @@ class HistoryStore:
                     "conversation": {
                         "conversation_id": conversation_id,
                         "message_count": len(messages),
+                        # Recorded rather than inferred: a reader of the graph must be able
+                        # to see that this source covers only the tail of a longer
+                        # conversation instead of assuming it is the whole thing.
+                        "included_message_count": included,
+                        "truncated": included < len(messages),
                     }
                 },
                 changed_at=changed_at,

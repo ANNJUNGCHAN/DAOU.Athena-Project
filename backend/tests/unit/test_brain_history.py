@@ -18,6 +18,7 @@ from athena_api.brain import (
     SourceKind,
     TradeSide,
 )
+from athena_api.brain.history import MAX_TRANSCRIPT_CHARS
 
 NOW = datetime(2026, 8, 15, 3, 0, tzinfo=UTC)
 
@@ -371,7 +372,79 @@ async def test_compact_conversations_renders_role_labelled_transcript(
     assert record.attributes["conversation"] == {
         "conversation_id": "conv-transcript",
         "message_count": 2,
+        "included_message_count": 2,
+        "truncated": False,
     }
+
+
+async def test_transcript_budget_stays_under_the_ontology_bound() -> None:
+    """The budget only works if it is actually below what SourceRecord.text accepts."""
+    assert MAX_TRANSCRIPT_CHARS < 10_000
+
+
+async def test_long_conversation_is_windowed_instead_of_wedging_ingestion(
+    history: HistoryStore,
+) -> None:
+    """A conversation past the ontology text bound must still roll up.
+
+    Without the budget the oversized row fails SourceRecord validation on the way back
+    out, the rollup raises, and -- since a rollup failure fails the whole job -- one long
+    conversation would permanently stop ingestion for every conversation.
+    """
+    filler = "가" * 500
+    total = 40  # 40 * ~500 chars >> MAX_TRANSCRIPT_CHARS
+    for index in range(total):
+        await history.upsert_chat(
+            chat_turn(
+                f"long-{index}",
+                "conv-long",
+                ChatRole.USER if index % 2 == 0 else ChatRole.ASSISTANT,
+                f"{index} {filler}",
+                NOW + timedelta(seconds=index),
+            ),
+            changed_at=NOW + timedelta(seconds=index),
+        )
+
+    updated = await history.compact_conversations(now=NOW + timedelta(seconds=total))
+    assert updated == ("conversation:conv-long",)
+
+    # Deserializing through SourceRecord is the step that used to blow up.
+    changes = await history.conversation_changes(0, limit=10)
+    record = changes[0].record
+    assert len(record.text) <= MAX_TRANSCRIPT_CHARS
+    conversation = record.attributes["conversation"]
+    assert conversation["message_count"] == total
+    assert conversation["truncated"] is True
+    assert 0 < conversation["included_message_count"] < total
+    # The window keeps the newest turns -- those are what give a follow-up its meaning.
+    assert f"{total - 1} " in record.text
+    assert not record.text.startswith("user: 0 ")
+
+
+async def test_single_turn_longer_than_the_budget_still_produces_a_transcript(
+    history: HistoryStore,
+) -> None:
+    """Emitting nothing would silently drop the conversation from extraction entirely.
+
+    Reachability note: `ChatHistoryRecord.text` is itself `LongText` (max 10_000), so a
+    single stored turn can never exceed that. The band this branch actually serves is
+    `MAX_TRANSCRIPT_CHARS < len(turn) <= 10_000`, which is why the budget sits below the
+    ontology bound rather than at it.
+    """
+    oversized = "나" * (MAX_TRANSCRIPT_CHARS + 500)
+    assert len(oversized) <= 10_000
+    await history.upsert_chat(
+        chat_turn("huge-1", "conv-huge", ChatRole.USER, oversized, NOW),
+        changed_at=NOW,
+    )
+
+    updated = await history.compact_conversations(now=NOW + timedelta(seconds=1))
+    assert updated == ("conversation:conv-huge",)
+
+    changes = await history.conversation_changes(0, limit=10)
+    record = changes[0].record
+    assert 0 < len(record.text) <= MAX_TRANSCRIPT_CHARS
+    assert record.attributes["conversation"]["included_message_count"] == 1
 
 
 async def test_compact_conversations_is_idempotent_until_new_messages_arrive(
