@@ -12,6 +12,9 @@
 // notice는 에러 안내라 전폭(현행 실측 유지). 미지 형상은 전폭 — 모르는 데이터의
 // 최후 착지점이 자유 카드(전폭)인 것과 같은 방향의 보수적 기본값이다.
 const WIDTH_GRADES = ['half', 'full'];
+// facts(P4) — F1/F2 둘 다 key/value 그리드라 stream/reader와 같은 컴팩트 반폭.
+// 1560px 캔버스에서 반폭(~752px)이면 F2의 2단 그룹도 나란히 여유 있게 들어간다.
+// compound(P4) — 헤더 밴드 + 표 1개라 table/mcp-table과 같은 전폭.
 const CARD_WIDTH_GRADE = {
   stream: 'half',
   reader: 'half',
@@ -20,6 +23,8 @@ const CARD_WIDTH_GRADE = {
   chart: 'full',
   free: 'full',
   notice: 'full',
+  facts: 'half',
+  compound: 'full',
 };
 
 // 규칙 2 — AI 개입은 폭 등급 승격·강등만. 유효하지 않은 힌트는 조용히 문법
@@ -39,6 +44,8 @@ const DROP_TYPE_MAP = {
   chart: ['chart'],
   free: ['free'],
   timeline: [],
+  facts: ['facts'],
+  compound: ['compound'],
 };
 
 function dropTargetsFor(dropTypes) {

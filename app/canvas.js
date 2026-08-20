@@ -10,6 +10,7 @@ const { errorNote, removeCardAndMaybeCollapse } = window.AthenaLib.UiKit;
 const { widthGradeFor, dropTargetsFor, exceedsHeightBudget, MIN_CARDS } = window.AthenaLib.CanvasLayout;
 const { foldColumns } = window.AthenaLib.ColumnFold;
 const { createChartCard } = window.AthenaLib.ChartCard;
+const { classifyCell, changeTone, formatNumeric, formatDatetime, groupFactsFields } = window.AthenaLib.FactsCard;
 
 async function loadFixture(kind) {
   return window.athena.invoke('athena:load-fixture', { kind });
@@ -191,6 +192,12 @@ function addLiveCard(result) {
   if (envelope.canvas_type === 'stream' && !envelope.fell_back) return renderLiveStream(envelope);
   if (envelope.canvas_type === 'reader' && !envelope.fell_back) return renderLiveReader(envelope);
   if (envelope.canvas_type === 'chart' && !envelope.fell_back) return renderLiveChart(envelope);
+  // facts/compound(P4, plan/공통화면-템플릿-실행계획-2026-08-20.md) — 공통 API 카드 6종
+  // 중 FactsCard/CompoundCard(일반). 스키마는 backend/athena_mcp/canvas.py FACTS_SCHEMA/
+  // COMPOUND_SCHEMA(P1a) 그대로. C1(차트 12TR)은 이 분기가 아니라 위 'chart'로 온다 —
+  // manifest layout=compound라도 build_chart_bars를 거치면 canvas_type은 'chart'다.
+  if (envelope.canvas_type === 'facts' && !envelope.fell_back) return renderFactsCard(envelope);
+  if (envelope.canvas_type === 'compound' && !envelope.fell_back) return renderCompoundCard(envelope);
   return renderFreeCanvas(envelope);
 }
 
@@ -217,12 +224,17 @@ function renderMcpTable(envelope) {
     body.appendChild(errorNote('빈 테이블 — columns 또는 rows가 없다.'));
     return;
   }
+  body.appendChild(buildFoldedTable(rawCols, rows));
+}
 
-  // §5.3.1 컬럼 우선순위 흡수(2층): columns는 이미 백엔드가 §5.3.1 규칙(식별 컬럼
-  // 고정 + 실측 alias 빈도 tie-break, backend/scripts/generate_api.py의
-  // column_priority_ranking)으로 정렬해 보낸다고 가정한다 — 여기서는 그 순서 위에서
-  // 1560px 캔버스 폭 기준으로 접기만 한다(app/lib/column-fold.js). ka10095(63컬럼)
-  // 같은 넓은 표가 스크롤 없이 fold되어 보이는 게 이 단계의 목표다.
+// table 카드와 compound 카드(P4)가 공유하는 표 빌더 — §5.3.1 컬럼 우선순위 흡수(2층):
+// columns는 이미 백엔드가 §5.3.1 규칙(식별 컬럼 고정 + 실측 alias 빈도 tie-break,
+// backend/scripts/generate_api.py의 column_priority_ranking)으로 정렬해 보낸다고
+// 가정한다 — 여기서는 그 순서 위에서 1560px 캔버스 폭 기준으로 접기만 한다
+// (app/lib/column-fold.js). ka10095(63컬럼) 같은 넓은 표가 스크롤 없이 fold되어
+// 보이는 게 이 단계의 목표다. 반환은 table 엘리먼트 하나 — 카드 뼈대(makeCard)는
+// 호출부가 짓는다.
+function buildFoldedTable(rawCols, rows) {
   const { visible: cols, hidden } = foldColumns(rawCols);
 
   const table = document.createElement('table');
@@ -249,7 +261,6 @@ function renderMcpTable(envelope) {
     tbody.appendChild(tr);
   }
   table.appendChild(tbody);
-  body.appendChild(table);
 
   // 접힘 사실은 데이터 속성으로만 남긴다(검증·캡처 리포트가 기계로 읽는다).
   // 표시 텍스트("접힌 컬럼 N개 …")는 2026-08-18 사용자 결정으로 제거 —
@@ -257,6 +268,96 @@ function renderMcpTable(envelope) {
   table.dataset.totalColumns = String(rawCols.length);
   table.dataset.visibleColumns = String(cols.length);
   table.dataset.hiddenColumns = String(hidden.length);
+  return table;
+}
+
+// ---------- 실배선 FactsCard/CompoundCard(P4) — MCP render_canvas의 facts/compound 응답 ----------
+// canvas.py FACTS_SCHEMA(L161-167)/COMPOUND_SCHEMA(L169-176) 실측: facts는
+// {fields:[{key,label,value}]}, compound는 {header:[...같은 필드 계약...], table:{columns,rows}}.
+// 필드별 개별 렌더러는 만들지 않는다 — lib/facts-card.js의 셀 프리미티브 5종
+// (spec §4: 가격/등락/수량/종목/일시)이 key로 포맷을 결정하고, 나머지는 일반 텍스트다.
+
+// FactsCard(F1 단일 그룹 · F2 2단 그룹, spec §3.1) — key/value dl 하나 또는 둘.
+// 그룹 분할은 lib/facts-card.js groupFactsFields(순수 함수, facts-card.test.js가 검증).
+function renderFactsFieldGroup(fields) {
+  const dl = document.createElement('dl');
+  dl.className = 'facts-group';
+  for (const field of fields) {
+    const key = field && field.key;
+    const cell = classifyCell(key);
+    const value = field ? field.value : undefined;
+
+    const dt = document.createElement('dt');
+    dt.className = 'facts-key';
+    dt.textContent = (field && (field.label != null ? field.label : field.key)) || '';
+
+    const dd = document.createElement('dd');
+    dd.className = `facts-value facts-value-${cell}`;
+    if (cell === 'change') {
+      dd.classList.add(`is-${changeTone(key, value)}`);
+      dd.textContent = value === null || value === undefined || value === '' ? '—' : String(value);
+    } else if (cell === 'price' || cell === 'quantity') {
+      dd.textContent = formatNumeric(value);
+    } else if (cell === 'datetime') {
+      dd.textContent = formatDatetime(value);
+    } else {
+      dd.textContent = value === null || value === undefined || value === '' ? '—' : String(value);
+    }
+    // dt+dd를 .facts-row로 묶는다(HTML5 dl은 그룹을 div로 감싸는 것을 허용한다) —
+    // facts-grid(세로: 라벨 위·값 아래)와 compound 헤더 밴드(가로 칩)가 같은 DOM을
+    // CSS만 바꿔 재사용하려면 한 쌍이 붙어 다녀야 한다(순수 dt/dd 나열은 flex-wrap
+    // 시 쌍이 흩어진다).
+    const row = document.createElement('div');
+    row.className = 'facts-row';
+    row.appendChild(dt);
+    row.appendChild(dd);
+    dl.appendChild(row);
+  }
+  return dl;
+}
+
+function renderFactsGrid(fields) {
+  const groups = groupFactsFields(fields);
+  const wrap = document.createElement('div');
+  wrap.className = groups.length > 1 ? 'facts-grid facts-grid-2col' : 'facts-grid';
+  for (const group of groups) wrap.appendChild(renderFactsFieldGroup(group));
+  return wrap;
+}
+
+function renderFactsCard(envelope) {
+  const { body } = makeCard('facts', envelope.caption || 'Facts', envelope.layout);
+  const fields = (envelope.data && Array.isArray(envelope.data.fields)) ? envelope.data.fields : [];
+  if (!fields.length) {
+    body.appendChild(errorNote('빈 facts — fields가 없다.'));
+    return;
+  }
+  body.appendChild(renderFactsGrid(fields));
+}
+
+// CompoundCard 일반(C2, spec §3.3) — "이름과 달리 다중 표가 아니다": 스칼라 헤더 밴드
+// 하나 + 표 하나로 고정. 헤더는 facts와 같은 셀 프리미티브를 재사용하되 세로 그리드가
+// 아니라 가로 밴드(스칼라 2~9개, §3.3 실측이라 F2 2단 분할까지는 가지 않는다)로 편다.
+// 표는 buildFoldedTable을 그대로 재사용한다(mcp-table과 드리프트하지 않는다).
+function renderCompoundHeaderBand(fields) {
+  const band = document.createElement('div');
+  band.className = 'compound-header-band';
+  band.appendChild(renderFactsFieldGroup(fields));
+  return band;
+}
+
+function renderCompoundCard(envelope) {
+  const { body } = makeCard('compound', envelope.caption || 'Compound', envelope.layout);
+  const data = (envelope.data && typeof envelope.data === 'object') ? envelope.data : {};
+  const header = Array.isArray(data.header) ? data.header : [];
+  const table = data.table;
+  const tableCols = table && Array.isArray(table.columns) ? table.columns : [];
+  const tableRows = table && Array.isArray(table.rows) ? table.rows : [];
+  if (!header.length || !tableCols.length || !tableRows.length) {
+    body.appendChild(errorNote('빈 compound — header 또는 table이 없다.'));
+    return;
+  }
+  body.appendChild(renderCompoundHeaderBand(header));
+  body.appendChild(buildFoldedTable(tableCols, tableRows));
 }
 
 // ---------- 실배선 스트림(신규①) — MCP render_canvas의 실제 stream 응답 ----------

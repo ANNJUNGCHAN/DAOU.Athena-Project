@@ -1428,6 +1428,117 @@ app.whenReady().then(async () => {
   report.historyChannelAllowed = historyChannelAllowed;
   assertOk('historyBadge: preload allowlist가 athena:history-save-failed를 통과시킨다', historyChannelAllowed === true);
 
+  // ---------- 검증 20: FactsCard/CompoundCard 실배선(P4, 공통 API 카드 6종) ----------
+  // plan/공통화면-템플릿-실행계획-2026-08-20.md P4 — 모델의 canvas_type 판단과 무관하게
+  // (P1b 이후에는 manifest 조회가 결정한다) 렌더러가 facts/compound 봉투를 그리는지
+  // 순수 렌더러 단에서 확인한다(quota 무관, 검증10의 liveEnvelope 헬퍼 재사용).
+  // F1(단일 그룹) · F2(2단 그룹, spec §3.1 경계 11개) · compound(헤더 밴드+표 1개,
+  // spec §3.3 "다중 표 아님")를 각각 실측한다.
+  if (!canvasWin.isVisible()) { dlog('expand for check20'); await mainMod.expandCanvasWindow(); await wait(200); }
+  canvasWin.webContents.send('athena:clear-canvases');
+  await wait(120);
+
+  // 20a — F1: 스칼라 6개, 셀 프리미티브 5종 중 4종(가격/등락/수량·일시/종목) 실측 포함.
+  liveEnvelope({
+    canvas_type: 'facts',
+    caption: '검증20 facts(F1)',
+    data: {
+      fields: [
+        { key: 'stk_nm', label: '종목명', value: '삼성전자' },
+        { key: 'cur_prc', label: '현재가', value: '71400' },
+        { key: 'pred_pre', label: '전일대비', value: '+1500' },
+        { key: 'pred_pre_sig', label: '전일대비기호', value: '2' },
+        { key: 'trde_qty', label: '거래량', value: '18402113' },
+        { key: 'dt', label: '기준일', value: '20260819' },
+      ],
+    },
+  });
+  await wait(200);
+  const factsF1Probe = await canvasWin.webContents.executeJavaScript(`
+    (() => {
+      const card = document.querySelector('#grid .card.facts');
+      if (!card) return null;
+      const changeCell = card.querySelector('.facts-value-change');
+      return {
+        groupCount: card.querySelectorAll('.facts-group').length,
+        rowCount: card.querySelectorAll('.facts-row').length,
+        priceText: card.querySelector('.facts-value-price') ? card.querySelector('.facts-value-price').textContent : null,
+        changeToneClass: changeCell ? [...changeCell.classList].find((c) => c.startsWith('is-')) : null,
+        datetimeText: card.querySelector('.facts-value-datetime') ? card.querySelector('.facts-value-datetime').textContent : null,
+        symbolText: card.querySelector('.facts-value-symbol') ? card.querySelector('.facts-value-symbol').textContent : null,
+      };
+    })()
+  `);
+
+  // 20b — F2: 스칼라 14개(경계 11개 초과) → 2단 그룹으로 접혀야 한다. 같은 타입
+  // 재요청이라 makeCard가 20a의 facts 카드를 갈아치운다(카드 정리 규칙).
+  const f2Fields = Array.from({ length: 14 }, (_, i) => ({ key: `f${i}`, label: `필드${i}`, value: String(i) }));
+  liveEnvelope({ canvas_type: 'facts', caption: '검증20 facts(F2)', data: { fields: f2Fields } });
+  await wait(200);
+  const factsF2Probe = await canvasWin.webContents.executeJavaScript(`
+    (() => {
+      const card = document.querySelector('#grid .card.facts');
+      if (!card) return null;
+      const grid = card.querySelector('.facts-grid');
+      return {
+        groupCount: card.querySelectorAll('.facts-group').length,
+        gridIs2Col: grid ? grid.classList.contains('facts-grid-2col') : false,
+        rowCount: card.querySelectorAll('.facts-row').length,
+      };
+    })()
+  `);
+
+  // 20c — compound(C2): 헤더 밴드(스칼라 3) + 표 1개. mcp-table과 같은 buildFoldedTable을
+  // 재사용하므로 fin-table 구조까지 확인한다.
+  liveEnvelope({
+    canvas_type: 'compound',
+    caption: '검증20 compound',
+    data: {
+      header: [
+        { key: 'stk_nm', label: '종목명', value: '삼성전자' },
+        { key: 'cur_prc', label: '현재가', value: '71400' },
+        { key: 'flu_rt', label: '등락률', value: '-1.02' },
+      ],
+      table: {
+        columns: [{ key: 'dt', label: '일자' }, { key: 'cur_prc', label: '현재가' }],
+        rows: [{ dt: '20260819', cur_prc: '71400' }, { dt: '20260818', cur_prc: '70200' }],
+      },
+    },
+  });
+  await wait(200);
+  const compoundProbe = await canvasWin.webContents.executeJavaScript(`
+    (() => {
+      const card = document.querySelector('#grid .card.compound');
+      if (!card) return null;
+      const band = card.querySelector('.compound-header-band');
+      const table = card.querySelector('table.fin-table');
+      const changeCell = band ? band.querySelector('.facts-value-change') : null;
+      return {
+        bandPresent: !!band,
+        bandRowCount: band ? band.querySelectorAll('.facts-row').length : 0,
+        tablePresent: !!table,
+        tableBodyRowCount: table ? table.querySelectorAll('tbody tr').length : 0,
+        changeToneClass: changeCell ? [...changeCell.classList].find((c) => c.startsWith('is-')) : null,
+      };
+    })()
+  `);
+  await shot(canvasWin, '21-facts-compound-cards.png');
+
+  report.factsCompoundCards = { f1: factsF1Probe, f2: factsF2Probe, compound: compoundProbe };
+  console.log('[verify] 검증20(facts/compound 카드):', JSON.stringify(report.factsCompoundCards));
+  assertOk('factsCard(F1): rendered as single group', factsF1Probe !== null && factsF1Probe.groupCount === 1);
+  assertOk('factsCard(F1): all 6 fields rendered', factsF1Probe !== null && factsF1Probe.rowCount === 6);
+  assertOk('factsCard(F1): price cell formatted with thousands separator', factsF1Probe !== null && factsF1Probe.priceText === '71,400');
+  assertOk('factsCard(F1): change cell tone reflects positive value → up', factsF1Probe !== null && factsF1Probe.changeToneClass === 'is-up');
+  assertOk('factsCard(F1): datetime cell formatted YYYYMMDD → YYYY-MM-DD', factsF1Probe !== null && factsF1Probe.datetimeText === '2026-08-19');
+  assertOk('factsCard(F1): symbol cell rendered', factsF1Probe !== null && factsF1Probe.symbolText === '삼성전자');
+  assertOk('factsCard(F2): 14 scalars fold into 2 groups(spec §3.1 boundary)', factsF2Probe !== null && factsF2Probe.groupCount === 2 && factsF2Probe.gridIs2Col === true);
+  assertOk('factsCard(F2): all 14 fields still rendered across groups', factsF2Probe !== null && factsF2Probe.rowCount === 14);
+  assertOk('compoundCard: header band + exactly one table(spec §3.3 "다중 표 아님")', compoundProbe !== null && compoundProbe.bandPresent === true && compoundProbe.tablePresent === true);
+  assertOk('compoundCard: header band renders all 3 scalar fields', compoundProbe !== null && compoundProbe.bandRowCount === 3);
+  assertOk('compoundCard: table renders both rows', compoundProbe !== null && compoundProbe.tableBodyRowCount === 2);
+  assertOk('compoundCard: header change cell tone reflects negative value → down', compoundProbe !== null && compoundProbe.changeToneClass === 'is-down');
+
   report.finishedAt = new Date().toISOString();
   fs.writeFileSync(path.join(CAPTURES, 'VERIFY-REPORT.json'), JSON.stringify(report, null, 2));
   console.log('[verify] 리포트 저장:', path.join(CAPTURES, 'VERIFY-REPORT.json'));

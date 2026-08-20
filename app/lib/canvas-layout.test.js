@@ -19,6 +19,11 @@ test('폭 문법 기본값 — 컴팩트는 반폭, 넓은 형상은 전폭', ()
   assert.equal(widthGradeFor('notice'), 'full');
 });
 
+test('폭 문법 — facts(F1/F2 key/value)는 반폭, compound(헤더+표)는 전폭 (P4)', () => {
+  assert.equal(widthGradeFor('facts'), 'half');
+  assert.equal(widthGradeFor('compound'), 'full');
+});
+
 test('미지 형상은 전폭 — 자유 카드와 같은 보수적 착지', () => {
   assert.equal(widthGradeFor('timeline'), 'full');
   assert.equal(widthGradeFor('unknown-type'), 'full');
@@ -46,6 +51,11 @@ test('drop_types — 미지 값·중복은 무시, 비배열은 빈 목록', () 
   assert.deepEqual(dropTargetsFor(undefined), []);
   // timeline은 카드 분기 자체가 없어(plan.md 다음 수 6) 드롭 대상도 없다
   assert.deepEqual(dropTargetsFor(['timeline']), []);
+});
+
+test('drop_types — facts/compound(P4)도 큐레이션 대상이다', () => {
+  assert.deepEqual(dropTargetsFor(['facts']), ['facts']);
+  assert.deepEqual(dropTargetsFor(['compound']), ['compound']);
 });
 
 test('높이 예산 — 최소 3장은 예산과 무관하게 보장(soul.md §5-2)', () => {
