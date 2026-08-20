@@ -54,6 +54,16 @@ def test_render_plan_request_still_rejects_unknown_canvas_type() -> None:
         RenderPlanRequest(plan_token="tok", canvas_type="stream", data={})
 
 
+def test_render_plan_request_canvas_type_is_optional() -> None:
+    """P5(2026-08-20) — canvas_type은 이제 operation_ref의 순수 함수라 caller가
+    안 보내도 된다(app/lib/main/fast-path.js가 더 이상 캐시 판정 객체에 담아두지
+    않는다). 필드 부재·명시적 None 둘 다 통과해야 한다."""
+    omitted = RenderPlanRequest(plan_token="tok", data={})
+    assert omitted.canvas_type is None
+    explicit_none = RenderPlanRequest(plan_token="tok", canvas_type=None, data={})
+    assert explicit_none.canvas_type is None
+
+
 # ---------------------------------------------------------------------------
 # 실제 HTTP 왕복 — selector.call/PlanSigner까지 그대로 태운다
 # (test_llm_tools_api.py::_service/_client/_resolve와 동형)
@@ -231,6 +241,26 @@ def test_render_plan_http_roundtrip_chart_tick_tr_omits_initial_period():
         envelope = client.app.state.canvas_events.get_nowait()
         assert envelope["canvas_type"] == "chart"
         assert "initial" not in envelope["data"]
+
+
+def test_render_plan_http_roundtrip_omits_canvas_type_and_still_resolves(caplog):
+    """P5 — 앱 캐시 리플레이가 canvas_type 필드 자체를 안 보내도(judgment에서
+    제거됐으므로) manifest 조회만으로 정상 라우팅된다. caplog로 "불일치" 로그가
+    찍히지 않음도 함께 증명한다 — 비교 대상이 없으니 불일치도 없다."""
+    upstream = FakeClient({"acctNo": "1234567890"})
+    with _client(_service(), upstream) as client:
+        token = _resolve(client, "base:ka00001", {})
+        with caplog.at_level(logging.WARNING, logger="athena_api.api.canvas_push"):
+            response = client.post(
+                "/api/v1/canvas/render-plan",
+                json={"plan_token": token, "data": {}},  # canvas_type 생략
+            )
+        assert response.status_code == 200, response.text
+        body = response.json()
+        assert body["canvas_type"] == "facts"
+        envelope = client.app.state.canvas_events.get_nowait()
+        assert envelope["canvas_type"] == "facts"
+        assert not any("불일치" in record.message for record in caplog.records)
 
 
 def test_render_plan_http_roundtrip_compound_generic_watchlist():
