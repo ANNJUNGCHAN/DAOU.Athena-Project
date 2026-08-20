@@ -154,6 +154,83 @@ def test_render_plan_http_roundtrip_chart_domain_promotes_compound_to_chart():
         assert envelope["canvas_type"] == "chart"
         assert envelope["data"]["symbol"] == "005930"
         assert len(envelope["data"]["bars"]) == 1
+        # P2a — ka10081(주식일봉차트조회요청)은 default_period="D".
+        assert envelope["data"]["initial"] == {"period": "D"}
+
+
+def test_render_plan_http_roundtrip_chart_weekly_tr_carries_initial_period_w():
+    """P2a 수용 기준의 "주봉 경로 실제 테스트" — base:ka10082(주식주봉차트조회요청)
+    로 plan_token을 실행하면 카드 봉투에 initial.period="W"가 실려야 한다(사용자가
+    든 예시: 주봉 TR을 부르면 카드가 'W' 탭 선택 상태로 열린다). 실 API 자격증명이
+    없어 앱 캡처 대신 이 백엔드 HTTP 왕복으로 배선을 증명한다."""
+    rows = [
+        {
+            "dt": "20260817",
+            "open_pric": "120200",
+            "high_pric": "121000",
+            "low_pric": "119500",
+            "cur_prc": "120800",
+            "trde_qty": "5000",
+        }
+    ]
+    upstream = FakeClient({"stk_cd": "005930", "stk_stk_pole_chart_qry": rows})
+    with _client(_service(), upstream) as client:
+        token = _resolve(
+            client,
+            "base:ka10082",
+            {"stk_cd": "005930", "base_dt": "20260817", "upd_stkpc_tp": "0"},
+        )
+        response = client.post(
+            "/api/v1/canvas/render-plan",
+            json={
+                "plan_token": token,
+                "canvas_type": "chart",
+                "data": {"symbol": "005930"},
+            },
+        )
+        assert response.status_code == 200, response.text
+        envelope = client.app.state.canvas_events.get_nowait()
+        assert envelope["canvas_type"] == "chart"
+        assert envelope["data"]["initial"] == {"period": "W"}
+
+
+def test_render_plan_http_roundtrip_chart_tick_tr_omits_initial_period():
+    """P2b(분/틱 4TR, 의도적 비배선) — base:ka10079(주식틱차트조회요청)는
+    manifest에 default_period=null이 있어도, 카드 봉투에는 "initial" 키 자체가
+    없어야 한다(호출부가 None을 생략, chart-card.js가 자체 'D' 폴백을 쓴다).
+    틱 응답 실제 필드는 cntr_tm(체결시간)이라 dt가 없다 — build_chart_bars가
+    이 실제 형상으로는 실패하므로, 여기서는 initial 배선 자체만 격리해 검증하기
+    위해 dt를 포함한 형상을 넣는다(변환 성공 여부는 이 테스트의 관심사가 아니다;
+    후속 라운드 필요조건 1이 실제 틱 필드 검증을 다룬다)."""
+    rows = [
+        {
+            "dt": "20260819",
+            "open_pric": "120200",
+            "high_pric": "121000",
+            "low_pric": "119500",
+            "cur_prc": "120800",
+            "trde_qty": "10",
+        }
+    ]
+    upstream = FakeClient({"stk_cd": "005930", "stk_tic_chart_qry": rows})
+    with _client(_service(), upstream) as client:
+        token = _resolve(
+            client,
+            "base:ka10079",
+            {"stk_cd": "005930", "tic_scope": "1", "upd_stkpc_tp": "0"},
+        )
+        response = client.post(
+            "/api/v1/canvas/render-plan",
+            json={
+                "plan_token": token,
+                "canvas_type": "chart",
+                "data": {"symbol": "005930"},
+            },
+        )
+        assert response.status_code == 200, response.text
+        envelope = client.app.state.canvas_events.get_nowait()
+        assert envelope["canvas_type"] == "chart"
+        assert "initial" not in envelope["data"]
 
 
 def test_render_plan_http_roundtrip_compound_generic_watchlist():

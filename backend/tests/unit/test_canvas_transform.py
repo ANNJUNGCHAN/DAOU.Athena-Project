@@ -6,11 +6,15 @@
 
 from __future__ import annotations
 
+import pytest
+
 from athena_api.canvas_transform import (
     FACTS_FIELDS_MAX,
     TABLE_ROWS_MAX,
+    build_chart_bars,
     build_compound_generic,
     build_facts,
+    resolve_chart_initial_period,
 )
 from athena_mcp.canvas import CANVAS_SCHEMAS, validate_canvas_payload
 
@@ -182,3 +186,96 @@ def test_data_shape_hint_covers_facts_and_compound():
     assert "fields" in desc
     assert "header" in desc
     assert "table" in desc
+
+
+# ---------------------------------------------------------------------------
+# P2a — build_chart_bars golden fixtures, 일/주/월/년봉 8TR 전수
+# (`plan/공통화면-템플릿-실행계획-2026-08-20.md` P2a 수용 기준: "이 8개 TR 전수에
+# 대해 golden fixture로 build_chart_bars 성공(구조 실패 0건)"). 컨테이너 alias·
+# 필드 셋은 `ref/kiwoom-tr-inventory.json` 실측 그대로다 — 8개 TR이 컨테이너
+# 이름은 서로 다르지만(_largest_dict_array가 이름과 무관하게 찾는다) 필드 셋은
+# 전부 _CHART_FIELD_MAP이 요구하는 dt/open_pric/high_pric/low_pric/cur_prc를
+# 포함한다.
+# ---------------------------------------------------------------------------
+
+_CHART_GOLDEN_ROWS = [
+    {
+        "cur_prc": "71000",
+        "trde_qty": "1000",
+        "dt": "20260819",
+        "open_pric": "70500",
+        "high_pric": "71500",
+        "low_pric": "70000",
+    }
+]
+
+_CHART_GOLDEN_CONTAINERS = {
+    "base:ka10081": "stk_dt_pole_chart_qry",  # 주식일봉차트조회요청
+    "base:ka10082": "stk_stk_pole_chart_qry",  # 주식주봉차트조회요청
+    "base:ka10083": "stk_mth_pole_chart_qry",  # 주식월봉차트조회요청
+    "base:ka10094": "stk_yr_pole_chart_qry",  # 주식년봉차트조회요청
+    "base:ka20006": "inds_dt_pole_qry",  # 업종일봉조회요청
+    "base:ka20007": "inds_stk_pole_qry",  # 업종주봉조회요청
+    "base:ka20008": "inds_mth_pole_qry",  # 업종월봉조회요청
+    "base:ka20019": "inds_yr_pole_qry",  # 업종년봉조회요청
+}
+
+
+@pytest.mark.parametrize("mapping_id", sorted(_CHART_GOLDEN_CONTAINERS))
+def test_build_chart_bars_succeeds_for_all_p2a_chart_trs(mapping_id: str) -> None:
+    container_alias = _CHART_GOLDEN_CONTAINERS[mapping_id]
+    payload = {"data": {container_alias: _CHART_GOLDEN_ROWS}}
+    built = build_chart_bars(payload)
+    assert not isinstance(built, str), f"{mapping_id} ({container_alias}): {built}"
+    bars, meta = built
+    assert meta["rows_kept"] == 1
+    assert bars[0]["close"] == 71000.0
+
+
+# ---------------------------------------------------------------------------
+# P2a/P2b — resolve_chart_initial_period (manifest presentation.controls.
+# default_period 조회, P2a Deliverable). 8TR은 실제 값, 4TR(P2b)/비차트/미등록/
+# 부재는 전부 None으로 수렴한다 — 호출부가 그 경우 data에 "initial"을 아예
+# 싣지 않는다(canvas_data.py/canvas_push.py).
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    ("mapping_id", "expected_period"),
+    [
+        ("base:ka10081", "D"),
+        ("base:ka10082", "W"),
+        ("base:ka10083", "M"),
+        ("base:ka10094", "Y"),
+        ("base:ka20006", "D"),
+        ("base:ka20007", "W"),
+        ("base:ka20008", "M"),
+        ("base:ka20019", "Y"),
+    ],
+)
+def test_resolve_chart_initial_period_returns_default_period_for_p2a_trs(
+    mapping_id: str, expected_period: str
+) -> None:
+    assert resolve_chart_initial_period(mapping_id) == expected_period
+
+
+@pytest.mark.parametrize(
+    "mapping_id",
+    ["base:ka10079", "base:ka10080", "base:ka20004", "base:ka20005"],
+)
+def test_resolve_chart_initial_period_is_none_for_p2b_minute_tick_trs(
+    mapping_id: str,
+) -> None:
+    """P2b(분/틱 4TR) 의도적 비배선 — manifest에 default_period=null이 있어도
+    이 함수는 None으로 정규화한다(호출부는 None만 보고 initial을 생략한다)."""
+    assert resolve_chart_initial_period(mapping_id) is None
+
+
+def test_resolve_chart_initial_period_is_none_for_non_chart_mapping() -> None:
+    assert resolve_chart_initial_period("base:ka00001") is None  # facts, controls 필드 없음
+
+
+def test_resolve_chart_initial_period_is_none_for_unregistered_or_missing_operation_ref() -> None:
+    assert resolve_chart_initial_period("base:does-not-exist") is None
+    assert resolve_chart_initial_period(None) is None
+    assert resolve_chart_initial_period("") is None
