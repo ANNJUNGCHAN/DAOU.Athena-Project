@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-08-19T15:29:47.326Z",
+  "startedAt": "2026-08-20T00:11:07.319Z",
   "layout": {
     "scale": 1,
     "screen": {
@@ -55,17 +55,17 @@
     "ok": true
   },
   "expand": {
-    "frameCount": 24,
-    "p50": 18.09999999999991,
-    "p95": 38.30000000000018,
-    "max": 56.90000000000009,
-    "min": 12.099999999999909
+    "frameCount": 30,
+    "p50": 18,
+    "p95": 18.5,
+    "max": 35.899999999999864,
+    "min": 17.09999999999991
   },
   "collapse": {
-    "frameCount": 29,
-    "p50": 17.800000000000182,
-    "p95": 22,
-    "max": 70.80000000000018,
+    "frameCount": 32,
+    "p50": 17.900000000000546,
+    "p95": 18.200000000000728,
+    "max": 31.300000000000182,
     "min": 17.199999999999818
   },
   "afterCollapse": {
@@ -528,7 +528,7 @@
   },
   "agentTurn": {
     "present": true,
-    "badge": "00:24 발화",
+    "badge": "09:05 발화",
     "mode": "실시간 (WS)",
     "source": "루틴 '검증 루틴' · 에이전트 발화 — 묻지 않은 턴입니다",
     "body": "005930 조건 도달 — 관측값 5.3 (임계 5). 값은 발화 시점 기준입니다 — 최신 확인은 다시 물어봐 주세요.",
@@ -556,5 +556,27 @@
     "noDuplicateMetaOnALine": true
   },
   "historyChannelAllowed": true,
-  "finishedAt": "2026-08-19T15:30:27.805Z"
+  "factsCompoundCards": {
+    "f1": {
+      "groupCount": 1,
+      "rowCount": 6,
+      "priceText": "71,400",
+      "changeToneClass": "is-up",
+      "datetimeText": "2026-08-19",
+      "symbolText": "삼성전자"
+    },
+    "f2": {
+      "groupCount": 2,
+      "gridIs2Col": true,
+      "rowCount": 14
+    },
+    "compound": {
+      "bandPresent": true,
+      "bandRowCount": 3,
+      "tablePresent": true,
+      "tableBodyRowCount": 2,
+      "changeToneClass": "is-down"
+    }
+  },
+  "finishedAt": "2026-08-20T00:11:44.176Z"
 }
