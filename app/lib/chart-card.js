@@ -124,11 +124,31 @@ function withAlpha(hex, alpha) {
   return `rgba(${r},${g},${b},${alpha})`;
 }
 
+// P2a(`plan/공통화면-템플릿-실행계획-2026-08-20.md`) — render-plan이 카드 봉투에
+// 실어주는 opts.initial.period(일/주/월/년봉 8TR 한정, canvas_transform.py::
+// resolve_chart_initial_period)만 신뢰한다. MIN/TICK을 포함해 그 외 값은 전부
+// "미인식"으로 취급해 'D'로 안전 폴백한다 — 백엔드가 분/틱 TR(P2b)에는 이 값을
+// 절대 주지 않으므로(의도적 비배선), 여기서 MIN/TICK을 받아들이면 정보 정직성
+// 계약(§8, 탭 표시=실제 데이터)이 아니라 우연에 기대는 셈이다. 부재/미인식은
+// 조용히 넘기지 않고 console.warn으로 남긴다.
+const VALID_INITIAL_PERIODS = ['D', 'W', 'M', 'Y'];
+function resolveInitialPeriod(initial) {
+  const requested = initial && initial.period;
+  if (!requested) return 'D';
+  if (VALID_INITIAL_PERIODS.indexOf(requested) === -1) {
+    console.warn(`[chart-card] 인식할 수 없는 initial.period=${JSON.stringify(requested)} — 'D'로 폴백`);
+    return 'D';
+  }
+  return requested;
+}
+
 // ---------- 카드 마운트 (DOM 필요) ----------
 // container: 카드 본문 DOM 노드(canvas.js의 chartBody — .chart-card-body).
-// opts: {symbol, name, ohlcv}. ohlcv는 항상 일봉(D) 배열로 받는다 — 주/월/년/
-// 분/틱은 이 함수 안에서 chart-resample.js로 그때그때 파생한다(원본 일봉은
-// 절대 버리지 않는다, 주기 전환을 몇 번 오가도 정밀도 손실이 없다).
+// opts: {symbol, name, ohlcv, initial}. ohlcv는 항상 일봉(D) 배열로 받는다 — 주/월/
+// 년/분/틱은 이 함수 안에서 chart-resample.js로 그때그때 파생한다(원본 일봉은
+// 절대 버리지 않는다, 주기 전환을 몇 번 오가도 정밀도 손실이 없다). opts.initial
+// (선택, {period})은 render-plan이 8TR(일/주/월/년봉)에 한해 넘겨주는 초기 주기다
+// (P2a) — 부재/미인식은 resolveInitialPeriod가 'D'로 안전 폴백한다.
 // 반환: {chart, setForm(candle|bar|line|area), setData(ohlcv), destroy}.
 async function createChartCard(container, opts) {
   const o = opts || {};
@@ -136,9 +156,13 @@ async function createChartCard(container, opts) {
     await import(__LIGHTWEIGHT_CHARTS_URL);
 
   const dailyBars = Array.isArray(o.ohlcv) ? o.ohlcv : [];
+  // 초기 주기가 'D'가 아니면 최초 렌더부터 실제로 리샘플된 봉을 보여준다 — 툴바
+  // 탭만 'W'로 표시하고 데이터는 일봉 그대로면 정보 정직성(§8) 위반이다.
+  const initialPeriod = resolveInitialPeriod(o.initial);
+  const initialResample = resample(dailyBars, initialPeriod, 1);
 
   const toolbar = createChartToolbar({
-    initial: { period: 'D', interval: 1, form: 'candle', adjusted: true },
+    initial: { period: initialPeriod, interval: 1, form: 'candle', adjusted: true },
     callbacks: {
       onPeriodChange: (period, interval) => applyPeriod(period, interval),
       onFormChange: (form) => setForm(form),
@@ -207,11 +231,11 @@ async function createChartCard(container, opts) {
   const SERIES_DEFS = { candle: CandlestickSeries, bar: BarSeries, line: LineSeries, area: AreaSeries };
 
   let currentForm = 'candle';
-  let currentPeriod = 'D';
+  let currentPeriod = initialPeriod;
   let currentInterval = 1;
   let currentAdjusted = true;
-  let currentMockResample = false;
-  let currentBars = dailyBars;
+  let currentMockResample = initialResample.mock;
+  let currentBars = initialResample.bars;
   let priceSeries = null;
   let volumeSeries = null;
   let drawLayer = null; // CC-105 — buildPriceSeries보다 늦게 만들어져서 let 선언
@@ -714,10 +738,12 @@ async function createChartCard(container, opts) {
   return { chart, setForm, setData, applyPeriod, applyAdjusted, toggleFullscreen, destroy };
 }
 
-// 외부 소비자는 canvas.js(createChartCard)와 chart-card.test.js(순수 변환 + 등락색)
-// 뿐이다 — 나머지 상수는 내부 구현 세부라 내보내지 않는다(deslop 2026-08-18).
+// 외부 소비자는 canvas.js(createChartCard)와 chart-card.test.js(순수 변환 + 등락색
+// + resolveInitialPeriod, P2a) 뿐이다 — 나머지 상수는 내부 구현 세부라 내보내지
+// 않는다(deslop 2026-08-18).
 const __exports = {
   createChartCard,
+  resolveInitialPeriod,
   toCandleSeriesData,
   toVolumeSeriesData,
   withAlpha,

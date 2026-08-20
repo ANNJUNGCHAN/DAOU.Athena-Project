@@ -9593,6 +9593,9 @@
         "upstream_path": "/api/dostk/chart"
       },
       "presentation": {
+        "controls": {
+          "default_period": null
+        },
         "layout": "compound",
         "shape": "compound"
       },
@@ -9680,6 +9683,9 @@
         "upstream_path": "/api/dostk/chart"
       },
       "presentation": {
+        "controls": {
+          "default_period": null
+        },
         "layout": "compound",
         "shape": "compound"
       },
@@ -9770,6 +9776,9 @@
         "upstream_path": "/api/dostk/chart"
       },
       "presentation": {
+        "controls": {
+          "default_period": "D"
+        },
         "layout": "compound",
         "shape": "compound"
       },
@@ -9860,6 +9869,9 @@
         "upstream_path": "/api/dostk/chart"
       },
       "presentation": {
+        "controls": {
+          "default_period": "W"
+        },
         "layout": "compound",
         "shape": "compound"
       },
@@ -9950,6 +9962,9 @@
         "upstream_path": "/api/dostk/chart"
       },
       "presentation": {
+        "controls": {
+          "default_period": "M"
+        },
         "layout": "compound",
         "shape": "compound"
       },
@@ -10437,6 +10452,9 @@
         "upstream_path": "/api/dostk/chart"
       },
       "presentation": {
+        "controls": {
+          "default_period": "Y"
+        },
         "layout": "compound",
         "shape": "compound"
       },
@@ -11851,6 +11869,9 @@
         "upstream_path": "/api/dostk/chart"
       },
       "presentation": {
+        "controls": {
+          "default_period": null
+        },
         "layout": "compound",
         "shape": "compound"
       },
@@ -11939,6 +11960,9 @@
         "upstream_path": "/api/dostk/chart"
       },
       "presentation": {
+        "controls": {
+          "default_period": null
+        },
         "layout": "compound",
         "shape": "compound"
       },
@@ -12022,6 +12046,9 @@
         "upstream_path": "/api/dostk/chart"
       },
       "presentation": {
+        "controls": {
+          "default_period": "D"
+        },
         "layout": "compound",
         "shape": "compound"
       },
@@ -12105,6 +12132,9 @@
         "upstream_path": "/api/dostk/chart"
       },
       "presentation": {
+        "controls": {
+          "default_period": "W"
+        },
         "layout": "compound",
         "shape": "compound"
       },
@@ -12188,6 +12218,9 @@
         "upstream_path": "/api/dostk/chart"
       },
       "presentation": {
+        "controls": {
+          "default_period": "M"
+        },
         "layout": "compound",
         "shape": "compound"
       },
@@ -12271,6 +12304,9 @@
         "upstream_path": "/api/dostk/chart"
       },
       "presentation": {
+        "controls": {
+          "default_period": "Y"
+        },
         "layout": "compound",
         "shape": "compound"
       },

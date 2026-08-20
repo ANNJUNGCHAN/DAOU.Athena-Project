@@ -713,6 +713,33 @@ def base_layout(kind: str, shape: str) -> str:
     return {"scalar_only": "facts", "pure_list": "table", "compound": "compound"}[shape]
 
 
+# 차트 주기 배선(P2a/P2b, `plan/공통화면-템플릿-실행계획-2026-08-20.md`) — domain=="charts"
+# and shape=="compound"는 정확히 12개 TR이다(canvas_transform.py의 chart 승격 조건과
+# 동일 조건, 실측 확인). 그 12개 중 한글 TR명에 일/주/월/년봉 키워드가 매칭되는 8개가
+# P2a(ka10081/82/83/94, ka20006/07/08/19), 매칭 안 되는 4개(틱·분봉: ka10079/80,
+# ka20004/05)가 P2b — 하나의 결정론적 함수가 스코프 선택 없이 둘 다 만든다("매칭 실패는
+# 추측하지 않는다", CLAUDE.md §3과 동형).
+_CHART_CONTROLS_DOMAIN = "charts"
+_CHART_CONTROLS_SHAPE = "compound"
+_CHART_PERIOD_KEYWORDS = (
+    ("일봉", "D"),
+    ("주봉", "W"),
+    ("월봉", "M"),
+    ("년봉", "Y"),
+)
+
+
+def chart_default_period(name: str) -> str | None:
+    """TR 한글명에서 봉 주기를 결정론적으로 유도한다(P2a). 매칭 실패는 `None`
+    (추측하지 않는다) — 분/틱 TR(P2b, 이번 라운드 의도적 비배선)의 이름
+    ("주식틱차트조회요청" 등)은 네 키워드 중 어느 것도 포함하지 않으므로 이 함수가
+    자동으로 `None`을 반환한다. 별도 제외 목록이 필요 없다."""
+    for keyword_text, period in _CHART_PERIOD_KEYWORDS:
+        if keyword_text in name:
+            return period
+    return None
+
+
 def workflow_classification(kind: str) -> dict[str, Any]:
     if kind == "query":
         return {"category": "read_display", "workflow": "read", "read": True}
@@ -766,6 +793,9 @@ def build_common_screen_manifest(
             continue
         prefix = class_prefix(tr["id"])
         shape = profile_by_id[tr["id"]]["shape"]
+        presentation: dict[str, Any] = {"shape": shape, "layout": base_layout(tr["kind"], shape)}
+        if tr["domain"] == _CHART_CONTROLS_DOMAIN and shape == _CHART_CONTROLS_SHAPE:
+            presentation["controls"] = {"default_period": chart_default_period(tr["name"])}
         mappings.append(
             {
                 "mapping_id": f"base:{tr['id']}",
@@ -785,7 +815,7 @@ def build_common_screen_manifest(
                     "request": contract_field_aliases(tr, request=True),
                     "response": contract_field_aliases(tr, request=False),
                 },
-                "presentation": {"shape": shape, "layout": base_layout(tr["kind"], shape)},
+                "presentation": presentation,
                 "classification": workflow_classification(tr["kind"]),
                 "contracts": {
                     "request_model": f"athena_api.generated.models.{prefix}Request",
