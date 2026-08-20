@@ -13,28 +13,20 @@ Run with `--check` to verify the committed file is current without writing it.
 from __future__ import annotations
 
 import argparse
-import json
-import sys
 from pathlib import Path
 from typing import Any
 
-BACKEND = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(BACKEND))
-
-from athena_api.generated.registry import DETAIL_REGISTRY, TR_REGISTRY  # noqa: E402
+from screen_render_shared import (
+    BACKEND,
+    escape_cell,
+    load_manifest,
+    mapping_display_name,
+    tr_korean_name,
+)
+from screen_render_shared import MANIFEST_PATH as MANIFEST_PATH  # 테스트 재수출
 
 REPO_ROOT = BACKEND.parent
-MANIFEST_PATH = BACKEND / "ref" / "kiwoom-common-screen-manifest.json"
 OUTPUT_PATH = REPO_ROOT / "plan" / "kiwoom-common-screen-injection-map.md"
-
-
-def load_manifest() -> dict[str, Any]:
-    return json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
-
-
-def escape_cell(value: str) -> str:
-    """Escape a value for safe embedding in a Markdown table cell."""
-    return value.replace("\\", "\\\\").replace("|", "\\|").replace("\r", "").replace("\n", "<br>")
 
 
 def layout_categories(mappings: list[dict[str, Any]]) -> dict[str, str]:
@@ -60,31 +52,6 @@ def mapping_counts_by_layout(mappings: list[dict[str, Any]]) -> dict[str, int]:
         layout = mapping["presentation"]["layout"]
         counts[layout] = counts.get(layout, 0) + 1
     return counts
-
-
-def tr_korean_name(tr_id: str) -> str | None:
-    spec = TR_REGISTRY.get(tr_id)
-    return spec.name if spec is not None else None
-
-
-def mapping_display_name(mapping: dict[str, Any]) -> str:
-    """Look up the Korean operation name from the generated registry.
-
-    Never invented: base mappings use `TR_REGISTRY[tr].name`; split-derived
-    mappings use the detail's `title_ko`, falling back to `title_en` then the
-    group id, and also show the parent TR name. Missing names render `—`
-    explicitly rather than being silently omitted.
-    """
-    tr_id = mapping["operation"]["tr_id"]
-    parent_name = tr_korean_name(tr_id)
-    if mapping["mapping_type"] == "base":
-        return escape_cell(parent_name) if parent_name else "—"
-    detail = DETAIL_REGISTRY.get(mapping["mapping_id"])
-    if detail is None:
-        return "—"
-    detail_name = detail.title_ko or detail.title_en or detail.group_id
-    parent = parent_name or "—"
-    return f"{escape_cell(detail_name)} ({escape_cell(parent)})"
 
 
 def request_field_cell(mapping: dict[str, Any]) -> str:
