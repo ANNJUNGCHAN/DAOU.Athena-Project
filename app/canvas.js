@@ -481,7 +481,11 @@ async function renderLiveChart(envelope) {
   chartBody.className = 'chart-card-body';
   body.appendChild(chartBody);
   try {
-    const instance = await createChartCard(chartBody, { symbol: data.symbol, name: data.name, ohlcv: bars });
+    // P2a — data.initial({period})은 일/주/월/년봉 8TR에 한해 render-plan이
+    // 실어준다(canvas_transform.py::resolve_chart_initial_period). 그 외(P2b
+    // 분/틱 4TR 포함)는 undefined — createChartCard의 resolveInitialPeriod가
+    // 'D'로 안전 폴백한다.
+    const instance = await createChartCard(chartBody, { symbol: data.symbol, name: data.name, ohlcv: bars, initial: data.initial });
     // 닫기 버튼(closeCard)이 lightweight-charts를 정리하도록 카드 자체에 매단다.
     cardDestroyers.set(card, instance.destroy);
   } catch (err) {

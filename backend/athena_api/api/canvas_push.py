@@ -37,6 +37,7 @@ from athena_api.canvas_transform import (
     build_facts,
     build_table,
     describe_unsupported_render_plan_kind,
+    resolve_chart_initial_period,
     resolve_render_plan_kind,
 )
 from athena_api.dependencies import (
@@ -192,6 +193,11 @@ async def canvas_render_plan(
         data: dict[str, Any] = {"symbol": symbol, "bars": bars}
         if isinstance(payload.data.get("name"), str):
             data["name"] = payload.data["name"]
+        # P2a — 일/주/월/년봉 8TR만 실제 값을 준다(그 외는 None → 카드는
+        # chart-card.js 자체 'D' 폴백을 쓴다, canvas_transform.py 함수 docstring).
+        initial_period = resolve_chart_initial_period(operation_ref)
+        if initial_period is not None:
+            data["initial"] = {"period": initial_period}
     elif canvas_kind == "table":
         built = build_table(call_payload)
         if isinstance(built, str):

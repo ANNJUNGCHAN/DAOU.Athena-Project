@@ -107,6 +107,21 @@ def response_container_cells(mapping: dict[str, Any]) -> tuple[str, str]:
     return str(len(data)), str(total_columns)
 
 
+def default_control_cell(mapping: dict[str, Any]) -> str:
+    """"기본 제어값" 열(P2a/P2b) — `presentation.controls.default_period`.
+
+    세 상태를 구분해서 보여준다: `controls` 자체가 없는 289개 비차트 TR은 `—`,
+    분/틱 4TR(P2b, 의도적 비배선)은 `controls.default_period`가 `null`이라
+    `—(비배선)`, 일/주/월/년봉 8TR(P2a)은 실제 값(`` `D` ``/`` `W` ``/`` `M` ``/`` `Y` ``).
+    빈칸 하나로 뭉개면 "누락"과 "의도적 비배선"이 문서에서 구분되지 않는다
+    (CLAUDE.md §4 정직 기록)."""
+    controls = mapping["presentation"].get("controls")
+    if controls is None:
+        return "—"
+    period = controls.get("default_period")
+    return f"`{period}`" if period else "—(비배선)"
+
+
 def mapping_row(mapping: dict[str, Any]) -> str:
     operation = mapping["operation"]
     route = mapping["route"]
@@ -121,6 +136,7 @@ def mapping_row(mapping: dict[str, Any]) -> str:
         response_field_cell(mapping),
         resp_containers,
         resp_columns,
+        default_control_cell(mapping),
     ]
     return "| " + " | ".join(cells) + " |"
 
@@ -161,9 +177,9 @@ def render_layout_section(
         lines.append("")
         lines.append(
             "| Mapping ID | TR | Name | Route | Operation ID | Req fields | Resp fields | "
-            "Resp containers | Resp columns |"
+            "Resp containers | Resp columns | Default control |"
         )
-        lines.append("| --- | --- | --- | --- | --- | ---: | ---: | ---: | ---: |")
+        lines.append("| --- | --- | --- | --- | --- | ---: | ---: | ---: | ---: | --- |")
         for mapping in domain_mappings:
             lines.append(mapping_row(mapping))
         lines.append("")

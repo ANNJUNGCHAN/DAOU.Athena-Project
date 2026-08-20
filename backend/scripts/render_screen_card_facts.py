@@ -112,6 +112,13 @@ def distribution(values: list[int]) -> dict[str, int]:
     }
 
 
+def default_period(mapping: dict[str, Any]) -> str | None:
+    """`presentation.controls.default_period`(P2a/P2b) — 없거나(비차트) `null`이면
+    (P2b 분/틱 4TR, 의도적 비배선) `None`으로 그대로 반영한다(추측 없음)."""
+    controls = mapping["presentation"].get("controls")
+    return controls.get("default_period") if controls else None
+
+
 def mapping_facts(mapping: dict[str, Any]) -> dict[str, Any]:
     route = mapping["route"]
     return {
@@ -126,6 +133,7 @@ def mapping_facts(mapping: dict[str, Any]) -> dict[str, Any]:
         "response_top_level": response_top_level(mapping),
         "response_containers": response_containers(mapping),
         "response_columns": response_columns(mapping),
+        "default_period": default_period(mapping),
     }
 
 

@@ -283,3 +283,24 @@ def describe_unsupported_render_plan_kind(operation_ref: str | None) -> str:
         "read/display 카드가 아니다 — free로 폴백한다"
     )
 
+
+def resolve_chart_initial_period(operation_ref: str | None) -> str | None:
+    """operation_ref → manifest `presentation.controls.default_period`(P2a).
+
+    일/주/월/년봉 8TR(ka10081/82/83/94, ka20006/07/08/19)만 실제 값('D'/'W'/'M'/'Y')을
+    갖는다. 분/틱 4TR(ka10079/80, ka20004/05)은 manifest에 `controls.default_period`가
+    구조적으로 존재하되 `null`이다(P2b, 의도적 비배선 — `plan/공통화면-템플릿-실행계획
+    -2026-08-20.md` P2b 참조: chart-card.js의 "입력은 항상 일봉" 계약과 pseudoIntraday
+    의사난수 재샘플이 충돌해 정보 정직성을 해친다). 그 외 289개 비차트 TR은 `controls`
+    필드 자체가 없다. 세 경우 모두 여기서는 `None`으로 수렴한다 — 호출부(canvas_data.py
+    /canvas_push.py)는 `None`이면 `data`에 `initial`을 아예 싣지 않고, chart-card.js가
+    자체 `'D'` 안전 폴백을 쓴다(무음 오배정이 아니라 명시적 미배선)."""
+    if not operation_ref:
+        return None
+    mapping = screen_manifest.get_mapping(operation_ref)
+    if mapping is None:
+        return None
+    controls = mapping.get("presentation", {}).get("controls") or {}
+    period = controls.get("default_period")
+    return period if isinstance(period, str) and period else None
+
