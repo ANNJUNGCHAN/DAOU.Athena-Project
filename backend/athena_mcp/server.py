@@ -112,7 +112,16 @@ _DATA_PROPERTY: dict[str, Any] = {"type": "object", "description": _data_shape_h
 
 _RENDER_CANVAS_INPUT_SCHEMA: dict[str, Any] = {
     "type": "object",
-    "required": ["canvas_type", "data"],
+    # `canvas_type`은 P1b(2026-08-20)부터 필수가 아니다 — plan_token 경로는
+    # manifest가 카드 종류를 결정하므로(canvas_data.py::render_with_plan,
+    # `plan/공통화면-템플릿-실행계획-2026-08-20.md` P1b) 모델이 안 보내도 된다.
+    # plan_token 없는 구경로(`_render_canvas`)도 이미 `arguments.get("canvas_type",
+    # "free")`로 부재를 관용해왔다(_render_canvas 정의 참조) — 필수 해제가 두
+    # 경로 어느 쪽도 깨지 않는다. 실제 SDK 왕복으로 이 완화가 통과함을 증명하는
+    # 회귀 테스트가 있다(test_server.py, Architect 권고 5 — "문서상 optional ≠
+    # SDK가 실제로 optional 취급"이었던 canvas_type enum 함정과 동형의 위험이라
+    # 가정으로 넘기지 않는다).
+    "required": ["data"],
     "properties": {
         "canvas_type": _CANVAS_TYPE_PROPERTY,
         "data": _DATA_PROPERTY,
@@ -727,10 +736,11 @@ def _builtin_tool_defs() -> list[types.Tool]:
     return [
         types.Tool(
             name=RENDER_CANVAS_TOOL,
-            description="5종 캔버스(stream/reader/timeline/table/chart) 또는 free로 "
-            "렌더링한다. 스키마 불일치 시 free로 폴백하고 그 사실을 응답에 남긴다. "
-            "chart/table 카드는 plan_token(athena_resolve 발급)을 주면 게이트웨이가 "
-            "데이터를 직접 채운다 — athena_call을 건너뛰는 가장 빠른 경로다.",
+            description="7종 캔버스(stream/reader/timeline/table/chart/facts/compound) "
+            "또는 free로 렌더링한다. 스키마 불일치 시 free로 폴백하고 그 사실을 응답에 "
+            "남긴다. plan_token(athena_resolve 발급)을 주면 게이트웨이가 데이터를 직접 "
+            "채우고 카드 종류도 직접 결정한다(canvas_type은 안 보내도 된다) — "
+            "athena_call을 건너뛰는 가장 빠른 경로다.",
             inputSchema=_RENDER_CANVAS_INPUT_SCHEMA,
         ),
         types.Tool(

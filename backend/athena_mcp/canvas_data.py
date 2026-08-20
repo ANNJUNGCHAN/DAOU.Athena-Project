@@ -13,6 +13,15 @@
 변환은 전부 결정적이다(CLAUDE.md §7 — 모델 호출·무작위성 없음). 변환 불가능한
 형상이면 조용히 그리지 않고 에러로 안내한다(athena_call 직접 경로가 폴백).
 
+**카드 종류는 모델이 아니라 manifest가 결정한다**(P1b, 2026-08-20 — 계획
+`plan/공통화면-템플릿-실행계획-2026-08-20.md`). 모델이 인자로 보낸 `canvas_type`은
+더 이상 분기 조건이 아니라 감사용 힌트다 — plan을 실행해 얻은 `operation_ref`로
+`athena_api.screen_manifest`(경유 `canvas_transform.resolve_render_plan_kind`)를
+조회해 카드 종류를 결정하고, 모델의 힌트와 다르면 manifest가 이기며 불일치를 로그로
+남긴다(무음 불일치 금지). manifest가 이 경로에서 지원하지 않는 카드(event/action/
+status, 또는 미등록 operation_ref)를 가리키면 에러가 아니라 free 카드로 폴백한다
+(크래시 대신 폴백, 사유를 응답에 남긴다 — canvas.py의 기존 폴백 철학과 동형).
+
 안전 성질: 이 경로는 주문 확인 헤더(X-Athena-Confirm 등)를 절대 싣지 않는다 —
 주문 계획이 넘어와도 백엔드의 3중 게이트가 헤더 부재로 거부한다(조회 전용).
 """
@@ -20,14 +29,16 @@
 from __future__ import annotations
 
 import json
+import logging
 from typing import Any
 
 import httpx
 from mcp import types
 
-# 순수 변환은 백엔드 단일 소재지로 이동(athena_api/canvas_transform.py) —
-# 캐시 리플레이 라우트와 공용이다. 여기서는 재수출만 한다(테스트·호출부 계약 유지 —
-# `as` 동일명 별칭은 의도적 재수출 표기라 ruff가 지우지 않는다).
+# 순수 변환·manifest 기반 카드 종류 결정은 백엔드 단일 소재지로 이동
+# (athena_api/canvas_transform.py) — 캐시 리플레이 라우트와 공용이다. 여기서는
+# 재수출만 한다(테스트·호출부 계약 유지 — `as` 동일명 별칭은 의도적 재수출
+# 표기라 ruff가 지우지 않는다).
 from athena_api.canvas_transform import (
     BARS_MAX as BARS_MAX,
 )
@@ -38,9 +49,32 @@ from athena_api.canvas_transform import (
     build_chart_bars as build_chart_bars,
 )
 from athena_api.canvas_transform import (
+    build_compound_generic as build_compound_generic,
+)
+from athena_api.canvas_transform import (
+    build_facts as build_facts,
+)
+from athena_api.canvas_transform import (
     build_table as build_table,
 )
+from athena_api.canvas_transform import (
+    describe_unsupported_render_plan_kind as describe_unsupported_render_plan_kind,
+)
+from athena_api.canvas_transform import (
+    resolve_render_plan_kind as resolve_render_plan_kind,
+)
 from athena_mcp.canvas import validate_canvas_payload
+
+logger = logging.getLogger(__name__)
+
+# facts/compound는 TR 응답 본문(`call_payload["data"]`)만 보고 top-level 스칼라를
+# 뽑는다(canvas_transform.build_facts 계약) — chart/table처럼 전체 응답 트리를
+# 재귀 탐색하지 않는다. call_payload 전체를 넘기면 `operation_ref` 같은 봉투
+# 필드를 TR 필드로 오인한다(실측 확인) — 반드시 `.get("data")`만 넘긴다.
+_BUILD_FROM_TR_DATA = {
+    "facts": build_facts,
+    "compound": build_compound_generic,
+}
 
 
 def _error(text: str) -> types.CallToolResult:
@@ -61,13 +95,6 @@ async def render_with_plan(
     반환 payload는 기존 `_render_canvas`와 같은 형상(앱 호환)에 `summary`가
     더해진다 — 모델은 데이터 대신 summary로 답한다.
     """
-    canvas_type = arguments.get("canvas_type")
-    if canvas_type not in ("chart", "table"):
-        return _error(
-            "plan_token 데이터 지름길은 canvas_type 'chart'/'table'만 지원한다 — "
-            "다른 카드는 athena_call로 데이터를 받아 직접 구성하라"
-        )
-
     plan_token = arguments["plan_token"]
     try:
         response = await http_client.post(
@@ -85,34 +112,77 @@ async def render_with_plan(
         call_payload = response.json()
     except ValueError:
         return _error("plan 실행 응답이 JSON이 아니다")
+    if not isinstance(call_payload, dict):
+        call_payload = {}
+
+    operation_ref = call_payload.get("operation_ref")
+    model_canvas_type = arguments.get("canvas_type")
+    canvas_kind = resolve_render_plan_kind(operation_ref)
 
     model_data = arguments.get("data") or {}
-    if canvas_type == "chart":
-        built = build_chart_bars(call_payload)
-        if isinstance(built, str):
-            return _error(f"차트 변환 실패: {built}")
-        bars, meta = built
-        symbol = model_data.get("symbol")
-        if not isinstance(symbol, str) or not symbol:
-            return _error(
-                "차트 카드에는 data.symbol(종목코드)이 필요하다 — 인자에 넣어 다시 호출하라"
-            )
-        data: dict[str, Any] = {"symbol": symbol, "bars": bars}
-        if isinstance(model_data.get("name"), str):
-            data["name"] = model_data["name"]
-    else:
-        built = build_table(call_payload)
-        if isinstance(built, str):
-            return _error(f"테이블 변환 실패: {built}")
-        data, meta = built
 
-    result = validate_canvas_payload(canvas_type, data)
+    if canvas_kind is None:
+        reason = describe_unsupported_render_plan_kind(operation_ref)
+        logger.warning(
+            "render_with_plan free 폴백 — operation_ref=%s model_canvas_type=%s 사유=%s",
+            operation_ref,
+            model_canvas_type,
+            reason,
+        )
+        result_canvas_type: str = "free"
+        result_fell_back = True
+        result_fallback_reason: str | None = reason
+        result_data: dict[str, Any] = call_payload
+        meta: dict[str, Any] = {"fell_back": True, "fallback_reason": reason}
+    else:
+        if model_canvas_type is not None and model_canvas_type != canvas_kind:
+            logger.warning(
+                "render_with_plan canvas_type 불일치 — model=%s manifest=%s "
+                "operation_ref=%s (manifest가 이긴다)",
+                model_canvas_type,
+                canvas_kind,
+                operation_ref,
+            )
+
+        if canvas_kind == "chart":
+            built = build_chart_bars(call_payload)
+            if isinstance(built, str):
+                return _error(f"차트 변환 실패: {built}")
+            bars, meta = built
+            symbol = model_data.get("symbol")
+            if not isinstance(symbol, str) or not symbol:
+                return _error(
+                    "차트 카드에는 data.symbol(종목코드)이 필요하다 — 인자에 넣어 다시 호출하라"
+                )
+            data: dict[str, Any] = {"symbol": symbol, "bars": bars}
+            if isinstance(model_data.get("name"), str):
+                data["name"] = model_data["name"]
+        elif canvas_kind == "table":
+            built = build_table(call_payload)
+            if isinstance(built, str):
+                return _error(f"테이블 변환 실패: {built}")
+            data, meta = built
+        else:  # facts / compound — TR 응답 본문만(위 _BUILD_FROM_TR_DATA 주석)
+            tr_data = call_payload.get("data")
+            if not isinstance(tr_data, dict):
+                tr_data = {}
+            built = _BUILD_FROM_TR_DATA[canvas_kind](tr_data)
+            if isinstance(built, str):
+                return _error(f"{canvas_kind} 변환 실패: {built}")
+            data, meta = built
+
+        result = validate_canvas_payload(canvas_kind, data)
+        result_canvas_type = result.canvas_type
+        result_fell_back = result.fell_back
+        result_fallback_reason = result.fallback_reason
+        result_data = result.data
+
     payload = {
-        "canvas_type": result.canvas_type,
-        "fell_back": result.fell_back,
-        "fallback_reason": result.fallback_reason,
+        "canvas_type": result_canvas_type,
+        "fell_back": result_fell_back,
+        "fallback_reason": result_fallback_reason,
         "caption": arguments.get("caption"),
-        "data": result.data,
+        "data": result_data,
         "layout": None,
         "drop_types": [],
     }
@@ -134,12 +204,12 @@ async def render_with_plan(
 
     if pushed:
         small = {
-            "canvas_type": result.canvas_type,
+            "canvas_type": result_canvas_type,
             # 파서(stream-json-parser.js)가 이 플래그로 'pushed' 분류를 한다 —
             # 앱은 이 결과로 카드를 그리지 않는다(사이드 채널이 이미 그렸다).
             "pushed": True,
-            "fell_back": result.fell_back,
-            "fallback_reason": result.fallback_reason,
+            "fell_back": result_fell_back,
+            "fallback_reason": result_fallback_reason,
             "caption": arguments.get("caption"),
             # 모델이 답변에 쓰는 요약 — 데이터 본문은 모델 스트림을 타지 않는다.
             # trimmed면 "최근 N행 기준"을 답변에 밝히는 것이 계약이다(프롬프트 v3d).

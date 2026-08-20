@@ -2,11 +2,19 @@
 
 계약: 변환은 결정적, 실패는 조용한 폴백이 아니라 에러 안내, 주문 확인 헤더는
 절대 싣지 않는다(조회 전용). 봉은 시간 오름차순·최신 BARS_MAX개.
+
+P1b(2026-08-20, `plan/공통화면-템플릿-실행계획-2026-08-20.md`) 갱신: 카드 종류는
+모델의 canvas_type이 아니라 plan 실행 결과 operation_ref로 조회한 manifest가
+결정한다. 아래 테스트는 실제 manifest(`backend/ref/kiwoom-common-screen-manifest.json`)
+의 실측 operation_ref를 그대로 쓴다(추측 픽스처가 아니다) — base:ka10081(차트,
+domain=="charts" compound → "chart"로 승격), base:ka00001(facts), base:ka01300
+(compound 제네릭), base:ka10173/ka10174(websocket → layout="event", 이 경로 밖).
 """
 
 from __future__ import annotations
 
 import json
+import logging
 from pathlib import Path
 
 import httpx
@@ -75,6 +83,9 @@ def test_build_table_caps_rows_and_derives_columns():
 
 
 async def test_render_with_plan_chart_fills_envelope_and_summary(tmp_path: Path, mock_http_client):
+    """operation_ref=base:ka10081(manifest layout=compound, domain=charts)이
+    "chart"로 승격되고 실제로 build_chart_bars 경로를 탄다 — 모델이 canvas_type=
+    "chart"를 맞게 보내도(불일치 로그 없이) 카드 종류는 manifest가 정한다."""
     seen = {}
 
     def handler(request: httpx.Request) -> httpx.Response:
@@ -86,7 +97,10 @@ async def test_render_with_plan_chart_fills_envelope_and_summary(tmp_path: Path,
         seen["headers"] = dict(request.headers)
         return httpx.Response(
             200,
-            json={"data": {"stk_dt_pole_chart_qry": _chart_rows(10)}},
+            json={
+                "operation_ref": "base:ka10081",
+                "data": {"stk_dt_pole_chart_qry": _chart_rows(10)},
+            },
         )
 
     result = await render_with_plan(
@@ -112,6 +126,7 @@ async def test_render_with_plan_chart_fills_envelope_and_summary(tmp_path: Path,
     assert payload["summary"]["latest_close"] == 247500.0
     pushed = seen["pushed_envelope"]
     assert pushed["canvas_type"] == "chart"
+    assert pushed["fell_back"] is False
     assert pushed["data"]["symbol"] == "005930"
     assert len(pushed["data"]["bars"]) == 10
     assert pushed["data"]["bars"][0]["time"] < pushed["data"]["bars"][-1]["time"]
@@ -119,7 +134,10 @@ async def test_render_with_plan_chart_fills_envelope_and_summary(tmp_path: Path,
 
 async def test_render_with_plan_requires_symbol_for_chart(mock_http_client):
     def handler(_request: httpx.Request) -> httpx.Response:
-        return httpx.Response(200, json={"data": {"rows": _chart_rows(3)}})
+        return httpx.Response(
+            200,
+            json={"operation_ref": "base:ka10081", "data": {"rows": _chart_rows(3)}},
+        )
 
     result = await render_with_plan(
         {"canvas_type": "chart", "plan_token": "tok", "data": {}},
@@ -130,17 +148,182 @@ async def test_render_with_plan_requires_symbol_for_chart(mock_http_client):
     assert "data.symbol" in result.content[0].text
 
 
-async def test_render_with_plan_rejects_unsupported_canvas_type(mock_http_client):
-    def handler(_request: httpx.Request) -> httpx.Response:
-        raise AssertionError("호출되면 안 된다")
+async def test_render_with_plan_manifest_wins_over_mismatched_model_canvas_type_hint(
+    mock_http_client, caplog
+):
+    """모델이 canvas_type="table"을 보내도 operation_ref=base:ka00001은 manifest상
+    facts다 — manifest가 이기고, 불일치는 조용히 넘기지 않고 로그에 남는다."""
+    seen = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        if request.url.path == "/api/v1/canvas/push":
+            seen["pushed_envelope"] = json.loads(request.content)
+            return httpx.Response(200, json={"queued": True})
+        return httpx.Response(
+            200,
+            json={
+                "operation_ref": "base:ka00001",
+                "data": {"stk_cd": "005930", "stk_nm": "삼성전자", "cur_prc": "71000"},
+                "continuation": {"cont_yn": "N"},
+            },
+        )
+
+    with caplog.at_level(logging.WARNING, logger="athena_mcp.canvas_data"):
+        result = await render_with_plan(
+            {"canvas_type": "table", "plan_token": "tok", "data": {}},
+            mock_http_client(handler),
+            call_timeout_seconds=5.0,
+        )
+    assert result.isError is False
+    pushed = seen["pushed_envelope"]
+    # manifest(facts)가 이겼다 — 모델이 보낸 "table"이 아니다.
+    assert pushed["canvas_type"] == "facts"
+    # 봉투 필드(operation_ref/continuation)를 TR 필드로 오인하지 않았다 —
+    # call_payload["data"]만 넘겼다는 증거(추출된 3필드만 있어야 한다).
+    assert [f["key"] for f in pushed["data"]["fields"]] == ["stk_cd", "stk_nm", "cur_prc"]
+    assert "operation_ref" not in [f["key"] for f in pushed["data"]["fields"]]
+    assert any("불일치" in record.message for record in caplog.records)
+
+
+async def test_render_with_plan_facts_golden_path(mock_http_client):
+    seen = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        if request.url.path == "/api/v1/canvas/push":
+            seen["pushed_envelope"] = json.loads(request.content)
+            return httpx.Response(200, json={"queued": True})
+        return httpx.Response(
+            200,
+            json={"operation_ref": "base:ka00001", "data": {"acctNo": "1234567890"}},
+        )
 
     result = await render_with_plan(
-        {"canvas_type": "stream", "plan_token": "tok", "data": {}},
+        {"plan_token": "tok", "data": {}},  # canvas_type 생략 — 힌트 없이도 동작
         mock_http_client(handler),
         call_timeout_seconds=5.0,
     )
-    assert result.isError is True
-    assert "chart" in result.content[0].text
+    assert result.isError is False
+    payload = json.loads(result.content[0].text)
+    assert payload["canvas_type"] == "facts"
+    assert payload["fell_back"] is False
+    assert payload["summary"]["fields_total"] == 1
+    pushed = seen["pushed_envelope"]
+    assert pushed["data"]["fields"] == [
+        {"key": "acctNo", "label": "acctNo", "value": "1234567890"}
+    ]
+
+
+async def test_render_with_plan_compound_generic_golden_path(mock_http_client):
+    seen = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        if request.url.path == "/api/v1/canvas/push":
+            seen["pushed_envelope"] = json.loads(request.content)
+            return httpx.Response(200, json={"queued": True})
+        return httpx.Response(
+            200,
+            json={
+                "operation_ref": "base:ka01300",
+                "data": {
+                    "rtcd": "0",
+                    "nofi": [
+                        {"gcod": "001", "name": "삼성전자"},
+                        {"gcod": "002", "name": "SK하이닉스"},
+                    ],
+                },
+            },
+        )
+
+    result = await render_with_plan(
+        {"plan_token": "tok", "data": {}},
+        mock_http_client(handler),
+        call_timeout_seconds=5.0,
+    )
+    assert result.isError is False
+    payload = json.loads(result.content[0].text)
+    assert payload["canvas_type"] == "compound"
+    pushed = seen["pushed_envelope"]
+    assert pushed["data"]["header"] == [{"key": "rtcd", "label": "rtcd", "value": "0"}]
+    assert pushed["data"]["table"]["rows"] == [
+        {"gcod": "001", "name": "삼성전자"},
+        {"gcod": "002", "name": "SK하이닉스"},
+    ]
+
+
+async def test_render_with_plan_falls_back_to_free_when_manifest_kind_unsupported(
+    mock_http_client, caplog
+):
+    """구 `test_render_with_plan_rejects_unsupported_canvas_type` 자리 —
+    의미가 바뀌었다(P1b): 모델이 선언한 canvas_type이 아니라 manifest가 가리키는
+    카드 종류가 이 경로의 지원 목록(chart/table/facts/compound) 밖일 때, 크래시
+    (isError)가 아니라 free 카드로 폴백하고 사유를 로그·응답에 남긴다.
+    base:ka10173은 websocket TR이라 manifest layout="event" — 이 read/display
+    plan_token 경로 범위 밖이다(§11 미해결 3, "이종 메시지 사각지대" 방어)."""
+    seen = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        if request.url.path == "/api/v1/canvas/push":
+            seen["pushed_envelope"] = json.loads(request.content)
+            return httpx.Response(200, json={"queued": True})
+        return httpx.Response(
+            200, json={"operation_ref": "base:ka10173", "data": {"some": "ws-field"}}
+        )
+
+    with caplog.at_level(logging.WARNING, logger="athena_mcp.canvas_data"):
+        result = await render_with_plan(
+            {"canvas_type": "stream", "plan_token": "tok", "data": {}},
+            mock_http_client(handler),
+            call_timeout_seconds=5.0,
+        )
+    assert result.isError is False
+    payload = json.loads(result.content[0].text)
+    assert payload["canvas_type"] == "free"
+    assert payload["fell_back"] is True
+    assert payload["fallback_reason"] is not None
+    pushed = seen["pushed_envelope"]
+    assert pushed["canvas_type"] == "free"
+    assert pushed["fell_back"] is True
+    assert any("free 폴백" in record.message for record in caplog.records)
+
+
+async def test_render_with_plan_ka10174_falls_back_to_free(mock_http_client):
+    """ka10173과 별개로 ka10174(layout="event", shape="scalar_only")도 명시 검증한다
+    — 계획 §P1b 수용 기준이 두 TR을 각각 이름으로 지정한다."""
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        if request.url.path == "/api/v1/canvas/push":
+            return httpx.Response(200, json={"queued": True})
+        return httpx.Response(200, json={"operation_ref": "base:ka10174", "data": {}})
+
+    result = await render_with_plan(
+        {"plan_token": "tok", "data": {}},
+        mock_http_client(handler),
+        call_timeout_seconds=5.0,
+    )
+    assert result.isError is False
+    payload = json.loads(result.content[0].text)
+    assert payload["canvas_type"] == "free"
+    assert payload["fell_back"] is True
+
+
+async def test_render_with_plan_falls_back_to_free_when_operation_ref_missing(mock_http_client):
+    """plan 실행 응답에 operation_ref 자체가 없는 방어적 경우 — 크래시하지 않는다."""
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        if request.url.path == "/api/v1/canvas/push":
+            return httpx.Response(200, json={"queued": True})
+        return httpx.Response(200, json={"data": {"foo": "bar"}})
+
+    result = await render_with_plan(
+        {"plan_token": "tok", "data": {}},
+        mock_http_client(handler),
+        call_timeout_seconds=5.0,
+    )
+    assert result.isError is False
+    payload = json.loads(result.content[0].text)
+    assert payload["canvas_type"] == "free"
+    assert payload["fell_back"] is True
+    assert "operation_ref가 없다" in payload["fallback_reason"]
 
 
 async def test_render_with_plan_surfaces_backend_error(mock_http_client):
@@ -160,7 +343,10 @@ async def test_render_with_plan_falls_back_to_inline_when_push_fails(mock_http_c
     def handler(request: httpx.Request) -> httpx.Response:
         if request.url.path == "/api/v1/canvas/push":
             return httpx.Response(503, json={"detail": "채널 미준비"})
-        return httpx.Response(200, json={"data": {"rows": _chart_rows(3)}})
+        return httpx.Response(
+            200,
+            json={"operation_ref": "base:ka10081", "data": {"rows": _chart_rows(3)}},
+        )
 
     result = await render_with_plan(
         {"canvas_type": "chart", "plan_token": "tok", "data": {"symbol": "005930"}},
