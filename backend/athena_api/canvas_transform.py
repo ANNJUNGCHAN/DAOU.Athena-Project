@@ -10,6 +10,8 @@ from __future__ import annotations
 
 from typing import Any
 
+from athena_api import screen_manifest
+
 # 차트 봉투에 남기는 최신 봉 수 상한. 240봉 ≈ 일봉 1년 — 직렬화 ~26k자로
 # CLI 툴 결과 한도(40k 트리밍 기준) 아래에 안전하게 들어간다. 카드의
 # 리샘플링(chart-resample.js)이 주/월 뷰를 여기서 유도한다.
@@ -221,4 +223,63 @@ def build_compound_generic(payload: Any) -> tuple[dict[str, Any], dict[str, Any]
     }
     return data, meta
 
+
+# ---------------------------------------------------------------------------
+# manifest 기반 카드 종류 결정 (P1b, `plan/공통화면-템플릿-실행계획-2026-08-20.md`
+# §Q3·P1b Deliverable 1·2) — 콜드 경로(athena_mcp/canvas_data.py::render_with_plan)
+# 캐시 리플레이 경로(athena_api/api/canvas_push.py::canvas_render_plan) 둘 다 이
+# 함수 하나로 operation_ref → canvas_type을 결정한다(같은 판정 로직을 두 곳이
+# 따로 짜지 않는다, Architect 권고). 모델/캐시 caller가 보낸 canvas_type은 여기
+# 관여하지 않는다 — 호출부가 감사용 힌트로만 비교·로그한다. 결정은 오직 manifest다.
+# ---------------------------------------------------------------------------
+
+# 실측(2026-08-20): manifest의 compound 레이아웃 29건 중 domain=="charts"인
+# 정확히 12건(ka10079/80/81/82/83/94, ka20004/05/06/07/08/19 — P2a 8 + P2b 4와
+# 정확히 일치)이 OHLCV 캔들스틱 형상이다. 기존 프로덕션 "chart" canvas_type
+# (build_chart_bars, app/lib/chart-card.js 렌더러, 27.3s 콜드/222ms 캐시 실측)이
+# 이미 이 형상을 쓰고 있으므로, compound 레이아웃이라도 이 12건은 "chart"로
+# 승격한다 — 그러지 않으면 라이브 차트 기능이 아직 렌더러가 없는 제네릭
+# "compound" 카드로 강등돼 회귀가 난다. TR id를 손으로 나열하는 대신 manifest
+# 자체의 domain 필드를 신호로 쓴다("추측하지 않는다", CLAUDE.md §3) — domain이
+# 바뀌면 이 승격도 그대로 따라간다.
+_CHART_DOMAIN = "charts"
+
+_RENDER_PLAN_LAYOUTS = frozenset({"facts", "table", "compound"})
+
+
+def resolve_render_plan_kind(operation_ref: str | None) -> str | None:
+    """operation_ref(manifest mapping_id) → render-plan 카드 종류.
+
+    facts/table은 manifest layout 그대로, compound는 domain=="charts"면
+    "chart"로 승격(위 주석)하고 그 외는 "compound"(제네릭 facts헤더+표)로
+    남는다. event(WS)/action(주문)/status(oauth) 레이아웃과 미등록
+    operation_ref는 이 plan_token read/display 경로 범위 밖이라 `None` —
+    호출부가 free로 폴백하고 사유를 로그에 남긴다(무음 오배정 금지, 계획
+    §5 Guardrails).
+    """
+    if not operation_ref:
+        return None
+    mapping = screen_manifest.get_mapping(operation_ref)
+    if mapping is None:
+        return None
+    layout = mapping.get("presentation", {}).get("layout")
+    if layout == "compound" and mapping.get("operation", {}).get("domain") == _CHART_DOMAIN:
+        return "chart"
+    if layout in _RENDER_PLAN_LAYOUTS:
+        return layout
+    return None
+
+
+def describe_unsupported_render_plan_kind(operation_ref: str | None) -> str:
+    """free 폴백 사유 문구 — 콜드/캐시 경로가 감사 로그·응답 summary에 그대로 쓴다."""
+    if not operation_ref:
+        return "plan 실행 응답에 operation_ref가 없다 — free로 폴백한다"
+    mapping = screen_manifest.get_mapping(operation_ref)
+    if mapping is None:
+        return f"manifest에 operation_ref={operation_ref!r} 매핑이 없다 — free로 폴백한다"
+    layout = mapping.get("presentation", {}).get("layout")
+    return (
+        f"manifest layout={layout!r}(operation_ref={operation_ref!r})은 "
+        "read/display 카드가 아니다 — free로 폴백한다"
+    )
 

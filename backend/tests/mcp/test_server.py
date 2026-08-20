@@ -9,6 +9,7 @@ import json
 import sys
 from pathlib import Path
 
+import httpx
 import pytest
 from mcp import types
 
@@ -240,6 +241,142 @@ async def test_render_canvas_drop_types_filters_unknown_and_dedupes(tmp_path):
     }
     payload = json.loads((await gw.dispatch_call(RENDER_CANVAS_TOOL, args)).content[0].text)
     assert payload["drop_types"] == ["stream", "table"]
+
+
+# ---------------------------------------------------------------------------
+# P1b(2026-08-20) — canvas_type 필수 해제 + facts/compound 구경로 회귀
+# (`plan/공통화면-템플릿-실행계획-2026-08-20.md` P1b Deliverable 3·5)
+# ---------------------------------------------------------------------------
+
+
+async def test_render_canvas_tool_schema_accepts_missing_canvas_type_via_real_sdk_validation(
+    make_gateway,
+):
+    """Architect 권고 5 — "문서상 optional ≠ SDK가 실제로 optional 취급"이었던
+    canvas_type enum 함정과 동형의 위험이다. 문서·주석이 아니라 실제 mcp SDK의
+    `jsonschema.validate(instance=arguments, schema=tool.inputSchema)`
+    (mcp.server.lowlevel.server.Server.call_tool, validate_input=True 기본값)를
+    `server.request_handlers[types.CallToolRequest]` 경유로 실제 구동해 증명한다
+    — `dispatch_call()`을 직접 부르면 이 검증 레이어를 건너뛴다."""
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        if request.url.path == "/api/v1/canvas/push":
+            return httpx.Response(200, json={"queued": True})
+        return httpx.Response(
+            200, json={"operation_ref": "base:ka00001", "data": {"acctNo": "1234567890"}}
+        )
+
+    gw = make_gateway(handler)
+    server = build_mcp_server(gw)
+    call_handler = server.request_handlers[types.CallToolRequest]
+
+    request = types.CallToolRequest(
+        method="tools/call",
+        params=types.CallToolRequestParams(
+            name=RENDER_CANVAS_TOOL,
+            # canvas_type 생략 — 스키마 완화 전이었다면 "required" 위반으로
+            # jsonschema가 게이트웨이 코드 도달 전에 거부했어야 한다.
+            arguments={"plan_token": "tok", "data": {}},
+        ),
+    )
+    server_result = await call_handler(request)
+    result = server_result.root
+    assert result.isError is False
+    payload = json.loads(result.content[0].text)
+    assert payload["canvas_type"] == "facts"
+
+
+async def test_render_canvas_direct_data_still_requires_input_validation_for_missing_data(
+    make_gateway,
+):
+    """`data`는 이번 완화 대상이 아니다 — 여전히 required다(스코프 확인용
+    회귀, canvas_type만 뺐다는 것의 반증)."""
+
+    def handler(_request):
+        raise AssertionError("호출되면 안 된다 — SDK 검증 단계에서 거부돼야 한다")
+
+    gw = make_gateway(handler)
+    server = build_mcp_server(gw)
+    call_handler = server.request_handlers[types.CallToolRequest]
+
+    request = types.CallToolRequest(
+        method="tools/call",
+        params=types.CallToolRequestParams(name=RENDER_CANVAS_TOOL, arguments={}),
+    )
+    server_result = await call_handler(request)
+    result = server_result.root
+    assert result.isError is True
+    assert "data" in result.content[0].text
+
+
+async def test_render_canvas_direct_facts_payload_without_plan_token_still_renders(tmp_path):
+    """구경로 `_render_canvas()`(plan_token 없음)는 P1b 범위 밖으로 명시 선언됐다
+    (계획 P1b Deliverable 3) — facts/compound 스키마가 P1a에서 추가된 뒤에도
+    `validate_canvas_payload()`가 이미 일반화돼 있어 이 함수 자체를 고칠 필요가
+    없었다는 것을 회귀로 고정한다. 모델이 plan_token 없이 canvas_type=facts를
+    직접 골라도(자유 선택 유지) 여전히 정상 렌더된다."""
+    gw = _bare_gateway(tmp_path)
+    args = {
+        "canvas_type": "facts",
+        "data": {"fields": [{"key": "stk_cd", "label": "stk_cd", "value": "005930"}]},
+    }
+    result = await gw.dispatch_call(RENDER_CANVAS_TOOL, args)
+    assert result.isError is False
+    payload = json.loads(result.content[0].text)
+    assert payload["canvas_type"] == "facts"
+    assert payload["fell_back"] is False
+
+
+async def test_render_canvas_direct_compound_payload_without_plan_token_still_renders(tmp_path):
+    gw = _bare_gateway(tmp_path)
+    args = {
+        "canvas_type": "compound",
+        "data": {
+            "header": [{"key": "rtcd", "label": "rtcd", "value": "0"}],
+            "table": {"columns": [{"key": "gcod", "label": "gcod"}], "rows": [{"gcod": "001"}]},
+        },
+    }
+    result = await gw.dispatch_call(RENDER_CANVAS_TOOL, args)
+    assert result.isError is False
+    payload = json.loads(result.content[0].text)
+    assert payload["canvas_type"] == "compound"
+    assert payload["fell_back"] is False
+
+
+async def test_render_canvas_plan_audit_log_contract_unchanged_by_manifest_wiring(make_gateway):
+    """server.py:341-343 — plan_token 경로는 `dispatch_call()`이 "kiwoom-selector"
+    감사 로그에 툴명 "render_canvas_plan"·성공 여부만 남긴다(인자·응답 본문 제외,
+    CLAUDE.md §7). manifest 결선이 콜드 경로 내부 판정 로직만 바꿨을 뿐 이
+    감사 계약(호출부·필드·성공 판정)은 그대로임을 고정한다."""
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        if request.url.path == "/api/v1/canvas/push":
+            return httpx.Response(200, json={"queued": True})
+        return httpx.Response(
+            200, json={"operation_ref": "base:ka00001", "data": {"acctNo": "1"}}
+        )
+
+    gw = make_gateway(handler)
+    result = await gw.dispatch_call(RENDER_CANVAS_TOOL, {"plan_token": "tok", "data": {}})
+    assert result.isError is False
+
+    entries = gw._audit_log("kiwoom-selector").read_all()
+    matching = [e for e in entries if e["tool"] == "render_canvas_plan"]
+    assert len(matching) == 1
+    assert matching[0]["success"] is True
+    # 인자·응답 본문이 감사 로그에 새지 않는다(계좌 정보 등 — 함정 ⑫).
+    assert "acctNo" not in json.dumps(matching[0])
+    assert "operation_ref" not in matching[0]
+
+
+async def test_render_canvas_direct_call_still_defaults_missing_canvas_type_to_free(tmp_path):
+    """`_render_canvas()`는 스키마 완화 전부터 `arguments.get("canvas_type", "free")`로
+    부재를 관용해왔다 — required 제거가 이 경로를 새로 깨지 않는다는 반증."""
+    gw = _bare_gateway(tmp_path)
+    result = await gw.dispatch_call(RENDER_CANVAS_TOOL, {"data": {"x": 1}})
+    assert result.isError is False
+    payload = json.loads(result.content[0].text)
+    assert payload["canvas_type"] == "free"
 
 
 async def test_save_canvas_writes_file(tmp_path):
