@@ -16,14 +16,16 @@ test('normalizeQuery: 공백·대소문자·말미 문장부호만 다듬는다'
 test('QueryCache: 같은 질문(정규화 동치)이 판정을 재사용한다', () => {
   let t = 0;
   const cache = new QueryCache({ clock: () => t });
-  cache.set('삼성전자 차트 보여줘', { canvasType: 'chart' });
-  assert.deepEqual(cache.get('  삼성전자  차트 보여줘! '), { canvasType: 'chart' });
+  // 캐시는 judgment 형상을 모른다(불투명 저장) — P5부터 canvasType은 판정
+  // 객체에 없다(operation_ref의 순수 함수라 응답값을 쓴다, fast-path.js).
+  cache.set('삼성전자 차트 보여줘', { resolveQuestion: '삼성전자 차트' });
+  assert.deepEqual(cache.get('  삼성전자  차트 보여줘! '), { resolveQuestion: '삼성전자 차트' });
 });
 
 test('QueryCache: TTL 만료 시 무효 — 낡은 판정을 재사용하지 않는다', () => {
   let t = 0;
   const cache = new QueryCache({ ttlMs: 1000, clock: () => t });
-  cache.set('q', { canvasType: 'chart' });
+  cache.set('q', { resolveQuestion: 'q' });
   t = 1001;
   assert.equal(cache.get('q'), null);
 });
@@ -39,7 +41,7 @@ test('QueryCache: 상한 초과 시 가장 오래된 항목부터 축출(FIFO)',
 
 test('QueryCache: invalidate — 실패한 판정은 반복 리플레이되지 않는다', () => {
   const cache = new QueryCache({ clock: () => 0 });
-  cache.set('q', { canvasType: 'chart' });
+  cache.set('q', { resolveQuestion: 'q' });
   cache.invalidate('q');
   assert.equal(cache.get('q'), null);
 });

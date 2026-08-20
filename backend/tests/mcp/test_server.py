@@ -900,3 +900,24 @@ def test_render_canvas_data_description_lists_all_shapes():
     # 검증 동작 자체는 그대로여야 한다 — 안내문은 판정에 관여하지 않는다.
     assert _RENDER_CANVAS_INPUT_SCHEMA["properties"]["data"]["type"] == "object"
     assert _SAVE_CANVAS_INPUT_SCHEMA["properties"]["data"]["description"] == desc
+
+
+def test_render_canvas_canvas_type_deprecated_for_plan_token_path_only():
+    """P5(2026-08-20) — render_canvas의 canvas_type은 plan_token 경로에서 폐기
+    표시된다(완전 제거는 후속, open-questions §3). save_canvas와 render_canvas의
+    plan_token 없는 구경로에서는 canvas_type이 여전히 유효한 필수 개념이므로,
+    폐기 표시가 render_canvas 스키마에만 붙고 save_canvas는 그대로여야 한다."""
+    from athena_mcp.server import _RENDER_CANVAS_INPUT_SCHEMA, _SAVE_CANVAS_INPUT_SCHEMA
+
+    render_prop = _RENDER_CANVAS_INPUT_SCHEMA["properties"]["canvas_type"]
+    assert render_prop["deprecated"] is True
+    assert "plan_token" in render_prop["description"]
+    assert "DEPRECATED" in render_prop["description"]
+    # 값 검증 동작 자체는 안 바뀐다 — enum을 안 거는 폴백 계약은 그대로.
+    assert render_prop["type"] == "string"
+    # save_canvas는 manifest/operation_ref 경로가 아니다 — 폐기 표시가 없어야 한다.
+    save_prop = _SAVE_CANVAS_INPUT_SCHEMA["properties"]["canvas_type"]
+    assert "deprecated" not in save_prop
+    # data 안내문 계약(위 테스트)이 render_canvas 쪽 canvas_type 변경으로
+    # 깨지지 않았는지도 함께 고정한다 — 두 프로퍼티는 서로 독립이다.
+    assert render_prop["description"] != save_prop["description"]

@@ -1038,7 +1038,9 @@ async function runLiveQuery(query, expand) {
         source: 'live-cache',
         error: null,
         answerText: replay.answerText,
-        canvasTypes: [cachedJudgment.canvasType],
+        // 요청값(캐시된 판정)이 아니라 응답값(manifest가 실제로 정한 카드
+        // 종류) — P5부터 캐시 판정 객체가 canvasType을 안 들고 있다.
+        canvasTypes: [replay.canvasType],
         diagnostics: null,
         durationMs: replay.durationMs,
       };
@@ -1136,12 +1138,15 @@ async function runLiveQuery(query, expand) {
   // 문장 대신, 실제로 Claude가 쓴 답변을 그대로 보여준다.
   // 판정 저장(시맨틱 캐시) — 성공 + plan_token 렌더가 실제로 일어난 왕복만.
   // 같은 질문 2회차부터 모델 무호출 리플레이의 재료가 된다(runLiveQuery 진입부).
+  // 이 턴에 모델이 실제로 고른 canvas_type(chart/table)은 캐시 대상 여부를
+  // 거르는 그때그때의 필터일 뿐, 저장하는 판정 객체에는 담지 않는다 — 카드
+  // 종류는 이제 operation_ref의 순수 함수라(P5, canvas_push.py) 재생 시점에
+  // 백엔드가 다시 정하므로 캐싱이 불필요하다(fast-path.js가 응답값을 쓴다).
   if (result.ok && capturedResolveInput && capturedRenderInput
       && (capturedRenderInput.canvas_type === 'chart' || capturedRenderInput.canvas_type === 'table')) {
     liveQueryCache.set(query, {
       resolveQuestion: capturedResolveInput.question,
       resolveArgs: capturedResolveInput.arguments || {},
-      canvasType: capturedRenderInput.canvas_type,
       data: capturedRenderInput.data || {},
       caption: capturedRenderInput.caption || null,
     });

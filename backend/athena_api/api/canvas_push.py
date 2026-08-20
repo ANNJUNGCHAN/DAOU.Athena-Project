@@ -20,7 +20,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
-from typing import Any
+from typing import Annotated, Any
 
 from fastapi import APIRouter, Request, Response, WebSocket
 from fastapi.responses import JSONResponse
@@ -104,10 +104,18 @@ class RenderPlanRequest(BaseModel):
     낼 수 있는 4종(facts/table/compound/chart)을 전부 받아야 한다 — 안 그러면
     facts/compound 요청이 manifest 조회에 닿기도 전에 여기서 422로 죽는다
     (계획 §Q3 [r5·Critic 잔여]).
+
+    P5(2026-08-20)부터 `canvas_type` 자체가 선택이다 — 카드 종류는 이제
+    `operation_ref`의 순수 함수라 caller가 몰라도 된다(계획
+    `plan/공통화면-템플릿-실행계획-2026-08-20.md` P5). 앱의 캐시 리플레이
+    경로(`app/lib/main/fast-path.js`)는 더 이상 이 필드를 캐시 판정 객체에
+    담아두지 않고 아예 보내지 않는다 — 필드가 없으면(`None`) manifest 조회
+    결과와 비교할 대상이 없으므로 불일치 로그도 건너뛴다(무음 불일치와는
+    다르다 — 비교할 게 없다는 것과 비교했더니 달랐다는 것은 별개다).
     """
 
     plan_token: str = Field(min_length=1)
-    canvas_type: str = Field(pattern="^(chart|table|facts|compound)$")
+    canvas_type: Annotated[str, Field(pattern="^(chart|table|facts|compound)$")] | None = None
     data: dict[str, Any] = Field(default_factory=dict)
     caption: str | None = None
 
@@ -171,7 +179,7 @@ async def canvas_render_plan(
             }
         )
 
-    if payload.canvas_type != canvas_kind:
+    if payload.canvas_type is not None and payload.canvas_type != canvas_kind:
         logger.warning(
             "canvas_render_plan canvas_type 불일치 — caller=%s manifest=%s "
             "operation_ref=%s (manifest가 이긴다)",

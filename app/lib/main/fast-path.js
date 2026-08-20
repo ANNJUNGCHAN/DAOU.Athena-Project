@@ -5,6 +5,14 @@
 // 카드는 WS 사이드 채널로 도착한다(캔버스 먼저) — 이 모듈은 채팅 답만 만든다.
 // 답변은 결정론 템플릿(routine-turn.js와 같은 문법 — LLM 0)이라 지어낼 수 없고,
 // "이전 해석 재사용"을 항상 밝힌다(정직성 — 새 판단인 척하지 않는다).
+//
+// canvasType은 P5(2026-08-20)부터 캐시 판정 객체(judgment)에 담기지 않는다 —
+// 카드 종류는 이제 operation_ref의 순수 함수라 백엔드가 manifest 조회로
+// 정하고(canvas_push.py::canvas_render_plan), 판정 시점의 모델 선택은 낡을
+// 수 있다(캐시가 재생성 전 값을 들고 있을 수 있다). 그래서 이 모듈은
+// render-plan 요청에 canvas_type을 아예 싣지 않고, 응답이 돌려준 실제 값
+// (body.canvas_type)으로 답변 문구를 만든다 — 요청값이 아니라 응답값이
+// 권위다(app/chat.js의 canvasTypeLabel 주석과 같은 원칙).
 'use strict';
 
 function comma(n) {
@@ -12,12 +20,13 @@ function comma(n) {
   return n.toLocaleString('ko-KR');
 }
 
-// summary(backend render-plan 응답) + 판정 → 결정론 채팅 답변.
-function buildReplayAnswer(judgment, summary) {
+// canvasType(응답이 돌려준 실제 카드 종류) + judgmentData(캐시된 요청 인자 —
+// 종목명 라벨용) + summary(backend render-plan 응답) → 결정론 채팅 답변.
+function buildReplayAnswer(canvasType, judgmentData, summary) {
   const s = summary || {};
   const suffix = ' (같은 질문의 이전 해석을 재사용했습니다 — 데이터는 방금 새로 조회)';
-  if (judgment.canvasType === 'chart') {
-    const label = (judgment.data && (judgment.data.name || judgment.data.symbol)) || '요청 종목';
+  if (canvasType === 'chart') {
+    const label = (judgmentData && (judgmentData.name || judgmentData.symbol)) || '요청 종목';
     const parts = [`${label} 차트를 캔버스에 띄웠습니다`];
     if (s.rows_kept != null && s.first_time && s.last_time) {
       parts.push(`— 최근 ${s.rows_kept}봉(${s.first_time}~${s.last_time})`);
@@ -67,9 +76,12 @@ async function runCachedReplay({ judgment, backendBase, fetchImpl, clock }) {
     renderRes = await doFetch(`${backendBase}/api/v1/canvas/render-plan`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      // canvas_type 필드를 아예 안 싣는다(P5) — RenderPlanRequest.canvas_type은
+      // 이제 선택이고(canvas_push.py), 백엔드가 operation_ref로 manifest를
+      // 조회해 카드 종류를 정한다. 캐시가 낡은 판정을 들고 있어도 여기서
+      // 틀린 힌트를 보낼 일 자체가 없다.
       body: JSON.stringify({
         plan_token: planToken,
-        canvas_type: judgment.canvasType,
         data: judgment.data || {},
         caption: judgment.caption || null,
       }),
@@ -88,7 +100,8 @@ async function runCachedReplay({ judgment, backendBase, fetchImpl, clock }) {
   return {
     ok: true,
     summary: body.summary,
-    answerText: buildReplayAnswer(judgment, body.summary),
+    canvasType: body.canvas_type,
+    answerText: buildReplayAnswer(body.canvas_type, judgment.data, body.summary),
     durationMs: now() - startedAt,
   };
 }

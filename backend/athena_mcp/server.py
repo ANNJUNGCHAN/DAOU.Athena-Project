@@ -110,6 +110,31 @@ def _data_shape_hint() -> str:
 
 _DATA_PROPERTY: dict[str, Any] = {"type": "object", "description": _data_shape_hint()}
 
+# render_canvas 전용 canvas_type — P5(2026-08-20)부터 plan_token 경로에서는
+# deprecated로 표시한다(완전 제거는 아니다 — open-questions §3에 후속으로
+# 남긴다, 계획이 양자택일을 허용했고 하위호환을 보수적으로 선택했다).
+# `_CANVAS_TYPE_PROPERTY`를 그대로 재사용하지 않는 이유: 이 필드는
+# `_SAVE_CANVAS_INPUT_SCHEMA`에서는 여전히 필수·비폐기 값이고(save_canvas는
+# manifest/operation_ref 경로가 아니다), render_canvas 안에서도 plan_token이
+# **없는** 구경로(`_render_canvas`)에서는 여전히 모델이 직접 정하는 유효한
+# 값이다(P1b Deliverable 3, §7 전체 수용 기준 — "모델 판단 제거는 plan_token
+# 경로의 성질이지 시스템 전체의 불변식이 아니다"). 그래서 deprecated 표시는
+# render_canvas 스키마 하나에만, 설명문으로 범위를 명시해서 붙인다 — 전체
+# canvas_type 개념이 아니라 "plan_token과 함께 보낼 때"만 폐기 대상이다.
+_RENDER_CANVAS_CANVAS_TYPE_PROPERTY: dict[str, Any] = {
+    **_CANVAS_TYPE_PROPERTY,
+    "deprecated": True,
+    "description": (
+        _CANVAS_TYPE_PROPERTY["description"] + " "
+        "[DEPRECATED] plan_token을 함께 보내는 경로에서는 이 값을 무시한다 — "
+        "카드 종류는 백엔드가 operation_ref로 manifest를 조회해 결정한다"
+        "(P1b/P5, `plan/공통화면-템플릿-실행계획-2026-08-20.md`). 보내도 감사"
+        "로그의 불일치 힌트로만 쓰이고 렌더 결과에 영향을 주지 않으니, "
+        "plan_token을 쓸 때는 이 필드를 생략해도 된다. plan_token 없이 data를 "
+        "직접 구성해 보내는 경로에서는 여전히 이 값이 카드 종류를 결정한다."
+    ),
+}
+
 _RENDER_CANVAS_INPUT_SCHEMA: dict[str, Any] = {
     "type": "object",
     # `canvas_type`은 P1b(2026-08-20)부터 필수가 아니다 — plan_token 경로는
@@ -123,7 +148,7 @@ _RENDER_CANVAS_INPUT_SCHEMA: dict[str, Any] = {
     # 가정으로 넘기지 않는다).
     "required": ["data"],
     "properties": {
-        "canvas_type": _CANVAS_TYPE_PROPERTY,
+        "canvas_type": _RENDER_CANVAS_CANVAS_TYPE_PROPERTY,
         "data": _DATA_PROPERTY,
         # 데이터 지름길(2026-08-19, canvas_data.py) — 캔버스 우선·모델 무통과.
         "plan_token": {
