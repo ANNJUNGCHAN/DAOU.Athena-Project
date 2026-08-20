@@ -1248,3 +1248,60 @@ Win+←/→/↑/↓가 이 앱에서 OS 표준 창 단축키와 같은 뜻으로
 죽어 있으면 감시도 멈춘다(알림을 놓칠 뿐 오집행은 없다 — 확정 결정 2·3). 활성 루틴
 칩은 백엔드가 안 떠 있으면 숨긴다 — 없는 감시를 있다고 표시하지 않는다.
 
+## 공통화면 템플릿 — FactsCard/CompoundCard 실배선 + 모델 표면 축소 (2026-08-20, P0~P5)
+
+설계 정본은 `plan/공통화면-템플릿-실행계획-2026-08-20.md`다. 요지: 카드 **종류**는
+더 이상 모델이 `render_canvas` 호출 인자로 고르지 않는다 — `plan_token` 경로에서는
+백엔드가 실행 결과 `operation_ref`로 manifest(`presentation.layout`)를 조회해
+결정한다(콜드 경로 `canvas_data.py::render_with_plan`·캐시 경로
+`canvas_push.py::canvas_render_plan` 둘 다 같은 함수 `resolve_render_plan_kind`를
+공유). 앱 쪽 변경은 이 결선의 소비자다.
+
+**FactsCard/CompoundCard 렌더러 신설**(`canvas.js` `renderFactsCard`/
+`renderCompoundCard`, 셀 프리미티브 5종은 `lib/facts-card.js` — 가격/등락/수량/
+종목/일시, 필드별 개별 렌더러는 만들지 않는다). FactsCard는 필드 11개를 경계로
+1단(F1)/2열(F2) 그리드로 나뉘고(`groupFactsFields`, `SINGLE_GROUP_MAX=10`),
+CompoundCard는 같은 셀 프리미티브로 만든 헤더 밴드 + 표 1개로 고정이다. 표 빌더
+(`buildFoldedTable`)는 기존 `table` 카드와 **공유** — 컬럼 우선순위 fold 로직이
+갈라지는 것을 막는다. 카드 12종을 늘리지 않았다(기존 카드 종류의 소비 스키마만
+추가). 폭 등급은 `canvas-layout.js`가 결정한다 — facts는 컴팩트 반폭(stream/reader와
+같음), compound는 전폭(table과 같음). `innerHTML` 사용 0건 유지(전부
+`textContent`/DOM 노드).
+
+**차트 초기 주기**(P2a) — 일/주/월/년봉 8개 TR에 한해 manifest의
+`presentation.controls.default_period`가 카드 봉투의 `data.initial.period`로
+실린다. `chart-card.js`의 하드코딩 `'D'` 초기화를 이 값으로 대체하되, 값이 없거나
+(분/틱 4개 TR, P2b는 의도적으로 `null`) 인식 못 하는 값이면 기존 `'D'` 폴백을 그대로
+쓴다 — 실제 데이터가 일봉인데 툴바만 다른 주기를 가리키는 정보 정직성 위반을
+`resolveInitialPeriod`가 검증 후 실제 재샘플까지 수행해 막는다.
+
+**모델 표면 축소(P5)**: MCP 툴 스키마의 `render_canvas`용 `canvas_type`을
+`plan_token` 경로 한정으로 `deprecated: true` 표시했다(완전 제거는 하지 않음 —
+`save_canvas`와 `plan_token` 없는 구경로에서는 여전히 모델이 직접 정하는 유효한
+값이라 그쪽 스키마는 그대로 둔다). 앱의 시맨틱 캐시(`query-cache.js`/
+`fast-path.js`)는 `canvasType`을 캐시 판정 객체에서 뺐다 — 카드 종류는 이제
+`operation_ref`의 순수 함수라 캐싱이 무의미해졌고, 캐시 리플레이 답변 문구는
+render-plan **응답**의 실제 `canvas_type`으로 만든다(요청값이 아니라 응답값이
+권위 — 캐시가 낡은 판정을 들고 있어도 정확한 문구가 나온다). 이 변경의 자연스러운
+완결로 백엔드 `RenderPlanRequest.canvas_type`(`canvas_push.py`)도 선택 필드로
+전환했다 — 앱이 더 이상 보낼 값이 없기 때문이다.
+
+**미완·범위 밖(정직하게 기록)**: EventCard(23, WS)·ActionCard(12, 주문)·
+StatusCard(2, oauth) = 37개 매핑은 이번 라운드에서 손대지 않았다 — 여전히 모델/
+기존 서브시스템(루틴·주문 티켓·oauth) 소관이다. 264개 read/display **전부**가
+카드 *종류* 결선의 대상이다(facts 114 · table 121 · compound-generic 17 · 차트
+12 = 264) — 단 카드 *종류*와 별개 층위인 **초기 주기**는 차트 12개 중 8개(P2a,
+일/주/월/년봉)만 실제 값을 받는다. 분/틱 차트 4개 TR(P2b)은 카드 종류는 배선되지만
+초기 주기는 명시적 미배선(`presentation.controls.default_period=null` + 부정
+테스트로 고정, `chart-resample.js`의 의사난수 합성 재샘플은 그대로). "264/264 완전
+배선"이라고 뭉뚱그리면 카드 종류와 초기 주기가 같은 완성도라고 오독하게 된다.
+Paper 화면설계서에 경우별 대표 보드 58~70(13장)을 신설했지만, Paper 렌더 서비스
+타임아웃으로 **시각 검수(스크린샷)는 못했다** — 토큰 값(무채색·액센트 0·12px
+하한) 코드 대조로 대체 증거를 남겼을 뿐이다.
+
+**검증**: `npm run verify` 검증20(facts/compound 카드 — F1 그룹/행 수·가격 텍스트·
+등락 톤 클래스·일시 텍스트·종목 텍스트, F2 2열 그리드, compound 밴드·표 렌더) 신설
+— 2026-08-20 실행 기준 `npm test` 256건(fast-path 신규 2건 포함, 254→256) ·
+`npm run verify` 검증 1~20 전 단언 통과 · backend pytest 940건(937→940, canvas_type
+선택 필드·MCP 스키마 deprecated 표시 회귀 테스트 3건 추가).
+

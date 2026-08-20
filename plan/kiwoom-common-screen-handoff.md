@@ -22,7 +22,7 @@
 | 스토리 | 상태 | 의미 |
 |---|---|---|
 | G001 Canonical inventory and coverage manifest | 완료 | 301개 라우팅 매핑과 22개 제외 원본을 생성·검증함 |
-| G002 Normalized screen contracts and generated control hints | 진행 중, 미구현 | 다음 시작점 |
+| G002 Normalized screen contracts and generated control hints | **부분 완료** (2026-08-20) | `presentation.layout`(카드 종류)과 `presentation.controls.default_period`(제어 힌트)를 런타임 조회 authority로 승격 — 264개 read/display **전부**(facts/table/compound-generic/차트, P1a+P1b) 카드 종류 결선 완료. 카드 종류와 별개 층위인 초기 주기는 차트 12개 중 8개 TR(P2a)만 실값 배선, 나머지 4개(P2b, 분/틱)는 명시적 null. 원래 설계한 `ScreenDefinition`/`ScreenDocument` 풀 계약(§5)은 미구현 — EventCard/ActionCard/StatusCard(37개)는 범위 밖으로 후속 라운드에 남긴다. 커밋: 9fe46e4(경우의 수 매트릭스)·8da2aaa(P0 조인 증명)·014d122(P1a)·1d23c9f(P1b)·2879998(P4 렌더러)·1ee5d7b(P2a)·e653cc6(P2b) — 계획 `plan/공통화면-템플릿-실행계획-2026-08-20.md` |
 | G003 Shared Athena canvas and reusable screen states | 대기 | 공통 캔버스와 상태 컴포넌트 |
 | G004 Electron IPC, backend, and guarded workflow integration | 대기 | 안전한 preload/IPC 및 워크플로 연결 |
 | G005 Exhaustive route and field coverage verification | 대기 | 301개 전수 증명 |
@@ -313,7 +313,13 @@ guarded workflow다. live order는 절대 호출하지 마라.
 ## 10. 완료로 오인하면 안 되는 것
 
 - G001만 완료됐다. 전체 Ultragoal은 완료되지 않았다.
-- G002 `ScreenDefinition`/`ScreenDocument` 계약은 아직 구현되지 않았다.
+- G002는 **부분 완료**(2026-08-20, §1 표 참조) — 원래 설계한 `ScreenDefinition`/
+  `ScreenDocument` 풀 계약(§5)과 `listDefinitions/runRead/...` renderer API는
+  여전히 미구현이다. 구현된 것은 그 부분집합: manifest의 `presentation.layout`을
+  런타임 카드 종류 결정 authority로, `presentation.controls.default_period`를
+  차트 초기 주기 힌트로 승격한 것뿐이다(RALPLAN-DR Option A, `plan/공통화면-
+  템플릿-실행계획-2026-08-20.md` §4). EventCard/ActionCard/StatusCard(37개)는
+  손대지 않았다 — "G002 완료"라고 주장하면 안 된다.
 - Electron은 실제 FastAPI/키움 데이터가 아니라 mock canvas를 사용한다.
 - 301개 전수 DOM/IPC/field sentinel 검증은 아직 없다.
 - Paper 아트보드는 골격만 있고 최종 비평·완료 처리가 남았다.

@@ -1,9 +1,9 @@
 # Athena 진행 상황 및 재개 계획
 
-> 최종 갱신: 2026-08-19 (3차 병합 — `그래프` 채팅→LadybugDB 성향 파이프라인 합류:
-> gap 2건 폐쇄·ADR 게이트 G005 완성·Open WebUI 방식 로그 관리. 직전 2차 병합은
-> main 7차 능동 에이전트 P0~P4 + 디자인 8~10차 리퀴드 글래스·커맨드 카드·글자 크기.
-> §1 첫 블록이 병합 재실측) · 브랜치 `main`
+> 최종 갱신: 2026-08-20 (공통화면 템플릿 실행계획 P0~P5 완료 — TR→카드 결정론 결선.
+> `presentation.layout`/`presentation.controls.default_period`를 런타임 조회
+> authority로 승격해, plan_token 경로에서 모델의 canvas_type 판단을 제거했다.
+> §1 첫 블록이 이번 실측) · 브랜치 `main`
 >
 > 아래는 그 이전 상태다 — **`디자인` 브랜치 병합 완료.** 두 갈래가 합류했다:
 > ① 전 구간 지연 최적화(합의 계획 `.omc/plans/plan-latency-optimization.md`) — 진단 보고서는
@@ -33,7 +33,38 @@
 > 번호는 **갈래별로 독립**이다 — `main` 갈래(4차 키움·5차 지연)와 `디자인` 갈래
 > (4차 리사이즈~7차 휘도)가 같은 날짜에 병렬로 진행됐다. 병합 직후 재실측이 맨 위다.
 
-**2026-08-19 (시맨틱 캐시 리플레이) · 같은 질문 2회차 모델 무호출 — 이 수치가 현행이다:**
+**2026-08-20 (공통화면 템플릿 P0~P5) · TR→카드 결정론 결선 완료 후 재실측 — 이 수치가 현행이다:**
+
+```
+backend: 940 passed, 0 failed (xdist --dist loadgroup -n auto, 52.86초 — 1회 중
+         xdist 병렬 스케줄링 플레이크 1건 관측(test_render_plan_http_roundtrip_
+         chart_tick_tr_omits_initial_period, JSONDecodeError) → 단독 재실행(14
+         passed)과 xdist 재실행(940 passed) 둘 다 재현 안 됨, 코드 회귀 아님으로
+         판정) · ruff clean · generate_api.py --check current
+app:     npm test → 256 passed, 0 failed (254 + fast-path 신규 2) ·
+         npm run verify → 검증 1~20 전 단언 통과 · exit 0
+결선:    264개 read/display 매핑 전부(facts 114·table 121·compound-generic 17·
+         차트 12, event/action/status 37개는 범위 밖)가 카드 *종류* 결선의
+         대상이다 — plan_token 경로(콜드 canvas_data.py::render_with_plan + 캐시
+         canvas_push.py::canvas_render_plan) 양쪽에서 manifest(operation_ref→
+         presentation.layout) 조회로 결정된다(P0 8da2aaa·P1a 014d122·P1b
+         1d23c9f). 카드 종류와 별개 층위인 **초기 주기**는 차트 12개 중 8개만
+         (P2a 1ee5d7b, 일/주/월/년봉) presentation.controls.default_period로
+         실제 값을 받고, 나머지 4개(P2b e653cc6, 분/틱)는 null 명시 + 부정
+         테스트로 비배선을 고정했다 — "264/264 완전 배선"으로 뭉뚱그리지 않는다.
+         301개 라우팅 전부는 13개 "경우의 수"로
+         결정론적으로 접힌다(9fe46e4, 밴드 경계=LIST_UI_PAGE_SIZE 10/SCREEN_BUDGET
+         20, 합 301·누락 0). Paper 화면설계서에 경우별 대표 보드 58~70 신설(13장,
+         US-002) — get_screenshot 타임아웃으로 시각 검수는 미완, 코드 토큰 대조로
+         무채색·액센트 0·12px 하한 확증(대체 증거).
+P5:      MCP 툴 스키마 canvas_type(render_canvas)을 plan_token 경로 한정
+         deprecated로 표시(완전 제거는 보류, save_canvas와 plan_token 없는
+         구경로는 그대로 유효). query-cache.js/fast-path.js가 canvasType을 캐시
+         판정 객체에서 제거 — render-plan 응답의 실제 canvas_type(요청값이 아니라
+         응답값)으로 답변 문구를 만든다. 이 변경의 자연스러운 완결로 backend
+         RenderPlanRequest.canvas_type도 선택 필드로 전환(canvas_push.py) —
+         관련 신규 테스트 backend 3건·app 2건.
+```
 
 ```
 실측:   캐시 적중 시 "삼성전자 차트" **222~253ms**(resolve 재서명→render-plan 실행·
