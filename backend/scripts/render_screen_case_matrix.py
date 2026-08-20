@@ -18,19 +18,14 @@ and detail-split candidacy.
 from __future__ import annotations
 
 import argparse
-import json
-import sys
 from pathlib import Path
 from typing import Any
 
-BACKEND = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(BACKEND))
+from screen_render_shared import BACKEND, load_manifest, mapping_display_name
 
-from athena_api.generated.registry import DETAIL_REGISTRY, TR_REGISTRY  # noqa: E402
 from athena_api.output_profile import LIST_UI_PAGE_SIZE, SCREEN_BUDGET  # noqa: E402
 
 REPO_ROOT = BACKEND.parent
-MANIFEST_PATH = BACKEND / "ref" / "kiwoom-common-screen-manifest.json"
 OUTPUT_PATH = REPO_ROOT / "plan" / "kiwoom-common-screen-case-matrix.md"
 
 # 차트로 그리는 compound TR — plan/공통화면-템플릿-실행계획-2026-08-20.md 기준.
@@ -55,32 +50,6 @@ CASES: list[dict[str, str]] = [
     {"id": "S1", "card": "StatusCard", "name": "연결 상태", "rule": "layout=status"},
 ]
 CASE_BY_ID = {case["id"]: case for case in CASES}
-
-
-def load_manifest() -> dict[str, Any]:
-    return json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
-
-
-def escape_cell(value: str) -> str:
-    return value.replace("\\", "\\\\").replace("|", "\\|").replace("\r", "").replace("\n", "<br>")
-
-
-def tr_korean_name(tr_id: str) -> str | None:
-    spec = TR_REGISTRY.get(tr_id)
-    return spec.name if spec is not None else None
-
-
-def mapping_display_name(mapping: dict[str, Any]) -> str:
-    tr_id = mapping["operation"]["tr_id"]
-    parent_name = tr_korean_name(tr_id)
-    if mapping["mapping_type"] == "base":
-        return escape_cell(parent_name) if parent_name else "—"
-    detail = DETAIL_REGISTRY.get(mapping["mapping_id"])
-    if detail is None:
-        return "—"
-    detail_name = detail.title_ko or detail.title_en or detail.group_id
-    parent = parent_name or "—"
-    return f"{escape_cell(detail_name)} ({escape_cell(parent)})"
 
 
 def scalar_count(mapping: dict[str, Any]) -> int:
