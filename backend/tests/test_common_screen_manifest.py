@@ -197,3 +197,44 @@ def test_every_common_screen_mapping_has_exact_contract_fields_and_provenance() 
         assert mapping["provenance"]["output_profile"]["operation_id"] == tr_id
         assert mapping["contracts"]["request_model"].endswith(spec.request_model.__name__)
         assert mapping["contracts"]["response_model"].endswith(response_model.__name__)
+
+
+# P2a/P2b 차트 주기 배선 — 8TR(일/주/월/년봉)만 실제 default_period, 4TR(분/틱)은
+# null, 나머지 289TR은 controls 필드 자체가 없다(`plan/공통화면-템플릿-실행계획
+# -2026-08-20.md` P2a/P2b). 한글 TR명 키워드 매칭 드리프트를 잡기 위해 12개 전수를
+# 명시 allowlist로 고정한다 — 매칭 로직이 바뀌어 이 중 하나라도 값이 달라지면 이
+# 테스트가 먼저 실패한다(추측 대신 실패, quirks.py 원칙과 동형).
+_EXPECTED_CHART_DEFAULT_PERIODS = {
+    "base:ka10081": "D",  # 주식일봉차트조회요청
+    "base:ka10082": "W",  # 주식주봉차트조회요청
+    "base:ka10083": "M",  # 주식월봉차트조회요청
+    "base:ka10094": "Y",  # 주식년봉차트조회요청
+    "base:ka20006": "D",  # 업종일봉조회요청
+    "base:ka20007": "W",  # 업종주봉조회요청
+    "base:ka20008": "M",  # 업종월봉조회요청
+    "base:ka20019": "Y",  # 업종년봉조회요청
+    "base:ka10079": None,  # 주식틱차트조회요청 — P2b 의도적 비배선
+    "base:ka10080": None,  # 주식분봉차트조회요청 — P2b 의도적 비배선
+    "base:ka20004": None,  # 업종틱차트조회요청 — P2b 의도적 비배선
+    "base:ka20005": None,  # 업종분봉조회요청 — P2b 의도적 비배선
+}
+
+
+def test_common_screen_manifest_chart_default_period_wiring_is_exact() -> None:
+    manifest = _json(MANIFEST_PATH)
+    by_id = {mapping["mapping_id"]: mapping for mapping in manifest["mappings"]}
+
+    actual = {
+        mapping_id: by_id[mapping_id]["presentation"]["controls"]["default_period"]
+        for mapping_id in _EXPECTED_CHART_DEFAULT_PERIODS
+    }
+    assert actual == _EXPECTED_CHART_DEFAULT_PERIODS
+
+    # 이 12개 밖에서는 controls 필드가 아예 없어야 한다 — "값이 없다"(비차트)와
+    # "값이 null이다"(P2b 비배선)를 매니페스트 레벨에서 구조적으로 구분한다.
+    with_controls = {
+        mapping["mapping_id"]
+        for mapping in manifest["mappings"]
+        if mapping["presentation"].get("controls") is not None
+    }
+    assert with_controls == set(_EXPECTED_CHART_DEFAULT_PERIODS)

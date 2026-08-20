@@ -130,6 +130,73 @@ async def test_render_with_plan_chart_fills_envelope_and_summary(tmp_path: Path,
     assert pushed["data"]["symbol"] == "005930"
     assert len(pushed["data"]["bars"]) == 10
     assert pushed["data"]["bars"][0]["time"] < pushed["data"]["bars"][-1]["time"]
+    # P2a — ka10081(주식일봉차트조회요청)은 default_period="D".
+    assert pushed["data"]["initial"] == {"period": "D"}
+
+
+async def test_render_with_plan_chart_weekly_tr_carries_initial_period_w(mock_http_client):
+    """P2a 수용 기준의 "주봉 경로 실제 테스트"(콜드 경로) — base:ka10082(주식주봉
+    차트조회요청)를 render_with_plan으로 실행하면 사이드 채널로 밀리는 봉투에
+    initial.period="W"가 실려야 한다. 실 자격증명 캡처 대신 이 백엔드 테스트로
+    배선을 증명한다(팀장 지시: 생략 시 생략 사실을 보고)."""
+    seen = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        if request.url.path == "/api/v1/canvas/push":
+            seen["pushed_envelope"] = json.loads(request.content)
+            return httpx.Response(200, json={"queued": True})
+        return httpx.Response(
+            200,
+            json={
+                "operation_ref": "base:ka10082",
+                "data": {"stk_stk_pole_chart_qry": _chart_rows(5)},
+            },
+        )
+
+    result = await render_with_plan(
+        {
+            "canvas_type": "chart",
+            "plan_token": "tok-w",
+            "data": {"symbol": "005930", "name": "삼성전자"},
+        },
+        mock_http_client(handler),
+        call_timeout_seconds=5.0,
+    )
+    assert result.isError is False
+    assert seen["pushed_envelope"]["data"]["initial"] == {"period": "W"}
+
+
+async def test_render_with_plan_chart_tick_tr_omits_initial_period(mock_http_client):
+    """P2b(분/틱 4TR, 의도적 비배선, 콜드 경로) — base:ka10079(주식틱차트조회요청)
+    는 manifest에 default_period=null이 있어도 봉투에 "initial" 키 자체가 없다.
+    틱 실제 필드는 cntr_tm(체결시간)이라 dt가 없지만, 여기서는 initial 배선만
+    격리 검증하기 위해 dt를 포함한 형상을 쓴다(build_chart_bars 성공 여부는
+    이 테스트의 관심사가 아니다 — 후속 라운드 필요조건 1 참조)."""
+    seen = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        if request.url.path == "/api/v1/canvas/push":
+            seen["pushed_envelope"] = json.loads(request.content)
+            return httpx.Response(200, json={"queued": True})
+        return httpx.Response(
+            200,
+            json={
+                "operation_ref": "base:ka10079",
+                "data": {"stk_tic_chart_qry": _chart_rows(5)},
+            },
+        )
+
+    result = await render_with_plan(
+        {
+            "canvas_type": "chart",
+            "plan_token": "tok-tick",
+            "data": {"symbol": "005930"},
+        },
+        mock_http_client(handler),
+        call_timeout_seconds=5.0,
+    )
+    assert result.isError is False
+    assert "initial" not in seen["pushed_envelope"]["data"]
 
 
 async def test_render_with_plan_requires_symbol_for_chart(mock_http_client):
