@@ -7,10 +7,11 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
 const path = require('node:path');
 const {
   toCandleSeriesData, toVolumeSeriesData, withAlpha, UP_COLOR, DOWN_COLOR,
-  resolveInitialPeriod, createCachedChartLibraryLoader,
+  resolveInitialPeriod, createCachedChartLibraryLoader, renderNowAndOnNextFrame,
 } = require('./chart-card');
 
 const FIXTURE = require(path.join(__dirname, '..', 'data', 'chart-mock-ohlcv.json'));
@@ -32,6 +33,24 @@ test('cold-start chart import is started once and every renderer awaits the same
   assert.deepEqual(await prewarm, { library: { createChart: (await firstRender).library.createChart }, readyAt: 123.5 });
   assert.strictEqual(load(), prewarm);
   assert.equal(imports, 1);
+});
+
+test('volume-profile toggle renders immediately even when the next animation frame is withheld', () => {
+  const calls = [];
+  let queuedFrame = null;
+  renderNowAndOnNextFrame(
+    () => calls.push('render'),
+    (callback) => { queuedFrame = callback; },
+  );
+  assert.deepEqual(calls, ['render']);
+  assert.equal(typeof queuedFrame, 'function');
+  queuedFrame();
+  assert.deepEqual(calls, ['render', 'render']);
+  const source = fs.readFileSync(path.join(__dirname, 'chart-card.js'), 'utf8');
+  assert.match(
+    source,
+    /onVolumeProfileToggle:\s*\(on\)\s*=>\s*\{[\s\S]*?renderNowAndOnNextFrame\(renderVolumeProfile\)/,
+  );
 });
 
 test('chart-mock-ohlcv.json: 240 일봉, OHLC 정합(low<=open/close<=high)', () => {
