@@ -14,6 +14,7 @@ sys.path.insert(0, str(SCRIPTS))
 sys.path.insert(0, str(BACKEND))
 
 fit_dissonance_check = importlib.import_module("fit_dissonance_check")
+capture_screen_render_evidence = importlib.import_module("capture_screen_render_evidence")
 
 
 @pytest.fixture(scope="module")
@@ -183,11 +184,8 @@ def test_validate_override_rejects_unknown_rule_and_missing_rescore() -> None:
     assert not fit_dissonance_check.validate_override({"rescored_fit": 1})
 
 
-def test_exit_code_three_tier_semantics(tmp_path: Path) -> None:
-    """§6.3 요구: 서킷브레이커 위반=1, 자동 통과+사람표본 미완=2, 전부 통과=0.
-    현재 저장소 상태(사람 채점 0/N, override/free-canvas 없음)에서는 FORMATTER_MISSING
-    zero-tolerance가 실제로 존재해 exit 1이 나오는 것이 정직한 현재 상태다 — 이 테스트는
-    스크립트가 실행 가능하고 exit code가 정의된 값(0/1/2) 중 하나임을 검증한다."""
+def test_complete_machine_gate_exits_zero_without_fabricated_human_labels(tmp_path: Path) -> None:
+    """완전 screen definitions와 최신 렌더 증거가 통과하면 사람 표본은 advisory다."""
     completed = subprocess.run(
         [sys.executable, str(SCRIPTS / "fit_dissonance_check.py"), "--check", "--stamp", "test"],
         cwd=str(BACKEND),
@@ -196,8 +194,48 @@ def test_exit_code_three_tier_semantics(tmp_path: Path) -> None:
         encoding="utf-8",
         env={"PYTHONIOENCODING": "utf-8"},
     )
-    assert completed.returncode in (0, 1, 2)
-    assert "EXIT" in completed.stdout
+    assert completed.returncode == 0, completed.stdout + completed.stderr
+    assert "EXIT 0" in completed.stdout
+    assert "human_review_advisory" in completed.stdout
+
+
+def test_checked_in_renderer_evidence_is_current_and_provenanced() -> None:
+    completed = subprocess.run(
+        [sys.executable, str(SCRIPTS / "capture_screen_render_evidence.py"), "--check"],
+        cwd=str(BACKEND),
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        env={"PYTHONIOENCODING": "utf-8"},
+    )
+    assert completed.returncode == 0, completed.stdout + completed.stderr
+
+    evidence = json.loads(
+        capture_screen_render_evidence.EVIDENCE_PATH.read_text(encoding="utf-8")
+    )
+    assert evidence["coverage"]["fit_gate_representative_cases"] == [
+        "A1",
+        "C1",
+        "C2",
+        "E1",
+        "E2",
+        "E3",
+        "F1",
+        "F2",
+        "S1",
+        "T1",
+        "T2",
+        "T3",
+        "T4",
+    ]
+    assert evidence["coverage"]["all_paper_cases_visual_status"] == "complete"
+    assert evidence["coverage"]["paper_cases_without_case_specific_machine_evidence"] == []
+    assert len(evidence["representative_cases"]) == 13
+    assert all(case["status"] == "pass" for case in evidence["representative_cases"])
+    assert all(
+        all(all(group.values()) for group in case["report_assertions"].values())
+        for case in evidence["representative_cases"]
+    )
 
 
 def test_outputs_are_written_as_valid_utf8_json() -> None:
@@ -224,3 +262,9 @@ def test_outputs_are_written_as_valid_utf8_json() -> None:
     )
     assert scorecard["aggregate"]["auto_scored"] == 289
     assert scorecard["aggregate"]["order_popup_checklist_scored"] == 12
+    assert scorecard["aggregate"]["zero_tolerance_violation_count"] == 0
+    assert scorecard["provenance"]["screen_definitions_present"] is True
+    assert scorecard["provenance"]["scoring_mode"] == "screen_definitions_complete"
+    assert scorecard["machine_render_evidence"]["coverage"]["fit_gate_status"] == "pass"
+    assert scorecard["human_review_advisory"]["required_for_machine_gate"] is False
+    assert scorecard["human_review_advisory"]["status"] == "pending"

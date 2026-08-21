@@ -1,0 +1,437 @@
+{
+  "schema_version": 1,
+  "evidence_kind": "machine_renderer_provenance",
+  "source_report": {
+    "path": "app/captures/VERIFY-REPORT.json",
+    "sha256": "cf5c9b428a580bff38ee1067521065e54d23c9bb82222830a168c1679394a681",
+    "started_at": "2026-08-21T02:18:27.565Z",
+    "finished_at": "2026-08-21T02:19:17.633Z",
+    "command": "cd app && npm run verify"
+  },
+  "source_hashes": {
+    "app/verify.js": "38cfc9a6911496fc544d1d7e7aa73422107aa5fe1aee178615c6c3db5088152d",
+    "app/canvas.html": "1d0db1c14057b0cb02ee110f3604c1044c3d3cbc0e8f3f3cc9448dab23dc62a6",
+    "app/canvas.js": "11f2c14220f12910a293aeafa5629b55b2390beeb5fcb15ae39f0682305e7c9a",
+    "app/canvas.css": "54d01e07c7d858a5b30cd1e228564451f50389ddc90f5374678d5cc1d8c04209",
+    "app/lib/canvas-layout.js": "98023857555c3dda00124c27e55056b7ee04a3603887a16a059ef0b5d29bda55",
+    "app/lib/chart-card.js": "589692bec4c465688ca8238faf17c9f62b540dff4ade46f8a487e6a4007c9e85",
+    "backend/ref/kiwoom-screen-definitions.json": "7e03c82db221b2736251acf4bb669ffcaacfdf7a32fb8b770a5f8f39952ae79b"
+  },
+  "representative_cases": [
+    {
+      "template_case_id": "A1",
+      "screen_id": "AT-CV-005:A1",
+      "report_assertions": {
+        "dom": {
+          "connected": true,
+          "nonzeroRect": true,
+          "bodyHasContent": true,
+          "screenIdMatches": true
+        },
+        "layout": {
+          "cardMeasured": true,
+          "paperWidthApplied": true
+        },
+        "controls": {
+          "closeControlRendered": true,
+          "protectedActionsAbsent": true
+        },
+        "states": {
+          "declaredStateRendered": true,
+          "displayOnlyGuardRendered": true
+        }
+      },
+      "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+      "screenshot": "app/captures/paper-A1.png",
+      "screenshot_sha256": "61dac189929c36a5315e2168d8e35faf1d5f5f8e07a0596c1e7cfaa026f89655",
+      "status": "pass"
+    },
+    {
+      "template_case_id": "C1",
+      "screen_id": "AT-CV-005:C1",
+      "report_assertions": {
+        "dom": {
+          "connected": true,
+          "nonzeroRect": true,
+          "bodyHasContent": true,
+          "screenIdMatches": true
+        },
+        "layout": {
+          "cardMeasured": true,
+          "paperWidthApplied": true
+        },
+        "controls": {
+          "closeControlRendered": true,
+          "protectedActionsAbsent": true
+        },
+        "states": {
+          "declaredStateRendered": true,
+          "displayOnlyGuardRendered": true
+        }
+      },
+      "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+      "screenshot": "app/captures/paper-C1.png",
+      "screenshot_sha256": "05fdc316b9a77bbafe54c33143f4ac1d82eede227dafc629f338a1e2e9383669",
+      "status": "pass"
+    },
+    {
+      "template_case_id": "C2",
+      "screen_id": "AT-CV-005:C2",
+      "report_assertions": {
+        "dom": {
+          "connected": true,
+          "nonzeroRect": true,
+          "bodyHasContent": true,
+          "screenIdMatches": true
+        },
+        "layout": {
+          "cardMeasured": true,
+          "paperWidthApplied": true
+        },
+        "controls": {
+          "closeControlRendered": true,
+          "protectedActionsAbsent": true
+        },
+        "states": {
+          "declaredStateRendered": true,
+          "displayOnlyGuardRendered": true
+        }
+      },
+      "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+      "screenshot": "app/captures/paper-C2.png",
+      "screenshot_sha256": "2dcb6a9bd042b66753dd4b796a5ed8ff43d8fb314e029a11876ca9c302f92aca",
+      "status": "pass"
+    },
+    {
+      "template_case_id": "E1",
+      "screen_id": "AT-CV-005:E1",
+      "report_assertions": {
+        "dom": {
+          "connected": true,
+          "nonzeroRect": true,
+          "bodyHasContent": true,
+          "screenIdMatches": true
+        },
+        "layout": {
+          "cardMeasured": true,
+          "paperWidthApplied": true
+        },
+        "controls": {
+          "closeControlRendered": true,
+          "protectedActionsAbsent": true
+        },
+        "states": {
+          "declaredStateRendered": true,
+          "displayOnlyGuardRendered": true
+        }
+      },
+      "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+      "screenshot": "app/captures/paper-E1.png",
+      "screenshot_sha256": "57df12b9a964d0e7992e6491585b424f91376bf585f8074aa26c15af7e702332",
+      "status": "pass"
+    },
+    {
+      "template_case_id": "E2",
+      "screen_id": "AT-CV-005:E2",
+      "report_assertions": {
+        "dom": {
+          "connected": true,
+          "nonzeroRect": true,
+          "bodyHasContent": true,
+          "screenIdMatches": true
+        },
+        "layout": {
+          "cardMeasured": true,
+          "paperWidthApplied": true
+        },
+        "controls": {
+          "closeControlRendered": true,
+          "protectedActionsAbsent": true
+        },
+        "states": {
+          "declaredStateRendered": true,
+          "displayOnlyGuardRendered": true
+        }
+      },
+      "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+      "screenshot": "app/captures/paper-E2.png",
+      "screenshot_sha256": "3126f2f10888bff80a97d4d7b93b13e8fce55f870febde83c26f494a597782b3",
+      "status": "pass"
+    },
+    {
+      "template_case_id": "E3",
+      "screen_id": "AT-CV-005:E3",
+      "report_assertions": {
+        "dom": {
+          "connected": true,
+          "nonzeroRect": true,
+          "bodyHasContent": true,
+          "screenIdMatches": true
+        },
+        "layout": {
+          "cardMeasured": true,
+          "paperWidthApplied": true
+        },
+        "controls": {
+          "closeControlRendered": true,
+          "protectedActionsAbsent": true
+        },
+        "states": {
+          "declaredStateRendered": true,
+          "displayOnlyGuardRendered": true
+        }
+      },
+      "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+      "screenshot": "app/captures/paper-E3.png",
+      "screenshot_sha256": "3846574194a8bb8bd927a6d92b4da34f314943198d4880d6223e03de9719507b",
+      "status": "pass"
+    },
+    {
+      "template_case_id": "F1",
+      "screen_id": "AT-CV-005:F1",
+      "report_assertions": {
+        "dom": {
+          "connected": true,
+          "nonzeroRect": true,
+          "bodyHasContent": true,
+          "screenIdMatches": true
+        },
+        "layout": {
+          "cardMeasured": true,
+          "paperWidthApplied": true
+        },
+        "controls": {
+          "closeControlRendered": true,
+          "protectedActionsAbsent": true
+        },
+        "states": {
+          "declaredStateRendered": true,
+          "displayOnlyGuardRendered": true
+        }
+      },
+      "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+      "screenshot": "app/captures/paper-F1.png",
+      "screenshot_sha256": "bd750137360a68ece0e9cec72e9d3770b90840ade19064adf5e1bf1178027d6a",
+      "status": "pass"
+    },
+    {
+      "template_case_id": "F2",
+      "screen_id": "AT-CV-005:F2",
+      "report_assertions": {
+        "dom": {
+          "connected": true,
+          "nonzeroRect": true,
+          "bodyHasContent": true,
+          "screenIdMatches": true
+        },
+        "layout": {
+          "cardMeasured": true,
+          "paperWidthApplied": true
+        },
+        "controls": {
+          "closeControlRendered": true,
+          "protectedActionsAbsent": true
+        },
+        "states": {
+          "declaredStateRendered": true,
+          "displayOnlyGuardRendered": true
+        }
+      },
+      "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+      "screenshot": "app/captures/paper-F2.png",
+      "screenshot_sha256": "b56959510b4092580c3da6cc2ed174365ad82b22a1a645ee60f97539a7de8686",
+      "status": "pass"
+    },
+    {
+      "template_case_id": "S1",
+      "screen_id": "AT-CV-005:S1",
+      "report_assertions": {
+        "dom": {
+          "connected": true,
+          "nonzeroRect": true,
+          "bodyHasContent": true,
+          "screenIdMatches": true
+        },
+        "layout": {
+          "cardMeasured": true,
+          "paperWidthApplied": true
+        },
+        "controls": {
+          "closeControlRendered": true,
+          "protectedActionsAbsent": true
+        },
+        "states": {
+          "declaredStateRendered": true,
+          "displayOnlyGuardRendered": true
+        }
+      },
+      "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+      "screenshot": "app/captures/paper-S1.png",
+      "screenshot_sha256": "535519d2911c335c60d8e39b33885be9eca6250b8a4dfe7fe5b59c950aee998a",
+      "status": "pass"
+    },
+    {
+      "template_case_id": "T1",
+      "screen_id": "AT-CV-005:T1",
+      "report_assertions": {
+        "dom": {
+          "connected": true,
+          "nonzeroRect": true,
+          "bodyHasContent": true,
+          "screenIdMatches": true
+        },
+        "layout": {
+          "cardMeasured": true,
+          "paperWidthApplied": true
+        },
+        "controls": {
+          "closeControlRendered": true,
+          "protectedActionsAbsent": true
+        },
+        "states": {
+          "declaredStateRendered": true,
+          "displayOnlyGuardRendered": true
+        }
+      },
+      "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+      "screenshot": "app/captures/paper-T1.png",
+      "screenshot_sha256": "3f3fb701e4eefb47818322b932d799379e03380d1ca08978723b15b2dc3e0df7",
+      "status": "pass"
+    },
+    {
+      "template_case_id": "T2",
+      "screen_id": "AT-CV-005:T2",
+      "report_assertions": {
+        "dom": {
+          "connected": true,
+          "nonzeroRect": true,
+          "bodyHasContent": true,
+          "screenIdMatches": true
+        },
+        "layout": {
+          "cardMeasured": true,
+          "paperWidthApplied": true
+        },
+        "controls": {
+          "closeControlRendered": true,
+          "protectedActionsAbsent": true
+        },
+        "states": {
+          "declaredStateRendered": true,
+          "displayOnlyGuardRendered": true
+        }
+      },
+      "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+      "screenshot": "app/captures/paper-T2.png",
+      "screenshot_sha256": "659e8301640c3e2ca2cd91b43b4b4b08bcf98c99ceeccc1911ec4b9acb81729f",
+      "status": "pass"
+    },
+    {
+      "template_case_id": "T3",
+      "screen_id": "AT-CV-005:T3",
+      "report_assertions": {
+        "dom": {
+          "connected": true,
+          "nonzeroRect": true,
+          "bodyHasContent": true,
+          "screenIdMatches": true
+        },
+        "layout": {
+          "cardMeasured": true,
+          "paperWidthApplied": true
+        },
+        "controls": {
+          "closeControlRendered": true,
+          "protectedActionsAbsent": true
+        },
+        "states": {
+          "declaredStateRendered": true,
+          "displayOnlyGuardRendered": true
+        }
+      },
+      "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+      "screenshot": "app/captures/paper-T3.png",
+      "screenshot_sha256": "d857a1d93b081967ae0838ac6b79e80a28927a5e9ae130c53e0862f354ebd4ef",
+      "status": "pass"
+    },
+    {
+      "template_case_id": "T4",
+      "screen_id": "AT-CV-005:T4",
+      "report_assertions": {
+        "dom": {
+          "connected": true,
+          "nonzeroRect": true,
+          "bodyHasContent": true,
+          "screenIdMatches": true
+        },
+        "layout": {
+          "cardMeasured": true,
+          "paperWidthApplied": true
+        },
+        "controls": {
+          "closeControlRendered": true,
+          "protectedActionsAbsent": true
+        },
+        "states": {
+          "declaredStateRendered": true,
+          "displayOnlyGuardRendered": true
+        }
+      },
+      "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+      "screenshot": "app/captures/paper-T4.png",
+      "screenshot_sha256": "70cc4aef140bc47299c9a566a69aafb9eb03228d75303d80c86e17d0b55f17fd",
+      "status": "pass"
+    }
+  ],
+  "coverage": {
+    "fit_gate_representative_cases": [
+      "A1",
+      "C1",
+      "C2",
+      "E1",
+      "E2",
+      "E3",
+      "F1",
+      "F2",
+      "S1",
+      "T1",
+      "T2",
+      "T3",
+      "T4"
+    ],
+    "fit_gate_status": "pass",
+    "all_paper_template_cases": [
+      "A1",
+      "C1",
+      "C2",
+      "E1",
+      "E2",
+      "E3",
+      "F1",
+      "F2",
+      "S1",
+      "T1",
+      "T2",
+      "T3",
+      "T4"
+    ],
+    "paper_cases_with_machine_screenshot_dom_evidence": [
+      "A1",
+      "C1",
+      "C2",
+      "E1",
+      "E2",
+      "E3",
+      "F1",
+      "F2",
+      "S1",
+      "T1",
+      "T2",
+      "T3",
+      "T4"
+    ],
+    "paper_cases_without_case_specific_machine_evidence": [],
+    "all_paper_cases_visual_status": "complete",
+    "note": "Every approved Paper case has current case-specific renderer DOM, layout, control, state, and screenshot evidence."
+  }
+}
