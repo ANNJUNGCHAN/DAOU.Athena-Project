@@ -19,6 +19,7 @@ from athena_mcp.client import ResponseTooLargeError, ServerCrashedError
 from athena_mcp.consent import ConsentStore
 from athena_mcp.registry import ServerRegistry
 from athena_mcp.result import ERROR_ORIGIN_META_KEY
+from athena_mcp.selector_tools import CALL_TOOL
 from athena_mcp.server import RENDER_CANVAS_TOOL, SAVE_CANVAS_TOOL, AthenaGateway, build_mcp_server
 
 FIXTURE_SERVER = Path(__file__).resolve().parent / "fixtures" / "fake_server.py"
@@ -268,6 +269,16 @@ async def test_render_canvas_tool_schema_accepts_missing_canvas_type_via_real_sd
 
     gw = make_gateway(handler)
     server = build_mcp_server(gw)
+    list_handler = server.request_handlers[types.ListToolsRequest]
+    listed = await list_handler(types.ListToolsRequest(method="tools/list"))
+    render_tool = next(tool for tool in listed.root.tools if tool.name == RENDER_CANVAS_TOOL)
+    assert render_tool.inputSchema["anyOf"] == [
+        {"required": ["plan_token"]},
+        {"required": ["data"]},
+    ]
+    assert render_tool.inputSchema["properties"]["plan_token"]["type"] == "string"
+    assert "summary" not in render_tool.description
+    assert "data 없이" in render_tool.description
     call_handler = server.request_handlers[types.CallToolRequest]
 
     request = types.CallToolRequest(
@@ -276,7 +287,7 @@ async def test_render_canvas_tool_schema_accepts_missing_canvas_type_via_real_sd
             name=RENDER_CANVAS_TOOL,
             # canvas_type 생략 — 스키마 완화 전이었다면 "required" 위반으로
             # jsonschema가 게이트웨이 코드 도달 전에 거부했어야 한다.
-            arguments={"plan_token": "tok", "data": {}},
+            arguments={"plan_token": "tok"},
         ),
     )
     server_result = await call_handler(request)
@@ -284,13 +295,80 @@ async def test_render_canvas_tool_schema_accepts_missing_canvas_type_via_real_sd
     assert result.isError is False
     payload = json.loads(result.content[0].text)
     assert payload["canvas_type"] == "facts"
+    assert set(payload) == {
+        "canvas_type",
+        "pushed",
+        "fell_back",
+        "fallback_reason",
+        "trimmed",
+        "partial",
+    }
+    assert "tok" not in result.content[0].text
+    assert "1234567890" not in result.content[0].text
+    assert "summary" not in result.content[0].text
+
+    legacy_request = types.CallToolRequest(
+        method="tools/call",
+        params=types.CallToolRequestParams(
+            name=RENDER_CANVAS_TOOL,
+            arguments={"canvas_type": "free", "data": {"legacy": "non-kiwoom"}},
+        ),
+    )
+    legacy_result = (await call_handler(legacy_request)).root
+    assert legacy_result.isError is False
+    assert json.loads(legacy_result.content[0].text)["data"] == {"legacy": "non-kiwoom"}
+
+
+async def test_actual_mcp_call_returns_value_free_websocket_lifecycle_receipts(make_gateway):
+    fixture_by_token = {
+        "start-secret": {"trnm": "REG", "return_code": "0"},
+        "stop-secret": {"trnm": "REMOVE", "return_code": "0"},
+        "reconnect-secret": {"lifecycle": "reconnecting", "return_code": "0"},
+        "reconnected-secret": {"lifecycle": "reconnected", "return_code": "0"},
+        "error-secret": {"trnm": "REG", "return_code": "-1", "return_msg": "raw failure"},
+    }
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        assert request.url.path == "/api/v1/llm/tools/call"
+        token = json.loads(request.content)["plan_token"]
+        return httpx.Response(
+            200,
+            json={
+                "operation_ref": "base:0B",
+                "data": {
+                    **fixture_by_token[token],
+                    "data": [{"type": "0B", "values": {"10": "73500", "15": "1200"}}],
+                },
+            },
+        )
+
+    server = build_mcp_server(make_gateway(handler))
+    call_handler = server.request_handlers[types.CallToolRequest]
+    expected = {
+        "start-secret": ("started", False),
+        "stop-secret": ("stopped", False),
+        "reconnect-secret": ("reconnecting", False),
+        "reconnected-secret": ("reconnected", False),
+        "error-secret": ("error", True),
+    }
+    for token, (state, is_error) in expected.items():
+        request = types.CallToolRequest(
+            method="tools/call",
+            params=types.CallToolRequestParams(name=CALL_TOOL, arguments={"plan_token": token}),
+        )
+        result = (await call_handler(request)).root
+        payload = json.loads(result.content[0].text)
+        assert result.isError is is_error
+        assert payload["lifecycle"] == state
+        assert set(payload) == {"lifecycle", "receipt"}
+        for forbidden in (token, "73500", "1200", "values", "return_msg", "raw failure"):
+            assert forbidden not in result.content[0].text
 
 
 async def test_render_canvas_direct_data_still_requires_input_validation_for_missing_data(
     make_gateway,
 ):
-    """`data`는 이번 완화 대상이 아니다 — 여전히 required다(스코프 확인용
-    회귀, canvas_type만 뺐다는 것의 반증)."""
+    """plan_token과 data가 모두 없으면 SDK 입력 검증에서 닫힌다."""
 
     def handler(_request):
         raise AssertionError("호출되면 안 된다 — SDK 검증 단계에서 거부돼야 한다")
@@ -306,7 +384,7 @@ async def test_render_canvas_direct_data_still_requires_input_validation_for_mis
     server_result = await call_handler(request)
     result = server_result.root
     assert result.isError is True
-    assert "data" in result.content[0].text
+    assert "not valid under any" in result.content[0].text
 
 
 async def test_render_canvas_direct_facts_payload_without_plan_token_still_renders(tmp_path):
@@ -899,7 +977,10 @@ def test_render_canvas_data_description_lists_all_shapes():
     assert "free" in desc
     # 검증 동작 자체는 그대로여야 한다 — 안내문은 판정에 관여하지 않는다.
     assert _RENDER_CANVAS_INPUT_SCHEMA["properties"]["data"]["type"] == "object"
-    assert _SAVE_CANVAS_INPUT_SCHEMA["properties"]["data"]["description"] == desc
+    save_desc = _SAVE_CANVAS_INPUT_SCHEMA["properties"]["data"]["description"]
+    assert save_desc in desc
+    assert "legacy/non-Kiwoom" in desc
+    assert "plan_token" not in save_desc
 
 
 def test_render_canvas_canvas_type_deprecated_for_plan_token_path_only():

@@ -1,4 +1,4 @@
-"""render_canvas의 plan_token 데이터 지름길 — 캔버스 우선, 데이터는 모델을 안 거친다.
+"""MCP 캔버스 side-channel과 WebSocket 수명주기 영수증 계약.
 
 2026-08-19 실측 배경: 차트 질의에서 모델이 athena_call로 받은 대형 응답을 컨텍스트에
 삼키고(입력), 카드 봉투를 손으로 옮겨 적고(출력 — 가장 느린 구간), 그 봉투가 툴
@@ -7,20 +7,20 @@
 
     athena_resolve → plan_token → athena__render_canvas(plan_token, ...)
       → 게이트웨이가 백엔드에서 데이터를 직접 실행·변환해 봉투를 채운다
-      → 봉투는 툴 결과에 실려 앱이 즉시 카드를 그리고(캔버스 먼저),
-      → 모델은 payload.summary(최신값·기간·행수)만으로 채팅에 답한다.
+      → 봉투는 ``/canvas/push`` side-channel로만 보내 앱이 즉시 그린다
+      → 모델에는 데이터 요약이 아닌 display receipt만 돌아간다.
 
 변환은 전부 결정적이다(CLAUDE.md §7 — 모델 호출·무작위성 없음). 변환 불가능한
-형상이면 조용히 그리지 않고 에러로 안내한다(athena_call 직접 경로가 폴백).
+형상이면 payload를 모델로 되돌리지 않고 명시 오류로 닫는다.
 
 **카드 종류는 모델이 아니라 manifest가 결정한다**(P1b, 2026-08-20 — 계획
 `plan/공통화면-템플릿-실행계획-2026-08-20.md`). 모델이 인자로 보낸 `canvas_type`은
 더 이상 분기 조건이 아니라 감사용 힌트다 — plan을 실행해 얻은 `operation_ref`로
 `athena_api.screen_manifest`(경유 `canvas_transform.resolve_render_plan_kind`)를
 조회해 카드 종류를 결정하고, 모델의 힌트와 다르면 manifest가 이기며 불일치를 로그로
-남긴다(무음 불일치 금지). manifest가 이 경로에서 지원하지 않는 카드(event/action/
-status, 또는 미등록 operation_ref)를 가리키면 에러가 아니라 free 카드로 폴백한다
-(크래시 대신 폴백, 사유를 응답에 남긴다 — canvas.py의 기존 폴백 철학과 동형).
+남긴다(무음 불일치 금지). 키움 plan 경로에서 mapping·screen 또는 지원하는 read 카드
+계약이 없으면 coverage 결함이므로 fail-closed한다. ``free`` 폴백은 plan_token 없는
+legacy/non-Kiwoom ``render_canvas(data)``에만 남는다.
 
 안전 성질: 이 경로는 주문 확인 헤더(X-Athena-Confirm 등)를 절대 싣지 않는다 —
 주문 계획이 넘어와도 백엔드의 3중 게이트가 헤더 부재로 거부한다(조회 전용).
@@ -40,13 +40,10 @@ from mcp import types
 # 재수출만 한다(테스트·호출부 계약 유지 — `as` 동일명 별칭은 의도적 재수출
 # 표기라 ruff가 지우지 않는다).
 from athena_api.canvas_transform import (
-    BARS_MAX as BARS_MAX,
-)
-from athena_api.canvas_transform import (
     TABLE_ROWS_MAX as TABLE_ROWS_MAX,
 )
 from athena_api.canvas_transform import (
-    build_chart_bars as build_chart_bars,
+    build_aits_chart_envelope_data as build_aits_chart_envelope_data,
 )
 from athena_api.canvas_transform import (
     build_compound_generic as build_compound_generic,
@@ -61,11 +58,9 @@ from athena_api.canvas_transform import (
     describe_unsupported_render_plan_kind as describe_unsupported_render_plan_kind,
 )
 from athena_api.canvas_transform import (
-    resolve_chart_initial_period as resolve_chart_initial_period,
-)
-from athena_api.canvas_transform import (
     resolve_render_plan_kind as resolve_render_plan_kind,
 )
+from athena_api.screen_manifest import get_mapping
 from athena_mcp.canvas import validate_canvas_payload
 
 logger = logging.getLogger(__name__)
@@ -87,6 +82,105 @@ def _error(text: str) -> types.CallToolResult:
     )
 
 
+_WS_RECEIPTS = {
+    "started": "실시간 데이터 수신을 시작했습니다. 캔버스에서 확인하세요.",
+    "stopped": "실시간 데이터 수신을 중지했습니다.",
+    "reconnecting": "실시간 데이터 연결을 복구하고 있습니다. 캔버스에서 확인하세요.",
+    "reconnected": "실시간 데이터 연결을 복구했습니다. 캔버스에서 확인하세요.",
+    "error": "실시간 데이터 연결에 실패했습니다. 인증 및 연결 상태를 확인하세요.",
+}
+
+
+def _result_payload(result: types.CallToolResult) -> dict[str, Any] | None:
+    """CallToolResult의 JSON 객체만 읽는다. 원문은 새 결과에 복제하지 않는다."""
+    if isinstance(result.structuredContent, dict):
+        return result.structuredContent
+    if not result.content or not isinstance(result.content[0], types.TextContent):
+        return None
+    try:
+        payload = json.loads(result.content[0].text)
+    except (TypeError, ValueError):
+        return None
+    return payload if isinstance(payload, dict) else None
+
+
+def _ws_state(payload: dict[str, Any]) -> str | None:
+    data = payload.get("data")
+    if not isinstance(data, dict):
+        data = {}
+
+    return_code = data.get("return_code", payload.get("return_code"))
+    if return_code is not None and str(return_code).strip() not in {"0", "+0", "00"}:
+        return "error"
+
+    raw_state = data.get("lifecycle") or data.get("state")
+    if not isinstance(raw_state, str):
+        raw_state = payload.get("lifecycle") or payload.get("state")
+    if isinstance(raw_state, str):
+        normalized = raw_state.strip().lower().replace("-", "_")
+        aliases = {
+            "start": "started",
+            "starting": "started",
+            "running": "started",
+            "stop": "stopped",
+            "stopping": "stopped",
+            "reconnect": "reconnecting",
+            "retrying": "reconnecting",
+            "connected": "reconnected",
+            "failed": "error",
+            "failure": "error",
+            "disconnected": "error",
+        }
+        normalized = aliases.get(normalized, normalized)
+        if normalized in _WS_RECEIPTS:
+            return normalized
+
+    trnm = data.get("trnm", payload.get("trnm"))
+    if trnm == "REG":
+        return "started"
+    if trnm == "REMOVE":
+        return "stopped"
+    return None
+
+
+def websocket_lifecycle_receipt(result: types.CallToolResult) -> types.CallToolResult:
+    """키움 WebSocket 응답을 값 없는 수명주기 영수증으로 바꾼다.
+
+    일반 query/order 결과는 그대로 둔다. WebSocket 여부는 문자열 패턴이 아니라
+    canonical screen manifest의 ``classification``으로 판정한다. 성공 HTTP 응답이어도
+    ACK가 알 수 없는 상태이거나 화면 계약이 없으면 frame/data를 내보내지 않고
+    명시적 오류로 닫는다.
+    """
+    if result.isError:
+        return result
+    payload = _result_payload(result)
+    if payload is None:
+        return result
+    operation_ref = payload.get("operation_ref")
+    if not isinstance(operation_ref, str):
+        return result
+    mapping = get_mapping(operation_ref)
+    if mapping is None:
+        return result
+    classification = mapping.get("classification")
+    if not isinstance(classification, dict) or classification.get("category") != "websocket":
+        return result
+
+    screen_reference = mapping.get("screen_reference")
+    if not isinstance(screen_reference, dict) or not screen_reference.get("screen_id"):
+        return _error(f"키움 화면 계약 누락: {operation_ref}의 screen_reference")
+
+    state = _ws_state(payload)
+    if state is None:
+        return _error("실시간 데이터 상태를 확인할 수 없습니다. 연결 상태를 다시 확인하세요.")
+    receipt = {"lifecycle": state, "receipt": _WS_RECEIPTS[state]}
+    return types.CallToolResult(
+        content=[types.TextContent(type="text", text=json.dumps(receipt, ensure_ascii=False))],
+        structuredContent=receipt,
+        isError=state == "error",
+    )
+
+
 async def render_with_plan(
     arguments: dict[str, Any],
     http_client: httpx.AsyncClient,
@@ -95,8 +189,8 @@ async def render_with_plan(
 ) -> types.CallToolResult:
     """plan_token을 게이트웨이가 직접 실행해 카드 봉투를 채운다.
 
-    반환 payload는 기존 `_render_canvas`와 같은 형상(앱 호환)에 `summary`가
-    더해진다 — 모델은 데이터 대신 summary로 답한다.
+    전체 카드 봉투는 side-channel로만 전달한다. 성공한 tool result에는 값이나
+    요약 없이 display receipt만 반환한다.
     """
     plan_token = arguments["plan_token"]
     try:
@@ -120,66 +214,72 @@ async def render_with_plan(
 
     operation_ref = call_payload.get("operation_ref")
     model_canvas_type = arguments.get("canvas_type")
+    mapping = get_mapping(operation_ref) if isinstance(operation_ref, str) else None
+    if mapping is None:
+        return _error(f"키움 화면 계약 누락: {operation_ref!r}의 mapping")
+    screen_reference = mapping.get("screen_reference")
+    if not isinstance(screen_reference, dict) or not screen_reference.get("screen_id"):
+        return _error(f"키움 화면 계약 누락: {operation_ref}의 screen_reference")
     canvas_kind = resolve_render_plan_kind(operation_ref)
-
-    model_data = arguments.get("data") or {}
 
     if canvas_kind is None:
         reason = describe_unsupported_render_plan_kind(operation_ref)
-        logger.warning(
-            "render_with_plan free 폴백 — operation_ref=%s model_canvas_type=%s 사유=%s",
+        logger.error(
+            "render_with_plan coverage 결함 — operation_ref=%s model_canvas_type=%s 사유=%s",
             operation_ref,
             model_canvas_type,
             reason,
         )
-        result_canvas_type: str = "free"
-        result_fell_back = True
-        result_fallback_reason: str | None = reason
-        result_data: dict[str, Any] = call_payload
-        meta: dict[str, Any] = {"fell_back": True, "fallback_reason": reason}
+        return _error(
+            f"키움 화면 계약 오류: {operation_ref}의 presentation은 plan 렌더 대상이 아니다"
+        )
+
+    if model_canvas_type is not None and model_canvas_type != canvas_kind:
+        logger.warning(
+            "render_with_plan canvas_type 불일치 — model=%s manifest=%s "
+            "operation_ref=%s (manifest가 이긴다)",
+            model_canvas_type,
+            canvas_kind,
+            operation_ref,
+        )
+
+    if canvas_kind == "chart":
+        built = build_aits_chart_envelope_data(operation_ref, call_payload)
+        if isinstance(built, str):
+            return _error(f"차트 변환 실패: {built}")
+        chart_envelope, meta = built
+        renderer_id = chart_envelope["renderer_id"]
+        data = chart_envelope["data"]
+    elif canvas_kind == "table":
+        built = build_table(call_payload)
+        if isinstance(built, str):
+            return _error(f"테이블 변환 실패: {built}")
+        data, meta = built
+    else:  # facts / compound — TR 응답 본문만(위 _BUILD_FROM_TR_DATA 주석)
+        tr_data = call_payload.get("data")
+        if not isinstance(tr_data, dict):
+            tr_data = {}
+        built = _BUILD_FROM_TR_DATA[canvas_kind](tr_data)
+        if isinstance(built, str):
+            return _error(f"{canvas_kind} 변환 실패: {built}")
+        data, meta = built
+
+    if canvas_kind == "chart":
+        # AITS 차트는 generated manifest/screen definition의 renderer·JSONPath
+        # 계약으로 이미 검증됐다. legacy MCP chart schema(bars)를 통과시키거나
+        # caller data로 재검증하면 계약이 다시 낡은 형상으로 퇴행한다.
+        result_canvas_type = "chart"
+        result_fell_back = False
+        result_fallback_reason = None
+        result_data = data
     else:
-        if model_canvas_type is not None and model_canvas_type != canvas_kind:
-            logger.warning(
-                "render_with_plan canvas_type 불일치 — model=%s manifest=%s "
-                "operation_ref=%s (manifest가 이긴다)",
-                model_canvas_type,
-                canvas_kind,
-                operation_ref,
-            )
-
-        if canvas_kind == "chart":
-            built = build_chart_bars(call_payload)
-            if isinstance(built, str):
-                return _error(f"차트 변환 실패: {built}")
-            bars, meta = built
-            symbol = model_data.get("symbol")
-            if not isinstance(symbol, str) or not symbol:
-                return _error(
-                    "차트 카드에는 data.symbol(종목코드)이 필요하다 — 인자에 넣어 다시 호출하라"
-                )
-            data: dict[str, Any] = {"symbol": symbol, "bars": bars}
-            if isinstance(model_data.get("name"), str):
-                data["name"] = model_data["name"]
-            # P2a — 일/주/월/년봉 8TR만 실제 값을 준다(그 외는 None → 카드는
-            # chart-card.js 자체 'D' 폴백을 쓴다, canvas_transform.py 함수 docstring).
-            initial_period = resolve_chart_initial_period(operation_ref)
-            if initial_period is not None:
-                data["initial"] = {"period": initial_period}
-        elif canvas_kind == "table":
-            built = build_table(call_payload)
-            if isinstance(built, str):
-                return _error(f"테이블 변환 실패: {built}")
-            data, meta = built
-        else:  # facts / compound — TR 응답 본문만(위 _BUILD_FROM_TR_DATA 주석)
-            tr_data = call_payload.get("data")
-            if not isinstance(tr_data, dict):
-                tr_data = {}
-            built = _BUILD_FROM_TR_DATA[canvas_kind](tr_data)
-            if isinstance(built, str):
-                return _error(f"{canvas_kind} 변환 실패: {built}")
-            data, meta = built
-
+        renderer_id = None
         result = validate_canvas_payload(canvas_kind, data)
+        if result.fell_back:
+            return _error(
+                f"키움 화면 계약 오류: {operation_ref}의 {canvas_kind} payload가 "
+                "manifest와 맞지 않는다"
+            )
         result_canvas_type = result.canvas_type
         result_fell_back = result.fell_back
         result_fallback_reason = result.fallback_reason
@@ -194,15 +294,14 @@ async def render_with_plan(
         "layout": None,
         "drop_types": [],
     }
+    if renderer_id is not None:
+        payload["renderer_id"] = renderer_id
 
-    # 봉투는 사이드 채널(POST /canvas/push → 앱 WS)로 민다 — 툴 결과에 실으면
-    # claude CLI 잘림 한도에 걸려 카드가 깨진다(2026-08-19 프로브 실측). 모델에게는
-    # summary만 돌려준다(사용자 지시 "캔버스 먼저, 채팅은 요약만").
+    # 봉투는 사이드 채널(POST /canvas/push → 앱 WS)로만 민다. tool result에는
+    # 데이터 요약도 싣지 않는다 — 성공한 캔버스 자체가 기본 답이다.
     push_note: str | None = None
     try:
-        push_response = await http_client.post(
-            "/api/v1/canvas/push", json=payload, timeout=5.0
-        )
+        push_response = await http_client.post("/api/v1/canvas/push", json=payload, timeout=5.0)
         pushed = push_response.status_code < 400
         if not pushed:
             push_note = f"HTTP {push_response.status_code}"
@@ -211,32 +310,22 @@ async def render_with_plan(
         push_note = str(exc)
 
     if pushed:
-        small = {
+        receipt = {
             "canvas_type": result_canvas_type,
             # 파서(stream-json-parser.js)가 이 플래그로 'pushed' 분류를 한다 —
             # 앱은 이 결과로 카드를 그리지 않는다(사이드 채널이 이미 그렸다).
             "pushed": True,
             "fell_back": result_fell_back,
             "fallback_reason": result_fallback_reason,
-            "caption": arguments.get("caption"),
-            # 모델이 답변에 쓰는 요약 — 데이터 본문은 모델 스트림을 타지 않는다.
-            # trimmed면 "최근 N행 기준"을 답변에 밝히는 것이 계약이다(프롬프트 v3d).
-            "summary": meta,
+            "trimmed": bool(meta.get("trimmed")),
+            "partial": bool(meta.get("partial")),
         }
         return types.CallToolResult(
-            content=[
-                types.TextContent(type="text", text=json.dumps(small, ensure_ascii=False))
-            ],
-            structuredContent=small,
+            content=[types.TextContent(type="text", text=json.dumps(receipt, ensure_ascii=False))],
+            structuredContent=receipt,
             isError=False,
         )
 
-    # 푸시 실패 — 구식 경로(툴 결과에 봉투)로 후퇴한다. 잘릴 수 있으나 아무것도
-    # 안 그리는 것보다 낫고, 실패 사실을 payload에 남긴다(조용한 강등 금지).
-    payload["push_failed"] = push_note
-    payload["summary"] = meta
-    return types.CallToolResult(
-        content=[types.TextContent(type="text", text=json.dumps(payload, ensure_ascii=False))],
-        structuredContent=payload,
-        isError=False,
-    )
+    # 키움 plan 경로에서는 full payload를 MCP tool result로 되돌리지 않는다.
+    # push 실패는 성공으로 위장하거나 legacy free 카드로 강등하지 않고 명시 오류다.
+    return _error(f"캔버스 push 실패: {push_note or '알 수 없는 오류'}")

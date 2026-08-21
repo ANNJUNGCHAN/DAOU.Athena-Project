@@ -12,7 +12,8 @@ Claude Code CLI  ->  Athena Gateway  ->  등록된 MCP 서버 N개
 1) 승인 여부 재확인 2) 알려진 결함 보정(quirks.py) 3) 4단계 파싱(result.py)
 4) 감사 로그 기록(인자/응답 본문 제외) 순으로 처리한다.
 
-키움 TR은 v1 범위 밖이다(결정 4) — 이 파일에서 키움을 노출하지 않는다.
+키움 raw TR 라우트는 직접 노출하지 않는다. selector 4툴과 sealed plan 캔버스
+side-channel만 Athena 관리 built-in으로 노출하며, 일반 upstream MCP와 분리한다.
 """
 
 from __future__ import annotations
@@ -146,20 +147,30 @@ _RENDER_CANVAS_INPUT_SCHEMA: dict[str, Any] = {
     # 회귀 테스트가 있다(test_server.py, Architect 권고 5 — "문서상 optional ≠
     # SDK가 실제로 optional 취급"이었던 canvas_type enum 함정과 동형의 위험이라
     # 가정으로 넘기지 않는다).
-    "required": ["data"],
+    # 두 경로만 유효하다: plan_token 하나로 sealed Kiwoom 화면을 실행하거나,
+    # legacy/non-Kiwoom 호출자가 data를 직접 준다. 실제 MCP SDK는 dispatch 전에
+    # 이 스키마를 검증하므로 list_tools 광고 자체가 이 조건을 정확히 가져야 한다.
+    "anyOf": [{"required": ["plan_token"]}, {"required": ["data"]}],
     "properties": {
         "canvas_type": _RENDER_CANVAS_CANVAS_TYPE_PROPERTY,
-        "data": _DATA_PROPERTY,
+        "data": {
+            **_DATA_PROPERTY,
+            "description": (
+                _DATA_PROPERTY["description"]
+                + "\nlegacy/non-Kiwoom 직접 렌더 경로에서만 사용한다. plan_token 경로의 "
+                "field·sort·card·screen은 sealed plan과 manifest가 정하므로 data를 보내지 않는다."
+            ),
+        },
         # 데이터 지름길(2026-08-19, canvas_data.py) — 캔버스 우선·모델 무통과.
         "plan_token": {
-            "type": ["string", "null"],
+            "type": "string",
+            "minLength": 1,
             "description": (
                 "선택: athena_resolve가 발급한 조회 plan_token. 주면 게이트웨이가 "
-                "직접 실행해 chart/table 카드 데이터를 채운다 — athena_call로 "
-                "데이터를 먼저 읽어올 필요가 없다(그만큼 빠르다). 이때 data에는 "
-                "chart면 {symbol, name}만 넣으면 되고, 응답의 summary(최신값·"
-                "기간·행수)로 채팅에 답하면 된다. 토큰은 1회용이라 이 호출로 "
-                "소비된다."
+                "직접 실행하고 manifest가 card·field·sort·screen을 결정한다. data나 "
+                "canvas_type은 필요 없으며 sealed plan의 context를 덮어쓸 수 없다. "
+                "성공 결과는 값·행·열·봉·summary가 없는 display receipt뿐이고 전체 "
+                "payload는 canvas side-channel로만 간다. 토큰은 1회용이다."
             ),
         },
         "caption": {"type": ["string", "null"]},
@@ -557,6 +568,8 @@ class AthenaGateway:
             timing_log_path=self.audit_log_dir / "kiwoom-selector-timing.jsonl",
             cache=self.selector_cache,
         )
+        if name == selector_tools.CALL_TOOL:
+            result = canvas_data.websocket_lifecycle_receipt(result)
         self._audit_log("kiwoom-selector").record(
             "kiwoom-selector", name, success=not result.isError
         )
@@ -762,10 +775,10 @@ def _builtin_tool_defs() -> list[types.Tool]:
         types.Tool(
             name=RENDER_CANVAS_TOOL,
             description="7종 캔버스(stream/reader/timeline/table/chart/facts/compound) "
-            "또는 free로 렌더링한다. 스키마 불일치 시 free로 폴백하고 그 사실을 응답에 "
-            "남긴다. plan_token(athena_resolve 발급)을 주면 게이트웨이가 데이터를 직접 "
-            "채우고 카드 종류도 직접 결정한다(canvas_type은 안 보내도 된다) — "
-            "athena_call을 건너뛰는 가장 빠른 경로다.",
+            "또는 free로 렌더링한다. legacy/non-Kiwoom data 경로의 스키마 불일치만 "
+            "free로 폴백한다. plan_token(athena_resolve 발급)을 주는 키움 경로는 "
+            "data 없이 호출하며 sealed plan과 manifest가 화면을 완전히 결정한다. "
+            "mapping/screen 누락은 fail-closed하고 성공 결과는 display receipt만 반환한다.",
             inputSchema=_RENDER_CANVAS_INPUT_SCHEMA,
         ),
         types.Tool(
