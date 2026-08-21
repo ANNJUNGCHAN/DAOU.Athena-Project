@@ -1,7 +1,7 @@
 """canvas_data — render_canvas plan_token 데이터 지름길 (2026-08-19).
 
 계약: 변환은 결정적, 실패는 조용한 폴백이 아니라 에러 안내, 주문 확인 헤더는
-절대 싣지 않는다(조회 전용). 봉은 시간 오름차순·최신 BARS_MAX개.
+절대 싣지 않는다(조회 전용). 차트는 generated AITS renderer/JSONPath 계약만 쓴다.
 
 P1b(2026-08-20, `plan/공통화면-템플릿-실행계획-2026-08-20.md`) 갱신: 카드 종류는
 모델의 canvas_type이 아니라 plan 실행 결과 operation_ref로 조회한 manifest가
@@ -15,57 +15,86 @@ from __future__ import annotations
 
 import json
 import logging
-from pathlib import Path
 
 import httpx
+import pytest
 
 from athena_mcp.canvas_data import (
-    BARS_MAX,
     TABLE_ROWS_MAX,
-    build_chart_bars,
     build_table,
     render_with_plan,
 )
 
+_AITS_CHART_CASES = [
+    ("ka10079", "tick", "stock", "stk_tic_chart_qry", "cntr_tm", "cur_prc", "trde_qty"),
+    ("ka10080", "min", "stock", "stk_min_pole_chart_qry", "cntr_tm", "cur_prc", "trde_qty"),
+    ("ka10081", "day", "stock", "stk_dt_pole_chart_qry", "dt", "cur_prc", "trde_qty"),
+    ("ka10082", "week", "stock", "stk_stk_pole_chart_qry", "dt", "cur_prc", "trde_qty"),
+    ("ka10083", "month", "stock", "stk_mth_pole_chart_qry", "dt", "cur_prc", "trde_qty"),
+    ("ka10094", "year", "stock", "stk_yr_pole_chart_qry", "dt", "cur_prc", "trde_qty"),
+    ("ka20004", "tick", "sector", "inds_tic_chart_qry", "cntr_tm", "cur_prc", "trde_qty"),
+    ("ka20005", "min", "sector", "inds_min_pole_qry", "cntr_tm", "cur_prc", "trde_qty"),
+    ("ka20006", "day", "sector", "inds_dt_pole_qry", "dt", "cur_prc", "trde_qty"),
+    ("ka20007", "week", "sector", "inds_stk_pole_qry", "dt", "cur_prc", "trde_qty"),
+    ("ka20008", "month", "sector", "inds_mth_pole_qry", "dt", "cur_prc", "trde_qty"),
+    ("ka20019", "year", "sector", "inds_yr_pole_qry", "dt", "cur_prc", "trde_qty"),
+    ("ka50079", "tick", "gold", "gds_tic_chart_qry", "cntr_tm", "cur_prc", "trde_qty"),
+    ("ka50080", "min", "gold", "gds_min_chart_qry", "cntr_tm", "cur_prc", "trde_qty"),
+    ("ka50081", "day", "gold", "gds_day_chart_qry", "dt", "cur_prc", "acc_trde_qty"),
+    ("ka50082", "week", "gold", "gds_week_chart_qry", "dt", "cur_prc", "acc_trde_qty"),
+    ("ka50083", "month", "gold", "gds_month_chart_qry", "dt", "cur_prc", "acc_trde_qty"),
+    ("ka50091", "tick", "gold", "gds_tic_chart_qry", "cntr_tm", "cntr_pric", "trde_qty"),
+    ("ka50092", "min", "gold", "gds_min_chart_qry", "cntr_tm", "cntr_pric", "trde_qty"),
+]
 
-def _chart_rows(n: int) -> list[dict[str, str]]:
-    # 키움 실측 형상(ka10081): 최신이 앞, 가격은 문자열(때로 부호 접두).
+_AITS_RELOAD_CONTRACTS = {
+    "stock": {
+        "tick": ("base:ka10079", ["stk_cd", "tic_scope", "upd_stkpc_tp"]),
+        "min": ("base:ka10080", ["stk_cd", "tic_scope", "upd_stkpc_tp", "base_dt"]),
+        "day": ("base:ka10081", ["stk_cd", "base_dt", "upd_stkpc_tp"]),
+        "week": ("base:ka10082", ["stk_cd", "base_dt", "upd_stkpc_tp"]),
+        "month": ("base:ka10083", ["stk_cd", "base_dt", "upd_stkpc_tp"]),
+        "year": ("base:ka10094", ["stk_cd", "base_dt", "upd_stkpc_tp"]),
+    },
+    "sector": {
+        "tick": ("base:ka20004", ["inds_cd", "tic_scope"]),
+        "min": ("base:ka20005", ["inds_cd", "tic_scope", "base_dt"]),
+        "day": ("base:ka20006", ["inds_cd", "base_dt"]),
+        "week": ("base:ka20007", ["inds_cd", "base_dt"]),
+        "month": ("base:ka20008", ["inds_cd", "base_dt"]),
+        "year": ("base:ka20019", ["inds_cd", "base_dt"]),
+    },
+    "gold-generic": {
+        "tick": ("base:ka50079", ["stk_cd", "tic_scope", "upd_stkpc_tp"]),
+        "min": ("base:ka50080", ["stk_cd", "tic_scope", "upd_stkpc_tp"]),
+        "day": ("base:ka50081", ["stk_cd", "base_dt", "upd_stkpc_tp"]),
+        "week": ("base:ka50082", ["stk_cd", "base_dt", "upd_stkpc_tp"]),
+        "month": ("base:ka50083", ["stk_cd", "base_dt", "upd_stkpc_tp"]),
+    },
+    "gold-today": {
+        "tick": ("base:ka50091", ["stk_cd", "tic_scope"]),
+        "min": ("base:ka50092", ["stk_cd", "tic_scope"]),
+    },
+}
+
+
+def _aits_chart_rows(time_alias: str, close_alias: str, volume_alias: str) -> list[dict[str, str]]:
+    times = (
+        ["20260821100000", "20260821090000"]
+        if time_alias == "cntr_tm"
+        else ["20260821", "20260820"]
+    )
     return [
         {
-            "dt": str(20260819 - i),
+            time_alias: time_value,
             "open_pric": "+120200",
             "high_pric": "374500",
             "low_pric": "-119000",
-            "cur_prc": "247500",
-            "trde_qty": "1000",
+            close_alias: close,
+            volume_alias: "1000",
         }
-        for i in range(n)
+        for time_value, close in zip(times, ("247500", "246000"), strict=True)
     ]
-
-
-def test_build_chart_bars_maps_sorts_and_trims():
-    payload = {"operation_ref": "op", "data": {"stk_dt_pole_chart_qry": _chart_rows(300)}}
-    built = build_chart_bars(payload)
-    assert not isinstance(built, str)
-    bars, meta = built
-    assert len(bars) == BARS_MAX
-    # 오름차순 + 최신 유지(최신 = 가장 큰 dt)
-    assert bars[0]["time"] < bars[-1]["time"]
-    assert bars[-1]["time"] == "2026-08-19"  # YYYYMMDD → 대시 변환(렌더러 파싱 계약)
-    # 부호 접두는 값이 아니다
-    assert bars[-1]["open"] == 120200.0
-    assert bars[-1]["low"] == 119000.0
-    assert bars[-1]["volume"] == 1000.0
-    assert meta["rows_total"] == 300
-    assert meta["rows_kept"] == BARS_MAX
-    assert meta["trimmed"] is True
-    assert meta["latest_close"] == 247500.0
-
-
-def test_build_chart_bars_rejects_non_chart_payload():
-    built = build_chart_bars({"data": {"rows": [{"foo": "1"}]}})
-    assert isinstance(built, str)
-    assert "매핑 실패" in built
 
 
 def test_build_table_caps_rows_and_derives_columns():
@@ -82,128 +111,150 @@ def test_build_table_caps_rows_and_derives_columns():
 # (2026-08-20 포니테일 감사 — 4파일 중복 제거).
 
 
-async def test_render_with_plan_chart_fills_envelope_and_summary(tmp_path: Path, mock_http_client):
-    """operation_ref=base:ka10081(manifest layout=compound, domain=charts)이
-    "chart"로 승격되고 실제로 build_chart_bars 경로를 탄다 — 모델이 canvas_type=
-    "chart"를 맞게 보내도(불일치 로그 없이) 카드 종류는 manifest가 정한다."""
+@pytest.mark.parametrize(
+    (
+        "tr_id",
+        "period",
+        "target",
+        "container_alias",
+        "time_alias",
+        "close_alias",
+        "volume_alias",
+    ),
+    _AITS_CHART_CASES,
+)
+async def test_render_with_plan_all_generated_chart_contracts_push_aits_envelope_only(
+    mock_http_client,
+    tr_id: str,
+    period: str,
+    target: str,
+    container_alias: str,
+    time_alias: str,
+    close_alias: str,
+    volume_alias: str,
+):
+    """19개 generated 차트 계약을 caller 추론 없이 AITS 봉투로 side-channel 전송한다."""
     seen = {}
 
     def handler(request: httpx.Request) -> httpx.Response:
         if request.url.path == "/api/v1/canvas/push":
             seen["pushed_envelope"] = json.loads(request.content)
             return httpx.Response(200, json={"queued": True})
+        seen["call_count"] = seen.get("call_count", 0) + 1
         seen["path"] = request.url.path
         seen["body"] = json.loads(request.content)
         seen["headers"] = dict(request.headers)
         return httpx.Response(
             200,
             json={
-                "operation_ref": "base:ka10081",
-                "data": {"stk_dt_pole_chart_qry": _chart_rows(10)},
+                "operation_ref": f"base:{tr_id}",
+                "data": {container_alias: _aits_chart_rows(time_alias, close_alias, volume_alias)},
+                "canvas_context": {"symbol": "SIGNED-SYMBOL"},
             },
         )
 
     result = await render_with_plan(
         {
             "canvas_type": "chart",
-            "plan_token": "tok-1",
-            "data": {"symbol": "005930", "name": "삼성전자"},
+            "plan_token": f"tok-{tr_id}",
+            "data": {
+                "symbol": "CONFLICTING",
+                "chart_meta": {
+                    "series_scope": "caller-controlled",
+                    "reload_group": "gold-today",
+                    "reload_targets": {
+                        "tick": {"operation_ref": "base:ka50091", "request_fields": []}
+                    },
+                },
+            },
         },
         mock_http_client(handler),
         call_timeout_seconds=5.0,
     )
     assert result.isError is False
     assert seen["path"] == "/api/v1/llm/tools/call"
-    assert seen["body"] == {"plan_token": "tok-1"}
+    assert seen["call_count"] == 1
+    assert seen["body"] == {"plan_token": f"tok-{tr_id}"}
     # 조회 전용 — 주문 확인 헤더를 절대 싣지 않는다(3중 게이트가 주문 plan을 거부).
     assert "x-athena-confirm" not in seen["headers"]
     payload = json.loads(result.content[0].text)
-    # 모델에게는 요약만 — 봉투(데이터)는 사이드 채널로 밀렸다.
+    # 모델에게는 값 없는 display receipt만 — 봉투(데이터)는 side-channel로 밀렸다.
     assert payload["pushed"] is True
     assert payload["canvas_type"] == "chart"
-    assert "data" not in payload
-    assert payload["summary"]["rows_total"] == 10
-    assert payload["summary"]["latest_close"] == 247500.0
+    assert set(payload) == {
+        "canvas_type",
+        "pushed",
+        "fell_back",
+        "fallback_reason",
+        "trimmed",
+        "partial",
+    }
+    receipt_text = result.content[0].text
+    for forbidden in (
+        f"tok-{tr_id}",
+        "SIGNED-SYMBOL",
+        "247500",
+        "candles",
+        "close",
+        "rows_total",
+        "summary",
+    ):
+        assert forbidden not in receipt_text
     pushed = seen["pushed_envelope"]
     assert pushed["canvas_type"] == "chart"
     assert pushed["fell_back"] is False
-    assert pushed["data"]["symbol"] == "005930"
-    assert len(pushed["data"]["bars"]) == 10
-    assert pushed["data"]["bars"][0]["time"] < pushed["data"]["bars"][-1]["time"]
-    # P2a — ka10081(주식일봉차트조회요청)은 default_period="D".
-    assert pushed["data"]["initial"] == {"period": "D"}
+    assert pushed["renderer_id"] == "aits-chart-v1"
+    assert set(pushed["data"]) == {"symbol", "chart", "chart_meta"}
+    assert pushed["data"]["symbol"] == "SIGNED-SYMBOL"
+    chart = pushed["data"]["chart"]
+    assert chart["period"] == period
+    assert chart["target"] == target
+    assert chart["trId"] == tr_id
+    assert chart["candles"][0]["time"] < chart["candles"][-1]["time"]
+    assert chart["candles"][-1]["close"] == 247500.0
+    assert "bars" not in pushed["data"]
+    assert "initial" not in pushed["data"]
+    chart_meta = pushed["data"]["chart_meta"]
+    assert set(chart_meta) == {"series_scope", "reload_group", "reload_targets"}
+    if target == "stock":
+        expected_scope, expected_group = "standard", "stock"
+    elif target == "sector":
+        expected_scope, expected_group = "standard", "sector"
+    elif tr_id in {"ka50091", "ka50092"}:
+        expected_scope, expected_group = "today", "gold-today"
+    else:
+        expected_scope, expected_group = "generic", "gold-generic"
+    assert chart_meta["series_scope"] == expected_scope
+    assert chart_meta["reload_group"] == expected_group
+    assert chart_meta["reload_targets"] == {
+        reload_period: {
+            "operation_ref": operation_ref,
+            "request_fields": request_fields,
+        }
+        for reload_period, (operation_ref, request_fields) in _AITS_RELOAD_CONTRACTS[
+            expected_group
+        ].items()
+    }
+    # gold generic(50079/80 포함)과 today(50091/92)는 서로의 reload 후보를
+    # 절대 포함하지 않는다. caller가 보낸 gold-today 메타도 helper 입력이 아니다.
+    reload_refs = {
+        target_contract["operation_ref"]
+        for target_contract in chart_meta["reload_targets"].values()
+    }
+    if expected_group == "gold-generic":
+        assert reload_refs.isdisjoint({"base:ka50091", "base:ka50092"})
+    elif expected_group == "gold-today":
+        assert reload_refs.isdisjoint({"base:ka50079", "base:ka50080"})
 
 
-async def test_render_with_plan_chart_weekly_tr_carries_initial_period_w(mock_http_client):
-    """P2a 수용 기준의 "주봉 경로 실제 테스트"(콜드 경로) — base:ka10082(주식주봉
-    차트조회요청)를 render_with_plan으로 실행하면 사이드 채널로 밀리는 봉투에
-    initial.period="W"가 실려야 한다. 실 자격증명 캡처 대신 이 백엔드 테스트로
-    배선을 증명한다(팀장 지시: 생략 시 생략 사실을 보고)."""
-    seen = {}
-
-    def handler(request: httpx.Request) -> httpx.Response:
-        if request.url.path == "/api/v1/canvas/push":
-            seen["pushed_envelope"] = json.loads(request.content)
-            return httpx.Response(200, json={"queued": True})
-        return httpx.Response(
-            200,
-            json={
-                "operation_ref": "base:ka10082",
-                "data": {"stk_stk_pole_chart_qry": _chart_rows(5)},
-            },
-        )
-
-    result = await render_with_plan(
-        {
-            "canvas_type": "chart",
-            "plan_token": "tok-w",
-            "data": {"symbol": "005930", "name": "삼성전자"},
-        },
-        mock_http_client(handler),
-        call_timeout_seconds=5.0,
-    )
-    assert result.isError is False
-    assert seen["pushed_envelope"]["data"]["initial"] == {"period": "W"}
-
-
-async def test_render_with_plan_chart_tick_tr_omits_initial_period(mock_http_client):
-    """P2b(분/틱 4TR, 의도적 비배선, 콜드 경로) — base:ka10079(주식틱차트조회요청)
-    는 manifest에 default_period=null이 있어도 봉투에 "initial" 키 자체가 없다.
-    틱 실제 필드는 cntr_tm(체결시간)이라 dt가 없지만, 여기서는 initial 배선만
-    격리 검증하기 위해 dt를 포함한 형상을 쓴다(build_chart_bars 성공 여부는
-    이 테스트의 관심사가 아니다 — 후속 라운드 필요조건 1 참조)."""
-    seen = {}
-
-    def handler(request: httpx.Request) -> httpx.Response:
-        if request.url.path == "/api/v1/canvas/push":
-            seen["pushed_envelope"] = json.loads(request.content)
-            return httpx.Response(200, json={"queued": True})
-        return httpx.Response(
-            200,
-            json={
-                "operation_ref": "base:ka10079",
-                "data": {"stk_tic_chart_qry": _chart_rows(5)},
-            },
-        )
-
-    result = await render_with_plan(
-        {
-            "canvas_type": "chart",
-            "plan_token": "tok-tick",
-            "data": {"symbol": "005930"},
-        },
-        mock_http_client(handler),
-        call_timeout_seconds=5.0,
-    )
-    assert result.isError is False
-    assert "initial" not in seen["pushed_envelope"]["data"]
-
-
-async def test_render_with_plan_requires_symbol_for_chart(mock_http_client):
+async def test_render_with_plan_requires_sealed_symbol_for_chart(mock_http_client):
     def handler(_request: httpx.Request) -> httpx.Response:
         return httpx.Response(
             200,
-            json={"operation_ref": "base:ka10081", "data": {"rows": _chart_rows(3)}},
+            json={
+                "operation_ref": "base:ka10081",
+                "data": {"stk_dt_pole_chart_qry": _aits_chart_rows("dt", "cur_prc", "trde_qty")},
+            },
         )
 
     result = await render_with_plan(
@@ -212,7 +263,7 @@ async def test_render_with_plan_requires_symbol_for_chart(mock_http_client):
         call_timeout_seconds=5.0,
     )
     assert result.isError is True
-    assert "data.symbol" in result.content[0].text
+    assert "display symbol" in result.content[0].text
 
 
 async def test_render_with_plan_manifest_wins_over_mismatched_model_canvas_type_hint(
@@ -273,11 +324,11 @@ async def test_render_with_plan_facts_golden_path(mock_http_client):
     payload = json.loads(result.content[0].text)
     assert payload["canvas_type"] == "facts"
     assert payload["fell_back"] is False
-    assert payload["summary"]["fields_total"] == 1
+    assert "summary" not in payload
+    assert "1234567890" not in result.content[0].text
     pushed = seen["pushed_envelope"]
-    assert pushed["data"]["fields"] == [
-        {"key": "acctNo", "label": "acctNo", "value": "1234567890"}
-    ]
+    assert "renderer_id" not in pushed
+    assert pushed["data"]["fields"] == [{"key": "acctNo", "label": "acctNo", "value": "1234567890"}]
 
 
 async def test_render_with_plan_compound_generic_golden_path(mock_http_client):
@@ -317,15 +368,10 @@ async def test_render_with_plan_compound_generic_golden_path(mock_http_client):
     ]
 
 
-async def test_render_with_plan_falls_back_to_free_when_manifest_kind_unsupported(
+async def test_render_with_plan_fails_closed_when_manifest_kind_is_not_read_display(
     mock_http_client, caplog
 ):
-    """구 `test_render_with_plan_rejects_unsupported_canvas_type` 자리 —
-    의미가 바뀌었다(P1b): 모델이 선언한 canvas_type이 아니라 manifest가 가리키는
-    카드 종류가 이 경로의 지원 목록(chart/table/facts/compound) 밖일 때, 크래시
-    (isError)가 아니라 free 카드로 폴백하고 사유를 로그·응답에 남긴다.
-    base:ka10173은 websocket TR이라 manifest layout="event" — 이 read/display
-    plan_token 경로 범위 밖이다(§11 미해결 3, "이종 메시지 사각지대" 방어)."""
+    """키움 guarded workflow는 legacy free 카드로 강등하지 않는다."""
     seen = {}
 
     def handler(request: httpx.Request) -> httpx.Response:
@@ -342,18 +388,14 @@ async def test_render_with_plan_falls_back_to_free_when_manifest_kind_unsupporte
             mock_http_client(handler),
             call_timeout_seconds=5.0,
         )
-    assert result.isError is False
-    payload = json.loads(result.content[0].text)
-    assert payload["canvas_type"] == "free"
-    assert payload["fell_back"] is True
-    assert payload["fallback_reason"] is not None
-    pushed = seen["pushed_envelope"]
-    assert pushed["canvas_type"] == "free"
-    assert pushed["fell_back"] is True
-    assert any("free 폴백" in record.message for record in caplog.records)
+    assert result.isError is True
+    assert "화면 계약 오류" in result.content[0].text
+    assert "ws-field" not in result.content[0].text
+    assert "pushed_envelope" not in seen
+    assert any("coverage 결함" in record.message for record in caplog.records)
 
 
-async def test_render_with_plan_ka10174_falls_back_to_free(mock_http_client):
+async def test_render_with_plan_ka10174_fails_closed(mock_http_client):
     """ka10173과 별개로 ka10174(layout="event", shape="scalar_only")도 명시 검증한다
     — 계획 §P1b 수용 기준이 두 TR을 각각 이름으로 지정한다."""
 
@@ -367,14 +409,12 @@ async def test_render_with_plan_ka10174_falls_back_to_free(mock_http_client):
         mock_http_client(handler),
         call_timeout_seconds=5.0,
     )
-    assert result.isError is False
-    payload = json.loads(result.content[0].text)
-    assert payload["canvas_type"] == "free"
-    assert payload["fell_back"] is True
+    assert result.isError is True
+    assert "화면 계약 오류" in result.content[0].text
 
 
-async def test_render_with_plan_falls_back_to_free_when_operation_ref_missing(mock_http_client):
-    """plan 실행 응답에 operation_ref 자체가 없는 방어적 경우 — 크래시하지 않는다."""
+async def test_render_with_plan_fails_closed_when_operation_ref_missing(mock_http_client):
+    """plan 실행 응답에 operation_ref가 없으면 coverage 오류로 닫는다."""
 
     def handler(request: httpx.Request) -> httpx.Response:
         if request.url.path == "/api/v1/canvas/push":
@@ -386,11 +426,33 @@ async def test_render_with_plan_falls_back_to_free_when_operation_ref_missing(mo
         mock_http_client(handler),
         call_timeout_seconds=5.0,
     )
-    assert result.isError is False
-    payload = json.loads(result.content[0].text)
-    assert payload["canvas_type"] == "free"
-    assert payload["fell_back"] is True
-    assert "operation_ref가 없다" in payload["fallback_reason"]
+    assert result.isError is True
+    assert "mapping" in result.content[0].text
+    assert "foo" not in result.content[0].text
+
+
+async def test_render_with_plan_fails_closed_when_screen_reference_missing(
+    mock_http_client, monkeypatch
+):
+    def handler(_request: httpx.Request) -> httpx.Response:
+        return httpx.Response(
+            200,
+            json={"operation_ref": "base:ka00001", "data": {"cur_prc": "73500"}},
+        )
+
+    monkeypatch.setattr(
+        "athena_mcp.canvas_data.get_mapping",
+        lambda _operation_ref: {"screen_reference": {}},
+    )
+    result = await render_with_plan(
+        {"plan_token": "screen-gap-secret"},
+        mock_http_client(handler),
+        call_timeout_seconds=5.0,
+    )
+    assert result.isError is True
+    assert "screen_reference" in result.content[0].text
+    assert "73500" not in result.content[0].text
+    assert "screen-gap-secret" not in result.content[0].text
 
 
 async def test_render_with_plan_surfaces_backend_error(mock_http_client):
@@ -406,23 +468,25 @@ async def test_render_with_plan_surfaces_backend_error(mock_http_client):
     assert "409" in result.content[0].text
 
 
-async def test_render_with_plan_falls_back_to_inline_when_push_fails(mock_http_client):
+async def test_render_with_plan_push_failure_is_truthful_without_inline_data(mock_http_client):
     def handler(request: httpx.Request) -> httpx.Response:
         if request.url.path == "/api/v1/canvas/push":
             return httpx.Response(503, json={"detail": "채널 미준비"})
         return httpx.Response(
             200,
-            json={"operation_ref": "base:ka10081", "data": {"rows": _chart_rows(3)}},
+            json={
+                "operation_ref": "base:ka10081",
+                "data": {"stk_dt_pole_chart_qry": _aits_chart_rows("dt", "cur_prc", "trde_qty")},
+                "canvas_context": {"symbol": "005930"},
+            },
         )
 
     result = await render_with_plan(
-        {"canvas_type": "chart", "plan_token": "tok", "data": {"symbol": "005930"}},
+        {"plan_token": "tok"},
         mock_http_client(handler),
         call_timeout_seconds=5.0,
     )
-    assert result.isError is False
-    payload = json.loads(result.content[0].text)
-    # 후퇴 경로 — 봉투를 툴 결과에 실었고, 실패 사실을 숨기지 않는다.
-    assert "pushed" not in payload
-    assert payload["push_failed"] == "HTTP 503"
-    assert len(payload["data"]["bars"]) == 3
+    assert result.isError is True
+    assert result.content[0].text == "캔버스 push 실패: HTTP 503"
+    for forbidden in ("005930", "247500", "bars", "close", "summary"):
+        assert forbidden not in result.content[0].text
