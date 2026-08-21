@@ -1760,10 +1760,10 @@ if (!process.env.ATHENA_NO_AUTOSTART) {
           const count = await restDatasetRunner.refreshStockEntityIndex(stockEntityIndex, {
             backendBase: BACKEND_HTTP_BASE,
           });
-          mdlog(`Kiwoom 종목명 인덱스 갱신 — alias ${count}개`);
+          mdlog(`Kiwoom 종목명 인덱스 갱신 — 종목 ${count}개`);
         } catch (err) {
-          // 인덱스가 없으면 이름 질의만 기존 경로로 abstain한다. 명시적 6자리 코드는
-          // 계속 직결 가능하며, 추측한 종목코드를 만들어내지 않는다.
+          // 인덱스가 없으면 이름과 코드 질의 모두 기존 경로로 abstain한다.
+          // snapshot에 없는 6자리 코드를 신뢰하거나 추측해 만들어내지 않는다.
           mdlog(`Kiwoom 종목명 인덱스 갱신 보류: ${String((err && err.message) || err)}`);
         }
       })
