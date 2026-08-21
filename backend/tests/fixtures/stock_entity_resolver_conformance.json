@@ -1,18 +1,30 @@
 {
-  "schema_version": 1,
-  "adapter_version": "stock-entity-index-v2",
+  "schema_version": 2,
+  "adapter_version": "stock-entity-index-v3",
+  "market_kinds": {"0": "stock", "10": "stock", "8": "etf"},
+  "record_markets": {
+    "123456": "0",
+    "654321": "10",
+    "111111": "0",
+    "222222": "10",
+    "333333": "8"
+  },
   "records": [
     {"code": "123456", "name": "새로운회사"},
     {"code": "654321", "name": "또다른회사"},
     {"code": "111111", "name": "공동회사"},
-    {"code": "222222", "name": "공동회사"}
+    {"code": "222222", "name": "공동회사"},
+    {"code": "333333", "name": "펀드회사"}
   ],
   "cases": [
-    {"id": "exact-name", "question": "새로운회사 오늘 주가 얼마야?", "expected_code": "123456"},
-    {"id": "allowed-particle", "question": "새로운회사의 현재가 알려줘", "expected_code": "123456"},
-    {"id": "normalized-punctuation", "question": "[새 로 운 회 사]의 오늘 주가 조회", "expected_code": "123456"},
-    {"id": "single-explicit-code", "question": "123456 오늘 주가", "expected_code": "123456"},
-    {"id": "name-and-same-code", "question": "새로운회사 123456 현재가", "expected_code": "123456"},
+    {"id": "exact-name", "question": "새로운회사 오늘 주가 얼마야?", "expected_code": "123456", "expected_kind": "stock"},
+    {"id": "allowed-particle", "question": "새로운회사의 현재가 알려줘", "expected_code": "123456", "expected_kind": "stock"},
+    {"id": "normalized-punctuation", "question": "[새 로 운 회 사]의 오늘 주가 조회", "expected_code": "123456", "expected_kind": "stock"},
+    {"id": "single-explicit-code", "question": "123456 오늘 주가", "expected_code": "123456", "expected_kind": "stock"},
+    {"id": "name-and-same-code", "question": "새로운회사 123456 현재가", "expected_code": "123456", "expected_kind": "stock"},
+    {"id": "kosdaq-stock", "question": "또다른회사의 현재가", "expected_code": "654321", "expected_kind": "stock"},
+    {"id": "etf-name", "question": "펀드회사의 현재가", "expected_code": "333333", "expected_kind": "etf"},
+    {"id": "etf-code", "question": "333333 오늘 주가", "expected_code": "333333", "expected_kind": "etf"},
     {"id": "embedded-suffix", "question": "새로운회사서비스 오늘 주가", "expected_code": null},
     {"id": "embedded-prefix-and-suffix", "question": "아주새로운회사서비스 오늘 주가", "expected_code": null},
     {"id": "two-issuers", "question": "새로운회사와 또다른회사 오늘 주가", "expected_code": null},
@@ -21,9 +33,9 @@
     {"id": "name-code-mutation", "question": "새로운회사 654321 현재가", "expected_code": null},
     {"id": "negation", "question": "새로운회사 말고 없는회사 오늘 주가", "expected_code": null},
     {"id": "comparison", "question": "새로운회사와 시장을 비교해 오늘 주가 알려줘", "expected_code": null},
-    {"id": "non-quote-context", "question": "새로운회사 제주 여행 가격", "expected_code": "123456"},
-    {"id": "identity-context", "question": "새로운회사에 대해 설명해줘", "expected_code": "123456"},
-    {"id": "chart-context", "question": "새로운회사 일봉 차트를 보여줘", "expected_code": "123456"},
-    {"id": "order-context", "question": "새로운회사 한 주 매수해줘", "expected_code": "123456"}
+    {"id": "non-quote-context", "question": "새로운회사 제주 여행 가격", "expected_code": "123456", "expected_kind": "stock"},
+    {"id": "identity-context", "question": "새로운회사에 대해 설명해줘", "expected_code": "123456", "expected_kind": "stock"},
+    {"id": "chart-context", "question": "새로운회사 일봉 차트를 보여줘", "expected_code": "123456", "expected_kind": "stock"},
+    {"id": "order-context", "question": "새로운회사 한 주 매수해줘", "expected_code": "123456", "expected_kind": "stock"}
   ]
 }
