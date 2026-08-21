@@ -40,10 +40,18 @@ function finiteOrNull(value) {
   return value !== null && value !== '' && Number.isFinite(Number(value)) ? Number(value) : null;
 }
 
-function normalizeChartCandle(value) {
+function normalizeChartTime(value, period) {
+  if (value == null) return null;
+  if ((period === 'tick' || period === 'min') && typeof value === 'number' && Number.isFinite(value)) {
+    return value;
+  }
+  return String(value);
+}
+
+function normalizeChartCandle(value, period) {
   const candle = value && typeof value === 'object' ? value : {};
   const normalized = {
-    time: candle.time == null ? null : String(candle.time),
+    time: normalizeChartTime(candle.time, period),
     open: finiteOrNull(candle.open),
     high: finiteOrNull(candle.high),
     low: finiteOrNull(candle.low),
@@ -68,7 +76,7 @@ function normalizeChartCardBody(value) {
     period: body.period,
     target: body.target,
     trId: body.trId.trim(),
-    candles: (Array.isArray(body.candles) ? body.candles : []).map(normalizeChartCandle),
+    candles: (Array.isArray(body.candles) ? body.candles : []).map((candle) => normalizeChartCandle(candle, body.period)),
   };
 }
 
@@ -256,7 +264,7 @@ function createAitsChartPanelAdapter(options) {
     if (!Number.isInteger(generation) || generation !== state.generation) return false;
     if (!VALID_TICK_KINDS.has(delta.kind)) throw new Error(`AITS ChartTickDelta.kind 오류: ${String(delta.kind)}`);
     if (String(delta.stock || '') !== state.stock) return false;
-    const candle = normalizeChartCandle(delta.candle);
+    const candle = normalizeChartCandle(delta.candle, state.body.period);
     const candles = state.body.candles.slice();
     if (delta.kind === 'update') {
       if (!candles.length || candles[candles.length - 1].time !== candle.time) return false;
