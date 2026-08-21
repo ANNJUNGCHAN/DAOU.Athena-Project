@@ -108,13 +108,16 @@ test('panelId is stable for REST correlation, live stock, and fixture', () => {
 test('tick/min snapshots mount pre-sampled without D fallback or pseudo resample', async () => {
   const log = fakeRendererLog();
   const adapter = createAitsChartPanelAdapter({ renderChart: log.factory });
-  await adapter.openPanel({}, body({ period: 'tick', trId: 'ka10079' }), { panelId: 'tick', stock: '005930' });
-  await adapter.openPanel({}, body({ period: 'min', trId: 'ka10080' }), { panelId: 'min', stock: '005930' });
+  const epoch = 1787274900;
+  await adapter.openPanel({}, body({ period: 'tick', trId: 'ka10079', candles: [candle(epoch, 100)] }), { panelId: 'tick', stock: '005930' });
+  await adapter.openPanel({}, body({ period: 'min', trId: 'ka10080', candles: [candle(epoch, 100)] }), { panelId: 'min', stock: '005930' });
   const renders = log.calls.filter((call) => call[0] === 'render');
   assert.equal(renders[0][2].initial.period, 'TICK');
   assert.equal(renders[1][2].initial.period, 'MIN');
   assert.equal(renders[0][2].preSampled, true);
   assert.equal(renders[1][2].preSampled, true);
+  assert.equal(renders[0][2].ohlcv[0].time, epoch);
+  assert.equal(renders[1][2].ohlcv[0].time, epoch);
 });
 
 test('same panel period reload reuses one renderer and one session', async () => {
