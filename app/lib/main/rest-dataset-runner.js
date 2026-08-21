@@ -15,6 +15,10 @@ const STOCK_ENTITY_RESOLVER_VERSION = 3;
 const STOCK_ENTITY_RESOLVER_ADAPTER_VERSION = `${STOCK_ENTITY_RESOLVER_ALGORITHM}-v${STOCK_ENTITY_RESOLVER_VERSION}`;
 const ENTITY_INDEX_VERSION = STOCK_ENTITY_RESOLVER_VERSION;
 const QUOTE_INTENT_RE = /(현재가|현재\s*시세|오늘\s*주가|주가\s*(?:얼마|조회)|current\s+(?:stock\s+)?price|stock\s+price\s+today)/i;
+// 현재가라는 단어가 다른 명시적 화면 의도에 포함돼도 quote 단축 경로가 이를
+// 덮어쓰면 안 된다. 아래 토큰이 함께 있으면 selector가 전체 문맥을 판정하도록
+// 보수적으로 abstain한다. 종목명이나 존댓말 같은 일반 문구는 막지 않는다.
+const COMPETING_QUOTE_OPERATION_RE = /(?:거래원|증권사|매매동향|거래량|체결량|매물대|호가|차트|[일주월년분틱]\s*봉|순위|랭킹|재무|실적|공시|뉴스|계좌|잔고|예수금|매수|매도|주문|\b(?:broker|dealer|volume|order\s*book|chart|ranking|financials?|earnings?|disclosures?|news|account|balance|buy|sell|order)\b)/i;
 const AMBIGUOUS_ENTITY_CONTEXT_RE = /(?:말고|제외|아닌|비교|\b(?:not|except|excluding|compare|versus|vs)\b)/i;
 const ENTITY_SUFFIX_PATTERN = "(?:'s|의|가|이|은|는|을|를|와|과|에|에서|으로|로)";
 const REVIEWED_MARKET_ENTITY_KIND = Object.freeze({ '0': 'stock', '10': 'stock', '8': 'etf' });
@@ -700,7 +704,7 @@ async function refreshStockEntityIndex(index, {
 
 function buildQuoteDataset(query, index, { idFactory = () => `rest-${Date.now().toString(36)}` } = {}) {
   const text = String(query || '').trim();
-  if (!QUOTE_INTENT_RE.test(text)) {
+  if (!QUOTE_INTENT_RE.test(text) || COMPETING_QUOTE_OPERATION_RE.test(text)) {
     return null;
   }
   const entity = index && index.resolveQuery(text);
