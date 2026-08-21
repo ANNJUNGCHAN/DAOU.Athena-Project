@@ -25,6 +25,9 @@ const CARD_WIDTH_GRADE = {
   notice: 'full',
   facts: 'half',
   compound: 'full',
+  event: 'full',
+  action: 'half',
+  status: 'half',
 };
 
 // 규칙 2 — AI 개입은 폭 등급 승격·강등만. 유효하지 않은 힌트는 조용히 문법
@@ -46,6 +49,9 @@ const DROP_TYPE_MAP = {
   timeline: [],
   facts: ['facts'],
   compound: ['compound'],
+  event: ['event'],
+  action: ['action'],
+  status: ['status'],
 };
 
 function dropTargetsFor(dropTypes) {

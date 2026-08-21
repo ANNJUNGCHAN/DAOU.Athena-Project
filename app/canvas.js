@@ -10,7 +10,19 @@ const { errorNote, removeCardAndMaybeCollapse } = window.AthenaLib.UiKit;
 const { widthGradeFor, dropTargetsFor, exceedsHeightBudget, MIN_CARDS } = window.AthenaLib.CanvasLayout;
 const { foldColumns } = window.AthenaLib.ColumnFold;
 const { createChartCard } = window.AthenaLib.ChartCard;
+const { AITS_CHART_RENDERER_ID, createAitsChartPanelAdapter, fromAthenaChartData, parseAitsChartSnapshot, panelIdFor } = window.AthenaLib.AitsChartPanel;
 const { classifyCell, changeTone, formatNumeric, formatDatetime, groupFactsFields } = window.AthenaLib.FactsCard;
+const { isValidCorrelation, waitForVisiblePaint } = window.AthenaLib.RestCanvasPaint;
+
+// 모든 chart surface의 유일한 세션/DTO 권위. 실제 그리기는 기존 하나의
+// lightweight-charts controller만 주입하며 별도 renderer/BrowserWindow는 없다.
+const aitsChartPanels = createAitsChartPanelAdapter({ renderChart: createChartCard, maxPanels: 6 });
+window.addEventListener('beforeunload', () => {
+  for (const session of aitsChartPanels.snapshot()) {
+    window.athena.send('athena:chart-panel-destroyed', { panelId: session.panelId });
+  }
+  aitsChartPanels.destroyAll();
+}, { once: true });
 
 async function loadFixture(kind) {
   return window.athena.invoke('athena:load-fixture', { kind });
@@ -35,9 +47,20 @@ window.athena.on('athena:prefs-changed', (next) => applyFontSizePref(next));
 // 정리하도록 카드 DOM 노드에 매달아둔다(WeakMap: 카드가 GC되면 콜백도 같이 사라짐).
 const cardDestroyers = new WeakMap();
 
+function destroyCard(card) {
+  if (!card) return;
+  const destroy = cardDestroyers.get(card);
+  if (destroy) {
+    try { destroy(); } catch {}
+    cardDestroyers.delete(card);
+  }
+  card.remove();
+}
+
 const mosaic = document.getElementById('mosaic');
 const sheen = document.getElementById('sheen');
 const grid = document.getElementById('grid');
+let activeDatasetId = null;
 
 function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
 function easeInCubic(t) { return t * t * t; }
@@ -52,13 +75,6 @@ function easeInCubic(t) { return t * t * t; }
 // - cards: 'live'(현행 — 카드 backdrop-filter 유지)
 //          | 'baked'(애니메이션 동안 카드를 정적 프로스트로 굽는다, canvas.css .frost-baked)
 let glassSeparation = { sheen: 'modulate', cards: 'live' };
-// 휘도 감지-적응(2026-08-19) — main이 보내는 밝기 기반 유리 두께를 .mosaic에
-// 반영한다. canvas.css가 var(--glass-canvas-live, var(--glass-canvas))를 읽으므로
-// 이벤트가 안 오면(fixture 검증) 토큰 기본값 그대로다 — 검증16 결정론 유지.
-window.athena.on('athena:backdrop-luminance', ({ canvasAlpha } = {}) => {
-  if (!Number.isFinite(canvasAlpha)) return;
-  document.documentElement.style.setProperty('--glass-canvas-live', canvasAlpha.toFixed(3));
-});
 
 window.athena.on('athena:glass-separation', (payload) => {
   glassSeparation = {
@@ -149,7 +165,56 @@ window.athena.on('athena:add-canvas', ({ type }) => {
 });
 
 window.athena.on('athena:clear-canvases', () => {
-  grid.innerHTML = '';
+  for (const card of grid.querySelectorAll('.card')) {
+    destroyCard(card);
+  }
+  activeDatasetId = null;
+});
+
+window.athena.on('athena:add-rest-canvas', async (payload) => {
+  const receivedAt = performance.now();
+  const correlation = payload && payload.envelope && payload.envelope.correlation;
+  if (!payload || !isValidCorrelation(correlation)) return;
+  try {
+    const envelope = Object.assign({}, payload.envelope, {
+      operation_ref: payload.operationRef,
+      operation_args: payload.operationArgs,
+    });
+    const card = await addLiveCard({ status: 'success', envelope });
+    const domAttachedAt = performance.now();
+    const paint = await waitForVisiblePaint(card);
+    window.athena.send('athena:rest-canvas-painted', {
+      dataset_id: correlation.dataset_id,
+      item_id: correlation.item_id,
+      ordinal: correlation.ordinal,
+      operation_ref: payload.operationRef,
+      canvas_type: payload.canvasType,
+      render_state: card && card.dataset.renderState ? card.dataset.renderState : 'data',
+      renderer_id: card && card.dataset.rendererId ? card.dataset.rendererId : null,
+      panel_id: card && card.dataset.chartPanelId ? card.dataset.chartPanelId : null,
+      generation: card && card.dataset.chartGeneration ? Number(card.dataset.chartGeneration) : null,
+      verified_visible: paint.verifiedVisible,
+      dom_attached_at: domAttachedAt,
+      visible_paint_at: paint.visiblePaintAt,
+      inline_to_dom_ms: Math.max(0, domAttachedAt - receivedAt),
+      dom_to_paint_ack_ms: Math.max(0, paint.visiblePaintAt - domAttachedAt),
+      rect: paint.rect,
+    });
+  } catch (error) {
+    window.athena.send('athena:rest-canvas-painted', {
+      dataset_id: correlation.dataset_id,
+      item_id: correlation.item_id,
+      ordinal: correlation.ordinal,
+      operation_ref: payload.operationRef,
+      canvas_type: payload.canvasType,
+      render_state: 'error',
+      renderer_id: null,
+      panel_id: null,
+      generation: null,
+      verified_visible: false,
+      error: String((error && error.message) || error),
+    });
+  }
 });
 
 // ---------- 실배선 — stream-json-parser.classifyCanvasBlock()의 결과를 렌더 ----------
@@ -160,7 +225,7 @@ window.athena.on('athena:add-canvas-live', (result) => {
   addLiveCard(result);
 });
 
-function addLiveCard(result) {
+async function addLiveCard(result) {
   if (!result) return renderLiveNotice('빈 응답을 받았다.');
   if (result.status === 'rejected') {
     return renderLiveNotice('캔버스 호출이 거부됐다 — --allowedTools 권한이 없다.');
@@ -173,12 +238,13 @@ function addLiveCard(result) {
   }
   const envelope = result.envelope;
   if (!envelope) return renderLiveNotice('캔버스 응답에 데이터가 없다.');
+  if (envelope.state) return renderRestStateCard(envelope);
   // 턴별 큐레이션(배치·생애주기 규칙 3, canvas-taxonomy) — 모델이 봉투
   // drop_types로 지목한, 현재 질의와 무관해진 카드를 렌더 전에 치운다.
   // 'table'은 픽스처 table과 실배선 mcp-table 둘 다다(lib/canvas-layout.js).
   for (const cls of dropTargetsFor(envelope.drop_types)) {
     const el = grid.querySelector(`.card.${cls}`);
-    if (el) el.remove();
+    if (el) destroyCard(el);
   }
   // ★ canvas_type은 응답값이다 — 요청값이 아니다(S4 RESULT.md §5). success/fallback
   // 둘 다 이 필드로 어떤 카드를 그릴지 정한다. 알려진 4종(table/stream/reader) 중
@@ -198,7 +264,26 @@ function addLiveCard(result) {
   // manifest layout=compound라도 build_chart_bars를 거치면 canvas_type은 'chart'다.
   if (envelope.canvas_type === 'facts' && !envelope.fell_back) return renderFactsCard(envelope);
   if (envelope.canvas_type === 'compound' && !envelope.fell_back) return renderCompoundCard(envelope);
+  if (envelope.canvas_type === 'event' && !envelope.fell_back) return renderEventCard(envelope);
+  if (envelope.canvas_type === 'action' && !envelope.fell_back) return renderActionCard(envelope);
+  if (envelope.canvas_type === 'status' && !envelope.fell_back) return renderStatusCard(envelope);
   return renderFreeCanvas(envelope);
+}
+
+function renderRestStateCard(envelope) {
+  const type = envelope.canvas_type === 'table' ? 'mcp-table' : envelope.canvas_type;
+  const labels = {
+    timeout: ['조회 시간 초과', '제한 시간 안에 데이터를 받지 못했습니다. 다시 시도해 주세요.'],
+    cancelled: ['조회 취소됨', '요청이 취소되었습니다. 데이터 카드는 표시하지 않았습니다.'],
+    error: ['조회 오류', '데이터를 불러오지 못했습니다. 잠시 뒤 다시 시도해 주세요.'],
+  };
+  const [title, message] = labels[envelope.state] || labels.error;
+  const { card, body } = makeCard(type, title, envelope.layout, envelope.correlation);
+  card.dataset.screenState = envelope.state;
+  card.dataset.renderState = envelope.state === 'timeout' ? 'timeout' : 'error';
+  if (envelope.screen_id) card.dataset.screenId = envelope.screen_id;
+  body.appendChild(errorNote(message));
+  return card;
 }
 
 // 카드를 못 그릴 상황(거부/에러/해석불가)을 조용히 삼키지 않는다 — 모자이크에
@@ -211,20 +296,118 @@ function renderLiveNotice(message) {
   body.appendChild(errorNote(message));
 }
 
+function stampPaperScreen(card, envelope) {
+  if (envelope && envelope.screen_id) card.dataset.screenId = envelope.screen_id;
+  return card;
+}
+
+function describeAitsChartPanel(data, envelope, source) {
+  const chartData = data && typeof data === 'object' ? data : {};
+  const chartEnvelope = envelope && typeof envelope === 'object' ? envelope : {};
+  if (source !== 'fixture') {
+    const snapshot = parseAitsChartSnapshot(chartEnvelope);
+    const context = {
+      source,
+      correlation: chartEnvelope.correlation,
+      target: snapshot.body.target,
+      stock: snapshot.stock,
+    };
+    const panelId = panelIdFor(context);
+    const active = aitsChartPanels.snapshot().find((session) => session.panelId === panelId);
+    const generation = active ? active.generation + 1 : 1;
+    context.operationRef = chartEnvelope.operation_ref || chartEnvelope.operationRef;
+    context.operationArgs = chartEnvelope.operation_args || chartEnvelope.operationArgs;
+    return {
+      body: snapshot.body,
+      context: Object.assign(context, { panelId, generation }),
+      panelId,
+      generation,
+      rendererId: snapshot.rendererId,
+    };
+  }
+  const stock = chartData.symbol || chartData.stock || chartData.code || 'UNKNOWN';
+  const context = {
+    source,
+    panelId: chartData.panelId || chartData.panel_id,
+    correlation: chartEnvelope.correlation,
+    operationRef: chartEnvelope.operation_ref || chartEnvelope.operationRef,
+    trId: chartData.trId || chartData.tr_id,
+    target: chartData.target,
+    stock,
+    name: chartData.name,
+    generation: 1,
+  };
+  return {
+    body: fromAthenaChartData(chartData, context),
+    context,
+    panelId: panelIdFor(context),
+    generation: 1,
+    rendererId: AITS_CHART_RENDERER_ID,
+  };
+}
+
+async function reloadExistingAitsChartPanel(descriptor, envelope) {
+  const card = Array.from(grid.querySelectorAll('.card.chart')).find(
+    (candidate) => candidate.dataset.chartPanelId === descriptor.panelId
+  );
+  if (!card || !aitsChartPanels.has(descriptor.panelId)) return null;
+  await aitsChartPanels.reloadPanel(descriptor.panelId, descriptor.body, { generation: descriptor.generation });
+  stampPaperScreen(card, envelope);
+  card.dataset.renderState = descriptor.body.candles.length ? 'data' : 'empty';
+  card.dataset.chartGeneration = String(descriptor.generation);
+  card.scrollIntoView({ block: 'nearest' });
+  return card;
+}
+
+async function mountAitsChartPanel(card, chartBody, descriptor) {
+  // panel identity와 provisional disposer를 await 전에 등록한다. 같은 panel의
+  // 동시 reload/dataset 교체가 늦은 mount를 두 번째 renderer로 만들지 못한다.
+  card.dataset.chartAuthority = 'AITS';
+  card.dataset.rendererId = descriptor.rendererId;
+  card.dataset.chartPanelId = descriptor.panelId;
+  card.dataset.chartGeneration = String(descriptor.generation);
+  card.dataset.renderState = 'loading';
+  descriptor.context.onReloadRequest = async (request) => {
+    const active = aitsChartPanels.snapshot().find((candidate) => candidate.panelId === descriptor.panelId);
+    if (!active) throw new Error('AITS chart session이 닫혔다');
+    return window.athena.invoke('athena:reload-chart-panel', {
+      panelId: descriptor.panelId,
+      generation: active.generation,
+      period: request.period,
+      interval: request.interval,
+      adjusted: request.adjusted,
+    });
+  };
+  cardDestroyers.set(card, () => {
+    aitsChartPanels.destroyPanel(descriptor.panelId);
+    window.athena.send('athena:chart-panel-destroyed', { panelId: descriptor.panelId });
+  });
+  const session = await aitsChartPanels.openPanel(chartBody, descriptor.body, descriptor.context);
+  card.dataset.chartSessionId = session.sessionId;
+  card.dataset.chartTrId = session.body.trId;
+  card.dataset.chartGeneration = String(session.generation);
+  card.dataset.renderState = session.body.candles.length ? 'data' : 'empty';
+  return session;
+}
+
 // ---------- 공통 테이블(신규④) — MCP render_canvas의 실제 table 응답 ----------
 // 목업 table 카드(renderTable, 아래)와는 다른 데이터 형상이다 — 이건 키움
 // 재무제표 고정 스키마가 아니라 스키마 불특정 {columns:[{key,label}], rows:[{key:value}]}다.
 // GLOSSARY.md §2 신규④ "공통 테이블 — 스키마 불특정 레코드. '부모'이자 기본값".
 function renderMcpTable(envelope) {
-  const { body } = makeCard('mcp-table', envelope.caption || '공통 테이블', envelope.layout);
+  const { card, body } = makeCard('mcp-table', envelope.caption || '공통 테이블', envelope.layout, envelope.correlation);
+  stampPaperScreen(card, envelope);
   const rawCols = (envelope.data && Array.isArray(envelope.data.columns)) ? envelope.data.columns : [];
   const rows = (envelope.data && Array.isArray(envelope.data.rows)) ? envelope.data.rows : [];
+  const header = (envelope.data && Array.isArray(envelope.data.header)) ? envelope.data.header : [];
 
   if (!rawCols.length || !rows.length) {
     body.appendChild(errorNote('빈 테이블 — columns 또는 rows가 없다.'));
-    return;
+    return card;
   }
+  if (header.length) body.appendChild(renderCompoundHeaderBand(header));
   body.appendChild(buildFoldedTable(rawCols, rows));
+  return card;
 }
 
 // table 카드와 compound 카드(P4)가 공유하는 표 빌더 — §5.3.1 컬럼 우선순위 흡수(2층):
@@ -325,13 +508,15 @@ function renderFactsGrid(fields) {
 }
 
 function renderFactsCard(envelope) {
-  const { body } = makeCard('facts', envelope.caption || 'Facts', envelope.layout);
+  const { card, body } = makeCard('facts', envelope.caption || 'Facts', envelope.layout, envelope.correlation);
+  stampPaperScreen(card, envelope);
   const fields = (envelope.data && Array.isArray(envelope.data.fields)) ? envelope.data.fields : [];
   if (!fields.length) {
     body.appendChild(errorNote('빈 facts — fields가 없다.'));
-    return;
+    return card;
   }
   body.appendChild(renderFactsGrid(fields));
+  return card;
 }
 
 // CompoundCard 일반(C2, spec §3.3) — "이름과 달리 다중 표가 아니다": 스칼라 헤더 밴드
@@ -346,7 +531,8 @@ function renderCompoundHeaderBand(fields) {
 }
 
 function renderCompoundCard(envelope) {
-  const { body } = makeCard('compound', envelope.caption || 'Compound', envelope.layout);
+  const { card, body } = makeCard('compound', envelope.caption || 'Compound', envelope.layout, envelope.correlation);
+  stampPaperScreen(card, envelope);
   const data = (envelope.data && typeof envelope.data === 'object') ? envelope.data : {};
   const header = Array.isArray(data.header) ? data.header : [];
   const table = data.table;
@@ -354,10 +540,109 @@ function renderCompoundCard(envelope) {
   const tableRows = table && Array.isArray(table.rows) ? table.rows : [];
   if (!header.length || !tableCols.length || !tableRows.length) {
     body.appendChild(errorNote('빈 compound — header 또는 table이 없다.'));
-    return;
+    return card;
   }
   body.appendChild(renderCompoundHeaderBand(header));
   body.appendChild(buildFoldedTable(tableCols, tableRows));
+  return card;
+}
+
+// Paper AT-CV-005 protected workflow templates. These cards are display-only:
+// they expose lifecycle and allowlisted receipt/event fields, never credentials,
+// order execution, OAuth actions, or raw WebSocket frames.
+function appendWorkflowState(body, state, label = '상태') {
+  const row = document.createElement('div');
+  row.className = 'workflow-state';
+  const key = document.createElement('span');
+  key.className = 'workflow-state-label';
+  key.textContent = label;
+  const value = document.createElement('span');
+  value.className = 'workflow-state-value';
+  value.textContent = state || 'unavailable';
+  row.appendChild(key);
+  row.appendChild(value);
+  body.appendChild(row);
+  return row;
+}
+
+function renderEventCard(envelope) {
+  const { card, body } = makeCard('event', envelope.caption || '실시간 이벤트', envelope.layout, envelope.correlation);
+  stampPaperScreen(card, envelope);
+  const data = envelope.data && typeof envelope.data === 'object' ? envelope.data : {};
+  const lifecycle = data.lifecycle || data.state || 'connecting';
+  card.dataset.workflow = 'websocket_lifecycle';
+  card.dataset.screenState = lifecycle;
+  appendWorkflowState(body, lifecycle, '수신 상태');
+  const records = Array.isArray(data.records) ? data.records.slice(0, 20) : [];
+  const list = document.createElement('ol');
+  list.className = 'event-log';
+  list.setAttribute('aria-label', '제한된 이벤트 로그');
+  for (const record of records) {
+    const item = document.createElement('li');
+    item.className = 'event-log-item';
+    item.textContent = typeof record === 'string'
+      ? record
+      : Object.entries(record || {}).slice(0, 5).map(([key, value]) => `${key} ${value}`).join(' · ');
+    list.appendChild(item);
+  }
+  if (!records.length) {
+    const item = document.createElement('li');
+    item.className = 'event-log-item is-empty';
+    item.textContent = '표시할 이벤트가 없습니다.';
+    list.appendChild(item);
+  }
+  body.appendChild(list);
+  const guard = document.createElement('div');
+  guard.className = 'workflow-guard';
+  guard.textContent = '표시 전용 · 원본 프레임과 인증값은 노출하지 않음';
+  body.appendChild(guard);
+  return card;
+}
+
+function renderActionCard(envelope) {
+  const { card, body } = makeCard('action', envelope.caption || '주문 확인', envelope.layout, envelope.correlation);
+  stampPaperScreen(card, envelope);
+  const data = envelope.data && typeof envelope.data === 'object' ? envelope.data : {};
+  card.dataset.workflow = 'guarded_order';
+  card.dataset.screenState = data.lifecycle || data.state || 'review';
+  appendWorkflowState(body, card.dataset.screenState, '주문 단계');
+  const receipt = data.receipt && typeof data.receipt === 'object' ? data.receipt : {};
+  const allowlisted = [
+    { key: 'ord_no', label: '주문번호' },
+    { key: 'dmst_stex_tp', label: '거래소 구분' },
+  ].filter((field) => receipt[field.key] !== undefined);
+  if (allowlisted.length) {
+    body.appendChild(renderFactsGrid(allowlisted.map((field) => ({
+      key: field.key,
+      label: field.label,
+      value: receipt[field.key],
+    }))));
+  }
+  const guard = document.createElement('div');
+  guard.className = 'workflow-guard';
+  guard.textContent = '표시 전용 · 실행과 최종 확인은 대화창에서만 가능';
+  body.appendChild(guard);
+  return card;
+}
+
+function renderStatusCard(envelope) {
+  const { card, body } = makeCard('status', envelope.caption || '연결 상태', envelope.layout, envelope.correlation);
+  stampPaperScreen(card, envelope);
+  const data = envelope.data && typeof envelope.data === 'object' ? envelope.data : {};
+  const lifecycle = data.lifecycle || data.state || (data.ready ? 'ready' : 'auth_required');
+  card.dataset.workflow = 'oauth_lifecycle';
+  card.dataset.screenState = lifecycle;
+  appendWorkflowState(body, lifecycle, '인증 상태');
+  body.appendChild(renderFactsGrid([
+    { key: 'configured', label: '설정됨', value: data.configured === true ? '예' : '아니오' },
+    { key: 'ready', label: '사용 가능', value: data.ready === true ? '예' : '아니오' },
+    { key: 'expires_at', label: '만료 시각', value: data.expires_at || '—' },
+  ]));
+  const guard = document.createElement('div');
+  guard.className = 'workflow-guard';
+  guard.textContent = '토큰과 자격 증명 값은 문서에 표시하지 않음';
+  body.appendChild(guard);
+  return card;
 }
 
 // ---------- 실배선 스트림(신규①) — MCP render_canvas의 실제 stream 응답 ----------
@@ -370,11 +655,11 @@ function renderCompoundCard(envelope) {
 // textContent 대입 전에 폴백 문구를 둔다. sanitize한 문자열은 textContent로만
 // 넣는다 — innerHTML 금지(CLAUDE.md §6).
 function renderLiveStream(envelope) {
-  const { body } = makeCard('stream', envelope.caption || '스트림 · 뉴스', envelope.layout);
+  const { card, body } = makeCard('stream', envelope.caption || '스트림 · 뉴스', envelope.layout, envelope.correlation);
   const records = (envelope.data && Array.isArray(envelope.data.records)) ? envelope.data.records : [];
   if (!records.length) {
     body.appendChild(errorNote('빈 스트림 — records가 없다.'));
-    return;
+    return card;
   }
   const ul = document.createElement('ul');
   ul.className = 'stream-list';
@@ -407,6 +692,7 @@ function renderLiveStream(envelope) {
     more.textContent = `+ ${records.length - SHOW}건 더`;
     body.appendChild(more);
   }
+  return card;
 }
 
 // `ts`가 second/day 어느 정밀도든 한 형식으로 렌더한다 — day 정밀도에서 없는
@@ -432,18 +718,18 @@ function formatRecordTs(ts, precision) {
 // 않고 문단 하나로 그대로 낸다.
 function renderLiveReader(envelope) {
   const data = (envelope.data && typeof envelope.data === 'object') ? envelope.data : {};
-  const { body } = makeCard('reader', data.title || envelope.caption || '리더 · 공시 원문', envelope.layout);
+  const { card, body } = makeCard('reader', data.title || envelope.caption || '리더 · 공시 원문', envelope.layout, envelope.correlation);
   if (data.error_state === 'not_found') {
     body.appendChild(errorNote('문서를 찾을 수 없다 — not_found.'));
-    return;
+    return card;
   }
   if (data.error_state === 'processing_delayed') {
     body.appendChild(errorNote('문서 처리가 지연되고 있다 — processing_delayed.'));
-    return;
+    return card;
   }
   if (!data.body_markdown) {
     body.appendChild(errorNote('빈 리더 — body_markdown이 없다.'));
-    return;
+    return card;
   }
   if (Array.isArray(data.highlights) && data.highlights.length) {
     const note = document.createElement('div');
@@ -459,39 +745,53 @@ function renderLiveReader(envelope) {
   } else {
     renderMarkdownInto(body, data.body_markdown);
   }
+  return card;
 }
 
-// ---------- 실배선 차트(신규⑤) — MCP render_canvas의 실제 chart 응답 ----------
-// live-prompt.js의 chart 힌트가 규정한 형상: data는 {symbol, name, bars:[{time,
-// open,high,low,close,volume}, ...]}(날짜 오름차순 — 프롬프트가 모델에게 정렬해서
-// 보내라고 지시한다, 여기서는 재정렬하지 않는다). 렌더 자체는 아래 renderChartCard
-// (목업 경로, addCard('chart'))와 같은 createChartCard를 재사용한다 — 차이는
-// loadFixture 대신 envelope.data를 바로 먹인다는 것뿐이다. 카드 셸(makeCard)·
-// cardDestroyers 등록·에러 처리는 다른 실배선 렌더러(renderMcpTable 등)와 동일하다.
+// ---------- 실배선 AITS 차트 — REST inline/MCP side-channel 공용 ----------
+// backend/manifest가 확정한 renderer_id='aits-chart-v1'과 data.chart
+// ChartCardBody만 받는다. renderer는 period/target/trId를 추측하지 않고, 계약이
+// 빠지거나 다르면 같은 카드 슬롯에 error 상태를 표시한다. fixture도 최종 DOM은
+// 동일한 aitsChartPanels adapter를 거치며 저수준 createChartCard 직접 호출은 없다.
 async function renderLiveChart(envelope) {
   const data = (envelope.data && typeof envelope.data === 'object') ? envelope.data : {};
-  const bars = Array.isArray(data.bars) ? data.bars : [];
-  const title = envelope.caption || (data.name ? `일봉 — ${data.name}` : '차트');
-  const { card, body } = makeCard('chart', title, envelope.layout);
-  if (!bars.length) {
-    body.appendChild(errorNote('빈 차트 — bars가 없다.'));
-    return;
+  const title = envelope.caption || '차트';
+  let descriptor;
+  try {
+    descriptor = describeAitsChartPanel(data, envelope, 'live');
+  } catch (err) {
+    const { card, body } = makeCard('chart', title, envelope.layout, envelope.correlation);
+    stampPaperScreen(card, envelope);
+    card.dataset.renderState = 'error';
+    body.appendChild(errorNote(`AITS 차트 계약 오류 — ${err && err.message ? err.message : String(err)}`));
+    return card;
+  }
+  const reloaded = await reloadExistingAitsChartPanel(descriptor, envelope);
+  if (reloaded) return reloaded;
+  const { card, body } = makeCard('chart', title, envelope.layout, envelope.correlation);
+  stampPaperScreen(card, envelope);
+  if (!descriptor.body.candles.length) {
+    card.dataset.renderState = 'empty';
+    body.appendChild(errorNote('빈 차트 — candles가 없다.'));
+    return card;
   }
   const chartBody = document.createElement('div');
   chartBody.className = 'chart-card-body';
   body.appendChild(chartBody);
   try {
-    // P2a — data.initial({period})은 일/주/월/년봉 8TR에 한해 render-plan이
-    // 실어준다(canvas_transform.py::resolve_chart_initial_period). 그 외(P2b
-    // 분/틱 4TR 포함)는 undefined — createChartCard의 resolveInitialPeriod가
-    // 'D'로 안전 폴백한다.
-    const instance = await createChartCard(chartBody, { symbol: data.symbol, name: data.name, ohlcv: bars, initial: data.initial });
-    // 닫기 버튼(closeCard)이 lightweight-charts를 정리하도록 카드 자체에 매단다.
-    cardDestroyers.set(card, instance.destroy);
+    await mountAitsChartPanel(card, chartBody, descriptor);
   } catch (err) {
     chartBody.remove();
+    card.dataset.renderState = 'error';
+    delete card.dataset.chartAuthority;
+    delete card.dataset.rendererId;
+    delete card.dataset.chartPanelId;
+    delete card.dataset.chartGeneration;
+    delete card.dataset.chartSessionId;
+    delete card.dataset.chartTrId;
     body.appendChild(errorNote(`차트를 그리지 못했다 — ${err && err.message ? err.message : String(err)}`));
   }
+  return card;
 }
 
 // ---------- 자유 카드(신규, W4 최소 구현) ----------
@@ -501,7 +801,7 @@ async function renderLiveChart(envelope) {
 // envelope.data를 재귀적으로 key/value 트리로 펼친다. innerHTML 미사용
 // (CLAUDE.md §6) — DOM 노드만 만든다.
 function renderFreeCanvas(envelope) {
-  const { body } = makeCard('free', envelope.caption || '자유 카드', envelope.layout);
+  const { card, body } = makeCard('free', envelope.caption || '자유 카드', envelope.layout, envelope.correlation);
   if (envelope.fell_back) {
     const note = document.createElement('div');
     note.className = 'fin-meta';
@@ -509,6 +809,7 @@ function renderFreeCanvas(envelope) {
     body.appendChild(note);
   }
   body.appendChild(renderJsonTree(envelope.data));
+  return card;
 }
 
 function renderJsonTree(value) {
@@ -607,23 +908,49 @@ function cardCloseButton(card) {
 // 초과 시 가장 오래된(도착순 맨 앞) 카드부터 제거한다. 판정 로직은
 // lib/canvas-layout.js — 순수 함수라 node --test로 검증된다.
 function enforceHeightBudget() {
+  // REST 데이터셋은 최대 6장 전체가 한 결과 집합이다. 오래된 카드를 높이 예산으로
+  // 제거하면 같은 타입 공존·ordinal 계약이 깨지므로 스크롤로 모두 보존한다.
+  if (grid.querySelector('.card[data-dataset-id]')) return;
   let cards = grid.querySelectorAll('.card');
   while (
     cards.length > MIN_CARDS &&
     exceedsHeightBudget(grid.scrollHeight, grid.clientHeight, cards.length)
   ) {
-    cards[0].remove();
+    destroyCard(cards[0]);
     cards = grid.querySelectorAll('.card');
   }
 }
 
-function makeCard(type, title, layoutHint) {
-  const existing = grid.querySelector(`.card.${type}`);
-  if (existing) existing.remove(); // 재요청 시 새로 갱신 — 큐레이션(규칙 3)의 특수 사례
+function makeCard(type, title, layoutHint, correlation) {
+  const isDatasetCard = isValidCorrelation(correlation);
+  if (isDatasetCard && activeDatasetId !== correlation.dataset_id) {
+    for (const prior of grid.querySelectorAll('.card[data-dataset-id]')) {
+      destroyCard(prior);
+    }
+    activeDatasetId = correlation.dataset_id;
+  }
+  const existing = isDatasetCard
+    ? Array.from(grid.querySelectorAll('.card[data-dataset-id]')).find((candidate) => (
+      candidate.dataset.datasetId === correlation.dataset_id
+      && candidate.dataset.itemId === correlation.item_id
+      && Number(candidate.dataset.ordinal) === correlation.ordinal
+    ))
+    : Array.from(grid.querySelectorAll(`.card.${type}`)).find((candidate) => !candidate.dataset.datasetId);
+  const activeDatasetCardCount = Array.from(grid.querySelectorAll('.card[data-dataset-id]'))
+    .filter((candidate) => candidate.dataset.datasetId === correlation.dataset_id).length;
+  if (isDatasetCard && !existing && activeDatasetCardCount >= 6) {
+    throw new Error('REST 데이터셋 카드는 최대 6개다');
+  }
+  if (existing) destroyCard(existing); // 재요청 시 새로 갱신 — renderer/session도 함께 폐기
   const card = document.createElement('div');
   // 폭은 형상이 정하고(w-half/w-full), AI layout 힌트는 등급 승격·강등만 한다.
   // 순서는 도착순(appendChild) — canvas-taxonomy "배치·생애주기 규칙 (2026-08-18)".
   card.className = `card ${type} w-${widthGradeFor(type, layoutHint)}`;
+  if (isDatasetCard) {
+    card.dataset.datasetId = correlation.dataset_id;
+    card.dataset.itemId = correlation.item_id;
+    card.dataset.ordinal = String(correlation.ordinal);
+  }
   const head = document.createElement('div');
   head.className = 'card-head';
   const h = document.createElement('div');
@@ -681,15 +1008,17 @@ async function addCard(type) {
 // import, lib/chart-card.js 상단 주석)라 makeCard로 카드 뼈대를 먼저 세우고
 // 그 안에서 await한다 — 다른 렌더러(renderStream 등)와 달리 이 함수만 async다.
 async function renderChartCard() {
+  const fixtureData = await loadFixture('chart');
+  const data = { symbol: '005930', name: '삼성전자', bars: fixtureData.bars, trId: 'ka10081', target: 'stock', period: 'day' };
+  const descriptor = describeAitsChartPanel(data, {}, 'fixture');
+  const reloaded = await reloadExistingAitsChartPanel(descriptor, {});
+  if (reloaded) return reloaded;
   const { card, body } = makeCard('chart', '일봉 — 삼성전자');
   const chartBody = document.createElement('div');
   chartBody.className = 'chart-card-body';
   body.appendChild(chartBody);
   try {
-    const { bars } = await loadFixture('chart');
-    const instance = await createChartCard(chartBody, { symbol: '005930', name: '삼성전자', ohlcv: bars });
-    // 닫기 버튼(closeCard)이 lightweight-charts를 정리하도록 카드 자체에 매단다.
-    cardDestroyers.set(card, instance.destroy);
+    await mountAitsChartPanel(card, chartBody, descriptor);
   } catch (err) {
     chartBody.remove();
     body.appendChild(errorNote(`차트를 그리지 못했다 — ${err && err.message ? err.message : String(err)}`));

@@ -489,6 +489,19 @@ table.fin-table { width: 100%; border-collapse: collapse; font-variant-numeric: 
 .compound-header-band .facts-key { flex-shrink: 0; }
 .compound-header-band .facts-value { white-space: nowrap; }
 
+/* ---- Paper 보호 워크플로 카드(Event/Action/Status) — 상태와 allowlist만 표시. ---- */
+.workflow-state {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 8px 10px; margin-bottom: 10px; border: 1px solid var(--color-k-line-soft);
+  border-radius: 8px; background: rgba(255, 255, 255, 0.035);
+}
+.workflow-state-label { color: var(--color-k-faint); font-size: var(--text-sm); }
+.workflow-state-value { color: var(--color-k-text); font-family: var(--font-mono); font-size: var(--text-base); }
+.event-log { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 5px; max-height: 300px; overflow: auto; }
+.event-log-item { color: var(--color-k-dim); font-family: var(--font-mono); font-size: var(--text-sm); padding: 5px 7px; border-bottom: 1px solid var(--color-k-line-soft); }
+.event-log-item.is-empty { color: var(--color-k-faint); }
+.workflow-guard { margin-top: 10px; color: var(--color-k-faint); font-size: var(--text-sm); }
+
 /* ---- 자유 카드 — 스키마를 가정하지 않는 재귀 key/value 트리 (W4 최소 구현) ---- */
 .free-tree-dl { margin: 0 0 6px; display: grid; grid-template-columns: minmax(90px, max-content) 1fr; gap: 3px 12px; }
 .free-tree-dl dt { font-family: var(--font-mono); font-size: var(--text-sm); color: var(--color-k-faint); }

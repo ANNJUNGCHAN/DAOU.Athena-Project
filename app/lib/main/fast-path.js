@@ -15,34 +15,19 @@
 // 권위다(app/chat.js의 canvasTypeLabel 주석과 같은 원칙).
 'use strict';
 
-function comma(n) {
-  if (typeof n !== 'number' || !Number.isFinite(n)) return String(n);
-  return n.toLocaleString('ko-KR');
-}
+const { sanitizeCacheValue } = require('./query-cache');
 
-// canvasType(응답이 돌려준 실제 카드 종류) + judgmentData(캐시된 요청 인자 —
-// 종목명 라벨용) + summary(backend render-plan 응답) → 결정론 채팅 답변.
-function buildReplayAnswer(canvasType, judgmentData, summary) {
-  const s = summary || {};
-  const suffix = ' (같은 질문의 이전 해석을 재사용했습니다 — 데이터는 방금 새로 조회)';
-  if (canvasType === 'chart') {
-    const label = (judgmentData && (judgmentData.name || judgmentData.symbol)) || '요청 종목';
-    const parts = [`${label} 차트를 캔버스에 띄웠습니다`];
-    if (s.rows_kept != null && s.first_time && s.last_time) {
-      parts.push(`— 최근 ${s.rows_kept}봉(${s.first_time}~${s.last_time})`);
-    }
-    if (s.latest_close != null) parts.push(`, 최근 종가 ${comma(s.latest_close)}원`);
-    if (s.trimmed) parts.push(`. 전체 ${s.rows_total}봉 중 최근 구간 기준입니다`);
-    return parts.join('') + '.' + suffix;
-  }
-  const cols = Array.isArray(s.columns) ? s.columns.length : null;
-  return `표를 캔버스에 띄웠습니다 — ${s.rows_kept ?? '?'}행${cols ? ` · ${cols}열` : ''}.` + suffix;
+// 성공 채팅은 데이터 요약이 아니라 표시 영수증이다. 가격·행·열·봉·기간은
+// renderer-only envelope에 남기고, 캐시 무결성 사실만 고지한다.
+function buildReplayAnswer() {
+  return '캔버스에 표시했습니다. 이전 해석을 재사용했고 데이터는 새로 조회했습니다.';
 }
 
 // 반환: { ok, answerText?, summary?, reason?, durationMs }
 // 실패는 조용히 삼키지 않고 reason으로 돌려준다 — 호출자가 정상 경로로 폴백하고
 // 캐시를 무효화한다(잘못된 판정이 반복 리플레이되지 않게).
 async function runCachedReplay({ judgment, backendBase, fetchImpl, clock }) {
+  const safeJudgment = sanitizeCacheValue(judgment || {});
   const doFetch = fetchImpl || fetch;
   const now = clock || Date.now;
   const startedAt = now();
@@ -54,9 +39,15 @@ async function runCachedReplay({ judgment, backendBase, fetchImpl, clock }) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        question: judgment.resolveQuestion,
-        intent: 'auto', // 조회 표면만 — 리플레이가 주문·실시간에 닿을 수 없다
-        arguments: judgment.resolveArgs || {},
+        question: safeJudgment.resolveQuestion,
+        intent: safeJudgment.resolveIntent,
+        // candidate_refs는 검색 힌트라 캐시하지 않는다. 반대로 아래 셋은
+        // describe 뒤 확정한 canonical assertion이므로 매번 resolve에 다시 보내
+        // 카탈로그 변경/소유권 불일치를 백엔드가 거부하게 한다.
+        preferred_ref: safeJudgment.preferredRef,
+        detail_group: safeJudgment.detailGroup,
+        response_mode: safeJudgment.responseMode,
+        arguments: safeJudgment.resolveArgs || {},
       }),
     });
   } catch (err) {
@@ -82,8 +73,7 @@ async function runCachedReplay({ judgment, backendBase, fetchImpl, clock }) {
       // 틀린 힌트를 보낼 일 자체가 없다.
       body: JSON.stringify({
         plan_token: planToken,
-        data: judgment.data || {},
-        caption: judgment.caption || null,
+        caption: safeJudgment.caption || null,
       }),
     });
   } catch (err) {
@@ -99,9 +89,9 @@ async function runCachedReplay({ judgment, backendBase, fetchImpl, clock }) {
 
   return {
     ok: true,
-    summary: body.summary,
+    receipt: body.receipt,
     canvasType: body.canvas_type,
-    answerText: buildReplayAnswer(body.canvas_type, judgment.data, body.summary),
+    answerText: buildReplayAnswer(),
     durationMs: now() - startedAt,
   };
 }

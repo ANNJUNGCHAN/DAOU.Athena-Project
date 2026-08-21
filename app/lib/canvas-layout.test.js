@@ -24,6 +24,12 @@ test('폭 문법 — facts(F1/F2 key/value)는 반폭, compound(헤더+표)는 �
   assert.equal(widthGradeFor('compound'), 'full');
 });
 
+test('폭 문법 — 보호 워크플로 event는 전폭, action/status는 반폭', () => {
+  assert.equal(widthGradeFor('event'), 'full');
+  assert.equal(widthGradeFor('action'), 'half');
+  assert.equal(widthGradeFor('status'), 'half');
+});
+
 test('미지 형상은 전폭 — 자유 카드와 같은 보수적 착지', () => {
   assert.equal(widthGradeFor('timeline'), 'full');
   assert.equal(widthGradeFor('unknown-type'), 'full');

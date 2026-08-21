@@ -124,14 +124,10 @@ function withAlpha(hex, alpha) {
   return `rgba(${r},${g},${b},${alpha})`;
 }
 
-// P2a(`plan/공통화면-템플릿-실행계획-2026-08-20.md`) — render-plan이 카드 봉투에
-// 실어주는 opts.initial.period(일/주/월/년봉 8TR 한정, canvas_transform.py::
-// resolve_chart_initial_period)만 신뢰한다. MIN/TICK을 포함해 그 외 값은 전부
-// "미인식"으로 취급해 'D'로 안전 폴백한다 — 백엔드가 분/틱 TR(P2b)에는 이 값을
-// 절대 주지 않으므로(의도적 비배선), 여기서 MIN/TICK을 받아들이면 정보 정직성
-// 계약(§8, 탭 표시=실제 데이터)이 아니라 우연에 기대는 셈이다. 부재/미인식은
-// 조용히 넘기지 않고 console.warn으로 남긴다.
-const VALID_INITIAL_PERIODS = ['D', 'W', 'M', 'Y'];
+// AITS ChartCardBody.period를 Athena 툴바 토큰으로 받은 값만 신뢰한다. D/W/M/Y와
+// 실제 분·틱 snapshot을 뜻하는 MIN/TICK을 허용하고, 그 외 값은 D로 fail-safe한다.
+// AITS adapter는 preSampled=true를 함께 넘겨 실제 분·틱 봉을 의사 재샘플하지 않는다.
+const VALID_INITIAL_PERIODS = ['D', 'W', 'M', 'Y', 'MIN', 'TICK'];
 function resolveInitialPeriod(initial) {
   const requested = initial && initial.period;
   if (!requested) return 'D';
@@ -144,29 +140,31 @@ function resolveInitialPeriod(initial) {
 
 // ---------- 카드 마운트 (DOM 필요) ----------
 // container: 카드 본문 DOM 노드(canvas.js의 chartBody — .chart-card-body).
-// opts: {symbol, name, ohlcv, initial}. ohlcv는 항상 일봉(D) 배열로 받는다 — 주/월/
-// 년/분/틱은 이 함수 안에서 chart-resample.js로 그때그때 파생한다(원본 일봉은
-// 절대 버리지 않는다, 주기 전환을 몇 번 오가도 정밀도 손실이 없다). opts.initial
-// (선택, {period})은 render-plan이 8TR(일/주/월/년봉)에 한해 넘겨주는 초기 주기다
-// (P2a) — 부재/미인식은 resolveInitialPeriod가 'D'로 안전 폴백한다.
-// 반환: {chart, setForm(candle|bar|line|area), setData(ohlcv), destroy}.
+// opts: {symbol, name, ohlcv, initial, preSampled}. 기존 fixture는 일봉 원본에서
+// 클라이언트 재샘플한다. AITS adapter는 해당 TR이 이미 만든 canonical candles를
+// preSampled=true로 전달하므로 분·틱을 포함해 최초 봉을 그대로 그린다.
+// 반환: {chart, setForm(candle|bar|line|area), setData(ohlcv), replaceData(ohlcv),
+// applyChartTick(update|rollover, candle), destroy}. applyChartTick은 AITS
+// ChartTickDelta의 진행봉 경로이며 현재 줌·팬 viewport를 보존한다.
 async function createChartCard(container, opts) {
   const o = opts || {};
   const { createChart, CandlestickSeries, BarSeries, LineSeries, AreaSeries, HistogramSeries, CrosshairMode, LineStyle } =
     await import(__LIGHTWEIGHT_CHARTS_URL);
 
-  const dailyBars = Array.isArray(o.ohlcv) ? o.ohlcv : [];
+  let dailyBars = Array.isArray(o.ohlcv) ? o.ohlcv.slice() : [];
   // 초기 주기가 'D'가 아니면 최초 렌더부터 실제로 리샘플된 봉을 보여준다 — 툴바
   // 탭만 'W'로 표시하고 데이터는 일봉 그대로면 정보 정직성(§8) 위반이다.
   const initialPeriod = resolveInitialPeriod(o.initial);
-  const initialResample = resample(dailyBars, initialPeriod, 1);
+  const initialResample = o.preSampled
+    ? { bars: dailyBars.slice(), mock: false }
+    : resample(dailyBars, initialPeriod, 1);
 
   const toolbar = createChartToolbar({
     initial: { period: initialPeriod, interval: 1, form: 'candle', adjusted: true },
     callbacks: {
-      onPeriodChange: (period, interval) => applyPeriod(period, interval),
+      onPeriodChange: (period, interval) => requestAuthoritativeReload({ period, interval, adjusted: currentAdjusted }),
       onFormChange: (form) => setForm(form),
-      onAdjustedToggle: (adjustedOn) => applyAdjusted(adjustedOn),
+      onAdjustedToggle: (adjustedOn) => requestAuthoritativeReload({ period: currentPeriod, interval: currentInterval, adjusted: adjustedOn }),
       onFullscreenToggle: () => toggleFullscreen(),
       onIndicatorButtonClick: (anchorBtn) => indicatorPanel.open(anchorBtn),
     },
@@ -234,6 +232,8 @@ async function createChartCard(container, opts) {
   let currentPeriod = initialPeriod;
   let currentInterval = 1;
   let currentAdjusted = true;
+  let reloadPending = false;
+  let reloadFailure = null;
   let currentMockResample = initialResample.mock;
   let currentBars = initialResample.bars;
   let priceSeries = null;
@@ -611,7 +611,8 @@ async function createChartCard(container, opts) {
     },
   });
 
-  function setData(ohlcv) {
+  function setData(ohlcv, options) {
+    const shouldFitContent = !options || options.fitContent !== false;
     const candleData = toCandleSeriesData(ohlcv);
     const volumeData = toVolumeSeriesData(ohlcv);
     if (currentForm === 'line' || currentForm === 'area') {
@@ -620,7 +621,7 @@ async function createChartCard(container, opts) {
       priceSeries.setData(candleData);
     }
     volumeSeries.setData(volumeData);
-    chart.timeScale().fitContent();
+    if (shouldFitContent) chart.timeScale().fitContent();
     recomputeOverlayData();
     recomputeVolMaData();
     recomputePaneIndicatorData();
@@ -630,6 +631,54 @@ async function createChartCard(container, opts) {
       renderVolumeProfile();
       if (drawLayer) drawLayer.renderAll(); // 추세선 재투영(주기 전환·데이터 갱신)
     });
+  }
+
+  // AITS CARD_SET/same-panel reload 권위 경로. 화면 시리즈만 바꾸는 setData와
+  // 달리 이후 주기 전환·tick delta가 참조하는 controller 기준 배열도 함께
+  // 교체한다. 전달된 ChartCardBody.candles는 이미 해당 주기의 canonical
+  // snapshot이므로 여기서 다시 재샘플하지 않는다.
+  function replaceData(ohlcv, options) {
+    const replacement = options && typeof options === 'object' ? options : {};
+    if (VALID_INITIAL_PERIODS.indexOf(replacement.period) !== -1) {
+      currentPeriod = replacement.period;
+      currentInterval = replacement.interval || 1;
+      toolbar.setPeriod(currentPeriod, currentInterval, false);
+    }
+    dailyBars = Array.isArray(ohlcv) ? ohlcv.slice() : [];
+    currentBars = dailyBars.slice();
+    currentMockResample = false;
+    setData(currentBars);
+    updateNote();
+  }
+
+  // AITS ChartTickDelta 호환 경로. update는 같은 시각 슬롯의 마지막 봉 교체,
+  // rollover는 새 봉 append다. renderer/series를 다시 만들지 않고 fitContent도
+  // 호출하지 않으므로 진행봉 수신 전의 줌·팬 viewport가 유지된다.
+  function applyChartTick(kind, candle) {
+    const price = toCandleSeriesData([candle])[0];
+    const volume = toVolumeSeriesData([candle])[0];
+    if (!price) return false;
+    if (kind === 'update') {
+      if (!currentBars.length) return false;
+      currentBars[currentBars.length - 1] = candle;
+      if (dailyBars.length) dailyBars[dailyBars.length - 1] = candle;
+    } else if (kind === 'rollover') {
+      currentBars.push(candle);
+      dailyBars.push(candle);
+    } else {
+      return false;
+    }
+    if (currentForm === 'line' || currentForm === 'area') priceSeries.update({ time: price.time, value: price.close });
+    else priceSeries.update(price);
+    if (volume) volumeSeries.update(volume);
+    recomputeOverlayData();
+    recomputeVolMaData();
+    recomputePaneIndicatorData();
+    requestAnimationFrame(() => {
+      renderVolumeProfile();
+      if (drawLayer) drawLayer.renderAll();
+    });
+    return true;
   }
 
   // 기본 on(이평선·거래량MA) 초기 적용 — 패널·데이터 로드보다 먼저 시리즈를
@@ -645,15 +694,44 @@ async function createChartCard(container, opts) {
     saveAuthoring();
   }
 
-  // 정직 표기(fin-meta 관례) — 수정주가는 백엔드 미연결이라 토글해도 실제
-  // 서버 보정값이 오지 않는다(§6). 분/틱은 일봉에서 만든 결정적 의사 재샘플이다
-  // (chart-resample.js). 둘 다 항상 정확한 현재 상태를 보여준다 — 토글 직후만
-  // 반짝하고 사라지는 표기가 아니다(soul.md §8 정보 정직성).
+  // 정직 표기(fin-meta 관례) — AITS canonical snapshot은 수정주가/주기 변경 때
+  // REST control-plane을 새로 왕복한다. fixture만 로컬 재샘플임을 표시한다.
   function updateNote() {
-    const parts = ['서버 보정(upd_stkpc_tp) 미연결 — 목업 동일 데이터'];
+    const parts = o.preSampled
+      ? [`AITS ${o.trId || 'chart'} canonical snapshot`]
+      : ['서버 보정(upd_stkpc_tp) 미연결 — 목업 동일 데이터'];
     if (currentMockResample) parts.push('분/틱은 일봉에서 만든 결정적 의사 재샘플 — 실제 장중 분포 아님');
     if (authoringStore.enabled) parts.push('저작 상태 로컬 저장 1판 — 백엔드 영속은 후속 라운드');
+    if (reloadFailure) parts.push(`재조회 실패 — ${reloadFailure}`);
     adjustedNote.textContent = parts.join(' · ');
+  }
+
+  async function requestAuthoritativeReload(request) {
+    const previous = { period: currentPeriod, interval: currentInterval, adjusted: currentAdjusted };
+    if (reloadPending || typeof o.onReloadRequest !== 'function') {
+      toolbar.setPeriod(previous.period, previous.interval, false);
+      toolbar.setAdjusted(previous.adjusted);
+      reloadFailure = reloadPending ? '이전 재조회가 진행 중이다' : 'REST reload 권위가 없다';
+      updateNote();
+      return false;
+    }
+    reloadPending = true;
+    reloadFailure = null;
+    try {
+      const result = await o.onReloadRequest(request);
+      if (!result || result.ok !== true) throw new Error((result && result.error) || 'reload가 완료되지 않았다');
+      currentAdjusted = request.adjusted !== false;
+      toolbar.setAdjusted(currentAdjusted);
+      return true;
+    } catch (error) {
+      toolbar.setPeriod(previous.period, previous.interval, false);
+      toolbar.setAdjusted(previous.adjusted);
+      reloadFailure = String((error && error.message) || error);
+      updateNote();
+      return false;
+    } finally {
+      reloadPending = false;
+    }
   }
 
   // 주기 탭·세분 전환 — 원본 일봉(dailyBars)에서 매번 새로 파생한다(누적 오차 없음).
@@ -671,11 +749,11 @@ async function createChartCard(container, opts) {
     updateNote();
   }
 
-  // 수정주가 토글 — §6: 클라이언트 보정 계산 없음, 서버가 보정 시계열을 준다.
-  // 이 앱은 백엔드 미연결이라 "재조회"를 같은 파이프라인 재실행으로 흉내만
-  // 내고(mock 재로드), 그 사실을 note에 정직하게 남긴다.
+  // 프로그래밍 API/fixture 호환 경로. 사용자 toolbar 토글은 위의
+  // requestAuthoritativeReload를 통해서만 서버 snapshot을 교체한다.
   function applyAdjusted(adjustedOn) {
     currentAdjusted = adjustedOn;
+    toolbar.setAdjusted(currentAdjusted);
     applyPeriod(currentPeriod, currentInterval);
   }
 
@@ -735,7 +813,7 @@ async function createChartCard(container, opts) {
     if (priceWrap.parentElement) priceWrap.remove();
   }
 
-  return { chart, setForm, setData, applyPeriod, applyAdjusted, toggleFullscreen, destroy };
+  return { chart, setForm, setData, replaceData, applyChartTick, applyPeriod, applyAdjusted, toggleFullscreen, destroy };
 }
 
 // 외부 소비자는 canvas.js(createChartCard)와 chart-card.test.js(순수 변환 + 등락색
