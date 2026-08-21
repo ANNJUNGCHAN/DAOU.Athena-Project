@@ -14,14 +14,13 @@ const STOCK_ENTITY_RESOLVER_ALGORITHM = 'stock-entity-index';
 const STOCK_ENTITY_RESOLVER_VERSION = 3;
 const STOCK_ENTITY_RESOLVER_ADAPTER_VERSION = `${STOCK_ENTITY_RESOLVER_ALGORITHM}-v${STOCK_ENTITY_RESOLVER_VERSION}`;
 const ENTITY_INDEX_VERSION = STOCK_ENTITY_RESOLVER_VERSION;
-const QUOTE_INTENT_RE = /(현재가|현재\s*시세|오늘\s*주가|주가\s*(?:얼마|조회)|current\s+(?:stock\s+)?price|stock\s+price\s+today)/i;
-// 현재가라는 단어가 다른 명시적 화면 의도에 포함돼도 quote 단축 경로가 이를
-// 덮어쓰면 안 된다. 아래 토큰이 함께 있으면 selector가 전체 문맥을 판정하도록
-// 보수적으로 abstain한다. 종목명이나 존댓말 같은 일반 문구는 막지 않는다.
-const COMPETING_QUOTE_OPERATION_RE = /(?:거래원|증권사|매매동향|거래량|체결량|매물대|호가|차트|[일주월년분틱]\s*봉|순위|랭킹|재무|실적|공시|뉴스|계좌|잔고|예수금|매수|매도|주문|\b(?:broker|dealer|volume|order\s*book|chart|ranking|financials?|earnings?|disclosures?|news|account|balance|buy|sell|order)\b)/i;
 const AMBIGUOUS_ENTITY_CONTEXT_RE = /(?:말고|제외|아닌|비교|\b(?:not|except|excluding|compare|versus|vs)\b)/i;
 const ENTITY_SUFFIX_PATTERN = "(?:'s|의|가|이|은|는|을|를|와|과|에|에서|으로|로)";
 const REVIEWED_MARKET_ENTITY_KIND = Object.freeze({ '0': 'stock', '10': 'stock', '8': 'etf' });
+const GRAMMAR_EDGE = `[\\s?!.,~"'():;·-]*`;
+const KOREAN_QUOTE_CORE = '(?:현재\\s*(?:가|시세)|오늘\\s*주가|주가)(?:\\s*(?:얼마(?:야|예요|에요|인가요?)?|조회))?';
+const KOREAN_QUOTE_COURTESY = '(?:\\s*(?:를|은|는))?(?:\\s*(?:좀|한번))?(?:\\s*(?:(?:알려|보여)\\s*(?:줘|주세요)|(?:조회|확인)\\s*(?:해)?\\s*(?:줘|주세요)|해\\s*(?:줘|주세요)))?';
+const ENGLISH_QUOTE_CORE = '(?:current\\s+(?:stock\\s+)?price|stock\\s+price\\s+today)';
 
 class RestDatasetError extends Error {
   constructor(code, message, details = {}) {
@@ -49,6 +48,31 @@ function aliasSpanPattern(alias) {
     `(?:^|[^0-9a-z가-힣])${flexibleAlias}(?:${ENTITY_SUFFIX_PATTERN})?(?=$|[^0-9a-z가-힣])`,
     'iu',
   );
+}
+
+function flexibleExactAliasPattern(alias) {
+  return [...String(alias || '')].map(regexEscape).join('[\\s._-]*');
+}
+
+// Fast quote는 selector를 대신하는 작은 폐쇄 문법이다. 정확히 resolve된 하나의
+// 종목 표기와 현재가 표현, 검토된 조사/정중어만 질문 전체를 소진해야 한다.
+// 알 수 없는 단어·접속사·추가 화면 의미가 한 글자라도 남으면 정상 selector로
+// 넘긴다. 따라서 경쟁 의도 목록을 계속 유지할 필요가 없다.
+function matchesStandaloneQuoteGrammar(query, index, entity) {
+  if (!index || !entity) return false;
+  const text = String(query || '').normalize('NFKC').toLocaleLowerCase('ko-KR').trim();
+  const aliases = index.aliasesForEntity(entity);
+  return aliases.some((alias) => {
+    const aliasPattern = flexibleExactAliasPattern(alias);
+    const koreanEntity = `${aliasPattern}(?:의|은|는|이|가|을|를)?`;
+    const englishEntity = `${aliasPattern}(?:\\s*'s)?`;
+    const patterns = [
+      `${GRAMMAR_EDGE}${koreanEntity}\\s*${KOREAN_QUOTE_CORE}${KOREAN_QUOTE_COURTESY}${GRAMMAR_EDGE}`,
+      `${GRAMMAR_EDGE}(?:please\\s+)?(?:show\\s+me\\s+|tell\\s+me\\s+)?${englishEntity}\\s+${ENGLISH_QUOTE_CORE}(?:\\s+please)?${GRAMMAR_EDGE}`,
+      `${GRAMMAR_EDGE}(?:please\\s+)?${ENGLISH_QUOTE_CORE}\\s+(?:for|of)\\s+${englishEntity}(?:\\s+please)?${GRAMMAR_EDGE}`,
+    ];
+    return patterns.some((pattern) => new RegExp(`^${pattern}$`, 'iu').test(text));
+  });
 }
 
 function stableValue(value) {
@@ -632,7 +656,23 @@ class StockEntityIndex {
   }
 
   get size() {
-    return this._aliases.size;
+    return this._entities.size;
+  }
+
+  aliasesForEntity(entity) {
+    if (!entity) return [];
+    const entityKeys = new Set();
+    for (const [key, indexedEntity] of this._entities) {
+      if (indexedEntity.code === entity.code
+          && indexedEntity.kind === entity.kind
+          && indexedEntity.market === entity.market) entityKeys.add(key);
+    }
+    if (!entityKeys.size) return [];
+    const aliases = [];
+    for (const [alias, keys] of this._aliases) {
+      if ([...entityKeys].some((key) => keys.has(key))) aliases.push(alias);
+    }
+    return aliases;
   }
 
   resolveQuery(query) {
@@ -673,7 +713,40 @@ function extractStockMasterRecords(body) {
   if (Array.isArray(body)) return body;
   if (body && Array.isArray(body.list)) return body.list;
   if (body && body.data && Array.isArray(body.data.list)) return body.data.list;
-  return [];
+  throw new RestDatasetError('stock_master_shape', 'stock-master 응답에 list 배열이 없다');
+}
+
+function buildStockMasterRefreshRecords(marketRecords) {
+  const reviewedMarkets = Object.keys(REVIEWED_MARKET_ENTITY_KIND);
+  if (reviewedMarkets.some((market) => !Array.isArray(marketRecords[market]))) {
+    throw new RestDatasetError('stock_master_incomplete', 'stock-master 0/10/8 전체 배치가 필요하다');
+  }
+  const candidatesByCode = new Map();
+  for (const requestedMarket of reviewedMarkets) {
+    for (const row of marketRecords[requestedMarket]) {
+      if (!row || typeof row !== 'object' || Array.isArray(row)) {
+        throw new RestDatasetError('stock_master_row', 'stock-master 행은 객체여야 한다');
+      }
+      const code = String(row.code || row.stk_cd || '').trim();
+      const name = String(row.name || row.stk_nm || '').trim();
+      // ka10099 market 0은 aggregate 응답이다. 요청 시장을 추정값으로 쓰지
+      // 않고 각 행이 반환한 시장만 신원 권위로 사용한다.
+      const market = String(row.marketCode || row.market_code || '').trim();
+      if (!/^\d{6}$/.test(code) || !name || !REVIEWED_MARKET_ENTITY_KIND[market]) continue;
+      const candidate = Object.freeze({ code, name, market });
+      const fingerprint = JSON.stringify(candidate);
+      if (!candidatesByCode.has(code)) candidatesByCode.set(code, new Map());
+      candidatesByCode.get(code).set(fingerprint, candidate);
+    }
+  }
+
+  const accepted = [];
+  for (const candidates of candidatesByCode.values()) {
+    // aggregate/dedicated 응답의 동일 행은 한 종목이다. 이름이나 반환 시장이
+    // 충돌하면 어느 쪽도 선택하지 않고 코드 전체를 제외한다.
+    if (candidates.size === 1) accepted.push(candidates.values().next().value);
+  }
+  return accepted;
 }
 
 async function refreshStockEntityIndex(index, {
@@ -682,33 +755,34 @@ async function refreshStockEntityIndex(index, {
   markets = ['0', '10', '8'],
   wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
 }) {
-  const records = [];
-  for (let marketIndex = 0; marketIndex < markets.length; marketIndex += 1) {
-    const market = markets[marketIndex];
-    const kind = REVIEWED_MARKET_ENTITY_KIND[String(market)];
-    if (!kind) continue;
+  const reviewedMarkets = markets
+    .map(String)
+    .filter((market, position, all) => REVIEWED_MARKET_ENTITY_KIND[market] && all.indexOf(market) === position);
+  if (Object.keys(REVIEWED_MARKET_ENTITY_KIND).some((market) => !reviewedMarkets.includes(market))) {
+    throw new RestDatasetError('stock_master_incomplete', 'stock-master refresh는 0/10/8 시장을 모두 조회해야 한다');
+  }
+  const marketRecords = {};
+  for (let marketIndex = 0; marketIndex < reviewedMarkets.length; marketIndex += 1) {
+    const market = reviewedMarkets[marketIndex];
     const response = await fetchImpl(`${backendBase}/api/v1/tr/stockinfo/ka10099`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ mrkt_tp: market }),
     });
     const body = await readJson(response, 'stock-master');
-    records.push(...extractStockMasterRecords(body).map((record) => ({ ...record, market: String(market) })));
-    // 같은 API ID는 초당 1회 제한이다. 첫 시장부터 즉시 사용 가능한 인덱스로
-    // 반영하고, 다음 시장 호출 전 1초 창을 넘긴다.
-    index.replace(records);
-    if (marketIndex < markets.length - 1) await wait(1050);
+    marketRecords[market] = extractStockMasterRecords(body);
+    // 같은 API ID는 초당 1회 제한이다. 대기 중에도 기존 snapshot을 유지한다.
+    if (marketIndex < reviewedMarkets.length - 1) await wait(1050);
   }
-  return index.size;
+  const records = buildStockMasterRefreshRecords(marketRecords);
+  // 모든 fetch/검증/충돌 제거가 성공한 뒤 단 한 번 게시한다.
+  return index.replace(records);
 }
 
 function buildQuoteDataset(query, index, { idFactory = () => `rest-${Date.now().toString(36)}` } = {}) {
   const text = String(query || '').trim();
-  if (!QUOTE_INTENT_RE.test(text) || COMPETING_QUOTE_OPERATION_RE.test(text)) {
-    return null;
-  }
   const entity = index && index.resolveQuery(text);
-  if (!entity || entity.kind !== 'stock') return null;
+  if (!entity || entity.kind !== 'stock' || !matchesStandaloneQuoteGrammar(text, index, entity)) return null;
   return {
     datasetId: String(idFactory()).slice(0, 64),
     question: text,

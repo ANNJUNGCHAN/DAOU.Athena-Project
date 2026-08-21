@@ -671,27 +671,40 @@ test('quote binder keeps entity resolution separate from quote intent routing', 
   }
 });
 
-test('quote binder binds a standalone current quote but abstains from explicit competing screen semantics', () => {
+test('quote binder uses a closed standalone grammar and rejects every residual semantic token', () => {
   const index = new StockEntityIndex();
   index.replace([
-    { code: '005930', name: '삼성전자', market: '0' },
+    { code: '005930', name: '삼성전자', aliases: ['Samsung Electronics'], market: '0' },
     { code: '015760', name: '한국전력', market: '0' },
   ]);
 
-  const standalone = buildQuoteDataset('삼성전자 현재가 알려줘', index, {
-    idFactory: () => 'standalone-quote',
-  });
-  assert.equal(standalone.datasetId, 'standalone-quote');
-  assert.equal(standalone.items[0].operationRef, 'detail:ka10001:current_trading');
-  assert.deepEqual(standalone.items[0].args, { stk_cd: '005930' });
-
-  for (const competing of [
-    '한국전력의 거래원 조회에서 현재가와 거래량 요약만 보여줘',
-    '한국전력 현재가와 broker 동향을 보여줘',
-    '한국전력 현재가 거래량 차트',
+  for (const standaloneQuestion of [
+    '삼성전자 현재가',
+    '삼성전자 현재가 알려줘',
+    '005930 현재가',
+    '005930 오늘 주가',
+    '005930 주가 얼마',
+    'Samsung Electronics current price',
+    'current stock price for Samsung Electronics please',
   ]) {
-    assert.equal(index.resolveQuery(competing)?.code, '015760', competing);
-    assert.equal(buildQuoteDataset(competing, index), null, competing);
+    const standalone = buildQuoteDataset(standaloneQuestion, index, {
+      idFactory: () => 'standalone-quote',
+    });
+    assert.equal(standalone.datasetId, 'standalone-quote', standaloneQuestion);
+    assert.equal(standalone.items[0].operationRef, 'detail:ka10001:current_trading', standaloneQuestion);
+    assert.deepEqual(standalone.items[0].args, { stk_cd: '005930' }, standaloneQuestion);
+  }
+
+  for (const residualContext of [
+    '한국전력의 거래원 조회에서 현재가와 거래량 요약만 보여줘',
+    '한국전력 회원사 현황과 현재가',
+    '한국전력 brokerage activity and current price',
+    '한국전력 selling members and current price',
+    '삼성전자 현재가와 미상 의미를 함께',
+    '삼성전자 말고 한국전력 현재가',
+    '삼성전자와 한국전력 현재가 비교',
+  ]) {
+    assert.equal(buildQuoteDataset(residualContext, index), null, residualContext);
   }
 });
 
@@ -779,13 +792,111 @@ test('ETF, unknown code, intent uncertainty, and unknown market never bind the s
     fetchImpl: async (_url, options) => {
       const market = JSON.parse(options.body).mrkt_tp;
       fetches.push(market);
-      return response({ list: [{ stk_cd: `${Number(market) + 1}`.padStart(6, '0'), stk_nm: `시장${market}` }] });
+      return response({ list: [{
+        code: `${Number(market) + 1}`.padStart(6, '0'),
+        name: `시장${market}`,
+        marketCode: market,
+      }] });
     },
   });
   assert.deepEqual(fetches, ['0', '10', '8']);
   assert.equal(refreshed.resolveQuery('시장0 현재가')?.kind, 'stock');
   assert.equal(refreshed.resolveQuery('시장10 현재가')?.kind, 'stock');
   assert.equal(refreshed.resolveQuery('시장8 현재가')?.kind, 'etf');
+});
+
+test('stock-master refresh publishes one atomic returned-market snapshot and deduplicates aggregate overlap', async () => {
+  const index = new StockEntityIndex();
+  index.replace([
+    { code: '111111', name: '기존종목', market: '0' },
+    { code: '069500', name: 'KODEX 200', market: '8' },
+  ]);
+  let releaseLast;
+  let reachedLast;
+  const lastBlocked = new Promise((resolve) => { reachedLast = resolve; });
+  const lastRelease = new Promise((resolve) => { releaseLast = resolve; });
+
+  const refresh = refreshStockEntityIndex(index, {
+    backendBase: 'http://backend',
+    wait: async () => {},
+    fetchImpl: async (_url, options) => {
+      const market = JSON.parse(options.body).mrkt_tp;
+      if (market === '8') {
+        reachedLast();
+        await lastRelease;
+      }
+      const lists = {
+        0: [
+          { code: '222222', name: '신규코스피', marketCode: '0' },
+          // 시장 0 응답은 aggregate다. 반환 marketCode=8이 권위다.
+          { code: '069500', name: 'KODEX 200', marketCode: '8' },
+        ],
+        10: [{ code: '333333', name: '신규코스닥', marketCode: '10' }],
+        8: [{ code: '069500', name: 'KODEX 200', marketCode: '8' }],
+      };
+      return response({ list: lists[market] });
+    },
+  });
+
+  await lastBlocked;
+  assert.equal(index.resolveQuery('기존종목 현재가')?.code, '111111');
+  assert.equal(index.resolveQuery('신규코스피 현재가'), null);
+  assert.equal(index.resolveQuery('KODEX 200 현재가')?.kind, 'etf');
+  assert.equal(buildQuoteDataset('KODEX 200 현재가', index), null);
+
+  releaseLast();
+  assert.equal(await refresh, 3);
+  assert.equal(index.resolveQuery('기존종목 현재가'), null);
+  assert.equal(index.resolveQuery('신규코스피 현재가')?.kind, 'stock');
+  assert.equal(index.resolveQuery('KODEX 200 현재가')?.kind, 'etf');
+  assert.equal(buildQuoteDataset('KODEX 200 현재가', index), null);
+  assert.equal(buildQuoteDataset('신규코스피 현재가', index)?.items[0].args.stk_cd, '222222');
+});
+
+test('stock-master refresh excludes conflicting identity metadata instead of choosing a response order', async () => {
+  const index = new StockEntityIndex();
+  const size = await refreshStockEntityIndex(index, {
+    backendBase: 'http://backend',
+    wait: async () => {},
+    fetchImpl: async (_url, options) => {
+      const market = JSON.parse(options.body).mrkt_tp;
+      const lists = {
+        0: [{ code: '555555', name: '충돌A', marketCode: '0' }],
+        10: [{ code: '555555', name: '충돌B', marketCode: '10' }],
+        8: [],
+      };
+      return response({ list: lists[market] });
+    },
+  });
+  assert.equal(size, 0);
+  assert.equal(index.resolveQuery('555555 현재가'), null);
+  assert.equal(index.resolveQuery('충돌A 현재가'), null);
+  assert.equal(index.resolveQuery('충돌B 현재가'), null);
+});
+
+test('stock-master fetch or response validation failure preserves the prior snapshot', async () => {
+  const index = new StockEntityIndex();
+  index.replace([{ code: '005930', name: '삼성전자', market: '0' }]);
+
+  await assert.rejects(refreshStockEntityIndex(index, {
+    backendBase: 'http://backend',
+    wait: async () => {},
+    fetchImpl: async (_url, options) => {
+      const market = JSON.parse(options.body).mrkt_tp;
+      if (market === '10') throw new Error('upstream unavailable');
+      return response({ list: [{ code: '222222', name: '미게시종목', marketCode: market }] });
+    },
+  }), /upstream unavailable/);
+  assert.equal(index.resolveQuery('삼성전자 현재가')?.code, '005930');
+  assert.equal(index.resolveQuery('미게시종목 현재가'), null);
+
+  await assert.rejects(refreshStockEntityIndex(index, {
+    backendBase: 'http://backend',
+    wait: async () => {},
+    fetchImpl: async () => response({ unexpected: [] }),
+  }), /stock-master/i);
+  assert.equal(index.resolveQuery('삼성전자 현재가')?.code, '005930');
+  assert.equal(buildQuoteDataset('삼성전자 현재가', index)?.items[0].args.stk_cd, '005930');
 });
 
 test('recommendations accept only predeclared safe query actions, dedupe, and cap at three', () => {
