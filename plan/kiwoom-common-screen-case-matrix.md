@@ -15,11 +15,11 @@ generator and `python backend/scripts/render_screen_case_matrix.py --check`.
 | --- | --- | --- | --- | ---: |
 | `F1` | FactsCard | 단일 그룹 | layout=facts · 스칼라 ≤ 10 | 93 |
 | `F2` | FactsCard | 2단 그룹 | layout=facts · 스칼라 11–20 | 21 |
-| `T1` | TableCard | 표준 표 | layout=table · pure_list · 컬럼 ≤ 10 | 38 |
-| `T2` | TableCard | 접힘 표 | layout=table · pure_list · 컬럼 11–20 | 61 |
+| `T1` | TableCard | 표준 표 | layout=table · pure_list · 컬럼 ≤ 10 | 32 |
+| `T2` | TableCard | 접힘 표 | layout=table · pure_list · 컬럼 11–20 | 60 |
 | `T3` | TableCard | 광폭 표 | layout=table · pure_list · 컬럼 > 20 | 12 |
 | `T4` | TableCard | 헤더 스칼라 + 표 | layout=table · compound(스칼라 1 + 리스트 1) | 10 |
-| `C1` | CompoundCard | 차트 (주기 옵션) | layout=compound · 차트 12TR (P2a 배선 8 + P2b 비배선 4) | 12 |
+| `C1` | CompoundCard | AITS 차트 | presentation.renderer_id=aits-chart-v1 | 19 |
 | `C2` | CompoundCard | 일반 (스칼라 + 리스트) | layout=compound · 차트 외 | 17 |
 | `E1` | EventCard | 표준 이벤트 | layout=event · 리스트 1 | 21 |
 | `E2` | EventCard | 대형 이벤트 | layout=event · 리스트 2 | 1 |
@@ -156,7 +156,7 @@ generator and `python backend/scripts/render_screen_case_matrix.py --check`.
 | `detail:kt00013:substitute_valuation_and_limits` | `kt00013` | 대용 평가·증거금 및 주문 한도 (증거금세부내역조회요청) | 스칼라 12 |
 | `detail:kt00016:asset_balance_change` | `kt00016` | 자산 항목 기초·기말 잔액 (일별계좌수익률상세현황요청) | 스칼라 16 |
 
-## T1 · TableCard — 표준 표 (38건)
+## T1 · TableCard — 표준 표 (32건)
 
 규칙: layout=table · pure_list · 컬럼 ≤ 10
 
@@ -188,20 +188,14 @@ generator and `python backend/scripts/render_screen_case_matrix.py --check`.
 | `base:ka30011` | `ka30011` | ELW근접율요청 | 스칼라 1 · 컬럼 8 |
 | `base:ka40001` | `ka40001` | ETF수익율요청 | 스칼라 1 · 컬럼 4 |
 | `base:ka40010` | `ka40010` | ETF시간대별수급현황 | 스칼라 1 · 컬럼 5 |
-| `base:ka50079` | `ka50079` | 금현물틱차트조회요청 | 스칼라 1 · 컬럼 9 |
-| `base:ka50080` | `ka50080` | 금현물분봉차트조회요청 | 스칼라 1 · 컬럼 10 |
-| `base:ka50081` | `ka50081` | 금현물일봉차트조회요청 | 스칼라 1 · 컬럼 8 |
-| `base:ka50082` | `ka50082` | 금현물주봉차트조회요청 | 스칼라 1 · 컬럼 7 |
-| `base:ka50083` | `ka50083` | 금현물월봉차트조회요청 | 스칼라 1 · 컬럼 7 |
 | `base:ka50087` | `ka50087` | 금현물예상체결 | 스칼라 1 · 컬럼 8 |
-| `base:ka50091` | `ka50091` | 금현물당일틱차트조회요청 | 스칼라 1 · 컬럼 9 |
 | `base:ka90001` | `ka90001` | 테마그룹별요청 | 스칼라 1 · 컬럼 9 |
 | `base:ka90006` | `ka90006` | 프로그램매매차익잔고추이요청 | 스칼라 1 · 컬럼 7 |
 | `base:ka90007` | `ka90007` | 프로그램매매누적추이요청 | 스칼라 1 · 컬럼 9 |
 | `base:ka90012` | `ka90012` | 대차거래내역요청 | 스칼라 1 · 컬럼 6 |
 | `base:kt00002` | `kt00002` | 일별추정예탁자산현황요청 | 스칼라 1 · 컬럼 8 |
 
-## T2 · TableCard — 접힘 표 (61건)
+## T2 · TableCard — 접힘 표 (60건)
 
 규칙: layout=table · pure_list · 컬럼 11–20
 
@@ -259,7 +253,6 @@ generator and `python backend/scripts/render_screen_case_matrix.py --check`.
 | `base:ka40009` | `ka40009` | ETF시간대별NAV현황 | 스칼라 1 · 컬럼 12 |
 | `base:ka50010` | `ka50010` | 금현물체결추이 | 스칼라 1 · 컬럼 13 |
 | `base:ka50012` | `ka50012` | 금현물일별추이 | 스칼라 1 · 컬럼 13 |
-| `base:ka50092` | `ka50092` | 금현물당일분봉차트조회요청 | 스칼라 1 · 컬럼 11 |
 | `base:ka50101` | `ka50101` | 금현물 호가 | 스칼라 1 · 컬럼 15 |
 | `base:ka52301` | `ka52301` | 금현물투자자현황 | 스칼라 1 · 컬럼 18 |
 | `base:ka90003` | `ka90003` | 프로그램순매수상위50요청 | 스칼라 1 · 컬럼 11 |
@@ -305,24 +298,31 @@ generator and `python backend/scripts/render_screen_case_matrix.py --check`.
 | `detail:kt50020:gold_holdings` | `kt50020` | 금현물 보유 종목 (금현물 잔고확인) | 스칼라 1 · 컬럼 16 |
 | `detail:kt50032:gold_trade_history` | `kt50032` | 금현물 거래 내역 (금현물 거래내역조회) | 스칼라 1 · 컬럼 24 |
 
-## C1 · CompoundCard — 차트 (주기 옵션) (12건)
+## C1 · CompoundCard — AITS 차트 (19건)
 
-규칙: layout=compound · 차트 12TR (P2a 배선 8 + P2b 비배선 4)
+규칙: presentation.renderer_id=aits-chart-v1
 
 | Mapping ID | TR | 이름 | 구조 | 차트 배선 |
 | --- | --- | --- | --- | --- |
-| `base:ka10079` | `ka10079` | 주식틱차트조회요청 | 스칼라 3 · 컬럼 8 | 비배선(P2b) |
-| `base:ka10080` | `ka10080` | 주식분봉차트조회요청 | 스칼라 2 · 컬럼 8 | 비배선(P2b) |
-| `base:ka10081` | `ka10081` | 주식일봉차트조회요청 | 스칼라 2 · 컬럼 10 | 배선(P2a) |
-| `base:ka10082` | `ka10082` | 주식주봉차트조회요청 | 스칼라 2 · 컬럼 10 | 배선(P2a) |
-| `base:ka10083` | `ka10083` | 주식월봉차트조회요청 | 스칼라 2 · 컬럼 10 | 배선(P2a) |
-| `base:ka10094` | `ka10094` | 주식년봉차트조회요청 | 스칼라 2 · 컬럼 7 | 배선(P2a) |
-| `base:ka20004` | `ka20004` | 업종틱차트조회요청 | 스칼라 2 · 컬럼 8 | 비배선(P2b) |
-| `base:ka20005` | `ka20005` | 업종분봉조회요청 | 스칼라 2 · 컬럼 9 | 비배선(P2b) |
-| `base:ka20006` | `ka20006` | 업종일봉조회요청 | 스칼라 2 · 컬럼 7 | 배선(P2a) |
-| `base:ka20007` | `ka20007` | 업종주봉조회요청 | 스칼라 2 · 컬럼 7 | 배선(P2a) |
-| `base:ka20008` | `ka20008` | 업종월봉조회요청 | 스칼라 2 · 컬럼 7 | 배선(P2a) |
-| `base:ka20019` | `ka20019` | 업종년봉조회요청 | 스칼라 2 · 컬럼 7 | 배선(P2a) |
+| `base:ka10079` | `ka10079` | 주식틱차트조회요청 | 스칼라 3 · 컬럼 8 | aits-chart-v1 |
+| `base:ka10080` | `ka10080` | 주식분봉차트조회요청 | 스칼라 2 · 컬럼 8 | aits-chart-v1 |
+| `base:ka10081` | `ka10081` | 주식일봉차트조회요청 | 스칼라 2 · 컬럼 10 | aits-chart-v1 |
+| `base:ka10082` | `ka10082` | 주식주봉차트조회요청 | 스칼라 2 · 컬럼 10 | aits-chart-v1 |
+| `base:ka10083` | `ka10083` | 주식월봉차트조회요청 | 스칼라 2 · 컬럼 10 | aits-chart-v1 |
+| `base:ka10094` | `ka10094` | 주식년봉차트조회요청 | 스칼라 2 · 컬럼 7 | aits-chart-v1 |
+| `base:ka20004` | `ka20004` | 업종틱차트조회요청 | 스칼라 2 · 컬럼 8 | aits-chart-v1 |
+| `base:ka20005` | `ka20005` | 업종분봉조회요청 | 스칼라 2 · 컬럼 9 | aits-chart-v1 |
+| `base:ka20006` | `ka20006` | 업종일봉조회요청 | 스칼라 2 · 컬럼 7 | aits-chart-v1 |
+| `base:ka20007` | `ka20007` | 업종주봉조회요청 | 스칼라 2 · 컬럼 7 | aits-chart-v1 |
+| `base:ka20008` | `ka20008` | 업종월봉조회요청 | 스칼라 2 · 컬럼 7 | aits-chart-v1 |
+| `base:ka20019` | `ka20019` | 업종년봉조회요청 | 스칼라 2 · 컬럼 7 | aits-chart-v1 |
+| `base:ka50079` | `ka50079` | 금현물틱차트조회요청 | 스칼라 1 · 컬럼 9 | aits-chart-v1 |
+| `base:ka50080` | `ka50080` | 금현물분봉차트조회요청 | 스칼라 1 · 컬럼 10 | aits-chart-v1 |
+| `base:ka50081` | `ka50081` | 금현물일봉차트조회요청 | 스칼라 1 · 컬럼 8 | aits-chart-v1 |
+| `base:ka50082` | `ka50082` | 금현물주봉차트조회요청 | 스칼라 1 · 컬럼 7 | aits-chart-v1 |
+| `base:ka50083` | `ka50083` | 금현물월봉차트조회요청 | 스칼라 1 · 컬럼 7 | aits-chart-v1 |
+| `base:ka50091` | `ka50091` | 금현물당일틱차트조회요청 | 스칼라 1 · 컬럼 9 | aits-chart-v1 |
+| `base:ka50092` | `ka50092` | 금현물당일분봉차트조회요청 | 스칼라 1 · 컬럼 11 | aits-chart-v1 |
 
 ## C2 · CompoundCard — 일반 (스칼라 + 리스트) (17건)
 

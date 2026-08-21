@@ -1,0 +1,347 @@
+{
+  "version": 2,
+  "contract_version": "selector-routing-v5",
+  "query_frame_version": "query-frame-v7",
+  "description": "Sparse, reviewed overrides for deterministically derived selector routing metadata.",
+  "equivalence_groups": {
+    "sector_52_week_range": {
+      "canonical_ref": "detail:ka20001:fifty_two_week_range",
+      "members": [
+        "detail:ka20001:fifty_two_week_range",
+        "detail:ka20009:fifty_two_week_range"
+      ],
+      "qualifier_axes": [
+        "data_intents",
+        "temporal_scopes"
+      ]
+    }
+  },
+  "overrides": {
+    "base:ka00001": {
+      "data_intents": [
+        "identity",
+        "account_state"
+      ]
+    },
+    "base:ka10001": {
+      "measures": [
+        "identity",
+        "fundamentals",
+        "ownership",
+        "price",
+        "valuation",
+        "financials",
+        "trade",
+        "change",
+        "volume",
+        "volatility"
+      ]
+    },
+    "detail:ka10001:identity_and_capital": {
+      "measures": [
+        "identity",
+        "fundamentals"
+      ],
+      "capabilities": ["identity_capital", "equity_corporate_fundamentals"]
+    },
+    "base:ka30012": {
+      "measures": [
+        "identity",
+        "price",
+        "volatility",
+        "valuation",
+        "change",
+        "fundamentals",
+        "ownership",
+        "flow",
+        "pnl",
+        "position",
+        "order_status",
+        "sensitivity"
+      ]
+    },
+    "detail:ka30012:underlying_basket": {
+      "measures": [
+        "identity",
+        "price",
+        "change",
+        "valuation",
+        "fundamentals",
+        "ownership",
+        "flow",
+        "pnl",
+        "position",
+        "order_status",
+        "volatility",
+        "sensitivity"
+      ]
+    },
+    "detail:ka30012:valuation_and_rights": {
+      "measures": [
+        "identity",
+        "valuation",
+        "volatility",
+        "sensitivity",
+        "price"
+      ]
+    },
+    "detail:kt00001:receivables_and_arrears": {
+      "data_intents": [
+        "snapshot",
+        "account_state"
+      ],
+      "capabilities": ["account_receivable"]
+    },
+    "base:kt00018": {
+      "measures": [
+        "valuation",
+        "balance",
+        "pnl",
+        "credit",
+        "lending",
+        "ownership",
+        "position"
+      ]
+    },
+    "detail:kt00018:portfolio_summary": {
+      "measures": [
+        "valuation",
+        "balance",
+        "pnl"
+      ]
+    },
+    "detail:kt00018:financing_summary": {
+      "data_intents": [
+        "snapshot",
+        "portfolio"
+      ],
+      "measures": [
+        "credit",
+        "lending"
+      ]
+    },
+    "base:kt00009": {
+      "bindings": [
+        "account_context",
+        "instrument_code",
+        "market_code",
+        "date",
+        "period"
+      ],
+      "capabilities": ["combined_order_status"]
+    },
+    "detail:kt00009:order_execution_status": {
+      "bindings": [
+        "account_context",
+        "instrument_code",
+        "market_code",
+        "date",
+        "period"
+      ],
+      "capabilities": ["order_unfilled", "order_filled", "combined_order_status"]
+    },
+    "detail:ka10001:current_trading": {
+      "measures": ["price", "change", "volume", "volatility"]
+    },
+    "detail:ka10002:market_snapshot": {
+      "temporal_scopes": ["current"],
+      "measures": ["price", "volume", "flow"]
+    },
+    "detail:kt00004:cash_and_assets": {
+      "measures": ["valuation", "balance", "position"],
+      "capabilities": ["account_assets"]
+    },
+    "detail:kt00018:holdings": {
+      "measures": ["valuation", "ownership", "position", "pnl"]
+    },
+    "detail:kt50020:gold_account_summary": {
+      "data_intents": ["portfolio", "account_state"],
+      "measures": ["valuation", "pnl"]
+    },
+    "base:ka40006": {
+      "temporal_scopes": ["current", "intraday", "range"]
+    },
+    "detail:ka30012:market_snapshot": {
+      "temporal_scopes": ["current"],
+      "measures": ["price", "change"]
+    },
+    "base:ka50100": {
+      "temporal_scopes": ["current"]
+    },
+    "base:ka50101": {
+      "measures": ["price", "change", "volume", "trade_value", "orderbook", "trade"]
+    },
+    "detail:kt00001:withdrawal_and_order_capacity": {
+      "measures": ["order_status", "balance"]
+    },
+    "detail:kt00004:position_valuation": {
+      "measures": ["valuation", "position", "pnl"]
+    },
+    "detail:kt50020:gold_holdings": {
+      "measures": ["ownership", "position", "valuation", "pnl", "price"]
+    },
+    "base:kt00002": {
+      "data_intents": ["portfolio", "account_state", "history"]
+    },
+    "base:ka50087": {
+      "measures": ["price", "change", "volume", "trade"]
+    },
+    "base:ka30001": {
+      "data_intents": ["ranking", "spike_ranking", "screening"],
+      "temporal_scopes": ["current"]
+    },
+    "base:ka10054": {
+      "data_intents": ["snapshot", "screening"],
+      "capabilities": ["volatility_indicator"]
+    },
+    "detail:ka10007:expected_market": {
+      "capabilities": ["expected_trade"]
+    },
+    "base:1h": {
+      "actions": ["subscribe"],
+      "capabilities": ["volatility_indicator"]
+    },
+    "detail:kt00013:today_reuse": {
+      "capabilities": ["account_today_reuse"]
+    },
+    "base:ka30004": {
+      "data_intents": ["ranking", "valuation_gap", "screening"]
+    },
+    "base:ka20003": {
+      "capabilities": ["sector_index_collection"]
+    },
+    "base:ka10023": {
+      "temporal_scopes": ["current"]
+    },
+    "base:ka40009": {
+      "temporal_scopes": ["current", "intraday"]
+    },
+    "base:ka10050": {
+      "temporal_scopes": ["current"]
+    },
+    "base:04": {
+      "data_intents": ["subscription", "account_state", "portfolio"]
+    },
+    "base:kt50030": {
+      "data_intents": ["account_state", "history"]
+    },
+    "base:kt50075": {
+      "data_intents": ["account_state"]
+    },
+    "detail:ka20001:session_range": {
+      "temporal_scopes": ["current", "intraday", "range"]
+    },
+    "detail:ka20009:session_range": {
+      "temporal_scopes": ["daily", "range"]
+    },
+    "base:ka10060": {
+      "capabilities": ["investor_flow", "daily_history", "instrument_investor_chart"]
+    },
+    "base:ka10100": {
+      "capabilities": ["stock_information"]
+    },
+    "detail:ka20001:market_snapshot": {
+      "measures": ["price", "change", "volume", "trade_value"]
+    },
+    "detail:ka20001:fifty_two_week_range": {
+      "data_intents": ["price_range", "snapshot", "current_quote"],
+      "temporal_scopes": ["current", "range"],
+      "capabilities": ["price_range_52w"]
+    },
+    "detail:ka20009:daily_history": {
+      "capabilities": ["daily_history"]
+    },
+    "detail:ka20009:fifty_two_week_range": {
+      "data_intents": ["price_range", "history"],
+      "temporal_scopes": ["daily", "range"],
+      "capabilities": ["price_range_52w"]
+    },
+    "base:ka10010": {
+      "capabilities": ["program_flow"]
+    },
+    "base:ka20002": {
+      "capabilities": ["constituents"]
+    },
+    "detail:kt00001:foreign_currency_deposits": {
+      "capabilities": ["account_currency"]
+    },
+    "detail:kt00004:account_identity": {
+      "capabilities": ["account_identity"]
+    },
+    "detail:kt50032:gold_trade_history": {
+      "capabilities": ["daily_history"]
+    },
+    "base:ka40003": {
+      "capabilities": ["etf_nav"]
+    },
+    "base:ka40010": {
+      "capabilities": ["etf_flow"]
+    },
+    "detail:ka30012:payoff_conditions": {
+      "capabilities": ["elw_payoff"]
+    },
+    "detail:ka30012:liquidity_and_leverage": {
+      "capabilities": ["elw_liquidity_leverage"]
+    },
+    "base:ka30003": {
+      "capabilities": ["daily_history"]
+    },
+    "base:ka50012": {
+      "capabilities": ["daily_history", "gold_daily"]
+    },
+    "detail:ka10001:valuation": {
+      "capabilities": ["equity_valuation", "equity_multiples"]
+    },
+    "detail:ka10001:price_range": {
+      "capabilities": ["price_range_52w"]
+    },
+    "detail:ka10001:financial_performance": {
+      "capabilities": ["equity_corporate_fundamentals", "equity_financial_performance"]
+    },
+    "detail:ka30012:liquidity_providers": {
+      "capabilities": ["elw_liquidity_providers"]
+    },
+    "detail:ka30012:evaluation_window": {
+      "capabilities": ["elw_evaluation_window"]
+    },
+    "detail:ka30012:evaluation_extrema": {
+      "capabilities": ["elw_evaluation_extrema"]
+    },
+    "base:ka10075": {
+      "capabilities": ["order_unfilled"]
+    },
+    "base:ka10076": {
+      "capabilities": ["order_filled"]
+    },
+    "base:0m": {
+      "feeds": ["elw_theoretical_value"]
+    },
+    "base:0u": {
+      "feeds": ["elw_metrics"]
+    },
+    "base:ka10171": {
+      "capabilities": ["condition_list"]
+    },
+    "base:ka10172": {
+      "capabilities": ["condition_general"]
+    },
+    "base:ka10173": {
+      "capabilities": ["condition_realtime"]
+    },
+    "base:0H": {
+      "feeds": ["expected_trade"]
+    },
+    "base:ka50091": {
+      "capabilities": ["gold_today_intraday"]
+    },
+    "base:ka50092": {
+      "capabilities": ["gold_today_intraday"]
+    },
+    "base:ka10101": {
+      "measures": ["identity"]
+    },
+    "detail:ka30012:key_dates": {
+      "capabilities": ["elw_key_dates"]
+    }
+  }
+}
