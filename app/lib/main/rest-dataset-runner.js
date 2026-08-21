@@ -11,12 +11,13 @@ const PRIMARY_UPSTREAM_DEADLINE_MS = 1500;
 const PAINT_RESERVE_MS = 100;
 const SECONDARY_PAINT_TIMEOUT_MS = 3000;
 const STOCK_ENTITY_RESOLVER_ALGORITHM = 'stock-entity-index';
-const STOCK_ENTITY_RESOLVER_VERSION = 2;
+const STOCK_ENTITY_RESOLVER_VERSION = 3;
 const STOCK_ENTITY_RESOLVER_ADAPTER_VERSION = `${STOCK_ENTITY_RESOLVER_ALGORITHM}-v${STOCK_ENTITY_RESOLVER_VERSION}`;
 const ENTITY_INDEX_VERSION = STOCK_ENTITY_RESOLVER_VERSION;
 const QUOTE_INTENT_RE = /(현재가|현재\s*시세|오늘\s*주가|주가\s*(?:얼마|조회)|current\s+(?:stock\s+)?price|stock\s+price\s+today)/i;
 const AMBIGUOUS_ENTITY_CONTEXT_RE = /(?:말고|제외|아닌|비교|\b(?:not|except|excluding|compare|versus|vs)\b)/i;
 const ENTITY_SUFFIX_PATTERN = "(?:'s|의|가|이|은|는|을|를|와|과|에|에서|으로|로)";
+const REVIEWED_MARKET_ENTITY_KIND = Object.freeze({ '0': 'stock', '10': 'stock', '8': 'etf' });
 
 class RestDatasetError extends Error {
   constructor(code, message, details = {}) {
@@ -597,24 +598,31 @@ class StockEntityIndex {
     this.version = STOCK_ENTITY_RESOLVER_VERSION;
     this.adapterVersion = STOCK_ENTITY_RESOLVER_ADAPTER_VERSION;
     this._aliases = new Map();
+    this._entities = new Map();
     this.refreshedAt = null;
   }
 
   replace(records) {
     const next = new Map();
+    const entities = new Map();
     for (const record of records || []) {
       const code = String(record && (record.code || record.stk_cd) || '').trim();
       const name = String(record && (record.name || record.stk_nm) || '').trim();
-      if (!/^\d{6}$/.test(code) || !name) continue;
+      const market = String(record && (record.market ?? record.mrkt_tp) || '').trim();
+      const kind = REVIEWED_MARKET_ENTITY_KIND[market];
+      if (!/^\d{6}$/.test(code) || !name || !kind) continue;
+      const entityKey = `${market}:${code}`;
+      entities.set(entityKey, Object.freeze({ code, kind, market }));
       const supplementalAliases = Array.isArray(record && record.aliases) ? record.aliases : [];
       for (const alias of [code, name, ...supplementalAliases]) {
         const normalized = normalizeText(alias);
         if (!normalized) continue;
         if (!next.has(normalized)) next.set(normalized, new Set());
-        next.get(normalized).add(code);
+        next.get(normalized).add(entityKey);
       }
     }
     this._aliases = next;
+    this._entities = entities;
     this.refreshedAt = Date.now();
     return this.size;
   }
@@ -632,17 +640,28 @@ class StockEntityIndex {
     );
     if (explicitCodes.size > 1) return null;
 
-    const matchedCodes = new Set(explicitCodes);
+    const matchedEntities = new Set();
+    for (const code of explicitCodes) {
+      const entities = this._aliases.get(code);
+      if (!entities || entities.size !== 1) return null;
+      matchedEntities.add([...entities][0]);
+    }
     let matchedAlias = false;
-    for (const [alias, codes] of this._aliases) {
+    for (const [alias, entities] of this._aliases) {
       if (alias.length < 2 || /^\d{6}$/.test(alias) || !aliasSpanPattern(alias).test(text)) continue;
       matchedAlias = true;
-      if (codes.size !== 1) return null;
-      matchedCodes.add([...codes][0]);
+      if (entities.size !== 1) return null;
+      matchedEntities.add([...entities][0]);
     }
-    if (matchedCodes.size !== 1) return null;
-    const code = [...matchedCodes][0];
-    return { code, source: explicitCodes.size === 1 && !matchedAlias ? 'explicit-code' : 'entity-index' };
+    if (matchedEntities.size !== 1) return null;
+    const entity = this._entities.get([...matchedEntities][0]);
+    if (!entity) return null;
+    return {
+      code: entity.code,
+      kind: entity.kind,
+      market: entity.market,
+      source: explicitCodes.size === 1 && !matchedAlias ? 'explicit-code' : 'entity-index',
+    };
   }
 }
 
@@ -662,13 +681,15 @@ async function refreshStockEntityIndex(index, {
   const records = [];
   for (let marketIndex = 0; marketIndex < markets.length; marketIndex += 1) {
     const market = markets[marketIndex];
+    const kind = REVIEWED_MARKET_ENTITY_KIND[String(market)];
+    if (!kind) continue;
     const response = await fetchImpl(`${backendBase}/api/v1/tr/stockinfo/ka10099`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ mrkt_tp: market }),
     });
     const body = await readJson(response, 'stock-master');
-    records.push(...extractStockMasterRecords(body));
+    records.push(...extractStockMasterRecords(body).map((record) => ({ ...record, market: String(market) })));
     // 같은 API ID는 초당 1회 제한이다. 첫 시장부터 즉시 사용 가능한 인덱스로
     // 반영하고, 다음 시장 호출 전 1초 창을 넘긴다.
     index.replace(records);
@@ -683,7 +704,7 @@ function buildQuoteDataset(query, index, { idFactory = () => `rest-${Date.now().
     return null;
   }
   const entity = index && index.resolveQuery(text);
-  if (!entity) return null;
+  if (!entity || entity.kind !== 'stock') return null;
   return {
     datasetId: String(idFactory()).slice(0, 64),
     question: text,
@@ -705,6 +726,7 @@ module.exports = {
   STOCK_ENTITY_RESOLVER_ALGORITHM,
   STOCK_ENTITY_RESOLVER_VERSION,
   STOCK_ENTITY_RESOLVER_ADAPTER_VERSION,
+  REVIEWED_MARKET_ENTITY_KIND,
   RestDatasetError,
   StockEntityIndex,
   normalizeDataset,

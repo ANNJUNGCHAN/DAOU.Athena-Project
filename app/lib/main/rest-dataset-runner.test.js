@@ -7,8 +7,10 @@ const path = require('node:path');
 const {
   MAX_CONCURRENCY,
   STOCK_ENTITY_RESOLVER_ADAPTER_VERSION,
+  REVIEWED_MARKET_ENTITY_KIND,
   StockEntityIndex,
   buildQuoteDataset,
+  refreshStockEntityIndex,
   normalizeDataset,
   normalizeRecommendations,
   runRestDataset,
@@ -19,6 +21,13 @@ const RESOLVER_VECTOR_PATH = path.resolve(
   '../../../backend/tests/fixtures/stock_entity_resolver_conformance.json',
 );
 const RESOLVER_VECTOR = JSON.parse(fs.readFileSync(RESOLVER_VECTOR_PATH, 'utf8'));
+
+function resolverRecords() {
+  return RESOLVER_VECTOR.records.map((record) => ({
+    ...record,
+    market: RESOLVER_VECTOR.record_markets[record.code],
+  }));
+}
 
 function response(body, status = 200) {
   return { ok: status < 400, status, json: async () => body };
@@ -636,21 +645,25 @@ test('fixture-shaped input is accepted without mutating the fixture contract', (
 
 test('stock entity index consumes the shared Python/JS conformance vector at a stable adapter version', () => {
   const index = new StockEntityIndex();
-  index.replace(RESOLVER_VECTOR.records);
+  index.replace(resolverRecords());
   assert.equal(RESOLVER_VECTOR.adapter_version, STOCK_ENTITY_RESOLVER_ADAPTER_VERSION);
+  assert.equal(RESOLVER_VECTOR.schema_version, 2);
+  assert.deepEqual(RESOLVER_VECTOR.market_kinds, REVIEWED_MARKET_ENTITY_KIND);
   assert.equal(index.adapterVersion, RESOLVER_VECTOR.adapter_version);
   for (const vectorCase of RESOLVER_VECTOR.cases) {
+    const resolution = index.resolveQuery(vectorCase.question);
     assert.equal(
-      index.resolveQuery(vectorCase.question)?.code || null,
+      resolution?.code || null,
       vectorCase.expected_code,
       vectorCase.id,
     );
+    assert.equal(resolution?.kind || null, vectorCase.expected_kind || null, `${vectorCase.id}: kind`);
   }
 });
 
 test('quote binder keeps entity resolution separate from quote intent routing', () => {
   const index = new StockEntityIndex();
-  index.replace(RESOLVER_VECTOR.records);
+  index.replace(resolverRecords());
   for (const id of ['non-quote-context', 'identity-context', 'chart-context', 'order-context']) {
     const vectorCase = RESOLVER_VECTOR.cases.find((item) => item.id === id);
     assert.equal(index.resolveQuery(vectorCase.question)?.code, '123456', `${id}: entity`);
@@ -660,7 +673,7 @@ test('quote binder keeps entity resolution separate from quote intent routing', 
 
 test('resolved entity code remains exact through quote dataset and resolve control plane', async () => {
   const index = new StockEntityIndex();
-  index.replace(RESOLVER_VECTOR.records);
+  index.replace(resolverRecords());
   const bindings = [
     ['새로운회사 오늘 주가 얼마야?', 'name-binding'],
     ['123456 오늘 주가', 'code-binding'],
@@ -694,7 +707,7 @@ test('resolved entity code remains exact through quote dataset and resolve contr
 
 test('unsafe or non-quote resolver vectors mint neither a quote dataset nor a plan', async () => {
   const index = new StockEntityIndex();
-  index.replace(RESOLVER_VECTOR.records);
+  index.replace(resolverRecords());
   let controlPlaneCalls = 0;
   for (const id of ['name-code-mutation', 'ambiguous-name', 'two-issuers', 'two-explicit-codes', 'negation', 'comparison', 'non-quote-context']) {
     const vectorCase = RESOLVER_VECTOR.cases.find((item) => item.id === id);
@@ -714,11 +727,41 @@ test('unsafe or non-quote resolver vectors mint neither a quote dataset nor a pl
   assert.equal(controlPlaneCalls, 0);
 });
 
-test('binder abstains when intent or entity is uncertain', () => {
+test('ETF, unknown code, intent uncertainty, and unknown market never bind the stock quote operation', async () => {
   const index = new StockEntityIndex();
-  index.replace([{ code: '123456', name: '새로운회사' }]);
+  index.replace([
+    { code: '123456', name: '새로운회사', market: '0' },
+    { code: '333333', name: '펀드회사', market: '8' },
+    { code: '444444', name: '미지시장회사', market: '99' },
+  ]);
+  assert.deepEqual(index.resolveQuery('123456 현재가'), {
+    code: '123456', kind: 'stock', market: '0', source: 'explicit-code',
+  });
+  assert.equal(index.resolveQuery('333333 현재가')?.kind, 'etf');
+  assert.equal(index.resolveQuery('999999 현재가'), null);
+  assert.equal(index.resolveQuery('미지시장회사 현재가'), null);
+  assert.equal(buildQuoteDataset('펀드회사 오늘 주가', index), null);
+  assert.equal(buildQuoteDataset('333333 오늘 주가', index), null);
+  assert.equal(buildQuoteDataset('999999 오늘 주가', index), null);
   assert.equal(buildQuoteDataset('새로운회사에 대해 설명해줘', index), null);
   assert.equal(buildQuoteDataset('없는회사 오늘 주가', index), null);
+
+  const refreshed = new StockEntityIndex();
+  const fetches = [];
+  await refreshStockEntityIndex(refreshed, {
+    backendBase: 'http://backend',
+    markets: ['0', '10', '8', '99'],
+    wait: async () => {},
+    fetchImpl: async (_url, options) => {
+      const market = JSON.parse(options.body).mrkt_tp;
+      fetches.push(market);
+      return response({ list: [{ stk_cd: `${Number(market) + 1}`.padStart(6, '0'), stk_nm: `시장${market}` }] });
+    },
+  });
+  assert.deepEqual(fetches, ['0', '10', '8']);
+  assert.equal(refreshed.resolveQuery('시장0 현재가')?.kind, 'stock');
+  assert.equal(refreshed.resolveQuery('시장10 현재가')?.kind, 'stock');
+  assert.equal(refreshed.resolveQuery('시장8 현재가')?.kind, 'etf');
 });
 
 test('recommendations accept only predeclared safe query actions, dedupe, and cap at three', () => {
