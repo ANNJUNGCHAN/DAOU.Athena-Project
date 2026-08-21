@@ -131,7 +131,7 @@ function buildLivePrompt(query) {
     '  "open":숫자,"high":숫자,"low":숫자,"close":숫자,"volume":숫자}, ...]}',
     '  키움 일봉(ka10081 등) 응답 매핑 예시: dt(YYYYMMDD)→time(YYYY-MM-DD),',
     '  open_pric→open, high_pric→high, low_pric→low, cur_prc→close, trde_qty→volume',
-    '  — 전부 문자열로 오므로 반드시 숫자로 변환한다. bars는 날짜 오름차순으로',
+    '  — 전부 문자열로 오므로 반드시 숫자로 변환한다. candles는 날짜 오름차순으로',
     '  정렬한다(키움 응답은 최신순으로 오므로 뒤집어야 한다). chart 객체를 닫아 data.chart로 보낸다.',
     '- 가격 흐름과 이벤트(공시·뉴스)를 한 시간축에 겹쳐 보는 요청 → canvas_type',
     '  "timeline", data는 {"price_series":[{"ts":"...","open":숫자,"high":숫자,',

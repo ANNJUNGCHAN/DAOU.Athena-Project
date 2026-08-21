@@ -89,7 +89,7 @@ test('buildLivePrompt: W3 작업 규율 — 초반 툴 로드 권고 + 재조회
   assert.ok(p.includes('call을 반복하거나'));
 });
 
-test('buildLivePrompt: chart 스키마 힌트 — canvas_type "chart"와 symbol/name/bars 형상', () => {
+test('buildLivePrompt: chart 스키마 힌트 — AITS data.symbol + data.chart.candles 형상만 노출', () => {
   const p = buildLivePrompt('x');
   assert.ok(p.includes('"chart"'));
   assert.ok(p.includes('"symbol"'));
@@ -100,6 +100,8 @@ test('buildLivePrompt: chart 스키마 힌트 — canvas_type "chart"와 symbol/
   assert.ok(p.includes('"candles"'));
   assert.ok(p.includes('"open"'));
   assert.ok(p.includes('"volume"'));
+  assert.ok(!p.includes('bars'));
+  assert.ok(!p.includes('"initial"'));
 });
 
 test('buildLivePrompt: chart 힌트 — 키움 ka10081 응답 필드 매핑과 오름차순 정렬 지시가 있다', () => {

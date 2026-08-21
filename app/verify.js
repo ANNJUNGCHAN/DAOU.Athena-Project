@@ -1098,14 +1098,15 @@ app.whenReady().then(async () => {
   assertOk('chartCard: 24 volume-profile bars present', report.chartCard.volumeProfileBars24 === true);
 
   // ---- 검증13b — 실배선 chart 봉투(canvas.js renderLiveChart, 2026-08-18) ----
-  // live-prompt.js의 chart 힌트가 규정한 형상 그대로(symbol/name/bars) liveEnvelope
+  // backend가 발급하는 AITS 정식 봉투(renderer_id + data.symbol + data.chart)를
+  // liveEnvelope 헬퍼(검증10)로 합성해 gateway→AITS adapter→저수준 renderer를 검증한다.
   // 헬퍼(검증10에서 정의)로 합성 봉투를 보낸다 — 백엔드·quota 무관, 순수 렌더러 단
   // 검증(canvas_type:'chart'가 backend/athena_mcp/canvas.py 스키마 레지스트리에
   // 아직 없어도 이 경로는 상관없다 — main.js는 응답값 canvas_type만 읽는다).
   // 위 검증13이 이미 mock 'chart' 카드(window.addCard('chart'))를 그려뒀으므로,
   // makeCard의 "같은 타입 재요청 시 갈아치운다" 규칙(카드 정리 규칙)에 따라 이
   // 봉투가 그 카드를 대체한다 — 별도 정리 호출 없이 정확히 카드 1장만 남아야 한다.
-  const liveChartBars = [
+  const liveChartCandles = [
     { time: '2026-08-14', open: 71000, high: 71600, low: 70800, close: 71300, volume: 9123456 },
     { time: '2026-08-17', open: 71300, high: 71900, low: 71100, close: 71700, volume: 8877665 },
     { time: '2026-08-18', open: 71700, high: 72200, low: 71500, close: 72000, volume: 10233445 },
@@ -1114,7 +1115,7 @@ app.whenReady().then(async () => {
     canvas_type: 'chart',
     renderer_id: 'aits-chart-v1',
     caption: '검증13b 실배선 차트',
-    data: { symbol: '005930', chart: { period: 'day', target: 'stock', trId: 'ka10081', candles: liveChartBars } },
+    data: { symbol: '005930', chart: { period: 'day', target: 'stock', trId: 'ka10081', candles: liveChartCandles } },
   });
   await wait(1200); // import는 chart-card.js 로드 시 prewarm, 카드 마운트 자체는 비동기다.
   const liveChartProbe = await canvasWin.webContents.executeJavaScript(`
@@ -1125,6 +1126,10 @@ app.whenReady().then(async () => {
       return {
         cardCount: cards.length,
         canvasCount: card.querySelectorAll('canvas').length,
+        chartAuthority: card.dataset.chartAuthority || null,
+        renderState: card.dataset.renderState || null,
+        rendererId: card.dataset.rendererId || null,
+        errorNoteAbsent: !card.querySelector('.uk-error, [role="alert"]'),
         chartImportReadyAt: Number(card.dataset.chartImportReadyAt) || null,
         titleText: card.querySelector('.card-title') ? card.querySelector('.card-title').textContent : null,
       };
@@ -1135,6 +1140,10 @@ app.whenReady().then(async () => {
     cardRendered: liveChartProbe !== null,
     replacedMockChartCard: liveChartProbe !== null && liveChartProbe.cardCount === 1,
     canvasMounted: liveChartProbe !== null && liveChartProbe.canvasCount > 0,
+    aitsAuthority: liveChartProbe !== null && liveChartProbe.chartAuthority === 'AITS',
+    dataRenderState: liveChartProbe !== null && liveChartProbe.renderState === 'data',
+    rendererIdMatches: liveChartProbe !== null && liveChartProbe.rendererId === 'aits-chart-v1',
+    errorNoteAbsent: liveChartProbe !== null && liveChartProbe.errorNoteAbsent === true,
     prewarmTelemetryPresent: liveChartProbe !== null && Number.isFinite(liveChartProbe.chartImportReadyAt),
     // caption은 정보성 참고값(어떤 문구가 카드 제목에 실제로 반영됐는지 추적용) — 단언에서 뺀다.
     titleText: liveChartProbe && liveChartProbe.titleText,
@@ -1143,6 +1152,10 @@ app.whenReady().then(async () => {
   assertOk('liveChartCard: card rendered from a synthetic live envelope', report.liveChartCard.cardRendered === true);
   assertOk('liveChartCard: same-type re-render replaced the mock chart card (exactly one .card.chart)', report.liveChartCard.replacedMockChartCard === true);
   assertOk('liveChartCard: lightweight-charts canvas element mounted', report.liveChartCard.canvasMounted === true);
+  assertOk('liveChartCard: data-chart-authority is AITS', report.liveChartCard.aitsAuthority === true);
+  assertOk('liveChartCard: renderState is data, never an error-card false green', report.liveChartCard.dataRenderState === true);
+  assertOk('liveChartCard: rendererId is aits-chart-v1', report.liveChartCard.rendererIdMatches === true);
+  assertOk('liveChartCard: no visible renderer error note', report.liveChartCard.errorNoteAbsent === true);
   assertOk('liveChartCard: prewarmed chart import readiness telemetry recorded', report.liveChartCard.prewarmTelemetryPresent === true);
 
   // ---------- 검증 14: 창 배치(스냅) — Windows 표준 의미론 (2026-08-18) ----------
@@ -1654,10 +1667,13 @@ app.whenReady().then(async () => {
     { id: 'T2', type: 'table', screenId: 'AT-CV-005:T2', state: 'ready', data: tableData(14) },
     { id: 'T3', type: 'table', screenId: 'AT-CV-005:T3', state: 'ready', layout: 'full', data: tableData(28) },
     { id: 'T4', type: 'table', screenId: 'AT-CV-005:T4', state: 'ready', data: tableData(6, true) },
-    { id: 'C1', type: 'chart', screenId: 'AT-CV-005:C1', state: 'ready', data: { symbol: '005930', name: '검증종목', bars: [
-      { time: '2026-08-18', open: 100, high: 110, low: 95, close: 105, volume: 1000 },
-      { time: '2026-08-19', open: 105, high: 115, low: 101, close: 112, volume: 1200 },
-    ] } },
+    { id: 'C1', type: 'chart', screenId: 'AT-CV-005:C1', state: 'ready', rendererId: 'aits-chart-v1', data: {
+      symbol: '005930',
+      chart: { period: 'day', target: 'stock', trId: 'ka10081', candles: [
+        { time: '2026-08-18', open: 100, high: 110, low: 95, close: 105, volume: 1000 },
+        { time: '2026-08-19', open: 105, high: 115, low: 101, close: 112, volume: 1200 },
+      ] },
+    } },
     { id: 'C2', type: 'compound', screenId: 'AT-CV-005:C2', state: 'ready', data: { header: [{ key: 'stk_nm', label: '종목명', value: '검증종목' }], table: tableData(4) } },
     { id: 'E1', type: 'event', screenId: 'AT-CV-005:E1', state: 'open', data: { lifecycle: 'open', records: [{ type: '체결', name: '검증종목', value: '100' }] } },
     { id: 'E2', type: 'event', screenId: 'AT-CV-005:E2', state: 'reconnecting', data: { lifecycle: 'reconnecting', records: Array.from({ length: 20 }, (_, i) => ({ seq: i + 1, type: '시세', value: `${100 + i}` })) } },
@@ -1673,6 +1689,7 @@ app.whenReady().then(async () => {
       canvas_type: paperCase.type,
       caption: `Paper ${paperCase.id}`,
       screen_id: paperCase.screenId,
+      renderer_id: paperCase.rendererId,
       layout: paperCase.layout || null,
       data: paperCase.data,
     });
@@ -1693,6 +1710,11 @@ app.whenReady().then(async () => {
         displayOnlyGuard: protectedWorkflow ? !!card.querySelector('.workflow-guard') : true,
         noExecutableOrderOrOauthControl: !card.querySelector('button[data-order], button[data-oauth], input[type=password]'),
         screenIdMatches: card.dataset.screenId === ${JSON.stringify(paperCase.screenId)},
+        chartAuthorityMatches: ${JSON.stringify(paperCase.type)} !== 'chart' || card.dataset.chartAuthority === 'AITS',
+        chartRenderStateIsData: ${JSON.stringify(paperCase.type)} !== 'chart' || card.dataset.renderState === 'data',
+        chartRendererIdMatches: ${JSON.stringify(paperCase.type)} !== 'chart' || card.dataset.rendererId === 'aits-chart-v1',
+        chartSurfaceMounted: ${JSON.stringify(paperCase.type)} !== 'chart' || card.querySelectorAll('canvas').length > 0,
+        chartErrorNoteAbsent: ${JSON.stringify(paperCase.type)} !== 'chart' || !card.querySelector('.uk-error, [role="alert"]'),
       };
     })()`);
     const captureName = `paper-${paperCase.id}.png`;
@@ -1702,6 +1724,8 @@ app.whenReady().then(async () => {
       && probe.connected && probe.nonzeroRect && probe.bodyHasContent && probe.hasCloseControl
       && probe.stateMatches && probe.displayOnlyGuard && probe.noExecutableOrderOrOauthControl
       && probe.screenIdMatches
+      && probe.chartAuthorityMatches && probe.chartRenderStateIsData && probe.chartRendererIdMatches
+      && probe.chartSurfaceMounted && probe.chartErrorNoteAbsent
       && imageSize.width > 0 && imageSize.height > 0;
     report.paperScreenCases[paperCase.id] = {
       screenId: paperCase.screenId,
@@ -1711,7 +1735,15 @@ app.whenReady().then(async () => {
       dom: { connected: !!(probe && probe.connected), nonzeroRect: !!(probe && probe.nonzeroRect), bodyHasContent: !!(probe && probe.bodyHasContent), screenIdMatches: !!(probe && probe.screenIdMatches) },
       layout: { cardMeasured: !!(probe && probe.nonzeroRect), paperWidthApplied: !!probe },
       controls: { closeControlRendered: !!(probe && probe.hasCloseControl), protectedActionsAbsent: !!(probe && probe.noExecutableOrderOrOauthControl) },
-      states: { declaredStateRendered: !!(probe && probe.stateMatches), displayOnlyGuardRendered: !!(probe && probe.displayOnlyGuard) },
+      states: {
+        declaredStateRendered: !!(probe && probe.stateMatches),
+        displayOnlyGuardRendered: !!(probe && probe.displayOnlyGuard),
+        chartAuthorityMatches: !!(probe && probe.chartAuthorityMatches),
+        chartRenderStateIsData: !!(probe && probe.chartRenderStateIsData),
+        chartRendererIdMatches: !!(probe && probe.chartRendererIdMatches),
+        chartSurfaceMounted: !!(probe && probe.chartSurfaceMounted),
+        chartErrorNoteAbsent: !!(probe && probe.chartErrorNoteAbsent),
+      },
     };
     assertOk(`paperScreenCases ${paperCase.id}: actual DOM/layout/control/state + screenshot`, passed);
   }
