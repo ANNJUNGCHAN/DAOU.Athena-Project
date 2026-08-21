@@ -20,12 +20,10 @@ W1은 게이트웨이 골격이고 캔버스 전면 설계는 W3 몫이다(`plan
   한다(§7 결정4 파급) — `price_series`/`events` 둘 다 선택 필드로 둔다
 - **공통 테이블**: 컬럼을 데이터에서 유도하는 게 기본값 — `columns`가 없으면
   `rows[0]`의 키에서 유도한다(서버가 미리 계산해 보내도 되고 안 보내도 된다)
-- **차트**: 키움 셀렉터 게이트웨이 빌트인(`athena_search`/`describe`/`resolve`/
-  `call`)이 붙으면서 추가됐다 — 일봉 OHLCV를 그대로 싣는다. 필드 이름은
-  `app/lib/chart-card.js`가 소비하는 형상(`opts: {symbol, name, ohlcv}`,
-  `ohlcv[i]: {time, open, high, low, close, volume}`)을 그대로 따르되, 캔버스
-  계약 레벨에서는 `ohlcv`를 `bars`로 부른다(canvas.py의 다른 배열 필드들과
-  이름 규칙을 맞춘 것 — 렌더러 쪽 매핑은 이 모듈이 관여하지 않는다).
+- **차트**: AITS renderer의 명시적 입력만 받는다. `symbol`과
+  `chart: {period, target, trId, candles}`를 caller가 완성해야 하며, 제목·TR명·
+  legacy `bars`에서 누락 필드를 추론하지 않는다. 출력 봉투에는 반드시
+  `renderer_id="aits-chart-v1"`가 붙는다.
 - **facts** / **compound** (P1a, `plan/공통화면-템플릿-실행계획-2026-08-20.md`):
   공통 API 카드 6종(`plan/kiwoom-common-screen-spec.md` §3)의 FactsCard(114)·
   CompoundCard(29)와 같은 계약이다. `facts`는 컨테이너 없는 스칼라 key/value
@@ -47,6 +45,7 @@ from typing import Any, Literal
 import jsonschema
 
 CanvasType = Literal["stream", "reader", "timeline", "table", "chart", "facts", "compound", "free"]
+AITS_CHART_RENDERER_ID = "aits-chart-v1"
 
 _STREAM_RECORD_SCHEMA: dict[str, Any] = {
     "type": "object",
@@ -125,27 +124,42 @@ TABLE_SCHEMA: dict[str, Any] = {
     },
 }
 
-_CHART_BAR_SCHEMA: dict[str, Any] = {
+_CHART_CANDLE_SCHEMA: dict[str, Any] = {
     "type": "object",
     "required": ["time", "open", "high", "low", "close"],
     "properties": {
-        "time": {"type": "string"},
+        "time": {"type": ["string", "integer"]},
         "open": {"type": "number"},
         "high": {"type": "number"},
         "low": {"type": "number"},
         "close": {"type": "number"},
         "volume": {"type": "number"},
     },
+    "additionalProperties": False,
 }
 
 CHART_SCHEMA: dict[str, Any] = {
     "type": "object",
-    "required": ["symbol", "bars"],
+    "required": ["symbol", "chart"],
     "properties": {
-        "symbol": {"type": "string"},
-        "name": {"type": "string"},
-        "bars": {"type": "array", "items": _CHART_BAR_SCHEMA, "minItems": 1},
+        "symbol": {"type": "string", "minLength": 1},
+        "chart": {
+            "type": "object",
+            "required": ["period", "target", "trId", "candles"],
+            "properties": {
+                "period": {"enum": ["tick", "min", "day", "week", "month", "year"]},
+                "target": {"enum": ["stock", "sector", "gold"]},
+                "trId": {"type": "string", "minLength": 1},
+                "candles": {
+                    "type": "array",
+                    "items": _CHART_CANDLE_SCHEMA,
+                    "minItems": 1,
+                },
+            },
+            "additionalProperties": False,
+        },
     },
+    "additionalProperties": False,
 }
 
 _FACTS_FIELD_SCHEMA: dict[str, Any] = {

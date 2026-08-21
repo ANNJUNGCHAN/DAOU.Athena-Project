@@ -38,7 +38,11 @@ from athena_mcp.aggregator import (
     UnknownQualifiedNameError,
     UpdateResult,
 )
-from athena_mcp.canvas import CANVAS_SCHEMAS, validate_canvas_payload
+from athena_mcp.canvas import (
+    AITS_CHART_RENDERER_ID,
+    CANVAS_SCHEMAS,
+    validate_canvas_payload,
+)
 from athena_mcp.client import ResponseTooLargeError, ServerCrashedError, UpstreamServerHandle
 from athena_mcp.consent import AuditLog, ConsentStore
 from athena_mcp.registry import ServerRegistry, UnknownAliasError
@@ -76,6 +80,7 @@ _CANVAS_TYPE_PROPERTY: dict[str, Any] = {
     ),
 }
 
+
 # `data`에 canvas_type별 형상 요약을 description으로 싣는다(plan.md 액션 11).
 # oneOf 강제 검증이 아니라 **안내문**인 이유: canvas_type enum을 안 거는 것과
 # 같은 근거다 — SDK 사전 검증이 폴백 경로를 죽인다. 판정은 여전히
@@ -100,9 +105,7 @@ def _data_shape_hint() -> str:
                 parts.append(f"{key}({mark})")
         suffix = ""
         if schema.get("anyOf"):
-            alts = " 또는 ".join(
-                "+".join(alt.get("required", [])) for alt in schema["anyOf"]
-            )
+            alts = " 또는 ".join("+".join(alt.get("required", [])) for alt in schema["anyOf"])
             suffix = f" [{alts} 중 하나는 필수]"
         lines.append(f"- {name}: {'; '.join(parts)}{suffix}")
     lines.append("- free: 임의 구조 허용")
@@ -612,6 +615,8 @@ def _render_canvas(arguments: dict[str, Any]) -> types.CallToolResult:
         "layout": _normalize_layout(arguments.get("layout")),
         "drop_types": _normalize_drop_types(arguments.get("drop_types")),
     }
+    if result.canvas_type == "chart":
+        payload["renderer_id"] = AITS_CHART_RENDERER_ID
     return types.CallToolResult(
         content=[types.TextContent(type="text", text=json.dumps(payload, ensure_ascii=False))],
         structuredContent=payload,
@@ -652,6 +657,8 @@ def _save_canvas(arguments: dict[str, Any], save_dir: Path) -> types.CallToolRes
         "data": result.data,
         "saved_at": saved_at,
     }
+    if result.canvas_type == "chart":
+        payload["renderer_id"] = AITS_CHART_RENDERER_ID
     out_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
 
     payload_with_path = {**payload, "path": str(out_path)}
