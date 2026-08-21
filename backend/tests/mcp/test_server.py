@@ -198,6 +198,54 @@ async def test_render_canvas_valid_stream(tmp_path):
     assert payload["fell_back"] is False
 
 
+def _direct_aits_chart_data() -> dict:
+    return {
+        "symbol": "005930",
+        "chart": {
+            "period": "day",
+            "target": "stock",
+            "trId": "ka10081",
+            "candles": [
+                {
+                    "time": "2026-08-21",
+                    "open": 71000,
+                    "high": 72000,
+                    "low": 70500,
+                    "close": 71500,
+                    "volume": 12345678,
+                }
+            ],
+        },
+    }
+
+
+async def test_render_canvas_direct_chart_preserves_explicit_aits_renderer_envelope(tmp_path):
+    gw = _bare_gateway(tmp_path)
+    data = _direct_aits_chart_data()
+    result = await gw.dispatch_call(RENDER_CANVAS_TOOL, {"canvas_type": "chart", "data": data})
+    assert result.isError is False
+    payload = json.loads(result.content[0].text)
+    assert payload["canvas_type"] == "chart"
+    assert payload["renderer_id"] == "aits-chart-v1"
+    assert payload["data"] == data
+    assert result.structuredContent == payload
+
+
+async def test_render_canvas_direct_legacy_bars_does_not_emit_chart_or_renderer(tmp_path):
+    gw = _bare_gateway(tmp_path)
+    legacy = {
+        "symbol": "005930",
+        "bars": [{"time": "2026-08-21", "open": 1, "high": 2, "low": 0.5, "close": 1.5}],
+    }
+    result = await gw.dispatch_call(RENDER_CANVAS_TOOL, {"canvas_type": "chart", "data": legacy})
+    payload = json.loads(result.content[0].text)
+    assert payload["canvas_type"] == "free"
+    assert payload["fell_back"] is True
+    assert "renderer_id" not in payload
+    assert payload["data"] == legacy
+    assert "chart" not in payload["data"]
+
+
 async def test_render_canvas_schema_mismatch_falls_back_to_free_and_reports_it(tmp_path):
     gw = _bare_gateway(tmp_path)
     bad_data = {"records": [{"source": "x"}]}  # ts/title/url 없음
@@ -219,9 +267,7 @@ async def test_render_canvas_layout_hint_normalization(tmp_path):
     assert payload["layout"] == "full"
 
     args_bad = {"canvas_type": "free", "data": {"x": 1}, "layout": "mega"}
-    payload_bad = json.loads(
-        (await gw.dispatch_call(RENDER_CANVAS_TOOL, args_bad)).content[0].text
-    )
+    payload_bad = json.loads((await gw.dispatch_call(RENDER_CANVAS_TOOL, args_bad)).content[0].text)
     assert payload_bad["layout"] is None
 
     args_none = {"canvas_type": "free", "data": {"x": 1}}
@@ -430,9 +476,7 @@ async def test_render_canvas_plan_audit_log_contract_unchanged_by_manifest_wirin
     def handler(request: httpx.Request) -> httpx.Response:
         if request.url.path == "/api/v1/canvas/push":
             return httpx.Response(200, json={"queued": True})
-        return httpx.Response(
-            200, json={"operation_ref": "base:ka00001", "data": {"acctNo": "1"}}
-        )
+        return httpx.Response(200, json={"operation_ref": "base:ka00001", "data": {"acctNo": "1"}})
 
     gw = make_gateway(handler)
     result = await gw.dispatch_call(RENDER_CANVAS_TOOL, {"plan_token": "tok", "data": {}})
@@ -477,6 +521,27 @@ async def test_save_canvas_writes_file(tmp_path):
     on_disk = json.loads(saved_path.read_text(encoding="utf-8"))
     assert on_disk["canvas_type"] == "table"
     assert on_disk["data"]["rows"] == [{"a": 1}]
+
+
+async def test_save_canvas_chart_preserves_aits_renderer_on_disk_and_result(tmp_path):
+    save_dir = tmp_path / "canvases"
+    gw = AthenaGateway(
+        registry=ServerRegistry(path=tmp_path / "reg.json"),
+        consent_store=ConsentStore(path=tmp_path / "consent.json"),
+        canvas_save_dir=save_dir,
+    )
+    data = _direct_aits_chart_data()
+    result = await gw.dispatch_call(
+        SAVE_CANVAS_TOOL,
+        {"canvas_type": "chart", "data": data, "name": "aits-chart"},
+    )
+    assert result.isError is False
+    payload = json.loads(result.content[0].text)
+    on_disk = json.loads((save_dir / "aits-chart.json").read_text(encoding="utf-8"))
+    for envelope in (payload, on_disk):
+        assert envelope["canvas_type"] == "chart"
+        assert envelope["renderer_id"] == "aits-chart-v1"
+        assert envelope["data"] == data
 
 
 async def test_save_canvas_rejects_relative_path_traversal(tmp_path):
@@ -895,9 +960,9 @@ async def test_dispatch_call_timeout_is_audited_and_marked_upstream_failed(tmp_p
     assert result.isError is True
     assert result.meta[ERROR_ORIGIN_META_KEY] == "upstream-failed"
     audit_entries = gw._audit_log("dart").read_all()
-    assert any(
-        e["tool"] == "search_disclosure" and e["success"] is False for e in audit_entries
-    ), "타임아웃도 실패로 감사 로그에 남아야 한다"
+    assert any(e["tool"] == "search_disclosure" and e["success"] is False for e in audit_entries), (
+        "타임아웃도 실패로 감사 로그에 남아야 한다"
+    )
 
 
 class _ResponseTooLargeUpstreamHandle:
@@ -926,9 +991,9 @@ async def test_dispatch_call_response_too_large_is_audited_and_marked_upstream_f
     assert result.isError is True
     assert result.meta[ERROR_ORIGIN_META_KEY] == "upstream-failed"
     audit_entries = gw._audit_log("dart").read_all()
-    assert any(
-        e["tool"] == "search_disclosure" and e["success"] is False for e in audit_entries
-    ), "응답 초과도 실패로 감사 로그에 남아야 한다"
+    assert any(e["tool"] == "search_disclosure" and e["success"] is False for e in audit_entries), (
+        "응답 초과도 실패로 감사 로그에 남아야 한다"
+    )
 
 
 class _UnsupportedBlockUpstreamHandle:

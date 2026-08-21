@@ -96,53 +96,95 @@ def test_free_canvas_type_never_falls_back():
 
 
 # ---------------------------------------------------------------------------
-# 차트 — app/lib/chart-card.js 소비 형상(symbol/name/bars[time,o,h,l,c,volume])
+# 차트 — explicit AITS 입력(symbol + chart{period,target,trId,candles})
 # ---------------------------------------------------------------------------
 
 
-def test_chart_payload_valid_with_volume():
-    data = {
+def _aits_chart_data() -> dict:
+    return {
         "symbol": "005930",
-        "name": "삼성전자",
-        "bars": [
-            {"time": "2026-08-14", "open": 71000, "high": 72000, "low": 70500, "close": 71500,
-             "volume": 12345678},
-        ],
+        "chart": {
+            "period": "day",
+            "target": "stock",
+            "trId": "ka10081",
+            "candles": [
+                {
+                    "time": "2026-08-14",
+                    "open": 71000,
+                    "high": 72000,
+                    "low": 70500,
+                    "close": 71500,
+                    "volume": 12345678,
+                }
+            ],
+        },
     }
+
+
+def test_chart_payload_accepts_explicit_aits_shape():
+    data = _aits_chart_data()
     result = canvas.validate_canvas_payload("chart", data)
     assert result.canvas_type == "chart"
     assert result.fell_back is False
     assert result.fallback_reason is None
+    assert result.data == data
 
 
 def test_chart_payload_valid_without_optional_fields():
-    """volume·name은 선택이다 — 없어도 유효하다."""
+    """volume은 선택이고 intraday epoch time도 명시 계약에서 허용한다."""
     data = {
         "symbol": "005930",
-        "bars": [{"time": "2026-08-14", "open": 1, "high": 2, "low": 0.5, "close": 1.5}],
+        "chart": {
+            "period": "min",
+            "target": "stock",
+            "trId": "ka10080",
+            "candles": [{"time": 1787270400, "open": 1, "high": 2, "low": 0.5, "close": 1.5}],
+        },
     }
     result = canvas.validate_canvas_payload("chart", data)
     assert result.fell_back is False
 
 
 def test_chart_payload_missing_symbol_falls_back_to_free():
-    data = {"bars": [{"time": "2026-08-14", "open": 1, "high": 2, "low": 0.5, "close": 1.5}]}
+    data = _aits_chart_data()
+    del data["symbol"]
     result = canvas.validate_canvas_payload("chart", data)
     assert result.canvas_type == "free"
     assert result.fell_back is True
     assert "chart" in result.fallback_reason
 
 
-def test_chart_payload_empty_bars_falls_back_to_free():
-    """bars는 최소 1개 이상이어야 한다 — 빈 배열은 무효다."""
-    data = {"symbol": "005930", "bars": []}
+def test_chart_payload_empty_candles_falls_back_to_free():
+    data = _aits_chart_data()
+    data["chart"]["candles"] = []
     result = canvas.validate_canvas_payload("chart", data)
     assert result.canvas_type == "free"
     assert result.fell_back is True
 
 
-def test_chart_payload_bar_missing_required_field_falls_back_to_free():
-    data = {"symbol": "005930", "bars": [{"time": "2026-08-14", "open": 1, "high": 2, "low": 0.5}]}
+def test_chart_payload_candle_missing_required_field_falls_back_to_free():
+    data = _aits_chart_data()
+    del data["chart"]["candles"][0]["close"]
+    result = canvas.validate_canvas_payload("chart", data)
+    assert result.canvas_type == "free"
+    assert result.fell_back is True
+
+
+def test_legacy_symbol_bars_chart_cannot_succeed_or_infer_aits_fields():
+    legacy = {
+        "symbol": "005930",
+        "bars": [{"time": "2026-08-14", "open": 1, "high": 2, "low": 0.5, "close": 1.5}],
+    }
+    result = canvas.validate_canvas_payload("chart", legacy)
+    assert result.canvas_type == "free"
+    assert result.fell_back is True
+    assert result.data == legacy
+    assert "chart" not in result.data
+
+
+def test_explicit_aits_chart_rejects_legacy_or_unknown_fields():
+    data = _aits_chart_data()
+    data["bars"] = data["chart"]["candles"]
     result = canvas.validate_canvas_payload("chart", data)
     assert result.canvas_type == "free"
     assert result.fell_back is True
