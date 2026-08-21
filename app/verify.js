@@ -249,6 +249,99 @@ app.whenReady().then(async () => {
   assertOk('boot: boot bar wrote full name then returned to placeholder', report.bootChatOnly.bootBarWritesName === true);
   assertOk('boot: booted into chat(app) mode, not onboarding (verify profile isolation)', report.bootChatOnly.bootedIntoChatMode === true);
 
+  // ---------- 검증 1c: fail-closed REST 영수증 실제 표시 ----------
+  // 거절 요청은 캔버스가 없으므로 이 영수증이 유일한 피드백이다. 매 회 온보딩
+  // 패널이 앱을 가린 상태를 재현한 뒤, production main→IPC→chat DOM→doubleRAF
+  // paint ack를 여섯 번 반복해 모드 복구와 반복 waiter 정리를 함께 검증한다.
+  const receiptPaints = [];
+  for (let index = 0; index < 6; index += 1) {
+    await chatWin.webContents.executeJavaScript(`
+      (() => {
+        document.getElementById('app').hidden = true;
+        document.getElementById('onboard').hidden = false;
+      })()
+    `);
+    const receiptStartedAt = Date.now();
+    const paint = await mainMod.emitRestReceiptAndWaitForPaint(
+      '지원하지 않는 요청이라 캔버스에 표시하지 않았습니다.',
+      { timeoutMs: 1500 },
+    );
+    const surface = await chatWin.webContents.executeJavaScript(`
+      (() => {
+        const appPanel = document.getElementById('app');
+        const onboard = document.getElementById('onboard');
+        const receipts = [...document.querySelectorAll('.rest-receipt')];
+        const last = receipts[receipts.length - 1];
+        const rect = last && last.getBoundingClientRect();
+        return {
+          appVisible: !!appPanel && !appPanel.hidden,
+          onboardingHidden: !!onboard && onboard.hidden,
+          receiptCount: receipts.length,
+          nonzero: !!rect && rect.width > 0 && rect.height > 0,
+        };
+      })()
+    `);
+    receiptPaints.push({
+      elapsedMs: Date.now() - receiptStartedAt,
+      verifiedVisible: paint.verifiedVisible === true,
+      ...surface,
+    });
+  }
+  report.restReceiptPaint = { repeats: receiptPaints };
+  const receiptPaintPass = receiptPaints.length === 6 && receiptPaints.every((item, index) => (
+    item.verifiedVisible && item.appVisible && item.onboardingHidden
+    && item.nonzero && item.receiptCount === index + 1 && item.elapsedMs < 1500
+  ));
+  assertOk('restReceiptPaint: six hidden-mode receipts become visible with bounded paint ack', receiptPaintPass);
+  await chatWin.webContents.executeJavaScript(`
+    document.querySelectorAll('.rest-receipt').forEach((node) => node.remove())
+  `);
+
+  // ---------- 검증 1d: OS/main timer 지연에도 3초 전 보편 피드백 ----------
+  // T+2100부터 메인 이벤트 루프를 약 600ms 막아 T+2200 watchdog 자체가 늦게
+  // 실행되는 최악 조건을 만든다. 업스트림은 끝나지 않으며 runner의 T+3000
+  // abort로 정리된다. 그 사이 payload-free 지연 영수증이 실제로 먼저 그려져야 한다.
+  const delayedFeedbackDataset = {
+    datasetId: 'verify-delayed-feedback',
+    question: '지연 피드백 검증',
+    items: [{
+      itemId: 'verify-delayed-feedback-1',
+      ordinal: 1,
+      operationRef: 'detail:ka10001:current_trading',
+      args: { stk_cd: '005930' },
+    }],
+    firstCanvasDeadlineMs: 3000,
+  };
+  const delayedFetch = async (_url, options) => new Promise((_resolve, reject) => {
+    options.signal.addEventListener('abort', () => reject(options.signal.reason), { once: true });
+  });
+  const delayedRunStartedAt = Date.now();
+  const mainDelay = setTimeout(() => {
+    const blockedUntil = Date.now() + 600;
+    while (Date.now() < blockedUntil) { /* intentional verify-only event-loop delay */ }
+  }, 2100);
+  const delayedFeedbackResult = await mainMod.runDirectRestDataset(delayedFeedbackDataset, true, {
+    fetchImpl: delayedFetch,
+  });
+  clearTimeout(mainDelay);
+  report.delayedRestFeedback = {
+    elapsedMs: delayedFeedbackResult.firstFeedbackMs,
+    totalRunMs: Date.now() - delayedRunStartedAt,
+    feedbackOk: delayedFeedbackResult.feedbackOk,
+    receiptPainted: delayedFeedbackResult.answerPaintedByMain,
+    renderedCount: delayedFeedbackResult.renderedCount,
+  };
+  assertOk(
+    'delayedRestFeedback: 600ms main scheduling delay still paints truthful receipt before 3000ms',
+    delayedFeedbackResult.feedbackOk === true
+      && delayedFeedbackResult.answerPaintedByMain === true
+      && delayedFeedbackResult.firstFeedbackMs < 3000
+      && delayedFeedbackResult.renderedCount === 0,
+  );
+  await chatWin.webContents.executeJavaScript(`
+    document.querySelectorAll('.rest-receipt').forEach((node) => node.remove())
+  `);
+
   // ---------- 검증 2: 점 → 캔버스 확장/수축, 프레임 실측 ----------
   const dotBefore = await mainMod.getDotScreenPoint();
   report.dotScreenPoint = dotBefore;
@@ -1019,8 +1112,9 @@ app.whenReady().then(async () => {
   ];
   liveEnvelope({
     canvas_type: 'chart',
+    renderer_id: 'aits-chart-v1',
     caption: '검증13b 실배선 차트',
-    data: { symbol: '005930', name: '삼성전자', bars: liveChartBars },
+    data: { symbol: '005930', chart: { period: 'day', target: 'stock', trId: 'ka10081', candles: liveChartBars } },
   });
   await wait(1200); // renderLiveChart도 동적 import + 비동기 마운트(검증13과 같은 이유)
   const liveChartProbe = await canvasWin.webContents.executeJavaScript(`
@@ -1538,6 +1632,86 @@ app.whenReady().then(async () => {
   assertOk('compoundCard: header band renders all 3 scalar fields', compoundProbe !== null && compoundProbe.bandRowCount === 3);
   assertOk('compoundCard: table renders both rows', compoundProbe !== null && compoundProbe.tableBodyRowCount === 2);
   assertOk('compoundCard: header change cell tone reflects negative value → down', compoundProbe !== null && compoundProbe.changeToneClass === 'is-down');
+
+  // ---------- 검증 21: Paper AT-CV-005 승인 템플릿 13종 실제 DOM/캡처 ----------
+  // 각 케이스를 같은 canvas renderer 채널에 주입하고, 카드가 실제 layout/control/state
+  // 계약을 노출한 뒤 compositor screenshot이 비어 있지 않은지 확인한다. 보호 워크플로
+  // E/A/S는 표시 전용 fixture만 사용하며 주문/OAuth/WS side effect를 실행하지 않는다.
+  const tableData = (columnCount, withHeader = false) => ({
+    ...(withHeader ? { header: [{ key: 'stk_nm', label: '종목명', value: '검증종목' }] } : {}),
+    columns: Array.from({ length: columnCount }, (_, i) => ({ key: `c${i}`, label: `열${i}` })),
+    rows: Array.from({ length: 3 }, (_, r) => Object.fromEntries(
+      Array.from({ length: columnCount }, (_, c) => [`c${c}`, `${r}-${c}`]),
+    )),
+  });
+  const paperCases = [
+    { id: 'F1', type: 'facts', screenId: 'AT-CV-005:F1', state: 'ready', data: { fields: Array.from({ length: 6 }, (_, i) => ({ key: `f${i}`, label: `필드${i}`, value: `${i}` })) } },
+    { id: 'F2', type: 'facts', screenId: 'AT-CV-005:F2', state: 'ready', data: { fields: Array.from({ length: 14 }, (_, i) => ({ key: `f${i}`, label: `필드${i}`, value: `${i}` })) } },
+    { id: 'T1', type: 'table', screenId: 'AT-CV-005:T1', state: 'ready', data: tableData(4) },
+    { id: 'T2', type: 'table', screenId: 'AT-CV-005:T2', state: 'ready', data: tableData(14) },
+    { id: 'T3', type: 'table', screenId: 'AT-CV-005:T3', state: 'ready', layout: 'full', data: tableData(28) },
+    { id: 'T4', type: 'table', screenId: 'AT-CV-005:T4', state: 'ready', data: tableData(6, true) },
+    { id: 'C1', type: 'chart', screenId: 'AT-CV-005:C1', state: 'ready', data: { symbol: '005930', name: '검증종목', bars: [
+      { time: '2026-08-18', open: 100, high: 110, low: 95, close: 105, volume: 1000 },
+      { time: '2026-08-19', open: 105, high: 115, low: 101, close: 112, volume: 1200 },
+    ] } },
+    { id: 'C2', type: 'compound', screenId: 'AT-CV-005:C2', state: 'ready', data: { header: [{ key: 'stk_nm', label: '종목명', value: '검증종목' }], table: tableData(4) } },
+    { id: 'E1', type: 'event', screenId: 'AT-CV-005:E1', state: 'open', data: { lifecycle: 'open', records: [{ type: '체결', name: '검증종목', value: '100' }] } },
+    { id: 'E2', type: 'event', screenId: 'AT-CV-005:E2', state: 'reconnecting', data: { lifecycle: 'reconnecting', records: Array.from({ length: 20 }, (_, i) => ({ seq: i + 1, type: '시세', value: `${100 + i}` })) } },
+    { id: 'E3', type: 'event', screenId: 'AT-CV-005:E3', state: 'stopped', data: { lifecycle: 'stopped', records: [{ seq: 1 }] } },
+    { id: 'A1', type: 'action', screenId: 'AT-CV-005:A1', state: 'review', data: { lifecycle: 'review', receipt: { ord_no: 'DISPLAY-ONLY', dmst_stex_tp: 'KRX' } } },
+    { id: 'S1', type: 'status', screenId: 'AT-CV-005:S1', state: 'ready', data: { lifecycle: 'ready', configured: true, ready: true, expires_at: '2026-08-21T12:00:00+09:00' } },
+  ];
+  report.paperScreenCases = {};
+  for (const paperCase of paperCases) {
+    canvasWin.webContents.send('athena:clear-canvases');
+    await wait(60);
+    liveEnvelope({
+      canvas_type: paperCase.type,
+      caption: `Paper ${paperCase.id}`,
+      screen_id: paperCase.screenId,
+      layout: paperCase.layout || null,
+      data: paperCase.data,
+    });
+    await wait(paperCase.type === 'chart' ? 350 : 120);
+    const probe = await canvasWin.webContents.executeJavaScript(`(() => {
+      const card = document.querySelector('#grid .card');
+      if (!card) return null;
+      const rect = card.getBoundingClientRect();
+      const body = card.querySelector('.card-body');
+      const protectedWorkflow = card.dataset.workflow || null;
+      return {
+        connected: card.isConnected,
+        nonzeroRect: rect.width > 0 && rect.height > 0,
+        bodyHasContent: !!body && body.textContent.trim().length > 0,
+        fullWidth: card.classList.contains('w-full'),
+        hasCloseControl: !!card.querySelector('.uk-card-close'),
+        stateMatches: protectedWorkflow ? card.dataset.screenState === ${JSON.stringify(paperCase.state)} : true,
+        displayOnlyGuard: protectedWorkflow ? !!card.querySelector('.workflow-guard') : true,
+        noExecutableOrderOrOauthControl: !card.querySelector('button[data-order], button[data-oauth], input[type=password]'),
+        screenIdMatches: card.dataset.screenId === ${JSON.stringify(paperCase.screenId)},
+      };
+    })()`);
+    const captureName = `paper-${paperCase.id}.png`;
+    const imageSize = await shot(canvasWin, captureName);
+    const passed = !!probe
+      && Object.values(probe).every((value) => value === true || value === false || typeof value === 'string' || value === null)
+      && probe.connected && probe.nonzeroRect && probe.bodyHasContent && probe.hasCloseControl
+      && probe.stateMatches && probe.displayOnlyGuard && probe.noExecutableOrderOrOauthControl
+      && probe.screenIdMatches
+      && imageSize.width > 0 && imageSize.height > 0;
+    report.paperScreenCases[paperCase.id] = {
+      screenId: paperCase.screenId,
+      fixture: 'verify.js:paper-at-cv-005-display-only-v1',
+      status: passed ? 'pass' : 'fail',
+      screenshot: `app/captures/${captureName}`,
+      dom: { connected: !!(probe && probe.connected), nonzeroRect: !!(probe && probe.nonzeroRect), bodyHasContent: !!(probe && probe.bodyHasContent), screenIdMatches: !!(probe && probe.screenIdMatches) },
+      layout: { cardMeasured: !!(probe && probe.nonzeroRect), paperWidthApplied: !!probe },
+      controls: { closeControlRendered: !!(probe && probe.hasCloseControl), protectedActionsAbsent: !!(probe && probe.noExecutableOrderOrOauthControl) },
+      states: { declaredStateRendered: !!(probe && probe.stateMatches), displayOnlyGuardRendered: !!(probe && probe.displayOnlyGuard) },
+    };
+    assertOk(`paperScreenCases ${paperCase.id}: actual DOM/layout/control/state + screenshot`, passed);
+  }
 
   report.finishedAt = new Date().toISOString();
   fs.writeFileSync(path.join(CAPTURES, 'VERIFY-REPORT.json'), JSON.stringify(report, null, 2));

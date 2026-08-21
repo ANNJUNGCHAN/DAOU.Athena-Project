@@ -3,7 +3,8 @@
 // require()들도 이 시각 이후 비용이므로, "창 표시까지" 수치는 require 체인
 // 전체를 포함한다(가장 이른 지점에서 찍어야 실제 부팅 지연을 반영한다).
 const MODULE_LOAD_AT = Date.now();
-const { app, BrowserWindow, ipcMain, screen, Tray, Menu, nativeImage, desktopCapturer, Notification } = require('electron');
+const { app, BrowserWindow, ipcMain, screen, Tray, Menu, nativeImage, Notification } = require('electron');
+const { performance } = require('node:perf_hooks');
 const path = require('path');
 const fs = require('fs');
 
@@ -22,15 +23,17 @@ const mcpEnv = require('./lib/main/mcp-env');
 const { runClaudeQuery } = require('./lib/main/claude-runner');
 const { ensureMcpConfig } = require('./lib/main/mcp-config');
 const { buildLivePrompt } = require('./lib/main/live-prompt');
+const restDatasetRunner = require('./lib/main/rest-dataset-runner');
+const chartReload = require('./lib/main/chart-reload');
+const chartReloadAuthority = chartReload.createChartReloadAuthority();
+const { correlationKey: restCorrelationKey } = require('./lib/rest-canvas-paint');
+const { resolveWindowHtmlPath, waitForWindowReady } = require('./lib/main/window-readiness');
 // 목업 데이터 로더 — 렌더러 격리 이관(2026-08-18). canvas.js가 더는 fs를
 // 직접 못 쓴다 — athena:load-fixture가 이 모듈을 대신 호출해준다.
 const mockdata = require('./lib/main/mockdata');
 // 백엔드(FastAPI/uvicorn) 자동 기동 — 헬스체크 후 죽어 있을 때만 스폰한다(중복
 // 스폰 금지, lib/main/backend-launcher.js 상단 주석 참고).
 const backendLauncher = require('./lib/main/backend-launcher');
-// 휘도 감지-적응의 순수 계산부(2026-08-19) — 캡처·타이머는 아래
-// startBackdropSampling()이, 계산·매핑은 이 모듈이 담당한다(단위 테스트 9건).
-const backdropLuma = require('./lib/main/backdrop-luma');
 // 채팅 → HistoryStore 영속 훅(.omc/plans/plan-chat-graph-pipeline.md §2(a)/(g)).
 // fire-and-forget — 절대 await로 채팅 UX를 막지 않는다(모듈 상단 주석 참조).
 const historySink = require('./lib/main/history-sink');
@@ -59,6 +62,7 @@ app.on('window-all-closed', () => {
 let isQuitting = false;
 app.on('before-quit', () => {
   isQuitting = true;
+  chartReloadAuthority.clear();
   // 우리가 스폰했을 때만 죽인다(backend-launcher.js의 backendChild 판정) — 사용자가
   // 별도 콘솔에서 수동 기동한 백엔드 인스턴스는 이 앱의 생애주기와 무관하게 산다.
   backendLauncher.shutdownBackend();
@@ -176,9 +180,10 @@ async function createWindows() {
   // S1에서 발견된 환경 이슈: 프로세스의 "첫 번째" show()된 창이 OS 합성에서
   // topmost로 안정적으로 올라오지 않는 경우가 있었다. 워밍업 창으로 우회.
   const warmup = new BrowserWindow({ x: 10, y: 10, width: 10, height: 10, show: false, frame: false });
+  const warmupReady = waitForWindowReady(warmup, { label: 'warmup window' });
   warmup.loadURL('data:text/html,<body></body>');
   mdlog('warmup created, waiting ready-to-show');
-  await new Promise((r) => warmup.once('ready-to-show', r));
+  await warmupReady;
   mdlog('warmup ready-to-show fired');
   warmup.show();
   await wait(300);
@@ -189,16 +194,18 @@ async function createWindows() {
   canvasWin = new BrowserWindow(commonWinOpts({
     x: layout.originX, y: layout.originY, width: layout.canvasW, height: layout.canvasH,
   }));
+  const canvasReady = waitForWindowReady(canvasWin, { label: 'canvas window' });
   // 크기 잠금 해제(2026-08-18 사용자 지시 — "무조건 가로세로 모두 조정 가능해야
   // 한다"). E3 치수(1560×800)는 부팅 기본값일 뿐 불변 계약이 아니다. 하한은
   // 카드 1장 + 여백이 성립하는 최소 면적.
   canvasWin.setMinimumSize(480, 320);
-  canvasWin.loadFile('canvas.html');
+  canvasWin.loadFile(resolveWindowHtmlPath(__dirname, 'canvas.html'));
   mdlog('canvasWin created + loadFile called');
 
   chatWin = new BrowserWindow(commonWinOpts({
     x: chatX, y: chatBottom - chatHeight, width: layout.chatW, height: chatHeight,
   }));
+  const chatReady = waitForWindowReady(chatWin, { label: 'chat window' });
   // 채팅창도 폭·높이 모두 유동이다(2026-08-18 사용자 지시). 상한을 걸지 않는다 —
   // chatBaseH~chatMaxH는 자동 성장(setChatHeight)의 가동 범위일 뿐이고, 사용자가
   // OS 모서리 리사이즈로 그 밖에 두면 handleForeignArrange가 수용하고 렌더러에
@@ -206,16 +213,13 @@ async function createWindows() {
   // 크기. 완전 잠금(min=max)이면 Win+↑의 OS maximize가 이벤트도 없이 무시된다는
   // 실측(qa-win-arrow)은 여전히 유효하다 — 지금은 잠금 자체가 없다.
   chatWin.setMinimumSize(480, Math.min(160, layout.chatBaseH));
-  chatWin.loadFile('chat.html');
+  chatWin.loadFile(resolveWindowHtmlPath(__dirname, 'chat.html'));
   mdlog('chatWin created + loadFile called');
 
   noteAppBounds(canvasWin);
   noteAppBounds(chatWin);
 
-  await Promise.all([
-    new Promise((r) => canvasWin.once('ready-to-show', r)),
-    new Promise((r) => chatWin.once('ready-to-show', r)),
-  ]);
+  await Promise.all([canvasReady, chatReady]);
   mdlog('both ready-to-show fired');
 
   // R1(W2 지시): 부팅 시 대화 창만 뜬다. 캔버스 창은 존재하되 숨어 있다(최종 크기로 생성됨, show() 안 함).
@@ -295,9 +299,6 @@ async function createWindows() {
     if (details && details.edge === 'top') event.preventDefault();
   });
 
-  // 휘도 감지-적응 시작(2026-08-19) — 두 창이 다 뜬 뒤에만. fixture면 내부에서 no-op.
-  startBackdropSampling();
-
   // 루틴 알림 구독 시작(2026-08-19 능동 에이전트 P2) — fixture면 내부에서 no-op.
   startRoutineFeed();
   // 캔버스 사이드 채널 구독(2026-08-19 데이터 지름길) — 게이트웨이가 채운 카드가
@@ -325,7 +326,7 @@ const LOCAL_BEARER_TOKEN = process.env.ATHENA_LOCAL_BEARER_TOKEN || null;
 let routineFeed = null;
 
 function startRoutineFeed() {
-  // 검증 결정론 보호 — verify.js(fixture)에서는 돌리지 않는다(backdrop 샘플링과 동일 문법).
+  // 검증 결정론 보호 — verify.js(fixture)에서는 능동 피드를 돌리지 않는다.
   if (process.env.ATHENA_CANVAS_SOURCE === 'fixture') return;
   if (routineFeed) return;
   routineFeed = new RoutineFeed({
@@ -745,88 +746,6 @@ ipcMain.on('athena:close-windows', () => {
   hideToBackground();
 });
 
-// ---------- 휘도 감지-적응 (2026-08-19 구현 — palette.md "채택" 스펙의 실결선) ----------
-// 검증 보드 45가 실측으로 증명한 결함의 해소: 밝은 배경화면 위에서 유리 0.30은
-// dim 계층 텍스트를 소실시킨다. 2초 저빈도 폴링으로 데스크톱 썸네일을 떠서
-// **우리 창 영역을 제외한**(화면 캡처에는 우리 창 자신도 찍힌다) 평균 휘도를 재고,
-// EMA 스무딩 후 두 렌더러에 표면별 유리 두께를 보낸다. 렌더러는 CSS 전이(600ms)로
-// 부드럽게 따라간다 — 이건 opacity 페이드가 아니라 리퀴드 글래스의 정의 그 자체
-// ("배경에 따라 tint를 연속적으로 조정", liquid-glass.md §1 적응성)다.
-// fixture(자동 검증) 실행에서는 돌리지 않는다 — 캡처·검증16 결정론 보호.
-// 연속 실패 3회면 폴백 0.55 고정(부록 A2: 가독성이 감지 성공 여부에 걸리면 안 된다).
-let backdropTimer = null;
-let smoothedLuma = null;
-let sampleFailures = 0;
-let lastSent = null;
-// 계단화 스테퍼(2026-08-19 사용자 보고 "투명도가 막 바뀐다") — 3계단×3연속(6초)
-// 일 때만 전환. 연속값 직결은 배경이 움직일 때마다 유리가 숨 쉬는 결함이었다.
-const brightnessStepper = backdropLuma.createBrightnessStepper({ dwell: 3 });
-
-async function sampleBackdropOnce() {
-  if (!chatWin || chatWin.isDestroyed()) return;
-  try {
-    const display = screen.getDisplayMatching(chatWin.getBounds());
-    const thumbW = 240;
-    const thumbH = Math.max(1, Math.round(thumbW * display.bounds.height / display.bounds.width));
-    const sources = await desktopCapturer.getSources({ types: ['screen'], thumbnailSize: { width: thumbW, height: thumbH } });
-    const source = sources.find((s) => String(s.display_id) === String(display.id)) || sources[0];
-    if (!source || source.thumbnail.isEmpty()) throw new Error('빈 썸네일');
-    const size = source.thumbnail.getSize();
-    const scaleX = size.width / display.bounds.width;
-    const scaleY = size.height / display.bounds.height;
-    const exclude = [];
-    for (const w of [chatWin, canvasWin]) {
-      if (w && !w.isDestroyed() && w.isVisible() && !w.isMinimized()) {
-        const b = w.getBounds();
-        exclude.push(backdropLuma.scaleRect(
-          { x: b.x - display.bounds.x, y: b.y - display.bounds.y, width: b.width, height: b.height },
-          scaleX, scaleY
-        ));
-      }
-    }
-    const luma = backdropLuma.computeAverageLuminance(source.thumbnail.toBitmap(), size.width, size.height, exclude);
-    if (luma === null) return; // 창이 화면을 다 덮어 판정 불가 — 이전 값 유지
-    sampleFailures = 0;
-    smoothedLuma = backdropLuma.smooth(smoothedLuma, luma);
-    const b = brightnessStepper(backdropLuma.lumaToBrightness(smoothedLuma));
-    sendBackdropAlphas({
-      brightness: b,
-      windowAlpha: backdropLuma.brightnessToAlpha(b, 0.30),
-      canvasAlpha: backdropLuma.brightnessToAlpha(b, 0.50),
-    });
-  } catch (err) {
-    sampleFailures += 1;
-    if (sampleFailures === 3) {
-      // 폴백 — 감지가 계속 실패하면 중간 두께로 고정한다. 가독성을 감지 성공
-      // 여부에 걸어두지 않는다(palette.md). mdlog로 원인은 남긴다.
-      mdlog(`휘도 샘플링 3연속 실패 — 폴백 0.55 고정: ${String((err && err.message) || err)}`);
-      sendBackdropAlphas({ brightness: null, windowAlpha: 0.55, canvasAlpha: 0.55, fallback: true });
-    }
-  }
-}
-
-function sendBackdropAlphas(payload) {
-  // 0.01 미만의 변화는 보내지 않는다 — 렌더러 전이가 미세 진동하지 않게.
-  if (lastSent && payload.windowAlpha !== undefined
-    && Math.abs(lastSent.windowAlpha - payload.windowAlpha) < 0.01
-    && Math.abs(lastSent.canvasAlpha - payload.canvasAlpha) < 0.01) return;
-  lastSent = payload;
-  for (const w of [chatWin, canvasWin]) {
-    if (w && !w.isDestroyed()) w.webContents.send('athena:backdrop-luminance', payload);
-  }
-}
-
-function startBackdropSampling() {
-  if (backdropTimer) return;
-  if (process.env.ATHENA_CANVAS_SOURCE === 'fixture') return; // 자동 검증 결정론 보호
-  sampleBackdropOnce();
-  backdropTimer = setInterval(sampleBackdropOnce, 2000);
-}
-
-app.on('will-quit', () => {
-  if (backdropTimer) { clearInterval(backdropTimer); backdropTimer = null; }
-});
-
 // ---------- 줌(화면 확대/축소) — 두 창 동기, Ctrl+= / Ctrl+- / Ctrl+0 / Ctrl+휠 ----------
 // 창 크기는 그대로 두고 콘텐츠 배율만 바꾼다(브라우저 줌과 같은 문법). 렌더러의
 // CSS px 좌표 계약이 배율만큼 어긋나는 지점은 정확히 세 곳이고 각자 보정한다:
@@ -900,6 +819,25 @@ function rmaxFor(cx, cy) {
   return Math.max(...corners.map(([x, y]) => Math.hypot(x - cx, y - cy)));
 }
 
+function waitForCanvasIpc(channel, timeoutMs) {
+  return new Promise((resolve, reject) => {
+    const onMessage = (event, data) => {
+      if (!canvasWin || canvasWin.isDestroyed() || event.sender !== canvasWin.webContents) return;
+      cleanup();
+      resolve(data);
+    };
+    const timer = setTimeout(() => {
+      cleanup();
+      reject(new Error(`${channel} IPC timeout after ${timeoutMs}ms`));
+    }, timeoutMs);
+    const cleanup = () => {
+      clearTimeout(timer);
+      ipcMain.removeListener(channel, onMessage);
+    };
+    ipcMain.on(channel, onMessage);
+  });
+}
+
 async function expandCanvasWindow() {
   if (!chatWin || chatWin.isDestroyed() || !canvasWin || canvasWin.isDestroyed()) return null;
   const dotScreen = await getDotScreenPoint();
@@ -907,16 +845,15 @@ async function expandCanvasWindow() {
   const { cx, cy } = canvasLocalFromScreen(dotScreen);
   const rmax = rmaxFor(cx, cy);
 
-  await new Promise((resolve) => {
-    ipcMain.once('primed', resolve);
-    canvasWin.webContents.send('prime-clip', { cx, cy });
-  });
+  const primed = waitForCanvasIpc('primed', 750);
+  canvasWin.webContents.send('prime-clip', { cx, cy });
+  await primed;
   canvasWin.show();
   canvasWin.moveTop();
   chatWin.moveTop();
   canvasVisible = true;
 
-  const donePromise = new Promise((resolve) => ipcMain.once('animation-done', (e, data) => resolve(data)));
+  const donePromise = waitForCanvasIpc('animation-done', 1250);
   canvasWin.webContents.send('run-animation', { cx, cy, rmax, duration: 550, mode: 'expand' });
   const result = await donePromise;
   return result;
@@ -930,7 +867,7 @@ async function collapseCanvasWindow() {
   const { cx, cy } = canvasLocalFromScreen(dotScreen);
   const rmax = rmaxFor(cx, cy);
 
-  const donePromise = new Promise((resolve) => ipcMain.once('animation-done', (e, data) => resolve(data)));
+  const donePromise = waitForCanvasIpc('animation-done', 1250);
   canvasWin.webContents.send('run-animation', { cx, cy, rmax, duration: 550, mode: 'collapse' });
   const result = await donePromise;
   canvasWin.hide();
@@ -943,6 +880,137 @@ ipcMain.on('athena:collapse-canvas', () => { collapseCanvasWindow(); });
 ipcMain.on('athena:highlight-canvas', (e, type) => {
   if (canvasVisible) canvasWin.webContents.send('athena:highlight-canvas', type);
 });
+
+const restPaintWaiters = new Map();
+const restReceiptWaiters = new Map();
+
+ipcMain.on('athena:rest-canvas-painted', (event, payload = {}) => {
+  if (!canvasWin || canvasWin.isDestroyed() || event.sender !== canvasWin.webContents) return;
+  const key = restCorrelationKey({
+    dataset_id: payload.dataset_id,
+    item_id: payload.item_id,
+    ordinal: payload.ordinal,
+  });
+  const waiter = key && restPaintWaiters.get(key);
+  if (!waiter) return;
+  restPaintWaiters.delete(key);
+  waiter.cleanup();
+  if (!payload.verified_visible) {
+    waiter.reject(new Error(payload.error || 'REST 카드가 실제 표시되지 않았다'));
+    return;
+  }
+  const paintResult = {
+    verifiedVisible: true,
+    visiblePaintAt: performance.now(),
+    inlineToDomMs: Number(payload.inline_to_dom_ms) || 0,
+    domToPaintAckMs: Number(payload.dom_to_paint_ack_ms) || 0,
+    renderState: payload.render_state || null,
+    rendererId: payload.renderer_id || null,
+    panelId: payload.panel_id || null,
+    generation: payload.generation != null && Number.isInteger(Number(payload.generation)) ? Number(payload.generation) : null,
+    rect: payload.rect || null,
+  };
+  chartReloadAuthority.registerPaint(paintResult, waiter.reloadAuthority);
+  waiter.resolve(paintResult);
+});
+
+ipcMain.on('athena:rest-receipt-painted', (event, payload = {}) => {
+  if (!chatWin || chatWin.isDestroyed() || event.sender !== chatWin.webContents) return;
+  const receiptId = String(payload.receipt_id || '');
+  const waiter = restReceiptWaiters.get(receiptId);
+  if (!waiter) return;
+  restReceiptWaiters.delete(receiptId);
+  waiter.cleanup();
+  if (!payload.verified_visible) {
+    waiter.reject(new Error(payload.error || 'REST 영수증이 실제 표시되지 않았다'));
+    return;
+  }
+  waiter.resolve({ verifiedVisible: true, visiblePaintAt: performance.now(), rect: payload.rect || null });
+});
+
+ipcMain.on('athena:chart-panel-destroyed', (event, payload = {}) => {
+  if (!canvasWin || canvasWin.isDestroyed() || event.sender !== canvasWin.webContents) return;
+  chartReloadAuthority.unregister(payload.panelId);
+});
+
+function emitRestReceiptAndWaitForPaint(text, { timeoutMs = 3000 } = {}) {
+  if (!chatWin || chatWin.isDestroyed()) return Promise.reject(new Error('대화 창이 준비되지 않았다'));
+  if (chatWin.isMinimized()) chatWin.restore();
+  chatWin.show();
+  chatWin.moveTop();
+  chatWin.focus();
+  const receiptId = crypto.randomUUID();
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      restReceiptWaiters.delete(receiptId);
+      reject(new Error('REST 영수증 paint ack 3초 제한을 넘겼다'));
+    }, timeoutMs);
+    const cleanup = () => clearTimeout(timer);
+    restReceiptWaiters.set(receiptId, { resolve, reject, cleanup });
+    chatWin.webContents.send('athena:add-rest-receipt', { receiptId, text });
+  });
+}
+
+async function emitRestCanvasAndWaitForPaint(payload, { expand = true, timeoutMs = 3000 } = {}) {
+  if (!canvasWin || canvasWin.isDestroyed()) throw new Error('캔버스 창이 준비되지 않았다');
+  // The direct REST lane has a hard three-second feedback budget. Reveal the
+  // already-loaded surface immediately; the normal dot toggle retains its
+  // decorative 550ms materialisation animation.
+  if (expand && !canvasVisible) {
+    canvasWin.show();
+    canvasWin.moveTop();
+    if (chatWin && !chatWin.isDestroyed()) chatWin.moveTop();
+    canvasVisible = true;
+  }
+  // Recover a minimized surface without changing application focus. The
+  // renderer uses backgroundThrottling:false and the paint contract itself
+  // verifies a visible, nonzero card followed by two animation frames.
+  if (canvasWin.isMinimized()) canvasWin.restore();
+  if (!canvasWin.isVisible()) canvasWin.showInactive();
+  const correlation = payload && payload.envelope && payload.envelope.correlation;
+  const key = restCorrelationKey(correlation);
+  if (!key) throw new Error('REST 카드 correlation이 완전하지 않다');
+  if (restPaintWaiters.has(key)) throw new Error('같은 REST 카드 paint ack가 이미 대기 중이다');
+  return new Promise((resolve, reject) => {
+    let timer = null;
+    const onAbort = () => {
+      restPaintWaiters.delete(key);
+      cleanup();
+      reject(payload.signal && payload.signal.reason instanceof Error
+        ? payload.signal.reason
+        : new Error('REST 카드 표시가 중단됐다'));
+    };
+    const cleanup = () => {
+      if (timer) clearTimeout(timer);
+      if (payload.signal) payload.signal.removeEventListener('abort', onAbort);
+    };
+    timer = setTimeout(() => {
+      restPaintWaiters.delete(key);
+      cleanup();
+      reject(new Error('REST 카드 paint ack 3초 제한을 넘겼다'));
+    }, timeoutMs);
+    if (payload.signal) payload.signal.addEventListener('abort', onAbort, { once: true });
+    const chart = payload && payload.envelope && payload.envelope.data && payload.envelope.data.chart;
+    restPaintWaiters.set(key, {
+      resolve,
+      reject,
+      cleanup,
+      reloadAuthority: {
+        correlation,
+        operationRef: payload.operationRef,
+        operationArgs: payload.operationArgs,
+        chartBody: chart,
+        chartMeta: payload && payload.envelope && payload.envelope.data && payload.envelope.data.chart_meta,
+      },
+    });
+    canvasWin.webContents.send('athena:add-rest-canvas', {
+      envelope: payload.envelope,
+      operationRef: payload.operationRef,
+      operationArgs: payload.operationArgs,
+      canvasType: payload.canvasType,
+    });
+  });
+}
 
 // ---------- athena__render_canvas — 결정 D1의 실배선 + 명시적 픽스처 어댑터 ----------
 // 두 경로가 여기서 갈린다(plan/kiwoom-common-screen-handoff.md §6 — HTTP/WebSocket
@@ -975,6 +1043,7 @@ function sendLiveCanvasResult(result) {
 // 지금 떠 있는 실배선 claude 프로세스의 kill 핸들. 정확히 하나만 유지한다 —
 // Esc 후 재질의로 프로세스가 쌓이던 갭(README "다중 세션도 없다")의 해소.
 let activeLiveQuery = null;
+let activeRestRun = null;
 
 // 멀티턴(2026-08-17) — 직전 성공 왕복의 session_id. 다음 질의를 --resume으로
 // 이어 이전 대화 내용(질문·답변·툴 결과)이 반영되게 한다. -p 재개는 세션을
@@ -1008,11 +1077,109 @@ function emitHistorySaveFailed({ messageId, role }) {
 
 // 시맨틱 캐시 + 리플레이(2026-08-19 "아직 느리다") — 같은 질문 2회차부터 모델을
 // 태우지 않는다. 판정만 재사용, 데이터는 매번 새로 조회(query-cache.js/fast-path.js).
-const { QueryCache } = require('./lib/main/query-cache');
+const { QueryCache, ReplayTurnCapture } = require('./lib/main/query-cache');
 const fastPath = require('./lib/main/fast-path');
 const liveQueryCache = new QueryCache();
+const stockEntityIndex = new restDatasetRunner.StockEntityIndex();
+const DIRECT_FEEDBACK_WATCHDOG_MS = 2200;
+
+async function runDirectRestDataset(dataset, expand = true, overrides = {}) {
+  const startedAt = performance.now();
+  const ownController = overrides.signal ? null : new AbortController();
+  if (!overrides.signal && activeRestRun) activeRestRun.abort(new Error('새 REST 데이터셋 요청이 이전 요청을 대체했다'));
+  if (ownController) activeRestRun = ownController;
+  let feedbackObserved = false;
+  let watchdogReceipt = null;
+  const shouldPaintReceipt = !overrides.emitCanvas;
+  const feedbackWatchdog = shouldPaintReceipt ? setTimeout(() => {
+    if (feedbackObserved) return;
+    watchdogReceipt = emitRestReceiptAndWaitForPaint(
+      '조회가 지연되어 아직 화면 데이터를 표시하지 못했습니다.',
+      { timeoutMs: Math.max(1, 3000 - DIRECT_FEEDBACK_WATCHDOG_MS) },
+    ).then((paint) => ({ paint, error: null }), (error) => ({ paint: null, error }));
+  }, DIRECT_FEEDBACK_WATCHDOG_MS) : null;
+  const handleDirectEvent = (event) => {
+    if (event && event.type === 'paint-ack') feedbackObserved = true;
+    if (typeof overrides.onEvent === 'function') overrides.onEvent(event);
+  };
+  let result;
+  try {
+    result = await restDatasetRunner.runRestDataset({
+      dataset,
+      backendBase: BACKEND_HTTP_BASE,
+      fetchImpl: overrides.fetchImpl,
+      signal: overrides.signal || ownController.signal,
+      hardSignal: overrides.hardSignal,
+      onEvent: handleDirectEvent,
+      emitCanvas: overrides.emitCanvas || ((payload) => {
+        if (ownController && activeRestRun !== ownController) {
+          throw new Error('교체된 REST 데이터셋의 늦은 카드는 표시하지 않는다');
+        }
+        return emitRestCanvasAndWaitForPaint(payload, {
+          expand,
+          timeoutMs: Math.max(1, payload.paintDeadlineAt - performance.now()),
+        });
+      }),
+    });
+  } finally {
+    if (feedbackWatchdog) clearTimeout(feedbackWatchdog);
+    if (activeRestRun === ownController) activeRestRun = null;
+  }
+  const watchdogOutcome = watchdogReceipt ? await watchdogReceipt : null;
+  if (watchdogOutcome && watchdogOutcome.paint) {
+    result.answerPaintedByMain = true;
+    result.feedbackOk = true;
+    result.firstFeedbackMs = Math.max(0, watchdogOutcome.paint.visiblePaintAt - startedAt);
+  } else if (!result.renderedCount && shouldPaintReceipt) {
+    try {
+      const paint = await emitRestReceiptAndWaitForPaint(result.answerText, {
+        timeoutMs: Math.max(1, 3000 - (performance.now() - startedAt)),
+      });
+      result.answerPaintedByMain = true;
+      result.feedbackOk = true;
+      result.firstFeedbackMs = Math.max(0, paint.visiblePaintAt - startedAt);
+    } catch (error) {
+      result.answerPaintedByMain = false;
+      result.feedbackOk = false;
+      result.feedbackError = String((error && error.message) || error);
+    }
+  } else if (watchdogOutcome && watchdogOutcome.error && !result.feedbackOk) {
+    result.feedbackError = String((watchdogOutcome.error && watchdogOutcome.error.message) || watchdogOutcome.error);
+  }
+  if (!overrides.skipHistory && dataset && dataset.question) {
+    historySink.saveChatMessage(
+      { conversationId: historyConversationId(), text: dataset.question, role: 'user' },
+      { onSaveFailed: emitHistorySaveFailed, mdlog },
+    );
+  }
+  if (!overrides.skipHistory) {
+    historySink.saveChatMessage(
+      { conversationId: historyConversationId(), text: result.answerText, role: 'assistant' },
+      { onSaveFailed: emitHistorySaveFailed, mdlog },
+    );
+  }
+  return result;
+}
+
+async function handleChartPanelReload(event, payload) {
+  if (!canvasWin || canvasWin.isDestroyed() || event.sender !== canvasWin.webContents) {
+    throw new Error('AITS chart reload는 캔버스 창에서만 허용된다');
+  }
+  const request = chartReloadAuthority.buildDataset(payload);
+  const result = await runDirectRestDataset(request, false, { skipHistory: true });
+  return chartReloadAuthority.acceptResult(request, result);
+}
+
+ipcMain.handle('athena:reload-chart-panel', handleChartPanelReload);
 
 async function runLiveQuery(query, expand) {
+  const directDataset = restDatasetRunner.buildQuoteDataset(query, stockEntityIndex, {
+    idFactory: () => `rest-${crypto.randomUUID()}`,
+  });
+  if (directDataset) {
+    mdlog('Kiwoom REST 직결 화면 경로 선택 — 모델/MCP/WS 무호출');
+    return runDirectRestDataset(directDataset, expand);
+  }
   const { dir, configFile } = getLiveMcpConfig();
 
   // 빠른 경로 — 캐시된 판정이 있으면 claude -p를 스폰하지 않는다. 카드는
@@ -1068,9 +1235,9 @@ async function runLiveQuery(query, expand) {
   // 실제로 가능하다 — 그때 빈 유리창을 열어두지 않는다.
   let expandTriggered = false;
   const canvasTypesSeen = [];
-  // 판정 캡처(시맨틱 캐시 재료) — onEvent가 채우고 성공 왕복 뒤에만 저장한다.
-  let capturedResolveInput = null;
-  let capturedRenderInput = null;
+  // 판정 캡처(시맨틱 캐시 재료) — tool_use_id로 resolve 결과 토큰과 render 입력
+  // 토큰을 상관시킨다. 마지막 입력끼리 우연히 결합하지 않는다.
+  const replayTurnCapture = new ReplayTurnCapture();
   const resumeSessionId = liveSessionId;
   // 설정 화면 모델 패널(lib/main/model-prefs.js) 값 — null이면 buildArgs가
   // --model/--effort를 안 붙여 claude CLI 기본값을 쓴다.
@@ -1085,19 +1252,8 @@ async function runLiveQuery(query, expand) {
     model,
     effort,
     onSpawn: (h) => { myHandle = h; activeLiveQuery = h; },
-    // 판정 캡처(시맨틱 캐시) — 모델이 실제로 내린 해석(resolve 인자·카드 구성)을
-    // 스트림에서 줍는다. 저장은 성공 왕복 뒤에만 한다(아래).
-    onEvent: (ev) => {
-      if (!ev || ev.type !== 'assistant' || !ev.message || !Array.isArray(ev.message.content)) return;
-      for (const block of ev.message.content) {
-        if (!block || block.type !== 'tool_use' || !block.input) continue;
-        if (String(block.name || '').endsWith('athena_resolve')) {
-          capturedResolveInput = block.input;
-        } else if (String(block.name || '').endsWith('athena__render_canvas') && block.input.plan_token) {
-          capturedRenderInput = block.input;
-        }
-      }
-    },
+    // 성공 resolve 1건과 render 1건의 토큰이 정확히 같은 경우만 캐시한다.
+    onEvent: (ev) => replayTurnCapture.observe(ev),
     onCanvasResult: (r) => {
       if (r.status === 'pushed') {
         // 카드는 사이드 채널(startCanvasFeed)로 이미 도착했다 — 여기선 집계만.
@@ -1136,21 +1292,17 @@ async function runLiveQuery(query, expand) {
   // finalResult.result는 claude -p의 마지막 assistant 텍스트다(RESULT.md의
   // type:"result" 이벤트) — 목업 시절의 정형화된 "캔버스 창에 ~ 띄웠습니다"
   // 문장 대신, 실제로 Claude가 쓴 답변을 그대로 보여준다.
-  // 판정 저장(시맨틱 캐시) — 성공 + plan_token 렌더가 실제로 일어난 왕복만.
+  // 판정 저장(시맨틱 캐시) — successful resolve 1건과 같은 plan_token의 render
+  // 1건이 실제로 일어난 왕복만.
   // 같은 질문 2회차부터 모델 무호출 리플레이의 재료가 된다(runLiveQuery 진입부).
-  // 이 턴에 모델이 실제로 고른 canvas_type(chart/table)은 캐시 대상 여부를
+  // backend manifest가 돌려준 실제 canvas_type(chart/table)은 캐시 대상 여부를
   // 거르는 그때그때의 필터일 뿐, 저장하는 판정 객체에는 담지 않는다 — 카드
   // 종류는 이제 operation_ref의 순수 함수라(P5, canvas_push.py) 재생 시점에
   // 백엔드가 다시 정하므로 캐싱이 불필요하다(fast-path.js가 응답값을 쓴다).
-  if (result.ok && capturedResolveInput && capturedRenderInput
-      && (capturedRenderInput.canvas_type === 'chart' || capturedRenderInput.canvas_type === 'table')) {
-    liveQueryCache.set(query, {
-      resolveQuestion: capturedResolveInput.question,
-      resolveArgs: capturedResolveInput.arguments || {},
-      data: capturedRenderInput.data || {},
-      caption: capturedRenderInput.caption || null,
-    });
-  }
+  const replayJudgment = result.ok
+    ? replayTurnCapture.buildJudgment(canvasTypesSeen)
+    : null;
+  if (replayJudgment) liveQueryCache.set(query, replayJudgment);
 
   const answerText = result.finalResult && typeof result.finalResult.result === 'string'
     ? result.finalResult.result
@@ -1178,6 +1330,9 @@ async function runLiveQuery(query, expand) {
 
 // Esc 중단 — 렌더러의 abortToken은 UI 반영만 막는다. 프로세스는 여기서 실제로 죽인다.
 ipcMain.on('athena:abort-live-query', () => {
+  if (activeRestRun) {
+    activeRestRun.abort(new Error('사용자가 REST 데이터셋 요청을 취소했다'));
+  }
   if (activeLiveQuery) {
     activeLiveQuery.kill();
     activeLiveQuery = null;
@@ -1185,6 +1340,9 @@ ipcMain.on('athena:abort-live-query', () => {
 });
 
 ipcMain.handle('athena__render_canvas', async (e, payload = {}) => {
+  if (payload.source === 'rest-dataset') {
+    return runDirectRestDataset(payload.dataset, payload.expand !== false);
+  }
   if (payload.source === 'fixture') {
     // 기존 목업 경로 — 그대로 보존한다. type만 알면 되고 실제 텍스트는 안 쓴다.
     const { type, expand } = payload;
@@ -1594,7 +1752,19 @@ if (!process.env.ATHENA_NO_AUTOSTART) {
     // 떠 있으면(사용자가 수동 기동) 손대지 않는다 — backend-launcher.js의
     // 헬스체크 우선 판정이 중복 스폰을 막는다.
     backendLauncher.ensureBackend({ mdlog })
-      .then(() => historySink.refreshBrainReady({ mdlog }))
+      .then(async () => {
+        historySink.refreshBrainReady({ mdlog });
+        try {
+          const count = await restDatasetRunner.refreshStockEntityIndex(stockEntityIndex, {
+            backendBase: BACKEND_HTTP_BASE,
+          });
+          mdlog(`Kiwoom 종목명 인덱스 갱신 — alias ${count}개`);
+        } catch (err) {
+          // 인덱스가 없으면 이름 질의만 기존 경로로 abstain한다. 명시적 6자리 코드는
+          // 계속 직결 가능하며, 추측한 종목코드를 만들어내지 않는다.
+          mdlog(`Kiwoom 종목명 인덱스 갱신 보류: ${String((err && err.message) || err)}`);
+        }
+      })
       .catch((err) => {
         mdlog(`ensureBackend 실패: ${String((err && err.message) || err)}`);
       });
@@ -1607,6 +1777,10 @@ module.exports = {
   createWindows,
   expandCanvasWindow,
   collapseCanvasWindow,
+  emitRestCanvasAndWaitForPaint,
+  emitRestReceiptAndWaitForPaint,
+  runDirectRestDataset,
+  getStockEntityIndex: () => stockEntityIndex,
   getDotScreenPoint,
   getWins: () => ({ chatWin, canvasWin }),
   getLayout: () => layout,

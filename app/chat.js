@@ -5,6 +5,7 @@
 const onboarding = window.AthenaLib.Onboarding;
 const authScreen = window.AthenaLib.AuthScreen;
 const settingsCards = window.AthenaLib.SettingsCards;
+const { waitForVisiblePaint: waitForRestReceiptPaint } = window.AthenaLib.RestCanvasPaint;
 
 const $boot = document.getElementById('boot');
 const $bootLine = document.getElementById('bootLine');
@@ -39,6 +40,49 @@ let state = 'idle'; // idle | judging | calling | done(즉시 idle로 수렴)
 let liveProgressEl = null;
 let abortToken = 0;
 let onboardCleanup = null; // 현재 노출 중인 온보딩/인증 화면의 정리 함수(리스너·타이머 해제)
+
+function prepareRestReceiptSurface() {
+  // A fail-closed receipt is the only visible result for rejected/no-render
+  // requests. It must not be appended beneath boot, onboarding, settings or
+  // order panels. Return the existing window to chat mode before measuring it.
+  $boot.hidden = true;
+  $onboard.hidden = true;
+  $settings.hidden = true;
+  $order.hidden = true;
+  $app.hidden = false;
+  settingsOpen = false;
+  orderOpen = false;
+  manualOverride = false;
+}
+
+window.athena.on('athena:add-rest-receipt', async (payload = {}) => {
+  prepareRestReceiptSurface();
+  const line = document.createElement('div');
+  line.className = 'turn rest-receipt';
+  line.dataset.receiptId = String(payload.receiptId || '');
+  const text = document.createElement('div');
+  text.className = 'turn-a';
+  text.textContent = String(payload.text || '캔버스에 표시하지 못했습니다.');
+  line.appendChild(text);
+  $history.appendChild(line);
+  line.scrollIntoView({ block: 'nearest' });
+  scheduleHeightSync();
+  try {
+    const paint = await waitForRestReceiptPaint(line);
+    window.athena.send('athena:rest-receipt-painted', {
+      receipt_id: payload.receiptId,
+      verified_visible: paint.verifiedVisible,
+      visible_paint_at: paint.visiblePaintAt,
+      rect: paint.rect,
+    });
+  } catch (error) {
+    window.athena.send('athena:rest-receipt-painted', {
+      receipt_id: payload.receiptId,
+      verified_visible: false,
+      error: String((error && error.message) || error),
+    });
+  }
+});
 
 // ---------- 화면 설정(autoExpandCanvas/autoGrowChat) — 복구된 baa7e0e 계약 ----------
 // 병합 커밋 c0d874b가 옮기겠다고 하고 안 옮긴 것을 2026-08-18에 되살렸다
@@ -248,23 +292,11 @@ window.athena.on('athena:init', (payload) => {
 const rootStyles = getComputedStyle(document.documentElement);
 const GLASS_WINDOW = parseFloat(rootStyles.getPropertyValue('--glass-window')) || 0.30;
 const GLASS_WINDOW_MAX = parseFloat(rootStyles.getPropertyValue('--glass-window-max')) || 0.55;
-// 휘도 감지-적응(2026-08-19) — 높이 보간과 밝기 하한의 합성: 최종 두께는
-// max(높이 보간값, 밝기 하한)이다. 어두운 배경에선 하한이 GLASS_WINDOW라 기존
-// 동작 그대로이고, 밝은 배경에선 하한이 0.72까지 올라가 dim 텍스트 소실(검증
-// 보드 45 실측)을 막는다.
-let glassFrac = 0;
-let glassBrightFloor = GLASS_WINDOW;
+// 데스크톱 캡처 폴링 없이 tokens.css의 정적 안전 알파만 높이에 따라 보간한다.
 function applyGlassFraction(frac) {
-  glassFrac = frac;
   const interpolated = GLASS_WINDOW + (GLASS_WINDOW_MAX - GLASS_WINDOW) * frac;
-  const alpha = Math.max(interpolated, glassBrightFloor);
-  document.documentElement.style.setProperty('--glass-alpha', alpha.toFixed(3));
+  document.documentElement.style.setProperty('--glass-alpha', interpolated.toFixed(3));
 }
-window.athena.on('athena:backdrop-luminance', ({ windowAlpha } = {}) => {
-  if (!Number.isFinite(windowAlpha)) return;
-  glassBrightFloor = windowAlpha;
-  applyGlassFraction(glassFrac); // 현재 높이 상태에 새 하한을 즉시 합성 — 전이는 CSS(600ms)가 맡는다
-});
 
 window.addEventListener('resize', () => {
   // innerHeight는 CSS px — 창 bounds(물리 px)와 비교하려면 줌 배율을 되돌린다.
@@ -392,6 +424,8 @@ const CANVAS_TYPE_LABELS = {
   stream: '스트림',
   reader: '리더',
   chart: '차트',
+  facts: '핵심 정보',
+  compound: '복합 정보',
   free: '자유 카드',
   notice: '알림',
 };
@@ -400,6 +434,40 @@ function canvasTypeLabel(t) {
   // 미지의 타입도 원문 식별자를 새지 않게 한다 — 게이트웨이가 새 canvas_type을
   // 보내기 시작하면 여기 매핑에 등록하는 것이 정직한 경로다.
   return CANVAS_TYPE_LABELS[t] || '카드';
+}
+
+let activeRecommendationRow = null;
+
+function clearRecommendations() {
+  if (!activeRecommendationRow) return;
+  for (const button of activeRecommendationRow.querySelectorAll('button')) button.disabled = true;
+  activeRecommendationRow.remove();
+  activeRecommendationRow = null;
+}
+
+function renderRecommendations(turn, recommendations) {
+  clearRecommendations();
+  if (!Array.isArray(recommendations) || !recommendations.length) return;
+  const row = document.createElement('div');
+  row.className = 'turn-recommendations';
+  row.setAttribute('aria-label', '후속 질문');
+  for (const recommendation of recommendations.slice(0, 3)) {
+    if (!recommendation || !recommendation.label || !recommendation.query) continue;
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'recommendation-chip';
+    button.textContent = recommendation.label;
+    button.setAttribute('aria-label', recommendation.label);
+    button.addEventListener('click', () => {
+      if (state !== 'idle') return;
+      clearRecommendations();
+      dispatchUserQuery(recommendation.query);
+    });
+    row.appendChild(button);
+  }
+  if (!row.childElementCount) return;
+  turn.appendChild(row);
+  activeRecommendationRow = row;
 }
 
 function pickCardTypes(text) {
@@ -442,6 +510,7 @@ async function runQuery(text) {
 async function runQueryLive(text) {
   const myToken = ++abortToken;
   manualOverride = false;
+  clearRecommendations();
 
   const qLine = document.createElement('div');
   qLine.className = 'turn';
@@ -512,10 +581,12 @@ async function runQueryLive(text) {
   aText.className = 'turn-a';
   // 정직하게: 실패했으면 실패했다고 보여준다(CLAUDE.md §4). result.error는
   // claude 종료 코드거나 CLI가 낸 실패 메시지 원문이다.
-  aText.textContent = result && result.ok
-    ? (result.answerText || `완료 — 카드 ${cardCount}개, 답변 텍스트 없음`)
-    : `실패 — ${(result && result.error) || '알 수 없는 오류'}`;
-  aLine.appendChild(aText);
+  aText.textContent = result && result.answerText
+    ? result.answerText
+    : (result && result.ok
+      ? `완료 — 카드 ${cardCount}개, 답변 텍스트 없음`
+      : `실패 — ${(result && result.error) || '알 수 없는 오류'}`);
+  if (!(result && result.answerPaintedByMain)) aLine.appendChild(aText);
 
   const meta = document.createElement('div');
   meta.className = 'turn-meta';
@@ -531,9 +602,13 @@ async function runQueryLive(text) {
   const trace = document.createElement('span');
   const durS = result && typeof result.durationMs === 'number' ? (result.durationMs / 1000).toFixed(1) : elapsedText().replace('s', '');
   const skipped = result && result.diagnostics && result.diagnostics.skippedLines;
-  trace.textContent = `claude -p · ${durS}s` + (skipped ? ` · 비JSON 라인 ${skipped}건 건너뜀` : '');
+  const traceSource = result && result.source === 'kiwoom-rest'
+    ? '키움 REST'
+    : (result && result.source === 'live-cache' ? '키움 REST · 이전 해석 재사용' : 'claude -p');
+  trace.textContent = `${traceSource} · ${durS}s` + (skipped ? ` · 비JSON 라인 ${skipped}건 건너뜀` : '');
   meta.appendChild(trace);
   aLine.appendChild(meta);
+  renderRecommendations(aLine, result && result.recommendations);
 
   $history.appendChild(aLine);
   saveFailedRouter.setAssistantLine(aLine);
@@ -785,20 +860,24 @@ async function runHistoryCommand(text) {
 $dot.addEventListener('click', () => { openSettings(); });
 
 // ---------- 입력 ----------
-$input.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter' && state === 'idle') {
-    const text = $input.value.trim() || '보유 종목 수급 요약해줘';
-    $input.value = '';
-    if (isSettingsCommand(text)) {
-      openSettings();
-      return;
-    }
-    if (isHistoryCommand(text)) {
-      runHistoryCommand(text);
-      return;
-    }
-    runQuery(text);
+function dispatchUserQuery(text) {
+  const normalized = String(text || '').trim() || '보유 종목 수급 요약해줘';
+  if (isSettingsCommand(normalized)) {
+    openSettings();
+    return;
   }
+  if (isHistoryCommand(normalized)) {
+    runHistoryCommand(normalized);
+    return;
+  }
+  runQuery(normalized);
+}
+
+$input.addEventListener('keydown', (e) => {
+  if (e.key !== 'Enter' || state !== 'idle') return;
+  const text = $input.value;
+  $input.value = '';
+  dispatchUserQuery(text);
 });
 
 // ---------- 창 제어 버튼 (AT-CH-001, 2026-08-18) — 우상단 3버튼 ----------

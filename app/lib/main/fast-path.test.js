@@ -10,8 +10,11 @@ const { buildReplayAnswer, runCachedReplay } = require('./fast-path');
 // operation_ref의 순수 함수라 백엔드가 render-plan 응답으로 돌려준다.
 const JUDGMENT = {
   resolveQuestion: '삼성전자 005930 일봉 차트',
+  resolveIntent: 'query',
   resolveArgs: { stk_cd: '005930', base_dt: '20260819', upd_stkpc_tp: '1' },
-  data: { symbol: '005930', name: '삼성전자' },
+  preferredRef: 'base:ka10081',
+  detailGroup: null,
+  responseMode: 'full',
   caption: '삼성전자 일봉',
 };
 
@@ -37,8 +40,7 @@ test('runCachedReplay: resolve→render-plan 2호출로 완결, 답변에 재사
     ['/api/v1/llm/tools/resolve', () => jsonRes(200, { plan_token: 'tok-9' })],
     ['/api/v1/canvas/render-plan', () => jsonRes(200, {
       queued: true, canvas_type: 'chart',
-      summary: { rows_total: 600, rows_kept: 240, trimmed: true,
-        first_time: '2025-08-25', last_time: '2026-08-19', latest_close: 247500 },
+      receipt: { pushed: true, delivery: 'side_channel', canvas_type: 'chart', trimmed: true, cache_reused: true },
     })],
   ]);
   const result = await runCachedReplay({
@@ -47,13 +49,45 @@ test('runCachedReplay: resolve→render-plan 2호출로 완결, 답변에 재사
   assert.equal(result.ok, true);
   assert.equal(doFetch.calls.length, 2);
   assert.equal(doFetch.calls[1].body.plan_token, 'tok-9');
-  assert.equal(doFetch.calls[0].body.intent, 'auto'); // 조회 표면만
+  assert.equal('data' in doFetch.calls[1].body, false);
+  assert.equal(doFetch.calls[0].body.intent, 'query'); // 저장한 조회 intent 유지
+  assert.equal(doFetch.calls[0].body.preferred_ref, 'base:ka10081');
+  assert.equal(doFetch.calls[0].body.detail_group, null);
+  assert.equal(doFetch.calls[0].body.response_mode, 'full');
+  assert.equal('candidate_refs' in doFetch.calls[0].body, false);
   assert.equal(result.canvasType, 'chart'); // 응답값을 그대로 노출(main.js가 canvasTypes에 씀)
-  assert.ok(result.answerText.includes('삼성전자'));
-  assert.ok(result.answerText.includes('247,500'));
-  assert.ok(result.answerText.includes('240봉'));
-  assert.ok(result.answerText.includes('이전 해석을 재사용')); // 정직 고지 필수
-  assert.ok(result.answerText.includes('전체 600봉 중')); // trimmed 고지
+  assert.equal(result.answerText, '캔버스에 표시했습니다. 이전 해석을 재사용했고 데이터는 새로 조회했습니다.');
+  assert.equal(result.answerText.includes('삼성전자'), false);
+  assert.equal(result.answerText.includes('247,500'), false);
+  assert.equal(result.answerText.includes('240봉'), false);
+});
+
+test('runCachedReplay: cached payload and sensitive extras are never sent to render-plan', async () => {
+  const doFetch = fakeFetch([
+    ['/api/v1/llm/tools/resolve', () => jsonRes(200, { plan_token: 'fresh-token' })],
+    ['/api/v1/canvas/render-plan', () => jsonRes(200, {
+      queued: true, canvas_type: 'chart', receipt: { pushed: true, canvas_type: 'chart' },
+    })],
+  ]);
+  await runCachedReplay({
+    judgment: {
+      ...JUDGMENT,
+      resolveArgs: { ...JUDGMENT.resolveArgs, account_no: '123-45', order_qty: 3 },
+      data: { price: '70500' },
+      payload: { rows: ['secret'] },
+      plan_token: 'stale-token',
+      account: { number: '123-45' },
+      orderData: { side: 'buy' },
+    },
+    backendBase: 'http://b',
+    fetchImpl: doFetch,
+    clock: () => 0,
+  });
+  assert.deepEqual(doFetch.calls[1].body, {
+    plan_token: 'fresh-token',
+    caption: '삼성전자 일봉',
+  });
+  assert.deepEqual(doFetch.calls[0].body.arguments, JUDGMENT.resolveArgs);
 });
 
 test('runCachedReplay: render-plan 요청에 canvas_type 필드를 싣지 않는다', async () => {
@@ -62,7 +96,7 @@ test('runCachedReplay: render-plan 요청에 canvas_type 필드를 싣지 않는
   const doFetch = fakeFetch([
     ['/api/v1/llm/tools/resolve', () => jsonRes(200, { plan_token: 'tok-1' })],
     ['/api/v1/canvas/render-plan', () => jsonRes(200, {
-      queued: true, canvas_type: 'table', summary: { rows_kept: 5, columns: ['a'] },
+      queued: true, canvas_type: 'table', receipt: { pushed: true, canvas_type: 'table' },
     })],
   ]);
   await runCachedReplay({
@@ -78,16 +112,16 @@ test('runCachedReplay: 캐시가 낡은 카드 종류를 몰라도 응답값으�
     ['/api/v1/llm/tools/resolve', () => jsonRes(200, { plan_token: 'tok-2' })],
     ['/api/v1/canvas/render-plan', () => jsonRes(200, {
       queued: true, canvas_type: 'table',
-      summary: { rows_kept: 12, rows_total: 12, columns: ['종목', '등락률'] },
+      receipt: { pushed: true, canvas_type: 'table' },
     })],
   ]);
   const result = await runCachedReplay({
     judgment: JUDGMENT, backendBase: 'http://b', fetchImpl: doFetch, clock: () => 0,
   });
   assert.equal(result.ok, true);
-  assert.ok(result.answerText.includes('12행'));
-  assert.ok(result.answerText.includes('2열'));
-  assert.ok(!result.answerText.includes('차트')); // chart 문구로 잘못 새지 않는다
+  assert.equal(result.answerText, '캔버스에 표시했습니다. 이전 해석을 재사용했고 데이터는 새로 조회했습니다.');
+  assert.equal(result.answerText.includes('12행'), false);
+  assert.equal(result.answerText.includes('종목'), false);
 });
 
 test('runCachedReplay: plan_token이 없으면 폴백 사유를 돌려준다', async () => {
@@ -99,6 +133,18 @@ test('runCachedReplay: plan_token이 없으면 폴백 사유를 돌려준다', a
   });
   assert.equal(result.ok, false);
   assert.ok(result.reason.includes('plan_token'));
+});
+
+test('runCachedReplay: stale canonical assertion 거부는 폴백 사유로 반환하고 렌더하지 않는다', async () => {
+  const doFetch = fakeFetch([
+    ['/api/v1/llm/tools/resolve', () => jsonRes(409, { detail: 'preferred_ref mismatch' })],
+  ]);
+  const result = await runCachedReplay({
+    judgment: JUDGMENT, backendBase: 'http://b', fetchImpl: doFetch, clock: () => 0,
+  });
+  assert.equal(result.ok, false);
+  assert.equal(result.reason, 'resolve HTTP 409');
+  assert.equal(doFetch.calls.length, 1);
 });
 
 test('runCachedReplay: render-plan 실패(HTTP)도 조용히 삼키지 않는다', async () => {
@@ -113,12 +159,9 @@ test('runCachedReplay: render-plan 실패(HTTP)도 조용히 삼키지 않는다
   assert.ok(result.reason.includes('422'));
 });
 
-test('buildReplayAnswer: table 형상도 결정론 — 행·열과 재사용 고지', () => {
-  const text = buildReplayAnswer(
-    'table', {},
-    { rows_kept: 30, rows_total: 30, columns: ['a', 'b', 'c'] },
-  );
-  assert.ok(text.includes('30행'));
-  assert.ok(text.includes('3열'));
-  assert.ok(text.includes('이전 해석을 재사용'));
+test('buildReplayAnswer: 성공 영수증은 데이터 행·열·값을 입력받지도 노출하지도 않는다', () => {
+  const text = buildReplayAnswer();
+  assert.equal(text, '캔버스에 표시했습니다. 이전 해석을 재사용했고 데이터는 새로 조회했습니다.');
+  assert.equal(text.includes('30행'), false);
+  assert.equal(text.includes('3열'), false);
 });

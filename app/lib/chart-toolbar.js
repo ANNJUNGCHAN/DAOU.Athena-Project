@@ -155,11 +155,14 @@ function createChartToolbar(opts) {
     }
   }
 
-  function selectPeriod(period) {
+  function setPeriod(period, interval, notify) {
     state.period = period;
-    state.interval = 1;
+    state.interval = interval || 1;
     refreshTabsUi();
-    cb.onPeriodChange && cb.onPeriodChange(state.period, state.interval);
+    if (notify) cb.onPeriodChange && cb.onPeriodChange(state.period, state.interval);
+  }
+  function selectPeriod(period) {
+    setPeriod(period, 1, true);
   }
   function selectInterval(n) {
     state.interval = n;
@@ -207,6 +210,13 @@ function createChartToolbar(opts) {
   });
   right.appendChild(adjustedBtn);
 
+  function setAdjusted(adjusted) {
+    state.adjusted = adjusted !== false;
+    adjustedBtn.textContent = state.adjusted ? '수정주가' : '원주가';
+    adjustedBtn.classList.toggle('is-on', state.adjusted);
+    adjustedBtn.setAttribute('aria-pressed', String(state.adjusted));
+  }
+
   const fullscreenBtn = iconButton('chart-toolbar-btn chart-toolbar-fullscreen', '⛶', '크게 보기', '크게 보기');
   fullscreenBtn.addEventListener('click', () => {
     cb.onFullscreenToggle && cb.onFullscreenToggle();
@@ -229,7 +239,7 @@ function createChartToolbar(opts) {
     closeAnyOpenDropdown();
   }
 
-  return { element: bar, setFullscreenLabel, destroy, state };
+  return { element: bar, setPeriod, setAdjusted, setFullscreenLabel, destroy, state };
 }
 
 // UMD 각주(2026-08-18 렌더러 격리) — sanitize.js와 같은 패턴.

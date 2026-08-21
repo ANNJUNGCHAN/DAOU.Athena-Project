@@ -33,21 +33,40 @@ test('buildLivePrompt: reader 스키마 힌트가 canvas.py READER_SCHEMA 필드
   assert.ok(p.includes('"highlights"'));
 });
 
-test('buildLivePrompt: 키움 라우팅 규칙 — 마켓 데이터는 4단계 셀렉터로, 외부 MCP로 대체 금지', () => {
+test('buildLivePrompt: 키움 라우팅 규칙 — selector 후 manifest render, 외부 MCP 대체 금지', () => {
   const p = buildLivePrompt('x');
   assert.ok(p.includes('athena_search'));
   assert.ok(p.includes('athena_describe'));
   assert.ok(p.includes('athena_resolve'));
   assert.ok(p.includes('athena_call'));
+  assert.ok(p.includes('athena_search → athena_describe → athena_resolve 순서로 선택'));
+  assert.ok(!p.includes('athena_resolve → athena_call(키움 REST)'));
   assert.ok(p.includes('외부 MCP나 웹으로 대체하지 마라'));
   assert.ok(p.includes('키움 백엔드가 미기동'));
 });
 
-test('buildLivePrompt: 4단계 사용법 — detail_group·plan_token 1회용 안내를 담는다', () => {
+test('buildLivePrompt: detail_group 선택과 plan_token 1회용 안내를 담는다', () => {
   const p = buildLivePrompt('x');
   assert.ok(p.includes('detail_groups'));
   assert.ok(p.includes('detail_group'));
+  assert.ok(p.includes('typed local detail이 하나뿐일 때만'));
+  assert.ok(p.includes('DETAIL_GROUP_REQUIRED'));
+  assert.ok(p.includes('전체 응답이 된다고 가정하지 마라'));
+  assert.ok(!p.includes('생략하면 전체 응답 — 항상 안전'));
   assert.ok(p.includes('1회용'));
+});
+
+test('buildLivePrompt: candidate는 soft hint, preferred는 describe 확인 canonical assertion으로 구분한다', () => {
+  const p = buildLivePrompt('x');
+  assert.ok(p.includes('candidate_refs'));
+  assert.ok(p.includes('soft hint'));
+  assert.ok(p.includes('preferred_ref'));
+  assert.ok(p.includes('canonical operation/family assertion'));
+  assert.ok(p.includes('suggested_operation_ref'));
+  assert.ok(p.includes('suggested_detail_group'));
+  assert.ok(p.includes('실제로 소유하는지 확인'));
+  assert.ok(p.includes('ambiguous'));
+  assert.ok(p.includes('억지 resolve하지 말고'));
 });
 
 test('buildLivePrompt: W3 번복 — describe 생략 금지(인자 목록이 describe에만 있음, 실측 턴 18→31 악화)', () => {
@@ -74,7 +93,11 @@ test('buildLivePrompt: chart 스키마 힌트 — canvas_type "chart"와 symbol/
   const p = buildLivePrompt('x');
   assert.ok(p.includes('"chart"'));
   assert.ok(p.includes('"symbol"'));
-  assert.ok(p.includes('"bars"'));
+  assert.ok(p.includes('"period"'));
+  assert.ok(p.includes('"target"'));
+  assert.ok(p.includes('"trId"'));
+  assert.ok(p.includes('"chart"'));
+  assert.ok(p.includes('"candles"'));
   assert.ok(p.includes('"open"'));
   assert.ok(p.includes('"volume"'));
 });
@@ -115,12 +138,27 @@ test('buildLivePrompt: 실행 환경 제약 v3c — Bash 없음·승인 절차 �
   assert.ok(p.includes('받은 부분만으로 즉시 카드를'));
 });
 
-test('buildLivePrompt: 데이터 지름길 v3d — chart/table은 plan_token으로 render_canvas 직행 (2026-08-19)', () => {
+test('buildLivePrompt: manifest-backed read 전체가 plan_token만으로 render_canvas 직행한다', () => {
   const p = buildLivePrompt('x');
   assert.ok(p.includes('athena_call로 데이터를 읽어오지 마라'));
-  assert.ok(p.includes('plan_token'));
+  assert.ok(p.includes('facts/table/compound/chart 전부'));
+  assert.ok(p.includes('{plan_token:"..."}'));
+  assert.ok(p.includes('canvas_type과 data는 보내지'));
+  assert.ok(p.includes('manifest-unsupported'));
+  assert.ok(p.includes('no-card fallback'));
+  assert.ok(p.includes('정상 facts/compound/table/chart 조회에는 athena_call을 쓰지 않는다'));
   assert.ok(p.includes('summary'));
   assert.ok(p.includes('최근 N봉 기준'));
+  assert.ok(!p.includes('chart/table 카드를 그릴 때는'));
+  assert.ok(!p.includes('chart/table 외 카드를 직접 구성할 때만'));
+});
+
+test('buildLivePrompt: flagship 현재가도 backend manifest가 facts 카드를 고르는 plan 경로다', () => {
+  const p = buildLivePrompt('x');
+  assert.ok(p.includes('삼성전자 오늘 주가'));
+  assert.ok(p.includes('resolve plan_token만 렌더'));
+  assert.ok(p.includes('current-price facts 카드'));
+  assert.ok(p.includes('모델이 facts나 compound payload를 직접 만들지 마라'));
 });
 
 test('buildLivePrompt: timeline 스키마 힌트 — 부분 데이터 허용 (2026-08-19 QA LIV-046)', () => {
