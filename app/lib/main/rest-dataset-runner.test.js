@@ -671,6 +671,30 @@ test('quote binder keeps entity resolution separate from quote intent routing', 
   }
 });
 
+test('quote binder binds a standalone current quote but abstains from explicit competing screen semantics', () => {
+  const index = new StockEntityIndex();
+  index.replace([
+    { code: '005930', name: '삼성전자', market: '0' },
+    { code: '015760', name: '한국전력', market: '0' },
+  ]);
+
+  const standalone = buildQuoteDataset('삼성전자 현재가 알려줘', index, {
+    idFactory: () => 'standalone-quote',
+  });
+  assert.equal(standalone.datasetId, 'standalone-quote');
+  assert.equal(standalone.items[0].operationRef, 'detail:ka10001:current_trading');
+  assert.deepEqual(standalone.items[0].args, { stk_cd: '005930' });
+
+  for (const competing of [
+    '한국전력의 거래원 조회에서 현재가와 거래량 요약만 보여줘',
+    '한국전력 현재가와 broker 동향을 보여줘',
+    '한국전력 현재가 거래량 차트',
+  ]) {
+    assert.equal(index.resolveQuery(competing)?.code, '015760', competing);
+    assert.equal(buildQuoteDataset(competing, index), null, competing);
+  }
+});
+
 test('resolved entity code remains exact through quote dataset and resolve control plane', async () => {
   const index = new StockEntityIndex();
   index.replace(resolverRecords());
