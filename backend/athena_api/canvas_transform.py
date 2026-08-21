@@ -8,9 +8,16 @@
 
 from __future__ import annotations
 
+import json
+import logging
+from datetime import datetime, timedelta, timezone
+from functools import lru_cache
+from pathlib import Path
 from typing import Any
 
 from athena_api import screen_manifest
+
+logger = logging.getLogger(__name__)
 
 # 차트 봉투에 남기는 최신 봉 수 상한. 240봉 ≈ 일봉 1년 — 직렬화 ~26k자로
 # CLI 툴 결과 한도(40k 트리밍 기준) 아래에 안전하게 들어간다. 카드의
@@ -148,6 +155,82 @@ def build_table(payload: Any) -> tuple[dict[str, Any], dict[str, Any]] | str:
 # compound 헤더는 실측 2~9(§3.3)로 더 작지만, 별도 상수를 만들 만큼 다르지 않다.
 FACTS_FIELDS_MAX = 40
 
+# 모델에게 돌아가는 render-plan summary에는 카드 본문을 다시 싣지 않는다. 다만
+# 가격 질의의 자연어 답변이 실제 현재가/등락을 말할 수 있도록, 시장 데이터 중
+# 명시적으로 허용한 스칼라만 작은 preview로 남긴다. 계좌·인증 필드는 allowlist에
+# 없으므로 값이 summary 경계로 복제되지 않는다. 각 제한은 서로 독립적으로 적용한다.
+SUMMARY_PREVIEW_ITEMS_MAX = 6
+SUMMARY_PREVIEW_STRING_MAX = 80
+SUMMARY_PREVIEW_BYTES_MAX = 1024
+
+_SUMMARY_FIELD_LABELS = {
+    "cur_prc": "현재가",
+    "pred_pre": "전일대비",
+    "pre_sig": "등락기호",
+    "pred_pre_sig": "등락기호",
+    "flu_smbol": "등락기호",
+    "smbol": "등락기호",
+    "flu_rt": "등락률",
+    "cntr_tm": "체결시각",
+    "trde_tm": "거래시각",
+    "base_dt": "기준일자",
+    "dt": "일자",
+    "stk_cd": "종목코드",
+    "stk_nm": "종목명",
+    "rtcd": "응답코드",
+}
+
+
+def _bounded_text(value: Any) -> tuple[str, bool]:
+    """스칼라를 길이 제한 문자열로 만든다. 컨테이너는 preview 대상이 아니다."""
+    text = str(value)
+    if len(text) <= SUMMARY_PREVIEW_STRING_MAX:
+        return text, False
+    return text[: SUMMARY_PREVIEW_STRING_MAX - 1] + "…", True
+
+
+def _summary_preview(items: list[tuple[str, Any]]) -> tuple[list[dict[str, str]], bool]:
+    """허용된 스칼라를 item/string/UTF-8 byte 상한 안에서 결정적으로 고른다."""
+    by_key = dict(items)
+    eligible = [(key, by_key[key]) for key in _SUMMARY_FIELD_LABELS if key in by_key]
+    preview: list[dict[str, str]] = []
+    truncated = False
+    for key, value in eligible:
+        if len(preview) >= SUMMARY_PREVIEW_ITEMS_MAX:
+            truncated = True
+            break
+        text, text_truncated = _bounded_text(value)
+        candidate = {"key": key, "label": _SUMMARY_FIELD_LABELS[key], "value": text}
+        encoded = json.dumps(
+            [*preview, candidate], ensure_ascii=False, separators=(",", ":")
+        ).encode("utf-8")
+        if len(encoded) > SUMMARY_PREVIEW_BYTES_MAX:
+            truncated = True
+            break
+        preview.append(candidate)
+        truncated = truncated or text_truncated
+    return preview, truncated
+
+
+def _summary_keys(items: list[tuple[str, Any]]) -> tuple[list[str], bool]:
+    """Compound 헤더의 키 이름만 동일한 item/string/byte 상한으로 요약한다."""
+    keys: list[str] = []
+    truncated = False
+    for key, _ in items:
+        if len(keys) >= SUMMARY_PREVIEW_ITEMS_MAX:
+            truncated = True
+            break
+        text, text_truncated = _bounded_text(key)
+        encoded = json.dumps([*keys, text], ensure_ascii=False, separators=(",", ":")).encode(
+            "utf-8"
+        )
+        if len(encoded) > SUMMARY_PREVIEW_BYTES_MAX:
+            truncated = True
+            break
+        keys.append(text)
+        truncated = truncated or text_truncated
+    return keys, truncated
+
 
 def _scalar_items(payload: Any) -> list[tuple[str, Any]] | None:
     """dict의 최상위 스칼라(비-dict·비-list) 필드만 순서 보존해 뽑는다.
@@ -180,10 +263,13 @@ def build_facts(payload: Any) -> tuple[dict[str, Any], dict[str, Any]] | str:
     kept = items[:FACTS_FIELDS_MAX]
     fields = [{"key": key, "label": key, "value": value} for key, value in kept]
     data = {"fields": fields}
+    preview, preview_truncated = _summary_preview(items)
     meta = {
         "fields_total": len(items),
         "fields_kept": len(kept),
         "trimmed": len(items) > len(kept),
+        "preview": preview,
+        "preview_truncated": preview_truncated,
     }
     return data, meta
 
@@ -213,9 +299,15 @@ def build_compound_generic(payload: Any) -> tuple[dict[str, Any], dict[str, Any]
     table = {"columns": columns, "rows": table_rows}
 
     data = {"header": header, "table": table}
+    header_preview, header_preview_truncated = _summary_preview(header_items)
+    header_keys, header_keys_truncated = _summary_keys(header_items)
     meta = {
         "header_fields_total": len(header_items),
         "header_fields_kept": len(header_kept),
+        "header_keys": header_keys,
+        "header_keys_truncated": header_keys_truncated,
+        "header_preview": header_preview,
+        "header_preview_truncated": header_preview_truncated,
         "table_rows_total": len(rows),
         "table_rows_kept": len(table_rows),
         "table_trimmed": len(rows) > len(table_rows),
@@ -233,26 +325,329 @@ def build_compound_generic(payload: Any) -> tuple[dict[str, Any], dict[str, Any]
 # 관여하지 않는다 — 호출부가 감사용 힌트로만 비교·로그한다. 결정은 오직 manifest다.
 # ---------------------------------------------------------------------------
 
-# 실측(2026-08-20): manifest의 compound 레이아웃 29건 중 domain=="charts"인
-# 정확히 12건(ka10079/80/81/82/83/94, ka20004/05/06/07/08/19 — P2a 8 + P2b 4와
-# 정확히 일치)이 OHLCV 캔들스틱 형상이다. 기존 프로덕션 "chart" canvas_type
-# (build_chart_bars, app/lib/chart-card.js 렌더러, 27.3s 콜드/222ms 캐시 실측)이
-# 이미 이 형상을 쓰고 있으므로, compound 레이아웃이라도 이 12건은 "chart"로
-# 승격한다 — 그러지 않으면 라이브 차트 기능이 아직 렌더러가 없는 제네릭
-# "compound" 카드로 강등돼 회귀가 난다. TR id를 손으로 나열하는 대신 manifest
-# 자체의 domain 필드를 신호로 쓴다("추측하지 않는다", CLAUDE.md §3) — domain이
-# 바뀌면 이 승격도 그대로 따라간다.
-_CHART_DOMAIN = "charts"
+AITS_CHART_RENDERER_ID = "aits-chart-v1"
+_AITS_PERIODS = frozenset({"tick", "min", "day", "week", "month", "year"})
+_AITS_TARGETS = frozenset({"stock", "sector", "gold"})
+_AITS_RELOAD_GROUP_SCOPE = {
+    ("stock", "stock"): "standard",
+    ("sector", "sector"): "standard",
+    ("gold", "gold-generic"): "generic",
+    ("gold", "gold-today"): "today",
+}
+_SCREEN_DEFINITIONS_PATH = (
+    Path(__file__).resolve().parents[1] / "ref" / "kiwoom-screen-definitions.json"
+)
 
 _RENDER_PLAN_LAYOUTS = frozenset({"facts", "table", "compound"})
+
+
+@lru_cache(maxsize=1)
+def _screen_definitions() -> dict[str, dict[str, Any]]:
+    try:
+        raw = json.loads(_SCREEN_DEFINITIONS_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        logger.exception("키움 화면 정의를 읽지 못했다: %s", _SCREEN_DEFINITIONS_PATH)
+        return {}
+    definitions = raw.get("definitions")
+    if not isinstance(definitions, list):
+        return {}
+    return {
+        definition["mapping_id"]: definition
+        for definition in definitions
+        if isinstance(definition, dict)
+        and isinstance(definition.get("mapping_id"), str)
+    }
+
+
+def _path_container_alias(path: Any) -> str | None:
+    if not isinstance(path, str) or not path.startswith("$."):
+        return None
+    alias = path[2:]
+    if not alias or "." in alias or "[" in alias or "]" in alias:
+        return None
+    return alias
+
+
+def _path_field_alias(path: Any, container_alias: str) -> str | None:
+    prefix = f"$.{container_alias}[*]."
+    if not isinstance(path, str) or not path.startswith(prefix):
+        return None
+    alias = path[len(prefix) :]
+    if not alias or "." in alias or "[" in alias or "]" in alias:
+        return None
+    return alias
+
+
+def _aits_time(raw: Any, timezone_name: Any) -> str | int | None:
+    if not isinstance(raw, str) or not isinstance(timezone_name, str):
+        return None
+    text = raw.strip()
+    if len(text) == 8 and text.isdigit():
+        try:
+            return datetime.strptime(text, "%Y%m%d").strftime("%Y-%m-%d")
+        except ValueError:
+            return None
+    if len(text) == 10 and text[4] == "-" and text[7] == "-":
+        try:
+            return datetime.strptime(text, "%Y-%m-%d").strftime("%Y-%m-%d")
+        except ValueError:
+            return None
+    if len(text) != 14 or not text.isdigit() or timezone_name != "Asia/Seoul":
+        return None
+    try:
+        parsed = datetime.strptime(text, "%Y%m%d%H%M%S").replace(
+            tzinfo=timezone(timedelta(hours=9))
+        )
+    except ValueError:
+        return None
+    return int(parsed.timestamp())
+
+
+def _aits_number(raw: Any) -> float | None:
+    if isinstance(raw, (int, float)) and not isinstance(raw, bool):
+        return float(raw)
+    if not isinstance(raw, str) or not raw.strip():
+        return None
+    try:
+        return float(raw.strip().lstrip("+-"))
+    except ValueError:
+        return None
+
+
+def resolve_screen_render_contract(
+    operation_ref: str | None,
+) -> tuple[str, str, str | None] | str:
+    """Join manifest and generated screen definition; any drift fails closed."""
+    if not isinstance(operation_ref, str):
+        return "오퍼레이션 참조가 없다"
+    mapping = screen_manifest.get_mapping(operation_ref)
+    definition = _screen_definitions().get(operation_ref)
+    canvas_kind = resolve_render_plan_kind(operation_ref)
+    if mapping is None or definition is None or canvas_kind is None:
+        return "매니페스트 또는 화면 정의가 없다"
+    classification = mapping.get("classification")
+    screen_reference = mapping.get("screen_reference")
+    if (
+        not isinstance(classification, dict)
+        or classification.get("category") != "read_display"
+        or not isinstance(screen_reference, dict)
+    ):
+        return "read/display 화면 계약이 아니다"
+    screen_id = screen_reference.get("screen_id")
+    if (
+        not isinstance(screen_id, str)
+        or not screen_id
+        or definition.get("mapping_id") != operation_ref
+        or definition.get("operation_ref") != operation_ref
+        or definition.get("screen_id") != screen_id
+        or definition.get("category") != "read_display"
+    ):
+        return "매니페스트와 화면 정의 식별자가 불일치한다"
+    manifest_renderer = mapping.get("presentation", {}).get("renderer_id")
+    definition_renderer = definition.get("presentation", {}).get("renderer_id")
+    chart = (definition.get("data") or {}).get("chart")
+    if manifest_renderer != definition_renderer:
+        return "매니페스트와 화면 정의 renderer가 불일치한다"
+    if canvas_kind != "chart":
+        if manifest_renderer is not None or chart is not None:
+            return "비차트 화면에 차트 계약이 섞였다"
+        return canvas_kind, screen_id, None
+    if (
+        manifest_renderer != AITS_CHART_RENDERER_ID
+        or not isinstance(chart, dict)
+        or set(chart)
+        != {
+            "trId",
+            "period",
+            "target",
+            "series_scope",
+            "reload_group",
+            "reload_targets",
+            "container_path",
+            "time_path",
+            "ohlcv",
+        }
+        or chart.get("trId") != operation_ref.removeprefix("base:")
+        or chart.get("period") not in _AITS_PERIODS
+        or chart.get("target") not in _AITS_TARGETS
+        or _AITS_RELOAD_GROUP_SCOPE.get(
+            (chart.get("target"), chart.get("reload_group"))
+        )
+        != chart.get("series_scope")
+        or not isinstance(chart.get("reload_targets"), dict)
+        or chart.get("period") not in chart["reload_targets"]
+        or not isinstance(chart.get("container_path"), str)
+        or not isinstance(chart.get("time_path"), str)
+        or not isinstance(chart.get("ohlcv"), dict)
+        or set(chart["ohlcv"]) != {"open", "high", "low", "close", "volume"}
+        or any(
+            not isinstance(chart["ohlcv"].get(key), str)
+            for key in ("open", "high", "low", "close")
+        )
+        or (
+            chart["ohlcv"].get("volume") is not None
+            and not isinstance(chart["ohlcv"]["volume"], str)
+        )
+    ):
+        return "AITS 차트 계약이 불완전하다"
+    definitions = _screen_definitions()
+    reload_keys: dict[tuple[Any, Any, Any], str] = {}
+    for candidate_ref, candidate_definition in definitions.items():
+        candidate_chart = (candidate_definition.get("data") or {}).get("chart")
+        if not isinstance(candidate_chart, dict):
+            continue
+        reload_key = (
+            candidate_chart.get("target"),
+            candidate_chart.get("reload_group"),
+            candidate_chart.get("period"),
+        )
+        prior_ref = reload_keys.get(reload_key)
+        if prior_ref is not None and prior_ref != candidate_ref:
+            return "AITS reload target가 중복되어 모호하다"
+        reload_keys[reload_key] = candidate_ref
+    for period, target in chart["reload_targets"].items():
+        if (
+            period not in _AITS_PERIODS
+            or not isinstance(target, dict)
+            or set(target) != {"operation_ref", "request_fields"}
+            or not isinstance(target.get("operation_ref"), str)
+            or not isinstance(target.get("request_fields"), list)
+            or not all(
+                isinstance(field, str) and field for field in target["request_fields"]
+            )
+        ):
+            return "AITS reload target 계약이 불완전하다"
+        target_definition = definitions.get(target["operation_ref"])
+        if not isinstance(target_definition, dict):
+            return "AITS reload target 화면 정의가 없다"
+        target_chart = (target_definition.get("data") or {}).get("chart")
+        request_allowlist = (target_definition.get("input") or {}).get("field_allowlist")
+        if not isinstance(target_chart, dict) or not isinstance(request_allowlist, dict):
+            return "AITS reload target 데이터 계약이 없다"
+        request_fields = list(request_allowlist.get("top_level", []))
+        request_fields.extend(
+            alias
+            for container in request_allowlist.get("data", [])
+            for alias in container.get("field_aliases", [])
+        )
+        if (
+            target_chart.get("target") != chart["target"]
+            or target_chart.get("reload_group") != chart["reload_group"]
+            or target_chart.get("period") != period
+            or target_chart.get("trId")
+            != target["operation_ref"].removeprefix("base:")
+            or request_fields != target["request_fields"]
+        ):
+            return "AITS reload target가 현재 계약과 불일치한다"
+    return canvas_kind, screen_id, AITS_CHART_RENDERER_ID
+
+
+def build_aits_chart_body(
+    operation_ref: str, tr_data: Any
+) -> tuple[dict[str, Any], dict[str, Any]] | str:
+    """Build the AITS ChartCardBody only from generated JSONPath metadata."""
+    resolved = resolve_screen_render_contract(operation_ref)
+    if isinstance(resolved, str) or resolved[0] != "chart":
+        return resolved if isinstance(resolved, str) else "AITS 차트 화면이 아니다"
+    if not isinstance(tr_data, dict):
+        return "서명된 차트 응답 본문이 없다"
+    definition = _screen_definitions()[operation_ref]
+    chart = definition["data"]["chart"]
+    container_alias = _path_container_alias(chart["container_path"])
+    if container_alias is None:
+        return "차트 컨테이너 경로가 유효하지 않다"
+    rows = tr_data.get(container_alias)
+    if not isinstance(rows, list) or not rows or not all(isinstance(row, dict) for row in rows):
+        return f"화면 정의 컨테이너 {container_alias}에서 차트 행을 찾지 못했다"
+    time_alias = _path_field_alias(chart["time_path"], container_alias)
+    aliases = {
+        key: _path_field_alias(chart["ohlcv"].get(key), container_alias)
+        for key in ("open", "high", "low", "close", "volume")
+    }
+    if time_alias is None or any(aliases[key] is None for key in ("open", "high", "low", "close")):
+        return "차트 시간축 또는 필수 OHLC 경로가 유효하지 않다"
+    timezone_name = definition["data"]["time"].get("timezone")
+    candles: list[dict[str, Any]] = []
+    for row in rows:
+        time_value = _aits_time(row.get(time_alias), timezone_name)
+        if time_value is None:
+            continue
+        candle: dict[str, Any] = {"time": time_value}
+        for key in ("open", "high", "low", "close"):
+            value = _aits_number(row.get(aliases[key]))
+            if value is None:
+                break
+            candle[key] = value
+        else:
+            volume_alias = aliases["volume"]
+            if volume_alias is not None:
+                volume = _aits_number(row.get(volume_alias))
+                if volume is not None:
+                    candle["volume"] = volume
+            candles.append(candle)
+    if not candles:
+        return "시간축과 OHLC 계약으로 유효한 봉을 만들지 못했다"
+    max_rows = definition["data"]["range"].get("max_rows")
+    if not isinstance(max_rows, int) or isinstance(max_rows, bool) or not 1 <= max_rows <= 240:
+        return "차트 행 상한이 유효하지 않다"
+    candles.sort(key=lambda candle: candle["time"])
+    total = len(candles)
+    kept = candles[-max_rows:]
+    return {
+        "period": chart["period"],
+        "target": chart["target"],
+        "trId": chart["trId"],
+        "candles": kept,
+    }, {
+        "rows_total": total,
+        "rows_kept": len(kept),
+        "trimmed": total > len(kept),
+        "first_time": kept[0]["time"],
+        "last_time": kept[-1]["time"],
+        "latest_close": kept[-1]["close"],
+    }
+
+
+def build_aits_chart_envelope_data(
+    operation_ref: str, call_payload: Any
+) -> tuple[dict[str, Any], dict[str, Any]] | str:
+    """Build renderer identity plus safe AITS data from a verified CallResponse dump.
+
+    The only live identity is ``canvas_context.symbol`` sealed by the signed plan;
+    caller render-plan data is intentionally absent from this function's inputs.
+    """
+    if not isinstance(call_payload, dict):
+        return "검증된 호출 응답 봉투가 없다"
+    built = build_aits_chart_body(operation_ref, call_payload.get("data"))
+    if isinstance(built, str):
+        return built
+    chart, meta = built
+    definition_chart = _screen_definitions()[operation_ref]["data"]["chart"]
+    canvas_context = call_payload.get("canvas_context")
+    symbol = canvas_context.get("symbol") if isinstance(canvas_context, dict) else None
+    if not isinstance(symbol, str) or not symbol:
+        return "verified chart plan did not contain a display symbol"
+    return {
+        "renderer_id": AITS_CHART_RENDERER_ID,
+        "data": {
+            "symbol": symbol,
+            "chart": chart,
+            "chart_meta": {
+                "series_scope": definition_chart["series_scope"],
+                "reload_group": definition_chart["reload_group"],
+                "reload_targets": definition_chart["reload_targets"],
+            },
+        },
+    }, meta
 
 
 def resolve_render_plan_kind(operation_ref: str | None) -> str | None:
     """operation_ref(manifest mapping_id) → render-plan 카드 종류.
 
-    facts/table은 manifest layout 그대로, compound는 domain=="charts"면
-    "chart"로 승격(위 주석)하고 그 외는 "compound"(제네릭 facts헤더+표)로
-    남는다. event(WS)/action(주문)/status(oauth) 레이아웃과 미등록
+    차트는 manifest `presentation.renderer_id`가 정확히 AITS renderer일 때만
+    선택한다. 제목·domain·layout·응답 모양은 차트 선택 권한이 없다. 나머지
+    facts/table/compound는 manifest layout 그대로 사용한다. 알 수 없는 renderer,
+    event(WS)/action(주문)/status(oauth) 레이아웃과 미등록
     operation_ref는 이 plan_token read/display 경로 범위 밖이라 `None` —
     호출부가 free로 폴백하고 사유를 로그에 남긴다(무음 오배정 금지, 계획
     §5 Guardrails).
@@ -262,9 +657,13 @@ def resolve_render_plan_kind(operation_ref: str | None) -> str | None:
     mapping = screen_manifest.get_mapping(operation_ref)
     if mapping is None:
         return None
-    layout = mapping.get("presentation", {}).get("layout")
-    if layout == "compound" and mapping.get("operation", {}).get("domain") == _CHART_DOMAIN:
+    presentation = mapping.get("presentation", {})
+    renderer_id = presentation.get("renderer_id")
+    if renderer_id == AITS_CHART_RENDERER_ID:
         return "chart"
+    if renderer_id is not None:
+        return None
+    layout = presentation.get("layout")
     if layout in _RENDER_PLAN_LAYOUTS:
         return layout
     return None
@@ -277,9 +676,12 @@ def describe_unsupported_render_plan_kind(operation_ref: str | None) -> str:
     mapping = screen_manifest.get_mapping(operation_ref)
     if mapping is None:
         return f"manifest에 operation_ref={operation_ref!r} 매핑이 없다 — free로 폴백한다"
-    layout = mapping.get("presentation", {}).get("layout")
+    presentation = mapping.get("presentation", {})
+    layout = presentation.get("layout")
+    renderer_id = presentation.get("renderer_id")
     return (
-        f"manifest layout={layout!r}(operation_ref={operation_ref!r})은 "
+        f"manifest renderer_id={renderer_id!r}, layout={layout!r}"
+        f"(operation_ref={operation_ref!r})은 "
         "read/display 카드가 아니다 — free로 폴백한다"
     )
 
