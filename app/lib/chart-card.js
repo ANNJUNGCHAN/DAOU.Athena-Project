@@ -80,6 +80,18 @@ function createCachedChartLibraryLoader(importer, clock) {
   };
 }
 
+// 창이 가려지거나 최소화에서 막 복원된 시점에는 Chromium이 RAF를 늦출 수 있다.
+// 사용자 토글의 첫 결과를 RAF에만 맡기지 않고 즉시 그린 뒤, 다음 프레임에서
+// lightweight-charts 좌표를 한 번 더 읽어 레이아웃 변화를 보정한다.
+function renderNowAndOnNextFrame(render, scheduleFrame) {
+  if (typeof render !== 'function') throw new TypeError('chart render callback이 필요하다');
+  render();
+  const schedule = typeof scheduleFrame === 'function'
+    ? scheduleFrame
+    : (callback) => requestAnimationFrame(callback);
+  return schedule(() => render());
+}
+
 const __loadChartLibrary = createCachedChartLibraryLoader(() => import(__LIGHTWEIGHT_CHARTS_URL));
 // 실제 renderer에서는 canvas.html이 chart-card.js를 읽는 즉시 prewarm한다. Node의
 // 순수 단위 테스트는 ESM/DOM 라이브러리를 불필요하게 로드하지 않는다.
@@ -630,7 +642,7 @@ async function createChartCard(container, opts) {
       },
       onVolumeProfileToggle: (on) => {
         volumeProfileOn = on;
-        requestAnimationFrame(() => renderVolumeProfile());
+        renderNowAndOnNextFrame(renderVolumeProfile);
         saveAuthoring();
       },
     },
@@ -847,6 +859,7 @@ async function createChartCard(container, opts) {
 const __exports = {
   createChartCard,
   createCachedChartLibraryLoader,
+  renderNowAndOnNextFrame,
   resolveInitialPeriod,
   toCandleSeriesData,
   toVolumeSeriesData,
