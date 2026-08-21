@@ -1116,7 +1116,7 @@ app.whenReady().then(async () => {
     caption: '검증13b 실배선 차트',
     data: { symbol: '005930', chart: { period: 'day', target: 'stock', trId: 'ka10081', candles: liveChartBars } },
   });
-  await wait(1200); // renderLiveChart도 동적 import + 비동기 마운트(검증13과 같은 이유)
+  await wait(1200); // import는 chart-card.js 로드 시 prewarm, 카드 마운트 자체는 비동기다.
   const liveChartProbe = await canvasWin.webContents.executeJavaScript(`
     (() => {
       const cards = document.querySelectorAll('#grid .card.chart');
@@ -1125,6 +1125,7 @@ app.whenReady().then(async () => {
       return {
         cardCount: cards.length,
         canvasCount: card.querySelectorAll('canvas').length,
+        chartImportReadyAt: Number(card.dataset.chartImportReadyAt) || null,
         titleText: card.querySelector('.card-title') ? card.querySelector('.card-title').textContent : null,
       };
     })()
@@ -1134,6 +1135,7 @@ app.whenReady().then(async () => {
     cardRendered: liveChartProbe !== null,
     replacedMockChartCard: liveChartProbe !== null && liveChartProbe.cardCount === 1,
     canvasMounted: liveChartProbe !== null && liveChartProbe.canvasCount > 0,
+    prewarmTelemetryPresent: liveChartProbe !== null && Number.isFinite(liveChartProbe.chartImportReadyAt),
     // caption은 정보성 참고값(어떤 문구가 카드 제목에 실제로 반영됐는지 추적용) — 단언에서 뺀다.
     titleText: liveChartProbe && liveChartProbe.titleText,
   };
@@ -1141,6 +1143,7 @@ app.whenReady().then(async () => {
   assertOk('liveChartCard: card rendered from a synthetic live envelope', report.liveChartCard.cardRendered === true);
   assertOk('liveChartCard: same-type re-render replaced the mock chart card (exactly one .card.chart)', report.liveChartCard.replacedMockChartCard === true);
   assertOk('liveChartCard: lightweight-charts canvas element mounted', report.liveChartCard.canvasMounted === true);
+  assertOk('liveChartCard: prewarmed chart import readiness telemetry recorded', report.liveChartCard.prewarmTelemetryPresent === true);
 
   // ---------- 검증 14: 창 배치(스냅) — Windows 표준 의미론 (2026-08-18) ----------
   // main.js가 노출한 placeWindows(left/right)·centerWindows를 직접 구동하고,

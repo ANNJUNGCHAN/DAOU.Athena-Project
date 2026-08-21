@@ -182,6 +182,8 @@ window.athena.on('athena:add-rest-canvas', async (payload) => {
     });
     const card = await addLiveCard({ status: 'success', envelope });
     const domAttachedAt = performance.now();
+    const chartImportReadyAt = card && card.dataset.chartImportReadyAt
+      ? Number(card.dataset.chartImportReadyAt) : null;
     const paint = await waitForVisiblePaint(card);
     window.athena.send('athena:rest-canvas-painted', {
       dataset_id: correlation.dataset_id,
@@ -196,6 +198,10 @@ window.athena.on('athena:add-rest-canvas', async (payload) => {
       verified_visible: paint.verifiedVisible,
       dom_attached_at: domAttachedAt,
       visible_paint_at: paint.visiblePaintAt,
+      inline_to_chart_import_ms: Number.isFinite(chartImportReadyAt)
+        ? Math.max(0, chartImportReadyAt - receivedAt) : null,
+      chart_import_to_dom_ms: Number.isFinite(chartImportReadyAt)
+        ? Math.max(0, domAttachedAt - Math.max(receivedAt, chartImportReadyAt)) : null,
       inline_to_dom_ms: Math.max(0, domAttachedAt - receivedAt),
       dom_to_paint_ack_ms: Math.max(0, paint.visiblePaintAt - domAttachedAt),
       rect: paint.rect,
@@ -377,6 +383,9 @@ async function mountAitsChartPanel(card, chartBody, descriptor) {
       interval: request.interval,
       adjusted: request.adjusted,
     });
+  };
+  descriptor.context.onChartLibraryReady = (readyAt) => {
+    if (Number.isFinite(Number(readyAt))) card.dataset.chartImportReadyAt = String(Number(readyAt));
   };
   cardDestroyers.set(card, () => {
     aitsChartPanels.destroyPanel(descriptor.panelId);

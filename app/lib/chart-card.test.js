@@ -8,9 +8,31 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const path = require('node:path');
-const { toCandleSeriesData, toVolumeSeriesData, withAlpha, UP_COLOR, DOWN_COLOR, resolveInitialPeriod } = require('./chart-card');
+const {
+  toCandleSeriesData, toVolumeSeriesData, withAlpha, UP_COLOR, DOWN_COLOR,
+  resolveInitialPeriod, createCachedChartLibraryLoader,
+} = require('./chart-card');
 
 const FIXTURE = require(path.join(__dirname, '..', 'data', 'chart-mock-ohlcv.json'));
+
+test('cold-start chart import is started once and every renderer awaits the same ready result', async () => {
+  let imports = 0;
+  let resolveImport;
+  const load = createCachedChartLibraryLoader(
+    () => { imports += 1; return new Promise((resolve) => { resolveImport = resolve; }); },
+    () => 123.5,
+  );
+  const prewarm = load();
+  const firstRender = load();
+  assert.strictEqual(firstRender, prewarm);
+  assert.equal(imports, 0);
+  await Promise.resolve();
+  assert.equal(imports, 1);
+  resolveImport({ createChart() {} });
+  assert.deepEqual(await prewarm, { library: { createChart: (await firstRender).library.createChart }, readyAt: 123.5 });
+  assert.strictEqual(load(), prewarm);
+  assert.equal(imports, 1);
+});
 
 test('chart-mock-ohlcv.json: 240 일봉, OHLC 정합(low<=open/close<=high)', () => {
   assert.equal(FIXTURE.bars.length, 240);
