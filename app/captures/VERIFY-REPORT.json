@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-08-20T01:26:34.885Z",
+  "startedAt": "2026-08-21T02:18:27.565Z",
   "layout": {
     "scale": 1,
     "screen": {
@@ -47,26 +47,85 @@
     "bootBarWritesName": true,
     "bootedIntoChatMode": true
   },
+  "restReceiptPaint": {
+    "repeats": [
+      {
+        "elapsedMs": 41,
+        "verifiedVisible": true,
+        "appVisible": true,
+        "onboardingHidden": true,
+        "receiptCount": 1,
+        "nonzero": true
+      },
+      {
+        "elapsedMs": 55,
+        "verifiedVisible": true,
+        "appVisible": true,
+        "onboardingHidden": true,
+        "receiptCount": 2,
+        "nonzero": true
+      },
+      {
+        "elapsedMs": 51,
+        "verifiedVisible": true,
+        "appVisible": true,
+        "onboardingHidden": true,
+        "receiptCount": 3,
+        "nonzero": true
+      },
+      {
+        "elapsedMs": 55,
+        "verifiedVisible": true,
+        "appVisible": true,
+        "onboardingHidden": true,
+        "receiptCount": 4,
+        "nonzero": true
+      },
+      {
+        "elapsedMs": 53,
+        "verifiedVisible": true,
+        "appVisible": true,
+        "onboardingHidden": true,
+        "receiptCount": 5,
+        "nonzero": true
+      },
+      {
+        "elapsedMs": 54,
+        "verifiedVisible": true,
+        "appVisible": true,
+        "onboardingHidden": true,
+        "receiptCount": 6,
+        "nonzero": true
+      }
+    ]
+  },
+  "delayedRestFeedback": {
+    "elapsedMs": 2753.4620000000004,
+    "totalRunMs": 3017,
+    "feedbackOk": true,
+    "receiptPainted": true,
+    "renderedCount": 0
+  },
   "dotScreenPoint": {
     "x": 540.6666679382324,
-    "y": 1071.3333435058594
+    "y": 1076.6666870117188
   },
   "osCaptureAttempted": {
     "ok": true
   },
   "expand": {
-    "frameCount": 31,
+    "frameCount": 29,
     "p50": 18,
-    "p95": 34.59999999999991,
-    "max": 35.700000000000045,
-    "min": 17.09999999999991
+    "p95": 34.70000000000073,
+    "max": 54,
+    "min": 17.300000000000182
   },
   "collapse": {
-    "frameCount": 33,
+    "frameCount": 32,
     "p50": 17.899999999999636,
     "p95": 18.5,
-    "max": 28.599999999999454,
-    "min": 17.199999999999818
+    "max": 20.200000000000728,
+    "min": 17.200000000000728
   },
   "afterCollapse": {
     "canvasVisible": false
@@ -81,9 +140,9 @@
       },
       "chat": {
         "x": 510,
-        "y": 834,
-        "width": 904,
-        "height": 267
+        "y": 732,
+        "width": 911,
+        "height": 373
       }
     },
     "afterCanvasMove": {
@@ -95,9 +154,9 @@
       },
       "chat": {
         "x": 510,
-        "y": 834,
-        "width": 904,
-        "height": 267
+        "y": 732,
+        "width": 911,
+        "height": 373
       }
     },
     "afterChatResize": {
@@ -109,9 +168,9 @@
       },
       "chat": {
         "x": 510,
-        "y": 834,
-        "width": 905,
-        "height": 367
+        "y": 732,
+        "width": 912,
+        "height": 473
       }
     },
     "canvasMovedButChatUnchanged": true,
@@ -345,6 +404,7 @@
     "cardRendered": true,
     "replacedMockChartCard": true,
     "canvasMounted": true,
+    "prewarmTelemetryPresent": true,
     "titleText": "검증13b 실배선 차트"
   },
   "windowPlacement": {
@@ -528,7 +588,7 @@
   },
   "agentTurn": {
     "present": true,
-    "badge": "10:21 발화",
+    "badge": "11:13 발화",
     "mode": "실시간 (WS)",
     "source": "루틴 '검증 루틴' · 에이전트 발화 — 묻지 않은 턴입니다",
     "body": "005930 조건 도달 — 관측값 5.3 (임계 5). 값은 발화 시점 기준입니다 — 최신 확인은 다시 물어봐 주세요.",
@@ -578,5 +638,319 @@
       "changeToneClass": "is-down"
     }
   },
-  "finishedAt": "2026-08-20T01:27:12.185Z"
+  "paperScreenCases": {
+    "F1": {
+      "screenId": "AT-CV-005:F1",
+      "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+      "status": "pass",
+      "screenshot": "app/captures/paper-F1.png",
+      "dom": {
+        "connected": true,
+        "nonzeroRect": true,
+        "bodyHasContent": true,
+        "screenIdMatches": true
+      },
+      "layout": {
+        "cardMeasured": true,
+        "paperWidthApplied": true
+      },
+      "controls": {
+        "closeControlRendered": true,
+        "protectedActionsAbsent": true
+      },
+      "states": {
+        "declaredStateRendered": true,
+        "displayOnlyGuardRendered": true
+      }
+    },
+    "F2": {
+      "screenId": "AT-CV-005:F2",
+      "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+      "status": "pass",
+      "screenshot": "app/captures/paper-F2.png",
+      "dom": {
+        "connected": true,
+        "nonzeroRect": true,
+        "bodyHasContent": true,
+        "screenIdMatches": true
+      },
+      "layout": {
+        "cardMeasured": true,
+        "paperWidthApplied": true
+      },
+      "controls": {
+        "closeControlRendered": true,
+        "protectedActionsAbsent": true
+      },
+      "states": {
+        "declaredStateRendered": true,
+        "displayOnlyGuardRendered": true
+      }
+    },
+    "T1": {
+      "screenId": "AT-CV-005:T1",
+      "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+      "status": "pass",
+      "screenshot": "app/captures/paper-T1.png",
+      "dom": {
+        "connected": true,
+        "nonzeroRect": true,
+        "bodyHasContent": true,
+        "screenIdMatches": true
+      },
+      "layout": {
+        "cardMeasured": true,
+        "paperWidthApplied": true
+      },
+      "controls": {
+        "closeControlRendered": true,
+        "protectedActionsAbsent": true
+      },
+      "states": {
+        "declaredStateRendered": true,
+        "displayOnlyGuardRendered": true
+      }
+    },
+    "T2": {
+      "screenId": "AT-CV-005:T2",
+      "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+      "status": "pass",
+      "screenshot": "app/captures/paper-T2.png",
+      "dom": {
+        "connected": true,
+        "nonzeroRect": true,
+        "bodyHasContent": true,
+        "screenIdMatches": true
+      },
+      "layout": {
+        "cardMeasured": true,
+        "paperWidthApplied": true
+      },
+      "controls": {
+        "closeControlRendered": true,
+        "protectedActionsAbsent": true
+      },
+      "states": {
+        "declaredStateRendered": true,
+        "displayOnlyGuardRendered": true
+      }
+    },
+    "T3": {
+      "screenId": "AT-CV-005:T3",
+      "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+      "status": "pass",
+      "screenshot": "app/captures/paper-T3.png",
+      "dom": {
+        "connected": true,
+        "nonzeroRect": true,
+        "bodyHasContent": true,
+        "screenIdMatches": true
+      },
+      "layout": {
+        "cardMeasured": true,
+        "paperWidthApplied": true
+      },
+      "controls": {
+        "closeControlRendered": true,
+        "protectedActionsAbsent": true
+      },
+      "states": {
+        "declaredStateRendered": true,
+        "displayOnlyGuardRendered": true
+      }
+    },
+    "T4": {
+      "screenId": "AT-CV-005:T4",
+      "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+      "status": "pass",
+      "screenshot": "app/captures/paper-T4.png",
+      "dom": {
+        "connected": true,
+        "nonzeroRect": true,
+        "bodyHasContent": true,
+        "screenIdMatches": true
+      },
+      "layout": {
+        "cardMeasured": true,
+        "paperWidthApplied": true
+      },
+      "controls": {
+        "closeControlRendered": true,
+        "protectedActionsAbsent": true
+      },
+      "states": {
+        "declaredStateRendered": true,
+        "displayOnlyGuardRendered": true
+      }
+    },
+    "C1": {
+      "screenId": "AT-CV-005:C1",
+      "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+      "status": "pass",
+      "screenshot": "app/captures/paper-C1.png",
+      "dom": {
+        "connected": true,
+        "nonzeroRect": true,
+        "bodyHasContent": true,
+        "screenIdMatches": true
+      },
+      "layout": {
+        "cardMeasured": true,
+        "paperWidthApplied": true
+      },
+      "controls": {
+        "closeControlRendered": true,
+        "protectedActionsAbsent": true
+      },
+      "states": {
+        "declaredStateRendered": true,
+        "displayOnlyGuardRendered": true
+      }
+    },
+    "C2": {
+      "screenId": "AT-CV-005:C2",
+      "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+      "status": "pass",
+      "screenshot": "app/captures/paper-C2.png",
+      "dom": {
+        "connected": true,
+        "nonzeroRect": true,
+        "bodyHasContent": true,
+        "screenIdMatches": true
+      },
+      "layout": {
+        "cardMeasured": true,
+        "paperWidthApplied": true
+      },
+      "controls": {
+        "closeControlRendered": true,
+        "protectedActionsAbsent": true
+      },
+      "states": {
+        "declaredStateRendered": true,
+        "displayOnlyGuardRendered": true
+      }
+    },
+    "E1": {
+      "screenId": "AT-CV-005:E1",
+      "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+      "status": "pass",
+      "screenshot": "app/captures/paper-E1.png",
+      "dom": {
+        "connected": true,
+        "nonzeroRect": true,
+        "bodyHasContent": true,
+        "screenIdMatches": true
+      },
+      "layout": {
+        "cardMeasured": true,
+        "paperWidthApplied": true
+      },
+      "controls": {
+        "closeControlRendered": true,
+        "protectedActionsAbsent": true
+      },
+      "states": {
+        "declaredStateRendered": true,
+        "displayOnlyGuardRendered": true
+      }
+    },
+    "E2": {
+      "screenId": "AT-CV-005:E2",
+      "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+      "status": "pass",
+      "screenshot": "app/captures/paper-E2.png",
+      "dom": {
+        "connected": true,
+        "nonzeroRect": true,
+        "bodyHasContent": true,
+        "screenIdMatches": true
+      },
+      "layout": {
+        "cardMeasured": true,
+        "paperWidthApplied": true
+      },
+      "controls": {
+        "closeControlRendered": true,
+        "protectedActionsAbsent": true
+      },
+      "states": {
+        "declaredStateRendered": true,
+        "displayOnlyGuardRendered": true
+      }
+    },
+    "E3": {
+      "screenId": "AT-CV-005:E3",
+      "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+      "status": "pass",
+      "screenshot": "app/captures/paper-E3.png",
+      "dom": {
+        "connected": true,
+        "nonzeroRect": true,
+        "bodyHasContent": true,
+        "screenIdMatches": true
+      },
+      "layout": {
+        "cardMeasured": true,
+        "paperWidthApplied": true
+      },
+      "controls": {
+        "closeControlRendered": true,
+        "protectedActionsAbsent": true
+      },
+      "states": {
+        "declaredStateRendered": true,
+        "displayOnlyGuardRendered": true
+      }
+    },
+    "A1": {
+      "screenId": "AT-CV-005:A1",
+      "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+      "status": "pass",
+      "screenshot": "app/captures/paper-A1.png",
+      "dom": {
+        "connected": true,
+        "nonzeroRect": true,
+        "bodyHasContent": true,
+        "screenIdMatches": true
+      },
+      "layout": {
+        "cardMeasured": true,
+        "paperWidthApplied": true
+      },
+      "controls": {
+        "closeControlRendered": true,
+        "protectedActionsAbsent": true
+      },
+      "states": {
+        "declaredStateRendered": true,
+        "displayOnlyGuardRendered": true
+      }
+    },
+    "S1": {
+      "screenId": "AT-CV-005:S1",
+      "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+      "status": "pass",
+      "screenshot": "app/captures/paper-S1.png",
+      "dom": {
+        "connected": true,
+        "nonzeroRect": true,
+        "bodyHasContent": true,
+        "screenIdMatches": true
+      },
+      "layout": {
+        "cardMeasured": true,
+        "paperWidthApplied": true
+      },
+      "controls": {
+        "closeControlRendered": true,
+        "protectedActionsAbsent": true
+      },
+      "states": {
+        "declaredStateRendered": true,
+        "displayOnlyGuardRendered": true
+      }
+    }
+  },
+  "finishedAt": "2026-08-21T02:19:17.633Z"
 }

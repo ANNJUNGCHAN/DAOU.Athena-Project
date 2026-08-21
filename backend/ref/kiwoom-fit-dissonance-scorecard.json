@@ -18,7 +18,7 @@
     "order_popup_checklist_scored": 12,
     "override_count": 0,
     "rule_row_count": 6,
-    "zero_tolerance_violation_count": 82
+    "zero_tolerance_violation_count": 0
   },
   "anchor": {
     "actual_count": 25,
@@ -81,6 +81,452 @@
     "target_count": 26
   },
   "generated_at": "test",
+  "human_review_advisory": {
+    "inter_rater_agreement": null,
+    "reason": "Historical G001.5 design-rubric review is independent from the complete screen-definition and renderer-provenance machine gate.",
+    "required_for_machine_gate": false,
+    "sample_actual": 105,
+    "sample_scored": 0,
+    "sample_target": 90,
+    "status": "pending"
+  },
+  "machine_render_evidence": {
+    "coverage": {
+      "all_paper_cases_visual_status": "complete",
+      "all_paper_template_cases": [
+        "A1",
+        "C1",
+        "C2",
+        "E1",
+        "E2",
+        "E3",
+        "F1",
+        "F2",
+        "S1",
+        "T1",
+        "T2",
+        "T3",
+        "T4"
+      ],
+      "fit_gate_representative_cases": [
+        "A1",
+        "C1",
+        "C2",
+        "E1",
+        "E2",
+        "E3",
+        "F1",
+        "F2",
+        "S1",
+        "T1",
+        "T2",
+        "T3",
+        "T4"
+      ],
+      "fit_gate_status": "pass",
+      "note": "Every approved Paper case has current case-specific renderer DOM, layout, control, state, and screenshot evidence.",
+      "paper_cases_with_machine_screenshot_dom_evidence": [
+        "A1",
+        "C1",
+        "C2",
+        "E1",
+        "E2",
+        "E3",
+        "F1",
+        "F2",
+        "S1",
+        "T1",
+        "T2",
+        "T3",
+        "T4"
+      ],
+      "paper_cases_without_case_specific_machine_evidence": []
+    },
+    "evidence_kind": "machine_renderer_provenance",
+    "representative_cases": [
+      {
+        "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+        "report_assertions": {
+          "controls": {
+            "closeControlRendered": true,
+            "protectedActionsAbsent": true
+          },
+          "dom": {
+            "bodyHasContent": true,
+            "connected": true,
+            "nonzeroRect": true,
+            "screenIdMatches": true
+          },
+          "layout": {
+            "cardMeasured": true,
+            "paperWidthApplied": true
+          },
+          "states": {
+            "declaredStateRendered": true,
+            "displayOnlyGuardRendered": true
+          }
+        },
+        "screen_id": "AT-CV-005:A1",
+        "screenshot": "app/captures/paper-A1.png",
+        "screenshot_sha256": "61dac189929c36a5315e2168d8e35faf1d5f5f8e07a0596c1e7cfaa026f89655",
+        "status": "pass",
+        "template_case_id": "A1"
+      },
+      {
+        "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+        "report_assertions": {
+          "controls": {
+            "closeControlRendered": true,
+            "protectedActionsAbsent": true
+          },
+          "dom": {
+            "bodyHasContent": true,
+            "connected": true,
+            "nonzeroRect": true,
+            "screenIdMatches": true
+          },
+          "layout": {
+            "cardMeasured": true,
+            "paperWidthApplied": true
+          },
+          "states": {
+            "declaredStateRendered": true,
+            "displayOnlyGuardRendered": true
+          }
+        },
+        "screen_id": "AT-CV-005:C1",
+        "screenshot": "app/captures/paper-C1.png",
+        "screenshot_sha256": "05fdc316b9a77bbafe54c33143f4ac1d82eede227dafc629f338a1e2e9383669",
+        "status": "pass",
+        "template_case_id": "C1"
+      },
+      {
+        "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+        "report_assertions": {
+          "controls": {
+            "closeControlRendered": true,
+            "protectedActionsAbsent": true
+          },
+          "dom": {
+            "bodyHasContent": true,
+            "connected": true,
+            "nonzeroRect": true,
+            "screenIdMatches": true
+          },
+          "layout": {
+            "cardMeasured": true,
+            "paperWidthApplied": true
+          },
+          "states": {
+            "declaredStateRendered": true,
+            "displayOnlyGuardRendered": true
+          }
+        },
+        "screen_id": "AT-CV-005:C2",
+        "screenshot": "app/captures/paper-C2.png",
+        "screenshot_sha256": "2dcb6a9bd042b66753dd4b796a5ed8ff43d8fb314e029a11876ca9c302f92aca",
+        "status": "pass",
+        "template_case_id": "C2"
+      },
+      {
+        "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+        "report_assertions": {
+          "controls": {
+            "closeControlRendered": true,
+            "protectedActionsAbsent": true
+          },
+          "dom": {
+            "bodyHasContent": true,
+            "connected": true,
+            "nonzeroRect": true,
+            "screenIdMatches": true
+          },
+          "layout": {
+            "cardMeasured": true,
+            "paperWidthApplied": true
+          },
+          "states": {
+            "declaredStateRendered": true,
+            "displayOnlyGuardRendered": true
+          }
+        },
+        "screen_id": "AT-CV-005:E1",
+        "screenshot": "app/captures/paper-E1.png",
+        "screenshot_sha256": "57df12b9a964d0e7992e6491585b424f91376bf585f8074aa26c15af7e702332",
+        "status": "pass",
+        "template_case_id": "E1"
+      },
+      {
+        "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+        "report_assertions": {
+          "controls": {
+            "closeControlRendered": true,
+            "protectedActionsAbsent": true
+          },
+          "dom": {
+            "bodyHasContent": true,
+            "connected": true,
+            "nonzeroRect": true,
+            "screenIdMatches": true
+          },
+          "layout": {
+            "cardMeasured": true,
+            "paperWidthApplied": true
+          },
+          "states": {
+            "declaredStateRendered": true,
+            "displayOnlyGuardRendered": true
+          }
+        },
+        "screen_id": "AT-CV-005:E2",
+        "screenshot": "app/captures/paper-E2.png",
+        "screenshot_sha256": "3126f2f10888bff80a97d4d7b93b13e8fce55f870febde83c26f494a597782b3",
+        "status": "pass",
+        "template_case_id": "E2"
+      },
+      {
+        "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+        "report_assertions": {
+          "controls": {
+            "closeControlRendered": true,
+            "protectedActionsAbsent": true
+          },
+          "dom": {
+            "bodyHasContent": true,
+            "connected": true,
+            "nonzeroRect": true,
+            "screenIdMatches": true
+          },
+          "layout": {
+            "cardMeasured": true,
+            "paperWidthApplied": true
+          },
+          "states": {
+            "declaredStateRendered": true,
+            "displayOnlyGuardRendered": true
+          }
+        },
+        "screen_id": "AT-CV-005:E3",
+        "screenshot": "app/captures/paper-E3.png",
+        "screenshot_sha256": "3846574194a8bb8bd927a6d92b4da34f314943198d4880d6223e03de9719507b",
+        "status": "pass",
+        "template_case_id": "E3"
+      },
+      {
+        "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+        "report_assertions": {
+          "controls": {
+            "closeControlRendered": true,
+            "protectedActionsAbsent": true
+          },
+          "dom": {
+            "bodyHasContent": true,
+            "connected": true,
+            "nonzeroRect": true,
+            "screenIdMatches": true
+          },
+          "layout": {
+            "cardMeasured": true,
+            "paperWidthApplied": true
+          },
+          "states": {
+            "declaredStateRendered": true,
+            "displayOnlyGuardRendered": true
+          }
+        },
+        "screen_id": "AT-CV-005:F1",
+        "screenshot": "app/captures/paper-F1.png",
+        "screenshot_sha256": "bd750137360a68ece0e9cec72e9d3770b90840ade19064adf5e1bf1178027d6a",
+        "status": "pass",
+        "template_case_id": "F1"
+      },
+      {
+        "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+        "report_assertions": {
+          "controls": {
+            "closeControlRendered": true,
+            "protectedActionsAbsent": true
+          },
+          "dom": {
+            "bodyHasContent": true,
+            "connected": true,
+            "nonzeroRect": true,
+            "screenIdMatches": true
+          },
+          "layout": {
+            "cardMeasured": true,
+            "paperWidthApplied": true
+          },
+          "states": {
+            "declaredStateRendered": true,
+            "displayOnlyGuardRendered": true
+          }
+        },
+        "screen_id": "AT-CV-005:F2",
+        "screenshot": "app/captures/paper-F2.png",
+        "screenshot_sha256": "b56959510b4092580c3da6cc2ed174365ad82b22a1a645ee60f97539a7de8686",
+        "status": "pass",
+        "template_case_id": "F2"
+      },
+      {
+        "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+        "report_assertions": {
+          "controls": {
+            "closeControlRendered": true,
+            "protectedActionsAbsent": true
+          },
+          "dom": {
+            "bodyHasContent": true,
+            "connected": true,
+            "nonzeroRect": true,
+            "screenIdMatches": true
+          },
+          "layout": {
+            "cardMeasured": true,
+            "paperWidthApplied": true
+          },
+          "states": {
+            "declaredStateRendered": true,
+            "displayOnlyGuardRendered": true
+          }
+        },
+        "screen_id": "AT-CV-005:S1",
+        "screenshot": "app/captures/paper-S1.png",
+        "screenshot_sha256": "535519d2911c335c60d8e39b33885be9eca6250b8a4dfe7fe5b59c950aee998a",
+        "status": "pass",
+        "template_case_id": "S1"
+      },
+      {
+        "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+        "report_assertions": {
+          "controls": {
+            "closeControlRendered": true,
+            "protectedActionsAbsent": true
+          },
+          "dom": {
+            "bodyHasContent": true,
+            "connected": true,
+            "nonzeroRect": true,
+            "screenIdMatches": true
+          },
+          "layout": {
+            "cardMeasured": true,
+            "paperWidthApplied": true
+          },
+          "states": {
+            "declaredStateRendered": true,
+            "displayOnlyGuardRendered": true
+          }
+        },
+        "screen_id": "AT-CV-005:T1",
+        "screenshot": "app/captures/paper-T1.png",
+        "screenshot_sha256": "3f3fb701e4eefb47818322b932d799379e03380d1ca08978723b15b2dc3e0df7",
+        "status": "pass",
+        "template_case_id": "T1"
+      },
+      {
+        "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+        "report_assertions": {
+          "controls": {
+            "closeControlRendered": true,
+            "protectedActionsAbsent": true
+          },
+          "dom": {
+            "bodyHasContent": true,
+            "connected": true,
+            "nonzeroRect": true,
+            "screenIdMatches": true
+          },
+          "layout": {
+            "cardMeasured": true,
+            "paperWidthApplied": true
+          },
+          "states": {
+            "declaredStateRendered": true,
+            "displayOnlyGuardRendered": true
+          }
+        },
+        "screen_id": "AT-CV-005:T2",
+        "screenshot": "app/captures/paper-T2.png",
+        "screenshot_sha256": "659e8301640c3e2ca2cd91b43b4b4b08bcf98c99ceeccc1911ec4b9acb81729f",
+        "status": "pass",
+        "template_case_id": "T2"
+      },
+      {
+        "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+        "report_assertions": {
+          "controls": {
+            "closeControlRendered": true,
+            "protectedActionsAbsent": true
+          },
+          "dom": {
+            "bodyHasContent": true,
+            "connected": true,
+            "nonzeroRect": true,
+            "screenIdMatches": true
+          },
+          "layout": {
+            "cardMeasured": true,
+            "paperWidthApplied": true
+          },
+          "states": {
+            "declaredStateRendered": true,
+            "displayOnlyGuardRendered": true
+          }
+        },
+        "screen_id": "AT-CV-005:T3",
+        "screenshot": "app/captures/paper-T3.png",
+        "screenshot_sha256": "d857a1d93b081967ae0838ac6b79e80a28927a5e9ae130c53e0862f354ebd4ef",
+        "status": "pass",
+        "template_case_id": "T3"
+      },
+      {
+        "fixture": "verify.js:paper-at-cv-005-display-only-v1",
+        "report_assertions": {
+          "controls": {
+            "closeControlRendered": true,
+            "protectedActionsAbsent": true
+          },
+          "dom": {
+            "bodyHasContent": true,
+            "connected": true,
+            "nonzeroRect": true,
+            "screenIdMatches": true
+          },
+          "layout": {
+            "cardMeasured": true,
+            "paperWidthApplied": true
+          },
+          "states": {
+            "declaredStateRendered": true,
+            "displayOnlyGuardRendered": true
+          }
+        },
+        "screen_id": "AT-CV-005:T4",
+        "screenshot": "app/captures/paper-T4.png",
+        "screenshot_sha256": "70cc4aef140bc47299c9a566a69aafb9eb03228d75303d80c86e17d0b55f17fd",
+        "status": "pass",
+        "template_case_id": "T4"
+      }
+    ],
+    "schema_version": 1,
+    "source_hashes": {
+      "app/canvas.css": "54d01e07c7d858a5b30cd1e228564451f50389ddc90f5374678d5cc1d8c04209",
+      "app/canvas.html": "1d0db1c14057b0cb02ee110f3604c1044c3d3cbc0e8f3f3cc9448dab23dc62a6",
+      "app/canvas.js": "11f2c14220f12910a293aeafa5629b55b2390beeb5fcb15ae39f0682305e7c9a",
+      "app/lib/canvas-layout.js": "98023857555c3dda00124c27e55056b7ee04a3603887a16a059ef0b5d29bda55",
+      "app/lib/chart-card.js": "589692bec4c465688ca8238faf17c9f62b540dff4ade46f8a487e6a4007c9e85",
+      "app/verify.js": "38cfc9a6911496fc544d1d7e7aa73422107aa5fe1aee178615c6c3db5088152d",
+      "backend/ref/kiwoom-screen-definitions.json": "7e03c82db221b2736251acf4bb669ffcaacfdf7a32fb8b770a5f8f39952ae79b"
+    },
+    "source_report": {
+      "command": "cd app && npm run verify",
+      "finished_at": "2026-08-21T02:19:17.633Z",
+      "path": "app/captures/VERIFY-REPORT.json",
+      "sha256": "cf5c9b428a580bff38ee1067521065e54d23c9bb82222830a168c1679394a681",
+      "started_at": "2026-08-21T02:18:27.565Z"
+    }
+  },
   "mappings": [
     {
       "agreement": null,
@@ -94,7 +540,6 @@
       "diagnostics": {
         "event_stream_field_count": 35,
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0286,
         "layout": "event",
         "max_table_column_count": 35,
         "shape": "compound",
@@ -129,7 +574,6 @@
       "diagnostics": {
         "event_stream_field_count": 27,
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.2963,
         "layout": "event",
         "max_table_column_count": 27,
         "shape": "compound",
@@ -163,7 +607,6 @@
       "diagnostics": {
         "event_stream_field_count": 19,
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.1579,
         "layout": "event",
         "max_table_column_count": 19,
         "shape": "compound",
@@ -195,7 +638,6 @@
       "diagnostics": {
         "event_stream_field_count": 43,
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.2093,
         "layout": "event",
         "max_table_column_count": 43,
         "shape": "compound",
@@ -227,7 +669,6 @@
       "diagnostics": {
         "event_stream_field_count": 2,
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0,
         "layout": "event",
         "max_table_column_count": 2,
         "shape": "compound",
@@ -259,7 +700,6 @@
       "diagnostics": {
         "event_stream_field_count": 163,
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0307,
         "layout": "event",
         "max_table_column_count": 163,
         "shape": "compound",
@@ -291,7 +731,6 @@
       "diagnostics": {
         "event_stream_field_count": 5,
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0,
         "layout": "event",
         "max_table_column_count": 5,
         "shape": "compound",
@@ -315,16 +754,14 @@
       "agreement": null,
       "auto_failure_codes": [
         "OVERFLOW_WIDTH",
-        "STRUCTURAL_MISMATCH",
-        "FORMATTER_MISSING"
+        "STRUCTURAL_MISMATCH"
       ],
-      "auto_fit": 0,
+      "auto_fit": 1,
       "auto_warnings": [],
       "blind_index": "A5",
       "diagnostics": {
         "event_stream_field_count": 57,
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.6316,
         "layout": "event",
         "max_table_column_count": 57,
         "shape": "compound",
@@ -340,16 +777,17 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
-      "rules_applied": [],
+      "resolved_fit": 1,
+      "rules_applied": [
+        "event_stream_ladder_judgement",
+        "table_column_priority"
+      ],
       "tr_id": "0F"
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [
         "OVERFLOW_WIDTH_WARN"
       ],
@@ -357,7 +795,6 @@
       "diagnostics": {
         "event_stream_field_count": 15,
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.3333,
         "layout": "event",
         "max_table_column_count": 15,
         "shape": "compound",
@@ -373,7 +810,7 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "0G"
     },
@@ -386,7 +823,6 @@
       "diagnostics": {
         "event_stream_field_count": 7,
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.2857,
         "layout": "event",
         "max_table_column_count": 7,
         "shape": "compound",
@@ -408,16 +844,13 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": "S6",
       "diagnostics": {
         "event_stream_field_count": 4,
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.5,
         "layout": "event",
         "max_table_column_count": 4,
         "shape": "compound",
@@ -433,7 +866,7 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "0I"
     },
@@ -446,7 +879,6 @@
       "diagnostics": {
         "event_stream_field_count": 12,
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.1667,
         "layout": "event",
         "max_table_column_count": 12,
         "shape": "compound",
@@ -468,10 +900,8 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [
         "OVERFLOW_WIDTH_WARN"
       ],
@@ -479,7 +909,6 @@
       "diagnostics": {
         "event_stream_field_count": 14,
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.5714,
         "layout": "event",
         "max_table_column_count": 14,
         "shape": "compound",
@@ -495,22 +924,19 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "0U"
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": "S9",
       "diagnostics": {
         "event_stream_field_count": 10,
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.6,
         "layout": "event",
         "max_table_column_count": 10,
         "shape": "compound",
@@ -526,22 +952,19 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "0g"
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": null,
       "diagnostics": {
         "event_stream_field_count": 10,
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.5,
         "layout": "event",
         "max_table_column_count": 10,
         "shape": "compound",
@@ -557,7 +980,7 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "0m"
     },
@@ -570,7 +993,6 @@
       "diagnostics": {
         "event_stream_field_count": 3,
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0,
         "layout": "event",
         "max_table_column_count": 3,
         "shape": "compound",
@@ -592,16 +1014,13 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": null,
       "diagnostics": {
         "event_stream_field_count": 6,
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.5,
         "layout": "event",
         "max_table_column_count": 6,
         "shape": "compound",
@@ -617,7 +1036,7 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "0u"
     },
@@ -632,7 +1051,6 @@
       "diagnostics": {
         "event_stream_field_count": 17,
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.1765,
         "layout": "event",
         "max_table_column_count": 17,
         "shape": "compound",
@@ -663,7 +1081,6 @@
       "diagnostics": {
         "event_stream_field_count": 19,
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.1053,
         "layout": "event",
         "max_table_column_count": 19,
         "shape": "compound",
@@ -691,7 +1108,6 @@
       "blind_index": "S12",
       "diagnostics": {
         "facts_count": 3,
-        "formatter_unknown_ratio": 0.0,
         "layout": "status",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -719,7 +1135,6 @@
       "blind_index": "S13",
       "diagnostics": {
         "facts_count": 3,
-        "formatter_unknown_ratio": 0.0,
         "layout": "status",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -747,7 +1162,8 @@
       "blind_index": "S14",
       "diagnostics": {
         "facts_count": 1,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -769,15 +1185,14 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": "S15",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.5833,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 12,
         "shape": "pure_list",
@@ -793,21 +1208,20 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka00198"
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": "S16",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 1.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "compound",
         "max_table_column_count": 1,
         "shape": "compound",
@@ -823,21 +1237,20 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka01300"
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": "S17",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 1.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "compound",
         "max_table_column_count": 3,
         "shape": "compound",
@@ -853,7 +1266,7 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka01301"
     },
@@ -865,7 +1278,8 @@
       "blind_index": "S18",
       "diagnostics": {
         "facts_count": 8,
-        "formatter_unknown_ratio": 0.2941,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "compound",
         "max_table_column_count": 10,
         "shape": "compound",
@@ -893,7 +1307,8 @@
       "blind_index": "S19",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.1667,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 12,
         "shape": "pure_list",
@@ -915,17 +1330,16 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [
         "OVERFLOW_WIDTH_WARN"
       ],
       "blind_index": "S20",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.4706,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 17,
         "shape": "pure_list",
@@ -941,7 +1355,7 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka10005"
     },
@@ -953,7 +1367,8 @@
       "blind_index": "S21",
       "diagnostics": {
         "facts_count": 10,
-        "formatter_unknown_ratio": 0.2,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -975,15 +1390,14 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": "S22",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.4545,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 11,
         "shape": "pure_list",
@@ -999,7 +1413,7 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka10008"
     },
@@ -1013,7 +1427,8 @@
       "blind_index": "S23",
       "diagnostics": {
         "facts_count": 18,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -1041,7 +1456,8 @@
       "blind_index": "S24",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 12,
         "shape": "pure_list",
@@ -1063,15 +1479,14 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": "S25",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.3333,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 12,
         "shape": "pure_list",
@@ -1087,7 +1502,7 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka10013"
     },
@@ -1099,7 +1514,8 @@
       "blind_index": "S26",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0909,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 11,
         "shape": "pure_list",
@@ -1122,15 +1538,15 @@
     {
       "agreement": null,
       "auto_failure_codes": [
-        "OVERFLOW_WIDTH",
-        "FORMATTER_MISSING"
+        "OVERFLOW_WIDTH"
       ],
-      "auto_fit": 0,
+      "auto_fit": 1,
       "auto_warnings": [],
       "blind_index": "A6",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.4,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 30,
         "shape": "pure_list",
@@ -1146,8 +1562,10 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
-      "rules_applied": [],
+      "resolved_fit": 1,
+      "rules_applied": [
+        "table_column_priority"
+      ],
       "tr_id": "ka10015"
     },
     {
@@ -1158,7 +1576,8 @@
       "blind_index": "S27",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 12,
         "shape": "pure_list",
@@ -1188,7 +1607,8 @@
       "blind_index": "S28",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.2857,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 14,
         "shape": "pure_list",
@@ -1216,7 +1636,8 @@
       "blind_index": "S29",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 11,
         "shape": "pure_list",
@@ -1244,7 +1665,8 @@
       "blind_index": "S30",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.1818,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 11,
         "shape": "pure_list",
@@ -1272,7 +1694,8 @@
       "blind_index": "S31",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.3,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 10,
         "shape": "pure_list",
@@ -1300,7 +1723,8 @@
       "blind_index": "S32",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.2,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 10,
         "shape": "pure_list",
@@ -1328,7 +1752,8 @@
       "blind_index": "S33",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.3,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 10,
         "shape": "pure_list",
@@ -1356,7 +1781,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 10,
         "shape": "pure_list",
@@ -1384,7 +1810,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 10,
         "shape": "pure_list",
@@ -1412,7 +1839,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 11,
         "shape": "pure_list",
@@ -1440,7 +1868,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.1111,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 9,
         "shape": "pure_list",
@@ -1462,15 +1891,14 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.4167,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 12,
         "shape": "pure_list",
@@ -1486,7 +1914,7 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka10027"
     },
@@ -1498,7 +1926,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0833,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 12,
         "shape": "pure_list",
@@ -1526,7 +1955,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.1667,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 12,
         "shape": "pure_list",
@@ -1556,7 +1986,8 @@
       "blind_index": "S34",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 22,
         "shape": "pure_list",
@@ -1586,7 +2017,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 6,
         "shape": "pure_list",
@@ -1616,7 +2048,8 @@
       "blind_index": "S35",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.1538,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 13,
         "shape": "pure_list",
@@ -1644,7 +2077,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.2727,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 11,
         "shape": "pure_list",
@@ -1672,7 +2106,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.1818,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 11,
         "shape": "pure_list",
@@ -1694,17 +2129,16 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [
         "OVERFLOW_WIDTH_WARN"
       ],
       "blind_index": "S36",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.5385,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 13,
         "shape": "pure_list",
@@ -1720,21 +2154,20 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka10035"
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.3333,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 12,
         "shape": "pure_list",
@@ -1750,7 +2183,7 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka10036"
     },
@@ -1764,7 +2197,8 @@
       "blind_index": "S37",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0769,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 13,
         "shape": "pure_list",
@@ -1792,7 +2226,8 @@
       "blind_index": "S38",
       "diagnostics": {
         "facts_count": 4,
-        "formatter_unknown_ratio": 0.2222,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "compound",
         "max_table_column_count": 5,
         "shape": "compound",
@@ -1820,7 +2255,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.25,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 12,
         "shape": "pure_list",
@@ -1842,15 +2278,14 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": "S39",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.3333,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 3,
         "shape": "pure_list",
@@ -1866,7 +2301,7 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka10042"
     },
@@ -1878,7 +2313,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.1111,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 9,
         "shape": "pure_list",
@@ -1906,7 +2342,8 @@
       "blind_index": "S40",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 4,
         "shape": "pure_list",
@@ -1934,7 +2371,8 @@
       "blind_index": "S41",
       "diagnostics": {
         "facts_count": 2,
-        "formatter_unknown_ratio": 0.1538,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "compound",
         "max_table_column_count": 11,
         "shape": "compound",
@@ -1956,17 +2394,16 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [
         "OVERFLOW_WIDTH_WARN"
       ],
       "blind_index": "S42",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.3077,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 13,
         "shape": "pure_list",
@@ -1982,21 +2419,20 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka10046"
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.3333,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 12,
         "shape": "pure_list",
@@ -2012,21 +2448,20 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka10047"
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.875,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 8,
         "shape": "pure_list",
@@ -2042,21 +2477,20 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka10048"
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.7,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 10,
         "shape": "pure_list",
@@ -2072,23 +2506,22 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka10050"
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [
         "OVERFLOW_WIDTH_WARN"
       ],
       "blind_index": "S43",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.7,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 20,
         "shape": "pure_list",
@@ -2104,7 +2537,7 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka10051"
     },
@@ -2116,7 +2549,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0909,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 11,
         "shape": "pure_list",
@@ -2144,7 +2578,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.25,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 8,
         "shape": "pure_list",
@@ -2166,17 +2601,16 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [
         "OVERFLOW_WIDTH_WARN"
       ],
       "blind_index": "S44",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.3571,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 14,
         "shape": "pure_list",
@@ -2192,7 +2626,7 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka10054"
     },
@@ -2204,7 +2638,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 8,
         "shape": "pure_list",
@@ -2232,7 +2667,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 11,
         "shape": "pure_list",
@@ -2254,17 +2690,16 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [
         "OVERFLOW_WIDTH_WARN"
       ],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.6,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 20,
         "shape": "pure_list",
@@ -2280,23 +2715,22 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka10059"
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [
         "OVERFLOW_WIDTH_WARN"
       ],
       "blind_index": "S45",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.7059,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 17,
         "shape": "pure_list",
@@ -2312,23 +2746,22 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka10060"
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [
         "OVERFLOW_WIDTH_WARN"
       ],
       "blind_index": "S46",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.9231,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 13,
         "shape": "pure_list",
@@ -2344,7 +2777,7 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka10061"
     },
@@ -2358,7 +2791,8 @@
       "blind_index": "S47",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0625,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 16,
         "shape": "pure_list",
@@ -2388,7 +2822,8 @@
       "blind_index": "S48",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0476,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 21,
         "shape": "pure_list",
@@ -2412,15 +2847,14 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.7778,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 9,
         "shape": "pure_list",
@@ -2436,7 +2870,7 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka10064"
     },
@@ -2448,7 +2882,8 @@
       "blind_index": "S49",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.2,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 5,
         "shape": "pure_list",
@@ -2470,17 +2905,16 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [
         "OVERFLOW_WIDTH_WARN"
       ],
       "blind_index": "S50",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.5789,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 19,
         "shape": "pure_list",
@@ -2496,21 +2930,20 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka10066"
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.6667,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 6,
         "shape": "pure_list",
@@ -2526,21 +2959,20 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka10068"
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": "S51",
       "diagnostics": {
         "facts_count": 8,
-        "formatter_unknown_ratio": 0.4286,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "compound",
         "max_table_column_count": 6,
         "shape": "compound",
@@ -2556,7 +2988,7 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka10069"
     },
@@ -2570,7 +3002,8 @@
       "blind_index": "S52",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.2857,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 14,
         "shape": "pure_list",
@@ -2600,7 +3033,8 @@
       "blind_index": "S53",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.1429,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 14,
         "shape": "pure_list",
@@ -2628,7 +3062,8 @@
       "blind_index": "S54",
       "diagnostics": {
         "facts_count": 5,
-        "formatter_unknown_ratio": 0.1818,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "compound",
         "max_table_column_count": 6,
         "shape": "compound",
@@ -2658,7 +3093,8 @@
       "blind_index": "A7",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.1,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 30,
         "shape": "pure_list",
@@ -2690,7 +3126,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.1053,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 19,
         "shape": "pure_list",
@@ -2718,7 +3155,8 @@
       "blind_index": "S55",
       "diagnostics": {
         "facts_count": 1,
-        "formatter_unknown_ratio": 0.2,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "compound",
         "max_table_column_count": 9,
         "shape": "compound",
@@ -2746,7 +3184,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 9,
         "shape": "pure_list",
@@ -2774,7 +3213,8 @@
       "blind_index": "S56",
       "diagnostics": {
         "facts_count": 2,
-        "formatter_unknown_ratio": 0.1,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "compound",
         "max_table_column_count": 8,
         "shape": "compound",
@@ -2802,7 +3242,8 @@
       "blind_index": "S57",
       "diagnostics": {
         "facts_count": 1,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "compound",
         "max_table_column_count": 8,
         "shape": "compound",
@@ -2830,7 +3271,8 @@
       "blind_index": "S58",
       "diagnostics": {
         "facts_count": 1,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "compound",
         "max_table_column_count": 10,
         "shape": "compound",
@@ -2858,7 +3300,8 @@
       "blind_index": "S59",
       "diagnostics": {
         "facts_count": 1,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "compound",
         "max_table_column_count": 10,
         "shape": "compound",
@@ -2886,7 +3329,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 1,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "compound",
         "max_table_column_count": 10,
         "shape": "compound",
@@ -2914,7 +3358,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.1667,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 12,
         "shape": "pure_list",
@@ -2944,7 +3389,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.1765,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 17,
         "shape": "pure_list",
@@ -2967,15 +3413,15 @@
     {
       "agreement": null,
       "auto_failure_codes": [
-        "OVERFLOW_WIDTH",
-        "FORMATTER_MISSING"
+        "OVERFLOW_WIDTH"
       ],
-      "auto_fit": 0,
+      "auto_fit": 1,
       "auto_warnings": [],
       "blind_index": "S60",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.4091,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 22,
         "shape": "pure_list",
@@ -2991,8 +3437,10 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
-      "rules_applied": [],
+      "resolved_fit": 1,
+      "rules_applied": [
+        "table_column_priority"
+      ],
       "tr_id": "ka10086"
     },
     {
@@ -3005,7 +3453,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.1429,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 14,
         "shape": "pure_list",
@@ -3033,7 +3482,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 1,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "compound",
         "max_table_column_count": 7,
         "shape": "compound",
@@ -3056,15 +3506,15 @@
     {
       "agreement": null,
       "auto_failure_codes": [
-        "OVERFLOW_WIDTH",
-        "FORMATTER_MISSING"
+        "OVERFLOW_WIDTH"
       ],
-      "auto_fit": 0,
+      "auto_fit": 1,
       "auto_warnings": [],
       "blind_index": "A8",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.3651,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 63,
         "shape": "pure_list",
@@ -3080,8 +3530,10 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
-      "rules_applied": [],
+      "resolved_fit": 1,
+      "rules_applied": [
+        "table_column_priority"
+      ],
       "tr_id": "ka10095"
     },
     {
@@ -3094,7 +3546,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.2308,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 13,
         "shape": "pure_list",
@@ -3116,17 +3569,16 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [
         "OVERFLOW_WIDTH_WARN"
       ],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.9231,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 13,
         "shape": "pure_list",
@@ -3142,7 +3594,7 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka10099"
     },
@@ -3156,7 +3608,8 @@
       "blind_index": "S61",
       "diagnostics": {
         "facts_count": 14,
-        "formatter_unknown_ratio": 0.0714,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -3178,15 +3631,14 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 1.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 3,
         "shape": "pure_list",
@@ -3202,21 +3654,20 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka10101"
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 1.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 2,
         "shape": "pure_list",
@@ -3232,7 +3683,7 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka10102"
     },
@@ -3246,7 +3697,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.2105,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 19,
         "shape": "pure_list",
@@ -3274,7 +3726,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 6,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "compound",
         "max_table_column_count": 11,
         "shape": "compound",
@@ -3296,16 +3749,13 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": "A9",
       "diagnostics": {
         "event_stream_field_count": 1,
         "facts_count": 0,
-        "formatter_unknown_ratio": 1.0,
         "layout": "event",
         "max_table_column_count": 1,
         "shape": "compound",
@@ -3321,22 +3771,19 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka10171"
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": null,
       "diagnostics": {
         "event_stream_field_count": 13,
         "facts_count": 3,
-        "formatter_unknown_ratio": 0.8462,
         "layout": "event",
         "max_table_column_count": 10,
         "shape": "compound",
@@ -3352,22 +3799,19 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka10172"
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": "A10",
       "diagnostics": {
         "event_stream_field_count": 10,
         "facts_count": 9,
-        "formatter_unknown_ratio": 0.4,
         "layout": "event",
         "max_table_column_count": 1,
         "shape": "compound",
@@ -3383,7 +3827,7 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka10173"
     },
@@ -3396,7 +3840,6 @@
       "diagnostics": {
         "event_stream_field_count": 1,
         "facts_count": 1,
-        "formatter_unknown_ratio": 0.0,
         "layout": "event",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -3424,7 +3867,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 12,
         "shape": "pure_list",
@@ -3446,17 +3890,16 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [
         "OVERFLOW_WIDTH_WARN"
       ],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.4667,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 15,
         "shape": "pure_list",
@@ -3472,7 +3915,7 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka20003"
     },
@@ -3484,7 +3927,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 1,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "compound",
         "max_table_column_count": 8,
         "shape": "compound",
@@ -3512,7 +3956,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 1,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "compound",
         "max_table_column_count": 9,
         "shape": "compound",
@@ -3540,7 +3985,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 1,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "compound",
         "max_table_column_count": 7,
         "shape": "compound",
@@ -3568,7 +4014,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 1,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "compound",
         "max_table_column_count": 7,
         "shape": "compound",
@@ -3596,7 +4043,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 1,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "compound",
         "max_table_column_count": 7,
         "shape": "compound",
@@ -3624,7 +4072,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 1,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "compound",
         "max_table_column_count": 7,
         "shape": "compound",
@@ -3646,15 +4095,14 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.6667,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 6,
         "shape": "pure_list",
@@ -3670,7 +4118,7 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka20068"
     },
@@ -3682,7 +4130,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 1,
-        "formatter_unknown_ratio": 0.1818,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "compound",
         "max_table_column_count": 10,
         "shape": "compound",
@@ -3710,7 +4159,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.25,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 8,
         "shape": "pure_list",
@@ -3738,7 +4188,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.1,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 10,
         "shape": "pure_list",
@@ -3768,7 +4219,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.2,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 15,
         "shape": "pure_list",
@@ -3798,7 +4250,8 @@
       "blind_index": "A12",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.2564,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 39,
         "shape": "pure_list",
@@ -3828,7 +4281,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.2727,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 11,
         "shape": "pure_list",
@@ -3850,15 +4304,14 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.3333,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 12,
         "shape": "pure_list",
@@ -3874,7 +4327,7 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka30010"
     },
@@ -3886,7 +4339,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 8,
         "shape": "pure_list",
@@ -3914,7 +4368,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 4,
         "shape": "pure_list",
@@ -3942,7 +4397,8 @@
       "blind_index": "S62",
       "diagnostics": {
         "facts_count": 5,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -3972,7 +4428,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0714,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 14,
         "shape": "pure_list",
@@ -3994,17 +4451,16 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [
         "OVERFLOW_WIDTH_WARN"
       ],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.3333,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 18,
         "shape": "pure_list",
@@ -4020,7 +4476,7 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka40004"
     },
@@ -4034,7 +4490,8 @@
       "blind_index": "S63",
       "diagnostics": {
         "facts_count": 5,
-        "formatter_unknown_ratio": 0.2632,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "compound",
         "max_table_column_count": 14,
         "shape": "compound",
@@ -4062,7 +4519,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 6,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "compound",
         "max_table_column_count": 6,
         "shape": "compound",
@@ -4090,7 +4548,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 5,
-        "formatter_unknown_ratio": 0.1667,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "compound",
         "max_table_column_count": 7,
         "shape": "compound",
@@ -4118,7 +4577,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.25,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 12,
         "shape": "pure_list",
@@ -4146,7 +4606,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.2,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 5,
         "shape": "pure_list",
@@ -4176,7 +4637,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.1538,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 13,
         "shape": "pure_list",
@@ -4206,7 +4668,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.2308,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 13,
         "shape": "pure_list",
@@ -4234,7 +4697,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 9,
         "shape": "pure_list",
@@ -4262,7 +4726,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 10,
         "shape": "pure_list",
@@ -4290,7 +4755,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 8,
         "shape": "pure_list",
@@ -4318,7 +4784,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 7,
         "shape": "pure_list",
@@ -4346,7 +4813,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 7,
         "shape": "pure_list",
@@ -4374,7 +4842,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.125,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 8,
         "shape": "pure_list",
@@ -4402,7 +4871,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 9,
         "shape": "pure_list",
@@ -4430,7 +4900,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 11,
         "shape": "pure_list",
@@ -4458,7 +4929,8 @@
       "blind_index": "S64",
       "diagnostics": {
         "facts_count": 11,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -4488,7 +4960,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.2,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 15,
         "shape": "pure_list",
@@ -4518,7 +4991,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 18,
         "shape": "pure_list",
@@ -4540,15 +5014,14 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.4444,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 9,
         "shape": "pure_list",
@@ -4564,7 +5037,7 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka90001"
     },
@@ -4576,7 +5049,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 2,
-        "formatter_unknown_ratio": 0.2308,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "compound",
         "max_table_column_count": 12,
         "shape": "compound",
@@ -4604,7 +5078,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0909,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 11,
         "shape": "pure_list",
@@ -4632,7 +5107,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 6,
-        "formatter_unknown_ratio": 0.0588,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "compound",
         "max_table_column_count": 11,
         "shape": "compound",
@@ -4654,17 +5130,16 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [
         "OVERFLOW_WIDTH_WARN"
       ],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.6111,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 18,
         "shape": "pure_list",
@@ -4680,7 +5155,7 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka90005"
     },
@@ -4692,7 +5167,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 7,
         "shape": "pure_list",
@@ -4714,15 +5190,14 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.8889,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 9,
         "shape": "pure_list",
@@ -4738,7 +5213,7 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka90007"
     },
@@ -4752,7 +5227,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.1111,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 18,
         "shape": "pure_list",
@@ -4782,7 +5258,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 16,
         "shape": "pure_list",
@@ -4804,17 +5281,16 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [
         "OVERFLOW_WIDTH_WARN"
       ],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.6111,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 18,
         "shape": "pure_list",
@@ -4830,21 +5306,20 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka90010"
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.5,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 6,
         "shape": "pure_list",
@@ -4860,7 +5335,7 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka90012"
     },
@@ -4874,7 +5349,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.1111,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 18,
         "shape": "pure_list",
@@ -4896,15 +5372,14 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.375,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 8,
         "shape": "pure_list",
@@ -4920,7 +5395,7 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "kt00002"
     },
@@ -4932,7 +5407,8 @@
       "blind_index": "S65",
       "diagnostics": {
         "facts_count": 1,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -4962,7 +5438,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.1364,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 22,
         "shape": "pure_list",
@@ -4994,7 +5471,8 @@
       "blind_index": "S66",
       "diagnostics": {
         "facts_count": 4,
-        "formatter_unknown_ratio": 0.1579,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "compound",
         "max_table_column_count": 15,
         "shape": "compound",
@@ -5017,15 +5495,15 @@
     {
       "agreement": null,
       "auto_failure_codes": [
-        "OVERFLOW_WIDTH",
-        "FORMATTER_MISSING"
+        "OVERFLOW_WIDTH"
       ],
-      "auto_fit": 0,
+      "auto_fit": 1,
       "auto_warnings": [],
       "blind_index": "A13",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.3137,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 51,
         "shape": "pure_list",
@@ -5041,8 +5519,10 @@
       "mapping_type": "base",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
-      "rules_applied": [],
+      "resolved_fit": 1,
+      "rules_applied": [
+        "table_column_priority"
+      ],
       "tr_id": "kt00015"
     },
     {
@@ -5133,7 +5613,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 1,
-        "formatter_unknown_ratio": 0.125,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "compound",
         "max_table_column_count": 7,
         "shape": "compound",
@@ -5161,7 +5642,8 @@
       "blind_index": "S67",
       "diagnostics": {
         "facts_count": 1,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -5231,7 +5713,8 @@
       "blind_index": "S68",
       "diagnostics": {
         "facts_count": 14,
-        "formatter_unknown_ratio": 0.1429,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -5261,7 +5744,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0455,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 22,
         "shape": "pure_list",
@@ -5293,7 +5777,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.1364,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 22,
         "shape": "pure_list",
@@ -5325,7 +5810,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0455,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 22,
         "shape": "pure_list",
@@ -5355,7 +5841,8 @@
       "blind_index": "S69",
       "diagnostics": {
         "facts_count": 6,
-        "formatter_unknown_ratio": 0.1667,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -5383,7 +5870,8 @@
       "blind_index": "S70",
       "diagnostics": {
         "facts_count": 8,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -5405,15 +5893,14 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": "S71",
       "diagnostics": {
         "facts_count": 3,
-        "formatter_unknown_ratio": 0.6667,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -5429,21 +5916,20 @@
       "mapping_type": "split_derived",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka10001"
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": "S72",
       "diagnostics": {
         "facts_count": 6,
-        "formatter_unknown_ratio": 0.3333,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -5459,7 +5945,7 @@
       "mapping_type": "split_derived",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka10001"
     },
@@ -5471,7 +5957,8 @@
       "blind_index": "S73",
       "diagnostics": {
         "facts_count": 8,
-        "formatter_unknown_ratio": 0.25,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -5493,15 +5980,14 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": "S74",
       "diagnostics": {
         "facts_count": 8,
-        "formatter_unknown_ratio": 0.5,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -5517,21 +6003,20 @@
       "mapping_type": "split_derived",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka10001"
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 6,
-        "formatter_unknown_ratio": 1.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -5547,14 +6032,13 @@
       "mapping_type": "split_derived",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka10001"
     },
     {
       "agreement": null,
       "auto_failure_codes": [
-        "FORMATTER_MISSING",
         "STRUCTURAL_MISMATCH"
       ],
       "auto_fit": 0,
@@ -5564,7 +6048,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 15,
-        "formatter_unknown_ratio": 0.6667,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -5593,7 +6078,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 7,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -5616,7 +6102,6 @@
     {
       "agreement": null,
       "auto_failure_codes": [
-        "FORMATTER_MISSING",
         "STRUCTURAL_MISMATCH"
       ],
       "auto_fit": 0,
@@ -5626,7 +6111,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 15,
-        "formatter_unknown_ratio": 0.6667,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -5655,7 +6141,8 @@
       "blind_index": "S75",
       "diagnostics": {
         "facts_count": 4,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -5683,7 +6170,8 @@
       "blind_index": "S76",
       "diagnostics": {
         "facts_count": 4,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -5713,7 +6201,8 @@
       "blind_index": "A14",
       "diagnostics": {
         "facts_count": 10,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -5744,7 +6233,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 10,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -5775,7 +6265,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 10,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -5806,7 +6297,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 10,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -5837,7 +6329,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 10,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -5868,7 +6361,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 10,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -5897,7 +6391,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 1,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -5929,7 +6424,8 @@
       "blind_index": "A15",
       "diagnostics": {
         "facts_count": 20,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -5962,7 +6458,8 @@
       "blind_index": "A16",
       "diagnostics": {
         "facts_count": 20,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -5995,7 +6492,8 @@
       "blind_index": "A17",
       "diagnostics": {
         "facts_count": 20,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -6024,7 +6522,8 @@
       "blind_index": "A18",
       "diagnostics": {
         "facts_count": 10,
-        "formatter_unknown_ratio": 0.2,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -6052,7 +6551,8 @@
       "blind_index": "A19",
       "diagnostics": {
         "facts_count": 4,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -6084,7 +6584,8 @@
       "blind_index": "A20",
       "diagnostics": {
         "facts_count": 20,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -6115,7 +6616,8 @@
       "blind_index": "A21",
       "diagnostics": {
         "facts_count": 10,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -6146,7 +6648,8 @@
       "blind_index": "A22",
       "diagnostics": {
         "facts_count": 16,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -6168,15 +6671,14 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": "A23",
       "diagnostics": {
         "facts_count": 4,
-        "formatter_unknown_ratio": 0.5,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -6192,7 +6694,7 @@
       "mapping_type": "split_derived",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka10007"
     },
@@ -6204,7 +6706,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.25,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 8,
         "shape": "compound",
@@ -6227,7 +6730,6 @@
     {
       "agreement": null,
       "auto_failure_codes": [
-        "FORMATTER_MISSING",
         "STRUCTURAL_MISMATCH"
       ],
       "auto_fit": 0,
@@ -6237,7 +6739,8 @@
       "blind_index": "S77",
       "diagnostics": {
         "facts_count": 20,
-        "formatter_unknown_ratio": 0.5,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "compound",
@@ -6260,15 +6763,14 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 4,
-        "formatter_unknown_ratio": 1.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "compound",
@@ -6284,14 +6786,13 @@
       "mapping_type": "split_derived",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka10040"
     },
     {
       "agreement": null,
       "auto_failure_codes": [
-        "FORMATTER_MISSING",
         "STRUCTURAL_MISMATCH"
       ],
       "auto_fit": 0,
@@ -6301,7 +6802,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 20,
-        "formatter_unknown_ratio": 0.5,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "compound",
@@ -6330,7 +6832,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 10,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -6360,7 +6863,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 5,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -6391,7 +6895,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 5,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -6422,7 +6927,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 5,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -6453,7 +6959,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 5,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -6484,7 +6991,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 5,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -6515,7 +7023,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 5,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -6544,7 +7053,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 1,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -6572,7 +7082,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 5,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -6600,7 +7111,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 6,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "compound",
@@ -6622,15 +7134,14 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.5714,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 7,
         "shape": "compound",
@@ -6646,21 +7157,20 @@
       "mapping_type": "split_derived",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka20001"
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 5,
-        "formatter_unknown_ratio": 1.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "compound",
@@ -6676,7 +7186,7 @@
       "mapping_type": "split_derived",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka20001"
     },
@@ -6688,7 +7198,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 8,
-        "formatter_unknown_ratio": 0.125,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "compound",
@@ -6716,7 +7227,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 3,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "compound",
@@ -6738,15 +7250,14 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.6667,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 6,
         "shape": "compound",
@@ -6762,7 +7273,7 @@
       "mapping_type": "split_derived",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka20009"
     },
@@ -6774,7 +7285,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 6,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "compound",
@@ -6796,15 +7308,14 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 5,
-        "formatter_unknown_ratio": 1.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "compound",
@@ -6820,7 +7331,7 @@
       "mapping_type": "split_derived",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka20009"
     },
@@ -6832,7 +7343,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 8,
-        "formatter_unknown_ratio": 0.125,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "compound",
@@ -6860,7 +7372,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 3,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "compound",
@@ -6882,15 +7395,14 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 5,
-        "formatter_unknown_ratio": 1.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -6906,7 +7418,7 @@
       "mapping_type": "split_derived",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka30012"
     },
@@ -6918,7 +7430,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 6,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -6946,7 +7459,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 6,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -6974,7 +7488,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 6,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -6996,15 +7511,14 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 7,
-        "formatter_unknown_ratio": 0.7143,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -7020,21 +7534,20 @@
       "mapping_type": "split_derived",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka30012"
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 3,
-        "formatter_unknown_ratio": 0.6667,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -7050,7 +7563,7 @@
       "mapping_type": "split_derived",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka30012"
     },
@@ -7062,7 +7575,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 5,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -7084,15 +7598,14 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 4,
-        "formatter_unknown_ratio": 0.75,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -7108,14 +7621,13 @@
       "mapping_type": "split_derived",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "ka30012"
     },
     {
       "agreement": null,
       "auto_failure_codes": [
-        "FORMATTER_MISSING",
         "STRUCTURAL_MISMATCH"
       ],
       "auto_fit": 0,
@@ -7123,7 +7635,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 10,
-        "formatter_unknown_ratio": 0.5,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -7154,7 +7667,8 @@
       "blind_index": "A24",
       "diagnostics": {
         "facts_count": 13,
-        "formatter_unknown_ratio": 0.2308,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -7182,7 +7696,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 10,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "compound",
@@ -7204,17 +7719,16 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [
         "OVERFLOW_WIDTH_WARN"
       ],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.6429,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 14,
         "shape": "compound",
@@ -7230,21 +7744,20 @@
       "mapping_type": "split_derived",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "kt00001"
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 9,
-        "formatter_unknown_ratio": 0.5556,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "compound",
@@ -7260,21 +7773,20 @@
       "mapping_type": "split_derived",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "kt00001"
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 9,
-        "formatter_unknown_ratio": 0.5556,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "compound",
@@ -7290,7 +7802,7 @@
       "mapping_type": "split_derived",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "kt00001"
     },
@@ -7302,7 +7814,8 @@
       "blind_index": "A25",
       "diagnostics": {
         "facts_count": 12,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "compound",
@@ -7330,7 +7843,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 10,
-        "formatter_unknown_ratio": 0.1,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "compound",
@@ -7352,15 +7866,14 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 9,
-        "formatter_unknown_ratio": 0.4444,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "compound",
@@ -7376,7 +7889,7 @@
       "mapping_type": "split_derived",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "kt00001"
     },
@@ -7388,7 +7901,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 10,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "compound",
@@ -7416,7 +7930,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 2,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "compound",
@@ -7444,7 +7959,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 7,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "compound",
@@ -7466,17 +7982,16 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [
         "OVERFLOW_WIDTH_WARN"
       ],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.3333,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 15,
         "shape": "compound",
@@ -7492,21 +8007,20 @@
       "mapping_type": "split_derived",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "kt00004"
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 9,
-        "formatter_unknown_ratio": 0.3333,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "compound",
@@ -7522,7 +8036,7 @@
       "mapping_type": "split_derived",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "kt00004"
     },
@@ -7534,7 +8048,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 8,
-        "formatter_unknown_ratio": 0.25,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "compound",
@@ -7556,15 +8071,14 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 5,
-        "formatter_unknown_ratio": 0.4,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "compound",
@@ -7580,7 +8094,7 @@
       "mapping_type": "split_derived",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "kt00005"
     },
@@ -7592,7 +8106,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 6,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "compound",
@@ -7620,7 +8135,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 5,
-        "formatter_unknown_ratio": 0.2,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "compound",
@@ -7648,7 +8164,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 6,
-        "formatter_unknown_ratio": 0.1667,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "compound",
@@ -7678,7 +8195,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.1538,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 13,
         "shape": "compound",
@@ -7706,7 +8224,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 3,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "compound",
@@ -7736,7 +8255,8 @@
       "blind_index": "S78",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.0455,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 22,
         "shape": "compound",
@@ -7766,7 +8286,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 9,
-        "formatter_unknown_ratio": 0.1111,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -7798,7 +8319,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 14,
-        "formatter_unknown_ratio": 0.0714,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -7827,7 +8349,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 5,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -7855,7 +8378,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 5,
-        "formatter_unknown_ratio": 0.2,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -7887,7 +8411,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 16,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -7918,7 +8443,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 12,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -7947,7 +8473,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 3,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -7975,7 +8502,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 9,
-        "formatter_unknown_ratio": 0.1111,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -8007,7 +8535,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 16,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -8036,7 +8565,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 2,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -8064,7 +8594,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 5,
-        "formatter_unknown_ratio": 0.2,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -8086,15 +8617,14 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 6,
-        "formatter_unknown_ratio": 0.3333,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -8110,7 +8640,7 @@
       "mapping_type": "split_derived",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "kt00013"
     },
@@ -8122,7 +8652,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 2,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -8150,7 +8681,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 6,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -8178,7 +8710,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 5,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -8206,7 +8739,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 4,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -8228,15 +8762,14 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 5,
-        "formatter_unknown_ratio": 0.4,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -8252,7 +8785,7 @@
       "mapping_type": "split_derived",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "kt00013"
     },
@@ -8264,7 +8797,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 12,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -8292,7 +8826,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 5,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -8320,7 +8855,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 3,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -8342,17 +8878,16 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [
         "FACTS_DENSITY_EXCEEDED_WARN"
       ],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 16,
-        "formatter_unknown_ratio": 0.875,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -8368,21 +8903,20 @@
       "mapping_type": "split_derived",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "kt00016"
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 8,
-        "formatter_unknown_ratio": 0.75,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -8398,7 +8932,7 @@
       "mapping_type": "split_derived",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "kt00016"
     },
@@ -8410,7 +8944,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 6,
-        "formatter_unknown_ratio": 0.1667,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -8432,15 +8967,14 @@
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 6,
-        "formatter_unknown_ratio": 0.3333,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -8456,21 +8990,20 @@
       "mapping_type": "split_derived",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "kt00016"
     },
     {
       "agreement": null,
-      "auto_failure_codes": [
-        "FORMATTER_MISSING"
-      ],
-      "auto_fit": 0,
+      "auto_failure_codes": [],
+      "auto_fit": 2,
       "auto_warnings": [],
       "blind_index": null,
       "diagnostics": {
         "facts_count": 10,
-        "formatter_unknown_ratio": 0.4,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -8486,7 +9019,7 @@
       "mapping_type": "split_derived",
       "override_id": null,
       "rescored_fit": null,
-      "resolved_fit": 0,
+      "resolved_fit": 2,
       "rules_applied": [],
       "tr_id": "kt00017"
     },
@@ -8498,7 +9031,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 8,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -8526,7 +9060,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 7,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "scalar_only",
@@ -8554,7 +9089,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 3,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "compound",
@@ -8584,7 +9120,8 @@
       "blind_index": "S79",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.2174,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 23,
         "shape": "compound",
@@ -8614,7 +9151,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 5,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "compound",
@@ -8642,7 +9180,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 8,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "compound",
@@ -8672,7 +9211,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.125,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 16,
         "shape": "compound",
@@ -8700,7 +9240,8 @@
       "blind_index": null,
       "diagnostics": {
         "facts_count": 1,
-        "formatter_unknown_ratio": 0.0,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "facts",
         "max_table_column_count": 0,
         "shape": "compound",
@@ -8730,7 +9271,8 @@
       "blind_index": "S80",
       "diagnostics": {
         "facts_count": 0,
-        "formatter_unknown_ratio": 0.2917,
+        "formatter_missing_count": 0,
+        "formatter_source": "kiwoom-screen-definitions.json",
         "layout": "table",
         "max_table_column_count": 24,
         "shape": "compound",
@@ -8758,9 +9300,8 @@
     "design_medium": null,
     "ka10173": "deferred — 실측 대기(plan §11-3 참조), 이번 실행에서는 anchor counterexample로만 채점",
     "rater_mode": null,
-    "scoring_mode": "output_profile_provisional",
-    "screen_definitions_note": "backend/ref/kiwoom-screen-definitions.json(G002 산출물)이 없어 output-profile/manifest 기반 provisional 모드로만 채점했다(§6.3).",
-    "screen_definitions_present": false,
+    "scoring_mode": "screen_definitions_complete",
+    "screen_definitions_present": true,
     "stratified_sample_note": "2축(shape x width_bucket) 표집은 셀 크기의 20%(최소 3, 셀 크기 이하로 캡)를 mapping_id 정렬 후 앞에서부터 선택했다. 3축(>12컬럼<20, anchor/2축 제외)은 동일 정렬 기준으로 최대 9개를 선택했다. 둘 다 난수를 쓰지 않는다.",
     "width_calibration": "measured, not recalibrated (FAIL 20 과관대 권고 기록) — see backend/ref/width-anchor-pixel-calibration.json",
     "ws_ladder_calibration": "confirmed 2026-08-18 — see backend/ref/ws-ladder-regex-calibration.json"

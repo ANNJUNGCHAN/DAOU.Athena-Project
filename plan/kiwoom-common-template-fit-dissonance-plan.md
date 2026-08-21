@@ -1,5 +1,14 @@
 # 키움 공통 UI 템플릿 · 이질감 테스트 및 구현 실행계획
 
+> **2026-08-21 후속 계약:** 이 문서의 90개 사람 표본과
+> `inter_rater_agreement`는 화면 정의가 없던 G001.5 시기의 디자인 루브릭 검수다.
+> `plan/캔버스-우선-응답-지시문.md`가 요구한 301개 완전 ScreenDefinition이 materialize된
+> 뒤에는 `fit_dissonance_check.py --check`의 기계 완료 조건을 막지 않고
+> `human_review_advisory`로 별도 보고한다. 사람이 실제로 채점하지 않은 값은 생성하지 않는다.
+> 현재 기계 게이트는 301개 조인, zero-tolerance/override, 승인된 Paper 13 case 전부의 최신
+> Electron DOM·layout·control·state·screenshot provenance를 검증한다. 아래의 표본 설계와 루브릭 자체는 향후 독립 검수용으로
+> 보존한다.
+
 > 기준일: 2026-08-16
 > 저장소: `C:\Users\ajc22\orca\workspaces\DAOU.Athena\Call`
 > 문서 상태: **결정 1·2·3·5 확정(2026-08-16 사용자 승인), 결정 4(용량 목표)만 미정.** 확정 내용 — Paper: 이번 세션 MCP 재연결 시도 / 템플릿: 3캔버스+6프리미티브 유지 / 합격선: **엄격안** / 사람 표본: **90개(약 30%)**. 상세는 §8.

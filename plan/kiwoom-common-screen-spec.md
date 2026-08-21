@@ -5,7 +5,7 @@
 이 문서는 키움 REST 301개 라우팅 매핑 전체를 렌더링하는 공통화면 카드 체계의 설계 계약이다.
 [`plan/kiwoom-optimal-screen-selection-rendering-plan.md`](kiwoom-optimal-screen-selection-rendering-plan.md) G002~G006이 구현할 대상이고, [`plan/kiwoom-common-screen-brief.md`](kiwoom-common-screen-brief.md)의 제품 요구사항을 만족해야 한다. [`plan/kiwoom-common-screen-handoff.md`](kiwoom-common-screen-handoff.md)는 현재 구현 상태(G001만 완료)의 인수인계다.
 
-권위 원본: [`backend/ref/kiwoom-common-screen-manifest.json`](../backend/ref/kiwoom-common-screen-manifest.json)(G001, 검증됨). 이 문서의 모든 수치는 거기서 실측했다. 새 수치를 쓸 경우 출처를 명시한다.
+권위 원본: [`backend/ref/kiwoom-common-screen-manifest.json`](../backend/ref/kiwoom-common-screen-manifest.json)(301 mapping/22 exclusion coverage)과 [`backend/ref/kiwoom-screen-definitions.json`](../backend/ref/kiwoom-screen-definitions.json)(301 mapping별 데이터·표현·상태·Paper template 계약)이다. 둘 다 `generate_api.py` 생성물이며 손으로 수정하지 않는다. 이 문서의 모든 수치는 거기서 실측했다. 새 수치를 쓸 경우 출처를 명시한다.
 
 ---
 
@@ -32,21 +32,35 @@
 원본 파일:
 
 - [`backend/ref/kiwoom-common-screen-manifest.json`](../backend/ref/kiwoom-common-screen-manifest.json) — 301개 mapping + 22개 exclusion 원장
-- [`backend/scripts/generate_api.py`](../backend/scripts/generate_api.py) — manifest를 결정적으로 생성/검증하는 생성기
+- [`backend/ref/kiwoom-screen-definitions.json`](../backend/ref/kiwoom-screen-definitions.json) — 승인된 13개 template case와 301개 mapping의 exact field/time/sort/range/presentation/state/follow-up allowlist 계약
+- [`backend/scripts/generate_api.py`](../backend/scripts/generate_api.py) — 두 ref를 결정적으로 생성하고 누락·중복·orphan·free fallback을 거부하는 생성기
 
 검증 명령:
 
 ```bash
+cd backend && .venv/Scripts/python scripts/generate_api.py --check
+cd backend && .venv/Scripts/python scripts/capture_screen_render_evidence.py --check
+cd backend && .venv/Scripts/python scripts/fit_dissonance_check.py --check
 cd backend && .venv/Scripts/python scripts/render_screen_injection_map.py --check
 cd backend && .venv/Scripts/python scripts/render_screen_card_facts.py --check
-cd backend && .venv/Scripts/python -m pytest tests/test_screen_injection_map.py tests/test_screen_card_facts.py tests/test_common_screen_manifest.py -q
+cd backend && .venv/Scripts/python -m pytest tests/test_screen_definitions.py tests/test_screen_injection_map.py tests/test_screen_card_facts.py tests/test_common_screen_manifest.py -q
 ```
 
 이 게이트들이 보장하는 것:
 
 - 301개 매핑 전수가 [`plan/kiwoom-common-screen-injection-map.md`](kiwoom-common-screen-injection-map.md)(생성 문서, 직접 수정 금지)에 나타난다.
 - layout과 category가 함수 관계다 — 매핑 하나가 두 카드에 걸치거나 어느 카드에도 속하지 않는 경우가 없다.
+- 모든 mapping은 `AT-CV-005:<case>` 안정 ID로 승인된 F1/F2/T1/T2/T3/T4/C1/C2/E1/E2/E3/A1/S1 중 정확히 하나에 연결된다. 화면 정의 또는 필수 계약이 없으면 generic/free 카드로 강등하지 않고 생성 단계에서 실패한다.
+- 모든 화면은 `loading`/`empty`/`partial`/`stale`/`timeout`/`error` 상태를 명시한다. 3초 안에 데이터가 없을 때도 같은 manifest/Paper 화면의 `timeout` 상태를 쓰며 별도 free 오류 카드를 만들지 않는다.
 - 부록(injection map)이 manifest와 항상 동기화된다(`--check`가 drift를 검출).
+- `capture_screen_render_evidence.py`가 `npm run verify`의 보고서·대표 screenshot과 실제
+  renderer source, 화면 정의의 SHA-256을 묶는다. 앱 코드 또는 화면 정의가 바뀐 뒤 Electron
+  검증/evidence 갱신을 생략하면 fit gate가 stale로 실패한다. 승인된 13 case 각각의
+  DOM·layout·control·state assertion과 screenshot이 전부 있어야 하며 하나라도 없거나 실패하면
+  fit gate가 닫힌다.
+- 과거 G001.5의 사람 표본과 채점자 일치도는 화면 정의가 없던 시기의 독립 디자인 검수다.
+  `human_review_advisory`로 계속 보고하지만 완전한 screen-definition 기계 게이트의 종료 코드를
+  막지 않으며, 실제 사람이 채점하지 않은 값을 생성하지 않는다.
 - **Paper 아트보드가 인쇄하는 수치가 manifest에서 재계산된다.** 카드별 매핑 수 · 도메인 분포 ·
   형상 분포(min/중앙/p90/max) · 대표 매핑(mapping ID · route · operation ID · alias)이 전부
   [`backend/ref/kiwoom-common-screen-card-facts.json`](../backend/ref/kiwoom-common-screen-card-facts.json)
@@ -322,7 +336,7 @@ End of Document → `40`. 신규 장표 2장이 들어왔다 — `23 · AT-CH-00
 2. **연속조회가 현재 클라이언트에 도달하지 않는다.** `athena_api/generated/runtime.py`의 `apply_continuation_headers()`가 정의만 되어 있고 호출부가 0건이다. 요청 측(`cont-yn`/`next-key` 헤더)은 301개 전 라우트에 균일하게 있다. 응답 측이 연결되기 전에는 TableCard의 `stale`/"더 보기"를 표시할 근거가 없다. 이건 G004의 선결 조건이다.
 3. **`ka10173`/`ka10174`가 event 패턴에서 벗어난다.** 나머지 21개는 틱 페이로드인데, `ka10173`은 top-level 15필드에 컨테이너 2개(하나는 비어 있음), `ka10174`는 컨테이너 0개인 순수 제어 응답이다. EventCard 변형이 필요한지 별도 판정이 필요하다. (2026-08-17 실증: AITS `sig-card`는 조건검색 5슬롯 한도 + 6번째 등록 시 사람이 고르는 "교체 제안" 워크플로를 실제로 갖는다 — 단순 lifecycle이 아니다. 또 `ka10173`의 컨테이너 2개는 동명 `data`의 이종 메시지 병존(조회 응답 vs 실시간 푸시)로, 이질감 흡수 규칙 6행 중 어느 조건에도 걸리지 않는 사각지대다. [`plan/kiwoom-common-screen-aits-coverage-audit.md`](kiwoom-common-screen-aits-coverage-audit.md) §7.) **(2026-08-18 판정 보류 — 사용자 확인.** 실측 우선 원칙에 따라 분리/통합/신규칙 판정은 모의계좌 실시간 푸시 실측 증거 위에서만 내리기로 했으나, 자격증명(`backend/.env` `ATHENA_KIWOOM_ACCOUNTS`) 미준비 + 조건식(영웅문4 선생성) 부재로 실측 불가. 실측 스파이크는 `spike/cond-realtime/probe_ka10173.py`로 준비 완료. **G001.5는 ka10173 판정 제외를 명시하고 진행한다** — anchor 26 중 ka10173 1건은 scorecard에 `deferred: 실측 대기`로 표기하고 fit 채점 모수에서 잠정 제외, 자격증명 확보 시 실측→판정→재채점.)
 4. **oauth 요청 필드가 0이다.** StatusCard(§3.6)에 입력 영역이 필요한지 확인이 필요하다.
-5. **`AT-CV-005` 식별자의 출처가 저장소 어디에도 없다.** 이전 판의 Paper 아트보드 14·15가 이 이름을 썼는데 정의가 없고 형제 식별자도 없다. 현재는 아트보드 25~34가 이 이름을 일관되게 쓰고 있지만, 그건 사용처가 늘어난 것이지 출처가 생긴 게 아니다. 덧붙여 아트보드 `06 · 화면 목록 · ID 체계`는 `AT-CV-001~004`를 2차 범위(캔버스 창 기본·시계열·호가·관측)로 예약해 두었고 **레이아웃 변형에 대한 ID 규칙이 없다** — 카드 6종이 하나의 ID를 공유하는 현재 방식이 그 체계와 맞는지 판정되지 않았다. (2026-08-17: `AT-CV-001`은 예약된 이름 그대로 캔버스 창 기본 실측 장표(35)에 사용되기 시작했다. `002~004`는 여전히 2차 예약이다.)
+5. **`AT-CV-005`의 역사적 등록 출처는 여전히 저장소에 없다.** 다만 런타임/검증에서 쓸 안정 ID 공백은 해소했다. `kiwoom-screen-definitions.json`이 기존 Paper family `AT-CV-005`와 이미 승인된 13개 case ID를 합성한 `AT-CV-005:<case>`를 기계 ID로 고정하며, case마다 기존 아트보드 27~32와 상태/워크플로 아트보드 33~34를 명시한다. 이는 14번째 화면이나 새 시각 상태를 만든 것이 아니라 기존 case matrix의 ID를 materialize한 것이다. Paper의 상위 `AT-CV-001~005` 번호 체계가 최초로 어디서 승인됐는지는 별도 문서 provenance 공백으로 남는다.
 6. **loading/empty/error 선례가 코드에 없다.** `app/canvas.js`의 stream/reader/table 세 렌더러 모두 mock을 동기로 읽어 실패 경로를 실행하지 않는다. 이 기획서가 그 패턴을 새로 세우는 것이지 기존 것을 잇는 게 아니다.
 7. **캔버스 3개가 한 창에 동시에 있을 때의 배치 규칙이 미정이다**([`plan/canvas-taxonomy.md`](canvas-taxonomy.md) 미해결 항목, 라운드 2 미완).
 8. **이 문서가 스스로와 충돌했던 지점 — CompoundCard의 `stale`.** §3.3은 CompoundCard의 상태 목록에 `stale`을 넣었고 §5 말미는 CompoundCard가 `stale`에 도달하지 않는다고 적었다. 실측은 §3.3 쪽이다(29개 전체가 컨테이너 정확히 1개 = 연속조회 대상). §5를 정정하고 아트보드 33의 행렬도 그렇게 그렸다. 다만 §11-2가 풀리기 전에는 어느 카드에서도 `stale`이 실제로 발화하지 않는다 — 지금 이 구분은 UI 계약이지 관측된 동작이 아니다.
