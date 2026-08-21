@@ -2,7 +2,7 @@
 
 2026-08-19 실측 배경: render_canvas의 plan_token 지름길(athena_mcp/canvas_data.py)이
 봉투를 툴 결과에 실었더니 claude CLI의 툴 결과 잘림 한도에 걸려 카드가 깨졌다 —
-카드 데이터는 모델 스트림을 타면 안 된다(사용자 지시 "캔버스 먼저, 채팅은 요약만").
+카드 데이터는 모델 스트림을 타면 안 된다(사용자 지시 "성공한 캔버스가 답").
 POST /api/v1/canvas/push(게이트웨이 → 큐) + /api/v1/ws/canvas(앱 구독)로 루틴
 알림(routines_ws.py)과 같은 문법의 전용 채널을 둔다. 인증도 같은 배타 2모드
 (ws_auth) — LLM 노출 아님(셀렉터 4툴 계약과 무관한 로컬 배관).
@@ -12,19 +12,21 @@ POST /api/v1/canvas/push(게이트웨이 → 큐) + /api/v1/ws/canvas(앱 구독
 앱이 캐시에 저장해 둔 과거 LLM 판정의 재생 힌트일 뿐, 실행 결과 `operation_ref`로
 `canvas_transform.resolve_render_plan_kind`(경유 `screen_manifest`)를 조회한 값이
 다르면 manifest가 이기고 불일치를 로그로 남긴다(무음 불일치 금지). manifest가
-지원하지 않는 카드(event/action/status, 미등록 operation_ref)면 422가 아니라
-free 카드로 폴백한다(canvas_data.py::render_with_plan과 동일 정책·동일 함수).
+지원하지 않는 카드(event/action/status, 미등록 operation_ref)는 coverage 결함으로
+fail-closed한다. 키움 plan-token 경로에는 generic/free 강등이 없다.
 """
 
 from __future__ import annotations
 
 import asyncio
 import logging
-from typing import Annotated, Any
+import time
+from typing import Annotated, Any, Literal
 
+import httpx
 from fastapi import APIRouter, Request, Response, WebSocket
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 # OptionalOrderClientDep/OptionalWsClientDep는 llm_tools.py가 정의한다 —
 # call과 같은 주입 의미론(부재는 주입이 아니라 dispatch에서 에러)을 그대로 쓴다.
@@ -32,22 +34,24 @@ from athena_api.api.llm_tools import OptionalOrderClientDep, OptionalWsClientDep
 from athena_api.api.ws_auth import authenticate_downstream_ws
 from athena_api.api.ws_pump import pump_queue_to_websocket
 from athena_api.canvas_transform import (
-    build_chart_bars,
+    build_aits_chart_envelope_data,
     build_compound_generic,
     build_facts,
     build_table,
     describe_unsupported_render_plan_kind,
-    resolve_chart_initial_period,
-    resolve_render_plan_kind,
+    resolve_screen_render_contract,
 )
 from athena_api.dependencies import (
     AccountAliasDep,
     KiwoomClientDep,
     SelectorServiceDep,
 )
+from athena_api.errors import KiwoomError
 from athena_api.selector.schemas import CallRequest
 
 logger = logging.getLogger(__name__)
+
+_INLINE_SERVER_BUDGET_MS = 2700
 
 router = APIRouter(tags=["canvas side-channel"])
 
@@ -118,6 +122,196 @@ class RenderPlanRequest(BaseModel):
     canvas_type: Annotated[str, Field(pattern="^(chart|table|facts|compound)$")] | None = None
     data: dict[str, Any] = Field(default_factory=dict)
     caption: str | None = None
+    delivery: Literal["side_channel", "inline"] = "side_channel"
+    dataset_id: str | None = Field(default=None, min_length=1, max_length=64)
+    item_id: str | None = Field(default=None, min_length=1, max_length=128)
+    ordinal: int | None = Field(default=None, ge=1, le=6)
+    deadline_ms: int = Field(default=_INLINE_SERVER_BUDGET_MS, ge=100, le=3000)
+
+    @model_validator(mode="after")
+    def validate_correlation(self) -> RenderPlanRequest:
+        correlation = (self.dataset_id, self.item_id, self.ordinal)
+        if any(value is not None for value in correlation) and not all(
+            value is not None for value in correlation
+        ):
+            raise ValueError("dataset_id, item_id, ordinal must be provided together")
+        return self
+
+
+def _correlation(payload: RenderPlanRequest) -> dict[str, str | int] | None:
+    if payload.dataset_id is None:
+        return None
+    assert payload.item_id is not None and payload.ordinal is not None
+    return {
+        "dataset_id": payload.dataset_id,
+        "item_id": payload.item_id,
+        "ordinal": payload.ordinal,
+    }
+
+
+def _elapsed_ms(start: float) -> float:
+    return round((time.perf_counter() - start) * 1000, 3)
+
+
+def _is_empty_payload(value: Any) -> bool:
+    if value is None or value == "":
+        return True
+    if isinstance(value, dict):
+        return all(_is_empty_payload(item) for item in value.values())
+    if isinstance(value, list):
+        return all(_is_empty_payload(item) for item in value)
+    return False
+
+
+def _empty_canvas(kind: str) -> tuple[dict[str, Any], dict[str, Any]]:
+    if kind == "facts":
+        data: dict[str, Any] = {"fields": [], "empty_state": True}
+    elif kind == "table":
+        data = {"columns": [], "rows": [], "empty_state": True}
+    else:
+        data = {
+            "header": [],
+            "table": {"columns": [], "rows": []},
+            "empty_state": True,
+        }
+    return data, {"empty_state": True}
+
+
+def _timing(
+    *, total_start: float, call_ms: float, transform_ms: float, delivery_ms: float
+) -> dict[str, float]:
+    return {
+        "server_ms": _elapsed_ms(total_start),
+        "call_ms": call_ms,
+        "transform_ms": transform_ms,
+        "delivery_ms": delivery_ms,
+    }
+
+
+def _display_receipt(
+    *,
+    delivery: Literal["side_channel", "inline"],
+    canvas_kind: str,
+    screen_id: str,
+    meta: dict[str, Any],
+    renderer_id: str | None = None,
+) -> dict[str, Any]:
+    """Return control metadata only; never copy rows, fields, values, or preview data."""
+    receipt = {
+        "pushed": delivery == "side_channel",
+        "delivery": delivery,
+        "canvas_type": canvas_kind,
+        "screen_id": screen_id,
+        "fell_back": False,
+        "fallback_reason": None,
+        "trimmed": bool(meta.get("trimmed") or meta.get("table_trimmed")),
+        "partial": False,
+        "cache_reused": False,
+    }
+    if renderer_id is not None:
+        receipt["renderer_id"] = renderer_id
+    return receipt
+
+
+def _screen_contract(operation_ref: str | None) -> tuple[str, str, str | None] | None:
+    resolved = resolve_screen_render_contract(operation_ref)
+    return None if isinstance(resolved, str) else resolved
+
+
+def _error_state_response(
+    *,
+    payload: RenderPlanRequest,
+    operation_ref: str,
+    canvas_kind: str,
+    screen_id: str,
+    renderer_id: str | None,
+    state: Literal["timeout", "cancelled", "error"],
+    code: str,
+    retryable: bool,
+    total_start: float,
+    call_ms: float,
+) -> JSONResponse:
+    correlation = _correlation(payload)
+    envelope: dict[str, Any] = {
+        "canvas_type": canvas_kind,
+        "screen_id": screen_id,
+        "state": state,
+        "fell_back": False,
+        "fallback_reason": None,
+        "caption": None,
+        "layout": None,
+        "drop_types": [],
+        "error": {"code": code, "retryable": retryable},
+    }
+    if renderer_id is not None:
+        envelope["renderer_id"] = renderer_id
+    if correlation is not None:
+        envelope["correlation"] = correlation
+    receipt = _display_receipt(
+        delivery="inline",
+        canvas_kind=canvas_kind,
+        screen_id=screen_id,
+        meta={},
+        renderer_id=renderer_id,
+    )
+    receipt.update({"state": state, "error_code": code})
+    return JSONResponse(
+        content={
+            "delivery": "inline",
+            "queued": False,
+            "status": "error_rendered",
+            "code": code,
+            "operation_ref": operation_ref,
+            "canvas_type": canvas_kind,
+            "screen_id": screen_id,
+            "correlation": correlation,
+            "envelope": envelope,
+            "receipt": receipt,
+            "timing": _timing(
+                total_start=total_start,
+                call_ms=call_ms,
+                transform_ms=0.0,
+                delivery_ms=0.0,
+            ),
+            "next_actions": ["retry_query"] if retryable else [],
+        }
+    )
+
+
+def _render_error(
+    *,
+    payload: RenderPlanRequest,
+    status_code: int,
+    code: str,
+    detail: str,
+    operation_ref: str | None,
+    total_start: float,
+    call_ms: float = 0.0,
+    transform_ms: float = 0.0,
+    next_actions: list[str] | None = None,
+) -> JSONResponse:
+    return JSONResponse(
+        status_code=status_code,
+        content={
+            "delivery": payload.delivery,
+            "queued": False,
+            "status": "rejected" if call_ms == 0.0 else "transform_error",
+            "code": code,
+            "detail": detail,
+            "operation_ref": operation_ref,
+            "canvas_type": None,
+            "correlation": _correlation(payload),
+            "envelope": None,
+            "receipt": None,
+            "timing": _timing(
+                total_start=total_start,
+                call_ms=call_ms,
+                transform_ms=transform_ms,
+                delivery_ms=0.0,
+            ),
+            "next_actions": next_actions or [],
+        },
+    )
 
 
 @router.post("/api/v1/canvas/render-plan", operation_id="canvas_render_plan")
@@ -131,53 +325,167 @@ async def canvas_render_plan(
     selector: SelectorServiceDep,
     account: AccountAliasDep,
 ) -> JSONResponse:
+    total_start = time.perf_counter()
+    correlation = _correlation(payload)
+    # Every render-plan delivery is a read-only Kiwoom REST surface. Verify the
+    # signed identity before inspecting delivery or dispatching so a default
+    # side-channel request cannot register/remove WebSocket state or place an
+    # order and only fail later during manifest transformation. Rejected
+    # non-query tokens are deliberately burned: verification succeeded and the
+    # caller spent this one-use execution attempt, matching selector.call's
+    # established failure-after-verification nonce policy.
+    verified_plan = selector.signer.verify(
+        payload.plan_token, selector.catalog, expected_account=account
+    )
+    document = selector.catalog.find_exact(verified_plan.operation_ref)
+    if document is None or document.kind != "query":
+        selector._consume_nonce(verified_plan)
+        return _render_error(
+            payload=payload,
+            status_code=422,
+            code="INLINE_QUERY_ONLY",
+            detail="canvas render-plan accepts signed query plans only",
+            operation_ref=verified_plan.operation_ref,
+            total_start=total_start,
+            next_actions=["resolve_query_plan"],
+        )
+
     queue = getattr(request.app.state, "canvas_events", None)
-    if queue is None:
+    if payload.delivery == "side_channel" and queue is None:
         return JSONResponse(
             status_code=503, content={"detail": "캔버스 채널이 준비되지 않았다"}
         )
 
+    inline_contract: tuple[str, str, str | None] | None = None
+    inline_operation_ref: str | None = None
+    if payload.delivery == "inline":
+        inline_operation_ref = verified_plan.operation_ref
+        inline_contract = _screen_contract(inline_operation_ref)
+        if inline_contract is None:
+            return _render_error(
+                payload=payload,
+                status_code=422,
+                code="CANVAS_COVERAGE_MISSING",
+                detail="signed query plan has no authoritative read/display screen contract",
+                operation_ref=inline_operation_ref,
+                total_start=total_start,
+                next_actions=["register_manifest_screen"],
+            )
+
     # 주문 확인 헤더를 아예 받지 않는다 — 조회 plan만 실행 가능(주문 plan은
     # selector.call의 3중 게이트가 헤더 부재로 거부한다).
-    call_response = await selector.call(
-        CallRequest(plan_token=payload.plan_token),
-        request,
-        response,
-        client,
-        account=account,
-        order_client=order_client,
-        ws_client=ws_client,
-    )
+    call_start = time.perf_counter()
+    try:
+        if inline_contract is None:
+            call_response = await selector.call(
+                CallRequest(plan_token=payload.plan_token),
+                request,
+                response,
+                client,
+                account=account,
+                order_client=order_client,
+                ws_client=ws_client,
+            )
+        else:
+            budget_ms = min(payload.deadline_ms, _INLINE_SERVER_BUDGET_MS)
+            async with asyncio.timeout(budget_ms / 1000):
+                call_response = await selector.call(
+                    CallRequest(plan_token=payload.plan_token),
+                    request,
+                    response,
+                    client,
+                    account=account,
+                    order_client=None,
+                    ws_client=None,
+                )
+    except TimeoutError:
+        if inline_contract is None or inline_operation_ref is None:
+            raise
+        return _error_state_response(
+            payload=payload,
+            operation_ref=inline_operation_ref,
+            canvas_kind=inline_contract[0],
+            screen_id=inline_contract[1],
+            renderer_id=inline_contract[2],
+            state="timeout",
+            code="UPSTREAM_TIMEOUT",
+            retryable=True,
+            total_start=total_start,
+            call_ms=_elapsed_ms(call_start),
+        )
+    except httpx.TimeoutException:
+        if inline_contract is None or inline_operation_ref is None:
+            raise
+        return _error_state_response(
+            payload=payload,
+            operation_ref=inline_operation_ref,
+            canvas_kind=inline_contract[0],
+            screen_id=inline_contract[1],
+            renderer_id=inline_contract[2],
+            state="timeout",
+            code="UPSTREAM_TIMEOUT",
+            retryable=True,
+            total_start=total_start,
+            call_ms=_elapsed_ms(call_start),
+        )
+    except asyncio.CancelledError:
+        if inline_contract is None or inline_operation_ref is None:
+            raise
+        return _error_state_response(
+            payload=payload,
+            operation_ref=inline_operation_ref,
+            canvas_kind=inline_contract[0],
+            screen_id=inline_contract[1],
+            renderer_id=inline_contract[2],
+            state="cancelled",
+            code="UPSTREAM_CANCELLED",
+            retryable=True,
+            total_start=total_start,
+            call_ms=_elapsed_ms(call_start),
+        )
+    except KiwoomError:
+        if inline_contract is None or inline_operation_ref is None:
+            raise
+        return _error_state_response(
+            payload=payload,
+            operation_ref=inline_operation_ref,
+            canvas_kind=inline_contract[0],
+            screen_id=inline_contract[1],
+            renderer_id=inline_contract[2],
+            state="error",
+            code="UPSTREAM_ERROR",
+            retryable=True,
+            total_start=total_start,
+            call_ms=_elapsed_ms(call_start),
+        )
+    call_ms = _elapsed_ms(call_start)
     call_payload = call_response.model_dump()
 
+    transform_start = time.perf_counter()
     operation_ref = call_payload.get("operation_ref")
-    canvas_kind = resolve_render_plan_kind(operation_ref)
+    screen_contract = inline_contract or _screen_contract(operation_ref)
 
-    if canvas_kind is None:
+    if screen_contract is None:
         reason = describe_unsupported_render_plan_kind(operation_ref)
         logger.warning(
-            "canvas_render_plan free 폴백 — operation_ref=%s caller_canvas_type=%s 사유=%s",
+            "canvas_render_plan coverage 결함 — operation_ref=%s caller_canvas_type=%s 사유=%s",
             operation_ref,
             payload.canvas_type,
             reason,
         )
-        envelope = {
-            "canvas_type": "free",
-            "fell_back": True,
-            "fallback_reason": reason,
-            "caption": payload.caption,
-            "data": call_payload,
-            "layout": None,
-            "drop_types": [],
-        }
-        _enqueue_envelope(queue, envelope)
-        return JSONResponse(
-            content={
-                "queued": True,
-                "canvas_type": "free",
-                "summary": {"fell_back": True, "fallback_reason": reason},
-            }
+        transform_ms = _elapsed_ms(transform_start)
+        return _render_error(
+            payload=payload,
+            status_code=422,
+            code="CANVAS_COVERAGE_MISSING",
+            detail=reason,
+            operation_ref=operation_ref,
+            total_start=total_start,
+            call_ms=call_ms,
+            transform_ms=transform_ms,
+            next_actions=["register_manifest_screen"],
         )
+    canvas_kind, screen_id, renderer_id = screen_contract
 
     if payload.canvas_type is not None and payload.canvas_type != canvas_kind:
         logger.warning(
@@ -189,41 +497,76 @@ async def canvas_render_plan(
         )
 
     if canvas_kind == "chart":
-        built = build_chart_bars(call_payload)
+        built = build_aits_chart_envelope_data(operation_ref, call_payload)
         if isinstance(built, str):
-            return JSONResponse(status_code=422, content={"detail": f"차트 변환 실패: {built}"})
-        bars, meta = built
-        symbol = payload.data.get("symbol")
-        if not isinstance(symbol, str) or not symbol:
-            return JSONResponse(
-                status_code=422, content={"detail": "차트에는 data.symbol이 필요하다"}
+            return _render_error(
+                payload=payload,
+                status_code=422,
+                code="CANVAS_TRANSFORM_FAILED",
+                detail=f"chart transform failed: {built}",
+                operation_ref=operation_ref,
+                total_start=total_start,
+                call_ms=call_ms,
+                transform_ms=_elapsed_ms(transform_start),
+                next_actions=["resolve_again"],
             )
-        data: dict[str, Any] = {"symbol": symbol, "bars": bars}
-        if isinstance(payload.data.get("name"), str):
-            data["name"] = payload.data["name"]
-        # P2a — 일/주/월/년봉 8TR만 실제 값을 준다(그 외는 None → 카드는
-        # chart-card.js 자체 'D' 폴백을 쓴다, canvas_transform.py 함수 docstring).
-        initial_period = resolve_chart_initial_period(operation_ref)
-        if initial_period is not None:
-            data["initial"] = {"period": initial_period}
+        aits_envelope, meta = built
+        if aits_envelope["renderer_id"] != renderer_id:
+            return _render_error(
+                payload=payload,
+                status_code=422,
+                code="CANVAS_COVERAGE_MISSING",
+                detail="AITS renderer identity drifted during chart transform",
+                operation_ref=operation_ref,
+                total_start=total_start,
+                call_ms=call_ms,
+                transform_ms=_elapsed_ms(transform_start),
+                next_actions=["register_manifest_screen"],
+            )
+        data: dict[str, Any] = aits_envelope["data"]
     elif canvas_kind == "table":
-        built = build_table(call_payload)
+        if payload.delivery == "inline" and _is_empty_payload(call_payload.get("data")):
+            built = _empty_canvas("table")
+        else:
+            built = build_table(call_payload)
         if isinstance(built, str):
-            return JSONResponse(status_code=422, content={"detail": f"테이블 변환 실패: {built}"})
+            return _render_error(
+                payload=payload,
+                status_code=422,
+                code="CANVAS_TRANSFORM_FAILED",
+                detail=f"table transform failed: {built}",
+                operation_ref=operation_ref,
+                total_start=total_start,
+                call_ms=call_ms,
+                transform_ms=_elapsed_ms(transform_start),
+                next_actions=["resolve_again"],
+            )
         data, meta = built
     else:  # facts / compound — TR 응답 본문만(위 _BUILD_FROM_TR_DATA 주석)
         tr_data = call_payload.get("data")
         if not isinstance(tr_data, dict):
             tr_data = {}
-        built = _BUILD_FROM_TR_DATA[canvas_kind](tr_data)
+        if payload.delivery == "inline" and _is_empty_payload(tr_data):
+            built = _empty_canvas(canvas_kind)
+        else:
+            built = _BUILD_FROM_TR_DATA[canvas_kind](tr_data)
         if isinstance(built, str):
-            return JSONResponse(
-                status_code=422, content={"detail": f"{canvas_kind} 변환 실패: {built}"}
+            return _render_error(
+                payload=payload,
+                status_code=422,
+                code="CANVAS_TRANSFORM_FAILED",
+                detail=f"{canvas_kind} transform failed: {built}",
+                operation_ref=operation_ref,
+                total_start=total_start,
+                call_ms=call_ms,
+                transform_ms=_elapsed_ms(transform_start),
+                next_actions=["resolve_again"],
             )
         data, meta = built
 
     envelope = {
         "canvas_type": canvas_kind,
+        "screen_id": screen_id,
         "fell_back": False,
         "fallback_reason": None,
         "caption": payload.caption,
@@ -231,9 +574,66 @@ async def canvas_render_plan(
         "layout": None,
         "drop_types": [],
     }
+    if renderer_id is not None:
+        envelope["renderer_id"] = renderer_id
+    if correlation is not None:
+        envelope["correlation"] = correlation
+    transform_ms = _elapsed_ms(transform_start)
+    if payload.delivery == "inline":
+        return JSONResponse(
+            content={
+                "delivery": "inline",
+                "queued": False,
+                "status": "rendered",
+                "operation_ref": operation_ref,
+                "canvas_type": canvas_kind,
+                "screen_id": screen_id,
+                "correlation": correlation,
+                "envelope": envelope,
+                "receipt": _display_receipt(
+                    delivery="inline",
+                    canvas_kind=canvas_kind,
+                    screen_id=screen_id,
+                    meta=meta,
+                    renderer_id=renderer_id,
+                ),
+                "timing": _timing(
+                    total_start=total_start,
+                    call_ms=call_ms,
+                    transform_ms=transform_ms,
+                    delivery_ms=0.0,
+                ),
+                "next_actions": [],
+            }
+        )
+    delivery_start = time.perf_counter()
     _enqueue_envelope(queue, envelope)
+    delivery_ms = _elapsed_ms(delivery_start)
     return JSONResponse(
-        content={"queued": True, "canvas_type": canvas_kind, "summary": meta}
+        content={
+            "queued": True,
+            "delivery": "side_channel",
+            "status": "queued",
+            "operation_ref": operation_ref,
+            "canvas_type": canvas_kind,
+            "screen_id": screen_id,
+            "correlation": correlation,
+            "envelope": None,
+            "receipt": _display_receipt(
+                delivery="side_channel",
+                canvas_kind=canvas_kind,
+                screen_id=screen_id,
+                meta=meta,
+                renderer_id=renderer_id,
+            ),
+            "timing": _timing(
+                total_start=total_start,
+                call_ms=call_ms,
+                transform_ms=transform_ms,
+                delivery_ms=delivery_ms,
+            ),
+            "next_actions": [],
+        }
     )
 
 

@@ -6,15 +6,25 @@
 
 from __future__ import annotations
 
+import json
+from copy import deepcopy
+
 import pytest
 
+import athena_api.canvas_transform as canvas_transform
 from athena_api.canvas_transform import (
     FACTS_FIELDS_MAX,
+    SUMMARY_PREVIEW_BYTES_MAX,
+    SUMMARY_PREVIEW_ITEMS_MAX,
+    SUMMARY_PREVIEW_STRING_MAX,
     TABLE_ROWS_MAX,
     build_chart_bars,
     build_compound_generic,
     build_facts,
+    build_table,
     resolve_chart_initial_period,
+    resolve_render_plan_kind,
+    resolve_screen_render_contract,
 )
 from athena_mcp.canvas import CANVAS_SCHEMAS, validate_canvas_payload
 
@@ -29,7 +39,13 @@ def test_build_facts_single_scalar_field():
     assert not isinstance(result, str)
     data, meta = result
     assert data == {"fields": [{"key": "acctNo", "label": "acctNo", "value": "1234567890"}]}
-    assert meta == {"fields_total": 1, "fields_kept": 1, "trimmed": False}
+    assert meta == {
+        "fields_total": 1,
+        "fields_kept": 1,
+        "trimmed": False,
+        "preview": [],  # 계좌번호는 모델 summary로 복제하지 않는다.
+        "preview_truncated": False,
+    }
 
 
 def test_build_facts_multiple_scalar_fields_preserve_order():
@@ -61,7 +77,53 @@ def test_build_facts_caps_at_facts_fields_max():
         "fields_total": FACTS_FIELDS_MAX + 10,
         "fields_kept": FACTS_FIELDS_MAX,
         "trimmed": True,
+        "preview": [],
+        "preview_truncated": False,
     }
+
+
+def test_build_facts_current_trading_summary_has_exact_price_and_change():
+    payload = {
+        "cur_prc": "+71000",
+        "pre_sig": "2",
+        "pred_pre": "+1200",
+        "flu_rt": "+1.72",
+        "trde_tm": "153012",
+        "trde_qty": "123456",
+    }
+    result = build_facts(payload)
+    assert not isinstance(result, str)
+    _, meta = result
+    assert meta["preview"] == [
+        {"key": "cur_prc", "label": "현재가", "value": "+71000"},
+        {"key": "pred_pre", "label": "전일대비", "value": "+1200"},
+        {"key": "pre_sig", "label": "등락기호", "value": "2"},
+        {"key": "flu_rt", "label": "등락률", "value": "+1.72"},
+        {"key": "trde_tm", "label": "거래시각", "value": "153012"},
+    ]
+    assert meta["preview_truncated"] is False
+
+
+def test_build_facts_summary_preview_obeys_item_string_and_byte_bounds():
+    payload = {key: "가" * 500 for key in (
+        "cur_prc",
+        "pred_pre",
+        "pre_sig",
+        "pred_pre_sig",
+        "flu_smbol",
+        "smbol",
+        "flu_rt",
+        "cntr_tm",
+    )}
+    result = build_facts(payload)
+    assert not isinstance(result, str)
+    _, meta = result
+    assert len(meta["preview"]) <= SUMMARY_PREVIEW_ITEMS_MAX
+    assert all(len(item["value"]) <= SUMMARY_PREVIEW_STRING_MAX for item in meta["preview"])
+    assert len(json.dumps(meta["preview"], ensure_ascii=False).encode("utf-8")) <= (
+        SUMMARY_PREVIEW_BYTES_MAX
+    )
+    assert meta["preview_truncated"] is True
 
 
 def test_build_facts_rejects_non_dict_payload():
@@ -82,6 +144,18 @@ def test_build_facts_output_validates_against_facts_schema():
     result = validate_canvas_payload("facts", data)
     assert result.fell_back is False
     assert result.canvas_type == "facts"
+
+
+def test_table_summary_contract_remains_count_and_columns_only():
+    built = build_table({"rows": [{"code": "005930", "price": "71000"}]})
+    assert not isinstance(built, str)
+    _, meta = built
+    assert meta == {
+        "rows_total": 1,
+        "rows_kept": 1,
+        "trimmed": False,
+        "columns": ["code", "price"],
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -110,11 +184,54 @@ def test_build_compound_generic_header_and_table():
     assert meta == {
         "header_fields_total": 1,
         "header_fields_kept": 1,
+        "header_keys": ["rtcd"],
+        "header_keys_truncated": False,
+        "header_preview": [{"key": "rtcd", "label": "응답코드", "value": "0"}],
+        "header_preview_truncated": False,
         "table_rows_total": 2,
         "table_rows_kept": 2,
         "table_trimmed": False,
         "table_columns": ["gcod", "name"],
     }
+
+
+def test_build_compound_generic_summary_has_bounded_headers_not_rows():
+    payload = {
+        "stk_cd": "005930",
+        "stk_nm": "삼성전자",
+        "cur_prc": "71000",
+        "private_note": "요약에 포함되면 안 됨",
+        "rows": [{"name": "row-secret", "value": "full-row-value"}],
+    }
+    result = build_compound_generic(payload)
+    assert not isinstance(result, str)
+    _, meta = result
+    assert meta["header_keys"] == ["stk_cd", "stk_nm", "cur_prc", "private_note"]
+    assert meta["header_preview"] == [
+        {"key": "cur_prc", "label": "현재가", "value": "71000"},
+        {"key": "stk_cd", "label": "종목코드", "value": "005930"},
+        {"key": "stk_nm", "label": "종목명", "value": "삼성전자"},
+    ]
+    rendered = json.dumps(meta, ensure_ascii=False)
+    assert "row-secret" not in rendered
+    assert "full-row-value" not in rendered
+    assert "요약에 포함되면 안 됨" not in rendered
+
+
+def test_build_compound_generic_header_summary_obeys_bounds():
+    payload = {
+        **{f"header_{i}_" + ("가" * 100): i for i in range(10)},
+        "rows": [{"value": 1}],
+    }
+    result = build_compound_generic(payload)
+    assert not isinstance(result, str)
+    _, meta = result
+    assert 0 < len(meta["header_keys"]) <= SUMMARY_PREVIEW_ITEMS_MAX
+    assert all(len(key) <= SUMMARY_PREVIEW_STRING_MAX for key in meta["header_keys"])
+    assert len(json.dumps(meta["header_keys"], ensure_ascii=False).encode("utf-8")) <= (
+        SUMMARY_PREVIEW_BYTES_MAX
+    )
+    assert meta["header_keys_truncated"] is True
 
 
 def test_build_compound_generic_caps_table_rows_at_table_rows_max():
@@ -230,6 +347,14 @@ def test_build_chart_bars_succeeds_for_all_p2a_chart_trs(mapping_id: str) -> Non
     bars, meta = built
     assert meta["rows_kept"] == 1
     assert bars[0]["close"] == 71000.0
+    assert set(meta) == {
+        "rows_total",
+        "rows_kept",
+        "trimmed",
+        "first_time",
+        "last_time",
+        "latest_close",
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -279,3 +404,37 @@ def test_resolve_chart_initial_period_is_none_for_unregistered_or_missing_operat
     assert resolve_chart_initial_period("base:does-not-exist") is None
     assert resolve_chart_initial_period(None) is None
     assert resolve_chart_initial_period("") is None
+
+
+@pytest.mark.parametrize(
+    "mapping_id",
+    [
+        "base:ka10079",
+        "base:ka10094",
+        "base:ka20004",
+        "base:ka20019",
+        "base:ka50079",
+        "base:ka50083",
+        "base:ka50091",
+        "base:ka50092",
+    ],
+)
+def test_resolve_render_plan_kind_uses_explicit_aits_renderer(mapping_id: str) -> None:
+    assert resolve_render_plan_kind(mapping_id) == "chart"
+
+
+@pytest.mark.parametrize("mapping_id", ["base:ka10060", "base:ka10064"])
+def test_chart_named_table_operations_are_not_promoted(mapping_id: str) -> None:
+    assert resolve_render_plan_kind(mapping_id) == "table"
+
+
+def test_runtime_rejects_ambiguous_gold_reload_group(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    definitions = deepcopy(canvas_transform._screen_definitions())
+    today = definitions["base:ka50091"]["data"]["chart"]
+    today["series_scope"] = "generic"
+    today["reload_group"] = "gold-generic"
+    monkeypatch.setattr(canvas_transform, "_screen_definitions", lambda: definitions)
+    resolved = resolve_screen_render_contract("base:ka50079")
+    assert resolved == "AITS reload target가 중복되어 모호하다"
