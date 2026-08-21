@@ -105,7 +105,10 @@ test('exact direct lane uses only resolve and inline render-plan, then emits pai
     fetchImpl,
     emitCanvas: async (payload) => {
       emitted.push(payload);
-      return { verifiedVisible: true, visiblePaintAt: payload.requestStartedAt + 25, inlineToDomMs: 2, domToPaintAckMs: 3 };
+      return {
+        verifiedVisible: true, visiblePaintAt: payload.requestStartedAt + 25,
+        inlineToChartImportMs: 0, chartImportToDomMs: 2, inlineToDomMs: 2, domToPaintAckMs: 3,
+      };
     },
   });
   assert.equal(result.ok, true);
@@ -131,6 +134,14 @@ test('exact direct lane uses only resolve and inline render-plan, then emits pai
   assert.equal(emitted[0].envelope.data.fields[0].value, '73500');
   assert.equal(result.answerText.includes('73500'), false);
   assert.equal(result.answerText.includes('현재가'), false);
+  assert.deepEqual(result.canvases[0].stageMs, {
+    requestToInlineMs: result.canvases[0].stageMs.requestToInlineMs,
+    inlineToChartImportMs: 0,
+    chartImportToDomMs: 2,
+    inlineToDomMs: 2,
+    domToPaintAckMs: 3,
+    totalMs: result.canvases[0].stageMs.totalMs,
+  });
 });
 
 test('visible AITS renderer error is feedback, never a successful data canvas', async () => {

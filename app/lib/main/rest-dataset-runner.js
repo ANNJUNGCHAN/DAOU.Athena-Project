@@ -502,6 +502,10 @@ async function runRestDataset({
         verifiedVisible: paint ? paint.verifiedVisible !== false : true,
         stageMs: {
           requestToInlineMs: Math.max(0, inlineAt - startedAt),
+          inlineToChartImportMs: paint && paint.inlineToChartImportMs != null
+            ? Number(paint.inlineToChartImportMs) : null,
+          chartImportToDomMs: paint && paint.chartImportToDomMs != null
+            ? Number(paint.chartImportToDomMs) : null,
           inlineToDomMs: Number(paint && paint.inlineToDomMs) || 0,
           domToPaintAckMs: Number(paint && paint.domToPaintAckMs) || 0,
           totalMs,

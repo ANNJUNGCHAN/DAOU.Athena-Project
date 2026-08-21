@@ -23,7 +23,9 @@
 // Node/Electron(nodeIntegration:true) 양쪽에서 CJS 모듈 안의 동적 import()는
 // 지원된다(실측: `node -e "(async()=>{await import('lightweight-charts')})()"`
 // 정상 동작, Object.keys에 createChart/CandlestickSeries/HistogramSeries 확인됨).
-// 그래서 createChartCard는 async 함수이고, 로드는 지연 import로 처리한다.
+// 그래서 createChartCard는 async 함수다. 다만 첫 REST 차트의 3초 paint budget을
+// import cold-start에 쓰지 않도록 이 스크립트가 로드될 때 단 하나의 cached import를
+// 시작하고, 모든 createChartCard 호출이 같은 Promise를 기다린다.
 //
 // 좌하단에 뜨는 작은 로고는 버그가 아니다 — lightweight-charts Apache-2.0 라이선스가
 // 요구하는 TradingView attribution(layout.attributionLogo, 기본 true)이다.
@@ -63,6 +65,27 @@ const __LIGHTWEIGHT_CHARTS_URL = (() => {
   if (typeof document === 'undefined' || !document.currentScript) return 'lightweight-charts';
   return new URL('../node_modules/lightweight-charts/dist/lightweight-charts.standalone.production.mjs', document.currentScript.src).href;
 })();
+
+function createCachedChartLibraryLoader(importer, clock) {
+  if (typeof importer !== 'function') throw new TypeError('chart library importer가 필요하다');
+  const now = typeof clock === 'function' ? clock : () => (
+    typeof performance !== 'undefined' && typeof performance.now === 'function' ? performance.now() : Date.now()
+  );
+  let promise = null;
+  return function loadChartLibrary() {
+    if (!promise) {
+      promise = Promise.resolve().then(importer).then((library) => ({ library, readyAt: now() }));
+    }
+    return promise;
+  };
+}
+
+const __loadChartLibrary = createCachedChartLibraryLoader(() => import(__LIGHTWEIGHT_CHARTS_URL));
+// 실제 renderer에서는 canvas.html이 chart-card.js를 읽는 즉시 prewarm한다. Node의
+// 순수 단위 테스트는 ESM/DOM 라이브러리를 불필요하게 로드하지 않는다.
+if (!__isCjs && typeof document !== 'undefined') {
+  void __loadChartLibrary().catch(() => {});
+}
 
 const UP_COLOR = '#FF5C5C';
 const DOWN_COLOR = '#4D9FFF';
@@ -148,8 +171,10 @@ function resolveInitialPeriod(initial) {
 // ChartTickDelta의 진행봉 경로이며 현재 줌·팬 viewport를 보존한다.
 async function createChartCard(container, opts) {
   const o = opts || {};
+  const loaded = await __loadChartLibrary();
+  if (typeof o.onChartLibraryReady === 'function') o.onChartLibraryReady(loaded.readyAt);
   const { createChart, CandlestickSeries, BarSeries, LineSeries, AreaSeries, HistogramSeries, CrosshairMode, LineStyle } =
-    await import(__LIGHTWEIGHT_CHARTS_URL);
+    loaded.library;
 
   let dailyBars = Array.isArray(o.ohlcv) ? o.ohlcv.slice() : [];
   // 초기 주기가 'D'가 아니면 최초 렌더부터 실제로 리샘플된 봉을 보여준다 — 툴바
@@ -821,6 +846,7 @@ async function createChartCard(container, opts) {
 // 않는다(deslop 2026-08-18).
 const __exports = {
   createChartCard,
+  createCachedChartLibraryLoader,
   resolveInitialPeriod,
   toCandleSeriesData,
   toVolumeSeriesData,

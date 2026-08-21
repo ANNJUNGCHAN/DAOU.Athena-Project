@@ -129,6 +129,7 @@ function rendererOptions(body, context) {
     initial: { period: initialPeriod },
     preSampled: true,
     onReloadRequest: meta.onReloadRequest,
+    onChartLibraryReady: meta.onChartLibraryReady,
   };
 }
 

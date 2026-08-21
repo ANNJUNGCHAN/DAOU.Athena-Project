@@ -271,4 +271,7 @@ test('all Athena chart entry points are statically locked to the AITS adapter', 
   assert.doesNotMatch(tickBody, /setData\(/);
   assert.match(lowLevel, /onPeriodChange: \(period, interval\) => requestAuthoritativeReload/);
   assert.match(lowLevel, /onAdjustedToggle: \(adjustedOn\) => requestAuthoritativeReload/);
+  assert.match(lowLevel, /const __loadChartLibrary = createCachedChartLibraryLoader/);
+  assert.match(lowLevel, /if \(!__isCjs && typeof document !== 'undefined'\)[\s\S]*__loadChartLibrary\(\)/);
+  assert.match(lowLevel, /await __loadChartLibrary\(\)/);
 });

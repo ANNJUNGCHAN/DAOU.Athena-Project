@@ -903,6 +903,8 @@ ipcMain.on('athena:rest-canvas-painted', (event, payload = {}) => {
     verifiedVisible: true,
     visiblePaintAt: performance.now(),
     inlineToDomMs: Number(payload.inline_to_dom_ms) || 0,
+    inlineToChartImportMs: payload.inline_to_chart_import_ms == null ? null : Number(payload.inline_to_chart_import_ms),
+    chartImportToDomMs: payload.chart_import_to_dom_ms == null ? null : Number(payload.chart_import_to_dom_ms),
     domToPaintAckMs: Number(payload.dom_to_paint_ack_ms) || 0,
     renderState: payload.render_state || null,
     rendererId: payload.renderer_id || null,
