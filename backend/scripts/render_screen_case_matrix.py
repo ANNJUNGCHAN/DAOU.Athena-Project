@@ -28,11 +28,7 @@ from athena_api.output_profile import LIST_UI_PAGE_SIZE, SCREEN_BUDGET  # noqa: 
 REPO_ROOT = BACKEND.parent
 OUTPUT_PATH = REPO_ROOT / "plan" / "kiwoom-common-screen-case-matrix.md"
 
-# 차트로 그리는 compound TR — plan/공통화면-템플릿-실행계획-2026-08-20.md 기준.
-# P2a에서 배선하는 일/주/월/년봉 8종 + P2b에서 의도적으로 비배선하는 분/틱 4종.
-CHART_TRS_WIRED = frozenset({"ka10081", "ka10082", "ka10083", "ka10094", "ka20006", "ka20007", "ka20008", "ka20019"})
-CHART_TRS_UNWIRED = frozenset({"ka10079", "ka10080", "ka20004", "ka20005"})
-CHART_TRS = CHART_TRS_WIRED | CHART_TRS_UNWIRED
+AITS_CHART_RENDERER_ID = "aits-chart-v1"
 
 CASES: list[dict[str, str]] = [
     {"id": "F1", "card": "FactsCard", "name": "단일 그룹", "rule": f"layout=facts · 스칼라 ≤ {LIST_UI_PAGE_SIZE}"},
@@ -41,7 +37,7 @@ CASES: list[dict[str, str]] = [
     {"id": "T2", "card": "TableCard", "name": "접힘 표", "rule": f"layout=table · pure_list · 컬럼 {LIST_UI_PAGE_SIZE + 1}–{SCREEN_BUDGET}"},
     {"id": "T3", "card": "TableCard", "name": "광폭 표", "rule": f"layout=table · pure_list · 컬럼 > {SCREEN_BUDGET}"},
     {"id": "T4", "card": "TableCard", "name": "헤더 스칼라 + 표", "rule": "layout=table · compound(스칼라 1 + 리스트 1)"},
-    {"id": "C1", "card": "CompoundCard", "name": "차트 (주기 옵션)", "rule": "layout=compound · 차트 12TR (P2a 배선 8 + P2b 비배선 4)"},
+    {"id": "C1", "card": "CompoundCard", "name": "AITS 차트", "rule": "presentation.renderer_id=aits-chart-v1"},
     {"id": "C2", "card": "CompoundCard", "name": "일반 (스칼라 + 리스트)", "rule": "layout=compound · 차트 외"},
     {"id": "E1", "card": "EventCard", "name": "표준 이벤트", "rule": "layout=event · 리스트 1"},
     {"id": "E2", "card": "EventCard", "name": "대형 이벤트", "rule": "layout=event · 리스트 2"},
@@ -68,7 +64,8 @@ def classify(mapping: dict[str, Any]) -> str:
     """Assign a mapping to exactly one card case. Raises on anything unassignable."""
     layout = mapping["presentation"]["layout"]
     shape = mapping["presentation"]["shape"]
-    tr_id = mapping["operation"]["tr_id"]
+    if mapping["presentation"].get("renderer_id") == AITS_CHART_RENDERER_ID:
+        return "C1"
     if layout == "facts":
         scalars = scalar_count(mapping)
         if scalars <= LIST_UI_PAGE_SIZE:
@@ -86,7 +83,7 @@ def classify(mapping: dict[str, Any]) -> str:
             return "T2"
         return "T3"
     if layout == "compound":
-        return "C1" if tr_id in CHART_TRS else "C2"
+        return "C2"
     if layout == "event":
         if shape == "scalar_only":
             return "E3"
@@ -123,12 +120,7 @@ def structure_cell(mapping: dict[str, Any]) -> str:
 
 
 def chart_wiring_cell(mapping: dict[str, Any]) -> str:
-    tr_id = mapping["operation"]["tr_id"]
-    if tr_id in CHART_TRS_WIRED:
-        return "배선(P2a)"
-    if tr_id in CHART_TRS_UNWIRED:
-        return "비배선(P2b)"
-    return "—"
+    return mapping["presentation"].get("renderer_id") or "—"
 
 
 def render_case_section(case: dict[str, str], members: list[dict[str, Any]]) -> list[str]:

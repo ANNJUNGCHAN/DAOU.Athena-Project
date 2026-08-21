@@ -3,12 +3,12 @@
 `kiwoom-common-screen-manifest.json` decides *which card* a TR renders as. That decision is
 only trustworthy if `mapping_id` actually identifies the same operation the selector runtime
 resolves at call time. This module proves that join by *executing* the real selector code —
-`athena_api.selector.policy.select_operation` (and, through it, `_resolve_detail`) — against
+the legacy exact/detail facade `athena_api.selector.policy.select_operation` — against
 every one of the manifest's 301 routable mappings, not by comparing strings.
 
 Architect 권고 6 (plan §P0) specifically warns that a string comparison between `operation_ref`
 and `mapping_id` can be a false positive for the 22 `SPLIT_BASE_TR_IDS` families: their base TR
-is not itself callable, so the join has to go through `select_operation`'s exact-ref branch with
+is not itself callable, so the join goes through `select_operation`'s exact-ref branch with
 an explicit `detail_group`, exactly as `SelectorService.resolve()` does at
 `athena_api/selector/service.py:259-266`. This module drives that branch for every detail
 mapping instead of doing a direct `DETAIL_REGISTRY[mapping_id]` lookup.
@@ -102,8 +102,8 @@ def test_every_callable_base_mapping_resolves_through_real_select_operation(
     catalog, base_mappings: list[dict]
 ) -> None:
     """query/order/websocket base mappings must round-trip through the exact same
-    `select_operation` exact-ref branch `SelectorService.resolve()` hits when a caller
-    passes the operation_ref back as the question (service.py:197,259-266)."""
+    legacy `select_operation` exact-ref branch when a caller passes the operation_ref
+    back as the question. SelectorService owns an equivalent exact-identity branch."""
     callable_mappings = [
         m for m in base_mappings if m["classification"]["category"] != "oauth"
     ]
@@ -163,10 +163,8 @@ def test_every_detail_mapping_key_exists_in_generated_detail_registry(
 def test_every_detail_mapping_resolves_through_real_split_base_branch(
     catalog, detail_mappings: list[dict]
 ) -> None:
-    """Drives select_operation the way a live resolve() call does for a split family:
-    question == the family's base operation_ref, detail_group == the projection's group id
-    (service.py:196-266). This forces execution through the SPLIT_BASE_TR_IDS branch in
-    policy.py:74-82 and `_resolve_detail` (policy.py:36-50), not a direct dict lookup."""
+    """Drives the legacy exact/detail facade for a split family: question equals
+    the base operation_ref and detail_group equals the projection's owned group id."""
     assert detail_mappings  # sanity
     misses: list[str] = []
     for mapping in detail_mappings:

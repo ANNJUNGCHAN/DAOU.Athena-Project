@@ -1,0 +1,14 @@
+{
+  "version": "selector-entity-markers-v1",
+  "source": "Checked-in Kiwoom inventory ETF issuer semantics; not a full instrument master.",
+  "markers": {
+    "etf": [
+      "ARIRANG",
+      "KINDEX",
+      "KODEX",
+      "KOSEF",
+      "KSTAR",
+      "TIGER"
+    ]
+  }
+}
