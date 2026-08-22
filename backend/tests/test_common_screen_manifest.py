@@ -199,9 +199,10 @@ def test_every_common_screen_mapping_has_exact_contract_fields_and_provenance() 
         assert mapping["contracts"]["response_model"].endswith(response_model.__name__)
 
 
-# P2a/P2b 차트 주기 배선 — 8TR(일/주/월/년봉)만 실제 default_period, 4TR(분/틱)은
-# null, 나머지 289TR은 controls 필드 자체가 없다(`plan/공통화면-템플릿-실행계획
-# -2026-08-20.md` P2a/P2b). 한글 TR명 키워드 매칭 드리프트를 잡기 위해 12개 전수를
+# P2a/P2b 차트 주기 배선 — 11TR(일/주/월/년봉)만 실제 default_period, 8TR(분/틱)은
+# null, 나머지 282TR은 controls 필드 자체가 없다(`plan/공통화면-템플릿-실행계획
+# -2026-08-20.md` P2a/P2b + AITS 금현물 7종 caf8613).
+# 한글 TR명 키워드 매칭 드리프트를 잡기 위해 19개 전수를
 # 명시 allowlist로 고정한다 — 매칭 로직이 바뀌어 이 중 하나라도 값이 달라지면 이
 # 테스트가 먼저 실패한다(추측 대신 실패, quirks.py 원칙과 동형).
 _EXPECTED_CHART_DEFAULT_PERIODS = {
@@ -217,6 +218,16 @@ _EXPECTED_CHART_DEFAULT_PERIODS = {
     "base:ka10080": None,  # 주식분봉차트조회요청 — P2b 의도적 비배선
     "base:ka20004": None,  # 업종틱차트조회요청 — P2b 의도적 비배선
     "base:ka20005": None,  # 업종분봉조회요청 — P2b 의도적 비배선
+    # 금현물 차트 7종은 AITS 화면 정의(caf8613)가 추가했다. 주식·업종과 같은
+    # P2a/P2b 규칙을 따른다 — 일/주/월만 배선, 틱/분은 의도적 null.
+    # 금현물에는 년봉 TR이 없어 Y가 없다.
+    "base:ka50081": "D",  # 금현물일봉차트조회요청
+    "base:ka50082": "W",  # 금현물주봉차트조회요청
+    "base:ka50083": "M",  # 금현물월봉차트조회요청
+    "base:ka50079": None,  # 금현물틱차트조회요청 — 의도적 비배선
+    "base:ka50080": None,  # 금현물분봉차트조회요청 — 의도적 비배선
+    "base:ka50091": None,  # 금현물당일틱차트조회요청 — 의도적 비배선
+    "base:ka50092": None,  # 금현물당일분봉차트조회요청 — 의도적 비배선
 }
 
 
@@ -230,7 +241,7 @@ def test_common_screen_manifest_chart_default_period_wiring_is_exact() -> None:
     }
     assert actual == _EXPECTED_CHART_DEFAULT_PERIODS
 
-    # 이 12개 밖에서는 controls 필드가 아예 없어야 한다 — "값이 없다"(비차트)와
+    # 이 19개 밖에서는 controls 필드가 아예 없어야 한다 — "값이 없다"(비차트)와
     # "값이 null이다"(P2b 비배선)를 매니페스트 레벨에서 구조적으로 구분한다.
     with_controls = {
         mapping["mapping_id"]

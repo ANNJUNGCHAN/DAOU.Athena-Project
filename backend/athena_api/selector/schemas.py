@@ -47,6 +47,13 @@ class ReasonCode(StrEnum):
     REALTIME_FIELD_MATCH = "REALTIME_FIELD_MATCH"
     SYNONYM_MATCH = "SYNONYM_MATCH"
     QUERY_COVERAGE = "QUERY_COVERAGE"
+    TYPED_ELIGIBLE = "TYPED_ELIGIBLE"
+    TYPED_MEASURE_MATCH = "TYPED_MEASURE_MATCH"
+    TYPED_BINDING_MATCH = "TYPED_BINDING_MATCH"
+    TYPED_DETAIL_MATCH = "TYPED_DETAIL_MATCH"
+    TYPED_DOMINANCE = "TYPED_DOMINANCE"
+    EQUIVALENCE_CANONICAL = "EQUIVALENCE_CANONICAL"
+    UNIQUE_EXACT_PROFILE = "UNIQUE_EXACT_PROFILE"
     EXPLICIT_DETAIL_GROUP = "EXPLICIT_DETAIL_GROUP"
     BASE_DEFAULT = "BASE_DEFAULT"
     PURE_LIST_BASE_REQUIRED = "PURE_LIST_BASE_REQUIRED"
@@ -57,6 +64,8 @@ class ReasonCode(StrEnum):
     WEBSOCKET_CONTROL_ONLY = "WEBSOCKET_CONTROL_ONLY"
     INTENT_REQUIRED = "INTENT_REQUIRED"
     AMBIGUOUS_MARGIN = "AMBIGUOUS_MARGIN"
+    AMBIGUOUS = "AMBIGUOUS"
+    NO_COMPATIBLE_PROFILE = "NO_COMPATIBLE_PROFILE"
     LOW_CONFIDENCE = "LOW_CONFIDENCE"
 
 
@@ -80,10 +89,20 @@ class SearchHit(StrictModel):
     name: str
     group_title: str | None = None
     score: int
-    confidence: Literal["high", "medium", "low"]
+    confidence: Literal["high", "medium", "low"] = Field(
+        description=(
+            "Shared typed-compatibility outcome, never a lexical-score band: high means "
+            "one exact profile or exact identity is uniquely proved, medium means typed "
+            "dominance or equivalence canonicalization selected it, and low means the "
+            "policy abstains, rejects, suggests another intent, or this hit is only a "
+            "diagnostic alternative. Resolve always repeats the same typed decision."
+        )
+    )
     contributions: list[ScoreContribution]
     generic_callable: bool
     discovery_only: bool
+    suggested_detail_group: str | None = None
+    suggested_operation_ref: str | None = None
 
 
 class SearchResponse(StrictModel):
@@ -112,7 +131,9 @@ class DetailGroupSummary(StrictModel):
 
     A detail projection costs exactly one upstream call - the same call the base
     operation makes - and then narrows the response to ``response_field_count``
-    fields. It is chosen explicitly by the model, never guessed by the ranker.
+    fields. After family selection, the selector may choose it from uniquely strong
+    typed compatibility plus authoritative canonical evidence. Otherwise the caller
+    supplies its ``group_id`` explicitly.
     """
 
     group_id: str
@@ -167,15 +188,29 @@ class ResolveRequest(StrictModel):
             "here because resolve ranks the question a second time."
         ),
     )
-    candidate_refs: list[str] = Field(default_factory=list, max_length=8)
-    preferred_ref: str | None = None
+    candidate_refs: list[str] = Field(
+        default_factory=list,
+        max_length=8,
+        description=(
+            "Validated soft hints from search. They never restrict or reorder the canonical "
+            "intent surface; unknown, hidden, or wrong-intent identities fail closed."
+        ),
+    )
+    preferred_ref: str | None = Field(
+        default=None,
+        description=(
+            "Assertion that canonical selection belongs to this family. A detail identity "
+            "also implies its group; it never overrides canonical family selection."
+        ),
+    )
     detail_group: str | None = Field(
         default=None,
         max_length=64,
         description=(
-            "Explicit detail projection of the selected TR family, taken from "
-            "athena_describe.detail_groups. The server never infers this from the "
-            "question; omit it to receive the full typed base response."
+            "Optional detail projection assertion for the canonical family, taken from "
+            "describe or the top search hit's suggestion. Omit it to accept a uniquely "
+            "supported typed and canonically named family-local detail; ambiguous local "
+            "evidence returns DETAIL_GROUP_REQUIRED."
         ),
     )
     arguments: dict[str, Any] = Field(default_factory=dict)
@@ -216,7 +251,14 @@ class ContinuationOutput(StrictModel):
     next_plan_token: str | None = None
 
 
+class CanvasContext(StrictModel):
+    """서명된 plan에서 파생한 비민감 캔버스 식별자만 담는 작은 봉투."""
+
+    symbol: str | None = Field(default=None, min_length=1, max_length=32)
+
+
 class CallResponse(StrictModel):
     operation_ref: str
     data: dict[str, Any]
     continuation: ContinuationOutput
+    canvas_context: CanvasContext = Field(default_factory=CanvasContext)

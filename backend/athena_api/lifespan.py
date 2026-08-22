@@ -1,6 +1,7 @@
 """Application resource lifecycle."""
 
 import asyncio
+import logging
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager, suppress
 from dataclasses import dataclass
@@ -18,6 +19,7 @@ from athena_api.brain import (
     LocalCommandStructuredLlm,
 )
 from athena_api.config import KiwoomAccount, Settings, get_settings
+from athena_api.dependencies import build_selector_service
 from athena_api.errors import KiwoomAuthError
 from athena_api.kiwoom import (
     KiwoomAuth,
@@ -33,6 +35,9 @@ from athena_api.routines.runtime import (
     open_routines,
     teardown_routines,
 )
+from athena_api.selector.instrument_identity import InstrumentIdentityIndex
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass(slots=True)
@@ -276,6 +281,9 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
 
     @asynccontextmanager
     async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+        instrument_identity = InstrumentIdentityIndex()
+        app.state.instrument_identity = instrument_identity
+        app.state.selector_service = build_selector_service(instrument_identity)
         app.state.settings = runtime_settings
         app.state.local_bearer_token = (
             runtime_settings.local_bearer_token.get_secret_value()
@@ -330,7 +338,19 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
                         await ws_client.close()
                     else:
                         runtime.ws_client = ws_client
-                _publish_default(app, runtimes.get(runtime_settings.kiwoom_default_account or ""))
+                default_runtime = runtimes.get(runtime_settings.kiwoom_default_account or "")
+                _publish_default(app, default_runtime)
+                if default_runtime is not None and default_runtime.ready:
+                    try:
+                        await instrument_identity.refresh(default_runtime.data_client)
+                    except Exception as exc:
+                        # Identity availability may never weaken startup or leak upstream
+                        # contents. The empty prior snapshot makes selector planning fail
+                        # closed until a future complete refresh succeeds.
+                        logger.warning(
+                            "instrument identity refresh failed type=%s",
+                            type(exc).__name__,
+                        )
             if runtime_settings.brain_enabled:
                 brain = await _open_brain(runtime_settings)
                 _publish_brain(app, brain)

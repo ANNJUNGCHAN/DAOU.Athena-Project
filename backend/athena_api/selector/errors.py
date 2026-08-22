@@ -75,3 +75,9 @@ class PlanAlreadyUsedError(InvalidPlanError):
     """
 
     code = "PLAN_ALREADY_USED"
+
+
+class ReplayStateCapacityError(SelectorError):
+    """Replay protection is full of unexpired nonces, so dispatch must stop."""
+
+    code = "REPLAY_STATE_CAPACITY_EXCEEDED"

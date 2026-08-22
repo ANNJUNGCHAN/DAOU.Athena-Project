@@ -566,7 +566,21 @@ pytest 2건 + **verify 검증 10**(합성 봉투로 실배선 채널 `athena:add
 `app/`(이 디렉토리)만 건드렸다 — `backend/`는 같은 날 다른 작업이 동시에 손대고
 있어 의도적으로 안 건드렸다.
 
-### 라우팅 규칙 + 4단계 사용법 한 줄 (`lib/main/live-prompt.js`)
+### 현재 selector 경계 (2026-08-21)
+
+앱은 기본적으로 selector의 signed `plan_token`과 manifest-derived `canvas_type`/renderer
+metadata를 소비한다. 단, 닫힌 standalone quote grammar가 정확히 매칭될 때는 앱이
+case-sensitive canonical identity `detail:ka10001:current_trading`을 직접 선택한다. 이
+예외는 현재 국내 equity quote에만 적용되며, 모든 다른 operation은 backend selector/plan을
+통과한다. 종목·계좌·가격·수량은 여전히 typed binding으로 백엔드가 검증한다.
+
+현재가 빠른 경로는 국내 equity quote snapshot으로 판정된 계획에 한정된다. foreign-market,
+차트·이력·업종 질문은 quote로 강제하지 않는다. `canvas_type`은 표현 선택이며 AITS DTO는
+차트/캔버스 payload 계약이지 market-data identity나 quote source가 아니다. 직접 MCP chart
+검증은 AITS DTO 경계에서 별도로 수행한다. 2026-08-21 현재 `npm test`는 321건 통과이며,
+직접 MCP chart 검증은 selector 정확도와 합산하지 않는다.
+
+### 라우팅 규칙 + selector/manifest 실행법 (`lib/main/live-prompt.js`)
 
 이 게이트웨이는 `backend/docs/LLM_API_SELECTION.md`가 정의한 4개 셀렉터 툴
 (`athena_search`/`athena_describe`/`athena_resolve`/`athena_call`)로 키움 REST
@@ -575,49 +589,60 @@ pytest 2건 + **verify 검증 10**(합성 봉투로 실배선 채널 `athena:add
 엉뚱한 MCP로 답할 여지가 있었다 — 프롬프트에 명시적으로 못 박았다:
 
 - 시세·차트·호가·체결·순위·잔고 등 마켓 데이터는 반드시 `athena_search →
-  athena_describe → athena_resolve → athena_call` 순서로 조회하고, 외부 MCP·웹으로
-  대체하지 않는다.
-- `athena_describe`의 `detail_groups`에서만 `detail_group`을 지정한다(없으면 전체
-  응답).
+  athena_describe → athena_resolve`로 선택하고, manifest-backed read는 받은
+  `plan_token`만 `athena__render_canvas`에 넘긴다. `canvas_type`과 `data`는 보내지
+  않으며 외부 MCP·웹으로 대체하지 않는다.
+- 이 직행 경로는 일반 facts quote grammar에만 적용한다. 닫힌 standalone quote grammar가
+  정확히 매칭되면 앱이 `detail:ka10001:current_trading`을 선택하고, 그 밖의 facts/table/
+  compound/chart 질문은 backend selector/plan을 통과한다. 모델이 임의 payload를 만들거나
+  `athena_call`로 우회하지 않는다.
+- `athena_call` 직접 호출은 manifest-unsupported가 명시됐거나 no-card fallback을
+  명시적으로 선택한 경우에만 쓴다.
+- `athena_describe`의 `detail_groups`에서만 `detail_group`을 지정한다. 생략하면
+  질문과 일치하는 typed local detail이 하나일 때만 자동 선택되고, 둘 이상이면
+  `DETAIL_GROUP_REQUIRED`로 거부된다(전체 응답으로 간주하지 않는다).
 - `plan_token`은 1회용이다 — 실패해도 소진되므로(`LLM_API_SELECTION.md` "Single-use
   enforcement") 같은 토큰으로 재시도하지 않고 `athena_resolve`부터 다시 밟는다.
 - 키움 백엔드가 미기동이라는 에러가 오면 그 사실을 사용자에게 알리고 끝낸다.
 
-증거: `live-prompt.test.js`에 라우팅 규칙 단언 2건 + 4단계 사용법 단언 1건 추가,
+증거: `live-prompt.test.js`에 selector/manifest 라우팅 및 detail 사용법 단언을 추가,
 `npm test` 통과.
 
-### chart 캔버스 힌트 + 실배선 렌더 (`live-prompt.js` + `canvas.js`)
+### fallback chart 캔버스 힌트 + 실배선 렌더 (`live-prompt.js` + `canvas.js`)
 
-프롬프트에 `table`/`stream`/`reader`와 같은 형식으로 `chart` 힌트를 추가했다 —
-`canvas_type "chart"`, `data`는 `{"symbol","name","bars":[{"time":"YYYY-MM-DD",
-"open","high","low","close","volume"}, ...]}`. 키움 일봉(`ka10081` 등) 응답
+수동 payload가 필요한 외부 데이터 또는 명시적 manifest-unsupported fallback용으로
+`table`/`stream`/`reader`와 같은 형식의 `chart` 힌트를 유지한다. 키움
+manifest-backed read는 이 형상을 모델이 만들지 않고 `plan_token`만 전달한다.
+fallback `chart` 형상은
+`canvas_type "chart"`, `renderer_id "aits-chart-v1"`, `data`는
+`{"symbol":"005930","chart":{"period":"day","target":"stock","trId":"ka10081",
+"candles":[{"time":"YYYY-MM-DD","open":숫자,"high":숫자,"low":숫자,
+"close":숫자,"volume":숫자}, ...]}}`. 키움 일봉(`ka10081` 등) 응답
 매핑을 예시로 못 박았다 — `dt(YYYYMMDD)→time(YYYY-MM-DD)`,
 `open_pric→open`/`high_pric→high`/`low_pric→low`/`cur_prc→close`/`trde_qty→volume`
-(전부 문자열로 오므로 숫자 변환 지시 포함), `bars`는 날짜 **오름차순**(키움 응답은
+(전부 문자열로 오므로 숫자 변환 지시 포함), `candles`는 날짜 **오름차순**(키움 응답은
 최신순이므로 뒤집으라고 명시).
 
 `canvas.js`의 `addLiveCard`에 `canvas_type === 'chart' && !fell_back` 분기와
-`renderLiveChart(envelope)`를 추가했다 — 기존 `renderChartCard`(목업, `addCard('chart')`
-경로)와 같은 `createChartCard`를 재사용하되 `loadFixture` 대신 `envelope.data`의
-`{symbol,name,bars}`를 그대로 먹인다. 카드 셸(`makeCard('chart', …)`)·
-`cardDestroyers` 등록·빈 `bars` 시 `errorNote` 처리는 다른 실배선 렌더러
-(`renderMcpTable`/`renderLiveStream`/`renderLiveReader`)와 동일한 패턴이다. 카드
-제목은 `envelope.caption`을 우선하고 없으면 `data.name`으로 "일봉 — 종목명"을
-만든다. `lib/canvas-layout.js`의 폭 문법(`chart: 'full'`)과 큐레이션 드롭 타깃
+`renderLiveChart(envelope)`를 추가했다. 이 경로는 `renderer_id`와
+`data.symbol + data.chart`를 `aits-chart-panel.js`에서 검증한 뒤, fixture·REST·MCP가
+공유하는 AITS panel adapter를 통해 기존 저수준 `createChartCard` 하나만 사용한다.
+계약 누락·불일치 또는 빈 `candles`는 데이터 성공으로 세지 않고 같은 카드 슬롯의
+오류/빈 상태로 표시한다. 카드 제목은 `envelope.caption`을 우선하며,
+`lib/canvas-layout.js`의 폭 문법(`chart: 'full'`)과 큐레이션 드롭 타깃
 (`chart: ['chart']`)은 차트 카드(CC-101~106) 작업 때 이미 들어가 있어 수정하지
 않았다.
 
-**정직하게 남기는 갭**: `backend/athena_mcp/canvas.py`의 `CANVAS_SCHEMAS`
-레지스트리(2026-08-18 기준)는 `stream`/`reader`/`timeline`/`table` 4종뿐이고
-`chart`는 아직 없다 — 게이트웨이가 실제로 `canvas_type:"chart"` 봉투를 그대로
-통과시키는지는 `backend/`가 스키마를 추가해야 실측할 수 있다(별도 작업, 이
-브랜치에서는 손대지 않았다). `main.js`/`canvas.js`는 응답값 `canvas_type`만 읽으므로
-백엔드가 스키마를 추가하면 이 앱 쪽은 추가 수정 없이 그대로 동작해야 한다는 게
-설계 의도지만, 실왕복으로는 아직 확인 못 했다.
+**역사적 갭 해소**: 2026-08-18 당시에는 `chart` 스키마가 없어 수동 봉투 실왕복을
+확인하지 못했지만, 현재 manifest-backed `plan_token` 경로는 backend가
+`operation_ref`로 카드 종류와 데이터를 결정한다. 따라서 정상 키움 chart/facts/
+table/compound 요청은 위 fallback 스키마나 모델의 `canvas_type` 선택에 의존하지 않는다.
 
 증거: `npm run verify` 검증13b — `liveEnvelope` 헬퍼(검증10)로 합성 chart 봉투를
 보내 카드 렌더·`lightweight-charts` `<canvas>` 마운트·같은 타입 재요청 시 목업
-차트 카드를 갈아치우는 것까지 단언(백엔드·quota 무관, 순수 렌더러 단 검증).
+차트 카드를 갈아치우는 것까지 단언한다. 추가로 `data-chart-authority="AITS"`,
+`data-render-state="data"`, `data-renderer-id="aits-chart-v1"`, 실제 canvas 존재,
+`.uk-error` 부재를 함께 확인해 오류 카드가 성공으로 통과하는 false-green을 막는다.
 2026-08-18 실행 통과, `captures/20-live-chart-card.png`.
 
 ### 백엔드 자동 기동 (`lib/main/backend-launcher.js`)
@@ -1182,16 +1207,13 @@ Win+←/→/↑/↓가 이 앱에서 OS 표준 창 단축키와 같은 뜻으로
 알린다(chat.js `maybeShowCoachmark`, localStorage 플래그). fixture(자동 검증)
 실행에선 뜨지 않는다 — 캡처 결정론 보호.
 
-**휘도 감지-적응 (2026-08-19)** — palette.md "채택" 스펙의 실결선. Paper 보드 45가
-밝은 배경 위 유리 0.30에서 dim 텍스트 소실을 실측한 것이 근거다.
-`main.js startBackdropSampling()`: desktopCapturer 썸네일에서 **자기 창 영역을
-제외**하고(화면 캡처에는 우리 창도 찍힌다) 평균 휘도를 재고, 2초 폴링 + EMA
-스무딩 후 `athena:backdrop-luminance`로 표면별 두께를 방송한다 — 창 0.30→최대
-0.72, 캔버스 창 0.50→0.72. 렌더러는 600ms 전이(opacity 페이드가 아니라 두께
-변조). 폴백: 3연속 실패 시 0.55 고정. 계산부는 `lib/main/backdrop-luma.js`
-(단위 테스트 9건), 실측은 `probe-backdrop-luma.js`(captures/backdrop-luma-probe.json
-— 어두운 데스크톱에서 b=0 판정·이벤트 왕복 확인). fixture 실행에선 루프를 아예
-안 돌린다 — 검증16(유리 사다리) 결정론 보호.
+**정적 안전 유리 알파 (2026-08-21)** — 데스크톱 썸네일 캡처와 2초 휘도 폴링은
+Electron 메인 프로세스/IPC를 수 초 동안 굶겨 REST 카드와 보편 영수증의 3초 SLA를
+침범한 실측 때문에 제거했다. 정상 실행과 fixture 모두 `tokens.css`의 고정 사다리
+(대화 0.30, 카드 0.45, 캔버스 0.50, 확장 대화 0.55)를 사용한다. 채팅 높이에 따른
+0.30→0.55 보간과 기존 CSS 유리 효과는 유지하지만, desktopCapturer·주기 타이머·
+런타임 알파 IPC는 존재하지 않는다. 검증16은 이 정적 사다리와 Paper 시각을 계속
+단언한다.
 
 **부수(2026-08-19)** — 캔버스 900px 이하 1열 접힘(canvas.css @media — Paper 보드
 46 명세와 짝). 창 이동 커서 신호는 손잡이가 크롬으로 좁혀지며(정정 5) 컨트롤
@@ -1257,6 +1279,10 @@ Win+←/→/↑/↓가 이 앱에서 OS 표준 창 단축키와 같은 뜻으로
 `canvas_push.py::canvas_render_plan` 둘 다 같은 함수 `resolve_render_plan_kind`를
 공유). 앱 쪽 변경은 이 결선의 소비자다.
 
+live prompt도 이 계약을 `facts`/`table`/`compound`/`chart` 전체에 적용한다. 모델은
+resolve 결과의 `plan_token`만 보내며 `canvas_type`과 `data`를 생략한다.
+`athena_call`은 명시적 manifest-unsupported/no-card fallback에만 남는다.
+
 **FactsCard/CompoundCard 렌더러 신설**(`canvas.js` `renderFactsCard`/
 `renderCompoundCard`, 셀 프리미티브 5종은 `lib/facts-card.js` — 가격/등락/수량/
 종목/일시, 필드별 개별 렌더러는 만들지 않는다). FactsCard는 필드 11개를 경계로
@@ -1268,12 +1294,12 @@ CompoundCard는 같은 셀 프리미티브로 만든 헤더 밴드 + 표 1개로
 같음), compound는 전폭(table과 같음). `innerHTML` 사용 0건 유지(전부
 `textContent`/DOM 노드).
 
-**차트 초기 주기**(P2a) — 일/주/월/년봉 8개 TR에 한해 manifest의
-`presentation.controls.default_period`가 카드 봉투의 `data.initial.period`로
-실린다. `chart-card.js`의 하드코딩 `'D'` 초기화를 이 값으로 대체하되, 값이 없거나
-(분/틱 4개 TR, P2b는 의도적으로 `null`) 인식 못 하는 값이면 기존 `'D'` 폴백을 그대로
-쓴다 — 실제 데이터가 일봉인데 툴바만 다른 주기를 가리키는 정보 정직성 위반을
-`resolveInitialPeriod`가 검증 후 실제 재샘플까지 수행해 막는다.
+**차트 초기 주기**(AITS C1) — backend가 발급한 `renderer_id="aits-chart-v1"`과
+`data.chart.period`(`tick|min|day|week|month|year`)가 표시 주기의 유일한 권위다.
+`aits-chart-panel.js`가 이를 내부 툴바 토큰(`TICK|MIN|D|W|M|Y`)으로 매핑하며,
+REST/MCP live 경로는 별도 초기주기 객체나 TR 정규식 추론으로 폴백하지 않는다.
+특히 tick/min candles의 숫자 epoch는 숫자로 유지하고, 장기 주기의 날짜 문자열은
+그대로 전달해 lightweight-charts의 시간 타입을 바꾸지 않는다.
 
 **모델 표면 축소(P5)**: MCP 툴 스키마의 `render_canvas`용 `canvas_type`을
 `plan_token` 경로 한정으로 `deprecated: true` 표시했다(완전 제거는 하지 않음 —
@@ -1286,22 +1312,49 @@ render-plan **응답**의 실제 `canvas_type`으로 만든다(요청값이 아�
 완결로 백엔드 `RenderPlanRequest.canvas_type`(`canvas_push.py`)도 선택 필드로
 전환했다 — 앱이 더 이상 보낼 값이 없기 때문이다.
 
-**미완·범위 밖(정직하게 기록)**: EventCard(23, WS)·ActionCard(12, 주문)·
-StatusCard(2, oauth) = 37개 매핑은 이번 라운드에서 손대지 않았다 — 여전히 모델/
-기존 서브시스템(루틴·주문 티켓·oauth) 소관이다. 264개 read/display **전부**가
+캐시 판정은 describe로 확인한 `preferred_ref` canonical assertion이 있는 read-only
+`auto`/`query` resolve만 저장한다. `preferred_ref`·`detail_group`·`response_mode`는
+리플레이 resolve에 다시 보내 카탈로그 변경이나 소유권 불일치를 재검증하고, 실패하면
+기존처럼 캐시를 무효화한 뒤 live 경로로 폴백한다. `candidate_refs`는 search의 soft
+hint라 저장하지 않으며, 주문·웹소켓·OAuth 판정도 캐시/리플레이하지 않는다. 주문과
+조회는 TR 접두어로 추측하지 않고 backend manifest가 돌려준 실제 카드 종류로 가른다.
+한 turn에 successful resolve와 render가 각각 정확히 하나이고, `tool_use_id`로 찾은
+resolve 결과의 `plan_token`과 render 입력 토큰이 일치할 때만 둘을 같은 판정으로 묶는다.
+
+**보호 워크플로 표시 경계**: EventCard(WS)·ActionCard(주문)·StatusCard(OAuth)는
+Paper 승인 템플릿을 표시하는 렌더러만 연결했다. 이벤트는 제한된 로그와 lifecycle,
+주문은 allowlist 영수증과 확인 단계, OAuth는 설정/준비/만료 상태만 표시한다. 원본
+WS 프레임·주문 실행·OAuth 동작·자격 증명 값은 캔버스에서 다루지 않는다. 264개
+read/display **전부**가
 카드 *종류* 결선의 대상이다(facts 114 · table 121 · compound-generic 17 · 차트
 12 = 264) — 단 카드 *종류*와 별개 층위인 **초기 주기**는 차트 12개 중 8개(P2a,
 일/주/월/년봉)만 실제 값을 받는다. 분/틱 차트 4개 TR(P2b)은 카드 종류는 배선되지만
 초기 주기는 명시적 미배선(`presentation.controls.default_period=null` + 부정
 테스트로 고정, `chart-resample.js`의 의사난수 합성 재샘플은 그대로). "264/264 완전
 배선"이라고 뭉뚱그리면 카드 종류와 초기 주기가 같은 완성도라고 오독하게 된다.
-Paper 화면설계서에 경우별 대표 보드 58~70(13장)을 신설했지만, Paper 렌더 서비스
-타임아웃으로 **시각 검수(스크린샷)는 못했다** — 토큰 값(무채색·액센트 0·12px
-하한) 코드 대조로 대체 증거를 남겼을 뿐이다.
+Paper 화면설계서의 13개 대표 케이스(F1/F2/T1/T2/T3/T4/C1/C2/E1/E2/E3/A1/S1)는
+`npm run verify`가 실제 Electron renderer에 하나씩 주입한다. 각 케이스는 고유 PNG와
+DOM/layout/control/state 단언을 `captures/VERIFY-REPORT.json.paperScreenCases`에 남긴다.
 
 **검증**: `npm run verify` 검증20(facts/compound 카드 — F1 그룹/행 수·가격 텍스트·
 등락 톤 클래스·일시 텍스트·종목 텍스트, F2 2열 그리드, compound 밴드·표 렌더) 신설
-— 2026-08-20 실행 기준 `npm test` 256건(fast-path 신규 2건 포함, 254→256) ·
-`npm run verify` 검증 1~20 전 단언 통과 · backend pytest 940건(937→940, canvas_type
-선택 필드·MCP 스키마 deprecated 표시 회귀 테스트 3건 추가).
+— 2026-08-21 실행 기준 `npm test` 321건 · `npm run verify` 기존 검증과 Paper 13종
+전 단언 통과.
+
+### 키움 REST 직결 데이터셋 캔버스
+
+`lib/main/rest-dataset-runner.js`는 검증된 query operation과 arguments가 이미 있는
+키움 REST 데이터셋만 받는다. 모델·Claude·MCP·WebSocket은 첫 화면 경로에 없으며,
+backend `render-plan`의 inline envelope를 실제 renderer에 바로 보낸다. 첫 항목을
+먼저 표시한 뒤 나머지는 동시 실행 3개 이하로 처리하고, 한 데이터셋은 최대 6장이다.
+카드는 `dataset_id/item_id/ordinal`로 식별되어 같은 카드 종류도 함께 존재하며 다음
+데이터셋이 오면 이전 데이터셋 전체를 교체한다.
+
+표시 완료는 창이 보이고 카드 DOM rect가 0보다 크며 두 번의 animation frame이 지난
+시점의 IPC ack로만 인정한다. backend 호출은 2700ms 안에 끝나도록 제한하고, timeout/
+cancel/error도 manifest/Paper가 지정한 같은 슬롯의 상태 카드로 표시한다. 성공 채팅
+답변은 데이터 값을 반복하지 않는 고정 영수증 `캔버스에 표시했습니다.`이며 추천은
+backend가 미리 선언한 안전한 query action만 최대 3개 노출한다. 종목명은 `ka10099`
+stock-master로 만든 버전 인덱스의 exact alias만 사용하고, 인덱스가 없거나 모호하면
+직결 경로를 포기한다. 6자리 코드는 즉시 사용할 수 있다.
 

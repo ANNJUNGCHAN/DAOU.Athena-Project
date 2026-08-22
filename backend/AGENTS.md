@@ -44,7 +44,13 @@ fails if the tree is stale.
 - Order routes stay disabled by default (`ATHENA_ENABLE_ORDER_API` + `ATHENA_LOCAL_BEARER_TOKEN`),
   use a no-retry client, and require explicit confirmation plus idempotency.
 - Errors must be secret-safe at the HTTP boundary — raise the domain errors in `athena_api/errors.py`.
-- Treat the selector evaluation suite as a release gate.
+- Treat the selector evaluation suite as a release gate. Keep public production,
+  expansion, v2, v3, and v4 strata separate; shadow/advisory analysis and lexical
+  score thresholds are not execution authority. Canonical operation identities are
+  exact/case-sensitive `operation_ref` values; instrument/account/price/quantity
+  values remain typed bindings. Selector metrics are artifact-bound last-known measurements and
+  must be refreshed after evaluator/source-hash changes; see `backend/docs/LLM_API_SELECTION.md`
+  and the dated plan artifacts.
 
 ### Testing Requirements
 ```powershell
@@ -65,6 +71,9 @@ Async tests need no marker (`asyncio_mode = "auto"`). HTTP is stubbed with `resp
 - One-line module docstring at the top of every module states its single responsibility.
 - Dependency injection through `athena_api/dependencies.py`; no import-time globals for clients.
 - Bounded everything: rolling-window rate limits, bounded subscriber queues, bounded batch fan-out.
+- Selector search/resolve rank the same complete intent surface. `candidate_refs` are validated
+  soft hints, while `preferred_ref` is only a canonical family assertion; neither may override
+  family selection or weaken order/WebSocket/OAuth visibility gates.
 
 ## Dependencies
 
