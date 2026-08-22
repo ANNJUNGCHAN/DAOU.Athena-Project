@@ -64,6 +64,14 @@ test('normal Electron runtime contains no desktop capture polling that can starv
   assert.doesNotMatch(mainSource, /athena:backdrop-luminance/);
   assert.match(mainSource, /visiblePaintAt:\s*performance\.now\(\)/);
   assert.match(runnerSource, /clock\s*=\s*\(\)\s*=>\s*performance\.now\(\)/);
-  assert.match(tokensSource, /--glass-window:\s*0\.30/);
-  assert.match(tokensSource, /--glass-canvas:\s*0\.50/);
+  // 사다리는 런타임 샘플링이 아니라 **정적 토큰**이어야 한다는 것이 이 단언의 요지다.
+  // 2026-08-22 팔레트 반전(사용자 지시 "애플 Liquid Glass 형태 그대로")으로 값 자체는
+  // 바뀌었고 투명도 3단(clear/default/opaque)이 생겼다 — 값을 못박는 대신 기본 단계가
+  // 정적 리터럴이고 순서 계약(window < card < canvas < window-max)이 성립함을 본다.
+  const ladder = ['window', 'card', 'canvas', 'window-max'].map((key) => {
+    const found = tokensSource.match(new RegExp(`--glass-${key}:\\s*(\\d*\\.?\\d+);`));
+    assert.ok(found, `--glass-${key} 정적 리터럴이 없다`);
+    return Number(found[1]);
+  });
+  assert.deepEqual(ladder, [...ladder].sort((a, b) => a - b), '유리 사다리 순서 계약 위반');
 });

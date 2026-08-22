@@ -35,6 +35,10 @@ function applyFontSizePref(p) {
   const v = p && p.fontSize;
   if (v && v !== 'md') document.documentElement.dataset.fontSize = v;
   else delete document.documentElement.dataset.fontSize;
+  // 유리 투명도 3단(2026-08-22) — 같은 방송을 타고 두 창에 함께 적용된다.
+  const g = p && p.glassLevel;
+  if (g && g !== 'default') document.documentElement.dataset.glass = g;
+  else delete document.documentElement.dataset.glass;
 }
 (async () => {
   try {

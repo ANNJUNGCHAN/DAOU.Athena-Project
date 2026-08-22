@@ -405,6 +405,36 @@ async function refreshScreenCard(card, head, body) {
   }
   body.appendChild(row('uk-toggle-row', [fontLabelCol, fontChipRow]));
 
+  // ---- 유리 투명도 3단 (2026-08-22 사용자 지시 — 애플 Liquid Glass 레퍼런스가
+  // 투명도를 사용자 슬라이더로 준다). 값은 lib/main/prefs.js GLASS_LEVELS와 1:1이고
+  // tokens.css의 --glass-* 사다리를 통째로 바꾼다. 글자 크기와 완전히 같은 문법.
+  const GLASS_CHIPS = [
+    { value: 'clear', label: '가장 투명' },
+    { value: 'default', label: '중간' },
+    { value: 'opaque', label: '가장 불투명' },
+  ];
+  const glassLabelCol = el('div');
+  glassLabelCol.appendChild(el('div', 'uk-toggle-label', '유리 투명도'));
+  glassLabelCol.appendChild(
+    el('div', 'uk-toggle-sub', '두 창과 카드에 함께 적용된다 — 바탕이 복잡하면 불투명 쪽이 읽힌다'),
+  );
+  const glassChipRow = row('uk-chip-row', []);
+  const currentGlass = data.glassLevel || 'default';
+  const glassChips = [];
+  for (const c of GLASS_CHIPS) {
+    const b = button('ghost', c.label, {
+      onClick: async () => {
+        await setPref('glassLevel', c.value);
+        for (const { btn, value } of glassChips) btn.classList.toggle('is-pressed', value === c.value);
+      },
+    });
+    b.classList.add('uk-chip');
+    if (c.value === currentGlass) b.classList.add('is-pressed');
+    glassChips.push({ btn: b, value: c.value });
+    glassChipRow.appendChild(b);
+  }
+  body.appendChild(row('uk-toggle-row', [glassLabelCol, glassChipRow]));
+
   // ---- UI 배율 — 기존 Ctrl+=/Ctrl+-/Ctrl+휠(chat.js)과 같은 채널을 버튼으로 노출 ----
   const zoomLabelCol = el('div');
   zoomLabelCol.appendChild(el('div', 'uk-toggle-label', 'UI 배율'));

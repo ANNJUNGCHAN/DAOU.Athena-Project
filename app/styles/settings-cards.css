@@ -34,7 +34,7 @@
    물러난다. 2026-08-17 디자인 리뷰 [MED] 정정 — SETTINGS-05 캡처에서 "활성화"와
    "+ 서버 등록"이 동시에 마젠타로 보였다. */
 .settings-grid:has(.uk-sheet) .card:not(:has(.uk-sheet)) .uk-btn-primary {
-  background: rgb(255 255 255 / 10%);
+  background: rgb(16 19 26 / 10%);
   color: var(--color-k-dim);
 }
 
@@ -44,7 +44,7 @@
    * 였고 대화 창 모드의 카드류는 전부 평면 rgba였다 — canvas.css .card와 같은
    * 처방(알파 0.45 + blur 14px)으로 재질을 통일한다. 유리 위 유리(#settings 자체가
    * .app 유리)는 two-windows.md 정정 2가 이미 감수한 비용이다. */
-  background: rgba(36, 42, 54, var(--glass-card)); /* SSOT: tokens.css 유리 사다리 */
+  background: rgba(255, 255, 255, var(--glass-card)); /* SSOT: tokens.css 유리 사다리 */
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid var(--color-k-line);
@@ -89,7 +89,7 @@
   padding: 0 18px;
   margin-bottom: 0;
   align-items: center;
-  background: rgba(29, 34, 44, 0.6);
+  background: rgba(255, 255, 255, 0.6);
   border-bottom: 1px solid var(--color-k-line-soft);
   flex-shrink: 0;
 }
@@ -102,7 +102,7 @@
 .uk-settings-actions { display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
 .uk-settings-note {
   padding: 8px 18px;
-  background: rgba(29, 34, 44, 0.35);
+  background: rgba(255, 255, 255, 0.35);
   font-family: var(--font-body);
   font-size: var(--text-sm);
   color: var(--color-k-faint);
@@ -135,13 +135,13 @@
   border-bottom: 1px solid #21262F;
 }
 .uk-row.is-clickable { cursor: pointer; }
-.uk-row.is-clickable:hover { background: rgb(255 255 255 / 3%); }
+.uk-row.is-clickable:hover { background: rgb(16 19 26 / 4%); }
 .uk-cell-strong { font-family: var(--font-body); font-size: var(--text-base); color: var(--color-k-text); }
 .uk-mono-faint { font-family: var(--font-mono); font-size: var(--text-sm); color: var(--color-k-faint); }
 .uk-cmd { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-k-faint); white-space: normal; word-break: break-all; }
 /* 유리화(2026-08-18) — 평면 rgba를 canvas 카드와 같은 재질로. 명령 문자열 가독은
    blur가 뒤를 뭉개므로 유지된다. */
-.uk-cmd-box { padding: 10px 12px; border-radius: 6px; background: rgba(29, 34, 44, 0.55); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid var(--color-k-line-soft); }
+.uk-cmd-box { padding: 10px 12px; border-radius: 6px; background: rgba(255, 255, 255, 0.55); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid var(--color-k-line-soft); }
 .uk-spacer { flex: none; }
 
 /* 계좌 목록 컬럼 */
@@ -163,7 +163,7 @@
 .uk-pill.is-clickable { cursor: pointer; }
 .uk-pill.tone-ok { background: rgb(95 206 63 / 12%); color: var(--color-ok); }
 .uk-pill.tone-warn { background: rgb(255 152 56 / 12%); color: var(--color-warn); }
-.uk-pill.tone-dim { background: rgb(255 255 255 / 6%); color: var(--color-k-dim); }
+.uk-pill.tone-dim { background: rgb(16 19 26 / 6%); color: var(--color-k-dim); }
 .uk-pill.tone-brand { background: rgb(238 19 123 / 16%); color: var(--color-brand); }
 
 /* ---- 시트 내부 폼 요소 (계좌 등록 · MCP 등록) ---- */
@@ -175,7 +175,7 @@
   padding: 16px;
   border-radius: 10px;
   /* 유리화(2026-08-18) — 솔리드 panel 색을 반투명 + blur로 */
-  background: rgba(23, 27, 36, 0.45);
+  background: rgba(255, 255, 255, 0.45);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid var(--color-k-line-soft);
@@ -282,7 +282,7 @@
 
 .uk-checklist {
   display: flex; flex-direction: column; gap: 6px;
-  padding: 12px 14px; border-radius: 8px; background: rgba(29, 34, 44, 0.35);
+  padding: 12px 14px; border-radius: 8px; background: rgba(255, 255, 255, 0.35);
 }
 .uk-checklist-row { display: flex; align-items: center; justify-content: space-between; }
 .uk-checklist-label { display: flex; align-items: center; gap: 8px; font-family: var(--font-body); font-size: var(--text-base); color: var(--color-k-text); }
@@ -290,7 +290,7 @@
 
 /* ---- MCP 등록 시트 ---- */
 .uk-alias-list { display: flex; flex-direction: column; border-radius: 6px; overflow: hidden; border: 1px solid var(--color-k-line-soft); }
-.uk-alias-row { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 1px solid var(--color-k-line-soft); background: rgba(29, 34, 44, 0.72); }
+.uk-alias-row { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 1px solid var(--color-k-line-soft); background: rgba(255, 255, 255, 0.72); }
 .uk-alias-row:last-child { border-bottom: none; }
 .uk-alias-arrow { color: var(--color-k-faint); font-family: var(--font-mono); }
 .uk-staged-alias { font-family: var(--font-mono); font-size: var(--text-base); color: var(--color-k-text); }
@@ -413,7 +413,7 @@ button.uk-model-account-row {
   text-align: left;
   transition: background var(--dur-fast) var(--ease);
 }
-button.uk-model-account-row:hover { background: rgb(255 255 255 / 5%); }
+button.uk-model-account-row:hover { background: rgb(16 19 26 / 5%); }
 button.uk-model-account-row:focus-visible { outline: 2px solid rgb(255 255 255 / 55%); outline-offset: -2px; }
 .uk-model-account-label { flex: none; }
 .uk-model-connect-label { font-family: var(--font-body); font-size: var(--text-sm); color: var(--color-k-dim); }
@@ -428,16 +428,16 @@ button.uk-model-account-row:focus-visible { outline: 2px solid rgb(255 255 255 /
 .uk-btn.uk-chip {
   padding: 6px 12px;
   border-radius: 999px;
-  background: rgb(255 255 255 / 5%);
-  border: 1px solid rgb(255 255 255 / 14%);
+  background: rgb(16 19 26 / 5%);
+  border: 1px solid rgb(16 19 26 / 14%);
   color: var(--color-k-dim);
   font-family: var(--font-body);
   font-size: var(--text-sm);
 }
-.uk-btn.uk-chip:hover:not(:disabled) { background: rgb(255 255 255 / 10%); }
+.uk-btn.uk-chip:hover:not(:disabled) { background: rgb(16 19 26 / 10%); }
 .uk-btn.uk-chip.is-pressed {
-  background: rgb(255 255 255 / 16%);
-  border-color: rgb(255 255 255 / 32%);
+  background: rgb(16 19 26 / 16%);
+  border-color: rgb(16 19 26 / 16%);
   color: var(--color-k-text);
   font-family: var(--font-strong);
 }

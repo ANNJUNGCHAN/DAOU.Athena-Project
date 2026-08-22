@@ -18,7 +18,7 @@ html, body { background: transparent; }
      아니라 두께 변조(리퀴드 글래스 적응성) — 급변은 깜빡임으로 보인다(palette.md).
      backgroundColor는 verify.js 검증16이 직접 읽는 SSOT 값 — background 축약형으로
      되돌려 아래 background-image와 합치지 마라. */
-  background-color: rgba(29, 34, 44, var(--glass-canvas-live, var(--glass-canvas)));
+  background-color: rgba(255, 255, 255, var(--glass-canvas-live, var(--glass-canvas)));
   transition: background-color 600ms var(--ease), background-image 600ms var(--ease);
   /* 리퀴드 글라스는 검정 평면이 아니다(2026-08-17 사용자 지시 — "애플의 리퀴드
    * 글라스라는 사실을 명심해"). 두께 0.50(2026-08-18 하향 후 현행값) 위에 무채색
@@ -30,11 +30,12 @@ html, body { background: transparent; }
    * 이 창도 두 창 중 하나라 .app과 같은 문법을 쓴다. 기존 라디얼 하이라이트 2장은
    * 그대로 아래에 남겨 산란(scatter) 역할을 유지한다. */
   background-image:
-    linear-gradient(115deg, transparent 32%, rgba(255, 253, 248, 0.11) 43%, transparent 58%),
+    /* 2026-08-22: .app과 같은 수정 — 흡수는 두께의 변조이지 반복이 아니다.
+     * 사다리 값은 background-color 하나만 지고 여기서는 델타만 얹는다. */
     linear-gradient(135deg,
-      rgba(29, 34, 44, calc(var(--glass-canvas-live, var(--glass-canvas)) + 0.08)) 0%,
-      rgba(29, 34, 44, var(--glass-canvas-live, var(--glass-canvas))) 46%,
-      rgba(36, 42, 54, calc(var(--glass-canvas-live, var(--glass-canvas)) + 0.04)) 100%),
+      rgba(255, 255, 255, 0.06) 0%,
+      rgba(255, 255, 255, 0) 46%,
+      rgba(255, 255, 255, 0.04) 100%),
     radial-gradient(820px 480px at 22% 12%, rgba(255, 255, 255, 0.05), transparent 70%),
     radial-gradient(720px 520px at 78% 88%, rgba(255, 255, 255, 0.035), transparent 70%);
   /* 렌징(2026-08-19) — .app과 같은 4요소. 창 전체가 유리 표면이므로 자기 경계에
@@ -43,7 +44,7 @@ html, body { background: transparent; }
   box-shadow:
     inset 0 1px 0 rgba(255, 253, 248, 0.58),
     inset 1px 0 0 rgba(255, 253, 248, 0.15),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.40),
+    inset 0 -1px 0 rgb(16 19 26 / 8%),
     inset 0 0 70px rgba(255, 240, 214, 0.05);
   will-change: clip-path;
   overflow: hidden;
@@ -64,9 +65,9 @@ html, body { background: transparent; }
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-auto-rows: min-content;
-  gap: 16px;
+  gap: 12px;
   /* 상단은 타이틀바(32px) 아래에서 시작한다 — 카드가 크롬에 깔리지 않게. */
-  padding: 44px 20px 20px;
+  padding: 36px 16px 16px;
   align-content: start;
   /* 카드가 창보다 많이 쌓이면 스크롤 — 2026-08-17 디자인 리뷰 [HIGH] 정정.
    * 이전 판은 부모 .mosaic의 overflow:hidden에 잘려 4번째 카드부터 영구히
@@ -84,8 +85,8 @@ html, body { background: transparent; }
 }
 .grid::-webkit-scrollbar { width: 8px; }
 .grid::-webkit-scrollbar-track { background: transparent; }
-.grid::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.14); border-radius: 999px; }
-.grid::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.28); }
+.grid::-webkit-scrollbar-thumb { background: rgb(16 19 26 / 18%); border-radius: 999px; }
+.grid::-webkit-scrollbar-thumb:hover { background: rgb(16 19 26 / 32%); }
 .grid:empty::before {
   content: '캔버스 대기 중 — 대화 창에서 질의를 보내면 이 자리에 캔버스가 뜬다';
   grid-column: 1 / -1;
@@ -109,7 +110,7 @@ html, body { background: transparent; }
    * backgroundColor는 verify.js 검증16 cardMatchesToken이 직접 읽는 SSOT 값 —
    * background 축약형으로 되돌려 아래 background-image와 합치지 마라(합치면
    * backgroundColor가 transparent가 돼 검증16이 깨진다). */
-  background-color: rgba(36, 42, 54, var(--glass-card)); /* SSOT: tokens.css 유리 사다리 */
+  background-color: rgba(255, 255, 255, var(--glass-card)); /* SSOT: tokens.css 유리 사다리 */
   /* 2026-08-19 흡수·스펙큘러 — .app/.mosaic와 같은 문법(115° 정적 스윕 + 135° 3단
    * 흡수 그라디언트). 다크 스톱 3번째 톤(43,50,64)은 새 토큰이 아니라 panel→panel2→
    * panel3 델타(+7,+8,+10 계열)를 그대로 이어 외삽한 값이다 — 카드보다 한 단계
@@ -117,14 +118,14 @@ html, body { background: transparent; }
    * background-image는 항상 콘텐츠(.card-head/.card-body)보다 아래에 페인트되므로
    * 숫자 가독(§8)에 영향 없다. */
   background-image:
-    linear-gradient(115deg, transparent 32%, rgba(255, 253, 248, 0.13) 43%, transparent 58%),
+    /* 2026-08-22: 같은 수정(절대 알파 반복 → 델타 변조). */
     linear-gradient(135deg,
-      rgba(36, 42, 54, calc(var(--glass-card) + 0.08)) 0%,
-      rgba(36, 42, 54, var(--glass-card)) 46%,
-      rgba(43, 50, 64, calc(var(--glass-card) + 0.04)) 100%);
+      rgba(255, 255, 255, 0.06) 0%,
+      rgba(255, 255, 255, 0) 46%,
+      rgba(255, 255, 255, 0.04) 100%);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid rgb(16 19 26 / 6%);
   border-radius: 14px;
   padding: 14px 16px;
   min-height: 200px;
@@ -137,9 +138,9 @@ html, body { background: transparent; }
   box-shadow:
     inset 0 1px 0 rgba(255, 253, 248, 0.62),
     inset 1px 0 0 rgba(255, 253, 248, 0.17),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.42),
+    inset 0 -1px 0 rgb(16 19 26 / 8%),
     inset 0 0 54px rgba(255, 240, 214, 0.07),
-    0 24px 60px rgba(6, 8, 12, 0.55);
+    0 14px 36px rgb(16 19 26 / 10%);
   transition: box-shadow var(--dur-base) var(--ease), border-color var(--dur-base) var(--ease);
 }
 /* 폭 문법 — 폭은 형상이 정하고(w-half/w-full, lib/canvas-layout.js) 순서는 도착순
@@ -166,7 +167,7 @@ html, body { background: transparent; }
 .mosaic.frost-baked .card {
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
-  background: rgba(36, 42, 54, 0.78);
+  background: rgba(255, 255, 255, 0.78);
 }
 
 .card-head {
@@ -201,7 +202,7 @@ html, body { background: transparent; }
   display: block;
   height: 18px;
   margin-top: -18px;
-  background: linear-gradient(to bottom, rgba(23, 27, 36, 0), rgba(23, 27, 36, 0.94));
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.94));
   pointer-events: none;
 }
 
@@ -230,7 +231,7 @@ html, body { background: transparent; }
 table.fin-table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: var(--text-base); }
 .fin-table th, .fin-table td { padding: 5px 10px; text-align: right; border-bottom: 1px solid var(--color-k-line-soft); white-space: nowrap; text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6); }
 .fin-table th:first-child, .fin-table td:first-child { text-align: left; }
-.fin-table thead th { position: sticky; top: 0; background: rgba(29, 34, 44, 0.96); color: var(--color-k-dim); font-weight: 400; font-family: var(--font-strong); }
+.fin-table thead th { position: sticky; top: 0; background: rgba(255, 255, 255, 0.96); color: var(--color-k-dim); font-weight: 400; font-family: var(--font-strong); }
 
 /* ---- 차트(CC-101) ---- */
 /* .card-body는 overflow:auto인데 lightweight-charts autoSize는 스크롤 컨테이너
@@ -268,7 +269,7 @@ table.fin-table { width: 100%; border-collapse: collapse; font-variant-numeric: 
   position: absolute; left: 2px; bottom: 2px;
   width: 112px; height: 22px;
   border-radius: 6px;
-  background: rgba(23, 27, 36, 0.55);
+  background: rgba(255, 255, 255, 0.55);
   pointer-events: none;
   z-index: 2;
 }
@@ -278,7 +279,7 @@ table.fin-table { width: 100%; border-collapse: collapse; font-variant-numeric: 
   position: absolute; top: 8px; left: 8px; width: 42px;
   display: none; flex-direction: column; gap: 4px;
   padding: 6px 5px;
-  background: rgba(29, 34, 44, 0.92);
+  background: rgba(255, 255, 255, 0.92);
   border: 1px solid var(--color-k-line-soft);
   border-radius: 6px;
   z-index: 4;

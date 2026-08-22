@@ -5,31 +5,38 @@
 @font-face { font-family: 'Daki Title'; src: url('file:///C:/Windows/Fonts/DakiMTitle.ttf') format('truetype'); font-weight: 400; }
 
 :root {
-  /* 표면 */
-  --color-k-bg: #10131a;
-  --color-k-panel: #171b24;
-  --color-k-panel2: #1d222c;
-  --color-k-panel3: #242a36;
-  --color-k-line: #2c3340;
-  --color-k-line-soft: #262c38;
+  /* 2026-08-22 팔레트 반전 — 사용자 지시("디자인을 갈아엎는 한이 있더라도 애플
+     Liquid Glass 형태로"). 근거: Windows의 mica·acrylic은 앱 테마를 따라가므로
+     다크 테마에서는 재질 자체가 어둡고, acrylic은 비활성 창에서 단색으로 떨어진다.
+     즉 "검은 창"은 CSS 틴트가 아니라 재질의 OS 동작이었다(2026-08-22 실측 3회).
+     라이트 테마에서 acrylic은 밝은 유리로 렌더되고 비활성 단색도 밝은 값이 된다.
+     ui/soul.md의 다크 무채색 규범을 이 지시가 대체한다 — 문서도 함께 갱신한다.
+     "유리는 무채색" 원칙은 유지한다: 흰 유리이지 색유리가 아니다. */
 
-  /* 텍스트 */
-  --color-k-text: #e6e8ee;
-  --color-k-dim: #9aa2b1;
-  --color-k-faint: #6b7480;
+  /* 표면 — 백색 유리 */
+  --color-k-bg: #eef0f4;
+  --color-k-panel: #ffffff;
+  --color-k-panel2: #fafbfc;
+  --color-k-panel3: #f4f5f8;
+  --color-k-line: rgb(16 19 26 / 14%);
+  --color-k-line-soft: rgb(16 19 26 / 8%);
 
-  /* 텍스트 밝기 알파 변형 — 2026-08-19 결정(질의응답): 온보딩·인증·설정 화면군이
-     쓰던 rgb(242 244 248 / N%)·rgb(230 232 238 / N%) 리터럴 11종을 4단으로 접는다.
+  /* 텍스트 — 유리 위 잉크 */
+  --color-k-text: #14171d;
+  --color-k-dim: #5b6270;
+  --color-k-faint: #8b93a1;
+
+  /* 텍스트 밝기 알파 변형 — 4단 계약은 유지하고 기준색만 잉크로 뒤집는다.
      새 알파가 필요하면 단계를 늘리지 말고 가장 가까운 단계를 쓴다. */
-  --color-k-bright: rgb(242 244 248 / 92%);
-  --color-k-soft: rgb(230 232 238 / 62%);
-  --color-k-hint: rgb(230 232 238 / 45%);
-  --color-k-ghost: rgb(230 232 238 / 30%);
+  --color-k-bright: rgb(16 19 26 / 92%);
+  --color-k-soft: rgb(16 19 26 / 62%);
+  --color-k-hint: rgb(16 19 26 / 45%);
+  --color-k-ghost: rgb(16 19 26 / 30%);
 
-  /* 가격 의미색 */
-  --color-up: #ff5c5c;
-  --color-down: #4d9fff;
-  --color-flat: #98a0b0;
+  /* 가격 의미색 — 흰 유리 위 대비를 위해 채도를 낮추고 명도를 내린다(의미는 불변) */
+  --color-up: #d92b2b;
+  --color-down: #1f6fd4;
+  --color-flat: #6b7480;
 
   /* 브랜드 — 인터랙션 지점 하나에만 */
   --color-brand: #ee137b;
@@ -44,11 +51,20 @@
      규범을 현실의 값 사다리로 개정하고 여기를 SSOT로 삼는다(soul.md §7 완화책 2 개정).
      순서 계약: window < card < canvas < window-max. verify.js 검증16이 이 값과
      실제 표면 렌더 값의 일치·순서를 단언한다 — 값을 바꾸려면 여기만 바꾼다.
-     카드가 캔버스 창보다 얇은 이유: 카드는 blur(14px)라는 별도 축을 함께 갖는다. */
-  --glass-window: 0.30;      /* 대화 창 기본(뒤=데스크톱) */
-  --glass-card: 0.45;        /* 카드 — backdrop-filter blur(14px)와 짝 */
-  --glass-canvas: 0.50;      /* 캔버스 창 표면 */
-  --glass-window-max: 0.55;  /* 대화 창 확장(뒤=캔버스) */
+     카드가 캔버스 창보다 얇은 이유: 카드는 blur(14px)라는 별도 축을 함께 갖는다.
+
+     2026-08-22 팔레트 반전과 함께 재조정(사용자 지시 "애플 Liquid Glass 형태 그대로").
+     경로: 창 재질(acrylic)을 끄고 투명창으로 갔으므로 이 값이 곧 화면에 보이는 막의
+     전부다. 0.06~0.20까지 내려봤더니 "너무 투명"이었고, 0.55에서는 어두운 바탕화면
+     위에서 중간 회색이 돼 잉크 글씨가 뭉갰다. 애플 레퍼런스가 어떤 배경에서도 읽히는
+     이유는 강한 블러로 뒤를 지우기 때문인데 우리는 창 뒤를 블러할 수 없다(Chromium은
+     페이지 안쪽만 흐린다). 블러로 못 지우면 막의 밝기로 지운다 — 거의 흰 패널로 올려
+     가독을 바탕화면과 무관하게 만든다. 사용자가 직접 고를 수 있도록 아래 3단
+     (clear/default/opaque)을 함께 둔다. 순서 계약은 세 단계 모두에서 지켜진다. */
+  --glass-window: 0.86;      /* 대화 창 기본(뒤=데스크톱) */
+  --glass-card: 0.90;        /* 카드 — backdrop-filter blur(14px)와 짝 */
+  --glass-canvas: 0.92;      /* 캔버스 창 표면 */
+  --glass-window-max: 0.95;  /* 대화 창 확장(뒤=캔버스) */
 
   --ease: cubic-bezier(.2, 0, 0, 1);
   --dur-fast: 120ms;
@@ -73,6 +89,30 @@
   --text-xl: 20px;
   --text-display: 28px;
   --text-hero: 72px;
+}
+
+/* 유리 투명도 3단 (2026-08-22 사용자 지시 — 애플 Liquid Glass 레퍼런스가 투명도를
+ * 사용자 슬라이더로 준다: "가장 투명 / 중간(기본값) / 가장 불투명"). 값의 SSOT는
+ * lib/main/prefs.js(glassLevel: clear/default/opaque)이고 렌더러가
+ * <html data-glass="...">로 적용한다. default는 :root 기본값이라 셀렉터가 없다.
+ * 순서 계약(window < card < canvas < window-max)은 세 단계 모두에서 지켜진다.
+ *
+ * 정직 기록: 애플처럼 "뒤가 흐려지며 비치는" 상태는 Windows/Electron에서 재현할 수
+ * 없다 — Chromium의 backdrop-filter는 페이지 안쪽만 흐리고 창 뒤 데스크톱은 못
+ * 건드린다. 그래서 clear 단계는 "블러 없는 맑은 유리"이고, 그 대가로 바탕화면이
+ * 복잡하면 글자가 겹쳐 읽힌다. 가독이 깨지면 default·opaque로 올리는 것이 정답이다.
+ * 창 안(카드 ↔ 캔버스 표면)의 블러는 진짜로 동작한다. */
+:root[data-glass='clear'] {
+  --glass-window: 0.30;
+  --glass-card: 0.42;
+  --glass-canvas: 0.48;
+  --glass-window-max: 0.55;
+}
+:root[data-glass='opaque'] {
+  --glass-window: 0.96;
+  --glass-card: 0.97;
+  --glass-canvas: 0.98;
+  --glass-window-max: 0.99;
 }
 
 /* 글자 크기 5단계 (2026-08-19 사용자 지시 "글자가 너무 큼") — 설정 › 화면 › 글자
