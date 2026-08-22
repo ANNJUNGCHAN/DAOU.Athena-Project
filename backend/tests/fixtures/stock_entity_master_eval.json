@@ -1,0 +1,31 @@
+{
+  "schema_version": 2,
+  "source": "ka10099-test-snapshot",
+  "market_kinds": {"0": "stock", "10": "stock", "8": "etf"},
+  "entities": [
+    {"code": "005930", "name": "삼성전자", "market": "0", "kind": "stock"},
+    {"code": "000660", "name": "SK하이닉스", "market": "0", "kind": "stock"},
+    {"code": "035420", "name": "NAVER", "market": "0", "kind": "stock"},
+    {"code": "005380", "name": "현대차", "market": "0", "kind": "stock"},
+    {"code": "373220", "name": "LG에너지솔루션", "market": "0", "kind": "stock"},
+    {"code": "005490", "name": "POSCO홀딩스", "market": "0", "kind": "stock"},
+    {"code": "035720", "name": "카카오", "market": "0", "kind": "stock"},
+    {"code": "006400", "name": "삼성SDI", "market": "0", "kind": "stock"},
+    {"code": "051910", "name": "LG화학", "market": "0", "kind": "stock"},
+    {"code": "105560", "name": "KB금융", "market": "0", "kind": "stock"},
+    {"code": "090430", "name": "아모레퍼시픽", "market": "0", "kind": "stock"},
+    {"code": "034020", "name": "두산에너빌리티", "market": "0", "kind": "stock"},
+    {"code": "066570", "name": "LG전자", "market": "0", "kind": "stock"},
+    {"code": "028260", "name": "삼성물산", "market": "0", "kind": "stock"},
+    {"code": "012330", "name": "현대모비스", "market": "0", "kind": "stock"},
+    {"code": "207940", "name": "삼성바이오로직스", "market": "0", "kind": "stock"},
+    {"code": "086280", "name": "현대글로비스", "market": "0", "kind": "stock"},
+    {"code": "011170", "name": "롯데케미칼", "market": "0", "kind": "stock"},
+    {"code": "010950", "name": "S-Oil", "market": "0", "kind": "stock"},
+    {"code": "259960", "name": "크래프톤", "market": "0", "kind": "stock"},
+    {"code": "015760", "name": "한국전력", "market": "0", "kind": "stock"},
+    {"code": "010130", "name": "고려아연", "market": "0", "kind": "stock"},
+    {"code": "241560", "name": "두산밥캣", "market": "0", "kind": "stock"},
+    {"code": "128940", "name": "한미약품", "market": "0", "kind": "stock"}
+  ]
+}

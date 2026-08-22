@@ -16,6 +16,7 @@ from athena_api.selector.errors import (
     OperationNotFoundError,
     UnsupportedOperationError,
 )
+from athena_api.selector.instrument_identity import InstrumentIdentityIndex
 from athena_api.selector.normalization import normalize_text
 from athena_api.selector.plans import PlanSigner
 from athena_api.selector.ranking import rank_documents
@@ -53,36 +54,44 @@ def _load_golden() -> tuple[dict[str, Any], ...]:
 GOLDEN = _load_golden()
 RESOLVE_CASES = tuple(case for case in GOLDEN if case["disposition"] == "resolve")
 
-# Two realtime resolve cases are permanent, documented limitations of a lexical ranker,
-# not bugs left half-finished - see test_realtime_resolve_known_limitations_fail_in_the_
-# documented_way for the exact shape each one must keep failing in. They are excluded from
-# test_resolve_selects_the_gold_base_or_detail's strict pass/fail gate and asserted there
-# instead, so the suite stays green *and* a new regression, or either limitation quietly
-# resolving cleanly, still breaks something - the latter is the signal to come back and
-# shrink this set, not to add to it.
-_REALTIME_RESOLVE_KNOWN_LIMITATIONS = {
-    # Both base:00 (주문체결) and base:0B (주식체결) are named 체결, and the question
-    # supplies no lexical discriminator between them; the signal that picks 0B - the
-    # question names a tradable instrument, so it is item-scoped rather than 00's
-    # account-scoped stream - is semantic, and this ranker is lexical by design.
-    "realtime-0B-ko": "resolves to base:00 instead of base:0B",
-    # base:0H ranks first in search, but ties closely with base:ka10173, which sits in a
-    # different subcategory; policy.select_operation deliberately declines to break a
-    # cross-cluster tie by name and hands the candidates back instead of guessing. A
-    # refusal that names the right answer is the designed outcome, not a failure to select.
-    "realtime-0H-en": "raises AmbiguousOperationError with base:0H among the candidates",
-}
-MISSING_ARGUMENT_CASES = tuple(
-    case for case in GOLDEN if case["disposition"] == "missing_args"
+# These reviewed legacy cases predate the final authority boundaries.  Keeping the
+# classification by corpus id makes the migration auditable without rewriting the
+# frozen fixture answers.
+EMBEDDED_ID_CASE_IDS = frozenset(
+    {
+        "detail-ka10001-ko",
+        "detail-ka10002-en",
+        "detail-ka10007-en",
+        "detail-ka10040-mixed",
+    }
 )
-DETAIL_REQUIRED_CASES = tuple(
-    case for case in GOLDEN if case["disposition"] == "detail_required"
+TARGETLESS_DETAIL_CASE_IDS = frozenset(
+    {
+        "detail-ka10004-ko",
+        "detail-ka10087-ko",
+        "detail-ka30012-en",
+        "detail-kt00001-ko",
+        "detail-kt00004-en",
+        "detail-kt00010-en",
+        "detail-kt00011-ko",
+        "detail-kt00012-en",
+        "detail-kt00016-en",
+        "detail-kt00017-ko",
+        "detail-kt00018-en",
+    }
 )
+SEMANTIC_AMBIGUITY_CASE_IDS = frozenset({"detail-kt00005-mixed"})
+FAIL_CLOSED_RESOLVE_CASE_IDS = (
+    EMBEDDED_ID_CASE_IDS
+    | TARGETLESS_DETAIL_CASE_IDS
+    | SEMANTIC_AMBIGUITY_CASE_IDS
+)
+
+MISSING_ARGUMENT_CASES = tuple(case for case in GOLDEN if case["disposition"] == "missing_args")
+DETAIL_REQUIRED_CASES = tuple(case for case in GOLDEN if case["disposition"] == "detail_required")
 SAFETY_CASES = tuple(case for case in GOLDEN if case["slice"] == "safety")
 REJECTION_CASES = tuple(
-    case
-    for case in GOLDEN
-    if case["slice"] in {"forbidden", "ambiguity", "adversarial"}
+    case for case in GOLDEN if case["slice"] in {"forbidden", "ambiguity", "adversarial"}
 )
 
 
@@ -93,7 +102,19 @@ def catalog() -> OperationCatalog:
 
 @pytest.fixture(scope="module")
 def service(catalog: OperationCatalog) -> SelectorService:
-    return SelectorService(catalog, PlanSigner(b"selector-evaluation-secret"))
+    identity = InstrumentIdentityIndex()
+    identity.replace(
+        {
+            "0": [{"code": "005930", "name": "삼성전자", "marketCode": "0"}],
+            "10": [{"code": "035720", "name": "카카오", "marketCode": "10"}],
+            "8": [{"code": "069500", "name": "KODEX 200", "marketCode": "8"}],
+        }
+    )
+    return SelectorService(
+        catalog,
+        PlanSigner(b"selector-evaluation-secret"),
+        instrument_identity=identity,
+    )
 
 
 def test_golden_corpus_has_exactly_84_reviewable_cases() -> None:
@@ -129,17 +150,15 @@ def _family_of(operation_ref: str) -> str:
     return f"base:{parts[1]}"
 
 
-def test_golden_retrieval_meets_release_thresholds(service: SelectorService) -> None:
+def test_golden_retrieval_is_exact(service: SelectorService) -> None:
     """Retrieval is scored at family granularity, because that is what it decides.
 
     Search ranks one document per TR family; a projection is chosen afterwards
     through an explicit ``detail_group``, never by out-ranking its siblings.
     """
     evaluated = [case for case in GOLDEN if case["accepted_refs"]]
-    per_slice: dict[str, list[bool]] = defaultdict(list)
-    per_slice_recall_at_five: dict[str, list[bool]] = defaultdict(list)
     recall_at_five: list[bool] = []
-    accepted_top_one: list[bool] = []
+    typed_top_one: list[bool] = []
 
     for case in evaluated:
         result = service.search(
@@ -153,75 +172,20 @@ def test_golden_retrieval_meets_release_thresholds(service: SelectorService) -> 
         accepted = {_family_of(ref) for ref in case["accepted_refs"]}
         recalled = bool(accepted.intersection(refs))
         recall_at_five.append(recalled)
-        per_slice_recall_at_five[case["slice"]].append(recalled)
-        top_one = bool(refs and refs[0] in accepted)
-        accepted_top_one.append(top_one)
-        per_slice[case["slice"]].append(top_one)
-
-    detail_and_base = [
-        result
-        for case, result in zip(evaluated, accepted_top_one, strict=True)
-        if case["slice"] in {"detail", "detail_required"}
-    ]
-    assert sum(recall_at_five) / len(recall_at_five) >= 1.0
-    assert sum(accepted_top_one) / len(accepted_top_one) >= 0.95
-    # Bigram down-weighting resolved the long-standing 금일 재사용 금액만 case, where
-    # kt00010 outranked kt00013 (detail was 21/22). detail/detail_required are now both
-    # 22/22 - a floor that still passed at the old 0.97 would let that regress silently,
-    # so both this combined check and each slice's own floor below are pinned to 1.0.
-    assert sum(detail_and_base) / len(detail_and_base) >= 1.0
-    # Per-slice floors: 0.90 is the shared bar every non-realtime slice clears; detail
-    # and detail_required are pinned tighter, at their own measured 1.0, so the fix above
-    # is a gate and not just a number that happens to still pass.
-    slice_floors = {"detail": 1.0, "detail_required": 1.0}
-    assert all(
-        sum(results) / len(results) >= slice_floors.get(slice_name, 0.90)
-        for slice_name, results in per_slice.items()
-        if slice_name != "realtime"
-    )
-
-    # Realtime top-1 (0.75, 9/12) understates what a caller actually experiences on this
-    # surface, so it gets two floors measured differently rather than one number stretched
-    # to cover both jobs:
-    #
-    # - recall@5 is the strict gate, pinned at 1.0: none of the three top-1 misses
-    #   (realtime-0B-ko, realtime-ka10171-ko, realtime-ka10174-mixed) are actually lost -
-    #   every one of them ranks the correct family second, and the whole corpus's
-    #   recall@5 (asserted above) is 1.0. A regression that pushed the true answer out of
-    #   the top 5 would be a real loss this floor exists to catch.
-    # - top-1 is the loose gate, because `resolve` (see the dedicated resolve-accuracy
-    #   test below) re-ranks the same shortlist with policy.select_operation's name
-    #   tie-break and recovers two of the three second-place misses. Raising this to 0.90
-    #   to match the other slices would either discard the still-real misses or falsely
-    #   certify retrieval quality that top-1 alone does not have; whoever improves
-    #   retrieval further should raise it, re-measured, not by inspection.
-    realtime_results = per_slice["realtime"]
-    realtime_recall_at_five = per_slice_recall_at_five["realtime"]
-    assert sum(realtime_recall_at_five) / len(realtime_recall_at_five) >= 1.0
-    assert sum(realtime_results) / len(realtime_results) >= 0.75
+        # Lexical ranking is display-only.  The service prepends a family only when
+        # shared typed compatibility has actually selected it; LOW diagnostic hits
+        # have no semantic top-one contract.
+        if result.results and result.results[0].confidence != "low":
+            typed_top_one.append(refs[0] in accepted)
+    assert all(recall_at_five)
+    assert all(typed_top_one)
 
 
-def test_realtime_resolve_meets_a_measured_accuracy_floor(service: SelectorService) -> None:
-    """`resolve` is what a screen builder actually gets, not the retrieval shortlist.
+def test_realtime_resolve_is_exact(service: SelectorService) -> None:
+    """Keep autonomous realtime resolution exact as well as retrieval.
 
-    Retrieval and resolve are different guarantees: search hands back up to five ranked
-    families, but `resolve` re-ranks that same shortlist and applies
-    policy.select_operation's name tie-break on top of it, so it can recover a case where
-    the gold family placed second by raw score. Gating only on retrieval would let
-    `resolve` regress to the retrieval order - i.e. lose that recovery - and still pass.
-
-    Two of the twelve realtime cases remain genuine misses here, not thresholds papered
-    over:
-
-    - realtime-0B-ko ("삼성전자 실시간 체결가 tick 단위로 받아줘") resolves to
-      base:00 주문체결 instead of base:0B 주식체결. Both are named 체결 and the question
-      supplies no lexical discriminator between them; the actual signal - the question
-      names a tradable instrument, so it is item-scoped, while 00 is account-scoped - is
-      semantic, not lexical, and out of reach for this ranker.
-    - realtime-0H-en may still move as the lexicon agent lands more vocabulary.
-
-    The floor is pinned at the measured value so a regression below it fails loudly;
-    raise it only after re-measuring, not by inspection.
+    Search and resolve remain separate guarantees because resolve can still abstain or
+    reject arguments after retrieval has selected the right family.
     """
     realtime_cases = [case for case in GOLDEN if case["slice"] == "realtime"]
     accurate: list[bool] = []
@@ -244,11 +208,11 @@ def test_realtime_resolve_meets_a_measured_accuracy_floor(service: SelectorServi
             accurate.append(False)
             continue
         accurate.append(resolved.operation_ref in case["accepted_refs"])
-    assert sum(accurate) / len(accurate) >= 10 / 12
+    assert all(accurate)
 
 
 _STRICT_RESOLVE_CASES = tuple(
-    case for case in RESOLVE_CASES if case["id"] not in _REALTIME_RESOLVE_KNOWN_LIMITATIONS
+    case for case in RESOLVE_CASES if case["id"] not in FAIL_CLOSED_RESOLVE_CASE_IDS
 )
 
 
@@ -267,41 +231,79 @@ def test_resolve_selects_the_gold_base_or_detail(
         )
     )
     assert result.operation_ref in case["accepted_refs"]
-    assert {reason.value for reason in result.selection_reasons}.intersection(case["reasons"])
+    expected_reasons = set(case["reasons"])
+    if expected_reasons == {"BASE_DEFAULT"}:
+        # BASE_DEFAULT was the pre-typed policy reason.  Natural-language semantic
+        # selection now records the shared seam's unique-profile authority.
+        expected_reasons = {"UNIQUE_EXACT_PROFILE"}
+    assert {reason.value for reason in result.selection_reasons}.intersection(
+        expected_reasons
+    )
 
 
 @pytest.mark.parametrize(
     "case",
-    [case for case in RESOLVE_CASES if case["id"] in _REALTIME_RESOLVE_KNOWN_LIMITATIONS],
+    tuple(case for case in RESOLVE_CASES if case["id"] in EMBEDDED_ID_CASE_IDS),
     ids=lambda case: case["id"],
 )
-def test_realtime_resolve_known_limitations_fail_in_the_documented_way(
+def test_embedded_operation_ids_never_gain_exact_control_plane_authority(
     service: SelectorService, case: dict[str, Any]
 ) -> None:
-    """Pin the exact shape of each documented realtime resolve limitation.
+    # Exact identities are authoritative only when the normalized whole question is
+    # the canonical ref/TR/group id.  preferred_ref and detail_group cannot rescue an
+    # operation-like token embedded in natural language.
+    with pytest.raises(NoConfidentMatchError):
+        service.resolve(
+            ResolveRequest(
+                question=case["question"],
+                intent=DiscoveryIntent(case["intent"]),
+                preferred_ref=case["preferred_ref"],
+                detail_group=case["detail_group"],
+                arguments=case["arguments"],
+            )
+        )
 
-    A bare pytest.raises(SomeError) or "not in accepted_refs" would pass for any failure,
-    including a regression that breaks these questions in some new, undiagnosed way. That
-    would defeat the point of naming them as known limitations rather than just skipping
-    them: this test exists to keep the suite green for *these specific* failures only, and
-    to fail again the moment either one changes shape - whether that is a regression or a
-    fix landing.
-    """
-    request = ResolveRequest(
-        question=case["question"],
-        intent=DiscoveryIntent(case["intent"]),
-        arguments=case["arguments"],
-    )
-    if case["id"] == "realtime-0B-ko":
-        result = service.resolve(request)
-        assert result.operation_ref == "base:00"
-        assert result.operation_ref not in case["accepted_refs"]
-    elif case["id"] == "realtime-0H-en":
-        with pytest.raises(AmbiguousOperationError) as caught:
-            service.resolve(request)
-        assert "base:0H" in caught.value.details["candidates"]
-    else:
-        pytest.fail(f"no documented failure shape for {case['id']!r}")
+
+@pytest.mark.parametrize(
+    "case",
+    tuple(case for case in RESOLVE_CASES if case["id"] in TARGETLESS_DETAIL_CASE_IDS),
+    ids=lambda case: case["id"],
+)
+def test_preferred_detail_cannot_cure_missing_target_evidence(
+    service: SelectorService, case: dict[str, Any]
+) -> None:
+    # Caller arguments are validation data, not semantic authority.  A generic product
+    # word or bound stk_cd cannot replace a concrete target/target-anchor in the query.
+    with pytest.raises((AmbiguousOperationError, NoConfidentMatchError)):
+        service.resolve(
+            ResolveRequest(
+                question=case["question"],
+                intent=DiscoveryIntent(case["intent"]),
+                preferred_ref=case["preferred_ref"],
+                detail_group=case["detail_group"],
+                arguments=case["arguments"],
+            )
+        )
+
+
+@pytest.mark.parametrize(
+    "case",
+    tuple(case for case in RESOLVE_CASES if case["id"] in SEMANTIC_AMBIGUITY_CASE_IDS),
+    ids=lambda case: case["id"],
+)
+def test_preferred_detail_cannot_cure_true_family_ambiguity(
+    service: SelectorService, case: dict[str, Any]
+) -> None:
+    with pytest.raises(AmbiguousOperationError):
+        service.resolve(
+            ResolveRequest(
+                question=case["question"],
+                intent=DiscoveryIntent(case["intent"]),
+                preferred_ref=case["preferred_ref"],
+                detail_group=case["detail_group"],
+                arguments=case["arguments"],
+            )
+        )
 
 
 @pytest.mark.parametrize("case", DETAIL_REQUIRED_CASES, ids=lambda case: case["id"])
@@ -387,7 +389,11 @@ def test_orders_and_websockets_need_explicit_intent_and_stay_guarded(
     assert all(hit.operation_ref != operation_ref for hit in vague.results)
 
     resolved = service.resolve(
-        ResolveRequest(question=operation_ref, arguments=case["arguments"])
+        ResolveRequest(
+            question=operation_ref,
+            intent=DiscoveryIntent(case["intent"]),
+            arguments=case["arguments"],
+        )
     )
     assert resolved.operation_ref == operation_ref
     # The plan names the operation; it does not authorise placing it.
@@ -505,9 +511,9 @@ def test_ranking_is_deterministic_for_all_golden_questions(
         documents = catalog.visible_for(DiscoveryIntent(case["intent"]))
         forward = rank_documents(case["question"], documents)
         reverse = rank_documents(case["question"], tuple(reversed(documents)))
-        assert [
-            (item.document.operation_ref, item.score) for item in forward
-        ] == [(item.document.operation_ref, item.score) for item in reverse]
+        assert [(item.document.operation_ref, item.score) for item in forward] == [
+            (item.document.operation_ref, item.score) for item in reverse
+        ]
 
 
 def test_oauth_and_all_129_us_only_ids_are_excluded(
