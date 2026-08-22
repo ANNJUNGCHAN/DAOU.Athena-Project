@@ -14,11 +14,18 @@ from pydantic import BaseModel
 from athena_api.generated.registry import (
     DETAIL_REGISTRY,
     OUTPUT_PROFILE_BY_ID,
+    QUERY_FRAME_VERSION,
+    ROUTING_CONTRACT_VERSION,
+    ROUTING_EQUIVALENCE_GROUPS,
+    ROUTING_REGISTRY,
     SPLIT_BASE_TR_IDS,
     TR_REGISTRY,
 )
+from athena_api.routing_contract import OperationRouting
 
 from .lexicon import LEXICON_VERSION
+from .normalization import tokenize
+from .query_frame import ENTITY_MARKER_SHA256, ENTITY_MARKER_VERSION
 from .schemas import DiscoveryIntent
 
 Visibility = Literal["normal", "explicit", "hidden"]
@@ -111,6 +118,7 @@ class OperationDocument:
     generic_callable: bool
     request_schema_hash: str
     response_schema_hash: str
+    routing: OperationRouting
 
     @property
     def family_ref(self) -> str:
@@ -131,11 +139,12 @@ class OperationCatalog:
     def visible_for(self, intent: DiscoveryIntent) -> tuple[OperationDocument, ...]:
         """Return the searchable surface: one document per TR family.
 
-        Detail projections are deliberately excluded. Siblings of one TR share
-        that TR's whole vocabulary, so ranking them against each other cannot be
-        made reliable - the model picks a projection explicitly through
-        ``ResolveRequest.detail_group`` instead. Details stay addressable by
-        exact identity through :meth:`find_exact` and :meth:`details_for`.
+        Detail projections are deliberately excluded from global ranking. After
+        a family is fixed, policy evaluates only its owned details and may choose
+        one uniquely supported by typed compatibility and authoritative canonical
+        evidence; otherwise ``ResolveRequest.detail_group`` is required. Details
+        stay addressable by exact identity through :meth:`find_exact` and
+        :meth:`details_for`.
         """
         if intent in {DiscoveryIntent.AUTO, DiscoveryIntent.QUERY}:
             allowed = {"query"}
@@ -172,13 +181,41 @@ def _detail_titles_by_tr() -> Mapping[str, tuple[str, ...]]:
     for operation_ref in sorted(DETAIL_REGISTRY):
         detail = DETAIL_REGISTRY[operation_ref]
         terms = grouped.setdefault(detail.tr_id, [])
-        terms.extend(
-            term for term in (detail.title_ko, detail.title_en, detail.group_id) if term
-        )
+        terms.extend(term for term in (detail.title_ko, detail.title_en, detail.group_id) if term)
     return MappingProxyType({tr_id: tuple(terms) for tr_id, terms in grouped.items()})
 
 
 _DETAIL_TITLES_BY_TR = _detail_titles_by_tr()
+
+_GENERIC_CAPABILITY_TOKENS = frozenset(
+    {
+        "account",
+        "current",
+        "data",
+        "identity",
+        "information",
+        "market",
+        "snapshot",
+        "stock",
+        "계좌",
+        "기본",
+        "시장",
+        "정보",
+        "종목",
+        "현재",
+    }
+)
+
+
+def _family_capability_terms(tr_id: str) -> tuple[str, ...]:
+    """Return canonical detail titles that add a discriminating capability term."""
+    return tuple(
+        term
+        for detail in DETAIL_REGISTRY.values()
+        if detail.tr_id == tr_id
+        for term in (detail.title_ko, detail.title_en)
+        if term and set(tokenize(term, korean_bigrams=False)).difference(_GENERIC_CAPABILITY_TOKENS)
+    )
 
 
 def _zones_for_base(tr_id: str) -> Mapping[str, tuple[str, ...]]:
@@ -188,9 +225,7 @@ def _zones_for_base(tr_id: str) -> Mapping[str, tuple[str, ...]]:
     # A websocket type's payload is one level below its acknowledgement envelope, and the
     # envelope is byte-identical across all 23 types. Without this the only content-bearing
     # vocabulary a realtime type owns is its two-word name.
-    realtime_model = (
-        realtime_item_model(spec.response_model) if spec.kind == "websocket" else None
-    )
+    realtime_model = realtime_item_model(spec.response_model) if spec.kind == "websocket" else None
     return MappingProxyType(
         {
             # The name alone. A TR's overview is prose, and for the 23 websocket types it is
@@ -202,6 +237,7 @@ def _zones_for_base(tr_id: str) -> Mapping[str, tuple[str, ...]]:
             "title": (spec.name,) if spec.name else (),
             "overview": (spec.overview,) if spec.overview else (),
             "family_projection": _DETAIL_TITLES_BY_TR.get(tr_id, ()),
+            "family_capability": _family_capability_terms(tr_id),
             "realtime_field": (
                 _realtime_field_terms(realtime_model) if realtime_model is not None else ()
             ),
@@ -256,12 +292,21 @@ def _catalog_version(documents: tuple[OperationDocument, ...]) -> str:
             "generic_callable": document.generic_callable,
             "request_schema_hash": document.request_schema_hash,
             "response_schema_hash": document.response_schema_hash,
+            "routing": document.routing.canonical(),
             "zones": dict(document.searchable_zones),
         }
         for document in documents
     ]
     encoded = json.dumps(
-        {"lexicon_version": LEXICON_VERSION, "documents": canonical},
+        {
+            "lexicon_version": LEXICON_VERSION,
+            "routing_equivalence_groups": ROUTING_EQUIVALENCE_GROUPS,
+            "routing_contract_version": ROUTING_CONTRACT_VERSION,
+            "query_frame_version": QUERY_FRAME_VERSION,
+            "entity_marker_version": ENTITY_MARKER_VERSION,
+            "entity_marker_sha256": ENTITY_MARKER_SHA256,
+            "documents": canonical,
+        },
         ensure_ascii=False,
         sort_keys=True,
         separators=(",", ":"),
@@ -299,11 +344,11 @@ def build_operation_catalog() -> OperationCatalog:
                 # ranks them; the model must declare the intent and then name the operation.
                 # A split family is the inverse: searchable, but replaced by its projections.
                 generic_callable=(
-                    spec.kind in {"query", "order", "websocket"}
-                    and tr_id not in SPLIT_BASE_TR_IDS
+                    spec.kind in {"query", "order", "websocket"} and tr_id not in SPLIT_BASE_TR_IDS
                 ),
                 request_schema_hash=model_schema_hash(spec.request_model),
                 response_schema_hash=model_schema_hash(spec.response_model),
+                routing=ROUTING_REGISTRY[f"base:{tr_id}"],
             )
         )
     for operation_ref in sorted(DETAIL_REGISTRY):
@@ -330,6 +375,7 @@ def build_operation_catalog() -> OperationCatalog:
                 generic_callable=True,
                 request_schema_hash=model_schema_hash(base.request_model),
                 response_schema_hash=model_schema_hash(detail.response_model),
+                routing=ROUTING_REGISTRY[operation_ref],
             )
         )
     ordered = tuple(sorted(documents, key=lambda document: document.operation_ref))
