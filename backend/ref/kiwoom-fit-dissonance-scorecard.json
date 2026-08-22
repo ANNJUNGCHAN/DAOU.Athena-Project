@@ -162,13 +162,18 @@
             "paperWidthApplied": true
           },
           "states": {
+            "chartAuthorityMatches": true,
+            "chartErrorNoteAbsent": true,
+            "chartRenderStateIsData": true,
+            "chartRendererIdMatches": true,
+            "chartSurfaceMounted": true,
             "declaredStateRendered": true,
             "displayOnlyGuardRendered": true
           }
         },
         "screen_id": "AT-CV-005:A1",
         "screenshot": "app/captures/paper-A1.png",
-        "screenshot_sha256": "61dac189929c36a5315e2168d8e35faf1d5f5f8e07a0596c1e7cfaa026f89655",
+        "screenshot_sha256": "b19a521c8e2354d942da43f32507bc63e2d14a97d8551ebda22cf1e21f8217ea",
         "status": "pass",
         "template_case_id": "A1"
       },
@@ -190,13 +195,18 @@
             "paperWidthApplied": true
           },
           "states": {
+            "chartAuthorityMatches": true,
+            "chartErrorNoteAbsent": true,
+            "chartRenderStateIsData": true,
+            "chartRendererIdMatches": true,
+            "chartSurfaceMounted": true,
             "declaredStateRendered": true,
             "displayOnlyGuardRendered": true
           }
         },
         "screen_id": "AT-CV-005:C1",
         "screenshot": "app/captures/paper-C1.png",
-        "screenshot_sha256": "05fdc316b9a77bbafe54c33143f4ac1d82eede227dafc629f338a1e2e9383669",
+        "screenshot_sha256": "4fb74462d0152e983f3650dfe354f4949b4a6e5506418559dc40edf594229931",
         "status": "pass",
         "template_case_id": "C1"
       },
@@ -218,13 +228,18 @@
             "paperWidthApplied": true
           },
           "states": {
+            "chartAuthorityMatches": true,
+            "chartErrorNoteAbsent": true,
+            "chartRenderStateIsData": true,
+            "chartRendererIdMatches": true,
+            "chartSurfaceMounted": true,
             "declaredStateRendered": true,
             "displayOnlyGuardRendered": true
           }
         },
         "screen_id": "AT-CV-005:C2",
         "screenshot": "app/captures/paper-C2.png",
-        "screenshot_sha256": "2dcb6a9bd042b66753dd4b796a5ed8ff43d8fb314e029a11876ca9c302f92aca",
+        "screenshot_sha256": "99b02cd92fcc4fb093d41cb5d9404485e1e71a4043b226ed7bcae529ee67d311",
         "status": "pass",
         "template_case_id": "C2"
       },
@@ -246,13 +261,18 @@
             "paperWidthApplied": true
           },
           "states": {
+            "chartAuthorityMatches": true,
+            "chartErrorNoteAbsent": true,
+            "chartRenderStateIsData": true,
+            "chartRendererIdMatches": true,
+            "chartSurfaceMounted": true,
             "declaredStateRendered": true,
             "displayOnlyGuardRendered": true
           }
         },
         "screen_id": "AT-CV-005:E1",
         "screenshot": "app/captures/paper-E1.png",
-        "screenshot_sha256": "57df12b9a964d0e7992e6491585b424f91376bf585f8074aa26c15af7e702332",
+        "screenshot_sha256": "aaf308968c4b567f6b8e71e6ac8cb7110f1d98757692e450e8de0171a7cacd48",
         "status": "pass",
         "template_case_id": "E1"
       },
@@ -274,13 +294,18 @@
             "paperWidthApplied": true
           },
           "states": {
+            "chartAuthorityMatches": true,
+            "chartErrorNoteAbsent": true,
+            "chartRenderStateIsData": true,
+            "chartRendererIdMatches": true,
+            "chartSurfaceMounted": true,
             "declaredStateRendered": true,
             "displayOnlyGuardRendered": true
           }
         },
         "screen_id": "AT-CV-005:E2",
         "screenshot": "app/captures/paper-E2.png",
-        "screenshot_sha256": "3126f2f10888bff80a97d4d7b93b13e8fce55f870febde83c26f494a597782b3",
+        "screenshot_sha256": "038d0502a843e85e47952adf610b794389593c9d0be950f4016c2be3bf837719",
         "status": "pass",
         "template_case_id": "E2"
       },
@@ -302,13 +327,18 @@
             "paperWidthApplied": true
           },
           "states": {
+            "chartAuthorityMatches": true,
+            "chartErrorNoteAbsent": true,
+            "chartRenderStateIsData": true,
+            "chartRendererIdMatches": true,
+            "chartSurfaceMounted": true,
             "declaredStateRendered": true,
             "displayOnlyGuardRendered": true
           }
         },
         "screen_id": "AT-CV-005:E3",
         "screenshot": "app/captures/paper-E3.png",
-        "screenshot_sha256": "3846574194a8bb8bd927a6d92b4da34f314943198d4880d6223e03de9719507b",
+        "screenshot_sha256": "b40a36a9b5778e2967e0e23c4f53a2bb5a2f31002511962e5b7734f0295d912b",
         "status": "pass",
         "template_case_id": "E3"
       },
@@ -330,13 +360,18 @@
             "paperWidthApplied": true
           },
           "states": {
+            "chartAuthorityMatches": true,
+            "chartErrorNoteAbsent": true,
+            "chartRenderStateIsData": true,
+            "chartRendererIdMatches": true,
+            "chartSurfaceMounted": true,
             "declaredStateRendered": true,
             "displayOnlyGuardRendered": true
           }
         },
         "screen_id": "AT-CV-005:F1",
         "screenshot": "app/captures/paper-F1.png",
-        "screenshot_sha256": "bd750137360a68ece0e9cec72e9d3770b90840ade19064adf5e1bf1178027d6a",
+        "screenshot_sha256": "505ab3650a267e25de8991f073dfb9191ff98446216dc96e7020ba1ff69a194f",
         "status": "pass",
         "template_case_id": "F1"
       },
@@ -358,13 +393,18 @@
             "paperWidthApplied": true
           },
           "states": {
+            "chartAuthorityMatches": true,
+            "chartErrorNoteAbsent": true,
+            "chartRenderStateIsData": true,
+            "chartRendererIdMatches": true,
+            "chartSurfaceMounted": true,
             "declaredStateRendered": true,
             "displayOnlyGuardRendered": true
           }
         },
         "screen_id": "AT-CV-005:F2",
         "screenshot": "app/captures/paper-F2.png",
-        "screenshot_sha256": "b56959510b4092580c3da6cc2ed174365ad82b22a1a645ee60f97539a7de8686",
+        "screenshot_sha256": "11a7688ac4b0665e5b28ba9c3b999399326be82e8228f3752e8c4e0d95386361",
         "status": "pass",
         "template_case_id": "F2"
       },
@@ -386,13 +426,18 @@
             "paperWidthApplied": true
           },
           "states": {
+            "chartAuthorityMatches": true,
+            "chartErrorNoteAbsent": true,
+            "chartRenderStateIsData": true,
+            "chartRendererIdMatches": true,
+            "chartSurfaceMounted": true,
             "declaredStateRendered": true,
             "displayOnlyGuardRendered": true
           }
         },
         "screen_id": "AT-CV-005:S1",
         "screenshot": "app/captures/paper-S1.png",
-        "screenshot_sha256": "535519d2911c335c60d8e39b33885be9eca6250b8a4dfe7fe5b59c950aee998a",
+        "screenshot_sha256": "219efe4ffce2a45a63b751da3e9fbc90972332e991eb74aa3721f4fd4858bfc5",
         "status": "pass",
         "template_case_id": "S1"
       },
@@ -414,13 +459,18 @@
             "paperWidthApplied": true
           },
           "states": {
+            "chartAuthorityMatches": true,
+            "chartErrorNoteAbsent": true,
+            "chartRenderStateIsData": true,
+            "chartRendererIdMatches": true,
+            "chartSurfaceMounted": true,
             "declaredStateRendered": true,
             "displayOnlyGuardRendered": true
           }
         },
         "screen_id": "AT-CV-005:T1",
         "screenshot": "app/captures/paper-T1.png",
-        "screenshot_sha256": "3f3fb701e4eefb47818322b932d799379e03380d1ca08978723b15b2dc3e0df7",
+        "screenshot_sha256": "b53f0bb907f08af38ee36a608efc006647234ad19f8f8e4046477a26232d3a03",
         "status": "pass",
         "template_case_id": "T1"
       },
@@ -442,13 +492,18 @@
             "paperWidthApplied": true
           },
           "states": {
+            "chartAuthorityMatches": true,
+            "chartErrorNoteAbsent": true,
+            "chartRenderStateIsData": true,
+            "chartRendererIdMatches": true,
+            "chartSurfaceMounted": true,
             "declaredStateRendered": true,
             "displayOnlyGuardRendered": true
           }
         },
         "screen_id": "AT-CV-005:T2",
         "screenshot": "app/captures/paper-T2.png",
-        "screenshot_sha256": "659e8301640c3e2ca2cd91b43b4b4b08bcf98c99ceeccc1911ec4b9acb81729f",
+        "screenshot_sha256": "ba70e5f65b4a479ecab1ff6c194c97443ea51394d2f2a8028057f2e525bd089f",
         "status": "pass",
         "template_case_id": "T2"
       },
@@ -470,13 +525,18 @@
             "paperWidthApplied": true
           },
           "states": {
+            "chartAuthorityMatches": true,
+            "chartErrorNoteAbsent": true,
+            "chartRenderStateIsData": true,
+            "chartRendererIdMatches": true,
+            "chartSurfaceMounted": true,
             "declaredStateRendered": true,
             "displayOnlyGuardRendered": true
           }
         },
         "screen_id": "AT-CV-005:T3",
         "screenshot": "app/captures/paper-T3.png",
-        "screenshot_sha256": "d857a1d93b081967ae0838ac6b79e80a28927a5e9ae130c53e0862f354ebd4ef",
+        "screenshot_sha256": "d5f4d9de7611a54613d8ea03ae380705de7dd8beaf3f5668b8864fbacb13b74e",
         "status": "pass",
         "template_case_id": "T3"
       },
@@ -498,13 +558,18 @@
             "paperWidthApplied": true
           },
           "states": {
+            "chartAuthorityMatches": true,
+            "chartErrorNoteAbsent": true,
+            "chartRenderStateIsData": true,
+            "chartRendererIdMatches": true,
+            "chartSurfaceMounted": true,
             "declaredStateRendered": true,
             "displayOnlyGuardRendered": true
           }
         },
         "screen_id": "AT-CV-005:T4",
         "screenshot": "app/captures/paper-T4.png",
-        "screenshot_sha256": "70cc4aef140bc47299c9a566a69aafb9eb03228d75303d80c86e17d0b55f17fd",
+        "screenshot_sha256": "b7bb572fe5f380ea1c39801d30598d3a7cd6116aa94ba1e7815159f788486ece",
         "status": "pass",
         "template_case_id": "T4"
       }
@@ -516,15 +581,15 @@
       "app/canvas.js": "11f2c14220f12910a293aeafa5629b55b2390beeb5fcb15ae39f0682305e7c9a",
       "app/lib/canvas-layout.js": "98023857555c3dda00124c27e55056b7ee04a3603887a16a059ef0b5d29bda55",
       "app/lib/chart-card.js": "589692bec4c465688ca8238faf17c9f62b540dff4ade46f8a487e6a4007c9e85",
-      "app/verify.js": "38cfc9a6911496fc544d1d7e7aa73422107aa5fe1aee178615c6c3db5088152d",
+      "app/verify.js": "1d3b23127390450e6c20e2aff7d5735a8291cf6fe900ec9f420c9c1b1fb61277",
       "backend/ref/kiwoom-screen-definitions.json": "7e03c82db221b2736251acf4bb669ffcaacfdf7a32fb8b770a5f8f39952ae79b"
     },
     "source_report": {
       "command": "cd app && npm run verify",
-      "finished_at": "2026-08-21T02:19:17.633Z",
+      "finished_at": "2026-08-22T09:54:09.422Z",
       "path": "app/captures/VERIFY-REPORT.json",
-      "sha256": "cf5c9b428a580bff38ee1067521065e54d23c9bb82222830a168c1679394a681",
-      "started_at": "2026-08-21T02:18:27.565Z"
+      "sha256": "0fbfca425d74615151edada082aa0a141bf277ba921afd334553c78da72e6bf9",
+      "started_at": "2026-08-22T09:53:22.378Z"
     }
   },
   "mappings": [

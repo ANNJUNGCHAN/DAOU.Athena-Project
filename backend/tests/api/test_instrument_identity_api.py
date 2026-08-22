@@ -1,0 +1,147 @@
+"""HTTP regressions for private instrument identity binding during resolve."""
+
+from fastapi.testclient import TestClient
+
+from athena_api.config import Settings
+from athena_api.dependencies import get_selector_service
+from athena_api.main import create_app
+from athena_api.selector import PlanSigner, SelectorService, build_operation_catalog
+from athena_api.selector.instrument_identity import InstrumentIdentityIndex
+
+
+def _client() -> tuple[TestClient, SelectorService]:
+    index = InstrumentIdentityIndex()
+    index.replace(
+        {
+            "0": [{"code": "005930", "name": "삼성전자", "marketCode": "0"}],
+            "10": [{"code": "035720", "name": "카카오", "marketCode": "10"}],
+            "8": [{"code": "069500", "name": "KODEX 200", "marketCode": "8"}],
+        }
+    )
+    service = SelectorService(
+        build_operation_catalog(),
+        PlanSigner(b"identity-api-test", nonce_factory=lambda: "identity-api"),
+        instrument_identity=index,
+    )
+    app = create_app(Settings(_env_file=None))
+    app.dependency_overrides[get_selector_service] = lambda: service
+    return TestClient(app), service
+
+
+def test_http_name_and_code_queries_sign_the_same_operation_with_the_same_code() -> None:
+    client, service = _client()
+    with client:
+        responses = [
+            client.post(
+                "/api/v1/llm/tools/resolve",
+                json={"question": question, "arguments": {}},
+            )
+            for question in ("삼성전자 오늘 주가 얼마야?", "005930 오늘 주가 얼마야?")
+        ]
+
+    assert [response.status_code for response in responses] == [200, 200]
+    assert {response.json()["operation_ref"] for response in responses} == {
+        "detail:ka10001:current_trading"
+    }
+    assert [
+        service.signer.verify(response.json()["plan_token"], service.catalog).arguments
+        for response in responses
+    ] == [{"stk_cd": "005930"}, {"stk_cd": "005930"}]
+
+
+def test_http_resolve_rejects_caller_code_mismatch_without_returning_a_plan() -> None:
+    client, _ = _client()
+    with client:
+        response = client.post(
+            "/api/v1/llm/tools/resolve",
+            json={
+                "question": "삼성전자 오늘 주가 얼마야?",
+                "arguments": {"stk_cd": "035720"},
+            },
+        )
+
+    assert response.status_code == 422
+    assert response.json()["code"] == "INVALID_ARGUMENTS"
+    assert "plan_token" not in response.text
+
+
+def test_http_unavailable_index_keeps_name_query_fail_closed() -> None:
+    service = SelectorService(
+        build_operation_catalog(),
+        PlanSigner(b"identity-unavailable-api"),
+        instrument_identity=InstrumentIdentityIndex(),
+    )
+    app = create_app(Settings(_env_file=None))
+    app.dependency_overrides[get_selector_service] = lambda: service
+
+    with TestClient(app) as client:
+        response = client.post(
+            "/api/v1/llm/tools/resolve",
+            json={
+                "question": "삼성전자 오늘 주가 얼마야?",
+                "arguments": {"stk_cd": "005930"},
+            },
+        )
+
+    assert response.status_code == 404
+    assert response.json()["code"] == "NO_CONFIDENT_MATCH"
+    assert "plan_token" not in response.text
+
+
+def test_http_natural_order_matching_mismatch_missing_and_exact_contract() -> None:
+    client, service = _client()
+    base_arguments = {
+        "dmst_stex_tp": "KRX",
+        "stk_cd": "005930",
+        "ord_qty": "1",
+        "trde_tp": "3",
+    }
+    with client:
+        matching = client.post(
+            "/api/v1/llm/tools/resolve",
+            json={
+                "question": "삼성전자 한 주를 시장가로 매수해줘",
+                "intent": "order",
+                "arguments": base_arguments,
+            },
+        )
+        mismatch = client.post(
+            "/api/v1/llm/tools/resolve",
+            json={
+                "question": "삼성전자 한 주를 시장가로 매수해줘",
+                "intent": "order",
+                "arguments": {**base_arguments, "stk_cd": "035720"},
+            },
+        )
+        missing = client.post(
+            "/api/v1/llm/tools/resolve",
+            json={
+                "question": "삼성전자 한 주를 시장가로 매수해줘",
+                "intent": "order",
+                "arguments": {
+                    key: value for key, value in base_arguments.items() if key != "stk_cd"
+                },
+            },
+        )
+        exact = client.post(
+            "/api/v1/llm/tools/resolve",
+            json={
+                "question": "base:kt10000",
+                "intent": "order",
+                "arguments": {**base_arguments, "stk_cd": "035720"},
+            },
+        )
+
+    assert matching.status_code == 200
+    assert service.signer.verify(
+        matching.json()["plan_token"], service.catalog
+    ).arguments["stk_cd"] == "005930"
+    assert mismatch.status_code == 422
+    assert mismatch.json()["code"] == "INVALID_ARGUMENTS"
+    assert "plan_token" not in mismatch.text
+    assert missing.status_code == 422
+    assert missing.json()["code"] == "INVALID_ARGUMENTS"
+    assert exact.status_code == 200
+    assert service.signer.verify(
+        exact.json()["plan_token"], service.catalog
+    ).arguments["stk_cd"] == "035720"

@@ -74,7 +74,8 @@
         "order_status",
         "volatility",
         "sensitivity"
-      ]
+      ],
+      "capabilities": ["elw_underlying_basket"]
     },
     "detail:ka30012:valuation_and_rights": {
       "measures": [
@@ -83,7 +84,8 @@
         "volatility",
         "sensitivity",
         "price"
-      ]
+      ],
+      "capabilities": ["elw_valuation_rights"]
     },
     "detail:kt00001:receivables_and_arrears": {
       "data_intents": [
@@ -131,6 +133,12 @@
       "capabilities": ["combined_order_status"]
     },
     "detail:kt00009:order_execution_status": {
+      "data_intents": [
+        "account_state",
+        "open_orders",
+        "filled_orders",
+        "combined_order_status"
+      ],
       "bindings": [
         "account_context",
         "instrument_code",
@@ -140,8 +148,18 @@
       ],
       "capabilities": ["order_unfilled", "order_filled", "combined_order_status"]
     },
+    "detail:kt00010:purchase_settlement": {
+      "data_intents": ["snapshot", "purchase_settlement"],
+      "capabilities": ["account_purchase_settlement"]
+    },
     "detail:ka10001:current_trading": {
       "measures": ["price", "change", "volume", "volatility"]
+    },
+    "base:ka10003": {
+      "data_intents": ["snapshot", "market_executions"]
+    },
+    "base:ka10059": {
+      "data_intents": ["snapshot", "participant_breakdown"]
     },
     "detail:ka10002:market_snapshot": {
       "temporal_scopes": ["current"],
@@ -151,8 +169,15 @@
       "measures": ["valuation", "balance", "position"],
       "capabilities": ["account_assets"]
     },
+    "detail:kt00001:cash_and_margin": {
+      "capabilities": ["account_cash_margin"]
+    },
+    "detail:kt00001:settlement_forecast": {
+      "capabilities": ["account_settlement_forecast"]
+    },
     "detail:kt00018:holdings": {
-      "measures": ["valuation", "ownership", "position", "pnl"]
+      "measures": ["valuation", "ownership", "position", "pnl"],
+      "capabilities": ["account_holdings"]
     },
     "detail:kt50020:gold_account_summary": {
       "data_intents": ["portfolio", "account_state"],
@@ -172,7 +197,8 @@
       "measures": ["price", "change", "volume", "trade_value", "orderbook", "trade"]
     },
     "detail:kt00001:withdrawal_and_order_capacity": {
-      "measures": ["order_status", "balance"]
+      "measures": ["order_status", "balance"],
+      "capabilities": ["account_withdrawal_capacity"]
     },
     "detail:kt00004:position_valuation": {
       "measures": ["valuation", "position", "pnl"]
@@ -226,7 +252,7 @@
       "data_intents": ["account_state", "history"]
     },
     "base:kt50075": {
-      "data_intents": ["account_state"]
+      "data_intents": ["account_state", "open_orders"]
     },
     "detail:ka20001:session_range": {
       "temporal_scopes": ["current", "intraday", "range"]
@@ -235,6 +261,7 @@
       "temporal_scopes": ["daily", "range"]
     },
     "base:ka10060": {
+      "temporal_scopes": ["daily", "range"],
       "capabilities": ["investor_flow", "daily_history", "instrument_investor_chart"]
     },
     "base:ka10100": {
@@ -257,12 +284,15 @@
       "capabilities": ["price_range_52w"]
     },
     "base:ka10010": {
+      "bindings": ["sector_code"],
       "capabilities": ["program_flow"]
     },
     "base:ka20002": {
+      "data_intents": ["snapshot", "screening"],
       "capabilities": ["constituents"]
     },
     "detail:kt00001:foreign_currency_deposits": {
+      "data_intents": ["account_state", "foreign_currency_balance"],
       "capabilities": ["account_currency"]
     },
     "detail:kt00004:account_identity": {
@@ -308,9 +338,11 @@
       "capabilities": ["elw_evaluation_extrema"]
     },
     "base:ka10075": {
+      "data_intents": ["account_state", "open_orders"],
       "capabilities": ["order_unfilled"]
     },
     "base:ka10076": {
+      "data_intents": ["account_state", "filled_orders"],
       "capabilities": ["order_filled"]
     },
     "base:0m": {

@@ -1,36 +1,19 @@
-"""Family selection policy.
-
-The selector chooses a **TR family** from the question. It never guesses which
-projection of that family the user wanted.
-
-A detail projection is not a cheaper call: ``generated/runtime.call_typed_tr``
-issues the same single upstream request as the base operation and then filters
-the response by the projection's field aliases. So base is always a correct,
-complete answer - a projection only narrows it. Because sibling projections of
-one TR share that TR's entire vocabulary, ranking them against each other is
-unreliable by construction. The model therefore names the projection explicitly
-through ``ResolveRequest.detail_group``, and the server validates that the group
-belongs to the selected family.
-"""
+"""Legacy selector facade backed only by shared typed compatibility authority."""
 
 from __future__ import annotations
-
-from collections import defaultdict
 
 from athena_api.generated.registry import SPLIT_BASE_TR_IDS
 
 from .catalog import OperationCatalog, OperationDocument
+from .compatibility import CompatibilityDecisionStatus, decide_selector_compatibility
 from .errors import (
     AmbiguousOperationError,
     DetailGroupRequiredError,
     NoConfidentMatchError,
     UnknownDetailGroupError,
 )
-from .normalization import normalize_text
 from .ranking import RankedDocument
-from .schemas import ReasonCode, ResponseMode
-
-_FULL_TERMS = ("전체", "전부", "모든", "원문", "raw", "full", "complete", "전체 응답")
+from .schemas import DiscoveryIntent, ReasonCode, ResponseMode
 
 
 def _resolve_detail(
@@ -38,19 +21,22 @@ def _resolve_detail(
 ) -> OperationDocument:
     document = catalog.find_exact(f"detail:{tr_id}:{detail_group}")
     if document is None:
-        available = [item.group_id for item in catalog.details_for(tr_id)]
         raise UnknownDetailGroupError(
             "Detail group does not belong to the selected operation family",
             details={
                 "operation_ref": f"base:{tr_id}",
                 "detail_group": detail_group,
-                "available_groups": available,
+                "available_groups": [
+                    item.group_id for item in catalog.details_for(tr_id)
+                ],
             },
         )
     return document
 
 
-def _detail_group_required(catalog: OperationCatalog, tr_id: str) -> DetailGroupRequiredError:
+def _detail_group_required(
+    catalog: OperationCatalog, tr_id: str
+) -> DetailGroupRequiredError:
     return DetailGroupRequiredError(
         "Operation family is served through its detail projections",
         details={
@@ -60,6 +46,43 @@ def _detail_group_required(catalog: OperationCatalog, tr_id: str) -> DetailGroup
     )
 
 
+def _exact_selection(
+    catalog: OperationCatalog,
+    question: str,
+    response_mode: ResponseMode,
+    detail_group: str | None,
+) -> tuple[OperationDocument, list[ReasonCode]] | None:
+    exact = catalog.find_exact(question.strip())
+    if exact is None:
+        return None
+    if detail_group is not None:
+        if exact.group_id is not None:
+            if detail_group != exact.group_id:
+                raise UnknownDetailGroupError(
+                    "Detail group conflicts with the exact detail operation",
+                    details={
+                        "operation_ref": exact.operation_ref,
+                        "detail_group": detail_group,
+                        "available_groups": [
+                            item.group_id for item in catalog.details_for(exact.tr_id)
+                        ],
+                    },
+                )
+            return exact, [ReasonCode.EXACT_OPERATION_REF]
+        if catalog.details_for(exact.tr_id):
+            return (
+                _resolve_detail(catalog, exact.tr_id, detail_group),
+                [ReasonCode.EXPLICIT_DETAIL_GROUP],
+            )
+    if exact.tr_id in SPLIT_BASE_TR_IDS and exact.group_id is None:
+        raise _detail_group_required(catalog, exact.tr_id)
+    if not exact.generic_callable:
+        return exact, [ReasonCode.DISCOVERY_ONLY]
+    if response_mode is ResponseMode.FULL:
+        return exact, [ReasonCode.EXPLICIT_FULL_RESPONSE]
+    return exact, [ReasonCode.EXACT_OPERATION_REF]
+
+
 def select_operation(
     catalog: OperationCatalog,
     question: str,
@@ -67,117 +90,77 @@ def select_operation(
     response_mode: ResponseMode,
     detail_group: str | None = None,
 ) -> tuple[OperationDocument, list[ReasonCode]]:
-    exact_ref = catalog.find_exact(question.strip())
-    if exact_ref is not None:
-        # A named projection resolves before the callable gate: a split family is itself
-        # not callable, yet naming one of its groups is exactly the supported path.
-        if (
-            detail_group is not None
-            and exact_ref.group_id is None
-            and catalog.details_for(exact_ref.tr_id)
-        ):
+    """Compatibility wrapper; ranking is display-only and never authorizes selection."""
+    exact = _exact_selection(catalog, question, response_mode, detail_group)
+    if exact is not None:
+        return exact
+
+    from .primitive_evidence import analyze_question
+
+    execution = analyze_question(question).execution
+    intent = (
+        DiscoveryIntent.ORDER
+        if execution is not None and execution.value == "order"
+        else DiscoveryIntent.WEBSOCKET
+        if execution is not None and execution.value == "websocket"
+        else DiscoveryIntent.QUERY
+    )
+
+    decision = decide_selector_compatibility(catalog, question, intent)
+    if decision.status is CompatibilityDecisionStatus.AMBIGUOUS:
+        raise AmbiguousOperationError(
+            "Several operation families match the question",
+            details={
+                "candidates": list(decision.compatible_operation_refs),
+                "reason": ReasonCode.AMBIGUOUS_MARGIN.value,
+            },
+        )
+    if decision.status is CompatibilityDecisionStatus.DETAIL_GROUP_REQUIRED:
+        family_ref = decision.selected_family_ref
+        if family_ref is None:
+            raise NoConfidentMatchError("No compatible operation profile")
+        tr_id = family_ref.removeprefix("base:")
+        if detail_group is not None:
             return (
-                _resolve_detail(catalog, exact_ref.tr_id, detail_group),
+                _resolve_detail(catalog, tr_id, detail_group),
                 [ReasonCode.EXPLICIT_DETAIL_GROUP],
             )
-        if not exact_ref.generic_callable:
-            if exact_ref.tr_id in SPLIT_BASE_TR_IDS and exact_ref.group_id is None:
-                raise _detail_group_required(catalog, exact_ref.tr_id)
-            return exact_ref, [ReasonCode.DISCOVERY_ONLY]
-        return exact_ref, [ReasonCode.EXACT_OPERATION_REF]
+        raise _detail_group_required(catalog, tr_id)
+    if decision.status is not CompatibilityDecisionStatus.SELECTED:
+        raise NoConfidentMatchError(
+            "No compatible operation profile",
+            details={"reason_codes": list(decision.reason_codes)},
+        )
 
-    if not ranked:
-        raise NoConfidentMatchError("No operation matches the question")
-
-    by_family: dict[str, list[RankedDocument]] = defaultdict(list)
-    for item in ranked:
-        by_family[item.document.family_ref].append(item)
-    families = sorted(
-        ((max(item.score for item in items), family, items) for family, items in by_family.items()),
-        key=lambda item: (-item[0], item[1]),
-    )
-    top_score, family_ref, top_items = families[0]
-    exact_tr = question.strip() == family_ref.removeprefix("base:")
-    if not exact_tr:
-        if top_score < 240:
-            raise NoConfidentMatchError("No operation reached the confidence threshold")
-        if len(families) > 1:
-            # A total-score margin measures how similarly two families are *supported*, and
-            # on a tight surface most of that support is shared boilerplate: the four
-            # 조건검색 TRs draw the same points from the same domain and the same field
-            # descriptions, so the only zone that separates them - the name - moves the
-            # total by a few percent and the question gets refused as ambiguous.
-            #
-            # So the margin decides only whether the totals are distinguishable. When they
-            # are not, the name breaks the tie, because a name is a claim about identity and
-            # every other zone is corroboration. "조건검색 ... 해지해줘" puts ka10174
-            # 조건검색 실시간 해제 second by total and first by name; answering ka10173 or
-            # refusing outright are both worse than answering the one that was named.
-            # It stays ambiguous when the tie-break is itself tied.
-            second_score = families[1][0]
-            if top_score - second_score < 80 or top_score / second_score < 1.15:
-                # The totals are indistinguishable, so the name breaks the tie - but only
-                # inside the leader's own subcategory, which is the scope where the
-                # "mostly shared boilerplate" premise holds. Siblings there draw the same
-                # points from the same domain and the same field descriptions, so the name
-                # is the only zone separating them and a decisive win on it reads as a few
-                # percent of the total.
-                #
-                # Across subcategories two operations have genuinely different
-                # vocabularies, and comparing their names is not a tie-break but a second,
-                # worse ranking - "stream the expected opening match price" would hand 0H
-                # 주식예상체결's lead to ka10173 조건검색 요청 실시간 purely because
-                # "stream" expands to 실시간 and that TR happens to be named 실시간. When
-                # the tie is across clusters, or the tie-break is itself tied, the question
-                # really is ambiguous and the candidates go back to the caller.
-                cluster = catalog.by_ref[family_ref].subcategory
-                contenders = [
-                    entry
-                    for entry in families
-                    if top_score - entry[0] < 80 or top_score / entry[0] < 1.15
-                ]
-                best_title = max(
-                    max(item.title_score for item in items) for _, _, items in contenders
-                )
-                named_best = [
-                    entry
-                    for entry in contenders
-                    if max(item.title_score for item in entry[2]) == best_title
-                ]
-                same_cluster = all(
-                    catalog.by_ref[family].subcategory == cluster
-                    for _, family, _ in contenders
-                )
-                if not (same_cluster and len(named_best) == 1):
-                    raise AmbiguousOperationError(
-                        "Several operation families match the question",
-                        details={
-                            "candidates": [family for _, family, _ in families[:3]],
-                            "reason": ReasonCode.AMBIGUOUS_MARGIN.value,
-                        },
-                    )
-                top_score, family_ref, top_items = named_best[0]
-
-    tr_id = family_ref.removeprefix("base:")
-    base = catalog.by_ref[family_ref]
-    normalized_question = normalize_text(question)
-
-    # An explicit full-response request outranks a projection: the caller asked
-    # for everything, so narrowing would drop fields they named.
-    if (
-        response_mode is ResponseMode.FULL
-        or any(term in normalized_question for term in _FULL_TERMS)
-    ) and tr_id not in SPLIT_BASE_TR_IDS:
-        return base, [ReasonCode.EXPLICIT_FULL_RESPONSE]
+    selected_ref = decision.selected_operation_ref
+    if selected_ref is None:
+        raise NoConfidentMatchError("No compatible operation profile")
+    selected = catalog.by_ref[selected_ref]
     if detail_group is not None:
+        if selected.group_id is not None:
+            if detail_group != selected.group_id:
+                raise UnknownDetailGroupError(
+                    "Detail group conflicts with the typed compatible operation",
+                    details={
+                        "operation_ref": selected.operation_ref,
+                        "detail_group": detail_group,
+                        "available_groups": [
+                            item.group_id
+                            for item in catalog.details_for(selected.tr_id)
+                        ],
+                    },
+                )
+            return selected, [ReasonCode.TYPED_DETAIL_MATCH]
         return (
-            _resolve_detail(catalog, tr_id, detail_group),
+            _resolve_detail(catalog, selected.tr_id, detail_group),
             [ReasonCode.EXPLICIT_DETAIL_GROUP],
         )
-    if base.shape == "pure_list":
-        return base, [ReasonCode.PURE_LIST_BASE_REQUIRED]
-    # A split family has no response of its own left to serve, not even for an explicit
-    # full-response request: the projections are the operation now.
-    if tr_id in SPLIT_BASE_TR_IDS:
-        raise _detail_group_required(catalog, tr_id)
-    return base, [ReasonCode.BASE_DEFAULT]
+    if response_mode is ResponseMode.FULL:
+        if selected.tr_id in SPLIT_BASE_TR_IDS:
+            raise _detail_group_required(catalog, selected.tr_id)
+        return catalog.by_ref[selected.family_ref], [ReasonCode.EXPLICIT_FULL_RESPONSE]
+    if selected.group_id is not None:
+        return selected, [ReasonCode.TYPED_DETAIL_MATCH]
+    if selected.shape == "pure_list":
+        return selected, [ReasonCode.PURE_LIST_BASE_REQUIRED]
+    return selected, [ReasonCode.BASE_DEFAULT]

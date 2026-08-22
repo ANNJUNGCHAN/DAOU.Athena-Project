@@ -5,8 +5,14 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from .catalog import OperationCatalog, OperationDocument
-from .lexicon import synonym_only_tokens
+from .eligibility import evaluate_eligibility
+from .lexicon import (
+    reviewed_canonical_terms,
+    reviewed_query_fragments,
+    synonym_only_tokens,
+)
 from .normalization import identity_tokens, normalize_text, tokenize
+from .query_frame import extract_query_frame, mask_opaque_instrument_spans
 from .schemas import (
     DiscoveryIntent,
     ReasonCode,
@@ -22,6 +28,7 @@ class RankedDocument:
     document: OperationDocument
     score: int
     contributions: tuple[ScoreContribution, ...]
+    typed_tier: int = 0
 
     @property
     def title_score(self) -> int:
@@ -47,16 +54,15 @@ class RankedDocument:
             if contribution.reason_code not in identity_reasons
         )
 
+    @property
+    def authoritative_score(self) -> int:
+        """Lexical support allowed to authorize resolve/plan selection."""
+        return sum(contribution.points for contribution in self.contributions)
+
 
 _ZONE_RULES = {
     "title": (ReasonCode.TITLE_TOKEN_MATCH, 150, 750),
-    # Titles absorbed from a family's projections. Same token weight as the TR's
-    # own title - this vocabulary is how an English question reaches a
-    # Korean-named TR - but deliberately outside the phrase-bonus zone: slice
-    # titles such as "계좌 정보" / "Account information" are boilerplate that
-    # several unrelated families reuse, so a 1,400 point phrase bonus there would
-    # decide family selection on a naming coincidence.
-    "family_projection": (ReasonCode.PROJECTION_TITLE_MATCH, 150, 750),
+    "family_capability": (ReasonCode.PROJECTION_TITLE_MATCH, 150, 750),
     # The TR's prose note, scored well below its name. An overview explains how to use an
     # operation, so it repeats mechanism vocabulary - 등록, 수신, 실시간, 종목코드 - that
     # says nothing about which operation was asked for. It earns points because a question
@@ -68,10 +74,31 @@ _ZONE_RULES = {
     "realtime_field": (ReasonCode.REALTIME_FIELD_MATCH, 90, 600),
     "domain": (ReasonCode.DOMAIN_MATCH, 80, 400),
     "request_alias": (ReasonCode.REQUEST_FIELD_MATCH, 70, 350),
-    "request_description": (ReasonCode.REQUEST_FIELD_MATCH, 70, 350),
     "response_alias": (ReasonCode.RESPONSE_FIELD_MATCH, 50, 500),
-    "response_description": (ReasonCode.RESPONSE_FIELD_MATCH, 50, 500),
 }
+
+_CAPABILITY_STOP_TOKENS = frozenset(
+    {
+        "account",
+        "current",
+        "data",
+        "identity",
+        "industry",
+        "information",
+        "market",
+        "snapshot",
+        "stock",
+        "sector",
+        "top",
+        "계좌",
+        "기본",
+        "시장",
+        "업종",
+        "정보",
+        "종목",
+        "현재",
+    }
+)
 
 # Full marks for a document that matches every distinct token of the question.
 _COVERAGE_POINTS = 600
@@ -91,9 +118,7 @@ _CORROBORATION_ZONES = frozenset(
         "domain",
         "realtime_field",
         "request_alias",
-        "request_description",
         "response_alias",
-        "response_description",
     }
 )
 _CORROBORATION_CAP = 750
@@ -111,11 +136,30 @@ def _contribution(
 
 
 def _zone_tokens(document: OperationDocument, zone: str) -> set[str]:
-    return {
-        token
-        for value in document.searchable_zones.get(zone, ())
-        for token in tokenize(value)
+    tokens = {
+        token for value in document.searchable_zones.get(zone, ()) for token in tokenize(value)
     }
+    tokens.update(
+        term
+        for value in document.searchable_zones.get(zone, ())
+        for term in reviewed_canonical_terms(value)
+    )
+    if zone == "family_capability":
+        tokens.difference_update(_CAPABILITY_STOP_TOKENS)
+    return tokens
+
+
+def _matched_phrase(title: str, normalized_query: str) -> str | None:
+    normalized_title = normalize_text(title)
+    compact_title = normalized_title.replace(" ", "")
+    compact_match = (
+        not title.isascii()
+        and len(compact_title) >= 4
+        and compact_title in normalized_query.replace(" ", "")
+    )
+    if len(tokenize(title)) >= 2 and (normalized_title in normalized_query or compact_match):
+        return normalized_title
+    return None
 
 
 # A token has to be absent from at least a tenth of the surface to say anything about it.
@@ -144,8 +188,13 @@ def uninformative_zone_tokens(
     """
     if len(documents) < _MINIMUM_SURFACE:
         return frozenset()
-    tokens = set(tokenize(query))
-    tokens.update(synonym_only_tokens(tuple(sorted(tokens))))
+    semantic_query = mask_opaque_instrument_spans(query)
+    ordered_direct_tokens = tuple(tokenize(semantic_query, korean_bigrams=False))
+    direct_tokens = set(ordered_direct_tokens)
+    tokens = direct_tokens | reviewed_query_fragments(
+        set(tokenize(semantic_query)).difference(direct_tokens)
+    )
+    tokens.update(synonym_only_tokens(ordered_direct_tokens))
     if not tokens:
         return frozenset()
     threshold = len(documents) * _UNINFORMATIVE_SHARE
@@ -178,20 +227,21 @@ def rank_document(
     uninformative: frozenset[tuple[str, str]] = frozenset(),
 ) -> RankedDocument:
     stripped = query.strip()
-    normalized_query = normalize_text(query)
-    direct_tokens = set(tokenize(query, korean_bigrams=False))
+    semantic_query = mask_opaque_instrument_spans(query)
+    normalized_query = normalize_text(semantic_query)
+    ordered_direct_tokens = tuple(tokenize(semantic_query, korean_bigrams=False))
+    direct_tokens = set(ordered_direct_tokens)
     # Bigrams let a question reach inside a Korean compound: 체결 has to find 주식체결.
     # They are evidence of a different grade from a word the user actually typed, though,
     # because a two-syllable slice of one word is a whole word of another. 실시간 yields
     # 시간, which matches 주식시간외호가 as strongly as 호가 does, and that false match
     # alone tied 0E with the correctly named 0D on a question about 호가 잔량.
-    all_tokens = set(tokenize(query))
-    fragment_tokens = all_tokens.difference(direct_tokens)
-    # Expanded from the fragments too, because Korean agglutinates: "해지해줘" is one token
-    # to the tokenizer, so the dictionary word 해지 exists only as a fragment of it. Feeding
-    # the lexicon whole words alone silently disables synonym matching for most Korean
-    # questions - 해지 stopped reaching `ka10174 조건검색 실시간 해제` entirely.
-    synonym_tokens = set(synonym_only_tokens(tuple(sorted(all_tokens)))).difference(all_tokens)
+    all_tokens = set(tokenize(semantic_query))
+    fragment_tokens = reviewed_query_fragments(all_tokens.difference(direct_tokens))
+    # Only authored whole tokens trigger synonym emission. Raw Korean fragments still match
+    # document compounds below, but they no longer manufacture synonym bigrams that count as
+    # correlated evidence a second time.
+    synonym_tokens = set(synonym_only_tokens(ordered_direct_tokens)).difference(all_tokens)
     contributions: list[ScoreContribution] = []
     matched_direct: set[str] = set()
     matched_fragments: set[str] = set()
@@ -208,9 +258,7 @@ def rank_document(
         )
     if document.group_id is not None and stripped == document.group_id:
         contributions.append(
-            _contribution(
-                ReasonCode.EXACT_GROUP_ID, 4_000, {document.group_id}, "identity"
-            )
+            _contribution(ReasonCode.EXACT_GROUP_ID, 4_000, {document.group_id}, "identity")
         )
     # A TR id cited inside a longer question ("ka10001 가치평가 지표만") is an
     # identity signal, not a lexical one. Matched case-sensitively on identity
@@ -221,24 +269,33 @@ def rank_document(
         )
 
     for title in document.searchable_zones.get("title", ()):
-        normalized_title = normalize_text(title)
         # A phrase is more than one word. Single-token titles such as "totals"
         # are generic enough to appear inside unrelated questions, and the 1,400
         # point phrase bonus would let them outrank the correct TR family.
         # They still earn TITLE_TOKEN_MATCH below.
-        if len(tokenize(title)) >= 2 and normalized_title in normalized_query:
+        matched_phrase = _matched_phrase(title, normalized_query)
+        if matched_phrase is not None:
+            contributions.append(
+                _contribution(ReasonCode.TITLE_PHRASE_MATCH, 1_400, {matched_phrase}, "title")
+            )
+            break
+
+    for title in document.searchable_zones.get("family_capability", ()):
+        matched_phrase = _matched_phrase(title, normalized_query)
+        if matched_phrase is not None:
             contributions.append(
                 _contribution(
-                    ReasonCode.TITLE_PHRASE_MATCH, 1_400, {normalized_title}, "title"
+                    ReasonCode.PROJECTION_TITLE_MATCH,
+                    1_400,
+                    {matched_phrase},
+                    "family_capability",
                 )
             )
             break
 
     for zone, (reason, points_per_token, cap) in _ZONE_RULES.items():
         zone_tokens = {
-            token
-            for token in _zone_tokens(document, zone)
-            if (zone, token) not in uninformative
+            token for token in _zone_tokens(document, zone) if (zone, token) not in uninformative
         }
         direct_matches = direct_tokens.intersection(zone_tokens)
         if direct_matches:
@@ -264,16 +321,12 @@ def rank_document(
             points = min(cap, len(fragment_matches) * points_per_token // 2)
             contributions.append(_contribution(reason, points, fragment_matches, zone))
 
-    corroboration = sum(
-        item.points for item in contributions if item.scope in _CORROBORATION_ZONES
-    )
+    corroboration = sum(item.points for item in contributions if item.scope in _CORROBORATION_ZONES)
     if corroboration > _CORROBORATION_CAP:
         # Scaled rather than truncated so the returned explanation still shows which zones
         # supported the match and in what proportion; only their combined weight is bounded.
         contributions = [
-            item.model_copy(
-                update={"points": item.points * _CORROBORATION_CAP // corroboration}
-            )
+            item.model_copy(update={"points": item.points * _CORROBORATION_CAP // corroboration})
             if item.scope in _CORROBORATION_ZONES
             else item
             for item in contributions
@@ -289,8 +342,7 @@ def rank_document(
     covered = {
         token
         for token in direct_tokens
-        if token in matched_direct
-        or any(fragment in token for fragment in matched_fragments)
+        if token in matched_direct or any(fragment in token for fragment in matched_fragments)
     }
     if direct_tokens and covered:
         coverage = len(covered) / len(direct_tokens)
@@ -317,14 +369,68 @@ def rank_documents(
 ) -> tuple[RankedDocument, ...]:
     # Computed over the candidate set, not the whole catalog: what a token can discriminate
     # depends on what it is being asked to discriminate between.
-    uninformative = uninformative_zone_tokens(query, documents)
-    ranked = [rank_document(query, document, uninformative) for document in documents]
-    ranked = [item for item in ranked if item.score > 0]
+    frame = extract_query_frame(query)
+    stripped = query.strip()
+    cited_ids = identity_tokens(query)
+    identity_matches = {
+        document.operation_ref
+        for document in documents
+        if stripped in {document.operation_ref, document.tr_id, document.group_id}
+        or document.tr_id in cited_ids
+    }
+    eligibility = {
+        document.operation_ref: evaluate_eligibility(frame, document) for document in documents
+    }
+    eligible_documents = tuple(
+        document
+        for document in documents
+        if eligibility[document.operation_ref].eligible
+        or document.operation_ref in identity_matches
+    )
+    uninformative = uninformative_zone_tokens(query, eligible_documents)
+    ranked = []
+    for document in eligible_documents:
+        item = rank_document(query, document, uninformative)
+        typed = eligibility[document.operation_ref]
+        contributions = tuple(
+            sorted(
+                (*item.contributions, *typed.contributions),
+                key=lambda contribution: (
+                    -contribution.points,
+                    contribution.reason_code.value,
+                    contribution.scope,
+                ),
+            )
+        )
+        ranked.append(
+            RankedDocument(
+                document=document,
+                score=item.score,
+                contributions=contributions,
+                # A visible canonical identity preserves the selector's exact-ID contract.
+                # Visibility was already applied by the caller; semantic extraction cannot
+                # reinterpret an explicitly cited TR as another family.
+                typed_tier=(
+                    max(typed.tier, 1_000)
+                    if document.operation_ref in identity_matches
+                    else typed.tier
+                ),
+            )
+        )
+    ranked = [item for item in ranked if item.score > 0 or item.typed_tier > 0]
     return tuple(
         sorted(
             ranked,
             key=lambda item: (
+                # Ranking is display-only.  Preserve whole-query canonical identity
+                # and typed eligibility as coarse gates, then let the operation's
+                # authored lexical evidence order equally eligible diagnostics.
+                # Fine-grained typed tiers are not execution authority.
+                -(item.typed_tier >= 1_000),
+                -(item.typed_tier > 0),
                 -item.score,
+                -item.typed_tier,
+                -item.authoritative_score,
                 not item.document.generic_callable,
                 item.document.kind != "query",
                 item.document.operation_ref,
@@ -343,7 +449,17 @@ def searchable_surface(
     """
     surface = catalog.visible_for(request.intent)
     exact = catalog.find_exact(request.query.strip())
-    if exact is not None and exact.group_id is not None and exact not in surface:
+    exact_is_visible = exact is not None and (
+        (exact.kind == "query" and request.intent in {DiscoveryIntent.AUTO, DiscoveryIntent.QUERY})
+        or (exact.kind == "order" and request.intent is DiscoveryIntent.ORDER)
+        or (exact.kind == "websocket" and request.intent is DiscoveryIntent.WEBSOCKET)
+    )
+    if (
+        exact is not None
+        and exact_is_visible
+        and exact.group_id is not None
+        and exact not in surface
+    ):
         return (*surface, exact)
     return surface
 
@@ -402,7 +518,6 @@ def search_catalog(catalog: OperationCatalog, request: SearchRequest) -> SearchR
     ranked = rank_documents(request.query, searchable_surface(catalog, request))
     results = []
     for item in ranked[: request.limit]:
-        confidence = "high" if item.score >= 1_000 else "medium" if item.score >= 240 else "low"
         document = item.document
         results.append(
             SearchHit(
@@ -412,7 +527,10 @@ def search_catalog(catalog: OperationCatalog, request: SearchRequest) -> SearchR
                 name=document.name,
                 group_title=document.group_title_ko or document.group_title_en,
                 score=item.score,
-                confidence=confidence,
+                # Raw lexical points are evidence contributions, not calibrated
+                # confidence. SelectorService aligns this label with the final canonical
+                # policy outcome after ambiguity and typed eligibility are evaluated.
+                confidence="low",
                 contributions=list(item.contributions),
                 generic_callable=document.generic_callable,
                 discovery_only=document.visibility == "explicit",

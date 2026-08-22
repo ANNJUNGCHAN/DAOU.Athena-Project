@@ -85,6 +85,70 @@ async def test_resolve_happy_path(tmp_path, make_gateway):
     assert json.loads(result.content[0].text)["plan_token"] == "tok-abc"
 
 
+async def test_resolve_exact_identity_preserves_backend_intent_fail_closed_semantics(
+    tmp_path, make_gateway
+):
+    seen: list[dict[str, object]] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        payload = json.loads(request.content)
+        seen.append(payload)
+        assert request.url.path == "/api/v1/llm/tools/resolve"
+        if (payload["question"], payload["intent"]) in {
+            ("base:0B", "query"),
+            ("base:kt10000", "query"),
+            ("base:ka10001", "websocket"),
+        }:
+            return httpx.Response(
+                404,
+                json={"code": "OPERATION_NOT_FOUND", "message": "Operation was not found"},
+            )
+        assert payload == {
+            "question": "base:0B",
+            "intent": "websocket",
+            "arguments": {"trnm": "REG", "grp_no": "1", "refresh": "1"},
+        }
+        return httpx.Response(
+            200,
+            json={
+                "status": "resolved",
+                "catalog_version": "v1",
+                "operation_ref": "base:0B",
+                "plan_token": "signed-ws-plan",
+                "expires_at": "2026-08-18T00:00:00+00:00",
+                "selection_reasons": ["EXACT_OPERATION_REF"],
+                "required_arguments_satisfied": True,
+                "response_mode": "auto",
+            },
+        )
+
+    gw = make_gateway(handler)
+    for question, intent, arguments in (
+        ("base:0B", "query", {"trnm": "REG", "grp_no": "1", "refresh": "1"}),
+        ("base:kt10000", "query", {"stk_cd": "005930"}),
+        ("base:ka10001", "websocket", {"stk_cd": "005930"}),
+    ):
+        result = await gw.dispatch_call(
+            RESOLVE_TOOL,
+            {"question": question, "intent": intent, "arguments": arguments},
+        )
+        assert result.isError is True
+        assert "OPERATION_NOT_FOUND" in result.content[0].text
+        assert "plan_token" not in result.content[0].text
+
+    allowed = await gw.dispatch_call(
+        RESOLVE_TOOL,
+        {
+            "question": "base:0B",
+            "intent": "websocket",
+            "arguments": {"trnm": "REG", "grp_no": "1", "refresh": "1"},
+        },
+    )
+    assert allowed.isError is False
+    assert json.loads(allowed.content[0].text)["plan_token"] == "signed-ws-plan"
+    assert len(seen) == 4
+
+
 async def test_call_happy_path(tmp_path, make_gateway):
     def handler(request: httpx.Request) -> httpx.Response:
         assert request.url.path == "/api/v1/llm/tools/call"
@@ -148,6 +212,27 @@ async def test_5xx_error_detail_is_forwarded(tmp_path, make_gateway):
     assert result.isError is True
     assert "credentials unavailable" in result.content[0].text
     assert result.meta[ERROR_ORIGIN_META_KEY] == "upstream-failed"
+
+
+async def test_replay_capacity_error_is_forwarded_without_a_plan_retry(tmp_path, make_gateway):
+    calls = 0
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        nonlocal calls
+        calls += 1
+        return httpx.Response(
+            503,
+            json={
+                "detail": "Selector request failed",
+                "code": "REPLAY_STATE_CAPACITY_EXCEEDED",
+            },
+        )
+
+    gw = make_gateway(handler)
+    result = await gw.dispatch_call(CALL_TOOL, {"plan_token": "fresh-plan"})
+    assert result.isError is True
+    assert "REPLAY_STATE_CAPACITY_EXCEEDED" in result.content[0].text
+    assert calls == 1
 
 
 # ---------------------------------------------------------------------------
@@ -335,6 +420,10 @@ async def test_list_tools_includes_selector_tools_with_contract_names(tmp_path, 
     assert set(SELECTOR_TOOL_NAMES) <= names
     for name in SELECTOR_TOOL_NAMES:
         assert f"athena__{name}" not in names  # 이중 프리픽스 아님
+    resolve = next(tool for tool in result.root.tools if tool.name == RESOLVE_TOOL)
+    properties = resolve.inputSchema["properties"]
+    assert "soft hint" in properties["candidate_refs"]["description"]
+    assert "canonical family assertion" in properties["preferred_ref"]["description"]
 
 
 # ---------------------------------------------------------------------------

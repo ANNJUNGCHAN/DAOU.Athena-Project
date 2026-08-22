@@ -96,7 +96,8 @@ Use the [LLM API selection contract](docs/LLM_API_SELECTION.md) when connecting 
 adapter. Athena keeps the 323-operation domestic catalog server-side: 208 base operations plus 115
 detail projections. Of these, 299 identities are generic-callable: 264 query identities (149 unsplit bases
 plus 115 projections), 12 guarded orders, and 23 websocket control frames. 22 split bases are
-searchable but require a `detail_group`, and 2 OAuth identities are hidden. Orders and
+searchable but cannot produce a base plan: a unique typed/canonical family-local detail is selected
+automatically, otherwise `detail_group`/`DETAIL_GROUP_REQUIRED` closes the request. Two OAuth identities are hidden. Orders and
 websocket controls need an explicit `intent` to be found and cannot be reached by a vague
 question. `resolve` and `call` execute both directly once named — a websocket `call` sends one
 registration frame over the shared connection and returns its acknowledgement, with the `REAL`
@@ -114,9 +115,22 @@ selector POST operations carry `x-athena-llm-exposed: true`. The 22 split base r
 registered: their projections replaced them, and `/api/v1/raw/tr/{tr_id}` and `/api/v1/batch`
 refuse them too so the removal is not merely cosmetic.
 
-Treat the selector evaluation suite as a release gate: it pins retrieval thresholds at family
-granularity and asserts that every split family refuses `resolve` with the list of groups that
-replaced it.
+Treat the selector evaluation suite as a release gate: it checks typed eligibility, family/detail
+compatibility, identity boundaries, and signed-plan safety. It does not make lexical score
+thresholds or title/alias matches an execution authority. Last-known pre-current-source-rerun
+evidence is reported in separate strata: public production 72/72 (raw 63/63, quote 9/9, exact 16/16, shadow 39/41,
+advisory 4); expansion 45/45 (exact 33/33, shadow 19/19, advisory 9); v2 60/60 (exact 43/43,
+shadow 10/12, advisory 18); v3 74/74 (exact 50/50, shadow 11/11, advisory 15); v4 73/73
+(exact 51/51, shadow 15/15, advisory 12). Safety violations were all zero in those artifacts.
+These are not one combined accuracy claim and must be refreshed after evaluator/source-hash changes.
+
+Production identity is the canonical, exact and case-sensitive `operation_ref`; stock codes,
+account aliases, prices, and quantities are typed bindings, not identities. The quote fast path is
+limited to a current domestic equity quote with a valid routing contract and required instrument
+binding. The Electron app normally consumes the backend plan and manifest-derived card metadata;
+its only direct-selection exception is the closed standalone domestic-equity quote grammar, which
+selects the exact `detail:ka10001:current_trading` identity. All other operations use the backend
+selector/plan path.
 
 Order endpoints, when installed, are additionally disabled by default. Enabling them requires
 `ATHENA_ENABLE_ORDER_API=true` and `ATHENA_LOCAL_BEARER_TOKEN`; the order router also enforces its
