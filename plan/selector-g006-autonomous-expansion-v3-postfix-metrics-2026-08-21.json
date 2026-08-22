@@ -1,0 +1,740 @@
+{
+  "autonomous_calibration": {
+    "calibration_pass": true,
+    "distributions": {
+      "authoritative_margin": {
+        "count": 44,
+        "max": 1701,
+        "min": 0,
+        "p25": 1,
+        "p50": 105,
+        "p75": 271
+      },
+      "score_margin": {
+        "count": 44,
+        "max": 1700,
+        "min": 0,
+        "p25": 0,
+        "p50": 105,
+        "p75": 270
+      },
+      "score_margin_ratio": {
+        "count": 40,
+        "max": 7.0,
+        "min": 1.0,
+        "p25": 1.02029,
+        "p50": 1.396396,
+        "p75": 2.116667
+      },
+      "top1_authoritative_score": {
+        "count": 62,
+        "max": 2424,
+        "min": 0,
+        "p25": 281,
+        "p50": 487,
+        "p75": 772
+      },
+      "top1_score": {
+        "count": 62,
+        "max": 2424,
+        "min": 0,
+        "p25": 280,
+        "p50": 487,
+        "p75": 770
+      }
+    },
+    "flagship_case": null,
+    "identity_assisted_cases": 0,
+    "policy_confidence_bins": {
+      "high": {
+        "cases": 46,
+        "population_coverage": 0.621622,
+        "rejected_cases": 0,
+        "rejected_correct": 0,
+        "rejected_precision": null,
+        "selected_cases": 46,
+        "selected_correct": 46,
+        "selected_coverage": 0.621622,
+        "selected_precision": 1.0
+      },
+      "low": {
+        "cases": 24,
+        "population_coverage": 0.324324,
+        "rejected_cases": 24,
+        "rejected_correct": 24,
+        "rejected_precision": 1.0,
+        "selected_cases": 0,
+        "selected_correct": 0,
+        "selected_coverage": 0.0,
+        "selected_precision": null
+      },
+      "medium": {
+        "cases": 4,
+        "population_coverage": 0.054054,
+        "rejected_cases": 0,
+        "rejected_correct": 0,
+        "rejected_precision": null,
+        "selected_cases": 4,
+        "selected_correct": 4,
+        "selected_coverage": 0.054054,
+        "selected_precision": 1.0
+      }
+    },
+    "policy_confidence_source": "athena_api.selector.compatibility.decide_selector_compatibility",
+    "population": "autonomous_expansion:raw",
+    "rejected": {
+      "cases": 24,
+      "correct": 24,
+      "coverage": 0.324324,
+      "precision": 1.0
+    },
+    "retrieval_score_bands": {
+      "240_to_999": {
+        "accuracy": 1.0,
+        "cases": 41,
+        "correct": 41,
+        "population_coverage": 0.554054
+      },
+      "at_least_1000": {
+        "accuracy": 1.0,
+        "cases": 8,
+        "correct": 8,
+        "population_coverage": 0.108108
+      },
+      "below_240": {
+        "accuracy": 1.0,
+        "cases": 13,
+        "correct": 13,
+        "population_coverage": 0.175676
+      },
+      "no_result": {
+        "accuracy": 1.0,
+        "cases": 12,
+        "correct": 12,
+        "population_coverage": 0.162162
+      }
+    },
+    "retrieval_threshold_policy": "observed_only_no_threshold_tuning",
+    "retrieval_thresholds_observed": {
+      "close_margin_absolute": 80,
+      "close_margin_ratio": 1.15,
+      "descriptive_upper_band_score": 1000,
+      "minimum_score": 240
+    },
+    "selected": {
+      "cases": 50,
+      "correct": 50,
+      "coverage": 0.675676,
+      "precision": 1.0
+    },
+    "threshold_evidence": {
+      "absolute_margin_at_least_80_cases": 24,
+      "absolute_margin_below_80_cases": 20,
+      "no_runner_up_cases": 30,
+      "no_score_ratio_cases": 34,
+      "ratio_at_least_1_15_cases": 24,
+      "ratio_below_1_15_cases": 16,
+      "score_at_least_240_cases": 49,
+      "score_below_240_cases": 13
+    },
+    "total_cases": 74,
+    "vague_price_case": null
+  },
+  "case_count": 100,
+  "corpus": "backend/tests/fixtures/api_selector_autonomous_expansion_v3.jsonl",
+  "corpus_sha256": "5a5d38dda8efbf3d3ff51b492d80dc39b97d8e96bfda06d0a4a7be0b7522efbf",
+  "critical_cases": 74,
+  "critical_failure_count": 0,
+  "critical_failures": [],
+  "critical_groups": {
+    "52week": true,
+    "account": true,
+    "advice": true,
+    "ambiguity": true,
+    "amend": true,
+    "annual": true,
+    "assets": true,
+    "barrier": true,
+    "breadth": true,
+    "cancel": true,
+    "cash": true,
+    "chart": true,
+    "combined": true,
+    "condition": true,
+    "constituents": true,
+    "credit": true,
+    "critical": true,
+    "currency": true,
+    "current": true,
+    "daily": true,
+    "daily_history": true,
+    "dated": true,
+    "decompose": true,
+    "disparity": true,
+    "elw": true,
+    "entity_code": true,
+    "entity_masking": true,
+    "etf": true,
+    "evaluation": true,
+    "expected_quote": true,
+    "extrema": true,
+    "flow": true,
+    "forbidden": true,
+    "forex": true,
+    "gold": true,
+    "history": true,
+    "holdings": true,
+    "identity": true,
+    "index": true,
+    "indicator": true,
+    "investor": true,
+    "lifecycle": true,
+    "liquidity_provider": true,
+    "lp": true,
+    "minute": true,
+    "missing_context": true,
+    "mixed": true,
+    "monthly": true,
+    "multi_instrument": true,
+    "music": true,
+    "nav": true,
+    "no_order": true,
+    "no_plan": true,
+    "oauth": true,
+    "ood": true,
+    "open_filled_overlap": true,
+    "order": true,
+    "order_status": true,
+    "orderbook": true,
+    "ownership": true,
+    "payoff": true,
+    "position": true,
+    "product": true,
+    "product_boundary": true,
+    "program_trading": true,
+    "prompt_injection": true,
+    "proximity": true,
+    "query_vs_websocket": true,
+    "quote": true,
+    "range": true,
+    "ranking": true,
+    "receivables": true,
+    "returns": true,
+    "same_day": true,
+    "screening": true,
+    "secret": true,
+    "sector": true,
+    "snapshot": true,
+    "start": true,
+    "stock": true,
+    "stop": true,
+    "subscribe": true,
+    "summary": true,
+    "surface_crossing": true,
+    "table": true,
+    "tick": true,
+    "travel": true,
+    "unsupported_measure": true,
+    "valuation": true,
+    "vi": true,
+    "websocket": true,
+    "websocket_vs_query": true
+  },
+  "evaluation_mode": "production_instrument_identity_fixture_semantic",
+  "exact_operation_accuracy": 1.0,
+  "exact_operation_cases": 50,
+  "exact_operation_correct": 50,
+  "expected_rejection_cases": 24,
+  "expected_rejection_recall": 1.0,
+  "failed_critical_groups": [],
+  "failed_legacy_pairs": [],
+  "freeze_manifest": null,
+  "gate_metrics": {
+    "52week": true,
+    "account": true,
+    "advice": true,
+    "ambiguity": true,
+    "amend": true,
+    "annual": true,
+    "assets": true,
+    "barrier": true,
+    "breadth": true,
+    "cancel": true,
+    "cash": true,
+    "chart": true,
+    "combined": true,
+    "condition": true,
+    "constituents": true,
+    "credit": true,
+    "critical": true,
+    "currency": true,
+    "current": true,
+    "daily": true,
+    "daily_history": true,
+    "dated": true,
+    "decompose": true,
+    "disparity": true,
+    "elw": true,
+    "entity_code": true,
+    "entity_masking": true,
+    "etf": true,
+    "evaluation": true,
+    "expected_quote": true,
+    "extrema": true,
+    "flow": true,
+    "forbidden": true,
+    "forex": true,
+    "gold": true,
+    "history": true,
+    "holdings": true,
+    "identity": true,
+    "index": true,
+    "indicator": true,
+    "investor": true,
+    "lifecycle": true,
+    "liquidity_provider": true,
+    "lp": true,
+    "minute": true,
+    "missing_context": true,
+    "mixed": true,
+    "monthly": true,
+    "multi_instrument": true,
+    "music": true,
+    "nav": true,
+    "no_order": true,
+    "no_plan": true,
+    "oauth": true,
+    "ood": true,
+    "open_filled_overlap": true,
+    "order": true,
+    "order_status": true,
+    "orderbook": true,
+    "ownership": true,
+    "payoff": true,
+    "position": true,
+    "product": true,
+    "product_boundary": true,
+    "program_trading": true,
+    "prompt_injection": true,
+    "proximity": true,
+    "query_vs_websocket": true,
+    "quote": true,
+    "range": true,
+    "ranking": true,
+    "receivables": true,
+    "returns": true,
+    "same_day": true,
+    "screening": true,
+    "secret": true,
+    "sector": true,
+    "snapshot": true,
+    "start": true,
+    "stock": true,
+    "stop": true,
+    "subscribe": true,
+    "summary": true,
+    "surface_crossing": true,
+    "table": true,
+    "tick": true,
+    "travel": true,
+    "unsupported_measure": true,
+    "valuation": true,
+    "vi": true,
+    "websocket": true,
+    "websocket_vs_query": true
+  },
+  "gates_pass": true,
+  "general_accuracy_advisory_all_strata": 0.85,
+  "general_correct_advisory_all_strata": 85,
+  "headline": {
+    "production": "74/74",
+    "semantic_shadow_cases": 11,
+    "unsupported_identity_advisory_cases": 15
+  },
+  "identity_assisted_calibration": {
+    "calibration_pass": true,
+    "distributions": {
+      "authoritative_margin": {
+        "count": 0,
+        "max": null,
+        "min": null,
+        "p25": null,
+        "p50": null,
+        "p75": null
+      },
+      "score_margin": {
+        "count": 0,
+        "max": null,
+        "min": null,
+        "p25": null,
+        "p50": null,
+        "p75": null
+      },
+      "score_margin_ratio": {
+        "count": 0,
+        "max": null,
+        "min": null,
+        "p25": null,
+        "p50": null,
+        "p75": null
+      },
+      "top1_authoritative_score": {
+        "count": 0,
+        "max": null,
+        "min": null,
+        "p25": null,
+        "p50": null,
+        "p75": null
+      },
+      "top1_score": {
+        "count": 0,
+        "max": null,
+        "min": null,
+        "p25": null,
+        "p50": null,
+        "p75": null
+      }
+    },
+    "flagship_case": null,
+    "identity_assisted_cases": 0,
+    "policy_confidence_bins": {
+      "high": {
+        "cases": 0,
+        "population_coverage": 0.0,
+        "rejected_cases": 0,
+        "rejected_correct": 0,
+        "rejected_precision": null,
+        "selected_cases": 0,
+        "selected_correct": 0,
+        "selected_coverage": 0.0,
+        "selected_precision": null
+      },
+      "low": {
+        "cases": 0,
+        "population_coverage": 0.0,
+        "rejected_cases": 0,
+        "rejected_correct": 0,
+        "rejected_precision": null,
+        "selected_cases": 0,
+        "selected_correct": 0,
+        "selected_coverage": 0.0,
+        "selected_precision": null
+      },
+      "medium": {
+        "cases": 0,
+        "population_coverage": 0.0,
+        "rejected_cases": 0,
+        "rejected_correct": 0,
+        "rejected_precision": null,
+        "selected_cases": 0,
+        "selected_correct": 0,
+        "selected_coverage": 0.0,
+        "selected_precision": null
+      }
+    },
+    "policy_confidence_source": "athena_api.selector.compatibility.decide_selector_compatibility",
+    "population": "autonomous_expansion:identity_assisted",
+    "rejected": {
+      "cases": 0,
+      "correct": 0,
+      "coverage": 0.0,
+      "precision": null
+    },
+    "retrieval_score_bands": {
+      "240_to_999": {
+        "accuracy": null,
+        "cases": 0,
+        "correct": 0,
+        "population_coverage": 0.0
+      },
+      "at_least_1000": {
+        "accuracy": null,
+        "cases": 0,
+        "correct": 0,
+        "population_coverage": 0.0
+      },
+      "below_240": {
+        "accuracy": null,
+        "cases": 0,
+        "correct": 0,
+        "population_coverage": 0.0
+      },
+      "no_result": {
+        "accuracy": null,
+        "cases": 0,
+        "correct": 0,
+        "population_coverage": 0.0
+      }
+    },
+    "retrieval_threshold_policy": "observed_only_no_threshold_tuning",
+    "retrieval_thresholds_observed": {
+      "close_margin_absolute": 80,
+      "close_margin_ratio": 1.15,
+      "descriptive_upper_band_score": 1000,
+      "minimum_score": 240
+    },
+    "selected": {
+      "cases": 0,
+      "correct": 0,
+      "coverage": 0.0,
+      "precision": null
+    },
+    "threshold_evidence": {
+      "absolute_margin_at_least_80_cases": 0,
+      "absolute_margin_below_80_cases": 0,
+      "no_runner_up_cases": 0,
+      "no_score_ratio_cases": 0,
+      "ratio_at_least_1_15_cases": 0,
+      "ratio_below_1_15_cases": 0,
+      "score_at_least_240_cases": 0,
+      "score_below_240_cases": 0
+    },
+    "total_cases": 0,
+    "vague_price_case": null
+  },
+  "legacy_pairs": {
+    "v3-account-evaluation-detail": true,
+    "v3-account-ownership": true,
+    "v3-account-summary-vs-lines": true,
+    "v3-elw-detail-contrast": true,
+    "v3-elw-evaluation-detail": true,
+    "v3-etf-nav-query-stream": true,
+    "v3-etf-single-vs-multi": true,
+    "v3-gold-history-shape": true,
+    "v3-gold-intraday-period": true,
+    "v3-gold-product-code": true,
+    "v3-order-buy-advice": true,
+    "v3-order-lifecycle-gold": true,
+    "v3-product-boundary-etf-stock": true,
+    "v3-sector-chart-granularity": true,
+    "v3-sector-now-vs-history": true,
+    "v3-ws-condition-lifecycle": true,
+    "v3-ws-stock-query-contrast": true
+  },
+  "metamorphic_groups": {
+    "v3-missing-context": true,
+    "v3-oauth-language": true,
+    "v3-ood-language": true,
+    "v3-stock-entity-mask": true
+  },
+  "methodology_provenance": "post-exposure methodology correction: frozen identity-provider support separated from production authority",
+  "partition": "autonomous_expansion",
+  "policy_rejection_cases": 24,
+  "predeclared_gates": null,
+  "production_accuracy": 1.0,
+  "production_case_count": 74,
+  "production_correct": 74,
+  "rejected_forbidden_precision": 1.0,
+  "resolver_assisted_semantic_shadow_calibration": {
+    "calibration_pass": true,
+    "distributions": {
+      "authoritative_margin": {
+        "count": 4,
+        "max": 310,
+        "min": 0,
+        "p25": 0,
+        "p50": 217,
+        "p75": 217
+      },
+      "score_margin": {
+        "count": 4,
+        "max": 310,
+        "min": 0,
+        "p25": 0,
+        "p50": 217,
+        "p75": 217
+      },
+      "score_margin_ratio": {
+        "count": 2,
+        "max": 2.265306,
+        "min": 1.0,
+        "p25": 1.0,
+        "p50": 1.0,
+        "p75": 2.265306
+      },
+      "top1_authoritative_score": {
+        "count": 11,
+        "max": 624,
+        "min": 0,
+        "p25": 177,
+        "p50": 218,
+        "p75": 556
+      },
+      "top1_score": {
+        "count": 11,
+        "max": 620,
+        "min": 0,
+        "p25": 175,
+        "p50": 217,
+        "p75": 555
+      }
+    },
+    "flagship_case": null,
+    "identity_assisted_cases": 11,
+    "policy_confidence_bins": {
+      "high": {
+        "cases": 10,
+        "population_coverage": 0.909091,
+        "rejected_cases": 0,
+        "rejected_correct": 0,
+        "rejected_precision": null,
+        "selected_cases": 10,
+        "selected_correct": 10,
+        "selected_coverage": 0.909091,
+        "selected_precision": 1.0
+      },
+      "low": {
+        "cases": 1,
+        "population_coverage": 0.090909,
+        "rejected_cases": 1,
+        "rejected_correct": 1,
+        "rejected_precision": 1.0,
+        "selected_cases": 0,
+        "selected_correct": 0,
+        "selected_coverage": 0.0,
+        "selected_precision": null
+      },
+      "medium": {
+        "cases": 0,
+        "population_coverage": 0.0,
+        "rejected_cases": 0,
+        "rejected_correct": 0,
+        "rejected_precision": null,
+        "selected_cases": 0,
+        "selected_correct": 0,
+        "selected_coverage": 0.0,
+        "selected_precision": null
+      }
+    },
+    "policy_confidence_source": "athena_api.selector.compatibility.decide_selector_compatibility",
+    "population": "autonomous_expansion:production_instrument_identity_fixture_semantic_shadow",
+    "rejected": {
+      "cases": 1,
+      "correct": 1,
+      "coverage": 0.090909,
+      "precision": 1.0
+    },
+    "retrieval_score_bands": {
+      "240_to_999": {
+        "accuracy": 1.0,
+        "cases": 5,
+        "correct": 5,
+        "population_coverage": 0.454545
+      },
+      "at_least_1000": {
+        "accuracy": null,
+        "cases": 0,
+        "correct": 0,
+        "population_coverage": 0.0
+      },
+      "below_240": {
+        "accuracy": 1.0,
+        "cases": 6,
+        "correct": 6,
+        "population_coverage": 0.545455
+      },
+      "no_result": {
+        "accuracy": null,
+        "cases": 0,
+        "correct": 0,
+        "population_coverage": 0.0
+      }
+    },
+    "retrieval_threshold_policy": "observed_only_no_threshold_tuning",
+    "retrieval_thresholds_observed": {
+      "close_margin_absolute": 80,
+      "close_margin_ratio": 1.15,
+      "descriptive_upper_band_score": 1000,
+      "minimum_score": 240
+    },
+    "selected": {
+      "cases": 10,
+      "correct": 10,
+      "coverage": 0.909091,
+      "precision": 1.0
+    },
+    "threshold_evidence": {
+      "absolute_margin_at_least_80_cases": 2,
+      "absolute_margin_below_80_cases": 2,
+      "no_runner_up_cases": 7,
+      "no_score_ratio_cases": 9,
+      "ratio_at_least_1_15_cases": 1,
+      "ratio_below_1_15_cases": 1,
+      "score_at_least_240_cases": 5,
+      "score_below_240_cases": 6
+    },
+    "total_cases": 11,
+    "vague_price_case": null
+  },
+  "schema_version": 4,
+  "sealed_run_status": null,
+  "severe_scope_errors": 0,
+  "strata": {
+    "identity_assisted_quote_control_plane": {
+      "cases": 0,
+      "correct": 0,
+      "direct_quote_binding_cases": 0,
+      "direct_quote_binding_failures": 0,
+      "gate_pass": true
+    },
+    "raw_question_only": {
+      "cases": 74,
+      "correct": 74,
+      "gate_pass": true
+    },
+    "resolver_assisted_semantic_shadow": {
+      "authority": "research_only_fixture_snapshot_excluded_from_production_green",
+      "cases": 11,
+      "correct": 11,
+      "gate_pass": null,
+      "scope": "production_identity_algorithm_with_static_fixture_not_live_app_state"
+    },
+    "unsupported_identity_surface_advisory": {
+      "authority": "provider_unsupported_advisory_excluded_from_production",
+      "case_ids": [
+        "v3-stock-hyundai-day-band-en",
+        "v3-stock-hyundai-valuation-en",
+        "v3-stock-cj-weekly-en",
+        "v3-stock-investor-chart-en",
+        "v3-etf-single-return-ko",
+        "v3-etf-arirang-info-en",
+        "v3-etf-bond-daily-mixed",
+        "v3-etf-auto-intraday-fills-en",
+        "v3-etf-nav-one-shot-ko",
+        "v3-etf-flow-mixed",
+        "v3-etf-price-intraday-ko",
+        "v3-elw-put-snapshot-en",
+        "v3-order-stock-buy-en",
+        "v3-ws-stock-trade-ko",
+        "v3-ws-stock-depth-en"
+      ],
+      "cases": 15,
+      "gate_pass": null,
+      "operation_gold_evaluated": 0
+    }
+  },
+  "surface_crossings": 0,
+  "target_resolver": {
+    "adapter_version": "production-index-fixture-adapter-v1",
+    "fixture": "stock_entity_master_eval.json",
+    "fixture_sha256": "b07b00eca891490bdc9da11a0031b5ccf1b73fd4709df7a753b9aef09597a21d",
+    "implementation": "backend/athena_api/selector/instrument_identity.py",
+    "implementation_sha256": "6b3521362be686fa60ef6e8c3c64fb0c3775fdba342658667e35fbb14f6c4d68",
+    "kind": "production-instrument-identity-index",
+    "market_kinds": {
+      "0": "stock",
+      "10": "stock",
+      "8": "etf"
+    },
+    "quote_control_plane_evidence": {
+      "implementation": "app/lib/main/rest-dataset-runner.js",
+      "implementation_sha256": "48b769d7857a226d8e6b5ff858dd8192a6c8a595608573d0ef71e7f19af2722b",
+      "scope": "direct_quote_dataset_only",
+      "test": "app/lib/main/rest-dataset-runner.test.js",
+      "test_sha256": "3dd4f14a0de645ec988523e5e18465eb54646de592dfef240f939738f7e8bb8f"
+    },
+    "scope": "production_algorithm_with_reviewed_fixture_snapshot",
+    "value_retention": "none"
+  },
+  "wrong_plans": 0
+}

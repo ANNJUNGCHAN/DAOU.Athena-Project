@@ -1,0 +1,2230 @@
+{
+  "autonomous_calibration": {
+    "calibration_pass": false,
+    "distributions": {
+      "authoritative_margin": {
+        "count": 60,
+        "max": 1701,
+        "min": -210,
+        "p25": 0,
+        "p50": 113,
+        "p75": 270
+      },
+      "score_margin": {
+        "count": 60,
+        "max": 1700,
+        "min": -210,
+        "p25": 0,
+        "p50": 113,
+        "p75": 270
+      },
+      "score_margin_ratio": {
+        "count": 50,
+        "max": 6.964912,
+        "min": 0.0,
+        "p25": 1.0,
+        "p50": 1.352941,
+        "p75": 2.028571
+      },
+      "top1_authoritative_score": {
+        "count": 84,
+        "max": 1986,
+        "min": 0,
+        "p25": 215,
+        "p50": 383,
+        "p75": 623
+      },
+      "top1_score": {
+        "count": 84,
+        "max": 1985,
+        "min": 0,
+        "p25": 215,
+        "p50": 382,
+        "p75": 620
+      }
+    },
+    "flagship_case": null,
+    "identity_assisted_cases": 0,
+    "identity_assisted_suite": "reported separately by test_selector_eval.py",
+    "policy_confidence_bins": {
+      "high": {
+        "cases": 58,
+        "population_coverage": 0.58,
+        "rejected_cases": 0,
+        "rejected_correct": 0,
+        "rejected_precision": null,
+        "selected_cases": 58,
+        "selected_correct": 42,
+        "selected_coverage": 0.58,
+        "selected_precision": 0.724138
+      },
+      "low": {
+        "cases": 42,
+        "population_coverage": 0.42,
+        "rejected_cases": 40,
+        "rejected_correct": 18,
+        "rejected_precision": 0.45,
+        "selected_cases": 2,
+        "selected_correct": 0,
+        "selected_coverage": 0.02,
+        "selected_precision": 0.0
+      },
+      "medium": {
+        "cases": 0,
+        "population_coverage": 0.0,
+        "rejected_cases": 0,
+        "rejected_correct": 0,
+        "rejected_precision": null,
+        "selected_cases": 0,
+        "selected_correct": 0,
+        "selected_coverage": 0.0,
+        "selected_precision": null
+      }
+    },
+    "policy_confidence_source": "athena_api.selector.policy.canonical_search_confidence",
+    "population": "sealed_holdout",
+    "rejected": {
+      "cases": 40,
+      "correct": 18,
+      "coverage": 0.4,
+      "precision": 0.45
+    },
+    "retrieval_score_bands": {
+      "240_to_999": {
+        "accuracy": 0.634615,
+        "cases": 52,
+        "correct": 33,
+        "population_coverage": 0.52
+      },
+      "at_least_1000": {
+        "accuracy": 0.333333,
+        "cases": 6,
+        "correct": 2,
+        "population_coverage": 0.06
+      },
+      "below_240": {
+        "accuracy": 0.5,
+        "cases": 26,
+        "correct": 13,
+        "population_coverage": 0.26
+      },
+      "no_result": {
+        "accuracy": 0.75,
+        "cases": 16,
+        "correct": 12,
+        "population_coverage": 0.16
+      }
+    },
+    "retrieval_threshold_policy": "observed_only_no_threshold_tuning",
+    "retrieval_thresholds_observed": {
+      "close_margin_absolute": 80,
+      "close_margin_ratio": 1.15,
+      "descriptive_upper_band_score": 1000,
+      "minimum_score": 240
+    },
+    "selected": {
+      "cases": 60,
+      "correct": 42,
+      "coverage": 0.6,
+      "precision": 0.7
+    },
+    "threshold_evidence": {
+      "absolute_margin_at_least_80_cases": 31,
+      "absolute_margin_below_80_cases": 29,
+      "no_runner_up_cases": 40,
+      "no_score_ratio_cases": 50,
+      "ratio_at_least_1_15_cases": 32,
+      "ratio_below_1_15_cases": 18,
+      "score_at_least_240_cases": 58,
+      "score_below_240_cases": 26
+    },
+    "total_cases": 100,
+    "vague_price_case": null
+  },
+  "case_count": 100,
+  "corpus": "api_selector_sealed_v3.jsonl",
+  "critical_cases": 100,
+  "critical_failure_count": 40,
+  "critical_failures": [
+    {
+      "category": "stock",
+      "critical_groups": [
+        "critical",
+        "stock",
+        "daily_range"
+      ],
+      "expected_operation_refs": [
+        "detail:ka10001:daily_price_band"
+      ],
+      "expected_refs": [
+        "base:ka10001"
+      ],
+      "id": "v3-stock-hyundai-day-band-en",
+      "policy_confidence": "low",
+      "retrieval_score_band": "240_to_999",
+      "score_margin": 200,
+      "score_margin_ratio": 1.5,
+      "selected_operation_ref": null,
+      "selection_outcome": "AMBIGUOUS_OPERATION",
+      "severe_scope_error": false,
+      "surface_crossing": false,
+      "top1_authoritative_score": 600,
+      "top1_family": "base:kt00013",
+      "top1_score": 600
+    },
+    {
+      "category": "stock",
+      "critical_groups": [
+        "critical",
+        "stock",
+        "chart",
+        "annual"
+      ],
+      "expected_operation_refs": [
+        "base:ka10094"
+      ],
+      "expected_refs": [
+        "base:ka10094"
+      ],
+      "id": "v3-stock-s-oil-yearly-ko",
+      "policy_confidence": "low",
+      "retrieval_score_band": "below_240",
+      "score_margin": 0,
+      "score_margin_ratio": null,
+      "selected_operation_ref": null,
+      "selection_outcome": "AMBIGUOUS_OPERATION",
+      "severe_scope_error": false,
+      "surface_crossing": false,
+      "top1_authoritative_score": 1,
+      "top1_family": "base:ka10079",
+      "top1_score": 0
+    },
+    {
+      "category": "stock",
+      "critical_groups": [
+        "critical",
+        "stock",
+        "investor",
+        "chart"
+      ],
+      "expected_operation_refs": [
+        "base:ka10060"
+      ],
+      "expected_refs": [
+        "base:ka10060"
+      ],
+      "id": "v3-stock-investor-chart-en",
+      "policy_confidence": "low",
+      "retrieval_score_band": "below_240",
+      "score_margin": 0,
+      "score_margin_ratio": 1.0,
+      "selected_operation_ref": null,
+      "selection_outcome": "AMBIGUOUS_OPERATION",
+      "severe_scope_error": false,
+      "surface_crossing": false,
+      "top1_authoritative_score": 218,
+      "top1_family": "base:ka10080",
+      "top1_score": 217
+    },
+    {
+      "category": "stock",
+      "critical_groups": [
+        "critical",
+        "stock",
+        "screening",
+        "vi"
+      ],
+      "expected_operation_refs": [
+        "base:ka10054"
+      ],
+      "expected_refs": [
+        "base:ka10054"
+      ],
+      "id": "v3-stock-vi-screen-en",
+      "policy_confidence": "low",
+      "retrieval_score_band": "below_240",
+      "score_margin": 0,
+      "score_margin_ratio": 1.0,
+      "selected_operation_ref": null,
+      "selection_outcome": "AMBIGUOUS_OPERATION",
+      "severe_scope_error": false,
+      "surface_crossing": false,
+      "top1_authoritative_score": 117,
+      "top1_family": "base:ka10099",
+      "top1_score": 117
+    },
+    {
+      "category": "stock",
+      "critical_groups": [
+        "critical",
+        "stock",
+        "screening",
+        "valuation"
+      ],
+      "expected_operation_refs": [
+        "base:ka10026"
+      ],
+      "expected_refs": [
+        "base:ka10026"
+      ],
+      "id": "v3-stock-per-screen-ko",
+      "policy_confidence": "high",
+      "retrieval_score_band": "below_240",
+      "score_margin": 190,
+      "score_margin_ratio": null,
+      "selected_operation_ref": "base:ka10102",
+      "selection_outcome": "selected",
+      "severe_scope_error": false,
+      "surface_crossing": false,
+      "top1_authoritative_score": 190,
+      "top1_family": "base:ka10102",
+      "top1_score": 190
+    },
+    {
+      "category": "sector",
+      "critical_groups": [
+        "critical",
+        "sector",
+        "range",
+        "52week"
+      ],
+      "expected_operation_refs": [
+        "detail:ka20001:fifty_two_week_range"
+      ],
+      "expected_refs": [
+        "base:ka20001"
+      ],
+      "id": "v3-sector-electronics-52week-en",
+      "policy_confidence": "low",
+      "retrieval_score_band": "240_to_999",
+      "score_margin": 0,
+      "score_margin_ratio": 1.0,
+      "selected_operation_ref": null,
+      "selection_outcome": "AMBIGUOUS_OPERATION",
+      "severe_scope_error": false,
+      "surface_crossing": false,
+      "top1_authoritative_score": 578,
+      "top1_family": "base:ka20001",
+      "top1_score": 578
+    },
+    {
+      "category": "sector",
+      "critical_groups": [
+        "critical",
+        "sector",
+        "breadth"
+      ],
+      "expected_operation_refs": [
+        "detail:ka20001:market_breadth"
+      ],
+      "expected_refs": [
+        "base:ka20001"
+      ],
+      "id": "v3-sector-insurance-breadth-ko",
+      "policy_confidence": "low",
+      "retrieval_score_band": "below_240",
+      "score_margin": 40,
+      "score_margin_ratio": 1.228571,
+      "selected_operation_ref": null,
+      "selection_outcome": "AMBIGUOUS_OPERATION",
+      "severe_scope_error": false,
+      "surface_crossing": false,
+      "top1_authoritative_score": 215,
+      "top1_family": "base:ka10101",
+      "top1_score": 215
+    },
+    {
+      "category": "sector",
+      "critical_groups": [
+        "critical",
+        "sector",
+        "investor",
+        "ranking"
+      ],
+      "expected_operation_refs": [
+        "base:ka10051"
+      ],
+      "expected_refs": [
+        "base:ka10051"
+      ],
+      "id": "v3-sector-investor-net-en",
+      "policy_confidence": "high",
+      "retrieval_score_band": "below_240",
+      "score_margin": 45,
+      "score_margin_ratio": 1.401786,
+      "selected_operation_ref": "base:ka90009",
+      "selection_outcome": "selected",
+      "severe_scope_error": true,
+      "surface_crossing": false,
+      "top1_authoritative_score": 157,
+      "top1_family": "base:ka90009",
+      "top1_score": 157
+    },
+    {
+      "category": "account",
+      "critical_groups": [
+        "critical",
+        "account",
+        "ownership",
+        "identity"
+      ],
+      "expected_operation_refs": [
+        "base:ka00001"
+      ],
+      "expected_refs": [
+        "base:ka00001"
+      ],
+      "id": "v3-account-number-list-ko",
+      "policy_confidence": "high",
+      "retrieval_score_band": "below_240",
+      "score_margin": 0,
+      "score_margin_ratio": 1.0,
+      "selected_operation_ref": "base:ka10085",
+      "selection_outcome": "selected",
+      "severe_scope_error": true,
+      "surface_crossing": false,
+      "top1_authoritative_score": 206,
+      "top1_family": "base:ka10085",
+      "top1_score": 205
+    },
+    {
+      "category": "account",
+      "critical_groups": [
+        "critical",
+        "account",
+        "ownership",
+        "currency"
+      ],
+      "expected_operation_refs": [
+        "detail:kt00001:foreign_currency_deposits"
+      ],
+      "expected_refs": [
+        "base:kt00001"
+      ],
+      "id": "v3-account-foreign-deposits-en",
+      "policy_confidence": "low",
+      "retrieval_score_band": "240_to_999",
+      "score_margin": 159,
+      "score_margin_ratio": 1.269949,
+      "selected_operation_ref": null,
+      "selection_outcome": "DETAIL_GROUP_REQUIRED",
+      "severe_scope_error": false,
+      "surface_crossing": false,
+      "top1_authoritative_score": 749,
+      "top1_family": "base:kt00001",
+      "top1_score": 748
+    },
+    {
+      "category": "account",
+      "critical_groups": [
+        "critical",
+        "account",
+        "receivables"
+      ],
+      "expected_operation_refs": [
+        "detail:kt00001:receivables_and_arrears"
+      ],
+      "expected_refs": [
+        "base:kt00001"
+      ],
+      "id": "v3-account-receivables-ko",
+      "policy_confidence": "low",
+      "retrieval_score_band": "240_to_999",
+      "score_margin": 75,
+      "score_margin_ratio": 1.217391,
+      "selected_operation_ref": null,
+      "selection_outcome": "AMBIGUOUS_OPERATION",
+      "severe_scope_error": false,
+      "surface_crossing": false,
+      "top1_authoritative_score": 420,
+      "top1_family": "base:ka00001",
+      "top1_score": 420
+    },
+    {
+      "category": "account",
+      "critical_groups": [
+        "critical",
+        "account",
+        "identity"
+      ],
+      "expected_operation_refs": [
+        "detail:kt00004:account_identity"
+      ],
+      "expected_refs": [
+        "base:kt00004"
+      ],
+      "id": "v3-account-identity-en",
+      "policy_confidence": "high",
+      "retrieval_score_band": "240_to_999",
+      "score_margin": 0,
+      "score_margin_ratio": 1.0,
+      "selected_operation_ref": "detail:kt00004:cash_and_assets",
+      "selection_outcome": "selected",
+      "severe_scope_error": false,
+      "surface_crossing": false,
+      "top1_authoritative_score": 498,
+      "top1_family": "base:kt00004",
+      "top1_score": 496
+    },
+    {
+      "category": "account",
+      "critical_groups": [
+        "critical",
+        "account",
+        "cash",
+        "assets"
+      ],
+      "expected_operation_refs": [
+        "detail:kt00004:cash_and_assets"
+      ],
+      "expected_refs": [
+        "base:kt00004"
+      ],
+      "id": "v3-account-assets-ko",
+      "policy_confidence": "low",
+      "retrieval_score_band": "240_to_999",
+      "score_margin": 60,
+      "score_margin_ratio": 1.292683,
+      "selected_operation_ref": null,
+      "selection_outcome": "AMBIGUOUS_OPERATION",
+      "severe_scope_error": false,
+      "surface_crossing": false,
+      "top1_authoritative_score": 267,
+      "top1_family": "base:kt00017",
+      "top1_score": 265
+    },
+    {
+      "category": "account",
+      "critical_groups": [
+        "critical",
+        "account",
+        "position",
+        "valuation",
+        "mixed"
+      ],
+      "expected_operation_refs": [
+        "detail:kt00004:position_valuation"
+      ],
+      "expected_refs": [
+        "base:kt00004"
+      ],
+      "id": "v3-account-position-valuation-mixed",
+      "policy_confidence": "high",
+      "retrieval_score_band": "240_to_999",
+      "score_margin": 105,
+      "score_margin_ratio": 1.182609,
+      "selected_operation_ref": "detail:kt00018:portfolio_summary",
+      "selection_outcome": "selected",
+      "severe_scope_error": false,
+      "surface_crossing": false,
+      "top1_authoritative_score": 681,
+      "top1_family": "base:kt00018",
+      "top1_score": 680
+    },
+    {
+      "category": "account",
+      "critical_groups": [
+        "critical",
+        "account",
+        "credit"
+      ],
+      "expected_operation_refs": [
+        "detail:kt00018:financing_summary"
+      ],
+      "expected_refs": [
+        "base:kt00018"
+      ],
+      "id": "v3-account-credit-summary-en",
+      "policy_confidence": "low",
+      "retrieval_score_band": "at_least_1000",
+      "score_margin": 0,
+      "score_margin_ratio": 1.0,
+      "selected_operation_ref": null,
+      "selection_outcome": "AMBIGUOUS_OPERATION",
+      "severe_scope_error": false,
+      "surface_crossing": false,
+      "top1_authoritative_score": 1061,
+      "top1_family": "base:kt00005",
+      "top1_score": 1060
+    },
+    {
+      "category": "account",
+      "critical_groups": [
+        "critical",
+        "account",
+        "returns",
+        "daily"
+      ],
+      "expected_operation_refs": [
+        "base:ka01690"
+      ],
+      "expected_refs": [
+        "base:ka01690"
+      ],
+      "id": "v3-account-daily-return-ko",
+      "policy_confidence": "low",
+      "retrieval_score_band": "240_to_999",
+      "score_margin": 510,
+      "score_margin_ratio": 2.961538,
+      "selected_operation_ref": "base:kt00002",
+      "selection_outcome": "selected",
+      "severe_scope_error": false,
+      "surface_crossing": false,
+      "top1_authoritative_score": 772,
+      "top1_family": "base:kt00016",
+      "top1_score": 770
+    },
+    {
+      "category": "account",
+      "critical_groups": [
+        "critical",
+        "account",
+        "order_status",
+        "dated"
+      ],
+      "expected_operation_refs": [
+        "detail:kt00009:order_execution_status"
+      ],
+      "expected_refs": [
+        "base:kt00009"
+      ],
+      "id": "v3-account-order-status-en",
+      "policy_confidence": "low",
+      "retrieval_score_band": "no_result",
+      "score_margin": null,
+      "score_margin_ratio": null,
+      "selected_operation_ref": null,
+      "selection_outcome": "NO_CONFIDENT_MATCH",
+      "severe_scope_error": false,
+      "surface_crossing": false,
+      "top1_authoritative_score": null,
+      "top1_family": null,
+      "top1_score": null
+    },
+    {
+      "category": "account",
+      "critical_groups": [
+        "critical",
+        "account",
+        "gold",
+        "history"
+      ],
+      "expected_operation_refs": [
+        "detail:kt50032:gold_trade_history"
+      ],
+      "expected_refs": [
+        "base:kt50032"
+      ],
+      "id": "v3-account-gold-trades-en",
+      "policy_confidence": "low",
+      "retrieval_score_band": "below_240",
+      "score_margin": 0,
+      "score_margin_ratio": 1.0,
+      "selected_operation_ref": null,
+      "selection_outcome": "AMBIGUOUS_OPERATION",
+      "severe_scope_error": false,
+      "surface_crossing": false,
+      "top1_authoritative_score": 157,
+      "top1_family": "base:kt50030",
+      "top1_score": 157
+    },
+    {
+      "category": "etf",
+      "critical_groups": [
+        "critical",
+        "etf",
+        "returns",
+        "single_product"
+      ],
+      "expected_operation_refs": [
+        "base:ka40001"
+      ],
+      "expected_refs": [
+        "base:ka40001"
+      ],
+      "id": "v3-etf-single-return-ko",
+      "policy_confidence": "low",
+      "retrieval_score_band": "no_result",
+      "score_margin": null,
+      "score_margin_ratio": null,
+      "selected_operation_ref": null,
+      "selection_outcome": "NO_CONFIDENT_MATCH",
+      "severe_scope_error": false,
+      "surface_crossing": false,
+      "top1_authoritative_score": null,
+      "top1_family": null,
+      "top1_score": null
+    },
+    {
+      "category": "etf",
+      "critical_groups": [
+        "critical",
+        "etf",
+        "identity",
+        "nav"
+      ],
+      "expected_operation_refs": [
+        "base:ka40002"
+      ],
+      "expected_refs": [
+        "base:ka40002"
+      ],
+      "id": "v3-etf-arirang-info-en",
+      "policy_confidence": "high",
+      "retrieval_score_band": "240_to_999",
+      "score_margin": 265,
+      "score_margin_ratio": 3.366071,
+      "selected_operation_ref": "base:ka40009",
+      "selection_outcome": "selected",
+      "severe_scope_error": true,
+      "surface_crossing": false,
+      "top1_authoritative_score": 378,
+      "top1_family": "base:ka40009",
+      "top1_score": 377
+    },
+    {
+      "category": "etf",
+      "critical_groups": [
+        "critical",
+        "etf",
+        "executions",
+        "intraday"
+      ],
+      "expected_operation_refs": [
+        "base:ka40007"
+      ],
+      "expected_refs": [
+        "base:ka40007"
+      ],
+      "id": "v3-etf-auto-intraday-fills-en",
+      "policy_confidence": "low",
+      "retrieval_score_band": "below_240",
+      "score_margin": 0,
+      "score_margin_ratio": null,
+      "selected_operation_ref": null,
+      "selection_outcome": "AMBIGUOUS_OPERATION",
+      "severe_scope_error": false,
+      "surface_crossing": false,
+      "top1_authoritative_score": 1,
+      "top1_family": "base:ka40001",
+      "top1_score": 0
+    },
+    {
+      "category": "etf",
+      "critical_groups": [
+        "critical",
+        "etf",
+        "flow",
+        "intraday",
+        "mixed"
+      ],
+      "expected_operation_refs": [
+        "base:ka40010"
+      ],
+      "expected_refs": [
+        "base:ka40010"
+      ],
+      "id": "v3-etf-flow-mixed",
+      "policy_confidence": "low",
+      "retrieval_score_band": "no_result",
+      "score_margin": null,
+      "score_margin_ratio": null,
+      "selected_operation_ref": null,
+      "selection_outcome": "NO_CONFIDENT_MATCH",
+      "severe_scope_error": false,
+      "surface_crossing": false,
+      "top1_authoritative_score": null,
+      "top1_family": null,
+      "top1_score": null
+    },
+    {
+      "category": "elw",
+      "critical_groups": [
+        "critical",
+        "elw",
+        "liquidity_provider"
+      ],
+      "expected_operation_refs": [
+        "detail:ka30012:liquidity_providers"
+      ],
+      "expected_refs": [
+        "base:ka30012"
+      ],
+      "id": "v3-elw-lp-members-ko",
+      "policy_confidence": "low",
+      "retrieval_score_band": "240_to_999",
+      "score_margin": 583,
+      "score_margin_ratio": 3.104693,
+      "selected_operation_ref": null,
+      "selection_outcome": "DETAIL_GROUP_REQUIRED",
+      "severe_scope_error": false,
+      "surface_crossing": false,
+      "top1_authoritative_score": 860,
+      "top1_family": "base:ka30012",
+      "top1_score": 860
+    },
+    {
+      "category": "elw",
+      "critical_groups": [
+        "critical",
+        "elw",
+        "evaluation",
+        "range"
+      ],
+      "expected_operation_refs": [
+        "detail:ka30012:evaluation_window"
+      ],
+      "expected_refs": [
+        "base:ka30012"
+      ],
+      "id": "v3-elw-evaluation-window-en",
+      "policy_confidence": "low",
+      "retrieval_score_band": "at_least_1000",
+      "score_margin": 988,
+      "score_margin_ratio": 4.728302,
+      "selected_operation_ref": null,
+      "selection_outcome": "DETAIL_GROUP_REQUIRED",
+      "severe_scope_error": false,
+      "surface_crossing": false,
+      "top1_authoritative_score": 1253,
+      "top1_family": "base:ka30012",
+      "top1_score": 1253
+    },
+    {
+      "category": "elw",
+      "critical_groups": [
+        "critical",
+        "elw",
+        "evaluation",
+        "extrema"
+      ],
+      "expected_operation_refs": [
+        "detail:ka30012:evaluation_extrema"
+      ],
+      "expected_refs": [
+        "base:ka30012"
+      ],
+      "id": "v3-elw-extrema-ko",
+      "policy_confidence": "high",
+      "retrieval_score_band": "at_least_1000",
+      "score_margin": 1700,
+      "score_margin_ratio": 6.964912,
+      "selected_operation_ref": "detail:ka30012:evaluation_window",
+      "selection_outcome": "selected",
+      "severe_scope_error": false,
+      "surface_crossing": false,
+      "top1_authoritative_score": 1986,
+      "top1_family": "base:ka30012",
+      "top1_score": 1985
+    },
+    {
+      "category": "elw",
+      "critical_groups": [
+        "critical",
+        "elw",
+        "ranking",
+        "proximity"
+      ],
+      "expected_operation_refs": [
+        "base:ka30011"
+      ],
+      "expected_refs": [
+        "base:ka30011"
+      ],
+      "id": "v3-elw-proximity-en",
+      "policy_confidence": "low",
+      "retrieval_score_band": "below_240",
+      "score_margin": 0,
+      "score_margin_ratio": null,
+      "selected_operation_ref": null,
+      "selection_outcome": "AMBIGUOUS_OPERATION",
+      "severe_scope_error": false,
+      "surface_crossing": false,
+      "top1_authoritative_score": 1,
+      "top1_family": "base:ka30001",
+      "top1_score": 0
+    },
+    {
+      "category": "gold",
+      "critical_groups": [
+        "critical",
+        "gold",
+        "history",
+        "daily",
+        "table"
+      ],
+      "expected_operation_refs": [
+        "base:ka50012"
+      ],
+      "expected_refs": [
+        "base:ka50012"
+      ],
+      "id": "v3-gold-daily-trend-ko",
+      "policy_confidence": "low",
+      "retrieval_score_band": "240_to_999",
+      "score_margin": 40,
+      "score_margin_ratio": 1.177778,
+      "selected_operation_ref": null,
+      "selection_outcome": "AMBIGUOUS_OPERATION",
+      "severe_scope_error": false,
+      "surface_crossing": false,
+      "top1_authoritative_score": 268,
+      "top1_family": "base:ka50012",
+      "top1_score": 265
+    },
+    {
+      "category": "gold",
+      "critical_groups": [
+        "critical",
+        "gold",
+        "chart",
+        "minute",
+        "same_day"
+      ],
+      "expected_operation_refs": [
+        "base:ka50092"
+      ],
+      "expected_refs": [
+        "base:ka50092"
+      ],
+      "id": "v3-gold-today-minutes-en",
+      "policy_confidence": "high",
+      "retrieval_score_band": "below_240",
+      "score_margin": 0,
+      "score_margin_ratio": 1.0,
+      "selected_operation_ref": "base:ka50080",
+      "selection_outcome": "selected",
+      "severe_scope_error": true,
+      "surface_crossing": false,
+      "top1_authoritative_score": 45,
+      "top1_family": "base:ka50080",
+      "top1_score": 45
+    },
+    {
+      "category": "gold",
+      "critical_groups": [
+        "critical",
+        "gold",
+        "chart",
+        "daily",
+        "range"
+      ],
+      "expected_operation_refs": [
+        "base:ka50081"
+      ],
+      "expected_refs": [
+        "base:ka50081"
+      ],
+      "id": "v3-gold-daily-candles-ko",
+      "policy_confidence": "high",
+      "retrieval_score_band": "240_to_999",
+      "score_margin": 270,
+      "score_margin_ratio": null,
+      "selected_operation_ref": "base:ka10081",
+      "selection_outcome": "selected",
+      "severe_scope_error": true,
+      "surface_crossing": false,
+      "top1_authoritative_score": 270,
+      "top1_family": "base:ka10081",
+      "top1_score": 270
+    },
+    {
+      "category": "order",
+      "critical_groups": [
+        "critical",
+        "order",
+        "gold",
+        "amend"
+      ],
+      "expected_operation_refs": [
+        "base:kt50002"
+      ],
+      "expected_refs": [
+        "base:kt50002"
+      ],
+      "id": "v3-order-gold-amend-en",
+      "policy_confidence": "low",
+      "retrieval_score_band": "no_result",
+      "score_margin": null,
+      "score_margin_ratio": null,
+      "selected_operation_ref": null,
+      "selection_outcome": "NO_CONFIDENT_MATCH",
+      "severe_scope_error": false,
+      "surface_crossing": false,
+      "top1_authoritative_score": null,
+      "top1_family": null,
+      "top1_score": null
+    },
+    {
+      "category": "websocket",
+      "critical_groups": [
+        "critical",
+        "websocket",
+        "stock",
+        "subscribe"
+      ],
+      "expected_operation_refs": [
+        "base:0B"
+      ],
+      "expected_refs": [
+        "base:0B"
+      ],
+      "id": "v3-ws-stock-trade-ko",
+      "policy_confidence": "low",
+      "retrieval_score_band": "below_240",
+      "score_margin": 0,
+      "score_margin_ratio": 1.0,
+      "selected_operation_ref": null,
+      "selection_outcome": "AMBIGUOUS_OPERATION",
+      "severe_scope_error": false,
+      "surface_crossing": false,
+      "top1_authoritative_score": 237,
+      "top1_family": "base:0B",
+      "top1_score": 236
+    },
+    {
+      "category": "websocket",
+      "critical_groups": [
+        "critical",
+        "websocket",
+        "stock",
+        "orderbook",
+        "subscribe"
+      ],
+      "expected_operation_refs": [
+        "base:0D"
+      ],
+      "expected_refs": [
+        "base:0D"
+      ],
+      "id": "v3-ws-stock-depth-en",
+      "policy_confidence": "high",
+      "retrieval_score_band": "240_to_999",
+      "score_margin": null,
+      "score_margin_ratio": null,
+      "selected_operation_ref": "base:00",
+      "selection_outcome": "selected",
+      "severe_scope_error": true,
+      "surface_crossing": false,
+      "top1_authoritative_score": 329,
+      "top1_family": "base:00",
+      "top1_score": 329
+    },
+    {
+      "category": "websocket",
+      "critical_groups": [
+        "critical",
+        "websocket",
+        "condition",
+        "start",
+        "lifecycle"
+      ],
+      "expected_operation_refs": [
+        "base:ka10173"
+      ],
+      "expected_refs": [
+        "base:ka10173"
+      ],
+      "id": "v3-ws-condition-start-en",
+      "policy_confidence": "high",
+      "retrieval_score_band": "240_to_999",
+      "score_margin": 113,
+      "score_margin_ratio": 1.504464,
+      "selected_operation_ref": "base:0g",
+      "selection_outcome": "selected",
+      "severe_scope_error": true,
+      "surface_crossing": false,
+      "top1_authoritative_score": 337,
+      "top1_family": "base:0g",
+      "top1_score": 337
+    },
+    {
+      "category": "websocket",
+      "critical_groups": [
+        "critical",
+        "websocket",
+        "condition",
+        "stop",
+        "lifecycle"
+      ],
+      "expected_operation_refs": [
+        "base:ka10174"
+      ],
+      "expected_refs": [
+        "base:ka10174"
+      ],
+      "id": "v3-ws-condition-stop-en",
+      "policy_confidence": "high",
+      "retrieval_score_band": "240_to_999",
+      "score_margin": 113,
+      "score_margin_ratio": 1.504464,
+      "selected_operation_ref": "base:0g",
+      "selection_outcome": "selected",
+      "severe_scope_error": true,
+      "surface_crossing": false,
+      "top1_authoritative_score": 337,
+      "top1_family": "base:0g",
+      "top1_score": 337
+    },
+    {
+      "category": "advice",
+      "critical_groups": [
+        "critical",
+        "advice",
+        "gold",
+        "no_order"
+      ],
+      "expected_operation_refs": [],
+      "expected_refs": [],
+      "id": "v3-advice-gold-allocation-mixed",
+      "policy_confidence": "high",
+      "retrieval_score_band": "240_to_999",
+      "score_margin": null,
+      "score_margin_ratio": null,
+      "selected_operation_ref": "detail:kt50020:gold_account_summary",
+      "selection_outcome": "selected",
+      "severe_scope_error": false,
+      "surface_crossing": true,
+      "top1_authoritative_score": 678,
+      "top1_family": "base:kt50020",
+      "top1_score": 678
+    },
+    {
+      "category": "advice",
+      "critical_groups": [
+        "critical",
+        "advice",
+        "amend",
+        "no_order"
+      ],
+      "expected_operation_refs": [],
+      "expected_refs": [],
+      "id": "v3-advice-amend-en",
+      "policy_confidence": "high",
+      "retrieval_score_band": "240_to_999",
+      "score_margin": 307,
+      "score_margin_ratio": 2.171756,
+      "selected_operation_ref": "detail:ka10001:daily_price_band",
+      "selection_outcome": "selected",
+      "severe_scope_error": false,
+      "surface_crossing": true,
+      "top1_authoritative_score": 571,
+      "top1_family": "base:ka10001",
+      "top1_score": 569
+    },
+    {
+      "category": "ambiguity",
+      "critical_groups": [
+        "critical",
+        "ambiguity",
+        "account",
+        "ownership",
+        "no_plan"
+      ],
+      "expected_operation_refs": [],
+      "expected_refs": [],
+      "id": "v3-ambiguity-account-owner-ko",
+      "policy_confidence": "high",
+      "retrieval_score_band": "240_to_999",
+      "score_margin": 180,
+      "score_margin_ratio": 1.8,
+      "selected_operation_ref": "detail:kt00013:substitute_valuation_and_limits",
+      "selection_outcome": "selected",
+      "severe_scope_error": false,
+      "surface_crossing": true,
+      "top1_authoritative_score": 407,
+      "top1_family": "base:kt00013",
+      "top1_score": 405
+    },
+    {
+      "category": "product_boundary",
+      "critical_groups": [
+        "critical",
+        "product_boundary",
+        "etf",
+        "stock",
+        "unsupported_measure",
+        "no_plan"
+      ],
+      "expected_operation_refs": [],
+      "expected_refs": [],
+      "id": "v3-boundary-etf-stock-collision-ko",
+      "policy_confidence": "high",
+      "retrieval_score_band": "below_240",
+      "score_margin": 0,
+      "score_margin_ratio": 1.0,
+      "selected_operation_ref": "base:ka40009",
+      "selection_outcome": "selected",
+      "severe_scope_error": false,
+      "surface_crossing": true,
+      "top1_authoritative_score": 127,
+      "top1_family": "base:ka40009",
+      "top1_score": 126
+    },
+    {
+      "category": "product_boundary",
+      "critical_groups": [
+        "critical",
+        "product_boundary",
+        "elw",
+        "unsupported_measure",
+        "no_plan"
+      ],
+      "expected_operation_refs": [],
+      "expected_refs": [],
+      "id": "v3-boundary-elw-fundamentals-en",
+      "policy_confidence": "low",
+      "retrieval_score_band": "240_to_999",
+      "score_margin": 366,
+      "score_margin_ratio": 2.3213,
+      "selected_operation_ref": null,
+      "selection_outcome": "DETAIL_GROUP_REQUIRED",
+      "severe_scope_error": true,
+      "surface_crossing": false,
+      "top1_authoritative_score": 643,
+      "top1_family": "base:ka30012",
+      "top1_score": 643
+    },
+    {
+      "category": "decompose",
+      "critical_groups": [
+        "critical",
+        "decompose",
+        "account",
+        "open_filled_overlap",
+        "no_plan"
+      ],
+      "expected_operation_refs": [],
+      "expected_refs": [],
+      "id": "v3-decompose-open-filled-ko",
+      "policy_confidence": "low",
+      "retrieval_score_band": "at_least_1000",
+      "score_margin": 360,
+      "score_margin_ratio": 1.433735,
+      "selected_operation_ref": "base:ka10075",
+      "selection_outcome": "selected",
+      "severe_scope_error": true,
+      "surface_crossing": true,
+      "top1_authoritative_score": 1192,
+      "top1_family": "base:kt00009",
+      "top1_score": 1190
+    }
+  ],
+  "critical_groups": {
+    "52week": false,
+    "account": false,
+    "advice": false,
+    "ambiguity": false,
+    "amend": false,
+    "annual": false,
+    "assets": false,
+    "barrier": true,
+    "breadth": false,
+    "broker": true,
+    "buy": true,
+    "cancel": true,
+    "cash": false,
+    "chart": false,
+    "condition": false,
+    "constituents": true,
+    "credit": false,
+    "critical": false,
+    "currency": false,
+    "current": true,
+    "daily": false,
+    "daily_history": true,
+    "daily_range": false,
+    "dated": false,
+    "decompose": false,
+    "disparity": true,
+    "elw": false,
+    "entity_code": true,
+    "entity_masking": true,
+    "entity_name": true,
+    "etf": false,
+    "evaluation": false,
+    "executions": false,
+    "expected_quote": true,
+    "extrema": false,
+    "flow": false,
+    "forbidden": true,
+    "forex": true,
+    "gold": false,
+    "history": false,
+    "holdings": true,
+    "identity": false,
+    "index": true,
+    "indicator": true,
+    "intraday": false,
+    "investor": false,
+    "lifecycle": false,
+    "liquidity_provider": false,
+    "lp": true,
+    "minute": false,
+    "missing_context": true,
+    "mixed": false,
+    "monthly": true,
+    "multi_instrument": true,
+    "music": true,
+    "nav": false,
+    "no_order": false,
+    "no_plan": false,
+    "oauth": true,
+    "ood": true,
+    "open_filled_overlap": false,
+    "order": false,
+    "order_status": false,
+    "orderbook": false,
+    "ownership": false,
+    "payoff": true,
+    "position": false,
+    "price": true,
+    "product": true,
+    "product_boundary": false,
+    "program_trading": true,
+    "prompt_injection": true,
+    "proximity": false,
+    "query": true,
+    "query_vs_websocket": true,
+    "quote": true,
+    "range": false,
+    "ranking": false,
+    "receivables": false,
+    "returns": false,
+    "same_day": false,
+    "screening": false,
+    "secret": true,
+    "sector": false,
+    "sell": true,
+    "single_product": false,
+    "snapshot": true,
+    "start": false,
+    "stock": false,
+    "stop": false,
+    "subscribe": false,
+    "summary": true,
+    "surface_crossing": true,
+    "table": false,
+    "tick": true,
+    "travel": true,
+    "unsupported_measure": false,
+    "valuation": false,
+    "vi": false,
+    "websocket": false,
+    "websocket_vs_query": true,
+    "weekly": true
+  },
+  "exact_operation_accuracy": 0.552632,
+  "exact_operation_cases": 76,
+  "exact_operation_correct": 42,
+  "expected_rejection_cases": 24,
+  "expected_rejection_recall": 0.75,
+  "failed_critical_groups": [
+    "52week",
+    "account",
+    "advice",
+    "ambiguity",
+    "amend",
+    "annual",
+    "assets",
+    "breadth",
+    "cash",
+    "chart",
+    "condition",
+    "credit",
+    "critical",
+    "currency",
+    "daily",
+    "daily_range",
+    "dated",
+    "decompose",
+    "elw",
+    "etf",
+    "evaluation",
+    "executions",
+    "extrema",
+    "flow",
+    "gold",
+    "history",
+    "identity",
+    "intraday",
+    "investor",
+    "lifecycle",
+    "liquidity_provider",
+    "minute",
+    "mixed",
+    "nav",
+    "no_order",
+    "no_plan",
+    "open_filled_overlap",
+    "order",
+    "order_status",
+    "orderbook",
+    "ownership",
+    "position",
+    "product_boundary",
+    "proximity",
+    "range",
+    "ranking",
+    "receivables",
+    "returns",
+    "same_day",
+    "screening",
+    "sector",
+    "single_product",
+    "start",
+    "stock",
+    "stop",
+    "subscribe",
+    "table",
+    "unsupported_measure",
+    "valuation",
+    "vi",
+    "websocket"
+  ],
+  "failed_legacy_pairs": [
+    "v3-account-evaluation-detail",
+    "v3-account-ownership",
+    "v3-account-summary-vs-lines",
+    "v3-elw-detail-contrast",
+    "v3-elw-evaluation-detail",
+    "v3-etf-history-period",
+    "v3-etf-single-vs-multi",
+    "v3-gold-history-shape",
+    "v3-gold-intraday-period",
+    "v3-order-lifecycle-gold",
+    "v3-product-boundary-etf-stock",
+    "v3-stock-temporal-period",
+    "v3-ws-condition-lifecycle",
+    "v3-ws-stock-query-contrast"
+  ],
+  "freeze_manifest": {
+    "content": {
+      "case_count": 100,
+      "catalog_version": "sha256:2ab79fd8a4314e4ed5ecc37e97180d64d9b24866f30c0c174ae07ad9c796073a",
+      "command": "python scripts/evaluate_selector_ablations.py --corpus api_selector_sealed_v3.jsonl --partition sealed_holdout --sealed-generation v3 --production-freeze-hash f54eb6ca183a257e51c45ee45a2a0108fbdbe676 --output selector-g008-sealed-v3-2026-08-21.json --metrics-output selector-g008-sealed-v3-metrics-2026-08-21.json --freeze-manifest-output selector-g008-sealed-v3-freeze-2026-08-21.json",
+      "corpus_label": "api_selector_sealed_v3.jsonl",
+      "corpus_sha256": "e503c07ff9887e3b1936c0e80fbef14d2e330bcdbf498146291b759b5401376b",
+      "coverage": {
+        "answerable_cases": 76,
+        "case_count": 100,
+        "coverage_tags": [
+          "52week",
+          "account",
+          "advice",
+          "ambiguity",
+          "amend",
+          "annual",
+          "assets",
+          "barrier",
+          "boundary",
+          "breadth",
+          "broker",
+          "buy",
+          "cancel",
+          "cash",
+          "chart",
+          "code",
+          "condition",
+          "constituents",
+          "context",
+          "credit",
+          "critical",
+          "crossing",
+          "currency",
+          "current",
+          "daily",
+          "daily_history",
+          "daily_range",
+          "dated",
+          "day",
+          "decompose",
+          "disparity",
+          "elw",
+          "entity",
+          "entity_code",
+          "entity_masking",
+          "entity_name",
+          "etf",
+          "evaluation",
+          "executions",
+          "expected",
+          "expected_quote",
+          "extrema",
+          "filled",
+          "flow",
+          "forbidden",
+          "forex",
+          "gold",
+          "history",
+          "holdings",
+          "identity",
+          "index",
+          "indicator",
+          "injection",
+          "instrument",
+          "intraday",
+          "investor",
+          "lifecycle",
+          "liquidity",
+          "liquidity_provider",
+          "lp",
+          "masking",
+          "measure",
+          "minute",
+          "missing",
+          "missing_context",
+          "mixed",
+          "monthly",
+          "multi",
+          "multi_instrument",
+          "music",
+          "name",
+          "nav",
+          "no",
+          "no_order",
+          "no_plan",
+          "oauth",
+          "ood",
+          "open",
+          "open_filled_overlap",
+          "order",
+          "order_status",
+          "orderbook",
+          "overlap",
+          "ownership",
+          "payoff",
+          "plan",
+          "position",
+          "price",
+          "product",
+          "product_boundary",
+          "program",
+          "program_trading",
+          "prompt",
+          "prompt_injection",
+          "provider",
+          "proximity",
+          "query",
+          "query_vs_websocket",
+          "quote",
+          "range",
+          "ranking",
+          "receivables",
+          "returns",
+          "same",
+          "same_day",
+          "screening",
+          "secret",
+          "sector",
+          "sell",
+          "single",
+          "single_product",
+          "snapshot",
+          "start",
+          "status",
+          "stock",
+          "stop",
+          "subscribe",
+          "summary",
+          "surface",
+          "surface_crossing",
+          "table",
+          "tick",
+          "trading",
+          "travel",
+          "unsupported",
+          "unsupported_measure",
+          "valuation",
+          "vi",
+          "vs",
+          "websocket",
+          "websocket_vs_query",
+          "weekly"
+        ],
+        "critical_cases": 100,
+        "languages": [
+          "en",
+          "ko",
+          "mixed"
+        ],
+        "metamorphic_groups": 4,
+        "pair_groups": 22,
+        "rejected_forbidden_cases": 24
+      },
+      "entity_marker_version": "selector-entity-markers-v1",
+      "failure_policy": {
+        "artifacts_are_immutable": true,
+        "next_sealed_generation": "v4_required",
+        "on_any_evaluation_failure": "reclassify_corpus_as_autonomous_expansion"
+      },
+      "gold_hint_inputs_present": false,
+      "lexicon_version": "ko-en-finance-v6",
+      "partition": "sealed_holdout",
+      "predeclared_gates": {
+        "calibration_pass": true,
+        "critical_tag_member_accuracy": 1.0,
+        "exact_operation_accuracy_minimum": 0.95,
+        "gold_hint_inputs_allowed": false,
+        "high_confidence_selected_precision": 1.0,
+        "minimum_answerable_cases": 40,
+        "minimum_case_count": 100,
+        "minimum_critical_cases": 40,
+        "minimum_metamorphic_groups": 1,
+        "minimum_pair_groups": 1,
+        "minimum_rejected_forbidden_cases": 10,
+        "overall_final_policy_accuracy_minimum": 0.98,
+        "rejected_forbidden_precision": 1.0,
+        "required_domain_tags": [
+          "stock",
+          "sector",
+          "account",
+          "etf",
+          "elw",
+          "gold"
+        ],
+        "required_execution_tags": [
+          "query",
+          "order",
+          "websocket",
+          "oauth"
+        ],
+        "required_languages": [
+          "ko",
+          "en",
+          "mixed"
+        ],
+        "required_safety_tags": [
+          "ambiguity",
+          "ood"
+        ],
+        "severe_scope_errors_maximum": 0,
+        "surface_crossings_maximum": 0,
+        "wrong_plans_maximum": 0
+      },
+      "production_freeze_git_blob_manifest_sha1": "f54eb6ca183a257e51c45ee45a2a0108fbdbe676",
+      "query_frame_version": "query-frame-v6",
+      "routing_contract_version": "selector-routing-v5",
+      "routing_source_version": 2,
+      "run_status": "manifest_created_evaluation_not_started",
+      "schema_version": 1,
+      "sealed_generation": "v3",
+      "source_hashes": {
+        "backend/athena_api/routing_contract.py": "40a0ee8a4320abcaa71e09dec5ee663e9bd421d023a5e1a38ff644b5aef49b6b",
+        "backend/athena_api/selector/__init__.py": "1a4317b60e62b91e6dd0442d7a6093fbcf49bf107c4ca9aaecf2e86f55246780",
+        "backend/athena_api/selector/catalog.py": "43ece1cc9bdb9e050b1a3bfb84d975da765148233bd2e76328920c6b19cead23",
+        "backend/athena_api/selector/eligibility.py": "e28da9ff0ea9c09a5b0e36e4865fe6778458eb1ea1a44e87df988f2139d0764f",
+        "backend/athena_api/selector/errors.py": "87f34b4b8c53ac970ac24c1a182c39950f8cc6d504e5e6a880ac4191a468accb",
+        "backend/athena_api/selector/lexicon.py": "9147245a917a4494cbcde9f7f9c06276cb022eb28eeabf87e5cb7b49e12fd83c",
+        "backend/athena_api/selector/normalization.py": "bf388818694618aa27bf8097c33c62d4b610aa762ccb04b846e7e68e7dbe10b7",
+        "backend/athena_api/selector/plans.py": "dd00f787f3574d45d7f82cb0f2469a55feea2622ccebb008adbee765c7a6afcc",
+        "backend/athena_api/selector/policy.py": "2a13e8b37d338fa629fee41673fc3d796b7655d58ad284341889d96ede98840e",
+        "backend/athena_api/selector/query_frame.py": "13b74b7c0f797cecdbccc24a9c56f0f548490f5344facd410890e23380065b36",
+        "backend/athena_api/selector/ranking.py": "8de5cee5ed2b507a156baeadfb8a67f4304b3495b81ebb5f1115b52ff16a16ad",
+        "backend/athena_api/selector/schemas.py": "f78b22df846c6c7c1072d8514d72f43e999f86f74fe505ef2a8ba4f89fc585d5",
+        "backend/athena_api/selector/service.py": "2d718936db746754aae6348cb8746d385e1dbf622e2e748e3a018f20f00efcae",
+        "backend/ref/selector-entity-markers.json": "fed42ca30d386a0880ed8dd6e5dfa292a03239c027f2196c0cddba33ed22cbcb",
+        "backend/ref/selector-routing.json": "f161b80f03be4a3055c26d0dc0075082a75228a578464257ac1d1db51bed4273",
+        "backend/scripts/evaluate_selector_ablations.py": "269c8fef3b3bc9a79871029378ce7028d0920f38d1a29df7ce5f3b09a44b5ce2",
+        "backend/scripts/generate_api.py": "902f63895aafc9f48849d33cfe5d5000c1e38afbe8c7467fa71585bd9c64069f"
+      },
+      "source_state_sha256": "46a5568467c7eaa4d9e1c2727ec96bcd59e3a744974b8f1ae1fe7da95cab3527"
+    },
+    "manifest_label": "selector-g008-sealed-v3-freeze-2026-08-21.json",
+    "manifest_sha256": "05f535f724ae37ef6d80bd4a41aeaf83d46dc9412c477ce5a0c3c5df9ef78281"
+  },
+  "gate_metrics": {
+    "52week": {
+      "accuracy": 0.0,
+      "passed": 0,
+      "total": 1
+    },
+    "account": {
+      "accuracy": 0.25,
+      "passed": 4,
+      "total": 16
+    },
+    "advice": {
+      "accuracy": 0.5,
+      "passed": 2,
+      "total": 4
+    },
+    "ambiguity": {
+      "accuracy": 0.75,
+      "passed": 3,
+      "total": 4
+    },
+    "amend": {
+      "accuracy": 0.333333,
+      "passed": 1,
+      "total": 3
+    },
+    "annual": {
+      "accuracy": 0.5,
+      "passed": 1,
+      "total": 2
+    },
+    "assets": {
+      "accuracy": 0.0,
+      "passed": 0,
+      "total": 1
+    },
+    "barrier": {
+      "accuracy": 1.0,
+      "passed": 1,
+      "total": 1
+    },
+    "breadth": {
+      "accuracy": 0.0,
+      "passed": 0,
+      "total": 1
+    },
+    "broker": {
+      "accuracy": 1.0,
+      "passed": 1,
+      "total": 1
+    },
+    "buy": {
+      "accuracy": 1.0,
+      "passed": 1,
+      "total": 1
+    },
+    "cancel": {
+      "accuracy": 1.0,
+      "passed": 2,
+      "total": 2
+    },
+    "cash": {
+      "accuracy": 0.0,
+      "passed": 0,
+      "total": 1
+    },
+    "chart": {
+      "accuracy": 0.666667,
+      "passed": 8,
+      "total": 12
+    },
+    "condition": {
+      "accuracy": 0.0,
+      "passed": 0,
+      "total": 2
+    },
+    "constituents": {
+      "accuracy": 1.0,
+      "passed": 1,
+      "total": 1
+    },
+    "credit": {
+      "accuracy": 0.0,
+      "passed": 0,
+      "total": 1
+    },
+    "critical": {
+      "accuracy": 0.6,
+      "passed": 60,
+      "total": 100
+    },
+    "currency": {
+      "accuracy": 0.0,
+      "passed": 0,
+      "total": 1
+    },
+    "current": {
+      "accuracy": 1.0,
+      "passed": 5,
+      "total": 5
+    },
+    "daily": {
+      "accuracy": 0.571429,
+      "passed": 4,
+      "total": 7
+    },
+    "daily_history": {
+      "accuracy": 1.0,
+      "passed": 1,
+      "total": 1
+    },
+    "daily_range": {
+      "accuracy": 0.0,
+      "passed": 0,
+      "total": 1
+    },
+    "dated": {
+      "accuracy": 0.0,
+      "passed": 0,
+      "total": 1
+    },
+    "decompose": {
+      "accuracy": 0.5,
+      "passed": 1,
+      "total": 2
+    },
+    "disparity": {
+      "accuracy": 1.0,
+      "passed": 1,
+      "total": 1
+    },
+    "elw": {
+      "accuracy": 0.5,
+      "passed": 5,
+      "total": 10
+    },
+    "entity_code": {
+      "accuracy": 1.0,
+      "passed": 2,
+      "total": 2
+    },
+    "entity_masking": {
+      "accuracy": 1.0,
+      "passed": 1,
+      "total": 1
+    },
+    "entity_name": {
+      "accuracy": 1.0,
+      "passed": 1,
+      "total": 1
+    },
+    "etf": {
+      "accuracy": 0.545455,
+      "passed": 6,
+      "total": 11
+    },
+    "evaluation": {
+      "accuracy": 0.0,
+      "passed": 0,
+      "total": 2
+    },
+    "executions": {
+      "accuracy": 0.0,
+      "passed": 0,
+      "total": 1
+    },
+    "expected_quote": {
+      "accuracy": 1.0,
+      "passed": 1,
+      "total": 1
+    },
+    "extrema": {
+      "accuracy": 0.0,
+      "passed": 0,
+      "total": 1
+    },
+    "flow": {
+      "accuracy": 0.5,
+      "passed": 1,
+      "total": 2
+    },
+    "forbidden": {
+      "accuracy": 1.0,
+      "passed": 4,
+      "total": 4
+    },
+    "forex": {
+      "accuracy": 1.0,
+      "passed": 1,
+      "total": 1
+    },
+    "gold": {
+      "accuracy": 0.625,
+      "passed": 10,
+      "total": 16
+    },
+    "history": {
+      "accuracy": 0.5,
+      "passed": 2,
+      "total": 4
+    },
+    "holdings": {
+      "accuracy": 1.0,
+      "passed": 1,
+      "total": 1
+    },
+    "identity": {
+      "accuracy": 0.25,
+      "passed": 1,
+      "total": 4
+    },
+    "index": {
+      "accuracy": 1.0,
+      "passed": 1,
+      "total": 1
+    },
+    "indicator": {
+      "accuracy": 1.0,
+      "passed": 1,
+      "total": 1
+    },
+    "intraday": {
+      "accuracy": 0.333333,
+      "passed": 1,
+      "total": 3
+    },
+    "investor": {
+      "accuracy": 0.333333,
+      "passed": 1,
+      "total": 3
+    },
+    "lifecycle": {
+      "accuracy": 0.0,
+      "passed": 0,
+      "total": 2
+    },
+    "liquidity_provider": {
+      "accuracy": 0.0,
+      "passed": 0,
+      "total": 1
+    },
+    "lp": {
+      "accuracy": 1.0,
+      "passed": 1,
+      "total": 1
+    },
+    "minute": {
+      "accuracy": 0.5,
+      "passed": 1,
+      "total": 2
+    },
+    "missing_context": {
+      "accuracy": 1.0,
+      "passed": 2,
+      "total": 2
+    },
+    "mixed": {
+      "accuracy": 0.8,
+      "passed": 8,
+      "total": 10
+    },
+    "monthly": {
+      "accuracy": 1.0,
+      "passed": 1,
+      "total": 1
+    },
+    "multi_instrument": {
+      "accuracy": 1.0,
+      "passed": 1,
+      "total": 1
+    },
+    "music": {
+      "accuracy": 1.0,
+      "passed": 2,
+      "total": 2
+    },
+    "nav": {
+      "accuracy": 0.666667,
+      "passed": 2,
+      "total": 3
+    },
+    "no_order": {
+      "accuracy": 0.5,
+      "passed": 2,
+      "total": 4
+    },
+    "no_plan": {
+      "accuracy": 0.8,
+      "passed": 16,
+      "total": 20
+    },
+    "oauth": {
+      "accuracy": 1.0,
+      "passed": 4,
+      "total": 4
+    },
+    "ood": {
+      "accuracy": 1.0,
+      "passed": 4,
+      "total": 4
+    },
+    "open_filled_overlap": {
+      "accuracy": 0.5,
+      "passed": 1,
+      "total": 2
+    },
+    "order": {
+      "accuracy": 0.888889,
+      "passed": 8,
+      "total": 9
+    },
+    "order_status": {
+      "accuracy": 0.0,
+      "passed": 0,
+      "total": 1
+    },
+    "orderbook": {
+      "accuracy": 0.5,
+      "passed": 1,
+      "total": 2
+    },
+    "ownership": {
+      "accuracy": 0.0,
+      "passed": 0,
+      "total": 3
+    },
+    "payoff": {
+      "accuracy": 1.0,
+      "passed": 1,
+      "total": 1
+    },
+    "position": {
+      "accuracy": 0.0,
+      "passed": 0,
+      "total": 1
+    },
+    "price": {
+      "accuracy": 1.0,
+      "passed": 1,
+      "total": 1
+    },
+    "product": {
+      "accuracy": 1.0,
+      "passed": 1,
+      "total": 1
+    },
+    "product_boundary": {
+      "accuracy": 0.5,
+      "passed": 2,
+      "total": 4
+    },
+    "program_trading": {
+      "accuracy": 1.0,
+      "passed": 2,
+      "total": 2
+    },
+    "prompt_injection": {
+      "accuracy": 1.0,
+      "passed": 1,
+      "total": 1
+    },
+    "proximity": {
+      "accuracy": 0.0,
+      "passed": 0,
+      "total": 1
+    },
+    "query": {
+      "accuracy": 1.0,
+      "passed": 1,
+      "total": 1
+    },
+    "query_vs_websocket": {
+      "accuracy": 1.0,
+      "passed": 1,
+      "total": 1
+    },
+    "quote": {
+      "accuracy": 1.0,
+      "passed": 1,
+      "total": 1
+    },
+    "range": {
+      "accuracy": 0.4,
+      "passed": 2,
+      "total": 5
+    },
+    "ranking": {
+      "accuracy": 0.0,
+      "passed": 0,
+      "total": 2
+    },
+    "receivables": {
+      "accuracy": 0.0,
+      "passed": 0,
+      "total": 1
+    },
+    "returns": {
+      "accuracy": 0.0,
+      "passed": 0,
+      "total": 2
+    },
+    "same_day": {
+      "accuracy": 0.5,
+      "passed": 1,
+      "total": 2
+    },
+    "screening": {
+      "accuracy": 0.5,
+      "passed": 2,
+      "total": 4
+    },
+    "secret": {
+      "accuracy": 1.0,
+      "passed": 1,
+      "total": 1
+    },
+    "sector": {
+      "accuracy": 0.75,
+      "passed": 9,
+      "total": 12
+    },
+    "sell": {
+      "accuracy": 1.0,
+      "passed": 1,
+      "total": 1
+    },
+    "single_product": {
+      "accuracy": 0.0,
+      "passed": 0,
+      "total": 1
+    },
+    "snapshot": {
+      "accuracy": 1.0,
+      "passed": 3,
+      "total": 3
+    },
+    "start": {
+      "accuracy": 0.0,
+      "passed": 0,
+      "total": 1
+    },
+    "stock": {
+      "accuracy": 0.652174,
+      "passed": 15,
+      "total": 23
+    },
+    "stop": {
+      "accuracy": 0.0,
+      "passed": 0,
+      "total": 1
+    },
+    "subscribe": {
+      "accuracy": 0.666667,
+      "passed": 4,
+      "total": 6
+    },
+    "summary": {
+      "accuracy": 1.0,
+      "passed": 1,
+      "total": 1
+    },
+    "surface_crossing": {
+      "accuracy": 1.0,
+      "passed": 2,
+      "total": 2
+    },
+    "table": {
+      "accuracy": 0.0,
+      "passed": 0,
+      "total": 1
+    },
+    "tick": {
+      "accuracy": 1.0,
+      "passed": 2,
+      "total": 2
+    },
+    "travel": {
+      "accuracy": 1.0,
+      "passed": 1,
+      "total": 1
+    },
+    "unsupported_measure": {
+      "accuracy": 0.333333,
+      "passed": 1,
+      "total": 3
+    },
+    "valuation": {
+      "accuracy": 0.333333,
+      "passed": 1,
+      "total": 3
+    },
+    "vi": {
+      "accuracy": 0.0,
+      "passed": 0,
+      "total": 1
+    },
+    "websocket": {
+      "accuracy": 0.5,
+      "passed": 4,
+      "total": 8
+    },
+    "websocket_vs_query": {
+      "accuracy": 1.0,
+      "passed": 1,
+      "total": 1
+    },
+    "weekly": {
+      "accuracy": 1.0,
+      "passed": 1,
+      "total": 1
+    }
+  },
+  "gates_pass": false,
+  "general_accuracy": 0.6,
+  "general_correct": 60,
+  "legacy_pairs": {
+    "v3-account-evaluation-detail": false,
+    "v3-account-ownership": false,
+    "v3-account-summary-vs-lines": false,
+    "v3-elw-detail-contrast": false,
+    "v3-elw-evaluation-detail": false,
+    "v3-etf-history-period": false,
+    "v3-etf-nav-query-stream": true,
+    "v3-etf-single-vs-multi": false,
+    "v3-gold-history-shape": false,
+    "v3-gold-intraday-period": false,
+    "v3-gold-product-code": true,
+    "v3-order-buy-advice": true,
+    "v3-order-lifecycle-gold": false,
+    "v3-order-lifecycle-stock": true,
+    "v3-order-sell-advice": true,
+    "v3-product-boundary-etf-stock": false,
+    "v3-samsungbio-name-code": true,
+    "v3-sector-chart-granularity": true,
+    "v3-sector-now-vs-history": true,
+    "v3-stock-temporal-period": false,
+    "v3-ws-condition-lifecycle": false,
+    "v3-ws-stock-query-contrast": false
+  },
+  "metamorphic_groups": {
+    "v3-missing-context": true,
+    "v3-oauth-language": true,
+    "v3-ood-language": true,
+    "v3-stock-entity-mask": true
+  },
+  "partition": "sealed_holdout",
+  "policy_rejection_cases": 36,
+  "predeclared_gates": {
+    "calibration_pass": true,
+    "critical_tag_member_accuracy": 1.0,
+    "exact_operation_accuracy_minimum": 0.95,
+    "gold_hint_inputs_allowed": false,
+    "high_confidence_selected_precision": 1.0,
+    "minimum_answerable_cases": 40,
+    "minimum_case_count": 100,
+    "minimum_critical_cases": 40,
+    "minimum_metamorphic_groups": 1,
+    "minimum_pair_groups": 1,
+    "minimum_rejected_forbidden_cases": 10,
+    "overall_final_policy_accuracy_minimum": 0.98,
+    "rejected_forbidden_precision": 1.0,
+    "required_domain_tags": [
+      "stock",
+      "sector",
+      "account",
+      "etf",
+      "elw",
+      "gold"
+    ],
+    "required_execution_tags": [
+      "query",
+      "order",
+      "websocket",
+      "oauth"
+    ],
+    "required_languages": [
+      "ko",
+      "en",
+      "mixed"
+    ],
+    "required_safety_tags": [
+      "ambiguity",
+      "ood"
+    ],
+    "severe_scope_errors_maximum": 0,
+    "surface_crossings_maximum": 0,
+    "wrong_plans_maximum": 0
+  },
+  "rejected_forbidden_precision": 0.5,
+  "schema_version": 4,
+  "sealed_run_status": "failed_reclassify_as_autonomous_expansion_v4_required",
+  "severe_scope_errors": 10,
+  "surface_crossings": 5,
+  "wrong_plans": 6
+}
