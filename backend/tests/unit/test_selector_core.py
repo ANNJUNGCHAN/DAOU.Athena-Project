@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 from dataclasses import replace
 from datetime import UTC, datetime
 from pathlib import Path
@@ -10,6 +11,7 @@ from fastapi import Request, Response
 from pydantic import ValidationError
 
 from athena_api.kiwoom import ResponseEnvelope
+from athena_api.routing_contract import EntityKind
 from athena_api.selector.catalog import build_operation_catalog, realtime_item_model
 from athena_api.selector.errors import (
     AmbiguousOperationError,
@@ -21,6 +23,7 @@ from athena_api.selector.errors import (
     OperationNotFoundError,
     PlanAlreadyUsedError,
     PreferredOperationError,
+    ReplayStateCapacityError,
     StalePlanError,
     UnknownDetailGroupError,
 )
@@ -28,6 +31,7 @@ from athena_api.selector.lexicon import synonym_only_tokens
 from athena_api.selector.normalization import tokenize
 from athena_api.selector.plans import PlanSigner, VerifiedPlan
 from athena_api.selector.policy import select_operation
+from athena_api.selector.primitive_evidence import TargetResolution
 from athena_api.selector.ranking import (
     _MINIMUM_SURFACE,
     _ZONE_RULES,
@@ -51,6 +55,39 @@ from athena_api.selector.service import _NONCE_CACHE_LIMIT, SelectorService
 BACKEND = Path(__file__).resolve().parents[2]
 
 
+def _identity_only_test_target_resolver(question: str) -> TargetResolution | None:
+    normalized = " ".join(question.casefold().split())
+    for alias, entity_kind in (
+        ("삼성전자", EntityKind.STOCK),
+        ("kodex 200", EntityKind.ETF),
+    ):
+        if re.search(
+            rf"(?<![0-9a-z가-힣]){re.escape(alias)}(?![0-9a-z가-힣])",
+            normalized,
+        ) is not None:
+            return TargetResolution(entity_kind)
+    return None
+
+
+def test_multiword_synonym_aliases_match_atomically_without_entity_token_leakage() -> None:
+    assert "indicator" not in synonym_only_tokens(("elw",))
+    assert "greeks" not in synonym_only_tokens(("elw",))
+    assert "nav" not in synonym_only_tokens(("etf",))
+
+    elw_indicator = set(synonym_only_tokens(("show", "elw", "indicator")))
+    etf_nav = set(synonym_only_tokens(("show", "etf", "nav")))
+    assert {"greeks", "지표"}.issubset(elw_indicator)
+    assert "순자산가치" in etf_nav
+
+
+def test_synonym_expansion_is_not_transitive() -> None:
+    # ``bid`` belongs to both the order-book and buy concepts. One authored match may
+    # expand its own concept, but the newly emitted token must not activate another.
+    expanded = set(synonym_only_tokens(("orderbook",)))
+    assert "bid" in expanded
+    assert "buy" not in expanded
+
+
 @pytest.fixture(scope="module")
 def catalog():
     return build_operation_catalog()
@@ -58,7 +95,11 @@ def catalog():
 
 @pytest.fixture
 def service(catalog):
-    return SelectorService(catalog, PlanSigner(b"selector-test-secret", nonce_factory=lambda: "n"))
+    return SelectorService(
+        catalog,
+        PlanSigner(b"selector-test-secret", nonce_factory=lambda: "n"),
+        target_resolver=_identity_only_test_target_resolver,
+    )
 
 
 def test_catalog_has_exact_domestic_visibility_and_callability_counts(catalog) -> None:
@@ -72,8 +113,7 @@ def test_catalog_has_exact_domestic_visibility_and_callability_counts(catalog) -
     # The read surface is unchanged by opening order and websocket execution.
     assert manifest["counts"]["categories"]["read_display"] == 264
     read_callable = sum(
-        document.generic_callable and document.kind == "query"
-        for document in catalog.documents
+        document.generic_callable and document.kind == "query" for document in catalog.documents
     )
     assert read_callable == 264
     assert sum(document.visibility == "explicit" for document in catalog.documents) == 35
@@ -121,36 +161,34 @@ def test_korean_and_english_finance_queries_use_the_controlled_lexicon(service) 
 def test_auto_is_query_only_and_order_websocket_require_explicit_intent(service) -> None:
     auto = service.search(SearchRequest(query="주문 체결", intent=DiscoveryIntent.AUTO))
     orders = service.search(SearchRequest(query="주문 체결", intent=DiscoveryIntent.ORDER))
-    websocket = service.search(
-        SearchRequest(query="실시간 체결", intent=DiscoveryIntent.WEBSOCKET)
-    )
+    websocket = service.search(SearchRequest(query="실시간 체결", intent=DiscoveryIntent.WEBSOCKET))
 
     assert all(hit.kind.value == "query" for hit in auto.results)
     assert orders.results and all(hit.kind.value == "order" for hit in orders.results)
-    assert websocket.results and all(
-        hit.kind.value == "websocket" for hit in websocket.results
-    )
+    assert websocket.results and all(hit.kind.value == "websocket" for hit in websocket.results)
     # Callable, but only reachable once the caller declares the intent.
     assert all(hit.generic_callable for hit in orders.results + websocket.results)
     assert all(hit.discovery_only for hit in orders.results + websocket.results)
 
 
 def test_operation_identity_is_case_sensitive_for_0g_and_0G(service) -> None:
-    upper = service.search(
-        SearchRequest(query="0G", intent=DiscoveryIntent.WEBSOCKET, limit=2)
-    )
-    lower = service.search(
-        SearchRequest(query="0g", intent=DiscoveryIntent.WEBSOCKET, limit=2)
-    )
+    upper = service.search(SearchRequest(query="0G", intent=DiscoveryIntent.WEBSOCKET, limit=2))
+    lower = service.search(SearchRequest(query="0g", intent=DiscoveryIntent.WEBSOCKET, limit=2))
 
     assert upper.results[0].operation_ref == "base:0G"
     assert lower.results[0].operation_ref == "base:0g"
-    assert service.describe(
-        DescribeRequest(operation_ref="base:0G", intent=DiscoveryIntent.WEBSOCKET)
-    ).operation_ref == "base:0G"
-    assert service.describe(
-        DescribeRequest(operation_ref="base:0g", intent=DiscoveryIntent.WEBSOCKET)
-    ).operation_ref == "base:0g"
+    assert (
+        service.describe(
+            DescribeRequest(operation_ref="base:0G", intent=DiscoveryIntent.WEBSOCKET)
+        ).operation_ref
+        == "base:0G"
+    )
+    assert (
+        service.describe(
+            DescribeRequest(operation_ref="base:0g", intent=DiscoveryIntent.WEBSOCKET)
+        ).operation_ref
+        == "base:0g"
+    )
 
 
 def test_oauth_and_unknown_us_operations_are_indistinguishable_from_missing(service) -> None:
@@ -180,41 +218,40 @@ def _ranked(document, points: int) -> RankedDocument:
     )
 
 
-def test_family_policy_defaults_to_base_and_honours_an_explicit_detail_group(
+def test_family_policy_defaults_to_base_and_prefers_explicit_or_unique_typed_detail(
     catalog,
 ) -> None:
     # An unsplit family still answers from its base.
     unsplit = catalog.by_ref["base:ka10006"]
     selected, reasons = select_operation(
         catalog,
-        "주식시분",
+        "base:ka10006",
         (_ranked(unsplit, 300),),
         ResponseMode.AUTO,
     )
     assert selected is unsplit
-    assert reasons == [ReasonCode.BASE_DEFAULT]
+    assert reasons == [ReasonCode.EXACT_OPERATION_REF]
 
-    # A split family has no base left to fall back to, and says what to call instead.
+    # A split family auto-selects only a uniquely compatible family-local detail.
     base = catalog.by_ref["base:ka10001"]
-    with pytest.raises(DetailGroupRequiredError) as caught:
-        select_operation(
-            catalog,
-            "현재 거래 정보",
-            (_ranked(base, 300),),
-            ResponseMode.AUTO,
-        )
-    assert caught.value.details["operation_ref"] == "base:ka10001"
-    assert "current_trading" in caught.value.details["available_groups"]
+    selected, reasons = select_operation(
+        catalog,
+        "이 종목 오늘 주가",
+        (_ranked(base, 300),),
+        ResponseMode.AUTO,
+    )
+    assert selected.operation_ref == "detail:ka10001:current_trading"
+    assert reasons == [ReasonCode.TYPED_DETAIL_MATCH]
 
     selected, reasons = select_operation(
         catalog,
-        "현재 거래 정보",
+        "이 종목 오늘 주가",
         (_ranked(base, 300),),
         ResponseMode.AUTO,
         "current_trading",
     )
     assert selected.operation_ref == "detail:ka10001:current_trading"
-    assert reasons == [ReasonCode.EXPLICIT_DETAIL_GROUP]
+    assert reasons == [ReasonCode.TYPED_DETAIL_MATCH]
 
 
 def test_unknown_detail_group_is_rejected_with_the_available_groups(catalog) -> None:
@@ -222,7 +259,7 @@ def test_unknown_detail_group_is_rejected_with_the_available_groups(catalog) -> 
     with pytest.raises(UnknownDetailGroupError) as caught:
         select_operation(
             catalog,
-            "현재 거래 정보",
+            "base:ka10001",
             (_ranked(base, 300),),
             ResponseMode.AUTO,
             "not_a_group",
@@ -241,7 +278,7 @@ def test_detail_group_of_another_family_cannot_be_borrowed(catalog) -> None:
     with pytest.raises(UnknownDetailGroupError):
         select_operation(
             catalog,
-            "현재 거래 정보",
+            "base:ka10001",
             (_ranked(base, 300),),
             ResponseMode.AUTO,
             "holdings",
@@ -252,18 +289,18 @@ def test_family_policy_keeps_pure_lists_and_explicit_full_requests_on_base(catal
     pure_list = catalog.by_ref["base:ka10095"]
     selected, reasons = select_operation(
         catalog,
-        "관심종목 정보",
+        "base:ka10095",
         (_ranked(pure_list, 400),),
         ResponseMode.AUTO,
     )
     assert selected is pure_list
-    assert reasons == [ReasonCode.PURE_LIST_BASE_REQUIRED]
+    assert reasons == [ReasonCode.EXACT_OPERATION_REF]
 
     # An explicit full-response request still outranks narrowing on an unsplit family.
     unsplit = catalog.by_ref["base:ka10006"]
     selected, reasons = select_operation(
         catalog,
-        "전체 원문 응답",
+        "base:ka10006",
         (_ranked(unsplit, 400),),
         ResponseMode.FULL,
     )
@@ -275,7 +312,7 @@ def test_family_policy_keeps_pure_lists_and_explicit_full_requests_on_base(catal
     with pytest.raises(DetailGroupRequiredError):
         select_operation(
             catalog,
-            "전체 원문 응답",
+            "base:ka10001",
             (_ranked(detail, 400),),
             ResponseMode.FULL,
         )
@@ -304,7 +341,7 @@ def test_resolve_validates_required_arguments_and_issues_allowlisted_plan(servic
 def test_explicit_full_response_cannot_resurrect_a_split_base(service) -> None:
     resolved = service.resolve(
         ResolveRequest(
-            question="current trading",
+            question="삼성전자 오늘 주가 얼마야?",
             candidate_refs=["detail:ka10001:current_trading"],
             preferred_ref="detail:ka10001:current_trading",
             arguments={"stk_cd": "005930"},
@@ -313,7 +350,10 @@ def test_explicit_full_response_cannot_resurrect_a_split_base(service) -> None:
     )
 
     assert resolved.operation_ref == "detail:ka10001:current_trading"
-    assert resolved.selection_reasons == [ReasonCode.EXPLICIT_DETAIL_GROUP]
+    assert resolved.selection_reasons == [
+        ReasonCode.UNIQUE_EXACT_PROFILE,
+        ReasonCode.EXPLICIT_DETAIL_GROUP,
+    ]
 
     # With no projection named, a full-response request is refused rather than widened.
     with pytest.raises(DetailGroupRequiredError):
@@ -327,20 +367,30 @@ def test_explicit_full_response_cannot_resurrect_a_split_base(service) -> None:
 
 
 @pytest.mark.parametrize(
-    ("operation_ref", "arguments"),
+    ("operation_ref", "intent", "arguments"),
     [
         (
             "base:kt10000",
+            DiscoveryIntent.ORDER,
             {"dmst_stex_tp": "KRX", "stk_cd": "005930", "ord_qty": "1", "trde_tp": "0"},
         ),
-        ("base:0G", {"trnm": "REG", "grp_no": "1", "refresh": "1"}),
+        (
+            "base:0G",
+            DiscoveryIntent.WEBSOCKET,
+            {"trnm": "REG", "grp_no": "1", "refresh": "1"},
+        ),
     ],
 )
 def test_order_and_websocket_resolve_only_from_an_exact_reference(
-    service, operation_ref: str, arguments: dict[str, object]
+    service,
+    operation_ref: str,
+    intent: DiscoveryIntent,
+    arguments: dict[str, object],
 ) -> None:
-    """Resolve ranks the query surface alone, so only a named reference reaches these."""
-    resolved = service.resolve(ResolveRequest(question=operation_ref, arguments=arguments))
+    """An exact reference resolves only on its explicitly requested surface."""
+    resolved = service.resolve(
+        ResolveRequest(question=operation_ref, intent=intent, arguments=arguments)
+    )
     assert resolved.operation_ref == operation_ref
 
     # No natural-language question can rank onto them, whatever it says.
@@ -528,9 +578,7 @@ async def test_call_rejects_a_replayed_plan_token(catalog) -> None:
     same token is refused and never reaches the upstream client a second time."""
     service = SelectorService(catalog, _incrementing_signer())
     resolved = service.resolve(
-        ResolveRequest(
-            question="detail:ka10001:current_trading", arguments={"stk_cd": "005930"}
-        )
+        ResolveRequest(question="detail:ka10001:current_trading", arguments={"stk_cd": "005930"})
     )
     client = _CountingClient()
     request = _blank_request()
@@ -551,9 +599,7 @@ async def test_call_burns_the_token_even_when_the_upstream_call_then_fails(catal
     retried with the same token - the caller must resolve again for a new one."""
     service = SelectorService(catalog, _incrementing_signer())
     resolved = service.resolve(
-        ResolveRequest(
-            question="detail:ka10001:current_trading", arguments={"stk_cd": "005930"}
-        )
+        ResolveRequest(question="detail:ka10001:current_trading", arguments={"stk_cd": "005930"})
     )
     request = _blank_request()
 
@@ -625,7 +671,7 @@ def test_consume_nonce_rejects_replay_and_sweeps_expired_entries_on_access(catal
     assert "b" in service._consumed_nonces
 
 
-def test_consume_nonce_cache_stays_bounded_and_evicts_oldest_first(catalog) -> None:
+def test_consume_nonce_capacity_fails_closed_without_evicting_unexpired(catalog) -> None:
     signer = PlanSigner(b"selector-test-secret", clock=lambda: 1_000.0)
     service = SelectorService(catalog, signer)
     far_future = 1_000_000.0  # never pruned within this test
@@ -634,10 +680,25 @@ def test_consume_nonce_cache_stays_bounded_and_evicts_oldest_first(catalog) -> N
         service._consume_nonce(_fixture_plan(f"n{index}", exp=far_future))
     assert len(service._consumed_nonces) == _NONCE_CACHE_LIMIT
 
-    service._consume_nonce(_fixture_plan("overflow", exp=far_future))
+    with pytest.raises(ReplayStateCapacityError):
+        service._consume_nonce(_fixture_plan("overflow", exp=far_future))
     assert len(service._consumed_nonces) == _NONCE_CACHE_LIMIT
-    assert "n0" not in service._consumed_nonces
-    assert "overflow" in service._consumed_nonces
+    assert "n0" in service._consumed_nonces
+    assert "overflow" not in service._consumed_nonces
+    with pytest.raises(PlanAlreadyUsedError):
+        service._consume_nonce(_fixture_plan("n0", exp=far_future))
+
+
+def test_expired_nonce_entries_free_replay_capacity(catalog) -> None:
+    now = [1_000.0]
+    signer = PlanSigner(b"selector-test-secret", clock=lambda: now[0])
+    service = SelectorService(catalog, signer)
+    for index in range(_NONCE_CACHE_LIMIT):
+        service._consume_nonce(_fixture_plan(f"n{index}", exp=1_010.0))
+
+    now[0] = 1_020.0
+    service._consume_nonce(_fixture_plan("fresh", exp=1_030.0))
+    assert tuple(service._consumed_nonces) == ("fresh",)
 
 
 @pytest.mark.parametrize(
@@ -700,6 +761,69 @@ def test_a_websocket_ref_handed_to_resolve_under_query_intent_is_refused(service
         )
 
 
+@pytest.mark.parametrize(
+    ("question", "intent", "arguments"),
+    [
+        ("base:0B", DiscoveryIntent.QUERY, {"trnm": "REG", "grp_no": "1", "refresh": "1"}),
+        ("0B", DiscoveryIntent.QUERY, {"trnm": "REG", "grp_no": "1", "refresh": "1"}),
+        (
+            "base:kt10000",
+            DiscoveryIntent.QUERY,
+            {"dmst_stex_tp": "KRX", "stk_cd": "005930", "ord_qty": "1", "trde_tp": "0"},
+        ),
+        (
+            "kt10000",
+            DiscoveryIntent.WEBSOCKET,
+            {"dmst_stex_tp": "KRX", "stk_cd": "005930", "ord_qty": "1", "trde_tp": "0"},
+        ),
+        ("base:ka10001", DiscoveryIntent.WEBSOCKET, {"stk_cd": "005930"}),
+        ("detail:ka10001:current_trading", DiscoveryIntent.WEBSOCKET, {"stk_cd": "005930"}),
+    ],
+)
+def test_exact_identity_cannot_cross_the_requested_intent_surface(
+    service, question: str, intent: DiscoveryIntent, arguments: dict[str, str]
+) -> None:
+    with pytest.raises(OperationNotFoundError):
+        service.resolve(ResolveRequest(question=question, intent=intent, arguments=arguments))
+
+
+@pytest.mark.parametrize(
+    ("question", "intent", "arguments", "expected_ref"),
+    [
+        (
+            "detail:ka10001:current_trading",
+            DiscoveryIntent.QUERY,
+            {"stk_cd": "005930"},
+            "detail:ka10001:current_trading",
+        ),
+        (
+            "kt10000",
+            DiscoveryIntent.ORDER,
+            {"dmst_stex_tp": "KRX", "stk_cd": "005930", "ord_qty": "1", "trde_tp": "0"},
+            "base:kt10000",
+        ),
+        (
+            "0B",
+            DiscoveryIntent.WEBSOCKET,
+            {"trnm": "REG", "grp_no": "1", "refresh": "1"},
+            "base:0B",
+        ),
+    ],
+)
+def test_exact_identity_still_resolves_inside_its_requested_intent_surface(
+    service,
+    question: str,
+    intent: DiscoveryIntent,
+    arguments: dict[str, str],
+    expected_ref: str,
+) -> None:
+    resolved = service.resolve(
+        ResolveRequest(question=question, intent=intent, arguments=arguments)
+    )
+    assert resolved.operation_ref == expected_ref
+    assert service.signer.verify(resolved.plan_token, service.catalog).operation_ref == expected_ref
+
+
 def test_describe_reports_a_renderable_fid_contract_for_every_websocket_type(
     service, catalog
 ) -> None:
@@ -753,7 +877,7 @@ def test_uninformative_zone_tokens_suppresses_redundant_zones_not_discriminators
     """
     documents = catalog.visible_for(DiscoveryIntent.WEBSOCKET)
     suppressed = uninformative_zone_tokens("서비스명 체결 정보", documents)
-    assert ("response_description", "서비스명") in suppressed
+    assert ("response_description", "서비스명") not in suppressed
     assert ("request_description", "서비스명") not in suppressed
     assert ("title", "체결") not in suppressed
 
@@ -777,7 +901,7 @@ def test_uninformative_zone_tokens_never_suppresses_every_zone_a_token_appears_i
     queries = ["실시간 체결 정보 알려줘", "주문 체결", "서비스명", "국내주식 실시간 스트리밍"]
     for query in queries:
         tokens = set(tokenize(query))
-        tokens.update(synonym_only_tokens(tuple(sorted(tokens))))
+        tokens.update(synonym_only_tokens(tuple(tokenize(query, korean_bigrams=False))))
         suppressed = uninformative_zone_tokens(query, documents)
         for token in tokens:
             zones_with_token = {
@@ -787,9 +911,7 @@ def test_uninformative_zone_tokens_never_suppresses_every_zone_a_token_appears_i
             }
             if not zones_with_token:
                 continue
-            surviving = zones_with_token - {
-                zone for zone, name in suppressed if name == token
-            }
+            surviving = zones_with_token - {zone for zone, name in suppressed if name == token}
             assert surviving, f"{token!r} lost every zone for query {query!r}"
 
     # The single-zone case named above, pinned concretely: "websocket" only ever
