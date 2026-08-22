@@ -7,6 +7,18 @@
 > `get_basic_info`가 반환한 22개 아트보드 좌표다. 이 문서를 쓴 에이전트는 Paper에
 > **read-only**로 접근했다 — 아래 시퀀스는 실행되지 않았다.
 >
+> **2026-08-23 정정 — §0·§1의 그리드 표는 낡았다.** `get_basic_info` 실측 결과
+> `Athena — 화면설계서`에는 **아트보드 57개**와 `§0`~`§11` 섹션 헤더가 있다(22개가
+> 아니다). "23번이 다음 칸"이라는 §1 표를 그대로 믿지 말고 저작 직전에
+> `get_basic_info`로 좌표를 다시 읽어라. 또한 이 파일의 토큰 32개는 **다크 팔레트**이고,
+> 2026-08-22 확정 디자인 언어(라이트 백색 유리)와 어긋난다 — 새 목업은
+> `app/styles/tokens.css`를 SSOT로 삼는다.
+>
+> **2026-08-23 신규 파일**: 셸 재설계 5장은 별도 파일
+> `Athena — Codex형 셸 · 알림 오브`(fileId `01M0N3G9T4WGGE73YFR9GRDJ3B`)에 있다.
+> 라이트 토큰 37개를 새로 심었고, Desktop/Glow는 교차 파일 복제가 안 되므로 01쪽에서
+> 손으로 그린 뒤 02~05쪽은 아트보드 통째 `duplicate_nodes`로 파생시켰다.
+>
 > **2026-08-18 실집행 정정**: 보드 8쪽(1M-0)·40쪽(6RX-0) 편집에서 이 레시피를 실제로
 > 집행하며 두 가지가 실측으로 갱신됐다. ① **`write_html`의 `style` 문자열은 반드시
 > 케밥케이스 CSS여야 한다** — 초판 예제들의 camelCase는 대부분 조용히 버려진다(함정 11,
@@ -366,14 +378,22 @@ finish_working_on_nodes {}
     행처럼 형태가 같고 텍스트/좌표만 다른 요소는 처음부터 새로 쓰지 말고 기존
     노드(같은 보드 안이든 `QT-0`/`QQ-0`이든)를 복제 → `update_styles`로 위치 조정 →
     `set_text_content`로 텍스트 교체.
-11. **computed 값을 입력으로 왕복시키지 마라** (2026-08-18 실측, 35쪽 재작업).
-    `get_computed_styles`가 반환하는 `linear-gradient(in oklab 158deg, …)`(색공간
-    선행) 문자열을 write_html/update_styles에 그대로 되넣으면 **조용히 버려진다** —
-    Paper 입력 파서는 각도 선행(`158deg in oklab`)만 받는다(CSS 표준은 두 순서 다
-    유효한데 자기 직렬화 출력을 자기가 못 읽는 왕복 비대칭이다). write_html 경로는
-    `ignoredStyles` 같은 실패 신호조차 없다. **기존 노드 재현은 `duplicate_nodes`
-    복제로 — 왕복 자체가 없다.** 새 복합값을 손으로 쓸 때만 각도 선행으로 쓰고
-    직후 `get_computed_styles`로 검증한다.
+11. **그라디언트에 색공간 키워드를 쓰지 마라 — 각도가 사라진다** (2026-08-23 실측으로
+    정정. 초판·2026-08-18판의 "각도 선행이면 통과한다"는 **틀렸다**).
+    `Athena — Codex형 셸 · 알림 오브` 01쪽 Desktop 배경에서 세 형태를 모두 시험했다:
+
+    | 입력 문자열 | `get_computed_styles` 결과 각도 |
+    |---|---|
+    | `linear-gradient(158deg in oklab, …)` (각도 선행) | **180deg — 소실** |
+    | `linear-gradient(in oklab 158deg, …)` (색공간 선행) | **180deg — 소실** |
+    | `linear-gradient(158deg, …)` (색공간 없음) | **158deg ✓** |
+
+    write_html·update_styles 두 경로 모두 같은 결과였고, `ignoredStyles`에도 안 잡힌다
+    (각도만 기본값으로 떨어지고 그라디언트 자체는 생성되므로 실패 신호가 없다).
+    **색공간 키워드를 빼면 Paper가 알아서 oklab으로 보간해 직렬화한다** — 결과 색은
+    동일하고 각도만 산다. 그러므로 손으로 쓸 때는 언제나 `158deg, …` 형태로 쓰고,
+    직후 `get_computed_styles`로 각도를 확인한다.
+    기존 노드 재현은 여전히 `duplicate_nodes` 복제가 우선이다 — 왕복 자체가 없다.
 12. **`write_html`의 `style` 문자열은 케밥케이스 CSS만 쓴다 — camelCase는 조용히
     버려진다** (실측 2026-08-18, 보드 8쪽 재작업). `style="backgroundColor:#fff;
     borderRadius:4px"`처럼 쓰면 에러 없이 생성되지만 `get_computed_styles`로 확인하면
@@ -385,6 +405,21 @@ finish_working_on_nodes {}
     케밥, JSON 객체는 camel. camelCase로 이미 써버렸다면 `update_styles`로 같은
     스타일을 재적용해 복구할 수 있다(보드 8쪽이 실제로 이 경로로 복구됐다). 쓰고
     나면 `get_computed_styles`로 핵심 속성이 실제로 붙었는지 확인하는 것이 값싸다.
+13. **`flex-basis:0%`가 `height`를 이긴다 — 카드 내용이 통째로 사라진다** (2026-08-23
+    실측, 01쪽 차트 카드). column 플렉스 컨테이너 안에서 `flex-grow:1; flex-basis:0%`로
+    만든 자식에게 나중에 `height:300px`만 주고 `flexGrow:0`으로 내리면, 남아 있는
+    `flexBasis:0%`가 주축 크기를 0으로 잡아 **높이가 무시되고 자식이 min-content로
+    붕괴한다.** 실제로 24개 봉 차트가 전부 사라지고 헤더·축만 남았다.
+    `get_computed_styles`에는 `height:"300px"`가 멀쩡히 찍혀 있어서 더 헷갈린다.
+    → 고정 높이로 바꿀 때는 **`flexBasis`를 `"auto"`로 같이 되돌린다.**
+14. **`transform`은 지원하지 않는다 — `rotate`만 남는다** (2026-08-23 실측, 05쪽 접힘
+    토글). `transform: scaleX(-1)`로 아이콘을 뒤집으려 하면 `ignoredStyles` 없이
+    사라지고 `get_computed_styles`에는 `rotate:"0deg"`만 보인다. 좌우 반전이 필요하면
+    **SVG path를 반전한 좌표로 다시 쓴다**(`write_html` mode `replace`).
+15. **긴 라벨은 `white-space:nowrap` + 부모 `flex-shrink:0`을 같이 준다** (2026-08-23,
+    01쪽 모델 필 · 03쪽 오브 버튼). 알약형 버튼 안의 한글 라벨이 폭 계산에서 밀리면
+    "앱에서 열 / 기"처럼 두 줄로 쪼개진다. 버튼 프레임에 `flexShrink:0`, 텍스트에
+    `whiteSpace:nowrap`을 함께 걸어야 한다 — 둘 중 하나만으로는 안 잡힌다.
 
 ---
 
