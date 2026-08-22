@@ -274,12 +274,33 @@ FactsCard(114) · TableCard(121) · CompoundCard(29) · EventCard(23) · ActionC
 | `llm_get_manifest` | 부트스트랩용 GET 엔드포인트. **다섯 번째 툴이 아니다** (`x-athena-llm-exposed: false`) |
 | **실행 계획 (plan token)** | `operation_ref` + 검증된 인자 + 만료시각을 HMAC-SHA256으로 서명한 `v1.<payload>.<sig>`. TTL 1~600초(기본 120). **URL·경로를 담지 않는다** |
 | **family (TR 패밀리)** | `base:{tr_id}`. 하나의 TR과 그 모든 detail projection이 공유하는 검색·선택 단위 |
-| **policy** | 질문에서 **패밀리 하나만** 고르고 projection은 **절대 추측하지 않는다**는 원칙. 확신도 240점, 1·2위 격차 <80점 또는 비율 <1.15면 애매로 판정 |
+| **policy** | 질문에서 전역적으로 **패밀리 하나만** 고른 뒤 그 패밀리 안에서만 detail을 평가하는 원칙. typed 호환성과 권위 있는 canonical 근거가 한 detail을 유일하게 지지하면 자동 선택하고, 아니면 명시적 `detail_group` 또는 `DETAIL_GROUP_REQUIRED`로 닫는다. 240점 하한은 typed tier가 0 이하인 lexical fallback에만 적용한다. 1·2위 격차 <80점 또는 비율 <1.15인 가까움 판정도 같은 typed tier의 경쟁 패밀리가 있을 때만 ambiguity 검증에 쓰며, canonical name·subcategory·capability의 조건부 tie-break를 통과하면 선택할 수 있다. |
 | **catalog** | 323개 오퍼레이션을 `operation_ref`로 색인한 불변 카탈로그. 버전은 `sha256:...` |
-| **lexicon** | 버전 관리된 한/영 금융 동의어 사전 (`ko-en-finance-v1`) |
+| **lexicon** | 버전 관리된 한/영 금융 동의어 사전 (`ko-en-finance-v7`). 다단어 별칭은 전체 정규화 구문이 일치할 때만 한 단계로 확장하며, 엔터티 토큰 하나가 기능 용어를 방출하거나 확장 결과가 다른 개념을 연쇄 활성화하지 않는다. |
+| **entity-kind marker reference** | 질문의 종목명 문자열 자체를 보존하지 않고 ETF 같은 상품 종류 근거만 만드는, 버전·해시 고정된 검토 표식 목록. 전체 종목 마스터가 아니며 체크인된 키움 inventory의 운용사/상품 의미에서 확인된 표식만 담는다. |
 | **ranking** | 정체성 매치 → 제목·도메인·필드 매치 → 동의어 → 커버리지 보너스를 점수화하는 **결정론적** 정렬. 임베딩·모델 호출·무작위성 금지 |
-| **visibility** | `normal` 정상 노출 / `explicit` discovery-only(주문·WS는 검색은 되나 호출 금지) / `hidden` 없는 것처럼 취급(oauth) |
-| **generic_callable** | 일반 셀렉터로 호출 가능한가. query kind만 참. 286/323 |
+| **visibility** | `normal`은 `auto`/`query` 조회 표면, `explicit`는 명시적 `intent=order` 또는 `intent=websocket`에서만 검색·resolve되고 각 실행 가드를 통과해야 호출 가능한 표면, `hidden`은 없는 것처럼 취급하는 OAuth 표면 |
+| **generic_callable** | 일반 셀렉터가 검증된 signed plan을 발급할 수 있는가. 149 unsplit query base + 115 detail + 12 order + 23 WebSocket = **299/323**이며, 22 split base와 2 OAuth는 false |
+| **replay state capacity** | 사용 완료된 signed plan nonce를 만료 시각까지 보존하는 프로세스 로컬 상한. 가득 차면 만료 전 항목을 축출하지 않고 새 `athena_call`을 `REPLAY_STATE_CAPACITY_EXCEEDED`로 거부해 재실행 가능성이 생기지 않게 한다 |
+| **routing contract** | 각 오퍼레이션이 다루는 대상·엔터티·실행 종류·데이터 의도·시간 범위·측정값·결과 형태·필수 바인딩 역할을 enum으로 봉인한 불변 메타데이터. 원본 인벤토리에서 결정론적으로 파생하고 `selector-routing.json`의 검증된 예외만 덮어쓴다 |
+| **holdings intent** | 현재 보유 종목·수량·평가 목록을 요청하는 데이터 의도. 체결 잔고·주문 상태와 구분한다 |
+| **performance intent** | 기간 수익률·벤치마크 대비 성과를 요청하는 데이터 의도. 단일 현재가나 단순 평가금액과 구분한다 |
+| **valuation-gap intent** | 이론가 대비 프리미엄·디스카운트·괴리율을 요청하는 데이터 의도. 일반 민감도 지표와 구분한다 |
+| **QueryFrame** | 사용자 질문에서 직접 관찰되는 routing contract 축만 추출한 값 객체. 동의어 확장·생성 bigram·계좌번호/종목코드/가격/수량 같은 인자 값은 담지 않으며, 근거가 없으면 빈 축을 유지한다 |
+| **evidence atom** | 질문에 직접 쓰인 발화 행위·액션·소유권·엔터티 개수·전달 방식·집계 범위·기간 종류 하나를 값 없이 보존하는 버전 가능한 canonical 근거. 종목명·코드·계좌번호 같은 실제 값은 보존하지 않는다 |
+| **QueryAnalysis** | `QueryFrame`과 evidence atom을 함께 봉인한 shadow 분석 결과. 현재 public selector 선택 권한은 없고, exact operation profile과의 호환성 증명을 비교·검증하는 데만 쓴다 |
+| **canonical identity** | 서버가 허용하는 정확하고 대소문자 구분되는 `operation_ref`. 종목명·종목코드·계좌 alias·가격·수량은 identity가 아니라 별도 typed binding이다 |
+| **quote fast path** | 현재 국내 주식 quote snapshot을 typed routing contract와 필수 종목 binding으로 처리하는 제한 경로. 임의 텍스트, 외국 시장, 차트·이력 질문을 quote로 승격하지 않는다 |
+| **AITS DTO** | AITS 실측으로 고정한 캔버스/차트 데이터 전송 객체. selector의 operation identity나 quote 값의 출처를 대신하지 않는다 |
+| **compatibility proof** | `QueryAnalysis`의 모든 명시 제약을 exact base/detail operation profile에 conjunctive로 검증한 `match` / `contradiction` / `insufficient` 3값 결과. 실행 가능한 `match`는 최소한 target 근거와 capability 근거를 모두 요구한다 |
+| **compatibility decision trace** | 호환되는 exact profile frontier에서 typed dominance로 제거된 방향 간선과, 검토된 equivalence group이 canonical operation으로 접힌 내역을 정렬해 남기는 값 없는 감사 원장. 최종 confidence도 이 원장의 unique/dominance/equivalence/abstention 결과에서만 파생하며 lexical score는 사용하지 않는다 |
+| **chart interval** | 차트의 `tick`·`minute`·`daily`·`weekly`·`monthly`·`annual` 주기. `tick`과 `minute`을 포괄적인 `intraday`로 합치지 않아 같은 대상의 틱차트와 분봉차트를 구분한다 |
+| **ranking specialization** | 순위 질의에서만 활성화되는 측정값(`volume_ranking`·`orderbook_ranking`)과 방식(`spike_ranking`·`top_ranking`)의 교차 intent. 일반 거래량·호가 조회에는 적용하지 않는다 |
+| **order action specialization** | 일반 `order_action` 아래에서 기존 주문의 `order_amend`와 `order_cancel`을 구분하는 직접 intent. 회사명·TR ID·질의별 가중치가 아니라 정정/취소 canonical 동사로만 추출한다 |
+| **family capability** | detail 형제를 전역 후보로 만들지 않고 base family가 제공하는 canonical detail title만 제한적으로 요약한 검색 표면. field description·예시 값·인자 값은 포함하지 않는다 |
+| **candidate soft hint** | `candidate_refs`로 전달되지만 canonical intent surface를 제한·재정렬하지 않는 검증용 참조. 누락·순서·중복은 선택 결과를 바꾸지 않고 unknown/hidden/wrong-intent는 fail-closed한다 |
+| **canonical family assertion** | `preferred_ref`가 독립적으로 계산된 canonical family와 같다는 주장. 선택 override가 아니며 불일치하면 409로 거부한다 |
+| **directional extraction** | 질문 표현을 canonical enum으로 한 방향 매핑하는 추출 규칙. 오퍼레이션 문서를 질문 동의어로 확장하지 않으며, 추출 결과가 기존 검색 점수나 실행 계획을 암묵적으로 바꾸지 않는다 |
 
 ---
 
