@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-08-21T03:17:13.783Z",
+  "startedAt": "2026-08-22T09:53:22.378Z",
   "layout": {
     "scale": 1,
     "screen": {
@@ -50,7 +50,7 @@
   "restReceiptPaint": {
     "repeats": [
       {
-        "elapsedMs": 41,
+        "elapsedMs": 48,
         "verifiedVisible": true,
         "appVisible": true,
         "onboardingHidden": true,
@@ -58,7 +58,7 @@
         "nonzero": true
       },
       {
-        "elapsedMs": 52,
+        "elapsedMs": 53,
         "verifiedVisible": true,
         "appVisible": true,
         "onboardingHidden": true,
@@ -66,7 +66,7 @@
         "nonzero": true
       },
       {
-        "elapsedMs": 52,
+        "elapsedMs": 53,
         "verifiedVisible": true,
         "appVisible": true,
         "onboardingHidden": true,
@@ -74,7 +74,7 @@
         "nonzero": true
       },
       {
-        "elapsedMs": 55,
+        "elapsedMs": 53,
         "verifiedVisible": true,
         "appVisible": true,
         "onboardingHidden": true,
@@ -82,7 +82,7 @@
         "nonzero": true
       },
       {
-        "elapsedMs": 51,
+        "elapsedMs": 53,
         "verifiedVisible": true,
         "appVisible": true,
         "onboardingHidden": true,
@@ -90,7 +90,7 @@
         "nonzero": true
       },
       {
-        "elapsedMs": 53,
+        "elapsedMs": 54,
         "verifiedVisible": true,
         "appVisible": true,
         "onboardingHidden": true,
@@ -100,8 +100,8 @@
     ]
   },
   "delayedRestFeedback": {
-    "elapsedMs": 2745.1724999999997,
-    "totalRunMs": 3004,
+    "elapsedMs": 2748.1077999999998,
+    "totalRunMs": 3013,
     "feedbackOk": true,
     "receiptPainted": true,
     "renderedCount": 0
@@ -114,18 +114,18 @@
     "ok": true
   },
   "expand": {
-    "frameCount": 25,
+    "frameCount": 30,
     "p50": 18,
-    "p95": 53.5,
-    "max": 53.5,
-    "min": 17.399999999999636
+    "p95": 35.399999999999636,
+    "max": 35.899999999999636,
+    "min": 17.100000000000364
   },
   "collapse": {
-    "frameCount": 5,
-    "p50": 22.899999999999636,
-    "p95": 497.89999999999964,
-    "max": 497.89999999999964,
-    "min": 17.899999999999636
+    "frameCount": 32,
+    "p50": 18,
+    "p95": 18.399999999999636,
+    "max": 28.899999999999636,
+    "min": 17.100000000000364
   },
   "afterCollapse": {
     "canvasVisible": false
@@ -592,7 +592,7 @@
   },
   "agentTurn": {
     "present": true,
-    "badge": "12:11 발화",
+    "badge": "18:47 발화",
     "mode": "실시간 (WS)",
     "source": "루틴 '검증 루틴' · 에이전트 발화 — 묻지 않은 턴입니다",
     "body": "005930 조건 도달 — 관측값 5.3 (임계 5). 값은 발화 시점 기준입니다 — 최신 확인은 다시 물어봐 주세요.",
@@ -1021,5 +1021,5 @@
       }
     }
   },
-  "finishedAt": "2026-08-21T03:18:04.895Z"
+  "finishedAt": "2026-08-22T09:54:09.422Z"
 }

@@ -42,10 +42,17 @@ server-side (264 generic-callable query identities, 35 explicit guarded order/We
   otherwise; lexical title, synonym, alias, and threshold scores are not execution authority.
 - Keep strata separate in reports: public production, expansion, v2, v3, and v4. The following are
   last-known artifact-bound measurements, not unconditional current claims; refresh them after
-  evaluator/source-hash changes. Results are public 72/72 (raw 63/63, quote 9/9, exact 16/16, shadow 39/41, advisory 4),
-  expansion 45/45 (exact 33/33, shadow 19/19, advisory 9), v2 60/60 (exact 43/43, shadow
-  10/12, advisory 18), v3 74/74 (exact 50/50, shadow 11/11, advisory 15), and v4 73/73
-  (exact 51/51, shadow 15/15, advisory 12); safety violations are zero.
+  evaluator/source-hash changes. Measured 2026-08-22 after the stratification repair
+  (an explicit six-digit code in the question is now raw evidence, not resolver assistance,
+  so cases moved from shadow into raw): public production 73/73 (raw 71/71, quote 2/2),
+  expansion 48/48 (raw 48/48), v2 63/63, v3 75/75, and v4 74/74 — every production gate green.
+  Non-gating strata, reported not hidden: shadow public 39/40, expansion 16/16, v2 9/11,
+  v3 10/10, v4 14/14; advisory 4 / 9 / 16 / 15 / 12 cases carry no operation gold.
+  Wrong plans, surface crossings, and severe scope errors are zero in every partition.
+- The v5 sealed generation is **blocked, not done**: `SEALED_V5_ACCEPTANCE` exists but no v5
+  corpus has been authored, so its five tests are skipped with that reason. Satisfying it
+  requires 100 newly authored questions (10+ direct-quote, zero advisory, no near-copies of
+  any regression corpus) — derivations of existing corpora fail the near-copy check by design.
 
 ### Testing Requirements
 ```powershell

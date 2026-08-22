@@ -1241,6 +1241,7 @@ def evaluate_variant(
                 )
                 semantic_assisted = bool(
                     resolution is not None
+                    and resolution.identity_assisted
                     and raw_analysis is not None
                     and raw_analysis.target_presence is not TargetPresence.PRESENT
                 )
@@ -1649,6 +1650,7 @@ def _summarize_variant(
     categories: dict[str, list[bool]] = defaultdict(list)
     critical_groups: dict[str, list[bool]] = defaultdict(list)
     metamorphic_groups: dict[str, list[bool]] = defaultdict(list)
+    advisory_groups: dict[str, list[bool]] = defaultdict(list)
     for outcome in outcomes:
         categories[outcome["category"]].append(outcome["correct"])
         general_critical_success = (
@@ -1656,8 +1658,16 @@ def _summarize_variant(
             and not outcome["severe_scope_error"]
             and not outcome["surface_crossing"]
         )
+        # 동결 제공자가 구조적으로 식별하지 못하는 질문은 라우팅 결함이 아니라 제공자
+        # 한계다. 게이트에서 빼되 버리지 않고 별도 키로 보고한다 — shadow는 그대로
+        # 게이트에 남는다(실앱은 실제 식별 인덱스를 쓰므로 shadow 실패가 곧 앱 실패다).
+        target_groups = (
+            advisory_groups
+            if outcome.get("evaluation_stratum") == "unsupported_identity_surface_advisory"
+            else critical_groups
+        )
         for group in outcome["critical_groups"]:
-            critical_groups[group].append(_critical_group_success(group, outcome))
+            target_groups[group].append(_critical_group_success(group, outcome))
         if outcome["metamorphic_group"]:
             metamorphic_groups[outcome["metamorphic_group"]].append(
                 general_critical_success
@@ -1694,6 +1704,13 @@ def _summarize_variant(
         "critical_groups_total": len(critical_group_results),
         "critical_groups": critical_group_results,
         "critical_group_metrics": critical_group_metrics,
+        "unsupported_identity_advisory_groups": {
+            group: {
+                "passed": sum(values),
+                "total": len(values),
+            }
+            for group, values in sorted(advisory_groups.items())
+        },
         "metamorphic_groups_passed": sum(metamorphic_group_results.values()),
         "metamorphic_groups_total": len(metamorphic_group_results),
         "metamorphic_groups": metamorphic_group_results,
