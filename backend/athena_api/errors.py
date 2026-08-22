@@ -54,6 +54,7 @@ def install_exception_handlers(app: FastAPI) -> None:
         OperationNotFoundError,
         PlanAlreadyUsedError,
         PreferredOperationError,
+        ReplayStateCapacityError,
         SelectorError,
         StalePlanError,
         UnknownDetailGroupError,
@@ -65,6 +66,7 @@ def install_exception_handlers(app: FastAPI) -> None:
         (ExpiredPlanError, 410),
         (StalePlanError, 409),
         (PlanAlreadyUsedError, 409),
+        (ReplayStateCapacityError, 503),
         (InvalidPlanError, 400),
         (InvalidArgumentsError, 422),
         (UnsupportedOperationError, 403),
@@ -96,9 +98,7 @@ def install_exception_handlers(app: FastAPI) -> None:
         )
 
     @app.exception_handler(UnknownAccountError)
-    async def unknown_account_handler(
-        _request: Request, exc: UnknownAccountError
-    ) -> JSONResponse:
+    async def unknown_account_handler(_request: Request, exc: UnknownAccountError) -> JSONResponse:
         return JSONResponse(
             status_code=404,
             content={"detail": "Kiwoom account is not configured", "message": str(exc)},
@@ -159,6 +159,4 @@ def install_exception_handlers(app: FastAPI) -> None:
 
     @app.exception_handler(BrainNotReadyError)
     async def brain_not_ready_handler(_request: Request, _exc: BrainNotReadyError) -> JSONResponse:
-        return JSONResponse(
-            status_code=503, content={"detail": "Investment brain is not ready"}
-        )
+        return JSONResponse(status_code=503, content={"detail": "Investment brain is not ready"})

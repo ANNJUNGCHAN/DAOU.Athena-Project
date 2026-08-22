@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import re
+
 from .normalization import tokenize
 
-LEXICON_VERSION = "ko-en-finance-v2"
+LEXICON_VERSION = "ko-en-finance-v7"
 
 # Concept groups are deliberately small and reviewed. Expansion is symmetric.
 _CONCEPTS: tuple[tuple[str, ...], ...] = (
@@ -29,6 +31,7 @@ _CONCEPTS: tuple[tuple[str, ...], ...] = (
     ("차트", "봉", "chart", "candle", "ohlcv"),
     ("투자자", "기관", "외국인", "investor", "institution", "foreign"),
     ("예수금", "현금", "deposit", "cash", "entr"),
+    ("lp", "liquidity provider", "liquidity-provider"),
     ("매수", "buy", "bid"),
     ("매도", "sell", "ask"),
     ("종목", "주식", "stock", "ticker", "stk"),
@@ -50,7 +53,7 @@ _CONCEPTS: tuple[tuple[str, ...], ...] = (
     # out of.
     ("거래원", "broker", "brokers", "member firm", "trading member"),
     # 0J 업종지수: sector/industry index level.
-    ("업종", "sector", "industry index"),
+    ("업종", "지수", "sector", "industry index", "sector index"),
     # 0w 종목프로그램매매: no lexicon group. "program trading"/"trading" would hand it every
     # one of its own title bigrams on the word "trading" alone, outscoring 0F 주식당일거래원
     # on a question that names the broker, not the program-trading flow. Its own Korean name
@@ -72,14 +75,55 @@ _CONCEPTS: tuple[tuple[str, ...], ...] = (
     ("해지", "해제", "unsubscribe", "cancel", "remove"),
 )
 
+_REVIEWED_CONCEPT_TOKENS = frozenset(
+    token
+    for concept in _CONCEPTS
+    for term in concept
+    for token in tokenize(term, korean_bigrams=False)
+)
+_REVIEWED_CANONICAL_FRAGMENTS = frozenset(
+    {"현재", "자본", "코드", "동향", "실적", "조회", "번호", "미수", "연체", "자산"}
+)
+_REVIEWED_CANONICAL_TERMS = frozenset({"미체결", "종목코드", "현재가"})
+
+
+def reviewed_query_fragments(tokens: set[str]) -> set[str]:
+    """Keep only reviewed concept or canonical query fragments."""
+    return tokens.intersection(
+        _REVIEWED_CONCEPT_TOKENS | _REVIEWED_CANONICAL_FRAGMENTS
+    )
+
+
+def reviewed_canonical_terms(value: str) -> set[str]:
+    """Return reviewed Korean terms embedded at a lexical boundary in catalog text."""
+    normalized = " ".join(value.casefold().split())
+    return {
+        term
+        for term in _REVIEWED_CANONICAL_TERMS
+        if re.search(rf"(?<![가-힣]){re.escape(term)}", normalized) is not None
+    }
+
+
+def _contains_sequence(tokens: tuple[str, ...], phrase: tuple[str, ...]) -> bool:
+    if len(phrase) == 1:
+        return phrase[0] in tokens
+    width = len(phrase)
+    return any(tokens[index : index + width] == phrase for index in range(len(tokens) - width + 1))
+
 
 def expand_tokens(tokens: tuple[str, ...]) -> tuple[str, ...]:
-    """Return deterministic original plus synonym tokens."""
+    """Return one-hop synonyms for authored tokens and atomic multiword aliases.
+
+    A multiword alias such as ``ELW indicator`` or ``ETF NAV`` is evidence only when
+    the complete normalized sequence occurs. Its entity token alone must not emit the
+    capability vocabulary. Matching is evaluated against the original input once, so a
+    synonym emitted by one concept cannot activate a second concept transitively.
+    """
     expanded = set(tokens)
     for concept in _CONCEPTS:
-        concept_tokens = {token for term in concept for token in tokenize(term)}
-        if expanded.intersection(concept_tokens):
-            expanded.update(concept_tokens)
+        aliases = tuple(tokenize(term, korean_bigrams=False) for term in concept)
+        if any(_contains_sequence(tokens, alias) for alias in aliases):
+            expanded.update(token for alias in aliases for token in alias)
     return tuple(sorted(expanded))
 
 

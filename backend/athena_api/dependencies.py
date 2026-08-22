@@ -16,18 +16,31 @@ from athena_api.accounts import (
 from athena_api.errors import KiwoomNotReadyError, UnknownAccountError
 from athena_api.kiwoom import KiwoomClient, KiwoomWsClient, TokenManager
 from athena_api.selector import PlanSigner, SelectorService, build_operation_catalog
+from athena_api.selector.instrument_identity import InstrumentIdentityIndex
 
 # Plans are intentionally process-local and short-lived. Deploy the selector with one
 # worker unless a shared signing secret is supplied by a future secret-manager adapter.
-_selector_service = SelectorService(
-    build_operation_catalog(),
-    PlanSigner(secrets.token_bytes(32), ttl_seconds=120),
-)
+_selector_catalog = build_operation_catalog()
+_selector_signing_secret = secrets.token_bytes(32)
 
 
-def get_selector_service() -> SelectorService:
-    """Return the immutable process-local selector service."""
-    return _selector_service
+def build_selector_service(
+    instrument_identity: InstrumentIdentityIndex | None = None,
+) -> SelectorService:
+    """Build one process-local selector around an app-owned identity snapshot."""
+    return SelectorService(
+        _selector_catalog,
+        PlanSigner(_selector_signing_secret, ttl_seconds=120),
+        instrument_identity=instrument_identity,
+    )
+
+
+_selector_service = build_selector_service()
+
+
+def get_selector_service(request: Request) -> SelectorService:
+    """Return the app-local selector, with a credential-free fallback for test apps."""
+    return getattr(request.app.state, "selector_service", _selector_service)
 
 
 SelectorServiceDep = Annotated[SelectorService, Depends(get_selector_service)]

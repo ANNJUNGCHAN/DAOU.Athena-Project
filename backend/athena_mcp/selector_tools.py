@@ -129,7 +129,7 @@ def _record_backend_timing(
         with path.open("a", encoding="utf-8") as f:
             f.write(json.dumps(entry, ensure_ascii=False) + "\n")
     except OSError:
-        pass
+        return
 
 
 # ---------------------------------------------------------------------------
@@ -287,18 +287,34 @@ _RESOLVE_INPUT_SCHEMA: dict[str, Any] = {
             "default": "auto",
             "description": (
                 "athena_search와 같은 게이트를 다시 적용한다 — resolve는 질문을 "
-                "한 번 더 랭킹한다."
+                "한 번 더 랭킹하며 question의 exact ref/TR ID도 이 intent 표면을 "
+                "벗어나면 fail-closed한다."
             ),
         },
-        "candidate_refs": {"type": "array", "items": {"type": "string"}, "maxItems": 8},
-        "preferred_ref": {"type": ["string", "null"]},
+        "candidate_refs": {
+            "type": "array",
+            "items": {"type": "string"},
+            "maxItems": 8,
+            "description": (
+                "검증되는 soft hint다. 누락·순서·중복은 canonical 선택을 바꾸지 않으며, "
+                "unknown/hidden/wrong-intent ref는 fail-closed한다."
+            ),
+        },
+        "preferred_ref": {
+            "type": ["string", "null"],
+            "description": (
+                "canonical family assertion이다. override가 아니며 detail ref는 그 "
+                "group을 암시하고 명시 detail_group과 충돌하면 실패한다."
+            ),
+        },
         "detail_group": {
             "type": ["string", "null"],
             "maxLength": 64,
             "description": (
-                "athena_describe 응답의 detail_groups에 나열된 값만 허용한다 — "
-                "서버는 질문에서 이걸 추론하지 않는다. 생략하면 전체 타입 기본 "
-                "응답을 받는다."
+                "athena_describe 또는 search의 suggested_detail_group에 나온 canonical "
+                "group만 허용한다. resolve는 canonical family를 다시 검증하며, 생략 시 "
+                "typed 호환성과 권위 있는 canonical 근거가 유일하게 지지하는 "
+                "family-local detail만 자동 선택할 수 있다."
             ),
         },
         "arguments": {"type": "object", "description": "선택된 오퍼레이션의 요청 인자."},
@@ -332,8 +348,9 @@ _INPUT_SCHEMA_BY_TOOL: dict[str, dict[str, Any]] = {
 
 _FLOW_NOTE = (
     "4단계 흐름의 일부다: athena_search -> athena_describe -> athena_resolve -> "
-    "athena_call. detail_group은 athena_describe 응답의 detail_groups에 나열된 "
-    "값만 쓸 수 있다(추측 금지, 생략하면 전체 타입 기본 응답). athena_resolve가 "
+    "athena_call. search의 top hit에 suggested_detail_group/operation_ref가 있으면 "
+    "resolve가 같은 full intent surface에서 재검증한다. candidate_refs는 soft hint, "
+    "preferred_ref는 canonical family assertion이다. athena_resolve가 "
     "발급하는 plan_token은 1회용이다 — athena_call에 정확히 한 번만 넘기고, "
     "실패해도(타임아웃 포함) 재시도하지 말고 athena_resolve를 다시 불러 새 "
     "토큰을 받는다."
@@ -350,8 +367,7 @@ _DESCRIPTION_BY_TOOL: dict[str, str] = {
         f"읽는다. {_FLOW_NOTE}"
     ),
     RESOLVE_TOOL: (
-        f"3/4단계 — 오퍼레이션을 선택하고 인자를 검증해 서명된 실행 계획을 발급한다. "
-        f"{_FLOW_NOTE}"
+        f"3/4단계 — 오퍼레이션을 선택하고 인자를 검증해 서명된 실행 계획을 발급한다. {_FLOW_NOTE}"
     ),
     CALL_TOOL: (
         "4/4단계 — 서명된 계획을 실행한다. 웹소켓 계획은 등록 프레임 하나를 보내고 "
@@ -427,7 +443,8 @@ def _trim_call_payload(payload: Any) -> Any:
         "total_rows": best_len,
         "note": (
             "LLM 표면 한도로 배열 앞쪽만 남겼다(차트류는 최신이 앞 — 실측). "
-            "남은 행으로 즉시 진행하고, 답변에 '최근 " f"{kept}행 기준'임을 밝혀라."
+            "남은 행으로 즉시 진행하고, 답변에 '최근 "
+            f"{kept}행 기준'임을 밝혀라."
         ),
     }
     return payload
@@ -473,9 +490,11 @@ def _extract_error_detail(response: httpx.Response) -> str:
     except ValueError:
         return response.text[:500]
     if isinstance(body, dict):
+        code = body.get("code")
         detail = body.get("detail")
         if detail is not None:
-            return detail if isinstance(detail, str) else json.dumps(detail, ensure_ascii=False)
+            rendered = detail if isinstance(detail, str) else json.dumps(detail, ensure_ascii=False)
+            return f"{code}: {rendered}" if isinstance(code, str) else rendered
         return json.dumps(body, ensure_ascii=False)
     return json.dumps(body, ensure_ascii=False)
 
