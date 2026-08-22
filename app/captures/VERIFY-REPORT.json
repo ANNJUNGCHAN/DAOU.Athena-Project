@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-08-21T02:18:27.565Z",
+  "startedAt": "2026-08-21T03:17:13.783Z",
   "layout": {
     "scale": 1,
     "screen": {
@@ -58,7 +58,7 @@
         "nonzero": true
       },
       {
-        "elapsedMs": 55,
+        "elapsedMs": 52,
         "verifiedVisible": true,
         "appVisible": true,
         "onboardingHidden": true,
@@ -66,7 +66,7 @@
         "nonzero": true
       },
       {
-        "elapsedMs": 51,
+        "elapsedMs": 52,
         "verifiedVisible": true,
         "appVisible": true,
         "onboardingHidden": true,
@@ -82,7 +82,7 @@
         "nonzero": true
       },
       {
-        "elapsedMs": 53,
+        "elapsedMs": 51,
         "verifiedVisible": true,
         "appVisible": true,
         "onboardingHidden": true,
@@ -90,7 +90,7 @@
         "nonzero": true
       },
       {
-        "elapsedMs": 54,
+        "elapsedMs": 53,
         "verifiedVisible": true,
         "appVisible": true,
         "onboardingHidden": true,
@@ -100,8 +100,8 @@
     ]
   },
   "delayedRestFeedback": {
-    "elapsedMs": 2753.4620000000004,
-    "totalRunMs": 3017,
+    "elapsedMs": 2745.1724999999997,
+    "totalRunMs": 3004,
     "feedbackOk": true,
     "receiptPainted": true,
     "renderedCount": 0
@@ -114,18 +114,18 @@
     "ok": true
   },
   "expand": {
-    "frameCount": 29,
+    "frameCount": 25,
     "p50": 18,
-    "p95": 34.70000000000073,
-    "max": 54,
-    "min": 17.300000000000182
+    "p95": 53.5,
+    "max": 53.5,
+    "min": 17.399999999999636
   },
   "collapse": {
-    "frameCount": 32,
-    "p50": 17.899999999999636,
-    "p95": 18.5,
-    "max": 20.200000000000728,
-    "min": 17.200000000000728
+    "frameCount": 5,
+    "p50": 22.899999999999636,
+    "p95": 497.89999999999964,
+    "max": 497.89999999999964,
+    "min": 17.899999999999636
   },
   "afterCollapse": {
     "canvasVisible": false
@@ -404,6 +404,10 @@
     "cardRendered": true,
     "replacedMockChartCard": true,
     "canvasMounted": true,
+    "aitsAuthority": true,
+    "dataRenderState": true,
+    "rendererIdMatches": true,
+    "errorNoteAbsent": true,
     "prewarmTelemetryPresent": true,
     "titleText": "검증13b 실배선 차트"
   },
@@ -588,7 +592,7 @@
   },
   "agentTurn": {
     "present": true,
-    "badge": "11:13 발화",
+    "badge": "12:11 발화",
     "mode": "실시간 (WS)",
     "source": "루틴 '검증 루틴' · 에이전트 발화 — 묻지 않은 턴입니다",
     "body": "005930 조건 도달 — 관측값 5.3 (임계 5). 값은 발화 시점 기준입니다 — 최신 확인은 다시 물어봐 주세요.",
@@ -660,7 +664,12 @@
       },
       "states": {
         "declaredStateRendered": true,
-        "displayOnlyGuardRendered": true
+        "displayOnlyGuardRendered": true,
+        "chartAuthorityMatches": true,
+        "chartRenderStateIsData": true,
+        "chartRendererIdMatches": true,
+        "chartSurfaceMounted": true,
+        "chartErrorNoteAbsent": true
       }
     },
     "F2": {
@@ -684,7 +693,12 @@
       },
       "states": {
         "declaredStateRendered": true,
-        "displayOnlyGuardRendered": true
+        "displayOnlyGuardRendered": true,
+        "chartAuthorityMatches": true,
+        "chartRenderStateIsData": true,
+        "chartRendererIdMatches": true,
+        "chartSurfaceMounted": true,
+        "chartErrorNoteAbsent": true
       }
     },
     "T1": {
@@ -708,7 +722,12 @@
       },
       "states": {
         "declaredStateRendered": true,
-        "displayOnlyGuardRendered": true
+        "displayOnlyGuardRendered": true,
+        "chartAuthorityMatches": true,
+        "chartRenderStateIsData": true,
+        "chartRendererIdMatches": true,
+        "chartSurfaceMounted": true,
+        "chartErrorNoteAbsent": true
       }
     },
     "T2": {
@@ -732,7 +751,12 @@
       },
       "states": {
         "declaredStateRendered": true,
-        "displayOnlyGuardRendered": true
+        "displayOnlyGuardRendered": true,
+        "chartAuthorityMatches": true,
+        "chartRenderStateIsData": true,
+        "chartRendererIdMatches": true,
+        "chartSurfaceMounted": true,
+        "chartErrorNoteAbsent": true
       }
     },
     "T3": {
@@ -756,7 +780,12 @@
       },
       "states": {
         "declaredStateRendered": true,
-        "displayOnlyGuardRendered": true
+        "displayOnlyGuardRendered": true,
+        "chartAuthorityMatches": true,
+        "chartRenderStateIsData": true,
+        "chartRendererIdMatches": true,
+        "chartSurfaceMounted": true,
+        "chartErrorNoteAbsent": true
       }
     },
     "T4": {
@@ -780,7 +809,12 @@
       },
       "states": {
         "declaredStateRendered": true,
-        "displayOnlyGuardRendered": true
+        "displayOnlyGuardRendered": true,
+        "chartAuthorityMatches": true,
+        "chartRenderStateIsData": true,
+        "chartRendererIdMatches": true,
+        "chartSurfaceMounted": true,
+        "chartErrorNoteAbsent": true
       }
     },
     "C1": {
@@ -804,7 +838,12 @@
       },
       "states": {
         "declaredStateRendered": true,
-        "displayOnlyGuardRendered": true
+        "displayOnlyGuardRendered": true,
+        "chartAuthorityMatches": true,
+        "chartRenderStateIsData": true,
+        "chartRendererIdMatches": true,
+        "chartSurfaceMounted": true,
+        "chartErrorNoteAbsent": true
       }
     },
     "C2": {
@@ -828,7 +867,12 @@
       },
       "states": {
         "declaredStateRendered": true,
-        "displayOnlyGuardRendered": true
+        "displayOnlyGuardRendered": true,
+        "chartAuthorityMatches": true,
+        "chartRenderStateIsData": true,
+        "chartRendererIdMatches": true,
+        "chartSurfaceMounted": true,
+        "chartErrorNoteAbsent": true
       }
     },
     "E1": {
@@ -852,7 +896,12 @@
       },
       "states": {
         "declaredStateRendered": true,
-        "displayOnlyGuardRendered": true
+        "displayOnlyGuardRendered": true,
+        "chartAuthorityMatches": true,
+        "chartRenderStateIsData": true,
+        "chartRendererIdMatches": true,
+        "chartSurfaceMounted": true,
+        "chartErrorNoteAbsent": true
       }
     },
     "E2": {
@@ -876,7 +925,12 @@
       },
       "states": {
         "declaredStateRendered": true,
-        "displayOnlyGuardRendered": true
+        "displayOnlyGuardRendered": true,
+        "chartAuthorityMatches": true,
+        "chartRenderStateIsData": true,
+        "chartRendererIdMatches": true,
+        "chartSurfaceMounted": true,
+        "chartErrorNoteAbsent": true
       }
     },
     "E3": {
@@ -900,7 +954,12 @@
       },
       "states": {
         "declaredStateRendered": true,
-        "displayOnlyGuardRendered": true
+        "displayOnlyGuardRendered": true,
+        "chartAuthorityMatches": true,
+        "chartRenderStateIsData": true,
+        "chartRendererIdMatches": true,
+        "chartSurfaceMounted": true,
+        "chartErrorNoteAbsent": true
       }
     },
     "A1": {
@@ -924,7 +983,12 @@
       },
       "states": {
         "declaredStateRendered": true,
-        "displayOnlyGuardRendered": true
+        "displayOnlyGuardRendered": true,
+        "chartAuthorityMatches": true,
+        "chartRenderStateIsData": true,
+        "chartRendererIdMatches": true,
+        "chartSurfaceMounted": true,
+        "chartErrorNoteAbsent": true
       }
     },
     "S1": {
@@ -948,9 +1012,14 @@
       },
       "states": {
         "declaredStateRendered": true,
-        "displayOnlyGuardRendered": true
+        "displayOnlyGuardRendered": true,
+        "chartAuthorityMatches": true,
+        "chartRenderStateIsData": true,
+        "chartRendererIdMatches": true,
+        "chartSurfaceMounted": true,
+        "chartErrorNoteAbsent": true
       }
     }
   },
-  "finishedAt": "2026-08-21T02:19:17.633Z"
+  "finishedAt": "2026-08-21T03:18:04.895Z"
 }
