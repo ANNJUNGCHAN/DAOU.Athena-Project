@@ -45,6 +45,10 @@ class TargetResolution:
 class _ResolvedInstrument:
     code: str
     target: TargetResolution
+    # 질문이 이미 6자리 코드를 담고 있으면 이름→코드 해석이 한 일이 없다.
+    # 평가 계층이 "식별 보조를 받은 질문"과 "날 것 그대로의 질문"을 구분해야 하므로
+    # 보조 여부만 값 없이 남긴다 — 어떤 이름이 맞았는지는 여전히 노출하지 않는다.
+    identity_assisted: bool = True
 
 
 @dataclass(frozen=True, slots=True)
@@ -188,11 +192,13 @@ class InstrumentIdentityIndex:
         ):
             return None
         matched_codes = set(explicit_codes)
+        alias_matched = False
         for pattern, codes in snapshot.alias_patterns:
             if pattern.search(text) is None:
                 continue
             if len(codes) != 1:
                 return None
+            alias_matched = True
             matched_codes.update(codes)
         if len(matched_codes) != 1:
             return None
@@ -200,7 +206,11 @@ class InstrumentIdentityIndex:
         record = snapshot.records_by_code.get(code)
         if record is None:
             return None
-        return _ResolvedInstrument(code, TargetResolution(record.kind))
+        return _ResolvedInstrument(
+            code,
+            TargetResolution(record.kind),
+            identity_assisted=alias_matched,
+        )
 
     def resolve_target(self, question: str) -> TargetResolution | None:
         resolved = self.resolve(question)

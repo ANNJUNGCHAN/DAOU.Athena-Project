@@ -16,6 +16,11 @@ sys.path.insert(0, str(BACKEND))
 fit_dissonance_check = importlib.import_module("fit_dissonance_check")
 capture_screen_render_evidence = importlib.import_module("capture_screen_render_evidence")
 
+# 이 파일의 테스트들은 같은 스코어카드 산출물 경로에 쓴다. xdist가 워커를 나눠
+# 배치하면 한 테스트가 다른 테스트의 반쯤 쓰인 파일을 읽어 exit 1이 난다
+# (전체 스위트에서만 재현, 단독 실행은 초록). test_accounts와 같은 처방이다.
+pytestmark = pytest.mark.xdist_group("fit_dissonance_scorecard")
+
 
 @pytest.fixture(scope="module")
 def manifest() -> dict:

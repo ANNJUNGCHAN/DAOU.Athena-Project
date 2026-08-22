@@ -1139,9 +1139,23 @@ def analyze_question(
             normalized,
         )
     )
+    # 질문이 6자리 국내 종목 코드를 직접 적었으면 그 자체가 대상 근거다. 고유명사
+    # 스팬과 달리 코드는 종목 마스터 없이도 형식으로 확정되고, 어떤 종목인지는
+    # 여기서 보존하지 않는다. 날짜(yymmdd)·수량과 섞이지 않도록 코드 토큰에 붙는
+    # 날짜·단위 표현은 제외한다.
+    explicit_code_target = any(
+        # 코드에 공백 없이 바로 단위가 붙으면(260822일, 5000원) 식별자가 아니다.
+        # "005930 일봉"처럼 띄어쓴 뒤의 일/월은 주기 표현이므로 제외하지 않는다.
+        not re.match(r"(?:년|월|일|시|분|초|원|주|건|%|퍼센트)(?![가-힣])", question[match.end() :])
+        and not re.search(
+            r"(?:날짜|일자|기준일|date)\s*$", question[: match.start()], re.IGNORECASE
+        )
+        for match in re.finditer(r"(?<!\d)\d{6}(?!\d)", question)
+    )
     target_presence = (
         TargetPresence.PRESENT
         if resolved_target
+        or explicit_code_target
         or concrete_gold_target
         or deictic_target
         else TargetPresence.UNKNOWN
@@ -1149,6 +1163,7 @@ def analyze_question(
     authored_target = (
         resolved_target
         or reviewed_asset_target
+        or explicit_code_target
         or concrete_gold_target
         or deictic_target
     )
@@ -1563,6 +1578,19 @@ def analyze_question(
     for capability, terms in capability_terms:
         if stated(*terms):
             add(capabilities, capability)
+    # "미체결 주문"은 부분 문자열로 "체결 주문"을 품는다. 질문의 모든 '체결'이 부정
+    # 접두 '미' 뒤에 있으면 체결된 주문 근거가 아니다 — 그대로 두면 미체결 조회가
+    # 체결 조회와 상충해 기권한다(실측: sealed-order-gold-cancel-status-ko).
+    fill_matches = tuple(re.finditer("체결", normalized))
+    if (
+        CapabilityKind.ORDER_FILLED in capabilities
+        and fill_matches  # 한국어 '체결'이 하나도 없으면 이 규칙은 관여하지 않는다.
+        and all(
+            match.start() >= 1 and normalized[match.start() - 1] == "미"
+            for match in fill_matches
+        )
+    ):
+        discard(capabilities, CapabilityKind.ORDER_FILLED)
     if evaluation_window and stated(
         "highest price", "lowest price", "high and low", "최고가", "최저가"
     ):

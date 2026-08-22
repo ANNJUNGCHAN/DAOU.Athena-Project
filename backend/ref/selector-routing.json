@@ -252,7 +252,7 @@
       "data_intents": ["account_state", "history"]
     },
     "base:kt50075": {
-      "data_intents": ["account_state"]
+      "data_intents": ["account_state", "open_orders"]
     },
     "detail:ka20001:session_range": {
       "temporal_scopes": ["current", "intraday", "range"]
