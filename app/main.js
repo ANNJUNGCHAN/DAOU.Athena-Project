@@ -3,7 +3,7 @@
 // require()들도 이 시각 이후 비용이므로, "창 표시까지" 수치는 require 체인
 // 전체를 포함한다(가장 이른 지점에서 찍어야 실제 부팅 지연을 반영한다).
 const MODULE_LOAD_AT = Date.now();
-const { app, BrowserWindow, ipcMain, screen, Tray, Menu, nativeImage, Notification } = require('electron');
+const { app, BrowserWindow, ipcMain, screen, Tray, Menu, nativeImage, Notification, nativeTheme } = require('electron');
 const { performance } = require('node:perf_hooks');
 const path = require('path');
 const fs = require('fs');
@@ -73,9 +73,16 @@ app.on('before-quit', () => {
 // 컴팩트 커맨드 카드(900×248)로. 폭이 canvasW와 달라지므로 대화 창은 캔버스 창
 // 폭의 중앙에 정렬한다(chatOriginX). 248 = 그립 14 + 이력 ~86 + 입력줄 52 +
 // 컨트롤 스트립 48 + 여백.
+// 2026-08-22 축소(사용자 지시 "창이랑 글씨 크기가 너무 크다"): 이 치수는 DIP라
+// 배율 1.5 디스플레이에서는 물리 픽셀로 1.5배가 된다(실측 devicePixelRatio 1.5) —
+// 설계값이 그대로 화면을 가득 채웠다. 비율(캔버스:대화)과 컴팩트 커맨드 카드 문법은
+// 유지한 채 스케일만 약 0.82로 내린다.
+// 2026-08-22 2차 축소(사용자 지시 "창도 줄여줘 · 지금보다 미니멀하게"):
+// 크롬 여백까지 함께 줄였으므로(입력줄 52→44, 스트립 48→40, 타이틀바 32→26)
+// 대화 창 기본 높이도 그만큼 내려간다. 176 = 그립 8 + 이력 ~58 + 입력 44 + 스트립 40 + 여백.
 const DESIGN = {
-  canvasW: 1560, canvasH: 800,
-  chatW: 900, chatBaseH: 248, chatMaxH: 788,
+  canvasW: 1120, canvasH: 580,
+  chatW: 640, chatBaseH: 176, chatMaxH: 560,
 };
 
 function wait(ms) { return new Promise((r) => setTimeout(r, ms)); }
@@ -144,7 +151,27 @@ function commonWinOpts(bounds) {
     // S1 실측(spike/electron-glass/RESULT.md): backgroundMaterial:'acrylic' 단독으로
     // "뒤가 비치며 블러"가 성립한다. transparent:true는 기본으로 켜지 않는다(W2 지시) —
     // 블러 없는 완전 투명만 주기 때문.
-    backgroundMaterial: 'acrylic',
+    //
+    // 2026-08-22 실측 정정(사용자 지적 "다른 창에 들어가면 아직도 검정색"):
+    // Windows의 acrylic(DWMSBT_TRANSIENTWINDOW)은 **활성 창에만** 그려지고 포커스를
+    // 잃으면 DWM이 단색으로 떨어뜨린다. 즉 비활성일 때의 검정은 CSS 틴트가 아니라
+    // 재질의 OS 동작이라 CSS로 넘을 수 없다. mica는 비활성에서도 반투명을 유지한다 —
+    // 대신 뒤의 다른 창이 아니라 바탕화면을 샘플링한다. "유리는 항상 유리로 읽혀야
+    // 한다"(soul.md)를 우선해 mica를 기본으로 둔다. ATHENA_WINDOW_MATERIAL로 되돌릴
+    // 수 있게 남긴다(acrylic|mica|tabbed|none) — 재질 판단은 실물 확인이 필요하다.
+    // 2026-08-22 3차 실측(사용자 판정 "그냥 완전 투명해야 한다. 너무 회색이다"):
+    // 라이트 acrylic도 회백색 막이라 그 자체가 회색으로 읽힌다. 재질을 끄고 진짜
+    // 투명창으로 간다 — 데스크톱이 그대로 비치고, DWM이 칠하는 단색이 없으니
+    // 비활성 검정도 원천 소멸한다. CSS border-radius도 이제 제대로 잘려 모서리
+    // 네모 아티팩트가 사라진다.
+    // 대가(정직 기록): Chromium의 backdrop-filter는 **페이지 안**만 흐린다 —
+    // 창 뒤 데스크톱은 블러할 수 없다. 즉 애플 Liquid Glass의 "뒤가 굴절되며
+    // 흐려지는" 효과는 Windows/Electron에서 재현 불가다. 유리감은 가장자리 광량·
+    // 얇은 백색 막·접지 그림자로만 만든다.
+    transparent: process.env.ATHENA_WINDOW_MATERIAL ? false : true,
+    ...(process.env.ATHENA_WINDOW_MATERIAL
+      ? { backgroundMaterial: process.env.ATHENA_WINDOW_MATERIAL }
+      : {}),
     // 렌더러 격리(2026-08-18, 클로드 데스크탑 방식) — nodeIntegration:false +
     // contextIsolation:true + preload.js의 contextBridge 다리만 남긴다.
     // sandbox:true도 켠 채로 동작한다(preload가 require('electron')만 쓴다 —
@@ -1746,6 +1773,13 @@ ipcMain.handle('athena:mcp-remove', handleMcpRemove);
 // 실패해도(멱등이라 다음 mcp-list/부팅에서 재시도된다) 창 생성과 무관하다.
 if (!process.env.ATHENA_NO_AUTOSTART) {
   app.whenReady().then(() => {
+    // 2026-08-22 팔레트 반전(사용자 지시 "애플 Liquid Glass 형태 그대로"):
+    // Windows의 acrylic/mica는 **앱 테마**를 따라 렌더된다. 다크로 두면 재질 자체가
+    // 어두워 무슨 값을 써도 검정으로 수렴한다(실측 3회 — acrylic·mica 모두).
+    // 라이트로 고정해야 밝은 유리가 되고, 비활성 창에서 DWM이 떨어뜨리는 단색도
+    // 검정이 아니라 밝은 값이 된다. 시스템 테마를 따라가지 않고 고정하는 이유:
+    // 이 앱의 팔레트가 흰 유리 위 잉크 하나뿐이라 다크에서 성립하지 않는다.
+    nativeTheme.themeSource = 'light';
     createWindows();
     mcpEnv.migratePlaintextEnv().catch((err) => {
       mdlog(`부팅 시 mcp-env 마이그레이션 실패: ${String((err && err.message) || err)}`);

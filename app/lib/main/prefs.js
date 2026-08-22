@@ -14,11 +14,23 @@ const path = require('path');
 const { app } = require('electron');
 const { writeJsonAtomic } = require('./json-store');
 
-const PREF_DEFAULTS = { autoExpandCanvas: true, autoGrowChat: true, fontSize: 'md' };
+const PREF_DEFAULTS = {
+  autoExpandCanvas: true,
+  autoGrowChat: true,
+  fontSize: 'xs',
+  glassLevel: 'default',
+};
 
 // 글자 크기 5단계(2026-08-19 사용자 지시 "글자가 너무 큼") — 값은 tokens.css의
 // :root[data-font-size=...] 토큰 세트 키다. 두 렌더러가 <html> dataset으로 적용한다.
 const FONT_SIZES = ['xs', 'sm', 'md', 'lg', 'xl'];
+
+// 유리 투명도 3단(2026-08-22 사용자 지시 — 애플 Liquid Glass 레퍼런스가 투명도를
+// 사용자 슬라이더로 준다: "가장 투명 / 중간(기본값) / 가장 불투명"). 값은 tokens.css의
+// :root[data-glass=...] 토큰 세트 키이고, 적용 문법은 글자 크기와 동일하다.
+// 유리 사다리의 순서 계약(window < card < canvas < window-max)은 세 단계 모두에서
+// 지켜진다 — 단계는 스케일만 옮긴다.
+const GLASS_LEVELS = ['clear', 'default', 'opaque'];
 
 function statePath() {
   return path.join(app.getPath('userData'), 'athena-prefs.json');
@@ -33,6 +45,8 @@ function readState() {
         if (typeof raw[key] === 'boolean') out[key] = raw[key];
       } else if (key === 'fontSize') {
         if (FONT_SIZES.includes(raw[key])) out[key] = raw[key];
+      } else if (key === 'glassLevel') {
+        if (GLASS_LEVELS.includes(raw[key])) out[key] = raw[key];
       }
     }
     return out;
@@ -60,10 +74,12 @@ function set(patch) {
       if (typeof v === 'boolean') next[key] = v;
     } else if (key === 'fontSize') {
       if (FONT_SIZES.includes(v)) next[key] = v;
+    } else if (key === 'glassLevel') {
+      if (GLASS_LEVELS.includes(v)) next[key] = v;
     }
   }
   writeState(next);
   return next;
 }
 
-module.exports = { get, set, PREF_DEFAULTS, FONT_SIZES };
+module.exports = { get, set, PREF_DEFAULTS, FONT_SIZES, GLASS_LEVELS };

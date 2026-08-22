@@ -89,7 +89,7 @@ window.athena.on('athena:add-rest-receipt', async (payload = {}) => {
 // (app/README.md L599-608). 기본값은 원본과 동일 — 채널·기본값을 못 받아도
 // 두 동작 모두 이전과 같은 "항상 켜짐"으로 동작한다(fail-open, 새 기능이라
 // 실패가 기존 동작을 축소시키면 안 된다).
-let prefs = { autoExpandCanvas: true, autoGrowChat: true, fontSize: 'md' };
+let prefs = { autoExpandCanvas: true, autoGrowChat: true, fontSize: 'md', glassLevel: 'default' };
 // 글자 크기 5단계(2026-08-19) — tokens.css의 :root[data-font-size=...] 토큰 세트를
 // 켠다. md는 기본 토큰이므로 속성을 지워 :root 값으로 돌아간다. 텍스트 크기가
 // 바뀌면 필요한 창 높이도 바뀌므로 auto-grow 재측정을 건다.
@@ -99,14 +99,22 @@ function applyFontSize() {
   else delete document.documentElement.dataset.fontSize;
   if (typeof scheduleHeightSync === 'function') scheduleHeightSync();
 }
+// 유리 투명도 3단(2026-08-22) — 글자 크기와 같은 문법. default는 :root 기본 토큰이라
+// 속성을 지운다. 두께만 바뀌므로 높이 재측정은 필요 없다.
+function applyGlassLevel() {
+  const v = prefs.glassLevel;
+  if (v && v !== 'default') document.documentElement.dataset.glass = v;
+  else delete document.documentElement.dataset.glass;
+}
 async function loadPrefs() {
   try {
     const next = await window.athena.invoke('athena:settings:prefs:get');
     if (next) prefs = next;
   } catch { /* 채널 없음 — 기본값 유지 */ }
   applyFontSize();
+  applyGlassLevel();
 }
-window.athena.on('athena:prefs-changed', (next) => { if (next) { prefs = next; applyFontSize(); } });
+window.athena.on('athena:prefs-changed', (next) => { if (next) { prefs = next; applyFontSize(); applyGlassLevel(); } });
 
 // ---------- "기록 안 됨" 배지 — 채팅 저장 실패 신호(2026-08-19, plan-chat-graph-pipeline.md §2(g)) ----------
 // 순수 로직은 lib/history-badge.js(node --test로 단위 테스트) — 여기는 IPC 구독과
@@ -984,26 +992,18 @@ document.addEventListener('keydown', (e) => {
     return;
   }
   if (!(e.ctrlKey || e.metaKey) || e.altKey) return;
-  if (e.key === '=' || e.key === '+') {
-    e.preventDefault();
-    window.athena.send('athena:zoom', { dir: 'in' });
-  } else if (e.key === '-' || e.key === '_') {
-    e.preventDefault();
-    window.athena.send('athena:zoom', { dir: 'out' });
-  } else if (e.key === '0') {
-    e.preventDefault();
-    window.athena.send('athena:zoom', { dir: 'reset' });
-  } else if (e.key === 'm' || e.key === 'M') {
+  // 2026-08-22 사용자 지시("스크롤 돌렸을 때 작았다가 커지는 것 하지 말고, UI
+  // 설정에서만 글씨 크기랑 이런 걸 바꾸게 해달라"): Ctrl+=/-/0 배율 단축키와
+  // Ctrl+휠 배율을 폐기한다. 크기는 설정 › 화면(글자 크기 5단계 · UI 배율)에서만
+  // 바뀐다 — 입력 중 우발적인 배율 변경이 사라진다.
+  if (e.key === 'm' || e.key === 'M') {
     e.preventDefault();
     window.athena.send('athena:minimize-windows');
   }
 });
 
-window.addEventListener('wheel', (e) => {
-  if (!e.ctrlKey) return;
-  e.preventDefault();
-  window.athena.send('athena:zoom', { dir: e.deltaY < 0 ? 'in' : 'out' });
-}, { passive: false });
+// Ctrl+휠 배율은 2026-08-22 사용자 지시로 폐기했다(위 keydown 주석 참조).
+// 휠은 이력 스크롤에만 쓰인다 — 배율 변경 경로는 설정 하나뿐이다.
 
 // 창 이동은 네이티브 캡션이다(2026-08-19 표준화) — 손잡이는 chat.css의
 // -webkit-app-region 선언(컨트롤 스트립·설정/주문 헤더)이고 JS 드래그 경로는
