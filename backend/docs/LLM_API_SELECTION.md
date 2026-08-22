@@ -15,6 +15,43 @@ user question
   -> call that signed plan
 ```
 
+### Current routing authority (2026-08-21)
+
+Execution authority is the typed, allowlisted operation contract and its exact
+`operation_ref`. `QueryFrame`, evidence atoms, compatibility proofs, lexical title
+matches, aliases, synonym expansion, and numeric score thresholds are diagnostic or
+advisory signals; none authorizes an operation by itself. Instrument names, stock codes,
+account aliases, prices, and quantities are values bound through typed arguments, not
+operation identities. Hidden or unsupported identities remain indistinguishable from
+unknown identities.
+
+The production quote fast path is deliberately narrow: it handles a current domestic
+equity quote only when the routing contract identifies an equity quote snapshot and a
+required instrument binding is available. It does not reinterpret foreign-market,
+chart/history, sector, or arbitrary-text questions as quotes. The Electron app normally consumes
+the signed plan and manifest-derived card metadata. Its only direct-selection exception is a
+closed standalone domestic-equity quote grammar, which selects the exact case-sensitive
+`detail:ka10001:current_trading` identity; every other operation goes through the backend
+selector/plan path.
+AITS DTOs describe render payloads, not selector identity or market-data authority.
+
+Evaluation strata are reported independently. The figures below are last-known, artifact-bound
+measurements captured before the current quote-source/hash rerun; they are not unconditional
+current accuracy claims. A result is valid only together with the evaluator artifact and source
+hash that produced it. Upcoming seam/evaluator source changes invalidate the corresponding hash.
+
+| Stratum | Result |
+| --- | --- |
+| Public production | 72/72; raw 63/63, quote 9/9, exact 16/16, shadow 39/41, advisory 4 |
+| Expansion | 45/45; exact 33/33, shadow 19/19, advisory 9 |
+| v2 | 60/60; exact 43/43, shadow 10/12, advisory 18 |
+| v3 | 74/74; exact 50/50, shadow 11/11, advisory 15 |
+| v4 | 73/73; exact 51/51, shadow 15/15, advisory 12 |
+
+Safety violations are zero in every stratum. These rows are not additive accuracy claims.
+The current Electron `npm test` result is 321 passing tests; direct MCP chart checks use
+the AITS DTO contract and are separate from selector routing accuracy.
+
 The four model-controlled selector tools are:
 
 | LLM tool | HTTP endpoint | OpenAPI `operationId` | Purpose |
@@ -55,7 +92,7 @@ Athena has 323 Kiwoom operations after response splitting:
 | Operation class | Count | Selector visibility | Generic `resolve` / `call` |
 | --- | ---: | --- | --- |
 | Unsplit query base operations | 149 | Normal | Yes |
-| Split query base operations | 22 | Normal | No, `detail_group` required |
+| Split query base operations | 22 | Normal | Base plan no; uniquely supported owned detail or explicit `detail_group` required |
 | Query detail projections | 115 | Normal | Yes |
 | Guarded order operations | 12 | Explicit `intent=order` | Yes, with the order guards |
 | WebSocket operations | 23 | Explicit `intent=websocket` | Yes, control frame only |
@@ -171,6 +208,70 @@ runtimes: `call_typed_tr` for a query, `call_order_tr` for a guarded order —
 the same function the direct order route calls — and `call_websocket_tr` for a
 subscription control frame.
 
+### Typed routing metadata and QueryFrame
+
+Every one of the 208 base operations and 115 detail projections carries an
+immutable `OperationRouting` contract. Its closed enum axes are subject, entity
+kind, execution kind, data intent, temporal scope, measure, result shape, and
+binding role. There is no `other` bucket: an unmapped taxonomy value or incomplete
+coverage fails generation instead of silently weakening eligibility.
+
+The generator builds those 323 contracts in a fixed order:
+
+1. derive each base from canonical inventory category, subcategory, operation
+   name, field aliases, and generated output shape;
+2. refine a detail from its projection title, declared fields, and layout while
+   inheriting the base identity, execution kind, and binding roles;
+3. replace each split base's semantic axes with the ordered union of its detail
+   children;
+4. apply only exact-reference overrides from
+   `ref/selector-routing.json`. Overrides cannot change subject, entity kind,
+   execution kind, or result shape.
+
+Raw overview prose, field descriptions, examples, and sample values are not
+derivation inputs. The routing source version, routing contract version,
+QueryFrame version, and every canonical routing value are sealed into the
+catalog hash.
+
+`QueryFrame` is the question-side counterpart. It performs one-way, authored
+phrase-to-enum extraction only. It does not run synonym expansion, generate
+bigrams, or retain argument values such as account numbers, instrument codes,
+prices, or quantities. Unsupported or unobserved axes remain empty rather than
+being guessed. Search first applies visibility, then rejects direct contradictions
+on subject, entity, data intent, temporal scope, and result shape. Measures and
+binding roles are soft corroboration only: they are explained but cannot raise a
+candidate into a stronger eligibility tier. Empty facets and generic/unspecified
+operation facets remain neutral. Exact visible operation/TR identities retain
+their identity behavior after the visibility and safety gates.
+
+An opaque instrument span contributes only value-free entity evidence and is
+masked before both QueryFrame extraction and lexical ranking. Control words and
+reviewed asset-class markers remain visible. A comparison across multiple
+independent instruments is not collapsed into a single-instrument operation:
+when no request schema accepts all identities, resolve rejects the request so the
+caller can issue independently validated calls and compose their results.
+
+Routing v2 keeps distinctions that were previously lost inside broad axes:
+tick and minute charts have separate temporal scopes; chart requests carry a
+chart intent in addition to history; price history, price range, and market
+scale are explicit intents; ranking combines its direct measure and mode
+specializations; and existing-order amend/cancel actions are distinct. These
+values are derived from canonical operation/group names and direct question
+phrases. They do not contain company names, instrument codes, or operation-ID
+exceptions. When otherwise tied families expose a strict capability subset,
+the subset is the canonical generic family unless the question directly names
+the broader specialization.
+
+Only typed-eligible candidates enter lexical ranking. Raw request/response field
+descriptions and legacy `family_projection` titles remain available to `describe`
+but are completely absent from ranking. A base family instead exposes a bounded
+`family_capability` surface made only from canonical detail titles; generic
+subject/entity tokens do not score there, and detail siblings never become global
+candidates. `preferred_ref` only asserts the independently selected canonical
+family; an owned `detail_group` is then validated inside that family, never against
+global detail competition. The public Search/Describe/Resolve/Call field shape and signed
+plan payload remain version 1; typed reason codes are additive.
+
 ## Canonical operation identities
 
 The selector recognizes exactly two public identity forms:
@@ -224,7 +325,10 @@ Contract:
 - `limit`: 1 to 10; default 5.
 - Unknown request properties are rejected.
 
-`auto` and `query` search only the 171 query families. 22 of them were replaced by their projections and answer `resolve` with `DETAIL_GROUP_REQUIRED` and the group list. `order` searches only
+`auto` and `query` search only the 171 query families. For the 22 split families,
+`resolve` evaluates only owned details and either selects one uniquely supported by
+typed compatibility plus authoritative canonical evidence or answers
+`DETAIL_GROUP_REQUIRED` with the group list. `order` searches only
 the 12 guarded order base operations. `websocket` searches only the 23 streaming
 base operations. No intent reveals OAuth.
 
@@ -236,7 +340,7 @@ base operations. No intent reveals OAuth.
   "normalized_query": "삼성전자 현재가와 등락률만",
   "results": [
     {
-      "operation_ref": "detail:ka10001:current_trading",
+      "operation_ref": "base:ka10001",
       "kind": "query",
       "domain": "stockinfo",
       "name": "주식기본정보요청",
@@ -252,7 +356,9 @@ base operations. No intent reveals OAuth.
         }
       ],
       "generic_callable": true,
-      "discovery_only": false
+      "discovery_only": false,
+      "suggested_detail_group": "current_trading",
+      "suggested_operation_ref": "detail:ka10001:current_trading"
     }
   ]
 }
@@ -260,7 +366,17 @@ base operations. No intent reveals OAuth.
 
 Scores in examples are illustrative; clients must not hard-code them. The stable
 contract is the ordered result, contribution list, reason codes, and catalog
-version.
+version. Ranking is display-only and never authorizes a plan. `confidence` is
+derived from the shared typed compatibility decision: `high` means one exact
+profile matched directly, `medium` means typed dominance or a reviewed
+equivalence collapse produced the unique profile, and `low` means the decision
+abstained or the hit is not the selected canonical result. It is explanatory
+metadata, not plan authority; only `resolve` can revalidate the request and issue
+a signed plan.
+Only the top canonical family hit may carry the two additive suggestion
+fields. They are absent when family/detail selection is ambiguous, the question
+asks for a full response, or no uniquely supported family-local detail exists.
+`resolve` always recomputes and validates the suggestion on the full intent surface.
 
 ### Deterministic normalization and ranking
 
@@ -278,13 +394,20 @@ Natural-language indexing uses:
    `주식시간외호가` as directly as `호가` does. Full weight there would tie an
    unrelated after-hours-quote operation with the operation the question named.
 5. A small, versioned Korean/English finance synonym lexicon
-   (`LEXICON_VERSION = "ko-en-finance-v2"`), expanded over both whole tokens
-   and bigram fragments — Korean agglutinates, so a dictionary entry such as
-   해지 (cancel/unsubscribe) exists in a question only as a fragment of one
-   inflected token (해지해줘) and would never reach the lexicon otherwise.
-6. Exact case-sensitive identity, TR-ID, and group-ID checks before text
+   (`LEXICON_VERSION = "ko-en-finance-v7"`). Single authored tokens expand one
+   hop; a multiword alias expands only when its complete normalized token sequence
+   occurs. Entity tokens such as `ELW` or `ETF` therefore cannot manufacture
+   capability terms from `ELW indicator` or `ETF NAV`, and emitted synonyms never
+   activate another concept transitively. Reviewed Korean compound fragments remain
+   a separate half-weight lexical signal.
+6. A value-free transient entity-span pass masks six-digit codes and opaque proper
+   names before typed/lexical matching. Reviewed asset-class prefixes come from the
+   versioned, schema-validated `ref/selector-entity-markers.json`; its version and
+   SHA-256 are included in the catalog hash. This is not a full instrument master
+   and cannot establish `TargetPresence.PRESENT` or plan authority.
+7. Exact case-sensitive identity, TR-ID, and group-ID checks before text
    normalization.
-7. Per-surface uninformative-token suppression (below) over the ranked
+8. Per-surface uninformative-token suppression (below) over the ranked
    candidate set, before zone scoring.
 
 The same catalog version and request must produce the same ranking regardless of
@@ -444,26 +567,35 @@ Contract:
   question a second time rather than trusting the caller's earlier search. It
   is not the query surface by default plus an override; `auto` and `query` rank
   `visible_for(query)` only, so a vague question cannot land on an order or a
-  subscription no matter how it scores. `candidate_refs` and `preferred_ref` are
-  filtered against this same intent — a caller cannot smuggle an order or
-  websocket ref past a `query` intent by naming it explicitly in either field.
+  subscription no matter how it scores. Exact operation refs/TR IDs,
+  `candidate_refs`, and `preferred_ref` are filtered against this same intent — a
+  caller cannot smuggle an order or websocket ref past a `query` intent by naming
+  it in the question or either hint field.
   A caller that searched under `intent=websocket` passes `intent=websocket` here
   too; passing `query` instead makes every websocket candidate disappear from
   ranking and from the `candidate_refs`/`preferred_ref` checks.
-- `candidate_refs`: zero to eight hints from `search`.
-- `preferred_ref`: an optional preference, never an instruction. It is evaluated
-  at **family** granularity, because that is the granularity the ranker decides
-  at. Naming a projection here also implies its `detail_group`.
+- `candidate_refs`: zero to eight validated soft hints from `search`. They never
+  restrict, reorder, or replace the canonical intent surface, so omission, order,
+  and duplication cannot change selection. Unknown, hidden, or wrong-intent refs
+  fail closed. A non-callable split base is allowed as a family hint, but can never
+  produce a base plan.
+- `preferred_ref`: an optional canonical family assertion, not a preference or
+  override. The independently selected family must match or resolution fails with
+  409. Naming a projection also implies its group; an explicit conflicting
+  `detail_group` fails with 409. A matching detail assertion may determine only that
+  owned family-local projection; it can never alter or escape the canonical family.
 - `detail_group`: an optional projection of the selected family, taken from
-  `athena_describe.detail_groups`. The server never infers it from the question.
+  `athena_describe.detail_groups` or the top search suggestion. It cannot bypass
+  canonical family authority; omission permits only a uniquely typed local detail.
 - `arguments`: wire-alias arguments for the final typed request model.
 - `response_mode`: `auto`, `compact`, or `full`.
 - `continuation`: `cont_yn` (`N` or `Y`) and optional `next_key`.
 - Unknown request properties are rejected.
 
-The server re-ranks all eligible candidates. It does not accept client-provided
-scores and does not blindly accept `preferred_ref`. After selecting an operation,
-it validates `arguments` with the generated Pydantic request model. Missing
+The server re-ranks the complete intent surface regardless of `candidate_refs`.
+Search and resolve therefore share the same family/detail decision. It does not
+accept client-provided scores or let `preferred_ref` alter that decision. After
+selecting an operation, it validates `arguments` with the generated Pydantic request model. Missing
 required arguments, unknown arguments, and invalid values fail before a plan is
 issued.
 
@@ -476,7 +608,7 @@ issued.
   "operation_ref": "detail:ka10001:valuation",
   "plan_token": "<opaque-signed-plan-token>",
   "expires_at": "2026-08-15T12:00:00Z",
-  "selection_reasons": ["SINGLE_GROUP_PREFERRED"],
+  "selection_reasons": ["EXPLICIT_DETAIL_GROUP"],
   "required_arguments_satisfied": true,
   "response_mode": "compact"
 }
@@ -489,46 +621,33 @@ accepts it exactly once, including on a failed attempt (see
 
 ### Ambiguity and no-match behavior
 
-Resolution groups candidates by base TR family before comparing alternatives.
+Resolution proves candidates against exact routing profiles and groups compatible
+profiles by base TR family before comparing alternatives.
 Exact operation identities and exact case-sensitive TR IDs bypass family
-ambiguity checks. General natural language uses these thresholds:
-
-- top family score below 240: `NO_CONFIDENT_MATCH`;
-- top-to-second margin below 80, or top/second ratio below 1.15, **and the name
-  tie-break (below) does not resolve it**: `AMBIGUOUS_OPERATION`;
-- a preferred identity outside the server's top three or at least 20% below the
-  top score: `PREFERRED_REF_NOT_SUPPORTED_BY_QUERY`.
-
-The margin only decides whether two families' totals are *distinguishable*; it
-does not by itself decide the winner. Every family within that margin of the
-top score — not only the runner-up — is collected first. When more than one
-family remains, `TITLE_TOKEN_MATCH`/`TITLE_PHRASE_MATCH` points alone (each
-family's `title_score`) break the tie, because the operation's name is a claim
-about identity and every other zone is corroboration. It stays
-`AMBIGUOUS_OPERATION` only when that tie-break is itself tied.
-
-On a tight surface — the four `조건검색` (condition-search) TRs, for example —
-most of the score is shared boilerplate: same domain, same field descriptions,
-so a decisive win on the one zone that actually differs, the name, moved the
-*total* by only a few percent and read as ambiguous under the margin alone.
-"조건검색 ... 해지해줘" puts `ka10174 조건검색 실시간 해제` second by total
-score and first by name; the name tie-break now answers it instead of either
-guessing `ka10173` or refusing a question that named its target.
-
-**Known limitation:** the tie-break assumes the total-score leader is also the
-best-named candidate among the indistinguishable set; when it is not, an
-unrelated family with a coincidentally high `title_score` wins instead of the
-true leader. `realtime-0H-en` (see
-[Current progress](#current-progress)) is exactly this case: `base:0H`
-860 leads `base:ka10173` 749 by total score but loses the tie-break, because
-`ka10173`'s 조건검색 title happens to match the question's 시간/실시간
-fragments harder than `0H`'s own title does. This is a real, measured gap in
-the tie-break, not a lexicon gap — see the linked section for the exact
-numbers.
+ambiguity checks only after they pass the requested intent's visibility surface.
+An exact order, WebSocket, or query identity under the wrong intent is
+`OPERATION_NOT_FOUND` and cannot issue a plan. General natural language has no
+score threshold, score margin, title tie-break, company boost, or lexical fallback.
+Every explicit query axis must be compatible with an exact profile. Family
+authority is established first; query-evidenced active-axis Pareto dominance may
+remove broader profiles, and only reviewed routing-equivalence groups may collapse
+otherwise equal profiles. More than one surviving family is
+`AMBIGUOUS_OPERATION`; no surviving profile is `NO_CONFIDENT_MATCH`. A preferred
+identity whose family differs from this independent decision is
+`PREFERRED_REF_NOT_SUPPORTED_BY_QUERY` (HTTP 409).
 
 These failures issue no plan token. The error includes at most three candidates
 with their scores and reason codes so the LLM can refine the question without
 receiving the full catalog.
+
+A natural-language question also abstains before argument validation when it
+provides no target scope, or an instrument-bound profile requires an authoritative
+target anchor and the question has only an unresolved name. This prevents a generic
+request such as a bare price question or an arbitrary noun plus market syntax from
+turning into a stock plan. Authoritative anchors are an exact six-digit code, a
+validated deictic binding, a reviewed concrete gold contract, or the trusted
+application resolver boundary backed by the stock master. Caller-supplied argument
+roles and asset-class markers alone do not establish target identity.
 
 Missing arguments are not ambiguity. Once the semantic operation is clear, the
 resolver returns `INVALID_ARGUMENTS` with the generated request-model validation
@@ -545,7 +664,7 @@ Examples:
 
 ## Base versus detail selection
 
-**The server selects a TR family. The model selects the projection.**
+**The server selects a TR family, then evaluates projections only inside it.**
 
 A detail projection is not a cheaper call. `call_typed_tr` issues the same single
 upstream request the base operation issues, then filters the response by the
@@ -553,11 +672,14 @@ projection's field aliases. Base is therefore always a correct and complete
 answer; a projection only narrows it — by 5.5x on average across the 22 split
 TRs, and by 9x for the widest (`ka10007`: 124 fields to 13.8).
 
-Because sibling projections of one TR share that TR's entire vocabulary, ranking
-them against each other cannot be made reliable. `detail:ka10004:buy_bid_prices`
+Sibling projections are never allowed into global family competition.
+`detail:ka10004:buy_bid_prices`
 and `detail:ka10004:buy_bid_quantities` differ by one token inside titles that
-are otherwise identical. So the selector does not guess. After choosing the
-family it applies these rules in order:
+are otherwise identical. After choosing the family, the selector evaluates only
+`catalog.details_for(tr_id)` and auto-selects a child only when typed compatibility
+and authoritative family-local canonical-title evidence identify one unique local
+winner. Otherwise it asks for an explicit group. The rules
+are applied in this order:
 
 1. If the question explicitly asks for `전체`, `전부`, `모든`, `원문`, `raw`,
    `full`, or `complete`, or `response_mode=full`, select the typed base operation
@@ -570,7 +692,10 @@ family it applies these rules in order:
    list; it never silently falls back to base.
 3. If the response shape is `pure_list`, select the base operation and record
    `PURE_LIST_BASE_REQUIRED`.
-4. Otherwise select the typed base operation and record `BASE_DEFAULT`.
+4. For a split family, auto-select a uniquely supported family-local detail and
+   record `TYPED_DETAIL_MATCH`; otherwise return `DETAIL_GROUP_REQUIRED` with the
+   valid groups.
+5. Otherwise select the typed base operation and record `BASE_DEFAULT`.
 
 `raw` means the complete **typed base response**. The selector never routes to
 Athena's untyped raw endpoint.
@@ -580,7 +705,10 @@ Athena's untyped raw endpoint.
 `athena_describe` on a base query operation returns `detail_groups`: every
 projection of that family with its `group_id`, canonical `operation_ref`,
 Korean and English titles, `layout`, `ui_page_size`, and `response_field_count`.
-That listing is the only supported source for `detail_group`.
+That listing is the authoritative inventory for `detail_group`; a top search
+suggestion may carry one owned canonical group from the same inventory. The policy
+may also select that group automatically only when typed plus canonical family-local
+evidence makes it unique. Otherwise the caller must use the inventory explicitly.
 
 ```text
 athena_search("매수 10단계 호가 가격")      -> base:ka10004
@@ -589,7 +717,8 @@ athena_resolve(..., detail_group="buy_bid_prices")
 athena_call(plan_token)                   -> 7 fields, one upstream call
 ```
 
-Omitting `detail_group` is always safe and returns the full typed base response.
+Omitting `detail_group` is safe: it either selects a uniquely supported local
+detail, returns an unsplit typed base, or fails with `DETAIL_GROUP_REQUIRED`.
 
 ### Why pure lists stay at the base identity
 
@@ -674,8 +803,11 @@ Nonces are tracked in a process-local, size-capped cache keyed by the plan's
 nonce (`SelectorService._consumed_nonces`). An entry is evicted once its own
 `exp` has passed - a token past its expiry is already rejected by signature
 verification before this cache is ever consulted, so pruning it here opens no
-replay window - or when the cache is full, oldest first. Restarting the
-process, which already invalidates every outstanding plan through the
+replay window. If the cache is full and every entry is still live, the server
+does **not** evict an unexpired nonce: it rejects the new call with
+`REPLAY_STATE_CAPACITY_EXCEEDED` (HTTP 503) before upstream dispatch. This keeps
+memory bounded without reopening the oldest plan for replay; capacity returns
+as entries expire. Restarting the process, which already invalidates every outstanding plan through the
 process-local signing key, clears this cache along with it; a multi-worker
 deployment would need this cache made as shared as the signing secret, which
 is why CLAUDE.md SS7 keeps this service to one worker.
@@ -804,8 +936,8 @@ similar Korean operation.
 | Unknown, hidden, or wrong-intent identity | `OPERATION_NOT_FOUND` | 404 | Search again with the correct explicit intent. Do not guess case or path. |
 | No family reaches the confidence floor | `NO_CONFIDENT_MATCH` | 404 | Ask a focused clarification or state unsupported scope. |
 | Two families remain too close | `AMBIGUOUS_OPERATION` | 409 | Present at most the returned candidates and ask which information is wanted. |
-| Client preference conflicts with server ranking | `PREFERRED_REF_NOT_SUPPORTED_BY_QUERY` | 409 | Drop the preference and refine the question. |
-| Hidden OAuth identity named directly | `OPERATION_NOT_GENERIC_CALLABLE` | 403 | OAuth is not part of this catalog; do not retry through `call`. |
+| Client family assertion conflicts with canonical selection | `PREFERRED_REF_NOT_SUPPORTED_BY_QUERY` | 409 | Drop the assertion and refine the question. |
+| Hidden OAuth identity named directly | `OPERATION_NOT_FOUND` | 404 | Hidden identities are indistinguishable from unknown or unsupported identities; do not retry through `call`. |
 | Split family named without `detail_group` | `DETAIL_GROUP_REQUIRED` | 422 | Read `details.available_groups` and resolve again with one of them. |
 | `detail_group` not in the selected family | `UNKNOWN_DETAIL_GROUP` | 422 | Read `details.available_groups`, or drop `detail_group` for the base response. |
 | Missing, unknown, or invalid request fields | `INVALID_ARGUMENTS` | 422 | Collect or correct arguments, then resolve again. |
@@ -813,6 +945,7 @@ similar Korean operation.
 | Plan expired | `EXPIRED_PLAN` | 410 | Resolve again with current intent and arguments. |
 | Catalog/schema changed after resolution | `STALE_PLAN` | 409 | Search/describe/resolve against the current catalog. |
 | `plan_token` already spent by a prior `call`, including one that failed upstream | `PLAN_ALREADY_USED` | 409 | Resolve again; never resend the same token. |
+| Replay-state capacity contains only unexpired nonces | `REPLAY_STATE_CAPACITY_EXCEEDED` | 503 | Wait for outstanding plans to expire, then resolve again; no upstream call occurred. |
 
 No error may silently fall back to the first search result or a large base
 response. No failed resolution returns a plan token.
@@ -890,8 +1023,10 @@ Recommended MCP initialization instruction:
 Athena exposes domestic Kiwoom data through four catalog tools. Search first,
 describe the best candidate, resolve with all required arguments, then call only
 the returned plan token. Search returns one operation per TR family. For a
-focused question, read detail_groups from describe and pass the matching
-detail_group to resolve; omit it for the full typed base response. Orders and
+focused question, use the top search suggestion or read detail_groups from
+describe; resolve may auto-select one uniquely supported typed/canonical local
+detail, otherwise pass the matching detail_group after DETAIL_GROUP_REQUIRED.
+Use response_mode=full for the full typed base response. Orders and
 WebSocket subscriptions need an explicit intent="order" or intent="websocket" on
 both search and resolve; a vague question never reaches them. A WebSocket call
 sends one registration frame and returns its acknowledgement, not the stream -
@@ -917,9 +1052,10 @@ Adapter requirements:
 7. Order and WebSocket plans go through the same `resolve`/`call` pair as a
    read; only the intent argument, the order confirmation/idempotency headers,
    and (for orders) the `Authorization` header differ. Do not build a second,
-   parallel call path for them. `OPERATION_NOT_GENERIC_CALLABLE` now means an
-   OAuth identity or a stale plan reached execution — never route it anywhere;
-   the identity is unsupported, full stop.
+   parallel call path for them. `OPERATION_NOT_GENERIC_CALLABLE` is an internal
+   callable-gate failure, not a hint to probe hidden identities. A hidden OAuth
+   identity is deliberately indistinguishable from an unknown identity and returns
+   `OPERATION_NOT_FOUND`.
 8. Cache manifest/search/description only by `catalog_version`. Discard cached
    contracts when the version changes.
 
@@ -978,24 +1114,24 @@ base/detail identity or expected error, and relevant reason codes.
 
 ### Metrics
 
-Retrieval is scored at **family** granularity, because that is the only thing
-retrieval decides. Projection choice is not a retrieval outcome; it is an
-explicit argument, and its correctness is asserted per case by
+Retrieval is scored at **family** granularity. Projection choice is a separate,
+family-local decision: it is either a uniquely supported typed/canonical result or
+an explicit `detail_group`, and its correctness is asserted per case by
 `test_resolve_selects_the_gold_base_or_detail`.
 
 | Metric | Definition | Release expectation |
 | --- | --- | --- |
-| Family recall@5 | Correct base TR family appears in the top five. | >= 0.98 overall; 1.0 on the realtime slice; regressions block release. |
-| Family top-1 accuracy | Correct base TR family ranks first. | >= 0.95 overall, 1.0 on the detail and detail_required slices, >= 0.90 on every other non-realtime slice. |
-| Realtime family top-1 | Correct websocket family ranks first, retrieval only. | >= 0.75; deliberately looser than the other slices (see Current progress). |
-| Realtime resolve accuracy | `resolve` returns the gold `operation_ref` for a realtime question. | >= 10/12; the number `resolve`'s own tie-break and intent gate are actually held to. |
+| Family recall@5 | Correct base TR family appears in the top five. | 100% across every golden slice; regressions block release. |
+| Family top-1 accuracy | Correct base TR family ranks first. | 100% across every golden slice. |
+| Realtime family top-1 | Correct websocket family ranks first, retrieval only. | 12/12. |
+| Realtime resolve accuracy | `resolve` returns the gold `operation_ref` for a realtime question. | 12/12. |
 | Projection fidelity | `detail_group` resolves to that group or fails loudly. | 100%; an unknown group must never fall back to base. |
-| Base over-fetch rate | Focused questions answered without their `detail_group`. | Adapter-side metric; the server no longer guesses. |
+| Base over-fetch rate | Focused questions answered without the correct family-local detail. | Auto-detail must have unique typed/canonical support; otherwise `DETAIL_GROUP_REQUIRED`. |
 | Full-response recall | Explicit full/multi-group questions resolved to base. | 100% for explicit-full fixtures. |
 | Pure-list compliance | Pure-list questions remain at base. | 100%. |
 | Ambiguity precision | Ambiguous gold cases produce no plan. | 100% for safety fixtures. |
 | Argument validation recall | Missing/unknown/invalid fields fail before a plan. | 100%. |
-| Policy isolation | Order/WSS never reachable by a vague `auto`/`query` question or a mismatched `candidate_refs`/`preferred_ref`; OAuth/U.S. never leak. | 100%. |
+| Policy isolation | Order/WSS never reachable by a vague `auto`/`query` question, wrong-intent exact identity, or mismatched `candidate_refs`/`preferred_ref`; OAuth/U.S. never leak. | 100%. |
 | Determinism | Same input/catalog produces byte-equivalent ordered candidates. | 100% across randomized registry order and hash seeds. |
 | Context footprint | Always-loaded schemas seen by the LLM. | Four meta-tools, independent of catalog size. |
 | Upstream efficiency | Kiwoom calls per successful focused question. | One unless the user explicitly requests multiple independent data sets/pages. |
@@ -1008,13 +1144,13 @@ family accuracy and poor projection quality.
 
 The catalog, four-tool transport contract, signed-plan boundary, explicit
 projection selection, realtime discovery and execution, and safety fixtures are
-implemented. The golden corpus is 84 cases (`detail` 22, `detail_required` 22,
-`realtime` 12, `missing_args` 8, `safety` 8, `forbidden` 4, `ambiguity` 4,
-`adversarial` 4; 35 Korean, 35 English, 14 mixed), measured against
-`tests/unit/test_selector_eval.py`:
+implemented. The 84-case golden corpus below is the historical identity-assisted
+baseline. Current autonomous and typed-routing evidence is reported by independent
+strata in the routing-authority table at the start of this document; it supersedes
+the old combined retrieval summary.
 
-- Retrieval, over the 72 cases that carry an accepted family: recall@5 is
-  72/72 = 100%, top-1 is 69/72 = 95.8%.
+- Historical baseline only: over the 72 cases carrying an accepted family, recall@5
+  was 72/72 and top-1 was 70/72. Do not present this as current autonomous accuracy.
 - `detail` and `detail_required` are each 22/22 = 100%, so the combined
   detail-and-base slice is 44/44 = 100%. The long-standing near-miss here —
   `금일 재사용 금액만` ranking `base:kt00010` above the gold `base:kt00013` — is
@@ -1024,44 +1160,23 @@ implemented. The golden corpus is 84 cases (`detail` 22, `detail_required` 22,
   earlier failure mode this slice also used to show — focused questions
   resolving to a base operation because sibling projections were ranked against
   each other — remains gone by construction: siblings are still never ranked.
-- `realtime` retrieval (12 websocket golden questions) is 9/12 = 75% top-1 but
-  12/12 = 100% recall@5: none of the three top-1 misses are actually lost, each
-  ranks the correct family second. `resolve`'s own re-ranking and name tie-break
-  (see [Ambiguity and no-match behavior](#ambiguity-and-no-match-behavior))
-  recovers two of those three, so **realtime resolve accuracy — what a screen
-  builder actually gets — is 10/12 = 83.3%**, measured separately by
-  `test_realtime_resolve_meets_a_measured_accuracy_floor`. Two genuine misses
-  remain:
-  - `realtime-0B-ko` ("삼성전자 실시간 체결가 tick 단위로 받아줘") resolves to
-    `base:00` 주문체결 instead of the gold `base:0B` 주식체결. Both types are
-    named 체결 and the question supplies no lexical discriminator between them
-    — the real signal is that the question names a tradable instrument, so it
-    is item-scoped, while `00` is account-scoped, which is semantic, not
-    lexical, and out of reach for this ranker.
-  - `realtime-0H-en` ("stream the expected opening match price for 005930
-    before the market fixes") is not a missing word; it is the name tie-break's
-    own blind spot. Totals: `base:0H` 860 (gold), `base:ka10173` 749,
-    `base:00` 748 — `860 / 749 = 1.148`, just under the 1.15 distinguishability
-    ratio, so all three enter the tie-break together. The tie-break then picks
-    by `title_score` alone, and `ka10173` 조건검색's title happens to score
-    337 there (its literal tokens match the fragments 시간/실시간) against
-    `0H`'s 112 — 0H's 860 is earned mostly through `realtime_field`/`domain`
-    corroboration, not its title. The tie-break exists to prefer the
-    *correctly-named* family among near-ties; it assumes that family also has
-    the best title match, which fails here, so it hands the question to an
-    unrelated, higher-scoring-by-title family instead of the actual leader.
-    Closing this needs either a wider name-tiebreak (fall back to total score
-    when the leader-by-total isn't the leader-by-title) or pulling `0H` far
-    enough past the 1.15 ratio that it never enters the tie-break at all — not
-    another lexicon entry. The eval floor is deliberately measured, not
-    inspected, so a fix here should be verified by re-running the suite rather
-    than assumed.
+- `realtime` retrieval is 12/12 top-1 and 12/12 recall@5. Autonomous realtime
+  resolve is also 12/12, measured separately by `test_realtime_resolve_is_exact`.
+  Typed subject/entity eligibility closes the former `realtime-0B-ko` miss by
+  separating an instrument-scoped stock fill from the account-scoped order-fill
+  stream before lexical ranking.
 
-Both floors — retrieval's realtime top-1 at 0.75 and resolve's realtime
-accuracy at 10/12 — are pinned at their currently measured values rather than a
-round number, so either regressing is a release-blocking test failure and
-either improving requires deliberately raising the floor, not just landing a
-change that happens to clear the old one.
+Those 117/117 and 73/73 figures belong to an earlier autonomous evaluation report and
+are superseded; they must not be combined with the current strata. The last-known
+artifact-bound strata are listed in the routing-authority table above. Historical ablation findings
+remain useful for diagnosis, but display descriptions, family projections, aliases,
+bigrams, coverage, and score thresholds are not execution authority.
+
+`scripts/evaluate_selector_ablations.py --check` validates the current release
+report at `plan/selector-g003-autonomous-2026-08-20.json`. The original
+`plan/selector-ablation-baseline-2026-08-20.json` is an immutable historical G001
+measurement and is read or compared only when passed explicitly with `--output`;
+the default check never rewrites or treats it as current.
 
 ### Regression invariants
 
@@ -1076,9 +1191,11 @@ update:
   and describable but are not callable;
 - a searchable query surface of exactly 171 documents, one per TR family, with
   no projection among them;
-- every one of the 115 projections advertised by `describe` on its base, and
-  reachable only by naming its `group_id`;
-- exactly 35 explicit discovery-only identities;
+- every one of the 115 projections advertised by `describe` on its base; one may
+  be auto-selected only when typed compatibility plus authoritative canonical
+  evidence uniquely supports it, otherwise it is reachable by naming its
+  `group_id` and omission returns `DETAIL_GROUP_REQUIRED`;
+- exactly 35 explicit guarded order/WebSocket identities;
 - no U.S.-only identity in search, describe, resolve, call, or manifest;
 - no plan for ambiguity, invalid arguments, or a hidden OAuth identity; a plan
   for a named order or websocket operation is expected and, on `call`, is
@@ -1091,8 +1208,8 @@ update:
   `PLAN_ALREADY_USED` regardless of whether the first attempt succeeded,
   failed upstream, or is still in flight, for query, order, and websocket
   plans alike;
-- base/detail selection rules and published score thresholds, including the
-  ambiguity-margin name tie-break and the realtime corroboration cap;
+- base/detail selection rules, family-first compatibility, active-axis Pareto
+  dominance, reviewed equivalence collapse, and fail-closed target evidence;
 - catalog version changes whenever identities, searchable metadata, lexicon, or
   request/response schemas change;
 - every successful detail call performs one base TR call and returns only its
