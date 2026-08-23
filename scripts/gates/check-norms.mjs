@@ -91,6 +91,53 @@ for (const spec of CHECKS) {
 }
 
 /**
+ * GLOSSARY §1이 **정준 정의 절**이다 — 새 정의가 문서 어딘가에 있는 것으로는 부족하다.
+ *
+ * 이 검사도 실제 결함에서 나왔다: 1차 개정 때 셸 창·알림 오브 창 정의를 §5(판정·프로세스)에
+ * 얹고 §1(창·표면 ★)은 손대지 않았다. 그래서 §1만 읽으면 옛 2창 모델이 여전히 유일한
+ * 정의로 보였다. 원 계획서가 "깨지는 것"으로 명시 지목한 지점이 바로 §1인데도 그랬다.
+ * 단어 존재 검사는 이걸 통과시킨다 — 절을 잘라서 그 안을 봐야 한다.
+ *
+ * 정의 중복도 막는다. 용어집에 같은 용어가 두 곳에 정의돼 있으면 어느 쪽이 표준인지
+ * 알 수 없고, 한쪽만 갱신되는 드리프트가 시작된다.
+ */
+{
+  let text;
+  try {
+    text = readFileSync(join(ROOT, "GLOSSARY.md"), "utf8");
+  } catch {
+    text = null;
+  }
+  if (text) {
+    const m = /^##\s*1\.\s*창[^\n]*$([\s\S]*?)(?=^##\s)/m.exec(text);
+    if (!m) {
+      failures.push("GLOSSARY.md: §1(창·표면) 절을 찾지 못했다");
+    } else {
+      const section1 = m[1];
+      for (const term of ["셸 창", "알림 오브 창"]) {
+        if (!section1.includes(term)) {
+          failures.push(
+            `GLOSSARY.md §1: "${term}" 정의가 없다 — §1이 정준 정의 절이다. ` +
+              `다른 절에만 적으면 §1만 읽는 사람에게는 옛 정의가 유일해 보인다`
+          );
+        }
+      }
+      // 정의 중복 금지: 표 행(`| **용어** |`) 형태가 §1 밖에도 있으면 드리프트 시작점이다.
+      for (const term of ["셸 창", "알림 오브 창"]) {
+        const rowRe = new RegExp(`^\\|\\s*\\*\\*${term}\\*\\*\\s*\\|`, "gm");
+        const all = [...text.matchAll(rowRe)].length;
+        const inS1 = [...section1.matchAll(rowRe)].length;
+        if (all > inS1) {
+          failures.push(
+            `GLOSSARY.md: "${term}" 정의 행이 §1 밖에도 ${all - inS1}건 있다 — 중복 정의는 드리프트를 부른다`
+          );
+        }
+      }
+    }
+  }
+}
+
+/**
  * 개정문이 가리키는 문서가 실제로 존재하는지 본다.
  *
  * 이 검사는 실제 결함에서 나왔다: 개정 직후 CLAUDE.md가 아직 만들지 않은
