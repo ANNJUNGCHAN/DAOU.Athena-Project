@@ -1,31 +1,31 @@
 {
-  "startedAt": "2026-08-22T09:53:22.378Z",
+  "startedAt": "2026-08-23T15:36:12.790Z",
   "layout": {
     "scale": 1,
     "screen": {
       "sw": 1920,
       "sh": 1152
     },
-    "canvasW": 1560,
-    "canvasH": 800,
-    "chatW": 900,
-    "chatBaseH": 248,
-    "chatMaxH": 788,
-    "originX": 180,
-    "originY": 52,
-    "chatOriginX": 510
+    "canvasW": 1120,
+    "canvasH": 580,
+    "chatW": 640,
+    "chatBaseH": 176,
+    "chatMaxH": 560,
+    "originX": 400,
+    "originY": 198,
+    "chatOriginX": 640
   },
   "bootChatOnly": {
     "canvasVisibleAtBoot": false,
     "chatVisibleAtBoot": true,
     "shots": {
       "boot": {
-        "width": 1353,
-        "height": 377
+        "width": 960,
+        "height": 264
       },
       "idle": {
-        "width": 1355,
-        "height": 399
+        "width": 960,
+        "height": 288
       }
     },
     "chatBootedAfterBoot": true,
@@ -50,7 +50,7 @@
   "restReceiptPaint": {
     "repeats": [
       {
-        "elapsedMs": 48,
+        "elapsedMs": 37,
         "verifiedVisible": true,
         "appVisible": true,
         "onboardingHidden": true,
@@ -58,7 +58,7 @@
         "nonzero": true
       },
       {
-        "elapsedMs": 53,
+        "elapsedMs": 49,
         "verifiedVisible": true,
         "appVisible": true,
         "onboardingHidden": true,
@@ -66,7 +66,7 @@
         "nonzero": true
       },
       {
-        "elapsedMs": 53,
+        "elapsedMs": 50,
         "verifiedVisible": true,
         "appVisible": true,
         "onboardingHidden": true,
@@ -74,7 +74,7 @@
         "nonzero": true
       },
       {
-        "elapsedMs": 53,
+        "elapsedMs": 49,
         "verifiedVisible": true,
         "appVisible": true,
         "onboardingHidden": true,
@@ -82,7 +82,7 @@
         "nonzero": true
       },
       {
-        "elapsedMs": 53,
+        "elapsedMs": 50,
         "verifiedVisible": true,
         "appVisible": true,
         "onboardingHidden": true,
@@ -90,7 +90,7 @@
         "nonzero": true
       },
       {
-        "elapsedMs": 54,
+        "elapsedMs": 51,
         "verifiedVisible": true,
         "appVisible": true,
         "onboardingHidden": true,
@@ -100,32 +100,32 @@
     ]
   },
   "delayedRestFeedback": {
-    "elapsedMs": 2748.1077999999998,
-    "totalRunMs": 3013,
+    "elapsedMs": 2772.9099,
+    "totalRunMs": 3015,
     "feedbackOk": true,
     "receiptPainted": true,
     "renderedCount": 0
   },
   "dotScreenPoint": {
-    "x": 540.6666679382324,
-    "y": 1076.6666870117188
+    "x": 662.6666679382324,
+    "y": 936.3333435058594
   },
   "osCaptureAttempted": {
     "ok": true
   },
   "expand": {
-    "frameCount": 30,
-    "p50": 18,
-    "p95": 35.399999999999636,
-    "max": 35.899999999999636,
-    "min": 17.100000000000364
+    "frameCount": 32,
+    "p50": 16.699999999999818,
+    "p95": 33.30000000000018,
+    "max": 33.399999999999636,
+    "min": 8.299999999999272
   },
   "collapse": {
-    "frameCount": 32,
-    "p50": 18,
-    "p95": 18.399999999999636,
-    "max": 28.899999999999636,
-    "min": 17.100000000000364
+    "frameCount": 35,
+    "p50": 16.69999999999891,
+    "p95": 16.799999999999272,
+    "max": 16.799999999999272,
+    "min": 16.5
   },
   "afterCollapse": {
     "canvasVisible": false
@@ -133,44 +133,44 @@
   "independence": {
     "initial": {
       "canvas": {
-        "x": 180,
-        "y": 52,
-        "width": 1563,
-        "height": 803
+        "x": 400,
+        "y": 198,
+        "width": 1120,
+        "height": 580
       },
       "chat": {
-        "x": 510,
-        "y": 732,
-        "width": 911,
-        "height": 373
+        "x": 640,
+        "y": 628,
+        "width": 640,
+        "height": 332
       }
     },
     "afterCanvasMove": {
       "canvas": {
-        "x": 260,
-        "y": 52,
-        "width": 1564,
-        "height": 803
+        "x": 480,
+        "y": 198,
+        "width": 1120,
+        "height": 580
       },
       "chat": {
-        "x": 510,
-        "y": 732,
-        "width": 911,
-        "height": 373
+        "x": 640,
+        "y": 628,
+        "width": 640,
+        "height": 332
       }
     },
     "afterChatResize": {
       "canvas": {
-        "x": 260,
-        "y": 52,
-        "width": 1564,
-        "height": 803
+        "x": 480,
+        "y": 198,
+        "width": 1120,
+        "height": 580
       },
       "chat": {
-        "x": 510,
-        "y": 732,
-        "width": 912,
-        "height": 473
+        "x": 640,
+        "y": 628,
+        "width": 640,
+        "height": 432
       }
     },
     "canvasMovedButChatUnchanged": true,
@@ -187,34 +187,34 @@
   "e2eTrigger": {
     "reachedDoneState": true,
     "boundsBeforeQuery": {
-      "x": 510,
-      "y": 852,
-      "width": 901,
-      "height": 249
+      "x": 640,
+      "y": 778,
+      "width": 640,
+      "height": 176
     },
     "boundsAfterQuery": {
-      "x": 510,
-      "y": 809,
-      "width": 904,
-      "height": 294
+      "x": 640,
+      "y": 733,
+      "width": 640,
+      "height": 224
     },
     "grewTallerThanBase": true,
-    "grownByPx": 45,
+    "grownByPx": 48,
     "finalAnswerText": "캔버스 창에 스트림, 리더, 공통 테이블을 띄웠습니다.",
     "cardChipCount": 3
   },
   "manualResize": {
     "beforeDrag": {
-      "x": 510,
-      "y": 809,
-      "width": 904,
-      "height": 294
+      "x": 640,
+      "y": 733,
+      "width": 640,
+      "height": 224
     },
     "afterDrag": {
-      "x": 510,
-      "y": 649,
-      "width": 905,
-      "height": 455
+      "x": 640,
+      "y": 573,
+      "width": 640,
+      "height": 385
     },
     "grewByDrag": true,
     "bottomEdgePinned": true
@@ -326,8 +326,8 @@
         "full"
       ],
       "count": 3,
-      "scrollHeight": 856,
-      "clientHeight": 403
+      "scrollHeight": 836,
+      "clientHeight": 290
     }
   },
   "dragStandard": {
@@ -345,22 +345,22 @@
     "canvasStripRegion": "drag",
     "pairFollow": {
       "cvBefore": {
-        "x": 180,
-        "y": 52,
-        "width": 1566,
-        "height": 803
+        "x": 400,
+        "y": 198,
+        "width": 1120,
+        "height": 580
       },
       "cvAfter": {
-        "x": 240,
-        "y": 92,
-        "width": 1567,
-        "height": 803
+        "x": 460,
+        "y": 238,
+        "width": 1120,
+        "height": 580
       },
       "cvRestored": {
-        "x": 180,
-        "y": 52,
-        "width": 1568,
-        "height": 803
+        "x": 400,
+        "y": 198,
+        "width": 1120,
+        "height": 580
       },
       "pairFollowed": true,
       "pairReturned": true
@@ -414,70 +414,70 @@
   "windowPlacement": {
     "beforePlacement": {
       "canvas": {
-        "x": 180,
-        "y": 52,
-        "width": 1561,
-        "height": 801
+        "x": 400,
+        "y": 198,
+        "width": 1120,
+        "height": 580
       },
       "chat": {
-        "x": 510,
-        "y": 852,
-        "width": 901,
-        "height": 249
+        "x": 640,
+        "y": 778,
+        "width": 640,
+        "height": 176
       }
     },
     "afterLeft": {
       "canvas": {
-        "x": -300,
-        "y": 52,
-        "width": 1562,
-        "height": 801
+        "x": -80,
+        "y": 198,
+        "width": 1120,
+        "height": 580
       },
       "chat": {
-        "x": 30,
-        "y": 852,
-        "width": 901,
-        "height": 249
+        "x": 160,
+        "y": 778,
+        "width": 640,
+        "height": 176
       }
     },
     "afterRight": {
       "canvas": {
-        "x": 660,
-        "y": 52,
-        "width": 1561,
-        "height": 801
+        "x": 880,
+        "y": 198,
+        "width": 1120,
+        "height": 580
       },
       "chat": {
-        "x": 990,
-        "y": 852,
-        "width": 901,
-        "height": 249
+        "x": 1120,
+        "y": 778,
+        "width": 640,
+        "height": 176
       }
     },
     "afterMaximize": {
-      "x": 990,
-      "y": 313,
-      "width": 902,
-      "height": 789
+      "x": 1120,
+      "y": 394,
+      "width": 640,
+      "height": 560
     },
     "afterRestore": {
-      "x": 990,
-      "y": 854,
-      "width": 903,
-      "height": 249
+      "x": 1120,
+      "y": 778,
+      "width": 640,
+      "height": 176
     },
     "afterCenter": {
       "canvas": {
-        "x": 180,
-        "y": 52,
-        "width": 1561,
-        "height": 801
+        "x": 400,
+        "y": 198,
+        "width": 1120,
+        "height": 580
       },
       "chat": {
-        "x": 510,
-        "y": 853,
-        "width": 902,
-        "height": 249
+        "x": 640,
+        "y": 778,
+        "width": 640,
+        "height": 176
       }
     },
     "pairMovedTogetherOnLeft": true,
@@ -570,20 +570,20 @@
   },
   "glassLadder": {
     "chatTokens": {
-      "window": 0.3,
-      "card": 0.45,
-      "canvas": 0.5,
-      "windowMax": 0.55
+      "window": 0.86,
+      "card": 0.9,
+      "canvas": 0.92,
+      "windowMax": 0.95
     },
     "canvasTokens": {
-      "window": 0.3,
-      "card": 0.45,
-      "canvas": 0.5,
-      "windowMax": 0.55
+      "window": 0.86,
+      "card": 0.9,
+      "canvas": 0.92,
+      "windowMax": 0.95
     },
-    "mosaicAlpha": 0.5,
-    "cardAlpha": 0.45,
-    "chatAppAlpha": 0.3,
+    "mosaicAlpha": 0.92,
+    "cardAlpha": 0.9,
+    "chatAppAlpha": 0.86,
     "tokensMatchAcrossWindows": true,
     "ladderOrdered": true,
     "mosaicMatchesToken": true,
@@ -592,7 +592,7 @@
   },
   "agentTurn": {
     "present": true,
-    "badge": "18:47 발화",
+    "badge": "00:30 발화",
     "mode": "실시간 (WS)",
     "source": "루틴 '검증 루틴' · 에이전트 발화 — 묻지 않은 턴입니다",
     "body": "005930 조건 도달 — 관측값 5.3 (임계 5). 값은 발화 시점 기준입니다 — 최신 확인은 다시 물어봐 주세요.",
@@ -1021,5 +1021,5 @@
       }
     }
   },
-  "finishedAt": "2026-08-22T09:54:09.422Z"
+  "finishedAt": "2026-08-23T15:36:56.476Z"
 }

@@ -1,9 +1,12 @@
 # Athena 진행 상황 및 재개 계획
 
-> 최종 갱신: 2026-08-20 (공통화면 템플릿 실행계획 P0~P5 완료 — TR→카드 결정론 결선.
+> 최종 갱신: 2026-08-24 (증거 정리 + fit-dissonance 게이트 회귀 1건 수정.
+> canvas-100 벤치마크의 **최종 초록 실행분이 미커밋**이라 저장소가 아는 마지막
+> 상태가 red-run9(fail)였던 것을 바로잡았다. §1 첫 블록이 이번 실측) · 브랜치 `main`
+>
+> 그 이전 갱신: 2026-08-20 (공통화면 템플릿 실행계획 P0~P5 완료 — TR→카드 결정론 결선.
 > `presentation.layout`/`presentation.controls.default_period`를 런타임 조회
-> authority로 승격해, plan_token 경로에서 모델의 canvas_type 판단을 제거했다.
-> §1 첫 블록이 이번 실측) · 브랜치 `main`
+> authority로 승격해, plan_token 경로에서 모델의 canvas_type 판단을 제거했다)
 >
 > 아래는 그 이전 상태다 — **`디자인` 브랜치 병합 완료.** 두 갈래가 합류했다:
 > ① 전 구간 지연 최적화(합의 계획 `.omc/plans/plan-latency-optimization.md`) — 진단 보고서는
@@ -26,14 +29,65 @@
 
 ## 1. 실측 상태
 
-> **현행 수치는 바로 아래 첫 블록(2026-08-19)이다.** 이후 블록들은 날짜가 박힌
+> **현행 수치는 바로 아래 첫 블록(2026-08-24)이다.** 이후 블록들은 날짜가 박힌
 > 스냅샷이고 어떻게 여기까지 왔는지를 남기려고 보존한다 — **인용하지 마라.**
+
+**2026-08-24 (증거 정리) · fit-dissonance 게이트 회귀 수정 후 전 스위트 재실측 — 이 수치가 현행이다:**
+
+```
+backend: 1561 passed, 0 failed, 5 skipped (xdist --dist loadgroup -n auto, 282.05초) ·
+         ruff clean · generate_api.py --check → current
+app:     npm test → 321 passed, 0 failed (3.09초) ·
+         npm run verify → 검증 1~20 전 단언 통과 · exit 0 (캡처 20장 인접 동일 0건)
+```
+
+**회귀 1건 — 디자인 커밋이 게이트를 빨간 채로 통과시켰다:**
+
+```
+증상:   scripts/fit_dissonance_check.py --stamp test 가 exit 1
+        ("screen renderer evidence is stale") → test_fit_dissonance_check.py 3건 실패
+원인:   8eb152e(2026-08-22, 라이트 리퀴드 글래스)가 app/canvas.css·app/canvas.js를
+        바꾸면서 backend/ref/kiwoom-screen-render-evidence.json을 재생성하지 않았다.
+        그 증거 파일의 마지막 갱신은 **그보다 이전** 커밋 b8c1093("전 게이트 초록").
+        drift는 source_hashes의 두 항목뿐(canvas.css·canvas.js).
+수정:   게이트가 지시하는 복구 절차 그대로 — npm run verify → capture_screen_render_
+        evidence.py. 게이트 재실행 exit 0(screen_renderer_evidence=pass,
+        paper_cases=13/13, zero_tolerance_violations=0), 3건 전부 통과.
+교훈:   app/canvas.{css,js}를 건드리면 이 증거가 같이 갱신돼야 한다. 커밋 전
+        backend 스위트를 돌렸다면 잡혔다 — CLAUDE.md §9가 이미 요구하는 절차다.
+```
+
+**canvas-100 벤치마크 — 최종 실행분을 이제야 고정했다 (2026-08-21 02:23 생성분):**
+
+```
+status: pass · corpus backend/tests/fixtures/kiwoom_rest_canvas_100.jsonl (100건)
+게이트 4종 전부 통과:
+  functional               100/100
+  first_visible_feedback   p50 205ms · p95 1234ms · max 1585ms (상한 3000)
+  first_verified_data_canvas  분모 89 · 누락 0 · p50 206ms · p95 909ms · max 1247ms
+                           (렌더 없는 11건은 지연 집계에서만 제외)
+  aits_chart_panels(신규)  renderer_id=aits-chart-v1 · 오퍼레이션 19/19 ·
+                           패널 요청 49 · ack 49 · 누락 0 · 재시도 0 · 지각 0 ·
+                           p50 747ms · p95 1031ms · max 1811ms
+경위:   red-run1(1/100) → run2(31) → run3(63) → run4(83) → run5(83) → run6(97) →
+        run7(98) → **green-run8(100/100)** → red-run9(99/100, max 3056>3000) →
+        최종(pass, aits_chart_panels 게이트 추가 + p95 2385→1234ms)
+        저장소에는 run8·run9만 있었다 — 최신이 빨강으로 보이던 원인.
+```
+
+**증거 용량 규약 신설:** 셀렉터 ablation 원본은 파일당 77~136MB(5건 합 507MB)다.
+부피의 99%가 `variants[].cases[].compatibility_trace` 한 키이므로 그것만 떼어낸
+`.summary.json`(합 9.3MB, 1.8%)을 커밋하고 원본은 `.gitignore`로 로컬 보관한다.
+케이스 117·변형 10은 전량 보존 — **표본을 깎으면 요약이 아니라 다른 증거가 된다.**
+추출기는 `backend/scripts/summarize_selector_evidence.py`이고 `_summary_provenance`에
+원본 sha256을 적어 낡음을 감지한다. `plan/*.progress.jsonl`도 제외했다 — 러너의
+라이브 진행 미러이고 완주하면 `.jsonl`과 바이트 동일하다(`cmp` 실측 3쌍).
 
 > **갈래 주의**: 2026-08-19 `디자인` 브랜치가 `main`에 병합됐다. 아래 스냅샷의 차수
 > 번호는 **갈래별로 독립**이다 — `main` 갈래(4차 키움·5차 지연)와 `디자인` 갈래
 > (4차 리사이즈~7차 휘도)가 같은 날짜에 병렬로 진행됐다. 병합 직후 재실측이 맨 위다.
 
-**2026-08-20 (공통화면 템플릿 P0~P5) · TR→카드 결정론 결선 완료 후 재실측 — 이 수치가 현행이다:**
+**2026-08-20 (공통화면 템플릿 P0~P5) · TR→카드 결정론 결선 완료 후 재실측:**
 
 ```
 backend: 940 passed, 0 failed (xdist --dist loadgroup -n auto, 52.86초 — 1회 중
