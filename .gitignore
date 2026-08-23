@@ -23,3 +23,15 @@ __pycache__/
 .claude/settings.local.json
 .unlazy/
 .unlazy-hook-state.json
+
+# 셀렉터 ablation 원본 증거 — 파일당 77~136MB(부피의 99%가 compatibility_trace).
+# 로컬 보관하고 저장소에는 요약본(.summary.json)만 남긴다.
+# 재생성: backend/scripts/summarize_selector_evidence.py
+plan/selector-g0*.json
+!plan/selector-g0*.summary.json
+
+# playwright MCP 실행 찌꺼기
+.playwright-mcp/
+
+# 벤치마크 러너의 라이브 진행 미러 — 완주하면 .jsonl 트레이스와 바이트 동일(실측 2026-08-23)
+plan/*.progress.jsonl
