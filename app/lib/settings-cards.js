@@ -405,12 +405,16 @@ async function refreshScreenCard(card, head, body) {
   }
   body.appendChild(row('uk-toggle-row', [fontLabelCol, fontChipRow]));
 
-  // ---- 유리 투명도 3단 (2026-08-22 사용자 지시 — 애플 Liquid Glass 레퍼런스가
-  // 투명도를 사용자 슬라이더로 준다). 값은 lib/main/prefs.js GLASS_LEVELS와 1:1이고
-  // tokens.css의 --glass-* 사다리를 통째로 바꾼다. 글자 크기와 완전히 같은 문법.
+  // ---- 유리 투명도 5단 (2026-08-22 사용자 지시 — 애플 Liquid Glass 레퍼런스가
+  // 투명도를 사용자 슬라이더로 준다 — 2026-08-24 리프 1.1.2에서 Paper 보드 07이
+  // sheer·solid 2단을 더해 5단으로 늘렸다). 값은 lib/main/prefs.js GLASS_LEVELS와
+  // 1:1이고 tokens.css의 --glass-* 사다리를 통째로 바꾼다. 글자 크기와 완전히 같은
+  // 문법 — .uk-chip-row가 flex-wrap이라 칩 5개도 FONT_SIZE_CHIPS와 동일하게 줄바꿈된다.
   const GLASS_CHIPS = [
     { value: 'clear', label: '가장 투명' },
+    { value: 'sheer', label: '투명' },
     { value: 'default', label: '중간' },
+    { value: 'solid', label: '불투명' },
     { value: 'opaque', label: '가장 불투명' },
   ];
   const glassLabelCol = el('div');
