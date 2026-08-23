@@ -1,0 +1,206 @@
+2026-08-21T02:22:40.765Z backend-spawn pid=1080 port=62613
+2026-08-21T02:22:44.601Z backend-healthy
+2026-08-21T02:22:44.602Z electron-ready
+2026-08-21T02:22:44.624Z main-required
+2026-08-21T02:22:45.560Z windows-created
+2026-08-21T02:22:45.561Z case-start rest-001-facts-1
+2026-08-21T02:22:46.287Z case-done rest-001-facts-1 feedback=689.5546999999997
+2026-08-21T02:22:46.288Z case-start rest-002-facts-2
+2026-08-21T02:22:46.518Z case-done rest-002-facts-2 feedback=198.52719999999954
+2026-08-21T02:22:46.519Z case-start rest-003-facts-3
+2026-08-21T02:22:46.750Z case-done rest-003-facts-3 feedback=205.77729999999974
+2026-08-21T02:22:46.750Z case-start rest-004-facts-4
+2026-08-21T02:22:46.964Z case-done rest-004-facts-4 feedback=178.0063
+2026-08-21T02:22:46.966Z case-start rest-005-facts-5
+2026-08-21T02:22:47.177Z case-done rest-005-facts-5 feedback=180.02440000000024
+2026-08-21T02:22:47.178Z case-start rest-006-facts-6
+2026-08-21T02:22:47.374Z case-done rest-006-facts-6 feedback=165.8755999999994
+2026-08-21T02:22:47.375Z case-start rest-007-facts-7
+2026-08-21T02:22:47.585Z case-done rest-007-facts-7 feedback=179.84960000000046
+2026-08-21T02:22:47.586Z case-start rest-008-facts-8
+2026-08-21T02:22:47.789Z case-done rest-008-facts-8 feedback=173.45029999999952
+2026-08-21T02:22:47.790Z case-start rest-009-facts-9
+2026-08-21T02:22:48.015Z case-done rest-009-facts-9 feedback=203.0557000000008
+2026-08-21T02:22:48.016Z case-start rest-010-facts-10
+2026-08-21T02:22:48.211Z case-done rest-010-facts-10 feedback=173.33590000000004
+2026-08-21T02:22:48.212Z case-start rest-011-table-1
+2026-08-21T02:22:48.439Z case-done rest-011-table-1 feedback=190.20359999999982
+2026-08-21T02:22:48.440Z case-start rest-012-table-2
+2026-08-21T02:22:48.666Z case-done rest-012-table-2 feedback=189.16730000000007
+2026-08-21T02:22:48.667Z case-start rest-013-table-3
+2026-08-21T02:22:48.876Z case-done rest-013-table-3 feedback=188.33050000000003
+2026-08-21T02:22:48.877Z case-start rest-014-table-4
+2026-08-21T02:22:49.092Z case-done rest-014-table-4 feedback=177.8678
+2026-08-21T02:22:49.093Z case-start rest-015-table-5
+2026-08-21T02:22:49.313Z case-done rest-015-table-5 feedback=188.23099999999977
+2026-08-21T02:22:49.314Z case-start rest-016-table-6
+2026-08-21T02:22:49.525Z case-done rest-016-table-6 feedback=189.27559999999903
+2026-08-21T02:22:49.526Z case-start rest-017-table-7
+2026-08-21T02:22:49.768Z case-done rest-017-table-7 feedback=205.35289999999986
+2026-08-21T02:22:49.768Z case-start rest-018-table-8
+2026-08-21T02:22:49.965Z case-done rest-018-table-8 feedback=161.08289999999943
+2026-08-21T02:22:49.966Z case-start rest-019-table-9
+2026-08-21T02:22:50.189Z case-done rest-019-table-9 feedback=201.49029999999948
+2026-08-21T02:22:50.189Z case-start rest-020-table-10
+2026-08-21T02:22:50.385Z case-done rest-020-table-10 feedback=158.41289999999935
+2026-08-21T02:22:50.386Z case-start rest-021-compound-1
+2026-08-21T02:22:50.596Z case-done rest-021-compound-1 feedback=187.77560000000085
+2026-08-21T02:22:50.596Z case-start rest-022-compound-2
+2026-08-21T02:22:50.792Z case-done rest-022-compound-2 feedback=173.30249999999978
+2026-08-21T02:22:50.793Z case-start rest-023-compound-3
+2026-08-21T02:22:51.004Z case-done rest-023-compound-3 feedback=174.39409999999953
+2026-08-21T02:22:51.005Z case-start rest-024-compound-4
+2026-08-21T02:22:51.231Z case-done rest-024-compound-4 feedback=189.53100000000086
+2026-08-21T02:22:51.232Z case-start rest-025-compound-5
+2026-08-21T02:22:51.456Z case-done rest-025-compound-5 feedback=188.5697999999993
+2026-08-21T02:22:51.457Z case-start rest-026-compound-6
+2026-08-21T02:22:51.667Z case-done rest-026-compound-6 feedback=189.20080000000053
+2026-08-21T02:22:51.668Z case-start rest-027-compound-7
+2026-08-21T02:22:51.908Z case-done rest-027-compound-7 feedback=203.32700000000114
+2026-08-21T02:22:51.908Z case-start rest-028-compound-8
+2026-08-21T02:22:52.134Z case-done rest-028-compound-8 feedback=188.8762000000006
+2026-08-21T02:22:52.135Z case-start rest-029-chart-1
+2026-08-21T02:22:52.439Z case-done rest-029-chart-1 feedback=281.1916000000001
+2026-08-21T02:22:52.440Z case-start rest-030-chart-2
+2026-08-21T02:22:52.683Z case-done rest-030-chart-2 feedback=208.08159999999953
+2026-08-21T02:22:52.684Z case-start rest-031-chart-3
+2026-08-21T02:22:52.922Z case-done rest-031-chart-3 feedback=205.5580000000009
+2026-08-21T02:22:52.923Z case-start rest-032-chart-4
+2026-08-21T02:22:53.151Z case-done rest-032-chart-4 feedback=192.32989999999882
+2026-08-21T02:22:53.152Z case-start rest-033-chart-5
+2026-08-21T02:22:53.387Z case-done rest-033-chart-5 feedback=200.85429999999906
+2026-08-21T02:22:53.388Z case-start rest-034-chart-6
+2026-08-21T02:22:53.604Z case-done rest-034-chart-6 feedback=190.71360000000095
+2026-08-21T02:22:53.605Z case-start rest-035-chart-7
+2026-08-21T02:22:53.816Z case-done rest-035-chart-7 feedback=175.5038999999997
+2026-08-21T02:22:53.817Z case-start rest-036-chart-8
+2026-08-21T02:22:54.042Z case-done rest-036-chart-8 feedback=190.63770000000113
+2026-08-21T02:22:54.043Z case-start rest-037-chart-9
+2026-08-21T02:22:54.269Z case-done rest-037-chart-9 feedback=192.26080000000002
+2026-08-21T02:22:54.270Z case-start rest-038-chart-10
+2026-08-21T02:22:54.497Z case-done rest-038-chart-10 feedback=190.3842999999997
+2026-08-21T02:22:54.497Z case-start rest-039-chart-11
+2026-08-21T02:22:54.793Z case-done rest-039-chart-11 feedback=205.75900000000001
+2026-08-21T02:22:54.793Z case-start rest-040-chart-12
+2026-08-21T02:22:55.009Z case-done rest-040-chart-12 feedback=189.4260000000013
+2026-08-21T02:22:55.009Z case-start rest-041-fanout-2-1
+2026-08-21T02:22:55.672Z case-done rest-041-fanout-2-1 feedback=249.05439999999908
+2026-08-21T02:22:55.673Z case-start rest-042-fanout-2-2
+2026-08-21T02:22:56.352Z case-done rest-042-fanout-2-2 feedback=250.57030000000123
+2026-08-21T02:22:56.352Z case-start rest-043-fanout-2-3
+2026-08-21T02:22:57.377Z case-done rest-043-fanout-2-3 feedback=249.45939999999973
+2026-08-21T02:22:57.377Z case-start rest-044-fanout-2-4
+2026-08-21T02:22:58.033Z case-done rest-044-fanout-2-4 feedback=236.78620000000228
+2026-08-21T02:22:58.034Z case-start rest-045-fanout-3-5
+2026-08-21T02:22:59.090Z case-done rest-045-fanout-3-5 feedback=249.90799999999945
+2026-08-21T02:22:59.091Z case-start rest-046-fanout-3-6
+2026-08-21T02:22:59.903Z case-done rest-046-fanout-3-6 feedback=262.9937000000027
+2026-08-21T02:22:59.904Z case-start rest-047-fanout-3-7
+2026-08-21T02:23:00.725Z case-done rest-047-fanout-3-7 feedback=248.93089999999938
+2026-08-21T02:23:00.726Z case-start rest-048-fanout-3-8
+2026-08-21T02:23:01.533Z case-done rest-048-fanout-3-8 feedback=250.87880000000223
+2026-08-21T02:23:01.533Z case-start rest-049-fanout-4-9
+2026-08-21T02:23:02.485Z case-done rest-049-fanout-4-9 feedback=235.0589
+2026-08-21T02:23:02.486Z case-start rest-050-fanout-4-10
+2026-08-21T02:23:03.421Z case-done rest-050-fanout-4-10 feedback=233.98110000000088
+2026-08-21T02:23:03.421Z case-start rest-051-fanout-4-11
+2026-08-21T02:23:04.380Z case-done rest-051-fanout-4-11 feedback=249.7512999999999
+2026-08-21T02:23:04.381Z case-start rest-052-fanout-4-12
+2026-08-21T02:23:05.331Z case-done rest-052-fanout-4-12 feedback=234.11130000000048
+2026-08-21T02:23:05.331Z case-start rest-053-fanout-5-13
+2026-08-21T02:23:06.824Z case-done rest-053-fanout-5-13 feedback=250.22400000000198
+2026-08-21T02:23:06.824Z case-start rest-054-fanout-5-14
+2026-08-21T02:23:08.278Z case-done rest-054-fanout-5-14 feedback=248.44820000000254
+2026-08-21T02:23:08.280Z case-start rest-055-fanout-5-15
+2026-08-21T02:23:09.814Z case-done rest-055-fanout-5-15 feedback=269.53180000000066
+2026-08-21T02:23:09.815Z case-start rest-056-fanout-5-16
+2026-08-21T02:23:11.298Z case-done rest-056-fanout-5-16 feedback=234.4546999999984
+2026-08-21T02:23:11.299Z case-start rest-057-fanout-6-17
+2026-08-21T02:23:13.325Z case-done rest-057-fanout-6-17 feedback=263.66240000000107
+2026-08-21T02:23:13.326Z case-start rest-058-fanout-6-18
+2026-08-21T02:23:15.091Z case-done rest-058-fanout-6-18 feedback=248.49799999999595
+2026-08-21T02:23:15.091Z case-start rest-059-fanout-6-19
+2026-08-21T02:23:16.954Z case-done rest-059-fanout-6-19 feedback=249.22520000000077
+2026-08-21T02:23:16.954Z case-start rest-060-fanout-6-20
+2026-08-21T02:23:17.816Z case-done rest-060-fanout-6-20 feedback=176.19670000000042
+2026-08-21T02:23:17.817Z case-start rest-061-single-flight-1
+2026-08-21T02:23:18.399Z case-done rest-061-single-flight-1 feedback=506.5708999999988
+2026-08-21T02:23:18.400Z case-start rest-062-single-flight-2
+2026-08-21T02:23:19.248Z case-done rest-062-single-flight-2 feedback=765.4431999999942
+2026-08-21T02:23:19.249Z case-start rest-063-single-flight-3
+2026-08-21T02:23:20.068Z case-done rest-063-single-flight-3 feedback=574.751400000001
+2026-08-21T02:23:20.069Z case-start rest-064-single-flight-4
+2026-08-21T02:23:20.969Z case-done rest-064-single-flight-4 feedback=602.6247999999978
+2026-08-21T02:23:20.970Z case-start rest-065-single-flight-5
+2026-08-21T02:23:21.837Z case-done rest-065-single-flight-5 feedback=660.4150000000009
+2026-08-21T02:23:21.838Z case-start rest-066-single-flight-6
+2026-08-21T02:23:22.601Z case-done rest-066-single-flight-6 feedback=687.7830999999933
+2026-08-21T02:23:22.602Z case-start rest-067-single-flight-7
+2026-08-21T02:23:23.433Z case-done rest-067-single-flight-7 feedback=750.3187000000034
+2026-08-21T02:23:23.434Z case-start rest-068-single-flight-8
+2026-08-21T02:23:24.323Z case-done rest-068-single-flight-8 feedback=750.5473000000056
+2026-08-21T02:23:24.325Z case-start rest-069-pool-cold-1
+2026-08-21T02:23:25.273Z case-done rest-069-pool-cold-1 feedback=916.2772000000041
+2026-08-21T02:23:25.274Z case-start rest-070-pool-cold-2
+2026-08-21T02:23:26.223Z case-done rest-070-pool-cold-2 feedback=912.9544000000024
+2026-08-21T02:23:26.223Z case-start rest-071-pool-cold-3
+2026-08-21T02:23:27.162Z case-done rest-071-pool-cold-3 feedback=902.7188999999998
+2026-08-21T02:23:27.163Z case-start rest-072-pool-cold-4
+2026-08-21T02:23:28.115Z case-done rest-072-pool-cold-4 feedback=916.6670999999988
+2026-08-21T02:23:28.115Z case-start rest-073-pool-warm-5
+2026-08-21T02:23:28.523Z case-done rest-073-pool-warm-5 feedback=375.27850000000035
+2026-08-21T02:23:28.524Z case-start rest-074-pool-warm-6
+2026-08-21T02:23:28.718Z case-done rest-074-pool-warm-6 feedback=158.55859999999666
+2026-08-21T02:23:28.719Z case-start rest-075-pool-warm-7
+2026-08-21T02:23:28.929Z case-done rest-075-pool-warm-7 feedback=174.74240000000282
+2026-08-21T02:23:28.930Z case-start rest-076-pool-warm-8
+2026-08-21T02:23:29.126Z case-done rest-076-pool-warm-8 feedback=174.15780000000086
+2026-08-21T02:23:29.126Z case-start rest-077-deadline-900
+2026-08-21T02:23:30.409Z case-done rest-077-deadline-900 feedback=1247.1565000000046
+2026-08-21T02:23:30.410Z case-start rest-078-admission-timeout-2400
+2026-08-21T02:23:32.018Z case-done rest-078-admission-timeout-2400 feedback=1585.0963000000047
+2026-08-21T02:23:32.019Z case-start rest-079-deadline-3001
+2026-08-21T02:23:33.273Z case-done rest-079-deadline-3001 feedback=1233.1852
+2026-08-21T02:23:33.274Z case-start rest-080-slow-enrichment-2
+2026-08-21T02:23:36.452Z case-done rest-080-slow-enrichment-2 feedback=373.53949999999895
+2026-08-21T02:23:36.453Z case-start rest-081-slow-enrichment-3
+2026-08-21T02:23:39.700Z case-done rest-081-slow-enrichment-3 feedback=233.01970000000438
+2026-08-21T02:23:39.701Z case-start rest-082-cold-admission-timeout-2300
+2026-08-21T02:23:41.292Z case-done rest-082-cold-admission-timeout-2300 feedback=1568.9191999999966
+2026-08-21T02:23:41.293Z case-start rest-083-partial-1
+2026-08-21T02:23:42.070Z case-done rest-083-partial-1 feedback=294.8489000000045
+2026-08-21T02:23:42.071Z case-start rest-084-partial-2
+2026-08-21T02:23:42.891Z case-done rest-084-partial-2 feedback=265.5662999999986
+2026-08-21T02:23:42.892Z case-start rest-085-partial-3
+2026-08-21T02:23:44.455Z case-done rest-085-partial-3 feedback=262.40759999999864
+2026-08-21T02:23:44.456Z case-start rest-086-partial-4
+2026-08-21T02:23:46.000Z case-done rest-086-partial-4 feedback=221.40520000000106
+2026-08-21T02:23:46.001Z case-start rest-087-partial-5
+2026-08-21T02:23:46.990Z case-done rest-087-partial-5 feedback=175.60510000000068
+2026-08-21T02:23:46.991Z case-start rest-088-partial-6
+2026-08-21T02:23:48.744Z case-done rest-088-partial-6 feedback=188.62129999999888
+2026-08-21T02:23:48.745Z case-start rest-089-partial-7
+2026-08-21T02:23:51.093Z case-done rest-089-partial-7 feedback=203.2433000000019
+2026-08-21T02:23:51.094Z case-start rest-090-partial-8
+2026-08-21T02:23:52.870Z case-done rest-090-partial-8 feedback=143.2945999999938
+2026-08-21T02:23:52.871Z case-start rest-091-all-timeout
+2026-08-21T02:23:55.615Z case-done rest-091-all-timeout feedback=1251.005799999999
+2026-08-21T02:23:55.616Z case-start rest-092-user-cancel
+2026-08-21T02:23:58.593Z case-done rest-092-user-cancel feedback=1277.6897999999928
+2026-08-21T02:23:58.593Z case-start rest-093-empty-table
+2026-08-21T02:23:58.812Z case-done rest-093-empty-table feedback=189.75380000000587
+2026-08-21T02:23:58.813Z case-start rest-094-empty-facts
+2026-08-21T02:23:59.037Z case-done rest-094-empty-facts feedback=202.4421999999904
+2026-08-21T02:23:59.038Z case-start rest-095-guarded-buy-no-render
+2026-08-21T02:23:59.108Z case-done rest-095-guarded-buy-no-render feedback=47.473600000012084
+2026-08-21T02:23:59.109Z case-start rest-096-guarded-sell-no-render
+2026-08-21T02:23:59.162Z case-done rest-096-guarded-sell-no-render feedback=24.284400000004098
+2026-08-21T02:23:59.163Z case-start rest-097-excluded-split-base
+2026-08-21T02:23:59.253Z case-done rest-097-excluded-split-base feedback=54.831300000005285
+2026-08-21T02:23:59.253Z case-start rest-098-oauth-hidden
+2026-08-21T02:23:59.325Z case-done rest-098-oauth-hidden feedback=37.30830000000424
+2026-08-21T02:23:59.326Z case-start rest-099-unknown-ref
+2026-08-21T02:23:59.379Z case-done rest-099-unknown-ref feedback=30.21820000000298
+2026-08-21T02:23:59.379Z case-start rest-100-manifest-type-authority
+2026-08-21T02:23:59.433Z case-done rest-100-manifest-type-authority feedback=24.20579999999609
+2026-08-21T02:23:59.443Z backend-exit code=null signal=SIGTERM

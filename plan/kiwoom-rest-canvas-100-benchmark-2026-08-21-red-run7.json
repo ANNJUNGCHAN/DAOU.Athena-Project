@@ -1,0 +1,6404 @@
+{
+  "status": "fail",
+  "gates": {
+    "functional": {
+      "passed": false,
+      "pass_count": 98,
+      "total": 100,
+      "required": 100
+    },
+    "first_visible_feedback": {
+      "passed": false,
+      "denominator": 100,
+      "measured_count": 100,
+      "p50_ms": 221.0,
+      "p95_ms": 2504.1,
+      "max_ms": 3122,
+      "threshold_max_ms": 3000.0
+    },
+    "first_verified_data_canvas": {
+      "passed": false,
+      "denominator": 89,
+      "measured_count": 88,
+      "missing_count": 1,
+      "p50_ms": 222.0,
+      "p95_ms": 2403.8,
+      "max_ms": 2838.0,
+      "thresholds_ms": {
+        "p50": 1000.0,
+        "p95": 2500.0,
+        "max": 3000.0
+      },
+      "no_render_cases_excluded_from_latency_only": 11
+    }
+  },
+  "cases": [
+    {
+      "case_id": "rest-001-facts-1",
+      "category": "facts_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 406.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 184,
+          "inline_to_dom_ms": 62,
+          "dom_to_paint_ack_ms": 125.19999998807907,
+          "total_ms": 406
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 146.869,
+          "call_ms": 136.78,
+          "transform_ms": 0.119,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 406,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-001-facts-1-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 2,
+          "renderPlanStartedAtMs": 22,
+          "inlineReadyAtMs": 185,
+          "ackSentAtMs": 407,
+          "resolveMs": 20,
+          "renderPlanMs": 163,
+          "inlineToAckMs": 222
+        }
+      ]
+    },
+    {
+      "case_id": "rest-002-facts-2",
+      "category": "facts_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 167.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 137,
+          "inline_to_dom_ms": 3,
+          "dom_to_paint_ack_ms": 25.900000035762787,
+          "total_ms": 167
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 115.215,
+          "call_ms": 114.914,
+          "transform_ms": 0.047,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 167,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-002-facts-2-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 12,
+          "inlineReadyAtMs": 137,
+          "ackSentAtMs": 167,
+          "resolveMs": 12,
+          "renderPlanMs": 125,
+          "inlineToAckMs": 30
+        }
+      ]
+    },
+    {
+      "case_id": "rest-003-facts-3",
+      "category": "facts_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 190.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 152,
+          "inline_to_dom_ms": 3.600000023841858,
+          "dom_to_paint_ack_ms": 32.799999952316284,
+          "total_ms": 190
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 122.431,
+          "call_ms": 122.119,
+          "transform_ms": 0.1,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 190,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-003-facts-3-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 23,
+          "inlineReadyAtMs": 153,
+          "ackSentAtMs": 190,
+          "resolveMs": 23,
+          "renderPlanMs": 130,
+          "inlineToAckMs": 37
+        }
+      ]
+    },
+    {
+      "case_id": "rest-004-facts-4",
+      "category": "facts_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 187.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 158,
+          "inline_to_dom_ms": 2.800000011920929,
+          "dom_to_paint_ack_ms": 25.299999952316284,
+          "total_ms": 187
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 120.792,
+          "call_ms": 120.547,
+          "transform_ms": 0.037,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 187,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-004-facts-4-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 21,
+          "inlineReadyAtMs": 158,
+          "ackSentAtMs": 187,
+          "resolveMs": 21,
+          "renderPlanMs": 137,
+          "inlineToAckMs": 29
+        }
+      ]
+    },
+    {
+      "case_id": "rest-005-facts-5",
+      "category": "facts_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 189.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 152,
+          "inline_to_dom_ms": 1.9000000357627869,
+          "dom_to_paint_ack_ms": 34.30000001192093,
+          "total_ms": 189
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 128.726,
+          "call_ms": 128.497,
+          "transform_ms": 0.035,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 189,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-005-facts-5-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 1,
+          "renderPlanStartedAtMs": 11,
+          "inlineReadyAtMs": 153,
+          "ackSentAtMs": 190,
+          "resolveMs": 10,
+          "renderPlanMs": 142,
+          "inlineToAckMs": 37
+        }
+      ]
+    },
+    {
+      "case_id": "rest-006-facts-6",
+      "category": "facts_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 206.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 168,
+          "inline_to_dom_ms": 2.399999976158142,
+          "dom_to_paint_ack_ms": 34.40000003576279,
+          "total_ms": 206
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 129.405,
+          "call_ms": 129.154,
+          "transform_ms": 0.025,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 206,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-006-facts-6-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 22,
+          "inlineReadyAtMs": 168,
+          "ackSentAtMs": 206,
+          "resolveMs": 22,
+          "renderPlanMs": 146,
+          "inlineToAckMs": 38
+        }
+      ]
+    },
+    {
+      "case_id": "rest-007-facts-7",
+      "category": "facts_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 188.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 152,
+          "inline_to_dom_ms": 1.600000023841858,
+          "dom_to_paint_ack_ms": 34.09999996423721,
+          "total_ms": 188
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 130.175,
+          "call_ms": 129.939,
+          "transform_ms": 0.064,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 188,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-007-facts-7-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 1,
+          "renderPlanStartedAtMs": 8,
+          "inlineReadyAtMs": 153,
+          "ackSentAtMs": 189,
+          "resolveMs": 7,
+          "renderPlanMs": 145,
+          "inlineToAckMs": 36
+        }
+      ]
+    },
+    {
+      "case_id": "rest-008-facts-8",
+      "category": "facts_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 205.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 167,
+          "inline_to_dom_ms": 1.5999999642372131,
+          "dom_to_paint_ack_ms": 34.30000001192093,
+          "total_ms": 205
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 130.877,
+          "call_ms": 130.611,
+          "transform_ms": 0.098,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 205,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-008-facts-8-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 20,
+          "inlineReadyAtMs": 167,
+          "ackSentAtMs": 205,
+          "resolveMs": 20,
+          "renderPlanMs": 147,
+          "inlineToAckMs": 38
+        }
+      ]
+    },
+    {
+      "case_id": "rest-009-facts-9",
+      "category": "facts_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 2408.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 147,
+          "inline_to_dom_ms": 2.699999988079071,
+          "dom_to_paint_ack_ms": 37.10000002384186,
+          "total_ms": 2408
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 127.153,
+          "call_ms": 126.925,
+          "transform_ms": 0.036,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2408,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-009-facts-9-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 12,
+          "inlineReadyAtMs": 147,
+          "ackSentAtMs": 2408,
+          "resolveMs": 12,
+          "renderPlanMs": 135,
+          "inlineToAckMs": 2261
+        }
+      ]
+    },
+    {
+      "case_id": "rest-010-facts-10",
+      "category": "facts_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 160.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 122,
+          "inline_to_dom_ms": 3.599999964237213,
+          "dom_to_paint_ack_ms": 33.30000001192093,
+          "total_ms": 160
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 101.762,
+          "call_ms": 101.459,
+          "transform_ms": 0.097,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 160,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-010-facts-10-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 1,
+          "renderPlanStartedAtMs": 7,
+          "inlineReadyAtMs": 123,
+          "ackSentAtMs": 161,
+          "resolveMs": 6,
+          "renderPlanMs": 116,
+          "inlineToAckMs": 38
+        }
+      ]
+    },
+    {
+      "case_id": "rest-011-table-1",
+      "category": "table_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 205.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 168,
+          "inline_to_dom_ms": 2.599999964237213,
+          "dom_to_paint_ack_ms": 33.80000001192093,
+          "total_ms": 205
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 131.67,
+          "call_ms": 131.443,
+          "transform_ms": 0.035,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 205,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-011-table-1-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 1,
+          "renderPlanStartedAtMs": 22,
+          "inlineReadyAtMs": 168,
+          "ackSentAtMs": 205,
+          "resolveMs": 21,
+          "renderPlanMs": 146,
+          "inlineToAckMs": 37
+        }
+      ]
+    },
+    {
+      "case_id": "rest-012-table-2",
+      "category": "table_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 189.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 152,
+          "inline_to_dom_ms": 1.800000011920929,
+          "dom_to_paint_ack_ms": 34,
+          "total_ms": 189
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 117.409,
+          "call_ms": 117.237,
+          "transform_ms": 0.033,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 189,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-012-table-2-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 19,
+          "inlineReadyAtMs": 152,
+          "ackSentAtMs": 189,
+          "resolveMs": 19,
+          "renderPlanMs": 133,
+          "inlineToAckMs": 37
+        }
+      ]
+    },
+    {
+      "case_id": "rest-013-table-3",
+      "category": "table_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 189.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 152,
+          "inline_to_dom_ms": 2.300000011920929,
+          "dom_to_paint_ack_ms": 34.19999998807907,
+          "total_ms": 189
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 117.11,
+          "call_ms": 116.847,
+          "transform_ms": 0.087,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 189,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-013-table-3-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 19,
+          "inlineReadyAtMs": 152,
+          "ackSentAtMs": 189,
+          "resolveMs": 19,
+          "renderPlanMs": 133,
+          "inlineToAckMs": 37
+        }
+      ]
+    },
+    {
+      "case_id": "rest-014-table-4",
+      "category": "table_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 190.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 153,
+          "inline_to_dom_ms": 1.600000023841858,
+          "dom_to_paint_ack_ms": 34.59999996423721,
+          "total_ms": 190
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 117.789,
+          "call_ms": 117.602,
+          "transform_ms": 0.038,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 190,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-014-table-4-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 18,
+          "inlineReadyAtMs": 153,
+          "ackSentAtMs": 190,
+          "resolveMs": 18,
+          "renderPlanMs": 135,
+          "inlineToAckMs": 37
+        }
+      ]
+    },
+    {
+      "case_id": "rest-015-table-5",
+      "category": "table_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 189.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 154,
+          "inline_to_dom_ms": 2,
+          "dom_to_paint_ack_ms": 33.30000001192093,
+          "total_ms": 189
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 133.056,
+          "call_ms": 132.865,
+          "transform_ms": 0.028,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 189,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-015-table-5-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 6,
+          "inlineReadyAtMs": 154,
+          "ackSentAtMs": 190,
+          "resolveMs": 6,
+          "renderPlanMs": 148,
+          "inlineToAckMs": 36
+        }
+      ]
+    },
+    {
+      "case_id": "rest-016-table-6",
+      "category": "table_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 190.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 154,
+          "inline_to_dom_ms": 1.699999988079071,
+          "dom_to_paint_ack_ms": 34,
+          "total_ms": 190
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 119.235,
+          "call_ms": 119.107,
+          "transform_ms": 0.02,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 190,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-016-table-6-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 20,
+          "inlineReadyAtMs": 154,
+          "ackSentAtMs": 190,
+          "resolveMs": 20,
+          "renderPlanMs": 134,
+          "inlineToAckMs": 36
+        }
+      ]
+    },
+    {
+      "case_id": "rest-017-table-7",
+      "category": "table_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 192.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 155,
+          "inline_to_dom_ms": 2,
+          "dom_to_paint_ack_ms": 33.69999998807907,
+          "total_ms": 192
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 119.532,
+          "call_ms": 119.355,
+          "transform_ms": 0.038,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 192,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-017-table-7-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 19,
+          "inlineReadyAtMs": 155,
+          "ackSentAtMs": 192,
+          "resolveMs": 19,
+          "renderPlanMs": 136,
+          "inlineToAckMs": 37
+        }
+      ]
+    },
+    {
+      "case_id": "rest-018-table-8",
+      "category": "table_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 173.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 137,
+          "inline_to_dom_ms": 1.800000011920929,
+          "dom_to_paint_ack_ms": 33.80000001192093,
+          "total_ms": 173
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 123.175,
+          "call_ms": 122.962,
+          "transform_ms": 0.024,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 173,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-018-table-8-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 6,
+          "inlineReadyAtMs": 137,
+          "ackSentAtMs": 173,
+          "resolveMs": 6,
+          "renderPlanMs": 131,
+          "inlineToAckMs": 36
+        }
+      ]
+    },
+    {
+      "case_id": "rest-019-table-9",
+      "category": "table_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 1884.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 1846,
+          "inline_to_dom_ms": 1.899999976158142,
+          "dom_to_paint_ack_ms": 35.30000001192093,
+          "total_ms": 1884
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 118.24,
+          "call_ms": 118.052,
+          "transform_ms": 0.048,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 1884,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-019-table-9-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 20,
+          "inlineReadyAtMs": 1846,
+          "ackSentAtMs": 1884,
+          "resolveMs": 20,
+          "renderPlanMs": 1826,
+          "inlineToAckMs": 38
+        }
+      ]
+    },
+    {
+      "case_id": "rest-020-table-10",
+      "category": "table_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 2207.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 147,
+          "inline_to_dom_ms": 2.5,
+          "dom_to_paint_ack_ms": 34.10000002384186,
+          "total_ms": 2207
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 132.401,
+          "call_ms": 132.201,
+          "transform_ms": 0.047,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2207,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-020-table-10-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 8,
+          "inlineReadyAtMs": 147,
+          "ackSentAtMs": 2207,
+          "resolveMs": 8,
+          "renderPlanMs": 139,
+          "inlineToAckMs": 2060
+        }
+      ]
+    },
+    {
+      "case_id": "rest-021-compound-1",
+      "category": "compound_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 172.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 138,
+          "inline_to_dom_ms": 1.5,
+          "dom_to_paint_ack_ms": 32.10000002384186,
+          "total_ms": 172
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 114.973,
+          "call_ms": 114.744,
+          "transform_ms": 0.068,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 172,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-021-compound-1-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 7,
+          "inlineReadyAtMs": 138,
+          "ackSentAtMs": 172,
+          "resolveMs": 7,
+          "renderPlanMs": 131,
+          "inlineToAckMs": 34
+        }
+      ]
+    },
+    {
+      "case_id": "rest-022-compound-2",
+      "category": "compound_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 188.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 151,
+          "inline_to_dom_ms": 1.4000000357627869,
+          "dom_to_paint_ack_ms": 34.69999998807907,
+          "total_ms": 188
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 116.143,
+          "call_ms": 115.956,
+          "transform_ms": 0.062,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 188,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-022-compound-2-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 18,
+          "inlineReadyAtMs": 151,
+          "ackSentAtMs": 188,
+          "resolveMs": 18,
+          "renderPlanMs": 133,
+          "inlineToAckMs": 37
+        }
+      ]
+    },
+    {
+      "case_id": "rest-023-compound-3",
+      "category": "compound_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 189.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 152,
+          "inline_to_dom_ms": 3,
+          "dom_to_paint_ack_ms": 33.60000002384186,
+          "total_ms": 189
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 116.752,
+          "call_ms": 116.55,
+          "transform_ms": 0.059,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 189,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-023-compound-3-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 19,
+          "inlineReadyAtMs": 152,
+          "ackSentAtMs": 189,
+          "resolveMs": 19,
+          "renderPlanMs": 133,
+          "inlineToAckMs": 37
+        }
+      ]
+    },
+    {
+      "case_id": "rest-024-compound-4",
+      "category": "compound_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 192.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 168,
+          "inline_to_dom_ms": 1.9000000357627869,
+          "dom_to_paint_ack_ms": 22,
+          "total_ms": 192
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 134.322,
+          "call_ms": 134.092,
+          "transform_ms": 0.106,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 192,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-024-compound-4-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 18,
+          "inlineReadyAtMs": 168,
+          "ackSentAtMs": 192,
+          "resolveMs": 18,
+          "renderPlanMs": 150,
+          "inlineToAckMs": 24
+        }
+      ]
+    },
+    {
+      "case_id": "rest-025-compound-5",
+      "category": "compound_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 177.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 141,
+          "inline_to_dom_ms": 2.300000011920929,
+          "dom_to_paint_ack_ms": 33.299999952316284,
+          "total_ms": 177
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 106.013,
+          "call_ms": 105.854,
+          "transform_ms": 0.049,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 177,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-025-compound-5-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 20,
+          "inlineReadyAtMs": 141,
+          "ackSentAtMs": 177,
+          "resolveMs": 20,
+          "renderPlanMs": 121,
+          "inlineToAckMs": 36
+        }
+      ]
+    },
+    {
+      "case_id": "rest-026-compound-6",
+      "category": "compound_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 175.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 138,
+          "inline_to_dom_ms": 1.699999988079071,
+          "dom_to_paint_ack_ms": 34,
+          "total_ms": 175
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 118.252,
+          "call_ms": 118.029,
+          "transform_ms": 0.056,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 175,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-026-compound-6-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 5,
+          "inlineReadyAtMs": 138,
+          "ackSentAtMs": 175,
+          "resolveMs": 5,
+          "renderPlanMs": 133,
+          "inlineToAckMs": 37
+        }
+      ]
+    },
+    {
+      "case_id": "rest-027-compound-7",
+      "category": "compound_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 204.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 168,
+          "inline_to_dom_ms": 1.5999999642372131,
+          "dom_to_paint_ack_ms": 33.5,
+          "total_ms": 204
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 133.587,
+          "call_ms": 133.363,
+          "transform_ms": 0.072,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 204,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-027-compound-7-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 19,
+          "inlineReadyAtMs": 168,
+          "ackSentAtMs": 204,
+          "resolveMs": 19,
+          "renderPlanMs": 149,
+          "inlineToAckMs": 36
+        }
+      ]
+    },
+    {
+      "case_id": "rest-028-compound-8",
+      "category": "compound_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 189.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 153,
+          "inline_to_dom_ms": 1.300000011920929,
+          "dom_to_paint_ack_ms": 34.39999997615814,
+          "total_ms": 189
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 115.899,
+          "call_ms": 115.624,
+          "transform_ms": 0.055,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 189,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-028-compound-8-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 19,
+          "inlineReadyAtMs": 153,
+          "ackSentAtMs": 189,
+          "resolveMs": 19,
+          "renderPlanMs": 134,
+          "inlineToAckMs": 36
+        }
+      ]
+    },
+    {
+      "case_id": "rest-029-chart-1",
+      "category": "chart_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 1757.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 187,
+          "inline_to_dom_ms": 42.299999952316284,
+          "dom_to_paint_ack_ms": 63.700000047683716,
+          "total_ms": 1757
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 150.23,
+          "call_ms": 117.61,
+          "transform_ms": 32.438,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 1757,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-029-chart-1-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 20,
+          "inlineReadyAtMs": 187,
+          "ackSentAtMs": 1757,
+          "resolveMs": 20,
+          "renderPlanMs": 167,
+          "inlineToAckMs": 1570
+        }
+      ]
+    },
+    {
+      "case_id": "rest-030-chart-2",
+      "category": "chart_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 191.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 136,
+          "inline_to_dom_ms": 11.200000047683716,
+          "dom_to_paint_ack_ms": 42.89999997615814,
+          "total_ms": 191
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 116.505,
+          "call_ms": 116.154,
+          "transform_ms": 0.109,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 191,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-030-chart-2-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 10,
+          "inlineReadyAtMs": 136,
+          "ackSentAtMs": 191,
+          "resolveMs": 10,
+          "renderPlanMs": 126,
+          "inlineToAckMs": 55
+        }
+      ]
+    },
+    {
+      "case_id": "rest-031-chart-3",
+      "category": "chart_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 208.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 153,
+          "inline_to_dom_ms": 5.600000023841858,
+          "dom_to_paint_ack_ms": 48.89999997615814,
+          "total_ms": 208
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 116.524,
+          "call_ms": 115.807,
+          "transform_ms": 0.575,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 208,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-031-chart-3-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 18,
+          "inlineReadyAtMs": 153,
+          "ackSentAtMs": 208,
+          "resolveMs": 18,
+          "renderPlanMs": 135,
+          "inlineToAckMs": 55
+        }
+      ]
+    },
+    {
+      "case_id": "rest-032-chart-4",
+      "category": "chart_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 2396.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 2341,
+          "inline_to_dom_ms": 8.699999988079071,
+          "dom_to_paint_ack_ms": 45.39999997615814,
+          "total_ms": 2396
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 115.848,
+          "call_ms": 115.627,
+          "transform_ms": 0.096,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2396,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-032-chart-4-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 20,
+          "inlineReadyAtMs": 2341,
+          "ackSentAtMs": 2396,
+          "resolveMs": 20,
+          "renderPlanMs": 2321,
+          "inlineToAckMs": 55
+        }
+      ]
+    },
+    {
+      "case_id": "rest-033-chart-5",
+      "category": "chart_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 192.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 137,
+          "inline_to_dom_ms": 6.799999952316284,
+          "dom_to_paint_ack_ms": 47.30000001192093,
+          "total_ms": 192
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 124.04,
+          "call_ms": 123.775,
+          "transform_ms": 0.082,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 192,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-033-chart-5-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 7,
+          "inlineReadyAtMs": 137,
+          "ackSentAtMs": 192,
+          "resolveMs": 7,
+          "renderPlanMs": 130,
+          "inlineToAckMs": 55
+        }
+      ]
+    },
+    {
+      "case_id": "rest-034-chart-6",
+      "category": "chart_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 208.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 153,
+          "inline_to_dom_ms": 8,
+          "dom_to_paint_ack_ms": 46.5,
+          "total_ms": 208
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 118.727,
+          "call_ms": 118.474,
+          "transform_ms": 0.133,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 208,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-034-chart-6-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 21,
+          "inlineReadyAtMs": 153,
+          "ackSentAtMs": 208,
+          "resolveMs": 21,
+          "renderPlanMs": 132,
+          "inlineToAckMs": 55
+        }
+      ]
+    },
+    {
+      "case_id": "rest-035-chart-7",
+      "category": "chart_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 206.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 152,
+          "inline_to_dom_ms": 7,
+          "dom_to_paint_ack_ms": 46.10000002384186,
+          "total_ms": 206
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 117.473,
+          "call_ms": 117.145,
+          "transform_ms": 0.155,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 206,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-035-chart-7-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 1,
+          "renderPlanStartedAtMs": 20,
+          "inlineReadyAtMs": 153,
+          "ackSentAtMs": 207,
+          "resolveMs": 19,
+          "renderPlanMs": 133,
+          "inlineToAckMs": 54
+        }
+      ]
+    },
+    {
+      "case_id": "rest-036-chart-8",
+      "category": "chart_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 221.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 167,
+          "inline_to_dom_ms": 4.900000035762787,
+          "dom_to_paint_ack_ms": 48.09999996423721,
+          "total_ms": 221
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 133.016,
+          "call_ms": 132.771,
+          "transform_ms": 0.096,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 221,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-036-chart-8-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 18,
+          "inlineReadyAtMs": 167,
+          "ackSentAtMs": 221,
+          "resolveMs": 18,
+          "renderPlanMs": 149,
+          "inlineToAckMs": 54
+        }
+      ]
+    },
+    {
+      "case_id": "rest-037-chart-9",
+      "category": "chart_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 192.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 138,
+          "inline_to_dom_ms": 7.199999988079071,
+          "dom_to_paint_ack_ms": 46.700000047683716,
+          "total_ms": 192
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 117.167,
+          "call_ms": 116.828,
+          "transform_ms": 0.154,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 192,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-037-chart-9-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 5,
+          "inlineReadyAtMs": 138,
+          "ackSentAtMs": 192,
+          "resolveMs": 5,
+          "renderPlanMs": 133,
+          "inlineToAckMs": 54
+        }
+      ]
+    },
+    {
+      "case_id": "rest-038-chart-10",
+      "category": "chart_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 222.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 168,
+          "inline_to_dom_ms": 5.5,
+          "dom_to_paint_ack_ms": 47.80000001192093,
+          "total_ms": 222
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 133.504,
+          "call_ms": 133.192,
+          "transform_ms": 0.112,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 222,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-038-chart-10-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 20,
+          "inlineReadyAtMs": 168,
+          "ackSentAtMs": 222,
+          "resolveMs": 20,
+          "renderPlanMs": 148,
+          "inlineToAckMs": 54
+        }
+      ]
+    },
+    {
+      "case_id": "rest-039-chart-11",
+      "category": "chart_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 206.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 152,
+          "inline_to_dom_ms": 7.300000011920929,
+          "dom_to_paint_ack_ms": 46.39999997615814,
+          "total_ms": 206
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 116.181,
+          "call_ms": 115.932,
+          "transform_ms": 0.121,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 206,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-039-chart-11-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 20,
+          "inlineReadyAtMs": 152,
+          "ackSentAtMs": 206,
+          "resolveMs": 20,
+          "renderPlanMs": 132,
+          "inlineToAckMs": 54
+        }
+      ]
+    },
+    {
+      "case_id": "rest-040-chart-12",
+      "category": "chart_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 1493.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 1434,
+          "inline_to_dom_ms": 5.800000011920929,
+          "dom_to_paint_ack_ms": 51.69999998807907,
+          "total_ms": 1493
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 115.228,
+          "call_ms": 114.993,
+          "transform_ms": 0.111,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 1493,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-040-chart-12-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 18,
+          "inlineReadyAtMs": 1434,
+          "ackSentAtMs": 1493,
+          "resolveMs": 18,
+          "renderPlanMs": 1416,
+          "inlineToAckMs": 59
+        }
+      ]
+    },
+    {
+      "case_id": "rest-041-fanout-2-1",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 234.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 197,
+          "inline_to_dom_ms": 1.899999976158142,
+          "dom_to_paint_ack_ms": 34.5,
+          "total_ms": 234
+        },
+        {
+          "request_to_inline_ms": 2603,
+          "inline_to_dom_ms": 1.600000023841858,
+          "dom_to_paint_ack_ms": 35.5,
+          "total_ms": 2642
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 176.187,
+          "call_ms": 175.934,
+          "transform_ms": 0.061,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 326.251,
+          "call_ms": 326.065,
+          "transform_ms": 0.021,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 2,
+      "physical_calls": 2,
+      "first_visible_feedback_ms": 234,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-041-fanout-2-1-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 9,
+          "inlineReadyAtMs": 197,
+          "ackSentAtMs": 234,
+          "resolveMs": 9,
+          "renderPlanMs": 188,
+          "inlineToAckMs": 37
+        },
+        {
+          "itemId": "rest-041-fanout-2-1-2",
+          "ordinal": 2,
+          "resolveStartedAtMs": 234,
+          "renderPlanStartedAtMs": 247,
+          "inlineReadyAtMs": 2603,
+          "ackSentAtMs": 2642,
+          "resolveMs": 13,
+          "renderPlanMs": 2356,
+          "inlineToAckMs": 39
+        }
+      ]
+    },
+    {
+      "case_id": "rest-042-fanout-2-2",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 242.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 206,
+          "inline_to_dom_ms": 1.2000000476837158,
+          "dom_to_paint_ack_ms": 34,
+          "total_ms": 242
+        },
+        {
+          "request_to_inline_ms": 587,
+          "inline_to_dom_ms": 5,
+          "dom_to_paint_ack_ms": 49.200000047683716,
+          "total_ms": 642
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 193.857,
+          "call_ms": 193.626,
+          "transform_ms": 0.099,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 328.515,
+          "call_ms": 328.07,
+          "transform_ms": 0.271,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 2,
+      "physical_calls": 2,
+      "first_visible_feedback_ms": 242,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-042-fanout-2-2-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 5,
+          "inlineReadyAtMs": 206,
+          "ackSentAtMs": 242,
+          "resolveMs": 5,
+          "renderPlanMs": 201,
+          "inlineToAckMs": 36
+        },
+        {
+          "itemId": "rest-042-fanout-2-2-2",
+          "ordinal": 2,
+          "resolveStartedAtMs": 242,
+          "renderPlanStartedAtMs": 253,
+          "inlineReadyAtMs": 587,
+          "ackSentAtMs": 642,
+          "resolveMs": 11,
+          "renderPlanMs": 334,
+          "inlineToAckMs": 55
+        }
+      ]
+    },
+    {
+      "case_id": "rest-043-fanout-2-3",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 252.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 216,
+          "inline_to_dom_ms": 1.199999988079071,
+          "dom_to_paint_ack_ms": 34.80000001192093,
+          "total_ms": 252
+        },
+        {
+          "request_to_inline_ms": 595,
+          "inline_to_dom_ms": 2.099999964237213,
+          "dom_to_paint_ack_ms": 367,
+          "total_ms": 965
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 180.741,
+          "call_ms": 180.603,
+          "transform_ms": 0.037,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 314.429,
+          "call_ms": 314.291,
+          "transform_ms": 0.026,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 2,
+      "physical_calls": 2,
+      "first_visible_feedback_ms": 252,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-043-fanout-2-3-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 19,
+          "inlineReadyAtMs": 216,
+          "ackSentAtMs": 252,
+          "resolveMs": 19,
+          "renderPlanMs": 197,
+          "inlineToAckMs": 36
+        },
+        {
+          "itemId": "rest-043-fanout-2-3-2",
+          "ordinal": 2,
+          "resolveStartedAtMs": 252,
+          "renderPlanStartedAtMs": 263,
+          "inlineReadyAtMs": 595,
+          "ackSentAtMs": 965,
+          "resolveMs": 11,
+          "renderPlanMs": 332,
+          "inlineToAckMs": 370
+        }
+      ]
+    },
+    {
+      "case_id": "rest-044-fanout-2-4",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 235.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 197,
+          "inline_to_dom_ms": 1.4000000357627869,
+          "dom_to_paint_ack_ms": 35.19999998807907,
+          "total_ms": 235
+        },
+        {
+          "request_to_inline_ms": 2153,
+          "inline_to_dom_ms": 1.5,
+          "dom_to_paint_ack_ms": 36.30000001192093,
+          "total_ms": 2192
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 174.696,
+          "call_ms": 174.401,
+          "transform_ms": 0.099,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 326.992,
+          "call_ms": 326.804,
+          "transform_ms": 0.042,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 2,
+      "physical_calls": 2,
+      "first_visible_feedback_ms": 235,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-044-fanout-2-4-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 1,
+          "renderPlanStartedAtMs": 8,
+          "inlineReadyAtMs": 198,
+          "ackSentAtMs": 236,
+          "resolveMs": 7,
+          "renderPlanMs": 190,
+          "inlineToAckMs": 38
+        },
+        {
+          "itemId": "rest-044-fanout-2-4-2",
+          "ordinal": 2,
+          "resolveStartedAtMs": 236,
+          "renderPlanStartedAtMs": 248,
+          "inlineReadyAtMs": 2154,
+          "ackSentAtMs": 2193,
+          "resolveMs": 12,
+          "renderPlanMs": 1906,
+          "inlineToAckMs": 39
+        }
+      ]
+    },
+    {
+      "case_id": "rest-045-fanout-3-5",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 1583.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 1545,
+          "inline_to_dom_ms": 2.100000023841858,
+          "dom_to_paint_ack_ms": 35.5,
+          "total_ms": 1583
+        },
+        {
+          "request_to_inline_ms": 1936,
+          "inline_to_dom_ms": 1.7999999523162842,
+          "dom_to_paint_ack_ms": 33.5,
+          "total_ms": 1972
+        },
+        {
+          "request_to_inline_ms": 3221,
+          "inline_to_dom_ms": 8.599999964237213,
+          "dom_to_paint_ack_ms": 58.5,
+          "total_ms": 3289
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 192.374,
+          "call_ms": 192.098,
+          "transform_ms": 0.108,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 325.246,
+          "call_ms": 325.002,
+          "transform_ms": 0.028,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 475.23,
+          "call_ms": 475.026,
+          "transform_ms": 0.08,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 3,
+      "physical_calls": 3,
+      "first_visible_feedback_ms": 1583,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-045-fanout-3-5-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 17,
+          "inlineReadyAtMs": 1545,
+          "ackSentAtMs": 1583,
+          "resolveMs": 17,
+          "renderPlanMs": 1528,
+          "inlineToAckMs": 38
+        },
+        {
+          "itemId": "rest-045-fanout-3-5-2",
+          "ordinal": 2,
+          "resolveStartedAtMs": 1583,
+          "renderPlanStartedAtMs": 1597,
+          "inlineReadyAtMs": 1936,
+          "ackSentAtMs": 1972,
+          "resolveMs": 14,
+          "renderPlanMs": 339,
+          "inlineToAckMs": 36
+        },
+        {
+          "itemId": "rest-045-fanout-3-5-3",
+          "ordinal": 3,
+          "resolveStartedAtMs": 1584,
+          "renderPlanStartedAtMs": 1599,
+          "inlineReadyAtMs": 3221,
+          "ackSentAtMs": 3289,
+          "resolveMs": 15,
+          "renderPlanMs": 1622,
+          "inlineToAckMs": 68
+        }
+      ]
+    },
+    {
+      "case_id": "rest-046-fanout-3-6",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 248.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 211,
+          "inline_to_dom_ms": 1.800000011920929,
+          "dom_to_paint_ack_ms": 33.80000001192093,
+          "total_ms": 248
+        },
+        {
+          "request_to_inline_ms": 604,
+          "inline_to_dom_ms": 1.300000011920929,
+          "dom_to_paint_ack_ms": 366.69999998807907,
+          "total_ms": 2815
+        },
+        {
+          "request_to_inline_ms": 2816,
+          "inline_to_dom_ms": 2.300000011920929,
+          "dom_to_paint_ack_ms": 34.89999997615814,
+          "total_ms": 2854
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 192.879,
+          "call_ms": 192.706,
+          "transform_ms": 0.026,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 328.037,
+          "call_ms": 327.864,
+          "transform_ms": 0.028,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 463.542,
+          "call_ms": 463.393,
+          "transform_ms": 0.08,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 3,
+      "physical_calls": 3,
+      "first_visible_feedback_ms": 248,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-046-fanout-3-6-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 5,
+          "inlineReadyAtMs": 211,
+          "ackSentAtMs": 248,
+          "resolveMs": 5,
+          "renderPlanMs": 206,
+          "inlineToAckMs": 37
+        },
+        {
+          "itemId": "rest-046-fanout-3-6-2",
+          "ordinal": 2,
+          "resolveStartedAtMs": 248,
+          "renderPlanStartedAtMs": 262,
+          "inlineReadyAtMs": 604,
+          "ackSentAtMs": 2815,
+          "resolveMs": 14,
+          "renderPlanMs": 342,
+          "inlineToAckMs": 2211
+        },
+        {
+          "itemId": "rest-046-fanout-3-6-3",
+          "ordinal": 3,
+          "resolveStartedAtMs": 248,
+          "renderPlanStartedAtMs": 261,
+          "inlineReadyAtMs": 2816,
+          "ackSentAtMs": 2854,
+          "resolveMs": 13,
+          "renderPlanMs": 2555,
+          "inlineToAckMs": 38
+        }
+      ]
+    },
+    {
+      "case_id": "rest-047-fanout-3-7",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 221.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 183,
+          "inline_to_dom_ms": 1.699999988079071,
+          "dom_to_paint_ack_ms": 35.10000002384186,
+          "total_ms": 221
+        },
+        {
+          "request_to_inline_ms": 561,
+          "inline_to_dom_ms": 2.5,
+          "dom_to_paint_ack_ms": 33.30000001192093,
+          "total_ms": 597
+        },
+        {
+          "request_to_inline_ms": 711,
+          "inline_to_dom_ms": 1.100000023841858,
+          "dom_to_paint_ack_ms": 35.39999997615814,
+          "total_ms": 749
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 162.747,
+          "call_ms": 162.59,
+          "transform_ms": 0.04,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 323.389,
+          "call_ms": 323.123,
+          "transform_ms": 0.061,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 465.417,
+          "call_ms": 465.287,
+          "transform_ms": 0.024,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 3,
+      "physical_calls": 3,
+      "first_visible_feedback_ms": 221,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-047-fanout-3-7-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 5,
+          "inlineReadyAtMs": 183,
+          "ackSentAtMs": 221,
+          "resolveMs": 5,
+          "renderPlanMs": 178,
+          "inlineToAckMs": 38
+        },
+        {
+          "itemId": "rest-047-fanout-3-7-2",
+          "ordinal": 2,
+          "resolveStartedAtMs": 221,
+          "renderPlanStartedAtMs": 232,
+          "inlineReadyAtMs": 561,
+          "ackSentAtMs": 597,
+          "resolveMs": 11,
+          "renderPlanMs": 329,
+          "inlineToAckMs": 36
+        },
+        {
+          "itemId": "rest-047-fanout-3-7-3",
+          "ordinal": 3,
+          "resolveStartedAtMs": 221,
+          "renderPlanStartedAtMs": 233,
+          "inlineReadyAtMs": 711,
+          "ackSentAtMs": 749,
+          "resolveMs": 12,
+          "renderPlanMs": 478,
+          "inlineToAckMs": 38
+        }
+      ]
+    },
+    {
+      "case_id": "rest-048-fanout-3-8",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 265.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 229,
+          "inline_to_dom_ms": 1.800000011920929,
+          "dom_to_paint_ack_ms": 33.69999998807907,
+          "total_ms": 265
+        },
+        {
+          "request_to_inline_ms": 607,
+          "inline_to_dom_ms": 1.699999988079071,
+          "dom_to_paint_ack_ms": 34.5,
+          "total_ms": 644
+        },
+        {
+          "request_to_inline_ms": 759,
+          "inline_to_dom_ms": 1.5,
+          "dom_to_paint_ack_ms": 35,
+          "total_ms": 796
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 194,
+          "call_ms": 193.79,
+          "transform_ms": 0.064,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 330.593,
+          "call_ms": 330.386,
+          "transform_ms": 0.04,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 463.956,
+          "call_ms": 463.783,
+          "transform_ms": 0.028,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 3,
+      "physical_calls": 3,
+      "first_visible_feedback_ms": 265,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-048-fanout-3-8-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 1,
+          "renderPlanStartedAtMs": 19,
+          "inlineReadyAtMs": 230,
+          "ackSentAtMs": 266,
+          "resolveMs": 18,
+          "renderPlanMs": 211,
+          "inlineToAckMs": 36
+        },
+        {
+          "itemId": "rest-048-fanout-3-8-2",
+          "ordinal": 2,
+          "resolveStartedAtMs": 266,
+          "renderPlanStartedAtMs": 273,
+          "inlineReadyAtMs": 608,
+          "ackSentAtMs": 645,
+          "resolveMs": 7,
+          "renderPlanMs": 335,
+          "inlineToAckMs": 37
+        },
+        {
+          "itemId": "rest-048-fanout-3-8-3",
+          "ordinal": 3,
+          "resolveStartedAtMs": 267,
+          "renderPlanStartedAtMs": 274,
+          "inlineReadyAtMs": 760,
+          "ackSentAtMs": 797,
+          "resolveMs": 7,
+          "renderPlanMs": 486,
+          "inlineToAckMs": 37
+        }
+      ]
+    },
+    {
+      "case_id": "rest-049-fanout-4-9",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 236.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 199,
+          "inline_to_dom_ms": 1.399999976158142,
+          "dom_to_paint_ack_ms": 34.89999997615814,
+          "total_ms": 236
+        },
+        {
+          "request_to_inline_ms": 1528,
+          "inline_to_dom_ms": 1.100000023841858,
+          "dom_to_paint_ack_ms": 74.5,
+          "total_ms": 1607
+        },
+        {
+          "request_to_inline_ms": 1527,
+          "inline_to_dom_ms": 1.300000011920929,
+          "dom_to_paint_ack_ms": 38,
+          "total_ms": 1567
+        },
+        {
+          "request_to_inline_ms": 1528,
+          "inline_to_dom_ms": 5.399999976158142,
+          "dom_to_paint_ack_ms": 71.60000002384186,
+          "total_ms": 1607
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 178.962,
+          "call_ms": 178.739,
+          "transform_ms": 0.075,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 331.227,
+          "call_ms": 330.995,
+          "transform_ms": 0.068,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 453.266,
+          "call_ms": 453.047,
+          "transform_ms": 0.024,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 618.845,
+          "call_ms": 618.595,
+          "transform_ms": 0.144,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 4,
+      "physical_calls": 4,
+      "first_visible_feedback_ms": 236,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-049-fanout-4-9-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 4,
+          "inlineReadyAtMs": 199,
+          "ackSentAtMs": 236,
+          "resolveMs": 4,
+          "renderPlanMs": 195,
+          "inlineToAckMs": 37
+        },
+        {
+          "itemId": "rest-049-fanout-4-9-2",
+          "ordinal": 2,
+          "resolveStartedAtMs": 236,
+          "renderPlanStartedAtMs": 258,
+          "inlineReadyAtMs": 1528,
+          "ackSentAtMs": 1607,
+          "resolveMs": 22,
+          "renderPlanMs": 1270,
+          "inlineToAckMs": 79
+        },
+        {
+          "itemId": "rest-049-fanout-4-9-3",
+          "ordinal": 3,
+          "resolveStartedAtMs": 236,
+          "renderPlanStartedAtMs": 256,
+          "inlineReadyAtMs": 1527,
+          "ackSentAtMs": 1567,
+          "resolveMs": 20,
+          "renderPlanMs": 1271,
+          "inlineToAckMs": 40
+        },
+        {
+          "itemId": "rest-049-fanout-4-9-4",
+          "ordinal": 4,
+          "resolveStartedAtMs": 236,
+          "renderPlanStartedAtMs": 257,
+          "inlineReadyAtMs": 1528,
+          "ackSentAtMs": 1607,
+          "resolveMs": 21,
+          "renderPlanMs": 1271,
+          "inlineToAckMs": 79
+        }
+      ]
+    },
+    {
+      "case_id": "rest-050-fanout-4-10",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 235.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 198,
+          "inline_to_dom_ms": 2.600000023841858,
+          "dom_to_paint_ack_ms": 33.39999997615814,
+          "total_ms": 235
+        },
+        {
+          "request_to_inline_ms": 579,
+          "inline_to_dom_ms": 1,
+          "dom_to_paint_ack_ms": 35.69999998807907,
+          "total_ms": 616
+        },
+        {
+          "request_to_inline_ms": 2861,
+          "inline_to_dom_ms": 1.699999988079071,
+          "dom_to_paint_ack_ms": 50.40000003576279,
+          "total_ms": 2916
+        },
+        {
+          "request_to_inline_ms": 2860,
+          "inline_to_dom_ms": 1.699999988079071,
+          "dom_to_paint_ack_ms": 35.5,
+          "total_ms": 2898
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 176.726,
+          "call_ms": 176.581,
+          "transform_ms": 0.017,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 319.621,
+          "call_ms": 319.535,
+          "transform_ms": 0.026,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 456.558,
+          "call_ms": 456.419,
+          "transform_ms": 0.025,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 607.74,
+          "call_ms": 607.614,
+          "transform_ms": 0.068,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 4,
+      "physical_calls": 4,
+      "first_visible_feedback_ms": 235,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-050-fanout-4-10-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 1,
+          "renderPlanStartedAtMs": 9,
+          "inlineReadyAtMs": 198,
+          "ackSentAtMs": 235,
+          "resolveMs": 8,
+          "renderPlanMs": 189,
+          "inlineToAckMs": 37
+        },
+        {
+          "itemId": "rest-050-fanout-4-10-2",
+          "ordinal": 2,
+          "resolveStartedAtMs": 235,
+          "renderPlanStartedAtMs": 251,
+          "inlineReadyAtMs": 579,
+          "ackSentAtMs": 616,
+          "resolveMs": 16,
+          "renderPlanMs": 328,
+          "inlineToAckMs": 37
+        },
+        {
+          "itemId": "rest-050-fanout-4-10-3",
+          "ordinal": 3,
+          "resolveStartedAtMs": 235,
+          "renderPlanStartedAtMs": 251,
+          "inlineReadyAtMs": 2861,
+          "ackSentAtMs": 2916,
+          "resolveMs": 16,
+          "renderPlanMs": 2610,
+          "inlineToAckMs": 55
+        },
+        {
+          "itemId": "rest-050-fanout-4-10-4",
+          "ordinal": 4,
+          "resolveStartedAtMs": 235,
+          "renderPlanStartedAtMs": 251,
+          "inlineReadyAtMs": 2860,
+          "ackSentAtMs": 2898,
+          "resolveMs": 16,
+          "renderPlanMs": 2609,
+          "inlineToAckMs": 38
+        }
+      ]
+    },
+    {
+      "case_id": "rest-051-fanout-4-11",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 233.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 197,
+          "inline_to_dom_ms": 1.5,
+          "dom_to_paint_ack_ms": 34.30000001192093,
+          "total_ms": 233
+        },
+        {
+          "request_to_inline_ms": 575,
+          "inline_to_dom_ms": 1.300000011920929,
+          "dom_to_paint_ack_ms": 35.39999997615814,
+          "total_ms": 612
+        },
+        {
+          "request_to_inline_ms": 729,
+          "inline_to_dom_ms": 2.299999952316284,
+          "dom_to_paint_ack_ms": 34,
+          "total_ms": 765
+        },
+        {
+          "request_to_inline_ms": 848,
+          "inline_to_dom_ms": 7.5,
+          "dom_to_paint_ack_ms": 46.200000047683716,
+          "total_ms": 903
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 186.212,
+          "call_ms": 186.031,
+          "transform_ms": 0.044,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 321.731,
+          "call_ms": 321.637,
+          "transform_ms": 0.028,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 467.504,
+          "call_ms": 467.238,
+          "transform_ms": 0.128,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 595.161,
+          "call_ms": 594.947,
+          "transform_ms": 0.098,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 4,
+      "physical_calls": 4,
+      "first_visible_feedback_ms": 233,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-051-fanout-4-11-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 6,
+          "inlineReadyAtMs": 197,
+          "ackSentAtMs": 233,
+          "resolveMs": 6,
+          "renderPlanMs": 191,
+          "inlineToAckMs": 36
+        },
+        {
+          "itemId": "rest-051-fanout-4-11-2",
+          "ordinal": 2,
+          "resolveStartedAtMs": 233,
+          "renderPlanStartedAtMs": 248,
+          "inlineReadyAtMs": 575,
+          "ackSentAtMs": 612,
+          "resolveMs": 15,
+          "renderPlanMs": 327,
+          "inlineToAckMs": 37
+        },
+        {
+          "itemId": "rest-051-fanout-4-11-3",
+          "ordinal": 3,
+          "resolveStartedAtMs": 234,
+          "renderPlanStartedAtMs": 248,
+          "inlineReadyAtMs": 729,
+          "ackSentAtMs": 765,
+          "resolveMs": 14,
+          "renderPlanMs": 481,
+          "inlineToAckMs": 36
+        },
+        {
+          "itemId": "rest-051-fanout-4-11-4",
+          "ordinal": 4,
+          "resolveStartedAtMs": 234,
+          "renderPlanStartedAtMs": 248,
+          "inlineReadyAtMs": 849,
+          "ackSentAtMs": 903,
+          "resolveMs": 14,
+          "renderPlanMs": 601,
+          "inlineToAckMs": 54
+        }
+      ]
+    },
+    {
+      "case_id": "rest-052-fanout-4-12",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 237.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 200,
+          "inline_to_dom_ms": 3.5,
+          "dom_to_paint_ack_ms": 33.09999996423721,
+          "total_ms": 237
+        },
+        {
+          "request_to_inline_ms": 595,
+          "inline_to_dom_ms": 1.800000011920929,
+          "dom_to_paint_ack_ms": 34,
+          "total_ms": 632
+        },
+        {
+          "request_to_inline_ms": 731,
+          "inline_to_dom_ms": 1.699999988079071,
+          "dom_to_paint_ack_ms": 34.10000002384186,
+          "total_ms": 768
+        },
+        {
+          "request_to_inline_ms": 867,
+          "inline_to_dom_ms": 2.099999964237213,
+          "dom_to_paint_ack_ms": 33.5,
+          "total_ms": 903
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 186.347,
+          "call_ms": 186.118,
+          "transform_ms": 0.091,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 335.565,
+          "call_ms": 335.415,
+          "transform_ms": 0.02,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 470.906,
+          "call_ms": 470.775,
+          "transform_ms": 0.047,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 603.57,
+          "call_ms": 603.34,
+          "transform_ms": 0.095,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 4,
+      "physical_calls": 4,
+      "first_visible_feedback_ms": 237,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-052-fanout-4-12-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 7,
+          "inlineReadyAtMs": 200,
+          "ackSentAtMs": 237,
+          "resolveMs": 7,
+          "renderPlanMs": 193,
+          "inlineToAckMs": 37
+        },
+        {
+          "itemId": "rest-052-fanout-4-12-2",
+          "ordinal": 2,
+          "resolveStartedAtMs": 237,
+          "renderPlanStartedAtMs": 252,
+          "inlineReadyAtMs": 595,
+          "ackSentAtMs": 632,
+          "resolveMs": 15,
+          "renderPlanMs": 343,
+          "inlineToAckMs": 37
+        },
+        {
+          "itemId": "rest-052-fanout-4-12-3",
+          "ordinal": 3,
+          "resolveStartedAtMs": 237,
+          "renderPlanStartedAtMs": 253,
+          "inlineReadyAtMs": 731,
+          "ackSentAtMs": 768,
+          "resolveMs": 16,
+          "renderPlanMs": 478,
+          "inlineToAckMs": 37
+        },
+        {
+          "itemId": "rest-052-fanout-4-12-4",
+          "ordinal": 4,
+          "resolveStartedAtMs": 237,
+          "renderPlanStartedAtMs": 253,
+          "inlineReadyAtMs": 867,
+          "ackSentAtMs": 904,
+          "resolveMs": 16,
+          "renderPlanMs": 614,
+          "inlineToAckMs": 37
+        }
+      ]
+    },
+    {
+      "case_id": "rest-053-fanout-5-13",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 1799.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 1762,
+          "inline_to_dom_ms": 1.300000011920929,
+          "dom_to_paint_ack_ms": 35.19999998807907,
+          "total_ms": 1799
+        },
+        {
+          "request_to_inline_ms": 3981,
+          "inline_to_dom_ms": 1,
+          "dom_to_paint_ack_ms": 60.299999952316284,
+          "total_ms": 4046
+        },
+        {
+          "request_to_inline_ms": 3981,
+          "inline_to_dom_ms": 1.399999976158142,
+          "dom_to_paint_ack_ms": 36.60000002384186,
+          "total_ms": 4019
+        },
+        {
+          "request_to_inline_ms": 3981,
+          "inline_to_dom_ms": 6.399999976158142,
+          "dom_to_paint_ack_ms": 56.30000001192093,
+          "total_ms": 4046
+        },
+        {
+          "request_to_inline_ms": 4794,
+          "inline_to_dom_ms": 6.300000011920929,
+          "dom_to_paint_ack_ms": 48,
+          "total_ms": 4849
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 194.806,
+          "call_ms": 194.46,
+          "transform_ms": 0.166,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 327.748,
+          "call_ms": 327.56,
+          "transform_ms": 0.099,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 463.798,
+          "call_ms": 463.694,
+          "transform_ms": 0.022,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 600.084,
+          "call_ms": 599.826,
+          "transform_ms": 0.103,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 756.225,
+          "call_ms": 756.007,
+          "transform_ms": 0.074,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 5,
+      "physical_calls": 5,
+      "first_visible_feedback_ms": 1799,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-053-fanout-5-13-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 21,
+          "inlineReadyAtMs": 1762,
+          "ackSentAtMs": 1799,
+          "resolveMs": 21,
+          "renderPlanMs": 1741,
+          "inlineToAckMs": 37
+        },
+        {
+          "itemId": "rest-053-fanout-5-13-2",
+          "ordinal": 2,
+          "resolveStartedAtMs": 1799,
+          "renderPlanStartedAtMs": 1815,
+          "inlineReadyAtMs": 3981,
+          "ackSentAtMs": 4046,
+          "resolveMs": 16,
+          "renderPlanMs": 2166,
+          "inlineToAckMs": 65
+        },
+        {
+          "itemId": "rest-053-fanout-5-13-3",
+          "ordinal": 3,
+          "resolveStartedAtMs": 1800,
+          "renderPlanStartedAtMs": 1816,
+          "inlineReadyAtMs": 3981,
+          "ackSentAtMs": 4019,
+          "resolveMs": 16,
+          "renderPlanMs": 2165,
+          "inlineToAckMs": 38
+        },
+        {
+          "itemId": "rest-053-fanout-5-13-4",
+          "ordinal": 4,
+          "resolveStartedAtMs": 1800,
+          "renderPlanStartedAtMs": 1814,
+          "inlineReadyAtMs": 3981,
+          "ackSentAtMs": 4046,
+          "resolveMs": 14,
+          "renderPlanMs": 2167,
+          "inlineToAckMs": 65
+        },
+        {
+          "itemId": "rest-053-fanout-5-13-5",
+          "ordinal": 5,
+          "resolveStartedAtMs": 4019,
+          "renderPlanStartedAtMs": 4026,
+          "inlineReadyAtMs": 4794,
+          "ackSentAtMs": 4849,
+          "resolveMs": 7,
+          "renderPlanMs": 768,
+          "inlineToAckMs": 55
+        }
+      ]
+    },
+    {
+      "case_id": "rest-054-fanout-5-14",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 248.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 212,
+          "inline_to_dom_ms": 1.5,
+          "dom_to_paint_ack_ms": 33.89999997615814,
+          "total_ms": 248
+        },
+        {
+          "request_to_inline_ms": 604,
+          "inline_to_dom_ms": 1.199999988079071,
+          "dom_to_paint_ack_ms": 364.60000002384186,
+          "total_ms": 971
+        },
+        {
+          "request_to_inline_ms": 741,
+          "inline_to_dom_ms": 1.800000011920929,
+          "dom_to_paint_ack_ms": 254.0999999642372,
+          "total_ms": 998
+        },
+        {
+          "request_to_inline_ms": 877,
+          "inline_to_dom_ms": 2.300000011920929,
+          "dom_to_paint_ack_ms": 117.39999997615814,
+          "total_ms": 998
+        },
+        {
+          "request_to_inline_ms": 3361,
+          "inline_to_dom_ms": 1.600000023841858,
+          "dom_to_paint_ack_ms": 34.89999997615814,
+          "total_ms": 3399
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 188.818,
+          "call_ms": 188.622,
+          "transform_ms": 0.025,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 324.941,
+          "call_ms": 324.756,
+          "transform_ms": 0.022,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 475.562,
+          "call_ms": 475.389,
+          "transform_ms": 0.03,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 612.489,
+          "call_ms": 612.239,
+          "transform_ms": 0.077,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 753.568,
+          "call_ms": 753.299,
+          "transform_ms": 0.13,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 5,
+      "physical_calls": 5,
+      "first_visible_feedback_ms": 248,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-054-fanout-5-14-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 19,
+          "inlineReadyAtMs": 212,
+          "ackSentAtMs": 248,
+          "resolveMs": 19,
+          "renderPlanMs": 193,
+          "inlineToAckMs": 36
+        },
+        {
+          "itemId": "rest-054-fanout-5-14-2",
+          "ordinal": 2,
+          "resolveStartedAtMs": 249,
+          "renderPlanStartedAtMs": 259,
+          "inlineReadyAtMs": 604,
+          "ackSentAtMs": 971,
+          "resolveMs": 10,
+          "renderPlanMs": 345,
+          "inlineToAckMs": 367
+        },
+        {
+          "itemId": "rest-054-fanout-5-14-3",
+          "ordinal": 3,
+          "resolveStartedAtMs": 249,
+          "renderPlanStartedAtMs": 259,
+          "inlineReadyAtMs": 741,
+          "ackSentAtMs": 998,
+          "resolveMs": 10,
+          "renderPlanMs": 482,
+          "inlineToAckMs": 257
+        },
+        {
+          "itemId": "rest-054-fanout-5-14-4",
+          "ordinal": 4,
+          "resolveStartedAtMs": 249,
+          "renderPlanStartedAtMs": 258,
+          "inlineReadyAtMs": 877,
+          "ackSentAtMs": 998,
+          "resolveMs": 9,
+          "renderPlanMs": 619,
+          "inlineToAckMs": 121
+        },
+        {
+          "itemId": "rest-054-fanout-5-14-5",
+          "ordinal": 5,
+          "resolveStartedAtMs": 971,
+          "renderPlanStartedAtMs": 986,
+          "inlineReadyAtMs": 3361,
+          "ackSentAtMs": 3399,
+          "resolveMs": 15,
+          "renderPlanMs": 2375,
+          "inlineToAckMs": 38
+        }
+      ]
+    },
+    {
+      "case_id": "rest-055-fanout-5-15",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 250.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 213,
+          "inline_to_dom_ms": 1.199999988079071,
+          "dom_to_paint_ack_ms": 34.80000001192093,
+          "total_ms": 250
+        },
+        {
+          "request_to_inline_ms": 621,
+          "inline_to_dom_ms": 1.100000023841858,
+          "dom_to_paint_ack_ms": 35,
+          "total_ms": 658
+        },
+        {
+          "request_to_inline_ms": 757,
+          "inline_to_dom_ms": 2.300000011920929,
+          "dom_to_paint_ack_ms": 33.89999997615814,
+          "total_ms": 794
+        },
+        {
+          "request_to_inline_ms": 894,
+          "inline_to_dom_ms": 8.199999988079071,
+          "dom_to_paint_ack_ms": 45.59999996423721,
+          "total_ms": 948
+        },
+        {
+          "request_to_inline_ms": 1423,
+          "inline_to_dom_ms": 2.599999964237213,
+          "dom_to_paint_ack_ms": 33.200000047683716,
+          "total_ms": 1460
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 193.952,
+          "call_ms": 193.815,
+          "transform_ms": 0.039,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 337.187,
+          "call_ms": 337.083,
+          "transform_ms": 0.022,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 473.699,
+          "call_ms": 473.487,
+          "transform_ms": 0.107,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 610.073,
+          "call_ms": 609.809,
+          "transform_ms": 0.077,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 737.701,
+          "call_ms": 737.523,
+          "transform_ms": 0.037,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 5,
+      "physical_calls": 5,
+      "first_visible_feedback_ms": 250,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-055-fanout-5-15-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 4,
+          "inlineReadyAtMs": 213,
+          "ackSentAtMs": 250,
+          "resolveMs": 4,
+          "renderPlanMs": 209,
+          "inlineToAckMs": 37
+        },
+        {
+          "itemId": "rest-055-fanout-5-15-2",
+          "ordinal": 2,
+          "resolveStartedAtMs": 250,
+          "renderPlanStartedAtMs": 271,
+          "inlineReadyAtMs": 621,
+          "ackSentAtMs": 658,
+          "resolveMs": 21,
+          "renderPlanMs": 350,
+          "inlineToAckMs": 37
+        },
+        {
+          "itemId": "rest-055-fanout-5-15-3",
+          "ordinal": 3,
+          "resolveStartedAtMs": 250,
+          "renderPlanStartedAtMs": 271,
+          "inlineReadyAtMs": 757,
+          "ackSentAtMs": 794,
+          "resolveMs": 21,
+          "renderPlanMs": 486,
+          "inlineToAckMs": 37
+        },
+        {
+          "itemId": "rest-055-fanout-5-15-4",
+          "ordinal": 4,
+          "resolveStartedAtMs": 251,
+          "renderPlanStartedAtMs": 270,
+          "inlineReadyAtMs": 894,
+          "ackSentAtMs": 948,
+          "resolveMs": 19,
+          "renderPlanMs": 624,
+          "inlineToAckMs": 54
+        },
+        {
+          "itemId": "rest-055-fanout-5-15-5",
+          "ordinal": 5,
+          "resolveStartedAtMs": 658,
+          "renderPlanStartedAtMs": 669,
+          "inlineReadyAtMs": 1423,
+          "ackSentAtMs": 1460,
+          "resolveMs": 11,
+          "renderPlanMs": 754,
+          "inlineToAckMs": 37
+        }
+      ]
+    },
+    {
+      "case_id": "rest-056-fanout-5-16",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 221.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 184,
+          "inline_to_dom_ms": 1.600000023841858,
+          "dom_to_paint_ack_ms": 34.89999997615814,
+          "total_ms": 221
+        },
+        {
+          "request_to_inline_ms": 1641,
+          "inline_to_dom_ms": 1.100000023841858,
+          "dom_to_paint_ack_ms": 30.099999964237213,
+          "total_ms": 1677
+        },
+        {
+          "request_to_inline_ms": 1640,
+          "inline_to_dom_ms": 2,
+          "dom_to_paint_ack_ms": 20.899999976158142,
+          "total_ms": 1664
+        },
+        {
+          "request_to_inline_ms": 1640,
+          "inline_to_dom_ms": 2.399999976158142,
+          "dom_to_paint_ack_ms": 31.30000001192093,
+          "total_ms": 1677
+        },
+        {
+          "request_to_inline_ms": 2435,
+          "inline_to_dom_ms": 1.2999999523162842,
+          "dom_to_paint_ack_ms": 108.90000003576279,
+          "total_ms": 4136
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 168.47,
+          "call_ms": 168.242,
+          "transform_ms": 0.065,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 336.64,
+          "call_ms": 336.558,
+          "transform_ms": 0.025,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 463.864,
+          "call_ms": 463.658,
+          "transform_ms": 0.076,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 607.949,
+          "call_ms": 607.838,
+          "transform_ms": 0.025,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 749.725,
+          "call_ms": 749.492,
+          "transform_ms": 0.088,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 5,
+      "physical_calls": 5,
+      "first_visible_feedback_ms": 221,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-056-fanout-5-16-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 1,
+          "renderPlanStartedAtMs": 9,
+          "inlineReadyAtMs": 184,
+          "ackSentAtMs": 221,
+          "resolveMs": 8,
+          "renderPlanMs": 175,
+          "inlineToAckMs": 37
+        },
+        {
+          "itemId": "rest-056-fanout-5-16-2",
+          "ordinal": 2,
+          "resolveStartedAtMs": 221,
+          "renderPlanStartedAtMs": 233,
+          "inlineReadyAtMs": 1641,
+          "ackSentAtMs": 1677,
+          "resolveMs": 12,
+          "renderPlanMs": 1408,
+          "inlineToAckMs": 36
+        },
+        {
+          "itemId": "rest-056-fanout-5-16-3",
+          "ordinal": 3,
+          "resolveStartedAtMs": 221,
+          "renderPlanStartedAtMs": 234,
+          "inlineReadyAtMs": 1640,
+          "ackSentAtMs": 1664,
+          "resolveMs": 13,
+          "renderPlanMs": 1406,
+          "inlineToAckMs": 24
+        },
+        {
+          "itemId": "rest-056-fanout-5-16-4",
+          "ordinal": 4,
+          "resolveStartedAtMs": 221,
+          "renderPlanStartedAtMs": 234,
+          "inlineReadyAtMs": 1640,
+          "ackSentAtMs": 1677,
+          "resolveMs": 13,
+          "renderPlanMs": 1406,
+          "inlineToAckMs": 37
+        },
+        {
+          "itemId": "rest-056-fanout-5-16-5",
+          "ordinal": 5,
+          "resolveStartedAtMs": 1664,
+          "renderPlanStartedAtMs": 1671,
+          "inlineReadyAtMs": 2435,
+          "ackSentAtMs": 4136,
+          "resolveMs": 7,
+          "renderPlanMs": 764,
+          "inlineToAckMs": 1701
+        }
+      ]
+    },
+    {
+      "case_id": "rest-057-fanout-6-17",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 235.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 198,
+          "inline_to_dom_ms": 1,
+          "dom_to_paint_ack_ms": 34.59999996423721,
+          "total_ms": 235
+        },
+        {
+          "request_to_inline_ms": 1720,
+          "inline_to_dom_ms": 1.899999976158142,
+          "dom_to_paint_ack_ms": 79.90000003576279,
+          "total_ms": 1809
+        },
+        {
+          "request_to_inline_ms": 1720,
+          "inline_to_dom_ms": 2.700000047683716,
+          "dom_to_paint_ack_ms": 33.799999952316284,
+          "total_ms": 1757
+        },
+        {
+          "request_to_inline_ms": 1720,
+          "inline_to_dom_ms": 11.399999976158142,
+          "dom_to_paint_ack_ms": 72.60000002384186,
+          "total_ms": 1810
+        },
+        {
+          "request_to_inline_ms": 3431,
+          "inline_to_dom_ms": 5.400000035762787,
+          "dom_to_paint_ack_ms": 57.39999997615814,
+          "total_ms": 3497
+        },
+        {
+          "request_to_inline_ms": 3430,
+          "inline_to_dom_ms": 1.899999976158142,
+          "dom_to_paint_ack_ms": 35.19999998807907,
+          "total_ms": 3468
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 187.216,
+          "call_ms": 187.01,
+          "transform_ms": 0.068,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 332.885,
+          "call_ms": 332.737,
+          "transform_ms": 0.085,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 470.008,
+          "call_ms": 469.874,
+          "transform_ms": 0.033,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 608.654,
+          "call_ms": 608.326,
+          "transform_ms": 0.202,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 746.828,
+          "call_ms": 746.564,
+          "transform_ms": 0.074,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 885.366,
+          "call_ms": 885.09,
+          "transform_ms": 0.116,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 6,
+      "physical_calls": 6,
+      "first_visible_feedback_ms": 235,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-057-fanout-6-17-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 6,
+          "inlineReadyAtMs": 198,
+          "ackSentAtMs": 235,
+          "resolveMs": 6,
+          "renderPlanMs": 192,
+          "inlineToAckMs": 37
+        },
+        {
+          "itemId": "rest-057-fanout-6-17-2",
+          "ordinal": 2,
+          "resolveStartedAtMs": 235,
+          "renderPlanStartedAtMs": 251,
+          "inlineReadyAtMs": 1720,
+          "ackSentAtMs": 1809,
+          "resolveMs": 16,
+          "renderPlanMs": 1469,
+          "inlineToAckMs": 89
+        },
+        {
+          "itemId": "rest-057-fanout-6-17-3",
+          "ordinal": 3,
+          "resolveStartedAtMs": 235,
+          "renderPlanStartedAtMs": 250,
+          "inlineReadyAtMs": 1720,
+          "ackSentAtMs": 1757,
+          "resolveMs": 15,
+          "renderPlanMs": 1470,
+          "inlineToAckMs": 37
+        },
+        {
+          "itemId": "rest-057-fanout-6-17-4",
+          "ordinal": 4,
+          "resolveStartedAtMs": 235,
+          "renderPlanStartedAtMs": 251,
+          "inlineReadyAtMs": 1720,
+          "ackSentAtMs": 1810,
+          "resolveMs": 16,
+          "renderPlanMs": 1469,
+          "inlineToAckMs": 90
+        },
+        {
+          "itemId": "rest-057-fanout-6-17-5",
+          "ordinal": 5,
+          "resolveStartedAtMs": 1757,
+          "renderPlanStartedAtMs": 1766,
+          "inlineReadyAtMs": 3431,
+          "ackSentAtMs": 3497,
+          "resolveMs": 9,
+          "renderPlanMs": 1665,
+          "inlineToAckMs": 66
+        },
+        {
+          "itemId": "rest-057-fanout-6-17-6",
+          "ordinal": 6,
+          "resolveStartedAtMs": 1809,
+          "renderPlanStartedAtMs": 1822,
+          "inlineReadyAtMs": 3431,
+          "ackSentAtMs": 3468,
+          "resolveMs": 13,
+          "renderPlanMs": 1609,
+          "inlineToAckMs": 37
+        }
+      ]
+    },
+    {
+      "case_id": "rest-058-fanout-6-18",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 221.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 185,
+          "inline_to_dom_ms": 1.2999999523162842,
+          "dom_to_paint_ack_ms": 34.10000002384186,
+          "total_ms": 221
+        },
+        {
+          "request_to_inline_ms": 580,
+          "inline_to_dom_ms": 1.300000011920929,
+          "dom_to_paint_ack_ms": 34.89999997615814,
+          "total_ms": 617
+        },
+        {
+          "request_to_inline_ms": 716,
+          "inline_to_dom_ms": 1.4000000357627869,
+          "dom_to_paint_ack_ms": 34.59999996423721,
+          "total_ms": 752
+        },
+        {
+          "request_to_inline_ms": 2078,
+          "inline_to_dom_ms": 2.699999988079071,
+          "dom_to_paint_ack_ms": 44.60000002384186,
+          "total_ms": 2132
+        },
+        {
+          "request_to_inline_ms": 2077,
+          "inline_to_dom_ms": 1.699999988079071,
+          "dom_to_paint_ack_ms": 46.10000002384186,
+          "total_ms": 2126
+        },
+        {
+          "request_to_inline_ms": 2078,
+          "inline_to_dom_ms": 1.899999976158142,
+          "dom_to_paint_ack_ms": 47.30000001192093,
+          "total_ms": 2132
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 165.689,
+          "call_ms": 165.569,
+          "transform_ms": 0.02,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 337.038,
+          "call_ms": 336.909,
+          "transform_ms": 0.023,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 468.597,
+          "call_ms": 468.484,
+          "transform_ms": 0.021,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 611.342,
+          "call_ms": 611.202,
+          "transform_ms": 0.08,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 753.427,
+          "call_ms": 753.281,
+          "transform_ms": 0.053,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 879.615,
+          "call_ms": 879.41,
+          "transform_ms": 0.057,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 6,
+      "physical_calls": 6,
+      "first_visible_feedback_ms": 221,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-058-fanout-6-18-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 4,
+          "inlineReadyAtMs": 185,
+          "ackSentAtMs": 221,
+          "resolveMs": 4,
+          "renderPlanMs": 181,
+          "inlineToAckMs": 36
+        },
+        {
+          "itemId": "rest-058-fanout-6-18-2",
+          "ordinal": 2,
+          "resolveStartedAtMs": 221,
+          "renderPlanStartedAtMs": 237,
+          "inlineReadyAtMs": 580,
+          "ackSentAtMs": 617,
+          "resolveMs": 16,
+          "renderPlanMs": 343,
+          "inlineToAckMs": 37
+        },
+        {
+          "itemId": "rest-058-fanout-6-18-3",
+          "ordinal": 3,
+          "resolveStartedAtMs": 221,
+          "renderPlanStartedAtMs": 237,
+          "inlineReadyAtMs": 716,
+          "ackSentAtMs": 752,
+          "resolveMs": 16,
+          "renderPlanMs": 479,
+          "inlineToAckMs": 36
+        },
+        {
+          "itemId": "rest-058-fanout-6-18-4",
+          "ordinal": 4,
+          "resolveStartedAtMs": 221,
+          "renderPlanStartedAtMs": 236,
+          "inlineReadyAtMs": 2078,
+          "ackSentAtMs": 2132,
+          "resolveMs": 15,
+          "renderPlanMs": 1842,
+          "inlineToAckMs": 54
+        },
+        {
+          "itemId": "rest-058-fanout-6-18-5",
+          "ordinal": 5,
+          "resolveStartedAtMs": 617,
+          "renderPlanStartedAtMs": 629,
+          "inlineReadyAtMs": 2077,
+          "ackSentAtMs": 2126,
+          "resolveMs": 12,
+          "renderPlanMs": 1448,
+          "inlineToAckMs": 49
+        },
+        {
+          "itemId": "rest-058-fanout-6-18-6",
+          "ordinal": 6,
+          "resolveStartedAtMs": 752,
+          "renderPlanStartedAtMs": 766,
+          "inlineReadyAtMs": 2078,
+          "ackSentAtMs": 2132,
+          "resolveMs": 14,
+          "renderPlanMs": 1312,
+          "inlineToAckMs": 54
+        }
+      ]
+    },
+    {
+      "case_id": "rest-059-fanout-6-19",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 248.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 212,
+          "inline_to_dom_ms": 1.300000011920929,
+          "dom_to_paint_ack_ms": 34.69999998807907,
+          "total_ms": 248
+        },
+        {
+          "request_to_inline_ms": 1883,
+          "inline_to_dom_ms": 1.600000023841858,
+          "dom_to_paint_ack_ms": 47,
+          "total_ms": 1937
+        },
+        {
+          "request_to_inline_ms": 1882,
+          "inline_to_dom_ms": 2.399999976158142,
+          "dom_to_paint_ack_ms": 34.10000002384186,
+          "total_ms": 1920
+        },
+        {
+          "request_to_inline_ms": 1882,
+          "inline_to_dom_ms": 7.900000035762787,
+          "dom_to_paint_ack_ms": 42.89999997615814,
+          "total_ms": 1938
+        },
+        {
+          "request_to_inline_ms": 4323,
+          "inline_to_dom_ms": 1.399999976158142,
+          "dom_to_paint_ack_ms": 50.10000002384186,
+          "total_ms": 4378
+        },
+        {
+          "request_to_inline_ms": 4323,
+          "inline_to_dom_ms": 1.899999976158142,
+          "dom_to_paint_ack_ms": 34.80000001192093,
+          "total_ms": 4360
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 191.172,
+          "call_ms": 190.865,
+          "transform_ms": 0.051,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 313.497,
+          "call_ms": 313.377,
+          "transform_ms": 0.028,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 465.367,
+          "call_ms": 465.049,
+          "transform_ms": 0.122,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 599.859,
+          "call_ms": 599.688,
+          "transform_ms": 0.082,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 735.302,
+          "call_ms": 735.082,
+          "transform_ms": 0.022,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 890.837,
+          "call_ms": 890.598,
+          "transform_ms": 0.048,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 6,
+      "physical_calls": 6,
+      "first_visible_feedback_ms": 248,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-059-fanout-6-19-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 1,
+          "renderPlanStartedAtMs": 8,
+          "inlineReadyAtMs": 213,
+          "ackSentAtMs": 249,
+          "resolveMs": 7,
+          "renderPlanMs": 205,
+          "inlineToAckMs": 36
+        },
+        {
+          "itemId": "rest-059-fanout-6-19-2",
+          "ordinal": 2,
+          "resolveStartedAtMs": 250,
+          "renderPlanStartedAtMs": 270,
+          "inlineReadyAtMs": 1884,
+          "ackSentAtMs": 1938,
+          "resolveMs": 20,
+          "renderPlanMs": 1614,
+          "inlineToAckMs": 54
+        },
+        {
+          "itemId": "rest-059-fanout-6-19-3",
+          "ordinal": 3,
+          "resolveStartedAtMs": 250,
+          "renderPlanStartedAtMs": 269,
+          "inlineReadyAtMs": 1883,
+          "ackSentAtMs": 1921,
+          "resolveMs": 19,
+          "renderPlanMs": 1614,
+          "inlineToAckMs": 38
+        },
+        {
+          "itemId": "rest-059-fanout-6-19-4",
+          "ordinal": 4,
+          "resolveStartedAtMs": 250,
+          "renderPlanStartedAtMs": 270,
+          "inlineReadyAtMs": 1883,
+          "ackSentAtMs": 1939,
+          "resolveMs": 20,
+          "renderPlanMs": 1613,
+          "inlineToAckMs": 56
+        },
+        {
+          "itemId": "rest-059-fanout-6-19-5",
+          "ordinal": 5,
+          "resolveStartedAtMs": 1921,
+          "renderPlanStartedAtMs": 1928,
+          "inlineReadyAtMs": 4324,
+          "ackSentAtMs": 4379,
+          "resolveMs": 7,
+          "renderPlanMs": 2396,
+          "inlineToAckMs": 55
+        },
+        {
+          "itemId": "rest-059-fanout-6-19-6",
+          "ordinal": 6,
+          "resolveStartedAtMs": 1938,
+          "renderPlanStartedAtMs": 1947,
+          "inlineReadyAtMs": 4324,
+          "ackSentAtMs": 4361,
+          "resolveMs": 9,
+          "renderPlanMs": 2377,
+          "inlineToAckMs": 37
+        }
+      ]
+    },
+    {
+      "case_id": "rest-060-fanout-6-20",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 1451.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 199,
+          "inline_to_dom_ms": 2.300000011920929,
+          "dom_to_paint_ack_ms": 33.60000002384186,
+          "total_ms": 1451
+        },
+        {
+          "request_to_inline_ms": 1818,
+          "inline_to_dom_ms": 1.300000011920929,
+          "dom_to_paint_ack_ms": 35.30000001192093,
+          "total_ms": 1855
+        },
+        {
+          "request_to_inline_ms": 1956,
+          "inline_to_dom_ms": 2.100000023841858,
+          "dom_to_paint_ack_ms": 33.799999952316284,
+          "total_ms": 1992
+        },
+        {
+          "request_to_inline_ms": 2078,
+          "inline_to_dom_ms": 2.599999964237213,
+          "dom_to_paint_ack_ms": 33.10000002384186,
+          "total_ms": 2114
+        },
+        {
+          "request_to_inline_ms": 3384,
+          "inline_to_dom_ms": 1.699999988079071,
+          "dom_to_paint_ack_ms": 43.5,
+          "total_ms": 3438
+        },
+        {
+          "request_to_inline_ms": 3384,
+          "inline_to_dom_ms": 8.5,
+          "dom_to_paint_ack_ms": 45.19999998807907,
+          "total_ms": 3438
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 176.661,
+          "call_ms": 176.449,
+          "transform_ms": 0.054,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 337.326,
+          "call_ms": 337.126,
+          "transform_ms": 0.026,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 474.383,
+          "call_ms": 474.166,
+          "transform_ms": 0.021,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 595.573,
+          "call_ms": 595.414,
+          "transform_ms": 0.042,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 720.732,
+          "call_ms": 720.57,
+          "transform_ms": 0.04,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 884.308,
+          "call_ms": 884.114,
+          "transform_ms": 0.071,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 6,
+      "physical_calls": 6,
+      "first_visible_feedback_ms": 1451,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-060-fanout-6-20-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 5,
+          "inlineReadyAtMs": 199,
+          "ackSentAtMs": 1451,
+          "resolveMs": 5,
+          "renderPlanMs": 194,
+          "inlineToAckMs": 1252
+        },
+        {
+          "itemId": "rest-060-fanout-6-20-2",
+          "ordinal": 2,
+          "resolveStartedAtMs": 1451,
+          "renderPlanStartedAtMs": 1464,
+          "inlineReadyAtMs": 1818,
+          "ackSentAtMs": 1855,
+          "resolveMs": 13,
+          "renderPlanMs": 354,
+          "inlineToAckMs": 37
+        },
+        {
+          "itemId": "rest-060-fanout-6-20-3",
+          "ordinal": 3,
+          "resolveStartedAtMs": 1452,
+          "renderPlanStartedAtMs": 1467,
+          "inlineReadyAtMs": 1956,
+          "ackSentAtMs": 1992,
+          "resolveMs": 15,
+          "renderPlanMs": 489,
+          "inlineToAckMs": 36
+        },
+        {
+          "itemId": "rest-060-fanout-6-20-4",
+          "ordinal": 4,
+          "resolveStartedAtMs": 1452,
+          "renderPlanStartedAtMs": 1466,
+          "inlineReadyAtMs": 2078,
+          "ackSentAtMs": 2114,
+          "resolveMs": 14,
+          "renderPlanMs": 612,
+          "inlineToAckMs": 36
+        },
+        {
+          "itemId": "rest-060-fanout-6-20-5",
+          "ordinal": 5,
+          "resolveStartedAtMs": 1855,
+          "renderPlanStartedAtMs": 1868,
+          "inlineReadyAtMs": 3384,
+          "ackSentAtMs": 3438,
+          "resolveMs": 13,
+          "renderPlanMs": 1516,
+          "inlineToAckMs": 54
+        },
+        {
+          "itemId": "rest-060-fanout-6-20-6",
+          "ordinal": 6,
+          "resolveStartedAtMs": 1992,
+          "renderPlanStartedAtMs": 2004,
+          "inlineReadyAtMs": 3384,
+          "ackSentAtMs": 3438,
+          "resolveMs": 12,
+          "renderPlanMs": 1380,
+          "inlineToAckMs": 54
+        }
+      ]
+    },
+    {
+      "case_id": "rest-061-single-flight-1",
+      "category": "single_flight",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 477.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 439,
+          "inline_to_dom_ms": 1.5,
+          "dom_to_paint_ack_ms": 35.30000001192093,
+          "total_ms": 477
+        },
+        {
+          "request_to_inline_ms": 477,
+          "inline_to_dom_ms": 1.2999999523162842,
+          "dom_to_paint_ack_ms": 425.60000002384186,
+          "total_ms": 2053
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 418.739,
+          "call_ms": 418.567,
+          "transform_ms": 0.059,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 418.739,
+          "call_ms": 418.567,
+          "transform_ms": 0.059,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 2,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 477,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-061-single-flight-1-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 8,
+          "inlineReadyAtMs": 439,
+          "ackSentAtMs": 477,
+          "resolveMs": 8,
+          "renderPlanMs": 431,
+          "inlineToAckMs": 38
+        },
+        {
+          "itemId": "rest-061-single-flight-1-2",
+          "ordinal": 2,
+          "inlineReadyAtMs": 477,
+          "ackSentAtMs": 2053,
+          "resolveMs": null,
+          "renderPlanMs": null,
+          "inlineToAckMs": 1576
+        }
+      ]
+    },
+    {
+      "case_id": "rest-062-single-flight-2",
+      "category": "single_flight",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 524.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 488,
+          "inline_to_dom_ms": 2.699999988079071,
+          "dom_to_paint_ack_ms": 33.39999997615814,
+          "total_ms": 524
+        },
+        {
+          "request_to_inline_ms": 525,
+          "inline_to_dom_ms": 1.5999999642372131,
+          "dom_to_paint_ack_ms": 50.60000002384186,
+          "total_ms": 577
+        },
+        {
+          "request_to_inline_ms": 525,
+          "inline_to_dom_ms": 0.800000011920929,
+          "dom_to_paint_ack_ms": 49.69999998807907,
+          "total_ms": 577
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 464.789,
+          "call_ms": 464.505,
+          "transform_ms": 0.061,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 464.789,
+          "call_ms": 464.505,
+          "transform_ms": 0.061,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 464.789,
+          "call_ms": 464.505,
+          "transform_ms": 0.061,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 3,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 524,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-062-single-flight-2-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 10,
+          "inlineReadyAtMs": 488,
+          "ackSentAtMs": 525,
+          "resolveMs": 10,
+          "renderPlanMs": 478,
+          "inlineToAckMs": 37
+        },
+        {
+          "itemId": "rest-062-single-flight-2-2",
+          "ordinal": 2,
+          "inlineReadyAtMs": 525,
+          "ackSentAtMs": 577,
+          "resolveMs": null,
+          "renderPlanMs": null,
+          "inlineToAckMs": 52
+        },
+        {
+          "itemId": "rest-062-single-flight-2-3",
+          "ordinal": 3,
+          "inlineReadyAtMs": 525,
+          "ackSentAtMs": 577,
+          "resolveMs": null,
+          "renderPlanMs": null,
+          "inlineToAckMs": 52
+        }
+      ]
+    },
+    {
+      "case_id": "rest-063-single-flight-3",
+      "category": "single_flight",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 1424.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 1385,
+          "inline_to_dom_ms": 2.599999964237213,
+          "dom_to_paint_ack_ms": 35.10000002384186,
+          "total_ms": 1424
+        },
+        {
+          "request_to_inline_ms": 1424,
+          "inline_to_dom_ms": 1.300000011920929,
+          "dom_to_paint_ack_ms": 49,
+          "total_ms": 1475
+        },
+        {
+          "request_to_inline_ms": 1424,
+          "inline_to_dom_ms": 1.199999988079071,
+          "dom_to_paint_ack_ms": 47.90000003576279,
+          "total_ms": 1475
+        },
+        {
+          "request_to_inline_ms": 1424,
+          "inline_to_dom_ms": 2,
+          "dom_to_paint_ack_ms": 45.80000001192093,
+          "total_ms": 1475
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 512.002,
+          "call_ms": 511.797,
+          "transform_ms": 0.07,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 512.002,
+          "call_ms": 511.797,
+          "transform_ms": 0.07,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 512.002,
+          "call_ms": 511.797,
+          "transform_ms": 0.07,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 512.002,
+          "call_ms": 511.797,
+          "transform_ms": 0.07,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 4,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 1424,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-063-single-flight-3-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 18,
+          "inlineReadyAtMs": 1385,
+          "ackSentAtMs": 1424,
+          "resolveMs": 18,
+          "renderPlanMs": 1367,
+          "inlineToAckMs": 39
+        },
+        {
+          "itemId": "rest-063-single-flight-3-2",
+          "ordinal": 2,
+          "inlineReadyAtMs": 1424,
+          "ackSentAtMs": 1475,
+          "resolveMs": null,
+          "renderPlanMs": null,
+          "inlineToAckMs": 51
+        },
+        {
+          "itemId": "rest-063-single-flight-3-3",
+          "ordinal": 3,
+          "inlineReadyAtMs": 1424,
+          "ackSentAtMs": 1475,
+          "resolveMs": null,
+          "renderPlanMs": null,
+          "inlineToAckMs": 51
+        },
+        {
+          "itemId": "rest-063-single-flight-3-4",
+          "ordinal": 4,
+          "inlineReadyAtMs": 1424,
+          "ackSentAtMs": 1475,
+          "resolveMs": null,
+          "renderPlanMs": null,
+          "inlineToAckMs": 51
+        }
+      ]
+    },
+    {
+      "case_id": "rest-064-single-flight-4",
+      "category": "single_flight",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 2769.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 562,
+          "inline_to_dom_ms": 10.300000011920929,
+          "dom_to_paint_ack_ms": 43.60000002384186,
+          "total_ms": 2769
+        },
+        {
+          "request_to_inline_ms": 2769,
+          "inline_to_dom_ms": 13.5,
+          "dom_to_paint_ack_ms": 94.19999998807907,
+          "total_ms": 2877
+        },
+        {
+          "request_to_inline_ms": 2769,
+          "inline_to_dom_ms": 6.600000023841858,
+          "dom_to_paint_ack_ms": 87.89999997615814,
+          "total_ms": 2877
+        },
+        {
+          "request_to_inline_ms": 2769,
+          "inline_to_dom_ms": 12.199999988079071,
+          "dom_to_paint_ack_ms": 81.5,
+          "total_ms": 2878
+        },
+        {
+          "request_to_inline_ms": 2877,
+          "inline_to_dom_ms": 10.800000011920929,
+          "dom_to_paint_ack_ms": 77.69999998807907,
+          "total_ms": 2966
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 546.161,
+          "call_ms": 545.95,
+          "transform_ms": 0.076,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 546.161,
+          "call_ms": 545.95,
+          "transform_ms": 0.076,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 546.161,
+          "call_ms": 545.95,
+          "transform_ms": 0.076,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 546.161,
+          "call_ms": 545.95,
+          "transform_ms": 0.076,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 546.161,
+          "call_ms": 545.95,
+          "transform_ms": 0.076,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 5,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2769,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-064-single-flight-4-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 8,
+          "inlineReadyAtMs": 562,
+          "ackSentAtMs": 2769,
+          "resolveMs": 8,
+          "renderPlanMs": 554,
+          "inlineToAckMs": 2207
+        },
+        {
+          "itemId": "rest-064-single-flight-4-2",
+          "ordinal": 2,
+          "inlineReadyAtMs": 2769,
+          "ackSentAtMs": 2877,
+          "resolveMs": null,
+          "renderPlanMs": null,
+          "inlineToAckMs": 108
+        },
+        {
+          "itemId": "rest-064-single-flight-4-3",
+          "ordinal": 3,
+          "inlineReadyAtMs": 2769,
+          "ackSentAtMs": 2878,
+          "resolveMs": null,
+          "renderPlanMs": null,
+          "inlineToAckMs": 109
+        },
+        {
+          "itemId": "rest-064-single-flight-4-4",
+          "ordinal": 4,
+          "inlineReadyAtMs": 2769,
+          "ackSentAtMs": 2878,
+          "resolveMs": null,
+          "renderPlanMs": null,
+          "inlineToAckMs": 109
+        },
+        {
+          "itemId": "rest-064-single-flight-4-5",
+          "ordinal": 5,
+          "inlineReadyAtMs": 2877,
+          "ackSentAtMs": 2967,
+          "resolveMs": null,
+          "renderPlanMs": null,
+          "inlineToAckMs": 90
+        }
+      ]
+    },
+    {
+      "case_id": "rest-065-single-flight-5",
+      "category": "single_flight",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 629.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 593,
+          "inline_to_dom_ms": 1.300000011920929,
+          "dom_to_paint_ack_ms": 34.30000001192093,
+          "total_ms": 629
+        },
+        {
+          "request_to_inline_ms": 629,
+          "inline_to_dom_ms": 1.5,
+          "dom_to_paint_ack_ms": 50.60000002384186,
+          "total_ms": 681
+        },
+        {
+          "request_to_inline_ms": 629,
+          "inline_to_dom_ms": 1,
+          "dom_to_paint_ack_ms": 49.60000002384186,
+          "total_ms": 682
+        },
+        {
+          "request_to_inline_ms": 629,
+          "inline_to_dom_ms": 0.8999999761581421,
+          "dom_to_paint_ack_ms": 48.60000002384186,
+          "total_ms": 682
+        },
+        {
+          "request_to_inline_ms": 681,
+          "inline_to_dom_ms": 1.4000000357627869,
+          "dom_to_paint_ack_ms": 52.19999998807907,
+          "total_ms": 735
+        },
+        {
+          "request_to_inline_ms": 682,
+          "inline_to_dom_ms": 0.800000011920929,
+          "dom_to_paint_ack_ms": 51.39999997615814,
+          "total_ms": 735
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 576.851,
+          "call_ms": 576.665,
+          "transform_ms": 0.041,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 576.851,
+          "call_ms": 576.665,
+          "transform_ms": 0.041,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 576.851,
+          "call_ms": 576.665,
+          "transform_ms": 0.041,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 576.851,
+          "call_ms": 576.665,
+          "transform_ms": 0.041,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 576.851,
+          "call_ms": 576.665,
+          "transform_ms": 0.041,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 576.851,
+          "call_ms": 576.665,
+          "transform_ms": 0.041,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 6,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 629,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-065-single-flight-5-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 8,
+          "inlineReadyAtMs": 593,
+          "ackSentAtMs": 629,
+          "resolveMs": 8,
+          "renderPlanMs": 585,
+          "inlineToAckMs": 36
+        },
+        {
+          "itemId": "rest-065-single-flight-5-2",
+          "ordinal": 2,
+          "inlineReadyAtMs": 629,
+          "ackSentAtMs": 681,
+          "resolveMs": null,
+          "renderPlanMs": null,
+          "inlineToAckMs": 52
+        },
+        {
+          "itemId": "rest-065-single-flight-5-3",
+          "ordinal": 3,
+          "inlineReadyAtMs": 629,
+          "ackSentAtMs": 682,
+          "resolveMs": null,
+          "renderPlanMs": null,
+          "inlineToAckMs": 53
+        },
+        {
+          "itemId": "rest-065-single-flight-5-4",
+          "ordinal": 4,
+          "inlineReadyAtMs": 629,
+          "ackSentAtMs": 682,
+          "resolveMs": null,
+          "renderPlanMs": null,
+          "inlineToAckMs": 53
+        },
+        {
+          "itemId": "rest-065-single-flight-5-5",
+          "ordinal": 5,
+          "inlineReadyAtMs": 681,
+          "ackSentAtMs": 735,
+          "resolveMs": null,
+          "renderPlanMs": null,
+          "inlineToAckMs": 54
+        },
+        {
+          "itemId": "rest-065-single-flight-5-6",
+          "ordinal": 6,
+          "inlineReadyAtMs": 682,
+          "ackSentAtMs": 735,
+          "resolveMs": null,
+          "renderPlanMs": null,
+          "inlineToAckMs": 53
+        }
+      ]
+    },
+    {
+      "case_id": "rest-066-single-flight-6",
+      "category": "single_flight",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 674.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 637,
+          "inline_to_dom_ms": 2.700000047683716,
+          "dom_to_paint_ack_ms": 33.39999997615814,
+          "total_ms": 674
+        },
+        {
+          "request_to_inline_ms": 674,
+          "inline_to_dom_ms": 2.199999988079071,
+          "dom_to_paint_ack_ms": 50.69999998807907,
+          "total_ms": 728
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 617.235,
+          "call_ms": 617.012,
+          "transform_ms": 0.05,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 617.235,
+          "call_ms": 617.012,
+          "transform_ms": 0.05,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 2,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 674,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-066-single-flight-6-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 4,
+          "inlineReadyAtMs": 637,
+          "ackSentAtMs": 674,
+          "resolveMs": 4,
+          "renderPlanMs": 633,
+          "inlineToAckMs": 37
+        },
+        {
+          "itemId": "rest-066-single-flight-6-2",
+          "ordinal": 2,
+          "inlineReadyAtMs": 674,
+          "ackSentAtMs": 728,
+          "resolveMs": null,
+          "renderPlanMs": null,
+          "inlineToAckMs": 54
+        }
+      ]
+    },
+    {
+      "case_id": "rest-067-single-flight-7",
+      "category": "single_flight",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 1713.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 1675,
+          "inline_to_dom_ms": 2.900000035762787,
+          "dom_to_paint_ack_ms": 33.89999997615814,
+          "total_ms": 1713
+        },
+        {
+          "request_to_inline_ms": 1713,
+          "inline_to_dom_ms": 3,
+          "dom_to_paint_ack_ms": 49.5,
+          "total_ms": 1766
+        },
+        {
+          "request_to_inline_ms": 1713,
+          "inline_to_dom_ms": 2.300000011920929,
+          "dom_to_paint_ack_ms": 47.10000002384186,
+          "total_ms": 1766
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 675.232,
+          "call_ms": 674.992,
+          "transform_ms": 0.081,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 675.232,
+          "call_ms": 674.992,
+          "transform_ms": 0.081,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 675.232,
+          "call_ms": 674.992,
+          "transform_ms": 0.081,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 3,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 1713,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-067-single-flight-7-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 1,
+          "renderPlanStartedAtMs": 7,
+          "inlineReadyAtMs": 1676,
+          "ackSentAtMs": 1714,
+          "resolveMs": 6,
+          "renderPlanMs": 1669,
+          "inlineToAckMs": 38
+        },
+        {
+          "itemId": "rest-067-single-flight-7-2",
+          "ordinal": 2,
+          "inlineReadyAtMs": 1714,
+          "ackSentAtMs": 1767,
+          "resolveMs": null,
+          "renderPlanMs": null,
+          "inlineToAckMs": 53
+        },
+        {
+          "itemId": "rest-067-single-flight-7-3",
+          "ordinal": 3,
+          "inlineReadyAtMs": 1714,
+          "ackSentAtMs": 1767,
+          "resolveMs": null,
+          "renderPlanMs": null,
+          "inlineToAckMs": 53
+        }
+      ]
+    },
+    {
+      "case_id": "rest-068-single-flight-8",
+      "category": "single_flight",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 2525.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 2470,
+          "inline_to_dom_ms": 5.5,
+          "dom_to_paint_ack_ms": 48.5,
+          "total_ms": 2525
+        },
+        {
+          "request_to_inline_ms": 2525,
+          "inline_to_dom_ms": 5.900000035762787,
+          "dom_to_paint_ack_ms": 64.5,
+          "total_ms": 2596
+        },
+        {
+          "request_to_inline_ms": 2525,
+          "inline_to_dom_ms": 4.5,
+          "dom_to_paint_ack_ms": 59.80000001192093,
+          "total_ms": 2596
+        },
+        {
+          "request_to_inline_ms": 2525,
+          "inline_to_dom_ms": 7,
+          "dom_to_paint_ack_ms": 56.59999996423721,
+          "total_ms": 2596
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 709.981,
+          "call_ms": 709.398,
+          "transform_ms": 0.354,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 709.981,
+          "call_ms": 709.398,
+          "transform_ms": 0.354,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 709.981,
+          "call_ms": 709.398,
+          "transform_ms": 0.354,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 709.981,
+          "call_ms": 709.398,
+          "transform_ms": 0.354,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 4,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2525,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-068-single-flight-8-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 10,
+          "inlineReadyAtMs": 2470,
+          "ackSentAtMs": 2525,
+          "resolveMs": 10,
+          "renderPlanMs": 2460,
+          "inlineToAckMs": 55
+        },
+        {
+          "itemId": "rest-068-single-flight-8-2",
+          "ordinal": 2,
+          "inlineReadyAtMs": 2525,
+          "ackSentAtMs": 2596,
+          "resolveMs": null,
+          "renderPlanMs": null,
+          "inlineToAckMs": 71
+        },
+        {
+          "itemId": "rest-068-single-flight-8-3",
+          "ordinal": 3,
+          "inlineReadyAtMs": 2525,
+          "ackSentAtMs": 2596,
+          "resolveMs": null,
+          "renderPlanMs": null,
+          "inlineToAckMs": 71
+        },
+        {
+          "itemId": "rest-068-single-flight-8-4",
+          "ordinal": 4,
+          "inlineReadyAtMs": 2525,
+          "ackSentAtMs": 2596,
+          "resolveMs": null,
+          "renderPlanMs": null,
+          "inlineToAckMs": 71
+        }
+      ]
+    },
+    {
+      "case_id": "rest-069-pool-cold-1",
+      "category": "pool_cold",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 927.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 891,
+          "inline_to_dom_ms": 1.899999976158142,
+          "dom_to_paint_ack_ms": 34.19999998807907,
+          "total_ms": 927
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 867.901,
+          "call_ms": 867.739,
+          "transform_ms": 0.026,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 927,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-069-pool-cold-1-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 6,
+          "inlineReadyAtMs": 891,
+          "ackSentAtMs": 927,
+          "resolveMs": 6,
+          "renderPlanMs": 885,
+          "inlineToAckMs": 36
+        }
+      ]
+    },
+    {
+      "case_id": "rest-070-pool-cold-2",
+      "category": "pool_cold",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 2469.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 882,
+          "inline_to_dom_ms": 1.899999976158142,
+          "dom_to_paint_ack_ms": 237.5,
+          "total_ms": 2469
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 862.312,
+          "call_ms": 862.142,
+          "transform_ms": 0.024,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2469,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-070-pool-cold-2-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 5,
+          "inlineReadyAtMs": 882,
+          "ackSentAtMs": 2469,
+          "resolveMs": 5,
+          "renderPlanMs": 877,
+          "inlineToAckMs": 1587
+        }
+      ]
+    },
+    {
+      "case_id": "rest-071-pool-cold-3",
+      "category": "pool_cold",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 1615.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 1578,
+          "inline_to_dom_ms": 1.800000011920929,
+          "dom_to_paint_ack_ms": 34.69999998807907,
+          "total_ms": 1615
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 860.987,
+          "call_ms": 860.782,
+          "transform_ms": 0.084,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 1615,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-071-pool-cold-3-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 4,
+          "inlineReadyAtMs": 1578,
+          "ackSentAtMs": 1615,
+          "resolveMs": 4,
+          "renderPlanMs": 1574,
+          "inlineToAckMs": 37
+        }
+      ]
+    },
+    {
+      "case_id": "rest-072-pool-cold-4",
+      "category": "pool_cold",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 2838.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 2758,
+          "inline_to_dom_ms": 6.5,
+          "dom_to_paint_ack_ms": 72.69999998807907,
+          "total_ms": 2838
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 853.853,
+          "call_ms": 853.594,
+          "transform_ms": 0.095,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2818,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-072-pool-cold-4-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 7,
+          "inlineReadyAtMs": 2758,
+          "ackSentAtMs": 2838,
+          "resolveMs": 7,
+          "renderPlanMs": 2751,
+          "inlineToAckMs": 80
+        }
+      ]
+    },
+    {
+      "case_id": "rest-073-pool-warm-5",
+      "category": "pool_warm",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 129.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 92,
+          "inline_to_dom_ms": 1.899999976158142,
+          "dom_to_paint_ack_ms": 34.60000002384186,
+          "total_ms": 129
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 72.197,
+          "call_ms": 72.017,
+          "transform_ms": 0.03,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 129,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-073-pool-warm-5-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 6,
+          "inlineReadyAtMs": 92,
+          "ackSentAtMs": 129,
+          "resolveMs": 6,
+          "renderPlanMs": 86,
+          "inlineToAckMs": 37
+        }
+      ]
+    },
+    {
+      "case_id": "rest-074-pool-warm-6",
+      "category": "pool_warm",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 173.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 137,
+          "inline_to_dom_ms": 1.300000011920929,
+          "dom_to_paint_ack_ms": 34.69999998807907,
+          "total_ms": 173
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 102.463,
+          "call_ms": 102.289,
+          "transform_ms": 0.027,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 173,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-074-pool-warm-6-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 18,
+          "inlineReadyAtMs": 137,
+          "ackSentAtMs": 173,
+          "resolveMs": 18,
+          "renderPlanMs": 119,
+          "inlineToAckMs": 36
+        }
+      ]
+    },
+    {
+      "case_id": "rest-075-pool-warm-7",
+      "category": "pool_warm",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 161.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 124,
+          "inline_to_dom_ms": 2.199999988079071,
+          "dom_to_paint_ack_ms": 33.40000003576279,
+          "total_ms": 161
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 89.971,
+          "call_ms": 89.782,
+          "transform_ms": 0.077,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 161,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-075-pool-warm-7-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 19,
+          "inlineReadyAtMs": 124,
+          "ackSentAtMs": 161,
+          "resolveMs": 19,
+          "renderPlanMs": 105,
+          "inlineToAckMs": 37
+        }
+      ]
+    },
+    {
+      "case_id": "rest-076-pool-warm-8",
+      "category": "pool_warm",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 162.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 109,
+          "inline_to_dom_ms": 4.399999976158142,
+          "dom_to_paint_ack_ms": 48.40000003576279,
+          "total_ms": 162
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 88.908,
+          "call_ms": 88.658,
+          "transform_ms": 0.109,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 162,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-076-pool-warm-8-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 4,
+          "inlineReadyAtMs": 109,
+          "ackSentAtMs": 162,
+          "resolveMs": 4,
+          "renderPlanMs": 105,
+          "inlineToAckMs": 53
+        }
+      ]
+    },
+    {
+      "case_id": "rest-077-deadline-1200",
+      "category": "deadline_boundary",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 3122,
+      "first_visible_feedback_kind": "receipt",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-077-deadline-1200-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 18,
+          "inlineReadyAtMs": 3085,
+          "failureAtMs": 3087,
+          "failureStage": "first_canvas_deadline",
+          "resolveMs": 18,
+          "renderPlanMs": 3067,
+          "inlineToAckMs": null
+        }
+      ]
+    },
+    {
+      "case_id": "rest-078-admission-timeout-2400",
+      "category": "deadline_boundary",
+      "expected_outcome": "deadline_miss_no_render",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": false,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 1566,
+      "first_visible_feedback_kind": "state_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-078-admission-timeout-2400-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 6,
+          "inlineReadyAtMs": 1529,
+          "ackSentAtMs": 1566,
+          "resolveMs": 6,
+          "renderPlanMs": 1523,
+          "inlineToAckMs": 37
+        }
+      ]
+    },
+    {
+      "case_id": "rest-079-deadline-3001",
+      "category": "deadline_boundary",
+      "expected_outcome": "deadline_miss_no_render",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": false,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2576,
+      "first_visible_feedback_kind": "state_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-079-deadline-3001-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 6,
+          "inlineReadyAtMs": 2540,
+          "ackSentAtMs": 2576,
+          "resolveMs": 6,
+          "renderPlanMs": 2534,
+          "inlineToAckMs": 36
+        }
+      ]
+    },
+    {
+      "case_id": "rest-080-slow-enrichment-2",
+      "category": "slow_enrichment",
+      "expected_outcome": "render_partial",
+      "observed_outcome": "render_partial",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 739.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 275,
+          "inline_to_dom_ms": 1.699999988079071,
+          "dom_to_paint_ack_ms": 461.7000000476837,
+          "total_ms": 739
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 264.518,
+          "call_ms": 264.304,
+          "transform_ms": 0.084,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 2,
+      "first_visible_feedback_ms": 739,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-080-slow-enrichment-2-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 1,
+          "renderPlanStartedAtMs": 6,
+          "inlineReadyAtMs": 276,
+          "ackSentAtMs": 740,
+          "resolveMs": 5,
+          "renderPlanMs": 270,
+          "inlineToAckMs": 464
+        },
+        {
+          "itemId": "rest-080-slow-enrichment-2-2",
+          "ordinal": 2,
+          "resolveStartedAtMs": 740,
+          "renderPlanStartedAtMs": 750,
+          "inlineReadyAtMs": 3947,
+          "ackSentAtMs": 3984,
+          "resolveMs": 10,
+          "renderPlanMs": 3197,
+          "inlineToAckMs": 37
+        }
+      ]
+    },
+    {
+      "case_id": "rest-081-slow-enrichment-3",
+      "category": "slow_enrichment",
+      "expected_outcome": "render_partial",
+      "observed_outcome": "render_partial",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 236.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 200,
+          "inline_to_dom_ms": 1.199999988079071,
+          "dom_to_paint_ack_ms": 34.5,
+          "total_ms": 236
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 179.712,
+          "call_ms": 179.469,
+          "transform_ms": 0.104,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 3,
+      "first_visible_feedback_ms": 236,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-081-slow-enrichment-3-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 7,
+          "inlineReadyAtMs": 200,
+          "ackSentAtMs": 236,
+          "resolveMs": 7,
+          "renderPlanMs": 193,
+          "inlineToAckMs": 36
+        },
+        {
+          "itemId": "rest-081-slow-enrichment-3-2",
+          "ordinal": 2,
+          "resolveStartedAtMs": 236,
+          "renderPlanStartedAtMs": 249,
+          "inlineReadyAtMs": 3089,
+          "ackSentAtMs": 3143,
+          "resolveMs": 13,
+          "renderPlanMs": 2840,
+          "inlineToAckMs": 54
+        },
+        {
+          "itemId": "rest-081-slow-enrichment-3-3",
+          "ordinal": 3,
+          "resolveStartedAtMs": 236,
+          "renderPlanStartedAtMs": 251,
+          "inlineReadyAtMs": 3089,
+          "ackSentAtMs": 3125,
+          "resolveMs": 15,
+          "renderPlanMs": 2838,
+          "inlineToAckMs": 36
+        }
+      ]
+    },
+    {
+      "case_id": "rest-082-cold-admission-timeout-2300",
+      "category": "deadline_boundary",
+      "expected_outcome": "deadline_miss_no_render",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": false,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2503,
+      "first_visible_feedback_kind": "state_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-082-cold-admission-timeout-2300-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 20,
+          "inlineReadyAtMs": 2465,
+          "ackSentAtMs": 2503,
+          "resolveMs": 20,
+          "renderPlanMs": 2445,
+          "inlineToAckMs": 38
+        }
+      ]
+    },
+    {
+      "case_id": "rest-083-partial-1",
+      "category": "partial_failure",
+      "expected_outcome": "render_partial",
+      "observed_outcome": "render_partial",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 1834.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 1796,
+          "inline_to_dom_ms": 1.600000023841858,
+          "dom_to_paint_ack_ms": 35.69999998807907,
+          "total_ms": 1834
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 238.926,
+          "call_ms": 238.644,
+          "transform_ms": 0.154,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 2,
+      "first_visible_feedback_ms": 1834,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-083-partial-1-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 7,
+          "inlineReadyAtMs": 1796,
+          "ackSentAtMs": 1834,
+          "resolveMs": 7,
+          "renderPlanMs": 1789,
+          "inlineToAckMs": 38
+        },
+        {
+          "itemId": "rest-083-partial-1-2",
+          "ordinal": 2,
+          "resolveStartedAtMs": 1834,
+          "renderPlanStartedAtMs": 1843,
+          "inlineReadyAtMs": 3791,
+          "ackSentAtMs": 3827,
+          "resolveMs": 9,
+          "renderPlanMs": 1948,
+          "inlineToAckMs": 36
+        }
+      ]
+    },
+    {
+      "case_id": "rest-084-partial-2",
+      "category": "partial_failure",
+      "expected_outcome": "render_partial",
+      "observed_outcome": "render_partial",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 2121.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 2066,
+          "inline_to_dom_ms": 8.300000011920929,
+          "dom_to_paint_ack_ms": 45.39999997615814,
+          "total_ms": 2121
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 525.091,
+          "call_ms": 524.828,
+          "transform_ms": 0.102,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 2,
+      "first_visible_feedback_ms": 234,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-084-partial-2-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 4,
+          "inlineReadyAtMs": 197,
+          "ackSentAtMs": 234,
+          "resolveMs": 4,
+          "renderPlanMs": 193,
+          "inlineToAckMs": 37
+        },
+        {
+          "itemId": "rest-084-partial-2-2",
+          "ordinal": 2,
+          "resolveStartedAtMs": 234,
+          "renderPlanStartedAtMs": 246,
+          "inlineReadyAtMs": 2066,
+          "ackSentAtMs": 2121,
+          "resolveMs": 12,
+          "renderPlanMs": 1820,
+          "inlineToAckMs": 55
+        }
+      ]
+    },
+    {
+      "case_id": "rest-085-partial-3",
+      "category": "partial_failure",
+      "expected_outcome": "render_partial",
+      "observed_outcome": "render_partial",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 236.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 198,
+          "inline_to_dom_ms": 2.300000011920929,
+          "dom_to_paint_ack_ms": 34.80000001192093,
+          "total_ms": 236
+        },
+        {
+          "request_to_inline_ms": 1413,
+          "inline_to_dom_ms": 2.599999964237213,
+          "dom_to_paint_ack_ms": 34.10000002384186,
+          "total_ms": 1450
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 184.36,
+          "call_ms": 184.183,
+          "transform_ms": 0.022,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 644.156,
+          "call_ms": 643.878,
+          "transform_ms": 0.094,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 2,
+      "physical_calls": 3,
+      "first_visible_feedback_ms": 236,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-085-partial-3-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 8,
+          "inlineReadyAtMs": 198,
+          "ackSentAtMs": 236,
+          "resolveMs": 8,
+          "renderPlanMs": 190,
+          "inlineToAckMs": 38
+        },
+        {
+          "itemId": "rest-085-partial-3-2",
+          "ordinal": 2,
+          "resolveStartedAtMs": 236,
+          "renderPlanStartedAtMs": 252,
+          "inlineReadyAtMs": 1453,
+          "ackSentAtMs": 1504,
+          "resolveMs": 16,
+          "renderPlanMs": 1201,
+          "inlineToAckMs": 51
+        },
+        {
+          "itemId": "rest-085-partial-3-3",
+          "ordinal": 3,
+          "resolveStartedAtMs": 236,
+          "renderPlanStartedAtMs": 255,
+          "inlineReadyAtMs": 1413,
+          "ackSentAtMs": 1450,
+          "resolveMs": 19,
+          "renderPlanMs": 1158,
+          "inlineToAckMs": 37
+        }
+      ]
+    },
+    {
+      "case_id": "rest-086-partial-4",
+      "category": "partial_failure",
+      "expected_outcome": "render_partial",
+      "observed_outcome": "render_partial",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 220.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 183,
+          "inline_to_dom_ms": 1.4000000357627869,
+          "dom_to_paint_ack_ms": 34.89999997615814,
+          "total_ms": 220
+        },
+        {
+          "request_to_inline_ms": 1724,
+          "inline_to_dom_ms": 1.600000023841858,
+          "dom_to_paint_ack_ms": 35.59999996423721,
+          "total_ms": 1762
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 172.143,
+          "call_ms": 171.997,
+          "transform_ms": 0.045,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 785.864,
+          "call_ms": 785.606,
+          "transform_ms": 0.102,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 2,
+      "physical_calls": 3,
+      "first_visible_feedback_ms": 220,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-086-partial-4-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 6,
+          "inlineReadyAtMs": 183,
+          "ackSentAtMs": 220,
+          "resolveMs": 6,
+          "renderPlanMs": 177,
+          "inlineToAckMs": 37
+        },
+        {
+          "itemId": "rest-086-partial-4-2",
+          "ordinal": 2,
+          "resolveStartedAtMs": 220,
+          "renderPlanStartedAtMs": 234,
+          "inlineReadyAtMs": 605,
+          "ackSentAtMs": 1723,
+          "resolveMs": 14,
+          "renderPlanMs": 371,
+          "inlineToAckMs": 1118
+        },
+        {
+          "itemId": "rest-086-partial-4-3",
+          "ordinal": 3,
+          "resolveStartedAtMs": 221,
+          "renderPlanStartedAtMs": 235,
+          "inlineReadyAtMs": 1724,
+          "ackSentAtMs": 1762,
+          "resolveMs": 14,
+          "renderPlanMs": 1489,
+          "inlineToAckMs": 38
+        }
+      ]
+    },
+    {
+      "case_id": "rest-087-partial-5",
+      "category": "partial_failure",
+      "expected_outcome": "render_partial",
+      "observed_outcome": "render_partial",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 931.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 484,
+          "inline_to_dom_ms": 1.399999976158142,
+          "dom_to_paint_ack_ms": 444.9000000357628,
+          "total_ms": 931
+        },
+        {
+          "request_to_inline_ms": 756,
+          "inline_to_dom_ms": 1.399999976158142,
+          "dom_to_paint_ack_ms": 208.30000001192093,
+          "total_ms": 966
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 255.026,
+          "call_ms": 254.916,
+          "transform_ms": 0.026,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 526.516,
+          "call_ms": 526.382,
+          "transform_ms": 0.041,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 2,
+      "physical_calls": 4,
+      "first_visible_feedback_ms": 188,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-087-partial-5-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 6,
+          "inlineReadyAtMs": 151,
+          "ackSentAtMs": 188,
+          "resolveMs": 6,
+          "renderPlanMs": 145,
+          "inlineToAckMs": 37
+        },
+        {
+          "itemId": "rest-087-partial-5-2",
+          "ordinal": 2,
+          "resolveStartedAtMs": 188,
+          "renderPlanStartedAtMs": 207,
+          "inlineReadyAtMs": 484,
+          "ackSentAtMs": 931,
+          "resolveMs": 19,
+          "renderPlanMs": 277,
+          "inlineToAckMs": 447
+        },
+        {
+          "itemId": "rest-087-partial-5-3",
+          "ordinal": 3,
+          "resolveStartedAtMs": 188,
+          "renderPlanStartedAtMs": 208,
+          "inlineReadyAtMs": 756,
+          "ackSentAtMs": 966,
+          "resolveMs": 20,
+          "renderPlanMs": 548,
+          "inlineToAckMs": 210
+        },
+        {
+          "itemId": "rest-087-partial-5-4",
+          "ordinal": 4,
+          "resolveStartedAtMs": 189,
+          "renderPlanStartedAtMs": 208,
+          "inlineReadyAtMs": 650,
+          "ackSentAtMs": 966,
+          "resolveMs": 19,
+          "renderPlanMs": 442,
+          "inlineToAckMs": 316
+        }
+      ]
+    },
+    {
+      "case_id": "rest-088-partial-6",
+      "category": "partial_failure",
+      "expected_outcome": "render_partial",
+      "observed_outcome": "render_partial",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 199.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 162,
+          "inline_to_dom_ms": 3.599999964237213,
+          "dom_to_paint_ack_ms": 32.60000002384186,
+          "total_ms": 199
+        },
+        {
+          "request_to_inline_ms": 2741,
+          "inline_to_dom_ms": 1.300000011920929,
+          "dom_to_paint_ack_ms": 34.80000001192093,
+          "total_ms": 2778
+        },
+        {
+          "request_to_inline_ms": 633,
+          "inline_to_dom_ms": 1.399999976158142,
+          "dom_to_paint_ack_ms": 34.5,
+          "total_ms": 2741
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 146.123,
+          "call_ms": 145.876,
+          "transform_ms": 0.096,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 718.952,
+          "call_ms": 718.696,
+          "transform_ms": 0.031,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 389.91,
+          "call_ms": 389.698,
+          "transform_ms": 0.029,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 3,
+      "physical_calls": 4,
+      "first_visible_feedback_ms": 199,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-088-partial-6-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 1,
+          "renderPlanStartedAtMs": 10,
+          "inlineReadyAtMs": 163,
+          "ackSentAtMs": 200,
+          "resolveMs": 9,
+          "renderPlanMs": 153,
+          "inlineToAckMs": 37
+        },
+        {
+          "itemId": "rest-088-partial-6-2",
+          "ordinal": 2,
+          "resolveStartedAtMs": 200,
+          "renderPlanStartedAtMs": 223,
+          "inlineReadyAtMs": 2743,
+          "ackSentAtMs": 2797,
+          "resolveMs": 23,
+          "renderPlanMs": 2520,
+          "inlineToAckMs": 54
+        },
+        {
+          "itemId": "rest-088-partial-6-3",
+          "ordinal": 3,
+          "resolveStartedAtMs": 201,
+          "renderPlanStartedAtMs": 222,
+          "inlineReadyAtMs": 2742,
+          "ackSentAtMs": 2779,
+          "resolveMs": 21,
+          "renderPlanMs": 2520,
+          "inlineToAckMs": 37
+        },
+        {
+          "itemId": "rest-088-partial-6-4",
+          "ordinal": 4,
+          "resolveStartedAtMs": 201,
+          "renderPlanStartedAtMs": 225,
+          "inlineReadyAtMs": 634,
+          "ackSentAtMs": 2742,
+          "resolveMs": 24,
+          "renderPlanMs": 409,
+          "inlineToAckMs": 2108
+        }
+      ]
+    },
+    {
+      "case_id": "rest-089-partial-7",
+      "category": "partial_failure",
+      "expected_outcome": "render_partial",
+      "observed_outcome": "render_partial",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 222.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 184,
+          "inline_to_dom_ms": 1.800000011920929,
+          "dom_to_paint_ack_ms": 34.89999997615814,
+          "total_ms": 222
+        },
+        {
+          "request_to_inline_ms": 850,
+          "inline_to_dom_ms": 8.100000023841858,
+          "dom_to_paint_ack_ms": 44.89999997615814,
+          "total_ms": 904
+        },
+        {
+          "request_to_inline_ms": 1021,
+          "inline_to_dom_ms": 2.300000011920929,
+          "dom_to_paint_ack_ms": 51.5,
+          "total_ms": 1075
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 163.328,
+          "call_ms": 162.906,
+          "transform_ms": 0.132,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 602.892,
+          "call_ms": 602.667,
+          "transform_ms": 0.104,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 777.092,
+          "call_ms": 776.858,
+          "transform_ms": 0.073,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 3,
+      "physical_calls": 5,
+      "first_visible_feedback_ms": 222,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-089-partial-7-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 6,
+          "inlineReadyAtMs": 184,
+          "ackSentAtMs": 222,
+          "resolveMs": 6,
+          "renderPlanMs": 178,
+          "inlineToAckMs": 38
+        },
+        {
+          "itemId": "rest-089-partial-7-2",
+          "ordinal": 2,
+          "resolveStartedAtMs": 222,
+          "renderPlanStartedAtMs": 237,
+          "inlineReadyAtMs": 850,
+          "ackSentAtMs": 904,
+          "resolveMs": 15,
+          "renderPlanMs": 613,
+          "inlineToAckMs": 54
+        },
+        {
+          "itemId": "rest-089-partial-7-3",
+          "ordinal": 3,
+          "resolveStartedAtMs": 222,
+          "renderPlanStartedAtMs": 237,
+          "inlineReadyAtMs": 699,
+          "ackSentAtMs": 736,
+          "resolveMs": 15,
+          "renderPlanMs": 462,
+          "inlineToAckMs": 37
+        },
+        {
+          "itemId": "rest-089-partial-7-4",
+          "ordinal": 4,
+          "resolveStartedAtMs": 222,
+          "renderPlanStartedAtMs": 236,
+          "inlineReadyAtMs": 1021,
+          "ackSentAtMs": 1075,
+          "resolveMs": 14,
+          "renderPlanMs": 785,
+          "inlineToAckMs": 54
+        },
+        {
+          "itemId": "rest-089-partial-7-5",
+          "ordinal": 5,
+          "resolveStartedAtMs": 736,
+          "renderPlanStartedAtMs": 747,
+          "inlineReadyAtMs": 3614,
+          "ackSentAtMs": 3650,
+          "resolveMs": 11,
+          "renderPlanMs": 2867,
+          "inlineToAckMs": 36
+        }
+      ]
+    },
+    {
+      "case_id": "rest-090-partial-8",
+      "category": "partial_failure",
+      "expected_outcome": "render_partial",
+      "observed_outcome": "render_partial",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 1567.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 1511,
+          "inline_to_dom_ms": 1.0999999642372131,
+          "dom_to_paint_ack_ms": 44.80000001192093,
+          "total_ms": 1567
+        },
+        {
+          "request_to_inline_ms": 1510,
+          "inline_to_dom_ms": 6.199999988079071,
+          "dom_to_paint_ack_ms": 47.5,
+          "total_ms": 1565
+        },
+        {
+          "request_to_inline_ms": 4097,
+          "inline_to_dom_ms": 1.4000000357627869,
+          "dom_to_paint_ack_ms": 47.89999997615814,
+          "total_ms": 4150
+        },
+        {
+          "request_to_inline_ms": 4096,
+          "inline_to_dom_ms": 2.5,
+          "dom_to_paint_ack_ms": 33.39999997615814,
+          "total_ms": 4133
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 291.786,
+          "call_ms": 291.564,
+          "transform_ms": 0.031,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 563.446,
+          "call_ms": 563.232,
+          "transform_ms": 0.102,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 754.399,
+          "call_ms": 754.254,
+          "transform_ms": 0.022,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 905.801,
+          "call_ms": 905.609,
+          "transform_ms": 0.059,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 4,
+      "physical_calls": 6,
+      "first_visible_feedback_ms": 160,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-090-partial-8-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 1,
+          "renderPlanStartedAtMs": 10,
+          "inlineReadyAtMs": 124,
+          "ackSentAtMs": 161,
+          "resolveMs": 9,
+          "renderPlanMs": 114,
+          "inlineToAckMs": 37
+        },
+        {
+          "itemId": "rest-090-partial-8-2",
+          "ordinal": 2,
+          "resolveStartedAtMs": 161,
+          "renderPlanStartedAtMs": 176,
+          "inlineReadyAtMs": 1512,
+          "ackSentAtMs": 1568,
+          "resolveMs": 15,
+          "renderPlanMs": 1336,
+          "inlineToAckMs": 56
+        },
+        {
+          "itemId": "rest-090-partial-8-3",
+          "ordinal": 3,
+          "resolveStartedAtMs": 161,
+          "renderPlanStartedAtMs": 175,
+          "inlineReadyAtMs": 1511,
+          "ackSentAtMs": 1566,
+          "resolveMs": 14,
+          "renderPlanMs": 1336,
+          "inlineToAckMs": 55
+        },
+        {
+          "itemId": "rest-090-partial-8-4",
+          "ordinal": 4,
+          "resolveStartedAtMs": 161,
+          "renderPlanStartedAtMs": 174,
+          "inlineReadyAtMs": 1512,
+          "ackSentAtMs": 1568,
+          "resolveMs": 13,
+          "renderPlanMs": 1338,
+          "inlineToAckMs": 56
+        },
+        {
+          "itemId": "rest-090-partial-8-5",
+          "ordinal": 5,
+          "resolveStartedAtMs": 1566,
+          "renderPlanStartedAtMs": 1575,
+          "inlineReadyAtMs": 4098,
+          "ackSentAtMs": 4151,
+          "resolveMs": 9,
+          "renderPlanMs": 2523,
+          "inlineToAckMs": 53
+        },
+        {
+          "itemId": "rest-090-partial-8-6",
+          "ordinal": 6,
+          "resolveStartedAtMs": 1568,
+          "renderPlanStartedAtMs": 1576,
+          "inlineReadyAtMs": 4097,
+          "ackSentAtMs": 4134,
+          "resolveMs": 8,
+          "renderPlanMs": 2521,
+          "inlineToAckMs": 37
+        }
+      ]
+    },
+    {
+      "case_id": "rest-091-all-timeout",
+      "category": "timeout_cancel_empty",
+      "expected_outcome": "deadline_miss_no_render",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": false,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 2,
+      "first_visible_feedback_ms": 1417,
+      "first_visible_feedback_kind": "state_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-091-all-timeout-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 7,
+          "inlineReadyAtMs": 1380,
+          "ackSentAtMs": 1417,
+          "resolveMs": 7,
+          "renderPlanMs": 1373,
+          "inlineToAckMs": 37
+        },
+        {
+          "itemId": "rest-091-all-timeout-2",
+          "ordinal": 2,
+          "resolveStartedAtMs": 1417,
+          "renderPlanStartedAtMs": 1425,
+          "inlineReadyAtMs": 3890,
+          "ackSentAtMs": 3926,
+          "resolveMs": 8,
+          "renderPlanMs": 2465,
+          "inlineToAckMs": 36
+        }
+      ]
+    },
+    {
+      "case_id": "rest-092-user-cancel",
+      "category": "timeout_cancel_empty",
+      "expected_outcome": "cancelled_no_render",
+      "observed_outcome": "render_partial",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "unexpected_render"
+      ],
+      "sla_applicable": false,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 1476,
+          "inline_to_dom_ms": 8.199999988079071,
+          "dom_to_paint_ack_ms": 46.80000001192093,
+          "total_ms": 1532
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 908.261,
+          "call_ms": 908.002,
+          "transform_ms": 0.104,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 2,
+      "first_visible_feedback_ms": 1532,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-092-user-cancel-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 5,
+          "inlineReadyAtMs": 1476,
+          "ackSentAtMs": 1532,
+          "resolveMs": 5,
+          "renderPlanMs": 1471,
+          "inlineToAckMs": 56
+        },
+        {
+          "itemId": "rest-092-user-cancel-2",
+          "ordinal": 2,
+          "resolveStartedAtMs": 1532,
+          "renderPlanStartedAtMs": 1540,
+          "inlineReadyAtMs": 4245,
+          "ackSentAtMs": 4281,
+          "resolveMs": 8,
+          "renderPlanMs": 2705,
+          "inlineToAckMs": 36
+        }
+      ]
+    },
+    {
+      "case_id": "rest-093-empty-table",
+      "category": "timeout_cancel_empty",
+      "expected_outcome": "render_empty_state",
+      "observed_outcome": "render_empty_state",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 175.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 138,
+          "inline_to_dom_ms": 1.5999999642372131,
+          "dom_to_paint_ack_ms": 34.90000003576279,
+          "total_ms": 175
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 117.764,
+          "call_ms": 117.62,
+          "transform_ms": 0.011,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 175,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-093-empty-table-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 5,
+          "inlineReadyAtMs": 138,
+          "ackSentAtMs": 175,
+          "resolveMs": 5,
+          "renderPlanMs": 133,
+          "inlineToAckMs": 37
+        }
+      ]
+    },
+    {
+      "case_id": "rest-094-empty-facts",
+      "category": "timeout_cancel_empty",
+      "expected_outcome": "render_empty_state",
+      "observed_outcome": "render_empty_state",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 205.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 168,
+          "inline_to_dom_ms": 1.2999999523162842,
+          "dom_to_paint_ack_ms": 35.10000002384186,
+          "total_ms": 205
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 132.718,
+          "call_ms": 132.565,
+          "transform_ms": 0.007,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 205,
+      "first_visible_feedback_kind": "data_canvas",
+      "pipeline_stages": [
+        {
+          "itemId": "rest-094-empty-facts-1",
+          "ordinal": 1,
+          "resolveStartedAtMs": 0,
+          "renderPlanStartedAtMs": 20,
+          "inlineReadyAtMs": 168,
+          "ackSentAtMs": 205,
+          "resolveMs": 20,
+          "renderPlanMs": 148,
+          "inlineToAckMs": 37
+        }
+      ]
+    },
+    {
+      "case_id": "rest-095-guarded-buy-no-render",
+      "category": "safety_negative",
+      "expected_outcome": "rejected_no_render",
+      "observed_outcome": "rejected_no_render",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": false,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 0,
+      "first_visible_feedback_ms": 30,
+      "first_visible_feedback_kind": "receipt",
+      "pipeline_stages": []
+    },
+    {
+      "case_id": "rest-096-guarded-sell-no-render",
+      "category": "safety_negative",
+      "expected_outcome": "rejected_no_render",
+      "observed_outcome": "rejected_no_render",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": false,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 0,
+      "first_visible_feedback_ms": 21,
+      "first_visible_feedback_kind": "receipt",
+      "pipeline_stages": []
+    },
+    {
+      "case_id": "rest-097-excluded-split-base",
+      "category": "safety_negative",
+      "expected_outcome": "rejected_no_render",
+      "observed_outcome": "rejected_no_render",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": false,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 0,
+      "first_visible_feedback_ms": 30,
+      "first_visible_feedback_kind": "receipt",
+      "pipeline_stages": []
+    },
+    {
+      "case_id": "rest-098-oauth-hidden",
+      "category": "safety_negative",
+      "expected_outcome": "rejected_no_render",
+      "observed_outcome": "rejected_no_render",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": false,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 0,
+      "first_visible_feedback_ms": 22,
+      "first_visible_feedback_kind": "receipt",
+      "pipeline_stages": []
+    },
+    {
+      "case_id": "rest-099-unknown-ref",
+      "category": "safety_negative",
+      "expected_outcome": "rejected_no_render",
+      "observed_outcome": "rejected_no_render",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": false,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 0,
+      "first_visible_feedback_ms": 30,
+      "first_visible_feedback_kind": "receipt",
+      "pipeline_stages": []
+    },
+    {
+      "case_id": "rest-100-manifest-type-authority",
+      "category": "safety_negative",
+      "expected_outcome": "rejected_no_render",
+      "observed_outcome": "rejected_no_render",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": false,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 0,
+      "first_visible_feedback_ms": 23,
+      "first_visible_feedback_kind": "receipt",
+      "pipeline_stages": []
+    }
+  ],
+  "schema_version": 1,
+  "generated_at": "2026-08-20T18:21:05.698573+00:00",
+  "corpus": {
+    "path": "backend/tests/fixtures/kiwoom_rest_canvas_100.jsonl",
+    "sha256": "2b57a4fe8d9ec6e39646eb8f0e33317935e56e3d67197c08abc1b8c347743f2c",
+    "count": 100
+  },
+  "trace": {
+    "path": "plan/kiwoom-rest-canvas-100-trace-2026-08-21.jsonl",
+    "sha256": "6582740ab88205809d3d74fc0e3aaacee8a125df3775fe4f334dd2bbe24ea50e",
+    "count": 100
+  },
+  "manifest": {
+    "path": "backend/ref/kiwoom-common-screen-manifest.json",
+    "sha256": "12ae5f1adb1c1c7da41cd8ade381cf89e840c314cc33104fe4ee5223132cd0f1"
+  },
+  "catalog": {
+    "path": "backend/ref/kiwoom-tr-inventory.json",
+    "sha256": "318d081c7cac23e3fa290e3b885308bc42a28c6f84f7c74cad3c3103e80ff63b"
+  },
+  "source_hashes": {
+    "backend/scripts/evaluate_kiwoom_rest_canvas_100.py": "15765754808ce4337a6addd518247cbff06ebaf35e4b1866f399cef3095d7dd2",
+    "backend/scripts/serve_kiwoom_rest_canvas_benchmark.py": "2791e6292179f50bffa4fa86ad479cc8b01e916b29e6f1956639718106f0f7e3",
+    "backend/athena_api/api/canvas_push.py": "9e7de9f91299aafa60b6cdc0d213982fa699b491c885691fa30c276ae21a7f07",
+    "app/main.js": "5c0ec692d87cbc8abae3772dda7d3a4cac3110d1f669007028d9bfae1656b48a",
+    "app/canvas.js": "8cef26747d405ae43df8afa1ca9e756579b0b5a92fa8da4a71de14f8a9497a6d",
+    "app/preload.js": "2d7af6c8c4d0fa9f65164834face08b70d6f13dfc4697b66d4f4ecef42a4da13",
+    "app/lib/main/rest-dataset-runner.js": "a83de13090a6ca2f548d3dd192bc550e207322b7d757c7e170de28b320bc717b",
+    "app/scripts/benchmark-rest-canvas-100.js": "58db9b9c20e18ae7f45302a61cdfc2044ed26a7d58be271cfbaad659a998360c"
+  },
+  "execution": {
+    "command": [
+      "C:\\Projects\\DAOU.Athena\\backend\\.venv\\Scripts\\python.exe",
+      "C:\\Projects\\DAOU.Athena\\backend\\scripts\\evaluate_kiwoom_rest_canvas_100.py",
+      "--run"
+    ],
+    "producer_command": [
+      "node",
+      "C:\\Projects\\DAOU.Athena\\app\\node_modules\\electron\\cli.js",
+      "C:\\Projects\\DAOU.Athena\\app\\scripts\\benchmark-rest-canvas-100.js",
+      "--corpus",
+      "C:\\Projects\\DAOU.Athena\\backend\\tests\\fixtures\\kiwoom_rest_canvas_100.jsonl",
+      "--output",
+      "C:\\Projects\\DAOU.Athena\\plan\\kiwoom-rest-canvas-100-trace-2026-08-21.jsonl"
+    ],
+    "cwd": "C:\\Projects\\DAOU.Athena",
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "processor_count": 22,
+    "whole_corpus_single_pass": true,
+    "case_retries": 0
+  }
+}

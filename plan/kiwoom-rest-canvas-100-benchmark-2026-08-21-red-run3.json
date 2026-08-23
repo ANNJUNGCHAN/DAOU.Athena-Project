@@ -1,0 +1,3746 @@
+{
+  "status": "fail",
+  "gates": {
+    "functional": {
+      "passed": false,
+      "pass_count": 63,
+      "total": 100,
+      "required": 100
+    },
+    "first_visible_feedback": {
+      "passed": false,
+      "denominator": 100,
+      "measured_count": 100,
+      "p50_ms": 884.0,
+      "p95_ms": 3938.7,
+      "max_ms": 5154,
+      "threshold_max_ms": 3000.0
+    },
+    "first_verified_data_canvas": {
+      "passed": false,
+      "denominator": 92,
+      "measured_count": 82,
+      "missing_count": 10,
+      "p50_ms": 742.5,
+      "p95_ms": 2401.7,
+      "max_ms": 2937.0,
+      "thresholds_ms": {
+        "p50": 1000.0,
+        "p95": 2500.0,
+        "max": 3000.0
+      },
+      "no_render_cases_excluded_from_latency_only": 8
+    }
+  },
+  "cases": [
+    {
+      "case_id": "rest-001-facts-1",
+      "category": "facts_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 555.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 440,
+          "inline_to_dom_ms": 53.5,
+          "dom_to_paint_ack_ms": 35.39999997615814,
+          "total_ms": 555
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 129.9,
+          "call_ms": 125.015,
+          "transform_ms": 0.072,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 555,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-002-facts-2",
+      "category": "facts_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 313.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 273,
+          "inline_to_dom_ms": 2.5,
+          "dom_to_paint_ack_ms": 33.89999997615814,
+          "total_ms": 313
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 116.289,
+          "call_ms": 116.056,
+          "transform_ms": 0.038,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 313,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-003-facts-3",
+      "category": "facts_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 282.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 243,
+          "inline_to_dom_ms": 3.100000023841858,
+          "dom_to_paint_ack_ms": 32.59999996423721,
+          "total_ms": 282
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 129.352,
+          "call_ms": 129.086,
+          "transform_ms": 0.078,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 282,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-004-facts-4",
+      "category": "facts_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 282.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 242,
+          "inline_to_dom_ms": 2.300000011920929,
+          "dom_to_paint_ack_ms": 33.80000001192093,
+          "total_ms": 282
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 130.507,
+          "call_ms": 130.353,
+          "transform_ms": 0.029,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 282,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-005-facts-5",
+      "category": "facts_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 298.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 258,
+          "inline_to_dom_ms": 2.199999988079071,
+          "dom_to_paint_ack_ms": 34,
+          "total_ms": 298
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 130.216,
+          "call_ms": 129.988,
+          "transform_ms": 0.033,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 298,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-006-facts-6",
+      "category": "facts_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 4028,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-007-facts-7",
+      "category": "facts_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 1472.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 1426,
+          "inline_to_dom_ms": 2.399999976158142,
+          "dom_to_paint_ack_ms": 40.19999998807907,
+          "total_ms": 1472
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 122.397,
+          "call_ms": 122.146,
+          "transform_ms": 0.06,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 1472,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-008-facts-8",
+      "category": "facts_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 289.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 244,
+          "inline_to_dom_ms": 2.199999988079071,
+          "dom_to_paint_ack_ms": 37.80000001192093,
+          "total_ms": 289
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 132.137,
+          "call_ms": 131.936,
+          "transform_ms": 0.074,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 289,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-009-facts-9",
+      "category": "facts_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 1918.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 1878,
+          "inline_to_dom_ms": 1.699999988079071,
+          "dom_to_paint_ack_ms": 34.5,
+          "total_ms": 1918
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 99.576,
+          "call_ms": 99.379,
+          "transform_ms": 0.024,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 1918,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-010-facts-10",
+      "category": "facts_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 253.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 213,
+          "inline_to_dom_ms": 1.7000000476837158,
+          "dom_to_paint_ack_ms": 34.59999996423721,
+          "total_ms": 253
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 117.427,
+          "call_ms": 117.196,
+          "transform_ms": 0.095,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 253,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-011-table-1",
+      "category": "table_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 1668.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 1616,
+          "inline_to_dom_ms": 3.699999988079071,
+          "dom_to_paint_ack_ms": 39.39999997615814,
+          "total_ms": 1668
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 124.672,
+          "call_ms": 124.423,
+          "transform_ms": 0.039,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 1668,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-012-table-2",
+      "category": "table_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 2115.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 290,
+          "inline_to_dom_ms": 1.600000023841858,
+          "dom_to_paint_ack_ms": 34.69999998807907,
+          "total_ms": 2115
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 129.655,
+          "call_ms": 129.402,
+          "transform_ms": 0.062,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2115,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-013-table-3",
+      "category": "table_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 1486.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 1445,
+          "inline_to_dom_ms": 1.7000000476837158,
+          "dom_to_paint_ack_ms": 34.69999998807907,
+          "total_ms": 1486
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 133.016,
+          "call_ms": 132.854,
+          "transform_ms": 0.024,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 1486,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-014-table-4",
+      "category": "table_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 334.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 291,
+          "inline_to_dom_ms": 3.199999988079071,
+          "dom_to_paint_ack_ms": 32.40000003576279,
+          "total_ms": 334
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 115.018,
+          "call_ms": 114.703,
+          "transform_ms": 0.033,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 334,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-015-table-5",
+      "category": "table_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 2225.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 258,
+          "inline_to_dom_ms": 2.300000011920929,
+          "dom_to_paint_ack_ms": 33.80000001192093,
+          "total_ms": 2225
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 115.538,
+          "call_ms": 115.342,
+          "transform_ms": 0.024,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2225,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-016-table-6",
+      "category": "table_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 1170.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 1127,
+          "inline_to_dom_ms": 3.100000023841858,
+          "dom_to_paint_ack_ms": 34.5,
+          "total_ms": 1170
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 118.93,
+          "call_ms": 118.553,
+          "transform_ms": 0.061,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 1170,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-017-table-7",
+      "category": "table_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 350.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 305,
+          "inline_to_dom_ms": 2.100000023841858,
+          "dom_to_paint_ack_ms": 34.30000001192093,
+          "total_ms": 350
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 130.775,
+          "call_ms": 130.535,
+          "transform_ms": 0.036,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 350,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-018-table-8",
+      "category": "table_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 255.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 214,
+          "inline_to_dom_ms": 2.599999964237213,
+          "dom_to_paint_ack_ms": 34.10000002384186,
+          "total_ms": 255
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 100.312,
+          "call_ms": 100.11,
+          "transform_ms": 0.057,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 255,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-019-table-9",
+      "category": "table_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 2339.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 2298,
+          "inline_to_dom_ms": 1.5,
+          "dom_to_paint_ack_ms": 34.59999996423721,
+          "total_ms": 2339
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 101.806,
+          "call_ms": 101.555,
+          "transform_ms": 0.052,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2339,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-020-table-10",
+      "category": "table_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 713.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 228,
+          "inline_to_dom_ms": 1.699999988079071,
+          "dom_to_paint_ack_ms": 480.10000002384186,
+          "total_ms": 713
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 133.017,
+          "call_ms": 132.865,
+          "transform_ms": 0.035,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 713,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-021-compound-1",
+      "category": "compound_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 749.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 230,
+          "inline_to_dom_ms": 1.9000000357627869,
+          "dom_to_paint_ack_ms": 514.3999999761581,
+          "total_ms": 749
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 105.291,
+          "call_ms": 105.11,
+          "transform_ms": 0.056,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 749,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-022-compound-2",
+      "category": "compound_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 272.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 230,
+          "inline_to_dom_ms": 2.100000023841858,
+          "dom_to_paint_ack_ms": 34.39999997615814,
+          "total_ms": 272
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 114.062,
+          "call_ms": 113.773,
+          "transform_ms": 0.118,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 272,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-023-compound-3",
+      "category": "compound_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 2035.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 1992,
+          "inline_to_dom_ms": 4.200000047683716,
+          "dom_to_paint_ack_ms": 31.599999964237213,
+          "total_ms": 2035
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 123.589,
+          "call_ms": 123.237,
+          "transform_ms": 0.144,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2035,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-024-compound-4",
+      "category": "compound_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 1606.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 1565,
+          "inline_to_dom_ms": 2.700000047683716,
+          "dom_to_paint_ack_ms": 34,
+          "total_ms": 1606
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 112.77,
+          "call_ms": 112.542,
+          "transform_ms": 0.074,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 1606,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-025-compound-5",
+      "category": "compound_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 315.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 274,
+          "inline_to_dom_ms": 2,
+          "dom_to_paint_ack_ms": 34.60000002384186,
+          "total_ms": 315
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 116.464,
+          "call_ms": 116.203,
+          "transform_ms": 0.055,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 315,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-026-compound-6",
+      "category": "compound_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 1969.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 1929,
+          "inline_to_dom_ms": 1.399999976158142,
+          "dom_to_paint_ack_ms": 34.69999998807907,
+          "total_ms": 1969
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 129.832,
+          "call_ms": 129.667,
+          "transform_ms": 0.041,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 1969,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-027-compound-7",
+      "category": "compound_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 2244.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 2205,
+          "inline_to_dom_ms": 1.4000000357627869,
+          "dom_to_paint_ack_ms": 34.59999996423721,
+          "total_ms": 2244
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 131.306,
+          "call_ms": 131.132,
+          "transform_ms": 0.061,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2244,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-028-compound-8",
+      "category": "compound_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 253.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 213,
+          "inline_to_dom_ms": 1.399999976158142,
+          "dom_to_paint_ack_ms": 34.30000001192093,
+          "total_ms": 253
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 117.625,
+          "call_ms": 117.434,
+          "transform_ms": 0.048,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 253,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-029-chart-1",
+      "category": "chart_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 3276,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-030-chart-2",
+      "category": "chart_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 4379,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-031-chart-3",
+      "category": "chart_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 307.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 198,
+          "inline_to_dom_ms": 39.10000002384186,
+          "dom_to_paint_ack_ms": 67.09999996423721,
+          "total_ms": 307
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 102.919,
+          "call_ms": 102.644,
+          "transform_ms": 0.085,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 307,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-032-chart-4",
+      "category": "chart_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 302.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 244,
+          "inline_to_dom_ms": 7.400000035762787,
+          "dom_to_paint_ack_ms": 47,
+          "total_ms": 302
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 133.018,
+          "call_ms": 132.855,
+          "transform_ms": 0.034,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 302,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-033-chart-5",
+      "category": "chart_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 314.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 258,
+          "inline_to_dom_ms": 6.400000035762787,
+          "dom_to_paint_ack_ms": 46.39999997615814,
+          "total_ms": 314
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 130.988,
+          "call_ms": 130.807,
+          "transform_ms": 0.037,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 314,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-034-chart-6",
+      "category": "chart_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 3132,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-035-chart-7",
+      "category": "chart_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 4134,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-036-chart-8",
+      "category": "chart_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 787.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 230,
+          "inline_to_dom_ms": 7.600000023841858,
+          "dom_to_paint_ack_ms": 546.1999999880791,
+          "total_ms": 787
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 127.513,
+          "call_ms": 127.35,
+          "transform_ms": 0.042,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 787,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-037-chart-9",
+      "category": "chart_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 317.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 260,
+          "inline_to_dom_ms": 7.300000011920929,
+          "dom_to_paint_ack_ms": 46.09999996423721,
+          "total_ms": 317
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 132.961,
+          "call_ms": 132.771,
+          "transform_ms": 0.034,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 317,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-038-chart-10",
+      "category": "chart_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 271.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 214,
+          "inline_to_dom_ms": 5.800000011920929,
+          "dom_to_paint_ack_ms": 48.799999952316284,
+          "total_ms": 271
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 117.508,
+          "call_ms": 117.344,
+          "transform_ms": 0.027,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 271,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-039-chart-11",
+      "category": "chart_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2350,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-040-chart-12",
+      "category": "chart_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 2269.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 2211,
+          "inline_to_dom_ms": 6.900000035762787,
+          "dom_to_paint_ack_ms": 47.59999996423721,
+          "total_ms": 2269
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 133.558,
+          "call_ms": 133.395,
+          "transform_ms": 0.036,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2269,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-041-fanout-2-1",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 736.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 288,
+          "inline_to_dom_ms": 1.699999988079071,
+          "dom_to_paint_ack_ms": 442.5,
+          "total_ms": 736
+        },
+        {
+          "request_to_inline_ms": 1141,
+          "inline_to_dom_ms": 1.5,
+          "dom_to_paint_ack_ms": 351.69999998807907,
+          "total_ms": 1497
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 193.757,
+          "call_ms": 193.559,
+          "transform_ms": 0.082,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 322.387,
+          "call_ms": 322.248,
+          "transform_ms": 0.026,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 2,
+      "physical_calls": 2,
+      "first_visible_feedback_ms": 736,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-042-fanout-2-2",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 329.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 289,
+          "inline_to_dom_ms": 1.300000011920929,
+          "dom_to_paint_ack_ms": 34.39999997615814,
+          "total_ms": 329
+        },
+        {
+          "request_to_inline_ms": 1973,
+          "inline_to_dom_ms": 8.899999976158142,
+          "dom_to_paint_ack_ms": 45.200000047683716,
+          "total_ms": 2031
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 191.202,
+          "call_ms": 190.894,
+          "transform_ms": 0.176,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 326.817,
+          "call_ms": 326.644,
+          "transform_ms": 0.03,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 2,
+      "physical_calls": 2,
+      "first_visible_feedback_ms": 329,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-043-fanout-2-3",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 312.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 272,
+          "inline_to_dom_ms": 1.399999976158142,
+          "dom_to_paint_ack_ms": 34.90000003576279,
+          "total_ms": 312
+        },
+        {
+          "request_to_inline_ms": 2049,
+          "inline_to_dom_ms": 1.899999976158142,
+          "dom_to_paint_ack_ms": 33.69999998807907,
+          "total_ms": 2088
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 192.959,
+          "call_ms": 192.736,
+          "transform_ms": 0.06,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 314.377,
+          "call_ms": 314.219,
+          "transform_ms": 0.029,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 2,
+      "physical_calls": 2,
+      "first_visible_feedback_ms": 312,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-044-fanout-2-4",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 1501.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 1458,
+          "inline_to_dom_ms": 2.599999964237213,
+          "dom_to_paint_ack_ms": 33.80000001192093,
+          "total_ms": 1501
+        },
+        {
+          "request_to_inline_ms": 1989,
+          "inline_to_dom_ms": 1.800000011920929,
+          "dom_to_paint_ack_ms": 34.10000002384186,
+          "total_ms": 2028
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 178.949,
+          "call_ms": 178.709,
+          "transform_ms": 0.082,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 328.469,
+          "call_ms": 328.245,
+          "transform_ms": 0.029,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 2,
+      "physical_calls": 2,
+      "first_visible_feedback_ms": 1501,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-045-fanout-3-5",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 1428.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 1387,
+          "inline_to_dom_ms": 1.5999999642372131,
+          "dom_to_paint_ack_ms": 35.40000003576279,
+          "total_ms": 1428
+        },
+        {
+          "request_to_inline_ms": 1975,
+          "inline_to_dom_ms": 1.399999976158142,
+          "dom_to_paint_ack_ms": 372.39999997615814,
+          "total_ms": 3731
+        },
+        {
+          "request_to_inline_ms": 2127,
+          "inline_to_dom_ms": 5.399999976158142,
+          "dom_to_paint_ack_ms": 261.7000000476837,
+          "total_ms": 3731
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 193.784,
+          "call_ms": 193.55,
+          "transform_ms": 0.103,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 318.535,
+          "call_ms": 318.367,
+          "transform_ms": 0.034,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 456.462,
+          "call_ms": 456.316,
+          "transform_ms": 0.029,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 3,
+      "physical_calls": 3,
+      "first_visible_feedback_ms": 1428,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-046-fanout-3-6",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_partial",
+      "functional_pass": false,
+      "failures": [
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 322.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 284,
+          "inline_to_dom_ms": 1.600000023841858,
+          "dom_to_paint_ack_ms": 33.5,
+          "total_ms": 322
+        },
+        {
+          "request_to_inline_ms": 2348,
+          "inline_to_dom_ms": 2.899999976158142,
+          "dom_to_paint_ack_ms": 33.90000003576279,
+          "total_ms": 2390
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 178.267,
+          "call_ms": 178.119,
+          "transform_ms": 0.025,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 325.257,
+          "call_ms": 325.02,
+          "transform_ms": 0.045,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 2,
+      "physical_calls": 3,
+      "first_visible_feedback_ms": 322,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-047-fanout-3-7",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_partial",
+      "functional_pass": false,
+      "failures": [
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 1948.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 1899,
+          "inline_to_dom_ms": 1.300000011920929,
+          "dom_to_paint_ack_ms": 43.5,
+          "total_ms": 1948
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 178.167,
+          "call_ms": 177.979,
+          "transform_ms": 0.039,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 3,
+      "first_visible_feedback_ms": 1948,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-048-fanout-3-8",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 317.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 273,
+          "inline_to_dom_ms": 1.300000011920929,
+          "dom_to_paint_ack_ms": 38.89999997615814,
+          "total_ms": 317
+        },
+        {
+          "request_to_inline_ms": 2424,
+          "inline_to_dom_ms": 1.100000023841858,
+          "dom_to_paint_ack_ms": 49.80000001192093,
+          "total_ms": 2478
+        },
+        {
+          "request_to_inline_ms": 2421,
+          "inline_to_dom_ms": 1.300000011920929,
+          "dom_to_paint_ack_ms": 34.40000003576279,
+          "total_ms": 2460
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 177.273,
+          "call_ms": 176.992,
+          "transform_ms": 0.104,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 317.398,
+          "call_ms": 317.203,
+          "transform_ms": 0.061,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 464.689,
+          "call_ms": 464.554,
+          "transform_ms": 0.027,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 3,
+      "physical_calls": 3,
+      "first_visible_feedback_ms": 317,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-049-fanout-4-9",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_partial",
+      "functional_pass": false,
+      "failures": [
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 2134.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 289,
+          "inline_to_dom_ms": 1.5,
+          "dom_to_paint_ack_ms": 34.10000002384186,
+          "total_ms": 2134
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 178.398,
+          "call_ms": 178.18,
+          "transform_ms": 0.098,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 4,
+      "first_visible_feedback_ms": 2134,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-050-fanout-4-10",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 346.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 291,
+          "inline_to_dom_ms": 1.800000011920929,
+          "dom_to_paint_ack_ms": 50.299999952316284,
+          "total_ms": 346
+        },
+        {
+          "request_to_inline_ms": 972,
+          "inline_to_dom_ms": 1.300000011920929,
+          "dom_to_paint_ack_ms": 45.89999997615814,
+          "total_ms": 1021
+        },
+        {
+          "request_to_inline_ms": 1108,
+          "inline_to_dom_ms": 1.699999988079071,
+          "dom_to_paint_ack_ms": 51,
+          "total_ms": 1164
+        },
+        {
+          "request_to_inline_ms": 1244,
+          "inline_to_dom_ms": 2.099999964237213,
+          "dom_to_paint_ack_ms": 40.60000002384186,
+          "total_ms": 1290
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 180.334,
+          "call_ms": 180.187,
+          "transform_ms": 0.023,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 336.302,
+          "call_ms": 336.22,
+          "transform_ms": 0.026,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 472.928,
+          "call_ms": 472.782,
+          "transform_ms": 0.032,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 608.54,
+          "call_ms": 608.401,
+          "transform_ms": 0.077,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 4,
+      "physical_calls": 4,
+      "first_visible_feedback_ms": 346,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-051-fanout-4-11",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 341.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 300,
+          "inline_to_dom_ms": 1.699999988079071,
+          "dom_to_paint_ack_ms": 33.89999997615814,
+          "total_ms": 341
+        },
+        {
+          "request_to_inline_ms": 981,
+          "inline_to_dom_ms": 2,
+          "dom_to_paint_ack_ms": 34.39999997615814,
+          "total_ms": 1021
+        },
+        {
+          "request_to_inline_ms": 1118,
+          "inline_to_dom_ms": 1.9000000357627869,
+          "dom_to_paint_ack_ms": 35,
+          "total_ms": 1159
+        },
+        {
+          "request_to_inline_ms": 1255,
+          "inline_to_dom_ms": 6.900000035762787,
+          "dom_to_paint_ack_ms": 47.69999998807907,
+          "total_ms": 1315
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 189.2,
+          "call_ms": 189.012,
+          "transform_ms": 0.059,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 337.582,
+          "call_ms": 337.452,
+          "transform_ms": 0.024,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 474.715,
+          "call_ms": 474.527,
+          "transform_ms": 0.074,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 611.207,
+          "call_ms": 611.01,
+          "transform_ms": 0.039,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 4,
+      "physical_calls": 4,
+      "first_visible_feedback_ms": 341,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-052-fanout-4-12",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 357.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 318,
+          "inline_to_dom_ms": 1.600000023841858,
+          "dom_to_paint_ack_ms": 34.09999996423721,
+          "total_ms": 357
+        },
+        {
+          "request_to_inline_ms": 1932,
+          "inline_to_dom_ms": 3.599999964237213,
+          "dom_to_paint_ack_ms": 43.60000002384186,
+          "total_ms": 1983
+        },
+        {
+          "request_to_inline_ms": 1922,
+          "inline_to_dom_ms": 2,
+          "dom_to_paint_ack_ms": 18.30000001192093,
+          "total_ms": 1948
+        },
+        {
+          "request_to_inline_ms": 1927,
+          "inline_to_dom_ms": 1,
+          "dom_to_paint_ack_ms": 32.30000001192093,
+          "total_ms": 1965
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 190.747,
+          "call_ms": 190.549,
+          "transform_ms": 0.069,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 309.354,
+          "call_ms": 309.2,
+          "transform_ms": 0.033,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 462.978,
+          "call_ms": 462.781,
+          "transform_ms": 0.041,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 614.023,
+          "call_ms": 613.888,
+          "transform_ms": 0.053,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 4,
+      "physical_calls": 4,
+      "first_visible_feedback_ms": 357,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-053-fanout-5-13",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_partial",
+      "functional_pass": false,
+      "failures": [
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 379.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 335,
+          "inline_to_dom_ms": 2.800000011920929,
+          "dom_to_paint_ack_ms": 34,
+          "total_ms": 379
+        },
+        {
+          "request_to_inline_ms": 2163,
+          "inline_to_dom_ms": 1.5999999642372131,
+          "dom_to_paint_ack_ms": 34.40000003576279,
+          "total_ms": 2203
+        },
+        {
+          "request_to_inline_ms": 2325,
+          "inline_to_dom_ms": 1.5999999642372131,
+          "dom_to_paint_ack_ms": 34.80000001192093,
+          "total_ms": 2366
+        },
+        {
+          "request_to_inline_ms": 2451,
+          "inline_to_dom_ms": 11.399999976158142,
+          "dom_to_paint_ack_ms": 43.200000047683716,
+          "total_ms": 2510
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 192.577,
+          "call_ms": 192.391,
+          "transform_ms": 0.067,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 330.387,
+          "call_ms": 330.165,
+          "transform_ms": 0.102,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 492.812,
+          "call_ms": 492.647,
+          "transform_ms": 0.024,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 618.199,
+          "call_ms": 618.11,
+          "transform_ms": 0.032,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 4,
+      "physical_calls": 5,
+      "first_visible_feedback_ms": 379,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-054-fanout-5-14",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_partial",
+      "functional_pass": false,
+      "failures": [
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 326.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 273,
+          "inline_to_dom_ms": 1.2000000476837158,
+          "dom_to_paint_ack_ms": 47.799999952316284,
+          "total_ms": 326
+        },
+        {
+          "request_to_inline_ms": 2473,
+          "inline_to_dom_ms": 1.199999988079071,
+          "dom_to_paint_ack_ms": 42.10000002384186,
+          "total_ms": 2521
+        },
+        {
+          "request_to_inline_ms": 2459,
+          "inline_to_dom_ms": 2.199999988079071,
+          "dom_to_paint_ack_ms": 34.30000001192093,
+          "total_ms": 2504
+        },
+        {
+          "request_to_inline_ms": 2467,
+          "inline_to_dom_ms": 3.800000011920929,
+          "dom_to_paint_ack_ms": 44.19999998807907,
+          "total_ms": 2521
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 174.485,
+          "call_ms": 174.178,
+          "transform_ms": 0.024,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 306.9,
+          "call_ms": 306.807,
+          "transform_ms": 0.024,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 464.829,
+          "call_ms": 464.722,
+          "transform_ms": 0.026,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 593.644,
+          "call_ms": 593.454,
+          "transform_ms": 0.071,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 4,
+      "physical_calls": 5,
+      "first_visible_feedback_ms": 326,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-055-fanout-5-15",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_partial",
+      "functional_pass": false,
+      "failures": [
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 362.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 304,
+          "inline_to_dom_ms": 1.199999988079071,
+          "dom_to_paint_ack_ms": 52.09999996423721,
+          "total_ms": 362
+        },
+        {
+          "request_to_inline_ms": 2568,
+          "inline_to_dom_ms": 2.800000011920929,
+          "dom_to_paint_ack_ms": 43.10000002384186,
+          "total_ms": 2621
+        },
+        {
+          "request_to_inline_ms": 2555,
+          "inline_to_dom_ms": 3.5,
+          "dom_to_paint_ack_ms": 39.89999997615814,
+          "total_ms": 2610
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 193.414,
+          "call_ms": 193.075,
+          "transform_ms": 0.068,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 332.326,
+          "call_ms": 332.121,
+          "transform_ms": 0.03,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 468.134,
+          "call_ms": 467.919,
+          "transform_ms": 0.067,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 3,
+      "physical_calls": 5,
+      "first_visible_feedback_ms": 362,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-056-fanout-5-16",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_partial",
+      "functional_pass": false,
+      "failures": [
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 778.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 320,
+          "inline_to_dom_ms": 1.4000000357627869,
+          "dom_to_paint_ack_ms": 450.80000001192093,
+          "total_ms": 778
+        },
+        {
+          "request_to_inline_ms": 1404,
+          "inline_to_dom_ms": 1.5,
+          "dom_to_paint_ack_ms": 48.60000002384186,
+          "total_ms": 1458
+        },
+        {
+          "request_to_inline_ms": 1551,
+          "inline_to_dom_ms": 2.5,
+          "dom_to_paint_ack_ms": 43.40000003576279,
+          "total_ms": 1602
+        },
+        {
+          "request_to_inline_ms": 1675,
+          "inline_to_dom_ms": 1.7000000476837158,
+          "dom_to_paint_ack_ms": 45.59999996423721,
+          "total_ms": 1727
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 193.877,
+          "call_ms": 193.609,
+          "transform_ms": 0.091,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 325.137,
+          "call_ms": 325.033,
+          "transform_ms": 0.026,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 472.261,
+          "call_ms": 472.157,
+          "transform_ms": 0.027,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 596.948,
+          "call_ms": 596.763,
+          "transform_ms": 0.025,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 4,
+      "physical_calls": 5,
+      "first_visible_feedback_ms": 778,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-057-fanout-6-17",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_partial",
+      "functional_pass": false,
+      "failures": [
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 767.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 364,
+          "inline_to_dom_ms": 1.199999988079071,
+          "dom_to_paint_ack_ms": 395.5,
+          "total_ms": 767
+        },
+        {
+          "request_to_inline_ms": 1528,
+          "inline_to_dom_ms": 2.199999988079071,
+          "dom_to_paint_ack_ms": 47.80000001192093,
+          "total_ms": 1585
+        },
+        {
+          "request_to_inline_ms": 1664,
+          "inline_to_dom_ms": 2.099999964237213,
+          "dom_to_paint_ack_ms": 40.5,
+          "total_ms": 1710
+        },
+        {
+          "request_to_inline_ms": 1801,
+          "inline_to_dom_ms": 5.300000011920929,
+          "dom_to_paint_ack_ms": 55.10000002384186,
+          "total_ms": 1865
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 179.088,
+          "call_ms": 178.827,
+          "transform_ms": 0.073,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 327.284,
+          "call_ms": 326.969,
+          "transform_ms": 0.116,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 461.631,
+          "call_ms": 461.507,
+          "transform_ms": 0.02,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 599.527,
+          "call_ms": 599.285,
+          "transform_ms": 0.028,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 4,
+      "physical_calls": 6,
+      "first_visible_feedback_ms": 767,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-058-fanout-6-18",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_partial",
+      "functional_pass": false,
+      "failures": [
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 367.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 321,
+          "inline_to_dom_ms": 1.399999976158142,
+          "dom_to_paint_ack_ms": 39.90000003576279,
+          "total_ms": 367
+        },
+        {
+          "request_to_inline_ms": 926,
+          "inline_to_dom_ms": 1.2999999523162842,
+          "dom_to_paint_ack_ms": 42.60000002384186,
+          "total_ms": 973
+        },
+        {
+          "request_to_inline_ms": 1076,
+          "inline_to_dom_ms": 2.100000023841858,
+          "dom_to_paint_ack_ms": 49.89999997615814,
+          "total_ms": 1133
+        },
+        {
+          "request_to_inline_ms": 1261,
+          "inline_to_dom_ms": 3.5,
+          "dom_to_paint_ack_ms": 41.60000002384186,
+          "total_ms": 1311
+        },
+        {
+          "request_to_inline_ms": 1824,
+          "inline_to_dom_ms": 1.699999988079071,
+          "dom_to_paint_ack_ms": 49.30000001192093,
+          "total_ms": 1883
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 176.321,
+          "call_ms": 176.078,
+          "transform_ms": 0.043,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 318.936,
+          "call_ms": 318.856,
+          "transform_ms": 0.025,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 466.878,
+          "call_ms": 466.752,
+          "transform_ms": 0.025,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 653.096,
+          "call_ms": 652.979,
+          "transform_ms": 0.058,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 742.14,
+          "call_ms": 741.851,
+          "transform_ms": 0.108,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 5,
+      "physical_calls": 6,
+      "first_visible_feedback_ms": 367,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-059-fanout-6-19",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_partial",
+      "functional_pass": false,
+      "failures": [
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 348.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 306,
+          "inline_to_dom_ms": 1.100000023841858,
+          "dom_to_paint_ack_ms": 36.799999952316284,
+          "total_ms": 348
+        },
+        {
+          "request_to_inline_ms": 1964,
+          "inline_to_dom_ms": 2.400000035762787,
+          "dom_to_paint_ack_ms": 28.899999976158142,
+          "total_ms": 2002
+        },
+        {
+          "request_to_inline_ms": 2181,
+          "inline_to_dom_ms": 3.300000011920929,
+          "dom_to_paint_ack_ms": 33.30000001192093,
+          "total_ms": 2225
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 177.416,
+          "call_ms": 177.172,
+          "transform_ms": 0.045,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 332.615,
+          "call_ms": 332.375,
+          "transform_ms": 0.059,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 550.878,
+          "call_ms": 550.572,
+          "transform_ms": 0.12,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 3,
+      "physical_calls": 6,
+      "first_visible_feedback_ms": 348,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-060-fanout-6-20",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_partial",
+      "functional_pass": false,
+      "failures": [
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 421.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 380,
+          "inline_to_dom_ms": 3.400000035762787,
+          "dom_to_paint_ack_ms": 31.299999952316284,
+          "total_ms": 421
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 175.071,
+          "call_ms": 174.774,
+          "transform_ms": 0.092,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 6,
+      "first_visible_feedback_ms": 421,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-061-single-flight-1",
+      "category": "single_flight",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 1935.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 1869,
+          "inline_to_dom_ms": 3.100000023841858,
+          "dom_to_paint_ack_ms": 53.30000001192093,
+          "total_ms": 1935
+        },
+        {
+          "request_to_inline_ms": 1935,
+          "inline_to_dom_ms": 1.199999988079071,
+          "dom_to_paint_ack_ms": 35.5,
+          "total_ms": 1979
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 434.063,
+          "call_ms": 433.876,
+          "transform_ms": 0.062,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 434.063,
+          "call_ms": 433.876,
+          "transform_ms": 0.062,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 2,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 1935,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-062-single-flight-2",
+      "category": "single_flight",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 1944.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 1903,
+          "inline_to_dom_ms": 2.600000023841858,
+          "dom_to_paint_ack_ms": 34.10000002384186,
+          "total_ms": 1944
+        },
+        {
+          "request_to_inline_ms": 1944,
+          "inline_to_dom_ms": 2.300000011920929,
+          "dom_to_paint_ack_ms": 46.19999998807907,
+          "total_ms": 1998
+        },
+        {
+          "request_to_inline_ms": 1949,
+          "inline_to_dom_ms": 2.399999976158142,
+          "dom_to_paint_ack_ms": 40.30000001192093,
+          "total_ms": 1998
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 460.662,
+          "call_ms": 460.302,
+          "transform_ms": 0.105,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 460.662,
+          "call_ms": 460.302,
+          "transform_ms": 0.105,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 460.662,
+          "call_ms": 460.302,
+          "transform_ms": 0.105,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 3,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 1944,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-063-single-flight-3",
+      "category": "single_flight",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 2744.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 2697,
+          "inline_to_dom_ms": 1.899999976158142,
+          "dom_to_paint_ack_ms": 34.80000001192093,
+          "total_ms": 2744
+        },
+        {
+          "request_to_inline_ms": 2744,
+          "inline_to_dom_ms": 2.399999976158142,
+          "dom_to_paint_ack_ms": 43.5,
+          "total_ms": 2797
+        },
+        {
+          "request_to_inline_ms": 2750,
+          "inline_to_dom_ms": 1.899999976158142,
+          "dom_to_paint_ack_ms": 38.10000002384186,
+          "total_ms": 2797
+        },
+        {
+          "request_to_inline_ms": 2756,
+          "inline_to_dom_ms": 3.900000035762787,
+          "dom_to_paint_ack_ms": 28.19999998807907,
+          "total_ms": 2797
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 510.062,
+          "call_ms": 509.83,
+          "transform_ms": 0.05,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 510.062,
+          "call_ms": 509.83,
+          "transform_ms": 0.05,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 510.062,
+          "call_ms": 509.83,
+          "transform_ms": 0.05,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 510.062,
+          "call_ms": 509.83,
+          "transform_ms": 0.05,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 4,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2744,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-064-single-flight-4",
+      "category": "single_flight",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 843.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 728,
+          "inline_to_dom_ms": 11,
+          "dom_to_paint_ack_ms": 97.10000002384186,
+          "total_ms": 843
+        },
+        {
+          "request_to_inline_ms": 843,
+          "inline_to_dom_ms": 13.600000023841858,
+          "dom_to_paint_ack_ms": 57.19999998807907,
+          "total_ms": 922
+        },
+        {
+          "request_to_inline_ms": 850,
+          "inline_to_dom_ms": 15.5,
+          "dom_to_paint_ack_ms": 116.20000004768372,
+          "total_ms": 1027
+        },
+        {
+          "request_to_inline_ms": 859,
+          "inline_to_dom_ms": 11,
+          "dom_to_paint_ack_ms": 105.09999996423721,
+          "total_ms": 1027
+        },
+        {
+          "request_to_inline_ms": 922,
+          "inline_to_dom_ms": 25.399999976158142,
+          "dom_to_paint_ack_ms": 92.40000003576279,
+          "total_ms": 1119
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 554.723,
+          "call_ms": 554.469,
+          "transform_ms": 0.059,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 554.723,
+          "call_ms": 554.469,
+          "transform_ms": 0.059,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 554.723,
+          "call_ms": 554.469,
+          "transform_ms": 0.059,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 554.723,
+          "call_ms": 554.469,
+          "transform_ms": 0.059,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 554.723,
+          "call_ms": 554.469,
+          "transform_ms": 0.059,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 5,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 843,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-065-single-flight-5",
+      "category": "single_flight",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 2219.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 726,
+          "inline_to_dom_ms": 3.199999988079071,
+          "dom_to_paint_ack_ms": 33.700000047683716,
+          "total_ms": 2219
+        },
+        {
+          "request_to_inline_ms": 2219,
+          "inline_to_dom_ms": 2.199999988079071,
+          "dom_to_paint_ack_ms": 34.69999998807907,
+          "total_ms": 2265
+        },
+        {
+          "request_to_inline_ms": 2227,
+          "inline_to_dom_ms": 1.800000011920929,
+          "dom_to_paint_ack_ms": 48.89999997615814,
+          "total_ms": 2283
+        },
+        {
+          "request_to_inline_ms": 2231,
+          "inline_to_dom_ms": 2.199999988079071,
+          "dom_to_paint_ack_ms": 44.89999997615814,
+          "total_ms": 2289
+        },
+        {
+          "request_to_inline_ms": 2265,
+          "inline_to_dom_ms": 4.300000011920929,
+          "dom_to_paint_ack_ms": 42.89999997615814,
+          "total_ms": 2317
+        },
+        {
+          "request_to_inline_ms": 2283,
+          "inline_to_dom_ms": 2.199999988079071,
+          "dom_to_paint_ack_ms": 43.89999997615814,
+          "total_ms": 2335
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 584.362,
+          "call_ms": 583.949,
+          "transform_ms": 0.137,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 584.362,
+          "call_ms": 583.949,
+          "transform_ms": 0.137,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 584.362,
+          "call_ms": 583.949,
+          "transform_ms": 0.137,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 584.362,
+          "call_ms": 583.949,
+          "transform_ms": 0.137,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 584.362,
+          "call_ms": 583.949,
+          "transform_ms": 0.137,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 584.362,
+          "call_ms": 583.949,
+          "transform_ms": 0.137,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 6,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2219,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-066-single-flight-6",
+      "category": "single_flight",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 2702.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 2653,
+          "inline_to_dom_ms": 1.300000011920929,
+          "dom_to_paint_ack_ms": 44.19999998807907,
+          "total_ms": 2702
+        },
+        {
+          "request_to_inline_ms": 2702,
+          "inline_to_dom_ms": 1.699999988079071,
+          "dom_to_paint_ack_ms": 34.80000001192093,
+          "total_ms": 2747
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 613.218,
+          "call_ms": 613.017,
+          "transform_ms": 0.022,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 613.218,
+          "call_ms": 613.017,
+          "transform_ms": 0.022,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 2,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2702,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-067-single-flight-7",
+      "category": "single_flight",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 812.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 771,
+          "inline_to_dom_ms": 1.9000000357627869,
+          "dom_to_paint_ack_ms": 34.69999998807907,
+          "total_ms": 812
+        },
+        {
+          "request_to_inline_ms": 812,
+          "inline_to_dom_ms": 3.400000035762787,
+          "dom_to_paint_ack_ms": 44.09999996423721,
+          "total_ms": 864
+        },
+        {
+          "request_to_inline_ms": 816,
+          "inline_to_dom_ms": 1.699999988079071,
+          "dom_to_paint_ack_ms": 40.700000047683716,
+          "total_ms": 865
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 665.387,
+          "call_ms": 665.198,
+          "transform_ms": 0.056,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 665.387,
+          "call_ms": 665.198,
+          "transform_ms": 0.056,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 665.387,
+          "call_ms": 665.198,
+          "transform_ms": 0.056,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 3,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 812,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-068-single-flight-8",
+      "category": "single_flight",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 925.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 847,
+          "inline_to_dom_ms": 12.800000011920929,
+          "dom_to_paint_ack_ms": 58.89999997615814,
+          "total_ms": 925
+        },
+        {
+          "request_to_inline_ms": 925,
+          "inline_to_dom_ms": 13.300000011920929,
+          "dom_to_paint_ack_ms": 232,
+          "total_ms": 3363
+        },
+        {
+          "request_to_inline_ms": 931,
+          "inline_to_dom_ms": 12.5,
+          "dom_to_paint_ack_ms": 219.5,
+          "total_ms": 3363
+        },
+        {
+          "request_to_inline_ms": 937,
+          "inline_to_dom_ms": 98.59999996423721,
+          "dom_to_paint_ack_ms": 133.5,
+          "total_ms": 3364
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 722.481,
+          "call_ms": 722.207,
+          "transform_ms": 0.047,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 722.481,
+          "call_ms": 722.207,
+          "transform_ms": 0.047,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 722.481,
+          "call_ms": 722.207,
+          "transform_ms": 0.047,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 722.481,
+          "call_ms": 722.207,
+          "transform_ms": 0.047,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 4,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 925,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-069-pool-cold-1",
+      "category": "pool_cold",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 1046.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 1003,
+          "inline_to_dom_ms": 3.100000023841858,
+          "dom_to_paint_ack_ms": 33.799999952316284,
+          "total_ms": 1046
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 859.085,
+          "call_ms": 858.885,
+          "transform_ms": 0.035,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 1046,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-070-pool-cold-2",
+      "category": "pool_cold",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 2405.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 2349,
+          "inline_to_dom_ms": 2,
+          "dom_to_paint_ack_ms": 45.89999997615814,
+          "total_ms": 2405
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 829.864,
+          "call_ms": 829.621,
+          "transform_ms": 0.036,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2405,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-071-pool-cold-3",
+      "category": "pool_cold",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 1862.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 1814,
+          "inline_to_dom_ms": 2.600000023841858,
+          "dom_to_paint_ack_ms": 33.39999997615814,
+          "total_ms": 1862
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 855.402,
+          "call_ms": 855.106,
+          "transform_ms": 0.114,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 1862,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-072-pool-cold-4",
+      "category": "pool_cold",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 2292.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 2195,
+          "inline_to_dom_ms": 7.100000023841858,
+          "dom_to_paint_ack_ms": 83.69999998807907,
+          "total_ms": 2292
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 854.76,
+          "call_ms": 854.495,
+          "transform_ms": 0.052,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2292,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-073-pool-warm-5",
+      "category": "pool_warm",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 1750.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 258,
+          "inline_to_dom_ms": 2.699999988079071,
+          "dom_to_paint_ack_ms": 34.19999998807907,
+          "total_ms": 1750
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 87.643,
+          "call_ms": 87.373,
+          "transform_ms": 0.032,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 1750,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-074-pool-warm-6",
+      "category": "pool_warm",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 2115.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 283,
+          "inline_to_dom_ms": 1.4000000357627869,
+          "dom_to_paint_ack_ms": 530.3999999761581,
+          "total_ms": 2115
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 99.159,
+          "call_ms": 98.848,
+          "transform_ms": 0.061,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2115,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-075-pool-warm-7",
+      "category": "pool_warm",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 286.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 244,
+          "inline_to_dom_ms": 3.399999976158142,
+          "dom_to_paint_ack_ms": 32.90000003576279,
+          "total_ms": 286
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 87.889,
+          "call_ms": 87.561,
+          "transform_ms": 0.124,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 286,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-076-pool-warm-8",
+      "category": "pool_warm",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 1638.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 1559,
+          "inline_to_dom_ms": 10.700000047683716,
+          "dom_to_paint_ack_ms": 63.299999952316284,
+          "total_ms": 1638
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 82.012,
+          "call_ms": 81.787,
+          "transform_ms": 0.027,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 1638,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-077-deadline-2900",
+      "category": "deadline_boundary",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2915,
+      "first_visible_feedback_kind": "state_canvas"
+    },
+    {
+      "case_id": "rest-078-deadline-2400",
+      "category": "deadline_boundary",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 3479,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-079-deadline-3001",
+      "category": "deadline_boundary",
+      "expected_outcome": "deadline_miss_no_render",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded"
+      ],
+      "sla_applicable": false,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 5154,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-080-slow-enrichment-2",
+      "category": "slow_enrichment",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_partial",
+      "functional_pass": false,
+      "failures": [
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 496.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 443,
+          "inline_to_dom_ms": 2.300000011920929,
+          "dom_to_paint_ack_ms": 43.30000001192093,
+          "total_ms": 496
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 263.344,
+          "call_ms": 262.999,
+          "transform_ms": 0.153,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 2,
+      "first_visible_feedback_ms": 496,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-081-slow-enrichment-3",
+      "category": "slow_enrichment",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_partial",
+      "functional_pass": false,
+      "failures": [
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 393.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 350,
+          "inline_to_dom_ms": 2.5,
+          "dom_to_paint_ack_ms": 33.90000003576279,
+          "total_ms": 393
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 192.034,
+          "call_ms": 191.713,
+          "transform_ms": 0.109,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 3,
+      "first_visible_feedback_ms": 393,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-082-cold-handshake-2800",
+      "category": "deadline_boundary",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 3894,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-083-partial-1",
+      "category": "partial_failure",
+      "expected_outcome": "render_partial",
+      "observed_outcome": "render_partial",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 427.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 378,
+          "inline_to_dom_ms": 1.5,
+          "dom_to_paint_ack_ms": 43.5,
+          "total_ms": 427
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 237.98,
+          "call_ms": 237.773,
+          "transform_ms": 0.072,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 2,
+      "first_visible_feedback_ms": 427,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-084-partial-2",
+      "category": "partial_failure",
+      "expected_outcome": "render_partial",
+      "observed_outcome": "render_partial",
+      "functional_pass": false,
+      "failures": [
+        "wrong_canvas_sequence"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 2706.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 2641,
+          "inline_to_dom_ms": 11.5,
+          "dom_to_paint_ack_ms": 43.19999998807907,
+          "total_ms": 2706
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 513.357,
+          "call_ms": 513.149,
+          "transform_ms": 0.05,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 2,
+      "first_visible_feedback_ms": 402,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-085-partial-3",
+      "category": "partial_failure",
+      "expected_outcome": "render_partial",
+      "observed_outcome": "render_partial",
+      "functional_pass": false,
+      "failures": [
+        "wrong_canvas_sequence"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 1520.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 1477,
+          "inline_to_dom_ms": 1.9000000357627869,
+          "dom_to_paint_ack_ms": 34.89999997615814,
+          "total_ms": 1520
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 178.88,
+          "call_ms": 178.696,
+          "transform_ms": 0.022,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 3,
+      "first_visible_feedback_ms": 1520,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-086-partial-4",
+      "category": "partial_failure",
+      "expected_outcome": "render_partial",
+      "observed_outcome": "render_partial",
+      "functional_pass": false,
+      "failures": [
+        "wrong_canvas_sequence"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 399.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 349,
+          "inline_to_dom_ms": 1.800000011920929,
+          "dom_to_paint_ack_ms": 44.19999998807907,
+          "total_ms": 399
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 175.235,
+          "call_ms": 174.995,
+          "transform_ms": 0.051,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 3,
+      "first_visible_feedback_ms": 399,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-087-partial-5",
+      "category": "partial_failure",
+      "expected_outcome": "render_partial",
+      "observed_outcome": "render_partial",
+      "functional_pass": false,
+      "failures": [
+        "wrong_canvas_sequence"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 2937.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 2874,
+          "inline_to_dom_ms": 1.899999976158142,
+          "dom_to_paint_ack_ms": 57.40000003576279,
+          "total_ms": 2937
+        },
+        {
+          "request_to_inline_ms": 2871,
+          "inline_to_dom_ms": 1.199999988079071,
+          "dom_to_paint_ack_ms": 61.40000003576279,
+          "total_ms": 2937
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 262.841,
+          "call_ms": 262.741,
+          "transform_ms": 0.037,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 520.705,
+          "call_ms": 520.496,
+          "transform_ms": 0.062,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 2,
+      "physical_calls": 4,
+      "first_visible_feedback_ms": 277,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-088-partial-6",
+      "category": "partial_failure",
+      "expected_outcome": "render_partial",
+      "observed_outcome": "render_partial",
+      "functional_pass": false,
+      "failures": [
+        "wrong_canvas_sequence"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 337.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 292,
+          "inline_to_dom_ms": 2.399999976158142,
+          "dom_to_paint_ack_ms": 34.30000001192093,
+          "total_ms": 337
+        },
+        {
+          "request_to_inline_ms": 1473,
+          "inline_to_dom_ms": 1.2000000476837158,
+          "dom_to_paint_ack_ms": 34.69999998807907,
+          "total_ms": 1514
+        },
+        {
+          "request_to_inline_ms": 1155,
+          "inline_to_dom_ms": 2.699999988079071,
+          "dom_to_paint_ack_ms": 34.39999997615814,
+          "total_ms": 1197
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 146.917,
+          "call_ms": 146.592,
+          "transform_ms": 0.088,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 707.858,
+          "call_ms": 707.648,
+          "transform_ms": 0.03,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 388.844,
+          "call_ms": 388.686,
+          "transform_ms": 0.023,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 3,
+      "physical_calls": 4,
+      "first_visible_feedback_ms": 337,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-089-partial-7",
+      "category": "partial_failure",
+      "expected_outcome": "render_partial",
+      "observed_outcome": "render_partial",
+      "functional_pass": false,
+      "failures": [
+        "wrong_canvas_sequence"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 1748.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 1707,
+          "inline_to_dom_ms": 2.199999988079071,
+          "dom_to_paint_ack_ms": 33.19999998807907,
+          "total_ms": 1748
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 147.356,
+          "call_ms": 147.064,
+          "transform_ms": 0.077,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 5,
+      "first_visible_feedback_ms": 1748,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-090-partial-8",
+      "category": "partial_failure",
+      "expected_outcome": "render_partial",
+      "observed_outcome": "render_partial",
+      "functional_pass": false,
+      "failures": [
+        "wrong_canvas_sequence"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 2318.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 2274,
+          "inline_to_dom_ms": 2.699999988079071,
+          "dom_to_paint_ack_ms": 35.39999997615814,
+          "total_ms": 2318
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 307.109,
+          "call_ms": 306.896,
+          "transform_ms": 0.031,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 6,
+      "first_visible_feedback_ms": 307,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-091-all-timeout",
+      "category": "timeout_cancel_empty",
+      "expected_outcome": "deadline_miss_no_render",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_physical_call_count"
+      ],
+      "sla_applicable": false,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 3709,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-092-user-cancel",
+      "category": "timeout_cancel_empty",
+      "expected_outcome": "cancelled_no_render",
+      "observed_outcome": "cancelled_no_render",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": false,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 2,
+      "first_visible_feedback_ms": 1056,
+      "first_visible_feedback_kind": "state_canvas"
+    },
+    {
+      "case_id": "rest-093-empty-table",
+      "category": "timeout_cancel_empty",
+      "expected_outcome": "render_empty_state",
+      "observed_outcome": "render_empty_state",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 306.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 261,
+          "inline_to_dom_ms": 1.399999976158142,
+          "dom_to_paint_ack_ms": 36.200000047683716,
+          "total_ms": 306
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 128.355,
+          "call_ms": 127.292,
+          "transform_ms": 0.022,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 306,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-094-empty-facts",
+      "category": "timeout_cancel_empty",
+      "expected_outcome": "render_empty_state",
+      "observed_outcome": "render_empty_state",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 329.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 274,
+          "inline_to_dom_ms": 0.800000011920929,
+          "dom_to_paint_ack_ms": 50.69999998807907,
+          "total_ms": 329
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 147.577,
+          "call_ms": 147.426,
+          "transform_ms": 0.015,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 329,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-095-guarded-buy-no-render",
+      "category": "safety_negative",
+      "expected_outcome": "rejected_no_render",
+      "observed_outcome": "rejected_no_render",
+      "functional_pass": false,
+      "failures": [
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded"
+      ],
+      "sla_applicable": false,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 0,
+      "first_visible_feedback_ms": 3207,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-096-guarded-sell-no-render",
+      "category": "safety_negative",
+      "expected_outcome": "rejected_no_render",
+      "observed_outcome": "rejected_no_render",
+      "functional_pass": false,
+      "failures": [
+        "unverified_first_visible_feedback"
+      ],
+      "sla_applicable": false,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 0,
+      "first_visible_feedback_ms": 2451,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-097-excluded-split-base",
+      "category": "safety_negative",
+      "expected_outcome": "rejected_no_render",
+      "observed_outcome": "rejected_no_render",
+      "functional_pass": false,
+      "failures": [
+        "unverified_first_visible_feedback"
+      ],
+      "sla_applicable": false,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 0,
+      "first_visible_feedback_ms": 2117,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-098-oauth-hidden",
+      "category": "safety_negative",
+      "expected_outcome": "rejected_no_render",
+      "observed_outcome": "rejected_no_render",
+      "functional_pass": false,
+      "failures": [
+        "unverified_first_visible_feedback"
+      ],
+      "sla_applicable": false,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 0,
+      "first_visible_feedback_ms": 2134,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-099-unknown-ref",
+      "category": "safety_negative",
+      "expected_outcome": "rejected_no_render",
+      "observed_outcome": "rejected_no_render",
+      "functional_pass": false,
+      "failures": [
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded"
+      ],
+      "sla_applicable": false,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 0,
+      "first_visible_feedback_ms": 3934,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-100-manifest-type-authority",
+      "category": "safety_negative",
+      "expected_outcome": "render_manifest_authoritative",
+      "observed_outcome": "rejected_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "wrong_physical_call_count",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 0,
+      "first_visible_feedback_ms": 4240,
+      "first_visible_feedback_kind": "receipt"
+    }
+  ],
+  "schema_version": 1,
+  "generated_at": "2026-08-20T17:51:06.921030+00:00",
+  "corpus": {
+    "path": "backend/tests/fixtures/kiwoom_rest_canvas_100.jsonl",
+    "sha256": "f47bcefa5777923f0f43a75e7299fc1746d8646391648d81d3fa3740b8b8af44",
+    "count": 100
+  },
+  "trace": {
+    "path": "plan/kiwoom-rest-canvas-100-trace-2026-08-21.jsonl",
+    "sha256": "60981079cd3d087fd0b7e5f881f4048da2dd839d38ef03fde24074609a97a6c0",
+    "count": 100
+  },
+  "manifest": {
+    "path": "backend/ref/kiwoom-common-screen-manifest.json",
+    "sha256": "12ae5f1adb1c1c7da41cd8ade381cf89e840c314cc33104fe4ee5223132cd0f1"
+  },
+  "catalog": {
+    "path": "backend/ref/kiwoom-tr-inventory.json",
+    "sha256": "318d081c7cac23e3fa290e3b885308bc42a28c6f84f7c74cad3c3103e80ff63b"
+  },
+  "source_hashes": {
+    "backend/scripts/evaluate_kiwoom_rest_canvas_100.py": "d4b1e3d9e790690e9fd209e54c84833408f34b186b4e4d78af3d2969cdad40e5",
+    "backend/scripts/serve_kiwoom_rest_canvas_benchmark.py": "48fc21cca393fc06542f5122402440208b53db45662149db643334340f86064e",
+    "backend/athena_api/api/canvas_push.py": "a64ebbfe6864eb3f6b4ef0f17178207090f241ba7eab8547b1c794fc38cd2dea",
+    "app/main.js": "8e6e7276f084a30fc22f736005b06440ad1f9882e65d5fdfe346fdc17aaae4b5",
+    "app/canvas.js": "8cef26747d405ae43df8afa1ca9e756579b0b5a92fa8da4a71de14f8a9497a6d",
+    "app/preload.js": "2d7af6c8c4d0fa9f65164834face08b70d6f13dfc4697b66d4f4ecef42a4da13",
+    "app/lib/main/rest-dataset-runner.js": "b141ea0653a868e133967295f498a0a88231fc7d4f9af81cd019771c7e358955",
+    "app/scripts/benchmark-rest-canvas-100.js": "f49a1a5781b0ac530fc4183370ad501669e5a1a704b602a5bb60980a534af845"
+  },
+  "execution": {
+    "command": [
+      "C:\\Projects\\DAOU.Athena\\backend\\.venv\\Scripts\\python.exe",
+      "C:\\Projects\\DAOU.Athena\\backend\\scripts\\evaluate_kiwoom_rest_canvas_100.py",
+      "--run"
+    ],
+    "producer_command": [
+      "node",
+      "C:\\Projects\\DAOU.Athena\\app\\node_modules\\electron\\cli.js",
+      "C:\\Projects\\DAOU.Athena\\app\\scripts\\benchmark-rest-canvas-100.js",
+      "--corpus",
+      "C:\\Projects\\DAOU.Athena\\backend\\tests\\fixtures\\kiwoom_rest_canvas_100.jsonl",
+      "--output",
+      "C:\\Projects\\DAOU.Athena\\plan\\kiwoom-rest-canvas-100-trace-2026-08-21.jsonl"
+    ],
+    "cwd": "C:\\Projects\\DAOU.Athena",
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "processor_count": 22,
+    "whole_corpus_single_pass": true,
+    "case_retries": 0
+  }
+}

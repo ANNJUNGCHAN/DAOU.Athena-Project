@@ -1,0 +1,206 @@
+2026-08-20T18:18:37.294Z backend-spawn pid=56356 port=53169
+2026-08-20T18:18:40.089Z backend-healthy
+2026-08-20T18:18:40.089Z electron-ready
+2026-08-20T18:18:40.127Z main-required
+2026-08-20T18:18:44.249Z windows-created
+2026-08-20T18:18:44.252Z case-start rest-001-facts-1
+2026-08-20T18:18:44.701Z case-done rest-001-facts-1 feedback=406
+2026-08-20T18:18:44.702Z case-start rest-002-facts-2
+2026-08-20T18:18:44.900Z case-done rest-002-facts-2 feedback=167
+2026-08-20T18:18:44.901Z case-start rest-003-facts-3
+2026-08-20T18:18:45.119Z case-done rest-003-facts-3 feedback=190
+2026-08-20T18:18:45.121Z case-start rest-004-facts-4
+2026-08-20T18:18:45.341Z case-done rest-004-facts-4 feedback=187
+2026-08-20T18:18:45.342Z case-start rest-005-facts-5
+2026-08-20T18:18:45.555Z case-done rest-005-facts-5 feedback=189
+2026-08-20T18:18:45.556Z case-start rest-006-facts-6
+2026-08-20T18:18:45.798Z case-done rest-006-facts-6 feedback=206
+2026-08-20T18:18:45.798Z case-start rest-007-facts-7
+2026-08-20T18:18:46.022Z case-done rest-007-facts-7 feedback=188
+2026-08-20T18:18:46.022Z case-start rest-008-facts-8
+2026-08-20T18:18:46.250Z case-done rest-008-facts-8 feedback=205
+2026-08-20T18:18:46.251Z case-start rest-009-facts-9
+2026-08-20T18:18:50.498Z case-done rest-009-facts-9 feedback=2408
+2026-08-20T18:18:50.499Z case-start rest-010-facts-10
+2026-08-20T18:18:50.692Z case-done rest-010-facts-10 feedback=160
+2026-08-20T18:18:50.693Z case-start rest-011-table-1
+2026-08-20T18:18:50.932Z case-done rest-011-table-1 feedback=205
+2026-08-20T18:18:50.933Z case-start rest-012-table-2
+2026-08-20T18:18:51.156Z case-done rest-012-table-2 feedback=189
+2026-08-20T18:18:51.157Z case-start rest-013-table-3
+2026-08-20T18:18:51.369Z case-done rest-013-table-3 feedback=189
+2026-08-20T18:18:51.370Z case-start rest-014-table-4
+2026-08-20T18:18:51.595Z case-done rest-014-table-4 feedback=190
+2026-08-20T18:18:51.595Z case-start rest-015-table-5
+2026-08-20T18:18:51.807Z case-done rest-015-table-5 feedback=189
+2026-08-20T18:18:51.808Z case-start rest-016-table-6
+2026-08-20T18:18:52.020Z case-done rest-016-table-6 feedback=190
+2026-08-20T18:18:52.020Z case-start rest-017-table-7
+2026-08-20T18:18:52.236Z case-done rest-017-table-7 feedback=192
+2026-08-20T18:18:52.236Z case-start rest-018-table-8
+2026-08-20T18:18:52.431Z case-done rest-018-table-8 feedback=173
+2026-08-20T18:18:52.431Z case-start rest-019-table-9
+2026-08-20T18:18:54.338Z case-done rest-019-table-9 feedback=1884
+2026-08-20T18:18:54.339Z case-start rest-020-table-10
+2026-08-20T18:18:56.568Z case-done rest-020-table-10 feedback=2207
+2026-08-20T18:18:56.569Z case-start rest-021-compound-1
+2026-08-20T18:18:56.769Z case-done rest-021-compound-1 feedback=172
+2026-08-20T18:18:56.769Z case-start rest-022-compound-2
+2026-08-20T18:18:56.983Z case-done rest-022-compound-2 feedback=188
+2026-08-20T18:18:56.983Z case-start rest-023-compound-3
+2026-08-20T18:18:57.195Z case-done rest-023-compound-3 feedback=189
+2026-08-20T18:18:57.196Z case-start rest-024-compound-4
+2026-08-20T18:18:57.424Z case-done rest-024-compound-4 feedback=192
+2026-08-20T18:18:57.425Z case-start rest-025-compound-5
+2026-08-20T18:18:57.635Z case-done rest-025-compound-5 feedback=177
+2026-08-20T18:18:57.635Z case-start rest-026-compound-6
+2026-08-20T18:18:57.845Z case-done rest-026-compound-6 feedback=175
+2026-08-20T18:18:57.846Z case-start rest-027-compound-7
+2026-08-20T18:18:58.073Z case-done rest-027-compound-7 feedback=204
+2026-08-20T18:18:58.074Z case-start rest-028-compound-8
+2026-08-20T18:18:58.287Z case-done rest-028-compound-8 feedback=189
+2026-08-20T18:18:58.288Z case-start rest-029-chart-1
+2026-08-20T18:19:00.067Z case-done rest-029-chart-1 feedback=1757
+2026-08-20T18:19:00.068Z case-start rest-030-chart-2
+2026-08-20T18:19:00.291Z case-done rest-030-chart-2 feedback=191
+2026-08-20T18:19:00.292Z case-start rest-031-chart-3
+2026-08-20T18:19:00.534Z case-done rest-031-chart-3 feedback=208
+2026-08-20T18:19:00.534Z case-start rest-032-chart-4
+2026-08-20T18:19:02.963Z case-done rest-032-chart-4 feedback=2396
+2026-08-20T18:19:02.964Z case-start rest-033-chart-5
+2026-08-20T18:19:03.191Z case-done rest-033-chart-5 feedback=192
+2026-08-20T18:19:03.192Z case-start rest-034-chart-6
+2026-08-20T18:19:03.434Z case-done rest-034-chart-6 feedback=208
+2026-08-20T18:19:03.434Z case-start rest-035-chart-7
+2026-08-20T18:19:03.675Z case-done rest-035-chart-7 feedback=206
+2026-08-20T18:19:03.675Z case-start rest-036-chart-8
+2026-08-20T18:19:03.931Z case-done rest-036-chart-8 feedback=221
+2026-08-20T18:19:03.931Z case-start rest-037-chart-9
+2026-08-20T18:19:04.159Z case-done rest-037-chart-9 feedback=192
+2026-08-20T18:19:04.160Z case-start rest-038-chart-10
+2026-08-20T18:19:04.417Z case-done rest-038-chart-10 feedback=222
+2026-08-20T18:19:04.417Z case-start rest-039-chart-11
+2026-08-20T18:19:04.659Z case-done rest-039-chart-11 feedback=206
+2026-08-20T18:19:04.659Z case-start rest-040-chart-12
+2026-08-20T18:19:06.186Z case-done rest-040-chart-12 feedback=1493
+2026-08-20T18:19:06.187Z case-start rest-041-fanout-2-1
+2026-08-20T18:19:08.853Z case-done rest-041-fanout-2-1 feedback=234
+2026-08-20T18:19:08.853Z case-start rest-042-fanout-2-2
+2026-08-20T18:19:09.522Z case-done rest-042-fanout-2-2 feedback=242
+2026-08-20T18:19:09.522Z case-start rest-043-fanout-2-3
+2026-08-20T18:19:10.520Z case-done rest-043-fanout-2-3 feedback=252
+2026-08-20T18:19:10.521Z case-start rest-044-fanout-2-4
+2026-08-20T18:19:12.750Z case-done rest-044-fanout-2-4 feedback=235
+2026-08-20T18:19:12.751Z case-start rest-045-fanout-3-5
+2026-08-20T18:19:16.069Z case-done rest-045-fanout-3-5 feedback=1583
+2026-08-20T18:19:16.070Z case-start rest-046-fanout-3-6
+2026-08-20T18:19:18.958Z case-done rest-046-fanout-3-6 feedback=248
+2026-08-20T18:19:18.959Z case-start rest-047-fanout-3-7
+2026-08-20T18:19:19.738Z case-done rest-047-fanout-3-7 feedback=221
+2026-08-20T18:19:19.739Z case-start rest-048-fanout-3-8
+2026-08-20T18:19:20.556Z case-done rest-048-fanout-3-8 feedback=265
+2026-08-20T18:19:20.557Z case-start rest-049-fanout-4-9
+2026-08-20T18:19:22.187Z case-done rest-049-fanout-4-9 feedback=236
+2026-08-20T18:19:22.188Z case-start rest-050-fanout-4-10
+2026-08-20T18:19:25.133Z case-done rest-050-fanout-4-10 feedback=235
+2026-08-20T18:19:25.134Z case-start rest-051-fanout-4-11
+2026-08-20T18:19:26.063Z case-done rest-051-fanout-4-11 feedback=233
+2026-08-20T18:19:26.063Z case-start rest-052-fanout-4-12
+2026-08-20T18:19:27.002Z case-done rest-052-fanout-4-12 feedback=237
+2026-08-20T18:19:27.003Z case-start rest-053-fanout-5-13
+2026-08-20T18:19:31.874Z case-done rest-053-fanout-5-13 feedback=1799
+2026-08-20T18:19:31.875Z case-start rest-054-fanout-5-14
+2026-08-20T18:19:35.305Z case-done rest-054-fanout-5-14 feedback=248
+2026-08-20T18:19:35.306Z case-start rest-055-fanout-5-15
+2026-08-20T18:19:36.798Z case-done rest-055-fanout-5-15 feedback=250
+2026-08-20T18:19:36.799Z case-start rest-056-fanout-5-16
+2026-08-20T18:19:40.956Z case-done rest-056-fanout-5-16 feedback=221
+2026-08-20T18:19:40.956Z case-start rest-057-fanout-6-17
+2026-08-20T18:19:44.489Z case-done rest-057-fanout-6-17 feedback=235
+2026-08-20T18:19:44.490Z case-start rest-058-fanout-6-18
+2026-08-20T18:19:46.655Z case-done rest-058-fanout-6-18 feedback=221
+2026-08-20T18:19:46.656Z case-start rest-059-fanout-6-19
+2026-08-20T18:19:51.062Z case-done rest-059-fanout-6-19 feedback=248
+2026-08-20T18:19:51.062Z case-start rest-060-fanout-6-20
+2026-08-20T18:19:54.533Z case-done rest-060-fanout-6-20 feedback=1451
+2026-08-20T18:19:54.534Z case-start rest-061-single-flight-1
+2026-08-20T18:19:56.615Z case-done rest-061-single-flight-1 feedback=477
+2026-08-20T18:19:56.616Z case-start rest-062-single-flight-2
+2026-08-20T18:19:57.216Z case-done rest-062-single-flight-2 feedback=524
+2026-08-20T18:19:57.216Z case-start rest-063-single-flight-3
+2026-08-20T18:19:58.721Z case-done rest-063-single-flight-3 feedback=1424
+2026-08-20T18:19:58.722Z case-start rest-064-single-flight-4
+2026-08-20T18:20:01.715Z case-done rest-064-single-flight-4 feedback=2769
+2026-08-20T18:20:01.716Z case-start rest-065-single-flight-5
+2026-08-20T18:20:02.484Z case-done rest-065-single-flight-5 feedback=629
+2026-08-20T18:20:02.485Z case-start rest-066-single-flight-6
+2026-08-20T18:20:03.236Z case-done rest-066-single-flight-6 feedback=674
+2026-08-20T18:20:03.237Z case-start rest-067-single-flight-7
+2026-08-20T18:20:05.031Z case-done rest-067-single-flight-7 feedback=1713
+2026-08-20T18:20:05.031Z case-start rest-068-single-flight-8
+2026-08-20T18:20:07.660Z case-done rest-068-single-flight-8 feedback=2525
+2026-08-20T18:20:07.660Z case-start rest-069-pool-cold-1
+2026-08-20T18:20:08.613Z case-done rest-069-pool-cold-1 feedback=927
+2026-08-20T18:20:08.614Z case-start rest-070-pool-cold-2
+2026-08-20T18:20:11.111Z case-done rest-070-pool-cold-2 feedback=2469
+2026-08-20T18:20:11.111Z case-start rest-071-pool-cold-3
+2026-08-20T18:20:12.757Z case-done rest-071-pool-cold-3 feedback=1615
+2026-08-20T18:20:12.758Z case-start rest-072-pool-cold-4
+2026-08-20T18:20:15.629Z case-done rest-072-pool-cold-4 feedback=2818
+2026-08-20T18:20:15.630Z case-start rest-073-pool-warm-5
+2026-08-20T18:20:15.789Z case-done rest-073-pool-warm-5 feedback=129
+2026-08-20T18:20:15.790Z case-start rest-074-pool-warm-6
+2026-08-20T18:20:15.985Z case-done rest-074-pool-warm-6 feedback=173
+2026-08-20T18:20:15.986Z case-start rest-075-pool-warm-7
+2026-08-20T18:20:16.169Z case-done rest-075-pool-warm-7 feedback=161
+2026-08-20T18:20:16.170Z case-start rest-076-pool-warm-8
+2026-08-20T18:20:16.356Z case-done rest-076-pool-warm-8 feedback=162
+2026-08-20T18:20:16.356Z case-start rest-077-deadline-1200
+2026-08-20T18:20:19.514Z case-done rest-077-deadline-1200 feedback=3122
+2026-08-20T18:20:19.515Z case-start rest-078-admission-timeout-2400
+2026-08-20T18:20:21.111Z case-done rest-078-admission-timeout-2400 feedback=1566
+2026-08-20T18:20:21.112Z case-start rest-079-deadline-3001
+2026-08-20T18:20:23.725Z case-done rest-079-deadline-3001 feedback=2576
+2026-08-20T18:20:23.726Z case-start rest-080-slow-enrichment-2
+2026-08-20T18:20:27.744Z case-done rest-080-slow-enrichment-2 feedback=739
+2026-08-20T18:20:27.745Z case-start rest-081-slow-enrichment-3
+2026-08-20T18:20:30.913Z case-done rest-081-slow-enrichment-3 feedback=236
+2026-08-20T18:20:30.914Z case-start rest-082-cold-admission-timeout-2300
+2026-08-20T18:20:33.447Z case-done rest-082-cold-admission-timeout-2300 feedback=2503
+2026-08-20T18:20:33.447Z case-start rest-083-partial-1
+2026-08-20T18:20:37.308Z case-done rest-083-partial-1 feedback=1834
+2026-08-20T18:20:37.309Z case-start rest-084-partial-2
+2026-08-20T18:20:39.453Z case-done rest-084-partial-2 feedback=234
+2026-08-20T18:20:39.454Z case-start rest-085-partial-3
+2026-08-20T18:20:40.987Z case-done rest-085-partial-3 feedback=236
+2026-08-20T18:20:40.987Z case-start rest-086-partial-4
+2026-08-20T18:20:42.774Z case-done rest-086-partial-4 feedback=220
+2026-08-20T18:20:42.774Z case-start rest-087-partial-5
+2026-08-20T18:20:43.762Z case-done rest-087-partial-5 feedback=188
+2026-08-20T18:20:43.762Z case-start rest-088-partial-6
+2026-08-20T18:20:47.931Z case-done rest-088-partial-6 feedback=199
+2026-08-20T18:20:47.931Z case-start rest-089-partial-7
+2026-08-20T18:20:51.619Z case-done rest-089-partial-7 feedback=222
+2026-08-20T18:20:51.620Z case-start rest-090-partial-8
+2026-08-20T18:20:55.794Z case-done rest-090-partial-8 feedback=160
+2026-08-20T18:20:55.795Z case-start rest-091-all-timeout
+2026-08-20T18:20:59.757Z case-done rest-091-all-timeout feedback=1417
+2026-08-20T18:20:59.757Z case-start rest-092-user-cancel
+2026-08-20T18:21:04.072Z case-done rest-092-user-cancel feedback=1532
+2026-08-20T18:21:04.072Z case-start rest-093-empty-table
+2026-08-20T18:21:04.276Z case-done rest-093-empty-table feedback=175
+2026-08-20T18:21:04.277Z case-start rest-094-empty-facts
+2026-08-20T18:21:04.505Z case-done rest-094-empty-facts feedback=205
+2026-08-20T18:21:04.505Z case-start rest-095-guarded-buy-no-render
+2026-08-20T18:21:04.559Z case-done rest-095-guarded-buy-no-render feedback=30
+2026-08-20T18:21:04.559Z case-start rest-096-guarded-sell-no-render
+2026-08-20T18:21:04.611Z case-done rest-096-guarded-sell-no-render feedback=21
+2026-08-20T18:21:04.611Z case-start rest-097-excluded-split-base
+2026-08-20T18:21:04.665Z case-done rest-097-excluded-split-base feedback=30
+2026-08-20T18:21:04.666Z case-start rest-098-oauth-hidden
+2026-08-20T18:21:04.718Z case-done rest-098-oauth-hidden feedback=22
+2026-08-20T18:21:04.719Z case-start rest-099-unknown-ref
+2026-08-20T18:21:04.771Z case-done rest-099-unknown-ref feedback=30
+2026-08-20T18:21:04.771Z case-start rest-100-manifest-type-authority
+2026-08-20T18:21:04.823Z case-done rest-100-manifest-type-authority feedback=23
+2026-08-20T18:21:04.858Z backend-exit code=null signal=SIGTERM

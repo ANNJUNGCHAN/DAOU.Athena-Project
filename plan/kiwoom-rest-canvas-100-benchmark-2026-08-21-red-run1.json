@@ -1,0 +1,2807 @@
+{
+  "status": "fail",
+  "gates": {
+    "functional": {
+      "passed": false,
+      "pass_count": 1,
+      "total": 100,
+      "required": 100
+    },
+    "first_visible_feedback": {
+      "passed": false,
+      "denominator": 100,
+      "measured_count": 100,
+      "p50_ms": 2377.5,
+      "p95_ms": 4084.45,
+      "max_ms": 4472,
+      "threshold_max_ms": 3000.0
+    },
+    "first_verified_data_canvas": {
+      "passed": false,
+      "denominator": 92,
+      "measured_count": 33,
+      "missing_count": 59,
+      "p50_ms": 326.0,
+      "p95_ms": 2330.2,
+      "max_ms": 2587.0,
+      "thresholds_ms": {
+        "p50": 1000.0,
+        "p95": 2500.0,
+        "max": 3000.0
+      },
+      "no_render_cases_excluded_from_latency_only": 8
+    }
+  },
+  "cases": [
+    {
+      "case_id": "rest-001-facts-1",
+      "category": "facts_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": false,
+      "failures": [
+        "wrong_canvas_sequence"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 612.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 469,
+          "inline_to_dom_ms": 63.39999997615814,
+          "dom_to_paint_ack_ms": 46.80000001192093,
+          "total_ms": 612
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 142.501,
+          "call_ms": 131.678,
+          "transform_ms": 0.156,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 612,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-002-facts-2",
+      "category": "facts_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": false,
+      "failures": [
+        "wrong_canvas_sequence"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 326.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 289,
+          "inline_to_dom_ms": 3.200000047683716,
+          "dom_to_paint_ack_ms": 33,
+          "total_ms": 326
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 110.214,
+          "call_ms": 109.952,
+          "transform_ms": 0.03,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 326,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-003-facts-3",
+      "category": "facts_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": false,
+      "failures": [
+        "wrong_canvas_sequence"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 219.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 182,
+          "inline_to_dom_ms": 2,
+          "dom_to_paint_ack_ms": 34.30000001192093,
+          "total_ms": 219
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 122.017,
+          "call_ms": 121.704,
+          "transform_ms": 0.112,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 219,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-004-facts-4",
+      "category": "facts_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2454,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-005-facts-5",
+      "category": "facts_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2169,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-006-facts-6",
+      "category": "facts_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": false,
+      "failures": [
+        "wrong_canvas_sequence"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 2036.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 1996,
+          "inline_to_dom_ms": 3.099999964237213,
+          "dom_to_paint_ack_ms": 36.80000001192093,
+          "total_ms": 2036
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 139.1,
+          "call_ms": 138.88,
+          "transform_ms": 0.025,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2036,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-007-facts-7",
+      "category": "facts_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": false,
+      "failures": [
+        "wrong_canvas_sequence"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 213.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 175,
+          "inline_to_dom_ms": 3.699999988079071,
+          "dom_to_paint_ack_ms": 33.39999997615814,
+          "total_ms": 213
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 130.105,
+          "call_ms": 129.84,
+          "transform_ms": 0.062,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 213,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-008-facts-8",
+      "category": "facts_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": false,
+      "failures": [
+        "wrong_canvas_sequence"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 252.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 214,
+          "inline_to_dom_ms": 2.199999988079071,
+          "dom_to_paint_ack_ms": 34.700000047683716,
+          "total_ms": 252
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 132.55,
+          "call_ms": 132.323,
+          "transform_ms": 0.061,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 252,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-009-facts-9",
+      "category": "facts_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": false,
+      "failures": [
+        "wrong_canvas_sequence"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 265.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 228,
+          "inline_to_dom_ms": 1.300000011920929,
+          "dom_to_paint_ack_ms": 34.89999997615814,
+          "total_ms": 265
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 116.755,
+          "call_ms": 116.612,
+          "transform_ms": 0.024,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 265,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-010-facts-10",
+      "category": "facts_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 3345,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-011-table-1",
+      "category": "table_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 3808,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-012-table-2",
+      "category": "table_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2147,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-013-table-3",
+      "category": "table_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": false,
+      "failures": [
+        "wrong_canvas_sequence"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 192.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 144,
+          "inline_to_dom_ms": 3.899999976158142,
+          "dom_to_paint_ack_ms": 43.10000002384186,
+          "total_ms": 192
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 118.327,
+          "call_ms": 118.047,
+          "transform_ms": 0.076,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 192,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-014-table-4",
+      "category": "table_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 3477,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-015-table-5",
+      "category": "table_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": false,
+      "failures": [
+        "wrong_canvas_sequence"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 221.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 168,
+          "inline_to_dom_ms": 3.199999988079071,
+          "dom_to_paint_ack_ms": 48.39999997615814,
+          "total_ms": 221
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 137.225,
+          "call_ms": 136.945,
+          "transform_ms": 0.047,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 221,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-016-table-6",
+      "category": "table_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 3418,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-017-table-7",
+      "category": "table_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2279,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-018-table-8",
+      "category": "table_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": false,
+      "failures": [
+        "wrong_canvas_sequence"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 175.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 137,
+          "inline_to_dom_ms": 1.399999976158142,
+          "dom_to_paint_ack_ms": 35.30000001192093,
+          "total_ms": 175
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 114.592,
+          "call_ms": 114.404,
+          "transform_ms": 0.03,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 175,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-019-table-9",
+      "category": "table_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 4351,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-020-table-10",
+      "category": "table_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 3703,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-021-compound-1",
+      "category": "compound_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2141,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-022-compound-2",
+      "category": "compound_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": false,
+      "failures": [
+        "wrong_canvas_sequence"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 2289.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 2252,
+          "inline_to_dom_ms": 2,
+          "dom_to_paint_ack_ms": 34.30000001192093,
+          "total_ms": 2289
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 120.274,
+          "call_ms": 120.008,
+          "transform_ms": 0.056,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2289,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-023-compound-3",
+      "category": "compound_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 3127,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-024-compound-4",
+      "category": "compound_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2126,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-025-compound-5",
+      "category": "compound_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2827,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-026-compound-6",
+      "category": "compound_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 3306,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-027-compound-7",
+      "category": "compound_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": false,
+      "failures": [
+        "wrong_canvas_sequence"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 183.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 138,
+          "inline_to_dom_ms": 1.5,
+          "dom_to_paint_ack_ms": 42.69999998807907,
+          "total_ms": 183
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 115.275,
+          "call_ms": 115.024,
+          "transform_ms": 0.103,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 183,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-028-compound-8",
+      "category": "compound_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2202,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-029-chart-1",
+      "category": "chart_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2276,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-030-chart-2",
+      "category": "chart_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 3261,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-031-chart-3",
+      "category": "chart_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": false,
+      "failures": [
+        "wrong_canvas_sequence"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 280.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 153,
+          "inline_to_dom_ms": 42.5,
+          "dom_to_paint_ack_ms": 83.19999998807907,
+          "total_ms": 280
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 133.985,
+          "call_ms": 133.65,
+          "transform_ms": 0.112,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 280,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-032-chart-4",
+      "category": "chart_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": false,
+      "failures": [
+        "wrong_canvas_sequence"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 222.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 168,
+          "inline_to_dom_ms": 9.5,
+          "dom_to_paint_ack_ms": 44.19999998807907,
+          "total_ms": 222
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 124.229,
+          "call_ms": 123.921,
+          "transform_ms": 0.073,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 222,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-033-chart-5",
+      "category": "chart_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": false,
+      "failures": [
+        "wrong_canvas_sequence"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 1968.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 1912,
+          "inline_to_dom_ms": 7.300000011920929,
+          "dom_to_paint_ack_ms": 47.89999997615814,
+          "total_ms": 1968
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 114.643,
+          "call_ms": 114.43,
+          "transform_ms": 0.039,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 1968,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-034-chart-6",
+      "category": "chart_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 3015,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-035-chart-7",
+      "category": "chart_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2889,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-036-chart-8",
+      "category": "chart_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": false,
+      "failures": [
+        "wrong_canvas_sequence"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 208.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 153,
+          "inline_to_dom_ms": 5.5,
+          "dom_to_paint_ack_ms": 48.5,
+          "total_ms": 208
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 133.521,
+          "call_ms": 133.27,
+          "transform_ms": 0.037,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 208,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-037-chart-9",
+      "category": "chart_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 3994,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-038-chart-10",
+      "category": "chart_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": false,
+      "failures": [
+        "wrong_canvas_sequence"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 1808.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 1736,
+          "inline_to_dom_ms": 8.300000011920929,
+          "dom_to_paint_ack_ms": 63.60000002384186,
+          "total_ms": 1808
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 124.93,
+          "call_ms": 124.654,
+          "transform_ms": 0.045,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 1808,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-039-chart-11",
+      "category": "chart_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2499,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-040-chart-12",
+      "category": "chart_single",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": false,
+      "failures": [
+        "wrong_canvas_sequence"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 210.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 154,
+          "inline_to_dom_ms": 12.099999964237213,
+          "dom_to_paint_ack_ms": 43.30000001192093,
+          "total_ms": 210
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 114.361,
+          "call_ms": 114.088,
+          "transform_ms": 0.067,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 210,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-041-fanout-2-1",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 2,
+      "first_visible_feedback_ms": 3501,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-042-fanout-2-2",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 2,
+      "first_visible_feedback_ms": 2150,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-043-fanout-2-3",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 2,
+      "first_visible_feedback_ms": 3479,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-044-fanout-2-4",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 2,
+      "first_visible_feedback_ms": 2785,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-045-fanout-3-5",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 3,
+      "first_visible_feedback_ms": 4161,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-046-fanout-3-6",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 3,
+      "first_visible_feedback_ms": 3493,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-047-fanout-3-7",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 3,
+      "first_visible_feedback_ms": 2254,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-048-fanout-3-8",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 3,
+      "first_visible_feedback_ms": 2184,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-049-fanout-4-9",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 4,
+      "first_visible_feedback_ms": 4472,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-050-fanout-4-10",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_partial",
+      "functional_pass": false,
+      "failures": [
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 524.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 487,
+          "inline_to_dom_ms": 1.800000011920929,
+          "dom_to_paint_ack_ms": 34.40000003576279,
+          "total_ms": 524
+        },
+        {
+          "request_to_inline_ms": 623,
+          "inline_to_dom_ms": 1.5,
+          "dom_to_paint_ack_ms": 34.60000002384186,
+          "total_ms": 660
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 325.115,
+          "call_ms": 324.905,
+          "transform_ms": 0.029,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 460.664,
+          "call_ms": 460.462,
+          "transform_ms": 0.038,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 2,
+      "physical_calls": 4,
+      "first_visible_feedback_ms": 524,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-051-fanout-4-11",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 4,
+      "first_visible_feedback_ms": 2641,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-052-fanout-4-12",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 4,
+      "first_visible_feedback_ms": 2773,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-053-fanout-5-13",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 5,
+      "first_visible_feedback_ms": 4084,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-054-fanout-5-14",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 5,
+      "first_visible_feedback_ms": 3993,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-055-fanout-5-15",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 5,
+      "first_visible_feedback_ms": 3113,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-056-fanout-5-16",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 5,
+      "first_visible_feedback_ms": 2547,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-057-fanout-6-17",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 6,
+      "first_visible_feedback_ms": 2363,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-058-fanout-6-18",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 6,
+      "first_visible_feedback_ms": 3112,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-059-fanout-6-19",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 6,
+      "first_visible_feedback_ms": 2570,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-060-fanout-6-20",
+      "category": "fanout_success",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 6,
+      "first_visible_feedback_ms": 2180,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-061-single-flight-1",
+      "category": "single_flight",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": false,
+      "failures": [
+        "wrong_canvas_sequence"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 2021.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 1973,
+          "inline_to_dom_ms": 2.5,
+          "dom_to_paint_ack_ms": 45,
+          "total_ms": 2021
+        },
+        {
+          "request_to_inline_ms": 2021,
+          "inline_to_dom_ms": 1.800000011920929,
+          "dom_to_paint_ack_ms": 39.5,
+          "total_ms": 3479
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 417.136,
+          "call_ms": 416.916,
+          "transform_ms": 0.083,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 417.136,
+          "call_ms": 416.916,
+          "transform_ms": 0.083,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 2,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2021,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-062-single-flight-2",
+      "category": "single_flight",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2605,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-063-single-flight-3",
+      "category": "single_flight",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 4055,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-064-single-flight-4",
+      "category": "single_flight",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": false,
+      "failures": [
+        "wrong_canvas_sequence"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 778.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 580,
+          "inline_to_dom_ms": 7.300000011920929,
+          "dom_to_paint_ack_ms": 190.5,
+          "total_ms": 778
+        },
+        {
+          "request_to_inline_ms": 778,
+          "inline_to_dom_ms": 6.600000023841858,
+          "dom_to_paint_ack_ms": 67.69999998807907,
+          "total_ms": 853
+        },
+        {
+          "request_to_inline_ms": 778,
+          "inline_to_dom_ms": 4.599999964237213,
+          "dom_to_paint_ack_ms": 63.10000002384186,
+          "total_ms": 853
+        },
+        {
+          "request_to_inline_ms": 778,
+          "inline_to_dom_ms": 9.5,
+          "dom_to_paint_ack_ms": 57.60000002384186,
+          "total_ms": 853
+        },
+        {
+          "request_to_inline_ms": 853,
+          "inline_to_dom_ms": 6.900000035762787,
+          "dom_to_paint_ack_ms": 64.89999997615814,
+          "total_ms": 927
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 560.13,
+          "call_ms": 559.946,
+          "transform_ms": 0.043,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 560.13,
+          "call_ms": 559.946,
+          "transform_ms": 0.043,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 560.13,
+          "call_ms": 559.946,
+          "transform_ms": 0.043,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 560.13,
+          "call_ms": 559.946,
+          "transform_ms": 0.043,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 560.13,
+          "call_ms": 559.946,
+          "transform_ms": 0.043,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 5,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 778,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-065-single-flight-5",
+      "category": "single_flight",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2227,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-066-single-flight-6",
+      "category": "single_flight",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": false,
+      "failures": [
+        "wrong_canvas_sequence"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 677.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 639,
+          "inline_to_dom_ms": 2.800000011920929,
+          "dom_to_paint_ack_ms": 34,
+          "total_ms": 677
+        },
+        {
+          "request_to_inline_ms": 677,
+          "inline_to_dom_ms": 1.600000023841858,
+          "dom_to_paint_ack_ms": 51,
+          "total_ms": 730
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 619.291,
+          "call_ms": 619.068,
+          "transform_ms": 0.044,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 619.291,
+          "call_ms": 619.068,
+          "transform_ms": 0.044,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 2,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 677,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-067-single-flight-7",
+      "category": "single_flight",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 3676,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-068-single-flight-8",
+      "category": "single_flight",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": false,
+      "failures": [
+        "wrong_canvas_sequence"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 2587.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 2513,
+          "inline_to_dom_ms": 6,
+          "dom_to_paint_ack_ms": 66.69999998807907,
+          "total_ms": 2587
+        },
+        {
+          "request_to_inline_ms": 2587,
+          "inline_to_dom_ms": 12,
+          "dom_to_paint_ack_ms": 94,
+          "total_ms": 2694
+        },
+        {
+          "request_to_inline_ms": 2587,
+          "inline_to_dom_ms": 11,
+          "dom_to_paint_ack_ms": 83,
+          "total_ms": 2694
+        },
+        {
+          "request_to_inline_ms": 2587,
+          "inline_to_dom_ms": 17.399999976158142,
+          "dom_to_paint_ack_ms": 75,
+          "total_ms": 2694
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 710.361,
+          "call_ms": 710.196,
+          "transform_ms": 0.034,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 710.361,
+          "call_ms": 710.196,
+          "transform_ms": 0.034,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 710.361,
+          "call_ms": 710.196,
+          "transform_ms": 0.034,
+          "delivery_ms": 0
+        },
+        {
+          "server_ms": 710.361,
+          "call_ms": 710.196,
+          "transform_ms": 0.034,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 4,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2587,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-069-pool-cold-1",
+      "category": "pool_cold",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": false,
+      "failures": [
+        "wrong_canvas_sequence"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 1318.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 1003,
+          "inline_to_dom_ms": 1.7999999523162842,
+          "dom_to_paint_ack_ms": 312.5,
+          "total_ms": 1318
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 862.709,
+          "call_ms": 862.469,
+          "transform_ms": 0.026,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 1318,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-070-pool-cold-2",
+      "category": "pool_cold",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": false,
+      "failures": [
+        "wrong_canvas_sequence"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 2392.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 2353,
+          "inline_to_dom_ms": 1.5,
+          "dom_to_paint_ack_ms": 35.90000003576279,
+          "total_ms": 2392
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 862.495,
+          "call_ms": 862.327,
+          "transform_ms": 0.034,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 2392,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-071-pool-cold-3",
+      "category": "pool_cold",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 3918,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-072-pool-cold-4",
+      "category": "pool_cold",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": false,
+      "failures": [
+        "wrong_canvas_sequence"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 1593.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 1535,
+          "inline_to_dom_ms": 5.899999976158142,
+          "dom_to_paint_ack_ms": 50.89999997615814,
+          "total_ms": 1593
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 864.208,
+          "call_ms": 864.006,
+          "transform_ms": 0.037,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 1593,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-073-pool-warm-5",
+      "category": "pool_warm",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": false,
+      "failures": [
+        "wrong_canvas_sequence"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 326.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 288,
+          "inline_to_dom_ms": 2.599999964237213,
+          "dom_to_paint_ack_ms": 34.10000002384186,
+          "total_ms": 326
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 102.302,
+          "call_ms": 102.136,
+          "transform_ms": 0.021,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 326,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-074-pool-warm-6",
+      "category": "pool_warm",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 4093,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-075-pool-warm-7",
+      "category": "pool_warm",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": false,
+      "failures": [
+        "wrong_canvas_sequence"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 173.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 137,
+          "inline_to_dom_ms": 2,
+          "dom_to_paint_ack_ms": 33.30000001192093,
+          "total_ms": 173
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 121.527,
+          "call_ms": 121.362,
+          "transform_ms": 0.058,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 173,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-076-pool-warm-8",
+      "category": "pool_warm",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_all",
+      "functional_pass": false,
+      "failures": [
+        "wrong_canvas_sequence"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 192.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 139,
+          "inline_to_dom_ms": 5.699999988079071,
+          "dom_to_paint_ack_ms": 47.30000001192093,
+          "total_ms": 192
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 103.048,
+          "call_ms": 102.88,
+          "transform_ms": 0.035,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 192,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-077-deadline-2900",
+      "category": "deadline_boundary",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 3427,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-078-deadline-2400",
+      "category": "deadline_boundary",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 3999,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-079-deadline-3001",
+      "category": "deadline_boundary",
+      "expected_outcome": "deadline_miss_no_render",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded"
+      ],
+      "sla_applicable": false,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 3979,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-080-slow-enrichment-2",
+      "category": "slow_enrichment",
+      "expected_outcome": "render_all",
+      "observed_outcome": "render_partial",
+      "functional_pass": false,
+      "failures": [
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 1461.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 1423,
+          "inline_to_dom_ms": 1.899999976158142,
+          "dom_to_paint_ack_ms": 35,
+          "total_ms": 1461
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 260.902,
+          "call_ms": 260.73,
+          "transform_ms": 0.061,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 2,
+      "first_visible_feedback_ms": 1461,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-081-slow-enrichment-3",
+      "category": "slow_enrichment",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 3,
+      "first_visible_feedback_ms": 2501,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-082-cold-handshake-2800",
+      "category": "deadline_boundary",
+      "expected_outcome": "render_all",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 3997,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-083-partial-1",
+      "category": "partial_failure",
+      "expected_outcome": "render_partial",
+      "observed_outcome": "render_partial",
+      "functional_pass": false,
+      "failures": [
+        "wrong_canvas_sequence"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 678.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 632,
+          "inline_to_dom_ms": 1,
+          "dom_to_paint_ack_ms": 44.5,
+          "total_ms": 678
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 224.398,
+          "call_ms": 224.224,
+          "transform_ms": 0.062,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 2,
+      "first_visible_feedback_ms": 678,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-084-partial-2",
+      "category": "partial_failure",
+      "expected_outcome": "render_partial",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 2,
+      "first_visible_feedback_ms": 3301,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-085-partial-3",
+      "category": "partial_failure",
+      "expected_outcome": "render_partial",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 3,
+      "first_visible_feedback_ms": 3597,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-086-partial-4",
+      "category": "partial_failure",
+      "expected_outcome": "render_partial",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 3,
+      "first_visible_feedback_ms": 2151,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-087-partial-5",
+      "category": "partial_failure",
+      "expected_outcome": "render_partial",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 4,
+      "first_visible_feedback_ms": 3358,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-088-partial-6",
+      "category": "partial_failure",
+      "expected_outcome": "render_partial",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 4,
+      "first_visible_feedback_ms": 3515,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-089-partial-7",
+      "category": "partial_failure",
+      "expected_outcome": "render_partial",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 5,
+      "first_visible_feedback_ms": 4066,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-090-partial-8",
+      "category": "partial_failure",
+      "expected_outcome": "render_partial",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 6,
+      "first_visible_feedback_ms": 4162,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-091-all-timeout",
+      "category": "timeout_cancel_empty",
+      "expected_outcome": "deadline_miss_no_render",
+      "observed_outcome": "deadline_miss_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded"
+      ],
+      "sla_applicable": false,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 2,
+      "first_visible_feedback_ms": 4053,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-092-user-cancel",
+      "category": "timeout_cancel_empty",
+      "expected_outcome": "cancelled_no_render",
+      "observed_outcome": "cancelled_no_render",
+      "functional_pass": true,
+      "failures": [],
+      "sla_applicable": false,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 2,
+      "first_visible_feedback_ms": 952,
+      "first_visible_feedback_kind": "state_canvas"
+    },
+    {
+      "case_id": "rest-093-empty-table",
+      "category": "timeout_cancel_empty",
+      "expected_outcome": "render_empty_state",
+      "observed_outcome": "render_empty_state",
+      "functional_pass": false,
+      "failures": [
+        "wrong_canvas_sequence"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 190.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 152,
+          "inline_to_dom_ms": 1.2000000476837158,
+          "dom_to_paint_ack_ms": 35.299999952316284,
+          "total_ms": 190
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 129.232,
+          "call_ms": 129.05,
+          "transform_ms": 0.011,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 190,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-094-empty-facts",
+      "category": "timeout_cancel_empty",
+      "expected_outcome": "render_empty_state",
+      "observed_outcome": "render_empty_state",
+      "functional_pass": false,
+      "failures": [
+        "wrong_canvas_sequence"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": 204.0,
+      "stage_timings": [
+        {
+          "request_to_inline_ms": 168,
+          "inline_to_dom_ms": 1.399999976158142,
+          "dom_to_paint_ack_ms": 34.5,
+          "total_ms": 204
+        }
+      ],
+      "backend_timings": [
+        {
+          "server_ms": 132.502,
+          "call_ms": 132.323,
+          "transform_ms": 0.012,
+          "delivery_ms": 0
+        }
+      ],
+      "rendered_count": 1,
+      "physical_calls": 1,
+      "first_visible_feedback_ms": 204,
+      "first_visible_feedback_kind": "data_canvas"
+    },
+    {
+      "case_id": "rest-095-guarded-buy-no-render",
+      "category": "safety_negative",
+      "expected_outcome": "rejected_no_render",
+      "observed_outcome": "rejected_no_render",
+      "functional_pass": false,
+      "failures": [
+        "unverified_first_visible_feedback"
+      ],
+      "sla_applicable": false,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 0,
+      "first_visible_feedback_ms": 2396,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-096-guarded-sell-no-render",
+      "category": "safety_negative",
+      "expected_outcome": "rejected_no_render",
+      "observed_outcome": "rejected_no_render",
+      "functional_pass": false,
+      "failures": [
+        "unverified_first_visible_feedback"
+      ],
+      "sla_applicable": false,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 0,
+      "first_visible_feedback_ms": 2113,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-097-excluded-split-base",
+      "category": "safety_negative",
+      "expected_outcome": "rejected_no_render",
+      "observed_outcome": "rejected_no_render",
+      "functional_pass": false,
+      "failures": [
+        "unverified_first_visible_feedback"
+      ],
+      "sla_applicable": false,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 0,
+      "first_visible_feedback_ms": 2124,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-098-oauth-hidden",
+      "category": "safety_negative",
+      "expected_outcome": "rejected_no_render",
+      "observed_outcome": "rejected_no_render",
+      "functional_pass": false,
+      "failures": [
+        "unverified_first_visible_feedback",
+        "first_visible_feedback_deadline_exceeded"
+      ],
+      "sla_applicable": false,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 0,
+      "first_visible_feedback_ms": 3659,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-099-unknown-ref",
+      "category": "safety_negative",
+      "expected_outcome": "rejected_no_render",
+      "observed_outcome": "rejected_no_render",
+      "functional_pass": false,
+      "failures": [
+        "unverified_first_visible_feedback"
+      ],
+      "sla_applicable": false,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 0,
+      "first_visible_feedback_ms": 2112,
+      "first_visible_feedback_kind": "receipt"
+    },
+    {
+      "case_id": "rest-100-manifest-type-authority",
+      "category": "safety_negative",
+      "expected_outcome": "render_manifest_authoritative",
+      "observed_outcome": "rejected_no_render",
+      "functional_pass": false,
+      "failures": [
+        "wrong_first_visible_feedback_kind",
+        "unverified_first_visible_feedback",
+        "wrong_outcome",
+        "wrong_canvas_sequence",
+        "untruthful_display_receipt",
+        "wrong_physical_call_count",
+        "missing_expected_render"
+      ],
+      "sla_applicable": true,
+      "first_verified_canvas_ms": null,
+      "stage_timings": [],
+      "backend_timings": [],
+      "rendered_count": 0,
+      "physical_calls": 0,
+      "first_visible_feedback_ms": 2107,
+      "first_visible_feedback_kind": "receipt"
+    }
+  ],
+  "schema_version": 1,
+  "generated_at": "2026-08-20T17:38:16.497018+00:00",
+  "corpus": {
+    "path": "backend/tests/fixtures/kiwoom_rest_canvas_100.jsonl",
+    "sha256": "f47bcefa5777923f0f43a75e7299fc1746d8646391648d81d3fa3740b8b8af44",
+    "count": 100
+  },
+  "trace": {
+    "path": "plan/kiwoom-rest-canvas-100-trace-2026-08-21.jsonl",
+    "sha256": "3f8ab3beed18583a600a070cdf378385a517db756a2e0104008ecba791beae39",
+    "count": 100
+  },
+  "manifest": {
+    "path": "backend/ref/kiwoom-common-screen-manifest.json",
+    "sha256": "12ae5f1adb1c1c7da41cd8ade381cf89e840c314cc33104fe4ee5223132cd0f1"
+  },
+  "catalog": {
+    "path": "backend/ref/kiwoom-tr-inventory.json",
+    "sha256": "318d081c7cac23e3fa290e3b885308bc42a28c6f84f7c74cad3c3103e80ff63b"
+  },
+  "source_hashes": {
+    "backend/scripts/evaluate_kiwoom_rest_canvas_100.py": "5b04f0fa8a46919dd1cd511ea7ad7fb173d2d037b1d20c1faace84401c7c039b",
+    "backend/scripts/serve_kiwoom_rest_canvas_benchmark.py": "48fc21cca393fc06542f5122402440208b53db45662149db643334340f86064e",
+    "backend/athena_api/api/canvas_push.py": "a64ebbfe6864eb3f6b4ef0f17178207090f241ba7eab8547b1c794fc38cd2dea",
+    "app/main.js": "0f9b4f759bb166ad2441ee2d13e3b2ee3f78000aab2b6d4aca40113ab12ff374",
+    "app/canvas.js": "8cef26747d405ae43df8afa1ca9e756579b0b5a92fa8da4a71de14f8a9497a6d",
+    "app/preload.js": "2d7af6c8c4d0fa9f65164834face08b70d6f13dfc4697b66d4f4ecef42a4da13",
+    "app/lib/main/rest-dataset-runner.js": "4dfd200560aa542798c18c19880cebaa72d1d804f216af9a01f48e327d22074c",
+    "app/scripts/benchmark-rest-canvas-100.js": "f1054e1099899492a021af7308ee09a05919c9e84a89d188f300a2f8b7f8edd5"
+  },
+  "execution": {
+    "command": [
+      "C:\\Projects\\DAOU.Athena\\backend\\.venv\\Scripts\\python.exe",
+      "C:\\Projects\\DAOU.Athena\\backend\\scripts\\evaluate_kiwoom_rest_canvas_100.py",
+      "--run"
+    ],
+    "producer_command": [
+      "node",
+      "C:\\Projects\\DAOU.Athena\\app\\node_modules\\electron\\cli.js",
+      "C:\\Projects\\DAOU.Athena\\app\\scripts\\benchmark-rest-canvas-100.js",
+      "--corpus",
+      "C:\\Projects\\DAOU.Athena\\backend\\tests\\fixtures\\kiwoom_rest_canvas_100.jsonl",
+      "--output",
+      "C:\\Projects\\DAOU.Athena\\plan\\kiwoom-rest-canvas-100-trace-2026-08-21.jsonl"
+    ],
+    "cwd": "C:\\Projects\\DAOU.Athena",
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "processor_count": 22,
+    "whole_corpus_single_pass": true,
+    "case_retries": 0
+  }
+}
