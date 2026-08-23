@@ -173,7 +173,7 @@
         },
         "screen_id": "AT-CV-005:A1",
         "screenshot": "app/captures/paper-A1.png",
-        "screenshot_sha256": "b19a521c8e2354d942da43f32507bc63e2d14a97d8551ebda22cf1e21f8217ea",
+        "screenshot_sha256": "d6634c761d7b4ceef00abac1b6768861dee94f76c153b3e4fdcb25fe1059d2a9",
         "status": "pass",
         "template_case_id": "A1"
       },
@@ -206,7 +206,7 @@
         },
         "screen_id": "AT-CV-005:C1",
         "screenshot": "app/captures/paper-C1.png",
-        "screenshot_sha256": "4fb74462d0152e983f3650dfe354f4949b4a6e5506418559dc40edf594229931",
+        "screenshot_sha256": "7150acf0056af20dae4f72679cea60209e3fe4be2a90d7f60f57c9c64810da39",
         "status": "pass",
         "template_case_id": "C1"
       },
@@ -239,7 +239,7 @@
         },
         "screen_id": "AT-CV-005:C2",
         "screenshot": "app/captures/paper-C2.png",
-        "screenshot_sha256": "99b02cd92fcc4fb093d41cb5d9404485e1e71a4043b226ed7bcae529ee67d311",
+        "screenshot_sha256": "f8dd43f75fe137ec2660ff1635c57b9d8cfacb09409571248f84a65cdf63aa12",
         "status": "pass",
         "template_case_id": "C2"
       },
@@ -272,7 +272,7 @@
         },
         "screen_id": "AT-CV-005:E1",
         "screenshot": "app/captures/paper-E1.png",
-        "screenshot_sha256": "aaf308968c4b567f6b8e71e6ac8cb7110f1d98757692e450e8de0171a7cacd48",
+        "screenshot_sha256": "fc8f850157d0d683328231f0f77d930d6ec8703f718e6d2938c4854c0ae9164d",
         "status": "pass",
         "template_case_id": "E1"
       },
@@ -305,7 +305,7 @@
         },
         "screen_id": "AT-CV-005:E2",
         "screenshot": "app/captures/paper-E2.png",
-        "screenshot_sha256": "038d0502a843e85e47952adf610b794389593c9d0be950f4016c2be3bf837719",
+        "screenshot_sha256": "bbe1b214b784a051e0d3d931e48d3f4febcf64d004f41d19801178d6b8cc3319",
         "status": "pass",
         "template_case_id": "E2"
       },
@@ -338,7 +338,7 @@
         },
         "screen_id": "AT-CV-005:E3",
         "screenshot": "app/captures/paper-E3.png",
-        "screenshot_sha256": "b40a36a9b5778e2967e0e23c4f53a2bb5a2f31002511962e5b7734f0295d912b",
+        "screenshot_sha256": "5fcab2fbd45ec02b0fb00cb32a5a85de5a4f1de74185047b505759577185a222",
         "status": "pass",
         "template_case_id": "E3"
       },
@@ -371,7 +371,7 @@
         },
         "screen_id": "AT-CV-005:F1",
         "screenshot": "app/captures/paper-F1.png",
-        "screenshot_sha256": "505ab3650a267e25de8991f073dfb9191ff98446216dc96e7020ba1ff69a194f",
+        "screenshot_sha256": "4f4ca7332f3c65d178d4a26ac33f1490ac41ea591b43bbbaa16c40c2ca7d71fa",
         "status": "pass",
         "template_case_id": "F1"
       },
@@ -404,7 +404,7 @@
         },
         "screen_id": "AT-CV-005:F2",
         "screenshot": "app/captures/paper-F2.png",
-        "screenshot_sha256": "11a7688ac4b0665e5b28ba9c3b999399326be82e8228f3752e8c4e0d95386361",
+        "screenshot_sha256": "0a45949a7e796f81cd3412b7d2d4278e58d841bb7f841c9d0022e1efc3bf753a",
         "status": "pass",
         "template_case_id": "F2"
       },
@@ -437,7 +437,7 @@
         },
         "screen_id": "AT-CV-005:S1",
         "screenshot": "app/captures/paper-S1.png",
-        "screenshot_sha256": "219efe4ffce2a45a63b751da3e9fbc90972332e991eb74aa3721f4fd4858bfc5",
+        "screenshot_sha256": "82a8fb4de299bc86c91230f7a324a13b3608e04039ab64f24530b314e3e5eaf7",
         "status": "pass",
         "template_case_id": "S1"
       },
@@ -470,7 +470,7 @@
         },
         "screen_id": "AT-CV-005:T1",
         "screenshot": "app/captures/paper-T1.png",
-        "screenshot_sha256": "b53f0bb907f08af38ee36a608efc006647234ad19f8f8e4046477a26232d3a03",
+        "screenshot_sha256": "7857517bd07f6d40721610709ffed71aa30cbef5269cceaf92c6813709d8825e",
         "status": "pass",
         "template_case_id": "T1"
       },
@@ -503,7 +503,7 @@
         },
         "screen_id": "AT-CV-005:T2",
         "screenshot": "app/captures/paper-T2.png",
-        "screenshot_sha256": "ba70e5f65b4a479ecab1ff6c194c97443ea51394d2f2a8028057f2e525bd089f",
+        "screenshot_sha256": "2e4d2651fdd3a1c7c277770164fcc3a2b85f743d1a26373524c02247de070910",
         "status": "pass",
         "template_case_id": "T2"
       },
@@ -536,7 +536,7 @@
         },
         "screen_id": "AT-CV-005:T3",
         "screenshot": "app/captures/paper-T3.png",
-        "screenshot_sha256": "d5f4d9de7611a54613d8ea03ae380705de7dd8beaf3f5668b8864fbacb13b74e",
+        "screenshot_sha256": "ca016d2a6600d0b4ae13159ecede13deec1871fd3553e15c97ab13192fce29c0",
         "status": "pass",
         "template_case_id": "T3"
       },
@@ -569,16 +569,16 @@
         },
         "screen_id": "AT-CV-005:T4",
         "screenshot": "app/captures/paper-T4.png",
-        "screenshot_sha256": "b7bb572fe5f380ea1c39801d30598d3a7cd6116aa94ba1e7815159f788486ece",
+        "screenshot_sha256": "11fbce9e9f19ccd18cfc9236819595ee0d78084456ab795acec0b9d3eab0d711",
         "status": "pass",
         "template_case_id": "T4"
       }
     ],
     "schema_version": 1,
     "source_hashes": {
-      "app/canvas.css": "54d01e07c7d858a5b30cd1e228564451f50389ddc90f5374678d5cc1d8c04209",
+      "app/canvas.css": "ab1f80ef34627a0142a9cabedab29507ce47bc22725a8837a5694d4065dd4e8c",
       "app/canvas.html": "1d0db1c14057b0cb02ee110f3604c1044c3d3cbc0e8f3f3cc9448dab23dc62a6",
-      "app/canvas.js": "11f2c14220f12910a293aeafa5629b55b2390beeb5fcb15ae39f0682305e7c9a",
+      "app/canvas.js": "90be1f3c68d0f54238d43e8be29f8a74c06c2f99b089ff6fc896affa63ff144e",
       "app/lib/canvas-layout.js": "98023857555c3dda00124c27e55056b7ee04a3603887a16a059ef0b5d29bda55",
       "app/lib/chart-card.js": "589692bec4c465688ca8238faf17c9f62b540dff4ade46f8a487e6a4007c9e85",
       "app/verify.js": "1d3b23127390450e6c20e2aff7d5735a8291cf6fe900ec9f420c9c1b1fb61277",
@@ -586,10 +586,10 @@
     },
     "source_report": {
       "command": "cd app && npm run verify",
-      "finished_at": "2026-08-22T09:54:09.422Z",
+      "finished_at": "2026-08-23T15:36:56.476Z",
       "path": "app/captures/VERIFY-REPORT.json",
-      "sha256": "0fbfca425d74615151edada082aa0a141bf277ba921afd334553c78da72e6bf9",
-      "started_at": "2026-08-22T09:53:22.378Z"
+      "sha256": "74a385a793cfd92b14ebccdc249830028357f2c998b4992e2d48a0be70a67e7b",
+      "started_at": "2026-08-23T15:36:12.790Z"
     }
   },
   "mappings": [
