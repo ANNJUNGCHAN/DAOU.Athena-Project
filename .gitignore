@@ -18,3 +18,8 @@ __pycache__/
 .ruff_cache/
 .pytest_cache/
 .codex/
+
+# unlazy 스킬 — 로컬 조율 상태 (커밋 금지)
+.claude/settings.local.json
+.unlazy/
+.unlazy-hook-state.json
