@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-08-23T15:36:12.790Z",
+  "startedAt": "2026-08-23T16:26:38.194Z",
   "layout": {
     "scale": 1,
     "screen": {
@@ -50,7 +50,7 @@
   "restReceiptPaint": {
     "repeats": [
       {
-        "elapsedMs": 37,
+        "elapsedMs": 52,
         "verifiedVisible": true,
         "appVisible": true,
         "onboardingHidden": true,
@@ -58,7 +58,7 @@
         "nonzero": true
       },
       {
-        "elapsedMs": 49,
+        "elapsedMs": 53,
         "verifiedVisible": true,
         "appVisible": true,
         "onboardingHidden": true,
@@ -66,7 +66,7 @@
         "nonzero": true
       },
       {
-        "elapsedMs": 50,
+        "elapsedMs": 53,
         "verifiedVisible": true,
         "appVisible": true,
         "onboardingHidden": true,
@@ -74,7 +74,7 @@
         "nonzero": true
       },
       {
-        "elapsedMs": 49,
+        "elapsedMs": 53,
         "verifiedVisible": true,
         "appVisible": true,
         "onboardingHidden": true,
@@ -82,7 +82,7 @@
         "nonzero": true
       },
       {
-        "elapsedMs": 50,
+        "elapsedMs": 52,
         "verifiedVisible": true,
         "appVisible": true,
         "onboardingHidden": true,
@@ -90,7 +90,7 @@
         "nonzero": true
       },
       {
-        "elapsedMs": 51,
+        "elapsedMs": 53,
         "verifiedVisible": true,
         "appVisible": true,
         "onboardingHidden": true,
@@ -100,32 +100,32 @@
     ]
   },
   "delayedRestFeedback": {
-    "elapsedMs": 2772.9099,
-    "totalRunMs": 3015,
+    "elapsedMs": 2744.3399999999997,
+    "totalRunMs": 3004,
     "feedbackOk": true,
     "receiptPainted": true,
     "renderedCount": 0
   },
   "dotScreenPoint": {
     "x": 662.6666679382324,
-    "y": 936.3333435058594
+    "y": 937.3333435058594
   },
   "osCaptureAttempted": {
     "ok": true
   },
   "expand": {
-    "frameCount": 32,
-    "p50": 16.699999999999818,
-    "p95": 33.30000000000018,
-    "max": 33.399999999999636,
-    "min": 8.299999999999272
+    "frameCount": 31,
+    "p50": 17.900000000000546,
+    "p95": 18.199999999999818,
+    "max": 36,
+    "min": 17
   },
   "collapse": {
-    "frameCount": 35,
-    "p50": 16.69999999999891,
-    "p95": 16.799999999999272,
-    "max": 16.799999999999272,
-    "min": 16.5
+    "frameCount": 33,
+    "p50": 17.800000000000182,
+    "p95": 18.100000000000364,
+    "max": 23.199999999999818,
+    "min": 17.100000000000364
   },
   "afterCollapse": {
     "canvasVisible": false
@@ -140,9 +140,9 @@
       },
       "chat": {
         "x": 640,
-        "y": 628,
+        "y": 611,
         "width": 640,
-        "height": 332
+        "height": 350
       }
     },
     "afterCanvasMove": {
@@ -154,9 +154,9 @@
       },
       "chat": {
         "x": 640,
-        "y": 628,
+        "y": 611,
         "width": 640,
-        "height": 332
+        "height": 350
       }
     },
     "afterChatResize": {
@@ -168,9 +168,9 @@
       },
       "chat": {
         "x": 640,
-        "y": 628,
+        "y": 611,
         "width": 640,
-        "height": 432
+        "height": 451
       }
     },
     "canvasMovedButChatUnchanged": true,
@@ -592,7 +592,7 @@
   },
   "agentTurn": {
     "present": true,
-    "badge": "00:30 발화",
+    "badge": "01:21 발화",
     "mode": "실시간 (WS)",
     "source": "루틴 '검증 루틴' · 에이전트 발화 — 묻지 않은 턴입니다",
     "body": "005930 조건 도달 — 관측값 5.3 (임계 5). 값은 발화 시점 기준입니다 — 최신 확인은 다시 물어봐 주세요.",
@@ -1021,5 +1021,5 @@
       }
     }
   },
-  "finishedAt": "2026-08-23T15:36:56.476Z"
+  "finishedAt": "2026-08-23T16:27:17.613Z"
 }

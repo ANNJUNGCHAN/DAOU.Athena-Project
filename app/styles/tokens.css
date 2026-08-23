@@ -91,11 +91,13 @@
   --text-hero: 72px;
 }
 
-/* 유리 투명도 3단 (2026-08-22 사용자 지시 — 애플 Liquid Glass 레퍼런스가 투명도를
- * 사용자 슬라이더로 준다: "가장 투명 / 중간(기본값) / 가장 불투명"). 값의 SSOT는
- * lib/main/prefs.js(glassLevel: clear/default/opaque)이고 렌더러가
- * <html data-glass="...">로 적용한다. default는 :root 기본값이라 셀렉터가 없다.
- * 순서 계약(window < card < canvas < window-max)은 세 단계 모두에서 지켜진다.
+/* 유리 투명도 5단 (2026-08-22 사용자 지시 — 애플 Liquid Glass 레퍼런스가 투명도를
+ * 사용자 슬라이더로 준다: "가장 투명 / 중간(기본값) / 가장 불투명" — 이후
+ * 2026-08-24 리프 1.1.2에서 Paper 보드 07이 sheer·solid 2단을 더해 5단으로 늘렸다).
+ * 값의 SSOT는 lib/main/prefs.js(glassLevel: clear/sheer/default/solid/opaque)이고
+ * 렌더러가 <html data-glass="...">로 적용한다. default는 :root 기본값이라
+ * 셀렉터가 없다. 순서 계약 2축(① 단계 안: window < card < canvas < window-max,
+ * ② 단계 간: clear < sheer < default < solid < opaque)은 다섯 단계 모두에서 지켜진다.
  *
  * 정직 기록: 애플처럼 "뒤가 흐려지며 비치는" 상태는 Windows/Electron에서 재현할 수
  * 없다 — Chromium의 backdrop-filter는 페이지 안쪽만 흐리고 창 뒤 데스크톱은 못
@@ -107,6 +109,25 @@
   --glass-card: 0.42;
   --glass-canvas: 0.48;
   --glass-window-max: 0.55;
+}
+/* sheer/solid — 2026-08-24 리프 1.1.2, Paper 보드 07(AT-ST-010a)이 clear·default·
+ * opaque 사이에 5단 슬라이더를 지정했다. 보드가 준 건 window 값 둘뿐이다
+ * (sheer .58, solid .91 — 보드가 빨간 글씨로 "구현 후 측정해야 한다"고 경고한
+ * **설계값**, 아직 실측 없음). card/canvas/window-max 셋은 보드에 없어서
+ * 인접 단계 중점(clear↔default, default↔opaque의 t=0.5 선형 보간)으로 채웠다 —
+ * 이것도 실측이 아니라 계산값이다. 리프 1.4.2(불연속 슬라이더)가 구현 후 실측해
+ * 이 여섯 값을 정정한다(CLAUDE.md §3 — 추측을 값으로 박지 않는다). */
+:root[data-glass='sheer'] {
+  --glass-window: 0.58;      /* 보드 07 설계값, 미실측 */
+  --glass-card: 0.66;        /* 보간값 (0.42+0.90)/2 */
+  --glass-canvas: 0.70;      /* 보간값 (0.48+0.92)/2 */
+  --glass-window-max: 0.75;  /* 보간값 (0.55+0.95)/2 */
+}
+:root[data-glass='solid'] {
+  --glass-window: 0.91;      /* 보드 07 설계값, 미실측 */
+  --glass-card: 0.94;        /* 보간값 (0.90+0.97)/2 = 0.935 → 0.94 */
+  --glass-canvas: 0.95;      /* 보간값 (0.92+0.98)/2 */
+  --glass-window-max: 0.97;  /* 보간값 (0.95+0.99)/2 */
 }
 :root[data-glass='opaque'] {
   --glass-window: 0.96;
