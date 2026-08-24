@@ -52,7 +52,7 @@ function mustContain(rel, src, needle, why) {
 // --xss 모드: innerHTML 문자열 싱크 0건 (함정 ⑪ — 저장형 XSS)
 // ─────────────────────────────────────────────────────────────────────────
 if (process.argv.includes("--xss")) {
-  const TARGETS = ["shell.js", "chat.js", "canvas.js", "main.js", "preload.js", "verify.js"];
+  const TARGETS = ["shell.js", "chat.js", "canvas.js", "orb.js", "main.js", "preload.js", "verify.js"];
   // 대입 싱크만 잡는다. `.innerHTML` 읽기는 싱크가 아니다.
   const SINK = /\.(innerHTML|outerHTML)\s*(\+)?=|\.insertAdjacentHTML\s*\(/;
   let scanned = 0;
@@ -102,13 +102,30 @@ if (mainRaw) {
   mustContain("main.js", main, /\bshellWin\b/, "셸 창 변수 `shellWin`이 있어야 한다");
   mustContain("main.js", main, /computeShellPlacement/, "셸 단일 배치 계산을 써야 한다");
   mustContain("main.js", main, /['"]shell\.html['"]/, "셸 창이 shell.html을 로드해야 한다");
-  mustContain("main.js", main, /getWins:\s*\(\)\s*=>\s*\(\{\s*shellWin\s*\}\)/,
-    "getWins()가 `{ shellWin }`만 돌려줘야 한다 — verify.js가 이 모양에 의존한다");
+  // getWins()가 돌려주는 창 집합 = 이 앱의 OS 창 전부. 2026-08-24 리프 1.3.1에서
+  // `{ shellWin }` → `{ shellWin, orbWin }`으로 늘었다. 이름을 정확히 나열해
+  // **세 번째 창이 조용히 끼어드는 것**을 막는다 — "창 3개 이상 = 즉시 탈락"
+  // (CLAUDE.md §2)의 정적 대응물이다.
+  const wins = /getWins:\s*\(\)\s*=>\s*\(\{([^}]*)\}\)/.exec(main);
+  if (!wins) {
+    failures.push("main.js: getWins() 반환 형상을 찾지 못했다 — verify.js가 이 모양에 의존한다");
+  } else {
+    const names = wins[1].split(",").map((s) => s.trim()).filter(Boolean);
+    const expected = ["shellWin", "orbWin"];
+    if (names.join(",") !== expected.join(",")) {
+      failures.push(
+        `main.js: getWins()가 [${names.join(", ")}] — [${expected.join(", ")}] 이어야 한다 ` +
+          `(창은 둘뿐이다, GLOSSARY §1)`
+      );
+    }
+  }
 
-  // 창 생성 횟수 — 워밍업 창은 commonWinOpts를 안 쓰므로 이 셈에서 빠진다.
+  // 창 생성 횟수. 워밍업 창은 commonWinOpts를 안 쓰므로 이 셈에서 빠지고,
+  // 오브 창도 자기 옵션 빌더(orb-window.js buildOrbWindowOptions)를 쓰므로 빠진다 —
+  // alwaysOnTop이 셸 쪽으로 새지 않게 옵션을 일부러 안 공유한다.
   const created = (main.match(/new BrowserWindow\(commonWinOpts\(/g) || []).length;
   if (created !== 1) {
-    failures.push(`main.js: commonWinOpts로 만드는 창이 ${created}개 — 이 리프 시점에는 셸 창 1개여야 한다(오브는 1.3.1)`);
+    failures.push(`main.js: commonWinOpts로 만드는 창이 ${created}개 — 셸 창 1개여야 한다(오브는 자기 옵션 빌더를 쓴다)`);
   }
 
   // 음성 대조군 — 지켜져야 하는 것이 함께 사라지지 않았는지 본다. 이게 없으면
@@ -214,5 +231,5 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
-console.log("창 1개 · 짝 배치 잔재 0건 · 영역 계약(캔버스 flex · 채팅 400px 고정) 통과");
+console.log("창 2개(셸+오브) · 짝 배치 잔재 0건 · 영역 계약(캔버스 flex · 채팅 400px 고정) 통과");
 console.log("window model verification passed");

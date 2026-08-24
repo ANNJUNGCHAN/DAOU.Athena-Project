@@ -210,15 +210,18 @@ app.whenReady().then(async () => {
   // ---------- 창 생성 (main.js와 동일 경로) ----------
   await mainMod.createWindows();
   dlog('createWindows done');
-  const { shellWin } = mainMod.getWins();
+  const { shellWin, orbWin } = mainMod.getWins();
   const layout = mainMod.getLayout();
   report.layout = layout;
 
-  // ---------- 검증 1: 부팅 — 셸 창 하나가 뜬다 ----------
+  // ---------- 검증 1: 부팅 — 셸 창 + 알림 오브 창, 정확히 둘 ----------
   // 2026-08-24 리프 1.2.1: 옛 이름은 "부팅 — 대화 창만 뜬다"였고, 캔버스 창이 숨어
   // 있는지(canvasVisibleAtBoot === false)를 함께 봤다. 창이 하나가 되면서 그 질문이
-  // 사라졌다 — 대신 **OS 창이 정말 1개인지**를 잰다. 오브 창(1.3.1)이 붙으면 이
-  // 기대값이 2가 되고, 그때 이 단언을 고치는 것이 그 리프의 일이다.
+  // 사라졌다 — 대신 **OS 창 수**를 잰다.
+  // 2026-08-24 리프 1.3.1: 알림 오브 창이 붙어 기대값이 1 → **2**가 됐다. 이제
+  // 이 숫자가 GLOSSARY §1의 "창은 둘"이고, 3 이상은 즉시 탈락이다(CLAUDE.md §2).
+  // 오브는 상시 표시가 사양이라 부팅 직후부터 보여야 한다 — 숨어 있으면 알림이
+  // 와도 사용자가 볼 표면이 없다.
   // 부팅 바 연출 표집(1b)은 스크린샷보다 먼저 걸어둔다 — shot()이 수백 ms를 먹는
   // 동안 타이핑 구간(+660~+1160ms)이 지나가버리는 레이스를 피한다.
   const bootBarPromise = traceBootBar(shellWin);
@@ -226,6 +229,7 @@ app.whenReady().then(async () => {
   report.bootChatOnly = {
     openWindowCount: BrowserWindow.getAllWindows().length,
     chatVisibleAtBoot: shellWin.isVisible(),
+    orbVisibleAtBoot: !!orbWin && orbWin.isVisible(),
   };
   dlog('before shot 01'); const s1 = await shot(shellWin, '01-boot-sequence.png'); dlog('after shot 01');
   const boot = await waitForChatBooted(shellWin);
@@ -249,8 +253,9 @@ app.whenReady().then(async () => {
     '| 모드 배타성:', boot.exactlyOneModeVisible,
     '| 부팅바 이름쓰기:', JSON.stringify(bootBar)
   );
-  assertOk('boot: exactly one OS window (Codex형 셸 — 오브는 리프 1.3.1)', report.bootChatOnly.openWindowCount === 1);
+  assertOk('boot: exactly two OS windows (셸 + 알림 오브 — GLOSSARY §1)', report.bootChatOnly.openWindowCount === 2);
   assertOk('boot: shell window visible at boot', report.bootChatOnly.chatVisibleAtBoot === true);
+  assertOk('boot: orb window visible at boot (상시 표시가 사양이다)', report.bootChatOnly.orbVisibleAtBoot === true);
   assertOk('boot: chat reached a mode after boot sequence', report.bootChatOnly.chatBootedAfterBoot === true);
   assertOk('boot: exactly one mode panel visible (no overlap)', report.bootChatOnly.exactlyOneModeVisible === true);
   assertOk('boot: boot bar wrote full name then returned to placeholder', report.bootChatOnly.bootBarWritesName === true);
@@ -322,28 +327,100 @@ app.whenReady().then(async () => {
   const delayedFetch = async (_url, options) => new Promise((_resolve, reject) => {
     options.signal.addEventListener('abort', () => reject(options.signal.reason), { once: true });
   });
-  const delayedRunStartedAt = Date.now();
-  const mainDelay = setTimeout(() => {
-    const blockedUntil = Date.now() + 600;
-    while (Date.now() < blockedUntil) { /* intentional verify-only event-loop delay */ }
-  }, 2100);
-  const delayedFeedbackResult = await mainMod.runDirectRestDataset(delayedFeedbackDataset, true, {
-    fetchImpl: delayedFetch,
-  });
-  clearTimeout(mainDelay);
+  // 2026-08-24 리프 1.3.1 — 이 검사가 **앱을 오진하고 있었다.**
+  //
+  // 증상: 5회 실행 중 2회가 3130~3196ms로 실패했다. 옛 판은 그걸 "앱이 3초 예산을
+  // 넘겼다"로 보고했다. 계측을 넣어 실제 스톨 구간을 재보니 원인이 달랐다:
+  //
+  //   run  총시간   스톨 시작   스톨 길이   스톨 종료   **앱이 쓴 시간**  판정
+  //   1    2737     2101       600        2701       36ms            통과
+  //   2    2748     2112       600        2712       36ms            통과
+  //   3    3196     **2573**   600        3173       **23ms**        실패
+  //
+  // 실패한 run 3에서 앱은 **가장 빨랐다**(23ms). 넘긴 이유는 하네스 자신의
+  // `setTimeout(2100)`이 473ms 늦게 실행됐기 때문이다 — 공유 데스크톱에서 타이머가
+  // 밀린 것이고 앱과 무관하다. 즉 옛 오라클은 하네스의 스케줄 지터를 앱 결함으로
+  // 번역하고 있었다. 이런 거짓 양성은 결국 "이 검사는 원래 가끔 빨개진다"는 학습을
+  // 만들고, 그때 진짜 회귀가 섞여 들어온다.
+  //
+  // 고친 방향(완화가 아니라 분리):
+  //  ① 하네스가 자기 사양(2100±60에 시작, 600±60 지속)을 지켰는지 먼저 잰다.
+  //  ② 사양을 못 지킨 시행은 **무효 시행**이고 최대 3회까지 다시 시도한다.
+  //  ③ 유효 시행을 한 번도 못 만들면 **조용히 통과시키지 않고** 별도 사유로 실패시킨다
+  //     (환경 불일치는 증거가 아니라 검증 실패다).
+  //  ④ 3초 예산 단언은 그대로 두고, **앱이 스톨 이후 쓴 시간**에도 별도 상한을 건다 —
+  //     총시간이 우연히 맞아떨어져도 앱이 느려지면 잡힌다(옛 판에는 없던 가드다).
+  const STALL_SPEC = { scheduledAtMs: 2100, requestedMs: 600, toleranceMs: 60 };
+  const APP_LATENCY_BUDGET_MS = 400; // 실측 23~133ms의 3배 — 회귀는 잡고 지터는 통과시킨다
+  const delayedTrials = [];
+  let delayedTrial = null;
+
+  for (let attempt = 1; attempt <= 3; attempt += 1) {
+    const stall = { ...STALL_SPEC, startedAtMs: null, actualMs: null };
+    const startedAt = Date.now();
+    const mainDelay = setTimeout(() => {
+      const enteredAt = Date.now();
+      stall.startedAtMs = enteredAt - startedAt;
+      const blockedUntil = enteredAt + stall.requestedMs;
+      while (Date.now() < blockedUntil) { /* intentional verify-only event-loop delay */ }
+      stall.actualMs = Date.now() - enteredAt;
+    }, stall.scheduledAtMs);
+    const result = await mainMod.runDirectRestDataset(delayedFeedbackDataset, true, {
+      fetchImpl: delayedFetch,
+    });
+    clearTimeout(mainDelay);
+
+    const stallEndedAtMs = stall.startedAtMs === null ? null : stall.startedAtMs + stall.actualMs;
+    const trial = {
+      attempt,
+      elapsedMs: result.firstFeedbackMs,
+      totalRunMs: Date.now() - startedAt,
+      feedbackOk: result.feedbackOk,
+      receiptPainted: result.answerPaintedByMain,
+      renderedCount: result.renderedCount,
+      stall,
+      stallEndedAtMs,
+      // 스톨이 끝난 뒤 앱이 영수증을 띄우기까지 쓴 시간 — 이게 앱의 몫이다.
+      appLatencyAfterStallMs: stallEndedAtMs === null || result.firstFeedbackMs == null
+        ? null
+        : Math.round(result.firstFeedbackMs - stallEndedAtMs),
+      stallWithinSpec: stall.actualMs !== null && stall.startedAtMs !== null
+        && Math.abs(stall.actualMs - stall.requestedMs) <= stall.toleranceMs
+        && Math.abs(stall.startedAtMs - stall.scheduledAtMs) <= stall.toleranceMs,
+    };
+    delayedTrials.push(trial);
+    if (trial.stallWithinSpec) { delayedTrial = trial; break; }
+    dlog(`delayedRestFeedback: 시행 ${attempt} 무효(스톨 시작 ${stall.startedAtMs}ms, 길이 ${stall.actualMs}ms) — 재시도`);
+    // 렌더러에 쌓인 영수증을 치우고 다음 시행으로 — 시행 간 상태가 새면 안 된다.
+    await shellWin.webContents.executeJavaScript(
+      "document.querySelectorAll('.rest-receipt').forEach((node) => node.remove())"
+    );
+    await wait(200);
+  }
+
   report.delayedRestFeedback = {
-    elapsedMs: delayedFeedbackResult.firstFeedbackMs,
-    totalRunMs: Date.now() - delayedRunStartedAt,
-    feedbackOk: delayedFeedbackResult.feedbackOk,
-    receiptPainted: delayedFeedbackResult.answerPaintedByMain,
-    renderedCount: delayedFeedbackResult.renderedCount,
+    trials: delayedTrials,
+    validTrial: delayedTrial,
+    // 유효 시행을 못 만든 것은 환경 불일치다 — 통과가 아니라 별도 실패로 보고한다.
+    producedValidTrial: delayedTrial !== null,
   };
   assertOk(
+    'delayedRestFeedback: 하네스가 사양대로 스톨을 재현했다(3회 안에 유효 시행 확보)',
+    report.delayedRestFeedback.producedValidTrial === true,
+  );
+  assertOk(
     'delayedRestFeedback: 600ms main scheduling delay still paints truthful receipt before 3000ms',
-    delayedFeedbackResult.feedbackOk === true
-      && delayedFeedbackResult.answerPaintedByMain === true
-      && delayedFeedbackResult.firstFeedbackMs < 3000
-      && delayedFeedbackResult.renderedCount === 0,
+    !!delayedTrial
+      && delayedTrial.feedbackOk === true
+      && delayedTrial.receiptPainted === true
+      && delayedTrial.elapsedMs < 3000
+      && delayedTrial.renderedCount === 0,
+  );
+  assertOk(
+    `delayedRestFeedback: 스톨 해제 후 앱 지연이 ${APP_LATENCY_BUDGET_MS}ms 미만이다(앱 자체 회귀 가드)`,
+    !!delayedTrial
+      && delayedTrial.appLatencyAfterStallMs !== null
+      && delayedTrial.appLatencyAfterStallMs < APP_LATENCY_BUDGET_MS,
   );
   await shellWin.webContents.executeJavaScript(`
     document.querySelectorAll('.rest-receipt').forEach((node) => node.remove())
@@ -1573,30 +1650,6 @@ app.whenReady().then(async () => {
   );
   assertOk('orderTicket: Esc 복귀', orderClosed === true);
 
-  // ---------- 검증 18: 캡처 신뢰성 — 연속 캡처 중복 감지 (2026-08-19 QA 결함 #2 재발 방지,
-  // 디자인 갈래에서는 검증17이었다 — 병합 시 능동 턴 검증17과 번호가 겹쳐 18로 재부여) ----------
-  // 같은 창을 연속으로 찍은 두 캡처가 MD5까지 완전히 같으면, 둘 중 하나(대개
-  // 나중 것)는 화면이 바뀌기 전 프레임을 찍은 것이다 — 파일명이 주장하는 화면을
-  // 실제로 담지 못했다는 뜻이라 값 자체가 신뢰 불가다. shot()의 rAF 2회 대기로
-  // 근본 원인은 고쳤지만, 이 단언은 회귀를 잡는 감지망이다(완화가 아니라 추가).
-  // 2026-08-24 리프 1.2.1: 예외 목록이 비었다. 옛 예외는 03b(캔버스 펼침 중의 대화
-  // 창)→04(수축 후 대화 창) 한 쌍이었다 — 캔버스 창의 가시성이 대화 창 DOM을 안
-  // 바꾸므로 두 장이 픽셀까지 같은 것이 정상이었다. 확장/수축 연출과 함께 두 캡처
-  // 자체가 사라졌다. 예외를 관성으로 남기면 "예외라서 통과"가 조용히 쌓인다.
-  const EXPECTED_IDENTICAL = new Set();
-  const dupCaptures = [];
-  for (let i = 1; i < captureLog.length; i++) {
-    const prev = captureLog[i - 1];
-    const cur = captureLog[i];
-    if (EXPECTED_IDENTICAL.has(`${prev.name}>>>${cur.name}`)) continue;
-    if (prev.winTitle === cur.winTitle && prev.hash === cur.hash) {
-      dupCaptures.push({ prev: prev.name, cur: cur.name, hash: cur.hash });
-    }
-  }
-  report.captureIntegrity = { totalShots: captureLog.length, duplicates: dupCaptures };
-  console.log('[verify] 검증18(캡처 신뢰성):', JSON.stringify(report.captureIntegrity));
-  assertOk('captureIntegrity: no adjacent same-window capture is byte-identical', dupCaptures.length === 0);
-
   // ---------- 검증 19: "기록 안 됨" 배지 — 채팅 저장 실패 신호(2026-08-19,
   // 그래프 갈래에서는 검증17이었다 — 병합 시 번호가 겹쳐 19로 재부여) ----------
   // verify.js는 항상 fixture 경로(ATHENA_CANVAS_SOURCE=fixture)라 runQueryLive를
@@ -1878,6 +1931,214 @@ app.whenReady().then(async () => {
     };
     assertOk(`paperScreenCases ${paperCase.id}: actual DOM/layout/control/state + screenshot`, passed);
   }
+
+  // ---------- 검증 22: 알림 오브 창 (2026-08-24 리프 1.3.1 — 쿼터 0) ----------
+  // 합성 발화 이벤트를 오브에 직접 주입해 계약을 실측한다. 백엔드 WS를 띄우지
+  // 않는다(파일 상단 원칙: 자동 검증은 외부 상태에 좌우되면 안 된다) — main의
+  // RoutineFeed가 받아서 보내는 것과 **같은 채널·같은 형상**이라 경로가 같다.
+  //
+  // 여기서 재는 것은 셋이다:
+  //  (a) 접힘 상태의 기하 — 76px 원형이고 화면 구석에 있다
+  //  (b) 펼침의 정직성 계약 — 발화 배지 · 방식 표기 · 소스 라벨 · 시점 고지
+  //  (c) **없어야 하는 것** — 실행 버튼 0 · 입력창 0(확정 결정 3 · 단일 입력 원칙)
+  // 그리고 왕복 불변: 펼쳤다 접으면 오브가 원래 자리로 돌아온다.
+  const orbCollapsedBefore = orbWin.getBounds();
+  await shot(orbWin, '22-orb-collapsed.png');
+
+  orbWin.webContents.send('athena:routine-event', {
+    type: 'routine-fired',
+    routine_id: 'vorb1',
+    symbol: '005930',
+    source: 'price.change_rate',
+    mode: 'realtime-ws',
+    observed: 5.3,
+    threshold: 5.0,
+    note: '오브 검증 루틴',
+    fired_at: new Date(Date.now() - 3 * 60 * 1000).toISOString(),
+  });
+  await wait(300);
+
+  const orbCollapsedProbe = await orbWin.webContents.executeJavaScript(`(() => {
+    const orb = document.getElementById('orb');
+    const r = orb.getBoundingClientRect();
+    const cs = getComputedStyle(orb);
+    const ring = getComputedStyle(document.getElementById('orbRing'));
+    return {
+      width: Math.round(r.width),
+      height: Math.round(r.height),
+      borderRadius: cs.borderRadius,
+      // 링의 호는 미확인 알림 수다 — 1건 받았으니 0이 아니어야 한다.
+      arc: Number(document.getElementById('orbRing').style.getPropertyValue('--orb-arc')),
+      count: document.getElementById('orbCount').textContent,
+      panelHidden: document.getElementById('orbPanel').hidden,
+      state: document.getElementById('orbRoot').dataset.state,
+      // 드래그 손잡이/구멍 계약 — 같은 픽셀에 겹치면 클릭이 영영 안 온다.
+      orbRegion: (cs.getPropertyValue('app-region') || cs.getPropertyValue('-webkit-app-region') || '').trim(),
+      coreRegion: (() => {
+        const c = getComputedStyle(document.getElementById('orbToggle'));
+        return (c.getPropertyValue('app-region') || c.getPropertyValue('-webkit-app-region') || '').trim();
+      })(),
+      ringHasBrand: ring.backgroundImage.includes('238, 19, 123'),
+    };
+  })()`);
+
+  // 펼침 — 실제 사용자 경로(코어 클릭)를 그대로 태운다.
+  await orbWin.webContents.executeJavaScript("document.getElementById('orbToggle').click()");
+  await wait(450);
+  const orbExpandedBounds = orbWin.getBounds();
+  await shot(orbWin, '23-orb-expanded.png');
+
+  const orbPanelProbe = await orbWin.webContents.executeJavaScript(`(() => {
+    const txt = (id) => { const n = document.getElementById(id); return n ? n.textContent.trim() : null; };
+    return {
+      state: document.getElementById('orbRoot').dataset.state,
+      anchor: document.getElementById('orbRoot').dataset.anchor,
+      panelVisible: document.getElementById('orbPanel').hidden === false,
+      badge: txt('orbBadge'),
+      mode: txt('orbMode'),
+      relative: txt('orbRelative'),
+      body: txt('orbBody'),
+      source: txt('orbSource'),
+      cardRows: document.querySelectorAll('#orbCard .orb-row').length,
+      // 펼치면 전부 확인 처리 — 본 것을 안 봤다고 하지 않는다.
+      arcAfterOpen: Number(document.getElementById('orbRing').style.getPropertyValue('--orb-arc')),
+      countAfterOpen: txt('orbCount'),
+      // **없어야 하는 것** — DOM 실측. 정적 게이트(check-orb.mjs)와 이중으로 건다.
+      inputCount: document.querySelectorAll('input, textarea, [contenteditable]').length,
+      buttonIds: [...document.querySelectorAll('button')].map((b) => b.id).sort(),
+    };
+  })()`);
+
+  // 접기 — 왕복 불변 확인
+  await orbWin.webContents.executeJavaScript("document.getElementById('orbClose').click()");
+  await wait(450);
+  const orbCollapsedAfter = orbWin.getBounds();
+
+  report.orbWindow = {
+    collapsedBefore: orbCollapsedBefore,
+    expandedBounds: orbExpandedBounds,
+    collapsedAfter: orbCollapsedAfter,
+    collapsed: orbCollapsedProbe,
+    panel: orbPanelProbe,
+    // (a) 기하
+    isCircle76: orbCollapsedProbe.width === 76 && orbCollapsedProbe.height === 76
+      && /50%|38px/.test(orbCollapsedProbe.borderRadius),
+    dragHandleContract: orbCollapsedProbe.orbRegion === 'drag' && orbCollapsedProbe.coreRegion === 'no-drag',
+    unreadArcShown: orbCollapsedProbe.arc > 0 && orbCollapsedProbe.count === '1',
+    ringUsesSingleAccent: orbCollapsedProbe.ringHasBrand === true,
+    // 펼치면 창이 실제로 커진다(패널이 창 밖으로 잘리지 않는다)
+    expandGrewWindow: orbExpandedBounds.width > orbCollapsedBefore.width
+      && orbExpandedBounds.height > orbCollapsedBefore.height,
+    // 오브 원은 화면에서 안 움직인다 — 패널이 안쪽으로 자란다
+    orbCornerStayed:
+      near(orbExpandedBounds.x + orbExpandedBounds.width, orbCollapsedBefore.x + orbCollapsedBefore.width)
+      && near(orbExpandedBounds.y + orbExpandedBounds.height, orbCollapsedBefore.y + orbCollapsedBefore.height),
+    // 왕복 불변 — 접으면 정확히 제자리
+    roundTripRestoresPosition:
+      near(orbCollapsedAfter.x, orbCollapsedBefore.x) && near(orbCollapsedAfter.y, orbCollapsedBefore.y)
+      && orbCollapsedAfter.width === orbCollapsedBefore.width
+      && orbCollapsedAfter.height === orbCollapsedBefore.height,
+    // (b) 정직성 계약 4종 — 값이 실제로 채워졌는지
+    hasFiredBadge: /^\d{2}:\d{2} 발화$/.test(orbPanelProbe.badge || ''),
+    hasModeLabel: orbPanelProbe.mode === '실시간 (WS)',
+    hasRelativeTime: /분 전|방금/.test(orbPanelProbe.relative || ''),
+    hasSourceLabel: /묻지 않은 턴입니다/.test(orbPanelProbe.source || ''),
+    // 시점 고지 — 결정론 템플릿의 문장을 그대로 쓰는지
+    statesValueIsAtFireTime: /발화 시점 기준/.test(orbPanelProbe.body || ''),
+    representativeCardRendered: orbPanelProbe.cardRows >= 3,
+    markedReadOnOpen: orbPanelProbe.arcAfterOpen === 0 && orbPanelProbe.countAfterOpen === '',
+    // (c) 없어야 하는 것
+    noInputSurface: orbPanelProbe.inputCount === 0,
+    onlyAllowedButtons: JSON.stringify(orbPanelProbe.buttonIds) === JSON.stringify(['orbClose', 'orbMore', 'orbToggle']),
+  };
+  console.log('[verify] 검증22(알림 오브):', JSON.stringify(report.orbWindow));
+  for (const key of [
+    'isCircle76', 'dragHandleContract', 'unreadArcShown', 'ringUsesSingleAccent',
+    'expandGrewWindow', 'orbCornerStayed', 'roundTripRestoresPosition',
+    'hasFiredBadge', 'hasModeLabel', 'hasRelativeTime', 'hasSourceLabel',
+    'statesValueIsAtFireTime', 'representativeCardRendered', 'markedReadOnOpen',
+    'noInputSurface', 'onlyAllowedButtons',
+  ]) {
+    assertOk(`orbWindow.${key}`, report.orbWindow[key] === true);
+  }
+
+  // 검증 22b — "더보기"가 셸을 앞으로 가져오고 대표 카드를 중앙 캔버스에 쌓는다.
+  // **주문은 여기서도 집행되지 않는다**(확정 결정 3) — 이 경로가 하는 일은
+  // 창을 올리고 카드를 그리는 것뿐이고, 카드는 기존 facts 봉투다(신규 타입 0개).
+  await shellWin.webContents.executeJavaScript("window.AthenaShell.clearCanvases()");
+  await wait(120);
+  const orbEnvelope = mainMod.routineEventToFactsEnvelope({
+    type: 'routine-fired', routine_id: 'vorb2', symbol: '005930',
+    source: 'price.change_rate', mode: 'realtime-ws', observed: 5.3, threshold: 5.0,
+    note: '오브 더보기 검증', fired_at: new Date().toISOString(),
+  });
+  ipcMain.emit('athena:orb-open-shell', {}, {
+    event: {
+      type: 'routine-fired', routine_id: 'vorb2', symbol: '005930',
+      source: 'price.change_rate', mode: 'realtime-ws', observed: 5.3, threshold: 5.0,
+      note: '오브 더보기 검증', fired_at: new Date().toISOString(),
+    },
+  });
+  await wait(500);
+  const orbMoreProbe = await shellWin.webContents.executeJavaScript(`(() => {
+    const card = document.querySelector('#grid .card.facts');
+    return {
+      factsCardCount: document.querySelectorAll('#grid .card.facts').length,
+      caption: card ? (card.querySelector('.card-title') || {}).textContent || null : null,
+      rowCount: card ? card.querySelectorAll('.facts-row').length : 0,
+      // 실행 어포던스가 카드에 딸려오면 안 된다.
+      execButtons: [...document.querySelectorAll('#grid .card.facts button')]
+        .map((b) => b.textContent.trim())
+        .filter((t) => /실행|매수|매도|주문/.test(t)).length,
+    };
+  })()`);
+  report.orbMoreToShell = {
+    envelopeType: orbEnvelope.canvas_type,
+    envelopeFieldCount: orbEnvelope.data.fields.length,
+    ...orbMoreProbe,
+    shellVisible: shellWin.isVisible(),
+    // 신규 카드 타입 0개 — 기존 facts 봉투로 접는다.
+    usesExistingFactsType: orbEnvelope.canvas_type === 'facts',
+    cardRendered: orbMoreProbe.factsCardCount === 1 && orbMoreProbe.rowCount >= 3,
+    // 시점 고지가 캔버스까지 따라온다
+    captionStatesFireTime: /발화 시점 기준/.test(orbMoreProbe.caption || ''),
+    noExecAffordanceOnCard: orbMoreProbe.execButtons === 0,
+  };
+  console.log('[verify] 검증22b(오브 더보기 → 셸):', JSON.stringify(report.orbMoreToShell));
+  assertOk('orbMoreToShell: 기존 facts 봉투를 쓴다(신규 카드 타입 0개)', report.orbMoreToShell.usesExistingFactsType === true);
+  assertOk('orbMoreToShell: 셸 창이 앞으로 온다', report.orbMoreToShell.shellVisible === true);
+  assertOk('orbMoreToShell: 대표 카드가 중앙 캔버스에 실제로 그려진다', report.orbMoreToShell.cardRendered === true);
+  assertOk('orbMoreToShell: 시점 고지가 카드까지 따라온다', report.orbMoreToShell.captionStatesFireTime === true);
+  assertOk('orbMoreToShell: 카드에 실행 어포던스가 없다(확정 결정 3)', report.orbMoreToShell.noExecAffordanceOnCard === true);
+
+  // 2026-08-24 리프 1.3.1: 이 블록을 파일 맨 끝으로 옮겼다. 원래는 검증 19 앞에
+  // 있었는데, 그 자리에서는 뒤에 찍히는 캡처(검증 20~22)를 훑지 못한다 — 오브
+  // 캡처 2장이 그 사각지대에 들어가면서 실측으로 드러났다(중복 감지가 14장만
+  // 보고 16장을 못 봤다). 검사 대상이 "지금까지 찍은 것"이 아니라 "전부"여야
+  // 회귀 감지망으로 성립한다.
+  // ---------- 검증 18: 캡처 신뢰성 — 연속 캡처 중복 감지 (2026-08-19 QA 결함 #2 재발 방지,
+  // 디자인 갈래에서는 검증17이었다 — 병합 시 능동 턴 검증17과 번호가 겹쳐 18로 재부여) ----------
+  // 같은 창을 연속으로 찍은 두 캡처가 MD5까지 완전히 같으면, 둘 중 하나(대개
+  // 나중 것)는 화면이 바뀌기 전 프레임을 찍은 것이다 — 파일명이 주장하는 화면을
+  // 실제로 담지 못했다는 뜻이라 값 자체가 신뢰 불가다. shot()의 rAF 2회 대기로
+  // 근본 원인은 고쳤지만, 이 단언은 회귀를 잡는 감지망이다(완화가 아니라 추가).
+  // 2026-08-24 리프 1.2.1: 예외 목록이 비었다. 옛 예외는 03b(캔버스 펼침 중의 대화
+  // 창)→04(수축 후 대화 창) 한 쌍이었다 — 캔버스 창의 가시성이 대화 창 DOM을 안
+  // 바꾸므로 두 장이 픽셀까지 같은 것이 정상이었다. 확장/수축 연출과 함께 두 캡처
+  // 자체가 사라졌다. 예외를 관성으로 남기면 "예외라서 통과"가 조용히 쌓인다.
+  const EXPECTED_IDENTICAL = new Set();
+  const dupCaptures = [];
+  for (let i = 1; i < captureLog.length; i++) {
+    const prev = captureLog[i - 1];
+    const cur = captureLog[i];
+    if (EXPECTED_IDENTICAL.has(`${prev.name}>>>${cur.name}`)) continue;
+    if (prev.winTitle === cur.winTitle && prev.hash === cur.hash) {
+      dupCaptures.push({ prev: prev.name, cur: cur.name, hash: cur.hash });
+    }
+  }
+  report.captureIntegrity = { totalShots: captureLog.length, duplicates: dupCaptures };
+  console.log('[verify] 검증18(캡처 신뢰성):', JSON.stringify(report.captureIntegrity));
+  assertOk('captureIntegrity: no adjacent same-window capture is byte-identical', dupCaptures.length === 0);
 
   report.finishedAt = new Date().toISOString();
   fs.writeFileSync(path.join(CAPTURES, 'VERIFY-REPORT.json'), JSON.stringify(report, null, 2));

@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-08-24T00:13:15.518Z",
+  "startedAt": "2026-08-24T01:34:13.709Z",
   "layout": {
     "scale": 1,
     "screen": {
@@ -12,8 +12,9 @@
     "originY": 196
   },
   "bootChatOnly": {
-    "openWindowCount": 1,
+    "openWindowCount": 2,
     "chatVisibleAtBoot": true,
+    "orbVisibleAtBoot": true,
     "shots": {
       "boot": {
         "width": 2280,
@@ -46,7 +47,7 @@
   "restReceiptPaint": {
     "repeats": [
       {
-        "elapsedMs": 39,
+        "elapsedMs": 38,
         "verifiedVisible": true,
         "appVisible": true,
         "onboardingHidden": true,
@@ -62,7 +63,7 @@
         "nonzero": true
       },
       {
-        "elapsedMs": 54,
+        "elapsedMs": 53,
         "verifiedVisible": true,
         "appVisible": true,
         "onboardingHidden": true,
@@ -70,7 +71,7 @@
         "nonzero": true
       },
       {
-        "elapsedMs": 52,
+        "elapsedMs": 53,
         "verifiedVisible": true,
         "appVisible": true,
         "onboardingHidden": true,
@@ -78,7 +79,7 @@
         "nonzero": true
       },
       {
-        "elapsedMs": 53,
+        "elapsedMs": 54,
         "verifiedVisible": true,
         "appVisible": true,
         "onboardingHidden": true,
@@ -96,11 +97,45 @@
     ]
   },
   "delayedRestFeedback": {
-    "elapsedMs": 2739.3563000000004,
-    "totalRunMs": 3011,
-    "feedbackOk": true,
-    "receiptPainted": true,
-    "renderedCount": 0
+    "trials": [
+      {
+        "attempt": 1,
+        "elapsedMs": 2751.8122,
+        "totalRunMs": 3008,
+        "feedbackOk": true,
+        "receiptPainted": true,
+        "renderedCount": 0,
+        "stall": {
+          "scheduledAtMs": 2100,
+          "requestedMs": 600,
+          "toleranceMs": 60,
+          "startedAtMs": 2116,
+          "actualMs": 600
+        },
+        "stallEndedAtMs": 2716,
+        "appLatencyAfterStallMs": 36,
+        "stallWithinSpec": true
+      }
+    ],
+    "validTrial": {
+      "attempt": 1,
+      "elapsedMs": 2751.8122,
+      "totalRunMs": 3008,
+      "feedbackOk": true,
+      "receiptPainted": true,
+      "renderedCount": 0,
+      "stall": {
+        "scheduledAtMs": 2100,
+        "requestedMs": 600,
+        "toleranceMs": 60,
+        "startedAtMs": 2116,
+        "actualMs": 600
+      },
+      "stallEndedAtMs": 2716,
+      "appLatencyAfterStallMs": 36,
+      "stallWithinSpec": true
+    },
+    "producedValidTrial": true
   },
   "canvasAlwaysVisible": {
     "cardCount": 3,
@@ -541,7 +576,7 @@
   },
   "agentTurn": {
     "present": true,
-    "badge": "09:07 발화",
+    "badge": "10:28 발화",
     "mode": "실시간 (WS)",
     "source": "루틴 '검증 루틴' · 에이전트 발화 — 묻지 않은 턴입니다",
     "body": "005930 조건 도달 — 관측값 5.3 (임계 5). 값은 발화 시점 기준입니다 — 최신 확인은 다시 물어봐 주세요.",
@@ -552,11 +587,7 @@
     "appHidden": true,
     "firedAtLabel": true,
     "execDisabled": true,
-    "windowCount": 1
-  },
-  "captureIntegrity": {
-    "totalShots": 14,
-    "duplicates": []
+    "windowCount": 2
   },
   "historySaveFailedBadge": {
     "moduleLoaded": true,
@@ -970,5 +1001,89 @@
       }
     }
   },
-  "finishedAt": "2026-08-24T00:13:56.744Z"
+  "orbWindow": {
+    "collapsedBefore": {
+      "x": 1820,
+      "y": 1052,
+      "width": 76,
+      "height": 76
+    },
+    "expandedBounds": {
+      "x": 1536,
+      "y": 864,
+      "width": 360,
+      "height": 264
+    },
+    "collapsedAfter": {
+      "x": 1820,
+      "y": 1052,
+      "width": 76,
+      "height": 76
+    },
+    "collapsed": {
+      "width": 76,
+      "height": 76,
+      "borderRadius": "50%",
+      "arc": 0.2,
+      "count": "1",
+      "panelHidden": true,
+      "state": "collapsed",
+      "orbRegion": "drag",
+      "coreRegion": "no-drag",
+      "ringHasBrand": true
+    },
+    "panel": {
+      "state": "expanded",
+      "anchor": "bottom-right",
+      "panelVisible": true,
+      "badge": "10:32 발화",
+      "mode": "실시간 (WS)",
+      "relative": "3분 전",
+      "body": "005930 조건 도달 — 관측값 5.3 (임계 5). 값은 발화 시점 기준입니다 — 최신 확인은 다시 물어봐 주세요.",
+      "source": "루틴 '오브 검증 루틴' · 에이전트 발화 — 묻지 않은 턴입니다",
+      "cardRows": 5,
+      "arcAfterOpen": 0,
+      "countAfterOpen": "",
+      "inputCount": 0,
+      "buttonIds": [
+        "orbClose",
+        "orbMore",
+        "orbToggle"
+      ]
+    },
+    "isCircle76": true,
+    "dragHandleContract": true,
+    "unreadArcShown": true,
+    "ringUsesSingleAccent": true,
+    "expandGrewWindow": true,
+    "orbCornerStayed": true,
+    "roundTripRestoresPosition": true,
+    "hasFiredBadge": true,
+    "hasModeLabel": true,
+    "hasRelativeTime": true,
+    "hasSourceLabel": true,
+    "statesValueIsAtFireTime": true,
+    "representativeCardRendered": true,
+    "markedReadOnOpen": true,
+    "noInputSurface": true,
+    "onlyAllowedButtons": true
+  },
+  "orbMoreToShell": {
+    "envelopeType": "facts",
+    "envelopeFieldCount": 7,
+    "factsCardCount": 1,
+    "caption": "감시 발화 — 값은 발화 시점 기준입니다",
+    "rowCount": 7,
+    "execButtons": 0,
+    "shellVisible": true,
+    "usesExistingFactsType": true,
+    "cardRendered": true,
+    "captionStatesFireTime": true,
+    "noExecAffordanceOnCard": true
+  },
+  "captureIntegrity": {
+    "totalShots": 30,
+    "duplicates": []
+  },
+  "finishedAt": "2026-08-24T01:35:02.439Z"
 }

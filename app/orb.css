@@ -1,0 +1,292 @@
+/* 알림 오브 창 (2026-08-24 리프 1.3.1) — 데스크톱 구석 상시 원형 창.
+ *
+ * 재료 규범은 셸 창과 같다(CLAUDE.md §2): 모든 표면이 유리 · 유리는 무채색 ·
+ * 유리 뒤에 굴절할 것이 있다 · 깊이는 값으로 만든다(테두리 굵기가 아니라) ·
+ * 액센트 색 없음. 예외는 화면당 마젠타 1곳뿐이고, 이 창에서 그 한 곳은
+ * **미확인 알림 호(arc)**다 — 장식이 아니라 수치의 렌더다.
+ *
+ * 창 자체가 투명이라(orb-window.js transparent:true) 창 배경은 없다. 원형은
+ * border-radius로 만들고, 그 밖은 실제로 데스크톱이 보인다 — 사각 판이 남지
+ * 않으므로 "뒤에 굴절할 게 없는 반투명 회색 사각형"(soul.md §7 금지)이 아니다. */
+
+html, body {
+  margin: 0;
+  background: transparent;
+  overflow: hidden;
+  /* 창 밖 영역의 클릭이 통과해야 하는 건 아니다(창 자체가 오브 크기다) —
+   * 다만 펼침 상태에서 패널 밖 여백은 투명하므로 이벤트를 먹지 않게 둔다. */
+  user-select: none;
+}
+
+.orb-root {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  /* anchor에 따라 원과 패널의 배치가 뒤집힌다 — 아래 [data-anchor] 규칙이 정한다. */
+  gap: 0;
+}
+
+/* ---------- 접힘 상태의 원형 ---------- */
+#orb {
+  position: absolute;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  /* 창 표면 유리 단(tokens.css 사다리) — 셸 창과 같은 값을 읽는다. */
+  background-color: rgba(255, 255, 255, var(--glass-window));
+  background-image:
+    linear-gradient(135deg,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(255, 255, 255, 0) 46%,
+      rgba(255, 255, 255, 0.05) 100%);
+  /* 렌징 4요소 — 셸 창 #shell과 같은 문법. 원형이라 인셋이 링처럼 돈다. */
+  box-shadow:
+    inset 0 1px 0 rgba(255, 253, 248, 0.60),
+    inset 0 -1px 0 rgb(16 19 26 / 8%),
+    inset 0 0 24px rgba(255, 240, 214, 0.08),
+    0 10px 26px rgb(16 19 26 / 18%);
+  border: 1px solid rgb(16 19 26 / 7%);
+  /* 링 전체가 드래그 손잡이다. 가운데 코어만 no-drag로 뚫는다. */
+  -webkit-app-region: drag;
+  cursor: grab;
+}
+
+/* 미확인 알림 호 — conic-gradient의 각도를 JS가 --orb-arc(0~1)로 준다.
+ * 0이면 호가 없다: 없는 알림을 있는 것처럼 그리지 않는다(정보 정직성). */
+#orbRing {
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  pointer-events: none;
+  background: conic-gradient(
+    from 180deg,
+    var(--color-brand) calc(var(--orb-arc, 0) * 360deg),
+    rgba(16, 19, 26, 0.10) 0
+  );
+  /* 링만 남기고 가운데를 판다 — 채워진 원판이 아니라 테두리 게이지다. */
+  -webkit-mask: radial-gradient(circle, transparent 0 32px, #000 33px);
+  mask: radial-gradient(circle, transparent 0 32px, #000 33px);
+  /* 값이 바뀔 때 튀지 않게 — opacity 페이드가 아니라 각도 전이다. */
+  transition: background 320ms var(--ease);
+}
+
+.orb-core {
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  background: transparent;
+  appearance: none;
+  cursor: pointer;
+  /* 드래그 영역에 뚫는 구멍 — 이게 없으면 클릭이 OS 드래그에 먹혀 안 온다. */
+  -webkit-app-region: no-drag;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+}
+
+.orb-core:focus-visible {
+  outline: 2px solid var(--color-k-text);
+  outline-offset: 2px;
+}
+
+/* 미확인 수 — 0이면 JS가 textContent를 비운다(0을 그리지 않는다). */
+.orb-count {
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+  font-family: var(--font-mono);
+  color: var(--color-k-text);
+}
+
+/* ---------- 펼침 패널 ---------- */
+.orb-panel {
+  position: absolute;
+  /* 오브 원이 앉는 모서리를 뺀 나머지가 패널 자리다 — anchor 규칙이 정한다. */
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 16px;
+  box-sizing: border-box;
+  border-radius: 16px;
+  background-color: rgba(255, 255, 255, var(--glass-card));
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgb(16 19 26 / 7%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 253, 248, 0.55),
+    0 18px 44px rgb(16 19 26 / 16%);
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  /* 헤더는 창 이동 손잡이다 — 펼친 상태에서도 창을 옮길 수 있어야 한다. */
+}
+
+.orb-panel-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  -webkit-app-region: drag;
+}
+
+.orb-badge {
+  font-size: var(--text-xs);
+  font-family: var(--font-mono);
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: rgb(16 19 26 / 7%);
+  white-space: nowrap;
+}
+
+.orb-mode,
+.orb-relative {
+  font-size: var(--text-xs);
+  color: var(--color-k-faint);
+  white-space: nowrap;
+}
+
+.orb-relative { margin-left: auto; }
+
+.orb-close {
+  width: 22px;
+  height: 22px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  padding: 0;
+  appearance: none;
+  cursor: pointer;
+  position: relative;
+  -webkit-app-region: no-drag;
+  flex-shrink: 0;
+}
+.orb-close::before,
+.orb-close::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 10px;
+  width: 12px;
+  height: 1px;
+  background: var(--color-k-text);
+}
+.orb-close::before { transform: rotate(45deg); }
+.orb-close::after { transform: rotate(-45deg); }
+.orb-close:hover { background: rgb(16 19 26 / 7%); }
+
+.orb-body {
+  margin: 0;
+  font-size: var(--text-base);
+  line-height: 1.5;
+  -webkit-app-region: no-drag;
+  user-select: text;
+}
+
+/* 대표 카드 — 이벤트 원장 행의 1:1 렌더. 값은 숫자 정렬이 필요하므로 mono. */
+.orb-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, var(--glass-canvas));
+  border: 1px solid rgb(16 19 26 / 6%);
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-app-region: no-drag;
+}
+
+.orb-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-size: var(--text-sm);
+}
+
+.orb-row-label {
+  color: var(--color-k-faint);
+  flex-shrink: 0;
+  min-width: 64px;
+}
+
+.orb-row-value {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  margin-left: auto;
+  text-align: right;
+  user-select: text;
+}
+
+.orb-foot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.orb-source {
+  font-size: var(--text-xs);
+  color: var(--color-k-faint);
+  line-height: 1.35;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.orb-more {
+  -webkit-app-region: no-drag;
+  flex-shrink: 0;
+  appearance: none;
+  cursor: pointer;
+  border: 1px solid rgb(16 19 26 / 12%);
+  border-radius: 999px;
+  padding: 5px 12px;
+  background: rgba(255, 255, 255, 0.55);
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+}
+.orb-more:hover { background: rgba(255, 255, 255, 0.78); }
+.orb-more:focus-visible {
+  outline: 2px solid var(--color-k-text);
+  outline-offset: 2px;
+}
+
+/* ---------- 접힘/펼침 상태 ---------- */
+/* 접힘: 창 자체가 76px이라 패널은 존재하지 않는다(hidden). */
+.orb-root[data-state="collapsed"] .orb-panel { display: none; }
+
+/* ---------- anchor — 오브 원이 앉는 모서리 ----------
+ * main이 사분면으로 계산해서 준다(orb-window.js computeExpandedBounds).
+ * 원은 화면에서 안 움직이고 패널이 안쪽으로 자란다. */
+.orb-root[data-anchor$="right"] #orb { right: 0; }
+.orb-root[data-anchor$="left"]  #orb { left: 0; }
+.orb-root[data-anchor^="bottom"] #orb { bottom: 0; }
+.orb-root[data-anchor^="top"]    #orb { top: 0; }
+
+/* 패널은 오브가 차지한 모서리(76px)를 비우고 나머지를 채운다. */
+.orb-root[data-anchor="bottom-right"] .orb-panel { left: 0; right: 0; top: 0; bottom: 76px; }
+.orb-root[data-anchor="bottom-left"]  .orb-panel { left: 0; right: 0; top: 0; bottom: 76px; }
+.orb-root[data-anchor="top-right"]    .orb-panel { left: 0; right: 0; top: 76px; bottom: 0; }
+.orb-root[data-anchor="top-left"]     .orb-panel { left: 0; right: 0; top: 76px; bottom: 0; }
+
+/* ---------- 접근성 3종은 styles/access.css가 전역으로 처리한다 ----------
+ * 여기서는 이 창에만 있는 표면 두 곳을 추가로 덮는다 — access.css는 셸 창의
+ * 클래스 이름을 알지 못한다(CLAUDE.md §2: 접근성 3종은 직접 구현한다). */
+@media (prefers-reduced-transparency: reduce) {
+  #orb, .orb-panel, .orb-card {
+    background-color: rgb(255 255 255 / 98%);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  #orb, .orb-panel { border-color: rgb(16 19 26 / 55%); }
+  .orb-mode, .orb-relative, .orb-source, .orb-row-label { color: var(--color-k-text); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #orbRing { transition: none; }
+}

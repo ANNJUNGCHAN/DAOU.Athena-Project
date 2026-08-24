@@ -28,7 +28,8 @@ via `ATHENA_CANVAS_SOURCE=fixture` to keep automated verification quota-free and
 | `shell.html` / `shell.css` / `shell.js` | **Shell window (2026-08-24, leaf 1.2.1)** — the single window document. `shell.css` re-scopes `canvas.css`/`chat.css` (both written as `position:fixed; inset:0` for their own window) into regions; `shell.js` owns window chrome (titlebar, min/max/close), window shortcuts, and the cross-region bus `window.AthenaShell` |
 | `chat.css` / `chat.js` | Right chat region (400px, never collapses): boot gauge, three-state indicator, history, sibling mode panels |
 | `canvas.css` / `canvas.js` | Centre canvas region (flex): mosaic, three fixture-path renderers plus the live-path renderers (`renderMcpTable`/`renderLiveStream`/`renderLiveReader`/`renderLiveChart`, 2026-08-18) driven by `addLiveCard`'s `envelope.canvas_type` switch |
-| `verify.js` | Verification script — creates the window, screenshots, forces accessibility media via CDP, writes `captures/VERIFY-REPORT.json` |
+| `orb.html` / `orb.css` / `orb.js` | **알림 오브 창 (2026-08-24, leaf 1.3.1)** — 76px circle, always-on-top, drag by the ring / click the core to expand. Body text comes from `lib/routine-turn.js` (deterministic, LLM 0). No exec button, no input |
+| `verify.js` | Verification script — creates both windows, screenshots, forces accessibility media via CDP, writes `captures/VERIFY-REPORT.json` |
 
 ## Subdirectories
 | Directory | Purpose |
@@ -42,13 +43,23 @@ via `ATHENA_CANVAS_SOURCE=fixture` to keep automated verification quota-free and
 ## For AI Agents
 
 ### Working In This Directory
-- **One window right now; two at most.** 2026-08-24 leaf 1.2.1 replaced the 대화 창/캔버스 창
+- **Exactly two windows. No exceptions.** 2026-08-24 leaf 1.2.1 replaced the 대화 창/캔버스 창
   pair with a single **셸 창** (`shellWin`, `shell.html`) holding two regions: centre canvas
   (`#canvasRegion`, flex — the only output surface) and right chat (`#chatRegion`, 400px,
-  `flex-shrink:0` — the only input surface, never collapses). The 알림 오브 창 is leaf 1.3.1 and
-  the left 이력 사이드바 268px is leaf 1.2.2 — **neither exists yet; don't stub them.**
-  `BrowserWindow` construction is limited to `warmup`/`shellWin`, and there are no `dialog.*`
-  calls. "설정창" / "팝업창" / "일시 표면" are **retired terms** — don't reintroduce them.
+  `flex-shrink:0` — the only input surface, never collapses). Leaf 1.3.1 then added the
+  **알림 오브 창** (`orbWin`, `orb.html`) — a 76px circular always-on-top surface in a desktop
+  corner. `getWins()` returns exactly `{ shellWin, orbWin }`; a third window is an instant
+  elimination (CLAUDE.md §2) and `scripts/gates/check-window-model.mjs` pins that list.
+  The left 이력 사이드바 268px is leaf 1.2.2 — **it does not exist yet; don't stub it**
+  (`scripts/gates/check-orb.mjs`'s sibling gate fails on a `#historyRail` placeholder).
+  `BrowserWindow` construction is limited to `warmup`/`shellWin`/`orbWin`, and there are no
+  `dialog.*` calls. "설정창" / "팝업창" / "일시 표면" are **retired terms** — don't reintroduce them.
+- **The orb must not grow actions.** No exec button, no mini input — 확정 결정 3 (orders are
+  placed by humans) and the single-input-point rule. Its only forward path is 더보기, which
+  brings the shell forward and pushes the event as an existing `facts` envelope (no new card
+  type). `scripts/gates/check-orb.mjs` locks the button id allowlist, bans `<input>`/
+  `<textarea>`/`contenteditable`, bans 실행-implying copy, and bans `athena:order-execute` /
+  `athena:routine-confirm` / `athena__render_canvas` from `orb.js`.
 - **Everything else is a mode**, implemented as a sibling panel in `shell.html` that shows
   while `#app` hides. Since leaf 1.2.1 the mode panels (`#onboard`/`#settings`/`#order`) are
   full-shell overlays (`shell.css .shell-overlay`) — they no longer resize the window. The old

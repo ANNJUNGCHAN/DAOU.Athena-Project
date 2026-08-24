@@ -67,6 +67,15 @@ const SEND_CHANNELS = new Set([
   'athena:rest-canvas-painted',
   'athena:rest-receipt-painted',
   'athena:chart-panel-destroyed',
+  // 알림 오브 창(2026-08-24 리프 1.3.1) — 오브가 보낼 수 있는 것은 이 둘뿐이다.
+  //   athena:orb-toggle     접힘/펼침 요청. 창 크기 변경은 main이 한다(기하는
+  //                         lib/main/orb-window.js).
+  //   athena:orb-open-shell "더보기" — 셸을 앞으로 가져오고 대표 카드를 캔버스에 쌓는다.
+  // 오브에는 실행 버튼도 입력창도 없다(확정 결정 3 · 단일 입력 원칙) — 그래서
+  // athena__render_canvas·athena:order-execute·athena:routine-confirm은
+  // 이 다리에 있어도 오브 렌더러가 부르지 않는다(scripts/gates/check-orb.mjs가 잰다).
+  'athena:orb-toggle',
+  'athena:orb-open-shell',
 ]);
 
 // 2026-08-24 리프 1.2.1에서 사라진 on 채널 4건:
@@ -94,6 +103,9 @@ const ON_CHANNELS = new Set([
   // 채팅 저장 실패 신호(2026-08-19, plan-chat-graph-pipeline.md §2(g)) —
   // history-sink의 POST가 실패하면 main이 {messageId, role}만 보낸다(본문 없음).
   'athena:history-save-failed',
+  // 오브 접힘/펼침 확정 통보(2026-08-24 리프 1.3.1) — main이 창 크기를 실제로
+  // 바꾼 뒤에 보낸다. 렌더러가 먼저 펼치면 창보다 큰 패널이 한 프레임 잘린다.
+  'athena:orb-state',
 ]);
 
 contextBridge.exposeInMainWorld('athena', {
