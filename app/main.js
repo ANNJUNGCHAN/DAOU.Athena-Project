@@ -21,6 +21,8 @@ const prefs = require('./lib/main/prefs');
 const modelPrefs = require('./lib/main/model-prefs');
 const codexConfig = require('./lib/main/codex-config');
 const { computeShellPlacement } = require('./lib/main/window-placement');
+// 알림 오브 창(2026-08-24 리프 1.3.1) — 창 기하·옵션은 전부 저 모듈이 진다.
+const orbWindow = require('./lib/main/orb-window');
 const mcpCli = require('./lib/main/mcp-cli');
 const mcpEnv = require('./lib/main/mcp-env');
 // 결정 D1의 실배선 — claude -p 스폰 + stream-json 파싱 + .mcp.json 생성.
@@ -110,6 +112,13 @@ function computeLayout() {
 
 let layout;
 let shellWin;
+// 알림 오브 창 — 데스크톱 구석 상시 원형 창(GLOSSARY §1). 셸 창과 함께 OS 창 2개를
+// 이룬다. orbExpanded/orbAnchor는 접힘↔펼침 왕복의 기준점이다 — 펼칠 때 계산한
+// anchor를 들고 있어야 접을 때 오브를 정확히 제자리로 되돌린다(안 그러면 왕복할
+// 때마다 오브가 화면을 조금씩 기어간다, orb-window.test.js가 이 불변을 고정한다).
+let orbWin;
+let orbExpanded = false;
+let orbAnchor = 'bottom-right';
 
 // 셸 창을 사용자 앞으로 가져온다. 옛 판의 expandCanvasWindow()가 하던 "카드가
 // 생겼으니 캔버스를 연다"의 자리를 대신한다 — 캔버스는 늘 떠 있으므로 열 것이
@@ -245,6 +254,30 @@ async function createWindows() {
 
   shellWin.on('closed', () => app.quit());
 
+  // ---------- 알림 오브 창 (2026-08-24 리프 1.3.1) ----------
+  // 셸 창 다음에 만든다 — 오브의 "더보기"가 셸을 앞으로 가져오므로 셸이 먼저 있어야 한다.
+  // 부팅 시 곧바로 보인다: 상시 표시가 사양이고(GLOSSARY §1), 숨어 있으면 알림이
+  // 와도 사용자가 볼 표면이 없다.
+  const orbDisplay = screen.getDisplayMatching(shellWin.getBounds());
+  const created = orbWindow.createOrbWindow({
+    BrowserWindow,
+    appDir: __dirname,
+    workArea: orbDisplay.workArea,
+  });
+  orbWin = created.win;
+  const orbReady = waitForWindowReady(orbWin, { label: 'orb window' });
+  await orbReady;
+  orbWin.showInactive(); // 포커스를 뺏지 않는다 — 셸 창이 방금 focus()를 가져갔다
+  mdlog(`orbWin created + shown at ${JSON.stringify(created.bounds)}`);
+
+  // Alt+F4가 오브에 직접 오면 흡수한다 — 오브를 닫는 것은 앱 종료가 아니다.
+  // isQuitting이면(before-quit 이후) 진짜 종료 경로이므로 막지 않는다.
+  orbWin.on('close', (event) => {
+    if (isQuitting) return;
+    event.preventDefault();
+    orbWin.hide();
+  });
+
   // ---------- 창 기본 기능 (2026-08-17) — frame:false라 OS 타이틀바가 없어 직접 배선 ----------
   // Win+방향키(2026-08-18) — OS 창 스냅과 같은 손버릇. globalShortcut은 다른 앱과
   // 전역 충돌 위험이 있어 쓰지 않고(electron#9206), 창의 webContents에
@@ -290,6 +323,11 @@ function startRoutineFeed() {
       // 능동 턴은 항상 이력에 쌓인다 — 토스트를 놓쳐도 다음 열람 때 남아 있다.
       if (shellWin && !shellWin.isDestroyed()) {
         shellWin.webContents.send('athena:routine-event', event);
+      }
+      // 같은 이벤트가 오브에도 간다(2026-08-24 리프 1.3.1). 두 표면이 같은 원장
+      // 행을 각자 렌더할 뿐이고 백엔드 신규 경로는 0건이다 — 설계서 §판단서 요지.
+      if (orbWin && !orbWin.isDestroyed()) {
+        orbWin.webContents.send('athena:routine-event', event);
       }
       if (event && (event.type === 'routine-fired' || event.type === 'routine-restore-failed')) {
         const toast = routineTurn.buildToast(event);
@@ -544,6 +582,70 @@ ipcMain.on('athena:toggle-maximize', (e, { force } = {}) => {
     return;
   }
   if (shellWin.isMaximized()) shellWin.unmaximize(); else shellWin.maximize();
+});
+
+// ---------- 알림 오브 — 접힘/펼침, 더보기 (2026-08-24 리프 1.3.1) ----------
+// 창 크기 변경을 main이 하는 이유: 기하가 **화면 좌표**에 묶여 있다. 오브 원은
+// 펼쳐도 화면에서 안 움직여야 하고(패널이 안쪽으로 자란다), 그 방향은 오브가
+// 지금 어느 사분면에 있느냐로 정해진다 — 렌더러는 자기 창의 화면 좌표를 모른다.
+ipcMain.on('athena:orb-toggle', (e, { expanded } = {}) => {
+  if (!orbWin || orbWin.isDestroyed()) return;
+  const next = !!expanded;
+  if (next === orbExpanded) return;
+
+  if (next) {
+    const workArea = screen.getDisplayMatching(orbWin.getBounds()).workArea;
+    const plan = orbWindow.computeExpandedBounds(orbWin.getBounds(), workArea);
+    orbAnchor = plan.anchor;
+    orbWindow.applyOrbBounds(orbWin, plan.bounds);
+  } else {
+    // 접을 때는 펼칠 때 쓴 anchor를 그대로 되쓴다 — 다시 계산하면 창이 이미
+    // 커진 상태의 중심으로 사분면을 판정해 다른 답이 나올 수 있다.
+    orbWindow.applyOrbBounds(
+      orbWin,
+      orbWindow.computeCollapsedBounds(orbWin.getBounds(), orbAnchor),
+    );
+  }
+  orbExpanded = next;
+  // 창 크기가 실제로 바뀐 뒤에 알린다 — 먼저 알리면 창보다 큰 패널이 한 프레임 잘린다.
+  orbWin.webContents.send('athena:orb-state', { expanded: next, anchor: orbAnchor });
+});
+
+/**
+ * 능동 턴 이벤트를 기존 `facts` 봉투로 접는다 — **신규 카드 타입 0개**
+ * (main.js chatsToTableEnvelope와 같은 문법). 값은 이벤트 원장 행 그대로이고
+ * 없는 필드는 줄을 만들지 않는다 — 빈 값을 채우면 "측정했는데 값이 없다"로 읽힌다.
+ */
+function routineEventToFactsEnvelope(event) {
+  const candidates = [
+    ['stk_cd', '종목', event.symbol],
+    ['observed', '관측값', event.observed],
+    ['threshold', '임계', event.threshold],
+    ['source', '소스', event.source],
+    ['mode', '감시 방식', event.mode ? routineTurn.describeMode(event.mode) : null],
+    ['fired_at', '발화 시각', event.fired_at],
+    ['routine', '루틴', event.note || event.routine_id],
+  ];
+  return {
+    canvas_type: 'facts',
+    // 시점 고지 — 캔버스에 쌓인 뒤에도 이 값이 발화 시점 기준임을 카드가 스스로 말한다.
+    caption: '감시 발화 — 값은 발화 시점 기준입니다',
+    fell_back: false,
+    data: {
+      fields: candidates
+        .filter(([, , value]) => value !== null && value !== undefined && value !== '')
+        .map(([key, label, value]) => ({ key, label, value: String(value) })),
+    },
+  };
+}
+
+// "더보기" — 오브에서 셸로 가는 유일한 경로. 셸을 앞으로 가져오고 대표 카드를
+// 중앙 캔버스에 쌓는다. **주문은 여기서도 집행되지 않는다**(확정 결정 3) — 이
+// 핸들러가 하는 일은 창을 올리고 카드를 그리는 것뿐이다.
+ipcMain.on('athena:orb-open-shell', (e, { event } = {}) => {
+  if (!event || typeof event !== 'object') return;
+  revealShell({ focus: true });
+  sendLiveCanvasResult({ status: 'success', envelope: routineEventToFactsEnvelope(event) });
 });
 
 // 기본 위치 복귀("center") — 셸 창을 부팅 좌표·부팅 치수로 되돌린다. 어떤 키·IPC
@@ -1577,9 +1679,12 @@ module.exports = {
   emitRestReceiptAndWaitForPaint,
   runDirectRestDataset,
   getStockEntityIndex: () => stockEntityIndex,
-  // 창은 하나다(2026-08-24 리프 1.2.1). 객체로 감싸 돌려주는 모양은 유지한다 —
-  // 오브 창(1.3.1)이 붙으면 여기에 orbWin이 들어온다.
-  getWins: () => ({ shellWin }),
+  // 창은 둘이다 — 셸 창 + 알림 오브 창(2026-08-24 리프 1.3.1로 GLOSSARY §1의
+  // "창은 둘"이 실제로 성립했다).
+  getWins: () => ({ shellWin, orbWin }),
+  // 오브 기하 — verify.js가 접힘/펼침 왕복을 구동할 때 쓴다.
+  getOrbState: () => ({ expanded: orbExpanded, anchor: orbAnchor }),
+  routineEventToFactsEnvelope,
   getLayout: () => layout,
   // 셸 창을 앞으로 — verify.js가 트레이 복귀·카드 푸시 경로를 검증할 때 쓴다.
   revealShell,
