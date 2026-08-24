@@ -134,7 +134,7 @@ function chartPanelAck(canvas, kind = 'initial', totalMs = null) {
   };
 }
 
-async function executeAitsReload(canvasWin, testCase, result) {
+async function executeAitsReload(shellWin, testCase, result) {
   const expectation = testCase.aits_reload;
   if (!expectation) return null;
   const source = (result.canvases || []).find((canvas) => canvas.ordinal === expectation.panel_order);
@@ -149,7 +149,7 @@ async function executeAitsReload(canvasWin, testCase, result) {
     interval: 5,
   };
   const startedAt = performance.now();
-  const observed = await canvasWin.webContents.executeJavaScript(`(async () => {
+  const observed = await shellWin.webContents.executeJavaScript(`(async () => {
     const reply = await window.athena.invoke('athena:reload-chart-panel', ${JSON.stringify(payload)});
     const card = Array.from(document.querySelectorAll('[data-chart-panel-id]'))
       .find((item) => item.dataset.chartPanelId === ${JSON.stringify(source.panelId)});
@@ -314,9 +314,9 @@ async function run() {
       rejectAfter(15000, 'Electron window startup watchdog expired'),
     ]);
     producerLog('windows-created');
-    const { canvasWin } = main.getWins();
+    const { shellWin } = main.getWins();
     let activeRendererErrors = [];
-    canvasWin.webContents.on('ipc-message', (_event, channel, ...args) => {
+    shellWin.webContents.on('ipc-message', (_event, channel, ...args) => {
       if (channel !== 'athena:rest-canvas-painted') return;
       const payload = args[0] && typeof args[0] === 'object' ? args[0] : {};
       if (!payload.error) return;
@@ -333,7 +333,7 @@ async function run() {
     for (const testCase of cases) {
       producerLog(`case-start ${testCase.id}`);
       activeRendererErrors = [];
-      canvasWin.webContents.send('athena:clear-canvases');
+      shellWin.webContents.send('athena:clear-canvases');
       await wait(20);
       const controller = new AbortController();
       const hardController = new AbortController();
@@ -357,7 +357,7 @@ async function run() {
           }),
           rejectAfter(10500, 'benchmark case did not settle after abort'),
         ]);
-        const reloadAck = await executeAitsReload(canvasWin, testCase, result);
+        const reloadAck = await executeAitsReload(shellWin, testCase, result);
         if (reloadAck) {
           result.reloadChartPanelAck = reloadAck;
           result.physicalCalls = Number(result.physicalCalls || 0) + 1;

@@ -49,9 +49,12 @@ test('closed cleanup tolerates an already-destroyed webContents', async () => {
 
 test('window HTML paths are absolute and anchored to the app directory', () => {
   const appDir = path.resolve('C:/repo/app');
-  assert.equal(resolveWindowHtmlPath(appDir, 'canvas.html'), path.join(appDir, 'canvas.html'));
-  assert.equal(resolveWindowHtmlPath(appDir, 'chat.html'), path.join(appDir, 'chat.html'));
+  assert.equal(resolveWindowHtmlPath(appDir, 'shell.html'), path.join(appDir, 'shell.html'));
   assert.throws(() => resolveWindowHtmlPath(appDir, '../secret.html'), /unsupported/);
+  // 2026-08-24 리프 1.2.1: 두 창 문서는 shell.html 하나로 합쳐졌고 파일도 지웠다.
+  // 화이트리스트에 남아 있으면 "아직 띄울 수 있다"는 거짓 신호가 되므로 거부를 단언한다.
+  assert.throws(() => resolveWindowHtmlPath(appDir, 'chat.html'), /unsupported/);
+  assert.throws(() => resolveWindowHtmlPath(appDir, 'canvas.html'), /unsupported/);
 });
 
 test('normal Electron runtime contains no desktop capture polling that can starve direct REST paint', () => {

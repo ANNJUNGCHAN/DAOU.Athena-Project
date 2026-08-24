@@ -92,7 +92,7 @@ async function run() {
   await app.whenReady();
   await main.createWindows();
   const wins = main.getWins();
-  console.log(`[verify-settings] windows created: chat=${!!wins.chatWin} canvas=${!!wins.canvasWin}`);
+  console.log(`[verify-settings] windows created: chat=${!!wins.shellWin} canvas=${!!wins.shellWin}`);
   await wait(400);
 
   // ---------------- 온보딩 ----------------
@@ -105,11 +105,11 @@ async function run() {
   await wait(50);
   log('onboarding.advance.step2', h.onboardingAdvance(null, { step: 2 }));
   log('onboarding.state.afterStep2', h.onboardingState());
-  const heightBeforeStep3Done = main.getWins().chatWin.getBounds().height;
+  const heightBeforeStep3Done = main.getWins().shellWin.getBounds().height;
   const advanceStep3 = h.onboardingAdvance(null, { step: 3 });
   log('onboarding.advance.step3', advanceStep3);
   await wait(50);
-  const heightAfterStep3Done = main.getWins().chatWin.getBounds().height;
+  const heightAfterStep3Done = main.getWins().shellWin.getBounds().height;
   // README.md 검증3이 이미 문서화한 ±1~2px DPI 반올림 편차(acrylic 창의
   // setBounds() 요청값과 getBounds() 실측값 차이, 기능적 결함 아님)를 그대로
   // 허용 오차로 쓴다.

@@ -1,6 +1,7 @@
 // contextBridge 다리 — 2026-08-18 렌더러 격리 전환(클로드 데스크탑 방식).
-// contextIsolation:true + nodeIntegration:false 아래서 두 창(chatWin/canvasWin)이
-// 공유하는 유일한 preload다. 여기 나열된 채널만 통과한다 — 범용 패스스루
+// contextIsolation:true + nodeIntegration:false 아래서 셸 창이 쓰는 유일한
+// preload다(2026-08-24 리프 1.2.1 전에는 두 창이 공유했다. 오브 창(1.3.1)이
+// 붙으면 다시 공유한다). 여기 나열된 채널만 통과한다 — 범용 패스스루
 // (channel을 그대로 받아 ipcRenderer.invoke(channel, ...)에 넘기는 식) 금지.
 // 실측된 IPC 전수 목록은 main.js의 ipcMain.handle/on 등록부와 1:1로 맞춰뒀다.
 // athena:load-fixture는 이 전환에서 새로 생긴 채널이다 — lib/mockdata.js가
@@ -48,27 +49,33 @@ const INVOKE_CHANNELS = new Set([
   'athena:brain-reset',
 ]);
 
+// 2026-08-24 리프 1.2.1에서 사라진 send 채널 4건 — 창 모델과 함께 죽었다.
+//   athena:set-chat-height  대화 창 높이 자동 성장(창이 아니라 영역이 됐다)
+//   athena:collapse-canvas  캔버스 창 수축(닫을 창이 없다)
+//   primed / animation-done 확장 애니메이션 왕복 ack(애니메이션이 없다)
 const SEND_CHANNELS = new Set([
   'athena:minimize-windows',
   'athena:close-windows',
   'athena:zoom',
-  'athena:set-chat-height',
-  'athena:collapse-canvas',
+  // 창 최대화 토글(2026-08-24 리프 1.2.1) — 옛 athena:set-chat-height의 자리.
+  // 대화 창 높이 토글이 OS 창 최대화로 바뀌면서 상태 소유자가 렌더러에서 OS로
+  // 넘어갔고, 그래서 렌더러는 요청만 보내고 판정은 main이 한다.
+  'athena:toggle-maximize',
   'athena:highlight-canvas',
   'athena:abort-live-query',
   'athena:place-windows',
   'athena:rest-canvas-painted',
   'athena:rest-receipt-painted',
   'athena:chart-panel-destroyed',
-  'primed',
-  'animation-done',
 ]);
 
+// 2026-08-24 리프 1.2.1에서 사라진 on 채널 4건:
+//   prime-clip / run-animation  확장 애니메이션 구동(애니메이션이 없다)
+//   athena:window-key           Win+↑/↓의 렌더러 위임(main이 OS 최대화로 직접 처리)
+//   athena:manual-resize        OS 리사이즈 수용 통보(채팅 높이 상태가 사라졌다)
 const ON_CHANNELS = new Set([
   'athena:init',
   'athena:glass-separation',
-  'prime-clip',
-  'run-animation',
   'athena:add-canvas',
   'athena:clear-canvases',
   'athena:add-canvas-live',
@@ -81,14 +88,6 @@ const ON_CHANNELS = new Set([
   'athena:live-canvas-added',
   'athena:auth-token-changed',
   'athena:cli-changed',
-  // main의 before-input-event(Win+↑/↓)가 위임하는 채널 — 높이 상태는 렌더러가
-  // 소유하므로(chat.js manualOverride 등) main이 setChatHeight를 직접 부르지
-  // 않고 이 이벤트로 chat.js의 □ 버튼과 같은 로컬 경로를 태운다(2026-08-18).
-  'athena:window-key',
-  // OS 모서리 리사이즈 수용 알림(2026-08-18 자유 리사이즈) — main의
-  // handleForeignArrange가 사용자 리사이즈를 수용할 때 렌더러의 manualOverride를
-  // 켜서 자동 성장이 사용자 크기를 되감지 않게 한다(chat.js).
-  'athena:manual-resize',
   // 루틴 알림(능동 에이전트 P2) — main의 RoutineFeed가 백엔드 WS에서 받은
   // 발화·만료·복원실패 이벤트를 능동 턴으로 전달한다.
   'athena:routine-event',

@@ -1,7 +1,14 @@
-// 대화 창 렌더러. nodeIntegration:false / contextIsolation:true(2026-08-18 렌더러
-// 격리, 클로드 데스크탑 방식) — preload.js의 window.athena 다리로만 main과
-// 통신한다. lib/*.js는 chat.html이 <script> 태그로 미리 로드해 window.AthenaLib에
+// 우측 채팅 영역 렌더러. nodeIntegration:false / contextIsolation:true(2026-08-18
+// 렌더러 격리, 클로드 데스크탑 방식) — preload.js의 window.athena 다리로만 main과
+// 통신한다. lib/*.js는 shell.html이 <script> 태그로 미리 로드해 window.AthenaLib에
 // 얹어둔 전역이다(require 없음 — nodeIntegration:false라 브라우저에 require가 없다).
+//
+// 2026-08-24 리프 1.2.1: 이 파일은 더 이상 **창** 하나를 소유하지 않는다. 셸 창의
+// #chatRegion(고정 폭 400px) 안에서 돈다. 그와 함께 창 높이 상태의 소유권 전체가
+// 사라졌다 — 자동 성장(scheduleHeightSync/measureNeededHeight) · 수동 리사이즈
+// (그립 드래그) · manualOverride · 최대화 토글 · 유리 두께의 높이 보간이 전부
+// "창 높이 = 대화 이력 높이"라는 전제 위에 있었고, 이력은 이제 영역 안에서
+// 스크롤한다. 창 크롬·창 단축키는 shell.js로 옮겼다.
 const onboarding = window.AthenaLib.Onboarding;
 const authScreen = window.AthenaLib.AuthScreen;
 const settingsCards = window.AthenaLib.SettingsCards;
@@ -12,30 +19,22 @@ const $bootLine = document.getElementById('bootLine');
 const $bootPanel = document.getElementById('bootPanel');
 const $bootName = document.getElementById('bootName');
 const $bootPh = document.getElementById('bootPh');
-const $winControls = document.getElementById('winControls');
-const $winMin = document.getElementById('winMin');
-const $winMax = document.getElementById('winMax');
-const $winClose = document.getElementById('winClose');
 const $app = document.getElementById('app');
 const $history = document.getElementById('history');
 const $input = document.getElementById('input');
 const $dot = document.getElementById('dot');
 const $lockHint = document.getElementById('lockHint');
 const $lockText = document.getElementById('lockText');
-const $grip = document.getElementById('grip');
 const $onboard = document.getElementById('onboard');
 const $onboardBody = document.getElementById('onboardBody');
 const $settings = document.getElementById('settings');
 const $settingsNav = document.getElementById('settingsNav');
 const $settingsGrid = document.getElementById('settingsGrid');
 
-let layout = { chatBaseH: 204, chatMaxH: 788, scale: 1 };
 // 'live'(기본) | 'fixture'. main이 athena:init에서 알려준다(main.js
 // ATHENA_CANVAS_SOURCE 참조). verify.js만 명시적으로 'fixture'를 세팅한다 —
 // 사람이 쓰는 npm start는 항상 live다(결정 D1의 실배선이 기본 경로여야 한다).
 let canvasSource = 'live';
-let manualOverride = false;
-let currentHeight = layout.chatBaseH;
 let state = 'idle'; // idle | judging | calling | done(즉시 idle로 수렴)
 let liveProgressEl = null;
 let abortToken = 0;
@@ -52,7 +51,6 @@ function prepareRestReceiptSurface() {
   $app.hidden = false;
   settingsOpen = false;
   orderOpen = false;
-  manualOverride = false;
 }
 
 window.athena.on('athena:add-rest-receipt', async (payload = {}) => {
@@ -66,7 +64,7 @@ window.athena.on('athena:add-rest-receipt', async (payload = {}) => {
   line.appendChild(text);
   $history.appendChild(line);
   line.scrollIntoView({ block: 'nearest' });
-  scheduleHeightSync();
+  scrollAfterRender();
   try {
     const paint = await waitForRestReceiptPaint(line);
     window.athena.send('athena:rest-receipt-painted', {
@@ -97,7 +95,7 @@ function applyFontSize() {
   const v = prefs.fontSize;
   if (v && v !== 'md') document.documentElement.dataset.fontSize = v;
   else delete document.documentElement.dataset.fontSize;
-  if (typeof scheduleHeightSync === 'function') scheduleHeightSync();
+  scrollAfterRender();
 }
 // 유리 투명도 3단(2026-08-22) — 글자 크기와 같은 문법. default는 :root 기본 토큰이라
 // 속성을 지운다. 두께만 바뀌므로 높이 재측정은 필요 없다.
@@ -144,8 +142,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
   const finishBoot = async () => {
     $boot.hidden = true;
-    $winControls.hidden = false; // 창 크롬은 창이 확정된 뒤에만 존재한다(부팅 연출 보호)
-    document.getElementById('dragStrip').hidden = false; // 타이틀바도 같은 크롬이다
+    // 창 크롬(셸·타이틀바·창 제어 3버튼)은 창이 확정된 뒤에만 존재한다 —
+    // 부팅 연출 보호. 크롬 자체는 shell.js가 소유한다(리프 1.2.1).
+    window.AthenaShell.revealChrome();
     const onboardState = await onboardStatePromise;
     if (onboardState && onboardState.needed) {
       startOnboarding(onboardState.step);
@@ -156,7 +155,7 @@ window.addEventListener('DOMContentLoaded', () => {
     } else {
       $app.hidden = false;
       $input.focus();
-      scheduleHeightSync();
+      scrollHistoryToBottom();
       maybeShowCoachmark();
     }
   };
@@ -188,10 +187,12 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // ---------- 온보딩(AT-SY-002/003) · 인증(AT-CV-OAUTH) 상태 머신 ----------
-// 대화 창을 chatMaxH로 확장한 상태에서 CLI 연결(2/3) → 계좌 연결(3/3) → 인증
-// 토큰 확인(등록 직후 1회) 순으로 진행하고, 끝나면 chatBaseH로 되돌려 AT-CH-001
-// (평소 대화 화면)로 넘어간다. 세 화면 모두 새 창이 아니라 이 컨테이너(#onboard)
-// 하나를 재사용한다(plan/paper-specs/00-통합-계획.md §1.1/§1.5).
+// CLI 연결(2/3) → 계좌 연결(3/3) → 인증 토큰 확인(등록 직후 1회) 순으로 진행하고,
+// 끝나면 평소 대화 화면(AT-CH-001)으로 넘어간다. 세 화면 모두 새 창이 아니라 이
+// 컨테이너(#onboard) 하나를 재사용한다(plan/paper-specs/00-통합-계획.md §1.1/§1.5).
+// 2026-08-24 리프 1.2.1: 옛 판은 진입 시 대화 창을 chatMaxH로 키우고 나갈 때
+// chatBaseH로 되돌렸다. 지금 #onboard는 셸 창 전체를 덮는 오버레이라(shell.css
+// .shell-overlay) 창 크기를 건드리지 않는다 — 열고 닫는 것이 전부다.
 async function onboardAdvance(step) {
   try {
     const res = await window.athena.invoke('athena:onboarding-advance', { step });
@@ -203,9 +204,6 @@ async function onboardAdvance(step) {
 
 function startOnboarding(step) {
   $onboard.hidden = false;
-  manualOverride = true; // 온보딩 동안은 대화 이력 기반 자동 성장 로직이 개입하지 않는다
-  syncMaxButton(); // 모드가 높이 소유권을 가져간다 — 최대화 버튼 비활성
-  window.athena.send('athena:set-chat-height', { height: layout.chatMaxH, manual: false });
   // 스펙 전체에 "1 / 3" 화면이 없다(00-통합-계획.md §7-2 열린 질문) — main이
   // step:1을 돌려줘도 CLI 연결(2/3)부터 시작한다. 발명 — 리포트에 명시.
   showOnboardingStep(step === 3 ? 3 : 2);
@@ -245,13 +243,8 @@ function finishOnboarding() {
   if (onboardCleanup) { onboardCleanup(); onboardCleanup = null; }
   $onboard.hidden = true;
   $app.hidden = false;
-  manualOverride = false;
-  syncMaxButton(); // 높이 소유권 반환 — 최대화 버튼 재활성
-  // main이 done:true 응답 시 스스로 축소한다(house rule IPC 계약) — 이 호출은
-  // 그 경로가 아직 없거나 실패했을 때를 위한 방어적 폴백이다.
-  window.athena.send('athena:set-chat-height', { height: layout.chatBaseH, manual: false });
   $input.focus();
-  scheduleHeightSync();
+  scrollAfterRender();
   maybeShowCoachmark(); // 최초 실행은 온보딩을 지나므로 여기가 첫 대화 화면이다
 }
 
@@ -279,69 +272,32 @@ function maybeShowCoachmark() {
   setTimeout(() => { if (mark.isConnected) dismiss(); }, 8000);
 }
 
-// ---------- 초기 레이아웃 정보 수신 ----------
+// ---------- 초기 정보 수신 ----------
 window.athena.on('athena:init', (payload) => {
-  layout = payload;
-  canvasSource = payload.canvasSource || 'live';
-  currentHeight = layout.chatBaseH;
-  applyGlassFraction(0);
+  canvasSource = (payload && payload.canvasSource) || 'live';
 });
 
-// ---------- 유리 두께 보간 (기본 0.30 ↔ 확장 0.55) ----------
-// two-windows.md의 굴절값(0.46→0.17)은 창 자체의 네이티브 재질 강도를 말하며
-// Electron backgroundMaterial API로는 런타임 파라미터화가 안 된다(chat.css 주석
-// 참조) — 여기서는 실제로 조절 가능한 알파만 보간한다.
-// 2026-08-18 전체 스케일 하향(사용자 지시 "그냥 검은 창 같다 — 뒤가 비쳐야 한다"):
-// 0.82↔0.97은 acrylic 위에서 사실상 불투명 검정으로 읽혔다. 블러(가독성)는
-// 네이티브 acrylic이 담당하므로 틴트 알파는 낮춰도 텍스트 대비가 성립한다.
-// "뒤 정보 밀도에 비례해 두꺼워진다"(soul.md §7)는 유지.
-// 2026-08-19: 값의 SSOT는 tokens.css 유리 사다리(--glass-window/--glass-window-max)다
-// — 여기 하드코드하면 CSS와 두 벌이 된다(verify 검증16이 사다리 일치를 단언한다).
+// ---------- 창 표면의 유리 두께 ----------
+// 값의 SSOT는 tokens.css 유리 사다리(--glass-window)다 — 여기 하드코드하면 CSS와
+// 두 벌이 된다(verify 검증16이 사다리 일치를 단언한다). `--glass-alpha`를 쓰는
+// 요소는 이제 셸(#shell, shell.css)이다 — 옛 판에서는 대화 창의 `.app`이었다.
+//
+// 2026-08-24 리프 1.2.1: **보간이 사라졌다.** 옛 판은 대화 창 높이에 비례해
+// --glass-window ↔ --glass-window-max를 연속 보간했다("뒤 정보 밀도에 비례해
+// 두꺼워진다", soul.md §7) — 창이 커질수록 뒤에 겹치는 정보가 많아진다는 전제였다.
+// 셸 창은 내용이 늘어도 크기가 그대로이고 늘어나는 것은 영역 안 스크롤이라,
+// 창 크기를 유리 두께의 근거로 삼을 수 없다. 근거 없는 값을 계속 흔드는 것보다
+// 사다리의 기본 단을 정직하게 고정하는 쪽을 택한다. 두께 조절은 설정 › 화면의
+// 유리 5단(리프 1.1.2)이 사용자 손에 이미 쥐여준다.
 const rootStyles = getComputedStyle(document.documentElement);
 const GLASS_WINDOW = parseFloat(rootStyles.getPropertyValue('--glass-window')) || 0.30;
-const GLASS_WINDOW_MAX = parseFloat(rootStyles.getPropertyValue('--glass-window-max')) || 0.55;
-// 데스크톱 캡처 폴링 없이 tokens.css의 정적 안전 알파만 높이에 따라 보간한다.
-function applyGlassFraction(frac) {
-  const interpolated = GLASS_WINDOW + (GLASS_WINDOW_MAX - GLASS_WINDOW) * frac;
-  document.documentElement.style.setProperty('--glass-alpha', interpolated.toFixed(3));
-}
-
-window.addEventListener('resize', () => {
-  // innerHeight는 CSS px — 창 bounds(물리 px)와 비교하려면 줌 배율을 되돌린다.
-  currentHeight = Math.round(window.innerHeight * window.athena.getZoomFactor());
-  const growable = Math.max(1, layout.chatMaxH - layout.chatBaseH);
-  const frac = Math.min(1, Math.max(0, (currentHeight - layout.chatBaseH) / growable));
-  applyGlassFraction(frac);
-  syncMaxButton();
-});
-
-// OS 모서리 리사이즈(2026-08-18 자유 리사이즈 승급) — main의 handleForeignArrange가
-// 사용자 리사이즈를 수용하면서 보낸다. 그립 드래그와 같은 "수동" 문법으로 취급해
-// 다음 내용 변화의 자동 성장이 방금의 사용자 크기를 덮어쓰지 않게 한다.
-window.athena.on('athena:manual-resize', () => { manualOverride = true; });
-
-// 최대화 버튼의 상태(확장/복귀/비활성)를 실제 창 상태에서 파생한다 — 버튼이 자기
-// 기억이 아니라 창의 현재 상태를 말하게 한다(정보 정직성). 설정·온보딩 모드가
-// 높이를 소유하는 동안은 disabled로 디밍한다 — "복귀" 아이콘을 보여주면서 클릭을
-// 조용히 무시하는 것은 라벨이 거짓말하는 상태다(2026-08-18 리뷰 지적).
-// resize 이벤트 외에 모드 열림/닫힘 지점 4곳에서도 직접 호출한다 — 창이 이미
-// chatMaxH라 리사이즈가 안 일어나는 경우에도 상태가 맞아야 한다.
-function syncMaxButton() {
-  const modeOwnsHeight = settingsOpen || orderOpen || !$onboard.hidden;
-  const atMax = currentHeight >= layout.chatMaxH - 2;
-  $winMax.disabled = modeOwnsHeight;
-  $winMax.classList.toggle('is-max', atMax && !modeOwnsHeight);
-  const label = modeOwnsHeight
-    ? '지금은 설정·온보딩이 창 높이를 관리한다'
-    : atMax ? '기본 높이로 복귀' : '최대 높이로 확장';
-  $winMax.title = label;
-  $winMax.setAttribute('aria-label', label);
-}
+document.documentElement.style.setProperty('--glass-alpha', GLASS_WINDOW.toFixed(3));
 
 // ---------- 이력 스크롤 — 하단 고정(stick-to-bottom) ----------
-// .history가 overflow-y:auto로 바뀌었다(chat.css) — 창이 chatMaxH까지 자란 뒤에는
-// 지난 턴을 스크롤로 되짚는다. 새 내용이 올 때는 바닥에 붙어 따라가되, 사용자가
-// 위로 올려 읽는 중이면(바닥에서 24px 이상) 강제로 끌어내리지 않는다.
+// .history는 overflow-y:auto다(chat.css) — 채팅 영역이 고정 크기가 된 뒤(리프
+// 1.2.1)로는 지난 턴을 되짚는 **유일한** 수단이다. 새 내용이 올 때는 바닥에 붙어
+// 따라가되, 사용자가 위로 올려 읽는 중이면(바닥에서 24px 이상) 강제로 끌어내리지
+// 않는다.
 let stickToBottom = true;
 $history.addEventListener('scroll', () => {
   stickToBottom = $history.scrollHeight - $history.scrollTop - $history.clientHeight < 24;
@@ -352,58 +308,19 @@ function scrollHistoryToBottom(force) {
   if (stickToBottom) $history.scrollTop = $history.scrollHeight;
 }
 
-// ---------- 자동 성장 (위로만, 사용자 수동 조작을 덮어쓰지 않음) ----------
-function scheduleHeightSync() {
-  requestAnimationFrame(() => {
-    // autoGrowChat=false여도 스크롤(하단 고정)은 계속 동작한다 — 막는 건 창을
-    // 키우는 자동 요청뿐이다. 수동 리사이즈(그립 드래그)는 이 경로를 안 탄다.
-    if (!manualOverride && prefs.autoGrowChat) {
-      const need = measureNeededHeight();
-      window.athena.send('athena:set-chat-height', { height: need, manual: false });
-    }
-    scrollHistoryToBottom();
-  });
+// ---------- 렌더 직후 바닥 따라가기 ----------
+// 옛 이름은 scrollAfterRender()였다 — 창 높이 자동 성장 요청과 하단 고정 스크롤을
+// 한 rAF 안에서 같이 했다. 리프 1.2.1에서 높이 요청이 사라져 남은 것은 스크롤뿐이라
+// 이름도 그에 맞게 바꿨다(이름이 하는 일보다 크면 다음 사람이 없는 기능을 찾는다).
+//
+// 함께 사라진 것: measureNeededHeight()(타이틀바·그립·입력 스택·이력 높이를 더해
+// 필요한 창 높이를 재던 함수) · 그립 드래그 수동 리사이즈 · athena:zoom-changed
+// 재측정 · prefs.autoGrowChat 분기. 넷 다 "창 높이 = 대화 이력 높이"의 부속이다.
+// prefs.autoGrowChat 설정 항목 자체는 아직 남아 있다(설정 › 화면) — 아무 효과가
+// 없는 항목을 켜 두는 것은 정보 정직성 위반이라 리프 1.4.1이 걷어내야 한다.
+function scrollAfterRender() {
+  requestAnimationFrame(() => scrollHistoryToBottom());
 }
-
-function measureNeededHeight() {
-  // 타이틀바(2026-08-19) — 창 크롬이 32px를 차지하므로 필요 높이에 포함한다.
-  // 안 하면 콘텐츠가 그만큼 임계를 못 넘어 자동 성장이 죽는다(검증5 실측).
-  const bar = document.getElementById('dragStrip');
-  const barH = (bar && bar.offsetHeight) || 32;
-  const gripH = $grip.getBoundingClientRect().height;
-  // AT-CH-001R — 입력 영역은 이제 2행(입력줄 52 + 컨트롤 스트립 48) 스택이다.
-  const inputStack = document.querySelector('.input-stack');
-  const inputH = inputStack ? inputStack.getBoundingClientRect().height : 100;
-  const histNeeded = $history.scrollHeight + 16; // padding
-  // 측정은 CSS px, 창 높이는 물리 px — 줌 배율을 곱해 보낸다(main의 clamp와 단위 일치).
-  return Math.round((barH + gripH + inputH + histNeeded) * window.athena.getZoomFactor());
-}
-
-// 줌 배율이 바뀌면 같은 내용이라도 필요한 창 높이가 달라진다 — 다시 재서 요청한다.
-window.athena.on('athena:zoom-changed', () => scheduleHeightSync());
-
-// ---------- 수동 리사이즈 (그립 드래그) ----------
-let dragging = false;
-let dragStartScreenY = 0;
-let dragStartHeight = 0;
-$grip.addEventListener('mousedown', (e) => {
-  dragging = true;
-  dragStartScreenY = e.screenY;
-  dragStartHeight = currentHeight;
-  document.body.style.cursor = 'ns-resize';
-});
-window.addEventListener('mousemove', (e) => {
-  if (!dragging) return;
-  const delta = dragStartScreenY - e.screenY; // 위로 끌수록(스크린Y 감소) 커진다
-  const h = Math.round(dragStartHeight + delta);
-  window.athena.send('athena:set-chat-height', { height: h, manual: true });
-});
-window.addEventListener('mouseup', () => {
-  if (!dragging) return;
-  dragging = false;
-  manualOverride = true;
-  document.body.style.cursor = '';
-});
 
 // ---------- TR → 카드 종류 라우팅 (목업) ----------
 // "캔버스"는 창을 뜻한다. 창 안에 뜨는 것은 **카드**다(GLOSSARY.md §2).
@@ -516,8 +433,7 @@ async function runQuery(text) {
 // 아니라 "카드가 늘어난 개수 + 경과 시간"이다. 실왕복은 43초까지 걸린 실측이
 // 있다(spike/cli-pipe/gateway/RESULT.md) — 조용히 멈춘 것처럼 보이면 안 된다.
 async function runQueryLive(text) {
-  const myToken = ++abortToken;
-  manualOverride = false;
+  const myToken = ++abortToken;
   clearRecommendations();
 
   const qLine = document.createElement('div');
@@ -528,7 +444,7 @@ async function runQueryLive(text) {
   qLine.appendChild(qText);
   $history.appendChild(qLine);
   scrollHistoryToBottom(true); // 새 질문은 무조건 바닥으로 — 위에서 읽던 중이어도 새 턴이 우선이다
-  scheduleHeightSync();
+  scrollAfterRender();
   // 새 턴 시작 — "기록 안 됨" 배지가 붙을 줄 참조를 갱신(main이 진입 직후 role:user
   // 저장을 이미 시도하므로 여기서부터 실패 이벤트가 올 수 있다).
   saveFailedRouter.startTurn(qLine);
@@ -544,7 +460,7 @@ async function runQueryLive(text) {
   progress.appendChild(progText);
   $history.appendChild(progress);
   liveProgressEl = progress;
-  scheduleHeightSync();
+  scrollAfterRender();
 
   let cardCount = 0;
   let calling = false;
@@ -564,7 +480,7 @@ async function runQueryLive(text) {
     if (!calling) { calling = true; state = 'calling'; setDot('calling'); }
     cardCount += 1;
     renderProgress();
-    scheduleHeightSync();
+    scrollAfterRender();
   };
   const unsubscribeLiveCanvasAdded = window.athena.on('athena:live-canvas-added', onLiveCanvasAdded);
 
@@ -620,7 +536,7 @@ async function runQueryLive(text) {
 
   $history.appendChild(aLine);
   saveFailedRouter.setAssistantLine(aLine);
-  scheduleHeightSync();
+  scrollAfterRender();
   $input.focus();
 
   // 방금 턴에서 모델이 athena_routine(draft)로 제안했을 수 있다 — 승인 카드는
@@ -634,7 +550,6 @@ async function runQueryLive(text) {
 // 강제할 때만 여기로 온다 — quota 없이 결정론적 3상태/자동성장 검증을 위해서다.
 async function runQueryFixture(text) {
   const myToken = ++abortToken;
-  manualOverride = false; // 새 턴 — 자동 성장 재개
   const types = pickCardTypes(text);
 
   const qLine = document.createElement('div');
@@ -645,7 +560,7 @@ async function runQueryFixture(text) {
   qLine.appendChild(qText);
   $history.appendChild(qLine);
   scrollHistoryToBottom(true);
-  scheduleHeightSync();
+  scrollAfterRender();
 
   // 상태 1 — 판단 중
   state = 'judging';
@@ -661,7 +576,7 @@ async function runQueryFixture(text) {
   progress.appendChild(progTrs);
   $history.appendChild(progress);
   liveProgressEl = progress;
-  scheduleHeightSync();
+  scrollAfterRender();
 
   await wait(550);
   if (myToken !== abortToken) return;
@@ -695,7 +610,7 @@ async function runQueryFixture(text) {
     done += 1;
     progText.textContent = `${CARD_PLAN[type].toolLabel} 완료 · ${done}/${types.length}`;
   }
-  scheduleHeightSync();
+  scrollAfterRender();
   await wait(200);
   if (myToken !== abortToken) return;
 
@@ -728,7 +643,7 @@ async function runQueryFixture(text) {
   aLine.appendChild(meta);
 
   $history.appendChild(aLine);
-  scheduleHeightSync();
+  scrollAfterRender();
   $input.focus();
 }
 
@@ -752,6 +667,10 @@ function wait(ms) { return new Promise((r) => setTimeout(r, ms)); }
 // 문법이다(ui/DESIGN-SOUL.md:100 "#dot를 건들면 그냥 채팅창이 설정창으로 변하는
 // 것이 좋겠다", 도출된 규칙 3). 근거: 설정을 만지는 동안 사용자는 채팅을 치지
 // 않는다 — 시간을 다투지 않으면 면적을 나누지 않는다.
+// 2026-08-24 리프 1.2.1: #settings는 이제 셸 창 **전체**를 덮는 오버레이다
+// (shell.css .shell-overlay). 400px 채팅 영역 안에 좌 사이드바 + 우 패널 2단을
+// 넣으면 짜부라진다. Codex형 전체 스왑(좌상단 "← 앱으로 돌아가기" · Esc 동등)의
+// 나머지는 리프 1.4.1이 얹는다 — 지금은 위치만 셸 전체다.
 let settingsOpen = false;
 
 function openSettings() {
@@ -759,9 +678,6 @@ function openSettings() {
   settingsOpen = true;
   $app.hidden = true;
   $settings.hidden = false;
-  manualOverride = true; // 설정 동안은 이력 기반 자동 성장이 개입하지 않는다
-  syncMaxButton(); // 모드가 높이 소유권을 가져간다 — 최대화 버튼 비활성
-  window.athena.send('athena:set-chat-height', { height: layout.chatMaxH, manual: false });
   // Paper 43쪽(2026-08-18 확정) — 좌 사이드바(화면·계좌·MCP 서버·모델) + 우 패널.
   // 세 카드를 동시에 쌓아 보여주던 이전 판(renderScreen/renderAccounts/renderMcp를
   // 나란히 호출)을 대체한다. 패널 렌더 함수 자체는 그대로 재사용 — nav가 어떤 걸
@@ -788,9 +704,6 @@ function closeSettings() {
   $settingsNav.replaceChildren();
   $settings.hidden = true;
   $app.hidden = false;
-  manualOverride = false;
-  syncMaxButton(); // 높이 소유권 반환 — 최대화 버튼 재활성
-  window.athena.send('athena:set-chat-height', { height: layout.chatBaseH, manual: false });
   $input.focus();
 }
 
@@ -828,8 +741,7 @@ function historyCommandKind(text) {
 // sendLiveCanvasResult 재사용, 신규 카드 타입 0개). 실패해도 카드 없이 정직한
 // 안내 텍스트만 남긴다(CLAUDE.md §4 — 조용히 삼키지 않는다).
 async function runHistoryCommand(text) {
-  const myToken = ++abortToken;
-  manualOverride = false;
+  const myToken = ++abortToken;
 
   const qLine = document.createElement('div');
   qLine.className = 'turn';
@@ -839,7 +751,7 @@ async function runHistoryCommand(text) {
   qLine.appendChild(qText);
   $history.appendChild(qLine);
   scrollHistoryToBottom(true);
-  scheduleHeightSync();
+  scrollAfterRender();
 
   const kind = historyCommandKind(text);
   const label = kind === 'profile-summary' ? '투자 성향 요약' : '채팅 이력';
@@ -861,7 +773,7 @@ async function runHistoryCommand(text) {
     : `${label}을 불러올 수 없다 — ${(result && result.error) || '알 수 없는 오류'}`;
   aLine.appendChild(aText);
   $history.appendChild(aLine);
-  scheduleHeightSync();
+  scrollAfterRender();
   $input.focus();
 }
 
@@ -888,126 +800,20 @@ $input.addEventListener('keydown', (e) => {
   dispatchUserQuery(text);
 });
 
-// ---------- 창 제어 버튼 (AT-CH-001, 2026-08-18) — 우상단 3버튼 ----------
-// 최소화 = 기존 Ctrl+M과 같은 IPC(두 창 한 몸). 최대화 = 이 앱에서 창의 최대는
-// OS 전체화면이 아니라 설계 최대 높이(chatMaxH, E3)다 — 그립 드래그와 같은 높이
-// 배선으로 chatBaseH↔chatMaxH를 오간다. 닫기 = 종료가 아니라 두 창을 숨기고
-// 프로세스를 백그라운드에 남긴다(사용자 지시 "백그라운드는 살아있음") — 복귀는
-// 트레이(main.js). 온보딩·설정 모드가 열려 있는 동안 높이는 모드 소유라 최대화
-// 토글은 개입하지 않는다.
-// ---------- 창 최대화/복원/최소화 — 로컬 경로 (2026-08-18, Windows 표준 의미론) ----------
-// 높이 상태(auto-grow·manualOverride·□ 버튼 상태)의 단일 소유자는 렌더러다.
-// □ 버튼 · Win+↑/↓(main이 athena:window-key로 위임) · Ctrl+Alt+↑/↓가 전부 이
-// 두 함수를 공유한다 — main이 setChatHeight를 직접 부르면(구판) 이 상태들과
-// 어긋난다(팀리드 지시). Win+←/→·Ctrl+Alt+←/→는 렌더러 상태와 무관한 순수 위치
-// 이동이라 여전히 IPC(athena:place-windows)로 main이 직접 처리한다.
-// 마지막 수동 높이 기억(2026-08-19 결정, 질의응답) — Windows 복원 사각형 의미론.
-// □(확장 토글)는 이제 "확장 ↔ 직전 크기"다. 사용자가 그립·OS 엣지로 만든 커스텀
-// 크기를 □가 조용히 204px로 붕괴시키던 결함(디자인 비판 2026-08-18)의 해소.
-// 표준 최대(chatMaxH)를 넘긴 크기에서 □를 누르면 표준 최대로 접되 원크기를
-// 복원값으로 기억한다 — 다시 누르면 돌아온다.
-let lastRestoreHeight = null;
-
-function restoreFromMax() {
-  const target = lastRestoreHeight && lastRestoreHeight > layout.chatBaseH + 2
-    ? lastRestoreHeight
-    : layout.chatBaseH;
-  lastRestoreHeight = null;
-  // 기본 높이로 돌아가면 자동 성장 재개(manualOverride 해제), 커스텀 크기로
-  // 돌아가면 그 크기를 보호한다(그립 드래그와 같은 문법).
-  manualOverride = target !== layout.chatBaseH;
-  window.athena.send('athena:set-chat-height', { height: target, manual: manualOverride });
-}
-
-function toggleMaxHeight() {
-  if (settingsOpen || orderOpen || !$onboard.hidden) return; // 모드가 높이를 소유 중 — disabled의 백스톱
-  const over = currentHeight > layout.chatMaxH + 2;
-  const atMax = !over && currentHeight >= layout.chatMaxH - 2;
-  if (over) {
-    // 표준 최대보다 크게 늘린 상태 — 표준 최대로 접고 원크기를 기억한다.
-    lastRestoreHeight = currentHeight;
-    manualOverride = true;
-    window.athena.send('athena:set-chat-height', { height: layout.chatMaxH, manual: true });
-  } else if (atMax) {
-    // scheduleHeightSync()를 부르지 않는 이유는 구판 주석 그대로 — 수축 직후
-    // 자연 높이 재확장이 끼어드는 이중 리사이즈 방지(2026-08-18 리뷰 지적).
-    restoreFromMax();
-  } else {
-    lastRestoreHeight = currentHeight > layout.chatBaseH + 2 ? currentHeight : null;
-    manualOverride = true; // 그립 드래그와 같은 문법 — 자동 성장이 덮어쓰지 않는다
-    window.athena.send('athena:set-chat-height', { height: layout.chatMaxH, manual: true });
-  }
-  $input.focus();
-}
-
-// Windows의 "restore-then-minimize" 의미론 — 최대화(이상) 상태면 직전 크기로 복원,
-// 아니면 두 창을 최소화한다.
-function restoreOrMinimize() {
-  if (settingsOpen || orderOpen || !$onboard.hidden) return; // 모드가 높이를 소유 중 — disabled의 백스톱
-  if (currentHeight >= layout.chatMaxH - 2) {
-    restoreFromMax();
-  } else {
-    window.athena.send('athena:minimize-windows');
-  }
-}
-
-// main의 before-input-event(Win+↑/↓)가 위임하는 이벤트 — □ 버튼과 같은 로컬
-// 경로를 태운다(main.js wireWindowsKeyShortcuts 주석 참고).
-window.athena.on('athena:window-key', ({ dir } = {}) => {
-  if (dir === 'up') toggleMaxHeight();
-  else if (dir === 'down') restoreOrMinimize();
-});
-
-$winMin.addEventListener('click', () => {
-  window.athena.send('athena:minimize-windows');
-});
-$winMax.addEventListener('click', () => { toggleMaxHeight(); });
-$winClose.addEventListener('click', () => {
-  window.athena.send('athena:close-windows');
-});
-
-// ---------- 창 기본 기능 (2026-08-17) — frame:false라 OS 타이틀바가 없어 직접 배선 ----------
-// 줌: Ctrl+= / Ctrl+- / Ctrl+0 / Ctrl+휠. 최소화: Ctrl+M. main.js가 두 창을 동기한다.
-// 창 배치(2026-08-18, 설정 › 화면 안내 행과 짝을 이룬다) — 주 경로는 Windows
-// 네이티브 Win+방향키(main.js가 before-input-event로 직접 처리한다,
-// WIN_ARROW_DIR). Ctrl+Alt+방향키는 보조 경로이고 같은 의미론을 써야 한다 —
-// left/right는 좌/우 절반, **up은 최대화 토글**(□ 버튼과 동일), **down은
-// 복원→최소화**다. left/right는 렌더러 상태와 무관하니 여전히 IPC
-// (athena:place-windows)로 main이 처리하지만, up/down은 높이 상태를 렌더러가
-// 소유하므로(toggleMaxHeight/restoreOrMinimize 주석 참고) IPC 왕복 없이 같은
-// 로컬 함수를 직접 부른다 — Win+↑/↓가 athena:window-key로 도착하는 것과 결국
-// 같은 경로를 탄다. 'center'/'minimize' 같은 옛 별도 이름은 쓰지 않는다.
-// Ctrl 단독 분기(줌·최소화)보다 먼저 검사해야 한다 — 기존 코드는 altKey가
-// 눌리면 그냥 return했는데, 여기서 그 자리를 가로채 처리하고 여전히
-// return한다(다른 Ctrl+Alt 조합에도 줌 로직이 새지 않게).
-document.addEventListener('keydown', (e) => {
-  if ((e.ctrlKey || e.metaKey) && e.altKey) {
-    if (e.key === 'ArrowUp') { e.preventDefault(); toggleMaxHeight(); return; }
-    if (e.key === 'ArrowDown') { e.preventDefault(); restoreOrMinimize(); return; }
-    const dir = { ArrowLeft: 'left', ArrowRight: 'right' }[e.key];
-    if (dir) {
-      e.preventDefault();
-      window.athena.send('athena:place-windows', { dir });
-    }
-    return;
-  }
-  if (!(e.ctrlKey || e.metaKey) || e.altKey) return;
-  // 2026-08-22 사용자 지시("스크롤 돌렸을 때 작았다가 커지는 것 하지 말고, UI
-  // 설정에서만 글씨 크기랑 이런 걸 바꾸게 해달라"): Ctrl+=/-/0 배율 단축키와
-  // Ctrl+휠 배율을 폐기한다. 크기는 설정 › 화면(글자 크기 5단계 · UI 배율)에서만
-  // 바뀐다 — 입력 중 우발적인 배율 변경이 사라진다.
-  if (e.key === 'm' || e.key === 'M') {
-    e.preventDefault();
-    window.athena.send('athena:minimize-windows');
-  }
-});
-
-// Ctrl+휠 배율은 2026-08-22 사용자 지시로 폐기했다(위 keydown 주석 참조).
-// 휠은 이력 스크롤에만 쓰인다 — 배율 변경 경로는 설정 하나뿐이다.
-
+// ---------- 창 제어는 여기 없다 (2026-08-24 리프 1.2.1) ----------
+// 우상단 3버튼(최소화·최대화·닫기)과 창 단축키(Ctrl+M · Ctrl+Alt+방향키)가
+// shell.js로 옮겨갔다. 창에 속하는 것이 어느 한 영역의 코드에 살면 안 된다 —
+// 옛 판에서 여기 있었던 이유는 대화 창이 곧 앱의 창이었기 때문이다.
+//
+// 함께 사라진 것: toggleMaxHeight()/restoreFromMax()/restoreOrMinimize()와
+// lastRestoreHeight, 그리고 `athena:window-key` 구독. 이 앱에서 "창의 최대"는
+// OS 전체화면이 아니라 설계 최대 높이(chatMaxH)라는 정의 위에 서 있던 것들이다.
+// 셸 창에서는 최대화가 그냥 OS 창 최대화이고, 그 상태의 소유자는 렌더러가
+// 아니라 OS다 — 그래서 판정도 main으로 갔다(main.js athena:toggle-maximize).
+//
 // 창 이동은 네이티브 캡션이다(2026-08-19 표준화) — 손잡이는 chat.css의
-// -webkit-app-region 선언(컨트롤 스트립·설정/주문 헤더)이고 JS 드래그 경로는
-// 폐기됐다. 본문(.history)은 손잡이가 아니라 텍스트 선택이 된다.
+// -webkit-app-region 선언(컨트롤 스트립·설정/주문 헤더)과 셸 타이틀바이고 JS
+// 드래그 경로는 폐기됐다. 본문(.history)은 손잡이가 아니라 텍스트 선택이 된다.
 
 // ---------- 컨트롤 스트립(AT-CH-001R, Paper 47쪽) — CLI 필 · 모델 필 · 팝오버 ----------
 // 실기능만 올린다(soul.md §7): CLI 필은 runQuery의 실행기(claude -p) 표시이자
@@ -1130,9 +936,12 @@ document.addEventListener('keydown', (e) => {
       setDot(null);
       setLocked(false);
       if (liveProgressEl) { liveProgressEl.remove(); liveProgressEl = null; }
-      scheduleHeightSync();
+      scrollAfterRender();
     } else {
-      window.athena.send('athena:collapse-canvas');
+      // 옛 판에서 이 키는 캔버스 **창**을 수축시켜 닫았다(athena:collapse-canvas).
+      // 닫을 창이 없어진 뒤 남는 의미는 "쌓인 카드를 치운다"이고, 두 영역이 같은
+      // 문서에 사는 지금은 IPC 왕복 없이 shell.js 버스로 바로 부른다.
+      window.AthenaShell.clearCanvases();
     }
   }
 });
@@ -1175,7 +984,7 @@ function _mountTurn(line, el) {
   // 등장은 굴절 변조 — chat.css의 .turn-agent 전이. reduced-motion이면 즉시.
   requestAnimationFrame(() => el.classList.add('is-in'));
   $history.scrollTop = $history.scrollHeight;
-  scheduleHeightSync();
+  scrollAfterRender();
 }
 
 function renderAgentTurn(event) {
@@ -1363,9 +1172,6 @@ function openOrderTicket(prefill) {
   orderOpen = true;
   $app.hidden = true;
   $order.hidden = false;
-  manualOverride = true;
-  syncMaxButton();
-  window.athena.send('athena:set-chat-height', { height: layout.chatMaxH, manual: false });
   renderOrderTicket(prefill);
 }
 
@@ -1375,9 +1181,6 @@ function closeOrderTicket() {
   $orderBody.replaceChildren();
   $order.hidden = true;
   $app.hidden = false;
-  manualOverride = false;
-  syncMaxButton();
-  window.athena.send('athena:set-chat-height', { height: layout.chatBaseH, manual: false });
   $input.focus();
 }
 

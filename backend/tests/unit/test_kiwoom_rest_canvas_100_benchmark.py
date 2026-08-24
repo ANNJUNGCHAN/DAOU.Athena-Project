@@ -279,7 +279,7 @@ def test_benchmark_producer_executes_declared_same_panel_reload() -> None:
         encoding="utf-8"
     )
 
-    assert "executeAitsReload(canvasWin, testCase, result)" in producer
+    assert "executeAitsReload(shellWin, testCase, result)" in producer
     assert "athena:reload-chart-panel" in producer
 
 
@@ -301,7 +301,8 @@ def test_report_source_closure_includes_aits_runtime_and_authority_dependencies(
         "backend/athena_api/generated/registry.py",
         "backend/ref/kiwoom-screen-definitions.json",
         "backend/scripts/generate_api.py",
-        "app/canvas.html",
+        "app/shell.html",
+        "app/shell.css",
         "app/lib/chart-card.js",
         "app/lib/chart-toolbar.js",
         "app/package.json",

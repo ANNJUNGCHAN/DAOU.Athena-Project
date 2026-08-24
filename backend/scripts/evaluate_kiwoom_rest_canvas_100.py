@@ -52,7 +52,10 @@ SOURCE_PATHS = (
     AITS_CONTRACTS_PATH,
     BACKEND / "ref" / "kiwoom-screen-definitions.json",
     ROOT / "app" / "main.js",
-    ROOT / "app" / "canvas.html",
+    # 2026-08-24 리프 1.2.1: 캔버스 창 문서가 셸 창 문서로 합쳐졌다.
+    # 중앙 캔버스의 영역 폭·패딩을 셸이 정하므로 shell.css도 프리시니스 입력이다.
+    ROOT / "app" / "shell.html",
+    ROOT / "app" / "shell.css",
     ROOT / "app" / "canvas.js",
     ROOT / "app" / "preload.js",
     ROOT / "app" / "package.json",

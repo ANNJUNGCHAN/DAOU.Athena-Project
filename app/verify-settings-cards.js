@@ -93,7 +93,7 @@ function installStubHandlers() {
 }
 
 // MCP 카드만 다시 그린다 — buildCardShell이 기존 .card.mcp를 제거하고 새로 붙인다.
-// window.AthenaLib.SettingsCards는 chat.html이 <script> 태그로 미리 로드해둔
+// window.AthenaLib.SettingsCards는 shell.html이 <script> 태그로 미리 로드해둔
 // 전역이다(require 없음, nodeIntegration:false).
 async function rerenderMcpCard(win) {
   await win.webContents.executeJavaScript(
@@ -142,60 +142,60 @@ app.whenReady().then(async () => {
   console.log('[verify-settings] stub install:', stubbedChannels);
 
   await mainMod.createWindows();
-  const { chatWin } = mainMod.getWins();
+  const { shellWin } = mainMod.getWins();
   await wait(600);
 
   // ---------- 설정 모드를 연다 — 새 창이 아니라 이 창이 변한다 ----------
   // 점 클릭의 기본 선택은 '화면'이다(2026-08-18 사이드바 도입) — 계좌 카드를
   // 보려면 nav에서 '계좌'를 선택해야 한다(예전엔 점 클릭 한 번에 계좌·MCP 카드가
   // 동시에 떴다, chat.js openSettings/lib/settings-cards.js renderNav 참고).
-  await chatWin.webContents.executeJavaScript("document.getElementById('dot').click()");
+  await shellWin.webContents.executeJavaScript("document.getElementById('dot').click()");
   await wait(500);
-  await clickAndLog(chatWin, 'select nav 계좌', clickNavItem('계좌'));
+  await clickAndLog(shellWin, 'select nav 계좌', clickNavItem('계좌'));
   await wait(400);
-  await shot(chatWin, 'SETTINGS-03-accounts-list.png');
+  await shot(shellWin, 'SETTINGS-03-accounts-list.png');
 
-  await clickAndLog(chatWin, 'open register sheet', clickByText('.card.accounts button', '+ 계좌 등록'));
+  await clickAndLog(shellWin, 'open register sheet', clickByText('.card.accounts button', '+ 계좌 등록'));
   await wait(200);
-  await shot(chatWin, 'SETTINGS-04-accounts-register-sheet.png');
-  await clickAndLog(chatWin, 'close register sheet', clickByText('.card.accounts .uk-sheet button', '취소'));
+  await shot(shellWin, 'SETTINGS-04-accounts-register-sheet.png');
+  await clickAndLog(shellWin, 'close register sheet', clickByText('.card.accounts .uk-sheet button', '취소'));
   await wait(200);
 
-  await clickAndLog(chatWin, 'open order-api sheet', clickByText('.card.accounts .uk-pill', 'OFF'));
+  await clickAndLog(shellWin, 'open order-api sheet', clickByText('.card.accounts .uk-pill', 'OFF'));
   await wait(200);
-  await shot(chatWin, 'SETTINGS-05-orderapi-sheet.png');
-  await clickAndLog(chatWin, 'click activate', clickByText('.card.accounts .uk-sheet button', '활성화'));
+  await shot(shellWin, 'SETTINGS-05-orderapi-sheet.png');
+  await clickAndLog(shellWin, 'click activate', clickByText('.card.accounts .uk-sheet button', '활성화'));
   await wait(300);
-  await shot(chatWin, 'SETTINGS-06-orderapi-after-activate.png');
+  await shot(shellWin, 'SETTINGS-06-orderapi-after-activate.png');
 
   // MCP 카드로 전환 — nav '경유'다(직접 renderMcp() 호출이 아니다). 실제
   // 사용자 경로(renderNav onSelect)를 타야 grid.replaceChildren()이 먼저 불려
   // 계좌 카드가 정리된다 — 안 그러면 두 카드가 같은 grid에 함께 남는, 실제로는
   // 도달 불가능한 상태가 된다(사이드바는 한 번에 카드 하나만 보여준다).
-  await clickAndLog(chatWin, 'select nav MCP 서버', clickNavItem('MCP 서버'));
+  await clickAndLog(shellWin, 'select nav MCP 서버', clickNavItem('MCP 서버'));
   await wait(1000); // mcp-list는 Python CLI 콜드 스폰이라 실측 ~850ms 걸린다(verify-settings.js 주석 참고)
-  await shot(chatWin, 'SETTINGS-07-mcp-list.png');
+  await shot(shellWin, 'SETTINGS-07-mcp-list.png');
 
-  await clickAndLog(chatWin, 'open mcp register sheet', clickByText('.card.mcp button', '+ 서버 등록'));
+  await clickAndLog(shellWin, 'open mcp register sheet', clickByText('.card.mcp button', '+ 서버 등록'));
   await wait(200);
-  await shot(chatWin, 'SETTINGS-08-mcp-register-sheet-empty.png');
+  await shot(shellWin, 'SETTINGS-08-mcp-register-sheet-empty.png');
 
-  await chatWin.webContents.executeJavaScript(`
+  await shellWin.webContents.executeJavaScript(`
     (() => {
       const ta = document.querySelector('.card.mcp .uk-sheet textarea');
       ta.value = '{\\n  "mcpServers": {\\n    "@drfirst/korea-stock-mcp": { "command": "npx", "args": ["-y", "@drfirst/korea-stock-mcp"] }\\n  }\\n}';
       ta.dispatchEvent(new Event('input', { bubbles: true }));
     })();
   `);
-  await clickAndLog(chatWin, 'analyze snippet', clickByText('.card.mcp .uk-sheet button', '분석'));
+  await clickAndLog(shellWin, 'analyze snippet', clickByText('.card.mcp .uk-sheet button', '분석'));
   await wait(300);
-  await shot(chatWin, 'SETTINGS-09-mcp-register-sheet-staged.png');
-  await clickAndLog(chatWin, 'approve staged server', clickByText('.card.mcp .uk-sheet button', '승인'));
+  await shot(shellWin, 'SETTINGS-09-mcp-register-sheet-staged.png');
+  await clickAndLog(shellWin, 'approve staged server', clickByText('.card.mcp .uk-sheet button', '승인'));
   await wait(300);
-  await shot(chatWin, 'SETTINGS-10-mcp-register-sheet-after-approve.png');
+  await shot(shellWin, 'SETTINGS-10-mcp-register-sheet-after-approve.png');
 
-  await rerenderMcpCard(chatWin);
-  await clickAndLog(chatWin, 'open probe sheet (pykrx row)', `
+  await rerenderMcpCard(shellWin);
+  await clickAndLog(shellWin, 'open probe sheet (pykrx row)', `
     (() => {
       const rows = Array.from(document.querySelectorAll('.card.mcp .uk-row.is-clickable'));
       const r = rows.find((row) => row.textContent.includes('pykrx'));
@@ -205,9 +205,9 @@ app.whenReady().then(async () => {
     })();
   `);
   await wait(300);
-  await shot(chatWin, 'SETTINGS-11-mcp-probe-sheet.png');
+  await shot(shellWin, 'SETTINGS-11-mcp-probe-sheet.png');
 
-  await clickAndLog(chatWin, 'toggle a checkbox', `
+  await clickAndLog(shellWin, 'toggle a checkbox', `
     (() => {
       const cbs = Array.from(document.querySelectorAll('.card.mcp .uk-sheet .uk-check:not(.is-disabled)'));
       const target = cbs.find((c) => !c.classList.contains('is-checked'));
@@ -217,30 +217,30 @@ app.whenReady().then(async () => {
     })();
   `);
   await wait(150);
-  await shot(chatWin, 'SETTINGS-12-mcp-probe-sheet-toggled.png');
+  await shot(shellWin, 'SETTINGS-12-mcp-probe-sheet-toggled.png');
 
   // 닫기 경고(D8, 2026-08-17 실사용 사고 재발 방지) — 체크박스를 건드린 뒤
   // "선택 허용"을 누르지 않은 채 닫으려 하면, 바로 닫지 말고 인라인으로
   // 경고해야 한다. 커밋 전에 이 갈래부터 확인한다.
-  await clickAndLog(chatWin, 'close probe sheet with unsaved change (expect warning bar)', clickByText('.card.mcp .uk-sheet-close', '닫기'));
+  await clickAndLog(shellWin, 'close probe sheet with unsaved change (expect warning bar)', clickByText('.card.mcp .uk-sheet-close', '닫기'));
   await wait(150);
-  await shot(chatWin, 'SETTINGS-12b-mcp-probe-sheet-close-warning-dirty.png');
-  console.log('[verify-settings] warning bar present (dirty):', await chatWin.webContents.executeJavaScript(
+  await shot(shellWin, 'SETTINGS-12b-mcp-probe-sheet-close-warning-dirty.png');
+  console.log('[verify-settings] warning bar present (dirty):', await shellWin.webContents.executeJavaScript(
     "!!document.querySelector('.card.mcp .uk-close-warn')"
   ));
-  await clickAndLog(chatWin, 'dismiss warning (계속 편집)', clickByText('.card.mcp .uk-close-warn button', '계속 편집'));
+  await clickAndLog(shellWin, 'dismiss warning (계속 편집)', clickByText('.card.mcp .uk-close-warn button', '계속 편집'));
   await wait(150);
-  console.log('[verify-settings] sheet still open after 계속 편집:', await chatWin.webContents.executeJavaScript(
+  console.log('[verify-settings] sheet still open after 계속 편집:', await shellWin.webContents.executeJavaScript(
     "!!document.querySelector('.card.mcp .uk-sheet')"
   ));
 
-  await clickAndLog(chatWin, 'commit 선택 허용', clickByText('.card.mcp .uk-sheet button', '선택 허용'));
+  await clickAndLog(shellWin, 'commit 선택 허용', clickByText('.card.mcp .uk-sheet button', '선택 허용'));
   await wait(400);
-  await shot(chatWin, 'SETTINGS-13-mcp-probe-sheet-committed.png');
+  await shot(shellWin, 'SETTINGS-13-mcp-probe-sheet-committed.png');
 
   // 실제 사고 재현(2026-08-17 dart-mcp) — 커밋 후 남아있는 이 시트에서 허용된
   // 툴을 전부 해제한 채 닫으면 "허용된 툴 0개" 경고가 떠야 한다.
-  console.log('[verify-settings] uncheck all allowed tools:', await chatWin.webContents.executeJavaScript(`
+  console.log('[verify-settings] uncheck all allowed tools:', await shellWin.webContents.executeJavaScript(`
     (() => {
       const cbs = Array.from(document.querySelectorAll('.card.mcp .uk-sheet .uk-check.is-checked'));
       cbs.forEach((c) => c.click());
@@ -248,15 +248,15 @@ app.whenReady().then(async () => {
     })();
   `));
   await wait(150);
-  await clickAndLog(chatWin, 'close probe sheet with 0 allowed (expect warning)', clickByText('.card.mcp .uk-sheet-close', '닫기'));
+  await clickAndLog(shellWin, 'close probe sheet with 0 allowed (expect warning)', clickByText('.card.mcp .uk-sheet-close', '닫기'));
   await wait(150);
-  await shot(chatWin, 'SETTINGS-14-mcp-probe-sheet-close-warning-zero.png');
-  console.log('[verify-settings] warning bar text (zero-allowed):', await chatWin.webContents.executeJavaScript(
+  await shot(shellWin, 'SETTINGS-14-mcp-probe-sheet-close-warning-zero.png');
+  console.log('[verify-settings] warning bar text (zero-allowed):', await shellWin.webContents.executeJavaScript(
     "(document.querySelector('.card.mcp .uk-close-warn .uk-warnbox-body') || {}).textContent || 'NOT FOUND'"
   ));
-  await clickAndLog(chatWin, 'force close anyway (그냥 닫기)', clickByText('.card.mcp .uk-close-warn button', '그냥 닫기'));
+  await clickAndLog(shellWin, 'force close anyway (그냥 닫기)', clickByText('.card.mcp .uk-close-warn button', '그냥 닫기'));
   await wait(150);
-  console.log('[verify-settings] sheet closed after force-close:', await chatWin.webContents.executeJavaScript(
+  console.log('[verify-settings] sheet closed after force-close:', await shellWin.webContents.executeJavaScript(
     "!document.querySelector('.card.mcp .uk-sheet')"
   ));
 

@@ -50,19 +50,19 @@ const MEASURE_ALL_PANES_JS = `(() => {
 async function main() {
   const mainMod = require('./main.js');
   await mainMod.createWindows();
-  const { canvasWin } = mainMod.getWins();
-  if (!canvasWin) throw new Error('canvasWin을 못 찾았다');
+  const { shellWin } = mainMod.getWins();
+  if (!shellWin) throw new Error('shellWin을 못 찾았다');
 
-  canvasWin.show();
+  shellWin.show();
   await wait(400);
 
-  await canvasWin.webContents.executeJavaScript(`window.addCard('chart')`);
+  await shellWin.webContents.executeJavaScript(`window.addCard('chart')`);
   await wait(1500); // createChartCard는 동적 import + 비동기 마운트
 
   const report = {};
 
   // ---- ① ∿ 클릭 → 패널 열림, 35종 노출 확인 ----
-  report.panelOpen = await canvasWin.webContents.executeJavaScript(`(() => {
+  report.panelOpen = await shellWin.webContents.executeJavaScript(`(() => {
     const card = document.querySelector('.card.chart');
     const btn = Array.from(card.querySelectorAll('.chart-toolbar-btn')).find(b => b.textContent.includes('∿'));
     const disabledBefore = btn.disabled;
@@ -89,11 +89,11 @@ async function main() {
     };
   })()`);
   await wait(150);
-  const panelImg = await canvasWin.webContents.capturePage();
+  const panelImg = await shellWin.webContents.capturePage();
   fs.writeFileSync(path.join(CAPTURES, 'CC-103-indicators.png'), panelImg.toPNG());
 
   // ---- ② 볼린저 on(가격 pane 오버레이 — 새 pane 아님) ----
-  report.bollOn = await canvasWin.webContents.executeJavaScript(`(() => {
+  report.bollOn = await shellWin.webContents.executeJavaScript(`(() => {
     const card = document.querySelector('.card.chart');
     const panel = card.querySelector('.chart-indicator-panel');
     const row = Array.from(panel.querySelectorAll('.chart-ind-row')).find(r => r.querySelector('.chart-ind-label').textContent === '볼린저');
@@ -101,10 +101,10 @@ async function main() {
     return { isOn: row.classList.contains('is-on'), ariaChecked: row.getAttribute('aria-checked') };
   })()`);
   await wait(200);
-  report.paneSeparationAfterBoll = await canvasWin.webContents.executeJavaScript(MEASURE_ALL_PANES_JS);
+  report.paneSeparationAfterBoll = await shellWin.webContents.executeJavaScript(MEASURE_ALL_PANES_JS);
 
   // ---- ③ RSI on(하단 새 pane 추가) ----
-  report.rsiOn = await canvasWin.webContents.executeJavaScript(`(() => {
+  report.rsiOn = await shellWin.webContents.executeJavaScript(`(() => {
     const card = document.querySelector('.card.chart');
     const panel = card.querySelector('.chart-indicator-panel');
     const row = Array.from(panel.querySelectorAll('.chart-ind-row')).find(r => r.querySelector('.chart-ind-label').textContent === 'RSI');
@@ -113,10 +113,10 @@ async function main() {
     return { isOn: row.classList.contains('is-on'), rowCountBefore };
   })()`);
   await wait(250);
-  report.paneSeparationAfterRsi = await canvasWin.webContents.executeJavaScript(MEASURE_ALL_PANES_JS);
+  report.paneSeparationAfterRsi = await shellWin.webContents.executeJavaScript(MEASURE_ALL_PANES_JS);
 
   // ---- ④ 매물대 on(오버레이 존재 + POC 색) ----
-  report.volumeProfileOn = await canvasWin.webContents.executeJavaScript(`(() => {
+  report.volumeProfileOn = await shellWin.webContents.executeJavaScript(`(() => {
     const card = document.querySelector('.card.chart');
     const panel = card.querySelector('.chart-indicator-panel');
     const vpRow = panel.querySelector('.chart-ind-vp-row');
@@ -124,7 +124,7 @@ async function main() {
     return { isOn: vpRow.classList.contains('is-on') };
   })()`);
   await wait(300); // requestAnimationFrame 두 번(fitContent 이후 재계산) 여유
-  report.volumeProfileOverlay = await canvasWin.webContents.executeJavaScript(`(() => {
+  report.volumeProfileOverlay = await shellWin.webContents.executeJavaScript(`(() => {
     const card = document.querySelector('.card.chart');
     const overlay = card.querySelector('.chart-volume-profile-overlay');
     const bars = overlay ? Array.from(overlay.querySelectorAll('.chart-vp-bar')) : [];
@@ -134,28 +134,28 @@ async function main() {
     const normalColor = bars.find(b => !b.classList.contains('is-poc')) ? getComputedStyle(bars.find(b => !b.classList.contains('is-poc'))).backgroundColor : null;
     return { overlayPresent: !!overlay, displayed, barCount: bars.length, pocBarCount: pocBars.length, pocColor, normalColor };
   })()`);
-  const vpImg = await canvasWin.webContents.capturePage();
+  const vpImg = await shellWin.webContents.capturePage();
   fs.writeFileSync(path.join(CAPTURES, 'CC-103-volume-profile.png'), vpImg.toPNG());
 
   // 패널 닫기(다음 검사 전 정리)
-  await canvasWin.webContents.executeJavaScript(`document.body.click()`);
+  await shellWin.webContents.executeJavaScript(`document.body.click()`);
   await wait(150);
 
   // ---- ⑤ 형식 전환(바→캔들) 후 pane overlap 0 재단언 — CC-102 회귀 지점 ----
-  await canvasWin.webContents.executeJavaScript(`(() => {
+  await shellWin.webContents.executeJavaScript(`(() => {
     const card = document.querySelector('.card.chart');
     const formBtn = Array.from(card.querySelectorAll('.chart-toolbar-btn')).find(b => b.textContent.includes('▦'));
     formBtn.click();
   })()`);
   await wait(80);
-  await canvasWin.webContents.executeJavaScript(`(() => {
+  await shellWin.webContents.executeJavaScript(`(() => {
     const card = document.querySelector('.card.chart');
     const panel = card.querySelector('.chart-toolbar-dropdown');
     const opt = panel && Array.from(panel.querySelectorAll('.chart-toolbar-dropdown-item')).find(b => b.textContent === '바');
     if (opt) opt.click();
   })()`);
   await wait(300);
-  report.paneSeparationAfterFormSwitch = await canvasWin.webContents.executeJavaScript(MEASURE_ALL_PANES_JS);
+  report.paneSeparationAfterFormSwitch = await shellWin.webContents.executeJavaScript(MEASURE_ALL_PANES_JS);
 
   fs.writeFileSync(
     path.join(CAPTURES, 'CC-103-probe-report.json'),

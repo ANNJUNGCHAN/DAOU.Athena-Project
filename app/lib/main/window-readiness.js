@@ -2,8 +2,14 @@
 
 const path = require('node:path');
 
+// 로드 가능한 창 문서 화이트리스트. 임의 경로를 loadFile에 넘기지 못하게 막는다.
+// 2026-08-24 리프 1.2.1: canvas.html·chat.html 두 창 문서가 shell.html 하나로
+// 합쳐졌다. 옛 두 파일은 삭제됐으므로 목록에서도 뺀다 — 남겨두면 "아직 그 창을
+// 띄울 수 있다"는 거짓 신호가 된다. 오브 창(1.3.1)이 orb.html을 여기 추가한다.
+const WINDOW_HTML = ['shell.html'];
+
 function resolveWindowHtmlPath(appDir, filename) {
-  if (!['canvas.html', 'chat.html'].includes(filename)) throw new Error('unsupported window html');
+  if (!WINDOW_HTML.includes(filename)) throw new Error('unsupported window html');
   return path.resolve(appDir, filename);
 }
 

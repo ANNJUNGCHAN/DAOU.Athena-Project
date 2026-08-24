@@ -12,9 +12,9 @@ app.whenReady().then(async () => {
   const samples = [];
   const created = main.createWindows();
   const timer = setInterval(() => {
-    const { chatWin } = main.getWins();
-    if (chatWin && !chatWin.isDestroyed()) {
-      const b = chatWin.getBounds();
+    const { shellWin } = main.getWins();
+    if (shellWin && !shellWin.isDestroyed()) {
+      const b = shellWin.getBounds();
       const last = samples[samples.length - 1];
       if (!last || last.w !== b.width || last.h !== b.height) {
         samples.push({ t: Date.now() - t0, w: b.width, h: b.height, x: b.x, y: b.y });
