@@ -107,6 +107,24 @@ leaf-1.3.1 알림 오브 창 — VERIFIED (2026-08-24)
   G4/G5: innerHTML 싱크 0건(대상 7개로 orb.js 추가) · 셸 계약 회귀 없음
 ```
 
+```
+leaf-1.3.2 오브 시각 재작업 — VERIFIED (2026-08-24)
+  사용자 지시로 ui/kiwoome.zip(키움 마스코트 키우미) 참조. 질의 확정:
+  **평소 무채색 → 알림 시 얼굴**, CSS로 다시 그림(PNG 에셋 0건).
+  G1 node scripts/gates/check-orb.mjs → exit 0 (구현 전 exit 1로 6건)
+  G2 npm test → 332 passed / 0 failed (회귀 0)
+  G3 npm run verify → exit 0. 검증 22-A/22-B가 nativeImage.toBitmap()으로
+     **렌더된 픽셀**을 잰다: 알림 0건 최대채도 4·파란픽셀 0 / 알림 1건 파란픽셀 3339.
+  G4 innerHTML 싱크 0건 · G5 norms 통과(예외가 규칙을 먹지 않았다) · G6 캡처 수동 검수
+```
+
+**픽셀 오라클이 소스 검사가 못 잡을 결함을 잡았다.** 첫 구현은 바이저를
+`transform: scale(0.34) + filter: blur(7px)`로 눌러뒀는데 그건 색을 **줄일 뿐
+없애지 않았다** — 정지 상태 파란 픽셀 601개, 최대 채도 145. "평소 무채색"은 작게
+보인다는 뜻이 아니라 **없다**는 뜻이다. `clip-path`로 바꿔 잘린 영역을 아예 안 그리게
+했다(0개). 소스만 봤다면 "무채색으로 만들었다"고 보고했을 결함이다. 색값 3정지점은
+원본 렌더 실측이고 근거는 `ui/kiwoome-reference.md`에 있다.
+
 **리프 1.2.1이 "구조적으로 얇은 마진"이라고 적었던 `delayedRestFeedback`은
 오진이었다 — 리프 1.3.1에서 계측으로 잡았다.**
 
@@ -143,7 +161,7 @@ busy-wait로 막아 최악 조건을 만드는데, 그 바닥값이 이미 2700m
 
 ---
 
-## 3. 트리 — 브랜치 7 · 리프 15
+## 3. 트리 — 브랜치 7 · 리프 16
 
 | id | 작업 | 소유 경로 | 상태 |
 |---|---|---|---|
@@ -153,6 +171,7 @@ busy-wait로 막아 최악 조건을 만드는데, 그 바닥값이 이미 2700m
 | 1.2.2 | 좌측 이력 사이드바 268px(접힘) — 3영역 완성 | `app/shell.*` | READY |
 | 1.2.3 | 카드 12종 이식 | `app/canvas.js` `app/canvas.css` | WAITING 1.2.2 |
 | 1.3.1 | 알림 오브 창 | `app/orb.*` `app/lib/main/orb-window.js` | **VERIFIED** |
+| 1.3.2 | 오브 시각 재작업(키우미 참조) | `app/orb.{css,js,html}` `CLAUDE.md` `ui/soul.md` `GLOSSARY.md` `ui/kiwoome-reference.md` | **VERIFIED** |
 | 1.4.1 | 설정 모드 스왑 | `app/settings.*` `app/lib/settings-cards.js` | WAITING 1.2.2 |
 | 1.4.2 | 불연속 슬라이더 2종 | `app/lib/ui/discrete-slider.js` `app/lib/main/prefs.js` | WAITING 1.4.1 |
 | 1.5.1 | 에이전트 모드 스왑 | `app/lib/ui/agent-mode/**` | WAITING 1.2.3 |

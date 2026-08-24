@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-08-24T01:37:49.776Z",
+  "startedAt": "2026-08-24T07:24:36.911Z",
   "layout": {
     "scale": 1,
     "screen": {
@@ -47,7 +47,7 @@
   "restReceiptPaint": {
     "repeats": [
       {
-        "elapsedMs": 52,
+        "elapsedMs": 49,
         "verifiedVisible": true,
         "appVisible": true,
         "onboardingHidden": true,
@@ -55,7 +55,7 @@
         "nonzero": true
       },
       {
-        "elapsedMs": 51,
+        "elapsedMs": 52,
         "verifiedVisible": true,
         "appVisible": true,
         "onboardingHidden": true,
@@ -63,7 +63,7 @@
         "nonzero": true
       },
       {
-        "elapsedMs": 53,
+        "elapsedMs": 52,
         "verifiedVisible": true,
         "appVisible": true,
         "onboardingHidden": true,
@@ -71,7 +71,7 @@
         "nonzero": true
       },
       {
-        "elapsedMs": 53,
+        "elapsedMs": 52,
         "verifiedVisible": true,
         "appVisible": true,
         "onboardingHidden": true,
@@ -79,7 +79,7 @@
         "nonzero": true
       },
       {
-        "elapsedMs": 53,
+        "elapsedMs": 51,
         "verifiedVisible": true,
         "appVisible": true,
         "onboardingHidden": true,
@@ -87,7 +87,7 @@
         "nonzero": true
       },
       {
-        "elapsedMs": 53,
+        "elapsedMs": 52,
         "verifiedVisible": true,
         "appVisible": true,
         "onboardingHidden": true,
@@ -100,7 +100,7 @@
     "trials": [
       {
         "attempt": 1,
-        "elapsedMs": 2739.2785,
+        "elapsedMs": 2724.5459,
         "totalRunMs": 3013,
         "feedbackOk": true,
         "receiptPainted": true,
@@ -109,17 +109,17 @@
           "scheduledAtMs": 2100,
           "requestedMs": 600,
           "toleranceMs": 60,
-          "startedAtMs": 2103,
+          "startedAtMs": 2102,
           "actualMs": 600
         },
-        "stallEndedAtMs": 2703,
-        "appLatencyAfterStallMs": 36,
+        "stallEndedAtMs": 2702,
+        "appLatencyAfterStallMs": 23,
         "stallWithinSpec": true
       }
     ],
     "validTrial": {
       "attempt": 1,
-      "elapsedMs": 2739.2785,
+      "elapsedMs": 2724.5459,
       "totalRunMs": 3013,
       "feedbackOk": true,
       "receiptPainted": true,
@@ -128,11 +128,11 @@
         "scheduledAtMs": 2100,
         "requestedMs": 600,
         "toleranceMs": 60,
-        "startedAtMs": 2103,
+        "startedAtMs": 2102,
         "actualMs": 600
       },
-      "stallEndedAtMs": 2703,
-      "appLatencyAfterStallMs": 36,
+      "stallEndedAtMs": 2702,
+      "appLatencyAfterStallMs": 23,
       "stallWithinSpec": true
     },
     "producedValidTrial": true
@@ -576,7 +576,7 @@
   },
   "agentTurn": {
     "present": true,
-    "badge": "10:32 발화",
+    "badge": "16:19 발화",
     "mode": "실시간 (WS)",
     "source": "루틴 '검증 루틴' · 에이전트 발화 — 묻지 않은 턴입니다",
     "body": "005930 조건 도달 — 관측값 5.3 (임계 5). 값은 발화 시점 기준입니다 — 최신 확인은 다시 물어봐 주세요.",
@@ -1024,19 +1024,23 @@
       "width": 76,
       "height": 76,
       "borderRadius": "50%",
-      "arc": 0.2,
       "count": "1",
       "panelHidden": true,
       "state": "collapsed",
+      "alert": "fired",
+      "orbBackground": "rgba(255, 255, 255, 0.86)",
+      "visorTransition": "clip-path 0.34s cubic-bezier(0.2, 0, 0, 1), transform 0.34s cubic-bezier(0.2, 0, 0, 1)",
+      "visorTransform": "matrix(1, 0, 0, 1, 0, 0)",
+      "eyeCount": 2,
       "orbRegion": "drag",
       "coreRegion": "no-drag",
-      "ringHasBrand": true
+      "ringHasBrand": false
     },
     "panel": {
       "state": "expanded",
       "anchor": "bottom-right",
       "panelVisible": true,
-      "badge": "10:35 발화",
+      "badge": "16:22 발화",
       "mode": "실시간 (WS)",
       "relative": "3분 전",
       "body": "005930 조건 도달 — 관측값 5.3 (임계 5). 값은 발화 시점 기준입니다 — 최신 확인은 다시 물어봐 주세요.",
@@ -1055,8 +1059,38 @@
     },
     "isCircle76": true,
     "dragHandleContract": true,
-    "unreadArcShown": true,
-    "ringUsesSingleAccent": true,
+    "alertBeforeEvent": "none",
+    "pixelsQuiet": {
+      "size": {
+        "width": 114,
+        "height": 114
+      },
+      "opaquePixels": 10086,
+      "meanChroma": 0.59,
+      "maxChroma": 4,
+      "bluishPixels": 0,
+      "bluishRatio": 0
+    },
+    "pixelsAlerted": {
+      "size": {
+        "width": 114,
+        "height": 114
+      },
+      "opaquePixels": 10244,
+      "meanChroma": 46.47,
+      "maxChroma": 164,
+      "bluishPixels": 3339,
+      "bluishRatio": 0.3259
+    },
+    "quietStateWasClean": true,
+    "quietIsAchromatic": true,
+    "alertedShowsVisor": true,
+    "stateActuallyChangedPixels": true,
+    "unreadCountShown": true,
+    "glassStaysAchromatic": true,
+    "visorNotFadeIn": true,
+    "hasTwoEyes": true,
+    "magentaArcRemoved": true,
     "expandGrewWindow": true,
     "orbCornerStayed": true,
     "roundTripRestoresPosition": true,
@@ -1085,8 +1119,8 @@
     "noExecAffordanceOnCard": true
   },
   "captureIntegrity": {
-    "totalShots": 30,
+    "totalShots": 31,
     "duplicates": []
   },
-  "finishedAt": "2026-08-24T01:38:38.081Z"
+  "finishedAt": "2026-08-24T07:25:18.777Z"
 }

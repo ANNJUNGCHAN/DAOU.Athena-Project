@@ -183,6 +183,68 @@ if (preloadRaw) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────
+// 6. 마스코트 상태 계약 (2026-08-24 리프 1.3.2 — ui/kiwoome.zip 참조)
+//    평소 무채색 → 알림 시 딥블루 바이저. 색은 장식이 아니라 신호다.
+// ─────────────────────────────────────────────────────────────────────────
+if (htmlRaw && cssRaw && orbJsRaw) {
+  const html = stripHtmlComments(htmlRaw);
+  const orbJs = stripComments(orbJsRaw);
+
+  // (a) PNG 에셋 0건 — CSS/SVG로 다시 그린다(질의 확정 2026-08-24).
+  //     원본 렌더는 ui/에 참조로만 남고 앱에는 바이너리가 들어가지 않는다.
+  must(!/<img\b/i.test(html), "orb.html: <img>가 있다 — 마스코트는 CSS/SVG로 그린다(PNG 에셋 0건)");
+  for (const [src, name] of [[html, "orb.html"], [cssRaw, "orb.css"]]) {
+    must(!/\.png|\.jpe?g|\.webp/i.test(src), `${name}: 래스터 이미지 참조가 있다 — 앱에 바이너리를 넣지 않는다`);
+    must(!/data:image\//i.test(src), `${name}: data URI 이미지가 있다 — 같은 이유로 금지`);
+  }
+
+  // (b) 마스코트 요소가 실제로 있다 — 부재 검사만으로는 빈 껍데기도 통과한다.
+  must(/id="orbVisor"/.test(html), "orb.html: #orbVisor(딥블루 바이저)가 없다");
+  // 눈은 **둘**이어야 얼굴이다. class 속성 안 어디에 있어도 잡히게 단어 경계로 센다
+  // (`class="orb-eye orb-eye-l"`처럼 변형 클래스가 붙는다).
+  const eyes = (html.match(/class="[^"]*\borb-eye\b/g) || []).length;
+  must(eyes === 2, `orb.html: .orb-eye가 ${eyes}개 — 눈은 둘이어야 얼굴로 읽힌다`);
+  must(/#orbVisor\s*\{/.test(cssRaw), "orb.css: #orbVisor 규칙이 없다");
+
+  // (c) **유리는 끝까지 무채색이다.** 바이저는 유리 위의 틴트가 아니라 유리 뒤의
+  //     굴절 대상이다(soul.md §7 두 조항을 동시에 만족시키는 유일한 배치).
+  //     #orb의 배경은 백색 알파만이어야 한다 — 색이 섞이면 그건 틴트다.
+  const orbRule = /#orb\s*\{[^}]*\}/.exec(cssRaw);
+  if (orbRule) {
+    const bg = /background-color:\s*([^;]+);/.exec(orbRule[0]);
+    must(!!bg && /rgba\(\s*255\s*,\s*255\s*,\s*255\s*,/.test(bg[1]),
+      "orb.css: #orb의 background-color가 백색 알파가 아니다 — 유리에 틴트를 칠하면 안 된다(soul.md §7)");
+  }
+
+  // (d) 신호색은 토큰 하나로만 — 리터럴이 흩어지면 두 벌이 된다(1.1.2에서 겪은 결함).
+  must(/--color-kiwoome-visor/.test(cssRaw),
+    "orb.css: 바이저 색을 --color-kiwoome-visor 토큰으로 써야 한다(리터럴 산재 금지)");
+
+  // (e) **페이드로 등장하지 않는다**(soul.md §7 — 유리는 opacity가 아니라 굴절 변조로
+  //     나타난다). 바이저 전이에 opacity만 걸리면 그 금지에 걸린다.
+  const visorRule = /#orbVisor\s*\{[^}]*\}/.exec(cssRaw);
+  if (visorRule) {
+    const tr = /transition:\s*([^;]+);/.exec(visorRule[0]);
+    must(!!tr, "orb.css: #orbVisor에 전이가 없다 — 상태 변화가 뚝 끊긴다");
+    if (tr) {
+      must(!/^\s*opacity\b/.test(tr[1]) || /transform|filter|scale/.test(tr[1]),
+        "orb.css: #orbVisor 전이에 기하 변조가 없다 — opacity 페이드가 아니라 clip-path/transform으로 드러나야 한다(soul.md §7)");
+    }
+  }
+
+  // (f) 신호는 화면당 한 곳 — 얼굴이 드러나면 마젠타 호는 꺼진다.
+  //     상호 배타를 한 함수가 책임져야 두 곳에서 따로 켜지는 사고가 안 난다.
+  must(/function renderPresence\s*\(/.test(orbJs),
+    "orb.js: renderPresence()가 없다 — 호와 얼굴의 상호 배타를 한 곳에서 정해야 한다");
+  // JS는 `dataset.alert`, CSS는 `[data-alert=…]`로 같은 속성을 만진다 — 둘 다 받는다.
+  must(/dataset\.alert|data-alert/.test(orbJs) && /data-alert/.test(cssRaw),
+    "orb.js/orb.css: data-alert 상태 속성이 없다 — 무채색↔발화 두 상태를 구분해야 한다");
+  // 발화 상태에서만 색이 존재한다 — 무채색 기본 규칙을 CSS가 실제로 그렇게 쓰는지.
+  must(/\[data-alert="fired"\][^{]*#orbVisor/.test(cssRaw),
+    "orb.css: 바이저가 [data-alert=\"fired\"]에 묶여 있지 않다 — 평소에도 색이 보인다");
+}
+
+// ─────────────────────────────────────────────────────────────────────────
 if (failures.length > 0) {
   console.error("오브 계약 검사 실패:");
   for (const f of failures) console.error(`  - ${f}`);

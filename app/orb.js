@@ -1,4 +1,4 @@
-// 알림 오브 렌더러 (2026-08-24 리프 1.3.1).
+// 알림 오브 렌더러 (2026-08-24 리프 1.3.1 · 시각 재작업 1.3.2).
 //
 // nodeIntegration:false / contextIsolation:true / sandbox:true — preload.js의
 // window.athena 다리로만 main과 통신한다. lib/routine-turn.js는 orb.html이
@@ -18,7 +18,6 @@
 
   const $root = document.getElementById('orbRoot');
   const $panel = document.getElementById('orbPanel');
-  const $ring = document.getElementById('orbRing');
   const $count = document.getElementById('orbCount');
   const $toggle = document.getElementById('orbToggle');
   const $close = document.getElementById('orbClose');
@@ -30,23 +29,34 @@
   const $card = document.getElementById('orbCard');
   const $source = document.getElementById('orbSource');
 
-  // 미확인 알림. 링의 호(arc)가 이 배열의 길이를 그린다 — 진행률 흉내가 아니라
-  // 실제 수치다. 펼치면 가장 최근 것을 보여주고 전부 확인 처리한다.
+  // 미확인 알림. 이 배열이 비어 있으면 오브는 무채색이고, 하나라도 있으면 얼굴이
+  // 드러난다(renderPresence). 펼치면 가장 최근 것을 보여주고 전부 확인 처리한다.
   const unread = [];
   let current = null;
   let expanded = false;
 
-  /** 호가 가득 차는 기준. 이 위로는 더 안 늘어나고 숫자가 진실을 말한다. */
-  const ARC_FULL_AT = 5;
-
-  function renderRing() {
+  /**
+   * 오브의 존재감 — **무채색 ↔ 발화 두 상태를 여기 한 곳에서만 정한다**
+   * (2026-08-24 리프 1.3.2, 키우미 참조).
+   *
+   * 평소 오브는 무채색 유리 구체다. 미확인 알림이 생겨야 딥블루 바이저와 눈이
+   * 드러난다 — 색이 장식이 아니라 **신호**다(ui/brand.md "무채색 구조가 신호가
+   * 되는 순간"). 신호는 화면당 한 곳이므로 이 창의 색은 바이저 하나뿐이고,
+   * 옛 판의 마젠타 호는 얼굴이 그 역할을 가져가면서 걷어냈다.
+   *
+   * 상태 소유자를 한 함수로 묶은 이유: 얼굴·수·aria 라벨이 서로 다른 곳에서
+   * 켜지면 "얼굴은 떴는데 수는 0"처럼 서로 어긋난 화면이 나온다.
+   */
+  function renderPresence() {
     const n = unread.length;
-    $ring.style.setProperty('--orb-arc', String(Math.min(n, ARC_FULL_AT) / ARC_FULL_AT));
+    const fired = n > 0;
+    $root.dataset.alert = fired ? 'fired' : 'none';
     // 0을 그리지 않는다 — 없는 알림을 있는 것처럼 보이게 하는 가장 흔한 방법이다.
-    $count.textContent = n > 0 ? String(n) : '';
+    $count.textContent = fired ? String(n) : '';
+    // 스크린 리더에는 색이 안 들리므로 상태를 라벨로도 말한다.
     $toggle.setAttribute(
       'aria-label',
-      n > 0 ? `읽지 않은 알림 ${n}건 펼치기` : '알림 펼치기',
+      fired ? `읽지 않은 알림 ${n}건 펼치기` : '알림 펼치기',
     );
   }
 
@@ -121,7 +131,7 @@
       // 펼치는 순간 전부 확인 처리한다 — 사용자가 본 것을 안 봤다고 하지 않는다.
       current = unread.length ? unread[unread.length - 1] : current;
       unread.length = 0;
-      renderRing();
+      renderPresence();
       if (current) renderPanel(current);
     }
   });
@@ -135,7 +145,7 @@
       return;
     }
     unread.push(event);
-    renderRing();
+    renderPresence();
   });
 
   $toggle.addEventListener('click', () => setExpanded(!expanded));
@@ -157,5 +167,5 @@
     }
   });
 
-  renderRing();
+  renderPresence();
 })();
