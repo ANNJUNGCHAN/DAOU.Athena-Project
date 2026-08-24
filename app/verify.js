@@ -2000,6 +2000,10 @@ app.whenReady().then(async () => {
       body: txt('orbBody'),
       source: txt('orbSource'),
       cardRows: document.querySelectorAll('#orbCard .orb-row').length,
+      // 대표 카드가 스크롤 뒤로 잘리는지 — 잘리면 숫자가 안 읽힌다(soul.md §8).
+      // 264px 시절 5줄 중 2줄만 보이던 실측 결함의 회귀 가드다(캡처로 발견).
+      cardScrollHeight: document.getElementById('orbCard').scrollHeight,
+      cardClientHeight: document.getElementById('orbCard').clientHeight,
       // 펼치면 전부 확인 처리 — 본 것을 안 봤다고 하지 않는다.
       arcAfterOpen: Number(document.getElementById('orbRing').style.getPropertyValue('--orb-arc')),
       countAfterOpen: txt('orbCount'),
@@ -2046,6 +2050,9 @@ app.whenReady().then(async () => {
     // 시점 고지 — 결정론 템플릿의 문장을 그대로 쓰는지
     statesValueIsAtFireTime: /발화 시점 기준/.test(orbPanelProbe.body || ''),
     representativeCardRendered: orbPanelProbe.cardRows >= 3,
+    // 대표 카드 전체가 스크롤 없이 보인다 — 값이 잘리면 카드가 아니라 미끼다.
+    representativeCardFullyVisible:
+      orbPanelProbe.cardScrollHeight <= orbPanelProbe.cardClientHeight + 2,
     markedReadOnOpen: orbPanelProbe.arcAfterOpen === 0 && orbPanelProbe.countAfterOpen === '',
     // (c) 없어야 하는 것
     noInputSurface: orbPanelProbe.inputCount === 0,
@@ -2056,7 +2063,7 @@ app.whenReady().then(async () => {
     'isCircle76', 'dragHandleContract', 'unreadArcShown', 'ringUsesSingleAccent',
     'expandGrewWindow', 'orbCornerStayed', 'roundTripRestoresPosition',
     'hasFiredBadge', 'hasModeLabel', 'hasRelativeTime', 'hasSourceLabel',
-    'statesValueIsAtFireTime', 'representativeCardRendered', 'markedReadOnOpen',
+    'statesValueIsAtFireTime', 'representativeCardRendered', 'representativeCardFullyVisible', 'markedReadOnOpen',
     'noInputSurface', 'onlyAllowedButtons',
   ]) {
     assertOk(`orbWindow.${key}`, report.orbWindow[key] === true);
