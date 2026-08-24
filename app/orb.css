@@ -199,6 +199,13 @@ html, body {
   -webkit-app-region: no-drag;
 }
 
+/* 넘칠 때만 보이는 얇은 스크롤바 — 기본 Windows 스크롤바의 화살표 버튼은
+ * 이 크기의 표면에서 카드보다 눈에 띈다(canvas.css .grid와 같은 처리). */
+.orb-card::-webkit-scrollbar { width: 6px; }
+.orb-card::-webkit-scrollbar-track { background: transparent; }
+.orb-card::-webkit-scrollbar-thumb { background: rgb(16 19 26 / 18%); border-radius: 999px; }
+.orb-card::-webkit-scrollbar-thumb:hover { background: rgb(16 19 26 / 32%); }
+
 .orb-row {
   display: flex;
   align-items: baseline;

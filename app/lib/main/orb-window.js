@@ -17,9 +17,12 @@ const { resolveWindowHtmlPath } = require('./window-readiness');
 const ORB_SIZE = 76;
 /** 데스크톱 구석에서 띄우는 여백. 작업 표시줄은 workArea가 이미 뺀 영역이다. */
 const ORB_MARGIN = 24;
-/** 펼침 패널 치수 — 대화체 문장 1 + 대표 카드 1 + 더보기가 들어가는 최소치. */
+/** 펼침 패널 치수 — 대화체 문장 1 + 대표 카드 1 + 더보기가 들어가는 최소치.
+ * 2026-08-24 실측 정정: 264px에서는 대표 카드 5줄 중 2줄만 보이고 나머지가 스크롤
+ * 뒤로 숨었다(캡처 23-orb-expanded.png). 숫자가 안 읽히면 실패다(soul.md §8) —
+ * 본문 2줄 + 카드 5줄이 스크롤 없이 들어가는 높이로 올린다. */
 const EXPANDED_WIDTH = 360;
-const EXPANDED_HEIGHT = 264;
+const EXPANDED_HEIGHT = 328;
 
 /**
  * 부팅 시 오브를 놓을 자리 — 워크에어리어 우하단 구석.
