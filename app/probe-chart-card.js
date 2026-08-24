@@ -28,21 +28,21 @@ function wait(ms) { return new Promise((r) => setTimeout(r, ms)); }
 async function main() {
   const mainMod = require('./main.js');
   await mainMod.createWindows();
-  const { canvasWin } = mainMod.getWins();
-  if (!canvasWin) throw new Error('canvasWin을 못 찾았다 — getWins() 반환 형상 확인 필요');
+  const { shellWin } = mainMod.getWins();
+  if (!shellWin) throw new Error('shellWin을 못 찾았다 — getWins() 반환 형상 확인 필요');
 
-  canvasWin.show();
+  shellWin.show();
   await wait(400);
 
-  const before = await canvasWin.webContents.executeJavaScript(`document.querySelectorAll('.card').length`);
+  const before = await shellWin.webContents.executeJavaScript(`document.querySelectorAll('.card').length`);
 
   // addCard는 canvas.js의 스크립트 전역 함수 — classic script라 window에 걸린다.
-  await canvasWin.webContents.executeJavaScript(`window.addCard('chart')`);
+  await shellWin.webContents.executeJavaScript(`window.addCard('chart')`);
   // createChartCard는 동적 import + lightweight-charts 마운트라 비동기다. 카드
   // 개수(동기, makeCard가 즉시 DOM에 붙임)와 실제 캔버스 엘리먼트(비동기) 둘 다 잰다.
   await wait(1500);
 
-  const report = await canvasWin.webContents.executeJavaScript(`(() => {
+  const report = await shellWin.webContents.executeJavaScript(`(() => {
     const card = document.querySelector('.card.chart');
     if (!card) return { cardPresent: false };
     const canvases = card.querySelectorAll('canvas');
@@ -63,13 +63,13 @@ async function main() {
     'utf-8'
   );
 
-  const img = await canvasWin.webContents.capturePage();
+  const img = await shellWin.webContents.capturePage();
   fs.writeFileSync(path.join(CAPTURES, 'CC-101-chart-card.png'), img.toPNG());
 
   // 카드 닫기(destroy) 누수 확인 — 닫기 버튼 클릭 후 canvas 엘리먼트가 실제로 사라지는지.
-  await canvasWin.webContents.executeJavaScript(`document.querySelector('.card.chart .uk-card-close').click()`);
+  await shellWin.webContents.executeJavaScript(`document.querySelector('.card.chart .uk-card-close').click()`);
   await wait(300);
-  const afterClose = await canvasWin.webContents.executeJavaScript(`({
+  const afterClose = await shellWin.webContents.executeJavaScript(`({
     cardStillPresent: !!document.querySelector('.card.chart'),
     canvasNodesRemaining: document.querySelectorAll('.card.chart canvas').length,
   })`);

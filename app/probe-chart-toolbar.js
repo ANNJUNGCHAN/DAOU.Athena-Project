@@ -59,14 +59,14 @@ const MEASURE_PANES_JS = `(() => {
   };
 })()`;
 
-async function selectChartForm(canvasWin, label) {
-  await canvasWin.webContents.executeJavaScript(`(() => {
+async function selectChartForm(shellWin, label) {
+  await shellWin.webContents.executeJavaScript(`(() => {
     const card = document.querySelector('.card.chart');
     const formBtn = Array.from(card.querySelectorAll('.chart-toolbar-btn')).find(b => b.textContent.includes('▦'));
     formBtn.click();
   })()`);
   await wait(80);
-  await canvasWin.webContents.executeJavaScript(`(() => {
+  await shellWin.webContents.executeJavaScript(`(() => {
     const card = document.querySelector('.card.chart');
     const panel = card.querySelector('.chart-toolbar-dropdown');
     const opt = panel && Array.from(panel.querySelectorAll('.chart-toolbar-dropdown-item')).find(b => b.textContent === ${JSON.stringify(label)});
@@ -78,23 +78,23 @@ async function selectChartForm(canvasWin, label) {
 async function main() {
   const mainMod = require('./main.js');
   await mainMod.createWindows();
-  const { canvasWin } = mainMod.getWins();
-  if (!canvasWin) throw new Error('canvasWin을 못 찾았다');
+  const { shellWin } = mainMod.getWins();
+  if (!shellWin) throw new Error('shellWin을 못 찾았다');
 
-  canvasWin.show();
+  shellWin.show();
   await wait(400);
 
-  await canvasWin.webContents.executeJavaScript(`window.addCard('chart')`);
+  await shellWin.webContents.executeJavaScript(`window.addCard('chart')`);
   await wait(1500); // createChartCard는 동적 import + 비동기 마운트
 
   const report = {};
 
   // ---- 기본 상태(캔들·일봉) 스크린샷 — 전환 실험 전에 먼저 뜬다 ----
-  const toolbarImg = await canvasWin.webContents.capturePage();
+  const toolbarImg = await shellWin.webContents.capturePage();
   fs.writeFileSync(path.join(CAPTURES, 'CC-102-toolbar.png'), toolbarImg.toPNG());
 
   // ---- ① 주기 탭: 일→주 전환 시 활성 탭이 바뀐다 ----
-  report.periodSwitch = await canvasWin.webContents.executeJavaScript(`(() => {
+  report.periodSwitch = await shellWin.webContents.executeJavaScript(`(() => {
     const card = document.querySelector('.card.chart');
     const tabs = Array.from(card.querySelectorAll('.chart-toolbar-tab'));
     const dayTab = tabs.find(b => b.textContent === '일');
@@ -107,7 +107,7 @@ async function main() {
   await wait(200);
 
   // 세분 드롭다운 — 분 탭으로 전환하면 세분 버튼이 나타나야 한다.
-  report.intervalDropdown = await canvasWin.webContents.executeJavaScript(`(() => {
+  report.intervalDropdown = await shellWin.webContents.executeJavaScript(`(() => {
     const card = document.querySelector('.card.chart');
     const tabs = Array.from(card.querySelectorAll('.chart-toolbar-tab'));
     const minTab = tabs.find(b => b.textContent === '분');
@@ -126,7 +126,7 @@ async function main() {
   await wait(200);
 
   // 일봉으로 복귀(다음 검사를 위해)
-  await canvasWin.webContents.executeJavaScript(`(() => {
+  await shellWin.webContents.executeJavaScript(`(() => {
     const card = document.querySelector('.card.chart');
     const dayTab = Array.from(card.querySelectorAll('.chart-toolbar-tab')).find(b => b.textContent === '일');
     dayTab.click();
@@ -134,7 +134,7 @@ async function main() {
   await wait(200);
 
   // ---- ② 차트모양 드롭다운: 4종 라벨 확인 + 형식마다 가격/거래량 pane 분리 유지 ----
-  report.formLabels = await canvasWin.webContents.executeJavaScript(`(() => {
+  report.formLabels = await shellWin.webContents.executeJavaScript(`(() => {
     const card = document.querySelector('.card.chart');
     const formBtn = Array.from(card.querySelectorAll('.chart-toolbar-btn')).find(b => b.textContent.includes('▦'));
     formBtn.click();
@@ -148,19 +148,19 @@ async function main() {
 
   report.paneSeparationByForm = {};
   for (const label of ['바', '캔들', '라인', '영역']) {
-    await selectChartForm(canvasWin, label);
-    const measured = await canvasWin.webContents.executeJavaScript(MEASURE_PANES_JS);
+    await selectChartForm(shellWin, label);
+    const measured = await shellWin.webContents.executeJavaScript(MEASURE_PANES_JS);
     report.paneSeparationByForm[label] = measured;
     if (label === '라인') {
-      const lineImg = await canvasWin.webContents.capturePage();
+      const lineImg = await shellWin.webContents.capturePage();
       fs.writeFileSync(path.join(CAPTURES, 'CC-102-form-line.png'), lineImg.toPNG());
     }
   }
   // 캔들(기본값)로 복귀 — 이후 검사(전체화면 캡처 등)는 기본 상태로 한다.
-  await selectChartForm(canvasWin, '캔들');
+  await selectChartForm(shellWin, '캔들');
 
   // ---- ③ 수정주가 토글 ----
-  report.adjustedToggle = await canvasWin.webContents.executeJavaScript(`(() => {
+  report.adjustedToggle = await shellWin.webContents.executeJavaScript(`(() => {
     const card = document.querySelector('.card.chart');
     const btn = card.querySelector('.chart-toolbar-adjusted');
     const before = btn.textContent;
@@ -171,11 +171,11 @@ async function main() {
   })()`);
   await wait(200);
   // 수정주가 원상복귀(기본 on)
-  await canvasWin.webContents.executeJavaScript(`document.querySelector('.card.chart .chart-toolbar-adjusted').click()`);
+  await shellWin.webContents.executeJavaScript(`document.querySelector('.card.chart .chart-toolbar-adjusted').click()`);
   await wait(150);
 
   // ---- ④ 전체화면 진입/복귀(캔들·일봉 기본 상태에서) ----
-  report.fullscreen = await canvasWin.webContents.executeJavaScript(`(() => {
+  report.fullscreen = await shellWin.webContents.executeJavaScript(`(() => {
     const card = document.querySelector('.card.chart');
     const grid = document.getElementById('grid');
     const fsBtn = card.querySelector('.chart-toolbar-fullscreen');
@@ -188,11 +188,11 @@ async function main() {
     return { beforeExpanded, beforeLabel, afterEnterExpanded, afterEnterGridHasExpanded, afterEnterLabel };
   })()`);
   await wait(300);
-  report.fullscreenPaneSeparation = await canvasWin.webContents.executeJavaScript(MEASURE_PANES_JS);
-  const fsImg = await canvasWin.webContents.capturePage();
+  report.fullscreenPaneSeparation = await shellWin.webContents.executeJavaScript(MEASURE_PANES_JS);
+  const fsImg = await shellWin.webContents.capturePage();
   fs.writeFileSync(path.join(CAPTURES, 'CC-102-fullscreen.png'), fsImg.toPNG());
 
-  report.fullscreenExit = await canvasWin.webContents.executeJavaScript(`(() => {
+  report.fullscreenExit = await shellWin.webContents.executeJavaScript(`(() => {
     const card = document.querySelector('.card.chart');
     const grid = document.getElementById('grid');
     const fsBtn = card.querySelector('.chart-toolbar-fullscreen');

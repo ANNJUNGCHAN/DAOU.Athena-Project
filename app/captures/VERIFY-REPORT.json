@@ -1,31 +1,27 @@
 {
-  "startedAt": "2026-08-23T16:26:38.194Z",
+  "startedAt": "2026-08-24T00:13:15.518Z",
   "layout": {
     "scale": 1,
     "screen": {
       "sw": 1920,
       "sh": 1152
     },
-    "canvasW": 1120,
-    "canvasH": 580,
-    "chatW": 640,
-    "chatBaseH": 176,
-    "chatMaxH": 560,
-    "originX": 400,
-    "originY": 198,
-    "chatOriginX": 640
+    "shellW": 1520,
+    "shellH": 760,
+    "originX": 200,
+    "originY": 196
   },
   "bootChatOnly": {
-    "canvasVisibleAtBoot": false,
+    "openWindowCount": 1,
     "chatVisibleAtBoot": true,
     "shots": {
       "boot": {
-        "width": 960,
-        "height": 264
+        "width": 2280,
+        "height": 1140
       },
       "idle": {
-        "width": 960,
-        "height": 288
+        "width": 2280,
+        "height": 1140
       }
     },
     "chatBootedAfterBoot": true,
@@ -50,7 +46,7 @@
   "restReceiptPaint": {
     "repeats": [
       {
-        "elapsedMs": 52,
+        "elapsedMs": 39,
         "verifiedVisible": true,
         "appVisible": true,
         "onboardingHidden": true,
@@ -66,7 +62,7 @@
         "nonzero": true
       },
       {
-        "elapsedMs": 53,
+        "elapsedMs": 54,
         "verifiedVisible": true,
         "appVisible": true,
         "onboardingHidden": true,
@@ -74,7 +70,7 @@
         "nonzero": true
       },
       {
-        "elapsedMs": 53,
+        "elapsedMs": 52,
         "verifiedVisible": true,
         "appVisible": true,
         "onboardingHidden": true,
@@ -82,7 +78,7 @@
         "nonzero": true
       },
       {
-        "elapsedMs": 52,
+        "elapsedMs": 53,
         "verifiedVisible": true,
         "appVisible": true,
         "onboardingHidden": true,
@@ -90,7 +86,7 @@
         "nonzero": true
       },
       {
-        "elapsedMs": 53,
+        "elapsedMs": 54,
         "verifiedVisible": true,
         "appVisible": true,
         "onboardingHidden": true,
@@ -100,128 +96,114 @@
     ]
   },
   "delayedRestFeedback": {
-    "elapsedMs": 2744.3399999999997,
-    "totalRunMs": 3004,
+    "elapsedMs": 2739.3563000000004,
+    "totalRunMs": 3011,
     "feedbackOk": true,
     "receiptPainted": true,
     "renderedCount": 0
   },
-  "dotScreenPoint": {
-    "x": 662.6666679382324,
-    "y": 937.3333435058594
+  "canvasAlwaysVisible": {
+    "cardCount": 3,
+    "allCardsNonzero": true,
+    "canvasRegionNonzero": true,
+    "chatRegionWidth": 400,
+    "canvasLeftOfChat": true,
+    "noInlineClipPath": true,
+    "noInlineBackdropFilter": true,
+    "computedSheenFilter": "blur(0px)"
   },
   "osCaptureAttempted": {
     "ok": true
   },
-  "expand": {
-    "frameCount": 31,
-    "p50": 17.900000000000546,
-    "p95": 18.199999999999818,
-    "max": 36,
-    "min": 17
-  },
-  "collapse": {
-    "frameCount": 33,
-    "p50": 17.800000000000182,
-    "p95": 18.100000000000364,
-    "max": 23.199999999999818,
-    "min": 17.100000000000364
-  },
-  "afterCollapse": {
-    "canvasVisible": false
-  },
-  "independence": {
-    "initial": {
-      "canvas": {
-        "x": 400,
-        "y": 198,
-        "width": 1120,
-        "height": 580
-      },
-      "chat": {
-        "x": 640,
-        "y": 611,
-        "width": 640,
-        "height": 350
-      }
+  "regionContract": {
+    "shellInitial": {
+      "x": 200,
+      "y": 196,
+      "width": 1520,
+      "height": 760
     },
-    "afterCanvasMove": {
-      "canvas": {
-        "x": 480,
-        "y": 198,
-        "width": 1120,
-        "height": 580
-      },
-      "chat": {
-        "x": 640,
-        "y": 611,
-        "width": 640,
-        "height": 350
-      }
+    "afterMove": {
+      "x": 280,
+      "y": 196,
+      "width": 1520,
+      "height": 760
     },
-    "afterChatResize": {
-      "canvas": {
-        "x": 480,
-        "y": 198,
-        "width": 1120,
-        "height": 580
-      },
-      "chat": {
-        "x": 640,
-        "y": 611,
-        "width": 640,
-        "height": 451
-      }
+    "narrowW": 1280,
+    "widthsInitial": {
+      "canvas": 1089,
+      "chat": 400
     },
-    "canvasMovedButChatUnchanged": true,
-    "chatResizedButCanvasUnchanged": true
+    "widthsAfterMove": {
+      "canvas": 1089,
+      "chat": 400
+    },
+    "widthsAfterNarrow": {
+      "canvas": 849,
+      "chat": 400
+    },
+    "moveKeepsWidths": true,
+    "chatNeverShrinks": true,
+    "canvasAbsorbsShrink": true
   },
   "accessibilityShotsTaken": [
-    "05-a11y-reduced-transparency-canvas.png",
-    "05-a11y-reduced-transparency-chat.png",
-    "06-a11y-prefers-contrast-canvas.png",
-    "06-a11y-prefers-contrast-chat.png",
-    "07-a11y-reduced-motion-canvas.png",
-    "07-a11y-reduced-motion-chat.png"
+    "05-a11y-reduced-transparency.png",
+    "06-a11y-prefers-contrast.png",
+    "07-a11y-reduced-motion.png"
   ],
   "e2eTrigger": {
     "reachedDoneState": true,
     "boundsBeforeQuery": {
-      "x": 640,
-      "y": 778,
-      "width": 640,
-      "height": 176
+      "x": 200,
+      "y": 196,
+      "width": 1520,
+      "height": 760
     },
     "boundsAfterQuery": {
-      "x": 640,
-      "y": 733,
-      "width": 640,
-      "height": 224
+      "x": 200,
+      "y": 196,
+      "width": 1520,
+      "height": 760
     },
-    "grewTallerThanBase": true,
-    "grownByPx": 48,
+    "turnsBeforeQuery": 0,
+    "history": {
+      "scrollHeight": 633,
+      "clientHeight": 633,
+      "scrollTop": 0,
+      "turnCount": 2,
+      "atBottom": true,
+      "overflows": false
+    },
+    "windowHeightUnchanged": true,
+    "historyGrew": true,
+    "stuckToBottom": true,
     "finalAnswerText": "캔버스 창에 스트림, 리더, 공통 테이블을 띄웠습니다.",
     "cardChipCount": 3
   },
-  "manualResize": {
-    "beforeDrag": {
-      "x": 640,
-      "y": 733,
-      "width": 640,
-      "height": 224
+  "userResizeRespected": {
+    "beforeResize": {
+      "x": 200,
+      "y": 196,
+      "width": 1520,
+      "height": 760
     },
-    "afterDrag": {
-      "x": 640,
-      "y": 573,
-      "width": 640,
-      "height": 385
+    "afterResize": {
+      "x": 200,
+      "y": 196,
+      "width": 1520,
+      "height": 880
     },
-    "grewByDrag": true,
-    "bottomEdgePinned": true
+    "afterContentPush": {
+      "x": 200,
+      "y": 196,
+      "width": 1520,
+      "height": 880
+    },
+    "resizeApplied": true,
+    "contentDidNotResizeWindow": true
   },
   "settingsSurface": {
     "noNewWindowOnOpen": true,
-    "stillTwoWindows": true,
+    "windowCountUnchanged": true,
     "noNewWindowOnSecondClick": true,
     "renderedInChatWindow": true,
     "chatModeSteppedAside": true,
@@ -234,7 +216,7 @@
     "modelPanelHasClaudeAccountRow": true,
     "modelPanelHasModelChips": true,
     "noSettingsCardsOnCanvas": true,
-    "chatGrewToMax": true,
+    "windowSizeUnchangedWhileOpen": true,
     "dotIsRealButton": true,
     "noTrIdLeak": true,
     "noBearerLeak": true,
@@ -262,31 +244,22 @@
     "turnCountAfter": 1
   },
   "windowBasics": {
-    "zoomInSyncsBothWindows": true,
-    "zoomAfterIn": {
-      "chat": 1.21,
-      "canvas": 1.21
-    },
+    "zoomInApplied": true,
+    "zoomAfterIn": 1.21,
     "zoomResetReturnsTo1": true,
     "movedAnchorKept": true,
     "anchorKept": {
       "xKept": true,
-      "bottomKept": true,
-      "heightApplied": true
+      "yKept": true,
+      "sizeKept": true
     },
-    "canvasWasVisible": true,
-    "minimizeLowersBoth": true,
-    "restorePairsBoth": true
+    "minimizeLowersWindow": true,
+    "restoreRaisesWindow": true
   },
   "closeToBackground": {
-    "canvasVisibleBeforeClose": true,
-    "bothHiddenAfterClose": true,
-    "visibleAfterClose": {
-      "chat": false,
-      "canvas": false
-    },
-    "chatRestored": true,
-    "canvasRestoredWithPair": true
+    "hiddenAfterClose": true,
+    "restoredFromTrayPath": true,
+    "windowStillAlive": true
   },
   "cardLayout": {
     "arrivalOrder": [
@@ -326,8 +299,8 @@
         "full"
       ],
       "count": 3,
-      "scrollHeight": 836,
-      "clientHeight": 290
+      "scrollHeight": 808,
+      "clientHeight": 337
     }
   },
   "dragStandard": {
@@ -337,33 +310,32 @@
     "appRegions": {
       "strip": "drag",
       "controlStrip": "none",
-      "grip": "no-drag",
       "winBtn": "no-drag",
       "history": "none",
+      "grid": "none",
       "settingsHead": "drag"
     },
-    "canvasStripRegion": "drag",
-    "pairFollow": {
-      "cvBefore": {
-        "x": 400,
-        "y": 198,
-        "width": 1120,
-        "height": 580
+    "foreignMove": {
+      "foreignBefore": {
+        "x": 200,
+        "y": 196,
+        "width": 1520,
+        "height": 760
       },
-      "cvAfter": {
-        "x": 460,
-        "y": 238,
-        "width": 1120,
-        "height": 580
+      "foreignAfter": {
+        "x": 260,
+        "y": 236,
+        "width": 1520,
+        "height": 760
       },
-      "cvRestored": {
-        "x": 400,
-        "y": 198,
-        "width": 1120,
-        "height": 580
+      "foreignRestored": {
+        "x": 200,
+        "y": 196,
+        "width": 1520,
+        "height": 760
       },
-      "pairFollowed": true,
-      "pairReturned": true
+      "foreignMoveKept": true,
+      "foreignReturnKept": true
     }
   },
   "tableColumnFold": {
@@ -412,82 +384,64 @@
     "titleText": "검증13b 실배선 차트"
   },
   "windowPlacement": {
+    "workArea": {
+      "x": 0,
+      "y": 0,
+      "width": 1920,
+      "height": 1152
+    },
     "beforePlacement": {
-      "canvas": {
-        "x": 400,
-        "y": 198,
-        "width": 1120,
-        "height": 580
-      },
-      "chat": {
-        "x": 640,
-        "y": 778,
-        "width": 640,
-        "height": 176
-      }
+      "x": 200,
+      "y": 196,
+      "width": 1520,
+      "height": 760
     },
     "afterLeft": {
-      "canvas": {
-        "x": -80,
-        "y": 198,
-        "width": 1120,
-        "height": 580
-      },
-      "chat": {
-        "x": 160,
-        "y": 778,
-        "width": 640,
-        "height": 176
-      }
+      "x": -280,
+      "y": 196,
+      "width": 1520,
+      "height": 760
     },
     "afterRight": {
-      "canvas": {
-        "x": 880,
-        "y": 198,
-        "width": 1120,
-        "height": 580
-      },
-      "chat": {
-        "x": 1120,
-        "y": 778,
-        "width": 640,
-        "height": 176
-      }
+      "x": 680,
+      "y": 196,
+      "width": 1520,
+      "height": 760
     },
     "afterMaximize": {
-      "x": 1120,
-      "y": 394,
-      "width": 640,
-      "height": 560
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 1920,
+        "height": 1152
+      },
+      "isMaximized": true
     },
     "afterRestore": {
-      "x": 1120,
-      "y": 778,
-      "width": 640,
-      "height": 176
+      "bounds": {
+        "x": 680,
+        "y": 196,
+        "width": 1520,
+        "height": 760
+      },
+      "isMaximized": false
     },
     "afterCenter": {
-      "canvas": {
-        "x": 400,
-        "y": 198,
-        "width": 1120,
-        "height": 580
-      },
-      "chat": {
-        "x": 640,
-        "y": 778,
-        "width": 640,
-        "height": 176
-      }
+      "x": 200,
+      "y": 196,
+      "width": 1520,
+      "height": 760
     },
-    "pairMovedTogetherOnLeft": true,
-    "pairMovedTogetherOnRight": true,
+    "expectedLeftX": -280,
+    "expectedRightX": 680,
+    "leftCentersInLeftHalf": true,
+    "rightCentersInRightHalf": true,
     "leftDiffersFromRight": true,
     "sizeUnchangedOnLeft": true,
     "sizeUnchangedOnRight": true,
-    "maximizedViaWindowKey": true,
-    "maximizedReachedChatMaxH": true,
-    "restoredViaWindowKey": true,
+    "maximizeToggleMaximizes": true,
+    "restoreToggleUnmaximizes": true,
+    "restoreReturnsToPreMaxSize": true,
     "anchorKeptAfterSnap": true,
     "centerReturnsToBootOrigin": true
   },
@@ -569,30 +523,25 @@
     "nullRemovesModelLine": true
   },
   "glassLadder": {
-    "chatTokens": {
+    "tokens": {
       "window": 0.86,
       "card": 0.9,
       "canvas": 0.92,
       "windowMax": 0.95
     },
-    "canvasTokens": {
-      "window": 0.86,
-      "card": 0.9,
-      "canvas": 0.92,
-      "windowMax": 0.95
-    },
+    "shellAlpha": 0.86,
     "mosaicAlpha": 0.92,
     "cardAlpha": 0.9,
-    "chatAppAlpha": 0.86,
-    "tokensMatchAcrossWindows": true,
+    "chatAppRaw": "rgba(0, 0, 0, 0)",
     "ladderOrdered": true,
+    "shellMatchesWindowToken": true,
     "mosaicMatchesToken": true,
     "cardMatchesToken": true,
-    "chatAppMatchesWindowToken": true
+    "chatAppTransparent": true
   },
   "agentTurn": {
     "present": true,
-    "badge": "01:21 발화",
+    "badge": "09:07 발화",
     "mode": "실시간 (WS)",
     "source": "루틴 '검증 루틴' · 에이전트 발화 — 묻지 않은 턴입니다",
     "body": "005930 조건 도달 — 관측값 5.3 (임계 5). 값은 발화 시점 기준입니다 — 최신 확인은 다시 물어봐 주세요.",
@@ -603,10 +552,10 @@
     "appHidden": true,
     "firedAtLabel": true,
     "execDisabled": true,
-    "windowCount": 2
+    "windowCount": 1
   },
   "captureIntegrity": {
-    "totalShots": 20,
+    "totalShots": 14,
     "duplicates": []
   },
   "historySaveFailedBadge": {
@@ -1021,5 +970,5 @@
       }
     }
   },
-  "finishedAt": "2026-08-23T16:27:17.613Z"
+  "finishedAt": "2026-08-24T00:13:56.744Z"
 }

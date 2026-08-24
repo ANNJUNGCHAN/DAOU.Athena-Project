@@ -1,0 +1,146 @@
+/* 셸 창 레이아웃 — Codex형 창 모델(2026-08-24 리프 1.2.1).
+ *
+ * 이 파일이 하는 일은 하나다: **자기 창을 전제로 쓰인 두 렌더러의 스타일을
+ * 영역 스코프로 되돌린다.** canvas.css의 `.mosaic`과 chat.css의 `.app`은 둘 다
+ * `position: fixed; inset: 0`이다 — 각자 OS 창 하나를 통째로 차지하던 시절의
+ * 선언이다. 여기서 `position: absolute`로 낮추고 영역을 컨테이닝 블록으로 만든다.
+ * 원본 파일을 고치지 않는 이유: 그 값들은 유리 사다리·렌징·흡수 그라디언트의
+ * SSOT이고 verify.js 검증16이 직접 읽는다. 위치만 여기서 덮는다.
+ *
+ * shell.html의 링크 순서가 계약이다 — 이 파일은 canvas.css·chat.css **뒤**,
+ * access.css **앞**에 온다.
+ *
+ * 아직 없는 것(정직 기록): 좌측 이력 사이드바 268px은 리프 1.2.2다. 지금 셸은
+ * 2영역이다 — 빈 컨테이너를 미리 두지 않는다. */
+
+html, body { background: transparent; }
+body { margin: 0; overflow: hidden; }
+
+/* ---------- 창 표면 ----------
+ * 유리 사다리의 `--glass-window` 단이 여기다. 옛 판에서는 대화 창의 `.app`이
+ * 창 표면이었지만(chat.css), `.app`이 셸 위의 한 영역으로 내려오면서 표면 역할이
+ * 셸로 올라왔다. 값·문법은 chat.css `.app`에서 그대로 가져왔다 — 배경색은
+ * `--glass-alpha`(chat.js가 세팅) 폴백 `--glass-window`, 흡수는 background-image
+ * 델타로만, 깊이는 렌징 4요소(상단 하이라이트·좌측 엣지·하단 그림자·웜 이너 글로우).
+ * background-color를 background 축약형으로 되돌리지 마라 — verify.js 검증16이
+ * 이 값을 getComputedStyle().backgroundColor로 직접 읽는다. */
+#shell {
+  position: fixed;
+  inset: 0;
+  box-sizing: border-box;
+  display: flex;
+  gap: 10px;
+  /* 상단은 타이틀바(ui-kit.css .titlebar) 아래에서 시작한다 — 유리 자체는
+   * inset:0이라 바 뒤까지 이어져 크롬이 유리 위 값 단계로 얹힌다. */
+  padding: 32px 10px 10px;
+  background-color: rgba(255, 255, 255, var(--glass-alpha, var(--glass-window))); /* SSOT: tokens.css 유리 사다리 */
+  background-image:
+    linear-gradient(135deg,
+      rgba(255, 255, 255, 0.06) 0%,
+      rgba(255, 255, 255, 0) 46%,
+      rgba(255, 255, 255, 0.04) 100%);
+  transition: background-color 600ms var(--ease), background-image 600ms var(--ease);
+  border-radius: 16px;
+  border: 1px solid rgb(16 19 26 / 7%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 253, 248, 0.60),
+    inset 1px 0 0 rgba(255, 253, 248, 0.16),
+    inset 0 -1px 0 rgb(16 19 26 / 8%),
+    inset 0 0 60px rgba(255, 240, 214, 0.06),
+    0 18px 44px rgb(16 19 26 / 12%);
+  overflow: hidden;
+}
+
+/* ---------- 영역 ---------- */
+.shell-region {
+  position: relative; /* .mosaic/.app의 컨테이닝 블록 */
+  /* flex 자식의 기본 min-*: auto는 내용이 큰 영역을 줄지 못하게 만든다 —
+   * 캔버스에 넓은 표가 뜨면 채팅 영역을 밀어낸다. 0으로 낮춘다. */
+  min-width: 0;
+  min-height: 0;
+}
+
+/* 중앙 캔버스 — 유일한 출력 지점. 남는 폭을 전부 가진다. */
+#canvasRegion {
+  flex: 1 1 auto;
+}
+
+/* 우측 채팅 — 유일한 입력 지점. **어떤 상태에서도 접히지 않는다**(GLOSSARY §1).
+ * flex-shrink:0이 그 계약의 구현이다 — 캔버스 내용이 아무리 넓어도 이 400px은
+ * 줄지 않는다. 창이 좁아지면 줄어드는 쪽은 캔버스이고, 그 아래로는
+ * main.js DESIGN.minW(900)가 창 자체의 하한을 건다. */
+#chatRegion {
+  width: 400px;
+  flex-shrink: 0;
+}
+
+/* ---------- canvas.css 되돌리기 ---------- */
+#canvasRegion .mosaic {
+  position: absolute;
+  border-radius: 12px;
+  /* 창 확장/수축 연출이 사라졌으므로(리프 1.2.1) clip-path 힌트도 필요 없다. */
+  will-change: auto;
+}
+#canvasRegion .glass-sheen {
+  position: absolute;
+  border-radius: 12px;
+}
+/* 옛 상단 패딩 36px은 캔버스 **창**의 타이틀바 자리였다 — 타이틀바가 셸로
+ * 올라갔으므로 카드가 그만큼 아래로 밀릴 이유가 없다. */
+#canvasRegion .grid {
+  padding: 12px;
+}
+#canvasRegion .grid:empty::before {
+  content: '캔버스 대기 중 — 오른쪽 채팅에 질의를 보내면 이 자리에 카드가 뜬다';
+}
+
+/* ---------- chat.css 되돌리기 ----------
+ * 채팅 영역의 `.app`은 더 이상 창 표면이 아니다 — 셸 유리 위에 얹힌 투명한
+ * 레이아웃 열이다. 유리를 한 겹 더 칠하면 실효 불투명도가 곱해져 "그냥 검은 창"
+ * 회귀가 난다(2026-08-22 실측으로 두 번 겪은 결함 — chat.css .app 주석 참조).
+ * 자기 유리를 갖는 것은 창(#shell) · 캔버스(.mosaic) · 카드(.card) 셋뿐이다. */
+#chatRegion > .app {
+  position: absolute;
+  padding-top: 0;
+  background-color: transparent;
+  background-image: none;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+/* 400px 열에서는 28px 좌우 여백이 본문 폭을 지나치게 먹는다. */
+#chatRegion .history {
+  padding: 8px 16px 4px;
+}
+#chatRegion .input-stack {
+  padding-left: 4px;
+  padding-right: 4px;
+}
+/* 캔버스와 채팅 사이의 경계는 선이 아니라 광량으로 긋는다(soul.md §7 —
+ * 깊이는 값으로 만든다, 테두리 굵기가 아니라). */
+#chatRegion::before {
+  content: '';
+  position: absolute;
+  left: -5px;
+  top: 6px;
+  bottom: 6px;
+  width: 1px;
+  background: linear-gradient(180deg,
+    rgba(255, 253, 248, 0) 0%,
+    rgba(255, 253, 248, 0.34) 22%,
+    rgba(255, 253, 248, 0.34) 78%,
+    rgba(255, 253, 248, 0) 100%);
+  pointer-events: none;
+}
+
+/* ---------- 모드 패널 ----------
+ * 온보딩·인증·설정·주문은 셸 창 전체를 덮는다. `.app`(chat.css)이 이미
+ * `position: fixed; inset: 0`이라 위치는 그대로 두고 층만 올린다. */
+.shell-overlay {
+  z-index: 10;
+}
+
+/* 부팅 연출은 셸·크롬 위에 있어야 한다 — 연출이 끝나야 창이 확정된다. */
+.boot {
+  z-index: 20;
+}

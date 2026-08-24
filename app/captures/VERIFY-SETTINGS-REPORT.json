@@ -16,10 +16,9 @@
     "done": true
   },
   "onboarding.chatHeight.selfReturnedToBase": {
-    "heightBeforeStep3Done": 789,
-    "heightAfterStep3Done": 249,
-    "baseH": 248,
-    "shrunkBackToBase": true
+    "heightBeforeStep3Done": 760,
+    "heightAfterStep3Done": 760,
+    "shrunkBackToBase": false
   },
   "cli.list": {
     "providers": [
@@ -29,8 +28,8 @@
         "connected": true,
         "accounts": [
           {
-            "id": "claude:jcahn@daou.co.kr",
-            "label": "jcahn@daou.co.kr",
+            "id": "claude:ajc227ung@gmail.com",
+            "label": "ajc227ung@gmail.com",
             "active": true
           }
         ]
@@ -77,12 +76,12 @@
   },
   "account.register.ok(stubbedNetwork)": {
     "ok": true,
-    "id": "da8cddf7-881a-4a5e-a35b-f7cbff90f68d"
+    "id": "3fd6123b-ea9f-4231-b758-99b05e3dc432"
   },
   "account.list.afterRegister": {
     "accounts": [
       {
-        "id": "da8cddf7-881a-4a5e-a35b-f7cbff90f68d",
+        "id": "3fd6123b-ea9f-4231-b758-99b05e3dc432",
         "alias": "검증-성공계좌",
         "connected": true,
         "active": true,
@@ -111,7 +110,7 @@
   "account.list.afterOrderApiOn": {
     "accounts": [
       {
-        "id": "da8cddf7-881a-4a5e-a35b-f7cbff90f68d",
+        "id": "3fd6123b-ea9f-4231-b758-99b05e3dc432",
         "alias": "검증-성공계좌",
         "connected": true,
         "active": true,
@@ -139,8 +138,8 @@
   },
   "auth-token-status": {
     "state": "ready",
-    "expiresInSec": 2315259514,
-    "issuedAt": "2026-08-19T15:21:25.289Z"
+    "expiresInSec": 2314881901,
+    "issuedAt": "2026-08-24T00:14:57.534Z"
   },
   "auth-token-refresh": {
     "ok": true,

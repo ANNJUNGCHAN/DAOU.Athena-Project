@@ -3,7 +3,7 @@
 //
 // app/verify.js 검증12(컬럼 우선순위 fold — main 병합 시 검증10에서 재번호)의
 // 경로를 그대로 재사용한다 —
-// canvasWin에 app/data/wide-table-fold-fixtures.json의 실데이터를
+// shellWin에 app/data/wide-table-fold-fixtures.json의 실데이터를
 // 'athena:add-canvas-live'로 직접 주입 → canvas.js의 renderMcpTable() →
 // app/lib/column-fold.js가 실제 렌더 DOM에서 fold를 발동시킨다 → capturePage().
 // main.js를 거치지 않으므로 fixture/live 소스 분기와 무관한 순수 렌더러 검증이다.
@@ -44,8 +44,8 @@ async function shot(win, filePath) {
 app.whenReady().then(async () => {
   const mainMod = require('./main.js');
   await mainMod.createWindows();
-  const { chatWin, canvasWin } = mainMod.getWins();
-  await mainMod.expandCanvasWindow();
+  const { shellWin } = mainMod.getWins();
+  mainMod.revealShell({ focus: false });
   await wait(300);
 
   const wideFixtures = JSON.parse(
@@ -67,7 +67,7 @@ app.whenReady().then(async () => {
     const mockRow = {};
     for (const col of tr.columns) mockRow[col.key] = `v:${col.key}`;
 
-    canvasWin.webContents.send('athena:add-canvas-live', {
+    shellWin.webContents.send('athena:add-canvas-live', {
       status: 'success',
       envelope: {
         canvas_type: 'table',
@@ -78,7 +78,7 @@ app.whenReady().then(async () => {
     });
     await wait(300);
 
-    const foldProbe = await canvasWin.webContents.executeJavaScript(`
+    const foldProbe = await shellWin.webContents.executeJavaScript(`
       (() => {
         const card = document.querySelector('#grid .card.mcp-table');
         if (!card) return null;
@@ -93,7 +93,7 @@ app.whenReady().then(async () => {
       })()
     `);
 
-    await shot(canvasWin, filePath);
+    await shot(shellWin, filePath);
 
     const expected = foldByMappingId.get(tr.mapping_id) || null;
     const visibleColumns = foldProbe && foldProbe.headerCellCount;
@@ -126,7 +126,7 @@ app.whenReady().then(async () => {
   const allMatch = captureEntries.every((e) => e.matchesFoldSummary);
   const report = {
     generatedAt: new Date().toISOString(),
-    method: "app/capture-wide15.js — verify.js 검증12(컬럼 우선순위 fold) 경로를 15 TR 전부로 확장. canvasWin에 athena:add-canvas-live를 직접 주입 → renderMcpTable → webContents.capturePage().",
+    method: "app/capture-wide15.js — verify.js 검증12(컬럼 우선순위 fold) 경로를 15 TR 전부로 확장. shellWin에 athena:add-canvas-live를 직접 주입 → renderMcpTable → webContents.capturePage().",
     canvasWidthPx: wideFixtures.canvas_width_px,
     trCount: wideFixtures.trs.length,
     allMatchFoldSummary: allMatch,

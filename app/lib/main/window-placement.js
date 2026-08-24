@@ -1,9 +1,12 @@
-// 창 짝(캔버스 창 + 대화 창)을 워크에어리어의 절반에 배치하는 순수 좌표 계산.
+// 셸 창 하나를 워크에어리어의 절반(또는 전체)에 배치하는 순수 좌표 계산.
 // Electron 의존 없음 — main.js의 placeWindows()가 이 결과를 그대로
-// BrowserWindow.setBounds()에 먹인다. Win+↑/↓(최대화 토글·복원-또는-최소화)는
-// 위치가 아니라 대화 창 높이(chatBaseH↔chatMaxH)만 바꾸는 별개 경로라 여기서
-// 안 다룬다 — main.js의 toggleChatMaximize()/placeWindows()가 기존
-// setChatHeight()를 직접 부른다.
+// BrowserWindow.setBounds()에 먹인다.
+//
+// 2026-08-24 Codex형 전환(리프 1.2.1): 이전 판은 **창 짝**(캔버스 창 + 대화 창)을
+// 한 덩어리로 배치하는 computePlacement()였다. 짝의 높이(canvasH + chatBaseH)로
+// 세로 중앙을 잡고, 대화 창을 캔버스 폭의 중앙에 정렬하고(chatOriginX), 대화 창이
+// 위로만 자라도록 하단 앵커(chatBottom)를 함께 돌려줬다. 창이 하나가 되면서 그
+// 세 가지가 전부 의미를 잃는다 — 셸 창은 자기 폭·높이 그대로 구간 중앙에 놓인다.
 //
 // 크기는 항상 dims 그대로 돌려준다(불변) — 위치만 바뀐다. 호출자가 반드시
 // {x,y,width,height}를 한 번에 setBounds()에 넘겨야 한다 — setPosition()만
@@ -11,18 +14,13 @@
 // 5e0a9ab, 드래그 폴링에서 실측·수정된 것과 같은 원인).
 'use strict';
 
-// dir: 'left' | 'right'. workArea: {x,y,width,height}(대상 디스플레이의
-// screen.getDisplayMatching(...).workArea). dims: {canvasW, canvasH, chatW,
-// chatBaseH, chatHeight} — chatHeight는 *현재* 대화 창 높이(설정 등 모드로
-// 확장돼 있어도 그 높이를 유지한 채 자리만 옮긴다).
+// dir: 'left' | 'right' | 그 외(전체 워크에어리어 중앙).
+// workArea: {x,y,width,height}(대상 디스플레이의 screen.getDisplayMatching(...).workArea).
+// dims: {width, height} — 셸 창의 *현재* 크기. 사용자가 리사이즈한 크기로 스냅해도
+// 그 크기를 유지한 채 자리만 옮긴다.
 //
-// 반환: canvasBounds/chatBounds 둘 다 {x,y,width,height} — 그대로 setBounds에
-// 쓴다. chatBottom/chatX는 main.js의 앵커 변수(대화 창이 위로만 자라게 하는
-// 기준) 갱신용이다.
-function computePlacement(dir, workArea, dims) {
-  const pairW = dims.canvasW;
-  const pairH = dims.canvasH + dims.chatBaseH;
-
+// 반환: {bounds} — 그대로 setBounds에 쓴다.
+function computeShellPlacement(dir, workArea, dims) {
   let regionX = workArea.x;
   let regionWidth = workArea.width;
   if (dir === 'left' || dir === 'right') {
@@ -31,19 +29,10 @@ function computePlacement(dir, workArea, dims) {
   }
   // 구간 폭(절반 또는 전체) < 창 폭이면 중앙 정렬 공식이 자연히 음수 오프셋을
   // 내놓는다 — "그 구간 중앙에 겹쳐 배치"가 별도 분기 없이 성립한다.
-  const x = Math.round(regionX + (regionWidth - pairW) / 2);
-  const y = Math.max(workArea.y, Math.round(workArea.y + (workArea.height - pairH) / 2));
-  const chatBottom = y + dims.canvasH + dims.chatBaseH;
-  // AT-CH-001R(2026-08-19): chatW(900) < canvasW(1560) — 대화 창은 캔버스 폭의
-  // 중앙에 정렬한다. chatW==canvasW였던 구판에서는 chatX==x로 동일 값이었다.
-  const chatX = x + Math.round((dims.canvasW - dims.chatW) / 2);
+  const x = Math.round(regionX + (regionWidth - dims.width) / 2);
+  const y = Math.max(workArea.y, Math.round(workArea.y + (workArea.height - dims.height) / 2));
 
-  return {
-    canvasBounds: { x, y, width: dims.canvasW, height: dims.canvasH },
-    chatBounds: { x: chatX, y: chatBottom - dims.chatHeight, width: dims.chatW, height: dims.chatHeight },
-    chatBottom,
-    chatX,
-  };
+  return { bounds: { x, y, width: dims.width, height: dims.height } };
 }
 
-module.exports = { computePlacement };
+module.exports = { computeShellPlacement };

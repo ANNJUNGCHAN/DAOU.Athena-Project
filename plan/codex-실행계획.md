@@ -74,7 +74,33 @@ leaf-1.1.1 규범 개정 — VERIFIED (2026-08-24)
      개정 전 실행은 exit 1로 12건 누락을 보고했다 — 게이트가 정직하게 실패함을 먼저 확인했다.
      음성 대조군: "창 3개 이상" 탈락 조건과 타협 불가 규범 4종이 살아 있는지 함께 잰다.
   G2 manual: 이행 중 문서 공존 명시 — 이 문서 §1이 증거
+
+leaf-1.1.2 유리 5단 · prefs 기본값 — VERIFIED (2026-08-24)
+
+leaf-1.6.1 Paper 보드06 D확정 · 07 명명정정 — VERIFIED (2026-08-24)
+
+leaf-1.2.1 창 모델 전환 — VERIFIED (2026-08-24)
+  G1 runnable: node scripts/gates/check-window-model.mjs → exit 0
+     개정 전 실행은 exit 1로 결함 31건을 보고했다(짝 배치 잔재 · shell.html 부재 ·
+     죽은 IPC 채널 8건). 음성 대조군을 검사기 안에도 넣었다 — frame:false ·
+     렌더러 격리 3종 · 루틴/캔버스 피드 구독이 함께 사라지지 않았는지 같이 잰다.
+     (main.js를 통째로 비워도 통과하는 검사기를 막는다.)
+  G2 runnable: cd app && npm test → 320 passed / 0 failed
+     기준선 321에서 1 줄었다: 짝 배치 테스트 10건이 셸 단일 배치 테스트 9건으로 바뀌었다.
+  G3 runnable: cd app && npm run verify → exit 0, "[verify] 전 단언 통과"
+  G4 runnable: node scripts/gates/check-window-model.mjs --xss → exit 0 (대입 싱크 0건)
+     개정 전에 이미 초록이라 **양성 대조군**으로 실패 능력을 증명했다(싱크 한 줄을
+     심었다 지웠다). 회귀 가드이지 적색-우선 게이트가 아니다.
+  보조 하네스: npm run verify:settings · verify:settings-cards 둘 다 exit 0.
 ```
+
+**G3의 흔들리는 단언 1건 — 정직 기록.** `delayedRestFeedback`(검증 1d)은 3회 실행에서
+`2723ms · 3144ms · 2739ms`가 나왔고 3000ms 예산에 대해 **1회 실패**했다. 원인은 셸이 아니다:
+같은 실행의 영수증 페인트 자체는 `39~54ms`다. 이 검사는 T+2100부터 메인 루프를 600ms
+busy-wait로 막아 최악 조건을 만드는데, 그 바닥값이 이미 2700ms라 남는 여유가 300ms뿐이다 —
+공유 데스크톱에서 busy-wait가 밀리면 그대로 넘긴다. **구조적으로 얇은 마진이지 이 리프가
+만든 회귀가 아니다.** 초록이 나올 때까지 재실행한 것이 아니라 3회 값을 전부 남긴다(CLAUDE.md §9).
+후속 리프가 워치독 시각이나 예산 판정을 손봐야 한다.
 
 ---
 
@@ -84,10 +110,10 @@ leaf-1.1.1 규범 개정 — VERIFIED (2026-08-24)
 |---|---|---|---|
 | 1.1.1 | 규범 개정 | `CLAUDE.md` `GLOSSARY.md` `ui/soul.md` | **VERIFIED** |
 | 1.1.2 | 유리 5단 · prefs 기본값 | `tokens.css` `prefs.js` `settings-cards.js` | **VERIFIED** |
-| 1.2.1 | 창 모델 전환 | `app/main.js` `app/lib/main/window-placement.js` `app/preload.js` | READY |
-| 1.2.2 | 3영역 레이아웃 | `app/shell.*` | WAITING 1.2.1 |
+| 1.2.1 | 창 모델 전환 | `main.js` `window-placement.js` `preload.js` `verify.js` `shell.*` + `chat/canvas`의 창 결합부 | **VERIFIED** |
+| 1.2.2 | 좌측 이력 사이드바 268px(접힘) — 3영역 완성 | `app/shell.*` | READY |
 | 1.2.3 | 카드 12종 이식 | `app/canvas.js` `app/canvas.css` | WAITING 1.2.2 |
-| 1.3.1 | 알림 오브 창 | `app/orb.*` `app/lib/main/orb-window.js` | WAITING 1.2.1 |
+| 1.3.1 | 알림 오브 창 | `app/orb.*` `app/lib/main/orb-window.js` | READY |
 | 1.4.1 | 설정 모드 스왑 | `app/settings.*` `app/lib/settings-cards.js` | WAITING 1.2.2 |
 | 1.4.2 | 불연속 슬라이더 2종 | `app/lib/ui/discrete-slider.js` `app/lib/main/prefs.js` | WAITING 1.4.1 |
 | 1.5.1 | 에이전트 모드 스왑 | `app/lib/ui/agent-mode/**` | WAITING 1.2.3 |
@@ -200,9 +226,45 @@ leaf-1.1.1 규범 개정 — VERIFIED (2026-08-24)
 
 ---
 
+## 5-A. 리프 1.2.1이 남긴 빚 — 다음 리프가 진다
+
+구현하면서 **의도적으로 안 한 것**과 **하면서 생긴 부채**를 나눠 적는다. 숨기지 않는다(§4).
+
+### 안 한 것 (리프 경계라서)
+
+| 무엇 | 누가 | 지금 상태 |
+|---|---|---|
+| 좌측 이력 사이드바 268px(접힘) | 1.2.2 | **DOM에도 CSS에도 없다.** 빈 스텁을 심지 않았다 — 게이트가 `#historyRail` 스텁을 발견하면 실패시킨다 |
+| 설정의 Codex형 전체 스왑(좌상단 "← 앱으로 돌아가기" · Esc 동등) | 1.4.1 | 위치만 셸 전체 오버레이로 올렸다(400px 채팅 안에서 짜부라지는 것을 막으려고). 내용·복귀 문법은 옛 판 그대로 |
+| 카드 12종 재편 | 1.2.3 | canvas.js가 그리던 그대로 중앙에 뜬다 |
+| 알림 오브 창 | 1.3.1 | OS 창은 **1개**다. GLOSSARY §1의 "둘"은 오브가 붙어야 성립한다 |
+
+### 하면서 생긴 부채
+
+- **`prefs.autoGrowChat` 설정 항목이 아무 효과가 없다.** 자동 성장 경로가 사라졌는데 설정 ›
+  화면의 항목은 남아 있다 — 켜고 끌 수 있는데 아무 일도 안 일어나는 상태는 정보 정직성
+  위반이다(soul.md §8). **리프 1.4.1이 걷어내야 한다.**
+- **셸 창의 유리 사다리를 1단만 쓴다.** `#shell`이 `--glass-window`, `.mosaic`이
+  `--glass-canvas`, `.card`가 `--glass-card`를 진다. 채팅 영역(`.app`)은 자기 유리를 갖지
+  않는다(두 겹 칠하면 "그냥 검은 창" 회귀 — 2026-08-22 실측 2회). 좌측 사이드바가 붙을 때
+  3영역 광량 배분을 1.2.2가 다시 판단해야 한다.
+- **`verify-glass-separation.js`와 `npm run verify:glass`를 폐기했다.** 굴절층·데이터층 분리
+  A/B/C 계측이 재던 확장 애니메이션 자체가 사라졌다 — 측정 대상 없는 하네스를 남기면 다음
+  사람이 초록/빨강을 오해한다.
+- **보조 하네스 13개를 기계적으로 이관했다**(`probe-chart-*` · `run-cases-*` ·
+  `capture-wide15` · `probe-boot-bounds` · `probe-brain-chat-e2e` ·
+  `scripts/benchmark-rest-canvas-100`). `getWins()` 반환 형상 변경에 맞춰 이름을 접고
+  `expandCanvasWindow()`를 `revealShell()`로 바꿨다. **문법 검사(`node --check`)만 통과했고
+  실행은 안 해봤다** — `verify:settings`/`verify:settings-cards` 둘만 실제로 돌려 exit 0을
+  확인했다. 나머지는 다음에 그 프로브를 쓰는 사람이 처음 돌린다.
+- **검증 1d의 3000ms 마진이 300ms뿐이다** — §2의 흔들리는 단언 기록 참조.
+
+---
+
 ## 6. 다음 수
 
-1. **`1.2.1` 셸 창 전환** — 가장 무겁고 대부분을 막고 있다. 원 계획서가 세어둔 "깨지는 것"
-   5건을 함께 재정의한다. `verify.js`를 이 리프가 소유한다.
-2. `1.3.1` 오브 창은 `1.2.1` 다음(창 생성 지점을 공유한다).
-3. `1.6.2` Paper 실측 반영은 구현이 끝난 뒤라야 "실측"이 된다.
+1. **`1.2.2` 좌측 이력 사이드바** — 3영역을 완성한다. 접힘이 계약이다(안 접히면 탈락, CLAUDE.md §2).
+   DESIGN.shellW를 1520 → 1788로 올리는 것도 이 리프의 일이다.
+2. `1.3.1` 오브 창 — 붙어야 OS 창이 2개가 되고 GLOSSARY §1이 성립한다.
+3. `1.4.1` 설정 전체 스왑 — 위 부채 목록의 `autoGrowChat` 정리를 같이 진다.
+4. `1.6.2` Paper 실측 반영은 구현이 끝난 뒤라야 "실측"이 된다.

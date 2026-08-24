@@ -172,16 +172,16 @@ function restoreOnboarding(backup) {
 // 각 함수는 { observations, screenshots } 를 남긴다. 판정하지 않는다.
 
 async function caseLIV089(ctx) {
-  const { chatWin, evDir, question } = ctx;
+  const { shellWin, evDir, question } = ctx;
   const auditBefore = auditSnapshot(AUDIT_DIR);
-  const pre = await chatWin.webContents.executeJavaScript(CHAT_PROBE);
-  await typeAndEnter(chatWin, question);
+  const pre = await shellWin.webContents.executeJavaScript(CHAT_PROBE);
+  await typeAndEnter(shellWin, question);
   await wait(3000);
-  const post = await chatWin.webContents.executeJavaScript(CHAT_PROBE);
-  await shot(chatWin, path.join(evDir, 'chat-after-enter.png'));
+  const post = await shellWin.webContents.executeJavaScript(CHAT_PROBE);
+  await shot(shellWin, path.join(evDir, 'chat-after-enter.png'));
   const delta = auditDelta(AUDIT_DIR, auditBefore);
   // 정리 — 설정이 열렸으면 Esc로 닫는다.
-  await pressEsc(chatWin);
+  await pressEsc(shellWin);
   await wait(500);
   return {
     observations: {
@@ -197,22 +197,22 @@ async function caseLIV089(ctx) {
 }
 
 async function caseLIV091(ctx) {
-  const { chatWin, canvasWin, evDir, question } = ctx;
+  const { shellWin, evDir, question } = ctx;
   const m = question.match(/'([^']+)'/);
   const query = m ? m[1] : '삼성전자 재무제표와 최근 공시를 한꺼번에 정리해 줘';
   const pidsBefore = claudePids();
-  const pre = await chatWin.webContents.executeJavaScript(CHAT_PROBE);
-  await typeAndEnter(chatWin, query);
+  const pre = await shellWin.webContents.executeJavaScript(CHAT_PROBE);
+  await typeAndEnter(shellWin, query);
   await wait(700); // judging 진입 대기 — 카드가 뜨기 전이어야 한다
-  const during = await chatWin.webContents.executeJavaScript(CHAT_PROBE);
-  await pressEsc(chatWin);
+  const during = await shellWin.webContents.executeJavaScript(CHAT_PROBE);
+  await pressEsc(shellWin);
   await wait(3000); // killTree 정리 시간
-  const post = await chatWin.webContents.executeJavaScript(CHAT_PROBE);
-  const canvasVisible = ctx.mainMod.getWins().canvasWin.isVisible();
-  const cardCount = await canvasWin.webContents.executeJavaScript(CANVAS_COUNT_PROBE);
+  const post = await shellWin.webContents.executeJavaScript(CHAT_PROBE);
+  const canvasVisible = ctx.mainMod.getWins().shellWin.isVisible();
+  const cardCount = await shellWin.webContents.executeJavaScript(CANVAS_COUNT_PROBE);
   const pidsAfter = claudePids();
   const newPidsRemaining = pidsAfter.filter((p) => !pidsBefore.includes(p));
-  await shot(chatWin, path.join(evDir, 'chat-after-esc.png'));
+  await shot(shellWin, path.join(evDir, 'chat-after-esc.png'));
   return {
     observations: {
       state_when_esc: during.state,
@@ -228,35 +228,35 @@ async function caseLIV091(ctx) {
 }
 
 async function caseLIV092(ctx) {
-  const { chatWin, evDir } = ctx;
+  const { shellWin, evDir } = ctx;
   const query = '삼성전자 최근 공시 목록 정리해 줘';
-  const pre = await chatWin.webContents.executeJavaScript(CHAT_PROBE);
-  await typeAndEnter(chatWin, query);
+  const pre = await shellWin.webContents.executeJavaScript(CHAT_PROBE);
+  await typeAndEnter(shellWin, query);
   // judging 진입을 기다린다
   let during = null;
   for (let i = 0; i < 40; i++) {
-    during = await chatWin.webContents.executeJavaScript(CHAT_PROBE);
+    during = await shellWin.webContents.executeJavaScript(CHAT_PROBE);
     if (during.state !== 'idle') break;
     await wait(250);
   }
-  await clickDot(chatWin); // 진행 중 설정 열기
+  await clickDot(shellWin); // 진행 중 설정 열기
   await wait(600);
-  const withSettings = await chatWin.webContents.executeJavaScript(CHAT_PROBE);
-  await shot(chatWin, path.join(evDir, 'chat-settings-during-query.png'));
-  await pressEsc(chatWin); // 첫 Esc — 설정만 닫혀야 한다
+  const withSettings = await shellWin.webContents.executeJavaScript(CHAT_PROBE);
+  await shot(shellWin, path.join(evDir, 'chat-settings-during-query.png'));
+  await pressEsc(shellWin); // 첫 Esc — 설정만 닫혀야 한다
   await wait(600);
-  const afterEsc = await chatWin.webContents.executeJavaScript(CHAT_PROBE);
-  await shot(chatWin, path.join(evDir, 'chat-after-first-esc.png'));
+  const afterEsc = await shellWin.webContents.executeJavaScript(CHAT_PROBE);
+  await shot(shellWin, path.join(evDir, 'chat-after-first-esc.png'));
   // 질의가 계속 진행돼 답변이 달리는지 본다
   let final = afterEsc;
   const t0 = Date.now();
   while (Date.now() - t0 < 260000) {
-    final = await chatWin.webContents.executeJavaScript(CHAT_PROBE);
+    final = await shellWin.webContents.executeJavaScript(CHAT_PROBE);
     if (final.answerCount > pre.answerCount && final.state === 'idle') break;
     await wait(500);
   }
-  await shot(chatWin, path.join(evDir, 'chat-final.png'));
-  await pressEsc(chatWin); // 캔버스 정리
+  await shot(shellWin, path.join(evDir, 'chat-final.png'));
+  await pressEsc(shellWin); // 캔버스 정리
   await wait(1500);
   return {
     observations: {
@@ -272,27 +272,27 @@ async function caseLIV092(ctx) {
 }
 
 async function caseLIV093(ctx) {
-  const { chatWin, canvasWin, evDir } = ctx;
+  const { shellWin, evDir } = ctx;
   const query = '삼성전자 주요 재무 지표를 표로 정리해 줘';
   const canvasesBefore = canvasFilesSnapshot();
-  const pre = await chatWin.webContents.executeJavaScript(CHAT_PROBE);
-  await typeAndEnter(chatWin, query);
+  const pre = await shellWin.webContents.executeJavaScript(CHAT_PROBE);
+  await typeAndEnter(shellWin, query);
   let post = pre;
   const t0 = Date.now();
   while (Date.now() - t0 < 260000) {
-    post = await chatWin.webContents.executeJavaScript(CHAT_PROBE);
+    post = await shellWin.webContents.executeJavaScript(CHAT_PROBE);
     if (post.answerCount > pre.answerCount && post.state === 'idle') break;
     await wait(500);
   }
   await wait(1500);
-  const cardsBeforeEsc = await canvasWin.webContents.executeJavaScript(CANVAS_COUNT_PROBE);
-  await shot(canvasWin, path.join(evDir, 'canvas-before-esc.png'));
-  await pressEsc(chatWin); // idle 상태의 Esc — 캔버스 접기
+  const cardsBeforeEsc = await shellWin.webContents.executeJavaScript(CANVAS_COUNT_PROBE);
+  await shot(shellWin, path.join(evDir, 'canvas-before-esc.png'));
+  await pressEsc(shellWin); // idle 상태의 Esc — 캔버스 접기
   await wait(1500);
-  const canvasVisible = ctx.mainMod.getWins().canvasWin.isVisible();
-  const cardsAfterEsc = await canvasWin.webContents.executeJavaScript(CANVAS_COUNT_PROBE);
+  const canvasVisible = ctx.mainMod.getWins().shellWin.isVisible();
+  const cardsAfterEsc = await shellWin.webContents.executeJavaScript(CANVAS_COUNT_PROBE);
   const newCanvasFiles = canvasFilesSnapshot().filter((f) => !canvasesBefore.includes(f));
-  await shot(chatWin, path.join(evDir, 'chat-after-esc.png'));
+  await shot(shellWin, path.join(evDir, 'chat-after-esc.png'));
   return {
     observations: {
       query_completed: post.answerCount > pre.answerCount,
@@ -305,30 +305,30 @@ async function caseLIV093(ctx) {
 }
 
 async function caseLIV094(ctx) {
-  const { chatWin, canvasWin, evDir } = ctx;
+  const { shellWin, evDir } = ctx;
   const query = '삼성전자 재무 하이라이트 표와 최근 공시 목록을 각각 카드로 보여줘';
-  const pre = await chatWin.webContents.executeJavaScript(CHAT_PROBE);
-  const preCards = await canvasWin.webContents.executeJavaScript(CANVAS_COUNT_PROBE);
-  await typeAndEnter(chatWin, query);
+  const pre = await shellWin.webContents.executeJavaScript(CHAT_PROBE);
+  const preCards = await shellWin.webContents.executeJavaScript(CANVAS_COUNT_PROBE);
+  await typeAndEnter(shellWin, query);
   // 첫 카드가 뜨는 순간을 기다렸다가 즉시 Esc
   let firstCardMs = null;
   const t0 = Date.now();
   while (Date.now() - t0 < 260000) {
-    const n = await canvasWin.webContents.executeJavaScript(CANVAS_COUNT_PROBE);
+    const n = await shellWin.webContents.executeJavaScript(CANVAS_COUNT_PROBE);
     if (n > preCards) { firstCardMs = Date.now() - t0; break; }
-    const st = await chatWin.webContents.executeJavaScript(CHAT_PROBE);
+    const st = await shellWin.webContents.executeJavaScript(CHAT_PROBE);
     if (st.state === 'idle' && st.answerCount > pre.answerCount) break; // 카드 없이 끝남
     await wait(300);
   }
-  const cardsAtAbort = await canvasWin.webContents.executeJavaScript(CANVAS_COUNT_PROBE);
-  await pressEsc(chatWin); // 진행 중 Esc — 중단 분기
+  const cardsAtAbort = await shellWin.webContents.executeJavaScript(CANVAS_COUNT_PROBE);
+  await pressEsc(shellWin); // 진행 중 Esc — 중단 분기
   await wait(3000);
-  const post = await chatWin.webContents.executeJavaScript(CHAT_PROBE);
-  const cardsAfter = await canvasWin.webContents.executeJavaScript(CANVAS_COUNT_PROBE);
-  const canvasVisible = ctx.mainMod.getWins().canvasWin.isVisible();
-  await shot(chatWin, path.join(evDir, 'chat-after-abort.png'));
-  await shot(canvasWin, path.join(evDir, 'canvas-after-abort.png'));
-  await pressEsc(chatWin); // 정리 — 캔버스 접기
+  const post = await shellWin.webContents.executeJavaScript(CHAT_PROBE);
+  const cardsAfter = await shellWin.webContents.executeJavaScript(CANVAS_COUNT_PROBE);
+  const canvasVisible = ctx.mainMod.getWins().shellWin.isVisible();
+  await shot(shellWin, path.join(evDir, 'chat-after-abort.png'));
+  await shot(shellWin, path.join(evDir, 'canvas-after-abort.png'));
+  await pressEsc(shellWin); // 정리 — 캔버스 접기
   await wait(1500);
   return {
     observations: {
@@ -343,53 +343,53 @@ async function caseLIV094(ctx) {
 }
 
 async function caseLIV098(ctx) {
-  const { chatWin, evDir, question, attachment } = ctx;
+  const { shellWin, evDir, question, attachment } = ctx;
   // 실 레지스트리 보호 — 등록이 일어나므로 백업 후 복원한다.
   const regPath = path.join(ATHENA_HOME, 'mcp_servers.json');
   const consentPath = path.join(ATHENA_HOME, 'consent.json');
   const regBackup = fs.existsSync(regPath) ? fs.readFileSync(regPath, 'utf8') : null;
   const consentBackup = fs.existsSync(consentPath) ? fs.readFileSync(consentPath, 'utf8') : null;
 
-  await clickDot(chatWin);
+  await clickDot(shellWin);
   await wait(600);
-  await clickNavItem(chatWin, 'MCP 서버');
+  await clickNavItem(shellWin, 'MCP 서버');
   await wait(1500);
-  const openSheet = await clickByText(chatWin, '.card.mcp button', '+ 서버 등록');
+  const openSheet = await clickByText(shellWin, '.card.mcp button', '+ 서버 등록');
   await wait(400);
-  await chatWin.webContents.executeJavaScript(`(() => {
+  await shellWin.webContents.executeJavaScript(`(() => {
     const ta = document.querySelector('.card.mcp .uk-sheet textarea');
     if (!ta) return 'NOT FOUND: textarea';
     ta.value = ${JSON.stringify(attachment)};
     ta.dispatchEvent(new Event('input', { bubbles: true }));
     return 'pasted';
   })();`);
-  const analyze = await clickByText(chatWin, '.card.mcp .uk-sheet button', '분석');
+  const analyze = await clickByText(shellWin, '.card.mcp .uk-sheet button', '분석');
   // 분석은 Python CLI 콜드 스폰(~850ms+)이다 — 고정 대기(800ms)로 캡처하면 스테이징
   // 결과가 아직 없다(2026-08-19 1차 실행에서 staged_warnboxes=[]로 실측). 폴링한다.
   let staged = null;
   for (let i = 0; i < 30; i++) {
     await wait(500);
-    staged = await chatWin.webContents.executeJavaScript(MCP_SHEET_DUMP);
+    staged = await shellWin.webContents.executeJavaScript(MCP_SHEET_DUMP);
     if (staged.present && ((staged.warnboxes && staged.warnboxes.length) || /quote-fetcher/.test(staged.text || ''))) break;
   }
-  await shot(chatWin, path.join(evDir, 'mcp-staged-risks.png'));
+  await shot(shellWin, path.join(evDir, 'mcp-staged-risks.png'));
   // 등록을 진행해 승인 게이트까지 간다 — 게이트에서 '거부'로 멈춘다(스폰 없음 검증).
   let gate = null, gateShot = false;
-  const proceed = await clickByText(chatWin, '.card.mcp .uk-sheet button', '승인');
+  const proceed = await clickByText(shellWin, '.card.mcp .uk-sheet button', '승인');
   if (proceed === 'clicked') {
     await wait(800);
-    gate = await chatWin.webContents.executeJavaScript(MCP_SHEET_DUMP);
-    await shot(chatWin, path.join(evDir, 'mcp-approve-gate.png'));
+    gate = await shellWin.webContents.executeJavaScript(MCP_SHEET_DUMP);
+    await shot(shellWin, path.join(evDir, 'mcp-approve-gate.png'));
     gateShot = true;
-    await clickByText(chatWin, '.card.mcp .uk-sheet button', '거부');
+    await clickByText(shellWin, '.card.mcp .uk-sheet button', '거부');
     await wait(600);
   }
   // 시트 닫기(경고 바가 뜨면 강제 닫기)
-  await clickByText(chatWin, '.card.mcp .uk-sheet-close', '닫기');
+  await clickByText(shellWin, '.card.mcp .uk-sheet-close', '닫기');
   await wait(300);
-  await clickByText(chatWin, '.card.mcp .uk-close-warn button', '그냥 닫기');
+  await clickByText(shellWin, '.card.mcp .uk-close-warn button', '그냥 닫기');
   await wait(300);
-  await pressEsc(chatWin);
+  await pressEsc(shellWin);
   await wait(500);
 
   const logExists = fs.existsSync(path.join(ATHENA_HOME, 'logs', 'quote-fetcher.log'));
@@ -426,13 +426,13 @@ async function caseLIV098(ctx) {
 }
 
 async function caseLIV099(ctx) {
-  const { chatWin, evDir } = ctx;
+  const { shellWin, evDir } = ctx;
   const auditBefore = auditSnapshot(AUDIT_DIR);
-  await clickDot(chatWin);
+  await clickDot(shellWin);
   await wait(600);
-  await clickNavItem(chatWin, 'MCP 서버');
+  await clickNavItem(shellWin, 'MCP 서버');
   await wait(1500);
-  const openRow = await chatWin.webContents.executeJavaScript(`(() => {
+  const openRow = await shellWin.webContents.executeJavaScript(`(() => {
     const rows = Array.from(document.querySelectorAll('.card.mcp .uk-row.is-clickable'));
     const r = rows.find((row) => row.textContent.includes('korea-stock-mcp'));
     if (!r) return 'NOT FOUND: korea-stock-mcp row';
@@ -442,14 +442,14 @@ async function caseLIV099(ctx) {
   // probe는 실제 서버 스폰이다 — 툴 행이 그려질 때까지 기다린다(최대 30초)
   let sheet = null;
   for (let i = 0; i < 60; i++) {
-    sheet = await chatWin.webContents.executeJavaScript(MCP_SHEET_DUMP);
+    sheet = await shellWin.webContents.executeJavaScript(MCP_SHEET_DUMP);
     if (sheet.present && sheet.checks.length > 0) break;
     await wait(500);
   }
-  await shot(chatWin, path.join(evDir, 'probe-initial.png'));
+  await shot(shellWin, path.join(evDir, 'probe-initial.png'));
   const initial = sheet;
   // '오늘 날짜' 툴 체크 해제
-  const toggleOff = await chatWin.webContents.executeJavaScript(`(() => {
+  const toggleOff = await shellWin.webContents.executeJavaScript(`(() => {
     const cbs = Array.from(document.querySelectorAll('.card.mcp .uk-sheet .uk-check'));
     const t = cbs.find((c) => /오늘|today|date/i.test((c.parentElement ? c.parentElement.textContent : '')));
     if (!t) return 'NOT FOUND: today-date tool checkbox';
@@ -458,15 +458,15 @@ async function caseLIV099(ctx) {
     return 'unchecked';
   })();`);
   await wait(300);
-  const commit1 = await clickByText(chatWin, '.card.mcp .uk-sheet button', '선택 허용');
+  const commit1 = await clickByText(shellWin, '.card.mcp .uk-sheet button', '선택 허용');
   await wait(800);
-  await shot(chatWin, path.join(evDir, 'probe-after-toggle-off.png'));
+  await shot(shellWin, path.join(evDir, 'probe-after-toggle-off.png'));
   // 시트를 닫고 다시 연다 — 미허용 유지 확인
-  await clickByText(chatWin, '.card.mcp .uk-sheet-close', '닫기');
+  await clickByText(shellWin, '.card.mcp .uk-sheet-close', '닫기');
   await wait(300);
-  await clickByText(chatWin, '.card.mcp .uk-close-warn button', '그냥 닫기');
+  await clickByText(shellWin, '.card.mcp .uk-close-warn button', '그냥 닫기');
   await wait(500);
-  await chatWin.webContents.executeJavaScript(`(() => {
+  await shellWin.webContents.executeJavaScript(`(() => {
     const rows = Array.from(document.querySelectorAll('.card.mcp .uk-row.is-clickable'));
     const r = rows.find((row) => row.textContent.includes('korea-stock-mcp'));
     if (r) r.click();
@@ -474,13 +474,13 @@ async function caseLIV099(ctx) {
   })();`);
   let reopened = null;
   for (let i = 0; i < 60; i++) {
-    reopened = await chatWin.webContents.executeJavaScript(MCP_SHEET_DUMP);
+    reopened = await shellWin.webContents.executeJavaScript(MCP_SHEET_DUMP);
     if (reopened.present && reopened.checks.length > 0) break;
     await wait(500);
   }
-  await shot(chatWin, path.join(evDir, 'probe-reopened.png'));
+  await shot(shellWin, path.join(evDir, 'probe-reopened.png'));
   // 원상 복구 — 다시 켜고 저장
-  const toggleOn = await chatWin.webContents.executeJavaScript(`(() => {
+  const toggleOn = await shellWin.webContents.executeJavaScript(`(() => {
     const cbs = Array.from(document.querySelectorAll('.card.mcp .uk-sheet .uk-check'));
     const t = cbs.find((c) => /오늘|today|date/i.test((c.parentElement ? c.parentElement.textContent : '')));
     if (!t) return 'NOT FOUND';
@@ -489,15 +489,15 @@ async function caseLIV099(ctx) {
     return 'rechecked';
   })();`);
   await wait(300);
-  const commit2 = await clickByText(chatWin, '.card.mcp .uk-sheet button', '선택 허용');
+  const commit2 = await clickByText(shellWin, '.card.mcp .uk-sheet button', '선택 허용');
   await wait(800);
-  const final = await chatWin.webContents.executeJavaScript(MCP_SHEET_DUMP);
-  await shot(chatWin, path.join(evDir, 'probe-restored.png'));
-  await clickByText(chatWin, '.card.mcp .uk-sheet-close', '닫기');
+  const final = await shellWin.webContents.executeJavaScript(MCP_SHEET_DUMP);
+  await shot(shellWin, path.join(evDir, 'probe-restored.png'));
+  await clickByText(shellWin, '.card.mcp .uk-sheet-close', '닫기');
   await wait(300);
-  await clickByText(chatWin, '.card.mcp .uk-close-warn button', '그냥 닫기');
+  await clickByText(shellWin, '.card.mcp .uk-close-warn button', '그냥 닫기');
   await wait(300);
-  await pressEsc(chatWin);
+  await pressEsc(shellWin);
   await wait(500);
   const delta = auditDelta(AUDIT_DIR, auditBefore);
   const checkedCount = (d) => d && d.checks ? d.checks.filter((c) => c.classes.includes('is-checked')).length : null;
@@ -518,12 +518,12 @@ async function caseLIV099(ctx) {
 }
 
 async function caseLIV100(ctx) {
-  const { chatWin, evDir } = ctx;
-  await clickDot(chatWin);
+  const { shellWin, evDir } = ctx;
+  await clickDot(shellWin);
   await wait(600);
-  await clickNavItem(chatWin, 'MCP 서버');
+  await clickNavItem(shellWin, 'MCP 서버');
   await wait(1500);
-  const listDump = await chatWin.webContents.executeJavaScript(`(() => {
+  const listDump = await shellWin.webContents.executeJavaScript(`(() => {
     return Array.from(document.querySelectorAll('.card.mcp .uk-row')).map((r) => ({
       classes: [...r.classList], text: (r.textContent || '').slice(0, 140),
     }));
@@ -531,7 +531,7 @@ async function caseLIV100(ctx) {
   // 1차 실행의 함정: /naver-search(?!-2)/가 naver-search-2 행의 argsPreview
   // ('@isnow890/naver-search-mcp')에 부분매치해 엉뚱한 행을 눌렀다. 행 텍스트는
   // 별칭으로 시작하므로 시작 일치로 잡는다.
-  const openRow = await chatWin.webContents.executeJavaScript(`(() => {
+  const openRow = await shellWin.webContents.executeJavaScript(`(() => {
     const rows = Array.from(document.querySelectorAll('.card.mcp .uk-row'));
     const r = rows.find((row) => {
       const t = (row.textContent || '').trim();
@@ -545,14 +545,14 @@ async function caseLIV100(ctx) {
   let sheet = null;
   for (let i = 0; i < 20; i++) {
     await wait(500);
-    sheet = await chatWin.webContents.executeJavaScript(MCP_SHEET_DUMP);
+    sheet = await shellWin.webContents.executeJavaScript(MCP_SHEET_DUMP);
     if (sheet.present && sheet.text && !/실행 중/.test(sheet.text.slice(0, 200))) break;
   }
-  await shot(chatWin, path.join(evDir, 'probe-unapproved.png'));
+  await shot(shellWin, path.join(evDir, 'probe-unapproved.png'));
   // 승인 버튼은 누르지 않는다 — 케이스의 요지다. 시트만 닫는다.
-  await clickByText(chatWin, '.card.mcp .uk-sheet-close', '닫기');
+  await clickByText(shellWin, '.card.mcp .uk-sheet-close', '닫기');
   await wait(300);
-  await pressEsc(chatWin);
+  await pressEsc(shellWin);
   await wait(500);
   // 위 caseLIV098과 동일 — servers는 dict, 승인은 consent.json이 정본.
   let approvedState = null;
@@ -581,32 +581,32 @@ async function caseLIV100(ctx) {
 
 // 온보딩 케이스 — 부팅 전 상태 조작이 필요해 단독 호출 전제.
 async function caseLIV095(ctx) {
-  const { chatWin, evDir } = ctx;
+  const { shellWin, evDir } = ctx;
   await wait(1500); // 부팅 게이지 종료 대기
   let dump = null;
   for (let i = 0; i < 30; i++) {
-    dump = await chatWin.webContents.executeJavaScript(ONBOARD_DUMP);
+    dump = await shellWin.webContents.executeJavaScript(ONBOARD_DUMP);
     if (dump.panels.onboard || dump.panels.app) break;
     await wait(300);
   }
-  await shot(chatWin, path.join(evDir, 'onboard-after-corrupt.png'));
+  await shot(shellWin, path.join(evDir, 'onboard-after-corrupt.png'));
   return { observations: { dump } };
 }
 
 async function caseLIV096(ctx) {
-  const { chatWin, evDir } = ctx;
+  const { shellWin, evDir } = ctx;
   // 3/3 화면 렌더 + 토큰 상태 도달을 기다린다 — auto-continue(2.4s)보다 빨리 움직인다.
   let dump = null;
   for (let i = 0; i < 100; i++) {
-    dump = await chatWin.webContents.executeJavaScript(ONBOARD_DUMP);
+    dump = await shellWin.webContents.executeJavaScript(ONBOARD_DUMP);
     if (dump.panels.onboard && /계좌/.test(dump.bodyText || '')) break;
     if (dump.panels.app) break; // 이미 자동 전환됨
     await wait(100);
   }
-  await shot(chatWin, path.join(evDir, 'onboard-step3.png'));
+  await shot(shellWin, path.join(evDir, 'onboard-step3.png'));
   // 1차 실행에서 NOT FOUND — 행 컨테이너를 넓게 잡고, 못 찾으면 그 시점의
   // 후보 목록을 관측값으로 남긴다(auth-screen.js labeledRow('계좌', ...) 구조).
-  const clickResult = await chatWin.webContents.executeJavaScript(`(() => {
+  const clickResult = await shellWin.webContents.executeJavaScript(`(() => {
     const rows = Array.from(document.querySelectorAll(
       '#onboardBody .uk-row, #onboardBody [class*="row"], #onboardBody [class*="labeled"]'));
     const target = rows.find((n) => /계좌/.test(n.textContent || ''));
@@ -618,17 +618,17 @@ async function caseLIV096(ctx) {
     return 'clicked (is-clickable=' + target.classList.contains('is-clickable') + ') text=' + (target.textContent || '').trim().slice(0, 60);
   })();`);
   await wait(800);
-  const after = await chatWin.webContents.executeJavaScript(ONBOARD_DUMP);
-  await shot(chatWin, path.join(evDir, 'onboard-after-account-click.png'));
+  const after = await shellWin.webContents.executeJavaScript(ONBOARD_DUMP);
+  await shot(shellWin, path.join(evDir, 'onboard-after-account-click.png'));
   return { observations: { step3: dump, click_account_row: clickResult, after_click: after } };
 }
 
 async function caseLIV097(ctx) {
-  const { chatWin, evDir } = ctx;
+  const { shellWin, evDir } = ctx;
   // ready 상태의 '연결 해제' 버튼을 자동 전환(2.4s) 전에 누른다.
   let clicked = null, dump = null;
   for (let i = 0; i < 150; i++) {
-    clicked = await chatWin.webContents.executeJavaScript(`(() => {
+    clicked = await shellWin.webContents.executeJavaScript(`(() => {
       const btns = Array.from(document.querySelectorAll('#onboardBody button'));
       const b = btns.find((x) => x.textContent.trim() === '연결 해제');
       if (!b) return null;
@@ -636,17 +636,17 @@ async function caseLIV097(ctx) {
       return 'clicked';
     })();`);
     if (clicked === 'clicked') break;
-    dump = await chatWin.webContents.executeJavaScript(ONBOARD_DUMP);
+    dump = await shellWin.webContents.executeJavaScript(ONBOARD_DUMP);
     if (dump.panels.app) break; // 이미 전환돼버림 — 그것도 기록
     await wait(100);
   }
   const clickAt = Date.now();
-  await shot(chatWin, path.join(evDir, 'onboard-after-revoke-click.png'));
+  await shot(shellWin, path.join(evDir, 'onboard-after-revoke-click.png'));
   await wait(2400); // auto_check가 지정한 시점
-  const at24 = await chatWin.webContents.executeJavaScript(ONBOARD_DUMP);
-  await shot(chatWin, path.join(evDir, 'onboard-at-2400ms.png'));
+  const at24 = await shellWin.webContents.executeJavaScript(ONBOARD_DUMP);
+  await shot(shellWin, path.join(evDir, 'onboard-at-2400ms.png'));
   await wait(2000);
-  const later = await chatWin.webContents.executeJavaScript(ONBOARD_DUMP);
+  const later = await shellWin.webContents.executeJavaScript(ONBOARD_DUMP);
   return {
     observations: {
       revoke_clicked: clicked === 'clicked',
@@ -661,27 +661,27 @@ async function caseLIV097(ctx) {
 // LIV-055 — LIV-091과 같은 중단 분기이되, ① 케이스 지정 질의 사용 ② abort 후
 // 10초간 "뒤늦게 새 카드가 나타나는지"를 추가 관찰한다(must_not_include 검증).
 async function caseLIV055(ctx) {
-  const { chatWin, canvasWin, evDir } = ctx;
+  const { shellWin, evDir } = ctx;
   const query = '기아 관련 최근 공시랑 뉴스를 각각 표랑 스트림 카드로 정리해줘';
   const pidsBefore = claudePids();
-  const pre = await chatWin.webContents.executeJavaScript(CHAT_PROBE);
-  const preCards = await canvasWin.webContents.executeJavaScript(CANVAS_COUNT_PROBE);
-  await typeAndEnter(chatWin, query);
+  const pre = await shellWin.webContents.executeJavaScript(CHAT_PROBE);
+  const preCards = await shellWin.webContents.executeJavaScript(CANVAS_COUNT_PROBE);
+  await typeAndEnter(shellWin, query);
   await wait(700);
-  const during = await chatWin.webContents.executeJavaScript(CHAT_PROBE);
-  await pressEsc(chatWin);
+  const during = await shellWin.webContents.executeJavaScript(CHAT_PROBE);
+  await pressEsc(shellWin);
   await wait(1000);
-  const post = await chatWin.webContents.executeJavaScript(CHAT_PROBE);
-  await shot(chatWin, path.join(evDir, 'chat-after-esc.png'));
+  const post = await shellWin.webContents.executeJavaScript(CHAT_PROBE);
+  await shot(shellWin, path.join(evDir, 'chat-after-esc.png'));
   // 늦은 카드 감시 — abort가 프로세스 트리를 정말 죽였다면 0이어야 한다.
   let lateCards = 0;
   for (let i = 0; i < 10; i++) {
     await wait(1000);
-    const n = await canvasWin.webContents.executeJavaScript(CANVAS_COUNT_PROBE);
+    const n = await shellWin.webContents.executeJavaScript(CANVAS_COUNT_PROBE);
     if (n > preCards) lateCards = n - preCards;
   }
-  const final = await chatWin.webContents.executeJavaScript(CHAT_PROBE);
-  const canvasVisible = ctx.mainMod.getWins().canvasWin.isVisible();
+  const final = await shellWin.webContents.executeJavaScript(CHAT_PROBE);
+  const canvasVisible = ctx.mainMod.getWins().shellWin.isVisible();
   const pidsAfter = claudePids();
   return {
     observations: {
@@ -743,7 +743,7 @@ app.whenReady().then(async () => {
 
   const mainMod = require('./main.js');
   await mainMod.createWindows();
-  const { chatWin, canvasWin } = mainMod.getWins();
+  const { shellWin } = mainMod.getWins();
   await wait(2000); // 부팅 전개
 
   const runDir = path.join(REPO, 'datasets', 'eval-runs', `${stampDir(new Date())}-intraday-ui`);
@@ -760,7 +760,7 @@ app.whenReady().then(async () => {
     const startedAt = new Date();
     let result = null, error = null;
     try {
-      result = await proc({ chatWin, canvasWin, mainMod, evDir, question: c.question, attachment: c.attachment || null });
+      result = await proc({ shellWin, mainMod, evDir, question: c.question, attachment: c.attachment || null });
     } catch (e) {
       error = String((e && e.stack) || e);
     }

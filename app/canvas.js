@@ -1,9 +1,13 @@
-// 캔버스 창 렌더러. spike/electron-glass/canvas.html의 확장/수축 rAF 애니메이션을
-// 그대로 이식 + 목업 데이터 3종 렌더. nodeIntegration:false / contextIsolation:true
+// 중앙 캔버스 영역 렌더러. nodeIntegration:false / contextIsolation:true
 // (2026-08-18 렌더러 격리) — preload.js의 window.athena 다리로만 main과 통신한다.
-// lib/*.js는 canvas.html이 <script> 태그로 미리 로드해 window.AthenaLib에 얹어둔
+// lib/*.js는 shell.html이 <script> 태그로 미리 로드해 window.AthenaLib에 얹어둔
 // 전역이다. 목업 데이터(spike/captures/*.json)는 fs를 직접 못 읽어 main으로
 // 옮겼다 — athena:load-fixture invoke로 파싱된 데이터만 받는다.
+//
+// 2026-08-24 리프 1.2.1: 이 파일은 더 이상 **창** 하나를 통째로 소유하지 않는다.
+// 셸 창(shell.html)의 #canvasRegion 안에서 돈다 — 창 크롬·창 단축키는 shell.js가,
+// 우측 채팅은 chat.js가 맡는다. spike/electron-glass/canvas.html에서 이식했던
+// 확장/수축 rAF 애니메이션은 이 전환에서 제거됐다(아래 "사라진 것" 참조).
 const { sanitize } = window.AthenaLib.Sanitize;
 const { renderMarkdownInto } = window.AthenaLib.Markdown;
 const { errorNote, removeCardAndMaybeCollapse } = window.AthenaLib.UiKit;
@@ -61,119 +65,40 @@ function destroyCard(card) {
   card.remove();
 }
 
-const mosaic = document.getElementById('mosaic');
-const sheen = document.getElementById('sheen');
 const grid = document.getElementById('grid');
 let activeDatasetId = null;
 
-function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
-function easeInCubic(t) { return t * t * t; }
-
-// 굴절층·데이터층 분리(soul.md §7 완화책) — 애니메이션 굴절의 두 축을 따로 토글한다.
-// 기본은 현행(modulate/live) — 스파이크 계측(verify-glass-separation.js)이 수치로
-// 채택을 판정한다(plan.md 다음 수 7 "프로토타입 실측 먼저").
-// - sheen: 'modulate'(현행 — blur 반경을 매 프레임 30→0px 변조)
-//          | 'bake'(정적 프로스트 — 반경은 30px 고정, 서리층의 농도(opacity)만 변조.
-//            유리 표면의 페이드가 아니라 안개층의 걷힘이라 soul.md §7 "굴절 변조로
-//            등장" 규범과 양립한다는 가설 — 판정은 실측이 한다)
-// - cards: 'live'(현행 — 카드 backdrop-filter 유지)
-//          | 'baked'(애니메이션 동안 카드를 정적 프로스트로 굽는다, canvas.css .frost-baked)
-let glassSeparation = { sheen: 'modulate', cards: 'live' };
-
-window.athena.on('athena:glass-separation', (payload) => {
-  glassSeparation = {
-    sheen: payload && payload.sheen === 'bake' ? 'bake' : 'modulate',
-    cards: payload && payload.cards === 'baked' ? 'baked' : 'live',
-  };
-});
-
-// ---------- 점 → 캔버스 확장/수축 (spike v2.js 이식, setBounds 애니메이션 없음) ----------
-function runAnimation({ cx, cy, rmax, duration, mode }) {
-  return new Promise((resolve) => {
-    const gs = glassSeparation; // 애니메이션 도중 토글이 바뀌어도 한 실행 안에서는 일관되게
-    if (gs.cards === 'baked') mosaic.classList.add('frost-baked');
-    if (gs.sheen === 'bake') {
-      sheen.style.backdropFilter = 'blur(30px)';
-      sheen.style.webkitBackdropFilter = 'blur(30px)';
-    }
-    const timestamps = [];
-    const t0 = performance.now();
-    function frame(now) {
-      timestamps.push(now);
-      const elapsed = now - t0;
-      const t = Math.min(1, elapsed / duration);
-      const et = mode === 'expand' ? easeOutCubic(t) : (1 - easeInCubic(1 - t));
-      const r = mode === 'expand' ? rmax * et : rmax * (1 - et);
-      // 굴절 변조: 등장 시 30px(짙은 안개)→0px(맑음), 소멸 시 반대.
-      // 스파이크(canvas.html)는 등장 끝값을 6px로 남겨뒀는데, 이 상태로 캡처해보니
-      // 실제 재무 데이터·텍스트가 영구적으로 흐려져 읽히지 않았다(soul.md §8
-      // "정보 정직성" 위반 — 실측으로 발견, W2 구현 중 정정). 정지 상태는 0이어야 한다.
-      mosaic.style.clipPath = `circle(${r}px at ${cx}px ${cy}px)`;
-      if (gs.sheen === 'bake') {
-        // 정적 프로스트 — 반경 고정, 농도만 변조(굴절 재계산을 반경 변화와 분리)
-        sheen.style.opacity = String(mode === 'expand' ? (1 - et) : et);
-      } else {
-        const blur = mode === 'expand' ? (30 * (1 - et)) : (30 * et);
-        sheen.style.backdropFilter = `blur(${blur}px)`;
-        sheen.style.webkitBackdropFilter = `blur(${blur}px)`;
-      }
-      if (t < 1) {
-        requestAnimationFrame(frame);
-      } else {
-        if (mode === 'expand') {
-          // 안전망 — 부동소수 오차로 완전히 0에 못 미치는 경우를 명시적으로 정리한다.
-          // (bake 변형은 반경이 30px 고정이었으므로 여기서 0으로 되돌리는 것이
-          // 정지 상태 규범 "blur는 반드시 0px"의 유일한 경로다.)
-          sheen.style.backdropFilter = 'blur(0px)';
-          sheen.style.webkitBackdropFilter = 'blur(0px)';
-        }
-        // 잔류 방지 — 토글 상태와 무관하게 무조건 정리한다(구운 서리·농도 인라인).
-        sheen.style.opacity = '';
-        mosaic.classList.remove('frost-baked');
-        resolve(timestamps);
-      }
-    }
-    requestAnimationFrame(frame);
-  });
-}
-
-// main.js가 주는 cx/cy/rmax는 물리 px(스크린 좌표 기반) — clipPath는 CSS px로
-// 그리므로 줌 배율만큼 되돌린다(줌 미사용 시 zf=1로 기존과 동일).
-function toCssCoords(payload) {
-  const zf = window.athena.getZoomFactor();
-  const scaled = { ...payload, cx: payload.cx / zf, cy: payload.cy / zf };
-  if (typeof payload.rmax === 'number') scaled.rmax = payload.rmax / zf;
-  return scaled;
-}
-
-window.athena.on('prime-clip', (payload) => {
-  const p = toCssCoords(payload);
-  mosaic.style.clipPath = `circle(0px at ${p.cx}px ${p.cy}px)`;
-  sheen.style.backdropFilter = 'blur(30px)';
-  window.athena.send('primed');
-});
-
-window.athena.on('run-animation', async (payload) => {
-  const p = toCssCoords(payload);
-  if (p.mode === 'expand') {
-    mosaic.style.clipPath = `circle(0px at ${p.cx}px ${p.cy}px)`;
-    sheen.style.backdropFilter = 'blur(30px)';
-  }
-  const timestamps = await runAnimation(p);
-  window.athena.send('animation-done', { mode: p.mode, timestamps });
-});
+// ---------- 사라진 것: 점 → 캔버스 확장/수축 연출 (2026-08-24 리프 1.2.1) ----------
+// 여기 있던 runAnimation()과 그 부속(easeOutCubic/easeInCubic · toCssCoords ·
+// prime-clip/run-animation 구독 · primed/animation-done ack · glassSeparation
+// 토글 · .frost-baked 굽기)이 통째로 사라졌다. 전부 **캔버스 창을 열고 닫는**
+// 550ms materialize 연출의 부속인데, 창 모델 전환으로 열고 닫을 창이 없다 —
+// 중앙 캔버스는 셸 창의 한 영역이라 늘 떠 있다.
+//
+// 같이 폐기된 것: verify-glass-separation.js(굴절층·데이터층 분리 A/B/C 계측)와
+// npm run verify:glass. 그 하네스가 재던 프레임 비용 자체가 없어졌다 — 측정 대상이
+// 사라졌는데 하네스만 남기면 다음 사람이 초록/빨강을 오해한다.
+//
+// 정지 상태 규범(soul.md §8 정보 정직성 — 데이터 위에 잔류 블러가 남으면 안 된다)은
+// 이제 CSS 하나로 성립한다: canvas.css .glass-sheen의 blur(0px)가 유일한 값이고
+// 이 값을 인라인으로 덮는 코드가 없다. 잔류 블러 버그의 원인 경로가 소멸했다.
 
 // ---------- 캔버스 카드 추가/초기화/하이라이트 ----------
 window.athena.on('athena:add-canvas', ({ type }) => {
   addCard(type);
 });
 
-window.athena.on('athena:clear-canvases', () => {
+// 카드 비우기 — 옛 판에서는 main이 캔버스 창을 수축시킬 때 `athena:clear-canvases`
+// IPC로 보냈다. 두 영역이 같은 문서에 사는 지금은 IPC를 왕복할 이유가 없다:
+// chat.js의 Esc(유휴 상태)가 shell.js 버스를 통해 이 함수를 직접 부른다.
+function clearCanvases() {
   for (const card of grid.querySelectorAll('.card')) {
     destroyCard(card);
   }
   activeDatasetId = null;
-});
+}
+
+window.AthenaShell.registerCanvasClear(clearCanvases);
 
 window.athena.on('athena:add-rest-canvas', async (payload) => {
   const receivedAt = performance.now();
@@ -1152,31 +1077,11 @@ function fmtWon(raw) {
   return n.toLocaleString('ko-KR');
 }
 
-// ---------- 창 기본 기능 (2026-08-17) — 대화 창(chat.js)과 같은 배선 ----------
-// 줌·최소화는 main.js가 두 창을 동기하므로 어느 창에 포커스가 있어도 동작이 같다.
-document.addEventListener('keydown', (e) => {
-  if (!(e.ctrlKey || e.metaKey) || e.altKey) return;
-  if (e.key === '=' || e.key === '+') {
-    e.preventDefault();
-    window.athena.send('athena:zoom', { dir: 'in' });
-  } else if (e.key === '-' || e.key === '_') {
-    e.preventDefault();
-    window.athena.send('athena:zoom', { dir: 'out' });
-  } else if (e.key === '0') {
-    e.preventDefault();
-    window.athena.send('athena:zoom', { dir: 'reset' });
-  } else if (e.key === 'm' || e.key === 'M') {
-    e.preventDefault();
-    window.athena.send('athena:minimize-windows');
-  }
-});
-
-window.addEventListener('wheel', (e) => {
-  if (!e.ctrlKey) return;
-  e.preventDefault();
-  window.athena.send('athena:zoom', { dir: e.deltaY < 0 ? 'in' : 'out' });
-}, { passive: false });
-
-// 창 이동은 네이티브 캡션이다(2026-08-19 표준화) — 손잡이는 canvas.html의
-// 상단 스트립(#dragStrip, canvas.css -webkit-app-region:drag)이고 JS 드래그
-// 경로는 폐기됐다. 카드·여백의 스크롤·선택은 이제 드래그와 충돌 여지가 없다.
+// ---------- 창 기본 기능은 여기 없다 (2026-08-24 리프 1.2.1) ----------
+// 옛 판에는 캔버스 창에도 대화 창과 같은 창 단축키 배선이 있었다 — 창이 둘이라
+// 어느 쪽에 포커스가 있어도 Ctrl+M·Ctrl+휠 배율이 같게 동작해야 했기 때문이다.
+// 창이 하나가 된 지금 그 중복은 사라졌다: 창에 속하는 것은 shell.js가 한 벌만
+// 가진다(창 크롬·창 단축키·네이티브 캡션 드래그 손잡이 #dragStrip).
+// Ctrl+= / Ctrl+- / Ctrl+0 / Ctrl+휠 배율 자체는 2026-08-22 사용자 지시로 이미
+// 폐기됐다 — 크기는 설정 › 화면에서만 바뀐다. 그 폐기는 chat.js에만 반영돼 있었고
+// 이 파일에는 남아 있었다(창이 둘이라 서로 어긋나 있던 것이다). 여기서 정리한다.

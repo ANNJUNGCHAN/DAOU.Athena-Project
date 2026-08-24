@@ -1,9 +1,10 @@
 // 검증 스크립트. `npm run verify` (= electron verify.js)로 실행한다.
 // main.js를 모듈로 불러와 실제 앱과 동일한 창 생성 로직을 재사용하고,
 // - capturePage() 스크린샷 (app/captures/)
-// - 점→캔버스 확장/수축 rAF 프레임 실측 (p50/p95/max)
-// - 두 창 getBounds() 독립성
+// - 셸 창 3영역(현재 2영역) 폭 계약 · 배치 · 최대화 의미론
 // - 접근성 3종 강제 적용 스크린샷 (CDP Emulation.setEmulatedMedia)
+// 2026-08-24 리프 1.2.1: "점→캔버스 확장/수축 rAF 프레임 실측"과 "두 창 getBounds()
+// 독립성"은 측정 대상 자체가 사라져 빠졌다(창 모델 전환 — 각 검증 블록 주석 참조).
 // 을 수행하고 app/captures/VERIFY-REPORT.json 에 원본 수치를 남긴다.
 
 // main.js를 라이브러리로 불러올 때는 자동 기동(app.whenReady().then(createWindows))을
@@ -126,7 +127,7 @@ async function clearMedia(win) {
 //
 // 모드는 배타적이어야 한다 — `#app`·`#onboard`·`#settings`는 형제 패널이고
 // 둘이 동시에 보이면 겹쳐 그려진다(GLOSSARY.md §1: 모드는 창이 아니다).
-async function waitForChatBooted(chatWin, timeoutMs = 5000) {
+async function waitForChatBooted(shellWin, timeoutMs = 5000) {
   const probe = `(() => {
     const vis = (id) => { const n = document.getElementById(id); return !!n && !n.hidden; };
     return { boot: vis('boot'), app: vis('app'), onboard: vis('onboard'), settings: vis('settings') };
@@ -134,7 +135,7 @@ async function waitForChatBooted(chatWin, timeoutMs = 5000) {
   const t0 = Date.now();
   let panels = null;
   while (Date.now() - t0 < timeoutMs) {
-    panels = await chatWin.webContents.executeJavaScript(probe);
+    panels = await shellWin.webContents.executeJavaScript(probe);
     if (!panels.boot && (panels.app || panels.onboard)) break;
     await wait(100);
   }
@@ -154,7 +155,7 @@ async function waitForChatBooted(chatWin, timeoutMs = 5000) {
 // 지워지고 placeholder로 돌아오는지, 부팅이 끝날 때까지 DOM을 60ms 간격으로
 // 표집한다. 스크린샷은 타이밍 레이스가 있어 상태 자체를 잰다. reduced-motion
 // 환경이면 시퀀스가 통째로 생략되는 게 스펙이므로 그 사실을 함께 기록한다.
-async function traceBootBar(chatWin, timeoutMs = 5000) {
+async function traceBootBar(shellWin, timeoutMs = 5000) {
   const probe = `(() => {
     const boot = document.getElementById('boot');
     const name = document.getElementById('bootName');
@@ -173,7 +174,7 @@ async function traceBootBar(chatWin, timeoutMs = 5000) {
   let reducedMotion = false;
   while (Date.now() - t0 < timeoutMs) {
     let s;
-    try { s = await chatWin.webContents.executeJavaScript(probe); } catch { break; }
+    try { s = await shellWin.webContents.executeJavaScript(probe); } catch { break; }
     reducedMotion = s.reducedMotion;
     if (!s.booting) break;
     if (s.name.length > maxName.length) maxName = s.name;
@@ -209,20 +210,27 @@ app.whenReady().then(async () => {
   // ---------- 창 생성 (main.js와 동일 경로) ----------
   await mainMod.createWindows();
   dlog('createWindows done');
-  const { chatWin, canvasWin } = mainMod.getWins();
+  const { shellWin } = mainMod.getWins();
   const layout = mainMod.getLayout();
   report.layout = layout;
 
-  // ---------- 검증 1: 부팅 — 대화 창만 뜬다 ----------
+  // ---------- 검증 1: 부팅 — 셸 창 하나가 뜬다 ----------
+  // 2026-08-24 리프 1.2.1: 옛 이름은 "부팅 — 대화 창만 뜬다"였고, 캔버스 창이 숨어
+  // 있는지(canvasVisibleAtBoot === false)를 함께 봤다. 창이 하나가 되면서 그 질문이
+  // 사라졌다 — 대신 **OS 창이 정말 1개인지**를 잰다. 오브 창(1.3.1)이 붙으면 이
+  // 기대값이 2가 되고, 그때 이 단언을 고치는 것이 그 리프의 일이다.
   // 부팅 바 연출 표집(1b)은 스크린샷보다 먼저 걸어둔다 — shot()이 수백 ms를 먹는
   // 동안 타이핑 구간(+660~+1160ms)이 지나가버리는 레이스를 피한다.
-  const bootBarPromise = traceBootBar(chatWin);
+  const bootBarPromise = traceBootBar(shellWin);
   await wait(200);
-  report.bootChatOnly = { canvasVisibleAtBoot: canvasWin.isVisible(), chatVisibleAtBoot: chatWin.isVisible() };
-  dlog('before shot 01'); const s1 = await shot(chatWin, '01-boot-sequence.png'); dlog('after shot 01');
-  const boot = await waitForChatBooted(chatWin);
+  report.bootChatOnly = {
+    openWindowCount: BrowserWindow.getAllWindows().length,
+    chatVisibleAtBoot: shellWin.isVisible(),
+  };
+  dlog('before shot 01'); const s1 = await shot(shellWin, '01-boot-sequence.png'); dlog('after shot 01');
+  const boot = await waitForChatBooted(shellWin);
   const bootBar = await bootBarPromise;
-  dlog('boot done, before shot 02'); const s2 = await shot(chatWin, '02-chat-only-idle.png'); dlog('after shot 02');
+  dlog('boot done, before shot 02'); const s2 = await shot(shellWin, '02-chat-only-idle.png'); dlog('after shot 02');
   report.bootChatOnly.shots = { boot: s1, idle: s2 };
   report.bootChatOnly.chatBootedAfterBoot = boot.booted;
   report.bootChatOnly.bootMode = boot.mode;
@@ -236,14 +244,13 @@ app.whenReady().then(async () => {
   // 그 상태의 검증 5~8은 숨은 DOM을 재는 것이라 믿으면 안 된다.
   report.bootChatOnly.bootedIntoChatMode = boot.mode === 'app';
   console.log(
-    '[verify] 검증1 완료 — 부팅 시 캔버스 창 표시 여부:', canvasWin.isVisible(),
-    '| 대화 창 부팅:', boot.booted, '| 모드:', boot.mode,
+    '[verify] 검증1 완료 — 열린 OS 창 수:', report.bootChatOnly.openWindowCount,
+    '| 셸 창 부팅:', boot.booted, '| 모드:', boot.mode,
     '| 모드 배타성:', boot.exactlyOneModeVisible,
     '| 부팅바 이름쓰기:', JSON.stringify(bootBar)
   );
-  // canvasVisibleAtBoot는 false가 정상이다(부팅 시 캔버스 창은 숨어 있어야 한다) —
-  // 단언 대상에서 제외한다.
-  assertOk('boot: chat window visible at boot', report.bootChatOnly.chatVisibleAtBoot === true);
+  assertOk('boot: exactly one OS window (Codex형 셸 — 오브는 리프 1.3.1)', report.bootChatOnly.openWindowCount === 1);
+  assertOk('boot: shell window visible at boot', report.bootChatOnly.chatVisibleAtBoot === true);
   assertOk('boot: chat reached a mode after boot sequence', report.bootChatOnly.chatBootedAfterBoot === true);
   assertOk('boot: exactly one mode panel visible (no overlap)', report.bootChatOnly.exactlyOneModeVisible === true);
   assertOk('boot: boot bar wrote full name then returned to placeholder', report.bootChatOnly.bootBarWritesName === true);
@@ -255,7 +262,7 @@ app.whenReady().then(async () => {
   // paint ack를 여섯 번 반복해 모드 복구와 반복 waiter 정리를 함께 검증한다.
   const receiptPaints = [];
   for (let index = 0; index < 6; index += 1) {
-    await chatWin.webContents.executeJavaScript(`
+    await shellWin.webContents.executeJavaScript(`
       (() => {
         document.getElementById('app').hidden = true;
         document.getElementById('onboard').hidden = false;
@@ -266,7 +273,7 @@ app.whenReady().then(async () => {
       '지원하지 않는 요청이라 캔버스에 표시하지 않았습니다.',
       { timeoutMs: 1500 },
     );
-    const surface = await chatWin.webContents.executeJavaScript(`
+    const surface = await shellWin.webContents.executeJavaScript(`
       (() => {
         const appPanel = document.getElementById('app');
         const onboard = document.getElementById('onboard');
@@ -293,7 +300,7 @@ app.whenReady().then(async () => {
     && item.nonzero && item.receiptCount === index + 1 && item.elapsedMs < 1500
   ));
   assertOk('restReceiptPaint: six hidden-mode receipts become visible with bounded paint ack', receiptPaintPass);
-  await chatWin.webContents.executeJavaScript(`
+  await shellWin.webContents.executeJavaScript(`
     document.querySelectorAll('.rest-receipt').forEach((node) => node.remove())
   `);
 
@@ -338,35 +345,79 @@ app.whenReady().then(async () => {
       && delayedFeedbackResult.firstFeedbackMs < 3000
       && delayedFeedbackResult.renderedCount === 0,
   );
-  await chatWin.webContents.executeJavaScript(`
+  await shellWin.webContents.executeJavaScript(`
     document.querySelectorAll('.rest-receipt').forEach((node) => node.remove())
   `);
 
-  // ---------- 검증 2: 점 → 캔버스 확장/수축, 프레임 실측 ----------
-  const dotBefore = await mainMod.getDotScreenPoint();
-  report.dotScreenPoint = dotBefore;
+  // 허용 오차 2px — Windows에서 setBounds() 요청값과 getBounds() 실측값 사이에
+  // DPI 반올림으로 1px 안팎의 편차가 실측된다(기능적 결함 아님). 옛 판은 검증 3
+  // 안에서 정의했는데, 이제 검증 2부터 쓰므로 앞으로 끌어올렸다.
+  const near = (a, b, tol = 2) => Math.abs(a - b) <= tol;
 
-  dlog('before expand 1'); const expandResult = await mainMod.expandCanvasWindow(); dlog('after expand 1');
+  // ---------- 검증 2: 중앙 캔버스는 늘 떠 있다 (2026-08-24 리프 1.2.1 재정의) ----------
+  // 옛 검증 2는 "점 → 캔버스 확장/수축, 프레임 실측"이었다: getDotScreenPoint()로
+  // 점의 화면 좌표를 재고, expandCanvasWindow()가 캔버스 **창**을 원형 clip-path로
+  // 550ms 동안 열고, collapseCanvasWindow()가 닫고, 그 사이 rAF 프레임 간격을
+  // p50/p95/max로 기록했다. 창이 하나가 되면서 열고 닫을 창이 없다 —
+  // 중앙 캔버스는 셸 창의 한 영역이라 부팅 순간부터 떠 있다.
+  //
+  // 그래서 이 자리에서 재는 것을 바꾼다: **연출 없이도 카드가 실제로 보이는가.**
+  // 프레임 수치(report.expand/report.collapse)는 측정 대상이 사라져 리포트에서도
+  // 뺀다 — 없는 것을 0으로 채워 넣으면 다음 사람이 "성능이 완벽하다"로 읽는다.
+  shellWin.webContents.send('athena:add-canvas', { type: 'stream' });
   await wait(150);
-  canvasWin.webContents.send('athena:add-canvas', { type: 'stream' });
+  shellWin.webContents.send('athena:add-canvas', { type: 'reader' });
   await wait(150);
-  canvasWin.webContents.send('athena:add-canvas', { type: 'reader' });
-  await wait(150);
-  canvasWin.webContents.send('athena:add-canvas', { type: 'table' });
+  shellWin.webContents.send('athena:add-canvas', { type: 'table' });
   await wait(300);
-  await shot(canvasWin, '03-mosaic-expanded.png');
-  await shot(chatWin, '03b-chat-during-mosaic.png');
+  await shot(shellWin, '03-shell-canvas-and-chat.png');
+
+  report.canvasAlwaysVisible = await shellWin.webContents.executeJavaScript(`(() => {
+    const region = document.getElementById('canvasRegion');
+    const chat = document.getElementById('chatRegion');
+    const cards = [...document.querySelectorAll('#grid .card')];
+    const r = region.getBoundingClientRect();
+    const c = chat.getBoundingClientRect();
+    const mosaic = document.getElementById('mosaic');
+    const sheen = document.querySelector('#canvasRegion .glass-sheen');
+    return {
+      cardCount: cards.length,
+      allCardsNonzero: cards.every((n) => {
+        const b = n.getBoundingClientRect();
+        return b.width > 0 && b.height > 0;
+      }),
+      canvasRegionNonzero: r.width > 0 && r.height > 0,
+      chatRegionWidth: Math.round(c.width),
+      // 캔버스가 채팅 왼쪽에 있다(영역 순서 계약).
+      canvasLeftOfChat: r.left < c.left,
+      // 옛 확장 연출이 남긴 잔재가 없어야 한다 — clipPath 인라인은 카드를 원형으로
+      // 잘라 데이터를 감추고, 잔류 blur는 숫자를 흐린다(soul.md §8 정보 정직성).
+      // 두 값 모두 **인라인 스타일이 비어 있는지**를 본다: 애니메이션이 사라졌으니
+      // 이 자리를 쓰는 코드 자체가 없어야 한다.
+      noInlineClipPath: mosaic.style.clipPath === '',
+      noInlineBackdropFilter: !sheen || sheen.style.backdropFilter === '',
+      // 정지 상태 규범 — 계산값 blur도 0px여야 한다(canvas.css .glass-sheen).
+      computedSheenFilter: sheen ? getComputedStyle(sheen).backdropFilter : null,
+    };
+  })()`);
+  console.log('[verify] 검증2(중앙 캔버스 상시 표시):', JSON.stringify(report.canvasAlwaysVisible));
+  assertOk('canvas: three fixture cards rendered with nonzero boxes', report.canvasAlwaysVisible.cardCount === 3 && report.canvasAlwaysVisible.allCardsNonzero === true);
+  assertOk('canvas: canvas region is left of chat region', report.canvasAlwaysVisible.canvasLeftOfChat === true);
+  assertOk('canvas: chat region is 400px wide (never collapses)', near(report.canvasAlwaysVisible.chatRegionWidth, 400, 2));
+  assertOk('canvas: no residual expand-animation clip-path', report.canvasAlwaysVisible.noInlineClipPath === true);
+  assertOk('canvas: no residual inline backdrop-filter', report.canvasAlwaysVisible.noInlineBackdropFilter === true);
+  assertOk('canvas: sheen rests at blur(0px)', /blur\(0px\)/.test(String(report.canvasAlwaysVisible.computedSheenFilter || '')));
 
   // 보조 증거 — 실제 OS 화면 합성 캡처(best-effort). spike/electron-glass/RESULT.md가
   // 기록한 대로 이 공유 데스크톱 환경에서는 간헐적으로 실패한다. 실패해도 위의
   // capturePage() 결과가 주 증거이므로 여기서는 막지 않는다.
   try {
     const capScript = path.join(__dirname, '..', 'spike', 'electron-glass', 'scripts', 'capture.ps1');
-    const cb = canvasWin.getBounds();
+    const cb = shellWin.getBounds();
     execFileSync('powershell', [
       '-NoProfile', '-ExecutionPolicy', 'Bypass', '-WindowStyle', 'Hidden', '-File', capScript,
       '-x', String(cb.x), '-y', String(cb.y), '-w', String(cb.width), '-h', String(cb.height),
-      '-out', path.join(CAPTURES, '03c-mosaic-OS-composited.png'),
+      '-out', path.join(CAPTURES, '03c-shell-OS-composited.png'),
     ], { stdio: 'pipe', windowsHide: true, timeout: 8000 });
     report.osCaptureAttempted = { ok: true };
   } catch (err) {
@@ -374,103 +425,111 @@ app.whenReady().then(async () => {
     dlog('OS capture failed: ' + (err && err.message || err));
   }
 
-  report.expand = stats(expandResult.timestamps);
-  console.log('[verify] 확장 프레임 stats:', JSON.stringify(report.expand));
-
-  await wait(400);
-  dlog('before collapse 1'); const collapseResult = await mainMod.collapseCanvasWindow(); dlog('after collapse 1');
-  report.collapse = stats(collapseResult.timestamps);
-  console.log('[verify] 수축 프레임 stats:', JSON.stringify(report.collapse));
-  await wait(200);
-  await shot(chatWin, '04-collapsed-back-to-chat.png');
-  report.afterCollapse = { canvasVisible: canvasWin.isVisible() };
-  assertOk('collapse: canvas hidden after collapseCanvasWindow()', report.afterCollapse.canvasVisible === false);
-  // expand/collapse 프레임 stats(p50/p95/max)는 공유 데스크톱 환경이라 실행마다
-  // 흔들린다(CLAUDE.md §9) — 수치는 리포트에 남기되 pass/fail 단언에서는 뺀다.
-
-  // ---------- 검증 3: 두 창 독립 이동/리사이즈 ----------
+  // ---------- 검증 3: 셸 창 이동/리사이즈가 영역 계약을 지킨다 (리프 1.2.1 재정의) ----------
+  // 옛 검증 3은 "두 창 독립 이동/리사이즈"였다 — 캔버스 창을 옮겨도 대화 창이
+  // 안 따라오고, 대화 창 높이를 바꿔도 캔버스 창이 그대로인지를 봤다. 창이
+  // 하나면 독립시킬 상대가 없다. 대신 **창을 움직여도 안의 영역 계약이 유지되는지**를
+  // 잰다: 채팅 400px은 창 폭이 줄어도 줄지 않고, 줄어드는 쪽은 캔버스다.
+  //
   // 직접 setBounds는 반드시 noteAppBounds로 "앱 주도"임을 표시한다 — 안 하면
   // 스냅 대상화(2026-08-18)의 OS 배치 감지가 이 이동을 Win+방향키 스냅으로
-  // 오인해 짝 전체를 정착시켜 독립성 단언이 설계된 동작에 의해 깨진다.
-  const initial = { canvas: canvasWin.getBounds(), chat: chatWin.getBounds() };
-  canvasWin.setBounds({ ...canvasWin.getBounds(), x: canvasWin.getBounds().x + 80 });
-  mainMod.noteAppBounds(canvasWin);
+  // 오인해 창을 정착시켜 단언이 설계된 동작에 의해 깨진다.
+  const regionWidths = () => shellWin.webContents.executeJavaScript(`(() => {
+    const c = document.getElementById('canvasRegion').getBoundingClientRect();
+    const t = document.getElementById('chatRegion').getBoundingClientRect();
+    return { canvas: Math.round(c.width), chat: Math.round(t.width) };
+  })()`);
+
+  const shellInitial = shellWin.getBounds();
+  const widthsInitial = await regionWidths();
+
+  shellWin.setBounds({ ...shellInitial, x: shellInitial.x + 80 });
+  mainMod.noteAppBounds(shellWin);
   await wait(150);
-  const afterCanvasMove = { canvas: canvasWin.getBounds(), chat: chatWin.getBounds() };
-  chatWin.setBounds({ ...chatWin.getBounds(), height: Math.min(layout.chatMaxH, chatWin.getBounds().height + 100) });
-  mainMod.noteAppBounds(chatWin);
-  await wait(150);
-  const afterChatResize = { canvas: canvasWin.getBounds(), chat: chatWin.getBounds() };
+  const afterMove = shellWin.getBounds();
+  const widthsAfterMove = await regionWidths();
+
+  // 창 폭을 240 줄인다 — 채팅은 그대로, 캔버스만 줄어야 한다.
+  const narrowW = shellInitial.width - 240;
+  shellWin.setBounds({ ...afterMove, width: narrowW });
+  mainMod.noteAppBounds(shellWin);
+  await wait(200);
+  const widthsAfterNarrow = await regionWidths();
+
   // 원위치
-  canvasWin.setBounds({ ...canvasWin.getBounds(), x: canvasWin.getBounds().x - 80 });
-  mainMod.noteAppBounds(canvasWin);
-  chatWin.setBounds({ x: layout.chatOriginX, y: (layout.originY + layout.canvasH + layout.chatBaseH) - layout.chatBaseH, width: layout.chatW, height: layout.chatBaseH });
-  mainMod.noteAppBounds(chatWin);
+  shellWin.setBounds(shellInitial);
+  mainMod.noteAppBounds(shellWin);
   await wait(150);
 
-  // 허용 오차 2px — Windows에서 backgroundMaterial(acrylic) 적용 시 setBounds() 요청값과
-  // getBounds() 실측값 사이에 DPI 반올림으로 1px 안팎의 편차가 실측된다(기능적 결함 아님).
-  const near = (a, b, tol = 2) => Math.abs(a - b) <= tol;
-
-  report.independence = {
-    initial, afterCanvasMove, afterChatResize,
-    canvasMovedButChatUnchanged:
-      near(afterCanvasMove.canvas.x, initial.canvas.x + 80) &&
-      near(afterCanvasMove.chat.x, initial.chat.x) && near(afterCanvasMove.chat.y, initial.chat.y) &&
-      near(afterCanvasMove.chat.height, initial.chat.height),
-    chatResizedButCanvasUnchanged:
-      near(afterChatResize.chat.height, Math.min(layout.chatMaxH, initial.chat.height + 100)) &&
-      near(afterChatResize.canvas.x, afterCanvasMove.canvas.x) && near(afterChatResize.canvas.y, afterCanvasMove.canvas.y) &&
-      near(afterChatResize.canvas.width, afterCanvasMove.canvas.width) && near(afterChatResize.canvas.height, afterCanvasMove.canvas.height),
+  report.regionContract = {
+    shellInitial, afterMove, narrowW,
+    widthsInitial, widthsAfterMove, widthsAfterNarrow,
+    moveKeepsWidths:
+      near(afterMove.x, shellInitial.x + 80)
+      && near(widthsAfterMove.canvas, widthsInitial.canvas)
+      && near(widthsAfterMove.chat, widthsInitial.chat),
+    chatNeverShrinks: near(widthsAfterNarrow.chat, widthsInitial.chat, 2),
+    canvasAbsorbsShrink: widthsAfterNarrow.canvas <= widthsInitial.canvas - 200,
   };
-  console.log('[verify] 독립성 체크:', JSON.stringify(report.independence.canvasMovedButChatUnchanged), JSON.stringify(report.independence.chatResizedButCanvasUnchanged));
-  assertOk('independence: canvas move does not affect chat bounds', report.independence.canvasMovedButChatUnchanged === true);
-  assertOk('independence: chat resize does not affect canvas bounds', report.independence.chatResizedButCanvasUnchanged === true);
+  console.log('[verify] 검증3(영역 계약):', JSON.stringify(report.regionContract));
+  assertOk('regionContract: moving the window keeps both region widths', report.regionContract.moveKeepsWidths === true);
+  assertOk('regionContract: chat region never shrinks when the window narrows', report.regionContract.chatNeverShrinks === true);
+  assertOk('regionContract: canvas region absorbs the shrink', report.regionContract.canvasAbsorbsShrink === true);
 
   // ---------- 검증 4: 접근성 3종 (CDP Emulation.setEmulatedMedia) ----------
-  // 다시 캔버스를 채워서 유리 표면이 실제로 보이는 상태에서 캡처한다.
-  dlog('before expand 2'); const expand2 = await mainMod.expandCanvasWindow(); dlog('after expand 2');
-  canvasWin.webContents.send('athena:add-canvas', { type: 'stream' });
-  canvasWin.webContents.send('athena:add-canvas', { type: 'table' });
+  // 캔버스에 카드가 찬 상태 그대로 캡처한다 — 유리 표면이 실제로 보여야 의미가 있다.
+  // 2026-08-24 리프 1.2.1: 창이 하나가 되면서 캡처도 상태당 **한 장**이다. 옛 판은
+  // 창마다 한 장씩 총 6장을 찍었는데, 지금 같은 창을 두 번 찍으면 바이트까지
+  // 동일한 PNG 두 장이 남고 그건 검증17(캡처 스로틀 회귀 가드)이 잡아야 할
+  // 신호와 구별되지 않는다.
+  shellWin.webContents.send('athena:add-canvas', { type: 'stream' });
+  shellWin.webContents.send('athena:add-canvas', { type: 'table' });
   await wait(300);
 
-  await forceMedia(canvasWin, [{ name: 'prefers-reduced-transparency', value: 'reduce' }]);
-  await forceMedia(chatWin, [{ name: 'prefers-reduced-transparency', value: 'reduce' }]);
+  await forceMedia(shellWin, [{ name: 'prefers-reduced-transparency', value: 'reduce' }]);
   await wait(150);
-  await shot(canvasWin, '05-a11y-reduced-transparency-canvas.png');
-  await shot(chatWin, '05-a11y-reduced-transparency-chat.png');
-  await clearMedia(canvasWin);
-  await clearMedia(chatWin);
+  await shot(shellWin, '05-a11y-reduced-transparency.png');
+  await clearMedia(shellWin);
 
-  await forceMedia(canvasWin, [{ name: 'prefers-contrast', value: 'more' }]);
-  await forceMedia(chatWin, [{ name: 'prefers-contrast', value: 'more' }]);
+  await forceMedia(shellWin, [{ name: 'prefers-contrast', value: 'more' }]);
   await wait(150);
-  await shot(canvasWin, '06-a11y-prefers-contrast-canvas.png');
-  await shot(chatWin, '06-a11y-prefers-contrast-chat.png');
-  await clearMedia(canvasWin);
-  await clearMedia(chatWin);
+  await shot(shellWin, '06-a11y-prefers-contrast.png');
+  await clearMedia(shellWin);
 
-  await forceMedia(canvasWin, [{ name: 'prefers-reduced-motion', value: 'reduce' }]);
-  await forceMedia(chatWin, [{ name: 'prefers-reduced-motion', value: 'reduce' }]);
+  await forceMedia(shellWin, [{ name: 'prefers-reduced-motion', value: 'reduce' }]);
   await wait(150);
-  await shot(canvasWin, '07-a11y-reduced-motion-canvas.png');
-  await shot(chatWin, '07-a11y-reduced-motion-chat.png');
-  await clearMedia(canvasWin);
-  await clearMedia(chatWin);
+  await shot(shellWin, '07-a11y-reduced-motion.png');
+  await clearMedia(shellWin);
 
   dlog('a11y shots done'); report.accessibilityShotsTaken = [
-    '05-a11y-reduced-transparency-canvas.png', '05-a11y-reduced-transparency-chat.png',
-    '06-a11y-prefers-contrast-canvas.png', '06-a11y-prefers-contrast-chat.png',
-    '07-a11y-reduced-motion-canvas.png', '07-a11y-reduced-motion-chat.png',
+    '05-a11y-reduced-transparency.png',
+    '06-a11y-prefers-contrast.png',
+    '07-a11y-reduced-motion.png',
   ];
   console.log('[verify] 접근성 3종 캡처 완료');
 
-  // ---------- 검증 5: 실제 개발용 트리거(Enter) 종단간 플로우 — 3상태 + 자동 성장 ----------
+
+  // ---------- 검증 5: 실제 사용자 트리거(Enter) 종단간 플로우 — 3상태 ----------
   // 지금까지는 mainMod 함수를 직접 호출했다. 이번엔 사용자가 실제로 하는 행동
-  // (입력 후 Enter)을 그대로 시뮬레이션해 chat.js의 상태 머신·자동 성장·
+  // (입력 후 Enter)을 그대로 시뮬레이션해 chat.js의 상태 머신과
   // athena__render_canvas 트리거 전체 경로를 검증한다.
-  const boundsBeforeQuery = chatWin.getBounds();
-  await chatWin.webContents.executeJavaScript(`
+  //
+  // 2026-08-24 리프 1.2.1: 옛 판은 여기서 **창 높이 자동 성장**을 함께 쟀다
+  // (boundsAfterQuery.height > boundsBeforeQuery.height + 2). 채팅이 고정 폭 영역이
+  // 된 뒤로는 창이 자라지 않는다 — 자라는 것은 이력의 scrollHeight이고, 넘치면
+  // 영역 안에서 스크롤한다. 그래서 "창이 커졌는가" 대신 **"이력이 실제로 늘고
+  // 바닥을 따라갔는가"**를 잰다. 창 높이 불변도 함께 단언한다: 옛 자동 성장 경로가
+  // 되살아나면 그게 회귀다.
+  const boundsBeforeQuery = shellWin.getBounds();
+  // 이력이 실제로 늘었는지는 **턴 수**로 잰다. scrollHeight는 못 쓴다: chat.css의
+  // `.history > :first-child { margin-top: auto }`가 내용을 바닥에 붙이므로, 내용이
+  // 영역보다 짧은 동안 scrollHeight는 clientHeight에 고정된다(첫 실행 실측:
+  // 질의 전후 둘 다 633). 옛 판에서 이 지표가 창 높이였던 자리를 그대로 물려받아
+  // scrollHeight를 넣었다가 거짓 실패를 봤다 — 실측이 지표를 고친 사례다.
+  const turnsBeforeQuery = await shellWin.webContents.executeJavaScript(
+    "document.querySelectorAll('#history .turn').length"
+  );
+  await shellWin.webContents.executeJavaScript(`
     (() => {
       const input = document.getElementById('input');
       input.value = '삼성전자 재무제표랑 공시, 뉴스 보여줘';
@@ -478,91 +537,131 @@ app.whenReady().then(async () => {
     })();
   `);
   await wait(350);
-  await shot(chatWin, '08-e2e-1-judging.png'); // 상태 1 — 판단 중 (점 breathe, 입력 잠김)
+  await shot(shellWin, '08-e2e-1-judging.png'); // 상태 1 — 판단 중 (점 breathe, 입력 잠김)
   await wait(500);
-  await shot(chatWin, '09-e2e-2-calling.png'); // 상태 2 — 호출 중 (TR 코드 누적)
+  await shot(shellWin, '09-e2e-2-calling.png'); // 상태 2 — 호출 중 (TR 코드 누적)
 
   // 상태 3(완료)까지 폴링 — .turn-a가 나타날 때까지, 최대 6초
   let e2eDone = false;
   const t0 = Date.now();
   while (Date.now() - t0 < 6000) {
-    const found = await chatWin.webContents.executeJavaScript("!!document.querySelector('.turn-a')");
+    const found = await shellWin.webContents.executeJavaScript("!!document.querySelector('.turn-a')");
     if (found) { e2eDone = true; break; }
     await wait(150);
   }
   await wait(150);
-  await shot(chatWin, '10-e2e-3-done-autogrow.png');
-  await shot(canvasWin, '11-e2e-3-mosaic-from-query.png');
-  const boundsAfterQuery = chatWin.getBounds();
+  // 옛 판은 여기서 두 장을 찍었다(대화 창 10번 · 캔버스 창 11번). 창이 하나면
+  // 같은 프레임 두 장이라 한 장으로 접는다 — 셸 한 장에 채팅 이력과 카드가 같이 찍힌다.
+  await shot(shellWin, '10-e2e-3-done.png');
+  const boundsAfterQuery = shellWin.getBounds();
 
-  const finalTurnText = await chatWin.webContents.executeJavaScript(
+  const finalTurnText = await shellWin.webContents.executeJavaScript(
     "(() => { const els = document.querySelectorAll('.turn-a'); return els.length ? els[els.length-1].textContent : null; })()"
   );
-  const chipCount = await chatWin.webContents.executeJavaScript("document.querySelectorAll('.chip').length");
+  const chipCount = await shellWin.webContents.executeJavaScript("document.querySelectorAll('.chip').length");
+  const historyState = await shellWin.webContents.executeJavaScript(`(() => {
+    const h = document.getElementById('history');
+    return {
+      scrollHeight: h.scrollHeight,
+      clientHeight: h.clientHeight,
+      scrollTop: Math.round(h.scrollTop),
+      turnCount: h.querySelectorAll('.turn').length,
+      // 하단 고정 — 새 턴이 들어오면 바닥을 따라간다(chat.js scrollHistoryToBottom).
+      // 내용이 아직 영역보다 짧으면 스크롤 자체가 없으므로 그 경우도 통과로 본다.
+      atBottom: h.scrollHeight - h.scrollTop - h.clientHeight < 24,
+      overflows: h.scrollHeight > h.clientHeight,
+    };
+  })()`);
 
   report.e2eTrigger = {
     reachedDoneState: e2eDone,
     boundsBeforeQuery, boundsAfterQuery,
-    // 옛 단언은 `boundsAfterQuery.height > layout.chatBaseH`였다. 이건 DPI 반올림
-    // 1px(205 > 204)에 통과한다 — 2026-08-17 실행이 실제로 그렇게 통과했다.
-    // 그때 자동 성장은 죽어 있었다(온보딩이 `#app`을 숨겨 `#history.scrollHeight`가
-    // 0이었다). 질의 **전** 높이 대비 실제 증가를 보고, acrylic DPI 반올림 오차
-    // (±2px)보다 커야 통과시킨다.
-    grewTallerThanBase: boundsAfterQuery.height > boundsBeforeQuery.height + 2,
-    grownByPx: boundsAfterQuery.height - boundsBeforeQuery.height,
+    turnsBeforeQuery,
+    history: historyState,
+    // 창은 자라지 않는다(리프 1.2.1). ±2px는 DPI 반올림 허용치.
+    windowHeightUnchanged: near(boundsAfterQuery.height, boundsBeforeQuery.height),
+    historyGrew: historyState.turnCount > turnsBeforeQuery,
+    stuckToBottom: historyState.atBottom,
     finalAnswerText: finalTurnText,
     cardChipCount: chipCount,
   };
   console.log('[verify] 검증5(E2E Enter 트리거):', JSON.stringify(report.e2eTrigger));
   assertOk('e2e: reached done state (.turn-a appeared)', report.e2eTrigger.reachedDoneState === true);
-  assertOk('e2e: chat grew taller than pre-query height', report.e2eTrigger.grewTallerThanBase === true);
+  assertOk('e2e: window height did NOT change (auto-grow is gone)', report.e2eTrigger.windowHeightUnchanged === true);
+  assertOk('e2e: history content grew inside the fixed chat region', report.e2eTrigger.historyGrew === true);
+  assertOk('e2e: history stuck to bottom after the new turn', report.e2eTrigger.stuckToBottom === true);
   // finalAnswerText/cardChipCount는 fixture 응답 내용에 좌우되는 정보성 필드라
   // 단언에서 뺀다.
 
-  // ---------- 검증 6: 그립 드래그로 수동 리사이즈 ----------
-  const beforeDrag = chatWin.getBounds();
-  const dragStartScreenY = layout.originY + layout.canvasH + layout.chatBaseH - 5; // 대략 그립 근처
-  await chatWin.webContents.executeJavaScript(`
+  // ---------- 검증 6: 창 크기는 사용자 리사이즈로만 바뀐다 (리프 1.2.1 재정의) ----------
+  // 옛 검증 6은 "그립 드래그로 수동 리사이즈"였다 — 대화 창 상단의 #grip을 끌어
+  // 창 높이를 키우고, 그동안 하단 입력줄이 화면에 고정(bottomEdgePinned)돼 있는지를
+  // 봤다. 그립도, 하단 앵커도, "창 높이 = 이력 높이"라는 전제도 전부 사라졌다.
+  // 남은 계약은 훨씬 단순하다: **창 크기를 바꾸는 것은 OS 리사이즈뿐이고, 앱이
+  // 그 결과를 되감지 않는다.** 옛 판에서는 자동 성장이 사용자 크기를 덮어쓸 수
+  // 있어서 manualOverride라는 별도 장치가 필요했다 — 그 장치가 필요 없어졌다는
+  // 것을 여기서 잰다(자동 성장 부활 회귀 가드).
+  const beforeResize = shellWin.getBounds();
+  shellWin.setBounds({ ...beforeResize, height: beforeResize.height + 120 });
+  mainMod.noteAppBounds(shellWin);
+  await wait(250);
+  const afterResize = shellWin.getBounds();
+  // 내용을 더 밀어 넣는다 — 옛 자동 성장이 살아 있었다면 여기서 창이 다시 움직인다.
+  await shellWin.webContents.executeJavaScript(`
     (() => {
-      const grip = document.getElementById('grip');
-      grip.dispatchEvent(new MouseEvent('mousedown', { screenY: ${dragStartScreenY}, bubbles: true }));
-      window.dispatchEvent(new MouseEvent('mousemove', { screenY: ${dragStartScreenY - 160}, bubbles: true }));
-      window.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
+      const h = document.getElementById('history');
+      for (let i = 0; i < 5; i += 1) {
+        const line = document.createElement('div');
+        line.className = 'turn verify6-filler';
+        const t = document.createElement('div');
+        t.className = 'turn-a';
+        t.textContent = 'verify6 filler ' + i;
+        line.appendChild(t);
+        h.appendChild(line);
+      }
     })();
   `);
-  await wait(200);
-  const afterDrag = chatWin.getBounds();
-  report.manualResize = {
-    beforeDrag, afterDrag,
-    grewByDrag: afterDrag.height > beforeDrag.height,
-    bottomEdgePinned: near(beforeDrag.y + beforeDrag.height, afterDrag.y + afterDrag.height),
-  };
-  console.log('[verify] 검증6(수동 리사이즈):', JSON.stringify(report.manualResize));
-  assertOk('manualResize: grip drag grew chat height', report.manualResize.grewByDrag === true);
-  assertOk('manualResize: bottom edge stayed pinned while resizing', report.manualResize.bottomEdgePinned === true);
+  await wait(300);
+  const afterContentPush = shellWin.getBounds();
+  await shellWin.webContents.executeJavaScript(
+    "document.querySelectorAll('.verify6-filler').forEach((n) => n.remove())"
+  );
+  shellWin.setBounds(beforeResize);
+  mainMod.noteAppBounds(shellWin);
+  await wait(150);
 
-  // ---------- 검증 7: 설정을 열어도 창은 둘이다 + 사이드바 nav 전환 ----------
-  // ui/soul.md §3·§8 — 창은 둘뿐이고 창 3개 이상은 즉시 탈락이다. 설정은 새 창이
-  // 아니라 대화 창의 모드다(GLOSSARY.md §1). 이 검증의 핵심 단언은 "창이 늘어난다"
-  // 가 아니라 **"창이 늘지 않는다"**이다.
+  report.userResizeRespected = {
+    beforeResize, afterResize, afterContentPush,
+    resizeApplied: near(afterResize.height, beforeResize.height + 120),
+    contentDidNotResizeWindow: near(afterContentPush.height, afterResize.height),
+  };
+  console.log('[verify] 검증6(사용자 리사이즈 존중):', JSON.stringify(report.userResizeRespected));
+  assertOk('userResize: OS resize applied to the shell window', report.userResizeRespected.resizeApplied === true);
+  assertOk('userResize: new content does NOT resize the window (auto-grow regression guard)', report.userResizeRespected.contentDidNotResizeWindow === true);
+
+  // ---------- 검증 7: 설정을 열어도 창은 늘지 않는다 + 사이드바 nav 전환 ----------
+  // ui/soul.md §3·§8 — 창 3개 이상은 즉시 탈락이다. 설정은 새 창이 아니라 셸 창의
+  // 모드다(GLOSSARY.md §1). 이 검증의 핵심 단언은 "창이 늘어난다"가 아니라
+  // **"창이 늘지 않는다"**이다 — 그래서 기대값을 상수로 박지 않고 열기 **전**
+  // 창 수와 대조한다. 오브 창(1.3.1)이 붙어 기준선이 2가 돼도 이 검증은 그대로 산다.
   // 2026-08-18 사이드바 도입(Paper 43쪽) — #settingsGrid에는 nav가 고른 카드
   // 하나만 산다. 옛 단언("점 클릭 한 번에 계좌·MCP 카드가 동시에 뜬다")은 더 이상
   // 성립하지 않는다 — 기본 선택은 '화면'이고, 계좌·MCP·모델은 nav에서 선택해야
   // 각각 뜬다(lib/settings-cards.js renderNav/SETTINGS_PANELS, chat.js openSettings).
   const winCountBefore = BrowserWindow.getAllWindows().length;
-  const chatBoundsBefore = chatWin.getBounds();
+  const chatBoundsBefore = shellWin.getBounds();
 
-  await chatWin.webContents.executeJavaScript("document.getElementById('dot').click()");
+  await shellWin.webContents.executeJavaScript("document.getElementById('dot').click()");
   await wait(900);
 
   const winCountAfterOpen = BrowserWindow.getAllWindows().length;
 
   // 두 번 눌러도(재오픈이 no-op) nav·카드가 중복되지 않아야 한다
-  await chatWin.webContents.executeJavaScript("document.getElementById('dot').click()");
+  await shellWin.webContents.executeJavaScript("document.getElementById('dot').click()");
   await wait(600);
   const winCountAfterSecondClick = BrowserWindow.getAllWindows().length;
 
-  const navProbe = await chatWin.webContents.executeJavaScript(`
+  const navProbe = await shellWin.webContents.executeJavaScript(`
     (() => {
       const nav = document.getElementById('settingsNav');
       const items = nav ? Array.from(nav.querySelectorAll('.settings-nav-item')) : [];
@@ -588,21 +687,21 @@ app.whenReady().then(async () => {
     `;
   }
 
-  const navClickAccounts = await chatWin.webContents.executeJavaScript(clickNavItemScript('계좌'));
+  const navClickAccounts = await shellWin.webContents.executeJavaScript(clickNavItemScript('계좌'));
   await wait(500);
-  const accountsPanelCardCount = await chatWin.webContents.executeJavaScript(
+  const accountsPanelCardCount = await shellWin.webContents.executeJavaScript(
     "document.querySelectorAll('#settingsGrid .card.accounts').length"
   );
 
-  const navClickMcp = await chatWin.webContents.executeJavaScript(clickNavItemScript('MCP 서버'));
+  const navClickMcp = await shellWin.webContents.executeJavaScript(clickNavItemScript('MCP 서버'));
   await wait(1000); // mcp-list는 Python CLI 콜드 스폰이라 실측 ~850ms 걸린다(verify-settings.js 주석 참고)
-  const mcpPanelCardCount = await chatWin.webContents.executeJavaScript(
+  const mcpPanelCardCount = await shellWin.webContents.executeJavaScript(
     "document.querySelectorAll('#settingsGrid .card.mcp').length"
   );
 
-  const navClickModel = await chatWin.webContents.executeJavaScript(clickNavItemScript('모델'));
+  const navClickModel = await shellWin.webContents.executeJavaScript(clickNavItemScript('모델'));
   await wait(500);
-  const modelPanelProbe = await chatWin.webContents.executeJavaScript(`
+  const modelPanelProbe = await shellWin.webContents.executeJavaScript(`
     (() => {
       const card = document.querySelector('#settingsGrid .card.model');
       return {
@@ -613,7 +712,7 @@ app.whenReady().then(async () => {
     })()
   `);
 
-  const chatProbe = await chatWin.webContents.executeJavaScript(`
+  const chatProbe = await shellWin.webContents.executeJavaScript(`
     (() => ({
       // 대화 화면은 물러나고 설정 화면이 그 자리를 차지한다 — 같은 창이 변한 것이다
       appHidden: document.getElementById('app').hidden === true,
@@ -627,21 +726,23 @@ app.whenReady().then(async () => {
       bearerLeak: /ATHENA_LOCAL_BEARER_TOKEN\s*=/.test(document.body.innerText),
     }))()
   `);
-  // 캔버스 창은 설정에 관여하지 않는다 — 설정 카드가 저기 있으면 안 된다
-  const canvasProbe = await canvasWin.webContents.executeJavaScript(`
+  // 중앙 캔버스는 설정에 관여하지 않는다 — 설정 카드가 #grid에 있으면 안 된다.
+  // 창이 하나가 된 뒤(리프 1.2.1)에도 두 영역의 DOM 서브트리는 분리돼 있으므로
+  // 이 단언은 그대로 유효하다 — 오히려 한 문서 안이라 섞일 위험이 커져 더 중요해졌다.
+  const canvasProbe = await shellWin.webContents.executeJavaScript(`
     (() => ({
       settingsCardsOnCanvas: document.querySelectorAll('#grid .card.accounts, #grid .card.mcp, #grid .card.model, #grid .card.screen').length,
     }))()
   `);
-  const chatBoundsWhileOpen = chatWin.getBounds();
-  await shot(chatWin, '17-settings-mode.png');
+  const chatBoundsWhileOpen = shellWin.getBounds();
+  await shot(shellWin, '17-settings-mode.png');
 
   // Esc로 대화 모드로 돌아온다
-  await chatWin.webContents.executeJavaScript(
+  await shellWin.webContents.executeJavaScript(
     "document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))"
   );
   await wait(600);
-  const chatAfterClose = await chatWin.webContents.executeJavaScript(`
+  const chatAfterClose = await shellWin.webContents.executeJavaScript(`
     (() => ({
       appVisible: document.getElementById('app').hidden === false,
       settingsHidden: document.getElementById('settings').hidden === true,
@@ -651,11 +752,13 @@ app.whenReady().then(async () => {
 
   report.settingsSurface = {
     // 핵심 계약 — 설정은 창을 만들지 않는다. 이 창이 변한다.
+    // 이 객체의 값은 전부 불리언이어야 한다 — 아래 일괄 단언 루프가 `=== true`로
+    // 판정하므로 수치를 섞으면 조용히 실패한다(창 수 자체는 report.bootChatOnly에 있다).
     noNewWindowOnOpen: winCountAfterOpen === winCountBefore,
-    stillTwoWindows: BrowserWindow.getAllWindows().length === winCountBefore,
+    windowCountUnchanged: BrowserWindow.getAllWindows().length === winCountBefore,
     noNewWindowOnSecondClick: winCountAfterSecondClick === winCountBefore,
-    // 대화 창이 설정 모드로 바뀐다
-    renderedInChatWindow: chatProbe.settingsVisible === true && chatProbe.url === 'chat.html',
+    // 셸 창이 설정 모드로 바뀐다
+    renderedInChatWindow: chatProbe.settingsVisible === true && chatProbe.url === 'shell.html',
     chatModeSteppedAside: chatProbe.appHidden === true,
     // 사이드바 nav — 존재 + 항목 5개(화면·계좌·MCP 서버·모델·성향・이력, 채팅→그래프
     // 파이프라인 단계 5로 늘었다 — .omc/plans/plan-chat-graph-pipeline.md §2(e)) +
@@ -673,8 +776,12 @@ app.whenReady().then(async () => {
     modelPanelHasModelChips: modelPanelProbe.modelChipCount > 0,
     // 설정은 캔버스의 일이 아니다
     noSettingsCardsOnCanvas: canvasProbe.settingsCardsOnCanvas === 0,
-    // 온보딩과 같은 문법 — 창이 chatMaxH로 자란다
-    chatGrewToMax: chatBoundsWhileOpen.height > chatBoundsBefore.height,
+    // 2026-08-24 리프 1.2.1: 옛 단언 chatGrewToMax("설정을 열면 창이 chatMaxH로
+    // 자란다")는 사라졌다 — 설정은 셸 창 전체를 덮는 오버레이라 창 크기를 건드리지
+    // 않는다. 그 자리에 **창 크기 불변**을 넣는다: 모드 전환이 창을 흔들면 회귀다.
+    windowSizeUnchangedWhileOpen:
+      near(chatBoundsWhileOpen.width, chatBoundsBefore.width)
+      && near(chatBoundsWhileOpen.height, chatBoundsBefore.height),
     dotIsRealButton: chatProbe.dotIsButton === true,
     noTrIdLeak: chatProbe.trIdLeak === false,
     noBearerLeak: chatProbe.bearerLeak === false,
@@ -701,10 +808,10 @@ app.whenReady().then(async () => {
   // 사이드바 도입 이후 커맨드바 경로도 기본 선택은 '화면'이다 — 옛 accountsCardCount
   // 전제(검증7과 같은 이유로) 대신 nav 존재 + 기본 패널로 판정한다.
   const winCountBeforeCmd = BrowserWindow.getAllWindows().length;
-  const turnCountBeforeCmd = await chatWin.webContents.executeJavaScript(
+  const turnCountBeforeCmd = await shellWin.webContents.executeJavaScript(
     "document.querySelectorAll('.turn-q').length"
   );
-  await chatWin.webContents.executeJavaScript(`
+  await shellWin.webContents.executeJavaScript(`
     (() => {
       const el = document.getElementById('input');
       el.value = '설정';
@@ -713,7 +820,7 @@ app.whenReady().then(async () => {
   `);
   await wait(900);
   const winCountAfterCmd = BrowserWindow.getAllWindows().length;
-  const chatAfterCmd = await chatWin.webContents.executeJavaScript(`
+  const chatAfterCmd = await shellWin.webContents.executeJavaScript(`
     (() => ({
       inputCleared: document.getElementById('input').value === '',
       turnCount: document.querySelectorAll('.turn-q').length,
@@ -723,7 +830,7 @@ app.whenReady().then(async () => {
     }))()
   `);
   // 정리 — 다음 단계에 설정 모드를 남기지 않는다
-  await chatWin.webContents.executeJavaScript(
+  await shellWin.webContents.executeJavaScript(
     "document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))"
   );
   await wait(400);
@@ -749,94 +856,94 @@ app.whenReady().then(async () => {
   // 드래그 자체는 실제 마우스가 필요해 자동화로 못 돌린다 — 대신 그 결과(창이
   // 옮겨진 상태)를 setBounds로 재현해 "다음 높이 변경이 창을 부팅 좌표로
   // 되돌리지 않는다"(앵커 동기화)를 단언한다.
-  const sendFromChat = (channel, payload) => chatWin.webContents.executeJavaScript(
+  const sendFromChat = (channel, payload) => shellWin.webContents.executeJavaScript(
     `window.athena.send('${channel}', ${JSON.stringify(payload)})`
   );
 
-  // 9a — 줌: 두 창이 같은 배율로 움직이고, reset으로 1.0에 돌아온다
+  // 9a — 줌: 배율이 적용되고 reset으로 1.0에 돌아온다.
+  // 옛 판은 "두 창이 같은 배율로 움직인다"를 쟀다(zoomInSyncsBothWindows) — 창이
+  // 하나가 되면서 동기화할 상대가 없다. 렌더러가 하나뿐이라 배율 어긋남 자체가
+  // 구조적으로 불가능해졌다(리프 1.2.1).
   await sendFromChat('athena:zoom', { dir: 'in' });
   await sendFromChat('athena:zoom', { dir: 'in' });
   await wait(300);
-  const zoomAfterIn = {
-    chat: chatWin.webContents.getZoomFactor(),
-    canvas: canvasWin.webContents.getZoomFactor(),
-  };
+  const zoomAfterIn = shellWin.webContents.getZoomFactor();
   await sendFromChat('athena:zoom', { dir: 'reset' });
   await wait(300);
-  const zoomAfterReset = chatWin.webContents.getZoomFactor();
+  const zoomAfterReset = shellWin.webContents.getZoomFactor();
 
-  // 9b — 이동 앵커: 창을 옮긴 뒤 높이를 바꿔도 새 위치가 유지된다(스냅백 회귀 방지)
-  const beforeMove = chatWin.getBounds();
-  chatWin.setBounds({ x: beforeMove.x + 120, y: beforeMove.y - 40, width: beforeMove.width, height: beforeMove.height });
-  mainMod.noteAppBounds(chatWin); // 앱 주도 표시 — OS 스냅 오인 정착 방지(검증3 주석)
+  // 9b — 이동 앵커: 창을 옮긴 뒤에도 그 자리가 유지된다(스냅백 회귀 방지).
+  // 옛 판은 이동 후 `athena:set-chat-height`로 높이를 바꿔 "높이 변경이 창을 부팅
+  // 좌표로 되돌리지 않는가"를 쟀다. 높이 경로가 사라졌으므로(리프 1.2.1) 같은
+  // 회귀를 다른 자극으로 잰다: 이동 후 **모드 전환**(설정 열고 닫기)이다. 모드
+  // 전환도 옛 판에서는 창 크기를 건드리던 경로라 스냅백 위험이 같은 자리에 있다.
+  const beforeMove = shellWin.getBounds();
+  shellWin.setBounds({ x: beforeMove.x + 120, y: beforeMove.y - 40, width: beforeMove.width, height: beforeMove.height });
+  mainMod.noteAppBounds(shellWin); // 앱 주도 표시 — OS 스냅 오인 정착 방지(검증3 주석)
   await wait(150);
-  const moved = chatWin.getBounds();
-  await sendFromChat('athena:set-chat-height', { height: layout.chatBaseH + 150 });
-  await wait(300);
-  const afterHeightAtNewSpot = chatWin.getBounds();
+  const moved = shellWin.getBounds();
+  await shellWin.webContents.executeJavaScript("document.getElementById('dot').click()");
+  await wait(500);
+  await shellWin.webContents.executeJavaScript(
+    "document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))"
+  );
+  await wait(500);
+  const afterModeToggleAtNewSpot = shellWin.getBounds();
   const anchorKept = {
-    xKept: near(afterHeightAtNewSpot.x, moved.x),
-    bottomKept: near(afterHeightAtNewSpot.y + afterHeightAtNewSpot.height, moved.y + moved.height),
-    heightApplied: near(afterHeightAtNewSpot.height, layout.chatBaseH + 150),
+    xKept: near(afterModeToggleAtNewSpot.x, moved.x),
+    yKept: near(afterModeToggleAtNewSpot.y, moved.y),
+    sizeKept: near(afterModeToggleAtNewSpot.width, moved.width)
+      && near(afterModeToggleAtNewSpot.height, moved.height),
   };
   // 원위치 복구 — 이후 단계에 이동 상태를 남기지 않는다
-  chatWin.setBounds(beforeMove);
-  mainMod.noteAppBounds(chatWin);
-  await wait(150);
-  await sendFromChat('athena:set-chat-height', { height: layout.chatBaseH });
+  shellWin.setBounds(beforeMove);
+  mainMod.noteAppBounds(shellWin);
   await wait(200);
 
-  // 9c — 최소화(내리기)·복원(올리기): 두 창이 한 몸으로 내려가고, 한쪽 복원이 짝을 끌어올린다
-  const canvasWasVisible = canvasWin.isVisible();
+  // 9c — 최소화(내리기)·복원(올리기). 옛 판은 "두 창이 한 몸으로 내려가고 한쪽
+  // 복원이 짝을 끌어올린다"를 쟀다 — 짝이 없어져 왕복 자체만 남는다.
   await sendFromChat('athena:minimize-windows');
   await wait(500);
-  const minimized = { chat: chatWin.isMinimized(), canvas: canvasWin.isMinimized() };
-  chatWin.restore();
+  const minimized = shellWin.isMinimized();
+  shellWin.restore();
   await wait(600);
-  const restoredPair = {
-    chat: !chatWin.isMinimized(),
-    canvas: !canvasWasVisible || !canvasWin.isMinimized(),
-  };
+  const restored = !shellWin.isMinimized();
 
   report.windowBasics = {
-    zoomInSyncsBothWindows: zoomAfterIn.chat > 1 && Math.abs(zoomAfterIn.chat - zoomAfterIn.canvas) < 0.001,
+    zoomInApplied: zoomAfterIn > 1,
     zoomAfterIn,
     zoomResetReturnsTo1: Math.abs(zoomAfterReset - 1) < 0.001,
-    movedAnchorKept: anchorKept.xKept && anchorKept.bottomKept && anchorKept.heightApplied,
+    movedAnchorKept: anchorKept.xKept && anchorKept.yKept && anchorKept.sizeKept,
     anchorKept,
-    canvasWasVisible,
-    minimizeLowersBoth: minimized.chat && (!canvasWasVisible || minimized.canvas),
-    restorePairsBoth: restoredPair.chat && restoredPair.canvas,
+    minimizeLowersWindow: minimized === true,
+    restoreRaisesWindow: restored === true,
   };
   console.log('[verify] 검증9(창 기본 기능):', JSON.stringify(report.windowBasics));
-  assertOk('windowBasics: zoom-in syncs both windows', report.windowBasics.zoomInSyncsBothWindows === true);
+  assertOk('windowBasics: zoom-in applied to the shell renderer', report.windowBasics.zoomInApplied === true);
   assertOk('windowBasics: zoom reset returns to 1.0', report.windowBasics.zoomResetReturnsTo1 === true);
-  assertOk('windowBasics: move anchor kept after height change', report.windowBasics.movedAnchorKept === true);
-  assertOk('windowBasics: minimize lowers both windows', report.windowBasics.minimizeLowersBoth === true);
-  assertOk('windowBasics: restore pairs both windows', report.windowBasics.restorePairsBoth === true);
+  assertOk('windowBasics: position/size kept across a mode toggle at a moved spot', report.windowBasics.movedAnchorKept === true);
+  assertOk('windowBasics: minimize lowers the shell window', report.windowBasics.minimizeLowersWindow === true);
+  assertOk('windowBasics: restore raises the shell window', report.windowBasics.restoreRaisesWindow === true);
 
-  // 9d — 닫기(백그라운드 유지, 2026-08-18): 두 창이 숨고 프로세스는 산다. 복귀는
+  // 9d — 닫기(백그라운드 유지, 2026-08-18): 창이 숨고 프로세스는 산다. 복귀는
   // 트레이 클릭과 같은 함수 참조(restoreFromBackground)를 직접 부른다 — 실제
   // 트레이 클릭은 자동화로 만들 수 없다(정직 표기: 아이콘 클릭 자체는 미실측).
-  const canvasVisibleBeforeClose = canvasWin.isVisible();
+  // 옛 판은 "두 창이 함께 숨고 함께 돌아오는가"(짝 맞춤)를 함께 쟀다 — 짝이 없다.
   await sendFromChat('athena:close-windows');
   await wait(400);
-  const hiddenPair = { chat: chatWin.isVisible(), canvas: canvasWin.isVisible() };
+  const visibleAfterClose = shellWin.isVisible();
   mainMod.restoreFromBackground();
   await wait(400);
   report.closeToBackground = {
-    canvasVisibleBeforeClose,
-    bothHiddenAfterClose: !hiddenPair.chat && !hiddenPair.canvas,
-    visibleAfterClose: hiddenPair,
-    chatRestored: chatWin.isVisible(),
-    canvasRestoredWithPair: !canvasVisibleBeforeClose || canvasWin.isVisible(),
+    hiddenAfterClose: visibleAfterClose === false,
+    restoredFromTrayPath: shellWin.isVisible(),
+    // 닫기는 종료가 아니다 — 창이 파괴되지 않고 숨었을 뿐이어야 한다.
+    windowStillAlive: !shellWin.isDestroyed(),
   };
   console.log('[verify] 검증9d(닫기→백그라운드→복귀):', JSON.stringify(report.closeToBackground));
-  // canvasVisibleBeforeClose는 이 시점의 상태를 기록하는 값이라(캔버스가 항상
-  // 열려 있어야 한다는 계약이 아니다) 단언에서 뺀다 — 아래 세 값이 실제 계약이다.
-  assertOk('closeToBackground: both windows hidden after close', report.closeToBackground.bothHiddenAfterClose === true);
-  assertOk('closeToBackground: chat restored from tray path', report.closeToBackground.chatRestored === true);
-  assertOk('closeToBackground: canvas restored with its pair', report.closeToBackground.canvasRestoredWithPair === true);
+  assertOk('closeToBackground: shell window hidden after close', report.closeToBackground.hiddenAfterClose === true);
+  assertOk('closeToBackground: shell restored from tray path', report.closeToBackground.restoredFromTrayPath === true);
+  assertOk('closeToBackground: close hides rather than destroys', report.closeToBackground.windowStillAlive === true);
 
   // ---------- 검증 10: 카드 배치·생애주기 규칙 (2026-08-18) ----------
   // 규칙 원본: plan/canvas-taxonomy.md "배치·생애주기 규칙". 폭은 형상이 정하고
@@ -844,11 +951,14 @@ app.whenReady().then(async () => {
   // drop_types는 턴별 큐레이션, 높이 예산(뷰포트 2배·최소 3장)은 안전망이다.
   // 실배선 경로(athena:add-canvas-live)는 합성 봉투로 구동한다 — main.js가
   // 실왕복 후 보내는 채널·형상 그대로이고 quota를 쓰지 않는다(파일 상단 원칙).
-  if (!canvasWin.isVisible()) { dlog('expand for check10'); await mainMod.expandCanvasWindow(); await wait(200); }
-  canvasWin.webContents.send('athena:clear-canvases');
+  // 중앙 캔버스는 늘 떠 있다 — 옛 판의 'expand for check10'(캔버스 창을 열어두는
+  // 준비 단계)은 사라졌다. 창이 숨어 있으면(직전 검증 9d) 앞으로 가져오기만 한다.
+  mainMod.revealShell({ focus: false });
+  await wait(200);
+  await shellWin.webContents.executeJavaScript("window.AthenaShell.clearCanvases()");
   await wait(120);
 
-  const gridProbe = () => canvasWin.webContents.executeJavaScript(`
+  const gridProbe = () => shellWin.webContents.executeJavaScript(`
     (() => {
       const grid = document.getElementById('grid');
       const cards = [...grid.querySelectorAll('.card')];
@@ -861,18 +971,18 @@ app.whenReady().then(async () => {
       };
     })()
   `);
-  const liveEnvelope = (envelope) => canvasWin.webContents.send('athena:add-canvas-live', {
+  const liveEnvelope = (envelope) => shellWin.webContents.send('athena:add-canvas-live', {
     status: 'success',
     envelope: { fell_back: false, fallback_reason: null, layout: null, drop_types: [], ...envelope },
   });
 
   // 10a — 도착순 + 형상별 폭 문법: stream → table → reader 순서로 보낸다. 옛 CSS는
   // 타입 고정 order라 이 순서가 stream·reader·table로 재정렬됐다 — 이제 도착순이 규범.
-  canvasWin.webContents.send('athena:add-canvas', { type: 'stream' });
+  shellWin.webContents.send('athena:add-canvas', { type: 'stream' });
   await wait(120);
-  canvasWin.webContents.send('athena:add-canvas', { type: 'table' });
+  shellWin.webContents.send('athena:add-canvas', { type: 'table' });
   await wait(120);
-  canvasWin.webContents.send('athena:add-canvas', { type: 'reader' });
+  shellWin.webContents.send('athena:add-canvas', { type: 'reader' });
   await wait(200);
   const arrival = await gridProbe();
 
@@ -892,26 +1002,28 @@ app.whenReady().then(async () => {
   liveEnvelope({ canvas_type: 'reader', caption: '검증10 리더', drop_types: ['table'], data: { title: '검증10 리더', body_markdown: '# 검증\n큐레이션 본문' } });
   await wait(200);
   const curated = await gridProbe();
-  await shot(canvasWin, '12-card-layout-rules.png');
+  await shot(shellWin, '12-card-layout-rules.png');
 
   // 10e — 높이 예산 집행: 창을 절반 높이로 줄여 예산을 좁힌 뒤 4장째를 추가하면
   // 가장 오래된 카드부터 제거된다(최소 3장 보장이라 3장에서 멈춘다).
-  const cbBefore = canvasWin.getBounds();
-  // 캔버스는 스냅 대상화(2026-08-18)로 min=max 크기 잠금이 걸려 있다 — 절반
-  // 축소 시뮬레이션 동안만 하한을 풀고, 끝나면 원래 잠금으로 되돌린다.
+  const cbBefore = shellWin.getBounds();
+  // 셸 창에는 부팅 하한(main.js DESIGN.minW/minH)이 걸려 있다 — 절반 축소
+  // 시뮬레이션이 그 하한에 막히지 않게 잠시만 풀고, 끝나면 되돌린다.
+  // 2026-08-24 리프 1.2.1: 옛 판은 `layout.canvasW`(캔버스 창 설계 폭)를 하한
+  // 폭으로 썼다. 그 값이 사라져 undefined가 들어가면서 setMinimumSize가 던졌다.
   const halfH = Math.round(cbBefore.height / 2);
-  canvasWin.setMinimumSize(layout.canvasW, halfH);
-  canvasWin.setBounds({ ...cbBefore, height: halfH });
-  mainMod.noteAppBounds(canvasWin); // 앱 주도 표시 — OS 스냅 오인 정착 방지
+  shellWin.setMinimumSize(200, 200);
+  shellWin.setBounds({ ...cbBefore, height: halfH });
+  mainMod.noteAppBounds(shellWin); // 앱 주도 표시 — OS 스냅 오인 정착 방지
   await wait(200);
-  canvasWin.webContents.send('athena:add-canvas', { type: 'table' });
+  shellWin.webContents.send('athena:add-canvas', { type: 'table' });
   await wait(150);
   liveEnvelope({ canvas_type: 'free', caption: '검증10 자유', data: { a: 1, b: '검증' } });
   await wait(250);
   const afterBudget = await gridProbe();
-  canvasWin.setBounds(cbBefore);
-  canvasWin.setMinimumSize(layout.canvasW, layout.canvasH); // 잠금 복구
-  mainMod.noteAppBounds(canvasWin);
+  shellWin.setBounds(cbBefore);
+  shellWin.setMinimumSize(900, 480); // 하한 복구 — main.js DESIGN.minW/minH와 같은 값
+  mainMod.noteAppBounds(shellWin);
   await wait(150);
 
   report.cardLayout = {
@@ -935,21 +1047,29 @@ app.whenReady().then(async () => {
   assertOk('cardLayout: drop_types curation removed table card', report.cardLayout.dropTypesRemovedTable === true);
   assertOk('cardLayout: height budget evicts oldest card first', report.cardLayout.budgetEnforcedOldestFirst === true);
 
-  // ---------- 검증 11: 창 이동 표준화 — 네이티브 캡션 · JS 드래그 폐기 · 짝 팔로우 ----------
+  // ---------- 검증 11: 창 이동 표준화 — 네이티브 캡션 · JS 드래그 폐기 ----------
   // 2026-08-19 사용자 지시("평범한 앱처럼"): 커서 폴링 드래그(athena:window-drag)를
   // 폐기하고 -webkit-app-region 캡션으로 전환했다. 실제 캡션 드래그는 실물 마우스가
   // 필요해 자동화로 못 돌린다(검증9와 같은 제약) — 대신 계약 3종을 단언한다:
   // (a) 옛 채널이 죽어 있다(allowlist 제거 — send가 던진다) + 크기 불변(구판 DPI
-  //     성장 버그 5e0a9ab 회귀 가드 계승), (b) 캡션/구멍 CSS 계약, (c) 짝 팔로우 —
-  // noteAppBounds 없는 순수 이동(사용자 드래그 재현)이 짝 창을 같은 델타로 정착.
+  //     성장 버그 5e0a9ab 회귀 가드 계승), (b) 캡션/구멍 CSS 계약, (c) 외부(사용자)
+  //     이동을 앱이 되감지 않는다.
+  //
+  // 2026-08-24 리프 1.2.1: (c)가 "짝 팔로우"에서 "되감지 않는다"로 바뀌었다. 옛
+  // 판은 noteAppBounds 없는 setBounds로 사용자 드래그를 재현해 **상대 창이 같은
+  // 델타로 따라오는지**를 쟀다. 따라올 상대가 없어졌으므로, 같은 자극으로 그
+  // 반대편 위험을 잰다: handleForeignArrange가 사용자 이동을 OS 스냅으로 오인해
+  // 창을 제자리로 정착시켜버리면 그게 회귀다.
+  // #grip은 사라졌다(리프 1.2.1) — no-drag 구멍 단언 대상에서 뺀다. 캔버스 창의
+  // 별도 상단 스트립도 사라졌다: 타이틀바는 셸에 하나뿐이라 strip과 같은 요소다.
   const { screen: elScreen } = require('electron');
-  const dragBefore = chatWin.getBounds();
-  const oldChannelDead = await chatWin.webContents.executeJavaScript(
+  const dragBefore = shellWin.getBounds();
+  const oldChannelDead = await shellWin.webContents.executeJavaScript(
     "(() => { try { window.athena.send('athena:window-drag', { phase: 'start' }); return false; } catch { return true; } })()"
   );
   await wait(400);
-  const dragAfter = chatWin.getBounds();
-  const appRegions = await chatWin.webContents.executeJavaScript(`(() => {
+  const dragAfter = shellWin.getBounds();
+  const appRegions = await shellWin.webContents.executeJavaScript(`(() => {
     const reg = (sel) => {
       const el = document.querySelector(sel);
       if (!el) return null;
@@ -957,50 +1077,45 @@ app.whenReady().then(async () => {
       return (cs.getPropertyValue('app-region') || cs.getPropertyValue('-webkit-app-region') || '').trim();
     };
     return { strip: reg('#dragStrip'), controlStrip: reg('#controlStrip'),
-             grip: reg('#grip'), winBtn: reg('.win-btn'), history: reg('#history'),
+             winBtn: reg('.win-btn'), history: reg('#history'), grid: reg('#grid'),
              settingsHead: reg('#settings .settings-head') };
   })()`);
-  const canvasStripRegion = await canvasWin.webContents.executeJavaScript(
-    "(() => { const cs = getComputedStyle(document.getElementById('dragStrip')); return (cs.getPropertyValue('app-region') || cs.getPropertyValue('-webkit-app-region') || '').trim(); })()"
-  );
-  // (c) 짝 팔로우 — 의도적으로 noteAppBounds를 생략한 setBounds = 외부(사용자) 이동.
-  // handleForeignArrange(디바운스 120ms)가 순수 이동으로 판정해 캔버스를 정착시킨다.
-  const cvBefore = canvasWin.getBounds();
-  const chBefore = chatWin.getBounds();
-  chatWin.setBounds({ x: chBefore.x + 60, y: chBefore.y + 40, width: chBefore.width, height: chBefore.height });
+  // (c) 외부 이동 수용 — 의도적으로 noteAppBounds를 생략한 setBounds = 사용자 이동.
+  // handleForeignArrange(디바운스 120ms)가 반절 스냅 기하가 아님을 보고 그대로 수용해야 한다.
+  const foreignBefore = shellWin.getBounds();
+  shellWin.setBounds({ x: foreignBefore.x + 60, y: foreignBefore.y + 40, width: foreignBefore.width, height: foreignBefore.height });
   await wait(450);
-  const cvAfter = canvasWin.getBounds();
-  const pairFollowed = near(cvAfter.x, cvBefore.x + 60) && near(cvAfter.y, cvBefore.y + 40);
-  // 원위치 — 같은 외부 이동 경로로 되돌리면 짝도 같이 돌아온다.
-  chatWin.setBounds({ x: chBefore.x, y: chBefore.y, width: chBefore.width, height: chBefore.height });
+  const foreignAfter = shellWin.getBounds();
+  const foreignMoveKept = near(foreignAfter.x, foreignBefore.x + 60) && near(foreignAfter.y, foreignBefore.y + 40);
+  // 원위치 — 같은 외부 이동 경로로 되돌린다.
+  shellWin.setBounds({ x: foreignBefore.x, y: foreignBefore.y, width: foreignBefore.width, height: foreignBefore.height });
   await wait(450);
-  const cvRestored = canvasWin.getBounds();
-  const pairReturned = near(cvRestored.x, cvBefore.x) && near(cvRestored.y, cvBefore.y);
+  const foreignRestored = shellWin.getBounds();
+  const foreignReturnKept = near(foreignRestored.x, foreignBefore.x) && near(foreignRestored.y, foreignBefore.y);
   report.dragStandard = {
     scaleFactor: elScreen.getPrimaryDisplay().scaleFactor,
     oldChannelDead,
     sizeUnchanged: dragBefore.width === dragAfter.width && dragBefore.height === dragAfter.height,
-    appRegions, canvasStripRegion,
-    pairFollow: { cvBefore, cvAfter, cvRestored, pairFollowed, pairReturned },
+    appRegions,
+    foreignMove: { foreignBefore, foreignAfter, foreignRestored, foreignMoveKept, foreignReturnKept },
   };
   console.log('[verify] 검증11(창 이동 표준화):', JSON.stringify(report.dragStandard));
   assertOk('dragStandard: 옛 JS 드래그 채널이 죽어 있다(allowlist 거부)', oldChannelDead === true);
   assertOk('dragStandard: 크기 불변(5e0a9ab 회귀 가드 계승)', report.dragStandard.sizeUnchanged === true);
-  assertOk('dragStandard: 대화 창 맨 위 스트립 = 캡션(drag)', appRegions.strip === 'drag');
-  assertOk('dragStandard: grip 중앙·창 버튼 = no-drag 구멍',
-    appRegions.grip === 'no-drag' && appRegions.winBtn === 'no-drag');
+  assertOk('dragStandard: 셸 맨 위 타이틀바 = 캡션(drag)', appRegions.strip === 'drag');
+  assertOk('dragStandard: 창 버튼 = no-drag 구멍', appRegions.winBtn === 'no-drag');
   assertOk('dragStandard: 컨트롤 스트립은 캡션이 아니다(2026-08-19 개정 — 맨 위만)', appRegions.controlStrip !== 'drag');
-  assertOk('dragStandard: 본문(.history)은 손잡이가 아니다', appRegions.history !== 'drag');
+  assertOk('dragStandard: 채팅 본문(.history)은 손잡이가 아니다', appRegions.history !== 'drag');
+  assertOk('dragStandard: 캔버스 본문(#grid)도 손잡이가 아니다', appRegions.grid !== 'drag');
   assertOk('dragStandard: 설정 헤더 = 캡션(drag)', appRegions.settingsHead === 'drag');
-  assertOk('dragStandard: 캔버스 상단 스트립 = 캡션(drag)', canvasStripRegion === 'drag');
-  assertOk('dragStandard: 외부 순수 이동 시 짝 팔로우(같은 델타 정착)', pairFollowed === true);
-  assertOk('dragStandard: 복귀 이동도 짝 유지', pairReturned === true);
+  assertOk('dragStandard: 외부(사용자) 이동을 앱이 되감지 않는다', foreignMoveKept === true);
+  assertOk('dragStandard: 복귀 이동도 그대로 수용된다', foreignReturnKept === true);
 
   // ---------- 검증 12: §5.3.1 컬럼 우선순위 흡수(2층) — table 카드가 1560px에서 접힌다 ----------
   // claude -p 실배선 없이(quota 0) canvas.js의 'athena:add-canvas-live' 경로에 실제
   // ka10095(63컬럼, backend/ref/kiwoom-common-screen-manifest.json column_priority 그대로
   // 추출한 app/data/wide-table-fold-fixtures.json)를 직접 주입해 app/lib/column-fold.js가
-  // 실제 렌더 DOM에서도 fold를 발동시키는지 확인한다 — main.js를 거치지 않고 canvasWin에
+  // 실제 렌더 DOM에서도 fold를 발동시키는지 확인한다 — main.js를 거치지 않고 shellWin에
   // 바로 IPC를 보내므로 fixture/live 소스 분기와 무관하다(순수 렌더러 단 검증).
   const wideFixtures = JSON.parse(
     fs.readFileSync(path.join(__dirname, 'data', 'wide-table-fold-fixtures.json'), 'utf-8')
@@ -1008,7 +1123,7 @@ app.whenReady().then(async () => {
   const ka10095Fixture = wideFixtures.trs.find((t) => t.mapping_id === 'base:ka10095');
   const mockRow = {};
   for (const col of ka10095Fixture.columns) mockRow[col.key] = `v:${col.key}`;
-  await canvasWin.webContents.send('athena:add-canvas-live', {
+  await shellWin.webContents.send('athena:add-canvas-live', {
     status: 'success',
     envelope: {
       canvas_type: 'table',
@@ -1018,7 +1133,7 @@ app.whenReady().then(async () => {
     },
   });
   await wait(300);
-  const foldProbe = await canvasWin.webContents.executeJavaScript(`
+  const foldProbe = await shellWin.webContents.executeJavaScript(`
     (() => {
       const card = document.querySelector('#grid .card.mcp-table');
       if (!card) return null;
@@ -1032,7 +1147,7 @@ app.whenReady().then(async () => {
       };
     })()
   `);
-  await shot(canvasWin, '18-table-column-fold-ka10095.png');
+  await shot(shellWin, '18-table-column-fold-ka10095.png');
 
   report.tableColumnFold = {
     trId: ka10095Fixture.tr_id,
@@ -1053,9 +1168,9 @@ app.whenReady().then(async () => {
   // 깊은 상호작용(형식 전환·저작 영속·드로잉)은 probe-chart-*.js 4종이 전담한다 —
   // 여기서는 회귀 게이트로서 "카드가 뜨고, 툴바가 계약대로 있고, 매물대가 켜진다"
   // 만 매 verify마다 실측한다.
-  await canvasWin.webContents.executeJavaScript(`window.addCard('chart')`);
+  await shellWin.webContents.executeJavaScript(`window.addCard('chart')`);
   await wait(1500); // 동적 import + 비동기 마운트
-  const chartProbe = await canvasWin.webContents.executeJavaScript(`(async () => {
+  const chartProbe = await shellWin.webContents.executeJavaScript(`(async () => {
     const card = document.querySelector('.card.chart');
     if (!card) return null;
     const tabs = Array.from(card.querySelectorAll('.chart-toolbar-tab')).map(b => b.textContent);
@@ -1079,7 +1194,7 @@ app.whenReady().then(async () => {
     return { cardPresent: true, tabs, paneRows, indicatorRows, vpBars };
   })()`);
   await wait(200);
-  await shot(canvasWin, '19-chart-card.png');
+  await shot(shellWin, '19-chart-card.png');
   report.chartCard = {
     cardRendered: chartProbe !== null,
     periodTabsOk: chartProbe !== null && chartProbe.tabs.join(',') === '일,주,월,년,분,틱',
@@ -1118,7 +1233,7 @@ app.whenReady().then(async () => {
     data: { symbol: '005930', chart: { period: 'day', target: 'stock', trId: 'ka10081', candles: liveChartCandles } },
   });
   await wait(1200); // import는 chart-card.js 로드 시 prewarm, 카드 마운트 자체는 비동기다.
-  const liveChartProbe = await canvasWin.webContents.executeJavaScript(`
+  const liveChartProbe = await shellWin.webContents.executeJavaScript(`
     (() => {
       const cards = document.querySelectorAll('#grid .card.chart');
       const card = cards[cards.length - 1];
@@ -1135,7 +1250,7 @@ app.whenReady().then(async () => {
       };
     })()
   `);
-  await shot(canvasWin, '20-live-chart-card.png');
+  await shot(shellWin, '20-live-chart-card.png');
   report.liveChartCard = {
     cardRendered: liveChartProbe !== null,
     replacedMockChartCard: liveChartProbe !== null && liveChartProbe.cardCount === 1,
@@ -1160,86 +1275,90 @@ app.whenReady().then(async () => {
 
   // ---------- 검증 14: 창 배치(스냅) — Windows 표준 의미론 (2026-08-18) ----------
   // main.js가 노출한 placeWindows(left/right)·centerWindows를 직접 구동하고,
-  // up/down은 실제 경로(athena:window-key → chat.js의 □ 버튼과 같은 로컬 함수)를
-  // 그대로 왕복한다. 확인할 것: (a) 두 창이 함께 움직이는가(짝의 상대 오프셋
-  // 불변 — computePlacement 계약상 캔버스·대화 창 x가 같다) (b) 크기는 안
-  // 변하는가(스냅은 위치만 바꾼다) (c) 스냅 뒤에도 앵커가 갱신돼 다음
-  // setChatHeight가 부팅 좌표로 되돌리지 않는가(syncChatAnchor 회귀 가드, 커밋
-  // 5e0a9ab와 같은 종류의 버그를 잡는다).
+  // 최대화/복원은 실제 경로(athena:toggle-maximize)를 그대로 왕복한다.
+  //
+  // 2026-08-24 리프 1.2.1로 바뀐 것 둘:
+  //  (a) "짝이 함께 움직이는가"가 사라졌다 — 옛 계약은 "대화 창이 캔버스 폭의
+  //      중앙에 온다"(AT-CH-001R)였는데 창이 하나라 상대 오프셋이 없다. 그 자리에
+  //      **좌/우 절반의 중앙에 놓이는가**를 직접 잰다(computeShellPlacement 계약).
+  //  (b) ↑/↓가 chatBaseH↔chatMaxH 높이 토글이 아니라 **OS 창 최대화/복원**이다.
+  // 남는 것: 크기 불변(스냅은 위치만 바꾼다) · 스냅 뒤 앵커 갱신(다음 앱 주도
+  // 이동이 부팅 좌표로 되돌리지 않는가 — 커밋 5e0a9ab와 같은 종류의 회귀 가드).
   mainMod.centerWindows(); // 이전 검증들의 이동 상태를 정리 — 원점에서 시작
   await wait(150);
-  const beforePlacement = { canvas: canvasWin.getBounds(), chat: chatWin.getBounds() };
+  const beforePlacement = shellWin.getBounds();
+  const workArea = elScreen.getDisplayMatching(beforePlacement).workArea;
 
   mainMod.placeWindows('left');
   await wait(200);
-  const afterLeft = { canvas: canvasWin.getBounds(), chat: chatWin.getBounds() };
+  const afterLeft = shellWin.getBounds();
 
   mainMod.placeWindows('right');
   await wait(200);
-  const afterRight = { canvas: canvasWin.getBounds(), chat: chatWin.getBounds() };
+  const afterRight = shellWin.getBounds();
 
-  // □ 토글 경유 — Win+↑와 정확히 같은 채널(athena:window-key)로 렌더러의 로컬
-  // 경로(chat.js toggleMaxHeight)를 태운다. 먼저 알려진 높이(chatBaseH)로
-  // 맞춰 시작한다 — 이전 단계의 잔여 높이에 기댄 판정은 흔들린다.
-  chatWin.webContents.executeJavaScript(`window.athena.send('athena:set-chat-height', { height: ${layout.chatBaseH} })`);
-  await wait(250);
-  const chatHeightBeforeMax = chatWin.getBounds().height;
-  chatWin.webContents.send('athena:window-key', { dir: 'up' });
-  await wait(400);
-  const afterMaximize = chatWin.getBounds();
-
-  chatWin.webContents.send('athena:window-key', { dir: 'down' });
-  await wait(400);
-  const afterRestore = chatWin.getBounds();
-
-  // 앵커 유지 — 스냅(right) 뒤 위치에서 높이만 바꿔도 x/하단 y가 그대로여야
-  // 한다(검증9의 이동 앵커 계약과 같은 종류, syncChatAnchor 회귀 가드).
-  const beforeAnchorCheck = chatWin.getBounds();
-  chatWin.webContents.executeJavaScript(
-    `window.athena.send('athena:set-chat-height', { height: ${layout.chatBaseH + 80} })`
+  // 최대화 토글 — □ 버튼·Win+↑·Ctrl+Alt+↑가 전부 이 채널을 탄다(main.js).
+  const heightBeforeMax = shellWin.getBounds().height;
+  await shellWin.webContents.executeJavaScript(
+    "window.athena.send('athena:toggle-maximize', { force: 'maximize' })"
   );
-  await wait(300);
-  const afterAnchorHeightChange = chatWin.getBounds();
+  await wait(500);
+  const afterMaximize = { bounds: shellWin.getBounds(), isMaximized: shellWin.isMaximized() };
+
+  await shellWin.webContents.executeJavaScript(
+    "window.athena.send('athena:toggle-maximize', { force: 'restore-or-minimize' })"
+  );
+  await wait(500);
+  const afterRestore = { bounds: shellWin.getBounds(), isMaximized: shellWin.isMaximized() };
+
+  // 앵커 유지 — 스냅 뒤 위치에서 앱 주도 이동을 한 번 더 걸어도 부팅 좌표로
+  // 튕겨 돌아가지 않아야 한다(handleForeignArrange 오인 정착 회귀 가드).
+  mainMod.placeWindows('right');
+  await wait(250);
+  const beforeAnchorCheck = shellWin.getBounds();
+  shellWin.setBounds({ ...beforeAnchorCheck, y: beforeAnchorCheck.y + 30 });
+  mainMod.noteAppBounds(shellWin);
+  await wait(400);
+  const afterAnchorNudge = shellWin.getBounds();
 
   mainMod.centerWindows(); // 원위치 — 이후 단계에 배치 상태를 남기지 않는다
-  await wait(200);
-  chatWin.webContents.executeJavaScript(`window.athena.send('athena:set-chat-height', { height: ${layout.chatBaseH} })`);
-  await wait(200);
-  const afterCenter = { canvas: canvasWin.getBounds(), chat: chatWin.getBounds() };
+  await wait(250);
+  const afterCenter = shellWin.getBounds();
+
+  const halfW = Math.floor(workArea.width / 2);
+  const expectedLeftX = Math.round(workArea.x + (halfW - beforePlacement.width) / 2);
+  const expectedRightX = Math.round((workArea.x + workArea.width - halfW) + (halfW - beforePlacement.width) / 2);
 
   report.windowPlacement = {
-    beforePlacement, afterLeft, afterRight, afterMaximize, afterRestore, afterCenter,
-    // AT-CH-001R(2026-08-19): chatW(900) < canvasW(1560) — "짝으로 움직인다"의
-    // 계약은 x 동일이 아니라 **대화 창이 캔버스 폭의 중앙**이다(window-placement.js).
-    // 구판(chatW==canvasW)에서 x 동일 비교는 이 계약의 특수 사례였다.
-    pairMovedTogetherOnLeft: near(afterLeft.chat.x, afterLeft.canvas.x + Math.round((afterLeft.canvas.width - afterLeft.chat.width) / 2)),
-    pairMovedTogetherOnRight: near(afterRight.chat.x, afterRight.canvas.x + Math.round((afterRight.canvas.width - afterRight.chat.width) / 2)),
-    leftDiffersFromRight: afterLeft.canvas.x !== afterRight.canvas.x,
-    // near() ±2px — 이 파일의 다른 bounds 비교와 같은 관례다(acrylic + DPI 배율에서
-    // setBounds 요청값과 getBounds 실측값이 1px 안팎 어긋나는 실측, 검증3 주석).
-    // 자유 리사이즈 승급(2026-08-18)으로 min=max 잠금이 사라져 이 편차를 OS가
-    // 눌러주지 않게 됐다 — 정확 일치 요구는 계약이 아니라 잠금의 부수 효과였다.
-    sizeUnchangedOnLeft: near(afterLeft.canvas.width, beforePlacement.canvas.width) && near(afterLeft.canvas.height, beforePlacement.canvas.height),
-    sizeUnchangedOnRight: near(afterRight.canvas.width, beforePlacement.canvas.width) && near(afterRight.canvas.height, beforePlacement.canvas.height),
-    maximizedViaWindowKey: afterMaximize.height > chatHeightBeforeMax,
-    maximizedReachedChatMaxH: near(afterMaximize.height, layout.chatMaxH),
-    restoredViaWindowKey: near(afterRestore.height, layout.chatBaseH),
+    workArea, beforePlacement, afterLeft, afterRight, afterMaximize, afterRestore, afterCenter,
+    expectedLeftX, expectedRightX,
+    // near() ±2px — 이 파일의 다른 bounds 비교와 같은 관례다(DPI 배율에서 setBounds
+    // 요청값과 getBounds 실측값이 1px 안팎 어긋나는 실측, 검증3 주석).
+    leftCentersInLeftHalf: near(afterLeft.x, expectedLeftX),
+    rightCentersInRightHalf: near(afterRight.x, expectedRightX),
+    leftDiffersFromRight: afterLeft.x !== afterRight.x,
+    sizeUnchangedOnLeft: near(afterLeft.width, beforePlacement.width) && near(afterLeft.height, beforePlacement.height),
+    sizeUnchangedOnRight: near(afterRight.width, beforePlacement.width) && near(afterRight.height, beforePlacement.height),
+    maximizeToggleMaximizes: afterMaximize.isMaximized === true && afterMaximize.bounds.height > heightBeforeMax,
+    restoreToggleUnmaximizes: afterRestore.isMaximized === false,
+    restoreReturnsToPreMaxSize: near(afterRestore.bounds.height, heightBeforeMax),
     anchorKeptAfterSnap:
-      near(afterAnchorHeightChange.x, beforeAnchorCheck.x)
-      && near(afterAnchorHeightChange.y + afterAnchorHeightChange.height, beforeAnchorCheck.y + beforeAnchorCheck.height),
-    centerReturnsToBootOrigin: near(afterCenter.canvas.x, layout.originX) && near(afterCenter.canvas.y, layout.originY),
+      near(afterAnchorNudge.x, beforeAnchorCheck.x)
+      && near(afterAnchorNudge.y, beforeAnchorCheck.y + 30),
+    centerReturnsToBootOrigin: near(afterCenter.x, layout.originX) && near(afterCenter.y, layout.originY)
+      && near(afterCenter.width, layout.shellW) && near(afterCenter.height, layout.shellH),
   };
   console.log('[verify] 검증14(창 배치):', JSON.stringify(report.windowPlacement));
-  assertOk('windowPlacement: pair moves together on left snap', report.windowPlacement.pairMovedTogetherOnLeft === true);
-  assertOk('windowPlacement: pair moves together on right snap', report.windowPlacement.pairMovedTogetherOnRight === true);
+  assertOk('windowPlacement: left snap centers the shell in the left half', report.windowPlacement.leftCentersInLeftHalf === true);
+  assertOk('windowPlacement: right snap centers the shell in the right half', report.windowPlacement.rightCentersInRightHalf === true);
   assertOk('windowPlacement: left and right snap to different positions', report.windowPlacement.leftDiffersFromRight === true);
   assertOk('windowPlacement: size unchanged on left snap', report.windowPlacement.sizeUnchangedOnLeft === true);
   assertOk('windowPlacement: size unchanged on right snap', report.windowPlacement.sizeUnchangedOnRight === true);
-  assertOk('windowPlacement: athena:window-key up maximizes chat height', report.windowPlacement.maximizedViaWindowKey === true);
-  assertOk('windowPlacement: maximize reaches chatMaxH', report.windowPlacement.maximizedReachedChatMaxH === true);
-  assertOk('windowPlacement: athena:window-key down restores base height', report.windowPlacement.restoredViaWindowKey === true);
-  assertOk('windowPlacement: anchor kept after snap (no snapback on height change)', report.windowPlacement.anchorKeptAfterSnap === true);
-  assertOk('windowPlacement: centerWindows returns to boot origin', report.windowPlacement.centerReturnsToBootOrigin === true);
+  assertOk('windowPlacement: athena:toggle-maximize maximizes the OS window', report.windowPlacement.maximizeToggleMaximizes === true);
+  assertOk('windowPlacement: athena:toggle-maximize restores the OS window', report.windowPlacement.restoreToggleUnmaximizes === true);
+  assertOk('windowPlacement: restore returns to the pre-maximize size', report.windowPlacement.restoreReturnsToPreMaxSize === true);
+  assertOk('windowPlacement: anchor kept after snap (no snapback on app-driven move)', report.windowPlacement.anchorKeptAfterSnap === true);
+  assertOk('windowPlacement: centerWindows returns to boot origin and design size', report.windowPlacement.centerReturnsToBootOrigin === true);
 
   // ---------- 검증 15: 모델 설정 저장 (lib/main/model-prefs.js) ----------
   // UI 쪽(모델 칩·Claude 계정 행 존재)은 검증7의 settingsSurface.modelPanel*
@@ -1318,11 +1437,20 @@ app.whenReady().then(async () => {
 
   // ---------- 검증 16: 유리 사다리 SSOT (2026-08-19 결정 — 질의응답) ----------
   // "광량 3단 고정" 규범을 값 사다리로 개정하면서 값의 SSOT를 tokens.css의
-  // --glass-* 4변수로 박았다(soul.md §7 완화책 2 개정). 여기서는 (a) 두 창이
-  // 같은 토큰을 읽는지, (b) 실제 표면 렌더 값이 토큰과 일치하는지, (c) 사다리
-  // 순서 계약(window < card < canvas < window-max)이 성립하는지를 단언한다 —
-  // 값을 CSS 어딘가에 하드코드해 사다리가 두 벌이 되는 회귀를 잡는 게 목적이다.
-  const readTokens = `(() => {
+  // --glass-* 4변수로 박았다(soul.md §7 완화책 2 개정). (a) 실제 표면 렌더 값이
+  // 토큰과 일치하는지, (b) 사다리 순서 계약(window < card < canvas < window-max)이
+  // 성립하는지를 단언한다 — 값을 CSS 어딘가에 하드코드해 사다리가 두 벌이 되는
+  // 회귀를 잡는 게 목적이다.
+  //
+  // 2026-08-24 리프 1.2.1로 바뀐 것 둘:
+  //  (a) "두 창이 같은 토큰을 읽는가"(tokensMatchAcrossWindows)가 사라졌다 —
+  //      렌더러가 하나라 토큰이 갈라질 곳이 없다.
+  //  (b) **창 표면이 `.app`에서 `#shell`로 옮겨갔다.** 옛 판에서 대화 창의 `.app`이
+  //      창 표면(--glass-window)이었는데, `.app`은 이제 셸 위의 투명한 레이아웃
+  //      열이고 표면은 셸이 진다(shell.css). 그래서 여기서 읽는 요소도 바뀐다.
+  //      `.app`이 투명한지도 함께 단언한다 — 유리를 두 겹 칠하면 실효 불투명도가
+  //      곱해져 "그냥 검은 창" 회귀가 난다(2026-08-22 실측으로 두 번 겪었다).
+  const tokens = await shellWin.webContents.executeJavaScript(`(() => {
     const s = getComputedStyle(document.documentElement);
     return {
       window: parseFloat(s.getPropertyValue('--glass-window')),
@@ -1330,53 +1458,52 @@ app.whenReady().then(async () => {
       canvas: parseFloat(s.getPropertyValue('--glass-canvas')),
       windowMax: parseFloat(s.getPropertyValue('--glass-window-max')),
     };
-  })()`;
-  const chatTokens = await chatWin.webContents.executeJavaScript(readTokens);
-  const canvasTokens = await canvasWin.webContents.executeJavaScript(readTokens);
-  // 캔버스 창에 카드 하나를 띄워 실측한다(이전 검증들이 카드를 정리했을 수 있다).
-  canvasWin.webContents.send('athena:add-canvas', { type: 'stream' });
+  })()`);
+  // 캔버스에 카드 하나를 띄워 실측한다(이전 검증들이 카드를 정리했을 수 있다).
+  shellWin.webContents.send('athena:add-canvas', { type: 'stream' });
   await wait(400);
   const alphaOf = (rgba) => {
     const m = /rgba?\(\s*\d+\s*,\s*\d+\s*,\s*\d+\s*(?:,\s*([0-9.]+))?\)/.exec(rgba || '');
     return m ? (m[1] === undefined ? 1 : parseFloat(m[1])) : NaN;
   };
-  const surfaceAlphas = await canvasWin.webContents.executeJavaScript(`(() => {
-    const mosaic = getComputedStyle(document.querySelector('.mosaic')).backgroundColor;
-    const card = document.querySelector('.card');
-    return { mosaic, card: card ? getComputedStyle(card).backgroundColor : null };
+  const surfaceAlphas = await shellWin.webContents.executeJavaScript(`(() => {
+    const card = document.querySelector('#grid .card');
+    return {
+      shell: getComputedStyle(document.getElementById('shell')).backgroundColor,
+      mosaic: getComputedStyle(document.querySelector('.mosaic')).backgroundColor,
+      card: card ? getComputedStyle(card).backgroundColor : null,
+      chatApp: getComputedStyle(document.querySelector('#chatRegion > .app')).backgroundColor,
+    };
   })()`);
-  const chatAppAlpha = await chatWin.webContents.executeJavaScript(
-    "getComputedStyle(document.querySelector('.app')).backgroundColor"
-  );
   const nearAlpha = (a, b) => Number.isFinite(a) && Math.abs(a - b) <= 0.02;
   report.glassLadder = {
-    chatTokens, canvasTokens,
+    tokens,
+    shellAlpha: alphaOf(surfaceAlphas.shell),
     mosaicAlpha: alphaOf(surfaceAlphas.mosaic),
     cardAlpha: alphaOf(surfaceAlphas.card),
-    chatAppAlpha: alphaOf(chatAppAlpha),
-    tokensMatchAcrossWindows:
-      chatTokens.window === canvasTokens.window && chatTokens.card === canvasTokens.card
-      && chatTokens.canvas === canvasTokens.canvas && chatTokens.windowMax === canvasTokens.windowMax,
+    chatAppRaw: surfaceAlphas.chatApp,
     ladderOrdered:
-      chatTokens.window < chatTokens.card && chatTokens.card < chatTokens.canvas
-      && chatTokens.canvas < chatTokens.windowMax,
-    mosaicMatchesToken: nearAlpha(alphaOf(surfaceAlphas.mosaic), canvasTokens.canvas),
-    cardMatchesToken: nearAlpha(alphaOf(surfaceAlphas.card), canvasTokens.card),
-    // 대화 창은 기본 높이 상태 — --glass-alpha 보간의 하한이 곧 --glass-window여야 한다.
-    chatAppMatchesWindowToken: nearAlpha(alphaOf(chatAppAlpha), chatTokens.window),
+      tokens.window < tokens.card && tokens.card < tokens.canvas
+      && tokens.canvas < tokens.windowMax,
+    shellMatchesWindowToken: nearAlpha(alphaOf(surfaceAlphas.shell), tokens.window),
+    mosaicMatchesToken: nearAlpha(alphaOf(surfaceAlphas.mosaic), tokens.canvas),
+    cardMatchesToken: nearAlpha(alphaOf(surfaceAlphas.card), tokens.card),
+    // 채팅 영역은 자기 유리를 갖지 않는다 — 완전 투명(alpha 0)이어야 한다.
+    chatAppTransparent: alphaOf(surfaceAlphas.chatApp) === 0
+      || /rgba\(0,\s*0,\s*0,\s*0\)|transparent/.test(String(surfaceAlphas.chatApp)),
   };
   console.log('[verify] 검증16(유리 사다리):', JSON.stringify(report.glassLadder));
-  assertOk('glassLadder: tokens identical across both windows', report.glassLadder.tokensMatchAcrossWindows === true);
   assertOk('glassLadder: window < card < canvas < window-max', report.glassLadder.ladderOrdered === true);
+  assertOk('glassLadder: shell surface renders --glass-window', report.glassLadder.shellMatchesWindowToken === true);
   assertOk('glassLadder: canvas surface renders --glass-canvas', report.glassLadder.mosaicMatchesToken === true);
   assertOk('glassLadder: card renders --glass-card', report.glassLadder.cardMatchesToken === true);
-  assertOk('glassLadder: chat app renders --glass-window at base height', report.glassLadder.chatAppMatchesWindowToken === true);
+  assertOk('glassLadder: chat region does not paint a second glass layer', report.glassLadder.chatAppTransparent === true);
 
   // ---------- 검증 17: 능동 턴·주문 티켓 (2026-08-19 능동 에이전트 — 쿼터 0) ----------
   // 합성 발화 이벤트를 IPC로 주입해 P2~P4 렌더 계약을 픽스처로 검증한다:
   // 능동 턴(발화 배지·방식 표기·소스 라벨·시점 고지) → 티켓 직행 버튼 →
   // 모드 전이(#order 표시·#app 후퇴·창은 둘) → 게이트 잠금 → Esc 복귀.
-  chatWin.webContents.send('athena:routine-event', {
+  shellWin.webContents.send('athena:routine-event', {
     type: 'routine-fired',
     routine_id: 'vr1',
     symbol: '005930',
@@ -1388,7 +1515,7 @@ app.whenReady().then(async () => {
     fired_at: new Date(Date.now() - 6 * 60 * 1000).toISOString(),
   });
   await wait(400);
-  report.agentTurn = await chatWin.webContents.executeJavaScript(`(() => {
+  report.agentTurn = await shellWin.webContents.executeJavaScript(`(() => {
     const t = document.querySelector('.turn-agent.agent-fired');
     if (!t) return { present: false };
     return {
@@ -1409,13 +1536,13 @@ app.whenReady().then(async () => {
   assertOk('agentTurn: 시점 고지(발화 시점 기준)', (report.agentTurn.body || '').includes('발화 시점'));
   assertOk('agentTurn: 티켓 직행 버튼', report.agentTurn.hasTicketButton === true);
 
-  await chatWin.webContents.executeJavaScript(`(() => {
+  await shellWin.webContents.executeJavaScript(`(() => {
     const t = document.querySelector('.turn-agent.agent-fired');
     const b = Array.from(t.querySelectorAll('button')).find((x) => x.textContent.includes('주문 티켓'));
     b.click();
   })()`);
   await wait(600);
-  report.orderTicket = await chatWin.webContents.executeJavaScript(`(() => {
+  report.orderTicket = await shellWin.webContents.executeJavaScript(`(() => {
     const vis = (id) => { const n = document.getElementById(id); return !!n && !n.hidden; };
     const execBtn = Array.from(document.querySelectorAll('#orderBody button'))
       .find((x) => x.textContent.includes('주문 실행'));
@@ -1431,14 +1558,17 @@ app.whenReady().then(async () => {
   console.log('[verify] 검증17(주문 티켓):', JSON.stringify(report.orderTicket));
   assertOk('orderTicket: 모드 전이(#order 표시·#app 후퇴)',
     report.orderTicket.orderVisible === true && report.orderTicket.appHidden === true);
-  assertOk('orderTicket: 창은 둘', report.orderTicket.windowCount === 2);
+  // 주문 확인도 새 창이 아니라 모드다 — 부팅 시점 창 수와 같아야 한다(기대값을
+  // 상수로 박지 않는다: 오브 창(1.3.1)이 붙어 기준선이 2가 돼도 이 단언은 그대로 산다).
+  assertOk('orderTicket: 창 수가 부팅 시점과 같다(새 창 없음)',
+    report.orderTicket.windowCount === report.bootChatOnly.openWindowCount);
   assertOk('orderTicket: 발화 시점 라벨(시점 정직성)', report.orderTicket.firedAtLabel === true);
   assertOk('orderTicket: 게이트 잠금(주문 API 부재 시 실행 비활성)', report.orderTicket.execDisabled === true);
-  await chatWin.webContents.executeJavaScript(
+  await shellWin.webContents.executeJavaScript(
     "document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))"
   );
   await wait(300);
-  const orderClosed = await chatWin.webContents.executeJavaScript(
+  const orderClosed = await shellWin.webContents.executeJavaScript(
     "(() => { const o = document.getElementById('order'); const a = document.getElementById('app'); return o.hidden && !a.hidden; })()"
   );
   assertOk('orderTicket: Esc 복귀', orderClosed === true);
@@ -1449,11 +1579,11 @@ app.whenReady().then(async () => {
   // 나중 것)는 화면이 바뀌기 전 프레임을 찍은 것이다 — 파일명이 주장하는 화면을
   // 실제로 담지 못했다는 뜻이라 값 자체가 신뢰 불가다. shot()의 rAF 2회 대기로
   // 근본 원인은 고쳤지만, 이 단언은 회귀를 잡는 감지망이다(완화가 아니라 추가).
-  // 03b→04는 예외로 허용한다 — 대화 창의 유휴 입력줄은 캔버스 창이 펼쳐져 있든
-  // 접혔든 자기 자신은 안 바뀐다(캔버스 가시성은 대화 창 DOM에 영향이 없다,
-  // 실측 확인: 두 캡처가 픽셀 단위로 동일 — 새 턴도, 부팅 애니메이션도 그 사이에
-  // 없다). 여기서 빼지 않으면 "정상적으로 안 바뀌는 화면"까지 결함으로 오탐한다.
-  const EXPECTED_IDENTICAL = new Set(['03b-chat-during-mosaic.png>>>04-collapsed-back-to-chat.png']);
+  // 2026-08-24 리프 1.2.1: 예외 목록이 비었다. 옛 예외는 03b(캔버스 펼침 중의 대화
+  // 창)→04(수축 후 대화 창) 한 쌍이었다 — 캔버스 창의 가시성이 대화 창 DOM을 안
+  // 바꾸므로 두 장이 픽셀까지 같은 것이 정상이었다. 확장/수축 연출과 함께 두 캡처
+  // 자체가 사라졌다. 예외를 관성으로 남기면 "예외라서 통과"가 조용히 쌓인다.
+  const EXPECTED_IDENTICAL = new Set();
   const dupCaptures = [];
   for (let i = 1; i < captureLog.length; i++) {
     const prev = captureLog[i - 1];
@@ -1476,7 +1606,7 @@ app.whenReady().then(async () => {
   // main.js의 IPC 배선(athena:history-save-failed → saveFailedRouter.handleFailure)은
   // 별도로 preload.js의 ON_CHANNELS allowlist 통과 여부만 확인한다(실제 스트림은
   // node --test의 lib/history-badge.test.js가 순수 로직을 이미 촘촘히 검증했다).
-  const badgeCheck = await chatWin.webContents.executeJavaScript(`(() => {
+  const badgeCheck = await shellWin.webContents.executeJavaScript(`(() => {
     const HistoryBadge = window.AthenaLib && window.AthenaLib.HistoryBadge;
     if (!HistoryBadge) return { moduleLoaded: false };
     const router = HistoryBadge.createSaveFailedRouter();
@@ -1517,7 +1647,7 @@ app.whenReady().then(async () => {
   })()`);
   report.historySaveFailedBadge = badgeCheck;
   console.log('[verify] 검증19("기록 안 됨" 배지):', JSON.stringify(report.historySaveFailedBadge));
-  assertOk('historyBadge: HistoryBadge 모듈이 chat.html에 실제로 로드됐다', badgeCheck.moduleLoaded === true);
+  assertOk('historyBadge: HistoryBadge 모듈이 shell.html에 실제로 로드됐다', badgeCheck.moduleLoaded === true);
   assertOk('historyBadge: assistant 실패가 aLine 생성보다 먼저 오면 pending으로 흡수된다', badgeCheck.pendingBeforeALine === true);
   assertOk('historyBadge: role:user 배지 텍스트 — "기록 안 됨"', badgeCheck.userBadgeText === '기록 안 됨');
   assertOk('historyBadge: role:assistant 배지 텍스트(pending 흡수 후 적용) — "기록 안 됨"', badgeCheck.assistantBadgeText === '기록 안 됨');
@@ -1526,7 +1656,7 @@ app.whenReady().then(async () => {
 
   // preload allowlist — 렌더러가 athena:history-save-failed를 구독할 수 있어야
   // main의 IPC가 실제로 chat.js에 닿는다(모듈 로직과 별개로 배선 자체를 확인).
-  const historyChannelAllowed = await chatWin.webContents.executeJavaScript(`(() => {
+  const historyChannelAllowed = await shellWin.webContents.executeJavaScript(`(() => {
     try {
       const unsubscribe = window.athena.on('athena:history-save-failed', () => {});
       unsubscribe();
@@ -1544,8 +1674,9 @@ app.whenReady().then(async () => {
   // 순수 렌더러 단에서 확인한다(quota 무관, 검증10의 liveEnvelope 헬퍼 재사용).
   // F1(단일 그룹) · F2(2단 그룹, spec §3.1 경계 11개) · compound(헤더 밴드+표 1개,
   // spec §3.3 "다중 표 아님")를 각각 실측한다.
-  if (!canvasWin.isVisible()) { dlog('expand for check20'); await mainMod.expandCanvasWindow(); await wait(200); }
-  canvasWin.webContents.send('athena:clear-canvases');
+  mainMod.revealShell({ focus: false });
+  await wait(200);
+  await shellWin.webContents.executeJavaScript("window.AthenaShell.clearCanvases()");
   await wait(120);
 
   // 20a — F1: 스칼라 6개, 셀 프리미티브 5종 중 4종(가격/등락/수량·일시/종목) 실측 포함.
@@ -1564,7 +1695,7 @@ app.whenReady().then(async () => {
     },
   });
   await wait(200);
-  const factsF1Probe = await canvasWin.webContents.executeJavaScript(`
+  const factsF1Probe = await shellWin.webContents.executeJavaScript(`
     (() => {
       const card = document.querySelector('#grid .card.facts');
       if (!card) return null;
@@ -1585,7 +1716,7 @@ app.whenReady().then(async () => {
   const f2Fields = Array.from({ length: 14 }, (_, i) => ({ key: `f${i}`, label: `필드${i}`, value: String(i) }));
   liveEnvelope({ canvas_type: 'facts', caption: '검증20 facts(F2)', data: { fields: f2Fields } });
   await wait(200);
-  const factsF2Probe = await canvasWin.webContents.executeJavaScript(`
+  const factsF2Probe = await shellWin.webContents.executeJavaScript(`
     (() => {
       const card = document.querySelector('#grid .card.facts');
       if (!card) return null;
@@ -1616,7 +1747,7 @@ app.whenReady().then(async () => {
     },
   });
   await wait(200);
-  const compoundProbe = await canvasWin.webContents.executeJavaScript(`
+  const compoundProbe = await shellWin.webContents.executeJavaScript(`
     (() => {
       const card = document.querySelector('#grid .card.compound');
       if (!card) return null;
@@ -1632,7 +1763,7 @@ app.whenReady().then(async () => {
       };
     })()
   `);
-  await shot(canvasWin, '21-facts-compound-cards.png');
+  await shot(shellWin, '21-facts-compound-cards.png');
 
   report.factsCompoundCards = { f1: factsF1Probe, f2: factsF2Probe, compound: compoundProbe };
   console.log('[verify] 검증20(facts/compound 카드):', JSON.stringify(report.factsCompoundCards));
@@ -1683,7 +1814,7 @@ app.whenReady().then(async () => {
   ];
   report.paperScreenCases = {};
   for (const paperCase of paperCases) {
-    canvasWin.webContents.send('athena:clear-canvases');
+    await shellWin.webContents.executeJavaScript("window.AthenaShell.clearCanvases()");
     await wait(60);
     liveEnvelope({
       canvas_type: paperCase.type,
@@ -1694,7 +1825,7 @@ app.whenReady().then(async () => {
       data: paperCase.data,
     });
     await wait(paperCase.type === 'chart' ? 350 : 120);
-    const probe = await canvasWin.webContents.executeJavaScript(`(() => {
+    const probe = await shellWin.webContents.executeJavaScript(`(() => {
       const card = document.querySelector('#grid .card');
       if (!card) return null;
       const rect = card.getBoundingClientRect();
@@ -1718,7 +1849,7 @@ app.whenReady().then(async () => {
       };
     })()`);
     const captureName = `paper-${paperCase.id}.png`;
-    const imageSize = await shot(canvasWin, captureName);
+    const imageSize = await shot(shellWin, captureName);
     const passed = !!probe
       && Object.values(probe).every((value) => value === true || value === false || typeof value === 'string' || value === null)
       && probe.connected && probe.nonzeroRect && probe.bodyHasContent && probe.hasCloseControl

@@ -6,8 +6,10 @@
 > Terminology: [`GLOSSARY.md`](../GLOSSARY.md) is the standard vocabulary for this repo. Use its definitions; register new terms there before using them in code.
 
 ## Purpose
-Athena W2 — the two-window Electron shell prototype: a canvas window (1560×800, top) and a chat
-window (1560×204–788, bottom) as two OS-level independent windows. Ported from
+Athena — the Codex형 Electron shell prototype: **one** OS window (1520×760) holding a centre
+canvas region and a right 400px chat region. Until 2026-08-24 this was a two-window pair (a canvas
+window on top of a chat window); leaf 1.2.1 merged them — see `plan/codex-실행계획.md` for what the
+merge dropped and what is still owed. Ported from
 `spike/electron-glass/v2.js`/`v3.js`/`canvas.html`. **No React, no bundler** — plain HTML/CSS/JS on
 Electron 43.x. `athena__render_canvas` is wired to decision D1's real path as of 2026-08-17:
 Electron spawns `claude -p`, `lib/main/stream-json-parser.js` parses the stream-json output, and
@@ -21,16 +23,17 @@ via `ATHENA_CANVAS_SOURCE=fixture` to keep automated verification quota-free and
 |------|-------------|
 | `README.md` | Run instructions, verified measurements, the four bugs found during porting, and an explicit unimplemented list — read it before changing behavior |
 | `package.json` | `npm start` = `electron .`, `npm run verify` = `electron verify.js` (not `node`) |
-| `main.js` | Main process: layout math, both windows, dot→canvas expand/collapse, chat auto/manual resize, `athena__render_canvas` handler |
-| `preload.js` | contextBridge — the only path from either renderer into `ipcMain`/`webFrame`. Exposes `window.athena.{invoke,send,on,getZoomFactor}`, each gated by a channel allowlist. No general passthrough. |
-| `chat.html` / `chat.css` / `chat.js` | Chat window: boot gauge, three-state indicator, history, grip resize |
-| `canvas.html` / `canvas.css` / `canvas.js` | Canvas window: mosaic, rAF expand/collapse animation, three fixture-path renderers plus the live-path renderers (`renderMcpTable`/`renderLiveStream`/`renderLiveReader`/`renderLiveChart`, 2026-08-18) driven by `addLiveCard`'s `envelope.canvas_type` switch |
-| `verify.js` | Verification script — creates windows, screenshots, measures frames, forces accessibility media via CDP, writes `captures/VERIFY-REPORT.json` |
+| `main.js` | Main process: layout math, the shell window, snap placement, `athena__render_canvas` handler |
+| `preload.js` | contextBridge — the only path from the renderer into `ipcMain`/`webFrame`. Exposes `window.athena.{invoke,send,on,getZoomFactor}`, each gated by a channel allowlist. No general passthrough. |
+| `shell.html` / `shell.css` / `shell.js` | **Shell window (2026-08-24, leaf 1.2.1)** — the single window document. `shell.css` re-scopes `canvas.css`/`chat.css` (both written as `position:fixed; inset:0` for their own window) into regions; `shell.js` owns window chrome (titlebar, min/max/close), window shortcuts, and the cross-region bus `window.AthenaShell` |
+| `chat.css` / `chat.js` | Right chat region (400px, never collapses): boot gauge, three-state indicator, history, sibling mode panels |
+| `canvas.css` / `canvas.js` | Centre canvas region (flex): mosaic, three fixture-path renderers plus the live-path renderers (`renderMcpTable`/`renderLiveStream`/`renderLiveReader`/`renderLiveChart`, 2026-08-18) driven by `addLiveCard`'s `envelope.canvas_type` switch |
+| `verify.js` | Verification script — creates the window, screenshots, forces accessibility media via CDP, writes `captures/VERIFY-REPORT.json` |
 
 ## Subdirectories
 | Directory | Purpose |
 |-----------|---------|
-| `lib/` | Renderer-side modules — loaded via `<script>` tags (see `chat.html`/`canvas.html` load order), **not** `require`. Each file has a UMD head/tail: `require`/`module.exports` when `typeof module !== 'undefined'`, else `window.AthenaLib.<Name>`. Entire file bodies are wrapped in `(function () { ... })();` — classic `<script>` tags share one script-level scope, so unwrapped top-level `const`/`function` in different files collide (`el`, `sanitize`, etc. — real regression found during the 2026-08-18 isolation migration, see `README.md`). `sanitize.js` (JS port of `spike/stream-adapter/adapter.py` strip_tags → unescape_entities), `markdown.js` (minimal markdown→DOM, no `innerHTML`), `chart-card.js` (dynamic `import()` of `lightweight-charts.standalone.production.mjs` — the standalone build, not `production.mjs`, because the latter bare-imports `fancy-canvas` which nodeIntegration:false can't resolve). |
+| `lib/` | Renderer-side modules — loaded via `<script>` tags (see `shell.html` load order), **not** `require`. Each file has a UMD head/tail: `require`/`module.exports` when `typeof module !== 'undefined'`, else `window.AthenaLib.<Name>`. Entire file bodies are wrapped in `(function () { ... })();` — classic `<script>` tags share one script-level scope, so unwrapped top-level `const`/`function` in different files collide (`el`, `sanitize`, etc. — real regression found during the 2026-08-18 isolation migration, see `README.md`). `sanitize.js` (JS port of `spike/stream-adapter/adapter.py` strip_tags → unescape_entities), `markdown.js` (minimal markdown→DOM, no `innerHTML`), `chart-card.js` (dynamic `import()` of `lightweight-charts.standalone.production.mjs` — the standalone build, not `production.mjs`, because the latter bare-imports `fancy-canvas` which nodeIntegration:false can't resolve). |
 | `lib/main/` | Main-process modules. `stream-json-parser.js` (pure NDJSON/tool_result parsing + `StreamJsonSession`, tested against `spike/captures/S4-gateway-cli-roundtrip.ndjson`), `claude-runner.js` (spawns `claude -p`, wires the parser), `live-prompt.js` (wraps the user query with canvas-render instructions + the Kiwoom routing rule — market data must go `athena_search → athena_describe → athena_resolve → athena_call`, never an external MCP/web — plus `table`/`stream`/`reader`/`chart` schema hints), `mcp-config.js` (writes `.mcp.json` under `userData` at runtime, exports `BACKEND_DIR`/`PYTHON_EXE`), `backend-launcher.js` (2026-08-18 — auto-starts the FastAPI/uvicorn backend on boot: health-checks `GET 127.0.0.1:8010/api/v1/llm/manifest` first and never spawns a second instance if one already answers — CLAUDE.md §7 single-worker invariant — only kills the process it spawned itself on `before-quit`; pure decision logic (`buildUvicornArgs`/`decideAction`) is unit-tested, the actual spawn/health-poll/kill path is not, same principle as never calling `claude -p` from tests), `onboarding.js`/`accounts.js`/`cli-accounts.js`/`secrets.js`/`mcp-cli.js` (settings/onboarding backend), `model-prefs.js` (Claude model/effort, `athena-model.json` under userData), `codex-config.js` (Codex model/effort — patches `$CODEX_HOME/config.toml` top-level `model`/`model_reasoning_effort` keys in-place, byte-preserving comments/unknown keys/`[section]`s; 2026-08-18), `mockdata.js` (loads `spike/captures/*.json` — the explicit fixture adapter, only used when `source:'fixture'`; moved here 2026-08-18 because the renderer can no longer touch `fs` directly — exposed via the `athena:load-fixture` IPC channel). Run `npm test` (`node --test lib/main/*.test.js`) — no Electron needed, no `claude -p` calls (quota), no real backend spawn. |
 | `styles/` | `tokens.css` (palette tokens, `@font-face`, global `[hidden]{display:none!important}`), `access.css` (three accessibility media queries) |
 | `data/` | `reader-mock.md` — DART markdown excerpt, truncated at the capture's preview-field limit (surfaced in the UI header, not hidden) |
@@ -39,12 +42,17 @@ via `ATHENA_CANVAS_SOURCE=fixture` to keep automated verification quota-free and
 ## For AI Agents
 
 ### Working In This Directory
-- **Exactly two windows. No exceptions.** 대화 창 (`chatWin`) and 캔버스 창 (`canvasWin`).
-  `BrowserWindow` construction is limited to `warmup`/`canvasWin`/`chatWin`, and there are no
-  `dialog.*` calls. "설정창" / "팝업창" / "일시 표면" are **retired terms** — don't reintroduce them.
-- **Everything else is a mode of the 대화 창**, implemented as a sibling panel in `chat.html`
-  that shows while `#app` hides. Same resize grammar for all of them: grow to `chatMaxH`, return
-  to `chatBaseH`.
+- **One window right now; two at most.** 2026-08-24 leaf 1.2.1 replaced the 대화 창/캔버스 창
+  pair with a single **셸 창** (`shellWin`, `shell.html`) holding two regions: centre canvas
+  (`#canvasRegion`, flex — the only output surface) and right chat (`#chatRegion`, 400px,
+  `flex-shrink:0` — the only input surface, never collapses). The 알림 오브 창 is leaf 1.3.1 and
+  the left 이력 사이드바 268px is leaf 1.2.2 — **neither exists yet; don't stub them.**
+  `BrowserWindow` construction is limited to `warmup`/`shellWin`, and there are no `dialog.*`
+  calls. "설정창" / "팝업창" / "일시 표면" are **retired terms** — don't reintroduce them.
+- **Everything else is a mode**, implemented as a sibling panel in `shell.html` that shows
+  while `#app` hides. Since leaf 1.2.1 the mode panels (`#onboard`/`#settings`/`#order`) are
+  full-shell overlays (`shell.css .shell-overlay`) — they no longer resize the window. The old
+  grammar ("grow to `chatMaxH`, return to `chatBaseH`") is gone along with window auto-grow.
   - `#onboard` → 온보딩 · 인증 (`lib/onboarding.js`, `lib/auth-screen.js`)
   - `#settings` → 설정: a sidebar nav (`#settingsNav`, 화면 · 계좌 · MCP 서버 · 모델, default
     selection 화면) + a single card panel (`#settingsGrid`) that the nav swaps

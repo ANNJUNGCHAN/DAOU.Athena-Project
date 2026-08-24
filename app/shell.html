@@ -1,0 +1,179 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Athena</title>
+<!-- 셸 창 문서 — Codex형 창 모델(2026-08-24 리프 1.2.1). 옛 판은 chat.html과
+     canvas.html 두 문서가 각자의 OS 창에 떴다. 이제 한 문서 안의 두 영역이다.
+     스타일 순서가 계약이다: canvas.css·chat.css는 자기 창을 전제로 `position:fixed;
+     inset:0`을 쓰므로, shell.css가 **그 뒤에서** 영역 스코프로 되돌린다.
+     access.css는 언제나 마지막 — 접근성 3종이 다른 규칙을 이겨야 한다. -->
+<link rel="stylesheet" href="styles/tokens.css" />
+<link rel="stylesheet" href="styles/ui-kit.css" />
+<link rel="stylesheet" href="canvas.css" />
+<link rel="stylesheet" href="chat.css" />
+<link rel="stylesheet" href="styles/settings-cards.css" />
+<link rel="stylesheet" href="shell.css" />
+<link rel="stylesheet" href="styles/access.css" />
+</head>
+<body>
+  <!-- 부팅(AT-SY-001) — 4단계 생성 시퀀스. 별도 스플래시가 아니라 창 자신이
+       생성되는 연출이다: 발광점(0ms) → 가로 확장(+180ms) → 세로 전개(+420ms)
+       → 창 확정(+620ms). 확정된 바의 입력줄에 ATHENA가 한 자씩 적혔다가 지워지고
+       placeholder로 돌아온 상태에서 실제 셸(#shell)로 스왑한다. 시퀀스는 chat.js가
+       클래스 토글로 구동한다(리프 1.2.1에서 창 높이 의존을 걷어냈다 — 연출 자체는
+       그대로다). -->
+  <div id="boot" class="boot">
+    <div class="boot-line" id="bootLine"></div>
+    <div class="boot-panel" id="bootPanel">
+      <div class="boot-body"></div>
+      <div class="boot-inputbar">
+        <div class="boot-input-line">
+          <span class="boot-name" id="bootName"></span>
+          <span class="boot-cursor"></span>
+          <span class="boot-ph" id="bootPh" hidden>무엇이든 물어보세요</span>
+        </div>
+        <div class="boot-strip">
+          <span class="boot-dot"></span>
+          <span class="boot-pill">CLAUDE</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 셸 — 창 표면(유리 사다리의 `--glass-window` 단)이 여기다. 옛 판에서는
+       대화 창의 `.app`이 창 표면이었는데, 이제 `.app`은 셸 위의 한 영역이라
+       표면 역할을 셸이 가져간다(verify.js 검증16이 이 요소를 읽는다). -->
+  <div id="shell" class="shell" hidden>
+    <!-- 중앙 캔버스 — 유일한 출력 지점. 늘 떠 있다(옛 판의 확장/수축 연출 없음). -->
+    <main id="canvasRegion" class="shell-region">
+      <div id="mosaic" class="mosaic glass">
+        <div id="grid" class="grid"></div>
+      </div>
+      <div class="glass-sheen" id="sheen" aria-hidden="true"></div>
+    </main>
+
+    <!-- 우측 채팅 400px — 유일한 입력 지점. **어떤 상태에서도 접히지 않는다**
+         (GLOSSARY §1). shell.css의 flex-shrink:0이 그 계약이다. -->
+    <section id="chatRegion" class="shell-region">
+      <div id="app" class="app glass" hidden>
+        <div class="history" id="history"></div>
+
+        <!-- 커맨드 카드(AT-CH-001R, Paper 47쪽) — 입력줄과 컨트롤 스트립의 2행
+             구조. 스트립에는 **실기능만** 올린다(soul.md §7 — 없는 기능을 암시하는
+             장식 UI 금지): 점(설정)·CLI 필·모델 필·루틴 칩(활성 감시 수). -->
+        <div class="input-stack" id="inputStack">
+          <div class="input-row">
+            <input id="input" class="input" placeholder="무엇이든 물어보세요" autofocus />
+            <div class="lock-hint" id="lockHint" hidden>
+              <span id="lockText">답변 중…</span>
+              <span class="esc">ESC 중단</span>
+            </div>
+          </div>
+          <div class="control-strip" id="controlStrip">
+            <!-- 점은 두 역할을 겸한다: 대화 상태 표시 · 설정 진입(GLOSSARY §1).
+                 세 번째였던 "캔버스 확장 애니메이션의 중심점"은 리프 1.2.1에서
+                 사라졌다 — 확장할 창이 없다. 누르면 새 창이 뜨는 게 아니라 셸이
+                 설정 모드로 바뀐다. 커맨드바("설정", "계좌 관리")가 동등한
+                 진입로이고, 점으로만 갈 수 있으면 soul.md §8 탈락 조건이다. -->
+            <button
+              class="dot"
+              id="dot"
+              type="button"
+              aria-label="설정 열기"
+              title="설정"
+            ></button>
+            <!-- CLI 필 — runQuery의 실제 실행기(claude -p)를 표시한다. 클릭=설정 모드
+                 (전환·계정은 거기서). 표시가 실행기와 어긋나면 정보 정직성 위반이다. -->
+            <button id="cliPill" class="pill" type="button" title="활성 CLI — 설정에서 전환">CLAUDE</button>
+            <!-- 루틴 칩 — 활성 감시 수. 백엔드 미기동이면 숨긴다(없는 감시를 있다고 표시하지 않는다). -->
+            <span id="routineChip" class="routine-chip" hidden></span>
+            <span class="strip-spacer"></span>
+            <!-- 모델 필 — athena:model-get 실상태 표시, 클릭=인라인 팝오버(새 창 아님). -->
+            <button id="modelPill" class="pill" type="button" title="모델 · 추론 노력">기본 모델</button>
+          </div>
+          <!-- 모델 팝오버 — 창 안 오버레이. 유리 0.45+blur(카드 단계), 무채색.
+               페이드 등장 금지(soul.md §7) — display 토글로 나타난다. -->
+          <div id="modelPopover" class="model-popover" hidden></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- 모드 패널 3종(온보딩·인증 / 설정 / 주문 확인) — **셸 창 전체를 덮는다.**
+       옛 판에서는 대화 창의 형제 패널이라 대화 창 크기(chatMaxH)로 확장됐다.
+       채팅이 400px 영역이 된 뒤에도 그 자리에 두면 설정 사이드바+패널 2단이
+       400px 안에 짜부라진다 — 그래서 셸 폭 전체를 쓰는 오버레이로 올린다.
+       이것은 목표 구조(셸 창 전체 스왑, CLAUDE.md §2)로 가는 중간 단계다:
+       리프 1.4.1이 좌상단 "← 앱으로 돌아가기" + Esc 동등 복귀와 Codex형 설정
+       레이아웃을 얹는다. 지금은 위치만 셸 전체이고 내용은 옛 판 그대로다. -->
+  <div id="onboard" class="app glass shell-overlay" hidden>
+    <div id="onboardBody" class="onb-root"></div>
+  </div>
+
+  <div id="settings" class="app glass shell-overlay" hidden>
+    <div class="settings-head">
+      <span class="settings-title">설정</span>
+      <span class="settings-hint">↑↓ 이동 · Enter 선택 · Tab 패널 이동 · Esc 닫기</span>
+    </div>
+    <div class="settings-body">
+      <div id="settingsNav" class="settings-nav"></div>
+      <div id="settingsGrid" class="settings-grid"></div>
+    </div>
+  </div>
+
+  <div id="order" class="app glass shell-overlay" hidden>
+    <div class="settings-head">
+      <span class="settings-title">주문 티켓</span>
+      <span class="settings-hint">Esc 닫기 — 실행 전에는 아무 일도 일어나지 않습니다</span>
+    </div>
+    <div id="orderBody" class="settings-grid"></div>
+  </div>
+
+  <!-- 창 크롬 — 모드·영역과 무관하게 **창**에 속하므로 #shell 밖 고정 오버레이다.
+       부팅 연출 중에는 숨겼다가 shell.js revealChrome()에서 드러난다.
+       닫기는 종료가 아니다 — 창을 숨기고 프로세스는 백그라운드에 남는다(트레이 복귀). -->
+  <div id="dragStrip" class="titlebar" hidden aria-hidden="true"><span class="titlebar-label">Athena</span></div>
+
+  <div id="winControls" class="win-controls" hidden>
+    <button id="winMin" class="win-btn" type="button" aria-label="최소화" title="최소화 (Ctrl+M)"><span class="win-ic-min"></span></button>
+    <button id="winMax" class="win-btn" type="button" aria-label="최대화" title="최대화 (Win+↑)"><span class="win-ic-max"></span></button>
+    <button id="winClose" class="win-btn" type="button" aria-label="닫기 — 백그라운드 유지" title="닫기 — 백그라운드에 유지"><span class="win-ic-close"></span></button>
+  </div>
+
+<!-- 렌더러 격리(2026-08-18, CLAUDE.md §6) — nodeIntegration:false라 require가
+     없다. lib/*.js는 UMD 각주로 window.AthenaLib에 전역을 얹는 순수 <script>다.
+     의존 순서를 지켜야 한다(각 파일 상단 주석의 UMD 헤드가 앞서 로드된 전역을
+     찾는다). 옛 두 문서의 목록을 합친 것이고, 양쪽에 있던 것(ui-kit·edge-glow·
+     rest-canvas-paint)은 한 번만 로드한다.
+     shell.js가 canvas.js·chat.js보다 **먼저** 와야 한다 — 두 영역 스크립트가
+     window.AthenaShell(창 크롬·영역 간 버스)을 찾는다. -->
+<script src="lib/ui-kit.js"></script>
+<script src="lib/edge-glow.js"></script>
+<script src="lib/sanitize.js"></script>
+<script src="lib/markdown.js"></script>
+<script src="lib/rest-canvas-paint.js"></script>
+<script src="lib/canvas-layout.js"></script>
+<script src="lib/column-fold.js"></script>
+<script src="lib/facts-card.js"></script>
+<script src="lib/chart-indicator-registry.js"></script>
+<script src="lib/chart-indicators.js"></script>
+<script src="lib/chart-volume-profile.js"></script>
+<script src="lib/chart-resample.js"></script>
+<script src="lib/chart-toolbar.js"></script>
+<script src="lib/chart-authoring-store.js"></script>
+<script src="lib/chart-drawings.js"></script>
+<script src="lib/chart-indicator-panel.js"></script>
+<script src="lib/chart-card.js"></script>
+<script src="lib/aits-chart-panel.js"></script>
+<script src="lib/onboarding.js"></script>
+<script src="lib/auth-screen.js"></script>
+<script src="lib/routine-turn.js"></script>
+<script src="lib/order-ticket.js"></script>
+<script src="lib/settings-cards.js"></script>
+<script src="lib/history-badge.js"></script>
+<script src="shell.js"></script>
+<script src="canvas.js"></script>
+<script src="chat.js"></script>
+</body>
+</html>

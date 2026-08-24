@@ -28,8 +28,8 @@ app.setPath('userData', PROBE_PROFILE);
 
 function wait(ms) { return new Promise((r) => setTimeout(r, ms)); }
 
-async function clickIndicatorPanelButton(canvasWin) {
-  await canvasWin.webContents.executeJavaScript(`(() => {
+async function clickIndicatorPanelButton(shellWin) {
+  await shellWin.webContents.executeJavaScript(`(() => {
     const card = document.querySelector('.card.chart');
     const btn = Array.from(card.querySelectorAll('.chart-toolbar-btn')).find(b => b.textContent.includes('∿'));
     btn.click();
@@ -37,8 +37,8 @@ async function clickIndicatorPanelButton(canvasWin) {
   await wait(120);
 }
 
-async function clickPanelRow(canvasWin, label) {
-  await canvasWin.webContents.executeJavaScript(`(() => {
+async function clickPanelRow(shellWin, label) {
+  await shellWin.webContents.executeJavaScript(`(() => {
     const card = document.querySelector('.card.chart');
     const panel = card.querySelector('.chart-indicator-panel');
     const row = Array.from(panel.querySelectorAll('.chart-ind-row')).find(r => r.querySelector('.chart-ind-label').textContent === ${JSON.stringify(label)});
@@ -47,26 +47,26 @@ async function clickPanelRow(canvasWin, label) {
   await wait(200);
 }
 
-async function clickVpRow(canvasWin) {
-  await canvasWin.webContents.executeJavaScript(`(() => {
+async function clickVpRow(shellWin) {
+  await shellWin.webContents.executeJavaScript(`(() => {
     document.querySelector('.card.chart .chart-ind-vp-row').click();
   })()`);
   await wait(250);
 }
 
-async function closePanel(canvasWin) {
-  await canvasWin.webContents.executeJavaScript(`document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))`);
+async function closePanel(shellWin) {
+  await shellWin.webContents.executeJavaScript(`document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))`);
   await wait(120);
 }
 
-async function selectChartForm(canvasWin, label) {
-  await canvasWin.webContents.executeJavaScript(`(() => {
+async function selectChartForm(shellWin, label) {
+  await shellWin.webContents.executeJavaScript(`(() => {
     const card = document.querySelector('.card.chart');
     const formBtn = Array.from(card.querySelectorAll('.chart-toolbar-btn')).find(b => b.textContent.includes('▦'));
     formBtn.click();
   })()`);
   await wait(80);
-  await canvasWin.webContents.executeJavaScript(`(() => {
+  await shellWin.webContents.executeJavaScript(`(() => {
     const card = document.querySelector('.card.chart');
     const panel = card.querySelector('.chart-toolbar-dropdown');
     const opt = panel && Array.from(panel.querySelectorAll('.chart-toolbar-dropdown-item')).find(b => b.textContent === ${JSON.stringify(label)});
@@ -75,8 +75,8 @@ async function selectChartForm(canvasWin, label) {
   await wait(250);
 }
 
-async function clickPeriodTab(canvasWin, label) {
-  await canvasWin.webContents.executeJavaScript(`(() => {
+async function clickPeriodTab(shellWin, label) {
+  await shellWin.webContents.executeJavaScript(`(() => {
     const card = document.querySelector('.card.chart');
     const tab = Array.from(card.querySelectorAll('.chart-toolbar-tab')).find(b => b.textContent === ${JSON.stringify(label)});
     tab.click();
@@ -114,14 +114,14 @@ const READ_STATE_JS = `(async () => {
 async function main() {
   const mainMod = require('./main.js');
   await mainMod.createWindows();
-  const { canvasWin } = mainMod.getWins();
-  if (!canvasWin) throw new Error('canvasWin을 못 찾았다');
+  const { shellWin } = mainMod.getWins();
+  if (!shellWin) throw new Error('shellWin을 못 찾았다');
 
-  canvasWin.show();
+  shellWin.show();
   await wait(400);
 
   // 이전 실행 잔여 상태 제거 — 프로브는 결정적이어야 한다.
-  await canvasWin.webContents.executeJavaScript(`(() => {
+  await shellWin.webContents.executeJavaScript(`(() => {
     const del = [];
     for (let i = 0; i < localStorage.length; i += 1) {
       const k = localStorage.key(i);
@@ -131,7 +131,7 @@ async function main() {
     return del.length;
   })()`);
 
-  await canvasWin.webContents.executeJavaScript(`window.addCard('chart')`);
+  await shellWin.webContents.executeJavaScript(`window.addCard('chart')`);
   await wait(1500);
 
   const report = {};
@@ -140,24 +140,24 @@ async function main() {
 
   try {
     // ---- ① 일봉에서 저작: 볼린저 on · 형식 바 · 매물대 on ----
-    mark('D:패널 열기'); await clickIndicatorPanelButton(canvasWin);
-    mark('D:볼린저 on'); await clickPanelRow(canvasWin, '볼린저');
-    mark('D:매물대 on'); await clickVpRow(canvasWin);
-    mark('D:패널 닫기'); await closePanel(canvasWin);
-    mark('D:형식 바'); await selectChartForm(canvasWin, '바');
-    mark('D:상태 읽기'); report.afterAuthoringOnD = await canvasWin.webContents.executeJavaScript(READ_STATE_JS);
+    mark('D:패널 열기'); await clickIndicatorPanelButton(shellWin);
+    mark('D:볼린저 on'); await clickPanelRow(shellWin, '볼린저');
+    mark('D:매물대 on'); await clickVpRow(shellWin);
+    mark('D:패널 닫기'); await closePanel(shellWin);
+    mark('D:형식 바'); await selectChartForm(shellWin, '바');
+    mark('D:상태 읽기'); report.afterAuthoringOnD = await shellWin.webContents.executeJavaScript(READ_STATE_JS);
 
     // ---- ② 주봉 전환 — 독립 상태를 만든다(매물대 off·형식 캔들) ----
-    mark('W:주 탭'); await clickPeriodTab(canvasWin, '주');
-    mark('W:패널 열기'); await clickIndicatorPanelButton(canvasWin);
-    mark('W:매물대 off'); await clickVpRow(canvasWin);
-    mark('W:패널 닫기'); await closePanel(canvasWin);
-    mark('W:형식 캔들'); await selectChartForm(canvasWin, '캔들');
-    mark('W:상태 읽기'); report.afterChangesOnW = await canvasWin.webContents.executeJavaScript(READ_STATE_JS);
+    mark('W:주 탭'); await clickPeriodTab(shellWin, '주');
+    mark('W:패널 열기'); await clickIndicatorPanelButton(shellWin);
+    mark('W:매물대 off'); await clickVpRow(shellWin);
+    mark('W:패널 닫기'); await closePanel(shellWin);
+    mark('W:형식 캔들'); await selectChartForm(shellWin, '캔들');
+    mark('W:상태 읽기'); report.afterChangesOnW = await shellWin.webContents.executeJavaScript(READ_STATE_JS);
 
     // ---- ③ 일봉 복귀 — 3종 복원 단언 ----
-    mark('D복귀:일 탭'); await clickPeriodTab(canvasWin, '일');
-    mark('D복귀:상태 읽기'); report.afterReturnToD = await canvasWin.webContents.executeJavaScript(READ_STATE_JS);
+    mark('D복귀:일 탭'); await clickPeriodTab(shellWin, '일');
+    mark('D복귀:상태 읽기'); report.afterReturnToD = await shellWin.webContents.executeJavaScript(READ_STATE_JS);
   } catch (err) {
     console.error(`[probe-authoring] 단계 "${step}"에서 실패:`, err && err.message);
     throw err;
@@ -176,7 +176,7 @@ async function main() {
   report.pass = Object.values(report.assertions).every(Boolean);
 
   await wait(300);
-  const img = await canvasWin.webContents.capturePage();
+  const img = await shellWin.webContents.capturePage();
   fs.writeFileSync(path.join(CAPTURES, 'CC-104-restore.png'), img.toPNG());
   fs.writeFileSync(path.join(CAPTURES, 'CC-104-probe-report.json'), JSON.stringify(report, null, 2), 'utf-8');
 

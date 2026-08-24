@@ -8,14 +8,14 @@
 // 태우려면 `athena__render_canvas` IPC(payload {query, expand})를 실제로 호출해야 하고,
 // 그건 ipcMain.handle에 걸려 있어 렌더러(webContents) 쪽에서 invoke해야 한다 —
 // `verify.js`가 쓰는 것과 같은 패턴(main.js를 라이브러리로 require, createWindows()
-// 직접 호출, chatWin.webContents.executeJavaScript로 window.athena.invoke 구동).
+// 직접 호출, shellWin.webContents.executeJavaScript로 window.athena.invoke 구동).
 //
 // **이 파일이 spike/cli-pipe/gateway/가 아니라 app/ 안에 있는 이유(실측으로 확정)**:
-// main.js는 `canvasWin.loadFile('canvas.html')` / `chatWin.loadFile('chat.html')`을
+// main.js는 `shellWin.loadFile('shell.html')` / `shellWin.loadFile('shell.html')`을
 // **상대경로**로 부른다. Electron의 loadFile은 그 경로를 main.js의 __dirname이 아니라
 // `app.getAppPath()`(= electron에 넘긴 진입 스크립트의 디렉터리) 기준으로 푼다. 처음
 // 이 프로브를 spike/cli-pipe/gateway/에 두고 `electron ../spike/.../probe.js`로
-// 실행했더니 chat.html을 spike/cli-pipe/gateway/chat.html에서 찾다가
+// 실행했더니 shell.html을 spike/cli-pipe/gateway/shell.html에서 찾다가
 // ERR_FILE_NOT_FOUND로 실패했고, ready-to-show가 영영 안 와서 createWindows()가
 // 19분 넘게 무한 대기했다(실측, 죽여서 확인). probe-krx-live.js·verify.js가 전부
 // app/ 안에 있는 이유가 바로 이거다 — 새 방식을 발명하지 않고 그 관례를 따른다.
@@ -199,7 +199,7 @@ async function spawnBackend() {
     const mainMod = require(path.join(APP_DIR, 'main.js'));
     await mainMod.createWindows();
     log('windows created');
-    const { chatWin } = mainMod.getWins();
+    const { shellWin } = mainMod.getWins();
 
     // history-sink.js의 canAttemptSave()는 brainReadyCache===true일 때만 통과한다.
     // 그 캐시는 정상 부팅 경로(main.js 하단 `if (!process.env.ATHENA_NO_AUTOSTART)`)의
@@ -227,7 +227,7 @@ async function spawnBackend() {
     let queryError = null;
     try {
       queryResult = await Promise.race([
-        chatWin.webContents.executeJavaScript(invokeScript),
+        shellWin.webContents.executeJavaScript(invokeScript),
         wait(CONVERSATION_QUERY_TIMEOUT_MS).then(() => { throw new Error('probe-level timeout'); }),
       ]);
     } catch (err) {

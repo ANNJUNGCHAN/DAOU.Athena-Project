@@ -40,7 +40,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 const { loadCases, auditSnapshot, auditDelta, stampDir } = require('./lib/main/eval-harness');
 
 // verify.js:104의 부팅 판정과 같은 기준 — #boot가 사라지고 #app 또는 #onboard가 보이면 완료.
-async function waitForChatBooted(chatWin, timeoutMs = 15000) {
+async function waitForChatBooted(shellWin, timeoutMs = 15000) {
   const probe = `(() => {
     const vis = (id) => { const n = document.getElementById(id); return !!n && !n.hidden; };
     return { boot: vis('boot'), app: vis('app'), onboard: vis('onboard'), settings: vis('settings') };
@@ -48,7 +48,7 @@ async function waitForChatBooted(chatWin, timeoutMs = 15000) {
   const t0 = Date.now();
   let panels = null;
   while (Date.now() - t0 < timeoutMs) {
-    panels = await chatWin.webContents.executeJavaScript(probe);
+    panels = await shellWin.webContents.executeJavaScript(probe);
     if (!panels.boot && (panels.app || panels.onboard)) break;
     await wait(100);
   }
@@ -140,9 +140,9 @@ app.whenReady().then(async () => {
   const cases = loadCases(DATASET);
   const mainMod = require('./main.js');
   await mainMod.createWindows();
-  const { chatWin, canvasWin } = mainMod.getWins();
+  const { shellWin } = mainMod.getWins();
 
-  const boot = await waitForChatBooted(chatWin);
+  const boot = await waitForChatBooted(shellWin);
   // ATHENA_RUN_SUFFIX: 수정 검증 런을 기준선 런과 분리한다(예: '-fixcheck').
   // 없으면 기존 이름 그대로 — 기준선 디렉토리를 덮어쓰는 사고를 막는 장치다.
   const runDir = path.join(REPO, 'datasets', 'eval-runs',
@@ -168,8 +168,8 @@ app.whenReady().then(async () => {
     if (!c) { process.stdout.write(`SKIP ${id}\n`); continue; }
     // 창이 죽었으면 이 인보케이션은 회복 불능이다 — 부분 기록을 남기고 즉시
     // 나가서 다음 배치 인보케이션(새 앱 인스턴스)이 이어가게 한다.
-    if (chatWin.isDestroyed() || chatWin.webContents.isDestroyed()
-      || canvasWin.isDestroyed() || canvasWin.webContents.isDestroyed()) {
+    if (shellWin.isDestroyed() || shellWin.webContents.isDestroyed()
+      || shellWin.isDestroyed() || shellWin.webContents.isDestroyed()) {
       process.stdout.write(`WINDOW-DEAD before ${id} — 배치 중단\n`);
       mergeRunIndex(runDir, boot, index);
       app.exit(5);
@@ -183,13 +183,13 @@ app.whenReady().then(async () => {
     try {
 
     const auditBefore = auditSnapshot(AUDIT_DIR);
-    const pre = await chatWin.webContents.executeJavaScript(CHAT_PROBE);
+    const pre = await shellWin.webContents.executeJavaScript(CHAT_PROBE);
     // Esc 접기가 grid를 비우므로 보통 0이지만, 접기 실패로 잔류 카드가 있으면
     // 이 값 이후의 카드만 이 케이스 것으로 귀속한다.
-    const preCanvasCount = await canvasWin.webContents.executeJavaScript(CANVAS_COUNT_PROBE);
+    const preCanvasCount = await shellWin.webContents.executeJavaScript(CANVAS_COUNT_PROBE);
 
     // 커맨드바에 실제로 타이핑하고 Enter — verify.js:278과 같은 경로.
-    await chatWin.webContents.executeJavaScript(`(() => {
+    await shellWin.webContents.executeJavaScript(`(() => {
       const input = document.getElementById('input');
       input.value = ${JSON.stringify(userText)};
       input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
@@ -203,12 +203,12 @@ app.whenReady().then(async () => {
     let firstCardMs = null;
     const t0 = Date.now();
     while (Date.now() - t0 < QUERY_TIMEOUT_MS) {
-      post = await chatWin.webContents.executeJavaScript(CHAT_PROBE);
+      post = await shellWin.webContents.executeJavaScript(CHAT_PROBE);
       if (!seenStates.length || seenStates[seenStates.length - 1].state !== post.state) {
         seenStates.push({ state: post.state, at_ms: Date.now() - t0 });
       }
       if (firstCardMs === null) {
-        const n = await canvasWin.webContents.executeJavaScript(CANVAS_COUNT_PROBE);
+        const n = await shellWin.webContents.executeJavaScript(CANVAS_COUNT_PROBE);
         if (n > preCanvasCount) firstCardMs = Date.now() - t0;
       }
       if (post.answerCount > pre.answerCount && post.state === 'idle') break;
@@ -219,11 +219,11 @@ app.whenReady().then(async () => {
 
     // 카드가 그려질 시간을 조금 더 준다(마지막 카드 IPC가 답변 직후 도착할 수 있다).
     await wait(1500);
-    const canvasState = await canvasWin.webContents.executeJavaScript(CANVAS_PROBE);
+    const canvasState = await shellWin.webContents.executeJavaScript(CANVAS_PROBE);
     const delta = auditDelta(AUDIT_DIR, auditBefore);
 
-    const chatSize = await shot(chatWin, path.join(evDir, 'chat.png'));
-    const canvasSize = await shot(canvasWin, path.join(evDir, 'canvas.png'));
+    const chatSize = await shot(shellWin, path.join(evDir, 'chat.png'));
+    const canvasSize = await shot(shellWin, path.join(evDir, 'canvas.png'));
 
     fs.writeFileSync(path.join(evDir, 'chat-answer.txt'), String((post && post.lastAnswer) || ''), 'utf8');
     fs.writeFileSync(path.join(evDir, 'ui-state.json'), JSON.stringify({
@@ -262,7 +262,7 @@ app.whenReady().then(async () => {
     process.stdout.write(`DONE ${id} completed=${completed} ${elapsed.toFixed(1)}s firstCard=${firstCardMs === null ? '-' : (firstCardMs / 1000).toFixed(1) + 's'} cards=[${cardTypes.join(', ')}] chips+${chipsAdded} states=${seenStates.map((s) => s.state).join('>')}\n`);
 
     // 다음 케이스를 위한 상태 리셋 — Esc로 캔버스를 접는다(idle에서의 Esc 분기).
-    await chatWin.webContents.executeJavaScript(
+    await shellWin.webContents.executeJavaScript(
       "document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))");
     await wait(2000);
     } catch (e) {
