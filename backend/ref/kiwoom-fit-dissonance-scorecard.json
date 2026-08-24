@@ -173,7 +173,7 @@
         },
         "screen_id": "AT-CV-005:A1",
         "screenshot": "app/captures/paper-A1.png",
-        "screenshot_sha256": "533dca93bfada9aa14504622890d03167a42a939008c29a93c139d71026854e9",
+        "screenshot_sha256": "ff59097fd36e15314820fa1f0f7f179be4c09024f887cb684e0728ecd2970a06",
         "status": "pass",
         "template_case_id": "A1"
       },
@@ -206,7 +206,7 @@
         },
         "screen_id": "AT-CV-005:C1",
         "screenshot": "app/captures/paper-C1.png",
-        "screenshot_sha256": "a33bc62f7525f999aac54d540feaa6ae9a71ef0a3eba49bd1c10ffda8b97c5f6",
+        "screenshot_sha256": "4cb9d54342cc13d31a7eca714a7113d06c2eef81b9c5bdebd542d3ce78927e5f",
         "status": "pass",
         "template_case_id": "C1"
       },
@@ -239,7 +239,7 @@
         },
         "screen_id": "AT-CV-005:C2",
         "screenshot": "app/captures/paper-C2.png",
-        "screenshot_sha256": "76a8fe8b3516c8c402c9ec3d64c901359f2399fa016b5392d15c3489441a2cbc",
+        "screenshot_sha256": "e2c8921d3aef768da9bff952c94acbfe1f0a8bb8e64ba607020d0ff8a658474f",
         "status": "pass",
         "template_case_id": "C2"
       },
@@ -272,7 +272,7 @@
         },
         "screen_id": "AT-CV-005:E1",
         "screenshot": "app/captures/paper-E1.png",
-        "screenshot_sha256": "0befcc97c61004c5c90f831440aea8eb32bcae71f93e8fda76dc00ada0bd910f",
+        "screenshot_sha256": "0ee179fb68b1fd23003fc8d3204cf952a1dc602921108c9116dd66c6475aca3a",
         "status": "pass",
         "template_case_id": "E1"
       },
@@ -305,7 +305,7 @@
         },
         "screen_id": "AT-CV-005:E2",
         "screenshot": "app/captures/paper-E2.png",
-        "screenshot_sha256": "c1378a41d4d57a88887fd932ca0542f18d621cc39cbbf9dc4d16d936565b9011",
+        "screenshot_sha256": "e2ef66dceecd87401c0b7535de4cb0dad82f02d3fbddcf79e507ade5953bc65b",
         "status": "pass",
         "template_case_id": "E2"
       },
@@ -338,7 +338,7 @@
         },
         "screen_id": "AT-CV-005:E3",
         "screenshot": "app/captures/paper-E3.png",
-        "screenshot_sha256": "d1575a93e6afc8f43e9b8c39ab101d624c70f0992b510f5c62006e44f705dcc4",
+        "screenshot_sha256": "e7293c75ba3367076233253881e3e12f1ab84980fded95ac9ff9e021ae3e70a1",
         "status": "pass",
         "template_case_id": "E3"
       },
@@ -371,7 +371,7 @@
         },
         "screen_id": "AT-CV-005:F1",
         "screenshot": "app/captures/paper-F1.png",
-        "screenshot_sha256": "a57e27d9dc72f642cfdeb43eded9cedf4e81efa72b7cb984505b2887d13d580f",
+        "screenshot_sha256": "cecb1ec9b81bb88baefc7bb3a879b178486041f02ad574e5eb7b5e8aab026370",
         "status": "pass",
         "template_case_id": "F1"
       },
@@ -404,7 +404,7 @@
         },
         "screen_id": "AT-CV-005:F2",
         "screenshot": "app/captures/paper-F2.png",
-        "screenshot_sha256": "4343ea22b30d848884afd743a626ba314aa95f79c0ce7cee3ee4fb1de35e0a7c",
+        "screenshot_sha256": "50598ae0a225f14f6c146e4f6f3341964107b8761c01678a87b737748b705668",
         "status": "pass",
         "template_case_id": "F2"
       },
@@ -437,7 +437,7 @@
         },
         "screen_id": "AT-CV-005:S1",
         "screenshot": "app/captures/paper-S1.png",
-        "screenshot_sha256": "e88a81d15524784a8e1a7e8240743889eea8ef102d7b3938e6548889413ca832",
+        "screenshot_sha256": "4409f6a3772102e5767875030467a633cf2038f6d3111aa9b7ac762404d42edd",
         "status": "pass",
         "template_case_id": "S1"
       },
@@ -470,7 +470,7 @@
         },
         "screen_id": "AT-CV-005:T1",
         "screenshot": "app/captures/paper-T1.png",
-        "screenshot_sha256": "97ef99a4d5f69f14a4c44615832bbe9f673a53e474859baaffa4b50ce9e86f5d",
+        "screenshot_sha256": "946221b4feb4662a85dfa19aa76fbfdfe0ad983f9402bdbfd96e040c94a3068c",
         "status": "pass",
         "template_case_id": "T1"
       },
@@ -503,7 +503,7 @@
         },
         "screen_id": "AT-CV-005:T2",
         "screenshot": "app/captures/paper-T2.png",
-        "screenshot_sha256": "53011476dc3d9f6d8441d25059e6c0dd6a25bc65ac3971d7fdbccfb85805a80a",
+        "screenshot_sha256": "613f3b0045a962d09ef4854ff5925a239e708131a1892c5467e0716afb908e38",
         "status": "pass",
         "template_case_id": "T2"
       },
@@ -536,7 +536,7 @@
         },
         "screen_id": "AT-CV-005:T3",
         "screenshot": "app/captures/paper-T3.png",
-        "screenshot_sha256": "e3d1ccdc492f196f7e19c07b26adebb3cbda1ed577af1b2a5d47570e52f69c73",
+        "screenshot_sha256": "27f777f6b6b3401f80216c27300d3436c2091656d818b76f5de4d4ac7693ecb3",
         "status": "pass",
         "template_case_id": "T3"
       },
@@ -569,7 +569,7 @@
         },
         "screen_id": "AT-CV-005:T4",
         "screenshot": "app/captures/paper-T4.png",
-        "screenshot_sha256": "b7be803a0ccf036f719b00f5fb390faa909f92a0d04b886fe937bb8f5dbfdf3b",
+        "screenshot_sha256": "a2e8e27c466af35fe325d01d7c555a5b5a06dbbef3ca0320c784c68567eb47d6",
         "status": "pass",
         "template_case_id": "T4"
       }
@@ -582,15 +582,15 @@
       "app/lib/chart-card.js": "589692bec4c465688ca8238faf17c9f62b540dff4ade46f8a487e6a4007c9e85",
       "app/shell.css": "d2b7599a40d4621ac1255a1bd1bdb574baff5d09b19338e11185e0b746ab4967",
       "app/shell.html": "ac1185a2a506077501616d35e8774fdd814e1235c71a4c9ebd173712ba232659",
-      "app/verify.js": "538f6587d95a4f3111fcfa29eaa19b4905dd600ac1b680f910bb34d8dbcdd6c4",
+      "app/verify.js": "052a3d54d4d54c4f9bbcf896e398184137e55ea09fb75baaaccc938478b4a4af",
       "backend/ref/kiwoom-screen-definitions.json": "7e03c82db221b2736251acf4bb669ffcaacfdf7a32fb8b770a5f8f39952ae79b"
     },
     "source_report": {
       "command": "cd app && npm run verify",
-      "finished_at": "2026-08-24T01:38:38.081Z",
+      "finished_at": "2026-08-24T07:25:18.777Z",
       "path": "app/captures/VERIFY-REPORT.json",
-      "sha256": "52912341d947f5468a523604db10a618b7ed68733242f2b3b2b9ef953e0caa4a",
-      "started_at": "2026-08-24T01:37:49.776Z"
+      "sha256": "9020f055fe571cbf399895aecbe99eeead4d057c2af5f2079719cdaf2182c72c",
+      "started_at": "2026-08-24T07:24:36.911Z"
     }
   },
   "mappings": [

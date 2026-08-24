@@ -107,6 +107,41 @@ async function shot(win, name) {
   return img.getSize();
 }
 
+// 2026-08-24 리프 1.3.2 — **렌더된 픽셀**의 채도를 잰다.
+// 소스에 색을 안 썼다는 것과 화면에 색이 안 나온다는 것은 다른 주장이다. 이 저장소는
+// 그 차이로 두 번 데였다(잔류 blur가 데이터를 흐렸고, 죽은 유리 단계가 토큰에만 있었다).
+// nativeImage.toBitmap()은 BGRA 원본을 준다 — 디코더를 끼지 않고 실제 합성 결과를 읽는다.
+//
+// 투명창이라 창 밖 영역은 alpha 0으로 온다. 불투명 픽셀만 세야 배경이 통계를 희석하지 않는다.
+async function measurePixels(win) {
+  await win.webContents.executeJavaScript(
+    'new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))'
+  );
+  const img = await win.webContents.capturePage();
+  const bmp = img.toBitmap();
+  let opaque = 0, chromaSum = 0, maxChroma = 0, bluish = 0;
+  for (let i = 0; i < bmp.length; i += 4) {
+    const b = bmp[i], g = bmp[i + 1], r = bmp[i + 2], a = bmp[i + 3];
+    if (a < 200) continue;
+    opaque += 1;
+    // 채도 = max(r,g,b) - min(r,g,b). 무채색(백/회/흑)은 0이다.
+    const c = Math.max(r, g, b) - Math.min(r, g, b);
+    chromaSum += c;
+    if (c > maxChroma) maxChroma = c;
+    // 바이저 판정 — 참조 렌더 실측에 쓴 것과 **같은 기준**이다
+    // (ui/.kiwoome-extract/sample-visor.js): 파랑 지배 + 충분히 진함.
+    if (b > r + 45 && b > g + 45 && b > 70) bluish += 1;
+  }
+  return {
+    size: img.getSize(),
+    opaquePixels: opaque,
+    meanChroma: opaque ? Number((chromaSum / opaque).toFixed(2)) : null,
+    maxChroma,
+    bluishPixels: bluish,
+    bluishRatio: opaque ? Number((bluish / opaque).toFixed(4)) : null,
+  };
+}
+
 async function forceMedia(win, features) {
   const wc = win.webContents;
   if (!wc.debugger.isAttached()) wc.debugger.attach('1.3');
@@ -1943,7 +1978,15 @@ app.whenReady().then(async () => {
   //  (c) **없어야 하는 것** — 실행 버튼 0 · 입력창 0(확정 결정 3 · 단일 입력 원칙)
   // 그리고 왕복 불변: 펼쳤다 접으면 오브가 원래 자리로 돌아온다.
   const orbCollapsedBefore = orbWin.getBounds();
+
+  // 22-A — **알림 0건: 오브에 색이 없다.** 리프 1.3.2의 핵심 계약이다.
+  // 먼저 상태가 정말 'none'인지 확인한다 — 앞선 검증이 오브에 이벤트를 흘렸다면
+  // 이 측정은 무의미해진다(가정을 재지 않고 확인한다).
+  const orbAlertBeforeEvent = await orbWin.webContents.executeJavaScript(
+    "document.getElementById('orbRoot').dataset.alert"
+  );
   await shot(orbWin, '22-orb-collapsed.png');
+  const pixelsQuiet = await measurePixels(orbWin);
 
   orbWin.webContents.send('athena:routine-event', {
     type: 'routine-fired',
@@ -1958,27 +2001,40 @@ app.whenReady().then(async () => {
   });
   await wait(300);
 
+  // 22-B — **알림이 오면 딥블루 바이저가 드러난다.** 같은 창, 같은 크기, 상태만 다르다.
+  await shot(orbWin, '22b-orb-alerted.png');
+  const pixelsAlerted = await measurePixels(orbWin);
+
   const orbCollapsedProbe = await orbWin.webContents.executeJavaScript(`(() => {
     const orb = document.getElementById('orb');
     const r = orb.getBoundingClientRect();
     const cs = getComputedStyle(orb);
-    const ring = getComputedStyle(document.getElementById('orbRing'));
+    const visor = getComputedStyle(document.getElementById('orbVisor'));
     return {
       width: Math.round(r.width),
       height: Math.round(r.height),
       borderRadius: cs.borderRadius,
-      // 링의 호는 미확인 알림 수다 — 1건 받았으니 0이 아니어야 한다.
-      arc: Number(document.getElementById('orbRing').style.getPropertyValue('--orb-arc')),
       count: document.getElementById('orbCount').textContent,
       panelHidden: document.getElementById('orbPanel').hidden,
       state: document.getElementById('orbRoot').dataset.state,
+      // 2026-08-24 리프 1.3.2 — 무채색↔발화 상태. 1건 받았으니 'fired'여야 한다.
+      alert: document.getElementById('orbRoot').dataset.alert,
+      // 유리는 끝까지 무채색이다 — 셸 배경에 색이 섞이면 그건 틴트다(soul.md §7).
+      orbBackground: cs.backgroundColor,
+      // 바이저는 **페이드가 아니라** 스케일·블러 변조로 드러난다(soul.md §7).
+      visorTransition: visor.transition,
+      visorTransform: visor.transform,
+      eyeCount: document.querySelectorAll('#orbVisor .orb-eye').length,
       // 드래그 손잡이/구멍 계약 — 같은 픽셀에 겹치면 클릭이 영영 안 온다.
       orbRegion: (cs.getPropertyValue('app-region') || cs.getPropertyValue('-webkit-app-region') || '').trim(),
       coreRegion: (() => {
         const c = getComputedStyle(document.getElementById('orbToggle'));
         return (c.getPropertyValue('app-region') || c.getPropertyValue('-webkit-app-region') || '').trim();
       })(),
-      ringHasBrand: ring.backgroundImage.includes('238, 19, 123'),
+      // 옛 마젠타 호는 걷어냈다 — 얼굴이 신호를 가져갔고 신호는 화면당 한 곳이다.
+      // 죽은 채 남았는지 확인한다: 링 배경에 브랜드 마젠타가 있으면 안 된다.
+      ringHasBrand: getComputedStyle(document.getElementById('orbRing'))
+        .backgroundImage.includes('238, 19, 123'),
     };
   })()`);
 
@@ -2028,8 +2084,29 @@ app.whenReady().then(async () => {
     isCircle76: orbCollapsedProbe.width === 76 && orbCollapsedProbe.height === 76
       && /50%|38px/.test(orbCollapsedProbe.borderRadius),
     dragHandleContract: orbCollapsedProbe.orbRegion === 'drag' && orbCollapsedProbe.coreRegion === 'no-drag',
-    unreadArcShown: orbCollapsedProbe.arc > 0 && orbCollapsedProbe.count === '1',
-    ringUsesSingleAccent: orbCollapsedProbe.ringHasBrand === true,
+    // ---------- 리프 1.3.2: 키우미 참조 상태 계약 ----------
+    alertBeforeEvent: orbAlertBeforeEvent,
+    pixelsQuiet,
+    pixelsAlerted,
+    // 앞선 검증이 오브에 이벤트를 흘리지 않았다 — 22-A 측정의 전제다.
+    quietStateWasClean: orbAlertBeforeEvent === 'none',
+    // **알림 0건이면 색이 없다.** 순수 백/회색은 채도 0이고, 안티에일리어싱이
+    // 만드는 잔여는 한 자릿수에 머문다. 8은 그 여유이지 색을 봐주는 한계가 아니다 —
+    // 바이저(파랑)는 채도 100 이상이라 이 문턱과 두 자릿수 차이로 갈린다.
+    quietIsAchromatic: pixelsQuiet.maxChroma <= 8 && pixelsQuiet.bluishPixels === 0,
+    // **알림이 오면 딥블루가 실제로 화면에 있다.** 참조 실측과 같은 판정 기준을 쓴다.
+    alertedShowsVisor: pixelsAlerted.bluishRatio >= 0.10,
+    // 상태가 바뀌었는데 픽셀이 안 바뀌면 그건 렌더가 아니라 주장이다.
+    stateActuallyChangedPixels: pixelsAlerted.bluishPixels > pixelsQuiet.bluishPixels,
+    unreadCountShown: orbCollapsedProbe.alert === 'fired' && orbCollapsedProbe.count === '1',
+    // 유리는 끝까지 무채색 — 셸 배경은 백색 알파여야 한다(틴트 금지).
+    glassStaysAchromatic: /rgba?\(\s*255\s*,\s*255\s*,\s*255\s*[,)]/.test(orbCollapsedProbe.orbBackground),
+    // 페이드로 등장하지 않는다 — 전이가 transform/filter를 타야 한다.
+    visorNotFadeIn: /transform|filter/.test(orbCollapsedProbe.visorTransition)
+      && !/^opacity/.test(orbCollapsedProbe.visorTransition.trim()),
+    hasTwoEyes: orbCollapsedProbe.eyeCount === 2,
+    // 마젠타 호는 걷어냈다 — 신호는 화면당 한 곳(이 창에서는 바이저)이다.
+    magentaArcRemoved: orbCollapsedProbe.ringHasBrand === false,
     // 펼치면 창이 실제로 커진다(패널이 창 밖으로 잘리지 않는다)
     expandGrewWindow: orbExpandedBounds.width > orbCollapsedBefore.width
       && orbExpandedBounds.height > orbCollapsedBefore.height,
@@ -2060,7 +2137,9 @@ app.whenReady().then(async () => {
   };
   console.log('[verify] 검증22(알림 오브):', JSON.stringify(report.orbWindow));
   for (const key of [
-    'isCircle76', 'dragHandleContract', 'unreadArcShown', 'ringUsesSingleAccent',
+    'isCircle76', 'dragHandleContract',
+    'quietStateWasClean', 'quietIsAchromatic', 'alertedShowsVisor', 'stateActuallyChangedPixels',
+    'unreadCountShown', 'glassStaysAchromatic', 'visorNotFadeIn', 'hasTwoEyes', 'magentaArcRemoved',
     'expandGrewWindow', 'orbCornerStayed', 'roundTripRestoresPosition',
     'hasFiredBadge', 'hasModeLabel', 'hasRelativeTime', 'hasSourceLabel',
     'statesValueIsAtFireTime', 'representativeCardRendered', 'representativeCardFullyVisible', 'markedReadOnOpen',
