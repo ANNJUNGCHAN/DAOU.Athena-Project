@@ -53,14 +53,16 @@ html, body {
  * 원본 마스코트에서도 바이저는 헬멧에 난 창이지 헬멧의 색이 아니다. */
 #orbVisor {
   position: absolute;
-  /* 세로로 긴 타원 — 원본의 얼굴 비율(폭:높이 ≈ 0.82)을 따른다. */
   /* 인셋 = 백색 셸(헬멧)의 두께. 원본에서 바이저는 헬멧에 난 창이라 테두리가
    * 분명히 읽혀야 한다 — 꽉 채우면 "눈 달린 파란 공"이 되지 헬멧으로 안 읽힌다.
-   * 아래턱(bottom)을 이마(top)보다 두껍게 둔 것도 원본 비율이다. */
-  left: 19%;
-  right: 19%;
-  top: 16%;
-  bottom: 23%;
+   *
+   * 2026-08-25: 원본은 아래턱이 이마보다 두꺼웠는데(상16·하23), 얼굴을 정가운데로
+   * 옮기고 테두리를 한 단 얇게 줄였다(사용자 결정). 네 변을 같게 두면 얼굴이
+   * 원의 중심에 앉고, 15%면 헬멧 테두리가 여전히 테두리로 읽힌다. */
+  left: 15%;
+  right: 15%;
+  top: 15%;
+  bottom: 15%;
   border-radius: 50% 50% 48% 48% / 54% 54% 46% 46%;
   background:
     /* 상단 스펙큘러 — 유광 3D 구체의 핵심. 원본의 밝은 반사 지점 위치를 따른다. */
@@ -72,19 +74,62 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 22%;
   pointer-events: none;
   /* **페이드로 등장하지 않는다**(soul.md §7 — 유리는 opacity가 아니라 굴절 변조로
    * 나타난다). 백색 셸이 바이저를 덮었다가 열리는 **기하 변조**로 드러낸다.
    *
    * 2026-08-24 실측 정정: 처음에는 `scale(0.34) + blur(7px)`로 눌러뒀는데, 그건
    * 색을 **줄일 뿐 없애지 않았다** — 정지 상태 캡처에서 파란 픽셀 601개, 최대
-   * 채도 145가 나왔다(검증 22-A가 잡았다). "평소 무채색"은 작게 보인다는 뜻이
-   * 아니라 **없다**는 뜻이다. clip-path는 잘린 영역을 아예 그리지 않으므로
-   * 정지 상태 파란 픽셀이 0이 된다. 스케일은 부푸는 느낌만 남기고 축소폭을 줄였다. */
-  clip-path: circle(0% at 50% 44%);
-  transform: scale(0.88);
+   * 채도 145가 나왔다(검증 22-A가 잡았다). clip-path는 잘린 영역을 아예 그리지
+   * 않으므로 개폐가 픽셀 단위로 성립한다.
+   *
+   * 2026-08-25 규범 개정: "평소 **무채색**"을 "평소 **반쯤**"으로 바꾼다. 얼굴이
+   * 아예 없으면 오브는 딱딱한 공이라 상주할 이유가 없다. 대신 신호는 색의 유무가
+   * 아니라 **색의 양**이 진다 — 대기는 34%만 열리고 발화에서 75%로 활짝 열린다.
+   *
+   * 34%인 이유(실측 정정): 처음 44%로 뒀더니 clip 원이 바이저 타원을 거의 다
+   * 덮어 발화와 면적이 안 갈렸다 — (44/75)² 같은 제곱비는 clip이 바이저 경계에서
+   * **포화**되므로 성립하지 않는다. 34%(r≈18px)는 바이저(r≈26.6px) 면적의 절반
+   * 아래를 드러내 발화 대비 ~0.45로 떨어진다(검증22 firedIsVisiblyWider가 잰다).
+   *
+   * 앵커 50% 50%: 얼굴을 정가운데 둔다(2026-08-25 사용자 결정 — 인셋 대칭화와 짝). */
+  clip-path: circle(var(--orb-open, 34%) at 50% 50%);
+  transform: scale(var(--orb-scale, 0.97));
   transition: clip-path 340ms var(--ease), transform 340ms var(--ease);
+  /* 숨 — 알아채면 실패고 없으면 허전한 정도. transform이 아니라 **독립 scale 속성**에
+   * 태운다: transform에 얹으면 위 전이(상태 변화)를 애니메이션이 덮어써서 개폐가
+   * 뚝뚝 끊긴다. 두 속성은 곱해지므로 상태와 숨이 서로를 안 밟는다. */
+  animation: orb-breathe 4200ms ease-in-out infinite;
+}
+
+@keyframes orb-breathe {
+  0%, 100% { scale: 1; }
+  50%      { scale: 1.018; }
+}
+
+/* 시선 층 — 두 눈이 **통째로** 옮겨 앉는다. 눈동자를 따로 그리지 않는다:
+ * 흰 도형을 늘리는 순간 키우미가 아니게 된다(표정은 눈 모양 하나로만 만든다). */
+.orb-gaze {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* px로 잡는다 — 오브는 언제나 76px이라 %보다 px이 덜 헷갈린다(프로토타입도 px 기준). */
+  transform: translate(var(--orb-gx, 0px), var(--orb-gy, 0px));
+  transition: transform var(--orb-gaze-dur, 340ms) var(--ease);
+}
+
+/* 깜빡임 층 — scaleY만 진다. 시선과 층을 나눠야 서로 안 밟는다. */
+.orb-lid {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22%;
+  transform: scaleY(var(--orb-lid, 1));
+  transition: transform var(--orb-blink-dur, 130ms) var(--ease);
 }
 
 /* 눈 — 원본의 둥근 세로 막대 두 개. 흰색이라 신호색을 늘리지 않는다. */
@@ -94,17 +139,62 @@ html, body {
   border-radius: 999px;
   background: #fff;
   box-shadow: 0 1px 2px rgb(0 0 0 / 18%);
-  /* 바이저가 부풀 때 눈이 같이 늘어나 보이지 않게 살짝 늦게 따라온다. */
-  transform: scaleY(0.2);
-  transition: transform 260ms var(--ease) 90ms;
+  flex-shrink: 0;
+  /* 모양이 곧 표정이다 — 폭·높이·테두리가 전이 대상이다. */
+  transition:
+    width 220ms var(--ease),
+    height 220ms var(--ease),
+    border-radius 220ms var(--ease),
+    transform 220ms var(--ease);
 }
 
-/* 발화 상태 — 여기서만 색이 존재한다. */
-#orbRoot[data-alert="fired"] #orbVisor {
-  clip-path: circle(75% at 50% 44%);
-  transform: scale(1);
+/* ---------- 표정 — 흰 도형의 모양 하나로만 만든다 ----------
+ * 바이저 색·헬멧·링은 전부 그대로다. 새 기관(눈썹·입·눈동자)을 붙이지 않는다.
+ * 각 표정은 앱에 **이미 있는 신호**에 붙는다 — 얼굴이 새 정보를 만들면 거짓말이 된다. */
+
+/* 잠듦 — 오래 아무 일 없음. 옛 판의 '평소'가 여기로 내려왔다. */
+#orbRoot[data-face="sleep"] #orbVisor { --orb-open: 20%; --orb-scale: 0.94; }
+#orbRoot[data-face="sleep"] .orb-eye { height: 8%; }
+
+/* 듣는 중 — 입력줄을 내려다본다. 시선은 orb.js가 --orb-gy로 준다. */
+#orbRoot[data-face="listen"] .orb-eye { height: 28%; }
+
+/* 경계 — 좁아지며 한쪽을 붙박는다. 아직 발화는 아니다. */
+#orbRoot[data-face="watch"] .orb-eye { width: 11%; height: 30%; }
+
+/* 완료·신남 — 위로 휜 아치. 배경을 지우고 테두리 한쪽만 남긴다(도형 수는 그대로 둘). */
+#orbRoot[data-face="done"] .orb-eye,
+#orbRoot[data-face="glad"] .orb-eye {
+  background: transparent;
+  box-shadow: none;
+  border-radius: 999px 999px 0 0;
+  border-top: 2px solid #fff;
 }
-#orbRoot[data-alert="fired"] .orb-eye { transform: scaleY(1); }
+#orbRoot[data-face="done"] .orb-eye { width: 24%; height: 14%; }
+#orbRoot[data-face="glad"] .orb-eye { width: 28%; height: 17%; border-top-width: 2.5px; }
+#orbRoot[data-face="glad"] #orbVisor { --orb-open: 42%; }
+
+/* 미안 — 아래로 휜 아치. 색은 그대로다(실패를 색으로 말하지 않는다). */
+#orbRoot[data-face="sorry"] .orb-eye {
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0 0 999px 999px;
+  border-bottom: 2px solid #fff;
+  width: 24%;
+  height: 12%;
+}
+#orbRoot[data-face="sorry"] #orbVisor { --orb-open: 30%; }
+
+/* 딴생각 — 살짝 기운다. 붙잡지 않겠다는 뜻. */
+#orbRoot[data-face="drift"] .orb-eye { transform: rotate(-10deg); }
+
+/* 발화 — **여기서만 활짝 열린다.** 신호는 색의 유무가 아니라 색의 양이다. */
+#orbRoot[data-alert="fired"] #orbVisor,
+#orbRoot[data-face="fired"] #orbVisor {
+  --orb-open: 75%;
+  --orb-scale: 1;
+}
+#orbRoot[data-face="fired"] .orb-eye { width: 21%; height: 21%; border-radius: 50%; }
 
 /* 링 — 셸의 가장자리 두께를 암시하는 **무채색** 테두리다.
  * 2026-08-24 리프 1.3.2: 옛 판은 여기에 마젠타 호로 미확인 수를 그렸다. 얼굴이
@@ -371,5 +461,12 @@ html, body {
 @media (prefers-reduced-motion: reduce) {
   /* 스케일·블러 변조를 끈다. **상태는 그대로 보여야 한다** — 애니메이션을 끄는 것이지
    * 정보를 끄는 게 아니다. 그래서 전이만 없애고 최종 상태는 유지한다. */
-  #orbVisor, .orb-eye { transition: none; }
+  #orbVisor, .orb-eye, .orb-gaze, .orb-lid { transition: none; }
+  /* 숨은 통째로 멈춘다. access.css의 전역 규칙은 반복을 1회로 깎을 뿐이라
+   * 숨의 절반 지점(부푼 상태)에서 굳을 수 있다 — 여기서 아예 끈다. */
+  #orbVisor { animation: none; }
+  /* **멈춘 프레임은 반드시 뜬 눈이어야 한다.** 깜빡임이 감은 채로 굳으면 사용자는
+   * 그걸 '잠듦'으로 읽는다 — 모션을 끈 대가로 없는 상태를 만들어내는 셈이다.
+   * orb.js도 같은 이유로 reduced-motion에서는 깜빡임·두리번 루프를 아예 안 돌린다. */
+  .orb-lid { transform: none; }
 }
