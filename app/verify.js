@@ -497,7 +497,7 @@ app.whenReady().then(async () => {
   assertOk('canvas: sheen rests at blur(0px)', /blur\(0px\)/.test(String(report.canvasAlwaysVisible.computedSheenFilter || '')));
 
   try {
-    const capScript = path.join(__dirname, '..', 'spike', 'electron-glass', 'scripts', 'capture.ps1');
+    const capScript = path.join(__dirname, 'scripts', 'capture.ps1');
     const cb = shellWin.getBounds();
     execFileSync('powershell', [
       '-NoProfile', '-ExecutionPolicy', 'Bypass', '-WindowStyle', 'Hidden', '-File', capScript,
