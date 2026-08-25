@@ -1,11 +1,15 @@
 const fs = require('fs');
 const path = require('path');
 
-const CAPTURES_DIR = path.join(__dirname, '..', '..', '..', 'spike', 'captures');
+// 픽스처는 전부 app/data/ 안에 산다. 옛 판은 스트림·테이블만 저장소 밖
+// spike/captures를 가리켰는데, 그 디렉터리가 사라지면서(2026-08-25 정리 커밋)
+// athena:load-fixture가 ENOENT로 죽었다 — 테스트 경로가 아니라 실행 경로다
+// (main.js athena__render_canvas의 source:'fixture'가 닿는다). 앱이 읽는 자료는
+// 앱 안에 둔다.
 const APP_DATA_DIR = path.join(__dirname, '..', '..', 'data');
 
 function readJson(file) {
-  const p = path.join(CAPTURES_DIR, file);
+  const p = path.join(APP_DATA_DIR, file);
   return JSON.parse(fs.readFileSync(p, 'utf-8'));
 }
 

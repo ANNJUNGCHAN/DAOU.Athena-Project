@@ -10,7 +10,9 @@ const { spawn, execFileSync } = require('child_process');
 const APP_DIR = __dirname;
 const BACKEND_DIR = path.join(__dirname, '..', 'backend');
 const PYTHON_EXE = path.join(BACKEND_DIR, '.venv', 'Scripts', 'python.exe');
-const OUT_PATH = path.join(__dirname, '..', 'spike', 'cli-pipe', 'gateway', 'PROBE-BRAIN-CHAT-E2E.json');
+// probe-boot-bounds.js와 같은 자리 — 산출물은 app/captures/에 모은다.
+// (옛 경로 spike/cli-pipe/gateway/는 사라진 트리라, 쓰면 저장소 밖에 되살아났다.)
+const OUT_PATH = path.join(__dirname, 'captures', 'PROBE-BRAIN-CHAT-E2E.json');
 
 const BACKEND_PORT = 8011; // 기본(8010)과 겹치지 않는 포트 — 떠 있을 수 있는 다른 인스턴스와 충돌 회피
 const BACKEND_URL = `http://127.0.0.1:${BACKEND_PORT}`;
