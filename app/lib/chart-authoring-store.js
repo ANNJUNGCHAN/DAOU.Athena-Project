@@ -5,18 +5,6 @@
 (function () {
 'use strict';
 
-// 저작 상태 영속(CC-104) — plan/chart-lens-spec.md §3 계약.
-// 4종(지표 on/off+파라미터 · 차트형식 · 매물대 토글 · 드로잉)을 종목×주기 키로
-// 저장·복원한다. AITS는 드로잉만 영속했지만(chart-card-control-spec §9) Athena는
-// 4종 전부를 영속한다 — 갭을 승계하지 않는 신규 결정.
-//
-// 저장소는 렌더러 localStorage 1판이다(백엔드 영속은 후속 라운드 — 정직 표기는
-// chart-card.js note에 있다). storage는 주입 가능한 인터페이스(getItem/setItem)로
-// 추상화한다 — 단위 테스트는 메모리 맵을 쓴다.
-//
-// 직렬화 스키마는 화이트리스트다: 지표 가시성·파라미터, 형식, 매물대, 드로잉
-// 배열만 나간다. 비밀값·계좌정보가 들어갈 자리 자체가 없고, 테스트가 이 사실을
-// 고정한다(스키마에 없는 키는 역직렬화에서 버려진다).
 
 const SCHEMA_VERSION = 1;
 const KEY_PREFIX = 'chart.authoring';

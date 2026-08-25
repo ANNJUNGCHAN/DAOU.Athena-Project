@@ -1,24 +1,3 @@
-// 검증 케이스 실행 하네스 (UI 경유) — **실제 두 창을 띄우고 커맨드바에 타이핑한다.**
-//
-// `run-cases.js`와의 차이: 그건 `runClaudeQuery`를 헤드리스로 불러 백엔드 왕복만 봤다.
-// 이 스크립트는 `main.js`의 `createWindows()`로 진짜 대화 창·캔버스 창을 띄우고,
-// `#input`에 질문을 넣어 Enter를 디스패치한 뒤, **대화 창에 답변이 렌더되고 캔버스 창에
-// 카드가 그려지는 것을 DOM과 스크린샷으로 확인**한다. verify.js가 쓰는 것과 같은 방식이다.
-//
-// 왜 필요한가: 카드가 어떤 렌더러로 그려졌는지는 게이트웨이 봉투(envelope)가 아니라
-// `canvas.js addLiveCard()`의 분기 결과다. 봉투가 table이어도 렌더 결과를 봐야 `.card.mcp-table`
-// 인지 `.card.free`인지 확정된다. 헤드리스 실행은 이 구분을 할 수 없다.
-//
-// verify.js와 다른 점 두 가지 (의도적):
-//   - `ATHENA_CANVAS_SOURCE`를 설정하지 않는다 → 실배선(live) 경로. verify.js는 fixture 고정.
-//   - userData를 실제 프로필(athena-shell)로 쓴다 → 등록된 MCP·비밀값이 살아 있어야 한다.
-//     verify.js는 `.verify-profile`을 쓴다.
-//
-// ⚠ **쿼터를 쓴다.** 케이스 1건당 `claude -p` 왕복 1회.
-//
-// 실행: cd app && npx electron run-cases-ui.js LIV-048 LIV-057
-// 산출: datasets/eval-runs/<날짜>-intraday-ui/<case-id>/
-//   evidence/chat-answer.txt · chat.png · canvas.png · ui-state.json · audit-delta.jsonl
 
 process.env.ATHENA_NO_AUTOSTART = '1';
 

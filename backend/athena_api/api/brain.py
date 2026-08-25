@@ -1,16 +1,3 @@
-"""Investment-brain HTTP surface: chat ingestion, status, chat/profile reads.
-
-Local-only, bearer-gated the same way as ``api/oauth_status.py``
-(``security.require_local_bearer``). Every read/write route 503s while the piece of the
-brain runtime it needs is not ready instead of returning a silently empty result
-(CLAUDE.md §7 -- "조용한 빈 결과 금지"). ``GET /status`` is the one exception: its whole
-purpose is reporting readiness, so it always answers 200 (mirrors ``/ready/accounts`` in
-``main.py``).
-
-**Trap ⑫**: never pass ``text``/chat content into ``logger.*`` here, in this module or
-any handler added to it. Only ``source_id``, ``role``, and a success/failure boolean are
-safe to log.
-"""
 
 from __future__ import annotations
 

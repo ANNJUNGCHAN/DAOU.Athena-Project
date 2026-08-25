@@ -3,20 +3,6 @@
 // el/sanitize 같은 흔한 이름이 파일 간에 충돌해 SyntaxError가 났다(실측, diag-isolation.js).
 // CJS(require)는 이 IIFE 밖에서도 동일하게 동작한다 — Node의 모듈 래퍼가 이미 함수 스코프다.
 (function () {
-// 온보딩 2/3(CLI 연결)·3/3(계좌 연결) 화면. AT-SY-002 / AT-SY-003.
-//
-// 이 화면들은 새 창이 아니다 — 대화 창이 chatMaxH로 확장된 상태의 콘텐츠다
-// (plan/paper-specs/00-통합-계획.md §1.1). 스펙의 800px "Onboarding Window"는
-// 실제 창(1560px 폭 스케일)의 콘텐츠 컬럼으로만 다룬다 — 창을 흉내 낸 카드를
-// 한 번 더 그리지 않는다(chat.html의 #onboard가 이미 .app과 같은 유리 패널이다).
-//
-// 렌더링 계약은 lib/markdown.js·lib/ui-kit.js와 동일: innerHTML에 문자열을 넣지
-// 않는다. 전부 el()/textContent.
-//
-// 비밀값 계약(house rule 2 · AT-ST-007): APP KEY/SECRET KEY 값은 입력 요소에서
-// window.athena.invoke() 호출 인자로 "직접" 읽어 넘긴다 — 어떤 JS 변수에도 값
-// 자체를 담아두지 않는다(길이만 읽어 카운터를 표시한다). 저장 성공/실패와
-// 무관하게 클릭 직후 입력 필드도 곧바로 비운다.
 
 // UMD 헤드(2026-08-18 렌더러 격리) — ipcRenderer는 window.athena 다리로
 // 대체한다(preload.js). ui-kit require는 node --test/<script> 태그 겸용.

@@ -5,9 +5,6 @@
 (function () {
 'use strict';
 
-// 매물대(가격대별거래량) 순수 계산 — plan/chart-card-control-spec.md §4 (AITS chart-volume-profile.ts 실측 계약).
-// 배분은 종가 기준 단순 배분이다: 각 봉의 거래량 전량을 그 봉 종가가 속한 버킷에 합산.
-// 고저 균등배분이 아님 — AITS 방식 그대로가 1판 기본 (spec §10).
 
 const VOLUME_PROFILE_BUCKETS = 24;
 

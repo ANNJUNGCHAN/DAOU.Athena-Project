@@ -28,8 +28,6 @@ from render_screen_card_facts import (  # noqa: E402
 )
 from render_screen_injection_map import load_manifest  # noqa: E402
 
-# Pinned in plan/kiwoom-common-screen-spec.md §1 and independently asserted in
-# tests/test_screen_injection_map.py.
 EXPECTED_CARD_COUNTS = {
     "TableCard": 121,
     "FactsCard": 114,
@@ -39,8 +37,6 @@ EXPECTED_CARD_COUNTS = {
     "StatusCard": 2,
 }
 
-# The five cell primitives of plan/kiwoom-common-screen-spec.md §4. Every alias
-# listed here must be one the manifest actually reports as high-frequency.
 CELL_PRIMITIVE_ALIASES = {
     "price": ("cur_prc", "high_pric", "low_pric", "open_pric"),
     "change": ("pred_pre", "pred_pre_sig", "flu_rt"),
@@ -214,11 +210,6 @@ def test_cell_primitive_evidence_supports_the_five_primitives() -> None:
 
 
 def test_status_card_facts_carry_no_credential_or_token_values() -> None:
-    """OAuth screens show state, never secrets (spec §6.3, CLAUDE.md §1).
-
-    The facts file is committed and rendered into a design tool, so a token or
-    key alias reaching it would be a leak path, not just a documentation flaw.
-    """
     data = facts()
     status = next(card for card in data["cards"] if card["card"] == "StatusCard")
     aliases = {

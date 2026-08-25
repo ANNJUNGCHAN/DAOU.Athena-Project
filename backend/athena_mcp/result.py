@@ -1,24 +1,3 @@
-"""`CallToolResult` 파싱 — W0 S2 실측으로 확정된 4단계 우선순위.
-
-```
-1. isError == True      -> content[0].text 는 사람이 읽는 에러. 캔버스로 보내지 말 것
-                            (게이트웨이 자신이 만든 에러라면 `_meta`에 발생지점
-                            마커가 실려 온다 -> ParsedResult.error_origin)
-2. structuredContent    -> 있으면 신뢰            (소수 서버만)
-3. content[0].text      -> json.loads() 시도      (대부분이 이 경로)
-4. 파싱 실패            -> 순수 텍스트 (리더 캔버스 원문 후보)
-```
-
-**3번이 주경로다.** 실측 캡처 기준 서버 3개 중 2개(`jjlabsio` 8툴 전부,
-`naver-search-mcp` 전부)가 `structuredContent`를 항상 `null`로 준다
-(`plan/mcp-실행계획.md` §9-①). `structuredContent` 우선 규칙 자체는 유지하되
-"예외지 규칙이 아니다"라는 전제로 짠다.
-
-`content` 배열에는 `text` 외 `image`/`resource_link`/`audio`/`resource` 블록이
-올 수 있다(미검증이지만 스펙상 가능). 최소한 타입 분기는 두고, structuredContent도
-없고 text 블록도 없으면 **조용히 무시하지 않고 명시적으로 에러를 낸다**
-(`UnsupportedContentBlockError`).
-"""
 
 from __future__ import annotations
 
@@ -29,22 +8,6 @@ from typing import Any, Literal
 ParsedStatus = Literal["error", "structured", "json", "text", "empty"]
 
 ErrorOrigin = Literal["gateway-blocked", "upstream-failed"]
-"""에러 결과가 어디서 만들어졌는지 — `_meta[ERROR_ORIGIN_META_KEY]`로 실려 온다
-(server.py가 채우고, 이 모듈은 읽기만 한다).
-
-- `gateway-blocked`: Athena 게이트웨이 자신이 upstream에 보내지도 않고
-  거부했다(동의 미승인, 미등록 툴명, 서버 미연결, `save_canvas` 경로 조작
-  방어 등). 사용자 구제책이 있다 — 승인하거나 이름/경로를 고치면 통과한다.
-- `upstream-failed`: 실제로 upstream에 호출이 나갔다(또는 나가려다 프로세스가
-  죽었다). 실패 원인이 upstream 쪽에 있어 사용자가 게이트웨이 설정으로 고칠
-  방법이 없다.
-
-`plan/paper-specs/02-MCP-응답-형상-전수조사.md` §D-7이 기록한 격차를 메운다:
-동의 거부(`GRAFT-verify.json`의 `unapproved_tool_direct`)와 진짜 upstream
-에러(`S2-jjlabsio-*`류)가 `isError:true` + 사람이 읽는 문장으로 형상이
-완전히 같아서, 카드가 문자열 파싱 없이는 둘을 구분할 방법이 없었다.
-"""
-
 ERROR_ORIGIN_META_KEY = "athena/error_origin"
 """`CallToolResult._meta`에 발생지점 마커를 실을 때 쓰는 키.
 

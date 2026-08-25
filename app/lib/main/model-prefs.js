@@ -1,27 +1,3 @@
-// 모델·추론강도(effort) 설정 저장소 — 설정 화면의 모델 패널 Claude 절이 쓴다
-// (plan/paper-specs 모델 패널 조사, 팀리드 지시 2026-08-18).
-//
-// prefs.js·accounts.js와 같은 골격이다: statePath()가 userData 아래
-// athena-model.json을 가리키고, readState()는 실패·검증 실패 시 기본값으로
-// 폴백하며(fail-open), writeState()는 tmp-then-rename 원자적 쓰기를 쓴다.
-//
-// 형상: { claude: {model, effort} } — model/effort가 null이면 "기본"이다.
-// claude-runner.js의 buildArgs()는 null을 받으면 --model/--effort 인자
-// 자체를 안 붙인다(claude CLI 자체 기본값을 쓴다는 뜻).
-//
-// codex는 여기 없다(2026-08-18 실결선 — 팀리드 지시). Codex 설정은 이 앱의
-// userData가 아니라 `lib/main/codex-config.js`를 통해 Codex 본인의
-// `$CODEX_HOME/config.toml`에 직접 쓴다 — 이 앱 밖에서 codex를 쓸 때도
-// 적용되는 전역 기본값이라 userData 밑에 별도 저장할 이유가 없다. 예전에
-// 여기(athena-model.json)에 codex 키를 저장하던 시절의 흔적이 사용자 머신에
-// 남아 있을 수 있는데, 읽지 않고 무해하게 무시한다(마이그레이션 불필요).
-//
-// 검증(저장 전 거부, 무시가 아니다): model은 조사 확정 근거(claude -p --model
-// <별칭|전체ID>, 예: fable/opus/sonnet/haiku/default, 확장 컨텍스트 접미사
-// "claude-sonnet-4-5[1m]" 등)를 따라 영문·숫자·점·하이픈·대괄호만, 최대 64자,
-// 선두 '-' 금지(claude의 인자 파서가 값을 플래그로 오독하는 걸 막는다 — 팀리드
-// 지시). effort는 claude ∈ {low,medium,high,xhigh,max}(claude -p --effort).
-// 화이트리스트 밖 값은 { ok:false, error } — 조용히 버리지 않는다.
 'use strict';
 
 const fs = require('fs');

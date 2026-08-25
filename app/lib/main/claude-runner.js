@@ -1,31 +1,3 @@
-// `claude -p`를 spawn해 stream-json을 실시간으로 파싱한다 — 결정 D1의 실배선.
-//
-//   Electron ──spawn──> claude -p ──stdio──> athena-mcp serve ──> upstream N개
-//      ^                    │
-//      └── stream-json ─────┘   tool_result에서 캔버스 페이로드를 뽑아 IPC로 렌더
-//
-// 커맨드 계약은 spike/cli-pipe/gateway/RESULT.md §1 실왕복으로 고정됐다 —
-// 여기서 다시 조사하지 않는다:
-//   claude -p "<prompt>" --output-format stream-json --verbose
-//     --mcp-config <configFile> --strict-mcp-config
-//     --setting-sources ""
-//     --allowedTools "mcp__athena__athena__render_canvas"
-//   cwd = .mcp.json이 있는 디렉토리.
-//
-// 지켜야 할 것 (RESULT.md에서 실측으로 확정):
-//   - --setting-sources는 반드시 빈 문자열. 값을 하나라도 주면 유저 스코프
-//     훅·MCP·플러그인이 전부 로드된다(S3).
-//   - --allowedTools 없이는 툴 실행이 자동 거부된다(S3).
-//   - stdin을 명시적으로 닫는다 — 안 그러면 "no stdin data received in 3s"
-//     경고와 함께 3초를 버린다(S4 §1).
-//
-// 2026-08-17 개정 — --allowedTools 기본값은 툴 1개가 아니라 서버 전체다.
-// 위 계약의 예시(`mcp__athena__athena__render_canvas`)를 기본값으로 쓰면
-// 게이트웨이가 재노출한 업스트림 툴(예: mcp__athena__dart-mcp__search_disclosure)이
-// 전부 권한에서 거부된다 — 헤드리스라 승인 프롬프트가 뜰 수 없어 실사용에서
-// "권한 승인이 되지 않았습니다"로 죽는 것이 실측됐다(dart-mcp, 2026-08-17).
-// 툴 단위 게이트는 게이트웨이의 consent allowlist(~/.athena/consent.json,
-// probe 시트의 "선택 허용")가 담당한다 — CLI에서 이중 게이트를 만들지 않는다.
 'use strict';
 
 const { spawn } = require('child_process');
@@ -42,12 +14,6 @@ const GATEWAY_ALLOWED_TOOLS = 'mcp__athena';
 // 정상 질의는 전부 덮고, 멈춘 왕복이 UI를 영원히 잡아두는 것만 자른다.
 const DEFAULT_TIMEOUT_MS = 180_000;
 
-// stdout 누적 총량 상한 — README(app/README.md "응답 크기 상한은 여전히
-// 없다")가 지적한 갭의 해소(2026-08-18). `athena_mcp`의 post-parse 상한이
-// 1차 방어이고, 이건 앱 쪽 2차 방어다 — 게이트웨이가 그 상한을 우회하거나
-// 폭주하는 응답을 내도(버그·악의적 upstream 모두) 렌더러/메인 프로세스
-// 메모리가 무한정 자라지 않게 한다. 5,000,000바이트 — backend post-parse
-// 상한(500만 자, ASCII 기준 대략 5MB)과 같은 자릿수로 맞췄다.
 const MAX_STDOUT_BYTES = 5_000_000;
 
 function buildArgs({ prompt, configFile, allowedTools, resumeSessionId, model, effort }) {
@@ -120,33 +86,8 @@ function runClaudeQuery({
         // stdin을 명시적으로 닫는다(S4 §1) — 안 닫으면 "no stdin data received
         // in 3s" 경고로 3초를 버린다.
         stdio: ['ignore', 'pipe', 'pipe'],
-        // SECURITY.md §6 — 게이트웨이(athena-mcp serve)가 upstream MCP 서버를
-        // spawn할 때 쓸 복호화된 env를 여기서 claude 프로세스 환경에 얹는다.
-        // 환경변수는 자식으로 상속되므로 claude -p -> athena-mcp serve까지
-        // 별도 배선 없이 전달된다 — env를 명시하지 않으면 spawn()은 어차피
-        // process.env를 상속하므로, 여기서도 그 기반 위에 override만 덧붙인다.
         env: { ...process.env, ...mcpEnv.buildEnvOverrides() },
         windowsHide: true,
-        // ★ `shell: true`를 쓰면 안 된다 — 실측으로 확정됐다(2026-08-17).
-        //
-        // 이 파일의 이전 판은 "Windows에서 claude는 .cmd 셸 래퍼다"라는 **추측**으로
-        // `shell: process.platform === 'win32'`를 걸었고, 그게 실배선을 통째로
-        // 깨뜨렸다. Windows에서 `shell:true`는 args를 커맨드라인 문자열로 합치는데
-        // **빈 문자열 인자가 그 과정에서 사라진다.** 그래서 `--setting-sources`가
-        // 자기 값이 아니라 **다음 인자(`--allowedTools`)를 값으로 먹었다**:
-        //
-        //   Error processing --setting-sources: Invalid setting source: --allowedTools.
-        //   Valid options are: user, project, local
-        //
-        // (`spike/cli-pipe/gateway/PROBE-LIVE-SPAWN.json` — exit 1, 캔버스 0건, 319ms)
-        //
-        // 대조 실측: 같은 args를 `shell:false`로 넘기면 빈 문자열이 argv에 그대로
-        // 살아남는다. bash에서 손으로 돌렸을 때 통과했던 이유도 같다 — bash는
-        // `""`를 진짜 빈 argv 원소로 넘긴다(S4 실왕복).
-        //
-        // 그리고 추측 자체가 틀렸다: 이 머신의 `where claude`는
-        // `C:\Users\USER\.local\bin\claude.exe` — **진짜 .exe다.** `.exe`는
-        // CreateProcess가 PATH에서 찾으므로 셸이 필요 없다.
         shell: false,
       });
     } catch (err) {
@@ -154,7 +95,7 @@ function runClaudeQuery({
       return;
     }
 
-    child.stdout.setEncoding('utf8'); // UTF-8 고정 — 이 콘솔 자체가 cp949인 것과 무관(CLAUDE.md §8)
+    child.stdout.setEncoding('utf8');
     child.stderr.setEncoding('utf8');
     let stderrText = '';
     let settled = false;

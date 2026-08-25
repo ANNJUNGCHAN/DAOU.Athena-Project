@@ -1,7 +1,3 @@
-"""HTTP surface tests for /api/v1/brain/* (401/503/200, log masking).
-
-Trap ⑫: chat POST must never leak `text` into logs (CLAUDE.md §6, ADR §2(h)).
-"""
 
 from __future__ import annotations
 

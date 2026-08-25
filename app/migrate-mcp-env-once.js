@@ -1,8 +1,3 @@
-// 일회성 실행 스크립트 — 실제 사용자 `~/.athena/mcp_servers.json`의 평문 env를
-// 실제 Electron safeStorage로 마이그레이션한다(SECURITY.md §6). `npm run`
-// 스크립트에 등록하지 않는다 — 반복 실행할 일이 없는 1회성 수술이고(멱등이라
-// 다시 돌려도 안전은 하지만), main.js의 부팅 마이그레이션이 이후로는 이 역할을
-// 대신한다. 창을 띄우지 않는다 — app.whenReady() 후 마이그레이션만 하고 종료한다.
 'use strict';
 
 const path = require('path');

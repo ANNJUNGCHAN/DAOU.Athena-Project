@@ -1,24 +1,3 @@
-// claude -p --output-format stream-json 의 NDJSON 출력을 파싱한다.
-//
-// 계약은 실측으로 고정됐다 — 재조사하지 않는다:
-//   spike/cli-pipe/gateway/RESULT.md (S4, 실왕복 42 이벤트)
-//   spike/cli-pipe/RESULT.md (S3)
-//   spike/captures/S4-gateway-cli-roundtrip.ndjson ← 이 파일이 파서 테스트의 유일한 픽스처다.
-//     불변 증거다. 편집·재생성 금지(CLAUDE.md §3).
-//
-// 계약 요약:
-//   - NDJSON. spawn stdout은 라인 경계로 오지 않는다 — 청크 중간에서 줄이 끊길 수 있다.
-//   - tool_use / tool_result 블록은 message.content 배열 안에 있다.
-//   - tool_result.content 는 문자열 또는 블록 배열 둘 다 온다.
-//   - 캔버스 페이로드는 content가 문자열일 때 그 문자열을 한 번 더 JSON.parse 해야 나온다.
-//   - is_error 는 undefined/false/true 세 값. 없다고 성공이 아니다.
-//   - 거부: is_error:true + tool_result_meta[].non_execution_kind === "user-rejected".
-//   - canvas_type 은 요청값이 아니라 응답값으로 읽는다 — 실왕복 3회 중 2회가 free로 폴백했다.
-//   - 툴 이름은 `mcp__<별칭>__athena__render_canvas` — "athena__"가 두 번 나온다
-//     (서버 별칭 + 툴 자체 이름). 별칭이 달라질 수 있으므로 접미사로 매칭한다.
-//
-// 이 파일은 순수 함수 위주다 — 스트리밍 상태(청크 경계, tool_use 인덱스)만
-// StreamJsonSession 클래스에 감싼다. 둘 다 파일 입력만으로 단위 테스트 가능하다.
 
 'use strict';
 

@@ -3,9 +3,6 @@
 // el/sanitize 같은 흔한 이름이 파일 간에 충돌해 SyntaxError가 났다(실측, diag-isolation.js).
 // CJS(require)는 이 IIFE 밖에서도 동일하게 동작한다 — Node의 모듈 래퍼가 이미 함수 스코프다.
 (function () {
-// 카드 배치·생애주기 규칙 — 규칙 원본은 plan/canvas-taxonomy.md
-// "배치·생애주기 규칙 (2026-08-18 확정)". 순수 로직만 둔다(DOM 없음) —
-// canvas.js(렌더러)가 쓰고 canvas-layout.test.js(node --test)가 검증한다.
 'use strict';
 
 // 규칙 1 — 형상별 폭 문법(결정적 기본값). 컴팩트 형상은 반폭, 넓은 형상은 전폭.

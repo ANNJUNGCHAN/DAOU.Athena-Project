@@ -3,14 +3,6 @@
 // el/sanitize 같은 흔한 이름이 파일 간에 충돌해 SyntaxError가 났다(실측, diag-isolation.js).
 // CJS(require)는 이 IIFE 밖에서도 동일하게 동작한다 — Node의 모듈 래퍼가 이미 함수 스코프다.
 (function () {
-// spike/stream-adapter/adapter.py 의 sanitize 규칙을 JS로 포팅.
-// 순서 고정: strip_tags 먼저, unescape_entities 나중.
-// (반대로 하면 &lt;b&gt; 같은 이스케이프된 문자열이 언이스케이프 단계에서
-//  실제 태그 모양으로 부활한 뒤 스트리퍼에 걸려 사라진다 — adapter.py 주석 그대로.)
-//
-// 렌더링 계약(spike/stream-adapter/RESULT.md): sanitize()의 반환값은
-// innerHTML로 넣지 않는다. 텍스트 노드로만 렌더한다. 이 계약은 이 모듈이
-// 아니라 호출부(canvas.js)가 지켜야 한다 — sanitize 자체는 문자열만 돌려준다.
 
 const TAG_RE = /<[^>]*>/g;
 

@@ -1,15 +1,3 @@
-"""canvas_data — render_canvas plan_token 데이터 지름길 (2026-08-19).
-
-계약: 변환은 결정적, 실패는 조용한 폴백이 아니라 에러 안내, 주문 확인 헤더는
-절대 싣지 않는다(조회 전용). 차트는 generated AITS renderer/JSONPath 계약만 쓴다.
-
-P1b(2026-08-20, `plan/공통화면-템플릿-실행계획-2026-08-20.md`) 갱신: 카드 종류는
-모델의 canvas_type이 아니라 plan 실행 결과 operation_ref로 조회한 manifest가
-결정한다. 아래 테스트는 실제 manifest(`backend/ref/kiwoom-common-screen-manifest.json`)
-의 실측 operation_ref를 그대로 쓴다(추측 픽스처가 아니다) — base:ka10081(차트,
-domain=="charts" compound → "chart"로 승격), base:ka00001(facts), base:ka01300
-(compound 제네릭), base:ka10173/ka10174(websocket → layout="event", 이 경로 밖).
-"""
 
 from __future__ import annotations
 

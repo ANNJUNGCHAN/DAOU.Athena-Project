@@ -53,10 +53,6 @@ def test_scan_risk_patterns_does_not_scan_env_values():
 
 
 def test_scan_risk_patterns_detects_dangerous_env_key():
-    """W1 보안 리뷰(SECURITY.md §2): `command`/`args`만 봐서는 무해해 보여도
-    `NODE_OPTIONS` 같은 env 키는 인터프리터가 암묵적으로 코드를 로드하는
-    경로다 — command/args 전문에는 이 경로가 전혀 안 나타난다는 게 핵심이라
-    "node"/"server.js" 자체는 위험 패턴에 안 걸리는 값으로 고정한다."""
     warnings = consent.scan_risk_patterns(
         "node", ["server.js"], {"NODE_OPTIONS": "--require /tmp/evil.js"}
     )
@@ -177,10 +173,6 @@ def test_disallow_tool_on_never_registered_server_does_not_raise(store):
 
 
 def test_disallowed_tool_rejected_at_dispatch_gate_afterwards(store):
-    """`server.py`의 `dispatch_call()`이 실제로 거치는 게이트가
-    `is_tool_allowed()`다(`aggregator.resolve()` 다음 순서, SECURITY.md 참고).
-    disallow 이후 그 게이트가 진짜로 닫히는지 — 즉 다음 호출이 dispatch에서
-    거부될 조건이 성립하는지 — 확인한다."""
     store.request_consent("dart", "npx", ["-y", "x"], {})
     store.approve("dart", approved_tools={"search_disclosure"})
     assert store.is_tool_allowed("dart", "search_disclosure") is True  # 사전조건

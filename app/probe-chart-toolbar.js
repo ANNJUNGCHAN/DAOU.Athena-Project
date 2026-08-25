@@ -1,14 +1,3 @@
-// CC-102 수동 실측 프로브 — 툴바가 실제로 동작하는지 확인한다("될 것이다"로
-// 넘기지 않는다, CLAUDE.md §3). probe-chart-card.js(CC-101)와 같은 성격 —
-// 캔버스 창을 띄우고 addCard('chart')로 실제 카드를 만든 뒤, 툴바 버튼을
-// executeJavaScript로 직접 클릭해 DOM 상태 변화를 잰다.
-//
-// 2026-08-18 팀 리드 검수 결함 1건 재발 방지: 차트모양 전환(형식 재생성) 후
-// 거래량이 가격 pane과 겹쳐 그려지는 회귀가 있었다(lightweight-charts가 가격
-// pane을 비우는 순간 빈 pane을 자동 정리해 거래량 pane이 0으로 당겨짐 — 원인은
-// lib/chart-card.js buildPriceSeries 주석 참고). 이 프로브는 4형식(바·캔들·
-// 라인·영역) 전부에서 가격 pane과 거래량 pane이 실제로 DOM 상에서 겹치지 않는지
-// (row 높이·경계) 단언한다 — 재발하면 이 프로브가 실패해야 한다.
 process.env.ATHENA_NO_AUTOSTART = '1';
 process.env.ATHENA_CANVAS_SOURCE = 'fixture';
 

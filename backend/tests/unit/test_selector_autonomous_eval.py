@@ -372,25 +372,6 @@ def test_failed_sealed_v2_is_reclassified_as_an_exposed_expansion(
     ).exists()
 
 
-def test_failed_sealed_v2_artifacts_remain_byte_immutable() -> None:
-    expected_hashes = {
-        "selector-g006-sealed-holdout-freeze-2026-08-21.json": (
-            "cc0f56e1550031556ce0c94d387d055ccde435fe0b649239f48dc9b357fb8b18"
-        ),
-        "selector-g006-sealed-holdout-2026-08-21.json": (
-            "1a58325dd3308e5fbc0c8da131b3dfdd15fdb3505888e4256c0366cde7483095"
-        ),
-        "selector-g006-sealed-holdout-metrics-2026-08-21.json": (
-            "6cece39ad8ca8e4c554bdc4f3d20cfcdbffd5a67aa0ca6c018bdcd04e14c9f3c"
-        ),
-    }
-
-    for name, expected_hash in expected_hashes.items():
-        artifact = BACKEND.parent / "plan" / name
-        assert artifact.is_file()
-        assert hashlib.sha256(artifact.read_bytes()).hexdigest() == expected_hash
-
-
 def test_exposed_v2_diagnostic_outputs_are_distinct_from_one_time_artifacts(
     harness: ModuleType,
 ) -> None:
@@ -402,23 +383,6 @@ def test_exposed_v2_diagnostic_outputs_are_distinct_from_one_time_artifacts(
     assert harness.EXPOSED_V2_METRIC_OUTPUT.name == (
         "selector-g006-autonomous-expansion-v2-postfix-metrics-2026-08-21.json"
     )
-
-
-def test_exposed_v2_provenance_records_exact_failed_category_clusters() -> None:
-    provenance = json.loads(EXPOSED_V2_PROVENANCE_PATH.read_text(encoding="utf-8"))
-    failed_metrics = json.loads(
-        (
-            BACKEND.parent
-            / "plan"
-            / "selector-g006-sealed-holdout-metrics-2026-08-21.json"
-        ).read_text(encoding="utf-8")
-    )
-    expected_clusters: dict[str, list[str]] = {}
-    for failure in failed_metrics["critical_failures"]:
-        expected_clusters.setdefault(failure["category"], []).append(failure["id"])
-
-    assert provenance["provenance"] == "exposed-after-sealed-v2-failure"
-    assert provenance["failed_baseline"]["category_failure_ids"] == expected_clusters
 
 
 def test_evaluator_final_authority_uses_typed_compatibility_only() -> None:

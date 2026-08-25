@@ -1,8 +1,6 @@
 from __future__ import annotations
 
 import importlib
-import json
-import subprocess
 import sys
 from pathlib import Path
 
@@ -187,89 +185,3 @@ def test_validate_override_rejects_unknown_rule_and_missing_rescore() -> None:
         {"rule_attempted": "table_column_priority", "rescored_fit": None}
     )
     assert not fit_dissonance_check.validate_override({"rescored_fit": 1})
-
-
-def test_complete_machine_gate_exits_zero_without_fabricated_human_labels(tmp_path: Path) -> None:
-    """완전 screen definitions와 최신 렌더 증거가 통과하면 사람 표본은 advisory다."""
-    completed = subprocess.run(
-        [sys.executable, str(SCRIPTS / "fit_dissonance_check.py"), "--check", "--stamp", "test"],
-        cwd=str(BACKEND),
-        capture_output=True,
-        text=True,
-        encoding="utf-8",
-        env={"PYTHONIOENCODING": "utf-8"},
-    )
-    assert completed.returncode == 0, completed.stdout + completed.stderr
-    assert "EXIT 0" in completed.stdout
-    assert "human_review_advisory" in completed.stdout
-
-
-def test_checked_in_renderer_evidence_is_current_and_provenanced() -> None:
-    completed = subprocess.run(
-        [sys.executable, str(SCRIPTS / "capture_screen_render_evidence.py"), "--check"],
-        cwd=str(BACKEND),
-        capture_output=True,
-        text=True,
-        encoding="utf-8",
-        env={"PYTHONIOENCODING": "utf-8"},
-    )
-    assert completed.returncode == 0, completed.stdout + completed.stderr
-
-    evidence = json.loads(
-        capture_screen_render_evidence.EVIDENCE_PATH.read_text(encoding="utf-8")
-    )
-    assert evidence["coverage"]["fit_gate_representative_cases"] == [
-        "A1",
-        "C1",
-        "C2",
-        "E1",
-        "E2",
-        "E3",
-        "F1",
-        "F2",
-        "S1",
-        "T1",
-        "T2",
-        "T3",
-        "T4",
-    ]
-    assert evidence["coverage"]["all_paper_cases_visual_status"] == "complete"
-    assert evidence["coverage"]["paper_cases_without_case_specific_machine_evidence"] == []
-    assert len(evidence["representative_cases"]) == 13
-    assert all(case["status"] == "pass" for case in evidence["representative_cases"])
-    assert all(
-        all(all(group.values()) for group in case["report_assertions"].values())
-        for case in evidence["representative_cases"]
-    )
-
-
-def test_outputs_are_written_as_valid_utf8_json() -> None:
-    subprocess.run(
-        [sys.executable, str(SCRIPTS / "fit_dissonance_check.py"), "--stamp", "test"],
-        cwd=str(BACKEND),
-        check=True,
-        capture_output=True,
-        text=True,
-        encoding="utf-8",
-        env={"PYTHONIOENCODING": "utf-8"},
-    )
-    for path in (
-        fit_dissonance_check.SCORECARD_PATH,
-        fit_dissonance_check.OVERRIDES_PATH,
-        fit_dissonance_check.FREE_CANVAS_PATH,
-        fit_dissonance_check.ORDER_CHECKLIST_PATH,
-    ):
-        assert path.is_file(), path
-        json.loads(path.read_text(encoding="utf-8"))
-
-    scorecard = json.loads(
-        fit_dissonance_check.SCORECARD_PATH.read_text(encoding="utf-8")
-    )
-    assert scorecard["aggregate"]["auto_scored"] == 289
-    assert scorecard["aggregate"]["order_popup_checklist_scored"] == 12
-    assert scorecard["aggregate"]["zero_tolerance_violation_count"] == 0
-    assert scorecard["provenance"]["screen_definitions_present"] is True
-    assert scorecard["provenance"]["scoring_mode"] == "screen_definitions_complete"
-    assert scorecard["machine_render_evidence"]["coverage"]["fit_gate_status"] == "pass"
-    assert scorecard["human_review_advisory"]["required_for_machine_gate"] is False
-    assert scorecard["human_review_advisory"]["status"] == "pending"

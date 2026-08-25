@@ -1,10 +1,3 @@
-"""`athena-mcp redact-env` CLI 서브커맨드 테스트 (SECURITY.md §6 마이그레이션 전용).
-
-`app/lib/main/mcp-env.js`의 `migratePlaintextEnv()`가 secrets.js(safeStorage)에
-실값을 옮긴 뒤 이 서브커맨드를 spawn해 레지스트리를 센티널로 재작성한다. 여기서는
-그 JS 호출자 없이 CLI 표면만 직접 검증한다 — `cmd_redact_env`가 값을 받지 않고
-`ServerRegistry.set_env_sentinel()`을 그대로 위임하는지가 핵심이다.
-"""
 
 from __future__ import annotations
 

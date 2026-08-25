@@ -1,28 +1,3 @@
-"""`athena_search`/`athena_describe`/`athena_resolve`/`athena_call` — 키움
-셀렉터 4툴을 게이트웨이 빌트인으로 노출하는 HTTP 루프백 프록시.
-
-## 왜 인프로세스 import가 아니라 HTTP 루프백인가
-
-`SelectorService.call()`(`athena_api/selector/service.py`)은 키움 자격증명에
-의존한다. `process_lock.py`의 `CredentialProcessLock`은 정확히 1개의 uvicorn
-워커만 자격증명 보유 프로세스로 허용한다(CLAUDE.md §7). 이 MCP 게이트웨이가
-`athena_api.selector`를 in-process import하면(그 패키지의 `__init__.py`가
-`from .service import SelectorService`를 즉시 실행한다) 게이트웨이 프로세스가
-자격증명에 인접한 "두 번째 프로세스"가 될 위험을 안는다 — 그래서 이 파일은
-`athena_api`를 단 한 줄도 import하지 않는다. 아래 입력 스키마도
-`athena_api.selector.schemas`를 재사용하지 않고 손으로 미러링한다(재사용은
-결국 그 패키지를 import하게 만든다). 대신 이미 떠 있는 백엔드(정확히 1워커)에
-`httpx.AsyncClient`로 `/api/v1/llm/tools/*` 루프백 호출만 한다.
-
-## 왜 재시도가 절대 없는가
-
-`athena_resolve`가 발급하는 `plan_token`은 1회용이다(`docs/LLM_API_SELECTION.md`
-"Single-use enforcement"). 실패한 `athena_call`을 재시도하면 항상
-`PLAN_ALREADY_USED`(409)로 돌아오고, 주문 계획이었다면 중복 주문 위험까지
-있다(같은 문서 "MCP adapter instructions" 요구사항 6). 이 모듈은 타임아웃·
-연결 실패를 포함해 어떤 실패에도 재시도하지 않고 즉시 에러를 반환한다 —
-재-resolve는 호출자(LLM)의 몫이다.
-"""
 
 from __future__ import annotations
 
@@ -91,11 +66,6 @@ def backend_base_url() -> str:
     return os.environ.get(_BACKEND_URL_ENV_VAR, DEFAULT_BACKEND_URL)
 
 
-# W1 계측(plan/plan.md) — 4툴 각각의 게이트웨이<->백엔드 HTTP 왕복 소요(ms)를
-# 감사 로그(consent.AuditLog, ts/alias/tool/success 4필드 계약)와는 **별도
-# 파일**에 남긴다. 같은 디렉터리를 쓰되 파일명만 다르므로 `server.py`가 이미
-# 테스트에서 주입하는 `audit_log_dir`를 그대로 재사용할 수 있다(별도 설정
-# 표면을 새로 만들지 않는다).
 _TIMING_LOG_FILENAME = "kiwoom-selector-timing.jsonl"
 
 
@@ -478,13 +448,6 @@ def _success(payload: Any) -> types.CallToolResult:
 
 
 def _extract_error_detail(response: httpx.Response) -> str:
-    """4xx/5xx 본문에서 사람이 읽을 만한 요약을 뽑는다.
-
-    이건 원문 그대로 노출해도 upstream 원문 누출이 아니다 — 이 응답은
-    `athena_api`(Athena 자신의 백엔드)가 낸 것이고, CLAUDE.md §6의 전제대로
-    `athena_api/errors.py`가 실제 키움 upstream 원문·키를 이미 도메인 에러로
-    번역해서 내보낸 뒤다. 이 함수는 그 도메인 에러 응답을 한 번 더 간결하게
-    만들 뿐이다."""
     try:
         body = response.json()
     except ValueError:
@@ -507,26 +470,6 @@ async def dispatch(
     timing_log_path: Path | None = None,
     cache: SelectorCache | None = None,
 ) -> types.CallToolResult:
-    """`server.py`의 `AthenaGateway.dispatch_call()`이 빌트인 라우팅 분기에서 부른다.
-
-    **재시도 없음** — 연결 실패·타임아웃 어느 쪽도 재시도하지 않고 단 한 번의
-    시도 뒤 즉시 에러 결과를 반환한다(모듈 docstring 참고). 연결 거부(백엔드
-    미기동)는 별도의 안내 문구를 준다 — 다른 데이터 소스로 조용히 대체하지
-    말라는 지시를 명시적으로 담는다.
-
-    `timing_log_path`(생략 시 `default_timing_log_path()`)에 이 호출의 백엔드
-    HTTP 왕복 소요(ms)를 성공·실패 상관없이 한 줄 남긴다(W1 계측, plan/plan.md).
-    측정 구간은 `http_client.post()` 왕복만이다 — 응답 JSON 파싱 등 그 뒤의
-    처리 시간은 포함하지 않는다.
-
-    `cache`(W4, `SelectorCache` 참고)를 넘기면 search/describe만 캐시 조회·
-    저장 대상이 된다 — `SelectorCache.get()`/`put()` 자체가
-    `_CACHEABLE_TOOLS` 화이트리스트로 게이트돼 있어 resolve/call은 `cache`가
-    주어져도 이 함수 안에서 캐시 경로에 닿지 않는다(아래 두 지점 모두 같은
-    가드를 반복하지 않고 `SelectorCache` 쪽 게이트 하나에 의존한다). `cache`가
-    `None`이면(기본값) 캐시 없이 예전과 동일하게 매번 HTTP를 탄다 — 기존
-    호출부와의 하위 호환이 이걸로 보장된다.
-    """
     log_path = timing_log_path or default_timing_log_path()
 
     if cache is not None:

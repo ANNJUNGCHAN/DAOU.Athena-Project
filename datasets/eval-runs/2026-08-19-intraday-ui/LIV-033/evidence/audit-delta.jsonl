@@ -1,4 +1,0 @@
-{"ts":"2026-08-19T02:02:27.887819+00:00","alias":"dart-mcp","tool":"get_current_date","success":true}
-{"ts":"2026-08-19T02:02:27.897865+00:00","alias":"korea-stock-mcp","tool":"get_today_date","success":true}
-{"ts":"2026-08-19T02:02:40.562532+00:00","alias":"korea-stock-mcp","tool":"get_corp_code","success":true}
-{"ts":"2026-08-19T02:02:43.214925+00:00","alias":"korea-stock-mcp","tool":"get_disclosure_list","success":true}

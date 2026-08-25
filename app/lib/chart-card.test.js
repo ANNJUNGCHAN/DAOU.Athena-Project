@@ -112,11 +112,6 @@ test('mock 데이터에 대한 실제 변환도 산술적으로 닫힌다(전량
   assert.equal(volumes.length, FIXTURE.bars.length);
 });
 
-// ---------------------------------------------------------------------------
-// resolveInitialPeriod — P2a(`plan/공통화면-템플릿-실행계획-2026-08-20.md`)
-// render-plan이 넘긴 initial.period를 하드코딩 'D' 대신 쓰되, 부재/미인식은
-// 'D'로 안전 폴백 + 로그(수용 기준: "일/주/월/년봉 8TR에 한해서만 적용").
-// ---------------------------------------------------------------------------
 
 test('resolveInitialPeriod: AITS 주기 D/W/M/Y/MIN/TICK은 그대로 통과시킨다', () => {
   assert.equal(resolveInitialPeriod({ period: 'D' }), 'D');

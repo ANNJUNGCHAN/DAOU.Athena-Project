@@ -1,5 +1,0 @@
-https://developer.apple.com/documentation/technologyoverviews/liquid-glass
-https://developer.apple.com/videos/play/wwdc2025/219/
-https://www.figma.com/design/P8cTgf8hSG0ejwIw9e5sSU/Apple-Liquid-Glass-iOS-26---Control-Center-UI-Kit----Community-?node-id=105-23&p=f&t=1Eff4IzKqfGdk9f0-0
-https://developer.apple.com/documentation/technologyoverviews/adopting-liquid-glass
-https://www.figma.com/design/9PBnqWvwgSvAFu4W5r99DU/Liquid-Glass-UI-%7C-Apple-IOS-26--WWDC25---Community-?node-id=0-1&p=f&t=D3X1drEAnccns3WT-0

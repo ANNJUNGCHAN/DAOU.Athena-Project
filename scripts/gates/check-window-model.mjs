@@ -30,8 +30,7 @@ function read(rel) {
   return readFileSync(p, "utf8");
 }
 
-/** 주석을 걷어낸 소스. "옛 이름이 주석에만 남았다"를 통과시키기 위해서다 —
- *  이력 주석을 지우라고 강요하면 정직 기록(CLAUDE.md §4)과 충돌한다. */
+/** 주석을 걷어낸 소스. "옛 이름이 주석에만 남았다"를 통과시키기 위해서다. */
 function stripComments(src) {
   return src
     .replace(/\/\*[\s\S]*?\*\//g, "")
@@ -104,8 +103,7 @@ if (mainRaw) {
   mustContain("main.js", main, /['"]shell\.html['"]/, "셸 창이 shell.html을 로드해야 한다");
   // getWins()가 돌려주는 창 집합 = 이 앱의 OS 창 전부. 2026-08-24 리프 1.3.1에서
   // `{ shellWin }` → `{ shellWin, orbWin }`으로 늘었다. 이름을 정확히 나열해
-  // **세 번째 창이 조용히 끼어드는 것**을 막는다 — "창 3개 이상 = 즉시 탈락"
-  // (CLAUDE.md §2)의 정적 대응물이다.
+  // **세 번째 창이 조용히 끼어드는 것**을 막는다.
   const wins = /getWins:\s*\(\)\s*=>\s*\(\{([^}]*)\}\)/.exec(main);
   if (!wins) {
     failures.push("main.js: getWins() 반환 형상을 찾지 못했다 — verify.js가 이 모양에 의존한다");

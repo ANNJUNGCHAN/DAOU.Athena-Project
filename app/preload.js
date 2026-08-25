@@ -1,12 +1,3 @@
-// contextBridge 다리 — 2026-08-18 렌더러 격리 전환(클로드 데스크탑 방식).
-// contextIsolation:true + nodeIntegration:false 아래서 셸 창이 쓰는 유일한
-// preload다(2026-08-24 리프 1.2.1 전에는 두 창이 공유했다. 오브 창(1.3.1)이
-// 붙으면 다시 공유한다). 여기 나열된 채널만 통과한다 — 범용 패스스루
-// (channel을 그대로 받아 ipcRenderer.invoke(channel, ...)에 넘기는 식) 금지.
-// 실측된 IPC 전수 목록은 main.js의 ipcMain.handle/on 등록부와 1:1로 맞춰뒀다.
-// athena:load-fixture는 이 전환에서 새로 생긴 채널이다 — lib/mockdata.js가
-// 렌더러에서 fs로 spike/captures를 직접 읽던 것을 막고 main으로 옮겼다
-// (CLAUDE.md §6 "렌더러 Node API 직접 접근 0건" 원칙).
 const { contextBridge, ipcRenderer, webFrame } = require('electron');
 
 const INVOKE_CHANNELS = new Set([

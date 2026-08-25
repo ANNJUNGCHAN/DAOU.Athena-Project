@@ -1,4 +1,0 @@
-{"ts":"2026-08-19T02:42:18.554641+00:00","alias":"korea-stock-mcp","tool":"get_corp_code","success":true}
-{"ts":"2026-08-19T02:42:22.546883+00:00","alias":"korea-stock-mcp","tool":"get_disclosure_list","success":false}
-{"ts":"2026-08-19T02:42:26.328659+00:00","alias":"korea-stock-mcp","tool":"get_disclosure_list","success":true}
-{"ts":"2026-08-19T02:42:32.432141+00:00","alias":"korea-stock-mcp","tool":"get_disclosure","success":true}

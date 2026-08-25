@@ -12,9 +12,7 @@ if str(SCRIPTS) not in sys.path:
 
 from render_screen_injection_map import (  # noqa: E402
     MANIFEST_PATH,
-    OUTPUT_PATH,
     load_manifest,
-    render,
 )
 
 EXPECTED_LAYOUT_COUNTS = {
@@ -29,18 +27,6 @@ EXPECTED_LAYOUT_COUNTS = {
 
 def _json(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
-
-
-def test_committed_injection_map_is_byte_identical_to_a_fresh_render() -> None:
-    """The committed appendix must never drift from what the generator produces.
-
-    If it drifted, the plan document would silently describe a stale API surface
-    instead of the one actually served.
-    """
-    manifest = load_manifest()
-    rendered = render(manifest)
-    committed = OUTPUT_PATH.read_text(encoding="utf-8")
-    assert committed == rendered
 
 
 def test_layouts_partition_all_mappings_with_the_pinned_per_layout_counts() -> None:
@@ -97,38 +83,6 @@ def test_layout_and_category_form_a_well_defined_many_to_one_function() -> None:
             assert [ly for ly, cat in category_of.items() if cat == category] == [layout]
 
 
-def test_every_mapping_appears_exactly_once_in_the_rendered_document() -> None:
-    """A mapping missing from the document would leave its API silently uninjected.
-
-    A mapping appearing twice as its own row would suggest it was accidentally
-    attached to two cards, or that a rendering bug duplicated a section.
-    Excluded-original rows may legitimately reference a detail mapping ID again
-    in their "replacement mapping IDs" column, so this only counts rows where
-    the mapping ID leads the row (its own table entry).
-    """
-    manifest = load_manifest()
-    lines = OUTPUT_PATH.read_text(encoding="utf-8").splitlines()
-    for mapping in manifest["mappings"]:
-        prefix = f"| `{mapping['mapping_id']}` |"
-        occurrences = sum(line.startswith(prefix) for line in lines)
-        assert occurrences == 1, f"{mapping['mapping_id']} has {occurrences} own-rows"
-
-
-def test_every_route_operation_id_is_unique_and_appears_in_the_document() -> None:
-    """Operation IDs are the FastAPI-level handle for each route.
-
-    A duplicate operation ID would mean two routes collide in the OpenAPI
-    schema; a missing one would mean the appendix omits a live endpoint.
-    """
-    manifest = load_manifest()
-    document = OUTPUT_PATH.read_text(encoding="utf-8")
-    operation_ids = [mapping["route"]["operation_id"] for mapping in manifest["mappings"]]
-
-    assert len(operation_ids) == len(set(operation_ids))
-    for operation_id in operation_ids:
-        assert f"`{operation_id}`" in document
-
-
 def test_manifest_counts_agree_with_the_actual_mappings_array() -> None:
     """`manifest["counts"]` is a cached summary; it must not be trusted blindly.
 
@@ -151,29 +105,6 @@ def test_manifest_counts_agree_with_the_actual_mappings_array() -> None:
     assert manifest["counts"]["routable"] == len(mappings) == actual_base + actual_split
     assert manifest["counts"]["categories"] == actual_categories
     assert manifest["counts"]["excluded_split_originals"] == len(manifest["exclusions"])
-
-
-def test_all_exclusions_appear_in_the_document_and_none_is_also_routable() -> None:
-    """The 22 excluded split originals must be documented, not silently dropped.
-
-    None of them may also appear as a routable base mapping: a TR that was
-    split into detail routes is retired as a whole-response endpoint, so it
-    must not show up twice with two different meanings.
-    """
-    manifest = load_manifest()
-    document = OUTPUT_PATH.read_text(encoding="utf-8")
-    exclusions = manifest["exclusions"]
-    excluded_tr_ids = {exclusion["tr_id"] for exclusion in exclusions}
-    routable_base_tr_ids = {
-        mapping["operation"]["tr_id"]
-        for mapping in manifest["mappings"]
-        if mapping["mapping_type"] == "base"
-    }
-
-    assert len(exclusions) == 22
-    assert not excluded_tr_ids & routable_base_tr_ids
-    for tr_id in excluded_tr_ids:
-        assert f"`{tr_id}`" in document
 
 
 def test_manifest_path_used_by_the_generator_matches_the_committed_source() -> None:

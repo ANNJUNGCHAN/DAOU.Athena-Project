@@ -4,10 +4,14 @@
 !.env.example
 
 # 에이전트/오케스트레이터 런타임 상태 — 재현 가능한 제품 산출물이 아님
+.claude/
+.codex/
 .omc/
 .omx/
+.unlazy/
+.unlazy-hook-state.json
 
-# 스파이크에서 클론한 외부 저장소 — 커밋 금지
+# 외부 저장소 클론 — 커밋 금지
 vendor/
 
 # 빌드/캐시
@@ -17,21 +21,6 @@ __pycache__/
 *.pyc
 .ruff_cache/
 .pytest_cache/
-.codex/
-
-# unlazy 스킬 — 로컬 조율 상태 (커밋 금지)
-.claude/settings.local.json
-.unlazy/
-.unlazy-hook-state.json
-
-# 셀렉터 ablation 원본 증거 — 파일당 77~136MB(부피의 99%가 compatibility_trace).
-# 로컬 보관하고 저장소에는 요약본(.summary.json)만 남긴다.
-# 재생성: backend/scripts/summarize_selector_evidence.py
-plan/selector-g0*.json
-!plan/selector-g0*.summary.json
 
 # playwright MCP 실행 찌꺼기
 .playwright-mcp/
-
-# 벤치마크 러너의 라이브 진행 미러 — 완주하면 .jsonl 트레이스와 바이트 동일(실측 2026-08-23)
-plan/*.progress.jsonl

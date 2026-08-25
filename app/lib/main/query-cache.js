@@ -1,13 +1,3 @@
-// 시맨틱 질의 캐시(L1 완전일치) — 2026-08-19 사용자 보고 "아직 느리다"의 대응.
-//
-// 규칙 기반 신규 판단이 아니라 **이미 내린 LLM 판정의 재사용**이다(AITS
-// canvas_intent_cache의 정당화 논리 — plan/AITS-참고-매커니즘 §2-1). 저장하는
-// 것은 판정(어떤 오퍼레이션을 어떤 인자와 canonical assertion으로)뿐이고 **데이터는
-// 리플레이 때마다 새로 조회**한다 — 신선도 문제가 없다. 메모리 전용(디스크
-// 직렬화 없음), TTL·상한으로 무한 성장 방지.
-//
-// L2(정규형·동의 표현)는 미구현 — L1은 "같은 질문을 다시 했을 때"만 잡는다.
-// 실측으로 가치가 확인되면 AITS의 잔여 토큰 부분집합 방식을 이식한다.
 'use strict';
 
 const { extractToolResultBlocks, normalizeToolResultContent } = require('./stream-json-parser');

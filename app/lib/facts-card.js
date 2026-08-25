@@ -3,13 +3,7 @@
 // 같은 문법). CJS(require)는 이 IIFE 밖에서도 동일하게 동작한다.
 (function () {
 'use strict';
-// FactsCard/CompoundCard 헤더가 공유하는 순수 로직 — plan/공통화면-템플릿-실행계획-2026-08-20.md
-// P4. canvas.js(렌더러)가 쓰고 facts-card.test.js(node --test)가 검증한다. DOM 없음.
 
-// 셀 프리미티브 5종(plan/kiwoom-common-screen-spec.md §4) — operation마다 렌더러를 새로
-// 만들지 않기 위한 결정적 분류표. §4가 실측한 상위 10개 alias의 정확한 집합만 쓴다 —
-// 접두사/패턴 추측 금지(CLAUDE.md §3 "추측을 코드에 넣지 마라"). 매칭에 없는 필드는
-// 'generic'(일반 텍스트)으로 떨어진다 — 이것도 실패가 아니라 설계된 기본값이다.
 const PRICE_KEYS = new Set(['cur_prc', 'high_pric', 'low_pric', 'open_pric']);
 const CHANGE_KEYS = new Set(['pred_pre', 'pred_pre_sig', 'flu_rt']);
 const QUANTITY_KEYS = new Set(['trde_qty', 'acc_trde_qty']);
@@ -47,8 +41,6 @@ function changeTone(key, value) {
   return 'flat';
 }
 
-// 가격/수량 — 천단위 구분(ko-KR). 숫자로 안 읽히면(코드값 등) 원문 그대로 둔다 —
-// 파싱 실패를 지어낸 값으로 덮지 않는다(정보 정직성, ui/soul.md §8).
 function formatNumeric(value) {
   if (value === null || value === undefined || value === '') return '—';
   const n = Number(String(value).trim());

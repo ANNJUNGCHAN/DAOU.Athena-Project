@@ -1,13 +1,3 @@
-// 화면 설정(autoExpandCanvas/autoGrowChat) — 병합 커밋 c0d874b가 "후속 커밋에서
-// 모드 구현에 옮긴다"고 약속하고 누락한 기능의 복구(2026-08-18). 원본은
-// `git show baa7e0e -- app/main.js`(PREFS_FILE=userData/settings.json,
-// readPrefs/writePrefs)에 있다 — app/README.md L606-608이 이미 지시한 대로
-// 파일명만 이 저장소의 관례(athena-*.json)로 바꾼다.
-//
-// 이 모듈은 app/lib/main/accounts.js·onboarding.js와 같은 골격이다: statePath()가
-// userData 아래 athena-prefs.json을 가리키고, readState()는 실패 시 기본값으로
-// 폴백하며, writeState()는 tmp-then-rename 원자적 쓰기를 쓴다(baa7e0e의
-// writePrefs는 이 패턴을 안 썼다 — 되살리며 맞춘다).
 
 const fs = require('fs');
 const path = require('path');

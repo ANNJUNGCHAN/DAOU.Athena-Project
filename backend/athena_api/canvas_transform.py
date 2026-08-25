@@ -1,10 +1,3 @@
-"""캔버스 카드 변환 — 키움 응답 → 카드 봉투의 결정적 변환 (단일 소재지).
-
-원래 게이트웨이(athena_mcp/canvas_data.py)에 있던 순수 함수들이다. 캐시
-리플레이 라우트(api/canvas_push.py render-plan)가 같은 변환을 써야 해서
-백엔드 소유로 옮겼다 — 게이트웨이가 이 모듈을 역수입한다(같은 venv).
-모델 호출·무작위성 없음(CLAUDE.md §7).
-"""
 
 from __future__ import annotations
 
@@ -233,13 +226,6 @@ def _summary_keys(items: list[tuple[str, Any]]) -> tuple[list[str], bool]:
 
 
 def _scalar_items(payload: Any) -> list[tuple[str, Any]] | None:
-    """dict의 최상위 스칼라(비-dict·비-list) 필드만 순서 보존해 뽑는다.
-
-    manifest 실측(29개 CompoundCard 매핑 전수, 2026-08-20) 결과 컨테이너를 감싸는
-    별도 wrapper 없이 스칼라 필드와 리스트 컨테이너가 항상 같은 depth에 있다 —
-    그래서 얕은(top-level만) 추출로 충분하다. 이 가정이 깨지는 응답은 명시적
-    실패로 남는다(추측으로 깊이 파고들지 않는다, CLAUDE.md §3).
-    """
     if not isinstance(payload, dict):
         return None
     return [
@@ -316,14 +302,6 @@ def build_compound_generic(payload: Any) -> tuple[dict[str, Any], dict[str, Any]
     return data, meta
 
 
-# ---------------------------------------------------------------------------
-# manifest 기반 카드 종류 결정 (P1b, `plan/공통화면-템플릿-실행계획-2026-08-20.md`
-# §Q3·P1b Deliverable 1·2) — 콜드 경로(athena_mcp/canvas_data.py::render_with_plan)
-# 캐시 리플레이 경로(athena_api/api/canvas_push.py::canvas_render_plan) 둘 다 이
-# 함수 하나로 operation_ref → canvas_type을 결정한다(같은 판정 로직을 두 곳이
-# 따로 짜지 않는다, Architect 권고). 모델/캐시 caller가 보낸 canvas_type은 여기
-# 관여하지 않는다 — 호출부가 감사용 힌트로만 비교·로그한다. 결정은 오직 manifest다.
-# ---------------------------------------------------------------------------
 
 AITS_CHART_RENDERER_ID = "aits-chart-v1"
 _AITS_PERIODS = frozenset({"tick", "min", "day", "week", "month", "year"})
@@ -687,16 +665,6 @@ def describe_unsupported_render_plan_kind(operation_ref: str | None) -> str:
 
 
 def resolve_chart_initial_period(operation_ref: str | None) -> str | None:
-    """operation_ref → manifest `presentation.controls.default_period`(P2a).
-
-    일/주/월/년봉 8TR(ka10081/82/83/94, ka20006/07/08/19)만 실제 값('D'/'W'/'M'/'Y')을
-    갖는다. 분/틱 4TR(ka10079/80, ka20004/05)은 manifest에 `controls.default_period`가
-    구조적으로 존재하되 `null`이다(P2b, 의도적 비배선 — `plan/공통화면-템플릿-실행계획
-    -2026-08-20.md` P2b 참조: chart-card.js의 "입력은 항상 일봉" 계약과 pseudoIntraday
-    의사난수 재샘플이 충돌해 정보 정직성을 해친다). 그 외 289개 비차트 TR은 `controls`
-    필드 자체가 없다. 세 경우 모두 여기서는 `None`으로 수렴한다 — 호출부(canvas_data.py
-    /canvas_push.py)는 `None`이면 `data`에 `initial`을 아예 싣지 않고, chart-card.js가
-    자체 `'D'` 안전 폴백을 쓴다(무음 오배정이 아니라 명시적 미배선)."""
     if not operation_ref:
         return None
     mapping = screen_manifest.get_mapping(operation_ref)

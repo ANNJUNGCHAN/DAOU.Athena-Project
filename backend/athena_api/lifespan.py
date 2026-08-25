@@ -355,8 +355,6 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
                 brain = await _open_brain(runtime_settings)
                 _publish_brain(app, brain)
             if runtime_settings.routines_enabled:
-                # 루틴은 키움과 독립 기능이지만, 실시간 트랙·양보 판정은 기본
-                # 계정 런타임의 WS·리미터를 빌린다(리미터는 하나 — CLAUDE.md §7).
                 default_rt = runtimes.get(
                     runtime_settings.kiwoom_default_account or ""
                 ) or next(iter(runtimes.values()), None)

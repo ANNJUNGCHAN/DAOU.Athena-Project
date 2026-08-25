@@ -36,13 +36,6 @@ from mcp.types import CallToolResult, InitializeResult, ListToolsResult, Tool
 from athena_mcp.consent import ConsentStore
 from athena_mcp.registry import ServerEntry, resolve_secret_env
 
-# 실측 최대 upstream 응답: `jjlabsio` `get_disclosure`(사업보고서) 1,042,014자
-# (spike/mcp-client/CAPTURE-S2B-jjlabsio.md, quirks.py가 인용하는 636,059자
-# 사업보고서와는 별개의 대용량 캡처 — 둘 다 실측이고 자릿수 단위가 같다).
-# 상한 초과로 정상 DART 응답을 거부하면 안 되므로 관측 최댓값의 약 5배를
-# 여유로 뒀다 — 정확한 "안전한" 위치를 정할 근거는 없다(SECURITY.md #4가
-# 이미 그렇게 명시한다). 자원 고갈 방어와 실측 최대치 여유 확보 사이의
-# 임의 절충이며, 필요하면 생성자 인자로 서버별로 덮어쓴다.
 DEFAULT_MAX_RESPONSE_CHARS = 5_000_000
 
 
@@ -51,25 +44,6 @@ class ServerCrashedError(RuntimeError):
 
 
 class ResponseTooLargeError(RuntimeError):
-    """`call_tool()`/`list_tools()` 응답이 설정된 상한을 넘었다 — 자르지 않고 거부한다.
-
-    "조용히 자르지 않는다"는 이 패키지의 공통 규칙(SECURITY.md #4가 미해결로
-    남겨둔 항목)을 이 클래스가 채운다. `quirks.py` docstring이 이미 실측한
-    636,059자 사업보고서와 `spike/mcp-client/CAPTURE-S2B-jjlabsio.md`의
-    1,042,014자 캡처 둘 다 **정상적인 DART 대용량 공시**다 — 상한은 그 값들을
-    자르지 않도록 `DEFAULT_MAX_RESPONSE_CHARS`에 여유를 두고 잡았다.
-
-    **알려진 한계**: 이건 SDK가 `await`를 반환한 *뒤에* 파싱된 결과 크기를 재는
-    post-parse 상한이다. `mcp.client.stdio.stdio_client`의 `stdout_reader()`
-    (`mcp/client/stdio/__init__.py:139-162`)는 개행이 올 때까지
-    `buffer = buffer + chunk`로 무한정 이어붙이며 길이 상한이 전혀 없다 —
-    anyio의 `max_bytes=65536`은 syscall 1회당 청크 크기일 뿐 총합 상한이
-    아니다. 즉 이 클래스는 **이미 SDK 내부에서 벌어진 메모리 스파이크를 막지
-    못한다** — 응답이 이 클래스에 닿기 전에 이미 전부 메모리에 올라와 있다.
-    진짜 전송 계층 방어는 `stdio_client`의 `stdout_reader`를 로컬 포크해 청크
-    누적 중에 길이를 재는 것뿐이고, 이 웨이브에서는 하지 않았다 — 해결된 척
-    하지 않는다.
-    """
 
     def __init__(
         self, *, alias: str, tool_name: str | None, observed_size: int, limit: int
@@ -316,12 +290,6 @@ class UpstreamServerHandle:
             errlog = os.fdopen(stderr_write_fd, "wb")
             stderr_pump_task = asyncio.create_task(self._pump_stderr(stderr_read_fd))
             stderr_read_fd = None  # 소유권이 pump 태스크로 넘어갔다 — 직접 닫지 않는다
-            # SECURITY.md §6 — 레지스트리의 env 값은 평문이 아니라 센티널일 수
-            # 있다(app/lib/main/mcp-env.js가 마이그레이션한 경우). 여기서 실값으로
-            # 푼다 — 이 프로세스 환경에 `ATHENA_MCP_ENV__<alias>__<KEY>`가 없으면
-            # `MissingSecretEnvError`가 나고, 그건 이 try 블록 안이라 아래
-            # `except Exception`이 `_startup_error`에 담아 정상적인 "즉시 실패"
-            # 경로(pydantic ValidationError와 같은 처리)를 그대로 탄다.
             params = StdioServerParameters(
                 command=self.entry.command,
                 args=list(self.entry.args),

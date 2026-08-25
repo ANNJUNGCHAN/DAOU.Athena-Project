@@ -3,19 +3,6 @@
 // el/sanitize 같은 흔한 이름이 파일 간에 충돌해 SyntaxError가 났다(실측, diag-isolation.js).
 // CJS(require)는 이 IIFE 밖에서도 동일하게 동작한다 — Node의 모듈 래퍼가 이미 함수 스코프다.
 (function () {
-// 설정·온보딩 화면군이 공유하는 DOM 프리미티브.
-//
-// 왜 별도 모듈인가: 온보딩(대화 창)과 제어 캔버스(캔버스 창)는 서로 다른
-// 렌더러 프로세스인데 같은 부품을 쓴다 — 표시등, 활성/비활성 배지, 연결 버튼,
-// 진행 점. 창마다 각자 그리면 같은 배지가 두 벌로 갈라져 시간이 지나면
-// 어긋난다. 치수는 Paper 화면설계서 실측값이다(plan/paper-specs/ 각 문서의
-// "레이아웃 · 스타일" 절).
-//
-// 렌더링 계약은 lib/markdown.js와 같다: **문자열을 innerHTML로 파싱시키지
-// 않는다.** 전부 createElement + textContent다. 이 화면군은 계정 이메일·서버
-// 별칭·upstream 툴 설명처럼 남이 쓴 문자열을 그리므로 이 계약이 특히 중요하다
-// — upstream 툴 설명은 backend/athena_mcp/SECURITY.md §3이 프롬프트 인젝션
-// 공격면으로 명시한 바로 그 텍스트다.
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
@@ -110,9 +97,6 @@ function labeledRow(label, value, valueClass) {
   ]);
 }
 
-// 카드 내부 시트(AT-ST-002/003/005/006). 새 창도 새 캔버스도 아니다 —
-// 부모 카드 좌표계 안에서 덮는 오버레이다(plan/paper-specs/00-통합-계획.md §1.3).
-// onClose가 없으면 닫기 버튼을 만들지 않는다(닫기 경로가 없는 시트도 있다).
 function sheet(title, opts) {
   const o = opts || {};
   const root = el('div', 'uk-sheet');

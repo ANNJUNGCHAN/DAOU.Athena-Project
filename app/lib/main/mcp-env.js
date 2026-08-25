@@ -1,25 +1,3 @@
-// MCP 서버 env 비밀값(DART_API_KEY 등)을 계좌 비밀값과 같은 문법으로 옮긴다.
-//
-// 문제(SECURITY.md §6 [HIGH]): `~/.athena/mcp_servers.json`의 env 값이 평문으로
-// 저장된다. 계좌 APP KEY/SECRET KEY는 secrets.js를 거쳐 Electron `safeStorage`
-// (DPAPI)로 암호화되는데, MCP env는 같은 앱 같은 종류 화면에서 입력받고도
-// 그 보호를 못 받는다.
-//
-// 해법: 레지스트리엔 env 키 이름만 남기고, 값은 SENTINEL로 치환한다. 실값은
-// secrets.js(safeStorage)에 `mcp-env:<alias>` 네임스페이스로 저장하고, claude/
-// python을 spawn하는 시점에 `ATHENA_MCP_ENV__<alias>__<KEY>` 환경변수로 주입한다.
-// 환경변수는 자식 프로세스로 상속되므로 Electron -> claude -p -> athena-mcp
-// serve까지 별도 배선 없이 전달된다(child_process.spawn의 기본 상속 규칙).
-//
-// 파이썬 쪽 짝: `backend/athena_mcp/registry.py`의 `SECRET_SENTINEL`/
-// `resolve_secret_env()`/`ServerRegistry.set_env_sentinel()`, `__main__.py`의
-// `redact-env` 서브커맨드. SENTINEL 문자열은 양쪽에 **문자 그대로** 일치해야
-// 한다 — 바꾸려면 두 파일을 함께 고친다.
-//
-// 순환 require를 피하려고 이 파일은 mcp-cli.js를 요구하지 않는다(mcp-cli.js가
-// `probe()`에 이 모듈의 env override를 받아 쓰는 반대 방향 의존이라 서로
-// 참조하면 순환이 생긴다). registry.json 읽기와 `redact-env` spawn은 이 파일이
-// 직접 최소한으로 구현한다.
 'use strict';
 
 const fs = require('fs');

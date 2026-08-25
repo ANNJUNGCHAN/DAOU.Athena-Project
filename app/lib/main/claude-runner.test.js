@@ -1,7 +1,3 @@
-// claude-runner.js의 순수 부분(buildArgs)만 테스트한다. runClaudeQuery는 실제
-// `claude -p`를 spawn하므로 여기서 부르지 않는다(쿼터 소모 — CLAUDE.md §3,
-// 오케스트레이터 지시). 계약은 spike/cli-pipe/gateway/RESULT.md §1 실왕복
-// 커맨드와 문자 그대로 일치해야 한다.
 'use strict';
 
 const test = require('node:test');

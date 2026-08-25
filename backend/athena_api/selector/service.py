@@ -125,11 +125,6 @@ def _continuation_request(request: Request, *, cont_yn: str, next_key: str | Non
 
 logger = logging.getLogger(__name__)
 
-# Bound on the process-local single-use nonce cache. The shared limiter caps upstream
-# traffic at 5 calls/second and a plan's TTL is at most 600 seconds (CLAUDE.md SS7), so
-# even every plan in flight for the full allowed lifetime is on the order of 3,000
-# entries; this leaves generous headroom without letting an abusive client grow the
-# cache without bound.
 _NONCE_CACHE_LIMIT = 4096
 
 
@@ -694,17 +689,6 @@ class SelectorService:
         )
 
     def _consume_nonce(self, plan: VerifiedPlan) -> None:
-        """Mark ``plan``'s nonce spent, or refuse a replay of an already-spent one.
-
-        Must run after signature verification succeeds and before any upstream dispatch:
-        marking here, not after a successful response, means a token that fails upstream
-        (timeout, rate limit) is still burned. That trade is the accepted cost of closing
-        the double-spend this enforces (2026-08-18) — see docs/LLM_API_SELECTION.md.
-
-        No lock guards the check-then-mark: both run synchronously with no ``await``
-        between them, and this process runs a single uvicorn worker on one event loop
-        (CLAUDE.md SS7), so no other coroutine can observe the cache between the two.
-        """
         now = self.signer.now()
         expired = [nonce for nonce, exp in self._consumed_nonces.items() if exp <= now]
         for nonce in expired:
@@ -751,12 +735,6 @@ class SelectorService:
             request, cont_yn=plan.cont_yn, next_key=plan.next_key
         )
 
-        # Upstream round-trip only (not plan verification, not response model dumping
-        # below) - this is the third leg of the W1 latency breakdown (plan/plan.md):
-        # audit-interval - backend_ms (selector_tools.py) - upstream_ms (here) isolates
-        # gateway/backend processing from time actually spent waiting on Kiwoom. No
-        # payload or token in the log line - CLAUDE.md SS6 forbids upstream bodies/keys
-        # leaking into logs.
         upstream_start = time.monotonic()
         if document.kind == "order":
             if order_client is None:

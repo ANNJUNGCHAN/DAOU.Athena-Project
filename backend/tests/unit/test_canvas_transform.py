@@ -305,15 +305,6 @@ def test_data_shape_hint_covers_facts_and_compound():
     assert "table" in desc
 
 
-# ---------------------------------------------------------------------------
-# P2a — build_chart_bars golden fixtures, 일/주/월/년봉 8TR 전수
-# (`plan/공통화면-템플릿-실행계획-2026-08-20.md` P2a 수용 기준: "이 8개 TR 전수에
-# 대해 golden fixture로 build_chart_bars 성공(구조 실패 0건)"). 컨테이너 alias·
-# 필드 셋은 `ref/kiwoom-tr-inventory.json` 실측 그대로다 — 8개 TR이 컨테이너
-# 이름은 서로 다르지만(_largest_dict_array가 이름과 무관하게 찾는다) 필드 셋은
-# 전부 _CHART_FIELD_MAP이 요구하는 dt/open_pric/high_pric/low_pric/cur_prc를
-# 포함한다.
-# ---------------------------------------------------------------------------
 
 _CHART_GOLDEN_ROWS = [
     {

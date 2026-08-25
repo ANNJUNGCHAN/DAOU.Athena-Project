@@ -19,8 +19,6 @@ def store(tmp_path):
 
 
 def test_max_alias_len_leaves_room_for_observed_longest_tool_name():
-    # 실측(spike/captures/*tools*.json 전수조사): 최장 툴 이름 34자
-    # (naver-search-mcp: datalab_shopping_keyword_by_device)
     assert reg.MAX_ALIAS_LEN == 64 - 2 - 34
     alias = "a" * reg.MAX_ALIAS_LEN
     qname = alias + "__" + "datalab_shopping_keyword_by_device"
@@ -47,8 +45,6 @@ def test_validate_alias_accepts_valid():
 
 
 def test_92_char_violation_reproduced_from_spike_result():
-    """spike/mcp-client/RESULT.md L67 실측 재현: 60자 별칭 + 30자 툴명 = 92자,
-    64자 규칙 위반. 이 별칭은 등록 단계에서 이미 거부돼야 한다(28자 상한)."""
     alias = "user-registered-very-long-server-name-for-korean-market-data"
     assert len(alias) == 60
     with pytest.raises(reg.AliasValidationError):
@@ -207,9 +203,6 @@ def test_rename_keeps_entry_data(store):
     assert store.get("new-name").command == "npx"
 
 
-# ---------------------------------------------------------------------------
-# SECURITY.md §6 — env 비밀값 센티널/치환 (평문 저장 [HIGH] 해소)
-# ---------------------------------------------------------------------------
 
 
 def test_set_env_sentinel_replaces_value_and_persists(store):
@@ -250,8 +243,6 @@ def test_resolve_secret_env_substitutes_sentinel_from_process_env(monkeypatch):
 
 
 def test_resolve_secret_env_missing_injection_fails_closed(monkeypatch):
-    """앱을 거치지 않고 직접 spawn하면(환경변수 없음) 조용히 빈 값으로 넘기지
-    않고 명확히 실패한다 — SECURITY.md §6이 받아들인 대가."""
     monkeypatch.delenv("ATHENA_MCP_ENV__dart__DART_API_KEY", raising=False)
     env = {"DART_API_KEY": reg.SECRET_SENTINEL}
     with pytest.raises(reg.MissingSecretEnvError):

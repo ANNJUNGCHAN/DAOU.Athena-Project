@@ -1,9 +1,3 @@
-"""공시 폴러 소스 — DART Open API 직접 HTTP.
-
-MCP 게이트웨이를 경유하지 않는 이유(실행계획 §7-1): 게이트웨이는 claude -p
-질의당 1회성 프로세스라 스케줄 폴링 경로가 될 수 없다. 등록된 dart-mcp는
-대화 중 조회 전용으로 남는다. corp_code zfill(8) 함정(CLAUDE.md §8) 적용.
-"""
 
 from __future__ import annotations
 

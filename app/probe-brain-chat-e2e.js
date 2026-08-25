@@ -1,40 +1,3 @@
-// 채팅 → HistoryStore 실배선 E2E — `app/main.js`의 `runLiveQuery`가 `claude -p`
-// 왕복 전후로 `history-sink.js`를 fire-and-forget 호출해 SQLite(source_records)에
-// role:user 1행 + role:assistant 1행을 남기는지 **실측**한다(직전 커밋 f8fcc5f 구현).
-//
-// 왜 Electron으로 도는가: spike/cli-pipe/gateway/probe_live_spawn.js·probe_kiwoom_chart.js는
-// `claude-runner.js`의 `runClaudeQuery`를 node에서 직접 불러 spawn 자체만 검증했다 —
-// `main.js`의 `runLiveQuery`(history-sink 훅이 걸린 지점)는 타지 않는다. 이 훅을 실제로
-// 태우려면 `athena__render_canvas` IPC(payload {query, expand})를 실제로 호출해야 하고,
-// 그건 ipcMain.handle에 걸려 있어 렌더러(webContents) 쪽에서 invoke해야 한다 —
-// `verify.js`가 쓰는 것과 같은 패턴(main.js를 라이브러리로 require, createWindows()
-// 직접 호출, shellWin.webContents.executeJavaScript로 window.athena.invoke 구동).
-//
-// **이 파일이 spike/cli-pipe/gateway/가 아니라 app/ 안에 있는 이유(실측으로 확정)**:
-// main.js는 `shellWin.loadFile('shell.html')` / `shellWin.loadFile('shell.html')`을
-// **상대경로**로 부른다. Electron의 loadFile은 그 경로를 main.js의 __dirname이 아니라
-// `app.getAppPath()`(= electron에 넘긴 진입 스크립트의 디렉터리) 기준으로 푼다. 처음
-// 이 프로브를 spike/cli-pipe/gateway/에 두고 `electron ../spike/.../probe.js`로
-// 실행했더니 shell.html을 spike/cli-pipe/gateway/shell.html에서 찾다가
-// ERR_FILE_NOT_FOUND로 실패했고, ready-to-show가 영영 안 와서 createWindows()가
-// 19분 넘게 무한 대기했다(실측, 죽여서 확인). probe-krx-live.js·verify.js가 전부
-// app/ 안에 있는 이유가 바로 이거다 — 새 방식을 발명하지 않고 그 관례를 따른다.
-//
-// 백엔드 격리: 이 저장소에 이미 8010에 다른 backend가 떠 있을 수 있다(다른 에이전트
-// 작업 중일 수 있음) — 그 인스턴스와 절대 충돌하면 안 되고, 그 인스턴스의 브레인
-// 설정(brain_enabled 여부)도 모른다. 그래서 이 프로브는 **별도 포트(8011)**에
-// **임시 브레인 DB 경로**로 독립 uvicorn을 직접 스폰한다. main.js의 자동 백엔드
-// 기동(backendLauncher.ensureBackend)은 ATHENA_NO_AUTOSTART=1일 때 호출되지 않으므로
-// (main.js 하단 `if (!process.env.ATHENA_NO_AUTOSTART)` 분기 참조) 이 프로브가 직접
-// 켠 8011 인스턴스만 쓰인다.
-//
-// 실행: cd app && npx electron probe-brain-chat-e2e.js
-// ⚠ 쿼터를 쓴다. claude -p 왕복 1회, 40초~수 분 걸릴 수 있다(공유 머신 경합 시 더 길다).
-//   실패해도 재시도는 최대 1회.
-//
-// 사용자 실계정 DB(~/.athena/)는 절대 건드리지 않는다 — 브레인 DB 경로를 전부
-// os.tmpdir() 아래 임시 디렉토리로 못박는다. userData/CODEX_HOME도 verify.js와
-// 같은 패턴으로 임시 디렉토리에 격리한다(개인 프로필 비접촉).
 
 process.env.ATHENA_NO_AUTOSTART = '1';
 
@@ -81,7 +44,6 @@ const report = {
 };
 
 function log(msg) {
-  // 콘솔 cp949 함정(CLAUDE.md §8) — 한글 상세는 파일에만, 콘솔은 영문 요약만 찍는다.
   console.log(`[probe] ${msg}`);
 }
 
@@ -260,10 +222,6 @@ print(json.dumps({"rowCount": len(rows), "rows": rows}, ensure_ascii=False, defa
     let sqliteResult = null;
     let sqliteError = null;
     try {
-      // PYTHONIOENCODING 필수(CLAUDE.md §8): 이게 없으면 파이썬 print()가 Windows
-      // 콘솔 기본 인코딩(cp949)으로 stdout에 쓰고, node는 utf-8로 읽어 한글이 깨진다.
-      // 1차 실행(PROBE-BRAIN-CHAT-E2E.json 2026-08-19)의 질의 text가 실제로 이렇게
-      // 깨져 나왔다 — DB가 아니라 이 경로의 결함이라 증거 신뢰성 문제였다.
       const out = execFileSync(PYTHON_EXE, ['-c', pyScript], {
         cwd: BACKEND_DIR,
         encoding: 'utf-8',

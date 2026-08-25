@@ -1,25 +1,3 @@
-// 백엔드(FastAPI/uvicorn) 자동 기동 — 개발 레이아웃 전제(backend/.venv가 이
-// 저장소 옆에 있다는 가정, mcp-config.js의 BACKEND_DIR/PYTHON_EXE와 같은 계산).
-//
-// 왜 필요한가: 지금까지는 사용자가 `cd backend && .venv\Scripts\python -m uvicorn
-// athena_api.main:app ...`를 손으로 먼저 띄워야 실배선(live) 왕복이 붙었다 —
-// 안 띄우면 claude -p가 게이트웨이를 통해 키움 라우트를 부를 때마다 조용히 죽는다.
-// 이 모듈은 앱 부팅 시 백엔드가 살아있는지 헬스체크하고, 죽어 있으면 이 앱이
-// 대신 스폰한다.
-//
-// 지켜야 할 것:
-//   - **중복 스폰 금지.** 헬스체크가 200이면(자격 없이도 200 — 실측 확인,
-//     backend/api/v1/llm/manifest는 x-athena-llm-exposed:false 부트스트랩
-//     엔드포인트라 인증을 요구하지 않는다) 이미 누군가(사용자가 수동 기동한
-//     인스턴스 포함) 떠 있는 것이므로 절대 스폰하지 않는다. CLAUDE.md §7 —
-//     uvicorn 워커는 정확히 1개, 토큰·레이트리미터·멱등성 캐시가 전부 프로세스
-//     로컬이라 두 번째 인스턴스가 뜨면 그 상태들이 갈라진다.
-//   - **우리가 스폰한 프로세스만 우리가 죽인다.** shutdownBackend()는 이 모듈이
-//     내부에 쥔 child 핸들이 있을 때만 동작한다 — 사용자가 별도 콘솔에서 띄운
-//     인스턴스는 이 앱의 생애주기와 무관하게 계속 산다.
-//   - backend/.venv가 없으면(예: 이 앱만 배포된 환경) 조용히 스킵한다 — 실패로
-//     취급하지 않는다. 이 기능 자체가 "저장소 옆에 backend/가 있다"는 개발
-//     레이아웃을 전제한다.
 'use strict';
 
 const fs = require('fs');
@@ -28,8 +6,6 @@ const { spawn } = require('child_process');
 const { BACKEND_DIR, PYTHON_EXE } = require('./mcp-config');
 const { killTree } = require('./proc-utils');
 
-// backend/README.md "실행법"과 문자 그대로 일치하는 커맨드(포트·워커 수 포함) —
-// CLAUDE.md §7 "uvicorn 워커는 정확히 1개".
 const HEALTH_HOST = '127.0.0.1';
 const HEALTH_PORT = 8010;
 const HEALTH_URL = `http://${HEALTH_HOST}:${HEALTH_PORT}/api/v1/llm/manifest`;
@@ -185,12 +161,6 @@ async function restartAfterReset({ mdlog, ensureBackendFn = ensureBackend } = {}
   return { selfSpawned: true, restarted: !!(ensureResult && ensureResult.ok), ensureResult };
 }
 
-// 백엔드 로컬 베어러 토큰 조달(2026-08-19 캔버스 사이드 채널 실측 결함) —
-// backend/.env에 ATHENA_LOCAL_BEARER_TOKEN이 설정된 배포에서는 WS 인증이
-// 모드 A(토큰 필수, 루프백도 우회 불가)가 되는데, 앱 프로세스에는 그 토큰이
-// 없어 루틴·캔버스 피드가 인증 대기에 걸려 조용히 죽는다(실측: 전달 0건).
-// 같은 저장소·같은 사용자·같은 머신의 로컬 구성 파일이므로 앱이 읽어
-// **메모리에만** 올린다 — 로깅·직렬화 금지(CLAUDE.md §1).
 function readLocalBearerToken(backendDir) {
   try {
     const envPath = path.join(backendDir || BACKEND_DIR, '.env');

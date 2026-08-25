@@ -3,7 +3,7 @@
   "method": "backend/ref/kiwoom-tr-inventory.json에서 width anchor 5개(ka10095/kt00015/ka30005/ka10075/ka10015)의 resp_body kor 라벨을 추출하고(첫 행은 배열/그룹 헤더라 컬럼이 아니므로 제외 — 제외 후 카운트가 dissonance-plan §2.2의 63/51/39/30/30과 정확히 일치해 이 제외 규칙이 옳음을 확인함), §2.6 공식(라벨 글자수 x 평균 자폭 + padding, 데이터 셀 최소폭과 비교해 max)으로 컬럼 픽셀폭을 추정한 뒤 1560px 캔버스에 누적폭이 넘기 전까지 몇 컬럼이 스크롤 없이 보이는지 계산했다.",
   "source_file": "backend/ref/kiwoom-tr-inventory.json",
   "assumptions": {
-    "note": "ui/palette.md에 카드 테이블 셀의 명시적 px 폰트 크기 정의가 없다(본문 한글 폰트=다키체라는 서술만 있고 표 셀 px 값 없음). app/styles/settings-cards.css·ui-kit.css의 기존 표 유사 셀들은 11~14px 범위(가장 흔한 값 12~13px)를 쓰지만 이는 설정 카드용이지 12종 카드의 table 섹션 전용 CSS는 아직 리포에 없다. 따라서 팀리드 지시의 가정값을 그대로 채택하고 가정임을 명시한다.",
+    "note": "카드 테이블 셀의 명시적 px 폰트 크기 정의가 없다. app/styles/settings-cards.css·ui-kit.css의 기존 표 유사 셀들은 11~14px 범위(가장 흔한 값 12~13px)를 쓰지만 이는 설정 카드용이지 12종 카드의 table 섹션 전용 CSS는 아직 리포에 없다. 따라서 가정값을 그대로 채택하고 가정임을 명시한다.",
     "hangul_char_width_px": 14,
     "ascii_digit_width_px": 8,
     "column_padding_px": 24,

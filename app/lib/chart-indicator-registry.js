@@ -5,11 +5,6 @@
 (function () {
 'use strict';
 
-// 보조지표 35종 전수 레지스트리 — plan/chart-card-control-spec.md §3.1~3.3 순서 그대로.
-// section: 'overlay'(상단 지표, 가격 pane 오버레이) | 'pane'(하단 지표, 별도 패널).
-// implemented: 1판 계산 구현 여부. true 5종(ma·boll·volMa·rsi·macd) 외 30종은
-// 토글 비활성 + "미구현" 배지로 노출한다 — 숨기지 않는다(정보 정직성, CLAUDE.md §4).
-// params가 있는 항목만 우측 설정 패널에 입력 필드가 뜬다(구현 5종 전부 params 보유).
 
 const INDICATOR_DEFS = [
   // ---- 3.1·3.2 상단 지표(가격 오버레이) 12종 ----

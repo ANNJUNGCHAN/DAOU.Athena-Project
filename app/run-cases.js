@@ -1,22 +1,3 @@
-// 검증 케이스 실행 하네스 — `datasets/앱-검증-200.jsonl`의 케이스를 실제로 왕복시킨다.
-//
-// 앱 커맨드바에 입력한 것과 **같은 경로**를 탄다: `buildLivePrompt`로 감싸고,
-// `ensureMcpConfig`가 만든 userData의 `.mcp.json`을 쓰고, `runClaudeQuery`가
-// `claude -p`를 spawn한다(env는 그 안에서 `buildEnvOverrides()`로 주입된다).
-// 다른 것은 창이 없다는 것뿐이라 카드는 IPC 대신 `onCanvasResult` 콜백으로 받는다.
-//
-// Electron이 필요한 이유: 비밀값이 safeStorage(DPAPI)에 있어 복호화가 Electron
-// 프로세스에서만 된다. `node`로 돌리면 upstream 서버가 fail-closed로 죽는다.
-//
-// ⚠ **쿼터를 쓴다.** 케이스 1건당 `claude -p` 왕복 1회(수십 초~수 분)다.
-//
-// 실행:
-//   cd app && npx electron run-cases.js LIV-066 LIV-067
-//   cd app && npx electron run-cases.js --file ../datasets/eval-runs/<run>/cases.txt
-//
-// 산출: datasets/eval-runs/<날짜>-intraday/<case-id>/ 아래
-//   evidence/chat-answer.txt · evidence/audit-delta.jsonl · evidence/canvas-results.json
-//   raw-result.json  (verdict.json은 별도 채점 단계에서 사람/에이전트가 쓴다)
 
 process.env.ATHENA_NO_AUTOSTART = '1';
 
