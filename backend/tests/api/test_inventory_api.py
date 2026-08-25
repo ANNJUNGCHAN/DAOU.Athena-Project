@@ -134,8 +134,20 @@ def test_inventory_partition_and_static_openapi_coverage() -> None:
             if "x-kiwoom-tr-id" in operation:
                 assert operation["x-athena-llm-exposed"] is False
     assert len(operation_ids) == len(set(operation_ids))
-    assert len(operation_ids) == 327
+    # 327 → 332: leaf 7이 브레인 분석 표면 5개를 더했다(god-nodes,
+    # surprising-connections, suggested-questions, diff, cluster-map).
+    # 이 숫자는 표면이 조용히 늘거나 주는 것을 눈에 띄게 하려고 박아둔 값이므로,
+    # 무엇이 왜 늘었는지 적지 않고 숫자만 고치면 이 테스트가 하는 일이 없어진다.
+    assert len(operation_ids) == 332
     assert "get_internal_oauth_status" in operation_ids
+    for added in (
+        "get_brain_god_nodes",
+        "get_brain_surprising_connections",
+        "get_brain_suggested_questions",
+        "get_brain_graph_diff",
+        "get_brain_cluster_map",
+    ):
+        assert added in operation_ids, f"{added}가 표면에서 사라졌다"
     manifest = json.loads(
         (BACKEND / "ref" / "kiwoom-common-screen-manifest.json").read_text(encoding="utf-8")
     )

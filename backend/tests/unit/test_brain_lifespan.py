@@ -1,43 +1,28 @@
 
 import asyncio
-import os
 from pathlib import Path
 
 import pytest
 from fastapi import FastAPI
 
-from athena_api.brain import GraphStore, HistoryStore, IngestionCoordinator, JobTrigger
+from athena_api.brain import (
+    SCHEMA_VERSION,
+    GraphStore,
+    HistoryStore,
+    IngestionCoordinator,
+    JobTrigger,
+    SourceKind,
+)
 from athena_api.config import Settings
 from athena_api.lifespan import _open_brain, _teardown_brain, build_lifespan
 from athena_api.process_lock import BrainProcessLock
-
-
-def _test_only_windows_dll_dir() -> Path | None:
-    configured = os.getenv("ATHENA_LADYBUG_DLL_DIR")
-    if configured:
-        return Path(configured)
-    # Test harness fallback only, mirrors test_brain_graph_store.py. Production code
-    # never discovers this path.
-    local_test_runtime = Path(r"C:\Program Files\Git\mingw64\bin")
-    if os.name == "nt" and local_test_runtime.is_dir():
-        return local_test_runtime
-    return None
-
-
-@pytest.fixture
-def ladybug_dll_dir(monkeypatch: pytest.MonkeyPatch) -> Path | None:
-    runtime_dir = _test_only_windows_dll_dir()
-    if runtime_dir is not None:
-        monkeypatch.setenv("ATHENA_LADYBUG_DLL_DIR", str(runtime_dir))
-    return runtime_dir
 
 
 def _brain_settings(tmp_path: Path, **overrides: object) -> Settings:
     return Settings(
         _env_file=None,
         brain_enabled=True,
-        brain_db_path=tmp_path / "brain.lbug",
-        brain_history_db_path=tmp_path / "brain-history.sqlite3",
+        brain_db_path=tmp_path / "brain.sqlite3",
         **overrides,
     )
 
@@ -57,17 +42,15 @@ async def test_brain_disabled_by_default_never_touches_app_state_or_disk() -> No
         assert app.state.brain_ingestion_last_error is None
     # A disabled brain must never create a file under the real default path.
     assert not settings.brain_db_path.exists()
-    assert not settings.brain_history_db_path.exists()
+    assert not settings.brain_db_path.exists()
 
 
-# --- happy path: real ladybug runtime available on this machine ----------------------
+# --- happy path -----------------------------------------------------------------------
 
 
 async def test_brain_opens_and_closes_symmetrically_with_the_app_lifespan(
-    tmp_path: Path, ladybug_dll_dir: Path | None
+    tmp_path: Path
 ) -> None:
-    if ladybug_dll_dir is None:
-        pytest.skip("no local ladybug native runtime available on this machine")
     app = FastAPI()
     settings = _brain_settings(tmp_path)
     async with build_lifespan(settings)(app):
@@ -77,7 +60,7 @@ async def test_brain_opens_and_closes_symmetrically_with_the_app_lifespan(
         assert app.state.brain_ingestion_last_error is None
         store: GraphStore = app.state.brain_store
         assert store.is_open
-        assert await store.schema_version() == 1
+        assert await store.schema_version() == SCHEMA_VERSION
     assert app.state.brain_ready is False
     assert app.state.brain_store is None
     assert app.state.brain_ingestion_ready is False
@@ -85,32 +68,28 @@ async def test_brain_opens_and_closes_symmetrically_with_the_app_lifespan(
 
 
 async def test_ingestion_coordinator_starts_and_stops_symmetrically_with_the_app_lifespan(
-    tmp_path: Path, ladybug_dll_dir: Path | None
+    tmp_path: Path
 ) -> None:
     """ADR §4.2 step 1 ("writer queue/scheduler 시작") and step 3 ("scheduler/writer
     cancel 및 await") must bracket the app lifespan the same way DB open/close do.
     """
-    if ladybug_dll_dir is None:
-        pytest.skip("no local ladybug native runtime available on this machine")
     app = FastAPI()
     settings = _brain_settings(tmp_path)
     async with build_lifespan(settings)(app):
         assert app.state.brain_ingestion_ready is True
         assert app.state.brain_ingestion_last_error is None
-        assert settings.brain_history_db_path.exists()
+        assert settings.brain_db_path.exists()
     assert app.state.brain_ingestion_ready is False
     assert app.state.brain_ingestion_last_error is None
 
 
 async def test_ingestion_start_failure_is_recorded_but_does_not_fail_the_brain_open(
-    tmp_path: Path, ladybug_dll_dir: Path | None, monkeypatch: pytest.MonkeyPatch
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    """Ingestion is optional the same way fts is: a failure to open the raw-history store
+    """Ingestion is optional: a failure to open the raw-history store
     or start IngestionCoordinator degrades ingestion_ready without failing graph
     read/write, which does not depend on it (ADR §4.2 step 1, see _open_brain docstring).
     """
-    if ladybug_dll_dir is None:
-        pytest.skip("no local ladybug native runtime available on this machine")
 
     async def _boom(self: HistoryStore) -> None:
         raise RuntimeError("deterministic raw-history open failure")
@@ -125,10 +104,8 @@ async def test_ingestion_start_failure_is_recorded_but_does_not_fail_the_brain_o
 
 
 async def test_second_backend_is_rejected_while_first_holds_an_open_brain(
-    tmp_path: Path, ladybug_dll_dir: Path | None
+    tmp_path: Path
 ) -> None:
-    if ladybug_dll_dir is None:
-        pytest.skip("no local ladybug native runtime available on this machine")
     app_one = FastAPI()
     app_two = FastAPI()
     settings = _brain_settings(tmp_path)
@@ -142,40 +119,19 @@ async def test_second_backend_is_rejected_while_first_holds_an_open_brain(
         assert app_one.state.brain_store.is_open
 
 
-async def test_fts_load_failure_is_recorded_but_does_not_fail_the_brain_open(
-    tmp_path: Path, ladybug_dll_dir: Path | None, monkeypatch: pytest.MonkeyPatch
-) -> None:
-    if ladybug_dll_dir is None:
-        pytest.skip("no local ladybug native runtime available on this machine")
-
-    async def _boom(self: GraphStore) -> None:
-        raise RuntimeError("no bundled fts artifact and no network")
-
-    monkeypatch.setattr(GraphStore, "load_fts_extension", _boom)
-    app = FastAPI()
-    settings = _brain_settings(tmp_path)
-    async with build_lifespan(settings)(app):
-        assert app.state.brain_ready is True
-        assert app.state.brain_fts_ready is False
-        assert app.state.brain_fts_last_error is not None
-
-
-# --- degraded path: GraphStore.open() fails (e.g. no native runtime configured) ------
+# --- degraded path: GraphStore.open() fails --------------------------------------------
 #
-# A real end-to-end "no ATHENA_LADYBUG_DLL_DIR" probe was run by hand (not as an
-# automated test): once ladybug's native library has been loaded into a process by any
-# earlier successful open, Windows keeps it resident and later opens in the *same*
-# process succeed even without the DLL directory — so a same-process test toggling the
-# env var is order-dependent on whatever ran before it, not a reliable regression guard.
-# These tests instead pin the *contract* — GraphStore.open() failing for any reason must
-# degrade the brain, not the app — by making that failure deterministic via monkeypatch.
+# 네이티브 런타임이 사라지면서(SQLite로 내려오면서) "DLL이 없다"는 실패 모드 자체가
+# 없어졌다. 그래도 열기 실패는 여전히 가능하다 — 디스크 권한, 손상된 파일, 잠긴 경로.
+# 그래서 원인이 아니라 **계약**을 고정한다: `GraphStore.open()`이 어떤 이유로든 실패하면
+# 앱이 아니라 브레인만 강등된다.
 
 
 async def test_open_failure_does_not_crash_the_app(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     async def _boom(self: GraphStore) -> None:
-        raise RuntimeError("LadybugDB could not start; no native runtime configured")
+        raise RuntimeError("graph store could not be opened")
 
     monkeypatch.setattr(GraphStore, "open", _boom)
     app = FastAPI()
@@ -224,10 +180,8 @@ async def test_open_brain_raises_immediately_when_the_lock_is_already_held(
 
 
 async def test_extraction_is_disabled_by_default(
-    tmp_path: Path, ladybug_dll_dir: Path | None
+    tmp_path: Path
 ) -> None:
-    if ladybug_dll_dir is None:
-        pytest.skip("no local ladybug native runtime available on this machine")
     app = FastAPI()
     settings = _brain_settings(tmp_path)
     async with build_lifespan(settings)(app):
@@ -236,13 +190,11 @@ async def test_extraction_is_disabled_by_default(
 
 
 async def test_extraction_is_injected_into_the_coordinator_when_argv_is_configured(
-    tmp_path: Path, ladybug_dll_dir: Path | None
+    tmp_path: Path
 ) -> None:
     """ATHENA_BRAIN_EXTRACTION_LLM_ARGV configured -> IngestionCoordinator gets a real
     ExtractionService source_projector, not the None default (lifespan.py _open_brain).
     """
-    if ladybug_dll_dir is None:
-        pytest.skip("no local ladybug native runtime available on this machine")
     app = FastAPI()
     settings = _brain_settings(
         tmp_path, brain_extraction_llm_argv=["python", "-c", "pass"]
@@ -256,7 +208,14 @@ async def test_extraction_is_injected_into_the_coordinator_when_argv_is_configur
     try:
         assert brain.extraction_enabled is True
         assert brain.coordinator is not None
-        assert brain.coordinator._source_projector is not None  # noqa: SLF001
+        # 대화는 LLM 투영기로, 체결·잔고는 결정적 투영기로 — 셋 다 배선돼야 한다.
+        # `holding_projector`를 받아놓고 표에 넣지 않아 조용히 무시하던 버그가 실제로
+        # 있었으므로(leaf 2), 배선을 라우팅 표에서 직접 확인한다.
+        assert set(brain.coordinator._projectors) == {  # noqa: SLF001
+            SourceKind.CONVERSATION,
+            SourceKind.TRADE,
+            SourceKind.HOLDING,
+        }
     finally:
         await _teardown_brain(FastAPI(), brain)
 
@@ -265,10 +224,8 @@ async def test_extraction_is_injected_into_the_coordinator_when_argv_is_configur
 
 
 async def test_hourly_self_enqueue_calls_coordinator_enqueue_on_a_fast_tick(
-    tmp_path: Path, ladybug_dll_dir: Path | None, monkeypatch: pytest.MonkeyPatch
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    if ladybug_dll_dir is None:
-        pytest.skip("no local ladybug native runtime available on this machine")
     calls: list[JobTrigger] = []
     original_enqueue = IngestionCoordinator.enqueue
 
@@ -290,10 +247,8 @@ async def test_hourly_self_enqueue_calls_coordinator_enqueue_on_a_fast_tick(
 
 
 async def test_hourly_task_is_cancelled_symmetrically_with_the_app_lifespan(
-    tmp_path: Path, ladybug_dll_dir: Path | None
+    tmp_path: Path
 ) -> None:
-    if ladybug_dll_dir is None:
-        pytest.skip("no local ladybug native runtime available on this machine")
     app = FastAPI()
     settings = _brain_settings(tmp_path)
     async with build_lifespan(settings)(app):

@@ -2,11 +2,9 @@
 
 from __future__ import annotations
 
-import asyncio
 import hashlib
 import json
 import sqlite3
-from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 from decimal import Decimal
@@ -18,9 +16,13 @@ from uuid import uuid4
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
+from .db import SqliteOwner, atomic
 from .ontology import GraphId, LongText, SourceKind, SourceRecord
 
 RAW_SCHEMA_VERSION: Final = 1
+
+# 원본 이력 쓰기 한 단위의 savepoint 이름. 이력 쓰기끼리는 중첩하지 않으므로 하나면 된다.
+_RAW_WRITE: Final = "raw_write"
 MAX_BATCH_SIZE: Final = 500
 MAX_METADATA_BYTES: Final = 32_768
 
@@ -83,6 +85,26 @@ class CompletedTradeRecord(RawHistoryModel):
     quantity: Annotated[int, Field(strict=True, gt=0, le=10**12)]
     price: Annotated[Decimal, Field(strict=True, ge=0, max_digits=24, decimal_places=8)]
     occurred_at: datetime
+    metadata: dict[str, Any] = Field(default_factory=dict)
+
+
+class HoldingRecord(RawHistoryModel):
+    """보유잔고 한 종목의 스냅숏.
+
+    `quantity`가 `ge=0`인 것이 `CompletedTradeRecord`(`gt=0`)와 다르다. 0주는 유효한
+    잔고 상태다 — "다 팔았다"를 표현할 수 있어야 그래프에서 `owns`가 사라진다.
+    """
+
+    security_id: GraphId
+    quantity: Annotated[int, Field(strict=True, ge=0, le=10**12)]
+    average_price: Annotated[Decimal, Field(strict=True, ge=0, max_digits=24, decimal_places=8)]
+    occurred_at: datetime
+    # 계좌별 분해. 여러 계좌를 쓰면 `quantity`는 이미 합계이므로, "왜 이 수량인가"는
+    # 이 필드로만 답할 수 있다 — 그래프의 `owns` 엣지는 종목당 하나뿐이다.
+    # 계좌가 하나뿐이면 비워둔다.
+    by_account: dict[str, Annotated[int, Field(strict=True, ge=0)]] = Field(
+        default_factory=dict
+    )
     metadata: dict[str, Any] = Field(default_factory=dict)
 
 
@@ -207,10 +229,6 @@ class RetryPolicy:
 
 
 _SCHEMA: Final = """
-CREATE TABLE IF NOT EXISTS schema_version (
-    singleton INTEGER PRIMARY KEY CHECK (singleton = 1),
-    version INTEGER NOT NULL
-);
 CREATE TABLE IF NOT EXISTS source_records (
     source_id TEXT PRIMARY KEY,
     source_kind TEXT NOT NULL,
@@ -310,108 +328,57 @@ def _fingerprint(payload: dict[str, Any]) -> str:
 class HistoryStore:
     """Serialize one sqlite3 connection on a dedicated worker thread."""
 
-    def __init__(self, path: Path, *, busy_timeout_ms: int = 5_000) -> None:
-        if busy_timeout_ms <= 0:
-            raise ValueError("busy_timeout_ms must be positive")
-        self.path = Path(path)
-        self._busy_timeout_ms = busy_timeout_ms
-        self._connection: sqlite3.Connection | None = None
-        self._lock = asyncio.Lock()
-        self._owner = ThreadPoolExecutor(max_workers=1, thread_name_prefix="athena-history")
-        self._open_future: asyncio.Future[Any] | None = None
-        self._close_future: asyncio.Future[Any] | None = None
-        self._closed = False
+    def __init__(
+        self, path: Path | SqliteOwner, *, busy_timeout_ms: int = 5_000
+    ) -> None:
+        """경로를 주면 파일을 혼자 소유하고, `SqliteOwner`를 주면 나눠 쓴다.
+
+        나눠 쓰는 쪽이 운영 경로다 — `GraphStore`와 같은 연결을 써야 커서 전진과 그래프
+        쓰기가 커밋 하나로 묶인다. 그게 안 되면 "커서는 전진했는데 그래프엔 안 들어간"
+        상태가 프로세스 종료 창마다 생긴다.
+        """
+        if isinstance(path, SqliteOwner):
+            self._owner = path
+            self._owns_connection = False
+        else:
+            self._owner = SqliteOwner(
+                Path(path),
+                busy_timeout_ms=busy_timeout_ms,
+                thread_name_prefix="athena-history",
+            )
+            self._owns_connection = True
+        self.path = self._owner.path
 
     @property
     def is_open(self) -> bool:
-        return self._connection is not None and not self._closed
+        return self._owner.is_open
 
-    def _submit(self, function: Any, *args: Any) -> asyncio.Future[Any]:
-        return asyncio.get_running_loop().run_in_executor(self._owner, partial(function, *args))
+    @property
+    def owner(self) -> SqliteOwner:
+        return self._owner
 
     async def open(self) -> None:
-        async with self._lock:
-            if self._closed:
-                raise RuntimeError("history store is closed")
-            if self._connection is not None:
-                return
-            if self._open_future is None:
-                self._open_future = self._submit(self._open_sync)
-            try:
-                await asyncio.shield(self._open_future)
-            except asyncio.CancelledError:
-                raise
-            except Exception:
-                self._open_future = None
-                raise
-
-    def _open_sync(self) -> None:
-        if self._connection is not None:
-            return
-        self.path.parent.mkdir(parents=True, exist_ok=True)
-        connection = sqlite3.connect(self.path, isolation_level=None)
-        connection.row_factory = sqlite3.Row
-        try:
-            connection.execute("PRAGMA journal_mode=WAL")
-            connection.execute("PRAGMA foreign_keys=ON")
-            connection.execute(f"PRAGMA busy_timeout = {self._busy_timeout_ms:d}")
-            connection.executescript(_SCHEMA)
-            row = connection.execute(
-                "SELECT version FROM schema_version WHERE singleton = ?", (1,)
-            ).fetchone()
-            if row is None:
-                connection.execute(
-                    "INSERT INTO schema_version(singleton, version) VALUES (?, ?)",
-                    (1, RAW_SCHEMA_VERSION),
-                )
-            elif int(row["version"]) != RAW_SCHEMA_VERSION:
-                raise RuntimeError(f"unsupported raw schema version: {row['version']}")
-        except Exception:
-            connection.close()
-            raise
-        self._connection = connection
+        if self._owns_connection:
+            await self._owner.open()
+        elif not self._owner.is_open:
+            raise RuntimeError("shared sqlite owner must be opened before the history store")
+        await self._owner.install_schema("raw", _SCHEMA, RAW_SCHEMA_VERSION)
 
     async def close(self) -> None:
-        async with self._lock:
-            if self._close_future is None:
-                self._closed = True
-                self._close_future = self._submit(self._close_sync)
-            future = self._close_future
-        try:
-            await asyncio.shield(future)
-        finally:
-            self._owner.shutdown(wait=False, cancel_futures=False)
-
-    def _close_sync(self) -> None:
-        try:
-            if self._connection is not None:
-                self._connection.close()
-        finally:
-            self._connection = None
+        # 빌려 쓰는 연결은 닫지 않는다 — 아직 쓰고 있는 다른 저장소의 발밑이 사라진다.
+        if self._owns_connection:
+            await self._owner.close()
 
     async def _call(self, function: Any, *args: Any) -> Any:
-        async with self._lock:
-            if not self.is_open:
-                raise RuntimeError("history store is not open")
-            return await asyncio.shield(self._submit(function, *args))
+        if not self.is_open:
+            raise RuntimeError("history store is not open")
+        return await self._owner.run(partial(function, *args))
 
     def _db(self) -> sqlite3.Connection:
-        if self._connection is None or self._closed:
-            raise RuntimeError("history store is not open")
-        return self._connection
+        return self._owner.require()
 
     async def schema_version(self) -> int:
-        return await self._call(self._schema_version_sync)
-
-    def _schema_version_sync(self) -> int:
-        row = (
-            self._db()
-            .execute("SELECT version FROM schema_version WHERE singleton = ?", (1,))
-            .fetchone()
-        )
-        if row is None:
-            raise RuntimeError("raw schema metadata is missing")
-        return int(row["version"])
+        return await self._owner.schema_version("raw")
 
     async def upsert_chat(
         self, record: ChatHistoryRecord, *, changed_at: datetime | None = None
@@ -510,8 +477,7 @@ class HistoryStore:
         changed_at: str,
     ) -> HistoryUpsertResult:
         connection = self._db()
-        connection.execute("BEGIN IMMEDIATE")
-        try:
+        with atomic(connection, _RAW_WRITE):
             current = connection.execute(
                 "SELECT fingerprint, revision FROM source_records WHERE source_id = ?",
                 (source_id,),
@@ -521,7 +487,6 @@ class HistoryStore:
                     "SELECT seq FROM source_changes WHERE source_id = ? ORDER BY seq DESC LIMIT ?",
                     (source_id, 1),
                 ).fetchone()
-                connection.execute("COMMIT")
                 return HistoryUpsertResult(
                     source_id=source_id,
                     fingerprint=fingerprint,
@@ -567,7 +532,6 @@ class HistoryStore:
                     changed_at,
                 ),
             )
-            connection.execute("COMMIT")
             return HistoryUpsertResult(
                 source_id=source_id,
                 fingerprint=fingerprint,
@@ -575,9 +539,6 @@ class HistoryStore:
                 change_seq=int(cursor.lastrowid),
                 changed=True,
             )
-        except BaseException:
-            connection.execute("ROLLBACK")
-            raise
 
     async def chat_changes(self, after_seq: int, *, limit: int) -> tuple[SourceChange, ...]:
         return await self._changes(SourceKind.CHAT_MESSAGE, after_seq, limit)
@@ -587,6 +548,52 @@ class HistoryStore:
 
     async def conversation_changes(self, after_seq: int, *, limit: int) -> tuple[SourceChange, ...]:
         return await self._changes(SourceKind.CONVERSATION, after_seq, limit)
+
+    async def holding_changes(self, after_seq: int, *, limit: int) -> tuple[SourceChange, ...]:
+        return await self._changes(SourceKind.HOLDING, after_seq, limit)
+
+    async def upsert_holding(
+        self, record: HoldingRecord, *, changed_at: datetime | None = None
+    ) -> HistoryUpsertResult:
+        """보유잔고 한 종목의 현재 상태를 적재한다.
+
+        **소스 id가 종목당 하나**(`holding:<code>`)인 것이 체결과 가장 크게 다른 점이다.
+        체결은 사건이라 건마다 새 소스지만, 잔고는 상태라서 같은 종목의 다음 스냅숏이
+        앞의 것을 대체해야 한다. 건마다 쌓으면 어제 판 종목이 그래프에 영원히 남는다.
+
+        수량이 0인 행도 그대로 받는다 — "이제 안 들고 있다"는 것도 사실이고, 소스 단위
+        원자 교체가 그 시점에 `owns` 엣지를 걷어내는 근거가 된다. 여기서 걸러내면
+        그래프는 마지막으로 들고 있던 상태에 영원히 멈춘다.
+        """
+        metadata = _canonicalize_metadata(record.metadata)
+        attributes = {
+            "holding": {
+                "security_id": record.security_id,
+                "quantity": record.quantity,
+                "average_price": str(record.average_price),
+                # 계좌가 하나뿐이면 넣지 않는다 — 빈 dict가 지문에 섞이면 계좌를
+                # 늘리기 전후로 같은 잔고가 다른 지문을 갖게 된다.
+                **(
+                    {"by_account": dict(sorted(record.by_account.items()))}
+                    if record.by_account
+                    else {}
+                ),
+            },
+            "metadata": metadata,
+        }
+        text = (
+            f"holding {record.security_id} "
+            f"quantity={record.quantity} average_price={record.average_price}"
+        )
+        return await self._upsert_source(
+            source_id=f"holding:{record.security_id}",
+            source_kind=SourceKind.HOLDING,
+            text=text,
+            locator=f"holding:{record.security_id}",
+            occurred_at=record.occurred_at,
+            attributes=attributes,
+            changed_at=changed_at or utc_now(),
+        )
 
     async def _changes(
         self, source_kind: SourceKind, after_seq: int, limit: int
@@ -833,16 +840,11 @@ class HistoryStore:
 
     def _reset_cursors_sync(self, adapter_names: tuple[str, ...]) -> None:
         connection = self._db()
-        connection.execute("BEGIN IMMEDIATE")
-        try:
+        with atomic(connection, _RAW_WRITE):
             connection.executemany(
                 "DELETE FROM adapter_cursors WHERE adapter_name = ?",
                 ((adapter_name,) for adapter_name in adapter_names),
             )
-            connection.execute("COMMIT")
-        except BaseException:
-            connection.execute("ROLLBACK")
-            raise
 
     async def create_job(self, trigger: JobTrigger, *, now: datetime | None = None) -> IngestionJob:
         created_at = now or utc_now()
@@ -911,8 +913,7 @@ class HistoryStore:
 
     def _claim_job_sync(self, job_id: str, claimed_at: str) -> IngestionJob | None:
         connection = self._db()
-        connection.execute("BEGIN IMMEDIATE")
-        try:
+        with atomic(connection, _RAW_WRITE):
             row = connection.execute(
                 "SELECT job_id, attempts FROM ingestion_jobs WHERE job_id = ? "
                 "AND (status = ? OR (status = ? AND next_retry_at <= ?))",
@@ -924,19 +925,13 @@ class HistoryStore:
                 ),
             ).fetchone()
             if row is None:
-                connection.execute("COMMIT")
                 return None
             result = self._mark_job_running_sync(connection, row, claimed_at)
-            connection.execute("COMMIT")
             return result
-        except BaseException:
-            connection.execute("ROLLBACK")
-            raise
 
     def _claim_due_job_sync(self, claimed_at: str) -> IngestionJob | None:
         connection = self._db()
-        connection.execute("BEGIN IMMEDIATE")
-        try:
+        with atomic(connection, _RAW_WRITE):
             row = connection.execute(
                 "SELECT job_id, attempts FROM ingestion_jobs "
                 "WHERE status = ? OR (status = ? AND next_retry_at <= ?) "
@@ -949,14 +944,9 @@ class HistoryStore:
                 ),
             ).fetchone()
             if row is None:
-                connection.execute("COMMIT")
                 return None
             result = self._mark_job_running_sync(connection, row, claimed_at)
-            connection.execute("COMMIT")
             return result
-        except BaseException:
-            connection.execute("ROLLBACK")
-            raise
 
     def _mark_job_running_sync(
         self, connection: sqlite3.Connection, row: sqlite3.Row, claimed_at: str
@@ -1027,8 +1017,7 @@ class HistoryStore:
         job_completed_at: str | None = None,
     ) -> IngestionJob:
         connection = self._db()
-        connection.execute("BEGIN IMMEDIATE")
-        try:
+        with atomic(connection, _RAW_WRITE):
             job = self._get_job_sync(job_id)
             if job.status is not JobStatus.RUNNING:
                 raise ValueError("only a running job can be completed")
@@ -1045,11 +1034,7 @@ class HistoryStore:
                 "WHERE job_id = ? AND attempt = ?",
                 (status, attempt_completed_at, error, job_id, job.attempts),
             )
-            connection.execute("COMMIT")
             return self._get_job_sync(job_id)
-        except BaseException:
-            connection.execute("ROLLBACK")
-            raise
 
     async def recover_stale_jobs(
         self,
@@ -1074,8 +1059,7 @@ class HistoryStore:
         self, threshold: str, recovered_at: datetime, policy: RetryPolicy
     ) -> int:
         connection = self._db()
-        connection.execute("BEGIN IMMEDIATE")
-        try:
+        with atomic(connection, _RAW_WRITE):
             rows = connection.execute(
                 "SELECT job_id, attempts FROM ingestion_jobs "
                 "WHERE status = ? AND started_at <= ? ORDER BY job_id",
@@ -1113,11 +1097,7 @@ class HistoryStore:
                         row["attempts"],
                     ),
                 )
-            connection.execute("COMMIT")
             return len(rows)
-        except BaseException:
-            connection.execute("ROLLBACK")
-            raise
 
 
 def _validate_adapter_name(value: str) -> None:

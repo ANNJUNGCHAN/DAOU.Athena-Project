@@ -31,7 +31,7 @@ import httpx
 import mcp.types as types
 from mcp.server.lowlevel import Server
 
-from athena_mcp import canvas_data, quirks, routine_tools, selector_tools
+from athena_mcp import brain_tools, canvas_data, quirks, routine_tools, selector_tools
 from athena_mcp.aggregator import (
     ResolvedTarget,
     ToolAggregator,
@@ -362,6 +362,14 @@ class AthenaGateway:
                 "routine", routine_tools.ROUTINE_TOOL, success=not result.isError
             )
             return result
+        if name == brain_tools.BRAIN_TOOL:
+            # 같은 빌트인 우선순위·같은 감사 최소 원칙. 브레인 툴은 **읽기 전용**이라
+            # 부작용 감사가 아니라 접근 감사다 — 무엇을 물었는지는 남기지 않는다.
+            result = await brain_tools.dispatch(arguments, self.selector_http_client)
+            self._audit_log("brain").record(
+                "brain", brain_tools.BRAIN_TOOL, success=not result.isError
+            )
+            return result
 
         try:
             target = self.aggregator.resolve(name)
@@ -668,6 +676,10 @@ def _builtin_tool_defs() -> list[types.Tool]:
         # 루틴 제안·조회 툴(능동 에이전트 P3) — 같은 "우리가 관리하는 툴"
         # 범주. draft/list만 — 상태 변경은 사람 전용(routine_tools.py 참고).
         *routine_tools.builtin_tool_defs(),
+        # 투자의 뇌 조회 툴 — 읽기 전용 5액션. 쓰기 액션이 없는 것이 설계다
+        # (brain_tools.py 참고): 모델이 그래프에 직접 쓸 수 있으면 대화 티어가
+        # 자기 주장을 결정적 사실처럼 밀어 넣는 길이 생긴다.
+        *brain_tools.builtin_tool_defs(),
     ]
 
 

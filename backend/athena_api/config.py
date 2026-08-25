@@ -97,16 +97,14 @@ class Settings(BaseSettings):
     local_bearer_token: SecretStr | None = None
     request_timeout_seconds: float = 10.0
     max_rate_limit_retries: int = 1
-    # The investment brain (LadybugDB graph projection) is independent of Kiwoom
-    # credentials — off by default so the existing test suite and any deployment that
-    # never opts in never touches a real database file. See lifespan.py's build_lifespan.
+    # 투자의 뇌는 키움 자격증명과 무관하다 — 기본 off라서 옵트인하지 않은 배포와 기존
+    # 테스트는 실제 DB 파일을 건드리지 않는다. lifespan.py의 build_lifespan 참고.
     brain_enabled: bool = False
-    brain_db_path: Path = Field(default_factory=lambda: Path.home() / ".athena" / "brain.lbug")
-    # Authoritative raw history + durable ingestion job state (ADR §5), kept in a separate
-    # sqlite file next to the graph projection — never touched unless brain_enabled=true.
-    brain_history_db_path: Path = Field(
-        default_factory=lambda: Path.home() / ".athena" / "brain-history.sqlite3"
-    )
+    # 그래프 투영 + 원본 이력 + 잡 상태가 **한 파일**에 있다. 이전에는 `brain.lbug`와
+    # `brain-history.sqlite3` 둘이었고, 적재 1회가 커밋 2개라 그 사이에서 죽으면
+    # "커서는 전진했는데 그래프엔 안 들어간" 상태가 남았다(leaf 2에서 통합).
+    # 확장자도 바로잡았다: `.lbug`는 LadybugDB 시절 이름인데 내용은 이미 SQLite였다.
+    brain_db_path: Path = Field(default_factory=lambda: Path.home() / ".athena" / "brain.sqlite3")
     routines_enabled: bool = False
     routines_poll_interval_seconds: float = 300.0
     routines_store_path: Path = Field(

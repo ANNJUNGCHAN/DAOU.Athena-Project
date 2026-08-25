@@ -1128,6 +1128,7 @@ app.whenReady().then(async () => {
   const { screen: elScreen } = require('electron');
   const dragBefore = shellWin.getBounds();
   const oldChannelDead = await shellWin.webContents.executeJavaScript(
+    // ipc-channels:allow-dead — 죽은 채널을 일부러 부른다. 거절되는지가 측정 대상이다.
     "(() => { try { window.athena.send('athena:window-drag', { phase: 'start' }); return false; } catch { return true; } })()"
   );
   await wait(400);
@@ -2163,6 +2164,105 @@ app.whenReady().then(async () => {
   assertOk('captureIntegrity: no adjacent same-window capture is byte-identical', dupCaptures.length === 0);
 
   report.finishedAt = new Date().toISOString();
+  // ---------- 그래프 모드 (leaf 8 / W2-3) ----------
+  //
+  // 재는 것 둘: (1) 토글하면 캔버스가 **비어 있지 않다**, (2) 그려진 노드 수가
+  // 배치 결과와 일치한다. 스크린샷 픽셀 대조는 하지 않는다 — 기준 이미지 관리
+  // 비용이 붙고, 여기서 답해야 하는 질문은 '그려졌는가'이지 '똑같이 생겼는가'가 아니다.
+  //
+  // '비어 있지 않은가'의 판정은 `describeRendered()` 하나만 쓴다. 여기서 따로
+  // 세면 렌더러와 검증기가 서로 다른 답을 낼 수 있다.
+  try {
+    const graph = await shellWin.webContents.executeJavaScript(`(async () => {
+      const pill = document.getElementById('graphPill');
+      const container = document.getElementById('graphCanvas');
+      if (!pill || !container || !window.AthenaGraphMode) {
+        return { wired: false, reason: 'missing' };
+      }
+      // **가시성**으로 판정한다. 요소가 DOM에 있는지만 보면, 필이 영영 hidden인
+      // 채로도 'wired'가 되어 사람이 못 닿는 기능을 검증됐다고 적게 된다.
+      //
+      // 그런데 숨은 이유를 여기서 물어야 한다. "브레인이 꺼져서 숨었다"와
+      // "보이게 하는 코드가 없어서 숨었다"는 화면이 똑같다 — 재지 않으면 후자를
+      // 전자로 읽고 건너뛴다. 실제로 그 일이 있었다(G70). 그래서 브레인 상태를
+      // **따로** 물어 둘을 가른다.
+      const status = await window.athena.invoke('athena:brain-status').catch(() => null);
+      const brainReady = Boolean(status && status.ok && status.ready);
+      // 가용성 프로브는 비동기라 아직 안 끝났을 수 있다. 잠깐 기다려 본다.
+      if (pill.hidden && brainReady) {
+        const until = Date.now() + 3000;
+        while (pill.hidden && Date.now() < until) {
+          await new Promise((r) => setTimeout(r, 50));
+        }
+      }
+      if (pill.hidden) {
+        return {
+          wired: false,
+          reason: brainReady ? 'hidden-though-ready' : 'unavailable',
+          brainReady,
+        };
+      }
+      // 사람이 밟는 길 그대로 — API를 직접 부르지 않고 필을 누른다.
+      pill.click();
+      const deadline = Date.now() + 5000;
+      while (Date.now() < deadline) {
+        if (!container.hidden
+            && window.AthenaLib.GraphRender.describeRendered(container).rendered) break;
+        await new Promise((r) => setTimeout(r, 50));
+      }
+      const clickOpened = !container.hidden;
+      const byClick = window.AthenaLib.GraphRender.describeRendered(container);
+      // 좌표 계약은 배치 결과와 대조해야 알 수 있고, 클릭 경로는 그 값을 돌려주지
+      // 않는다. 요약으로 접었다 다시 펴서 같은 화면의 배치를 받아 온다.
+      await window.AthenaGraphMode.toggle();
+      const placed = await window.AthenaGraphMode.toggle();
+      const drawn = window.AthenaLib.GraphRender.describeRendered(container);
+      return {
+        wired: true,
+        clickOpened,
+        byClick,
+        containerVisible: !container.hidden,
+        summaryHidden: document.getElementById('mosaic').hidden,
+        placedNodes: placed ? placed.nodes.length : 0,
+        placedEdges: placed ? placed.edges.length : 0,
+        drawn,
+      };
+    })()`);
+    report.graphMode = graph;
+    if (graph.wired) {
+      // 필 클릭 하나로 열려야 한다 — API 직접 호출로만 열리면 사람은 못 쓴다.
+      assertOk('graph-mode: 필을 누르면 그래프가 열린다', graph.clickOpened === true);
+      assertOk('graph-mode: 필 클릭만으로 캔버스가 채워진다', graph.byClick.rendered === true);
+      assertOk('graph-mode: 토글하면 그래프 영역이 보인다', graph.containerVisible === true);
+      assertOk('graph-mode: 토글하면 요약이 숨는다', graph.summaryHidden === true);
+      // 노드가 0개면 '빈 캔버스'와 '고장'을 구분할 수 없다. 브레인이 꺼져 있으면
+      // 애초에 wired=false로 빠지므로, 여기 왔다면 그려진 것이 있어야 한다.
+      assertOk('graph-mode: 캔버스가 비어 있지 않다', graph.drawn.rendered === true);
+      assertOk(
+        'graph-mode: 그려진 노드 수가 배치와 일치한다',
+        graph.drawn.nodes === graph.placedNodes,
+      );
+      assertOk(
+        'graph-mode: 그려진 엣지 수가 배치와 일치한다',
+        graph.drawn.edges === graph.placedEdges,
+      );
+      report.graphMode.shot = await shot(shellWin, '90-graph-mode.png');
+    } else if (graph.reason === 'hidden-though-ready') {
+      // 브레인은 준비됐다는데 필이 숨어 있다 — 사람이 닿을 수 없는 기능이다.
+      failures.push('graph-mode: 브레인이 준비됐는데도 필이 숨어 있다');
+    } else if (graph.reason === 'unavailable') {
+      // 브레인이 꺼져 있으면 필도 숨는 것이 맞다 — 측정 대상이 없다. 실패로 세지
+      // 않되 **보고는 한다**. 조용히 건너뛰면 '검증됐다'로 읽힌다.
+      dlog('graph-mode: 브레인 꺼짐(필 숨김) — 측정 건너뜀');
+    } else {
+      // 필·캔버스·전역 중 하나가 아예 없다. 이건 "꺼져 있다"가 아니라 배선이
+      // 끊긴 것이므로 실패다.
+      failures.push('graph-mode: 배선이 끊겼다 (필/캔버스/전역 누락)');
+    }
+  } catch (err) {
+    report.graphMode = { error: String((err && err.message) || err) };
+    failures.push('graph-mode: 검증 블록이 예외로 끝났다');
+  }
   fs.writeFileSync(path.join(CAPTURES, 'VERIFY-REPORT.json'), JSON.stringify(report, null, 2));
   console.log('[verify] 리포트 저장:', path.join(CAPTURES, 'VERIFY-REPORT.json'));
 
