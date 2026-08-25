@@ -168,4 +168,4 @@ function createChartReloadAuthority(options) {
   };
 }
 
-module.exports = { AITS_CHART_RENDERER_ID, UI_TO_PERIOD, createChartReloadAuthority };
+module.exports = { AITS_CHART_RENDERER_ID, createChartReloadAuthority };
