@@ -28,6 +28,10 @@ const INVOKE_CHANNELS = new Set([
   'athena:mcp-remove',
   'athena:load-fixture',
   'athena:reload-chart-panel',
+  // 과거 봉 덧붙이기 — 좌측 끝에 닿으면 렌더러가 부른다(화면 교체 아님).
+  'athena:chart-history-page',
+  // 수급 시계열 — 하단 지표를 켤 때만 부른다.
+  'athena:chart-series',
   // 루틴(능동 에이전트 P2) — confirm/cancel은 사람 클릭 전용 경로다.
   'athena:routines-list',
   'athena:routine-confirm',
@@ -91,6 +95,9 @@ const ON_CHANNELS = new Set([
   // 루틴 알림(능동 에이전트 P2) — main의 RoutineFeed가 백엔드 WS에서 받은
   // 발화·만료·복원실패 이벤트를 능동 턴으로 전달한다.
   'athena:routine-event',
+  // 차트 실시간 체결(키움 REAL 0B) — main이 파싱만 해서 넘긴다. 진행봉으로
+  // 접는 일은 마지막 봉을 들고 있는 렌더러가 한다(lib/chart-tick-fold.js).
+  'athena:chart-ticks',
   // 채팅 저장 실패 신호(2026-08-19, plan-chat-graph-pipeline.md §2(g)) —
   // history-sink의 POST가 실패하면 main이 {messageId, role}만 보낸다(본문 없음).
   'athena:history-save-failed',

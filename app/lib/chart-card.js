@@ -14,8 +14,8 @@ function __dep(reqPath, globalName) {
 const { createChartToolbar } = __dep('./chart-toolbar', 'ChartToolbar');
 const { resample } = __dep('./chart-resample', 'ChartResample');
 const { createIndicatorPanel } = __dep('./chart-indicator-panel', 'ChartIndicatorPanel');
-const { DEFAULT_INDICATOR_VISIBLE, defaultParamsFor } = __dep('./chart-indicator-registry', 'ChartIndicatorRegistry');
-const { sma, bollinger, rsi, macd } = __dep('./chart-indicators', 'ChartIndicators');
+const { DEFAULT_INDICATOR_VISIBLE, defaultParamsFor, INDICATOR_DEFS } = __dep('./chart-indicator-registry', 'ChartIndicatorRegistry');
+const { createIndicatorRenderer } = __dep('./chart-indicator-render', 'ChartIndicatorRender');
 const { volumeProfile } = __dep('./chart-volume-profile', 'ChartVolumeProfile');
 const { createAuthoringStore, periodToken } = __dep('./chart-authoring-store', 'ChartAuthoringStore');
 const { createDrawingLayer } = __dep('./chart-drawings', 'ChartDrawings');
@@ -69,15 +69,39 @@ const AXIS_TEXT_COLOR = '#6B7480';
 // 가격축은 원 단위 정수로 — CC-101 이월 폴리시(팀 리드 지시, CC-102 인수 조건).
 const PRICE_FORMAT = { type: 'price', precision: 0, minMove: 1 };
 
-// ---- 보조지표(CC-103) 색 — 이평선·거래량MA는 "서로 구분되는 무채색 계열"
-// (spec §3.1) — 액센트 색 없음 원칙(soul.md)과 같은 결. 밝기 단계로만 구분한다.
-const MA_COLORS = ['#E7E9F2', '#C3C8DC', '#9AA0BF', '#6F76A0', '#4A5080'];
-const BOLL_BAND_COLOR = 'rgba(154,160,191,0.55)';
-const BOLL_MID_COLOR = 'rgba(154,160,191,0.9)';
-const RSI_COLOR = '#C3C8DC';
-const RSI_GUIDE_COLOR = 'rgba(154,160,191,0.4)';
-const MACD_LINE_COLOR = '#C3C8DC';
-const MACD_SIGNAL_COLOR = '#6F76A0';
+// 주기별 초기 봉 폭(px/봉) — MTS 표준 캔들 밀도. AITS
+// (src/renderer/shared/vm/chart-lwc/common.ts DEFAULT_BAR_SPACING)에서 가져온 값이다.
+//
+// 왜 fitContent가 아닌가: fitContent는 적재된 봉 전체를 폭에 욱여넣는다. 그러면
+// ① 봉 수가 많을수록 봉이 얇아져 뭉개지고 ② 이미 전부 보이므로 좌측으로 팬해도
+// 나올 과거가 없다. 실제로 두 증상 모두 나왔다(2026-08-25).
+// MTS는 반대로 '읽기 좋은 고정 봉 폭'을 유지하고 보이는 봉 수를 폭에 맞춰 정한다.
+// → barSpacing을 고정하고 scrollToRealTime()으로 우측(최신)에 정렬한다.
+//   나머지 과거는 좌측 팬·휠 줌아웃으로 접근한다(적재는 전량이다).
+const DEFAULT_BAR_SPACING = { TICK: 6, MIN: 6, D: 9, W: 7, M: 8, Y: 8 };
+const BAR_SPACING_FALLBACK = 9;
+
+
+// 장중(분·틱) 시각은 KST로 읽어야 한다. lightweight-charts는 시간대를 모르고
+// epoch를 UTC로 렌더한다 — 그대로 두면 09:00~15:30 정규장이 00:00~06:30으로
+// 찍힌다(2026-08-25 실서버 실측: 마지막 봉 15:30 KST가 06:30으로 보였다).
+// 데이터(epoch)는 건드리지 않고 표기만 Asia/Seoul로 바꾼다.
+const KST = 'Asia/Seoul';
+const KST_HM = new Intl.DateTimeFormat('ko-KR', { timeZone: KST, hour: '2-digit', minute: '2-digit', hour12: false });
+const KST_HMS = new Intl.DateTimeFormat('ko-KR', { timeZone: KST, hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+const KST_MD = new Intl.DateTimeFormat('ko-KR', { timeZone: KST, month: 'numeric', day: 'numeric' });
+
+// epoch 초만 다룬다. 일·주·월·년 봉의 time은 'YYYY-MM-DD' 문자열이라 라이브러리
+// 기본 표기가 이미 맞다 — 그때는 null을 돌려 기본 동작에 맡긴다.
+function kstLabel(time, withSeconds) {
+  if (typeof time !== 'number' || !Number.isFinite(time)) return null;
+  const at = new Date(time * 1000);
+  return (withSeconds ? KST_HMS : KST_HM).format(at);
+}
+
+// ---- 보조지표(CC-103) 색은 chart-indicator-render.js의 스펙 테이블이 갖는다.
+// 여기 있던 MA_COLORS/BOLL_*/RSI_*/MACD_* 7개는 지표별 배선을 렌더러로 옮기면서
+// 참조가 사라져 걷어냈다(2026-08-25). 무채색 밝기 단계 원칙은 그대로다.
 const DECIMAL_PRICE_FORMAT = { type: 'price', precision: 2, minMove: 0.01 };
 
 // ---------- 순수 변환 (DOM 없이 테스트 가능) ----------
@@ -156,6 +180,17 @@ async function createChartCard(container, opts) {
     : resample(dailyBars, initialPeriod, 1);
 
   const toolbar = createChartToolbar({
+    // 분·틱 탭을 열어줄 조건은 "이 패널이 분·틱을 조회할 수 있는가"다. AITS
+    // adapter가 reload 계약(chart_meta.reload_targets)에 min·tick이 있는지를 보고
+    // intradayAvailable로 넘겨준다 — 그게 있으면 주기 탭을 눌렀을 때 실제로
+    // ka10080/ka10079가 돈다(2026-08-25 실서버 확인: 6주기 전부 응답).
+    //
+    // preSampled만으로 판정하면 안 된다 — AITS adapter는 일봉 snapshot에도
+    // preSampled=true를 붙인다(그건 "다시 재샘플하지 마"라는 뜻이지 "장중
+    // 데이터가 있다"가 아니다). 실측으로 걸렸다(verify 검증13). 계약 정보가 없는
+    // 경로(fixture 등)는 종전 판정을 그대로 쓴다 — 없는 데이터를 열지 않는다.
+    intradayAvailable: o.intradayAvailable === true
+      || (!!o.preSampled && (initialPeriod === 'MIN' || initialPeriod === 'TICK')),
     initial: { period: initialPeriod, interval: 1, form: 'candle', adjusted: true },
     callbacks: {
       onPeriodChange: (period, interval) => requestAuthoritativeReload({ period, interval, adjusted: currentAdjusted }),
@@ -170,6 +205,12 @@ async function createChartCard(container, opts) {
   const adjustedNote = document.createElement('div');
   adjustedNote.className = 'fin-meta chart-mock-note';
   container.appendChild(adjustedNote);
+
+  // 지표 표시 실패 안내 — 평소엔 숨어 있고 못 켠 지표가 있을 때만 나타난다.
+  const indicatorNote = document.createElement('div');
+  indicatorNote.className = 'fin-meta chart-mock-note';
+  indicatorNote.hidden = true;
+  container.appendChild(indicatorNote);
 
   const priceWrap = document.createElement('div');
   priceWrap.className = 'chart-price-pane';
@@ -195,7 +236,16 @@ async function createChartCard(container, opts) {
   attributionScrim.setAttribute('aria-hidden', 'true');
   priceWrap.appendChild(attributionScrim);
 
+  // 축·크로스헤어 포매터는 createChart보다 늦게 호출되지만 선언은 먼저여야 한다
+  // (클로저가 TDZ에 걸리지 않게). applyBarDensity가 주기마다 갱신한다.
+  let intradayAxis = false;
+  let tickSeconds = false;
+
   const chart = createChart(priceWrap, {
+    // 크로스헤어의 시각 라벨 — 축과 같은 KST 표기를 쓴다.
+    localization: {
+      timeFormatter: (time) => (intradayAxis ? kstLabel(time, tickSeconds) : null),
+    },
     autoSize: true,
     layout: {
       background: { type: 'solid', color: 'transparent' },
@@ -219,6 +269,16 @@ async function createChartCard(container, opts) {
     },
     timeScale: {
       borderColor: GRID_COLOR,
+      // 장중 축 눈금. tickMarkType은 라이브러리가 정하는 눈금 단위로,
+      // 0=Year 1=Month 2=DayOfMonth 3=Time 4=TimeWithSeconds다. 날짜 단위 눈금은
+      // 날짜로, 그 아래는 KST 시각으로 찍는다. null이면 라이브러리 기본 표기다.
+      tickMarkFormatter: (time, tickMarkType) => {
+        if (!intradayAxis || typeof time !== 'number') return null;
+        if (tickMarkType <= 2) {
+          return Number.isFinite(time) ? KST_MD.format(new Date(time * 1000)) : null;
+        }
+        return kstLabel(time, tickMarkType === 4);
+      },
     },
   });
 
@@ -228,9 +288,13 @@ async function createChartCard(container, opts) {
   let currentPeriod = initialPeriod;
   let currentInterval = 1;
   let currentAdjusted = true;
+  // 주기를 바꾸면 서버가 다른 TR로 응답한다 — replaceData가 새 trId로 갱신한다.
+  let currentTrId = o.trId;
   let reloadPending = false;
   let reloadFailure = null;
-  let currentMockResample = initialResample.mock;
+  // 분·틱을 요청받았는데 그 데이터가 없을 때의 사유. 봉은 일봉으로 되돌아가므로
+  // 이걸 표시하지 않으면 "탭은 분인데 그려진 건 일봉"이 된다(§8 정보 정직성).
+  let intradayUnavailable = initialResample.unavailable || null;
   let currentBars = initialResample.bars;
   let priceSeries = null;
   let volumeSeries = null;
@@ -313,182 +377,85 @@ async function createChartCard(container, opts) {
   // indicatorState.visible/params는 chart-indicator-panel.js와 공유하는 같은
   // 객체다(참조 공유, 복제 아님) — 패널이 토글·파라미터를 직접 갱신하고, 여기는
   // "무엇이 바뀌었는지"만 콜백으로 받아 해당 시리즈군을 재생성한다.
+  // params는 레지스트리의 **모든** 지표를 미리 채운다 — 지표가 34종으로 늘면서
+  // 5종만 열거하던 방식은 새 지표를 켤 때 params[id]가 undefined가 돼 기본값이
+  // 사라진다(2026-08-25 확장). 레지스트리가 단일 출처다.
   const indicatorState = {
     visible: new Set(DEFAULT_INDICATOR_VISIBLE),
-    params: {
-      ma: defaultParamsFor('ma'),
-      boll: defaultParamsFor('boll'),
-      volMa: defaultParamsFor('volMa'),
-      rsi: defaultParamsFor('rsi'),
-      macd: defaultParamsFor('macd'),
-    },
+    params: INDICATOR_DEFS.reduce((acc, d) => {
+      acc[d.id] = defaultParamsFor(d.id);
+      return acc;
+    }, {}),
   };
   let volumeProfileOn = false;
 
-  let maSeriesList = []; // [{period, series}]
-  let bollSeriesGroup = null; // {upper, middle, lower}
-  let volMaSeriesList = []; // [{period, series}] — 거래량 pane(1) 위 오버레이
-  let rsiLine = null;
-  let macdLine = null;
-  let macdSignalLine = null;
-  let macdHistSeries = null;
+  // 지표 렌더는 chart-indicator-render.js가 스펙 테이블로 통째로 관리한다.
+  // 지표마다 전역 변수(maSeriesList/bollSeriesGroup/rsiLine/macdLine…)를 두던
+  // 옛 방식은 34종에서 배선이 34벌이 되고, pane 인덱스를 손으로 맞춰야 해서
+  // 이미 겪은 "pane 0이 비면 거래량이 당겨지는" 버그가 그만큼 넓어진다.
+  const indicatorRenderer = createIndicatorRenderer({
+    chart,
+    LineSeries,
+    HistogramSeries,
+    LineStyle,
+    priceFormat: PRICE_FORMAT,
+    decimalFormat: DECIMAL_PRICE_FORMAT,
+    volumePaneIndex: 1,
+    ownPaneHeight: 90,
+    volumeHeight: 80,
+    // pane 높이는 비율로 나눈다 — 개수 제한도 카드 성장도 없다(render 쪽 주석).
+    upColor: UP_COLOR,
+    downColor: DOWN_COLOR,
+    withAlpha,
+  });
 
-  function refreshExtraPaneHeights() {
-    if (chart.panes()[1]) chart.panes()[1].setHeight(80);
-    if (rsiLine && typeof rsiLine.paneIndex === 'function') {
-      const idx = rsiLine.paneIndex();
-      if (chart.panes()[idx]) chart.panes()[idx].setHeight(90);
-    }
-    if (macdLine && typeof macdLine.paneIndex === 'function') {
-      const idx = macdLine.paneIndex();
-      if (chart.panes()[idx]) chart.panes()[idx].setHeight(90);
-    }
+  // 지표 시리즈 재생성 — 켜진 조합 전체를 통째로 다시 만든다.
+  // 부분 갱신을 하지 않는 이유는 chart-indicator-render.js의 apply() 주석 참조
+  // (전용 pane 인덱스가 조합에 따라 바뀐다).
+  function applyIndicators() {
+    const res = indicatorRenderer.apply(indicatorState.visible, indicatorState.params, currentBars);
+    renderOverlayLegend();
+    reportSkippedIndicators(res && res.skipped);
   }
 
+  // 높이가 모자라 못 켠 지표를 **말해준다**. 목록에서는 켜진 것처럼 보이는데
+  // 화면엔 없는 상태가 제일 나쁘다(§8 정보 정직성) — 조용히 넘기지 않는다.
+  // 지금은 개수 제한이 없어 항상 빈 배열이지만, 미래에 다시 거부할 일이 생기면
+  // 알릴 자리가 남아 있어야 한다(조용한 누락 금지).
+  function reportSkippedIndicators(skipped) {
+    if (!indicatorNote) return;
+    if (!skipped || !skipped.length) {
+      indicatorNote.textContent = '';
+      indicatorNote.hidden = true;
+      return;
+    }
+    const labels = skipped
+      .map((id) => (INDICATOR_DEFS.find((d) => d.id === id) || {}).label || id)
+      .join(' · ');
+    indicatorNote.hidden = false;
+    indicatorNote.textContent =
+      `높이가 모자라 표시하지 못한 지표 ${skipped.length}종: ${labels} — 차트를 크게 보거나 다른 지표를 끄면 나타난다`;
+  }
+
+  // 지표 데이터만 다시 계산한다(시리즈 구성은 그대로) — 봉이 바뀌었을 때.
+  function recomputeIndicatorData() {
+    indicatorRenderer.setData(currentBars, indicatorState.params, indicatorState.visible);
+  }
+
+  // 가격 pane 위에 겹친 지표의 이름·색 칩. 어떤 지표가 켜져 있든 렌더러가
+  // 알려주는 대로 그린다(이평선 전용 하드코딩을 걷었다).
   function renderOverlayLegend() {
     overlayLegend.textContent = '';
-    if (!indicatorState.visible.has('ma')) return;
-    const periods = indicatorState.params.ma.periods;
-    for (let i = 0; i < periods.length; i += 1) {
+    const chips = indicatorRenderer.legendFor(indicatorState.visible, indicatorState.params);
+    for (const c of chips) {
       const chip = document.createElement('span');
       chip.className = 'chart-overlay-legend-chip';
       const dot = document.createElement('span');
       dot.className = 'chart-overlay-legend-dot';
-      dot.style.background = MA_COLORS[i % MA_COLORS.length];
+      dot.style.background = c.color;
       chip.appendChild(dot);
-      chip.appendChild(document.createTextNode(`MA${periods[i]}`));
+      chip.appendChild(document.createTextNode(c.label));
       overlayLegend.appendChild(chip);
-    }
-  }
-
-  // 이평선·볼린저 — 가격 pane(0) 위 라인. 파라미터/토글이 바뀔 때마다 통째로
-  // 지우고 다시 만든다(개수가 늘거나 줄 수 있어 diff보다 재생성이 단순하다).
-  function applyOverlayIndicators() {
-    for (const { series } of maSeriesList) chart.removeSeries(series);
-    maSeriesList = [];
-    if (indicatorState.visible.has('ma')) {
-      const periods = indicatorState.params.ma.periods;
-      for (let i = 0; i < periods.length; i += 1) {
-        const series = chart.addSeries(
-          LineSeries,
-          { color: MA_COLORS[i % MA_COLORS.length], lineWidth: 1, priceFormat: PRICE_FORMAT, crosshairMarkerVisible: false, lastValueVisible: false, priceLineVisible: false },
-          0
-        );
-        maSeriesList.push({ period: periods[i], series });
-      }
-    }
-    if (bollSeriesGroup) {
-      chart.removeSeries(bollSeriesGroup.upper);
-      chart.removeSeries(bollSeriesGroup.middle);
-      chart.removeSeries(bollSeriesGroup.lower);
-      bollSeriesGroup = null;
-    }
-    if (indicatorState.visible.has('boll')) {
-      const bandOpts = { lineWidth: 1, priceFormat: PRICE_FORMAT, crosshairMarkerVisible: false, lastValueVisible: false, priceLineVisible: false };
-      bollSeriesGroup = {
-        upper: chart.addSeries(LineSeries, Object.assign({ color: BOLL_BAND_COLOR }, bandOpts), 0),
-        middle: chart.addSeries(LineSeries, Object.assign({ color: BOLL_MID_COLOR }, bandOpts), 0),
-        lower: chart.addSeries(LineSeries, Object.assign({ color: BOLL_BAND_COLOR }, bandOpts), 0),
-      };
-    }
-    renderOverlayLegend();
-    recomputeOverlayData();
-  }
-
-  // 거래량MA — 거래량 pane(1) 위 오버레이(같은 스케일, priceScaleId:'').
-  function applyVolMaIndicator() {
-    for (const { series } of volMaSeriesList) chart.removeSeries(series);
-    volMaSeriesList = [];
-    if (indicatorState.visible.has('volMa')) {
-      const periods = indicatorState.params.volMa.periods;
-      for (let i = 0; i < periods.length; i += 1) {
-        const series = chart.addSeries(
-          LineSeries,
-          { color: MA_COLORS[i % MA_COLORS.length], lineWidth: 1, priceScaleId: '', crosshairMarkerVisible: false, lastValueVisible: false, priceLineVisible: false },
-          1
-        );
-        volMaSeriesList.push({ period: periods[i], series });
-      }
-    }
-    refreshExtraPaneHeights();
-    recomputeVolMaData();
-  }
-
-  // RSI·MACD — 별도 pane. 부분 토글이 pane 인덱스를 뒤섞지 않도록(CC-102 pane
-  // 분리 계약 연장) 항상 고정 순서(RSI→MACD)로 둘 다 통째로 재생성한다.
-  function applyPaneIndicators() {
-    if (rsiLine) { chart.removeSeries(rsiLine); rsiLine = null; }
-    if (macdLine) { chart.removeSeries(macdLine); macdLine = null; }
-    if (macdSignalLine) { chart.removeSeries(macdSignalLine); macdSignalLine = null; }
-    if (macdHistSeries) { chart.removeSeries(macdHistSeries); macdHistSeries = null; }
-
-    let paneIdx = 2; // 0=가격 1=거래량
-    if (indicatorState.visible.has('rsi')) {
-      rsiLine = chart.addSeries(
-        LineSeries,
-        { color: RSI_COLOR, lineWidth: 1, priceFormat: DECIMAL_PRICE_FORMAT, crosshairMarkerVisible: false, lastValueVisible: false },
-        paneIdx
-      );
-      rsiLine.createPriceLine({ price: 70, color: RSI_GUIDE_COLOR, lineStyle: LineStyle.Dashed, lineWidth: 1, axisLabelVisible: true, title: '70' });
-      rsiLine.createPriceLine({ price: 30, color: RSI_GUIDE_COLOR, lineStyle: LineStyle.Dashed, lineWidth: 1, axisLabelVisible: true, title: '30' });
-      paneIdx += 1;
-    }
-    if (indicatorState.visible.has('macd')) {
-      macdHistSeries = chart.addSeries(HistogramSeries, { priceFormat: DECIMAL_PRICE_FORMAT, lastValueVisible: false }, paneIdx);
-      macdLine = chart.addSeries(LineSeries, { color: MACD_LINE_COLOR, lineWidth: 1, priceFormat: DECIMAL_PRICE_FORMAT, crosshairMarkerVisible: false, lastValueVisible: false }, paneIdx);
-      macdSignalLine = chart.addSeries(LineSeries, { color: MACD_SIGNAL_COLOR, lineWidth: 1, priceFormat: DECIMAL_PRICE_FORMAT, crosshairMarkerVisible: false, lastValueVisible: false }, paneIdx);
-      paneIdx += 1;
-    }
-    refreshExtraPaneHeights();
-    recomputePaneIndicatorData();
-  }
-
-  // 지표 배열(워밍업 null 포함) → lightweight-charts 라인 데이터. null은 버린다.
-  function toLineData(times, values) {
-    return times.map((t, i) => ({ time: t, value: values[i] })).filter((d) => d.value != null);
-  }
-
-  function recomputeOverlayData() {
-    if (!currentBars.length) return;
-    const closes = currentBars.map((b) => Number(b.close));
-    const times = currentBars.map((b) => b.time);
-    for (const { period, series } of maSeriesList) {
-      series.setData(toLineData(times, sma(closes, period)));
-    }
-    if (bollSeriesGroup) {
-      const { upper, middle, lower } = bollinger(closes, indicatorState.params.boll.period, indicatorState.params.boll.mult);
-      bollSeriesGroup.upper.setData(toLineData(times, upper));
-      bollSeriesGroup.middle.setData(toLineData(times, middle));
-      bollSeriesGroup.lower.setData(toLineData(times, lower));
-    }
-  }
-
-  function recomputeVolMaData() {
-    if (!currentBars.length) return;
-    const volumes = currentBars.map((b) => Number(b.volume));
-    const times = currentBars.map((b) => b.time);
-    for (const { period, series } of volMaSeriesList) {
-      series.setData(toLineData(times, sma(volumes, period)));
-    }
-  }
-
-  function recomputePaneIndicatorData() {
-    if (!currentBars.length) return;
-    const closes = currentBars.map((b) => Number(b.close));
-    const times = currentBars.map((b) => b.time);
-    if (rsiLine) {
-      rsiLine.setData(toLineData(times, rsi(closes, indicatorState.params.rsi.period)));
-    }
-    if (macdLine) {
-      const p = indicatorState.params.macd;
-      const { macd: line, signal, histogram } = macd(closes, p.shortP, p.longP, p.signalP);
-      macdLine.setData(toLineData(times, line));
-      macdSignalLine.setData(toLineData(times, signal));
-      macdHistSeries.setData(
-        times
-          .map((t, i) => ({ time: t, value: histogram[i], color: histogram[i] >= 0 ? withAlpha(UP_COLOR, 0.6) : withAlpha(DOWN_COLOR, 0.6) }))
-          .filter((d) => d.value != null)
-      );
     }
   }
 
@@ -532,8 +499,83 @@ async function createChartCard(container, opts) {
       vpOverlay.appendChild(bar);
     }
   }
-  chart.timeScale().subscribeVisibleLogicalRangeChange(() => {
+  // ---------- 과거 봉 덧붙이기(좌측 끝 도달) ----------
+  // 적재분을 다 보고 왼쪽 끝에 닿으면 그 앞 구간을 한 페이지 더 받아 앞에 붙인다.
+  // 화면을 교체하지 않는다 — 보고 있던 봉이 그대로 남아야 한다(아래 인덱스 보정).
+  const HISTORY_TRIGGER_BARS = 12; // 왼쪽 끝에서 이만큼 남으면 미리 부른다
+  let historyPending = false;
+  let historyExhausted = false;
+  // 연속 실패 상한. 마운트 직후 권위 등록 전 거부는 곧 회복되므로 몇 번은 봐준다.
+  const HISTORY_MAX_FAILURES = 5;
+  let historyFailures = 0;
+
+  // 'YYYY-MM-DD' 또는 epoch → 'YYYYMMDD'. 커서로 쓸 수 없으면 null.
+  function cursorOf(bar) {
+    if (!bar || bar.time == null) return null;
+    if (typeof bar.time === 'string') {
+      const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(bar.time);
+      return m ? `${m[1]}${m[2]}${m[3]}` : null;
+    }
+    return null; // 분·틱(epoch)은 base_dt 커서가 없다 — main이 거부한다
+  }
+
+  // 왼쪽 끝 판정. range.to > 0을 함께 본다 — 마운트 직후 차트가 아직 폭을 못 잡은
+  // 순간에는 from이 -1700 같은 값으로 오고(가시 구간이 데이터와 아예 안 겹친다)
+  // 그걸 "끝에 닿았다"로 읽으면 초기 조회와 동시에 과거 조회가 나가 서로를
+  // abort시킨다(실측: 두 요청이 영영 pending으로 남았다).
+  function isNearLeftEdge(range) {
+    if (!range || !Number.isFinite(range.from) || !Number.isFinite(range.to)) return false;
+    if (range.to <= 0) return false; // 데이터와 겹치지 않는 뷰포트 — 아직 자리를 잡는 중이다
+    return range.from <= HISTORY_TRIGGER_BARS;
+  }
+
+  async function requestOlderBars() {
+    if (historyPending || historyExhausted) return;
+    if (typeof o.onHistoryRequest !== 'function') return;
+    const cursor = cursorOf(currentBars[0]);
+    if (!cursor) { historyExhausted = true; return; }
+    historyPending = true;
+    try {
+      // 실제 덧붙이기는 어댑터가 한다(prependData를 되불러 온다) — 봉의 정본은
+      // 세션 body이고, 여기서만 늘리면 두 벌이 어긋난다.
+      const added = Number(await o.onHistoryRequest(cursor)) || 0;
+      // 한 페이지가 통째로 중복이면 더 과거가 없다는 뜻이다 — 무한 재시도를 막는다.
+      if (added) historyFailures = 0;
+      else historyExhausted = true;
+    } catch {
+      // 실패는 "과거가 없다"는 증거가 아니다. 마운트 직후에는 패널 권위가 아직
+      // 등록되기 전이라 첫 요청이 거부될 수 있다(실측 2026-08-25: 페인트 확인보다
+      // 자동 발화가 먼저 일어나 size=0으로 거부됐다). 여기서 영구히 잠그면 그 뒤
+      // 사용자가 아무리 팬해도 과거가 영영 안 나온다 — 실제로 그렇게 막혀 있었다.
+      // 대신 연속 실패만 세어 몇 번 만에 포기한다.
+      historyFailures += 1;
+      if (historyFailures >= HISTORY_MAX_FAILURES) historyExhausted = true;
+    } finally {
+      historyPending = false;
+    }
+  }
+
+  // 앞쪽에 붙이고 보던 자리를 유지한다. setData는 논리 인덱스를 0부터 다시 매기므로
+  // 붙인 개수만큼 가시 범위를 밀어야 화면이 제자리에 남는다. 중복 제거는 호출자
+  // (어댑터)가 이미 했다 — 여기서 또 거르면 두 기준이 생긴다.
+  function prependData(fresh) {
+    const older = Array.isArray(fresh) ? fresh : [];
+    if (!older.length) return 0;
+    const range = chart.timeScale().getVisibleLogicalRange();
+    currentBars = older.concat(currentBars);
+    dailyBars = older.concat(dailyBars);
+    setData(currentBars, { fitContent: false });
+    if (range) {
+      chart.timeScale().setVisibleLogicalRange({
+        from: range.from + older.length, to: range.to + older.length,
+      });
+    }
+    return older.length;
+  }
+
+  chart.timeScale().subscribeVisibleLogicalRangeChange((range) => {
     if (volumeProfileOn) renderVolumeProfile();
+    if (isNearLeftEdge(range)) requestOlderBars();
   });
 
   // ---------- 저작 상태 영속(CC-104) — chart-lens-spec §3 ----------
@@ -577,9 +619,7 @@ async function createChartCard(container, opts) {
     }
     volumeProfileOn = !!saved.volumeProfileOn;
     indicatorPanel.syncFromState(volumeProfileOn);
-    applyOverlayIndicators();
-    applyVolMaIndicator();
-    applyPaneIndicators();
+    applyIndicators();
     if (drawLayer) drawLayer.load(saved.drawings);
     return true;
   }
@@ -588,15 +628,11 @@ async function createChartCard(container, opts) {
     initial: { visible: indicatorState.visible, params: indicatorState.params, volumeProfileOn },
     callbacks: {
       onToggle: (id) => {
-        if (id === 'ma' || id === 'boll') applyOverlayIndicators();
-        else if (id === 'volMa') applyVolMaIndicator();
-        else if (id === 'rsi' || id === 'macd') applyPaneIndicators();
+        applyIndicators();
         saveAuthoring();
       },
       onParamChange: (id) => {
-        if (id === 'ma' || id === 'boll') applyOverlayIndicators();
-        else if (id === 'volMa') applyVolMaIndicator();
-        else if (id === 'rsi' || id === 'macd') applyPaneIndicators();
+        applyIndicators();
         saveAuthoring();
       },
       onVolumeProfileToggle: (on) => {
@@ -606,6 +642,29 @@ async function createChartCard(container, opts) {
       },
     },
   });
+
+  // 봉 폭을 주기 표준값으로 고정하고 최신 봉에 정렬한다(fitContent 대체 — 위 주석).
+  // 보이는 봉 수는 차트 폭이 정한다: 도킹 카드(~970px)에서 일봉 9px ≈ 107봉,
+  // 전체화면(~1900px) ≈ 210봉. 적재분(240봉)이 더 많으므로 좌측 팬이 살아 있다.
+  function applyBarDensity() {
+    const barSpacing = DEFAULT_BAR_SPACING[currentPeriod] || BAR_SPACING_FALLBACK;
+    const width = priceWrap ? priceWrap.clientWidth : 0;
+    // 분·틱은 하루 안에서 봉이 갈리므로 시각을 보여야 한다. 이걸 안 켜면 시간축이
+    // 전부 같은 날짜("25일")로 찍혀 봉을 구분할 수 없다(2026-08-25 실서버 실측).
+    // 틱은 초까지 간다 — ka10079의 cntr_tm이 초 단위(20260825153004)다.
+    intradayAxis = currentPeriod === 'MIN' || currentPeriod === 'TICK';
+    tickSeconds = currentPeriod === 'TICK';
+    chart.timeScale().applyOptions({ timeVisible: intradayAxis, secondsVisible: tickSeconds });
+    // 적재 봉이 표준 폭으로 화면을 못 채우면 폭에 맞춘다. 년봉은 30봉뿐이라
+    // 8px 고정이면 240px만 쓰고 나머지가 통째로 빈다(2026-08-25 실서버 실측).
+    // 채울 수 있을 때만 고정 밀도를 쓴다 — 그때만 좌측에 팬할 과거가 남는다.
+    if (width > 0 && currentBars.length * barSpacing < width) {
+      chart.timeScale().fitContent();
+      return;
+    }
+    chart.timeScale().applyOptions({ barSpacing });
+    chart.timeScale().scrollToRealTime();
+  }
 
   function setData(ohlcv, options) {
     const shouldFitContent = !options || options.fitContent !== false;
@@ -617,10 +676,8 @@ async function createChartCard(container, opts) {
       priceSeries.setData(candleData);
     }
     volumeSeries.setData(volumeData);
-    if (shouldFitContent) chart.timeScale().fitContent();
-    recomputeOverlayData();
-    recomputeVolMaData();
-    recomputePaneIndicatorData();
+    if (shouldFitContent) applyBarDensity();
+    recomputeIndicatorData();
     // priceToCoordinate()는 fitContent() 이후 렌더가 실제로 갱신돼야 정확하다
     // (같은 틱에서 읽으면 이전 스케일값을 돌려줄 수 있다 — 실측 방어).
     requestAnimationFrame(() => {
@@ -635,6 +692,12 @@ async function createChartCard(container, opts) {
   // snapshot이므로 여기서 다시 재샘플하지 않는다.
   function replaceData(ohlcv, options) {
     const replacement = options && typeof options === 'object' ? options : {};
+    if (replacement.trId) currentTrId = replacement.trId;
+    // 주기가 바뀌면 과거 조회도 새 주기 기준으로 다시 시작한다 — 이전 주기에서
+    // "더 없음"으로 잠갔다고 새 주기까지 잠그면 안 된다.
+    historyExhausted = false;
+    historyPending = false;
+    historyFailures = 0;
     if (VALID_INITIAL_PERIODS.indexOf(replacement.period) !== -1) {
       currentPeriod = replacement.period;
       currentInterval = replacement.interval || 1;
@@ -642,7 +705,6 @@ async function createChartCard(container, opts) {
     }
     dailyBars = Array.isArray(ohlcv) ? ohlcv.slice() : [];
     currentBars = dailyBars.slice();
-    currentMockResample = false;
     setData(currentBars);
     updateNote();
   }
@@ -667,9 +729,7 @@ async function createChartCard(container, opts) {
     if (currentForm === 'line' || currentForm === 'area') priceSeries.update({ time: price.time, value: price.close });
     else priceSeries.update(price);
     if (volume) volumeSeries.update(volume);
-    recomputeOverlayData();
-    recomputeVolMaData();
-    recomputePaneIndicatorData();
+    recomputeIndicatorData();
     requestAnimationFrame(() => {
       renderVolumeProfile();
       if (drawLayer) drawLayer.renderAll();
@@ -679,8 +739,7 @@ async function createChartCard(container, opts) {
 
   // 기본 on(이평선·거래량MA) 초기 적용 — 패널·데이터 로드보다 먼저 시리즈를
   // 만들어둬야 setData()가 첫 렌더에서 바로 채운다.
-  applyOverlayIndicators();
-  applyVolMaIndicator();
+  applyIndicators();
 
   function setForm(form) {
     if (!SERIES_DEFS[form]) return;
@@ -694,9 +753,9 @@ async function createChartCard(container, opts) {
   // REST control-plane을 새로 왕복한다. fixture만 로컬 재샘플임을 표시한다.
   function updateNote() {
     const parts = o.preSampled
-      ? [`AITS ${o.trId || 'chart'} canonical snapshot`]
+      ? [`AITS ${currentTrId || 'chart'} canonical snapshot`]
       : ['서버 보정(upd_stkpc_tp) 미연결 — 목업 동일 데이터'];
-    if (currentMockResample) parts.push('분/틱은 일봉에서 만든 결정적 의사 재샘플 — 실제 장중 분포 아님');
+    if (intradayUnavailable) parts.push(`${intradayUnavailable} — 일봉을 그대로 보여준다`);
     if (authoringStore.enabled) parts.push('저작 상태 로컬 저장 1판 — 백엔드 영속은 후속 라운드');
     if (reloadFailure) parts.push(`재조회 실패 — ${reloadFailure}`);
     adjustedNote.textContent = parts.join(' · ');
@@ -737,9 +796,9 @@ async function createChartCard(container, opts) {
     saveAuthoring(); // 떠나는 주기의 상태를 그 주기 키로 확정
     currentPeriod = period;
     currentInterval = interval;
-    const { bars, mock } = resample(dailyBars, period, interval);
+    const { bars, unavailable } = resample(dailyBars, period, interval);
     currentBars = bars;
-    currentMockResample = mock;
+    intradayUnavailable = unavailable || null;
     applyAuthoring(authoringStore.load(symbol, periodToken(period, interval)));
     setData(currentBars);
     updateNote();
@@ -768,9 +827,36 @@ async function createChartCard(container, opts) {
     requestAnimationFrame(() => {
       const rect = priceWrap.getBoundingClientRect();
       if (rect.width > 0 && rect.height > 0) chart.resize(rect.width, rect.height);
-      chart.timeScale().fitContent();
+      // 봉 폭은 폭 독립이라 크기가 바뀌어도 다시 잡을 필요가 없다 — 보이는 봉 수만
+      // 늘고 준다. 다만 사용자가 아직 뷰포트를 안 잡았으면 최신 봉에 다시 정렬한다
+      // (폭 0에서 마운트된 경우 최초 정렬이 무의미했기 때문 — autoFitObserver 주석).
+      if (!viewportPinned) applyBarDensity();
       if (volumeProfileOn) renderVolumeProfile();
     });
+  }
+
+  // 마운트 시점엔 카드가 아직 그리드에 배치되기 전이라 폭이 0이다(실측 2026-08-25:
+  // t=300ms까지 0, t≈800ms에 970px). 폭 0에서 setData가 부른 fitContent는 폭 0
+  // 기준으로 barSpacing을 잡고, 이후 폭이 커져도 라이브러리는 우측 끝을 기준으로
+  // 유지하기 때문에 240봉이 오른쪽 15%에 뭉치고 나머지가 빈 칸으로 남았다.
+  // 폭은 한 번에 확정되지 않으므로(0 → 중간값 → 최종) 폭이 바뀔 때마다 다시 맞춘다.
+  // 단 사용자가 스크롤·줌으로 뷰포트를 잡은 뒤에는 건드리지 않는다 — 그때부터
+  // 뷰포트는 사용자 것이고, 창 크기 변화가 그걸 되돌리면 안 된다.
+  let viewportPinned = false;
+  let lastFitWidth = -1;
+  let autoFitObserver = null;
+  const pinViewport = () => { viewportPinned = true; };
+  priceWrap.addEventListener('wheel', pinViewport, { passive: true });
+  priceWrap.addEventListener('pointerdown', pinViewport);
+  if (typeof ResizeObserver !== 'undefined') {
+    autoFitObserver = new ResizeObserver(() => {
+      if (viewportPinned) return;
+      const width = Math.round(priceWrap.getBoundingClientRect().width);
+      if (width <= 0 || width === lastFitWidth) return; // 같은 폭 재진입 = 관측 루프
+      lastFitWidth = width;
+      measureAndResize();
+    });
+    autoFitObserver.observe(priceWrap);
   }
 
   function toggleFullscreen() {
@@ -791,6 +877,9 @@ async function createChartCard(container, opts) {
   }
 
   function destroy() {
+    if (autoFitObserver) { autoFitObserver.disconnect(); autoFitObserver = null; }
+    priceWrap.removeEventListener('wheel', pinViewport);
+    priceWrap.removeEventListener('pointerdown', pinViewport);
     toolbar.destroy();
     indicatorPanel.destroy();
     if (drawLayer) drawLayer.destroy();
@@ -802,7 +891,7 @@ async function createChartCard(container, opts) {
     if (priceWrap.parentElement) priceWrap.remove();
   }
 
-  return { chart, setForm, setData, replaceData, applyChartTick, applyPeriod, applyAdjusted, toggleFullscreen, destroy };
+  return { chart, setForm, setData, replaceData, prependData, applyChartTick, applyPeriod, applyAdjusted, toggleFullscreen, destroy };
 }
 
 // 외부 소비자는 canvas.js(createChartCard)와 chart-card.test.js(순수 변환 + 등락색

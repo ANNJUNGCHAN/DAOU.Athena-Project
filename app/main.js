@@ -313,6 +313,50 @@ function startRoutineFeed() {
 
 app.on('will-quit', () => { if (routineFeed) routineFeed.stop(); });
 
+// ---------- 차트 실시간 진행봉 — 키움 REAL 0B → 렌더러 ----------
+// 접기(진행봉 갱신)는 렌더러가 한다(lib/chart-tick-fold.js 주석). 여기서는
+// 종목 등록과 체결 전달만 맡는다. 업스트림 구독은 프로세스당 하나다.
+const chartRealtime = require('./lib/main/chart-realtime');
+const chartSeries = require('./lib/main/chart-series');
+
+let chartRealtimeFeed = null;
+let chartRealtimeRegistrar = null;
+
+function ensureChartRealtime(authority) {
+  if (process.env.ATHENA_CANVAS_SOURCE === 'fixture') return; // 검증 결정론 보호
+  const stock = authority && authority.chartBody && authority.chartBody.stock;
+  const code = String(stock || (authority && authority.operationArgs && authority.operationArgs.stk_cd) || '').trim();
+  if (!code) return;
+
+  if (!chartRealtimeRegistrar) {
+    chartRealtimeRegistrar = chartRealtime.createRealtimeRegistrar({
+      backendBase: BACKEND_HTTP_BASE,
+      mdlog,
+    });
+  }
+  if (!chartRealtimeFeed) {
+    chartRealtimeFeed = new RoutineFeed({
+      url: `${BACKEND_WS_BASE}/api/v1/ws/stream`,
+      token: LOCAL_BEARER_TOKEN,
+      onEvent: (frame) => {
+        if (!shellWin || shellWin.isDestroyed()) return;
+        // 거래일은 체결 시각(HHMMSS)에 날짜가 없어서 필요하다. 자정을 넘긴
+        // 시간외 체결은 다음 날로 접히지만, 정규장 진행봉에는 영향이 없다.
+        const ticks = chartRealtime.parseRealFrame(frame, chartRealtime.kstTradingDate());
+        if (!ticks.length) return;
+        shellWin.webContents.send('athena:chart-ticks', ticks);
+      },
+      onStatus: (s) => { if (s && s.state) mdlog(`차트 실시간 피드: ${s.state}`); },
+    });
+    chartRealtimeFeed.start();
+  }
+  chartRealtimeRegistrar.ensureSymbol(code).catch((err) => {
+    mdlog(`차트 REAL 등록 예외: ${String((err && err.message) || err)}`);
+  });
+}
+
+app.on('will-quit', () => { if (chartRealtimeFeed) chartRealtimeFeed.stop(); });
+
 // ---------- 캔버스 사이드 채널 — 백엔드 WS 구독 → 카드 직접 렌더 (데이터 지름길) ----------
 // render_canvas(plan_token) 경로에서 게이트웨이가 채운 봉투는 모델 스트림(툴 결과)
 // 대신 이 채널로 온다 — CLI 잘림 한도와 무관하고, 모델이 답을 쓰는 동안 카드가
@@ -782,6 +826,9 @@ ipcMain.on('athena:rest-canvas-painted', (event, payload = {}) => {
     rect: payload.rect || null,
   };
   chartReloadAuthority.registerPaint(paintResult, waiter.reloadAuthority);
+  // 차트가 실제로 그려진 순간에만 실시간을 건다 — 그려지지도 않은 패널로 REG를
+  // 소모하지 않는다(REG는 리미터를 먹는다). 종목당 1회는 registrar가 보장한다.
+  ensureChartRealtime(waiter.reloadAuthority);
   waiter.resolve(paintResult);
 });
 
@@ -1021,6 +1068,66 @@ async function handleChartPanelReload(event, payload) {
 }
 
 ipcMain.handle('athena:reload-chart-panel', handleChartPanelReload);
+
+// 과거 페이지 조회 — 카드를 갈아치우지 않고 앞쪽에 덧붙일 봉만 돌려준다.
+// emitCanvas를 가로채 사이드 채널 푸시를 막는다(푸시하면 렌더러가 패널을
+// 과거 구간으로 통째로 교체해버린다 — 우리가 원하는 건 prepend다).
+async function handleChartHistoryPage(event, payload) {
+  if (!shellWin || shellWin.isDestroyed() || event.sender !== shellWin.webContents) {
+    throw new Error('AITS chart history는 셸 창에서만 허용된다');
+  }
+  // 계약(reload_targets[period].request_fields)에 맞춰 인자를 고르고 base_dt만
+  // 커서로 바꾸는 일은 그대로 chart-reload가 한다 — 여기서 필드를 지어내지 않는다.
+  const request = chartReloadAuthority.buildHistoryDataset(payload);
+  const item = request.items[0];
+
+  // 렌더 파이프라인(runDirectRestDataset)을 타지 않는다. 그 경로는 activeRestRun을
+  // 공유해 진행 중인 조회를 abort시키고 캔버스 배달·패널 권위 수명에 엮인다 —
+  // 과거 조회는 화면을 그리는 일이 아니라 봉만 가져오는 일이라 그 전부가 부작용이다
+  // (실측 2026-08-25: 자동 발화 시 두 요청이 서로를 취소해 영영 pending으로 남았다).
+  let res;
+  try {
+    res = await fetch(`${BACKEND_HTTP_BASE}/api/v1/canvas/chart-page`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ operation_ref: item.operationRef, args: item.args }),
+    });
+  } catch (err) {
+    return { ok: false, error: `과거 조회 실패 — ${String((err && err.message) || err)}`, candles: [] };
+  }
+  if (!res.ok) {
+    const detail = await res.json().catch(() => null);
+    return {
+      ok: false,
+      error: `과거 조회 거부(HTTP ${res.status})${detail && detail.detail ? ` — ${detail.detail}` : ''}`,
+      candles: [],
+    };
+  }
+  const body = await res.json().catch(() => null);
+  const candles = body && Array.isArray(body.candles) ? body.candles : [];
+  if (!candles.length) return { ok: false, error: '과거 봉이 없다', candles: [] };
+  return { ok: true, candles, trId: body.tr_id || null };
+}
+
+ipcMain.handle('athena:chart-history-page', handleChartHistoryPage);
+
+// 수급 시계열 조회 — 지표를 켤 때만 부른다(켜지 않은 지표의 TR을 미리 당기지 않는다).
+// 한 TR의 여러 열을 한 번에 받아 렌더러가 분류별 pane을 만든다.
+async function handleChartSeries(event, payload) {
+  if (!shellWin || shellWin.isDestroyed() || event.sender !== shellWin.webContents) {
+    throw new Error('수급 시계열 조회는 셸 창에서만 허용된다');
+  }
+  const input = payload && typeof payload === 'object' ? payload : {};
+  return chartSeries.fetchChartSeries({
+    backendBase: BACKEND_HTTP_BASE,
+    operationRef: input.operationRef,
+    args: input.args,
+    fields: input.fields,
+    baseDt: input.baseDt,
+  });
+}
+
+ipcMain.handle('athena:chart-series', handleChartSeries);
 
 async function runLiveQuery(query, expand) {
   const directDataset = restDatasetRunner.buildQuoteDataset(query, stockEntityIndex, {

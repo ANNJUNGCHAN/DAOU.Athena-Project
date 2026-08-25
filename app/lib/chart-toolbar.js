@@ -18,8 +18,11 @@ const PERIOD_TABS = [
   { value: 'W', label: '주' },
   { value: 'M', label: '월' },
   { value: 'Y', label: '년' },
-  { value: 'MIN', label: '분' },
-  { value: 'TICK', label: '틱' },
+  // 분·틱은 자리를 지키되 눌리지 않는다(2026-08-25) — 일봉만 들어오는 지금
+  // 이 둘을 켜려면 없는 봉을 만들어내야 한다. 사유는 chart-resample.js의
+  // INTRADAY_UNAVAILABLE에 적었다. TR이 붙으면 unavailable만 떼면 된다.
+  { value: 'MIN', label: '분', unavailable: '분봉 데이터가 아직 없다 — 일봉만 들어온다' },
+  { value: 'TICK', label: '틱', unavailable: '틱 데이터가 아직 없다 — 일봉만 들어온다' },
 ];
 
 const INTERVAL_OPTIONS = {
@@ -117,13 +120,27 @@ function createChartToolbar(opts) {
   tabsWrap.setAttribute('role', 'tablist');
   tabsWrap.setAttribute('aria-label', '주기');
   const tabButtons = {};
+  // AITS adapter가 진짜 분·틱 snapshot을 넘길 땐(preSampled) 잠그면 안 된다 —
+  // 그때는 데이터가 실재하므로 unavailable이 거짓이 된다.
+  const intradayAvailable = o.intradayAvailable === true;
   for (const t of PERIOD_TABS) {
+    const unavailable = intradayAvailable ? null : t.unavailable;
     const tb = document.createElement('button');
     tb.type = 'button';
     tb.className = 'chart-toolbar-tab';
     tb.textContent = t.label;
     tb.setAttribute('role', 'tab');
-    tb.addEventListener('click', () => selectPeriod(t.value));
+    if (unavailable) {
+      // 숨기지 않는 이유: 이 주기가 존재한다는 사실 자체는 참이다. 없는 건
+      // 데이터고, 그걸 눌러본 사람이 알 수 있게 사유를 붙인다.
+      tb.disabled = true;
+      tb.title = unavailable;
+      tb.classList.add('is-unavailable');
+    }
+    tb.addEventListener('click', () => {
+      if (unavailable) return;
+      selectPeriod(t.value);
+    });
     tabButtons[t.value] = tb;
     tabsWrap.appendChild(tb);
   }

@@ -113,7 +113,15 @@ function createIndicatorPanel(opts) {
       const current = params[def.id][p.key] != null ? params[def.id][p.key] : p.default;
       const input = document.createElement('input');
       input.className = 'chart-ind-param-input';
-      if (Array.isArray(current)) {
+      if (typeof current === 'boolean') {
+        // 켬/끔 파라미터(기준선 표시 등) — 토스도 상한선·하한선을 개별 토글로 준다.
+        input.type = 'checkbox';
+        input.checked = current;
+        input.addEventListener('change', () => {
+          params[def.id] = Object.assign({}, params[def.id], { [p.key]: input.checked });
+          cb.onParamChange && cb.onParamChange(def.id, params[def.id]);
+        });
+      } else if (Array.isArray(current)) {
         input.type = 'text';
         input.value = current.join(',');
         input.addEventListener('change', () => {

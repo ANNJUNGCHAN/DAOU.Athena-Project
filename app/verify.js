@@ -17,6 +17,8 @@ const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
 const { execFileSync } = require('child_process');
+// 지표 행 수의 단일 출처 — 검증이 숫자를 따로 갖지 않는다(2026-08-25).
+const INDICATOR_DEFS_LENGTH = require('./lib/chart-indicator-registry').INDICATOR_DEFS.length;
 
 const CAPTURES = path.join(__dirname, 'captures');
 if (!fs.existsSync(CAPTURES)) fs.mkdirSync(CAPTURES, { recursive: true });
@@ -1237,13 +1239,17 @@ app.whenReady().then(async () => {
     const card = document.querySelector('.card.chart');
     if (!card) return null;
     const tabs = Array.from(card.querySelectorAll('.chart-toolbar-tab')).map(b => b.textContent);
+    // 분·틱은 데이터가 없어 잠겨 있어야 한다(2026-08-25 pseudoIntraday 제거).
+    // 사유(title)까지 확인한다 — 이유 없이 잠긴 버튼은 고장으로 읽힌다.
+    const lockedTabs = Array.from(card.querySelectorAll('.chart-toolbar-tab'))
+      .filter(b => b.disabled).map(b => ({ label: b.textContent, why: b.title }));
     const paneRows = Array.from(card.querySelectorAll('.chart-price-pane table tr'))
       .map(tr => tr.getBoundingClientRect()).filter(r => r.height > 0).length;
     const indBtn = Array.from(card.querySelectorAll('.chart-toolbar-btn')).find(b => b.textContent.includes('∿'));
     // 마운트 실패(예: lightweight-charts 미설치)면 카드는 있어도 툴바가 없다 —
     // 여기서 클릭하면 TypeError가 unhandledRejection으로 새서 verify가 영원히
     // 안 끝난다(2026-08-18 병합 검증에서 실제 재현). 실패는 수치로 보고한다.
-    if (!indBtn) return { cardPresent: true, tabs, paneRows, indicatorRows: 0, vpBars: 0, toolbarMissing: true };
+    if (!indBtn) return { cardPresent: true, tabs, lockedTabs, paneRows, indicatorRows: 0, vpBars: 0, toolbarMissing: true };
     indBtn.click();
     await new Promise(r => setTimeout(r, 150));
     const panel = card.querySelector('.chart-indicator-panel');
@@ -1254,7 +1260,7 @@ app.whenReady().then(async () => {
     const vpBars = card.querySelectorAll('.chart-volume-profile-overlay .chart-vp-bar').length;
     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
     await new Promise(r => setTimeout(r, 100));
-    return { cardPresent: true, tabs, paneRows, indicatorRows, vpBars };
+    return { cardPresent: true, tabs, lockedTabs, paneRows, indicatorRows, vpBars };
   })()`);
   await wait(200);
   await shot(shellWin, '19-chart-card.png');
@@ -1262,8 +1268,17 @@ app.whenReady().then(async () => {
     cardRendered: chartProbe !== null,
     periodTabsOk: chartProbe !== null && chartProbe.tabs.join(',') === '일,주,월,년,분,틱',
     paneSeparated: chartProbe !== null && chartProbe.paneRows >= 3, // 가격+구분+거래량 이상
-    indicatorRows35: chartProbe !== null && chartProbe.indicatorRows === 35,
+    // 2026-08-25: 지표 35 → 36종(RMI 추가). 행 수는 레지스트리에서 읽어
+    // 비교한다 — 숫자를 박아두면 지표를 추가할 때마다 여기가 깨진다.
+    indicatorRowsMatchRegistry:
+      chartProbe !== null && chartProbe.indicatorRows === INDICATOR_DEFS_LENGTH,
     volumeProfileBars24: chartProbe !== null && chartProbe.vpBars === 24,
+    // 분·틱 탭이 잠겼고 사유가 붙어 있는가. 이게 풀리면 봉을 지어내는 경로가
+    // 돌아왔다는 뜻이다(pseudoIntraday 회귀 감시).
+    intradayTabsLocked:
+      chartProbe !== null
+      && (chartProbe.lockedTabs || []).map((t) => t.label).join(',') === '분,틱'
+      && (chartProbe.lockedTabs || []).every((t) => /데이터가 아직 없다/.test(t.why)),
     // 실측 수치도 그대로 남긴다 — 불리언만으로는 미래 회귀의 원인 추적이 어렵다
     // (아키텍트 검증 권고, 2026-08-18. 형제 검증 블록과 기록 밀도 정합).
     measured: chartProbe,
@@ -1272,8 +1287,12 @@ app.whenReady().then(async () => {
   assertOk('chartCard: card rendered', report.chartCard.cardRendered === true);
   assertOk('chartCard: period tabs match 일,주,월,년,분,틱', report.chartCard.periodTabsOk === true);
   assertOk('chartCard: price/volume panes separated', report.chartCard.paneSeparated === true);
-  assertOk('chartCard: 35 indicator rows present', report.chartCard.indicatorRows35 === true);
+  assertOk(
+    `chartCard: 지표 행 ${INDICATOR_DEFS_LENGTH}개 표시`,
+    report.chartCard.indicatorRowsMatchRegistry === true
+  );
   assertOk('chartCard: 24 volume-profile bars present', report.chartCard.volumeProfileBars24 === true);
+  assertOk('chartCard: 분·틱 탭이 사유와 함께 잠겨 있다', report.chartCard.intradayTabsLocked === true);
 
   // ---- 검증13b — 실배선 chart 봉투(canvas.js renderLiveChart, 2026-08-18) ----
   // backend가 발급하는 AITS 정식 봉투(renderer_id + data.symbol + data.chart)를

@@ -128,7 +128,9 @@ test('same panel period reload reuses one renderer and one session', async () =>
   const second = await adapter.openPanel(container, body({ period: 'week', trId: 'ka10082', candles: [candle('2026-08-13', 110)] }), { panelId: 'chart-1', stock: '005930' });
   assert.equal(first.sessionId, second.sessionId);
   assert.equal(log.calls.filter((call) => call[0] === 'render').length, 1);
-  assert.deepEqual(log.calls.find((call) => call[0] === 'replaceData')[2], { period: 'W', interval: 1 });
+  // trId도 함께 넘어간다 — 주기가 바뀌면 TR도 바뀌므로(일 ka10081 → 주 ka10082)
+  // 렌더러가 정직 표기를 새 TR로 갱신할 수 있어야 한다.
+  assert.deepEqual(log.calls.find((call) => call[0] === 'replaceData')[2], { period: 'W', interval: 1, trId: 'ka10082' });
   assert.equal(log.calls.filter((call) => call[0] === 'replaceData').length, 1);
   assert.equal(second.body.trId, 'ka10082');
   assert.equal(adapter.snapshot()[0].reloads, 1);

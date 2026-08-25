@@ -586,6 +586,173 @@ def build_aits_chart_body(
     }
 
 
+def screen_definition_for(operation_ref: str) -> dict[str, Any] | None:
+    """화면 정의 1건을 돌려준다(없으면 None).
+
+    라우트가 `_screen_definitions()`(사설 lru_cache)를 직접 만지지 않게 하는 접근자다.
+    게이트 통과 후 `data.time` 같은 계약 세부를 봐야 하는 곳에서 쓴다.
+    """
+    return _screen_definitions().get(operation_ref)
+
+
+def _split_row_path(path: Any) -> tuple[str, str] | None:
+    """'$.shrts_trnsn[*].dt' → ('shrts_trnsn', 'dt').
+
+    차트 계약은 컨테이너 경로(`$.alias`)와 필드 경로를 따로 갖지만, 표 계약은
+    `data.time.field_path` 하나에 둘이 붙어 있다. `_path_container_alias`는
+    `$.alias` 전용이라 이 형태를 못 읽는다(실측: None을 돌려줬다).
+    """
+    if not isinstance(path, str) or not path.startswith("$."):
+        return None
+    body = path[2:]
+    marker = "[*]."
+    if marker not in body:
+        return None
+    container_alias, _, field_alias = body.partition(marker)
+    if not container_alias or not field_alias:
+        return None
+    for part in (container_alias, field_alias):
+        if "." in part or "[" in part or "]" in part:
+            return None
+    return container_alias, field_alias
+
+
+def _series_container(definition: dict[str, Any], container_alias: str) -> dict[str, Any] | None:
+    for container in definition["data"].get("containers") or []:
+        if isinstance(container, dict) and container.get("container_alias") == container_alias:
+            return container
+    return None
+
+
+def _series_number(raw: Any) -> float | None:
+    """부호를 살려서 읽는다 — `_aits_number`와 다른 점이 이것뿐이다.
+
+    `_aits_number`는 `.lstrip("+-")`로 부호를 버린다. OHLCV에서는 맞다: 가격은 늘
+    양수이고 앞의 +/-는 등락 표시일 뿐이다. 하지만 순매수량은 **부호가 곧 의미다** —
+    `-200`은 200주 순매도지 200주 순매수가 아니다. 여기서 부호를 버리면 수급 지표가
+    통째로 뒤집힌다(2026-08-26 실측으로 잡음). 가격 경로는 그대로 두려고 함수를 나눴다.
+    """
+    if isinstance(raw, (int, float)) and not isinstance(raw, bool):
+        return float(raw)
+    if not isinstance(raw, str) or not raw.strip():
+        return None
+    try:
+        return float(raw.strip())
+    except ValueError:
+        return None
+
+
+def _series_time(raw: Any, formatter: Any, timezone_name: Any, base_dt: str | None) -> Any:
+    """시계열 표의 시간 값을 canonical 시각으로 바꾼다.
+
+    `time_hhmmss`(예: ka10064의 `tm`)는 컨테이너에 날짜 필드가 **없다**(2026-08-25 실측).
+    그래서 요청이 준 거래일과 결합해야만 시각이 성립한다. 거래일이 없으면 오늘로
+    추측하지 않고 None을 돌려 호출자가 실패로 처리하게 한다.
+    """
+    if formatter == "time_hhmmss":
+        text = raw.strip() if isinstance(raw, str) else ""
+        if len(text) != 6 or not text.isdigit() or not base_dt:
+            return None
+        return _aits_time(f"{base_dt}{text}", timezone_name)
+    return _aits_time(raw, timezone_name)
+
+
+def build_series_body(
+    operation_ref: str,
+    tr_data: Any,
+    field_aliases: list[str],
+    *,
+    base_dt: str | None = None,
+) -> tuple[dict[str, Any], dict[str, Any]] | str:
+    """table 계약 + 시간축을 가진 TR 응답을 canonical 시계열로 바꾼다.
+
+    OHLCV가 아닌 시계열(수급 추이 등)을 차트 pane으로 그리기 위한 경로다. 그릴 열은
+    호출자가 명시해야 한다 — 자동으로 고르지 않는다. `column_priority` 첫 열이
+    `cur_prc`(현재가)/`pred_pre`(전일대비)인 계약이 있어(실측) 자동 선택은 수급이 아닌
+    값을 그리게 된다.
+    """
+    resolved = resolve_screen_render_contract(operation_ref)
+    if isinstance(resolved, str):
+        return resolved
+    if resolved[0] != "table":
+        return "시계열 표 화면이 아니다"
+    if not isinstance(tr_data, dict):
+        return "서명된 응답 본문이 없다"
+    if not field_aliases:
+        return "그릴 열을 지정해야 한다"
+
+    definition = _screen_definitions()[operation_ref]
+    time_meta = definition["data"].get("time") or {}
+    split = _split_row_path(time_meta.get("field_path"))
+    if split is None:
+        return "시간축 계약이 없다"
+    container_alias, time_alias = split
+
+    container = _series_container(definition, container_alias)
+    if container is None:
+        return f"화면 정의 컨테이너 {container_alias}를 찾지 못했다"
+    allowlist = set(container.get("field_allowlist") or [])
+    fields = {
+        field["alias"]: field
+        for field in container.get("fields") or []
+        if isinstance(field, dict) and isinstance(field.get("alias"), str)
+    }
+    for alias in field_aliases:
+        if alias not in allowlist:
+            return f"계약에 없는 열이다: {alias}"
+
+    rows = tr_data.get(container_alias)
+    if not isinstance(rows, list) or not rows or not all(isinstance(row, dict) for row in rows):
+        return f"화면 정의 컨테이너 {container_alias}에서 행을 찾지 못했다"
+
+    timezone_name = time_meta.get("timezone")
+    time_formatter = (fields.get(time_alias) or {}).get("formatter")
+    collected: dict[str, dict[Any, float]] = {alias: {} for alias in field_aliases}
+    if time_formatter == "time_hhmmss" and not base_dt:
+        # 장중 계약은 컨테이너에 날짜가 없다 — 거래일 없이는 시각이 성립하지 않는다.
+        # "유효한 점이 없다"로 뭉뚱그리지 않고 진짜 사유를 돌려준다.
+        return "장중 시계열은 거래일(base_dt)이 있어야 한다"
+    for row in rows:
+        at = _series_time(row.get(time_alias), time_formatter, timezone_name, base_dt)
+        if at is None:
+            continue
+        for alias in field_aliases:
+            value = _series_number(row.get(alias))
+            if value is None:
+                continue
+            # 같은 시각이 두 번 오면 뒤엣것을 쓴다 — dict가 그렇게 동작한다.
+            collected[alias][at] = value
+
+    series: list[dict[str, Any]] = []
+    for alias in field_aliases:
+        points = [
+            {"time": at, "value": value}
+            for at, value in sorted(collected[alias].items(), key=lambda item: str(item[0]))
+        ]
+        if not points:
+            return f"열 {alias}에서 유효한 점을 만들지 못했다"
+        series.append(
+            {
+                "field": alias,
+                "label": (fields.get(alias) or {}).get("label") or alias,
+                "points": points,
+            }
+        )
+
+    max_rows = definition["data"]["range"].get("max_rows")
+    if not isinstance(max_rows, int) or isinstance(max_rows, bool) or max_rows < 1:
+        return "행 상한이 유효하지 않다"
+    total = max(len(entry["points"]) for entry in series)
+    for entry in series:
+        entry["points"] = entry["points"][-max_rows:]
+    kept = max(len(entry["points"]) for entry in series)
+    return {"series": series, "time_alias": time_alias}, {
+        "rows_total": total,
+        "rows_kept": kept,
+        "trimmed": total > kept,
+    }
+
+
 def build_aits_chart_envelope_data(
     operation_ref: str, call_payload: Any
 ) -> tuple[dict[str, Any], dict[str, Any]] | str:
