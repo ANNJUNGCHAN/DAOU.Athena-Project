@@ -1,0 +1,125 @@
+[
+  {
+    "name": "명시적 선호",
+    "why": "가장 흔한 성공 경로. 투자자가 직접 말한 것은 EXTRACTED로 남아야 한다.",
+    "source": {
+      "id": "conversation:rec-1",
+      "kind": "conversation",
+      "text": "user: 삼성전자는 계속 들고 갈 생각이야. 배당도 나오고.\n",
+      "occurred_at": "2026-08-25T03:00:00+00:00"
+    },
+    "response": {
+      "schema_version": 2,
+      "entities": [
+        {
+          "ref": "e1",
+          "kind": "security",
+          "name": "삼성전자",
+          "aliases": ["005930"],
+          "attributes": {}
+        }
+      ],
+      "relations": [
+        {
+          "ref": "r1",
+          "kind": "prefers",
+          "source_ref": "me",
+          "target_ref": "e1",
+          "confidence": "EXTRACTED",
+          "rationale": "배당이 나온다고 했다",
+          "observed_at": "2026-08-25T03:00:00+00:00",
+          "attributes": {}
+        }
+      ]
+    },
+    "expect": { "ok": true, "entities": 2, "relations": 1, "confidence": "EXTRACTED" }
+  },
+  {
+    "name": "애매한 관심",
+    "why": "AMBIGUOUS가 버려지지 않고 그래프까지 도달하는 것이 suggest_questions의 재료다.",
+    "source": {
+      "id": "conversation:rec-2",
+      "kind": "conversation",
+      "text": "user: 리츠도 괜찮은 것 같기도 하고... 잘 모르겠네\n",
+      "occurred_at": "2026-08-25T04:00:00+00:00"
+    },
+    "response": {
+      "schema_version": 2,
+      "entities": [
+        { "ref": "e1", "kind": "theme", "name": "리츠", "attributes": {} }
+      ],
+      "relations": [
+        {
+          "ref": "r1",
+          "kind": "interested_in",
+          "source_ref": "me",
+          "target_ref": "e1",
+          "confidence": "AMBIGUOUS",
+          "rationale": "잘 모르겠다고 했다",
+          "observed_at": "2026-08-25T04:00:00+00:00",
+          "attributes": {}
+        }
+      ]
+    },
+    "expect": { "ok": true, "entities": 2, "relations": 1, "confidence": "AMBIGUOUS" }
+  },
+  {
+    "name": "산문이 섞인 응답",
+    "why": "--json-schema를 지원하지 않는 CLI에서 남는 실패. 실제 모델로는 재현하기 어렵다.",
+    "source": {
+      "id": "conversation:rec-3",
+      "kind": "conversation",
+      "text": "user: 2차전지는 접었어\n",
+      "occurred_at": "2026-08-25T05:00:00+00:00"
+    },
+    "raw_response": "물론입니다! 아래가 결과입니다:\n{\"schema_version\":2}",
+    "expect": { "ok": false, "error_contains": "response was invalid" }
+  },
+  {
+    "name": "잘린 응답",
+    "why": "긴 대화에서 토큰이 끊기면 이렇게 온다. JSON이 중간에서 멈춘다.",
+    "source": {
+      "id": "conversation:rec-4",
+      "kind": "conversation",
+      "text": "user: 반도체 장비주를 좀 봐줘\n",
+      "occurred_at": "2026-08-25T06:00:00+00:00"
+    },
+    "raw_response": "{\"schema_version\":2,\"entities\":[{\"ref\":\"e1\",\"kind\":\"the",
+    "expect": { "ok": false, "error_contains": "response was invalid" }
+  },
+  {
+    "name": "빈 결과",
+    "why": "뽑을 성향이 없는 대화도 있다. 그때 빈 봉투는 오류가 아니다.",
+    "source": {
+      "id": "conversation:rec-5",
+      "kind": "conversation",
+      "text": "user: 오늘 날씨 좋네요\n",
+      "occurred_at": "2026-08-25T07:00:00+00:00"
+    },
+    "response": { "schema_version": 2, "entities": [], "relations": [] },
+    "expect": { "ok": true, "entities": 0, "relations": 0 }
+  },
+  {
+    "name": "모델이 티어를 참칭",
+    "why": "대화가 결정적 사실 행세를 하는 경로. 봉투 단계에서 닫혀야 한다.",
+    "source": {
+      "id": "conversation:rec-6",
+      "kind": "conversation",
+      "text": "user: 삼성전자 샀어\n",
+      "occurred_at": "2026-08-25T08:00:00+00:00"
+    },
+    "response": {
+      "schema_version": 2,
+      "entities": [
+        {
+          "ref": "e1",
+          "kind": "security",
+          "name": "삼성전자",
+          "attributes": { "tier": "deterministic" }
+        }
+      ],
+      "relations": []
+    },
+    "expect": { "ok": false, "error_contains": "response was invalid" }
+  }
+]

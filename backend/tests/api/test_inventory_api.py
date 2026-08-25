@@ -141,10 +141,22 @@ def test_inventory_partition_and_static_openapi_coverage() -> None:
     # TR(수급 추이 등)을 canonical 시계열로 돌려주는 조회 전용 라우트다
     # (api/series_page.py). chart-page의 chart-only 게이트를 넓히지 않으려고 라우트를
     # 따로 뒀다 — 넓히면 table/facts/compound 전체가 사정권에 들어온다.
-    assert len(operation_ids) == 329
+    # 329 → 334(2026-08-26): leaf 7이 브레인 분석 표면 5개를 더했다(god-nodes,
+    # surprising-connections, suggested-questions, diff, cluster-map).
+    # 이 숫자는 표면이 조용히 늘거나 주는 것을 눈에 띄게 하려고 박아둔 값이므로,
+    # 무엇이 왜 늘었는지 적지 않고 숫자만 고치면 이 테스트가 하는 일이 없어진다.
+    assert len(operation_ids) == 334
     assert "canvas_chart_page" in operation_ids
     assert "canvas_series_page" in operation_ids
     assert "get_internal_oauth_status" in operation_ids
+    for added in (
+        "get_brain_god_nodes",
+        "get_brain_surprising_connections",
+        "get_brain_suggested_questions",
+        "get_brain_graph_diff",
+        "get_brain_cluster_map",
+    ):
+        assert added in operation_ids, f"{added}가 표면에서 사라졌다"
     manifest = json.loads(
         (BACKEND / "ref" / "kiwoom-common-screen-manifest.json").read_text(encoding="utf-8")
     )

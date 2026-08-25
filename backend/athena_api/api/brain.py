@@ -12,7 +12,18 @@ from typing import Annotated
 from fastapi import APIRouter, BackgroundTasks, Header, Request
 from pydantic import BaseModel, ConfigDict, Field
 
-from athena_api.brain import ChatHistoryRecord, ChatRole, GraphStore, HistoryStore, utc_now
+from athena_api.brain import (
+    ChatHistoryRecord,
+    ChatRole,
+    GraphProjector,
+    GraphStore,
+    HistoryStore,
+    god_nodes,
+    graph_diff,
+    suggest_questions,
+    surprising_connections,
+    utc_now,
+)
 from athena_api.errors import BrainNotReadyError
 from athena_api.lifespan import BrainRuntime, _teardown_brain
 from athena_api.security import require_local_bearer
@@ -26,6 +37,18 @@ _DEFAULT_PROFILE_WINDOW_DAYS = 90
 _DEFAULT_PROFILE_LIMIT = 50
 _DEFAULT_CHATS_LIMIT = 100
 _DEFAULT_CONVERSATIONS_LIMIT = 50
+# 분석 결과의 기본·최대 상한. 화면 하나에 들어갈 만큼만 낸다.
+_DEFAULT_ANALYSIS_LIMIT = 10
+_MAX_ANALYSIS_LIMIT = 100
+
+
+def _bounded(limit: int) -> int:
+    """상한을 범위 안으로 접는다.
+
+    분석 함수들은 `limit <= 0`에 `ValueError`를 던진다. HTTP 경계에서 그걸 그대로
+    500으로 흘리면 잘못된 질의가 서버 오류처럼 보인다 — 여기서 접는다.
+    """
+    return max(1, min(int(limit), _MAX_ANALYSIS_LIMIT))
 
 
 def _require_history(request: Request) -> HistoryStore:
@@ -40,6 +63,18 @@ def _require_store(request: Request) -> GraphStore:
     if store is None:
         raise BrainNotReadyError("investment brain graph store is not ready")
     return store
+
+
+def _require_projector(request: Request) -> GraphProjector:
+    """앱 수명에 묶인 투영기.
+
+    요청마다 새로 만들면 캐시가 매번 비어 분석 한 화면에 그래프를 네 번 읽는다 —
+    캐시를 둔 이유가 사라진다. `brain_ready`일 때만 존재하므로 그 게이트를 함께 탄다.
+    """
+    projector = getattr(request.app.state, "brain_projector", None)
+    if projector is None:
+        raise BrainNotReadyError("investment brain projection is not ready")
+    return projector
 
 
 class ChatIngestRequest(BaseModel):
@@ -65,7 +100,6 @@ class BrainStatusResponse(BaseModel):
     ready: bool
     ingestion_ready: bool
     extraction_enabled: bool
-    fts_ready: bool
 
 
 class ChatMessageOut(BaseModel):
@@ -100,15 +134,28 @@ class ConversationsResponse(BaseModel):
 
 
 class ProfileSummaryEntryOut(BaseModel):
+    """프로필 요약 한 행.
+
+    leaf 7에서 필드를 갈아엎었다. 이전 판은 `claim_count`/`average_confidence`를 냈는데
+    그 이름들은 leaf 1이 `Claim`을 폐기하면서 저장층에서 **사라진 지 오래**였다.
+    엔드포인트가 존재하지 않는 속성을 읽고 있었고, 결과가 빈 목록일 때만 테스트해서
+    `AttributeError`가 한 번도 드러나지 않았다 — 성향이 하나라도 쌓이는 순간 500이었다.
+
+    `tier`가 응답에 있는 것이 새 설계의 핵심이다. 말(대화)과 행동(체결·잔고)을 한 표에
+    두되 어느 쪽에서 왔는지 읽는 쪽이 구분할 수 있어야 한다.
+    """
+
     model_config = ConfigDict(extra="forbid")
 
     entity_id: str
     entity_kind: str
     entity_name: str
     relation_kind: str
-    claim_count: int
-    latest_observed_at: str
-    average_confidence: float
+    confidence: str
+    tier: str
+    rationale: str | None
+    observed_at: str
+    reinforcement: int
 
 
 class ProfileSummaryResponse(BaseModel):
@@ -178,7 +225,6 @@ async def get_brain_status(
         ready=bool(getattr(state, "brain_ready", False)),
         ingestion_ready=bool(getattr(state, "brain_ingestion_ready", False)),
         extraction_enabled=bool(getattr(state, "brain_extraction_enabled", False)),
-        fts_ready=bool(getattr(state, "brain_fts_ready", False)),
     )
 
 
@@ -275,9 +321,11 @@ async def get_brain_profile_summary(
                 entity_kind=entry.entity_kind,
                 entity_name=entry.entity_name,
                 relation_kind=entry.relation_kind,
-                claim_count=entry.claim_count,
-                latest_observed_at=entry.latest_observed_at,
-                average_confidence=entry.average_confidence,
+                confidence=entry.confidence,
+                tier=entry.tier,
+                rationale=entry.rationale,
+                observed_at=entry.observed_at,
+                reinforcement=entry.reinforcement,
             )
             for entry in entries
         ]
@@ -294,28 +342,29 @@ def _default_shutdown_hook() -> None:
     os.kill(os.getpid(), signal.SIGTERM)
 
 
-def _delete_brain_files(history_db_path: Path, graph_db_path: Path) -> list[str]:
-    """Delete the raw-history sqlite file (+ WAL/SHM sidecars) and the graph store.
+def _delete_brain_files(graph_db_path: Path) -> list[str]:
+    """브레인 파일과 WAL/SHM 사이드카를 지운다.
 
-    ``graph_db_path`` (lbug) is unlink'd or rmtree'd depending on what it actually is on
-    disk right now -- ADR §6 left the on-disk shape unresolved, so this branches on a
-    runtime is_dir() check rather than assuming either shape (plan §2(f)).
+    leaf 2에서 그래프·원본이력·잡 상태가 한 파일로 합쳐지면서 지울 대상도 하나가 됐다.
+    이전에는 둘을 지웠는데, 하나만 지워지고 죽으면 반쪽 상태가 남았다 — 리셋이
+    되살리려던 바로 그 상황이다.
+
+    디렉터리 분기를 남겨둔 이유: LadybugDB 시절 `brain.lbug`가 디렉터리였을 수 있고,
+    그 자리에서 업그레이드한 설치가 있으면 파일이 아니라 디렉터리를 만난다.
     """
     deleted: list[str] = []
+    if graph_db_path.exists() and graph_db_path.is_dir():
+        shutil.rmtree(graph_db_path, ignore_errors=True)
+        deleted.append(str(graph_db_path))
+        return deleted
     for path in (
-        history_db_path,
-        Path(str(history_db_path) + "-wal"),
-        Path(str(history_db_path) + "-shm"),
+        graph_db_path,
+        Path(str(graph_db_path) + "-wal"),
+        Path(str(graph_db_path) + "-shm"),
     ):
         if path.exists():
             path.unlink(missing_ok=True)
             deleted.append(str(path))
-    if graph_db_path.exists():
-        if graph_db_path.is_dir():
-            shutil.rmtree(graph_db_path, ignore_errors=True)
-        else:
-            graph_db_path.unlink(missing_ok=True)
-        deleted.append(str(graph_db_path))
     return deleted
 
 
@@ -349,8 +398,256 @@ async def post_brain_reset_and_restart(
     settings = state.settings
     await _teardown_brain(request.app, brain)
     state.brain_runtime = None
-    deleted = _delete_brain_files(settings.brain_history_db_path, settings.brain_db_path)
+    deleted = _delete_brain_files(settings.brain_db_path)
     hook = getattr(state, "brain_shutdown_hook", None) or _default_shutdown_hook
     background_tasks.add_task(hook)
     logger.info("brain reset-and-restart ok deleted_count=%d", len(deleted))
     return BrainResetResponse(deleted_files=deleted, restarting=True)
+
+
+# --- 분석 4종 + 군집 지도 (leaf 7) -------------------------------------------------------
+#
+# 저장층이 답하지 못하는 질문들이다. 다섯이 한 화면을 채우므로 공유 투영기의 캐시가
+# 실제로 값을 한다 — 요청마다 투영하면 그래프를 다섯 번 읽는다.
+
+
+class GodNodeOut(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    entity_id: str
+    name: str
+    kind: str
+    degree: int
+
+
+class GodNodesResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    revision: int
+    nodes: list[GodNodeOut]
+
+
+class SurprisingConnectionOut(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    source_entity_id: str
+    source_name: str
+    target_entity_id: str
+    target_name: str
+    kinds: list[str]
+    source_cluster: int
+    target_cluster: int
+
+
+class SurprisingConnectionsResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    revision: int
+    connections: list[SurprisingConnectionOut]
+
+
+class SuggestedQuestionOut(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    relation_id: str
+    subject_name: str
+    object_name: str
+    relation_kind: str
+    rationale: str | None
+    question: str
+
+
+class SuggestedQuestionsResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    revision: int
+    questions: list[SuggestedQuestionOut]
+
+
+class GraphDiffResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    from_revision: int
+    to_revision: int
+    entities_added: list[str]
+    entities_merged: list[str]
+    edges_added: list[str]
+    edges_removed: list[str]
+    edges_changed: list[str]
+    edges_rejected: list[str]
+
+
+class ClusterMapNodeOut(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    entity_id: str
+    name: str
+    kind: str
+    cluster: int
+    degree: int
+
+
+class ClusterMapResponse(BaseModel):
+    """군집 지도 1단계 — Electron 그래프 모드가 처음 그리는 것."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    revision: int
+    nodes: list[ClusterMapNodeOut]
+    edges: list[list[str]]
+
+
+@router.get(
+    "/analysis/god-nodes",
+    summary="투자의 중심 노드",
+    operation_id="get_brain_god_nodes",
+    response_model=GodNodesResponse,
+    openapi_extra={**_NOT_LLM_EXPOSED, "x-athena-side-effect": "none"},
+)
+async def get_brain_god_nodes(
+    request: Request,
+    authorization: Annotated[str, Header(alias="Authorization")],
+    limit: int = _DEFAULT_ANALYSIS_LIMIT,
+) -> GodNodesResponse:
+    require_local_bearer(request, authorization)
+    projected = await _require_projector(request).project()
+    return GodNodesResponse(
+        revision=projected.revision,
+        nodes=[
+            GodNodeOut(
+                entity_id=node.entity_id,
+                name=node.name,
+                kind=node.kind,
+                degree=node.degree,
+            )
+            for node in god_nodes(projected, limit=_bounded(limit))
+        ],
+    )
+
+
+@router.get(
+    "/analysis/surprising-connections",
+    summary="군집 경계를 넘는 연결",
+    operation_id="get_brain_surprising_connections",
+    response_model=SurprisingConnectionsResponse,
+    openapi_extra={**_NOT_LLM_EXPOSED, "x-athena-side-effect": "none"},
+)
+async def get_brain_surprising_connections(
+    request: Request,
+    authorization: Annotated[str, Header(alias="Authorization")],
+    limit: int = _DEFAULT_ANALYSIS_LIMIT,
+) -> SurprisingConnectionsResponse:
+    require_local_bearer(request, authorization)
+    projector = _require_projector(request)
+    projected = await projector.project()
+    assignment = await projector.clusters()
+    return SurprisingConnectionsResponse(
+        revision=projected.revision,
+        connections=[
+            SurprisingConnectionOut(
+                source_entity_id=item.source_entity_id,
+                source_name=item.source_name,
+                target_entity_id=item.target_entity_id,
+                target_name=item.target_name,
+                kinds=list(item.kinds),
+                source_cluster=item.source_cluster,
+                target_cluster=item.target_cluster,
+            )
+            for item in surprising_connections(
+                projected, limit=_bounded(limit), assignment=assignment
+            )
+        ],
+    )
+
+
+@router.get(
+    "/analysis/suggested-questions",
+    summary="되물을 것들 (불확실하다고 기록된 관계)",
+    operation_id="get_brain_suggested_questions",
+    response_model=SuggestedQuestionsResponse,
+    openapi_extra={**_NOT_LLM_EXPOSED, "x-athena-side-effect": "none"},
+)
+async def get_brain_suggested_questions(
+    request: Request,
+    authorization: Annotated[str, Header(alias="Authorization")],
+    limit: int = _DEFAULT_ANALYSIS_LIMIT,
+) -> SuggestedQuestionsResponse:
+    require_local_bearer(request, authorization)
+    store = _require_store(request)
+    projected = await _require_projector(request).project()
+    return SuggestedQuestionsResponse(
+        revision=projected.revision,
+        questions=[
+            SuggestedQuestionOut(
+                relation_id=item.relation_id,
+                subject_name=item.subject_name,
+                object_name=item.object_name,
+                relation_kind=item.relation_kind,
+                rationale=item.rationale,
+                question=item.question,
+            )
+            for item in suggest_questions(
+                projected, await store.relations(), limit=_bounded(limit)
+            )
+        ],
+    )
+
+
+@router.get(
+    "/analysis/diff",
+    summary="두 리비전 사이의 변화",
+    operation_id="get_brain_graph_diff",
+    response_model=GraphDiffResponse,
+    openapi_extra={**_NOT_LLM_EXPOSED, "x-athena-side-effect": "none"},
+)
+async def get_brain_graph_diff(
+    request: Request,
+    authorization: Annotated[str, Header(alias="Authorization")],
+    from_revision: int = 0,
+) -> GraphDiffResponse:
+    require_local_bearer(request, authorization)
+    store = _require_store(request)
+    diff = graph_diff(await store.events(), from_revision=max(0, from_revision))
+    return GraphDiffResponse(
+        from_revision=diff.from_revision,
+        to_revision=diff.to_revision,
+        entities_added=list(diff.entities_added),
+        entities_merged=list(diff.entities_merged),
+        edges_added=list(diff.edges_added),
+        edges_removed=list(diff.edges_removed),
+        edges_changed=list(diff.edges_changed),
+        edges_rejected=list(diff.edges_rejected),
+    )
+
+
+@router.get(
+    "/analysis/cluster-map",
+    summary="군집 지도 (그래프 모드 1단계)",
+    operation_id="get_brain_cluster_map",
+    response_model=ClusterMapResponse,
+    openapi_extra={**_NOT_LLM_EXPOSED, "x-athena-side-effect": "none"},
+)
+async def get_brain_cluster_map(
+    request: Request,
+    authorization: Annotated[str, Header(alias="Authorization")],
+) -> ClusterMapResponse:
+    require_local_bearer(request, authorization)
+    projector = _require_projector(request)
+    projected = await projector.project()
+    assignment = await projector.clusters()
+    graph = projected.graph
+    return ClusterMapResponse(
+        revision=projected.revision,
+        nodes=[
+            ClusterMapNodeOut(
+                entity_id=node,
+                name=str(graph.nodes[node].get("name", "")),
+                kind=str(graph.nodes[node].get("kind", "")),
+                cluster=assignment.get(node, -1),
+                degree=graph.degree(node),
+            )
+            # 정렬해 내보낸다 — 순서가 흔들리면 캔버스가 이유 없이 다시 그려진다.
+            for node in sorted(graph.nodes)
+        ],
+        edges=[list(pair) for pair in sorted(tuple(sorted(edge)) for edge in graph.edges)],
+    )
