@@ -104,6 +104,9 @@ const ON_CHANNELS = new Set([
   // 오브 접힘/펼침 확정 통보(2026-08-24 리프 1.3.1) — main이 창 크기를 실제로
   // 바꾼 뒤에 보낸다. 렌더러가 먼저 펼치면 창보다 큰 패널이 한 프레임 잘린다.
   'athena:orb-state',
+  // 오브 커서 추적(2026-08-25) — main이 폴링한 커서-오브중심 상대좌표
+  // {dx, dy, dist}를 밀어준다. 커서가 사라지거나 폴링이 멈추면 null.
+  'athena:orb-cursor',
 ]);
 
 contextBridge.exposeInMainWorld('athena', {

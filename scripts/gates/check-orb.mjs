@@ -239,9 +239,18 @@ if (htmlRaw && cssRaw && orbJsRaw) {
   // JS는 `dataset.alert`, CSS는 `[data-alert=…]`로 같은 속성을 만진다 — 둘 다 받는다.
   must(/dataset\.alert|data-alert/.test(orbJs) && /data-alert/.test(cssRaw),
     "orb.js/orb.css: data-alert 상태 속성이 없다 — 무채색↔발화 두 상태를 구분해야 한다");
-  // 발화 상태에서만 색이 존재한다 — 무채색 기본 규칙을 CSS가 실제로 그렇게 쓰는지.
+  // 2026-08-25 규범 개정 — "평소 **무채색**"에서 "평소 **반쯤**"으로.
+  // 얼굴은 늘 있고, 신호는 색의 유무가 아니라 **양**이 진다(바이저 개폐 정도).
+  // 그래도 발화가 자기 규칙을 따로 가져야 한다는 건 그대로다 — 그게 없으면
+  // 대기와 발화가 같은 넓이로 열려 발화가 신호이길 그친다.
+  // 넓이의 실제 차이는 verify.js 검증22가 렌더된 픽셀로 잰다(여기선 배선만 본다).
   must(/\[data-alert="fired"\][^{]*#orbVisor/.test(cssRaw),
-    "orb.css: 바이저가 [data-alert=\"fired\"]에 묶여 있지 않다 — 평소에도 색이 보인다");
+    "orb.css: 바이저가 [data-alert=\"fired\"]에 묶여 있지 않다 — 발화가 대기보다 넓게 열려야 신호다");
+
+  // 표정은 **눈 모양 하나로만** 만든다 — 새 기관(눈썹·입·눈동자)을 붙이면
+  // 그건 키우미가 아니다. data-face 축이 실제로 배선돼 있는지 둘 다에서 본다.
+  must(/dataset\.face|data-face/.test(orbJs) && /data-face/.test(cssRaw),
+    "orb.js/orb.css: data-face 표정 축이 없다 — 표정은 눈 모양으로만 만든다");
 }
 
 // ─────────────────────────────────────────────────────────────────────────

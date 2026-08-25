@@ -1,0 +1,674 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<title>오브 표정 엔진 — 타이밍 프로토타입</title>
+<!--
+  단일 파일 프로토타입 (Paper 아트보드 31의 실측판).
+  브라우저에서 그냥 열면 된다 — 의존성 0, 빌드 0, 서버 0.
+
+  **이 파일은 제품 코드가 아니다.** 값을 눈으로 맞춰보고 확정된 숫자만
+  orb.css로 옮기기 위한 도구다. scripts/gates/check-orb.mjs는 orb.html /
+  orb.css / styles/*만 훑으므로 이 파일은 게이트 대상이 아니다.
+
+  치수는 전부 k배율로 적는다. k=1이 실제 76px 오브다 —
+  큰 무대에서 맞춘 값이 실물에서 그대로 성립하는지 옆에 나란히 두고 본다.
+-->
+<style>
+:root{
+  /* 실측값 — orb.css / Paper 토큰에서 그대로 가져왔다. 눈대중 0개. */
+  --visor-lit:#576AF9;
+  --visor:#0E20B2;
+  --visor-deep:#000984;
+  --ink:#14171D;
+  --dim:#5B6270;
+  --faint:#8B93A1;
+  --line:rgb(16 19 26 / 14%);
+  --brand:#EE137B;
+  --ok:#5FCE3F;
+  --warn:#FF9838;
+
+  /* 튜닝 대상 — JS가 갱신한다. 여기 값이 곧 orb.css로 옮길 값이다. */
+  --blink-close:90ms;
+  --blink-open:130ms;
+  --gaze-out:260ms;
+  --gaze-back:340ms;
+  --track-lag:120ms;
+  --breathe-period:4200ms;
+  --breathe-amp:1.018;
+  --face-ease:cubic-bezier(.2,0,0,1);
+  --shape-dur:220ms;
+}
+
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+  color:#fff;
+  background-color:#43506B;
+  background-image:
+    radial-gradient(circle farthest-corner at 22% 18%, #7d8bb0 0%, #7d8bb000 68%),
+    radial-gradient(circle farthest-corner at 84% 26%, #6b789c 0%, #6b789c00 66%),
+    radial-gradient(circle farthest-corner at 60% 96%, #2c3348 0%, #2c334800 70%),
+    linear-gradient(160deg, #5a6688 0%, #47526e 52%, #363e54 100%);
+  background-attachment:fixed;
+  display:flex;
+  min-height:100vh;
+}
+
+/* ─────────────────────────── 무대 ─────────────────────────── */
+.stage{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:52px;
+  padding:48px;
+  min-width:0;
+}
+.stage-head{text-align:center;display:flex;flex-direction:column;gap:8px;}
+.stage-head h1{margin:0;font-size:26px;font-weight:600;letter-spacing:-.01em;}
+.stage-head p{margin:0;font-size:13px;line-height:20px;color:#ffffffb8;max-width:560px;}
+
+.orbs{display:flex;align-items:flex-end;gap:64px;}
+.slot{display:flex;flex-direction:column;align-items:center;gap:14px;}
+.slot-label{
+  font:500 11px/14px ui-monospace,"Cascadia Mono",Consolas,monospace;
+  letter-spacing:.1em;color:#ffffff8a;
+}
+
+/* ─────────────────────────── 오브 ─────────────────────────── */
+/* 모든 치수는 76px 기준값 × var(--k). k만 바꾸면 통째로 스케일된다. */
+.orb{
+  --k:1;
+  position:relative;
+  width:calc(76px * var(--k));
+  height:calc(76px * var(--k));
+  border-radius:50%;
+  border:1px solid #10131A12;
+  background-color:#FFFFFFE6;
+  background-image:linear-gradient(135deg,#ffffff14 0%,#ffffff00 46%,#ffffff0d 100%);
+  box-shadow:
+    inset 0 calc(1px * var(--k)) 0 #FFFDF899,
+    inset 0 calc(-1px * var(--k)) 0 #10131A14,
+    inset 0 0 calc(24px * var(--k)) #FFF0D614,
+    0 calc(10px * var(--k)) calc(26px * var(--k)) #10131A52;
+}
+
+/* 바이저 — 유일한 색. 숨은 여기서 쉰다. */
+.visor{
+  position:absolute;
+  left:calc(14.4px * var(--k));
+  top:calc(12.2px * var(--k));
+  width:calc(47.2px * var(--k));
+  height:calc(46.4px * var(--k));
+  display:flex;align-items:center;justify-content:center;
+  border-radius:50% 50% 48% 48% / 54% 54% 46% 46%;
+  box-shadow:
+    inset 0 calc(-2px * var(--k)) calc(6px * var(--k)) #00000047,
+    inset 0 calc(2px * var(--k)) calc(3px * var(--k)) #FFFFFF4D;
+  background-image:
+    radial-gradient(ellipse 58% 42% at 34% 20%, #ffffff6b 0%, #ffffff00 62%),
+    radial-gradient(ellipse 120% 100% at 32% 24%, var(--visor-lit) 0%, var(--visor) 46%, var(--visor-deep) 100%);
+  /* 각성도 — 상태마다 바이저가 얼마나 열렸는가. */
+  transform:scale(var(--open,1));
+  transition:transform var(--shape-dur) var(--face-ease);
+}
+.orb[data-breathe="on"] .visor{
+  animation:breathe var(--breathe-period) ease-in-out infinite;
+}
+@keyframes breathe{
+  0%,100%{transform:scale(var(--open,1));}
+  50%    {transform:scale(calc(var(--open,1) * var(--breathe-amp)));}
+}
+
+/* 시선 — 두 도형이 통째로 옮겨간다. 눈동자를 새로 그리지 않는다. */
+.gaze{
+  transform:translate(calc(var(--gx,0px) * var(--k)), calc(var(--gy,0px) * var(--k)));
+  transition:transform var(--gaze-back) var(--face-ease);
+}
+.gaze[data-moving="out"]{transition-duration:var(--gaze-out);}
+/* 커서 추적은 두리번보다 짧게 붙는다 — 길면 커서를 놓친 것처럼 보이고,
+   0이면 눈이 커서에 붙어버려 기계가 된다. 살짝 늦는 것이 살아 있는 것이다. */
+.gaze[data-moving="track"]{transition-duration:var(--track-lag);}
+
+/* 눈꺼풀 — 깜빡임만 담당한다. 시선과 층을 나눠야 서로 안 밟는다. */
+.lid{
+  transform:scaleY(var(--lid,1));
+  transform-origin:center center;
+  transition:transform var(--blink-open) var(--face-ease);
+}
+.lid[data-closing="1"]{transition-duration:var(--blink-close);}
+
+.eyes{display:flex;align-items:center;justify-content:center;gap:calc(10.4px * var(--k));}
+.eye{
+  width:calc(7.1px * var(--k));
+  height:calc(15.8px * var(--k));
+  border-radius:999px;
+  background:#fff;
+  box-shadow:0 calc(1px * var(--k)) calc(2px * var(--k)) #0000002E;
+  flex-shrink:0;
+  transition:
+    width var(--shape-dur) var(--face-ease),
+    height var(--shape-dur) var(--face-ease),
+    border-radius var(--shape-dur) var(--face-ease),
+    transform var(--shape-dur) var(--face-ease);
+}
+
+/* ── 표정 = 흰 도형의 모양. 눈썹도 입도 없다. ── */
+/* 아치 두 종류는 배경을 지우고 테두리 한쪽만 남긴다(도형 수는 그대로 둘). */
+.orb[data-face="sleep"] .eye{height:calc(2.6px * var(--k));}
+.orb[data-face="sleep"]{--open:.86;}
+
+.orb[data-face="listen"] .eye{height:calc(13.5px * var(--k));}
+
+.orb[data-face="think"] .eye{height:calc(15.8px * var(--k));}
+
+.orb[data-face="done"] .eye,
+.orb[data-face="glad"] .eye{
+  background:transparent;box-shadow:none;
+  border-radius:999px 999px 0 0;
+  border-top:calc(2.6px * var(--k)) solid #fff;
+}
+.orb[data-face="done"] .eye{width:calc(10.6px * var(--k));height:calc(6px * var(--k));}
+.orb[data-face="glad"] .eye{width:calc(12.5px * var(--k));height:calc(7.2px * var(--k));border-top-width:calc(3px * var(--k));}
+.orb[data-face="done"] .eyes,
+.orb[data-face="glad"] .eyes{gap:calc(8.2px * var(--k));}
+
+.orb[data-face="sorry"] .eye{
+  width:calc(10.6px * var(--k));height:calc(5.3px * var(--k));
+  background:transparent;box-shadow:none;
+  border-radius:0 0 999px 999px;
+  border-bottom:calc(2.4px * var(--k)) solid #fff;
+}
+.orb[data-face="sorry"] .eyes{gap:calc(8.2px * var(--k));}
+
+.orb[data-face="watch"] .eye{width:calc(5px * var(--k));height:calc(12.9px * var(--k));}
+.orb[data-face="watch"] .eyes{gap:calc(8.2px * var(--k));}
+
+.orb[data-face="fired"] .eye{width:calc(10.2px * var(--k));height:calc(10.2px * var(--k));border-radius:50%;}
+.orb[data-face="fired"] .eyes{gap:calc(9px * var(--k));}
+
+.orb[data-face="drift"] .eye{transform:rotate(-10deg);}
+
+/* 발화 수 배지 — 0은 그리지 않는다. */
+.count{
+  position:absolute;right:calc(1px * var(--k));top:calc(1px * var(--k));
+  min-width:calc(18px * var(--k));height:calc(18px * var(--k));
+  padding:0 calc(5px * var(--k));
+  border-radius:999px;background:#FFFFFFF0;
+  box-shadow:0 calc(1px * var(--k)) calc(3px * var(--k)) #10131A42;
+  display:none;align-items:center;justify-content:center;
+  font:600 calc(11px * var(--k))/1 ui-monospace,Consolas,monospace;color:var(--ink);
+}
+.orb[data-face="fired"] .count{display:flex;}
+
+/* ─────────────────────── 접근성 모의 ─────────────────────── */
+/* access.css:83의 전역 규칙을 흉내낸다 — 반복은 1회, 전이는 즉시.
+   여기서 확인해야 하는 것 하나: 멈춘 프레임이 "뜬 눈"인가. */
+body.rm .visor,
+body.rm .gaze,
+body.rm .lid,
+body.rm .eye{
+  animation-duration:.001ms !important;
+  animation-iteration-count:1 !important;
+  transition-duration:.001ms !important;
+}
+
+/* ─────────────────────────── 패널 ─────────────────────────── */
+.panel{
+  width:392px;flex-shrink:0;
+  background:#20263a;
+  border-left:1px solid #ffffff1f;
+  padding:26px 24px 40px;
+  overflow-y:auto;
+  display:flex;flex-direction:column;gap:26px;
+}
+.panel h2{
+  margin:0;font:500 11px/14px ui-monospace,Consolas,monospace;
+  letter-spacing:.12em;color:#ffffff7a;
+}
+.group{display:flex;flex-direction:column;gap:12px;}
+.faces{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+.faces button{
+  appearance:none;border:1px solid #ffffff24;background:#ffffff0f;color:#fff;
+  border-radius:9px;padding:9px 10px;font:14px/1.3 inherit;text-align:left;cursor:pointer;
+}
+.faces button:hover{background:#ffffff1c;}
+.faces button[aria-pressed="true"]{background:#fff;color:#20263a;border-color:#fff;}
+.faces b{display:block;font-weight:600;font-size:13px;}
+.faces span{display:block;font:500 10px/14px ui-monospace,Consolas,monospace;opacity:.62;}
+
+.toggles{display:flex;flex-direction:column;gap:9px;}
+.toggle{display:flex;align-items:center;gap:10px;font-size:13px;cursor:pointer;}
+.toggle input{width:16px;height:16px;accent-color:var(--brand);cursor:pointer;}
+.toggle em{font-style:normal;color:#ffffff8a;font-size:11px;margin-left:auto;font-family:ui-monospace,Consolas,monospace;}
+
+.slider{display:flex;flex-direction:column;gap:5px;}
+.slider .row{display:flex;align-items:baseline;justify-content:space-between;gap:10px;}
+.slider label{font-size:12px;color:#ffffffc7;}
+.slider output{font:500 12px/1 ui-monospace,Consolas,monospace;color:#fff;}
+.slider input{width:100%;accent-color:var(--brand);}
+.slider .hint{font-size:10.5px;line-height:15px;color:#ffffff70;}
+
+.export{
+  background:#12172a;border:1px solid #ffffff1f;border-radius:10px;
+  padding:14px;font:12px/19px ui-monospace,Consolas,monospace;
+  color:#cfd6e6;white-space:pre;overflow-x:auto;
+}
+.note{font-size:11px;line-height:17px;color:#ffffff8a;}
+.note b{color:var(--warn);font-weight:600;}
+</style>
+</head>
+<body>
+
+<main class="stage">
+  <div class="stage-head">
+    <h1>흰 도형만 움직인다</h1>
+    <p>왼쪽이 실물 76px, 오른쪽이 확대판이다. 확대판에서 맞춘 타이밍이 실물에서도 읽히는지 나란히 두고 본다 — 큰 화면에서만 좋아 보이는 모션은 실패다.</p>
+  </div>
+
+  <div class="orbs">
+    <div class="slot">
+      <div class="orb" id="orbReal" data-face="idle" data-breathe="on" style="--k:1">
+        <div class="visor">
+          <div class="gaze"><div class="lid"><div class="eyes">
+            <div class="eye"></div><div class="eye"></div>
+          </div></div></div>
+        </div>
+        <div class="count">1</div>
+      </div>
+      <div class="slot-label">76px — 실물</div>
+    </div>
+
+    <div class="slot">
+      <div class="orb" id="orbBig" data-face="idle" data-breathe="on" style="--k:3.4">
+        <div class="visor">
+          <div class="gaze"><div class="lid"><div class="eyes">
+            <div class="eye"></div><div class="eye"></div>
+          </div></div></div>
+        </div>
+        <div class="count">1</div>
+      </div>
+      <div class="slot-label">258px — 확대</div>
+    </div>
+  </div>
+</main>
+
+<aside class="panel">
+  <div class="group">
+    <h2>표정 — 흰 도형의 모양</h2>
+    <div class="faces" id="faces"></div>
+  </div>
+
+  <div class="group">
+    <h2>대기 루프</h2>
+    <div class="toggles">
+      <label class="toggle"><input type="checkbox" id="tBlink" checked> 깜빡임 <em id="blinkTick">—</em></label>
+      <label class="toggle"><input type="checkbox" id="tSaccade" checked> 두리번 <em id="sacTick">—</em></label>
+      <label class="toggle"><input type="checkbox" id="tBreathe" checked> 숨</label>
+      <label class="toggle"><input type="checkbox" id="tRm"> reduced-motion 모의 <em>멈춘 프레임 확인</em></label>
+    </div>
+    <div class="note">reduced-motion을 켜면 반복이 1회로 깎인다(<b>access.css:83</b>). 여기서 볼 것은 하나 — 멈춘 눈이 <b>뜬 눈</b>인가. 감긴 채 멈추면 사용자는 &ldquo;잠듦&rdquo;으로 읽는다.</div>
+  </div>
+
+  <div class="group">
+    <h2>커서 추적</h2>
+    <div class="toggles">
+      <label class="toggle"><input type="checkbox" id="tTrack" checked> 커서를 쳐다본다 <em id="trackTick">—</em></label>
+      <label class="toggle"><input type="checkbox" id="tWake" checked> 다가오면 깬다 <em>잠듦 → 대기</em></label>
+    </div>
+    <div class="slider"><div class="row"><label for="sRadius">반응 반경</label><output id="oRadius"></output></div><input type="range" id="sRadius" min="80" max="900" step="10" value="320">
+      <div class="hint">이 밖이면 쳐다보지 않는다. 화면 반대편 커서까지 따라가면 감시당하는 기분이 든다. 안쪽 75%는 최대치로 따라가고 바깥 25%에서만 잦아든다.</div></div>
+    <div class="slider"><div class="row"><label for="sTrackAmp">최대 이동</label><output id="oTrackAmp"></output></div><input type="range" id="sTrackAmp" min="1" max="10" step="0.5" value="4">
+      <div class="hint">76px 기준 px. 두리번(기본 7px)보다 작아야 &ldquo;곁눈질&rdquo;로 읽힌다.</div></div>
+    <div class="slider"><div class="row"><label for="sLag">따라가는 지연</label><output id="oLag"></output></div><input type="range" id="sLag" min="40" max="600" step="10" value="120"></div>
+    <div class="slider"><div class="row"><label for="sInterest">흥미 지속</label><output id="oInterest"></output></div><input type="range" id="sInterest" min="500" max="8000" step="250" value="2500">
+      <div class="hint">커서가 멈춰 있으면 이 시간 뒤에 시선을 놓는다. 계속 붙어 있으면 부담스럽다.</div></div>
+    <div class="note">&ldquo;조금만&rdquo;은 세 장치가 만든다 — <b>반경</b> 밖이면 안 보고, <b>이동량</b>은 감쇠하고, 멈춰 있으면 <b>흥미</b>를 잃는다. 시선이 뜻을 나르는 표정(듣는 중·생각 중·경계 등)에서는 아예 작동하지 않는다.</div>
+  </div>
+
+  <div class="group">
+    <h2>깜빡임</h2>
+    <div class="slider"><div class="row"><label for="sClose">감는 시간</label><output id="oClose"></output></div><input type="range" id="sClose" min="40" max="200" step="5" value="90"></div>
+    <div class="slider"><div class="row"><label for="sOpen">뜨는 시간</label><output id="oOpen"></output></div><input type="range" id="sOpen" min="40" max="300" step="5" value="130">
+      <div class="hint">뜨는 쪽이 느려야 기계가 아니다. 같거나 반대면 셔터처럼 보인다.</div></div>
+    <div class="slider"><div class="row"><label for="sMin">최소 간격</label><output id="oMin"></output></div><input type="range" id="sMin" min="1000" max="9000" step="250" value="4000"></div>
+    <div class="slider"><div class="row"><label for="sMax">최대 간격</label><output id="oMax"></output></div><input type="range" id="sMax" min="2000" max="16000" step="250" value="7000"></div>
+    <div class="slider"><div class="row"><label for="sDouble">두 번 연속 확률</label><output id="oDouble"></output></div><input type="range" id="sDouble" min="0" max="60" step="5" value="15">
+      <div class="hint">규칙적이면 시계다. 이 불규칙이 생물이라는 증거다.</div></div>
+  </div>
+
+  <div class="group">
+    <h2>두리번</h2>
+    <div class="slider"><div class="row"><label for="sOut">가는 시간</label><output id="oOut"></output></div><input type="range" id="sOut" min="80" max="600" step="10" value="260"></div>
+    <div class="slider"><div class="row"><label for="sBack">오는 시간</label><output id="oBack"></output></div><input type="range" id="sBack" min="80" max="900" step="10" value="340">
+      <div class="hint">갈 때는 빠르고 돌아올 때는 느리다 — 사람 눈이 그렇다.</div></div>
+    <div class="slider"><div class="row"><label for="sHold">머무는 시간</label><output id="oHold"></output></div><input type="range" id="sHold" min="200" max="3000" step="50" value="1200"></div>
+    <div class="slider"><div class="row"><label for="sAmp">이동 거리</label><output id="oAmp"></output></div><input type="range" id="sAmp" min="2" max="16" step="0.5" value="7">
+      <div class="hint">76px 기준 px. 너무 크면 눈이 바이저 밖으로 새어 보인다.</div></div>
+    <div class="slider"><div class="row"><label for="sSacMin">최소 간격</label><output id="oSacMin"></output></div><input type="range" id="sSacMin" min="2000" max="20000" step="500" value="8000"></div>
+    <div class="slider"><div class="row"><label for="sSacMax">최대 간격</label><output id="oSacMax"></output></div><input type="range" id="sSacMax" min="4000" max="40000" step="500" value="20000"></div>
+  </div>
+
+  <div class="group">
+    <h2>숨</h2>
+    <div class="slider"><div class="row"><label for="sPeriod">주기</label><output id="oPeriod"></output></div><input type="range" id="sPeriod" min="1500" max="9000" step="100" value="4200"></div>
+    <div class="slider"><div class="row"><label for="sBreath">부푸는 정도</label><output id="oBreath"></output></div><input type="range" id="sBreath" min="0" max="60" step="1" value="18">
+      <div class="hint">알아채면 실패다. 없으면 허전한 정도가 맞다.</div></div>
+  </div>
+
+  <div class="group">
+    <h2>표정 전환</h2>
+    <div class="slider"><div class="row"><label for="sShape">도형 변형 시간</label><output id="oShape"></output></div><input type="range" id="sShape" min="60" max="600" step="10" value="220"></div>
+  </div>
+
+  <div class="group">
+    <h2>orb.css로 옮길 값</h2>
+    <div class="export" id="export"></div>
+    <div class="note">여기 숫자만 <b>orb.css</b>와 <b>orb.js</b>로 옮기면 된다. 이 파일 자체는 제품에 들어가지 않는다.</div>
+  </div>
+</aside>
+
+<script>
+'use strict';
+
+// 표정 사전 — 값은 전부 76px 기준. gx/gy는 흰 도형이 옮겨 앉는 거리다.
+// 새 기관을 만들지 않으므로 여기 있는 건 모양과 위치 둘뿐이다.
+const FACES = [
+  { id:'idle',   name:'대기',     sig:'shell hidden',   gx:0,  gy:0,   idle:true  },
+  { id:'sleep',  name:'잠듦',     sig:'idle > 5min',    gx:0,  gy:0,   idle:false },
+  { id:'listen', name:'듣는 중',  sig:'input:focus',    gx:0,  gy:4,   idle:false },
+  { id:'think',  name:'생각 중',  sig:'query running',  gx:5,  gy:-4,  idle:false, scan:true },
+  { id:'done',   name:'완료',     sig:'result ok',      gx:0,  gy:0,   idle:false },
+  { id:'glad',   name:'신남',     sig:'목표가 도달',     gx:0,  gy:0,   idle:false },
+  { id:'watch',  name:'경계',     sig:'임계 90% 근접',   gx:6,  gy:0,   idle:false },
+  { id:'fired',  name:'발화',     sig:'routine-event',  gx:0,  gy:0,   idle:false },
+  { id:'sorry',  name:'미안',     sig:'error · timeout', gx:0, gy:2,   idle:false },
+  { id:'drift',  name:'딴생각',   sig:'장 마감',         gx:-5, gy:-3,  idle:false },
+];
+
+const orbs = [document.getElementById('orbReal'), document.getElementById('orbBig')];
+const root = document.documentElement;
+const $ = (id) => document.getElementById(id);
+
+let face = FACES[0];
+
+/* ── 표정 버튼 ── */
+const facesBox = $('faces');
+for (const f of FACES) {
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.setAttribute('aria-pressed', String(f.id === face.id));
+  b.dataset.face = f.id;
+  const n = document.createElement('b'); n.textContent = f.name;
+  const s = document.createElement('span'); s.textContent = f.sig;
+  b.append(n, s);
+  b.addEventListener('click', () => setFace(f));
+  facesBox.appendChild(b);
+}
+
+function setFace(f) {
+  face = f;
+  for (const el of facesBox.children) {
+    el.setAttribute('aria-pressed', String(el.dataset.face === f.id));
+  }
+  for (const o of orbs) o.dataset.face = f.id;
+  // 표정이 정한 기본 시선으로 즉시 돌아간다 — 두리번 중이었으면 그게 취소된다.
+  gazeTo(f.gx, f.gy, 'back');
+}
+
+/* ── 시선 ── */
+// 상태의 기본 시선 위에 두리번·커서 추적이 얹힌다. 원점은 언제나 표정이 정한다.
+// 오브마다 화면에서의 자리가 다르므로 커서 추적은 오브별로 따로 계산한다.
+function gazeOrb(o, gx, gy, dir) {
+  const g = o.querySelector('.gaze');
+  g.dataset.moving = dir;
+  g.style.setProperty('--gx', gx.toFixed(2) + 'px');
+  g.style.setProperty('--gy', gy.toFixed(2) + 'px');
+}
+function gazeTo(gx, gy, dir) {
+  for (const o of orbs) gazeOrb(o, gx, gy, dir === 'out' ? 'out' : 'back');
+}
+
+/* ── 깜빡임 ── */
+// 감았다 뜨는 한 번. 감는 전이가 끝난 뒤에 뜬다(setTimeout 체인).
+let blinkTimer = null;
+function blinkOnce(then) {
+  for (const o of orbs) {
+    const l = o.querySelector('.lid');
+    l.dataset.closing = '1';
+    l.style.setProperty('--lid', '0.06');
+  }
+  setTimeout(() => {
+    for (const o of orbs) {
+      const l = o.querySelector('.lid');
+      l.dataset.closing = '0';
+      l.style.setProperty('--lid', '1');
+    }
+    setTimeout(() => then && then(), num('sOpen'));
+  }, num('sClose'));
+}
+
+function scheduleBlink() {
+  clearTimeout(blinkTimer);
+  if (!$('tBlink').checked) { $('blinkTick').textContent = '꺼짐'; return; }
+  const lo = Math.min(num('sMin'), num('sMax'));
+  const hi = Math.max(num('sMin'), num('sMax'));
+  const wait = lo + Math.random() * (hi - lo);
+  $('blinkTick').textContent = (wait / 1000).toFixed(1) + 's 뒤';
+  blinkTimer = setTimeout(() => {
+    const twice = Math.random() * 100 < num('sDouble');
+    blinkOnce(() => {
+      if (twice) blinkOnce(scheduleBlink);
+      else scheduleBlink();
+    });
+  }, wait);
+}
+
+/* ── 두리번 ── */
+// 대기(idle:true)에서만 돈다. 아래는 목적지에서 뺀다 — 시무룩해 보인다.
+const DIRS = [[-1,-1],[0,-1],[1,-1],[-1,0],[1,0]];
+let sacTimer = null;
+function scheduleSaccade() {
+  clearTimeout(sacTimer);
+  if (!$('tSaccade').checked) { $('sacTick').textContent = '꺼짐'; return; }
+  const lo = Math.min(num('sSacMin'), num('sSacMax'));
+  const hi = Math.max(num('sSacMin'), num('sSacMax'));
+  const wait = lo + Math.random() * (hi - lo);
+  $('sacTick').textContent = (wait / 1000).toFixed(1) + 's 뒤';
+  sacTimer = setTimeout(() => {
+    // 커서를 쳐다보는 중이면 두리번은 쉰다 — 둘이 같은 층을 쓰므로 겹치면 시선이 튄다.
+    if (!face.idle || tracking) { scheduleSaccade(); return; }
+    const [dx, dy] = DIRS[Math.floor(Math.random() * DIRS.length)];
+    const amp = num('sAmp');
+    gazeTo(face.gx + dx * amp, face.gy + dy * amp * 0.85, 'out');
+    setTimeout(() => {
+      gazeTo(face.gx, face.gy, 'back');
+      scheduleSaccade();
+    }, num('sHold') + num('sOut'));
+  }, wait);
+}
+
+/* ── 생각 중 훑기 ── */
+// 스피너를 대신하는 유일한 진행 표시. 답이 오는 동안만 좌우로 훑는다.
+let scanTimer = null;
+let scanSide = 1;
+function scanTick() {
+  clearInterval(scanTimer);
+  scanTimer = setInterval(() => {
+    if (!face.scan) return;
+    scanSide *= -1;
+    gazeTo(face.gx * scanSide, face.gy, 'out');
+  }, 900);
+}
+
+/* ── 커서 추적 ── */
+// **실물에서는 이렇게 못 한다.** 오브 창은 76px짜리 별도 OS 창이라 mousemove가
+// 창 위에 있을 때만 온다 — 정작 눈이 따라가는 게 보여야 할 "떨어져 있을 때"는
+// 좌표가 안 들어온다. 실제 구현은 main에서 screen.getCursorScreenPoint()를
+// 폴링해 창 중심과의 상대 좌표를 렌더러로 밀어야 한다(main.js:2에 screen 이미 있음).
+// 여기 프로토타입은 한 문서 안이라 mousemove로 대신한다 — 느낌만 맞춰보는 용도다.
+let cursor = null;
+let lastMove = 0;
+let tracking = false;
+
+window.addEventListener('mousemove', (e) => {
+  cursor = { x: e.clientX, y: e.clientY };
+  lastMove = performance.now();
+});
+
+function releaseTrack() {
+  tracking = false;
+  gazeTo(face.gx, face.gy, 'back');
+}
+
+function trackLoop() {
+  const tick = $('trackTick');
+  if (!$('tTrack').checked) { if (tracking) releaseTrack(); tick.textContent = '꺼짐'; return; }
+  if (!cursor) { tick.textContent = '커서 없음'; return; }
+
+  // 흥미 — 커서가 멈춰 있은 지 오래면 시선을 놓는다. 계속 붙어 있으면 부담스럽다.
+  if (performance.now() - lastMove > num('sInterest')) {
+    if (tracking) releaseTrack();
+    tick.textContent = '흥미 잃음';
+    return;
+  }
+
+  const R = num('sRadius');
+  const maxAmp = num('sTrackAmp');
+
+  // 오브별 거리부터 잰다 — 깨우기 판정과 시선 계산이 같은 값을 쓴다.
+  const metrics = orbs.map((o) => {
+    const r = o.getBoundingClientRect();
+    const cx = r.left + r.width / 2;
+    const cy = r.top + r.height / 2;
+    const dx = cursor.x - cx;
+    const dy = cursor.y - cy;
+    return { o, dx, dy, dist: Math.hypot(dx, dy), inner: r.width / 2 };
+  });
+  const near = metrics.some((m) => m.dist <= R);
+
+  // 다가오면 깬다 — 잠듦은 시선을 안 쓰는 표정이라 여기서만 상태를 건드린다.
+  if (face.id === 'sleep' && near && $('tWake').checked) {
+    setFace(FACES[0]);
+    tick.textContent = '깨움';
+    return;
+  }
+
+  // 시선이 뜻을 나르는 표정에서는 커서를 보지 않는다 — 정보가 장난에 밀리면 안 된다.
+  if (!face.idle) { if (tracking) releaseTrack(); tick.textContent = '표정이 시선을 쓰는 중'; return; }
+
+  let any = false;
+  for (const m of metrics) {
+    if (m.dist > R) { gazeOrb(m.o, face.gx, face.gy, 'back'); continue; }
+    any = true;
+    // 반경 안쪽 75%는 최대치로 따라가고, 바깥 25%에서만 0으로 잦아든다.
+    // 반경 전체에 걸쳐 감쇠시키면(첫 판) 커서가 코앞에 와야 겨우 움직여서
+    // "따라다닌다"가 성립하지 않는다 — 실측: R=320, 거리 267에서 0.9px뿐이었다.
+    // 감쇠의 목적은 세기 조절이 아니라 경계에서 툭 켜지지 않게 하는 것이다.
+    const band = Math.max(1, R * 0.25);
+    const t = Math.min(1, Math.max(0, (R - m.dist) / band));
+    const amp = maxAmp * (t * t * (3 - 2 * t));
+    const d = m.dist || 1;
+    // 세로는 0.85배 — 바이저가 세로로 짧아서 같은 값이면 눈이 위아래로 새어 보인다.
+    gazeOrb(m.o, face.gx + (m.dx / d) * amp, face.gy + (m.dy / d) * amp * 0.85, 'track');
+  }
+  tracking = any;
+  tick.textContent = any ? '쳐다보는 중' : '멀어서 무시';
+}
+
+/* ── 슬라이더 배선 ── */
+function num(id) { return Number($(id).value); }
+
+const WIRING = [
+  ['sClose','oClose',  v => v + 'ms',                 v => root.style.setProperty('--blink-close', v + 'ms')],
+  ['sOpen', 'oOpen',   v => v + 'ms',                 v => root.style.setProperty('--blink-open', v + 'ms')],
+  ['sMin',  'oMin',    v => (v/1000).toFixed(2) + 's', null],
+  ['sMax',  'oMax',    v => (v/1000).toFixed(2) + 's', null],
+  ['sDouble','oDouble',v => v + '%',                  null],
+  ['sOut',  'oOut',    v => v + 'ms',                 v => root.style.setProperty('--gaze-out', v + 'ms')],
+  ['sBack', 'oBack',   v => v + 'ms',                 v => root.style.setProperty('--gaze-back', v + 'ms')],
+  ['sHold', 'oHold',   v => (v/1000).toFixed(2) + 's', null],
+  ['sAmp',  'oAmp',    v => v + 'px',                 null],
+  ['sSacMin','oSacMin',v => (v/1000).toFixed(1) + 's', null],
+  ['sSacMax','oSacMax',v => (v/1000).toFixed(1) + 's', null],
+  ['sPeriod','oPeriod',v => (v/1000).toFixed(1) + 's', v => root.style.setProperty('--breathe-period', v + 'ms')],
+  ['sBreath','oBreath',v => '+' + (v/10).toFixed(1) + '%', v => root.style.setProperty('--breathe-amp', (1 + v/1000).toFixed(4))],
+  ['sShape','oShape',  v => v + 'ms',                 v => root.style.setProperty('--shape-dur', v + 'ms')],
+  ['sRadius','oRadius',v => v + 'px',                 null],
+  ['sTrackAmp','oTrackAmp', v => v + 'px',            null],
+  ['sLag',  'oLag',    v => v + 'ms',                 v => root.style.setProperty('--track-lag', v + 'ms')],
+  ['sInterest','oInterest', v => (v/1000).toFixed(2) + 's', null],
+];
+
+function syncAll() {
+  for (const [sid, oid, fmt, apply] of WIRING) {
+    const v = num(sid);
+    $(oid).textContent = fmt(v);
+    if (apply) apply(v);
+  }
+  renderExport();
+}
+
+for (const [sid] of WIRING) {
+  $(sid).addEventListener('input', () => {
+    syncAll();
+    if (sid === 'sMin' || sid === 'sMax' || sid === 'sDouble') scheduleBlink();
+    if (sid.startsWith('sSac') || sid === 'sHold') scheduleSaccade();
+  });
+}
+
+/* ── 토글 ── */
+$('tBlink').addEventListener('change', scheduleBlink);
+$('tSaccade').addEventListener('change', scheduleSaccade);
+$('tBreathe').addEventListener('change', () => {
+  for (const o of orbs) o.dataset.breathe = $('tBreathe').checked ? 'on' : 'off';
+});
+$('tRm').addEventListener('change', () => {
+  document.body.classList.toggle('rm', $('tRm').checked);
+});
+
+/* ── 내보내기 ── */
+function renderExport() {
+  const amp = (1 + num('sBreath') / 1000).toFixed(4);
+  $('export').textContent =
+`/* orb.css */
+:root{
+  --blink-close: ${num('sClose')}ms;
+  --blink-open:  ${num('sOpen')}ms;
+  --gaze-out:    ${num('sOut')}ms;
+  --gaze-back:   ${num('sBack')}ms;
+  --shape-dur:   ${num('sShape')}ms;
+  --breathe:     ${num('sPeriod')}ms;
+  --breathe-amp: ${amp};
+}
+
+/* orb.js — 상수 */
+BLINK_INTERVAL = [${num('sMin')}, ${num('sMax')}]
+BLINK_DOUBLE   = ${(num('sDouble') / 100).toFixed(2)}
+SACCADE_EVERY  = [${num('sSacMin')}, ${num('sSacMax')}]
+SACCADE_HOLD   = ${num('sHold')}
+SACCADE_AMP    = ${num('sAmp')}   /* 76px 기준 px */
+
+/* 커서 추적 — main에서 screen.getCursorScreenPoint() 폴링 필요 */
+TRACK_RADIUS   = ${num('sRadius')}   /* 화면 px, 오브 중심 기준 */
+TRACK_AMP      = ${num('sTrackAmp')}   /* 76px 기준 px */
+TRACK_INTEREST = ${num('sInterest')}
+TRACK_ONLY_IN  = ['idle']   /* 시선이 뜻을 나르는 표정에서는 끈다 */`;
+}
+
+/* ── 시작 ── */
+syncAll();
+setFace(FACES[0]);
+scheduleBlink();
+scheduleSaccade();
+scanTick();
+// 30fps면 충분하다 — 커서 추적에 --track-lag(기본 120ms)가 이미 걸려 있어
+// 그보다 촘촘히 계산해봐야 전이가 먹어버린다.
+setInterval(trackLoop, 33);
+</script>
+</body>
+</html>
