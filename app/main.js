@@ -1398,6 +1398,14 @@ ipcMain.handle('athena:brain-status', async () => {
   return { ok: true, ...result.body };
 });
 
+// 그래프 모드가 그릴 군집 지도(leaf 8 / W2-3). 백엔드가 군집을 캐시하므로 왕복이
+// 싸고, 렌더러는 리비전이 그대로면 다시 그리지 않는다.
+ipcMain.handle('athena:brain-cluster-map', async () => {
+  const result = await fetchBrainJson('/api/v1/brain/analysis/cluster-map');
+  if (!result.ok) return { ok: false, error: result.error };
+  return { ok: true, ...result.body };
+});
+
 // ④ 공통 테이블 카드 봉투로 접는다 — canvas.js의 renderMcpTable(envelope)이
 // 이미 그리는 {canvas_type:'table', data:{columns,rows}} 그대로다. 신규 카드
 // 타입은 0개(계획 §2(d) "신규 카드 타입 0개").

@@ -11,8 +11,11 @@ dependencies = [
   "fastapi>=0.115,<1",
   "httpx>=0.27,<1",
   "jsonschema>=4.23,<5",
-  "ladybug==0.19.1",
   "mcp==1.28.*",
+  # 그래프 분석(군집·중심성·경로). **순수 파이썬**이라 ladybug를 걷어낸 이유였던
+  # 네이티브 휠·DLL 경로 세금이 없다 — Electron 앱을 일반 사용자에게 배포하는 우리에게
+  # 그 차이가 의존성을 다시 들이는 근거다.
+  "networkx>=3.4,<4",
   "pydantic-settings>=2.6,<3",
   "uvicorn[standard]>=0.32,<1",
   "websockets>=15,<16",
@@ -37,6 +40,12 @@ packages = ["athena_api", "athena_mcp"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 asyncio_mode = "auto"
+markers = [
+  # 검증 3층(leaf 9). 층마다 CI에서 따로 돌릴 수 있어야 한다 — 한 덩어리면
+  # "무엇이 검증됐나"에 층 단위로 답할 수 없다.
+  "deterministic: 결정층 — 저장층 계약과 결정적 티어(체결·잔고). LLM 없음, 난수 없음.",
+  "replay: 녹화응답층 — 녹화한 LLM 응답으로 추출 전 경로를 LLM 없이 재생한다.",
+]
 
 [tool.ruff]
 line-length = 100

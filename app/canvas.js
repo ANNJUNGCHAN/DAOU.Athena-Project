@@ -1,6 +1,6 @@
 const { sanitize } = window.AthenaLib.Sanitize;
 const { renderMarkdownInto } = window.AthenaLib.Markdown;
-const { errorNote, removeCardAndMaybeCollapse } = window.AthenaLib.UiKit;
+const { errorNote, removeCard } = window.AthenaLib.UiKit;
 const { widthGradeFor, dropTargetsFor, exceedsHeightBudget, MIN_CARDS } = window.AthenaLib.CanvasLayout;
 const { foldColumns } = window.AthenaLib.ColumnFold;
 const { createChartCard } = window.AthenaLib.ChartCard;
@@ -860,8 +860,8 @@ function closeCard(card) {
     cardDestroyers.delete(card);
   }
   // 부모에서 remove → 그리드가 비면 캔버스 접기는 ui-kit.js의
-  // removeCardAndMaybeCollapse로 settings-cards.js와 공용화했다(포니테일 감사).
-  removeCardAndMaybeCollapse(card);
+  // removeCard로 settings-cards.js와 공용화했다(포니테일 감사).
+  removeCard(card);
 }
 
 function cardCloseButton(card) {
@@ -1124,3 +1124,47 @@ function fmtWon(raw) {
 // Ctrl+= / Ctrl+- / Ctrl+0 / Ctrl+휠 배율 자체는 2026-08-22 사용자 지시로 이미
 // 폐기됐다 — 크기는 설정 › 화면에서만 바뀐다. 그 폐기는 chat.js에만 반영돼 있었고
 // 이 파일에는 남아 있었다(창이 둘이라 서로 어긋나 있던 것이다). 여기서 정리한다.
+
+// --- 그래프 모드 배선 (leaf 8 / W2-3) ---------------------------------------
+//
+// 상태·배치·그리기는 lib/graph-mode/**가 순수하게 갖고 있고, 여기서는 DOM과
+// 백엔드에만 잇는다. 브레인이 꺼져 있으면 필을 숨긴다 — 루틴 칩과 같은 규율로,
+// 없는 기능을 있다고 표시하지 않는다.
+const graphMode = window.AthenaLib.GraphModeController.createGraphModeController({
+  store: window.AthenaLib.GraphModeStore,
+  layout: window.AthenaLib.GraphClusterLayout,
+  render: window.AthenaLib.GraphRender,
+  prefs: window.AthenaLib.GraphModePrefs,
+  elements: {
+    pill: document.getElementById('graphPill'),
+    summary: document.getElementById('mosaic'),
+    graph: document.getElementById('graphCanvas'),
+  },
+  // main은 실패를 {ok:false}로 돌려준다. 컨트롤러는 **예외**로 실패를 안다 —
+  // 여기서 바꿔주지 않으면 `{ok:false}`가 정상 응답으로 흘러 빈 그래프가 그려지고,
+  // 그것은 "성향이 없다"로 읽힌다.
+  fetchClusterMap: async () => {
+    const res = await window.athena.invoke('athena:brain-cluster-map');
+    if (!res || !res.ok) throw new Error((res && res.error) || '군집 지도를 받지 못했다');
+    return res;
+  },
+  onError: (err) => console.warn('[graph-mode] cluster-map 실패', err),
+});
+window.AthenaGraphMode = graphMode;
+
+const graphPillEl = document.getElementById('graphPill');
+if (graphPillEl) {
+  graphPillEl.addEventListener('click', () => { graphMode.toggle(); });
+}
+
+// 필은 shell.html에서 hidden으로 태어난다 — 브레인이 준비됐다고 **확인한 뒤에만**
+// 보인다. 이 프로브가 없으면 필이 영영 숨어 있어 사람이 그래프 모드에 닿지 못한다.
+(async () => {
+  try {
+    const status = await window.athena.invoke('athena:brain-status');
+    graphMode.setAvailable(Boolean(status && status.ok && status.ready));
+  } catch (err) {
+    console.warn('[graph-mode] brain-status 실패 — 필을 숨긴 채로 둔다', err);
+    graphMode.setAvailable(false);
+  }
+})();

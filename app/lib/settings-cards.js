@@ -8,7 +8,7 @@
 // 대체한다(preload.js). ui-kit require는 node --test/<script> 태그 겸용.
 const {
   el, row, statusDot, badge, arrowIcon, button, progressDots, labeledRow,
-  sheet, secretMask, emptyState, errorNote, clear, removeCardAndMaybeCollapse,
+  sheet, secretMask, emptyState, errorNote, clear, removeCard,
 } = (typeof module !== 'undefined' && module.exports) ? require('./ui-kit') : window.AthenaLib.UiKit;
 
 // ---------------------------------------------------------------------------
@@ -138,7 +138,7 @@ function cardCloseButton(card) {
   b.type = 'button';
   b.setAttribute('aria-label', '카드 닫기');
   b.title = '이 카드 닫기';
-  b.addEventListener('click', () => removeCardAndMaybeCollapse(card));
+  b.addEventListener('click', () => removeCard(card));
   return b;
 }
 
@@ -1666,6 +1666,60 @@ function renderHistory(grid) {
   return refreshHistoryCard(card, head, body);
 }
 
+
+// 그래프 모드 설정 (leaf 8).
+//
+// 별도 카드를 만들지 않고 '성향・이력' 카드 안에 둔 이유: 사용자에게 이 둘은 한
+// 주제다("내 투자 성향을 어떻게 보고 관리할까"). 카드를 쪼개면 설정 화면에서 브레인
+// 관련 항목을 두 군데서 찾아야 한다.
+//
+// 값의 정본은 `lib/graph-mode/graph-mode-prefs.js`다. 여기서는 읽고 쓰기만 한다 —
+// 유효성 판단이 화면 코드에 흩어지면 저장된 값이 손상됐을 때 어디서 막혔는지 알 수 없다.
+function appendGraphModeSettings(body) {
+  const prefsLib =
+    (window.AthenaLib && window.AthenaLib.GraphModePrefs) || null;
+  if (!prefsLib) return;
+
+  let current = prefsLib.readPrefs();
+
+  const heading = el('div', 'uk-settings-note');
+  heading.appendChild(el('div', null, '그래프 모드 — 성향 그래프를 군집 지도로 본다. 군집을 누르면 그 안이 펼쳐지고, 어느 단계에서든 노드를 고르면 같은 패널이 열린다.'));
+  body.appendChild(heading);
+
+  const viewRow = row('uk-toggle-row', [
+    el('span', 'uk-toggle-label', '기본 화면'),
+  ]);
+  const viewBtn = button('ghost', current.defaultView === 'graph' ? '그래프' : '요약', {
+    onClick: () => {
+      current = prefsLib.writePrefs(
+        { defaultView: current.defaultView === 'graph' ? 'summary' : 'graph' },
+      );
+      viewBtn.querySelector('.uk-btn-label').textContent =
+        current.defaultView === 'graph' ? '그래프' : '요약';
+    },
+  });
+  viewRow.appendChild(viewBtn);
+  body.appendChild(viewRow);
+
+  const crossRow = row('uk-toggle-row', [
+    el('span', 'uk-toggle-label', '놀라운 연결 강조'),
+  ]);
+  const crossBtn = button('ghost', current.highlightCrossings ? '켬' : '끔', {
+    onClick: () => {
+      current = prefsLib.writePrefs({ highlightCrossings: !current.highlightCrossings });
+      crossBtn.querySelector('.uk-btn-label').textContent =
+        current.highlightCrossings ? '켬' : '끔';
+    },
+  });
+  crossRow.appendChild(crossBtn);
+  body.appendChild(crossRow);
+
+  const graphNote = el('div', 'uk-settings-note');
+  graphNote.appendChild(el('div', null, `이름표는 노드가 ${current.labelThreshold}개 이하일 때만 붙는다 — 그보다 많으면 글자가 겹쳐 읽을 수 없다.`));
+  graphNote.appendChild(el('div', null, '군집 배치는 결정적이다 — 같은 그래프를 다시 열면 노드가 같은 자리에 있다. 자리가 바뀌었다면 그래프가 실제로 바뀐 것이다.'));
+  body.appendChild(graphNote);
+}
+
 async function refreshHistoryCard(card, head, body) {
   let status;
   try {
@@ -1698,6 +1752,8 @@ async function refreshHistoryCard(card, head, body) {
   infoNote.appendChild(el('div', null, '배치 주기 — 설정 파일로 관리한다(ATHENA_BRAIN_INGEST_INTERVAL_MINUTES, 기본 60분). 이 화면은 값을 바꾸지 않는다.'));
   infoNote.appendChild(el('div', null, '수동 실행 · 마지막/다음 실행 시각 — 상태 API가 아직 이 값을 노출하지 않아 이 화면에서 제공하지 않는다.'));
   body.appendChild(infoNote);
+
+  appendGraphModeSettings(body);
 
   const dangerNote = el('div', 'uk-settings-note');
   dangerNote.appendChild(el('div', null, '전체 삭제 — 저장된 채팅 이력과 투자 성향 그래프를 모두 지우고 백엔드를 재기동한다. 되돌릴 수 없다.'));

@@ -42,6 +42,8 @@ const INVOKE_CHANNELS = new Set([
   'athena:brain-status',
   'athena:brain-history-query',
   'athena:brain-reset',
+  // 그래프 모드(leaf 8 / W2-3) — 군집 지도 조회. 읽기 전용이다.
+  'athena:brain-cluster-map',
 ]);
 
 // 2026-08-24 리프 1.2.1에서 사라진 send 채널 4건 — 창 모델과 함께 죽었다.
