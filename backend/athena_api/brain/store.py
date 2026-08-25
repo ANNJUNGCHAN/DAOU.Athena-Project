@@ -1,200 +1,128 @@
-"""Async-safe embedded graph projection backed by one LadybugDB owner.
+"""Async-safe investment-brain graph on one SQLite file.
 
-On Windows, ``dll_dir`` or ``ATHENA_LADYBUG_DLL_DIR`` may point to native
-runtime dependencies required by the Ladybug wheel. No machine path is guessed.
+2026-08-25 재설계. LadybugDB 임베디드 그래프를 걷어내고 SQLite로 내려왔다.
+
+**왜 그래프 DB를 버렸나.** 규모 때문이 아니다 — 엔티티 수천·관계 수만은 어떤 저장소에도
+부담이 아니다. 이유는 셋이다. (1) 네이티브 휠과 Windows DLL 경로 우회는 Electron 앱을
+일반 사용자에게 배포하는 우리에게 매 릴리스마다 갚는 세금이었다. (2) 우리가 그래프 DB에서
+실제로 쓰던 것은 upsert와 1홉 조회뿐이었고, 정작 필요한 Louvain·중심성·diff는 Cypher로
+표현조차 안 된다 — 그건 NetworkX 투영이 맡는다. (3) FTS5가 표준 내장이라 확장 로딩과
+그 실패를 다루던 강등 플래그(`brain_fts_ready`)가 통째로 사라진다.
+
+**왜 파일 하나인가.** 이전 판은 적재 1회가 두 커밋이었다 — 그래프는 `brain.lbug`,
+잡 상태는 `brain-history.sqlite3`. 그 사이에서 죽으면 잡은 done인데 그래프엔 안 들어간
+상태가 남는다. 한 파일이면 그 버그 종류가 구조적으로 사라진다.
+
+**동시성.** 연속 적재(대화마다) + 동시 리더(API) + 임의 종료(`reset-and-restart`가 스스로
+SIGTERM을 날린다)가 이 저장소의 실제 부하다. `history.py`가 이미 검증한 설정을 그대로
+쓴다: 단일 소유자 스레드 + `isolation_level=None`(명시적 BEGIN) + WAL + busy_timeout.
 """
 
 from __future__ import annotations
 
-import asyncio
 import json
-import os
-from concurrent.futures import ThreadPoolExecutor
+import re
+import sqlite3
 from dataclasses import dataclass
-from datetime import datetime, timedelta
-from functools import partial
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
-from types import ModuleType
 from typing import Any, Final
 
-from .ontology import Claim, Entity, Relation, RelationKind, SourceRecord
-
-# Single fixed investor-profile entity for this single-user local app (ADR §2(c)). No
-# discovery, no per-caller id -- this is the only id investor_profile_summary() reads.
-INVESTOR_PROFILE_ENTITY_ID: Final = "investor-profile:default"
-_PROFILE_RELATION_KINDS: Final = (
-    RelationKind.PREFERS,
-    RelationKind.AVOIDS,
-    RelationKind.INTERESTED_IN,
+from .db import SqliteOwner, atomic
+from .ontology import (
+    INVESTOR_PROFILE_NAME,
+    Confidence,
+    Entity,
+    EntityKind,
+    GraphEvent,
+    GraphEventOp,
+    Relation,
+    SourceRecord,
+    SourceTier,
+    entity_id,
+    normalize_identity,
+    relation_id,
 )
 
-SCHEMA_VERSION: Final = 1
+SCHEMA_VERSION: Final = 2
 MAX_SEARCH_LIMIT: Final = 100
 MAX_NEIGHBORHOOD_DEPTH: Final = 3
+MAX_ENTITIES_PER_EXTRACTION: Final = 64
+MAX_RELATIONS_PER_EXTRACTION: Final = 128
 
-_SCHEMA_STATEMENTS: Final = (
-    "CREATE NODE TABLE IF NOT EXISTS SchemaVersion(key STRING, version INT64, PRIMARY KEY (key))",
-    "CREATE NODE TABLE IF NOT EXISTS Entity("
-    "id STRING, kind STRING, name STRING, aliases_json STRING, attributes_json STRING, "
-    "created_at STRING, updated_at STRING, PRIMARY KEY (id))",
-    "CREATE NODE TABLE IF NOT EXISTS SourceRecord("
-    "id STRING, kind STRING, text STRING, locator STRING, fingerprint STRING, "
-    "attributes_json STRING, occurred_at STRING, ingested_at STRING, PRIMARY KEY (id))",
-    "CREATE NODE TABLE IF NOT EXISTS Claim("
-    "id STRING, kind STRING, text STRING, confidence DOUBLE, attributes_json STRING, "
-    "observed_at STRING, extracted_at STRING, PRIMARY KEY (id))",
-    "CREATE REL TABLE IF NOT EXISTS RELATES_TO("
-    "FROM Entity TO Entity, id STRING, kind STRING, confidence DOUBLE, "
-    "source_id STRING, target_id STRING, source_ids_json STRING, "
-    "attributes_json STRING, observed_at STRING, extracted_at STRING)",
-    "CREATE REL TABLE IF NOT EXISTS ABOUT(FROM Claim TO Entity)",
-    "CREATE REL TABLE IF NOT EXISTS SUPPORTED_BY(FROM Claim TO SourceRecord)",
-)
+# 이 단일 사용자 로컬 앱에는 투자자가 한 명뿐이다. 발견도 없고 호출자별 id도 없다 —
+# `investor_profile_summary()`가 읽는 유일한 id다.
+INVESTOR_PROFILE_ENTITY_ID: Final = entity_id(EntityKind.INVESTOR_PROFILE, INVESTOR_PROFILE_NAME)
 
-_SET_SCHEMA_VERSION: Final = """
-MERGE (v:SchemaVersion {key: $key})
-SET v.version = $version
-"""
-_GET_SCHEMA_VERSION: Final = """
-MATCH (v:SchemaVersion {key: $key}) RETURN v.version AS version
-"""
-_UPSERT_ENTITY: Final = """
-MERGE (e:Entity {id: $id})
-SET e.kind = $kind, e.name = $name, e.aliases_json = $aliases_json,
-    e.attributes_json = $attributes_json, e.created_at = $created_at,
-    e.updated_at = $updated_at
-RETURN e.id AS id
-"""
-_UPSERT_SOURCE: Final = """
-MERGE (s:SourceRecord {id: $id})
-SET s.kind = $kind, s.text = $text, s.locator = $locator,
-    s.fingerprint = $fingerprint, s.attributes_json = $attributes_json,
-    s.occurred_at = $occurred_at, s.ingested_at = $ingested_at
-RETURN s.id AS id
-"""
-_UPSERT_CLAIM: Final = """
-MERGE (c:Claim {id: $id})
-SET c.kind = $kind, c.text = $text, c.confidence = $confidence,
-    c.attributes_json = $attributes_json, c.observed_at = $observed_at,
-    c.extracted_at = $extracted_at
-RETURN c.id AS id
-"""
-_LINK_CLAIM_ENTITY: Final = """
-MATCH (c:Claim {id: $claim_id}), (e:Entity {id: $entity_id})
-MERGE (c)-[:ABOUT]->(e)
-RETURN c.id AS id
-"""
-_LINK_CLAIM_SOURCE: Final = """
-MATCH (c:Claim {id: $claim_id}), (s:SourceRecord {id: $source_id})
-MERGE (c)-[:SUPPORTED_BY]->(s)
-RETURN c.id AS id
-"""
-_ENTITY_EXISTS: Final = "MATCH (e:Entity {id: $id}) RETURN e.id AS id"
-_SOURCE_EXISTS: Final = "MATCH (s:SourceRecord {id: $id}) RETURN s.id AS id"
-_SOURCE_FINGERPRINT: Final = """
-MATCH (s:SourceRecord {id: $id}) RETURN s.fingerprint AS fingerprint
-"""
-_DELETE_CLAIM_ENTITIES: Final = """
-MATCH (c:Claim {id: $claim_id})-[r:ABOUT]->() DELETE r
-"""
-_DELETE_CLAIM_SOURCES: Final = """
-MATCH (c:Claim {id: $claim_id})-[r:SUPPORTED_BY]->() DELETE r
-"""
-_DELETE_RELATION_BY_ID: Final = """
-MATCH (:Entity)-[r:RELATES_TO]->(:Entity) WHERE r.id = $id DELETE r
-"""
-_DELETE_SOURCE_RELATIONS: Final = """
-MATCH (:Entity)-[r:RELATES_TO]->(:Entity)
-WHERE r.source_ids_json = $source_ids_json
-DELETE r
-"""
-_SOURCE_CLAIM_IDS: Final = """
-MATCH (c:Claim)-[r:SUPPORTED_BY]->(s:SourceRecord {id: $source_id})
-RETURN c.id AS id
-"""
-_DELETE_CLAIM: Final = "MATCH (c:Claim {id: $claim_id}) DELETE c"
-_UPSERT_RELATION: Final = """
-MATCH (source:Entity {id: $source_id}), (target:Entity {id: $target_id})
-MERGE (source)-[r:RELATES_TO {id: $id}]->(target)
-SET r.kind = $kind, r.confidence = $confidence,
-    r.source_id = $source_id, r.target_id = $target_id,
-    r.source_ids_json = $source_ids_json, r.attributes_json = $attributes_json,
-    r.observed_at = $observed_at, r.extracted_at = $extracted_at
-RETURN r.id AS id
-"""
-_SEARCH_ENTITIES: Final = """
-MATCH (e:Entity)
-WHERE lower(e.name) CONTAINS lower($query)
-   OR lower(e.aliases_json) CONTAINS lower($query)
-   OR lower(e.attributes_json) CONTAINS lower($query)
-RETURN e.id AS id, e.kind AS kind, e.name AS name
-ORDER BY lower(e.name), e.id
-LIMIT $limit
-"""
-_ENTITY_SEARCH_INDEX_NAME: Final = "entity_search_idx"
-_SHOW_INDEXES: Final = "CALL SHOW_INDEXES() RETURN index_name AS index_name"
-_CREATE_ENTITY_SEARCH_INDEX: Final = f"""
-CALL CREATE_FTS_INDEX('Entity', '{_ENTITY_SEARCH_INDEX_NAME}',
-    ['name', 'aliases_json', 'attributes_json'], stemmer := 'none')
-"""
-_SEARCH_ENTITIES_FTS: Final = f"""
-CALL QUERY_FTS_INDEX('Entity', '{_ENTITY_SEARCH_INDEX_NAME}', $query)
-RETURN node.id AS id, node.kind AS kind, node.name AS name, score
-ORDER BY score DESC, node.id
-LIMIT $limit
-"""
-_SUMMARY_QUERIES: Final = {
-    "entities": "MATCH (n:Entity) RETURN count(n) AS count",
-    "sources": "MATCH (n:SourceRecord) RETURN count(n) AS count",
-    "claims": "MATCH (n:Claim) RETURN count(n) AS count",
-    "relations": "MATCH (:Entity)-[r:RELATES_TO]->(:Entity) RETURN count(r) AS count",
-}
-_CLAIM_PROVENANCE: Final = """
-MATCH (c:Claim {id: $claim_id})
-OPTIONAL MATCH (c)-[:ABOUT]->(e:Entity)
-WITH c, collect(DISTINCT e.id) AS entity_ids
-OPTIONAL MATCH (c)-[:SUPPORTED_BY]->(s:SourceRecord)
-RETURN c.id AS claim_id, entity_ids, collect(DISTINCT s.id) AS source_ids
-"""
-_RESET_STATEMENTS: Final = (
-    "MATCH ()-[r:ABOUT]->() DELETE r",
-    "MATCH ()-[r:SUPPORTED_BY]->() DELETE r",
-    "MATCH ()-[r:RELATES_TO]->() DELETE r",
-    "MATCH (c:Claim) DELETE c",
-    "MATCH (s:SourceRecord) DELETE s",
-    "MATCH (e:Entity) DELETE e",
-    "MATCH (v:SchemaVersion) DELETE v",
-)
-_BEGIN: Final = "BEGIN TRANSACTION"
-_COMMIT: Final = "COMMIT"
-_ROLLBACK: Final = "ROLLBACK"
-_INSTALL_FTS: Final = "INSTALL fts"
-_LOAD_FTS: Final = "LOAD fts"
-_NEIGHBORHOOD_QUERIES: Final = {
-    depth: f"""
-MATCH p=(root:Entity {{id: $entity_id}})-[:RELATES_TO*1..{depth}]-(neighbor:Entity)
-RETURN nodes(p) AS path_nodes, relationships(p) AS path_relations
-ORDER BY neighbor.id
-LIMIT $limit
-"""
-    for depth in range(1, MAX_NEIGHBORHOOD_DEPTH + 1)
-}
-# graph.investor_profile_summary (ADR §6.2 allowlist). Deterministic read-time
-# aggregation only -- pure count/date-window filter, no model calls and none of the
-# similarity machinery ADR §7 bans
-# (ADR §7). PREFERS/AVOIDS/INTERESTED_IN out-edges from the single fixed
-# investor_profile entity, joined to the Claim(s) that support each target within the
-# window, grouped per target. Sort is fully deterministic: latest observation desc,
-# then supporting-claim count desc, then id for a stable tiebreak.
-_INVESTOR_PROFILE_SUMMARY_QUERY: Final = """
-MATCH (owner:Entity {id: $profile_id})-[rel:RELATES_TO]->(target:Entity)<-[:ABOUT]-(c:Claim)
-WHERE rel.kind IN $relation_kinds AND c.observed_at >= $window_start
-WITH target, rel, count(c) AS claim_count, max(c.observed_at) AS latest_observed_at,
-     avg(c.confidence) AS average_confidence
-RETURN target.id AS entity_id, target.kind AS entity_kind, target.name AS entity_name,
-       rel.kind AS relation_kind, claim_count, latest_observed_at, average_confidence
-ORDER BY latest_observed_at DESC, claim_count DESC, target.id
-LIMIT $limit
+# `reset_projection()`이 남기는 이벤트의 주체. 엔티티 id가 아니라 표식이라 `events()`가
+# 이 값을 걸러낸다 — 로그를 읽는 쪽이 존재하지 않는 노드를 만나지 않게 한다.
+_PROJECTION_MARKER: Final = "projection"
+
+# 그래프 쓰기 한 단위의 savepoint 이름. 그래프 쓰기끼리는 중첩하지 않으므로 하나면 된다.
+_GRAPH_WRITE: Final = "graph_write"
+
+_SCHEMA: Final = """
+CREATE TABLE IF NOT EXISTS graph_meta (
+    key   TEXT PRIMARY KEY,
+    value TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS entities (
+    id              TEXT PRIMARY KEY,
+    kind            TEXT NOT NULL,
+    name            TEXT NOT NULL,
+    norm_name       TEXT NOT NULL,
+    aliases_json    TEXT NOT NULL,
+    attributes_json TEXT NOT NULL,
+    created_at      TEXT NOT NULL,
+    updated_at      TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS entities_kind ON entities(kind);
+CREATE TABLE IF NOT EXISTS sources (
+    id              TEXT PRIMARY KEY,
+    kind            TEXT NOT NULL,
+    text            TEXT NOT NULL,
+    locator         TEXT,
+    fingerprint     TEXT NOT NULL,
+    attributes_json TEXT NOT NULL,
+    occurred_at     TEXT NOT NULL,
+    ingested_at     TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS relations (
+    id               TEXT PRIMARY KEY,
+    kind             TEXT NOT NULL,
+    source_entity_id TEXT NOT NULL REFERENCES entities(id) ON DELETE CASCADE,
+    target_entity_id TEXT NOT NULL REFERENCES entities(id) ON DELETE CASCADE,
+    confidence       TEXT NOT NULL,
+    tier             TEXT NOT NULL,
+    rationale        TEXT,
+    source_id        TEXT NOT NULL REFERENCES sources(id) ON DELETE CASCADE,
+    attributes_json  TEXT NOT NULL,
+    observed_at      TEXT NOT NULL,
+    extracted_at     TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS relations_src ON relations(source_entity_id);
+CREATE INDEX IF NOT EXISTS relations_tgt ON relations(target_entity_id);
+CREATE INDEX IF NOT EXISTS relations_source ON relations(source_id);
+CREATE TABLE IF NOT EXISTS graph_events (
+    seq               INTEGER PRIMARY KEY AUTOINCREMENT,
+    at                TEXT NOT NULL,
+    revision          INTEGER NOT NULL,
+    op                TEXT NOT NULL,
+    subject_id        TEXT NOT NULL,
+    object_id         TEXT,
+    relation          TEXT,
+    confidence_before TEXT,
+    confidence_after  TEXT,
+    source_id         TEXT
+);
+CREATE INDEX IF NOT EXISTS graph_events_subject ON graph_events(subject_id);
+CREATE INDEX IF NOT EXISTS graph_events_at ON graph_events(at);
+CREATE VIRTUAL TABLE IF NOT EXISTS entities_fts USING fts5(
+    entity_id UNINDEXED,
+    name,
+    aliases,
+    tokenize = 'unicode61 remove_diacritics 2'
+);
 """
 
 
@@ -202,337 +130,513 @@ LIMIT $limit
 class GraphSummary:
     entities: int
     sources: int
-    claims: int
     relations: int
+    events: int
+    revision: int
+
+
+@dataclass(frozen=True, slots=True)
+class EntityRow:
+    """dedup이 병합 후보를 고를 때 보는 한 행.
+
+    `Entity`를 그대로 쓰지 않는 이유는 `degree` 때문이다. 차수는 엔티티의 속성이 아니라
+    그래프의 성질이고, 승자 선택이 그것에 달려 있다.
+    """
+
+    id: str
+    kind: str
+    name: str
+    normalized_name: str
+    aliases: tuple[str, ...]
+    degree: int
+    created_at: str
+
+
+@dataclass(frozen=True, slots=True)
+class RelationRow:
+    """관계 한 행. 투영과 분석이 보는 모양이다.
+
+    `Relation`(온톨로지)을 그대로 쓰지 않는 이유는 타임스탬프 파싱 때문이다. 투영은
+    수천 행을 한 번에 읽는데, 그중 대부분은 시각을 보지 않는다.
+    """
+
+    id: str
+    kind: str
+    source_entity_id: str
+    target_entity_id: str
+    confidence: str
+    tier: str
+    rationale: str | None
+    source_id: str
+    observed_at: str
 
 
 @dataclass(frozen=True, slots=True)
 class EntitySearchHit:
-    id: str
+    entity_id: str
     kind: str
     name: str
+    score: float
 
 
 @dataclass(frozen=True, slots=True)
 class NeighborhoodEdge:
-    source_id: str
-    target_id: str
     relation_id: str
     kind: str
-    confidence: float
+    source_entity_id: str
+    target_entity_id: str
+    confidence: str
+    tier: str
+    depth: int
 
 
 @dataclass(frozen=True, slots=True)
 class InvestorProfileSummaryEntry:
+    """`GET /api/v1/brain/profile-summary` 한 행.
+
+    이전 판의 `claim_count`/`average_confidence`가 사라지고 `reinforcement`가 들어왔다.
+    Claim을 폐기하면서 "몇 번 재확인됐는가"를 그래프에서 셀 수 없게 됐지만,
+    `graph_events`가 그 이력을 갖고 있어 창 안에서 집계하면 같은 질문에 답할 수 있다.
+    그래프는 현재 상태만, 횟수는 로그에서 — 두 역할이 갈린 결과다.
+    """
+
     entity_id: str
     entity_kind: str
     entity_name: str
     relation_kind: str
-    claim_count: int
-    latest_observed_at: str
-    average_confidence: float
+    confidence: str
+    tier: str
+    rationale: str | None
+    observed_at: str
+    reinforcement: int
+
+
+def utc_now() -> datetime:
+    return datetime.now(tz=UTC)
+
+
+def _ts(value: datetime) -> str:
+    return value.astimezone(UTC).isoformat()
 
 
 def _json(value: Any) -> str:
-    return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return json.dumps(value, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
 
 
-def _timestamp(value: Any) -> str:
-    return value.isoformat().replace("+00:00", "Z")
+def _fts_query(raw: str) -> str:
+    """사용자 문자열을 FTS5 MATCH 식으로 바꾼다.
+
+    각 토큰을 따옴표로 감싸 리터럴로 만든다 — 사용자가 친 `AND`/`*`/`NEAR`가 연산자로
+    해석되면 검색이 조용히 다른 뜻이 되고, 최악에는 구문 오류로 터진다.
+    """
+    tokens = [t.replace('"', "") for t in re.split(r"\s+", raw.strip()) if t.strip()]
+    return " OR ".join(f'"{token}"' for token in tokens) if tokens else '""'
 
 
 class GraphStore:
-    """Own one database/connection pair and serialize all blocking access."""
+    """단일 소유자 스레드 위의 SQLite 그래프.
 
-    def __init__(self, path: Path, *, dll_dir: Path | None = None) -> None:
-        self.path = Path(path)
-        configured_dir = dll_dir or (
-            Path(value) if (value := os.getenv("ATHENA_LADYBUG_DLL_DIR")) else None
-        )
-        self._dll_dir = configured_dir
-        self._dll_handle: Any | None = None
-        self._lb: ModuleType | None = None
-        self._database: Any | None = None
-        self._connection: Any | None = None
-        self._lock = asyncio.Lock()
-        self._owner = ThreadPoolExecutor(max_workers=1, thread_name_prefix="athena-brain")
-        self._open_future: asyncio.Future[Any] | None = None
-        self._close_future: asyncio.Future[Any] | None = None
-        self._closed = False
-        # Set only once load_fts_extension() has both loaded the package and confirmed
-        # (or created) the entity search index — search_entities() reads this to pick
-        # the FTS/BM25 query path over the CONTAINS fallback, per ADR §7.
-        self._fts_index_ready = False
+    `open()`은 한 번만 유효하다. 닫은 뒤 다시 열지 않는 것은 `reset-and-restart`의
+    계약이기도 하다 — 리셋은 이 객체를 되살리는 대신 프로세스를 재기동하고, 다음 부팅의
+    평범한 열기 경로를 탄다. 재사용을 허용하면 "닫혔지만 살아 있는" 중간 상태가 생기고
+    그건 정합성 사고의 자리다.
+    """
+
+    def __init__(
+        self, path: Path | SqliteOwner, *, busy_timeout_ms: int = 5_000
+    ) -> None:
+        """경로를 주면 파일을 혼자 소유하고, `SqliteOwner`를 주면 나눠 쓴다.
+
+        나눠 쓰는 쪽이 운영 경로다 — `HistoryStore`와 같은 연결을 쓰면 커서 전진과
+        그래프 쓰기를 커밋 하나로 묶을 수 있다. 경로를 받는 쪽은 그래프만 단독으로
+        여는 테스트와 도구를 위해 남긴다.
+        """
+        if isinstance(path, SqliteOwner):
+            self._owner = path
+            self._owns_connection = False
+        else:
+            self._owner = SqliteOwner(
+                Path(path),
+                busy_timeout_ms=busy_timeout_ms,
+                thread_name_prefix="brain-graph-store",
+            )
+            self._owns_connection = True
+        self.path = self._owner.path
 
     @property
     def is_open(self) -> bool:
-        return self._connection is not None and not self._closed
+        return self._owner.is_open
+
+    @property
+    def owner(self) -> SqliteOwner:
+        return self._owner
 
     async def open(self) -> None:
-        async with self._lock:
-            if self._closed:
-                raise RuntimeError("graph store is closed")
-            if self._connection is not None:
-                return
-            if self._open_future is None:
-                self._open_future = self._submit_owner(self._open_sync)
-            try:
-                await asyncio.shield(self._open_future)
-            except asyncio.CancelledError:
-                raise
-            except Exception:
-                self._open_future = None
-                raise
+        if self._owns_connection:
+            await self._owner.open()
+        elif not self._owner.is_open:
+            raise RuntimeError("shared sqlite owner must be opened before the graph store")
+        await self._owner.install_schema("graph", _SCHEMA, SCHEMA_VERSION)
+        await self._owner.run(self._seed_revision)
 
-    def _submit_owner(self, function: Any, *args: Any) -> asyncio.Future[Any]:
-        loop = asyncio.get_running_loop()
-        return loop.run_in_executor(self._owner, partial(function, *args))
-
-    def _open_sync(self) -> None:
-        if self._connection is not None:
-            return
-        if os.name == "nt" and self._dll_dir is not None:
-            if not self._dll_dir.is_dir():
-                raise RuntimeError(f"LadybugDB DLL directory does not exist: {self._dll_dir}")
-            self._dll_handle = os.add_dll_directory(str(self._dll_dir))
-        try:
-            import ladybug as lb
-
-            database = lb.Database(str(self.path))
-            connection = lb.Connection(database)
-        except Exception as exc:
-            if self._dll_handle is not None:
-                self._dll_handle.close()
-                self._dll_handle = None
-            raise RuntimeError(
-                "LadybugDB could not start; on Windows set ATHENA_LADYBUG_DLL_DIR "
-                "to the directory containing its native runtime dependencies"
-            ) from exc
-        self._lb = lb
-        self._database = database
-        self._connection = connection
-        try:
-            for statement in _SCHEMA_STATEMENTS:
-                self._execute_sync(statement)
-            rows = self._execute_sync(_GET_SCHEMA_VERSION, {"key": "projection"})
-            if rows and int(rows[0]["version"]) != SCHEMA_VERSION:
-                raise RuntimeError(f"unsupported graph schema version: {rows[0]['version']}")
-            if not rows:
-                self._execute_sync(
-                    _SET_SCHEMA_VERSION,
-                    {"key": "projection", "version": SCHEMA_VERSION},
-                )
-        except Exception:
-            self._close_sync()
-            raise
+    def _seed_revision(self) -> None:
+        self._require().execute(
+            "INSERT INTO graph_meta(key, value) VALUES('revision', '0') "
+            "ON CONFLICT(key) DO NOTHING"
+        )
 
     async def close(self) -> None:
-        async with self._lock:
-            if self._close_future is None:
-                self._closed = True
-                self._close_future = self._submit_owner(self._close_sync)
-            close_future = self._close_future
-        try:
-            await asyncio.shield(close_future)
-        finally:
-            self._owner.shutdown(wait=False, cancel_futures=False)
+        # 연결을 빌려 쓰는 경우 닫는 것은 소유자의 일이다. 빌린 쪽이 닫으면 아직 쓰고
+        # 있는 다른 저장소의 발밑이 사라진다.
+        if self._owns_connection:
+            await self._owner.close()
 
-    def _close_sync(self) -> None:
-        try:
-            if self._connection is not None:
-                self._connection.close()
-        finally:
-            self._connection = None
-            try:
-                if self._database is not None:
-                    self._database.close()
-            finally:
-                self._database = None
-                if self._dll_handle is not None:
-                    self._dll_handle.close()
-                    self._dll_handle = None
-                self._lb = None
-
-    def _execute_sync(
-        self, query: str, parameters: dict[str, Any] | None = None
-    ) -> list[dict[str, Any]]:
-        if self._connection is None or self._closed:
-            raise RuntimeError("graph store is not open")
-        result = self._connection.execute(query, parameters=parameters or {})
-        return result.rows_as_dict().get_all()
-
-    async def _execute(
-        self, query: str, parameters: dict[str, Any] | None = None
-    ) -> list[dict[str, Any]]:
-        async with self._lock:
-            if not self.is_open:
-                raise RuntimeError("graph store is not open")
-            return await asyncio.shield(self._submit_owner(self._execute_sync, query, parameters))
+    def _require(self) -> sqlite3.Connection:
+        return self._owner.require()
 
     async def schema_version(self) -> int:
-        rows = await self._execute(_GET_SCHEMA_VERSION, {"key": "projection"})
-        if len(rows) != 1:
-            raise RuntimeError("graph schema metadata is missing")
-        return int(rows[0]["version"])
+        return await self._owner.schema_version("graph")
 
-    async def load_fts_extension(self) -> None:
-        """Fetch/activate the fts package and ensure the entity search index (ADR §4.2 step 4).
+    async def graph_revision(self) -> int:
+        def read() -> int:
+            return self._read_revision(self._require())
 
-        Best-effort by design: ADR investment-brain-architecture.md §7 requires the graph
-        core to start safely even when this package is unavailable (no bundled offline
-        artifact, no network) and to surface that as degraded readiness rather than a
-        startup failure, so callers should catch failures here rather than propagate them.
+        return await self._owner.run(read)
 
-        Verified empirically against ladybug 0.19.1 (no syntax precedent existed in this
-        repo or the ADR before this): ``CREATE_FTS_INDEX`` builds a live, auto-maintained
-        index over the named node properties — new/updated rows are picked up without a
-        rebuild, and the index itself persists across process restarts, so this only
-        (re)creates it when ``SHOW_INDEXES`` doesn't already list it (``CREATE_FTS_INDEX``
-        raises if called twice for the same name). It does *not* do substring/CONTAINS
-        matching — it tokenizes on whitespace/punctuation and only matches whole terms
-        (e.g. a query for "하이닉스" will not match a stored "SK하이닉스" token unless that
-        exact substring appears as its own token, such as in an alias). Once this method
-        succeeds, ``search_entities`` switches from the CONTAINS scan to this ranked
-        index; recall-quality gating against a fixed corpus (ADR §7) is unaddressed
-        follow-up work, not covered here.
-        """
-        await self._execute(_INSTALL_FTS)
-        await self._execute(_LOAD_FTS)
-        rows = await self._execute(_SHOW_INDEXES)
-        if not any(row["index_name"] == _ENTITY_SEARCH_INDEX_NAME for row in rows):
-            await self._execute(_CREATE_ENTITY_SEARCH_INDEX)
-        self._fts_index_ready = True
+    @staticmethod
+    def _read_revision(connection: sqlite3.Connection) -> int:
+        row = connection.execute("SELECT value FROM graph_meta WHERE key='revision'").fetchone()
+        return int(row["value"]) if row else 0
 
-    async def upsert_entity(self, entity: Entity) -> str:
-        rows = await self._execute(
-            _UPSERT_ENTITY,
-            {
-                "id": entity.id,
-                "kind": entity.kind.value,
-                "name": entity.name,
-                "aliases_json": _json(entity.aliases),
-                "attributes_json": _json(entity.attributes),
-                "created_at": _timestamp(entity.created_at),
-                "updated_at": _timestamp(entity.updated_at),
-            },
+    @staticmethod
+    def _bump_revision(connection: sqlite3.Connection) -> int:
+        revision = GraphStore._read_revision(connection) + 1
+        connection.execute(
+            "INSERT INTO graph_meta(key, value) VALUES('revision', ?) "
+            "ON CONFLICT(key) DO UPDATE SET value = excluded.value",
+            (str(revision),),
         )
-        return str(rows[0]["id"])
+        return revision
+
+    @staticmethod
+    def _record_event(
+        connection: sqlite3.Connection,
+        *,
+        revision: int,
+        op: GraphEventOp,
+        subject_id: str,
+        object_id: str | None = None,
+        relation: str | None = None,
+        confidence_before: str | None = None,
+        confidence_after: str | None = None,
+        source_id: str | None = None,
+    ) -> None:
+        connection.execute(
+            "INSERT INTO graph_events(at, revision, op, subject_id, object_id, relation,"
+            " confidence_before, confidence_after, source_id) VALUES(?,?,?,?,?,?,?,?,?)",
+            (
+                _ts(utc_now()),
+                revision,
+                op.value,
+                subject_id,
+                object_id,
+                relation,
+                confidence_before,
+                confidence_after,
+                source_id,
+            ),
+        )
+
+    # ── 쓰기 ────────────────────────────────────────────────────────────────
 
     async def upsert_source(self, source: SourceRecord) -> str:
-        rows = await self._execute(
-            _UPSERT_SOURCE,
-            {
-                "id": source.id,
-                "kind": source.kind.value,
-                "text": source.text,
-                "locator": source.locator,
-                "fingerprint": source.fingerprint,
-                "attributes_json": _json(source.attributes),
-                "occurred_at": _timestamp(source.occurred_at),
-                "ingested_at": _timestamp(source.ingested_at),
-            },
+        def write() -> str:
+            connection = self._require()
+            with atomic(connection, _GRAPH_WRITE):
+                self._upsert_source_row(connection, source)
+            return source.id
+
+        return await self._owner.run(write)
+
+    @staticmethod
+    def _upsert_source_row(connection: sqlite3.Connection, source: SourceRecord) -> None:
+        connection.execute(
+            "INSERT INTO sources(id, kind, text, locator, fingerprint, attributes_json,"
+            " occurred_at, ingested_at) VALUES(?,?,?,?,?,?,?,?)"
+            " ON CONFLICT(id) DO UPDATE SET kind=excluded.kind, text=excluded.text,"
+            " locator=excluded.locator, fingerprint=excluded.fingerprint,"
+            " attributes_json=excluded.attributes_json, occurred_at=excluded.occurred_at,"
+            " ingested_at=excluded.ingested_at",
+            (
+                source.id,
+                source.kind.value,
+                source.text,
+                source.locator,
+                source.fingerprint,
+                _json(source.attributes),
+                _ts(source.occurred_at),
+                _ts(source.ingested_at),
+            ),
         )
-        return str(rows[0]["id"])
 
-    async def upsert_claim(self, claim: Claim) -> str:
-        async with self._lock:
-            if not self.is_open:
-                raise RuntimeError("graph store is not open")
+    async def upsert_entity(self, entity: Entity) -> str:
+        def write() -> str:
+            connection = self._require()
+            with atomic(connection, _GRAPH_WRITE):
+                revision = self._bump_revision(connection)
+                self._upsert_entity_row(connection, entity, revision=revision)
+            return entity.id
 
-            def write() -> str:
-                self._execute_sync(_BEGIN)
-                try:
-                    missing_entities = [
-                        entity_id
-                        for entity_id in claim.entity_ids
-                        if not self._execute_sync(_ENTITY_EXISTS, {"id": entity_id})
-                    ]
-                    missing_sources = [
-                        source_id
-                        for source_id in claim.source_ids
-                        if not self._execute_sync(_SOURCE_EXISTS, {"id": source_id})
-                    ]
-                    if missing_entities or missing_sources:
-                        raise ValueError(
-                            "claim provenance targets do not exist: "
-                            f"entities={missing_entities}, sources={missing_sources}"
-                        )
-                    rows = self._execute_sync(
-                        _UPSERT_CLAIM,
-                        {
-                            "id": claim.id,
-                            "kind": claim.kind.value,
-                            "text": claim.text,
-                            "confidence": claim.confidence,
-                            "attributes_json": _json(claim.attributes),
-                            "observed_at": _timestamp(claim.observed_at),
-                            "extracted_at": _timestamp(claim.extracted_at),
-                        },
+        return await self._owner.run(write)
+
+    @staticmethod
+    def _upsert_entity_row(
+        connection: sqlite3.Connection, entity: Entity, *, revision: int
+    ) -> bool:
+        """엔티티를 쓰고 신규였는지 돌려준다. `created_at`은 최초 값을 지킨다."""
+        existed = (
+            connection.execute("SELECT 1 FROM entities WHERE id = ?", (entity.id,)).fetchone()
+            is not None
+        )
+        connection.execute(
+            "INSERT INTO entities(id, kind, name, norm_name, aliases_json, attributes_json,"
+            " created_at, updated_at) VALUES(?,?,?,?,?,?,?,?)"
+            " ON CONFLICT(id) DO UPDATE SET aliases_json=excluded.aliases_json,"
+            " attributes_json=excluded.attributes_json, updated_at=excluded.updated_at",
+            (
+                entity.id,
+                entity.kind.value,
+                entity.name,
+                normalize_identity(entity.name),
+                _json(list(entity.aliases)),
+                _json(entity.attributes),
+                _ts(entity.created_at),
+                _ts(entity.updated_at),
+            ),
+        )
+        connection.execute("DELETE FROM entities_fts WHERE entity_id = ?", (entity.id,))
+        connection.execute(
+            "INSERT INTO entities_fts(entity_id, name, aliases) VALUES(?,?,?)",
+            (entity.id, entity.name, " ".join(entity.aliases)),
+        )
+        if not existed:
+            GraphStore._record_event(
+                connection,
+                revision=revision,
+                op=GraphEventOp.ENTITY_ADDED,
+                subject_id=entity.id,
+            )
+        return not existed
+
+    async def entities(
+        self, *, kind: EntityKind | None = None
+    ) -> tuple[EntityRow, ...]:
+        """엔티티 목록을 차수와 함께. dedup이 병합 후보를 고를 때 쓴다.
+
+        차수를 여기서 함께 세는 이유는 승자 선택이 결정적이어야 하기 때문이다 —
+        dedup이 엔티티마다 따로 물으면 그 사이에 그래프가 바뀔 수 있고, 그러면 같은
+        입력에 다른 승자가 나온다.
+        """
+
+        def read() -> tuple[EntityRow, ...]:
+            sql = (
+                "SELECT e.id, e.kind, e.name, e.norm_name, e.aliases_json, e.created_at,"
+                " (SELECT count(*) FROM relations r"
+                "    WHERE r.source_entity_id = e.id OR r.target_entity_id = e.id) AS degree"
+                " FROM entities e"
+            )
+            params: tuple[Any, ...] = ()
+            if kind is not None:
+                sql += " WHERE e.kind = ?"
+                params = (kind.value,)
+            sql += " ORDER BY e.id"
+            return tuple(
+                EntityRow(
+                    id=str(row["id"]),
+                    kind=str(row["kind"]),
+                    name=str(row["name"]),
+                    normalized_name=str(row["norm_name"]),
+                    aliases=tuple(json.loads(str(row["aliases_json"]))),
+                    degree=int(row["degree"]),
+                    created_at=str(row["created_at"]),
+                )
+                for row in self._require().execute(sql, params)
+            )
+
+        return await self._owner.run(read)
+
+    async def relations(self) -> tuple[RelationRow, ...]:
+        """관계 전체. NetworkX 투영이 그래프를 한 번에 짓는 데 쓴다.
+
+        `neighborhood()`를 노드마다 부르면 N번 왕복하고, 그 사이 그래프가 바뀌면 투영이
+        일관되지 않은 시점의 조각들로 지어진다.
+        """
+
+        def read() -> tuple[RelationRow, ...]:
+            return tuple(
+                RelationRow(
+                    id=str(row["id"]),
+                    kind=str(row["kind"]),
+                    source_entity_id=str(row["source_entity_id"]),
+                    target_entity_id=str(row["target_entity_id"]),
+                    confidence=str(row["confidence"]),
+                    tier=str(row["tier"]),
+                    rationale=row["rationale"],
+                    source_id=str(row["source_id"]),
+                    observed_at=str(row["observed_at"]),
+                )
+                for row in self._require().execute(
+                    "SELECT id, kind, source_entity_id, target_entity_id, confidence, tier,"
+                    " rationale, source_id, observed_at FROM relations ORDER BY id"
+                )
+            )
+
+        return await self._owner.run(read)
+
+    async def merge_entities(self, winner_id: str, loser_id: str) -> None:
+        """진 엔티티를 승자에 접고, 그 관계를 승자로 옮긴다.
+
+        `INVESTOR_PROFILE`은 거부한다. 그 id는 고정값이고 `investor_profile_summary()`가
+        유일하게 그것만 읽는다 — 접히는 순간 프로필이 통째로 비는데 아무것도 터지지
+        않는다. 정책(종목은 병합 금지)은 `dedup`이 정하지만, 이 하나는 저장층의 구조적
+        불변식이라 여기서 막는다.
+        """
+        if winner_id == loser_id:
+            raise ValueError("cannot merge an entity into itself")
+        if INVESTOR_PROFILE_ENTITY_ID in (winner_id, loser_id):
+            raise ValueError("the investor profile entity cannot take part in a merge")
+
+        def write() -> None:
+            connection = self._require()
+            with atomic(connection, _GRAPH_WRITE):
+                winner = connection.execute(
+                    "SELECT * FROM entities WHERE id = ?", (winner_id,)
+                ).fetchone()
+                loser = connection.execute(
+                    "SELECT * FROM entities WHERE id = ?", (loser_id,)
+                ).fetchone()
+                if winner is None or loser is None:
+                    raise ValueError("both merge participants must exist")
+                if str(winner["kind"]) != str(loser["kind"]):
+                    raise ValueError("entities of different kinds cannot be merged")
+
+                revision = self._bump_revision(connection)
+                self._move_relations(connection, winner_id, loser_id, revision=revision)
+
+                # 진 쪽의 이름과 별칭이 승자의 별칭으로 살아남는다. 병합됐다고 그 이름으로
+                # 검색이 안 되면, 사용자가 아는 이름이 그래프에서 사라진 것처럼 보인다.
+                aliases = list(json.loads(str(winner["aliases_json"])))
+                aliases.extend(json.loads(str(loser["aliases_json"])))
+                aliases.append(str(loser["name"]))
+                merged: list[str] = []
+                for alias in aliases:
+                    if alias != str(winner["name"]) and alias not in merged:
+                        merged.append(alias)
+
+                connection.execute(
+                    "UPDATE entities SET aliases_json = ? WHERE id = ?",
+                    (_json(merged), winner_id),
+                )
+                connection.execute("DELETE FROM entities_fts WHERE entity_id = ?", (winner_id,))
+                connection.execute(
+                    "INSERT INTO entities_fts(entity_id, name, aliases) VALUES(?,?,?)",
+                    (winner_id, str(winner["name"]), " ".join(merged)),
+                )
+                connection.execute("DELETE FROM entities_fts WHERE entity_id = ?", (loser_id,))
+                connection.execute("DELETE FROM entities WHERE id = ?", (loser_id,))
+
+                self._record_event(
+                    connection,
+                    revision=revision,
+                    op=GraphEventOp.ENTITY_MERGED,
+                    subject_id=loser_id,
+                    object_id=winner_id,
+                )
+
+        await self._owner.run(write)
+
+    @staticmethod
+    def _move_relations(
+        connection: sqlite3.Connection, winner_id: str, loser_id: str, *, revision: int
+    ) -> None:
+        """진 엔티티에 붙은 엣지를 승자 쪽으로 옮긴다.
+
+        세 갈래를 모두 다뤄야 한다. (1) 옮기면 자기 자신으로 향하는 엣지가 되는 경우 —
+        `A -> B`에서 A와 B가 접히면 그렇게 된다. 온톨로지가 자기 루프를 금지하므로 버린다.
+        (2) 옮긴 자리에 이미 같은 `(출발, 도착, 종류)`가 있는 경우 — 티어 우선순위로
+        승자를 정한다. 적재 경로와 같은 규칙을 쓰지 않으면 병합이 결정적 티어를 조용히
+        덮어쓸 수 있다. (3) 나머지는 그대로 옮긴다.
+        """
+        rows = connection.execute(
+            "SELECT * FROM relations WHERE source_entity_id = ? OR target_entity_id = ?",
+            (loser_id, loser_id),
+        ).fetchall()
+        for row in rows:
+            old_id = str(row["id"])
+            kind = str(row["kind"])
+            src = winner_id if str(row["source_entity_id"]) == loser_id else str(
+                row["source_entity_id"]
+            )
+            tgt = winner_id if str(row["target_entity_id"]) == loser_id else str(
+                row["target_entity_id"]
+            )
+            connection.execute("DELETE FROM relations WHERE id = ?", (old_id,))
+
+            if src == tgt:
+                GraphStore._record_event(
+                    connection,
+                    revision=revision,
+                    op=GraphEventOp.EDGE_REMOVED,
+                    subject_id=str(row["source_entity_id"]),
+                    object_id=str(row["target_entity_id"]),
+                    relation=kind,
+                    confidence_before=str(row["confidence"]),
+                    source_id=str(row["source_id"]),
+                )
+                continue
+
+            new_id = relation_id(kind, src, tgt)
+            incumbent = connection.execute(
+                "SELECT * FROM relations WHERE id = ?", (new_id,)
+            ).fetchone()
+            if incumbent is not None:
+                incumbent_wins = (
+                    str(incumbent["tier"]) == SourceTier.DETERMINISTIC.value
+                    and str(row["tier"]) == SourceTier.CONVERSATIONAL.value
+                )
+                if incumbent_wins:
+                    GraphStore._record_event(
+                        connection,
+                        revision=revision,
+                        op=GraphEventOp.EDGE_REJECTED,
+                        subject_id=src,
+                        object_id=tgt,
+                        relation=kind,
+                        confidence_before=str(incumbent["confidence"]),
+                        confidence_after=str(row["confidence"]),
+                        source_id=str(row["source_id"]),
                     )
-                    self._execute_sync(_DELETE_CLAIM_ENTITIES, {"claim_id": claim.id})
-                    self._execute_sync(_DELETE_CLAIM_SOURCES, {"claim_id": claim.id})
-                    for entity_id in sorted(claim.entity_ids):
-                        linked = self._execute_sync(
-                            _LINK_CLAIM_ENTITY,
-                            {"claim_id": claim.id, "entity_id": entity_id},
-                        )
-                        if not linked:
-                            raise RuntimeError("claim entity link was not created")
-                    for source_id in sorted(claim.source_ids):
-                        linked = self._execute_sync(
-                            _LINK_CLAIM_SOURCE,
-                            {"claim_id": claim.id, "source_id": source_id},
-                        )
-                        if not linked:
-                            raise RuntimeError("claim source link was not created")
-                    self._execute_sync(_COMMIT)
-                    return str(rows[0]["id"])
-                except Exception:
-                    self._execute_sync(_ROLLBACK)
-                    raise
+                    continue
+                connection.execute("DELETE FROM relations WHERE id = ?", (new_id,))
 
-            return await asyncio.shield(self._submit_owner(write))
-
-    async def upsert_relation(self, relation: Relation) -> str:
-        async with self._lock:
-            if not self.is_open:
-                raise RuntimeError("graph store is not open")
-
-            def write() -> str:
-                self._execute_sync(_BEGIN)
-                try:
-                    source_exists = self._execute_sync(
-                        _ENTITY_EXISTS, {"id": relation.source_entity_id}
-                    )
-                    target_exists = self._execute_sync(
-                        _ENTITY_EXISTS, {"id": relation.target_entity_id}
-                    )
-                    if not source_exists or not target_exists:
-                        raise ValueError("relation endpoints must exist")
-                    self._execute_sync(_DELETE_RELATION_BY_ID, {"id": relation.id})
-                    rows = self._execute_sync(
-                        _UPSERT_RELATION,
-                        {
-                            "id": relation.id,
-                            "kind": relation.kind.value,
-                            "source_id": relation.source_entity_id,
-                            "target_id": relation.target_entity_id,
-                            "confidence": relation.confidence,
-                            "source_ids_json": _json(relation.source_ids),
-                            "attributes_json": _json(relation.attributes),
-                            "observed_at": _timestamp(relation.observed_at),
-                            "extracted_at": _timestamp(relation.extracted_at),
-                        },
-                    )
-                    if not rows:
-                        raise RuntimeError("relation was not created")
-                    self._execute_sync(_COMMIT)
-                    return str(rows[0]["id"])
-                except Exception:
-                    self._execute_sync(_ROLLBACK)
-                    raise
-
-            return await asyncio.shield(self._submit_owner(write))
+            connection.execute(
+                "INSERT INTO relations(id, kind, source_entity_id, target_entity_id, confidence,"
+                " tier, rationale, source_id, attributes_json, observed_at, extracted_at)"
+                " VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+                (
+                    new_id,
+                    kind,
+                    src,
+                    tgt,
+                    str(row["confidence"]),
+                    str(row["tier"]),
+                    row["rationale"],
+                    str(row["source_id"]),
+                    str(row["attributes_json"]),
+                    str(row["observed_at"]),
+                    str(row["extracted_at"]),
+                ),
+            )
 
     async def apply_extraction(
         self,
@@ -540,241 +644,355 @@ class GraphStore:
         source_fingerprint: str,
         entities: tuple[Entity, ...],
         relations: tuple[Relation, ...],
-        claims: tuple[Claim, ...],
     ) -> None:
-        """Atomically replace all derived claims and relations for one source."""
+        """한 소스가 주장하는 관계 전체를 원자적으로 교체한다.
+
+        핵심은 티어 우선순위다. 어떤 엣지를 결정적 티어(체결·잔고)가 이미 주장하고 있으면
+        대화 티어의 같은 엣지는 **무시된다**. 이것이 없으면 적재 순서가 진실을 정하게 된다 —
+        체결 적재가 나중이면 체결이 이기고 대화가 나중이면 대화가 이기는, 실행 순서에
+        따라 그래프가 달라지는 상태. graphify가 AST 노드를 정본으로 삼고 LLM 노드를
+        ghost로 제거하는 규칙과 같은 문제를 같은 방식으로 막는다.
+        """
         if not 1 <= len(source_id) <= 128 or not 1 <= len(source_fingerprint) <= 128:
             raise ValueError("source binding is out of bounds")
-        if len(entities) > 64 or len(relations) > 128 or len(claims) > 128:
-            raise ValueError("extraction exceeds projection count limits")
+        if len(entities) > MAX_ENTITIES_PER_EXTRACTION:
+            raise ValueError("extraction exceeds entity count limit")
+        if len(relations) > MAX_RELATIONS_PER_EXTRACTION:
+            raise ValueError("extraction exceeds relation count limit")
         entity_ids = {entity.id for entity in entities}
         if len(entity_ids) != len(entities):
             raise ValueError("extraction entity ids must be unique")
         if len({relation.id for relation in relations}) != len(relations):
             raise ValueError("extraction relation ids must be unique")
-        if len({claim.id for claim in claims}) != len(claims):
-            raise ValueError("extraction claim ids must be unique")
         for relation in relations:
-            if relation.source_ids != (source_id,):
+            if relation.source_id != source_id:
                 raise ValueError("extraction relation provenance must match its source")
-            if not {relation.source_entity_id, relation.target_entity_id} <= entity_ids:
+            if {relation.source_entity_id, relation.target_entity_id} - entity_ids:
                 raise ValueError("extraction relation endpoints must be supplied entities")
-        for claim in claims:
-            if claim.source_ids != (source_id,):
-                raise ValueError("extraction claim provenance must match its source")
-            if not set(claim.entity_ids) <= entity_ids:
-                raise ValueError("extraction claim targets must be supplied entities")
 
-        async with self._lock:
-            if not self.is_open:
-                raise RuntimeError("graph store is not open")
+        def write() -> None:
+            connection = self._require()
+            with atomic(connection, _GRAPH_WRITE):
+                row = connection.execute(
+                    "SELECT fingerprint FROM sources WHERE id = ?", (source_id,)
+                ).fetchone()
+                if row is None or str(row["fingerprint"]) != source_fingerprint:
+                    raise ValueError("source does not exist or fingerprint does not match")
 
-            def write() -> None:
-                self._execute_sync(_BEGIN)
-                try:
-                    rows = self._execute_sync(_SOURCE_FINGERPRINT, {"id": source_id})
-                    if len(rows) != 1 or str(rows[0]["fingerprint"]) != source_fingerprint:
-                        raise ValueError("source does not exist or fingerprint does not match")
-                    old_claim_ids = [
-                        str(row["id"])
-                        for row in self._execute_sync(_SOURCE_CLAIM_IDS, {"source_id": source_id})
-                    ]
-                    for claim_id in old_claim_ids:
-                        self._execute_sync(_DELETE_CLAIM_ENTITIES, {"claim_id": claim_id})
-                        self._execute_sync(_DELETE_CLAIM_SOURCES, {"claim_id": claim_id})
-                        self._execute_sync(_DELETE_CLAIM, {"claim_id": claim_id})
-                    self._execute_sync(
-                        _DELETE_SOURCE_RELATIONS,
-                        {"source_ids_json": _json((source_id,))},
+                revision = self._bump_revision(connection)
+                for entity in entities:
+                    self._upsert_entity_row(connection, entity, revision=revision)
+
+                stale = {
+                    str(r["id"])
+                    for r in connection.execute(
+                        "SELECT id FROM relations WHERE source_id = ?", (source_id,)
                     )
-                    for entity in entities:
-                        self._execute_sync(
-                            _UPSERT_ENTITY,
-                            {
-                                "id": entity.id,
-                                "kind": entity.kind.value,
-                                "name": entity.name,
-                                "aliases_json": _json(entity.aliases),
-                                "attributes_json": _json(entity.attributes),
-                                "created_at": _timestamp(entity.created_at),
-                                "updated_at": _timestamp(entity.updated_at),
-                            },
+                }
+                for relation in relations:
+                    stale.discard(relation.id)
+                    self._apply_one_relation(connection, relation, revision=revision)
+
+                for relation_row_id in sorted(stale):
+                    existing = connection.execute(
+                        "SELECT * FROM relations WHERE id = ?", (relation_row_id,)
+                    ).fetchone()
+                    connection.execute("DELETE FROM relations WHERE id = ?", (relation_row_id,))
+                    if existing is not None:
+                        self._record_event(
+                            connection,
+                            revision=revision,
+                            op=GraphEventOp.EDGE_REMOVED,
+                            subject_id=str(existing["source_entity_id"]),
+                            object_id=str(existing["target_entity_id"]),
+                            relation=str(existing["kind"]),
+                            confidence_before=str(existing["confidence"]),
+                            source_id=source_id,
                         )
-                    self._after_extraction_entities_sync()
-                    for relation in relations:
-                        rows = self._execute_sync(
-                            _UPSERT_RELATION,
-                            {
-                                "id": relation.id,
-                                "kind": relation.kind.value,
-                                "source_id": relation.source_entity_id,
-                                "target_id": relation.target_entity_id,
-                                "confidence": relation.confidence,
-                                "source_ids_json": _json(relation.source_ids),
-                                "attributes_json": _json(relation.attributes),
-                                "observed_at": _timestamp(relation.observed_at),
-                                "extracted_at": _timestamp(relation.extracted_at),
-                            },
-                        )
-                        if not rows:
-                            raise RuntimeError("extraction relation was not created")
-                    for claim in claims:
-                        self._execute_sync(
-                            _UPSERT_CLAIM,
-                            {
-                                "id": claim.id,
-                                "kind": claim.kind.value,
-                                "text": claim.text,
-                                "confidence": claim.confidence,
-                                "attributes_json": _json(claim.attributes),
-                                "observed_at": _timestamp(claim.observed_at),
-                                "extracted_at": _timestamp(claim.extracted_at),
-                            },
-                        )
-                        for entity_id in sorted(claim.entity_ids):
-                            if not self._execute_sync(
-                                _LINK_CLAIM_ENTITY,
-                                {"claim_id": claim.id, "entity_id": entity_id},
-                            ):
-                                raise RuntimeError("extraction claim target was not created")
-                        if not self._execute_sync(
-                            _LINK_CLAIM_SOURCE,
-                            {"claim_id": claim.id, "source_id": source_id},
-                        ):
-                            raise RuntimeError("extraction claim provenance was not created")
-                    self._execute_sync(_COMMIT)
-                except Exception:
-                    self._execute_sync(_ROLLBACK)
-                    raise
 
-            await asyncio.shield(self._submit_owner(write))
+        await self._owner.run(write)
 
-    def _after_extraction_entities_sync(self) -> None:
-        """Internal fault-injection seam used to verify transaction rollback."""
+    @staticmethod
+    def _apply_one_relation(
+        connection: sqlite3.Connection, relation: Relation, *, revision: int
+    ) -> None:
+        existing = connection.execute(
+            "SELECT * FROM relations WHERE id = ?", (relation.id,)
+        ).fetchone()
 
-    async def search_entities(self, query: str, *, limit: int = 20) -> tuple[EntitySearchHit, ...]:
-        """Rank by fts/BM25 once load_fts_extension() has built the index; else CONTAINS.
+        if existing is not None:
+            owned_by_other = str(existing["source_id"]) != relation.source_id
+            incumbent_is_fact = str(existing["tier"]) == SourceTier.DETERMINISTIC.value
+            challenger_is_talk = relation.tier is SourceTier.CONVERSATIONAL
+            if owned_by_other and incumbent_is_fact and challenger_is_talk:
+                # 체결·잔고가 이미 주장한 엣지를 대화가 덮지 못한다. 다만 **밀렸다는 사실을
+                # 기록한다** — 그러지 않으면 "말과 행동이 어긋났다"는 신호가 쓰기 순서에
+                # 좌우된다. 대화가 먼저 쓰였을 때만 EDGE_ADDED로 남고 체결이 먼저면
+                # 사라지는 비대칭이 실제로 있었다. 그 대조는 분석 계층이 읽는다.
+                GraphStore._record_event(
+                    connection,
+                    revision=revision,
+                    op=GraphEventOp.EDGE_REJECTED,
+                    subject_id=relation.source_entity_id,
+                    object_id=relation.target_entity_id,
+                    relation=relation.kind,
+                    confidence_before=str(existing["confidence"]),
+                    confidence_after=relation.confidence.value,
+                    source_id=relation.source_id,
+                )
+                return
 
-        The two are not equivalent: BM25 matches whole terms, not substrings (see
-        load_fts_extension's docstring). This falls back to the CONTAINS scan only when
-        the index isn't ready — not as a secondary pass merged with fts results — matching
-        the pre-fts behavior exactly for stores that never call load_fts_extension().
-        """
-        if not query.strip() or len(query) > 256:
-            raise ValueError("query must contain 1 to 256 non-blank characters")
-        if not 1 <= limit <= MAX_SEARCH_LIMIT:
-            raise ValueError(f"limit must be between 1 and {MAX_SEARCH_LIMIT}")
-        template = _SEARCH_ENTITIES_FTS if self._fts_index_ready else _SEARCH_ENTITIES
-        rows = await self._execute(template, {"query": query, "limit": limit})
-        return tuple(
-            EntitySearchHit(id=row["id"], kind=row["kind"], name=row["name"]) for row in rows
+        before = str(existing["confidence"]) if existing is not None else None
+        connection.execute(
+            "INSERT INTO relations(id, kind, source_entity_id, target_entity_id, confidence,"
+            " tier, rationale, source_id, attributes_json, observed_at, extracted_at)"
+            " VALUES(?,?,?,?,?,?,?,?,?,?,?)"
+            " ON CONFLICT(id) DO UPDATE SET confidence=excluded.confidence,"
+            " tier=excluded.tier, rationale=excluded.rationale, source_id=excluded.source_id,"
+            " attributes_json=excluded.attributes_json, observed_at=excluded.observed_at,"
+            " extracted_at=excluded.extracted_at",
+            (
+                relation.id,
+                relation.kind,
+                relation.source_entity_id,
+                relation.target_entity_id,
+                relation.confidence.value,
+                relation.tier.value,
+                relation.rationale,
+                relation.source_id,
+                _json(relation.attributes),
+                _ts(relation.observed_at),
+                _ts(relation.extracted_at),
+            ),
         )
+
+        if existing is None:
+            op = GraphEventOp.EDGE_ADDED
+        elif (
+            before != relation.confidence.value
+            or str(existing["tier"]) != relation.tier.value
+            or str(existing["source_id"]) != relation.source_id
+        ):
+            op = GraphEventOp.EDGE_CHANGED
+        else:
+            # 값이 그대로면 이벤트를 남기지 않는다. 같은 대화를 두 번 적재해도 로그가
+            # 부풀지 않아야 `reinforcement`가 "재확인 횟수"라는 의미를 지킨다.
+            return
+
+        GraphStore._record_event(
+            connection,
+            revision=revision,
+            op=op,
+            subject_id=relation.source_entity_id,
+            object_id=relation.target_entity_id,
+            relation=relation.kind,
+            confidence_before=before,
+            confidence_after=relation.confidence.value,
+            source_id=relation.source_id,
+        )
+
+    async def reset_projection(self) -> None:
+        """파생 그래프만 비운다. 원본(`sources`)과 이벤트 로그는 남는다."""
+
+        def write() -> None:
+            connection = self._require()
+            with atomic(connection, _GRAPH_WRITE):
+                revision = self._bump_revision(connection)
+                connection.execute("DELETE FROM relations")
+                connection.execute("DELETE FROM entities")
+                connection.execute("DELETE FROM entities_fts")
+                self._record_event(
+                    connection,
+                    revision=revision,
+                    op=GraphEventOp.EDGE_REMOVED,
+                    subject_id=_PROJECTION_MARKER,
+                )
+
+        await self._owner.run(write)
+
+    # ── 읽기 ────────────────────────────────────────────────────────────────
 
     async def summary(self) -> GraphSummary:
-        async with self._lock:
-            if not self.is_open:
-                raise RuntimeError("graph store is not open")
+        def read() -> GraphSummary:
+            connection = self._require()
 
-            def read_counts() -> GraphSummary:
-                counts = {
-                    name: int(self._execute_sync(query)[0]["count"])
-                    for name, query in _SUMMARY_QUERIES.items()
-                }
-                return GraphSummary(**counts)
+            def count(table: str) -> int:
+                return int(
+                    connection.execute(f"SELECT count(*) AS n FROM {table}").fetchone()["n"]
+                )
 
-            return await asyncio.shield(self._submit_owner(read_counts))
+            return GraphSummary(
+                entities=count("entities"),
+                sources=count("sources"),
+                relations=count("relations"),
+                events=count("graph_events"),
+                revision=self._read_revision(connection),
+            )
 
-    async def claim_provenance(self, claim_id: str) -> dict[str, Any] | None:
-        rows = await self._execute(_CLAIM_PROVENANCE, {"claim_id": claim_id})
-        if not rows:
-            return None
-        row = rows[0]
-        entity_ids = tuple(sorted(value for value in row["entity_ids"] if value is not None))
-        source_ids = tuple(sorted(value for value in row["source_ids"] if value is not None))
-        if not entity_ids or not source_ids:
-            raise RuntimeError("claim provenance is incomplete")
-        return {
-            "claim_id": str(row["claim_id"]),
-            "entity_ids": entity_ids,
-            "source_ids": source_ids,
-        }
+        return await self._owner.run(read)
+
+    async def search_entities(self, query: str, *, limit: int = 20) -> tuple[EntitySearchHit, ...]:
+        """FTS5 BM25 검색. 확장 로딩도, 실패 시 강등 플래그도 필요 없다."""
+        if not query.strip():
+            return ()
+        bounded = max(1, min(int(limit), MAX_SEARCH_LIMIT))
+
+        def read() -> tuple[EntitySearchHit, ...]:
+            rows = self._require().execute(
+                "SELECT f.entity_id AS entity_id, e.kind AS kind, e.name AS name,"
+                " bm25(entities_fts) AS score FROM entities_fts f"
+                " JOIN entities e ON e.id = f.entity_id"
+                " WHERE entities_fts MATCH ? ORDER BY score LIMIT ?",
+                (_fts_query(query), bounded),
+            ).fetchall()
+            return tuple(
+                EntitySearchHit(
+                    entity_id=str(r["entity_id"]),
+                    kind=str(r["kind"]),
+                    name=str(r["name"]),
+                    score=float(r["score"]),
+                )
+                for r in rows
+            )
+
+        return await self._owner.run(read)
 
     async def neighborhood(
-        self,
-        entity_id: str,
-        *,
-        depth: int = 1,
-        limit: int = 100,
+        self, root_entity_id: str, *, depth: int = 1, limit: int = 100
     ) -> tuple[NeighborhoodEdge, ...]:
-        if depth not in _NEIGHBORHOOD_QUERIES:
-            raise ValueError(f"depth must be between 1 and {MAX_NEIGHBORHOOD_DEPTH}")
-        if not 1 <= limit <= 500:
-            raise ValueError("limit must be between 1 and 500")
-        rows = await self._execute(
-            _NEIGHBORHOOD_QUERIES[depth],
-            {"entity_id": entity_id, "limit": limit},
-        )
-        edges: dict[str, NeighborhoodEdge] = {}
-        for row in rows:
-            for relation in row["path_relations"]:
-                relation_id = str(relation["id"])
-                edges[relation_id] = NeighborhoodEdge(
-                    source_id=str(relation["source_id"]),
-                    target_id=str(relation["target_id"]),
-                    relation_id=relation_id,
-                    kind=str(relation["kind"]),
-                    confidence=float(relation["confidence"]),
+        bounded_depth = max(1, min(int(depth), MAX_NEIGHBORHOOD_DEPTH))
+        bounded_limit = max(1, min(int(limit), MAX_SEARCH_LIMIT))
+
+        def read() -> tuple[NeighborhoodEdge, ...]:
+            connection = self._require()
+            seen_entities = {root_entity_id}
+            frontier = {root_entity_id}
+            edges: list[NeighborhoodEdge] = []
+            emitted: set[str] = set()
+            for level in range(1, bounded_depth + 1):
+                if not frontier:
+                    break
+                ordered = sorted(frontier)
+                placeholders = ",".join("?" for _ in ordered)
+                rows = connection.execute(
+                    "SELECT * FROM relations WHERE source_entity_id IN"
+                    f" ({placeholders}) OR target_entity_id IN ({placeholders})"
+                    " ORDER BY id",
+                    (*ordered, *ordered),
+                ).fetchall()
+                next_frontier: set[str] = set()
+                for row in rows:
+                    relation_row_id = str(row["id"])
+                    if relation_row_id in emitted:
+                        continue
+                    emitted.add(relation_row_id)
+                    edges.append(
+                        NeighborhoodEdge(
+                            relation_id=relation_row_id,
+                            kind=str(row["kind"]),
+                            source_entity_id=str(row["source_entity_id"]),
+                            target_entity_id=str(row["target_entity_id"]),
+                            confidence=str(row["confidence"]),
+                            tier=str(row["tier"]),
+                            depth=level,
+                        )
+                    )
+                    for endpoint in (row["source_entity_id"], row["target_entity_id"]):
+                        if str(endpoint) not in seen_entities:
+                            seen_entities.add(str(endpoint))
+                            next_frontier.add(str(endpoint))
+                    if len(edges) >= bounded_limit:
+                        return tuple(edges[:bounded_limit])
+                frontier = next_frontier
+            return tuple(edges[:bounded_limit])
+
+        return await self._owner.run(read)
+
+    async def events(self, *, after_seq: int = 0, limit: int = 100) -> tuple[GraphEvent, ...]:
+        bounded = max(1, min(int(limit), MAX_SEARCH_LIMIT))
+
+        def read() -> tuple[GraphEvent, ...]:
+            rows = self._require().execute(
+                "SELECT * FROM graph_events WHERE seq > ? AND subject_id <> ?"
+                " ORDER BY seq LIMIT ?",
+                (int(after_seq), _PROJECTION_MARKER, bounded),
+            ).fetchall()
+            return tuple(
+                GraphEvent(
+                    seq=int(r["seq"]),
+                    at=datetime.fromisoformat(str(r["at"])),
+                    revision=int(r["revision"]),
+                    op=GraphEventOp(str(r["op"])),
+                    subject_id=str(r["subject_id"]),
+                    object_id=None if r["object_id"] is None else str(r["object_id"]),
+                    relation=None if r["relation"] is None else str(r["relation"]),
+                    confidence_before=(
+                        None
+                        if r["confidence_before"] is None
+                        else Confidence(str(r["confidence_before"]))
+                    ),
+                    confidence_after=(
+                        None
+                        if r["confidence_after"] is None
+                        else Confidence(str(r["confidence_after"]))
+                    ),
+                    source_id=None if r["source_id"] is None else str(r["source_id"]),
                 )
-        return tuple(edges[key] for key in sorted(edges))
+                for r in rows
+            )
+
+        return await self._owner.run(read)
 
     async def investor_profile_summary(
         self, *, now: datetime, window_days: int = 90, limit: int = 50
     ) -> tuple[InvestorProfileSummaryEntry, ...]:
-        """Read-time aggregation over the fixed investor_profile entity (ADR §2(c)).
+        """투자자 프로필에서 뻗은 관계를 보강 횟수 순으로.
 
-        ``now`` is caller-supplied so the window boundary is deterministic and
-        reproducible in tests -- this method never reads the wall clock itself.
+        `reinforcement`는 그래프가 아니라 `graph_events`를 창 안에서 센 값이다.
+        엣지는 누적하지 않기로 했으므로(덮어쓰기) 그래프만 봐서는 한 번 말한 것과 열 번
+        말한 것이 구별되지 않는다 — 그 구별을 로그가 복원한다.
         """
-        if now.tzinfo is None or now.utcoffset() != timedelta(0):
+        if now.tzinfo is None or now.utcoffset() is None:
+            # naive를 `astimezone(UTC)`에 넘기면 파이썬이 **로컬 시간대로 가정**해서
+            # 조용히 다른 창을 연다. KST에서는 9시간이 밀리므로 경계의 관계가 이유 없이
+            # 들어오거나 빠진다. 터지지 않는 실패라 더 나쁘다.
             raise ValueError("now must be UTC-aware")
-        if not 1 <= window_days <= 3650:
-            raise ValueError("window_days must be between 1 and 3650")
-        if not 1 <= limit <= 500:
-            raise ValueError("limit must be between 1 and 500")
-        window_start = now - timedelta(days=window_days)
-        rows = await self._execute(
-            _INVESTOR_PROFILE_SUMMARY_QUERY,
-            {
-                "profile_id": INVESTOR_PROFILE_ENTITY_ID,
-                "relation_kinds": [kind.value for kind in _PROFILE_RELATION_KINDS],
-                "window_start": _timestamp(window_start),
-                "limit": limit,
-            },
-        )
-        return tuple(
-            InvestorProfileSummaryEntry(
-                entity_id=str(row["entity_id"]),
-                entity_kind=str(row["entity_kind"]),
-                entity_name=str(row["entity_name"]),
-                relation_kind=str(row["relation_kind"]),
-                claim_count=int(row["claim_count"]),
-                latest_observed_at=str(row["latest_observed_at"]),
-                average_confidence=float(row["average_confidence"]),
-            )
-            for row in rows
-        )
+        if window_days <= 0:
+            raise ValueError("window_days must be positive")
+        if limit <= 0:
+            # 0이나 음수를 1로 조용히 접으면 호출자는 "한 건뿐"이라는 잘못된 답을 받는다.
+            raise ValueError("limit must be positive")
+        cutoff = _ts(now.astimezone(UTC) - timedelta(days=window_days))
+        bounded = min(int(limit), MAX_SEARCH_LIMIT)
 
-    async def reset_projection(self) -> None:
-        async with self._lock:
-            if not self.is_open:
-                raise RuntimeError("graph store is not open")
-
-            def reset() -> None:
-                for statement in _RESET_STATEMENTS:
-                    self._execute_sync(statement)
-                self._execute_sync(
-                    _SET_SCHEMA_VERSION,
-                    {"key": "projection", "version": SCHEMA_VERSION},
+        def read() -> tuple[InvestorProfileSummaryEntry, ...]:
+            rows = self._require().execute(
+                "SELECT r.kind AS relation_kind, r.confidence AS confidence, r.tier AS tier,"
+                " r.rationale AS rationale, r.observed_at AS observed_at,"
+                " e.id AS entity_id, e.kind AS entity_kind, e.name AS entity_name,"
+                " (SELECT count(*) FROM graph_events g"
+                "    WHERE g.subject_id = r.source_entity_id"
+                "      AND g.object_id = r.target_entity_id"
+                "      AND g.relation = r.kind"
+                "      AND g.at >= ?) AS reinforcement"
+                " FROM relations r JOIN entities e ON e.id = r.target_entity_id"
+                " WHERE r.source_entity_id = ? AND r.observed_at >= ?"
+                " ORDER BY reinforcement DESC, r.observed_at DESC, e.name ASC LIMIT ?",
+                (cutoff, INVESTOR_PROFILE_ENTITY_ID, cutoff, bounded),
+            ).fetchall()
+            return tuple(
+                InvestorProfileSummaryEntry(
+                    entity_id=str(r["entity_id"]),
+                    entity_kind=str(r["entity_kind"]),
+                    entity_name=str(r["entity_name"]),
+                    relation_kind=str(r["relation_kind"]),
+                    confidence=str(r["confidence"]),
+                    tier=str(r["tier"]),
+                    rationale=None if r["rationale"] is None else str(r["rationale"]),
+                    observed_at=str(r["observed_at"]),
+                    reinforcement=int(r["reinforcement"]),
                 )
+                for r in rows
+            )
 
-            await asyncio.shield(self._submit_owner(reset))
+        return await self._owner.run(read)
