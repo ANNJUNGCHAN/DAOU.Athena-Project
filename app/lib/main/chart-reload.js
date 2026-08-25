@@ -95,6 +95,38 @@ function createChartReloadAuthority(options) {
     };
   }
 
+  // 과거 페이지 조회 — 같은 계약·같은 인자에 base_dt만 커서로 바꾼다.
+  //
+  // 왜 cont_yn/next_key가 아닌가: next_key는 응답 헤더에만 있고 render-plan 뒤에서
+  // 소비돼 앱까지 오지 않는다. 게다가 커서는 수명이 있어 재조회·주기전환마다 끊긴다.
+  // 차트 TR은 base_dt가 "이 날짜까지"를 뜻하므로, 가진 것 중 가장 오래된 봉의
+  // 날짜를 다시 base_dt로 주면 그 이전 구간이 온다(2026-08-25 실서버 확인:
+  // 20260825→20240307, 20240307→20210930). 커서를 들고 다닐 필요가 없다.
+  //
+  // generation을 올리지 않는다 — 이건 화면 교체가 아니라 앞쪽에 덧붙이는 조회다.
+  function buildHistoryDataset(request) {
+    const input = request && typeof request === 'object' ? request : {};
+    const cursor = String(input.beforeDate || '');
+    if (!/^\d{8}$/.test(cursor)) throw new Error(`AITS chart history 커서가 YYYYMMDD가 아니다: ${cursor}`);
+    const dataset = buildDataset(input);
+    const item = dataset.items[0];
+    if (!Object.prototype.hasOwnProperty.call(item.args, 'base_dt')) {
+      // 분·틱(ka10079)처럼 base_dt가 계약에 없는 주기는 이 방식으로 과거를 못 끊는다.
+      // 조용히 같은 구간을 다시 주지 않고 거부한다 — 안 되는 걸 되는 척하지 않는다.
+      throw new Error('이 주기는 base_dt 과거 조회를 지원하지 않는다');
+    }
+    item.args.base_dt = cursor;
+    return Object.assign(dataset, {
+      question: `AITS chart history ${item.operationRef} ~${cursor}`,
+      expected: Object.assign({}, dataset.expected, { generation: authorityGeneration(input) }),
+    });
+  }
+
+  function authorityGeneration(input) {
+    const authority = panels.get(String(input.panelId || ''));
+    return authority ? authority.generation : 1;
+  }
+
   function acceptResult(request, result) {
     const expected = request && request.expected;
     const canvas = result && Array.isArray(result.canvases) ? result.canvases[0] : null;
@@ -127,6 +159,7 @@ function createChartReloadAuthority(options) {
   return {
     registerPaint,
     buildDataset,
+    buildHistoryDataset,
     acceptResult,
     unregister,
     clear,

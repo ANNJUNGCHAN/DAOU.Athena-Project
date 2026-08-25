@@ -134,7 +134,16 @@ def test_inventory_partition_and_static_openapi_coverage() -> None:
             if "x-kiwoom-tr-id" in operation:
                 assert operation["x-athena-llm-exposed"] is False
     assert len(operation_ids) == len(set(operation_ids))
-    assert len(operation_ids) == 327
+    # 327 → 328(2026-08-25): canvas_chart_page 1건 추가. 차트 과거 페이지를
+    # canonical 봉으로 돌려주는 조회 전용 라우트다(api/chart_page.py). 이 수는
+    # 라우트 무단 증가를 막는 가드이므로, 늘릴 때는 무엇이 늘었는지 함께 적는다.
+    # 328 → 329(2026-08-26): canvas_series_page 1건 추가. table 계약 + 시간축을 가진
+    # TR(수급 추이 등)을 canonical 시계열로 돌려주는 조회 전용 라우트다
+    # (api/series_page.py). chart-page의 chart-only 게이트를 넓히지 않으려고 라우트를
+    # 따로 뒀다 — 넓히면 table/facts/compound 전체가 사정권에 들어온다.
+    assert len(operation_ids) == 329
+    assert "canvas_chart_page" in operation_ids
+    assert "canvas_series_page" in operation_ids
     assert "get_internal_oauth_status" in operation_ids
     manifest = json.loads(
         (BACKEND / "ref" / "kiwoom-common-screen-manifest.json").read_text(encoding="utf-8")

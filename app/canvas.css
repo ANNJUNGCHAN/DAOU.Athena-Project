@@ -151,7 +151,10 @@ html, body { background: transparent; }
 .card.notice { min-height: unset; }
 /* 차트 카드(CC-101) — 캔들+거래량 pane이 필요한 높이라 다른 카드보다 크게 연다
    (lightweight-charts는 컨테이너 실측 높이가 있어야 그린다 — max-height:360px
-   그대로면 거래량 pane이 짓눌린다). 전폭은 폭 문법(canvas-layout.js chart:'full')이 정한다. */
+   그대로면 거래량 pane이 짓눌린다). 전폭은 폭 문법(canvas-layout.js chart:'full')이 정한다.
+   하단 지표를 켜도 이 높이는 그대로다 — pane이 비율로 나눠 갖는다
+   (chart-indicator-render.js PRICE_STRETCH 주석, TradingView/토스 방식).
+   더 크게 보려면 전체화면(.is-expanded)이다. */
 .card.chart { min-height: 420px; max-height: 520px; }
 .card.highlight {
   border-color: var(--color-brand);
@@ -320,7 +323,12 @@ table.fin-table { width: 100%; border-collapse: collapse; font-variant-numeric: 
   padding: 4px 8px; border-radius: 6px; cursor: pointer;
   transition: color var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease);
 }
-.chart-toolbar-tab:hover { color: var(--color-k-text); }
+.chart-toolbar-tab:hover:not(:disabled) { color: var(--color-k-text); }
+/* 데이터가 없어 잠긴 주기(분·틱). 지운 게 아니라 잠근 것이라 자리는 남기고
+   눌리지 않음만 보인다 — 사유는 title로 붙는다(chart-toolbar.js). */
+.chart-toolbar-tab.is-unavailable {
+  color: var(--color-k-ghost); cursor: not-allowed;
+}
 .chart-toolbar-tab.is-active {
   color: var(--color-k-text);
   background: rgba(255, 255, 255, 0.08);

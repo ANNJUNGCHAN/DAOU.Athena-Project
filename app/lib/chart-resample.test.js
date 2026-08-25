@@ -3,7 +3,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const path = require('node:path');
-const { aggregatePeriod, pseudoIntraday, resample, mondayOf } = require('./chart-resample');
+const { aggregatePeriod, resample, mondayOf } = require('./chart-resample');
 
 const FIXTURE = require(path.join(__dirname, '..', 'data', 'chart-mock-ohlcv.json'));
 
@@ -62,42 +62,37 @@ test('aggregatePeriod(월봉/년봉): 실제 240봉 픽스처에서 그룹 수�
   assert.equal(totalYearly, totalDaily);
 });
 
-test('pseudoIntraday: 결정적 — 같은 입력이면 항상 같은 출력(Math.random 미사용)', () => {
-  const bar = [{ time: '2026-01-05', open: 100, high: 110, low: 95, close: 105, volume: 1000 }];
-  const a = pseudoIntraday(bar, 'minute', 5);
-  const b = pseudoIntraday(bar, 'minute', 5);
-  assert.deepEqual(a, b);
-});
-
-test('pseudoIntraday: 세그먼트 마지막 봉의 종가는 원 일봉 종가와 같다(값이 안 새지 않는다)', () => {
-  const bar = [{ time: '2026-01-05', open: 100, high: 110, low: 95, close: 105, volume: 1000 }];
-  const out = pseudoIntraday(bar, 'minute', 1); // 세분=1분 → SEGMENTS_BY_INTERVAL.minute[1]=30조각
-  assert.equal(out.length, 30);
-  assert.equal(out[out.length - 1].close, 105);
-  assert.equal(out[0].open, 100);
-  for (const seg of out) {
-    assert.ok(seg.low <= seg.high, `low<=high 위반: ${JSON.stringify(seg)}`);
+// 2026-08-25: pseudoIntraday 제거. 예전엔 일봉을 30조각으로 쪼개 의사 장중 봉을
+// 만들고 "실제 분포 아님" 각주를 달았다. 그 봉 위에서 지표 34종이 계산되면서
+// 각주로 덮을 수 없는 판단 재료가 되어 걷어냈다. 아래 테스트는 그게 **다시
+// 돌아오지 않는지**를 지킨다 — 봉을 지어내면 개수가 늘어나므로 개수로 잡는다.
+test('분·틱은 봉을 지어내지 않는다 — 일봉 개수 그대로에 사유가 붙는다', () => {
+  for (const [period, interval] of [['MIN', 5], ['TICK', 10]]) {
+    const r = resample(FIXTURE.bars, period, interval);
+    assert.equal(r.mock, false, `${period}: mock 재샘플이 살아있다`);
+    assert.equal(r.bars.length, FIXTURE.bars.length, `${period}: 봉 개수가 늘었다 — 지어냈다는 뜻이다`);
+    assert.deepEqual(r.bars, FIXTURE.bars, `${period}: 일봉을 그대로 돌려줘야 한다`);
+    assert.ok(r.unavailable, `${period}: 사유 없이 조용히 일봉을 내주면 안 된다`);
   }
 });
 
-test('pseudoIntraday: 빈 입력은 빈 배열', () => {
-  assert.deepEqual(pseudoIntraday([], 'tick', 1), []);
+test('사유 문구는 무엇이 없는지 말한다 — 분과 틱을 구분한다', () => {
+  assert.match(resample(FIXTURE.bars, 'MIN', 1).unavailable, /분봉 데이터/);
+  assert.match(resample(FIXTURE.bars, 'TICK', 1).unavailable, /틱 데이터/);
 });
 
-test('resample: 통합 진입점 — D는 그대로, W/M/Y는 집계, MIN/TICK은 mock=true', () => {
+test('모듈은 봉을 만드는 함수를 더 이상 내보내지 않는다', () => {
+  const mod = require('./chart-resample');
+  assert.equal(mod.pseudoIntraday, undefined);
+});
+
+test('resample: 통합 진입점 — D는 그대로, W/M/Y는 집계', () => {
   const d = resample(FIXTURE.bars, 'D');
   assert.equal(d.mock, false);
+  assert.equal(d.unavailable, undefined);
   assert.equal(d.bars.length, FIXTURE.bars.length);
 
   const w = resample(FIXTURE.bars, 'W');
   assert.equal(w.mock, false);
   assert.ok(w.bars.length < FIXTURE.bars.length);
-
-  const min = resample(FIXTURE.bars, 'MIN', 5);
-  assert.equal(min.mock, true);
-  assert.ok(min.bars.length > FIXTURE.bars.length);
-
-  const tick = resample(FIXTURE.bars, 'TICK', 10);
-  assert.equal(tick.mock, true);
-  assert.ok(tick.bars.length > 0);
 });

@@ -11,6 +11,40 @@ const { isValidCorrelation, waitForVisiblePaint } = window.AthenaLib.RestCanvasP
 // 모든 chart surface의 유일한 세션/DTO 권위. 실제 그리기는 기존 하나의
 // lightweight-charts controller만 주입하며 별도 renderer/BrowserWindow는 없다.
 const aitsChartPanels = createAitsChartPanelAdapter({ renderChart: createChartCard, maxPanels: 6 });
+
+// snapshot().period는 AITS 표기(day/week/…)다. 과거 조회 IPC는 툴바와 같은
+// UI 주기 코드를 쓰므로 여기서 되돌린다.
+const PERIOD_TO_ATHENA_UI = Object.freeze({
+  tick: 'TICK', min: 'MIN', day: 'D', week: 'W', month: 'M', year: 'Y',
+});
+
+// 실시간 진행봉 — main이 키움 REAL 0B에서 파싱한 체결을 그대로 보낸다. 어댑터가
+// 종목이 맞는 열린 패널마다 마지막 봉에 접어 넣는다(applyRealtimeTick). 해당
+// 종목 패널이 없으면 아무 일도 일어나지 않는다 — 여기서 카드를 만들지 않는다.
+if (window.athena && typeof window.athena.on === 'function') {
+  window.athena.on('athena:chart-ticks', (ticks) => {
+    if (!Array.isArray(ticks)) return;
+    for (const tick of ticks) {
+      aitsChartPanels.applyRealtimeTick(tick).catch(() => { /* 진행봉 실패는 차트를 죽이지 않는다 */ });
+    }
+  });
+}
+
+// 프로브·검증용 읽기 창구(window.addCard와 같은 관례). 상태를 바꾸지 않는다 —
+// 실시간 진행봉이 실제로 갱신됐는지 값으로 확인할 길이 달리 없다(캔버스에 그려진
+// 가격 라벨은 DOM이 아니다).
+const mountedChartSessions = new Map();
+window.__athenaChartProbe = {
+  snapshot: () => aitsChartPanels.snapshot(),
+  // 가시 구간을 직접 옮겨 "좌측 끝 도달"을 재현한다 — 사용자의 팬과 같은 신호를
+  // 차트에 준다(subscribeVisibleLogicalRangeChange가 동일하게 발화한다).
+  timeScale: () => {
+    const session = mountedChartSessions.values().next().value;
+    return session && session.renderer && session.renderer.chart
+      ? session.renderer.chart.timeScale() : null;
+  },
+};
+
 window.addEventListener('beforeunload', () => {
   for (const session of aitsChartPanels.snapshot()) {
     window.athena.send('athena:chart-panel-destroyed', { panelId: session.panelId });
@@ -238,6 +272,15 @@ function describeAitsChartPanel(data, envelope, source) {
     const generation = active ? active.generation + 1 : 1;
     context.operationRef = chartEnvelope.operation_ref || chartEnvelope.operationRef;
     context.operationArgs = chartEnvelope.operation_args || chartEnvelope.operationArgs;
+    // 분·틱 탭을 열 근거는 "이 패널의 reload 계약에 min·tick TR이 있는가" 하나다
+    // (2026-08-25). 종전엔 "초기 주기가 분·틱인가"로 판정했는데, 그러면 일봉으로
+    // 시작한 패널은 계약상 분봉을 받을 수 있어도 영영 잠긴 채였다 — 실측으로
+    // live 카드에서 분·틱이 둘 다 locked로 남았다.
+    const chartMeta = chartData.chart_meta && typeof chartData.chart_meta === 'object'
+      ? chartData.chart_meta : {};
+    const reloadTargets = chartMeta.reload_targets && typeof chartMeta.reload_targets === 'object'
+      ? chartMeta.reload_targets : {};
+    context.intradayAvailable = !!(reloadTargets.min || reloadTargets.tick);
     return {
       body: snapshot.body,
       context: Object.assign(context, { panelId, generation }),
@@ -267,12 +310,36 @@ function describeAitsChartPanel(data, envelope, source) {
   };
 }
 
+// 카드 제목의 주기 표기를 실제 주기에 맞춘다. 최초 캡션("삼성전자 일봉")은
+// 그때의 주기라, 분봉으로 바꿔도 제목이 '일봉'으로 남으면 §8 정보 정직성 위반이다
+// (실측 지적: "분틱 표시가 안돼" — 화면은 분봉인데 제목이 일봉이었다).
+const PERIOD_TITLE = Object.freeze({
+  tick: '틱', min: '분봉', day: '일봉', week: '주봉', month: '월봉', year: '년봉',
+});
+
+function retitleChartCard(card, period) {
+  const label = PERIOD_TITLE[period];
+  const title = card && card.querySelector('.card-title');
+  if (!label || !title) return;
+  // 끝에 붙은 주기 낱말만 갈아끼운다 — 종목명은 그대로 둔다.
+  const base = String(title.textContent || '').replace(/\s*(틱|분봉|일봉|주봉|월봉|년봉)\s*$/, '').trim();
+  title.textContent = base ? `${base} ${label}` : label;
+}
+
 async function reloadExistingAitsChartPanel(descriptor, envelope) {
   const card = Array.from(grid.querySelectorAll('.card.chart')).find(
     (candidate) => candidate.dataset.chartPanelId === descriptor.panelId
   );
   if (!card || !aitsChartPanels.has(descriptor.panelId)) return null;
-  await aitsChartPanels.reloadPanel(descriptor.panelId, descriptor.body, { generation: descriptor.generation });
+  // 세분(분·틱)은 서버가 실제로 쓴 tic_scope를 따른다. 이걸 안 넘기면 재조회
+  // 후 툴바가 1로 되돌아가 "10분을 눌렀는데 1분으로 돌아간다"가 된다(실측).
+  const args = (descriptor.context && descriptor.context.operationArgs) || {};
+  const ticScope = Number(args.tic_scope);
+  await aitsChartPanels.reloadPanel(descriptor.panelId, descriptor.body, {
+    generation: descriptor.generation,
+    interval: Number.isFinite(ticScope) && ticScope > 0 ? ticScope : 1,
+  });
+  retitleChartCard(card, descriptor.body.period);
   stampPaperScreen(card, envelope);
   card.dataset.renderState = descriptor.body.candles.length ? 'data' : 'empty';
   card.dataset.chartGeneration = String(descriptor.generation);
@@ -299,6 +366,23 @@ async function mountAitsChartPanel(card, chartBody, descriptor) {
       adjusted: request.adjusted,
     });
   };
+  // 과거 봉 덧붙이기 — main이 base_dt 커서로 그 앞 구간을 받아 candles만 돌려준다.
+  // reload와 달리 카드를 갈아치우지 않으므로 generation을 올리지 않는다.
+  descriptor.context.onHistoryRequest = async (beforeDate) => {
+    const active = aitsChartPanels.snapshot().find((candidate) => candidate.panelId === descriptor.panelId);
+    if (!active) return [];
+    const res = await window.athena.invoke('athena:chart-history-page', {
+      panelId: descriptor.panelId,
+      generation: active.generation,
+      period: PERIOD_TO_ATHENA_UI[active.period] || 'D',
+      interval: 1,
+      adjusted: true,
+      beforeDate,
+    });
+    if (!res || !res.ok || !Array.isArray(res.candles)) return 0;
+    // 어댑터가 정본(body.candles)에 붙이고 렌더러 표시까지 맞춘다.
+    return aitsChartPanels.prependHistory(descriptor.panelId, res.candles);
+  };
   descriptor.context.onChartLibraryReady = (readyAt) => {
     if (Number.isFinite(Number(readyAt))) card.dataset.chartImportReadyAt = String(Number(readyAt));
   };
@@ -307,6 +391,7 @@ async function mountAitsChartPanel(card, chartBody, descriptor) {
     window.athena.send('athena:chart-panel-destroyed', { panelId: descriptor.panelId });
   });
   const session = await aitsChartPanels.openPanel(chartBody, descriptor.body, descriptor.context);
+  mountedChartSessions.set(descriptor.panelId, session);
   card.dataset.chartSessionId = session.sessionId;
   card.dataset.chartTrId = session.body.trId;
   card.dataset.chartGeneration = String(session.generation);

@@ -159,8 +159,13 @@ async function main() {
 
   const failures = [];
   if (report.panelOpen.disabledBefore) failures.push('∿ 버튼이 여전히 disabled다');
-  if (report.panelOpen.totalRows !== 35) failures.push(`토글 행 수가 35가 아니다: ${report.panelOpen.totalRows}`);
-  if (report.panelOpen.implementedCount !== 5) failures.push(`구현 행 수가 5가 아니다: ${report.panelOpen.implementedCount}`);
+  // 2026-08-25: 지표가 5 → 34종으로 늘었다. 숫자를 박지 않고 레지스트리에서
+  // 읽는다 — 지표를 추가할 때마다 프로브가 깨지면 프로브를 안 돌리게 된다.
+  const REG = require('./lib/chart-indicator-registry').INDICATOR_DEFS;
+  const expectTotal = REG.length;
+  const expectImpl = REG.filter((d) => d.implemented).length;
+  if (report.panelOpen.totalRows !== expectTotal) failures.push(`토글 행 수가 ${expectTotal}이 아니다: ${report.panelOpen.totalRows}`);
+  if (report.panelOpen.implementedCount !== expectImpl) failures.push(`구현 행 수가 ${expectImpl}이 아니다: ${report.panelOpen.implementedCount}`);
   if (!report.panelOpen.allUnimplementedBadged) failures.push('미구현 행에 "미구현" 배지가 없다');
   if (!report.bollOn.isOn) failures.push('볼린저 토글이 켜지지 않았다');
   if (!report.paneSeparationAfterBoll.noOverlap) failures.push('볼린저 on 후 pane 겹침 발생');

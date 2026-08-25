@@ -17,3 +17,4 @@ captures/
 .probe-chart-toolbar-profile/
 .probe-chart-authoring-profile/
 .probe-chart-drawing-profile/
+.*-profile/
