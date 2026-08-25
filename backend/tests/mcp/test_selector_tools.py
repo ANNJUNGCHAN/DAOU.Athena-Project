@@ -344,9 +344,6 @@ async def test_audit_log_never_contains_plan_token_or_arguments(tmp_path, make_g
     assert secret_token not in raw_log_text
 
 
-# ---------------------------------------------------------------------------
-# 타이밍 로그(W1 계측, plan/plan.md) — 감사 로그와 별도 파일, ts/tool/backend_ms만
-# ---------------------------------------------------------------------------
 
 
 def _timing_log_path(tmp_path: Path) -> Path:

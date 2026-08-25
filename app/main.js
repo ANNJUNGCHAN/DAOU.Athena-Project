@@ -1,19 +1,9 @@
-// Athena — Codex형 셸 창 Electron 메인. spike/electron-glass/v2.js·v3.js 이식.
-// 2026-08-24 리프 1.2.1: 창 짝(캔버스 창 + 대화 창)을 **셸 창 하나**로 합쳤다.
-// 중앙 캔버스와 우측 채팅이 같은 렌더러(shell.html)의 두 영역이 되면서 짝 배치·
-// 확장 연출·대화 창 자동 성장이 통째로 사라졌다. 좌측 이력 사이드바는 리프 1.2.2,
-// 알림 오브 창은 리프 1.3.1이 붙인다 — 지금 이 파일이 만드는 OS 창은 1개다.
-// 부팅 지연 계측(합의 계획 W1) — 이 모듈이 로드되는 순간을 기준점으로 삼는다.
-// require()들도 이 시각 이후 비용이므로, "창 표시까지" 수치는 require 체인
-// 전체를 포함한다(가장 이른 지점에서 찍어야 실제 부팅 지연을 반영한다).
 const MODULE_LOAD_AT = Date.now();
 const { app, BrowserWindow, ipcMain, screen, Tray, Menu, nativeImage, Notification, nativeTheme } = require('electron');
 const { performance } = require('node:perf_hooks');
 const path = require('path');
 const fs = require('fs');
 
-// 설정·온보딩 화면군의 메인 프로세스 절반 (plan/paper-specs/00-통합-계획.md).
-// 비밀값은 secrets.js 밖으로 절대 안 나간다 — accounts.js가 내부적으로만 쓴다.
 const onboarding = require('./lib/main/onboarding');
 const cliAccounts = require('./lib/main/cli-accounts');
 const accounts = require('./lib/main/accounts');
@@ -153,26 +143,6 @@ function commonWinOpts(bounds) {
     // 맡긴다. 짝 z순서를 유지하던 focus/restore 핸들러는 창이 하나가 되면서
     // 사라졌다(리프 1.2.1). 알림 오브 창(1.3.1)은 예외로 alwaysOnTop을 건다.
     backgroundColor: '#00000000',
-    // S1 실측(spike/electron-glass/RESULT.md): backgroundMaterial:'acrylic' 단독으로
-    // "뒤가 비치며 블러"가 성립한다. transparent:true는 기본으로 켜지 않는다(W2 지시) —
-    // 블러 없는 완전 투명만 주기 때문.
-    //
-    // 2026-08-22 실측 정정(사용자 지적 "다른 창에 들어가면 아직도 검정색"):
-    // Windows의 acrylic(DWMSBT_TRANSIENTWINDOW)은 **활성 창에만** 그려지고 포커스를
-    // 잃으면 DWM이 단색으로 떨어뜨린다. 즉 비활성일 때의 검정은 CSS 틴트가 아니라
-    // 재질의 OS 동작이라 CSS로 넘을 수 없다. mica는 비활성에서도 반투명을 유지한다 —
-    // 대신 뒤의 다른 창이 아니라 바탕화면을 샘플링한다. "유리는 항상 유리로 읽혀야
-    // 한다"(soul.md)를 우선해 mica를 기본으로 둔다. ATHENA_WINDOW_MATERIAL로 되돌릴
-    // 수 있게 남긴다(acrylic|mica|tabbed|none) — 재질 판단은 실물 확인이 필요하다.
-    // 2026-08-22 3차 실측(사용자 판정 "그냥 완전 투명해야 한다. 너무 회색이다"):
-    // 라이트 acrylic도 회백색 막이라 그 자체가 회색으로 읽힌다. 재질을 끄고 진짜
-    // 투명창으로 간다 — 데스크톱이 그대로 비치고, DWM이 칠하는 단색이 없으니
-    // 비활성 검정도 원천 소멸한다. CSS border-radius도 이제 제대로 잘려 모서리
-    // 네모 아티팩트가 사라진다.
-    // 대가(정직 기록): Chromium의 backdrop-filter는 **페이지 안**만 흐린다 —
-    // 창 뒤 데스크톱은 블러할 수 없다. 즉 애플 Liquid Glass의 "뒤가 굴절되며
-    // 흐려지는" 효과는 Windows/Electron에서 재현 불가다. 유리감은 가장자리 광량·
-    // 얇은 백색 막·접지 그림자로만 만든다.
     transparent: process.env.ATHENA_WINDOW_MATERIAL ? false : true,
     ...(process.env.ATHENA_WINDOW_MATERIAL
       ? { backgroundMaterial: process.env.ATHENA_WINDOW_MATERIAL }
@@ -384,10 +354,6 @@ async function routineHttp(method, path) {
   return { ok: true, data: body };
 }
 
-// 주문 집행 프록시(P4) — 기존 3중 게이트 라우트로의 단일 전달. **무재시도**:
-// 타임아웃·오류 어느 쪽도 재전송하지 않는다(중복 주문 방지 — CLAUDE.md §1).
-// 로컬 베어러는 이 앱이 보관하지 않는다 — 미설정 배포에서는 백엔드가 정직하게
-// 거부하고 그 상태가 티켓에 그대로 표시된다.
 ipcMain.handle('athena:order-execute', async (_e, { trId, body, idempotencyKey }) => {
   if (!/^kt1000[01]$/.test(String(trId))) {
     return { ok: false, status: 0, error: '허용되지 않는 주문 TR' };
@@ -905,14 +871,6 @@ async function emitRestCanvasAndWaitForPaint(payload, { expand = true, timeoutMs
   });
 }
 
-// ---------- athena__render_canvas — 결정 D1의 실배선 + 명시적 픽스처 어댑터 ----------
-// 두 경로가 여기서 갈린다(plan/kiwoom-common-screen-handoff.md §6 — HTTP/WebSocket
-// adapter와 명시적 fixture adapter를 분리하라는 지시 그대로):
-//   source:'fixture' → 기존 목업 경로. spike/captures/*.json을 lib/mockdata.js가
-//                       읽는다. **명시적으로 선택했을 때만** 탄다 — verify.js가
-//                       ATHENA_CANVAS_SOURCE=fixture로 이 경로를 강제해서 quota
-//                       없이 결정론적으로 검증한다.
-//   그 외(기본값)      → 실배선. claude -p를 스폰해 실제 게이트웨이를 왕복한다.
 let liveMcpConfig = null; // 지연 생성 — app.getPath('userData')는 whenReady 이후에만 안전
 
 function getLiveMcpConfig() {
@@ -1249,13 +1207,6 @@ ipcMain.handle('athena__render_canvas', async (e, payload = {}) => {
   return runLiveQuery(query, expand);
 });
 
-// ---------------------------------------------------------------------------
-// 채팅→그래프 파이프라인 단계 5 — 커맨드바 HISTORY_COMMAND + 설정 모드
-// "성향・이력"(.omc/plans/plan-chat-graph-pipeline.md §2(e)/(f)). LLM을 거치지
-// 않는다 — chat.js가 정규식으로 직접 가로챈 뒤 이 IPC로 backend를 조회/조작한다.
-// history-sink.js가 이미 쥔 backend URL·bearer 토큰 접근을 그대로 재사용한다
-// (CLAUDE.md §0 "자격증명은 프로세스 메모리에만" — 여기서 새로 읽지 않는다).
-// ---------------------------------------------------------------------------
 
 async function fetchBrainJson(path, { params } = {}) {
   const token = historySink.getBearerToken();
@@ -1396,11 +1347,6 @@ function handleOnboardingAdvance(e, { step } = {}) {
 ipcMain.handle('athena:onboarding-state', handleOnboardingState);
 ipcMain.handle('athena:onboarding-advance', handleOnboardingAdvance);
 
-// ---------------------------------------------------------------------------
-// 화면 설정 — 복구된 baa7e0e 계약(2026-08-18, app/README.md L599-608 참조).
-// IPC 채널 이름은 원본 그대로다 — 저장 파일명만 athena-prefs.json 관례로 바꿨다
-// (lib/main/prefs.js). 방송 대상만 셸 창 하나로 줄었다(2026-08-24 리프 1.2.1).
-// ---------------------------------------------------------------------------
 
 function handlePrefsGet() {
   return prefs.get();
@@ -1472,12 +1418,6 @@ function broadcastCliChanged() {
   }
 }
 
-// 로그인은 사용자가 별도 콘솔 창에서 완료한다(브라우저 로그인 연동 방식 자체가
-// 스펙 미정 — plan/paper-specs/AT-SY-002-온보딩-CLI연결.md §Open questions 4).
-// 이 프로세스는 완료 시점을 콜백으로 알 방법이 없으므로, 로그인 창을 띄운
-// 뒤 최대 60초간 2초 간격으로 목록을 다시 훑어(detectAndMerge) 변화가 보이면
-// 그때 한 번 athena:cli-changed를 쏜다 — 진짜 이벤트 기반 알림이 아니라
-// 최선 노력의 폴링이다. 정확한 콜백 메커니즘은 §7-3 열린 질문으로 남는다.
 function pollCliChangesAfterLogin() {
   const before = JSON.stringify(cliAccounts.list());
   let attempts = 0;
@@ -1571,10 +1511,6 @@ accounts.onTokenChange((payload) => {
 // MCP (AT-ST-004/005/006) — backend/athena_mcp CLI를 감싼다, 재구현하지 않는다.
 // ---------------------------------------------------------------------------
 
-// SECURITY.md §6 — mcp-list 호출마다 평문 env를 발견하면 마이그레이션한다.
-// migratePlaintextEnv()는 멱등이라(이미 센티널이면 즉시 no-op) 매번 불러도
-// 비용이 거의 없다. 마이그레이션 실패(예: safeStorage 불가)는 리스트 자체를
-// 막지 않는다 — 평문 상태로라도 서버 목록은 계속 보여야 한다.
 async function handleMcpList() {
   try {
     const { migrated, skipped } = await mcpEnv.migratePlaintextEnv();
@@ -1624,17 +1560,6 @@ ipcMain.handle('athena:mcp-probe', handleMcpProbe);
 ipcMain.handle('athena:mcp-allow-tool', handleMcpAllowTool);
 ipcMain.handle('athena:mcp-remove', handleMcpRemove);
 
-// `require.main === module`은 Electron이 앱 진입점을 로드할 때 신뢰할 수 없다 —
-// 실측으로 확인: `electron .`(=npm start)로 띄워도 Electron의 내부 부트스트랩
-// 로더가 require.main을 이 모듈로 설정해주지 않아 항상 false였다. 그 결과
-// createWindows()가 한 번도 호출되지 않아 `npm start`가 창 없이 조용히 멈추는
-// 버그가 있었다(프로세스는 뜨지만 windows는 전혀 생성되지 않음 — W2 검증 중 발견).
-// verify.js가 main.js를 라이브러리로 require할 때만 자동 기동을 끄도록
-// 명시적 환경변수로 분기한다.
-// 부팅 시에도 한 번 마이그레이션을 시도한다(SECURITY.md §6) — 설정 화면을
-// 한 번도 안 열어 mcp-list가 호출되지 않아도, claude -p의 첫 왕복 전에 최대한
-// 일찍 평문을 지운다. createWindows()를 막지 않는다 — fire-and-forget이고
-// 실패해도(멱등이라 다음 mcp-list/부팅에서 재시도된다) 창 생성과 무관하다.
 if (!process.env.ATHENA_NO_AUTOSTART) {
   app.whenReady().then(() => {
     // 2026-08-22 팔레트 반전(사용자 지시 "애플 Liquid Glass 형태 그대로"):

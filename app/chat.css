@@ -505,14 +505,6 @@ html, body { background: transparent; }
   color: var(--color-k-bright);
 }
 .model-popover .mp-sep { height: 1px; background: rgb(255 255 255 / 8%); }
-/* 점 — 세 역할을 겸한다.
- * 1) 상태 표시기(idle/judging/calling)
- * 2) 캔버스 확장·수축 원형 클립의 기하 원점(main.js getDotScreenPoint)
- * 3) 설정 모드 진입점 — 데이터 표면이 아니라 "앱 자신"을 여는 자리. 새 창이 아니라
- *    이 창이 설정 모드로 바뀐다(ui/DESIGN-SOUL.md:100).
- * palette.md "한 화면에 마젠타는 한 곳"은 설정 모드에서도 지켜진다 — 모드가 열리면
- * #app이 숨어 이 점이 화면에서 사라지고, 마젠타는 카드의 주 액션 버튼 하나만 남는다.
- */
 .dot {
   width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0;
   background: radial-gradient(circle at 35% 35%, #fff, var(--color-brand) 55%, #8f0d57 100%);
@@ -574,13 +566,6 @@ html, body { background: transparent; }
   padding: 1px 6px;
 }
 
-/* ==========================================================================
-   온보딩(AT-SY-002/003) · 인증(AT-CV-OAUTH) — #onboard(.app.glass)의 콘텐츠.
-   #onboard 자체가 이미 .app과 같은 유리 패널(창)이므로, 여기서는 스펙의
-   800px "Onboarding Window" 목업을 창 안에 가운데 정렬된 콘텐츠 컬럼으로만
-   재현한다 — 두 번째 카드/테두리를 덧그리지 않는다
-   (plan/paper-specs/00-통합-계획.md §1.1).
-   ========================================================================== */
 .onb-root { position: absolute; inset: 0; }
 
 .onb-col {
@@ -976,13 +961,6 @@ html, body { background: transparent; }
 .switch-footer-btns .uk-btn-primary,
 .switch-footer-btns .uk-btn-text { height: 40px; padding: 0 20px; }
 
-/* =========================================================================
-   설정 모드 — #settings(.app.glass). 온보딩(#onboard)과 같은 문법이다.
-   새 창이 아니라 대화 창이 chatMaxH로 확장된 상태의 콘텐츠다.
-   근거: "설정을 만질 때 채팅을 치진 않으니까, #dot를 건들면 그냥 채팅창이
-   설정창으로 변하는 것이 좋겠다" — ui/DESIGN-SOUL.md:100.
-   카드 스타일은 styles/settings-cards.css.
-   ========================================================================= */
 #settings { padding: 18px 20px 20px; }
 
 .settings-head {
@@ -1023,9 +1001,6 @@ html, body { background: transparent; }
   min-height: 0;
 }
 
-/* 사이드바 — 유리 위의 미묘한 인셋. backdrop-filter를 추가하지 않는다(그러면
- * 유리 위에 유리를 또 얹는 꼴이라 재료 규범 위반) — 밝기·보더만으로 구분한다
- * (ui/soul.md §7 "깊이는 값으로 만든다"). */
 .settings-nav {
   flex: 0 0 236px;
   display: flex;
@@ -1056,8 +1031,6 @@ html, body { background: transparent; }
   flex-shrink: 0;
 }
 .settings-nav-item:hover { background: rgb(255 255 255 / 4%); color: var(--color-k-text); }
-/* 선택 표시는 배경/글자 밝기로만 — 액센트 색 금지(Paper 43쪽, ui/soul.md §7 "액센트
- * 색은 없다"). */
 .settings-nav-item.is-selected {
   background: rgb(255 255 255 / 7%);
   color: var(--color-k-text);

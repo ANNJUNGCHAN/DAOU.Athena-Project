@@ -5,15 +5,6 @@
 (function () {
 'use strict';
 
-// 보조지표 패널(CC-103) — plan/chart-card-control-spec.md §3·§4.
-// ∿▾ 클릭 → 2단 패널: 좌 토글 리스트("상단 지표"/"하단 지표" 섹션, 35종 전수) /
-// 우 설정(선택된 지표의 파라미터, 구현 지표만). 맨 아래 별도 행 = 매물대 토글.
-// chart-toolbar.js의 openDropdown과 같은 결(클릭 밖·Escape로 닫힘, 카드 안
-// 오버레이 — 새 창·새 시트 아님, 두 창 원칙). 전부 textContent/DOM 노드다
-// (innerHTML 문자열 삽입 금지, CLAUDE.md §6).
-//
-// 이 모듈은 DOM/상호작용만 맡는다. 실제 지표 계산·시리즈 재생성은 chart-card.js가
-// 콜백 안에서 한다(관심사 분리, chart-toolbar.js와 같은 패턴).
 
 // UMD 헤드(2026-08-18 렌더러 격리) — node --test(CommonJS)면 require, <script>
 // 태그 전역 로딩(nodeIntegration:false)이면 window.AthenaLib를 쓴다.

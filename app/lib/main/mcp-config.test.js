@@ -17,7 +17,6 @@ test('ensureMcpConfig: userData 아래에 claude -p가 읽을 수 있는 .mcp.js
     assert.ok(fs.existsSync(configPath));
 
     const written = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
-    // spike/cli-pipe/gateway/.mcp.json과 같은 형상 — 서버 키는 "athena"
     assert.ok(written.mcpServers.athena);
     assert.equal(written.mcpServers.athena.command, PYTHON_EXE);
     assert.deepEqual(written.mcpServers.athena.args, ['-m', 'athena_mcp', 'serve']);

@@ -1,8 +1,3 @@
-// "기록 안 됨" 배지 — 채팅 저장 실패 신호(2026-08-19, .omc/plans/plan-chat-graph-pipeline.md
-// §2(g)). 순수 로직만 여기 둔다(DOM 조작은 하되 Electron/IPC 의존은 없다) —
-// node --test에서 document를 얕게 스텁해 단위 테스트한다(lib/history-badge.test.js).
-// IIFE 스코프 격리 — chat.js와 top-level 이름 충돌을 피한다(sanitize.js와 동일 패턴,
-// app/README.md "함정" 참조).
 (function () {
 
 // lineEl(질문 또는 답변 turn div)에 배지 하나를 붙인다. 기존 `.turn-meta`(트레이스

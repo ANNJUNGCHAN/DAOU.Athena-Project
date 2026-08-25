@@ -1,22 +1,3 @@
-"""P0 join proof — 공통화면 template execution plan (`plan/공통화면-템플릿-실행계획-2026-08-20.md`).
-
-`kiwoom-common-screen-manifest.json` decides *which card* a TR renders as. That decision is
-only trustworthy if `mapping_id` actually identifies the same operation the selector runtime
-resolves at call time. This module proves that join by *executing* the real selector code —
-the legacy exact/detail facade `athena_api.selector.policy.select_operation` — against
-every one of the manifest's 301 routable mappings, not by comparing strings.
-
-Architect 권고 6 (plan §P0) specifically warns that a string comparison between `operation_ref`
-and `mapping_id` can be a false positive for the 22 `SPLIT_BASE_TR_IDS` families: their base TR
-is not itself callable, so the join goes through `select_operation`'s exact-ref branch with
-an explicit `detail_group`, exactly as `SelectorService.resolve()` does at
-`athena_api/selector/service.py:259-266`. This module drives that branch for every detail
-mapping instead of doing a direct `DETAIL_REGISTRY[mapping_id]` lookup.
-
-No network calls: `TR_REGISTRY`/`DETAIL_REGISTRY` are generated Python modules, and the manifest
-is a local ref/ file. Deterministic: the same manifest and registry always produce the same
-selector decisions.
-"""
 
 from __future__ import annotations
 
@@ -122,11 +103,6 @@ def test_every_callable_base_mapping_resolves_through_real_select_operation(
 def test_oauth_base_mappings_join_the_registry_but_are_deliberately_hidden_from_the_selector(
     catalog, base_mappings: list[dict]
 ) -> None:
-    """au10001/au10002 exist in TR_REGISTRY (real join) but the catalog marks oauth kind
-    `hidden` (catalog.py:276-277) — CLAUDE.md §7 draws the LLM-facing selector surface as
-    exactly 4 tools plus gateway-managed tools, and oauth lifecycle is neither. This is
-    documented, deliberate exclusion, proven by driving the real functions — not a silent
-    skip of the join proof for these 2 mappings."""
     oauth_mappings = [m for m in base_mappings if m["classification"]["category"] == "oauth"]
     assert len(oauth_mappings) == 2
     for mapping in oauth_mappings:

@@ -82,11 +82,6 @@ window.athena.on('athena:add-rest-receipt', async (payload = {}) => {
   }
 });
 
-// ---------- 화면 설정(autoExpandCanvas/autoGrowChat) — 복구된 baa7e0e 계약 ----------
-// 병합 커밋 c0d874b가 옮기겠다고 하고 안 옮긴 것을 2026-08-18에 되살렸다
-// (app/README.md L599-608). 기본값은 원본과 동일 — 채널·기본값을 못 받아도
-// 두 동작 모두 이전과 같은 "항상 켜짐"으로 동작한다(fail-open, 새 기능이라
-// 실패가 기존 동작을 축소시키면 안 된다).
 let prefs = { autoExpandCanvas: true, autoGrowChat: true, fontSize: 'md', glassLevel: 'default' };
 // 글자 크기 5단계(2026-08-19) — tokens.css의 :root[data-font-size=...] 토큰 세트를
 // 켠다. md는 기본 토큰이므로 속성을 지워 :root 값으로 돌아간다. 텍스트 크기가
@@ -121,16 +116,6 @@ const historyBadge = window.AthenaLib.HistoryBadge;
 const saveFailedRouter = historyBadge.createSaveFailedRouter();
 window.athena.on('athena:history-save-failed', (payload) => saveFailedRouter.handleFailure(payload));
 
-// ---------- 부팅(AT-SY-001) — 4단계 생성 시퀀스 ----------
-// 발광점(0ms) → 가로 확장(+180ms) → 세로 전개(+420ms, 유리 72%) → 창 확정(+620ms).
-// 이징 cubic-bezier(.2,0,0,1). 4단계는 2026-08-18 사용자 지시로 재정의됐다:
-// 전개의 종착은 별도 로고 화면이 아니라 **평소 채팅바 그 자체**다 — 확정된 바의
-// 입력줄에 ATHENA가 한 자씩 적혔다가(+660ms~) 지워지고 placeholder로 돌아온 뒤
-// (+1160ms) 실제 창으로 스왑한다(+1360ms). 부팅의 최대 크기는 채팅창(chatBaseH)을
-// 넘지 않는다. 이전 판의 "상단 로고 + 하단 입력줄" 2분할 확정 화면은 폐기.
-// 온보딩 자동 전환(최초 실행 시 AT-SY-002)은 그대로다.
-// prefers-reduced-motion이면 시퀀스를 건너뛰고 즉시 완료 상태로 간다(접근성 3종은
-// 직접 구현한다 — CLAUDE.md §2).
 window.addEventListener('DOMContentLoaded', () => {
   const onboardStatePromise = window.athena.invoke('athena:onboarding-state').catch(() => {
     // 채널이 아직 없거나 실패하면 "온보딩 필요"로 가정한다 — 온보딩을 건너
@@ -186,13 +171,6 @@ window.addEventListener('DOMContentLoaded', () => {
   setTimeout(finishBoot, 1360);
 });
 
-// ---------- 온보딩(AT-SY-002/003) · 인증(AT-CV-OAUTH) 상태 머신 ----------
-// CLI 연결(2/3) → 계좌 연결(3/3) → 인증 토큰 확인(등록 직후 1회) 순으로 진행하고,
-// 끝나면 평소 대화 화면(AT-CH-001)으로 넘어간다. 세 화면 모두 새 창이 아니라 이
-// 컨테이너(#onboard) 하나를 재사용한다(plan/paper-specs/00-통합-계획.md §1.1/§1.5).
-// 2026-08-24 리프 1.2.1: 옛 판은 진입 시 대화 창을 chatMaxH로 키우고 나갈 때
-// chatBaseH로 되돌렸다. 지금 #onboard는 셸 창 전체를 덮는 오버레이라(shell.css
-// .shell-overlay) 창 크기를 건드리지 않는다 — 열고 닫는 것이 전부다.
 async function onboardAdvance(step) {
   try {
     const res = await window.athena.invoke('athena:onboarding-advance', { step });
@@ -322,10 +300,6 @@ function scrollAfterRender() {
   requestAnimationFrame(() => scrollHistoryToBottom());
 }
 
-// ---------- TR → 카드 종류 라우팅 (목업) ----------
-// "캔버스"는 창을 뜻한다. 창 안에 뜨는 것은 **카드**다(GLOSSARY.md §2).
-// 카드는 데이터 표현 공통 UI라 들어오는 데이터가 달라져도 종류가 늘지 않는다 —
-// TR이 몇 개든 12종에 접는다. 여기 매핑은 그 접기의 목업이다.
 const CARD_PLAN = {
   stream: { label: '스트림', tool: 'search_news', toolLabel: '뉴스 검색' },
   reader: { label: '리더', tool: 'download_document', toolLabel: '공시 원문 조회' },
@@ -338,11 +312,6 @@ const CARD_PLAN = {
   mcp: { label: 'MCP 서버', tool: 'mcp_server_list', toolLabel: 'MCP 서버 목록 조회' },
 };
 
-// 내부 식별자를 사용자에게 보여주지 않는다(ui/DESIGN-SOUL.md 축3 — "TR코드는
-// 개발자의 언어이지 사용자의 언어가 아니다"). 2026-08-17 디자인 리뷰 [HIGH] 정정:
-// 이전 판은 진행 라인·트레이스에 tool 코드(search_news 등)를, 완료 칩에 응답
-// canvas_type(table/free 등)을 원문 그대로 노출했다. 화면에는 한국어 라벨만 내보내고
-// 원문 식별자는 코드(CARD_PLAN.tool)와 로그에만 남는다.
 const CANVAS_TYPE_LABELS = {
   table: '공통 테이블',
   'mcp-table': '공통 테이블',
@@ -420,18 +389,11 @@ function setDot(mode) {
   if (mode) $dot.classList.add(mode);
 }
 
-// 실배선/픽스처 분기 — plan/kiwoom-common-screen-handoff.md §6, main.js의
-// athena__render_canvas source:'fixture' 분기와 짝을 이룬다. 기본은 live다.
 async function runQuery(text) {
   if (canvasSource === 'fixture') return runQueryFixture(text);
   return runQueryLive(text);
 }
 
-// ---------- 실배선 — claude -p 실호출, 결정 D1 ----------
-// 목업 시절의 "TR 이름을 미리 안다"는 전제가 여기선 성립하지 않는다 — 어떤
-// MCP 툴이 몇 번 불릴지는 claude가 정한다. 그래서 진행 표시는 TR 코드 나열이
-// 아니라 "카드가 늘어난 개수 + 경과 시간"이다. 실왕복은 43초까지 걸린 실측이
-// 있다(spike/cli-pipe/gateway/RESULT.md) — 조용히 멈춘 것처럼 보이면 안 된다.
 async function runQueryLive(text) {
   const myToken = ++abortToken;
   clearRecommendations();
@@ -503,8 +465,6 @@ async function runQueryLive(text) {
   aLine.className = 'turn';
   const aText = document.createElement('div');
   aText.className = 'turn-a';
-  // 정직하게: 실패했으면 실패했다고 보여준다(CLAUDE.md §4). result.error는
-  // claude 종료 코드거나 CLI가 낸 실패 메시지 원문이다.
   aText.textContent = result && result.answerText
     ? result.answerText
     : (result && result.ok
@@ -544,10 +504,6 @@ async function runQueryLive(text) {
   refreshRoutineDrafts();
 }
 
-// ---------- 픽스처 어댑터 — 검증 전용, 명시적으로 선택했을 때만 탄다 ----------
-// spike/captures/*.json을 lib/mockdata.js가 읽는 경로(main.js의 source:'fixture'
-// 분기)로 이어진다. verify.js가 ATHENA_CANVAS_SOURCE=fixture로 canvasSource를
-// 강제할 때만 여기로 온다 — quota 없이 결정론적 3상태/자동성장 검증을 위해서다.
 async function runQueryFixture(text) {
   const myToken = ++abortToken;
   const types = pickCardTypes(text);
@@ -662,15 +618,6 @@ function answerFor(types) {
 
 function wait(ms) { return new Promise((r) => setTimeout(r, ms)); }
 
-// ---------- 설정 모드 ----------
-// 설정은 새 창이 아니다. **이 창이 설정 모드로 바뀐다** — 온보딩·인증과 같은
-// 문법이다(ui/DESIGN-SOUL.md:100 "#dot를 건들면 그냥 채팅창이 설정창으로 변하는
-// 것이 좋겠다", 도출된 규칙 3). 근거: 설정을 만지는 동안 사용자는 채팅을 치지
-// 않는다 — 시간을 다투지 않으면 면적을 나누지 않는다.
-// 2026-08-24 리프 1.2.1: #settings는 이제 셸 창 **전체**를 덮는 오버레이다
-// (shell.css .shell-overlay). 400px 채팅 영역 안에 좌 사이드바 + 우 패널 2단을
-// 넣으면 짜부라진다. Codex형 전체 스왑(좌상단 "← 앱으로 돌아가기" · Esc 동등)의
-// 나머지는 리프 1.4.1이 얹는다 — 지금은 위치만 셸 전체다.
 let settingsOpen = false;
 
 function openSettings() {
@@ -707,11 +654,6 @@ function closeSettings() {
   $input.focus();
 }
 
-// 커맨드바에서 설정을 부르는 말. 결정론적 매칭만 한다 — 애매하면 일반 질의로 흘린다.
-// GLOSSARY.md §1: 설정은 커맨드바로도 반드시 도달할 수 있어야 한다. 점으로만
-// 갈 수 있으면 ui/soul.md §8 탈락 조건에 걸린다.
-// 실측 함정: `\b`는 한글 뒤에서 성립하지 않는다(한글은 \w가 아니다). 이걸 쓰면
-// 첫 분기가 통째로 죽는다. 단독 호출어는 문자열 전체 일치로, 나머지는 동사구로 잡는다.
 const SETTINGS_COMMAND =
   /^(설정|환경설정|셋팅|세팅|settings?|config)\s*[?!.]*$|설정\s*(창|화면|모드)?\s*(을|를)?\s*(열어|보여|띄워|줘|줄래)|모델\s*(바꿔|변경|설정)|계좌\s*(연결|설정|관리)/i;
 
@@ -736,10 +678,6 @@ function historyCommandKind(text) {
   return /성향/.test(text) ? 'profile-summary' : 'chats';
 }
 
-// LLM 미경유 — 로컬 IPC(athena:brain-history-query)만 왕복한다. main이 backend를
-// 조회해 ④ 공통 테이블 카드 봉투로 접어 캔버스에 직접 보낸다(main.js
-// sendLiveCanvasResult 재사용, 신규 카드 타입 0개). 실패해도 카드 없이 정직한
-// 안내 텍스트만 남긴다(CLAUDE.md §4 — 조용히 삼키지 않는다).
 async function runHistoryCommand(text) {
   const myToken = ++abortToken;
 

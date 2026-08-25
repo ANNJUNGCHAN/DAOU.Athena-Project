@@ -290,10 +290,6 @@ async def test_render_canvas_drop_types_filters_unknown_and_dedupes(tmp_path):
     assert payload["drop_types"] == ["stream", "table"]
 
 
-# ---------------------------------------------------------------------------
-# P1b(2026-08-20) — canvas_type 필수 해제 + facts/compound 구경로 회귀
-# (`plan/공통화면-템플릿-실행계획-2026-08-20.md` P1b Deliverable 3·5)
-# ---------------------------------------------------------------------------
 
 
 async def test_render_canvas_tool_schema_accepts_missing_canvas_type_via_real_sdk_validation(
@@ -468,10 +464,6 @@ async def test_render_canvas_direct_compound_payload_without_plan_token_still_re
 
 
 async def test_render_canvas_plan_audit_log_contract_unchanged_by_manifest_wiring(make_gateway):
-    """server.py:341-343 — plan_token 경로는 `dispatch_call()`이 "kiwoom-selector"
-    감사 로그에 툴명 "render_canvas_plan"·성공 여부만 남긴다(인자·응답 본문 제외,
-    CLAUDE.md §7). manifest 결선이 콜드 경로 내부 판정 로직만 바꿨을 뿐 이
-    감사 계약(호출부·필드·성공 판정)은 그대로임을 고정한다."""
 
     def handler(request: httpx.Request) -> httpx.Response:
         if request.url.path == "/api/v1/canvas/push":
@@ -545,8 +537,6 @@ async def test_save_canvas_chart_preserves_aits_renderer_on_disk_and_result(tmp_
 
 
 async def test_save_canvas_rejects_relative_path_traversal(tmp_path):
-    """W1 보안 리뷰(SECURITY.md §1): `name="../evil"` 류가 save_dir 밖에
-    파일을 쓰지 못하게 막는다 — 조용히 자르지 않고 isError로 명시 거부한다."""
     save_dir = tmp_path / "canvases"
     outside_target = tmp_path / "evil.json"
     gw = AthenaGateway(
@@ -562,8 +552,6 @@ async def test_save_canvas_rejects_relative_path_traversal(tmp_path):
 
 
 async def test_save_canvas_rejects_absolute_path_override(tmp_path):
-    """W1 보안 리뷰(SECURITY.md §1): 절대경로 `name`이 `save_dir`를 완전히
-    건너뛰고 임의 위치에 쓰는 pathlib `/` 연산자 함정을 막는다."""
     save_dir = tmp_path / "canvases"
     abs_target = tmp_path / "abs_evil"
     gw = AthenaGateway(
@@ -579,10 +567,6 @@ async def test_save_canvas_rejects_absolute_path_override(tmp_path):
     assert result.meta[ERROR_ORIGIN_META_KEY] == "gateway-blocked"
 
 
-# ---------------------------------------------------------------------------
-# A5 — 프롬프트 인젝션 최소 완화: upstream description 출처 라벨링
-# (SECURITY.md §3 [HIGH, 미해결])
-# ---------------------------------------------------------------------------
 
 
 async def test_list_tools_wraps_upstream_description_with_source_label(gateway, tmp_path):
@@ -616,10 +600,6 @@ async def test_list_tools_does_not_wrap_builtin_tool_descriptions(gateway, tmp_p
     assert "신뢰할 수 없는" not in by_name[SAVE_CANVAS_TOOL]
 
 
-# ---------------------------------------------------------------------------
-# A6 — 프롬프트 인젝션 최소 완화: 응답 본문 출처 라벨링
-# (SECURITY.md §3 ①, A5의 description 라벨링과 짝을 이루는 나머지 절반)
-# ---------------------------------------------------------------------------
 
 
 async def test_dispatch_call_wraps_upstream_response_text_with_source_label(gateway, tmp_path):
@@ -689,10 +669,6 @@ async def test_wrap_upstream_content_text_does_not_double_wrap() -> None:
     assert twice.count("원문") == 1  # 마커가 겹쳐 씌워졌다면 본문이 두 번 나온다
 
 
-# ---------------------------------------------------------------------------
-# A7 — 프롬프트 인젝션 최소 완화: 본문에 심긴 위조 마커 무해화
-# (SECURITY.md §3, 2026-08-17 "마커 문자열 자체가 회피 가능하다" 항목을 닫는다)
-# ---------------------------------------------------------------------------
 
 
 def test_wrap_upstream_content_text_defuses_preplanted_close_marker() -> None:
@@ -879,10 +855,6 @@ async def test_dispatch_call_propagates_cancellation_instead_of_swallowing_it(tm
     assert gw.aggregator.resolve_progress_token("tok-3") is None
 
 
-# ---------------------------------------------------------------------------
-# 에러 원산지 마커 — "Athena가 막았다" vs "upstream이 실패했다"
-# (plan/paper-specs/02-MCP-응답-형상-전수조사.md §D-7)
-# ---------------------------------------------------------------------------
 
 
 async def test_dispatch_call_handle_not_connected_is_gateway_blocked(tmp_path):

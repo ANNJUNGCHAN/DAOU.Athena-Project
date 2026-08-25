@@ -1,15 +1,4 @@
 # ruff: noqa: E501
-"""Render the Kiwoom common-screen API injection appendix.
-
-Deterministically renders `ref/kiwoom-common-screen-manifest.json` into the
-Markdown injection appendix at `plan/kiwoom-common-screen-injection-map.md` for
-the 화면기획서 (screen planning document): which API feeds which common screen
-card. Run from any working directory with:
-
-    python backend/scripts/render_screen_injection_map.py
-
-Run with `--check` to verify the committed file is current without writing it.
-"""
 from __future__ import annotations
 
 import argparse
@@ -77,13 +66,6 @@ def response_container_cells(mapping: dict[str, Any]) -> tuple[str, str]:
 
 
 def default_control_cell(mapping: dict[str, Any]) -> str:
-    """"기본 제어값" 열(P2a/P2b) — `presentation.controls.default_period`.
-
-    세 상태를 구분해서 보여준다: `controls` 자체가 없는 289개 비차트 TR은 `—`,
-    분/틱 4TR(P2b, 의도적 비배선)은 `controls.default_period`가 `null`이라
-    `—(비배선)`, 일/주/월/년봉 8TR(P2a)은 실제 값(`` `D` ``/`` `W` ``/`` `M` ``/`` `Y` ``).
-    빈칸 하나로 뭉개면 "누락"과 "의도적 비배선"이 문서에서 구분되지 않는다
-    (CLAUDE.md §4 정직 기록)."""
     controls = mapping["presentation"].get("controls")
     if controls is None:
         return "—"

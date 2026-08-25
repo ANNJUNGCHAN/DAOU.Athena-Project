@@ -3,34 +3,6 @@
 // el/sanitize 같은 흔한 이름이 파일 간에 충돌해 SyntaxError가 났다(실측, diag-isolation.js).
 // CJS(require)는 이 IIFE 밖에서도 동일하게 동작한다 — Node의 모듈 래퍼가 이미 함수 스코프다.
 (function () {
-// 차트 카드(CC-101 + CC-102 + CC-103) — CompoundCard(charts) 위 시계열 렌즈의
-// 첫 렌더러. 계약: plan/chart-card-control-spec.md(컨트롤 실측) ·
-// plan/chart-lens-spec.md §4·§6 (저작 계층, 카드 신설 없음 — 이 파일은
-// makeCard('chart', …) 하나를 추가할 뿐 새 카드 종류를 만들지 않는다).
-//
-// CC-101 범위: 캔들 차트 본체 + 거래량 하위 pane. CC-102가 얹은 것: 툴바(§0 —
-// 주기 탭·세분·차트모양·수정주가·전체화면), 주기별 실제 재샘플
-// (lib/chart-resample.js), 전체화면(카드가 그리드를 전체 점유 — §7의 OS
-// position:fixed 전체화면과 다른 "두 창 원칙" 적응, 아래 toggleFullscreen
-// 참고). CC-103이 얹은 것: 보조지표 패널(§3, ∿▾ — lib/chart-indicator-panel.js
-// + lib/chart-indicator-registry.js, 35종 전수 노출·5종 계산 구현) · 매물대
-// 오버레이(§4, lib/chart-volume-profile.js 계산을 가격 pane 위 DOM 오버레이로
-// 렌더). 드로잉(§5)·크로스헤어 수치조회창(§8)은 이 라운드에도 포함하지 않는다.
-//
-// lightweight-charts 5.2.1은 ESM 전용(exports 필드에 "require" 조건 없음,
-// package.json 실측: `"exports": {".": {"...": {"import": "..."}}}`). 이 앱은
-// CommonJS(require) 관례를 쓰므로(canvas.js 등) 정적 require로 못 부른다 —
-// Node/Electron(nodeIntegration:true) 양쪽에서 CJS 모듈 안의 동적 import()는
-// 지원된다(실측: `node -e "(async()=>{await import('lightweight-charts')})()"`
-// 정상 동작, Object.keys에 createChart/CandlestickSeries/HistogramSeries 확인됨).
-// 그래서 createChartCard는 async 함수다. 다만 첫 REST 차트의 3초 paint budget을
-// import cold-start에 쓰지 않도록 이 스크립트가 로드될 때 단 하나의 cached import를
-// 시작하고, 모든 createChartCard 호출이 같은 Promise를 기다린다.
-//
-// 좌하단에 뜨는 작은 로고는 버그가 아니다 — lightweight-charts Apache-2.0 라이선스가
-// 요구하는 TradingView attribution(layout.attributionLogo, 기본 true)이다.
-// 실측으로 확인(probe-chart-card.js 캡처, elementFromPoint로 캔버스 픽셀임을
-// 확인 — DOM 오버레이가 아니다). 대체 표기 없이 끄면 라이선스 위반이라 그대로 둔다.
 
 // UMD 헤드(2026-08-18 렌더러 격리) — node --test(CommonJS)면 require, <script>
 // 태그 전역 로딩(nodeIntegration:false)이면 window.AthenaLib를 쓴다. 8개
@@ -48,19 +20,6 @@ const { volumeProfile } = __dep('./chart-volume-profile', 'ChartVolumeProfile');
 const { createAuthoringStore, periodToken } = __dep('./chart-authoring-store', 'ChartAuthoringStore');
 const { createDrawingLayer } = __dep('./chart-drawings', 'ChartDrawings');
 
-// lightweight-charts는 5.2.1부터 ESM 전용이라 동적 import()로만 부를 수 있다
-// (아래 createChartCard 안 주석 참고). nodeIntegration:true였을 때는 bare
-// specifier('lightweight-charts')를 Electron이 Node 해석 규칙으로 풀어줬지만,
-// nodeIntegration:false 아래서는 브라우저의 HTML 모듈 해석 규칙만 적용되어
-// bare specifier가 안 풀린다(import map도 안 씀 — CLAUDE.md 지시 "번들러 금지"와
-// 같은 결로 최소 개입). document.currentScript.src로 이 파일 자신의 URL을
-// 잡아 node_modules 상대 경로를 계산한다 — canvas.html의 document base URL에
-// 기대지 않는 방식이라 <script> 태그 로드 순서와 무관하게 항상 맞다.
-// standalone 빌드를 쓴다 — 일반 production.mjs는 fancy-canvas를 bare
-// specifier로 import해서(package.json dependencies), nodeIntegration:false
-// 아래 브라우저 ESM 해석기가 못 푼다("Failed to resolve module specifier
-// fancy-canvas" — 실측, diag-chart.js). standalone.production.mjs는 그
-// 의존성까지 번들에 넣어 외부 import가 0건이다(실측: grep으로 확인).
 const __LIGHTWEIGHT_CHARTS_URL = (() => {
   if (typeof document === 'undefined' || !document.currentScript) return 'lightweight-charts';
   return new URL('../node_modules/lightweight-charts/dist/lightweight-charts.standalone.production.mjs', document.currentScript.src).href;
@@ -803,13 +762,6 @@ async function createChartCard(container, opts) {
     updateNote();
   }
 
-  // ---------- 전체화면(§7) — "두 창 원칙" 적응 ----------
-  // spec 원문은 OS `position:fixed; inset:0`(브라우저/일반 웹앱 관례)이지만,
-  // Athena는 창이 둘뿐이라는 원칙(CLAUDE.md §2)이 위에 있다 — 새 창도, OS
-  // 전체화면도 쓰지 않는다. 대신 캔버스 창(그리드) 안에서 이 카드가
-  // grid-column을 전체로 넓히고 다른 카드를 숨기는 "그리드 점유"로 같은
-  // 사용자 목표(크게 보고 싶다)를 이룬다 — canvas.css .card.is-expanded /
-  // .grid.has-expanded.
   let isFullscreen = false;
 
   function measureAndResize() {

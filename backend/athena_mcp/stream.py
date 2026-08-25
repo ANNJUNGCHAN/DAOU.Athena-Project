@@ -1,34 +1,10 @@
-"""
-스트림 정규화 어댑터 — `spike/stream-adapter/adapter.py` 승격.
-
-NAVER(`search_news`) · DART(`get_disclosure_list`) 원시 응답을 통일된 스트림
-레코드로 정규화한다. 캔버스 신규①(스트림, `plan/mcp-실행계획.md` §3)의 데이터
-어댑터다.
-
-**로직은 spike에서 그대로 옮겼다** — sanitize 순서(태그 스트립 → 엔티티
-언이스케이프), `ts_precision`, dedupe 3단계 카운트를 변경하지 않았다.
-`spike/stream-adapter/test_adapter.py` 20/20 테스트가 전제한 동작과 동일해야
-하며, 그 테스트 스위트도 `backend/tests/mcp/test_stream.py`로 승격해 그대로
-통과시킨다.
-
-바뀐 것은 딱 하나 — 이 파일이 `backend/athena_mcp/`로 이동했으므로
-`CAPTURES_DIR`가 저장소 루트의 `spike/captures/`를 가리키도록 상대경로만
-재계산했다(로더 함수들은 spike 캡처를 픽스처로 쓰는 테스트/데모용이고, 실사용
-시에는 `client.py`가 돌려주는 실시간 응답을 직접 소스로 쓴다).
-
-**정직성 규범**: `ts_precision`이 `"day"`인 레코드의 시각을 00:00으로 지어내지
-않는다. `normalize_filing_ts`가 날짜만 반환하는 이유다.
-"""
 from __future__ import annotations
 
 import hashlib
 import html
-import json
 import re
 from datetime import date, datetime, timedelta, timezone
 from email.utils import parsedate_to_datetime
-from pathlib import Path
-from typing import Any
 from urllib.parse import urlparse
 
 KST = timezone(timedelta(hours=9))
@@ -260,43 +236,3 @@ def dedupe(records: list[dict]) -> tuple[list[dict], dict[str, int]]:
     stats["domain_time_flagged"] = len(flagged_ids)
 
     return stage2, stats
-
-
-# ---------------------------------------------------------------------------
-# 캡처 파일 로더 (테스트/데모용 — spike 유물. 실사용은 client.py 응답을 직접 소스로 쓴다)
-# ---------------------------------------------------------------------------
-
-CAPTURES_DIR = Path(__file__).resolve().parents[2] / "spike" / "captures"
-
-
-def _read_json(path: Path) -> Any:
-    return json.loads(path.read_text(encoding="utf-8"))
-
-
-def load_news_items(path: Path) -> list[dict]:
-    """`S2B-naver-news-*.json` — 캡처가 CallToolResult를 그대로 dump한 것."""
-    raw = _read_json(path)
-    payload = json.loads(raw["content"][0]["text"])
-    return payload["items"]
-
-
-def load_filing_items(path: Path) -> list[dict]:
-    """`S2B-jjlabsio-disclosure-list.json` — {"tool","args","result":{CallToolResult}} 래핑."""
-    raw = _read_json(path)
-    container = raw["result"] if "result" in raw else raw
-    payload = json.loads(container["content"][0]["text"])
-    return payload["list"]
-
-
-def audit_tags(items: list[dict], fields: tuple[str, ...] = ("title", "description")) -> set[str]:
-    """`<b>` 외 다른 태그가 실제로 있는지 전수조사한다."""
-    tags: set[str] = set()
-    tag_open_re = re.compile(r"<(/?[a-zA-Z][a-zA-Z0-9]*)[^>]*>")
-    for item in items:
-        for f in fields:
-            v = item.get(f)
-            if not v:
-                continue
-            for m in tag_open_re.findall(v):
-                tags.add(m.lower().lstrip("/"))
-    return tags

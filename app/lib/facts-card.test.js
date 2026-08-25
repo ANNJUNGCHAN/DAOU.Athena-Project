@@ -1,6 +1,3 @@
-// FactsCard/CompoundCard 순수 로직(lib/facts-card.js) 검증. 실행: npm test.
-// 규칙 원본: plan/kiwoom-common-screen-spec.md §4(셀 프리미티브 5종),
-// plan/kiwoom-common-screen-case-matrix.md(F1/F2 경계).
 'use strict';
 const { test } = require('node:test');
 const assert = require('node:assert/strict');

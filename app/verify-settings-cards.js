@@ -1,24 +1,3 @@
-// 검증 스크립트 — 설정 모드의 계좌·MCP 카드(lib/settings-cards.js) 전용.
-// `npm run verify:settings-cards`.
-//
-// 렌더러 쪽 IPC 호출부를 그대로 둔 채(athena:account-register 등 호출부 코드는
-// 수정하지 않음) IPC 응답만 스텁해, 목록·등록 시트·주문 API 게이트·probe 시트가
-// 스펙대로 그려지는지 스크린샷으로 남긴다. 스텁 데이터는 이 스크립트에만 존재하고
-// 앱 코드(lib/settings-cards.js)에는 목업이 전혀 없다.
-//
-// 2026-08-18 렌더러 격리 이후: 예전에는 렌더러 컨텍스트 안에서
-// `ipcRenderer.invoke`를 직접 몽키패치했다(require('electron')가 가능했으므로).
-// contextIsolation:true 아래서는 preload.js의 contextBridge가 window.athena를
-// 깊이 동결해 노출하므로 렌더러 쪽에서 재할당이 안 통한다 — 대신 **main
-// 프로세스에서 ipcMain 핸들러 자체를 스텁으로 바꿔치운다**(installStubHandlers).
-// 렌더러 호출부(athena:account-register 등)는 여전히 그대로다.
-//
-// 대상 창은 **대화 창**이다. 설정은 새 창도 캔버스도 아니라 대화 창의 모드다
-// (ui/DESIGN-SOUL.md:100, GLOSSARY.md §1). 2026-08-16 이전에는 캔버스 창을
-// 겨냥했다 — 그때는 카드가 캔버스에 그려졌다.
-//
-// `npm run verify`(verify.js 검증 7·8)는 "창이 늘지 않는가 / 모드가 뜨고 닫히는가"
-// 라는 계약을 본다. 이 스크립트는 그 안쪽의 **카드 상태들**을 본다. 역할이 다르다.
 process.env.ATHENA_NO_AUTOSTART = '1';
 
 const { app, ipcMain } = require('electron');

@@ -199,12 +199,6 @@ def test_every_common_screen_mapping_has_exact_contract_fields_and_provenance() 
         assert mapping["contracts"]["response_model"].endswith(response_model.__name__)
 
 
-# P2a/P2b 차트 주기 배선 — 11TR(일/주/월/년봉)만 실제 default_period, 8TR(분/틱)은
-# null, 나머지 282TR은 controls 필드 자체가 없다(`plan/공통화면-템플릿-실행계획
-# -2026-08-20.md` P2a/P2b + AITS 금현물 7종 caf8613).
-# 한글 TR명 키워드 매칭 드리프트를 잡기 위해 19개 전수를
-# 명시 allowlist로 고정한다 — 매칭 로직이 바뀌어 이 중 하나라도 값이 달라지면 이
-# 테스트가 먼저 실패한다(추측 대신 실패, quirks.py 원칙과 동형).
 _EXPECTED_CHART_DEFAULT_PERIODS = {
     "base:ka10081": "D",  # 주식일봉차트조회요청
     "base:ka10082": "W",  # 주식주봉차트조회요청

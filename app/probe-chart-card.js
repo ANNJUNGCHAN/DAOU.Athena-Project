@@ -1,8 +1,3 @@
-// CC-101 수동 실측 프로브 — 차트 카드가 실제로 뜨는지 확인한다("될 것이다"로
-// 넘기지 않는다, CLAUDE.md §3). 작성 시점엔 verify에 차트 검증이 없었고, CC-106이
-// 상설 검증으로 넣었다(main 병합 시 검증13으로 재번호) — 이 스크립트는 더 깊은
-// 수동 실측용으로 남는다. 캔버스 창을 띄우고 addCard('chart')를 실행해 스크린샷을 남긴다.
-// spike/cli-pipe/gateway/probe_live_spawn.js와 같은 성격의 1회성 수동 프로브다.
 process.env.ATHENA_NO_AUTOSTART = '1';
 process.env.ATHENA_CANVAS_SOURCE = 'fixture';
 

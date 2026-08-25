@@ -35,14 +35,6 @@ class RateLimiter:
             starts.popleft()
 
     def headroom(self) -> int:
-        """롤링 1초 창의 남은 전역 시작 여유 — 스냅샷이지 예약이 아니다.
-
-        용도는 루틴 감시 폴링의 양보 판정이다(실행계획 P1 — "대화가 항상
-        우선"): 여유가 임계 아래면 폴링이 이번 주기를 건너뛴다. asyncio
-        단일 스레드 협력 모델 전제라 락 없이 만료만 정리하고 읽는다.
-        리미터 인스턴스는 여전히 하나다(CLAUDE.md §7) — 이 메서드는 관측이지
-        새 리미터가 아니다.
-        """
         now = self._clock()
         self._expire(self._starts, now)
         return max(0, self._limit - len(self._starts))

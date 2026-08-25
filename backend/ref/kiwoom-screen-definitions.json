@@ -92,9 +92,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:E1",
       "states": [
@@ -286,9 +284,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:E1",
       "states": [
@@ -472,9 +468,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:E1",
       "states": [
@@ -650,9 +644,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:E1",
       "states": [
@@ -852,9 +844,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:E1",
       "states": [
@@ -1013,9 +1003,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:E1",
       "states": [
@@ -1335,9 +1323,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:E1",
       "states": [
@@ -1499,9 +1485,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:E1",
       "states": [
@@ -1715,9 +1699,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:E1",
       "states": [
@@ -1889,9 +1871,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:E1",
       "states": [
@@ -2055,9 +2035,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:E1",
       "states": [
@@ -2218,9 +2196,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:E1",
       "states": [
@@ -2389,9 +2365,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:E1",
       "states": [
@@ -2562,9 +2536,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:E1",
       "states": [
@@ -2731,9 +2703,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:E1",
       "states": [
@@ -2900,9 +2870,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:E1",
       "states": [
@@ -3062,9 +3030,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:E1",
       "states": [
@@ -3227,9 +3193,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:E1",
       "states": [
@@ -3403,9 +3367,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:E1",
       "states": [
@@ -3549,9 +3511,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:S1",
       "states": [
@@ -3667,9 +3627,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:S1",
       "states": [
@@ -3839,9 +3797,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -4186,9 +4142,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -4376,9 +4330,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:C2",
       "states": [
@@ -4584,9 +4536,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:C2",
       "states": [
@@ -5012,9 +4962,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:C2",
       "states": [
@@ -5356,9 +5304,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -5780,9 +5726,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -6041,9 +5985,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -6369,9 +6311,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -6750,9 +6690,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F2",
       "states": [
@@ -7083,9 +7021,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -7429,9 +7365,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -7760,9 +7694,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -8393,9 +8325,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T3",
       "states": [
@@ -8734,9 +8664,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -9106,9 +9034,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -9429,9 +9355,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -9755,9 +9679,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -10061,9 +9983,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T1",
       "states": [
@@ -10368,9 +10288,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T1",
       "states": [
@@ -10674,9 +10592,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T1",
       "states": [
@@ -10982,9 +10898,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T1",
       "states": [
@@ -11286,9 +11200,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T1",
       "states": [
@@ -11608,9 +11520,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -11894,9 +11804,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T1",
       "states": [
@@ -12235,9 +12143,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -12576,9 +12482,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -12915,9 +12819,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -13416,9 +13318,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T3",
       "states": [
@@ -13657,9 +13557,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T1",
       "states": [
@@ -14008,9 +13906,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -14330,9 +14226,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -14650,9 +14544,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -15002,9 +14894,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -15337,9 +15227,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -15690,9 +15578,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -15979,9 +15865,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:C2",
       "states": [
@@ -16316,9 +16200,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -16508,9 +16390,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T1",
       "states": [
@@ -16812,9 +16692,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T1",
       "states": [
@@ -17021,9 +16899,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T1",
       "states": [
@@ -17390,9 +17266,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:C2",
       "states": [
@@ -17750,9 +17624,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -18094,9 +17966,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -18374,9 +18244,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T1",
       "states": [
@@ -18686,9 +18554,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T1",
       "states": [
@@ -19147,9 +19013,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -19483,9 +19347,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -19763,9 +19625,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T1",
       "states": [
@@ -20140,9 +20000,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -20421,9 +20279,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T1",
       "states": [
@@ -20743,9 +20599,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -21219,9 +21073,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -21647,9 +21499,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -21998,9 +21848,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -22401,9 +22249,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -22883,9 +22729,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T3",
       "states": [
@@ -23182,9 +23026,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T1",
       "states": [
@@ -23406,9 +23248,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T1",
       "states": [
@@ -23854,9 +23694,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -24104,9 +23942,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T1",
       "states": [
@@ -24470,9 +24306,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:C2",
       "states": [
@@ -24850,9 +24684,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -25231,9 +25063,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -25562,9 +25392,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:C2",
       "states": [
@@ -26202,9 +26030,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T3",
       "states": [
@@ -26666,9 +26492,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -26973,9 +26797,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:C2",
       "states": [
@@ -27272,9 +27094,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T1",
       "states": [
@@ -27662,9 +27482,7 @@
       },
       "provenance": {
         "aits_chart_contract": "ref/aits-chart-contracts.json",
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:C1",
       "states": [
@@ -28038,9 +27856,7 @@
       },
       "provenance": {
         "aits_chart_contract": "ref/aits-chart-contracts.json",
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:C1",
       "states": [
@@ -28462,9 +28278,7 @@
       },
       "provenance": {
         "aits_chart_contract": "ref/aits-chart-contracts.json",
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:C1",
       "states": [
@@ -28886,9 +28700,7 @@
       },
       "provenance": {
         "aits_chart_contract": "ref/aits-chart-contracts.json",
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:C1",
       "states": [
@@ -29310,9 +29122,7 @@
       },
       "provenance": {
         "aits_chart_contract": "ref/aits-chart-contracts.json",
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:C1",
       "states": [
@@ -29657,9 +29467,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -30084,9 +29892,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -30590,9 +30396,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T3",
       "states": [
@@ -30956,9 +30760,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -31332,9 +31134,7 @@
       },
       "provenance": {
         "aits_chart_contract": "ref/aits-chart-contracts.json",
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:C1",
       "states": [
@@ -32495,9 +32295,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T3",
       "states": [
@@ -32849,9 +32647,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -33225,9 +33021,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -33546,9 +33340,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F2",
       "states": [
@@ -33748,9 +33540,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T1",
       "states": [
@@ -33932,9 +33722,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T1",
       "states": [
@@ -34384,9 +34172,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -34800,9 +34586,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:C2",
       "states": [
@@ -34891,9 +34675,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:E1",
       "states": [
@@ -35042,9 +34824,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:E1",
       "states": [
@@ -35203,9 +34983,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:E2",
       "states": [
@@ -35357,9 +35135,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:E3",
       "states": [
@@ -35744,9 +35520,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -36125,9 +35899,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -36493,9 +36265,7 @@
       },
       "provenance": {
         "aits_chart_contract": "ref/aits-chart-contracts.json",
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:C1",
       "states": [
@@ -36878,9 +36648,7 @@
       },
       "provenance": {
         "aits_chart_contract": "ref/aits-chart-contracts.json",
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:C1",
       "states": [
@@ -37247,9 +37015,7 @@
       },
       "provenance": {
         "aits_chart_contract": "ref/aits-chart-contracts.json",
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:C1",
       "states": [
@@ -37616,9 +37382,7 @@
       },
       "provenance": {
         "aits_chart_contract": "ref/aits-chart-contracts.json",
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:C1",
       "states": [
@@ -37985,9 +37749,7 @@
       },
       "provenance": {
         "aits_chart_contract": "ref/aits-chart-contracts.json",
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:C1",
       "states": [
@@ -38354,9 +38116,7 @@
       },
       "provenance": {
         "aits_chart_contract": "ref/aits-chart-contracts.json",
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:C1",
       "states": [
@@ -38605,9 +38365,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T1",
       "states": [
@@ -38936,9 +38694,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:C2",
       "states": [
@@ -39209,9 +38965,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T1",
       "states": [
@@ -39522,9 +39276,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T1",
       "states": [
@@ -39907,9 +39659,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -40676,9 +40426,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T3",
       "states": [
@@ -40995,9 +40743,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -41330,9 +41076,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -41599,9 +41343,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T1",
       "states": [
@@ -41803,9 +41545,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T1",
       "states": [
@@ -41989,9 +41729,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -42365,9 +42103,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -42799,9 +42535,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -43257,9 +42991,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:C2",
       "states": [
@@ -43602,9 +43334,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:C2",
       "states": [
@@ -43948,9 +43678,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:C2",
       "states": [
@@ -44278,9 +44006,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -44496,9 +44222,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T1",
       "states": [
@@ -44856,9 +44580,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -45217,9 +44939,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -45582,9 +45302,7 @@
       },
       "provenance": {
         "aits_chart_contract": "ref/aits-chart-contracts.json",
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:C1",
       "states": [
@@ -45963,9 +45681,7 @@
       },
       "provenance": {
         "aits_chart_contract": "ref/aits-chart-contracts.json",
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:C1",
       "states": [
@@ -46329,9 +46045,7 @@
       },
       "provenance": {
         "aits_chart_contract": "ref/aits-chart-contracts.json",
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:C1",
       "states": [
@@ -46679,9 +46393,7 @@
       },
       "provenance": {
         "aits_chart_contract": "ref/aits-chart-contracts.json",
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:C1",
       "states": [
@@ -47029,9 +46741,7 @@
       },
       "provenance": {
         "aits_chart_contract": "ref/aits-chart-contracts.json",
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:C1",
       "states": [
@@ -47295,9 +47005,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T1",
       "states": [
@@ -47633,9 +47341,7 @@
       },
       "provenance": {
         "aits_chart_contract": "ref/aits-chart-contracts.json",
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:C1",
       "states": [
@@ -48003,9 +47709,7 @@
       },
       "provenance": {
         "aits_chart_contract": "ref/aits-chart-contracts.json",
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:C1",
       "states": [
@@ -48279,9 +47983,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F2",
       "states": [
@@ -48672,9 +48374,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -49099,9 +48799,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -49386,9 +49084,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T1",
       "states": [
@@ -49758,9 +49454,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:C2",
       "states": [
@@ -50078,9 +49772,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -50494,9 +50186,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:C2",
       "states": [
@@ -50938,9 +50628,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -51203,9 +50891,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T1",
       "states": [
@@ -51502,9 +51188,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T1",
       "states": [
@@ -51944,9 +51628,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -52342,9 +52024,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -52786,9 +52466,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -53024,9 +52702,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T1",
       "states": [
@@ -53466,9 +53142,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T2",
       "states": [
@@ -53747,9 +53421,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T1",
       "states": [
@@ -53873,9 +53545,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -54387,9 +54057,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T3",
       "states": [
@@ -54849,9 +54517,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:C2",
       "states": [
@@ -55828,9 +55494,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T3",
       "states": [
@@ -55910,9 +55574,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:A1",
       "states": [
@@ -56043,9 +55705,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:A1",
       "states": [
@@ -56176,9 +55836,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:A1",
       "states": [
@@ -56309,9 +55967,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:A1",
       "states": [
@@ -56443,9 +56099,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:A1",
       "states": [
@@ -56578,9 +56232,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:A1",
       "states": [
@@ -56711,9 +56363,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:A1",
       "states": [
@@ -56844,9 +56494,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:A1",
       "states": [
@@ -57173,9 +56821,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:C2",
       "states": [
@@ -57299,9 +56945,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -57379,9 +57023,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:A1",
       "states": [
@@ -57509,9 +57151,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:A1",
       "states": [
@@ -57639,9 +57279,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:A1",
       "states": [
@@ -57770,9 +57408,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:A1",
       "states": [
@@ -58141,9 +57777,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F2",
       "states": [
@@ -58642,9 +58276,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T3",
       "states": [
@@ -59156,9 +58788,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T3",
       "states": [
@@ -59657,9 +59287,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T3",
       "states": [
@@ -59898,9 +59526,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -60169,9 +59795,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -60440,9 +60064,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -60681,9 +60303,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -60877,9 +60497,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -61148,9 +60766,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -61389,9 +61005,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -61632,9 +61246,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -61995,9 +61607,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F2",
       "states": [
@@ -62358,9 +61968,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F2",
       "states": [
@@ -62524,9 +62132,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -62825,9 +62431,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -63126,9 +62730,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -63427,9 +63029,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -63728,9 +63328,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -64029,9 +63627,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -64330,9 +63926,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -64541,9 +64135,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -64752,9 +64344,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -64963,9 +64553,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -65264,9 +64852,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -65655,9 +65241,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F2",
       "states": [
@@ -66106,9 +65690,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F2",
       "states": [
@@ -66557,9 +66139,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F2",
       "states": [
@@ -67008,9 +66588,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F2",
       "states": [
@@ -67309,9 +66887,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -67760,9 +67336,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F2",
       "states": [
@@ -67971,9 +67545,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -68422,9 +67994,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F2",
       "states": [
@@ -68873,9 +68443,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F2",
       "states": [
@@ -69084,9 +68652,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -69382,9 +68948,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T4",
       "states": [
@@ -69548,9 +69112,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -69774,9 +69336,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -70000,9 +69560,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -70226,9 +69784,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -70452,9 +70008,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -70678,9 +70232,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -70904,9 +70456,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -71205,9 +70755,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -71431,9 +70979,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -71703,9 +71249,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -71900,9 +71444,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -72127,9 +71669,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -72369,9 +71909,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -72651,9 +72189,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T4",
       "states": [
@@ -72923,9 +72459,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -73120,9 +72654,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -73347,9 +72879,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -73589,9 +73119,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -73855,9 +73383,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T4",
       "states": [
@@ -74081,9 +73607,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -74277,9 +73801,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -74623,9 +74145,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F2",
       "states": [
@@ -74879,9 +74399,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -75120,9 +74638,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -75346,9 +74862,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -75557,9 +75071,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -75858,9 +75370,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -76099,9 +75609,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -76340,9 +75848,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -76641,9 +76147,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -76942,9 +76446,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -77228,9 +76730,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -77529,9 +77029,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -77815,9 +77313,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -78101,9 +77597,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -78432,9 +77926,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F2",
       "states": [
@@ -78825,9 +78317,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T4",
       "states": [
@@ -79007,9 +78497,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -79264,9 +78752,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -79551,9 +79037,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -79965,9 +79449,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T4",
       "states": [
@@ -80236,9 +79718,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -80477,9 +79957,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -80703,9 +80181,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -80944,9 +80420,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -81170,9 +80644,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -81551,9 +81023,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T4",
       "states": [
@@ -81728,9 +81198,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -82261,9 +81729,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T4",
       "states": [
@@ -82614,9 +82080,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F2",
       "states": [
@@ -82892,9 +82356,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -83110,9 +82572,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -83307,9 +82767,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -83699,9 +83157,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F2",
       "states": [
@@ -84031,9 +83487,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F2",
       "states": [
@@ -84258,9 +83712,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -84427,9 +83879,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -84806,9 +84256,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F2",
       "states": [
@@ -85080,9 +84528,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -85304,9 +84750,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -85528,9 +84972,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -85752,9 +85194,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -85976,9 +85416,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -86215,9 +85653,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -86454,9 +85890,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -86663,9 +86097,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -86992,9 +86424,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F2",
       "states": [
@@ -87171,9 +86601,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -87368,9 +86796,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -87760,9 +87186,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F2",
       "states": [
@@ -88032,9 +87456,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -88274,9 +87696,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -88516,9 +87936,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -88802,9 +88220,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -89058,9 +88474,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -89299,9 +88713,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -89513,9 +88925,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -89697,9 +89107,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -90238,9 +89646,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T4",
       "states": [
@@ -90481,9 +89887,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -90894,9 +90298,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T4",
       "states": [
@@ -91037,9 +90439,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:F1",
       "states": [
@@ -91597,9 +90997,7 @@
       },
       "provenance": {
         "aits_chart_contract": null,
-        "case_matrix": "plan/kiwoom-common-screen-case-matrix.md",
-        "manifest": "ref/kiwoom-common-screen-manifest.json",
-        "paper_spec": "plan/kiwoom-common-screen-spec.md"
+        "manifest": "ref/kiwoom-common-screen-manifest.json"
       },
       "screen_id": "AT-CV-005:T4",
       "states": [
@@ -91629,8 +91027,7 @@
   "sources": {
     "aits_chart_contracts": "ref/aits-chart-contracts.json",
     "case_matrix_generator": "scripts/render_screen_case_matrix.py",
-    "manifest": "ref/kiwoom-common-screen-manifest.json",
-    "paper_spec": "plan/kiwoom-common-screen-spec.md"
+    "manifest": "ref/kiwoom-common-screen-manifest.json"
   },
   "templates": [
     {

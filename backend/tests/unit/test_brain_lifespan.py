@@ -1,9 +1,3 @@
-"""Wiring tests for the investment-brain graph projection inside build_lifespan().
-
-ADR: plan/investment-brain-architecture.md §4.2 — process lock -> DB open -> schema
-check -> fts load -> readiness. The single-writer queue itself is GraphStore's existing
-one-worker ThreadPoolExecutor (store.py); this file only tests the FastAPI seam around it.
-"""
 
 import asyncio
 import os

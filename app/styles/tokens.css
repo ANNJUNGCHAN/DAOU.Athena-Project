@@ -5,13 +5,6 @@
 @font-face { font-family: 'Daki Title'; src: url('file:///C:/Windows/Fonts/DakiMTitle.ttf') format('truetype'); font-weight: 400; }
 
 :root {
-  /* 2026-08-22 팔레트 반전 — 사용자 지시("디자인을 갈아엎는 한이 있더라도 애플
-     Liquid Glass 형태로"). 근거: Windows의 mica·acrylic은 앱 테마를 따라가므로
-     다크 테마에서는 재질 자체가 어둡고, acrylic은 비활성 창에서 단색으로 떨어진다.
-     즉 "검은 창"은 CSS 틴트가 아니라 재질의 OS 동작이었다(2026-08-22 실측 3회).
-     라이트 테마에서 acrylic은 밝은 유리로 렌더되고 비활성 단색도 밝은 값이 된다.
-     ui/soul.md의 다크 무채색 규범을 이 지시가 대체한다 — 문서도 함께 갱신한다.
-     "유리는 무채색" 원칙은 유지한다: 흰 유리이지 색유리가 아니다. */
 
   /* 표면 — 백색 유리 */
   --color-k-bg: #eef0f4;
@@ -110,13 +103,6 @@
   --glass-canvas: 0.48;
   --glass-window-max: 0.55;
 }
-/* sheer/solid — 2026-08-24 리프 1.1.2, Paper 보드 07(AT-ST-010a)이 clear·default·
- * opaque 사이에 5단 슬라이더를 지정했다. 보드가 준 건 window 값 둘뿐이다
- * (sheer .58, solid .91 — 보드가 빨간 글씨로 "구현 후 측정해야 한다"고 경고한
- * **설계값**, 아직 실측 없음). card/canvas/window-max 셋은 보드에 없어서
- * 인접 단계 중점(clear↔default, default↔opaque의 t=0.5 선형 보간)으로 채웠다 —
- * 이것도 실측이 아니라 계산값이다. 리프 1.4.2(불연속 슬라이더)가 구현 후 실측해
- * 이 여섯 값을 정정한다(CLAUDE.md §3 — 추측을 값으로 박지 않는다). */
 :root[data-glass='sheer'] {
   --glass-window: 0.58;      /* 보드 07 설계값, 미실측 */
   --glass-card: 0.66;        /* 보간값 (0.42+0.90)/2 */

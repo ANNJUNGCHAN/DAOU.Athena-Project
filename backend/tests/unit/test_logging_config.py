@@ -1,9 +1,3 @@
-"""Logging setup contract.
-
-The load-bearing tests here are the redaction ones: CLAUDE.md §1 trap ⑫ and §6 say no
-credential and no request/response body may reach a log line, and those rules are only
-real if something fails when they are broken.
-"""
 
 from __future__ import annotations
 
@@ -252,7 +246,6 @@ def test_redaction_survives_a_formatting_error_without_killing_logging() -> None
 
 
 def test_json_formatter_preserves_non_ascii() -> None:
-    """cp949 console trap (CLAUDE.md §8): the formatter must not escape Korean away."""
     formatter = JsonLogFormatter()
     record = logging.LogRecord(
         name="athena_api.brain",

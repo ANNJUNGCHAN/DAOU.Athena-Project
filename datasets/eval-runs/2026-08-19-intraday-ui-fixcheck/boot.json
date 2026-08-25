@@ -1,9 +1,0 @@
-{
- "booted": true,
- "panels": {
-  "boot": false,
-  "app": true,
-  "onboard": false,
-  "settings": false
- }
-}

@@ -43,8 +43,6 @@ def test_serverinfo_name_collision_separated_by_alias_not_upstream_name():
 
 
 def test_64_char_violation_skipped_not_silently_truncated():
-    """spike/mcp-client/RESULT.md L67 재현: 92자 조합. aggregator는 이 툴을
-    스킵하고 사유를 violations에 남겨야 한다 — 조용히 자르지 않는다."""
     a = agg.ToolAggregator()
     # 60자, registry라면 거부됐을 값
     long_alias = "user-registered-very-long-server-name-for-korean-market-data"

@@ -79,9 +79,6 @@ async def test_spawn_without_approval_is_blocked(tmp_path, entry):
     assert handle.is_running is False
 
 
-# ---------------------------------------------------------------------------
-# SECURITY.md §6 — env 센티널이 실제로 자식 프로세스까지 전달되는지 (진짜 spawn)
-# ---------------------------------------------------------------------------
 
 
 async def test_sentinel_env_resolved_and_delivered_to_subprocess(tmp_path, monkeypatch):

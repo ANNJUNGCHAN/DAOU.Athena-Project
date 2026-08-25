@@ -1,12 +1,3 @@
-// CC-103 수동 실측 프로브 — 보조지표 패널(∿▾)·매물대가 실제로 동작하는지
-// 확인한다("될 것이다"로 넘기지 않는다, CLAUDE.md §3). probe-chart-toolbar.js
-// (CC-102)와 같은 성격 — 캔버스 창을 띄우고 addCard('chart')로 실제 카드를
-// 만든 뒤, 패널·토글을 executeJavaScript로 직접 클릭해 DOM 상태 변화를 잰다.
-//
-// CC-102의 pane 분리 회귀(가격 pane을 비우는 순간 자동 정리되며 거래량 pane이
-// 0으로 당겨지는 문제)와 같은 성격의 위험이 CC-103에도 있다 — RSI/MACD가 새
-// pane을 추가·제거할 때 기존 가격(0)·거래량(1) pane 분리가 깨지지 않는지,
-// 그리고 차트형식 전환(CC-102 회귀 지점) 이후에도 유지되는지 재단언한다.
 process.env.ATHENA_NO_AUTOSTART = '1';
 process.env.ATHENA_CANVAS_SOURCE = 'fixture';
 

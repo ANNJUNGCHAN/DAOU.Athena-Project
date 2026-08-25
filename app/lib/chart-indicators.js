@@ -5,9 +5,6 @@
 (function () {
 'use strict';
 
-// 보조지표 순수 계산 — plan/chart-card-control-spec.md §3 (1판 구현 5종 중 계산형 4종).
-// 전부 결정적 순수 함수. 값이 정의되지 않는 워밍업 구간은 null로 둔다(정보 정직성 —
-// 0이나 근사값으로 채우지 않는다).
 
 // 단순이동평균. closes[i]가 null이면 결과도 null.
 function sma(values, period) {

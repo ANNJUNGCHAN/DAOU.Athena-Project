@@ -3,31 +3,6 @@
 // el/sanitize 같은 흔한 이름이 파일 간에 충돌해 SyntaxError가 났다(실측, diag-isolation.js).
 // CJS(require)는 이 IIFE 밖에서도 동일하게 동작한다 — Node의 모듈 래퍼가 이미 함수 스코프다.
 (function () {
-// 계좌(AT-ST-001/002/003) · MCP(AT-ST-004/005/006) 제어 캔버스 카드.
-//
-// 배치 근거: plan/paper-specs/00-통합-계획.md §1.2/1.3 — 두 화면 모두 "캔버스 창 ›
-// 제어 캔버스" 카드 하나이고, 등록·활성화·승인·probe 네 화면은 새 카드/새 창이
-// 아니라 이 두 카드 내부의 시트(오버레이)다. canvas.js의 addCard() 스위치에
-// stream/reader/table과 같은 자리로 얹힌다.
-//
-// 렌더링 계약은 lib/ui-kit.js·lib/markdown.js와 동일: innerHTML에 문자열을 넣지
-// 않는다. 계좌 별칭, MCP 별칭·실행 명령·upstream 툴 설명(backend/athena_mcp/
-// SECURITY.md §3이 명시한 프롬프트 인젝션 표면)은 전부 textContent로만 그린다.
-//
-// 비밀값 원칙(AT-ST-007, 부록이지만 모든 화면을 구속한다):
-// - APP KEY/SECRET KEY 값은 입력 요소 → 메인 프로세스行 IPC 인자로만 흐른다.
-//   읽어들인 뒤 바깥 스코프 변수에 담지 않고, invoke 직후 입력 요소도 비운다.
-// - 화면은 문자 수만 보여준다 — ui-kit의 secretMask(charCount)가 그 계약을
-//   코드로 강제한다(값이 아니라 개수만 받는 함수라 값 자체가 이 모듈에 닿을 수
-//   없다).
-// - MCP 스니펫 붙여넣기 textarea는 사용자가 붙여넣은 JSON 원문(그 안에 실제 env
-//   비밀값이 섞여 있을 수 있다)을 담을 수 있는 유일한 입력이다. 분석
-//   완료(athena:mcp-stage-snippet) 후에는 그 원문을 다시 읽어 다른 DOM 노드로
-//   재현하지 않는다 — envKeys(키 이름만)·risks만 렌더한다.
-//
-// 데이터는 전부 실제 IPC 핸들러 호출 결과다. 목업을 만들지 않는다 — 핸들러가
-// 아직 없으면(메인 프로세스 작업이 병행 중이라 있을 수 있다) 빈 카드에 예외를
-// 던지는 대신 emptyState + errorNote를 그린다.
 
 // UMD 헤드(2026-08-18 렌더러 격리) — ipcRenderer는 window.athena 다리로
 // 대체한다(preload.js). ui-kit require는 node --test/<script> 태그 겸용.
@@ -98,17 +73,6 @@ let unsubscribeScreenZoom = null;
 let unsubscribeModelChanged = null;
 let unsubscribeCliChangedForModel = null;
 
-// ---------------------------------------------------------------------------
-// 행 삭제 · 카드 닫기 — 설계(Paper 목업)가 그리지 않은 어포던스라 이 파일에서
-// 새로 정의한다(D3/D7, 오케스트레이터 지시). `athena:account-remove`/
-// `athena:mcp-remove`는 메인 프로세스에 이미 구현·검증돼 있었는데 부르는
-// 버튼이 없었다(app/README.md "남은 문제" 절) — 그 갭을 여기서 채운다.
-//
-// 삭제는 되돌릴 수 없다. window.confirm()은 프레임리스 글래스 렌더러를
-// 블로킹하므로 쓰지 않는다 — 행 안에 인라인 확인 바를 한 번 거친다. 계좌
-// 전환(AT-ST-001 Desc 4 "확인 대화상자 없음")은 그대로 무확인으로 둔다 — 그
-// 규칙은 전환 얘기지 삭제 얘기가 아니다.
-// ---------------------------------------------------------------------------
 
 // disabledTitle이 있으면(계좌 목록의 "마지막 하나는 삭제 불가", AT-ST-001
 // Desc 1.1) 클릭 리스너 없는 비활성 버튼만 돌려준다 — 64자 초과 툴 체크박스와
@@ -166,13 +130,6 @@ function deleteConfirmBar(message) {
   return { bar, cancelBtn, confirmBtn };
 }
 
-// 카드별 닫기(D7) — 지금까지 전역 Esc(캔버스 전체 접기)만 있었다(설계가 여는
-// 법만 정하고 닫는 법을 안 정함, app/README.md 참고). 마지막 카드를 닫으면
-// 빈 유리창을 화면에 남겨두지 않고 캔버스 자체를 접는다 — Esc가 쓰는 채널
-// (athena:collapse-canvas)을 그대로 재사용한다. canvas.js의 3개 카드(stream/
-// reader/table)도 같은 채널·같은 스타일로 닫기를 단다(일관성 판단, 보고서
-// 참고). 핵심 로직은 canvas.js와 공유해 ui-kit.js의 removeCardAndMaybeCollapse로
-// 옮겼다(포니테일 감사).
 
 // 카드 헤더의 실제 액션(등록·스니펫 붙여넣기)과 경쟁하지 않게 구분선 뒤
 // 조용한 자리에 둔다 — canvas.css의 .uk-card-close가 그 시각적 거리를 만든다.
@@ -224,13 +181,6 @@ function detachSheet(card, root) {
   root.remove();
 }
 
-// =============================================================================
-// 사이드바 내비게이션 — Paper 43쪽(2026-08-18 확정). 화면 · 계좌 · MCP 서버 · 모델
-// 4종. 선택 표시는 배경/글자 밝기로만 한다(액센트 색 금지, ui/soul.md §7). 키보드는
-// 리스트박스 문법: ↑↓는 포커스만 옮기고(선택 아님), Enter/Space가 커밋해 패널을
-// 렌더한다 — 자동 활성화(탭 문법)가 아니다. #settingsNav → #settingsGrid로 이어지는
-// DOM 순서 그대로라 Tab 키가 자연스럽게 "패널로 이동"이 된다(별도 배선 불필요).
-// =============================================================================
 
 const NAV_ITEMS = [
   { key: 'screen', label: '화면' },
@@ -322,13 +272,6 @@ function renderNav(nav, grid, { onSelect }) {
   commitSelect(order[0]);
 }
 
-// =============================================================================
-// 화면 — autoExpandCanvas/autoGrowChat (2026-08-18 복구, app/README.md L599-608)
-// 병합 커밋 c0d874b가 "후속 커밋에서 모드 구현에 옮긴다"고 적어놓고 실제로는
-// 안 옮긴 것을 여기 되살린다. 원본(git show baa7e0e -- app/settings.html)의
-// 체크박스 2개를 이 카드의 토글 2개로 대체한다 — 컴포넌트는 주문 API 게이트
-// 시트가 이미 쓰는 toggleSwitch/.uk-toggle-row 그대로 재사용한다.
-// =============================================================================
 
 function renderScreen(grid) {
   const { card, head, body } = buildCardShell(grid, 'screen');
@@ -465,7 +408,6 @@ async function refreshScreenCard(card, head, body) {
   placeLabelCol.appendChild(el('div', 'uk-toggle-sub', 'Win+←/→/↑/↓ — Windows 창 단축키 그대로 (좌/우 배치 · 최대화 · 최소화) · 보조: Ctrl+Alt+방향키'));
   body.appendChild(row('uk-toggle-row', [placeLabelCol]));
 
-  // ---- 접근성 3종 — 읽기 전용, OS 값을 그대로 보여준다(설정은 OS 소관, CLAUDE.md §2) ----
   const a11yWrap = el('div', 'uk-a11y-status');
   a11yWrap.appendChild(el('div', 'uk-field-label', '접근성 — 이 컴퓨터의 OS 설정을 따른다'));
   const A11Y_QUERIES = [
@@ -1351,10 +1293,6 @@ function openMcpProbeSheet(card, alias, onDone) {
         });
         const nameEl = el('span', `uk-col-toolname${oversized ? ' is-dim' : ''}`, t.name);
         const lenEl = el('span', `uk-col-toollen${oversized ? ' is-dim' : ''}`, `${qlen}자`);
-        // t.description은 upstream MCP 서버가 자체 보고한 문자열이다
-        // (backend/athena_mcp/SECURITY.md §3 — 프롬프트 인젝션 표면). 게이트웨이가
-        // 이미 서버 쪽에서 출처를 라벨링하므로 여기서 또 "(업스트림)" 같은 접두를
-        // 덧붙이지 않는다 — textContent로만, 있는 그대로 그린다.
         const descEl = el('span', `uk-col-tooldesc${oversized ? ' is-dim' : ''}`, t.description || '');
         const allowCell = el('span', 'uk-col-toolallow');
         if (oversized) {
@@ -1722,14 +1660,6 @@ async function refreshModelCard(card, head, body) {
   body.appendChild(note);
 }
 
-// =============================================================================
-// 성향・이력 — 채팅→그래프 파이프라인 단계 5(.omc/plans/plan-chat-graph-pipeline.md
-// §2(e)/(f)/3). 배치 주기·수동 실행·마지막/다음 실행은 지금 백엔드 상태 API
-// (GET /api/v1/brain/status)가 노출하지 않는다 — 조용히 지어내지 않고 "설정
-// 파일로 관리"/"아직 제공하지 않는다"로 정직하게 적는다(CLAUDE.md §4). 전체
-// 삭제만 실제로 동작한다: 확인 바(deleteConfirmBar, 계좌/MCP 카드와 같은
-// 컴포넌트) → athena:brain-reset → 진행/완료·재기동 안내.
-// =============================================================================
 
 function renderHistory(grid) {
   const { card, head, body } = buildCardShell(grid, 'history');

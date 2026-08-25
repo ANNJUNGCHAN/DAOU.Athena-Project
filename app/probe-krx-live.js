@@ -1,16 +1,3 @@
-// 장중 KRX 차단 진단 — `datasets/장중_해야할것_QA.md` §2의 0순위 판별을 수행한다.
-//
-// 왜 Electron으로 도는가: KRX_API_KEY는 safeStorage(DPAPI)로 암호화돼 레지스트리에
-// 센티널만 남아 있다. 복호화는 Electron 프로세스에서만 가능하므로(`lib/main/secrets.js`),
-// 앱이 upstream을 spawn할 때와 **동일한 경로**로 키를 얻어 KRX에 직접 묻는다.
-//
-// 무엇을 가리는가: `spike/krx-probe/RESULT.md`가 이미 "실제 키 → Unauthorized API Call /
-// 가짜 키 → Unauthorized Key"라는 구분을 관측해 '활용신청 미승인'으로 판정했다. 다만 그
-// 실험의 실행 시각이 장중이었는지 기록이 없다. 이 스크립트는 **정규장 시간에 같은 실험을
-// 재현**해서, 차단이 승인 문제인지 시간대 정책인지를 가른다.
-//
-// 실행: cd app && npx electron probe-krx-live.js
-// 산출: datasets/eval-runs/<날짜>-intraday/krx-probe.json (실키는 기록하지 않는다)
 
 process.env.ATHENA_NO_AUTOSTART = '1';
 
@@ -143,7 +130,6 @@ app.whenReady().then(async () => {
   fs.mkdirSync(dir, { recursive: true });
   const file = path.join(dir, 'krx-probe.json');
   fs.writeFileSync(file, JSON.stringify(out, null, 1), 'utf8');
-  // 콘솔은 cp949라 한글이 깨진다(CLAUDE.md §8). 판정은 파일을 열어 확인한다.
   process.stdout.write(`WROTE ${file}\n`);
   app.exit(0);
 });

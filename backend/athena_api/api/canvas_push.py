@@ -1,20 +1,3 @@
-"""캔버스 사이드 채널 — 게이트웨이가 채운 카드 봉투를 앱으로 직접 민다.
-
-2026-08-19 실측 배경: render_canvas의 plan_token 지름길(athena_mcp/canvas_data.py)이
-봉투를 툴 결과에 실었더니 claude CLI의 툴 결과 잘림 한도에 걸려 카드가 깨졌다 —
-카드 데이터는 모델 스트림을 타면 안 된다(사용자 지시 "성공한 캔버스가 답").
-POST /api/v1/canvas/push(게이트웨이 → 큐) + /api/v1/ws/canvas(앱 구독)로 루틴
-알림(routines_ws.py)과 같은 문법의 전용 채널을 둔다. 인증도 같은 배타 2모드
-(ws_auth) — LLM 노출 아님(셀렉터 4툴 계약과 무관한 로컬 배관).
-
-**카드 종류는 caller가 아니라 manifest가 결정한다**(P1b, 2026-08-20 — 계획
-`plan/공통화면-템플릿-실행계획-2026-08-20.md`). `RenderPlanRequest.canvas_type`은
-앱이 캐시에 저장해 둔 과거 LLM 판정의 재생 힌트일 뿐, 실행 결과 `operation_ref`로
-`canvas_transform.resolve_render_plan_kind`(경유 `screen_manifest`)를 조회한 값이
-다르면 manifest가 이기고 불일치를 로그로 남긴다(무음 불일치 금지). manifest가
-지원하지 않는 카드(event/action/status, 미등록 operation_ref)는 coverage 결함으로
-fail-closed한다. 키움 plan-token 경로에는 generic/free 강등이 없다.
-"""
 
 from __future__ import annotations
 
@@ -95,28 +78,6 @@ async def canvas_push(request: Request, envelope: dict[str, Any]) -> JSONRespons
 
 
 class RenderPlanRequest(BaseModel):
-    """캐시 리플레이(앱 빠른 경로) — 이미 내린 LLM 판정의 재실행 요청.
-
-    모델을 거치지 않는다: 앱이 저장해 둔 판정(오퍼레이션·인자·카드 구성)을
-    resolve로 재서명해 얻은 plan_token과 함께 보내면, 이 라우트가 실행·변환·
-    사이드 채널 푸시까지 한 번에 한다. 규칙 기반 신규 판단이 아니라 **과거 LLM
-    판정의 조회 인덱스**다(AITS L1/L2 캐시의 정당화 논리와 동일). LLM 비노출.
-
-    `canvas_type`은 P1b(2026-08-20)부터 캐시가 재생하는 과거 힌트일 뿐 카드
-    종류를 결정하지 않는다 — 실행 결과 `operation_ref`로 manifest를 조회한
-    값이 최종 authority다(모듈 docstring 참조). 패턴은 render-plan이 실제로
-    낼 수 있는 4종(facts/table/compound/chart)을 전부 받아야 한다 — 안 그러면
-    facts/compound 요청이 manifest 조회에 닿기도 전에 여기서 422로 죽는다
-    (계획 §Q3 [r5·Critic 잔여]).
-
-    P5(2026-08-20)부터 `canvas_type` 자체가 선택이다 — 카드 종류는 이제
-    `operation_ref`의 순수 함수라 caller가 몰라도 된다(계획
-    `plan/공통화면-템플릿-실행계획-2026-08-20.md` P5). 앱의 캐시 리플레이
-    경로(`app/lib/main/fast-path.js`)는 더 이상 이 필드를 캐시 판정 객체에
-    담아두지 않고 아예 보내지 않는다 — 필드가 없으면(`None`) manifest 조회
-    결과와 비교할 대상이 없으므로 불일치 로그도 건너뛴다(무음 불일치와는
-    다르다 — 비교할 게 없다는 것과 비교했더니 달랐다는 것은 별개다).
-    """
 
     plan_token: str = Field(min_length=1)
     canvas_type: Annotated[str, Field(pattern="^(chart|table|facts|compound)$")] | None = None

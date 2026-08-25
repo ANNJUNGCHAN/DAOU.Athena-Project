@@ -1,9 +1,0 @@
-{"ts":"2026-08-19T08:27:16.362143+00:00","tool":"athena_search","backend_ms":110}
-{"ts":"2026-08-19T08:27:18.291375+00:00","tool":"athena_describe","backend_ms":15}
-{"ts":"2026-08-19T08:27:21.293655+00:00","tool":"athena_resolve","backend_ms":140}
-{"ts":"2026-08-19T08:27:29.553987+00:00","tool":"athena_call","backend_ms":92}
-{"ts":"2026-08-19T08:27:16.363142+00:00","alias":"kiwoom-selector","tool":"athena_search","success":true}
-{"ts":"2026-08-19T08:27:18.292375+00:00","alias":"kiwoom-selector","tool":"athena_describe","success":true}
-{"ts":"2026-08-19T08:27:21.294925+00:00","alias":"kiwoom-selector","tool":"athena_resolve","success":true}
-{"ts":"2026-08-19T08:27:29.555985+00:00","alias":"kiwoom-selector","tool":"athena_call","success":true}
-{"ts":"2026-08-19T08:26:50.817184+00:00","alias":"naver-search-2","tool":"search_news","success":true}

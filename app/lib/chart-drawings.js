@@ -5,21 +5,6 @@
 (function () {
 'use strict';
 
-// 드로잉 1판(CC-105) — plan/chart-card-control-spec.md §5.
-// 구현 2종: 수평선(1클릭 즉시 확정) · 추세선(2클릭, 첫 점 후 실시간 미리보기).
-// 나머지 5종(십자선·광선·사각형·타원·피보)은 도구바에 비활성+미구현으로 노출만
-// 한다(정직 표기). 진입 게이트는 확장 모드다 — spec의 "전체화면 전용"을 두 창
-// 원칙에 맞춘 그리드 점유(chart-card.js toggleFullscreen)와 같은 적응.
-//
-// 좌표는 전부 데이터 좌표(time, price)로 저장한다(§5 "주기 전환과 무관하게
-// 재투영") — 픽셀은 렌더 순간에만 계산한다. 수평선은 lightweight-charts 네이티브
-// createPriceLine(가격축 라벨까지 공짜), 추세선은 SVG 오버레이(라이브러리에
-// 세그먼트 프리미티브가 없다)로 그린다.
-//
-// 영속은 chart-authoring-store(CC-104)의 drawings 슬롯을 쓴다 — 스키마:
-// { hlines: [{id, price}], lines: [{id, a:{time,price}, b:{time,price}}] }.
-// 스타일 1판은 AITS 기본값 계승(#2962FF, 2px) — 드로잉 색은 장식 액센트가
-// 아니라 사용자 주석 데이터다(chart-lens-spec §8 분류).
 
 const DRAW_COLOR = '#2962FF';
 

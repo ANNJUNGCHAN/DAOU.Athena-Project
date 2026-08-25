@@ -3,22 +3,6 @@
 // el/sanitize 같은 흔한 이름이 파일 간에 충돌해 SyntaxError가 났다(실측, diag-isolation.js).
 // CJS(require)는 이 IIFE 밖에서도 동일하게 동작한다 — Node의 모듈 래퍼가 이미 함수 스코프다.
 (function () {
-// 인증(토큰 상태) 화면 — AT-CV-OAUTH 3건을 하나의 실제 화면으로 통합 구현한다:
-//   - AT-CV-OAUTH-인증토큰-상태.md   : 실제 레이아웃(마스트헤드 + 타이머 카드 +
-//     상태 행 3개 + 하단 액션 바) — "준비됨" 상태 1종만 보여주는 스크린샷.
-//   - AT-CV-OAUTH-토큰-4상태.md      : 위와 같은 화면이 상태(인증 필요/준비됨/
-//     재발급 중/만료됨)에 따라 "숫자와 색만" 바뀐다는 명세 — 창 높이는 불변.
-//   - AT-CV-OAUTH-계좌-전환.md       : 계좌 행을 누르면 여는 하위 뷰(같은 화면
-//     안의 내부 상태 전환이지 새 창이 아니다).
-// 셋 다 대화 창이 확장된 같은 화면이다(plan/paper-specs/00-통합-계획.md §1.5).
-//
-// [연결 해제] 버튼 — 2026-08-17 결선. 갭이었던 athena:auth-token-revoke 채널을
-// lib/main/accounts.js에 추가했다(문서화된 au10002 "접근토큰폐기" REST 계약을
-// athena:auth-token-refresh가 이미 쓰는 방식 그대로 다시 호출 — backend/
-// athena_api/kiwoom/auth.py의 KiwoomAuth.revoke_token()과 같은 upstream, 같은
-// 계약). 폐기 후 상태는 항상 needed로 되돌아간다(auth.py의 finally-clear
-// 결정을 그대로 따름 — accounts.js 주석 참고). upstream 폐기 확인 자체가
-// 실패해도 로컬 토큰은 지워지므로, 실패는 막지 않고 참고용 안내만 보여준다.
 
 // UMD 헤드(2026-08-18 렌더러 격리) — ipcRenderer는 window.athena 다리로
 // 대체한다(preload.js). ui-kit require는 node --test/<script> 태그 겸용.

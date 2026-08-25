@@ -1,30 +1,3 @@
-"""MCP 캔버스 side-channel과 WebSocket 수명주기 영수증 계약.
-
-2026-08-19 실측 배경: 차트 질의에서 모델이 athena_call로 받은 대형 응답을 컨텍스트에
-삼키고(입력), 카드 봉투를 손으로 옮겨 적고(출력 — 가장 느린 구간), 그 봉투가 툴
-결과로 또 에코됐다(입력). 같은 데이터가 모델을 세 번 통과한 것이다. 이 모듈은
-그 경로를 뒤집는다(사용자 지시 "캔버스를 우선 구성하고, 필요 정보만 뽑아 답한다"):
-
-    athena_resolve → plan_token → athena__render_canvas(plan_token, ...)
-      → 게이트웨이가 백엔드에서 데이터를 직접 실행·변환해 봉투를 채운다
-      → 봉투는 ``/canvas/push`` side-channel로만 보내 앱이 즉시 그린다
-      → 모델에는 데이터 요약이 아닌 display receipt만 돌아간다.
-
-변환은 전부 결정적이다(CLAUDE.md §7 — 모델 호출·무작위성 없음). 변환 불가능한
-형상이면 payload를 모델로 되돌리지 않고 명시 오류로 닫는다.
-
-**카드 종류는 모델이 아니라 manifest가 결정한다**(P1b, 2026-08-20 — 계획
-`plan/공통화면-템플릿-실행계획-2026-08-20.md`). 모델이 인자로 보낸 `canvas_type`은
-더 이상 분기 조건이 아니라 감사용 힌트다 — plan을 실행해 얻은 `operation_ref`로
-`athena_api.screen_manifest`(경유 `canvas_transform.resolve_render_plan_kind`)를
-조회해 카드 종류를 결정하고, 모델의 힌트와 다르면 manifest가 이기며 불일치를 로그로
-남긴다(무음 불일치 금지). 키움 plan 경로에서 mapping·screen 또는 지원하는 read 카드
-계약이 없으면 coverage 결함이므로 fail-closed한다. ``free`` 폴백은 plan_token 없는
-legacy/non-Kiwoom ``render_canvas(data)``에만 남는다.
-
-안전 성질: 이 경로는 주문 확인 헤더(X-Athena-Confirm 등)를 절대 싣지 않는다 —
-주문 계획이 넘어와도 백엔드의 3중 게이트가 헤더 부재로 거부한다(조회 전용).
-"""
 
 from __future__ import annotations
 

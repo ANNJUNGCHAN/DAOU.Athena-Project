@@ -36,8 +36,6 @@ from render_screen_injection_map import (  # noqa: E402
 REPO_ROOT = BACKEND.parent
 OUTPUT_PATH = BACKEND / "ref" / "kiwoom-common-screen-card-facts.json"
 
-# Card display names, keyed by manifest layout. Not invented: these are the six
-# card names fixed by plan/kiwoom-common-screen-spec.md §3.
 CARD_NAMES = {
     "facts": "FactsCard",
     "table": "TableCard",
@@ -58,8 +56,6 @@ DRIVING_DIMENSION = {
     "status": "response_top_level",
 }
 
-# Screen ID carried over from plan/kiwoom-common-screen-spec.md §10. Its origin
-# is unresolved (spec §11-5); this generator does not mint a new one.
 SCREEN_ID = "AT-CV-005"
 
 CARD_ORDER = ["facts", "table", "compound", "event", "action", "status"]
@@ -223,12 +219,6 @@ def card_entry(
 
 
 def alias_frequency(mappings: list[dict[str, Any]], limit: int) -> list[dict[str, Any]]:
-    """How often each response alias occurs across mappings.
-
-    Backs the "five cell primitives, not 301 renderers" claim in
-    plan/kiwoom-common-screen-spec.md §4: an alias is counted once per mapping
-    it appears in, whether at top level or inside a container.
-    """
     counts: dict[str, int] = {}
     for mapping in mappings:
         response = mapping["fields"]["response"]

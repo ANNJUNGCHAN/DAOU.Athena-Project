@@ -1,21 +1,3 @@
-"""셀렉터 ablation 증거에서 커밋 가능한 요약본을 뽑는다.
-
-`evaluate_selector_ablations.py --output`이 내는 원본은 파일당 77~136MB다. 부피의
-99%는 `variants[].cases[].compatibility_trace` **한 키**이고(케이스당 약 58KB),
-판정에 필요한 필드 — `id` · `correct` · `decision` · `expected_refs` ·
-`selected_operation_ref` · `*_margin` · `compatibility_reason_codes` ·
-`identity_control_plane_trace` — 는 전부 그 키 **밖에** 있다.
-
-그래서 그 키 하나만 떼어내고 나머지는 통째로 보존한다. 케이스 수도, 변형 수도
-줄이지 않는다 — 표본을 깎으면 요약이 아니라 다른 증거가 된다.
-
-원본은 로컬에 그대로 두고 `.gitignore`로 막는다. 저장소에는 이 요약본이 남는다.
-`_summary_provenance`에 원본 파일명과 sha256을 적으므로, 원본을 다시 만들면
-해시 불일치로 낡음을 알 수 있다.
-
-사용:
-    python scripts/summarize_selector_evidence.py ../plan/selector-*.json
-"""
 
 from __future__ import annotations
 
@@ -92,7 +74,6 @@ def main() -> int:
         outdir = args.outdir or source.parent
         outdir.mkdir(parents=True, exist_ok=True)
         target = outdir / (source.stem + SUMMARY_SUFFIX)
-        # 콘솔 인코딩(cp949)에 의존하지 않는다 — CLAUDE.md §8 함정
         target.write_text(
             json.dumps(summary, ensure_ascii=False, indent=1, sort_keys=True) + "\n",
             encoding="utf-8",

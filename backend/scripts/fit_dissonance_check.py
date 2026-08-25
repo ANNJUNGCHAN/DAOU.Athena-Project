@@ -1,27 +1,4 @@
 # ruff: noqa: E501
-"""G001.5 이질감(fit dissonance) 게이트의 결정적 검증 스크립트.
-
-근거 문서: plan/kiwoom-common-template-fit-dissonance-plan.md (특히 §2, §5, §6.3, §9.7).
-자동 채점 289개(264 read_display + 23 websocket + 2 oauth, order 12는 §9.7 체크리스트로
-별도 집계)를 `backend/ref/kiwoom-common-screen-manifest.json`(301개 매핑),
-`backend/ref/kiwoom-screen-definitions.json`(301개 완전 화면 계약), inventory 라벨과
-보정 파일 2종(정규식·픽셀)으로 채점한다. 화면 정의가 없거나 manifest와 조인이 깨지면
-provisional 채점으로 강등하지 않고 즉시 실패한다.
-
-실행:
-    python backend/scripts/fit_dissonance_check.py            # 산출물 3종 생성/갱신
-    python backend/scripts/fit_dissonance_check.py --check    # 완전 기계 게이트 판정
-
-exit code:
-    0 = 완전 기계 게이트 통과(301개 화면 계약 + 자동 서킷브레이커 0건 + 최신 대표 렌더 증거)
-    1 = 서킷브레이커 위반(override>40 / 규칙>10 / 자유캔버스>8 / 예외총량>52 /
-        zero-tolerance 자동 위반 미해소 / order 체크리스트 8항목 중 fail 1건 이상 /
-        필수 입력 파일 누락)
-
-과거 G001.5의 사람 표본/채점자 일치도는 화면 정의가 없던 시기의 디자인 적합성 연구
-지표다. 완전한 screen definition 계약을 대신하지 않으며 현재 기계 게이트의 종료 코드를
-막지 않는다. 값은 scorecard의 human_review_advisory에 보존해 별도 독립 검수로 보고한다.
-"""
 
 from __future__ import annotations
 

@@ -110,9 +110,6 @@ async function run() {
   log('onboarding.advance.step3', advanceStep3);
   await wait(50);
   const heightAfterStep3Done = main.getWins().shellWin.getBounds().height;
-  // README.md 검증3이 이미 문서화한 ±1~2px DPI 반올림 편차(acrylic 창의
-  // setBounds() 요청값과 getBounds() 실측값 차이, 기능적 결함 아님)를 그대로
-  // 허용 오차로 쓴다.
   log('onboarding.chatHeight.selfReturnedToBase', {
     heightBeforeStep3Done,
     heightAfterStep3Done,
@@ -164,17 +161,10 @@ async function run() {
     log('account.list.afterRemove', h.accountList());
   }
 
-  // ---------------- MCP ----------------
-  // mcpList()는 mcp-env.js의 마이그레이션(비동기)을 먼저 시도하고 나서 목록을
-  // 돌려주므로 이제 async다 — await 없이 부르면 Promise 객체가 그대로
-  // 로깅된다(SECURITY.md §6 배선 이후).
   log('mcp.list.empty', await h.mcpList());
 
   const pythonExe = '.venv/Scripts/python.exe';
   const fixture = 'tests/mcp/fixtures/fake_server.py';
-  // env에 평문 시크릿을 심는다 — SECURITY.md §6 마이그레이션 실검증이 이 값의
-  // 왕복(등록 시 평문 -> mcpList() 마이그레이션 -> 센티널 -> buildEnvOverrides()
-  // 복호화 -> 실제 spawn 전달)을 추적한다.
   const PLAINTEXT_SECRET = 'plaintext-verify-value-0123456789';
   const snippet = JSON.stringify({
     mcpServers: {
@@ -208,9 +198,6 @@ async function run() {
     log('mcp.probe.afterAllowOff.echoAllowed', (probe3.tools || []).find((t) => t.name === 'echo'));
     log('mcp.list.afterProbe', await h.mcpList());
 
-    // ---- SECURITY.md §6 실검증 — MCP env 암호화 왕복 + fail-closed ----
-    // 위 mcpList() 호출이 이미 이번 프로세스의 실제 safeStorage로 마이그레이션을
-    // 한 번 거쳤다 — 그 결과를 여기서 확인한다.
     {
       const mcpEnv = require('./lib/main/mcp-env');
       const { PYTHON_EXE, BACKEND_DIR } = require('./lib/main/mcp-config');

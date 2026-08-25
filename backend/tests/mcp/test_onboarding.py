@@ -1,9 +1,3 @@
-"""이식 절차 테스트 — 별칭 정규화, 등록/승인 분리, probe.
-
-별칭 정규화 케이스는 전부 **실제로 존재하는 이름**에서 왔다:
-`@drfirst/korea-stock-mcp`(npm 스코프), 92자 위반을 재현했던 60자 이름
-(`spike/mcp-client/RESULT.md` L67), 한글 서버명(클로드 데스크탑 설정에 흔하다).
-"""
 
 from __future__ import annotations
 

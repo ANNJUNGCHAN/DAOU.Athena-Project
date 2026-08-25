@@ -1,13 +1,3 @@
-/* 알림 오브 창 (2026-08-24 리프 1.3.1) — 데스크톱 구석 상시 원형 창.
- *
- * 재료 규범은 셸 창과 같다(CLAUDE.md §2): 모든 표면이 유리 · 유리는 무채색 ·
- * 유리 뒤에 굴절할 것이 있다 · 깊이는 값으로 만든다(테두리 굵기가 아니라) ·
- * 액센트 색 없음. 예외는 화면당 마젠타 1곳뿐이고, 이 창에서 그 한 곳은
- * **미확인 알림 호(arc)**다 — 장식이 아니라 수치의 렌더다.
- *
- * 창 자체가 투명이라(orb-window.js transparent:true) 창 배경은 없다. 원형은
- * border-radius로 만들고, 그 밖은 실제로 데스크톱이 보인다 — 사각 판이 남지
- * 않으므로 "뒤에 굴절할 게 없는 반투명 회색 사각형"(soul.md §7 금지)이 아니다. */
 
 html, body {
   margin: 0;
@@ -52,12 +42,6 @@ html, body {
   cursor: grab;
 }
 
-/* ---------- 키우미 바이저 (2026-08-24 리프 1.3.2) ----------
- * 색 세 정지점은 `ui/kiwoome.zip` 원본 렌더의 **실측값**이다(img4 바이저 픽셀의
- * 명도 p05 / p50 / p95). 보간하거나 눈대중으로 고른 값이 0개다 — 근거는
- * `ui/kiwoome-reference.md`, 측정 스크립트는 `ui/.kiwoome-extract/sample-visor.js`.
- * 리터럴을 CSS 곳곳에 흩뿌리지 않고 토큰 셋으로 묶는다(1.1.2에서 값이 두 벌이 돼
- * 죽은 단계가 생겼던 것과 같은 종류의 사고를 막는다). */
 #orbRoot {
   --color-kiwoome-visor: #0e20b2;      /* 실측 p50 — 바이저 본색 */
   --color-kiwoome-visor-deep: #000984; /* 실측 p05 — 가장자리 최심부 */
@@ -362,9 +346,6 @@ html, body {
 .orb-root[data-anchor="top-right"]    .orb-panel { left: 0; right: 0; top: 76px; bottom: 0; }
 .orb-root[data-anchor="top-left"]     .orb-panel { left: 0; right: 0; top: 76px; bottom: 0; }
 
-/* ---------- 접근성 3종은 styles/access.css가 전역으로 처리한다 ----------
- * 여기서는 이 창에만 있는 표면 두 곳을 추가로 덮는다 — access.css는 셸 창의
- * 클래스 이름을 알지 못한다(CLAUDE.md §2: 접근성 3종은 직접 구현한다). */
 @media (prefers-reduced-transparency: reduce) {
   #orb, .orb-panel, .orb-card {
     background-color: rgb(255 255 255 / 98%);

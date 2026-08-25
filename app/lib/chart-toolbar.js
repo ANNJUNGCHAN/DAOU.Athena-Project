@@ -5,12 +5,6 @@
 (function () {
 'use strict';
 
-// 차트 카드 툴바(CC-102) — plan/chart-card-control-spec.md §0·§1·§2·§6·§7.
-// 카드 헤더 아래 1줄, 좌 주기 탭 / 우 차트모양·보조지표 자리·구분선·수정주가·전체화면.
-// 전부 textContent/DOM 노드 — innerHTML 문자열 삽입 금지(CLAUDE.md §6).
-//
-// 이 모듈은 DOM 뼈대와 사용자 조작 → 콜백 연결만 한다. 실제 차트 재시리즈·
-// 재샘플·전체화면 그리드 전환은 chart-card.js가 콜백 안에서 한다(관심사 분리).
 
 // UMD 헤드(2026-08-18 렌더러 격리) — node --test(CommonJS)면 require, <script>
 // 태그 전역 로딩(nodeIntegration:false)이면 window.AthenaLib를 쓴다.

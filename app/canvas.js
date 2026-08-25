@@ -1,13 +1,3 @@
-// 중앙 캔버스 영역 렌더러. nodeIntegration:false / contextIsolation:true
-// (2026-08-18 렌더러 격리) — preload.js의 window.athena 다리로만 main과 통신한다.
-// lib/*.js는 shell.html이 <script> 태그로 미리 로드해 window.AthenaLib에 얹어둔
-// 전역이다. 목업 데이터(spike/captures/*.json)는 fs를 직접 못 읽어 main으로
-// 옮겼다 — athena:load-fixture invoke로 파싱된 데이터만 받는다.
-//
-// 2026-08-24 리프 1.2.1: 이 파일은 더 이상 **창** 하나를 통째로 소유하지 않는다.
-// 셸 창(shell.html)의 #canvasRegion 안에서 돈다 — 창 크롬·창 단축키는 shell.js가,
-// 우측 채팅은 chat.js가 맡는다. spike/electron-glass/canvas.html에서 이식했던
-// 확장/수축 rAF 애니메이션은 이 전환에서 제거됐다(아래 "사라진 것" 참조).
 const { sanitize } = window.AthenaLib.Sanitize;
 const { renderMarkdownInto } = window.AthenaLib.Markdown;
 const { errorNote, removeCardAndMaybeCollapse } = window.AthenaLib.UiKit;
@@ -193,10 +183,6 @@ async function addLiveCard(result) {
   if (envelope.canvas_type === 'stream' && !envelope.fell_back) return renderLiveStream(envelope);
   if (envelope.canvas_type === 'reader' && !envelope.fell_back) return renderLiveReader(envelope);
   if (envelope.canvas_type === 'chart' && !envelope.fell_back) return renderLiveChart(envelope);
-  // facts/compound(P4, plan/공통화면-템플릿-실행계획-2026-08-20.md) — 공통 API 카드 6종
-  // 중 FactsCard/CompoundCard(일반). 스키마는 backend/athena_mcp/canvas.py FACTS_SCHEMA/
-  // COMPOUND_SCHEMA(P1a) 그대로. C1(차트 12TR)은 이 분기가 아니라 위 'chart'로 온다 —
-  // manifest layout=compound라도 build_chart_bars를 거치면 canvas_type은 'chart'다.
   if (envelope.canvas_type === 'facts' && !envelope.fell_back) return renderFactsCard(envelope);
   if (envelope.canvas_type === 'compound' && !envelope.fell_back) return renderCompoundCard(envelope);
   if (envelope.canvas_type === 'event' && !envelope.fell_back) return renderEventCard(envelope);
@@ -328,10 +314,6 @@ async function mountAitsChartPanel(card, chartBody, descriptor) {
   return session;
 }
 
-// ---------- 공통 테이블(신규④) — MCP render_canvas의 실제 table 응답 ----------
-// 목업 table 카드(renderTable, 아래)와는 다른 데이터 형상이다 — 이건 키움
-// 재무제표 고정 스키마가 아니라 스키마 불특정 {columns:[{key,label}], rows:[{key:value}]}다.
-// GLOSSARY.md §2 신규④ "공통 테이블 — 스키마 불특정 레코드. '부모'이자 기본값".
 function renderMcpTable(envelope) {
   const { card, body } = makeCard('mcp-table', envelope.caption || '공통 테이블', envelope.layout, envelope.correlation);
   stampPaperScreen(card, envelope);
@@ -383,9 +365,6 @@ function buildFoldedTable(rawCols, rows) {
   }
   table.appendChild(tbody);
 
-  // 접힘 사실은 데이터 속성으로만 남긴다(검증·캡처 리포트가 기계로 읽는다).
-  // 표시 텍스트("접힌 컬럼 N개 …")는 2026-08-18 사용자 결정으로 제거 —
-  // 정보 정직성(ui/soul.md §8)은 기계 검증 가능성으로 유지한다.
   table.dataset.totalColumns = String(rawCols.length);
   table.dataset.visibleColumns = String(cols.length);
   table.dataset.hiddenColumns = String(hidden.length);
@@ -583,15 +562,6 @@ function renderStatusCard(envelope) {
   return card;
 }
 
-// ---------- 실배선 스트림(신규①) — MCP render_canvas의 실제 stream 응답 ----------
-// 목업 스트림(아래 addCard → renderStream)은 네이버 뉴스 API 원형
-// {title, pubDate, originallink, link}을 읽는다 — 이건 다른 데이터 형상이다.
-// 실배선은 canvas.py STREAM_SCHEMA를 그대로 따른다(backend/athena_mcp/canvas.py
-// L34-55 실측): data.records:[{ts, ts_precision:"second"|"day", source, title,
-// url, summary?, tickers?[], kind?}]. title은 null 허용(스키마 "type":
-// ["string","null"]) — sanitize(null)도 null을 그대로 돌려주므로(lib/sanitize.js)
-// textContent 대입 전에 폴백 문구를 둔다. sanitize한 문자열은 textContent로만
-// 넣는다 — innerHTML 금지(CLAUDE.md §6).
 function renderLiveStream(envelope) {
   const { card, body } = makeCard('stream', envelope.caption || '스트림 · 뉴스', envelope.layout, envelope.correlation);
   const records = (envelope.data && Array.isArray(envelope.data.records)) ? envelope.data.records : [];
@@ -732,12 +702,6 @@ async function renderLiveChart(envelope) {
   return card;
 }
 
-// ---------- 자유 카드(신규, W4 최소 구현) ----------
-// GLOSSARY.md §2: "기성 12종으로 표현 못 하는 데이터가 오면 AI가 그 자리에서
-// 그리는 설계된 탈출구." 전체 자유 카드 설계(W4)는 미착수 상태로 남아 있다 —
-// 이건 그 자리를 비워두지 않기 위한 최소 구현이다: 스키마를 가정하지 않고
-// envelope.data를 재귀적으로 key/value 트리로 펼친다. innerHTML 미사용
-// (CLAUDE.md §6) — DOM 노드만 만든다.
 function renderFreeCanvas(envelope) {
   const { card, body } = makeCard('free', envelope.caption || '자유 카드', envelope.layout, envelope.correlation);
   if (envelope.fell_back) {
@@ -821,8 +785,6 @@ function cardCloseButton(card) {
   b.className = 'uk-card-close';
   b.setAttribute('aria-label', '카드 닫기');
   b.title = '이 카드 닫기';
-  // 문자 '×' 대신 스트로크 SVG — 폰트에 따라 흔들리지 않는 정밀한 X.
-  // createElementNS는 DOM 노드 생성이므로 innerHTML 금지 원칙(CLAUDE.md §6)과 무관.
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   svg.setAttribute('viewBox', '0 0 10 10');
   svg.setAttribute('width', '10');
@@ -935,16 +897,8 @@ async function addCard(type) {
   if (type === 'reader') return renderReader();
   if (type === 'table') return renderTable();
   if (type === 'chart') return renderChartCard();
-  // 계좌·MCP 카드는 여기 없다. 2026-08-16에 대화 창의 설정 모드로 옮겼다 —
-  // 설정은 데이터 출력이 아니라 "앱 자신"이고, 설정을 만지는 동안 사용자는
-  // 채팅을 치지 않는다(ui/DESIGN-SOUL.md:100). 렌더는 chat.js `openSettings`.
 }
 
-// ⑤ 차트 카드(CC-101) — CompoundCard(charts) 위 시계열 렌즈. 카드 제목은
-// TR ID를 노출하지 않는다("일봉 — 삼성전자", CLAUDE.md §5.3.1 관례와 같은 이유로
-// 내부 코드를 화면에 흘리지 않는다). lightweight-charts 마운트는 비동기(동적
-// import, lib/chart-card.js 상단 주석)라 makeCard로 카드 뼈대를 먼저 세우고
-// 그 안에서 await한다 — 다른 렌더러(renderStream 등)와 달리 이 함수만 async다.
 async function renderChartCard() {
   const fixtureData = await loadFixture('chart');
   const data = { symbol: '005930', name: '삼성전자', bars: fixtureData.bars, trId: 'ka10081', target: 'stock', period: 'day' };

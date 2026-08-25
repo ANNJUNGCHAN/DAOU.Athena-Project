@@ -1,8 +1,3 @@
-// 목업 데이터 로더 — main 프로세스 전용(2026-08-18 렌더러 격리 이관).
-// 원래 app/lib/mockdata.js였다. canvas.js가 fs로 spike/captures를 직접 읽는
-// 것은 nodeIntegration:false 아래서는 불가능해졌다 — main으로 옮기고
-// athena:load-fixture IPC로 파싱된 데이터만 넘긴다(CLAUDE.md §6 렌더러 Node
-// API 직접 접근 0건). spike/captures/*.json은 그대로 읽기만 한다(편집 금지).
 const fs = require('fs');
 const path = require('path');
 

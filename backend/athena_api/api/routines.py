@@ -1,10 +1,3 @@
-"""루틴 REST 표면 — draft/confirm/cancel/list.
-
-권한 경계(실행계획 §7-6·델타 blocker): draft·list는 모델(게이트웨이 프록시)도
-부를 수 있지만, **confirm·cancel은 사람 클릭(렌더러)만** 부른다 — 게이트웨이
-routine_tools는 이 두 액션을 아예 노출하지 않는다(그쪽 테스트가 고정).
-루틴 비활성 배포는 503 fail-closed — 조용한 빈 결과 금지(CLAUDE.md §7).
-"""
 
 from __future__ import annotations
 

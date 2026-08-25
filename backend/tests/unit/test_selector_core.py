@@ -510,9 +510,6 @@ async def test_call_executes_only_the_signed_operation_and_returns_next_plan(ser
 
 @pytest.mark.asyncio
 async def test_call_logs_upstream_round_trip_without_payload_or_token(service, caplog) -> None:
-    """W1 계측(plan/plan.md) — call()이 실제 upstream(call_typed_tr)을 감싸는
-    구간의 소요를 표준 logging으로 남긴다. tr_id와 ms만, 인자·응답 본문·
-    plan_token은 로그 문자열에 닿지 않는다(CLAUDE.md SS6)."""
 
     class SlowClient:
         async def post_with_headers(self, tr_id, path, body, options):

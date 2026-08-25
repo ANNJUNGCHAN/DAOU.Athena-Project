@@ -1,8 +1,3 @@
-// history-sink.js 단위 테스트 — 실제 네트워크 없이 global.fetch를 스텁한다
-// (backend-launcher.test.js 주석과 같은 이유: 순수 부분만 결정론적으로 검증,
-// 실배선 QA는 npm run verify/수동 curl의 몫). 시도 조건(§2(g))과 실패 이벤트
-// 방출을 확인한다 — CLAUDE.md §6 "본문을 로그에 남기지 않는다"는 코드 리뷰로
-// 확인(이 파일은 실패 콜백 payload에 messageId/role만 있는지를 단언).
 'use strict';
 
 const test = require('node:test');

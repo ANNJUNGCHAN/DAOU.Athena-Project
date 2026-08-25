@@ -10,12 +10,6 @@
 // main.js를 라이브러리로 불러올 때는 자동 기동(app.whenReady().then(createWindows))을
 // 막아야 한다 — verify.js가 createWindows()를 직접, 통제된 시점에 호출한다.
 process.env.ATHENA_NO_AUTOSTART = '1';
-// 기본 경로는 이제 실배선(live) — claude -p를 실제로 spawn한다(결정 D1).
-// 자동 검증은 그 경로를 타면 안 된다: quota를 쓰고, 43초+ 걸리고, 외부 상태에
-// 좌우돼 결정론적이지 않다. 검증 5(E2E Enter)는 명시적으로 픽스처 경로를 강제해
-// 기존 3상태·자동성장 검증을 quota 없이 그대로 재현한다(app/main.js
-// ATHENA_CANVAS_SOURCE 참조, plan/kiwoom-common-screen-handoff.md §6의
-// "명시적 fixture adapter" 지시).
 process.env.ATHENA_CANVAS_SOURCE = 'fixture';
 
 const { app, ipcMain, BrowserWindow } = require('electron');
@@ -154,14 +148,6 @@ async function clearMedia(win) {
   if (wc.debugger.isAttached()) wc.debugger.detach();
 }
 
-// 부팅 완료 판정. **`#app`이 보이는 것과 "부팅 성공"은 더 이상 같은 말이 아니다** —
-// 온보딩 병합 이후 `chat.js`는 온보딩이 필요하면 `#app`을 숨긴 채 `#onboard`를
-// 띄우고, 그게 정상 동작이다. 옛 판정(`!#app.hidden`)은 정상 동작을 false로
-// 찍었다. 판정을 "게이지가 끝났고 대화 창이 **어떤 모드로든** 도달했는가"로
-// 바꾸고, 어느 모드였는지를 리포트에 남긴다.
-//
-// 모드는 배타적이어야 한다 — `#app`·`#onboard`·`#settings`는 형제 패널이고
-// 둘이 동시에 보이면 겹쳐 그려진다(GLOSSARY.md §1: 모드는 창이 아니다).
 async function waitForChatBooted(shellWin, timeoutMs = 5000) {
   const probe = `(() => {
     const vis = (id) => { const n = document.getElementById(id); return !!n && !n.hidden; };
@@ -249,16 +235,6 @@ app.whenReady().then(async () => {
   const layout = mainMod.getLayout();
   report.layout = layout;
 
-  // ---------- 검증 1: 부팅 — 셸 창 + 알림 오브 창, 정확히 둘 ----------
-  // 2026-08-24 리프 1.2.1: 옛 이름은 "부팅 — 대화 창만 뜬다"였고, 캔버스 창이 숨어
-  // 있는지(canvasVisibleAtBoot === false)를 함께 봤다. 창이 하나가 되면서 그 질문이
-  // 사라졌다 — 대신 **OS 창 수**를 잰다.
-  // 2026-08-24 리프 1.3.1: 알림 오브 창이 붙어 기대값이 1 → **2**가 됐다. 이제
-  // 이 숫자가 GLOSSARY §1의 "창은 둘"이고, 3 이상은 즉시 탈락이다(CLAUDE.md §2).
-  // 오브는 상시 표시가 사양이라 부팅 직후부터 보여야 한다 — 숨어 있으면 알림이
-  // 와도 사용자가 볼 표면이 없다.
-  // 부팅 바 연출 표집(1b)은 스크린샷보다 먼저 걸어둔다 — shot()이 수백 ms를 먹는
-  // 동안 타이핑 구간(+660~+1160ms)이 지나가버리는 레이스를 피한다.
   const bootBarPromise = traceBootBar(shellWin);
   await wait(200);
   report.bootChatOnly = {
@@ -520,9 +496,6 @@ app.whenReady().then(async () => {
   assertOk('canvas: no residual inline backdrop-filter', report.canvasAlwaysVisible.noInlineBackdropFilter === true);
   assertOk('canvas: sheen rests at blur(0px)', /blur\(0px\)/.test(String(report.canvasAlwaysVisible.computedSheenFilter || '')));
 
-  // 보조 증거 — 실제 OS 화면 합성 캡처(best-effort). spike/electron-glass/RESULT.md가
-  // 기록한 대로 이 공유 데스크톱 환경에서는 간헐적으로 실패한다. 실패해도 위의
-  // capturePage() 결과가 주 증거이므로 여기서는 막지 않는다.
   try {
     const capScript = path.join(__dirname, '..', 'spike', 'electron-glass', 'scripts', 'capture.ps1');
     const cb = shellWin.getBounds();
@@ -751,15 +724,6 @@ app.whenReady().then(async () => {
   assertOk('userResize: OS resize applied to the shell window', report.userResizeRespected.resizeApplied === true);
   assertOk('userResize: new content does NOT resize the window (auto-grow regression guard)', report.userResizeRespected.contentDidNotResizeWindow === true);
 
-  // ---------- 검증 7: 설정을 열어도 창은 늘지 않는다 + 사이드바 nav 전환 ----------
-  // ui/soul.md §3·§8 — 창 3개 이상은 즉시 탈락이다. 설정은 새 창이 아니라 셸 창의
-  // 모드다(GLOSSARY.md §1). 이 검증의 핵심 단언은 "창이 늘어난다"가 아니라
-  // **"창이 늘지 않는다"**이다 — 그래서 기대값을 상수로 박지 않고 열기 **전**
-  // 창 수와 대조한다. 오브 창(1.3.1)이 붙어 기준선이 2가 돼도 이 검증은 그대로 산다.
-  // 2026-08-18 사이드바 도입(Paper 43쪽) — #settingsGrid에는 nav가 고른 카드
-  // 하나만 산다. 옛 단언("점 클릭 한 번에 계좌·MCP 카드가 동시에 뜬다")은 더 이상
-  // 성립하지 않는다 — 기본 선택은 '화면'이고, 계좌·MCP·모델은 nav에서 선택해야
-  // 각각 뜬다(lib/settings-cards.js renderNav/SETTINGS_PANELS, chat.js openSettings).
   const winCountBefore = BrowserWindow.getAllWindows().length;
   const chatBoundsBefore = shellWin.getBounds();
 
@@ -833,7 +797,6 @@ app.whenReady().then(async () => {
       url: location.pathname.split('/').pop(),
       // 점은 실제 버튼이어야 한다(장식이 아니라 어포던스)
       dotIsButton: document.getElementById('dot').tagName === 'BUTTON',
-      // 자격증명·토큰이 화면으로 새면 안 된다 (CLAUDE.md §1)
       trIdLeak: /au1000[12]/.test(document.body.innerText),
       bearerLeak: /ATHENA_LOCAL_BEARER_TOKEN\s*=/.test(document.body.innerText),
     }))()
@@ -915,10 +878,6 @@ app.whenReady().then(async () => {
   assertOk('settingsSurface.navClickMcpFound', navClickMcp === 'clicked');
   assertOk('settingsSurface.navClickModelFound', navClickModel === 'clicked');
 
-  // ---------- 검증 8: 커맨드바로도 설정에 도달한다 ----------
-  // GLOSSARY.md §1 — 점 클릭은 "추가" 진입로다. 커맨드바 경로가 없으면 soul.md §8 탈락 조건.
-  // 사이드바 도입 이후 커맨드바 경로도 기본 선택은 '화면'이다 — 옛 accountsCardCount
-  // 전제(검증7과 같은 이유로) 대신 nav 존재 + 기본 패널로 판정한다.
   const winCountBeforeCmd = BrowserWindow.getAllWindows().length;
   const turnCountBeforeCmd = await shellWin.webContents.executeJavaScript(
     "document.querySelectorAll('.turn-q').length"
@@ -1057,14 +1016,6 @@ app.whenReady().then(async () => {
   assertOk('closeToBackground: shell restored from tray path', report.closeToBackground.restoredFromTrayPath === true);
   assertOk('closeToBackground: close hides rather than destroys', report.closeToBackground.windowStillAlive === true);
 
-  // ---------- 검증 10: 카드 배치·생애주기 규칙 (2026-08-18) ----------
-  // 규칙 원본: plan/canvas-taxonomy.md "배치·생애주기 규칙". 폭은 형상이 정하고
-  // (w-half/w-full) 순서는 도착순, AI layout 힌트는 폭 등급 승격·강등만,
-  // drop_types는 턴별 큐레이션, 높이 예산(뷰포트 2배·최소 3장)은 안전망이다.
-  // 실배선 경로(athena:add-canvas-live)는 합성 봉투로 구동한다 — main.js가
-  // 실왕복 후 보내는 채널·형상 그대로이고 quota를 쓰지 않는다(파일 상단 원칙).
-  // 중앙 캔버스는 늘 떠 있다 — 옛 판의 'expand for check10'(캔버스 창을 열어두는
-  // 준비 단계)은 사라졌다. 창이 숨어 있으면(직전 검증 9d) 앞으로 가져오기만 한다.
   mainMod.revealShell({ focus: false });
   await wait(200);
   await shellWin.webContents.executeJavaScript("window.AthenaShell.clearCanvases()");
@@ -1685,15 +1636,6 @@ app.whenReady().then(async () => {
   );
   assertOk('orderTicket: Esc 복귀', orderClosed === true);
 
-  // ---------- 검증 19: "기록 안 됨" 배지 — 채팅 저장 실패 신호(2026-08-19,
-  // 그래프 갈래에서는 검증17이었다 — 병합 시 번호가 겹쳐 19로 재부여) ----------
-  // verify.js는 항상 fixture 경로(ATHENA_CANVAS_SOURCE=fixture)라 runQueryLive를
-  // 안 타므로(§CLAUDE.md §9 "픽스처 경로만 타서 못 잡는 것"과 같은 구조적 한계),
-  // 실제 backend/claude -p 왕복 없이 chat.js가 실제로 로드한
-  // window.AthenaLib.HistoryBadge 모듈 자체를 렌더러 안에서 직접 구동한다 —
-  // main.js의 IPC 배선(athena:history-save-failed → saveFailedRouter.handleFailure)은
-  // 별도로 preload.js의 ON_CHANNELS allowlist 통과 여부만 확인한다(실제 스트림은
-  // node --test의 lib/history-badge.test.js가 순수 로직을 이미 촘촘히 검증했다).
   const badgeCheck = await shellWin.webContents.executeJavaScript(`(() => {
     const HistoryBadge = window.AthenaLib && window.AthenaLib.HistoryBadge;
     if (!HistoryBadge) return { moduleLoaded: false };
@@ -1756,12 +1698,6 @@ app.whenReady().then(async () => {
   report.historyChannelAllowed = historyChannelAllowed;
   assertOk('historyBadge: preload allowlist가 athena:history-save-failed를 통과시킨다', historyChannelAllowed === true);
 
-  // ---------- 검증 20: FactsCard/CompoundCard 실배선(P4, 공통 API 카드 6종) ----------
-  // plan/공통화면-템플릿-실행계획-2026-08-20.md P4 — 모델의 canvas_type 판단과 무관하게
-  // (P1b 이후에는 manifest 조회가 결정한다) 렌더러가 facts/compound 봉투를 그리는지
-  // 순수 렌더러 단에서 확인한다(quota 무관, 검증10의 liveEnvelope 헬퍼 재사용).
-  // F1(단일 그룹) · F2(2단 그룹, spec §3.1 경계 11개) · compound(헤더 밴드+표 1개,
-  // spec §3.3 "다중 표 아님")를 각각 실측한다.
   mainMod.revealShell({ focus: false });
   await wait(200);
   await shellWin.webContents.executeJavaScript("window.AthenaShell.clearCanvases()");

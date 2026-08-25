@@ -10,8 +10,7 @@
     "verify": "electron verify.js",
     "verify:settings": "electron verify-settings.js",
     "verify:settings-cards": "electron verify-settings-cards.js",
-    "capture:wide15": "electron capture-wide15.js",
-    "verify:live": "node ../spike/cli-pipe/gateway/probe_live_spawn.js"
+    "capture:wide15": "electron capture-wide15.js"
   },
   "author": "",
   "license": "ISC",

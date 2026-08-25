@@ -1,8 +1,3 @@
-/* lib/ui-kit.js의 프리미티브 스타일. 두 창(chat.html·canvas.html)이 함께 링크한다.
-   치수·색은 Paper 화면설계서 실측값 — plan/paper-specs/ 각 문서 "레이아웃 · 스타일".
-   색을 새로 만들지 않는다: 전부 styles/tokens.css의 토큰이거나 흰색 알파다.
-   Paper 토큰 → 앱 토큰 대응: --font-kr=--font-body, --font-kr-bold=--font-strong,
-   --font-title=--font-display. */
 
 /* ---------- 경계 hover 광량 (lib/edge-glow.js, 2026-08-19 결정) ----------
    자유 리사이즈의 발견 장치 — 마우스가 창 경계 14px 안이면 그 변이 밝아진다.

@@ -107,8 +107,6 @@ class Settings(BaseSettings):
     brain_history_db_path: Path = Field(
         default_factory=lambda: Path.home() / ".athena" / "brain-history.sqlite3"
     )
-    # 능동 에이전트 루틴(감시·알림) — 기본 비활성. 켜지 않은 배포·테스트는 루틴
-    # 파일을 만들지 않는다. 실행계획 P1 (plan/능동-에이전트-실행계획-2026-08-19.md).
     routines_enabled: bool = False
     routines_poll_interval_seconds: float = 300.0
     routines_store_path: Path = Field(
@@ -151,10 +149,6 @@ class Settings(BaseSettings):
             raise ValueError("brain_ingest_interval_minutes must be positive")
         return value
 
-    # --- 로깅 (logging_config.py가 소비) ------------------------------------------
-    # Open WebUI의 GLOBAL_LOG_LEVEL / LOG_FORMAT 계약을 이 저장소 접두사로 옮긴 것.
-    # 감사(audit) 로그 관련 설정은 **의도적으로 없다** — 본문을 남기는 감사 로그를 두지
-    # 않기 때문이다(CLAUDE.md §1 함정 ⑫). 근거는 logging_config.py 모듈 docstring.
     log_level: str = "INFO"
     log_format: str = "text"
     # 서브시스템별 레벨 오버라이드. JSON 객체 문자열 또는 dict.

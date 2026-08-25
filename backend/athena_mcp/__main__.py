@@ -238,12 +238,6 @@ def cmd_disallow(args: argparse.Namespace) -> int:
 
 
 def cmd_redact_env(args: argparse.Namespace) -> int:
-    """평문 env 값을 센티널로 치환한다 — 마이그레이션 전용, 값 자체는 받지 않는다.
-
-    호출자(앱)가 이미 그 값을 Electron `safeStorage`에 옮겨놨다는 전제다.
-    `registry.ServerRegistry.set_env_sentinel()`이 하는 일 그대로를 CLI 표면에
-    노출할 뿐 — 여기서 값을 다루는 코드는 없다(SECURITY.md §6).
-    """
     registry, _, _ = _stores(args)
     for key in args.keys:
         registry.set_env_sentinel(args.alias, key)

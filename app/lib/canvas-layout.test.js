@@ -1,5 +1,3 @@
-// 배치·생애주기 규칙(lib/canvas-layout.js)의 순수 로직 검증. 실행: npm test.
-// 규칙 원본은 plan/canvas-taxonomy.md "배치·생애주기 규칙 (2026-08-18 확정)".
 'use strict';
 const { test } = require('node:test');
 const assert = require('node:assert/strict');

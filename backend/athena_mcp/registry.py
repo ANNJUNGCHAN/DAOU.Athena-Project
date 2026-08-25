@@ -1,56 +1,3 @@
-"""서버 레지스트리 — 사용자가 등록한 upstream MCP 서버의 `{command, args, env}` CRUD.
-
-## 영속 위치 — 홈 디렉토리, 프로젝트 상대경로 아님 (택일 근거)
-
-`~/.athena/mcp_servers.json` (기본값, `ATHENA_MCP_REGISTRY_PATH`로 재정의 가능).
-
-이유:
-1. 레지스트리는 "이 git 체크아웃"의 상태가 아니라 **이 컴퓨터를 쓰는 사용자**의 상태다.
-   클로드 데스크탑이 `claude_desktop_config.json`을 프로젝트가 아니라 사용자 홈(OS별
-   앱 설정 디렉토리)에 두는 것과 동일한 패턴 — 여러 프로젝트 작업 디렉토리를 오가도
-   등록된 서버 목록이 유지돼야 한다.
-2. `env`에는 실제 API 키(DART, NAVER 등)가 들어간다. 프로젝트 상대경로(예:
-   `backend/athena_mcp/data/`)에 두면 `.gitignore` 실수 한 번으로 비밀값이 커밋될
-   위험이 상시 존재한다. 홈 디렉토리는 애초에 git 추적 대상이 아니라 이 위험이
-   구조적으로 없다. (공통 규칙 4: 비밀값 하드코딩·커밋 금지)
-
-## 네임스페이스 키는 별칭(alias)이지 `serverInfo.name`이 아니다
-
-W0 S2 실측(`plan/mcp-실행계획.md` §8): `pykrx-mcp` · `@drfirst/korea-stock-mcp` ·
-`jjlabsio` 세 서버가 전부 `serverInfo.name`을 `korea-stock-mcp`류로 보고했다.
-`serverInfo.name`을 키로 쓰면 서로 다른 서버가 충돌한다. 그래서 등록 시 **사용자가
-직접 부여하는 별칭**만 네임스페이스 키로 쓴다 — upstream이 뭐라고 자칭하든 무관하다.
-
-## 별칭 길이 상한 — 64자 규칙의 역산
-
-MCP 툴 이름 길이 상한은 64자(`^[A-Za-z0-9_-]{1,64}$`)이고, aggregator가 노출하는
-합성 이름은 `별칭__툴명`이다. 별칭 자체가 너무 길면 어떤 툴 이름과 합쳐도 64자를
-넘는다 — W0 S2 실측이 92자 위반을 실제로 재현했다
-(`user-registered-very-long-server-name-for-korean-market-data__get_market_fundamental_by_date`,
-`spike/mcp-client/RESULT.md` L67).
-
-실측 캡처 전량(`spike/captures/*tools*.json`, 서버 7개·툴 76개 전수조사)에서
-관측된 가장 긴 실제 툴 이름은 `naver-search-mcp`의
-`datalab_shopping_keyword_by_device` = 34자다. 이 값을 예약 폭으로 삼아 별칭
-상한을 역산한다:
-
-    MAX_ALIAS_LEN = 64 - len("__") - OBSERVED_MAX_TOOL_NAME_LEN
-                  = 64 - 2 - 34 = 28
-
-이건 등록 시점의 **1차 방어선**이다(아직 upstream에 연결하지 않은 상태라 실제 툴
-이름 길이를 모르므로 관측치 기반 추정만 가능하다). 34자보다 긴 툴 이름을 가진
-서버가 나타날 가능성은 배제할 수 없으므로, `aggregator.py`가 **실제 툴 이름을
-받은 뒤 진짜 64자 규칙으로 2차 방어**한다(조용히 자르지 않고 그 툴만 스킵 +
-사유를 기록). 두 층 모두 필요하다 — 여기서는 등록 UX를 위한 근사치일 뿐이다.
-
-## `serverInfo.version`을 믿지 마라
-
-W0 S2 실측: `pykrx-mcp`는 자기 버전이 아니라 mcp SDK 버전(1.28.1)을 보고했고,
-`@drfirst/korea-stock-mcp`는 npm 최신 버전과 실행 중 보고 버전이 달랐다.
-그래서 이 모듈은 연결 후 관측된 `serverInfo`를 `self_reported_server_info`라는
-필드명으로만 저장한다 — "서버가 스스로 이렇게 주장했다"는 사실 그 이상을
-의미하지 않는다는 걸 필드명 자체가 말하게 한다.
-"""
 
 from __future__ import annotations
 
@@ -65,17 +12,8 @@ from typing import Any, Literal
 ALIAS_CHARSET_RE = re.compile(r"^[A-Za-z0-9_-]+$")
 QUALIFIED_NAME_SEPARATOR = "__"
 MAX_QUALIFIED_NAME_LEN = 64
-# 실측 근거는 모듈 docstring 참조. spike/captures/*tools*.json 전수조사로 확정.
 OBSERVED_MAX_TOOL_NAME_LEN = 34
 
-# SECURITY.md §6 [HIGH] 해소 — env 값을 평문으로 저장하지 않는다.
-#
-# 레지스트리(`~/.athena/mcp_servers.json`)에는 이 센티널 문자열만 남는다. 실값은
-# Electron `safeStorage`(DPAPI)로 앱 userData에 암호화 저장되고, spawn 직전에
-# 앱이 `ATHENA_MCP_ENV__<alias>__<KEY>` 환경변수로 이 프로세스에 주입한다
-# (`app/lib/main/mcp-env.js`가 문자 그대로 같은 상수를 쓴다 — 값을 바꾸면 양쪽을
-# 함께 고쳐야 한다). `resolve_secret_env()`가 spawn 직전에 이 센티널을 실값으로
-# 치환한다.
 SECRET_SENTINEL = "__ATHENA_SAFESTORAGE__"
 MAX_ALIAS_LEN = MAX_QUALIFIED_NAME_LEN - len(QUALIFIED_NAME_SEPARATOR) - OBSERVED_MAX_TOOL_NAME_LEN
 
@@ -129,13 +67,7 @@ class UnknownAliasError(KeyError):
 
 
 class MissingSecretEnvError(RuntimeError):
-    """레지스트리의 env 값이 `SECRET_SENTINEL`인데 이 프로세스 환경에 실값이 없다.
-
-    앱(Electron)이 spawn 시점에 `ATHENA_MCP_ENV__<alias>__<KEY>` 환경변수로
-    복호화한 값을 주입해야 한다. 이 프로세스가 그 변수 없이 직접 실행되면
-    (예: 앱 없이 `python -m athena_mcp probe/serve`를 손으로 부른 경우) 여기서
-    막힌다 — 조용히 빈 문자열로 넘기지 않고 명확히 실패시킨다(fail-closed).
-    SECURITY.md §6이 미리 받아들인 대가다."""
+    pass
 
 
 def resolve_secret_env(alias: str, env: dict[str, str]) -> dict[str, str]:
