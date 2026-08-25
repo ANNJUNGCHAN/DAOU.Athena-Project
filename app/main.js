@@ -58,6 +58,7 @@ app.on('window-all-closed', () => {
 let isQuitting = false;
 app.on('before-quit', () => {
   isQuitting = true;
+  stopOrbCursorPoll(); // 인터벌 누수 금지 — 창이 죽기 전에 정리한다
   chartReloadAuthority.clear();
   // 우리가 스폰했을 때만 죽인다(backend-launcher.js의 backendChild 판정) — 사용자가
   // 별도 콘솔에서 수동 기동한 백엔드 인스턴스는 이 앱의 생애주기와 무관하게 산다.
@@ -109,6 +110,54 @@ let shellWin;
 let orbWin;
 let orbExpanded = false;
 let orbAnchor = 'bottom-right';
+
+// ---------- 오브 커서 추적 — main 폴링 (2026-08-25) ----------
+// 오브 창은 76px밖에 안 된다. 렌더러 mousemove는 커서가 그 76px 위에 있을 때만
+// 발생하므로, "커서가 오브에서 떨어져 있고 그 방향을 오브가 눈으로 좇아야 하는"
+// 정작 필요한 구간에는 이벤트가 전혀 안 들어온다. 그래서 main이
+// screen.getCursorScreenPoint()를 직접 폴링해 오브 창 중심 기준 상대좌표를
+// 계산해 밀어준다 — 렌더러 이벤트에 기댈 수 없는 구조적 한계의 우회다.
+const ORB_CURSOR_POLL_MS = 60;
+let orbCursorPollTimer = null;
+let lastSentOrbCursor = null; // { dx, dy } — 억제 판정 기준
+
+function stopOrbCursorPoll() {
+  if (!orbCursorPollTimer) return;
+  clearInterval(orbCursorPollTimer);
+  orbCursorPollTimer = null;
+  lastSentOrbCursor = null;
+  // 폴링을 멈춘다는 것은 렌더러 입장에서 "커서 없음"이다 — 직전 좌표가 화면에
+  // 남아 눈이 엉뚱한 방향을 보고 굳는 것을 막는다.
+  if (orbWin && !orbWin.isDestroyed()) orbWin.webContents.send('athena:orb-cursor', null);
+}
+
+function startOrbCursorPoll() {
+  if (orbCursorPollTimer) return; // 이미 돌고 있다 — 중복 인터벌 금지
+  if (!orbWin || orbWin.isDestroyed() || !orbWin.isVisible()) return;
+  orbCursorPollTimer = setInterval(() => {
+    if (!orbWin || orbWin.isDestroyed() || !orbWin.isVisible()) {
+      stopOrbCursorPoll();
+      return;
+    }
+    const cursor = screen.getCursorScreenPoint();
+    const bounds = orbWin.getBounds(); // 사용자가 오브를 끌면 매 틱 위치가 바뀐다
+    const centerX = bounds.x + bounds.width / 2;
+    const centerY = bounds.y + bounds.height / 2;
+    const dx = cursor.x - centerX;
+    const dy = cursor.y - centerY;
+    // backgroundThrottling:false + alwaysOnTop 상주 창이라 60ms마다 무조건 쏘면
+    // 그 자체로 상시 IPC 비용이 쌓인다 — 1px 미만 변화는 그냥 버린다.
+    if (
+      lastSentOrbCursor
+      && Math.abs(dx - lastSentOrbCursor.dx) < 1
+      && Math.abs(dy - lastSentOrbCursor.dy) < 1
+    ) {
+      return;
+    }
+    lastSentOrbCursor = { dx, dy };
+    orbWin.webContents.send('athena:orb-cursor', { dx, dy, dist: Math.hypot(dx, dy) });
+  }, ORB_CURSOR_POLL_MS);
+}
 
 // 셸 창을 사용자 앞으로 가져온다. 옛 판의 expandCanvasWindow()가 하던 "카드가
 // 생겼으니 캔버스를 연다"의 자리를 대신한다 — 캔버스는 늘 떠 있으므로 열 것이
@@ -247,6 +296,14 @@ async function createWindows() {
     event.preventDefault();
     orbWin.hide();
   });
+
+  // 오브 창이 76px이라 렌더러 mousemove는 커서가 창 위에 있을 때만 온다 — 정작
+  // 눈이 커서를 따라가야 할 "떨어져 있을 때"는 좌표가 렌더러에 아예 안 들어온다.
+  // 그래서 main이 화면 전역 커서를 폴링해 오브 중심 기준 상대좌표를 밀어준다.
+  orbWin.on('show', startOrbCursorPoll);
+  orbWin.on('hide', stopOrbCursorPoll);
+  orbWin.on('closed', stopOrbCursorPoll);
+  startOrbCursorPoll(); // showInactive() 직후라 이미 보이는 상태 — hide 전까지 돈다
 
   // ---------- 창 기본 기능 (2026-08-17) — frame:false라 OS 타이틀바가 없어 직접 배선 ----------
   // Win+방향키(2026-08-18) — OS 창 스냅과 같은 손버릇. globalShortcut은 다른 앱과

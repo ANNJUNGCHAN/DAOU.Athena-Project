@@ -48,8 +48,17 @@
            칠한 틴트가 아니다. 유리는 끝까지 무채색이다(soul.md §7 틴트 금지).
            색 세 정지점은 원본 렌더 실측값이다 — 눈대중 0개. -->
       <span id="orbVisor" class="orb-visor" aria-hidden="true">
-        <span class="orb-eye orb-eye-l"></span>
-        <span class="orb-eye orb-eye-r"></span>
+        <!-- 시선·깜빡임·모양을 **서로 다른 층**에 둔다. 한 요소에 다 걸면 transform이
+             서로 밟아서 깜빡이는 순간 시선이 튄다(프로토타입에서 실측하고 나눴다).
+             orbGaze = 두 눈이 통째로 옮겨 앉는 층(시선),
+             orbLid  = scaleY로 눌리는 층(깜빡임),
+             .orb-eye = 자기 모양만 책임지는 층(표정). -->
+        <span id="orbGaze" class="orb-gaze">
+          <span id="orbLid" class="orb-lid">
+            <span class="orb-eye orb-eye-l"></span>
+            <span class="orb-eye orb-eye-r"></span>
+          </span>
+        </span>
       </span>
       <span id="orbRing" class="orb-ring" aria-hidden="true"></span>
       <button id="orbToggle" class="orb-core" type="button" aria-label="알림 펼치기">

@@ -2026,10 +2026,23 @@ app.whenReady().then(async () => {
     pixelsAlerted,
     // 앞선 검증이 오브에 이벤트를 흘리지 않았다 — 22-A 측정의 전제다.
     quietStateWasClean: orbAlertBeforeEvent === 'none',
-    // **알림 0건이면 색이 없다.** 순수 백/회색은 채도 0이고, 안티에일리어싱이
-    // 만드는 잔여는 한 자릿수에 머문다. 8은 그 여유이지 색을 봐주는 한계가 아니다 —
-    // 바이저(파랑)는 채도 100 이상이라 이 문턱과 두 자릿수 차이로 갈린다.
-    quietIsAchromatic: pixelsQuiet.maxChroma <= 8 && pixelsQuiet.bluishPixels === 0,
+    // 2026-08-25 규범 개정 — "평소 **무채색**"에서 "평소 **반쯤**"으로.
+    //
+    // 옛 조항은 알림 0건에서 파란 픽셀 **0개**를 요구했다. 그 값을 지키려면 평소에
+    // 얼굴이 아예 없어야 하고, 그러면 오브는 상주할 이유가 약한 딱딱한 공이 된다.
+    // 얼굴은 늘 두되 신호는 색의 **유무**가 아니라 **양**이 지도록 바꾼다:
+    // 대기는 34%만 열리고 발화에서 75%로 활짝 열린다(orb.css의 --orb-open).
+    //
+    // 0을 요구하던 자리에 **비율 상한**을 놓는다. 대기의 파란 면적이 발화의 60%를
+    // 넘으면 두 상태가 눈으로 안 갈리고, 그러면 발화는 더 이상 신호가 아니다.
+    // 설계비는 ~0.45다(제곱비가 아니다 — clip 원이 바이저 경계에서 포화되므로
+    // 첫 판 44%는 실측 1.0으로 이 검사에 잡혔고, 34%로 내려서 갈라졌다).
+    // 0.6은 그 위의 회귀 여유이지 봐주는 한계가 아니다.
+    quietFaceIsPresent: pixelsQuiet.bluishPixels > 0,
+    // 상한만 걸면 얼굴이 통째로 사라져도 통과한다 — 위 하한과 **짝으로** 건다.
+    firedIsVisiblyWider:
+      pixelsAlerted.bluishRatio > 0
+      && pixelsQuiet.bluishRatio <= pixelsAlerted.bluishRatio * 0.6,
     // **알림이 오면 딥블루가 실제로 화면에 있다.** 참조 실측과 같은 판정 기준을 쓴다.
     alertedShowsVisor: pixelsAlerted.bluishRatio >= 0.10,
     // 상태가 바뀌었는데 픽셀이 안 바뀌면 그건 렌더가 아니라 주장이다.
@@ -2074,7 +2087,8 @@ app.whenReady().then(async () => {
   console.log('[verify] 검증22(알림 오브):', JSON.stringify(report.orbWindow));
   for (const key of [
     'isCircle76', 'dragHandleContract',
-    'quietStateWasClean', 'quietIsAchromatic', 'alertedShowsVisor', 'stateActuallyChangedPixels',
+    'quietStateWasClean', 'quietFaceIsPresent', 'firedIsVisiblyWider',
+    'alertedShowsVisor', 'stateActuallyChangedPixels',
     'unreadCountShown', 'glassStaysAchromatic', 'visorNotFadeIn', 'hasTwoEyes', 'magentaArcRemoved',
     'expandGrewWindow', 'orbCornerStayed', 'roundTripRestoresPosition',
     'hasFiredBadge', 'hasModeLabel', 'hasRelativeTime', 'hasSourceLabel',
