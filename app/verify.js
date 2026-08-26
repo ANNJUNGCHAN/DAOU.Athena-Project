@@ -288,6 +288,21 @@ app.whenReady().then(async () => {
   assertOk('boot: boot bar wrote full name then returned to placeholder', report.bootChatOnly.bootBarWritesName === true);
   assertOk('boot: booted into chat(app) mode, not onboarding (verify profile isolation)', report.bootChatOnly.bootedIntoChatMode === true);
 
+  // ---------- 검증 1b-2: 빈 이력 안내 문구(Paper 05·3KM-0) ----------
+  // 부팅 직후, 아직 질의를 한 번도 안 보낸 시점의 #history는 자식이 0개다 —
+  // 그 순간 :empty 의사요소로 뜨는 안내 문구를 getComputedStyle로 읽는다.
+  const emptyHistory = await shellWin.webContents.executeJavaScript(`(() => {
+    const h = document.getElementById('history');
+    if (!h) return null;
+    const before = window.getComputedStyle(h, '::before').content;
+    const after = window.getComputedStyle(h, '::after').content;
+    return { childCount: h.children.length, before, after };
+  })()`);
+  report.bootChatOnly.emptyHistory = emptyHistory;
+  assertOk('emptyHistory: #history has no turns yet at boot', !!emptyHistory && emptyHistory.childCount === 0);
+  assertOk('emptyHistory: "새 대화" title shown via :empty::before', !!emptyHistory && emptyHistory.before.includes('새 대화'));
+  assertOk('emptyHistory: 안내 서브텍스트 노출', !!emptyHistory && emptyHistory.after.includes('종목') && emptyHistory.after.includes('캔버스에 카드로 쌓입니다'));
+
   // ---------- 검증 1c: fail-closed REST 영수증 실제 표시 ----------
   // 거절 요청은 캔버스가 없으므로 이 영수증이 유일한 피드백이다. 매 회 온보딩
   // 패널이 앱을 가린 상태를 재현한 뒤, production main→IPC→chat DOM→doubleRAF
