@@ -831,6 +831,123 @@ def describe_unsupported_render_plan_kind(operation_ref: str | None) -> str:
     )
 
 
+# Paper 보드 12d의 카드 16종 고정 이름. TR별 캡션(예: "일봉 — 삼성전자")은 이
+# 16종 중 하나로 카드가 분류될 때 타이틀에서 서브타이틀로 강등된다(카드-TR 대조
+# 조사 `.omc/state/card-backend-coverage.md`/`card-diff.md` 2026-08-26 기준).
+# 이 16종 밖의 TR(auth, elw/etf/theme 단독 화면 등)은 매핑하지 않는다 — 강제로
+# 끼워 맞추지 않고 현재 동작(캡션이 곧 타이틀)을 유지한다.
+_CARD_TITLES = frozenset(
+    {
+        "종목발굴", "시세", "수급", "거래원", "계좌", "주문내역", "보유주식",
+        "관심종목", "차트", "호가", "주문", "프로그램매매", "종목정보",
+        "신용거래", "대차거래", "공매도",
+    }
+)
+
+# 알려진 예외 — 라벨 키워드만으로는 못 잡는 소수의 operation_ref를 직접 못박는다
+# (2026-08-26 카드-TR 대조 조사에서 특정된 항목만, 추측 추가 없음).
+_CARD_TITLE_OVERRIDES: dict[str, str] = {
+    "detail:ka10040:foreign_broker_estimates": "거래원",
+    "detail:kt00004:position_valuation": "보유주식",
+    "detail:kt00005:settled_positions": "보유주식",
+}
+
+# 도메인 무관하게 항상 적용하는 라벨 키워드 — 이 5종은 다른 도메인과 섞일 위험이
+# 낮다(용어 자체가 카드 이름과 1:1로 붙는다).
+_GLOBAL_LABEL_KEYWORDS: tuple[tuple[str, str], ...] = (
+    ("조건검색", "종목발굴"),
+    ("프로그램", "프로그램매매"),
+    ("관심종목", "관심종목"),
+    ("대차거래", "대차거래"),
+    ("공매도", "공매도"),
+)
+
+# 도메인 안에서만 적용하는 라벨 키워드 — 같은 낱말이 다른 도메인에서는 다른
+# 뜻일 수 있어(예: quotes 밖의 "호가") 도메인으로 범위를 좁힌다.
+_DOMAIN_LABEL_KEYWORDS: dict[str, tuple[tuple[str, str], ...]] = {
+    "account": (
+        ("신용", "신용거래"),
+        ("대주", "신용거래"),
+        ("융자", "신용거래"),
+        ("주문체결", "주문내역"),
+        ("미체결", "주문내역"),
+        ("체결요청", "주문내역"),
+        ("실현손익", "주문내역"),
+        ("매매일지", "주문내역"),
+        ("거래내역", "주문내역"),
+        ("보유", "보유주식"),
+        ("잔고", "보유주식"),
+    ),
+    "order": (("신용", "신용거래"),),
+    "stockinfo": (("신용", "신용거래"), ("거래원", "거래원")),
+    "ranking": (("거래원", "거래원"), ("증권사", "거래원"), ("이탈원", "거래원")),
+    "quotes": (("호가", "호가"), ("주가", "시세"), ("시세", "시세")),
+    "websocket": (
+        ("호가", "호가"),
+        ("거래원", "거래원"),
+        ("종목정보", "종목정보"),
+        ("기세", "시세"),
+    ),
+    "elw": (("거래원", "거래원"),),
+}
+
+# 도메인이 16종 중 정확히 하나로 좁혀지는 경우의 기본값 — 위 키워드 규칙에서
+# 안 걸린 나머지에 적용한다. websocket/quotes/ranking/sector/elw/etf/theme/auth는
+# 도메인 하나가 여러 카드로 갈라지거나(위 키워드가 담당) 16종 밖이라 기본값이
+# 없다 — 매칭 실패는 None(캡션이 곧 타이틀인 현재 동작 유지).
+_DOMAIN_DEFAULT_TITLE: dict[str, str] = {
+    "charts": "차트",
+    "watchlist": "관심종목",
+    "lending": "대차거래",
+    "shortsale": "공매도",
+    "stockinfo": "종목정보",
+    "investor": "수급",
+    "account": "계좌",
+    "order": "주문",
+}
+
+
+def _screen_reader_label(operation_ref: str) -> str | None:
+    definition = _screen_definitions().get(operation_ref)
+    if not isinstance(definition, dict):
+        return None
+    accessibility = definition.get("accessibility")
+    if not isinstance(accessibility, dict):
+        return None
+    label = accessibility.get("screen_reader_label")
+    return label if isinstance(label, str) and label else None
+
+
+def resolve_fixed_card_title(operation_ref: str | None) -> str | None:
+    """operation_ref → Paper 보드 12d 카드 16종 중 고정 이름, 없으면 None.
+
+    도메인(`operation.domain`)과 화면 정의의 접근성 라벨(`screen_reader_label`)
+    만으로 결정한다 — 둘 다 이미 매니페스트/생성 화면 정의에 있는 값이라 206개를
+    손으로 나열하지 않는다. 판정 근거는 `.omc/state/card-backend-coverage.md`/
+    `card-diff.md`(2026-08-26). 애매한 TR은 강제로 채우지 않고 None을 돌려준다.
+    """
+    if not isinstance(operation_ref, str):
+        return None
+    override = _CARD_TITLE_OVERRIDES.get(operation_ref)
+    if override is not None:
+        return override
+    mapping = screen_manifest.get_mapping(operation_ref)
+    if mapping is None:
+        return None
+    domain = mapping.get("operation", {}).get("domain")
+    if not isinstance(domain, str):
+        return None
+    label = _screen_reader_label(operation_ref)
+    if label is not None:
+        for keyword, title in _GLOBAL_LABEL_KEYWORDS:
+            if keyword in label:
+                return title
+        for keyword, title in _DOMAIN_LABEL_KEYWORDS.get(domain, ()):
+            if keyword in label:
+                return title
+    return _DOMAIN_DEFAULT_TITLE.get(domain)
+
+
 def resolve_chart_initial_period(operation_ref: str | None) -> str | None:
     if not operation_ref:
         return None

@@ -31,6 +31,9 @@ from athena_api.canvas_transform import (
     describe_unsupported_render_plan_kind as describe_unsupported_render_plan_kind,
 )
 from athena_api.canvas_transform import (
+    resolve_fixed_card_title as resolve_fixed_card_title,
+)
+from athena_api.canvas_transform import (
     resolve_render_plan_kind as resolve_render_plan_kind,
 )
 from athena_api.screen_manifest import get_mapping
@@ -263,6 +266,11 @@ async def render_with_plan(
         "fell_back": result_fell_back,
         "fallback_reason": result_fallback_reason,
         "caption": arguments.get("caption"),
+        # TR이 Paper 보드 12d 카드 16종 중 하나로 확정되면 카드 헤드는 이
+        # 고정 이름을 타이틀로 쓰고, 위 caption(종목명·주기 등 가변 정보)은
+        # 서브타이틀로 내려간다(app/canvas.js makeCard). 16종 밖이면 None —
+        # 렌더러가 기존처럼 caption을 타이틀로 쓴다(정보 손실 없음).
+        "card_title": resolve_fixed_card_title(operation_ref),
         "data": result_data,
         "layout": None,
         "drop_types": [],

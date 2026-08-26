@@ -22,6 +22,7 @@ from athena_api.canvas_transform import (
     build_facts,
     build_table,
     describe_unsupported_render_plan_kind,
+    resolve_fixed_card_title,
     resolve_screen_render_contract,
 )
 from athena_api.dependencies import (
@@ -531,6 +532,9 @@ async def canvas_render_plan(
         "fell_back": False,
         "fallback_reason": None,
         "caption": payload.caption,
+        # canvas_data.render_with_plan과 같은 규칙 — TR이 카드 16종 중 하나로
+        # 확정되면 고정 이름이 타이틀, caption은 서브타이틀로 내려간다.
+        "card_title": resolve_fixed_card_title(operation_ref),
         "data": data,
         "layout": None,
         "drop_types": [],

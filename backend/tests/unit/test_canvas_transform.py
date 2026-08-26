@@ -12,6 +12,7 @@ from copy import deepcopy
 import pytest
 
 import athena_api.canvas_transform as canvas_transform
+from athena_api.canvas_transform import _CARD_TITLES as CARD_TITLES
 from athena_api.canvas_transform import (
     FACTS_FIELDS_MAX,
     SUMMARY_PREVIEW_BYTES_MAX,
@@ -23,6 +24,7 @@ from athena_api.canvas_transform import (
     build_facts,
     build_table,
     resolve_chart_initial_period,
+    resolve_fixed_card_title,
     resolve_render_plan_kind,
     resolve_screen_render_contract,
 )
@@ -429,3 +431,133 @@ def test_runtime_rejects_ambiguous_gold_reload_group(
     monkeypatch.setattr(canvas_transform, "_screen_definitions", lambda: definitions)
     resolved = resolve_screen_render_contract("base:ka50079")
     assert resolved == "AITS reload target가 중복되어 모호하다"
+
+
+# ---------------------------------------------------------------------------
+# resolve_fixed_card_title — Paper 보드 12d 카드 16종 고정 타이틀 매핑
+# (근거: .omc/state/card-backend-coverage.md / card-diff.md, 2026-08-26)
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    ("mapping_id", "expected_title"),
+    [
+        # 조건검색 → 종목발굴 (websocket 4종 + elw 1종, 글로벌 키워드)
+        ("base:ka10171", "종목발굴"),
+        ("base:ka10172", "종목발굴"),
+        ("base:ka10173", "종목발굴"),
+        ("base:ka10174", "종목발굴"),
+        ("base:ka30005", "종목발굴"),
+        # 프로그램매매 (websocket/sector/stockinfo/quotes 분산, "프로그램" 키워드)
+        ("base:0w", "프로그램매매"),
+        ("base:ka10010", "프로그램매매"),
+        ("base:ka90003", "프로그램매매"),
+        ("base:ka90004", "프로그램매매"),
+        ("base:ka90005", "프로그램매매"),
+        ("base:ka90013", "프로그램매매"),
+        # 관심종목 (domain=watchlist 기본값)
+        ("base:ka01300", "관심종목"),
+        ("base:ka01301", "관심종목"),
+        # 대차거래 ("대차거래" 키워드)
+        ("base:ka10068", "대차거래"),
+        ("base:ka10069", "대차거래"),
+        ("base:ka20068", "대차거래"),
+        ("base:ka90012", "대차거래"),
+        # 공매도 (domain=shortsale 기본값)
+        ("base:ka10014", "공매도"),
+        # 차트 (domain=charts 기본값)
+        ("base:ka10081", "차트"),
+        ("base:ka20004", "차트"),
+        # 거래원 — ranking 도메인 "거래원/증권사/이탈원" 키워드 + 명시 예외
+        ("base:ka10038", "거래원"),
+        ("base:ka10042", "거래원"),
+        ("base:ka10053", "거래원"),
+        ("detail:ka10040:sell_brokers", "거래원"),
+        ("detail:ka10040:buy_brokers", "거래원"),
+        ("detail:ka10040:broker_departures", "거래원"),
+        ("detail:ka10040:foreign_broker_estimates", "거래원"),  # 명시 예외 오버라이드
+        # 주문내역 — account 도메인 키워드
+        ("base:kt00007", "주문내역"),
+        ("base:ka10075", "주문내역"),
+        ("base:ka10076", "주문내역"),
+        ("base:kt00015", "주문내역"),
+        ("base:ka10170", "주문내역"),
+        ("detail:kt00009:order_execution_status", "주문내역"),
+        # 보유주식 — account 도메인 "보유"/"잔고" 키워드 + 명시 예외
+        ("detail:kt00018:holdings", "보유주식"),
+        ("detail:kt50020:gold_holdings", "보유주식"),
+        ("detail:kt00004:position_valuation", "보유주식"),  # 명시 예외 오버라이드
+        ("detail:kt00005:settled_positions", "보유주식"),  # 명시 예외 오버라이드
+        # 신용거래 — order/account 도메인 "신용"/"대주"/"융자" 키워드
+        ("base:kt10006", "신용거래"),
+        ("base:kt10007", "신용거래"),
+        ("base:kt10008", "신용거래"),
+        ("base:kt10009", "신용거래"),
+        ("detail:kt00001:special_deposits_and_credit", "신용거래"),
+        ("detail:kt00005:credit_and_collateral", "신용거래"),
+        ("detail:kt00013:credit_and_lending_collateral", "신용거래"),
+        ("detail:kt00013:repayment_losses", "신용거래"),
+        # 종목정보 — stockinfo 도메인 기본값
+        ("base:ka10099", "종목정보"),
+        ("base:ka10100", "종목정보"),
+        # 계좌 — account 도메인 기본값(키워드 미매칭)
+        ("base:ka00001", "계좌"),
+        ("base:kt00002", "계좌"),
+        # 수급 — investor 도메인 기본값
+        ("base:ka10008", "수급"),
+        ("base:ka10131", "수급"),
+        # 주문 — order 도메인 기본값(신용 아닌 주문)
+        ("base:kt10000", "주문"),
+        ("base:kt10001", "주문"),
+        # 호가 — quotes 도메인 "호가" 키워드
+        ("base:ka50101", "호가"),
+        ("detail:ka10004:sell_bid_prices", "호가"),
+        ("detail:ka10007:bid_prices", "호가"),
+        # 시세 — quotes 도메인 "주가"/"시세" 키워드, websocket "기세" 키워드
+        ("base:ka10086", "시세"),
+        ("base:0A", "시세"),
+    ],
+)
+def test_resolve_fixed_card_title_matches_paper_board_12d(
+    mapping_id: str, expected_title: str
+) -> None:
+    assert resolve_fixed_card_title(mapping_id) == expected_title
+
+
+@pytest.mark.parametrize(
+    "mapping_id",
+    [
+        "base:au10001",  # auth — 인증은 카드 16종 밖(Paper가 스스로 제외)
+        "base:ka40001",  # etf — 16종 밖 독립 도메인
+        "base:ka90001",  # theme — 16종 밖 독립 도메인
+        "base:ka10020",  # ranking, 거래원/증권사/이탈원 키워드 미매칭(호가잔량상위요청)
+        "base:ka10044",  # quotes, 일별기관매매종목요청 — 호가/주가/시세 키워드 미매칭
+    ],
+)
+def test_resolve_fixed_card_title_is_none_outside_the_16_card_taxonomy(
+    mapping_id: str,
+) -> None:
+    """16종 밖이거나 애매한 TR은 강제로 채우지 않는다 — 캡션이 그대로 타이틀로 남는
+    현재 동작을 유지해야 하므로 None이 맞다."""
+    assert resolve_fixed_card_title(mapping_id) is None
+
+
+def test_resolve_fixed_card_title_is_none_for_unregistered_or_missing_operation_ref() -> None:
+    assert resolve_fixed_card_title("base:does-not-exist") is None
+    assert resolve_fixed_card_title(None) is None
+    assert resolve_fixed_card_title("") is None
+
+
+def test_resolve_fixed_card_title_only_ever_returns_one_of_the_16_card_names() -> None:
+    """도메인·라벨 규칙이 오탈자나 새 이름을 만들어내지 않는지 — 매니페스트 전수로
+    한 번에 검증한다(회귀 가드)."""
+    from athena_api import screen_manifest
+
+    manifest = screen_manifest._manifest()
+    resolved = {
+        title
+        for mapping in manifest["mappings"]
+        if (title := resolve_fixed_card_title(mapping["operation_ref"])) is not None
+    }
+    assert resolved <= CARD_TITLES
+    assert resolved  # 최소 하나 이상은 실제로 매칭돼야 이 가드에 의미가 있다
