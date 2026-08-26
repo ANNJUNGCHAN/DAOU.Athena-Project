@@ -2,7 +2,12 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { buildArgs, RENDER_CANVAS_ALLOWED_TOOL, GATEWAY_ALLOWED_TOOLS } = require('./claude-runner');
+const {
+  buildArgs,
+  RENDER_CANVAS_ALLOWED_TOOL,
+  GATEWAY_ALLOWED_TOOLS,
+  DISABLE_TOOL_SEARCH_ENV,
+} = require('./claude-runner');
 
 test('buildArgs: RESULT.md §1 실왕복 커맨드와 동일한 인자 순서 · --setting-sources는 빈 문자열', () => {
   const args = buildArgs({ prompt: '1+1은?', configFile: '.mcp.json', allowedTools: RENDER_CANVAS_ALLOWED_TOOL });
@@ -95,4 +100,14 @@ test('GATEWAY_ALLOWED_TOOLS: 서버 단위 허용 — 업스트림 재노출 툴
   // 거부하게 만든다 — 2026-08-17 실사용에서 실측된 결함. 툴 단위 게이트는
   // 게이트웨이 consent allowlist가 담당하므로 CLI는 서버 단위로 허용한다.
   assert.equal(GATEWAY_ALLOWED_TOOLS, 'mcp__athena');
+});
+
+test('DISABLE_TOOL_SEARCH_ENV: 항상 "0"으로 고정한다 — 부모 셸의 ENABLE_TOOL_SEARCH 상속을 덮는다', () => {
+  // 2026-08-26 실측: 오케스트레이션 셸이 사용자 설정 env로 ENABLE_TOOL_SEARCH=1을
+  // 내보내면 그 셸에서 띄운 이 앱의 claude -p 자식이 그대로 물려받아 MCP 툴을
+  // 지연 로딩(ToolSearch)으로 돌렸고, 그 인덱서가 athena__render_canvas 하나만
+  // 못 찾아 카드가 캔버스에 전혀 안 뜨는 결함으로 이어졌다(일반 사용자는 이
+  // env가 없어 즉시 로딩이라 재현되지 않았다). 실제 spawn env에 반영되는지는
+  // claude-runner.stdout-cap.test.js가 실제 프로세스로 검증한다.
+  assert.deepEqual(DISABLE_TOOL_SEARCH_ENV, { ENABLE_TOOL_SEARCH: '0' });
 });

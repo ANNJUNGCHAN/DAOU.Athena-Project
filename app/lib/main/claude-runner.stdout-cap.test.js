@@ -95,3 +95,42 @@ test('runClaudeQuery: stdout 누적 총량이 상한 아래면 stdoutCapped:fals
   });
   assert.equal(result.stdoutCapped, false);
 });
+
+// 인자를 전부 무시하고 자기 프로세스가 실제로 물려받은 ENABLE_TOOL_SEARCH
+// env 값을 stream-json type:"result" 이벤트 하나로 되돌려주는 최소 실행
+// 파일. 부모(테스트)가 오염된 값을 심어도 runClaudeQuery()의 spawn env가
+// 그걸 덮어썼는지를 실제 자식 프로세스 관점에서 증명한다.
+function compileEnvEchoFixture() {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'athena-envecho-fixture-'));
+  const csPath = path.join(dir, 'envecho.cs');
+  const exePath = path.join(dir, 'envecho.exe');
+  const src = `
+using System;
+class Program {
+  static void Main(string[] args) {
+    var value = Environment.GetEnvironmentVariable("ENABLE_TOOL_SEARCH") ?? "__unset__";
+    Console.WriteLine("{\\"type\\":\\"result\\",\\"is_error\\":false,\\"result\\":\\"" + value + "\\"}");
+  }
+}`;
+  fs.writeFileSync(csPath, src, 'utf-8');
+  execFileSync(findCsc(), ['/nologo', `/out:${exePath}`, csPath], { stdio: 'pipe' });
+  return exePath;
+}
+
+test('runClaudeQuery: 부모 셸이 ENABLE_TOOL_SEARCH=1을 오염시켜도 자식 spawn env는 "0"으로 고정된다 (2026-08-26 카드 랜딩 결함)', async () => {
+  const previous = process.env.ENABLE_TOOL_SEARCH;
+  process.env.ENABLE_TOOL_SEARCH = '1'; // 오케스트레이션 셸 오염 재현
+  try {
+    const exePath = compileEnvEchoFixture();
+    const result = await runClaudeQuery({
+      prompt: 'x',
+      cwd: __dirname,
+      claudeBin: exePath,
+      timeoutMs: 0,
+    });
+    assert.equal(result.finalResult && result.finalResult.result, '0');
+  } finally {
+    if (previous === undefined) delete process.env.ENABLE_TOOL_SEARCH;
+    else process.env.ENABLE_TOOL_SEARCH = previous;
+  }
+});

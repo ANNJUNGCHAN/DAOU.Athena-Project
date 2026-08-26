@@ -10,6 +10,18 @@ const RENDER_CANVAS_ALLOWED_TOOL = 'mcp__athena__athena__render_canvas';
 // MCP 툴 이름에는 와일드카드가 안 되고 서버 단위 접두만 된다).
 const GATEWAY_ALLOWED_TOOLS = 'mcp__athena';
 
+// 카드 랜딩 결함(2026-08-26 실측) — 오케스트레이션 셸이 사용자 설정 env로
+// ENABLE_TOOL_SEARCH=1을 내보내면, 그 셸에서 띄운 이 앱의 `claude -p` 자식
+// 프로세스가 그 값을 그대로 물려받아 MCP 툴을 지연 로딩(ToolSearch 경유)으로
+// 돌린다. 지연 로딩 인덱서 자체가 `athena__render_canvas` 한 툴만 못 찾는
+// 결함이 있었다(별도로 고침, server.py의 inputSchema 최상위 anyOf 제거) —
+// 그런데 이 앱은 athena 게이트웨이가 노출하는 툴 수가 애초에 작아서 지연
+// 로딩의 이득(토큰 절약)이 없고, 인덱서 결함 하나로 카드 렌더 툴 자체가
+// 안 보이는 손실만 크다. 부모 셸에 뭐가 설정돼 있든 이 앱의 대화 세션은
+// 항상 즉시 로딩으로 고정한다 — 일반 사용자는 이 env를 안 갖고 있어
+// 지금까지 카드가 정상 떴었다(오케스트레이션/개발 셸에서만 재현됐다).
+const DISABLE_TOOL_SEARCH_ENV = { ENABLE_TOOL_SEARCH: '0' };
+
 // 실왕복 실측 최대 43초(RESULT.md) + DART 다중 호출 실측 ~60초 — 3분이면
 // 정상 질의는 전부 덮고, 멈춘 왕복이 UI를 영원히 잡아두는 것만 자른다.
 const DEFAULT_TIMEOUT_MS = 180_000;
@@ -95,7 +107,7 @@ function runClaudeQuery({
         // stdin을 명시적으로 닫는다(S4 §1) — 안 닫으면 "no stdin data received
         // in 3s" 경고로 3초를 버린다.
         stdio: ['ignore', 'pipe', 'pipe'],
-        env: { ...process.env, ...mcpEnv.buildEnvOverrides() },
+        env: { ...process.env, ...mcpEnv.buildEnvOverrides(), ...DISABLE_TOOL_SEARCH_ENV },
         windowsHide: true,
         shell: false,
       });
@@ -190,4 +202,11 @@ function runClaudeQuery({
   });
 }
 
-module.exports = { buildArgs, runClaudeQuery, RENDER_CANVAS_ALLOWED_TOOL, GATEWAY_ALLOWED_TOOLS, MAX_STDOUT_BYTES };
+module.exports = {
+  buildArgs,
+  runClaudeQuery,
+  RENDER_CANVAS_ALLOWED_TOOL,
+  GATEWAY_ALLOWED_TOOLS,
+  MAX_STDOUT_BYTES,
+  DISABLE_TOOL_SEARCH_ENV,
+};
