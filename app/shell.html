@@ -118,10 +118,19 @@
           </div>
         </div>
         <div id="graphSummaryBody">
-          <!-- 표 렌더 대상. summary-table.js의 renderSummaryTable()이 매 렌더마다
-               이 컨테이너의 자식만 통째로 비운다(summary-table.js:67) — #graphPanel은
-               그 바깥 형제라 표 리로드가 패널을 지울 방법이 구조적으로 없다. -->
-          <div id="graphSummaryTableArea"></div>
+          <div id="graphSummaryMain">
+            <!-- 히어로(보드 06 §5) — 사실/추론/불확실 % 실계산값만. "반도체 대형주
+                 중심..." 같은 자연어 타이틀 문장은 profile-summary 어디에도 없어
+                 짓지 않는다(§0 정책, summary-table.js renderSummaryHero). -->
+            <div id="graphSummaryHero"></div>
+            <!-- 확인 필요 배너(보드 06 §6, 06 전용 — 07엔 없음). 개수는
+                 athena:brain-suggested-questions 실값(summary-table.js). -->
+            <div id="graphConfirmBanner" class="confirm-banner" hidden></div>
+            <!-- 표 렌더 대상. summary-table.js의 renderSummaryTable()이 매 렌더마다
+                 이 컨테이너의 자식만 통째로 비운다(summary-table.js:67) — #graphPanel은
+                 그 바깥 형제라 표 리로드가 패널을 지울 방법이 구조적으로 없다. -->
+            <div id="graphSummaryTableArea"></div>
+          </div>
           <!-- 공통 패널(보드 07/15) — 스텝8이 채운다. controller.js의
                renderSelection()이 hidden·텍스트만 갱신한다(통째로 비우지 않는다). -->
           <div id="graphPanel" class="graph-panel" hidden></div>
