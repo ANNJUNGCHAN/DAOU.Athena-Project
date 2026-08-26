@@ -291,6 +291,26 @@ html, body { background: transparent; }
  * 사양) 이력 스크롤과 양립하지 않는다. 시각 결과는 동일하다: 내용이 적으면 바닥에
  * 붙고, 넘치면 위로 스크롤된다. 바닥 추적은 chat.js scrollHistoryToBottom(). */
 .history > :first-child { margin-top: auto; }
+/* 빈 이력 시작 안내(Paper 05·3KM-0 "대화 본문") — :empty 의사요소로 그린다.
+ * "새 대화"가 $history를 통째로 비우는 동작(lib/sidebar.js)과 그대로 맞물려서
+ * 별도 마크업·JS 토글 없이 문구가 뜨고 사라진다. */
+.history:empty { align-items: center; justify-content: center; text-align: center; }
+.history:empty::before {
+  content: '새 대화';
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 16px;
+  color: var(--color-k-hint);
+}
+.history:empty::after {
+  content: '종목·재무·공시를 물어보면\A답이 캔버스에 카드로 쌓입니다';
+  white-space: pre-line;
+  margin-top: 8px;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  line-height: 19px;
+  color: var(--color-k-ghost);
+}
 .history::-webkit-scrollbar { width: 8px; }
 .history::-webkit-scrollbar-track { background: transparent; }
 .history::-webkit-scrollbar-thumb {
