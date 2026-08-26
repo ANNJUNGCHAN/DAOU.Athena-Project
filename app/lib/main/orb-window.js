@@ -148,7 +148,6 @@ function createOrbWindow({ BrowserWindow, appDir, workArea }) {
 
 module.exports = {
   ORB_SIZE,
-  ORB_MARGIN,
   EXPANDED_WIDTH,
   EXPANDED_HEIGHT,
   computeOrbPlacement,

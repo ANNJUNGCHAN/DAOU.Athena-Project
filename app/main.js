@@ -1775,12 +1775,9 @@ module.exports = {
   emitRestCanvasAndWaitForPaint,
   emitRestReceiptAndWaitForPaint,
   runDirectRestDataset,
-  getStockEntityIndex: () => stockEntityIndex,
   // 창은 둘이다 — 셸 창 + 알림 오브 창(2026-08-24 리프 1.3.1로 GLOSSARY §1의
   // "창은 둘"이 실제로 성립했다).
   getWins: () => ({ shellWin, orbWin }),
-  // 오브 기하 — verify.js가 접힘/펼침 왕복을 구동할 때 쓴다.
-  getOrbState: () => ({ expanded: orbExpanded, anchor: orbAnchor }),
   routineEventToFactsEnvelope,
   getLayout: () => layout,
   // 셸 창을 앞으로 — verify.js가 트레이 복귀·카드 푸시 경로를 검증할 때 쓴다.

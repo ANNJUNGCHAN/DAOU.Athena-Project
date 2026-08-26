@@ -48,4 +48,4 @@ function loadFixture(kind) {
   throw new Error(`알 수 없는 fixture kind: ${kind}`);
 }
 
-module.exports = { loadStreamItems, loadFinancialStatement, loadReaderMarkdown, loadChartOhlcv, loadFixture };
+module.exports = { loadFixture };
