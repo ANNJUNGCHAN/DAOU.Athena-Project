@@ -12,6 +12,7 @@ const {
   normalizeToolResultContent,
   extractCanvasEnvelope,
   classifyCanvasBlock,
+  extractTextDelta,
   StreamJsonSession,
 } = require('./stream-json-parser');
 
@@ -108,6 +109,28 @@ test('classifyCanvasBlock: render_canvas 결과가 배열 content로 오면 unpa
 });
 
 // ---------------------------------------------------------------------------
+// 4b. 텍스트 델타 추출 — --include-partial-messages (2026-08-26 S2)
+// ---------------------------------------------------------------------------
+test('extractTextDelta: content_block_delta/text_delta에서 조각을 뽑는다(실측 형태)', () => {
+  const event = {
+    type: 'stream_event',
+    event: { type: 'content_block_delta', index: 0, delta: { type: 'text_delta', text: '하나, 둘' } },
+  };
+  assert.equal(extractTextDelta(event), '하나, 둘');
+});
+
+test('extractTextDelta: stream_event가 아니거나 text_delta가 아니면 null', () => {
+  assert.equal(extractTextDelta({ type: 'assistant' }), null);
+  assert.equal(extractTextDelta({ type: 'stream_event', event: { type: 'message_start' } }), null);
+  assert.equal(extractTextDelta({
+    type: 'stream_event',
+    event: { type: 'content_block_delta', delta: { type: 'input_json_delta', partial_json: '{}' } },
+  }), null); // tool_use 인자 스트리밍 — 채팅 답변이 아니다
+  assert.equal(extractTextDelta(null), null);
+  assert.equal(extractTextDelta(undefined), null);
+});
+
+// ---------------------------------------------------------------------------
 // 5. 스트리밍 세션
 // ---------------------------------------------------------------------------
 test('StreamJsonSession: 비JSON 라인은 건너뛰고 skippedLines로 센다', () => {
@@ -166,6 +189,35 @@ test('StreamJsonSession: finalResult()가 마지막 result/success 이벤트를 
   assert.equal(final.subtype, 'success');
   assert.equal(final.is_error, false);
   assert.equal(final.duration_ms, 43865);
+});
+
+test('StreamJsonSession: onTextDelta가 조각마다 불리고, 청크 경계에 걸쳐도 순서·내용이 보존된다', () => {
+  const lines = [
+    JSON.stringify({ type: 'stream_event', event: { type: 'message_start' } }),
+    JSON.stringify({ type: 'stream_event', event: { type: 'content_block_delta', index: 0, delta: { type: 'text_delta', text: '하' } } }),
+    JSON.stringify({ type: 'stream_event', event: { type: 'content_block_delta', index: 0, delta: { type: 'text_delta', text: '나, 둘' } } }),
+    JSON.stringify({ type: 'assistant', message: { content: [{ type: 'text', text: '하나, 둘' }] } }),
+  ];
+  const text = `${lines.join('\n')}\n`;
+  for (const chunkSize of [1, 5, 4096]) {
+    const session = new StreamJsonSession();
+    const deltas = [];
+    for (let i = 0; i < text.length; i += chunkSize) {
+      session.feed(text.slice(i, i + chunkSize), { onTextDelta: (d) => deltas.push(d) });
+    }
+    session.end({ onTextDelta: (d) => deltas.push(d) });
+    assert.deepEqual(deltas, ['하', '나, 둘'], `chunkSize=${chunkSize}`);
+  }
+});
+
+test('StreamJsonSession: onTextDelta가 없어도(REST 직결·캐시 리플레이 경로) 다른 콜백은 그대로 동작한다', () => {
+  const session = new StreamJsonSession();
+  const events = [];
+  session.feed(
+    `${JSON.stringify({ type: 'stream_event', event: { type: 'content_block_delta', index: 0, delta: { type: 'text_delta', text: 'x' } } })}\n`,
+    { onEvent: (e) => events.push(e) },
+  );
+  assert.equal(events.length, 1); // onTextDelta 콜백 부재가 onEvent를 막지 않는다
 });
 
 test('classifyCanvasBlock: pushed 봉투는 별도 상태 — 카드 이중 렌더 방지', () => {

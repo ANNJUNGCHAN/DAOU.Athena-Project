@@ -10,6 +10,7 @@ const {
   REVIEWED_MARKET_ENTITY_KIND,
   StockEntityIndex,
   buildQuoteDataset,
+  buildChartDataset,
   refreshStockEntityIndex,
   normalizeDataset,
   normalizeRecommendations,
@@ -705,6 +706,49 @@ test('quote binder uses a closed standalone grammar and rejects every residual s
     '삼성전자와 한국전력 현재가 비교',
   ]) {
     assert.equal(buildQuoteDataset(residualContext, index), null, residualContext);
+  }
+});
+
+test('chart binder uses a closed standalone grammar and rejects every residual semantic token', () => {
+  const index = new StockEntityIndex();
+  index.replace([
+    { code: '005930', name: '삼성전자', aliases: ['Samsung Electronics'], market: '0' },
+    { code: '015760', name: '한국전력', market: '0' },
+    { code: '069500', name: 'KODEX 200', market: '8' },
+  ]);
+
+  for (const standaloneQuestion of [
+    '삼성전자 차트',
+    '삼성전자 차트 보여줘',
+    '삼성전자 일봉',
+    '삼성전자 일봉 차트',
+    '삼성전자 일봉차트 보여줘',
+    '005930 차트 그려줘',
+    '005930 일봉 차트 띄워줘',
+  ]) {
+    const bound = buildChartDataset(standaloneQuestion, index, { idFactory: () => 'standalone-chart' });
+    assert.equal(bound.datasetId, 'standalone-chart', standaloneQuestion);
+    assert.equal(bound.items[0].operationRef, 'base:ka10081', standaloneQuestion);
+    assert.equal(bound.items[0].args.stk_cd, '005930', standaloneQuestion);
+    assert.equal(bound.items[0].args.upd_stkpc_tp, '1', standaloneQuestion);
+    assert.match(bound.items[0].args.base_dt, /^\d{8}$/, standaloneQuestion);
+  }
+
+  for (const residualContext of [
+    '삼성전자 주봉 차트', // 다른 TR — 일봉 문법에서 의도적으로 미매치
+    '삼성전자 시세', // 현재가 문법 영역 — 차트 문법과 겹치지 않는다
+    '삼성전자 호가', // 다른 화면 — 차트 fast-path 대상 아님
+    '삼성전자 차트 분석해줘', // "분석"은 정중어 목록 밖 — 모델 경로로
+    '삼성전자와 한국전력 차트 비교',
+    '삼성전자 말고 한국전력 차트',
+    'KODEX 200 차트', // etf는 buildQuoteDataset과 동일하게 kind 제한
+  ]) {
+    assert.equal(buildChartDataset(residualContext, index), null, residualContext);
+  }
+
+  // 주문류 의도는 애초에 차트 문법에 없는 단어라 매치될 수 없다 — 명시적으로 확인.
+  for (const orderLike of ['삼성전자 매수', '삼성전자 100주 매수 주문', '삼성전자 매도해줘']) {
+    assert.equal(buildChartDataset(orderLike, index), null, orderLike);
   }
 });
 

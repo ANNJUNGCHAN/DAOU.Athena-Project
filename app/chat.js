@@ -443,6 +443,30 @@ async function runQueryLive(text) {
   };
   const unsubscribeLiveCanvasAdded = window.athena.on('athena:live-canvas-added', onLiveCanvasAdded);
 
+  // 답변 텍스트 조각(2026-08-26 S2) — 턴이 끝나야만 답이 보이던 것을 없앤다.
+  // 첫 조각이 와야 버블을 만든다(빈 버블을 먼저 안 띄운다 — 카드 진행 표시와
+  // 같은 원칙). REST 직결·캐시 리플레이 경로는 claude 프로세스를 안 띄우므로
+  // 이 이벤트가 아예 안 온다 — 그 경로는 항상 이 블록 없이 기존대로 동작한다.
+  let streamALine = null;
+  let streamAText = null;
+  let streamedText = '';
+  const onLiveTextDelta = ({ text: delta } = {}) => {
+    if (myToken !== abortToken || !delta) return;
+    if (!calling) { calling = true; state = 'calling'; setDot('calling'); }
+    if (!streamALine) {
+      streamALine = document.createElement('div');
+      streamALine.className = 'turn';
+      streamAText = document.createElement('div');
+      streamAText.className = 'turn-a';
+      streamALine.appendChild(streamAText);
+      $history.appendChild(streamALine);
+    }
+    streamedText += delta;
+    streamAText.textContent = streamedText;
+    scrollAfterRender();
+  };
+  const unsubscribeLiveTextDelta = window.athena.on('athena:live-text-delta', onLiveTextDelta);
+
   let result;
   // 오브 "생각 중" 실신호(2026-08-26 board-32) — 스피너 대신 오브 시선이 위를
   // 훑는다. 여기 감싸는 구간이 실제 질의 왕복이다(claude -p 또는 캐시 리플레이).
@@ -452,6 +476,7 @@ async function runQueryLive(text) {
   } finally {
     clearInterval(tick);
     unsubscribeLiveCanvasAdded();
+    unsubscribeLiveTextDelta();
     window.athena.send('athena:orb-signal', { signal: 'think', active: false });
   }
   if (myToken !== abortToken) return;
@@ -467,16 +492,20 @@ async function runQueryLive(text) {
   progress.remove();
   liveProgressEl = null;
 
-  const aLine = document.createElement('div');
+  // 스트리밍 중 만든 버블이 있으면 그대로 이어 쓴다(재부착 없음 — 이미
+  // $history 안에 있다). 없으면(REST 직결·캐시 리플레이·조각 0개) 기존처럼 새로 만든다.
+  const aLine = streamALine || document.createElement('div');
   aLine.className = 'turn';
-  const aText = document.createElement('div');
+  const aText = streamAText || document.createElement('div');
   aText.className = 'turn-a';
+  // 최종 텍스트는 응답값이 권위다(스트리밍 누적치가 아니다) — 조각이 유실되거나
+  // 순서가 어긋나도 이 줄이 항상 진짜 답으로 덮어쓴다.
   aText.textContent = result && result.answerText
     ? result.answerText
     : (result && result.ok
       ? `완료 — 카드 ${cardCount}개, 답변 텍스트 없음`
       : `실패 — ${(result && result.error) || '알 수 없는 오류'}`);
-  if (!(result && result.answerPaintedByMain)) aLine.appendChild(aText);
+  if (!streamALine && !(result && result.answerPaintedByMain)) aLine.appendChild(aText);
 
   const meta = document.createElement('div');
   meta.className = 'turn-meta';
@@ -500,7 +529,7 @@ async function runQueryLive(text) {
   aLine.appendChild(meta);
   renderRecommendations(aLine, result && result.recommendations);
 
-  $history.appendChild(aLine);
+  if (!streamALine) $history.appendChild(aLine);
   saveFailedRouter.setAssistantLine(aLine);
   scrollAfterRender();
   $input.focus();

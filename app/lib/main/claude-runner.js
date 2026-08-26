@@ -20,6 +20,11 @@ function buildArgs({ prompt, configFile, allowedTools, resumeSessionId, model, e
   const args = [
     '-p', prompt,
     '--output-format', 'stream-json',
+    // 답변 텍스트가 텍스트 응답 완료 시점까지 통째로 안 오고 조각(text_delta)으로
+    // 온다 — chat.js가 채팅 버블에 실시간으로 이어붙인다(2026-08-26). 카드
+    // 렌더링(render_canvas tool_result)은 이 플래그 없이도 이미 스트리밍 중이었다
+    // (session.feed의 onCanvasResult가 매 청크마다 부르므로) — 텍스트만 밀려 있었다.
+    '--include-partial-messages',
     '--verbose',
     '--mcp-config', configFile,
     '--strict-mcp-config',
@@ -50,6 +55,7 @@ function buildArgs({ prompt, configFile, allowedTools, resumeSessionId, model, e
 // prompt/cwd/configFile은 호출자가 채운다(mcp-config.ensureMcpConfig()의 결과).
 // onCanvasResult(result) — render_canvas의 tool_result가 확정될 때마다(스트리밍 중).
 // onEvent(event) — 모든 파싱된 이벤트마다(진행 표시용, 선택).
+// onTextDelta(text) — 답변 텍스트 조각마다(--include-partial-messages, 선택).
 // onSpawn({pid, kill}) — 프로세스가 뜨자마자. kill()은 트리 전체를 끊는다(Esc 중단용).
 // timeoutMs — 왕복 상한. 넘기면 트리를 죽이고 ok:false·timedOut:true로 끝낸다. 0이면 무제한.
 // claudeBin — 테스트/오버라이드용. 기본은 PATH의 `claude`.
@@ -66,6 +72,7 @@ function runClaudeQuery({
   onSpawn,
   onCanvasResult,
   onEvent,
+  onTextDelta,
 } = {}) {
   return new Promise((resolve) => {
     if (!prompt || !String(prompt).trim()) {
@@ -120,7 +127,7 @@ function runClaudeQuery({
         killTree(child);
         return;
       }
-      session.feed(chunk, { onCanvasResult, onEvent });
+      session.feed(chunk, { onCanvasResult, onEvent, onTextDelta });
     });
     child.stderr.on('data', (c) => {
       stderrText += c;
@@ -156,7 +163,7 @@ function runClaudeQuery({
       if (settled) return;
       settled = true;
       if (timer) clearTimeout(timer);
-      session.end({ onCanvasResult, onEvent });
+      session.end({ onCanvasResult, onEvent, onTextDelta });
       const finalResult = session.finalResult();
       const isError = !!killedBy || code !== 0 || (finalResult && finalResult.is_error === true) || !finalResult;
       const killMessage = killedBy === 'timeout'
