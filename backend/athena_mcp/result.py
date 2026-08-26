@@ -5,6 +5,8 @@ import json
 from dataclasses import dataclass
 from typing import Any, Literal
 
+import mcp.types as types
+
 ParsedStatus = Literal["error", "structured", "json", "text", "empty"]
 
 ErrorOrigin = Literal["gateway-blocked", "upstream-failed"]
@@ -17,6 +19,31 @@ ERROR_ORIGIN_META_KEY = "athena/error_origin"
 충돌할 수 있다(SDK가 `io.modelcontextprotocol/related-task`를 `_meta` 키로
 쓰는 것과 같은 패턴, `mcp/types.py`의 `RelatedTaskMetadata` 독스트링).
 """
+
+
+def blocked(text: str) -> types.CallToolResult:
+    """upstream에 보내지 않고 게이트 단계에서 거부된 에러 결과."""
+    return types.CallToolResult(
+        content=[types.TextContent(type="text", text=text)],
+        isError=True,
+        _meta={ERROR_ORIGIN_META_KEY: "gateway-blocked"},
+    )
+
+
+def upstream_failed(text: str) -> types.CallToolResult:
+    """upstream 호출이 실패해 게이트웨이가 대신 합성한 에러 결과."""
+    return types.CallToolResult(
+        content=[types.TextContent(type="text", text=text)],
+        isError=True,
+        _meta={ERROR_ORIGIN_META_KEY: "upstream-failed"},
+    )
+
+
+def success(payload: Any) -> types.CallToolResult:
+    return types.CallToolResult(
+        content=[types.TextContent(type="text", text=json.dumps(payload, ensure_ascii=False))],
+        isError=False,
+    )
 
 
 class UnsupportedContentBlockError(Exception):
