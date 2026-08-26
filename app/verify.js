@@ -1934,6 +1934,15 @@ app.whenReady().then(async () => {
   );
   await shot(orbWin, '22-orb-collapsed.png');
   const pixelsQuiet = await measurePixels(orbWin);
+  // 눈 기하 — 대기(quiet) 상태의 눈 모양. board-31/32 규범 개정 이후 발화 신호는
+  // 바이저 폭이 아니라 **눈 모양**이 진다(위 orbWindow.firedEyesAreRounder 주석과
+  // 짝). getBoundingClientRect는 실측 px라 %보다 화면 배율에 안 흔들린다.
+  const orbQuietEyeProbe = await orbWin.webContents.executeJavaScript(`(() => {
+    const eye = document.querySelector('#orbVisor .orb-eye');
+    if (!eye) return null;
+    const r = eye.getBoundingClientRect();
+    return { width: r.width, height: r.height };
+  })()`);
 
   orbWin.webContents.send('athena:routine-event', {
     type: 'routine-fired',
@@ -1972,6 +1981,16 @@ app.whenReady().then(async () => {
       visorTransition: visor.transition,
       visorTransform: visor.transform,
       eyeCount: document.querySelectorAll('#orbVisor .orb-eye').length,
+      // 발화(fired) 상태의 눈 기하 — 위 orbQuietEyeProbe와 짝을 맞춰 대기↔발화의
+      // 실제 모양 차이를 잰다(더는 바이저 폭이 아니다).
+      eyeWidth: (() => {
+        const e = document.querySelector('#orbVisor .orb-eye');
+        return e ? e.getBoundingClientRect().width : null;
+      })(),
+      eyeHeight: (() => {
+        const e = document.querySelector('#orbVisor .orb-eye');
+        return e ? e.getBoundingClientRect().height : null;
+      })(),
       // 드래그 손잡이/구멍 계약 — 같은 픽셀에 겹치면 클릭이 영영 안 온다.
       orbRegion: (cs.getPropertyValue('app-region') || cs.getPropertyValue('-webkit-app-region') || '').trim(),
       coreRegion: (() => {
@@ -2057,20 +2076,28 @@ app.whenReady().then(async () => {
     // 여기 하나" — board-32). 대기 자체도 90%로 올라 파란 프레임이 거의 다
     // 드러난다(사용자 1순위 지적 "파란 부분이 너무 작다" 대응, orb.css 참조).
     //
-    // 그래서 아래 픽셀 비율 기반 검사 둘은 새 규범에서 성립하지 않는다 —
-    // 대기·발화가 같은 --orb-open(90%)을 쓰므로 파란 면적이 같아야 정상이다.
-    // 폐기하지 않고 남긴 이유는 회귀 신호로서의 가치가 남아서다: quietFaceIsPresent
-    // (대기에도 얼굴이 있다)는 여전히 유효하고, 폭 비교 둘은 **역방향**으로
-    // 다시 건다 — 대기와 발화의 바이저 폭이 이제 "거의 같아야" 정상이다(옛
-    // firedIsVisiblyWider의 정반대 주장, 같은 이유로 회귀를 잡는다).
+    // 그래서 아래 픽셀 비율 기반 검사 둘(옛 firedIsVisiblyWider·
+    // stateActuallyChangedPixels)은 새 규범에서 성립하지 않아 폐기했다 — 대기·
+    // 발화가 같은 --orb-open(90%)을 쓰므로 파란 면적이 같아야 정상이다.
+    // quietFaceIsPresent(대기에도 얼굴이 있다)는 여전히 유효하다.
     quietFaceIsPresent: pixelsQuiet.bluishPixels > 0,
-    firedIsVisiblyWider: true, // 폐기 — 발화 판별은 눈 모양이 진다(check-orb.mjs 같은 이유 참조)
+    //
+    // 2026-08-26 리뷰 결함 수정: 폐기하면서 자리에 `true` 상수를 박아뒀던 게
+    // 스스로 발견됐다 — 늘 통과하는 게이트는 게이트가 아니다. 발화 신호가 진짜
+    // 진 자리(눈 모양)로 옮겨 다시 잰다: 대기 눈은 길쭉한 알약(세로가 가로보다
+    // 한참 크다), 발화 눈은 거의 원이다(orb.css `[data-face="fired"] .orb-eye`
+    // 참조 — 22.6%×23%, 대기 기본 `.orb-eye` 14.5%×34.4%와 대조). 두 상태의
+    // getBoundingClientRect를 실측해 aspect ratio(세로/가로)로 비교한다.
+    firedEyesAreRounder: !!(orbQuietEyeProbe && orbCollapsedProbe.eyeWidth
+      && (orbQuietEyeProbe.height / orbQuietEyeProbe.width) > 1.5
+      && (orbCollapsedProbe.eyeHeight / orbCollapsedProbe.eyeWidth) < 1.3),
     // **알림이 오면 딥블루가 실제로 화면에 있다.** 참조 실측과 같은 판정 기준을 쓴다.
     alertedShowsVisor: pixelsAlerted.bluishRatio >= 0.10,
-    // 2026-08-26부터 대기·발화는 같은 --orb-open을 쓴다(눈 모양만 다르다) —
-    // 파란 픽셀 수가 달라야 한다는 옛 주장은 폐기한다. 대신 "대기에도 이미
-    // 알림 창이 열릴 만큼의 파란이 있었다"만 남겨 회귀를 잡는다.
-    stateActuallyChangedPixels: true, // 폐기 — 위 firedIsVisiblyWider와 같은 이유
+    // 대기→발화에서 눈 자체의 실측 px(너비 또는 높이)가 눈에 띄게 바뀌었는가 —
+    // 표정이 안 바뀌면 두 probe의 값이 같아 이 단언이 다시 떨어진다(회귀 가드).
+    stateActuallyChangedEyeShape: !!(orbQuietEyeProbe && orbCollapsedProbe.eyeWidth
+      && (Math.abs(orbCollapsedProbe.eyeWidth - orbQuietEyeProbe.width) > 2
+        || Math.abs(orbCollapsedProbe.eyeHeight - orbQuietEyeProbe.height) > 2)),
     unreadCountShown: orbCollapsedProbe.alert === 'fired' && orbCollapsedProbe.count === '1',
     // 유리는 끝까지 무채색 — 셸 배경은 백색 알파여야 한다(틴트 금지).
     glassStaysAchromatic: /rgba?\(\s*255\s*,\s*255\s*,\s*255\s*[,)]/.test(orbCollapsedProbe.orbBackground),
@@ -2116,8 +2143,8 @@ app.whenReady().then(async () => {
   console.log('[verify] 검증22(알림 오브):', JSON.stringify(report.orbWindow));
   for (const key of [
     'isCircle76', 'dragHandleContract',
-    'quietStateWasClean', 'quietFaceIsPresent', 'firedIsVisiblyWider',
-    'alertedShowsVisor', 'stateActuallyChangedPixels',
+    'quietStateWasClean', 'quietFaceIsPresent', 'firedEyesAreRounder',
+    'alertedShowsVisor', 'stateActuallyChangedEyeShape',
     'unreadCountShown', 'glassStaysAchromatic', 'visorNotFadeIn', 'hasTwoEyes', 'magentaArcRemoved',
     'expandGrewWindow', 'orbCornerStayed', 'roundTripRestoresPosition',
     'hasFiredBadge', 'hasModeLabel', 'hasRelativeTime', 'hasSourceLabel',
