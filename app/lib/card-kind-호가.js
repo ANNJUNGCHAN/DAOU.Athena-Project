@@ -173,8 +173,6 @@ const __exports = {
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = __exports;
 } else {
-  window.AthenaLib = window.AthenaLib || {};
-  window.AthenaLib.CardKindHoga = __exports;
   window.AthenaLib.CardKinds.register('호가', render호가);
 }
 

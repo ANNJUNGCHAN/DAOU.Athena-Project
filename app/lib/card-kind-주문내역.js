@@ -23,7 +23,7 @@ const CardPrimitives = typeof module !== 'undefined' && module.exports
 const FactsCard = typeof module !== 'undefined' && module.exports
   ? require('./facts-card')
   : window.AthenaLib.FactsCard;
-const { TwoLineRow, StatusPill } = CardPrimitives;
+const { TwoLineRow, StatusPill, extractDataRows } = CardPrimitives;
 const { formatNumeric } = FactsCard;
 
 // ord_stt 원문에 "완료"/"대기"가 부분 포함되는지로만 판정한다(정확한 열거값 미상).
@@ -62,12 +62,8 @@ function buildOrderLine(row) {
   return { title, titleSub: parts.join(' · ') || null, status: row.ord_stt };
 }
 
-function extractOrderRows(envelope) {
-  return envelope && envelope.data && Array.isArray(envelope.data.rows) ? envelope.data.rows : [];
-}
-
 function render주문내역(envelope) {
-  const lines = extractOrderRows(envelope).map(buildOrderLine).filter(Boolean);
+  const lines = extractDataRows(envelope).map(buildOrderLine).filter(Boolean);
   if (!lines.length) return null;
 
   const wrap = document.createElement('div');

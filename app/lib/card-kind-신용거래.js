@@ -27,16 +27,8 @@ const CardPrimitives = typeof module !== 'undefined' && module.exports
 const FactsCard = typeof module !== 'undefined' && module.exports
   ? require('./facts-card')
   : window.AthenaLib.FactsCard;
-const { TwoLineRow } = CardPrimitives;
-const { formatNumeric, formatDatetime } = FactsCard;
-
-// remn_rt(잔고율)는 "%, 소수점 둘째 자리"로 온다 — 부호 표기 언급이 없어(가공
-// 없이) % 기호만 없으면 붙인다.
-function formatPercent(raw) {
-  if (raw === undefined || raw === null || raw === '') return null;
-  const text = String(raw).trim();
-  return text.endsWith('%') ? text : `${text}%`;
-}
+const { TwoLineRow, extractDataRows } = CardPrimitives;
+const { formatNumeric, formatDatetime, formatPercent } = FactsCard;
 
 // row(ka10013 신용매매동향 한 행) → 렌더용 모델 | null(일자·잔고 중 하나라도
 // 없으면 이 행을 생략한다).
@@ -61,12 +53,8 @@ function buildCreditLine(row) {
   };
 }
 
-function extractRows(envelope) {
-  return envelope && envelope.data && Array.isArray(envelope.data.rows) ? envelope.data.rows : [];
-}
-
 function render신용거래(envelope) {
-  const lines = extractRows(envelope).map(buildCreditLine).filter(Boolean);
+  const lines = extractDataRows(envelope).map(buildCreditLine).filter(Boolean);
   if (!lines.length) return null; // ka10013이 아니거나(kt20016/kt20017) 핵심 필드가 없으면 범용 렌더로 폴백
 
   const wrap = document.createElement('div');

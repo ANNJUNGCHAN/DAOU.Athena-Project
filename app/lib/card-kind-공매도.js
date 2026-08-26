@@ -20,16 +20,8 @@ const CardPrimitives = typeof module !== 'undefined' && module.exports
 const FactsCard = typeof module !== 'undefined' && module.exports
   ? require('./facts-card')
   : window.AthenaLib.FactsCard;
-const { TwoLineRow } = CardPrimitives;
-const { formatNumeric, formatDatetime } = FactsCard;
-
-// trde_wght(매매비중)는 "부호 포함 소수점 둘째 자리"로 이미 부호가 실려 온다
-// (models.py 필드 설명) — +/- 재주입 없이 % 기호만 없으면 붙인다.
-function formatPercent(raw) {
-  if (raw === undefined || raw === null || raw === '') return null;
-  const text = String(raw).trim();
-  return text.endsWith('%') ? text : `${text}%`;
-}
+const { TwoLineRow, extractDataRows } = CardPrimitives;
+const { formatNumeric, formatDatetime, formatPercent } = FactsCard;
 
 // row(일별 공매도 추이 한 행) → 렌더용 모델 | null(일자·공매도량 중 하나라도
 // 없으면 이 행을 생략한다 — 핵심 식별 필드 없이 반쪽으로 안 그린다).
@@ -54,12 +46,8 @@ function buildShortsaleLine(row) {
   };
 }
 
-function extractRows(envelope) {
-  return envelope && envelope.data && Array.isArray(envelope.data.rows) ? envelope.data.rows : [];
-}
-
 function render공매도(envelope) {
-  const lines = extractRows(envelope).map(buildShortsaleLine).filter(Boolean);
+  const lines = extractDataRows(envelope).map(buildShortsaleLine).filter(Boolean);
   if (!lines.length) return null;
 
   const wrap = document.createElement('div');
