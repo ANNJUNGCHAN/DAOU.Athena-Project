@@ -891,6 +891,24 @@ _CARD_TITLE_OVERRIDES: dict[str, str] = {
     # ind_invsr(개인투자자)/frgnr_invsr(외국인투자자)/orgn(기관계) 필드를
     # 그대로 갖고 있어 Paper 수급카드 목업이 요구하는 데이터 그대로다.
     "base:ka10061": "수급",  # 종목별투자자기관별합계요청
+    # 호가 — ka10004/ka10007/ka10087 세 split family(전부 quotes 도메인,
+    # 전부 호가 전용 TR) 안에서 label에 "호가" 문자열이 없는 detail만 title=
+    # None으로 새고 있었다(2026-08-26 카드 데모 2라운드 실측 — 데모 프로브가
+    # 이 detail 중 하나를 골라 card_title=None을 받아 카드가 전혀 안 뜨는
+    # 결함으로 이어졌다). quotes 도메인에 "잔량"류 키워드를 추가하지 않는다
+    # — quotes에는 호가 아닌 TR도 섞여 있어 도메인 전체 키워드는 과매칭
+    # 위험이 크다(팀 지침). 세 TR 전부가 이미 quotes/호가 전용 family라는
+    # 것 자체가 실측 근거이므로 개별 지정한다.
+    "detail:ka10004:buy_bid_changes": "호가",  # 매수 10단계 잔량 대비
+    "detail:ka10004:buy_bid_quantities": "호가",  # 매수 10단계 잔량
+    "detail:ka10004:sell_bid_changes": "호가",  # 매도 10단계 잔량 대비
+    "detail:ka10004:sell_bid_quantities": "호가",  # 매도 10단계 잔량
+    "detail:ka10007:identity": "호가",  # 종목·일시 정보
+    "detail:ka10007:totals": "호가",  # 총매도·총매수 잔량·건수
+    "detail:ka10087:buy_bid_changes": "호가",  # 시간외 단일가 매수 잔량 대비
+    "detail:ka10087:buy_bid_quantities": "호가",  # 시간외 단일가 매수 잔량
+    "detail:ka10087:sell_bid_changes": "호가",  # 시간외 단일가 매도 잔량 대비
+    "detail:ka10087:sell_bid_quantities": "호가",  # 시간외 단일가 매도 잔량
 }
 
 # 도메인 무관하게 항상 적용하는 라벨 키워드 — 이 5종은 다른 도메인과 섞일 위험이

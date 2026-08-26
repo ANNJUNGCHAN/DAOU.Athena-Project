@@ -543,6 +543,19 @@ def test_runtime_rejects_ambiguous_gold_reload_group(
         ("base:ka50101", "호가"),
         ("detail:ka10004:sell_bid_prices", "호가"),
         ("detail:ka10007:bid_prices", "호가"),
+        # 호가 — 명시 예외 오버라이드(2026-08-26 카드 데모 2라운드 실측: ka10004/
+        # ka10007/ka10087 호가 전용 split family 안에서 label에 "호가" 문자열이
+        # 없는 detail만 title=None으로 새고 있었다).
+        ("detail:ka10004:buy_bid_changes", "호가"),  # 매수 10단계 잔량 대비
+        ("detail:ka10004:buy_bid_quantities", "호가"),  # 매수 10단계 잔량
+        ("detail:ka10004:sell_bid_changes", "호가"),  # 매도 10단계 잔량 대비
+        ("detail:ka10004:sell_bid_quantities", "호가"),  # 매도 10단계 잔량
+        ("detail:ka10007:identity", "호가"),  # 종목·일시 정보
+        ("detail:ka10007:totals", "호가"),  # 총매도·총매수 잔량·건수
+        ("detail:ka10087:buy_bid_changes", "호가"),  # 시간외 단일가 매수 잔량 대비
+        ("detail:ka10087:buy_bid_quantities", "호가"),  # 시간외 단일가 매수 잔량
+        ("detail:ka10087:sell_bid_changes", "호가"),  # 시간외 단일가 매도 잔량 대비
+        ("detail:ka10087:sell_bid_quantities", "호가"),  # 시간외 단일가 매도 잔량
         # 시세 — quotes 도메인 "주가"/"시세" 키워드, websocket "기세" 키워드
         ("base:ka10086", "시세"),
         ("base:0A", "시세"),
