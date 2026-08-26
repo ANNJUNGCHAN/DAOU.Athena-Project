@@ -2,43 +2,68 @@
 
 // DOM 조립(TwoLineRow/ChangeBadge 호출부)은 document가 필요해 node --test(순수 Node)
 // 경로에서는 못 돈다(card-primitives.test.js와 같은 결) — 이 스위트는 순수 판정 로직
-// (어떤 필드/행을 고르는가)만 검증한다.
+// (어떤 필드를 고르고 어떻게 분류하는가)만 검증한다.
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { selectProfitFields, selectCurrencyRows } = require('./card-kind-계좌');
+const { selectAccountFacts, selectCurrencyRows } = require('./card-kind-계좌');
 
-test('selectProfitFields — 손익 필드(원/율)만 원래 순서로 고른다', () => {
+test('selectAccountFacts — kt00004류: 손익 필드만 있는 응답은 전부 profit으로 분류된다', () => {
   const fields = [
-    { key: 'tdy_lspft_amt', label: '당일투자원금', value: '10000000' }, // 원금 — 대상 아님
     { key: 'lspft2', label: '당월투자손익', value: '+182400' },
     { key: 'lspft_rt', label: '누적손익율', value: '+1.53' },
-    { key: 'invt_bsamt', label: '투자기준금액', value: '12000000' }, // 기준금액 — 대상 아님
   ];
-  assert.deepEqual(selectProfitFields(fields), [
-    { key: 'lspft2', label: '당월투자손익', value: '+182400', unit: '원' },
-    { key: 'lspft_rt', label: '누적손익율', value: '+1.53', unit: '%' },
+  assert.deepEqual(selectAccountFacts(fields), [
+    { key: 'lspft2', label: '당월투자손익', value: '+182400', unit: '원', kind: 'profit' },
+    { key: 'lspft_rt', label: '누적손익율', value: '+1.53', unit: '%', kind: 'profit' },
   ]);
 });
 
-test('selectProfitFields — 값이 없는(null/undefined/빈문자) 손익 필드는 생략한다', () => {
+// 2026-08-26 데모 캡처 결함 재현 — app/captures/card-demo/보유주식.png(제목 "계좌").
+// kt00018:portfolio_summary(계좌평가현황요청)는 손익 필드(tot_evlt_pl/tot_prft_rt)와
+// 손익이 아닌 실계좌 필드(tot_pur_amt 등)가 한 응답에 섞여 있다 — 전자만 골라내고
+// 후자를 버리면 그것도 정보 손실이므로, 손익 필드가 하나라도 있으면 값이 실재하는
+// 필드는 전부(kind로 구분해서) 포함해야 한다.
+test('selectAccountFacts — kt00018류: 손익 필드가 있으면 같이 온 비손익 필드도 버리지 않는다', () => {
   const fields = [
-    { key: 'lspft', label: '누적투자손익', value: null },
-    { key: 'lspft2', label: '당월투자손익', value: undefined },
-    { key: 'tdy_lspft', label: '당일투자손익', value: '' },
+    { key: 'tot_pur_amt', label: null, value: '000000172645300' },
+    { key: 'tot_evlt_amt', label: null, value: '000000214456400' },
+    { key: 'tot_evlt_pl', label: null, value: '000000040027357' },
+    { key: 'tot_prft_rt', label: null, value: '000000023.18' },
+    { key: 'prsm_dpst_aset_amt', label: null, value: '000000532960056' },
   ];
-  assert.deepEqual(selectProfitFields(fields), []);
+  assert.deepEqual(selectAccountFacts(fields), [
+    { key: 'tot_pur_amt', label: '총매입금액', value: '000000172645300', unit: '원', kind: 'plain' },
+    { key: 'tot_evlt_amt', label: '총평가금액', value: '000000214456400', unit: '원', kind: 'plain' },
+    { key: 'tot_evlt_pl', label: '총평가손익금액', value: '000000040027357', unit: '원', kind: 'profit' },
+    { key: 'tot_prft_rt', label: '총수익률', value: '000000023.18', unit: '%', kind: 'profit' },
+    { key: 'prsm_dpst_aset_amt', label: '추정예탁자산', value: '000000532960056', unit: '원', kind: 'plain' },
+  ]);
 });
 
-test('selectProfitFields — 손익 필드가 하나도 없으면(다른 카드의 facts) 빈 배열', () => {
-  assert.deepEqual(selectProfitFields([{ key: 'stk_nm', label: '종목명', value: '삼성전자' }]), []);
-  assert.deepEqual(selectProfitFields([]), []);
-  assert.deepEqual(selectProfitFields(undefined), []);
+test('selectAccountFacts — label이 이미 있으면 대체 라벨을 쓰지 않는다', () => {
+  const fields = [{ key: 'tot_evlt_pl', label: '커스텀라벨', value: '100' }];
+  assert.deepEqual(selectAccountFacts(fields), [
+    { key: 'tot_evlt_pl', label: '커스텀라벨', value: '100', unit: '원', kind: 'profit' },
+  ]);
 });
 
-test('selectProfitFields — label이 없으면 key를 라벨로 대체한다', () => {
-  assert.deepEqual(selectProfitFields([{ key: 'lspft', value: '100' }]), [
-    { key: 'lspft', label: 'lspft', value: '100', unit: '원' },
+test('selectAccountFacts — 손익 필드가 하나도 없으면 null(이 렌더러가 아는 모양이 아니다)', () => {
+  assert.equal(selectAccountFacts([{ key: 'tot_pur_amt', label: '총매입금액', value: '100' }]), null);
+  assert.equal(selectAccountFacts([{ key: 'stk_nm', label: '종목명', value: '삼성전자' }]), null);
+  assert.equal(selectAccountFacts([]), null);
+  assert.equal(selectAccountFacts(undefined), null);
+});
+
+test('selectAccountFacts — 값이 없는(null/undefined/빈문자) 필드는 손익 여부와 무관하게 생략한다', () => {
+  const fields = [
+    { key: 'tot_evlt_pl', label: '총평가손익금액', value: '100' }, // 게이트를 여는 손익 필드
+    { key: 'tot_pur_amt', label: '총매입금액', value: null },
+    { key: 'tot_evlt_amt', label: '총평가금액', value: undefined },
+    { key: 'prsm_dpst_aset_amt', label: '추정예탁자산', value: '' },
+  ];
+  assert.deepEqual(selectAccountFacts(fields), [
+    { key: 'tot_evlt_pl', label: '총평가손익금액', value: '100', unit: '원', kind: 'profit' },
   ]);
 });
 
