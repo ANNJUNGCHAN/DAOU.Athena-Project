@@ -205,6 +205,20 @@ function extractTextDelta(event) {
   return delta.text;
 }
 
+// 추론 과정 조각 — 실측(claude -p --include-partial-messages, thinking 블록):
+//   {"type":"stream_event","event":{"type":"content_block_delta","index":0,
+//    "delta":{"type":"thinking_delta","thinking":"...","estimated_tokens":null}}}
+// 같은 content_block_delta 안에 signature_delta(서명, 텍스트 아님)도 오므로
+// type이 정확히 thinking_delta일 때만 뽑는다 — 미리보기 전용이라 저장하지 않는다.
+function extractThinkingDelta(event) {
+  if (!event || event.type !== 'stream_event') return null;
+  const inner = event.event;
+  if (!inner || inner.type !== 'content_block_delta') return null;
+  const delta = inner.delta;
+  if (!delta || delta.type !== 'thinking_delta' || typeof delta.thinking !== 'string') return null;
+  return delta.thinking;
+}
+
 // ---------------------------------------------------------------------------
 // 10. 스트리밍 세션 — child_process stdout 청크를 실시간으로 먹인다.
 //     내부에 최소 상태(carry, tool_use 인덱스, 카운터)만 들고 전체 이벤트
@@ -223,6 +237,8 @@ class StreamJsonSession {
   // callbacks.onCanvasResult(result) — render_canvas의 tool_result가 확정될 때마다.
   // callbacks.onTextDelta(text) — --include-partial-messages를 켰을 때 답변
   // 텍스트 조각마다(진행 중인 채팅 버블에 이어붙이는 용도, 선택).
+  // callbacks.onThinkingDelta(text) — 같은 플래그의 추론 조각마다(미리보기
+  // 전용 — 호출자가 턴 기록에 저장하면 안 된다, 선택).
   // 반환값은 이번 호출에서 새로 나온 캔버스 결과 배열(호출부가 편의상 쓸 수 있게).
   feed(chunk, callbacks) {
     const { lines, carry } = splitLines(this._carry, chunk);
@@ -237,7 +253,7 @@ class StreamJsonSession {
     return this._consumeLines(lines, callbacks || {});
   }
 
-  _consumeLines(lines, { onEvent, onCanvasResult, onTextDelta }) {
+  _consumeLines(lines, { onEvent, onCanvasResult, onTextDelta, onThinkingDelta }) {
     const newResults = [];
     for (const raw of lines) {
       const parsed = parseLine(raw);
@@ -250,6 +266,10 @@ class StreamJsonSession {
       if (onTextDelta) {
         const delta = extractTextDelta(event);
         if (delta) onTextDelta(delta);
+      }
+      if (onThinkingDelta) {
+        const thinkingDelta = extractThinkingDelta(event);
+        if (thinkingDelta) onThinkingDelta(thinkingDelta);
       }
       for (const block of extractToolResultBlocks(event)) {
         const info = this._toolUseIndex.get(block.toolUseId);
@@ -286,5 +306,6 @@ module.exports = {
   classifyCanvasBlock,
   collectCanvasResults,
   extractTextDelta,
+  extractThinkingDelta,
   StreamJsonSession,
 };

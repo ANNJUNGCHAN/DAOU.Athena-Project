@@ -317,6 +317,18 @@ html, body { background: transparent; }
      배경 해법 §각인). 유리 두께가 얇아지는 상태(창 최소 높이)에서도 대비를 지킨다. */
   text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
 }
+/* 추론 미리보기(2026-08-26) — 답변(.turn-a)과 뚜렷이 구분되는 옅은·작은 글씨.
+   미리보기 전용이라 각인 효과(.turn-a의 text-shadow) 없이 평평하게 둔다. */
+.turn-thinking-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-k-faint);
+}
+.turn-thinking-body {
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--color-k-faint);
+}
 .turn-meta {
   display: flex; align-items: center; gap: 10px;
   font-family: var(--font-mono);

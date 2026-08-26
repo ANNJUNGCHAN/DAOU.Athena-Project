@@ -13,6 +13,7 @@ const {
   extractCanvasEnvelope,
   classifyCanvasBlock,
   extractTextDelta,
+  extractThinkingDelta,
   StreamJsonSession,
 } = require('./stream-json-parser');
 
@@ -131,6 +132,41 @@ test('extractTextDelta: stream_event가 아니거나 text_delta가 아니면 nul
 });
 
 // ---------------------------------------------------------------------------
+// 4c. 추론 델타 추출 — --include-partial-messages의 thinking 블록 (2026-08-26)
+// ---------------------------------------------------------------------------
+test('extractThinkingDelta: content_block_delta/thinking_delta에서 조각을 뽑는다(실측 형태)', () => {
+  const event = {
+    type: 'stream_event',
+    event: { type: 'content_block_delta', index: 0, delta: { type: 'thinking_delta', thinking: '37×50부터 계산', estimated_tokens: null } },
+  };
+  assert.equal(extractThinkingDelta(event), '37×50부터 계산');
+});
+
+test('extractThinkingDelta: signature_delta(서명)는 추론 텍스트가 아니다 — 제외', () => {
+  const event = {
+    type: 'stream_event',
+    event: { type: 'content_block_delta', index: 0, delta: { type: 'signature_delta', signature: 'CAISqQIK...' } },
+  };
+  assert.equal(extractThinkingDelta(event), null);
+});
+
+test('extractThinkingDelta: text_delta는 추론이 아니다 — extractTextDelta와 서로 안 겹친다', () => {
+  const event = {
+    type: 'stream_event',
+    event: { type: 'content_block_delta', index: 1, delta: { type: 'text_delta', text: '답변입니다' } },
+  };
+  assert.equal(extractThinkingDelta(event), null);
+  assert.equal(extractTextDelta(event), '답변입니다');
+});
+
+test('extractThinkingDelta: stream_event가 아니거나 형태가 안 맞으면 null', () => {
+  assert.equal(extractThinkingDelta({ type: 'assistant' }), null);
+  assert.equal(extractThinkingDelta({ type: 'stream_event', event: { type: 'message_start' } }), null);
+  assert.equal(extractThinkingDelta(null), null);
+  assert.equal(extractThinkingDelta(undefined), null);
+});
+
+// ---------------------------------------------------------------------------
 // 5. 스트리밍 세션
 // ---------------------------------------------------------------------------
 test('StreamJsonSession: 비JSON 라인은 건너뛰고 skippedLines로 센다', () => {
@@ -218,6 +254,35 @@ test('StreamJsonSession: onTextDelta가 없어도(REST 직결·캐시 리플레�
     { onEvent: (e) => events.push(e) },
   );
   assert.equal(events.length, 1); // onTextDelta 콜백 부재가 onEvent를 막지 않는다
+});
+
+test('StreamJsonSession: onThinkingDelta가 추론 조각마다 불리고 text_delta·signature_delta는 안 섞인다', () => {
+  const lines = [
+    JSON.stringify({ type: 'stream_event', event: { type: 'content_block_start', index: 0, content_block: { type: 'thinking', thinking: '', signature: '' } } }),
+    JSON.stringify({ type: 'stream_event', event: { type: 'content_block_delta', index: 0, delta: { type: 'thinking_delta', thinking: '37×50', estimated_tokens: null } } }),
+    JSON.stringify({ type: 'stream_event', event: { type: 'content_block_delta', index: 0, delta: { type: 'thinking_delta', thinking: '부터 계산', estimated_tokens: null } } }),
+    JSON.stringify({ type: 'stream_event', event: { type: 'content_block_delta', index: 0, delta: { type: 'signature_delta', signature: 'sig-abc' } } }),
+    JSON.stringify({ type: 'stream_event', event: { type: 'content_block_delta', index: 1, delta: { type: 'text_delta', text: '1813입니다' } } }),
+  ];
+  const session = new StreamJsonSession();
+  const thinkingDeltas = [];
+  const textDeltas = [];
+  session.feed(`${lines.join('\n')}\n`, {
+    onThinkingDelta: (d) => thinkingDeltas.push(d),
+    onTextDelta: (d) => textDeltas.push(d),
+  });
+  assert.deepEqual(thinkingDeltas, ['37×50', '부터 계산']);
+  assert.deepEqual(textDeltas, ['1813입니다']);
+});
+
+test('StreamJsonSession: onThinkingDelta가 없어도(REST 직결·캐시 리플레이 경로) 다른 콜백은 그대로 동작한다', () => {
+  const session = new StreamJsonSession();
+  const events = [];
+  session.feed(
+    `${JSON.stringify({ type: 'stream_event', event: { type: 'content_block_delta', index: 0, delta: { type: 'thinking_delta', thinking: 'x', estimated_tokens: null } } })}\n`,
+    { onEvent: (e) => events.push(e) },
+  );
+  assert.equal(events.length, 1); // onThinkingDelta 콜백 부재가 onEvent를 막지 않는다
 });
 
 test('classifyCanvasBlock: pushed 봉투는 별도 상태 — 카드 이중 렌더 방지', () => {
