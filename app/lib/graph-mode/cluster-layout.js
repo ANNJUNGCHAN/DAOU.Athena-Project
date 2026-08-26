@@ -144,7 +144,6 @@ const __exports = {
   groupByCluster,
   NODE_RADIUS_MIN_PX,
   NODE_RADIUS_MAX_PX,
-  CANVAS_PADDING_PX,
 };
 
 // UMD 각주(2026-08-18 렌더러 격리) — column-fold.js와 같은 패턴.

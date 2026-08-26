@@ -325,7 +325,6 @@ function createIndicatorRenderer(deps) {
 
   // id → { seriesByKey: Map, hist: series|null, paneIndex }
   const mounted = new Map();
-  let lastSkipped = [];
   // 외부 TR에서 받아온 시계열. id → [{time, value}] 또는 null(조회 실패·없음).
   // 값이 없으면 pane을 만들지 않는다 — 빈 pane은 "켜졌는데 안 보인다"가 된다(§8).
   const externalById = new Map();
@@ -478,7 +477,6 @@ function createIndicatorRenderer(deps) {
     }
 
     setData(bars, params, visible);
-    lastSkipped = skipped;
     return { skipped, ownHeight, ownCount: wantOwn.length };
   }
 
@@ -538,7 +536,7 @@ function createIndicatorRenderer(deps) {
 
   return {
     apply, setData, legendFor, setExternalSeries,
-    destroy: removeAll, getSkipped: () => lastSkipped.slice(), SPEC_BY_ID,
+    destroy: removeAll,
   };
 }
 

@@ -87,7 +87,7 @@ function resample(dailyBars, period, interval) {
 }
 
 // UMD 각주(2026-08-18 렌더러 격리) — sanitize.js와 같은 패턴.
-const __exports = { aggregatePeriod, resample, mondayOf, periodKey, INTRADAY_UNAVAILABLE };
+const __exports = { aggregatePeriod, resample, mondayOf };
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = __exports;
 } else {

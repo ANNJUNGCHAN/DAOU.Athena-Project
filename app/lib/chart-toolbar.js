@@ -254,7 +254,7 @@ function createChartToolbar(opts) {
 }
 
 // UMD 각주(2026-08-18 렌더러 격리) — sanitize.js와 같은 패턴.
-const __exports = { createChartToolbar, PERIOD_TABS, INTERVAL_OPTIONS, CHART_FORM_DEFS, intervalLabel };
+const __exports = { createChartToolbar };
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = __exports;
 } else {

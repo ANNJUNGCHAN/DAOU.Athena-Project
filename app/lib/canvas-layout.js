@@ -76,9 +76,6 @@ function exceedsHeightBudget(scrollHeight, clientHeight, cardCount) {
 }
 
 const __exports = {
-  CARD_WIDTH_GRADE,
-  DROP_TYPE_MAP,
-  HEIGHT_BUDGET_FACTOR,
   MIN_CARDS,
   widthGradeFor,
   dropTargetsFor,

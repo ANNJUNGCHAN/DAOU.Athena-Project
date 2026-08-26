@@ -64,7 +64,7 @@ function foldTick(prevBar, tick, period, interval) {
   };
 }
 
-const __exports = { foldTick, slotStartSec, isoDateOfSlot, KST_OFFSET_SEC };
+const __exports = { foldTick, slotStartSec, isoDateOfSlot };
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = __exports;
 } else {
