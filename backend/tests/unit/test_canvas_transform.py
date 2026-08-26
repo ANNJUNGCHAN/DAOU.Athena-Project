@@ -476,13 +476,28 @@ def test_runtime_rejects_ambiguous_gold_reload_group(
         ("detail:ka10040:buy_brokers", "거래원"),
         ("detail:ka10040:broker_departures", "거래원"),
         ("detail:ka10040:foreign_broker_estimates", "거래원"),  # 명시 예외 오버라이드
+        # 거래원 — 명시 예외 오버라이드(2026-08-26 카드 v3 Wave 0-BE 실측:
+        # quotes/ranking 도메인인데 title=None으로 새던 3종. ka10078은 도메인이
+        # quotes라 ranking의 "증권사" 키워드 규칙이 애초에 안 걸리고, ka10037/
+        # ka10062는 ranking 도메인인데도 거래원/증권사/이탈원 키워드가 라벨에
+        # 없다).
+        ("base:ka10078", "거래원"),  # 증권사별종목매매동향요청
+        ("base:ka10037", "거래원"),  # 외국계창구매매상위요청
+        ("base:ka10062", "거래원"),  # 동일순매매순위요청
         # 주문내역 — account 도메인 키워드
         ("base:kt00007", "주문내역"),
         ("base:ka10075", "주문내역"),
         ("base:ka10076", "주문내역"),
-        ("base:kt00015", "주문내역"),
-        ("base:ka10170", "주문내역"),
         ("detail:kt00009:order_execution_status", "주문내역"),
+        # 주문내역 — 명시 예외 오버라이드(2026-08-26 카드 v3 Wave 0-BE 실측:
+        # account 기본값 "계좌"로 새던 3종. kt00009의 형제 detail
+        # order_execution_status는 이미 위에서 "주문내역"로 정확히 잡히는데
+        # contract_amounts만 라벨 키워드가 없어 새고 있었다 — kt50032도 같은
+        # 계열. gold_trade_history는 원문 "거래 내역"(공백)이 계좌 키워드
+        # "거래내역"(공백 없음)과 안 맞아 떨어져 아예 안 걸렸었다).
+        ("detail:kt00009:contract_amounts", "주문내역"),
+        ("detail:kt50032:account_identity", "주문내역"),
+        ("detail:kt50032:gold_trade_history", "주문내역"),
         # 보유주식 — account 도메인 "보유"/"잔고" 키워드 + 명시 예외
         ("detail:kt00018:holdings", "보유주식"),
         ("detail:kt50020:gold_holdings", "보유주식"),
@@ -503,6 +518,15 @@ def test_runtime_rejects_ambiguous_gold_reload_group(
         # 계좌 — account 도메인 기본값(키워드 미매칭)
         ("base:ka00001", "계좌"),
         ("base:kt00002", "계좌"),
+        # 계좌 — 실현손익/매매일지/거래내역 키워드(2026-08-26 카드 v3 Wave 0-BE
+        # 실측: 원래 "주문내역"을 가리켰지만 이 6종은 전부 계좌 단위 집계·
+        # 이력이지 개별 주문 목록이 아니다).
+        ("base:ka10072", "계좌"),  # 일자별종목별실현손익요청_일자
+        ("base:ka10073", "계좌"),  # 일자별종목별실현손익요청_기간
+        ("base:ka10074", "계좌"),  # 일자별실현손익요청
+        ("base:ka10077", "계좌"),  # 당일실현손익상세요청
+        ("base:ka10170", "계좌"),  # 당일매매일지요청
+        ("base:kt00015", "계좌"),  # 위탁종합거래내역요청
         # 수급 — investor 도메인 기본값
         ("base:ka10008", "수급"),
         ("base:ka10131", "수급"),
@@ -516,6 +540,26 @@ def test_runtime_rejects_ambiguous_gold_reload_group(
         # 시세 — quotes 도메인 "주가"/"시세" 키워드, websocket "기세" 키워드
         ("base:ka10086", "시세"),
         ("base:0A", "시세"),
+        # 시세 — 명시 예외 오버라이드(2026-08-26 카드 v3 Wave 0-BE 실측: quotes
+        # 도메인인데 라벨에 호가/주가/시세 키워드가 전혀 없어 title=None으로
+        # 새던 7종 — 전부 가격·체결 시계열 데이터).
+        ("base:ka10005", "시세"),  # 주식일주월시분요청
+        ("base:ka10006", "시세"),  # 주식시분요청
+        ("base:ka10046", "시세"),  # 체결강도추이시간별요청
+        ("base:ka10047", "시세"),  # 체결강도추이일별요청
+        ("base:ka50010", "시세"),  # 금현물체결추이
+        ("base:ka50012", "시세"),  # 금현물일별추이
+        ("base:ka50087", "시세"),  # 금현물예상체결
+        # 시세 — 명시 예외 오버라이드, stockinfo 도메인 기본값("종목정보")으로
+        # 새던 나머지 4종. stockinfo에 "시세" 키워드를 도메인 규칙으로
+        # 추가하는 대신 개별 지정한다 — 그렇게 하면
+        # `detail:ka10001:current_trading`(라벨에 "시세"가 있지만 ka10001
+        # 자기 소유 detail이라 "종목정보"가 맞다, 아래 회귀 테스트 참고)까지
+        # 걸려버리는 걸 실측으로 확인했다.
+        ("base:ka10003", "시세"),  # 체결정보요청
+        ("base:ka10055", "시세"),  # 당일전일체결량요청
+        ("base:ka10084", "시세"),  # 당일전일체결요청
+        ("detail:ka10002:market_snapshot", "시세"),  # 종목 시세 요약
     ],
 )
 def test_resolve_fixed_card_title_matches_paper_board_12d(
@@ -546,6 +590,27 @@ def test_resolve_fixed_card_title_is_none_for_unregistered_or_missing_operation_
     assert resolve_fixed_card_title("base:does-not-exist") is None
     assert resolve_fixed_card_title(None) is None
     assert resolve_fixed_card_title("") is None
+
+
+@pytest.mark.parametrize(
+    "mapping_id",
+    [
+        "detail:ka10001:current_trading",  # 라벨 "현재 시세 및 거래량" — "시세" 포함
+        "detail:ka10001:daily_price_band",  # 라벨 "당일 가격 범위 및 예상 체결"
+    ],
+)
+def test_resolve_fixed_card_title_keeps_ka10001_own_details_as_stockinfo(
+    mapping_id: str,
+) -> None:
+    """회귀 가드(2026-08-26 카드 v3 Wave 0-BE) — `detail:ka10002:market_snapshot`을
+    "시세"로 고치려고 `_DOMAIN_LABEL_KEYWORDS["stockinfo"]`에 ("시세","시세")
+    키워드를 도메인 규칙으로 넣어 봤더니, 라벨에 "시세"가 섞여 있는
+    `ka10001:current_trading`까지 "시세"로 새는 걸 실측으로 확인했다 —
+    ka10001은 "종목정보" 카드 자신의 detail이라 이건 회귀다. 그래서 market_snapshot은
+    도메인 키워드가 아니라 `_CARD_TITLE_OVERRIDES` 개별 지정으로 고쳤다(위
+    파라미터라이즈 테스트 참고). 이 테스트는 그 실수를 다시 저지르면 바로
+    깨진다."""
+    assert resolve_fixed_card_title(mapping_id) == "종목정보"
 
 
 def test_resolve_fixed_card_title_only_ever_returns_one_of_the_16_card_names() -> None:
