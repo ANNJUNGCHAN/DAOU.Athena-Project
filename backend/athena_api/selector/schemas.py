@@ -222,6 +222,13 @@ class ResolveResponse(StrictModel):
     status: Literal["resolved"] = "resolved"
     catalog_version: str
     operation_ref: str
+    kind: OperationKind = Field(
+        description=(
+            "Selected operation's kind. The gateway's auto-execute dual dispatch "
+            "(W2b) reads this to restrict itself to `query` — order/websocket plans "
+            "always come back as a plan_token only, unexecuted."
+        )
+    )
     plan_token: str = Field(
         description=(
             "Opaque signed plan. Single-use: athena_call accepts it exactly once, "

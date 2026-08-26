@@ -84,10 +84,7 @@ _CANVAS_TYPE_PROPERTY: dict[str, Any] = {
 # `data`에 canvas_type별 형상 요약을 description으로 싣는다(plan.md 액션 11).
 # oneOf 강제 검증이 아니라 **안내문**인 이유: canvas_type enum을 안 거는 것과
 # 같은 근거다 — SDK 사전 검증이 폴백 경로를 죽인다. 판정은 여전히
-# `validate_canvas_payload()`가 한다. 실측 근거: 형상 힌트 없이는 모델이 table
-# 형상을 맞추는 데 3회 걸렸고(2026-08-17 S4), 2026-08-19 100건 QA에서 지연의
-# 지배 요인이 "마지막 툴 호출 → 완료" 꼬리 구간(p50 기준 총 52초 중 첫 툴
-# 이후가 대부분)으로 실측됐다 — 재시도 1회가 곧 수십 초다.
+# `validate_canvas_payload()`가 한다.
 # CANVAS_SCHEMAS에서 생성하므로 스키마가 바뀌면 이 안내문도 따라온다(드리프트 없음).
 def _data_shape_hint() -> str:
     lines = ["canvas_type별 data 형상 요약 — 불일치 시 free로 폴백된다:"]
@@ -505,7 +502,37 @@ class AthenaGateway:
         self._audit_log("kiwoom-selector").record(
             "kiwoom-selector", name, success=not result.isError
         )
+        auto_execute = self._auto_execute_audit_status(name, result)
+        if auto_execute is not None:
+            # W2b — resolve가 같은 라운드에 athena_call도 실행했다. 모델이 직접
+            # athena_call을 불렀을 때와 같은 감사 흔적(툴명 athena_call, 성공
+            # 여부)을 남긴다 — plan_token/인자는 여기도 절대 넣지 않는다.
+            self._audit_log("kiwoom-selector").record(
+                "kiwoom-selector", selector_tools.CALL_TOOL, success=auto_execute
+            )
         return result
+
+    @staticmethod
+    def _auto_execute_audit_status(name: str, result: types.CallToolResult) -> bool | None:
+        """resolve 응답에 `auto_execute` 봉투가 실려 있으면 그 `executed` 값을,
+        없으면(오류 응답, 비-resolve 툴, 기능 꺼짐 등) `None`을 돌려준다."""
+        if name != selector_tools.RESOLVE_TOOL or result.isError or not result.content:
+            return None
+        block = result.content[0]
+        text = getattr(block, "text", None)
+        if not isinstance(text, str):
+            return None
+        try:
+            payload = json.loads(text)
+        except ValueError:
+            return None
+        if not isinstance(payload, dict):
+            return None
+        auto_execute = payload.get("auto_execute")
+        if not isinstance(auto_execute, dict):
+            return None
+        executed = auto_execute.get("executed")
+        return executed if isinstance(executed, bool) else None
 
 
 _LAYOUT_GRADES = ("half", "full")
