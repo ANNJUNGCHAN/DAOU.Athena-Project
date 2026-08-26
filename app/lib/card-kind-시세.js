@@ -19,6 +19,12 @@
 // ka10055 응답 자체는 어느 tdy_pred로 조회했는지 스스로 표시하지 않는다. 탭이 있는데
 // 눌러도 아무 일도 안 일어나면 있지도 않은 기능을 있는 척하는 장식 UI가 된다(soul.md
 // §7/§8) — 그래서 이번 패스는 탭 없이 표만 그린다.
+//
+// 체결가 부호 수정(팀리드 지시, 2026-08-26 카드 데모 후속) — cntr_pric은 키움
+// "부호가 포함된 숫자"라 부호가 기준가 대비 방향 표기이지 체결가의 부호가 아니다
+// (card-primitives.js priceMagnitude 주석 — QuoteHeader/RangeBar에 적용한 것과 같은
+// 근거). formatTickPrice가 이 표의 체결가 열에서만 부호를 걷어낸다 — 등락률(flu_rt)
+// 열은 그대로 둔다(ChangeBadge는 부호를 방향 표시 그 자체로 써야 한다).
 (function () {
 'use strict';
 
@@ -27,7 +33,7 @@ function __dep(reqPath, globalName) {
   return __isCjs ? require(reqPath) : window.AthenaLib[globalName];
 }
 const { formatNumeric } = __dep('./facts-card', 'FactsCard');
-const { ChangeBadge } = __dep('./card-primitives', 'CardPrimitives');
+const { ChangeBadge, priceMagnitude } = __dep('./card-primitives', 'CardPrimitives');
 
 // 표시 상한 — Paper 목업은 "최신행 우선" 롤링을 전제한다(무한정 누적 방지).
 const MAX_ROWS = 20;
@@ -83,6 +89,16 @@ function extractTickRows(envelope) {
   return rows;
 }
 
+// 순수 함수(node --test 대상) — 체결가 표시값을 만든다. cntr_pric도 키움 "부호가
+// 포함된 숫자"(models.py 실측)라 부호는 기준가 대비 방향 표기이지 체결가의 부호가
+// 아니다(card-primitives.js priceMagnitude 주석, 팀리드 지시로 2026-08-26 후속 수정
+// — QuoteHeader/RangeBar에 이어 이 표의 체결가 열도 같은 문제였다). 등락률(flu_rt)
+// 열은 건드리지 않는다 — ChangeBadge에서는 부호가 방향 표시 그 자체라 지우면 안 된다.
+// DOM 없이 이 변환만 따로 검증 가능하게 뺐다(chart-card.js "순수 변환 분리" 관행).
+function formatTickPrice(raw) {
+  return formatNumeric(priceMagnitude(raw));
+}
+
 function renderTickerTable(rows) {
   const wrap = document.createElement('div');
   wrap.className = 'card-kind-시세-ticker';
@@ -103,7 +119,7 @@ function renderTickerTable(rows) {
   for (const row of rows) {
     const tr = document.createElement('tr');
     const priceTd = document.createElement('td');
-    priceTd.textContent = formatNumeric(row.cntr_pric);
+    priceTd.textContent = formatTickPrice(row.cntr_pric);
     const qtyTd = document.createElement('td');
     qtyTd.textContent = formatNumeric(row.cntr_qty);
     const changeTd = document.createElement('td');
@@ -135,7 +151,7 @@ function render시세(envelope) {
   return renderTickerTable(merged);
 }
 
-const __exports = { mergeRollingRows, extractTickRows, render시세 };
+const __exports = { mergeRollingRows, extractTickRows, formatTickPrice, render시세 };
 if (__isCjs) {
   module.exports = __exports;
 } else {

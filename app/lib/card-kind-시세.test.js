@@ -5,7 +5,7 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { mergeRollingRows, extractTickRows } = require('./card-kind-시세');
+const { mergeRollingRows, extractTickRows, formatTickPrice } = require('./card-kind-시세');
 
 test('mergeRollingRows — 새 행을 앞쪽(최신행 우선)에 병합한다', () => {
   const existing = [{ cntr_tm: '093001', cntr_pric: '100' }];
@@ -63,4 +63,21 @@ test('extractTickRows — table 모양이 아니거나(columns/rows 없음) 빈 
   assert.equal(extractTickRows({ data: { columns: [], rows: [] } }), null);
   assert.equal(extractTickRows({}), null);
   assert.equal(extractTickRows(undefined), null);
+});
+
+// 체결가 부호 수정(팀리드 지시, 2026-08-26 카드 데모 후속) — cntr_pric도 키움 "부호가
+// 포함된 숫자"라 부호는 기준가 대비 방향 표기이지 체결가의 부호가 아니다
+// (card-primitives.js priceMagnitude와 같은 근거, 신호 붙은 실제 fixture로 검증).
+test('formatTickPrice — 신호 붙은 체결가는 부호를 걷어내고 콤마 포맷한다', () => {
+  assert.equal(formatTickPrice('-255500'), '255,500');
+  assert.equal(formatTickPrice('+266500'), '266,500');
+});
+
+test('formatTickPrice — 부호 없는 체결가는 그대로 콤마 포맷', () => {
+  assert.equal(formatTickPrice('1701000'), '1,701,000');
+});
+
+test('formatTickPrice — 값이 없으면 formatNumeric의 안전 폴백("—")', () => {
+  assert.equal(formatTickPrice(null), '—');
+  assert.equal(formatTickPrice(undefined), '—');
 });
