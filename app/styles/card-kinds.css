@@ -204,9 +204,30 @@
 
 /* KIND: 시세 */
 
+/* 4열 틱 표(체결가·체결량·등락률·거래량) — 표 골격은 fin-table(canvas.css) 재사용,
+   여기는 카드 본문 안 여백만 보탠다. */
+.card-kind-시세-ticker { display: block; }
+.card-kind-시세-ticker .fin-table td:nth-child(3) { padding-top: 3px; padding-bottom: 3px; }
+
 /* KIND: 수급 */
 
+.card-kit-sugub-note {
+  font-size: var(--text-xs);
+  color: var(--color-k-faint);
+  margin-bottom: 6px;
+}
+
 /* KIND: 거래원 */
+
+.card-kit-broker-ranking { display: flex; flex-direction: column; }
+.card-kit-broker-ranking-label {
+  font-size: var(--text-xs);
+  color: var(--color-k-faint);
+  margin-bottom: 2px;
+}
+.card-kit-broker-ranking .card-kit-row-ranked:not(:last-child) {
+  border-bottom: 1px solid var(--color-k-panel3);
+}
 
 /* KIND: 계좌 */
 
@@ -219,7 +240,21 @@
 
 /* KIND: 주문내역 */
 
+.card-kit-order-list { display: flex; flex-direction: column; }
+.card-kit-order-list .card-kit-row-two-line:not(:last-child) {
+  border-bottom: 1px solid var(--color-k-panel3);
+}
+/* ord_stt(주문상태) 톤 확장 — 정확한 원문 열거값은 모른다(card-kind-주문내역.js
+   상단 주석 참고). "완료"→ok(초록)/"대기"→warn(호박)로만 판정해 쓴다. */
+.card-kit-pill-status.is-ok { color: var(--color-ok); }
+.card-kit-pill-status.is-warn { color: var(--color-warn); }
+
 /* KIND: 보유주식 */
+
+.card-kit-position-list { display: flex; flex-direction: column; }
+.card-kit-position-list .card-kit-row-two-line:not(:last-child) {
+  border-bottom: 1px solid var(--color-k-panel3);
+}
 
 /* KIND: 관심종목 */
 
@@ -234,8 +269,21 @@
 
 /* KIND: 호가 */
 
+/* 잔량 래더 — 이 카드 계열의 detail: 응답은 가격+잔량을 같은 봉투에 담지 않는다(실측,
+   card-kind-호가.js 머리말) — .card-kit-row-ladder를 세로로 쌓기만 한다. */
+.card-kit-hoga-ladder { display: flex; flex-direction: column; gap: 2px; }
+
 /* KIND: 주문 */
 
 /* KIND: 프로그램매매 */
 
+.card-kit-program-trend { display: flex; flex-direction: column; gap: 8px; }
+.card-kit-program-trend .card-kit-tab-switcher { align-self: flex-start; }
+
 /* KIND: 종목정보 */
+
+/* ka10001 daily_price_band/price_range 그룹 — RangeBar 위에 "1일 범위"/"연중 범위"
+   라벨을 얹는다. 두 그룹 모두 이 envelope엔 현재가가 없어(다른 detail_group 소유)
+   점 마커는 안 뜬다 — 라벨-값 정직성 우선(card-kind-종목정보.js 상단 주석). */
+.card-kind-종목정보-range { display: flex; flex-direction: column; gap: 4px; }
+.card-kind-종목정보-range-label { font-size: var(--text-xs); color: var(--color-k-faint); }
