@@ -55,10 +55,11 @@ app.on('window-all-closed', () => {
   mdlog('window-all-closed fired (no-op)');
 });
 
-// OS 레벨 종료(Alt+F4, 트레이 "종료", verify 하네스의 app.quit())를 표시하는 플래그.
-// 창이 하나가 된 뒤(리프 1.2.1)로는 "짝 중 한쪽만 닫히는" 경우가 없어졌고, 셸 창의
-// 닫기는 곧 종료다 — 백그라운드 유지는 창 제어 ×(athena:close-windows)가 담당한다.
-// 오브 창(1.3.1)이 붙으면 그 창의 'close'가 이 플래그를 다시 보게 된다.
+// 진짜 종료(트레이 "종료", verify 하네스의 app.quit())를 표시하는 플래그.
+// 2026-08-26부터 셸의 OS 레벨 닫기(Alt+F4)도 종료가 아니라 백그라운드 숨김이다 —
+// 창 제어 ×(athena:close-windows)와 동일 동작. 오브 대화 모드(보드 33)가 셸 숨김을
+// 전제로 하는데 Alt+F4가 앱을 통째로 죽이면 진입로 하나가 함정이 된다.
+// 셸·오브 두 창의 'close'가 모두 이 플래그를 보고 종료/숨김을 가른다.
 let isQuitting = false;
 app.on('before-quit', () => {
   isQuitting = true;
