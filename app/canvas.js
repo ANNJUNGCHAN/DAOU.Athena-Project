@@ -956,6 +956,16 @@ async function renderLiveChart(envelope) {
   if (reloaded) return reloaded;
   const { card, body } = makeCard('chart', title, envelope.layout, envelope.correlation, subtitle);
   stampPaperScreen(card, envelope);
+  // 카드 v3(.omc/state/card-v3-plan.md §2.2) 카드종 후킹 — 차트 전용 변형. 다른 3곳
+  // (renderFactsCard/renderMcpTable/renderCompoundCard)은 renderFn이 body 전체를
+  // 대체하는 all-or-nothing 계약인데, 차트는 범용 body(툴바+캔들, chart-card.js)가
+  // 이미 완전한 렌더러라 대체할 대상이 없다 — 여기서는 AUGMENT(위에 얹기)만 한다.
+  // renderFn이 돌려준 조각을 차트 마운트 지점(chartBody) 바로 위에 붙인다. null이면
+  // 아무것도 얹지 않는다(기존 동작과 100% 동일) — chart-card.js/chart-toolbar.js는
+  // 손대지 않는다.
+  const kindAugment = window.AthenaLib.CardKinds.resolve(title);
+  const augmentEl = kindAugment && kindAugment(envelope);
+  if (augmentEl) body.appendChild(augmentEl);
   if (!descriptor.body.candles.length) {
     card.dataset.renderState = 'empty';
     body.appendChild(errorNote('빈 차트 — candles가 없다.'));
