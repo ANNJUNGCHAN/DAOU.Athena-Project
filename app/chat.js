@@ -1243,10 +1243,18 @@ function renderApprovalCard(r) {
 
   const head = document.createElement('div');
   head.className = 'agent-head';
-  const title = document.createElement('span');
-  title.className = 'agent-source';
-  title.textContent = '루틴 제안 — 승인 전에는 실재하지 않습니다';
-  head.appendChild(title);
+  const badge = document.createElement('span');
+  badge.className = 'agent-badge';
+  badge.textContent = '승인 필요';
+  head.appendChild(badge);
+  const label = document.createElement('span');
+  label.className = 'agent-source';
+  label.textContent = '감시 등록 요청';
+  head.appendChild(label);
+  const time = document.createElement('span');
+  time.className = 'agent-rel';
+  time.textContent = '방금';
+  head.appendChild(time);
   card.appendChild(head);
 
   const note = document.createElement('div');
@@ -1268,7 +1276,7 @@ function renderApprovalCard(r) {
 
   const notice = document.createElement('div');
   notice.className = 'agent-source';
-  notice.textContent = '승인해도 주문은 자동 집행되지 않습니다 — 조건 도달 시 알림이 옵니다.';
+  notice.textContent = '승인하면 백엔드에 감시가 등록됩니다. 주문은 실행되지 않습니다.';
   card.appendChild(notice);
 
   const row = document.createElement('div');
@@ -1292,12 +1300,12 @@ function renderApprovalCard(r) {
     }
   });
 
-  const cancel = _btn('취소', 'routine-btn');
+  const cancel = _btn('거절', 'routine-btn');
   cancel.addEventListener('click', async () => {
     approve.disabled = true;
     cancel.disabled = true;
     const res = await window.athena.invoke('athena:routine-cancel', { id: r.id });
-    status.textContent = res && res.ok ? '취소됨' : `취소 실패: ${(res && res.error) || '오류'}`;
+    status.textContent = res && res.ok ? '거절됨' : `거절 실패: ${(res && res.error) || '오류'}`;
   });
 
   const edit = document.createElement('span');
