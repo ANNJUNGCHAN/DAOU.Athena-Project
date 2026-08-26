@@ -38,6 +38,7 @@
 
   const $root = document.getElementById('orbRoot');
   const $orb = document.getElementById('orb');
+  const $ring = document.getElementById('orbRing');
   const $panel = document.getElementById('orbPanel');
   const $count = document.getElementById('orbCount');
   const $toggle = document.getElementById('orbToggle');
@@ -90,6 +91,53 @@
       fired ? `읽지 않은 알림 ${n}건 펼치기` : '알림 펼치기',
     );
   }
+
+  // ─────────────────────────────────────────────────────────────────────
+  // 감시 궤도 링(2026-08-27 갭 클로징 Step 1, board-30② "궤도 위성 = 감시
+  // 건수") — 접힌 원 둘레에 활성 감시(루틴) 수만큼 위성 점을 놓는다. 표정과는
+  // 다른 채널이라 화면당 신호 원칙을 깨지 않는다: 무채색(rgb(16 19 26/50%))
+  // 이고 바이저의 눈 모양을 건드리지 않는다 — .orb-count 배지(신호가 아니라
+  // 신호의 크기 표시)와 같은 격이다. 발화(fired)로 눈이 동그래질 때도 링은
+  // 원 가장자리 밖(orb.css #orbRing inset:-7px)이라 바이저 안쪽 눈과 자리가
+  // 겹치지 않는다.
+  // ─────────────────────────────────────────────────────────────────────
+
+  /** 위성 점 각도 배치 — 감시 건수만큼 궤도 위에 고르게 놓는다. 12시 방향에서
+   * 시작해 시계 방향으로 등분한다. 순수 함수라 count만으로 결과가 정해진다. */
+  function computeSatelliteDots(count) {
+    const n = Math.max(0, Math.floor(Number(count)) || 0);
+    const dots = [];
+    for (let i = 0; i < n; i++) dots.push({ angle: (360 / n) * i });
+    return dots;
+  }
+
+  /** 감시 0건이면 링 자체를 그리지 않는다 — 없는 감시를 있는 것처럼 보이면
+   * 안 된다. createElement/textContent만 쓴다(innerHTML 0건, 함정 ⑪). */
+  function renderSatelliteRing(count) {
+    const n = Math.max(0, Math.floor(Number(count)) || 0);
+    $root.dataset.watching = n > 0 ? 'true' : 'false';
+    $ring.replaceChildren();
+    for (const dot of computeSatelliteDots(n)) {
+      const el = document.createElement('span');
+      el.className = 'orb-ring-dot';
+      el.style.setProperty('--dot-angle', `${dot.angle}deg`);
+      $ring.appendChild(el);
+    }
+  }
+
+  // 셸 대화 컨트롤 스트립(refreshChatControlStrip)과 같은 IPC를 재사용한다 —
+  // 오브가 감시 목록을 새로 만들지 않는다. 상시 열린 창이라 초 단위 폴링은
+  // 낭비다 — 60s 간격 + 루틴 이벤트 수신 시 갱신이면 충분하다.
+  async function refreshSatelliteRing() {
+    try {
+      const res = await window.athena.invoke('athena:routines-list');
+      const routines = res && res.ok && res.data && Array.isArray(res.data.routines) ? res.data.routines : [];
+      renderSatelliteRing(routines.filter((r) => r.status === 'active').length);
+    } catch { /* 표시만 못한다 — 감시 자체엔 영향 없다 */ }
+  }
+
+  refreshSatelliteRing();
+  setInterval(refreshSatelliteRing, 60000);
 
   // ─────────────────────────────────────────────────────────────────────
   // 표정 · 대기 루프 (2026-08-25)
@@ -553,6 +601,8 @@
     current = event;
     // 무엇이 왔든 오브는 깬다 — 일이 생겼다는 것 자체가 신호다.
     touchActivity();
+    // 루틴 상태가 바뀌었을 수 있다(만료·발화 등) — 감시 궤도 링 수를 다시 잰다.
+    refreshSatelliteRing();
     if (expanded && !chatModeActive) {
       // 이미 펼쳐져 있으면 바로 갈아끼운다 — 쌓아두면 최신이 아닌 것을 보게 된다.
       // 대화 모드로 펼쳐진 동안에는(이론상 셸이 그새 열렸다가 다시 숨는 등)

@@ -262,17 +262,41 @@ html, body {
 #orbRoot[data-alert="fired"] .orb-eye,
 #orbRoot[data-face="fired"] .orb-eye { width: 22.6%; height: 23%; border-radius: 50%; }
 
-/* 링 — 셸의 가장자리 두께를 암시하는 **무채색** 테두리다. 신호는 화면당 한
- * 곳이고(soul.md), 이 창에서 그 한 곳은 바이저다 — 죽은 채 남겨두면 다음
- * 사람이 되살린다. */
+/* 궤도 링 — 감시 중(활성 루틴 수) 표시(board-30②, 2026-08-27 갭 클로징
+ * Step 1). 예전엔 항상 켜진 무채색 테두리(셸 가장자리 두께 암시)였는데 아무
+ * 상태도 지지 않는 장식이었다(git blame 8587bb1) — 그 자리를 감시 건수
+ * 신호로 채운다. 점선 원 + 위성 점(개수 = orb.js computeSatelliteDots가 재는
+ * 활성 감시 수). 여전히 무채색 rgb(16 19 26/50%)라 "신호는 화면당 바이저
+ * 하나" 규범을 깨지 않는다(.orb-count 배지와 같은 격 — 표정이 아니라 크기
+ * 표시) — 발화(fired)로 눈이 동그래질 때도 이 링은 원 가장자리 밖(inset:-7px)
+ * 이라 바이저 안쪽 눈과 자리가 겹치지 않는다. 감시 0건이면 그리지 않는다
+ * (orb.js가 [data-watching] 속성으로 gate한다) — 없는 감시를 있는 것처럼
+ * 보이면 안 된다. */
 #orbRing {
   position: absolute;
-  inset: -1px;
+  inset: -7px;
   border-radius: 50%;
   pointer-events: none;
-  background: rgba(16, 19, 26, 0.10);
-  -webkit-mask: radial-gradient(circle, transparent 0 32px, #000 33px);
-  mask: radial-gradient(circle, transparent 0 32px, #000 33px);
+  border: 1px dashed rgb(16 19 26 / 50%);
+  display: none;
+}
+#orbRoot[data-watching="true"] #orbRing { display: block; }
+
+/* 위성 점 — orb.js가 각도를 --dot-angle로 얹는다. translateY로 궤도
+ * 반지름(38px 오브 반지름 + 7px 인셋 = 45px)만큼 밀어낸 뒤 rotate로 자리를
+ * 잡는다 — 점이 원이라 자기 회전은 안 보이므로 순서(rotate→translate)만
+ * 맞으면 된다. 회전 애니메이션은 없다(정적 배치) — 그래서 reduced-motion
+ * 예외가 따로 필요 없다(돌리는 타이머 자체가 없다).*/
+.orb-ring-dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  margin: -2px 0 0 -2px;
+  border-radius: 50%;
+  background: rgb(16 19 26 / 50%);
+  transform: rotate(var(--dot-angle, 0deg)) translateY(-45px);
 }
 
 .orb-core {
