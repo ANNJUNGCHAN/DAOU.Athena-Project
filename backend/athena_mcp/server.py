@@ -137,7 +137,6 @@ _RENDER_CANVAS_CANVAS_TYPE_PROPERTY: dict[str, Any] = {
 
 _RENDER_CANVAS_INPUT_SCHEMA: dict[str, Any] = {
     "type": "object",
-    "anyOf": [{"required": ["plan_token"]}, {"required": ["data"]}],
     "properties": {
         "canvas_type": _RENDER_CANVAS_CANVAS_TYPE_PROPERTY,
         "data": {
@@ -328,6 +327,23 @@ class AthenaGateway:
         """
         name = qualified_or_builtin_name
         if name == RENDER_CANVAS_TOOL:
+            if not arguments.get("plan_token") and not arguments.get("data"):
+                # 게이트 수준 검증(2026-08-26) — 이 요구를 예전에는 inputSchema
+                # 최상위 anyOf([{required:[plan_token]},{required:[data]}])로
+                # 표현했다. 그 anyOf가 Claude Code CLI의 ToolSearch 지연 로딩
+                # 인덱서에서 이 툴 하나만 색인 실패(select:/의미 검색 둘 다
+                # 0건)를 내는 걸 실측으로 확인했다 — 형제 툴 athena__save_canvas는
+                # (구조가 거의 같은데 최상위 anyOf만 없다) 정상 색인된다.
+                # inputSchema는 느슨하게 두고(모델이 읽는 설명문으로 이미
+                # plan_token/data 양자택일을 충분히 설명한다) 실제 요구는
+                # 여기 코드에서 강제한다 — validate_canvas_payload는 그대로
+                # 권위 있는 검증기다, 이 게이트는 그 앞단 진입 조건만 지킨다.
+                return _gateway_blocked_result(
+                    "athena__render_canvas는 plan_token 또는 data 중 하나가 "
+                    "반드시 있어야 한다 — 조회 결과가 있으면 athena_resolve의 "
+                    "plan_token만 넘기고, legacy/non-Kiwoom 경로만 data를 "
+                    "직접 구성해 넘긴다."
+                )
             if arguments.get("plan_token"):
                 # 데이터 지름길(canvas_data.py) — 게이트웨이가 plan을 직접 실행해
                 # 봉투를 채운다. 백엔드 왕복이 생기므로 셀렉터와 같은 최소 감사

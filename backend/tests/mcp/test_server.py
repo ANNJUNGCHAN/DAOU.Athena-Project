@@ -314,10 +314,14 @@ async def test_render_canvas_tool_schema_accepts_missing_canvas_type_via_real_sd
     list_handler = server.request_handlers[types.ListToolsRequest]
     listed = await list_handler(types.ListToolsRequest(method="tools/list"))
     render_tool = next(tool for tool in listed.root.tools if tool.name == RENDER_CANVAS_TOOL)
-    assert render_tool.inputSchema["anyOf"] == [
-        {"required": ["plan_token"]},
-        {"required": ["data"]},
-    ]
+    # 최상위 anyOf([{required:[plan_token]},{required:[data]}])는 더 이상 없다
+    # (2026-08-26 — Claude Code CLI의 ToolSearch 지연 로딩 인덱서가 이 anyOf
+    # 하나 때문에 이 툴만 색인 실패했다: select:/의미 검색 둘 다 0건 실측,
+    # 형제 툴 athena__save_canvas는 구조가 거의 같은데 최상위 anyOf만 없어서
+    # 정상 색인됐다). plan_token 또는 data 요구는 `dispatch_call()`의 게이트
+    # 검사로 옮겼다(아래 test_render_canvas_direct_data_still_requires_...
+    # 참고) — inputSchema는 느슨해졌지만 실제 진입 요구는 그대로다.
+    assert "anyOf" not in render_tool.inputSchema
     assert render_tool.inputSchema["properties"]["plan_token"]["type"] == "string"
     assert "summary" not in render_tool.description
     assert "data 없이" in render_tool.description
@@ -410,10 +414,14 @@ async def test_actual_mcp_call_returns_value_free_websocket_lifecycle_receipts(m
 async def test_render_canvas_direct_data_still_requires_input_validation_for_missing_data(
     make_gateway,
 ):
-    """plan_token과 data가 모두 없으면 SDK 입력 검증에서 닫힌다."""
+    """plan_token과 data가 모두 없으면 여전히 닫힌다 — 다만 이제는 SDK의
+    jsonschema anyOf가 아니라 `dispatch_call()`의 게이트 검사에서다
+    (2026-08-26 — 최상위 anyOf를 스키마에서 걷어낸 이유는 위
+    test_render_canvas_tool_schema_accepts_missing_canvas_type_via_real_sdk_validation
+    참고)."""
 
     def handler(_request):
-        raise AssertionError("호출되면 안 된다 — SDK 검증 단계에서 거부돼야 한다")
+        raise AssertionError("호출되면 안 된다 — 게이트 검사 단계에서 거부돼야 한다")
 
     gw = make_gateway(handler)
     server = build_mcp_server(gw)
@@ -426,7 +434,19 @@ async def test_render_canvas_direct_data_still_requires_input_validation_for_mis
     server_result = await call_handler(request)
     result = server_result.root
     assert result.isError is True
-    assert "not valid under any" in result.content[0].text
+    assert "plan_token 또는 data 중 하나가" in result.content[0].text
+
+
+async def test_render_canvas_dispatch_call_blocks_when_data_is_an_empty_dict(tmp_path):
+    """빈 `data:{}`는 키는 있어도 값이 비어 렌더할 게 없다 — plan_token 판정과
+    같은 truthy 관례를 그대로 따라(기존 `if arguments.get("plan_token"):`
+    관례와 통일) 이것도 게이트에서 막는다."""
+    gw = _bare_gateway(tmp_path)
+
+    result = await gw.dispatch_call(RENDER_CANVAS_TOOL, {"data": {}})
+
+    assert result.isError is True
+    assert "plan_token 또는 data 중 하나가" in result.content[0].text
 
 
 async def test_render_canvas_direct_facts_payload_without_plan_token_still_renders(tmp_path):
