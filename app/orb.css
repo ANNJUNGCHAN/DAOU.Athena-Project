@@ -225,10 +225,11 @@ html, body {
  * 안 붙인다 — 전부 눈 모양 하나로만 말한다(board-31 표제, orb.js 위 주석과 짝).
  *
  * 실제 신호가 있는 건 idle·sleep·fired·만료(mopey)·복원실패(crying)에 더해
- * 2026-08-26부로 듣는 중(listen)·생각 중(think)·완료(done)가 늘었다(orb.js가
- * input:focus·질의 진행·턴 완료에 새로 붙였다). 윙크·놀람·찡그림은 오브에
- * 아직 그 신호가 없어(감시 등록 반영·급변·호출 실패를 오브가 받지 않는다)
- * CSS에 모양만 두고 배선하지 않는다 — watch/drift와 같은 이유(orb.js 주석). */
+ * 2026-08-26부로 듣는 중(listen)·생각 중(think)·완료(done)가, 2026-08-27
+ * 갭 클로징으로 윙크(등록 반영)·찡그림(호출 실패·연결 끊김)·놀람(급변)이
+ * 늘었다(orb.js가 각 신호를 받는 지점에서 배선한다). watch/glad만 아직
+ * CSS에 모양만 두고 배선하지 않는다 — 판정에 필요한 데이터가 없어 백로그로
+ * 유예했다(CP1/CP3, orb.js 상단 주석), watch/drift와 같은 이유다. */
 
 /* 윙크 — 승인됨(감시 등록 반영). 한쪽만 접힌다 — 표정 중 유일한 좌우 비대칭. */
 #orbRoot[data-face="wink"] .orb-eye-l { height: 6%; }
@@ -240,9 +241,6 @@ html, body {
   width: 24%;
   height: 14%;
 }
-
-/* 놀람 — 변동성 급등. 둥글고 크게 뜬다. */
-#orbRoot[data-face="surprise"] .orb-eye { width: 26%; height: 26%; border-radius: 50%; }
 
 /* 찡그림 — 호출 실패·연결 끊김. 사선으로 부딪는 두 막대( >< ). */
 #orbRoot[data-face="frown"] .orb-eye { width: 12%; height: 30%; }
@@ -279,6 +277,14 @@ html, body {
 /* 발화 — 두 도형이 동그래진다. 화면당 신호는 여기 하나다(board-32 section C). */
 #orbRoot[data-alert="fired"] .orb-eye,
 #orbRoot[data-face="fired"] .orb-eye { width: 22.6%; height: 23%; border-radius: 50%; }
+
+/* 놀람 — 발화 중 급변(변동성 급등, board-31⑤ 캡션). 위 발화 규칙 **뒤에**
+ * 와야 한다: 미확인 알림이 있으면 data-alert="fired"도 함께 서는데, 그
+ * 결합 규칙이 .orb-eye를 22.6%/23%로 고정한다 — 같은 특정성이라 소스 순서로
+ * 승자가 갈리므로, 놀람 규칙이 그 뒤에 있어야 26%/26%(더 둥글고 크게)로
+ * 이긴다. data-face 값 자체가 fired를 대체하고(orb.js 주석), 배지·카운트는
+ * 여전히 data-alert만 본다 — 2026-08-27 갭 클로징 Step 5. */
+#orbRoot[data-face="surprise"] .orb-eye { width: 26%; height: 26%; border-radius: 50%; }
 
 /* 궤도 링 — 감시 중(활성 루틴 수) 표시(board-30②, 2026-08-27 갭 클로징
  * Step 1). 예전엔 항상 켜진 무채색 테두리(셸 가장자리 두께 암시)였는데 아무

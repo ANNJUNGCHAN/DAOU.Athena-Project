@@ -27,6 +27,23 @@ function badgeText(firedAtIso) {
   return `${p(fired.getHours())}:${p(fired.getMinutes())} 발화`;
 }
 
+// 급변 판정 배율(board-31⑤ 캡션 "변동성 급등"). 관측값이 임계치의 이 배수
+// 이상이면 정상 발화가 아니라 급변으로 본다 — 근거 데이터 없이 잡은 최초값
+// 이라 캘리브레이션 여지가 있다(실사용 피드백으로 조정 예정).
+const SURGE_RATIO = 1.5;
+
+/** 관측값이 임계치를 SURGE_RATIO배 이상 초과했는지 — 급변(놀람) 여부.
+ * 숫자 파싱·검증은 relativeText의 Date.parse+Number.isFinite 관례를 그대로
+ * 옮긴 것이다: 파싱 실패나 임계 0(나눗셈 불능)이면 판정하지 않는다(false).
+ * 부호는 배율에만 관여하고 방향은 안 본다 — 급락 감시(threshold가 음수)도
+ * 같은 배율로 급변을 잰다. */
+function exceedRatio(observed, threshold) {
+  const o = Number(observed);
+  const t = Number(threshold);
+  if (!Number.isFinite(o) || !Number.isFinite(t) || t === 0) return false;
+  return Math.abs(o / t) >= SURGE_RATIO;
+}
+
 // event → 능동 턴 렌더 모델. kind: fired | expired | restore-failed | unknown.
 function buildTurnModel(event, nowMs) {
   if (!event || typeof event !== 'object') {
@@ -81,7 +98,7 @@ function buildToast(event) {
   return { title: 'Athena 알림', body: model.body };
 }
 
-const __exports = { describeMode, relativeText, badgeText, buildTurnModel, buildToast };
+const __exports = { describeMode, relativeText, badgeText, buildTurnModel, buildToast, exceedRatio };
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = __exports;
