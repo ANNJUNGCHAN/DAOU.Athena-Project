@@ -37,10 +37,19 @@ html, body {
     inset 0 0 24px rgba(255, 240, 214, 0.08),
     0 10px 26px rgb(16 19 26 / 18%);
   border: 1px solid rgb(16 19 26 / 7%);
-  /* 링 전체가 드래그 손잡이다. 가운데 코어만 no-drag로 뚫는다. */
-  -webkit-app-region: drag;
+  /* 2026-08-26 board-32: OS app-region 드래그를 걷어냈다 — app-region:drag는
+   * 창을 OS가 직접 옮겨서 렌더러에 이동량이 안 들어온다. board-32는 "끌 때
+   * 눈이 반대 방향으로 밀린다(관성)"를 요구하는데, 그 관성을 그리려면 매 이동의
+   * dx/dy가 JS에 있어야 한다 — 그래서 orb.js가 pointerdown/move/up으로 직접
+   * 드래그를 잡고 athena:orb-drag-move로 main에 이동을 요청한다(no-drag라야
+   * 이 포인터 이벤트가 온다 — app-region:drag가 남아 있으면 캡처 전에 OS가
+   * 이동을 가로챈다). 클릭(펼치기)과의 구분은 orb.js의 4px 문턱이 진다.
+   * -webkit-app-region: no-drag; 참고 — 명시하지 않으면 상위 .orb-root에서
+   * 물려받는 값이 없어 기본은 이미 no-drag지만, 다음 사람이 되살리지 않도록
+   * 의도를 여기 남긴다. */
   cursor: grab;
 }
+#orb:active { cursor: grabbing; }
 
 #orbRoot {
   --color-kiwoome-visor: #0e20b2;      /* 실측 p50 — 바이저 본색 */
@@ -56,13 +65,15 @@ html, body {
   /* 인셋 = 백색 셸(헬멧)의 두께. 원본에서 바이저는 헬멧에 난 창이라 테두리가
    * 분명히 읽혀야 한다 — 꽉 채우면 "눈 달린 파란 공"이 되지 헬멧으로 안 읽힌다.
    *
-   * 2026-08-25: 원본은 아래턱이 이마보다 두꺼웠는데(상16·하23), 얼굴을 정가운데로
-   * 옮기고 테두리를 한 단 얇게 줄였다(사용자 결정). 네 변을 같게 두면 얼굴이
-   * 원의 중심에 앉고, 15%면 헬멧 테두리가 여전히 테두리로 읽힌다. */
-  left: 15%;
-  right: 15%;
-  top: 15%;
-  bottom: 15%;
+   * 2026-08-26 board-32 실측 정정: "파란 부분이 너무 작다"(사용자 1순위 지적).
+   * Paper board 32가 orb 100px 기준 바이저 62×61(62%)을 못박았다 — 15%
+   * 인셋(70% 프레임)보다 살짝 작은 프레임이지만, 진짜 원인은 프레임이 아니라
+   * 아래 clip-path였다(대기 34%만 열려 그 안의 작은 원만 보였다). 프레임을
+   * 스펙값으로 맞추고, 아래 --orb-open 기본값을 키워 문제를 없앤다. */
+  left: 19%;
+  right: 19%;
+  top: 19.5%;
+  bottom: 19.5%;
   border-radius: 50% 50% 48% 48% / 54% 54% 46% 46%;
   background:
     /* 상단 스펙큘러 — 유광 3D 구체의 핵심. 원본의 밝은 반사 지점 위치를 따른다. */
@@ -83,18 +94,21 @@ html, body {
    * 채도 145가 나왔다(검증 22-A가 잡았다). clip-path는 잘린 영역을 아예 그리지
    * 않으므로 개폐가 픽셀 단위로 성립한다.
    *
-   * 2026-08-25 규범 개정: "평소 **무채색**"을 "평소 **반쯤**"으로 바꾼다. 얼굴이
-   * 아예 없으면 오브는 딱딱한 공이라 상주할 이유가 없다. 대신 신호는 색의 유무가
-   * 아니라 **색의 양**이 진다 — 대기는 34%만 열리고 발화에서 75%로 활짝 열린다.
-   *
-   * 34%인 이유(실측 정정): 처음 44%로 뒀더니 clip 원이 바이저 타원을 거의 다
-   * 덮어 발화와 면적이 안 갈렸다 — (44/75)² 같은 제곱비는 clip이 바이저 경계에서
-   * **포화**되므로 성립하지 않는다. 34%(r≈18px)는 바이저(r≈26.6px) 면적의 절반
-   * 아래를 드러내 발화 대비 ~0.45로 떨어진다(검증22 firedIsVisiblyWider가 잰다).
-   *
-   * 앵커 50% 50%: 얼굴을 정가운데 둔다(2026-08-25 사용자 결정 — 인셋 대칭화와 짝). */
-  clip-path: circle(var(--orb-open, 34%) at 50% 50%);
-  transform: scale(var(--orb-scale, 0.97));
+   * 2026-08-26 board-32 규범 개정(사용자 결정) — "대기 34% / 발화 75%"로 상태별
+   * 바이저 폭을 벌리던 축을 걷어낸다. board-32 section C는 잠듦을 뺀 모든 상태의
+   * orb-100 참조 프레임에서 바이저를 **항상 같은 62×61**로 그린다 — 표정은 눈
+   * 모양(section B/C)과 시간 루프(section D)만으로 만든다는 이 파일 상단 원칙을
+   * 바이저 자신도 지금부터 따른다. 그래서:
+   *   - 기본(대기)값을 90%로 올린다 — "말 걸 수 있는 상태"는 파란 프레임이
+   *     거의 다 드러나야 사용자 1순위 지적("파란 부분이 너무 작다")이 없어진다.
+   *   - **잠듦만** 예외로 남아 --orb-open을 따로 눌러 닫는다(옛 '평소' 34%가
+   *     그 자리로 내려간다 — 아래 [data-face="sleep"] 규칙).
+   *   - 발화·경계·미안 등 나머지 상태는 더 이상 --orb-open을 건드리지 않는다
+   *     (전부 기본 90%) — 상태 구분은 .orb-eye 모양이 진다.
+   * 이 개정으로 검증22의 firedIsVisiblyWider/stateActuallyChangedPixels는
+   * 더는 성립하지 않는다 — verify.js에 같은 이유를 남기고 폐기했다. */
+  clip-path: circle(var(--orb-open, 90%) at 50% 50%);
+  transform: scale(var(--orb-scale, 1));
   transition: clip-path 340ms var(--ease), transform 340ms var(--ease);
   /* 숨 — 알아채면 실패고 없으면 허전한 정도. transform이 아니라 **독립 scale 속성**에
    * 태운다: transform에 얹으면 위 전이(상태 변화)를 애니메이션이 덮어써서 개폐가
@@ -132,10 +146,11 @@ html, body {
   transition: transform var(--orb-blink-dur, 130ms) var(--ease);
 }
 
-/* 눈 — 원본의 둥근 세로 막대 두 개. 흰색이라 신호색을 늘리지 않는다. */
+/* 눈 — 원본의 둥근 세로 막대 두 개. 흰색이라 신호색을 늘리지 않는다.
+ * 2026-08-26 board-32 실측: eye 9×21 / visor 62×61 → 바이저 대비 14.5%×34.4%. */
 .orb-eye {
-  width: 15%;
-  height: 34%;
+  width: 14.5%;
+  height: 34.4%;
   border-radius: 999px;
   background: #fff;
   box-shadow: 0 1px 2px rgb(0 0 0 / 18%);
@@ -150,17 +165,26 @@ html, body {
 
 /* ---------- 표정 — 흰 도형의 모양 하나로만 만든다 ----------
  * 바이저 색·헬멧·링은 전부 그대로다. 새 기관(눈썹·입·눈동자)을 붙이지 않는다.
- * 각 표정은 앱에 **이미 있는 신호**에 붙는다 — 얼굴이 새 정보를 만들면 거짓말이 된다. */
+ * 각 표정은 앱에 **이미 있는 신호**에 붙는다 — 얼굴이 새 정보를 만들면 거짓말이 된다.
+ *
+ * 2026-08-26 board-32 실측: 아래 값은 전부 board-32 section C의 orb-100 참조
+ * 프레임(바이저 62×61)에서 잰 eye-l/eye-r 치수를 바이저 대비 %로 환산한 것이다
+ * (예: 완료 14×8 → 14/62=22.6%, 8/61=13.1%). **바이저 자신은 더 이상 표정마다
+ * 안 움직인다** — section C의 orb-100이 잠듦 한 칸만 빼고 전부 같은 62×61
+ * 프레임으로 그려져 있다: 표정 축은 눈 모양 하나, 바이저는 잠듦 하나만 예외다
+ * (아래 [data-face="sleep"]). 옛 판이 표정마다 --orb-open도 같이 흔든 건
+ * 이 파일 자신이 선언한 "눈 모양 하나로만" 원칙과 어긋났었다. */
 
-/* 잠듦 — 오래 아무 일 없음. 옛 판의 '평소'가 여기로 내려왔다. */
-#orbRoot[data-face="sleep"] #orbVisor { --orb-open: 20%; --orb-scale: 0.94; }
-#orbRoot[data-face="sleep"] .orb-eye { height: 8%; }
+/* 잠듦 — 오래 아무 일 없음(idle > 5min). 옛 판의 '평소'(34%)가 여기로 내려왔다
+ * — 바이저가 거의 닫히는 유일한 표정이다(board-32 section C). */
+#orbRoot[data-face="sleep"] #orbVisor { --orb-open: 34%; --orb-scale: 0.92; }
+#orbRoot[data-face="sleep"] .orb-eye { height: 6.5%; }
 
-/* 듣는 중 — 입력줄을 내려다본다. 시선은 orb.js가 --orb-gy로 준다. */
-#orbRoot[data-face="listen"] .orb-eye { height: 28%; }
+/* 듣는 중 — input:focus. 눈이 입력줄을 내려다본다. 시선은 orb.js가 --orb-gy로 준다. */
+#orbRoot[data-face="listen"] .orb-eye { height: 29.5%; }
 
-/* 경계 — 좁아지며 한쪽을 붙박는다. 아직 발화는 아니다. */
-#orbRoot[data-face="watch"] .orb-eye { width: 11%; height: 30%; }
+/* 경계 — 임계 근접. 좁아지며 한쪽을 붙박는다. 아직 발화는 아니다. */
+#orbRoot[data-face="watch"] .orb-eye { width: 11.3%; height: 27.9%; }
 
 /* 완료·신남 — 위로 휜 아치. 배경을 지우고 테두리 한쪽만 남긴다(도형 수는 그대로 둘). */
 #orbRoot[data-face="done"] .orb-eye,
@@ -170,36 +194,77 @@ html, body {
   border-radius: 999px 999px 0 0;
   border-top: 2px solid #fff;
 }
-#orbRoot[data-face="done"] .orb-eye { width: 24%; height: 14%; }
-#orbRoot[data-face="glad"] .orb-eye { width: 28%; height: 17%; border-top-width: 2.5px; }
-#orbRoot[data-face="glad"] #orbVisor { --orb-open: 42%; }
-
-/* 미안 — 아래로 휜 아치. 색은 그대로다(실패를 색으로 말하지 않는다). */
-#orbRoot[data-face="sorry"] .orb-eye {
-  background: transparent;
-  box-shadow: none;
-  border-radius: 0 0 999px 999px;
-  border-bottom: 2px solid #fff;
-  width: 24%;
-  height: 12%;
-}
-#orbRoot[data-face="sorry"] #orbVisor { --orb-open: 30%; }
+#orbRoot[data-face="done"] .orb-eye { width: 22.6%; height: 13.1%; }
+#orbRoot[data-face="glad"] .orb-eye { width: 27.4%; height: 16.4%; border-top-width: 2.5px; }
 
 /* 딴생각 — 살짝 기운다. 붙잡지 않겠다는 뜻. */
 #orbRoot[data-face="drift"] .orb-eye { transform: rotate(-10deg); }
 
-/* 발화 — **여기서만 활짝 열린다.** 신호는 색의 유무가 아니라 색의 양이다. */
-#orbRoot[data-alert="fired"] #orbVisor,
-#orbRoot[data-face="fired"] #orbVisor {
-  --orb-open: 75%;
-  --orb-scale: 1;
-}
-#orbRoot[data-face="fired"] .orb-eye { width: 21%; height: 21%; border-radius: 50%; }
+/* ---------- 2026-08-26 확장 — 표정 10종(board-31/32) ----------
+ * 기본(idle)·웃음(done)·즐거움(glad)·잠듦(sleep)은 위에 이미 있다. 여기서는
+ * 나머지 여섯 — 윙크·놀람·찡그림·우는·시무룩·생각중 — 만 보탠다.
+ * 신호는 화면당 바이저 하나뿐이라(check-orb.mjs) 배지·점 같은 둘째 채널은
+ * 안 붙인다 — 전부 눈 모양 하나로만 말한다(board-31 표제, orb.js 위 주석과 짝).
+ *
+ * 실제 신호가 있는 건 idle·sleep·fired·만료(mopey)·복원실패(crying)에 더해
+ * 2026-08-26부로 듣는 중(listen)·생각 중(think)·완료(done)가 늘었다(orb.js가
+ * input:focus·질의 진행·턴 완료에 새로 붙였다). 윙크·놀람·찡그림은 오브에
+ * 아직 그 신호가 없어(감시 등록 반영·급변·호출 실패를 오브가 받지 않는다)
+ * CSS에 모양만 두고 배선하지 않는다 — watch/drift와 같은 이유(orb.js 주석). */
 
-/* 링 — 셸의 가장자리 두께를 암시하는 **무채색** 테두리다.
- * 2026-08-24 리프 1.3.2: 옛 판은 여기에 마젠타 호로 미확인 수를 그렸다. 얼굴이
- * 그 신호를 대신하게 되면서 호를 걷어냈다 — 신호는 화면당 한 곳이고(soul.md),
- * 이 창에서 그 한 곳은 바이저다. 죽은 채 남겨두면 다음 사람이 되살린다. */
+/* 윙크 — 승인됨(감시 등록 반영). 한쪽만 접힌다 — 표정 중 유일한 좌우 비대칭. */
+#orbRoot[data-face="wink"] .orb-eye-l { height: 6%; }
+#orbRoot[data-face="wink"] .orb-eye-r {
+  background: transparent;
+  box-shadow: none;
+  border-radius: 999px 999px 0 0;
+  border-top: 2px solid #fff;
+  width: 24%;
+  height: 14%;
+}
+
+/* 놀람 — 변동성 급등. 둥글고 크게 뜬다. */
+#orbRoot[data-face="surprise"] .orb-eye { width: 26%; height: 26%; border-radius: 50%; }
+
+/* 찡그림 — 호출 실패·연결 끊김. 사선으로 부딪는 두 막대( >< ). */
+#orbRoot[data-face="frown"] .orb-eye { width: 12%; height: 30%; }
+#orbRoot[data-face="frown"] .orb-eye-l { transform: rotate(-24deg); }
+#orbRoot[data-face="frown"] .orb-eye-r { transform: rotate(24deg); }
+
+/* 시무룩 — 루틴이 만료로 끝남. 평평한 가로 막대 — 옛 '미안'의 만료 쪽. */
+#orbRoot[data-face="mopey"] .orb-eye { width: 22.6%; height: 11.5%; border-radius: 999px; }
+
+/* 우는 — 감시 복원 실패(강제 알림). 시무룩과 같은 눈에 눈물 한 방울만 더한다
+ * — 옛 '미안'의 복원실패 쪽. 새 기관이 아니라 기존 눈 모양의 부속물이다. */
+#orbRoot[data-face="crying"] .orb-eye {
+  width: 22.6%;
+  height: 11.5%;
+  border-radius: 999px;
+  position: relative;
+}
+#orbRoot[data-face="crying"] .orb-eye-r::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 160%;
+  width: 3px;
+  height: 6px;
+  background: #fff;
+  border-radius: 0 50% 50% 50%;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+/* 생각 중 — 질의 진행(query running). board-32: 눈 모양은 기본과 같은 32×21
+ * 그대로다 — 스피너를 대신하는 건 모양이 아니라 **시선**이다. 흰 도형이 위를
+ * 훑는다(orb.js startThinkSweep이 --orb-gx/gy를 좌우로 흔든다). */
+
+/* 발화 — 두 도형이 동그래진다. 화면당 신호는 여기 하나다(board-32 section C). */
+#orbRoot[data-alert="fired"] .orb-eye,
+#orbRoot[data-face="fired"] .orb-eye { width: 22.6%; height: 23%; border-radius: 50%; }
+
+/* 링 — 셸의 가장자리 두께를 암시하는 **무채색** 테두리다. 신호는 화면당 한
+ * 곳이고(soul.md), 이 창에서 그 한 곳은 바이저다 — 죽은 채 남겨두면 다음
+ * 사람이 되살린다. */
 #orbRing {
   position: absolute;
   inset: -1px;

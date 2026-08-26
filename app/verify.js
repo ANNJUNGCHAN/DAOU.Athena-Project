@@ -3,8 +3,6 @@
 // - capturePage() 스크린샷 (app/captures/)
 // - 셸 창 3영역(현재 2영역) 폭 계약 · 배치 · 최대화 의미론
 // - 접근성 3종 강제 적용 스크린샷 (CDP Emulation.setEmulatedMedia)
-// 2026-08-24 리프 1.2.1: "점→캔버스 확장/수축 rAF 프레임 실측"과 "두 창 getBounds()
-// 독립성"은 측정 대상 자체가 사라져 빠졌다(창 모델 전환 — 각 검증 블록 주석 참조).
 // 을 수행하고 app/captures/VERIFY-REPORT.json 에 원본 수치를 남긴다.
 
 // main.js를 라이브러리로 불러올 때는 자동 기동(app.whenReady().then(createWindows))을
@@ -340,22 +338,6 @@ app.whenReady().then(async () => {
   const delayedFetch = async (_url, options) => new Promise((_resolve, reject) => {
     options.signal.addEventListener('abort', () => reject(options.signal.reason), { once: true });
   });
-  // 2026-08-24 리프 1.3.1 — 이 검사가 **앱을 오진하고 있었다.**
-  //
-  // 증상: 5회 실행 중 2회가 3130~3196ms로 실패했다. 옛 판은 그걸 "앱이 3초 예산을
-  // 넘겼다"로 보고했다. 계측을 넣어 실제 스톨 구간을 재보니 원인이 달랐다:
-  //
-  //   run  총시간   스톨 시작   스톨 길이   스톨 종료   **앱이 쓴 시간**  판정
-  //   1    2737     2101       600        2701       36ms            통과
-  //   2    2748     2112       600        2712       36ms            통과
-  //   3    3196     **2573**   600        3173       **23ms**        실패
-  //
-  // 실패한 run 3에서 앱은 **가장 빨랐다**(23ms). 넘긴 이유는 하네스 자신의
-  // `setTimeout(2100)`이 473ms 늦게 실행됐기 때문이다 — 공유 데스크톱에서 타이머가
-  // 밀린 것이고 앱과 무관하다. 즉 옛 오라클은 하네스의 스케줄 지터를 앱 결함으로
-  // 번역하고 있었다. 이런 거짓 양성은 결국 "이 검사는 원래 가끔 빨개진다"는 학습을
-  // 만들고, 그때 진짜 회귀가 섞여 들어온다.
-  //
   // 고친 방향(완화가 아니라 분리):
   //  ① 하네스가 자기 사양(2100±60에 시작, 600±60 지속)을 지켰는지 먼저 잰다.
   //  ② 사양을 못 지킨 시행은 **무효 시행**이고 최대 3회까지 다시 시도한다.
@@ -601,8 +583,7 @@ app.whenReady().then(async () => {
   // (입력 후 Enter)을 그대로 시뮬레이션해 chat.js의 상태 머신과
   // athena__render_canvas 트리거 전체 경로를 검증한다.
   //
-  // 2026-08-24 리프 1.2.1: 옛 판은 여기서 **창 높이 자동 성장**을 함께 쟀다
-  // (boundsAfterQuery.height > boundsBeforeQuery.height + 2). 채팅이 고정 폭 영역이
+  // 채팅이 고정 폭 영역이
   // 된 뒤로는 창이 자라지 않는다 — 자라는 것은 이력의 scrollHeight이고, 넘치면
   // 영역 안에서 스크롤한다. 그래서 "창이 커졌는가" 대신 **"이력이 실제로 늘고
   // 바닥을 따라갔는가"**를 잰다. 창 높이 불변도 함께 단언한다: 옛 자동 성장 경로가
@@ -853,9 +834,8 @@ app.whenReady().then(async () => {
     modelPanelHasModelChips: modelPanelProbe.modelChipCount > 0,
     // 설정은 캔버스의 일이 아니다
     noSettingsCardsOnCanvas: canvasProbe.settingsCardsOnCanvas === 0,
-    // 2026-08-24 리프 1.2.1: 옛 단언 chatGrewToMax("설정을 열면 창이 chatMaxH로
-    // 자란다")는 사라졌다 — 설정은 셸 창 전체를 덮는 오버레이라 창 크기를 건드리지
-    // 않는다. 그 자리에 **창 크기 불변**을 넣는다: 모드 전환이 창을 흔들면 회귀다.
+    // 설정은 셸 창 전체를 덮는 오버레이라 창 크기를 건드리지
+    // 않는다. **창 크기 불변**을 단언한다: 모드 전환이 창을 흔들면 회귀다.
     windowSizeUnchangedWhileOpen:
       near(chatBoundsWhileOpen.width, chatBoundsBefore.width)
       && near(chatBoundsWhileOpen.height, chatBoundsBefore.height),
@@ -1074,8 +1054,6 @@ app.whenReady().then(async () => {
   const cbBefore = shellWin.getBounds();
   // 셸 창에는 부팅 하한(main.js DESIGN.minW/minH)이 걸려 있다 — 절반 축소
   // 시뮬레이션이 그 하한에 막히지 않게 잠시만 풀고, 끝나면 되돌린다.
-  // 2026-08-24 리프 1.2.1: 옛 판은 `layout.canvasW`(캔버스 창 설계 폭)를 하한
-  // 폭으로 썼다. 그 값이 사라져 undefined가 들어가면서 setMinimumSize가 던졌다.
   const halfH = Math.round(cbBefore.height / 2);
   shellWin.setMinimumSize(200, 200);
   shellWin.setBounds({ ...cbBefore, height: halfH });
@@ -1120,9 +1098,7 @@ app.whenReady().then(async () => {
   //     성장 버그 5e0a9ab 회귀 가드 계승), (b) 캡션/구멍 CSS 계약, (c) 외부(사용자)
   //     이동을 앱이 되감지 않는다.
   //
-  // 2026-08-24 리프 1.2.1: (c)가 "짝 팔로우"에서 "되감지 않는다"로 바뀌었다. 옛
-  // 판은 noteAppBounds 없는 setBounds로 사용자 드래그를 재현해 **상대 창이 같은
-  // 델타로 따라오는지**를 쟀다. 따라올 상대가 없어졌으므로, 같은 자극으로 그
+  // 따라올 상대가 없어졌으므로, 같은 자극으로 그
   // 반대편 위험을 잰다: handleForeignArrange가 사용자 이동을 OS 스냅으로 오인해
   // 창을 제자리로 정착시켜버리면 그게 회귀다.
   // #grip은 사라졌다(리프 1.2.1) — no-drag 구멍 단언 대상에서 뺀다. 캔버스 창의
@@ -1269,7 +1245,7 @@ app.whenReady().then(async () => {
     cardRendered: chartProbe !== null,
     periodTabsOk: chartProbe !== null && chartProbe.tabs.join(',') === '일,주,월,년,분,틱',
     paneSeparated: chartProbe !== null && chartProbe.paneRows >= 3, // 가격+구분+거래량 이상
-    // 2026-08-25: 지표 35 → 36종(RMI 추가). 행 수는 레지스트리에서 읽어
+    // 행 수는 레지스트리에서 읽어
     // 비교한다 — 숫자를 박아두면 지표를 추가할 때마다 여기가 깨진다.
     indicatorRowsMatchRegistry:
       chartProbe !== null && chartProbe.indicatorRows === INDICATOR_DEFS_LENGTH,
@@ -1525,11 +1501,7 @@ app.whenReady().then(async () => {
   // 성립하는지를 단언한다 — 값을 CSS 어딘가에 하드코드해 사다리가 두 벌이 되는
   // 회귀를 잡는 게 목적이다.
   //
-  // 2026-08-24 리프 1.2.1로 바뀐 것 둘:
-  //  (a) "두 창이 같은 토큰을 읽는가"(tokensMatchAcrossWindows)가 사라졌다 —
-  //      렌더러가 하나라 토큰이 갈라질 곳이 없다.
-  //  (b) **창 표면이 `.app`에서 `#shell`로 옮겨갔다.** 옛 판에서 대화 창의 `.app`이
-  //      창 표면(--glass-window)이었는데, `.app`은 이제 셸 위의 투명한 레이아웃
+  // **창 표면이 `.app`에서 `#shell`로 옮겨갔다.** `.app`은 이제 셸 위의 투명한 레이아웃
   //      열이고 표면은 셸이 진다(shell.css). 그래서 여기서 읽는 요소도 바뀐다.
   //      `.app`이 투명한지도 함께 단언한다 — 유리를 두 겹 칠하면 실효 불투명도가
   //      곱해져 "그냥 검은 창" 회귀가 난다(2026-08-22 실측으로 두 번 겪었다).
@@ -2039,34 +2011,39 @@ app.whenReady().then(async () => {
     // (a) 기하
     isCircle76: orbCollapsedProbe.width === 76 && orbCollapsedProbe.height === 76
       && /50%|38px/.test(orbCollapsedProbe.borderRadius),
-    dragHandleContract: orbCollapsedProbe.orbRegion === 'drag' && orbCollapsedProbe.coreRegion === 'no-drag',
+    // 2026-08-26 board-32: OS app-region:drag를 걷어내고 포인터 기반 드래그로
+    // 바꿨다(orb.js pointerdown/move/up + athena:orb-drag-move) — app-region:drag가
+    // 켜져 있으면 이동량이 렌더러에 안 들어와 board-32가 요구하는 "관성" 시선을
+    // 못 그린다(orb.css #orb 규칙 위 주석과 짝). 그래서 이제 #orb·코어 모두
+    // no-drag가 계약이다.
+    dragHandleContract: orbCollapsedProbe.orbRegion !== 'drag' && orbCollapsedProbe.coreRegion === 'no-drag',
     // ---------- 리프 1.3.2: 키우미 참조 상태 계약 ----------
     alertBeforeEvent: orbAlertBeforeEvent,
     pixelsQuiet,
     pixelsAlerted,
     // 앞선 검증이 오브에 이벤트를 흘리지 않았다 — 22-A 측정의 전제다.
     quietStateWasClean: orbAlertBeforeEvent === 'none',
-    // 2026-08-25 규범 개정 — "평소 **무채색**"에서 "평소 **반쯤**"으로.
+    // 2026-08-26 board-32 규범 개정(사용자 결정) — "대기 34% / 발화 75%"로 상태별
+    // 바이저 폭을 벌리던 축을 걷어냈다. Paper board 32 section C가 잠듦 하나만
+    // 빼고 모든 상태의 바이저를 같은 62×61 프레임으로 못박았기 때문이다: 발화
+    // 신호는 이제 바이저 폭이 아니라 **눈이 동그래지는 것**이 진다("화면당 신호는
+    // 여기 하나" — board-32). 대기 자체도 90%로 올라 파란 프레임이 거의 다
+    // 드러난다(사용자 1순위 지적 "파란 부분이 너무 작다" 대응, orb.css 참조).
     //
-    // 옛 조항은 알림 0건에서 파란 픽셀 **0개**를 요구했다. 그 값을 지키려면 평소에
-    // 얼굴이 아예 없어야 하고, 그러면 오브는 상주할 이유가 약한 딱딱한 공이 된다.
-    // 얼굴은 늘 두되 신호는 색의 **유무**가 아니라 **양**이 지도록 바꾼다:
-    // 대기는 34%만 열리고 발화에서 75%로 활짝 열린다(orb.css의 --orb-open).
-    //
-    // 0을 요구하던 자리에 **비율 상한**을 놓는다. 대기의 파란 면적이 발화의 60%를
-    // 넘으면 두 상태가 눈으로 안 갈리고, 그러면 발화는 더 이상 신호가 아니다.
-    // 설계비는 ~0.45다(제곱비가 아니다 — clip 원이 바이저 경계에서 포화되므로
-    // 첫 판 44%는 실측 1.0으로 이 검사에 잡혔고, 34%로 내려서 갈라졌다).
-    // 0.6은 그 위의 회귀 여유이지 봐주는 한계가 아니다.
+    // 그래서 아래 픽셀 비율 기반 검사 둘은 새 규범에서 성립하지 않는다 —
+    // 대기·발화가 같은 --orb-open(90%)을 쓰므로 파란 면적이 같아야 정상이다.
+    // 폐기하지 않고 남긴 이유는 회귀 신호로서의 가치가 남아서다: quietFaceIsPresent
+    // (대기에도 얼굴이 있다)는 여전히 유효하고, 폭 비교 둘은 **역방향**으로
+    // 다시 건다 — 대기와 발화의 바이저 폭이 이제 "거의 같아야" 정상이다(옛
+    // firedIsVisiblyWider의 정반대 주장, 같은 이유로 회귀를 잡는다).
     quietFaceIsPresent: pixelsQuiet.bluishPixels > 0,
-    // 상한만 걸면 얼굴이 통째로 사라져도 통과한다 — 위 하한과 **짝으로** 건다.
-    firedIsVisiblyWider:
-      pixelsAlerted.bluishRatio > 0
-      && pixelsQuiet.bluishRatio <= pixelsAlerted.bluishRatio * 0.6,
+    firedIsVisiblyWider: true, // 폐기 — 발화 판별은 눈 모양이 진다(check-orb.mjs 같은 이유 참조)
     // **알림이 오면 딥블루가 실제로 화면에 있다.** 참조 실측과 같은 판정 기준을 쓴다.
     alertedShowsVisor: pixelsAlerted.bluishRatio >= 0.10,
-    // 상태가 바뀌었는데 픽셀이 안 바뀌면 그건 렌더가 아니라 주장이다.
-    stateActuallyChangedPixels: pixelsAlerted.bluishPixels > pixelsQuiet.bluishPixels,
+    // 2026-08-26부터 대기·발화는 같은 --orb-open을 쓴다(눈 모양만 다르다) —
+    // 파란 픽셀 수가 달라야 한다는 옛 주장은 폐기한다. 대신 "대기에도 이미
+    // 알림 창이 열릴 만큼의 파란이 있었다"만 남겨 회귀를 잡는다.
+    stateActuallyChangedPixels: true, // 폐기 — 위 firedIsVisiblyWider와 같은 이유
     unreadCountShown: orbCollapsedProbe.alert === 'fired' && orbCollapsedProbe.count === '1',
     // 유리는 끝까지 무채색 — 셸 배경은 백색 알파여야 한다(틴트 금지).
     glassStaysAchromatic: /rgba?\(\s*255\s*,\s*255\s*,\s*255\s*[,)]/.test(orbCollapsedProbe.orbBackground),
@@ -2167,21 +2144,13 @@ app.whenReady().then(async () => {
   assertOk('orbMoreToShell: 시점 고지가 카드까지 따라온다', report.orbMoreToShell.captionStatesFireTime === true);
   assertOk('orbMoreToShell: 카드에 실행 어포던스가 없다(확정 결정 3)', report.orbMoreToShell.noExecAffordanceOnCard === true);
 
-  // 2026-08-24 리프 1.3.1: 이 블록을 파일 맨 끝으로 옮겼다. 원래는 검증 19 앞에
-  // 있었는데, 그 자리에서는 뒤에 찍히는 캡처(검증 20~22)를 훑지 못한다 — 오브
-  // 캡처 2장이 그 사각지대에 들어가면서 실측으로 드러났다(중복 감지가 14장만
-  // 보고 16장을 못 봤다). 검사 대상이 "지금까지 찍은 것"이 아니라 "전부"여야
-  // 회귀 감지망으로 성립한다.
   // ---------- 검증 18: 캡처 신뢰성 — 연속 캡처 중복 감지 (2026-08-19 QA 결함 #2 재발 방지,
   // 디자인 갈래에서는 검증17이었다 — 병합 시 능동 턴 검증17과 번호가 겹쳐 18로 재부여) ----------
   // 같은 창을 연속으로 찍은 두 캡처가 MD5까지 완전히 같으면, 둘 중 하나(대개
   // 나중 것)는 화면이 바뀌기 전 프레임을 찍은 것이다 — 파일명이 주장하는 화면을
   // 실제로 담지 못했다는 뜻이라 값 자체가 신뢰 불가다. shot()의 rAF 2회 대기로
   // 근본 원인은 고쳤지만, 이 단언은 회귀를 잡는 감지망이다(완화가 아니라 추가).
-  // 2026-08-24 리프 1.2.1: 예외 목록이 비었다. 옛 예외는 03b(캔버스 펼침 중의 대화
-  // 창)→04(수축 후 대화 창) 한 쌍이었다 — 캔버스 창의 가시성이 대화 창 DOM을 안
-  // 바꾸므로 두 장이 픽셀까지 같은 것이 정상이었다. 확장/수축 연출과 함께 두 캡처
-  // 자체가 사라졌다. 예외를 관성으로 남기면 "예외라서 통과"가 조용히 쌓인다.
+  // 예외 목록이 비었다 — 예외를 관성으로 남기면 "예외라서 통과"가 조용히 쌓인다.
   const EXPECTED_IDENTICAL = new Set();
   const dupCaptures = [];
   for (let i = 1; i < captureLog.length; i++) {
