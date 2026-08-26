@@ -290,16 +290,27 @@ def test_preferred_detail_cannot_cure_missing_target_evidence(
 # ---------------------------------------------------------------------------
 # W2c 완화 게이트(2026-08-26, 카드 랜딩 진단) — probe-resolve-raw.js 실측 재현.
 #
-# "삼성전자 지금 추이가 어때"류 파라프레이즈는 typed compatibility에서
-# NO_CONFIDENT_MATCH로 거부돼 render_canvas를 한 번도 못 부르는 실패를 냈다.
+# 대화체 파라프레이즈는 typed compatibility에서 NO_CONFIDENT_MATCH로 거부돼
+# render_canvas를 한 번도 못 부르는 실패를 냈다(실측 문구는 매 라이브 왕복마다
+# 달랐다 — "삼성전자 지금 추이가 어때", "삼성전자 현재가 주가 추이", "삼성전자
+# 현재 시세 및 거래량" 등. 아래 (a)는 이 테스트 파일의 작은 InstrumentIdentityIndex
+# 픽스처에서 실제로 REJECTED를 재현하는 문구를 쓴다 — "삼성전자 현재 시세 및
+# 거래량"은 이 좁은 픽스처에서는 구조화 힌트 없이도 이미 typed compatibility를
+# 통과해버려 이 게이트를 아예 안 태운다. 승인 조건의 취지(파라프레이즈 + 완전한
+# 구조화 단언 + 실제 종목 근거 → 구제)는 (a)로 그대로 검증된다).
+#
 # 여기 구제 대상은 위 두 fail-closed 테스트가 지키는 경계와 다르다 —
 # question 원문 자체에서 실제 종목("삼성전자")이 독립적으로 인식된다는 점이
 # "ka10001 가치평가 지표만 알려줘"(오퍼레이션 id가 토큰으로 낄 뿐 종목 근거는
-# 없음)나 "D+1 D+2 정산 전망"(종목 근거 자체가 없음)과의 결정적 차이다.
+# 없음)나 "D+1 D+2 정산 전망"(종목 근거 자체가 없음)과의 결정적 차이다. (b)(c)는
+# 그 두 케이스를 각각 골든 코퍼스(api_selector_golden.jsonl)의 실제 문구·인자
+# 그대로 단독 테스트로 다시 고정한다 — 기존 파라미터라이즈 테스트(EMBEDDED_ID_
+# CASE_IDS/TARGETLESS_DETAIL_CASE_IDS)는 손대지 않는다.
 # ---------------------------------------------------------------------------
 
 
 def test_guarded_fallback_rescues_the_diagnosed_paraphrase(service: SelectorService) -> None:
+    """(a) 종목 근거가 실제로 있는 파라프레이즈 + 완전한 구조화 단언 → 구제된다."""
     paraphrase = "삼성전자 현재가 주가 추이"
     rescued = service.resolve(
         ResolveRequest(
@@ -327,6 +338,24 @@ def test_guarded_fallback_refuses_the_same_paraphrase_without_structured_hints(
         )
 
 
+def test_guarded_fallback_refuses_an_instrument_mismatched_with_the_question(
+    service: SelectorService,
+) -> None:
+    """(3) 승인 조건 — question 원문에서 인식된 종목(삼성전자)과 bound
+    arguments의 종목(카카오)이 다르면 구제는커녕 애초에 성립하지 않는다.
+    이 검증은 새로 만들지 않는다 — `_bind_trusted_instrument`가 이미
+    non-explicit 경로 전체에 강제하는 기존 계약을 그대로 물려받는다."""
+    with pytest.raises(InvalidArgumentsError):
+        service.resolve(
+            ResolveRequest(
+                question="삼성전자 현재가 주가 추이",
+                preferred_ref="base:ka10001",
+                detail_group="current_trading",
+                arguments={"stk_cd": "035720"},  # 카카오 — 질문 속 종목과 불일치
+            )
+        )
+
+
 def test_guarded_fallback_never_rescues_order_kind_even_with_complete_hints(
     service: SelectorService,
 ) -> None:
@@ -344,6 +373,42 @@ def test_guarded_fallback_never_rescues_order_kind_even_with_complete_hints(
                     "ord_qty": "1",
                     "trde_tp": "0",
                 },
+            )
+        )
+
+
+def test_guarded_fallback_still_refuses_the_embedded_id_golden_case(
+    service: SelectorService,
+) -> None:
+    """(b) 골든 코퍼스 detail-ka10001-ko를 단독 테스트로 다시 고정한다 —
+    오퍼레이션 id("ka10001")가 문장에 토큰으로 낄 뿐 종목 근거가 없으면,
+    preferred_ref/detail_group/arguments가 전부 실제로 유효해도 여전히
+    거부된다(트리거인 파라미터라이즈 테스트와 별개로, 이 완화 게이트를
+    막 추가한 뒤 회귀를 바로 알아볼 수 있게 이름으로 고정한다)."""
+    with pytest.raises(NoConfidentMatchError):
+        service.resolve(
+            ResolveRequest(
+                question="ka10001 가치평가 지표만 알려줘",
+                preferred_ref="base:ka10001",
+                detail_group="valuation",
+                arguments={"stk_cd": "005930"},
+            )
+        )
+
+
+def test_guarded_fallback_still_refuses_the_targetless_golden_case(
+    service: SelectorService,
+) -> None:
+    """(c) 골든 코퍼스 detail-kt00001-ko를 단독 테스트로 다시 고정한다 —
+    종목 근거 자체가 문장에 없으면 preferred_ref/detail_group/arguments가
+    전부 유효해도 여전히 거부된다."""
+    with pytest.raises((AmbiguousOperationError, NoConfidentMatchError)):
+        service.resolve(
+            ResolveRequest(
+                question="D+1 D+2 정산 전망",
+                preferred_ref="base:kt00001",
+                detail_group="settlement_forecast",
+                arguments={"qry_tp": "2"},
             )
         )
 
