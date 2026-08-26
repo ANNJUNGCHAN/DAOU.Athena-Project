@@ -83,15 +83,28 @@ def backend_base_url() -> str:
 # resolve를 통과시키지 않으므로 여기 kind가 query/order/websocket 셋 중
 # 하나임이 항상 보장된다).
 #
-# 코드 없이 끌 수 있어야 한다는 요구에 따라 `ATHENA_SELECTOR_AUTO_EXECUTE=0`
-# 하나로 즉시 비활성화된다(기본 켜짐).
+# **기본값은 꺼짐이다(2026-08-26 회귀로 확정).** plan_token 1회용 계약과
+# render_canvas의 sealed-plan 경로가 정면충돌한다 — 캔버스 아키텍처는
+# "resolve -> 모델이 data 없이 athena__render_canvas(plan_token)을 부르고,
+# 봉인된 plan과 manifest가 화면을 완전히 결정한다"는 별도 계약이다
+# (server.py의 render_canvas 스키마 설명 "sealed plan과 manifest가 화면을
+# 완전히 결정한다" 참고). auto_execute가 resolve 시점에 그 토큰을 먼저
+# 소비해버리면, 모델이 그다음 정상적으로 render_canvas(plan_token)를
+# 부르는 순간 백엔드가 PLAN_ALREADY_USED로 거부한다 — 모델은 이걸 "툴이
+# 고장났다"고 결론짓고 athena_call로 우회하는데, 그 경로는 트리밍 없는
+# 전체 이력 TR 페이로드를 그대로 반환해 게이트웨이 토큰 한도를 넘긴다
+# (`test_regression_auto_execute_conflicts_with_render_canvas_sealed_plan`이
+# 이 충돌 사슬을 재현한다). 게다가 embedded call_result가 차트류 resolve
+# 응답 자체도 불필요하게 부풀린다. 재활성화하려면 auto_execute 응답에
+# 렌더용 재발급 토큰(next_plan_token류)을 동봉하는 재설계가 선행돼야 한다 —
+# 그 전까지는 `ATHENA_SELECTOR_AUTO_EXECUTE=1`로 명시적으로 켜야만 동작한다.
 _AUTO_EXECUTE_ENV_VAR = "ATHENA_SELECTOR_AUTO_EXECUTE"
-_AUTO_EXECUTE_DISABLED_VALUES = frozenset({"0", "false", "no", "off"})
+_AUTO_EXECUTE_ENABLED_VALUES = frozenset({"1", "true", "yes", "on"})
 
 
 def selector_auto_execute_enabled() -> bool:
-    raw = os.environ.get(_AUTO_EXECUTE_ENV_VAR, "1").strip().lower()
-    return raw not in _AUTO_EXECUTE_DISABLED_VALUES
+    raw = os.environ.get(_AUTO_EXECUTE_ENV_VAR, "0").strip().lower()
+    return raw in _AUTO_EXECUTE_ENABLED_VALUES
 
 
 async def _auto_execute_call(

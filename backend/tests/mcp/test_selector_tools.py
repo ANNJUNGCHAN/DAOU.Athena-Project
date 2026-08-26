@@ -485,7 +485,10 @@ def _resolve_response_json(*, kind: str, plan_token: str = "tok-auto") -> dict:
     }
 
 
-async def test_resolve_query_auto_executes_and_returns_call_result(tmp_path, make_gateway):
+async def test_resolve_query_auto_executes_and_returns_call_result(
+    tmp_path, make_gateway, monkeypatch
+):
+    monkeypatch.setenv("ATHENA_SELECTOR_AUTO_EXECUTE", "1")
     call_requests: list[httpx.Request] = []
 
     def handler(request: httpx.Request) -> httpx.Response:
@@ -514,7 +517,9 @@ async def test_resolve_query_auto_executes_and_returns_call_result(tmp_path, mak
     assert len(call_requests) == 1
 
 
-async def test_resolve_order_kind_never_auto_executes(tmp_path, make_gateway):
+async def test_resolve_order_kind_never_auto_executes(tmp_path, make_gateway, monkeypatch):
+    monkeypatch.setenv("ATHENA_SELECTOR_AUTO_EXECUTE", "1")
+
     def handler(request: httpx.Request) -> httpx.Response:
         assert request.url.path == "/api/v1/llm/tools/resolve"
         return httpx.Response(200, json=_resolve_response_json(kind="order"))
@@ -528,7 +533,9 @@ async def test_resolve_order_kind_never_auto_executes(tmp_path, make_gateway):
     assert payload["plan_token"] == "tok-auto"
 
 
-async def test_resolve_websocket_kind_never_auto_executes(tmp_path, make_gateway):
+async def test_resolve_websocket_kind_never_auto_executes(tmp_path, make_gateway, monkeypatch):
+    monkeypatch.setenv("ATHENA_SELECTOR_AUTO_EXECUTE", "1")
+
     def handler(request: httpx.Request) -> httpx.Response:
         assert request.url.path == "/api/v1/llm/tools/resolve"
         return httpx.Response(200, json=_resolve_response_json(kind="websocket"))
@@ -541,7 +548,11 @@ async def test_resolve_websocket_kind_never_auto_executes(tmp_path, make_gateway
     assert "auto_execute" not in payload
 
 
-async def test_auto_execute_call_failure_passes_through_resolve_success(tmp_path, make_gateway):
+async def test_auto_execute_call_failure_passes_through_resolve_success(
+    tmp_path, make_gateway, monkeypatch
+):
+    monkeypatch.setenv("ATHENA_SELECTOR_AUTO_EXECUTE", "1")
+
     def handler(request: httpx.Request) -> httpx.Response:
         if request.url.path == "/api/v1/llm/tools/resolve":
             return httpx.Response(200, json=_resolve_response_json(kind="query"))
@@ -558,7 +569,11 @@ async def test_auto_execute_call_failure_passes_through_resolve_success(tmp_path
     assert "call_result" not in payload["auto_execute"]
 
 
-async def test_auto_execute_connect_error_passes_through_resolve_success(tmp_path, make_gateway):
+async def test_auto_execute_connect_error_passes_through_resolve_success(
+    tmp_path, make_gateway, monkeypatch
+):
+    monkeypatch.setenv("ATHENA_SELECTOR_AUTO_EXECUTE", "1")
+
     def handler(request: httpx.Request) -> httpx.Response:
         if request.url.path == "/api/v1/llm/tools/resolve":
             return httpx.Response(200, json=_resolve_response_json(kind="query"))
@@ -573,9 +588,10 @@ async def test_auto_execute_connect_error_passes_through_resolve_success(tmp_pat
     assert "127.0.0.1:8010" in payload["auto_execute"]["error"]
 
 
-async def test_auto_execute_calls_backend_exactly_once(tmp_path, make_gateway):
+async def test_auto_execute_calls_backend_exactly_once(tmp_path, make_gateway, monkeypatch):
     """resolve가 query를 자동 실행해도 /call은 정확히 한 번만 나간다 —
     plan_token 재사용/중복 실행이 없다."""
+    monkeypatch.setenv("ATHENA_SELECTOR_AUTO_EXECUTE", "1")
     call_paths: list[str] = []
 
     def handler(request: httpx.Request) -> httpx.Response:
@@ -592,9 +608,32 @@ async def test_auto_execute_calls_backend_exactly_once(tmp_path, make_gateway):
     assert call_paths == ["/api/v1/llm/tools/resolve", "/api/v1/llm/tools/call"]
 
 
+async def test_auto_execute_default_is_off(tmp_path, make_gateway):
+    """2026-08-26 회귀로 기본값을 껐다 — env var를 아예 건드리지 않아도
+    (명시적 "0"이 아니어도) query resolve가 plan_token만 돌려주고 /call은
+    절대 안 나가야 한다. 이유는 아래 regression 테스트가 증명한다."""
+    call_requests: list[httpx.Request] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        if request.url.path == "/api/v1/llm/tools/resolve":
+            return httpx.Response(200, json=_resolve_response_json(kind="query"))
+        call_requests.append(request)
+        return httpx.Response(200, json={})
+
+    gw = make_gateway(handler)
+    result = await gw.dispatch_call(RESOLVE_TOOL, {"question": "삼성전자 현재가"})
+
+    assert result.isError is False
+    payload = json.loads(result.content[0].text)
+    assert "auto_execute" not in payload
+    assert len(call_requests) == 0
+
+
 async def test_auto_execute_disabled_via_env_var_leaves_plan_token_only(
     tmp_path, make_gateway, monkeypatch
 ):
+    """명시적으로 "0"을 줘도(기본값과 같은 결과지만 스위치 자체가 동작함을
+    별도로 증명한다) 동일하게 plan_token만 돌아온다."""
     monkeypatch.setenv("ATHENA_SELECTOR_AUTO_EXECUTE", "0")
     call_requests: list[httpx.Request] = []
 
@@ -613,7 +652,9 @@ async def test_auto_execute_disabled_via_env_var_leaves_plan_token_only(
     assert len(call_requests) == 0
 
 
-async def test_auto_execute_records_audit_entry_for_both_tools(tmp_path, make_gateway):
+async def test_auto_execute_records_audit_entry_for_both_tools(tmp_path, make_gateway, monkeypatch):
+    monkeypatch.setenv("ATHENA_SELECTOR_AUTO_EXECUTE", "1")
+
     def handler(request: httpx.Request) -> httpx.Response:
         if request.url.path == "/api/v1/llm/tools/resolve":
             return httpx.Response(200, json=_resolve_response_json(kind="query"))
@@ -627,3 +668,50 @@ async def test_auto_execute_records_audit_entry_for_both_tools(tmp_path, make_ga
     entries = gw._audit_log("kiwoom-selector").read_all()
     assert [entry["tool"] for entry in entries] == [RESOLVE_TOOL, CALL_TOOL]
     assert all(entry["success"] is True for entry in entries)
+
+
+# ---------------------------------------------------------------------------
+# 회귀 — auto_execute(ON)와 render_canvas의 sealed-plan 경로 충돌
+# (2026-08-26 실사용 결함: resolve가 auto_execute로 plan_token을 미리
+# 소비하면, 모델이 그다음 정상적으로 athena__render_canvas(plan_token)를
+# 불렀을 때 백엔드가 PLAN_ALREADY_USED로 거부한다). 이게 바로 기본값을
+# 끈 이유다 — 이 테스트는 auto_execute를 명시적으로 켜서 그 충돌 사슬을
+# 그대로 재현한다.
+# ---------------------------------------------------------------------------
+
+
+async def test_regression_auto_execute_conflicts_with_render_canvas_sealed_plan(
+    tmp_path, make_gateway, monkeypatch
+):
+    from athena_mcp.server import RENDER_CANVAS_TOOL
+
+    monkeypatch.setenv("ATHENA_SELECTOR_AUTO_EXECUTE", "1")
+    call_count = 0
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        nonlocal call_count
+        if request.url.path == "/api/v1/llm/tools/resolve":
+            return httpx.Response(200, json=_resolve_response_json(kind="query"))
+        assert request.url.path == "/api/v1/llm/tools/call"
+        assert json.loads(request.content) == {"plan_token": "tok-auto"}
+        call_count += 1
+        if call_count == 1:
+            # auto_execute가 resolve와 같은 라운드에 plan_token을 먼저 소비한다.
+            return httpx.Response(
+                200,
+                json={"operation_ref": "ka10001", "data": {}, "continuation": {"cont_yn": "N"}},
+            )
+        # 모델이 그다음 정상적으로 render_canvas(plan_token)를 부르면, 백엔드는
+        # 이미 소비된 토큰이라 PLAN_ALREADY_USED로 거부한다 — 실제 관측된 결함.
+        return httpx.Response(409, json={"detail": "PLAN_ALREADY_USED"})
+
+    gw = make_gateway(handler)
+
+    resolved = await gw.dispatch_call(RESOLVE_TOOL, {"question": "삼성전자 차트"})
+    assert resolved.isError is False
+    assert json.loads(resolved.content[0].text)["auto_execute"]["executed"] is True
+
+    rendered = await gw.dispatch_call(RENDER_CANVAS_TOOL, {"plan_token": "tok-auto"})
+    assert rendered.isError is True
+    assert "PLAN_ALREADY_USED" in rendered.content[0].text
+    assert call_count == 2
