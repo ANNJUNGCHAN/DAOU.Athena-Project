@@ -2011,7 +2011,15 @@ app.whenReady().then(async () => {
       arcAfterOpen: Number(document.getElementById('orbRing').style.getPropertyValue('--orb-arc')),
       countAfterOpen: txt('orbCount'),
       // **없어야 하는 것** — DOM 실측. 정적 게이트(check-orb.mjs)와 이중으로 건다.
-      inputCount: document.querySelectorAll('input, textarea, [contenteditable]').length,
+      // 2026-08-26 board-33/34 규범 개정 — "입력창 0개"가 "#orbInput 하나까지,
+      // 셸이 보이는 동안은 잠겨 있다"로 좁아졌다(check-orb.mjs 상단 주석과 짝).
+      // id 화이트리스트 + 지금 이 검증 시점(셸이 보이는 상태, closeToBackground
+      // 이후 restoreFromBackground로 이미 복귀됨)에 실제로 안 살아있는지를 같이 잰다.
+      inputIds: [...document.querySelectorAll('input, textarea, [contenteditable]')].map((n) => n.id).sort(),
+      chatInputStackHidden: (() => {
+        const el = document.getElementById('orbInputStack');
+        return el ? el.hidden : true;
+      })(),
       buttonIds: [...document.querySelectorAll('button')].map((b) => b.id).sort(),
     };
   })()`);
@@ -2096,9 +2104,14 @@ app.whenReady().then(async () => {
     representativeCardFullyVisible:
       orbPanelProbe.cardScrollHeight <= orbPanelProbe.cardClientHeight + 2,
     markedReadOnOpen: orbPanelProbe.arcAfterOpen === 0 && orbPanelProbe.countAfterOpen === '',
-    // (c) 없어야 하는 것
-    noInputSurface: orbPanelProbe.inputCount === 0,
-    onlyAllowedButtons: JSON.stringify(orbPanelProbe.buttonIds) === JSON.stringify(['orbClose', 'orbMore', 'orbToggle']),
+    // (c) 없어야 하는 것 / 있어도 되는 것의 상한
+    // board-33/34 — 입력창은 #orbInput 하나까지만 허용하고(그 밖의 id·이름 없는
+    // input·textarea·contenteditable은 여전히 0개), 이 검증 시점(셸이 보이는
+    // 상태 — 검증9d에서 restoreFromBackground로 이미 복귀됨)에는 대화 모드가
+    // 꺼져 있어야 하므로 그 하나도 실제로 안 살아있어야 한다.
+    onlyAllowedInput: JSON.stringify(orbPanelProbe.inputIds) === JSON.stringify(['orbInput']),
+    chatInputGatedByShellVisibility: orbPanelProbe.chatInputStackHidden === true,
+    onlyAllowedButtons: JSON.stringify(orbPanelProbe.buttonIds) === JSON.stringify(['orbChatGo', 'orbClose', 'orbEsc', 'orbMore', 'orbToggle']),
   };
   console.log('[verify] 검증22(알림 오브):', JSON.stringify(report.orbWindow));
   for (const key of [
@@ -2109,7 +2122,7 @@ app.whenReady().then(async () => {
     'expandGrewWindow', 'orbCornerStayed', 'roundTripRestoresPosition',
     'hasFiredBadge', 'hasModeLabel', 'hasRelativeTime', 'hasSourceLabel',
     'statesValueIsAtFireTime', 'representativeCardRendered', 'representativeCardFullyVisible', 'markedReadOnOpen',
-    'noInputSurface', 'onlyAllowedButtons',
+    'onlyAllowedInput', 'chatInputGatedByShellVisibility', 'onlyAllowedButtons',
   ]) {
     assertOk(`orbWindow.${key}`, report.orbWindow[key] === true);
   }
