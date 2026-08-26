@@ -1002,7 +1002,7 @@ function renderModelPopover() {
   const sep = document.createElement('div');
   sep.className = 'mp-sep';
   $modelPopover.appendChild(sep);
-  popoverSection('추론 노력', PILL_EFFORT_CHIPS, c.effort, 'effort');
+  popoverSection('사고 강도', PILL_EFFORT_CHIPS, c.effort, 'effort');
 }
 
 function closeModelPopover() { $modelPopover.hidden = true; }
