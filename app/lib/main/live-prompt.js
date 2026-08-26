@@ -55,6 +55,23 @@ function buildLivePrompt(query) {
     'athena_resolve부터 다시 밟는다. 키움 백엔드가 미기동이라는 에러가 오면 그 사실을',
     '사용자에게 알리고 끝낸다.',
     '',
+    // resolve question 어휘 규율(2026-08-26 실사용 결함): "삼성전자 지금 추이가
+    // 어때"류 대화체 질문이 athena_resolve에서 NO_CONFIDENT_MATCH로 4연속
+    // 거부되고 render_canvas를 한 번도 못 부른 채 텍스트로만 답하는 실패를
+    // 실측했다(카드 랜딩 0건). resolve의 typed compatibility 판정은 question의
+    // 자연어 표현이 아니라 카탈로그 어휘와의 일치로 점수를 매긴다 —
+    // preferred_ref/detail_group을 정확히 채워도 question 자체가 안 맞으면
+    // 그 hint는 override가 아니라서 구제되지 않는다(설계 그대로).
+    'athena_resolve의 question 어휘 규율 — question 필드는 사용자의 대화체 표현을',
+    '그대로 옮기지 마라(예: "지금 추이가 어때", "어떻게 되고 있어"). 대신 직전',
+    'athena_search 결과의 name/domain과 athena_describe 결과의 name·',
+    'detail_groups[].title_ko(예: "주식기본정보요청", "현재 시세 및 거래량",',
+    '"주식일봉차트조회요청")에서 실제로 쓰인 단어를 그대로 재사용해 question을',
+    '새로 구성하고, 종목명이 있으면 붙인다(예: "삼성전자 현재 시세 및 거래량",',
+    '"삼성전자 주식일봉차트조회"). 사용자 원문 어휘와 카탈로그 어휘가 겹치지',
+    '않으면 카탈로그 어휘를 우선한다 — question은 카탈로그를 검색하는 질의문이지',
+    '사용자에게 보여줄 문장이 아니다.',
+    '',
     // 사용자 노출 언어 규율(2026-08-26 — 사용자 실사용 신고: "삼성전자 외국인수급
     // 어때"류 모호 질의의 되묻기에 TR 코드·confidence·AMBIGUOUS_OPERATION이 그대로
     // 새어 나갔다). 사용자는 엔지니어가 아니라 일반 개인투자자다 — 파이프라인 내부

@@ -191,3 +191,16 @@ test('buildLivePrompt: 감시 방식 이분법 고지 — WS만 실시간, 공�
   assert.ok(p.includes('주기 확인 대상'));
   assert.ok(p.includes('실시간 공시 감시'));
 });
+
+test('buildLivePrompt: resolve question 어휘 규율 — 대화체 대신 카탈로그 어휘로 재구성 (2026-08-26 카드 랜딩 0건 실측)', () => {
+  const p = buildLivePrompt('x');
+  assert.ok(p.includes('question 어휘 규율'));
+  // 실패 재현 질의(probe-card-landing.js)의 대화체 표현을 금지 예시로 명시한다.
+  assert.ok(p.includes('지금 추이가 어때'));
+  assert.ok(p.includes('그대로 옮기지 마라'));
+  // 재구성 재료는 search/describe 응답 필드 그대로 — 모델이 새 어휘를 지어내지 않게.
+  assert.ok(p.includes('athena_describe 결과의 name'));
+  assert.ok(p.includes('detail_groups[].title_ko'));
+  assert.ok(p.includes('현재 시세 및 거래량'));
+  assert.ok(p.includes('카탈로그 어휘를 우선한다'));
+});
