@@ -2459,6 +2459,81 @@ app.whenReady().then(async () => {
     ipcMain.handle('athena:routines-list', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
   }
 
+  // ---------- 에이전트모드 캔버스 — 헤더·세그먼트 탭·통계 카드 (4단계) ----------
+  //
+  // 위 3단계 블록과 같은 이유로 athena:routines-list를 잠깐 fixture로 바꾼다
+  // (이 하네스엔 실제 백엔드가 없다) — draft 1건을 섞어 "모두" 탭엔 3건 전부,
+  // "활성" 탭엔 1건만 남는지로 좌측 리스트 필터링을 잰다.
+  try {
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({
+      ok: true,
+      data: {
+        routines: [
+          { id: 'fx1', symbol: '005930', note: '삼성전자 88,000 감시', status: 'active', mode: 'realtime-ws' },
+          { id: 'fx2', symbol: '000660', note: 'SK하이닉스 공시 키워드', status: 'paused', mode: 'periodic' },
+          { id: 'fx3', symbol: '005380', note: '현대차 실적 발표', status: 'draft', mode: 'periodic' },
+        ],
+        disclosure_ready: true,
+        last_error: null,
+      },
+    }));
+
+    const agentCanvasProbe = await shellWin.webContents.executeJavaScript(`(async () => {
+      const nav = document.getElementById('modeNavAgent');
+      const back = document.getElementById('modeNavSummary');
+      const canvas = document.getElementById('agentCanvas');
+      if (!nav || !back || !canvas) return { wired: false };
+      nav.click();
+      await new Promise((r) => setTimeout(r, 600)); // IPC 왕복 + refresh()
+      const headerText = {
+        title: (canvas.querySelector('.agent-title') || {}).textContent || null,
+        subtitle: (canvas.querySelector('.agent-subtitle') || {}).textContent || null,
+        tabLabels: Array.from(canvas.querySelectorAll('.agent-tab')).map((n) => n.textContent),
+        searchPlaceholder: (canvas.querySelector('.agent-search-input') || {}).placeholder || null,
+        ctaText: (canvas.querySelector('.agent-cta') || {}).textContent || null,
+      };
+      const statCards = Array.from(canvas.querySelectorAll('.agent-stat-card'));
+      const statCount = statCards.length;
+      const fixtureStatCount = statCards.filter((n) => n.getAttribute('data-source') === 'fixture').length;
+      const allRowCount = canvas.querySelectorAll('.agent-list-row').length;
+      const activeTabBtn = Array.from(canvas.querySelectorAll('.agent-tab')).find((n) => n.textContent === '활성');
+      if (activeTabBtn) activeTabBtn.click();
+      await new Promise((r) => setTimeout(r, 100));
+      const activeRowCount = canvas.querySelectorAll('.agent-list-row').length;
+      back.click();
+      await new Promise((r) => setTimeout(r, 100));
+      return { wired: true, headerText, statCount, fixtureStatCount, allRowCount, activeRowCount };
+    })()`);
+    report.agentCanvas = agentCanvasProbe;
+    assertOk('agent-canvas: 헤더/캔버스 배선이 있다', agentCanvasProbe.wired === true);
+    if (agentCanvasProbe.wired) {
+      assertOk('agent-canvas: 타이틀이 "에이전트"다', agentCanvasProbe.headerText.title === '에이전트');
+      assertOk(
+        'agent-canvas: 탭 3종(모두/활성/일시중지)이 있다',
+        JSON.stringify(agentCanvasProbe.headerText.tabLabels) === JSON.stringify(['모두', '활성', '일시중지']),
+      );
+      assertOk('agent-canvas: 검색 placeholder가 "작업 검색"이다', agentCanvasProbe.headerText.searchPlaceholder === '작업 검색');
+      assertOk('agent-canvas: CTA가 "새 작업"을 담고 있다', (agentCanvasProbe.headerText.ctaText || '').includes('새 작업'));
+      assertOk('agent-canvas: 통계 카드 4장이 렌더된다', agentCanvasProbe.statCount === 4);
+      assertOk(
+        'agent-canvas: 통계 카드 4장 전부 fixture 출처가 코드에 표시된다(P3)',
+        agentCanvasProbe.fixtureStatCount === 4,
+      );
+      assertOk('agent-canvas: "모두" 탭은 draft 포함 3건 전부 보인다', agentCanvasProbe.allRowCount === 3);
+      assertOk(
+        'agent-canvas: "활성" 탭 전환 시 1건만 남는다(좌측 리스트 필터링, 3단계 데이터)',
+        agentCanvasProbe.activeRowCount === 1,
+      );
+    }
+  } catch (err) {
+    report.agentCanvas = { error: String((err && err.message) || err) };
+    failures.push('agent-canvas: 검증 블록이 예외로 끝났다');
+  } finally {
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+  }
+
   fs.writeFileSync(path.join(CAPTURES, 'VERIFY-REPORT.json'), JSON.stringify(report, null, 2));
   console.log('[verify] 리포트 저장:', path.join(CAPTURES, 'VERIFY-REPORT.json'));
 
