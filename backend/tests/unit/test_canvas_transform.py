@@ -530,6 +530,12 @@ def test_runtime_rejects_ambiguous_gold_reload_group(
         # 수급 — investor 도메인 기본값
         ("base:ka10008", "수급"),
         ("base:ka10131", "수급"),
+        # 수급 — 명시 예외 오버라이드(2026-08-26 Lane 2 실측 제보: stockinfo
+        # 도메인 기본값 "종목정보"로 새고 있었다. 응답 모델
+        # Ka10061ResponseStkInvsrOrgnTotItem이 ind_invsr(개인투자자)/
+        # frgnr_invsr(외국인투자자)/orgn(기관계) 필드를 그대로 갖고 있어
+        # Paper 수급카드 목업 데이터와 정확히 일치한다).
+        ("base:ka10061", "수급"),  # 종목별투자자기관별합계요청
         # 주문 — order 도메인 기본값(신용 아닌 주문)
         ("base:kt10000", "주문"),
         ("base:kt10001", "주문"),
