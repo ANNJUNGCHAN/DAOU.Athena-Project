@@ -6,9 +6,6 @@ import re
 import unicodedata
 
 _TOKEN_RE = re.compile(r"[0-9a-z_]+|[가-힣]+")
-_OPERATION_REF_RE = re.compile(
-    r"(?:base:[A-Za-z0-9]+|detail:[A-Za-z0-9]+:[a-z0-9_]+)\Z"
-)
 _IDENTITY_TOKEN_RE = re.compile(r"[A-Za-z0-9]+")
 
 
@@ -36,7 +33,3 @@ def identity_tokens(value: str) -> frozenset[str]:
     """
     return frozenset(_IDENTITY_TOKEN_RE.findall(value))
 
-
-def is_canonical_operation_ref(value: str) -> bool:
-    """Validate the case-sensitive identity grammar without normalizing it."""
-    return _OPERATION_REF_RE.fullmatch(value) is not None
