@@ -157,7 +157,9 @@
   //            갭 클로징 Step 3b 신규. done과 같은 구조(DONE_HOLD 뒤 settleAmbientFace
   //            복귀)지만 전용 타이머를 따로 둬서 둘이 서로 안 밟는다.
   //   frown  — 대화 질의 실패(result.ok===false) — 2026-08-27 갭 클로징 Step 4a 신규.
-  //            done/wink와 같은 구조·같은 유지 시간이다.
+  //            done/wink와 같은 구조·같은 유지 시간이다. Step 4b부터는 루틴 피드
+  //            연결 끊김(disconnected) 동안에도 같은 얼굴을 쓴다 — 이쪽은 타이머로
+  //            안 풀리고 connected가 올 때까지 지속된다(아래 feedDown 축).
   //   fired  — 미확인 알림이 있다(data-alert와 짝)
   //   mopey  — 루틴 만료(routineTurn kind: expired) — 옛 '미안'의 절반
   //   crying — 감시 복원 실패(routineTurn kind: restore-failed) — 옛 '미안'의 나머지 절반
@@ -365,6 +367,11 @@
   // 중"을 덮어씌우면 진짜 신호가 묻힌다.
   let listening = false;
   let thinking = false;
+  // 루틴 피드 연결 끊김(board-30⑩) — listening/thinking과 같은 층의 축이다.
+  // 다른 둘과 달리 타이머로 안 풀리고 'connected' 신호가 와야 풀린다(연결이
+  // 죽어 있는 동안 계속 사실이니까) — 그래서 이 축은 done/wink/frown 같은
+  // DONE_HOLD 일시 표정이 아니라 앰비언트 판정(settleAmbientFace) 쪽에 있다.
+  let feedDown = false;
 
   function eventFaceActive() {
     // WINK·FROWN은 DONE과 같은 격이다(셋 다 신호 하나에 반응해 DONE_HOLD만큼
@@ -379,6 +386,9 @@
    * done·wink 타이머가 같이 쓴다(하나로 통일해야 규칙이 두 벌로 안 갈린다). */
   function settleAmbientFace() {
     if (thinking) { setFace(FACE.THINK); return; }
+    // 피드가 죽어 있는 동안은 찡그림을 깔아 둔다 — 듣는 중보다는 위, 생각
+    // 중보다는 아래(생각 중은 지금 실제로 진행 중인 일이라 더 급하다).
+    if (feedDown) { setFace(FACE.FROWN); return; }
     if (listening) { setFace(FACE.LISTEN); return; }
     setFace(face === FACE.SLEEP ? FACE.SLEEP : FACE.IDLE);
   }
@@ -388,7 +398,7 @@
     settleAmbientFace();
   }
 
-  window.athena.on('athena:orb-signal', ({ signal, active } = {}) => {
+  window.athena.on('athena:orb-signal', ({ signal, active, status } = {}) => {
     if (signal === 'listen') {
       listening = !!active;
       if (listening) touchActivity();
@@ -401,8 +411,34 @@
       triggerDoneFace();
     } else if (signal === 'registered') {
       triggerWinkFace();
+    } else if (signal === 'feed-status') {
+      handleFeedStatus(status);
     }
   });
+
+  // 루틴 피드 연결 상태(board-30⑩) — main.js RoutineFeed의 status를 그대로
+  // 받는다({state: 'connected'|'disconnected'|'unsupported'}). disconnected는
+  // 실제 끊김이라 지속 찡그림을 켜고, connected 복귀 시 끈다. unsupported는
+  // 신호가 아니라 무시한다 — 이 런타임에 WebSocket 구현 자체가 없다는 뜻이지
+  // "연결하다가 끊겼다"는 사실이 아니다(연결 시도조차 하지 않는다).
+  function handleFeedStatus(status) {
+    const state = status && status.state;
+    if (state === 'disconnected') {
+      feedDown = true;
+      touchActivity();
+      resolveAmbientFace();
+    } else if (state === 'connected') {
+      feedDown = false;
+      // resolveAmbientFace가 아니라 settleAmbientFace를 직접 부른다 — face가
+      // 여전히 FROWN이면(방금까지 feedDown이 그걸 골랐으니 그럴 확률이 높다)
+      // eventFaceActive()가 지금 막 끄려는 그 FROWN 자신을 "아직 활성"으로
+      // 오판해 되돌림을 막는다(triggerDoneFace/triggerWinkFace 주석과 같은
+      // 자기참조 함정). 다만 발화·만료·복원실패처럼 정말 더 급한 사실 위는
+      // 연결 복구 따위로 덮으면 안 된다.
+      if (face === FACE.FIRED || face === FACE.MOPEY || face === FACE.CRYING) return;
+      settleAmbientFace();
+    }
+  }
 
   // 완료 웃음 — 셸의 'done' 실신호와 오브 자신의 대화 모드 제출(2026-08-26
   // board-33)이 공유한다. 발화·만료·복원실패 중에는 덮지 않는다 — 그쪽이 더
