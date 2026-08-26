@@ -7,7 +7,7 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { pickPrimaryView } = require('./card-kind-종목정보');
+const { pickPrimaryView, isValidPriceRange } = require('./card-kind-종목정보');
 
 function envelopeWithFields(fields) {
   return { data: { fields: fields.map(([key, value]) => ({ key, value })) } };
@@ -61,4 +61,41 @@ test('pickPrimaryView — table/compound/event 모양(fields 배열 없음)이�
 
 test('pickPrimaryView — 빈 fields 배열은 null', () => {
   assert.equal(pickPrimaryView(envelopeWithFields([])), null);
+});
+
+// 가격 범위 정직성 가드(팀리드 지시, 2026-08-26 카드 데모 실측) — 실제 캡처된 값
+// 그대로 재현한다: 종목정보.png가 "1일 범위 -255,500 ~ 266,500"을 그렸다(샌드박스
+// 응답의 음수 저가). 가격은 음수/0일 수 없고 저가가 고가보다 클 수도 없다.
+test('isValidPriceRange — 데모에서 실제로 캡처된 음수 저가 값은 무효(-255500 ~ 266500)', () => {
+  assert.equal(isValidPriceRange('-255500', '266500'), false);
+});
+
+test('isValidPriceRange — 정상 범위(둘 다 양수, low<=high)는 유효', () => {
+  assert.equal(isValidPriceRange('1692000', '1714000'), true);
+  assert.equal(isValidPriceRange(100, 100), true); // low===high(당일 변동 없음)도 유효
+});
+
+test('isValidPriceRange — 0 이하(음수·0) 또는 저가>고가(역전)는 무효', () => {
+  assert.equal(isValidPriceRange('0', '100'), false);
+  assert.equal(isValidPriceRange('100', '0'), false);
+  assert.equal(isValidPriceRange('-1', '100'), false);
+  assert.equal(isValidPriceRange('100', '-1'), false);
+  assert.equal(isValidPriceRange('200', '100'), false); // low>high 역전
+});
+
+test('isValidPriceRange — 비유한값(파싱 불가)은 무효', () => {
+  assert.equal(isValidPriceRange('n/a', '100'), false);
+  assert.equal(isValidPriceRange('100', undefined), false);
+});
+
+test('pickPrimaryView — daily_price_band에 실제 캡처된 음수 저가가 오면 조각째 null(막대를 안 그린다)', () => {
+  const envelope = envelopeWithFields([
+    ['open_pric', '10000'], ['high_pric', '266500'], ['low_pric', '-255500'], ['base_pric', '10000'],
+  ]);
+  assert.equal(pickPrimaryView(envelope), null);
+});
+
+test('pickPrimaryView — price_range(연중 범위)도 같은 가드를 받는다', () => {
+  const envelope = envelopeWithFields([['oyr_hgst', '266500'], ['oyr_lwst', '-255500']]);
+  assert.equal(pickPrimaryView(envelope), null);
 });

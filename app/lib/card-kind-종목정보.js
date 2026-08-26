@@ -20,11 +20,14 @@
 //   (identity_and_capital 소유) 서브라인 없이 가격+배지만 뜬다 — 지어내지 않는다.
 // - daily_price_band(low_pric/high_pric 등) → "1일 범위" RangeBar. 같은 그룹에 현재가가
 //   없어 점 마커는 못 그린다(마커=현재가 위치인데 이 응답엔 현재가가 없다) — 라벨 없는
-//   범위만 그린다(필드 단위 생략, §4-1).
+//   범위만 그린다(필드 단위 생략, §4-1). low/high 둘 다 양수이고 low<=high일 때만
+//   그린다(isValidPriceRange) — 2026-08-26 카드 데모 실측으로 샌드박스 응답이 음수
+//   저가("-255,500 ~ 266,500")를 보낸 사례가 확인돼, 오해를 부르는 막대를 그리느니
+//   조각째 폴백한다(정직성 우선, §8).
 // - price_range(oyr_lwst/oyr_hgst 등) → "연중 범위" RangeBar. Paper는 "52주 범위"라
 //   쓰지만 gap 분석 실측대로 이 필드는 정확히 rolling 52주가 아니라 연중(달력연도)
 //   최저/최고다 — "52주"라고 라벨을 붙이면 정보 정직성(soul.md §8) 위반이라 있는
-//   그대로 "연중 범위"로 표기한다.
+//   그대로 "연중 범위"로 표기한다. 같은 isValidPriceRange 가드가 적용된다.
 // - 거래대금 1위/체결강도 랭크 타일 — 이 카드가 소유한 6개 TR 전체에 랭킹/체결강도
 //   필드가 없다(backend 미실재, gap 분석 확인) — 프리미티브 목록에도 애초에 없다
 //   (RankTile은 plan §1에서 제외됨). 구현하지 않는다.
@@ -40,6 +43,16 @@ function __dep(reqPath, globalName) {
   return __isCjs ? require(reqPath) : window.AthenaLib[globalName];
 }
 const { QuoteHeader, RangeBar } = __dep('./card-primitives', 'CardPrimitives');
+
+// 가격 범위 정직성 가드(팀리드 지시, 2026-08-26 카드 데모 실측 — 샌드박스 데이터가
+// 음수 저가를 보냈다: "1일 범위 -255,500 ~ 266,500"). 가격은 0 이하일 수 없고 저가가
+// 고가보다 클 수도 없다 — 셋 중 하나라도 어긋나면 이 조각 전체를 안 그린다(필드 하나만
+// 죽이지 않고 조각째 폴백, all-or-nothing). 순수 함수(node --test 대상).
+function isValidPriceRange(low, high) {
+  const l = Number(low);
+  const h = Number(high);
+  return Number.isFinite(l) && Number.isFinite(h) && l > 0 && h > 0 && l <= h;
+}
 
 function fieldMap(envelope) {
   const fields = envelope && envelope.data && Array.isArray(envelope.data.fields) ? envelope.data.fields : null;
@@ -67,10 +80,16 @@ function pickPrimaryView(envelope) {
     };
   }
   if (map.has('low_pric') && map.has('high_pric')) {
-    return { kind: 'daily-range', label: '1일 범위', low: map.get('low_pric'), high: map.get('high_pric') };
+    const low = map.get('low_pric');
+    const high = map.get('high_pric');
+    if (!isValidPriceRange(low, high)) return null; // 음수/0/역전 — 오해를 부르는 막대를 그리지 않는다
+    return { kind: 'daily-range', label: '1일 범위', low, high };
   }
   if (map.has('oyr_lwst') && map.has('oyr_hgst')) {
-    return { kind: 'year-range', label: '연중 범위', low: map.get('oyr_lwst'), high: map.get('oyr_hgst') };
+    const low = map.get('oyr_lwst');
+    const high = map.get('oyr_hgst');
+    if (!isValidPriceRange(low, high)) return null;
+    return { kind: 'year-range', label: '연중 범위', low, high };
   }
   return null;
 }
@@ -104,7 +123,7 @@ function render종목정보(envelope) {
   return renderRangeSection(view);
 }
 
-const __exports = { pickPrimaryView, render종목정보 };
+const __exports = { pickPrimaryView, isValidPriceRange, render종목정보 };
 if (__isCjs) {
   module.exports = __exports;
 } else {
