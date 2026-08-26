@@ -52,9 +52,18 @@
             window.AthenaGraphMode.setView(view);
           }
           // 에이전트모드 진입 시 라우틴 목록을 새로 받아온다(리프 1.2.2, 3단계) —
-          // loadAgentRoutines()가 안에서 renderList()까지 호출한다. 다른 모드는
-          // 라우틴 섹션과 무관하니 그냥 다시 그리기만 한다(대화 이력 복원).
-          if (view === 'agent') loadAgentRoutines(); else renderList();
+          // loadAgentRoutines()가 안에서 renderList()까지 호출한다. 캔버스 쪽
+          // 통계·리스트도 같은 진입점에서 새로고침한다(4단계, canvas.js가
+          // window.AthenaAgentCanvas로 노출). 다른 모드는 라우틴 섹션과
+          // 무관하니 사이드바만 다시 그린다(대화 이력 복원).
+          if (view === 'agent') {
+            loadAgentRoutines();
+            if (window.AthenaAgentCanvas && typeof window.AthenaAgentCanvas.refresh === 'function') {
+              window.AthenaAgentCanvas.refresh();
+            }
+          } else {
+            renderList();
+          }
         },
       })
     : null;

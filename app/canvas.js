@@ -1373,6 +1373,27 @@ window.AthenaGraphMode = graphMode;
 // (실측 결함).
 graphMode.applyVisibility();
 
+// --- 에이전트모드 캔버스 배선 (4단계, Paper 보드 39) -------------------------
+//
+// 헤더·탭·통계 카드·리스트는 lib/agent-canvas.js가 전부 그린다 — 여기서는
+// 컨테이너와 실제 IPC(3단계 sidebar.js가 쓰는 것과 같은 athena:routines-list
+// 채널)만 잇는다. refresh()는 모드 전환 시점에 sidebar.js의 모드 네비
+// onSelect가 window.AthenaAgentCanvas를 통해 부른다(사이드바 라우틴 목록
+// 새로고침과 같은 진입점, 단일 소유자 원칙).
+const agentCanvas = window.AthenaLib.AgentCanvas.createAgentCanvas({
+  container: document.getElementById('agentCanvas'),
+  fetchRoutines: async () => {
+    const res = await window.athena.invoke('athena:routines-list');
+    return (res && res.ok && res.data && Array.isArray(res.data.routines)) ? res.data.routines : [];
+  },
+  onNewTaskClick: () => {
+    const input = document.getElementById('input');
+    if (input) input.focus();
+  },
+});
+agentCanvas.mount();
+window.AthenaAgentCanvas = agentCanvas;
+
 // --- 그래프 모드 요약 뷰 배선 (보드 07) --------------------------------------
 //
 // 표 렌더·행 클릭·selectEntity 호출은 lib/graph-mode/summary-table.js가 갖고
