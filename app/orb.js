@@ -555,7 +555,17 @@
     else if (kind === 'restore-failed') setFace(FACE.CRYING);
   });
 
-  $toggle.addEventListener('click', () => {
+  // 2026-08-26 실사용 회귀("오브를 어떻게 펼쳐? 안펼쳐") — 리스너를 $toggle이
+  // 아니라 $orb에 건다. 원인 실측: $orb.setPointerCapture(위 pointerdown)이
+  // 활성화되는 타이밍이 비결정적이라(같은 tick에 pointerup까지 오면 캡처가
+  // gotpointercapture로 붙어버리고, 그 사이 pointermove가 한 번이라도 끼면
+  // 안 붙는다 — Chromium 쪽 타이밍 경합), 캡처가 붙은 경우 click의 target이
+  // 실제 클릭 지점(#orbToggle)이 아니라 캡처 요소(#orb)로 바뀐다. $toggle에
+  // 리스너가 있으면 그 click은 $toggle까지 버블링될 조상 경로가 아니라서
+  // 그냥 사라진다(계측 로그로 확인 — target:"orb"). $orb는 어느 쪽으로
+  // 리타깃되든(orb 자신이거나, orb의 자손인 orbToggle이거나) 항상 버블 경로
+  // 위에 있어 이 경합에 안전하다.
+  $orb.addEventListener('click', () => {
     // 드래그 문턱을 넘긴 상호작용의 꼬리에 붙는 클릭 1건을 삼킨다 — 안 그러면
     // 오브를 옮기고 손을 뗀 자리에서 펼침까지 같이 터진다.
     if (justDragged) { justDragged = false; return; }
