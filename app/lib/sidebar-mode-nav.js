@@ -11,7 +11,7 @@
 // 어긋날 일이 없다.
 
 function createSidebarModeNav(deps) {
-  const { items, onSelect } = deps || {};
+  const { items, badge, onSelect } = deps || {};
   const keys = items ? Object.keys(items) : [];
 
   function setActive(view) {
@@ -35,7 +35,23 @@ function createSidebarModeNav(deps) {
     });
   }
 
-  return { setActive };
+  // 에이전트 항목의 상시 배지 = 알람 센터 미확인 수(원칙2, Paper 보드 44).
+  // 호출자(lib/sidebar.js)가 notifyRooms의 !read 개수를 세어 넘긴다 — 이
+  // 모듈은 그 숫자를 렌더만 할 뿐, 알림 데이터 자체를 소유하지 않는다.
+  // 0이면 숨긴다(없는 미확인을 있다고 표시하지 않는다, P3).
+  function setBadgeCount(count) {
+    if (!badge) return;
+    const n = Number.isFinite(count) ? Math.max(0, Math.floor(count)) : 0;
+    if (n <= 0) {
+      badge.hidden = true;
+      badge.textContent = '';
+      return;
+    }
+    badge.hidden = false;
+    badge.textContent = String(n);
+  }
+
+  return { setActive, setBadgeCount };
 }
 
 const __exports = { createSidebarModeNav };

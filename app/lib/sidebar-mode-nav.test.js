@@ -26,9 +26,13 @@ function fakeButton() {
   return el;
 }
 
-function setup(onSelect) {
+function fakeBadge() {
+  return { hidden: true, textContent: '' };
+}
+
+function setup(onSelect, badge) {
   const items = { summary: fakeButton(), graph: fakeButton(), agent: fakeButton() };
-  const nav = createSidebarModeNav({ items, onSelect });
+  const nav = createSidebarModeNav({ items, badge, onSelect });
   return { nav, items };
 }
 
@@ -90,4 +94,51 @@ test('addEventListener가 없는 항목(비-DOM 값)이 섞여도 나머지는 �
   items.summary.dispatchEvent({ type: 'click' });
   assert.deepEqual(seen, ['summary']);
   assert.doesNotThrow(() => nav.setActive('graph'));
+});
+
+// ── 배지(원칙2 — 미확인 알람 수) ─────────────────────────────────────────────
+// 시나리오: 2개 미확인 이벤트 주입 → 배지 "2" → 1개 읽음 처리 → 배지 "1"
+// (팀 리드 브리핑 시나리오 그대로 — 이 파일은 호출자가 넘긴 숫자만 렌더한다).
+
+test('배지: 2개 미확인 → "2" 표시, 1개 읽음 처리 후 → "1" 표시', () => {
+  const badge = fakeBadge();
+  const { nav } = setup(undefined, badge);
+  nav.setBadgeCount(2);
+  assert.equal(badge.hidden, false);
+  assert.equal(badge.textContent, '2');
+  nav.setBadgeCount(1);
+  assert.equal(badge.hidden, false);
+  assert.equal(badge.textContent, '1');
+});
+
+test('배지: 0이면 숨긴다(없는 미확인을 있다고 표시하지 않는다)', () => {
+  const badge = fakeBadge();
+  const { nav } = setup(undefined, badge);
+  nav.setBadgeCount(2);
+  nav.setBadgeCount(0);
+  assert.equal(badge.hidden, true);
+  assert.equal(badge.textContent, '');
+});
+
+test('배지: 음수·NaN·미지정은 0으로 취급한다', () => {
+  const badge = fakeBadge();
+  const { nav } = setup(undefined, badge);
+  nav.setBadgeCount(-3);
+  assert.equal(badge.hidden, true);
+  nav.setBadgeCount(NaN);
+  assert.equal(badge.hidden, true);
+  nav.setBadgeCount(undefined);
+  assert.equal(badge.hidden, true);
+});
+
+test('배지: 소수는 내림한다', () => {
+  const badge = fakeBadge();
+  const { nav } = setup(undefined, badge);
+  nav.setBadgeCount(3.9);
+  assert.equal(badge.textContent, '3');
+});
+
+test('배지: badge 엘리먼트가 주입되지 않아도 터지지 않는다', () => {
+  const { nav } = setup();
+  assert.doesNotThrow(() => nav.setBadgeCount(5));
 });
