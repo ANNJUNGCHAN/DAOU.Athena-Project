@@ -86,11 +86,30 @@
       </div>
       <!-- 보드 07 — 그래프 모드 요약 뷰의 성향 신호 표. #mosaic·#graphCanvas와
            형제다(예전엔 #mosaic의 자식이라 그래프 모드에서 #mosaic가 hidden되면
-           함께 가려져 화면에 안 뜨는 결함이 있었다 — 2026-08-27 수정). -->
-      <div id="graphSummaryTable" class="mosaic glass" hidden></div>
+           함께 가려져 화면에 안 뜨는 결함이 있었다 — 2026-08-27 수정). 안쪽은
+           헤더(#graphSummaryHeader, 스텝2가 채운다)·본문(#graphSummaryTableArea+
+           #graphPanel 좌우, 스텝4/스텝8이 채운다) 2단 구조다 — applyVisibility()가
+           이 바깥 카드의 hidden만 소유하면 안쪽은 별도 hidden 로직 없이 함께 숨는다. -->
+      <div id="graphSummaryTable" class="mosaic glass" hidden>
+        <div id="graphSummaryHeader"></div>
+        <div id="graphSummaryBody">
+          <!-- 표 렌더 대상. summary-table.js의 renderSummaryTable()이 매 렌더마다
+               이 컨테이너의 자식만 통째로 비운다(summary-table.js:67) — #graphPanel은
+               그 바깥 형제라 표 리로드가 패널을 지울 방법이 구조적으로 없다. -->
+          <div id="graphSummaryTableArea"></div>
+          <!-- 공통 패널(보드 07/15) — 스텝8이 채운다. controller.js의
+               renderSelection()이 hidden·텍스트만 갱신한다(통째로 비우지 않는다). -->
+          <div id="graphPanel" class="graph-panel" hidden></div>
+        </div>
+      </div>
       <!-- 그래프 모드 — 요약(위 모자이크)과 **형제**다. 둘 중 하나만 보인다.
-           canvasRegion 전체를 토글하는 것이 결정(deep-interview Round 5). -->
-      <div id="graphCanvas" class="mosaic glass" hidden></div>
+           canvasRegion 전체를 토글하는 것이 결정(deep-interview Round 5). 안쪽은
+           헤더(#graphHeader, 스텝9가 채운다)·본문(#graphBody, 렌더·클릭위임·크기측정
+           전용) 2단 구조다. -->
+      <div id="graphCanvas" class="mosaic glass" hidden>
+        <div id="graphHeader"></div>
+        <div id="graphBody"></div>
+      </div>
       <div class="glass-sheen" id="sheen" aria-hidden="true"></div>
     </main>
 

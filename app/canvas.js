@@ -1347,10 +1347,17 @@ const graphMode = window.AthenaLib.GraphModeController.createGraphModeController
   elements: {
     pill: document.getElementById('graphPill'),
     summary: document.getElementById('mosaic'),
+    // 가시성 전용 — graphMode.applyVisibility() 하나만 이 hidden을 건드린다.
     graph: document.getElementById('graphCanvas'),
     // 보드 07 성향 신호 표 — 그래프 표면이라 답변 모드에선 숨는다(아래 §요약 뷰
     // 배선 주석·US-007 참고). graphMode.applyVisibility() 하나가 소유한다.
     summaryTable: document.getElementById('graphSummaryTable'),
+    // 그래프 뷰 본문 — 렌더·클릭위임·크기측정 전용(가시성은 위 graph가 계속
+    // 소유). #graphCanvas 안 #graphHeader의 영구 형제라 다시 그려도 헤더는 안 지워진다.
+    graphBody: document.getElementById('graphBody'),
+    // 공통 패널(보드 07/15) — #graphSummaryTableArea의 영구 형제. renderSelection()이
+    // hidden·텍스트만 갱신하고, 표 리로드가 이 노드를 건드릴 방법이 구조적으로 없다.
+    panel: document.getElementById('graphPanel'),
   },
   // main은 실패를 {ok:false}로 돌려준다. 컨트롤러는 **예외**로 실패를 안다 —
   // 여기서 바꿔주지 않으면 `{ok:false}`가 정상 응답으로 흘러 빈 그래프가 그려지고,
@@ -1386,7 +1393,10 @@ if (graphPillEl) {
 // 답변 모드에 그래프 콘텐츠가 새어 보였다(실측). 이 파일은 데이터 로드
 // 시점(ready)만 결정하고, 보이고 숨기는 건 절대 안 건드린다.
 const graphSummaryTable = window.AthenaLib.GraphSummaryTable.createSummaryTableController({
-  container: document.getElementById('graphSummaryTable'),
+  // 표 전용 렌더 대상 — #graphSummaryTable(가시성 전용) 안 #graphSummaryTableArea.
+  // #graphPanel은 그 바깥 형제라 표 리로드(renderSummaryTable의 통째 비움)가
+  // 패널을 건드리지 않는다(스텝0-2 소유권 계약).
+  container: document.getElementById('graphSummaryTableArea'),
   limit: 5, // 보드 07 "성향 신호 상위 5"
   fetchProfileSummary: ({ limit } = {}) => window.athena.invoke('athena:brain-profile-summary', { limit }),
   selectEntity: (entityId, panelData) => graphMode.selectEntity(entityId, panelData),
