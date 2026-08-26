@@ -39,7 +39,10 @@ function setup(options) {
   const elements = {
     pill: fakeNode('button'),
     summary: fakeNode('div'),
+    // graph(가시성 전용)와 graphBody(렌더/측정/클릭위임 전용)를 별개 노드로 둔다 —
+    // 스텝0-2 소유권 분리를 fake-dom에서도 그대로 흉내낸다.
     graph: fakeNode('div'),
+    graphBody: fakeNode('div'),
     summaryTable: fakeNode('div'),
   };
   if (opts.withPanel) elements.panel = fakeNode('div');
@@ -102,7 +105,7 @@ test('토글하면 캔버스 영역이 그래프로 바뀌고 그려진다', asy
   assert.equal(elements.graph.hidden, false);
   assert.equal(elements.summaryTable.hidden, false, '그래프 모드에선 성향 신호 표가 보인다');
   assert.equal(elements.pill.textContent, '그래프', '모드 칩은 지금 모드를 보여준다');
-  assert.equal(render.describeRendered(elements.graph).nodes, 2);
+  assert.equal(render.describeRendered(elements.graphBody).nodes, 2);
 });
 
 test('다시 토글하면 요약으로 돌아오고 그래프 표면은 완전히 숨는다', async () => {
@@ -118,10 +121,10 @@ test('리비전이 그대로면 다시 그리지 않는다', async () => {
   // 같은 그림을 다시 그리면 SVG가 통째로 교체되어 화면이 깜빡인다.
   const { controller, elements } = setup();
   await controller.toggle();
-  const svgBefore = elements.graph.children[0];
+  const svgBefore = elements.graphBody.children[0];
   const redrawn = await controller.refresh();
   assert.equal(redrawn, null, '다시 그리지 않았다');
-  assert.equal(elements.graph.children[0], svgBefore, '같은 SVG가 그대로 있다');
+  assert.equal(elements.graphBody.children[0], svgBefore, '같은 SVG가 그대로 있다');
 });
 
 test('리비전이 바뀌면 다시 그린다', async () => {
@@ -160,18 +163,18 @@ test('브레인이 안 됐을 때 그래프 모드로 들어오면 캔버스 안
   assert.equal(elements.summary.hidden, true, '그래프 모드 자체는 열린다');
   assert.equal(elements.graph.hidden, false);
   assert.equal(fetchCalls(), 0, '못 쓴다는 걸 이미 아니까 왕복하지 않는다');
-  assert.match(elements.graph.children[0].textContent, /브레인|성향/);
+  assert.match(elements.graphBody.children[0].textContent, /브레인|성향/);
 });
 
 test('그래프를 보는 중에 브레인이 꺼지면 화면 안에서 안내로 바뀐다(요약으로 쫓겨나지 않는다)', async () => {
   const { controller, elements } = setup();
   await controller.toggle();
   assert.equal(elements.graph.hidden, false);
-  const svgBefore = elements.graph.children[0];
+  const svgBefore = elements.graphBody.children[0];
   controller.setAvailable(false);
   assert.equal(elements.graph.hidden, false, '그래프 모드에 그대로 머문다');
   assert.equal(elements.summary.hidden, true);
-  assert.notEqual(elements.graph.children[0], svgBefore, '그림 대신 안내로 바뀐다');
+  assert.notEqual(elements.graphBody.children[0], svgBefore, '그림 대신 안내로 바뀐다');
 });
 
 test('그래프를 못 쓰다가 브레인이 켜지면 안내 대신 실제로 그린다', async () => {
@@ -180,7 +183,7 @@ test('그래프를 못 쓰다가 브레인이 켜지면 안내 대신 실제로 
   assert.equal(fetchCalls(), 0);
   await controller.setAvailable(true);
   assert.equal(fetchCalls(), 1);
-  assert.equal(render.describeRendered(elements.graph).nodes, 2);
+  assert.equal(render.describeRendered(elements.graphBody).nodes, 2);
 });
 
 test('설정이 이름표 임계를 정한다', async () => {
@@ -200,7 +203,7 @@ test('설정이 이름표 임계를 정한다', async () => {
   const { controller, elements } = setup({ prefs: boundPrefs });
   await controller.toggle();
   // 노드가 2개인데 임계가 1이므로 이름표가 안 붙는다.
-  assert.equal(render.describeRendered(elements.graph).labels, 0);
+  assert.equal(render.describeRendered(elements.graphBody).labels, 0);
 });
 
 test('요약 화면에서는 백엔드를 부르지 않는다', async () => {
@@ -215,26 +218,26 @@ test('1단계에서 노드를 클릭하면 그 군집이 펼쳐진다', async ()
   const { controller, elements, fetchCalls } = setup({ payload: payloadTwoClusters });
   await controller.toggle();
   assert.equal(controller.state.stage, store.STAGE_CLUSTERS);
-  const nodeEls = elements.graph.querySelectorAll('.graph-node');
+  const nodeEls = elements.graphBody.querySelectorAll('.graph-node');
   assert.equal(nodeEls.length, 3, '1단계는 군집 전부가 보인다');
   const clusterZeroNode = nodeEls.find((n) => n.getAttribute('data-entity-id') === 'e:a');
   clusterZeroNode.dispatchEvent({ type: 'click' });
   assert.equal(controller.state.stage, store.STAGE_EXPANDED);
   assert.equal(controller.state.expandedCluster, 0);
   assert.equal(fetchCalls(), 1, '펼침은 새 fetch 없이 캐시로 다시 그린다');
-  const afterExpand = elements.graph.querySelectorAll('.graph-node');
+  const afterExpand = elements.graphBody.querySelectorAll('.graph-node');
   assert.deepEqual(afterExpand.map((n) => n.getAttribute('data-entity-id')).sort(), ['e:a', 'e:b']);
 });
 
 test('2단계에서 노드를 클릭하면 선택된다(패널이 채워진다)', async () => {
   const { controller, elements } = setup({ payload: payloadTwoClusters, withPanel: true });
   await controller.toggle();
-  const firstClick = elements.graph.querySelectorAll('.graph-node')
+  const firstClick = elements.graphBody.querySelectorAll('.graph-node')
     .find((n) => n.getAttribute('data-entity-id') === 'e:a');
   firstClick.dispatchEvent({ type: 'click' }); // 1단계 클릭 — 펼친다
   assert.equal(controller.state.stage, store.STAGE_EXPANDED);
 
-  const secondClick = elements.graph.querySelectorAll('.graph-node')
+  const secondClick = elements.graphBody.querySelectorAll('.graph-node')
     .find((n) => n.getAttribute('data-entity-id') === 'e:b');
   secondClick.dispatchEvent({ type: 'click' }); // 2단계 클릭 — 고른다
   assert.equal(controller.state.selectedEntityId, 'e:b');
@@ -246,18 +249,18 @@ test('2단계에서 노드를 클릭하면 선택된다(패널이 채워진다)'
 test('panel 요소가 없으면 선택 상태는 바뀌지만 조용히 넘어간다', async () => {
   const { controller, elements } = setup({ payload: payloadTwoClusters });
   await controller.toggle();
-  const node = elements.graph.querySelectorAll('.graph-node')[0];
+  const node = elements.graphBody.querySelectorAll('.graph-node')[0];
   assert.doesNotThrow(() => node.dispatchEvent({ type: 'click' }));
 });
 
 test('collapseCluster()로 2단계에서 1단계로 돌아간다', async () => {
   const { controller, elements } = setup({ payload: payloadTwoClusters });
   await controller.toggle();
-  elements.graph.querySelectorAll('.graph-node')[0].dispatchEvent({ type: 'click' });
+  elements.graphBody.querySelectorAll('.graph-node')[0].dispatchEvent({ type: 'click' });
   assert.equal(controller.state.stage, store.STAGE_EXPANDED);
   controller.collapseCluster();
   assert.equal(controller.state.stage, store.STAGE_CLUSTERS);
-  assert.equal(elements.graph.querySelectorAll('.graph-node').length, 3, '전부 다시 보인다');
+  assert.equal(elements.graphBody.querySelectorAll('.graph-node').length, 3, '전부 다시 보인다');
 });
 
 test('clearSelection()으로 패널이 닫힌다', async () => {
@@ -282,4 +285,52 @@ test('selectEntity()는 그래프를 열지 않고도(요약 화면에서도) �
   assert.equal(controller.state.selectedEntityId, 'trait:short-turn');
   assert.equal(elements.panel.hidden, false);
   assert.match(elements.panel.textContent, /단기 회전/);
+});
+
+// ── 스텝0-2: DOM 골격 소유권 분리 회귀 가드 ──────────────────────────────────
+// graph(가시성)와 graphBody(렌더/측정/클릭위임)를 별개 참조로 나눈 것이 이
+// 스텝의 핵심이다 — 소유권이 다시 섞이면(예: applyVisibility가 graphBody도
+// 건드리기 시작하면) hidden 소유자가 둘이 되는 옛 결함이 재발한다.
+
+test('applyVisibility()는 graphBody·panel의 hidden을 건드리지 않는다(가시성은 graph·summaryTable만 소유)', () => {
+  const { controller, elements } = setup({ withPanel: true });
+  elements.graphBody.hidden = false;
+  elements.panel.hidden = false;
+  controller.applyVisibility();
+  assert.equal(elements.graph.hidden, true, '가시성 소유자(graph)는 정상 토글된다');
+  assert.equal(elements.graphBody.hidden, false, 'graphBody는 applyVisibility가 손대지 않는다');
+  assert.equal(elements.panel.hidden, false, 'panel도 applyVisibility가 손대지 않는다');
+});
+
+test('draw()는 폭/높이를 elements.graphBody.clientWidth/clientHeight에서 읽는다', async () => {
+  const elements = {
+    pill: fakeNode('button'),
+    summary: fakeNode('div'),
+    graph: fakeNode('div'),
+    graphBody: fakeNode('div'),
+    summaryTable: fakeNode('div'),
+  };
+  elements.graph.clientWidth = 999; // 가시성 전용 참조 — layoutClusterMap이 이 값을 읽으면 결함이다.
+  elements.graph.clientHeight = 999;
+  elements.graphBody.clientWidth = 321;
+  elements.graphBody.clientHeight = 654;
+  let capturedViewport = null;
+  const spyLayout = {
+    layoutClusterMap(p, viewport) {
+      capturedViewport = viewport;
+      return layout.layoutClusterMap(p, viewport);
+    },
+  };
+  const controller = createGraphModeController({
+    store,
+    layout: spyLayout,
+    render,
+    prefs: null,
+    elements,
+    fetchClusterMap: async () => payloadTwoClusters(7),
+  });
+  controller.setAvailable(true);
+  await controller.toggle();
+  assert.equal(capturedViewport.width, 321, 'graphBody.clientWidth를 읽는다');
+  assert.equal(capturedViewport.height, 654, 'graphBody.clientHeight를 읽는다');
 });

@@ -16,8 +16,10 @@ function createGraphModeController(deps) {
     layout,         // cluster-layout
     render,         // render
     prefs,          // graph-mode-prefs (선택)
-    elements,       // { pill, summary, graph, summaryTable(선택 — 보드 07 성향 신호 표),
-                    //   panel(선택) — 보드 07/15의 "공통 패널" }
+    elements,       // { pill, summary, graph(가시성 전용 — applyVisibility()만 소유),
+                    //   graphBody(렌더·클릭위임·크기측정 전용), summaryTable(선택 —
+                    //   보드 07 성향 신호 표, 가시성 전용), panel(선택) — 보드 07/15의
+                    //   "공통 패널" }
     fetchClusterMap, // async () => payload
     onError,        // (err) => void (선택)
   } = deps;
@@ -50,12 +52,12 @@ function createGraphModeController(deps) {
   // 브레인이 안 됐는데 그래프 모드로 들어오면 빈 캔버스 대신 이렇게 정직하게
   // 알린다 — 없는 것(성향 자체가 없다)과 못 읽은 것(브레인 미기동)은 다르다.
   function renderUnavailable() {
-    if (!elements.graph) return;
-    while (elements.graph.firstChild) elements.graph.removeChild(elements.graph.firstChild);
+    if (!elements.graphBody) return;
+    while (elements.graphBody.firstChild) elements.graphBody.removeChild(elements.graphBody.firstChild);
     const note = document.createElement('div');
     note.className = 'graph-mode-unavailable';
     note.textContent = '아직 성향을 읽을 수 없습니다 — 브레인이 준비되면 여기 그래프로 보입니다.';
-    elements.graph.appendChild(note);
+    elements.graphBody.appendChild(note);
     lastDrawnRevision = null; // available해지면 실제 그림으로 다시 그리게 한다.
   }
 
@@ -85,8 +87,8 @@ function createGraphModeController(deps) {
   // (render.js 주석 참고) 리스너도 매번 새로 건다 — 개별 바인딩을 쓰는 이유는
   // 이 파일이 최소 DOM 스텁(fake-dom.js)에서도 똑같이 돌아야 해서다(버블링 없음).
   function wireNodeClicks() {
-    if (!elements.graph || typeof elements.graph.querySelectorAll !== 'function') return;
-    const nodeEls = elements.graph.querySelectorAll('.graph-node');
+    if (!elements.graphBody || typeof elements.graphBody.querySelectorAll !== 'function') return;
+    const nodeEls = elements.graphBody.querySelectorAll('.graph-node');
     for (const nodeEl of nodeEls) {
       if (typeof nodeEl.addEventListener !== 'function') continue;
       nodeEl.addEventListener('click', () => {
@@ -98,11 +100,11 @@ function createGraphModeController(deps) {
   // 지금 상태로 마지막 배치를 다시 그린다 — 펼침·접기·선택 전부 이 경로를 탄다.
   // 배치는 이미 있으니 무엇을 보여줄지만 바뀐다, 네트워크 왕복이 필요 없다.
   function redrawFromCache() {
-    if (!lastPlaced || !elements.graph) return;
+    if (!lastPlaced || !elements.graphBody) return;
     const nodes = store.visibleNodes(state, lastPlaced);
     const edges = store.visibleEdges(state, lastPlaced);
     const settings = prefs ? prefs.readPrefs() : null;
-    render.renderClusterMap(elements.graph, { nodes, edges }, {
+    render.renderClusterMap(elements.graphBody, { nodes, edges }, {
       showLabels: prefs ? prefs.shouldShowLabels(settings, nodes.length) : true,
       highlightCrossings: settings ? settings.highlightCrossings : true,
       selectedEntityId: state.selectedEntityId,
@@ -151,14 +153,14 @@ function createGraphModeController(deps) {
     if (!force && lastDrawnRevision === state.revision) return null;
 
     const placed = layout.layoutClusterMap(payload, {
-      width: elements.graph ? elements.graph.clientWidth : 0,
-      height: elements.graph ? elements.graph.clientHeight : 0,
+      width: elements.graphBody ? elements.graphBody.clientWidth : 0,
+      height: elements.graphBody ? elements.graphBody.clientHeight : 0,
     });
     lastPlaced = placed;
     const nodes = store.visibleNodes(state, placed);
     const edges = store.visibleEdges(state, placed);
     const settings = prefs ? prefs.readPrefs() : null;
-    render.renderClusterMap(elements.graph, { nodes, edges }, {
+    render.renderClusterMap(elements.graphBody, { nodes, edges }, {
       showLabels: prefs
         ? prefs.shouldShowLabels(settings, nodes.length)
         : true,
