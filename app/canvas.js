@@ -30,6 +30,22 @@ if (window.athena && typeof window.athena.on === 'function') {
   });
 }
 
+// event/status 카드(Paper AT-CV-005 보호 워크플로) — 지금까지 이 두 canvas_type을
+// 채우는 발신처가 없어 렌더러만 있고 카드는 뜬 적이 없었다(2026-08-26 동적 추적,
+// screen-matrix.md #11 정정). lib/protected-cards.js가 앱이 이미 갖고 있는 실신호
+// (루틴 발화·인증 토큰 변경)만으로 기존 renderEventCard/renderStatusCard가 기대하는
+// envelope을 조립한다 — 백엔드 WS 인프라를 새로 놓지 않는다.
+if (window.athena && typeof window.athena.on === 'function' && window.AthenaLib.ProtectedCards) {
+  const protectedCards = window.AthenaLib.ProtectedCards;
+  window.athena.on('athena:routine-event', (event) => {
+    const built = protectedCards.buildRoutineFiredEventCard(event);
+    if (built) addLiveCard(built);
+  });
+  window.athena.on('athena:auth-token-changed', (payload) => {
+    addLiveCard(protectedCards.buildAuthTokenStatusCard(payload));
+  });
+}
+
 // 프로브·검증용 읽기 창구(window.addCard와 같은 관례). 상태를 바꾸지 않는다 —
 // 실시간 진행봉이 실제로 갱신됐는지 값으로 확인할 길이 달리 없다(캔버스에 그려진
 // 가격 라벨은 DOM이 아니다).

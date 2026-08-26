@@ -1247,6 +1247,7 @@ refreshRoutineDrafts();
 // 발화)가, 방향·수량·실행은 사람만. 집행은 기존 3중 게이트 백엔드 라우트
 // 그대로(새 주문 경로 없음), IN_DOUBT(409)는 재전송하지 않는다.
 const orderTicketLib = window.AthenaLib.OrderTicket;
+const protectedCardsLib = window.AthenaLib.ProtectedCards;
 const $order = document.getElementById('order');
 const $orderBody = document.getElementById('orderBody');
 let orderOpen = false;
@@ -1392,6 +1393,15 @@ async function renderOrderTicket(prefill) {
     const outcome = orderTicketLib.interpretExecuteStatus((res && res.status) || 0);
     orderTicketLib.transition(ticket, outcome === 'done' ? 'done'
       : outcome === 'in_doubt' ? 'in_doubt' : 'failed');
+    // 종결 상태를 표시 전용 action 카드로도 남긴다(Paper AT-CV-005 보호
+    // 워크플로) — 실행 버튼이 없는 영수증일 뿐, 이 티켓 패널이 유일한 실행
+    // 표면이라는 확정 결정 3 경계는 그대로다. addLiveCard는 canvas.js가 선언한
+    // 전역 함수다(같은 문서, canvas.js가 chat.js보다 먼저 로드된다 — shell.html).
+    if (typeof addLiveCard === 'function' && protectedCardsLib) {
+      addLiveCard(protectedCardsLib.buildOrderActionCard({
+        trId: payload.tr_id, body: payload.body, outcome, response: res,
+      }));
+    }
     if (outcome === 'done') {
       status.textContent = '주문 접수됨 — 체결은 계좌에서 확인하세요.';
     } else if (outcome === 'in_doubt') {
