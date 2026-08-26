@@ -91,7 +91,32 @@
            #graphPanel 좌우, 스텝4/스텝8이 채운다) 2단 구조다 — applyVisibility()가
            이 바깥 카드의 hidden만 소유하면 안쪽은 별도 hidden 로직 없이 함께 숨는다. -->
       <div id="graphSummaryTable" class="mosaic glass" hidden>
-        <div id="graphSummaryHeader"></div>
+        <!-- #graphSummaryHeader — 스텝2가 뷰 토글(요약/그래프)·필터 칩·"최근 갱신"을
+             채운다. 이 토글은 그래프 기능 진입(#dot/#graphPill, graphMode.toggle())과는
+             다른 축이다 — applyVisibility()가 elements.graph/elements.summaryTable을
+             둘 다 !graphView로 묶어 그래프 기능 안에서는 이 카드와 #graphCanvas가
+             동시에 hidden=false가 된다(US-007 계약: hidden 소유자는 applyVisibility()
+             하나뿐, 여기서 손대지 않는다). 그래서 "요약"/"그래프" 서브뷰는 hidden이
+             아니라 z-index(.graph-surface-back, canvas.js의 focusGraphSurface())로
+             어느 카드가 위에 보이는지만 바꾼다 — 실측: 아무 표시 없이 두면 나중에
+             오는 #graphCanvas가 항상 위에 그려져 이 카드 내용이 완전히 가려진다. -->
+        <div id="graphSummaryHeader">
+          <div class="summary-header-left">
+            <div class="view-toggle" role="tablist">
+              <button type="button" id="summaryViewTab" class="view-toggle-tab is-active" role="tab" aria-selected="true">요약</button>
+              <button type="button" id="graphViewTab" class="view-toggle-tab" role="tab" aria-selected="false">그래프</button>
+            </div>
+            <!-- 실데이터(entries[].observed_at 중 최신)로만 채운다 — Paper 목업
+                 "12분 전"을 그대로 박지 않는다. 표를 아직 못 읽었으면(빈 목록) 숨은 채로 둔다. -->
+            <span id="summaryUpdatedAt" class="summary-updated-at" hidden></span>
+          </div>
+          <div class="summary-header-right">
+            <!-- 필터 칩 — Paper가 활성/비활성 시각차·인터랙션 스펙을 안 그려서
+                 정적 라벨로만 둔다(열린 질문 5, 클릭 기능 발명하지 않음). -->
+            <span class="filter-chip">최근 90일</span>
+            <span class="filter-chip">보강 순</span>
+          </div>
+        </div>
         <div id="graphSummaryBody">
           <!-- 표 렌더 대상. summary-table.js의 renderSummaryTable()이 매 렌더마다
                이 컨테이너의 자식만 통째로 비운다(summary-table.js:67) — #graphPanel은
@@ -103,10 +128,11 @@
         </div>
       </div>
       <!-- 그래프 모드 — 요약(위 모자이크)과 **형제**다. 둘 중 하나만 보인다.
-           canvasRegion 전체를 토글하는 것이 결정(deep-interview Round 5). 안쪽은
-           헤더(#graphHeader, 스텝9가 채운다)·본문(#graphBody, 렌더·클릭위임·크기측정
+           canvasRegion 전체를 토글하는 것이 결정(deep-interview Round 5). 기본은
+           요약 서브뷰가 위(.graph-surface-back — 스텝2 참고, canvas.js가 토글).
+           안쪽은 헤더(#graphHeader, 스텝9가 채운다)·본문(#graphBody, 렌더·클릭위임·크기측정
            전용) 2단 구조다. -->
-      <div id="graphCanvas" class="mosaic glass" hidden>
+      <div id="graphCanvas" class="mosaic glass graph-surface-back" hidden>
         <div id="graphHeader"></div>
         <div id="graphBody"></div>
       </div>

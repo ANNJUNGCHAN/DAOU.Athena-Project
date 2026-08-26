@@ -1403,6 +1403,59 @@ const graphSummaryTable = window.AthenaLib.GraphSummaryTable.createSummaryTableC
   onError: (err) => console.warn('[graph-mode] profile-summary 실패', err),
 });
 
+// --- 요약 뷰 헤더 배선 (보드 06/07 §4-1, 4-3) --------------------------------
+//
+// "요약"/"그래프" 서브뷰 토글 — #dot/#graphPill의 그래프 기능 진입·이탈
+// (graphMode.toggle())과는 다른 축이다. #graphSummaryTable·#graphCanvas는
+// 그래프 기능 안에서 항상 함께 hidden=false가 되므로(위 elements 주석·US-007
+// 참고), 여기서는 hidden을 안 건드리고 어느 카드가 위에 보이는지만
+// .graph-surface-back(canvas.css)로 바꾼다 — graphMode.toggle()을 쓰면 이미
+// 그래프 기능 안(그렇지 않으면 이 헤더 자체가 안 보임)이라 답변 모드로 도로
+// 나가버린다(실측 — 계획 문서의 원안 배선을 그대로 쓰면 "그래프" 탭이 채팅으로
+// 튕겨나가는 결함이 된다).
+const summaryViewTabEl = document.getElementById('summaryViewTab');
+const graphViewTabEl = document.getElementById('graphViewTab');
+const graphCanvasSurfaceEl = document.getElementById('graphCanvas');
+const graphSummaryTableSurfaceEl = document.getElementById('graphSummaryTable');
+function focusGraphSurface(which) {
+  const showGraph = which === 'graph';
+  if (graphCanvasSurfaceEl) graphCanvasSurfaceEl.classList.toggle('graph-surface-back', !showGraph);
+  if (graphSummaryTableSurfaceEl) graphSummaryTableSurfaceEl.classList.toggle('graph-surface-back', showGraph);
+  if (summaryViewTabEl) {
+    summaryViewTabEl.classList.toggle('is-active', !showGraph);
+    summaryViewTabEl.setAttribute('aria-selected', showGraph ? 'false' : 'true');
+  }
+  if (graphViewTabEl) {
+    graphViewTabEl.classList.toggle('is-active', showGraph);
+    graphViewTabEl.setAttribute('aria-selected', showGraph ? 'true' : 'false');
+  }
+}
+if (summaryViewTabEl) summaryViewTabEl.addEventListener('click', () => focusGraphSurface('summary'));
+if (graphViewTabEl) graphViewTabEl.addEventListener('click', () => focusGraphSurface('graph'));
+
+// "최근 갱신"(06 §4-1) — entries[].observed_at 중 가장 최신값으로만 채운다. Paper
+// 목업 "12분 전"을 리터럴로 박지 않는다(§0 정직한 빈 데이터 정책) — 항목이 없거나
+// 유효한 시각이 하나도 없으면 자리를 숨긴다. 상대 시간 포맷은 새로 만들지 않고
+// 능동 턴 배지가 이미 쓰는 relativeText를 재사용한다(routine-turn.js).
+function renderSummaryUpdatedAt(entries) {
+  const el = document.getElementById('summaryUpdatedAt');
+  if (!el) return;
+  const list = Array.isArray(entries) ? entries : [];
+  let latestMs = null;
+  for (const entry of list) {
+    const t = entry && Date.parse(entry.observed_at);
+    if (Number.isFinite(t) && (latestMs === null || t > latestMs)) latestMs = t;
+  }
+  if (latestMs === null) {
+    el.hidden = true;
+    el.textContent = '';
+    return;
+  }
+  const relative = window.AthenaLib.RoutineTurn.relativeText(new Date(latestMs).toISOString(), Date.now());
+  el.hidden = !relative;
+  el.textContent = relative ? `최근 갱신 ${relative}` : '';
+}
+
 // 모드 칩은 항상 보이지만, 컨트롤러는 아직 "못 씀"으로 가정한 채 태어난다
 // (controller.js 기본값) — 이 프로브가 브레인 상태를 확인해 바로잡는다. 프로브 전에
 // 사람이 그래프 모드로 들어와도 renderUnavailable()의 정직한 안내가 뜨지, 막히지 않는다.
@@ -1415,7 +1468,7 @@ const graphSummaryTable = window.AthenaLib.GraphSummaryTable.createSummaryTableC
     // 여기서는 데이터를 미리 당겨올지만 결정한다(그래프 모드로 전환했을 때 바로
     // 보이도록 하는 프리페치 — 안 보이는 동안 부르는 낭비는 loadEmptyCanvasExtras와
     // 같은 기존 관례).
-    if (ready) graphSummaryTable.load();
+    if (ready) graphSummaryTable.load().then(renderSummaryUpdatedAt);
     // 빈 상태(보드 05) 숫자·CTA·힌트 — 같은 ready 확인에 얹는다(왕복 추가 없음).
     if (ready) loadEmptyCanvasExtras();
   } catch (err) {

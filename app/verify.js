@@ -2269,11 +2269,44 @@ app.whenReady().then(async () => {
       // 자식으로 숨어 있었어도 이 값은 그대로 'block'이었을 것이다. 실제로
       // 화면에 그려지는지는 크기로만 판별 가능하다 — 부모가 display:none이면
       // 자손은 레이아웃 박스 자체가 생성되지 않아 rect가 0×0이 된다.
-      const summaryTableRect = document.getElementById('graphSummaryTable').getBoundingClientRect();
+      const graphSummaryTableEl = document.getElementById('graphSummaryTable');
+      const summaryTableRect = graphSummaryTableEl.getBoundingClientRect();
       const summaryTableVisible = summaryTableRect.width > 0 && summaryTableRect.height > 0;
+      // 스텝2 회귀 가드 — 요약 뷰 헤더의 "요약"/"그래프" 서브뷰 탭은 hidden을
+      // 건드리지 않고 어느 카드가 위에 보이는지(.graph-surface-back)만 바꾼다
+      // (graphMode.toggle()을 쓰면 이미 그래프 기능 안이라 답변 모드로 튕겨나간다
+      // — 계획 원안의 함정, canvas.js focusGraphSurface() 주석 참고).
+      const graphViewTab = document.getElementById('graphViewTab');
+      const summaryViewTab = document.getElementById('summaryViewTab');
+      let surfaceToggle = null;
+      if (graphViewTab && summaryViewTab) {
+        const mosaicHiddenBefore = document.getElementById('mosaic').hidden;
+        const containerHiddenBefore = container.hidden;
+        const summaryTableHiddenBefore = graphSummaryTableEl.hidden;
+        graphViewTab.click();
+        const afterGraphClick = {
+          canvasBack: container.classList.contains('graph-surface-back'),
+          tableBack: graphSummaryTableEl.classList.contains('graph-surface-back'),
+          graphTabActive: graphViewTab.classList.contains('is-active'),
+        };
+        summaryViewTab.click();
+        const afterSummaryClick = {
+          canvasBack: container.classList.contains('graph-surface-back'),
+          tableBack: graphSummaryTableEl.classList.contains('graph-surface-back'),
+          summaryTabActive: summaryViewTab.classList.contains('is-active'),
+        };
+        surfaceToggle = {
+          afterGraphClick,
+          afterSummaryClick,
+          hiddenAttrsUnaffected:
+            document.getElementById('mosaic').hidden === mosaicHiddenBefore &&
+            container.hidden === containerHiddenBefore &&
+            graphSummaryTableEl.hidden === summaryTableHiddenBefore,
+        };
+      }
       const containerText = container.textContent;
       if (!brainReady) {
-        return { wired: true, brainReady, clickOpened, summaryHidden, summaryTableVisible, containerText };
+        return { wired: true, brainReady, clickOpened, summaryHidden, summaryTableVisible, surfaceToggle, containerText };
       }
       const byClick = window.AthenaLib.GraphRender.describeRendered(container);
       // 좌표 계약은 배치 결과와 대조해야 알 수 있고, 클릭 경로는 그 값을 돌려주지
@@ -2288,6 +2321,7 @@ app.whenReady().then(async () => {
         byClick,
         summaryHidden,
         summaryTableVisible,
+        surfaceToggle,
         placedNodes: placed ? placed.nodes.length : 0,
         placedEdges: placed ? placed.edges.length : 0,
         drawn,
@@ -2342,6 +2376,26 @@ app.whenReady().then(async () => {
         graph.summaryTableVisible === true,
       );
       report.graphMode.shot = await shot(shellWin, '90-graph-mode-unavailable.png');
+    }
+    if (graph.surfaceToggle) {
+      // 스텝2 회귀 가드 — brainReady와 무관하게 확인한다: 요약 뷰 헤더의
+      // "요약"/"그래프" 서브뷰 탭이 hidden 소유권(US-007, applyVisibility() 하나)을
+      // 건드리지 않고 어느 카드가 위에 보이는지(.graph-surface-back)만 바꾸는지.
+      const st = graph.surfaceToggle;
+      assertOk(
+        'graph-mode: 그래프 탭 클릭 시 그래프 캔버스가 앞으로 온다',
+        st.afterGraphClick.canvasBack === false && st.afterGraphClick.tableBack === true,
+      );
+      assertOk('graph-mode: 그래프 탭이 활성 스타일을 받는다', st.afterGraphClick.graphTabActive === true);
+      assertOk(
+        'graph-mode: 요약 탭 클릭 시 성향 신호 표가 다시 앞으로 온다',
+        st.afterSummaryClick.canvasBack === true && st.afterSummaryClick.tableBack === false,
+      );
+      assertOk('graph-mode: 요약 탭이 활성 스타일을 받는다', st.afterSummaryClick.summaryTabActive === true);
+      assertOk(
+        'graph-mode: 서브뷰 탭 클릭이 hidden 소유권(applyVisibility)을 건드리지 않는다',
+        st.hiddenAttrsUnaffected === true,
+      );
     }
   } catch (err) {
     report.graphMode = { error: String((err && err.message) || err) };
