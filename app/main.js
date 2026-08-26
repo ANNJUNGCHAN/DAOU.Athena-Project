@@ -406,7 +406,15 @@ function startRoutineFeed() {
         n.show();
       }
     },
-    onStatus: () => {},
+    // 루틴 피드 연결 상태를 오브에 얇게 릴레이한다(board-30⑩) — 위 orb-signal
+    // 릴레이(797행 부근)와 같은 원칙: main은 판단하지 않는다. connected/
+    // disconnected/unsupported를 그대로 실어 보내고, 그중 무엇을 얼굴로 바꿀지는
+    // orb.js가 정한다.
+    onStatus: (status) => {
+      if (orbWin && !orbWin.isDestroyed()) {
+        orbWin.webContents.send('athena:orb-signal', { signal: 'feed-status', status });
+      }
+    },
   });
   routineFeed.start();
 }
