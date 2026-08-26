@@ -16,31 +16,66 @@
        data-state: collapsed | expanded. -->
   <div id="orbRoot" class="orb-root" data-anchor="bottom-right" data-state="collapsed" data-alert="none">
 
-    <!-- 펼침 패널 — 세 조각까지다: 대화체 문장 1 · 대표 카드 1 · 더보기.
-         **실행 버튼도 미니 입력창도 없다**(확정 결정 3 · 단일 입력 원칙). -->
+    <!-- 펼침 패널 — 상태는 둘뿐이다(board-33/34, tree-34-deep.raw):
+         상태 A(셸 숨김) = 대화 모드, 상태 B(셸 표시) = 알림 전용.
+         알림 전용에서는 옛 계약 그대로다 — 대화체 문장 1 · 대표 카드 1 · 더보기,
+         실행 버튼 없음(확정 결정 3). 대화 모드에서만 입력줄이 생긴다 — **셸이
+         보이는 동안은 여전히 입력창 0개**라 "단일 입력 지점" 원칙 자체는 안
+         깨진다(둘이 동시에 살지 않는다), 그 지점이 셸 하나에서 "지금 보이는
+         창 하나"로 넓어졌을 뿐이다. -->
     <section id="orbPanel" class="orb-panel" hidden aria-live="polite">
       <header class="orb-panel-head">
         <!-- 시점 정직성 3종 — 발화 배지 · 방식 표기는 lib/routine-turn.js의
-             결정론 템플릿이 만든다. 오브가 문장을 짓지 않는다(LLM 0). -->
+             결정론 템플릿이 만든다. 오브가 문장을 짓지 않는다(LLM 0).
+             대화 모드에서는 badge/mode/relative를 비우고 헤더 타이틀만 쓴다. -->
         <span id="orbBadge" class="orb-badge"></span>
         <span id="orbMode" class="orb-mode"></span>
+        <span id="orbHeaderTitle" class="orb-header-title"></span>
         <span id="orbRelative" class="orb-relative"></span>
         <button id="orbClose" class="orb-close" type="button" aria-label="접기" title="접기"></button>
       </header>
 
-      <!-- 대화체 문장 1 -->
+      <!-- 알림 전용 본문(상태 B) -->
       <p id="orbBody" class="orb-body"></p>
 
       <!-- 대표 카드 1 — 이벤트 원장 행의 1:1 렌더링이다. 지어낸 값이 없다.
            캔버스의 카드 12종과 별개 표면이라 여기 미리보기는 카드 종류를 늘리지 않는다. -->
       <div id="orbCard" class="orb-card"></div>
 
-      <footer class="orb-foot">
+      <footer id="orbFoot" class="orb-foot">
         <!-- 소스 라벨 — "묻지 않은 턴입니다"까지 포함한 정직성 계약 문구. -->
         <span id="orbSource" class="orb-source"></span>
-        <!-- 오브의 유일한 진행 경로. 셸을 앞으로 가져오고 카드를 중앙 캔버스에 쌓는다. -->
+        <!-- 알림에서 셸로 가는 경로. 셸을 앞으로 가져오고 카드를 중앙 캔버스에 쌓는다. -->
         <button id="orbMore" class="orb-more" type="button">더보기</button>
       </footer>
+
+      <!-- 대화 본문(상태 A, board-33) — 빈 안내 → 질문/진행/답변 턴이 쌓인다. -->
+      <div id="orbChatBody" class="orb-chat-body" hidden>
+        <div id="orbChatEmpty" class="orb-chat-empty">
+          <p>셸을 내려두셨네요. 여기서 바로 물어보셔도 됩니다.</p>
+          <p>긴 표와 차트는 줄여서 보여드리고, 전체는 대화창에서 이어집니다.</p>
+        </div>
+        <div id="orbChatTurns" class="orb-chat-turns"></div>
+      </div>
+
+      <!-- 오브의 새 부품 — 입력은 상태 A(셸 숨김)에서만 존재한다(board-34 게이트,
+           orb.js applyMode가 athena:shell-visibility로 켜고 끈다). -->
+      <div id="orbInputStack" class="orb-input-stack" hidden>
+        <div class="orb-input-row">
+          <input id="orbInput" class="orb-input" type="text" placeholder="무엇이든 물어보세요" autocomplete="off" />
+          <div id="orbLockHint" class="orb-lock-hint" hidden>
+            <span>답변 중…</span>
+            <button id="orbEsc" class="orb-esc" type="button">ESC 중단</button>
+          </div>
+        </div>
+        <div class="orb-control-strip">
+          <span id="orbChatDot" class="orb-chat-dot" aria-hidden="true"></span>
+          <span id="orbChatCli" class="orb-chat-cli-pill"></span>
+          <span id="orbChatRoutine" class="orb-chat-routine-chip" hidden></span>
+          <!-- 대화 이어짐(board-34 A→B) — 셸을 앞으로 가져온다, 새 방이 아니다. -->
+          <button id="orbChatGo" class="orb-chat-go" type="button">대화창으로 가기</button>
+        </div>
+      </div>
     </section>
 
     <div id="orb" class="orb" title="끌어서 옮기고, 가운데를 눌러 펼친다">

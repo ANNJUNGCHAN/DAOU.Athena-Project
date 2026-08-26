@@ -38,6 +38,11 @@ let canvasSource = 'live';
 let state = 'idle'; // idle | judging | calling | done(즉시 idle로 수렴)
 let liveProgressEl = null;
 let abortToken = 0;
+// 오브 대화 모드(2026-08-26 board-33)가 돌리는 왕복 중에는 셸 입력도 잠근다 —
+// 셸이 숨겨진 동안만 오브가 질의할 수 있으므로 겹칠 일은 이론상 없지만, 트레이
+// 복귀처럼 타이핑 없이 셸이 다시 보이게 되는 경로가 있어 방어적으로 공유한다
+// (main.js broadcastLiveQueryBusy — "단일 실행 잠금은 공유한다").
+let remoteQueryBusy = false;
 let onboardCleanup = null; // 현재 노출 중인 온보딩/인증 화면의 정리 함수(리스너·타이머 해제)
 
 function prepareRestReceiptSurface() {
@@ -808,10 +813,17 @@ function dispatchUserQuery(text) {
 }
 
 $input.addEventListener('keydown', (e) => {
-  if (e.key !== 'Enter' || state !== 'idle') return;
+  if (e.key !== 'Enter' || state !== 'idle' || remoteQueryBusy) return;
   const text = $input.value;
   $input.value = '';
   dispatchUserQuery(text);
+});
+
+// 오브가 질의를 돌리는 동안 셸 입력도 잠근다(위 remoteQueryBusy 선언 참고).
+window.athena.on('athena:live-query-state', ({ busy } = {}) => {
+  if (state !== 'idle') return; // 셸 자신이 이미 진행 중이면 그쪽 setLocked가 우선한다
+  remoteQueryBusy = !!busy;
+  setLocked(remoteQueryBusy, remoteQueryBusy ? '오브에서 대화 중 — 잠시 후 다시 시도하세요' : undefined);
 });
 
 // 오브 "듣는 중" 실신호(2026-08-26 board-32) — 입력 지점은 이 창 하나뿐이라
@@ -1071,6 +1083,51 @@ window.athena.on('athena:routine-event', (event) => {
   refreshRoutineChip();
 });
 refreshRoutineChip();
+
+// ---------- 오브에서 오간 턴 반영(2026-08-26 board-33/34) ----------
+// 셸이 숨겨진 동안 오브 대화 모드가 돌린 턴은 chat.js가 그 순간에는 그릴 수
+// 없었다(창이 안 보였으니까) — main이 턴이 끝난 뒤 늦게 알려주면 여기서
+// $history에 채워 넣는다. "대화창으로 가기 → 메인 방 그대로 이어진다"(board-34)의
+// 시각적 절반 — 세션·이력 저장은 runLiveQuery가 이미 끝냈고, 이 핸들러는 DOM
+// 표시만 뒤늦게 맞춘다. 진행 중이던 셸 자신의 턴과 순서가 꼬이지 않게 idle일
+// 때만 붙인다(원리상 겹칠 수 없다 — 셸이 숨어야 오브가 말할 수 있으므로).
+window.athena.on('athena:orb-turn-committed', ({ query, result } = {}) => {
+  if (state !== 'idle' || !query) return;
+  const qLine = document.createElement('div');
+  qLine.className = 'turn';
+  const qText = document.createElement('div');
+  qText.className = 'turn-q';
+  qText.textContent = query;
+  qLine.appendChild(qText);
+  $history.appendChild(qLine);
+
+  const aLine = document.createElement('div');
+  aLine.className = 'turn';
+  const aText = document.createElement('div');
+  aText.className = 'turn-a';
+  aText.textContent = result && result.answerText
+    ? result.answerText
+    : (result && result.ok ? '완료 — 답변 텍스트 없음' : `실패 — ${(result && result.error) || '알 수 없는 오류'}`);
+  aLine.appendChild(aText);
+
+  const meta = document.createElement('div');
+  meta.className = 'turn-meta';
+  const canvasTypes = (result && result.canvasTypes) || [];
+  for (const t of canvasTypes) {
+    const chip = document.createElement('span');
+    chip.className = 'chip';
+    chip.textContent = canvasTypeLabel(t);
+    meta.appendChild(chip);
+  }
+  const trace = document.createElement('span');
+  const durS = result && typeof result.durationMs === 'number' ? (result.durationMs / 1000).toFixed(1) : null;
+  trace.textContent = '오브에서 대화' + (durS ? ` · ${durS}s` : '');
+  meta.appendChild(trace);
+  aLine.appendChild(meta);
+
+  $history.appendChild(aLine);
+  scrollAfterRender();
+});
 
 // ---------- 루틴 승인 카드 (P3, 2026-08-19) ----------
 // 모델은 draft 제안만 할 수 있다(athena_routine — confirm/cancel 액션 자체가
