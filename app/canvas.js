@@ -96,6 +96,133 @@ let activeDatasetId = null;
 // CSS 하나로 성립한다: canvas.css .glass-sheen의 blur(0px)가 유일한 값이고
 // 이 값을 인라인으로 덮는 코드가 없다.
 
+// ---------- 캔버스 빈 상태(보드 05) ----------
+// 옛 판은 `.grid:empty::before` 한 줄짜리 CSS pseudo-content였다. 숫자·CTA를
+// 담으려면 실DOM이 필요해 #grid의 형제(#gridEmpty)로 옮겼다 — pseudo-content는
+// 정적 문자열만 가능하고 버튼도 못 담는다. 보이고/숨기고는 #grid의 자식 수에만
+// 달렸으므로 카드 추가/삭제 호출부 전부를 따라다니는 대신 MutationObserver
+// 하나로 건다 — "카드가 뜨면 사라지고 비면 돌아온다"가 어떤 경로로 비워지든
+// (destroyCard/clearCanvases/enforceHeightBudget…) 자동으로 성립한다.
+const gridEmptyEl = document.getElementById('gridEmpty');
+function syncGridEmptyVisibility() {
+  if (!gridEmptyEl) return;
+  gridEmptyEl.hidden = grid.children.length > 0;
+}
+new MutationObserver(syncGridEmptyVisibility).observe(grid, { childList: true });
+syncGridEmptyVisibility();
+
+// 삽화 — 그래프 모티프(선 5·원 6), 참조 목업(board-05.png)의 성긴 비대칭 배치를
+// 옮겼다. 그래프 모드 배치 알고리즘과는 무관한 순수 장식이다. 무채색(currentColor)
+// 하나로 톤을 낮춘다 — 브랜드색은 화면당 인터랙션 지점 하나에만(palette.md).
+function buildEmptyCanvasIllustration() {
+  const wrap = document.createElement('div');
+  wrap.className = 'canvas-empty-graph';
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', '0 0 120 74');
+  svg.setAttribute('width', '120');
+  svg.setAttribute('height', '74');
+  svg.setAttribute('aria-hidden', 'true');
+  const nodes = [
+    { x: 22, y: 20, r: 4 },
+    { x: 30, y: 44, r: 9 },
+    { x: 66, y: 32, r: 7 },
+    { x: 94, y: 18, r: 4.5 },
+    { x: 100, y: 46, r: 4 },
+    { x: 78, y: 58, r: 3.5 },
+  ];
+  const edges = [[1, 0], [1, 2], [2, 3], [2, 4], [2, 5]];
+  for (const [a, b] of edges) {
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', nodes[a].x);
+    line.setAttribute('y1', nodes[a].y);
+    line.setAttribute('x2', nodes[b].x);
+    line.setAttribute('y2', nodes[b].y);
+    line.setAttribute('stroke', 'currentColor');
+    line.setAttribute('stroke-width', '1');
+    line.setAttribute('opacity', '0.35');
+    svg.appendChild(line);
+  }
+  nodes.forEach((n, i) => {
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('cx', n.x);
+    circle.setAttribute('cy', n.y);
+    circle.setAttribute('r', n.r);
+    circle.setAttribute('fill', 'currentColor');
+    circle.setAttribute('opacity', i === 1 ? '0.55' : '0.3');
+    svg.appendChild(circle);
+  });
+  wrap.appendChild(svg);
+  return wrap;
+}
+
+// 뼈대(삽화+제목+부제)는 항상 그린다 — 브레인이 꺼져 있어도 "카드가 없다"는
+// 사실 자체는 늘 참이다. 숫자·CTA·힌트는 뒤에서 준비되면 append로 더한다
+// (appendEmptyCanvasExtras) — 브레인 상태를 아직 모르는 부팅 초반에도 빈
+// 화면 대신 뼈대가 바로 보인다.
+function buildEmptyCanvasSkeleton() {
+  if (!gridEmptyEl) return;
+  gridEmptyEl.replaceChildren();
+  const box = document.createElement('div');
+  box.className = 'canvas-empty';
+  box.appendChild(buildEmptyCanvasIllustration());
+  const copy = document.createElement('div');
+  copy.className = 'canvas-empty-copy';
+  const title = document.createElement('div');
+  title.className = 'canvas-empty-title';
+  title.textContent = '아직 답변 카드가 없습니다';
+  const sub = document.createElement('div');
+  sub.className = 'canvas-empty-sub';
+  sub.textContent = '그동안 나눈 대화와 체결로 성향은 계속 쌓이고 있습니다.\n무엇이 쌓였는지 지금 볼 수 있습니다.';
+  copy.append(title, sub);
+  box.appendChild(copy);
+  gridEmptyEl.appendChild(box);
+}
+buildEmptyCanvasSkeleton();
+
+// 수치·CTA·힌트 — 브레인이 준비됐을 때만 붙인다(그래프 필과 같은 규율 — 없는
+// 기능을 있다고 표시하지 않는다). CTA는 그래프 모드 필과 똑같이 ready 하나에만
+// 달렸다 — 군집 지도 조회가 실패해도 그래프 모드 자체는 열 수 있다.
+// "최근 7일" 델타는 뺐다 — analysis/diff는 리비전 구간(from_revision) 기준이라
+// "7일 전 리비전"을 알 방법이 없어 실측 없는 숫자를 만들게 된다(정보 정직성).
+function appendEmptyCanvasExtras(stats, hintCount) {
+  if (!gridEmptyEl) return;
+  const box = gridEmptyEl.querySelector('.canvas-empty');
+  if (!box) return;
+  if (stats) {
+    const row = document.createElement('div');
+    row.className = 'canvas-empty-stats';
+    row.textContent = `엔티티 ${stats.entities} · 테마 군집 ${stats.clusters}`;
+    box.appendChild(row);
+  }
+  const cta = document.createElement('button');
+  cta.type = 'button';
+  cta.className = 'uk-btn uk-btn-primary canvas-empty-cta';
+  cta.textContent = '성향 그래프 열기';
+  cta.addEventListener('click', () => { graphMode.toggle(); });
+  box.appendChild(cta);
+  if (hintCount) {
+    const hint = document.createElement('div');
+    hint.className = 'canvas-empty-hint';
+    hint.textContent = `확인이 필요한 것 ${hintCount}건이 기다리고 있습니다`;
+    box.appendChild(hint);
+  }
+}
+
+// 브레인 상태 프로브(그래프 모드 부팅 IIFE, 아래)가 ready를 확인한 뒤 부른다 —
+// 같은 확인을 두 번 왕복하지 않는다. 군집 지도·되물을 것들 조회가 실패해도
+// CTA는 남는다(catch로 개별 무력화) — 숫자 하나 못 얻었다고 그래프 모드
+// 진입로까지 지울 이유는 없다.
+async function loadEmptyCanvasExtras() {
+  const [clusterRes, questionsRes] = await Promise.all([
+    window.athena.invoke('athena:brain-cluster-map').catch(() => null),
+    window.athena.invoke('athena:brain-suggested-questions').catch(() => null),
+  ]);
+  const { clusterStats, suggestedCount } = window.AthenaLib.EmptyCanvas;
+  const stats = clusterRes && clusterRes.ok ? clusterStats(clusterRes.nodes) : null;
+  const hintCount = questionsRes && questionsRes.ok ? suggestedCount(questionsRes.questions) : null;
+  appendEmptyCanvasExtras(stats, hintCount);
+}
+
 // ---------- 캔버스 카드 추가/초기화/하이라이트 ----------
 window.athena.on('athena:add-canvas', ({ type }) => {
   addCard(type);
@@ -1164,6 +1291,8 @@ const graphSummaryTable = window.AthenaLib.GraphSummaryTable.createSummaryTableC
     const summaryTableEl = document.getElementById('graphSummaryTable');
     if (summaryTableEl) summaryTableEl.hidden = !ready;
     if (ready) graphSummaryTable.load();
+    // 빈 상태(보드 05) 숫자·CTA·힌트 — 같은 ready 확인에 얹는다(왕복 추가 없음).
+    if (ready) loadEmptyCanvasExtras();
   } catch (err) {
     console.warn('[graph-mode] brain-status 실패 — 필을 숨긴 채로 둔다', err);
     graphMode.setAvailable(false);

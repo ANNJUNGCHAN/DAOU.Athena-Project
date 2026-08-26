@@ -17,6 +17,9 @@ const mcpCli = require('./lib/main/mcp-cli');
 const mcpEnv = require('./lib/main/mcp-env');
 // 결정 D1의 실배선 — claude -p 스폰 + stream-json 파싱 + .mcp.json 생성.
 const { runClaudeQuery } = require('./lib/main/claude-runner');
+// 툴 호출 진행 단계(board-33) 라벨링에 render_canvas 판정 하나만 빌려 쓴다 —
+// 파서 자체는 손대지 않는다(sendLiveToolStep 근처 주석 참고).
+const streamJsonParser = require('./lib/main/stream-json-parser');
 const { ensureMcpConfig } = require('./lib/main/mcp-config');
 const { buildLivePrompt } = require('./lib/main/live-prompt');
 const restDatasetRunner = require('./lib/main/rest-dataset-runner');
@@ -174,6 +177,21 @@ function revealShell({ focus = true } = {}) {
   if (focus) shellWin.focus();
 }
 
+// ---------- 셸 표시 여부 → 오브 (2026-08-26 board-33/34 "상태는 둘뿐이다") ----------
+// 오브의 대화 모드는 셸이 숨겨졌는지 하나로 결정된다. 판정은 isVisible()이지만
+// **최소화는 예외다** — 작업 표시줄에 남아 있으면 아직 셸을 쓰는 중이라고 본다
+// (board-34 "예외·최소화"). 가려짐(다른 앱에 덮임)은 따로 판정하지 않는다 —
+// 그 경우 isVisible()이 그대로 true라 자연히 셸 표시로 남는다(board-34 "예외·가려짐").
+function isShellHidden() {
+  if (!shellWin || shellWin.isDestroyed()) return false;
+  return !shellWin.isVisible() && !shellWin.isMinimized();
+}
+
+function broadcastShellVisibility() {
+  if (!orbWin || orbWin.isDestroyed()) return;
+  orbWin.webContents.send('athena:shell-visibility', { hidden: isShellHidden() });
+}
+
 function commonWinOpts(bounds) {
   return {
     ...bounds,
@@ -305,6 +323,14 @@ async function createWindows() {
   orbWin.on('hide', stopOrbCursorPoll);
   orbWin.on('closed', stopOrbCursorPoll);
   startOrbCursorPoll(); // showInactive() 직후라 이미 보이는 상태 — hide 전까지 돈다
+
+  // 셸 표시/숨김 전이마다 오브에 알린다(board-33/34). show/hide/minimize/restore
+  // 네 이벤트가 hideToBackground·revealShell·athena:minimize-windows·OS 복원을
+  // 전부 덮는다 — 새 판정 지점을 늘리지 않고 기존 창 수명 이벤트에 얹는다.
+  for (const ev of ['show', 'hide', 'minimize', 'restore']) {
+    shellWin.on(ev, broadcastShellVisibility);
+  }
+  broadcastShellVisibility(); // 부팅 직후 초기 상태 — 셸이 막 show()된 뒤라 '표시'다
 
   // ---------- 창 기본 기능 (2026-08-17) — frame:false라 OS 타이틀바가 없어 직접 배선 ----------
   // Win+방향키(2026-08-18) — OS 창 스냅과 같은 손버릇. globalShortcut은 다른 앱과
@@ -718,13 +744,17 @@ function routineEventToFactsEnvelope(event) {
   };
 }
 
-// "더보기" — 오브에서 셸로 가는 유일한 경로. 셸을 앞으로 가져오고 대표 카드를
-// 중앙 캔버스에 쌓는다. **주문은 여기서도 집행되지 않는다**(확정 결정 3) — 이
-// 핸들러가 하는 일은 창을 올리고 카드를 그리는 것뿐이다.
+// "더보기" · "대화창으로 가기" — 오브에서 셸로 가는 유일한 경로. 셸을 앞으로
+// 가져오고, 알림에서 왔으면 대표 카드도 중앙 캔버스에 쌓는다. **주문은 여기서도
+// 집행되지 않는다**(확정 결정 3) — 이 핸들러가 하는 일은 창을 올리고(+선택적으로
+// 카드를 그리고) 끝이다.
+// 2026-08-26 board-33/34 — event 없이도 부른다("대화창으로 가기"는 카드가 없다,
+// 대화는 이미 같은 셸 세션에 이어져 있으므로 창만 앞으로 가져오면 된다).
 ipcMain.on('athena:orb-open-shell', (e, { event } = {}) => {
-  if (!event || typeof event !== 'object') return;
   revealShell({ focus: true });
-  sendLiveCanvasResult({ status: 'success', envelope: routineEventToFactsEnvelope(event) });
+  if (event && typeof event === 'object') {
+    sendLiveCanvasResult({ status: 'success', envelope: routineEventToFactsEnvelope(event) });
+  }
 });
 
 // ---------- 오브 드래그 (2026-08-26 board-32) ----------
@@ -1011,17 +1041,88 @@ function sendLiveCanvasResult(result) {
 }
 
 // 답변 텍스트 조각(claude-runner.js의 onTextDelta) — 채팅 버블에 실시간으로
-// 이어붙일 델타 하나. 카드와 같은 창(shellWin)이지만 채팅 영역(chat.js)만 구독한다.
+// 이어붙일 델타 하나. 셸의 채팅 영역(chat.js)과 오브의 대화 모드(orb.js, board-33)가
+// 같은 채널을 구독한다 — 둘이 동시에 질의를 돌리는 일은 없으므로(board-34 "상태는
+// 둘뿐이다") 무조건 relay해도 엉뚱한 창이 남의 조각을 먹는 사고가 안 난다.
 function sendLiveTextDelta(text) {
-  if (!shellWin || shellWin.isDestroyed()) return;
-  shellWin.webContents.send('athena:live-text-delta', { text });
+  if (shellWin && !shellWin.isDestroyed()) shellWin.webContents.send('athena:live-text-delta', { text });
+  if (orbWin && !orbWin.isDestroyed()) orbWin.webContents.send('athena:live-text-delta', { text });
 }
 
-// 추론 조각 — 미리보기 전용이다(chat.js가 답변 첫 조각이나 턴 종료에서 지운다).
+// 추론 조각 — 미리보기 전용이다(chat.js/orb.js가 답변 첫 조각이나 턴 종료에서 지운다).
 // 여기서도 이력에 저장하지 않는다 — historySink는 finalResult.result만 다룬다.
 function sendLiveThinkingDelta(text) {
-  if (!shellWin || shellWin.isDestroyed()) return;
-  shellWin.webContents.send('athena:live-thinking-delta', { text });
+  if (shellWin && !shellWin.isDestroyed()) shellWin.webContents.send('athena:live-thinking-delta', { text });
+  if (orbWin && !orbWin.isDestroyed()) orbWin.webContents.send('athena:live-thinking-delta', { text });
+}
+
+// 툴 호출 진행 단계(2026-08-26 board-33) — StreamJsonSession이 이미 넘겨주는
+// 원시 이벤트(assistant의 tool_use 블록 시작 / user의 tool_result 블록 종료)에서
+// 뽑는다. 새 파서 채널을 만들지 않는다 — runLiveQuery의 onEvent 콜백 하나가
+// 판정도 겸한다(아래 trackToolStep). 화면에는 한국어 라벨만 낸다 — 원문 TR/툴
+// id는 절대 새지 않는다(오케스트레이터 지시).
+function sendLiveToolStep(step) {
+  if (shellWin && !shellWin.isDestroyed()) shellWin.webContents.send('athena:live-tool-step', step);
+  if (orbWin && !orbWin.isDestroyed()) orbWin.webContents.send('athena:live-tool-step', step);
+}
+
+const TOOL_STEP_LABELS = {
+  athena_search: '검색',
+  athena_describe: '스키마 확인',
+  athena_resolve: '판단 중',
+  athena_call: '조회',
+};
+
+function toolStepLabel(name) {
+  if (streamJsonParser.isRenderCanvasToolName(name)) return '카드 그리는 중';
+  // MCP 툴 이름은 mcp__<server>__<tool> 형태로 온다 — 마지막 조각만 라벨을 찾는 열쇠다.
+  const base = String(name || '').split('__').pop();
+  return TOOL_STEP_LABELS[base] || '처리 중';
+}
+
+// tool_use_id별 시작 시각을 들고 있다가 매칭되는 tool_result가 오면 소요시간과
+// 함께 완료를 알린다. runLiveQuery 호출마다 새로 만든다(왕복 하나의 수명).
+function createToolStepTracker() {
+  const steps = new Map(); // tool_use_id -> { label, startedAt }
+  return function trackToolStep(event) {
+    if (!event || typeof event !== 'object') return;
+    if (event.type === 'assistant') {
+      const content = event.message && event.message.content;
+      if (!Array.isArray(content)) return;
+      for (const block of content) {
+        if (block && block.type === 'tool_use' && block.id && !steps.has(block.id)) {
+          const label = toolStepLabel(block.name);
+          steps.set(block.id, { label, startedAt: Date.now() });
+          sendLiveToolStep({ id: block.id, label, done: false, elapsedMs: null });
+        }
+      }
+    } else if (event.type === 'user') {
+      const content = event.message && event.message.content;
+      if (!Array.isArray(content)) return;
+      for (const block of content) {
+        if (block && block.type === 'tool_result' && block.tool_use_id) {
+          const step = steps.get(block.tool_use_id);
+          if (step && step.elapsedMs === undefined) continue; // 이미 완료 처리됨
+          if (step) {
+            const elapsedMs = Date.now() - step.startedAt;
+            step.elapsedMs = elapsedMs; // 재-tool_result(있을 리 없지만) 방어
+            sendLiveToolStep({ id: block.tool_use_id, label: step.label, done: true, elapsedMs });
+          }
+        }
+      }
+    }
+  };
+}
+
+// 질의 왕복이 실제로 도는 동안 셸·오브 양쪽 입력을 함께 잠근다(2026-08-26
+// board-33 "단일 실행 잠금은 공유한다"). runLiveQuery 하나가 재귀 재시도할 수
+// 있으므로(세션 재개 실패 1회 재시도) 카운터로 겹침을 흡수한다 — 두 번째
+// 재귀에서 false로 떨어졌다가 바깥 호출이 끝나기도 전에 다시 열리면 안 된다.
+let liveQueryBusyDepth = 0;
+
+function broadcastLiveQueryBusy(busy) {
+  if (shellWin && !shellWin.isDestroyed()) shellWin.webContents.send('athena:live-query-state', { busy });
+  if (orbWin && !orbWin.isDestroyed()) orbWin.webContents.send('athena:live-query-state', { busy });
 }
 
 // 지금 떠 있는 실배선 claude 프로세스의 kill 핸들. 정확히 하나만 유지한다 —
@@ -1226,6 +1327,17 @@ async function handleChartSeries(event, payload) {
 ipcMain.handle('athena:chart-series', handleChartSeries);
 
 async function runLiveQuery(query, expand) {
+  liveQueryBusyDepth += 1;
+  if (liveQueryBusyDepth === 1) broadcastLiveQueryBusy(true);
+  try {
+    return await runLiveQueryInner(query, expand);
+  } finally {
+    liveQueryBusyDepth -= 1;
+    if (liveQueryBusyDepth === 0) broadcastLiveQueryBusy(false);
+  }
+}
+
+async function runLiveQueryInner(query, expand) {
   const directDataset = restDatasetRunner.buildQuoteDataset(query, stockEntityIndex, {
     idFactory: () => `rest-${crypto.randomUUID()}`,
   }) || restDatasetRunner.buildChartDataset(query, stockEntityIndex, {
@@ -1295,6 +1407,7 @@ async function runLiveQuery(query, expand) {
   // 판정 캡처(시맨틱 캐시 재료) — tool_use_id로 resolve 결과 토큰과 render 입력
   // 토큰을 상관시킨다. 마지막 입력끼리 우연히 결합하지 않는다.
   const replayTurnCapture = new ReplayTurnCapture();
+  const trackToolStep = createToolStepTracker();
   const resumeSessionId = liveSessionId;
   // 설정 화면 모델 패널(lib/main/model-prefs.js) 값 — null이면 buildArgs가
   // --model/--effort를 안 붙여 claude CLI 기본값을 쓴다.
@@ -1310,7 +1423,7 @@ async function runLiveQuery(query, expand) {
     effort,
     onSpawn: (h) => { myHandle = h; activeLiveQuery = h; },
     // 성공 resolve 1건과 render 1건의 토큰이 정확히 같은 경우만 캐시한다.
-    onEvent: (ev) => replayTurnCapture.observe(ev),
+    onEvent: (ev) => { replayTurnCapture.observe(ev); trackToolStep(ev); },
     onTextDelta: sendLiveTextDelta,
     onThinkingDelta: sendLiveThinkingDelta,
     onCanvasResult: (r) => {
@@ -1416,6 +1529,26 @@ ipcMain.handle('athena__render_canvas', async (e, payload = {}) => {
   return runLiveQuery(query, expand);
 });
 
+// 오브 대화 모드(2026-08-26 board-33) — 셸이 숨겨졌을 때만 오브 렌더러가 이
+// 채널을 부른다(orb.js 쪽 게이트는 athena:shell-visibility). **셸 창을 앞으로
+// 가져오지 않는다**(expand:false 고정) — "오브 미니 채팅은 언제나 메인 방
+// 하나에만 말한다"(board-34), 카드는 셸을 열지 않고도 캔버스 사이드 채널로
+// 이미 그려진다(startCanvasFeed). 파이프라인은 새로 만들지 않는다 — 셸의
+// 커맨드바가 부르는 runLiveQuery와 완전히 같은 함수를 그대로 호출한다.
+ipcMain.handle('athena:orb-chat-submit', async (e, payload = {}) => {
+  const query = payload && typeof payload.query === 'string' ? payload.query.trim() : '';
+  if (!query) return { ok: false, source: 'live', error: '질의가 비어 있다' };
+  const result = await runLiveQuery(query, false);
+  // 셸이 나중에 다시 열려도 같은 방이 이어져 보이도록, 오브에서 오간 턴을 셸의
+  // 대화 이력에도 커밋한다("대화창으로 가기 → 메인 방 그대로 이어진다", board-34).
+  // 세션·이력 저장 자체는 runLiveQuery가 이미 끝냈다 — 여기서는 셸 DOM 표시만
+  // 뒤늦게 채워 넣는다(셸이 숨어 있는 동안은 chat.js가 그릴 수 없었으므로).
+  if (shellWin && !shellWin.isDestroyed()) {
+    shellWin.webContents.send('athena:orb-turn-committed', { query, result });
+  }
+  return result;
+});
+
 
 async function fetchBrainJson(path, { params } = {}) {
   const token = historySink.getBearerToken();
@@ -1457,6 +1590,16 @@ ipcMain.handle('athena:brain-cluster-map', async () => {
 ipcMain.handle('athena:brain-profile-summary', async (_e, { limit, windowDays } = {}) => {
   const result = await fetchBrainJson('/api/v1/brain/profile-summary', {
     params: { limit, window_days: windowDays },
+  });
+  if (!result.ok) return { ok: false, error: result.error };
+  return { ok: true, ...result.body };
+});
+
+// 캔버스 빈 상태(보드 05)의 "확인이 필요한 것 N건" 힌트 — 되물을 것들(불확실하다고
+// 기록된 관계) 개수만 쓴다. 읽기 전용이다.
+ipcMain.handle('athena:brain-suggested-questions', async (_e, { limit } = {}) => {
+  const result = await fetchBrainJson('/api/v1/brain/analysis/suggested-questions', {
+    params: { limit },
   });
   if (!result.ok) return { ok: false, error: result.error };
   return { ok: true, ...result.body };

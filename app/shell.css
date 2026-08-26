@@ -369,9 +369,8 @@ body { margin: 0; overflow: hidden; }
 #canvasRegion .grid {
   padding: 12px;
 }
-#canvasRegion .grid:empty::before {
-  content: '캔버스 대기 중 — 오른쪽 채팅에 질의를 보내면 이 자리에 카드가 뜬다';
-}
+/* 빈 상태 완성형(보드 05, canvas.css #gridEmpty)이 이 자리를 대신한다 —
+ * 옛 :empty::before 한 줄 힌트는 canvas.js가 실DOM으로 새로 그린다. */
 
 /* ---------- chat.css 되돌리기 ----------
  * 채팅 영역의 `.app`은 더 이상 창 표면이 아니다 — 셸 유리 위에 얹힌 투명한

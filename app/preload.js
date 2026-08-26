@@ -49,6 +49,12 @@ const INVOKE_CHANNELS = new Set([
   'athena:brain-cluster-map',
   // 그래프 모드 요약 뷰(보드 07) — 성향 신호 상위 N. 읽기 전용이다.
   'athena:brain-profile-summary',
+  // 캔버스 빈 상태(보드 05) "확인이 필요한 것 N건" 힌트 — 되물을 것들. 읽기 전용이다.
+  'athena:brain-suggested-questions',
+  // 오브 대화 모드(2026-08-26 board-33) — 셸의 커맨드바가 부르는 runLiveQuery와
+  // 완전히 같은 파이프라인을 오브에서 부르는 다리. orb.js가 셸 숨김일 때만 쓴다
+  // (게이트는 athena:shell-visibility, scripts/gates/check-orb.mjs가 잰다).
+  'athena:orb-chat-submit',
 ]);
 
 const SEND_CHANNELS = new Set([
@@ -68,10 +74,14 @@ const SEND_CHANNELS = new Set([
   // 알림 오브 창(2026-08-24 리프 1.3.1) — 오브가 보낼 수 있는 것은 이 둘뿐이다.
   //   athena:orb-toggle     접힘/펼침 요청. 창 크기 변경은 main이 한다(기하는
   //                         lib/main/orb-window.js).
-  //   athena:orb-open-shell "더보기" — 셸을 앞으로 가져오고 대표 카드를 캔버스에 쌓는다.
-  // 오브에는 실행 버튼도 입력창도 없다(확정 결정 3 · 단일 입력 원칙) — 그래서
-  // athena__render_canvas·athena:order-execute·athena:routine-confirm은
-  // 이 다리에 있어도 오브 렌더러가 부르지 않는다(scripts/gates/check-orb.mjs가 잰다).
+  //   athena:orb-open-shell "더보기"·"대화창으로 가기" — 셸을 앞으로 가져온다
+  //                         (event가 있으면 대표 카드도 캔버스에 쌓는다).
+  // 2026-08-26 board-33 — "단일 입력 원칙"이 "셸이 보이는 동안은 오브에 입력이
+  // 없다"로 바뀌었다(board-33/34, tree-34-deep.raw "상태는 둘뿐이다"). 오브는
+  // 이제 athena:orb-chat-submit(INVOKE_CHANNELS)으로 질의를 낼 수 있지만, 그건
+  // 셸의 커맨드바와 같은 runLiveQuery를 부르는 것뿐 — athena:order-execute·
+  // athena:routine-confirm은 여전히 이 다리에 있어도 오브가 부르지 않는다
+  // (주문 집행·감시 승인은 여전히 오브의 액션이 아니다, scripts/gates/check-orb.mjs).
   'athena:orb-toggle',
   'athena:orb-open-shell',
   // 2026-08-26 board-32 — 포인터 드래그(오브가 매 이동을 main에 실어 보낸다)와
@@ -121,6 +131,17 @@ const ON_CHANNELS = new Set([
   // 셸→오브 실신호 릴레이(2026-08-26 board-32) — main이 athena:orb-signal
   // 그대로 되쏜다. {signal: 'listen'|'think'|'done', active}.
   'athena:orb-signal',
+  // ---------- 오브 대화 모드(2026-08-26 board-33/34) ----------
+  // 셸 표시 여부 — 오브의 대화 모드 게이트 그 자체다. {hidden: boolean}.
+  'athena:shell-visibility',
+  // 툴 호출 진행 단계 — {id, label, done, elapsedMs}. 라벨은 한국어 고정 문구뿐,
+  // 원문 TR/툴 id는 절대 안 실린다(sendLiveToolStep 주석 참고).
+  'athena:live-tool-step',
+  // 질의 왕복이 도는 동안 셸·오브 입력을 함께 잠그는 신호 — {busy: boolean}.
+  'athena:live-query-state',
+  // 오브에서 오간 턴을 셸의 대화 이력에도 늦게 채워 넣는다(셸이 숨어 있는 동안
+  // chat.js가 그릴 수 없었으므로) — {query, result}. 셸에서만 구독한다.
+  'athena:orb-turn-committed',
 ]);
 
 contextBridge.exposeInMainWorld('athena', {
