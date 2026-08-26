@@ -369,6 +369,39 @@ html, body { background: transparent; }
 }
 .turn-exec-header-label { flex: 1 1 auto; text-align: left; }
 .turn-exec-header-caret { flex-shrink: 0; }
+/* 실패 턴 버블(단계 7, board 1Y3-0 "실패 턴" C8B-0) — .turn-agent.agent-restore-failed의
+ * 자매 컴포넌트. 기존 토큰만 쓴다(새 색·새 토큰 금지). */
+.turn-fail-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 16px;
+  border-radius: var(--radius-lg);
+  background: var(--color-k-panel2);
+  border: 1px solid var(--color-k-line-soft);
+}
+.turn-fail-head { display: flex; align-items: center; gap: 8px; }
+.turn-fail-dot {
+  width: 6px;
+  height: 6px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: var(--color-warn);
+}
+.turn-fail-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  line-height: 12px;
+  color: var(--color-k-dim);
+}
+.turn-fail-body {
+  font-size: var(--text-sm);
+  line-height: 18px;
+  font-family: var(--font-body);
+  color: var(--color-k-text);
+  white-space: pre-wrap;
+}
 .turn-meta {
   display: flex; align-items: center; gap: 10px;
   font-family: var(--font-mono);

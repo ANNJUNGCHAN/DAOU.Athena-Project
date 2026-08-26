@@ -428,6 +428,30 @@ function foldExecutionRecord(toolSteps, startedAt) {
   return record;
 }
 
+// 실패 턴 버블(단계 7, board 1Y3-0 "실패 턴" C8B-0) — 기존
+// .turn-agent.agent-restore-failed 카드 레시피의 자매 컴포넌트. 성공 버블
+// (.turn-a, 각인 text-shadow 있음)과 시각적으로 구분되는 별도 패널이다 — 워닝
+// 닷·"질의 실패" 라벨이 상태를 말해주므로 본문엔 "실패 — " 접두사 없이 원문만
+// 넣는다. runQueryLive의 정상 실패 경로와 orb-turn-committed(오브에서 오간 턴의
+// 뒤늦은 반영) 둘 다 이 함수 하나로 그린다(라벨 두 벌 방지).
+function renderFailureBubble(aLine, errorText) {
+  const card = document.createElement('div');
+  card.className = 'turn-fail-card';
+  const head = document.createElement('div');
+  head.className = 'turn-fail-head';
+  const dot = document.createElement('span');
+  dot.className = 'turn-fail-dot';
+  const label = document.createElement('span');
+  label.className = 'turn-fail-label';
+  label.textContent = '질의 실패';
+  head.append(dot, label);
+  const body = document.createElement('div');
+  body.className = 'turn-fail-body';
+  body.textContent = errorText;
+  card.append(head, body);
+  aLine.appendChild(card);
+}
+
 async function runQueryLive(text) {
   const myToken = ++abortToken;
   clearRecommendations();
@@ -646,16 +670,18 @@ async function runQueryLive(text) {
   const aLine = streamALine || document.createElement('div');
   aLine.className = 'turn';
   if (execRecord) aLine.insertBefore(execRecord, aLine.firstChild);
-  const aText = streamAText || document.createElement('div');
-  aText.className = 'turn-a';
-  // 최종 텍스트는 응답값이 권위다(스트리밍 누적치가 아니다) — 조각이 유실되거나
-  // 순서가 어긋나도 이 줄이 항상 진짜 답으로 덮어쓴다.
-  aText.textContent = result && result.answerText
-    ? result.answerText
-    : (result && result.ok
-      ? `완료 — 카드 ${cardCount}개, 답변 텍스트 없음`
-      : `실패 — ${(result && result.error) || '알 수 없는 오류'}`);
-  if (!streamALine && !(result && result.answerPaintedByMain)) aLine.appendChild(aText);
+  if (!streamALine && result && !result.ok) {
+    renderFailureBubble(aLine, (result && result.error) || '알 수 없는 오류');
+  } else {
+    const aText = streamAText || document.createElement('div');
+    aText.className = 'turn-a';
+    // 최종 텍스트는 응답값이 권위다(스트리밍 누적치가 아니다) — 조각이 유실되거나
+    // 순서가 어긋나도 이 줄이 항상 진짜 답으로 덮어쓴다.
+    aText.textContent = result && result.answerText
+      ? result.answerText
+      : `완료 — 카드 ${cardCount}개, 답변 텍스트 없음`;
+    if (!streamALine && !(result && result.answerPaintedByMain)) aLine.appendChild(aText);
+  }
 
   const meta = document.createElement('div');
   meta.className = 'turn-meta';
@@ -1214,12 +1240,14 @@ window.athena.on('athena:orb-turn-committed', ({ query, result } = {}) => {
 
   const aLine = document.createElement('div');
   aLine.className = 'turn';
-  const aText = document.createElement('div');
-  aText.className = 'turn-a';
-  aText.textContent = result && result.answerText
-    ? result.answerText
-    : (result && result.ok ? '완료 — 답변 텍스트 없음' : `실패 — ${(result && result.error) || '알 수 없는 오류'}`);
-  aLine.appendChild(aText);
+  if (result && !result.ok) {
+    renderFailureBubble(aLine, (result && result.error) || '알 수 없는 오류');
+  } else {
+    const aText = document.createElement('div');
+    aText.className = 'turn-a';
+    aText.textContent = (result && result.answerText) || '완료 — 답변 텍스트 없음';
+    aLine.appendChild(aText);
+  }
 
   const meta = document.createElement('div');
   meta.className = 'turn-meta';
