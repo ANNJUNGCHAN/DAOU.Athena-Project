@@ -24,3 +24,6 @@ __pycache__/
 
 # playwright MCP 실행 찌꺼기
 .playwright-mcp/
+
+# 디자인 레퍼런스 스크린샷 드롭 — 커밋 금지
+/toss-*.png

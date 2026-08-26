@@ -18,8 +18,7 @@ SCREEN_DEFINITIONS_PATH = REF / "kiwoom-screen-definitions.json"
 EVIDENCE_PATH = REF / "kiwoom-screen-render-evidence.json"
 
 # 렌더 증거의 입력 파일 — 이 중 하나라도 바뀌면 증거가 stale이 된다.
-# 2026-08-24 리프 1.2.1: 캔버스 창 문서(app/canvas.html)가 셸 창 문서(app/shell.html)로
-# 합쳐졌다. 중앙 캔버스의 레이아웃을 셸이 결정하므로(영역 폭·패딩) shell.css도 입력이다.
+# 중앙 캔버스의 레이아웃을 셸이 결정하므로(영역 폭·패딩) shell.css도 입력이다.
 RENDERER_SOURCES = (
     APP / "verify.js",
     APP / "shell.html",

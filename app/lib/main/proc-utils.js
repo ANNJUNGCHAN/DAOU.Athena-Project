@@ -1,5 +1,5 @@
 // 자식 프로세스 트리 종료 공용 유틸 — claude-runner.js·backend-launcher.js가
-// 각자 들고 있던 동일 구현을 한 곳으로 모았다(2026-08-20 포니테일 감사).
+// 각자 들고 있던 동일 구현을 한 곳으로 모았다.
 //
 // claude.exe(→ athena-mcp serve → upstream N개)나 uvicorn worker처럼, 자식
 // 프로세스 자신만 죽이면 그 밑의 손자 프로세스가 고아로 남을 수 있다 — Windows는

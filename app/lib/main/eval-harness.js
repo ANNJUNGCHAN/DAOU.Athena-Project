@@ -1,4 +1,4 @@
-// QA 드라이버 3종의 공용부 — 2026-08-20 포니테일 감사
+// QA 드라이버 3종의 공용부
 //
 // run-cases.js · run-cases-ui.js · run-cases-appmode.js가 케이스 로더·audit 로그
 // 스냅샷/델타·날짜 스탬프를 거의 동일하게 각자 정의하고 있었다. 순수 fs/path 계산이라

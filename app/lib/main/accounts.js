@@ -47,8 +47,8 @@ function writeState(state) {
 
 // ---------------------------------------------------------------------------
 // 키움 REST 호출 공용 골격 — hostname/timeout/on-timeout/on-error/write/end를
-// issueKiwoomToken·revokeKiwoomToken이 반복하던 부분만 뽑았다(2026-08-20
-// 포니테일 감사). statusCode·parsed만 돌려주고 판정(ok/reason 결정)은 각
+// issueKiwoomToken·revokeKiwoomToken이 반복하던 부분만 뽑았다.
+// statusCode·parsed만 돌려주고 판정(ok/reason 결정)은 각
 // 호출부에 남긴다. 타임아웃·연결 에러·JSON 파싱 실패는 모두 statusCode:0·
 // parsed:null로 뭉뚱그린다 — 호출부의 기존 "statusCode가 2xx가 아니면
 // network" 판정이 그대로 이 경우도 처리하므로 동작은 이전과 같다.

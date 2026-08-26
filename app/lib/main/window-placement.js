@@ -2,12 +2,6 @@
 // Electron 의존 없음 — main.js의 placeWindows()가 이 결과를 그대로
 // BrowserWindow.setBounds()에 먹인다.
 //
-// 2026-08-24 Codex형 전환(리프 1.2.1): 이전 판은 **창 짝**(캔버스 창 + 대화 창)을
-// 한 덩어리로 배치하는 computePlacement()였다. 짝의 높이(canvasH + chatBaseH)로
-// 세로 중앙을 잡고, 대화 창을 캔버스 폭의 중앙에 정렬하고(chatOriginX), 대화 창이
-// 위로만 자라도록 하단 앵커(chatBottom)를 함께 돌려줬다. 창이 하나가 되면서 그
-// 세 가지가 전부 의미를 잃는다 — 셸 창은 자기 폭·높이 그대로 구간 중앙에 놓인다.
-//
 // 크기는 항상 dims 그대로 돌려준다(불변) — 위치만 바뀐다. 호출자가 반드시
 // {x,y,width,height}를 한 번에 setBounds()에 넘겨야 한다 — setPosition()만
 // 쓰면 DPI 배율 화면에서 반올림이 누적돼 창이 자라는 버그가 있다(커밋

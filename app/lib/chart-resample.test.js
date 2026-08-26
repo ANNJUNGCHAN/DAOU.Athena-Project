@@ -62,10 +62,6 @@ test('aggregatePeriod(월봉/년봉): 실제 240봉 픽스처에서 그룹 수�
   assert.equal(totalYearly, totalDaily);
 });
 
-// 2026-08-25: pseudoIntraday 제거. 예전엔 일봉을 30조각으로 쪼개 의사 장중 봉을
-// 만들고 "실제 분포 아님" 각주를 달았다. 그 봉 위에서 지표 34종이 계산되면서
-// 각주로 덮을 수 없는 판단 재료가 되어 걷어냈다. 아래 테스트는 그게 **다시
-// 돌아오지 않는지**를 지킨다 — 봉을 지어내면 개수가 늘어나므로 개수로 잡는다.
 test('분·틱은 봉을 지어내지 않는다 — 일봉 개수 그대로에 사유가 붙는다', () => {
   for (const [period, interval] of [['MIN', 5], ['TICK', 10]]) {
     const r = resample(FIXTURE.bars, period, interval);

@@ -121,8 +121,7 @@ async function run() {
   log('cli.list', h.cliList());
   log('cli.login.unknownProvider', await h.cliLogin(null, { providerId: 'nope' }));
   // gemini/grok은 LOGIN_COMMANDS에 없다(D6 — cli-accounts.js 주석 참고) — 설치
-  // 여부와 무관하게 unknownProvider 경로("알 수 없는 CLI다")를 탄다. 라벨이
-  // "(notInstalled)"였던 건 실제 코드 경로와 달랐다(정정, 2026-08-18).
+  // 여부와 무관하게 unknownProvider 경로("알 수 없는 CLI다")를 탄다.
   log('cli.login.gemini(unknownProvider)', await h.cliLogin(null, { providerId: 'gemini' }));
   log('cli.login.grok(unknownProvider)', await h.cliLogin(null, { providerId: 'grok' }));
   const cliAccounts = require('./lib/main/cli-accounts');

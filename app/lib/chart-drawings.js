@@ -238,8 +238,6 @@ function createDrawingLayer(deps) {
   return { toolbar, setEnabled, setTool, load, toJSON, reattachPriceLines, renderAll, destroy };
 }
 
-// 외부 소비자는 chart-card.js(createDrawingLayer)와 chart-drawings.test.js
-// (sanitize·projectLine·DRAW_TOOLS)뿐이다(deslop 2026-08-18).
 const __exports = {
   createDrawingLayer,
   sanitizeDrawings,

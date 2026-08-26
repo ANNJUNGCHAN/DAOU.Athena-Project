@@ -251,8 +251,6 @@ test('concurrent same-panel reload waits for one mount and never creates a dupli
 
 test('all Athena chart entry points are statically locked to the AITS adapter', () => {
   const canvas = fs.readFileSync(path.join(__dirname, '..', 'canvas.js'), 'utf8');
-  // 2026-08-24 리프 1.2.1: 캔버스 창 문서(canvas.html)가 셸 창 문서(shell.html)로
-  // 합쳐졌다. 스크립트 의존 순서 계약은 그대로라 대상 파일만 바뀐다.
   const html = fs.readFileSync(path.join(__dirname, '..', 'shell.html'), 'utf8');
   const lowLevel = fs.readFileSync(path.join(__dirname, 'chart-card.js'), 'utf8');
   assert.match(canvas, /createAitsChartPanelAdapter\(\{ renderChart: createChartCard, maxPanels: 6 \}\)/);

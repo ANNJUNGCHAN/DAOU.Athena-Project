@@ -22,8 +22,7 @@ from athena_mcp.selector_tools import (
     SelectorCache,
 )
 
-# `_gateway` 헬퍼는 tests/mcp/conftest.py의 `make_gateway` 픽스처로 옮겼다
-# (2026-08-20 포니테일 감사 — 4파일 중복 제거).
+# `_gateway` 헬퍼는 tests/mcp/conftest.py의 `make_gateway` 픽스처로 옮겼다.
 
 
 # ---------------------------------------------------------------------------
