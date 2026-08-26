@@ -1833,7 +1833,7 @@ function broadcastCliChanged() {
   }
 }
 
-function pollCliChangesAfterLogin() {
+function pollCliChangesAfterLogin(providerId) {
   const before = JSON.stringify(cliAccounts.list());
   // 목록이 안 변하는 재로그인(기존 계정으로 다시 로그인)은 자격증명 파일
   // mtime 서명으로 잡는다 — 없으면 온보딩 '로그인 대기 중'이 영영 안 풀린다.
@@ -1844,6 +1844,8 @@ function pollCliChangesAfterLogin() {
     const now = JSON.stringify(cliAccounts.list());
     if (now !== before || cliAccounts.credentialsSignature() !== sigBefore) {
       clearInterval(timer);
+      // 로그인 = 활성 전환(2026-08-27 검토 결정)
+      cliAccounts.activateProviderCurrent(providerId);
       broadcastCliChanged();
     } else if (attempts >= 30) {
       clearInterval(timer);
@@ -1857,7 +1859,7 @@ function handleCliList() {
 
 async function handleCliLogin(e, { providerId } = {}) {
   const result = await cliAccounts.login(providerId);
-  if (result.launched) pollCliChangesAfterLogin();
+  if (result.launched) pollCliChangesAfterLogin(providerId);
   return result;
 }
 
