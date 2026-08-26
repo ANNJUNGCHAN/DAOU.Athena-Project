@@ -9,6 +9,7 @@ const {
   ORB_SIZE,
   EXPANDED_WIDTH,
   EXPANDED_HEIGHT,
+  EXPANDED_HEIGHT_MAX,
   computeOrbPlacement,
   computeExpandedBounds,
   computeCollapsedBounds,
@@ -45,6 +46,19 @@ test('computeExpandedBounds: 우하단 오브는 좌상 방향으로 자란다(a
   // 오브 원의 오른쪽 아래 모서리가 그대로 있어야 한다 — 원은 화면에서 안 움직인다.
   assert.equal(bounds.x + bounds.width, orb.x + ORB_SIZE);
   assert.equal(bounds.y + bounds.height, orb.y + ORB_SIZE);
+});
+
+test('computeExpandedBounds: board-33 — height를 상한(640)까지 올려도 얼굴 모서리는 안 움직인다', () => {
+  // 콘텐츠가 길어져 패널이 400에서 640까지 자라는 경우다. 오브 원의 반대쪽
+  // 모서리(anchor 쪽)는 높이가 얼마든 고정이어야 한다 — 패널만 자란다.
+  const orb = computeOrbPlacement(WORK_AREA);
+  const grown = computeExpandedBounds(orb, WORK_AREA, { height: EXPANDED_HEIGHT_MAX });
+  assert.equal(grown.bounds.height, EXPANDED_HEIGHT_MAX);
+  assert.equal(grown.bounds.x + grown.bounds.width, orb.x + ORB_SIZE);
+  assert.equal(grown.bounds.y + grown.bounds.height, orb.y + ORB_SIZE);
+  // 640에서 접으면 400에서 접었을 때와 같은 자리로 돌아와야 한다(왕복 불변).
+  const collapsedFromMax = computeCollapsedBounds(grown.bounds, grown.anchor);
+  assert.deepEqual(collapsedFromMax, orb);
 });
 
 test('computeExpandedBounds: 좌상단 오브는 우하 방향으로 자란다(anchor top-left)', () => {

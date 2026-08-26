@@ -17,6 +17,7 @@
   const routineTurn = window.AthenaLib.RoutineTurn;
 
   const $root = document.getElementById('orbRoot');
+  const $orb = document.getElementById('orb');
   const $panel = document.getElementById('orbPanel');
   const $count = document.getElementById('orbCount');
   const $toggle = document.getElementById('orbToggle');
@@ -60,31 +61,54 @@
   // 모양은 전부 orb.css의 [data-face] 규칙이 지고, 여기서는 **언제 어느 얼굴인가**만
   // 정한다.
   //
-  // **얼굴은 앱에 이미 있는 신호에만 붙인다.** 지금 배선하는 것은 넷뿐이다:
-  //   idle  — 기본
-  //   sleep — 오래 아무 일 없음(옛 판의 '평소'가 여기로 내려왔다)
-  //   fired — 미확인 알림이 있다(data-alert와 짝)
-  //   sorry — 만료·복원 실패처럼 발화가 아닌 종류
-  // listen/think/watch/done/glad는 CSS에 모양만 있고 배선하지 않는다 — 오브가
-  // 질의를 돌리지 않으므로 그 신호가 아직 없다. 없는 신호에 얼굴을 붙이면 그건
-  // 정보가 아니라 지어낸 연기다(soul.md).
-  const FACE = { IDLE: 'idle', SLEEP: 'sleep', FIRED: 'fired', SORRY: 'sorry' };
+  // **얼굴은 앱에 이미 있는 신호에만 붙인다.** 지금 배선하는 것은 여덟이다:
+  //   idle   — 기본(대기)
+  //   sleep  — 오래 아무 일 없음(idle > 5min. 옛 판의 '평소'가 여기로 내려왔다)
+  //   listen — 셸 입력줄 포커스(input:focus) — 2026-08-26 board-32 신규
+  //   think  — 질의 진행 중(query running) — 2026-08-26 board-32 신규. 스피너 대신이다
+  //   done   — 턴 완료(result ok) — 2026-08-26 board-32 신규. 웃고 2초 뒤 idle로 돌아간다
+  //   fired  — 미확인 알림이 있다(data-alert와 짝)
+  //   mopey  — 루틴 만료(routineTurn kind: expired) — 옛 '미안'의 절반
+  //   crying — 감시 복원 실패(routineTurn kind: restore-failed) — 옛 '미안'의 나머지 절반
+  // 2026-08-26: '미안' 하나가 만료·복원실패 둘을 뭉뚱그렸는데, routine-turn.js가
+  // 이미 kind로 둘을 갈라 준다 — 같은 사실을 오브만 뭉개고 있었다(board-31).
+  // watch/glad/wink/surprise/frown은 아직 CSS에 모양만 있고 배선하지 않는다 —
+  // 오브가 감시 등록 반영·급변·호출 실패 신호를 받지 않으므로 그 신호가 아직
+  // 없다. 없는 신호에 얼굴을 붙이면 그건 정보가 아니라 지어낸 연기다(soul.md).
+  const FACE = {
+    IDLE: 'idle', SLEEP: 'sleep', LISTEN: 'listen', THINK: 'think', DONE: 'done',
+    FIRED: 'fired', MOPEY: 'mopey', CRYING: 'crying',
+  };
 
   const BLINK_CLOSE = 90;          // 감는 시간
   const BLINK_OPEN = 130;          // 뜨는 시간 — 감는 쪽보다 느려야 셔터로 안 읽힌다
   const BLINK_EVERY = [4000, 7000];
   const BLINK_DOUBLE = 0.15;       // 가끔 두 번 연속 — 이 불규칙이 생물이라는 증거다
-  const SACCADE_EVERY = [8000, 20000];
+  // 2026-08-26 2차 — 사용자 지적("눈이 너무 왔다갔다한다, 심란함"). board-32
+  // 원문도 "가끔 두리번거린다"다 — 가끔이 핵심이지 빈도가 아니다. 간격을 15~40s로
+  // 늘리고 진폭도 줄인다: 대기는 거의 정지 + 아주 가끔 두리번 + 깜빡임뿐이어야 한다.
+  const SACCADE_EVERY = [15000, 40000];
   const SACCADE_OUT = 260;         // 갈 때는 빠르고
   const SACCADE_BACK = 340;        // 돌아올 때는 느리다 — 사람 눈이 그렇다
   const SACCADE_HOLD = 1200;
-  const SACCADE_AMP = 7;           // px
+  const SACCADE_AMP = 5;           // px — 7에서 축소, 곁눈질 정도로만
   const SLEEP_AFTER = 5 * 60 * 1000;
 
   const CURSOR_RADIUS = 320;       // 화면 px — 이 밖의 커서는 쳐다보지 않는다
-  const CURSOR_AMP = 4;            // px — 두리번(7)보다 작아야 '곁눈질'로 읽힌다
+  const CURSOR_AMP = 3;            // px — 두리번(5)보다 작아야 '곁눈질'로 읽힌다
   const CURSOR_INTEREST = 2500;    // 커서가 멈춰 있으면 이 뒤에 시선을 놓는다
   const CURSOR_LAG = 120;          // 0이면 눈이 커서에 붙어버려 기계가 된다
+
+  const LISTEN_GAZE_Y = 6;         // px — 듣는 중 시선이 입력줄 쪽(아래)으로 내려앉는 양
+  // 생각 중 시선 — "위를 훑는다"는 스피너 대신 천천히 미끄러지는 드리프트다.
+  // 처음엔 520ms마다 좌우로 튀게 짜서 "왔다갔다"로 읽혔다(사용자 지적) — 간격을
+  // 늘리고 전이 시간도 같이 늘려 급한 왕복이 아니라 느린 표류로 보이게 한다.
+  const THINK_SWEEP_EVERY = 2600;  // ms — 생각 중 시선이 위를 훑는 주기
+  const THINK_SWEEP_DUR = 1400;    // ms — 느린 전이(예전 260ms는 홱 튀는 느낌이었다)
+  const THINK_SWEEP_AMP = 4;       // px — 두리번(5)보다도 작게, 미세한 표류
+  const DONE_HOLD = 2000;          // ms — 완료 웃음이 유지되는 시간(board-32)
+  const DRAG_THRESHOLD = 4;        // px — 이보다 적게 움직이면 클릭, 넘으면 드래그
+  const DRAG_GAZE_AMP = 6;         // px — 드래그 관성 시선 진폭
 
   // 모션을 원치 않는 사용자에게는 루프를 **아예 돌리지 않는다.** CSS로 전이만 끄면
   // 타이머는 계속 돌면서 감은 프레임에서 굳을 수 있고, 그건 없는 상태('잠듦')를
@@ -105,17 +129,42 @@
     $root.style.setProperty('--orb-gy', `${gy.toFixed(2)}px`);
   }
 
-  /** 표정의 기본 시선. 지금 배선한 넷은 전부 정면이지만, 자리를 만들어 둔다. */
+  /** 표정의 기본 시선. 듣는 중만 아래(입력줄)로 내려앉는다 — 나머지는 정면이다.
+   * 생각 중의 "위를 훑는다"는 정지 시선이 아니라 루프라서 startThinkSweep()이
+   * 별도로 --orb-gx/gy를 몬다(여기 baseGaze는 그 루프의 출발점만 준다). */
   function baseGaze() {
+    if (face === FACE.LISTEN) return { gx: 0, gy: LISTEN_GAZE_Y };
     return { gx: 0, gy: 0 };
   }
 
   function setFace(next) {
     if (face === next) return;
+    const prev = face;
     face = next;
     $root.dataset.face = next;
+    if (prev === FACE.THINK) stopThinkSweep();
+    if (next === FACE.THINK) { startThinkSweep(); return; }
     const g = baseGaze();
     setGaze(g.gx, g.gy, SACCADE_BACK);
+  }
+
+  // ── 생각 중 — 스피너 대신 시선이 위를 훑는다(board-32 section C). ──
+  let thinkTimer = null;
+
+  function startThinkSweep() {
+    clearInterval(thinkTimer);
+    if (reduceMotion.matches) { setGaze(0, -THINK_SWEEP_AMP * 0.85, SACCADE_BACK); return; }
+    let dir = -1;
+    setGaze(dir * THINK_SWEEP_AMP, -THINK_SWEEP_AMP * 0.85, THINK_SWEEP_DUR);
+    thinkTimer = setInterval(() => {
+      dir *= -1;
+      setGaze(dir * THINK_SWEEP_AMP, -THINK_SWEEP_AMP * 0.85, THINK_SWEEP_DUR);
+    }, THINK_SWEEP_EVERY);
+  }
+
+  function stopThinkSweep() {
+    clearInterval(thinkTimer);
+    thinkTimer = null;
   }
 
   // ── 깜빡임 ──
@@ -214,6 +263,109 @@
     if (cursorHeld && Date.now() - lastCursorAt > CURSOR_INTEREST) releaseCursor();
   }, 250);
 
+  // ── 듣는 중 · 생각 중 · 완료 — 셸 쪽 실신호(2026-08-26 board-32) ──
+  // chat.js가 input:focus/blur와 질의 시작/끝을 athena:orb-signal로 보낸다.
+  // main은 그대로 릴레이만 한다(routine-event와 같은 얇은 다리). 우선순위는
+  // 발화·만료·복원실패(event-driven face)가 가장 세다 — 능동 알림 위에 "듣는
+  // 중"을 덮어씌우면 진짜 신호가 묻힌다.
+  let listening = false;
+  let thinking = false;
+
+  function eventFaceActive() {
+    return face === FACE.FIRED || face === FACE.MOPEY || face === FACE.CRYING || face === FACE.DONE;
+  }
+
+  function resolveAmbientFace() {
+    if (eventFaceActive()) return;
+    if (thinking) { setFace(FACE.THINK); return; }
+    if (listening) { setFace(FACE.LISTEN); return; }
+    setFace(face === FACE.SLEEP ? FACE.SLEEP : FACE.IDLE);
+  }
+
+  window.athena.on('athena:orb-signal', ({ signal, active } = {}) => {
+    if (signal === 'listen') {
+      listening = !!active;
+      if (listening) touchActivity();
+      resolveAmbientFace();
+    } else if (signal === 'think') {
+      thinking = !!active;
+      if (thinking) touchActivity();
+      resolveAmbientFace();
+    } else if (signal === 'done') {
+      // 발화·만료·복원실패 중에는 완료 웃음을 덮지 않는다 — 그쪽이 더 중요한 사실이다.
+      if (face === FACE.FIRED || face === FACE.MOPEY || face === FACE.CRYING) return;
+      touchActivity();
+      setFace(FACE.DONE);
+      clearTimeout(doneTimer);
+      doneTimer = setTimeout(() => {
+        if (face === FACE.DONE) resolveAmbientFace();
+      }, DONE_HOLD);
+    }
+  });
+
+  // ── 드래그 — 포인터로 창을 옮긴다(2026-08-26 board-32). ──
+  // app-region:drag를 안 쓰는 이유는 orb.css #orb 규칙 위 주석 참조: OS가 이동을
+  // 가로채면 이동량이 렌더러에 안 들어와 "관성" 시선을 그릴 수 없다. 그래서
+  // pointerdown에서 포인터를 캡처하고, pointermove의 movementX/Y(창 위치와
+  // 무관한 원시 이동량)를 그대로 main에 실어 보낸다 — main이 오브 창의 현재
+  // getBounds()에 더해 setPosition한다(athena:orb-drag-move).
+  //
+  // 클릭(펼치기)과의 구분: 문턱(4px) 전까지는 그냥 pointerdown일 뿐이고, 넘는
+  // 순간부터 드래그로 확정한다. 문턱을 넘은 상호작용이면 뒤이어 오는 클릭
+  // 이벤트를 한 번 삼킨다(justDragged) — 안 그러면 드래그 후 손을 뗀 자리에서
+  // 펼침까지 같이 터진다.
+  let dragPointerId = null;
+  let dragMoved = false;
+  let justDragged = false;
+  let dragGazeTimer = null;
+
+  function pushDragGaze(mx, my) {
+    const mag = Math.hypot(mx, my) || 1;
+    // 끌리는 방향 반대로 밀린다(관성) — board-32 "B · 시선" 사용자 항목.
+    setGaze((-mx / mag) * DRAG_GAZE_AMP, (-my / mag) * DRAG_GAZE_AMP * 0.85, 70);
+    clearTimeout(dragGazeTimer);
+    dragGazeTimer = setTimeout(() => {
+      const g = baseGaze();
+      setGaze(g.gx, g.gy, SACCADE_BACK);
+    }, 220);
+  }
+
+  $orb.addEventListener('pointerdown', (e) => {
+    if (e.button !== 0 || dragPointerId !== null) return;
+    dragPointerId = e.pointerId;
+    dragMoved = false;
+    $orb.setPointerCapture(dragPointerId);
+  });
+
+  $orb.addEventListener('pointermove', (e) => {
+    if (dragPointerId === null || e.pointerId !== dragPointerId) return;
+    // 4px 문턱 — pointerdown 이후 첫 pointermove부터 여기 온다. 프레임당
+    // movementX/Y는 보통 문턱보다 작지만, 이동이 실제로 있었다는 사실 자체가
+    // "누르고 안 놓은 채 움직였다"이므로 드래그로 확정해도 된다 — 진짜 클릭은
+    // pointerup까지 pointermove가 거의 안 온다(사람 손 떨림 수준만 온다).
+    if (!dragMoved && Math.hypot(e.movementX, e.movementY) < DRAG_THRESHOLD) return;
+    dragMoved = true;
+    touchActivity();
+    window.athena.send('athena:orb-drag-move', { dx: e.movementX, dy: e.movementY });
+    if (!reduceMotion.matches) pushDragGaze(e.movementX, e.movementY);
+  });
+
+  function endDrag(e) {
+    if (dragPointerId === null || (e && e.pointerId !== dragPointerId)) return;
+    if ($orb.hasPointerCapture(dragPointerId)) $orb.releasePointerCapture(dragPointerId);
+    dragPointerId = null;
+    if (dragMoved) {
+      justDragged = true;
+      clearTimeout(dragGazeTimer);
+      const g = baseGaze();
+      setGaze(g.gx, g.gy, SACCADE_BACK);
+    }
+    dragMoved = false;
+  }
+
+  $orb.addEventListener('pointerup', endDrag);
+  $orb.addEventListener('pointercancel', endDrag);
+
   /** label/value 한 줄. 값은 항상 문자열로 박아 넣는다(textContent만 쓴다). */
   function row(label, value) {
     const el = document.createElement('div');
@@ -264,6 +416,32 @@
     // 더보기는 캔버스에 쌓을 카드가 있을 때만 의미가 있다. 없으면 숨긴다 —
     // 눌러도 아무 일 없는 버튼을 남기지 않는다(soul.md §7).
     $more.hidden = model.kind !== 'fired';
+    requestPanelHeight();
+  }
+
+  // ── 패널 높이 — 400 기본, 콘텐츠만큼 자라 640에서 멈춘다(board-33) ──
+  // 창 크기는 여기서도 main이 정한다(orb-toggle의 기존 계약 그대로) — 렌더러는
+  // "이 정도면 안 잘린다"는 값만 재서 실어 보낸다. 얼굴(#orb)은 anchor 배치라
+  // 패널이 자라도 제자리다 — 새 계산이 필요 없다.
+  const PANEL_HEIGHT_BASE = 400;
+  const PANEL_HEIGHT_MAX = 640;
+
+  function measureContentHeight() {
+    const head = $panel.querySelector('.orb-panel-head');
+    const foot = $panel.querySelector('.orb-foot');
+    const parts = [head, $body, $card, foot].filter(Boolean);
+    // scrollHeight는 overflow:auto인 $card에서도 잘리지 않은 실제 콘텐츠 높이를
+    // 준다 — 지금 보이는 크기가 아니라 필요한 크기를 재는 이유다.
+    const content = parts.reduce((sum, el) => sum + Math.max(el.offsetHeight, el.scrollHeight), 0);
+    const gaps = 8 * Math.max(0, parts.length - 1); // .orb-panel gap(orb.css)
+    const padY = 28; // .orb-panel padding 14px 위아래(orb.css)
+    return content + gaps + padY;
+  }
+
+  function requestPanelHeight() {
+    if (!expanded) return;
+    const height = Math.min(PANEL_HEIGHT_MAX, Math.max(PANEL_HEIGHT_BASE, measureContentHeight()));
+    window.athena.send('athena:orb-toggle', { expanded: true, height });
   }
 
   function setExpanded(next) {
@@ -304,10 +482,18 @@
     renderPresence();
     // 발화가 아닌 종류(만료·복원 실패)는 활짝 여는 얼굴이 아니다. 같은 결정론
     // 템플릿의 kind를 그대로 읽어 쓴다 — 여기서 따로 판정하면 두 벌이 된다.
-    if (routineTurn.buildTurnModel(event, Date.now()).kind !== 'fired') setFace(FACE.SORRY);
+    const kind = routineTurn.buildTurnModel(event, Date.now()).kind;
+    if (kind === 'expired') setFace(FACE.MOPEY);
+    else if (kind === 'restore-failed') setFace(FACE.CRYING);
   });
 
-  $toggle.addEventListener('click', () => { touchActivity(); setExpanded(!expanded); });
+  $toggle.addEventListener('click', () => {
+    // 드래그 문턱을 넘긴 상호작용의 꼬리에 붙는 클릭 1건을 삼킨다 — 안 그러면
+    // 오브를 옮기고 손을 뗀 자리에서 펼침까지 같이 터진다.
+    if (justDragged) { justDragged = false; return; }
+    touchActivity();
+    setExpanded(!expanded);
+  });
   $close.addEventListener('click', () => { touchActivity(); setExpanded(false); });
 
   // 오브의 유일한 진행 경로. 셸 창을 앞으로 가져오고 대표 카드를 중앙 캔버스에

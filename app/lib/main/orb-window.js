@@ -24,9 +24,16 @@ const ORB_MARGIN = 24;
  * 2026-08-25 재정정: 328px도 6px 모자랐다 — verify 검증22가 대표 카드를
  * scrollHeight 111 vs clientHeight 105로 재서 잘림을 잡았다. 카드가 딱 맞는
  * 높이는 회귀에 너무 예민하므로(글꼴 단 하나만 올려도 다시 잘린다) 여유 6px을
- * 얹어 340으로 올린다. */
+ * 얹어 340으로 올린다.
+ * 2026-08-26 board-33: 340은 이제 **기본값**이지 고정값이 아니다 — 콘텐츠가
+ * 길면(카드 필드가 많거나 소스 라벨이 길면) orb.js가 실측한 높이로 최대
+ * EXPANDED_HEIGHT_MAX까지 자란다. 400으로 올린 건 기본 여유를 board-33 실측에
+ * 맞춘 것뿐, 아래 로직은 그대로다. */
 const EXPANDED_WIDTH = 360;
-const EXPANDED_HEIGHT = 340;
+const EXPANDED_HEIGHT = 400;
+/** 콘텐츠가 아무리 길어도 여기서 멈춘다 — 넘는 몫은 패널 안 스크롤(.orb-card)이
+ * 진다. 화면을 절반 넘게 잡아먹는 알림 창은 그 자체로 침해다. */
+const EXPANDED_HEIGHT_MAX = 640;
 
 /**
  * 부팅 시 오브를 놓을 자리 — 워크에어리어 우하단 구석.
@@ -98,6 +105,17 @@ function buildOrbWindowOptions(bounds, preloadPath) {
     // "장식용 유리"(soul.md §7 금지 목록)가 된다.
     transparent: true,
     backgroundColor: '#00000000',
+    // 2026-08-26 실사용 결함 — "네모 모서리가 살짝 보인다"(사용자 지적). 원인은
+    // CSS가 아니라 OS 창 그림자였다: frame:false + transparent:true 창은 기본값
+    // (hasShadow 미지정 = true)에서도 Windows DWM이 **사각 창 프레임 전체**에
+    // 네이티브 그림자를 얹는다. 창 안쪽은 원 밖(76×76 정사각의 네 모서리, 원에
+    // 안 덮이는 부분)이 완전 투명이라 원만 보여야 하는데, 그 사각 그림자의
+    // 모서리가 원 밖으로 살짝 삐져나와 "네모 모서리"로 읽힌다 — 원이 정사각형에
+    // 내접하는 한 기하적으로 항상 남는 네 귀퉁이(캔버스 스크린샷 실측 —
+    // #orb를 76×76 상자 위에 그려보면 사각 배경이 그 네 귀퉁이에서 그대로
+    // 보인다). #orb 자신의 box-shadow(orb.css)가 이미 원형 그림자를 그려주므로
+    // OS 그림자는 중복이자 결함의 원인이다 — 꺼서 없앤다.
+    hasShadow: false,
     // 상시 표시가 사양이다(GLOSSARY §1). 셸 창과 달리 이건 의도된 예외다.
     alwaysOnTop: true,
     // 작업 표시줄을 차지하지 않는다 — 앱 창이 아니라 상주 표면이다.
@@ -150,6 +168,7 @@ module.exports = {
   ORB_SIZE,
   EXPANDED_WIDTH,
   EXPANDED_HEIGHT,
+  EXPANDED_HEIGHT_MAX,
   computeOrbPlacement,
   computeExpandedBounds,
   computeCollapsedBounds,

@@ -239,13 +239,16 @@ if (htmlRaw && cssRaw && orbJsRaw) {
   // JS는 `dataset.alert`, CSS는 `[data-alert=…]`로 같은 속성을 만진다 — 둘 다 받는다.
   must(/dataset\.alert|data-alert/.test(orbJs) && /data-alert/.test(cssRaw),
     "orb.js/orb.css: data-alert 상태 속성이 없다 — 무채색↔발화 두 상태를 구분해야 한다");
-  // 2026-08-25 규범 개정 — "평소 **무채색**"에서 "평소 **반쯤**"으로.
-  // 얼굴은 늘 있고, 신호는 색의 유무가 아니라 **양**이 진다(바이저 개폐 정도).
-  // 그래도 발화가 자기 규칙을 따로 가져야 한다는 건 그대로다 — 그게 없으면
-  // 대기와 발화가 같은 넓이로 열려 발화가 신호이길 그친다.
-  // 넓이의 실제 차이는 verify.js 검증22가 렌더된 픽셀로 잰다(여기선 배선만 본다).
-  must(/\[data-alert="fired"\][^{]*#orbVisor/.test(cssRaw),
-    "orb.css: 바이저가 [data-alert=\"fired\"]에 묶여 있지 않다 — 발화가 대기보다 넓게 열려야 신호다");
+  // 2026-08-26 board-32 규범 개정(사용자 결정) — "대기 34% / 발화 75%"로
+  // 바이저 폭을 상태마다 벌리던 축을 걷어냈다. Paper board 32 section C가
+  // 잠듦 하나만 빼고 모든 상태의 orb-100 참조 프레임을 같은 62×61 바이저로
+  // 그려서 못박았다: 발화 신호는 이제 바이저 폭이 아니라 **눈이 동그래지는
+  // 것**이 진다("화면당 신호는 여기 하나" — board-32). 옛 검사는
+  // [data-alert="fired"] ... #orbVisor 결합을 찾았는데 새 CSS는 그 결합을 아예
+  // 안 쓴다 — 같은 사실을 눈 쪽에서 다시 잰다(quietFaceIsPresent /
+  // firedIsVisiblyWider 픽셀 비교는 verify.js에서도 같은 이유로 폐기했다).
+  must(/\[data-alert="fired"\][^{]*\.orb-eye|\[data-face="fired"\][^{]*\.orb-eye/.test(cssRaw),
+    "orb.css: 발화 신호가 .orb-eye 모양에 안 묶여 있다 — board-32부터 신호는 눈 모양 하나다(대기/잠듦과 갈리는 유일한 축)");
 
   // 표정은 **눈 모양 하나로만** 만든다 — 새 기관(눈썹·입·눈동자)을 붙이면
   // 그건 키우미가 아니다. data-face 축이 실제로 배선돼 있는지 둘 다에서 본다.
