@@ -57,7 +57,12 @@ async function main() {
     })
   `);
 
-  await shellWin.webContents.executeJavaScript(`
+  // IIFE로 감싼다 — executeJavaScript의 top-level 스코프는 페이지의 main world와
+  // 공유돼서, 여기서 bare `const grid = ...`를 쓰면 canvas.js 자신의 top-level
+  // `const grid`(canvas.js:108)와 충돌해 SyntaxError로 스크립트 전체가 죽는다
+  // (실측 — Electron은 "Script failed to execute"라고만 하고 원인을 안 밝힌다,
+  // 함수 스코프로 격리해야 페이지 스크립트의 이름과 안 부딪힌다).
+  await shellWin.webContents.executeJavaScript(`(function () {
     window.__cardEventAt = null; // athena:live-canvas-added IPC 도착 시각
     window.__cardDomAt = null;   // #grid에 .card가 실제로 추가된 시각
     window.__rawDeltaAt = null;  // athena:live-text-delta IPC 최초 도착 시각(버퍼링과 무관)
@@ -68,11 +73,11 @@ async function main() {
     window.__unsubDelta = window.athena.on('athena:live-text-delta', () => {
       if (window.__rawDeltaAt == null) window.__rawDeltaAt = Date.now();
     });
-    const grid = document.getElementById('grid');
+    const probeGrid = document.getElementById('grid');
     window.__gridObserver = new MutationObserver(() => {
-      if (window.__cardDomAt == null && grid.querySelector('.card')) window.__cardDomAt = Date.now();
+      if (window.__cardDomAt == null && probeGrid.querySelector('.card')) window.__cardDomAt = Date.now();
     });
-    window.__gridObserver.observe(grid, { childList: true });
+    window.__gridObserver.observe(probeGrid, { childList: true });
     window.__historyObserver = new MutationObserver(() => {
       if (window.__textDomAt != null) return;
       const bubble = document.querySelector('.turn-a');
@@ -81,20 +86,44 @@ async function main() {
     window.__historyObserver.observe(document.getElementById('history'), {
       childList: true, subtree: true, characterData: true,
     });
-    undefined;
-  `);
+  })();
+  undefined;`);
 
+  // 실사용자와 같은 경로로 질의를 넣는다 — window.athena.invoke(athena__render_canvas)를
+  // 직접 부르면 chat.js의 runQueryLive()를 완전히 건너뛴다(그 함수가 IPC를 감싸는
+  // 게 아니라, chat.js가 스스로 그 IPC를 부르는 쪽이다). runQueryLive 안에서만
+  // onLiveTextDelta/onLiveCanvasAdded 리스너와 이번 카드 우선 버퍼링이 만들어지므로,
+  // #input에 진짜 Enter 키다운을 흘려보내야 그 코드가 실행된다(실측 — 직접 invoke로
+  // 돌렸더니 카드는 뜨는데 .turn-a가 끝까지 안 생겼다, chat.js가 아예 안 불렸기 때문).
   const startedAt = Date.now();
-  const result = await shellWin.webContents.executeJavaScript(
-    `window.athena.invoke('athena__render_canvas', ${JSON.stringify({ source: 'live', query: QUERY, expand: false })})`,
-  );
-  const resolvedAt = Date.now();
+  await shellWin.webContents.executeJavaScript(`(function () {
+    const input = document.getElementById('input');
+    input.value = ${JSON.stringify(QUERY)};
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  })();
+  undefined;`);
+
+  // runQueryLive 완료 신호 — 반환값을 못 받으니(이벤트로 트리거한 비동기 흐름이라
+  // 여기서 await할 Promise가 없다) .progress-line이 사라지는 걸로 판정한다(chat.js가
+  // 턴 종료 시 progress.remove()를 부르는 지점, 393-622행 부근). 최대 60초.
+  let resolvedAt = null;
+  for (let i = 0; i < 120; i += 1) {
+    await wait(500);
+    const progressGone = await shellWin.webContents.executeJavaScript(
+      'document.querySelectorAll(".progress-line").length === 0',
+    );
+    if (progressGone) { resolvedAt = Date.now(); break; }
+  }
+  if (resolvedAt == null) resolvedAt = Date.now(); // 타임아웃 — 그래도 지금까지 값을 기록한다
   await wait(300); // 마지막 MutationObserver 콜백이 마이크로태스크 큐를 빠져나올 여유
 
   const cardEventAt = await shellWin.webContents.executeJavaScript('window.__cardEventAt');
   const cardDomAt = await shellWin.webContents.executeJavaScript('window.__cardDomAt');
   const rawDeltaAt = await shellWin.webContents.executeJavaScript('window.__rawDeltaAt');
   const textDomAt = await shellWin.webContents.executeJavaScript('window.__textDomAt');
+  const finalBubbleText = await shellWin.webContents.executeJavaScript(
+    '(function(){ const b = document.querySelector(".turn-a"); return b ? b.textContent : null; })()',
+  );
   await shellWin.webContents.executeJavaScript(`
     window.__unsubCanvasAdded && window.__unsubCanvasAdded();
     window.__unsubDelta && window.__unsubDelta();
@@ -118,8 +147,7 @@ async function main() {
     bufferingWasActive: rawDeltaAt != null && cardDomAt != null && textDomAt != null
       ? rawDeltaAt < cardDomAt && textDomAt >= cardDomAt
       : null,
-    resultAnswerText: result && result.answerText,
-    resultOk: result && result.ok,
+    finalBubbleText,
     // US-007 — 순수 부팅 상태(사용자가 아무것도 누르기 전, brain-status 왕복까지 끝난 뒤).
     bootState,
     bootStatePure: bootState.chipText === '답변'
