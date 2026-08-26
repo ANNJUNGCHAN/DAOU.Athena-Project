@@ -95,6 +95,9 @@ const ON_CHANNELS = new Set([
   'athena:model-changed',
   'athena:zoom-changed',
   'athena:live-canvas-added',
+  // 답변 텍스트 조각(2026-08-26 S2) — main이 claude -p의 text_delta를 그대로
+  // 릴레이한다. chat.js가 진행 중인 채팅 버블에 이어붙인다.
+  'athena:live-text-delta',
   'athena:auth-token-changed',
   'athena:cli-changed',
   // 루틴 알림(능동 에이전트 P2) — main의 RoutineFeed가 백엔드 WS에서 받은

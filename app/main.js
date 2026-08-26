@@ -1010,6 +1010,13 @@ function sendLiveCanvasResult(result) {
   shellWin.webContents.send('athena:live-canvas-added', { status: result.status });
 }
 
+// 답변 텍스트 조각(claude-runner.js의 onTextDelta) — 채팅 버블에 실시간으로
+// 이어붙일 델타 하나. 카드와 같은 창(shellWin)이지만 채팅 영역(chat.js)만 구독한다.
+function sendLiveTextDelta(text) {
+  if (!shellWin || shellWin.isDestroyed()) return;
+  shellWin.webContents.send('athena:live-text-delta', { text });
+}
+
 // 지금 떠 있는 실배선 claude 프로세스의 kill 핸들. 정확히 하나만 유지한다 —
 // Esc 후 재질의로 프로세스가 쌓이던 갭(README "다중 세션도 없다")의 해소.
 let activeLiveQuery = null;
@@ -1214,6 +1221,8 @@ ipcMain.handle('athena:chart-series', handleChartSeries);
 async function runLiveQuery(query, expand) {
   const directDataset = restDatasetRunner.buildQuoteDataset(query, stockEntityIndex, {
     idFactory: () => `rest-${crypto.randomUUID()}`,
+  }) || restDatasetRunner.buildChartDataset(query, stockEntityIndex, {
+    idFactory: () => `rest-${crypto.randomUUID()}`,
   });
   if (directDataset) {
     mdlog('Kiwoom REST 직결 화면 경로 선택 — 모델/MCP/WS 무호출');
@@ -1295,6 +1304,7 @@ async function runLiveQuery(query, expand) {
     onSpawn: (h) => { myHandle = h; activeLiveQuery = h; },
     // 성공 resolve 1건과 render 1건의 토큰이 정확히 같은 경우만 캐시한다.
     onEvent: (ev) => replayTurnCapture.observe(ev),
+    onTextDelta: sendLiveTextDelta,
     onCanvasResult: (r) => {
       if (r.status === 'pushed') {
         // 카드는 사이드 채널(startCanvasFeed)로 이미 도착했다 — 여기선 집계만.

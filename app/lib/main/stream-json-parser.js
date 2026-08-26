@@ -189,6 +189,23 @@ function collectCanvasResults(events) {
 }
 
 // ---------------------------------------------------------------------------
+// 9b. 텍스트 델타 추출 — --include-partial-messages가 얹는 stream_event 중
+//     content_block_delta/text_delta만 채팅 버블에 흘려보낼 조각이다. 실측
+//     (claude -p --include-partial-messages --output-format stream-json):
+//     {"type":"stream_event","event":{"type":"content_block_delta",
+//      "index":0,"delta":{"type":"text_delta","text":"..."}}}
+//     tool_use 인자 스트리밍(input_json_delta)은 채팅 답변이 아니라 걸러낸다.
+// ---------------------------------------------------------------------------
+function extractTextDelta(event) {
+  if (!event || event.type !== 'stream_event') return null;
+  const inner = event.event;
+  if (!inner || inner.type !== 'content_block_delta') return null;
+  const delta = inner.delta;
+  if (!delta || delta.type !== 'text_delta' || typeof delta.text !== 'string') return null;
+  return delta.text;
+}
+
+// ---------------------------------------------------------------------------
 // 10. 스트리밍 세션 — child_process stdout 청크를 실시간으로 먹인다.
 //     내부에 최소 상태(carry, tool_use 인덱스, 카운터)만 들고 전체 이벤트
 //     로그는 쌓지 않는다 — 왕복 하나가 43초+ 걸릴 수 있어 메모리를 늘리지 않는다.
@@ -204,6 +221,8 @@ class StreamJsonSession {
 
   // 청크 하나를 먹인다. callbacks.onEvent(event) — 파싱된 이벤트마다.
   // callbacks.onCanvasResult(result) — render_canvas의 tool_result가 확정될 때마다.
+  // callbacks.onTextDelta(text) — --include-partial-messages를 켰을 때 답변
+  // 텍스트 조각마다(진행 중인 채팅 버블에 이어붙이는 용도, 선택).
   // 반환값은 이번 호출에서 새로 나온 캔버스 결과 배열(호출부가 편의상 쓸 수 있게).
   feed(chunk, callbacks) {
     const { lines, carry } = splitLines(this._carry, chunk);
@@ -218,7 +237,7 @@ class StreamJsonSession {
     return this._consumeLines(lines, callbacks || {});
   }
 
-  _consumeLines(lines, { onEvent, onCanvasResult }) {
+  _consumeLines(lines, { onEvent, onCanvasResult, onTextDelta }) {
     const newResults = [];
     for (const raw of lines) {
       const parsed = parseLine(raw);
@@ -228,6 +247,10 @@ class StreamJsonSession {
       indexToolUseBlock(this._toolUseIndex, event);
       if (event.type === 'result') this._finalResult = event;
       if (onEvent) onEvent(event);
+      if (onTextDelta) {
+        const delta = extractTextDelta(event);
+        if (delta) onTextDelta(delta);
+      }
       for (const block of extractToolResultBlocks(event)) {
         const info = this._toolUseIndex.get(block.toolUseId);
         if (!info || !info.isRenderCanvas) continue;
@@ -262,5 +285,6 @@ module.exports = {
   isUserRejected,
   classifyCanvasBlock,
   collectCanvasResults,
+  extractTextDelta,
   StreamJsonSession,
 };

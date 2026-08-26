@@ -21,6 +21,11 @@ const GRAMMAR_EDGE = `[\\s?!.,~"'():;·-]*`;
 const KOREAN_QUOTE_CORE = '(?:현재\\s*(?:가|시세)|오늘\\s*주가|주가)(?:\\s*(?:얼마(?:야|예요|에요|인가요?)?|조회))?';
 const KOREAN_QUOTE_COURTESY = '(?:\\s*(?:를|은|는))?(?:\\s*(?:좀|한번))?(?:\\s*(?:(?:알려|보여)\\s*(?:줘|주세요)|(?:조회|확인)\\s*(?:해)?\\s*(?:줘|주세요)|해\\s*(?:줘|주세요)))?';
 const ENGLISH_QUOTE_CORE = '(?:current\\s+(?:stock\\s+)?price|stock\\s+price\\s+today)';
+// 일봉 차트만 대상이다(base:ka10081) — "주봉/시세/호가"는 다른 TR·다른 렌더러라
+// 닫힌 문법에 안 넣는다(팀 지침의 "불확실하면 미매치"). 영어 문법도 뺐다 —
+// "chart"는 조직도 등과 겹쳐 한국어보다 오탐 위험이 크다.
+const KOREAN_CHART_CORE = '(?:일봉\\s*차트|차트|일봉)';
+const KOREAN_CHART_COURTESY = '(?:\\s*(?:를|은|는))?(?:\\s*(?:좀|한번))?(?:\\s*(?:(?:보여|그려|띄워)\\s*(?:줘|주세요|줄래)?|(?:조회|확인)\\s*(?:해)?\\s*(?:줘|주세요)|해\\s*(?:줘|주세요)))?';
 
 class RestDatasetError extends Error {
   constructor(code, message, details = {}) {
@@ -73,6 +78,28 @@ function matchesStandaloneQuoteGrammar(query, index, entity) {
     ];
     return patterns.some((pattern) => new RegExp(`^${pattern}$`, 'iu').test(text));
   });
+}
+
+// 차트 fast quote와 같은 원칙(닫힌 문법, 전체 소진) — 종목 표기 + 차트 단어 +
+// 검토된 조사/정중어만 허용한다. 남는 단어가 한 글자라도 있으면 정상 selector로.
+function matchesStandaloneChartGrammar(query, index, entity) {
+  if (!index || !entity) return false;
+  const text = String(query || '').normalize('NFKC').toLocaleLowerCase('ko-KR').trim();
+  const aliases = index.aliasesForEntity(entity);
+  return aliases.some((alias) => {
+    const aliasPattern = flexibleExactAliasPattern(alias);
+    const koreanEntity = `${aliasPattern}(?:의|은|는|이|가|을|를)?`;
+    const pattern = `${GRAMMAR_EDGE}${koreanEntity}\\s*${KOREAN_CHART_CORE}${KOREAN_CHART_COURTESY}${GRAMMAR_EDGE}`;
+    return new RegExp(`^${pattern}$`, 'iu').test(text);
+  });
+}
+
+function kstToday() {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Asia/Seoul', year: 'numeric', month: '2-digit', day: '2-digit',
+  }).formatToParts(new Date());
+  const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+  return `${values.year}${values.month}${values.day}`;
 }
 
 function stableValue(value) {
@@ -796,6 +823,29 @@ function buildQuoteDataset(query, index, { idFactory = () => `rest-${Date.now().
   };
 }
 
+// 일봉 차트 — base:ka10081(주식일봉차트조회요청)만 대상이다. base_dt는 "이
+// 날짜까지"를 뜻하는 커서라 오늘 날짜를 준다(chart-reload.js의 today() 관례와
+// 동일). upd_stkpc_tp:'1'은 수정주가 — AITS 차트 패널의 기본값과 맞춘다.
+function buildChartDataset(query, index, {
+  idFactory = () => `rest-${Date.now().toString(36)}`,
+  today = kstToday,
+} = {}) {
+  const text = String(query || '').trim();
+  const entity = index && index.resolveQuery(text);
+  if (!entity || entity.kind !== 'stock' || !matchesStandaloneChartGrammar(text, index, entity)) return null;
+  return {
+    datasetId: String(idFactory()).slice(0, 64),
+    question: text,
+    items: [{
+      itemId: 'primary-chart',
+      ordinal: 1,
+      operationRef: 'base:ka10081',
+      args: { stk_cd: entity.code, base_dt: today(), upd_stkpc_tp: '1' },
+      caption: null,
+    }],
+  };
+}
+
 module.exports = {
   MAX_ITEMS,
   MAX_CONCURRENCY,
@@ -812,6 +862,7 @@ module.exports = {
   isEligibleOperationRef,
   buildDeterministicAnswer,
   buildQuoteDataset,
+  buildChartDataset,
   refreshStockEntityIndex,
   runRestDataset,
 };

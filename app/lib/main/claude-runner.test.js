@@ -9,12 +9,18 @@ test('buildArgs: RESULT.md §1 실왕복 커맨드와 동일한 인자 순서 ·
   assert.deepEqual(args, [
     '-p', '1+1은?',
     '--output-format', 'stream-json',
+    '--include-partial-messages',
     '--verbose',
     '--mcp-config', '.mcp.json',
     '--strict-mcp-config',
     '--setting-sources', '',
     '--allowedTools', 'mcp__athena__athena__render_canvas',
   ]);
+});
+
+test('buildArgs: --include-partial-messages가 항상 붙는다(2026-08-26 S2 — 답변 텍스트 델타 스트리밍)', () => {
+  const args = buildArgs({ prompt: 'x', configFile: '.mcp.json', allowedTools: 'y' });
+  assert.ok(args.includes('--include-partial-messages'));
 });
 
 test('buildArgs: --tools를 붙이지 않는다 — 표면 축소 실험 철회(E2E run1~5 실측, claude-runner.js 주석)', () => {
