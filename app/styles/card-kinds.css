@@ -225,3 +225,17 @@
 /* KIND: 프로그램매매 */
 
 /* KIND: 종목정보 */
+/* 손익 필드 목록(profit) 또는 KRW/USD 통화 행(currency) — 둘 다 TwoLineRow 나열이라
+   같은 래퍼로 충분하다. divider는 미묘하게(마지막 행 제외) — .facts-grid 관행과 같다. */
+.card-kind-account-rows { display: flex; flex-direction: column; }
+.card-kind-account-rows .card-kit-row-two-line:not(:last-child) {
+  border-bottom: 1px solid var(--color-k-panel3);
+}
+
+/* ka10095 레일 로우 나열 — "토스 우측 관심 레일" 스타일(종목명+가격+등락을 한
+   가로줄로 압축). card-kind-account-rows와 같은 이유의 미묘한 divider. */
+.card-kind-watchlist-rail { display: flex; flex-direction: column; }
+.card-kind-watchlist-rail .card-kit-row-two-line:not(:last-child) {
+  border-bottom: 1px solid var(--color-k-panel3);
+}
+
