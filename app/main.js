@@ -527,7 +527,16 @@ ipcMain.handle('athena:routines-list', async () => {
   catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
 });
 ipcMain.handle('athena:routine-confirm', async (_e, { id }) => {
-  try { return await routineHttp('POST', `/api/v1/routines/${encodeURIComponent(id)}/confirm`); }
+  try {
+    const result = await routineHttp('POST', `/api/v1/routines/${encodeURIComponent(id)}/confirm`);
+    // 감시 확정 성공을 오브에 신호로 릴레이한다(board-30⑧) — 위 athena:orb-signal
+    // 릴레이(797행)와 같은 원칙: main은 판단하지 않는다. 신호를 받아 언제
+    // 어떤 표정으로 바꿀지는 orb.js가 정한다.
+    if (result.ok && orbWin && !orbWin.isDestroyed()) {
+      orbWin.webContents.send('athena:orb-signal', { signal: 'registered' });
+    }
+    return result;
+  }
   catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
 });
 ipcMain.handle('athena:routine-cancel', async (_e, { id }) => {
