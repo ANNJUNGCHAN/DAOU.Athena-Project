@@ -2388,6 +2388,77 @@ app.whenReady().then(async () => {
     failures.push('mode-nav: 검증 블록이 예외로 끝났다');
   }
 
+  // ---------- 에이전트모드 사이드바 — 작업·알람 파생 방 우선 노출 (3단계) ----------
+  //
+  // GET /api/v1/routines(athena:routines-list)는 이 하네스에 실제 백엔드가
+  // 없으면 그대로 실패한다(위 #routineChip과 같은 처지) — 그래서 계획서가 쓴
+  // "fixture 시드 데이터"를 여기서 만든다: ipcMain 핸들러를 이 블록 동안만
+  // 교체해 라이브 IPC 경로(athena:routines-list → 렌더러 렌더)는 그대로 타되
+  // 값만 픽스처로 준다. 렌더러 쪽 window.athena는 contextBridge로 얼려져 있어
+  // (exposeInMainWorld) 거기서 직접 monkeypatch하면 조용히 무시될 수 있다 —
+  // 그래서 main 프로세스의 ipcMain.handle을 바꾸는 쪽이 더 안전하다. 이
+  // 블록이 스크립트의 마지막 라우틴 소비자라 복원은 "백엔드 없음"과 동일한
+  // 정직한 실패 모양으로만 되돌린다(원래 핸들러를 그대로 재현할 수단이 없다).
+  try {
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({
+      ok: true,
+      data: {
+        routines: [
+          { id: 'fx1', symbol: '005930', note: '삼성전자 88,000 감시', status: 'active', mode: 'realtime-ws' },
+          { id: 'fx2', symbol: '000660', note: 'SK하이닉스 공시 키워드', status: 'paused', mode: 'periodic' },
+          // draft는 우선 노출 대상이 아니다 — 걸러지는지도 같이 잰다.
+          { id: 'fx3', symbol: '005380', note: '현대차 실적 발표', status: 'draft', mode: 'periodic' },
+        ],
+        disclosure_ready: true,
+        last_error: null,
+      },
+    }));
+
+    const agentSidebar = await shellWin.webContents.executeJavaScript(`(async () => {
+      const nav = document.getElementById('modeNavAgent');
+      const back = document.getElementById('modeNavSummary');
+      const list = document.getElementById('sidebarList');
+      if (!nav || !back || !list) return { wired: false };
+      nav.click();
+      await new Promise((r) => setTimeout(r, 600)); // IPC 왕복 + renderList()
+      const firstLabelAfterAgent = list.firstElementChild ? list.firstElementChild.textContent : null;
+      const routineRowCount = list.querySelectorAll('.sidebar-item.is-routine').length;
+      const pausedRowCount = list.querySelectorAll('.sidebar-item.is-routine.is-paused').length;
+      back.click();
+      await new Promise((r) => setTimeout(r, 200));
+      const firstLabelAfterReturn = list.firstElementChild ? list.firstElementChild.textContent : null;
+      const routineRowsGoneAfterReturn = list.querySelectorAll('.sidebar-item.is-routine').length === 0;
+      return {
+        wired: true, firstLabelAfterAgent, routineRowCount, pausedRowCount,
+        firstLabelAfterReturn, routineRowsGoneAfterReturn,
+      };
+    })()`);
+    report.agentSidebar = agentSidebar;
+    assertOk('agent-sidebar: 모드 네비/사이드바 리스트 배선이 있다', agentSidebar.wired === true);
+    if (agentSidebar.wired) {
+      assertOk(
+        'agent-sidebar: 에이전트 모드 전환 직후 첫 섹션이 "작업·알람"이다(AC6)',
+        agentSidebar.firstLabelAfterAgent === '작업·알람',
+      );
+      assertOk(
+        'agent-sidebar: draft를 제외한 2건(active+paused)만 우선 노출된다',
+        agentSidebar.routineRowCount === 2,
+      );
+      assertOk('agent-sidebar: paused 1건이 is-paused로 표시된다', agentSidebar.pausedRowCount === 1);
+      assertOk(
+        'agent-sidebar: 대화모드 복귀 시 라우틴 행이 사라지고 원래 이력이 복원된다(AC6)',
+        agentSidebar.routineRowsGoneAfterReturn === true && agentSidebar.firstLabelAfterReturn !== '작업·알람',
+      );
+    }
+  } catch (err) {
+    report.agentSidebar = { error: String((err && err.message) || err) };
+    failures.push('agent-sidebar: 검증 블록이 예외로 끝났다');
+  } finally {
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+  }
+
   fs.writeFileSync(path.join(CAPTURES, 'VERIFY-REPORT.json'), JSON.stringify(report, null, 2));
   console.log('[verify] 리포트 저장:', path.join(CAPTURES, 'VERIFY-REPORT.json'));
 

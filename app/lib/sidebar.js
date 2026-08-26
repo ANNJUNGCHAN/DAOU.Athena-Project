@@ -51,9 +51,48 @@
           if (window.AthenaGraphMode && typeof window.AthenaGraphMode.setView === 'function') {
             window.AthenaGraphMode.setView(view);
           }
+          // 에이전트모드 진입 시 라우틴 목록을 새로 받아온다(리프 1.2.2, 3단계) —
+          // loadAgentRoutines()가 안에서 renderList()까지 호출한다. 다른 모드는
+          // 라우틴 섹션과 무관하니 그냥 다시 그리기만 한다(대화 이력 복원).
+          if (view === 'agent') loadAgentRoutines(); else renderList();
         },
       })
     : null;
+
+  // 3단계(리프 1.2.2, Paper 보드 39 보강본) — 순수 포매팅/상태아이콘은
+  // agent-sidebar-list.js가 갖고 DOM은 여기서 조립한다(다른 make*Item과 같은 자리).
+  const agentSidebarList = window.AthenaLib && window.AthenaLib.AgentSidebarList;
+  let agentRoutinesCache = [];
+  let agentRoutinesRequestId = 0; // stale-응답 가드 — 아래 주석 참고.
+
+  function currentMode() {
+    return (window.AthenaGraphMode && window.AthenaGraphMode.state && window.AthenaGraphMode.state.view) || 'summary';
+  }
+
+  // GET /api/v1/routines 실데이터(IPC 경유, 기존 athena:routines-list 채널 —
+  // chat.js의 #routineChip이 이미 쓰는 것과 동일) → active/paused만 우선 노출.
+  // 백엔드 미기동이면 조용히 빈 목록(없는 걸 있다고 꾸미지 않는다, #routineChip과 같은 태도).
+  //
+  // requestId로 낡은 응답을 버린다: 사용자가 에이전트모드를 짧게 오갔다 다시
+  // 들어오면 왕복 두 개가 동시에 떠 있을 수 있고, 네트워크 사정상 먼저 보낸
+  // 쪽이 나중에 돌아올 수 있다 — 그걸 그대로 적용하면 최신 화면이 낡은
+  // 데이터로 덮인다(실측: verify.js 3단계 검증에서 이 역전이 실제로 재현됨).
+  async function loadAgentRoutines() {
+    const requestId = ++agentRoutinesRequestId;
+    if (!agentSidebarList) { renderList(); return; }
+    let rows = [];
+    try {
+      const res = await window.athena.invoke('athena:routines-list');
+      const routines = res && res.ok && res.data && Array.isArray(res.data.routines)
+        ? res.data.routines : [];
+      rows = agentSidebarList.buildAgentSidebarRows(routines);
+    } catch {
+      rows = [];
+    }
+    if (requestId !== agentRoutinesRequestId) return; // 그 사이 더 최신 요청이 갔다 — 이 응답은 버린다.
+    agentRoutinesCache = rows;
+    renderList();
+  }
 
   const INITIAL_VISIBLE = 6; // "더 보기" 이전에 보이는 지난 7일 이전 항목 수(Paper 보드 04 실측)
 
@@ -82,8 +121,8 @@
     return node;
   }
 
-  function makeSectionLabel(text) {
-    const label = el('div', 'sidebar-section-label');
+  function makeSectionLabel(text, extraClass) {
+    const label = el('div', extraClass ? `sidebar-section-label ${extraClass}` : 'sidebar-section-label');
     label.textContent = text;
     return label;
   }
@@ -118,8 +157,41 @@
     return btn;
   }
 
+  // 43번 "새 작업은 채팅에서" 원칙과 합치시킨다(전체 자연어 플로우는 8단계 몫) —
+  // 여기서는 그 방향의 가장 얕은 형태로 채팅 입력에 포커스만 옮긴다. 시트·모달을
+  // 새로 만들지 않는다(43 원칙 위반 방지, P3 — 없는 기능을 암시하지 않는다).
+  function selectRoutineItem() {
+    if ($input) $input.focus();
+  }
+
+  function makeRoutineItem(row) {
+    const btn = el('button', 'sidebar-item is-routine');
+    btn.type = 'button';
+    btn.title = row.title;
+    if (agentSidebarList && row.icon === agentSidebarList.STATUS_ICON.paused) {
+      btn.classList.add('is-paused');
+    }
+    const ic = el('span', 'sidebar-item-status-ic');
+    ic.textContent = row.icon.glyph;
+    ic.style.color = `var(${row.icon.colorVar})`;
+    btn.appendChild(ic);
+    const label = el('span', 'sidebar-item-label');
+    label.textContent = row.title;
+    btn.appendChild(label);
+    btn.addEventListener('click', () => selectRoutineItem(row));
+    return btn;
+  }
+
   function renderList() {
     while ($list.firstChild) $list.removeChild($list.firstChild);
+
+    // 에이전트모드 우선 노출(원칙3, Paper 보드 39 보강본) — 대화 이력보다
+    // 먼저 온다. 대화모드로 돌아오면(currentMode() !== 'agent') 이 블록을
+    // 건너뛰어 원래 이력이 그대로 복원된다 — 별도 복원 로직이 필요 없다.
+    if (currentMode() === 'agent' && agentRoutinesCache.length) {
+      $list.appendChild(makeSectionLabel('작업·알람', 'is-routine-caption'));
+      for (const row of agentRoutinesCache) $list.appendChild(makeRoutineItem(row));
+    }
 
     const q = searchQuery.trim().toLowerCase();
     const filtered = q
