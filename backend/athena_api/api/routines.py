@@ -80,6 +80,26 @@ async def confirm_routine(request: Request, routine_id: str) -> dict[str, Any]:
     return _view(spec, runtime)
 
 
+@router.post("/{routine_id}/pause")
+async def pause_routine(request: Request, routine_id: str) -> dict[str, Any]:
+    runtime = _runtime(request)
+    spec = runtime.store.get(routine_id)
+    if spec is None:
+        raise HTTPException(status_code=404, detail="루틴이 존재하지 않는다")
+    spec = runtime.store.transition(routine_id, "paused")
+    return _view(spec, runtime)
+
+
+@router.post("/{routine_id}/resume")
+async def resume_routine(request: Request, routine_id: str) -> dict[str, Any]:
+    runtime = _runtime(request)
+    spec = runtime.store.get(routine_id)
+    if spec is None:
+        raise HTTPException(status_code=404, detail="루틴이 존재하지 않는다")
+    spec = runtime.store.transition(routine_id, "active")
+    return _view(spec, runtime)
+
+
 @router.post("/{routine_id}/cancel")
 async def cancel_routine(request: Request, routine_id: str) -> dict[str, Any]:
     runtime = _runtime(request)
@@ -88,3 +108,11 @@ async def cancel_routine(request: Request, routine_id: str) -> dict[str, Any]:
         raise HTTPException(status_code=404, detail="루틴이 존재하지 않는다")
     spec = runtime.store.transition(routine_id, "cancelled")
     return _view(spec, runtime)
+
+
+@router.get("/{routine_id}/runs")
+async def list_routine_runs(request: Request, routine_id: str) -> dict[str, Any]:
+    """실행 이력 조회 — ledger는 그대로 두고 라우터 레벨에서 routine_id로 거른다."""
+    runtime = _runtime(request)
+    rows = [r for r in runtime.ledger.read_all() if r.get("routine_id") == routine_id]
+    return {"runs": rows}
