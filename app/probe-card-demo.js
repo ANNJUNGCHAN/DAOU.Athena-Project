@@ -42,6 +42,21 @@
 // 3종(계좌/보유주식/주문내역)은 이 배포에 실제 Kiwoom 계좌가 안 물려 있으면
 // resolve/render-plan이 그대로 실패한다 — 그 실패 사유를 report.json에
 // 있는 그대로 적고 스킵한다(지어낸 카드로 덮지 않는다).
+//
+// 라운드 2(팀리드 지시, e9bad09 이후): 호가/수급/거래원/프로그램매매도 이제
+// REST 직행 그레마(buildOrderBookDataset/buildInvestorFlowDataset/
+// buildTradingSourceDataset/buildProgramTradeDataset)가 있다. 자연어 입력
+// (예: "삼성전자 호가")으로 실제 태우는 대신 여전히 rest-dataset 직접 조립을
+// 쓴다 — 이유: 그 4개 함수는 StockEntityIndex.resolveQuery()로 종목명을
+// 좁히는데, 그 인덱스는 main.js의 app.whenReady 자동 블록(ATHENA_NO_AUTOSTART로
+// 막아둔 바로 그 블록)에서만 채워진다. 그 블록을 살리려면 이 프로브도
+// createWindows()를 두 번(자동+명시) 태우게 되고, 그건 probe-card-landing.js가
+// 이미 실측으로 겪은 "shellWin 두 개 경합" 버그로 이어진다(카드가 엉뚱한 창에
+// 붙는다). rest-dataset 경로는 그 자연어→종목코드 변환 단계만 건너뛸 뿐 —
+// operationRef+args는 새 그레마 함수가 실제로 만드는 것과 완전히 동일하고,
+// 그 뒤(백엔드 호출·변환·캔버스 페인트)는 100% 같은 실경로다. 자연어 인식
+// 자체는 이미 rest-dataset-runner.test.js 35/35(신규 5문법 포함)가 결정론적으로
+// 검증했다 — 이 프로브가 다시 증명할 필요가 없는 부분이다.
 
 process.env.ATHENA_NO_AUTOSTART = '1';
 
@@ -145,38 +160,84 @@ const TARGETS = [
     arguments: { stk_cd: STOCK },
   },
   {
-    // ka10004는 selector_detail_required(9분할) — sell_bid_quantities는 card-kind-호가.js의
-    // _LADDER_SHAPES['ka10004_sell'](sel_fpr_req 등)과 맞는다.
+    // 라운드 2 — buildOrderBookDataset(rest-dataset-runner.js)가 실제로 만드는 것과
+    // 정확히 같은 operationRef+args(detail:ka10004:aggregate_totals). 라운드 1에서는
+    // sell_bid_quantities(래더 분기)로 시도했는데, 이번엔 새 그레마가 실제로 고르는
+    // aggregate_totals(ProportionalBar 총잔량 분기, card-kind-호가.js detectTotals())로
+    // 바꿔 "그레마가 진짜로 만드는 조회"를 그대로 재현한다. 라운드 1에서 확인한
+    // card_title 라우팅 갭(ka10004 계열 전체가 screen_definitions.json에 항목이 없어
+    // title=None)은 detail_group과 무관하게 여전히 적용될 것으로 예상 — 실측으로 재확인.
     kind: '호가',
-    mode: 'selector',
-    question: '주식호가요청',
-    operationRef: 'detail:ka10004:sell_bid_quantities',
-    arguments: { stk_cd: STOCK },
+    mode: 'rest-dataset',
+    question: '삼성전자 호가',
+    dataset: () => ({
+      datasetId: `demo-hoga-${Date.now()}`,
+      question: '삼성전자 호가',
+      items: [{
+        itemId: 'primary', ordinal: 1,
+        operationRef: 'detail:ka10004:aggregate_totals',
+        args: { stk_cd: STOCK },
+        caption: null,
+      }],
+    }),
   },
   {
+    // buildInvestorFlowDataset과 완전히 같은 args(unit_tp:'1000' — 라운드 1의 '1'과
+    // 다르다, 그레마 원문 그대로 맞춘다).
     kind: '수급',
-    mode: 'selector',
-    question: '종목별투자자기관별합계요청',
-    operationRef: 'base:ka10061',
-    arguments: {
-      stk_cd: STOCK, strt_dt: kstYmd(7), end_dt: kstYmd(), amt_qty_tp: '1', trde_tp: '0', unit_tp: '1',
-    },
+    mode: 'rest-dataset',
+    question: '삼성전자 수급',
+    dataset: () => ({
+      datasetId: `demo-sugub-${Date.now()}`,
+      question: '삼성전자 수급',
+      items: [{
+        itemId: 'primary', ordinal: 1,
+        operationRef: 'base:ka10061',
+        args: {
+          stk_cd: STOCK, strt_dt: kstYmd(), end_dt: kstYmd(), amt_qty_tp: '1', trde_tp: '0', unit_tp: '1000',
+        },
+        caption: null,
+      }],
+    }),
   },
   {
-    // ka10040은 selector_detail_required(4분할) — buy_brokers는 card-kind-거래원.js의
-    // NAME_QTY_PATTERNS['buy'](buy_trde_ori_N/buy_trde_ori_qty_N)와 맞는다.
+    // buildTradingSourceDataset과 같은 operationRef(base:ka10038, 라운드 1의 ka10040과
+    // 다른 TR — 새 그레마가 실제로 고르는 것). Ka10038Response 실측: rank_1~3+
+    // stk_sec_rank(list, mmcm_nm/buy_qty/sell_qty)라 layout=table이고, 필드명이
+    // card-kind-거래원.js의 NAME_QTY_PATTERNS(buy_trde_ori_N 등, facts 전제)와
+    // 안 맞는다 — fell-back-generic이 예상된다(그레마 TR과 카드종 렌더러가 서로
+    // 다른 TR을 향해 만들어진 실제 통합 갭, 추측 아니라 모델 필드 대조로 확인).
     kind: '거래원',
-    mode: 'selector',
-    question: '당일주요거래원요청',
-    operationRef: 'detail:ka10040:buy_brokers',
-    arguments: { stk_cd: STOCK },
+    mode: 'rest-dataset',
+    question: '삼성전자 거래원',
+    dataset: () => ({
+      datasetId: `demo-georaewon-${Date.now()}`,
+      question: '삼성전자 거래원',
+      items: [{
+        itemId: 'primary', ordinal: 1,
+        operationRef: 'base:ka10038',
+        args: { stk_cd: STOCK, qry_tp: '2' },
+        caption: null,
+      }],
+    }),
   },
   {
+    // buildProgramTradeDataset과 완전히 같은 operationRef+args — 라운드 1(selector
+    // 경로)과 동일한 TR이라 결과도 동일할 것으로 예상, rest-dataset 경로로만 바꿔
+    // "시세/차트와 같은 실행 메커니즘"이라는 팀리드 지시를 문자 그대로 맞춘다.
     kind: '프로그램매매',
-    mode: 'selector',
-    question: '프로그램매매추이요청 시간대별',
-    operationRef: 'base:ka90005',
-    arguments: { date: kstYmd(), amt_qty_tp: '1', mrkt_tp: 'P00101', min_tic_tp: '1', stex_tp: '1' },
+    mode: 'rest-dataset',
+    question: '프로그램매매 동향',
+    dataset: () => ({
+      datasetId: `demo-program-${Date.now()}`,
+      question: '프로그램매매 동향',
+      items: [{
+        itemId: 'primary', ordinal: 1,
+        operationRef: 'base:ka90005',
+        args: { date: kstYmd(), amt_qty_tp: '1', mrkt_tp: 'P00101', min_tic_tp: '1', stex_tp: '1' },
+        caption: null,
+      }],
+    }),
   },
   {
     // kt00004는 selector_detail_required(4분할) — card-kind-계좌.js는 정확히
@@ -198,10 +259,14 @@ const TARGETS = [
     arguments: { qry_tp: '2', dmst_stex_tp: 'KRX' },
   },
   {
+    // 라운드 1은 render-plan 자체가 CANVAS_TRANSFORM_FAILED(응답에서 행 배열을
+    // 못 찾음)로 실패했다 — 이 계좌에 미체결 주문이 실제로 없어서다(데이터 부재,
+    // resolve 실패 아님). 팀리드 지시대로 bare tr_id("ka10075")로 재시도하지만
+    // 근본 원인(빈 계좌)은 question 형태와 무관해 같은 결과가 예상된다 — 실측 확인.
     kind: '주문내역',
     mode: 'selector',
     question: '미체결요청',
-    operationRef: 'base:ka10075',
+    operationRef: 'ka10075',
     arguments: { all_stk_tp: '0', trde_tp: '0', stex_tp: '0' },
   },
   {
@@ -332,6 +397,17 @@ async function main() {
   shellWin.show();
   shellWin.focus();
   await wait(1500); // 창 안정화
+
+  // 부팅 직후, 어떤 질의도 나가기 전 상태 캡처(팀리드 지시) — 사용자가 신고한
+  // "부팅 시 그래프/답변 모드 요소가 섞인다" 결함의 사전(before) 증거. worker-cards가
+  // 고치는 대상이고, 이 캡처는 그 수정 전 상태를 남겨두는 목적이라 재실행 때마다
+  // (부분 재실행 포함) 항상 새로 찍는다.
+  await shellWin.webContents.executeJavaScript(
+    'new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))',
+  );
+  const bootImg = await shellWin.webContents.capturePage();
+  fs.writeFileSync(path.join(OUT_DIR, 'boot-state.png'), bootImg.toPNG());
+  console.log(`[card-demo] boot-state.png 캡처 완료 → ${path.join(OUT_DIR, 'boot-state.png')}`);
 
   // 부분 재실행이면 이전 리포트에서 이번에 안 돌리는 카드종 결과를 그대로
   // 들고 온다 — 성공한 카드까지 매번 다시 태우지 않는다.
