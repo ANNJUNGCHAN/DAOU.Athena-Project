@@ -6,12 +6,20 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const {
+  detectStockInvestorSplit,
   detectContinuousTrade,
   detectForeignDaily,
   detectGoldInvestor,
   detectShape,
   render수급,
 } = require('./card-kind-수급');
+
+test('detectStockInvestorSplit — ka10061 개인/외국인/기관 3필드(Paper 목업과 동일 모양)', () => {
+  const row = { ind_invsr: '500618', frgnr_invsr: '-1351370', orgn: '850752', fnnc_invt: '1' };
+  assert.equal(detectStockInvestorSplit(row), true);
+  assert.equal(detectStockInvestorSplit({ ind_invsr: '1', frgnr_invsr: '1' }), false); // orgn 없음
+  assert.equal(detectStockInvestorSplit(null), false);
+});
 
 test('detectContinuousTrade — ka10131 종목별 순위 행(stk_nm+기관/외국인 순매매)', () => {
   const row = { stk_nm: '삼성전자', orgn_nettrde_amt: '100', frgnr_nettrde_amt: '-50', rank: '1' };
@@ -32,7 +40,11 @@ test('detectGoldInvestor — ka52301 매수/매도/순매수 금액 3필드', ()
   assert.equal(detectGoldInvestor({ all_dfrt_trst_buy_amt: '10' }), false);
 });
 
-test('detectShape — 첫 행으로 셋 중 하나를 정확히 고른다', () => {
+test('detectShape — 첫 행으로 넷 중 하나를 정확히 고른다', () => {
+  assert.equal(
+    detectShape([{ ind_invsr: '1', frgnr_invsr: '1', orgn: '1' }]),
+    'stock_investor_split'
+  );
   assert.equal(detectShape([{ stk_nm: 'x', orgn_nettrde_amt: '1', frgnr_nettrde_amt: '1' }]), 'continuous_trade');
   assert.equal(detectShape([{ dt: '1', chg_qty: '1', frgnr_limit_irds: '1' }]), 'foreign_daily');
   assert.equal(

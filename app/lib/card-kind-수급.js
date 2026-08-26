@@ -1,15 +1,17 @@
 // 카드 v3(.omc/state/card-v3-plan.md §2.3/§3 Wave 1-4 레인2) 카드종 — "수급".
 //
 // 실측(backend/athena_api/canvas_transform.py resolve_fixed_card_title, 2026-08-26):
-// card_title="수급"으로 실제로 라우팅되는 TR은 domain=investor 3종(ka10008/ka10131/
-// ka52301)뿐이다 — Paper 목업의 "개인/외국인/기관 3행" 원본 필드(ind_invsr/frgnr_invsr/
-// orgn)는 ka10061(domain=stockinfo)에만 있고 ka10061은 card_title="종목정보"로 라우팅된다
-// (다른 레인 소관, 이 파일에서 손 안 댐 — canvas_transform.py는 이 태스크 스코프 밖).
-// 그래서 이 파일은 Paper 목업을 문자 그대로 재현하지 않고, 실제로 이 타이틀에 도달하는
-// 3개 TR이 각자 가진 진짜 신호(부호 있는 순매매 필드)로 ProportionalBar를 만든다 —
-// 없는 필드를 지어내지 않는다(§4 원칙). 전부 build_table 경유(layout=table, envelope.data
-// = {columns, rows}) — build_table은 컬럼 라벨을 원본 키 그대로 붙이므로(canvas_transform.py
-// build_table) 한글 라벨은 이 실측 필드 전용으로 여기서 직접 단다.
+// card_title="수급"으로 라우팅되는 TR은 4종 — domain=investor 3종(ka10008/ka10131/
+// ka52301) + ka10061(domain=stockinfo, 2026-08-26 커밋 5649f0c로 _CARD_TITLE_OVERRIDES에
+// 개별 재배정됨, Lane 2 실측 제보). ka10061의 응답 모델(Ka10061ResponseStkInvsrOrgnTotItem,
+// backend/athena_api/generated/models.py:3181)이 ind_invsr(개인투자자)/frgnr_invsr
+// (외국인투자자)/orgn(기관계) 필드를 그대로 갖고 있어 Paper 수급카드 목업(개인/외국인/기관
+// 3행 부호값 막대)과 정확히 일치한다 — 이 파일의 4개 분기 중 유일하게 목업을 문자 그대로
+// 재현하는 조각이다. 나머지 3종(ka10008/ka10131/ka52301)은 목업과 다른 필드셋이라, 각자
+// 가진 진짜 신호(부호 있는 순매매 필드)로 대체 시각화를 만든다 — 없는 필드를 지어내지
+// 않는다(§4 원칙). 전부 build_table 경유(layout=table, envelope.data = {columns, rows}) —
+// build_table은 컬럼 라벨을 원본 키 그대로 붙이므로(canvas_transform.py build_table) 한글
+// 라벨은 이 실측 필드 전용으로 여기서 직접 단다.
 (function () {
 'use strict';
 
@@ -23,6 +25,13 @@ const { ProportionalBar } = CardPrimitives;
 const { formatDatetime } = FactsCard;
 
 // ---------- 순수 로직 ----------
+
+// ka10061(종목별투자자기관별합계요청) — Paper 목업과 정확히 같은 개인/외국인/기관 3필드.
+// 4종 중 유일하게 목업을 그대로 재현하는 조각(§헤더 주석).
+function detectStockInvestorSplit(row) {
+  if (!row) return false;
+  return 'ind_invsr' in row && 'frgnr_invsr' in row && 'orgn' in row;
+}
 
 // ka10131(기관외국인연속매매현황) — 종목별 순위 테이블. 1위 행(연속순매수 최상위 종목)의
 // 기관/외국인 순매매금액을 보여준다 — 전 종목 합계가 아니라 "연속매매 1위 종목" 스냅샷임을
@@ -49,6 +58,7 @@ function detectGoldInvestor(row) {
 function detectShape(rows) {
   const first = Array.isArray(rows) && rows.length ? rows[0] : null;
   if (!first) return null;
+  if (detectStockInvestorSplit(first)) return 'stock_investor_split';
   if (detectContinuousTrade(first)) return 'continuous_trade';
   if (detectForeignDaily(first)) return 'foreign_daily';
   if (detectGoldInvestor(first)) return 'gold_investor';
@@ -58,6 +68,13 @@ function detectShape(rows) {
 const _DAILY_ROWS_MAX = 10;
 
 // ---------- DOM 빌더 ----------
+
+function buildStockInvestorSplit(row) {
+  return ProportionalBar({
+    values: [Number(row.ind_invsr) || 0, Number(row.frgnr_invsr) || 0, Number(row.orgn) || 0],
+    labels: ['개인', '외국인', '기관'],
+  });
+}
 
 function buildContinuousTrade(row) {
   const wrap = document.createElement('div');
@@ -99,6 +116,7 @@ function render수급(envelope) {
     : null;
   if (!rows || !rows.length) return null;
   const shape = detectShape(rows);
+  if (shape === 'stock_investor_split') return buildStockInvestorSplit(rows[0]);
   if (shape === 'continuous_trade') return buildContinuousTrade(rows[0]);
   if (shape === 'foreign_daily') return buildForeignDaily(rows);
   if (shape === 'gold_investor') return buildGoldInvestor(rows[0]);
@@ -106,6 +124,7 @@ function render수급(envelope) {
 }
 
 const __exports = {
+  detectStockInvestorSplit,
   detectContinuousTrade,
   detectForeignDaily,
   detectGoldInvestor,
