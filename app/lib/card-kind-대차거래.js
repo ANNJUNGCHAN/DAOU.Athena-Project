@@ -34,7 +34,7 @@ const CardPrimitives = typeof module !== 'undefined' && module.exports
 const FactsCard = typeof module !== 'undefined' && module.exports
   ? require('./facts-card')
   : window.AthenaLib.FactsCard;
-const { TwoLineRow } = CardPrimitives;
+const { TwoLineRow, extractDataRows } = CardPrimitives;
 const { formatNumeric, formatDatetime } = FactsCard;
 
 // row(대차거래 한 행 — 일자 기준 또는 종목 기준) → 렌더용 모델 | null(식별자
@@ -64,12 +64,8 @@ function buildLendingLine(row) {
   };
 }
 
-function extractRows(envelope) {
-  return envelope && envelope.data && Array.isArray(envelope.data.rows) ? envelope.data.rows : [];
-}
-
 function render대차거래(envelope) {
-  const lines = extractRows(envelope).map(buildLendingLine).filter(Boolean);
+  const lines = extractDataRows(envelope).map(buildLendingLine).filter(Boolean);
   if (!lines.length) return null;
 
   const wrap = document.createElement('div');

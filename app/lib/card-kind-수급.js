@@ -135,8 +135,6 @@ const __exports = {
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = __exports;
 } else {
-  window.AthenaLib = window.AthenaLib || {};
-  window.AthenaLib.CardKindSugub = __exports;
   window.AthenaLib.CardKinds.register('수급', render수급);
 }
 

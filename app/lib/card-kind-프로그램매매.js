@@ -105,8 +105,6 @@ const __exports = {
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = __exports;
 } else {
-  window.AthenaLib = window.AthenaLib || {};
-  window.AthenaLib.CardKindProgram = __exports;
   window.AthenaLib.CardKinds.register('프로그램매매', render프로그램매매);
 }
 

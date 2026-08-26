@@ -62,6 +62,13 @@ function priceMagnitude(raw) {
   return Number.isFinite(Number(stripped)) && stripped !== '' ? stripped : raw; // 파싱 안 되면 원문 그대로
 }
 
+// envelope.data.rows 존재 여부 확인 — table 모양 응답을 다루는 여러 카드종(공매도/
+// 대차거래/신용거래/주문내역)에 반복되던 조각을 하나로 모음(2026-08-26 deslop).
+// rows가 없거나 배열이 아니면 빈 배열 — 호출부가 바로 .map/.filter를 걸 수 있게 한다.
+function extractDataRows(envelope) {
+  return envelope && envelope.data && Array.isArray(envelope.data.rows) ? envelope.data.rows : [];
+}
+
 // StatusPill — 상태값을 호출부가 넘긴 톤 테이블로 판정한다(ChangeBadge와 달리 부호가
 // 아니라 명시적 상태 라벨이 판정 기준). 테이블에 없는 상태는 flat(중립) 안전 폴백.
 function resolveStatusTone(status, toneTable) {
@@ -278,6 +285,7 @@ const __exports = {
   resolveStatusTone,
   ladderRatio,
   priceMagnitude,
+  extractDataRows,
   // DOM 빌더 — 렌더러(document 존재) 전용
   QuoteHeader,
   ChangeBadge,

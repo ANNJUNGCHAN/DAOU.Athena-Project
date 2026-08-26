@@ -56,6 +56,15 @@ function formatDatetime(value) {
   return text || '—';
 }
 
+// 퍼센트 표기 — 이미 "%"가 있으면 그대로, 없으면 붙인다. 부호는 원본 값이 이미
+// 가진 그대로 손대지 않는다(카드 v3 레인2/US-004 잔여 카드종 여러 곳에 반복되던
+// 조각을 하나로 모음, 2026-08-26 deslop).
+function formatPercent(raw) {
+  if (raw === undefined || raw === null || raw === '') return null;
+  const text = String(raw).trim();
+  return text.endsWith('%') ? text : `${text}%`;
+}
+
 // F1/F2(spec §3.1, case-matrix): 스칼라 ≤10은 단일 그룹, 11개 이상은 2단으로 접는다.
 // 20은 실측 관측 상한(case-matrix F2)일 뿐 렌더러의 하드 제약이 아니다 — 11개 이상이면
 // 항상 2단으로 접어 폭을 넘기지 않는다. 앞쪽 절반/뒤쪽 절반으로 나눠 원래 필드 순서를
@@ -74,6 +83,7 @@ const __exports = {
   changeTone,
   formatNumeric,
   formatDatetime,
+  formatPercent,
   groupFactsFields,
   SINGLE_GROUP_MAX,
 };
