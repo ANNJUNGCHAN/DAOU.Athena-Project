@@ -562,6 +562,17 @@ function cardTitleAndSubtitle(envelope, fallback) {
 
 function renderMcpTable(envelope) {
   const [title, subtitle] = cardTitleAndSubtitle(envelope, '공통 테이블');
+  // 카드 v3(.omc/state/card-v3-plan.md §2.2) 카드종 후킹 — title이 Paper 16종 고정
+  // 이름 중 하나로 등록돼 있으면 전용 body를 먼저 시도한다. all-or-nothing 계약
+  // (card-kinds.js)이라 renderFn이 null을 돌려주면 아래 범용 표 빌드로 그대로 폴백한다.
+  const kindRender = window.AthenaLib.CardKinds.resolve(title);
+  const built = kindRender && kindRender(envelope);
+  if (built) {
+    const { card, body } = makeCard('mcp-table', title, envelope.layout, envelope.correlation, subtitle);
+    stampPaperScreen(card, envelope);
+    body.appendChild(built);
+    return card;
+  }
   const { card, body } = makeCard('mcp-table', title, envelope.layout, envelope.correlation, subtitle);
   stampPaperScreen(card, envelope);
   const rawCols = (envelope.data && Array.isArray(envelope.data.columns)) ? envelope.data.columns : [];
@@ -673,6 +684,15 @@ function renderFactsGrid(fields) {
 
 function renderFactsCard(envelope) {
   const [title, subtitle] = cardTitleAndSubtitle(envelope, 'Facts');
+  // 카드 v3(§2.2) 카드종 후킹 — renderMcpTable과 같은 계약(all-or-nothing, card-kinds.js).
+  const kindRender = window.AthenaLib.CardKinds.resolve(title);
+  const built = kindRender && kindRender(envelope);
+  if (built) {
+    const { card, body } = makeCard('facts', title, envelope.layout, envelope.correlation, subtitle);
+    stampPaperScreen(card, envelope);
+    body.appendChild(built);
+    return card;
+  }
   const { card, body } = makeCard('facts', title, envelope.layout, envelope.correlation, subtitle);
   stampPaperScreen(card, envelope);
   const fields = (envelope.data && Array.isArray(envelope.data.fields)) ? envelope.data.fields : [];
@@ -697,6 +717,15 @@ function renderCompoundHeaderBand(fields) {
 
 function renderCompoundCard(envelope) {
   const [title, subtitle] = cardTitleAndSubtitle(envelope, 'Compound');
+  // 카드 v3(§2.2) 카드종 후킹 — renderMcpTable과 같은 계약(all-or-nothing, card-kinds.js).
+  const kindRender = window.AthenaLib.CardKinds.resolve(title);
+  const built = kindRender && kindRender(envelope);
+  if (built) {
+    const { card, body } = makeCard('compound', title, envelope.layout, envelope.correlation, subtitle);
+    stampPaperScreen(card, envelope);
+    body.appendChild(built);
+    return card;
+  }
   const { card, body } = makeCard('compound', title, envelope.layout, envelope.correlation, subtitle);
   stampPaperScreen(card, envelope);
   const data = (envelope.data && typeof envelope.data === 'object') ? envelope.data : {};

@@ -1,0 +1,227 @@
+/* app/styles/card-kinds.css — 카드 v3(.omc/state/card-v3-plan.md §1,§3 Wave 0-FE) 산출물.
+   1) 공유 UI 프리미티브 9종(.card-kit-*) 스타일. app/canvas.css의 .facts-*/.compound-*와
+      섞이지 않도록 접두어를 분리했다(§1 클래스 네이밍 규칙) — app/canvas.css는 건드리지 않는다.
+   2) 카드종별 placeholder 섹션(KIND 주석) — Wave 1-4 레인 워커는 자기 섹션 안쪽에만
+      스타일을 추가한다. 섹션 경계를 넘지 않으면 같은 파일이라도 git 3-way merge가
+      충돌하지 않는다(§3 Wave 0-FE 주석 그대로).
+   토큰은 전부 styles/tokens.css SSOT를 쓴다 — 색·크기를 새로 만들지 않는다.
+   카드 자신(.card)이 이미 backdrop-filter blur(14px)로 유리다 — 여기 프리미티브는
+   카드 표면 위 작은 칩/막대일 뿐 자체 blur/불투명 레이어를 얹지 않는다(glass-safe). */
+
+/* ---------- 프리미티브(§1) ---------- */
+
+.card-kit-quote-header {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.card-kit-quote-price {
+  font-family: var(--font-strong);
+  font-size: var(--text-xl);
+  letter-spacing: var(--tracking-num);
+  color: var(--color-k-text);
+}
+.card-kit-quote-subline {
+  flex-basis: 100%;
+  font-size: var(--text-xs);
+  color: var(--color-k-faint);
+}
+
+.card-kit-badge-change {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--color-k-panel3);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-flat);
+}
+.card-kit-badge-change.is-up { color: var(--color-up); }
+.card-kit-badge-change.is-down { color: var(--color-down); }
+.card-kit-badge-change.is-flat { color: var(--color-flat); }
+
+.card-kit-tab-switcher {
+  display: inline-flex;
+  gap: 2px;
+  padding: 2px;
+  border-radius: 8px;
+  background: var(--color-k-panel3);
+}
+.card-kit-tab {
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--color-k-dim);
+  cursor: pointer;
+}
+.card-kit-tab.is-active {
+  background: var(--color-k-panel);
+  color: var(--color-k-text);
+  font-family: var(--font-strong);
+}
+
+.card-kit-bar-proportional { display: flex; flex-direction: column; gap: 6px; }
+.card-kit-bar-row { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 8px; }
+.card-kit-bar-label { font-size: var(--text-sm); color: var(--color-k-faint); }
+.card-kit-bar-track {
+  position: relative;
+  display: block;
+  height: 6px;
+  border-radius: 3px;
+  overflow: hidden;
+  background: var(--color-k-panel3);
+}
+.card-kit-bar-fill { display: block; height: 100%; border-radius: 3px; background: var(--color-flat); }
+.card-kit-bar-fill.is-up { background: var(--color-up); }
+.card-kit-bar-fill.is-down { background: var(--color-down); }
+.card-kit-bar-value {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-k-text);
+  text-align: right;
+}
+
+.card-kit-bar-range { display: flex; flex-direction: column; gap: 4px; }
+.card-kit-bar-range-track {
+  position: relative;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--color-k-panel3);
+}
+.card-kit-bar-range-marker {
+  position: absolute;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-k-text);
+  transform: translate(-50%, -50%);
+}
+.card-kit-bar-range-labels {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-k-faint);
+}
+
+.card-kit-row-ranked {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+}
+.card-kit-row-ranked-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 4px;
+  background: var(--color-k-panel3);
+  font-family: var(--font-strong);
+  font-size: var(--text-xs);
+  color: var(--color-k-dim);
+}
+.card-kit-row-ranked-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--text-sm);
+  color: var(--color-k-text);
+}
+.card-kit-row-ranked-value {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-k-text);
+  text-align: right;
+}
+
+.card-kit-row-two-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 6px 0;
+}
+.card-kit-row-two-line-left,
+.card-kit-row-two-line-right { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.card-kit-row-two-line-right { align-items: flex-end; text-align: right; }
+.card-kit-row-two-line-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--text-sm);
+  color: var(--color-k-text);
+}
+.card-kit-row-two-line-value { font-family: var(--font-mono); font-size: var(--text-sm); color: var(--color-k-text); }
+.card-kit-row-two-line-subline { font-size: var(--text-xs); color: var(--color-k-faint); }
+
+.card-kit-pill-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--color-k-panel3);
+  font-family: var(--font-strong);
+  font-size: var(--text-xs);
+  color: var(--color-k-dim);
+}
+.card-kit-pill-status.is-up { color: var(--color-up); }
+.card-kit-pill-status.is-down { color: var(--color-down); }
+.card-kit-pill-status.is-flat { color: var(--color-flat); }
+
+.card-kit-row-ladder {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 0;
+}
+.card-kit-row-ladder-bar { display: block; height: 6px; border-radius: 3px; background: var(--color-flat); }
+.card-kit-row-ladder.is-bid .card-kit-row-ladder-bar { background: var(--color-up); }
+.card-kit-row-ladder.is-ask .card-kit-row-ladder-bar { background: var(--color-down); justify-self: end; }
+.card-kit-row-ladder-price { font-family: var(--font-mono); font-size: var(--text-sm); color: var(--color-k-text); }
+.card-kit-row-ladder-qty {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-k-faint);
+  text-align: right;
+}
+
+/* ---------- 카드종별 placeholder(§3 Wave 0-FE) ----------
+   gap 분석 인풋 12종(시세·수급·거래원·계좌·주문내역·보유주식·관심종목·차트·호가·주문·
+   프로그램매매·종목정보) 전부 미리 만들어 둔다. Wave 1-4는 이 중 11종만 레인 배정된다
+   (주문은 §4-4: feasibility=blocked라 구현 대상이 아니다 — 섹션은 남겨 두되 비워 둔다).
+   레인 워커는 자기 섹션 안쪽에만 채운다 — 다른 섹션을 건드리지 않는다. */
+
+/* KIND: 시세 */
+
+/* KIND: 수급 */
+
+/* KIND: 거래원 */
+
+/* KIND: 계좌 */
+
+/* KIND: 주문내역 */
+
+/* KIND: 보유주식 */
+
+/* KIND: 관심종목 */
+
+/* KIND: 차트 */
+
+/* KIND: 호가 */
+
+/* KIND: 주문 */
+
+/* KIND: 프로그램매매 */
+
+/* KIND: 종목정보 */
