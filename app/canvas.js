@@ -1238,8 +1238,9 @@ function fmtWon(raw) {
 // --- 그래프 모드 배선 (leaf 8 / W2-3) ---------------------------------------
 //
 // 상태·배치·그리기는 lib/graph-mode/**가 순수하게 갖고 있고, 여기서는 DOM과
-// 백엔드에만 잇는다. 브레인이 꺼져 있으면 필을 숨긴다 — 루틴 칩과 같은 규율로,
-// 없는 기능을 있다고 표시하지 않는다.
+// 백엔드에만 잇는다. 모드 칩(#graphPill)은 상시 보인다(Paper 보드 05) — 브레인이
+// 꺼져 있어도 그래프 모드 자체는 열 수 있고, 못 쓰는 이유는 캔버스 안에서 정직하게
+// 보여준다(controller.js의 renderUnavailable).
 const graphMode = window.AthenaLib.GraphModeController.createGraphModeController({
   store: window.AthenaLib.GraphModeStore,
   layout: window.AthenaLib.GraphClusterLayout,
@@ -1281,8 +1282,9 @@ const graphSummaryTable = window.AthenaLib.GraphSummaryTable.createSummaryTableC
   onError: (err) => console.warn('[graph-mode] profile-summary 실패', err),
 });
 
-// 필은 shell.html에서 hidden으로 태어난다 — 브레인이 준비됐다고 **확인한 뒤에만**
-// 보인다. 이 프로브가 없으면 필이 영영 숨어 있어 사람이 그래프 모드에 닿지 못한다.
+// 모드 칩은 항상 보이지만, 컨트롤러는 아직 "못 씀"으로 가정한 채 태어난다
+// (controller.js 기본값) — 이 프로브가 브레인 상태를 확인해 바로잡는다. 프로브 전에
+// 사람이 그래프 모드로 들어와도 renderUnavailable()의 정직한 안내가 뜨지, 막히지 않는다.
 (async () => {
   try {
     const status = await window.athena.invoke('athena:brain-status');
@@ -1294,7 +1296,7 @@ const graphSummaryTable = window.AthenaLib.GraphSummaryTable.createSummaryTableC
     // 빈 상태(보드 05) 숫자·CTA·힌트 — 같은 ready 확인에 얹는다(왕복 추가 없음).
     if (ready) loadEmptyCanvasExtras();
   } catch (err) {
-    console.warn('[graph-mode] brain-status 실패 — 필을 숨긴 채로 둔다', err);
+    console.warn('[graph-mode] brain-status 실패 — 못 씀으로 둔다', err);
     graphMode.setAvailable(false);
   }
 })();
