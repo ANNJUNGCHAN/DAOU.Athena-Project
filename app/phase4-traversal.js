@@ -121,9 +121,23 @@ async function main() {
     ['모델', '03d-settings-model.png'],
     ['그래프', '03e-settings-graph.png'],
   ];
+  // 2026-08-26: 점은 이제 답변⇄그래프 모드 전환기다(보드 05) — 설정 진입은
+  // 사이드바 계정 메뉴(보드 16) 아니면 커맨드바다. 이 프로필은 계좌가
+  // 미등록이라(위 PROFILE 주석 — cliDone/accountDone만 심는다) 계정 행이 숨어
+  // 있다(단계 02가 이미 그 상태를 'no-account'로 기록한다) — 그래서 여기서는
+  // 계정 상태와 무관한 커맨드바("설정" 입력)로 연다.
   await step('03-설정 열기', async () => {
-    await shellWin.webContents.executeJavaScript("document.getElementById('dot').click()");
+    const opened = await shellWin.webContents.executeJavaScript(`(() => {
+      const el = document.getElementById('input');
+      if (!el) return 'no-input';
+      el.value = '설정';
+      el.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+      return 'clicked';
+    })()`);
     await wait(700);
+    if (opened !== 'clicked') {
+      results.push({ name: '03-설정-열기', ok: false, file: null, note: `커맨드바로 설정을 못 열었다: ${opened}` });
+    }
   });
   for (const [label, file] of NAV_LABELS) {
     await step(`03-설정 탭 ${label}`, async () => {
@@ -149,32 +163,55 @@ async function main() {
     await wait(500);
   });
 
-  // ---------- (4) 그래프 모드 — 요약 뷰 · 그래프 뷰 ----------
+  // ---------- (4) 답변⇄그래프 모드 ----------
+  // 2026-08-26: 모드 칩(#graphPill)은 이제 상시 보인다(Paper 보드 05) — 브레인
+  // 미준비가 진입 자체를 막지 않는다. 준비됐으면 실제 그래프가, 안 됐으면
+  // 캔버스 안에 정직한 안내(controller.js renderUnavailable)가 뜬다 — 둘 다
+  // 성공이고, "칩이 숨어서 못 들어감"만 실패다.
   await step('04-그래프 모드', async () => {
-    await shot(shellWin, '04a-canvas-summary.png', '토글 전 — 요약(모자이크) 뷰');
+    await shot(shellWin, '04a-canvas-summary.png', '토글 전 — 답변(카드 그리드) 모드');
     const graphProbe = await shellWin.webContents.executeJavaScript(`(async () => {
       const pill = document.getElementById('graphPill');
       const container = document.getElementById('graphCanvas');
       const status = await window.athena.invoke('athena:brain-status').catch(() => null);
       const brainReady = Boolean(status && status.ok && status.ready);
       if (!pill) return { wired: false, reason: 'no-pill', brainReady };
-      if (pill.hidden) return { wired: false, reason: 'hidden', brainReady };
+      if (pill.hidden) return { wired: false, reason: 'hidden-though-always-visible', brainReady };
+      const labelBefore = pill.textContent;
       pill.click();
       const deadline = Date.now() + 4000;
       while (Date.now() < deadline) {
         if (!container.hidden) break;
         await new Promise((r) => setTimeout(r, 50));
       }
-      return { wired: true, opened: !container.hidden, brainReady };
+      return {
+        wired: true,
+        opened: !container.hidden,
+        brainReady,
+        labelBefore,
+        labelAfter: pill.textContent,
+        containerText: container.textContent,
+      };
     })()`);
     fs.writeFileSync(path.join(OUT_DIR, '04-graph-probe.json'), JSON.stringify(graphProbe, null, 2));
-    if (graphProbe.wired && graphProbe.opened) {
+    if (!graphProbe.wired) {
+      results.push({ name: '04-graph-mode', ok: false, file: null, note: `모드 칩 진입로가 막혀 있다 — ${JSON.stringify(graphProbe)}` });
+      return;
+    }
+    if (!graphProbe.opened) {
+      results.push({ name: '04-graph-mode', ok: false, file: null, note: `칩을 눌러도 그래프 캔버스가 안 열린다 — ${JSON.stringify(graphProbe)}` });
+      return;
+    }
+    if (graphProbe.brainReady) {
       await wait(300);
-      await shot(shellWin, '04b-canvas-graph.png', '그래프 뷰');
+      await shot(shellWin, '04b-canvas-graph.png', '그래프 뷰(브레인 준비됨)');
     } else {
-      // 브레인 미준비/필 숨김 — 우회하지 않는다, 미준비 상태를 그대로 캡처한다.
-      await shot(shellWin, '04b-canvas-graph-unavailable.png', JSON.stringify(graphProbe));
-      results.push({ name: '04b-graph-view', ok: false, file: path.join(OUT_DIR, '04b-canvas-graph-unavailable.png'), note: `그래프 뷰 미도달 — ${JSON.stringify(graphProbe)}` });
+      // 브레인 미준비 — 캔버스는 열리되 정직한 안내가 뜬다. 이건 실패가 아니라
+      // 의도한 동작이다.
+      await shot(shellWin, '04b-canvas-graph-unavailable.png', graphProbe.containerText);
+      if (!/브레인|성향/.test(graphProbe.containerText || '')) {
+        results.push({ name: '04b-graph-unavailable-honest', ok: false, file: null, note: `브레인 미준비인데 정직한 안내 문구가 없다 — ${JSON.stringify(graphProbe)}` });
+      }
     }
   });
 
