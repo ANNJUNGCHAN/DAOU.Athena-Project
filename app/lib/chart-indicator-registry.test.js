@@ -6,7 +6,7 @@ const { INDICATOR_DEFS, DEFAULT_INDICATOR_VISIBLE, defaultParamsFor } = require(
 const { SPECS, SPEC_BY_ID, linesOf, toLineData } = require('./chart-indicator-render');
 const IND = require('./chart-indicators');
 
-// 2026-08-25: 구현 5종 → 34종. 아래 숫자는 "지금 몇 개인가"를 박아두는 게 아니라
+// 아래 숫자는 "지금 몇 개인가"를 박아두는 게 아니라
 // **레지스트리와 렌더러가 어긋나지 않는다**는 계약을 지킨다. 지표를 추가할 때
 // 숫자 세 개만 고치고 나머지는 자동으로 검증되도록 짰다.
 const IMPLEMENTED = INDICATOR_DEFS.filter((d) => d.implemented);

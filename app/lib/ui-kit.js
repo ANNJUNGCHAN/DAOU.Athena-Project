@@ -148,11 +148,6 @@ function clear(node) {
 // 카드 제거 — canvas.js·settings-cards.js의 closeCard가 각자 손으로 들고 있던
 // 공통 핵심이다. lightweight-charts destroy 같은 카드별 부수 정리는 호출자가
 // 이 헬퍼를 부르기 전에 따로 한다(포니테일 감사).
-//
-// 2026-08-26. 옛 판은 그리드가 비면 `athena:collapse-canvas`를 보내 캔버스 창을
-// 접었다(D7). 그 채널은 리프 1.2.1에서 창이 하나가 되며 preload 허용 목록에서
-// 빠졌고 — 접을 창이 없다 — 그래서 이 send는 그때부터 preload가 거절해 마지막
-// 카드를 닫을 때마다 예외를 던지고 있었다. 이름의 "MaybeCollapse"도 함께 걷는다.
 function removeCard(card) {
   card.remove();
 }

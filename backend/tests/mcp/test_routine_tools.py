@@ -10,9 +10,8 @@ import pytest
 from athena_mcp import routine_tools
 from athena_mcp.result import ERROR_ORIGIN_META_KEY
 
-# `_client` 헬퍼는 tests/mcp/conftest.py의 `mock_http_client` 픽스처로 옮겼다
-# (2026-08-20 포니테일 감사 — 4파일 중복 제거). 이 파일은 백엔드 기본값과
-# 다른 base_url(127.0.0.1:8010)을 명시적으로 넘긴다.
+# `_client` 헬퍼는 tests/mcp/conftest.py의 `mock_http_client` 픽스처로 옮겼다.
+# 이 파일은 백엔드 기본값과 다른 base_url(127.0.0.1:8010)을 명시적으로 넘긴다.
 
 
 def test_tool_schema_only_allows_draft_and_list():

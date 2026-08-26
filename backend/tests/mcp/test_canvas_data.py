@@ -95,8 +95,7 @@ def test_build_table_caps_rows_and_derives_columns():
     assert meta["trimmed"] is True
 
 
-# `_client` 헬퍼는 tests/mcp/conftest.py의 `mock_http_client` 픽스처로 옮겼다
-# (2026-08-20 포니테일 감사 — 4파일 중복 제거).
+# `_client` 헬퍼는 tests/mcp/conftest.py의 `mock_http_client` 픽스처로 옮겼다.
 
 
 @pytest.mark.parametrize(

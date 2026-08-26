@@ -211,7 +211,6 @@ const INDICATOR_DEFS = [
   },
   { id: 'mfi', label: 'MFI', section: 'pane', implemented: true, params: [{ key: 'period', label: '기간', default: 14 }, { key: 'guides', label: '기준선', default: true } ] },
   { id: 'intradayIntensity', label: '일중 강도 지수', section: 'pane', implemented: true, params: [{ key: 'period', label: '기간', default: 21 }, { key: 'guides', label: '기준선', default: true } ] },
-  // 2026-08-25 추가 — 토스 WTS 목록에만 있던 항목(Playwright 실측).
   { id: 'rmi', label: 'RMI', section: 'pane', implemented: true, params: [
     { key: 'period', label: '기간', default: 14 },
     { key: 'momentumP', label: '모멘텀', default: 5 }, { key: 'guides', label: '기준선', default: true } ] },

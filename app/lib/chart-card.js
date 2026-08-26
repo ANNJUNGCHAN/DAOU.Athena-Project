@@ -74,7 +74,7 @@ const PRICE_FORMAT = { type: 'price', precision: 0, minMove: 1 };
 //
 // 왜 fitContent가 아닌가: fitContent는 적재된 봉 전체를 폭에 욱여넣는다. 그러면
 // ① 봉 수가 많을수록 봉이 얇아져 뭉개지고 ② 이미 전부 보이므로 좌측으로 팬해도
-// 나올 과거가 없다. 실제로 두 증상 모두 나왔다(2026-08-25).
+// 나올 과거가 없다.
 // MTS는 반대로 '읽기 좋은 고정 봉 폭'을 유지하고 보이는 봉 수를 폭에 맞춰 정한다.
 // → barSpacing을 고정하고 scrollToRealTime()으로 우측(최신)에 정렬한다.
 //   나머지 과거는 좌측 팬·휠 줌아웃으로 접근한다(적재는 전량이다).
@@ -894,9 +894,6 @@ async function createChartCard(container, opts) {
   return { chart, setForm, setData, replaceData, prependData, applyChartTick, applyPeriod, applyAdjusted, toggleFullscreen, destroy };
 }
 
-// 외부 소비자는 canvas.js(createChartCard)와 chart-card.test.js(순수 변환 + 등락색
-// + resolveInitialPeriod, P2a) 뿐이다 — 나머지 상수는 내부 구현 세부라 내보내지
-// 않는다(deslop 2026-08-18).
 const __exports = {
   createChartCard,
   createCachedChartLibraryLoader,

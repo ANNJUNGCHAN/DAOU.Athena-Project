@@ -577,7 +577,6 @@ function rmi(closes, period = 14, momentumP = 5) {
 // UMD 각주(2026-08-18 렌더러 격리) — sanitize.js와 같은 패턴.
 const __exports = {
   sma, ema, bollinger, rsi, macd,
-  // 2026-08-25 확장
   wilderSmooth, smaSparse,
   envelope, priceChannel, vwap, parabolicSar, supertrend, ichimoku, williamsFractal,
   atr, stochastic, stochRsi, cci, williamsR, dmiAdx, obv, adLine, chaikinOsc, mfi,
