@@ -59,6 +59,29 @@ test('selectAccountFacts — 아는 키는 field.label이 키를 그대로 echo�
   ]);
 });
 
+// 2026-08-26 마지막 결함 재현 — app/captures/card-demo/계좌.png. kt00004:
+// profit_and_loss의 9개 필드 중 손익 3종(tdy_lspft/lspft2/lspft)은 이미 라벨이
+// 붙었지만, 같은 응답의 원금 3종(tdy_lspft_amt/invt_bsamt/lspft_amt)은 라벨도
+// 없이 raw key로, 단위(원)도 없이 노출됐다 — PLAIN_WON_KEYS/LABEL_FALLBACK
+// 어디에도 없었기 때문이다. tdy_lspft_amt/lspft_amt는 models.py에서 뜻이
+// 하나뿐이라 라벨+단위 둘 다 붙이고, invt_bsamt는 같은 키가 두 다른 뜻으로
+// 쓰여서(models.py:6255 "당월투자원금" vs :6757 "투자원금평잔") 라벨은 raw key
+// 그대로 두되 단위(둘 다 "원")만 붙인다(팀리드 지시: 애매하면 라벨은 건너뛴다).
+test('selectAccountFacts — kt00004의 원금 필드 3종: 애매하지 않은 둘은 라벨+단위, 애매한 하나는 단위만', () => {
+  const fields = [
+    { key: 'tdy_lspft_amt', label: 'tdy_lspft_amt', value: '000000010000000' },
+    { key: 'invt_bsamt', label: 'invt_bsamt', value: '000000012000000' },
+    { key: 'lspft_amt', label: 'lspft_amt', value: '000000012000000' },
+    { key: 'tdy_lspft', label: 'tdy_lspft', value: '0' }, // 게이트를 여는 손익 필드
+  ];
+  assert.deepEqual(selectAccountFacts(fields), [
+    { key: 'tdy_lspft_amt', label: '당일투자원금', value: '000000010000000', unit: '원', kind: 'plain' },
+    { key: 'invt_bsamt', label: 'invt_bsamt', value: '000000012000000', unit: '원', kind: 'plain' },
+    { key: 'lspft_amt', label: '누적투자원금', value: '000000012000000', unit: '원', kind: 'plain' },
+    { key: 'tdy_lspft', label: '당일투자손익', value: '0', unit: '원', kind: 'profit' },
+  ]);
+});
+
 test('selectAccountFacts — 모르는 키는 field.label이 있으면 그걸 쓰고, 없으면 key로 물러난다', () => {
   const fields = [
     { key: 'tot_evlt_pl', label: null, value: '100' }, // 게이트를 여는 손익 필드
