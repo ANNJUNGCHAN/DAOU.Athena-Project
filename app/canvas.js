@@ -437,7 +437,7 @@ function retitleChartCard(card, period) {
   const label = PERIOD_TITLE[period];
   const title = card && card.querySelector('.card-title');
   if (!label || !title) return;
-  // 끝에 붙은 주기 낱말만 갈아끼운다 — 종목명은 그대로 둔다.
+  // 끝에 붙은 주기 낱말만 갈아끼운다 — 나머지 타이틀(고정 카드명 또는 caption)은 그대로 둔다.
   const base = String(title.textContent || '').replace(/\s*(틱|분봉|일봉|주봉|월봉|년봉)\s*$/, '').trim();
   title.textContent = base ? `${base} ${label}` : label;
 }
@@ -515,8 +515,23 @@ async function mountAitsChartPanel(card, chartBody, descriptor) {
   return session;
 }
 
+// TR이 Paper 보드 12d 카드 16종 중 하나로 확정되면 백엔드가 envelope.card_title에
+// 고정 이름을 채운다(canvas_transform.resolve_fixed_card_title) — 그 경우 카드
+// 타이틀은 고정 이름, 이전까지 타이틀이던 caption(종목명·주기 등)은 서브타이틀로
+// 내려간다(정보 손실 없음). card_title이 없으면(16종 밖) 기존처럼 caption이
+// 타이틀이다.
+function cardTitleAndSubtitle(envelope, fallback) {
+  const fixedTitle = envelope && typeof envelope.card_title === 'string' && envelope.card_title
+    ? envelope.card_title
+    : null;
+  const caption = envelope && envelope.caption;
+  if (fixedTitle) return [fixedTitle, caption || null];
+  return [caption || fallback, null];
+}
+
 function renderMcpTable(envelope) {
-  const { card, body } = makeCard('mcp-table', envelope.caption || '공통 테이블', envelope.layout, envelope.correlation);
+  const [title, subtitle] = cardTitleAndSubtitle(envelope, '공통 테이블');
+  const { card, body } = makeCard('mcp-table', title, envelope.layout, envelope.correlation, subtitle);
   stampPaperScreen(card, envelope);
   const rawCols = (envelope.data && Array.isArray(envelope.data.columns)) ? envelope.data.columns : [];
   const rows = (envelope.data && Array.isArray(envelope.data.rows)) ? envelope.data.rows : [];
@@ -626,7 +641,8 @@ function renderFactsGrid(fields) {
 }
 
 function renderFactsCard(envelope) {
-  const { card, body } = makeCard('facts', envelope.caption || 'Facts', envelope.layout, envelope.correlation);
+  const [title, subtitle] = cardTitleAndSubtitle(envelope, 'Facts');
+  const { card, body } = makeCard('facts', title, envelope.layout, envelope.correlation, subtitle);
   stampPaperScreen(card, envelope);
   const fields = (envelope.data && Array.isArray(envelope.data.fields)) ? envelope.data.fields : [];
   if (!fields.length) {
@@ -649,7 +665,8 @@ function renderCompoundHeaderBand(fields) {
 }
 
 function renderCompoundCard(envelope) {
-  const { card, body } = makeCard('compound', envelope.caption || 'Compound', envelope.layout, envelope.correlation);
+  const [title, subtitle] = cardTitleAndSubtitle(envelope, 'Compound');
+  const { card, body } = makeCard('compound', title, envelope.layout, envelope.correlation, subtitle);
   stampPaperScreen(card, envelope);
   const data = (envelope.data && typeof envelope.data === 'object') ? envelope.data : {};
   const header = Array.isArray(data.header) ? data.header : [];
@@ -864,12 +881,12 @@ function renderLiveReader(envelope) {
 // 동일한 aitsChartPanels adapter를 거치며 저수준 createChartCard 직접 호출은 없다.
 async function renderLiveChart(envelope) {
   const data = (envelope.data && typeof envelope.data === 'object') ? envelope.data : {};
-  const title = envelope.caption || '차트';
+  const [title, subtitle] = cardTitleAndSubtitle(envelope, '차트');
   let descriptor;
   try {
     descriptor = describeAitsChartPanel(data, envelope, 'live');
   } catch (err) {
-    const { card, body } = makeCard('chart', title, envelope.layout, envelope.correlation);
+    const { card, body } = makeCard('chart', title, envelope.layout, envelope.correlation, subtitle);
     stampPaperScreen(card, envelope);
     card.dataset.renderState = 'error';
     body.appendChild(errorNote(`AITS 차트 계약 오류 — ${err && err.message ? err.message : String(err)}`));
@@ -877,7 +894,7 @@ async function renderLiveChart(envelope) {
   }
   const reloaded = await reloadExistingAitsChartPanel(descriptor, envelope);
   if (reloaded) return reloaded;
-  const { card, body } = makeCard('chart', title, envelope.layout, envelope.correlation);
+  const { card, body } = makeCard('chart', title, envelope.layout, envelope.correlation, subtitle);
   stampPaperScreen(card, envelope);
   if (!descriptor.body.candles.length) {
     card.dataset.renderState = 'empty';
@@ -1022,7 +1039,7 @@ function enforceHeightBudget() {
   }
 }
 
-function makeCard(type, title, layoutHint, correlation) {
+function makeCard(type, title, layoutHint, correlation, subtitle) {
   const isDatasetCard = isValidCorrelation(correlation);
   if (isDatasetCard && activeDatasetId !== correlation.dataset_id) {
     for (const prior of grid.querySelectorAll('.card[data-dataset-id]')) {
@@ -1054,9 +1071,20 @@ function makeCard(type, title, layoutHint, correlation) {
   }
   const head = document.createElement('div');
   head.className = 'card-head';
+  // .card-head는 space-between 2-child 배선이다(title↔head-right) — 서브타이틀은
+  // 세 번째 flex item으로 흩뿌리지 않고 title과 함께 .card-titles에 묶는다.
+  const titles = document.createElement('div');
+  titles.className = 'card-titles';
   const h = document.createElement('div');
   h.className = 'card-title';
   h.textContent = title;
+  titles.appendChild(h);
+  if (subtitle) {
+    const sub = document.createElement('div');
+    sub.className = 'card-subtitle';
+    sub.textContent = subtitle;
+    titles.appendChild(sub);
+  }
   const fresh = document.createElement('div');
   fresh.className = 'card-fresh';
   fresh.textContent = freshLabel();
@@ -1064,7 +1092,7 @@ function makeCard(type, title, layoutHint, correlation) {
   rightGroup.className = 'card-head-right';
   rightGroup.appendChild(fresh);
   rightGroup.appendChild(cardCloseButton(card));
-  head.appendChild(h);
+  head.appendChild(titles);
   head.appendChild(rightGroup);
   const body = document.createElement('div');
   body.className = 'card-body';

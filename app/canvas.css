@@ -233,12 +233,22 @@ html, body { background: transparent; }
   display: flex; align-items: baseline; justify-content: space-between;
   margin-bottom: 10px; flex-shrink: 0;
 }
+/* card-title과 card-subtitle을 한 열로 묶어 card-head의 space-between이
+   title↔head-right 2개 사이에서만 작동하게 한다(card-fresh 주석과 같은 이유). */
+.card-titles { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .card-title {
   font-family: var(--font-strong);
   font-size: var(--text-md);
   letter-spacing: 0.3px;
   /* 각인(engraving, 2026-08-19) — 카드 유리 위가 아니라 안에 새겨진 것처럼. */
   text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+}
+/* TR이 카드 16종 중 하나로 확정되면 card-title은 고정 카드명, 이전까지
+   타이틀이던 caption(종목명·주기 등)은 여기로 내려온다(2026-08-26). */
+.card-subtitle {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-k-faint);
 }
 .card-fresh {
   font-family: var(--font-mono);
