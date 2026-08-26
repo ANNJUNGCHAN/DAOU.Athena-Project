@@ -349,6 +349,26 @@ html, body { background: transparent; }
   line-height: 1.5;
   color: var(--color-k-faint);
 }
+/* 완료 턴 실행 기록(단계 9, board-04 "⑥ 경과 헤더 — 접힌 상태") — 진행 중
+ * 그렸던 .progress-tool-steps를 그대로 옮겨 붙이고 접는다. */
+.turn-exec-record { margin-bottom: 8px; }
+.turn-exec-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 0 0 6px;
+  margin-bottom: 6px;
+  border: none;
+  border-bottom: 1px solid var(--color-k-line-soft);
+  background: transparent;
+  font-family: inherit;
+  font-size: var(--text-sm);
+  color: var(--color-k-faint);
+  cursor: pointer;
+}
+.turn-exec-header-label { flex: 1 1 auto; text-align: left; }
+.turn-exec-header-caret { flex-shrink: 0; }
 .turn-meta {
   display: flex; align-items: center; gap: 10px;
   font-family: var(--font-mono);
@@ -455,6 +475,10 @@ html, body { background: transparent; }
   flex-basis: 100%; /* .progress-line의 flex-wrap에서 항상 새 줄로 시작한다 */
 }
 .progress-tool-steps:empty { display: none; }
+/* 완료 턴 접힘 기록(단계 9) — hidden 속성이 위 display:flex보다 이겨야 한다
+ * (같은 우선순위면 author 스타일이 UA [hidden] 규칙을 덮어써 버려서 그냥
+ * hidden만으로는 안 숨는다). */
+.progress-tool-steps[hidden] { display: none; }
 
 .progress-tool-step {
   display: flex;
