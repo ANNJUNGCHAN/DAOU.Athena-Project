@@ -774,7 +774,7 @@ test('order book binder uses a closed standalone grammar and rejects every resid
   ]) {
     const bound = buildOrderBookDataset(standaloneQuestion, index, { idFactory: () => 'standalone-orderbook' });
     assert.equal(bound.datasetId, 'standalone-orderbook', standaloneQuestion);
-    assert.equal(bound.items[0].operationRef, 'base:ka10004', standaloneQuestion);
+    assert.equal(bound.items[0].operationRef, 'detail:ka10004:aggregate_totals', standaloneQuestion);
     assert.deepEqual(bound.items[0].args, { stk_cd: '005930' }, standaloneQuestion);
   }
 
