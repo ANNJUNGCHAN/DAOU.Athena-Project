@@ -13,6 +13,7 @@ const onboarding = window.AthenaLib.Onboarding;
 const authScreen = window.AthenaLib.AuthScreen;
 const settingsCards = window.AthenaLib.SettingsCards;
 const { waitForVisiblePaint: waitForRestReceiptPaint } = window.AthenaLib.RestCanvasPaint;
+const toolStepTrack = window.AthenaLib.ToolStepTrack;
 
 const $boot = document.getElementById('boot');
 const $bootLine = document.getElementById('bootLine');
@@ -422,6 +423,12 @@ async function runQueryLive(text) {
   const startedAt = Date.now();
   progText.textContent = 'Claude에게 물어보는 중 · 0.0s';
   progress.appendChild(progText);
+  // 실행 라인(2026-08-26 어드버서리얼 리뷰 결함 #3, board-04 "⑧ 실행 라인") —
+  // progress의 자식으로 둔다: Esc 중단(위 972행 근처)이 liveProgressEl 하나만
+  // remove()하므로, 여기 붙여야 중단 시에도 같이 지워진다(고아 DOM 방지).
+  const toolSteps = document.createElement('div');
+  toolSteps.className = 'progress-tool-steps';
+  progress.appendChild(toolSteps);
   $history.appendChild(progress);
   liveProgressEl = progress;
   scrollAfterRender();
@@ -447,6 +454,37 @@ async function runQueryLive(text) {
     scrollAfterRender();
   };
   const unsubscribeLiveCanvasAdded = window.athena.on('athena:live-canvas-added', onLiveCanvasAdded);
+
+  // 실행 라인(2026-08-26 어드버서리얼 리뷰 결함 #3) — main.js가 tool_use/
+  // tool_result에서 뽑아 보내는 단계를 그린다. orb.js가 이미 쓰는 판정
+  // (lib/tool-step-track.js)을 그대로 나눠 쓴다 — 라벨을 두 벌 짓지 않는다.
+  const toolStepStates = new Map();
+  const toolStepEls = new Map();
+  const onLiveToolStep = (step) => {
+    if (myToken !== abortToken) return;
+    const result = toolStepTrack.applyToolStep(toolStepStates, step);
+    if (!result) return;
+    if (!calling) { calling = true; state = 'calling'; setDot('calling'); }
+    let el = toolStepEls.get(result.id);
+    if (!el) {
+      el = document.createElement('div');
+      el.className = 'progress-tool-step';
+      const icon = document.createElement('span');
+      icon.className = 'progress-tool-step-icon';
+      const label = document.createElement('span');
+      label.className = 'progress-tool-step-label';
+      const time = document.createElement('span');
+      time.className = 'progress-tool-step-time';
+      el.append(icon, label, time);
+      toolSteps.appendChild(el);
+      toolStepEls.set(result.id, el);
+    }
+    el.classList.toggle('done', result.done);
+    el.querySelector('.progress-tool-step-label').textContent = result.label;
+    el.querySelector('.progress-tool-step-time').textContent = result.timeText;
+    scrollAfterRender();
+  };
+  const unsubscribeLiveToolStep = window.athena.on('athena:live-tool-step', onLiveToolStep);
 
   // 추론 미리보기(2026-08-26) — 답변 텍스트가 나오기 전 긴 침묵 구간을 채운다.
   // 미리보기 전용이다: 옅은 색·작은 글씨로 뚜렷이 구분하고, 답변 첫 조각이
@@ -515,6 +553,7 @@ async function runQueryLive(text) {
   } finally {
     clearInterval(tick);
     unsubscribeLiveCanvasAdded();
+    unsubscribeLiveToolStep();
     unsubscribeLiveThinkingDelta();
     unsubscribeLiveTextDelta();
     window.athena.send('athena:orb-signal', { signal: 'think', active: false });

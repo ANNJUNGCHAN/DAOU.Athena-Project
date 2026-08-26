@@ -416,6 +416,7 @@ html, body { background: transparent; }
   font-size: var(--text-sm);
   color: var(--color-k-dim);
   display: flex; align-items: center; gap: 8px;
+  flex-wrap: wrap; /* 실행 라인(.progress-tool-steps)이 아래 줄로 내려간다 */
 }
 .progress-trs {
   display: flex; gap: 6px; flex-wrap: wrap;
@@ -423,6 +424,56 @@ html, body { background: transparent; }
 .tr-code { color: var(--color-k-faint); }
 .tr-code.done { color: var(--color-ok); }
 .tr-fail { color: var(--color-warn); }
+
+/* 실행 라인(2026-08-26 어드버서리얼 리뷰 결함 #3, board-04 "⑧ 실행 라인") —
+ * orb.js .orb-tool-step*(orb.css)과 같은 문법: 스피너 없이 아이콘 채움 +
+ * 글자·소요시간만. 비어 있을 땐(:empty) 자리를 차지하지 않는다. */
+.progress-tool-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-basis: 100%; /* .progress-line의 flex-wrap에서 항상 새 줄로 시작한다 */
+}
+.progress-tool-steps:empty { display: none; }
+
+.progress-tool-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--text-xs);
+}
+
+.progress-tool-step-icon {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  border-radius: 3px;
+  border: 1.5px solid rgb(16 19 26 / 30%);
+  box-sizing: border-box;
+}
+.progress-tool-step.done .progress-tool-step-icon {
+  border-color: transparent;
+  background: var(--color-k-text);
+}
+
+.progress-tool-step-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-k-faint);
+}
+.progress-tool-step.done .progress-tool-step-label { color: var(--color-k-text); }
+
+.progress-tool-step-time {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-k-faint);
+  min-width: 32px;
+  text-align: right;
+}
 
 /* ---------- 커맨드 카드 하단(AT-CH-001R) — 입력줄 + 컨트롤 스트립 ---------- */
 .input-stack {

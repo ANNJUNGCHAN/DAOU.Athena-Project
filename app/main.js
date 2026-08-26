@@ -1554,6 +1554,20 @@ ipcMain.handle('athena__render_canvas', async (e, payload = {}) => {
 ipcMain.handle('athena:orb-chat-submit', async (e, payload = {}) => {
   const query = payload && typeof payload.query === 'string' ? payload.query.trim() : '';
   if (!query) return { ok: false, source: 'live', error: '질의가 비어 있다' };
+  // 2026-08-26 어드버서리얼 리뷰 결함 #1 — runLiveQueryInner의 "새 질의가 항상
+  // 선점한다"(활성 프로세스 kill)는 같은 창의 재질의를 가정한 안전장치였는데,
+  // 오브가 부르면 셸이 이미 돌리고 있던 질의를 조용히 죽이고 그 결과를
+  // claude-runner.js가 "사용자 중단"으로 셸 이력에 남긴다(killedBy:'abort' 딱지가
+  // 출처를 안 가린다) — 셸을 숨기고 오브로 넘어가는 전이가 board-33/34에서
+  // 정상 동작이라 이 레이스는 실제로 밟힌다. orb.js가 athena:live-query-state를
+  // 구독해 진행 중이면 입력 자체를 잠그지만(1차 방어, live-query-lock.js), 그
+  // 잠금과 이 제출 사이의 레이스까지 막으려면 여기서도 거부해야 한다(2차 방어
+  // — 죽이지 않는다). liveQueryBusyDepth로 판정한다 — activeLiveQuery만 보면
+  // REST 직결 fast-path(클로드 프로세스 없이 도는 구간이라 activeLiveQuery가
+  // null이다)의 레이스를 놓친다.
+  if (liveQueryBusyDepth > 0) {
+    return { ok: false, source: 'live', error: '셸 질의 진행 중 — 잠시 후 다시 시도하라' };
+  }
   const result = await runLiveQuery(query, false);
   // 셸이 나중에 다시 열려도 같은 방이 이어져 보이도록, 오브에서 오간 턴을 셸의
   // 대화 이력에도 커밋한다("대화창으로 가기 → 메인 방 그대로 이어진다", board-34).

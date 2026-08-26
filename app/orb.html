@@ -64,7 +64,7 @@
         <div class="orb-input-row">
           <input id="orbInput" class="orb-input" type="text" placeholder="무엇이든 물어보세요" autocomplete="off" />
           <div id="orbLockHint" class="orb-lock-hint" hidden>
-            <span>답변 중…</span>
+            <span id="orbLockText">답변 중…</span>
             <button id="orbEsc" class="orb-esc" type="button">ESC 중단</button>
           </div>
         </div>
@@ -103,6 +103,8 @@
   </div>
 
 <script src="lib/routine-turn.js"></script>
+<script src="lib/tool-step-track.js"></script>
+<script src="lib/live-query-lock.js"></script>
 <script src="orb.js"></script>
 </body>
 </html>

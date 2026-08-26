@@ -646,6 +646,20 @@ html, body {
   text-align: right;
 }
 
+/* 추론 미리보기(2026-08-26 어드버서리얼 리뷰 결함 #2) — 답변(.orb-turn-a)과
+ * 뚜렷이 구분되는 옅은·작은 글씨. chat.css .turn-thinking-label/body와 같은
+ * 문법 — 미리보기 전용이라 답변의 각인 효과 없이 평평하게 둔다. */
+.orb-thinking-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-k-faint);
+}
+.orb-thinking-body {
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  color: var(--color-k-faint);
+}
+
 /* ---------- 오브의 새 부품 — 입력줄 · 잠금 힌트 · 컨트롤 스트립 ---------- */
 .orb-input-stack {
   display: flex;
