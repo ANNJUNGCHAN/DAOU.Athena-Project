@@ -43,12 +43,7 @@ function foldColumns(columns, canvasWidthPx = DEFAULT_CANVAS_WIDTH_PX) {
 const __exports = {
   foldColumns,
   columnPixelWidth,
-  labelPixelWidth,
   DEFAULT_CANVAS_WIDTH_PX,
-  HANGUL_SYMBOL_CHAR_WIDTH_PX,
-  ASCII_DIGIT_CHAR_WIDTH_PX,
-  COLUMN_PADDING_PX,
-  DATA_CELL_MIN_WIDTH_PX,
 };
 
 // UMD 각주(2026-08-18 렌더러 격리) — sanitize.js와 같은 패턴.
