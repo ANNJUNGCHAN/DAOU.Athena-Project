@@ -60,6 +60,10 @@ function layoutClusterMap(payload, viewport) {
 
   const groups = groupByCluster(nodes);
   const maxDegree = nodes.reduce((acc, node) => Math.max(acc, node.degree || 0), 0);
+  // 응집도는 backend가 이미 계산해 주는 값을 통과만 시킨다(여기서 계산하지 않는다).
+  // 구버전 backend는 이 필드 자체가 없을 수 있으므로 그때는 undefined로 남겨
+  // 소비하는 쪽(스텝6/10)이 §0 원안(생략/size 대체)으로 폴백하게 한다.
+  const cohesionByCluster = (payload && payload.cluster_cohesion) || null;
   const centreX = width / 2;
   const centreY = height / 2;
   const mapRadius = Math.max(
@@ -106,6 +110,7 @@ function layoutClusterMap(payload, viewport) {
       x: clusterX,
       y: clusterY,
       radius: clusterRadius,
+      cohesion: cohesionByCluster ? cohesionByCluster[group.cluster] : undefined,
     });
   });
 
