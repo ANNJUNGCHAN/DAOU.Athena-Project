@@ -23,6 +23,7 @@ from athena_api.selector.ranking import rank_documents
 from athena_api.selector.schemas import (
     DescribeRequest,
     DiscoveryIntent,
+    ReasonCode,
     ResolveRequest,
     ResponseMode,
     SearchRequest,
@@ -282,6 +283,67 @@ def test_preferred_detail_cannot_cure_missing_target_evidence(
                 preferred_ref=case["preferred_ref"],
                 detail_group=case["detail_group"],
                 arguments=case["arguments"],
+            )
+        )
+
+
+# ---------------------------------------------------------------------------
+# W2c 완화 게이트(2026-08-26, 카드 랜딩 진단) — probe-resolve-raw.js 실측 재현.
+#
+# "삼성전자 지금 추이가 어때"류 파라프레이즈는 typed compatibility에서
+# NO_CONFIDENT_MATCH로 거부돼 render_canvas를 한 번도 못 부르는 실패를 냈다.
+# 여기 구제 대상은 위 두 fail-closed 테스트가 지키는 경계와 다르다 —
+# question 원문 자체에서 실제 종목("삼성전자")이 독립적으로 인식된다는 점이
+# "ka10001 가치평가 지표만 알려줘"(오퍼레이션 id가 토큰으로 낄 뿐 종목 근거는
+# 없음)나 "D+1 D+2 정산 전망"(종목 근거 자체가 없음)과의 결정적 차이다.
+# ---------------------------------------------------------------------------
+
+
+def test_guarded_fallback_rescues_the_diagnosed_paraphrase(service: SelectorService) -> None:
+    paraphrase = "삼성전자 현재가 주가 추이"
+    rescued = service.resolve(
+        ResolveRequest(
+            question=paraphrase,
+            preferred_ref="base:ka10001",
+            detail_group="current_trading",
+            arguments={"stk_cd": "005930"},
+        )
+    )
+    assert rescued.operation_ref == "detail:ka10001:current_trading"
+    assert rescued.selection_reasons == [ReasonCode.PREFERRED_STRUCTURED_ASSERTION]
+    verified = service.signer.verify(rescued.plan_token, service.catalog)
+    assert verified.arguments == {"stk_cd": "005930"}
+
+
+def test_guarded_fallback_refuses_the_same_paraphrase_without_structured_hints(
+    service: SelectorService,
+) -> None:
+    with pytest.raises(NoConfidentMatchError):
+        service.resolve(
+            ResolveRequest(
+                question="삼성전자 현재가 주가 추이",
+                arguments={"stk_cd": "005930"},
+            )
+        )
+
+
+def test_guarded_fallback_never_rescues_order_kind_even_with_complete_hints(
+    service: SelectorService,
+) -> None:
+    """주문 오발동 방지가 완화보다 우선한다 — query kind가 아니면 종목 근거와
+    구조화 단언이 완전해도 절대 구제하지 않는다(설계 확정)."""
+    with pytest.raises(NoConfidentMatchError):
+        service.resolve(
+            ResolveRequest(
+                question="삼성전자 지금 사줘",
+                intent=DiscoveryIntent.ORDER,
+                preferred_ref="base:kt10000",
+                arguments={
+                    "dmst_stex_tp": "KRX",
+                    "stk_cd": "005930",
+                    "ord_qty": "1",
+                    "trde_tp": "0",
+                },
             )
         )
 

@@ -393,6 +393,70 @@ class SelectorService:
             )
         return detail
 
+    def _guarded_preferred_fallback(
+        self,
+        preferred: OperationDocument | None,
+        detail_group: str | None,
+        *,
+        trusted_code: str | None,
+    ) -> OperationDocument | None:
+        """typed compatibility가 question을 REJECTED로 거부해도, 호출자가 이미
+        제시한 구조화 단언(preferred_ref [+ detail_group])이 카탈로그 소유권만으로
+        완전히 검증되고, question 자체에도 독립적으로 인식된 실제 대상(종목 등)
+        근거가 있으면 그 단언을 그대로 쓴다. `None`을 돌려주면 호출부가 기존
+        NoConfidentMatchError를 그대로 낸다 — 이 메서드는 절대 예외를 내지 않는다
+        (구제 실패는 "구제 안 함"이지 "다른 에러"가 아니다).
+
+        `trusted_code`는 `_resolved_identity(question)`의 결과다 — 즉 question
+        원문에서(전달된 arguments가 아니라) 독립적으로 인식된 종목 코드다. 이
+        조건이 없으면 절대 구제하지 않는다: 그래야
+        - 문장에 오퍼레이션 id/TR id가 토큰으로 끼어 있을 뿐 실제 대상 근거가
+          없는 경우(예: "ka10001 가치평가 지표만 알려줘")와
+        - 대상 근거가 아예 없는 일반 문구에 preferred_ref/인자만 얹은 경우
+          (예: "D+1 D+2 정산 전망" + stk_cd)
+        둘 다 이 구제를 못 받는다 — 회귀 테스트
+        `test_embedded_operation_ids_never_gain_exact_control_plane_authority`,
+        `test_preferred_detail_cannot_cure_missing_target_evidence`가 지키는
+        경계 그대로다(이 게이트를 추가하기 전 첫 시도는 이 두 경계를 깼다 —
+        2026-08-26 실측, `arguments.stk_cd`만으로는 절대 충분하지 않다).
+
+        완전성 요구 — 부분 힌트는 구제하지 않는다:
+        - `preferred`가 없으면(호출자가 preferred_ref를 안 줬으면) 즉시 포기한다.
+          candidate_refs는 이 메서드에 아예 안 들어온다 — soft hint는 구조화
+          assertion이 아니므로 완화 대상이 될 수 없다(모듈 docstring 원칙).
+        - `preferred.kind`가 query가 아니면 포기한다 — order/websocket은
+          typed 거부를 그대로 존중한다(주문 오발동 방지 최우선).
+        - `preferred`의 오퍼레이션이 종목코드를 바인딩하지 않으면(시장 전체
+          지표 등) `trusted_code` 자체가 무관한 근거이므로 포기한다.
+        - `preferred`가 detail 프로젝션 자체면(`group_id is not None`) 그대로
+          쓰되, `detail_group`이 같이 왔다면 반드시 일치해야 한다(불일치는 포기).
+        - `preferred`가 detail 없이 바로 호출 가능한 base면(`generic_callable`)
+          `detail_group`이 없어야만 그대로 쓴다 — 있는데 안 맞으면 포기.
+        - `preferred`가 detail 선택이 필요한 base(SPLIT_BASE_TR_IDS)면
+          `detail_group`이 반드시 있어야 하고, 그 조합이 실제로 카탈로그에
+          존재해야 한다 — 어느 하나라도 없으면 포기.
+        """
+        if preferred is None or preferred.kind != "query":
+            return None
+        if trusted_code is None:
+            return None
+        if BindingRole.INSTRUMENT_CODE not in preferred.routing.bindings:
+            return None
+        if preferred.group_id is not None:
+            if detail_group is not None and detail_group != preferred.group_id:
+                return None
+            return preferred
+        if preferred.generic_callable:
+            if detail_group is not None:
+                return None
+            return preferred
+        if detail_group is None:
+            return None
+        try:
+            return self._asserted_detail(preferred.family_ref, detail_group)
+        except UnknownDetailGroupError:
+            return None
+
     def describe(self, request: DescribeRequest) -> OperationDescription:
         document = self.catalog.find_exact(request.operation_ref)
         if document is None or not _intent_allows(document, request.intent):
@@ -584,14 +648,31 @@ class SelectorService:
                 target_resolution=target_resolution,
             )
             if decision.status is CompatibilityDecisionStatus.REJECTED:
-                public_reasons = _public_reason_codes(decision)
-                raise NoConfidentMatchError(
-                    "No operation has complete typed compatibility with the question",
-                    details={
-                        "reason_codes": [reason.value for reason in public_reasons]
-                    },
+                # W2c 완화 게이트(2026-08-26, 카드 랜딩 진단): 자유문장 question이
+                # typed compatibility에서 거부돼도, 호출자가 구조화된 단언
+                # (preferred_ref [+ detail_group])을 이미 제시했고 그 단언이
+                # describe와 독립적으로 검증되며, question 원문에서도 독립적으로
+                # 인식된 실제 대상(종목) 근거가 있으면 구제한다. candidate_refs
+                # 단독으로는 절대 구제하지 않는다 — soft hint일 뿐 assertion이
+                # 아니다(preferred_ref만 assertion). query kind에만 적용 —
+                # order/websocket은 typed 거부를 그대로 둔다(주문 오발동 방지가
+                # 최우선, 완화 대상이 아니다). `trusted_code` 요구는
+                # `_guarded_preferred_fallback` docstring 참고 — 이게 없으면
+                # 임베디드 id/무대상 문구 회귀 테스트를 깬다(첫 시도 실측).
+                fallback_document = self._guarded_preferred_fallback(
+                    preferred, detail_group, trusted_code=trusted_code
                 )
-            if decision.status is CompatibilityDecisionStatus.AMBIGUOUS:
+                if fallback_document is None:
+                    public_reasons = _public_reason_codes(decision)
+                    raise NoConfidentMatchError(
+                        "No operation has complete typed compatibility with the question",
+                        details={
+                            "reason_codes": [reason.value for reason in public_reasons]
+                        },
+                    )
+                document = fallback_document
+                reasons = [ReasonCode.PREFERRED_STRUCTURED_ASSERTION]
+            elif decision.status is CompatibilityDecisionStatus.AMBIGUOUS:
                 public_reasons = _public_reason_codes(decision)
                 raise AmbiguousOperationError(
                     "Several operation profiles are compatible with the question",
@@ -601,60 +682,61 @@ class SelectorService:
                         "reason_codes": [reason.value for reason in public_reasons],
                     },
                 )
-            canonical_family_ref = decision.selected_family_ref
-            assert canonical_family_ref is not None
-            if preferred is not None and preferred.family_ref != canonical_family_ref:
-                raise PreferredOperationError(
-                    "Preferred operation does not match canonical family selection"
-                )
-            if preferred is not None and preferred.group_id is not None:
-                if detail_group is not None and detail_group != preferred.group_id:
-                    raise PreferredOperationError(
-                        "Preferred detail conflicts with detail_group"
-                    )
-                detail_group = preferred.group_id
-
-            if decision.status is CompatibilityDecisionStatus.DETAIL_GROUP_REQUIRED:
-                if detail_group is None:
-                    self._validated_arguments(
-                        self.catalog.by_ref[canonical_family_ref], request.arguments
-                    )
-                    raise self._detail_required(canonical_family_ref)
-                document = self._asserted_detail(canonical_family_ref, detail_group)
-                reasons = [
-                    *_public_reason_codes(decision),
-                    ReasonCode.EXPLICIT_DETAIL_GROUP,
-                ]
             else:
-                assert decision.selected_operation_ref is not None
-                canonical_document = self.catalog.by_ref[
-                    decision.selected_operation_ref
-                ]
-                if detail_group is None:
-                    document = canonical_document
-                    reasons = _public_reason_codes(decision)
-                else:
-                    asserted = self._asserted_detail(canonical_family_ref, detail_group)
-                    if (
-                        canonical_document.group_id is not None
-                        and asserted.operation_ref != canonical_document.operation_ref
-                    ):
-                        if preferred is not None and preferred.group_id is not None:
-                            raise PreferredOperationError(
-                                "Preferred detail does not match typed selection"
-                            )
-                        raise UnknownDetailGroupError(
-                            "Detail group does not match typed selection",
-                            details={
-                                "operation_ref": canonical_document.operation_ref,
-                                "detail_group": detail_group,
-                            },
+                canonical_family_ref = decision.selected_family_ref
+                assert canonical_family_ref is not None
+                if preferred is not None and preferred.family_ref != canonical_family_ref:
+                    raise PreferredOperationError(
+                        "Preferred operation does not match canonical family selection"
+                    )
+                if preferred is not None and preferred.group_id is not None:
+                    if detail_group is not None and detail_group != preferred.group_id:
+                        raise PreferredOperationError(
+                            "Preferred detail conflicts with detail_group"
                         )
-                    document = asserted
+                    detail_group = preferred.group_id
+
+                if decision.status is CompatibilityDecisionStatus.DETAIL_GROUP_REQUIRED:
+                    if detail_group is None:
+                        self._validated_arguments(
+                            self.catalog.by_ref[canonical_family_ref], request.arguments
+                        )
+                        raise self._detail_required(canonical_family_ref)
+                    document = self._asserted_detail(canonical_family_ref, detail_group)
                     reasons = [
                         *_public_reason_codes(decision),
                         ReasonCode.EXPLICIT_DETAIL_GROUP,
                     ]
+                else:
+                    assert decision.selected_operation_ref is not None
+                    canonical_document = self.catalog.by_ref[
+                        decision.selected_operation_ref
+                    ]
+                    if detail_group is None:
+                        document = canonical_document
+                        reasons = _public_reason_codes(decision)
+                    else:
+                        asserted = self._asserted_detail(canonical_family_ref, detail_group)
+                        if (
+                            canonical_document.group_id is not None
+                            and asserted.operation_ref != canonical_document.operation_ref
+                        ):
+                            if preferred is not None and preferred.group_id is not None:
+                                raise PreferredOperationError(
+                                    "Preferred detail does not match typed selection"
+                                )
+                            raise UnknownDetailGroupError(
+                                "Detail group does not match typed selection",
+                                details={
+                                    "operation_ref": canonical_document.operation_ref,
+                                    "detail_group": detail_group,
+                                },
+                            )
+                        document = asserted
+                        reasons = [
+                            *_public_reason_codes(decision),
+                            ReasonCode.EXPLICIT_DETAIL_GROUP,
+                        ]
 
         if not document.generic_callable:
             raise UnsupportedOperationError("Operation cannot be called by the generic selector")
