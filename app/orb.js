@@ -82,7 +82,10 @@
     // 얼굴과 배지는 같은 사실의 두 표현이다 — 한 함수가 같이 정해야 두 곳에서
     // 따로 켜지는 사고가 안 난다(호와 얼굴의 상호 배타를 여기서 지던 것과 같은 이유).
     if (fired) setFace(FACE.FIRED);
-    else if (face === FACE.FIRED) setFace(FACE.IDLE);
+    // SURPRISE도 여기서 같이 풀어준다 — fired의 대체 표현일 뿐 별도 사건이
+    // 아니라서(위 FACE 주석), 읽으면(unread 비면) fired와 똑같이 풀려야 한다.
+    // mopey/crying은 다른 축(만료·복원실패, 별도 사건)이라 여기서 안 건드린다.
+    else if (face === FACE.FIRED || face === FACE.SURPRISE) setFace(FACE.IDLE);
     // 0을 그리지 않는다 — 없는 알림을 있는 것처럼 보이게 하는 가장 흔한 방법이다.
     $count.textContent = fired ? String(n) : '';
     // 스크린 리더에는 색이 안 들리므로 상태를 라벨로도 말한다.
@@ -161,18 +164,21 @@
   //            연결 끊김(disconnected) 동안에도 같은 얼굴을 쓴다 — 이쪽은 타이머로
   //            안 풀리고 connected가 올 때까지 지속된다(아래 feedDown 축).
   //   fired  — 미확인 알림이 있다(data-alert와 짝)
+  //   surprise — 발화 중 급변(관측값이 임계 초과폭 1.5배 이상 —
+  //            routine-turn.js exceedRatio) — 2026-08-27 갭 클로징 Step 5 신규.
+  //            fired를 대체한다(같은 unread 생애주기 — 읽으면 같이 풀린다,
+  //            아래 renderPresence 주석 참조) — 배지·카운트는 그대로
+  //            data-alert="fired"를 쓴다(board-31⑤ "변동성 급등").
   //   mopey  — 루틴 만료(routineTurn kind: expired) — 옛 '미안'의 절반
   //   crying — 감시 복원 실패(routineTurn kind: restore-failed) — 옛 '미안'의 나머지 절반
   // 2026-08-26: '미안' 하나가 만료·복원실패 둘을 뭉뚱그렸는데, routine-turn.js가
   // 이미 kind로 둘을 갈라 준다 — 같은 사실을 오브만 뭉개고 있었다(board-31).
-  // watch/glad/surprise는 아직 CSS에 모양만 있고 배선하지 않는다 — watch·glad는
-  // 판정에 필요한 데이터가 없어 백로그로 유예했고(CP1/CP3, orb.js 상단 주석),
-  // surprise는 급변 신호를 오브가 아직 받지 않는다(갭 클로징 뒷 Step에서 배선
-  // 예정). 없는 신호에 얼굴을 붙이면 그건 정보가 아니라 지어낸
-  // 연기다(soul.md).
+  // watch/glad는 아직 CSS에 모양만 있고 배선하지 않는다 — 판정에 필요한 데이터가
+  // 없어 백로그로 유예했다(CP1/CP3, orb.js 상단 주석). 없는 신호에 얼굴을
+  // 붙이면 그건 정보가 아니라 지어낸 연기다(soul.md).
   const FACE = {
     IDLE: 'idle', SLEEP: 'sleep', LISTEN: 'listen', THINK: 'think', DONE: 'done',
-    WINK: 'wink', FROWN: 'frown', FIRED: 'fired', MOPEY: 'mopey', CRYING: 'crying',
+    WINK: 'wink', FROWN: 'frown', FIRED: 'fired', SURPRISE: 'surprise', MOPEY: 'mopey', CRYING: 'crying',
   };
 
   const BLINK_CLOSE = 90;          // 감는 시간
@@ -377,8 +383,10 @@
     // WINK·FROWN은 DONE과 같은 격이다(셋 다 신호 하나에 반응해 DONE_HOLD만큼
     // 떴다가 스스로 꺼지는 일시 표정) — DONE을 여기 넣은 이유(듣는 중/생각
     // 중 같은 능동 표정이 유지 시간 안에 끼어들어 조기에 지우면 안 된다)가
-    // 셋 모두에 그대로 적용된다.
-    return face === FACE.FIRED || face === FACE.MOPEY || face === FACE.CRYING
+    // 셋 모두에 그대로 적용된다. SURPRISE는 FIRED의 대체 표현이라(같은
+    // unread 기반 알림) FIRED와 같은 줄에 둔다 — 이게 없으면 급변 발화 중에도
+    // listen/think 같은 능동 표정이 surprise를 밀어낸다.
+    return face === FACE.FIRED || face === FACE.SURPRISE || face === FACE.MOPEY || face === FACE.CRYING
       || face === FACE.DONE || face === FACE.WINK || face === FACE.FROWN;
   }
 
@@ -435,7 +443,7 @@
       // 오판해 되돌림을 막는다(triggerDoneFace/triggerWinkFace 주석과 같은
       // 자기참조 함정). 다만 발화·만료·복원실패처럼 정말 더 급한 사실 위는
       // 연결 복구 따위로 덮으면 안 된다.
-      if (face === FACE.FIRED || face === FACE.MOPEY || face === FACE.CRYING) return;
+      if (face === FACE.FIRED || face === FACE.SURPRISE || face === FACE.MOPEY || face === FACE.CRYING) return;
       settleAmbientFace();
     }
   }
@@ -444,7 +452,7 @@
   // board-33)이 공유한다. 발화·만료·복원실패 중에는 덮지 않는다 — 그쪽이 더
   // 중요한 사실이다.
   function triggerDoneFace() {
-    if (face === FACE.FIRED || face === FACE.MOPEY || face === FACE.CRYING) return;
+    if (face === FACE.FIRED || face === FACE.SURPRISE || face === FACE.MOPEY || face === FACE.CRYING) return;
     touchActivity();
     setFace(FACE.DONE);
     clearTimeout(doneTimer);
@@ -465,7 +473,7 @@
   // 두 표정이 겹치는 타이밍에 서로의 setTimeout을 밟지 않게 하려면(각 타이머는
   // 자기 얼굴일 때만 되돌린다) 축을 나눠야 한다.
   function triggerWinkFace() {
-    if (face === FACE.FIRED || face === FACE.MOPEY || face === FACE.CRYING) return;
+    if (face === FACE.FIRED || face === FACE.SURPRISE || face === FACE.MOPEY || face === FACE.CRYING) return;
     touchActivity();
     setFace(FACE.WINK);
     clearTimeout(winkTimer);
@@ -478,7 +486,7 @@
   // 찡그림 — 대화 질의 실패(board-30⑩). submitChatQuery가 result.ok===false를
   // 확정하는 지점에서 부른다. done/wink와 같은 구조·같은 전용 타이머 원칙.
   function triggerFrownFace() {
-    if (face === FACE.FIRED || face === FACE.MOPEY || face === FACE.CRYING) return;
+    if (face === FACE.FIRED || face === FACE.SURPRISE || face === FACE.MOPEY || face === FACE.CRYING) return;
     touchActivity();
     setFace(FACE.FROWN);
     clearTimeout(frownTimer);
@@ -713,6 +721,12 @@
     const kind = routineTurn.buildTurnModel(event, Date.now()).kind;
     if (kind === 'expired') setFace(FACE.MOPEY);
     else if (kind === 'restore-failed') setFace(FACE.CRYING);
+    // 급변(board-31⑤) — renderPresence가 방금 세운 FIRED를 대체한다. "눈
+    // 모양만 바꾼다"와 "fired 대신 surprise를 켠다"가 여기서는 같은 조작이다:
+    // 이 파일의 표정은 눈 모양 하나로만 지어지므로(orb.js 상단 주석), face
+    // 값 자체가 곧 눈 모양이다 — 별도로 "덧씌우는" 채널이 없다. 배지·카운트는
+    // renderPresence가 이미 정한 data-alert="fired"를 그대로 쓴다(단일 책임 유지).
+    else if (kind === 'fired' && routineTurn.exceedRatio(event.observed, event.threshold)) setFace(FACE.SURPRISE);
   });
 
   // 2026-08-26 실사용 회귀("오브를 어떻게 펼쳐? 안펼쳐") — 리스너를 $toggle이
