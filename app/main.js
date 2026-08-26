@@ -308,6 +308,11 @@ async function createWindows() {
 
   shellWin.on('closed', () => app.quit());
 
+  // CLI 로그인은 브라우저/콘솔에서 일어난다 — 사용자가 앱으로 돌아온 순간이
+  // 갱신 시점이다. 로그인이 pollCliChangesAfterLogin의 60초 창보다 오래 걸리면
+  // 목록이 안 갱신되던 실측 결함(2026-08-27)의 근본 처방.
+  shellWin.on('focus', () => broadcastCliChanged());
+
   // ---------- 알림 오브 창 (2026-08-24 리프 1.3.1) ----------
   // 셸 창 다음에 만든다 — 오브의 "더보기"가 셸을 앞으로 가져오므로 셸이 먼저 있어야 한다.
   // 부팅 시 곧바로 보인다: 상시 표시가 사양이고(GLOSSARY §1), 숨어 있으면 알림이
@@ -1830,11 +1835,14 @@ function broadcastCliChanged() {
 
 function pollCliChangesAfterLogin() {
   const before = JSON.stringify(cliAccounts.list());
+  // 목록이 안 변하는 재로그인(기존 계정으로 다시 로그인)은 자격증명 파일
+  // mtime 서명으로 잡는다 — 없으면 온보딩 '로그인 대기 중'이 영영 안 풀린다.
+  const sigBefore = cliAccounts.credentialsSignature();
   let attempts = 0;
   const timer = setInterval(() => {
     attempts += 1;
     const now = JSON.stringify(cliAccounts.list());
-    if (now !== before) {
+    if (now !== before || cliAccounts.credentialsSignature() !== sigBefore) {
       clearInterval(timer);
       broadcastCliChanged();
     } else if (attempts >= 30) {
