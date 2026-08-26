@@ -267,6 +267,10 @@
 
 /* KIND: 차트 */
 
+/* renderLiveChart의 AUGMENT 삽입 조각(canvas.js) — 차트 마운트 지점(.chart-card-body)
+   위에 얹는 가격 헤더. 아래쪽에 여백만 보태 캔들 영역과 붙지 않게 한다. */
+.card-kind-차트-quote { margin-bottom: 8px; }
+
 /* KIND: 호가 */
 
 /* 잔량 래더 — 이 카드 계열의 detail: 응답은 가격+잔량을 같은 봉투에 담지 않는다(실측,
