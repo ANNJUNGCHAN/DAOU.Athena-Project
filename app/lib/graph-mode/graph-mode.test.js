@@ -216,3 +216,57 @@ test('빈 배치에서도 보이는 것 계산이 터지지 않는다', () => {
   assert.deepEqual(store.visibleNodes(state, null), []);
   assert.deepEqual(store.visibleEdges(state, {}), []);
 });
+
+// ── 3상태(agent 추가) ───────────────────────────────────────────────────────
+// setView(state,'agent')가 toggleView를 재사용하면 무조건 VIEW_GRAPH로 튀는
+// 결함이 있었다(Rev.2에서 발견) — 이 구간은 그 회귀를 잡는다.
+
+test('setView(state, "agent")는 실제로 agent로 전이한다', () => {
+  const state = store.setView(store.createInitialState(), 'agent');
+  assert.equal(state.view, 'agent');
+});
+
+test('setView는 summary⇄agent⇄graph 어느 방향으로도 직접 전이한다', () => {
+  let state = store.createInitialState();
+  state = store.setView(state, 'agent');
+  assert.equal(state.view, 'agent');
+  state = store.setView(state, 'graph');
+  assert.equal(state.view, store.VIEW_GRAPH);
+  state = store.setView(state, 'summary');
+  assert.equal(state.view, store.VIEW_SUMMARY);
+});
+
+test('setView는 그래프를 떠날 때(목적지가 agent여도) 펼침·선택을 버린다', () => {
+  let state = store.applyRevision(store.setView(store.createInitialState(), 'graph'), 7);
+  state = store.expandCluster(state, 1);
+  state = store.selectEntity(state, 'e:a', {});
+  state = store.setView(state, 'agent');
+  assert.equal(state.view, 'agent');
+  assert.equal(state.stage, store.STAGE_CLUSTERS);
+  assert.equal(state.expandedCluster, null);
+  assert.equal(state.selectedEntityId, null);
+  assert.equal(state.panel, null);
+});
+
+test('setView는 모르는 view 값을 무시하고 같은 상태를 돌려준다', () => {
+  const state = store.createInitialState();
+  assert.equal(store.setView(state, 'bogus'), state);
+});
+
+test('setView는 같은 view로 부르면 같은 객체를 돌려준다(헛된 다시 그리기 없음)', () => {
+  const state = store.setView(store.createInitialState(), 'agent');
+  assert.equal(store.setView(state, 'agent'), state);
+});
+
+test('toggleView는 agent 상태에서 no-op이다(agent에서 요약·그래프로 토글할 근거가 없다)', () => {
+  const state = store.setView(store.createInitialState(), 'agent');
+  assert.equal(store.toggleView(state), state, '같은 객체를 그대로 돌려줘야 한다');
+});
+
+test('toggleView는 agent가 추가된 뒤에도 여전히 summary⇄graph 2값만 순환한다', () => {
+  let state = store.createInitialState();
+  state = store.toggleView(state);
+  assert.equal(state.view, store.VIEW_GRAPH);
+  state = store.toggleView(state);
+  assert.equal(state.view, store.VIEW_SUMMARY);
+});

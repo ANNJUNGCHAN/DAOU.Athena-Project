@@ -67,8 +67,8 @@ process.on('unhandledRejection', (err) => dlog('unhandledRejection: ' + (err && 
 
 function wait(ms) { return new Promise((r) => setTimeout(r, ms)); }
 
-// 2026-08-26: 점은 더 이상 설정을 열지 않는다(답변⇄그래프 모드 전환기로 바뀜,
-// Paper 보드 05) — 설정 진입은 사이드바 계정 메뉴 아니면 커맨드바다. 이 검증
+// 리프 1.2.2: 점은 대화 상태 표시 전용이라 설정을 열지 않는다(모드 전환은
+// 사이드바 모드 네비로, 설정 진입은 사이드바 계정 메뉴 아니면 커맨드바다). 이 검증
 // 프로필은 계좌가 비어 있어(위 §"검증 전용 프로필" 주석) 계정 행이 늘 숨어 있다
 // — 그래서 여기서는 계정 메뉴가 아니라 언제나 있는 커맨드바("설정" 입력)를
 // 신뢰성 있는 자극으로 쓴다. 검증8이 같은 경로를 별도로 더 자세히 잰다 — 이건
@@ -946,8 +946,8 @@ app.whenReady().then(async () => {
   // 좌표로 되돌리지 않는가"를 쟀다. 높이 경로가 사라졌으므로(리프 1.2.1) 같은
   // 회귀를 다른 자극으로 잰다: 이동 후 **모드 전환**(설정 열고 닫기)이다. 모드
   // 전환도 옛 판에서는 창 크기를 건드리던 경로라 스냅백 위험이 같은 자리에 있다.
-  // 2026-08-26: 점이 더 이상 설정을 열지 않으므로(그래프 모드 전환기로 바뀜)
-  // 커맨드바로 같은 "설정 열고 닫기" 자극을 만든다 — 이 검증이 재는 것은
+  // 리프 1.2.2: 점이 대화 상태 표시 전용이라 설정을 열지 않으므로 커맨드바로
+  // 같은 "설정 열고 닫기" 자극을 만든다 — 이 검증이 재는 것은
   // 앵커 유지이지 설정 진입 경로 자체가 아니다.
   const beforeMove = shellWin.getBounds();
   shellWin.setBounds({ x: beforeMove.x + 120, y: beforeMove.y - 40, width: beforeMove.width, height: beforeMove.height });
@@ -2233,15 +2233,16 @@ app.whenReady().then(async () => {
   //
   // '비어 있지 않은가'의 판정은 `describeRendered()` 하나만 쓴다. 여기서 따로
   // 세면 렌더러와 검증기가 서로 다른 답을 낼 수 있다.
-  // 2026-08-26: 모드 칩(#graphPill)은 이제 상시 보인다(Paper 보드 05) — 숨어서
-  // 못 닿는 경우가 사라졌으므로 더는 "hidden-though-ready/unavailable"로 갈라
-  // 잴 것이 없다. 대신 브레인 준비 여부로 **기대하는 결과**가 갈린다: 준비됐으면
-  // 실제 그래프가, 안 됐으면 캔버스 안의 정직한 안내(controller.js
-  // renderUnavailable)가 뜬다 — 둘 다 "정상"이고, 칩이 숨거나 클릭해도 캔버스가
-  // 안 열리는 것만 실패다.
+  // 리프 1.2.2: #graphPill은 사이드바 모드 네비(#modeNavGraph)로 대체됐다 —
+  // 상시 보이는 성질은 그대로 이어받는다(Paper 보드 05/44). 숨어서 못 닿는
+  // 경우가 없으므로 더는 "hidden-though-ready/unavailable"로 갈라 잴 것이 없다.
+  // 대신 브레인 준비 여부로 **기대하는 결과**가 갈린다: 준비됐으면 실제
+  // 그래프가, 안 됐으면 캔버스 안의 정직한 안내(controller.js
+  // renderUnavailable)가 뜬다 — 둘 다 "정상"이고, 네비 항목이 숨거나 클릭해도
+  // 캔버스가 안 열리는 것만 실패다.
   try {
     const graph = await shellWin.webContents.executeJavaScript(`(async () => {
-      const pill = document.getElementById('graphPill');
+      const pill = document.getElementById('modeNavGraph');
       const container = document.getElementById('graphCanvas');
       if (!pill || !container || !window.AthenaGraphMode) {
         return { wired: false, reason: 'missing' };
@@ -2288,16 +2289,16 @@ app.whenReady().then(async () => {
     report.graphMode = graph;
     if (!graph.wired) {
       if (graph.reason === 'hidden-though-always-visible') {
-        // 상시 보여야 하는 칩이 숨어 있다 — 사람이 닿을 수 없는 기능이다.
-        failures.push('graph-mode: 모드 칩이 상시 보여야 하는데 숨어 있다');
+        // 상시 보여야 하는 네비 항목이 숨어 있다 — 사람이 닿을 수 없는 기능이다.
+        failures.push('graph-mode: 모드 네비 항목이 상시 보여야 하는데 숨어 있다');
       } else {
-        // 칩·캔버스·전역 중 하나가 아예 없다 — 배선이 끊긴 것이므로 실패다.
-        failures.push('graph-mode: 배선이 끊겼다 (칩/캔버스/전역 누락)');
+        // 네비 항목·캔버스·전역 중 하나가 아예 없다 — 배선이 끊긴 것이므로 실패다.
+        failures.push('graph-mode: 배선이 끊겼다 (모드 네비/캔버스/전역 누락)');
       }
     } else if (graph.brainReady) {
-      // 칩 클릭 하나로 열려야 한다 — API 직접 호출로만 열리면 사람은 못 쓴다.
-      assertOk('graph-mode: 칩을 누르면 그래프가 열린다', graph.clickOpened === true);
-      assertOk('graph-mode: 칩 클릭만으로 캔버스가 채워진다', graph.byClick.rendered === true);
+      // 네비 항목 클릭 하나로 열려야 한다 — API 직접 호출로만 열리면 사람은 못 쓴다.
+      assertOk('graph-mode: 네비 항목을 누르면 그래프가 열린다', graph.clickOpened === true);
+      assertOk('graph-mode: 네비 클릭만으로 캔버스가 채워진다', graph.byClick.rendered === true);
       assertOk('graph-mode: 토글하면 요약이 숨는다', graph.summaryHidden === true);
       // 노드가 0개면 '빈 캔버스'와 '고장'을 구분할 수 없다. 브레인이 준비됐으면
       // 여기 왔을 때 그려진 것이 있어야 한다.
@@ -2312,9 +2313,9 @@ app.whenReady().then(async () => {
       );
       report.graphMode.shot = await shot(shellWin, '90-graph-mode.png');
     } else {
-      // 브레인이 안 됐다 — 그래도 칩을 누르면 캔버스는 열려야 한다(막히지 않는다),
-      // 다만 그 안은 실제 그래프가 아니라 정직한 안내여야 한다.
-      assertOk('graph-mode: 브레인이 안 돼도 칩을 누르면 캔버스가 열린다', graph.clickOpened === true);
+      // 브레인이 안 됐다 — 그래도 네비 항목을 누르면 캔버스는 열려야 한다(막히지
+      // 않는다), 다만 그 안은 실제 그래프가 아니라 정직한 안내여야 한다.
+      assertOk('graph-mode: 브레인이 안 돼도 네비 항목을 누르면 캔버스가 열린다', graph.clickOpened === true);
       assertOk('graph-mode: 토글하면 요약이 숨는다', graph.summaryHidden === true);
       assertOk(
         'graph-mode: 브레인 미준비 시 캔버스 안에 정직한 안내가 뜬다(빈 화면이 아니다)',
@@ -2326,6 +2327,67 @@ app.whenReady().then(async () => {
     report.graphMode = { error: String((err && err.message) || err) };
     failures.push('graph-mode: 검증 블록이 예외로 끝났다');
   }
+
+  // ---------- 사이드바 모드 네비 3상태 (리프 1.2.2, BLOCKER 반영) ----------
+  //
+  // #graphPill이 완전히 사라졌는지, 새 모드 네비 3항목이 캔버스 3영역
+  // (#mosaic/#graphCanvas/#agentCanvas)의 3중 배타를 실제로 쥐고 있는지,
+  // #dot 클릭이 더는 모드를 바꾸지 않는지(상태표시 전용으로 좁혀졌는지)를
+  // 잰다 — 1단계 완료 조건(AC3/AC4)이다.
+  try {
+    const modeNav = await shellWin.webContents.executeJavaScript(`(() => {
+      const pillGone = document.getElementById('graphPill') === null;
+      const items = {
+        summary: document.getElementById('modeNavSummary'),
+        graph: document.getElementById('modeNavGraph'),
+        agent: document.getElementById('modeNavAgent'),
+      };
+      const itemsPresent = Object.values(items).every(Boolean);
+      function visibleRegions() {
+        const regions = { summary: 'mosaic', graph: 'graphCanvas', agent: 'agentCanvas' };
+        return Object.entries(regions)
+          .filter(([, id]) => { const el = document.getElementById(id); return el && !el.hidden; })
+          .map(([key]) => key);
+      }
+      const dot = document.getElementById('dot');
+      const stateBefore = window.AthenaGraphMode ? window.AthenaGraphMode.state.view : null;
+      if (dot) dot.click();
+      const stateAfterDotClick = window.AthenaGraphMode ? window.AthenaGraphMode.state.view : null;
+      if (!itemsPresent) return { pillGone, itemsPresent, stateBefore, stateAfterDotClick };
+      items.agent.click();
+      const afterAgentClick = visibleRegions();
+      items.graph.click();
+      const afterGraphClick = visibleRegions();
+      items.summary.click();
+      const afterSummaryClick = visibleRegions();
+      return {
+        pillGone, itemsPresent, stateBefore, stateAfterDotClick,
+        afterAgentClick, afterGraphClick, afterSummaryClick,
+      };
+    })()`);
+    report.modeNav = modeNav;
+    assertOk('mode-nav: #graphPill이 DOM에서 제거됐다', modeNav.pillGone === true);
+    assertOk('mode-nav: 모드 네비 3항목(대화/그래프/에이전트)이 존재한다', modeNav.itemsPresent === true);
+    assertOk('mode-nav: #dot 클릭은 더 이상 모드를 바꾸지 않는다(상태표시 전용)', modeNav.stateAfterDotClick === modeNav.stateBefore);
+    if (modeNav.itemsPresent) {
+      assertOk(
+        'mode-nav: 에이전트 클릭 시 agentCanvas만 보인다(정확히 하나)',
+        JSON.stringify(modeNav.afterAgentClick) === JSON.stringify(['agent']),
+      );
+      assertOk(
+        'mode-nav: 그래프 클릭 시 graphCanvas만 보인다(정확히 하나)',
+        JSON.stringify(modeNav.afterGraphClick) === JSON.stringify(['graph']),
+      );
+      assertOk(
+        'mode-nav: 대화 클릭 시 mosaic만 보인다(정확히 하나)',
+        JSON.stringify(modeNav.afterSummaryClick) === JSON.stringify(['summary']),
+      );
+    }
+  } catch (err) {
+    report.modeNav = { error: String((err && err.message) || err) };
+    failures.push('mode-nav: 검증 블록이 예외로 끝났다');
+  }
+
   fs.writeFileSync(path.join(CAPTURES, 'VERIFY-REPORT.json'), JSON.stringify(report, null, 2));
   console.log('[verify] 리포트 저장:', path.join(CAPTURES, 'VERIFY-REPORT.json'));
 

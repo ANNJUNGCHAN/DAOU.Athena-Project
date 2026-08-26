@@ -62,6 +62,36 @@
         </button>
         <input id="sidebarSearchInput" class="sidebar-search-input" type="text" placeholder="대화 검색" hidden />
       </div>
+      <!-- 모드 네비(리프 1.2.2, Paper 보드 37/44) — #graphPill을 대체한다.
+           대화/그래프/에이전트 3항목, 캔버스 3영역(#mosaic/#graphCanvas/
+           #agentCanvas)의 유일한 사람 진입로다(lib/sidebar-mode-nav.js가
+           클릭만 배선하고, 실제 전환은 graph-mode/controller.js의 setView()
+           하나가 소유한다 — P4). 기본 active는 "대화"(VIEW_SUMMARY 초기값과
+           일치) — 부팅 시 별도 JS 호출 없이 정적 마크업으로 맞춘다. -->
+      <div class="sidebar-mode-nav" id="sidebarModeNav">
+        <div class="sidebar-mode-caption">모드</div>
+        <button class="sidebar-mode-item is-active" id="modeNavSummary" type="button" data-view="summary" aria-pressed="true">
+          <svg class="sidebar-mode-item-ic" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 3.5C2 2.7 2.7 2 3.5 2h7c.8 0 1.5.7 1.5 1.5v5c0 .8-.7 1.5-1.5 1.5H6L3.5 12v-2H3.5C2.7 10 2 9.3 2 8.5v-5z" fill="none" stroke="currentColor" stroke-width="1.2" /></svg>
+          <span class="sidebar-mode-item-label">대화</span>
+        </button>
+        <button class="sidebar-mode-item" id="modeNavGraph" type="button" data-view="graph" aria-pressed="false">
+          <svg class="sidebar-mode-item-ic" viewBox="0 0 14 14" aria-hidden="true">
+            <circle cx="3.5" cy="10.5" r="1.8" fill="none" stroke="currentColor" stroke-width="1.2" />
+            <circle cx="7" cy="3.5" r="1.8" fill="none" stroke="currentColor" stroke-width="1.2" />
+            <circle cx="10.5" cy="10.5" r="1.8" fill="none" stroke="currentColor" stroke-width="1.2" />
+            <path d="M4.4 9.1 6.2 5m1.6 0 1.8 4.1M5.3 10.5h3.4" fill="none" stroke="currentColor" stroke-width="1.2" />
+          </svg>
+          <span class="sidebar-mode-item-label">그래프</span>
+        </button>
+        <button class="sidebar-mode-item" id="modeNavAgent" type="button" data-view="agent" aria-pressed="false">
+          <svg class="sidebar-mode-item-ic" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 1.5 8.3 5.7 12.5 7 8.3 8.3 7 12.5 5.7 8.3 1.5 7 5.7 5.7z" fill="none" stroke="currentColor" stroke-width="1.2" /></svg>
+          <span class="sidebar-mode-item-label">에이전트</span>
+          <!-- 배지 — 미확인 알람 수(2단계). 스코프 밖: 이번 단계는 마크업만
+               놓고 hidden으로 둔다, 카운트 배선은 sidebar-mode-nav.js 2단계
+               확장이 맡는다. -->
+          <span class="sidebar-mode-badge" id="modeNavAgentBadge" hidden></span>
+        </button>
+      </div>
       <div class="sidebar-divider"></div>
       <div id="sidebarList" class="sidebar-list"></div>
       <div id="sidebarAccountMenu" class="sidebar-account-menu" hidden></div>
@@ -87,9 +117,13 @@
              pseudo-content로는 못 그린다 — 실DOM이다. -->
         <div id="gridEmpty" class="canvas-empty-wrap" hidden></div>
       </div>
-      <!-- 그래프 모드 — 요약(위 모자이크)과 **형제**다. 둘 중 하나만 보인다.
-           canvasRegion 전체를 토글하는 것이 결정(deep-interview Round 5). -->
+      <!-- 그래프 모드 — 요약(위 모자이크)과 **형제**다. 셋(요약/그래프/에이전트)
+           중 하나만 보인다. canvasRegion 전체를 토글하는 것이 결정
+           (deep-interview Round 5). -->
       <div id="graphCanvas" class="mosaic glass" hidden></div>
+      <!-- 에이전트 모드(리프 1.2.2, Paper 보드 39) — 위 두 표면과 형제, 3중
+           배타의 세 번째 자리. 내용은 4/5단계에서 채운다(lib/agent-canvas.js). -->
+      <div id="agentCanvas" class="mosaic glass" hidden></div>
       <div class="glass-sheen" id="sheen" aria-hidden="true"></div>
     </main>
 
@@ -123,30 +157,24 @@
             </div>
           </div>
           <div class="control-strip" id="controlStrip">
-            <!-- 점은 두 역할을 겸한다: 대화 상태 표시 · 답변⇄그래프 모드 전환
-                 (Paper 보드 05, 2026-08-26). 설정 진입은 사이드바 계정 메뉴(보드
-                 16, lib/sidebar.js registerOpenSettings)로 옮겼다 — 커맨드바
-                 ("설정", "계좌 관리")가 동등한 진입로이고, 점으로만 갈 수 있으면
-                 soul.md §8 탈락 조건이다. 세 번째였던 "캔버스 확장 애니메이션의
-                 중심점"은 리프 1.2.1에서 사라졌다 — 확장할 창이 없다. -->
+            <!-- 점은 이제 대화 상태 표시 전용이다(judging/calling — setDot()).
+                 모드 전환은 리프 1.2.2에서 사이드바 모드 네비(#sidebarModeNav)로
+                 옮겨갔다 — #graphPill도 함께 제거됐다(Paper 보드 44 "채팅은
+                 절대 접히지 않는다 · 모드는 캔버스만 바꾼다"). 설정 진입은
+                 사이드바 계정 메뉴(보드 16, lib/sidebar.js registerOpenSettings)
+                 — 커맨드바("설정", "계좌 관리")가 동등한 진입로다. -->
             <button
               class="dot"
               id="dot"
               type="button"
-              aria-label="답변·그래프 모드 전환"
-              title="모드 전환"
+              aria-label="대화 상태 표시"
+              title="대화 상태"
             ></button>
             <!-- CLI 필 — runQuery의 실제 실행기(claude -p)를 표시한다. 클릭=설정 모드
                  (전환·계정은 거기서). 표시가 실행기와 어긋나면 정보 정직성 위반이다. -->
             <button id="cliPill" class="pill" type="button" title="활성 CLI — 설정에서 전환">CLAUDE</button>
             <!-- 루틴 칩 — 활성 감시 수. 백엔드 미기동이면 숨긴다(없는 감시를 있다고 표시하지 않는다). -->
             <span id="routineChip" class="routine-chip" hidden></span>
-            <!-- 모드 칩 — 지금 캔버스 모드(답변/그래프)를 상시 보여준다(Paper 보드
-                 05 "모드 칩 상시"). 점과 같은 동작을 하는 두 번째 진입로이기도
-                 하다 — 브레인이 꺼져 있어도 숨기지 않는다(그래프 모드 자체는 늘
-                 열 수 있고, 못 쓰는 이유는 캔버스 안에서 설명한다 — graphMode.
-                 setAvailable 참고). -->
-            <button id="graphPill" class="pill" type="button" title="답변 ⇄ 그래프">답변</button>
             <span class="strip-spacer"></span>
             <!-- 모델 필 — athena:model-get 실상태 표시, 클릭=인라인 팝오버(새 창 아님). -->
             <button id="modelPill" class="pill" type="button" title="모델 · 추론 노력">기본 모델</button>
@@ -250,6 +278,7 @@
 <script src="lib/graph-mode/controller.js"></script>
 <script src="lib/settings-cards.js"></script>
 <script src="lib/history-badge.js"></script>
+<script src="lib/sidebar-mode-nav.js"></script>
 <script src="lib/sidebar.js"></script>
 <script src="shell.js"></script>
 <script src="canvas.js"></script>

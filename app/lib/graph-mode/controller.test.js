@@ -41,6 +41,7 @@ function setup(options) {
     summary: fakeNode('div'),
     graph: fakeNode('div'),
     summaryTable: fakeNode('div'),
+    agent: fakeNode('div'),
   };
   if (opts.withPanel) elements.panel = fakeNode('div');
   let calls = 0;
@@ -282,4 +283,49 @@ test('selectEntity()는 그래프를 열지 않고도(요약 화면에서도) �
   assert.equal(controller.state.selectedEntityId, 'trait:short-turn');
   assert.equal(elements.panel.hidden, false);
   assert.match(elements.panel.textContent, /단기 회전/);
+});
+
+// ── 3상태 캔버스 스위칭(리프 1.2.2, 사이드바 모드 네비) ───────────────────────
+// #graphPill을 대체하는 setView()와 elements.agent 3중 배타를 검증한다.
+
+test('setView("agent")로 전환하면 agent 표면만 보이고 나머지 둘은 숨는다(3중 배타)', async () => {
+  const { controller, elements } = setup();
+  await controller.setView('agent');
+  assert.equal(controller.state.view, 'agent');
+  assert.equal(elements.agent.hidden, false);
+  assert.equal(elements.summary.hidden, true);
+  assert.equal(elements.graph.hidden, true);
+  assert.equal(elements.summaryTable.hidden, true, '성향 신호 표도 그래프 표면이라 agent에서는 숨는다');
+});
+
+test('setView("graph")는 toggle()과 동등하게 실제로 그린다', async () => {
+  const { controller, elements } = setup();
+  await controller.setView('graph');
+  assert.equal(elements.graph.hidden, false);
+  assert.equal(render.describeRendered(elements.graph).nodes, 2);
+});
+
+test('setView("summary")로 돌아오면 세 표면 중 요약만 보인다', async () => {
+  const { controller, elements } = setup();
+  await controller.setView('agent');
+  await controller.setView('summary');
+  assert.equal(elements.summary.hidden, false);
+  assert.equal(elements.graph.hidden, true);
+  assert.equal(elements.agent.hidden, true);
+});
+
+test('agent로 전환할 때는 백엔드를 부르지 않는다(그래프 뷰가 아니므로 draw()가 no-op)', async () => {
+  const { controller, fetchCalls } = setup();
+  await controller.setView('agent');
+  assert.equal(fetchCalls(), 0);
+});
+
+test('elements.agent가 없어도 setView("agent")가 터지지 않는다(옵셔널 가드)', async () => {
+  const elements = { summary: fakeNode('div'), graph: fakeNode('div') };
+  const controller = createGraphModeController({
+    store, layout, render, prefs: null, elements,
+    fetchClusterMap: async () => payload(7),
+  });
+  await assert.doesNotReject(() => controller.setView('agent'));
+  assert.equal(elements.summary.hidden, true);
 });

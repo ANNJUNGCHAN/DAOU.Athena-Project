@@ -867,11 +867,10 @@ async function runHistoryCommand(text) {
   $input.focus();
 }
 
-// 점은 답변⇄그래프 모드 전환기다(Paper 보드 05, 2026-08-26). 설정 진입은
-// 사이드바 계정 메뉴(보드 16)로 옮겼다 — 커맨드바("설정")도 동등한 진입로다.
-// 실제 모드 엔진은 canvas.js의 graphMode(lib/graph-mode/controller.js) — 여기는
-// 그 위에 점 하나를 얹을 뿐, 두 번째 모드 엔진을 만들지 않는다.
-$dot.addEventListener('click', () => { window.AthenaGraphMode.toggle(); });
+// 점은 리프 1.2.2부터 대화 상태 표시 전용이다(setDot() 호출부만 남는다) — 모드
+// 전환 클릭은 사이드바 모드 네비(lib/sidebar-mode-nav.js)로 옮겨갔다(Paper 보드
+// 44 "원칙 1 — 채팅은 절대 접히지 않는다, 모드는 캔버스만 바꾼다"). 실제 모드
+// 엔진은 그대로 canvas.js의 graphMode(lib/graph-mode/controller.js) 하나다.
 // 사이드바 계정 메뉴(Paper 보드 16)의 "설정" 항목이 쓰는 다리 — lib/sidebar.js
 // 참고.
 window.AthenaShell.registerOpenSettings(openSettings);
