@@ -77,4 +77,4 @@ function set(patch) {
   return next;
 }
 
-module.exports = { get, set, PREF_DEFAULTS, FONT_SIZES, GLASS_LEVELS };
+module.exports = { get, set };

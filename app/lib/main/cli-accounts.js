@@ -204,4 +204,4 @@ function setActive(accountId) {
   return { ok: true };
 }
 
-module.exports = { PROVIDER_ORDER, list, login, setActive, probeBinaryExists };
+module.exports = { list, login, setActive, probeBinaryExists };
