@@ -48,8 +48,26 @@ html, body {
    * 물려받는 값이 없어 기본은 이미 no-drag지만, 다음 사람이 되살리지 않도록
    * 의도를 여기 남긴다. */
   cursor: grab;
+  /* 들림(board-30③)의 커짐·그림자 둘 다 이 전이를 탄다 — 따로 걸면 크기와
+   * 그림자가 서로 다른 박자로 도착해 "들린다"는 한 동작으로 안 읽힌다. */
+  transition: transform 180ms var(--ease), box-shadow 180ms var(--ease);
 }
 #orb:active { cursor: grabbing; }
+
+/* 들림 — 드래그 확정(문턱 4px 통과) 중 커지고 그림자가 멀어진다(board-30③
+ * 실측 2XW-0: 52.2×51.3 / 기본 47.2×46.4 ≈ 1.106배, 캡션 "들린 만큼 그림자가
+ * 멀어진다"). orb.js가 pointermove에서 dragMoved가 true가 되는 순간
+ * $root.dataset.dragging='true'를 얹고 endDrag에서 뗀다. 렌징 인셋 3겹은
+ * 유리 표면 자체의 하이라이트라 그대로 두고, 바닥 낙하 그림자(마지막 레이어)만
+ * 오프셋·번짐을 키운다 — 뜬 만큼 바닥에서 멀어진 그 그림자다. */
+#orbRoot[data-dragging="true"] #orb {
+  transform: scale(1.106);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 253, 248, 0.60),
+    inset 0 -1px 0 rgb(16 19 26 / 8%),
+    inset 0 0 24px rgba(255, 240, 214, 0.08),
+    0 20px 34px rgb(16 19 26 / 24%);
+}
 
 #orbRoot {
   --color-kiwoome-visor: #0e20b2;      /* 실측 p50 — 바이저 본색 */
@@ -810,6 +828,8 @@ html, body {
   /* 스케일·블러 변조를 끈다. **상태는 그대로 보여야 한다** — 애니메이션을 끄는 것이지
    * 정보를 끄는 게 아니다. 그래서 전이만 없애고 최종 상태는 유지한다. */
   #orbVisor, .orb-eye, .orb-gaze, .orb-lid { transition: none; }
+  /* 들림(board-30③)도 같은 원칙 — 커짐·그림자 상태는 유지하고 전이만 없앤다. */
+  #orb { transition: none; }
   /* 숨은 통째로 멈춘다. access.css의 전역 규칙은 반복을 1회로 깎을 뿐이라
    * 숨의 절반 지점(부푼 상태)에서 굳을 수 있다 — 여기서 아예 끈다. */
   #orbVisor { animation: none; }

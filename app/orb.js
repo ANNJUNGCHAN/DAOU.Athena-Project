@@ -437,6 +437,9 @@
     // pointerup까지 pointermove가 거의 안 온다(사람 손 떨림 수준만 온다).
     if (!dragMoved && Math.hypot(e.movementX, e.movementY) < DRAG_THRESHOLD) return;
     dragMoved = true;
+    // 들림(board-30③) — 문턱을 넘어 드래그로 확정되는 순간 커진다. endDrag가
+    // 뗀다. "들린 만큼 그림자가 멀어진다"는 orb.css [data-dragging] #orb가 진다.
+    $root.dataset.dragging = 'true';
     touchActivity();
     window.athena.send('athena:orb-drag-move', { dx: e.movementX, dy: e.movementY });
     if (!reduceMotion.matches) pushDragGaze(e.movementX, e.movementY);
@@ -446,6 +449,7 @@
     if (dragPointerId === null || (e && e.pointerId !== dragPointerId)) return;
     if ($orb.hasPointerCapture(dragPointerId)) $orb.releasePointerCapture(dragPointerId);
     dragPointerId = null;
+    delete $root.dataset.dragging;
     if (dragMoved) {
       justDragged = true;
       clearTimeout(dragGazeTimer);
