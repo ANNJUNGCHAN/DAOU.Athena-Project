@@ -447,6 +447,7 @@ html, body { background: transparent; }
   font-family: var(--font-body);
   font-size: var(--text-base);
   color: var(--color-k-text);
+  white-space: pre-line; /* 확정 문구의 \n이 실제 줄바꿈으로 보이게(2026-08-27 문구 2줄화) */
   pointer-events: none; /* 클릭을 가로채지 않는다 — 해제는 전역 리스너가 한다 */
 }
 

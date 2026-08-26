@@ -244,7 +244,7 @@ function maybeShowCoachmark() {
   if (document.querySelector('.coachmark')) return;
   const mark = document.createElement('div');
   mark.className = 'coachmark';
-  mark.textContent = '이 점이 설정입니다 — 누르거나, "설정"이라고 입력해도 열립니다';
+  mark.textContent = '점은 답변⇄그래프 모드 전환입니다.\n설정은 사이드바 계정 메뉴나 "설정" 입력으로 엽니다.';
   document.body.appendChild(mark);
   const dismiss = () => {
     try { localStorage.setItem('athena-coachmark-settings-v1', '1'); } catch { /* 플래그 실패 시 다음 부팅에 한 번 더 뜬다 — 치명적이지 않다 */ }
