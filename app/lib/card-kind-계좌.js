@@ -73,7 +73,13 @@ function selectAccountFacts(fields) {
     const value = field.value;
     if (value === null || value === undefined || value === '') continue;
     const { kind, unit } = classifyKey(key);
-    const label = (field.label && String(field.label).trim()) || LABEL_FALLBACK[key] || key;
+    // LABEL_FALLBACK을 field.label보다 먼저 본다 — 2026-08-26 추가 결함(app/captures/
+    // card-demo/계좌.png)에서 이 HTTP 경로는 label을 아예 비우는 대신 **키 이름을
+    // 그대로 label에 채워** 보낸다(예: label:"tdy_lspft") — field.label이 참이라
+    // 예전 우선순위(field.label || LABEL_FALLBACK)로는 절대 못 걸러진다. 아는 키는
+    // models.py로 검증한 우리 번역을 신뢰하고, 모르는 키만 envelope의 label(있으면)
+    // 또는 raw key로 물러난다.
+    const label = LABEL_FALLBACK[key] || (field.label && String(field.label).trim()) || key;
     out.push({ key, label, value, unit, kind });
   }
   return out;
