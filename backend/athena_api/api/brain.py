@@ -24,6 +24,7 @@ from athena_api.brain import (
     surprising_connections,
     utc_now,
 )
+from athena_api.brain.projection import cluster_cohesion
 from athena_api.errors import BrainNotReadyError
 from athena_api.lifespan import BrainRuntime, _teardown_brain
 from athena_api.security import require_local_bearer
@@ -495,6 +496,7 @@ class ClusterMapResponse(BaseModel):
     revision: int
     nodes: list[ClusterMapNodeOut]
     edges: list[list[str]]
+    cluster_cohesion: dict[int, float]
 
 
 @router.get(
@@ -635,6 +637,7 @@ async def get_brain_cluster_map(
     projector = _require_projector(request)
     projected = await projector.project()
     assignment = await projector.clusters()
+    cohesion = cluster_cohesion(projected, assignment)
     graph = projected.graph
     return ClusterMapResponse(
         revision=projected.revision,
@@ -650,4 +653,5 @@ async def get_brain_cluster_map(
             for node in sorted(graph.nodes)
         ],
         edges=[list(pair) for pair in sorted(tuple(sorted(edge)) for edge in graph.edges)],
+        cluster_cohesion=cohesion,
     )
