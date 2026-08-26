@@ -147,23 +147,28 @@
   // 모양은 전부 orb.css의 [data-face] 규칙이 지고, 여기서는 **언제 어느 얼굴인가**만
   // 정한다.
   //
-  // **얼굴은 앱에 이미 있는 신호에만 붙인다.** 지금 배선하는 것은 여덟이다:
+  // **얼굴은 앱에 이미 있는 신호에만 붙인다.** 지금 배선하는 것은 아홉이다:
   //   idle   — 기본(대기)
   //   sleep  — 오래 아무 일 없음(idle > 5min. 옛 판의 '평소'가 여기로 내려왔다)
   //   listen — 셸 입력줄 포커스(input:focus) — 2026-08-26 board-32 신규
   //   think  — 질의 진행 중(query running) — 2026-08-26 board-32 신규. 스피너 대신이다
   //   done   — 턴 완료(result ok) — 2026-08-26 board-32 신규. 웃고 2초 뒤 idle로 돌아간다
+  //   wink   — 감시 등록 반영(athena:routine-confirm 성공 릴레이) — 2026-08-27
+  //            갭 클로징 Step 3b 신규. done과 같은 구조(DONE_HOLD 뒤 resolveAmbientFace
+  //            복귀)지만 전용 타이머를 따로 둬서 둘이 서로 안 밟는다.
   //   fired  — 미확인 알림이 있다(data-alert와 짝)
   //   mopey  — 루틴 만료(routineTurn kind: expired) — 옛 '미안'의 절반
   //   crying — 감시 복원 실패(routineTurn kind: restore-failed) — 옛 '미안'의 나머지 절반
   // 2026-08-26: '미안' 하나가 만료·복원실패 둘을 뭉뚱그렸는데, routine-turn.js가
   // 이미 kind로 둘을 갈라 준다 — 같은 사실을 오브만 뭉개고 있었다(board-31).
-  // watch/glad/wink/surprise/frown은 아직 CSS에 모양만 있고 배선하지 않는다 —
-  // 오브가 감시 등록 반영·급변·호출 실패 신호를 받지 않으므로 그 신호가 아직
-  // 없다. 없는 신호에 얼굴을 붙이면 그건 정보가 아니라 지어낸 연기다(soul.md).
+  // watch/glad/surprise/frown은 아직 CSS에 모양만 있고 배선하지 않는다 — watch·glad는
+  // 판정에 필요한 데이터가 없어 백로그로 유예했고(CP1/CP3, orb.js 상단 주석),
+  // surprise·frown은 급변·호출 실패 신호를 오브가 아직 받지 않는다(갭 클로징
+  // 뒷 Step에서 배선 예정). 없는 신호에 얼굴을 붙이면 그건 정보가 아니라 지어낸
+  // 연기다(soul.md).
   const FACE = {
     IDLE: 'idle', SLEEP: 'sleep', LISTEN: 'listen', THINK: 'think', DONE: 'done',
-    FIRED: 'fired', MOPEY: 'mopey', CRYING: 'crying',
+    WINK: 'wink', FIRED: 'fired', MOPEY: 'mopey', CRYING: 'crying',
   };
 
   const BLINK_CLOSE = 90;          // 감는 시간
@@ -206,6 +211,7 @@
   let blinkTimer = null;
   let saccadeTimer = null;
   let doneTimer = null;
+  let winkTimer = null;
 
   const rand = (lo, hi) => lo + Math.random() * (hi - lo);
 
@@ -358,14 +364,25 @@
   let thinking = false;
 
   function eventFaceActive() {
-    return face === FACE.FIRED || face === FACE.MOPEY || face === FACE.CRYING || face === FACE.DONE;
+    // WINK는 DONE과 같은 격이다(둘 다 신호 하나에 반응해 DONE_HOLD만큼 떴다가
+    // 스스로 꺼지는 일시 표정) — DONE을 여기 넣은 이유(듣는 중/생각 중 같은
+    // 능동 표정이 유지 시간 안에 끼어들어 조기에 지우면 안 된다)가 WINK에도
+    // 그대로 적용된다.
+    return face === FACE.FIRED || face === FACE.MOPEY || face === FACE.CRYING
+      || face === FACE.DONE || face === FACE.WINK;
+  }
+
+  /** 앰비언트(듣는 중/생각 중/잠듦/기본) 판정의 공통 계산 — resolveAmbientFace와
+   * done·wink 타이머가 같이 쓴다(하나로 통일해야 규칙이 두 벌로 안 갈린다). */
+  function settleAmbientFace() {
+    if (thinking) { setFace(FACE.THINK); return; }
+    if (listening) { setFace(FACE.LISTEN); return; }
+    setFace(face === FACE.SLEEP ? FACE.SLEEP : FACE.IDLE);
   }
 
   function resolveAmbientFace() {
     if (eventFaceActive()) return;
-    if (thinking) { setFace(FACE.THINK); return; }
-    if (listening) { setFace(FACE.LISTEN); return; }
-    setFace(face === FACE.SLEEP ? FACE.SLEEP : FACE.IDLE);
+    settleAmbientFace();
   }
 
   window.athena.on('athena:orb-signal', ({ signal, active } = {}) => {
@@ -379,6 +396,8 @@
       resolveAmbientFace();
     } else if (signal === 'done') {
       triggerDoneFace();
+    } else if (signal === 'registered') {
+      triggerWinkFace();
     }
   });
 
@@ -391,7 +410,29 @@
     setFace(FACE.DONE);
     clearTimeout(doneTimer);
     doneTimer = setTimeout(() => {
-      if (face === FACE.DONE) resolveAmbientFace();
+      // resolveAmbientFace가 아니라 settleAmbientFace를 직접 부른다 — 얼굴은
+      // 값이 하나뿐이라 이 시점의 face는 항상 DONE과 "같다"(자기 자신이니까),
+      // 그래서 resolveAmbientFace를 거치면 eventFaceActive()가 "DONE이 아직
+      // 활성"이라고 스스로 오판해 절대 못 빠져나간다(자기 참조 교착 — 실측:
+      // 2026-08-27 프로브가 DONE_HOLD 경과 후에도 계속 'done'을 잡아냈다,
+      // wink를 얹으며 발견). 그사이 다른 이벤트가 face를 바꿔놨으면(fired 등)
+      // 아래 체크로 손대지 않는다.
+      if (face === FACE.DONE) settleAmbientFace();
+    }, DONE_HOLD);
+  }
+
+  // 윙크 — 감시 등록 반영(main.js athena:routine-confirm 성공 릴레이, board-30⑧/
+  // 31③). triggerDoneFace와 같은 구조지만 별도 타이머(winkTimer)를 쓴다 —
+  // 두 표정이 겹치는 타이밍에 서로의 setTimeout을 밟지 않게 하려면(각 타이머는
+  // 자기 얼굴일 때만 되돌린다) 축을 나눠야 한다.
+  function triggerWinkFace() {
+    if (face === FACE.FIRED || face === FACE.MOPEY || face === FACE.CRYING) return;
+    touchActivity();
+    setFace(FACE.WINK);
+    clearTimeout(winkTimer);
+    winkTimer = setTimeout(() => {
+      // settleAmbientFace 직접 호출 이유는 triggerDoneFace 주석과 같다.
+      if (face === FACE.WINK) settleAmbientFace();
     }, DONE_HOLD);
   }
 
