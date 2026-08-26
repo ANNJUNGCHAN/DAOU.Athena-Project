@@ -519,6 +519,9 @@ html, body { background: transparent; }
 }
 .pill:hover { border-color: var(--color-k-dim); }
 .pill:focus-visible { outline: 2px solid var(--color-k-text); outline-offset: 2px; }
+/* 모드 칩(#graphPill)의 "지금 모드" 표시 — 라벨은 "그래프"로 고정, 선택 여부는
+ * 배경색 스왑으로만 보여준다(06/07 §4-3, 38 §1.4-2). */
+.pill.is-active { background: var(--color-brand); color: #fff; border-color: transparent; }
 
 /* 모델 팝오버 — 카드 단계 유리(0.45+blur 14, tokens.css 사다리). 무채색.
  * 페이드 등장 금지 — hidden 토글로 나타난다(soul.md §7). */

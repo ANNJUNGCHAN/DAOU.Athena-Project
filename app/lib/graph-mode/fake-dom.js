@@ -46,6 +46,30 @@ function fakeNode(name) {
       handlers.forEach((handler) => handler(event));
       return true;
     },
+    // controller.js의 applyVisibility()가 모드 칩에 .is-active를 토글한다(스텝1) —
+    // attrs.class를 read/write해 querySelectorAll의 클래스 파싱과 같은 자료를 공유한다.
+    get classList() {
+      const node = this;
+      const read = () => String(node.attrs.class || '').split(/\s+/).filter(Boolean);
+      const write = (list) => { node.attrs.class = list.join(' '); };
+      return {
+        add(name) {
+          const list = read();
+          if (!list.includes(name)) write([...list, name]);
+        },
+        remove(name) {
+          write(read().filter((c) => c !== name));
+        },
+        toggle(name, force) {
+          const shouldHave = force === undefined ? !read().includes(name) : Boolean(force);
+          if (shouldHave) this.add(name); else this.remove(name);
+          return shouldHave;
+        },
+        contains(name) {
+          return read().includes(name);
+        },
+      };
+    },
     // '.graph-node' 같은 단일 클래스 셀렉터만 지원한다 — 두 테스트가 쓰는 전부다.
     querySelectorAll(selector) {
       const wanted = selector.replace(/^\./, '');

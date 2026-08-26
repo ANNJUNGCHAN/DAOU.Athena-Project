@@ -81,7 +81,7 @@ test('처음에는 요약이 보이고 그래프는 숨겨져 있다', () => {
   assert.equal(elements.summary.hidden, false);
   assert.equal(elements.graph.hidden, true);
   assert.equal(elements.summaryTable.hidden, true, '성향 신호 표도 그래프 표면이다 — 답변 모드에선 숨는다');
-  assert.equal(elements.pill.textContent, '답변', '모드 칩은 지금 모드를 보여준다');
+  assert.equal(elements.pill.classList.contains('is-active'), false, '모드 칩은 지금 모드를 보여준다(답변 모드에선 비활성)');
 });
 
 // US-007 — 부팅 시 그래프/답변 모드가 섞여 보이던 실사용 결함의 회귀 가드.
@@ -95,7 +95,7 @@ test('US-007: 브레인이 켜져 있어도 그래프로 토글하기 전엔 그
   assert.equal(elements.graph.hidden, true);
   assert.equal(elements.summaryTable.hidden, true);
   assert.equal(elements.summary.hidden, false);
-  assert.equal(elements.pill.textContent, '답변');
+  assert.equal(elements.pill.classList.contains('is-active'), false);
 });
 
 test('토글하면 캔버스 영역이 그래프로 바뀌고 그려진다', async () => {
@@ -104,7 +104,7 @@ test('토글하면 캔버스 영역이 그래프로 바뀌고 그려진다', asy
   assert.equal(elements.summary.hidden, true, '요약이 숨는다');
   assert.equal(elements.graph.hidden, false);
   assert.equal(elements.summaryTable.hidden, false, '그래프 모드에선 성향 신호 표가 보인다');
-  assert.equal(elements.pill.textContent, '그래프', '모드 칩은 지금 모드를 보여준다');
+  assert.equal(elements.pill.classList.contains('is-active'), true, '모드 칩은 지금 모드를 보여준다(그래프 모드에선 활성)');
   assert.equal(render.describeRendered(elements.graphBody).nodes, 2);
 });
 

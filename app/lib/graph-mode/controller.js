@@ -43,8 +43,10 @@ function createGraphModeController(deps) {
     if (elements.summaryTable) elements.summaryTable.hidden = !graphView;
     if (elements.pill) {
       // 모드 칩은 "다음에 할 동작"이 아니라 "지금 모드"를 보여준다(Paper 보드 05
-      // "모드 칩 상시" — 답변/그래프 둘 중 지금 켜져 있는 쪽).
-      elements.pill.textContent = graphView ? '그래프' : '답변';
+      // "모드 칩 상시" — 답변/그래프 둘 중 지금 켜져 있는 쪽). 라벨은 "그래프"로
+      // 고정하고, 지금 모드는 배경색 스왑(.is-active)으로만 표시한다(06/07 §4-3,
+      // 38 §1.4-2 규범 — 예전엔 라벨 자체를 답변⇄그래프로 바꿔치기했다).
+      elements.pill.classList.toggle('is-active', graphView);
       elements.pill.setAttribute('aria-pressed', graphView ? 'true' : 'false');
     }
   }
