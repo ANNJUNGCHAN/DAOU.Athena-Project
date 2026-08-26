@@ -422,7 +422,7 @@ async function runQueryLive(text) {
   progress.className = 'progress-line';
   const progText = document.createElement('span');
   const startedAt = Date.now();
-  progText.textContent = 'Claude에게 물어보는 중 · 0.0s';
+  progText.textContent = '판단 중 — 어떤 TR을 부를지 고르는 중 · 0.0s';
   progress.appendChild(progText);
   // 실행 라인(2026-08-26 어드버서리얼 리뷰 결함 #3, board-04 "⑧ 실행 라인") —
   // progress의 자식으로 둔다: Esc 중단(위 972행 근처)이 liveProgressEl 하나만
@@ -460,7 +460,7 @@ async function runQueryLive(text) {
   const elapsedText = () => `${((Date.now() - startedAt) / 1000).toFixed(1)}s`;
   const renderProgress = () => {
     if (myToken !== abortToken) return;
-    const base = calling ? `카드 ${cardCount}개 렌더됨` : 'Claude에게 물어보는 중';
+    const base = calling ? `카드 ${cardCount}개 렌더됨` : '판단 중 — 어떤 TR을 부를지 고르는 중';
     progText.textContent = `${base} · ${elapsedText()} 경과`;
     setLocked(true, `${base} · ${elapsedText()} 경과`);
   };
