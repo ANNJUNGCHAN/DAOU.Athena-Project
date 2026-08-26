@@ -898,8 +898,13 @@ function buildChartDataset(query, index, {
   };
 }
 
-// 호가 — base:ka10004(주식호가요청). 인자가 stk_cd 하나뿐이라(백엔드
-// Ka10004Request) 추가 매개변수가 필요 없다.
+// 호가 — detail:ka10004:aggregate_totals(호가 총잔량). base:ka10004는 split
+// family라(SPLIT_BASE_TR_IDS) detail_group 없이는 resolve 자체가
+// DETAIL_GROUP_REQUIRED로 거부된다(실측 — E2E 타이밍 프로브에서 422로 확인,
+// buildQuoteDataset이 base:ka10001 대신 detail:ka10001:current_trading을
+// 쓰는 것과 같은 이유). aggregate_totals(tot_sel_req/tot_buy_req)를 고른
+// 근거는 card-kind-호가.js의 render호가()가 detectTotals()를 최우선
+// 분기로 검사한다는 것 — 그 카드가 이미 이 조각을 1순위로 취급한다.
 function buildOrderBookDataset(query, index, { idFactory = () => `rest-${Date.now().toString(36)}` } = {}) {
   const text = String(query || '').trim();
   const entity = index && index.resolveQuery(text);
@@ -910,7 +915,7 @@ function buildOrderBookDataset(query, index, { idFactory = () => `rest-${Date.no
     items: [{
       itemId: 'primary-orderbook',
       ordinal: 1,
-      operationRef: 'base:ka10004',
+      operationRef: 'detail:ka10004:aggregate_totals',
       args: { stk_cd: entity.code },
       caption: null,
     }],
