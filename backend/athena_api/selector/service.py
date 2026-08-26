@@ -681,6 +681,7 @@ class SelectorService:
         return ResolveResponse(
             catalog_version=self.catalog.version,
             operation_ref=document.operation_ref,
+            kind=document.kind,  # type: ignore[arg-type]
             plan_token=token,
             expires_at=expires_at,
             selection_reasons=reasons,

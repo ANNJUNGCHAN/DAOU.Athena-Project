@@ -67,6 +67,98 @@ def backend_base_url() -> str:
     return os.environ.get(_BACKEND_URL_ENV_VAR, DEFAULT_BACKEND_URL)
 
 
+# ---------------------------------------------------------------------------
+# W2b — resolve/call 듀얼 디스패치 (.omc/plans/plan-latency-optimization.md
+# 2026-08-19 실측: resolve -> (모델 왕복) -> call 두 라운드가 8-10초를 태운다).
+#
+# athena_resolve가 **query** 계획을 발급하면, 같은 게이트웨이 왕복 안에서
+# athena_call과 정확히 같은 프록시 경로(같은 엔드포인트·같은 timeout·같은
+# plan_token 검증·백엔드의 같은 서명 확인)로 실행까지 마쳐 모델이 다시
+# athena_call을 부르는 라운드 하나를 없앤다.
+#
+# order/websocket은 이 함수가 절대 건드리지 않는다 — `_maybe_auto_execute()`가
+# `payload["kind"] != "query"`면 즉시 원본을 그대로 돌려주는 게이트가 첫 줄이다
+# (백엔드가 내려준 `kind`를 신뢰한다: 이 값은 `SelectorService.resolve()`가
+# 고른 `document.kind`이고, oauth 종류는 `_intent_allows()`가 구조적으로 절대
+# resolve를 통과시키지 않으므로 여기 kind가 query/order/websocket 셋 중
+# 하나임이 항상 보장된다).
+#
+# 코드 없이 끌 수 있어야 한다는 요구에 따라 `ATHENA_SELECTOR_AUTO_EXECUTE=0`
+# 하나로 즉시 비활성화된다(기본 켜짐).
+_AUTO_EXECUTE_ENV_VAR = "ATHENA_SELECTOR_AUTO_EXECUTE"
+_AUTO_EXECUTE_DISABLED_VALUES = frozenset({"0", "false", "no", "off"})
+
+
+def selector_auto_execute_enabled() -> bool:
+    raw = os.environ.get(_AUTO_EXECUTE_ENV_VAR, "1").strip().lower()
+    return raw not in _AUTO_EXECUTE_DISABLED_VALUES
+
+
+async def _auto_execute_call(
+    plan_token: str, http_client: httpx.AsyncClient, log_path: Path
+) -> tuple[Any | None, str | None]:
+    """athena_call과 동일한 엔드포인트/timeout/단일시도 원칙으로 plan_token을
+    소비한다. 정확히 (payload, None) 또는 (None, error_message) 중 하나만
+    돌려준다 — 실패해도 예외를 던지지 않는다(resolve 자체를 깨면 안 된다).
+    """
+    timeout = _TIMEOUT_SECONDS_BY_TOOL[CALL_TOOL]
+    url = f"/api/v1/llm/tools/{_ENDPOINT_BY_TOOL[CALL_TOOL]}"
+    start = time.monotonic()
+    try:
+        response = await http_client.post(
+            url, json={"plan_token": plan_token}, timeout=timeout
+        )
+    except httpx.ConnectError:
+        return None, (
+            "자동 실행(athena_call)이 키움 백엔드(127.0.0.1:8010) 미기동으로 실패했다. "
+            "plan_token은 이미 소비됐다 — 재시도하지 말고 athena_resolve부터 다시 부른다."
+        )
+    except httpx.TimeoutException as exc:
+        return None, (
+            f"자동 실행(athena_call)이 {timeout:.0f}초 안에 끝나지 않았다: {exc}. "
+            "plan_token은 이미 소비됐다 — 재시도하지 말고 athena_resolve부터 다시 부른다."
+        )
+    except httpx.HTTPError as exc:
+        return None, f"자동 실행(athena_call) 중 전송 오류: {exc}"
+    finally:
+        _record_backend_timing(log_path, CALL_TOOL, int((time.monotonic() - start) * 1000))
+
+    if response.status_code >= 400:
+        detail = _extract_error_detail(response)
+        return None, f"자동 실행(athena_call) 실패 (HTTP {response.status_code}): {detail}"
+
+    try:
+        call_payload = response.json()
+    except ValueError:
+        return None, f"자동 실행(athena_call) 응답이 JSON이 아니다: {response.text[:500]!r}"
+
+    return _trim_call_payload(call_payload), None
+
+
+async def _maybe_auto_execute(
+    resolve_payload: Any, http_client: httpx.AsyncClient, log_path: Path
+) -> Any:
+    if not selector_auto_execute_enabled():
+        return resolve_payload
+    if not isinstance(resolve_payload, dict) or resolve_payload.get("kind") != "query":
+        return resolve_payload
+    plan_token = resolve_payload.get("plan_token")
+    if not isinstance(plan_token, str) or not plan_token:
+        return resolve_payload
+
+    call_payload, error = await _auto_execute_call(plan_token, http_client, log_path)
+    merged = dict(resolve_payload)
+    if error is not None:
+        merged["auto_execute"] = {"executed": False, "error": error}
+    else:
+        # plan_token은 이미 소비됐다 — 모델이 같은 토큰으로 athena_call을 다시
+        # 부르면 PLAN_ALREADY_USED로 거부된다. `executed: true`가 그 신호다.
+        # 이어서 조회를 계속하려면 `call_result.continuation.next_plan_token`을
+        # 쓴다(schemas.py의 기존 continuation 계약 그대로).
+        merged["auto_execute"] = {"executed": True, "call_result": call_payload}
+    return merged
+
+
 _TIMING_LOG_FILENAME = "kiwoom-selector-timing.jsonl"
 
 
@@ -500,5 +592,7 @@ async def dispatch(
 
     if name == CALL_TOOL:
         payload = _trim_call_payload(payload)
+    elif name == RESOLVE_TOOL:
+        payload = await _maybe_auto_execute(payload, http_client, log_path)
 
     return _success(payload)

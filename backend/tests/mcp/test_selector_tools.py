@@ -20,8 +20,7 @@ from athena_mcp.selector_tools import (
 )
 from athena_mcp.server import build_mcp_server
 
-# `_gateway` 헬퍼는 tests/mcp/conftest.py의 `make_gateway` 픽스처로 옮겼다
-# (2026-08-20 포니테일 감사 — 4파일 중복 제거).
+# `_gateway` 헬퍼는 tests/mcp/conftest.py의 `make_gateway` 픽스처로 옮겼다.
 
 
 # ---------------------------------------------------------------------------
@@ -463,3 +462,168 @@ def test_trim_call_payload_ignores_non_dict_and_arrayless():
     big_text = {"data": {"text": "x" * 50_000}}
     assert _trim_call_payload(big_text) == big_text
     assert "_athena_trimmed" not in big_text
+
+
+# ---------------------------------------------------------------------------
+# W2b — resolve/call 듀얼 디스패치 (.omc/plans/plan-latency-optimization.md).
+# query 계획만 게이트웨이가 같은 라운드에 실행한다. order/websocket은 절대
+# 건드리지 않는다 — plan_token만 돌려주는 오늘의 흐름 그대로.
+# ---------------------------------------------------------------------------
+
+
+def _resolve_response_json(*, kind: str, plan_token: str = "tok-auto") -> dict:
+    return {
+        "status": "resolved",
+        "catalog_version": "v1",
+        "operation_ref": "ka10001",
+        "kind": kind,
+        "plan_token": plan_token,
+        "expires_at": "2026-08-26T00:00:00+00:00",
+        "selection_reasons": [],
+        "required_arguments_satisfied": True,
+        "response_mode": "auto",
+    }
+
+
+async def test_resolve_query_auto_executes_and_returns_call_result(tmp_path, make_gateway):
+    call_requests: list[httpx.Request] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        if request.url.path == "/api/v1/llm/tools/resolve":
+            return httpx.Response(200, json=_resolve_response_json(kind="query"))
+        assert request.url.path == "/api/v1/llm/tools/call"
+        assert json.loads(request.content) == {"plan_token": "tok-auto"}
+        call_requests.append(request)
+        return httpx.Response(
+            200,
+            json={
+                "operation_ref": "ka10001",
+                "data": {"cur_prc": "71000"},
+                "continuation": {"cont_yn": "N"},
+            },
+        )
+
+    gw = make_gateway(handler)
+    result = await gw.dispatch_call(RESOLVE_TOOL, {"question": "삼성전자 현재가"})
+
+    assert result.isError is False
+    payload = json.loads(result.content[0].text)
+    assert payload["plan_token"] == "tok-auto"
+    assert payload["auto_execute"]["executed"] is True
+    assert payload["auto_execute"]["call_result"]["data"]["cur_prc"] == "71000"
+    assert len(call_requests) == 1
+
+
+async def test_resolve_order_kind_never_auto_executes(tmp_path, make_gateway):
+    def handler(request: httpx.Request) -> httpx.Response:
+        assert request.url.path == "/api/v1/llm/tools/resolve"
+        return httpx.Response(200, json=_resolve_response_json(kind="order"))
+
+    gw = make_gateway(handler)
+    result = await gw.dispatch_call(RESOLVE_TOOL, {"question": "삼성전자 매수"})
+
+    assert result.isError is False
+    payload = json.loads(result.content[0].text)
+    assert "auto_execute" not in payload
+    assert payload["plan_token"] == "tok-auto"
+
+
+async def test_resolve_websocket_kind_never_auto_executes(tmp_path, make_gateway):
+    def handler(request: httpx.Request) -> httpx.Response:
+        assert request.url.path == "/api/v1/llm/tools/resolve"
+        return httpx.Response(200, json=_resolve_response_json(kind="websocket"))
+
+    gw = make_gateway(handler)
+    result = await gw.dispatch_call(RESOLVE_TOOL, {"question": "삼성전자 실시간 등록"})
+
+    assert result.isError is False
+    payload = json.loads(result.content[0].text)
+    assert "auto_execute" not in payload
+
+
+async def test_auto_execute_call_failure_passes_through_resolve_success(tmp_path, make_gateway):
+    def handler(request: httpx.Request) -> httpx.Response:
+        if request.url.path == "/api/v1/llm/tools/resolve":
+            return httpx.Response(200, json=_resolve_response_json(kind="query"))
+        return httpx.Response(503, json={"detail": "credentials unavailable"})
+
+    gw = make_gateway(handler)
+    result = await gw.dispatch_call(RESOLVE_TOOL, {"question": "삼성전자 현재가"})
+
+    assert result.isError is False  # resolve 자체는 절대 깨지지 않는다
+    payload = json.loads(result.content[0].text)
+    assert payload["plan_token"] == "tok-auto"
+    assert payload["auto_execute"]["executed"] is False
+    assert "credentials unavailable" in payload["auto_execute"]["error"]
+    assert "call_result" not in payload["auto_execute"]
+
+
+async def test_auto_execute_connect_error_passes_through_resolve_success(tmp_path, make_gateway):
+    def handler(request: httpx.Request) -> httpx.Response:
+        if request.url.path == "/api/v1/llm/tools/resolve":
+            return httpx.Response(200, json=_resolve_response_json(kind="query"))
+        raise httpx.ConnectError("refused", request=request)
+
+    gw = make_gateway(handler)
+    result = await gw.dispatch_call(RESOLVE_TOOL, {"question": "삼성전자 현재가"})
+
+    assert result.isError is False
+    payload = json.loads(result.content[0].text)
+    assert payload["auto_execute"]["executed"] is False
+    assert "127.0.0.1:8010" in payload["auto_execute"]["error"]
+
+
+async def test_auto_execute_calls_backend_exactly_once(tmp_path, make_gateway):
+    """resolve가 query를 자동 실행해도 /call은 정확히 한 번만 나간다 —
+    plan_token 재사용/중복 실행이 없다."""
+    call_paths: list[str] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        call_paths.append(request.url.path)
+        if request.url.path == "/api/v1/llm/tools/resolve":
+            return httpx.Response(200, json=_resolve_response_json(kind="query"))
+        return httpx.Response(
+            200, json={"operation_ref": "ka10001", "data": {}, "continuation": {"cont_yn": "N"}}
+        )
+
+    gw = make_gateway(handler)
+    await gw.dispatch_call(RESOLVE_TOOL, {"question": "삼성전자 현재가"})
+
+    assert call_paths == ["/api/v1/llm/tools/resolve", "/api/v1/llm/tools/call"]
+
+
+async def test_auto_execute_disabled_via_env_var_leaves_plan_token_only(
+    tmp_path, make_gateway, monkeypatch
+):
+    monkeypatch.setenv("ATHENA_SELECTOR_AUTO_EXECUTE", "0")
+    call_requests: list[httpx.Request] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        if request.url.path == "/api/v1/llm/tools/resolve":
+            return httpx.Response(200, json=_resolve_response_json(kind="query"))
+        call_requests.append(request)
+        return httpx.Response(200, json={})
+
+    gw = make_gateway(handler)
+    result = await gw.dispatch_call(RESOLVE_TOOL, {"question": "삼성전자 현재가"})
+
+    assert result.isError is False
+    payload = json.loads(result.content[0].text)
+    assert "auto_execute" not in payload
+    assert len(call_requests) == 0
+
+
+async def test_auto_execute_records_audit_entry_for_both_tools(tmp_path, make_gateway):
+    def handler(request: httpx.Request) -> httpx.Response:
+        if request.url.path == "/api/v1/llm/tools/resolve":
+            return httpx.Response(200, json=_resolve_response_json(kind="query"))
+        return httpx.Response(
+            200, json={"operation_ref": "ka10001", "data": {}, "continuation": {"cont_yn": "N"}}
+        )
+
+    gw = make_gateway(handler)
+    await gw.dispatch_call(RESOLVE_TOOL, {"question": "삼성전자 현재가"})
+
+    entries = gw._audit_log("kiwoom-selector").read_all()
+    assert [entry["tool"] for entry in entries] == [RESOLVE_TOOL, CALL_TOOL]
+    assert all(entry["success"] is True for entry in entries)
