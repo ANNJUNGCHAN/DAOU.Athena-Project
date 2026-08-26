@@ -81,7 +81,14 @@ function formatSignedWon(raw) {
 function formatRatePct(raw) {
   if (raw === undefined || raw === null || raw === '') return null;
   const text = String(raw).trim();
-  return text.endsWith('%') ? text : `${text}%`;
+  // 좌측 0-padding 필드(예: est_ratio "부호 포함 소수점 넷째 자리까지, 좌측
+  // 0-padding")가 있어(models.py 실측) 문자열을 그대로 못 쓴다 — 숫자로 파싱해
+  // 패딩을 지운다(formatSignedWon과 같은 이유). 이미 "%"가 붙은 원문은 숫자부만
+  // 떼어 파싱하고 그대로 재조립한다.
+  const hasPercent = text.endsWith('%');
+  const n = Number(hasPercent ? text.slice(0, -1) : text);
+  if (!Number.isFinite(n)) return hasPercent ? text : null;
+  return `${n}%`;
 }
 
 // plAmt/plRate → 배지 라벨("+565,000원 (7.1%)") | null(둘 다 없으면 배지를 안 만든다).

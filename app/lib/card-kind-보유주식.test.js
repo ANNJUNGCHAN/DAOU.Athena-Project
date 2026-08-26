@@ -86,3 +86,11 @@ test('buildPlLabel — 둘 다 없으면 null(배지를 안 만든다)', () => {
   assert.equal(buildPlLabel(undefined, undefined), null);
   assert.equal(buildPlLabel(null, ''), null);
 });
+
+test('buildPlLabel — 좌측 0-padding된 손익률(est_ratio 등)은 패딩을 지우고 조립한다', () => {
+  // 실측: kt50020 est_ratio는 "부호 포함 소수점 넷째 자리까지, 좌측 0-padding"
+  // (backend/athena_api/generated/models.py) — 문자열을 그대로 쓰면
+  // "(000000004.12%)"처럼 새는 결함이 있었다(팀리드 데모 지적).
+  assert.equal(buildPlLabel('1000', '000000004.12'), '+1,000원 (4.12%)');
+  assert.equal(buildPlLabel('-1000', '-00001.80'), '-1,000원 (-1.8%)');
+});
