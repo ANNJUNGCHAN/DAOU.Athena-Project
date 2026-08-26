@@ -67,6 +67,22 @@ process.on('unhandledRejection', (err) => dlog('unhandledRejection: ' + (err && 
 
 function wait(ms) { return new Promise((r) => setTimeout(r, ms)); }
 
+// 2026-08-26: 점은 더 이상 설정을 열지 않는다(답변⇄그래프 모드 전환기로 바뀜,
+// Paper 보드 05) — 설정 진입은 사이드바 계정 메뉴 아니면 커맨드바다. 이 검증
+// 프로필은 계좌가 비어 있어(위 §"검증 전용 프로필" 주석) 계정 행이 늘 숨어 있다
+// — 그래서 여기서는 계정 메뉴가 아니라 언제나 있는 커맨드바("설정" 입력)를
+// 신뢰성 있는 자극으로 쓴다. 검증8이 같은 경로를 별도로 더 자세히 잰다 — 이건
+// 그 앞단에서 "설정 화면이 열려 있다"는 상태만 만들어주는 유틸이다.
+async function openSettingsViaCommandBar(win) {
+  await win.webContents.executeJavaScript(`
+    (() => {
+      const el = document.getElementById('input');
+      el.value = '설정';
+      el.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    })();
+  `);
+}
+
 function stats(timestamps) {
   const deltas = [];
   for (let i = 1; i < timestamps.length; i++) deltas.push(timestamps[i] - timestamps[i - 1]);
@@ -710,13 +726,13 @@ app.whenReady().then(async () => {
   const winCountBefore = BrowserWindow.getAllWindows().length;
   const chatBoundsBefore = shellWin.getBounds();
 
-  await shellWin.webContents.executeJavaScript("document.getElementById('dot').click()");
+  await openSettingsViaCommandBar(shellWin);
   await wait(900);
 
   const winCountAfterOpen = BrowserWindow.getAllWindows().length;
 
-  // 두 번 눌러도(재오픈이 no-op) nav·카드가 중복되지 않아야 한다
-  await shellWin.webContents.executeJavaScript("document.getElementById('dot').click()");
+  // 두 번 열어도(재오픈이 no-op) nav·카드가 중복되지 않아야 한다
+  await openSettingsViaCommandBar(shellWin);
   await wait(600);
   const winCountAfterSecondClick = BrowserWindow.getAllWindows().length;
 
@@ -930,12 +946,15 @@ app.whenReady().then(async () => {
   // 좌표로 되돌리지 않는가"를 쟀다. 높이 경로가 사라졌으므로(리프 1.2.1) 같은
   // 회귀를 다른 자극으로 잰다: 이동 후 **모드 전환**(설정 열고 닫기)이다. 모드
   // 전환도 옛 판에서는 창 크기를 건드리던 경로라 스냅백 위험이 같은 자리에 있다.
+  // 2026-08-26: 점이 더 이상 설정을 열지 않으므로(그래프 모드 전환기로 바뀜)
+  // 커맨드바로 같은 "설정 열고 닫기" 자극을 만든다 — 이 검증이 재는 것은
+  // 앵커 유지이지 설정 진입 경로 자체가 아니다.
   const beforeMove = shellWin.getBounds();
   shellWin.setBounds({ x: beforeMove.x + 120, y: beforeMove.y - 40, width: beforeMove.width, height: beforeMove.height });
   mainMod.noteAppBounds(shellWin); // 앱 주도 표시 — OS 스냅 오인 정착 방지(검증3 주석)
   await wait(150);
   const moved = shellWin.getBounds();
-  await shellWin.webContents.executeJavaScript("document.getElementById('dot').click()");
+  await openSettingsViaCommandBar(shellWin);
   await wait(500);
   await shellWin.webContents.executeJavaScript(
     "document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))"
@@ -2174,6 +2193,12 @@ app.whenReady().then(async () => {
   //
   // '비어 있지 않은가'의 판정은 `describeRendered()` 하나만 쓴다. 여기서 따로
   // 세면 렌더러와 검증기가 서로 다른 답을 낼 수 있다.
+  // 2026-08-26: 모드 칩(#graphPill)은 이제 상시 보인다(Paper 보드 05) — 숨어서
+  // 못 닿는 경우가 사라졌으므로 더는 "hidden-though-ready/unavailable"로 갈라
+  // 잴 것이 없다. 대신 브레인 준비 여부로 **기대하는 결과**가 갈린다: 준비됐으면
+  // 실제 그래프가, 안 됐으면 캔버스 안의 정직한 안내(controller.js
+  // renderUnavailable)가 뜬다 — 둘 다 "정상"이고, 칩이 숨거나 클릭해도 캔버스가
+  // 안 열리는 것만 실패다.
   try {
     const graph = await shellWin.webContents.executeJavaScript(`(async () => {
       const pill = document.getElementById('graphPill');
@@ -2181,38 +2206,28 @@ app.whenReady().then(async () => {
       if (!pill || !container || !window.AthenaGraphMode) {
         return { wired: false, reason: 'missing' };
       }
-      // **가시성**으로 판정한다. 요소가 DOM에 있는지만 보면, 필이 영영 hidden인
-      // 채로도 'wired'가 되어 사람이 못 닿는 기능을 검증됐다고 적게 된다.
-      //
-      // 그런데 숨은 이유를 여기서 물어야 한다. "브레인이 꺼져서 숨었다"와
-      // "보이게 하는 코드가 없어서 숨었다"는 화면이 똑같다 — 재지 않으면 후자를
-      // 전자로 읽고 건너뛴다. 실제로 그 일이 있었다(G70). 그래서 브레인 상태를
-      // **따로** 물어 둘을 가른다.
       const status = await window.athena.invoke('athena:brain-status').catch(() => null);
       const brainReady = Boolean(status && status.ok && status.ready);
-      // 가용성 프로브는 비동기라 아직 안 끝났을 수 있다. 잠깐 기다려 본다.
-      if (pill.hidden && brainReady) {
-        const until = Date.now() + 3000;
-        while (pill.hidden && Date.now() < until) {
-          await new Promise((r) => setTimeout(r, 50));
-        }
-      }
       if (pill.hidden) {
-        return {
-          wired: false,
-          reason: brainReady ? 'hidden-though-ready' : 'unavailable',
-          brainReady,
-        };
+        return { wired: false, reason: 'hidden-though-always-visible', brainReady };
       }
-      // 사람이 밟는 길 그대로 — API를 직접 부르지 않고 필을 누른다.
+      // 사람이 밟는 길 그대로 — API를 직접 부르지 않고 칩을 누른다.
       pill.click();
       const deadline = Date.now() + 5000;
       while (Date.now() < deadline) {
-        if (!container.hidden
-            && window.AthenaLib.GraphRender.describeRendered(container).rendered) break;
+        if (!container.hidden) {
+          // 브레인 준비 시엔 실제 그래프가 그려질 때까지, 미준비 시엔 캔버스가
+          // 보이는 순간(안내 문구는 render.js를 거치지 않는다) 기다림을 끝낸다.
+          if (!brainReady || window.AthenaLib.GraphRender.describeRendered(container).rendered) break;
+        }
         await new Promise((r) => setTimeout(r, 50));
       }
       const clickOpened = !container.hidden;
+      const summaryHidden = document.getElementById('mosaic').hidden;
+      const containerText = container.textContent;
+      if (!brainReady) {
+        return { wired: true, brainReady, clickOpened, summaryHidden, containerText };
+      }
       const byClick = window.AthenaLib.GraphRender.describeRendered(container);
       // 좌표 계약은 배치 결과와 대조해야 알 수 있고, 클릭 경로는 그 값을 돌려주지
       // 않는다. 요약으로 접었다 다시 펴서 같은 화면의 배치를 받아 온다.
@@ -2221,24 +2236,31 @@ app.whenReady().then(async () => {
       const drawn = window.AthenaLib.GraphRender.describeRendered(container);
       return {
         wired: true,
+        brainReady,
         clickOpened,
         byClick,
-        containerVisible: !container.hidden,
-        summaryHidden: document.getElementById('mosaic').hidden,
+        summaryHidden,
         placedNodes: placed ? placed.nodes.length : 0,
         placedEdges: placed ? placed.edges.length : 0,
         drawn,
       };
     })()`);
     report.graphMode = graph;
-    if (graph.wired) {
-      // 필 클릭 하나로 열려야 한다 — API 직접 호출로만 열리면 사람은 못 쓴다.
-      assertOk('graph-mode: 필을 누르면 그래프가 열린다', graph.clickOpened === true);
-      assertOk('graph-mode: 필 클릭만으로 캔버스가 채워진다', graph.byClick.rendered === true);
-      assertOk('graph-mode: 토글하면 그래프 영역이 보인다', graph.containerVisible === true);
+    if (!graph.wired) {
+      if (graph.reason === 'hidden-though-always-visible') {
+        // 상시 보여야 하는 칩이 숨어 있다 — 사람이 닿을 수 없는 기능이다.
+        failures.push('graph-mode: 모드 칩이 상시 보여야 하는데 숨어 있다');
+      } else {
+        // 칩·캔버스·전역 중 하나가 아예 없다 — 배선이 끊긴 것이므로 실패다.
+        failures.push('graph-mode: 배선이 끊겼다 (칩/캔버스/전역 누락)');
+      }
+    } else if (graph.brainReady) {
+      // 칩 클릭 하나로 열려야 한다 — API 직접 호출로만 열리면 사람은 못 쓴다.
+      assertOk('graph-mode: 칩을 누르면 그래프가 열린다', graph.clickOpened === true);
+      assertOk('graph-mode: 칩 클릭만으로 캔버스가 채워진다', graph.byClick.rendered === true);
       assertOk('graph-mode: 토글하면 요약이 숨는다', graph.summaryHidden === true);
-      // 노드가 0개면 '빈 캔버스'와 '고장'을 구분할 수 없다. 브레인이 꺼져 있으면
-      // 애초에 wired=false로 빠지므로, 여기 왔다면 그려진 것이 있어야 한다.
+      // 노드가 0개면 '빈 캔버스'와 '고장'을 구분할 수 없다. 브레인이 준비됐으면
+      // 여기 왔을 때 그려진 것이 있어야 한다.
       assertOk('graph-mode: 캔버스가 비어 있지 않다', graph.drawn.rendered === true);
       assertOk(
         'graph-mode: 그려진 노드 수가 배치와 일치한다',
@@ -2249,17 +2271,16 @@ app.whenReady().then(async () => {
         graph.drawn.edges === graph.placedEdges,
       );
       report.graphMode.shot = await shot(shellWin, '90-graph-mode.png');
-    } else if (graph.reason === 'hidden-though-ready') {
-      // 브레인은 준비됐다는데 필이 숨어 있다 — 사람이 닿을 수 없는 기능이다.
-      failures.push('graph-mode: 브레인이 준비됐는데도 필이 숨어 있다');
-    } else if (graph.reason === 'unavailable') {
-      // 브레인이 꺼져 있으면 필도 숨는 것이 맞다 — 측정 대상이 없다. 실패로 세지
-      // 않되 **보고는 한다**. 조용히 건너뛰면 '검증됐다'로 읽힌다.
-      dlog('graph-mode: 브레인 꺼짐(필 숨김) — 측정 건너뜀');
     } else {
-      // 필·캔버스·전역 중 하나가 아예 없다. 이건 "꺼져 있다"가 아니라 배선이
-      // 끊긴 것이므로 실패다.
-      failures.push('graph-mode: 배선이 끊겼다 (필/캔버스/전역 누락)');
+      // 브레인이 안 됐다 — 그래도 칩을 누르면 캔버스는 열려야 한다(막히지 않는다),
+      // 다만 그 안은 실제 그래프가 아니라 정직한 안내여야 한다.
+      assertOk('graph-mode: 브레인이 안 돼도 칩을 누르면 캔버스가 열린다', graph.clickOpened === true);
+      assertOk('graph-mode: 토글하면 요약이 숨는다', graph.summaryHidden === true);
+      assertOk(
+        'graph-mode: 브레인 미준비 시 캔버스 안에 정직한 안내가 뜬다(빈 화면이 아니다)',
+        /브레인|성향/.test(graph.containerText || ''),
+      );
+      report.graphMode.shot = await shot(shellWin, '90-graph-mode-unavailable.png');
     }
   } catch (err) {
     report.graphMode = { error: String((err && err.message) || err) };
