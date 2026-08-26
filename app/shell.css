@@ -273,6 +273,35 @@ body { margin: 0; overflow: hidden; }
   color: var(--color-k-faint);
 }
 
+/* 에이전트모드 "작업·알람" 행(리프 1.2.2, Paper 보드 39 보강본 실측) — 날짜
+ * 섹션 행보다 촘촘한 padding/radius를 쓴다. 상태점 색은 상태 자체가 이미
+ * 의미를 담고 있으므로(활성=초록/실시간=파랑/일시중지=주황) 행 색은 활성 쪽만
+ * 진하게, 일시중지는 흐리게 갈라 시각적으로 "지금 안 도는 것"을 드러낸다. */
+.sidebar-section-label.is-routine-caption {
+  padding: 6px 12px 4px;
+  letter-spacing: 0.08em;
+  line-height: 14px;
+}
+.sidebar-item.is-routine {
+  gap: 8px;
+  padding: 0 12px;
+  border-radius: 6px;
+  color: var(--color-k-text);
+}
+.sidebar-item.is-routine .sidebar-item-label {
+  font-family: var(--font-strong);
+}
+.sidebar-item.is-routine.is-paused {
+  color: var(--color-k-faint);
+}
+.sidebar-item-status-ic {
+  flex-shrink: 0;
+  width: 11px;
+  font-size: var(--text-xs);
+  line-height: 14px;
+  text-align: center;
+}
+
 .sidebar-account-row {
   flex-shrink: 0;
   display: flex;
