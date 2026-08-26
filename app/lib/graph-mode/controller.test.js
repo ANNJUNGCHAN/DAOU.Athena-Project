@@ -57,6 +57,9 @@ function setup(options) {
     },
     onError: opts.onError,
   });
+  // 대부분의 테스트는 브레인이 켜져 있다고 가정한다 — 꺼진 채 시작하고 싶은
+  // 테스트만 opts.available: false를 넘긴다.
+  if (opts.available !== false) controller.setAvailable(true);
   return { controller, elements, fetchCalls: () => calls };
 }
 
@@ -73,7 +76,7 @@ test('처음에는 요약이 보이고 그래프는 숨겨져 있다', () => {
   controller.applyVisibility();
   assert.equal(elements.summary.hidden, false);
   assert.equal(elements.graph.hidden, true);
-  assert.equal(elements.pill.textContent, '그래프');
+  assert.equal(elements.pill.textContent, '답변', '모드 칩은 지금 모드를 보여준다');
 });
 
 test('토글하면 캔버스 영역이 그래프로 바뀌고 그려진다', async () => {
@@ -81,7 +84,7 @@ test('토글하면 캔버스 영역이 그래프로 바뀌고 그려진다', asy
   await controller.toggle();
   assert.equal(elements.summary.hidden, true, '요약이 숨는다');
   assert.equal(elements.graph.hidden, false);
-  assert.equal(elements.pill.textContent, '요약', '다음 동작을 표시한다');
+  assert.equal(elements.pill.textContent, '그래프', '모드 칩은 지금 모드를 보여준다');
   assert.equal(render.describeRendered(elements.graph).nodes, 2);
 });
 
@@ -120,22 +123,45 @@ test('백엔드가 죽으면 요약으로 돌아간다', async () => {
   assert.equal(seen.length, 1, '오류를 삼키지 않는다');
 });
 
-test('브레인이 꺼져 있으면 필을 숨긴다', () => {
-  // 없는 기능을 있다고 표시하지 않는다 — 루틴 칩과 같은 규율.
-  const { controller, elements } = setup();
-  controller.setAvailable(false);
-  assert.equal(elements.pill.hidden, true);
+test('모드 칩은 브레인 상태와 무관하게 상시 보인다', () => {
+  // 점(대화 상태)·칩(현재 모드) 둘 다 항상 켜져 있다 — 그래프 모드 진입로를
+  // 숨기지 않는다(Paper 보드 05 "모드 칩 상시").
+  const { controller, elements } = setup({ available: false });
+  controller.applyVisibility();
+  assert.equal(elements.pill.hidden, false);
   controller.setAvailable(true);
   assert.equal(elements.pill.hidden, false);
 });
 
-test('그래프를 보는 중에 브레인이 꺼지면 요약으로 되돌린다', async () => {
+test('브레인이 안 됐을 때 그래프 모드로 들어오면 캔버스 안에 정직한 안내가 뜬다', async () => {
+  // 빈 그래프를 그냥 띄우면 "성향이 없다"로 읽힌다 — 없는 것과 못 읽은 것은 다르다.
+  // 그렇다고 모드 진입 자체를 막지도 않는다(예전엔 필이 숨어서 못 들어왔다).
+  const { controller, elements, fetchCalls } = setup({ available: false });
+  await controller.toggle();
+  assert.equal(elements.summary.hidden, true, '그래프 모드 자체는 열린다');
+  assert.equal(elements.graph.hidden, false);
+  assert.equal(fetchCalls(), 0, '못 쓴다는 걸 이미 아니까 왕복하지 않는다');
+  assert.match(elements.graph.children[0].textContent, /브레인|성향/);
+});
+
+test('그래프를 보는 중에 브레인이 꺼지면 화면 안에서 안내로 바뀐다(요약으로 쫓겨나지 않는다)', async () => {
   const { controller, elements } = setup();
   await controller.toggle();
   assert.equal(elements.graph.hidden, false);
+  const svgBefore = elements.graph.children[0];
   controller.setAvailable(false);
-  assert.equal(elements.graph.hidden, true, '못 쓰는 화면에 머물지 않는다');
-  assert.equal(elements.summary.hidden, false);
+  assert.equal(elements.graph.hidden, false, '그래프 모드에 그대로 머문다');
+  assert.equal(elements.summary.hidden, true);
+  assert.notEqual(elements.graph.children[0], svgBefore, '그림 대신 안내로 바뀐다');
+});
+
+test('그래프를 못 쓰다가 브레인이 켜지면 안내 대신 실제로 그린다', async () => {
+  const { controller, elements, fetchCalls } = setup({ available: false });
+  await controller.toggle();
+  assert.equal(fetchCalls(), 0);
+  await controller.setAvailable(true);
+  assert.equal(fetchCalls(), 1);
+  assert.equal(render.describeRendered(elements.graph).nodes, 2);
 });
 
 test('설정이 이름표 임계를 정한다', async () => {

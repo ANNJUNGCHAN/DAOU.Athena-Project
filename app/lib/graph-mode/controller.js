@@ -24,15 +24,32 @@ function createGraphModeController(deps) {
   let state = store.createInitialState();
   let lastDrawnRevision = null;
   let lastPlaced = null; // 마지막으로 받은 배치. 펼침·접기·선택은 새 fetch 없이 이걸 다시 필터링해서 그린다.
+  // 브레인 상태를 아직 모르는 부팅 초반엔 "못 씀"으로 가정한다 — setAvailable(true)가
+  // 오기 전에 그래프 모드로 들어오면 renderUnavailable()의 정직한 안내를 보여준다.
+  let available = false;
 
   function applyVisibility() {
     const graphView = store.isGraphView(state);
     if (elements.summary) elements.summary.hidden = graphView;
     if (elements.graph) elements.graph.hidden = !graphView;
     if (elements.pill) {
-      elements.pill.textContent = graphView ? '요약' : '그래프';
+      // 모드 칩은 "다음에 할 동작"이 아니라 "지금 모드"를 보여준다(Paper 보드 05
+      // "모드 칩 상시" — 답변/그래프 둘 중 지금 켜져 있는 쪽).
+      elements.pill.textContent = graphView ? '그래프' : '답변';
       elements.pill.setAttribute('aria-pressed', graphView ? 'true' : 'false');
     }
+  }
+
+  // 브레인이 안 됐는데 그래프 모드로 들어오면 빈 캔버스 대신 이렇게 정직하게
+  // 알린다 — 없는 것(성향 자체가 없다)과 못 읽은 것(브레인 미기동)은 다르다.
+  function renderUnavailable() {
+    if (!elements.graph) return;
+    while (elements.graph.firstChild) elements.graph.removeChild(elements.graph.firstChild);
+    const note = document.createElement('div');
+    note.className = 'graph-mode-unavailable';
+    note.textContent = '아직 성향을 읽을 수 없습니다 — 브레인이 준비되면 여기 그래프로 보입니다.';
+    elements.graph.appendChild(note);
+    lastDrawnRevision = null; // available해지면 실제 그림으로 다시 그리게 한다.
   }
 
   // 노드 클릭 하나가 지금 단계에 따라 다른 뜻이다(보드 15): 1단계에서는 그 노드가
@@ -107,6 +124,10 @@ function createGraphModeController(deps) {
 
   async function draw(force) {
     if (!store.isGraphView(state)) return null;
+    if (!available) {
+      renderUnavailable();
+      return null;
+    }
     let payload;
     try {
       payload = await fetchClusterMap();
@@ -156,13 +177,17 @@ function createGraphModeController(deps) {
     async refresh() {
       return draw(false);
     },
-    // 브레인이 준비됐을 때만 필을 보인다 — 없는 기능을 있다고 표시하지 않는다.
-    setAvailable(available) {
-      if (elements.pill) elements.pill.hidden = !available;
-      if (!available && store.isGraphView(state)) {
-        state = store.setView(state, store.VIEW_SUMMARY);
-        applyVisibility();
+    // 모드 칩은 상시 보인다(Paper 보드 05) — 브레인 꺼짐은 칩을 숨기는 대신
+    // 그래프 화면 안에서 renderUnavailable()로 정직하게 알린다. 그래프 모드
+    // 자체는 브레인 상태와 무관하게 항상 열 수 있다.
+    setAvailable(nextAvailable) {
+      available = Boolean(nextAvailable);
+      if (!store.isGraphView(state)) return undefined;
+      if (available) {
+        return draw(true); // 못 쓰던 그래프가 쓸 수 있게 됐다 — 안내 대신 실제로 그린다.
       }
+      renderUnavailable();
+      return undefined;
     },
     applyVisibility,
     // 공통 패널 공개 API — 그래프 밖(요약 표의 행 선택, 보드 07)에서도 같은 패널을

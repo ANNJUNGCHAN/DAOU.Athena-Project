@@ -137,6 +137,21 @@ html, body { background: transparent; }
   color: var(--color-warn);
 }
 
+/* 그래프 모드 — 브레인이 안 됐을 때의 정직한 안내(controller.js renderUnavailable).
+ * 없는 것(성향 자체가 없다)과 못 읽은 것(브레인 미기동)을 가른다 — 빈 캔버스를
+ * 그냥 띄우면 전자로 읽힌다. */
+.graph-mode-unavailable {
+  position: absolute; inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 32px;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--color-k-dim);
+}
+
 /* 카드도 유리다 — soul.md §7 "모든 표면이 유리다. 두 창도, 창 안의 카드도 전부."
  * 2026-08-17 디자인 리뷰 [HIGH]로 정정: 이전 판은 고정 rgba 채움 + backdrop-filter
  * 0건이라 §7이 금지한 "뒤에 굴절할 것 없는 반투명 회색 사각형"이었다. 이제 알파를

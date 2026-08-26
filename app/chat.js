@@ -793,7 +793,11 @@ async function runHistoryCommand(text) {
   $input.focus();
 }
 
-$dot.addEventListener('click', () => { openSettings(); });
+// 점은 답변⇄그래프 모드 전환기다(Paper 보드 05, 2026-08-26). 설정 진입은
+// 사이드바 계정 메뉴(보드 16)로 옮겼다 — 커맨드바("설정")도 동등한 진입로다.
+// 실제 모드 엔진은 canvas.js의 graphMode(lib/graph-mode/controller.js) — 여기는
+// 그 위에 점 하나를 얹을 뿐, 두 번째 모드 엔진을 만들지 않는다.
+$dot.addEventListener('click', () => { window.AthenaGraphMode.toggle(); });
 // 사이드바 계정 메뉴(Paper 보드 16)의 "설정" 항목이 쓰는 다리 — lib/sidebar.js
 // 참고.
 window.AthenaShell.registerOpenSettings(openSettings);
