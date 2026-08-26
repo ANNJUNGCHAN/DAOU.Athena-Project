@@ -886,6 +886,11 @@ _CARD_TITLE_OVERRIDES: dict[str, str] = {
     "detail:kt00009:contract_amounts": "주문내역",  # 매도·매수 약정금액
     "detail:kt50032:account_identity": "주문내역",  # 계좌 정보
     "detail:kt50032:gold_trade_history": "주문내역",  # 금현물 거래 내역
+    # 수급 — stockinfo 도메인 기본값("종목정보")으로 새던 1종(2026-08-26
+    # Lane 2 실측 제보). 응답 모델(Ka10061ResponseStkInvsrOrgnTotItem)이
+    # ind_invsr(개인투자자)/frgnr_invsr(외국인투자자)/orgn(기관계) 필드를
+    # 그대로 갖고 있어 Paper 수급카드 목업이 요구하는 데이터 그대로다.
+    "base:ka10061": "수급",  # 종목별투자자기관별합계요청
 }
 
 # 도메인 무관하게 항상 적용하는 라벨 키워드 — 이 5종은 다른 도메인과 섞일 위험이
