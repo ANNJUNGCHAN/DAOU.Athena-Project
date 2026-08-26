@@ -435,6 +435,17 @@ async function runQueryLive(text) {
 
   let cardCount = 0;
   let calling = false;
+  // 카드 우선 표시(US-006) — render_canvas가 이번 턴에 떴다는 신호(아래
+  // onLiveToolStep, main.js toolStepLabel의 '카드 그리는 중' 라벨 — 새 IPC
+  // 없이 기존 tool-step 구독을 그대로 재사용한다)를 본 뒤로는, 첫 카드가
+  // 실제로 도착(onLiveCanvasAdded)하기 전까지 답변 텍스트 조각을 화면에
+  // 안 그리고 여기 모아둔다. 카드 없는 질의(renderCanvasSeen=false)는 이
+  // 분기를 타지 않아 지연이 0이다. 유실 걱정은 안 한다 — 턴이 끝나면
+  // 아래(583행 부근) "최종 텍스트는 응답값이 권위" 블록이 버블을 새로
+  // 만들어서라도 authoritative answerText로 항상 덮어쓴다.
+  let renderCanvasSeen = false;
+  let firstCanvasLanded = false;
+  let bufferedText = '';
   const elapsedText = () => `${((Date.now() - startedAt) / 1000).toFixed(1)}s`;
   const renderProgress = () => {
     if (myToken !== abortToken) return;
@@ -450,6 +461,18 @@ async function runQueryLive(text) {
     if (myToken !== abortToken) return;
     if (!calling) { calling = true; state = 'calling'; setDot('calling'); }
     cardCount += 1;
+    // 카드 우선 표시(US-006) — 첫 카드가 도착한 순간이 곧 버퍼 해제 시점이다.
+    // 그때까지 모아둔 텍스트를 한 번에 버블로 흘려보낸다(appendToBubble·
+    // bufferedText는 아래(답변 텍스트 조각 블록)에서 선언 — 클로저라 호출
+    // 시점엔 이미 초기화가 끝나 있다, onLiveTextDelta와 동일한 전제).
+    if (!firstCanvasLanded) {
+      firstCanvasLanded = true;
+      if (bufferedText) {
+        clearThinkingPreview();
+        appendToBubble(bufferedText);
+        bufferedText = '';
+      }
+    }
     renderProgress();
     scrollAfterRender();
   };
@@ -465,6 +488,9 @@ async function runQueryLive(text) {
     const result = toolStepTrack.applyToolStep(toolStepStates, step);
     if (!result) return;
     if (!calling) { calling = true; state = 'calling'; setDot('calling'); }
+    // 카드 우선 표시(US-006) — 새 IPC 없이 이 라벨(main.js toolStepLabel의
+    // render_canvas 전용 문구)로만 판정한다. 한 번 참이면 이번 턴 내내 유지한다.
+    if (result.label === '카드 그리는 중') renderCanvasSeen = true;
     let el = toolStepEls.get(result.id);
     if (!el) {
       el = document.createElement('div');
@@ -526,10 +552,7 @@ async function runQueryLive(text) {
   let streamALine = null;
   let streamAText = null;
   let streamedText = '';
-  const onLiveTextDelta = ({ text: delta } = {}) => {
-    if (myToken !== abortToken || !delta) return;
-    if (!calling) { calling = true; state = 'calling'; setDot('calling'); }
-    clearThinkingPreview(); // 답변이 시작됐다 — 추론 미리보기는 자리를 비켜준다
+  const appendToBubble = (text) => {
     if (!streamALine) {
       streamALine = document.createElement('div');
       streamALine.className = 'turn';
@@ -538,9 +561,23 @@ async function runQueryLive(text) {
       streamALine.appendChild(streamAText);
       $history.appendChild(streamALine);
     }
-    streamedText += delta;
+    streamedText += text;
     streamAText.textContent = streamedText;
     scrollAfterRender();
+  };
+  const onLiveTextDelta = ({ text: delta } = {}) => {
+    if (myToken !== abortToken || !delta) return;
+    if (!calling) { calling = true; state = 'calling'; setDot('calling'); }
+    // 카드 우선 표시(US-006) — render_canvas가 이번 턴에 떴는데 카드가 아직
+    // 안 왔으면, 조각을 화면에 안 그리고 모아만 둔다(onLiveCanvasAdded가
+    // 첫 카드 도착 때 한 번에 흘려보낸다). render_canvas가 없던 질의는
+    // renderCanvasSeen이 계속 false라 이 분기를 절대 안 타 지연이 0이다.
+    if (renderCanvasSeen && !firstCanvasLanded) {
+      bufferedText += delta;
+      return;
+    }
+    clearThinkingPreview(); // 답변이 시작됐다 — 추론 미리보기는 자리를 비켜준다
+    appendToBubble(delta);
   };
   const unsubscribeLiveTextDelta = window.athena.on('athena:live-text-delta', onLiveTextDelta);
 
