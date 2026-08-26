@@ -398,6 +398,36 @@ async function runQuery(text) {
   return runQueryLive(text);
 }
 
+// 완료된 턴의 실행 기록 보존(단계 9, board-04 "⑥ 경과 헤더") — 진행 중 그렸던
+// toolSteps를 다시 그리지 않고 그대로 옮겨 붙인 뒤 접는다(AC6: 펼쳤을 때
+// 라벨·소요시간이 진행 중 표시와 동일해야 한다 — 같은 DOM 노드라 항상 같다).
+// 도구 호출이 하나도 없던 턴(순수 프로즈 답변)은 접을 기록이 없으므로 null —
+// 호출자는 그때 아무것도 붙이지 않는다. Esc 중단(abortToken 경로)은 이 함수를
+// 아예 안 거친다 — liveProgressEl을 통째로 지울 뿐이다(5.3장, AC10 의도적 비대칭).
+function foldExecutionRecord(toolSteps, startedAt) {
+  if (!toolSteps || !toolSteps.childElementCount) return null;
+  const seconds = Math.max(0, Math.round((Date.now() - startedAt) / 1000));
+  const header = document.createElement('button');
+  header.type = 'button';
+  header.className = 'turn-exec-header';
+  const label = document.createElement('span');
+  label.className = 'turn-exec-header-label';
+  label.textContent = `${seconds}초 동안 작업함`;
+  const caret = document.createElement('span');
+  caret.className = 'turn-exec-header-caret';
+  caret.textContent = '⌄';
+  header.append(label, caret);
+  toolSteps.hidden = true;
+  header.addEventListener('click', () => {
+    toolSteps.hidden = !toolSteps.hidden;
+    caret.textContent = toolSteps.hidden ? '⌄' : '⌃';
+  });
+  const record = document.createElement('div');
+  record.className = 'turn-exec-record';
+  record.append(header, toolSteps);
+  return record;
+}
+
 async function runQueryLive(text) {
   const myToken = ++abortToken;
   clearRecommendations();
@@ -607,6 +637,7 @@ async function runQueryLive(text) {
   state = 'idle';
   setDot(null);
   setLocked(false);
+  const execRecord = foldExecutionRecord(toolSteps, startedAt);
   progress.remove();
   liveProgressEl = null;
 
@@ -614,6 +645,7 @@ async function runQueryLive(text) {
   // $history 안에 있다). 없으면(REST 직결·캐시 리플레이·조각 0개) 기존처럼 새로 만든다.
   const aLine = streamALine || document.createElement('div');
   aLine.className = 'turn';
+  if (execRecord) aLine.insertBefore(execRecord, aLine.firstChild);
   const aText = streamAText || document.createElement('div');
   aText.className = 'turn-a';
   // 최종 텍스트는 응답값이 권위다(스트리밍 누적치가 아니다) — 조각이 유실되거나
