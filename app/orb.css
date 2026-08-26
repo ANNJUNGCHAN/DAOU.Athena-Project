@@ -574,19 +574,6 @@ html, body {
   background: rgb(16 19 26 / 5%);
 }
 
-.orb-turn-meta {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-.orb-turn-chip {
-  font-size: var(--text-xs);
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: rgb(16 19 26 / 7%);
-  color: var(--color-k-faint);
-}
-
 /* 진행 카드 — "판단 중" + 툴 단계. 스피너는 없다(오브 시선이 대신한다) —
  * 이 카드는 텍스트·아이콘·소요시간만 그린다. */
 .orb-progress-card {
