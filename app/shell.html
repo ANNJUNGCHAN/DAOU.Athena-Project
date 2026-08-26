@@ -81,6 +81,10 @@
              형제라 clearCanvases()가 건드리지 않는다(#grid만 지운다). -->
         <div id="graphSummaryTable" hidden></div>
         <div id="grid" class="grid"></div>
+        <!-- 캔버스 빈 상태(보드 05) — #grid의 형제. 카드가 0장일 때만 보인다
+             (canvas.js MutationObserver). 숫자·CTA를 담아야 해서 CSS :empty
+             pseudo-content로는 못 그린다 — 실DOM이다. -->
+        <div id="gridEmpty" class="canvas-empty-wrap" hidden></div>
       </div>
       <!-- 그래프 모드 — 요약(위 모자이크)과 **형제**다. 둘 중 하나만 보인다.
            canvasRegion 전체를 토글하는 것이 결정(deep-interview Round 5). -->
@@ -190,6 +194,7 @@
 <script src="lib/markdown.js"></script>
 <script src="lib/rest-canvas-paint.js"></script>
 <script src="lib/canvas-layout.js"></script>
+<script src="lib/empty-canvas.js"></script>
 <script src="lib/column-fold.js"></script>
 <script src="lib/facts-card.js"></script>
 <script src="lib/chart-indicator-registry.js"></script>
