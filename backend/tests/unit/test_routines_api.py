@@ -121,3 +121,71 @@ def test_unknown_routine_is_404(app_client):
     client, _ = app_client
     assert client.post("/api/v1/routines/none/confirm").status_code == 404
     assert client.post("/api/v1/routines/none/cancel").status_code == 404
+    assert client.post("/api/v1/routines/none/pause").status_code == 404
+    assert client.post("/api/v1/routines/none/resume").status_code == 404
+
+
+class FakeWs:
+    def __init__(self):
+        self.registered = []
+
+    async def register(self, tr_id, items, **kw):
+        self.registered.append((tr_id, tuple(items)))
+        return {}
+
+
+def test_pause_then_resume_routine(app_client):
+    client, runtime = app_client
+    runtime.ws_client = FakeWs()
+    rid = client.post("/api/v1/routines/draft", json=DRAFT).json()["id"]
+    res = client.post(f"/api/v1/routines/{rid}/confirm")
+    assert res.status_code == 200
+    assert res.json()["status"] == "active"
+
+    res = client.post(f"/api/v1/routines/{rid}/pause")
+    assert res.status_code == 200
+    assert res.json()["status"] == "paused"
+
+    res = client.post(f"/api/v1/routines/{rid}/resume")
+    assert res.status_code == 200
+    assert res.json()["status"] == "active"
+
+
+def test_pause_rejects_invalid_transition(app_client):
+    client, _ = app_client
+    # draft 상태는 ALLOWED_TRANSITIONS 상 "paused"로 전이할 수 없다.
+    rid = client.post("/api/v1/routines/draft", json=DRAFT).json()["id"]
+    res = client.post(f"/api/v1/routines/{rid}/pause")
+    assert res.status_code == 409
+
+
+def test_runs_filters_by_routine_id(app_client):
+    client, runtime = app_client
+    rid_a = client.post("/api/v1/routines/draft", json=DRAFT).json()["id"]
+    rid_b = client.post("/api/v1/routines/draft", json=DRAFT).json()["id"]
+
+    runtime.ledger.record(
+        "fired",
+        routine_id=rid_a,
+        symbol="005930",
+        source="price.current",
+        observed=199000,
+        threshold=200000,
+        reason="조건 충족",
+    )
+    runtime.ledger.record(
+        "suppressed",
+        routine_id=rid_b,
+        symbol="005930",
+        source="price.current",
+        observed=199500,
+        threshold=200000,
+        reason="쿨다운 중",
+    )
+
+    res = client.get(f"/api/v1/routines/{rid_a}/runs")
+    assert res.status_code == 200
+    runs = res.json()["runs"]
+    assert len(runs) == 1
+    assert runs[0]["routine_id"] == rid_a
+    assert runs[0]["verdict"] == "fired"
