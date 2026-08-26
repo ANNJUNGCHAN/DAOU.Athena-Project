@@ -27,6 +27,17 @@ const ENGLISH_QUOTE_CORE = '(?:current\\s+(?:stock\\s+)?price|stock\\s+price\\s+
 const KOREAN_CHART_CORE = '(?:일봉\\s*차트|차트|일봉)';
 const KOREAN_CHART_COURTESY = '(?:\\s*(?:를|은|는))?(?:\\s*(?:좀|한번))?(?:\\s*(?:(?:보여|그려|띄워)\\s*(?:줘|주세요|줄래)?|(?:조회|확인)\\s*(?:해)?\\s*(?:줘|주세요)|해\\s*(?:줘|주세요)))?';
 
+// 카드 v3 정형 질의 5종(2026-08-26, 속도 레버) — QUOTE_COURTESY를 그대로
+// 재사용한다("보여/알려줘"·"조회/확인해줘"류 순수 조회 정중어라 그림/띄움
+// 동사가 붙는 CHART_COURTESY와 다르다). 각 CORE는 그 카드 하나만 가리키는
+// 명사라 다른 화면과 안 겹친다(예: "시세"는 QUOTE_CORE에 이미 있어 안 넣음).
+const KOREAN_ORDERBOOK_CORE = '(?:호가)';
+const KOREAN_INVESTOR_FLOW_CORE = '(?:수급|(?:외국인|기관)\\s*매매(?:\\s*동향)?)';
+const KOREAN_TRADING_SOURCE_CORE = '(?:거래원)';
+const KOREAN_STOCKINFO_CORE = '(?:종목정보|기업정보)';
+// 프로그램매매는 종목 무관(시장 전체) — entity 결선이 아예 없다.
+const KOREAN_PROGRAM_TRADE_CORE = '(?:프로그램매매(?:\\s*동향)?)';
+
 class RestDatasetError extends Error {
   constructor(code, message, details = {}) {
     super(message);
@@ -92,6 +103,47 @@ function matchesStandaloneChartGrammar(query, index, entity) {
     const pattern = `${GRAMMAR_EDGE}${koreanEntity}\\s*${KOREAN_CHART_CORE}${KOREAN_CHART_COURTESY}${GRAMMAR_EDGE}`;
     return new RegExp(`^${pattern}$`, 'iu').test(text);
   });
+}
+
+// 카드 v3 정형 질의 5종 공용 — 위 quote/chart와 같은 원칙(닫힌 문법, 전체
+// 소진)이라 entity+core+courtesy 뼈대를 공유한다. quote/chart는 각자 영어
+// 변형·다중 패턴이 있어 그대로 두고 손 안 댄다 — 이 5종은 전부 한국어
+// 단일 패턴이라 새 코드에서만 중복을 걷는다.
+function matchesStandaloneEntityGrammar(query, index, entity, core, courtesy) {
+  if (!index || !entity) return false;
+  const text = String(query || '').normalize('NFKC').toLocaleLowerCase('ko-KR').trim();
+  const aliases = index.aliasesForEntity(entity);
+  return aliases.some((alias) => {
+    const aliasPattern = flexibleExactAliasPattern(alias);
+    const koreanEntity = `${aliasPattern}(?:의|은|는|이|가|을|를)?`;
+    const pattern = `${GRAMMAR_EDGE}${koreanEntity}\\s*${core}${courtesy}${GRAMMAR_EDGE}`;
+    return new RegExp(`^${pattern}$`, 'iu').test(text);
+  });
+}
+
+function matchesStandaloneOrderBookGrammar(query, index, entity) {
+  return matchesStandaloneEntityGrammar(query, index, entity, KOREAN_ORDERBOOK_CORE, KOREAN_QUOTE_COURTESY);
+}
+
+function matchesStandaloneInvestorFlowGrammar(query, index, entity) {
+  return matchesStandaloneEntityGrammar(query, index, entity, KOREAN_INVESTOR_FLOW_CORE, KOREAN_QUOTE_COURTESY);
+}
+
+function matchesStandaloneTradingSourceGrammar(query, index, entity) {
+  return matchesStandaloneEntityGrammar(query, index, entity, KOREAN_TRADING_SOURCE_CORE, KOREAN_QUOTE_COURTESY);
+}
+
+function matchesStandaloneStockInfoGrammar(query, index, entity) {
+  return matchesStandaloneEntityGrammar(query, index, entity, KOREAN_STOCKINFO_CORE, KOREAN_QUOTE_COURTESY);
+}
+
+// 종목 결선이 없다 — 시장 전체 프로그램매매 동향이라 entity 매칭을 아예 안
+// 거친다. 남는 단어가 있으면(예: "삼성전자 프로그램매매") 이 문법이 아니라
+// 정상 selector로 넘어간다(전체 소진 원칙 그대로).
+function matchesStandaloneProgramTradeGrammar(query) {
+  const text = String(query || '').normalize('NFKC').toLocaleLowerCase('ko-KR').trim();
+  const pattern = `${GRAMMAR_EDGE}${KOREAN_PROGRAM_TRADE_CORE}${KOREAN_QUOTE_COURTESY}${GRAMMAR_EDGE}`;
+  return new RegExp(`^${pattern}$`, 'iu').test(text);
 }
 
 function kstToday() {
@@ -846,6 +898,128 @@ function buildChartDataset(query, index, {
   };
 }
 
+// 호가 — base:ka10004(주식호가요청). 인자가 stk_cd 하나뿐이라(백엔드
+// Ka10004Request) 추가 매개변수가 필요 없다.
+function buildOrderBookDataset(query, index, { idFactory = () => `rest-${Date.now().toString(36)}` } = {}) {
+  const text = String(query || '').trim();
+  const entity = index && index.resolveQuery(text);
+  if (!entity || entity.kind !== 'stock' || !matchesStandaloneOrderBookGrammar(text, index, entity)) return null;
+  return {
+    datasetId: String(idFactory()).slice(0, 64),
+    question: text,
+    items: [{
+      itemId: 'primary-orderbook',
+      ordinal: 1,
+      operationRef: 'base:ka10004',
+      args: { stk_cd: entity.code },
+      caption: null,
+    }],
+  };
+}
+
+// 수급 — base:ka10061(종목별투자자기관별합계요청). 개인/외국인/기관 3행
+// 스냅샷이 목적이라 시작일=종료일=오늘(단일 거래일)로 준다 — 추이가
+// 필요하면(닫힌 문법 밖) 모델 경로로 넘어간다. amt_qty_tp:'1'(금액)·
+// trde_tp:'0'(순매수, 백엔드 계약상 유일값)·unit_tp:'1000'(천주)은
+// Ka10061Request 필수 필드의 API 문서 나열 첫 값을 그대로 쓴다(추측 아님).
+function buildInvestorFlowDataset(query, index, {
+  idFactory = () => `rest-${Date.now().toString(36)}`,
+  today = kstToday,
+} = {}) {
+  const text = String(query || '').trim();
+  const entity = index && index.resolveQuery(text);
+  if (!entity || entity.kind !== 'stock' || !matchesStandaloneInvestorFlowGrammar(text, index, entity)) return null;
+  const dt = today();
+  return {
+    datasetId: String(idFactory()).slice(0, 64),
+    question: text,
+    items: [{
+      itemId: 'primary-investor-flow',
+      ordinal: 1,
+      operationRef: 'base:ka10061',
+      args: {
+        stk_cd: entity.code,
+        strt_dt: dt,
+        end_dt: dt,
+        amt_qty_tp: '1',
+        trde_tp: '0',
+        unit_tp: '1000',
+      },
+      caption: null,
+    }],
+  };
+}
+
+// 거래원 — base:ka10038(종목별증권사순위요청). qry_tp:'2'(순매수순위정렬)를
+// 기본값으로 쓴다 — "OO 거래원"류 질문은 보통 누가 사들이고 있는지를 묻는다.
+function buildTradingSourceDataset(query, index, { idFactory = () => `rest-${Date.now().toString(36)}` } = {}) {
+  const text = String(query || '').trim();
+  const entity = index && index.resolveQuery(text);
+  if (!entity || entity.kind !== 'stock' || !matchesStandaloneTradingSourceGrammar(text, index, entity)) return null;
+  return {
+    datasetId: String(idFactory()).slice(0, 64),
+    question: text,
+    items: [{
+      itemId: 'primary-trading-source',
+      ordinal: 1,
+      operationRef: 'base:ka10038',
+      args: { stk_cd: entity.code, qry_tp: '2' },
+      caption: null,
+    }],
+  };
+}
+
+// 종목정보 — base:ka10100(종목정보 조회). ka10001은 detail 7종으로 쪼개져
+// 있어(isEligibleOperationRef가 base:ka10001 자체를 이미 배제한다) 단일
+// TR로 "종목정보 개요"에 대응하는 게 없다 — stk_cd 하나만 받는 ka10100이
+// 정확히 그 개요 TR이다.
+function buildStockInfoDataset(query, index, { idFactory = () => `rest-${Date.now().toString(36)}` } = {}) {
+  const text = String(query || '').trim();
+  const entity = index && index.resolveQuery(text);
+  if (!entity || entity.kind !== 'stock' || !matchesStandaloneStockInfoGrammar(text, index, entity)) return null;
+  return {
+    datasetId: String(idFactory()).slice(0, 64),
+    question: text,
+    items: [{
+      itemId: 'primary-stockinfo',
+      ordinal: 1,
+      operationRef: 'base:ka10100',
+      args: { stk_cd: entity.code },
+      caption: null,
+    }],
+  };
+}
+
+// 프로그램매매 — base:ka90005(프로그램매매추이요청 시간대별), 시장 전체
+// 집계라 종목 결선이 없다. date는 오늘, amt_qty_tp:'1'(금액)·mrkt_tp:'P00101'
+// (코스피/KRX)·min_tic_tp:'1'(분)·stex_tp:'1'(KRX)은 전부 Ka90005Request
+// 필수 필드의 API 문서 첫 값 그대로다(추측 아님) — 코스닥 등 다른 시장은
+// 닫힌 문법 밖(불확실하면 미매치).
+function buildProgramTradeDataset(query, {
+  idFactory = () => `rest-${Date.now().toString(36)}`,
+  today = kstToday,
+} = {}) {
+  const text = String(query || '').trim();
+  if (!matchesStandaloneProgramTradeGrammar(text)) return null;
+  return {
+    datasetId: String(idFactory()).slice(0, 64),
+    question: text,
+    items: [{
+      itemId: 'primary-program-trade',
+      ordinal: 1,
+      operationRef: 'base:ka90005',
+      args: {
+        date: today(),
+        amt_qty_tp: '1',
+        mrkt_tp: 'P00101',
+        min_tic_tp: '1',
+        stex_tp: '1',
+      },
+      caption: null,
+    }],
+  };
+}
+
 module.exports = {
   MAX_ITEMS,
   MAX_CONCURRENCY,
@@ -863,6 +1037,11 @@ module.exports = {
   buildDeterministicAnswer,
   buildQuoteDataset,
   buildChartDataset,
+  buildOrderBookDataset,
+  buildInvestorFlowDataset,
+  buildTradingSourceDataset,
+  buildStockInfoDataset,
+  buildProgramTradeDataset,
   refreshStockEntityIndex,
   runRestDataset,
 };

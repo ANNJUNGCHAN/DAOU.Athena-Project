@@ -11,6 +11,11 @@ const {
   StockEntityIndex,
   buildQuoteDataset,
   buildChartDataset,
+  buildOrderBookDataset,
+  buildInvestorFlowDataset,
+  buildTradingSourceDataset,
+  buildStockInfoDataset,
+  buildProgramTradeDataset,
   refreshStockEntityIndex,
   normalizeDataset,
   normalizeRecommendations,
@@ -749,6 +754,191 @@ test('chart binder uses a closed standalone grammar and rejects every residual s
   // 주문류 의도는 애초에 차트 문법에 없는 단어라 매치될 수 없다 — 명시적으로 확인.
   for (const orderLike of ['삼성전자 매수', '삼성전자 100주 매수 주문', '삼성전자 매도해줘']) {
     assert.equal(buildChartDataset(orderLike, index), null, orderLike);
+  }
+});
+
+test('order book binder uses a closed standalone grammar and rejects every residual semantic token', () => {
+  const index = new StockEntityIndex();
+  index.replace([
+    { code: '005930', name: '삼성전자', aliases: ['Samsung Electronics'], market: '0' },
+    { code: '015760', name: '한국전력', market: '0' },
+    { code: '069500', name: 'KODEX 200', market: '8' },
+  ]);
+
+  for (const standaloneQuestion of [
+    '삼성전자 호가',
+    '삼성전자 호가 보여줘',
+    '삼성전자 호가 조회해줘',
+    '005930 호가',
+    '005930 호가 알려줘',
+  ]) {
+    const bound = buildOrderBookDataset(standaloneQuestion, index, { idFactory: () => 'standalone-orderbook' });
+    assert.equal(bound.datasetId, 'standalone-orderbook', standaloneQuestion);
+    assert.equal(bound.items[0].operationRef, 'base:ka10004', standaloneQuestion);
+    assert.deepEqual(bound.items[0].args, { stk_cd: '005930' }, standaloneQuestion);
+  }
+
+  for (const residualContext of [
+    '삼성전자 차트', // 다른 문법 영역
+    '삼성전자 현재가', // 다른 문법 영역
+    '삼성전자 호가 분석해줘', // "분석"은 정중어 목록 밖
+    '삼성전자와 한국전력 호가 비교',
+    '삼성전자 말고 한국전력 호가',
+    'KODEX 200 호가', // etf는 다른 grammar와 동일하게 kind 제한
+  ]) {
+    assert.equal(buildOrderBookDataset(residualContext, index), null, residualContext);
+  }
+
+  for (const orderLike of ['삼성전자 매수', '삼성전자 100주 매수 주문', '삼성전자 매도해줘']) {
+    assert.equal(buildOrderBookDataset(orderLike, index), null, orderLike);
+  }
+});
+
+test('investor flow binder uses a closed standalone grammar and rejects every residual semantic token', () => {
+  const index = new StockEntityIndex();
+  index.replace([
+    { code: '005930', name: '삼성전자', aliases: ['Samsung Electronics'], market: '0' },
+    { code: '015760', name: '한국전력', market: '0' },
+    { code: '069500', name: 'KODEX 200', market: '8' },
+  ]);
+
+  for (const standaloneQuestion of [
+    '삼성전자 수급',
+    '삼성전자 수급 보여줘',
+    '삼성전자 외국인 매매',
+    '삼성전자 외국인 매매 동향',
+    '삼성전자 기관 매매',
+    '삼성전자 기관 매매 동향 알려줘',
+    '005930 수급',
+  ]) {
+    const bound = buildInvestorFlowDataset(standaloneQuestion, index, { idFactory: () => 'standalone-investor-flow' });
+    assert.equal(bound.datasetId, 'standalone-investor-flow', standaloneQuestion);
+    assert.equal(bound.items[0].operationRef, 'base:ka10061', standaloneQuestion);
+    assert.equal(bound.items[0].args.stk_cd, '005930', standaloneQuestion);
+    assert.equal(bound.items[0].args.amt_qty_tp, '1', standaloneQuestion);
+    assert.equal(bound.items[0].args.trde_tp, '0', standaloneQuestion);
+    assert.equal(bound.items[0].args.unit_tp, '1000', standaloneQuestion);
+    assert.match(bound.items[0].args.strt_dt, /^\d{8}$/, standaloneQuestion);
+    assert.equal(bound.items[0].args.strt_dt, bound.items[0].args.end_dt, standaloneQuestion);
+  }
+
+  for (const residualContext of [
+    '삼성전자 거래원', // 다른 문법 영역
+    '삼성전자 개인 매매', // "개인"은 문법 밖 — 불확실하면 미매치
+    '삼성전자 수급 분석해줘', // "분석"은 정중어 목록 밖
+    '삼성전자와 한국전력 수급 비교',
+    '삼성전자 말고 한국전력 수급',
+    'KODEX 200 수급', // etf는 다른 grammar와 동일하게 kind 제한
+  ]) {
+    assert.equal(buildInvestorFlowDataset(residualContext, index), null, residualContext);
+  }
+
+  for (const orderLike of ['삼성전자 매수', '삼성전자 100주 매수 주문', '삼성전자 매도해줘']) {
+    assert.equal(buildInvestorFlowDataset(orderLike, index), null, orderLike);
+  }
+});
+
+test('trading source binder uses a closed standalone grammar and rejects every residual semantic token', () => {
+  const index = new StockEntityIndex();
+  index.replace([
+    { code: '005930', name: '삼성전자', aliases: ['Samsung Electronics'], market: '0' },
+    { code: '015760', name: '한국전력', market: '0' },
+    { code: '069500', name: 'KODEX 200', market: '8' },
+  ]);
+
+  for (const standaloneQuestion of [
+    '삼성전자 거래원',
+    '삼성전자 거래원 보여줘',
+    '삼성전자 거래원 알려줘',
+    '005930 거래원',
+  ]) {
+    const bound = buildTradingSourceDataset(standaloneQuestion, index, { idFactory: () => 'standalone-trading-source' });
+    assert.equal(bound.datasetId, 'standalone-trading-source', standaloneQuestion);
+    assert.equal(bound.items[0].operationRef, 'base:ka10038', standaloneQuestion);
+    assert.deepEqual(bound.items[0].args, { stk_cd: '005930', qry_tp: '2' }, standaloneQuestion);
+  }
+
+  for (const residualContext of [
+    '삼성전자 수급', // 다른 문법 영역
+    '삼성전자 거래원 분석해줘', // "분석"은 정중어 목록 밖
+    '삼성전자와 한국전력 거래원 비교',
+    '삼성전자 말고 한국전력 거래원',
+    'KODEX 200 거래원', // etf는 다른 grammar와 동일하게 kind 제한
+  ]) {
+    assert.equal(buildTradingSourceDataset(residualContext, index), null, residualContext);
+  }
+
+  for (const orderLike of ['삼성전자 매수', '삼성전자 100주 매수 주문', '삼성전자 매도해줘']) {
+    assert.equal(buildTradingSourceDataset(orderLike, index), null, orderLike);
+  }
+});
+
+test('stock info binder uses a closed standalone grammar and rejects every residual semantic token', () => {
+  const index = new StockEntityIndex();
+  index.replace([
+    { code: '005930', name: '삼성전자', aliases: ['Samsung Electronics'], market: '0' },
+    { code: '015760', name: '한국전력', market: '0' },
+    { code: '069500', name: 'KODEX 200', market: '8' },
+  ]);
+
+  for (const standaloneQuestion of [
+    '삼성전자 종목정보',
+    '삼성전자 종목정보 보여줘',
+    '삼성전자 기업정보',
+    '삼성전자 기업정보 알려줘',
+    '005930 종목정보',
+  ]) {
+    const bound = buildStockInfoDataset(standaloneQuestion, index, { idFactory: () => 'standalone-stockinfo' });
+    assert.equal(bound.datasetId, 'standalone-stockinfo', standaloneQuestion);
+    assert.equal(bound.items[0].operationRef, 'base:ka10100', standaloneQuestion);
+    assert.deepEqual(bound.items[0].args, { stk_cd: '005930' }, standaloneQuestion);
+  }
+
+  for (const residualContext of [
+    '삼성전자 현재가', // 다른 문법 영역
+    '삼성전자 종목정보 분석해줘', // "분석"은 정중어 목록 밖
+    '삼성전자와 한국전력 종목정보 비교',
+    '삼성전자 말고 한국전력 종목정보',
+    'KODEX 200 종목정보', // etf는 다른 grammar와 동일하게 kind 제한
+  ]) {
+    assert.equal(buildStockInfoDataset(residualContext, index), null, residualContext);
+  }
+
+  for (const orderLike of ['삼성전자 매수', '삼성전자 100주 매수 주문', '삼성전자 매도해줘']) {
+    assert.equal(buildStockInfoDataset(orderLike, index), null, orderLike);
+  }
+});
+
+test('program trade binder uses a closed market-wide grammar with no entity resolution', () => {
+  for (const standaloneQuestion of [
+    '프로그램매매',
+    '프로그램매매 동향',
+    '프로그램매매 보여줘',
+    '프로그램매매 동향 알려줘',
+  ]) {
+    const bound = buildProgramTradeDataset(standaloneQuestion, { idFactory: () => 'standalone-program-trade' });
+    assert.equal(bound.datasetId, 'standalone-program-trade', standaloneQuestion);
+    assert.equal(bound.items[0].operationRef, 'base:ka90005', standaloneQuestion);
+    assert.deepEqual(bound.items[0].args, {
+      date: bound.items[0].args.date,
+      amt_qty_tp: '1',
+      mrkt_tp: 'P00101',
+      min_tic_tp: '1',
+      stex_tp: '1',
+    }, standaloneQuestion);
+    assert.match(bound.items[0].args.date, /^\d{8}$/, standaloneQuestion);
+  }
+
+  for (const residualContext of [
+    '삼성전자 프로그램매매', // 종목명이 남아 있으면 이 문법(시장 전체) 밖
+    '프로그램매매 분석해줘', // "분석"은 정중어 목록 밖
+    '코스닥 프로그램매매', // 시장 지정은 닫힌 문법 밖(불확실하면 미매치)
+  ]) {
+    assert.equal(buildProgramTradeDataset(residualContext), null, residualContext);
+  }
+
+  for (const orderLike of ['삼성전자 매수', '삼성전자 100주 매수 주문', '삼성전자 매도해줘']) {
+    assert.equal(buildProgramTradeDataset(orderLike), null, orderLike);
   }
 });
 
