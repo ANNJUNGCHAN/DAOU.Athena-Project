@@ -260,13 +260,10 @@ window.athena.on('athena:init', (payload) => {
 // 두 벌이 된다(verify 검증16이 사다리 일치를 단언한다). `--glass-alpha`를 쓰는
 // 요소는 이제 셸(#shell, shell.css)이다 — 옛 판에서는 대화 창의 `.app`이었다.
 //
-// 2026-08-24 리프 1.2.1: **보간이 사라졌다.** 옛 판은 대화 창 높이에 비례해
-// --glass-window ↔ --glass-window-max를 연속 보간했다("뒤 정보 밀도에 비례해
-// 두꺼워진다", soul.md §7) — 창이 커질수록 뒤에 겹치는 정보가 많아진다는 전제였다.
 // 셸 창은 내용이 늘어도 크기가 그대로이고 늘어나는 것은 영역 안 스크롤이라,
 // 창 크기를 유리 두께의 근거로 삼을 수 없다. 근거 없는 값을 계속 흔드는 것보다
 // 사다리의 기본 단을 정직하게 고정하는 쪽을 택한다. 두께 조절은 설정 › 화면의
-// 유리 5단(리프 1.1.2)이 사용자 손에 이미 쥐여준다.
+// 유리 5단이 사용자 손에 이미 쥐여준다.
 const rootStyles = getComputedStyle(document.documentElement);
 const GLASS_WINDOW = parseFloat(rootStyles.getPropertyValue('--glass-window')) || 0.30;
 document.documentElement.style.setProperty('--glass-alpha', GLASS_WINDOW.toFixed(3));
@@ -395,7 +392,7 @@ async function runQuery(text) {
 }
 
 async function runQueryLive(text) {
-  const myToken = ++abortToken;
+  const myToken = ++abortToken;
   clearRecommendations();
 
   const qLine = document.createElement('div');
@@ -447,13 +444,22 @@ async function runQueryLive(text) {
   const unsubscribeLiveCanvasAdded = window.athena.on('athena:live-canvas-added', onLiveCanvasAdded);
 
   let result;
+  // 오브 "생각 중" 실신호(2026-08-26 board-32) — 스피너 대신 오브 시선이 위를
+  // 훑는다. 여기 감싸는 구간이 실제 질의 왕복이다(claude -p 또는 캐시 리플레이).
+  window.athena.send('athena:orb-signal', { signal: 'think', active: true });
   try {
     result = await window.athena.invoke('athena__render_canvas', { source: 'live', query: text, expand: prefs.autoExpandCanvas });
   } finally {
     clearInterval(tick);
     unsubscribeLiveCanvasAdded();
+    window.athena.send('athena:orb-signal', { signal: 'think', active: false });
   }
   if (myToken !== abortToken) return;
+
+  // 오브 "완료" 실신호 — 성공한 턴에만 붙인다(result ok). 실패는 웃을 일이 아니다.
+  if (result && result.ok) {
+    window.athena.send('athena:orb-signal', { signal: 'done', active: true });
+  }
 
   state = 'idle';
   setDot(null);
@@ -679,7 +685,7 @@ function historyCommandKind(text) {
 }
 
 async function runHistoryCommand(text) {
-  const myToken = ++abortToken;
+  const myToken = ++abortToken;
 
   const qLine = document.createElement('div');
   qLine.className = 'turn';
@@ -716,6 +722,9 @@ async function runHistoryCommand(text) {
 }
 
 $dot.addEventListener('click', () => { openSettings(); });
+// 사이드바 계정 메뉴(Paper 보드 16)의 "설정" 항목이 쓰는 다리 — lib/sidebar.js
+// 참고.
+window.AthenaShell.registerOpenSettings(openSettings);
 
 // ---------- 입력 ----------
 function dispatchUserQuery(text) {
@@ -738,7 +747,16 @@ $input.addEventListener('keydown', (e) => {
   dispatchUserQuery(text);
 });
 
-// ---------- 창 제어는 여기 없다 (2026-08-24 리프 1.2.1) ----------
+// 오브 "듣는 중" 실신호(2026-08-26 board-32) — 입력 지점은 이 창 하나뿐이라
+// (확정 결정 3), 여기 포커스가 곧 "사람이 말을 거는 중"이라는 사실이다. 지어낸
+// 감정이 아니라 이미 있는 DOM 신호에 이름만 붙이는 것뿐이다(orb.js 위 주석과 짝).
+$input.addEventListener('focus', () => {
+  window.athena.send('athena:orb-signal', { signal: 'listen', active: true });
+});
+$input.addEventListener('blur', () => {
+  window.athena.send('athena:orb-signal', { signal: 'listen', active: false });
+});
+
 // 우상단 3버튼(최소화·최대화·닫기)과 창 단축키(Ctrl+M · Ctrl+Alt+방향키)가
 // shell.js로 옮겨갔다. 창에 속하는 것이 어느 한 영역의 코드에 살면 안 된다 —
 // 옛 판에서 여기 있었던 이유는 대화 창이 곧 앱의 창이었기 때문이다.

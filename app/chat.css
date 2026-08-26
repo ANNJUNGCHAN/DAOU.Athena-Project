@@ -148,7 +148,10 @@ html, body { background: transparent; }
 .win-controls {
   position: fixed; top: 7px; right: 12px;
   display: flex; gap: 2px;
-  z-index: 6; /* sheen(5) 위 — 버튼이 하이라이트에 씻기지 않는다 */
+  /* sheen(5) 위 — 버튼이 하이라이트에 씻기지 않는다. titlebar(ui-kit.css, 7)·
+   * shell-overlay(설정/주문/온보딩, shell.css, 10) 위여야 한다 — 아니면 그
+   * 크롬들이 버튼 위를 덮어 클릭이 안 먹고 grab 커서만 보인다(2026-08-26 버그). */
+  z-index: 11;
 }
 .win-btn {
   width: 30px; height: 24px;
@@ -219,11 +222,6 @@ html, body { background: transparent; }
   /* 콘텐츠는 타이틀바(32px, ui-kit.css) 아래에서 시작한다 — 유리 자체(inset:0)는
    * 바 뒤까지 이어져 크롬이 유리 위 값 단계로 얹힌다. */
   padding-top: 26px;
-  /* 유리 두께 — 기본(뒤=데스크톱) 0.30. --glass-alpha는 창 높이에 따라 JS가 연속
-   * 보간한다(0.30↔0.55, chat.js applyGlassFraction).
-   * 2026-08-18 하향(사용자 지시 "그냥 검은 창 같다"): 가독성 블러는 네이티브
-   * acrylic이 담당하므로 틴트 알파는 뒤가 실제로 비치는 수준까지 내린다 —
-   * 유리로 읽히려면 굴절 대상(데스크톱)이 보여야 한다. */
   /* --glass-alpha(배경색)는 verify.js 검증16이 getComputedStyle().backgroundColor로
    * 직접 읽는 SSOT 값이다 — background 축약형으로 되돌려 background-image와 합치지
    * 마라(합치면 backgroundColor가 transparent가 돼 검증16이 깨진다). 흡수(2026-08-19
@@ -382,7 +380,7 @@ html, body { background: transparent; }
   position: fixed;
   left: 24px;
   bottom: 110px; /* 입력 스택(입력줄 52 + 스트립 48) 바로 위 */
-  z-index: 7; /* win-controls(6) 위 — 최초 1회뿐인 안내가 크롬에 깔리면 안 된다 */
+  z-index: 12; /* win-controls(11) 위 — 최초 1회뿐인 안내가 크롬에 깔리면 안 된다 */
   padding: 8px 14px;
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.65);
@@ -537,6 +535,11 @@ html, body { background: transparent; }
 
 .input {
   flex: 1;
+  /* flex 아이템의 기본 min-width:auto는 콘텐츠(placeholder) 기준 고유 최소폭을
+   * 강제한다 — 잠금 중 lock-hint(ESC 중단 칩 포함)가 그만큼 못 줄어들고 밀려나
+   * .app의 overflow:hidden 밖으로 잘려 나갔다(2026-08-26 사용자 지적 — ESC 칩이
+   * 안 보임). 0으로 풀어야 flex:1이 실제로 끝까지 줄어든다. */
+  min-width: 0;
   background: transparent; border: none; outline: none;
   color: var(--color-k-text);
   /* AT-CH-001 보드 11 사양 "입력 커서는 무채색. 브랜드 색은 점 하나뿐이다" —
@@ -558,6 +561,9 @@ html, body { background: transparent; }
   color: var(--color-k-dim);
   display: flex; align-items: center; gap: 10px;
   white-space: nowrap;
+  /* .input이 min-width:0으로 끝까지 줄어드는 쪽 — 이 쪽(ESC 중단 칩 포함)은
+   * 절대 안 줄어든다(Paper 보드 04: 입력이 잘리고 칩은 온전하다). */
+  flex-shrink: 0;
 }
 .lock-hint .esc {
   color: var(--color-k-faint);
@@ -968,12 +974,10 @@ html, body { background: transparent; }
   flex-shrink: 0;
   margin-bottom: 14px;
   /* 모드 헤더 = 네이티브 캡션(창 이동 손잡이, 2026-08-19 표준화) — 설정·주문
-   * 모드에서도 창을 끌 수 있다. 자식은 전부 비인터랙티브 텍스트라 구멍 불필요. */
+   * 모드에서도 창을 끌 수 있다. 자식은 전부 비인터랙티브 텍스트라 구멍 불필요.
+   * 커서는 기본 화살표로 둔다 — 네이티브 Windows 타이틀바는 grab 손모양을 쓰지
+   * 않는다(2026-08-26 사용자 지적). */
   -webkit-app-region: drag;
-  cursor: grab;
-  /* 우상단 창 제어 크롬(#winControls, 우측 12px + 94px)이 같은 코너에 떠 있다 —
-   * 안내 문구(.settings-hint)가 그 밑에 깔리지 않게 자리를 비워둔다
-   * (2026-08-18 리뷰 지적: 17-settings-mode.png에서 겹침 실측). */
   padding-right: 94px;
 }
 .settings-title {

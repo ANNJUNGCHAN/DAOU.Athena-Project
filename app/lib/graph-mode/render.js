@@ -33,6 +33,7 @@ function renderClusterMap(container, layout, options) {
   const settings = options || {};
   const showLabels = settings.showLabels !== false;
   const highlightCrossings = settings.highlightCrossings !== false;
+  const selectedEntityId = settings.selectedEntityId != null ? String(settings.selectedEntityId) : null;
 
   const nodes = (layout && layout.nodes) || [];
   const edges = (layout && layout.edges) || [];
@@ -72,8 +73,9 @@ function renderClusterMap(container, layout, options) {
 
   const nodeLayer = el('g', { class: 'graph-nodes' });
   for (const node of nodes) {
+    const isSelected = selectedEntityId !== null && selectedEntityId === String(node.entity_id);
     const group = el('g', {
-      class: 'graph-node',
+      class: isSelected ? 'graph-node is-selected' : 'graph-node',
       'data-entity-id': node.entity_id,
       'data-cluster': node.cluster,
       'data-kind': node.kind,

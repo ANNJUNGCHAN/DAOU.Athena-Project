@@ -187,9 +187,9 @@ const NAV_ITEMS = [
   { key: 'accounts', label: '계좌', countChannel: 'athena:account-list', countKey: 'accounts' },
   { key: 'mcp', label: 'MCP 서버', countChannel: 'athena:mcp-list', countKey: 'servers' },
   { key: 'model', label: '모델' },
-  // 채팅→그래프 파이프라인 단계 5(.omc/plans/plan-chat-graph-pipeline.md §2(e)) —
-  // 배치·전체 삭제는 카운트 배지가 없다(투자 성향은 "몇 개"로 셀 표가 아니다).
-  { key: 'history', label: '성향・이력' },
+  // Paper 보드 22 — 그래프 수집·노출 설정. 배지는 개수가 아니라 노출 on/off
+  // 상태다: 대화 모델에 성향 그래프가 열려 있는지를 켜짐/꺼짐으로 보여준다.
+  { key: 'history', label: '그래프', statusFn: () => (readGraphSettings().exposeToModel ? '켜짐' : '꺼짐') },
 ];
 
 async function refreshNavCount(item, badgeEl) {
@@ -229,6 +229,7 @@ function renderNav(nav, grid, { onSelect }) {
     applyRovingTabindex();
     const item = NAV_ITEMS.find((i) => i.key === key);
     if (item && item.countChannel && item._badgeEl) refreshNavCount(item, item._badgeEl);
+    if (item && item.statusFn && item._badgeEl) item._badgeEl.textContent = item.statusFn();
     onSelect(key, grid);
   }
 
@@ -249,6 +250,10 @@ function renderNav(nav, grid, { onSelect }) {
       item._badgeEl = badgeEl;
       b.appendChild(badgeEl);
       refreshNavCount(item, badgeEl);
+    } else if (item.statusFn) {
+      const badgeEl = el('span', 'settings-nav-badge', item.statusFn());
+      item._badgeEl = badgeEl;
+      b.appendChild(badgeEl);
     }
     b.addEventListener('click', () => commitSelect(item.key));
     b.addEventListener('keydown', (e) => {
@@ -1667,93 +1672,131 @@ function renderHistory(grid) {
 }
 
 
-// 그래프 모드 설정 (leaf 8).
+// 그래프 수집·노출 설정 (Paper 보드 22 복원) — 무엇을 읽고 누구에게 보일지.
+// 성향 그래프를 어떻게 "보는가"(군집 지도 뷰·강조·이름표 임계값)는 보드 22가
+// 캔버스로 보내는 취지라 이 카드에는 없다 — 여기는 수집원 3종과 모델 노출
+// on/off만 다룬다.
 //
-// 별도 카드를 만들지 않고 '성향・이력' 카드 안에 둔 이유: 사용자에게 이 둘은 한
-// 주제다("내 투자 성향을 어떻게 보고 관리할까"). 카드를 쪼개면 설정 화면에서 브레인
-// 관련 항목을 두 군데서 찾아야 한다.
-//
-// 값의 정본은 `lib/graph-mode/graph-mode-prefs.js`다. 여기서는 읽고 쓰기만 한다 —
-// 유효성 판단이 화면 코드에 흩어지면 저장된 값이 손상됐을 때 어디서 막혔는지 알 수 없다.
-function appendGraphModeSettings(body) {
-  const prefsLib =
-    (window.AthenaLib && window.AthenaLib.GraphModePrefs) || null;
-  if (!prefsLib) return;
+// 저장은 그래프 모드 설정(graph-mode-prefs.js)과 같은 이유로 localStorage다:
+// 백엔드 실제 수집 주기는 아직 이 값을 읽지 않는 화면 쪽 토글 상태일 뿐이라
+// 왕복할 값이 없다.
+const GRAPH_SETTINGS_STORAGE_KEY = 'athena.graphSettings.prefs';
 
-  let current = prefsLib.readPrefs();
+// 보유잔고 조회 주기 — Paper 보드 22는 60분만 보이지만 선택지는 최소한으로
+// 늘려 뒀다(2026-08-26). 백엔드가 아직 이 값을 읽지 않는다는 한계는 위 주석과
+// 같다 — 화면 쪽 선호값일 뿐이다.
+const HOLDINGS_INTERVAL_MINUTES = Object.freeze([30, 60, 120]);
 
-  const heading = el('div', 'uk-settings-note');
-  heading.appendChild(el('div', null, '그래프 모드 — 성향 그래프를 군집 지도로 본다. 군집을 누르면 그 안이 펼쳐지고, 어느 단계에서든 노드를 고르면 같은 패널이 열린다.'));
-  body.appendChild(heading);
+const GRAPH_SETTINGS_DEFAULTS = Object.freeze({
+  collectChat: true,
+  collectFills: true,
+  collectHoldings: true,
+  exposeToModel: true,
+  holdingsIntervalMin: 60,
+});
 
-  const viewRow = row('uk-toggle-row', [
-    el('span', 'uk-toggle-label', '기본 화면'),
-  ]);
-  const viewBtn = button('ghost', current.defaultView === 'graph' ? '그래프' : '요약', {
-    onClick: () => {
-      current = prefsLib.writePrefs(
-        { defaultView: current.defaultView === 'graph' ? 'summary' : 'graph' },
-      );
-      viewBtn.querySelector('.uk-btn-label').textContent =
-        current.defaultView === 'graph' ? '그래프' : '요약';
-    },
-  });
-  viewRow.appendChild(viewBtn);
-  body.appendChild(viewRow);
-
-  const crossRow = row('uk-toggle-row', [
-    el('span', 'uk-toggle-label', '놀라운 연결 강조'),
-  ]);
-  const crossBtn = button('ghost', current.highlightCrossings ? '켬' : '끔', {
-    onClick: () => {
-      current = prefsLib.writePrefs({ highlightCrossings: !current.highlightCrossings });
-      crossBtn.querySelector('.uk-btn-label').textContent =
-        current.highlightCrossings ? '켬' : '끔';
-    },
-  });
-  crossRow.appendChild(crossBtn);
-  body.appendChild(crossRow);
-
-  const graphNote = el('div', 'uk-settings-note');
-  graphNote.appendChild(el('div', null, `이름표는 노드가 ${current.labelThreshold}개 이하일 때만 붙는다 — 그보다 많으면 글자가 겹쳐 읽을 수 없다.`));
-  graphNote.appendChild(el('div', null, '군집 배치는 결정적이다 — 같은 그래프를 다시 열면 노드가 같은 자리에 있다. 자리가 바뀌었다면 그래프가 실제로 바뀐 것이다.'));
-  body.appendChild(graphNote);
+function normalizeGraphSettings(raw) {
+  const source = raw && typeof raw === 'object' ? raw : {};
+  const out = {};
+  for (const key of Object.keys(GRAPH_SETTINGS_DEFAULTS)) {
+    if (key === 'holdingsIntervalMin') continue;
+    out[key] = typeof source[key] === 'boolean' ? source[key] : GRAPH_SETTINGS_DEFAULTS[key];
+  }
+  out.holdingsIntervalMin = HOLDINGS_INTERVAL_MINUTES.includes(source.holdingsIntervalMin)
+    ? source.holdingsIntervalMin
+    : GRAPH_SETTINGS_DEFAULTS.holdingsIntervalMin;
+  return out;
 }
 
-async function refreshHistoryCard(card, head, body) {
-  let status;
+function readGraphSettings(storage) {
+  const store = storage || (typeof localStorage !== 'undefined' ? localStorage : null);
+  if (!store) return { ...GRAPH_SETTINGS_DEFAULTS };
+  let raw = null;
   try {
-    status = await window.athena.invoke('athena:brain-status');
-  } catch (err) {
-    status = { ok: false, error: String((err && err.message) || err) };
+    raw = JSON.parse(store.getItem(GRAPH_SETTINGS_STORAGE_KEY));
+  } catch {
+    raw = null;
   }
+  return normalizeGraphSettings(raw);
+}
+
+function writeGraphSettings(patch, storage) {
+  const store = storage || (typeof localStorage !== 'undefined' ? localStorage : null);
+  const next = normalizeGraphSettings({ ...readGraphSettings(store), ...(patch || {}) });
+  if (store) {
+    try {
+      store.setItem(GRAPH_SETTINGS_STORAGE_KEY, JSON.stringify(next));
+    } catch {
+      // 저장 실패(용량 초과·사생활 모드)는 화면을 막을 이유가 아니다 — graph-mode-prefs.js와 같은 판단.
+    }
+  }
+  return next;
+}
+
+function updateGraphNavBadge() {
+  const item = NAV_ITEMS.find((i) => i.key === 'history');
+  if (item && item._badgeEl && item.statusFn) item._badgeEl.textContent = item.statusFn();
+}
+
+function appendGraphSourceToggle(body, current, key, label, sub) {
+  const labelCol = el('div');
+  labelCol.appendChild(el('div', 'uk-toggle-label', label));
+  labelCol.appendChild(el('div', 'uk-toggle-sub', sub));
+  const toggle = toggleSwitch(current[key], (next) => {
+    writeGraphSettings({ [key]: next });
+    updateGraphNavBadge();
+  });
+  body.appendChild(row('uk-toggle-row', [labelCol, toggle]));
+}
+
+// 보유잔고 행 전용 — 다른 3개(대화·체결내역·모델 노출)와 달리 부제에 조회
+// 주기 선택기가 끼어 있다(Paper 보드 22: "조회 주기 [60분] 수량이 바뀔 때만
+// 기록"). appendGraphSourceToggle로는 표현이 안 돼 따로 뺐다.
+function appendHoldingsToggle(body, current) {
+  const labelCol = el('div');
+  labelCol.appendChild(el('div', 'uk-toggle-label', '보유잔고'));
+  const sub = el('div', 'uk-toggle-sub uk-holdings-sub');
+  sub.appendChild(el('span', null, '조회 주기'));
+  const select = el('select', 'uk-holdings-interval-select');
+  for (const min of HOLDINGS_INTERVAL_MINUTES) {
+    const opt = el('option', null, `${min}분`);
+    opt.value = String(min);
+    if (min === current.holdingsIntervalMin) opt.selected = true;
+    select.appendChild(opt);
+  }
+  select.addEventListener('change', () => {
+    writeGraphSettings({ holdingsIntervalMin: Number(select.value) });
+  });
+  sub.appendChild(select);
+  sub.appendChild(el('span', null, '· 수량이 바뀔 때만 기록'));
+  labelCol.appendChild(sub);
+  const toggle = toggleSwitch(current.collectHoldings, (next) => {
+    writeGraphSettings({ collectHoldings: next });
+    updateGraphNavBadge();
+  });
+  body.appendChild(row('uk-toggle-row', [labelCol, toggle]));
+}
+
+function refreshHistoryCard(card, head, body) {
   clear(head);
   clear(body);
 
   head.appendChild(row('uk-settings-title', [
-    el('span', 'uk-settings-name', '성향・이력'),
+    el('span', 'uk-settings-name', '그래프 수집과 노출'),
+    el('span', 'uk-settings-count', '무엇을 읽고 누구에게 보일지'),
   ]));
   const actions = row('uk-settings-actions', []);
   actions.appendChild(cardCloseButton(card));
   head.appendChild(actions);
 
-  const readyPill = status && status.ok
-    ? pill(status.ready ? '브레인 준비됨' : '브레인 준비 안 됨', status.ready ? 'ok' : 'dim')
-    : pill('상태 조회 실패', 'warn');
-  body.appendChild(row('uk-toggle-row', [
-    el('span', 'uk-toggle-label', '브레인 상태'),
-    readyPill,
-  ]));
-  if (!(status && status.ok)) {
-    body.appendChild(errorNote((status && status.error) || '상태를 조회할 수 없다'));
-  }
-
-  const infoNote = el('div', 'uk-settings-note');
-  infoNote.appendChild(el('div', null, '배치 주기 — 설정 파일로 관리한다(ATHENA_BRAIN_INGEST_INTERVAL_MINUTES, 기본 60분). 이 화면은 값을 바꾸지 않는다.'));
-  infoNote.appendChild(el('div', null, '수동 실행 · 마지막/다음 실행 시각 — 상태 API가 아직 이 값을 노출하지 않아 이 화면에서 제공하지 않는다.'));
-  body.appendChild(infoNote);
-
-  appendGraphModeSettings(body);
+  const current = readGraphSettings();
+  appendGraphSourceToggle(body, current, 'collectChat', '대화', '대화가 끝날 때마다 · LLM 추출');
+  appendGraphSourceToggle(body, current, 'collectFills', '체결내역', '60분마다 · LLM 없이 그대로');
+  appendHoldingsToggle(body, current);
+  appendGraphSourceToggle(
+    body, current, 'exposeToModel', '대화 모델에 성향 그래프 열기',
+    '켜면 답변이 사용자를 알고 시작합니다. 보유 종목 수량과 대화 원문이 모델 컨텍스트로 전달됩니다.',
+  );
 
   const dangerNote = el('div', 'uk-settings-note');
   dangerNote.appendChild(el('div', null, '전체 삭제 — 저장된 채팅 이력과 투자 성향 그래프를 모두 지우고 백엔드를 재기동한다. 되돌릴 수 없다.'));
@@ -1807,13 +1850,17 @@ async function refreshHistoryCard(card, head, body) {
       }
       resultBox.appendChild(note);
       // 삭제 직후엔 다시 누를 대상이 없다 — 재확인은 카드를 닫았다 다시 여는
-      // 것으로 한다(refreshHistoryCard가 최신 상태를 다시 조회한다).
+      // 것으로 한다(refreshHistoryCard가 토글 상태를 다시 그린다).
     });
   }
 }
 
 // UMD 각주(2026-08-18 렌더러 격리) — sanitize.js와 같은 패턴.
-const __exports = { renderAccounts, renderMcp, renderScreen, renderModel, renderHistory, renderNav };
+const __exports = {
+  renderAccounts, renderMcp, renderScreen, renderModel, renderHistory, renderNav,
+  normalizeGraphSettings, readGraphSettings, writeGraphSettings, GRAPH_SETTINGS_DEFAULTS,
+  HOLDINGS_INTERVAL_MINUTES,
+};
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = __exports;
 } else {

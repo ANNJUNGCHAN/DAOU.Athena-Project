@@ -11,6 +11,9 @@ const INVOKE_CHANNELS = new Set([
   'athena:cli-list',
   'athena:cli-login',
   'athena:cli-set-active',
+  // 이력 사이드바(리프 1.2.2) — 실데이터 목록·선택 상태.
+  'athena:conversations-list',
+  'athena:conversations-set-active',
   'athena:account-list',
   'athena:account-register',
   'athena:account-set-active',
@@ -44,12 +47,10 @@ const INVOKE_CHANNELS = new Set([
   'athena:brain-reset',
   // 그래프 모드(leaf 8 / W2-3) — 군집 지도 조회. 읽기 전용이다.
   'athena:brain-cluster-map',
+  // 그래프 모드 요약 뷰(보드 07) — 성향 신호 상위 N. 읽기 전용이다.
+  'athena:brain-profile-summary',
 ]);
 
-// 2026-08-24 리프 1.2.1에서 사라진 send 채널 4건 — 창 모델과 함께 죽었다.
-//   athena:set-chat-height  대화 창 높이 자동 성장(창이 아니라 영역이 됐다)
-//   athena:collapse-canvas  캔버스 창 수축(닫을 창이 없다)
-//   primed / animation-done 확장 애니메이션 왕복 ack(애니메이션이 없다)
 const SEND_CHANNELS = new Set([
   'athena:minimize-windows',
   'athena:close-windows',
@@ -73,12 +74,14 @@ const SEND_CHANNELS = new Set([
   // 이 다리에 있어도 오브 렌더러가 부르지 않는다(scripts/gates/check-orb.mjs가 잰다).
   'athena:orb-toggle',
   'athena:orb-open-shell',
+  // 2026-08-26 board-32 — 포인터 드래그(오브가 매 이동을 main에 실어 보낸다)와
+  // 셸→오브 실신호(입력 포커스·질의 진행·턴 완료). 셸 렌더러(chat.js)가
+  // orb-signal을 보내고, 오브 렌더러(orb.js)가 drag-move를 보낸다 — 같은
+  // preload가 두 창에 다 실리므로 한 Set에 같이 둔다.
+  'athena:orb-drag-move',
+  'athena:orb-signal',
 ]);
 
-// 2026-08-24 리프 1.2.1에서 사라진 on 채널 4건:
-//   prime-clip / run-animation  확장 애니메이션 구동(애니메이션이 없다)
-//   athena:window-key           Win+↑/↓의 렌더러 위임(main이 OS 최대화로 직접 처리)
-//   athena:manual-resize        OS 리사이즈 수용 통보(채팅 높이 상태가 사라졌다)
 const ON_CHANNELS = new Set([
   'athena:init',
   'athena:glass-separation',
@@ -109,6 +112,9 @@ const ON_CHANNELS = new Set([
   // 오브 커서 추적(2026-08-25) — main이 폴링한 커서-오브중심 상대좌표
   // {dx, dy, dist}를 밀어준다. 커서가 사라지거나 폴링이 멈추면 null.
   'athena:orb-cursor',
+  // 셸→오브 실신호 릴레이(2026-08-26 board-32) — main이 athena:orb-signal
+  // 그대로 되쏜다. {signal: 'listen'|'think'|'done', active}.
+  'athena:orb-signal',
 ]);
 
 contextBridge.exposeInMainWorld('athena', {

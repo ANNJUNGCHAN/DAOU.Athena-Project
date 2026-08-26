@@ -429,3 +429,21 @@ button.uk-model-account-row:focus-visible { outline: 2px solid rgb(255 255 255 /
   color: var(--color-k-text);
   font-family: var(--font-strong);
 }
+
+/* 보유잔고 조회 주기 — 부제 한 줄에 끼는 인라인 선택기(Paper 보드 22:
+   "조회 주기 [60분] 수량이 바뀔 때만 기록"). 칩과 같은 무채색 문법, 크기만
+   부제 텍스트에 맞춰 낮췄다. */
+.uk-holdings-sub { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.uk-holdings-interval-select {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--color-k-text);
+  background: rgb(16 19 26 / 5%);
+  border: 1px solid rgb(16 19 26 / 14%);
+  border-radius: 999px;
+  padding: 1px 8px;
+  appearance: auto;
+  cursor: pointer;
+}
+.uk-holdings-interval-select:hover { background: rgb(16 19 26 / 10%); }
+.uk-holdings-interval-select:focus-visible { outline: 2px solid var(--color-k-text); outline-offset: 1px; }

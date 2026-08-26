@@ -22,6 +22,18 @@ function payload(revision) {
   };
 }
 
+function payloadTwoClusters(revision) {
+  return {
+    revision,
+    nodes: [
+      { entity_id: 'e:a', name: '반도체', kind: 'theme', cluster: 0, degree: 2 },
+      { entity_id: 'e:b', name: '장비', kind: 'company', cluster: 0, degree: 1 },
+      { entity_id: 'e:c', name: '고배당', kind: 'theme', cluster: 1, degree: 1 },
+    ],
+    edges: [['e:a', 'e:b']],
+  };
+}
+
 function setup(options) {
   const opts = options || {};
   const elements = {
@@ -29,6 +41,7 @@ function setup(options) {
     summary: fakeNode('div'),
     graph: fakeNode('div'),
   };
+  if (opts.withPanel) elements.panel = fakeNode('div');
   let calls = 0;
   const controller = createGraphModeController({
     store,
@@ -39,7 +52,8 @@ function setup(options) {
     fetchClusterMap: async () => {
       calls += 1;
       if (opts.fail) throw new Error('backend down');
-      return payload(opts.revisions ? opts.revisions[calls - 1] : 7);
+      const build = opts.payload || payload;
+      return build(opts.revisions ? opts.revisions[calls - 1] : 7);
     },
     onError: opts.onError,
   });
@@ -148,4 +162,79 @@ test('요약 화면에서는 백엔드를 부르지 않는다', async () => {
   const { controller, fetchCalls } = setup();
   await controller.refresh();
   assert.equal(fetchCalls(), 0, '안 보이는 화면 때문에 왕복하지 않는다');
+});
+
+// ── 보드 15: 군집 펼침 · 노드 선택 와이어링 ──────────────────────────────────
+
+test('1단계에서 노드를 클릭하면 그 군집이 펼쳐진다', async () => {
+  const { controller, elements, fetchCalls } = setup({ payload: payloadTwoClusters });
+  await controller.toggle();
+  assert.equal(controller.state.stage, store.STAGE_CLUSTERS);
+  const nodeEls = elements.graph.querySelectorAll('.graph-node');
+  assert.equal(nodeEls.length, 3, '1단계는 군집 전부가 보인다');
+  const clusterZeroNode = nodeEls.find((n) => n.getAttribute('data-entity-id') === 'e:a');
+  clusterZeroNode.dispatchEvent({ type: 'click' });
+  assert.equal(controller.state.stage, store.STAGE_EXPANDED);
+  assert.equal(controller.state.expandedCluster, 0);
+  assert.equal(fetchCalls(), 1, '펼침은 새 fetch 없이 캐시로 다시 그린다');
+  const afterExpand = elements.graph.querySelectorAll('.graph-node');
+  assert.deepEqual(afterExpand.map((n) => n.getAttribute('data-entity-id')).sort(), ['e:a', 'e:b']);
+});
+
+test('2단계에서 노드를 클릭하면 선택된다(패널이 채워진다)', async () => {
+  const { controller, elements } = setup({ payload: payloadTwoClusters, withPanel: true });
+  await controller.toggle();
+  const firstClick = elements.graph.querySelectorAll('.graph-node')
+    .find((n) => n.getAttribute('data-entity-id') === 'e:a');
+  firstClick.dispatchEvent({ type: 'click' }); // 1단계 클릭 — 펼친다
+  assert.equal(controller.state.stage, store.STAGE_EXPANDED);
+
+  const secondClick = elements.graph.querySelectorAll('.graph-node')
+    .find((n) => n.getAttribute('data-entity-id') === 'e:b');
+  secondClick.dispatchEvent({ type: 'click' }); // 2단계 클릭 — 고른다
+  assert.equal(controller.state.selectedEntityId, 'e:b');
+  assert.equal(controller.state.panel.name, '장비');
+  assert.equal(elements.panel.hidden, false);
+  assert.match(elements.panel.textContent, /장비/);
+});
+
+test('panel 요소가 없으면 선택 상태는 바뀌지만 조용히 넘어간다', async () => {
+  const { controller, elements } = setup({ payload: payloadTwoClusters });
+  await controller.toggle();
+  const node = elements.graph.querySelectorAll('.graph-node')[0];
+  assert.doesNotThrow(() => node.dispatchEvent({ type: 'click' }));
+});
+
+test('collapseCluster()로 2단계에서 1단계로 돌아간다', async () => {
+  const { controller, elements } = setup({ payload: payloadTwoClusters });
+  await controller.toggle();
+  elements.graph.querySelectorAll('.graph-node')[0].dispatchEvent({ type: 'click' });
+  assert.equal(controller.state.stage, store.STAGE_EXPANDED);
+  controller.collapseCluster();
+  assert.equal(controller.state.stage, store.STAGE_CLUSTERS);
+  assert.equal(elements.graph.querySelectorAll('.graph-node').length, 3, '전부 다시 보인다');
+});
+
+test('clearSelection()으로 패널이 닫힌다', async () => {
+  const { controller, elements } = setup({ payload: payloadTwoClusters, withPanel: true });
+  await controller.toggle();
+  controller.selectEntity('e:a', { name: '반도체' });
+  assert.equal(elements.panel.hidden, false);
+  controller.clearSelection();
+  assert.equal(controller.state.selectedEntityId, null);
+  assert.equal(elements.panel.hidden, true);
+});
+
+// ── 보드 07: 요약 표 행 선택도 같은 공통 패널을 쓴다 ─────────────────────────
+// 요약 표 자체(canvas.js)는 이 디렉터리 밖이라 행 클릭 배선은 여기 없다 — 이
+// 테스트는 selectEntity()가 그래프 클릭과 동일한 패널 경로를 그대로 타는지만
+// 지킨다(store 주석 "공통 패널은 단계와 무관하게 같은 방식으로 열린다").
+test('selectEntity()는 그래프를 열지 않고도(요약 화면에서도) 공통 패널을 연다', () => {
+  const { controller, elements } = setup({ withPanel: true });
+  controller.applyVisibility();
+  assert.equal(controller.state.view, store.VIEW_SUMMARY);
+  controller.selectEntity('trait:short-turn', { name: '단기 회전' });
+  assert.equal(controller.state.selectedEntityId, 'trait:short-turn');
+  assert.equal(elements.panel.hidden, false);
+  assert.match(elements.panel.textContent, /단기 회전/);
 });
