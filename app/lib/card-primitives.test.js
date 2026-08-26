@@ -10,6 +10,7 @@ const {
   rangePosition,
   resolveStatusTone,
   ladderRatio,
+  priceMagnitude,
 } = require('./card-primitives');
 
 test('proportionalRatios — 최대 절대값 기준으로 0..1 스케일링한다', () => {
@@ -66,4 +67,30 @@ test('ladderRatio — maxQuantity가 0/음수/비유한이면 막대 없음(0)',
   assert.equal(ladderRatio(50, -10), 0);
   assert.equal(ladderRatio(50, 'n/a'), 0);
   assert.equal(ladderRatio('n/a', 100), 0);
+});
+
+// 팀리드 지시(2026-08-26 카드 데모 실측 후속) — 키움 가격류 필드는 "부호가 포함된
+// 숫자"인데 그 부호는 기준가 대비 방향 표기이지 값의 부호가 아니다(backend
+// canvas_transform._parse_price와 같은 근거). QuoteHeader/RangeBar 같은 가격 표시
+// 전용 소비자에서만 부호를 걷어낸다.
+test('priceMagnitude — 실제 캡처된 값 그대로: 음수/양수 부호를 걷어내 크기만 남긴다', () => {
+  assert.equal(priceMagnitude('-255500'), '255500');
+  assert.equal(priceMagnitude('-256500'), '256500');
+  assert.equal(priceMagnitude('+266500'), '266500');
+});
+
+test('priceMagnitude — 부호 없는 값은 그대로', () => {
+  assert.equal(priceMagnitude('266500'), '266500');
+  assert.equal(priceMagnitude(266500), '266500');
+});
+
+test('priceMagnitude — null/undefined는 그대로 통과(포맷 헬퍼의 "값 없음" 처리에 맡긴다)', () => {
+  assert.equal(priceMagnitude(null), null);
+  assert.equal(priceMagnitude(undefined), undefined);
+});
+
+test('priceMagnitude — 부호를 걷어내도 숫자로 안 읽히면(코드값 등) 원문 그대로 — 지어내지 않는다', () => {
+  assert.equal(priceMagnitude('-KRX001'), '-KRX001');
+  assert.equal(priceMagnitude('n/a'), 'n/a');
+  assert.equal(priceMagnitude(''), '');
 });

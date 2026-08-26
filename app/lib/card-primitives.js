@@ -40,6 +40,28 @@ function rangePosition(low, value, high) {
   return Math.min(1, Math.max(0, ratio));
 }
 
+// 가격 표시 전용 — 키움 가격류 필드는 "부호가 포함된 숫자"로 문서화된다
+// (backend/athena_api/generated/models.py 실측, 예: open_pric/high_pric/low_pric/
+// cur_prc 등 다수). 그 부호는 값의 부호가 아니라 기준가 대비 등락 방향 표기다 —
+// backend canvas_transform._parse_price가 이미 같은 근거로 lstrip('+-')한다(주석
+// 원문: "부호 접두(+/-)는 등락 표기이지 값이 아니다"). QuoteHeader의 가격/RangeBar의
+// 저가·고가처럼 "그 자체로 하나의 가격을 보여주는" 자리에서만 이 부호를 걷어낸다.
+// ChangeBadge(등락 배지)는 절대 이걸 거치지 않는다 — 거기서는 부호가 changeTone
+// 판정의 근거라 지우면 안 된다(2026-08-26 카드 데모 실측 후 팀리드 지시로 추가 —
+// 처음엔 "종목정보 카드가 음수 저가를 그린다"를 값 자체가 이상하다고 오판해
+// isValidPriceRange로 통째로 숨겼는데, 실은 정상 데이터를 잘못 해석한 표시 버그였다).
+//
+// 배치를 formatNumeric(facts-card.js) 전역이 아니라 여기 두는 이유: formatNumeric은
+// ChangeBadge/facts-grid 등 "부호가 의미를 가지는" 문맥에서도 그대로 쓰인다 — 거기를
+// 건드리면 등락 표시가 깨진다. 가격 전용 소비자(QuoteHeader/RangeBar, 이 파일)에만
+// 좁혀 적용하는 게 안전하다.
+function priceMagnitude(raw) {
+  if (raw === null || raw === undefined) return raw;
+  const text = String(raw).trim();
+  const stripped = text.replace(/^[+-]/, '');
+  return Number.isFinite(Number(stripped)) && stripped !== '' ? stripped : raw; // 파싱 안 되면 원문 그대로
+}
+
 // StatusPill — 상태값을 호출부가 넘긴 톤 테이블로 판정한다(ChangeBadge와 달리 부호가
 // 아니라 명시적 상태 라벨이 판정 기준). 테이블에 없는 상태는 flat(중립) 안전 폴백.
 function resolveStatusTone(status, toneTable) {
@@ -73,7 +95,7 @@ function QuoteHeader({ price, changeKey, changeValue, name, code } = {}) {
   el.className = 'card-kit-quote-header';
   const priceEl = document.createElement('span');
   priceEl.className = 'card-kit-quote-price';
-  priceEl.textContent = formatNumeric(price);
+  priceEl.textContent = formatNumeric(priceMagnitude(price)); // 부호는 등락 방향 표기 — 가격 자체엔 안 붙인다
   el.appendChild(priceEl);
   if (changeValue !== undefined) el.appendChild(ChangeBadge({ key: changeKey, value: changeValue }));
   const subline = [name, code].filter((part) => part !== undefined && part !== null && part !== '').join(' · ');
@@ -135,11 +157,16 @@ function ProportionalBar({ values, labels } = {}) {
 }
 
 function RangeBar({ low, value, high, lowLabel, highLabel } = {}) {
+  // 부호 걷어내기 — 위치 계산(rangePosition)도 표시(formatNumeric)도 크기(절대값)
+  // 기준이어야 한다(priceMagnitude 주석 참고). 여기서 한 번만 걷어내고 둘 다에 흘린다.
+  const lowMag = priceMagnitude(low);
+  const highMag = priceMagnitude(high);
+  const valueMag = priceMagnitude(value);
   const el = document.createElement('div');
   el.className = 'card-kit-bar-range';
   const track = document.createElement('div');
   track.className = 'card-kit-bar-range-track';
-  const position = rangePosition(low, value, high);
+  const position = rangePosition(lowMag, valueMag, highMag);
   if (position !== null) {
     const marker = document.createElement('span');
     marker.className = 'card-kit-bar-range-marker';
@@ -151,10 +178,10 @@ function RangeBar({ low, value, high, lowLabel, highLabel } = {}) {
   labels.className = 'card-kit-bar-range-labels';
   const lowEl = document.createElement('span');
   lowEl.className = 'card-kit-bar-range-low';
-  lowEl.textContent = lowLabel != null ? lowLabel : formatNumeric(low);
+  lowEl.textContent = lowLabel != null ? lowLabel : formatNumeric(lowMag);
   const highEl = document.createElement('span');
   highEl.className = 'card-kit-bar-range-high';
-  highEl.textContent = highLabel != null ? highLabel : formatNumeric(high);
+  highEl.textContent = highLabel != null ? highLabel : formatNumeric(highMag);
   labels.appendChild(lowEl);
   labels.appendChild(highEl);
   el.appendChild(labels);
@@ -250,6 +277,7 @@ const __exports = {
   rangePosition,
   resolveStatusTone,
   ladderRatio,
+  priceMagnitude,
   // DOM 빌더 — 렌더러(document 존재) 전용
   QuoteHeader,
   ChangeBadge,

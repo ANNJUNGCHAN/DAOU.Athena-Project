@@ -20,10 +20,14 @@
 //   (identity_and_capital 소유) 서브라인 없이 가격+배지만 뜬다 — 지어내지 않는다.
 // - daily_price_band(low_pric/high_pric 등) → "1일 범위" RangeBar. 같은 그룹에 현재가가
 //   없어 점 마커는 못 그린다(마커=현재가 위치인데 이 응답엔 현재가가 없다) — 라벨 없는
-//   범위만 그린다(필드 단위 생략, §4-1). low/high 둘 다 양수이고 low<=high일 때만
-//   그린다(isValidPriceRange) — 2026-08-26 카드 데모 실측으로 샌드박스 응답이 음수
-//   저가("-255,500 ~ 266,500")를 보낸 사례가 확인돼, 오해를 부르는 막대를 그리느니
-//   조각째 폴백한다(정직성 우선, §8).
+//   범위만 그린다(필드 단위 생략, §4-1). low/high는 크기(절대값) 기준으로 0 이하이거나
+//   역전(low>high)이면 안 그린다(isValidPriceRange) — 진짜 깨진 데이터만 걸러내는
+//   최후 방어선이다. 2026-08-26 카드 데모 실측: 처음엔 "1일 범위 -255,500 ~ 266,500"을
+//   음수 가격이라 오판해 통째로 숨겼는데, 그 부호는 값의 부호가 아니라 기준가 대비
+//   방향 표기였다(low_pric은 "부호가 포함된 숫자", card-primitives.js priceMagnitude
+//   주석 참고) — 정상 데이터를 표시 버그로 착각한 것이었다. RangeBar가 이제
+//   priceMagnitude로 부호를 걷어내고 그리므로, 여기 가드는 그 뒤(크기 기준)에서
+//   0 이하·역전 같은 진짜 이상값만 잡는다.
 // - price_range(oyr_lwst/oyr_hgst 등) → "연중 범위" RangeBar. Paper는 "52주 범위"라
 //   쓰지만 gap 분석 실측대로 이 필드는 정확히 rolling 52주가 아니라 연중(달력연도)
 //   최저/최고다 — "52주"라고 라벨을 붙이면 정보 정직성(soul.md §8) 위반이라 있는
@@ -42,15 +46,18 @@ const __isCjs = typeof module !== 'undefined' && module.exports;
 function __dep(reqPath, globalName) {
   return __isCjs ? require(reqPath) : window.AthenaLib[globalName];
 }
-const { QuoteHeader, RangeBar } = __dep('./card-primitives', 'CardPrimitives');
+const { QuoteHeader, RangeBar, priceMagnitude } = __dep('./card-primitives', 'CardPrimitives');
 
-// 가격 범위 정직성 가드(팀리드 지시, 2026-08-26 카드 데모 실측 — 샌드박스 데이터가
-// 음수 저가를 보냈다: "1일 범위 -255,500 ~ 266,500"). 가격은 0 이하일 수 없고 저가가
-// 고가보다 클 수도 없다 — 셋 중 하나라도 어긋나면 이 조각 전체를 안 그린다(필드 하나만
-// 죽이지 않고 조각째 폴백, all-or-nothing). 순수 함수(node --test 대상).
+// 가격 범위 최후 방어선(팀리드 지시로 2026-08-26 카드 데모 실측 뒤 크기 기준으로
+// 완화 — card-primitives.js priceMagnitude 주석 참고: "-255500"의 부호는 값이 아니라
+// 기준가 대비 방향 표기라 크기(255500)는 정상이다). 여기서는 RangeBar가 그리는 부호
+// 걷어낸 크기가 정말로 말이 되는지만 본다 — 0 이하이거나 저가>고가(역전)면 진짜 깨진
+// 데이터이므로 이 조각 전체를 안 그린다(필드 하나만 죽이지 않고 조각째 폴백,
+// all-or-nothing). 순수 함수(node --test 대상) — priceMagnitude와 같은 파싱 규칙을
+// 공유해 "부호 걷어내기"를 두 곳에서 따로 구현하지 않는다.
 function isValidPriceRange(low, high) {
-  const l = Number(low);
-  const h = Number(high);
+  const l = Number(priceMagnitude(low));
+  const h = Number(priceMagnitude(high));
   return Number.isFinite(l) && Number.isFinite(h) && l > 0 && h > 0 && l <= h;
 }
 
