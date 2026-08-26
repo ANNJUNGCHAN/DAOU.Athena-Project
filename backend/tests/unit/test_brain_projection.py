@@ -9,6 +9,7 @@ from __future__ import annotations
 from datetime import UTC, datetime
 from pathlib import Path
 
+import networkx as nx
 import pytest
 
 from athena_api.brain import (
@@ -19,6 +20,7 @@ from athena_api.brain import (
     EntityKind,
     GraphProjector,
     GraphStore,
+    ProjectedGraph,
     Relation,
     SourceKind,
     SourceRecord,
@@ -27,6 +29,7 @@ from athena_api.brain import (
     entity_id,
     relation_id,
 )
+from athena_api.brain.projection import cluster_cohesion
 
 NOW = datetime(2026, 8, 25, 3, 0, tzinfo=UTC)
 
@@ -288,3 +291,40 @@ async def test_cluster_numbers_run_from_largest_to_smallest(store: GraphStore) -
     ordered = [sizes[number] for number in sorted(sizes)]
     assert ordered == sorted(ordered, reverse=True), f"크기 내림차순이 아니다: {ordered}"
     assert assignment[big[0].id] == 0, "완전연결 6개가 가장 큰 군집이다"
+
+
+# ── 응집도 ──────────────────────────────────────────────────────────────────
+
+
+def test_cohesion_of_a_fully_connected_cluster_is_one() -> None:
+    """군집 내부가 완전그래프면 내부 간선 밀도는 1.0이다."""
+    graph = nx.Graph()
+    graph.add_nodes_from(["a", "b", "c"])
+    graph.add_edges_from([("a", "b"), ("b", "c"), ("a", "c")])
+    projected = ProjectedGraph(revision=1, graph=graph)
+
+    cohesion = cluster_cohesion(projected, {"a": 0, "b": 0, "c": 0})
+
+    assert cohesion[0] == 1.0
+
+
+def test_cohesion_of_a_cluster_with_no_internal_edges_is_zero() -> None:
+    """군집원끼리 하나도 안 이어져 있으면 밀도는 0.0이다."""
+    graph = nx.Graph()
+    graph.add_nodes_from(["a", "b", "c"])
+    projected = ProjectedGraph(revision=1, graph=graph)
+
+    cohesion = cluster_cohesion(projected, {"a": 0, "b": 0, "c": 0})
+
+    assert cohesion[0] == 0.0
+
+
+def test_cohesion_of_a_single_node_cluster_is_zero() -> None:
+    """군집 크기가 1이면 완전그래프 분모(n*(n-1)/2)가 0이라 밀도가 정의되지 않는다 — 0.0."""
+    graph = nx.Graph()
+    graph.add_node("a")
+    projected = ProjectedGraph(revision=1, graph=graph)
+
+    cohesion = cluster_cohesion(projected, {"a": 0})
+
+    assert cohesion[0] == 0.0
