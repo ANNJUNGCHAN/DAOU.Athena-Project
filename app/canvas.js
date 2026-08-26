@@ -458,6 +458,20 @@ function retitleChartCard(card, period) {
   title.textContent = base ? `${base} ${label}` : label;
 }
 
+// 주기가 바뀌면 title은 retitleChartCard가 갱신하는데 subtitle(원래 caption —
+// "일봉 — 삼성전자" 류, 종목명·주기가 함께 들어 있던 자리)은 그대로 남아 title과
+// 어긋난다(2026-08-26 리뷰 결함). 초기 렌더(renderLiveChart)와 같은 유도식
+// (cardTitleAndSubtitle)으로 다시 만든다 — 새 envelope에 caption이 없으면(빈
+// envelope으로 재조회하는 픽스처 경로 등) 손대지 않는다. subtitle 자체가
+// 없던 카드(card_title 없이 만들어진 카드)에도 새로 만들어 붙이지 않는다 —
+// 있던 걸 갱신할 뿐, 없던 구조를 재조회 시점에 바꾸지 않는다.
+function refreshChartSubtitle(card, envelope) {
+  const subtitleEl = card && card.querySelector('.card-subtitle');
+  if (!subtitleEl) return;
+  const [, subtitle] = cardTitleAndSubtitle(envelope, '차트');
+  if (subtitle) subtitleEl.textContent = subtitle;
+}
+
 async function reloadExistingAitsChartPanel(descriptor, envelope) {
   const card = Array.from(grid.querySelectorAll('.card.chart')).find(
     (candidate) => candidate.dataset.chartPanelId === descriptor.panelId
@@ -472,6 +486,7 @@ async function reloadExistingAitsChartPanel(descriptor, envelope) {
     interval: Number.isFinite(ticScope) && ticScope > 0 ? ticScope : 1,
   });
   retitleChartCard(card, descriptor.body.period);
+  refreshChartSubtitle(card, envelope);
   stampPaperScreen(card, envelope);
   card.dataset.renderState = descriptor.body.candles.length ? 'data' : 'empty';
   card.dataset.chartGeneration = String(descriptor.generation);
