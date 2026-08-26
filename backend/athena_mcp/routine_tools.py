@@ -11,13 +11,20 @@ selector_tools.py와 같은 이유로 `athena_api`를 import하지 않고 이미
 
 from __future__ import annotations
 
-import json
 from typing import Any
 
 import httpx
 import mcp.types as types
 
-from athena_mcp.result import ERROR_ORIGIN_META_KEY
+from athena_mcp.result import (
+    blocked as _blocked,
+)
+from athena_mcp.result import (
+    success as _success,
+)
+from athena_mcp.result import (
+    upstream_failed as _upstream_failed,
+)
 
 ROUTINE_TOOL = "athena_routine"
 
@@ -84,29 +91,6 @@ def builtin_tool_defs() -> list[types.Tool]:
             inputSchema=_INPUT_SCHEMA,
         )
     ]
-
-
-def _blocked(text: str) -> types.CallToolResult:
-    return types.CallToolResult(
-        content=[types.TextContent(type="text", text=text)],
-        isError=True,
-        _meta={ERROR_ORIGIN_META_KEY: "gateway-blocked"},
-    )
-
-
-def _upstream_failed(text: str) -> types.CallToolResult:
-    return types.CallToolResult(
-        content=[types.TextContent(type="text", text=text)],
-        isError=True,
-        _meta={ERROR_ORIGIN_META_KEY: "upstream-failed"},
-    )
-
-
-def _success(payload: Any) -> types.CallToolResult:
-    return types.CallToolResult(
-        content=[types.TextContent(type="text", text=json.dumps(payload, ensure_ascii=False))],
-        isError=False,
-    )
 
 
 async def dispatch(

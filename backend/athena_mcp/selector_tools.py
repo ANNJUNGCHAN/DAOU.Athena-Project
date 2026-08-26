@@ -13,7 +13,8 @@ from typing import Any
 import httpx
 import mcp.types as types
 
-from athena_mcp.result import ERROR_ORIGIN_META_KEY
+from athena_mcp.result import success as _success
+from athena_mcp.result import upstream_failed as _upstream_failed
 
 SEARCH_TOOL = "athena_search"
 DESCRIBE_TOOL = "athena_describe"
@@ -430,21 +431,6 @@ def builtin_tool_defs() -> list[types.Tool]:
         )
         for name in SELECTOR_TOOL_NAMES
     ]
-
-
-def _upstream_failed(text: str) -> types.CallToolResult:
-    return types.CallToolResult(
-        content=[types.TextContent(type="text", text=text)],
-        isError=True,
-        _meta={ERROR_ORIGIN_META_KEY: "upstream-failed"},
-    )
-
-
-def _success(payload: Any) -> types.CallToolResult:
-    return types.CallToolResult(
-        content=[types.TextContent(type="text", text=json.dumps(payload, ensure_ascii=False))],
-        isError=False,
-    )
 
 
 def _extract_error_detail(response: httpx.Response) -> str:
