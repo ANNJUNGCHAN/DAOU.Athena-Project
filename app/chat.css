@@ -1189,6 +1189,10 @@ html, body { background: transparent; }
 
 /* 루틴 승인 카드 (P3) */
 .routine-approval { border-left-color: rgba(230, 232, 238, 0.4); }
+/* Paper 1Y3-0(agent-badge, 1ZF-0)의 "승인 필요" 배지는 경고색이 아니라
+ * k-ghost/k-dim 무채색이다 — .agent-badge 기본값(경고 주황, agent-fired
+ * 시각용)을 이 카드 안에서만 되돌린다. */
+.routine-approval .agent-badge { color: var(--color-k-dim); border-color: var(--color-k-ghost); }
 .routine-mode-line { margin: 4px 0; }
 .routine-approval-actions { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
 .routine-btn {
