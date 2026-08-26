@@ -34,11 +34,21 @@ const PROFIT_AMOUNT_KEYS = ['lspft', 'lspft2', 'tdy_lspft', 'tot_evlt_pl', 'tdy_
 const PROFIT_RATE_KEYS = ['lspft_rt', 'lspft_ratio', 'tdy_lspft_rt', 'tot_prft_rt', 'pl_rt'];
 // 손익은 아니지만(늘 양수) 같은 응답에 자주 같이 오는 원화 금액 필드 — 손익 옆에서
 // 버려지지 않게 같이 포맷한다(단위 "원"까지 models.py 설명으로 확인된 것만).
-const PLAIN_WON_KEYS = ['tot_pur_amt', 'tot_evlt_amt', 'prsm_dpst_aset_amt'];
+// tdy_lspft_amt/lspft_amt는 kt00004:profit_and_loss 소속(6251-6264)이라 손익 3종
+// (lspft/lspft2/tdy_lspft)과 같은 응답에서 나온다 — 2026-08-26 추가 캡처(계좌.png)가
+// 이 둘을 raw key·무단위로 보여준 게 이번 결함이다. invt_bsamt도 같은 응답 소속이라
+// 단위는 "원"으로 안전하지만, 아래 LABEL_FALLBACK 주석 참고 — 이름은 안 붙인다.
+const PLAIN_WON_KEYS = ['tot_pur_amt', 'tot_evlt_amt', 'prsm_dpst_aset_amt', 'tdy_lspft_amt', 'lspft_amt', 'invt_bsamt'];
 
 // envelope에 label이 없을 때만 쓰는 대체 라벨 — 전부 models.py description 그대로다
 // (지어낸 한글 이름 없음). label이 왜 비는지는 프런트 문제가 아니라 별도 보고 대상
 // (이 HTTP 경로가 screen_reader_label 매핑을 안 태우는 것으로 보인다).
+//
+// invt_bsamt는 일부러 뺐다 — models.py에 같은 키가 두 가지 다른 뜻으로 나온다
+// (models.py:6255 "당월투자원금" vs :6757 "투자원금평잔", 둘 다 "단위: 원"만
+// 같다). 이 렌더러는 fields[] 배열만 보고 어느 TR/서브스크린에서 왔는지 모르므로
+// 어느 쪽인지 구분할 수 없다 — 잘못된 이름을 붙이느니 raw key를 남긴다(팀리드 지시:
+// 애매한 건 건너뛴다). 단위(원)는 두 뜻 모두 같아서 PLAIN_WON_KEYS엔 넣었다.
 const LABEL_FALLBACK = {
   lspft: '누적투자손익', lspft2: '당월투자손익', tdy_lspft: '당일투자손익',
   lspft_rt: '누적손익율', lspft_ratio: '당월손익율', tdy_lspft_rt: '당일손익율',
@@ -46,6 +56,7 @@ const LABEL_FALLBACK = {
   tdy_sel_pl: '당일매도손익', pl_rt: '손익율',
   rlzt_pl: '실현손익', tdy_rlzt_pl: '당일실현손익',
   tot_pur_amt: '총매입금액', tot_evlt_amt: '총평가금액', prsm_dpst_aset_amt: '추정예탁자산',
+  tdy_lspft_amt: '당일투자원금', lspft_amt: '누적투자원금',
 };
 
 function classifyKey(key) {
