@@ -39,20 +39,21 @@
   // window.AthenaGraphMode는 canvas.js가 이 스크립트보다 나중에(shell.html 로드
   // 순서) 세운다 — 그래서 모듈 로드 시점이 아니라 클릭 시점에만 참조한다(기존
   // $newChat의 window.AthenaShell 참조와 같은 패턴, 이 파일 위 머리말 참고).
-  if (window.AthenaLib && window.AthenaLib.SidebarModeNav) {
-    window.AthenaLib.SidebarModeNav.createSidebarModeNav({
-      items: {
-        summary: document.getElementById('modeNavSummary'),
-        graph: document.getElementById('modeNavGraph'),
-        agent: document.getElementById('modeNavAgent'),
-      },
-      onSelect: (view) => {
-        if (window.AthenaGraphMode && typeof window.AthenaGraphMode.setView === 'function') {
-          window.AthenaGraphMode.setView(view);
-        }
-      },
-    });
-  }
+  const modeNav = (window.AthenaLib && window.AthenaLib.SidebarModeNav)
+    ? window.AthenaLib.SidebarModeNav.createSidebarModeNav({
+        items: {
+          summary: document.getElementById('modeNavSummary'),
+          graph: document.getElementById('modeNavGraph'),
+          agent: document.getElementById('modeNavAgent'),
+        },
+        badge: document.getElementById('modeNavAgentBadge'),
+        onSelect: (view) => {
+          if (window.AthenaGraphMode && typeof window.AthenaGraphMode.setView === 'function') {
+            window.AthenaGraphMode.setView(view);
+          }
+        },
+      })
+    : null;
 
   const INITIAL_VISIBLE = 6; // "더 보기" 이전에 보이는 지난 7일 이전 항목 수(Paper 보드 04 실측)
 
@@ -188,6 +189,14 @@
   // 세션 메모리만 — 앱을 다시 켜면 비어 있다(위 파일 머리말 참고).
   const notifyRooms = [];
 
+  // 에이전트 모드 네비 배지(원칙2) — notifyRooms의 !read 개수를 그대로 노출한다.
+  // notifyRooms 자체가 이미 "라우틴 상태의 파생물"이라 별도로 다시 세거나
+  // 디스크에 남기지 않는다(P3 — 이 파일 머리말과 같은 이유).
+  function updateAgentBadge() {
+    if (!modeNav) return;
+    modeNav.setBadgeCount(notifyRooms.filter((r) => !r.read).length);
+  }
+
   function routineEventTitle(event) {
     if (event && event.note) return String(event.note);
     if (event && event.routine_id) return `루틴 ${event.routine_id}`;
@@ -208,6 +217,7 @@
       notifyRooms.unshift({ id, title: routineEventTitle(event), firedAt: firedAtMs, read: false, event });
     }
     renderList();
+    updateAgentBadge();
   }
 
   function selectNotifyRoom(id) {
@@ -221,6 +231,7 @@
     $roomTitle.textContent = room.title;
     $roomBanner.hidden = false;
     renderList();
+    updateAgentBadge();
   }
 
   // ---------- 새 대화 ----------
