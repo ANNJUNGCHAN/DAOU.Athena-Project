@@ -29,17 +29,22 @@ function createGraphModeController(deps) {
   // 오기 전에 그래프 모드로 들어오면 renderUnavailable()의 정직한 안내를 보여준다.
   let available = false;
 
-  // 보드 12d/US-007 — 답변⇄그래프 두 표면의 가시성은 전부 이 함수 하나가 소유한다.
-  // 부팅 시 다른 어디서도(예: canvas.js의 brain-status 콜백) summaryTable 같은
+  // 보드 12d/US-007 — 답변⇄그래프⇄에이전트 세 표면의 가시성은 전부 이 함수
+  // 하나가 소유한다(3중 배타 — 리프 1.2.2 사이드바 모드 네비, Rev.3). 부팅 시
+  // 다른 어디서도(예: canvas.js의 brain-status 콜백) summaryTable 같은
   // 그래프 표면의 hidden을 직접 건드리지 않는다 — 소유자가 둘이면 브레인 준비
   // 타이밍에 따라 그래프 표면이 답변 모드에 새어 보이는 결함이 재발한다(실측,
   // 2026-08-26 — summaryTable이 graphView와 무관하게 ready만으로 보였다 지워졌다 했다).
   function applyVisibility() {
     const graphView = store.isGraphView(state);
-    if (elements.summary) elements.summary.hidden = graphView;
+    const agentView = state.view === store.VIEW_AGENT;
+    if (elements.summary) elements.summary.hidden = graphView || agentView;
     if (elements.graph) elements.graph.hidden = !graphView;
+    if (elements.agent) elements.agent.hidden = !agentView;
     if (elements.summaryTable) elements.summaryTable.hidden = !graphView;
     if (elements.pill) {
+      // #graphPill은 리프 1.2.2에서 사이드바 모드 네비로 대체됐다 — 이 가드는
+      // 옵셔널이라 실제 앱은 더 이상 pill을 주입하지 않고, 기존 테스트만 계속 쓴다.
       // 모드 칩은 "다음에 할 동작"이 아니라 "지금 모드"를 보여준다(Paper 보드 05
       // "모드 칩 상시" — 답변/그래프 둘 중 지금 켜져 있는 쪽).
       elements.pill.textContent = graphView ? '그래프' : '답변';
@@ -177,6 +182,17 @@ function createGraphModeController(deps) {
     },
     async toggle() {
       state = store.toggleView(state);
+      applyVisibility();
+      renderSelection();
+      return draw(true);
+    },
+    // 사이드바 모드 네비(3항목)의 유일한 진입점 — summary/graph/agent 어느
+    // 값으로도 직접 전이한다(toggle()은 summary⇄graph 2값 순환 전용으로 그대로
+    // 둔다, verify.js의 기존 toggle() 직접 호출을 깨지 않기 위해). draw()는
+    // 그래프 뷰가 아니면 즉시 no-op을 돌려주므로 view와 무관하게 항상 불러도
+    // 안전하다(toggle()과 같은 패턴).
+    async setView(view) {
+      state = store.setView(state, view);
       applyVisibility();
       renderSelection();
       return draw(true);

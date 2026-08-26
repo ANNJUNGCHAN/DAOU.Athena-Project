@@ -130,6 +130,76 @@ body { margin: 0; overflow: hidden; }
 }
 .sidebar-search-input:focus { outline: none; border-color: var(--color-k-line); }
 
+/* 모드 네비(리프 1.2.2, Paper 보드 37/44 실측) — #graphPill을 대체한다.
+ * 대화/그래프/에이전트 3항목, 캔버스 3영역의 유일한 사람 진입로(lib/
+ * sidebar-mode-nav.js가 클릭만 배선, 소유자는 graph-mode/controller.js). */
+.sidebar-mode-nav {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 10px 10px;
+}
+.sidebar-mode-caption {
+  padding: 2px 8px 6px;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-weight: 300; /* DakiL — Paper 실측(get_jsx, 보드 44) */
+  font-size: var(--text-2xs);
+  letter-spacing: 0.1em;
+  line-height: 12px;
+}
+.sidebar-mode-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-k-dim);
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+}
+.sidebar-mode-item-ic {
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  color: inherit; /* stroke="currentColor" — 활성/비활성은 색 하나로 결정된다 */
+}
+.sidebar-mode-item-label {
+  font-family: var(--font-body);
+  font-weight: 300; /* DakiL — 비활성 라벨(Paper 실측) */
+  font-size: var(--text-base);
+  line-height: 16px;
+  color: inherit;
+}
+.sidebar-mode-item.is-active {
+  background: var(--color-k-panel);
+  border-color: var(--color-k-line);
+  color: var(--color-k-text);
+}
+.sidebar-mode-item.is-active .sidebar-mode-item-label {
+  font-family: var(--font-strong); /* DakiB — 활성 라벨(Paper 실측) */
+  font-weight: 400;
+}
+.sidebar-mode-badge {
+  margin-left: auto;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--color-brand);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  box-sizing: border-box;
+}
+
 .sidebar-divider {
   flex-shrink: 0;
   height: 1px;

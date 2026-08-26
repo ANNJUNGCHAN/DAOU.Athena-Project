@@ -14,6 +14,7 @@
 
 const VIEW_SUMMARY = 'summary';
 const VIEW_GRAPH = 'graph';
+const VIEW_AGENT = 'agent';
 const STAGE_CLUSTERS = 'clusters';
 const STAGE_EXPANDED = 'expanded';
 
@@ -32,19 +33,32 @@ function isGraphView(state) {
   return state.view === VIEW_GRAPH;
 }
 
-// 요약⇄그래프 토글. 그래프에서 요약으로 나가면 펼침과 선택을 버린다 — 돌아왔을 때
-// 사용자가 기억하지 못하는 상태에 놓여 있으면 방향을 잃는다.
+// 요약⇄그래프 토글 — 사이드바 모드 네비가 생기기 전부터 있던 2값 순환기다. 지금도
+// 유일한 실사용처(verify.js의 toggle() 직접 호출)가 요약⇄그래프 왕복 전용이라 이
+// 계약을 그대로 굳힌다: agent 상태에서 불릴 근거가 없으므로 그 경우는 no-op으로
+// 확정한다(Rev.3) — 상태를 그대로 돌려준다, 3번째 모드로 튀지 않는다.
+// 그래프에서 요약으로 나가면 펼침과 선택을 버린다 — 돌아왔을 때 사용자가 기억하지
+// 못하는 상태에 놓여 있으면 방향을 잃는다.
 function toggleView(state) {
+  if (state.view === VIEW_AGENT) return state;
   if (state.view === VIEW_GRAPH) {
     return { ...state, view: VIEW_SUMMARY, stage: STAGE_CLUSTERS, expandedCluster: null, selectedEntityId: null, panel: null };
   }
   return { ...state, view: VIEW_GRAPH };
 }
 
+// 3값 독립 전이 — toggleView를 재사용하지 않는다. toggleView는 summary⇄graph
+// 2값 하드코딩이라 setView(state,'agent')를 재사용하면 무조건 VIEW_GRAPH로
+// 튄다(실사용 결함, Rev.2에서 발견). 요청된 view를 직접 대입하고, 그래프를
+// 떠날 때만(목적지가 무엇이든) 펼침·선택을 버린다 — 그 상태는 그래프 밖에서
+// 의미가 없다.
 function setView(state, view) {
-  if (view !== VIEW_SUMMARY && view !== VIEW_GRAPH) return state;
+  if (view !== VIEW_SUMMARY && view !== VIEW_GRAPH && view !== VIEW_AGENT) return state;
   if (view === state.view) return state;
-  return toggleView(state);
+  if (state.view === VIEW_GRAPH) {
+    return { ...state, view, stage: STAGE_CLUSTERS, expandedCluster: null, selectedEntityId: null, panel: null };
+  }
+  return { ...state, view };
 }
 
 // 1단계 → 2단계. 군집 하나를 펼쳐 그 안의 노드를 본다.
@@ -104,6 +118,7 @@ function visibleEdges(state, layout) {
 const __exports = {
   VIEW_SUMMARY,
   VIEW_GRAPH,
+  VIEW_AGENT,
   STAGE_CLUSTERS,
   STAGE_EXPANDED,
   createInitialState,

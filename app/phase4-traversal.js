@@ -121,11 +121,11 @@ async function main() {
     ['모델', '03d-settings-model.png'],
     ['그래프', '03e-settings-graph.png'],
   ];
-  // 2026-08-26: 점은 이제 답변⇄그래프 모드 전환기다(보드 05) — 설정 진입은
-  // 사이드바 계정 메뉴(보드 16) 아니면 커맨드바다. 이 프로필은 계좌가
-  // 미등록이라(위 PROFILE 주석 — cliDone/accountDone만 심는다) 계정 행이 숨어
-  // 있다(단계 02가 이미 그 상태를 'no-account'로 기록한다) — 그래서 여기서는
-  // 계정 상태와 무관한 커맨드바("설정" 입력)로 연다.
+  // 리프 1.2.2: 점은 이제 대화 상태 표시 전용이라 설정으로 가는 길이 아니다 —
+  // 설정 진입은 사이드바 계정 메뉴(보드 16) 아니면 커맨드바다. 이 프로필은
+  // 계좌가 미등록이라(위 PROFILE 주석 — cliDone/accountDone만 심는다) 계정
+  // 행이 숨어 있다(단계 02가 이미 그 상태를 'no-account'로 기록한다) — 그래서
+  // 여기서는 계정 상태와 무관한 커맨드바("설정" 입력)로 연다.
   await step('03-설정 열기', async () => {
     const opened = await shellWin.webContents.executeJavaScript(`(() => {
       const el = document.getElementById('input');
@@ -164,14 +164,15 @@ async function main() {
   });
 
   // ---------- (4) 답변⇄그래프 모드 ----------
-  // 2026-08-26: 모드 칩(#graphPill)은 이제 상시 보인다(Paper 보드 05) — 브레인
-  // 미준비가 진입 자체를 막지 않는다. 준비됐으면 실제 그래프가, 안 됐으면
-  // 캔버스 안에 정직한 안내(controller.js renderUnavailable)가 뜬다 — 둘 다
-  // 성공이고, "칩이 숨어서 못 들어감"만 실패다.
+  // 리프 1.2.2: #graphPill은 사이드바 모드 네비(#modeNavGraph)로 대체됐다 —
+  // 상시 보이는 성질은 그대로 이어받는다(Paper 보드 05/44). 브레인 미준비가
+  // 진입 자체를 막지 않는다. 준비됐으면 실제 그래프가, 안 됐으면 캔버스 안에
+  // 정직한 안내(controller.js renderUnavailable)가 뜬다 — 둘 다 성공이고,
+  // "네비 항목이 숨어서 못 들어감"만 실패다.
   await step('04-그래프 모드', async () => {
     await shot(shellWin, '04a-canvas-summary.png', '토글 전 — 답변(카드 그리드) 모드');
     const graphProbe = await shellWin.webContents.executeJavaScript(`(async () => {
-      const pill = document.getElementById('graphPill');
+      const pill = document.getElementById('modeNavGraph');
       const container = document.getElementById('graphCanvas');
       const status = await window.athena.invoke('athena:brain-status').catch(() => null);
       const brainReady = Boolean(status && status.ok && status.ready);
@@ -195,11 +196,11 @@ async function main() {
     })()`);
     fs.writeFileSync(path.join(OUT_DIR, '04-graph-probe.json'), JSON.stringify(graphProbe, null, 2));
     if (!graphProbe.wired) {
-      results.push({ name: '04-graph-mode', ok: false, file: null, note: `모드 칩 진입로가 막혀 있다 — ${JSON.stringify(graphProbe)}` });
+      results.push({ name: '04-graph-mode', ok: false, file: null, note: `모드 네비 진입로가 막혀 있다 — ${JSON.stringify(graphProbe)}` });
       return;
     }
     if (!graphProbe.opened) {
-      results.push({ name: '04-graph-mode', ok: false, file: null, note: `칩을 눌러도 그래프 캔버스가 안 열린다 — ${JSON.stringify(graphProbe)}` });
+      results.push({ name: '04-graph-mode', ok: false, file: null, note: `네비 항목을 눌러도 그래프 캔버스가 안 열린다 — ${JSON.stringify(graphProbe)}` });
       return;
     }
     if (graphProbe.brainReady) {

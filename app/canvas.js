@@ -1333,21 +1333,23 @@ function fmtWon(raw) {
 // 창에 속하는 것(창 크롬·창 단축키·네이티브 캡션 드래그 손잡이 #dragStrip)은
 // shell.js가 한 벌만 가진다 — 이 파일에는 없다. 크기는 설정 › 화면에서만 바뀐다.
 
-// --- 그래프 모드 배선 (leaf 8 / W2-3) ---------------------------------------
+// --- 그래프 모드 배선 (leaf 8 / W2-3, 3상태는 리프 1.2.2) -------------------
 //
 // 상태·배치·그리기는 lib/graph-mode/**가 순수하게 갖고 있고, 여기서는 DOM과
-// 백엔드에만 잇는다. 모드 칩(#graphPill)은 상시 보인다(Paper 보드 05) — 브레인이
-// 꺼져 있어도 그래프 모드 자체는 열 수 있고, 못 쓰는 이유는 캔버스 안에서 정직하게
-// 보여준다(controller.js의 renderUnavailable).
+// 백엔드에만 잇는다. 모드 전환은 사이드바 모드 네비(lib/sidebar.js가 배선)로
+// 옮겨갔다 — #graphPill은 사라졌다. 브레인이 꺼져 있어도 그래프 모드 자체는
+// 열 수 있고, 못 쓰는 이유는 캔버스 안에서 정직하게 보여준다(controller.js의
+// renderUnavailable).
 const graphMode = window.AthenaLib.GraphModeController.createGraphModeController({
   store: window.AthenaLib.GraphModeStore,
   layout: window.AthenaLib.GraphClusterLayout,
   render: window.AthenaLib.GraphRender,
   prefs: window.AthenaLib.GraphModePrefs,
   elements: {
-    pill: document.getElementById('graphPill'),
     summary: document.getElementById('mosaic'),
     graph: document.getElementById('graphCanvas'),
+    // 3영역 3중 배타의 세 번째 자리(Paper 보드 39/44) — 내용은 4/5단계에서 채운다.
+    agent: document.getElementById('agentCanvas'),
     // 보드 07 성향 신호 표 — 그래프 표면이라 답변 모드에선 숨는다(아래 §요약 뷰
     // 배선 주석·US-007 참고). graphMode.applyVisibility() 하나가 소유한다.
     summaryTable: document.getElementById('graphSummaryTable'),
@@ -1365,15 +1367,11 @@ const graphMode = window.AthenaLib.GraphModeController.createGraphModeController
 window.AthenaGraphMode = graphMode;
 // 부팅을 순수 답변 모드로 고정한다(US-007) — 정적 HTML의 기본 hidden 속성이
 // 우연히 답변 모드와 맞아떨어지는 데 기대지 않고, 여기서 명시적으로 한 번
-// 그린다. 이후 모든 가시성 변경은 toggle()/setAvailable() 안에서 이 함수가
-// 계속 소유한다 — 다른 곳(예: 아래 brain-status 콜백)이 그래프 표면의 hidden을
-// 직접 건드리면 브레인 준비 타이밍에 따라 답변/그래프가 섞여 보인다(실측 결함).
+// 그린다. 이후 모든 가시성 변경은 toggle()/setView()/setAvailable() 안에서 이
+// 함수가 계속 소유한다 — 다른 곳(예: 아래 brain-status 콜백)이 그래프 표면의
+// hidden을 직접 건드리면 브레인 준비 타이밍에 따라 답변/그래프가 섞여 보인다
+// (실측 결함).
 graphMode.applyVisibility();
-
-const graphPillEl = document.getElementById('graphPill');
-if (graphPillEl) {
-  graphPillEl.addEventListener('click', () => { graphMode.toggle(); });
-}
 
 // --- 그래프 모드 요약 뷰 배선 (보드 07) --------------------------------------
 //
