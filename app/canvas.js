@@ -1401,6 +1401,16 @@ const graphSummaryTable = window.AthenaLib.GraphSummaryTable.createSummaryTableC
   fetchProfileSummary: ({ limit } = {}) => window.athena.invoke('athena:brain-profile-summary', { limit }),
   selectEntity: (entityId, panelData) => graphMode.selectEntity(entityId, panelData),
   onError: (err) => console.warn('[graph-mode] profile-summary 실패', err),
+  // 히어로(보드 06 §5)·확인 필요 배너(§6, 06 전용) — 스텝3. 배너 개수원은
+  // loadEmptyCanvasExtras()가 캔버스 빈 상태 힌트에 이미 쓰는 것과 같은 IPC다.
+  heroContainer: document.getElementById('graphSummaryHero'),
+  bannerContainer: document.getElementById('graphConfirmBanner'),
+  fetchSuggestedQuestions: () => window.athena.invoke('athena:brain-suggested-questions'),
+  // CTA "채팅에서 답하기" — 새 기능을 발명하지 않는다, 입력창에 포커스만 준다.
+  onConfirmCta: () => {
+    const inputEl = document.getElementById('input');
+    if (inputEl) inputEl.focus();
+  },
 });
 
 // --- 요약 뷰 헤더 배선 (보드 06/07 §4-1, 4-3) --------------------------------

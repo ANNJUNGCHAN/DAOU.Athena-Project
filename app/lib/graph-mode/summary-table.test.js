@@ -4,8 +4,14 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-const { renderSummaryTable, describeRendered, createSummaryTableController } =
-  require('./summary-table');
+const {
+  renderSummaryTable,
+  describeRendered,
+  createSummaryTableController,
+  computeConfidenceBreakdown,
+  renderSummaryHero,
+  renderConfirmBanner,
+} = require('./summary-table');
 const { fakeNode, installFakeDocument, uninstallFakeDocument } = require('./fake-dom');
 
 test.beforeEach(() => {
@@ -93,15 +99,86 @@ test('접근성 요약이 붙는다', () => {
   assert.match(table.attrs['aria-label'], /2건/);
 });
 
+// ── 히어로(스텝3) ────────────────────────────────────────────────────────────
+
+test('computeConfidenceBreakdown — confidence 3종 카운트를 %로 반올림한다', () => {
+  const entries = [
+    entry({ confidence: 'EXTRACTED' }),
+    entry({ confidence: 'EXTRACTED' }),
+    entry({ confidence: 'INFERRED' }),
+    entry({ confidence: 'AMBIGUOUS' }),
+  ];
+  assert.deepEqual(computeConfidenceBreakdown(entries), { fact: 50, inference: 25, ambiguous: 25, total: 4 });
+});
+
+test('computeConfidenceBreakdown — 빈 목록·인식 못 하는 confidence는 total 0', () => {
+  assert.deepEqual(computeConfidenceBreakdown([]), { fact: 0, inference: 0, ambiguous: 0, total: 0 });
+  assert.deepEqual(
+    computeConfidenceBreakdown([entry({ confidence: 'UNKNOWN' })]),
+    { fact: 0, inference: 0, ambiguous: 0, total: 0 },
+  );
+});
+
+test('renderSummaryHero — entries가 있으면 라벨과 %를 그린다', () => {
+  const container = fakeNode('div');
+  renderSummaryHero(container, [entry({ confidence: 'EXTRACTED' }), entry({ confidence: 'AMBIGUOUS' })]);
+  assert.equal(container.children.length, 1);
+  const label = container.querySelector('.summary-hero-label');
+  assert.equal(label.textContent, '지금 읽히는 성향');
+  const values = container.querySelectorAll('.summary-hero-stat-value').map((n) => n.textContent);
+  assert.deepEqual(values, ['50%', '0%', '50%'], '사실·추론·불확실 순서로 그려진다');
+});
+
+test('renderSummaryHero — 항목이 없으면 아예 안 그린다(§0 정직한 빈 데이터)', () => {
+  const container = fakeNode('div');
+  renderSummaryHero(container, []);
+  assert.equal(container.children.length, 0);
+});
+
+test('renderSummaryHero — 다시 부르면 이전 내용을 지운다', () => {
+  const container = fakeNode('div');
+  renderSummaryHero(container, [entry()]);
+  renderSummaryHero(container, []);
+  assert.equal(container.children.length, 0, '두 번째 호출이 빈 목록이면 첫 렌더 잔재도 지운다');
+});
+
+// ── 확인 필요 배너(스텝3) ────────────────────────────────────────────────────
+
+test('renderConfirmBanner — 개수가 있으면 그리고 hidden을 푼다', () => {
+  const container = fakeNode('div');
+  container.hidden = true;
+  const clicks = [];
+  renderConfirmBanner(container, 3, () => clicks.push('cta'));
+  assert.equal(container.hidden, false);
+  const title = container.querySelector('.confirm-banner-title');
+  assert.equal(title.textContent, '확인이 필요한 것 3건');
+  const cta = container.querySelector('.confirm-banner-cta');
+  cta.dispatchEvent({ type: 'click' });
+  assert.deepEqual(clicks, ['cta']);
+});
+
+test('renderConfirmBanner — 0/null/undefined면 배너를 숨긴다("0건"은 모순)', () => {
+  for (const hintCount of [0, null, undefined, NaN]) {
+    const container = fakeNode('div');
+    renderConfirmBanner(container, hintCount, null);
+    assert.equal(container.hidden, true, `hintCount=${hintCount}일 때 숨어야 한다`);
+    assert.equal(container.children.length, 0);
+  }
+});
+
 // ── 컨트롤러: fetch·행 클릭·selectEntity 배선 ────────────────────────────────
 
 function setupController(options) {
   const opts = options || {};
   const container = fakeNode('div');
+  const heroContainer = fakeNode('div');
+  const bannerContainer = fakeNode('div');
   const selected = [];
   const errors = [];
   const controller = createSummaryTableController({
     container,
+    heroContainer,
+    bannerContainer,
     limit: opts.limit === undefined ? 5 : opts.limit,
     fetchProfileSummary: async (params) => {
       if (opts.fail) throw new Error('backend down');
@@ -109,10 +186,12 @@ function setupController(options) {
       opts.onFetch && opts.onFetch(params);
       return { ok: true, entries: opts.entries || [entry()] };
     },
+    fetchSuggestedQuestions: opts.fetchSuggestedQuestions,
+    onConfirmCta: opts.onConfirmCta,
     selectEntity: (entityId, panelData) => selected.push({ entityId, panelData }),
     onError: (err) => errors.push(err),
   });
-  return { controller, container, selected, errors };
+  return { controller, container, heroContainer, bannerContainer, selected, errors };
 }
 
 test('load()가 성향 신호를 그린다', async () => {
@@ -163,4 +242,40 @@ test('다시 load()하면 표가 새로 그려진다(쌓이지 않는다)', asyn
   await controller.load();
   await controller.load();
   assert.equal(container.children.length, 1);
+});
+
+// ── 컨트롤러: 히어로·확인 필요 배너 배선(스텝3) ─────────────────────────────
+
+test('load()가 같은 entries로 히어로도 채운다', async () => {
+  const { controller, heroContainer } = setupController({
+    entries: [entry({ confidence: 'EXTRACTED' }), entry({ entity_id: 'e:b', confidence: 'AMBIGUOUS' })],
+  });
+  await controller.load();
+  assert.equal(heroContainer.children.length, 1);
+  assert.match(heroContainer.querySelector('.summary-hero-label').textContent, /지금 읽히는 성향/);
+});
+
+test('load()가 fetchSuggestedQuestions로 확인 필요 배너를 채운다', async () => {
+  const { controller, bannerContainer } = setupController({
+    fetchSuggestedQuestions: async () => ({ ok: true, questions: [{ q: 1 }, { q: 2 }] }),
+  });
+  await controller.load();
+  assert.equal(bannerContainer.hidden, false);
+  assert.equal(bannerContainer.querySelector('.confirm-banner-title').textContent, '확인이 필요한 것 2건');
+});
+
+test('fetchSuggestedQuestions가 없거나 실패해도 표 렌더 자체는 안 막힌다', async () => {
+  const { controller, container, bannerContainer } = setupController({
+    entries: [entry()],
+    fetchSuggestedQuestions: async () => { throw new Error('questions down'); },
+  });
+  await controller.load();
+  assert.equal(describeRendered(container).rows, 1, '배너 실패가 표 렌더를 막지 않는다');
+  assert.equal(bannerContainer.hidden, true);
+});
+
+test('백엔드가 죽어도 히어로는 빈 데이터로 정리된다(잔재 없음)', async () => {
+  const { controller, heroContainer } = setupController({ fail: true });
+  await controller.load();
+  assert.equal(heroContainer.children.length, 0);
 });
