@@ -22,6 +22,8 @@
   'use strict';
 
   const routineTurn = window.AthenaLib.RoutineTurn;
+  const toolStepTrack = window.AthenaLib.ToolStepTrack;
+  const liveQueryLock = window.AthenaLib.LiveQueryLock;
 
   const $root = document.getElementById('orbRoot');
   const $orb = document.getElementById('orb');
@@ -46,6 +48,7 @@
   const $inputStack = document.getElementById('orbInputStack');
   const $chatInput = document.getElementById('orbInput');
   const $lockHint = document.getElementById('orbLockHint');
+  const $lockText = document.getElementById('orbLockText');
   const $esc = document.getElementById('orbEsc');
   const $chatDot = document.getElementById('orbChatDot');
   const $chatCli = document.getElementById('orbChatCli');
@@ -588,6 +591,26 @@
   // 그대로 부르는 것뿐, 별도 파이프라인이 아니다(orb.js 상단 주석 참고).
   // ─────────────────────────────────────────────────────────────────────
   let chatBusy = false;
+  // 셸이 돌리고 있는 질의 — athena:live-query-state 브로드캐스트로 안다(2026-08-26
+  // 어드버서리얼 리뷰 결함 #1). chat.js는 이미 이 이벤트를 구독해 오브가 대화
+  // 중이면 셸 입력을 잠근다(chat.js remoteQueryBusy와 짝) — 반대 방향이 없어서
+  // 오브가 셸의 진행 중 질의를 조용히 죽이는 사고로 이어졌다.
+  let remoteQueryBusy = false;
+
+  // 판정은 lib/live-query-lock.js(순수 함수) 하나로 통일한다 — chatBusy·
+  // remoteQueryBusy가 바뀔 때마다 여기 하나만 부르면 입력 잠금·안내 문구가
+  // 항상 같은 규칙으로 갱신된다.
+  function syncInputLock() {
+    const lock = liveQueryLock.resolveInputLock({ chatBusy, remoteQueryBusy });
+    $chatInput.disabled = lock.disabled;
+    $lockHint.hidden = lock.hintHidden;
+    if (lock.hintText) $lockText.textContent = lock.hintText;
+  }
+
+  window.athena.on('athena:live-query-state', ({ busy } = {}) => {
+    remoteQueryBusy = !!busy;
+    syncInputLock();
+  });
 
   function orbTurn(className) {
     const el = document.createElement('div');
@@ -615,13 +638,18 @@
     card.append(judging, steps);
     $chatTurns.appendChild(card);
     card._steps = steps;
-    card._byId = new Map();
+    card._byId = new Map(); // DOM 엘리먼트 캐시(id별)
+    card._stepStates = new Map(); // tool-step-track.applyToolStep이 드는 판정 상태(id별)
     return card;
   }
 
+  // 판정은 lib/tool-step-track.js(순수 함수) 하나로 통일한다 — chat.js도
+  // 같은 모듈을 쓴다(2026-08-26 어드버서리얼 리뷰 결함 #3, 라벨 두 벌 방지).
   function updateProgressStep(card, step) {
-    if (!card || !card.isConnected || !step || !step.id) return;
-    let el = card._byId.get(step.id);
+    if (!card || !card.isConnected) return;
+    const result = toolStepTrack.applyToolStep(card._stepStates, step);
+    if (!result) return;
+    let el = card._byId.get(result.id);
     if (!el) {
       el = document.createElement('div');
       el.className = 'orb-tool-step';
@@ -633,12 +661,11 @@
       time.className = 'orb-tool-step-time';
       el.append(icon, label, time);
       card._steps.appendChild(el);
-      card._byId.set(step.id, el);
+      card._byId.set(result.id, el);
     }
-    el.classList.toggle('done', !!step.done);
-    el.querySelector('.orb-tool-step-label').textContent = step.label || '처리 중';
-    el.querySelector('.orb-tool-step-time').textContent =
-      step.done && typeof step.elapsedMs === 'number' ? `${(step.elapsedMs / 1000).toFixed(1)}s` : (step.done ? '—' : '');
+    el.classList.toggle('done', result.done);
+    el.querySelector('.orb-tool-step-label').textContent = result.label;
+    el.querySelector('.orb-tool-step-time').textContent = result.timeText;
     requestPanelHeight();
   }
 
@@ -658,12 +685,11 @@
 
   async function submitChatQuery(rawText) {
     const text = String(rawText || '').trim();
-    if (!text || chatBusy) return;
+    if (!text || chatBusy || remoteQueryBusy) return;
     chatBusy = true;
     $chatEmpty.hidden = true;
     $chatInput.value = '';
-    $chatInput.disabled = true;
-    $lockHint.hidden = false;
+    syncInputLock();
     setChatDot('judging');
     renderChatQuestion(text);
     const card = renderProgressCard();
@@ -680,9 +706,45 @@
       if (!calling) { calling = true; setChatDot('calling'); }
       updateProgressStep(card, step);
     });
+
+    // 추론 미리보기(2026-08-26 어드버서리얼 리뷰 결함 #2) — chat.js의
+    // onLiveThinkingDelta와 같은 규칙: 답변 텍스트가 나오기 전 긴 침묵 구간을
+    // 채우는 미리보기 전용 줄이다. 답변 첫 조각이 오거나 턴이 끝나면 지운다 —
+    // 턴 기록에는 절대 안 남는다. 빈 조각은 조용히 무시한다.
+    let thinkingEl = null;
+    let thinkingBody = null;
+    let thinkingText = '';
+    const clearThinkingPreview = () => {
+      if (!thinkingEl) return;
+      thinkingEl.remove();
+      thinkingEl = null;
+      thinkingBody = null;
+      thinkingText = '';
+    };
+    const unsubThinking = window.athena.on('athena:live-thinking-delta', ({ text: delta } = {}) => {
+      if (!delta) return;
+      if (!calling) { calling = true; setChatDot('calling'); }
+      if (!thinkingEl) {
+        thinkingEl = document.createElement('div');
+        thinkingEl.className = 'orb-thinking-preview';
+        const label = document.createElement('div');
+        label.className = 'orb-thinking-label';
+        label.textContent = '추론 중…';
+        thinkingBody = document.createElement('div');
+        thinkingBody.className = 'orb-thinking-body';
+        thinkingEl.append(label, thinkingBody);
+        if (card.isConnected) card.appendChild(thinkingEl);
+      }
+      thinkingText += delta;
+      thinkingBody.textContent = thinkingText;
+      scrollChatToBottom();
+      requestPanelHeight();
+    });
+
     const unsubDelta = window.athena.on('athena:live-text-delta', ({ text: delta } = {}) => {
       if (!delta) return;
       if (!calling) { calling = true; setChatDot('calling'); }
+      clearThinkingPreview(); // 답변이 시작됐다 — 추론 미리보기는 자리를 비켜준다
       if (!answer) {
         if (card.isConnected) card.remove();
         answer = renderChatAnswer('');
@@ -698,12 +760,13 @@
       result = { ok: false, error: String((err && err.message) || err) };
     } finally {
       unsubStep();
+      unsubThinking();
       unsubDelta();
+      clearThinkingPreview(); // 방어적 — 답변 조각 없이 턴이 끝나는 경로에서도 안 남는다
       thinking = false;
       resolveAmbientFace();
       chatBusy = false;
-      $chatInput.disabled = false;
-      $lockHint.hidden = true;
+      syncInputLock();
       setChatDot(null);
     }
 
@@ -763,7 +826,7 @@
   }
 
   $chatInput.addEventListener('keydown', (e) => {
-    if (e.key !== 'Enter' || chatBusy) return;
+    if (e.key !== 'Enter' || chatBusy || remoteQueryBusy) return;
     e.preventDefault();
     submitChatQuery($chatInput.value);
   });
