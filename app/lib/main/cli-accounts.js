@@ -223,6 +223,29 @@ function setActive(accountId) {
   return { ok: true };
 }
 
+// 로그인 = 활성 전환(2026-08-27 검토 결정) — 로그인 흐름이 끝난 provider의
+// 현재 감지 계정을 활성으로 승격한다. "새 계정 기본 비활성" 규칙의 예외는
+// 이 한 곳뿐이다: 로그인은 명시적 사용자 행위라 의도가 분명하다.
+function activateProviderCurrent(providerId) {
+  const detector = DETECTORS[providerId];
+  if (!detector) return { ok: false };
+  let found;
+  try {
+    found = detector();
+  } catch {
+    found = null;
+  }
+  if (!found) return { ok: false };
+  const id = `${providerId}:${found.identifier}`;
+  const state = detectAndMerge();
+  if (!state.accounts[id]) return { ok: false };
+  if (state.activeId !== id) {
+    state.activeId = id;
+    writeState(state);
+  }
+  return { ok: true, accountId: id };
+}
+
 // 재로그인(이미 목록에 있는 계정으로 다시 로그인)은 계정 목록을 바꾸지 않아
 // 목록 비교만으로는 감지되지 않는다(실측 2026-08-27: 로그인 대기가 영영 안
 // 풀리던 원인) — 자격증명 파일의 mtime을 서명으로 쓴다. 내용은 읽지 않는다.
@@ -236,4 +259,4 @@ function credentialsSignature() {
   }).join('|');
 }
 
-module.exports = { list, login, setActive, probeBinaryExists, credentialsSignature };
+module.exports = { list, login, setActive, probeBinaryExists, credentialsSignature, activateProviderCurrent };
