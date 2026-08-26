@@ -121,9 +121,11 @@
     }
 
     if (buckets.older.length) {
-      const visible = showOlder || q ? buckets.older : buckets.older.slice(0, 0);
+      const visible = showOlder || q ? buckets.older : buckets.older.slice(0, INITIAL_VISIBLE);
       for (const conv of visible) $list.appendChild(makeConversationItem(conv));
-      if (!showOlder && !q) {
+      // 이미 다 보이면(older 6개 이하) 눌러도 아무 것도 안 늘어나는 버튼을
+      // 남기지 않는다 — INITIAL_VISIBLE을 넘을 때만 보여준다.
+      if (!showOlder && !q && buckets.older.length > INITIAL_VISIBLE) {
         const more = el('button', 'sidebar-item sidebar-more');
         more.type = 'button';
         more.textContent = `더 보기 (${buckets.older.length})`;
