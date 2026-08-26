@@ -2264,9 +2264,16 @@ app.whenReady().then(async () => {
       }
       const clickOpened = !container.hidden;
       const summaryHidden = document.getElementById('mosaic').hidden;
+      // getComputedStyle().display는 조상의 display:none에 영향받지 않는다(그
+      // 자신의 display 선언만 본다) — #graphSummaryTable이 예전처럼 #mosaic의
+      // 자식으로 숨어 있었어도 이 값은 그대로 'block'이었을 것이다. 실제로
+      // 화면에 그려지는지는 크기로만 판별 가능하다 — 부모가 display:none이면
+      // 자손은 레이아웃 박스 자체가 생성되지 않아 rect가 0×0이 된다.
+      const summaryTableRect = document.getElementById('graphSummaryTable').getBoundingClientRect();
+      const summaryTableVisible = summaryTableRect.width > 0 && summaryTableRect.height > 0;
       const containerText = container.textContent;
       if (!brainReady) {
-        return { wired: true, brainReady, clickOpened, summaryHidden, containerText };
+        return { wired: true, brainReady, clickOpened, summaryHidden, summaryTableVisible, containerText };
       }
       const byClick = window.AthenaLib.GraphRender.describeRendered(container);
       // 좌표 계약은 배치 결과와 대조해야 알 수 있고, 클릭 경로는 그 값을 돌려주지
@@ -2280,6 +2287,7 @@ app.whenReady().then(async () => {
         clickOpened,
         byClick,
         summaryHidden,
+        summaryTableVisible,
         placedNodes: placed ? placed.nodes.length : 0,
         placedEdges: placed ? placed.edges.length : 0,
         drawn,
@@ -2299,6 +2307,13 @@ app.whenReady().then(async () => {
       assertOk('graph-mode: 칩을 누르면 그래프가 열린다', graph.clickOpened === true);
       assertOk('graph-mode: 칩 클릭만으로 캔버스가 채워진다', graph.byClick.rendered === true);
       assertOk('graph-mode: 토글하면 요약이 숨는다', graph.summaryHidden === true);
+      // G-05 회귀 가드 — #graphSummaryTable이 #mosaic의 자식이던 시절엔 부모의
+      // hidden(display:none) 상속에 막혀 크기가 0×0이었다(getComputedStyle의
+      // display 값 자체는 조상 hidden과 무관해 이 결함을 못 잡는다 — rect로 봐야 한다).
+      assertOk(
+        'graph-mode: 성향 신호 표가 실제로 렌더된다(hidden 상속에 막히지 않는다)',
+        graph.summaryTableVisible === true,
+      );
       // 노드가 0개면 '빈 캔버스'와 '고장'을 구분할 수 없다. 브레인이 준비됐으면
       // 여기 왔을 때 그려진 것이 있어야 한다.
       assertOk('graph-mode: 캔버스가 비어 있지 않다', graph.drawn.rendered === true);
@@ -2319,6 +2334,12 @@ app.whenReady().then(async () => {
       assertOk(
         'graph-mode: 브레인 미준비 시 캔버스 안에 정직한 안내가 뜬다(빈 화면이 아니다)',
         /브레인|성향/.test(graph.containerText || ''),
+      );
+      // G-05 회귀 가드 — 브레인 미준비 상태에서도 성향 신호 표 자체는 hidden
+      // 상속에 막히지 않고 렌더돼야 한다(내용은 profile-summary가 없어 비어 있을 수 있다).
+      assertOk(
+        'graph-mode: 성향 신호 표가 실제로 렌더된다(hidden 상속에 막히지 않는다)',
+        graph.summaryTableVisible === true,
       );
       report.graphMode.shot = await shot(shellWin, '90-graph-mode-unavailable.png');
     }
