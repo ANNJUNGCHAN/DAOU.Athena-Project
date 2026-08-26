@@ -1,10 +1,22 @@
-// US-006 프로브 — 카드가 먼저 랜딩되고 스트림 텍스트는 그 뒤에 나오는지 실측한다.
-// probe-text-stream.js와 같은 부팅 패턴(별도 프로필 — worker-w0fe의 데모 프로브와
-// 프로필이 겹치지 않게 분리)을 쓰되, 이 프로브가 재는 건 IPC 이벤트 도착 시각이
-// 아니라 **실제 DOM에 그려진 시각**이다 — chat.js의 카드 우선 버퍼링(US-006)은
-// athena:live-text-delta 자체의 도착 시각을 안 늦춘다(그건 여전히 원래 시각에
-// 온다), .turn-a에 실제로 칠해지는 시각만 늦춘다. 그래서 raw delta 도착 시각을
-// 재면 버퍼링 효과가 안 보인다 — MutationObserver로 DOM을 직접 지켜봐야 한다.
+// US-006/US-007 프로브 — 카드가 먼저 랜딩되고 스트림 텍스트는 그 뒤에 나오는지,
+// 그리고 부팅 화면이 그래프/답변 모드 뒤섞임 없이 순수한 답변 모드인지를 함께
+// 잰다(같은 E2E 큐 슬롯에서 검증하라는 팀리드 지시).
+//
+// US-006: probe-text-stream.js와 같은 부팅 패턴(별도 프로필 — worker-w0fe의
+// 데모 프로브와 프로필이 겹치지 않게 분리)을 쓰되, 이 프로브가 재는 건 IPC
+// 이벤트 도착 시각이 아니라 **실제 DOM에 그려진 시각**이다 — chat.js의 카드
+// 우선 버퍼링은 athena:live-text-delta 자체의 도착 시각을 안 늦춘다(그건 여전히
+// 원래 시각에 온다), .turn-a에 실제로 칠해지는 시각만 늦춘다. 그래서 raw delta
+// 도착 시각을 재면 버퍼링 효과가 안 보인다 — MutationObserver로 DOM을 직접
+// 지켜봐야 한다.
+//
+// US-007: 부팅 직후(3초 settle — canvas.js 동기 초기화 + brain-status 비동기
+// 왕복까지 전부 끝날 시간) 그래프 표면(summaryTable/graphCanvas)이 전무하고
+// 답변 표면(gridEmpty)만 있는지, 칩이 "답변"인지를 확인한다. 3초를 기다리는
+// 이유가 핵심이다 — brain-status가 늦게 resolve되면서 그래프 표면을 답변
+// 모드에 새어 보이게 했던 게 원래 결함이라, resolve가 끝난 뒤에 재야 그
+// 결함을 다시 잡아낼 수 있다.
+//
 // 백엔드(127.0.0.1:8010)가 떠 있어야 한다.
 
 const { app } = require('electron');
@@ -32,6 +44,18 @@ async function main() {
   shellWin.show();
   shellWin.focus();
   await wait(3000);
+
+  // US-007 — 사용자가 아무것도 누르기 전, 순수 부팅 상태를 잰다.
+  const bootState = await shellWin.webContents.executeJavaScript(`
+    ({
+      chipText: document.getElementById('graphPill') ? document.getElementById('graphPill').textContent : null,
+      summaryTableHidden: document.getElementById('graphSummaryTable') ? document.getElementById('graphSummaryTable').hidden : null,
+      graphCanvasHidden: document.getElementById('graphCanvas') ? document.getElementById('graphCanvas').hidden : null,
+      mosaicHidden: document.getElementById('mosaic') ? document.getElementById('mosaic').hidden : null,
+      gridEmptyHidden: document.getElementById('gridEmpty') ? document.getElementById('gridEmpty').hidden : null,
+      gridCardCount: document.getElementById('grid') ? document.getElementById('grid').querySelectorAll('.card').length : null,
+    })
+  `);
 
   await shellWin.webContents.executeJavaScript(`
     window.__cardEventAt = null; // athena:live-canvas-added IPC 도착 시각
@@ -96,13 +120,22 @@ async function main() {
       : null,
     resultAnswerText: result && result.answerText,
     resultOk: result && result.ok,
+    // US-007 — 순수 부팅 상태(사용자가 아무것도 누르기 전, brain-status 왕복까지 끝난 뒤).
+    bootState,
+    bootStatePure: bootState.chipText === '답변'
+      && bootState.summaryTableHidden === true
+      && bootState.graphCanvasHidden === true
+      && bootState.mosaicHidden === false
+      && bootState.gridEmptyHidden === false, // 카드 0개 상태라 빈 상태 블록은 보여야 정상
   };
   fs.writeFileSync(
     path.join(__dirname, 'captures', 'probe-card-first-text.json'),
     JSON.stringify(summary, null, 1),
   );
   console.log('[probe]', JSON.stringify(summary, null, 1));
-  const ok = cardDomAt != null && textDomAt != null && summary.cardDomBeforeTextDom === true;
+  const ok = cardDomAt != null && textDomAt != null
+    && summary.cardDomBeforeTextDom === true
+    && summary.bootStatePure === true;
   app.exit(ok ? 0 : 1);
 }
 

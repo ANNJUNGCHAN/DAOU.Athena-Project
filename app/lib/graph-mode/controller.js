@@ -16,7 +16,8 @@ function createGraphModeController(deps) {
     layout,         // cluster-layout
     render,         // render
     prefs,          // graph-mode-prefs (선택)
-    elements,       // { pill, summary, graph, panel(선택) — 보드 07/15의 "공통 패널" }
+    elements,       // { pill, summary, graph, summaryTable(선택 — 보드 07 성향 신호 표),
+                    //   panel(선택) — 보드 07/15의 "공통 패널" }
     fetchClusterMap, // async () => payload
     onError,        // (err) => void (선택)
   } = deps;
@@ -28,10 +29,16 @@ function createGraphModeController(deps) {
   // 오기 전에 그래프 모드로 들어오면 renderUnavailable()의 정직한 안내를 보여준다.
   let available = false;
 
+  // 보드 12d/US-007 — 답변⇄그래프 두 표면의 가시성은 전부 이 함수 하나가 소유한다.
+  // 부팅 시 다른 어디서도(예: canvas.js의 brain-status 콜백) summaryTable 같은
+  // 그래프 표면의 hidden을 직접 건드리지 않는다 — 소유자가 둘이면 브레인 준비
+  // 타이밍에 따라 그래프 표면이 답변 모드에 새어 보이는 결함이 재발한다(실측,
+  // 2026-08-26 — summaryTable이 graphView와 무관하게 ready만으로 보였다 지워졌다 했다).
   function applyVisibility() {
     const graphView = store.isGraphView(state);
     if (elements.summary) elements.summary.hidden = graphView;
     if (elements.graph) elements.graph.hidden = !graphView;
+    if (elements.summaryTable) elements.summaryTable.hidden = !graphView;
     if (elements.pill) {
       // 모드 칩은 "다음에 할 동작"이 아니라 "지금 모드"를 보여준다(Paper 보드 05
       // "모드 칩 상시" — 답변/그래프 둘 중 지금 켜져 있는 쪽).

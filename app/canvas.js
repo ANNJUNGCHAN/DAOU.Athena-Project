@@ -1348,6 +1348,9 @@ const graphMode = window.AthenaLib.GraphModeController.createGraphModeController
     pill: document.getElementById('graphPill'),
     summary: document.getElementById('mosaic'),
     graph: document.getElementById('graphCanvas'),
+    // 보드 07 성향 신호 표 — 그래프 표면이라 답변 모드에선 숨는다(아래 §요약 뷰
+    // 배선 주석·US-007 참고). graphMode.applyVisibility() 하나가 소유한다.
+    summaryTable: document.getElementById('graphSummaryTable'),
   },
   // main은 실패를 {ok:false}로 돌려준다. 컨트롤러는 **예외**로 실패를 안다 —
   // 여기서 바꿔주지 않으면 `{ok:false}`가 정상 응답으로 흘러 빈 그래프가 그려지고,
@@ -1360,6 +1363,12 @@ const graphMode = window.AthenaLib.GraphModeController.createGraphModeController
   onError: (err) => console.warn('[graph-mode] cluster-map 실패', err),
 });
 window.AthenaGraphMode = graphMode;
+// 부팅을 순수 답변 모드로 고정한다(US-007) — 정적 HTML의 기본 hidden 속성이
+// 우연히 답변 모드와 맞아떨어지는 데 기대지 않고, 여기서 명시적으로 한 번
+// 그린다. 이후 모든 가시성 변경은 toggle()/setAvailable() 안에서 이 함수가
+// 계속 소유한다 — 다른 곳(예: 아래 brain-status 콜백)이 그래프 표면의 hidden을
+// 직접 건드리면 브레인 준비 타이밍에 따라 답변/그래프가 섞여 보인다(실측 결함).
+graphMode.applyVisibility();
 
 const graphPillEl = document.getElementById('graphPill');
 if (graphPillEl) {
@@ -1370,8 +1379,12 @@ if (graphPillEl) {
 //
 // 표 렌더·행 클릭·selectEntity 호출은 lib/graph-mode/summary-table.js가 갖고
 // 있다 — 여기서는 컨테이너와 실제 IPC·selectEntity(#13의 공통 패널 API)만 잇는다.
-// #graphSummaryTable은 #mosaic의 자식(형제는 #grid)이라 브레인이 꺼져 있으면
-// #mosaic와 함께 그냥 안 보인다 — 별도 숨김 배선이 필요 없다.
+// #graphSummaryTable의 보이고/숨고는 위 graphMode(elements.summaryTable)가
+// graphView 하나로 소유한다(US-007) — 예전엔 "#mosaic의 자식이라 브레인이
+// 꺼지면 같이 안 보인다"고 가정했지만 틀렸다: #mosaic 자체는 답변 모드에서
+// 안 숨는다. 그래서 브레인 ready만으로 이 엘리먼트의 hidden을 따로 건드리면
+// 답변 모드에 그래프 콘텐츠가 새어 보였다(실측). 이 파일은 데이터 로드
+// 시점(ready)만 결정하고, 보이고 숨기는 건 절대 안 건드린다.
 const graphSummaryTable = window.AthenaLib.GraphSummaryTable.createSummaryTableController({
   container: document.getElementById('graphSummaryTable'),
   limit: 5, // 보드 07 "성향 신호 상위 5"
@@ -1388,8 +1401,10 @@ const graphSummaryTable = window.AthenaLib.GraphSummaryTable.createSummaryTableC
     const status = await window.athena.invoke('athena:brain-status');
     const ready = Boolean(status && status.ok && status.ready);
     graphMode.setAvailable(ready);
-    const summaryTableEl = document.getElementById('graphSummaryTable');
-    if (summaryTableEl) summaryTableEl.hidden = !ready;
+    // hidden은 안 건드린다 — graphMode.applyVisibility()가 유일한 소유자다(US-007).
+    // 여기서는 데이터를 미리 당겨올지만 결정한다(그래프 모드로 전환했을 때 바로
+    // 보이도록 하는 프리페치 — 안 보이는 동안 부르는 낭비는 loadEmptyCanvasExtras와
+    // 같은 기존 관례).
     if (ready) graphSummaryTable.load();
     // 빈 상태(보드 05) 숫자·CTA·힌트 — 같은 ready 확인에 얹는다(왕복 추가 없음).
     if (ready) loadEmptyCanvasExtras();
