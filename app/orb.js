@@ -664,6 +664,7 @@
       card._byId.set(result.id, el);
     }
     el.classList.toggle('done', result.done);
+    el.classList.toggle('is-warn', result.error);
     el.querySelector('.orb-tool-step-label').textContent = result.label;
     el.querySelector('.orb-tool-step-time').textContent = result.timeText;
     requestPanelHeight();
