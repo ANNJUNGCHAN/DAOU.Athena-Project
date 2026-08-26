@@ -41,10 +41,34 @@ test('selectAccountFacts — kt00018류: 손익 필드가 있으면 같이 온 �
   ]);
 });
 
-test('selectAccountFacts — label이 이미 있으면 대체 라벨을 쓰지 않는다', () => {
-  const fields = [{ key: 'tot_evlt_pl', label: '커스텀라벨', value: '100' }];
-  assert.deepEqual(selectAccountFacts(fields), [
-    { key: 'tot_evlt_pl', label: '커스텀라벨', value: '100', unit: '원', kind: 'profit' },
+// 2026-08-26 추가 결함 재현 — app/captures/card-demo/계좌.png. 이 HTTP 경로는 label을
+// 비우는 대신 **키 이름을 그대로 label에 채워** 보낸다(예: label:"tdy_lspft") — 옛
+// 우선순위(field.label || LABEL_FALLBACK)는 field.label이 "참"이라 절대 못 걸렀다.
+// 아는 키는 field.label이 뭐라고 하든 우리가 models.py로 검증한 라벨을 쓴다.
+test('selectAccountFacts — 아는 키는 field.label이 키를 그대로 echo해도 검증된 한글 라벨을 쓴다', () => {
+  const fields = [
+    { key: 'tdy_lspft', label: 'tdy_lspft', value: '0' },
+    { key: 'lspft2', label: 'lspft2', value: '0' },
+    { key: 'lspft', label: 'lspft', value: '0' },
+    { key: 'tdy_lspft_rt', label: 'tdy_lspft_rt', value: '0' },
+    { key: 'lspft_ratio', label: 'lspft_ratio', value: '0' },
+    { key: 'lspft_rt', label: 'lspft_rt', value: '0' },
+  ];
+  assert.deepEqual(selectAccountFacts(fields).map((r) => r.label), [
+    '당일투자손익', '당월투자손익', '누적투자손익', '당일손익율', '당월손익율', '누적손익율',
+  ]);
+});
+
+test('selectAccountFacts — 모르는 키는 field.label이 있으면 그걸 쓰고, 없으면 key로 물러난다', () => {
+  const fields = [
+    { key: 'tot_evlt_pl', label: null, value: '100' }, // 게이트를 여는 손익 필드
+    { key: 'unknown_field', label: '알수없는필드라벨', value: '1' },
+    { key: 'another_unknown', label: null, value: '2' },
+  ];
+  assert.deepEqual(selectAccountFacts(fields).map((r) => [r.key, r.label]), [
+    ['tot_evlt_pl', '총평가손익금액'],
+    ['unknown_field', '알수없는필드라벨'],
+    ['another_unknown', 'another_unknown'],
   ]);
 });
 
