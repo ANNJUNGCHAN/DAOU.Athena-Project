@@ -291,3 +291,31 @@
    점 마커는 안 뜬다 — 라벨-값 정직성 우선(card-kind-종목정보.js 상단 주석). */
 .card-kind-종목정보-range { display: flex; flex-direction: column; gap: 4px; }
 .card-kind-종목정보-range-label { font-size: var(--text-xs); color: var(--color-k-faint); }
+
+/* ---------- US-004 잔여 4종(.omc/state/card-v3-wave5-specs.json) ----------
+   신용거래·대차거래·공매도·종목발굴 — Wave 0에는 스텁이 없었다(당시 gap 분석
+   인풋 밖). 종목발굴은 전량 생략(사유는 .omc/state/phase3-list.md) — 그래서
+   섹션만 남겨 두고 비워 둔다("주문" 섹션과 같은 관례. */
+
+/* KIND: 신용거래 */
+
+.card-kind-신용거래-list { display: flex; flex-direction: column; }
+.card-kind-신용거래-list .card-kit-row-two-line:not(:last-child) {
+  border-bottom: 1px solid var(--color-k-panel3);
+}
+
+/* KIND: 대차거래 */
+
+.card-kind-대차거래-list { display: flex; flex-direction: column; }
+.card-kind-대차거래-list .card-kit-row-two-line:not(:last-child) {
+  border-bottom: 1px solid var(--color-k-panel3);
+}
+
+/* KIND: 공매도 */
+
+.card-kind-공매도-list { display: flex; flex-direction: column; }
+.card-kind-공매도-list .card-kit-row-two-line:not(:last-child) {
+  border-bottom: 1px solid var(--color-k-panel3);
+}
+
+/* KIND: 종목발굴 */
