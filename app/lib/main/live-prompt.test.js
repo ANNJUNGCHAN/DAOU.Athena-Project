@@ -82,6 +82,14 @@ test('buildLivePrompt: W3 첫 카드 우선 — 첫 데이터 확보 즉시 rend
   assert.ok(p.includes('첫 카드를 기다리고'));
 });
 
+test('buildLivePrompt: US-006 카드 우선 — render_canvas 전에는 답변 문장(프리앰블 포함) 금지', () => {
+  const p = buildLivePrompt('x');
+  assert.ok(p.includes('render_canvas를 호출하기 전까지 답변 문장을 한'));
+  assert.ok(p.includes('글자도 쓰지 마라'));
+  assert.ok(p.includes('프리앰블이다'));
+  assert.ok(p.includes('카드가 먼저 뜨고'));
+});
+
 test('buildLivePrompt: W3 작업 규율 — 초반 툴 로드 권고 + 재조회 금지 (run3~5 반복 사이클 실측의 수정)', () => {
   const p = buildLivePrompt('x');
   assert.ok(p.includes('초반에 필요한 툴'));
