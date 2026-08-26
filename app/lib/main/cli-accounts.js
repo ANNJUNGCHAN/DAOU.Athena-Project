@@ -62,16 +62,26 @@ function detectClaude() {
   return { identifier: label, label };
 }
 
+function codexHome() {
+  return process.env.CODEX_HOME || path.join(os.homedir(), '.codex');
+}
+
 function detectCodex() {
-  const codexHome = process.env.CODEX_HOME || path.join(os.homedir(), '.codex');
-  const authPath = path.join(codexHome, 'auth.json');
+  const authPath = path.join(codexHome(), 'auth.json');
   try {
     const raw = fs.readFileSync(authPath, 'utf-8');
     const parsed = JSON.parse(raw);
     // account_id만 꺼낸다 — id_token/access_token/refresh_token은 여기서도
     // 절대 읽지 않는다(조사 문서: 이메일을 얻으려면 JWT를 열어야 하는데 그건
     // 비밀값에 손대는 것이라 하지 않는다는 결론).
-    const accountId = parsed && typeof parsed.account_id === 'string' ? parsed.account_id : null;
+    // 현행 codex-cli(0.147 실측)는 account_id를 최상위가 아니라 tokens 안에 둔다 —
+    // 구(최상위)·신(tokens.account_id) 스키마 둘 다 받는다. tokens에서도
+    // account_id 외에는 여전히 아무것도 읽지 않는다.
+    const tokens = parsed && parsed.tokens;
+    const accountId =
+      parsed && typeof parsed.account_id === 'string' ? parsed.account_id
+        : tokens && typeof tokens.account_id === 'string' ? tokens.account_id
+        : null;
     if (!accountId) return null;
     return { identifier: accountId, label: `Codex · ${accountId.slice(0, 8)}` };
   } catch {
@@ -146,8 +156,14 @@ function probeBinaryExists(command) {
   return new Promise((resolve) => {
     let settled = false;
     let child;
+    // Windows: npm 전역 CLI(claude/codex)는 .cmd 셔임이라 shell 없는 직접 spawn이
+    // EINVAL로 죽는다(Node CVE-2024-27980 대응 이후) — 실행해 보는 대신 where로
+    // 존재만 묻는다(있으면 종료코드 0).
+    const isWin = process.platform === 'win32';
     try {
-      child = spawn(command, ['--version'], { stdio: 'ignore', windowsHide: true });
+      child = isWin
+        ? spawn('where', [command], { stdio: 'ignore', windowsHide: true })
+        : spawn(command, ['--version'], { stdio: 'ignore', windowsHide: true });
     } catch {
       resolve(false);
       return;
@@ -155,8 +171,8 @@ function probeBinaryExists(command) {
     child.on('error', () => {
       if (!settled) { settled = true; resolve(false); }
     });
-    child.on('exit', () => {
-      if (!settled) { settled = true; resolve(true); }
+    child.on('exit', (code) => {
+      if (!settled) { settled = true; resolve(isWin ? code === 0 : true); }
     });
   });
 }
@@ -184,7 +200,10 @@ async function login(providerId) {
     const child = spawn(
       'cmd.exe',
       ['/c', 'start', `"Athena · ${name} 로그인"`, 'cmd', '/k', cfg.command, ...cfg.args],
-      { detached: true, stdio: 'ignore', windowsHide: false },
+      // windowsVerbatimArguments: Node의 기본 재인용이 start의 제목 인자
+      // "..."를 \"로 이스케이프해 cmd가 빈 명령('')을 찾다 죽는다(실측
+      // 2026-08-27) — cmd.exe에는 인자를 조립한 그대로 넘겨야 한다.
+      { detached: true, stdio: 'ignore', windowsHide: false, windowsVerbatimArguments: true },
     );
     child.unref();
     return { ok: true, launched: true, message: cfg.message };
@@ -204,4 +223,17 @@ function setActive(accountId) {
   return { ok: true };
 }
 
-module.exports = { list, login, setActive, probeBinaryExists };
+// 재로그인(이미 목록에 있는 계정으로 다시 로그인)은 계정 목록을 바꾸지 않아
+// 목록 비교만으로는 감지되지 않는다(실측 2026-08-27: 로그인 대기가 영영 안
+// 풀리던 원인) — 자격증명 파일의 mtime을 서명으로 쓴다. 내용은 읽지 않는다.
+function credentialsSignature() {
+  const paths = [
+    path.join(os.homedir(), '.claude', '.credentials.json'),
+    path.join(codexHome(), 'auth.json'),
+  ];
+  return paths.map((p) => {
+    try { return String(fs.statSync(p).mtimeMs); } catch { return '0'; }
+  }).join('|');
+}
+
+module.exports = { list, login, setActive, probeBinaryExists, credentialsSignature };

@@ -119,7 +119,17 @@ function renderCliStep(root, { onContinue }) {
     nameCol.appendChild(el('div', 'onb-cli-email-sm', acc.label));
     const r = row('onb-cli-row', [statusDot(true), nameCol]);
     r.appendChild(el('div', 'onb-cli-spacer'));
-    r.appendChild(isPending ? waitingLabel() : badge(!!acc.active, acc.active ? '활성' : '비활성'));
+    if (isPending) {
+      r.appendChild(waitingLabel());
+    } else {
+      r.appendChild(badge(!!acc.active, acc.active ? '활성' : '비활성'));
+      // 계정 1개 상태에서도 추가 연결 진입로를 연다(2026-08-27 검토 결정) —
+      // 다계정 카드(renderCard)의 '계정 추가'와 같은 동작. 행 클릭(setActive)과
+      // 겹치지 않게 전파를 끊는다.
+      r.appendChild(button('text', '계정 추가', {
+        onClick: (ev) => { ev.stopPropagation(); doConnect(p); },
+      }));
+    }
     if (!acc.active) {
       r.classList.add('is-clickable');
       r.addEventListener('click', () => setActive(acc.id));
