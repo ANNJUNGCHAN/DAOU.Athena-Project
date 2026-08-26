@@ -290,6 +290,21 @@ async function createWindows() {
     canvasSource: process.env.ATHENA_CANVAS_SOURCE === 'fixture' ? 'fixture' : 'live',
   });
 
+  // 2026-08-26 board-33 오브 대화 진단 후속 — 셸의 OS 레벨 닫기(Alt+F4 등,
+  // 커스텀 #winClose 버튼을 거치지 않는 경로)도 종료가 아니라 백그라운드
+  // 숨김이어야 한다. 위 주석(58줄)의 옛 결정("셸 창의 닫기는 곧 종료다")을
+  // 뒤집는다 — #winClose만 숨기고 Alt+F4는 앱을 통째로 죽이던 비대칭이
+  // "오브랑 대화가 안 된다"는 실사용 신고의 유력 원인이었다(사용자가 습관적
+  // Alt+F4로 종료해버리면 애초에 셸 숨김 상태에 진입할 수가 없다). 진짜 종료는
+  // 트레이 메뉴("종료")로만 하도록 좁힌다 — isQuitting은 그 경로(app.quit())가
+  // 먼저 세운 뒤에야 닫기를 통과시킨다(오브 창의 close 핸들러와 같은 패턴).
+  shellWin.on('close', (event) => {
+    if (isQuitting) return;
+    event.preventDefault();
+    ensureTray(); // 숨기기 전에 복귀 경로부터 확보한다 — athena:close-windows와 동일한 순서
+    hideToBackground();
+  });
+
   shellWin.on('closed', () => app.quit());
 
   // ---------- 알림 오브 창 (2026-08-24 리프 1.3.1) ----------
