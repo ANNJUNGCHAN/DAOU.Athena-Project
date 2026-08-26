@@ -10,7 +10,7 @@
 
   // 영역이 등록하는 콜백. 서로 다른 <script>가 같은 문서에 살지만 모듈 경계는
   // 유지한다 — chat.js가 canvas.js의 내부 함수를 직접 부르지 않고 여기를 지난다.
-  const hooks = { clearCanvases: null };
+  const hooks = { clearCanvases: null, openSettings: null };
 
   // ---------- 창 크롬 ----------
   // 부팅 연출(chat.js)이 끝나야 창이 확정된다 — 그 전에는 크롬도 셸도 없다.
@@ -106,6 +106,12 @@
     registerCanvasClear(fn) { hooks.clearCanvases = typeof fn === 'function' ? fn : null; },
     clearCanvases() {
       if (hooks.clearCanvases) hooks.clearCanvases();
+    },
+    // chat.js가 openSettings()를 등록한다 — 사이드바 계정 메뉴의 "설정" 항목
+    // (Paper 보드 16)이 점·커맨드바와 동등한 진입로가 되려면 이 다리가 필요하다.
+    registerOpenSettings(fn) { hooks.openSettings = typeof fn === 'function' ? fn : null; },
+    openSettings() {
+      if (hooks.openSettings) hooks.openSettings();
     },
   };
 })();

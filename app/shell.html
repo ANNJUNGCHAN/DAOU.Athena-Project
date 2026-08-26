@@ -45,9 +45,41 @@
        대화 창의 `.app`이 창 표면이었는데, 이제 `.app`은 셸 위의 한 영역이라
        표면 역할을 셸이 가져간다(verify.js 검증16이 이 요소를 읽는다). -->
   <div id="shell" class="shell" hidden>
+    <!-- 좌측 이력 사이드바 268px(리프 1.2.2, Paper 보드 04/05/08/16) — 머리(새
+         대화·검색) · 이력 목록(날짜 섹션 + 알림 파생 방) · 발치(활성 계좌 행).
+         데이터는 lib/sidebar.js가 athena:conversations-list·athena:account-list·
+         athena:routine-event로 채운다 — 하드코딩된 목업 없음. -->
+    <nav id="historyRegion" class="shell-region">
+      <div class="sidebar-head">
+        <button id="sidebarNewChat" class="sidebar-head-btn" type="button">
+          <span class="sidebar-head-ic" aria-hidden="true">+</span>
+          <span>새 대화</span>
+        </button>
+        <button id="sidebarSearchToggle" class="sidebar-head-btn" type="button">
+          <span class="sidebar-head-ic" aria-hidden="true">⌕</span>
+          <span>대화 검색</span>
+        </button>
+        <input id="sidebarSearchInput" class="sidebar-search-input" type="text" placeholder="대화 검색" hidden />
+      </div>
+      <div class="sidebar-divider"></div>
+      <div id="sidebarList" class="sidebar-list"></div>
+      <div id="sidebarAccountMenu" class="sidebar-account-menu" hidden></div>
+      <button id="sidebarAccountRow" class="sidebar-account-row" type="button" hidden>
+        <span class="sidebar-account-dot" id="sidebarAccountDot" aria-hidden="true"></span>
+        <span class="sidebar-account-text">
+          <span id="sidebarAccountAlias" class="sidebar-account-alias"></span>
+          <span id="sidebarAccountToken" class="sidebar-account-token"></span>
+        </span>
+        <span class="sidebar-account-caret" aria-hidden="true">⌃</span>
+      </button>
+    </nav>
+
     <!-- 중앙 캔버스 — 유일한 출력 지점. 늘 떠 있다(옛 판의 확장/수축 연출 없음). -->
     <main id="canvasRegion" class="shell-region">
       <div id="mosaic" class="mosaic glass">
+        <!-- 보드 07 — 그래프 모드 요약 뷰의 성향 신호 표. #grid(일반 카드 모자이크)와
+             형제라 clearCanvases()가 건드리지 않는다(#grid만 지운다). -->
+        <div id="graphSummaryTable" hidden></div>
         <div id="grid" class="grid"></div>
       </div>
       <!-- 그래프 모드 — 요약(위 모자이크)과 **형제**다. 둘 중 하나만 보인다.
@@ -60,6 +92,18 @@
          (GLOSSARY §1). shell.css의 flex-shrink:0이 그 계약이다. -->
     <section id="chatRegion" class="shell-region">
       <div id="app" class="app glass" hidden>
+        <!-- 알림 파생 방 머리(Paper 보드 08) — 사이드바 "알림에서" 항목을 선택했을 때만
+             보인다. 메인 대화와 섞이지 않는다는 문구가 계약이다 — lib/sidebar.js가
+             채운다. -->
+        <div id="roomHeadBanner" class="room-head-banner" hidden>
+          <div class="room-head-top">
+            <span class="room-head-dot" aria-hidden="true"></span>
+            <span class="room-head-kicker">알림에서 시작된 방</span>
+            <span id="roomHeadTime" class="room-head-time"></span>
+          </div>
+          <div id="roomHeadTitle" class="room-head-title"></div>
+          <div class="room-head-sub">오브에서 넘어왔습니다. 이 감시 건에 대해서만 이어서 이야기합니다 — 메인 대화와 섞이지 않습니다.</div>
+        </div>
         <div class="history" id="history"></div>
 
         <!-- 커맨드 카드(AT-CH-001R, Paper 47쪽) — 입력줄과 컨트롤 스트립의 2행
@@ -168,9 +212,11 @@
 <script src="lib/graph-mode/graph-mode-store.js"></script>
 <script src="lib/graph-mode/graph-mode-prefs.js"></script>
 <script src="lib/graph-mode/render.js"></script>
+<script src="lib/graph-mode/summary-table.js"></script>
 <script src="lib/graph-mode/controller.js"></script>
 <script src="lib/settings-cards.js"></script>
 <script src="lib/history-badge.js"></script>
+<script src="lib/sidebar.js"></script>
 <script src="shell.js"></script>
 <script src="canvas.js"></script>
 <script src="chat.js"></script>

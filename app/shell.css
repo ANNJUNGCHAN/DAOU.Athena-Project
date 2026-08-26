@@ -10,8 +10,10 @@
  * shell.html의 링크 순서가 계약이다 — 이 파일은 canvas.css·chat.css **뒤**,
  * access.css **앞**에 온다.
  *
- * 아직 없는 것(정직 기록): 좌측 이력 사이드바 268px은 리프 1.2.2다. 지금 셸은
- * 2영역이다 — 빈 컨테이너를 미리 두지 않는다. */
+ * 리프 1.2.2(2026-08-26): 좌측 이력 사이드바 268px을 추가해 3영역이 됐다.
+ * 이력·계정 메뉴·알림 방 스타일은 아래 #historyRegion 블록에 있다 — 자기
+ * 유리(카드 단계)를 갖는 것은 계정 메뉴뿐이고, 사이드바 자체는 chatRegion과
+ * 같은 이유로 셸 표면(#shell) 유리를 그대로 투과한다. */
 
 html, body { background: transparent; }
 body { margin: 0; overflow: hidden; }
@@ -58,6 +60,283 @@ body { margin: 0; overflow: hidden; }
    * 캔버스에 넓은 표가 뜨면 채팅 영역을 밀어낸다. 0으로 낮춘다. */
   min-width: 0;
   min-height: 0;
+}
+
+/* 좌측 이력 사이드바 268px(리프 1.2.2, Paper 보드 04/05/08/16) — 캔버스처럼
+ * 남는 폭을 먹지 않고, 채팅처럼 접히지도 않는다. 고정폭 계약은 채팅과 같은
+ * 이유다(GLOSSARY §1 확장 — 이력은 좁아져도 항목 줄바꿈이 아니라 말줄임이어야
+ * 읽기가 안 깨진다). */
+#historyRegion {
+  width: 268px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  padding-right: 2px;
+}
+#historyRegion::after {
+  content: '';
+  position: absolute;
+  right: -5px;
+  top: 6px;
+  bottom: 6px;
+  width: 1px;
+  background: linear-gradient(180deg,
+    rgba(255, 253, 248, 0) 0%,
+    rgba(255, 253, 248, 0.34) 22%,
+    rgba(255, 253, 248, 0.34) 78%,
+    rgba(255, 253, 248, 0) 100%);
+  pointer-events: none;
+}
+
+.sidebar-head {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 2px 2px 8px;
+}
+.sidebar-head-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  padding: 0 8px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  text-align: left;
+  cursor: pointer;
+}
+.sidebar-head-btn:hover { background: rgb(16 19 26 / 6%); }
+.sidebar-head-ic {
+  width: 14px;
+  flex-shrink: 0;
+  text-align: center;
+  color: var(--color-k-dim);
+}
+.sidebar-search-input {
+  height: 30px;
+  margin-top: 2px;
+  padding: 0 8px;
+  border: 1px solid var(--color-k-line-soft);
+  border-radius: 8px;
+  background: rgb(255 255 255 / 60%);
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+}
+.sidebar-search-input:focus { outline: none; border-color: var(--color-k-line); }
+
+.sidebar-divider {
+  flex-shrink: 0;
+  height: 1px;
+  margin: 0 2px 4px;
+  background: var(--color-k-line-soft);
+}
+
+.sidebar-list {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0 2px;
+}
+.sidebar-section-label {
+  height: 24px;
+  padding: 6px 8px 2px;
+  color: var(--color-k-faint);
+  font-size: var(--text-xs);
+}
+.sidebar-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 8px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-k-soft);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
+}
+.sidebar-item:hover { background: rgb(16 19 26 / 5%); }
+.sidebar-item-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sidebar-item.is-selected {
+  background: rgb(16 19 26 / 6%);
+  color: var(--color-k-text);
+}
+.sidebar-item.is-selected .sidebar-item-label { font-family: var(--font-strong); }
+.sidebar-item-dot {
+  width: 5px;
+  height: 5px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--color-brand);
+}
+/* 알림 파생 방 항목 — 왼쪽 강조 막대로 "여기서 넘어왔다"는 출처를 표시한다
+ * (Paper 보드 08, 각 항목 안의 3×16 사각형). */
+.sidebar-item.is-notify::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 9px;
+  bottom: 9px;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--color-brand);
+}
+.sidebar-item.is-notify { padding-left: 12px; }
+.sidebar-more {
+  color: var(--color-k-faint);
+}
+
+.sidebar-account-row {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 48px;
+  margin-top: 4px;
+  padding: 0 8px;
+  border: none;
+  border-top: 1px solid var(--color-k-line-soft);
+  border-radius: 0;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+.sidebar-account-row:hover { background: rgb(16 19 26 / 4%); }
+.sidebar-account-dot {
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--color-ok);
+}
+.sidebar-account-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.sidebar-account-alias {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-k-text);
+  font-size: var(--text-sm);
+  font-family: var(--font-strong);
+}
+.sidebar-account-token {
+  color: var(--color-k-faint);
+  font-size: var(--text-xs);
+}
+.sidebar-account-caret {
+  color: var(--color-k-faint);
+  font-size: var(--text-xs);
+}
+
+/* 계정 메뉴(Paper 보드 16) — 발치 계좌 행에서 위로 펼쳐진다. 카드 단계 유리 —
+ * 모델 팝오버(chat.css .model-popover)와 같은 급이다. */
+.sidebar-account-menu {
+  flex-shrink: 0;
+  margin: 0 4px 4px;
+  padding: 4px;
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, var(--glass-card, 0.90));
+  border: 1px solid var(--color-k-line-soft);
+  box-shadow: 0 12px 28px rgb(16 19 26 / 16%);
+}
+.sidebar-menu-head {
+  padding: 8px 8px 10px;
+  border-bottom: 1px solid var(--color-k-line-soft);
+  margin-bottom: 4px;
+}
+.sidebar-menu-alias {
+  color: var(--color-k-text);
+  font-size: var(--text-sm);
+  font-family: var(--font-strong);
+}
+.sidebar-menu-sub {
+  margin-top: 2px;
+  color: var(--color-k-faint);
+  font-size: var(--text-xs);
+}
+.sidebar-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  padding: 0 8px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
+}
+.sidebar-menu-item:hover { background: rgb(16 19 26 / 6%); }
+.sidebar-menu-item-label { flex: 1 1 auto; }
+.sidebar-menu-item-value {
+  color: var(--color-k-faint);
+  font-size: var(--text-xs);
+}
+
+/* 알림 파생 방 머리(Paper 보드 08) — 채팅 영역 위쪽, 대화 이력보다 먼저. */
+.room-head-banner {
+  flex-shrink: 0;
+  padding: 10px 4px 12px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid var(--color-k-line-soft);
+}
+.room-head-top {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.room-head-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-brand);
+}
+.room-head-kicker {
+  color: var(--color-k-faint);
+  font-size: var(--text-xs);
+}
+.room-head-time {
+  margin-left: auto;
+  color: var(--color-k-faint);
+  font-size: var(--text-xs);
+}
+.room-head-title {
+  margin-top: 4px;
+  color: var(--color-k-text);
+  font-size: var(--text-md);
+  font-family: var(--font-strong);
+}
+.room-head-sub {
+  margin-top: 4px;
+  color: var(--color-k-dim);
+  font-size: var(--text-xs);
+  line-height: 1.5;
 }
 
 /* 중앙 캔버스 — 유일한 출력 지점. 남는 폭을 전부 가진다. */

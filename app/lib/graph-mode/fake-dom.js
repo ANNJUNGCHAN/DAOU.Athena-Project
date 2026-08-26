@@ -18,6 +18,7 @@ function fakeNode(name) {
     hidden: false,
     clientWidth: 800,
     clientHeight: 600,
+    _listeners: {},
     get firstChild() {
       return this.children[0] || null;
     },
@@ -34,6 +35,16 @@ function fakeNode(name) {
     removeChild(child) {
       this.children = this.children.filter((c) => c !== child);
       return child;
+    },
+    // controller.test.js가 노드 클릭 배선을 검증하는 데만 쓴다 — 버블링은 없다,
+    // 이 스텁이 흉내내는 건 이 리포가 실제로 붙이는 리스너 패턴(개별 바인딩)뿐이다.
+    addEventListener(type, handler) {
+      (this._listeners[type] = this._listeners[type] || []).push(handler);
+    },
+    dispatchEvent(event) {
+      const handlers = this._listeners[event && event.type] || [];
+      handlers.forEach((handler) => handler(event));
+      return true;
     },
     // '.graph-node' 같은 단일 클래스 셀렉터만 지원한다 — 두 테스트가 쓰는 전부다.
     querySelectorAll(selector) {
@@ -56,9 +67,13 @@ function fakeNode(name) {
   };
 }
 
-// render.js가 `document.createElementNS`로만 노드를 만든다 — 전역에 그것만 세운다.
+// render.js는 `document.createElementNS`(SVG)로, summary-table.js는
+// `document.createElement`(일반 DOM)로 노드를 만든다 — 전역에 그 둘만 세운다.
 function installFakeDocument() {
-  global.document = { createElementNS: (_ns, name) => fakeNode(name) };
+  global.document = {
+    createElementNS: (_ns, name) => fakeNode(name),
+    createElement: (name) => fakeNode(name),
+  };
 }
 
 function uninstallFakeDocument() {

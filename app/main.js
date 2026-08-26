@@ -33,6 +33,7 @@ const backendLauncher = require('./lib/main/backend-launcher');
 // 채팅 → HistoryStore 영속 훅(.omc/plans/plan-chat-graph-pipeline.md §2(a)/(g)).
 // fire-and-forget — 절대 await로 채팅 UX를 막지 않는다(모듈 상단 주석 참조).
 const historySink = require('./lib/main/history-sink');
+const conversations = require('./lib/main/conversations');
 const crypto = require('crypto');
 
 const MDEBUGLOG = path.join(__dirname, 'captures', 'main-debug.log');
@@ -500,11 +501,6 @@ ipcMain.handle('athena:routine-cancel', async (_e, { id }) => {
 //   maximize      → OS 최대화를 그대로 둔다(아래 wireOsSnapEvents 주석 참조).
 //   minimize      → 창이 하나라 짝 맞춤이 필요 없다 — OS에 맡긴다.
 // settlingSnap 가드: placeWindows의 setBounds가 다시 moved를 발화시키는 재진입을 막는다.
-//
-// 2026-08-24 리프 1.2.1: 짝 팔로우(한쪽을 끌면 다른 쪽이 같은 델타로 따라가기)와
-// 짝 최소화가 통째로 사라졌다 — 따라갈 상대가 없다. 대화 창 전용 분기(높이 앵커
-// 갱신 + athena:manual-resize 통보)도 함께 사라졌다: 채팅은 이제 창이 아니라 셸
-// 창 안의 고정 폭 영역이라 창 리사이즈가 채팅 높이 상태를 건드리지 않는다.
 let settlingSnap = false;
 
 // 앱이 마지막으로 지정한 bounds. 여기서 벗어난 moved/resized는 전부 OS 주도
@@ -610,12 +606,6 @@ ipcMain.on('athena:minimize-windows', () => {
 //   Win+↑   = 최대화.
 //   Win+↓   = 최대화 상태면 복원, 아니면 최소화 — Windows의 "restore-then-minimize".
 //
-// 2026-08-24 리프 1.2.1: ↑/↓의 렌더러 위임(`athena:window-key`)이 사라졌다.
-// 옛 판에서 ↑/↓는 창 높이가 아니라 **대화 이력의 높이**를 토글하는 것이었고, 그
-// 상태의 단일 소유자가 chat.js였기 때문에 main이 직접 처리하면 auto-grow와
-// 어긋났다. 셸 창에서는 ↑/↓가 그냥 OS 창 최대화·복원이라 렌더러에 물어볼 상태가
-// 없다 — main이 여기서 전부 처리한다.
-//
 // 좌우 배치의 좌표 계산은 lib/main/window-placement.js(순수 함수, Electron
 // 의존 없음, 단위 테스트됨)로 뺐다 — 결과를 그대로 setBounds에 먹인다. 크기는
 // 항상 명시적으로 재지정한다(setBounds({x,y,width,height})) — x/y만 옮기는
@@ -655,14 +645,36 @@ ipcMain.on('athena:toggle-maximize', (e, { force } = {}) => {
 // 창 크기 변경을 main이 하는 이유: 기하가 **화면 좌표**에 묶여 있다. 오브 원은
 // 펼쳐도 화면에서 안 움직여야 하고(패널이 안쪽으로 자란다), 그 방향은 오브가
 // 지금 어느 사분면에 있느냐로 정해진다 — 렌더러는 자기 창의 화면 좌표를 모른다.
-ipcMain.on('athena:orb-toggle', (e, { expanded } = {}) => {
+// height는 board-33(400 기본 · 콘텐츠 따라 가변 · 640 상한)을 위한 추가
+// 필드다 — 새 채널이 아니라 기존 orb-toggle 계약에 얹었다(오브가 얻는 IPC를
+// 늘리지 않는다는 제약과 맞추려는 선택). 얼굴(#orb)은 anchor로 화면에 고정돼
+// 있어 높이가 바뀌어도 새로 계산할 게 없다 — 패널만 anchor 반대쪽으로 자란다.
+function clampPanelHeight(height) {
+  const n = Number.isFinite(height) ? height : orbWindow.EXPANDED_HEIGHT;
+  return Math.min(orbWindow.EXPANDED_HEIGHT_MAX, Math.max(orbWindow.EXPANDED_HEIGHT, n));
+}
+
+ipcMain.on('athena:orb-toggle', (e, { expanded, height } = {}) => {
   if (!orbWin || orbWin.isDestroyed()) return;
   const next = !!expanded;
-  if (next === orbExpanded) return;
+  const targetHeight = clampPanelHeight(height);
+
+  if (next === orbExpanded) {
+    // 이미 펼쳐진 채로 콘텐츠 높이만 바뀐 요청이다 — 접힘/펼침 자체는 아무
+    // 일도 안 하므로 athena:orb-state는 다시 보내지 않는다(펼침 여부가 안
+    // 바뀌었는데 보내면 렌더러가 또 한 번 unread를 확인 처리한다).
+    if (next && orbWin.getBounds().height !== targetHeight) {
+      const workArea = screen.getDisplayMatching(orbWin.getBounds()).workArea;
+      const orbBounds = orbWindow.computeCollapsedBounds(orbWin.getBounds(), orbAnchor);
+      const plan = orbWindow.computeExpandedBounds(orbBounds, workArea, { height: targetHeight });
+      orbWindow.applyOrbBounds(orbWin, plan.bounds);
+    }
+    return;
+  }
 
   if (next) {
     const workArea = screen.getDisplayMatching(orbWin.getBounds()).workArea;
-    const plan = orbWindow.computeExpandedBounds(orbWin.getBounds(), workArea);
+    const plan = orbWindow.computeExpandedBounds(orbWin.getBounds(), workArea, { height: targetHeight });
     orbAnchor = plan.anchor;
     orbWindow.applyOrbBounds(orbWin, plan.bounds);
   } else {
@@ -713,6 +725,30 @@ ipcMain.on('athena:orb-open-shell', (e, { event } = {}) => {
   if (!event || typeof event !== 'object') return;
   revealShell({ focus: true });
   sendLiveCanvasResult({ status: 'success', envelope: routineEventToFactsEnvelope(event) });
+});
+
+// ---------- 오브 드래그 (2026-08-26 board-32) ----------
+// orb.js가 pointermove의 movementX/Y(창 위치와 무관한 원시 이동량)를 그대로
+// 보낸다 — main은 현재 getBounds()에 더해서 setPosition할 뿐이다. 오브 창은
+// resizable:false지만 이건 이동이지 크기 변경이 아니라서 orb-window.js의
+// applyOrbBounds(resizable 토글)가 필요 없다 — setPosition은 그대로 먹는다.
+// anchor는 여기서 갱신하지 않는다 — 다음 펼침 때 orbWindow.computeExpandedBounds가
+// orbWin.getBounds()를 다시 읽어 사분면을 새로 판정하므로 옮긴 자리에서도 저절로 맞는다.
+ipcMain.on('athena:orb-drag-move', (e, { dx, dy } = {}) => {
+  if (!orbWin || orbWin.isDestroyed()) return;
+  const bounds = orbWin.getBounds();
+  const nx = Math.round(bounds.x + (Number(dx) || 0));
+  const ny = Math.round(bounds.y + (Number(dy) || 0));
+  if (nx === bounds.x && ny === bounds.y) return;
+  orbWin.setPosition(nx, ny);
+});
+
+// ---------- 셸 → 오브 실신호 릴레이 (2026-08-26 board-32) ----------
+// chat.js가 input:focus/blur·질의 시작/끝·턴 완료를 보내면 그대로 오브에 되쏜다.
+// 판단은 여기서 하지 않는다 — 얼굴을 언제 무엇으로 바꿀지는 orb.js가 정한다
+// (routine-event를 그대로 릴레이만 하던 기존 패턴과 같다).
+ipcMain.on('athena:orb-signal', (e, payload = {}) => {
+  if (orbWin && !orbWin.isDestroyed()) orbWin.webContents.send('athena:orb-signal', payload);
 });
 
 // 기본 위치 복귀("center") — 셸 창을 부팅 좌표·부팅 치수로 되돌린다. 어떤 키·IPC
@@ -814,10 +850,6 @@ ipcMain.on('athena:close-windows', () => {
 
 // ---------- 줌(화면 확대/축소) — Ctrl+= / Ctrl+- / Ctrl+0 / Ctrl+휠 ----------
 // 창 크기는 그대로 두고 콘텐츠 배율만 바꾼다(브라우저 줌과 같은 문법).
-// 2026-08-24 리프 1.2.1: 렌더러가 하나가 되면서 창 순회가 사라졌고, 배율과
-// 어긋나던 CSS px 좌표 계약 두 곳(대화 창 높이 측정 · 확장 애니메이션 클립 좌표)도
-// 그 기능들과 함께 사라졌다. 남은 소비자는 렌더러의 레이아웃 재계산뿐이라
-// athena:zoom-changed는 그대로 방송한다.
 let uiZoom = 1;
 
 function applyUiZoom(dir) {
@@ -831,22 +863,6 @@ function applyUiZoom(dir) {
 
 ipcMain.on('athena:zoom', (e, { dir } = {}) => applyUiZoom(dir));
 
-// ---------- 사라진 것: 대화 창 높이 자동 성장 · 점→캔버스 확장/수축 (2026-08-24 리프 1.2.1) ----------
-// 여기 있던 세 덩어리가 창 모델 전환으로 존재 이유를 잃었다. 지운 이유를 남긴다 —
-// 되살리려는 다음 리프가 "왜 없지?"를 다시 조사하지 않게.
-//
-// ① setChatHeight() + `athena:set-chat-height`: 대화 창이 내용에 따라 위로 자라고
-//    입력줄이 화면 y에 고정되던 계약. 채팅이 셸 창 안의 고정 폭 영역이 되면서
-//    "창 높이 = 이력 높이"가 성립하지 않는다 — 이력은 이제 영역 안에서 스크롤한다.
-//    온보딩 완료 시 main이 스스로 기본 높이로 되돌리던 IPC 계약도 함께 소멸했다.
-// ② getDotScreenPoint()/canvasLocalFromScreen()/rmaxFor()/waitForCanvasIpc():
-//    점(.dot) 화면 좌표를 재서 캔버스 창의 원형 clip-path 확장 중심으로 쓰던 기하.
-//    중앙 캔버스가 늘 떠 있으므로 확장 중심이 없다.
-// ③ expandCanvasWindow()/collapseCanvasWindow() + `prime-clip`/`run-animation`/
-//    `primed`/`animation-done`/`athena:collapse-canvas`: 550ms materialize 연출.
-//    창을 열고 닫는 연출인데 열고 닫을 창이 없다.
-//
-// 남은 것은 카드 강조뿐이다 — 캔버스는 늘 보이므로 가시성 가드 없이 그대로 보낸다.
 ipcMain.on('athena:highlight-canvas', (e, type) => {
   if (shellWin && !shellWin.isDestroyed()) shellWin.webContents.send('athena:highlight-canvas', type);
 });
@@ -1021,6 +1037,14 @@ function historyConversationId() {
   return historyAppSessionId;
 }
 
+// 이력 사이드바(리프 1.2.2) 최소 영속화 — 첫 사용자 메시지에서 제목을 뽑아
+// athena-conversations.json에 적는다. historyConversationId()는 그대로 앱
+// 세션 고정이라 이 호출은 매번 같은 id를 touch할 뿐이다(conversations.js
+// 상단 주석 참고 — 재생 기능은 없다).
+function touchConversationEntry(text) {
+  try { conversations.touch({ id: historyConversationId(), title: text }); } catch { /* 사이드바 표시는 대화 성공의 필요조건이 아니다 */ }
+}
+
 // 저장 실패를 렌더러의 "기록 안 됨" 배지로 전달(계획 §2(g), 함정 ⑫ — messageId/role만
 // 싣고 본문은 절대 넘기지 않는다).
 function emitHistorySaveFailed({ messageId, role }) {
@@ -1105,6 +1129,7 @@ async function runDirectRestDataset(dataset, expand = true, overrides = {}) {
       { conversationId: historyConversationId(), text: dataset.question, role: 'user' },
       { onSaveFailed: emitHistorySaveFailed, mdlog },
     );
+    touchConversationEntry(dataset.question);
   }
   if (!overrides.skipHistory) {
     historySink.saveChatMessage(
@@ -1210,6 +1235,7 @@ async function runLiveQuery(query, expand) {
         { conversationId: historyConversationId(), text: query, role: 'user' },
         { onSaveFailed: emitHistorySaveFailed, mdlog },
       );
+      touchConversationEntry(query);
       historySink.saveChatMessage(
         { conversationId: historyConversationId(), text: replay.answerText, role: 'assistant' },
         { onSaveFailed: emitHistorySaveFailed, mdlog },
@@ -1236,6 +1262,7 @@ async function runLiveQuery(query, expand) {
     { conversationId: historyConversationId(), text: query, role: 'user' },
     { onSaveFailed: emitHistorySaveFailed, mdlog },
   );
+  touchConversationEntry(query);
 
   // 이전 질의 프로세스가 아직 살아 있으면 먼저 트리째 끊는다 — 새 질의가 항상 선점한다.
   if (activeLiveQuery) {
@@ -1406,6 +1433,17 @@ ipcMain.handle('athena:brain-cluster-map', async () => {
   return { ok: true, ...result.body };
 });
 
+// 그래프 모드 요약 뷰(보드 07)가 그릴 성향 신호 상위 N — 군집 지도와 달리 대상별
+// 관계·근거·보강 수까지 담는다(brain.py get_brain_profile_summary). limit은
+// 렌더러가 넘긴다 — 보드 07은 "상위 5"라 기본값(50)을 그대로 쓰면 안 맞는다.
+ipcMain.handle('athena:brain-profile-summary', async (_e, { limit, windowDays } = {}) => {
+  const result = await fetchBrainJson('/api/v1/brain/profile-summary', {
+    params: { limit, window_days: windowDays },
+  });
+  if (!result.ok) return { ok: false, error: result.error };
+  return { ok: true, ...result.body };
+});
+
 // ④ 공통 테이블 카드 봉투로 접는다 — canvas.js의 renderMcpTable(envelope)이
 // 이미 그리는 {canvas_type:'table', data:{columns,rows}} 그대로다. 신규 카드
 // 타입은 0개(계획 §2(d) "신규 카드 타입 0개").
@@ -1510,9 +1548,6 @@ function handleOnboardingState() {
 }
 
 function handleOnboardingAdvance(e, { step } = {}) {
-  // 2026-08-24 리프 1.2.1: 옛 계약은 "done:true면 main이 스스로 대화 창을 기본
-  // 높이로 되돌린다"였다(setChatHeight). 온보딩이 셸 창 안의 형제 패널이 되면서
-  // 되돌릴 창 높이가 없다 — 패널을 닫는 것은 렌더러의 일이고 main은 상태만 돌려준다.
   return onboarding.advance(step);
 }
 
@@ -1663,6 +1698,11 @@ function handleAuthTokenRefresh(e, { id } = {}) {
 function handleAuthTokenRevoke(e, { id } = {}) {
   return accounts.tokenRevoke(id);
 }
+
+// 이력 사이드바(리프 1.2.2) — athena:conversations-list -> { activeId, conversations }
+ipcMain.handle('athena:conversations-list', () => conversations.list());
+// 사이드바 항목 클릭의 선택 상태만 저장한다(재생 없음 — conversations.js 주석).
+ipcMain.handle('athena:conversations-set-active', (e, { id } = {}) => conversations.setActive(id));
 
 ipcMain.handle('athena:account-list', handleAccountList);
 ipcMain.handle('athena:account-register', handleAccountRegister);

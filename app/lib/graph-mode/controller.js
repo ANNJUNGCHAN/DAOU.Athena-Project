@@ -16,13 +16,14 @@ function createGraphModeController(deps) {
     layout,         // cluster-layout
     render,         // render
     prefs,          // graph-mode-prefs (선택)
-    elements,       // { pill, summary, graph }
+    elements,       // { pill, summary, graph, panel(선택) — 보드 07/15의 "공통 패널" }
     fetchClusterMap, // async () => payload
     onError,        // (err) => void (선택)
   } = deps;
 
   let state = store.createInitialState();
   let lastDrawnRevision = null;
+  let lastPlaced = null; // 마지막으로 받은 배치. 펼침·접기·선택은 새 fetch 없이 이걸 다시 필터링해서 그린다.
 
   function applyVisibility() {
     const graphView = store.isGraphView(state);
@@ -32,6 +33,76 @@ function createGraphModeController(deps) {
       elements.pill.textContent = graphView ? '요약' : '그래프';
       elements.pill.setAttribute('aria-pressed', graphView ? 'true' : 'false');
     }
+  }
+
+  // 노드 클릭 하나가 지금 단계에 따라 다른 뜻이다(보드 15): 1단계에서는 그 노드가
+  // 속한 군집을 펼치고, 2단계에서는 그 노드를 고른다 — 공통 패널이 연다.
+  function handleNodeClick(entityId, cluster) {
+    if (state.stage === store.STAGE_CLUSTERS) {
+      state = store.expandCluster(state, Number(cluster));
+      redrawFromCache();
+      return;
+    }
+    selectNode(entityId);
+  }
+
+  function selectNode(entityId) {
+    const node = lastPlaced && Array.isArray(lastPlaced.nodes)
+      ? lastPlaced.nodes.find((n) => n.entity_id === entityId)
+      : null;
+    const panelData = node
+      ? { entityId: node.entity_id, name: node.name, kind: node.kind, cluster: node.cluster, degree: node.degree }
+      : { entityId };
+    state = store.selectEntity(state, entityId, panelData);
+    renderSelection();
+  }
+
+  // 렌더된 노드마다 클릭을 건다. 다시 그릴 때마다 SVG가 통째로 교체되므로
+  // (render.js 주석 참고) 리스너도 매번 새로 건다 — 개별 바인딩을 쓰는 이유는
+  // 이 파일이 최소 DOM 스텁(fake-dom.js)에서도 똑같이 돌아야 해서다(버블링 없음).
+  function wireNodeClicks() {
+    if (!elements.graph || typeof elements.graph.querySelectorAll !== 'function') return;
+    const nodeEls = elements.graph.querySelectorAll('.graph-node');
+    for (const nodeEl of nodeEls) {
+      if (typeof nodeEl.addEventListener !== 'function') continue;
+      nodeEl.addEventListener('click', () => {
+        handleNodeClick(nodeEl.getAttribute('data-entity-id'), nodeEl.getAttribute('data-cluster'));
+      });
+    }
+  }
+
+  // 지금 상태로 마지막 배치를 다시 그린다 — 펼침·접기·선택 전부 이 경로를 탄다.
+  // 배치는 이미 있으니 무엇을 보여줄지만 바뀐다, 네트워크 왕복이 필요 없다.
+  function redrawFromCache() {
+    if (!lastPlaced || !elements.graph) return;
+    const nodes = store.visibleNodes(state, lastPlaced);
+    const edges = store.visibleEdges(state, lastPlaced);
+    const settings = prefs ? prefs.readPrefs() : null;
+    render.renderClusterMap(elements.graph, { nodes, edges }, {
+      showLabels: prefs ? prefs.shouldShowLabels(settings, nodes.length) : true,
+      highlightCrossings: settings ? settings.highlightCrossings : true,
+      selectedEntityId: state.selectedEntityId,
+    });
+    wireNodeClicks();
+    renderSelection();
+  }
+
+  // 공통 패널 — 선택된 노드가 있으면 채우고 없으면 숨긴다. 관계 목록·근거·최근
+  // 변화 같은 백엔드 의존 섹션은 여기서 만들지 않는다 — 지어낼 데이터가 없다.
+  // panel 요소는 주입받는다(elements.panel) — 안 들어오면 조용히 건너뛴다,
+  // DOM을 전역에서 만들지 않는다는 이 파일의 원래 계약을 지킨다.
+  function renderSelection() {
+    const panel = elements.panel;
+    if (!panel) return;
+    if (!state.selectedEntityId || !state.panel) {
+      panel.hidden = true;
+      panel.textContent = '';
+      return;
+    }
+    panel.hidden = false;
+    const data = state.panel;
+    const degreeText = Number.isFinite(data.degree) ? `연결 ${data.degree}` : '';
+    panel.textContent = [data.name || data.entityId, degreeText].filter(Boolean).join(' · ');
   }
 
   async function draw(force) {
@@ -55,13 +126,19 @@ function createGraphModeController(deps) {
       width: elements.graph ? elements.graph.clientWidth : 0,
       height: elements.graph ? elements.graph.clientHeight : 0,
     });
+    lastPlaced = placed;
+    const nodes = store.visibleNodes(state, placed);
+    const edges = store.visibleEdges(state, placed);
     const settings = prefs ? prefs.readPrefs() : null;
-    render.renderClusterMap(elements.graph, placed, {
+    render.renderClusterMap(elements.graph, { nodes, edges }, {
       showLabels: prefs
-        ? prefs.shouldShowLabels(settings, placed.nodes.length)
+        ? prefs.shouldShowLabels(settings, nodes.length)
         : true,
       highlightCrossings: settings ? settings.highlightCrossings : true,
+      selectedEntityId: state.selectedEntityId,
     });
+    wireNodeClicks();
+    renderSelection();
     lastDrawnRevision = state.revision;
     return placed;
   }
@@ -73,6 +150,7 @@ function createGraphModeController(deps) {
     async toggle() {
       state = store.toggleView(state);
       applyVisibility();
+      renderSelection();
       return draw(true);
     },
     async refresh() {
@@ -87,6 +165,23 @@ function createGraphModeController(deps) {
       }
     },
     applyVisibility,
+    // 공통 패널 공개 API — 그래프 밖(요약 표의 행 선택, 보드 07)에서도 같은 패널을
+    // 열 수 있어야 한다는 게 store의 원래 계약이다("공통 패널: 어느 단계에서든
+    // 노드를 고르면 같은 패널이 열린다"). 요약 표 자체는 이 디렉터리 밖(canvas.js)에
+    // 있어 그 쪽 행 클릭 배선은 이 파일의 몫이 아니다 — 호출자가 entityId·설명
+    // 데이터를 이 메서드로 넘기면 같은 패널이 연다.
+    selectEntity(entityId, panelData) {
+      state = store.selectEntity(state, entityId, panelData);
+      renderSelection();
+    },
+    clearSelection() {
+      state = store.clearSelection(state);
+      renderSelection();
+    },
+    collapseCluster() {
+      state = store.collapseCluster(state);
+      redrawFromCache();
+    },
   };
 }
 

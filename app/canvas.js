@@ -92,20 +92,9 @@ function destroyCard(card) {
 const grid = document.getElementById('grid');
 let activeDatasetId = null;
 
-// ---------- 사라진 것: 점 → 캔버스 확장/수축 연출 (2026-08-24 리프 1.2.1) ----------
-// 여기 있던 runAnimation()과 그 부속(easeOutCubic/easeInCubic · toCssCoords ·
-// prime-clip/run-animation 구독 · primed/animation-done ack · glassSeparation
-// 토글 · .frost-baked 굽기)이 통째로 사라졌다. 전부 **캔버스 창을 열고 닫는**
-// 550ms materialize 연출의 부속인데, 창 모델 전환으로 열고 닫을 창이 없다 —
-// 중앙 캔버스는 셸 창의 한 영역이라 늘 떠 있다.
-//
-// 같이 폐기된 것: verify-glass-separation.js(굴절층·데이터층 분리 A/B/C 계측)와
-// npm run verify:glass. 그 하네스가 재던 프레임 비용 자체가 없어졌다 — 측정 대상이
-// 사라졌는데 하네스만 남기면 다음 사람이 초록/빨강을 오해한다.
-//
 // 정지 상태 규범(soul.md §8 정보 정직성 — 데이터 위에 잔류 블러가 남으면 안 된다)은
-// 이제 CSS 하나로 성립한다: canvas.css .glass-sheen의 blur(0px)가 유일한 값이고
-// 이 값을 인라인으로 덮는 코드가 없다. 잔류 블러 버그의 원인 경로가 소멸했다.
+// CSS 하나로 성립한다: canvas.css .glass-sheen의 blur(0px)가 유일한 값이고
+// 이 값을 인라인으로 덮는 코드가 없다.
 
 // ---------- 캔버스 카드 추가/초기화/하이라이트 ----------
 window.athena.on('athena:add-canvas', ({ type }) => {
@@ -1116,14 +1105,8 @@ function fmtWon(raw) {
   return n.toLocaleString('ko-KR');
 }
 
-// ---------- 창 기본 기능은 여기 없다 (2026-08-24 리프 1.2.1) ----------
-// 옛 판에는 캔버스 창에도 대화 창과 같은 창 단축키 배선이 있었다 — 창이 둘이라
-// 어느 쪽에 포커스가 있어도 Ctrl+M·Ctrl+휠 배율이 같게 동작해야 했기 때문이다.
-// 창이 하나가 된 지금 그 중복은 사라졌다: 창에 속하는 것은 shell.js가 한 벌만
-// 가진다(창 크롬·창 단축키·네이티브 캡션 드래그 손잡이 #dragStrip).
-// Ctrl+= / Ctrl+- / Ctrl+0 / Ctrl+휠 배율 자체는 2026-08-22 사용자 지시로 이미
-// 폐기됐다 — 크기는 설정 › 화면에서만 바뀐다. 그 폐기는 chat.js에만 반영돼 있었고
-// 이 파일에는 남아 있었다(창이 둘이라 서로 어긋나 있던 것이다). 여기서 정리한다.
+// 창에 속하는 것(창 크롬·창 단축키·네이티브 캡션 드래그 손잡이 #dragStrip)은
+// shell.js가 한 벌만 가진다 — 이 파일에는 없다. 크기는 설정 › 화면에서만 바뀐다.
 
 // --- 그래프 모드 배선 (leaf 8 / W2-3) ---------------------------------------
 //
@@ -1157,12 +1140,30 @@ if (graphPillEl) {
   graphPillEl.addEventListener('click', () => { graphMode.toggle(); });
 }
 
+// --- 그래프 모드 요약 뷰 배선 (보드 07) --------------------------------------
+//
+// 표 렌더·행 클릭·selectEntity 호출은 lib/graph-mode/summary-table.js가 갖고
+// 있다 — 여기서는 컨테이너와 실제 IPC·selectEntity(#13의 공통 패널 API)만 잇는다.
+// #graphSummaryTable은 #mosaic의 자식(형제는 #grid)이라 브레인이 꺼져 있으면
+// #mosaic와 함께 그냥 안 보인다 — 별도 숨김 배선이 필요 없다.
+const graphSummaryTable = window.AthenaLib.GraphSummaryTable.createSummaryTableController({
+  container: document.getElementById('graphSummaryTable'),
+  limit: 5, // 보드 07 "성향 신호 상위 5"
+  fetchProfileSummary: ({ limit } = {}) => window.athena.invoke('athena:brain-profile-summary', { limit }),
+  selectEntity: (entityId, panelData) => graphMode.selectEntity(entityId, panelData),
+  onError: (err) => console.warn('[graph-mode] profile-summary 실패', err),
+});
+
 // 필은 shell.html에서 hidden으로 태어난다 — 브레인이 준비됐다고 **확인한 뒤에만**
 // 보인다. 이 프로브가 없으면 필이 영영 숨어 있어 사람이 그래프 모드에 닿지 못한다.
 (async () => {
   try {
     const status = await window.athena.invoke('athena:brain-status');
-    graphMode.setAvailable(Boolean(status && status.ok && status.ready));
+    const ready = Boolean(status && status.ok && status.ready);
+    graphMode.setAvailable(ready);
+    const summaryTableEl = document.getElementById('graphSummaryTable');
+    if (summaryTableEl) summaryTableEl.hidden = !ready;
+    if (ready) graphSummaryTable.load();
   } catch (err) {
     console.warn('[graph-mode] brain-status 실패 — 필을 숨긴 채로 둔다', err);
     graphMode.setAvailable(false);
