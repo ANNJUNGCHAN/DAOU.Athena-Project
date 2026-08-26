@@ -1122,7 +1122,7 @@ function createToolStepTracker() {
           if (step) {
             const elapsedMs = Date.now() - step.startedAt;
             step.elapsedMs = elapsedMs; // 재-tool_result(있을 리 없지만) 방어
-            sendLiveToolStep({ id: block.tool_use_id, label: step.label, done: true, elapsedMs });
+            sendLiveToolStep({ id: block.tool_use_id, label: step.label, done: true, elapsedMs, error: !!block.is_error });
           }
         }
       }

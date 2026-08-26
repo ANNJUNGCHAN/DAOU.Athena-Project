@@ -475,6 +475,8 @@ html, body { background: transparent; }
   border-color: transparent;
   background: var(--color-k-text);
 }
+/* 실패한 툴 호출(is_error:true) — done 뒤에 둬서 채움색을 경고색으로 덮는다. */
+.progress-tool-step.is-warn .progress-tool-step-icon { background: var(--color-warn); }
 
 .progress-tool-step-label {
   flex: 1 1 auto;
@@ -485,6 +487,7 @@ html, body { background: transparent; }
   color: var(--color-k-faint);
 }
 .progress-tool-step.done .progress-tool-step-label { color: var(--color-k-text); }
+.progress-tool-step.is-warn .progress-tool-step-label { color: var(--color-warn); }
 
 .progress-tool-step-time {
   flex-shrink: 0;
