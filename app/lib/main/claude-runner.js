@@ -56,6 +56,7 @@ function buildArgs({ prompt, configFile, allowedTools, resumeSessionId, model, e
 // onCanvasResult(result) — render_canvas의 tool_result가 확정될 때마다(스트리밍 중).
 // onEvent(event) — 모든 파싱된 이벤트마다(진행 표시용, 선택).
 // onTextDelta(text) — 답변 텍스트 조각마다(--include-partial-messages, 선택).
+// onThinkingDelta(text) — 추론 조각마다(같은 플래그, 미리보기 전용, 선택).
 // onSpawn({pid, kill}) — 프로세스가 뜨자마자. kill()은 트리 전체를 끊는다(Esc 중단용).
 // timeoutMs — 왕복 상한. 넘기면 트리를 죽이고 ok:false·timedOut:true로 끝낸다. 0이면 무제한.
 // claudeBin — 테스트/오버라이드용. 기본은 PATH의 `claude`.
@@ -73,6 +74,7 @@ function runClaudeQuery({
   onCanvasResult,
   onEvent,
   onTextDelta,
+  onThinkingDelta,
 } = {}) {
   return new Promise((resolve) => {
     if (!prompt || !String(prompt).trim()) {
@@ -127,7 +129,7 @@ function runClaudeQuery({
         killTree(child);
         return;
       }
-      session.feed(chunk, { onCanvasResult, onEvent, onTextDelta });
+      session.feed(chunk, { onCanvasResult, onEvent, onTextDelta, onThinkingDelta });
     });
     child.stderr.on('data', (c) => {
       stderrText += c;
@@ -163,7 +165,7 @@ function runClaudeQuery({
       if (settled) return;
       settled = true;
       if (timer) clearTimeout(timer);
-      session.end({ onCanvasResult, onEvent, onTextDelta });
+      session.end({ onCanvasResult, onEvent, onTextDelta, onThinkingDelta });
       const finalResult = session.finalResult();
       const isError = !!killedBy || code !== 0 || (finalResult && finalResult.is_error === true) || !finalResult;
       const killMessage = killedBy === 'timeout'

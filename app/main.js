@@ -1017,6 +1017,13 @@ function sendLiveTextDelta(text) {
   shellWin.webContents.send('athena:live-text-delta', { text });
 }
 
+// 추론 조각 — 미리보기 전용이다(chat.js가 답변 첫 조각이나 턴 종료에서 지운다).
+// 여기서도 이력에 저장하지 않는다 — historySink는 finalResult.result만 다룬다.
+function sendLiveThinkingDelta(text) {
+  if (!shellWin || shellWin.isDestroyed()) return;
+  shellWin.webContents.send('athena:live-thinking-delta', { text });
+}
+
 // 지금 떠 있는 실배선 claude 프로세스의 kill 핸들. 정확히 하나만 유지한다 —
 // Esc 후 재질의로 프로세스가 쌓이던 갭(README "다중 세션도 없다")의 해소.
 let activeLiveQuery = null;
@@ -1305,6 +1312,7 @@ async function runLiveQuery(query, expand) {
     // 성공 resolve 1건과 render 1건의 토큰이 정확히 같은 경우만 캐시한다.
     onEvent: (ev) => replayTurnCapture.observe(ev),
     onTextDelta: sendLiveTextDelta,
+    onThinkingDelta: sendLiveThinkingDelta,
     onCanvasResult: (r) => {
       if (r.status === 'pushed') {
         // 카드는 사이드 채널(startCanvasFeed)로 이미 도착했다 — 여기선 집계만.

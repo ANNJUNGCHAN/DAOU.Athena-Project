@@ -112,6 +112,21 @@ test('buildLivePrompt: chart 힌트 — 키움 ka10081 응답 필드 매핑과 �
   assert.ok(p.includes('오름차순'));
 });
 
+test('buildLivePrompt: 사용자 노출 언어 규율 — TR 코드·툴 이름·내부 오류 코드 노출 금지, 투자자 언어로 되묻기 (2026-08-26 사용자 신고)', () => {
+  const p = buildLivePrompt('x');
+  assert.ok(p.includes('사용자 노출 언어 규율'));
+  assert.ok(p.includes('TR 코드'));
+  assert.ok(p.includes('ka10008'));
+  assert.ok(p.includes('athena_search·athena_describe·athena_resolve·athena_call'));
+  assert.ok(p.includes('confidence'));
+  assert.ok(p.includes('AMBIGUOUS_OPERATION'));
+  assert.ok(p.includes('DETAIL_GROUP_REQUIRED'));
+  assert.ok(p.includes('카탈로그'));
+  assert.ok(p.includes('셀렉터'));
+  assert.ok(p.includes('외국인 단독 순매수 추이'));
+  assert.ok(p.includes('투자자 언어로 번역'));
+});
+
 test('buildLivePrompt: 조회 규율 — 명시 출처·상대 날짜·원문 확인·교차 출처 (2026-08-19 QA)', () => {
   const p = buildLivePrompt('x');
   assert.ok(p.includes('조회 규율'));

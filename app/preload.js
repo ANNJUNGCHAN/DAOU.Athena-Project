@@ -98,6 +98,9 @@ const ON_CHANNELS = new Set([
   // 답변 텍스트 조각(2026-08-26 S2) — main이 claude -p의 text_delta를 그대로
   // 릴레이한다. chat.js가 진행 중인 채팅 버블에 이어붙인다.
   'athena:live-text-delta',
+  // 추론 조각(2026-08-26) — thinking_delta 릴레이. 미리보기 전용 — chat.js가
+  // 답변 첫 조각이나 턴 종료에서 지우고 절대 이력에 저장하지 않는다.
+  'athena:live-thinking-delta',
   'athena:auth-token-changed',
   'athena:cli-changed',
   // 루틴 알림(능동 에이전트 P2) — main의 RoutineFeed가 백엔드 WS에서 받은

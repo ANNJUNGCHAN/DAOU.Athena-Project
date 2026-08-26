@@ -443,6 +443,39 @@ async function runQueryLive(text) {
   };
   const unsubscribeLiveCanvasAdded = window.athena.on('athena:live-canvas-added', onLiveCanvasAdded);
 
+  // 추론 미리보기(2026-08-26) — 답변 텍스트가 나오기 전 긴 침묵 구간을 채운다.
+  // 미리보기 전용이다: 옅은 색·작은 글씨로 뚜렷이 구분하고, 답변 첫 조각이
+  // 오거나 턴이 끝나면 즉시 지운다 — 턴 기록에는 절대 안 남는다.
+  let thinkingLine = null;
+  let thinkingBody = null;
+  let thinkingText = '';
+  const clearThinkingPreview = () => {
+    if (!thinkingLine) return;
+    thinkingLine.remove();
+    thinkingLine = null;
+    thinkingBody = null;
+  };
+  const onLiveThinkingDelta = ({ text: delta } = {}) => {
+    if (myToken !== abortToken || !delta) return;
+    if (!calling) { calling = true; state = 'calling'; setDot('calling'); }
+    if (!thinkingLine) {
+      thinkingLine = document.createElement('div');
+      thinkingLine.className = 'turn turn-thinking-preview';
+      const label = document.createElement('div');
+      label.className = 'turn-thinking-label';
+      label.textContent = '추론 중…';
+      thinkingBody = document.createElement('div');
+      thinkingBody.className = 'turn-thinking-body';
+      thinkingLine.appendChild(label);
+      thinkingLine.appendChild(thinkingBody);
+      $history.appendChild(thinkingLine);
+    }
+    thinkingText += delta;
+    thinkingBody.textContent = thinkingText;
+    scrollAfterRender();
+  };
+  const unsubscribeLiveThinkingDelta = window.athena.on('athena:live-thinking-delta', onLiveThinkingDelta);
+
   // 답변 텍스트 조각(2026-08-26 S2) — 턴이 끝나야만 답이 보이던 것을 없앤다.
   // 첫 조각이 와야 버블을 만든다(빈 버블을 먼저 안 띄운다 — 카드 진행 표시와
   // 같은 원칙). REST 직결·캐시 리플레이 경로는 claude 프로세스를 안 띄우므로
@@ -453,6 +486,7 @@ async function runQueryLive(text) {
   const onLiveTextDelta = ({ text: delta } = {}) => {
     if (myToken !== abortToken || !delta) return;
     if (!calling) { calling = true; state = 'calling'; setDot('calling'); }
+    clearThinkingPreview(); // 답변이 시작됐다 — 추론 미리보기는 자리를 비켜준다
     if (!streamALine) {
       streamALine = document.createElement('div');
       streamALine.className = 'turn';
@@ -476,8 +510,12 @@ async function runQueryLive(text) {
   } finally {
     clearInterval(tick);
     unsubscribeLiveCanvasAdded();
+    unsubscribeLiveThinkingDelta();
     unsubscribeLiveTextDelta();
     window.athena.send('athena:orb-signal', { signal: 'think', active: false });
+    // 방어적 — 답변 조각이 한 번도 안 오고 턴이 끝나는 경로(예: 조기 중단)에서도
+    // 미리보기가 턴 기록에 남지 않게 한다.
+    clearThinkingPreview();
   }
   if (myToken !== abortToken) return;
 
