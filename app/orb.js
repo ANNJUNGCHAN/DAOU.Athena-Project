@@ -147,28 +147,30 @@
   // 모양은 전부 orb.css의 [data-face] 규칙이 지고, 여기서는 **언제 어느 얼굴인가**만
   // 정한다.
   //
-  // **얼굴은 앱에 이미 있는 신호에만 붙인다.** 지금 배선하는 것은 아홉이다:
+  // **얼굴은 앱에 이미 있는 신호에만 붙인다.** 지금 배선하는 것은 열이다:
   //   idle   — 기본(대기)
   //   sleep  — 오래 아무 일 없음(idle > 5min. 옛 판의 '평소'가 여기로 내려왔다)
   //   listen — 셸 입력줄 포커스(input:focus) — 2026-08-26 board-32 신규
   //   think  — 질의 진행 중(query running) — 2026-08-26 board-32 신규. 스피너 대신이다
   //   done   — 턴 완료(result ok) — 2026-08-26 board-32 신규. 웃고 2초 뒤 idle로 돌아간다
   //   wink   — 감시 등록 반영(athena:routine-confirm 성공 릴레이) — 2026-08-27
-  //            갭 클로징 Step 3b 신규. done과 같은 구조(DONE_HOLD 뒤 resolveAmbientFace
+  //            갭 클로징 Step 3b 신규. done과 같은 구조(DONE_HOLD 뒤 settleAmbientFace
   //            복귀)지만 전용 타이머를 따로 둬서 둘이 서로 안 밟는다.
+  //   frown  — 대화 질의 실패(result.ok===false) — 2026-08-27 갭 클로징 Step 4a 신규.
+  //            done/wink와 같은 구조·같은 유지 시간이다.
   //   fired  — 미확인 알림이 있다(data-alert와 짝)
   //   mopey  — 루틴 만료(routineTurn kind: expired) — 옛 '미안'의 절반
   //   crying — 감시 복원 실패(routineTurn kind: restore-failed) — 옛 '미안'의 나머지 절반
   // 2026-08-26: '미안' 하나가 만료·복원실패 둘을 뭉뚱그렸는데, routine-turn.js가
   // 이미 kind로 둘을 갈라 준다 — 같은 사실을 오브만 뭉개고 있었다(board-31).
-  // watch/glad/surprise/frown은 아직 CSS에 모양만 있고 배선하지 않는다 — watch·glad는
+  // watch/glad/surprise는 아직 CSS에 모양만 있고 배선하지 않는다 — watch·glad는
   // 판정에 필요한 데이터가 없어 백로그로 유예했고(CP1/CP3, orb.js 상단 주석),
-  // surprise·frown은 급변·호출 실패 신호를 오브가 아직 받지 않는다(갭 클로징
-  // 뒷 Step에서 배선 예정). 없는 신호에 얼굴을 붙이면 그건 정보가 아니라 지어낸
+  // surprise는 급변 신호를 오브가 아직 받지 않는다(갭 클로징 뒷 Step에서 배선
+  // 예정). 없는 신호에 얼굴을 붙이면 그건 정보가 아니라 지어낸
   // 연기다(soul.md).
   const FACE = {
     IDLE: 'idle', SLEEP: 'sleep', LISTEN: 'listen', THINK: 'think', DONE: 'done',
-    WINK: 'wink', FIRED: 'fired', MOPEY: 'mopey', CRYING: 'crying',
+    WINK: 'wink', FROWN: 'frown', FIRED: 'fired', MOPEY: 'mopey', CRYING: 'crying',
   };
 
   const BLINK_CLOSE = 90;          // 감는 시간
@@ -212,6 +214,7 @@
   let saccadeTimer = null;
   let doneTimer = null;
   let winkTimer = null;
+  let frownTimer = null;
 
   const rand = (lo, hi) => lo + Math.random() * (hi - lo);
 
@@ -364,12 +367,12 @@
   let thinking = false;
 
   function eventFaceActive() {
-    // WINK는 DONE과 같은 격이다(둘 다 신호 하나에 반응해 DONE_HOLD만큼 떴다가
-    // 스스로 꺼지는 일시 표정) — DONE을 여기 넣은 이유(듣는 중/생각 중 같은
-    // 능동 표정이 유지 시간 안에 끼어들어 조기에 지우면 안 된다)가 WINK에도
-    // 그대로 적용된다.
+    // WINK·FROWN은 DONE과 같은 격이다(셋 다 신호 하나에 반응해 DONE_HOLD만큼
+    // 떴다가 스스로 꺼지는 일시 표정) — DONE을 여기 넣은 이유(듣는 중/생각
+    // 중 같은 능동 표정이 유지 시간 안에 끼어들어 조기에 지우면 안 된다)가
+    // 셋 모두에 그대로 적용된다.
     return face === FACE.FIRED || face === FACE.MOPEY || face === FACE.CRYING
-      || face === FACE.DONE || face === FACE.WINK;
+      || face === FACE.DONE || face === FACE.WINK || face === FACE.FROWN;
   }
 
   /** 앰비언트(듣는 중/생각 중/잠듦/기본) 판정의 공통 계산 — resolveAmbientFace와
@@ -433,6 +436,18 @@
     winkTimer = setTimeout(() => {
       // settleAmbientFace 직접 호출 이유는 triggerDoneFace 주석과 같다.
       if (face === FACE.WINK) settleAmbientFace();
+    }, DONE_HOLD);
+  }
+
+  // 찡그림 — 대화 질의 실패(board-30⑩). submitChatQuery가 result.ok===false를
+  // 확정하는 지점에서 부른다. done/wink와 같은 구조·같은 전용 타이머 원칙.
+  function triggerFrownFace() {
+    if (face === FACE.FIRED || face === FACE.MOPEY || face === FACE.CRYING) return;
+    touchActivity();
+    setFace(FACE.FROWN);
+    clearTimeout(frownTimer);
+    frownTimer = setTimeout(() => {
+      if (face === FACE.FROWN) settleAmbientFace();
     }, DONE_HOLD);
   }
 
@@ -897,6 +912,7 @@
       answer.line.appendChild(note);
     }
     if (result && result.ok) triggerDoneFace();
+    else if (result && result.ok === false) triggerFrownFace();
     scrollChatToBottom();
     requestPanelHeight();
     if (!$chatInput.disabled) $chatInput.focus();
