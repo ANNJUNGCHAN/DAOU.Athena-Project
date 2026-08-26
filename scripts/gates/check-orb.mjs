@@ -2,10 +2,20 @@
  * leaf-1.3.1 게이트 — 알림 오브 창이 계약대로 존재하는지 소스를 직접 파싱해 잰다.
  *
  * 이 게이트의 절반은 **없어야 하는 것**을 잰다. 오브의 위험은 기능이 모자란 것이
- * 아니라 **넘치는 것**이다: 실행 버튼 하나, 입력창 하나가 확정 결정 3(주문은 사람이
- * 낸다)과 단일 입력 원칙을 동시에 깬다. 그래서 존재 검사보다 부재 검사를 더 촘촘히
- * 건다 — 부재 검사는 양성 대조군 없이는 믿을 수 없으므로(빈 파일도 통과한다) 존재
- * 검사와 짝지어 둘 다 성립할 때만 초록을 준다.
+ * 아니라 **넘치는 것**이다: 실행 버튼 하나가 확정 결정 3(주문은 사람이 낸다)을
+ * 깬다. 그래서 존재 검사보다 부재 검사를 더 촘촘히 건다 — 부재 검사는 양성
+ * 대조군 없이는 믿을 수 없으므로(빈 파일도 통과한다) 존재 검사와 짝지어 둘 다
+ * 성립할 때만 초록을 준다.
+ *
+ * 2026-08-26 board-33/34 규범 개정(문서화된 결정, tree-34-deep.raw "상태는
+ * 둘뿐이다") — "입력창 0개(단일 입력 원칙)"가 "셸이 보이는 동안은 오브에 입력이
+ * 없다"로 좁아졌다. 오브는 셸이 숨겨졌을 때만(athena:shell-visibility로 게이트)
+ * #orbInput 하나를 받고, 그 질의는 셸의 커맨드바와 완전히 같은 runLiveQuery로
+ * 이어진다(athena:orb-chat-submit — athena__render_canvas를 직접 부르지 않는다).
+ * **살아있는 입력창은 여전히 최대 하나**이므로 원칙 자체(단일 입력)는 안 깨졌다 —
+ * 그 하나가 항상 셸이라는 전제만 깨졌다. 그래서 아래 (a)는 화이트리스트로
+ * 완화하고(#orbInput 외에는 여전히 금지), 주문 집행·감시 승인/취소가 여전히
+ * 오브의 액션이 아니라는 (b)의 핵심(확정 결정 3)은 그대로 조인다.
  *
  * 실행: node scripts/gates/check-orb.mjs
  * 성공 표지: orb contract verification passed
@@ -80,13 +90,22 @@ const htmlRaw = read("orb.html");
 if (htmlRaw) {
   const html = stripHtmlComments(htmlRaw);
 
-  // (a) 미니 입력창 없음 — 입력 지점은 셸 창 커맨드바 하나뿐이다.
-  must(!/<input\b/i.test(html), "orb.html: 입력창이 있다 — 입력 지점은 셸 창 하나뿐이다");
-  must(!/<textarea\b/i.test(html), "orb.html: textarea가 있다 — 입력 지점은 셸 창 하나뿐이다");
+  // (a) 입력창은 #orbInput 하나까지만 — board-33/34가 "셸 숨김일 때만" 조건으로
+  // 허용한 대화 입력줄이다. 그 밖의 input·모든 textarea·contenteditable은 여전히
+  // 금지다(둘 이상의 입력창이나 이름 없는 입력창은 게이트로 못 잰다).
+  const inputIds = [...html.matchAll(/<input\b[^>]*\bid="([^"]+)"/gi)].map((m) => m[1]);
+  const anonymousInputs = (html.match(/<input\b(?![^>]*\bid=)/gi) || []).length;
+  must(anonymousInputs === 0, `orb.html: id 없는 <input>이 ${anonymousInputs}개 — 모든 입력창은 이름이 있어야 검사할 수 있다`);
+  for (const id of inputIds) {
+    must(id === "orbInput", `orb.html: 허용되지 않은 입력창 #${id} — board-33이 연 것은 #orbInput 하나뿐이다`);
+  }
+  must(!/<textarea\b/i.test(html), "orb.html: textarea가 있다 — 대화 입력은 한 줄(#orbInput)까지다");
   must(!/contenteditable/i.test(html), "orb.html: contenteditable이 있다 — 사실상 입력창이다");
 
   // (b) 실행 버튼 없음 — 확정 결정 3. 버튼 id를 화이트리스트로 잠근다.
-  const ALLOWED_BUTTON_IDS = new Set(["orbToggle", "orbMore", "orbClose"]);
+  // orbEsc(답변 중단) · orbChatGo(대화창으로 가기)는 board-33이 추가한 대화 모드
+  // 부품이다 — 둘 다 주문·감시를 건드리지 않는다(집행 0, 승인 0).
+  const ALLOWED_BUTTON_IDS = new Set(["orbToggle", "orbMore", "orbClose", "orbEsc", "orbChatGo"]);
   const buttonIds = [...html.matchAll(/<button\b[^>]*\bid="([^"]+)"/gi)].map((m) => m[1]);
   const anonymousButtons = (html.match(/<button\b(?![^>]*\bid=)/gi) || []).length;
   must(anonymousButtons === 0, `orb.html: id 없는 <button>이 ${anonymousButtons}개 — 모든 액션은 이름이 있어야 검사할 수 있다`);
@@ -154,6 +173,13 @@ if (orbJsRaw) {
     "orb.js: buildTurnModel()을 실제로 호출해야 한다(LLM 0, 시점 정직성 — 문장을 짓지 않는다)");
   must(orbJs.includes("athena:routine-event"),
     "orb.js: 능동 턴 이벤트를 구독해야 한다 — 오브가 받는 유일한 발생원이다");
+
+  // board-33/34 — 대화 입력은 셸 숨김 신호로 게이트돼야 한다(추측이 아니라 실신호).
+  // 질의는 셸과 같은 runLiveQuery로 이어지는 전용 채널 하나로만 나가야 한다.
+  must(orbJs.includes("athena:shell-visibility"),
+    "orb.js: athena:shell-visibility를 구독해야 한다 — 대화 모드는 셸 숨김 실신호로만 켜진다(board-33/34)");
+  must(orbJs.includes("athena:orb-chat-submit"),
+    "orb.js: athena:orb-chat-submit을 불러야 한다 — 오브가 자기 질의 파이프라인을 새로 만들면 안 된다");
 }
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -263,5 +289,5 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
-console.log("오브 76px 원형 · alwaysOnTop · 실행 버튼 0 · 입력창 0 · 결정론 본문 통과");
+console.log("오브 76px 원형 · alwaysOnTop · 실행 버튼 0 · 입력창 최대 1(셸 숨김 전용) · 결정론 본문 통과");
 console.log("orb contract verification passed");

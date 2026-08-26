@@ -4,9 +4,16 @@
 // window.athena 다리로만 main과 통신한다. lib/routine-turn.js는 orb.html이
 // <script> 태그로 미리 로드해 window.AthenaLib에 얹어둔 전역이다.
 //
-// **이 파일이 하지 않는 것이 계약이다.** 질의를 시작하지 않고(입력 지점은 셸 창
-// 커맨드바 하나), 주문을 집행하지 않고(확정 결정 3), 감시를 승인·취소하지 않는다.
-// 오브의 액션은 펼침 · 더보기 · 접기 셋뿐이다.
+// **이 파일이 하지 않는 것이 계약이다.** 주문을 집행하지 않고(확정 결정 3),
+// 감시를 승인·취소하지 않는다 — 그 셋은 여전히 오브의 액션이 아니다.
+//
+// 2026-08-26 board-33/34 — "입력 지점은 셸 창 커맨드바 하나"는 "셸이 보이는
+// 동안은 오브에 입력이 없다"로 바뀌었다(tree-34-deep.raw "상태는 둘뿐이다").
+// 셸이 숨겨졌을 때만 오브가 질의를 받는다(athena:shell-visibility가 게이트) —
+// 그래서 **동시에 살아있는 입력창은 여전히 최대 하나**다, 그 하나가 어느 창인지가
+// 셸 표시 여부로 갈릴 뿐이다. 질의는 athena:orb-chat-submit으로 내는데, 이건
+// 셸의 커맨드바가 부르는 것과 완전히 같은 runLiveQuery로 이어진다 — 오브가 자기
+// 파이프라인을 새로 만들지 않는다.
 //
 // 본문은 지어내지 않는다: 발화 배지 · 방식 표기 · 소스 라벨 · 시점 고지는 전부
 // lib/routine-turn.js의 결정론 템플릿이 만든다(LLM 0). 렌더는 전부 textContent —
@@ -29,6 +36,23 @@
   const $body = document.getElementById('orbBody');
   const $card = document.getElementById('orbCard');
   const $source = document.getElementById('orbSource');
+  const $foot = document.getElementById('orbFoot');
+  const $headerTitle = document.getElementById('orbHeaderTitle');
+
+  // ── 대화 모드 DOM(2026-08-26 board-33) ──
+  const $chatBody = document.getElementById('orbChatBody');
+  const $chatEmpty = document.getElementById('orbChatEmpty');
+  const $chatTurns = document.getElementById('orbChatTurns');
+  const $inputStack = document.getElementById('orbInputStack');
+  const $chatInput = document.getElementById('orbInput');
+  const $lockHint = document.getElementById('orbLockHint');
+  const $esc = document.getElementById('orbEsc');
+  const $chatDot = document.getElementById('orbChatDot');
+  const $chatCli = document.getElementById('orbChatCli');
+  const $chatRoutine = document.getElementById('orbChatRoutine');
+  const $chatGo = document.getElementById('orbChatGo');
+  // 알림 전용 표면 — 대화 모드일 때 통째로 감춘다(applyMode).
+  const ALERT_ONLY_ELS = [$badge, $mode, $relative, $body, $card, $foot];
 
   // 미확인 알림. 이 배열이 비어 있으면 오브는 무채색이고, 하나라도 있으면 얼굴이
   // 드러난다(renderPresence). 펼치면 가장 최근 것을 보여주고 전부 확인 처리한다.
@@ -292,16 +316,22 @@
       if (thinking) touchActivity();
       resolveAmbientFace();
     } else if (signal === 'done') {
-      // 발화·만료·복원실패 중에는 완료 웃음을 덮지 않는다 — 그쪽이 더 중요한 사실이다.
-      if (face === FACE.FIRED || face === FACE.MOPEY || face === FACE.CRYING) return;
-      touchActivity();
-      setFace(FACE.DONE);
-      clearTimeout(doneTimer);
-      doneTimer = setTimeout(() => {
-        if (face === FACE.DONE) resolveAmbientFace();
-      }, DONE_HOLD);
+      triggerDoneFace();
     }
   });
+
+  // 완료 웃음 — 셸의 'done' 실신호와 오브 자신의 대화 모드 제출(2026-08-26
+  // board-33)이 공유한다. 발화·만료·복원실패 중에는 덮지 않는다 — 그쪽이 더
+  // 중요한 사실이다.
+  function triggerDoneFace() {
+    if (face === FACE.FIRED || face === FACE.MOPEY || face === FACE.CRYING) return;
+    touchActivity();
+    setFace(FACE.DONE);
+    clearTimeout(doneTimer);
+    doneTimer = setTimeout(() => {
+      if (face === FACE.DONE) resolveAmbientFace();
+    }, DONE_HOLD);
+  }
 
   // ── 드래그 — 포인터로 창을 옮긴다(2026-08-26 board-32). ──
   // app-region:drag를 안 쓰는 이유는 orb.css #orb 규칙 위 주석 참조: OS가 이동을
@@ -428,9 +458,13 @@
 
   function measureContentHeight() {
     const head = $panel.querySelector('.orb-panel-head');
-    const foot = $panel.querySelector('.orb-foot');
-    const parts = [head, $body, $card, foot].filter(Boolean);
-    // scrollHeight는 overflow:auto인 $card에서도 잘리지 않은 실제 콘텐츠 높이를
+    // 대화 모드(상태 A)와 알림 모드(상태 B)는 서로 다른 본문을 잰다 — 숨긴
+    // 쪽의 offsetHeight는 항상 0이라 섞어 재도 안전하지만, 명시하는 편이 다음
+    // 사람에게 "왜 이 부분들인가"를 남긴다.
+    const parts = chatModeActive
+      ? [head, $chatBody, $inputStack].filter(Boolean)
+      : [head, $body, $card, $foot].filter(Boolean);
+    // scrollHeight는 overflow:auto인 영역에서도 잘리지 않은 실제 콘텐츠 높이를
     // 준다 — 지금 보이는 크기가 아니라 필요한 크기를 재는 이유다.
     const content = parts.reduce((sum, el) => sum + Math.max(el.offsetHeight, el.scrollHeight), 0);
     const gaps = 8 * Math.max(0, parts.length - 1); // .orb-panel gap(orb.css)
@@ -452,6 +486,31 @@
     window.athena.send('athena:orb-toggle', { expanded: next });
   }
 
+  // ── 대화 모드 게이트 — 셸이 숨겨졌는지 하나로 결정된다(board-33/34) ──
+  let shellHidden = false;
+  let chatModeActive = false;
+
+  function applyMode() {
+    const next = shellHidden;
+    if (chatModeActive === next) return;
+    chatModeActive = next;
+    $root.dataset.orbMode = chatModeActive ? 'chat' : 'alert';
+    $headerTitle.textContent = chatModeActive ? '메인 대화' : '알림';
+    for (const el of ALERT_ONLY_ELS) el.classList.toggle('orb-mode-hidden', chatModeActive);
+    $chatBody.hidden = !chatModeActive;
+    $inputStack.hidden = !chatModeActive;
+    if (chatModeActive) {
+      $chatEmpty.hidden = $chatTurns.childElementCount > 0;
+      refreshChatControlStrip();
+    }
+    if (expanded) requestPanelHeight();
+  }
+
+  window.athena.on('athena:shell-visibility', ({ hidden } = {}) => {
+    shellHidden = !!hidden;
+    applyMode();
+  });
+
   // main이 창 크기를 실제로 바꾼 뒤에 온다 — 렌더러가 먼저 펼치면 창보다 큰
   // 패널이 한 프레임 잘려 보인다.
   window.athena.on('athena:orb-state', ({ expanded: isOpen, anchor } = {}) => {
@@ -459,6 +518,13 @@
     $root.dataset.state = isOpen ? 'expanded' : 'collapsed';
     $panel.hidden = !isOpen;
     expanded = !!isOpen;
+    applyMode();
+    if (isOpen && chatModeActive) {
+      // 대화 모드에서는 "펼침 = 확인 처리"가 아니다 — 알림은 다른 방이다
+      // (board-34 "방은 알림에서만 생긴다"). 입력에 바로 포커스만 옮긴다.
+      $chatInput.focus();
+      return;
+    }
     if (isOpen) {
       // 펼치는 순간 전부 확인 처리한다 — 사용자가 본 것을 안 봤다고 하지 않는다.
       current = unread.length ? unread[unread.length - 1] : current;
@@ -473,8 +539,10 @@
     current = event;
     // 무엇이 왔든 오브는 깬다 — 일이 생겼다는 것 자체가 신호다.
     touchActivity();
-    if (expanded) {
+    if (expanded && !chatModeActive) {
       // 이미 펼쳐져 있으면 바로 갈아끼운다 — 쌓아두면 최신이 아닌 것을 보게 된다.
+      // 대화 모드로 펼쳐진 동안에는(이론상 셸이 그새 열렸다가 다시 숨는 등)
+      // 진행 중인 대화를 알림이 덮지 않는다 — 그냥 미확인으로 쌓아둔다.
       renderPanel(event);
       return;
     }
@@ -496,7 +564,7 @@
   });
   $close.addEventListener('click', () => { touchActivity(); setExpanded(false); });
 
-  // 오브의 유일한 진행 경로. 셸 창을 앞으로 가져오고 대표 카드를 중앙 캔버스에
+  // 알림에서 셸로 가는 경로. 셸 창을 앞으로 가져오고 대표 카드를 중앙 캔버스에
   // 쌓는다 — main이 기존 facts 봉투로 접어 보낸다(신규 카드 타입 0개).
   $more.addEventListener('click', () => {
     if (!current) return;
@@ -504,12 +572,213 @@
     setExpanded(false);
   });
 
-  // Esc는 접기다. 오브에는 닫을 모드가 이것뿐이라 분기가 없다.
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && expanded) {
-      e.preventDefault();
-      setExpanded(false);
+  // ─────────────────────────────────────────────────────────────────────
+  // 대화 모드(2026-08-26 board-33) — 상태 A(셸 숨김)에서만 산다.
+  // 질의는 athena:orb-chat-submit 하나로 나간다 — main의 runLiveQuery를
+  // 그대로 부르는 것뿐, 별도 파이프라인이 아니다(orb.js 상단 주석 참고).
+  // ─────────────────────────────────────────────────────────────────────
+  let chatBusy = false;
+
+  function orbTurn(className) {
+    const el = document.createElement('div');
+    el.className = className;
+    return el;
+  }
+
+  function renderChatQuestion(text) {
+    const line = orbTurn('orb-turn');
+    const q = document.createElement('div');
+    q.className = 'orb-turn-q';
+    q.textContent = text;
+    line.appendChild(q);
+    $chatTurns.appendChild(line);
+    return line;
+  }
+
+  function renderProgressCard() {
+    const card = orbTurn('orb-progress-card');
+    const judging = document.createElement('div');
+    judging.className = 'orb-progress-judging';
+    judging.textContent = '판단 중';
+    const steps = document.createElement('div');
+    steps.className = 'orb-tool-steps';
+    card.append(judging, steps);
+    $chatTurns.appendChild(card);
+    card._steps = steps;
+    card._byId = new Map();
+    return card;
+  }
+
+  function updateProgressStep(card, step) {
+    if (!card || !card.isConnected || !step || !step.id) return;
+    let el = card._byId.get(step.id);
+    if (!el) {
+      el = document.createElement('div');
+      el.className = 'orb-tool-step';
+      const icon = document.createElement('span');
+      icon.className = 'orb-tool-step-icon';
+      const label = document.createElement('span');
+      label.className = 'orb-tool-step-label';
+      const time = document.createElement('span');
+      time.className = 'orb-tool-step-time';
+      el.append(icon, label, time);
+      card._steps.appendChild(el);
+      card._byId.set(step.id, el);
     }
+    el.classList.toggle('done', !!step.done);
+    el.querySelector('.orb-tool-step-label').textContent = step.label || '처리 중';
+    el.querySelector('.orb-tool-step-time').textContent =
+      step.done && typeof step.elapsedMs === 'number' ? `${(step.elapsedMs / 1000).toFixed(1)}s` : (step.done ? '—' : '');
+    requestPanelHeight();
+  }
+
+  function renderChatAnswer(text) {
+    const line = orbTurn('orb-turn');
+    const a = document.createElement('div');
+    a.className = 'orb-turn-a';
+    a.textContent = text;
+    line.appendChild(a);
+    $chatTurns.appendChild(line);
+    return { line, textEl: a };
+  }
+
+  function scrollChatToBottom() {
+    $chatBody.scrollTop = $chatBody.scrollHeight;
+  }
+
+  async function submitChatQuery(rawText) {
+    const text = String(rawText || '').trim();
+    if (!text || chatBusy) return;
+    chatBusy = true;
+    $chatEmpty.hidden = true;
+    $chatInput.value = '';
+    $chatInput.disabled = true;
+    $lockHint.hidden = false;
+    setChatDot('judging');
+    renderChatQuestion(text);
+    const card = renderProgressCard();
+    scrollChatToBottom();
+    requestPanelHeight();
+
+    thinking = true;
+    touchActivity();
+    resolveAmbientFace();
+
+    let calling = false;
+    let answer = null;
+    const unsubStep = window.athena.on('athena:live-tool-step', (step) => {
+      if (!calling) { calling = true; setChatDot('calling'); }
+      updateProgressStep(card, step);
+    });
+    const unsubDelta = window.athena.on('athena:live-text-delta', ({ text: delta } = {}) => {
+      if (!delta) return;
+      if (!calling) { calling = true; setChatDot('calling'); }
+      if (!answer) {
+        if (card.isConnected) card.remove();
+        answer = renderChatAnswer('');
+      }
+      answer.textEl.textContent += delta;
+      scrollChatToBottom();
+    });
+
+    let result;
+    try {
+      result = await window.athena.invoke('athena:orb-chat-submit', { query: text });
+    } catch (err) {
+      result = { ok: false, error: String((err && err.message) || err) };
+    } finally {
+      unsubStep();
+      unsubDelta();
+      thinking = false;
+      resolveAmbientFace();
+      chatBusy = false;
+      $chatInput.disabled = false;
+      $lockHint.hidden = true;
+      setChatDot(null);
+    }
+
+    // 최종 텍스트는 응답값이 권위다(스트리밍 누적치가 아니다) — chat.js
+    // runQueryLive와 같은 원칙(조각 유실·순서 어긋남에도 이 줄이 항상 이긴다).
+    const finalText = result && result.answerText
+      ? result.answerText
+      : (result && result.ok ? '완료 — 답변 텍스트 없음' : `실패 — ${(result && result.error) || '알 수 없는 오류'}`);
+    if (answer) {
+      answer.textEl.textContent = finalText;
+    } else {
+      if (card.isConnected) card.remove();
+      answer = renderChatAnswer(finalText);
+    }
+    // 표·차트는 여기서 다시 그리지 않는다(별도 렌더러, board-33 캡션) — 캔버스
+    // 카드 종류가 있었으면 정직하게 고지만 한다.
+    const canvasTypes = (result && result.canvasTypes) || [];
+    if (canvasTypes.length) {
+      const note = document.createElement('div');
+      note.className = 'orb-turn-fold-note';
+      note.textContent = '전체는 대화창에서 이어집니다';
+      answer.line.appendChild(note);
+    }
+    if (result && result.ok) triggerDoneFace();
+    scrollChatToBottom();
+    requestPanelHeight();
+    if (!$chatInput.disabled) $chatInput.focus();
+  }
+
+  function setChatDot(mode) {
+    $chatDot.classList.remove('judging', 'calling');
+    if (mode) $chatDot.classList.add(mode);
+  }
+
+  function abortChat() {
+    if (!chatBusy) return;
+    window.athena.send('athena:abort-live-query');
+  }
+
+  // 컨트롤 스트립 — 셸의 CLI 필·루틴 칩과 같은 어휘를 읽기 전용으로 보여준다
+  // (오브에는 팝오버·전환 UI가 없다 — 진입로는 "대화창으로 가기" 하나).
+  async function refreshChatControlStrip() {
+    try {
+      const st = await window.athena.invoke('athena:model-get');
+      const c = (st && st.claude) || {};
+      $chatCli.textContent = c.model ? c.model.toUpperCase() : 'CLAUDE';
+    } catch { /* 표시만 못한다 — 대화 기능에는 영향 없다 */ }
+    try {
+      const res = await window.athena.invoke('athena:routines-list');
+      const routines = res && res.ok && res.data && Array.isArray(res.data.routines) ? res.data.routines : [];
+      const active = routines.filter((r) => r.status === 'active').length;
+      $chatRoutine.hidden = active === 0;
+      $chatRoutine.textContent = `감시 ${active}`;
+    } catch {
+      $chatRoutine.hidden = true;
+    }
+  }
+
+  $chatInput.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter' || chatBusy) return;
+    e.preventDefault();
+    submitChatQuery($chatInput.value);
+  });
+  $chatInput.addEventListener('focus', () => {
+    listening = true;
+    touchActivity();
+    resolveAmbientFace();
+  });
+  $chatInput.addEventListener('blur', () => {
+    listening = false;
+    resolveAmbientFace();
+  });
+  $esc.addEventListener('click', () => abortChat());
+  // 대화 이어짐(board-34 A→B) — 셸을 앞으로 가져온다, 새 방을 열지 않는다.
+  $chatGo.addEventListener('click', () => {
+    window.athena.send('athena:orb-open-shell', {});
+  });
+
+  // Esc: 답변을 기다리는 중이면 중단, 아니면 접는다(오브에는 닫을 모드가
+  // 이 둘뿐이다). "ESC 중단"이 board-33이 요구하는 잠금 해제 경로다.
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape' || !expanded) return;
+    e.preventDefault();
+    if (chatModeActive && chatBusy) { abortChat(); return; }
+    setExpanded(false);
   });
 
   renderPresence();

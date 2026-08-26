@@ -501,6 +501,264 @@ html, body {
 .orb-root[data-anchor="top-right"]    .orb-panel { left: 0; right: 0; top: 76px; bottom: 0; }
 .orb-root[data-anchor="top-left"]     .orb-panel { left: 0; right: 0; top: 76px; bottom: 0; }
 
+/* 알림 전용 표면 강제 숨김(대화 모드 진입 시) — orb.js applyMode()가 토글한다.
+ * 개별 요소의 콘텐츠 기반 hidden(renderPanel)과 겹쳐도 되게 !important로 눌러
+ * 두 로직이 서로 밟지 않게 한다. */
+.orb-mode-hidden { display: none !important; }
+
+/* ---------- 대화 모드(2026-08-26 board-33/34) ----------
+ * 상태 A(셸 숨김)에서만 보인다 — orb.js applyMode()가 athena:shell-visibility로
+ * 이 블록과 알림 전용 블록(orb-body/orb-card/orb-foot 등)을 교대로 hidden 처리한다.
+ * 색·유리·모서리 문법은 위 알림 패널과 같은 값을 그대로 물려 쓴다(다른 창처럼
+ * 안 읽히면 안 된다) — 새 토큰을 만들지 않는다. */
+.orb-header-title {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.orb-chat-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-app-region: no-drag;
+}
+.orb-chat-body::-webkit-scrollbar { width: 6px; }
+.orb-chat-body::-webkit-scrollbar-track { background: transparent; }
+.orb-chat-body::-webkit-scrollbar-thumb { background: rgb(16 19 26 / 18%); border-radius: 999px; }
+
+.orb-chat-empty {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--color-k-faint);
+}
+.orb-chat-empty p { margin: 0 0 4px; }
+.orb-chat-empty p:last-child { margin-bottom: 0; }
+
+.orb-chat-turns {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.orb-turn { display: flex; flex-direction: column; gap: 4px; }
+
+.orb-turn-q {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  user-select: text;
+}
+
+.orb-turn-a {
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  user-select: text;
+  white-space: pre-wrap;
+}
+
+/* 긴 표·차트의 축약 고지 — 실제 폴딩 렌더러가 아니라 안내 한 줄이다. 캔버스
+ * 카드 12종을 여기서 복제하지 않는다(board-33 캡션 "별도 렌더러다"의 반대쪽
+ * 절반 — 지금은 폴딩까지는 만들지 않고 고지만 정직하게 낸다). */
+.orb-turn-fold-note {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-xs);
+  color: var(--color-k-faint);
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: rgb(16 19 26 / 5%);
+}
+
+.orb-turn-meta {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.orb-turn-chip {
+  font-size: var(--text-xs);
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgb(16 19 26 / 7%);
+  color: var(--color-k-faint);
+}
+
+/* 진행 카드 — "판단 중" + 툴 단계. 스피너는 없다(오브 시선이 대신한다) —
+ * 이 카드는 텍스트·아이콘·소요시간만 그린다. */
+.orb-progress-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, var(--glass-canvas));
+  border: 1px solid rgb(16 19 26 / 6%);
+}
+
+.orb-progress-judging {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-sm);
+  color: var(--color-k-faint);
+}
+.orb-progress-judging::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-k-faint);
+}
+
+.orb-tool-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.orb-tool-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--text-xs);
+}
+
+.orb-tool-step-icon {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  border-radius: 3px;
+  border: 1.5px solid rgb(16 19 26 / 30%);
+  box-sizing: border-box;
+}
+.orb-tool-step.done .orb-tool-step-icon {
+  border-color: transparent;
+  background: var(--color-k-text);
+}
+
+.orb-tool-step-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-k-faint);
+}
+.orb-tool-step.done .orb-tool-step-label { color: var(--color-k-text); }
+
+.orb-tool-step-time {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-k-faint);
+  min-width: 32px;
+  text-align: right;
+}
+
+/* ---------- 오브의 새 부품 — 입력줄 · 잠금 힌트 · 컨트롤 스트립 ---------- */
+.orb-input-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex-shrink: 0;
+  -webkit-app-region: no-drag;
+}
+
+.orb-input-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.orb-input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid rgb(16 19 26 / 12%);
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.55);
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+}
+.orb-input::placeholder { color: var(--color-k-faint); }
+.orb-input:focus-visible { outline: 2px solid var(--color-k-text); outline-offset: 1px; }
+.orb-input:disabled { opacity: 0.55; }
+
+/* 잠금 힌트 — 입력줄 위에 겹쳐서 "지금은 답만 기다리면 된다"를 말한다. 입력
+ * 요소 자체는 disabled로 남긴다(포커스를 잃지 않는다, 셸의 setLocked와 같은 문법). */
+.orb-lock-hint {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.72);
+  font-size: var(--text-sm);
+  color: var(--color-k-faint);
+  pointer-events: none;
+}
+
+.orb-esc {
+  pointer-events: auto;
+  appearance: none;
+  border: 1px solid rgb(16 19 26 / 14%);
+  border-radius: 999px;
+  padding: 3px 10px;
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--color-k-text);
+  font-size: var(--text-xs);
+  cursor: pointer;
+}
+.orb-esc:hover { background: rgba(255, 255, 255, 0.92); }
+
+.orb-control-strip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.orb-chat-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgb(16 19 26 / 20%);
+  flex-shrink: 0;
+}
+.orb-chat-dot.judging { background: #ee8a13; }
+.orb-chat-dot.calling { background: #13a34a; }
+
+.orb-chat-cli-pill,
+.orb-chat-routine-chip {
+  font-size: var(--text-xs);
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgb(16 19 26 / 7%);
+  color: var(--color-k-faint);
+  white-space: nowrap;
+}
+
+.orb-chat-go {
+  margin-left: auto;
+  appearance: none;
+  cursor: pointer;
+  border: 1px solid rgb(16 19 26 / 12%);
+  border-radius: 999px;
+  padding: 5px 12px;
+  background: rgba(255, 255, 255, 0.55);
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+}
+.orb-chat-go:hover { background: rgba(255, 255, 255, 0.78); }
+.orb-chat-go:focus-visible { outline: 2px solid var(--color-k-text); outline-offset: 2px; }
+
 @media (prefers-reduced-transparency: reduce) {
   #orb, .orb-panel, .orb-card {
     background-color: rgb(255 255 255 / 98%);
