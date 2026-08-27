@@ -154,6 +154,33 @@ class RoutineScheduler:
             }
         )
 
+    def near_snapshot(self) -> list[dict[str, Any]]:
+        """현재 near인 루틴들의 routine-near(active:true) 스냅샷(결함6).
+
+        재시작(restartAfterReset)이면 _near_active가 프로세스 로컬이라 소실돼
+        빈 목록이 나온다 — 앱은 이를 근거로 watching 리셋을 확정한다. 순단이면
+        _near_active가 살아 있어 그대로 재발신되고, 앱은 이를 복원으로 삼는다.
+        WS 연결 시(routines_ws.py) 큐 펌프 전에 호출한다.
+        """
+        events: list[dict[str, Any]] = []
+        for routine_id, active in self._near_active.items():
+            if not active:
+                continue
+            spec = self.store.get(routine_id)
+            if spec is None:
+                continue
+            events.append(
+                {
+                    "type": "routine-near",
+                    "routine_id": spec.id,
+                    "symbol": spec.symbol,
+                    "active": True,
+                    "observed": None,
+                    "threshold": spec.condition.value,
+                }
+            )
+        return events
+
     async def clear_near(self, spec: RoutineSpec) -> None:
         """만료·취소 등 평가 루프 밖에서 루틴이 종결될 때 근접 상태를 정리한다.
 

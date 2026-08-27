@@ -54,6 +54,29 @@ def test_fired_near_and_quiet(tmp_path):
     assert verdicts == ["near", "fired"]
 
 
+def test_near_hysteresis_holds_through_boundary_oscillation(tmp_path):
+    """결함7 반증 재현 — 진입/이탈 경계가 같으면 경계 부근 교대 입력마다
+    근접/조용이 반복된다. 이탈 경계(0.85)를 진입 경계(0.9)보다 낮춰 한 번
+    진입하면 더 멀어져야 이탈하도록 만든 데드밴드를 고정한다."""
+    eng = _engine(tmp_path)
+    spec = _surge_spec()  # threshold=5.0, op>=
+
+    assert eng.evaluate(spec, 4.6) == "near"  # 거리 0.08 — 진입경계(0.10) 안 — 진입
+    # 거리 0.13 — 구 단일경계(0.10)라면 여기서 이탈했을 값이지만, 이미 근접
+    # 중이라 이탈경계(0.15) 안 — 근접 유지
+    assert eng.evaluate(spec, 4.35) == "near"
+    assert eng.evaluate(spec, 4.6) == "near"  # 다시 붙음 — 근접 유지
+    assert eng.evaluate(spec, 4.1) is None  # 거리 0.18 — 이탈경계(0.15) 밖 — 진짜 이탈
+
+
+def test_near_entry_threshold_unaffected_by_exit_ratio(tmp_path):
+    """진입 경계는 이탈 경계 도입과 무관하게 기존 0.9(거리 0.10)를 유지한다."""
+    eng = _engine(tmp_path)
+    spec = _surge_spec()
+    assert eng.evaluate(spec, 4.35) is None  # 거리 0.13 — 아직 근접 진입 전, 진입경계 밖
+    assert eng.evaluate(spec, 4.55) == "near"  # 거리 0.09 — 진입경계 안 — 진입
+
+
 def test_consecutive_ticks_suppress_until_met(tmp_path):
     eng = _engine(tmp_path)
     spec = _surge_spec(ticks=3)
