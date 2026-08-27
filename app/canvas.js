@@ -1449,6 +1449,12 @@ const agentCanvas = window.AthenaLib.AgentCanvas.createAgentCanvas({
     const res = await window.athena.invoke('athena:routine-runs', { id });
     return (res && res.ok && res.data && typeof res.data.avg_duration_ms === 'number') ? res.data.avg_duration_ms : null;
   },
+  // F-stage9 — 말걸기 가드 패널. 저장(POST)은 이 패널이 아니라 채팅 확인
+  // 카드가 부른다(chat.js, 43 원칙 — 편집은 채팅 경로로만).
+  fetchNudgeGuard: async () => {
+    const res = await window.athena.invoke('athena:nudge-guard-get');
+    return (res && res.ok && res.data) ? res.data : null;
+  },
   // 11단계 — "그래프 모드에서 근거 보기 →". 사이드바 모드 네비와 같은 두 걸음
   // (캔버스 전환 + 네비 활성 표시)을 그대로 재현한다(sidebar.js 참고).
   onOpenGraph: () => {

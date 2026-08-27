@@ -512,6 +512,16 @@ async function runQueryLive(text) {
   };
   const unsubscribeLiveToolStep = window.athena.on('athena:live-tool-step', onLiveToolStep);
 
+  // 말걸기 가드 확인 카드(F-stage9) — 이 턴이 athena_nudge_guard를
+  // propose로 불렀다면 main.js가 tool_result에서 뽑아 보낸다(아래
+  // renderGuardConfirmCard 참고, 폴링으로는 발견 불가능한 비영속 데이터라
+  // 이 턴 전용 구독이 유일한 신호다).
+  const onNudgeGuardProposed = (payload) => {
+    if (myToken !== abortToken) return;
+    renderGuardConfirmCard(payload, text);
+  };
+  const unsubscribeNudgeGuardProposed = window.athena.on('athena:nudge-guard-proposed', onNudgeGuardProposed);
+
   // 추론 미리보기(2026-08-26) — 답변 텍스트가 나오기 전 긴 침묵 구간을 채운다.
   // 미리보기 전용이다: 옅은 색·작은 글씨로 뚜렷이 구분하고, 답변 첫 조각이
   // 오거나 턴이 끝나면 즉시 지운다 — 턴 기록에는 절대 안 남는다.
@@ -588,6 +598,7 @@ async function runQueryLive(text) {
     clearInterval(tick);
     unsubscribeLiveCanvasAdded();
     unsubscribeLiveToolStep();
+    unsubscribeNudgeGuardProposed();
     unsubscribeLiveThinkingDelta();
     unsubscribeLiveTextDelta();
     releaseLadder.dispose(); // 유예 타이머 누수 방지 — 방출 자체는 아래 authoritative overwrite의 몫.
@@ -1359,6 +1370,93 @@ function renderApprovalCard(r) {
 }
 
 refreshRoutineDrafts();
+
+// ---------- 말걸기 가드 확인 카드 (F-stage9, Paper 보드 42/BIM-0) ----------
+// athena_nudge_guard의 propose 결과는 라우틴 draft와 달리 아무것도 디스크에
+// 안 남는다(8단계, 비영속 게이트) — refreshRoutineDrafts()류 폴링으로는 발견
+// 못 하고, main.js가 이 턴의 tool_result에서 직접 뽑아 보내는
+// athena:nudge-guard-proposed 하나가 유일한 신호다(runQueryLive의 턴 전용
+// 구독, 아래). [확인] 클릭은 LLM 재스폰 없이 렌더러가 직접
+// POST /api/v1/nudge-guard를 부른다(기존 confirm 패턴과 동일, C1 결정).
+// 순수 계산(diff·병합·문구 조합)은 lib/guard-confirm.js에 있다(routine-turn.js와
+// 같은 자리 — DOM 없는 로직만 단위 테스트가 있는 lib으로 뗀다).
+const guardConfirmLib = window.AthenaLib.GuardConfirm;
+
+function renderGuardConfirmCard({ current, proposed } = {}, triggerText) {
+  if (!current || !proposed || typeof proposed !== 'object') return;
+
+  const line = document.createElement('div');
+  line.className = 'turn';
+  const card = document.createElement('div');
+  card.className = 'turn-agent guard-confirm';
+
+  // 태그 2종(Paper 실측): "가드 조정"(채움) · "제안"(외곽선).
+  const head = document.createElement('div');
+  head.className = 'agent-head';
+  const adjustPill = document.createElement('span');
+  adjustPill.className = 'routine-draft-pill is-filled';
+  adjustPill.textContent = '가드 조정';
+  head.appendChild(adjustPill);
+  const proposePill = document.createElement('span');
+  proposePill.className = 'routine-draft-pill';
+  proposePill.textContent = '제안';
+  head.appendChild(proposePill);
+  card.appendChild(head);
+
+  const body = document.createElement('div');
+  body.className = 'agent-body guard-confirm-body';
+  body.textContent = guardConfirmLib.guardConfirmBodyText(current, proposed);
+  card.appendChild(body);
+
+  const rationale = document.createElement('div');
+  rationale.className = 'agent-source';
+  rationale.textContent = guardConfirmLib.guardConfirmRationale(triggerText);
+  card.appendChild(rationale);
+
+  // 칩 2종(Paper 실측): "이렇게 바꿔줘"(핑크 필) · "그대로 둘게"(아웃라인).
+  // 42번 프로액티브 카드의 "루틴으로"/"보류"와 같은 시각 언어를 재사용한다
+  // (agent-proactive-chip, agent-canvas.js와 이 문서가 같은 shell.html에
+  // 로드돼 클래스 공유가 가능하다).
+  const row = document.createElement('div');
+  row.className = 'routine-approval-actions';
+  const status = document.createElement('span');
+  status.className = 'agent-mode';
+
+  const confirmBtn = _btn('이렇게 바꿔줘', 'agent-proactive-chip is-primary');
+  const dismissBtn = _btn('그대로 둘게', 'agent-proactive-chip');
+
+  confirmBtn.addEventListener('click', async () => {
+    confirmBtn.disabled = true;
+    dismissBtn.disabled = true;
+    const merged = guardConfirmLib.mergeGuardSettings(current, proposed);
+    const res = await window.athena.invoke('athena:nudge-guard-set', merged);
+    if (res && res.ok) {
+      status.textContent = '반영됐습니다';
+      // 캔버스 가드 패널도 같은 값을 보고 있다 — 다음 진입까지 기다리지 않고
+      // 바로 다시 그리게 한다(단일 소유자는 여전히 백엔드, 여긴 재조회만).
+      if (window.AthenaAgentCanvas && typeof window.AthenaAgentCanvas.refresh === 'function') {
+        window.AthenaAgentCanvas.refresh();
+      }
+    } else {
+      status.textContent = `저장 실패: ${(res && res.error) || '알 수 없는 오류'}`;
+      confirmBtn.disabled = false;
+      dismissBtn.disabled = false;
+    }
+  });
+  dismissBtn.addEventListener('click', () => {
+    // 8단계 비영속 설계대로 — 확인하지 않으면 제안은 그냥 사라진다(재확인 UI 없음).
+    confirmBtn.disabled = true;
+    dismissBtn.disabled = true;
+    status.textContent = '그대로 뒀습니다';
+  });
+
+  row.appendChild(confirmBtn);
+  row.appendChild(dismissBtn);
+  row.appendChild(status);
+  card.appendChild(row);
+
+  _mountTurn(line, card);
+}
 
 // ---------- 주문 확인 모드 — #order (P4, 2026-08-19) ----------
 // 유일하게 미착수였던 모드의 실체(GLOSSARY §1). 온보딩·설정과 같은 형제 패널

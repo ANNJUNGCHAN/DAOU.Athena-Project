@@ -560,6 +560,36 @@ ipcMain.handle('athena:routine-ack', async (_e, { id }) => {
   catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
 });
 
+// 말걸기 가드 설정 REST 프록시(F-stage9) — routineHttp와 별개다. 라우틴별
+// 목록이 아니라 전역 설정 한 벌이고(8단계 nudge_guard.py), set은 body가
+// 필요해 routineHttp(body 없음 전제)를 재사용하지 않는다.
+ipcMain.handle('athena:nudge-guard-get', async () => {
+  try {
+    const res = await fetch(`${BACKEND_HTTP_BASE}/api/v1/nudge-guard`);
+    const data = await res.json().catch(() => ({}));
+    return res.ok
+      ? { ok: true, data }
+      : { ok: false, status: res.status, error: data.detail || `HTTP ${res.status}` };
+  } catch (e) {
+    return { ok: false, error: String((e && e.message) || e) };
+  }
+});
+ipcMain.handle('athena:nudge-guard-set', async (_e, body) => {
+  try {
+    const res = await fetch(`${BACKEND_HTTP_BASE}/api/v1/nudge-guard`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body || {}),
+    });
+    const data = await res.json().catch(() => ({}));
+    return res.ok
+      ? { ok: true, data }
+      : { ok: false, status: res.status, error: data.detail || `HTTP ${res.status}` };
+  } catch (e) {
+    return { ok: false, error: String((e && e.message) || e) };
+  }
+});
+
 // ---------- OS 스냅 이벤트 정착 (2026-08-18 승급 — qa-win-arrow.json 실측 근거) ----------
 // resizable:true 승급으로 Windows가 Win+←/→(스냅)·Win+↑(최대화)·Win+↓(최소화)를
 // 직접 실행하게 됐다. 그 결과 이벤트를 받아 앱이 의미론을 정착시킨다:
@@ -1121,10 +1151,48 @@ function toolStepLabel(name) {
   return TOOL_STEP_LABELS[base] || '처리 중';
 }
 
+const NUDGE_GUARD_TOOL_NAME = 'athena_nudge_guard';
+
+// 말걸기 가드 확인 카드(F-stage9, Paper 보드 42/BIM-0) — athena_nudge_guard의
+// propose 호출 결과(비영속, guard_settings.py 참고)를 채팅 렌더러로 흘려보낸다.
+// 라우틴 승인 카드(athena_routine의 draft)와 달리 이건 아무것도 디스크에 안
+// 남는다 — refreshRoutineDrafts()류 폴링으로는 발견할 수 없고, 이 tool_result
+// 스트림이 유일한 신호다. orbWin에는 안 보낸다 — 가드 확정도 routine-confirm과
+// 같은 원칙으로 채팅 전용 사람 액션이다(오브는 주문 집행·감시 승인을 못 부르는
+// 것과 같은 이유).
+function maybeForwardNudgeGuardProposal(step, resultBlock) {
+  if (resultBlock.is_error === true) return;
+  const base = String(step.name || '').split('__').pop();
+  if (base !== NUDGE_GUARD_TOOL_NAME) return;
+  if (!step.input || step.input.action !== 'propose') return;
+  const text = extractToolResultText(resultBlock.content);
+  if (!text) return;
+  let payload;
+  try { payload = JSON.parse(text); } catch { return; }
+  if (!payload || typeof payload !== 'object' || !payload.current || !payload.proposed) return;
+  if (shellWin && !shellWin.isDestroyed()) {
+    shellWin.webContents.send('athena:nudge-guard-proposed', {
+      current: payload.current, proposed: payload.proposed, notice: payload.notice || null,
+    });
+  }
+}
+
+// tool_result.content는 문자열 또는 블록 배열로 온다 — athena_mcp/result.py의
+// success()는 항상 [{type:'text', text: JSON 문자열}] 블록 배열을 준다(문자열
+// 케이스는 방어용, stream-json-parser.js의 normalizeToolResultContent와 같은 이유).
+function extractToolResultText(content) {
+  if (typeof content === 'string') return content;
+  if (Array.isArray(content)) {
+    const block = content.find((b) => b && b.type === 'text' && typeof b.text === 'string');
+    return block ? block.text : null;
+  }
+  return null;
+}
+
 // tool_use_id별 시작 시각을 들고 있다가 매칭되는 tool_result가 오면 소요시간과
 // 함께 완료를 알린다. runLiveQuery 호출마다 새로 만든다(왕복 하나의 수명).
 function createToolStepTracker() {
-  const steps = new Map(); // tool_use_id -> { label, startedAt }
+  const steps = new Map(); // tool_use_id -> { label, startedAt, name, input, elapsedMs? }
   return function trackToolStep(event) {
     if (!event || typeof event !== 'object') return;
     if (event.type === 'assistant') {
@@ -1133,7 +1201,9 @@ function createToolStepTracker() {
       for (const block of content) {
         if (block && block.type === 'tool_use' && block.id && !steps.has(block.id)) {
           const label = toolStepLabel(block.name);
-          steps.set(block.id, { label, startedAt: Date.now() });
+          // name·input도 함께 들고 있는다 — F-stage9가 athena_nudge_guard의
+          // propose 호출을 가려내는 데 쓴다(위 maybeForwardNudgeGuardProposal).
+          steps.set(block.id, { label, startedAt: Date.now(), name: block.name, input: block.input });
           sendLiveToolStep({ id: block.id, label, done: false, elapsedMs: null });
         }
       }
@@ -1143,11 +1213,17 @@ function createToolStepTracker() {
       for (const block of content) {
         if (block && block.type === 'tool_result' && block.tool_use_id) {
           const step = steps.get(block.tool_use_id);
-          if (step && step.elapsedMs === undefined) continue; // 이미 완료 처리됨
+          // 중복 tool_result 방어 — elapsedMs가 이미 있으면(=이미 done 처리)
+          // 다시 안 보낸다. [F-stage9 정정] 이 조건이 뒤집혀 있어(=== undefined)
+          // 사실상 모든 tool_result의 done 이벤트가 나간 적이 없었다 — 주석
+          // "이미 완료 처리됨"이 원래 의도였고 조건식만 틀렸다. 나머지 로직은
+          // 무수정.
+          if (step && step.elapsedMs !== undefined) continue;
           if (step) {
             const elapsedMs = Date.now() - step.startedAt;
-            step.elapsedMs = elapsedMs; // 재-tool_result(있을 리 없지만) 방어
+            step.elapsedMs = elapsedMs;
             sendLiveToolStep({ id: block.tool_use_id, label: step.label, done: true, elapsedMs });
+            maybeForwardNudgeGuardProposal(step, block);
           }
         }
       }

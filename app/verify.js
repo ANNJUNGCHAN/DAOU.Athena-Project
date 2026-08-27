@@ -3276,6 +3276,15 @@ app.whenReady().then(async () => {
         },
       ],
     }));
+    // F-stage9 — 8단계 백엔드 GET /api/v1/nudge-guard와 같은 응답 계약.
+    ipcMain.removeHandler('athena:nudge-guard-get');
+    ipcMain.handle('athena:nudge-guard-get', async () => ({
+      ok: true,
+      data: {
+        max_daily_nudges: 2, quiet_hours: { start: '22:00', end: '07:00' },
+        show_rationale: true, learn_from_dismissals: true,
+      },
+    }));
 
     const proactiveProbe = await shellWin.webContents.executeJavaScript(`(async () => {
       const nav = document.getElementById('modeNavAgent');
@@ -3296,6 +3305,7 @@ app.whenReady().then(async () => {
       const chipLabels = Array.from(canvas.querySelectorAll('.agent-proactive-chip')).slice(0, 2).map((n) => n.textContent);
       const guardTagCount = canvas.querySelectorAll('.agent-nudge-guard-tag').length;
       const guardSource = (canvas.querySelector('.agent-nudge-guard') || {}).getAttribute('data-source');
+      const guardTagLabels = Array.from(canvas.querySelectorAll('.agent-nudge-guard-tag')).map((n) => n.textContent);
 
       // "보류" — 두 번째 카드의 보류 칩(각 카드 칩 배열의 인덱스 1).
       const secondCardChips = canvas.querySelectorAll('.agent-proactive-card')[1].querySelectorAll('.agent-proactive-chip');
@@ -3315,7 +3325,7 @@ app.whenReady().then(async () => {
       await new Promise((r) => setTimeout(r, 100));
       return {
         wired: true, tabLabelBefore, stripValue, stripSub, cardCount, chipLabels,
-        guardTagCount, guardSource, cardCountAfterHold, tabLabelAfterHold,
+        guardTagCount, guardSource, guardTagLabels, cardCountAfterHold, tabLabelAfterHold,
         graphLinkHiddenBefore, graphCanvasVisible, graphNavActive,
       };
     })()`);
@@ -3333,7 +3343,12 @@ app.whenReady().then(async () => {
         'agent-canvas-11: 칩이 "루틴으로"·"보류"다',
         JSON.stringify(proactiveProbe.chipLabels) === JSON.stringify(['루틴으로', '보류']),
       );
-      assertOk('agent-canvas-11: 말걸기 가드 태그 4개(fixture, 정적 표시만)', proactiveProbe.guardTagCount === 4 && proactiveProbe.guardSource === 'fixture');
+      assertOk(
+        'agent-canvas-11: 말걸기 가드 태그 4개가 GET /api/v1/nudge-guard 라이브 값으로 뜬다(F-stage9)',
+        proactiveProbe.guardTagCount === 4 && proactiveProbe.guardSource === 'live'
+          && JSON.stringify(proactiveProbe.guardTagLabels)
+            === JSON.stringify(['하루 최대 2회', '조용 시간 22:00–07:00', '근거 표시 항상', '거절 반영 성향으로 학습']),
+      );
       assertOk('agent-canvas-11: "보류" 클릭 후 카드가 1장으로 준다(세션 한정)', proactiveProbe.cardCountAfterHold === 1);
       assertOk('agent-canvas-11: "보류" 후 탭 라벨도 "제안 1"로 준다', proactiveProbe.tabLabelAfterHold === '제안 1');
       assertOk('agent-canvas-11: "그래프 모드에서 근거 보기 →"가 "제안" 뷰에서만 보인다', proactiveProbe.graphLinkHiddenBefore === false);
@@ -3351,6 +3366,8 @@ app.whenReady().then(async () => {
     ipcMain.handle('athena:routines-list', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
     ipcMain.removeHandler('athena:brain-profile-summary');
     ipcMain.handle('athena:brain-profile-summary', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+    ipcMain.removeHandler('athena:nudge-guard-get');
+    ipcMain.handle('athena:nudge-guard-get', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
     // 그래프 모드로 남아 있으면 다음 실행(재실행 시)에 영향을 줄 수 있다 — 답변 모드로 되돌린다.
     await shellWin.webContents.executeJavaScript(`(() => {
       if (window.AthenaGraphMode && window.AthenaGraphMode.state && window.AthenaGraphMode.state.view !== 'summary') {

@@ -1196,6 +1196,19 @@ html, body { background: transparent; }
 .routine-draft-hint { margin-left: auto; font-size: var(--text-2xs, 11px); color: var(--color-k-faint, #6b7480); }
 .routine-draft-title { font-size: var(--text-md, 14px); color: var(--color-k-text, #e6e8ee); font-weight: 600; margin: 2px 0 4px; }
 
+/* 말걸기 가드 확인 카드(F-stage9, Paper 보드 42/BIM-0 실측) — "가드 조정" 태그만
+   채움(is-filled), 나머지는 기존 클래스 재사용(agent-body·agent-source·
+   routine-approval-actions·agent-proactive-chip — 이 파일과 shell.css가 같은
+   shell.html에 로드돼 클래스 공유가 가능하다). */
+.guard-confirm { border-left-color: rgba(230, 232, 238, 0.4); }
+.routine-draft-pill.is-filled {
+  background: var(--color-k-text, #10131a);
+  color: var(--color-k-panel, #fff);
+  border-color: transparent;
+  font-family: var(--font-mono);
+}
+.guard-confirm-body { font-family: var(--font-strong, inherit); }
+
 /* 주문 티켓 (P4) */
 .ticket-card { display: flex; flex-direction: column; gap: 10px; padding: 18px 20px; border-radius: 12px; background: rgba(255, 255, 255, 0.6); border: 1px solid rgba(230, 232, 238, 0.12); }
 .ticket-row { display: flex; align-items: center; gap: 12px; }

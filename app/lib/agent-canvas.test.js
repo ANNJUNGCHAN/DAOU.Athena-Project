@@ -1047,15 +1047,63 @@ test('모든 제안을 보류하면 "지금은 표시할 제안이 없습니다"
   assert.equal(empty[0].textContent, '지금은 표시할 제안이 없습니다');
 });
 
-test('말걸기 가드는 정적 표시만이다 — 태그 4개 + 안내 문구, data-source fixture(P3, 죽은 저장 버튼 없음)', () => {
+test('말걸기 가드: 라이브 데이터 도착 전엔 "불러오는 중"으로 정직하게 보인다(F-stage9, P3)', () => {
   const container = fakeNode('div');
   const canvas = createAgentCanvas({ container, fetchRoutines: async () => [] });
   canvas.mount();
   const guard = findByClass(container, 'agent-nudge-guard')[0];
-  assert.equal(guard.getAttribute('data-source'), 'fixture');
+  assert.equal(guard.getAttribute('data-source'), 'live');
+  assert.equal(findByClass(guard, 'agent-nudge-guard-tag').length, 0);
+  assert.equal(findByClass(guard, 'agent-list-empty')[0].textContent, '가드 설정을 불러오는 중입니다');
+});
+
+test('말걸기 가드: GET /api/v1/nudge-guard 라이브 값으로 태그 4개 + 안내 문구를 채운다(F-stage9, 8단계 백엔드 연결)', async () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => [],
+    fetchNudgeGuard: async () => ({
+      max_daily_nudges: 2, quiet_hours: { start: '22:00', end: '07:00' },
+      show_rationale: true, learn_from_dismissals: true,
+    }),
+  });
+  canvas.mount();
+  await canvas.refresh();
+  const guard = findByClass(container, 'agent-nudge-guard')[0];
+  assert.equal(guard.getAttribute('data-source'), 'live');
   assert.deepEqual(
     findByClass(guard, 'agent-nudge-guard-tag').map((n) => n.textContent),
     ['하루 최대 2회', '조용 시간 22:00–07:00', '근거 표시 항상', '거절 반영 성향으로 학습'],
   );
   assert.equal(findByClass(guard, 'agent-nudge-guard-note').length, 1);
+});
+
+test('말걸기 가드: 값이 꺼져 있으면 "끔" 문구로 정확히 반영한다(지어내지 않는다)', async () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => [],
+    fetchNudgeGuard: async () => ({
+      max_daily_nudges: 0, quiet_hours: { start: '00:00', end: '00:00' },
+      show_rationale: false, learn_from_dismissals: false,
+    }),
+  });
+  canvas.mount();
+  await canvas.refresh();
+  const guard = findByClass(container, 'agent-nudge-guard')[0];
+  assert.deepEqual(
+    findByClass(guard, 'agent-nudge-guard-tag').map((n) => n.textContent),
+    ['하루 최대 0회', '조용 시간 00:00–00:00', '근거 표시 끔', '거절 학습 끔'],
+  );
+});
+
+test('말걸기 가드: fetchNudgeGuard가 실패해도 지어낸 값으로 채우지 않는다(P3)', async () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => [],
+    fetchNudgeGuard: async () => { throw new Error('backend down'); },
+  });
+  canvas.mount();
+  await assert.doesNotReject(() => canvas.refresh());
+  const guard = findByClass(container, 'agent-nudge-guard')[0];
+  assert.equal(findByClass(guard, 'agent-nudge-guard-tag').length, 0);
+  assert.equal(findByClass(guard, 'agent-list-empty')[0].textContent, '가드 설정을 불러오는 중입니다');
 });
