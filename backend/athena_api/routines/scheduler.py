@@ -135,6 +135,7 @@ class RoutineScheduler:
                 "observed": observed,
                 "threshold": spec.condition.value,
                 "note": spec.note,
+                "goal": spec.goal,
                 "fired_at": datetime.now(UTC).isoformat(),
             }
         )
