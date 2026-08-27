@@ -27,6 +27,7 @@ def app_client(tmp_path):
         routines_store_path=tmp_path / "routines.json",
         routines_ledger_path=tmp_path / "ledger.jsonl",
         routines_read_marks_path=tmp_path / "read_marks.json",
+        routines_engagement_path=tmp_path / "engagement.jsonl",
     )
 
     loop = asyncio.new_event_loop()
@@ -321,6 +322,95 @@ def test_runs_avg_duration_ms_is_null_when_no_durations_recorded(app_client):
     )
     res = client.get(f"/api/v1/routines/{rid}/runs")
     assert res.json()["avg_duration_ms"] is None
+
+
+# ---------- 발화→열람·이어진 대화(F2-스트레치, engagement) ----------
+
+
+def test_engagement_records_opened_and_replied(app_client):
+    client, runtime = app_client
+    rid = client.post("/api/v1/routines/draft", json=DRAFT).json()["id"]
+
+    res = client.post(f"/api/v1/routines/{rid}/engagement", json={"event": "opened"})
+    assert res.status_code == 200
+    assert res.json()["event"] == "opened"
+    assert res.json()["routine_id"] == rid
+
+    res2 = client.post(f"/api/v1/routines/{rid}/engagement", json={"event": "replied"})
+    assert res2.status_code == 200
+
+    rows = runtime.engagement.read_all()
+    assert [r["event"] for r in rows] == ["opened", "replied"]
+
+
+def test_engagement_rejects_unknown_event(app_client):
+    client, _ = app_client
+    rid = client.post("/api/v1/routines/draft", json=DRAFT).json()["id"]
+    res = client.post(f"/api/v1/routines/{rid}/engagement", json={"event": "clicked"})
+    assert res.status_code == 422
+
+
+def test_engagement_unknown_routine_is_404(app_client):
+    client, _ = app_client
+    res = client.post("/api/v1/routines/none/engagement", json={"event": "opened"})
+    assert res.status_code == 404
+
+
+def test_runs_reports_opened_rate_and_replied_count(app_client):
+    client, runtime = app_client
+    rid = client.post("/api/v1/routines/draft", json=DRAFT).json()["id"]
+
+    for _ in range(4):
+        runtime.ledger.record(
+            "fired",
+            routine_id=rid,
+            symbol="005930",
+            source="price.current",
+            observed=199000,
+            threshold=200000,
+            reason="조건 충족",
+        )
+    client.post(f"/api/v1/routines/{rid}/engagement", json={"event": "opened"})
+    client.post(f"/api/v1/routines/{rid}/engagement", json={"event": "opened"})
+    client.post(f"/api/v1/routines/{rid}/engagement", json={"event": "replied"})
+
+    res = client.get(f"/api/v1/routines/{rid}/runs")
+    body = res.json()
+    assert body["opened_rate"] == 0.5  # opened 2건 / fired 4건
+    assert body["replied_count"] == 1
+
+
+def test_runs_opened_rate_is_null_without_fired_rows(app_client):
+    """fired 행이 없으면 분모가 0이라 비율을 계산하지 않는다(None, 0.0 아님)."""
+    client, runtime = app_client
+    rid = client.post("/api/v1/routines/draft", json=DRAFT).json()["id"]
+    client.post(f"/api/v1/routines/{rid}/engagement", json={"event": "opened"})
+    res = client.get(f"/api/v1/routines/{rid}/runs")
+    body = res.json()
+    assert body["opened_rate"] is None
+    assert body["replied_count"] == 0
+
+
+def test_runs_engagement_aggregation_tolerates_corrupt_engagement_file(app_client):
+    """engagement.jsonl에 손상 라인이 섞여도 /runs가 죽지 않는다(하위호환)."""
+    client, runtime = app_client
+    rid = client.post("/api/v1/routines/draft", json=DRAFT).json()["id"]
+    runtime.ledger.record(
+        "fired",
+        routine_id=rid,
+        symbol="005930",
+        source="price.current",
+        observed=199000,
+        threshold=200000,
+        reason="조건 충족",
+    )
+    runtime.engagement.record("opened", routine_id=rid)
+    with runtime.engagement._path.open("a", encoding="utf-8") as fh:
+        fh.write("{이건 깨진 json\n")
+
+    res = client.get(f"/api/v1/routines/{rid}/runs")
+    assert res.status_code == 200
+    assert res.json()["opened_rate"] == 1.0  # 손상 라인은 무시하고 나머지만 집계
 
 
 # ---------- 읽음 상태·최근 발화(F3, read-marks) ----------

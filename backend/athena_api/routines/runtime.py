@@ -17,6 +17,7 @@ import httpx
 from athena_api.config import Settings
 from athena_api.routines.corp_catalog import CorpCatalog
 from athena_api.routines.disclosure_source import DartDisclosureSource
+from athena_api.routines.engagement import EngagementStore
 from athena_api.routines.ledger import RoutineLedger
 from athena_api.routines.models import RoutineSpec
 from athena_api.routines.read_marks import ReadMarksStore
@@ -39,6 +40,7 @@ class RoutinesRuntime:
     scheduler: RoutineScheduler
     events: asyncio.Queue[dict[str, Any]]
     read_marks: ReadMarksStore
+    engagement: EngagementStore
     http_client: httpx.AsyncClient | None = None
     ws_client: KiwoomWsClient | None = None
     ready: bool = False
@@ -111,6 +113,7 @@ async def open_routines(
     ledger = RoutineLedger(settings.routines_ledger_path)
     read_marks = ReadMarksStore(settings.routines_read_marks_path)
     read_marks.load()
+    engagement = EngagementStore(settings.routines_engagement_path)
     engine = TriggerEngine(ledger=ledger)
     notify = _notify_factory(events)
 
@@ -176,6 +179,7 @@ async def open_routines(
         scheduler=scheduler,
         events=events,
         read_marks=read_marks,
+        engagement=engagement,
         http_client=http_client,
         ws_client=ws_client,
         disclosure_ready=disclosure_ready,
