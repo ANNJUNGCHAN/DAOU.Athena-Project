@@ -894,7 +894,8 @@ function dispatchUserQuery(text) {
 
 $input.addEventListener('keydown', (e) => {
   if (e.key !== 'Enter' || state !== 'idle' || remoteQueryBusy) return;
-  const text = $input.value;
+  // 첨부 칩이 있으면 전송 직전에 경로를 동봉한다(코덱스 UI 이식, 2026-08-27).
+  const text = consumeAttachments($input.value);
   $input.value = '';
   dispatchUserQuery(text);
 });
@@ -1042,22 +1043,69 @@ function kiumiItem(label, onPick) {
   return b;
 }
 
-async function pickAndInsertPaths(directory) {
+// 첨부 칩(2026-08-27, 코덱스 UI 이식) — 경로는 입력줄이 아니라 칩으로 쌓이고,
+// 전송 시점에 프롬프트 뒤에 동봉된다. 눈에 보이는 질문은 깨끗하게 남는다.
+const $attachChips = document.getElementById('attachChips');
+let attachments = []; // { path, isDir }
+
+function renderAttachChips() {
+  $attachChips.textContent = '';
+  $attachChips.hidden = attachments.length === 0;
+  attachments.forEach((att, i) => {
+    const chip = document.createElement('span');
+    chip.className = 'attach-chip';
+    const ic = document.createElement('span');
+    ic.className = 'attach-chip-ic';
+    ic.textContent = att.isDir ? '📁' : '📄';
+    const name = document.createElement('span');
+    name.className = 'attach-chip-name';
+    name.textContent = att.path.split(/[\\/]/).pop() || att.path;
+    name.title = att.path;
+    const rm = document.createElement('button');
+    rm.type = 'button';
+    rm.className = 'attach-chip-rm';
+    rm.setAttribute('aria-label', '첨부 제거');
+    rm.textContent = '×';
+    rm.addEventListener('click', () => {
+      attachments.splice(i, 1);
+      renderAttachChips();
+    });
+    chip.appendChild(ic);
+    chip.appendChild(name);
+    chip.appendChild(rm);
+    $attachChips.appendChild(chip);
+  });
+}
+
+async function pickAttachments(directory) {
   closeKiumiMenu();
   try {
     const res = await window.athena.invoke('athena:pick-files', { directory });
-    if (res && res.ok && Array.isArray(res.paths) && res.paths.length) {
-      const joined = res.paths.join(' ');
-      $input.value = ($input.value ? $input.value.replace(/\s*$/, ' ') : '') + joined + ' ';
+    if (res && res.ok && Array.isArray(res.paths)) {
+      for (const p of res.paths) {
+        if (!attachments.some((a) => a.path === p)) attachments.push({ path: p, isDir: !!directory });
+      }
+      renderAttachChips();
     }
-  } catch { /* 취소·실패는 조용히 — 입력줄을 건드리지 않는다 */ }
+  } catch { /* 취소·실패는 조용히 — 칩을 건드리지 않는다 */ }
   $input.focus();
+}
+
+// 전송 직전 병합 — 프롬프트 뒤에 경로를 동봉하고 칩을 비운다. 입력이 비었으면
+// 기본 질의 대신 첨부를 읽으라는 요청으로 채운다(없는 질문을 지어내지 않는다).
+function consumeAttachments(text) {
+  if (!attachments.length) return text;
+  const paths = attachments.map((a) => a.path);
+  attachments = [];
+  renderAttachChips();
+  const head = String(text || '').trim() || '첨부한 파일을 읽고 내용을 설명해줘';
+  return `${head}\n\n[첨부 — 아래 경로를 Read(파일)/Glob(폴더)으로 직접 읽어라]\n${paths.join('\n')}`;
 }
 
 function renderKiumiMenu() {
   $kiumiMenu.textContent = '';
-  $kiumiMenu.appendChild(kiumiItem('파일 첨부', () => pickAndInsertPaths(false)));
-  $kiumiMenu.appendChild(kiumiItem('폴더 첨부', () => pickAndInsertPaths(true)));
+  $kiumiMenu.appendChild(kiumiItem('파일 첨부', () => pickAttachments(false)));
+  $kiumiMenu.appendChild(kiumiItem('폴더 첨부', () => pickAttachments(true)));
   const sep = document.createElement('div');
   sep.className = 'mp-sep';
   $kiumiMenu.appendChild(sep);

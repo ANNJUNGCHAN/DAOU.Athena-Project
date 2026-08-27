@@ -611,6 +611,41 @@ html, body { background: transparent; }
   right: auto; left: 14px;
   min-width: 240px;
 }
+/* 첨부 칩(2026-08-27, 코덱스 UI 이식) — 입력줄 위에 파일/폴더가 칩으로 쌓인다. */
+.attach-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0 2px 4px;
+}
+.attach-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 260px;
+  padding: 4px 6px 4px 10px;
+  border-radius: 10px;
+  background: rgb(16 19 26 / 6%);
+  border: 1px solid rgb(16 19 26 / 10%);
+  font-size: 12px;
+}
+.attach-chip-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.attach-chip-rm {
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0 4px;
+  font-size: 13px;
+  line-height: 1;
+  color: rgb(16 19 26 / 55%);
+  appearance: none;
+}
+.attach-chip-rm:hover { color: #10131a; }
+
 /* 모드 필(셸 v2, 보드 38) — 지금 모드를 브랜드색으로 표시만 한다. 전환은
  * 사이드바 모드 네비의 몫이라 커서도 기본값으로 되돌린다. */
 .pill.pill-mode {
