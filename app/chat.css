@@ -1492,19 +1492,22 @@ html, body { background: transparent; }
 .routine-approval .agent-badge { color: var(--color-k-dim); border-color: var(--color-k-ghost); }
 .routine-mode-line { margin: 4px 0; }
 .routine-approval-actions { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
-/* 보드 09(1ZM-0): 승인=잉크 90% 채움+panel 텍스트, 거절=잉크 30% 외곽선.
- * 다크 시절 하드코딩(회백 채움·밝은 외곽선)이 라이트 전환에서 누락됐던 블록(B8 감사). */
+/* 채팅 카드 칩(보드 43 실측, 2026-08-28 SSOT 정합) — 풀 라운드 아웃라인 필
+ * (py-1 px-4 · 잉크 14% 외곽선 · text-xs DakiL leading-14 · k-dim), 프라이머리는
+ * 브랜드 채움. 옛 보드 09 스펙(반경 8·잉크 90% 채움·text-sm)은 초안 카드
+ * 재설계(보드 43)로 대체됐다 — 동선 규칙③ "확정은 채팅 카드의 칩"의 그 칩이다. */
 .routine-btn {
-  font-family: var(--font-kr, inherit);
-  font-size: var(--text-sm, 13px);
-  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  line-height: 14px;
+  color: var(--color-k-dim);
   background: transparent;
-  border: 1px solid rgb(16 19 26 / 30%);
-  border-radius: 8px;
-  padding: 6px 20px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 999px;
+  padding: 4px 12px;
   cursor: pointer;
 }
-.routine-btn-approve { background: rgb(16 19 26 / 90%); color: var(--color-k-panel); border-color: transparent; }
+.routine-btn-approve { background: var(--color-brand); color: var(--color-k-panel); border-color: transparent; }
 .routine-btn:disabled { opacity: 0.4; cursor: default; }
 
 /* 작업 요약 · 초안 카드 머리(8단계, Paper 보드 43 실측) */
