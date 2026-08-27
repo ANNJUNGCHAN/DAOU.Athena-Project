@@ -1368,6 +1368,12 @@ const graphMode = window.AthenaLib.GraphModeController.createGraphModeController
     return res;
   },
   onError: (err) => console.warn('[graph-mode] cluster-map 실패', err),
+  // 공통 패널 CTA "채팅에서 답하기"(보드 07 §10-5, 스텝8) — 06 확인 필요 배너의
+  // onConfirmCta와 같은 최소 구현(새 기능 발명 없음, 입력창 포커스만).
+  onPanelCta: () => {
+    const inputEl = document.getElementById('input');
+    if (inputEl) inputEl.focus();
+  },
 });
 window.AthenaGraphMode = graphMode;
 // 부팅을 순수 답변 모드로 고정한다(US-007) — 정적 HTML의 기본 hidden 속성이

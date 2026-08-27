@@ -374,6 +374,81 @@ html, body { background: transparent; }
   margin-top: 6px;
 }
 
+/* 공통 패널(보드 07 §10, 스텝8) — 표 영역 우측 320px 고정폭. #graphSummaryTableArea
+ * 의 영구 형제라 표 리로드가 안 건드린다(스텝0-2 소유권 계약). */
+.graph-panel {
+  width: 320px; flex-shrink: 0; display: flex; flex-direction: column;
+  background: var(--color-k-panel2); border-left: 1px solid var(--color-k-line);
+  overflow: auto;
+}
+.panel-tabs {
+  display: flex; align-items: center; gap: 4px; padding: 11px 14px; flex-shrink: 0;
+  border-bottom: 1px solid var(--color-k-line);
+}
+.panel-tab {
+  appearance: none; border: 1px solid transparent; background: none; cursor: pointer;
+  padding: 5px 12px; border-radius: 6px;
+  font-family: var(--font-body); font-size: var(--text-sm); color: var(--color-k-hint);
+}
+.panel-tab.is-active {
+  background: var(--color-k-panel); border-color: var(--color-k-line);
+  font-family: var(--font-strong); color: var(--color-k-bright);
+}
+.panel-tabs-spacer { flex: 1 1 auto; }
+.panel-deselect {
+  appearance: none; border: none; background: none; cursor: pointer;
+  font-family: var(--font-body); font-size: var(--text-xs); color: var(--color-k-ghost);
+}
+
+.panel-header { padding: 16px 16px 14px; border-bottom: 1px solid var(--color-k-line); flex-shrink: 0; }
+.panel-header-row1 { display: flex; align-items: center; gap: 8px; }
+.panel-name { font-family: var(--font-display); font-size: var(--text-xl); color: var(--color-k-text); }
+.panel-kind-badge {
+  background: var(--color-k-panel3); border-radius: 4px; padding: 2px 7px;
+  font-family: var(--font-body); font-size: var(--text-2xs); color: var(--color-k-hint);
+}
+.panel-header-row2 {
+  font-family: var(--font-body); font-size: var(--text-xs); line-height: 17px; color: var(--color-k-soft);
+  margin-top: 7px;
+}
+
+/* dot 인코딩 — 표(§7-1)와 같은 confidence/tier 규칙(panelDotClass()), 패널에서는
+ * 10×10로 더 크게(§10-2). */
+.panel-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.panel-dot-fact { background: var(--color-k-text); }
+.panel-dot-warn { background: var(--color-warn); }
+.panel-dot-soft { background: none; border: 1.5px solid var(--color-k-hint); }
+
+/* 티어 대조(§10-3) — 가용 필드가 rationale/confidence/tier뿐이라 단일 카드로
+ * 축소(§0 정책, controller.js renderPanelContent 참고). */
+.panel-tier-card {
+  margin: 14px 16px; padding: 11px 12px; flex-shrink: 0;
+  background: var(--color-k-panel); border: 1px solid var(--color-k-line); border-radius: 8px;
+  display: flex; flex-direction: column; gap: 5px;
+}
+.panel-tier-row { display: flex; align-items: center; gap: 8px; }
+.panel-tier-label {
+  flex: 1 1 auto;
+  font-family: var(--font-strong); font-size: var(--text-sm); color: var(--color-k-bright);
+}
+.panel-tier-confidence {
+  background: var(--color-k-panel3); border-radius: 4px; padding: 2px 7px;
+  font-family: var(--font-body); font-size: var(--text-2xs); color: var(--color-k-soft);
+}
+.panel-tier-body {
+  font-family: var(--font-body); font-size: var(--text-xs); line-height: 17px; color: var(--color-k-soft);
+}
+
+/* §10-4(최근 변화)는 데이터가 없어 렌더하지 않는다 — 그 자리를 CTA가 대신
+ * 채우도록 margin-top:auto로 패널 하단에 붙인다(Paper는 최근 변화 섹션의
+ * flexGrow:1로 CTA를 밀어내렸다, 여기선 그 섹션 자체가 없어 CTA가 직접 민다). */
+.panel-cta {
+  appearance: none; border: none; cursor: pointer; margin-top: auto; flex-shrink: 0;
+  background: var(--color-brand); border-top: 1px solid var(--color-k-line);
+  padding: 9px 14px; text-align: center;
+  font-family: var(--font-strong); font-size: var(--text-sm); color: #fff;
+}
+
 /* 카드도 유리다 — soul.md §7 "모든 표면이 유리다. 두 창도, 창 안의 카드도 전부."
  * 2026-08-17 디자인 리뷰 [HIGH]로 정정: 이전 판은 고정 rgba 채움 + backdrop-filter
  * 0건이라 §7이 금지한 "뒤에 굴절할 것 없는 반투명 회색 사각형"이었다. 이제 알파를

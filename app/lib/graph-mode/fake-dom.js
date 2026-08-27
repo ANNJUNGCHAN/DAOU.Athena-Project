@@ -14,13 +14,25 @@ function fakeNode(name) {
     nodeName: name,
     attrs: {},
     children: [],
-    textContent: '',
+    _text: '',
     hidden: false,
     clientWidth: 800,
     clientHeight: 600,
     _listeners: {},
     get firstChild() {
       return this.children[0] || null;
+    },
+    // 실제 DOM처럼 자식이 있으면 재귀로 이어붙인 문자열, 없으면 리프 텍스트를
+    // 낸다(controller.js가 스텝8에서 panel을 appendChild로 조립하기 시작하며
+    // 필요해졌다 — 예전엔 textContent를 직접 대입하는 리프 노드만 있었다).
+    // 대입은 실제 DOM과 같이 기존 자식을 전부 지운다.
+    get textContent() {
+      if (this.children.length === 0) return this._text;
+      return this.children.map((c) => c.textContent).join('');
+    },
+    set textContent(value) {
+      this._text = value;
+      this.children = [];
     },
     setAttribute(key, value) {
       this.attrs[key] = value;
@@ -30,12 +42,15 @@ function fakeNode(name) {
     },
     appendChild(child) {
       this.children.push(child);
+      child.parentNode = this;
       return child;
     },
     removeChild(child) {
       this.children = this.children.filter((c) => c !== child);
+      child.parentNode = null;
       return child;
     },
+    parentNode: null,
     // controller.test.js가 노드 클릭 배선을 검증하는 데만 쓴다 — 버블링은 없다,
     // 이 스텁이 흉내내는 건 이 리포가 실제로 붙이는 리스너 패턴(개별 바인딩)뿐이다.
     addEventListener(type, handler) {
