@@ -5,7 +5,7 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { mergeRollingRows, extractTickRows, formatTickPrice } = require('./card-kind-시세');
+const { mergeRollingRows, extractTickRows, formatTickPrice, bufferKeyFor } = require('./card-kind-시세');
 
 test('mergeRollingRows — 새 행을 앞쪽(최신행 우선)에 병합한다', () => {
   const existing = [{ cntr_tm: '093001', cntr_pric: '100' }];
@@ -80,4 +80,24 @@ test('formatTickPrice — 부호 없는 체결가는 그대로 콤마 포맷', (
 test('formatTickPrice — 값이 없으면 formatNumeric의 안전 폴백("—")', () => {
   assert.equal(formatTickPrice(null), '—');
   assert.equal(formatTickPrice(undefined), '—');
+});
+
+// 회귀 가드(2026-08-27, 6종목 동시 실시간 프로브에서 실측) — dataset_id만 쓰면 한
+// 데이터셋 배치 안의 서로 다른 카드(예: 시세 6종목 일괄 조회)가 링버퍼를 같이 써서
+// 행이 섞인다. item_id까지 넣어야 카드별로 격리된다.
+test('bufferKeyFor — 같은 dataset_id라도 item_id가 다르면 다른 키(6종목 동시 격리)', () => {
+  const a = bufferKeyFor({ correlation: { dataset_id: 'ds1', item_id: 'item-0', ordinal: 1 } });
+  const b = bufferKeyFor({ correlation: { dataset_id: 'ds1', item_id: 'item-1', ordinal: 2 } });
+  assert.notEqual(a, b);
+  assert.equal(a, 'ds:ds1:item-0');
+  assert.equal(b, 'ds:ds1:item-1');
+});
+
+test('bufferKeyFor — item_id 없는 옛 단일 항목 배치는 dataset_id만으로 키를 만든다', () => {
+  assert.equal(bufferKeyFor({ correlation: { dataset_id: 'ds1' } }), 'ds:ds1');
+});
+
+test('bufferKeyFor — correlation이 없으면 싱글턴 키(단발 라이브 조회)', () => {
+  assert.equal(bufferKeyFor({}), '__single__');
+  assert.equal(bufferKeyFor(null), '__single__');
 });
