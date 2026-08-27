@@ -15,6 +15,9 @@ const aitsChartPanels = createAitsChartPanelAdapter({ renderChart: createChartCa
 // (아래 athena:chart-ticks 구독 하나가 둘 다에게 보낸다). 채널을 새로 안 만든다.
 const { createQuoteRealtimePanelAdapter } = window.AthenaLib.QuoteRealtimePanel;
 const quoteRealtimePanels = createQuoteRealtimePanelAdapter();
+// 호가 카드 실시간 세션(task #25) — 같은 어댑터 팩토리를 새 인스턴스로 재사용한다
+// (0B 체결과 0D 호가잔량은 완전히 다른 피드라 패널을 나눈다).
+const orderbookRealtimePanels = createQuoteRealtimePanelAdapter();
 
 // snapshot().period는 AITS 표기(day/week/…)다. 과거 조회 IPC는 툴바와 같은
 // UI 주기 코드를 쓰므로 여기서 되돌린다.
@@ -32,6 +35,13 @@ if (window.athena && typeof window.athena.on === 'function') {
       aitsChartPanels.applyRealtimeTick(tick).catch(() => { /* 진행봉 실패는 차트를 죽이지 않는다 */ });
       quoteRealtimePanels.applyRealtimeTick(tick); // 종목 불일치·열린 카드 없음은 내부에서 조용히 버려진다
     }
+  });
+  // 호가잔량(0D, task #25) — main이 lib/main/orderbook-realtime.js로 파싱해
+  // 넘긴다. 열린 호가 카드가 없으면(wireOrderbookRealtime 미배선) 내부에서
+  // 조용히 버려진다.
+  window.athena.on('athena:orderbook-ticks', (ticks) => {
+    if (!Array.isArray(ticks)) return;
+    for (const tick of ticks) orderbookRealtimePanels.applyRealtimeTick(tick);
   });
 }
 
@@ -579,15 +589,21 @@ function cardTitleAndSubtitle(envelope, fallback) {
 // quotes)에 봉인돼 오므로 대부분의 호출에서 아래 후보 중 하나는 찾는다 — 계좌·
 // 주문류(그 게이트 밖)는 여전히 못 찾아 자연 배제된다(정보 정직성 — 모르는
 // 종목을 안다고 지어내지 않는다).
-function wireQuoteRealtime(card, wrap, envelope, applyTick) {
+// wireQuoteRealtime/wireOrderbookRealtime이 공유하는 종목코드 추출(2026-08-27,
+// task #25에서 두 번째 호출부가 생기며 뺐다 — 로직 자체는 그대로).
+function resolveEnvelopeSymbol(envelope) {
   const args = envelope.operation_args || envelope.operationArgs;
-  const symbol = String(
+  return String(
     (args && args.stk_cd)
     || envelope.stk_cd
     || (envelope.data && envelope.data.stk_cd)
     || (envelope.data && envelope.data.symbol)
     || '',
   ).trim();
+}
+
+function wireQuoteRealtime(card, wrap, envelope, applyTick) {
+  const symbol = resolveEnvelopeSymbol(envelope);
   if (!symbol || typeof applyTick !== 'function') return;
   quoteRealtimePanels.openPanel(card, symbol, (tick) => applyTick(wrap, envelope, tick));
   const priorDestroy = cardDestroyers.get(card);
@@ -597,6 +613,23 @@ function wireQuoteRealtime(card, wrap, envelope, applyTick) {
     // 카드가 위에서 연 세션과 같은 symbol로만 해제한다. main이 acquire 때 보는
     // 것과 같은 envelope 필드에서 뽑은 값이라 카운트가 서로 어긋나지 않는다.
     window.athena.send('athena:realtime-release', { symbol });
+    if (priorDestroy) priorDestroy();
+  });
+}
+
+// 호가 카드(0D 호가잔량) 전용 — wireQuoteRealtime(0B)과 달리 main이 봉투만
+// 보고 알아서 acquire하지 않는다(0B는 "시장 데이터 도메인이면 무조건 REG",
+// 호가는 카드가 실제로 열려 있을 때만 REG를 쓴다 — task #25, 리미터 절약).
+// 그래서 여기서 acquire를 명시적으로 보낸다 — release와 짝이 대칭이다.
+function wireOrderbookRealtime(card, wrap, envelope, applyTick) {
+  const symbol = resolveEnvelopeSymbol(envelope);
+  if (!symbol || typeof applyTick !== 'function') return;
+  orderbookRealtimePanels.openPanel(card, symbol, (tick) => applyTick(wrap, envelope, tick));
+  window.athena.send('athena:orderbook-realtime-acquire', { symbol });
+  const priorDestroy = cardDestroyers.get(card);
+  cardDestroyers.set(card, () => {
+    orderbookRealtimePanels.closePanel(card);
+    window.athena.send('athena:orderbook-realtime-release', { symbol });
     if (priorDestroy) priorDestroy();
   });
 }
@@ -737,6 +770,10 @@ function renderFactsCard(envelope) {
     // 경우에만 갱신 대상이 있다. daily-range/year-range 조각뿐인 응답은
     // applyLiveTick 내부에서 대상 엘리먼트가 없어 조용히 건너뛴다.
     if (title === '종목정보') wireQuoteRealtime(card, built, envelope, window.AthenaLib.CardKindStockInfo.applyLiveTick);
+    // '호가' 카드종 — 호가잔량(0D)으로 래더 행·비율바를 제자리 갱신한다(task #25).
+    // quote-emphasis(QuoteHeader) 조각은 0D에 대응 필드가 없어 갱신하지 않는다
+    // (card-kind-호가.js applyLiveTick 주석 참고 — 없는 값을 지어내지 않는다).
+    if (title === '호가') wireOrderbookRealtime(card, built, envelope, window.AthenaLib.CardKindHoga.applyLiveTick);
     return card;
   }
   const { card, body } = makeCard('facts', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope), envelope.screen_id);
