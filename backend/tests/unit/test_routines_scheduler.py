@@ -20,13 +20,14 @@ from athena_api.routines.store import RoutineStore, RoutineTransitionError
 from athena_api.routines.triggers import TriggerEngine
 
 
-def _spec(source="price.change_rate", op=">=", value=5.0, symbol="005930"):
+def _spec(source="price.change_rate", op=">=", value=5.0, symbol="005930", goal=False):
     return validate_draft(
         {
             "symbol": symbol,
             "condition": {"source": source, "op": op, "value": value},
             "cooldown_s": 60,
             "expires_days": 7,
+            "goal": goal,
         }
     )
 
@@ -136,6 +137,42 @@ async def test_realtime_loop_evaluates_and_notifies(tmp_path):
     assert fired[0]["type"] == "routine-fired"
     assert fired[0]["mode"] == "realtime-ws"
     assert fired[0]["routine_id"] == spec.id
+    assert fired[0]["goal"] is False  # 기본값 — goal 미지정 루틴
+
+
+@pytest.mark.asyncio
+async def test_fired_notify_carries_goal_flag(tmp_path):
+    """CP1a — goal=true 루틴이 발화하면 fired 페이로드에 goal이 실린다."""
+    store = RoutineStore(tmp_path / "r.json")
+    spec = _spec(goal=True)
+    store.upsert(spec)
+    store.transition(spec.id, "active")
+    engine = TriggerEngine(ledger=RoutineLedger(tmp_path / "l.jsonl"))
+    fired: list[dict] = []
+
+    async def notify(ev):
+        fired.append(ev)
+
+    queue: asyncio.Queue = asyncio.Queue()
+    sched = RoutineScheduler(
+        store=store,
+        engine=engine,
+        notify=notify,
+        subscribe_ticks=lambda: queue,
+        poll_interval_s=9999,
+    )
+    await sched.start()
+    await queue.put(
+        {
+            "trnm": "REAL",
+            "data": [{"type": "0B", "item": "005930", "values": {"12": "+6.00"}}],
+        }
+    )
+    await asyncio.sleep(0.05)
+    await sched.stop()
+
+    assert len(fired) == 1
+    assert fired[0]["goal"] is True
 
 
 @pytest.mark.asyncio
