@@ -29,6 +29,38 @@ function el(name, className) {
   return node;
 }
 
+// 출처 열(06 §7-1) — 계획 원안은 `entry.source`(없음) 유무로 이 열을 넣을지
+// 정하라 했지만, 그 필드는 없어도 같은 의미를 `entry.tier`가 이미 담고 있다
+// (backend/athena_api/brain/ontology.py의 SourceTier: "DETERMINISTIC은
+// 체결·잔고처럼... CONVERSATIONAL은 대화에서 LLM이 추론한 것") — 그래서 없는
+// 필드를 기다리지 않고 tier를 출처로 번역해 넣는다.
+const SOURCE_TIER_LABELS = { deterministic: '체결·잔고', conversational: '대화' };
+
+// 최근 열(06 §7-1) — 일/주 단위 상대 시간. routine-turn.js의 relativeText는
+// 분/시간 단위(능동 턴 배지용)라 이 용도엔 맞지 않아 따로 둔다.
+function relativeDaysText(observedAtIso, nowMs) {
+  const t = Date.parse(observedAtIso);
+  if (!Number.isFinite(t)) return '';
+  const now = nowMs === undefined ? Date.now() : nowMs;
+  const days = Math.floor(Math.max(0, now - t) / 86400000);
+  if (days <= 0) return '오늘';
+  if (days < 7) return `${days}일 전`;
+  const weeks = Math.floor(days / 7);
+  if (weeks < 5) return `${weeks}주 전`;
+  return `${Math.floor(days / 30)}개월 전`;
+}
+
+// dot 인코딩(06 §7-1) — Paper가 정확한 배정 함수를 안 줘서(정찰 보고서: "손으로
+// 배정된 값으로 보인다, 정확한 함수 불명") confidence/tier 축으로 매핑한다:
+// 사실+체결기반(EXTRACTED && deterministic)만 채움 검정, 불확실(AMBIGUOUS)은
+// 채움 주황(경고), 나머지(추론 등)는 테두리만 — 실행자 판단이므로 title로
+// 신호한다(원칙5 "근거 불명확한 추정 분류").
+function dotClass(entry) {
+  if (entry.confidence === 'EXTRACTED' && entry.tier === 'deterministic') return 'summary-row-dot-fact';
+  if (entry.confidence === 'AMBIGUOUS') return 'summary-row-dot-warn';
+  return 'summary-row-dot-soft';
+}
+
 // 대상 열 — 이름 + entity_id. entity_id가 종목 코드가 아닐 수도 있어(테마 등)
 // 그대로 보조 텍스트로만 쓴다, 종목코드라고 새로 판정하지 않는다.
 function renderTargetCell(entry) {
@@ -48,8 +80,13 @@ function renderRow(entry) {
   row.setAttribute('role', 'button');
   row.setAttribute('tabindex', '0');
 
+  const dot = el('span', `summary-row-dot ${dotClass(entry)}`);
+  dot.setAttribute('title', '확정성 추정(confidence·출처 기반 분류)');
+  row.appendChild(dot);
+
   row.appendChild(renderTargetCell(entry));
 
+  // 관계 배지 — pill 스타일(canvas.css).
   const relation = el('span', 'summary-row-relation');
   relation.textContent = entry.relation_kind;
   row.appendChild(relation);
@@ -60,10 +97,39 @@ function renderRow(entry) {
   rationale.textContent = entry.rationale || '';
   row.appendChild(rationale);
 
+  const source = el('span', 'summary-row-source');
+  source.textContent = SOURCE_TIER_LABELS[entry.tier] || '';
+  row.appendChild(source);
+
   const reinforcement = el('span', 'summary-row-reinforcement');
   reinforcement.textContent = String(entry.reinforcement);
   row.appendChild(reinforcement);
 
+  const recent = el('span', 'summary-row-recent');
+  recent.textContent = relativeDaysText(entry.observed_at);
+  row.appendChild(recent);
+
+  return row;
+}
+
+// 열 머리글 행(06 §7-1). 텍스트 없는 아이콘 칸 하나 + 이름 붙은 6열.
+const COLUMN_HEADS = [
+  { key: 'icon', label: '' },
+  { key: 'target', label: '대상' },
+  { key: 'relation', label: '관계' },
+  { key: 'rationale', label: '근거' },
+  { key: 'source', label: '출처' },
+  { key: 'reinforcement', label: '보강' },
+  { key: 'recent', label: '최근' },
+];
+
+function renderColumnHeads() {
+  const row = el('div', 'summary-table-columns');
+  for (const col of COLUMN_HEADS) {
+    const cell = el('span', `summary-col summary-col-${col.key}`);
+    cell.textContent = col.label;
+    row.appendChild(cell);
+  }
   return row;
 }
 
@@ -156,14 +222,32 @@ function renderSummaryTable(container, entries) {
   if (!container) return null;
   while (container.firstChild) container.removeChild(container.firstChild);
   const list = Array.isArray(entries) ? entries : [];
+
+  const wrap = el('div', 'summary-table-wrap');
+
+  // 섹션 헤더(06/07 §7 공통) — "전체 M개 보기"는 안 넣는다: profile-summary
+  // 응답(ProfileSummaryResponse)엔 entries 목록만 있고 총건수 필드가 없어 M을
+  // 정직하게 채울 방법이 없다(§0 정책).
+  const head = el('div', 'summary-table-head');
+  const title = el('span', 'summary-table-title');
+  title.textContent = '성향 신호';
+  head.appendChild(title);
+  const subtitle = el('span', 'summary-table-subtitle');
+  subtitle.textContent = `상위 ${list.length}`;
+  head.appendChild(subtitle);
+  wrap.appendChild(head);
+
   const table = el('div', 'summary-table');
   table.setAttribute('role', 'table');
   table.setAttribute('aria-label', `성향 신호 ${list.length}건`);
+  table.appendChild(renderColumnHeads());
   for (const entry of list) {
     if (!entry || !entry.entity_id) continue;
     table.appendChild(renderRow(entry));
   }
-  container.appendChild(table);
+  wrap.appendChild(table);
+
+  container.appendChild(wrap);
   return table;
 }
 
@@ -270,6 +354,8 @@ const __exports = {
   computeConfidenceBreakdown,
   renderSummaryHero,
   renderConfirmBanner,
+  dotClass,
+  relativeDaysText,
 };
 
 // UMD 각주(2026-08-18 렌더러 격리) — column-fold.js와 같은 패턴.
