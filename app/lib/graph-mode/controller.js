@@ -115,11 +115,23 @@ function createGraphModeController(deps) {
     renderSelection();
   }
 
+  // 성향 신호 표 선택 하이라이트(보드 07) — applyVisibility()의 32행 주석
+  // "가시성은 전부 이 함수 하나가 소유한다"는 단일 소유권 원칙을 선택
+  // 하이라이트에도 적용한다: 새 상태·새 컴포넌트를 만들지 않고 기존
+  // state.selectedEntityId를 그대로 읽어 .is-selected만 토글한다.
+  function highlightSelectedRow() {
+    if (!elements.summaryTable || typeof elements.summaryTable.querySelectorAll !== 'function') return;
+    elements.summaryTable.querySelectorAll('.summary-row').forEach((row) => {
+      row.classList.toggle('is-selected', row.getAttribute('data-entity-id') === state.selectedEntityId);
+    });
+  }
+
   // 공통 패널 — 선택된 노드가 있으면 채우고 없으면 숨긴다. 관계 목록·근거·최근
   // 변화 같은 백엔드 의존 섹션은 여기서 만들지 않는다 — 지어낼 데이터가 없다.
   // panel 요소는 주입받는다(elements.panel) — 안 들어오면 조용히 건너뛴다,
   // DOM을 전역에서 만들지 않는다는 이 파일의 원래 계약을 지킨다.
   function renderSelection() {
+    highlightSelectedRow();
     const panel = elements.panel;
     if (!panel) return;
     if (!state.selectedEntityId || !state.panel) {

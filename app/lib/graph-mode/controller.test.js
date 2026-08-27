@@ -273,6 +273,66 @@ test('clearSelection()으로 패널이 닫힌다', async () => {
   assert.equal(elements.panel.hidden, true);
 });
 
+// ── 보드 07: 성향 신호 표 선택 하이라이트(스텝5) ─────────────────────────────
+
+function summaryRow(entityId) {
+  const row = fakeNode('div');
+  row.setAttribute('class', 'summary-row');
+  row.setAttribute('data-entity-id', entityId);
+  return row;
+}
+
+test('selectEntity() 후 summaryTable 안 해당 row가 is-selected를 받는다', () => {
+  const { controller, elements } = setup();
+  const rowA = summaryRow('e:a');
+  const rowB = summaryRow('e:b');
+  elements.summaryTable.appendChild(rowA);
+  elements.summaryTable.appendChild(rowB);
+
+  controller.selectEntity('e:a', { name: '삼성전자' });
+  assert.equal(rowA.classList.contains('is-selected'), true);
+  assert.equal(rowB.classList.contains('is-selected'), false, '다른 row는 안 받는다');
+});
+
+test('다른 엔티티를 선택하면 이전 row의 하이라이트가 옮겨간다', () => {
+  const { controller, elements } = setup();
+  const rowA = summaryRow('e:a');
+  const rowB = summaryRow('e:b');
+  elements.summaryTable.appendChild(rowA);
+  elements.summaryTable.appendChild(rowB);
+
+  controller.selectEntity('e:a', { name: '삼성전자' });
+  controller.selectEntity('e:b', { name: '고배당주' });
+  assert.equal(rowA.classList.contains('is-selected'), false);
+  assert.equal(rowB.classList.contains('is-selected'), true);
+});
+
+test('clearSelection() 후 모든 row에서 is-selected가 빠진다', () => {
+  const { controller, elements } = setup();
+  const rowA = summaryRow('e:a');
+  elements.summaryTable.appendChild(rowA);
+
+  controller.selectEntity('e:a', { name: '삼성전자' });
+  assert.equal(rowA.classList.contains('is-selected'), true);
+  controller.clearSelection();
+  assert.equal(rowA.classList.contains('is-selected'), false);
+});
+
+test('summaryTable이 없으면(선택 안 주입) 조용히 넘어간다', () => {
+  const elements = {
+    pill: fakeNode('button'),
+    summary: fakeNode('div'),
+    graph: fakeNode('div'),
+    graphBody: fakeNode('div'),
+    // summaryTable 없음
+  };
+  const controller = createGraphModeController({
+    store, layout, render, prefs: null, elements,
+    fetchClusterMap: async () => payload(7),
+  });
+  assert.doesNotThrow(() => controller.selectEntity('e:a', { name: '반도체' }));
+});
+
 // ── 보드 07: 요약 표 행 선택도 같은 공통 패널을 쓴다 ─────────────────────────
 // 요약 표 자체(canvas.js)는 이 디렉터리 밖이라 행 클릭 배선은 여기 없다 — 이
 // 테스트는 selectEntity()가 그래프 클릭과 동일한 패널 경로를 그대로 타는지만

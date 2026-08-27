@@ -305,6 +305,19 @@ html, body { background: transparent; }
 }
 .summary-row-recent { font-family: var(--font-body); font-size: var(--text-xs); color: var(--color-k-hint); }
 
+/* 선택 행 하이라이트(보드 07 §7-3) — 좌측 마젠타 보더 + 배경 5% 틴트 + 관계
+ * 배지 반전 + 근거 텍스트 승격. 보더 2px만큼 padding-left를 줄여 총 폭을
+ * 유지한다(정찰 보고서 표 그대로, 기준값은 이 표의 padding-inline 10px). */
+.summary-row.is-selected {
+  border-left: 2px solid var(--color-brand);
+  background: rgba(238, 19, 123, 0.05);
+  padding-left: 8px;
+}
+.summary-row.is-selected .summary-row-relation {
+  background: var(--color-k-panel); border: 1px solid var(--color-k-line);
+}
+.summary-row.is-selected .summary-row-rationale { color: var(--color-k-bright); }
+
 /* 카드도 유리다 — soul.md §7 "모든 표면이 유리다. 두 창도, 창 안의 카드도 전부."
  * 2026-08-17 디자인 리뷰 [HIGH]로 정정: 이전 판은 고정 rgba 채움 + backdrop-filter
  * 0건이라 §7이 금지한 "뒤에 굴절할 것 없는 반투명 회색 사각형"이었다. 이제 알파를
