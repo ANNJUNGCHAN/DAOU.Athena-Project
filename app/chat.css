@@ -1184,6 +1184,18 @@ html, body { background: transparent; }
 .routine-btn-approve { background: rgba(230, 232, 238, 0.9); color: #10131a; border-color: transparent; }
 .routine-btn:disabled { opacity: 0.4; cursor: default; }
 
+/* 작업 요약 · 초안 카드 머리(8단계, Paper 보드 43 실측) */
+.routine-draft-pill {
+  font-size: var(--text-2xs, 11px);
+  color: var(--color-k-dim, #9aa2b1);
+  border: 1px solid rgba(230, 232, 238, 0.35);
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+.routine-draft-pill.is-draft { border-color: rgba(238, 19, 123, 0.55); color: #ee137b; }
+.routine-draft-hint { margin-left: auto; font-size: var(--text-2xs, 11px); color: var(--color-k-faint, #6b7480); }
+.routine-draft-title { font-size: var(--text-md, 14px); color: var(--color-k-text, #e6e8ee); font-weight: 600; margin: 2px 0 4px; }
+
 /* 주문 티켓 (P4) */
 .ticket-card { display: flex; flex-direction: column; gap: 10px; padding: 18px 20px; border-radius: 12px; background: rgba(255, 255, 255, 0.6); border: 1px solid rgba(230, 232, 238, 0.12); }
 .ticket-row { display: flex; align-items: center; gap: 12px; }

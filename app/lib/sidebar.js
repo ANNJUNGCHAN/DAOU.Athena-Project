@@ -180,6 +180,9 @@
     if (agentSidebarList && row.icon === agentSidebarList.STATUS_ICON.paused) {
       btn.classList.add('is-paused');
     }
+    if (agentSidebarList && row.icon === agentSidebarList.STATUS_ICON.draft) {
+      btn.classList.add('is-draft'); // ◌ 점선 핑크(8단계, Paper 보드 43 실측)
+    }
     const ic = el('span', 'sidebar-item-status-ic');
     ic.textContent = row.icon.glyph;
     ic.style.color = `var(${row.icon.colorVar})`;

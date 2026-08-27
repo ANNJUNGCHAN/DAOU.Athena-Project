@@ -2407,7 +2407,7 @@ app.whenReady().then(async () => {
         routines: [
           { id: 'fx1', symbol: '005930', note: '삼성전자 88,000 감시', status: 'active', mode: 'realtime-ws' },
           { id: 'fx2', symbol: '000660', note: 'SK하이닉스 공시 키워드', status: 'paused', mode: 'periodic' },
-          // draft는 우선 노출 대상이 아니다 — 걸러지는지도 같이 잰다.
+          // draft도 8단계부터 우선 노출 대상이다(◌ 점선 핑크) — 포함되는지 같이 잰다.
           { id: 'fx3', symbol: '005380', note: '현대차 실적 발표', status: 'draft', mode: 'periodic' },
         ],
         disclosure_ready: true,
@@ -2425,12 +2425,13 @@ app.whenReady().then(async () => {
       const firstLabelAfterAgent = list.firstElementChild ? list.firstElementChild.textContent : null;
       const routineRowCount = list.querySelectorAll('.sidebar-item.is-routine').length;
       const pausedRowCount = list.querySelectorAll('.sidebar-item.is-routine.is-paused').length;
+      const draftRowCount = list.querySelectorAll('.sidebar-item.is-routine.is-draft').length;
       back.click();
       await new Promise((r) => setTimeout(r, 200));
       const firstLabelAfterReturn = list.firstElementChild ? list.firstElementChild.textContent : null;
       const routineRowsGoneAfterReturn = list.querySelectorAll('.sidebar-item.is-routine').length === 0;
       return {
-        wired: true, firstLabelAfterAgent, routineRowCount, pausedRowCount,
+        wired: true, firstLabelAfterAgent, routineRowCount, pausedRowCount, draftRowCount,
         firstLabelAfterReturn, routineRowsGoneAfterReturn,
       };
     })()`);
@@ -2442,10 +2443,11 @@ app.whenReady().then(async () => {
         agentSidebar.firstLabelAfterAgent === '작업·알람',
       );
       assertOk(
-        'agent-sidebar: draft를 제외한 2건(active+paused)만 우선 노출된다',
-        agentSidebar.routineRowCount === 2,
+        'agent-sidebar: active+paused+draft 3건 모두 우선 노출된다(8단계부터 draft도 포함)',
+        agentSidebar.routineRowCount === 3,
       );
       assertOk('agent-sidebar: paused 1건이 is-paused로 표시된다', agentSidebar.pausedRowCount === 1);
+      assertOk('agent-sidebar: draft 1건이 is-draft로 표시된다(◌ 점선 핑크)', agentSidebar.draftRowCount === 1);
       assertOk(
         'agent-sidebar: 대화모드 복귀 시 라우틴 행이 사라지고 원래 이력이 복원된다(AC6)',
         agentSidebar.routineRowsGoneAfterReturn === true && agentSidebar.firstLabelAfterReturn !== '작업·알람',
@@ -2526,8 +2528,8 @@ app.whenReady().then(async () => {
         agentCanvasProbe.fixtureStatCount === 4,
       );
       assertOk(
-        'agent-canvas: "모두" 탭은 감시 2건(draft 제외) + 예약 fixture 2건 = 4건이 보인다',
-        agentCanvasProbe.allRowCount === 4,
+        'agent-canvas: "모두" 탭은 감시 2건 + draft 1건 + 예약 fixture 2건 = 5건이 보인다(8단계부터 draft도 포함)',
+        agentCanvasProbe.allRowCount === 5,
       );
       assertOk(
         'agent-canvas: "활성" 탭 전환 시 2건(감시 1 + 예약 fixture 1)만 남는다(좌측 리스트 필터링)',
@@ -2588,12 +2590,19 @@ app.whenReady().then(async () => {
       // 무관하게 만든다.
       const allTabBtn = Array.from(canvas.querySelectorAll('.agent-tab')).find((n) => n.textContent === '모두');
       if (allTabBtn) allTabBtn.click();
-      const before = { live: count('.agent-row[data-source="live"]'), fixture: count('.agent-row[data-source="fixture"]') };
+      // 8단계부터 draft도 data-source="live"다(실데이터라서) — watch/draft를
+      // is-draft 클래스로 갈라 각각 잰다.
+      const snapshot = () => ({
+        watch: count('.agent-row[data-source="live"]:not(.is-draft)'),
+        draft: count('.agent-row.is-draft'),
+        fixture: count('.agent-row[data-source="fixture"]'),
+      });
+      const before = snapshot();
       // 채팅의 루틴 승인 카드가 [승인]을 누를 때 부르는 것과 같은 채널.
       const confirmRes = await window.athena.invoke('athena:routine-confirm', { id: 'fx-draft' });
       await window.AthenaAgentCanvas.refresh();
       await new Promise((r) => setTimeout(r, 200));
-      const after = { live: count('.agent-row[data-source="live"]'), fixture: count('.agent-row[data-source="fixture"]') };
+      const after = snapshot();
       back.click();
       await new Promise((r) => setTimeout(r, 100));
       return { wired: true, confirmOk: !!(confirmRes && confirmRes.ok), before, after };
@@ -2602,10 +2611,13 @@ app.whenReady().then(async () => {
     assertOk('agent-canvas-5: 배선이 있다', routineRoundTrip.wired === true);
     if (routineRoundTrip.wired) {
       assertOk('agent-canvas-5: confirm 호출이 성공한다(승인 카드와 같은 채널)', routineRoundTrip.confirmOk === true);
-      assertOk('agent-canvas-5: draft는 confirm 전엔 감시 목록에 없다', routineRoundTrip.before.live === 1);
       assertOk(
-        'agent-canvas-5: draft→confirm 왕복 후 감시 목록에 반영된다(실 API)',
-        routineRoundTrip.after.live === 2,
+        'agent-canvas-5: confirm 전엔 감시(watch) 1건 + draft 1건이 각각 보인다(8단계)',
+        routineRoundTrip.before.watch === 1 && routineRoundTrip.before.draft === 1,
+      );
+      assertOk(
+        'agent-canvas-5: draft→confirm 왕복 후 draft 행이 감시(watch) 행으로 바뀐다(실 API)',
+        routineRoundTrip.after.watch === 2 && routineRoundTrip.after.draft === 0,
       );
       assertOk(
         'agent-canvas-5: 예약 행 2건은 confirm과 무관하게 항상 fixture 배지가 붙어 있다',
@@ -2787,6 +2799,116 @@ app.whenReady().then(async () => {
     ipcMain.removeHandler('athena:brain-profile-summary');
     ipcMain.handle('athena:brain-profile-summary', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
     // 채팅 입력에 남은 시드 문장을 다음 블록으로 새지 않게 지운다.
+    await shellWin.webContents.executeJavaScript(`(() => {
+      const input = document.getElementById('input');
+      if (input) input.value = '';
+    })()`);
+  }
+
+  // ---------- 새 작업은 채팅에서 (8단계, Paper 보드 43) ----------
+  //
+  // athena:routines-list를 draft 2건이 있는 stateful fixture로 바꾸고, 아무
+  // 질의나 Enter로 트리거한다(검증5와 같은 경로) — chat.js가 턴 종료 직후
+  // refreshRoutineDrafts()를 불러 "작업 요약·초안" 카드를 스트림 파싱이 아니라
+  // 목록 재조회로 결정론적으로 띄운다(P3). "고칠 게 있어"는 채팅 입력에 문장을
+  // 심고(시트 없음), "바로 활성화"는 기존 승인 채널(athena:routine-confirm)을
+  // 그대로 부른다(채팅의 루틴 승인 카드가 이미 쓰는 것과 같은 채널).
+  try {
+    const stage8Routines = [
+      {
+        id: 'fx-draft-1', symbol: '005930', note: '삼성전자 조건 도달 시 감시', status: 'draft', mode: 'realtime-ws',
+        source_label: '현재가', cooldown_s: 300, activation_blocker: null,
+      },
+      {
+        id: 'fx-draft-2', symbol: '000660', note: 'SK하이닉스 공시 키워드 감시', status: 'draft', mode: 'periodic',
+        source_label: '공시 제목 키워드', cooldown_s: 600, activation_blocker: null,
+      },
+    ];
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({
+      ok: true, data: { routines: stage8Routines, disclosure_ready: true, last_error: null },
+    }));
+    ipcMain.removeHandler('athena:routine-confirm');
+    ipcMain.handle('athena:routine-confirm', async (_e, { id } = {}) => {
+      const r = stage8Routines.find((x) => x.id === id);
+      if (!r) return { ok: false, error: '루틴이 존재하지 않는다' };
+      r.status = 'active'; // routines.py confirm_routine과 같은 계약: draft → active
+      return { ok: true, data: { ...r } };
+    });
+
+    const draftFlowProbe = await shellWin.webContents.executeJavaScript(`(async () => {
+      const input = document.getElementById('input');
+      if (!input) return { wired: false };
+      input.value = '아무 질의나 — 초안 카드 트리거용';
+      input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+      let done = false;
+      const t0 = Date.now();
+      while (Date.now() - t0 < 6000) {
+        if (document.querySelectorAll('.routine-approval').length >= 2) { done = true; break; }
+        await new Promise((r) => setTimeout(r, 100));
+      }
+      if (!done) return { wired: true, cardsAppeared: false };
+
+      const cards = Array.from(document.querySelectorAll('.routine-approval'));
+      const cardFor = (title) => cards.find((c) => {
+        const t = c.querySelector('.routine-draft-title');
+        return t && t.textContent === title;
+      });
+      const card1 = cardFor('삼성전자 조건 도달 시 감시');
+      const card2 = cardFor('SK하이닉스 공시 키워드 감시');
+      const pills1 = card1 ? Array.from(card1.querySelectorAll('.routine-draft-pill')).map((n) => n.textContent) : [];
+      const hint1 = card1 ? (card1.querySelector('.routine-draft-hint') || {}).textContent : null;
+      const chipLabels1 = card1 ? Array.from(card1.querySelectorAll('.routine-btn')).map((n) => n.textContent) : [];
+      const previewDisabled1 = card1 ? card1.querySelectorAll('.routine-btn')[0].disabled : null;
+
+      // 카드1 — "고칠 게 있어" 클릭 → 채팅 입력에 문장이 심긴다.
+      if (card1) Array.from(card1.querySelectorAll('.routine-btn')).find((b) => b.textContent === '고칠 게 있어').click();
+      await new Promise((r) => setTimeout(r, 50));
+      const seededValue = input.value;
+
+      // 카드2 — "바로 활성화" 클릭 → 기존 승인 채널이 실제로 불린다.
+      let activateStatus = null;
+      if (card2) {
+        Array.from(card2.querySelectorAll('.routine-btn')).find((b) => b.textContent === '바로 활성화').click();
+        await new Promise((r) => setTimeout(r, 300));
+        activateStatus = (card2.querySelector('.agent-mode') || {}).textContent;
+      }
+
+      return { wired: true, cardsAppeared: true, pills1, hint1, chipLabels1, previewDisabled1, seededValue, activateStatus };
+    })()`);
+    report.draftFlow = draftFlowProbe;
+    assertOk('routine-draft-8: 배선이 있다', draftFlowProbe.wired === true);
+    if (draftFlowProbe.wired) {
+      assertOk('routine-draft-8: 질의 완료 후 초안 카드 2건이 뜬다(refreshRoutineDrafts)', draftFlowProbe.cardsAppeared === true);
+    }
+    if (draftFlowProbe.cardsAppeared) {
+      assertOk(
+        'routine-draft-8: pill이 "작업 요약"·"초안" 2개다',
+        JSON.stringify(draftFlowProbe.pills1) === JSON.stringify(['작업 요약', '초안']),
+      );
+      assertOk('routine-draft-8: 힌트가 "← 캔버스에 초안 생성됨"이다', draftFlowProbe.hint1 === '← 캔버스에 초안 생성됨');
+      assertOk(
+        'routine-draft-8: 칩 3종(미리보기 실행/바로 활성화/고칠 게 있어)이 있다',
+        JSON.stringify(draftFlowProbe.chipLabels1) === JSON.stringify(['미리보기 실행', '바로 활성화', '고칠 게 있어']),
+      );
+      assertOk('routine-draft-8: "미리보기 실행"은 백엔드가 없어 비활성이다(P3)', draftFlowProbe.previewDisabled1 === true);
+      assertOk(
+        'routine-draft-8: "고칠 게 있어" 클릭 시 채팅 입력에 문장이 심긴다(시트 없음)',
+        draftFlowProbe.seededValue === '"삼성전자 조건 도달 시 감시" 초안을 고쳐줘 — ',
+      );
+      assertOk(
+        'routine-draft-8: "바로 활성화" 클릭이 기존 승인 채널을 실제로 부른다',
+        draftFlowProbe.activateStatus === '활성 — 감시가 시작됐습니다',
+      );
+    }
+  } catch (err) {
+    report.draftFlow = { error: String((err && err.message) || err) };
+    failures.push('routine-draft-8: 검증 블록이 예외로 끝났다');
+  } finally {
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+    ipcMain.removeHandler('athena:routine-confirm');
+    ipcMain.handle('athena:routine-confirm', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
     await shellWin.webContents.executeJavaScript(`(() => {
       const input = document.getElementById('input');
       if (input) input.value = '';

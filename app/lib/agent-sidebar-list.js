@@ -6,20 +6,22 @@
 // (기존 makeConversationItem/makeNotifyItem과 같은 자리). GET /api/v1/routines
 // 실데이터를 입력으로 받는다 — 이 파일 자체는 IPC를 모른다(DI).
 //
-// 어떤 상태를 "우선 노출"할 것인가: active(+실시간 여부)·paused만이다.
-// draft/expired/cancelled/failed는 이 사이드바가 다룰 "지금 진행 중인" 일이
+// 어떤 상태를 "우선 노출"할 것인가: active(+실시간 여부)·paused·draft다.
+// expired/cancelled/failed는 이 사이드바가 다룰 "지금 진행 중인" 일이
 // 아니다(P3 — 죽은 상태를 살아있는 것처럼 나열하지 않는다). draft 초안 행은
-// 8단계(새 작업은 채팅에서)가 별도로 다룬다.
+// 8단계(새 작업은 채팅에서)가 여기서 다룬다 — ◌ 점선 핑크(Paper 보드 43 실측).
 
 const STATUS_ICON = {
   activeRealtime: { glyph: '●', colorVar: '--color-info', label: '실시간 감시' },
   activePeriodic: { glyph: '●', colorVar: '--color-ok', label: '활성' },
   paused: { glyph: '❚❚', colorVar: '--color-warn', label: '일시중지' },
+  draft: { glyph: '◌', colorVar: '--color-brand', label: '초안' },
 };
 
 // 라우틴 하나의 상태 아이콘 명세. 우선 노출 대상이 아니면 null.
 function statusIconFor(routine) {
   if (!routine) return null;
+  if (routine.status === 'draft') return STATUS_ICON.draft;
   if (routine.status === 'paused') return STATUS_ICON.paused;
   if (routine.status === 'active') {
     return routine.mode === 'realtime-ws' ? STATUS_ICON.activeRealtime : STATUS_ICON.activePeriodic;
