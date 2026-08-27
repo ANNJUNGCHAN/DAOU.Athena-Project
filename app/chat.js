@@ -1274,6 +1274,77 @@ window.athena.on('athena:briefing-tool-step', (step = {}) => {
   card.steps.textContent = step.done ? `${step.label} 완료` : `${step.label}…`;
 });
 
+// ---------- 놓친 예약 캐치업 카드(R1, 5단계) ----------
+// 기동 시 main이 감지한 놓친 예약을 사람이 확인해야 실행된다. 순서 보장(①
+// catchup-fire ledger 기록 → ② 브리핑 실행, MAJOR 3)은 main 쪽 invoke 핸들러
+// 몫이고, 이 카드는 물어보고 결과를 표시할 뿐이다. 건너뛰기는 백엔드 API를
+// 부르지 않고 카드만 닫는다(계획 명시).
+function renderMissedScheduleCard(r) {
+  const line = document.createElement('div');
+  line.className = 'turn';
+  const card = document.createElement('div');
+  card.className = 'turn-agent routine-missed';
+
+  const head = document.createElement('div');
+  head.className = 'agent-head';
+  const badge = document.createElement('span');
+  badge.className = 'agent-badge';
+  badge.textContent = '놓친 예약';
+  head.appendChild(badge);
+  card.appendChild(head);
+
+  const title = document.createElement('div');
+  title.className = 'routine-draft-title';
+  title.textContent = r.note || `${r.symbol || ''} 예약 브리핑`.trim();
+  card.appendChild(title);
+
+  const body = document.createElement('div');
+  body.className = 'agent-body';
+  body.textContent = '앱이 꺼져 있는 동안 예약 시각이 지났습니다. 지금 브리핑을 실행할까요?';
+  card.appendChild(body);
+
+  const row = document.createElement('div');
+  row.className = 'routine-approval-actions';
+  const status = document.createElement('span');
+  status.className = 'agent-mode';
+
+  const confirm = _btn('지금 브리핑', 'routine-btn routine-btn-approve');
+  confirm.addEventListener('click', async () => {
+    confirm.disabled = true;
+    skip.disabled = true;
+    const res = await window.athena.invoke('athena:routine-missed-confirm', { id: r.id });
+    if (res && res.ok) {
+      status.textContent = '발화가 기록됐습니다 — 브리핑 시작';
+    } else if (res && res.status === 409) {
+      // 이미 처리된 예약(중복 클릭·다른 경로 선처리) — 재시도 버튼을 되살리지 않는다.
+      status.textContent = '이미 처리된 예약입니다';
+    } else {
+      status.textContent = `실패: ${(res && res.error) || '알 수 없는 오류'}`;
+      confirm.disabled = false;
+      skip.disabled = false;
+    }
+  });
+
+  const skip = _btn('건너뛰기', 'routine-btn');
+  skip.addEventListener('click', () => {
+    // fire-and-forget — main 쪽 보관 뷰 정리뿐, 백엔드 API 호출 없음.
+    window.athena.invoke('athena:routine-missed-skip', { id: r.id }).catch(() => {});
+    line.remove(); // 카드만 닫는다
+  });
+
+  row.appendChild(confirm);
+  row.appendChild(skip);
+  row.appendChild(status);
+  card.appendChild(row);
+
+  _mountTurn(line, card);
+}
+
+window.athena.on('athena:routine-missed', ({ routines } = {}) => {
+  if (!Array.isArray(routines)) return;
+  for (const r of routines) renderMissedScheduleCard(r);
+});
+
 // ---------- 오브에서 오간 턴 반영(2026-08-26 board-33/34) ----------
 // 셸이 숨겨진 동안 오브 대화 모드가 돌린 턴은 chat.js가 그 순간에는 그릴 수
 // 없었다(창이 안 보였으니까) — main이 턴이 끝난 뒤 늦게 알려주면 여기서

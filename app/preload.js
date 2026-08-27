@@ -67,6 +67,10 @@ const INVOKE_CHANNELS = new Set([
   // 완전히 같은 파이프라인을 오브에서 부르는 다리. orb.js가 셸 숨김일 때만 쓴다
   // (게이트는 athena:shell-visibility, scripts/gates/check-orb.mjs가 잰다).
   'athena:orb-chat-submit',
+  // 놓친 예약 캐치업(R1, 5단계) — 확인은 main이 ① catchup-fire(ledger 기록)
+  // ② 브리핑 실행 순서를 보장한다. 건너뛰기는 백엔드 API를 부르지 않는다.
+  'athena:routine-missed-confirm',
+  'athena:routine-missed-skip',
 ]);
 
 const SEND_CHANNELS = new Set([
@@ -167,6 +171,8 @@ const ON_CHANNELS = new Set([
   // 브리핑 진행 배지 전용 신호 — {busy}. 입력 잠금(setLocked)에는 절대 쓰지
   // 않는다(MAJOR 2 — 브리핑이 셸 입력을 잠그면 안 된다).
   'athena:briefing-query-state',
+  // 놓친 예약(R1, 5단계) — 기동 시 main이 감지한 놓친 예약 목록. {routines: [뷰...]}.
+  'athena:routine-missed',
 ]);
 
 contextBridge.exposeInMainWorld('athena', {

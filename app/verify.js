@@ -3716,6 +3716,114 @@ app.whenReady().then(async () => {
     failures.push('briefing: 검증 블록이 예외로 끝났다');
   }
 
+  // ---------- 검증 R1-5: 놓친 예약 캐치업 흐름 (2026-08-27, 5단계 AC4) ----------
+  // 놓친 예약 카드를 IPC 주입으로 띄우고, 확인 클릭 시 ① catchup-fire(ledger
+  // 기록) ② 브리핑 실행이 **이 순서로** 불리는지 스텁 호출 순서로 단언한다.
+  // 캐치업→runs 이력 반영(ledger 기반)은 백엔드 pytest가 커버한다(3단계 —
+  // record_scheduled_fire 공유 헬퍼·/runs 필터) — 여기는 앱 쪽 순서·카드 계약만.
+  try {
+    const missedOrder = [];
+    const missedReports = [];
+    mainMod.setBriefingClaudeRunnerForVerify({
+      runClaudeQuery(opts) {
+        missedOrder.push('claude');
+        opts.onSpawn({ pid: 5, kill() {} });
+        opts.onTextDelta('캐치업 브리핑 본문');
+        return Promise.resolve({ ok: true });
+      },
+    }, {
+      fetchBudget: async () => ({ remaining: 99 }),
+      reportResult: async (p) => { missedReports.push(p); },
+      catchupFire: async (id) => {
+        missedOrder.push(`catchup:${id}`);
+        return { ok: true, data: { fired_at: '2026-08-27T07:30:00+09:00' } };
+      },
+    });
+    const missedView = (id, note) => ({
+      id, note, symbol: '005930', mode: 'scheduled', status: 'active', missed: true,
+      briefing_model: null, briefing_effort: null,
+    });
+    const findMissedCard = (note) => `(() => {
+      const cards = Array.from(document.querySelectorAll('.turn-agent.routine-missed'));
+      return cards.find((c) => {
+        const t = c.querySelector('.routine-draft-title');
+        return t && t.textContent === ${JSON.stringify(note)};
+      });
+    })`;
+
+    shellWin.webContents.send('athena:routine-missed', { routines: [missedView('vmiss1', '캐치업 검증 1')] });
+    await wait(400);
+    report.missedCatchup = {
+      cardRendered: await shellWin.webContents.executeJavaScript(`(() => {
+        const card = ${findMissedCard('캐치업 검증 1')}();
+        if (!card) return null;
+        const badge = card.querySelector('.agent-badge');
+        const labels = Array.from(card.querySelectorAll('button')).map((b) => b.textContent);
+        return { badge: badge ? badge.textContent : null, labels };
+      })()`),
+    };
+    assertOk('missed: 카드가 뜬다(배지·버튼 2개)',
+      !!report.missedCatchup.cardRendered
+      && report.missedCatchup.cardRendered.badge === '놓친 예약'
+      && JSON.stringify(report.missedCatchup.cardRendered.labels) === JSON.stringify(['지금 브리핑', '건너뛰기']));
+
+    await shellWin.webContents.executeJavaScript(`(() => {
+      const card = ${findMissedCard('캐치업 검증 1')}();
+      Array.from(card.querySelectorAll('button')).find((b) => b.textContent === '지금 브리핑').click();
+    })()`);
+    await wait(500);
+    report.missedCatchup.order = missedOrder.slice();
+    report.missedCatchup.statusText = await shellWin.webContents.executeJavaScript(`(() => {
+      const card = ${findMissedCard('캐치업 검증 1')}();
+      const s = card.querySelector('.routine-approval-actions .agent-mode');
+      return s ? s.textContent : null;
+    })()`);
+    assertOk('missed: catchup-fire가 브리핑보다 먼저 불렸다(순서 단언, MAJOR 3)',
+      JSON.stringify(missedOrder) === JSON.stringify(['catchup:vmiss1', 'claude']));
+    assertOk('missed: 서버 authoritative fired_at이 브리핑 보고까지 흘렀다',
+      missedReports.length === 1 && missedReports[0].fired_at === '2026-08-27T07:30:00+09:00');
+    assertOk('missed: 확인 상태 문구', report.missedCatchup.statusText === '발화가 기록됐습니다 — 브리핑 시작');
+
+    // 건너뛰기 — catchup도 브리핑도 안 불리고 카드만 닫힌다.
+    shellWin.webContents.send('athena:routine-missed', { routines: [missedView('vmiss2', '캐치업 검증 2')] });
+    await wait(300);
+    await shellWin.webContents.executeJavaScript(`(() => {
+      const card = ${findMissedCard('캐치업 검증 2')}();
+      Array.from(card.querySelectorAll('button')).find((b) => b.textContent === '건너뛰기').click();
+    })()`);
+    await wait(300);
+    const skippedGone = await shellWin.webContents.executeJavaScript(`!${findMissedCard('캐치업 검증 2')}()`);
+    assertOk('missed: 건너뛰기는 카드만 닫는다(스텁 무호출)', skippedGone === true
+      && JSON.stringify(missedOrder) === JSON.stringify(['catchup:vmiss1', 'claude']));
+
+    // 이미 처리된 예약(409) — 브리핑을 태우지 않고 카드에 사실만 표시한다.
+    mainMod.setBriefingClaudeRunnerForVerify({
+      runClaudeQuery() { missedOrder.push('claude-409'); return Promise.resolve({ ok: true }); },
+    }, {
+      fetchBudget: async () => ({ remaining: 99 }),
+      reportResult: async () => {},
+      catchupFire: async () => ({ ok: false, status: 409, error: '이미 발화 처리된 예약이다' }),
+    });
+    shellWin.webContents.send('athena:routine-missed', { routines: [missedView('vmiss3', '캐치업 검증 3')] });
+    await wait(300);
+    await shellWin.webContents.executeJavaScript(`(() => {
+      const card = ${findMissedCard('캐치업 검증 3')}();
+      Array.from(card.querySelectorAll('button')).find((b) => b.textContent === '지금 브리핑').click();
+    })()`);
+    await wait(300);
+    const status409 = await shellWin.webContents.executeJavaScript(`(() => {
+      const card = ${findMissedCard('캐치업 검증 3')}();
+      const s = card.querySelector('.routine-approval-actions .agent-mode');
+      return s ? s.textContent : null;
+    })()`);
+    assertOk('missed: 409면 브리핑을 안 태우고 "이미 처리됨"을 표시한다',
+      status409 === '이미 처리된 예약입니다' && !missedOrder.includes('claude-409'));
+    console.log('[verify] 검증R1-5(놓친 예약 캐치업):', JSON.stringify(report.missedCatchup));
+  } catch (err) {
+    report.missedCatchup = { error: String((err && err.message) || err) };
+    failures.push('missed: 검증 블록이 예외로 끝났다');
+  }
+
   fs.writeFileSync(path.join(CAPTURES, 'VERIFY-REPORT.json'), JSON.stringify(report, null, 2));
   console.log('[verify] 리포트 저장:', path.join(CAPTURES, 'VERIFY-REPORT.json'));
 
