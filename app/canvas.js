@@ -11,6 +11,10 @@ const { isValidCorrelation, waitForVisiblePaint } = window.AthenaLib.RestCanvasP
 // 모든 chart surface의 유일한 세션/DTO 권위. 실제 그리기는 기존 하나의
 // lightweight-charts controller만 주입하며 별도 renderer/BrowserWindow는 없다.
 const aitsChartPanels = createAitsChartPanelAdapter({ renderChart: createChartCard, maxPanels: 6 });
+// 시세 카드 실시간 세션(단계 8 확장) — 차트와 같은 0B 체결 피드를 나눠 쓴다
+// (아래 athena:chart-ticks 구독 하나가 둘 다에게 보낸다). 채널을 새로 안 만든다.
+const { createQuoteRealtimePanelAdapter } = window.AthenaLib.QuoteRealtimePanel;
+const quoteRealtimePanels = createQuoteRealtimePanelAdapter();
 
 // snapshot().period는 AITS 표기(day/week/…)다. 과거 조회 IPC는 툴바와 같은
 // UI 주기 코드를 쓰므로 여기서 되돌린다.
@@ -26,6 +30,7 @@ if (window.athena && typeof window.athena.on === 'function') {
     if (!Array.isArray(ticks)) return;
     for (const tick of ticks) {
       aitsChartPanels.applyRealtimeTick(tick).catch(() => { /* 진행봉 실패는 차트를 죽이지 않는다 */ });
+      quoteRealtimePanels.applyRealtimeTick(tick); // 종목 불일치·열린 카드 없음은 내부에서 조용히 버려진다
     }
   });
 }
@@ -560,6 +565,28 @@ function cardTitleAndSubtitle(envelope, fallback) {
   return [caption || fallback, null];
 }
 
+// 시세 카드 실시간 등록(단계 8 확장) — 종목코드를 아는 경우에만 세션을 연다.
+// REST 데이터셋 직결 카드는 envelope.operation_args.stk_cd가 있다(canvas.js
+// athena:add-rest-canvas 핸들러가 채운다 — 위쪽 참고). 클로드 툴 경로로 그려진
+// 카드는 이 필드가 없어 조용히 건너뛴다 — 모르는 종목을 안다고 지어내지 않는다
+// (정보 정직성). 서버측 0B REG는 main.js ensureChartRealtime이 이미 담당한다
+// (athena:rest-canvas-painted 이후, operationArgs.stk_cd 대상 — 차트 전용이
+// 아니라 어떤 카드든 종목코드가 있으면 등록한다). 여기서는 렌더러 쪽 세션만
+// 열어서 그 종목의 체결을 이 카드의 표로 이어붙인다.
+function wireQuoteRealtime(card, wrap, envelope) {
+  const args = envelope.operation_args || envelope.operationArgs;
+  const symbol = args && String(args.stk_cd || '').trim();
+  if (!symbol) return;
+  quoteRealtimePanels.openPanel(card, symbol, (tick) => {
+    window.AthenaLib.CardKindQuote.applyLiveTick(wrap, envelope, tick);
+  });
+  const priorDestroy = cardDestroyers.get(card);
+  cardDestroyers.set(card, () => {
+    quoteRealtimePanels.closePanel(card);
+    if (priorDestroy) priorDestroy();
+  });
+}
+
 function renderMcpTable(envelope) {
   const [title, subtitle] = cardTitleAndSubtitle(envelope, '공통 테이블');
   // 카드 v3(.omc/state/card-v3-plan.md §2.2) 카드종 후킹 — title이 Paper 16종 고정
@@ -571,6 +598,7 @@ function renderMcpTable(envelope) {
     const { card, body } = makeCard('mcp-table', title, envelope.layout, envelope.correlation, subtitle);
     stampPaperScreen(card, envelope);
     body.appendChild(built);
+    if (title === '시세') wireQuoteRealtime(card, built, envelope);
     return card;
   }
   const { card, body } = makeCard('mcp-table', title, envelope.layout, envelope.correlation, subtitle);

@@ -99,6 +99,33 @@ function formatTickPrice(raw) {
   return formatNumeric(priceMagnitude(raw));
 }
 
+// 실시간/일별 탭(878-0 실측, 2026-08-27 확장) — "실시간"이 기본 활성이다. 다른
+// 데이터를 새로 불러오지 않는다("재조회 없음" 원칙, 위 머리말 그대로) — "일별"은
+// 그냥 갱신을 멈춘 스냅샷이다. wrap.dataset.live로 상태를 두는 이유는 이 모듈이
+// DOM 밖 상태(모듈 스코프 Map 등)를 늘리지 않고, applyLiveTick 호출부(canvas.js)가
+// 카드 하나의 상태를 그 카드 엘리먼트만 보고 판단하게 하려는 것이다.
+function renderTabs(wrap) {
+  const tabs = document.createElement('div');
+  tabs.className = 'card-kind-시세-tabs';
+  const realtimeTab = document.createElement('button');
+  realtimeTab.type = 'button';
+  realtimeTab.className = 'card-kind-시세-tab is-active';
+  realtimeTab.textContent = '실시간';
+  const dailyTab = document.createElement('button');
+  dailyTab.type = 'button';
+  dailyTab.className = 'card-kind-시세-tab';
+  dailyTab.textContent = '일별';
+  const activate = (tab) => {
+    wrap.dataset.live = tab === realtimeTab ? 'true' : 'false';
+    realtimeTab.classList.toggle('is-active', tab === realtimeTab);
+    dailyTab.classList.toggle('is-active', tab === dailyTab);
+  };
+  realtimeTab.addEventListener('click', () => activate(realtimeTab));
+  dailyTab.addEventListener('click', () => activate(dailyTab));
+  tabs.append(realtimeTab, dailyTab);
+  return tabs;
+}
+
 function renderTickerTable(rows) {
   const wrap = document.createElement('div');
   wrap.className = 'card-kind-시세-ticker';
@@ -148,14 +175,53 @@ function render시세(envelope) {
   const key = bufferKeyFor(envelope);
   const merged = mergeRollingRows(ringBuffers.get(key), rows, MAX_ROWS);
   ringBuffers.set(key, merged);
-  return renderTickerTable(merged);
+  const wrap = document.createElement('div');
+  wrap.className = 'card-kind-시세';
+  wrap.dataset.live = 'true';
+  wrap.appendChild(renderTabs(wrap));
+  const tableHost = document.createElement('div');
+  tableHost.className = 'card-kind-시세-table-host';
+  tableHost.appendChild(renderTickerTable(merged));
+  wrap.appendChild(tableHost);
+  return wrap;
 }
 
-const __exports = { mergeRollingRows, extractTickRows, formatTickPrice, render시세 };
+// 실시간 체결 1건을 이미 그려진 표에 그대로 이어붙인다(단계 8 확장, canvas.js의
+// 실시간 세션 어댑터가 매 체결마다 이걸 부른다) — 재조회·destroy+recreate 없이
+// 표만 다시 그린다. "일별"로 멈춰둔 카드(wrap.dataset.live==='false')나 표가 아직
+// 없는 카드(재조회 사이 이미 사라졌다면)는 조용히 무시한다.
+// tick: lib/main/chart-realtime.js parseRealTick 계약 그대로
+// {symbol, at, price, volume, changeRate, accVolume} — changeRate/accVolume은
+// 실프레임 미실측 필드라 null일 수 있다(카드종 서식 함수가 이미 null-safe다).
+function applyLiveTick(wrap, envelope, tick) {
+  if (!wrap || wrap.dataset.live === 'false') return;
+  const host = wrap.querySelector('.card-kind-시세-table-host');
+  if (!host || !tick) return;
+  const key = bufferKeyFor(envelope);
+  // cntr_tm 자리는 REST 응답의 체결시간 문자열(HHMMSS) 대신 tick.at(에폭초)을
+  // 그대로 넣는다 — rowKey 중복판정의 유일한 목적(같은 초 안 복수 체결 구분)에는
+  // 이 정도 고유성으로 충분하고, 표에는 아예 안 쓰이는 필드다.
+  const row = {
+    cntr_tm: String(tick.at),
+    cntr_pric: tick.price,
+    cntr_qty: tick.volume,
+    flu_rt: tick.changeRate,
+    acc_trde_qty: tick.accVolume,
+  };
+  const merged = mergeRollingRows(ringBuffers.get(key), [row], MAX_ROWS);
+  ringBuffers.set(key, merged);
+  host.replaceChildren(renderTickerTable(merged));
+}
+
+const __exports = { mergeRollingRows, extractTickRows, formatTickPrice, render시세, applyLiveTick };
 if (__isCjs) {
   module.exports = __exports;
 } else {
   window.AthenaLib.CardKinds.register('시세', render시세);
+  // CardKinds.resolve(title)는 renderFn 하나만 돌려주는 계약이라(card-kinds.js) 여기
+  // 안 맞는 applyLiveTick은 별도 네임스페이스로 낸다 — canvas.js의 실시간 세션
+  // 어댑터가 이 카드종 표에 체결을 이어붙일 때 쓴다.
+  window.AthenaLib.CardKindQuote = { applyLiveTick };
 }
 
 })();

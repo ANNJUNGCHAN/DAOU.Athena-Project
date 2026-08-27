@@ -422,6 +422,10 @@ const chartSeries = require('./lib/main/chart-series');
 let chartRealtimeFeed = null;
 let chartRealtimeRegistrar = null;
 
+// 차트 전용이 아니다 — authority.operationArgs.stk_cd 폴백 덕에 종목코드가 있는
+// REST 데이터셋 카드라면 어느 카드종이든(시세 카드 포함, 단계 8 확장) 여기서
+// 등록된다. 호출부(athena:rest-canvas-painted)도 canvas_type을 안 가린다 —
+// "그려진 걸 확인한 뒤에만 REG" 원칙만 카드종 공통이면 된다.
 function ensureChartRealtime(authority) {
   if (process.env.ATHENA_CANVAS_SOURCE === 'fixture') return; // 검증 결정론 보호
   const stock = authority && authority.chartBody && authority.chartBody.stock;
