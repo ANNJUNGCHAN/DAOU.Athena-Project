@@ -422,3 +422,42 @@ body { margin: 0; overflow: hidden; }
 .boot {
   z-index: 20;
 }
+
+/* ---------- 모드 네비 (셸 v2 — Paper 보드 37·38·44, 2026-08-27) ----------
+ * 모드 전환은 여기가 소유한다. 활성 항목은 패널 배경+테두리(보드 38 실측),
+ * 비활성은 흐린 잉크. 에이전트는 준비 중이라 눌리지 않는다(disabled). */
+.sidebar-modes {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 12px 12px;
+}
+.sidebar-modes-label {
+  padding: 2px 8px 6px;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: rgb(16 19 26 / 38%);
+}
+.mode-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: rgb(16 19 26 / 62%);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  appearance: none;
+}
+.mode-item:hover { background: rgb(16 19 26 / 6%); }
+.mode-item[disabled] { opacity: 0.45; cursor: default; }
+.mode-item[disabled]:hover { background: transparent; }
+.sidebar-modes[data-mode="chat"] .mode-item-chat,
+.sidebar-modes[data-mode="graph"] .mode-item-graph {
+  background: rgb(255 255 255 / 85%);
+  border-color: rgb(16 19 26 / 8%);
+  color: #14171d;
+}

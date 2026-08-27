@@ -178,7 +178,10 @@ async function main() {
       if (!pill) return { wired: false, reason: 'no-pill', brainReady };
       if (pill.hidden) return { wired: false, reason: 'hidden-though-always-visible', brainReady };
       const labelBefore = pill.textContent;
-      pill.click();
+      // 셸 v2(2026-08-27) — 전환은 사이드바 모드 네비가 소유한다. 필은 표시 전용.
+      const nav = document.getElementById('modeNavGraph');
+      if (!nav) return { wired: false, reason: 'missing-mode-nav', brainReady };
+      nav.click();
       const deadline = Date.now() + 4000;
       while (Date.now() < deadline) {
         if (!container.hidden) break;

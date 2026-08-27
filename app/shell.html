@@ -63,6 +63,25 @@
         <input id="sidebarSearchInput" class="sidebar-search-input" type="text" placeholder="대화 검색" hidden />
       </div>
       <div class="sidebar-divider"></div>
+      <!-- 모드 네비(셸 v2 — Paper 보드 37·38·44, 2026-08-27 검토 결정): 모드 전환은
+           여기가 소유한다. 스트립의 모드 필(#graphPill)은 표시 전용이 됐다.
+           에이전트는 준비 중(보드 39~43) — 없는 기능을 되는 척 않는다(disabled). -->
+      <div id="sidebarModes" class="sidebar-modes" data-mode="chat">
+        <div class="sidebar-modes-label">모드</div>
+        <button id="modeNavChat" class="mode-item mode-item-chat" type="button">
+          <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 3.5C2 2.7 2.7 2 3.5 2h7c.8 0 1.5.7 1.5 1.5v5c0 .8-.7 1.5-1.5 1.5H6L3.5 12v-2C2.7 10 2 9.3 2 8.5v-5z" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
+          <span>대화</span>
+        </button>
+        <button id="modeNavGraph" class="mode-item mode-item-graph" type="button">
+          <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><circle cx="3.5" cy="10.5" r="1.8" fill="none" stroke="currentColor" stroke-width="1.2"/><circle cx="7" cy="3.5" r="1.8" fill="none" stroke="currentColor" stroke-width="1.2"/><circle cx="10.5" cy="10.5" r="1.8" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M4.4 9.1 6.2 5m1.6 0 1.8 4.1M5.3 10.5h3.4" fill="none" stroke="currentColor" stroke-width="1.1"/></svg>
+          <span>그래프</span>
+        </button>
+        <button id="modeNavAgent" class="mode-item mode-item-agent" type="button" disabled title="에이전트 모드 — 준비 중 (Paper 보드 39~43)">
+          <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 1.5 8.2 5 11.5 6.2 8.2 7.4 7 11 5.8 7.4 2.5 6.2 5.8 5z" fill="none" stroke="currentColor" stroke-width="1.1"/></svg>
+          <span>에이전트</span>
+        </button>
+      </div>
+      <div class="sidebar-divider"></div>
       <div id="sidebarList" class="sidebar-list"></div>
       <div id="sidebarAccountMenu" class="sidebar-account-menu" hidden></div>
       <button id="sidebarAccountRow" class="sidebar-account-row" type="button" hidden>
@@ -141,18 +160,20 @@
               data-mode="chat"
             >
               <span class="kiumi-visor" aria-hidden="true">
+                <!-- 색은 CSS(.kiumi-visor의 color)가 정한다 — 보드 38 스트립 실측:
+                     흰 몸체·브랜드 테두리에 바이저색 도형(바이저 채움 없음). -->
                 <svg class="kiumi-face kiumi-face-chat" width="13" height="12" viewBox="0 0 17 16" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="5" y="4.5" width="3" height="7" rx="1.5" fill="#FFFFFF"/>
-                  <rect x="9.5" y="4.5" width="3" height="7" rx="1.5" fill="#FFFFFF"/>
+                  <rect x="5" y="4.5" width="3" height="7" rx="1.5" fill="currentColor"/>
+                  <rect x="9.5" y="4.5" width="3" height="7" rx="1.5" fill="currentColor"/>
                 </svg>
                 <svg class="kiumi-face kiumi-face-graph" width="13" height="12" viewBox="0 0 17 16" xmlns="http://www.w3.org/2000/svg">
-                  <g stroke="#FFFFFF" stroke-width="1.1" stroke-opacity="0.75">
+                  <g stroke="currentColor" stroke-width="1.1" stroke-opacity="0.75">
                     <line x1="5.5" y1="5.5" x2="11.5" y2="4.5"/><line x1="5.5" y1="5.5" x2="8.5" y2="10.5"/>
                     <line x1="11.5" y1="4.5" x2="8.5" y2="10.5"/>
                   </g>
-                  <circle cx="5.5" cy="5.5" r="1.7" fill="#FFFFFF"/>
-                  <circle cx="11.5" cy="4.5" r="1.3" fill="#FFFFFF"/>
-                  <circle cx="8.5" cy="10.5" r="1.5" fill="#FFFFFF"/>
+                  <circle cx="5.5" cy="5.5" r="1.7" fill="currentColor"/>
+                  <circle cx="11.5" cy="4.5" r="1.3" fill="currentColor"/>
+                  <circle cx="8.5" cy="10.5" r="1.5" fill="currentColor"/>
                 </svg>
               </span>
             </button>
@@ -161,12 +182,11 @@
             <button id="cliPill" class="pill" type="button" title="활성 CLI — 설정에서 전환">CLAUDE</button>
             <!-- 루틴 칩 — 활성 감시 수. 백엔드 미기동이면 숨긴다(없는 감시를 있다고 표시하지 않는다). -->
             <span id="routineChip" class="routine-chip" hidden></span>
-            <!-- 모드 칩 — 지금 캔버스 모드(답변/그래프)를 상시 보여준다(Paper 보드
-                 05 "모드 칩 상시"). 점과 같은 동작을 하는 두 번째 진입로이기도
-                 하다 — 브레인이 꺼져 있어도 숨기지 않는다(그래프 모드 자체는 늘
-                 열 수 있고, 못 쓰는 이유는 캔버스 안에서 설명한다 — graphMode.
-                 setAvailable 참고). -->
-            <button id="graphPill" class="pill" type="button" title="답변 ⇄ 그래프">답변</button>
+            <!-- 모드 필(셸 v2 — Paper 보드 38, 2026-08-27): 지금 모드를 브랜드색으로
+                 표시만 한다. 전환은 사이드바 모드 네비(#sidebarModes)가 소유 —
+                 브레인이 꺼져 있어도 숨기지 않는다(못 쓰는 이유는 캔버스 안에서
+                 설명한다 — graphMode.setAvailable 참고). -->
+            <button id="graphPill" class="pill pill-mode" type="button" title="지금 모드 — 전환은 사이드바 모드에서">대화</button>
             <span class="strip-spacer"></span>
             <!-- 모델 필 — athena:model-get 실상태 표시, 클릭=인라인 팝오버(새 창 아님). -->
             <button id="modelPill" class="pill" type="button" title="모델 · 추론 노력">기본 모델</button>

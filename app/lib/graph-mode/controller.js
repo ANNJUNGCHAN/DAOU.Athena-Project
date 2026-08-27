@@ -40,14 +40,16 @@ function createGraphModeController(deps) {
     if (elements.graph) elements.graph.hidden = !graphView;
     if (elements.summaryTable) elements.summaryTable.hidden = !graphView;
     if (elements.pill) {
-      // 모드 칩은 "다음에 할 동작"이 아니라 "지금 모드"를 보여준다(Paper 보드 05
-      // "모드 칩 상시" — 답변/그래프 둘 중 지금 켜져 있는 쪽).
-      elements.pill.textContent = graphView ? '그래프' : '답변';
+      // 모드 필(셸 v2 — Paper 보드 38, 2026-08-27): "지금 모드"를 표시만 한다.
+      // 전환은 사이드바 모드 네비(elements.modeNav)의 몫.
+      elements.pill.textContent = graphView ? '그래프' : '대화';
       elements.pill.setAttribute('aria-pressed', graphView ? 'true' : 'false');
     }
     // 키우미 얼굴(2026-08-27, Paper 보드 45) — 지금 모드를 얼굴로 보여준다
     // (대화=눈 · 그래프=온톨로지 별자리). CSS가 data-mode로 얼굴을 고른다.
     if (elements.kiumi) elements.kiumi.dataset.mode = graphView ? 'graph' : 'chat';
+    // 모드 네비 활성 하이라이트(셸 v2) — 같은 data-mode 축을 쓴다.
+    if (elements.modeNav) elements.modeNav.dataset.mode = graphView ? 'graph' : 'chat';
   }
 
   // 브레인이 안 됐는데 그래프 모드로 들어오면 빈 캔버스 대신 이렇게 정직하게
