@@ -1331,7 +1331,9 @@ window.athena.on('athena:orb-turn-committed', ({ query, result } = {}) => {
 // 없다). 사람이 이 카드의 [승인]을 눌러야 감시가 시작된다. [승인] 클릭은
 // LLM 재스폰 없이 렌더러가 백엔드 confirm을 직접 부른다(~200ms — C1 결정).
 // 방식 행은 필수다(§8 고지 의무 — verify 검증 대상).
-const shownDraftIds = new Set();
+// id → 초안을 처음 본 시각(ISO, 앱측 클록) — 백엔드 생성 시각이 아니라 "우리가
+// 언제부터 이 카드를 보여주고 있었나"를 잰다. dedup 겸용(Set 대신 Map).
+const firstSeenAtById = new Map();
 
 async function refreshRoutineDrafts() {
   let routines;
@@ -1341,11 +1343,19 @@ async function refreshRoutineDrafts() {
       ? res.data.routines : [];
   } catch { return; }
   for (const r of routines) {
-    if (r.status !== 'draft' || shownDraftIds.has(r.id)) continue;
-    shownDraftIds.add(r.id);
+    if (r.status !== 'draft' || firstSeenAtById.has(r.id)) continue;
+    firstSeenAtById.set(r.id, new Date().toISOString());
     renderApprovalCard(r);
   }
 }
+
+// 카드는 한 번 만들어지면 DOM에 그대로 남는다(대화 이력이 append-only) — 시간이
+// 지나도 "방금"에 고정되지 않도록 떠 있는 카드만 골라 30초마다 다시 계산한다.
+setInterval(() => {
+  document.querySelectorAll('.routine-approval .agent-rel[data-fired-at]').forEach((el) => {
+    el.textContent = routineTurnLib.relativeText(el.dataset.firedAt, Date.now());
+  });
+}, 30 * 1000);
 
 function approvalModeLine(r) {
   const modeText = routineTurnLib.describeMode(r.mode);
@@ -1372,7 +1382,9 @@ function renderApprovalCard(r) {
   head.appendChild(label);
   const time = document.createElement('span');
   time.className = 'agent-rel';
-  time.textContent = '방금';
+  const firstSeenAt = firstSeenAtById.get(r.id) || new Date().toISOString();
+  time.dataset.firedAt = firstSeenAt;
+  time.textContent = routineTurnLib.relativeText(firstSeenAt, Date.now());
   head.appendChild(time);
   card.appendChild(head);
 
