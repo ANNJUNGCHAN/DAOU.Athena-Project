@@ -2303,8 +2303,31 @@ app.whenReady().then(async () => {
         surfaceToggle = { afterGraphClick, afterSummaryClick };
       }
       const containerText = container.textContent;
+      // 사이드바 모드 네비 "그래프" 클릭 → 그래프 진입 회귀 가드(스텝16, 계획서
+      // 자체 요구 — "네비 클릭→그래프 진입 어서션"). 내비 항목은 목적지다
+      // (control-strip 필의 toggle()과 달리) — 이미 그래프 모드에서 다시
+      // 눌러도 안 나가져야 한다(스텝2에서 실측한 "이미 그 화면에 있는데
+      // 토글하면 도로 나간다" 결함과 같은 종류를 사이드바 진입로에서도 막는다).
+      // 지금은 이미 그래프 모드다(위 pill.click()) — 필로 나갔다가 내비로
+      // 다시 들어와, 시작할 때와 같은 상태(그래프 모드)로 끝난다.
+      const modeGraphEl = document.getElementById('sidebarModeGraph');
+      const modeChatEl = document.getElementById('sidebarModeChat');
+      let sidebarModeNav = null;
+      if (modeGraphEl && modeChatEl) {
+        pill.click(); // 그래프 → 답변으로 나간다(필의 toggle()).
+        const afterExit = { mosaicHidden: document.getElementById('mosaic').hidden };
+        modeGraphEl.click(); // 답변 → 그래프로 내비가 들여보낸다.
+        const afterEnter = {
+          mosaicHidden: document.getElementById('mosaic').hidden,
+          graphNavActive: modeGraphEl.classList.contains('is-active'),
+          chatNavActive: modeChatEl.classList.contains('is-active'),
+        };
+        modeGraphEl.click(); // 이미 그래프인데 내비를 또 누른다 — 목적지라 안 나가져야 한다.
+        const afterReClick = { mosaicHidden: document.getElementById('mosaic').hidden };
+        sidebarModeNav = { afterExit, afterEnter, afterReClick };
+      }
       if (!brainReady) {
-        return { wired: true, brainReady, clickOpened, summaryHidden, summaryTableVisible, surfaceToggle, containerText };
+        return { wired: true, brainReady, clickOpened, summaryHidden, summaryTableVisible, surfaceToggle, containerText, sidebarModeNav };
       }
       const byClick = window.AthenaLib.GraphRender.describeRendered(container);
       // 좌표 계약은 배치 결과와 대조해야 알 수 있고, 클릭 경로는 그 값을 돌려주지
@@ -2320,6 +2343,7 @@ app.whenReady().then(async () => {
         summaryHidden,
         summaryTableVisible,
         surfaceToggle,
+        sidebarModeNav,
         placedNodes: placed ? placed.nodes.length : 0,
         placedEdges: placed ? placed.edges.length : 0,
         drawn,
@@ -2393,6 +2417,18 @@ app.whenReady().then(async () => {
       );
       assertOk('graph-mode: 요약 탭 클릭도 답변 모드로 튕겨나가지 않는다', st.afterSummaryClick.mosaicHidden === true);
       assertOk('graph-mode: 요약 탭이 활성 스타일을 받는다', st.afterSummaryClick.summaryTabActive === true);
+    }
+    if (graph.sidebarModeNav) {
+      // 스텝16 회귀 가드 — 사이드바 모드 네비 "그래프"는 목적지다(토글이 아니다).
+      const nav = graph.sidebarModeNav;
+      assertOk('sidebar-mode-nav: 필로 나가면 답변 모드다', nav.afterExit.mosaicHidden === false);
+      assertOk('sidebar-mode-nav: "그래프" 클릭이 그래프 모드로 들여보낸다', nav.afterEnter.mosaicHidden === true);
+      assertOk('sidebar-mode-nav: "그래프" 항목이 선택 표시를 받는다', nav.afterEnter.graphNavActive === true);
+      assertOk('sidebar-mode-nav: "대화" 항목은 선택 표시를 잃는다', nav.afterEnter.chatNavActive === false);
+      assertOk(
+        'sidebar-mode-nav: 이미 그래프 모드에서 "그래프"를 다시 눌러도 안 나간다(목적지, 토글 아님)',
+        nav.afterReClick.mosaicHidden === true,
+      );
     }
   } catch (err) {
     report.graphMode = { error: String((err && err.message) || err) };
