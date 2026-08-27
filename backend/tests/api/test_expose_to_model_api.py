@@ -61,3 +61,30 @@ def test_expose_to_model_rejects_extra_fields() -> None:
             headers={"Authorization": f"Bearer {BEARER}"},
         )
         assert response.status_code == 422
+
+
+def test_model_caller_is_gated_until_toggle_opens() -> None:
+    """WP-I I2+I3 — X-Athena-Caller: model 호출은 게이트 전용 503(G-I3)으로
+    막히고, 토글 ON 이후에는 게이트를 지나 기존 상태(브레인 미기동 503)로
+    떨어진다. 두 503은 detail로 구분된다(MCP dispatch()가 이 마커를 읽는다)."""
+    model_headers = {"Authorization": f"Bearer {BEARER}", "X-Athena-Caller": "model"}
+    route = "/api/v1/brain/analysis/god-nodes"
+    with _client() as client:
+        gated = client.get(route, headers=model_headers)
+        assert gated.status_code == 503
+        assert gated.json()["detail"] == "expose-to-model-disabled"
+
+        client.post(PATH, json={"enabled": True}, headers={"Authorization": f"Bearer {BEARER}"})
+        opened = client.get(route, headers=model_headers)
+        assert opened.status_code == 503
+        assert opened.json()["detail"] == "Investment brain is not ready"
+
+
+def test_local_caller_without_header_is_not_gated() -> None:
+    """헤더 없는 로컬 호출(Electron)은 게이트와 무관하게 기존 경로 그대로다 —
+    게이트는 모델 자기신고 경로 전용이다(G-I1)."""
+    route = "/api/v1/brain/analysis/god-nodes"
+    with _client() as client:
+        response = client.get(route, headers={"Authorization": f"Bearer {BEARER}"})
+        assert response.status_code == 503
+        assert response.json()["detail"] == "Investment brain is not ready"

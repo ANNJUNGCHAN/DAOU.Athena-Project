@@ -9,7 +9,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Annotated
 
-from fastapi import APIRouter, BackgroundTasks, Header, Request
+from fastapi import APIRouter, BackgroundTasks, Header, HTTPException, Request
 from pydantic import BaseModel, ConfigDict, Field
 
 from athena_api.brain import (
@@ -34,6 +34,22 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/brain", tags=["Investment brain"])
 
 _NOT_LLM_EXPOSED = {"x-athena-llm-exposed": False}
+
+# exposeToModel 게이트(WP-I) — `X-Athena-Caller: model` 자기신고 헤더(G-I1)가 붙은
+# 호출만 검사한다. 자기신고 기반이라 실수 방지용이지 적대적 우회를 막지 않는다
+# (expose-authz-design.md §2(a)) — 기존 X-Athena-Confirm류 신뢰 등급의 확장일 뿐
+# 새 위협모델을 만들지 않는다. detail 문자열은 MCP dispatch()가 "토글 꺼짐"과
+# "브레인 미기동"의 503을 구분하는 마커라 바꾸면 안 된다(brain_tools.py와 짝).
+_MODEL_GATE_DETAIL = "expose-to-model-disabled"
+
+
+def _require_model_exposure(request: Request, caller: str | None) -> None:
+    if caller != "model":
+        return  # Electron 등 로컬 호출자는 기존 그대로 — 게이트는 모델 경로 전용(G-I1).
+    if not getattr(request.app.state, "expose_to_model", False):
+        # 전용 503(G-I3) — 범용 >=400 분기와 달리 "사용자가 노출을 꺼 뒀다"를
+        # 실제 오류와 구분해 말할 수 있게 한다.
+        raise HTTPException(status_code=503, detail=_MODEL_GATE_DETAIL)
 _DEFAULT_PROFILE_WINDOW_DAYS = 90
 _DEFAULT_PROFILE_LIMIT = 50
 _DEFAULT_CHATS_LIMIT = 100
@@ -307,10 +323,12 @@ async def get_brain_conversations(
 async def get_brain_profile_summary(
     request: Request,
     authorization: Annotated[str, Header(alias="Authorization")],
+    x_athena_caller: Annotated[str | None, Header(alias="X-Athena-Caller")] = None,
     window_days: int = _DEFAULT_PROFILE_WINDOW_DAYS,
     limit: int = _DEFAULT_PROFILE_LIMIT,
 ) -> ProfileSummaryResponse:
     require_local_bearer(request, authorization)
+    _require_model_exposure(request, x_athena_caller)
     store = _require_store(request)
     entries = await store.investor_profile_summary(
         now=utc_now(), window_days=window_days, limit=limit
@@ -553,9 +571,11 @@ class ClusterMapResponse(BaseModel):
 async def get_brain_god_nodes(
     request: Request,
     authorization: Annotated[str, Header(alias="Authorization")],
+    x_athena_caller: Annotated[str | None, Header(alias="X-Athena-Caller")] = None,
     limit: int = _DEFAULT_ANALYSIS_LIMIT,
 ) -> GodNodesResponse:
     require_local_bearer(request, authorization)
+    _require_model_exposure(request, x_athena_caller)
     projected = await _require_projector(request).project()
     return GodNodesResponse(
         revision=projected.revision,
@@ -581,9 +601,11 @@ async def get_brain_god_nodes(
 async def get_brain_surprising_connections(
     request: Request,
     authorization: Annotated[str, Header(alias="Authorization")],
+    x_athena_caller: Annotated[str | None, Header(alias="X-Athena-Caller")] = None,
     limit: int = _DEFAULT_ANALYSIS_LIMIT,
 ) -> SurprisingConnectionsResponse:
     require_local_bearer(request, authorization)
+    _require_model_exposure(request, x_athena_caller)
     projector = _require_projector(request)
     projected = await projector.project()
     assignment = await projector.clusters()
@@ -617,9 +639,11 @@ async def get_brain_surprising_connections(
 async def get_brain_suggested_questions(
     request: Request,
     authorization: Annotated[str, Header(alias="Authorization")],
+    x_athena_caller: Annotated[str | None, Header(alias="X-Athena-Caller")] = None,
     limit: int = _DEFAULT_ANALYSIS_LIMIT,
 ) -> SuggestedQuestionsResponse:
     require_local_bearer(request, authorization)
+    _require_model_exposure(request, x_athena_caller)
     store = _require_store(request)
     projected = await _require_projector(request).project()
     return SuggestedQuestionsResponse(
@@ -650,9 +674,11 @@ async def get_brain_suggested_questions(
 async def get_brain_graph_diff(
     request: Request,
     authorization: Annotated[str, Header(alias="Authorization")],
+    x_athena_caller: Annotated[str | None, Header(alias="X-Athena-Caller")] = None,
     from_revision: int = 0,
 ) -> GraphDiffResponse:
     require_local_bearer(request, authorization)
+    _require_model_exposure(request, x_athena_caller)
     store = _require_store(request)
     diff = graph_diff(await store.events(), from_revision=max(0, from_revision))
     return GraphDiffResponse(
