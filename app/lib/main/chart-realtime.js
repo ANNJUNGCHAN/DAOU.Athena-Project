@@ -9,6 +9,11 @@
 const F_TIME = '20';   // 체결시간 HHMMSS(KST)
 const F_PRICE = '10';  // 현재가
 const F_VOLUME = '15'; // 체결량(부호는 매수/매도 구분 — 크기만 쓴다)
+// 시세 카드(단계 8 확장 조사, card-kind-시세.js 4열) 전용 — 진행봉 접기에는 안 쓴다.
+// F_TIME/F_PRICE/F_VOLUME과 같은 외부 규격(키움 실시간 FID) 근거이되, 이 두 필드는
+// 아직 실프레임으로 확인 전이다(백엔드 미기동 환경) — 없으면 null, 있으면 쓴다.
+const F_CHANGE_RATE = '12'; // 등락율(기준가 대비, 부호가 방향 그 자체 — 지우면 안 된다)
+const F_ACC_VOLUME = '13';  // 누적거래량
 
 const REAL_TR_ID = '0B';
 const KST_OFFSET_SEC = 9 * 3600;
@@ -16,6 +21,14 @@ const KST_OFFSET_SEC = 9 * 3600;
 function toMagnitude(value) {
   if (value == null) return null;
   const n = Number(String(value).trim().replace(/^[+-]/, ''));
+  return Number.isFinite(n) ? n : null;
+}
+
+// 등락율은 부호가 방향 그 자체다(체결가/체결량과 달리 지우면 안 된다) — 부호를
+// 보존한 채로만 숫자화한다. 없으면 null(값을 지어내지 않는다, §8).
+function toSignedNumber(value) {
+  if (value == null) return null;
+  const n = Number(String(value).trim());
   return Number.isFinite(n) ? n : null;
 }
 
@@ -54,7 +67,15 @@ function parseRealTick(row, tradingDate) {
   if (price == null || price <= 0) return null;
   const at = kstToEpochSec(tradingDate, values[F_TIME]);
   if (at == null) return null;
-  return { symbol, at, price, volume: toMagnitude(values[F_VOLUME]) || 0 };
+  return {
+    symbol,
+    at,
+    price,
+    volume: toMagnitude(values[F_VOLUME]) || 0,
+    // 시세 카드 4열 확장분 — 프레임에 없으면 null(소비측이 갱신을 스킵한다).
+    changeRate: toSignedNumber(values[F_CHANGE_RATE]),
+    accVolume: toMagnitude(values[F_ACC_VOLUME]),
+  };
 }
 
 // REAL 프레임 전체 → 체결 배열. trnm이 REAL이 아니면 빈 배열.
