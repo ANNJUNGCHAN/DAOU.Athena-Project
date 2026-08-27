@@ -56,17 +56,17 @@ const $resultDockChips = document.createElement('div');
 $resultDockChips.className = 'result-dock-chips';
 sourceRow.row.appendChild($resultDockChips);
 sourceRow.row.hidden = true;
-// 하위 에이전트 도크(task #32, 보드04 2EZ-0/DG2-0) — 결과물·출처와 달리 턴이
+// 하위 에이전트 도크(보드 37 9LD-0) — 결과물·출처와 달리 턴이
 // 끝나야 채워지는 게 아니라 진행 중에 실시간으로 늘어난다(Agent 생애주기
-// system 이벤트). 세 번째(마지막) 행이라 .result-dock-row:last-child의 기존
-// 구분선 규칙(마지막 행엔 border-bottom 없음)이 새 CSS 없이 그대로 적용된다.
+// system 이벤트). 행 순서는 보드 37 실측 결과물→하위 에이전트→출처 — 마지막
+// 행(출처)이 .result-dock-row:last-child 구분선 규칙을 받는다.
 const agentDockRow = buildResultDockRow('하위 에이전트');
 const $resultDockAgentCount = agentDockRow.countEl;
 const $resultDockAgentList = document.createElement('div');
 $resultDockAgentList.className = 'result-dock-agent-list';
 agentDockRow.row.appendChild($resultDockAgentList);
 agentDockRow.row.hidden = true;
-$resultDock.append(resultRow.row, sourceRow.row, agentDockRow.row);
+$resultDock.append(resultRow.row, agentDockRow.row, sourceRow.row);
 $app.insertBefore($resultDock, $history);
 // 세 행 중 하나라도 보이면 도크 자체를 보인다 — 개별 updateResultDock/
 // 서브에이전트 갱신 양쪽에서 부른다(단일 진실 — 도크 hidden을 직접 안 건드린다).
@@ -678,30 +678,21 @@ async function runQueryLive(text) {
   $resultDockAgentList.textContent = '';
   agentDockRow.row.hidden = true;
   refreshResultDockVisibility();
-  const subagentStates = new Map(); // taskId -> { description, status, elapsedMs, lastActivity }
-  const subagentRows = new Map(); // taskId -> { row, desc, status, elapsed, activity }
+  const subagentStates = new Map(); // taskId -> { description, status }
+  const subagentRows = new Map(); // taskId -> { row, label }
+  // 행은 보드 37 실측 한 줄: 색점(작업 중=info · 완료=ok) + "{이름} · {상태}".
   function ensureSubagentRow(taskId) {
     let entry = subagentRows.get(taskId);
     if (entry) return entry;
     const row = document.createElement('div');
     row.className = 'result-dock-agent-row';
-    const top = document.createElement('div');
-    top.className = 'result-dock-agent-row-top';
-    const desc = document.createElement('span');
-    desc.className = 'result-dock-agent-desc';
-    const status = document.createElement('span');
-    status.className = 'result-dock-agent-status';
-    top.append(desc, status);
-    const bottom = document.createElement('div');
-    bottom.className = 'result-dock-agent-row-bottom';
-    const elapsed = document.createElement('span');
-    elapsed.className = 'result-dock-agent-elapsed';
-    const activity = document.createElement('span');
-    activity.className = 'result-dock-agent-activity';
-    bottom.append(elapsed, activity);
-    row.append(top, bottom);
+    const dot = document.createElement('span');
+    dot.className = 'result-dock-agent-dot';
+    const label = document.createElement('span');
+    label.className = 'result-dock-agent-label';
+    row.append(dot, label);
     $resultDockAgentList.appendChild(row);
-    entry = { row, desc, status, elapsed, activity };
+    entry = { row, label };
     subagentRows.set(taskId, entry);
     return entry;
   }
@@ -709,7 +700,7 @@ async function runQueryLive(text) {
     if (myToken !== abortToken || !step || !step.taskId) return;
     let s = subagentStates.get(step.taskId);
     if (!s) {
-      s = { description: null, status: 'running', elapsedMs: null, lastActivity: null };
+      s = { description: null, status: 'running' };
       subagentStates.set(step.taskId, s);
     }
     if (step.subtype === 'task_started') {
@@ -718,8 +709,6 @@ async function runQueryLive(text) {
       // description이 시작 때와 다르게 갱신될 수 있다(실측, .omc/research/
       // 2026-08-27-서브에이전트-스트림-계약.md §2b) — 최신 값을 반영한다.
       if (step.description) s.description = step.description;
-      if (step.lastToolName) s.lastActivity = step.lastToolName; // main.js가 이미 toolStepLabel로 매핑했다
-      if (typeof step.elapsedMs === 'number') s.elapsedMs = step.elapsedMs;
     } else if (step.subtype === 'task_updated') {
       // 확정된 상태값은 completed 하나뿐이다(실측 미관측 — 실패/취소 라벨을
       // 지어내지 않는다). completed가 아니면 이미 갖고 있던 상태를 유지한다.
@@ -728,14 +717,13 @@ async function runQueryLive(text) {
     // task_notification의 summary는 이번 패스 UI에 안 낸다 — 도크는 압축 행이고
     // "자세히 보기" 드릴인은 범위 밖이다(연구 문서 §2d, output_file 노출 규율도 있다).
     const entry = ensureSubagentRow(step.taskId);
-    entry.desc.textContent = s.description || '하위 에이전트';
     const running = s.status !== 'completed';
-    entry.status.textContent = running ? '진행 중' : '완료';
-    entry.status.classList.toggle('is-running', running);
-    const seconds = typeof s.elapsedMs === 'number' ? (s.elapsedMs / 1000).toFixed(1) : '0.0';
-    entry.elapsed.textContent = `${seconds}s`;
-    entry.activity.textContent = s.lastActivity || '';
-    $resultDockAgentCount.textContent = String(subagentStates.size);
+    entry.label.textContent = `${s.description || '하위 에이전트'} · ${running ? '작업 중' : '완료'}`;
+    entry.row.classList.toggle('is-running', running);
+    // 카운트는 보드 37 실측 "완료 / 전체" 포맷.
+    let doneCount = 0;
+    for (const st of subagentStates.values()) if (st.status === 'completed') doneCount += 1;
+    $resultDockAgentCount.textContent = `${doneCount} / ${subagentStates.size}`;
     agentDockRow.row.hidden = subagentStates.size === 0;
     refreshResultDockVisibility();
     scrollAfterRender();

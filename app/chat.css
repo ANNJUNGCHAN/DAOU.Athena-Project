@@ -281,7 +281,7 @@ html, body { background: transparent; }
  * 반투명 흰 유리 톤(rgba(255,255,255,0.55))을 그대로 재사용한다(새 색 없음). */
 .result-dock {
   flex-shrink: 0;
-  margin: 4px 4px 8px;
+  margin: 0 4px 8px; /* 보드 37 실측 — 위 마진 없음(mx-1 mb-2) */
   display: flex;
   flex-direction: column;
   border-radius: 12px;
@@ -318,38 +318,36 @@ html, body { background: transparent; }
   color: var(--color-k-faint);
 }
 .result-dock-chips { display: flex; flex-wrap: wrap; gap: 6px; }
-/* 하위 에이전트 도크(task #32, 보드04 2EZ-0/DG2-0) — 행 2줄: 위(설명+상태),
- * 아래(경과+최근활동). 폰트·색 전부 기존 토큰 재사용 — 새 색 없음. */
-.result-dock-agent-list { display: flex; flex-direction: column; gap: 8px; }
-.result-dock-agent-row { display: flex; flex-direction: column; gap: 2px; }
-.result-dock-agent-row-top { display: flex; align-items: center; gap: 8px; }
-.result-dock-agent-desc {
-  flex: 1 1 auto;
+/* 출처·하위 에이전트 행은 머리-내용 간격이 결과물 행(2px)보다 넓다(보드 37 gap-1=4). */
+.result-dock-row:has(.result-dock-chips),
+.result-dock-row:has(.result-dock-agent-list) { gap: 4px; }
+/* 도크 출처 칩 — 보드 37 실측: 잉크 6% 채움·보더 없음·px 9. 전역 .chip(턴 메타)과
+ * 달리 도크 안에서만 이 모양이다. */
+.result-dock-chips .chip {
+  background: rgb(16 19 26 / 6%);
+  border: none;
+  padding: 3px 9px;
+  color: var(--color-k-dim);
+}
+/* 하위 에이전트 도크(보드 37 9LD-0) — 행 한 줄: 색점(작업 중=info · 완료=ok) +
+ * "{이름} · {상태}". 폰트·색 전부 기존 토큰 재사용 — 새 색 없음. */
+.result-dock-agent-list { display: flex; flex-direction: column; gap: 4px; }
+.result-dock-agent-row { display: flex; align-items: center; gap: 7px; }
+.result-dock-agent-dot {
+  width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+  background: var(--color-ok);
+}
+.result-dock-agent-row.is-running .result-dock-agent-dot { background: var(--color-info); }
+.result-dock-agent-label {
   min-width: 0;
   font-family: var(--font-body);
   font-size: var(--text-sm);
-  color: var(--color-k-text);
+  line-height: var(--leading-tight);
+  color: var(--color-k-dim);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.result-dock-agent-status {
-  flex-shrink: 0;
-  font-family: var(--font-mono);
-  font-size: var(--text-sm);
-  color: var(--color-k-faint); /* 완료 */
-}
-.result-dock-agent-status.is-running { color: var(--color-k-dim); } /* 진행 중 */
-.result-dock-agent-row-bottom {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-mono);
-  font-size: var(--text-sm);
-  color: var(--color-k-faint);
-}
-.result-dock-agent-elapsed { flex-shrink: 0; }
-.result-dock-agent-activity { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .history {
   flex: 1 1 auto;
@@ -400,10 +398,18 @@ html, body { background: transparent; }
   max-width: 1020px; /* two-windows.md: 1560px 전폭에서 타임스탬프가 본문과 끊겨 보임 → 읽기 컬럼 */
   flex-shrink: 0;
 }
+/* 사용자 질문 = 우측 정렬 말풍선(보드 37·38 공통 어휘 — B8 감사 2026-08-27).
+ * 라운드는 rounded-t-2xl·bl-2xl·br-xs(16/16/4/16) — 꼬리가 입력줄 쪽을 본다. */
 .turn-q {
-  font-family: var(--font-strong);
-  font-size: var(--text-md);
-  color: var(--color-k-dim);
+  align-self: flex-end;
+  max-width: 300px;
+  padding: 8px 14px;
+  border-radius: var(--radius-2xl) var(--radius-2xl) var(--radius-xs) var(--radius-2xl);
+  background: rgb(16 19 26 / 7%);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--color-k-text);
 }
 .turn-a {
   font-size: var(--text-lg);

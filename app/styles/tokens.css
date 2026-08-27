@@ -82,6 +82,19 @@
   --text-xl: 20px;
   --text-display: 28px;
   --text-hero: 72px;
+
+  /* 줄높이·라운드 스케일 — Paper 파일 토큰 실값(2026-08-27 get_tokens 실측).
+     chat.css(.turn-fail-card)·orb.css가 이미 var()로 참조 중이었으나 정의가
+     없어 라운드가 0으로 떨어지고 있었다(B8 감사 발견). */
+  --leading-tight: 16px;
+  --leading-normal: 20px;
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 14px;
+  --radius-2xl: 16px;
+  --radius-full: 999px;
 }
 
 /* 유리 투명도 5단 (2026-08-22 사용자 지시 — 애플 Liquid Glass 레퍼런스가 투명도를
