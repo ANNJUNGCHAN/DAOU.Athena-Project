@@ -99,7 +99,10 @@ test('GATEWAY_ALLOWED_TOOLS: 서버 단위 허용 — 업스트림 재노출 툴
   // 툴 1개짜리 기본값은 게이트웨이가 재노출한 업스트림 툴(dart-mcp 등)을 전부
   // 거부하게 만든다 — 2026-08-17 실사용에서 실측된 결함. 툴 단위 게이트는
   // 게이트웨이 consent allowlist가 담당하므로 CLI는 서버 단위로 허용한다.
-  assert.equal(GATEWAY_ALLOWED_TOOLS, 'mcp__athena');
+  // Task(서브에이전트, 2026-08-27) 추가 — 허용목록은 프로세스 전체에 한 벌이라
+  // 서브에이전트 권한 경계가 부모보다 넓어지지 않는다(claude-runner-subagent-probe
+  // 실측: mcp__athena는 부모처럼 성공, 허용목록 밖 Write는 부모처럼 거부).
+  assert.equal(GATEWAY_ALLOWED_TOOLS, 'mcp__athena,Task');
 });
 
 test('DISABLE_TOOL_SEARCH_ENV: 항상 "0"으로 고정한다 — 부모 셸의 ENABLE_TOOL_SEARCH 상속을 덮는다', () => {
