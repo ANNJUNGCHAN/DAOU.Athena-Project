@@ -99,7 +99,9 @@ test('GATEWAY_ALLOWED_TOOLS: 서버 단위 허용 — 업스트림 재노출 툴
   // 툴 1개짜리 기본값은 게이트웨이가 재노출한 업스트림 툴(dart-mcp 등)을 전부
   // 거부하게 만든다 — 2026-08-17 실사용에서 실측된 결함. 툴 단위 게이트는
   // 게이트웨이 consent allowlist가 담당하므로 CLI는 서버 단위로 허용한다.
-  assert.equal(GATEWAY_ALLOWED_TOOLS, 'mcp__athena');
+  // Read·Glob(2026-08-27): 키우미 파일/폴더 첨부가 경로를 프롬프트에 싣는다 —
+  // -p 모드에선 허용 목록 밖 툴이 전부 거부라 이 둘이 없으면 첨부를 못 읽는다.
+  assert.equal(GATEWAY_ALLOWED_TOOLS, 'mcp__athena,Read,Glob');
 });
 
 test('DISABLE_TOOL_SEARCH_ENV: 항상 "0"으로 고정한다 — 부모 셸의 ENABLE_TOOL_SEARCH 상속을 덮는다', () => {
