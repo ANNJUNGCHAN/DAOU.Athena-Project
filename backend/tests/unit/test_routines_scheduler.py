@@ -5,7 +5,7 @@ from __future__ import annotations
 import asyncio
 import io
 import zipfile
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, datetime, timedelta, timezone
 
 import pytest
 
@@ -15,11 +15,14 @@ from athena_api.routines.disclosure_source import (
     parse_list_payload,
 )
 from athena_api.routines.ledger import RoutineLedger
+from athena_api.routines.models import Condition, derive_mode
 from athena_api.routines.rules import validate_draft
 from athena_api.routines.runtime import RoutinesRuntime
 from athena_api.routines.scheduler import RoutineScheduler, adapt_real_message
 from athena_api.routines.store import RoutineStore, RoutineTransitionError
 from athena_api.routines.triggers import TriggerEngine
+
+_KST = timezone(timedelta(hours=9))
 
 
 def _spec(source="price.change_rate", op=">=", value=5.0, symbol="005930"):
@@ -335,6 +338,221 @@ async def test_expire_releases_subscription_via_scheduler_on_expire(tmp_path):
     assert store.get(periodic_spec.id).status == "expired"
     assert ws.removed.count(("0B", ("005930",))) == 1  # 딱 1회 — 이중 해제 없음
     assert ws.removed.count(("1h", ("005930",))) == 1
+
+
+# ---------- 예약(schedule.daily) 벽시계 트리거(F1) ----------
+
+
+def _schedule_spec(value="ALL@07:30", symbol="005930", store=None):
+    spec = validate_draft(
+        {
+            "symbol": symbol,
+            "condition": {"source": "schedule.daily", "op": "at", "value": value},
+            "cooldown_s": 60,
+            "expires_days": 7,
+        }
+    )
+    if store is not None:
+        store.upsert(spec)
+        store.transition(spec.id, "active")
+    return spec
+
+
+def test_derive_mode_full_regression_after_scheduled_mode_added():
+    """BLOCKER 회귀 방지(사실10) — schedule.daily 도입이 기존 6종 소스 라우팅을
+    안 건드리고, schedule.daily 자신은 정확히 scheduled로 라우팅됨을 전수 확인."""
+    realtime_cases = [
+        ("price.current", "<", 200000),
+        ("price.change_rate", ">=", 5.0),
+        ("trade.strength", ">=", 100.0),
+        ("volume.prev_day_ratio", ">=", 2.0),
+        ("vi.triggered", "==", True),
+    ]
+    for source, op, value in realtime_cases:
+        cond = _spec(source=source, op=op, value=value).condition
+        assert derive_mode(cond) == "realtime-ws", source
+
+    disclosure = validate_draft(
+        {
+            "symbol": "207940",
+            "condition": {
+                "source": "disclosure.title_keyword",
+                "op": "contains",
+                "value": "유상증자",
+            },
+            "cooldown_s": 60,
+            "expires_days": 7,
+        }
+    ).condition
+    assert derive_mode(disclosure) == "periodic"
+
+    scheduled = _schedule_spec().condition
+    assert derive_mode(scheduled) == "scheduled"
+
+
+@pytest.mark.asyncio
+async def test_run_periodic_once_skips_schedule_daily(tmp_path):
+    """BLOCKER 회귀 방지 — schedule.daily가 periodic 폴링(fetch_new_titles·
+    evaluate)에 전혀 걸리지 않고, disclosure 스펙만 정상 평가됨을 명시 단언."""
+    store = RoutineStore(tmp_path / "r.json")
+    _schedule_spec(store=store)
+
+    disclosure_spec = validate_draft(
+        {
+            "symbol": "207940",
+            "condition": {
+                "source": "disclosure.title_keyword",
+                "op": "contains",
+                "value": "유상증자",
+            },
+            "cooldown_s": 60,
+            "expires_days": 7,
+        }
+    )
+    store.upsert(disclosure_spec)
+    store.transition(disclosure_spec.id, "active")
+
+    engine = TriggerEngine(ledger=RoutineLedger(tmp_path / "l.jsonl"))
+    events: list[dict] = []
+
+    async def notify(ev):
+        events.append(ev)
+
+    fetched: list[str] = []
+
+    class FakeDisclosure:
+        async def fetch_new_titles(self, symbol, *, bgn_de, end_de):
+            fetched.append(symbol)
+            return ["주요사항보고서(유상증자결정)"]
+
+    sched = RoutineScheduler(
+        store=store,
+        engine=engine,
+        notify=notify,
+        disclosure=FakeDisclosure(),
+        poll_interval_s=9999,
+    )
+    await sched.run_periodic_once()
+
+    assert fetched == ["207940"]  # schedule.daily(005930)은 조회 자체가 없었다
+    assert [e["type"] for e in events] == ["routine-fired"]
+    assert events[0]["mode"] == "periodic"
+
+
+@pytest.mark.asyncio
+async def test_schedule_loop_fires_on_weekday_time_match(tmp_path):
+    store = RoutineStore(tmp_path / "r.json")
+    _schedule_spec(value="1,2,3,4,5@07:30", store=store)
+    engine = TriggerEngine(ledger=RoutineLedger(tmp_path / "l.jsonl"))
+    events: list[dict] = []
+
+    async def notify(ev):
+        events.append(ev)
+
+    monday_0730 = datetime(2026, 8, 24, 7, 30, tzinfo=_KST)  # 2026-08-24 = 월요일
+    sched = RoutineScheduler(
+        store=store, engine=engine, notify=notify, now_kst=lambda: monday_0730
+    )
+    await sched.run_schedule_once()
+
+    assert [e["type"] for e in events] == ["routine-fired"]
+    assert events[0]["mode"] == "scheduled"
+    rows = engine.ledger.read_all()
+    assert len(rows) == 1
+    assert rows[0]["verdict"] == "fired"
+
+
+@pytest.mark.asyncio
+async def test_schedule_loop_skips_non_matching_weekday(tmp_path):
+    store = RoutineStore(tmp_path / "r.json")
+    _schedule_spec(value="1,2,3,4,5@07:30", store=store)  # 평일 전용
+    engine = TriggerEngine(ledger=RoutineLedger(tmp_path / "l.jsonl"))
+    events: list[dict] = []
+
+    async def notify(ev):
+        events.append(ev)
+
+    saturday_0730 = datetime(2026, 8, 22, 7, 30, tzinfo=_KST)  # 2026-08-22 = 토요일
+    sched = RoutineScheduler(
+        store=store, engine=engine, notify=notify, now_kst=lambda: saturday_0730
+    )
+    await sched.run_schedule_once()
+
+    assert events == []
+    assert engine.ledger.read_all() == []
+
+
+@pytest.mark.asyncio
+async def test_schedule_loop_fires_once_per_day(tmp_path):
+    store = RoutineStore(tmp_path / "r.json")
+    _schedule_spec(store=store)
+    engine = TriggerEngine(ledger=RoutineLedger(tmp_path / "l.jsonl"))
+    events: list[dict] = []
+
+    async def notify(ev):
+        events.append(ev)
+
+    now = datetime(2026, 8, 24, 7, 30, tzinfo=_KST)
+    sched = RoutineScheduler(store=store, engine=engine, notify=notify, now_kst=lambda: now)
+    await sched.run_schedule_once()
+    await sched.run_schedule_once()  # 같은 날 두 번째 틱 — 재발화 안 함
+
+    assert len(events) == 1
+
+
+@pytest.mark.asyncio
+async def test_schedule_loop_restart_resets_local_fired_state(tmp_path):
+    """재기동 후 오늘 이미 발화했어도 프로세스 로컬 `_last_fired_date`가 리셋돼
+    한 번 더 발화할 수 있다 — TriggerState와 동일한, 문서화된 기존 한계다."""
+    store = RoutineStore(tmp_path / "r.json")
+    _schedule_spec(store=store)
+    ledger_path = tmp_path / "l.jsonl"
+    events: list[dict] = []
+
+    async def notify(ev):
+        events.append(ev)
+
+    now = datetime(2026, 8, 24, 7, 30, tzinfo=_KST)
+
+    sched1 = RoutineScheduler(
+        store=store,
+        engine=TriggerEngine(ledger=RoutineLedger(ledger_path)),
+        notify=notify,
+        now_kst=lambda: now,
+    )
+    await sched1.run_schedule_once()
+    assert len(events) == 1
+
+    # "재기동" — 새 스케줄러 인스턴스(_last_fired_date가 빈 상태로 리셋)
+    sched2 = RoutineScheduler(
+        store=store,
+        engine=TriggerEngine(ledger=RoutineLedger(ledger_path)),
+        notify=notify,
+        now_kst=lambda: now,
+    )
+    await sched2.run_schedule_once()
+    assert len(events) == 2  # 새 프로세스는 오늘 이미 발화했음을 모른다(허용된 한계)
+
+
+@pytest.mark.asyncio
+async def test_schedule_loop_records_last_error_on_corrupt_stored_value(tmp_path):
+    """rules.py가 draft 시점에 막았어야 하나, 저장값이 손상됐을 때도 조용히
+    죽지 않고 last_error에 남긴다(프리모템 1)."""
+    store = RoutineStore(tmp_path / "r.json")
+    spec = _schedule_spec(store=store)
+    spec.condition = Condition(source="schedule.daily", op="at", value="손상된값")
+    engine = TriggerEngine(ledger=RoutineLedger(tmp_path / "l.jsonl"))
+    events: list[dict] = []
+
+    async def notify(ev):
+        events.append(ev)
+
+    now = datetime(2026, 8, 24, 7, 30, tzinfo=_KST)
+    sched = RoutineScheduler(store=store, engine=engine, notify=notify, now_kst=lambda: now)
+    await sched.run_schedule_once()
+
+    assert events == []
+    assert spec.id in sched.last_error
 
 
 # ---------- 공시 소스·corp 카탈로그 파싱 (픽스처 — 실호출 없음) ----------

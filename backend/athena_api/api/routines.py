@@ -1,15 +1,64 @@
 
 from __future__ import annotations
 
+from datetime import datetime, timedelta, timezone
 from typing import Any
 
 from fastapi import APIRouter, HTTPException, Request
 
-from athena_api.routines.models import SOURCES
+from athena_api.routines.models import SOURCES, parse_schedule_value
 from athena_api.routines.rules import validate_draft
 from athena_api.routines.runtime import RoutinesRuntime
 
 router = APIRouter(prefix="/api/v1/routines", tags=["routines"])
+
+_KST = timezone(timedelta(hours=9))
+
+
+def _next_fire_at(spec: Any, *, now: datetime | None = None) -> str | None:
+    """예약(schedule.daily) 스펙의 다음 발화 시각 — 순수 함수, 저장하지 않는다."""
+    if spec.mode != "scheduled":
+        return None
+    parsed = parse_schedule_value(spec.condition.value)
+    if parsed is None:
+        return None
+    days, hhmm = parsed
+    hour, minute = int(hhmm[:2]), int(hhmm[3:])
+    base = (now or datetime.now(_KST)).astimezone(_KST)
+    for offset in range(8):  # 오늘 포함 최대 7일 뒤까지 탐색
+        candidate_date = base.date() + timedelta(days=offset)
+        if days is not None and candidate_date.isoweekday() not in days:
+            continue
+        candidate = datetime(
+            candidate_date.year,
+            candidate_date.month,
+            candidate_date.day,
+            hour,
+            minute,
+            tzinfo=_KST,
+        )
+        if candidate >= base:
+            return candidate.isoformat()
+    return None
+
+
+def _fired_today_kst(rows: list[dict[str, Any]], *, now: datetime | None = None) -> int:
+    """오늘(KST) 발화(fired) 건수 — list_routines()가 1회 read_all()로 계산한다."""
+    today = (now or datetime.now(_KST)).astimezone(_KST).date()
+    count = 0
+    for row in rows:
+        if row.get("verdict") != "fired":
+            continue
+        ts = row.get("ts")
+        if not isinstance(ts, str):
+            continue
+        try:
+            parsed = datetime.fromisoformat(ts)
+        except ValueError:
+            continue
+        if parsed.astimezone(_KST).date() == today:
+            count += 1
+    return count
 
 
 def _runtime(request: Request) -> RoutinesRuntime:
@@ -38,6 +87,7 @@ def _view(spec: Any, runtime: RoutinesRuntime) -> dict[str, Any]:
         "approved_at": spec.approved_at.isoformat() if spec.approved_at else None,
         "activation_blocker": runtime.can_activate(spec),
         "experimental_source": source_spec.experimental,
+        "next_fire_at": _next_fire_at(spec),
     }
 
 
@@ -56,6 +106,7 @@ async def list_routines(request: Request) -> dict[str, Any]:
         "routines": [_view(s, runtime) for s in runtime.store.list_all()],
         "disclosure_ready": runtime.disclosure_ready,
         "last_error": runtime.last_error,
+        "fired_today": _fired_today_kst(runtime.ledger.read_all()),
     }
 
 

@@ -13,16 +13,18 @@ import time
 from collections.abc import Awaitable, Callable
 from contextlib import suppress
 from dataclasses import dataclass, field
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime, timedelta, timezone
 from typing import Any
 
 from athena_api.routines.disclosure_source import (
     DartDisclosureSource,
     DisclosureSourceError,
 )
-from athena_api.routines.models import RoutineSpec
+from athena_api.routines.models import RoutineSpec, parse_schedule_value
 from athena_api.routines.store import RoutineStore
 from athena_api.routines.triggers import TriggerEngine, should_yield_to_conversation
+
+_KST = timezone(timedelta(hours=9))
 
 NotifyFn = Callable[[dict[str, Any]], Awaitable[None]]
 
@@ -88,13 +90,21 @@ class RoutineScheduler:
     unsubscribe_ticks: Callable[[asyncio.Queue[dict[str, Any]]], None] | None = None
     on_expire: Callable[[RoutineSpec], Awaitable[None]] | None = None
     clock: Callable[[], float] = time.monotonic
+    schedule_poll_interval_s: float = 20.0
+    now_kst: Callable[[], datetime] = lambda: datetime.now(_KST)
     last_error: str | None = None
     _tasks: list[asyncio.Task[None]] = field(default_factory=list)
     _stopping: bool = False
+    # 프로세스 로컬(영속 안 함, TriggerState와 동일한 트레이드오프) — 재기동하면
+    # 이 딕셔너리가 빈 상태로 시작돼 "오늘 이미 발화했다"는 사실을 잊는다.
+    # 그래서 재기동 직후 같은 날 한 번 더 발화할 수 있다 — 버그가 아니라 허용된
+    # 기존 한계다(계획 문서 Rev.3 "실행 시 참고" 참고).
+    _last_fired_date: dict[str, date] = field(default_factory=dict)
 
     async def start(self) -> None:
         self._stopping = False
         self._tasks.append(asyncio.create_task(self._periodic_loop()))
+        self._tasks.append(asyncio.create_task(self._schedule_loop()))
         if self.subscribe_ticks is not None:
             self._tasks.append(asyncio.create_task(self._realtime_loop()))
 
@@ -109,11 +119,8 @@ class RoutineScheduler:
 
     # ---------- 공통 ----------
 
-    async def _handle_verdict(
-        self, spec: RoutineSpec, verdict: str | None, observed: Any
-    ) -> None:
-        if verdict != "fired":
-            return
+    async def _fire(self, spec: RoutineSpec, observed: Any) -> None:
+        """발화 알림 조립 — 조건-감시(_handle_verdict)와 벽시계(_schedule_loop)가 공유."""
         await self.notify(
             {
                 "type": "routine-fired",
@@ -127,6 +134,13 @@ class RoutineScheduler:
                 "fired_at": datetime.now(UTC).isoformat(),
             }
         )
+
+    async def _handle_verdict(
+        self, spec: RoutineSpec, verdict: str | None, observed: Any
+    ) -> None:
+        if verdict != "fired":
+            return
+        await self._fire(spec, observed)
 
     async def _expire_pass(self) -> None:
         for spec in self.store.list_active():
@@ -203,3 +217,50 @@ class RoutineScheduler:
             for title in titles:
                 verdict = self.engine.evaluate(spec, title)
                 await self._handle_verdict(spec, verdict, title)
+
+    # ---------- schedule (벽시계 예약) ----------
+
+    async def _schedule_loop(self) -> None:
+        while not self._stopping:
+            await asyncio.sleep(self.schedule_poll_interval_s)
+            await self.run_schedule_once()
+
+    async def run_schedule_once(self) -> None:
+        """벽시계 매치 1회분 — 테스트가 직접 부른다. TriggerEngine 미경유(§8) —
+        벽시계 트리거엔 near/suppressed 개념이 없다, 하루 1회는
+        `_last_fired_date`(프로세스 로컬, `TriggerState`와 동일한 트레이드오프)로
+        보장한다."""
+        now = self.now_kst()
+        today = now.date()
+        hhmm = now.strftime("%H:%M")
+        weekday = now.isoweekday()  # 1=월 .. 7=일
+        for spec in self.store.list_active():
+            if spec.mode != "scheduled":
+                continue
+            if self._last_fired_date.get(spec.id) == today:
+                continue
+            parsed = parse_schedule_value(spec.condition.value)
+            if parsed is None:
+                # rules.py가 draft 시점에 막았어야 한다 — 여기 도달하면 저장된
+                # 값이 손상된 것이다. 조용히 넘기지 않고 사유를 남긴다(프리모템 1).
+                self.last_error = (
+                    f"루틴 {spec.id}의 예약 형식이 올바르지 않다: "
+                    f"{spec.condition.value!r}"
+                )
+                continue
+            days, target_hhmm = parsed
+            if target_hhmm != hhmm:
+                continue
+            if days is not None and weekday not in days:
+                continue
+            self._last_fired_date[spec.id] = today
+            self.engine.ledger.record(
+                "fired",
+                routine_id=spec.id,
+                symbol=spec.symbol,
+                source=spec.condition.source,
+                observed=hhmm,
+                threshold=spec.condition.value,
+                reason=f"예약 시각 도달({target_hhmm})",
+            )
+            await self._fire(spec, hhmm)

@@ -164,6 +164,68 @@ def test_pause_then_resume_routine(app_client):
     assert runtime.ws_client.registered.count(("1h", ("005930",))) == 2
 
 
+SCHEDULE_DRAFT = {
+    "symbol": "005930",
+    "condition": {"source": "schedule.daily", "op": "at", "value": "ALL@07:30"},
+    "cooldown_s": 1800,
+    "expires_days": 7,
+}
+
+
+def test_schedule_confirm_succeeds_without_dart_key_disclosure_still_blocked(app_client):
+    """Rev.3 BLOCKER 회귀 — DART 키 미설정(기본 배포, 이 fixture 상태)에서도
+    schedule.daily confirm은 성공해야 하고(사실11④), disclosure.title_keyword는
+    여전히 공시 폴러 미가용으로 409여야 한다(scheduled 분기가 periodic 게이트를
+    훼손하지 않았음을 대조 확인)."""
+    client, runtime = app_client
+    assert runtime.disclosure_ready is False  # 이 fixture는 DART 키를 안 준다
+
+    rid = client.post("/api/v1/routines/draft", json=SCHEDULE_DRAFT).json()["id"]
+    res = client.post(f"/api/v1/routines/{rid}/confirm")
+    assert res.status_code == 200
+    body = res.json()
+    assert body["status"] == "active"
+    assert body["mode"] == "scheduled"
+    assert body["activation_blocker"] is None
+
+    disclosure_draft = dict(
+        DRAFT,
+        condition={
+            "source": "disclosure.title_keyword",
+            "op": "contains",
+            "value": "유상증자",
+        },
+    )
+    rid2 = client.post("/api/v1/routines/draft", json=disclosure_draft).json()["id"]
+    res2 = client.post(f"/api/v1/routines/{rid2}/confirm")
+    assert res2.status_code == 409
+    assert "공시 폴러" in res2.json()["detail"]
+
+
+def test_list_routines_includes_fired_today_and_next_fire_at(app_client):
+    client, runtime = app_client
+    rid = client.post("/api/v1/routines/draft", json=SCHEDULE_DRAFT).json()["id"]
+    client.post(f"/api/v1/routines/{rid}/confirm")
+
+    listing = client.get("/api/v1/routines").json()
+    assert listing["fired_today"] == 0
+    row = next(r for r in listing["routines"] if r["id"] == rid)
+    assert row["mode"] == "scheduled"
+    assert row["next_fire_at"] is not None  # ISO 문자열 — 다음 매치 시각
+
+    runtime.ledger.record(
+        "fired",
+        routine_id=rid,
+        symbol="005930",
+        source="schedule.daily",
+        observed="07:30",
+        threshold="ALL@07:30",
+        reason="예약 시각 도달(07:30)",
+    )
+    listing2 = client.get("/api/v1/routines").json()
+    assert listing2["fired_today"] == 1
+
+
 def test_pause_rejects_invalid_transition(app_client):
     client, _ = app_client
     # draft 상태는 ALLOWED_TRANSITIONS 상 "paused"로 전이할 수 없다.
