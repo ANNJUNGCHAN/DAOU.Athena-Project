@@ -6,11 +6,13 @@
 // or-nothing envelope→DOM, 재조회 없음)로 그대로 남는다 — 실시간 갱신 책임은
 // 이 어댑터가 진다(차트와 동일한 책임 분리).
 //
-// 구독 해제 부재(확정 타협) — 서버측 0B 구독은 여기서 해제하지 않는다.
-// lib/main/chart-realtime.js의 registrar에 UNREG가 아예 없다(기존 차트 카드도
-// 같은 처지 — 세션이 닫혀도 서버는 계속 틱을 보내고 클라이언트가 조용히 버린다).
-// closePanel은 클라이언트 쪽 세션만 지운다. 백엔드가 등록취소를 노출하면 그때
-// ref-count 기반 실해제로 업그레이드한다.
+// 구독 해제(2026-08-27) — closePanel 자체는 클라이언트 쪽 세션만 지운다.
+// 서버측 0B 참조 해제(REMOVE 프레임)는 lib/main/chart-realtime.js의 참조 계수형
+// registrar가 진다 — 이 카드가 마지막 참조였으면 canvas.js wireQuoteRealtime의
+// destroy 훅이 athena:realtime-release IPC로 main에 알려 REMOVE를 낸다. 예전엔
+// "백엔드가 UNREG 미노출"이라 여기서 아예 안 끊는다고 적었는데, 그 전제가 틀렸다
+// (같은 REG 엔드포인트가 trnm:'REMOVE'를 받는다, backend 실측) — 지금은 위
+// registrar가 그 경로로 실해제한다.
 (function () {
 'use strict';
 

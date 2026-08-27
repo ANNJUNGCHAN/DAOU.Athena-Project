@@ -125,6 +125,7 @@ function createRealtimeRegistrar(opts) {
   const account = o.account || null;
   const mdlog = o.mdlog || (() => {});
   const refCounts = new Map(); // code -> 열린 참조 수(0 이하는 저장하지 않는다)
+  const pendingRegister = new Map(); // code -> 진행 중인 REG의 Promise(경합 방지)
 
   async function postFrame(trnm, code) {
     const headers = { 'Content-Type': 'application/json' };
@@ -146,6 +147,13 @@ function createRealtimeRegistrar(opts) {
     return true;
   }
 
+  // 같은 종목의 acquire가 REG 왕복 중(fetch await) 겹쳐 들어오면 — REST
+  // 데이터셋 하나에 같은 종목 카드가 2장 있어 거의 동시에 paint ack가 오는 경우
+  // 등 — 둘 다 카운트를 0으로 읽고 REG를 중복 발사한 뒤 마지막 쓰기가 앞선
+  // 쓰기를 덮어써 참조가 샌다(실측: 2회 acquire 후 refCount가 1로 무너짐).
+  // pendingRegister로 같은 종목의 진행 중인 REG 하나를 공유해 이를 막는다 —
+  // REG 자체는 한 번만 나가고, 그 결과를 기다리던 모든 acquire가 각자 카운트를
+  // 하나씩 올린다.
   async function acquire(symbol) {
     const code = String(symbol || '').trim();
     if (!code) return false;
@@ -154,10 +162,16 @@ function createRealtimeRegistrar(opts) {
       refCounts.set(code, count + 1);
       return true;
     }
-    const ok = await postFrame('REG', code);
+    let inFlight = pendingRegister.get(code);
+    if (!inFlight) {
+      inFlight = postFrame('REG', code).finally(() => { pendingRegister.delete(code); });
+      pendingRegister.set(code, inFlight);
+    }
+    const ok = await inFlight;
     if (!ok) return false;
-    refCounts.set(code, 1);
-    mdlog(`REAL 0B 등록 — ${code}`);
+    const next = (refCounts.get(code) || 0) + 1;
+    refCounts.set(code, next);
+    if (next === 1) mdlog(`REAL 0B 등록 — ${code}`);
     return true;
   }
 

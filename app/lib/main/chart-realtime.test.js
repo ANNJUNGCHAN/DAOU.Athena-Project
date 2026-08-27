@@ -123,6 +123,30 @@ test('acquire: 네트워크 실패도 조용히 성공으로 만들지 않는다
   assert.equal(reg.size(), 0);
 });
 
+test('acquire: 같은 종목이 REG 왕복 중에 겹쳐 들어와도 참조가 새지 않는다', async () => {
+  // 실측 회귀 — REST 데이터셋 하나에 같은 종목 카드가 2장 있으면 paint ack가
+  // 거의 동시에 온다. pendingRegister 없이는 둘 다 카운트를 0으로 읽고 REG를
+  // 중복 발사한 뒤 마지막 쓰기가 앞선 쓰기를 덮어써 참조가 1로 무너진다.
+  const calls = [];
+  let resolveFetch;
+  const reg = createRealtimeRegistrar({
+    backendBase: 'http://x',
+    fetchImpl: async (url, init) => {
+      calls.push(JSON.parse(init.body));
+      await new Promise((resolve) => { resolveFetch = resolve; });
+      return { ok: true, status: 200 };
+    },
+  });
+  const p1 = reg.acquire('005930'); // 카드 A — REG를 날리고 fetch가 아직 안 끝났다
+  const p2 = reg.acquire('005930'); // 카드 B(같은 종목) — REG를 또 날리면 안 된다
+  resolveFetch();
+  const [r1, r2] = await Promise.all([p1, p2]);
+  assert.equal(r1, true);
+  assert.equal(r2, true);
+  assert.equal(calls.filter((b) => b.trnm === 'REG').length, 1); // REG는 한 번만 나간다
+  assert.equal(reg.refCount('005930'), 2); // 그런데 참조 2개는 둘 다 반영된다
+});
+
 test('release: 카드 2장 중 1장만 닫으면 참조가 남아 REMOVE를 안 보낸다', async () => {
   const calls = [];
   const reg = createRealtimeRegistrar({

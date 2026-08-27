@@ -71,6 +71,9 @@ const SEND_CHANNELS = new Set([
   'athena:rest-canvas-painted',
   'athena:rest-receipt-painted',
   'athena:chart-panel-destroyed',
+  // 카드 소멸 시 실시간 구독 참조를 서버까지 해제한다(panelId가 없는 카드종 —
+  // 표/시세 등. AITS 차트는 위 athena:chart-panel-destroyed가 겸한다).
+  'athena:realtime-release',
   // 알림 오브 창(2026-08-24 리프 1.3.1) — 오브가 보낼 수 있는 것은 이 둘뿐이다.
   //   athena:orb-toggle     접힘/펼침 요청. 창 크기 변경은 main이 한다(기하는
   //                         lib/main/orb-window.js).

@@ -595,6 +595,10 @@ function wireQuoteRealtime(card, wrap, envelope) {
   const priorDestroy = cardDestroyers.get(card);
   cardDestroyers.set(card, () => {
     quoteRealtimePanels.closePanel(card);
+    // 카드 1장을 참조 1개로 센다(main.js ensureChartRealtime 주석 참고) — 이
+    // 카드가 위에서 연 세션과 같은 symbol로만 해제한다. main이 acquire 때 보는
+    // 것과 같은 envelope 필드에서 뽑은 값이라 카운트가 서로 어긋나지 않는다.
+    window.athena.send('athena:realtime-release', { symbol });
     if (priorDestroy) priorDestroy();
   });
 }
