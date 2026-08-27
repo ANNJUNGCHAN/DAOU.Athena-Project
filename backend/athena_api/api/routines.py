@@ -203,11 +203,54 @@ async def list_routine_runs(request: Request, routine_id: str) -> dict[str, Any]
     runtime = _runtime(request)
     rows = [r for r in runtime.ledger.read_all() if r.get("routine_id") == routine_id]
     # 최근 30건(옛 jsonl은 duration_ms 키 자체가 없을 수 있다 — 하위호환 방어).
+    recent = rows[-30:]
     durations = [
-        r["duration_ms"] for r in rows[-30:] if isinstance(r.get("duration_ms"), (int, float))
+        r["duration_ms"] for r in recent if isinstance(r.get("duration_ms"), (int, float))
     ]
     avg_duration_ms = sum(durations) / len(durations) if durations else None
-    return {"runs": rows, "avg_duration_ms": avg_duration_ms}
+
+    # 발화→열람/이어진 대화(F2-스트레치) — engagement.py 모듈 독스트링의 지표
+    # 정의 참고. fired_recent는 avg_duration_ms와 같은 "최근 30건" 창을
+    # 공유하되 fired 판정만 센다(near/suppressed는 능동 턴을 만들지 않는다).
+    # opened/replied 이벤트는 fired 행과 1:1 상관 ID가 없다 — 이 엔드포인트는
+    # engagement 로그 자신의 "최근 30건" 창을 독립적으로 써서 근사치를
+    # 낸다(정직한 근사임을 명시, 엄밀한 행 단위 상관은 하지 않는다).
+    fired_recent = [r for r in recent if r.get("verdict") == "fired"]
+    engagement_recent = [
+        e for e in runtime.engagement.read_all() if e.get("routine_id") == routine_id
+    ][-30:]
+    opened_count = sum(1 for e in engagement_recent if e.get("event") == "opened")
+    replied_count = sum(1 for e in engagement_recent if e.get("event") == "replied")
+    opened_rate = (opened_count / len(fired_recent)) if fired_recent else None
+
+    return {
+        "runs": rows,
+        "avg_duration_ms": avg_duration_ms,
+        "opened_rate": opened_rate,
+        "replied_count": replied_count,
+    }
+
+
+@router.post("/{routine_id}/engagement")
+async def record_engagement(
+    request: Request, routine_id: str, body: dict[str, Any]
+) -> dict[str, Any]:
+    """발화 열람·응답 계측 기록 — event는 "opened"|"replied"만 허용한다.
+
+    이 엔드포인트는 판정을 내리지 않는다(예: "N분 이내에 이어졌는가") —
+    그 판정은 프론트(app/chat.js)가 이미 마치고 사실만 통보한다. 여기서는
+    라우틴 존재 여부만 확인하고 engagement.py로 그대로 넘긴다."""
+    runtime = _runtime(request)
+    spec = runtime.store.get(routine_id)
+    if spec is None:
+        raise HTTPException(status_code=404, detail="루틴이 존재하지 않는다")
+    event = body.get("event")
+    if event not in ("opened", "replied"):
+        raise HTTPException(
+            status_code=422, detail="event는 'opened' 또는 'replied'만 허용된다"
+        )
+    row = runtime.engagement.record(event, routine_id=routine_id)
+    return row
 
 
 @router.post("/{routine_id}/ack")

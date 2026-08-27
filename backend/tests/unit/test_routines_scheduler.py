@@ -6,6 +6,7 @@ import asyncio
 import io
 import zipfile
 from datetime import UTC, datetime, timedelta, timezone
+from pathlib import Path
 
 import pytest
 
@@ -14,6 +15,7 @@ from athena_api.routines.disclosure_source import (
     DisclosureSourceError,
     parse_list_payload,
 )
+from athena_api.routines.engagement import EngagementStore
 from athena_api.routines.ledger import RoutineLedger
 from athena_api.routines.models import Condition, derive_mode
 from athena_api.routines.read_marks import ReadMarksStore
@@ -84,6 +86,44 @@ def test_read_marks_corrupt_file_degrades_to_empty(tmp_path):
     marks = ReadMarksStore(path)
     marks.load()  # 손상 — 낮은 스테이크라 빈 상태로 조용히 강등(store.py와 다른 정책)
     assert marks.last_read_fired_at("r1") is None
+
+
+def test_engagement_records_and_reads_back(tmp_path):
+    path = tmp_path / "engagement.jsonl"
+    store = EngagementStore(path)
+    assert store.read_all() == []  # 파일 없음 — 빈 상태
+
+    store.record("opened", routine_id="r1")
+    store.record("replied", routine_id="r1")
+    store.record("opened", routine_id="r2")
+
+    rows = store.read_all()
+    assert [r["event"] for r in rows] == ["opened", "replied", "opened"]
+    assert [r["routine_id"] for r in rows] == ["r1", "r1", "r2"]
+
+    restored = EngagementStore(path)  # 새 인스턴스도 같은 파일을 그대로 읽는다
+    assert len(restored.read_all()) == 3
+
+
+def test_engagement_rejects_unknown_event():
+    from athena_api.routines.engagement import EngagementError
+
+    store = EngagementStore(Path("unused.jsonl"))
+    with pytest.raises(EngagementError):
+        store.record("clicked", routine_id="r1")  # type: ignore[arg-type]
+
+
+def test_engagement_skips_corrupt_lines_and_keeps_reading(tmp_path):
+    """read_marks.py와 동형 정책 — 개별 손상 라인은 건너뛰고 나머지는 읽는다."""
+    path = tmp_path / "engagement.jsonl"
+    store = EngagementStore(path)
+    store.record("opened", routine_id="r1")
+    with path.open("a", encoding="utf-8") as fh:
+        fh.write("{이건 깨진 json\n")
+    store.record("replied", routine_id="r1")
+
+    rows = store.read_all()
+    assert [r["event"] for r in rows] == ["opened", "replied"]  # 손상 라인만 빠짐
 
 
 def test_store_rejects_illegal_transitions(tmp_path):
@@ -314,6 +354,7 @@ def _runtime(tmp_path, ws=None, on_expire=None):
         scheduler=sched,
         events=asyncio.Queue(200),
         read_marks=ReadMarksStore(tmp_path / "read_marks.json"),
+        engagement=EngagementStore(tmp_path / "engagement.jsonl"),
         ws_client=ws,
     )
 

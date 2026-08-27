@@ -117,6 +117,10 @@ class Settings(BaseSettings):
     routines_read_marks_path: Path = Field(
         default_factory=lambda: Path.home() / ".athena" / "routines" / "read_marks.json"
     )
+    # UI 텔레메트리(F2-스트레치) — ledger.jsonl과 별개 파일, ledger는 무수정(P4).
+    routines_engagement_path: Path = Field(
+        default_factory=lambda: Path.home() / ".athena" / "routines" / "engagement.jsonl"
+    )
     # 라우틴별이 아닌 전역 설정 — routines_enabled와 무관하게 항상 로드된다.
     nudge_guard_path: Path = Field(
         default_factory=lambda: Path.home() / ".athena" / "routines" / "nudge_guard.json"
