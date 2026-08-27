@@ -117,6 +117,10 @@ class Settings(BaseSettings):
     routines_read_marks_path: Path = Field(
         default_factory=lambda: Path.home() / ".athena" / "routines" / "read_marks.json"
     )
+    # 라우틴별이 아닌 전역 설정 — routines_enabled와 무관하게 항상 로드된다.
+    nudge_guard_path: Path = Field(
+        default_factory=lambda: Path.home() / ".athena" / "routines" / "nudge_guard.json"
+    )
     # DART 공시 폴러 키 — 없으면 periodic 공시 루틴만 강등(realtime은 무관).
     dart_api_key: SecretStr | None = None
     # Explicit argv for the local structured-extraction command (e.g. a local claude CLI
