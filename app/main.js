@@ -1647,6 +1647,16 @@ ipcMain.handle('athena:brain-suggested-questions', async (_e, { limit } = {}) =>
   return { ok: true, ...result.body };
 });
 
+// 그래프 모드 요약 뷰(보드 06/07)의 "숨은 연관" 섹션 — 군집 경계를 넘는 연결.
+// 스텝7에서 신설(정찰 당시엔 백엔드 엔드포인트만 있고 이 IPC 배선이 없었다).
+ipcMain.handle('athena:brain-surprising-connections', async (_e, { limit } = {}) => {
+  const result = await fetchBrainJson('/api/v1/brain/analysis/surprising-connections', {
+    params: { limit },
+  });
+  if (!result.ok) return { ok: false, error: result.error };
+  return { ok: true, ...result.body };
+});
+
 // ④ 공통 테이블 카드 봉투로 접는다 — canvas.js의 renderMcpTable(envelope)이
 // 이미 그리는 {canvas_type:'table', data:{columns,rows}} 그대로다. 신규 카드
 // 타입은 0개(계획 §2(d) "신규 카드 타입 0개").

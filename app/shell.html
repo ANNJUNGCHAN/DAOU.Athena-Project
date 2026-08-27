@@ -133,6 +133,9 @@
             <!-- 테마 군집(보드 06 §8/07 §8-2) — theme-clusters.js. 군집 이름은
                  백엔드 어디에도 없어(§0 발견1) 전 카드가 "이름 없음"이다. -->
             <div id="graphThemeClusters"></div>
+            <!-- 숨은 연관(보드 06 §9/07 §9-2) — hidden-links.js. "점수 8.5" 같은
+                 근거 없는 수치는 없다(§0 발견3, SurprisingConnectionOut에 없음). -->
+            <div id="graphHiddenLinks"></div>
           </div>
           <!-- 공통 패널(보드 07/15) — 스텝8이 채운다. controller.js의
                renderSelection()이 hidden·텍스트만 갱신한다(통째로 비우지 않는다). -->
@@ -306,6 +309,7 @@
 <script src="lib/graph-mode/render.js"></script>
 <script src="lib/graph-mode/summary-table.js"></script>
 <script src="lib/graph-mode/theme-clusters.js"></script>
+<script src="lib/graph-mode/hidden-links.js"></script>
 <script src="lib/graph-mode/controller.js"></script>
 <script src="lib/settings-cards.js"></script>
 <script src="lib/history-badge.js"></script>

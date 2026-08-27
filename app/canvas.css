@@ -358,6 +358,22 @@ html, body { background: transparent; }
 }
 .theme-cluster-cohesion.is-warn { color: var(--color-warn); }
 
+/* 숨은 연관(보드 06 §9/07 §9-2) — hidden-links.js. */
+.hidden-links { padding: 18px; border-top: 1px solid var(--color-k-line); }
+.hidden-links-head { display: flex; align-items: baseline; gap: 9px; padding-bottom: 12px; }
+.hidden-links-title { font-family: var(--font-strong); font-size: var(--text-base); color: var(--color-k-bright); }
+.hidden-links-subtitle { font-family: var(--font-body); font-size: var(--text-xs); color: var(--color-k-hint); }
+.hidden-link-list { display: flex; flex-direction: column; gap: 6px; }
+.hidden-link-row { padding-bottom: 12px; border-bottom: 1px solid var(--color-k-line); }
+.hidden-link-row:last-child { border-bottom: none; padding-bottom: 0; }
+.hidden-link-pair { display: flex; align-items: center; gap: 10px; }
+.hidden-link-entity { font-family: var(--font-strong); font-size: var(--text-base); color: var(--color-k-bright); }
+.hidden-link-arrow { font-family: var(--font-body); font-size: var(--text-sm); color: var(--color-k-ghost); }
+.hidden-link-desc {
+  font-family: var(--font-body); font-size: var(--text-xs); line-height: 17px; color: var(--color-k-soft);
+  margin-top: 6px;
+}
+
 /* 카드도 유리다 — soul.md §7 "모든 표면이 유리다. 두 창도, 창 안의 카드도 전부."
  * 2026-08-17 디자인 리뷰 [HIGH]로 정정: 이전 판은 고정 rgba 채움 + backdrop-filter
  * 0건이라 §7이 금지한 "뒤에 굴절할 것 없는 반투명 회색 사각형"이었다. 이제 알파를

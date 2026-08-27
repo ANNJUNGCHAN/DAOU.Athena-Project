@@ -51,6 +51,8 @@ const INVOKE_CHANNELS = new Set([
   'athena:brain-profile-summary',
   // 캔버스 빈 상태(보드 05) "확인이 필요한 것 N건" 힌트 — 되물을 것들. 읽기 전용이다.
   'athena:brain-suggested-questions',
+  // 그래프 모드 요약 뷰 "숨은 연관"(스텝7) — 군집 경계를 넘는 연결. 읽기 전용이다.
+  'athena:brain-surprising-connections',
   // 오브 대화 모드(2026-08-26 board-33) — 셸의 커맨드바가 부르는 runLiveQuery와
   // 완전히 같은 파이프라인을 오브에서 부르는 다리. orb.js가 셸 숨김일 때만 쓴다
   // (게이트는 athena:shell-visibility, scripts/gates/check-orb.mjs가 잰다).
