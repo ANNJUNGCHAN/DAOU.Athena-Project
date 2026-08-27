@@ -1383,40 +1383,130 @@ html, body { background: transparent; }
   .settings-nav-item:focus-visible { outline-color: #ffffff; }
 }
 
-/* ---------- 능동 턴 (능동 에이전트 P2, 2026-08-19) ---------- */
-/* 등장은 페이드가 아니라 굴절 변조다(liquid-glass §1) — backdrop-filter가
-   0에서 목표치로 오른다. 좌측 유도선·배지 외 액센트 없음(soul.md §7). */
-.turn-agent {
+/* ---------- 능동 턴 (능동 에이전트 P2 · 보드 37 개정, B8 감사 2026-08-27) ---------- */
+/* 발화 턴은 박스 없이 대화 평면에 눕는다(보드 37) — 박스는 승인 카드(보드 09,
+   좌측 잉크 유도선)와 복원 실패(보드 09, panel2 상자)만 가진다. */
+.turn-agent { display: flex; flex-direction: column; gap: 9px; padding: 2px 0; }
+.turn-agent.routine-approval {
   padding: 10px 14px;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.55);
-  border-left: 3px solid rgba(255, 152, 56, 0.8);
-  border-top: 1px solid rgba(230, 232, 238, 0.10);
-  border-right: 1px solid rgba(230, 232, 238, 0.10);
-  border-bottom: 1px solid rgba(230, 232, 238, 0.10);
+  gap: 4px;
+  background: rgb(255 255 255 / 86%);
+  border-left: 3px solid rgb(16 19 26 / 40%);
+  border-top: 1px solid rgb(16 19 26 / 6%);
+  border-right: 1px solid rgb(16 19 26 / 6%);
+  border-bottom: 1px solid rgb(16 19 26 / 6%);
+  /* 등장은 페이드가 아니라 굴절 변조(liquid-glass §1) — 박스 있는 카드만. */
   backdrop-filter: blur(0px);
   transition: backdrop-filter 600ms ease;
 }
-.turn-agent.is-in { backdrop-filter: blur(12px); }
-.agent-head { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
-.agent-badge {
+.turn-agent.routine-approval.is-in { backdrop-filter: blur(12px); }
+.turn-agent.agent-restore-failed {
+  padding: 12px 16px;
+  border-radius: var(--radius-lg);
+  gap: 6px;
+  background: var(--color-k-panel2);
+  border: 1px solid var(--color-k-line-soft);
+}
+.turn-agent.agent-restore-failed .agent-source {
+  display: flex; align-items: center; gap: 8px;
   font-family: var(--font-mono);
-  font-size: var(--text-2xs, 11px);
-  color: var(--color-warn, #ff9838);
-  border: 1px solid rgba(255, 152, 56, 0.55);
+  letter-spacing: 0.08em;
+}
+.turn-agent.agent-restore-failed .agent-source::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--color-warn); flex-shrink: 0;
+}
+.agent-head { display: flex; align-items: center; gap: 8px; }
+.routine-approval .agent-head { gap: 10px; }
+/* 발화 시각 배지 — 무채색 채움 필(보드 37). 경고색 아님: 사실 정보다. */
+.agent-badge {
+  font-family: var(--font-strong);
+  font-size: var(--text-sm);
+  line-height: var(--leading-tight);
+  color: var(--color-k-soft);
+  background: rgb(16 19 26 / 7%);
   border-radius: 999px;
+  padding: 2px 8px;
+}
+/* 승인 카드 배지는 외곽선 필(보드 09) — '승인 필요'는 상태 표지다. */
+.routine-approval .agent-badge {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  line-height: 16px;
+  color: var(--color-k-dim);
+  background: none;
+  border: 1px solid rgb(16 19 26 / 30%);
   padding: 1px 8px;
 }
-.agent-mode { font-size: var(--text-2xs, 11px); color: var(--color-k-dim, #9aa2b1); }
-.agent-rel { font-family: var(--font-mono); font-size: var(--text-2xs, 11px); color: var(--color-k-faint, #6b7480); }
-.agent-source { font-size: var(--text-2xs, 11px); color: var(--color-k-dim, #9aa2b1); margin-bottom: 4px; }
+.agent-mode { font-size: var(--text-sm); color: var(--color-k-faint); }
+.agent-rel { font-family: var(--font-mono); font-size: var(--text-sm); color: var(--color-k-faint); }
+.agent-fired .agent-rel { margin-left: auto; } /* 보드 37: 상대시각 우측 끝 */
+.agent-source { font-size: var(--text-sm); line-height: 17px; color: var(--color-k-faint); }
 .agent-body { font-size: var(--text-sm, 13px); color: var(--color-k-text, #e6e8ee); line-height: 1.5; }
-.turn-agent.agent-restore-failed { border-left-color: var(--color-warn, #ff9838); background: rgba(255, 152, 56, 0.10); }
-
+/* 발화 턴 구조 분해 본문(보드 37) — 종목 필과 문장이 베이스라인로 흐른다. */
+.agent-body-fired {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 4px;
+  font-size: var(--text-lg); line-height: 24px;
+}
+.agent-symbol-pill {
+  padding: 1px 6px; border-radius: 5px;
+  background: rgb(16 19 26 / 7%);
+  font-family: var(--font-mono);
+  font-size: var(--text-base); line-height: var(--leading-tight);
+  color: var(--color-k-text);
+}
+.agent-body-note {
+  width: 100%; padding-top: 2px;
+  font-size: var(--text-base); line-height: var(--leading-normal);
+  color: var(--color-k-soft);
+}
+/* 감시 조건 패널(보드 37 ③) */
+.agent-watch {
+  display: flex; flex-direction: column;
+  border-radius: 10px; overflow: clip;
+  background: rgb(255 255 255 / 62%);
+  border: 1px solid rgb(16 19 26 / 9%);
+}
+.agent-watch-head {
+  display: flex; align-items: center; height: 30px; padding: 0 11px; gap: 8px;
+  background: rgb(255 255 255 / 55%);
+  border-bottom: 1px solid rgb(16 19 26 / 8%);
+}
+.agent-watch-title {
+  flex: 1 1 0%;
+  font-family: var(--font-strong);
+  font-size: var(--text-sm); line-height: var(--leading-tight);
+  color: var(--color-k-dim);
+}
+.agent-watch-body { display: flex; flex-direction: column; padding: 11px; gap: 7px; }
+.agent-watch-symbol {
+  font-family: var(--font-mono);
+  font-size: var(--text-base); line-height: var(--leading-tight);
+  color: var(--color-k-text);
+}
+.agent-watch-row { display: flex; align-items: baseline; padding-left: 12px; gap: 9px; }
+.agent-watch-ic {
+  width: 11px; flex-shrink: 0;
+  font-family: var(--font-strong);
+  font-size: var(--text-sm);
+  color: var(--color-warn);
+}
+.agent-watch-ic.is-met { color: var(--color-ok); }
+.agent-watch-label {
+  flex: 1 1 0%; min-width: 0;
+  font-size: var(--text-base); line-height: var(--leading-tight);
+  color: var(--color-k-dim);
+}
+.agent-watch-value {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-base); line-height: var(--leading-tight);
+  color: var(--color-k-text);
+}
 
 @media (prefers-reduced-motion: reduce) {
-  .turn-agent { transition: none; }
-  .turn-agent.is-in, .turn-agent { backdrop-filter: blur(12px); }
+  .turn-agent.routine-approval { transition: none; backdrop-filter: blur(12px); }
 }
 
 /* 루틴 승인 카드 (P3) */
