@@ -87,6 +87,30 @@ async function main() {
   const s4 = await faceState(orbWin);
   record('04-재개장 강제 → data-face≠drowsy', s4.face !== 'drowsy', s4);
 
+  // ---------- (5) 결함 1 회귀 — SLEEP에서 커서 접근으로 깨울 때 marketClosed를
+  // 반영한다(orb.js touchActivity). SLEEP_AFTER(5분) 실시간 대기 대신 Date.now를
+  // 페이지 컨텍스트에서 앞당겨 15초 무활동 판정 타이머가 곧바로 SLEEP을 세우게
+  // 한다 — market-hours.js는 이미 이 프로브가 바꿔치기했으므로(patchMarketOpen)
+  // Date.now만 밀면 된다.
+  await patchMarketOpen(orbWin, false); // 장외로 강제(드로지 목적지 확인용)
+  await wait(15200);
+  const s5pre = await faceState(orbWin);
+  record('05a-장외 재확인(다음 단계 전 사전 조건) → data-face=drowsy', s5pre.face === 'drowsy', s5pre);
+
+  await orbWin.webContents.executeJavaScript(
+    `(() => { window.__probeNow = Date.now() + 6 * 60 * 1000; Date.now = () => window.__probeNow; return true; })()`,
+  );
+  await wait(15200); // 15초 무활동 판정 주기 1회 대기 — SLEEP으로 넘어간다
+  const s5sleep = await faceState(orbWin);
+  record('05b-무활동 판정 강제 경과 → data-face=sleep', s5sleep.face === 'sleep', s5sleep);
+
+  // 최소 커서 접근 경로(orb.js:429 부근) — 드래그 시작·오브 클릭과 같은
+  // touchActivity() 단일 판정 경로다(orb.js 상단 결함 1 주석 참조).
+  orbWin.webContents.send('athena:orb-cursor', { dx: 5, dy: 5, dist: 50 });
+  await wait(200);
+  const s5wake = await faceState(orbWin);
+  record('05c-SLEEP 중 커서 접근(장외) → data-face=drowsy(수정 전엔 idle로 오표시)', s5wake.face === 'drowsy', s5wake);
+
   fs.mkdirSync(path.join(__dirname, 'captures'), { recursive: true });
   fs.writeFileSync(path.join(__dirname, 'captures', 'probe-orb-drowsy-report.json'), JSON.stringify(report, null, 2));
   const okCount = report.steps.filter((s) => s.ok).length;

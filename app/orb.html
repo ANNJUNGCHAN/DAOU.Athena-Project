@@ -85,11 +85,17 @@
               <span id="orbTicketAmount" class="orb-row-value"></span>
             </div>
           </div>
+          <!-- 게이트 고지(결함4, 2026-08-27 CP2 확장 승인) — 셸 gateLine과 같은
+               정직 고지, 차단 사유가 있을 때만 보인다. -->
+          <div id="orbTicketGate" class="orb-ticket-gate" hidden></div>
           <div class="orb-ticket-actions">
             <button id="orbTicketExec" class="orb-ticket-exec" type="button">실행</button>
             <button id="orbTicketCancel" class="orb-ticket-cancel" type="button">취소</button>
             <span class="orb-ticket-confirm">1회 확인</span>
           </div>
+          <!-- 실행 결과 3갈래(결함5, 2026-08-27 CP2 확장 승인) — done/failed/
+               in_doubt를 셸 status와 같은 취지로 보여준다. -->
+          <div id="orbTicketStatus" class="orb-ticket-status" hidden></div>
         </div>
       </div>
 

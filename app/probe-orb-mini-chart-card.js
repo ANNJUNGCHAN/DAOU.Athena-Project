@@ -84,6 +84,50 @@ class Program {
   return exePath;
 }
 
+// 2026-08-27 결함 3 회귀 — render_canvas 성공 1건(분봉 2개짜리 chart 엔벌로프,
+// candle.time이 문자열이 아니라 백엔드 _aits_time()과 같은 Unix epoch 초
+// 정수)만 stdout에 쏟는다. 위 compileFakeClaude(일봉, time이 'YYYY-MM-DD'
+// 문자열)와 달리 time을 JSON 숫자로 박아 넣는다.
+function compileFakeClaudeMin() {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'athena-fake-claude-chartcard-min-'));
+  const csPath = path.join(dir, 'fakeclaudemin.cs');
+  const exePath = path.join(dir, 'fakeclaudemin.exe');
+  const src = `
+using System;
+
+class Program {
+  static void Main(string[] args) {
+    Console.OutputEncoding = new System.Text.UTF8Encoding(false);
+    char q = (char)34;
+
+    // 2026-08-27 09:31/09:35 KST → epoch 초(canvas_transform.py _aits_time()과
+    // 같은 산출: 14자리 KST 타임스탬프를 tzinfo(+9)로 파싱한 뒤 int(timestamp())).
+    string c1 = "{" + q + "time" + q + ":1787790660," + q + "open" + q + ":68800," + q + "high" + q + ":69000," + q + "low" + q + ":68700," + q + "close" + q + ":68900," + q + "volume" + q + ":500}";
+    string c2 = "{" + q + "time" + q + ":1787790900," + q + "open" + q + ":68900," + q + "high" + q + ":69300," + q + "low" + q + ":68850," + q + "close" + q + ":69200," + q + "volume" + q + ":600}";
+    string candles = "[" + c1 + "," + c2 + "]";
+
+    string chart = "{" + q + "period" + q + ":" + q + "min" + q + "," + q + "target" + q + ":" + q + "stock" + q + "," + q + "trId" + q + ":" + q + "ka10080" + q + "," + q + "candles" + q + ":" + candles + "}";
+
+    string envelope =
+      "{" + q + "card_title" + q + ":" + q + "삼성전자 005930(분봉테스트)" + q + "," +
+      q + "canvas_type" + q + ":" + q + "chart" + q + "," +
+      q + "fell_back" + q + ":false," +
+      q + "data" + q + ":{" + q + "symbol" + q + ":" + q + "005930" + q + "," + q + "chart" + q + ":" + chart + "}" +
+      "}";
+
+    string esc = envelope.Replace(q.ToString(), "\\\\" + q);
+
+    Console.WriteLine("{" + q + "type" + q + ":" + q + "assistant" + q + "," + q + "message" + q + ":{" + q + "content" + q + ":[{" + q + "type" + q + ":" + q + "tool_use" + q + "," + q + "id" + q + ":" + q + "tu1" + q + "," + q + "name" + q + ":" + q + "mcp__athena__athena__render_canvas" + q + "}]}}");
+    Console.WriteLine("{" + q + "type" + q + ":" + q + "user" + q + "," + q + "message" + q + ":{" + q + "content" + q + ":[{" + q + "type" + q + ":" + q + "tool_result" + q + "," + q + "tool_use_id" + q + ":" + q + "tu1" + q + "," + q + "content" + q + ":" + q + esc + q + "}]}}");
+    Console.WriteLine("{" + q + "type" + q + ":" + q + "result" + q + "," + q + "is_error" + q + ":false," + q + "result" + q + ":" + q + "최근 1분봉은 68,900에서 69,200으로 올랐습니다." + q + "," + q + "session_id" + q + ":" + q + "FAKE-SESSION-CHART-MIN" + q + "}");
+    Environment.Exit(0);
+  }
+}`;
+  fs.writeFileSync(csPath, src, 'utf-8');
+  execFileSync(findCsc(), ['/nologo', `/out:${exePath}`, csPath], { stdio: 'pipe' });
+  return exePath;
+}
+
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 const report = { steps: [] };
 function record(name, ok, data) {
@@ -154,6 +198,54 @@ async function main() {
   record('07-라인 색은 상승 토큰(var(--color-up))', !!cardState && cardState.pathStroke === 'var(--color-up)', cardState);
   record('08-시작/끝 날짜 2개', !!cardState && JSON.stringify(cardState.dates) === JSON.stringify(['2026-05-26', '2026-07-19']), cardState);
   record('09-능력 고지가 보드 원문과 일치', !!cardState && cardState.noteText === '지표 · 드로잉 · 매물대는 캔버스에서', cardState);
+
+  // ---------- 결함 3 회귀 — 분봉(숫자 epoch) 케이스 ----------
+  // candle.time이 'YYYY-MM-DD' 문자열이 아니라 숫자 epoch(canvas_transform.py
+  // _aits_time()이 분·틱봉에 만드는 형태)일 때도 orbChartDateLabel()이 KST
+  // 날짜·시각으로 바꿔 찍는지 — 수정 전엔 facts-card.js formatDatetime이
+  // 8자리 문자열만 인식해 "1787790660"이 그대로 찍혔다.
+  const minExePath = compileFakeClaudeMin();
+  process.env.ATHENA_CLAUDE_BIN = minExePath;
+
+  await orbWin.webContents.executeJavaScript(`(() => {
+    const input = document.getElementById('orbInput');
+    input.value = ${JSON.stringify('삼성전자 1분봉 보여줘')};
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
+  })()`);
+
+  const minDeadline = Date.now() + 20000;
+  let minCardState = null;
+  while (Date.now() < minDeadline) {
+    minCardState = await orbWin.webContents.executeJavaScript(`(() => {
+      const cards = document.querySelectorAll('#orbChatTurns .orb-fold-card');
+      const card = cards[cards.length - 1];
+      if (!card || !card.querySelector('.orb-fold-card-title') || card.querySelector('.orb-fold-card-title').textContent !== '삼성전자 005930(분봉테스트)') return null;
+      const svg = card.querySelector('.orb-chart-svg');
+      const path = svg ? svg.querySelector('path') : null;
+      const d = path ? path.getAttribute('d') : null;
+      const dates = Array.from(card.querySelectorAll('.orb-chart-dates span')).map((s) => s.textContent);
+      const changeEl = card.querySelector('.orb-chart-change');
+      return {
+        subtitle: card.querySelector('.orb-fold-card-subtitle') && card.querySelector('.orb-fold-card-subtitle').textContent,
+        price: card.querySelector('.orb-chart-price') && card.querySelector('.orb-chart-price').textContent,
+        changeText: changeEl ? changeEl.textContent : null,
+        changeClass: changeEl ? changeEl.className : null,
+        pathPointCount: d ? (d.match(/[ML]/g) || []).length : 0,
+        dates,
+      };
+    })()`);
+    if (minCardState) break;
+    await wait(300);
+  }
+
+  record('10-분봉(숫자 epoch) 카드가 실제로 그려졌다', !!minCardState, minCardState);
+  record('11-부제는 분봉 라벨', !!minCardState && minCardState.subtitle === '분봉', minCardState);
+  record('12-가격은 마지막 종가(69,200)', !!minCardState && minCardState.price === '69,200', minCardState);
+  record('13-등락 배지는 +300 (+0.44%) · 상승 톤(is-up)', !!minCardState && minCardState.changeText === '+300 (+0.44%)' && /is-up/.test(minCardState.changeClass || ''), minCardState);
+  record('14-종가 라인 점 2개(캔들 2개)', !!minCardState && minCardState.pathPointCount === 2, minCardState);
+  record('15-시작/끝 날짜가 epoch 그대로가 아니라 KST 날짜·시각으로 표시된다(1787790660→2026-08-27 09:31)',
+    !!minCardState && JSON.stringify(minCardState.dates) === JSON.stringify(['2026-08-27 09:31', '2026-08-27 09:35']),
+    minCardState);
 
   await wait(500);
   await orbWin.webContents.capturePage().then((img) => {

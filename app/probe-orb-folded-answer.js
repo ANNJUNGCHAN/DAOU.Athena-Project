@@ -90,6 +90,29 @@ async function main() {
   })()`);
   record('03b-접힌 동안의 턴이 그대로 남아 있다(새 경로 0개)', turns.lastText === '테스트 답변입니다', turns);
 
+  // ---------- (4) 결함 2 회귀 — MOPEY 활성 중 접힌 답 도착 → MOPEY 유지 ----------
+  // 루틴 만료(MOPEY)가 아직 unread에 남은 채(아직 안 읽음) 접힌 채로 대화
+  // 답까지 도착해도 renderPresence()의 FIRED가 MOPEY를 덮으면 안 된다(orb.js
+  // reapplyUnreadFace 주석 참조) — 배지 수만 unread 1 + folded 1 = 2로 는다.
+  await orbWin.webContents.executeJavaScript("document.getElementById('orbClose').click()");
+  await wait(200);
+  orbWin.webContents.send('athena:routine-event', {
+    type: 'routine-expired', routine_id: 'R-FOLD', note: 'probe-mopey-before-fold',
+  });
+  await wait(200);
+  const s4 = await orbState(orbWin);
+  record('04-루틴 만료(collapsed) → data-face=mopey, count=1', s4.face === 'mopey' && s4.alert === 'fired' && s4.count === '1', s4);
+
+  await orbWin.webContents.executeJavaScript(`(() => {
+    const input = document.getElementById('orbInput');
+    input.value = '두 번째 테스트 질의';
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
+  })()`);
+  await wait(900); // 800ms 지연(모킹) + 여유 — 접힌 채로 응답 도착
+  const s5 = await orbState(orbWin);
+  record('05-MOPEY 활성 중 접힌 답 도착 → MOPEY 유지 + 배지만 2로 증가(FIRED 다운그레이드 없음)',
+    s5.face === 'mopey' && s5.alert === 'fired' && s5.count === '2', s5);
+
   fs.mkdirSync(path.join(__dirname, 'captures'), { recursive: true });
   fs.writeFileSync(path.join(__dirname, 'captures', 'probe-orb-folded-answer-report.json'), JSON.stringify(report, null, 2));
   const okCount = report.steps.filter((s) => s.ok).length;

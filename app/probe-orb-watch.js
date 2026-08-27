@@ -27,6 +27,10 @@ function sendWatch(orbWin, active) {
   orbWin.webContents.send('athena:orb-signal', { signal: 'watch', active, observed: 4.6, threshold: 5.0 });
 }
 
+function sendFeedStatus(orbWin, state) {
+  orbWin.webContents.send('athena:orb-signal', { signal: 'feed-status', status: { state } });
+}
+
 async function faceState(orbWin) {
   return orbWin.webContents.executeJavaScript(`(() => {
     const root = document.getElementById('orbRoot');
@@ -123,6 +127,37 @@ async function main() {
   await wait(300);
   const s6 = await faceState(orbWin);
   record('06-펼쳐 읽음(근접 없음) → data-face=idle(회귀 없음)', s6.face === 'idle', s6);
+
+  // ---------- (7) 재조정 회귀(2026-08-27 A3, 사용자 승인) — watch 활성 중
+  // 피드가 끊겼다 재연결됐는데 근접 스냅샷이 안 따라오면(백엔드 재시작으로
+  // _near_active가 비어 이탈 신호 자체가 유실된 경우를 흉내낸다) watch가
+  // 유령으로 안 남아야 한다. 위 WATCH 주석의 '이탈 신호로만 풀린다' 불변식의
+  // 유일한 예외 — 재연결 자체가 리셋 신호가 된다. ----------
+  sendWatch(orbWin, true);
+  await wait(200);
+  const s7pre = await faceState(orbWin);
+  record('07pre-사전 준비: 근접 진입 → data-face=watch', s7pre.face === 'watch', s7pre);
+
+  sendFeedStatus(orbWin, 'disconnected');
+  await wait(200);
+  const s7down = await faceState(orbWin);
+  record('07down-근접 중 피드 단절 → data-face=frown(watch를 덮는다)', s7down.face === 'frown', s7down);
+
+  // 재연결 — 스냅샷이 따라오지 않는 경우를 흉내낸다.
+  sendFeedStatus(orbWin, 'connected');
+  await wait(200);
+  const s7up = await faceState(orbWin);
+  record('07up-재연결(스냅샷 없음) → watch가 유령으로 남지 않는다', s7up.face !== 'watch', s7up);
+
+  // 리셋이 영구 억제가 아님을 확인 — 재연결 직후 스냅샷이 실제로 도착하면
+  // (단순 네트워크 순단으로 여전히 근접 중인 경우) watch로 곧바로 복원돼야 한다.
+  sendWatch(orbWin, true);
+  await wait(200);
+  const s7restore = await faceState(orbWin);
+  record('07restore-재연결 직후 스냅샷 재도착 → watch로 복원', s7restore.face === 'watch', s7restore);
+
+  sendWatch(orbWin, false);
+  await wait(200);
 
   fs.mkdirSync(path.join(__dirname, 'captures'), { recursive: true });
   fs.writeFileSync(path.join(__dirname, 'captures', 'probe-orb-watch-report.json'), JSON.stringify(report, null, 2));
