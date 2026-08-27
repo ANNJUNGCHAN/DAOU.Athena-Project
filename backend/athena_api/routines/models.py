@@ -103,6 +103,7 @@ class RoutineSpec:
     status: RoutineStatus = "draft"
     created_at: datetime = field(default_factory=_utcnow)
     approved_at: datetime | None = None
+    goal: bool = False  # 목표가 도달 의도 — 승인 카드가 노출, 발화 시 FACE.GLAD 배선(CP1a)
 
     @property
     def mode(self) -> Mode:
@@ -129,6 +130,7 @@ class RoutineSpec:
             "cooldown_s": self.cooldown_s,
             "expires_at": self.expires_at.isoformat(),
             "note": self.note,
+            "goal": self.goal,
             "status": self.status,
             "mode": self.mode,  # 파생값이지만 읽는 쪽 편의로 함께 저장
             "created_at": self.created_at.isoformat(),
@@ -155,6 +157,7 @@ class RoutineSpec:
             status=raw["status"],
             created_at=datetime.fromisoformat(raw["created_at"]),
             approved_at=datetime.fromisoformat(approved) if approved else None,
+            goal=bool(raw.get("goal", False)),  # 구버전 저장분 하위호환 — 기본 False
         )
 
     def is_expired(self, now: datetime | None = None) -> bool:
