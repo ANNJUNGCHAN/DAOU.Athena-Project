@@ -406,7 +406,13 @@ function startRoutineFeed() {
         n.show();
       }
     },
-    onStatus: () => {},
+    // 알람 센터 "● WS 연결됨"(9단계, Paper 보드 40)이 재사용하는 실 신호 —
+    // 이전엔 no-op이라 렌더러에 닿지 않았다(재검증에서 확인). 그대로 릴레이만.
+    onStatus: (s) => {
+      if (shellWin && !shellWin.isDestroyed()) {
+        shellWin.webContents.send('athena:routine-feed-status', s);
+      }
+    },
   });
   routineFeed.start();
 }

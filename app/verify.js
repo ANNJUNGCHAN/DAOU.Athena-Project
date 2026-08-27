@@ -2915,6 +2915,91 @@ app.whenReady().then(async () => {
     })()`);
   }
 
+  // ---------- 알람 센터 · 라이브 관제 (9단계, Paper 보드 40) ----------
+  //
+  // 검증17이 이미 routine-fired 1건(vr1)을 보내 notifyRooms에 남아 있을 수
+  // 있다 — 정확한 총 개수 대신 "방금 보낸 이벤트가 실제로 알람 행으로 뜨는가"
+  // "모두 읽음으로 후 미확인이 0인가"를 상대적으로 잰다(routine-event 주입은
+  // 검증17과 같은 경로: shellWin.webContents.send).
+  try {
+    shellWin.webContents.send('athena:routine-event', {
+      type: 'routine-fired',
+      routine_id: 'stage9-alarm-1',
+      symbol: '000660',
+      source: 'price.change_rate',
+      mode: 'periodic',
+      observed: 123456,
+      threshold: 120000,
+      note: '9단계 알람 검증',
+      fired_at: new Date().toISOString(),
+    });
+    await wait(300); // sidebar.js handleRoutineEvent가 renderList/updateAgentBadge까지 끝내도록
+
+    const alarmProbe = await shellWin.webContents.executeJavaScript(`(async () => {
+      const nav = document.getElementById('modeNavAgent');
+      const back = document.getElementById('modeNavSummary');
+      const canvas = document.getElementById('agentCanvas');
+      if (!nav || !back || !canvas || !window.AthenaAgentCanvas) return { wired: false };
+      nav.click();
+      await new Promise((r) => setTimeout(r, 600));
+      const alertsTabBtn = Array.from(canvas.querySelectorAll('.agent-view-tab')).find((n) => n.textContent.startsWith('알람'));
+      if (!alertsTabBtn) return { wired: false };
+      const labelBefore = alertsTabBtn.textContent;
+      alertsTabBtn.click();
+      await new Promise((r) => setTimeout(r, 100));
+      const rows = Array.from(canvas.querySelectorAll('.agent-alarm-row'));
+      const myRow = rows.find((r) => (r.querySelector('.agent-alarm-title') || {}).textContent === '9단계 알람 검증');
+      const myRowUnread = myRow ? myRow.className.includes('is-unread') : null;
+      const wsLabel = (canvas.querySelector('.agent-live-ws-label') || {}).textContent;
+      const liveRowCount = canvas.querySelectorAll('.agent-live-progress-row').length;
+      const timelineRowCount = canvas.querySelectorAll('.agent-live-timeline-row').length;
+
+      canvas.querySelector('.agent-mark-all-read').click();
+      await new Promise((r) => setTimeout(r, 100));
+      const labelAfterMarkAll = alertsTabBtn.textContent;
+      const stillUnreadCount = canvas.querySelectorAll('.agent-alarm-row.is-unread').length;
+
+      const tasksTabBtn = Array.from(canvas.querySelectorAll('.agent-view-tab')).find((n) => n.textContent === '작업');
+      if (tasksTabBtn) tasksTabBtn.click();
+      await new Promise((r) => setTimeout(r, 100));
+      const tasksHeadHiddenAfterReturn = (canvas.querySelector('.agent-tasks-head') || {}).hidden;
+
+      back.click();
+      await new Promise((r) => setTimeout(r, 100));
+      return {
+        wired: true, labelBefore, myRowFound: !!myRow, myRowUnread, wsLabel,
+        liveRowCount, timelineRowCount, labelAfterMarkAll, stillUnreadCount, tasksHeadHiddenAfterReturn,
+      };
+    })()`);
+    report.alarmLive = alarmProbe;
+    assertOk('agent-canvas-9: 배선이 있다', alarmProbe.wired === true);
+    if (alarmProbe.wired) {
+      assertOk(
+        'agent-canvas-9: 알람 탭 라벨에 미확인 수가 붙는다(예: "알람 N")',
+        /^알람 \d+$/.test(alarmProbe.labelBefore),
+      );
+      assertOk(
+        'agent-canvas-9: 방금 보낸 routine-fired가 알람 행으로 뜬다(notifyRooms 승격)',
+        alarmProbe.myRowFound === true,
+      );
+      assertOk('agent-canvas-9: 그 행은 미확인(is-unread)이다', alarmProbe.myRowUnread === true);
+      assertOk(
+        'agent-canvas-9: 라이브 컬럼 진행바 2건 + 타임라인 4건(fixture)',
+        alarmProbe.liveRowCount === 2 && alarmProbe.timelineRowCount === 4,
+      );
+      assertOk(
+        'agent-canvas-9: "WS 연결됨"은 검증 하네스에서 피드가 안 도니 정직하게 "연결 안 됨"이다',
+        alarmProbe.wsLabel === 'WS 연결 안 됨',
+      );
+      assertOk('agent-canvas-9: "모두 읽음으로" 후 탭 라벨이 "알람"이다(배지 0)', alarmProbe.labelAfterMarkAll === '알람');
+      assertOk('agent-canvas-9: "모두 읽음으로" 후 미확인 행이 0건이다', alarmProbe.stillUnreadCount === 0);
+      assertOk('agent-canvas-9: "작업" 뷰로 돌아오면 작업 머리가 다시 보인다', alarmProbe.tasksHeadHiddenAfterReturn === false);
+    }
+  } catch (err) {
+    report.alarmLive = { error: String((err && err.message) || err) };
+    failures.push('agent-canvas-9: 검증 블록이 예외로 끝났다');
+  }
+
   fs.writeFileSync(path.join(CAPTURES, 'VERIFY-REPORT.json'), JSON.stringify(report, null, 2));
   console.log('[verify] 리포트 저장:', path.join(CAPTURES, 'VERIFY-REPORT.json'));
 
