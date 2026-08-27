@@ -3,7 +3,9 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { statusIconFor, isPriorityRoutine, buildAgentSidebarRows, STATUS_ICON } = require('./agent-sidebar-list');
+const {
+  statusIconFor, isPriorityRoutine, buildAgentSidebarRows, buildHydratedRooms, STATUS_ICON,
+} = require('./agent-sidebar-list');
 
 function routine(overrides) {
   return {
@@ -100,4 +102,52 @@ test('buildAgentSidebarRows: 배열이 아니거나 비어 있으면 빈 배열'
   assert.deepEqual(buildAgentSidebarRows(null), []);
   assert.deepEqual(buildAgentSidebarRows(undefined), []);
   assert.deepEqual(buildAgentSidebarRows([]), []);
+});
+
+// ── 7단계(F3-FE): 알림 방 하이드레이션 — 6단계 last_fired_at/unread로 재구성 ──
+
+test('buildHydratedRooms: 한 번도 발화한 적 없는(last_fired_at 없음) 라우틴은 제외한다', () => {
+  const routines = [
+    routine({ id: 'a', last_fired_at: null, unread: false }),
+    routine({ id: 'b' }), // last_fired_at 필드 자체가 없는 경우도 방어
+  ];
+  assert.deepEqual(buildHydratedRooms(routines), []);
+});
+
+test('buildHydratedRooms: unread를 그대로 뒤집어 read로 옮긴다(백엔드 read-marks가 유일한 진실)', () => {
+  const routines = [
+    routine({ id: 'a', last_fired_at: '2026-08-27T06:00:00Z', unread: true }),
+    routine({ id: 'b', last_fired_at: '2026-08-27T05:00:00Z', unread: false }),
+  ];
+  const rooms = buildHydratedRooms(routines);
+  assert.equal(rooms.find((r) => r.id === 'a').read, false, 'unread:true → read:false');
+  assert.equal(rooms.find((r) => r.id === 'b').read, true, 'unread:false → read:true');
+});
+
+test('buildHydratedRooms: 제목은 note를 그대로 쓰고, sub는 지어내지 않고 빈 문자열로 둔다(P3)', () => {
+  const rooms = buildHydratedRooms([
+    routine({ id: 'a', note: '삼성전자 88,000 감시', last_fired_at: '2026-08-27T06:00:00Z', unread: true }),
+  ]);
+  assert.equal(rooms[0].title, '삼성전자 88,000 감시');
+  assert.equal(rooms[0].sub, '');
+});
+
+test('buildHydratedRooms: 최신 발화 먼저로 정렬한다(handleRoutineEvent의 unshift와 같은 순서)', () => {
+  const routines = [
+    routine({ id: 'older', last_fired_at: '2026-08-25T06:00:00Z', unread: false }),
+    routine({ id: 'newest', last_fired_at: '2026-08-27T06:00:00Z', unread: true }),
+    routine({ id: 'middle', last_fired_at: '2026-08-26T06:00:00Z', unread: false }),
+  ];
+  assert.deepEqual(buildHydratedRooms(routines).map((r) => r.id), ['newest', 'middle', 'older']);
+});
+
+test('buildHydratedRooms: 파싱 불가능한 last_fired_at은 안전하게 걸러진다', () => {
+  const routines = [routine({ id: 'a', last_fired_at: 'not-a-date', unread: true })];
+  assert.deepEqual(buildHydratedRooms(routines), []);
+});
+
+test('buildHydratedRooms: 배열이 아니거나 비어 있으면 빈 배열', () => {
+  assert.deepEqual(buildHydratedRooms(null), []);
+  assert.deepEqual(buildHydratedRooms(undefined), []);
+  assert.deepEqual(buildHydratedRooms([]), []);
 });

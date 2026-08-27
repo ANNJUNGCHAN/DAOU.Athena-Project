@@ -553,6 +553,12 @@ ipcMain.handle('athena:routine-runs', async (_e, { id }) => {
   try { return await routineHttp('GET', `/api/v1/routines/${encodeURIComponent(id)}/runs`); }
   catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
 });
+// 알림 방 읽음 처리(7단계, F3-FE) — 6단계 read-marks에 남겨 재시작 후에도
+// 읽음 상태가 유지되게 한다. body 없이 부르면 백엔드가 현재 시각까지 기록한다.
+ipcMain.handle('athena:routine-ack', async (_e, { id }) => {
+  try { return await routineHttp('POST', `/api/v1/routines/${encodeURIComponent(id)}/ack`); }
+  catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
+});
 
 // ---------- OS 스냅 이벤트 정착 (2026-08-18 승급 — qa-win-arrow.json 실측 근거) ----------
 // resizable:true 승급으로 Windows가 Win+←/→(스냅)·Win+↑(최대화)·Win+↓(최소화)를
