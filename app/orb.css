@@ -198,6 +198,14 @@ html, body {
 #orbRoot[data-face="sleep"] #orbVisor { --orb-open: 34%; --orb-scale: 0.92; }
 #orbRoot[data-face="sleep"] .orb-eye { height: 6.5%; }
 
+/* 졸림 — 장 마감(board-30⑫/31⑨, 2026-08-27 갭 클로징 Step 6). sleep과 달리
+ * 바이저는 줄지 않는다(풀사이즈 — 팀 실측: "감시가 쉬는 시간"이지 무활동이
+ * 아니다) — #orbVisor 규칙이 없는 이유다. 눈 높이는 sleep과 같은 6.5%(같은
+ * "거의 감김" 깊이, 기존 값 재사용)로 처지되, 폭은 mopey와 같은 22.6%(역시
+ * 기존 값 재사용 — 리터럴 신설 금지)로 넓혀 감긴 눈이 아니라 무겁게 처진
+ * 눈으로 읽히게 한다(board 실측 rx=1.5 납작한 알약형과 같은 결). */
+#orbRoot[data-face="drowsy"] .orb-eye { width: 22.6%; height: 6.5%; border-radius: 999px; }
+
 /* 듣는 중 — input:focus. 눈이 입력줄을 내려다본다. 시선은 orb.js가 --orb-gy로 준다. */
 #orbRoot[data-face="listen"] .orb-eye { height: 29.5%; }
 
