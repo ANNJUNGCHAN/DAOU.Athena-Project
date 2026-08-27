@@ -114,6 +114,18 @@ function layoutClusterMap(payload, viewport) {
     });
   });
 
+  // 엣지 메타데이터(스텝13, 스텝13-보정 백엔드 예외 — additive 필드
+  // payload.edge_details[]{source,target,kinds,tier,confidence}). 기존
+  // payload.edges(bare [from,to] 쌍)는 절대 안 바뀌므로 이 룩업은 "있으면 보강,
+  // 없으면 조용히 undefined로 남긴다"는 관용(tolerant) 구조다 — 백엔드 승인 전
+  // (지금)이든 구버전 backend든 안 죽는다(§0 정책과 같은 논리).
+  const edgeDetailsByPair = new Map();
+  const rawEdgeDetails = Array.isArray(payload && payload.edge_details) ? payload.edge_details : [];
+  for (const detail of rawEdgeDetails) {
+    if (!detail || detail.source == null || detail.target == null) continue;
+    edgeDetailsByPair.set(entityPairKey(detail.source, detail.target), detail);
+  }
+
   const rawEdges = Array.isArray(payload && payload.edges) ? payload.edges : [];
   const edges = [];
   for (const pair of rawEdges) {
@@ -123,6 +135,7 @@ function layoutClusterMap(payload, viewport) {
     // 한쪽 끝이 없는 엣지는 그리지 않는다. 백엔드가 외래키로 막고 있으므로 정상
     // 경로에서는 없지만, 그리다 터지면 화면 전체가 죽는다.
     if (!from || !to) continue;
+    const detail = edgeDetailsByPair.get(entityPairKey(from.entity_id, to.entity_id));
     edges.push({
       from: from.entity_id,
       to: to.entity_id,
@@ -132,6 +145,9 @@ function layoutClusterMap(payload, viewport) {
       y2: to.y,
       // 군집을 넘는 엣지는 "놀라운 연결"이다 — 캔버스가 다르게 그린다.
       crossesCluster: from.cluster !== to.cluster,
+      kinds: detail ? detail.kinds : undefined,
+      tier: detail ? detail.tier : undefined,
+      confidence: detail ? detail.confidence : undefined,
     });
   }
 
@@ -204,6 +220,15 @@ function aggregateClusterEdges(placed, surprisingPairs) {
 
 function pairKey(a, b) {
   return a < b ? `${a}-${b}` : `${b}-${a}`;
+}
+
+// entity_id 쌍의 무향 키(스텝13) — pairKey와 같은 무향 정규화 원리지만, entity_id는
+// 임의 문자열이라(해시라 '-'가 들어있을 수 있다) '-' 구분자를 그대로 재사용하면
+// 충돌할 수 있어 공백으로 분리한 별도 함수를 둔다(entity_id 자체엔 공백이 없다 —
+// summary-table.js가 이미 이 값을 그대로 찍고 있어 알려진 형태다, §0 발견4).
+function entityPairKey(a, b) {
+  const [x, y] = String(a) < String(b) ? [a, b] : [b, a];
+  return `${x} ${y}`;
 }
 
 const __exports = {

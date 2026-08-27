@@ -81,6 +81,23 @@ function clusterEllipseBounds(nodes) {
   };
 }
 
+// entity_id 쌍의 무향 키(스텝13) — cluster-layout.js의 entityPairKey와 같은
+// 원리지만 render.js는 cluster-layout.js를 require하지 않으므로(새 크로스 의존을
+// 만들지 않는다) 이 작은 정규화 한 줄만 따로 둔다.
+function entityPairKey(a, b) {
+  const [x, y] = String(a) < String(b) ? [a, b] : [b, a];
+  return `${x} ${y}`;
+}
+
+// 엣지 종류 판정(스텝13) — classifyHubLeaf와 같은 성격의 §0 r4 판단이다.
+function classifyEdgeKind(edge, surprisingEntityPairs) {
+  if (surprisingEntityPairs && surprisingEntityPairs.has(entityPairKey(edge.from, edge.to))) {
+    return 'hidden-link';
+  }
+  if (edge.confidence === undefined) return null; // 메타데이터 없음 — 폴백(사실과 동일하게 실선).
+  return edge.confidence === 'EXTRACTED' ? 'fact' : 'inference';
+}
+
 function renderClusterMap(container, layout, options) {
   if (!container) return null;
   const settings = options || {};
@@ -96,6 +113,9 @@ function renderClusterMap(container, layout, options) {
     ? settings.unnamedClusters
     : new Set(Array.isArray(settings.unnamedClusters) ? settings.unnamedClusters : []);
   const clusterHasName = settings.clusterName != null; // 지금 보이는(단일) 군집의 이름 여부.
+  // 숨은 연관(스텝13) — controller.js가 아직 안 채워주는 선택적 입력이다(스텝11의
+  // surprisingPairs·스텝12의 unnamedClusters와 같은 사정, 대상 파일 밖).
+  const surprisingEntityPairs = settings.surprisingEntityPairs instanceof Set ? settings.surprisingEntityPairs : null;
 
   const nodes = (layout && layout.nodes) || [];
   const edges = (layout && layout.edges) || [];
@@ -139,17 +159,38 @@ function renderClusterMap(container, layout, options) {
   svg.appendChild(ellipseLayer);
 
   // 엣지를 먼저 그린다 — SVG는 뒤에 그린 것이 위로 오므로 노드가 선에 가려지지 않는다.
+  // 엣지 3종(스텝13, 보드 15 §2.3) — 숨은 연관이 최우선(surprisingEntityPairs와
+  // 겹치면 무조건 핑크), 그다음 confidence로 사실/추론을 가른다(§0 r4 "근거
+  // 불명확한 추정 분류" — EXTRACTED만 "확정적으로 관측됨"으로 보고 사실, 나머지
+  // (INFERRED/AMBIGUOUS 등)는 추론으로 묶는다. Paper는 confidence→사실/추론의
+  // 정확한 매핑 규칙을 안 주므로 이 이분법은 실행자 판단이다). edge.confidence가
+  // 아예 없으면(스텝13-보정 백엔드 예외 미승인 시절 또는 구버전 backend) 사실/
+  // 추론을 가를 근거가 없어 실선(사실과 시각적으로 동일) 하나로 폴백한다 —
+  // "메타데이터 부재 허용" 구조, §0 정책과 같은 논리.
+  // anyFact는 confidence==='EXTRACTED'가 실제로 확인된 엣지만 센다 — 폴백(kind
+  // === null, 메타데이터 자체가 없음)은 "확인 안 됨"이지 "사실 확인됨"이 아니라서
+  // 범례에 "사실"이라고 안내하면 없는 확신을 지어내는 셈이다(§0 정책). 스트로크는
+  // 폴백도 사실과 같은 실선을 쓰지만(구분할 근거가 없으니), 범례 캡션은 진짜
+  // confidence가 있을 때만 뜬다.
+  let anyFact = false;
+  let anyInference = false;
+  let anyHiddenLink = false;
   const edgeLayer = el('g', { class: 'graph-edges' });
   for (const edge of edges) {
+    const kind = classifyEdgeKind(edge, surprisingEntityPairs);
+    if (kind === 'hidden-link') anyHiddenLink = true;
+    else if (kind === 'inference') anyInference = true;
+    else if (kind === 'fact') anyFact = true; // null(폴백)은 세지 않는다.
+    const classes = ['graph-edge'];
+    if (highlightCrossings && edge.crossesCluster) classes.push('is-crossing');
+    if (kind === 'hidden-link') classes.push('is-hidden-link');
+    else if (kind === 'inference') classes.push('is-inference');
     const line = el('line', {
       x1: edge.x1,
       y1: edge.y1,
       x2: edge.x2,
       y2: edge.y2,
-      class:
-        highlightCrossings && edge.crossesCluster
-          ? 'graph-edge is-crossing'
-          : 'graph-edge',
+      class: classes.join(' '),
       'data-from': edge.from,
       'data-to': edge.to,
     });
@@ -206,11 +247,30 @@ function renderClusterMap(container, layout, options) {
 
   container.appendChild(svg);
   if (nodes.length > 0) {
-    const legend = elHtml('div', 'graph-node-tier-legend');
-    const caption = elHtml('span', 'graph-node-tier-caption');
-    caption.textContent = HUB_LEAF_CAPTION;
-    legend.appendChild(caption);
+    // 범례(보드 15 §2.4, 스텝13) — Paper 스펙 그대로(사실/추론/숨은연관 + spacer +
+    // "원 크기 = 연결 수" 우측 정렬)이되, 실제로 화면에 쓰인 종류만 보여준다(§0
+    // 정직한 데이터 정책, 스텝11과 같은 패턴) — 항상 뜨는 건 "원 크기=연결 수"뿐,
+    // 사실/추론/숨은연관은 그 종류의 엣지가 실제로 하나라도 그려졌을 때만 켠다.
+    const legend = elHtml('div', 'graph-node-legend');
+    if (anyFact) legend.appendChild(nodeLegendItem('사실 — 말했거나 체결됨', 'is-fact'));
+    if (anyInference) legend.appendChild(nodeLegendItem('추론', 'is-inference'));
+    if (anyHiddenLink) legend.appendChild(nodeLegendItem('숨은 연관', 'is-hidden-link'));
+    legend.appendChild(nodeLegendItem('원 크기 = 연결 수', null, 'is-right'));
     container.appendChild(legend);
+
+    // "추정 분류" 신호 캡션 줄(§0 r4, 원칙5) — 허브/leaf(스텝12)는 항상, confidence
+    // 기반 사실/추론(스텝13)은 그 구분이 실제로 쓰였을 때만(메타데이터가 없어
+    // 폴백했으면 애초에 구분 자체가 없으니 캡션도 의미가 없다).
+    const caption = elHtml('div', 'graph-node-tier-legend');
+    const tierCaption = elHtml('span', 'graph-node-tier-caption');
+    tierCaption.textContent = HUB_LEAF_CAPTION;
+    caption.appendChild(tierCaption);
+    if (anyFact && anyInference) {
+      const confidenceCaption = elHtml('span', 'graph-node-tier-caption');
+      confidenceCaption.textContent = '사실/추론 구분은 confidence 필드 기반 추정';
+      caption.appendChild(confidenceCaption);
+    }
+    container.appendChild(caption);
   }
   return svg;
 }
@@ -390,6 +450,19 @@ function legendItem(text, swatchClass, textClass) {
   const item = elHtml('span', 'graph-cluster-legend-item');
   if (swatchClass) item.appendChild(elHtml('span', `graph-cluster-legend-swatch ${swatchClass}`));
   const label = elHtml('span', textClass ? `graph-cluster-legend-label ${textClass}` : 'graph-cluster-legend-label');
+  label.textContent = text;
+  item.appendChild(label);
+  return item;
+}
+
+// legendItem과 같은 모양이지만 2단계(개별 노드/엣지) 전용 클래스를 쓴다(스텝13) —
+// 1단계 군집 범례(.graph-cluster-legend-*)와 같은 화면에 동시에 뜨는 일이 없어도
+// (state.stage가 배타적이다) 이름을 그대로 재사용하면 "군집" 범례로 오해된다 —
+// 그래서 별도 클래스 스킴을 쓴다(로직은 legendItem과 동일해 복붙 최소화만 포기).
+function nodeLegendItem(text, swatchClass, textClass) {
+  const item = elHtml('span', 'graph-node-legend-item');
+  if (swatchClass) item.appendChild(elHtml('span', `graph-node-legend-swatch ${swatchClass}`));
+  const label = elHtml('span', textClass ? `graph-node-legend-label ${textClass}` : 'graph-node-legend-label');
   label.textContent = text;
   item.appendChild(label);
   return item;

@@ -485,3 +485,106 @@ test('클러스터가 하나도 없으면 범례 자체를 안 그린다', () =>
   renderClusterBubbles(container, mockPlaced([]), { width: 800, height: 600 });
   assert.equal(container.querySelector('.graph-cluster-legend'), null);
 });
+
+// ── 2단계 엣지 3종 + 범례(스텝13) ────────────────────────────────────────────
+
+function mockLayout(edges) {
+  return {
+    nodes: [
+      { entity_id: 'e:a', name: 'A', kind: 'stock', cluster: 0, degree: 3, x: 100, y: 100, radius: 20 },
+      { entity_id: 'e:b', name: 'B', kind: 'stock', cluster: 0, degree: 2, x: 200, y: 100, radius: 16 },
+      { entity_id: 'e:c', name: 'C', kind: 'stock', cluster: 0, degree: 1, x: 300, y: 200, radius: 14 },
+    ],
+    edges,
+  };
+}
+
+function edgeLine(svg, from, to) {
+  return svg.querySelectorAll('.graph-edge').find((l) =>
+    (l.getAttribute('data-from') === from && l.getAttribute('data-to') === to)
+    || (l.getAttribute('data-from') === to && l.getAttribute('data-to') === from));
+}
+
+test('confidence가 EXTRACTED면 사실이다(기본 실선, 별도 클래스 없음)', () => {
+  const layout = mockLayout([{ from: 'e:a', to: 'e:b', x1: 100, y1: 100, x2: 200, y2: 100, confidence: 'EXTRACTED' }]);
+  const container = fakeNode('div');
+  renderClusterMap(container, layout, {});
+  const svg = container.querySelector('svg.graph-canvas');
+  const line = edgeLine(svg, 'e:a', 'e:b');
+  assert.equal(String(line.attrs.class).includes('is-inference'), false);
+  assert.equal(String(line.attrs.class).includes('is-hidden-link'), false);
+});
+
+test('confidence가 EXTRACTED가 아니면(INFERRED 등) 추론(is-inference)이다', () => {
+  const layout = mockLayout([{ from: 'e:a', to: 'e:b', x1: 100, y1: 100, x2: 200, y2: 100, confidence: 'INFERRED' }]);
+  const container = fakeNode('div');
+  renderClusterMap(container, layout, {});
+  const svg = container.querySelector('svg.graph-canvas');
+  assert.ok(String(edgeLine(svg, 'e:a', 'e:b').attrs.class).includes('is-inference'));
+});
+
+test('confidence가 아예 없으면(메타데이터 부재, 현재 실제 상태) 실선으로 폴백한다 — 사실/추론 구분 없음', () => {
+  const layout = mockLayout([{ from: 'e:a', to: 'e:b', x1: 100, y1: 100, x2: 200, y2: 100 }]);
+  const container = fakeNode('div');
+  renderClusterMap(container, layout, {});
+  const svg = container.querySelector('svg.graph-canvas');
+  const line = edgeLine(svg, 'e:a', 'e:b');
+  assert.equal(String(line.attrs.class).includes('is-inference'), false);
+  assert.equal(String(line.attrs.class).includes('is-hidden-link'), false);
+});
+
+test('surprisingEntityPairs와 겹치면 confidence와 무관하게 숨은 연관(is-hidden-link)이 최우선이다', () => {
+  const layout = mockLayout([{ from: 'e:a', to: 'e:b', x1: 100, y1: 100, x2: 200, y2: 100, confidence: 'EXTRACTED' }]);
+  const container = fakeNode('div');
+  renderClusterMap(container, layout, { surprisingEntityPairs: new Set(['e:a e:b']) });
+  const svg = container.querySelector('svg.graph-canvas');
+  const line = edgeLine(svg, 'e:a', 'e:b');
+  assert.ok(String(line.attrs.class).includes('is-hidden-link'));
+  assert.equal(String(line.attrs.class).includes('is-inference'), false);
+});
+
+test('confidence 메타데이터가 전혀 없으면 범례에 사실/추론/confidence 캡션이 안 뜨고 "원 크기=연결 수"만 뜬다(§0 정직한 데이터 — 확인 안 된 걸 "사실"이라 부르지 않는다)', () => {
+  const layout = mockLayout([{ from: 'e:a', to: 'e:b', x1: 100, y1: 100, x2: 200, y2: 100 }]);
+  const container = fakeNode('div');
+  renderClusterMap(container, layout, {});
+  const labels = container.querySelectorAll('.graph-node-legend-label').map((l) => l.textContent);
+  assert.ok(!labels.some((t) => t.includes('사실')));
+  assert.ok(!labels.some((t) => t.includes('추론')));
+  assert.ok(labels.some((t) => t.includes('원 크기')));
+  const captions = container.querySelectorAll('.graph-node-tier-caption').map((c) => c.textContent);
+  assert.ok(!captions.some((t) => t.includes('confidence')));
+});
+
+test('사실·추론이 둘 다 실제로 있으면 두 범례 항목과 confidence 캡션이 함께 뜬다', () => {
+  const layout = mockLayout([
+    { from: 'e:a', to: 'e:b', x1: 100, y1: 100, x2: 200, y2: 100, confidence: 'EXTRACTED' },
+    { from: 'e:b', to: 'e:c', x1: 200, y1: 100, x2: 300, y2: 200, confidence: 'INFERRED' },
+  ]);
+  const container = fakeNode('div');
+  renderClusterMap(container, layout, {});
+  const labels = container.querySelectorAll('.graph-node-legend-label').map((l) => l.textContent);
+  assert.ok(labels.some((t) => t.includes('사실')));
+  assert.ok(labels.some((t) => t.includes('추론')));
+  const captions = container.querySelectorAll('.graph-node-tier-caption').map((c) => c.textContent);
+  assert.ok(captions.some((t) => t.includes('confidence')));
+});
+
+test('숨은 연관이 실제로 있을 때만 "숨은 연관" 범례 항목이 뜬다', () => {
+  const layout = mockLayout([{ from: 'e:a', to: 'e:b', x1: 100, y1: 100, x2: 200, y2: 100 }]);
+  const container = fakeNode('div');
+  renderClusterMap(container, layout, {});
+  assert.ok(!container.querySelectorAll('.graph-node-legend-label').map((l) => l.textContent).some((t) => t.includes('숨은 연관')));
+
+  const container2 = fakeNode('div');
+  renderClusterMap(container2, layout, { surprisingEntityPairs: new Set(['e:a e:b']) });
+  assert.ok(container2.querySelectorAll('.graph-node-legend-label').map((l) => l.textContent).some((t) => t.includes('숨은 연관')));
+});
+
+test('"원 크기 = 연결 수" 항목은 우측 정렬 클래스를 받는다(Paper 스펙, 노드가 있으면 항상 뜬다)', () => {
+  const container = fakeNode('div');
+  renderClusterMap(container, mockLayout([]), {});
+  const rightAligned = container.querySelectorAll('.graph-node-legend-label')
+    .filter((l) => String(l.attrs.class).includes('is-right'));
+  assert.equal(rightAligned.length, 1);
+  assert.match(rightAligned[0].textContent, /원 크기/);
+});
