@@ -105,7 +105,13 @@ if (htmlRaw) {
   // (b) 실행 버튼 없음 — 확정 결정 3. 버튼 id를 화이트리스트로 잠근다.
   // orbEsc(답변 중단) · orbChatGo(대화창으로 가기)는 board-33이 추가한 대화 모드
   // 부품이다 — 둘 다 주문·감시를 건드리지 않는다(집행 0, 승인 0).
-  const ALLOWED_BUTTON_IDS = new Set(["orbToggle", "orbMore", "orbClose", "orbEsc", "orbChatGo"]);
+  // orbTicketExec/orbTicketCancel(2026-08-27 CP2 사용자 승인, board-33⑤ 캡션
+  // 50G-0/50H-0) — 미니 주문 티켓의 실행/취소뿐이다. 감시 승인/취소 버튼은
+  // 이 화이트리스트에 없다 — 그건 승인 대상이 아니다(CP2는 주문집행 절반만).
+  const ALLOWED_BUTTON_IDS = new Set([
+    "orbToggle", "orbMore", "orbClose", "orbEsc", "orbChatGo",
+    "orbTicketExec", "orbTicketCancel",
+  ]);
   const buttonIds = [...html.matchAll(/<button\b[^>]*\bid="([^"]+)"/gi)].map((m) => m[1]);
   const anonymousButtons = (html.match(/<button\b(?![^>]*\bid=)/gi) || []).length;
   must(anonymousButtons === 0, `orb.html: id 없는 <button>이 ${anonymousButtons}개 — 모든 액션은 이름이 있어야 검사할 수 있다`);
@@ -132,6 +138,20 @@ if (htmlRaw) {
     must(html.includes(needle), `orb.html: ${needle}을 링크/로드해야 한다`);
   }
   must(/id="orb"/.test(html), "orb.html: #orb(접힘 상태의 원형)가 있어야 한다");
+
+  // (e) 미니 주문 티켓 존재 검사(2026-08-27 CP2 승인, board-33⑤ · Paper 51D-0
+  // 실측) — #orbTicket 컨테이너가 생기는 Step 10b부터 켜진다. Step 10a(이
+  // 커밋) 시점에는 컨테이너 자체가 없어 아래 블록 전체를 건너뛴다 — 존재
+  // 검사가 아직 짓지 않은 UI를 요구해 게이트를 막으면 단계적 롤아웃이 안 된다.
+  if (html.includes('id="orbTicket"')) {
+    must(buttonIds.includes("orbTicketExec"), "orb.html: #orbTicketExec(실행)이 없다 — 티켓엔 실행 버튼이 있어야 한다(board-33⑤)");
+    must(buttonIds.includes("orbTicketCancel"), "orb.html: #orbTicketCancel(취소)이 없다");
+    for (const label of ["종목", "구분", "수량", "예상 체결금액"]) {
+      must(html.includes(label), `orb.html: 티켓 라벨 "${label}"이 없다(Paper 51D-0 실측)`);
+    }
+    must(html.includes("1회 확인"),
+      'orb.html: "1회 확인" 라벨이 없다(board-33⑤ 캡션 50G-0 — 방어 장치 없이 셸과 동일한 1회 확인)');
+  }
 }
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -155,13 +175,44 @@ if (cssRaw) {
 const orbJsRaw = read("orb.js");
 if (orbJsRaw) {
   const orbJs = stripComments(orbJsRaw);
+  // 2026-08-27 CP2 사용자 승인(board-33⑤ 캡션 50G-0/50H-0 원문: "⑤ 미니 주문
+  // 티켓 — 오브에서 집행한다" / "확정 결정 3의 다른 절반도 폐기된다. 방어
+  // 장치 없이 셸과 동일하게 1회 확인 — alwaysOnTop 창에 실행 버튼이 상주한다는
+  // 뜻이다") — athena:order-execute 금지만 풀렸다. 질의 시작(render_canvas)과
+  // 감시 승인/취소는 승인 대상이 아니라 여전히 금지다.
   for (const [channel, why] of [
     ["athena__render_canvas", "오브는 질의를 시작하지 않는다 — 입력 지점은 셸 하나뿐이다"],
-    ["athena:order-execute", "확정 결정 3 — 주문 집행은 오브에 없다"],
     ["athena:routine-confirm", "감시 승인도 오브의 액션이 아니다(설계서: 액션은 더보기까지)"],
     ["athena:routine-cancel", "감시 취소도 오브의 액션이 아니다"],
   ]) {
     must(!orbJs.includes(channel), `orb.js: '${channel}' 호출이 있다 — ${why}`);
+  }
+  // 반대 방향 존재 검사 — 금지가 풀렸다고 실제 호출이 없으면 이 완화는 죽은
+  // 코드다. #orbTicketExec를 참조하는 순간부터(Step 10c) 실제 호출을 요구한다
+  // — 10a/10b 시점에는 orb.js가 그 id를 아직 몰라 이 블록을 건너뛴다.
+  if (/orbTicketExec/.test(orbJs)) {
+    must(orbJs.includes("athena:order-execute"),
+      "orb.js: 티켓 실행 버튼은 참조하는데 'athena:order-execute' 호출이 없다 — CP2 승인 대상 자체가 빠졌다");
+  }
+
+  // 문구 대조군(orb.js 판) — 위 (c)는 orb.html만 본다. 구분(매수/매도) 값은
+  // "없는 필드 행 미생성" 계약상 정적 HTML에 못 박을 수 없어 renderOrbTicket()이
+  // 런타임에 조립한다 — 그 조립부 **밖**에서 같은 문구가 보이면 CP2 승인 범위
+  // (티켓 하나)를 넘어선 것이라 여전히 결함이다. 함수가 아직 없는 10a/10b는
+  // 건너뛴다.
+  const ticketFnMatch = /function\s+renderOrbTicket\s*\([^)]*\)\s*\{/.exec(orbJs);
+  if (ticketFnMatch) {
+    let depth = 1;
+    let i = ticketFnMatch.index + ticketFnMatch[0].length;
+    for (; i < orbJs.length && depth > 0; i++) {
+      if (orbJs[i] === "{") depth++;
+      else if (orbJs[i] === "}") depth--;
+    }
+    const outsideTicketFn = orbJs.slice(0, ticketFnMatch.index) + orbJs.slice(i);
+    for (const word of ["매수", "매도", "주문 실행", "즉시 실행", "지금 실행"]) {
+      must(!outsideTicketFn.includes(word),
+        `orb.js: renderOrbTicket() 밖에서 실행을 암시하는 문구 "${word}"가 있다(CP2는 티켓 하나만 승인했다)`);
+    }
   }
   // 정직성 계약 — 본문은 결정론 템플릿을 그대로 쓴다(지어낼 수 없다).
   // **두 조건을 모두** 건다: 진짜 모듈을 바인딩할 것 + 그 함수를 실제로 부를 것.
