@@ -295,7 +295,10 @@ function createSummaryTableController(deps) {
   }
 
   function panelDataFor(entry) {
-    // 페이로드에 실재하는 필드만 담는다 — 지어낸 값 없음.
+    // 페이로드에 실재하는 필드만 담는다 — 지어낸 값 없음. confidence/tier는
+    // 스텝8 공통 패널의 "티어 대조" 카드가 쓴다(§0 발견3 갱신 — 처음엔 이 두
+    // 필드가 없는 줄 알고 패널을 축소하려 했으나, 표(dotClass/출처 열)를 만들며
+    // 실재함을 확인했다).
     return {
       entityId: entry.entity_id,
       name: entry.entity_name,
@@ -303,6 +306,8 @@ function createSummaryTableController(deps) {
       relation: entry.relation_kind,
       rationale: entry.rationale,
       reinforcement: entry.reinforcement,
+      confidence: entry.confidence,
+      tier: entry.tier,
     };
   }
 

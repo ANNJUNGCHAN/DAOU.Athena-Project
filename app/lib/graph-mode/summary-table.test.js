@@ -276,6 +276,8 @@ test('행을 클릭하면 selectEntity가 실재 필드로만 채운 panelData�
     relation: '보유',
     rationale: '체결 4건 · 평균 71,200원',
     reinforcement: 12,
+    confidence: 'EXTRACTED',
+    tier: 'deterministic',
   });
 });
 

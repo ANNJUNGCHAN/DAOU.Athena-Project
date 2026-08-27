@@ -22,6 +22,7 @@ function createGraphModeController(deps) {
                     //   "공통 패널" }
     fetchClusterMap, // async () => payload
     onError,        // (err) => void (선택)
+    onPanelCta,     // () => void (선택) — 공통 패널 CTA "채팅에서 답하기" 클릭 시(스텝8)
   } = deps;
 
   let state = store.createInitialState();
@@ -126,23 +127,118 @@ function createGraphModeController(deps) {
     });
   }
 
-  // 공통 패널 — 선택된 노드가 있으면 채우고 없으면 숨긴다. 관계 목록·근거·최근
-  // 변화 같은 백엔드 의존 섹션은 여기서 만들지 않는다 — 지어낼 데이터가 없다.
-  // panel 요소는 주입받는다(elements.panel) — 안 들어오면 조용히 건너뛴다,
-  // DOM을 전역에서 만들지 않는다는 이 파일의 원래 계약을 지킨다.
+  function elp(name, className) {
+    const node = document.createElement(name);
+    if (className) node.setAttribute('class', className);
+    return node;
+  }
+
+  // dot 인코딩 재사용 — summary-table.js의 dotClass()와 같은 confidence/tier
+  // 규칙(§0 원칙5 "근거 불명확한 추정 분류"). 그래프 노드 선택 경로
+  // (selectNode())는 confidence/tier가 없어 이 판정이 항상 '테두리만'으로
+  // 떨어진다 — 지어낸 값이 아니라 정직한 기본값이다.
+  function panelDotClass(data) {
+    if (data.confidence === 'EXTRACTED' && data.tier === 'deterministic') return 'panel-dot-fact';
+    if (data.confidence === 'AMBIGUOUS') return 'panel-dot-warn';
+    return 'panel-dot-soft';
+  }
+
+  const PANEL_TIER_LABELS = { deterministic: '체결·잔고', conversational: '대화' };
+  const PANEL_CONFIDENCE_LABELS = { EXTRACTED: '사실', INFERRED: '추론', AMBIGUOUS: '불확실' };
+
+  // 공통 패널 콘텐츠(보드 07 §10, 스텝8). §10-1 탭("이력" 탭은 Paper에 콘텐츠
+  // 스펙이 없어 클릭해도 전환 없음, §6 범위 밖) · §10-2 선택 헤더 · §10-3 티어
+  // 대조(가용 필드가 rationale/confidence/tier뿐이라 두 카드 비교 "어긋남"
+  // 대신 단일 카드로 축소, §0 정책) · §10-5 CTA를 그린다. §10-4(최근 변화)는
+  // 데이터가 없어 섹션 자체를 렌더하지 않는다 — 빈 섹션보다 아예 없는 편이
+  // 정직하다.
+  function renderPanelContent(panel, data) {
+    while (panel.firstChild) panel.removeChild(panel.firstChild);
+
+    const tabs = elp('div', 'panel-tabs');
+    const traitTab = elp('button', 'panel-tab is-active');
+    traitTab.setAttribute('type', 'button');
+    traitTab.textContent = '성향';
+    tabs.appendChild(traitTab);
+    const historyTab = elp('button', 'panel-tab');
+    historyTab.setAttribute('type', 'button');
+    historyTab.textContent = '이력';
+    tabs.appendChild(historyTab);
+    tabs.appendChild(elp('span', 'panel-tabs-spacer'));
+    const deselectBtn = elp('button', 'panel-deselect');
+    deselectBtn.setAttribute('type', 'button');
+    deselectBtn.textContent = '선택 해제';
+    deselectBtn.addEventListener('click', () => {
+      state = store.clearSelection(state);
+      renderSelection();
+    });
+    tabs.appendChild(deselectBtn);
+    panel.appendChild(tabs);
+
+    const header = elp('div', 'panel-header');
+    const row1 = elp('div', 'panel-header-row1');
+    row1.appendChild(elp('span', `panel-dot ${panelDotClass(data)}`));
+    const name = elp('span', 'panel-name');
+    name.textContent = data.name || data.entityId;
+    row1.appendChild(name);
+    if (data.kind) {
+      const kindBadge = elp('span', 'panel-kind-badge');
+      kindBadge.textContent = data.kind;
+      row1.appendChild(kindBadge);
+    }
+    header.appendChild(row1);
+    if (Number.isFinite(data.reinforcement)) {
+      const row2 = elp('div', 'panel-header-row2');
+      row2.textContent = `보강 ${data.reinforcement}회`;
+      header.appendChild(row2);
+    }
+    panel.appendChild(header);
+
+    // 가용 필드가 하나라도 있을 때만 카드를 그린다 — 전부 없으면(그래프 노드
+    // 선택 경로처럼 rationale/confidence/tier가 아예 없는 panelData) 빈
+    // 카드를 만들지 않는다.
+    if (data.rationale || data.tier || data.confidence) {
+      const tierCard = elp('div', 'panel-tier-card');
+      const tierRow = elp('div', 'panel-tier-row');
+      tierRow.appendChild(elp('span', `panel-dot ${panelDotClass(data)}`));
+      const tierLabel = elp('span', 'panel-tier-label');
+      tierLabel.textContent = PANEL_TIER_LABELS[data.tier] || '출처 불명';
+      tierRow.appendChild(tierLabel);
+      if (data.confidence) {
+        const confBadge = elp('span', 'panel-tier-confidence');
+        confBadge.textContent = PANEL_CONFIDENCE_LABELS[data.confidence] || data.confidence;
+        tierRow.appendChild(confBadge);
+      }
+      tierCard.appendChild(tierRow);
+      if (data.rationale) {
+        const tierBody = elp('div', 'panel-tier-body');
+        tierBody.textContent = data.rationale;
+        tierCard.appendChild(tierBody);
+      }
+      panel.appendChild(tierCard);
+    }
+
+    const cta = elp('button', 'panel-cta');
+    cta.setAttribute('type', 'button');
+    cta.textContent = '채팅에서 답하기';
+    if (typeof onPanelCta === 'function') cta.addEventListener('click', onPanelCta);
+    panel.appendChild(cta);
+  }
+
+  // 공통 패널 — 선택된 노드가 있으면 채우고 없으면 숨긴다. panel 요소는
+  // 주입받는다(elements.panel) — 안 들어오면 조용히 건너뛴다, DOM을 전역에서
+  // 만들지 않는다는 이 파일의 원래 계약을 지킨다.
   function renderSelection() {
     highlightSelectedRow();
     const panel = elements.panel;
     if (!panel) return;
     if (!state.selectedEntityId || !state.panel) {
       panel.hidden = true;
-      panel.textContent = '';
+      while (panel.firstChild) panel.removeChild(panel.firstChild);
       return;
     }
     panel.hidden = false;
-    const data = state.panel;
-    const degreeText = Number.isFinite(data.degree) ? `연결 ${data.degree}` : '';
-    panel.textContent = [data.name || data.entityId, degreeText].filter(Boolean).join(' · ');
+    renderPanelContent(panel, state.panel);
   }
 
   async function draw(force) {

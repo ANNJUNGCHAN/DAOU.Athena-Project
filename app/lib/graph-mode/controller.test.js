@@ -60,6 +60,7 @@ function setup(options) {
       return build(opts.revisions ? opts.revisions[calls - 1] : 7);
     },
     onError: opts.onError,
+    onPanelCta: opts.onPanelCta,
   });
   // 대부분의 테스트는 브레인이 켜져 있다고 가정한다 — 꺼진 채 시작하고 싶은
   // 테스트만 opts.available: false를 넘긴다.
@@ -244,6 +245,91 @@ test('2단계에서 노드를 클릭하면 선택된다(패널이 채워진다)'
   assert.equal(controller.state.panel.name, '장비');
   assert.equal(elements.panel.hidden, false);
   assert.match(elements.panel.textContent, /장비/);
+});
+
+// ── 공통 패널 콘텐츠(보드 07 §10, 스텝8) ─────────────────────────────────────
+
+function tablePanelData(overrides) {
+  return {
+    entityId: 'e:samsung', name: '삼성전자', kind: 'stock', relation: '보유',
+    rationale: '체결 4건 · 평균 71,200원', reinforcement: 12,
+    confidence: 'EXTRACTED', tier: 'deterministic',
+    ...overrides,
+  };
+}
+
+test('패널 탭 — "성향"(활성)·"이력"(비활성)이 둘 다 그려진다', () => {
+  const { controller, elements } = setup({ withPanel: true });
+  controller.selectEntity('e:samsung', tablePanelData());
+  const tabs = elements.panel.querySelectorAll('.panel-tab');
+  assert.equal(tabs.length, 2);
+  assert.equal(tabs[0].textContent, '성향');
+  assert.equal(tabs[0].classList.contains('is-active'), true);
+  assert.equal(tabs[1].textContent, '이력');
+  assert.equal(tabs[1].classList.contains('is-active'), false);
+});
+
+test('패널 탭 — "이력" 탭은 클릭해도 전환 없다(Paper에 콘텐츠 스펙 없음, §6 범위 밖)', () => {
+  const { controller, elements } = setup({ withPanel: true });
+  controller.selectEntity('e:samsung', tablePanelData());
+  const historyTab = elements.panel.querySelectorAll('.panel-tab')[1];
+  assert.doesNotThrow(() => historyTab.dispatchEvent({ type: 'click' }));
+  // 클릭 핸들러 자체가 없다 — 활성 탭·패널 내용이 그대로다.
+  const traitTab = elements.panel.querySelectorAll('.panel-tab')[0];
+  assert.equal(traitTab.classList.contains('is-active'), true);
+});
+
+test('패널 탭 — "선택 해제" 클릭 시 clearSelection과 같은 결과(패널이 닫힌다)', () => {
+  const { controller, elements } = setup({ withPanel: true });
+  controller.selectEntity('e:samsung', tablePanelData());
+  const deselect = elements.panel.querySelector('.panel-deselect');
+  deselect.dispatchEvent({ type: 'click' });
+  assert.equal(controller.state.selectedEntityId, null);
+  assert.equal(elements.panel.hidden, true);
+});
+
+test('선택 헤더 — 이름·kind 배지·보강 횟수를 그린다', () => {
+  const { controller, elements } = setup({ withPanel: true });
+  controller.selectEntity('e:samsung', tablePanelData());
+  const name = elements.panel.querySelector('.panel-name');
+  assert.equal(name.textContent, '삼성전자');
+  const kindBadge = elements.panel.querySelector('.panel-kind-badge');
+  assert.equal(kindBadge.textContent, 'stock');
+  const row2 = elements.panel.querySelector('.panel-header-row2');
+  assert.equal(row2.textContent, '보강 12회');
+});
+
+test('티어 대조 카드 — tier를 한글로, confidence를 배지로, rationale을 본문으로 그린다', () => {
+  const { controller, elements } = setup({ withPanel: true });
+  controller.selectEntity('e:samsung', tablePanelData({ tier: 'conversational', confidence: 'INFERRED' }));
+  const label = elements.panel.querySelector('.panel-tier-label');
+  assert.equal(label.textContent, '대화');
+  const confBadge = elements.panel.querySelector('.panel-tier-confidence');
+  assert.equal(confBadge.textContent, '추론');
+  const body = elements.panel.querySelector('.panel-tier-body');
+  assert.equal(body.textContent, '체결 4건 · 평균 71,200원');
+});
+
+test('티어 대조 카드 — rationale/tier/confidence가 전부 없으면(그래프 노드 선택) 카드를 안 그린다', () => {
+  const { controller, elements } = setup({ payload: payloadTwoClusters, withPanel: true });
+  controller.selectEntity('e:x', { name: '이름만' }); // 그래프 노드 선택 경로와 같은 얕은 데이터
+  assert.equal(elements.panel.querySelector('.panel-tier-card'), null);
+});
+
+test('CTA "채팅에서 답하기" 클릭 시 onPanelCta가 불린다', () => {
+  let called = 0;
+  const { controller, elements } = setup({ withPanel: true, onPanelCta: () => { called += 1; } });
+  controller.selectEntity('e:samsung', tablePanelData());
+  const cta = elements.panel.querySelector('.panel-cta');
+  assert.equal(cta.textContent, '채팅에서 답하기');
+  cta.dispatchEvent({ type: 'click' });
+  assert.equal(called, 1);
+});
+
+test('§10-4 최근 변화 — 데이터가 없어 섹션 자체를 안 그린다(§0 정책)', () => {
+  const { controller, elements } = setup({ withPanel: true });
+  controller.selectEntity('e:samsung', tablePanelData());
+  assert.equal(elements.panel.querySelector('.panel-recent-changes'), null);
 });
 
 test('panel 요소가 없으면 선택 상태는 바뀌지만 조용히 넘어간다', async () => {
