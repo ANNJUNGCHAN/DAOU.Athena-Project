@@ -147,7 +147,7 @@ body { margin: 0; overflow: hidden; }
   font-weight: 300; /* DakiL — Paper 실측(get_jsx, 보드 44) */
   font-size: var(--text-2xs);
   letter-spacing: 0.1em;
-  line-height: 12px;
+  line-height: 16px; /* Paper 보드 37 leading-4 실측(2026-08-28 SSOT 정합) */
 }
 .sidebar-mode-item {
   display: flex;
@@ -177,7 +177,9 @@ body { margin: 0; overflow: hidden; }
 }
 .sidebar-mode-item.is-active {
   background: var(--color-k-panel);
-  border-color: var(--color-k-line);
+  /* Paper 보드 37/44 실측 #10131A14 = 8% — k-line(14%)이 아니라 k-line-soft다
+   * (2026-08-28 SSOT 정합, 보드 44에서 12회 일관 확증). */
+  border-color: var(--color-k-line-soft);
   color: var(--color-k-text);
 }
 .sidebar-mode-item.is-active .sidebar-mode-item-label {
