@@ -62,13 +62,14 @@
 // 뷰 탭 대신 브레드크럼을 그린다(재검증 확인). "최근 30회"는 6단계
 // GET /{id}/runs 실데이터, 상태 아이콘은 ledger의 실제 verdict 3종
 // (fired/near/suppressed)만 쓴다 — 목업의 "재시도 ↻"·"대체 실행 ⚠"은 대응
-// verdict가 없어 만들지 않는다(AC10). 통계 4타일과 "오늘 07:30 산출물" 카드는
-// ledger 스키마에 근거가 없다(컬럼이 식별자·숫자·판정 사유뿐, ledger.py 머리말
-// 참고) — 그래도 생략하지 않는다: 사용자 확정 규칙1("Paper에 있는 요소는 전부
-// 구현")의 합의된 처리는 fixture+data-source="fixture" 표기이지 생략이 아니다
-// (팀 리드 정정, 2026-08-27). 산출물 카드의 버튼 2종("캔버스에서 열기"·
-// "채팅으로")은 뒷받침 데이터가 없어 비활성으로 둔다(기능 없는 버튼을 활성으로
-// 두지 않는다, P3).
+// verdict가 없어 만들지 않는다(AC10). 통계 4타일 중 "평균"(5단계)·"발화→열람"·
+// "이어진 대화"(F-stage5b-FE)는 라이브다 — "성공률"만 지표 정의가 미확정이라
+// fixture로 남는다(4단계 ADR). "오늘 07:30 산출물" 카드는 ledger 스키마에
+// 근거가 없다(컬럼이 식별자·숫자·판정 사유뿐, ledger.py 머리말 참고) — 그래도
+// 생략하지 않는다: 사용자 확정 규칙1("Paper에 있는 요소는 전부 구현")의
+// 합의된 처리는 fixture+data-source="fixture" 표기이지 생략이 아니다(팀 리드
+// 정정, 2026-08-27). 산출물 카드의 버튼 2종("캔버스에서 열기"·"채팅으로")은
+// 뒷받침 데이터가 없어 비활성으로 둔다(기능 없는 버튼을 활성으로 두지 않는다, P3).
 const VERDICT_ICON = {
   fired: { glyph: '●', colorVar: '--color-ok' },
   near: { glyph: '◐', colorVar: '--color-warn' },
@@ -137,7 +138,7 @@ function createAgentCanvas(deps) {
     container, fetchRoutines, fetchFiredToday, onNewTaskClick, pauseRoutine, resumeRoutine,
     fetchProfileSummary, onAddSuggestion,
     fetchAlerts, markAllAlertsRead, getWsConnected,
-    fetchRuns, fetchAvgDuration,
+    fetchRuns, fetchAvgDuration, fetchEngagement,
     fetchNudgeGuard,
     onOpenGraph,
   } = deps || {};
@@ -156,6 +157,7 @@ function createAgentCanvas(deps) {
   let heldSuggestionIds = new Set(); // "보류"한 제안(11단계) — 세션 동안만, 저장 안 됨.
   let historyRequestId = 0; // 위와 같은 이유 — 별개 요청이라 별개 가드를 쓴다.
   let avgDurationCache = null; // GET /{id}/runs의 avg_duration_ms(5단계) — 드릴인 대상별로 갱신.
+  let engagementCache = null; // GET /{id}/runs의 opened_rate/replied_count(F-stage5b-FE) — 드릴인 대상별로 갱신.
   let nudgeGuardCache = null; // GET /api/v1/nudge-guard(F-stage9) — 라이브.
   let nudgeGuardRequestId = 0; // 위와 같은 이유 — 별개 요청이라 별개 가드를 쓴다.
 
@@ -627,23 +629,42 @@ function createAgentCanvas(deps) {
     return { key: 'avg', label: '평균', value: `${(avgDurationCache / 1000).toFixed(1)}s`, source: 'live' };
   }
 
-  // "성공률"·"발화→열람"·"이어진 대화"는 지표 정의 미확정/계측 미구현이라
-  // fixture로 남는다(4단계 ADR — "성공률"은 팀 리드 승인 전 착수하지 않음,
-  // 5-b 계측은 스트레치).
+  // "발화→열람"(F-stage5b-FE 라이브) — GET /{id}/runs의 opened_rate(0~1,
+  // 최근 30건 fired 기준 근사치, engagement.py 참고)를 %로 보여준다. null이면
+  // (아직 못 물어봤거나 최근 fired가 0건이라 분모가 없으면) "—"로 정직하게 둔다.
+  function openedRateTile() {
+    if (!engagementCache || engagementCache.openedRate == null) {
+      return { key: 'opened-rate', label: '발화→열람', value: '—', source: 'live' };
+    }
+    return { key: 'opened-rate', label: '발화→열람', value: `${Math.round(engagementCache.openedRate * 100)}%`, source: 'live' };
+  }
+
+  // "이어진 대화"(F-stage5b-FE 라이브) — GET /{id}/runs의 replied_count(최근
+  // 30건 engagement 로그 기준, engagement.py 참고) 그대로.
+  function repliedCountTile() {
+    if (!engagementCache || engagementCache.repliedCount == null) {
+      return { key: 'continued', label: '이어진 대화', value: '—', source: 'live' };
+    }
+    return { key: 'continued', label: '이어진 대화', value: `${engagementCache.repliedCount}건`, source: 'live' };
+  }
+
+  // "성공률"만 fixture로 남는다 — 지표 정의가 아직 팀 리드 승인 전이다(4단계
+  // ADR, 유일한 잔존 fixture). 나머지 셋(평균·발화→열람·이어진 대화)은
+  // F-stage5·5b-FE를 거쳐 전부 라이브다.
   function buildHistoryStats() {
     return [
       { key: 'success-rate', label: '성공률', value: '93%', source: 'fixture' },
       avgDurationTile(),
-      { key: 'opened-rate', label: '발화→열람', value: '71%', source: 'fixture' },
-      { key: 'continued', label: '이어진 대화', value: '9건', source: 'fixture' },
+      openedRateTile(),
+      repliedCountTile(),
     ];
   }
 
   // "오늘 07:30 산출물" 카드(fixture) — Paper 41번 우측 상단, 정정 반영(사용자
   // 확정 규칙1: 디자인에 있는 요소는 생략이 아니라 fixture+data-source 표기로
-  // 구현한다, 위 통계 4타일과 같은 처리). 버튼 2종은 뒷받침 데이터(캔버스
-  // 카드 재조회·채팅 이동 경로)가 없어 비활성 — 기능 없는 버튼을 활성으로
-  // 두지 않는다(P3).
+  // 구현한다, 아래 통계 4타일 중 "성공률"과 같은 처리). 버튼 2종은 뒷받침
+  // 데이터(캔버스 카드 재조회·채팅 이동 경로)가 없어 비활성 — 기능 없는
+  // 버튼을 활성으로 두지 않는다(P3).
   function fixtureTodayOutput() {
     return {
       title: '# 아침 브리핑 — 8/26 화',
@@ -756,10 +777,11 @@ function createAgentCanvas(deps) {
   }
 
   // GET /api/v1/routines/{id}/runs 실데이터(6단계) — requestId로 낡은 응답을
-  // 버린다(routine 목록·제안과 같은 이유·같은 패턴). fetchAvgDuration(5단계)은
-  // 같은 엔드포인트의 다른 필드(avg_duration_ms)를 노린 별개 왕복이다 —
-  // fetchFiredToday와 같은 이유(agent-canvas.js 머리말 "네 소스는 서로 무관한
-  // 왕복이다" 원칙 재사용), fetchRuns의 기존 배열 계약을 안 건드리기 위함이다.
+  // 버린다(routine 목록·제안과 같은 이유·같은 패턴). fetchAvgDuration(5단계)·
+  // fetchEngagement(F-stage5b-FE)는 같은 엔드포인트의 다른 필드(avg_duration_ms·
+  // opened_rate·replied_count)를 노린 별개 왕복이다 — fetchFiredToday와 같은
+  // 이유(agent-canvas.js 머리말 "네 소스는 서로 무관한 왕복이다" 원칙 재사용),
+  // fetchRuns의 기존 배열 계약을 안 건드리기 위함이다.
   async function refreshHistoryRuns() {
     if (!historyItem) return;
     const id = historyItem.id;
@@ -778,8 +800,16 @@ function createAgentCanvas(deps) {
     } catch {
       avgDuration = null;
     }
+    let engagement = null;
+    try {
+      const v = (typeof fetchEngagement === 'function') ? await fetchEngagement(id) : null;
+      engagement = (v && typeof v === 'object') ? v : null;
+    } catch {
+      engagement = null;
+    }
     if (rid !== historyRequestId || !historyItem || historyItem.id !== id) return;
     avgDurationCache = avgDuration;
+    engagementCache = engagement;
     renderHistoryStats();
     // ledger는 append-only(오래된 게 먼저)라 최신 먼저로 뒤집고 30건으로 자른다.
     const sorted = runs.slice().sort((a, b) => Date.parse(b.ts) - Date.parse(a.ts)).slice(0, 30);

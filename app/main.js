@@ -559,6 +559,24 @@ ipcMain.handle('athena:routine-ack', async (_e, { id }) => {
   try { return await routineHttp('POST', `/api/v1/routines/${encodeURIComponent(id)}/ack`); }
   catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
 });
+// 발화 열람·응답 계측(F-stage5b-FE) — engagement.py로 그대로 넘긴다. "언제
+// opened/replied로 볼지"의 판정은 렌더러(sidebar.js/chat.js) 몫이다(engagement.py
+// 모듈 독스트링 참고) — 여기는 REST 프록시일 뿐 판정을 갖지 않는다.
+ipcMain.handle('athena:routine-engagement', async (_e, { id, event } = {}) => {
+  try {
+    const res = await fetch(`${BACKEND_HTTP_BASE}/api/v1/routines/${encodeURIComponent(id)}/engagement`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ event }),
+    });
+    const data = await res.json().catch(() => ({}));
+    return res.ok
+      ? { ok: true, data }
+      : { ok: false, status: res.status, error: data.detail || `HTTP ${res.status}` };
+  } catch (e) {
+    return { ok: false, error: String((e && e.message) || e) };
+  }
+});
 
 // 말걸기 가드 설정 REST 프록시(F-stage9) — routineHttp와 별개다. 라우틴별
 // 목록이 아니라 전역 설정 한 벌이고(8단계 nudge_guard.py), set은 body가

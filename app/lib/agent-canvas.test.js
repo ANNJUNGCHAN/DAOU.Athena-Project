@@ -846,11 +846,12 @@ test('실행 이력이 없으면 "실행 이력이 없습니다"가 뜬다(지�
   assert.equal(empty[0].textContent, '실행 이력이 없습니다');
 });
 
-test('30회 통계 4타일: "평균"만 live, 나머지 3장은 fixture다(5단계 — 성공률/발화→열람/이어진 대화는 지표 정의 미확정)', async () => {
+test('30회 통계 4타일: "성공률"만 fixture, 나머지 3장(평균·발화→열람·이어진 대화)은 live다(F-stage5b-FE)', async () => {
   const container = fakeNode('div');
   const routines = [routine({ id: 'a', status: 'active' })];
   const canvas = createAgentCanvas({
-    container, fetchRoutines: async () => routines, fetchRuns: async () => [], fetchAvgDuration: async () => null,
+    container, fetchRoutines: async () => routines, fetchRuns: async () => [],
+    fetchAvgDuration: async () => null, fetchEngagement: async () => null,
   });
   canvas.mount();
   await canvas.refresh();
@@ -860,10 +861,51 @@ test('30회 통계 4타일: "평균"만 live, 나머지 3장은 fixture다(5단�
   const tiles = findByClass(statsCol, 'agent-history-stat-tile');
   assert.equal(tiles.length, 4);
   const bySource = (src) => tiles.filter((t) => t.getAttribute('data-source') === src);
-  assert.equal(bySource('fixture').length, 3);
-  assert.equal(bySource('live').length, 1);
-  const avgTile = tiles.find((t) => findByClass(t, 'agent-history-stat-label')[0].textContent === '평균');
-  assert.equal(avgTile.getAttribute('data-source'), 'live');
+  assert.equal(bySource('fixture').length, 1);
+  assert.equal(bySource('live').length, 3);
+  const successTile = tiles.find((t) => findByClass(t, 'agent-history-stat-label')[0].textContent === '성공률');
+  assert.equal(successTile.getAttribute('data-source'), 'fixture');
+});
+
+test('"발화→열람"·"이어진 대화" 타일: fetchEngagement가 없거나 실패하면 지어낸 숫자 없이 "—"를 보여준다(P3)', async () => {
+  const container = fakeNode('div');
+  const routines = [routine({ id: 'a', status: 'active' })];
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => routines, fetchRuns: async () => [] });
+  canvas.mount();
+  await canvas.refresh();
+  findByClass(container, 'agent-history-open')[0].dispatchEvent({ type: 'click' });
+  await new Promise((r) => setTimeout(r, 0));
+  const statsCol = findByClass(container, 'agent-history-stats-col')[0];
+  const tileValue = (label) => {
+    const t = findByClass(statsCol, 'agent-history-stat-tile').find(
+      (n) => findByClass(n, 'agent-history-stat-label')[0].textContent === label,
+    );
+    return findByClass(t, 'agent-history-stat-value')[0].textContent;
+  };
+  assert.equal(tileValue('발화→열람'), '—');
+  assert.equal(tileValue('이어진 대화'), '—');
+});
+
+test('"발화→열람"·"이어진 대화" 타일: opened_rate/replied_count(F-stage5b-BE)를 라이브로 표시한다', async () => {
+  const container = fakeNode('div');
+  const routines = [routine({ id: 'a', status: 'active' })];
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => routines, fetchRuns: async () => [],
+    fetchEngagement: async () => ({ openedRate: 0.71, repliedCount: 9 }),
+  });
+  canvas.mount();
+  await canvas.refresh();
+  findByClass(container, 'agent-history-open')[0].dispatchEvent({ type: 'click' });
+  await new Promise((r) => setTimeout(r, 0));
+  const statsCol = findByClass(container, 'agent-history-stats-col')[0];
+  const tileValue = (label) => {
+    const t = findByClass(statsCol, 'agent-history-stat-tile').find(
+      (n) => findByClass(n, 'agent-history-stat-label')[0].textContent === label,
+    );
+    return findByClass(t, 'agent-history-stat-value')[0].textContent;
+  };
+  assert.equal(tileValue('발화→열람'), '71%');
+  assert.equal(tileValue('이어진 대화'), '9건');
 });
 
 test('"평균" 타일: fetchAvgDuration이 없거나 실패하면 지어낸 숫자 없이 "—"를 보여준다(P3)', async () => {
