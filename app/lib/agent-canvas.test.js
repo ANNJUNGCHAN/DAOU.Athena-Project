@@ -892,7 +892,7 @@ test('실행 이력이 없으면 "실행 이력이 없습니다"가 뜬다(지�
   assert.equal(empty[0].textContent, '실행 이력이 없습니다');
 });
 
-test('30회 통계 4타일: "성공률"만 fixture, 나머지 3장(평균·발화→열람·이어진 대화)은 live다(F-stage5b-FE)', async () => {
+test('30회 통계 3타일(평균·발화→열람·이어진 대화)은 전부 live다(F-stage5b-FE, R2에서 지표 정의 미확정 타일 제거)', async () => {
   const container = fakeNode('div');
   const routines = [routine({ id: 'a', status: 'active' })];
   const canvas = createAgentCanvas({
@@ -905,12 +905,10 @@ test('30회 통계 4타일: "성공률"만 fixture, 나머지 3장(평균·발�
   await new Promise((r) => setTimeout(r, 0));
   const statsCol = findByClass(container, 'agent-history-stats-col')[0];
   const tiles = findByClass(statsCol, 'agent-history-stat-tile');
-  assert.equal(tiles.length, 4);
+  assert.equal(tiles.length, 3);
   const bySource = (src) => tiles.filter((t) => t.getAttribute('data-source') === src);
-  assert.equal(bySource('fixture').length, 1);
+  assert.equal(bySource('fixture').length, 0);
   assert.equal(bySource('live').length, 3);
-  const successTile = tiles.find((t) => findByClass(t, 'agent-history-stat-label')[0].textContent === '성공률');
-  assert.equal(successTile.getAttribute('data-source'), 'fixture');
 });
 
 test('"발화→열람"·"이어진 대화" 타일: fetchEngagement가 없거나 실패하면 지어낸 숫자 없이 "—"를 보여준다(P3)', async () => {

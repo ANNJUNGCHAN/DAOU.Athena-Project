@@ -938,7 +938,7 @@ body { margin: 0; overflow: hidden; }
 .agent-history-run-reason { color: var(--color-k-text); font-family: var(--font-body); font-size: var(--text-sm); }
 .agent-history-run-detail { color: var(--color-k-faint); font-family: var(--font-mono); font-size: var(--text-2xs); }
 
-.agent-history-stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.agent-history-stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
 .agent-history-stat-tile { display: flex; flex-direction: column; gap: 4px; padding: 12px; background: var(--color-k-panel3); border-radius: 8px; }
 .agent-history-stat-label { color: var(--color-k-faint); font-family: var(--font-body); font-weight: 300; font-size: var(--text-xs); }
 .agent-history-stat-value { color: var(--color-k-text); font-family: var(--font-strong); font-size: var(--text-lg); }
