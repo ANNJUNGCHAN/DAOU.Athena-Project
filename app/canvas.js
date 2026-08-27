@@ -1430,6 +1430,11 @@ const agentCanvas = window.AthenaLib.AgentCanvas.createAgentCanvas({
   fetchAlerts: () => (window.AthenaNotify ? window.AthenaNotify.list() : []),
   markAllAlertsRead: () => { if (window.AthenaNotify) window.AthenaNotify.markAllRead(); },
   getWsConnected: () => wsConnected,
+  // 10단계 — 실행 이력 드릴인. 6단계 GET /{id}/runs를 사람 클릭 전용 채널로.
+  fetchRuns: async (id) => {
+    const res = await window.athena.invoke('athena:routine-runs', { id });
+    return (res && res.ok && res.data && Array.isArray(res.data.runs)) ? res.data.runs : [];
+  },
 });
 agentCanvas.mount();
 window.AthenaAgentCanvas = agentCanvas;

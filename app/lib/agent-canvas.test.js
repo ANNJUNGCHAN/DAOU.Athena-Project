@@ -676,3 +676,112 @@ test('"WS 연결됨" — getWsConnected()가 실데이터다, false면 정직하
   canvas.updateWsStatus();
   assert.equal(findByClass(container, 'agent-live-ws-label')[0].textContent, 'WS 연결됨');
 });
+
+// ── 10단계: 실행 이력·결과 드릴인(GET /api/v1/routines/{id}/runs) ──
+
+function run(overrides) {
+  return { ts: '2026-08-26T07:30:00Z', routine_id: 'a', symbol: '005930', source: 'price.change_rate', verdict: 'fired', observed: 88100, threshold: 88000, reason: '조건 도달', ...overrides };
+}
+
+test('감시(watch) 상세에만 "전체 이력 보기 →"가 있다 — draft·예약(schedule)에는 없다', async () => {
+  const container = fakeNode('div');
+  const routines = [routine({ id: 'a', status: 'active' }), routine({ id: 'b', status: 'draft' })];
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => routines });
+  canvas.mount();
+  await canvas.refresh();
+  canvas.selectRow('a');
+  assert.equal(findByClass(container, 'agent-history-open').length, 1, 'watch에는 있다');
+  canvas.selectRow('b');
+  assert.equal(findByClass(container, 'agent-history-open').length, 0, 'draft에는 없다');
+  canvas.selectRow('fx-schedule-1');
+  assert.equal(findByClass(container, 'agent-history-open').length, 0, '예약(schedule)에는 없다');
+});
+
+test('"전체 이력 보기 →" 클릭 시 브레드크럼("작업 › 이름"+배지)이 뜨고 작업 화면이 숨는다', async () => {
+  const container = fakeNode('div');
+  const routines = [routine({ id: 'a', status: 'active', note: '삼성전자 88,000 감시' })];
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => routines,
+    fetchRuns: async () => [],
+  });
+  canvas.mount();
+  await canvas.refresh();
+  findByClass(container, 'agent-history-open')[0].dispatchEvent({ type: 'click' });
+  await new Promise((r) => setTimeout(r, 0));
+  assert.equal(findByClass(container, 'agent-breadcrumb')[0].hidden, false);
+  assert.equal(findByClass(container, 'agent-breadcrumb-title')[0].textContent, '삼성전자 88,000 감시');
+  assert.equal(findByClass(container, 'agent-breadcrumb-badge')[0].textContent, '활성');
+  assert.equal(findByClass(container, 'agent-tasks-head')[0].hidden, true);
+  assert.equal(findByClass(container, 'agent-stats')[0].hidden, true);
+  assert.equal(findByClass(container, 'agent-view-tabs')[0].hidden, true);
+  assert.equal(findByClass(container, 'agent-history-body')[0].hidden, false);
+});
+
+test('최근 30회는 fetchRuns(id) 실데이터 — 최신 먼저, ledger 실제 verdict 3종만 아이콘화한다(AC10)', async () => {
+  const container = fakeNode('div');
+  const routines = [routine({ id: 'a', status: 'active' })];
+  let calledWithId = null;
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => routines,
+    fetchRuns: async (id) => {
+      calledWithId = id;
+      return [
+        run({ ts: '2026-08-25T07:30:00Z', verdict: 'near', reason: '근접 — 임계 미달' }),
+        run({ ts: '2026-08-26T07:30:00Z', verdict: 'fired', reason: '조건 도달' }),
+        run({ ts: '2026-08-24T07:30:00Z', verdict: 'suppressed', reason: '쿨다운 중' }),
+      ];
+    },
+  });
+  canvas.mount();
+  await canvas.refresh();
+  findByClass(container, 'agent-history-open')[0].dispatchEvent({ type: 'click' });
+  await new Promise((r) => setTimeout(r, 0));
+  assert.equal(calledWithId, 'a');
+  const rows = findByClass(container, 'agent-history-run');
+  assert.equal(rows.length, 3);
+  const reasons = rows.map((r2) => findByClass(r2, 'agent-history-run-reason')[0].textContent);
+  assert.deepEqual(reasons, ['조건 도달', '근접 — 임계 미달', '쿨다운 중'], '최신(8/26) 먼저 정렬된다');
+  const marks = rows.map((r2) => findByClass(r2, 'agent-history-run-mark')[0].textContent);
+  assert.deepEqual(marks, ['●', '◐', '○'], 'fired=●·near=◐·suppressed=○ — 3종 실 verdict만');
+});
+
+test('실행 이력이 없으면 "실행 이력이 없습니다"가 뜬다(지어내지 않는다, P3)', async () => {
+  const container = fakeNode('div');
+  const routines = [routine({ id: 'a', status: 'active' })];
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => routines, fetchRuns: async () => [] });
+  canvas.mount();
+  await canvas.refresh();
+  findByClass(container, 'agent-history-open')[0].dispatchEvent({ type: 'click' });
+  await new Promise((r) => setTimeout(r, 0));
+  const empty = findByClass(findByClass(container, 'agent-history-runs-col')[0], 'agent-list-empty');
+  assert.equal(empty.length, 1);
+  assert.equal(empty[0].textContent, '실행 이력이 없습니다');
+});
+
+test('30회 통계 4타일은 fixture로 표시된다(ledger에 근거 필드가 없다)', async () => {
+  const container = fakeNode('div');
+  const routines = [routine({ id: 'a', status: 'active' })];
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => routines, fetchRuns: async () => [] });
+  canvas.mount();
+  await canvas.refresh();
+  findByClass(container, 'agent-history-open')[0].dispatchEvent({ type: 'click' });
+  await new Promise((r) => setTimeout(r, 0));
+  const statsCol = findByClass(container, 'agent-history-stats-col')[0];
+  assert.equal(statsCol.getAttribute('data-source'), 'fixture');
+  assert.equal(findByClass(statsCol, 'agent-history-stat-tile').length, 4);
+});
+
+test('"작업 ›" 클릭 시 드릴인이 닫히고 "작업" 화면이 복원된다', async () => {
+  const container = fakeNode('div');
+  const routines = [routine({ id: 'a', status: 'active' })];
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => routines, fetchRuns: async () => [] });
+  canvas.mount();
+  await canvas.refresh();
+  findByClass(container, 'agent-history-open')[0].dispatchEvent({ type: 'click' });
+  await new Promise((r) => setTimeout(r, 0));
+  findByClass(container, 'agent-breadcrumb-back')[0].dispatchEvent({ type: 'click' });
+  assert.equal(findByClass(container, 'agent-breadcrumb')[0].hidden, true);
+  assert.equal(findByClass(container, 'agent-history-body')[0].hidden, true);
+  assert.equal(findByClass(container, 'agent-tasks-head')[0].hidden, false);
+  assert.equal(findByClass(container, 'agent-stats')[0].hidden, false);
+});

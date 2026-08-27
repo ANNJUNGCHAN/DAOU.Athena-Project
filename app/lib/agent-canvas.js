@@ -46,6 +46,24 @@
 // 스트림·예약 트리거 둘 다 백엔드 미보유, 재검증 확인). "● WS 연결됨"만
 // 실데이터다 — main.js RoutineFeed의 onStatus를 이번에 처음 렌더러로
 // 릴레이했다(이전엔 no-op이라 신호가 안 왔다, 재검증에서 확인).
+//
+// 10단계(실행 이력·결과, Paper 보드 41 "작업 드릴인") — 감시(watch) 항목의
+// 상세 패널 "최근 실행" 캡션에 "전체 이력 보기 →"가 생긴다. draft·예약
+// (schedule)은 이 링크가 없다 — draft는 실행된 적이 없고, schedule은 실제
+// 백엔드 라우틴이 아니라 ledger에 대응 행이 있을 수 없다(P3). 드릴인 화면은
+// 뷰 탭을 브레드크럼("작업 › 이름" + 상태 배지)으로 잠깐 대체한다 — Paper가
+// 뷰 탭 대신 브레드크럼을 그린다(재검증 확인). "최근 30회"는 6단계
+// GET /{id}/runs 실데이터, 상태 아이콘은 ledger의 실제 verdict 3종
+// (fired/near/suppressed)만 쓴다 — 목업의 "재시도 ↻"·"대체 실행 ⚠"은 대응
+// verdict가 없어 만들지 않는다(AC10). 통계 4타일과 "오늘 산출물" 카드는
+// ledger 스키마에 근거가 없어(컬럼이 식별자·숫자·판정 사유뿐, ledger.py
+// 머리말 참고) 4타일만 fixture로 유지하고 산출물 카드는 아예 그리지 않는다
+// (지어낼 데이터가 없다, 팀 리드 브리핑에도 없던 항목).
+const VERDICT_ICON = {
+  fired: { glyph: '●', colorVar: '--color-ok' },
+  near: { glyph: '◐', colorVar: '--color-warn' },
+  suppressed: { glyph: '○', colorVar: '--color-k-faint' },
+};
 
 const TABS = [
   { key: 'all', label: '모두' },
@@ -100,6 +118,7 @@ function createAgentCanvas(deps) {
     container, fetchRoutines, onNewTaskClick, pauseRoutine, resumeRoutine,
     fetchProfileSummary, onAddSuggestion,
     fetchAlerts, markAllAlertsRead, getWsConnected,
+    fetchRuns,
   } = deps || {};
   if (!container) return { mount() {}, async refresh() {} };
 
@@ -111,6 +130,8 @@ function createAgentCanvas(deps) {
   let suggestRequestId = 0; // 위와 같은 이유 — 별개 요청이라 별개 가드를 쓴다.
   let activeView = 'tasks';
   let alertsCache = [];
+  let historyItem = null; // 드릴인 중인 항목(10단계) — null이면 드릴인이 아니다.
+  let historyRequestId = 0; // 위와 같은 이유 — 별개 요청이라 별개 가드를 쓴다.
 
   // ---------- 헤더 ----------
   const head = el('div', 'agent-head');
@@ -140,6 +161,24 @@ function createAgentCanvas(deps) {
     renderAlarmColumn();
   });
   head.appendChild(markAllReadBtn);
+
+  // 실행 이력 드릴인 브레드크럼(10단계, Paper 보드 41) — 뷰 탭 자리를 잠깐
+  // 대체한다("작업 › 이름" + 상태 배지). openHistory/closeHistory가 토글한다.
+  const breadcrumb = el('div', 'agent-breadcrumb');
+  breadcrumb.hidden = true;
+  const breadcrumbBack = el('button', 'agent-breadcrumb-back');
+  breadcrumbBack.type = 'button';
+  breadcrumbBack.textContent = '작업 ›';
+  breadcrumbBack.addEventListener('click', () => closeHistory());
+  breadcrumb.appendChild(breadcrumbBack);
+  const breadcrumbTitle = el('span', 'agent-breadcrumb-title');
+  breadcrumb.appendChild(breadcrumbTitle);
+  // agent-status-badge와는 다른 클래스다(같은 이름을 쓰면 findByClass류 조회가
+  // 상세 패널의 배지 대신 이 빈 배지를 먼저 집는다 — 실측: 기존 상세 패널
+  // 테스트 3건이 이 충돌로 깨졌다). 시각은 .agent-breadcrumb-badge가 따로 진다.
+  const breadcrumbBadge = el('span', 'agent-breadcrumb-badge');
+  breadcrumb.appendChild(breadcrumbBadge);
+  head.appendChild(breadcrumb);
 
   // "작업" 뷰 전용 머리(부제+리스트 필터 탭+검색+CTA) — .agent-head 레이아웃을
   // 그대로 물려받는다. "알람"·"라이브" 뷰에서는 숨는다(setActiveView).
@@ -450,6 +489,132 @@ function createAgentCanvas(deps) {
 
   alarmLiveBody.appendChild(liveCol);
 
+  // ---------- 실행 이력 · 결과 드릴인(10단계, Paper 보드 41) ----------
+  const historyBody = el('div', 'agent-history-body');
+  historyBody.hidden = true;
+
+  const historyRunsCol = el('div', 'agent-history-runs-col');
+  const historyRunsCaption = el('div', 'agent-panel-caption');
+  historyRunsCaption.textContent = '최근 30회';
+  historyRunsCol.appendChild(historyRunsCaption);
+  const historyRunsList = el('div', 'agent-history-runs-list');
+  historyRunsCol.appendChild(historyRunsList);
+  historyBody.appendChild(historyRunsCol);
+
+  function fixtureHistoryStats() {
+    return [
+      { label: '성공률', value: '93%' },
+      { label: '평균', value: '7.4s' },
+      { label: '발화→열람', value: '71%' },
+      { label: '이어진 대화', value: '9건' },
+    ];
+  }
+
+  const historyStatsCol = el('div', 'agent-history-stats-col');
+  historyStatsCol.setAttribute('data-source', 'fixture'); // ledger 스키마에 근거 없음(위 머리말).
+  const historyStatsCaption = el('div', 'agent-panel-caption');
+  historyStatsCaption.textContent = '30회 통계';
+  historyStatsCol.appendChild(historyStatsCaption);
+  const historyStatsGrid = el('div', 'agent-history-stats-grid');
+  for (const tile of fixtureHistoryStats()) {
+    const t = el('div', 'agent-history-stat-tile');
+    const l = el('div', 'agent-history-stat-label');
+    l.textContent = tile.label;
+    t.appendChild(l);
+    const v = el('div', 'agent-history-stat-value');
+    v.textContent = tile.value;
+    t.appendChild(v);
+    historyStatsGrid.appendChild(t);
+  }
+  historyStatsCol.appendChild(historyStatsGrid);
+  historyBody.appendChild(historyStatsCol);
+
+  function formatRunTime(iso) {
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return String(iso);
+    return d.toLocaleString('ko-KR', { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+  }
+
+  // ledger 실제 verdict 3종(fired/near/suppressed)만 쓴다 — 목업의 "재시도"·
+  // "대체 실행"류는 대응 verdict가 없어 만들지 않는다(AC10, 위 머리말).
+  function makeHistoryRunRow(run) {
+    const icon = VERDICT_ICON[run.verdict] || { glyph: '?', colorVar: '--color-k-faint' };
+    const row = el('div', 'agent-history-run');
+    const time = el('span', 'agent-history-run-time');
+    time.textContent = formatRunTime(run.ts);
+    row.appendChild(time);
+    const mark = el('span', 'agent-history-run-mark');
+    mark.textContent = icon.glyph;
+    mark.style.color = `var(${icon.colorVar})`;
+    row.appendChild(mark);
+    const textWrap = el('span', 'agent-history-run-text');
+    const reason = el('span', 'agent-history-run-reason');
+    reason.textContent = run.reason || '';
+    textWrap.appendChild(reason);
+    if (run.observed != null || run.threshold != null) {
+      const detail = el('span', 'agent-history-run-detail');
+      detail.textContent = `관측 ${run.observed} · 임계 ${run.threshold}`;
+      textWrap.appendChild(detail);
+    }
+    row.appendChild(textWrap);
+    return row;
+  }
+
+  // GET /api/v1/routines/{id}/runs 실데이터(6단계) — requestId로 낡은 응답을
+  // 버린다(routine 목록·제안과 같은 이유·같은 패턴).
+  async function refreshHistoryRuns() {
+    if (!historyItem) return;
+    const id = historyItem.id;
+    const rid = ++historyRequestId;
+    let runs = [];
+    try {
+      runs = (typeof fetchRuns === 'function') ? await fetchRuns(id) : [];
+      if (!Array.isArray(runs)) runs = [];
+    } catch {
+      runs = [];
+    }
+    if (rid !== historyRequestId || !historyItem || historyItem.id !== id) return;
+    // ledger는 append-only(오래된 게 먼저)라 최신 먼저로 뒤집고 30건으로 자른다.
+    const sorted = runs.slice().sort((a, b) => Date.parse(b.ts) - Date.parse(a.ts)).slice(0, 30);
+    while (historyRunsList.firstChild) historyRunsList.removeChild(historyRunsList.firstChild);
+    if (!sorted.length) {
+      const empty = el('div', 'agent-list-empty');
+      empty.textContent = '실행 이력이 없습니다';
+      historyRunsList.appendChild(empty);
+    } else {
+      for (const run of sorted) historyRunsList.appendChild(makeHistoryRunRow(run));
+    }
+  }
+
+  function openHistory(item) {
+    historyItem = item;
+    tasksHead.hidden = true;
+    stats.hidden = true;
+    body.hidden = true;
+    alarmLiveBody.hidden = true;
+    markAllReadBtn.hidden = true;
+    viewTabsWrap.hidden = true;
+    for (const k of Object.keys(viewTabButtons)) viewTabButtons[k].className = 'agent-view-tab';
+    breadcrumb.hidden = false;
+    breadcrumbTitle.textContent = item.title;
+    breadcrumbBadge.className = `agent-breadcrumb-badge is-${item.status}`;
+    breadcrumbBadge.textContent = item.status === 'paused' ? '일시중지' : '활성';
+    historyBody.hidden = false;
+    return refreshHistoryRuns(); // 호출부(클릭 핸들러)가 await할 수 있게 돌려준다.
+  }
+
+  // "작업 ›" 클릭 — 드릴인은 항상 "작업" 뷰에서만 열리므로(위 머리말) 그
+  // 상태로 직접 되돌린다.
+  function closeHistory() {
+    historyItem = null;
+    breadcrumb.hidden = true;
+    historyBody.hidden = true;
+    viewTabsWrap.hidden = false;
+    tasksHead.hidden = false;
+    stats.hidden = false;
+    body.hidden = false;
+  }
+
   // 예약 트리거 백엔드 미구현, 후속 스코프 — 벽시계 스케줄 개념이 SOURCES
   // 카탈로그에 없다(재검증 확인). 문구·필드는 Paper 보드 39 실측 예시 그대로다.
   function fixtureScheduleItems() {
@@ -671,9 +836,20 @@ function createAgentCanvas(deps) {
     // draft는 아직 한 번도 실행되지 않았다 — "최근 실행" 섹션 자체를 생략한다
     // (빈 로그를 지어내 보여주지 않는다, P3).
     if (item.kind !== 'draft') {
-      const logsCaption = el('div', 'agent-panel-caption');
+      const logsCaptionRow = el('div', 'agent-panel-caption-row');
+      const logsCaption = el('span', 'agent-panel-caption');
       logsCaption.textContent = '최근 실행';
-      detailCol.appendChild(logsCaption);
+      logsCaptionRow.appendChild(logsCaption);
+      // 드릴인(10단계)은 감시(watch)만 연다 — schedule은 실제 라우틴이 아니라
+      // ledger에 대응 행이 있을 수 없다(위 머리말).
+      if (item.kind === 'watch') {
+        const openHistoryBtn = el('button', 'agent-history-open');
+        openHistoryBtn.type = 'button';
+        openHistoryBtn.textContent = '전체 이력 보기 →';
+        openHistoryBtn.addEventListener('click', () => openHistory(item));
+        logsCaptionRow.appendChild(openHistoryBtn);
+      }
+      detailCol.appendChild(logsCaptionRow);
       const logsWrap = el('div', 'agent-detail-logs');
       logsWrap.setAttribute('data-source', 'fixture');
       for (const log of fixtureLogs()) {
@@ -755,6 +931,7 @@ function createAgentCanvas(deps) {
     container.appendChild(stats);
     container.appendChild(body);
     container.appendChild(alarmLiveBody);
+    container.appendChild(historyBody);
     renderStats();
     updateSubtitle();
     renderPanels();
@@ -779,13 +956,15 @@ function createAgentCanvas(deps) {
     renderPanels();
   }
 
-  // 세 소스는 서로 무관한 왕복이다 — 하나가 느려도(또는 실패해도) 다른 쪽을
+  // 네 소스는 서로 무관한 왕복이다 — 하나가 느려도(또는 실패해도) 다른 쪽을
   // 막지 않는다(Promise.all로 병렬, 실패는 각자의 try/catch가 이미 삼킨다).
   // 알람·WS 상태는 IPC 왕복이 없어(세션 메모리·캐시값) 동기로 같이 갱신한다.
   async function refresh() {
     renderAlarmColumn();
     renderWsStatus();
-    await Promise.all([refreshRoutines(), refreshSuggestions()]);
+    const tasks = [refreshRoutines(), refreshSuggestions()];
+    if (historyItem) tasks.push(refreshHistoryRuns()); // 드릴인 중이면 이력도 같이.
+    await Promise.all(tasks);
   }
 
   return { mount, refresh, setActiveTab, selectRow, setActiveView, updateWsStatus: renderWsStatus };

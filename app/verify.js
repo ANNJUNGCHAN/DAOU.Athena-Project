@@ -3000,6 +3000,100 @@ app.whenReady().then(async () => {
     failures.push('agent-canvas-9: 검증 블록이 예외로 끝났다');
   }
 
+  // ---------- 실행 이력 · 결과 드릴인 (10단계, Paper 보드 41) ----------
+  //
+  // athena:routines-list(감시 1건)와 athena:routine-runs(6단계 ledger 조회)를
+  // stateful fixture로 바꿔 "전체 이력 보기 →" → 브레드크럼 → 최근 30회 → 통계
+  // → "작업 ›" 복귀까지 왕복시킨다. verdict 3종(fired/near/suppressed) 아이콘만
+  // 쓰는지, 최신순 정렬인지를 확인한다(AC10).
+  try {
+    const stage10Routines = [
+      {
+        id: 'fx-hist-1', symbol: '005930', note: '삼성전자 88,000 감시', status: 'active', mode: 'realtime-ws',
+        source_label: '현재가', cooldown_s: 300,
+      },
+    ];
+    const stage10Runs = [
+      { ts: '2026-08-25T07:30:00Z', routine_id: 'fx-hist-1', symbol: '005930', source: 'price.change_rate', verdict: 'near', observed: 87900, threshold: 88000, reason: '근접 — 임계 미달' },
+      { ts: '2026-08-26T07:30:00Z', routine_id: 'fx-hist-1', symbol: '005930', source: 'price.change_rate', verdict: 'fired', observed: 88100, threshold: 88000, reason: '조건 도달' },
+      { ts: '2026-08-24T07:30:00Z', routine_id: 'fx-hist-1', symbol: '005930', source: 'price.change_rate', verdict: 'suppressed', observed: 88100, threshold: 88000, reason: '쿨다운 중' },
+    ];
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({
+      ok: true, data: { routines: stage10Routines, disclosure_ready: true, last_error: null },
+    }));
+    ipcMain.removeHandler('athena:routine-runs');
+    ipcMain.handle('athena:routine-runs', async (_e, { id } = {}) => ({
+      ok: true, data: { runs: stage10Runs.filter((r) => r.routine_id === id) },
+    }));
+
+    const historyProbe = await shellWin.webContents.executeJavaScript(`(async () => {
+      const nav = document.getElementById('modeNavAgent');
+      const back = document.getElementById('modeNavSummary');
+      const canvas = document.getElementById('agentCanvas');
+      if (!nav || !back || !canvas || !window.AthenaAgentCanvas) return { wired: false };
+      nav.click();
+      await new Promise((r) => setTimeout(r, 600));
+      const allTabBtn = Array.from(canvas.querySelectorAll('.agent-tab')).find((n) => n.textContent === '모두');
+      if (allTabBtn) allTabBtn.click();
+      window.AthenaAgentCanvas.selectRow('fx-hist-1');
+      await new Promise((r) => setTimeout(r, 100));
+      const openBtn = canvas.querySelector('.agent-history-open');
+      if (!openBtn) return { wired: false, reason: 'no-open-btn' };
+      openBtn.click();
+      await new Promise((r) => setTimeout(r, 300));
+      const breadcrumbVisible = !canvas.querySelector('.agent-breadcrumb').hidden;
+      const breadcrumbTitle = (canvas.querySelector('.agent-breadcrumb-title') || {}).textContent;
+      const breadcrumbBadge = (canvas.querySelector('.agent-breadcrumb-badge') || {}).textContent;
+      const tasksHeadHidden = (canvas.querySelector('.agent-tasks-head') || {}).hidden;
+      const runRows = Array.from(canvas.querySelectorAll('.agent-history-run'));
+      const reasons = runRows.map((r) => (r.querySelector('.agent-history-run-reason') || {}).textContent);
+      const marks = runRows.map((r) => (r.querySelector('.agent-history-run-mark') || {}).textContent);
+      const statTileCount = canvas.querySelectorAll('.agent-history-stat-tile').length;
+      const statsSource = (canvas.querySelector('.agent-history-stats-col') || {}).getAttribute
+        ? canvas.querySelector('.agent-history-stats-col').getAttribute('data-source') : null;
+
+      canvas.querySelector('.agent-breadcrumb-back').click();
+      await new Promise((r) => setTimeout(r, 100));
+      const breadcrumbHiddenAfterBack = canvas.querySelector('.agent-breadcrumb').hidden;
+      const tasksHeadVisibleAfterBack = !canvas.querySelector('.agent-tasks-head').hidden;
+
+      back.click();
+      await new Promise((r) => setTimeout(r, 100));
+      return {
+        wired: true, breadcrumbVisible, breadcrumbTitle, breadcrumbBadge, tasksHeadHidden,
+        reasons, marks, statTileCount, statsSource, breadcrumbHiddenAfterBack, tasksHeadVisibleAfterBack,
+      };
+    })()`);
+    report.historyDrillIn = historyProbe;
+    assertOk('agent-canvas-10: 배선이 있다', historyProbe.wired === true);
+    if (historyProbe.wired) {
+      assertOk('agent-canvas-10: 브레드크럼이 뜬다("작업 › 이름")', historyProbe.breadcrumbVisible === true);
+      assertOk('agent-canvas-10: 브레드크럼 제목이 실제 routine note다', historyProbe.breadcrumbTitle === '삼성전자 88,000 감시');
+      assertOk('agent-canvas-10: 브레드크럼 상태 배지가 "활성"이다', historyProbe.breadcrumbBadge === '활성');
+      assertOk('agent-canvas-10: 드릴인 진입 시 "작업" 머리가 숨는다', historyProbe.tasksHeadHidden === true);
+      assertOk(
+        'agent-canvas-10: 최근 30회가 GET /{id}/runs 실데이터로 최신순 정렬된다',
+        JSON.stringify(historyProbe.reasons) === JSON.stringify(['조건 도달', '근접 — 임계 미달', '쿨다운 중']),
+      );
+      assertOk(
+        'agent-canvas-10: 상태 아이콘이 ledger 실제 verdict 3종만 쓴다(fired=●·near=◐·suppressed=○, AC10)',
+        JSON.stringify(historyProbe.marks) === JSON.stringify(['●', '◐', '○']),
+      );
+      assertOk('agent-canvas-10: 30회 통계 4타일(fixture)', historyProbe.statTileCount === 4 && historyProbe.statsSource === 'fixture');
+      assertOk('agent-canvas-10: "작업 ›" 클릭 시 브레드크럼이 숨는다', historyProbe.breadcrumbHiddenAfterBack === true);
+      assertOk('agent-canvas-10: "작업 ›" 클릭 시 "작업" 머리가 복원된다', historyProbe.tasksHeadVisibleAfterBack === true);
+    }
+  } catch (err) {
+    report.historyDrillIn = { error: String((err && err.message) || err) };
+    failures.push('agent-canvas-10: 검증 블록이 예외로 끝났다');
+  } finally {
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+    ipcMain.removeHandler('athena:routine-runs');
+    ipcMain.handle('athena:routine-runs', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+  }
+
   fs.writeFileSync(path.join(CAPTURES, 'VERIFY-REPORT.json'), JSON.stringify(report, null, 2));
   console.log('[verify] 리포트 저장:', path.join(CAPTURES, 'VERIFY-REPORT.json'));
 

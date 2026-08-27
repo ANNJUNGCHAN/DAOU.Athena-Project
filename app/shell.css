@@ -633,7 +633,7 @@ body { margin: 0; overflow: hidden; }
   align-items: center;
   gap: 8px;
 }
-.agent-status-badge {
+.agent-status-badge, .agent-breadcrumb-badge {
   flex-shrink: 0;
   border: 1px solid var(--color-ok);
   border-radius: 999px;
@@ -643,11 +643,11 @@ body { margin: 0; overflow: hidden; }
   font-weight: 300;
   font-size: var(--text-2xs);
 }
-.agent-status-badge.is-paused {
+.agent-status-badge.is-paused, .agent-breadcrumb-badge.is-paused {
   border-color: var(--color-warn);
   color: var(--color-warn);
 }
-.agent-status-badge.is-draft {
+.agent-status-badge.is-draft, .agent-breadcrumb-badge.is-draft {
   border-color: var(--color-brand);
   color: var(--color-brand);
 }
@@ -866,6 +866,67 @@ body { margin: 0; overflow: hidden; }
 .agent-live-ws-dot { font-size: var(--text-xs); }
 .agent-live-ws-label { color: var(--color-k-text); font-family: var(--font-strong); font-size: var(--text-sm); }
 .agent-live-ws-caption { padding: 0 10px; color: var(--color-k-faint); font-family: var(--font-body); font-weight: 300; font-size: var(--text-xs); }
+
+/* ---------- 실행 이력·결과 드릴인(10단계, Paper 보드 41 실측) ---------- */
+.agent-breadcrumb { flex: 1 1 auto; display: flex; align-items: center; gap: 8px; margin-left: 14px; min-width: 0; }
+.agent-breadcrumb-back {
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  padding: 0;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--text-base);
+  cursor: pointer;
+}
+.agent-breadcrumb-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-k-text);
+  font-family: var(--font-strong);
+  font-size: var(--text-base);
+}
+
+.agent-panel-caption-row { display: flex; align-items: center; gap: 8px; }
+.agent-history-open {
+  margin-left: auto;
+  border: none;
+  background: transparent;
+  padding: 0;
+  color: var(--color-brand);
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--text-xs);
+  cursor: pointer;
+}
+
+.agent-history-body { flex: 1 1 auto; min-height: 0; display: flex; gap: 12px; }
+.agent-history-runs-col, .agent-history-stats-col {
+  flex: 1 1 0%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+  background: var(--color-k-panel);
+  border: 1px solid var(--color-k-line);
+  border-radius: 12px;
+  overflow-y: auto;
+}
+.agent-history-runs-list { display: flex; flex-direction: column; gap: 2px; }
+.agent-history-run { display: flex; align-items: flex-start; gap: 9px; padding: 8px 10px; border-radius: 8px; background: var(--color-k-panel3); }
+.agent-history-run-time { flex-shrink: 0; width: 76px; color: var(--color-k-faint); font-family: var(--font-mono); font-size: var(--text-2xs); }
+.agent-history-run-mark { flex-shrink: 0; width: 11px; font-size: var(--text-xs); text-align: center; }
+.agent-history-run-text { flex: 1 1 0%; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.agent-history-run-reason { color: var(--color-k-text); font-family: var(--font-body); font-size: var(--text-sm); }
+.agent-history-run-detail { color: var(--color-k-faint); font-family: var(--font-mono); font-size: var(--text-2xs); }
+
+.agent-history-stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.agent-history-stat-tile { display: flex; flex-direction: column; gap: 4px; padding: 12px; background: var(--color-k-panel3); border-radius: 8px; }
+.agent-history-stat-label { color: var(--color-k-faint); font-family: var(--font-body); font-weight: 300; font-size: var(--text-xs); }
+.agent-history-stat-value { color: var(--color-k-text); font-family: var(--font-strong); font-size: var(--text-lg); }
 
 .sidebar-account-row {
   flex-shrink: 0;
