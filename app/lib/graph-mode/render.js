@@ -347,8 +347,9 @@ function renderClusterBubbles(container, placed, options) {
   // 엣지를 먼저 그린다(renderClusterMap과 같은 이유 — SVG는 나중에 그린 게 위로
   // 온다, 버블이 선에 가려지면 안 된다). 실선/핑크 점선(숨은 연관)/주황 점선(확인
   // 필요) 3종 — 주황은 §0 r5 임계 규칙으로 게이팅한다: 0/N(현재 실제 상태)이면
-  // 이 3번째 종류를 아예 안 그리고 실선으로 대체한다(cluster-layout.js 주석 참고 —
-  // isSurprising은 surprising-connections가 아직 안 이어져 있어 항상 false다).
+  // 이 3번째 종류를 아예 안 그리고 실선으로 대체한다. isSurprising은 controller.js가
+  // 1단계 렌더마다 surprising-connections 실데이터로 aggregateClusterEdges를 다시
+  // 호출해 채운다(스텝14 실배선) — 실데이터가 없을 때만 false다.
   const edgeLayer = el('g', { class: 'graph-cluster-edges' });
   for (const edge of clusterEdges) {
     const clusterA = clusterById.get(edge.from);
@@ -412,6 +413,16 @@ function renderClusterBubbles(container, placed, options) {
       const unnamedBadge = el('text', { x: cluster.x, y: lineY, class: 'graph-cluster-unnamed-badge', 'text-anchor': 'middle' });
       unnamedBadge.textContent = '이름 없음';
       group.appendChild(unnamedBadge);
+      lineY += LINE_HEIGHT;
+    }
+
+    // AI 추정 라벨(WP-F) — name이 없을 때만 보조 표기한다. name을 대체하지
+    // 않으며(G-F7) "이름 없음" 배지도 그대로 둔다 — 요약 뷰 테마 카드의
+    // "AI 추정:" 접두 규범(canvas.css .theme-cluster-ai-label)을 그대로 따른다.
+    if (!cluster.name && cluster.aiLabel) {
+      const aiLabel = el('text', { x: cluster.x, y: lineY, class: 'graph-cluster-ai-label', 'text-anchor': 'middle' });
+      aiLabel.textContent = `AI 추정: ${cluster.aiLabel}`;
+      group.appendChild(aiLabel);
       lineY += LINE_HEIGHT;
     }
 

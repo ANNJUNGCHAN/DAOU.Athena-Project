@@ -221,6 +221,9 @@ html, body { background: transparent; }
 }
 .graph-cluster-label { font-family: var(--font-strong); font-size: var(--text-xs); fill: var(--color-k-bright); }
 .graph-cluster-unnamed-badge { font-family: var(--font-body); font-size: var(--text-xs); fill: var(--color-k-soft); }
+/* AI 추정 라벨(WP-F) — 요약 뷰 .theme-cluster-ai-label과 같은 스케일·톤(G-F7,
+ * "추정"임은 "AI 추정:" 접두사가 항상 명시). SVG text라 color 대신 fill. */
+.graph-cluster-ai-label { font-family: var(--font-body); font-size: var(--text-xs); fill: var(--color-k-soft); }
 .graph-cluster-stats { font-family: var(--font-mono); font-size: var(--text-2xs); fill: var(--color-k-hint); }
 .graph-cluster-stats.is-warn { fill: var(--color-warn); }
 

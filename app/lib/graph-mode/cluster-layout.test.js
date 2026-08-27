@@ -41,6 +41,26 @@ test('cluster_cohesion 필드가 없으면 cohesion은 undefined로 폴백한다
   }
 });
 
+test('cluster_ai_labels가 있으면 placed.clusters[i].aiLabel로 통과만 시킨다 — name은 계속 비운다(G-F7)', () => {
+  const layout = layoutClusterMap(
+    payload({ cluster_ai_labels: { 0: '반도체 밸류체인', 1: '배당 방어' } }),
+    VIEWPORT
+  );
+  const byCluster = new Map(layout.clusters.map((c) => [c.cluster, c]));
+  assert.equal(byCluster.get(0).aiLabel, '반도체 밸류체인');
+  assert.equal(byCluster.get(1).aiLabel, '배당 방어');
+  for (const cluster of layout.clusters) {
+    assert.equal(cluster.name, undefined, 'AI 추정 라벨이 name("이름 없음" 배지·namedCount 판정 축)을 채우면 안 된다');
+  }
+});
+
+test('cluster_ai_labels가 없으면 aiLabel은 undefined로 폴백한다(휴면·실패·구버전 backend)', () => {
+  const layout = layoutClusterMap(payload(), VIEWPORT);
+  for (const cluster of layout.clusters) {
+    assert.equal(cluster.aiLabel, undefined);
+  }
+});
+
 // ── 엣지 메타데이터(스텝13, 스텝13-보정 백엔드 예외의 additive edge_details) ────
 
 test('edge_details가 있으면 kind/tier/confidence가 해당 엣지에 실린다', () => {
