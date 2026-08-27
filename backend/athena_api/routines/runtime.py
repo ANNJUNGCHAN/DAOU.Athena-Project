@@ -42,17 +42,30 @@ class RoutinesRuntime:
     ready: bool = False
     disclosure_ready: bool = False
     last_error: str | None = None
-    _subscribed_symbols: set[str] = field(default_factory=set)
+    _symbol_refcounts: dict[str, int] = field(default_factory=dict)
 
     async def ensure_realtime_subscription(self, symbol: str) -> None:
-        """활성 realtime 루틴의 종목을 REAL로 구독한다(REG는 리미터 소모 — 1회)."""
+        """활성 realtime 루틴의 종목을 REAL로 구독한다(REG는 리미터 소모 — 참조카운트 0→1에서만)."""
         if self.ws_client is None:
             raise RuntimeError("키움 WS 미가용 — 실시간 루틴을 활성화할 수 없다")
-        if symbol in self._subscribed_symbols:
+        count = self._symbol_refcounts.get(symbol, 0)
+        if count == 0:
+            for tr_id in REALTIME_TR_IDS:
+                await self.ws_client.register(tr_id, [symbol])
+        self._symbol_refcounts[symbol] = count + 1
+
+    async def release_realtime_subscription(self, symbol: str) -> None:
+        """realtime 루틴 종료(cancel/pause/expire)의 구독 해제 — 참조카운트 1→0에서만 REMOVE."""
+        count = self._symbol_refcounts.get(symbol, 0)
+        if count <= 0:
             return
-        for tr_id in REALTIME_TR_IDS:
-            await self.ws_client.register(tr_id, [symbol])
-        self._subscribed_symbols.add(symbol)
+        count -= 1
+        if count == 0:
+            del self._symbol_refcounts[symbol]
+            for tr_id in REALTIME_TR_IDS:
+                await self.ws_client.remove(tr_id, [symbol])
+        else:
+            self._symbol_refcounts[symbol] = count
 
     def can_activate(self, spec: RoutineSpec) -> str | None:
         """활성화 가능성 사전 판정 — 불가 사유 문자열, 가능하면 None.
@@ -128,6 +141,13 @@ async def open_routines(
         if last_error is None:
             last_error = "DART 키 미설정 — 공시(periodic) 루틴 강등"
 
+    async def _release_on_expire(spec: RoutineSpec) -> None:
+        # pause/cancel과 동일한 게이트 — realtime-ws 모드만 REAL 구독을 쥔다.
+        # runtime은 정의 시점(아래)이 아니라 호출 시점(expire 발생 시)에 자유
+        # 변수로 조회되므로, scheduler 생성이 runtime 대입보다 앞서도 안전하다.
+        if spec.mode == "realtime-ws":
+            await runtime.release_realtime_subscription(spec.symbol)
+
     scheduler = RoutineScheduler(
         store=store,
         engine=engine,
@@ -139,6 +159,7 @@ async def open_routines(
         unsubscribe_ticks=(
             ws_client.unsubscribe_events if ws_client is not None else None
         ),
+        on_expire=_release_on_expire,
     )
 
     runtime = RoutinesRuntime(

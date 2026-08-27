@@ -87,6 +87,8 @@ async def pause_routine(request: Request, routine_id: str) -> dict[str, Any]:
     if spec is None:
         raise HTTPException(status_code=404, detail="루틴이 존재하지 않는다")
     spec = runtime.store.transition(routine_id, "paused")
+    if spec.mode == "realtime-ws":
+        await runtime.release_realtime_subscription(spec.symbol)
     return _view(spec, runtime)
 
 
@@ -96,6 +98,13 @@ async def resume_routine(request: Request, routine_id: str) -> dict[str, Any]:
     spec = runtime.store.get(routine_id)
     if spec is None:
         raise HTTPException(status_code=404, detail="루틴이 존재하지 않는다")
+    if spec.mode == "realtime-ws":
+        try:
+            await runtime.ensure_realtime_subscription(spec.symbol)
+        except Exception as exc:
+            raise HTTPException(
+                status_code=502, detail="실시간 구독 등록에 실패했다"
+            ) from exc
     spec = runtime.store.transition(routine_id, "active")
     return _view(spec, runtime)
 
@@ -107,6 +116,8 @@ async def cancel_routine(request: Request, routine_id: str) -> dict[str, Any]:
     if spec is None:
         raise HTTPException(status_code=404, detail="루틴이 존재하지 않는다")
     spec = runtime.store.transition(routine_id, "cancelled")
+    if spec.mode == "realtime-ws":
+        await runtime.release_realtime_subscription(spec.symbol)
     return _view(spec, runtime)
 
 

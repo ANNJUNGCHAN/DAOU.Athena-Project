@@ -86,6 +86,7 @@ class RoutineScheduler:
     disclosure: DartDisclosureSource | None = None
     subscribe_ticks: Callable[[], asyncio.Queue[dict[str, Any]]] | None = None
     unsubscribe_ticks: Callable[[asyncio.Queue[dict[str, Any]]], None] | None = None
+    on_expire: Callable[[RoutineSpec], Awaitable[None]] | None = None
     clock: Callable[[], float] = time.monotonic
     last_error: str | None = None
     _tasks: list[asyncio.Task[None]] = field(default_factory=list)
@@ -139,6 +140,8 @@ class RoutineScheduler:
                         "note": spec.note,
                     }
                 )
+                if self.on_expire is not None:
+                    await self.on_expire(spec)
 
     # ---------- realtime (WS 팬아웃) ----------
 
