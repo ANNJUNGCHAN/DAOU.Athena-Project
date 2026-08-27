@@ -68,6 +68,16 @@ def test_draft_list_view_hides_raw_condition(app_client):
     assert "condition" not in listing["routines"][0]
 
 
+def test_draft_view_exposes_goal_flag(app_client):
+    client, _ = app_client
+    res = client.post("/api/v1/routines/draft", json=dict(DRAFT, goal=True))
+    assert res.status_code == 200
+    assert res.json()["goal"] is True
+
+    default_res = client.post("/api/v1/routines/draft", json=DRAFT)
+    assert default_res.json()["goal"] is False
+
+
 def test_draft_validation_error_is_422_domain(app_client):
     client, _ = app_client
     bad = dict(DRAFT, condition={"source": "evil()", "op": "<", "value": 1})

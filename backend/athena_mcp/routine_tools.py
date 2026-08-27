@@ -70,6 +70,14 @@ _INPUT_SCHEMA: dict[str, Any] = {
                 "cooldown_s": {"type": "integer"},
                 "expires_days": {"type": "integer"},
                 "note": {"type": "string"},
+                "goal": {
+                    "type": "boolean",
+                    "description": (
+                        "사용자가 목표가·목표 도달을 명시적으로 말했을 때만 true. "
+                        "애매하면 생략(기본 false) — 오분류가 과대 반응(FACE.GLAD)을 "
+                        "부르니 보수적으로 판단하라."
+                    ),
+                },
             },
         },
     },

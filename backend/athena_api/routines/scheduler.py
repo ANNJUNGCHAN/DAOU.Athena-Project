@@ -90,6 +90,9 @@ class RoutineScheduler:
     last_error: str | None = None
     _tasks: list[asyncio.Task[None]] = field(default_factory=list)
     _stopping: bool = False
+    # routine_id → 근접(near) 진행 중 여부. 진입·이탈 각 1회만 notify하기 위한
+    # 프로세스 로컬 상태(영속 안 함) — TriggerEngine._states와 같은 성격.
+    _near_active: dict[str, bool] = field(default_factory=dict)
 
     async def start(self) -> None:
         self._stopping = False
@@ -111,6 +114,15 @@ class RoutineScheduler:
     async def _handle_verdict(
         self, spec: RoutineSpec, verdict: str | None, observed: Any
     ) -> None:
+        was_near = self._near_active.get(spec.id, False)
+        if verdict == "near":
+            if not was_near:  # 진입 — 연속 근접 틱마다 다시 알리지 않는다
+                self._near_active[spec.id] = True
+                await self._notify_near(spec, active=True, observed=observed)
+            return
+        if was_near:  # 다른 판정(quiet·suppressed·fired)으로 넘어감 — 이탈 1회
+            self._near_active[spec.id] = False
+            await self._notify_near(spec, active=False, observed=observed)
         if verdict != "fired":
             return
         await self.notify(
@@ -123,14 +135,41 @@ class RoutineScheduler:
                 "observed": observed,
                 "threshold": spec.condition.value,
                 "note": spec.note,
+                "goal": spec.goal,
                 "fired_at": datetime.now(UTC).isoformat(),
             }
         )
+
+    async def _notify_near(
+        self, spec: RoutineSpec, *, active: bool, observed: Any
+    ) -> None:
+        await self.notify(
+            {
+                "type": "routine-near",
+                "routine_id": spec.id,
+                "symbol": spec.symbol,
+                "active": active,
+                "observed": observed,
+                "threshold": spec.condition.value,
+            }
+        )
+
+    async def clear_near(self, spec: RoutineSpec) -> None:
+        """만료·취소 등 평가 루프 밖에서 루틴이 종결될 때 근접 상태를 정리한다.
+
+        정리하지 않으면 마지막 판정이 'near'였던 루틴은 이탈 신호 없이 사라져
+        오브가 watch 얼굴에 갇힌다(유령 watch). 종결 사유와 무관하게 진입 1회/
+        이탈 1회 규약을 지키기 위해 active:false를 여기서도 발신한다.
+        """
+        if not self._near_active.pop(spec.id, False):
+            return
+        await self._notify_near(spec, active=False, observed=None)
 
     async def _expire_pass(self) -> None:
         for spec in self.store.list_active():
             if spec.is_expired():
                 self.store.transition(spec.id, "expired")
+                await self.clear_near(spec)
                 await self.notify(
                     {
                         "type": "routine-expired",

@@ -44,10 +44,10 @@ def _surge_spec(ticks: int = 1):
 def test_fired_near_and_quiet(tmp_path):
     eng = _engine(tmp_path)
     spec = _surge_spec()
-    # 조용: 임계에서 멀다(5%의 80% 미만) — 기록 없음
+    # 조용: 임계에서 멀다(5%의 90% 미만) — 기록 없음
     assert eng.evaluate(spec, 1.0) is None
-    # 근접: 4.2%는 5%의 80% 이상 — near 기록
-    assert eng.evaluate(spec, 4.2) == "near"
+    # 근접: 4.6%는 5%의 90% 이상 — near 기록
+    assert eng.evaluate(spec, 4.6) == "near"
     # 발화
     assert eng.evaluate(spec, 5.3) == "fired"
     verdicts = [r["verdict"] for r in eng.ledger.read_all()]
