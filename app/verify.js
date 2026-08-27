@@ -67,6 +67,21 @@ process.on('unhandledRejection', (err) => dlog('unhandledRejection: ' + (err && 
 
 function wait(ms) { return new Promise((r) => setTimeout(r, ms)); }
 
+// waitForChatBooted(아래)의 폴링 형태를 범용화한 헬퍼 — 고정 wait(ms) 대신 조건이
+// 실제로 참이 될 때까지 짧은 간격으로 재확인한다. 반환값은 조건이 참이 된 시점의
+// check() 결과(타임아웃이면 마지막 결과, 보통 falsy) — 호출부가 이 값으로 성공/
+// 타임아웃을 함께 판정할 수 있다.
+async function waitUntil(check, { timeoutMs = 1500, intervalMs = 50 } = {}) {
+  const t0 = Date.now();
+  let last;
+  while (Date.now() - t0 < timeoutMs) {
+    last = await check();
+    if (last) return last;
+    await wait(intervalMs);
+  }
+  return last;
+}
+
 // 2026-08-26: 점은 더 이상 설정을 열지 않는다(답변⇄그래프 모드 전환기로 바뀜,
 // Paper 보드 05) — 설정 진입은 사이드바 계정 메뉴 아니면 커맨드바다. 이 검증
 // 프로필은 계좌가 비어 있어(위 §"검증 전용 프로필" 주석) 계정 행이 늘 숨어 있다
@@ -1380,13 +1395,16 @@ app.whenReady().then(async () => {
   await shellWin.webContents.executeJavaScript(
     "window.athena.send('athena:toggle-maximize', { force: 'maximize' })"
   );
-  await wait(500);
+  await waitUntil(
+    () => shellWin.isMaximized() === true && shellWin.getBounds().height > heightBeforeMax,
+    { timeoutMs: 2000 }
+  );
   const afterMaximize = { bounds: shellWin.getBounds(), isMaximized: shellWin.isMaximized() };
 
   await shellWin.webContents.executeJavaScript(
     "window.athena.send('athena:toggle-maximize', { force: 'restore-or-minimize' })"
   );
-  await wait(500);
+  await waitUntil(() => shellWin.isMaximized() === false, { timeoutMs: 2000 });
   const afterRestore = { bounds: shellWin.getBounds(), isMaximized: shellWin.isMaximized() };
 
   // 앵커 유지 — 스냅 뒤 위치에서 앱 주도 이동을 한 번 더 걸어도 부팅 좌표로
