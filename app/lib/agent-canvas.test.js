@@ -82,12 +82,47 @@ test('mount(): 헤더(타이틀·부제·탭 3종·검색·CTA)와 통계 카드
   assert.equal(findByClass(container, 'agent-stat-card').length, 4);
 });
 
-test('통계 카드 4장 전부 source:fixture로 표시된다(지어낸 숫자가 아님을 코드에 남긴다)', () => {
+test('통계 카드: "진행 중"만 fixture, 나머지 3장은 live로 표시된다(3단계 라이브 승격)', () => {
   const container = fakeNode('div');
   const canvas = createAgentCanvas({ container, fetchRoutines: async () => [] });
   canvas.mount();
   const cards = findByClass(container, 'agent-stat-card');
-  for (const card of cards) assert.equal(card.getAttribute('data-source'), 'fixture');
+  const bySource = (src) => cards.filter((c) => c.getAttribute('data-source') === src);
+  assert.equal(bySource('fixture').length, 1, '"진행 중" 하나만 fixture로 남는다');
+  assert.equal(bySource('live').length, 3, '다음 실행·오늘 발화·성향 제안은 live다');
+  const inProgress = cards.find((c) => findByClass(c, 'agent-stat-label')[0].textContent === '진행 중');
+  assert.equal(inProgress.getAttribute('data-source'), 'fixture');
+});
+
+test('통계 카드: 데이터가 없을 때 "다음 실행"·"오늘 발화"는 지어낸 값 없이 정직한 빈 상태를 보여준다(P3)', () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => [] });
+  canvas.mount();
+  const cards = findByClass(container, 'agent-stat-card');
+  const valueOf = (label) => findByClass(
+    cards.find((c) => findByClass(c, 'agent-stat-label')[0].textContent === label),
+    'agent-stat-value',
+  )[0].textContent;
+  assert.equal(valueOf('다음 실행'), '없음', 'fetchFiredToday 없이도 다음 실행은 라우틴 목록만으로 계산된다');
+  assert.equal(valueOf('오늘 발화'), '—', 'fetchFiredToday가 없으면 지어낸 숫자를 보여주지 않는다');
+});
+
+test('통계 카드: 예약(scheduled) 라우틴이 있으면 "다음 실행"이 그 next_fire_at으로 채워진다', async () => {
+  const container = fakeNode('div');
+  const routines = [routine({
+    id: 's1', status: 'active', mode: 'scheduled', note: '평일 아침 브리핑',
+    next_fire_at: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
+  })];
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => routines, fetchFiredToday: async () => 3,
+  });
+  canvas.mount();
+  await canvas.refresh();
+  const cards = findByClass(container, 'agent-stat-card');
+  const nextRun = cards.find((c) => findByClass(c, 'agent-stat-label')[0].textContent === '다음 실행');
+  assert.ok(findByClass(nextRun, 'agent-stat-value')[0].textContent.includes('평일 아침 브리핑'));
+  const firedToday = cards.find((c) => findByClass(c, 'agent-stat-label')[0].textContent === '오늘 발화');
+  assert.equal(findByClass(firedToday, 'agent-stat-value')[0].textContent, '3건');
 });
 
 test('성향 제안 카드만 is-accent가 붙는다', () => {
@@ -114,42 +149,55 @@ test('refresh(): 라우틴을 받아오면 부제(루틴 N · 감시 M)가 채�
 
 // ── 5단계: 좌측 "예약·감시" 리스트 — 감시(watch)=라이브 + 예약(schedule)=fixture ──
 
-test('"모두" 탭: watch 2건 + draft 1건(8단계, ◌ 점선 핑크) + 예약 fixture 2건이 모두 보인다', async () => {
+test('"모두" 탭: watch 2건 + draft 1건(8단계, ◌ 점선 핑크) + 예약(schedule) 1건이 모두 live로 보인다(3단계)', async () => {
   const container = fakeNode('div');
   const routines = [
     routine({ id: 'a', status: 'active' }),
     routine({ id: 'b', status: 'paused' }),
     routine({ id: 'c', status: 'draft' }),
+    routine({ id: 'd', status: 'active', mode: 'scheduled', note: '평일 아침 브리핑' }),
   ];
   const canvas = createAgentCanvas({ container, fetchRoutines: async () => routines });
   canvas.mount();
   await canvas.refresh();
   const rows = findByClass(container, 'agent-row');
-  assert.equal(rows.length, 5, 'watch 2건 + draft 1건 + schedule fixture 2건');
+  assert.equal(rows.length, 4, 'watch 2건 + draft 1건 + schedule 1건');
   const liveRows = rows.filter((r) => r.getAttribute('data-source') === 'live');
-  const fixtureRows = rows.filter((r) => r.getAttribute('data-source') === 'fixture');
-  assert.equal(liveRows.length, 3, 'watch 2건 + draft 1건 — draft도 실데이터다');
-  assert.equal(fixtureRows.length, 2);
+  assert.equal(liveRows.length, 4, '넷 다 실데이터다 — 예약도 3단계부터 fixture가 아니다');
   const draftRow = rows.find((r) => r.className.includes('is-draft'));
   assert.ok(draftRow, 'draft 행은 is-draft 클래스를 갖는다');
 });
 
-test('예약(schedule) 행에는 fixture 출처가 코드로 표시된다(P3)', async () => {
+test('예약(schedule) 행에는 live 출처가 코드로 표시된다(3단계 — 더 이상 fixture가 아니다, P3)', async () => {
+  const container = fakeNode('div');
+  const routines = [routine({ id: 's1', status: 'active', mode: 'scheduled', note: '평일 아침 브리핑' })];
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => routines });
+  canvas.mount();
+  await canvas.refresh();
+  const rows = findByClass(container, 'agent-row');
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].getAttribute('data-source'), 'live');
+});
+
+test('라이브 라우틴이 하나도 없으면 "조건에 맞는 작업이 없습니다"가 뜬다(예약 fixture 폴백 없음, 3단계)', async () => {
   const container = fakeNode('div');
   const canvas = createAgentCanvas({ container, fetchRoutines: async () => [] });
   canvas.mount();
   await canvas.refresh();
   const rows = findByClass(container, 'agent-row');
-  assert.equal(rows.length, 2, '라이브 라우틴이 없어도 예약 fixture 2건은 남는다');
-  for (const row of rows) assert.equal(row.getAttribute('data-source'), 'fixture');
+  assert.equal(rows.length, 0);
+  const watchListNode = findByClass(container, 'agent-watch-list')[0];
+  assert.equal(findByClass(watchListNode, 'agent-list-empty')[0].textContent, '조건에 맞는 작업이 없습니다');
 });
 
-test('탭 "활성": 감시 active 1건 + 예약 fixture 중 active 1건이 남는다', async () => {
+test('탭 "활성": 감시 active 1건 + 예약(schedule) active 1건이 남는다', async () => {
   const container = fakeNode('div');
   const routines = [
     routine({ id: 'a', status: 'active' }),
     routine({ id: 'b', status: 'paused' }),
     routine({ id: 'c', status: 'draft' }),
+    routine({ id: 'd', status: 'active', mode: 'scheduled', note: '평일 아침 브리핑' }),
+    routine({ id: 'e', status: 'paused', mode: 'scheduled', note: '반도체 ETF 리밸런스 점검' }),
   ];
   const canvas = createAgentCanvas({ container, fetchRoutines: async () => routines });
   canvas.mount();
@@ -159,7 +207,7 @@ test('탭 "활성": 감시 active 1건 + 예약 fixture 중 active 1건이 남�
   assert.equal(rows.length, 2);
   const titles = rows.map((r) => findByClass(r, 'agent-row-title')[0].textContent);
   assert.ok(titles.includes('005930 감시'), '라이브 감시 행');
-  assert.ok(titles.includes('평일 아침 브리핑'), '예약 fixture 행 중 active 상태인 것');
+  assert.ok(titles.includes('평일 아침 브리핑'), '예약 행 중 active 상태인 것');
 
   const activeTabBtn = findByClass(container, 'agent-tab').find((b) => b.textContent === '활성');
   assert.ok(activeTabBtn.className.includes('is-active'));
@@ -167,9 +215,13 @@ test('탭 "활성": 감시 active 1건 + 예약 fixture 중 active 1건이 남�
   assert.equal(allTabBtn.className.includes('is-active'), false, '다른 탭은 꺼진다');
 });
 
-test('탭 "일시중지": 감시 paused 1건 + 예약 fixture 중 paused 1건이 남는다', async () => {
+test('탭 "일시중지": 감시 paused 1건 + 예약(schedule) paused 1건이 남는다', async () => {
   const container = fakeNode('div');
-  const routines = [routine({ id: 'a', status: 'active' }), routine({ id: 'b', status: 'paused' })];
+  const routines = [
+    routine({ id: 'a', status: 'active' }),
+    routine({ id: 'b', status: 'paused' }),
+    routine({ id: 'e', status: 'paused', mode: 'scheduled', note: '반도체 ETF 리밸런스 점검' }),
+  ];
   const canvas = createAgentCanvas({ container, fetchRoutines: async () => routines });
   canvas.mount();
   await canvas.refresh();
@@ -179,6 +231,23 @@ test('탭 "일시중지": 감시 paused 1건 + 예약 fixture 중 paused 1건이
   const titles = rows.map((r) => findByClass(r, 'agent-row-title')[0].textContent);
   assert.ok(titles.includes('005930 감시'));
   assert.ok(titles.includes('반도체 ETF 리밸런스 점검'));
+});
+
+test('예약(schedule) 행은 watch(periodic)와 아이콘 색이 구분된다(사실11⑥, statusRowIcon 3분기)', async () => {
+  const container = fakeNode('div');
+  const routines = [
+    routine({ id: 'a', status: 'active', mode: 'realtime-ws', note: '실시간 감시' }),
+    routine({ id: 'd', status: 'active', mode: 'scheduled', note: '평일 아침 브리핑' }),
+  ];
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => routines });
+  canvas.mount();
+  await canvas.refresh();
+  const rows = findByClass(container, 'agent-row');
+  const dotFor = (title) => findByClass(rows.find(
+    (r) => findByClass(r, 'agent-row-title')[0].textContent === title,
+  ), 'agent-row-dot')[0];
+  assert.equal(dotFor('실시간 감시').style.color, 'var(--color-info)');
+  assert.equal(dotFor('평일 아침 브리핑').style.color, 'var(--color-ok)');
 });
 
 test('검색어를 입력하면 감시·예약 모두에서 제목/부제 부분일치로 좁혀진다', async () => {
@@ -229,7 +298,10 @@ test('기본으로 첫 행이 선택돼 상세 패널에 채워진다', async ()
 
 test('행을 클릭하면 상세 패널이 그 항목으로 바뀐다', async () => {
   const container = fakeNode('div');
-  const routines = [routine({ id: 'a', status: 'active', note: '라이브 감시 행' })];
+  const routines = [
+    routine({ id: 'a', status: 'active', note: '라이브 감시 행' }),
+    routine({ id: 'd', status: 'active', mode: 'scheduled', note: '평일 아침 브리핑' }),
+  ];
   const canvas = createAgentCanvas({ container, fetchRoutines: async () => routines });
   canvas.mount();
   await canvas.refresh();
@@ -255,15 +327,22 @@ test('감시(watch) 상세는 백엔드 실제 필드(소스·쿨다운)만 보�
   assert.equal(fieldLabels.includes('실행 위치'), false, 'watch에는 schedule 전용 fixture 필드가 없다');
 });
 
-test('예약(schedule) 상세는 fixture 필드(실행 위치 등)를 보여주고 data-source가 fixture다', async () => {
+test('예약(schedule) 상세는 백엔드 실제 필드(소스·쿨다운·다음 실행)를 보여주고 data-source가 live다(3단계)', async () => {
   const container = fakeNode('div');
-  const canvas = createAgentCanvas({ container, fetchRoutines: async () => [] });
+  const routines = [routine({
+    id: 's1', status: 'active', mode: 'scheduled', note: '평일 아침 브리핑',
+    source_label: '벽시계 예약', cooldown_s: 0, next_fire_at: '2026-08-28T07:30:00+09:00',
+  })];
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => routines });
   canvas.mount();
   await canvas.refresh();
   const fieldsWrap = findByClass(container, 'agent-detail-fields')[0];
-  assert.equal(fieldsWrap.getAttribute('data-source'), 'fixture');
+  assert.equal(fieldsWrap.getAttribute('data-source'), 'live');
   const fieldLabels = findByClass(fieldsWrap, 'agent-detail-field-label').map((n) => n.textContent);
-  assert.ok(fieldLabels.includes('실행 위치'));
+  assert.ok(fieldLabels.includes('소스'));
+  assert.ok(fieldLabels.includes('쿨다운'));
+  assert.ok(fieldLabels.includes('다음 실행'));
+  assert.equal(fieldLabels.includes('실행 위치'), false, '지어낸 fixture 필드가 아니다');
 });
 
 // ── 6.5단계: 상세 패널 일시중지·재개 버튼 → pause/resume API 배선 ──
@@ -302,9 +381,10 @@ test('감시(watch) paused 항목은 "▶ 재개" 버튼이 활성화돼 있고 
   assert.equal(resumedId, 'a');
 });
 
-test('예약(schedule) 항목은 일시중지 버튼이 항상 비활성이다(예약 트리거 백엔드 미구현, P3)', async () => {
+test('예약(schedule) 항목은 일시중지 버튼이 항상 비활성이다(F1 최소선 스코프 밖 — 3단계)', async () => {
   const container = fakeNode('div');
-  const canvas = createAgentCanvas({ container, fetchRoutines: async () => [] });
+  const routines = [routine({ id: 's1', status: 'active', mode: 'scheduled', note: '평일 아침 브리핑' })];
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => routines });
   canvas.mount();
   await canvas.refresh();
   const pauseBtn = findByClass(container, 'agent-pause-btn')[0];
@@ -330,7 +410,8 @@ test('pauseRoutine 호출 후 상세 패널이 refresh()로 실제 상태를 다
 
 test('최근 실행 로그는 fixture로 표시된다(ledger 라이브 연결은 10단계 몫)', async () => {
   const container = fakeNode('div');
-  const canvas = createAgentCanvas({ container, fetchRoutines: async () => [] });
+  const routines = [routine({ id: 'a', status: 'active' })];
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => routines });
   canvas.mount();
   await canvas.refresh();
   const logsWrap = findByClass(container, 'agent-detail-logs')[0];
@@ -340,7 +421,10 @@ test('최근 실행 로그는 fixture로 표시된다(ledger 라이브 연결은
 
 test('사용자가 고른 행이 필터로 사라지면 상세 패널이 남은 첫 항목으로 넘어간다', async () => {
   const container = fakeNode('div');
-  const routines = [routine({ id: 'a', status: 'active', note: '라이브 활성' })];
+  const routines = [
+    routine({ id: 'a', status: 'active', note: '라이브 활성' }),
+    routine({ id: 'b', status: 'paused', note: '라이브 일시중지' }),
+  ];
   const canvas = createAgentCanvas({ container, fetchRoutines: async () => routines });
   canvas.mount();
   await canvas.refresh();
@@ -356,8 +440,9 @@ test('사용자가 선택하기 전까지는 새로고침 때마다 항상 "지�
   let routines = [];
   const canvas = createAgentCanvas({ container, fetchRoutines: async () => routines });
   canvas.mount();
-  // mount() 시점엔 라이브 데이터가 없어 fixture 예약 행이 첫 항목이다.
-  assert.equal(findByClass(container, 'agent-detail-title')[0].textContent, '평일 아침 브리핑');
+  // mount() 시점엔 라이브 데이터가 아직 없다 — 3단계부터는 예약도 fixture
+  // 폴백이 없어 정직하게 빈 상태다(P3).
+  assert.equal(findByClass(container, 'agent-detail-empty')[0].textContent, '선택된 항목이 없습니다');
   // 라이브 라우틴이 뒤늦게 도착한다 — 아직 아무도 안 골랐으니 선택이 그쪽으로 옮겨가야 한다
   // (실측 버그: 이전엔 mount() 때 고정된 fixture 선택이 refresh() 후에도 안 바뀌었다).
   routines = [routine({ id: 'a', status: 'active', note: '뒤늦게 도착한 라이브 행' })];
@@ -374,14 +459,13 @@ test('CTA 클릭은 onNewTaskClick을 부른다(43번 원칙 — 시트를 열�
   assert.equal(called, 1);
 });
 
-test('fetchRoutines가 실패하면 감시 행 없이(빈 목록) 예약 fixture만 남는다', async () => {
+test('fetchRoutines가 실패하면 정직하게 빈 목록이다(3단계부터 예약 fixture 폴백이 없다, P3)', async () => {
   const container = fakeNode('div');
   const canvas = createAgentCanvas({ container, fetchRoutines: async () => { throw new Error('backend down'); } });
   canvas.mount();
   await assert.doesNotReject(() => canvas.refresh());
   const rows = findByClass(container, 'agent-row');
-  assert.equal(rows.length, 2, '라이브 백엔드가 죽어도 예약 fixture 2건은 정직하게 그대로 보인다');
-  for (const row of rows) assert.equal(row.getAttribute('data-source'), 'fixture');
+  assert.equal(rows.length, 0, '라이브 백엔드가 죽으면 지어낸 데이터로 채우지 않는다');
 });
 
 test('stale-응답 가드: 먼저 보낸 요청이 나중에 도착해도 최신 데이터를 덮지 않는다', async () => {
@@ -685,7 +769,11 @@ function run(overrides) {
 
 test('감시(watch) 상세에만 "전체 이력 보기 →"가 있다 — draft·예약(schedule)에는 없다', async () => {
   const container = fakeNode('div');
-  const routines = [routine({ id: 'a', status: 'active' }), routine({ id: 'b', status: 'draft' })];
+  const routines = [
+    routine({ id: 'a', status: 'active' }),
+    routine({ id: 'b', status: 'draft' }),
+    routine({ id: 's1', status: 'active', mode: 'scheduled', note: '평일 아침 브리핑' }),
+  ];
   const canvas = createAgentCanvas({ container, fetchRoutines: async () => routines });
   canvas.mount();
   await canvas.refresh();
@@ -693,8 +781,8 @@ test('감시(watch) 상세에만 "전체 이력 보기 →"가 있다 — draft�
   assert.equal(findByClass(container, 'agent-history-open').length, 1, 'watch에는 있다');
   canvas.selectRow('b');
   assert.equal(findByClass(container, 'agent-history-open').length, 0, 'draft에는 없다');
-  canvas.selectRow('fx-schedule-1');
-  assert.equal(findByClass(container, 'agent-history-open').length, 0, '예약(schedule)에는 없다');
+  canvas.selectRow('s1');
+  assert.equal(findByClass(container, 'agent-history-open').length, 0, '예약(schedule)에는 없다 — F1 최소선 스코프 밖');
 });
 
 test('"전체 이력 보기 →" 클릭 시 브레드크럼("작업 › 이름"+배지)이 뜨고 작업 화면이 숨는다', async () => {

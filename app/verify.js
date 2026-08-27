@@ -2465,8 +2465,10 @@ app.whenReady().then(async () => {
   //
   // 위 3단계 블록과 같은 이유로 athena:routines-list를 잠깐 fixture로 바꾼다
   // (이 하네스엔 실제 백엔드가 없다) — draft 1건을 섞어 좌측 리스트 필터링을
-  // 잰다. 5단계에서 리스트가 감시(watch, 실데이터)+예약(schedule, fixture
-  // 2건 고정)을 섞은 두 열 레이아웃으로 바뀌었다 — 행 클래스는 .agent-row다.
+  // 잰다. 5단계에서 리스트가 감시(watch, 실데이터)+예약(schedule) 두 열
+  // 레이아웃으로 바뀌었고, 후속 F-stage3(F1-FE)에서 예약도 fixture가 아니라
+  // GET /api/v1/routines의 mode==='scheduled' 실데이터로 승격됐다 — 그래서
+  // fx4를 섞어 예약 행도 같은 IPC로 함께 흘려보낸다. 행 클래스는 .agent-row다.
   try {
     ipcMain.removeHandler('athena:routines-list');
     ipcMain.handle('athena:routines-list', async () => ({
@@ -2476,9 +2478,14 @@ app.whenReady().then(async () => {
           { id: 'fx1', symbol: '005930', note: '삼성전자 88,000 감시', status: 'active', mode: 'realtime-ws' },
           { id: 'fx2', symbol: '000660', note: 'SK하이닉스 공시 키워드', status: 'paused', mode: 'periodic' },
           { id: 'fx3', symbol: '005380', note: '현대차 실적 발표', status: 'draft', mode: 'periodic' },
+          {
+            id: 'fx4', symbol: '069500', note: '평일 아침 브리핑', status: 'active', mode: 'scheduled',
+            next_fire_at: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
+          },
         ],
         disclosure_ready: true,
         last_error: null,
+        fired_today: 2,
       },
     }));
 
@@ -2524,15 +2531,15 @@ app.whenReady().then(async () => {
       assertOk('agent-canvas: CTA가 "새 작업"을 담고 있다', (agentCanvasProbe.headerText.ctaText || '').includes('새 작업'));
       assertOk('agent-canvas: 통계 카드 4장이 렌더된다', agentCanvasProbe.statCount === 4);
       assertOk(
-        'agent-canvas: 통계 카드 4장 전부 fixture 출처가 코드에 표시된다(P3)',
-        agentCanvasProbe.fixtureStatCount === 4,
+        'agent-canvas: "진행 중" 한 장만 fixture 출처다(F-stage3 — 나머지 3장은 라이브로 승격)',
+        agentCanvasProbe.fixtureStatCount === 1,
       );
       assertOk(
-        'agent-canvas: "모두" 탭은 감시 2건 + draft 1건 + 예약 fixture 2건 = 5건이 보인다(8단계부터 draft도 포함)',
-        agentCanvasProbe.allRowCount === 5,
+        'agent-canvas: "모두" 탭은 감시 2건 + draft 1건 + 예약(live) 1건 = 4건이 보인다(8단계 draft·F-stage3 예약 라이브 포함)',
+        agentCanvasProbe.allRowCount === 4,
       );
       assertOk(
-        'agent-canvas: "활성" 탭 전환 시 2건(감시 1 + 예약 fixture 1)만 남는다(좌측 리스트 필터링)',
+        'agent-canvas: "활성" 탭 전환 시 2건(감시 1 + 예약 1)만 남는다(좌측 리스트 필터링, 예약도 live)',
         agentCanvasProbe.activeRowCount === 2,
       );
     }
@@ -2544,14 +2551,16 @@ app.whenReady().then(async () => {
     ipcMain.handle('athena:routines-list', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
   }
 
-  // ---------- 에이전트모드 리스트·상세 — 감시=라이브 왕복, 예약=fixture 배지 (5단계) ----------
+  // ---------- 에이전트모드 리스트·상세 — 감시=라이브 왕복, 예약=라이브(F-stage3) (5단계) ----------
   //
   // athena:routines-list와 함께 athena:routine-confirm도 이 블록 동안만
   // stateful fixture로 바꾼다 — draft→active 전이를 진짜로 흉내 내서
   // "draft→confirm 왕복이 실제 API로 동작"을 잰다. 이 confirm 액션 자체는
   // 채팅의 루틴 승인 카드([승인] 버튼, chat.js renderApprovalCard)가 이미
   // 쓰는 것과 같은 IPC 채널·계약이다 — 여기서 새 UI를 만들지 않고 그 채널을
-  // 그대로 재사용해 캔버스가 결과를 정확히 반영하는지만 본다.
+  // 그대로 재사용해 캔버스가 결과를 정확히 반영하는지만 본다. F-stage3부터
+  // 예약(schedule.daily)도 fixture 폴백이 아니라 이 같은 IPC로 흘러온다 —
+  // fx-scheduled를 섞어 confirm 왕복과 무관하게 live로 남는지 함께 잰다.
   try {
     const stage5Routines = [
       {
@@ -2561,6 +2570,11 @@ app.whenReady().then(async () => {
       {
         id: 'fx-active', symbol: '000660', note: 'SK하이닉스 감시', status: 'active', mode: 'periodic',
         source_label: '공시 제목 키워드', cooldown_s: 600,
+      },
+      {
+        id: 'fx-scheduled', symbol: '069500', note: '평일 아침 브리핑', status: 'active', mode: 'scheduled',
+        source_label: '예약 시각(요일 지정)', cooldown_s: 0,
+        next_fire_at: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
       },
     ];
     ipcMain.removeHandler('athena:routines-list');
@@ -2591,37 +2605,52 @@ app.whenReady().then(async () => {
       const allTabBtn = Array.from(canvas.querySelectorAll('.agent-tab')).find((n) => n.textContent === '모두');
       if (allTabBtn) allTabBtn.click();
       // 8단계부터 draft도 data-source="live"다(실데이터라서) — watch/draft를
-      // is-draft 클래스로 갈라 각각 잰다.
+      // is-draft 클래스로 갈라 각각 잰다. F-stage3부터 watch:not(.is-draft)엔
+      // 예약(schedule) 행도 섞여 든다(둘 다 data-source="live") — 그래서
+      // 예약 행은 아래에서 제목으로 따로 찾아 출처만 별도로 잰다.
       const snapshot = () => ({
         watch: count('.agent-row[data-source="live"]:not(.is-draft)'),
         draft: count('.agent-row.is-draft'),
         fixture: count('.agent-row[data-source="fixture"]'),
       });
+      const scheduleRowSource = () => {
+        const row = Array.from(canvas.querySelectorAll('.agent-row')).find(
+          (r) => (r.querySelector('.agent-row-title') || {}).textContent === '평일 아침 브리핑',
+        );
+        return row ? row.getAttribute('data-source') : null;
+      };
       const before = snapshot();
+      const scheduleSourceBefore = scheduleRowSource();
       // 채팅의 루틴 승인 카드가 [승인]을 누를 때 부르는 것과 같은 채널.
       const confirmRes = await window.athena.invoke('athena:routine-confirm', { id: 'fx-draft' });
       await window.AthenaAgentCanvas.refresh();
       await new Promise((r) => setTimeout(r, 200));
       const after = snapshot();
+      const scheduleSourceAfter = scheduleRowSource();
       back.click();
       await new Promise((r) => setTimeout(r, 100));
-      return { wired: true, confirmOk: !!(confirmRes && confirmRes.ok), before, after };
+      return {
+        wired: true, confirmOk: !!(confirmRes && confirmRes.ok), before, after, scheduleSourceBefore, scheduleSourceAfter,
+      };
     })()`);
     report.routineRoundTrip = routineRoundTrip;
     assertOk('agent-canvas-5: 배선이 있다', routineRoundTrip.wired === true);
     if (routineRoundTrip.wired) {
       assertOk('agent-canvas-5: confirm 호출이 성공한다(승인 카드와 같은 채널)', routineRoundTrip.confirmOk === true);
       assertOk(
-        'agent-canvas-5: confirm 전엔 감시(watch) 1건 + draft 1건이 각각 보인다(8단계)',
-        routineRoundTrip.before.watch === 1 && routineRoundTrip.before.draft === 1,
+        // watch 카운트엔 F-stage3부터 예약(schedule) 행도 섞인다(둘 다
+        // data-source="live"라 이 CSS 셀렉터로는 안 갈린다) — fx-active(watch)
+        // + fx-scheduled(schedule) = 2, draft는 fx-draft 1건.
+        'agent-canvas-5: confirm 전엔 감시+예약(live) 2건 + draft 1건이 보인다(8단계, F-stage3)',
+        routineRoundTrip.before.watch === 2 && routineRoundTrip.before.draft === 1,
       );
       assertOk(
         'agent-canvas-5: draft→confirm 왕복 후 draft 행이 감시(watch) 행으로 바뀐다(실 API)',
-        routineRoundTrip.after.watch === 2 && routineRoundTrip.after.draft === 0,
+        routineRoundTrip.after.watch === 3 && routineRoundTrip.after.draft === 0,
       );
       assertOk(
-        'agent-canvas-5: 예약 행 2건은 confirm과 무관하게 항상 fixture 배지가 붙어 있다',
-        routineRoundTrip.before.fixture === 2 && routineRoundTrip.after.fixture === 2,
+        'agent-canvas-5/F-stage3: 예약(schedule) 행은 confirm과 무관하게 항상 live 출처다(더 이상 fixture가 아니다, P3)',
+        routineRoundTrip.scheduleSourceBefore === 'live' && routineRoundTrip.scheduleSourceAfter === 'live',
       );
     }
   } catch (err) {
@@ -2823,6 +2852,13 @@ app.whenReady().then(async () => {
         id: 'fx-draft-2', symbol: '000660', note: 'SK하이닉스 공시 키워드 감시', status: 'draft', mode: 'periodic',
         source_label: '공시 제목 키워드', cooldown_s: 600, activation_blocker: null,
       },
+      // F-stage3(F1-FE) — 예약(schedule.daily) draft. approvalModeLine()의
+      // 3분기(사실11②)가 "방식 예약 실행 — 지정 요일·시각"을 만들고, "틱
+      // 즉시"(periodic 전용 문구)가 섞이지 않는지 여기서 잰다.
+      {
+        id: 'fx-draft-3', symbol: '069500', note: '평일 아침 브리핑 예약', status: 'draft', mode: 'scheduled',
+        source_label: '예약 시각(요일 지정)', cooldown_s: 0, activation_blocker: null,
+      },
     ];
     ipcMain.removeHandler('athena:routines-list');
     ipcMain.handle('athena:routines-list', async () => ({
@@ -2844,7 +2880,7 @@ app.whenReady().then(async () => {
       let done = false;
       const t0 = Date.now();
       while (Date.now() - t0 < 6000) {
-        if (document.querySelectorAll('.routine-approval').length >= 2) { done = true; break; }
+        if (document.querySelectorAll('.routine-approval').length >= 3) { done = true; break; }
         await new Promise((r) => setTimeout(r, 100));
       }
       if (!done) return { wired: true, cardsAppeared: false };
@@ -2856,10 +2892,13 @@ app.whenReady().then(async () => {
       });
       const card1 = cardFor('삼성전자 조건 도달 시 감시');
       const card2 = cardFor('SK하이닉스 공시 키워드 감시');
+      const card3 = cardFor('평일 아침 브리핑 예약');
       const pills1 = card1 ? Array.from(card1.querySelectorAll('.routine-draft-pill')).map((n) => n.textContent) : [];
       const hint1 = card1 ? (card1.querySelector('.routine-draft-hint') || {}).textContent : null;
       const chipLabels1 = card1 ? Array.from(card1.querySelectorAll('.routine-btn')).map((n) => n.textContent) : [];
       const previewDisabled1 = card1 ? card1.querySelectorAll('.routine-btn')[0].disabled : null;
+      // F-stage3 — 예약 draft의 방식 고지 문구(approvalModeLine, 사실11②).
+      const desc3 = card3 ? (card3.querySelector('.agent-body') || {}).textContent : null;
 
       // 카드1 — "고칠 게 있어" 클릭 → 채팅 입력에 문장이 심긴다.
       if (card1) Array.from(card1.querySelectorAll('.routine-btn')).find((b) => b.textContent === '고칠 게 있어').click();
@@ -2874,7 +2913,9 @@ app.whenReady().then(async () => {
         activateStatus = (card2.querySelector('.agent-mode') || {}).textContent;
       }
 
-      return { wired: true, cardsAppeared: true, pills1, hint1, chipLabels1, previewDisabled1, seededValue, activateStatus };
+      return {
+        wired: true, cardsAppeared: true, pills1, hint1, chipLabels1, previewDisabled1, seededValue, activateStatus, desc3,
+      };
     })()`);
     report.draftFlow = draftFlowProbe;
     assertOk('routine-draft-8: 배선이 있다', draftFlowProbe.wired === true);
@@ -2899,6 +2940,14 @@ app.whenReady().then(async () => {
       assertOk(
         'routine-draft-8: "바로 활성화" 클릭이 기존 승인 채널을 실제로 부른다',
         draftFlowProbe.activateStatus === '활성 — 감시가 시작됐습니다',
+      );
+      assertOk(
+        'routine-draft-8/F-stage3: 예약(scheduled) draft 카드가 "방식 예약 실행"으로 뜬다(사실11②)',
+        !!draftFlowProbe.desc3 && draftFlowProbe.desc3.includes('방식 예약 실행'),
+      );
+      assertOk(
+        'routine-draft-8/F-stage3: 예약 카드 문구에 "틱 즉시"가 섞이지 않는다(approvalModeLine 3분기 회귀 방지)',
+        !!draftFlowProbe.desc3 && !draftFlowProbe.desc3.includes('틱 즉시'),
       );
     }
   } catch (err) {

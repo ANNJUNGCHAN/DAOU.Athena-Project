@@ -1244,7 +1244,12 @@ async function refreshRoutineDrafts() {
 
 function approvalModeLine(r) {
   const modeText = routineTurnLib.describeMode(r.mode);
-  const suffix = r.mode === 'periodic' ? ' — 최대 폴링 주기만큼 지연' : ' — 틱 즉시';
+  // describeMode()와 짝을 이루는 3분기(3단계, 사실11②) — periodic만 따로
+  // 걷어내고 나머지를 전부 "틱 즉시"로 묶으면 예약(scheduled)에도 그 문구가
+  // 붙어 "방식 예약 실행 — 틱 즉시"라는 자기모순이 생긴다.
+  const suffix = r.mode === 'periodic' ? ' — 최대 폴링 주기만큼 지연'
+    : r.mode === 'scheduled' ? ' — 지정 요일·시각'
+    : ' — 틱 즉시';
   const exp = r.experimental_source ? ' · [실값 미확인 필드]' : '';
   return `방식 ${modeText}${suffix}${exp}`;
 }
