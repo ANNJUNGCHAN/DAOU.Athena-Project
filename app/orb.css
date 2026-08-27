@@ -621,6 +621,19 @@ html, body {
   color: var(--color-k-faint);
 }
 
+/* 게이트 고지·실행 결과(결함4/5, 2026-08-27 CP2 확장 승인) — 새 색을 만들지
+ * 않는다. 정보는 .orb-source와 같은 톤, 실패·IN_DOUBT는 기존 --color-warn
+ * (chat.css .tr-fail과 같은 관례)을 그대로 쓴다. */
+.orb-ticket-gate,
+.orb-ticket-status {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  line-height: 1.35;
+  color: var(--color-k-faint);
+}
+.orb-ticket-status.is-failed,
+.orb-ticket-status.is-doubt { color: var(--color-warn); }
+
 .orb-foot {
   display: flex;
   align-items: center;

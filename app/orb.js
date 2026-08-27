@@ -96,6 +96,8 @@
   const $ticketAmount = document.getElementById('orbTicketAmount');
   const $ticketExec = document.getElementById('orbTicketExec');
   const $ticketCancel = document.getElementById('orbTicketCancel');
+  const $ticketGate = document.getElementById('orbTicketGate');
+  const $ticketStatus = document.getElementById('orbTicketStatus');
 
   // 미확인 알림. 이 배열이 비어 있으면 오브는 무채색이고, 하나라도 있으면 얼굴이
   // 드러난다(renderPresence). 펼치면 가장 최근 것을 보여주고 전부 확인 처리한다.
@@ -232,12 +234,47 @@
   //            보다 위에 둔다: 사용자 행위·장애(생각 중·피드 끊김·듣는 중)가 배경
   //            정보보다 급하고, watch는 무정보 상태보다는 위다(settleAmbientFace).
   //            지속 상태다 — done/wink처럼 타이머로 풀리지 않고 근접 이탈 신호가
-  //            와야 풀린다(feedDown과 같은 축).
+  //            와야 풀린다(feedDown과 같은 축). 유일한 예외(2026-08-27 A3,
+  //            사용자 승인): 피드가 disconnected→connected로 재연결되는 순간은
+  //            이탈 신호 없이도 강제로 false로 리셋한다(아래 handleFeedStatus) —
+  //            백엔드가 재시작되면 이탈 신호(routine-near active:false) 자체가
+  //            유실될 수 있어서, 원칙만 고수하면 유령 watch가 영구 고착한다.
+  //            재연결 직후 백엔드가 재발신하는 근접 스냅샷이 필요하면 곧바로
+  //            다시 세운다(단순 네트워크 순단이면 깜빡임 없이 즉시 복원).
   const FACE = {
     IDLE: 'idle', SLEEP: 'sleep', DROWSY: 'drowsy', LISTEN: 'listen', THINK: 'think', DONE: 'done',
     WINK: 'wink', FROWN: 'frown', FIRED: 'fired', SURPRISE: 'surprise', MOPEY: 'mopey', CRYING: 'crying',
     WATCH: 'watch', GLAD: 'glad',
   };
+
+  // 2026-08-27 결함 2 — renderPresence()가 방금 세운 FIRED 위에, 지금 쌓여
+  // 있는 unread 중 가장 심각한 kind를 다시 얹는다. routine-event 핸들러
+  // (아래 athena:routine-event)는 renderPresence() 직후 자신이 받은 새
+  // 이벤트의 kind로 항상 재확정하지만, 접힌 채 도착한 대화 답(foldedChatAnswers)은
+  // routine이 아니라 그 재확정이 없어 MOPEY/CRYING/GLAD/SURPRISE가 일반
+  // FIRED로 다운그레이드됐다 — '얼굴과 배지는 같은 사실의 두 표현' 불변식
+  // 위반. renderPresence() 자체는 손대지 않는다(probe-orb-mopey-crying.js가
+  // 고정한 'renderPresence→FIRED 후 kind override' 순서 계약을 그대로 둔다) —
+  // 이 호출자(접힌 답 경로)에서만 그 재확정을 흉내 낸다. 서열은 routine-event
+  // 핸들러(아래)와 같다: 만료(mopey) > 복원실패(crying) > 목표달성(glad) >
+  // 급변(surprise) — 일반 fired뿐이면 손대지 않는다(이미 FIRED로 맞다).
+  const UNREAD_FACE_RANK = [FACE.MOPEY, FACE.CRYING, FACE.GLAD, FACE.SURPRISE];
+  function unreadEventFace(event) {
+    const kind = routineTurn.buildTurnModel(event, Date.now()).kind;
+    if (kind === 'expired') return FACE.MOPEY;
+    if (kind === 'restore-failed') return FACE.CRYING;
+    if (kind === 'fired' && event.goal === true) return FACE.GLAD;
+    if (kind === 'fired' && routineTurn.exceedRatio(event.observed, event.threshold)) return FACE.SURPRISE;
+    return null;
+  }
+  function reapplyUnreadFace() {
+    let best = null;
+    for (const event of unread) {
+      const f = unreadEventFace(event);
+      if (f && (best === null || UNREAD_FACE_RANK.indexOf(f) < UNREAD_FACE_RANK.indexOf(best))) best = f;
+    }
+    if (best) setFace(best);
+  }
 
   const BLINK_CLOSE = 90;          // 감는 시간
   const BLINK_OPEN = 130;          // 뜨는 시간 — 감는 쪽보다 느려야 셔터로 안 읽힌다
@@ -376,9 +413,15 @@
   }
 
   // ── 잠듦 ── 오래 아무 일 없으면 내려앉는다. 상호작용이나 발화가 깨운다.
+  // 2026-08-27 결함 1 — 깨우기 목적지가 marketClosed를 반영한다: 장 마감
+  // 중이면 IDLE이 아니라 DROWSY로 정착한다(settleAmbientFace와 같은 판정).
+  // listen/think/watch 신호 핸들러는 touchActivity() 직후 resolveAmbientFace()로
+  // 자기 교정하지만, 커서 접근·드래그 시작·오브 클릭은 touchActivity()가 깨우기의
+  // 유일한 판정이라 여기서 어긋나면 다음 updateMarketClosed 틱(최대 15초)까지
+  // idle로 오표시된다.
   function touchActivity() {
     lastSignalAt = Date.now();
-    if (face === FACE.SLEEP) setFace(FACE.IDLE);
+    if (face === FACE.SLEEP) setFace(marketClosed ? FACE.DROWSY : FACE.IDLE);
   }
 
   setInterval(() => {
@@ -534,13 +577,23 @@
       touchActivity();
       resolveAmbientFace();
     } else if (state === 'connected') {
+      // 2026-08-27 A3(사용자 승인) — disconnected→connected로 재연결되는
+      // 이 순간만 watching을 강제로 false로 내린다(위 WATCH 주석의 유일한
+      // 예외). feedDown이 지금 true였을 때만(정말 끊겼다 돌아온 경우) 리셋한다
+      // — 백엔드 재시작으로 이탈 신호(routine-near active:false) 자체가
+      // 유실돼도 유령 watch가 남지 않는다. 재연결 직후 백엔드가 재발신하는
+      // 근접 스냅샷(현재 near인 루틴마다 routine-near active:true, main.js:398-406
+      // 릴레이)이 필요하면 아래 settleAmbientFace 이후 곧바로 다시 세운다.
+      if (feedDown) watching = false;
       feedDown = false;
       // resolveAmbientFace가 아니라 settleAmbientFace를 직접 부른다 — face가
       // 여전히 FROWN이면(방금까지 feedDown이 그걸 골랐으니 그럴 확률이 높다)
       // eventFaceActive()가 지금 막 끄려는 그 FROWN 자신을 "아직 활성"으로
       // 오판해 되돌림을 막는다(triggerDoneFace/triggerWinkFace 주석과 같은
       // 자기참조 함정). 다만 발화·만료·복원실패처럼 정말 더 급한 사실 위는
-      // 연결 복구 따위로 덮으면 안 된다.
+      // 연결 복구 따위로 덮으면 안 된다. 위 watching 리셋도 이 호출 하나로
+      // 표정에 반영된다 — 여기서 다시 resolveAmbientFace를 부르면 같은
+      // 자기참조 함정을 또 밟는다.
       if (face === FACE.FIRED || face === FACE.SURPRISE || face === FACE.GLAD || face === FACE.MOPEY || face === FACE.CRYING) return;
       settleAmbientFace();
     }
@@ -1074,6 +1127,28 @@
     tick: '틱', min: '분봉', day: '일봉', week: '주봉', month: '월봉', year: '년봉',
   });
 
+  // 2026-08-27 결함 3 — 분·틱봉 candle.time은 8자리 dt 문자열이 아니라
+  // 백엔드 canvas_transform.py _aits_time()이 만드는 Unix epoch 초 정수다
+  // (예: 1772203200). facts-card.js formatDatetime은 8자리 문자열만 인식하고
+  // 그 외는 String() 그대로 찍어 이 정수가 그대로 노출된다. 셸 캔버스
+  // lib/chart-card.js:96-99 kstLabel()에 이미 '숫자면 new Date(time*1000)→
+  // Asia/Seoul' 관례가 있다(2026-08-25 실측 수정 이력 주석 포함) — 그 관례를
+  // 재사용한다. chart-card.js를 그대로 require할 수는 없다: orb.html이
+  // 안 불러오는 파일이고(위 lib/*.js 로드 목록 참조), 부트 시 lightweight-charts
+  // ESM을 즉시 로드하는 부작용이 있으며, kstLabel 자신도 __exports 밖의
+  // 비공개 헬퍼다 — 그래서 같은 로직만 최소 복제한다. 일/주/월/년봉의
+  // 'YYYY-MM-DD' 문자열 time은 그대로 formatDatetime 경로를 타 기존 동작을
+  // 유지한다.
+  const ORB_CHART_KST_DT_PARTS = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Asia/Seoul', year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit', hour12: false,
+  });
+  function orbChartDateLabel(time) {
+    if (typeof time !== 'number' || !Number.isFinite(time)) return factsCard.formatDatetime(time);
+    const p = Object.fromEntries(ORB_CHART_KST_DT_PARTS.formatToParts(new Date(time * 1000)).map((x) => [x.type, x.value]));
+    return `${p.year}-${p.month}-${p.day} ${p.hour}:${p.minute}`;
+  }
+
   // 오브용 미니 차트(board-33④, Paper 4ZM-0 실측) — 캔버스 차트(lightweight-charts
   // 툴바·지표·드로잉·매물대)의 축소판이 아니라 완전히 별도의 렌더러다(보드 캡션
   // 원문). 구성 상한: 가격 + 등락률 + 종가 라인 1개 + 시작/끝 날짜 2개까지 — 그
@@ -1163,9 +1238,9 @@
       const dates = document.createElement('div');
       dates.className = 'orb-chart-dates';
       const startEl = document.createElement('span');
-      startEl.textContent = factsCard.formatDatetime(firstTime);
+      startEl.textContent = orbChartDateLabel(firstTime);
       const endEl = document.createElement('span');
-      endEl.textContent = factsCard.formatDatetime(lastTime);
+      endEl.textContent = orbChartDateLabel(lastTime);
       dates.append(startEl, endEl);
       card.appendChild(dates);
     }
@@ -1192,10 +1267,57 @@
   // 별도다. buildOrderPayload(lib/order-ticket.js, chat.js가 이미 쓰는 바로 그
   // 함수)가 기대하는 {symbol, side, qty} 모양 그대로 들고 있는다.
   let activeTicketOrder = null;
+  // 상태기계 — 셸(chat.js ticket)과 같은 orderTicketLib.createTicket/transition을
+  // 그대로 쓴다(결함5, 2026-08-27 CP2 확장 승인). review → executing →
+  // done|in_doubt|failed, failed만 재시도 가능(라이브러리 전이표 그대로 — 새
+  // 상태기계를 짓지 않는다).
+  let activeTicket = null;
+  // 게이트 차단 사유(결함4) — null이면 실행 가능. 조회 중에는 자리표시자
+  // 문자열을 넣어 그 사이 실행을 막는다(계좌 확인 전 낙관적 실행 금지).
+  let ticketGateBlocked = null;
+  let ticketExecuting = false;
+  // 세대 번호 — 게이트 조회·주문 실행 응답이 비동기라, 그사이 티켓이 닫히거나
+  // 새 티켓으로 갈아끼워진 뒤 늦게 도착한 응답이 새 화면을 덮어쓰는 것을 막는다.
+  let ticketGeneration = 0;
 
   function orbTicketFieldValue(fields, key) {
     const f = fields.find((f) => f && f.key === key);
     return f ? f.value : undefined;
+  }
+
+  // 실행 버튼 활성 조건 — 셸 syncExec()과 같은 규칙(chat.js:1516-1519): 필수값 +
+  // 게이트 통과 + 진행 중 아님 + 종결 상태(done/in_doubt) 아님. failed는
+  // 재시도를 허용한다(사람이 다시 누른 경우만, 새 멱등키).
+  function updateTicketExecDisabled() {
+    $ticketExec.disabled = !activeTicketOrder || !!ticketGateBlocked || ticketExecuting
+      || !activeTicket || activeTicket.state === 'done' || activeTicket.state === 'in_doubt';
+  }
+
+  // 게이트 조회(결함4) — 셸 renderOrderTicket()의 account-list 조회(chat.js:
+  // 1493-1503)와 같은 판정(orderTicketLib.gateBlocker)을 그대로 재사용한다.
+  // 새 방어 장치를 발명하지 않는다 — 이미 있는 판정을 오브에도 붙일 뿐이다.
+  async function refreshTicketGate(gen) {
+    ticketGateBlocked = '계좌 확인 중…';
+    updateTicketExecDisabled();
+    let blocked;
+    try {
+      const res = await window.athena.invoke('athena:account-list');
+      const accounts = (res && res.accounts) || [];
+      const active = accounts.find((a) => a.active) || accounts[0] || null;
+      blocked = orderTicketLib.gateBlocker(active);
+    } catch {
+      blocked = orderTicketLib.gateBlocker(null);
+    }
+    if (gen !== ticketGeneration) return; // 그사이 티켓이 닫히거나 갈렸다 — 낡은 응답을 버린다
+    ticketGateBlocked = blocked;
+    if (blocked) {
+      $ticketGate.textContent = `지금은 실행할 수 없음: ${blocked}`;
+      $ticketGate.hidden = false;
+    } else {
+      $ticketGate.hidden = true;
+      $ticketGate.textContent = '';
+    }
+    updateTicketExecDisabled();
   }
 
   /**
@@ -1252,7 +1374,22 @@
     activeTicketOrder = (symbol != null && symbol !== '' && (side === 'buy' || side === 'sell') && Number.isFinite(qty) && qty > 0)
       ? { symbol: String(symbol), side, qty: Number(qty) }
       : null;
-    $ticketExec.disabled = !activeTicketOrder;
+    // 새 티켓 — 상태기계를 review로 되돌리고(결함5), 이전 실행 결과 표시를
+    // 지운다. 게이트는 매 렌더마다 다시 조회한다(활성 계좌가 바뀌었을 수
+    // 있다 — 캐시하지 않는다).
+    activeTicket = activeTicketOrder ? orderTicketLib.createTicket(null) : null;
+    ticketExecuting = false;
+    $ticketStatus.hidden = true;
+    $ticketStatus.textContent = '';
+    $ticketStatus.classList.remove('is-failed', 'is-doubt');
+    const gen = ++ticketGeneration;
+    if (activeTicketOrder) {
+      refreshTicketGate(gen);
+    } else {
+      ticketGateBlocked = null;
+      $ticketGate.hidden = true;
+    }
+    updateTicketExecDisabled();
 
     $ticket.hidden = false;
     return $ticket;
@@ -1261,29 +1398,64 @@
   function closeOrbTicket() {
     $ticket.hidden = true;
     activeTicketOrder = null;
+    activeTicket = null;
+    ticketExecuting = false;
+    ticketGateBlocked = null;
+    ticketGeneration++; // 대기 중이던 게이트 조회 응답을 무효화
+    $ticketGate.hidden = true;
+    $ticketStatus.hidden = true;
   }
 
   $ticketCancel.addEventListener('click', closeOrbTicket);
 
   // 실행 — 셸(chat.js execBtn 핸들러)과 같은 페이로드·같은 IPC·같은 1회
-  // 확인 흐름이다: 새 파이프라인 0개, 신규 방어 장치 0개(board-33⑤ 캡션
-  // 50G-0 — "방어 장치 없이 셸과 동일하게 1회 확인"). 이 클릭 자체가 그
-  // 1회 확인이다 — 실행 후 별도 확인 대화상자를 띄우지 않는다.
+  // 확인 흐름이다: 새 파이프라인 0개(board-33⑤ 캡션 50G-0 — "방어 장치 없이
+  // 셸과 동일하게 1회 확인"). 이 클릭 자체가 그 1회 확인이다 — 실행 후 별도
+  // 확인 대화상자를 띄우지 않는다. 2026-08-27 CP2 확장 승인(결함4/5) — 게이트
+  // 확인과 결과 3갈래(done/in_doubt/failed)를 셸과 동등하게 이식한다(공유
+  // 라이브러리 재사용, 새 방어 장치 발명 금지).
   $ticketExec.addEventListener('click', async () => {
-    if (!activeTicketOrder || $ticketExec.disabled) return;
+    if (!activeTicketOrder || !activeTicket || $ticketExec.disabled) return;
     let payload;
     try {
       payload = orderTicketLib.buildOrderPayload(activeTicketOrder);
     } catch {
       return; // 값이 깨졌으면 조용히 무시 — 새 오류 UI를 짓지 않는다(방어 장치 0).
     }
-    $ticketExec.disabled = true;
-    await window.athena.invoke('athena:order-execute', {
+    const ticket = activeTicket;
+    const gen = ticketGeneration;
+    orderTicketLib.transition(ticket, 'executing');
+    ticketExecuting = true;
+    $ticketStatus.hidden = true;
+    updateTicketExecDisabled();
+    const res = await window.athena.invoke('athena:order-execute', {
       trId: payload.tr_id,
       body: payload.body,
       idempotencyKey: orderTicketLib.newIdempotencyKey(),
     });
-    closeOrbTicket();
+    if (gen !== ticketGeneration) return; // 응답 도착 전 티켓이 닫히거나 갈렸다 — 낡은 응답을 버린다
+    ticketExecuting = false;
+    const outcome = orderTicketLib.interpretExecuteStatus((res && res.status) || 0);
+    orderTicketLib.transition(ticket, outcome === 'done' ? 'done'
+      : outcome === 'in_doubt' ? 'in_doubt' : 'failed');
+    if (outcome === 'done') {
+      // 간결한 완료 표시 후 닫기 — DONE_HOLD(완료 웃음 유지 시간)와 같은
+      // 길이만큼 보여준 뒤 닫는다(별도 영수증 카드를 새로 만들지 않는다).
+      $ticketStatus.textContent = '주문 접수됨 — 체결은 계좌에서 확인하세요.';
+      $ticketStatus.hidden = false;
+      updateTicketExecDisabled();
+      setTimeout(() => { if (gen === ticketGeneration) closeOrbTicket(); }, DONE_HOLD);
+    } else if (outcome === 'in_doubt') {
+      $ticketStatus.textContent = '확인 중(IN_DOUBT) — 재전송하지 않습니다. 계좌에서 접수 여부를 확인하세요.';
+      $ticketStatus.classList.add('is-doubt');
+      $ticketStatus.hidden = false;
+      updateTicketExecDisabled();
+    } else {
+      $ticketStatus.textContent = `실행 실패: ${(res && res.error) || 'HTTP ' + ((res && res.status) || '?')}`;
+      $ticketStatus.classList.add('is-failed');
+      $ticketStatus.hidden = false;
+      updateTicketExecDisabled();
+    }
   });
 
   // canvas.js의 addLiveCard와 같은 1차 게이트(성공/폴백만 카드, 나머지는 통과)를
@@ -1446,6 +1618,9 @@
       foldedChatAnswers += 1;
       touchActivity();
       renderPresence();
+      // 결함 2 — renderPresence()가 방금 FIRED로 밀어놨을 수 있는 특수 표정을
+      // unread 기준으로 재확정한다(위 reapplyUnreadFace 주석 참조).
+      reapplyUnreadFace();
     }
     scrollChatToBottom();
     requestPanelHeight();
