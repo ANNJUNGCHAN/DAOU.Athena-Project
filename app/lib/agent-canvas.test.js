@@ -771,6 +771,32 @@ test('30회 통계 4타일은 fixture로 표시된다(ledger에 근거 필드가
   assert.equal(findByClass(statsCol, 'agent-history-stat-tile').length, 4);
 });
 
+test('"오늘 07:30 산출물" 카드는 fixture로 표시되고, 뒷받침 데이터가 없는 버튼 2종은 비활성이다(팀 리드 정정 반영)', async () => {
+  const container = fakeNode('div');
+  const routines = [routine({ id: 'a', status: 'active' })];
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => routines, fetchRuns: async () => [] });
+  canvas.mount();
+  await canvas.refresh();
+  findByClass(container, 'agent-history-open')[0].dispatchEvent({ type: 'click' });
+  await new Promise((r) => setTimeout(r, 0));
+  const card = findByClass(container, 'agent-history-output-card')[0];
+  assert.ok(card, '산출물 카드가 렌더된다 — 생략하지 않는다');
+  assert.equal(card.getAttribute('data-source'), 'fixture');
+  assert.equal(findByClass(card, 'agent-history-output-title')[0].textContent, '# 아침 브리핑 — 8/26 화');
+  assert.equal(findByClass(card, 'agent-history-output-tag')[0].textContent, '캔버스 카드');
+  const items = findByClass(card, 'agent-history-output-item-text').map((n) => n.textContent);
+  assert.deepEqual(items, [
+    '1. 삼성전자 88,000 돌파 — 감시 조건 도달',
+    '2. 반도체 공급망 뉴스 — 참고',
+    '3. 배당 바스켓 응집 0.58 → 0.61',
+  ]);
+  const subs = findByClass(card, 'agent-history-output-item-sub').map((n) => n.textContent);
+  assert.deepEqual(subs, ['권장: 감시 유지 · 89,000 재설정 검토']);
+  const btns = findByClass(card, 'agent-history-output-btn');
+  assert.deepEqual(btns.map((n) => n.textContent), ['캔버스에서 열기', '채팅으로']);
+  for (const btn of btns) assert.equal(btn.disabled, true, '뒷받침 데이터가 없어 비활성이어야 한다(P3)');
+});
+
 test('"작업 ›" 클릭 시 드릴인이 닫히고 "작업" 화면이 복원된다', async () => {
   const container = fakeNode('div');
   const routines = [routine({ id: 'a', status: 'active' })];

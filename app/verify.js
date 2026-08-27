@@ -3053,6 +3053,17 @@ app.whenReady().then(async () => {
       const statsSource = (canvas.querySelector('.agent-history-stats-col') || {}).getAttribute
         ? canvas.querySelector('.agent-history-stats-col').getAttribute('data-source') : null;
 
+      // "오늘 07:30 산출물" 카드(fixture, 팀 리드 정정으로 추가 — Paper 41번에
+      // 있는 요소는 생략이 아니라 fixture+data-source 표기로 구현한다).
+      const outputCard = canvas.querySelector('.agent-history-output-card');
+      const outputSource = outputCard ? outputCard.getAttribute('data-source') : null;
+      const outputTitle = (canvas.querySelector('.agent-history-output-title') || {}).textContent;
+      const outputTag = (canvas.querySelector('.agent-history-output-tag') || {}).textContent;
+      const outputItemCount = canvas.querySelectorAll('.agent-history-output-item-text').length;
+      const outputBtns = Array.from(canvas.querySelectorAll('.agent-history-output-btn'));
+      const outputBtnLabels = outputBtns.map((n) => n.textContent);
+      const outputBtnsAllDisabled = outputBtns.length > 0 && outputBtns.every((n) => n.disabled === true);
+
       canvas.querySelector('.agent-breadcrumb-back').click();
       await new Promise((r) => setTimeout(r, 100));
       const breadcrumbHiddenAfterBack = canvas.querySelector('.agent-breadcrumb').hidden;
@@ -3063,6 +3074,7 @@ app.whenReady().then(async () => {
       return {
         wired: true, breadcrumbVisible, breadcrumbTitle, breadcrumbBadge, tasksHeadHidden,
         reasons, marks, statTileCount, statsSource, breadcrumbHiddenAfterBack, tasksHeadVisibleAfterBack,
+        outputSource, outputTitle, outputTag, outputItemCount, outputBtnLabels, outputBtnsAllDisabled,
       };
     })()`);
     report.historyDrillIn = historyProbe;
@@ -3081,6 +3093,17 @@ app.whenReady().then(async () => {
         JSON.stringify(historyProbe.marks) === JSON.stringify(['●', '◐', '○']),
       );
       assertOk('agent-canvas-10: 30회 통계 4타일(fixture)', historyProbe.statTileCount === 4 && historyProbe.statsSource === 'fixture');
+      assertOk(
+        'agent-canvas-10: "오늘 07:30 산출물" 카드가 fixture로 뜬다(생략하지 않는다, 팀 리드 정정)',
+        historyProbe.outputSource === 'fixture' && historyProbe.outputTitle === '# 아침 브리핑 — 8/26 화',
+      );
+      assertOk('agent-canvas-10: 산출물 카드 태그가 "캔버스 카드"다', historyProbe.outputTag === '캔버스 카드');
+      assertOk('agent-canvas-10: 산출물 카드 요약 3항목이 뜬다', historyProbe.outputItemCount === 3);
+      assertOk(
+        'agent-canvas-10: 산출물 카드 버튼이 "캔버스에서 열기"·"채팅으로"이고 뒷받침 데이터가 없어 둘 다 비활성이다(P3)',
+        JSON.stringify(historyProbe.outputBtnLabels) === JSON.stringify(['캔버스에서 열기', '채팅으로'])
+          && historyProbe.outputBtnsAllDisabled === true,
+      );
       assertOk('agent-canvas-10: "작업 ›" 클릭 시 브레드크럼이 숨는다', historyProbe.breadcrumbHiddenAfterBack === true);
       assertOk('agent-canvas-10: "작업 ›" 클릭 시 "작업" 머리가 복원된다', historyProbe.tasksHeadVisibleAfterBack === true);
     }

@@ -55,10 +55,13 @@
 // 뷰 탭 대신 브레드크럼을 그린다(재검증 확인). "최근 30회"는 6단계
 // GET /{id}/runs 실데이터, 상태 아이콘은 ledger의 실제 verdict 3종
 // (fired/near/suppressed)만 쓴다 — 목업의 "재시도 ↻"·"대체 실행 ⚠"은 대응
-// verdict가 없어 만들지 않는다(AC10). 통계 4타일과 "오늘 산출물" 카드는
-// ledger 스키마에 근거가 없어(컬럼이 식별자·숫자·판정 사유뿐, ledger.py
-// 머리말 참고) 4타일만 fixture로 유지하고 산출물 카드는 아예 그리지 않는다
-// (지어낼 데이터가 없다, 팀 리드 브리핑에도 없던 항목).
+// verdict가 없어 만들지 않는다(AC10). 통계 4타일과 "오늘 07:30 산출물" 카드는
+// ledger 스키마에 근거가 없다(컬럼이 식별자·숫자·판정 사유뿐, ledger.py 머리말
+// 참고) — 그래도 생략하지 않는다: 사용자 확정 규칙1("Paper에 있는 요소는 전부
+// 구현")의 합의된 처리는 fixture+data-source="fixture" 표기이지 생략이 아니다
+// (팀 리드 정정, 2026-08-27). 산출물 카드의 버튼 2종("캔버스에서 열기"·
+// "채팅으로")은 뒷받침 데이터가 없어 비활성으로 둔다(기능 없는 버튼을 활성으로
+// 두지 않는다, P3).
 const VERDICT_ICON = {
   fired: { glyph: '●', colorVar: '--color-ok' },
   near: { glyph: '◐', colorVar: '--color-warn' },
@@ -536,8 +539,64 @@ function createAgentCanvas(deps) {
     ];
   }
 
+  // "오늘 07:30 산출물" 카드(fixture) — Paper 41번 우측 상단, 정정 반영(사용자
+  // 확정 규칙1: 디자인에 있는 요소는 생략이 아니라 fixture+data-source 표기로
+  // 구현한다, 위 통계 4타일과 같은 처리). 버튼 2종은 뒷받침 데이터(캔버스
+  // 카드 재조회·채팅 이동 경로)가 없어 비활성 — 기능 없는 버튼을 활성으로
+  // 두지 않는다(P3).
+  function fixtureTodayOutput() {
+    return {
+      title: '# 아침 브리핑 — 8/26 화',
+      tag: '캔버스 카드',
+      items: [
+        { text: '1. 삼성전자 88,000 돌파 — 감시 조건 도달', sub: '권장: 감시 유지 · 89,000 재설정 검토' },
+        { text: '2. 반도체 공급망 뉴스 — 참고' },
+        { text: '3. 배당 바스켓 응집 0.58 → 0.61' },
+      ],
+    };
+  }
+
   const historyStatsCol = el('div', 'agent-history-stats-col');
   historyStatsCol.setAttribute('data-source', 'fixture'); // ledger 스키마에 근거 없음(위 머리말).
+
+  const historyOutputCaption = el('div', 'agent-panel-caption');
+  historyOutputCaption.textContent = '오늘 07:30 산출물';
+  historyStatsCol.appendChild(historyOutputCaption);
+  const historyOutputCard = el('div', 'agent-history-output-card');
+  historyOutputCard.setAttribute('data-source', 'fixture');
+  const output = fixtureTodayOutput();
+  const outputHead = el('div', 'agent-history-output-head');
+  const outputTitle = el('span', 'agent-history-output-title');
+  outputTitle.textContent = output.title;
+  outputHead.appendChild(outputTitle);
+  const outputTag = el('span', 'agent-history-output-tag');
+  outputTag.textContent = output.tag;
+  outputHead.appendChild(outputTag);
+  historyOutputCard.appendChild(outputHead);
+  for (const item of output.items) {
+    const row = el('div', 'agent-history-output-item');
+    const text = el('div', 'agent-history-output-item-text');
+    text.textContent = item.text;
+    row.appendChild(text);
+    if (item.sub) {
+      const sub = el('div', 'agent-history-output-item-sub');
+      sub.textContent = item.sub;
+      row.appendChild(sub);
+    }
+    historyOutputCard.appendChild(row);
+  }
+  const outputActions = el('div', 'agent-history-output-actions');
+  for (const label of ['캔버스에서 열기', '채팅으로']) {
+    const btn = el('button', 'agent-history-output-btn');
+    btn.type = 'button';
+    btn.textContent = label;
+    btn.disabled = true;
+    btn.title = '뒷받침 데이터가 없어 아직 지원하지 않습니다';
+    outputActions.appendChild(btn);
+  }
+  historyOutputCard.appendChild(outputActions);
+  historyStatsCol.appendChild(historyOutputCard);
+
   const historyStatsCaption = el('div', 'agent-panel-caption');
   historyStatsCaption.textContent = '30회 통계';
   historyStatsCol.appendChild(historyStatsCaption);
