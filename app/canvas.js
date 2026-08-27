@@ -1339,6 +1339,13 @@ function fmtWon(raw) {
 // 백엔드에만 잇는다. 모드 칩(#graphPill)은 상시 보인다(Paper 보드 05) — 브레인이
 // 꺼져 있어도 그래프 모드 자체는 열 수 있고, 못 쓰는 이유는 캔버스 안에서 정직하게
 // 보여준다(controller.js의 renderUnavailable).
+
+// 숨은 연관(surprising-connections) 캐시(스텝14) — loadHiddenLinks()(아래, 보드
+// 06/07 §9 카드용으로 이미 있던 fetch)가 채우고 graphMode.draw()/노드 선택이
+// 재사용한다. 이중 fetch 금지(스텝11 보고에 대한 리드 지침) — 그래프 지도의
+// 핑크 점선·컨텍스트 패널의 "숨은" 관계 행 전부 이 한 번의 fetch에서 나온다.
+let lastSurprisingConnections = [];
+
 const graphMode = window.AthenaLib.GraphModeController.createGraphModeController({
   store: window.AthenaLib.GraphModeStore,
   layout: window.AthenaLib.GraphClusterLayout,
@@ -1381,6 +1388,13 @@ const graphMode = window.AthenaLib.GraphModeController.createGraphModeController
     const inputEl = document.getElementById('input');
     if (inputEl) inputEl.focus();
   },
+  // 스텝14 — 스텝11(숨은 연관 군집 쌍)·13(숨은 연관 엔티티 쌍)의 실배선. 위
+  // lastSurprisingConnections 캐시를 그대로 읽는다(이중 fetch 없음).
+  getSurprisingConnections: () => lastSurprisingConnections,
+  // 그래프 노드 선택 시 성향 신호 표와 같은 profile-summary 항목을 재사용한다
+  // (이중 fetch 금지) — graphSummaryTable은 이 파일 아래에서 선언되지만 이
+  // 함수는 나중에(사용자가 실제로 노드를 고를 때) 불리므로 문제없다.
+  getProfileSummaryEntries: () => graphSummaryTable.getEntries(),
 });
 window.AthenaGraphMode = graphMode;
 // 부팅을 순수 답변 모드로 고정한다(US-007) — 정적 HTML의 기본 hidden 속성이
@@ -1524,6 +1538,9 @@ async function loadHiddenLinks() {
     return;
   }
   if (!res || !res.ok) return;
+  // 스텝14 — 그래프 지도(핑크 점선)·컨텍스트 패널("숨은" 관계 행)이 재사용할
+  // 캐시를 여기서 채운다(위 lastSurprisingConnections 선언 참고).
+  lastSurprisingConnections = Array.isArray(res.connections) ? res.connections : [];
   window.AthenaLib.HiddenLinks.renderHiddenLinks(container, res.connections);
 }
 

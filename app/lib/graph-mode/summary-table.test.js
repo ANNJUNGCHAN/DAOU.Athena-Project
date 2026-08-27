@@ -271,6 +271,7 @@ test('행을 클릭하면 selectEntity가 실재 필드로만 채운 panelData�
   assert.equal(selected[0].entityId, 'e:samsung');
   assert.deepEqual(selected[0].panelData, {
     entityId: 'e:samsung',
+    source: 'table', // 선택 출처 태그(스텝14) — controller.js의 selectNode()가 매기는 'node'와 짝.
     name: '삼성전자',
     kind: 'stock',
     relation: '보유',
@@ -279,6 +280,14 @@ test('행을 클릭하면 selectEntity가 실재 필드로만 채운 panelData�
     confidence: 'EXTRACTED',
     tier: 'deterministic',
   });
+});
+
+test('getEntries()는 load() 전엔 빈 배열, 후엔 같은 entries를 그대로 돌려준다(스텝14, controller.js 재사용용)', async () => {
+  const { controller } = setupController({ entries: [entry()] });
+  assert.deepEqual(controller.getEntries(), []);
+  await controller.load();
+  assert.equal(controller.getEntries().length, 1);
+  assert.equal(controller.getEntries()[0].entity_id, 'e:samsung');
 });
 
 test('백엔드가 죽으면 빈 표를 그리고 오류를 삼키지 않는다', async () => {
