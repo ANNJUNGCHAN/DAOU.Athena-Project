@@ -48,7 +48,7 @@ async function main() {
   // US-007 — 사용자가 아무것도 누르기 전, 순수 부팅 상태를 잰다.
   const bootState = await shellWin.webContents.executeJavaScript(`
     ({
-      chipText: document.getElementById('graphPill') ? document.getElementById('graphPill').textContent : null,
+      modeNow: document.getElementById('sidebarModes') ? document.getElementById('sidebarModes').dataset.mode : null,
       summaryTableHidden: document.getElementById('graphSummaryTable') ? document.getElementById('graphSummaryTable').hidden : null,
       graphCanvasHidden: document.getElementById('graphCanvas') ? document.getElementById('graphCanvas').hidden : null,
       mosaicHidden: document.getElementById('mosaic') ? document.getElementById('mosaic').hidden : null,
@@ -150,7 +150,7 @@ async function main() {
     finalBubbleText,
     // US-007 — 순수 부팅 상태(사용자가 아무것도 누르기 전, brain-status 왕복까지 끝난 뒤).
     bootState,
-    bootStatePure: bootState.chipText === '답변'
+    bootStatePure: bootState.modeNow === 'chat'
       && bootState.summaryTableHidden === true
       && bootState.graphCanvasHidden === true
       && bootState.mosaicHidden === false

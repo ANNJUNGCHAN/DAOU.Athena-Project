@@ -125,10 +125,15 @@ app.whenReady().then(async () => {
   await wait(600);
 
   // ---------- 설정 모드를 연다 — 새 창이 아니라 이 창이 변한다 ----------
-  // 점 클릭의 기본 선택은 '화면'이다(2026-08-18 사이드바 도입) — 계좌 카드를
-  // 보려면 nav에서 '계좌'를 선택해야 한다(예전엔 점 클릭 한 번에 계좌·MCP 카드가
-  // 동시에 떴다, chat.js openSettings/lib/settings-cards.js renderNav 참고).
-  await shellWin.webContents.executeJavaScript("document.getElementById('dot').click()");
+  // 점은 더 이상 설정을 열지 않는다(보드 45 — 키우미 얼굴) — 진입은 커맨드바
+  // ("설정" 입력, verify.js openSettingsViaCommandBar와 같은 경로)다. 기본
+  // 선택은 '화면'이라 계좌 카드를 보려면 nav에서 '계좌'를 선택해야 한다
+  // (chat.js openSettings/lib/settings-cards.js renderNav 참고).
+  await shellWin.webContents.executeJavaScript(`(() => {
+    const el = document.getElementById('input');
+    el.value = '설정';
+    el.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  })();`);
   await wait(500);
   await clickAndLog(shellWin, 'select nav 계좌', clickNavItem('계좌'));
   await wait(400);
