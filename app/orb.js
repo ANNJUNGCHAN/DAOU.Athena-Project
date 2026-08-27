@@ -35,6 +35,7 @@
   const routineTurn = window.AthenaLib.RoutineTurn;
   const toolStepTrack = window.AthenaLib.ToolStepTrack;
   const liveQueryLock = window.AthenaLib.LiveQueryLock;
+  const marketHours = window.AthenaLib.MarketHours;
 
   const $root = document.getElementById('orbRoot');
   const $orb = document.getElementById('orb');
@@ -153,6 +154,12 @@
   // **얼굴은 앱에 이미 있는 신호에만 붙인다.** 지금 배선하는 것은 열이다:
   //   idle   — 기본(대기)
   //   sleep  — 오래 아무 일 없음(idle > 5min. 옛 판의 '평소'가 여기로 내려왔다)
+  //   drowsy — 장 마감 시간대(board-30⑫/31⑨) — 2026-08-27 갭 클로징 Step 6
+  //            신규. sleep과 다른 축이다: sleep은 사용자 무활동 5분(로컬 사실),
+  //            drowsy는 KST 평일 09:00~15:30 밖(세계 사실 — market-hours.js
+  //            isMarketOpen). 바이저는 줄지 않는다(풀사이즈, 팀 실측) — 눈만
+  //            처진다. listen/think보다 아래, sleep보다도 아래(둘 다 활성인
+  //            폐장 중 5분 무활동이면 더 깊은 sleep이 이긴다 — settleAmbientFace).
   //   listen — 셸 입력줄 포커스(input:focus) — 2026-08-26 board-32 신규
   //   think  — 질의 진행 중(query running) — 2026-08-26 board-32 신규. 스피너 대신이다
   //   done   — 턴 완료(result ok) — 2026-08-26 board-32 신규. 웃고 2초 뒤 idle로 돌아간다
@@ -177,7 +184,7 @@
   // 없어 백로그로 유예했다(CP1/CP3, orb.js 상단 주석). 없는 신호에 얼굴을
   // 붙이면 그건 정보가 아니라 지어낸 연기다(soul.md).
   const FACE = {
-    IDLE: 'idle', SLEEP: 'sleep', LISTEN: 'listen', THINK: 'think', DONE: 'done',
+    IDLE: 'idle', SLEEP: 'sleep', DROWSY: 'drowsy', LISTEN: 'listen', THINK: 'think', DONE: 'done',
     WINK: 'wink', FROWN: 'frown', FIRED: 'fired', SURPRISE: 'surprise', MOPEY: 'mopey', CRYING: 'crying',
   };
 
@@ -285,8 +292,9 @@
     clearTimeout(blinkTimer);
     if (reduceMotion.matches) return;
     blinkTimer = setTimeout(() => {
-      // 잠들었으면 눈이 이미 감겨 있다 — 그 위에 깜빡임을 얹으면 경련처럼 보인다.
-      if (face === FACE.SLEEP) { scheduleBlink(); return; }
+      // 잠들었거나 졸리면 눈이 이미 (거의) 감겨 있다 — drowsy 눈 높이가 sleep과
+      // 같은 6.5%라 그 위에 깜빡임을 얹으면 똑같이 경련처럼 보인다.
+      if (face === FACE.SLEEP || face === FACE.DROWSY) { scheduleBlink(); return; }
       const twice = Math.random() < BLINK_DOUBLE;
       blinkOnce(() => (twice ? blinkOnce(scheduleBlink) : scheduleBlink()));
     }, rand(BLINK_EVERY[0], BLINK_EVERY[1]));
@@ -317,9 +325,26 @@
   }
 
   setInterval(() => {
-    if (face !== FACE.IDLE) return;
+    // drowsy(장 마감)에서도 5분 무활동이 쌓이면 더 깊은 sleep으로 넘어간다 —
+    // sleep이 drowsy보다 우선하는 축이라서(settleAmbientFace) idle뿐 아니라
+    // drowsy에서도 승격을 허용해야 한다. 그 밖의 능동 표정(listen/think 등)은
+    // 여전히 막는다.
+    if (face !== FACE.IDLE && face !== FACE.DROWSY) return;
     if (Date.now() - lastSignalAt >= SLEEP_AFTER) setFace(FACE.SLEEP);
   }, 15000);
+
+  // ── 장 마감(board-30⑫/31⑨) — KST 평일 09:00~15:30 밖이면 졸림. 세계 시각
+  // 사실이라 사용자 상호작용과 무관하게 매 15초 재확인한다(위 sleep 판정과
+  // 같은 주기 패턴 재사용) — settleAmbientFace가 그 값을 읽어 우선순위를 잰다.
+  // 부트 호출(updateMarketClosed() 최초 실행 + setInterval)은 파일 맨 끝에
+  // 있다 — resolveAmbientFace가 읽는 thinking/feedDown/listening이 아직
+  // 선언 전(TDZ)이라 여기서 바로 부르면 터진다. */
+  let marketClosed = false;
+
+  function updateMarketClosed() {
+    marketClosed = marketHours ? !marketHours.isMarketOpen(new Date()) : false;
+    resolveAmbientFace();
+  }
 
   // ── 커서 추적 ──
   // main이 screen.getCursorScreenPoint()를 폴링해 **오브 창 중심 기준 상대 좌표**를
@@ -398,7 +423,11 @@
     // 중보다는 아래(생각 중은 지금 실제로 진행 중인 일이라 더 급하다).
     if (feedDown) { setFace(FACE.FROWN); return; }
     if (listening) { setFace(FACE.LISTEN); return; }
-    setFace(face === FACE.SLEEP ? FACE.SLEEP : FACE.IDLE);
+    // sleep(무활동 5분)이 drowsy(장 마감)보다 우선한다 — sleep은 drowsy 위에
+    // 얹힌 더 깊은 상태로만 도달한다(위 sleep 승격 타이머가 idle뿐 아니라
+    // drowsy에서도 승격을 허용한다). 그래서 이미 sleep이면 유지하고, 아니면
+    // marketClosed로 drowsy/idle을 가른다.
+    setFace(face === FACE.SLEEP ? FACE.SLEEP : (marketClosed ? FACE.DROWSY : FACE.IDLE));
   }
 
   function resolveAmbientFace() {
@@ -1031,4 +1060,7 @@
   $root.dataset.face = face;
   scheduleBlink();
   scheduleSaccade();
+  // updateMarketClosed 최초 호출 — 위 선언부 주석 참조(TDZ 회피로 여기로 미룸).
+  updateMarketClosed();
+  setInterval(updateMarketClosed, 15000);
 })();
