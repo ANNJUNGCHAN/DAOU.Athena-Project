@@ -38,11 +38,19 @@ test('renderHiddenLinks — 개체명 쌍과 kinds 조인 텍스트를 그린다
   assert.equal(desc.textContent, 'co_mention · shared_cluster_boundary');
 });
 
-test('renderHiddenLinks — 점수 칸을 만들지 않는다(§0 발견3, 데이터 없음)', () => {
+test('renderHiddenLinks — surprise_score가 없으면(구버전 backend) 점수 칸을 만들지 않는다', () => {
   const container = fakeNode('div');
   renderHiddenLinks(container, [connection()]);
   assert.equal(container.querySelector('.hidden-link-score'), null);
   assert.ok(!/8\.5/.test(container.querySelector('.hidden-link-row').textContent), '지어낸 점수가 없다');
+});
+
+test('renderHiddenLinks — surprise_score가 있으면 상대 점수 배지를 그린다(WP-B)', () => {
+  const container = fakeNode('div');
+  renderHiddenLinks(container, [connection({ surprise_score: 0.734 })]);
+  const score = container.querySelector('.hidden-link-score');
+  assert.equal(score.textContent, '상대 0.73');
+  assert.ok(!/8\.5/.test(container.querySelector('.hidden-link-row').textContent), '절대 점수는 여전히 안 지어낸다');
 });
 
 test('renderHiddenLinks — name이 없으면 entity_id로 대체한다', () => {
