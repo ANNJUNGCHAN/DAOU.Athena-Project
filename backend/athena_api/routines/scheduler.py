@@ -222,6 +222,13 @@ class RoutineScheduler:
 
     # ---------- schedule (벽시계 예약) ----------
 
+    # 경계(AC1) — 이 트랙이 하는 일은 여기까지다: 벽시계 매치 시 발화
+    # 알림(_fire, 능동 턴)과 ledger 기록뿐이다. 발화 이후 "브리핑 카드"를
+    # 자동으로 만드는 것(스케줄된 claude 턴 실행)은 이번 스코프가 아니다 —
+    # F1 확장선으로 별도 계획에 명시적으로 이연됐다(Rev.3 ADR,
+    # .omc/plans/agent-mode-followups-plan.md의 "F1 옵션 F1-B"). 예약이
+    # 뜨면 능동 턴만 뜨고, 실제 브리핑 내용은 사용자가 이어서 대화해야
+    # 만들어진다 — 이 파일이 대화 턴을 스스로 실행하는 일은 없다.
     async def _schedule_loop(self) -> None:
         while not self._stopping:
             await asyncio.sleep(self.schedule_poll_interval_s)
