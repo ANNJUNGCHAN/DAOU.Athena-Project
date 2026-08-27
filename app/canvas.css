@@ -462,6 +462,10 @@ html, body { background: transparent; }
 /* 대표 설명(WP-A3) — 의미적 이름이 아닌 규칙 기반 문자열이라, Paper가 실제로
  * 그린 값(이름·응집도)보다 한 단계 옅은 --color-k-faint로 톤을 낮춰 구분한다. */
 .theme-cluster-representative { font-family: var(--font-body); font-size: var(--text-xs); color: var(--color-k-faint); }
+/* AI 추정 라벨(WP-F) — LLM이 지은 추정 이름. 대표 설명(위, 규칙 기반)과 같은
+ * 서브텍스트 스케일이되 톤을 살짝 올려 구분한다 — "추정"임은 텍스트 접두사
+ * ("AI 추정:")가 항상 명시한다(G-F7). */
+.theme-cluster-ai-label { font-family: var(--font-body); font-size: var(--text-xs); color: var(--color-k-soft); }
 
 .theme-cluster-bar-row { display: flex; align-items: center; gap: 8px; }
 .theme-cluster-bar { flex: 1 1 0%; height: 3px; background: var(--color-k-bg); border-radius: 999px; overflow: hidden; }

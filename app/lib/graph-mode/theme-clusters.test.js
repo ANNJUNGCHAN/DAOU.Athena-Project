@@ -225,3 +225,37 @@ test('renderThemeClusters — 다시 그리면 이전 내용을 지운다', () =
   renderThemeClusters(container, [{ cluster: 0, size: 9, name: null }]);
   assert.equal(container.children.length, 1, '표가 쌓이지 않는다');
 });
+
+// ── AI 추정 라벨(WP-F F6) ───────────────────────────────────────────────────
+
+test('groupThemeClusters — cluster_ai_labels가 있으면 aiLabel로 통과시키고, 없으면 undefined', () => {
+  const withAi = groupThemeClusters(payload({
+    cluster_ai_labels: { 0: '반도체 밸류체인' },
+  }));
+  assert.equal(withAi.find((c) => c.cluster === 0).aiLabel, '반도체 밸류체인');
+  assert.equal(withAi.find((c) => c.cluster === 1).aiLabel, undefined, '라벨 없는 군집은 undefined');
+  const withoutAi = groupThemeClusters(payload());
+  assert.ok(withoutAi.every((c) => c.aiLabel === undefined), '휴면·구버전 backend엔 필드 자체가 없다');
+});
+
+test('renderThemeClusters — aiLabel이 있으면 "AI 추정:" 배지를 그리고, 없으면 생략한다', () => {
+  const container = fakeNode('div');
+  renderThemeClusters(container, [
+    { cluster: 0, size: 2, name: null, aiLabel: '반도체 밸류체인' },
+    { cluster: 1, size: 3, name: null, aiLabel: undefined },
+  ]);
+  const cards = container.querySelectorAll('.theme-cluster-card');
+  assert.equal(cards[0].querySelector('.theme-cluster-ai-label').textContent, 'AI 추정: 반도체 밸류체인');
+  assert.equal(cards[1].querySelector('.theme-cluster-ai-label'), null);
+});
+
+// 회귀 가드(G-F7) — aiLabel은 name을 대체하지 않는다. 라벨이 있어도 "이름 없음"
+// 배지·shouldWarnUnnamed 판정은 계속 name만 본다.
+test('renderThemeClusters — aiLabel이 있어도 "이름 없음" 배지·경고 판정은 안 바뀐다', () => {
+  const container = fakeNode('div');
+  renderThemeClusters(container, [
+    { cluster: 0, size: 2, name: null, aiLabel: '반도체 밸류체인' },
+  ]);
+  const card = container.querySelectorAll('.theme-cluster-card')[0];
+  assert.ok(card.querySelector('.theme-cluster-unnamed-badge'), '이름 없음 배지는 그대로다');
+});

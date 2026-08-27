@@ -43,6 +43,7 @@ function groupThemeClusters(payload) {
   const groups = window.AthenaLib.GraphClusterLayout.groupByCluster(nodes);
   const cohesionByCluster = (payload && payload.cluster_cohesion) || null;
   const representativeByCluster = (payload && payload.cluster_representative_labels) || null;
+  const aiLabelByCluster = (payload && payload.cluster_ai_labels) || null;
   return groups
     .filter((group) => group.cluster !== -1)
     .map((group) => ({
@@ -54,6 +55,10 @@ function groupThemeClusters(payload) {
       // 의미적 이름이 아니다 — name(위)과 분리된 필드라 "이름 없음" 배지·
       // namedCount 판정에는 영향을 주지 않는다.
       representative: representativeByCluster ? representativeByCluster[group.cluster] : undefined,
+      // WP-F — LLM이 지은 **추정 이름**. name을 대체하지 않는다(아직 의미적으로
+      // 100% 신뢰 가능한 이름이 아니다, G-F7) — "이름 없음" 배지·namedCount
+      // 판정은 계속 name만 본다. 없으면(휴면·실패·구버전 backend) undefined.
+      aiLabel: aiLabelByCluster ? aiLabelByCluster[group.cluster] : undefined,
     }));
 }
 
@@ -82,6 +87,15 @@ function renderClusterCard(cluster, warnUnnamed) {
     const representative = el('div', 'theme-cluster-representative');
     representative.textContent = `대표: ${cluster.representative}`;
     card.appendChild(representative);
+  }
+
+  // AI 추정 라벨(WP-F, G-F7) — 기존 "추정 분류" 관례(HUB_LEAF_CAPTION류)를
+  // 확장한 문구로, LLM이 지었음을 항상 명시한다. 없으면 생략 — 대표 설명만
+  // 남는 것이 정직한 폴백이다(§0 정책). "이름 없음" 배지는 이 값과 무관하다.
+  if (cluster.aiLabel) {
+    const aiLabel = el('div', 'theme-cluster-ai-label');
+    aiLabel.textContent = `AI 추정: ${cluster.aiLabel}`;
+    card.appendChild(aiLabel);
   }
 
   // 응집도는 스텝5-2 채택 여부에 따라 있을 수도 없을 수도 있다 — 없으면
