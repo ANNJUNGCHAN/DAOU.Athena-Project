@@ -10,7 +10,7 @@
 
   // 영역이 등록하는 콜백. 서로 다른 <script>가 같은 문서에 살지만 모듈 경계는
   // 유지한다 — chat.js가 canvas.js의 내부 함수를 직접 부르지 않고 여기를 지난다.
-  const hooks = { clearCanvases: null, openSettings: null };
+  const hooks = { clearCanvases: null, openSettings: null, seedChatInput: null };
 
   // ---------- 창 크롬 ----------
   // 부팅 연출(chat.js)이 끝나야 창이 확정된다 — 그 전에는 크롬도 셸도 없다.
@@ -112,6 +112,14 @@
     registerOpenSettings(fn) { hooks.openSettings = typeof fn === 'function' ? fn : null; },
     openSettings() {
       if (hooks.openSettings) hooks.openSettings();
+    },
+    // chat.js가 등록한다 — 시트 없이 채팅 입력에 시작 문장을 심고 포커스만
+    // 옮기는 43번 "새 작업은 채팅에서" 원칙의 공용 진입로다(7단계 제안 카드
+    // "추가"가 첫 사용처. sidebar.js의 selectRoutineItem처럼 $input을 직접
+    // 참조하지 않는 영역이 이 다리를 쓴다).
+    registerSeedChatInput(fn) { hooks.seedChatInput = typeof fn === 'function' ? fn : null; },
+    seedChatInput(text) {
+      if (hooks.seedChatInput) hooks.seedChatInput(text);
     },
   };
 })();

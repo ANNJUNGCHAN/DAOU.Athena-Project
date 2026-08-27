@@ -44,6 +44,7 @@ function setup(options) {
     graph: fakeNode('div'),
     graphBody: fakeNode('div'),
     summaryTable: fakeNode('div'),
+    agent: fakeNode('div'),
     graphHeaderMeta: fakeNode('span'),
     mapGuide: fakeNode('div'),
   };
@@ -874,4 +875,51 @@ test('§10-4 — 선택 해제 후 도착한 응답은 버려진다(패널을 �
   await flushTimeline();
   assert.equal(elements.panel.hidden, true);
   assert.equal(elements.panel.querySelector('.panel-recent-changes'), null);
+});
+
+// ── 3상태 캔버스 스위칭(리프 1.2.2, 사이드바 모드 네비) ───────────────────────
+// #graphPill을 대체하는 setView()와 elements.agent 3중 배타를 검증한다.
+
+test('setView("agent")로 전환하면 agent 표면만 보이고 나머지 둘은 숨는다(3중 배타)', async () => {
+  const { controller, elements } = setup();
+  await controller.setView('agent');
+  assert.equal(controller.state.view, 'agent');
+  assert.equal(elements.agent.hidden, false);
+  assert.equal(elements.summary.hidden, true);
+  assert.equal(elements.graph.hidden, true);
+  assert.equal(elements.summaryTable.hidden, true, '성향 신호 표도 그래프 표면이라 agent에서는 숨는다');
+});
+
+test('setView("graph")는 toggle()과 동등하다 — 기본 서브뷰는 요약 표, 지도 내용은 graphBody에 그려진다(스텝2-보정)', async () => {
+  const { controller, elements } = setup();
+  await controller.setView('graph');
+  assert.equal(elements.summary.hidden, true, '요약(답변) 모자이크가 숨는다');
+  assert.equal(elements.graph.hidden, true, '기본 서브뷰는 요약이라 지도는 아직 숨어 있다');
+  assert.equal(elements.summaryTable.hidden, false, '성향 신호 표가 기본으로 보인다');
+  assert.equal(render.describeRendered(elements.graphBody).nodes, 2, 'draw()는 surface와 무관하게 graphBody에 그린다');
+});
+
+test('setView("summary")로 돌아오면 세 표면 중 요약만 보인다', async () => {
+  const { controller, elements } = setup();
+  await controller.setView('agent');
+  await controller.setView('summary');
+  assert.equal(elements.summary.hidden, false);
+  assert.equal(elements.graph.hidden, true);
+  assert.equal(elements.agent.hidden, true);
+});
+
+test('agent로 전환할 때는 백엔드를 부르지 않는다(그래프 뷰가 아니므로 draw()가 no-op)', async () => {
+  const { controller, fetchCalls } = setup();
+  await controller.setView('agent');
+  assert.equal(fetchCalls(), 0);
+});
+
+test('elements.agent가 없어도 setView("agent")가 터지지 않는다(옵셔널 가드)', async () => {
+  const elements = { summary: fakeNode('div'), graph: fakeNode('div') };
+  const controller = createGraphModeController({
+    store, layout, render, prefs: null, elements,
+    fetchClusterMap: async () => payload(7),
+  });
+  await assert.doesNotReject(() => controller.setView('agent'));
+  assert.equal(elements.summary.hidden, true);
 });

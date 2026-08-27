@@ -160,3 +160,14 @@ def install_exception_handlers(app: FastAPI) -> None:
     @app.exception_handler(BrainNotReadyError)
     async def brain_not_ready_handler(_request: Request, _exc: BrainNotReadyError) -> JSONResponse:
         return JSONResponse(status_code=503, content={"detail": "Investment brain is not ready"})
+
+    from athena_api.routines.guard_settings import GuardSettingsError
+
+    @app.exception_handler(GuardSettingsError)
+    async def guard_settings_handler(
+        _request: Request, exc: GuardSettingsError
+    ) -> JSONResponse:
+        return JSONResponse(
+            status_code=422,
+            content={"detail": "가드 설정이 유효하지 않다", "message": str(exc)},
+        )

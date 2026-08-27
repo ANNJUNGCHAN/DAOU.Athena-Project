@@ -20,6 +20,7 @@ from athena_api.routines.models import (
     SOURCES,
     Condition,
     RoutineSpec,
+    parse_schedule_value,
 )
 
 
@@ -33,6 +34,12 @@ _MAX_KEYWORD_LEN = 64
 # 제어문자·개행 금지 — 원장/카드에 그대로 실리는 문자열이다.
 _KEYWORD_RE = re.compile(r"^[^\x00-\x1f\x7f]+$")
 _MAX_CONSECUTIVE_TICKS = 20
+# 브리핑 모델·노력 검증(R1) — 이 목록은 `app/lib/main/model-prefs.js:12,17`과
+# 수동 동기화 대상이다. JS/Python 교차 언어라 코드 공유가 불가능하므로 한쪽이
+# 바뀌면 다른 쪽도 수동 갱신해야 한다. 하이픈은 문자셋에 포함되므로 "선두
+# 하이픈 금지"는 별도 검사한다(model-prefs.js:21과 동형).
+_MODEL_CHARSET_RE = re.compile(r"^[A-Za-z0-9.\[\]-]{1,64}$")
+_BRIEFING_EFFORTS = frozenset({"low", "medium", "high", "xhigh", "max"})
 
 
 def _fail(msg: str) -> None:
@@ -73,6 +80,11 @@ def validate_condition(raw: Any) -> Condition:
             _fail(f"키워드는 1~{_MAX_KEYWORD_LEN}자여야 한다")
         if not _KEYWORD_RE.match(value):
             _fail("키워드에 제어문자를 쓸 수 없다")
+        if source == "schedule.daily" and parse_schedule_value(value) is None:
+            _fail(
+                "예약 시각은 '<요일>@<HH:MM>' 형식이어야 한다"
+                "(요일: ALL 또는 1~7 콤마열, 1=월..7=일)"
+            )
     else:
         # dict·list·None 등 — 중첩 조건·표현식 흉내는 전부 여기서 죽는다.
         _fail("value는 숫자·불리언·문자열 리터럴만 허용된다")
@@ -123,6 +135,22 @@ def validate_draft(raw: Any, *, now: datetime | None = None) -> RoutineSpec:
     goal = raw.get("goal", False)
     if not isinstance(goal, bool):
         _fail("goal은 불리언이어야 한다")
+    briefing_model = raw.get("briefing_model")
+    if briefing_model is not None:
+        if (
+            not isinstance(briefing_model, str)
+            or briefing_model.startswith("-")
+            or not _MODEL_CHARSET_RE.match(briefing_model)
+        ):
+            _fail(
+                "briefing_model은 영문·숫자·점·대괄호·하이픈 1~64자여야 한다"
+                "(선두 하이픈 금지)"
+            )
+
+    briefing_effort = raw.get("briefing_effort")
+    if briefing_effort is not None:
+        if not isinstance(briefing_effort, str) or briefing_effort not in _BRIEFING_EFFORTS:
+            _fail("briefing_effort는 low/medium/high/xhigh/max 중 하나여야 한다")
 
     spec = RoutineSpec(
         condition=condition,
@@ -131,6 +159,8 @@ def validate_draft(raw: Any, *, now: datetime | None = None) -> RoutineSpec:
         expires_at=now + timedelta(days=expires_days),
         note=note,
         goal=goal,
+        briefing_model=briefing_model,
+        briefing_effort=briefing_effort,
     )
     if not note:
         spec.note = spec.human_summary()

@@ -16,9 +16,10 @@ const FIRED = {
   fired_at: '2026-08-19T09:41:00+09:00',
 };
 
-test('describeMode: §8 이분법 문구', () => {
+test('describeMode: 3분기 문구(3단계 — schedule.daily 예약 추가)', () => {
   assert.equal(describeMode('realtime-ws'), '실시간 (WS)');
   assert.equal(describeMode('periodic'), '주기 확인');
+  assert.equal(describeMode('scheduled'), '예약 실행');
 });
 
 test('buildTurnModel(fired): 발화 배지·상대시간·방식·소스 라벨·시점 고지', () => {

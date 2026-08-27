@@ -36,8 +36,12 @@ def test_mode_is_derived_from_source_transport():
     periodic = validate_condition(
         {"source": "disclosure.title_keyword", "op": "contains", "value": "유상증자"}
     )
+    scheduled = validate_condition(
+        {"source": "schedule.daily", "op": "at", "value": "ALL@07:30"}
+    )
     assert derive_mode(ws) == "realtime-ws"
     assert derive_mode(periodic) == "periodic"
+    assert derive_mode(scheduled) == "scheduled"
 
 
 def test_spec_roundtrip_preserves_everything():
@@ -46,6 +50,47 @@ def test_spec_roundtrip_preserves_everything():
     assert restored.to_dict() == spec.to_dict()
     assert restored.mode == "realtime-ws"
     assert restored.status == "draft"
+
+
+def test_briefing_settings_roundtrip_and_legacy_compat():
+    """R1 — briefing_model/briefing_effort 왕복. 키 자체가 없는 옛 dict도
+    .get() 하위호환으로 None으로 복원된다."""
+    spec = validate_draft(
+        _draft(briefing_model="claude-sonnet-5", briefing_effort="low")
+    )
+    assert spec.briefing_model == "claude-sonnet-5"
+    assert spec.briefing_effort == "low"
+    restored = RoutineSpec.from_dict(spec.to_dict())
+    assert restored.to_dict() == spec.to_dict()
+
+    legacy = spec.to_dict()
+    del legacy["briefing_model"], legacy["briefing_effort"]
+    old = RoutineSpec.from_dict(legacy)
+    assert old.briefing_model is None
+    assert old.briefing_effort is None
+
+
+@pytest.mark.parametrize(
+    "over",
+    [
+        {"briefing_model": "-claude"},  # 선두 하이픈 금지(model-prefs.js:21 이식)
+        {"briefing_model": "bad model"},  # 공백 — 문자셋 밖
+        {"briefing_model": ""},
+        {"briefing_model": "a" * 65},
+        {"briefing_effort": "extreme"},  # 닫힌 목록 밖
+        {"briefing_effort": ""},
+        {"briefing_effort": True},
+    ],
+)
+def test_invalid_briefing_settings_are_rejected(over):
+    with pytest.raises(RoutineValidationError):
+        validate_draft(_draft(**over))
+
+
+def test_valid_briefing_model_charset_examples():
+    """model-prefs.js:17의 문자셋 — 점·대괄호·하이픈(비선두)을 허용한다."""
+    for model in ("claude-sonnet-5", "claude-opus-4.1", "m[1]"):
+        assert validate_draft(_draft(briefing_model=model)).briefing_model == model
 
 
 def test_human_summary_states_mode_in_korean():
@@ -111,6 +156,21 @@ def test_ops_are_scoped_per_source():
         validate_condition({"source": "price.current", "op": "contains", "value": 1})
 
 
+@pytest.mark.parametrize(
+    "value",
+    ["07:99@abc", "1,2,3,4,5", "8@07:30", "ALL@25:00", "ALL@07:5", "ALL@0730", ""],
+)
+def test_schedule_daily_rejects_malformed_values(value):
+    with pytest.raises(RoutineValidationError):
+        validate_condition({"source": "schedule.daily", "op": "at", "value": value})
+
+
+def test_schedule_daily_accepts_well_formed_values():
+    for value in ("ALL@07:30", "1,2,3,4,5@09:00", "7@23:59"):
+        cond = validate_condition({"source": "schedule.daily", "op": "at", "value": value})
+        assert cond.value == value
+
+
 def test_draft_bounds_are_enforced():
     with pytest.raises(RoutineValidationError):
         validate_draft(_draft(symbol="0059301"))
@@ -173,7 +233,24 @@ def test_ledger_rows_contain_only_whitelisted_fields(tmp_path):
         "observed",
         "threshold",
         "reason",
+        "duration_ms",
     }
+    assert rows[0]["duration_ms"] is None  # 미지정 시 기본값
+
+
+def test_ledger_records_duration_ms_when_given(tmp_path):
+    ledger = RoutineLedger(tmp_path / "ledger.jsonl")
+    ledger.record(
+        "fired",
+        routine_id="r1",
+        symbol="207940",
+        source="disclosure.title_keyword",
+        observed="유상증자결정",
+        threshold="유상증자",
+        reason="조건 도달",
+        duration_ms=812.5,
+    )
+    assert ledger.read_all()[0]["duration_ms"] == 812.5
 
 
 def test_expiry_helper(tmp_path):

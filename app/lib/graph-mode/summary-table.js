@@ -264,7 +264,7 @@ function createSummaryTableController(deps) {
   const {
     container,          // 표를 그릴 DOM 노드
     fetchProfileSummary, // async () => { ok, entries, ... }
-    selectEntity,       // (entityId, panelData) => void — window.AthenaGraphMode.selectEntity
+    selectEntity,       // (entityId, panelData) => void — window.AthenaCanvasMode.selectEntity
     limit,              // 보드 07은 "상위 5" — 기본 50을 그대로 쓰면 안 맞는다
     onError,            // (err) => void (선택)
     heroContainer,           // 선택 — 히어로(사실/추론/불확실 %) 렌더 대상(스텝3)

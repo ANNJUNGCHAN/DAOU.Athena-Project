@@ -62,22 +62,34 @@
         </button>
         <input id="sidebarSearchInput" class="sidebar-search-input" type="text" placeholder="대화 검색" hidden />
       </div>
-      <!-- 모드 네비(셸 v2 — Paper 보드 37·38·44, 2026-08-27 검토 결정): 모드 전환은
-           여기가 소유한다. 스트립 필 줄은 보드 45 v5에서 전면 제거됐다.
-           에이전트는 준비 중(보드 39~43) — 없는 기능을 되는 척 않는다(disabled). -->
-      <div id="sidebarModes" class="sidebar-modes" data-mode="chat">
-        <div class="sidebar-modes-label">모드</div>
-        <button id="modeNavChat" class="mode-item mode-item-chat" type="button">
-          <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 3.5C2 2.7 2.7 2 3.5 2h7c.8 0 1.5.7 1.5 1.5v5c0 .8-.7 1.5-1.5 1.5H6L3.5 12v-2C2.7 10 2 9.3 2 8.5v-5z" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
-          <span>대화</span>
+      <!-- 모드 네비(리프 1.2.2, Paper 보드 37/44) — #graphPill을 대체한다.
+           대화/그래프/에이전트 3항목, 캔버스 3영역(#mosaic/#graphCanvas/
+           #agentCanvas)의 유일한 사람 진입로다(lib/sidebar-mode-nav.js가
+           클릭만 배선하고, 실제 전환은 graph-mode/controller.js의 setView()
+           하나가 소유한다 — P4). 기본 active는 "대화"(VIEW_SUMMARY 초기값과
+           일치) — 부팅 시 별도 JS 호출 없이 정적 마크업으로 맞춘다. -->
+      <div class="sidebar-mode-nav" id="sidebarModeNav">
+        <div class="sidebar-mode-caption">모드</div>
+        <button class="sidebar-mode-item is-active" id="modeNavSummary" type="button" data-view="summary" aria-pressed="true">
+          <svg class="sidebar-mode-item-ic" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 3.5C2 2.7 2.7 2 3.5 2h7c.8 0 1.5.7 1.5 1.5v5c0 .8-.7 1.5-1.5 1.5H6L3.5 12v-2H3.5C2.7 10 2 9.3 2 8.5v-5z" fill="none" stroke="currentColor" stroke-width="1.2" /></svg>
+          <span class="sidebar-mode-item-label">대화</span>
         </button>
-        <button id="modeNavGraph" class="mode-item mode-item-graph" type="button">
-          <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><circle cx="3.5" cy="10.5" r="1.8" fill="none" stroke="currentColor" stroke-width="1.2"/><circle cx="7" cy="3.5" r="1.8" fill="none" stroke="currentColor" stroke-width="1.2"/><circle cx="10.5" cy="10.5" r="1.8" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M4.4 9.1 6.2 5m1.6 0 1.8 4.1M5.3 10.5h3.4" fill="none" stroke="currentColor" stroke-width="1.1"/></svg>
-          <span>그래프</span>
+        <button class="sidebar-mode-item" id="modeNavGraph" type="button" data-view="graph" aria-pressed="false">
+          <svg class="sidebar-mode-item-ic" viewBox="0 0 14 14" aria-hidden="true">
+            <circle cx="3.5" cy="10.5" r="1.8" fill="none" stroke="currentColor" stroke-width="1.2" />
+            <circle cx="7" cy="3.5" r="1.8" fill="none" stroke="currentColor" stroke-width="1.2" />
+            <circle cx="10.5" cy="10.5" r="1.8" fill="none" stroke="currentColor" stroke-width="1.2" />
+            <path d="M4.4 9.1 6.2 5m1.6 0 1.8 4.1M5.3 10.5h3.4" fill="none" stroke="currentColor" stroke-width="1.2" />
+          </svg>
+          <span class="sidebar-mode-item-label">그래프</span>
         </button>
-        <button id="modeNavAgent" class="mode-item mode-item-agent" type="button" disabled title="에이전트 모드 — 준비 중 (Paper 보드 39~43)">
-          <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 1.5 8.2 5 11.5 6.2 8.2 7.4 7 11 5.8 7.4 2.5 6.2 5.8 5z" fill="none" stroke="currentColor" stroke-width="1.1"/></svg>
-          <span>에이전트</span>
+        <button class="sidebar-mode-item" id="modeNavAgent" type="button" data-view="agent" aria-pressed="false">
+          <svg class="sidebar-mode-item-ic" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 1.5 8.3 5.7 12.5 7 8.3 8.3 7 12.5 5.7 8.3 1.5 7 5.7 5.7z" fill="none" stroke="currentColor" stroke-width="1.2" /></svg>
+          <span class="sidebar-mode-item-label">에이전트</span>
+          <!-- 배지 — 미확인 알람 수(2단계). 스코프 밖: 이번 단계는 마크업만
+               놓고 hidden으로 둔다, 카운트 배선은 sidebar-mode-nav.js 2단계
+               확장이 맡는다. -->
+          <span class="sidebar-mode-badge" id="modeNavAgentBadge" hidden></span>
         </button>
       </div>
       <div class="sidebar-divider"></div>
@@ -194,6 +206,9 @@
         </div>
         <div id="graphBody"></div>
       </div>
+      <!-- 에이전트 모드(리프 1.2.2, Paper 보드 39) — 위 표면들과 형제, 3중
+           배타의 세 번째 자리. 내용은 lib/agent-canvas.js가 채운다. -->
+      <div id="agentCanvas" class="mosaic glass" hidden></div>
       <div class="glass-sheen" id="sheen" aria-hidden="true"></div>
     </main>
 
@@ -353,6 +368,7 @@
 <script src="lib/onboarding.js"></script>
 <script src="lib/auth-screen.js"></script>
 <script src="lib/routine-turn.js"></script>
+<script src="lib/guard-confirm.js"></script>
 <script src="lib/tool-step-track.js"></script>
 <script src="lib/text-release-ladder.js"></script>
 <script src="lib/order-ticket.js"></script>
@@ -367,6 +383,9 @@
 <script src="lib/graph-mode/controller.js"></script>
 <script src="lib/settings-cards.js"></script>
 <script src="lib/history-badge.js"></script>
+<script src="lib/sidebar-mode-nav.js"></script>
+<script src="lib/agent-sidebar-list.js"></script>
+<script src="lib/agent-canvas.js"></script>
 <script src="lib/sidebar.js"></script>
 <script src="shell.js"></script>
 <script src="canvas.js"></script>

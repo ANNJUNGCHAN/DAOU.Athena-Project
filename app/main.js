@@ -408,6 +408,50 @@ const LOCAL_BEARER_TOKEN = process.env.ATHENA_LOCAL_BEARER_TOKEN || null;
 
 let routineFeed = null;
 
+// startRoutineFeed()의 인라인 onEvent 클로저에서 분리한 이름 있는 함수(Rev.3
+// MODERATE 4) — verify.js가 module.exports의 이 함수 참조를 직접 호출해 WS 서버
+// 없이 핸들러 로직만 태운다(revealShell/routineEventToFactsEnvelope와 동일 근거).
+// ATHENA_CANVAS_SOURCE=fixture 게이트는 startRoutineFeed() 진입만 막을 뿐 이
+// 직접 호출과는 무관하다. IPC 릴레이·OS 토스트 동작은 클로저 시절과 불변.
+function handleRoutineFeedEvent(event) {
+  // 근접(routine-near)은 알림이 아니라 배경 상태다 — athena:routine-event로
+  // 보내지 않는다(unread·토스트·이력 경로 오염 금지). orbWin에만 얇게
+  // 릴레이한다(feed-status 릴레이와 같은 자리·같은 패턴, CP3-2).
+  if (event && event.type === 'routine-near') {
+    if (orbWin && !orbWin.isDestroyed()) {
+      orbWin.webContents.send('athena:orb-signal', {
+        signal: 'watch', active: event.active, observed: event.observed, threshold: event.threshold,
+      });
+    }
+    return;
+  }
+  // 능동 턴은 항상 이력에 쌓인다 — 토스트를 놓쳐도 다음 열람 때 남아 있다.
+  if (shellWin && !shellWin.isDestroyed()) {
+    shellWin.webContents.send('athena:routine-event', event);
+  }
+  // 같은 이벤트가 오브에도 간다(2026-08-24 리프 1.3.1). 두 표면이 같은 원장
+  // 행을 각자 렌더할 뿐이고 백엔드 신규 경로는 0건이다 — 설계서 §판단서 요지.
+  if (orbWin && !orbWin.isDestroyed()) {
+    orbWin.webContents.send('athena:routine-event', event);
+  }
+  // fixture 게이트(검증 결정론) — verify.js가 이 함수를 직접 부를 때 실제 OS
+  // 토스트가 뜨지 않게 한다. 프로덕션에서는 fixture로 부팅하지 않으므로 무영향.
+  if (event && (event.type === 'routine-fired' || event.type === 'routine-restore-failed')
+      && process.env.ATHENA_CANVAS_SOURCE !== 'fixture') {
+    const toast = routineTurn.buildToast(event);
+    const n = new Notification({ title: toast.title, body: toast.body });
+    n.on('click', () => { restoreFromBackground(); });
+    n.show();
+  }
+  // 예약형 발화만 자동 브리핑(R1, 4단계) — 감시형(realtime-ws/periodic)은 위의
+  // 알림 턴이 전부다. 실패해도 알림 경로는 이미 끝났으므로 로그만 남긴다.
+  if (event && event.type === 'routine-fired' && event.mode === 'scheduled') {
+    runBriefingTurnWired(event).catch((err) => {
+      mdlog(`브리핑 러너 실패: ${String((err && err.message) || err)}`);
+    });
+  }
+}
+
 function startRoutineFeed() {
   // 검증 결정론 보호 — verify.js(fixture)에서는 능동 피드를 돌리지 않는다.
   if (process.env.ATHENA_CANVAS_SOURCE === 'fixture') return;
@@ -415,46 +459,197 @@ function startRoutineFeed() {
   routineFeed = new RoutineFeed({
     url: `${BACKEND_WS_BASE}/api/v1/ws/routines`,
     token: LOCAL_BEARER_TOKEN, // 토큰 설정 배포는 모드 A 인증 봉투, 미설정이면 루프백 게이트
-    onEvent: (event) => {
-      // 근접(routine-near)은 알림이 아니라 배경 상태다 — athena:routine-event로
-      // 보내지 않는다(unread·토스트·이력 경로 오염 금지). orbWin에만 얇게
-      // 릴레이한다(feed-status 릴레이와 같은 자리·같은 패턴, CP3-2).
-      if (event && event.type === 'routine-near') {
-        if (orbWin && !orbWin.isDestroyed()) {
-          orbWin.webContents.send('athena:orb-signal', {
-            signal: 'watch', active: event.active, observed: event.observed, threshold: event.threshold,
-          });
-        }
-        return;
-      }
-      // 능동 턴은 항상 이력에 쌓인다 — 토스트를 놓쳐도 다음 열람 때 남아 있다.
+    onEvent: handleRoutineFeedEvent,
+    // 알람 센터 "● WS 연결됨"(9단계, Paper 보드 40)이 재사용하는 실 신호 —
+    // 이전엔 no-op이라 렌더러에 닿지 않았다(재검증에서 확인). 그대로 릴레이만.
+    onStatus: (s) => {
       if (shellWin && !shellWin.isDestroyed()) {
-        shellWin.webContents.send('athena:routine-event', event);
+        shellWin.webContents.send('athena:routine-feed-status', s);
       }
-      // 같은 이벤트가 오브에도 간다(2026-08-24 리프 1.3.1). 두 표면이 같은 원장
-      // 행을 각자 렌더할 뿐이고 백엔드 신규 경로는 0건이다 — 설계서 §판단서 요지.
+      // 오브에도 얇게 릴레이한다(board-30⑩) — main은 판단하지 않는다.
+      // connected/disconnected/unsupported 중 무엇을 얼굴로 바꿀지는 orb.js가 정한다.
       if (orbWin && !orbWin.isDestroyed()) {
-        orbWin.webContents.send('athena:routine-event', event);
-      }
-      if (event && (event.type === 'routine-fired' || event.type === 'routine-restore-failed')) {
-        const toast = routineTurn.buildToast(event);
-        const n = new Notification({ title: toast.title, body: toast.body });
-        n.on('click', () => { restoreFromBackground(); });
-        n.show();
-      }
-    },
-    // 루틴 피드 연결 상태를 오브에 얇게 릴레이한다(board-30⑩) — 위 orb-signal
-    // 릴레이(797행 부근)와 같은 원칙: main은 판단하지 않는다. connected/
-    // disconnected/unsupported를 그대로 실어 보내고, 그중 무엇을 얼굴로 바꿀지는
-    // orb.js가 정한다.
-    onStatus: (status) => {
-      if (orbWin && !orbWin.isDestroyed()) {
-        orbWin.webContents.send('athena:orb-signal', { signal: 'feed-status', status });
+        orbWin.webContents.send('athena:orb-signal', { signal: 'feed-status', status: s });
       }
     },
   });
   routineFeed.start();
 }
+
+// ---------- 예약 자동 브리핑(R1, 4단계) — 독립 세션·독립 busy 카운터 ----------
+// 브리핑은 사용자 턴과 세 겹으로 격리된다(briefing-runner.js 머리말 참고):
+// 세션(resumeSessionId 없음), 동시성(briefingBusyDepth는 liveQueryBusyDepth와
+// 별개 변수), 우선순위(사용자 질의가 killInProgressBriefing()으로 항상 선점).
+const briefingRunner = require('./lib/main/briefing-runner');
+
+let briefingBusyDepth = 0;
+
+// athena:briefing-query-state는 **배지 갱신 전용**이다(MAJOR 2) — chat.js의
+// 구독 핸들러는 이 신호로 setLocked를 절대 부르지 않는다. 입력 잠금은 사용자
+// 턴 신호(athena:live-query-state)만 만든다. 발행은 결과를 아는 러너가 한다
+// (busy:false에 ok/aborted 동봉 — 렌더러가 성공·실패·선점을 추측하지 않게).
+function sendBriefingQueryState(state) {
+  if (shellWin && !shellWin.isDestroyed()) {
+    shellWin.webContents.send('athena:briefing-query-state', state);
+  }
+}
+
+// 순수 카운터 — 브로드캐스트는 러너의 ipc.sendQueryState 몫이다(위 주석).
+const briefingBusy = {
+  increment() { briefingBusyDepth += 1; },
+  decrement() { briefingBusyDepth -= 1; },
+  depth: () => briefingBusyDepth,
+};
+
+function sendBriefingTextDelta(text) {
+  if (shellWin && !shellWin.isDestroyed()) {
+    shellWin.webContents.send('athena:briefing-text-delta', { text });
+  }
+}
+
+function sendBriefingToolStep(step) {
+  if (shellWin && !shellWin.isDestroyed()) {
+    shellWin.webContents.send('athena:briefing-tool-step', step);
+  }
+}
+
+// verify.js 전용 DI(사실14) — 실제 CLI를 스폰하지 않는 스텁으로 러너 경로를
+// 결정론으로 태우고, 스텁 호출 카운트로 실호출을 단언한다. 백엔드 왕복
+// (budget/report)도 함께 바꿔칠 수 있다 — 개발 머신에 실백엔드가 떠 있어도
+// 검증 결과가 흔들리지 않게. 프로덕션 코드는 아무도 부르지 않는다.
+let briefingClaudeRunner = null; // null이면 실제 runClaudeQuery(아래 wired에서 대체)
+let briefingBackendOverrides = null;
+function setBriefingClaudeRunnerForVerify(stub, backendOverrides) {
+  briefingClaudeRunner = stub;
+  briefingBackendOverrides = backendOverrides || null;
+}
+
+function runBriefingTurnWired(event) {
+  const { dir, configFile } = getLiveMcpConfig();
+  // 툴 진행 표시는 사용자 턴과 같은 라벨 변환기를 쓰되 채널만 브리핑 전용이고,
+  // 말걸기 가드 확인 카드는 전달하지 않는다(자동 턴에서 승인 카드 금지).
+  const trackBriefingToolStep = createToolStepTracker(sendBriefingToolStep, { forwardNudgeGuard: false });
+  const fetchBudget = (briefingBackendOverrides && briefingBackendOverrides.fetchBudget)
+    || (async () => {
+      // 조회 실패는 fail-open(1회분 허용) — 이벤트 자체가 백엔드발이라 백엔드가
+      // 죽어 있으면 발화가 여기까지 오지도 않는다. 실제 상한 집행은 백엔드
+      // (GET /briefing-budget)가 한다.
+      const res = await routineHttp('GET', '/api/v1/routines/briefing-budget').catch(() => null);
+      return res && res.ok ? res.data : { remaining: 1 };
+    });
+  const reportResult = (briefingBackendOverrides && briefingBackendOverrides.reportResult)
+    || ((payload) => routineHttp(
+      'POST',
+      `/api/v1/routines/${encodeURIComponent(event.routine_id)}/briefing-result`,
+      payload,
+    ));
+  return briefingRunner.runBriefingTurn({
+    event,
+    isUserBusy: () => liveQueryBusyDepth > 0, // 읽기 전용 — 절대 증감하지 않는다
+    briefingBusy,
+    fetchBudget,
+    reportResult,
+    ipc: {
+      sendTextDelta: sendBriefingTextDelta,
+      sendToolStep: sendBriefingToolStep,
+      sendQueryState: sendBriefingQueryState,
+    },
+    claudeRunner: briefingClaudeRunner || { runClaudeQuery },
+    cwd: dir,
+    configFile,
+    onEvent: trackBriefingToolStep,
+    onCanvasResult: (r) => {
+      // 카드 경로는 사용자 턴과 동일(athena:add-canvas-live) — 캔버스는 턴
+      // 상태와 무관해 안전하다. pushed는 사이드 채널로 이미 도착한 카드다.
+      if (r.status === 'pushed') return;
+      sendLiveCanvasResult(r);
+    },
+  });
+}
+
+// ---------- 놓친 예약 캐치업(R1, 5단계) ----------
+// 앱이 꺼져 있는 동안 지나간 예약을 기동 시 1회 감지해 채팅 카드로 물어본다.
+// 자동 실행하지 않는다 — 사람이 [지금 브리핑]을 눌러야 ① catchup-fire(정식
+// ledger "fired" 기록, 서버 authoritative fired_at) ② 브리핑 실행 순서로
+// 이어진다(MAJOR 3 — 기록이 실행보다 먼저, 41번 이력·지표 왜곡 방지).
+
+// 감지 시점의 라우틴 뷰 보관 — 확인 클릭 시 합성 routine-fired 이벤트의 재료
+// (symbol/note/briefing_*)로 쓴다. 프로세스 로컬(재시작하면 재감지).
+const missedRoutineViews = new Map();
+
+// 셸 창·렌더러가 준비될 때까지 재시도하며 보낸다 — 백엔드가 이미 떠 있으면
+// (already-running) 헬스체크가 즉시 끝나 createWindows()의 워밍업 시퀀스
+// (~380ms+)보다 먼저 도달할 수 있다. 이 레이스에서 조용히 버리면 이번 세션
+// 동안 캐치업 기회가 사라진다(기동 시 1회 감지라서) — 유실하지 않는다.
+// 상한 후 포기: 창 자체가 안 뜨는 비정상 상황에서 영원히 들고 있지 않는다.
+function sendRoutineMissed(missed, attempt = 0) {
+  if (shellWin && !shellWin.isDestroyed() && !shellWin.webContents.isLoading()) {
+    shellWin.webContents.send('athena:routine-missed', { routines: missed });
+    return;
+  }
+  if (attempt >= 20) {
+    mdlog('놓친 예약 알림 유실 — 셸 창이 10초 내 준비되지 않았다');
+    return;
+  }
+  setTimeout(() => sendRoutineMissed(missed, attempt + 1), 500);
+}
+
+async function checkMissedSchedules() {
+  const res = await routineHttp('GET', '/api/v1/routines').catch(() => null);
+  if (!res || !res.ok || !res.data || !Array.isArray(res.data.routines)) return;
+  const missed = res.data.routines.filter(
+    (r) => r.mode === 'scheduled' && r.status === 'active' && r.missed === true,
+  );
+  if (!missed.length) return;
+  for (const r of missed) missedRoutineViews.set(r.id, r);
+  sendRoutineMissed(missed);
+}
+
+function catchupFireHttp(routineId) {
+  if (briefingBackendOverrides && briefingBackendOverrides.catchupFire) {
+    return briefingBackendOverrides.catchupFire(routineId);
+  }
+  return routineHttp('POST', `/api/v1/routines/${encodeURIComponent(routineId)}/catchup-fire`);
+}
+
+ipcMain.handle('athena:routine-missed-confirm', async (_e, { id } = {}) => {
+  try {
+    // ① 먼저 정식 ledger 기록 — 실패(이미 처리된 409 포함)면 브리핑도 없다.
+    const res = await catchupFireHttp(id);
+    if (!res || !res.ok) {
+      return { ok: false, status: (res && res.status) || 0, error: (res && res.error) || '캐치업 실패' };
+    }
+    const firedAt = res.data && res.data.fired_at;
+    const view = missedRoutineViews.get(id);
+    // ② 서버가 실제로 기록에 쓴 fired_at으로 합성 이벤트를 만들어 4단계 러너와
+    // 같은 실행 경로를 태운다(멱등성 키·briefings 기록·시계 편차 전부 이 값 하나로 정합).
+    runBriefingTurnWired({
+      type: 'routine-fired',
+      routine_id: id,
+      symbol: view ? view.symbol : '',
+      source: 'schedule.daily',
+      mode: 'scheduled',
+      observed: firedAt,
+      note: view ? view.note : '',
+      fired_at: firedAt,
+      briefing_model: view ? view.briefing_model : null,
+      briefing_effort: view ? view.briefing_effort : null,
+    }).catch((err) => {
+      mdlog(`캐치업 브리핑 실패: ${String((err && err.message) || err)}`);
+    });
+    missedRoutineViews.delete(id);
+    return { ok: true, data: { fired_at: firedAt } };
+  } catch (e) {
+    return { ok: false, error: String((e && e.message) || e) };
+  }
+});
+
+ipcMain.handle('athena:routine-missed-skip', async (_e, { id } = {}) => {
+  // 백엔드 API는 부르지 않는다(계획 명시 — 건너뛰기는 카드만 닫는다).
+  // main 쪽 보관 뷰만 정리하는 수신 지점이다.
+  missedRoutineViews.delete(id);
+  return { ok: true };
+});
 
 app.on('will-quit', () => { if (routineFeed) routineFeed.stop(); });
 
@@ -651,8 +846,14 @@ app.on('will-quit', () => { if (canvasFeed) canvasFeed.stop(); });
 
 // 루틴 REST 프록시 — 렌더러는 백엔드에 직접 붙지 않는다(기존 IPC 관례).
 // confirm/cancel은 **사람 클릭 전용** 경로다(실행계획 §7-6 — 모델 툴에는 없다).
-async function routineHttp(method, path) {
-  const res = await fetch(`${BACKEND_HTTP_BASE}${path}`, { method });
+// jsonBody(선택)는 JSON 직렬화해 보낸다 — briefing-result(R1, 4단계)가 첫 사용처다.
+async function routineHttp(method, path, jsonBody) {
+  const opts = { method };
+  if (jsonBody !== undefined) {
+    opts.headers = { 'Content-Type': 'application/json' };
+    opts.body = JSON.stringify(jsonBody);
+  }
+  const res = await fetch(`${BACKEND_HTTP_BASE}${path}`, opts);
   const body = await res.json().catch(() => ({}));
   if (!res.ok) {
     return { ok: false, status: res.status, error: body.detail || `HTTP ${res.status}` };
@@ -704,6 +905,73 @@ ipcMain.handle('athena:routine-confirm', async (_e, { id }) => {
 ipcMain.handle('athena:routine-cancel', async (_e, { id }) => {
   try { return await routineHttp('POST', `/api/v1/routines/${encodeURIComponent(id)}/cancel`); }
   catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
+});
+ipcMain.handle('athena:routine-pause', async (_e, { id }) => {
+  try { return await routineHttp('POST', `/api/v1/routines/${encodeURIComponent(id)}/pause`); }
+  catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
+});
+ipcMain.handle('athena:routine-resume', async (_e, { id }) => {
+  try { return await routineHttp('POST', `/api/v1/routines/${encodeURIComponent(id)}/resume`); }
+  catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
+});
+// 실행 이력 드릴인(10단계) — 6단계 GET /{id}/runs를 사람 클릭 전용 경로로 노출한다.
+ipcMain.handle('athena:routine-runs', async (_e, { id }) => {
+  try { return await routineHttp('GET', `/api/v1/routines/${encodeURIComponent(id)}/runs`); }
+  catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
+});
+// 알림 방 읽음 처리(7단계, F3-FE) — 6단계 read-marks에 남겨 재시작 후에도
+// 읽음 상태가 유지되게 한다. body 없이 부르면 백엔드가 현재 시각까지 기록한다.
+ipcMain.handle('athena:routine-ack', async (_e, { id }) => {
+  try { return await routineHttp('POST', `/api/v1/routines/${encodeURIComponent(id)}/ack`); }
+  catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
+});
+// 발화 열람·응답 계측(F-stage5b-FE) — engagement.py로 그대로 넘긴다. "언제
+// opened/replied로 볼지"의 판정은 렌더러(sidebar.js/chat.js) 몫이다(engagement.py
+// 모듈 독스트링 참고) — 여기는 REST 프록시일 뿐 판정을 갖지 않는다.
+ipcMain.handle('athena:routine-engagement', async (_e, { id, event } = {}) => {
+  try {
+    const res = await fetch(`${BACKEND_HTTP_BASE}/api/v1/routines/${encodeURIComponent(id)}/engagement`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ event }),
+    });
+    const data = await res.json().catch(() => ({}));
+    return res.ok
+      ? { ok: true, data }
+      : { ok: false, status: res.status, error: data.detail || `HTTP ${res.status}` };
+  } catch (e) {
+    return { ok: false, error: String((e && e.message) || e) };
+  }
+});
+
+// 말걸기 가드 설정 REST 프록시(F-stage9) — routineHttp와 별개다. 라우틴별
+// 목록이 아니라 전역 설정 한 벌이고(8단계 nudge_guard.py), set은 body가
+// 필요해 routineHttp(body 없음 전제)를 재사용하지 않는다.
+ipcMain.handle('athena:nudge-guard-get', async () => {
+  try {
+    const res = await fetch(`${BACKEND_HTTP_BASE}/api/v1/nudge-guard`);
+    const data = await res.json().catch(() => ({}));
+    return res.ok
+      ? { ok: true, data }
+      : { ok: false, status: res.status, error: data.detail || `HTTP ${res.status}` };
+  } catch (e) {
+    return { ok: false, error: String((e && e.message) || e) };
+  }
+});
+ipcMain.handle('athena:nudge-guard-set', async (_e, body) => {
+  try {
+    const res = await fetch(`${BACKEND_HTTP_BASE}/api/v1/nudge-guard`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body || {}),
+    });
+    const data = await res.json().catch(() => ({}));
+    return res.ok
+      ? { ok: true, data }
+      : { ok: false, status: res.status, error: data.detail || `HTTP ${res.status}` };
+  } catch (e) {
+    return { ok: false, error: String((e && e.message) || e) };
+  }
 });
 
 // ---------- OS 스냅 이벤트 정착 (2026-08-18 승급 — qa-win-arrow.json 실측 근거) ----------
@@ -1302,6 +1570,44 @@ function toolStepLabel(name) {
   return TOOL_STEP_LABELS[base] || '처리 중';
 }
 
+const NUDGE_GUARD_TOOL_NAME = 'athena_nudge_guard';
+
+// 말걸기 가드 확인 카드(F-stage9, Paper 보드 42/BIM-0) — athena_nudge_guard의
+// propose 호출 결과(비영속, guard_settings.py 참고)를 채팅 렌더러로 흘려보낸다.
+// 라우틴 승인 카드(athena_routine의 draft)와 달리 이건 아무것도 디스크에 안
+// 남는다 — refreshRoutineDrafts()류 폴링으로는 발견할 수 없고, 이 tool_result
+// 스트림이 유일한 신호다. orbWin에는 안 보낸다 — 가드 확정도 routine-confirm과
+// 같은 원칙으로 채팅 전용 사람 액션이다(오브는 주문 집행·감시 승인을 못 부르는
+// 것과 같은 이유).
+function maybeForwardNudgeGuardProposal(step, resultBlock) {
+  if (resultBlock.is_error === true) return;
+  const base = String(step.name || '').split('__').pop();
+  if (base !== NUDGE_GUARD_TOOL_NAME) return;
+  if (!step.input || step.input.action !== 'propose') return;
+  const text = extractToolResultText(resultBlock.content);
+  if (!text) return;
+  let payload;
+  try { payload = JSON.parse(text); } catch { return; }
+  if (!payload || typeof payload !== 'object' || !payload.current || !payload.proposed) return;
+  if (shellWin && !shellWin.isDestroyed()) {
+    shellWin.webContents.send('athena:nudge-guard-proposed', {
+      current: payload.current, proposed: payload.proposed, notice: payload.notice || null,
+    });
+  }
+}
+
+// tool_result.content는 문자열 또는 블록 배열로 온다 — athena_mcp/result.py의
+// success()는 항상 [{type:'text', text: JSON 문자열}] 블록 배열을 준다(문자열
+// 케이스는 방어용, stream-json-parser.js의 normalizeToolResultContent와 같은 이유).
+function extractToolResultText(content) {
+  if (typeof content === 'string') return content;
+  if (Array.isArray(content)) {
+    const block = content.find((b) => b && b.type === 'text' && typeof b.text === 'string');
+    return block ? block.text : null;
+  }
+  return null;
+}
+
 // tool_use_id별 시작 시각을 들고 있다가 매칭되는 tool_result가 오면 소요시간과
 // 함께 완료를 알린다. runLiveQuery 호출마다 새로 만든다(왕복 하나의 수명).
 //
@@ -1313,8 +1619,13 @@ function toolStepLabel(name) {
 //   (b) Agent tool_use 자체(streamJsonParser.isAgentToolName) — 그 생애주기는
 //       createSubagentTracker()가 하위 에이전트 도크로 따로 추적한다. 걸러도
 //       완료 쪽(tool_result)은 steps에 애초에 없어 자동으로 조용히 무시된다.
-function createToolStepTracker() {
-  const steps = new Map(); // tool_use_id -> { label, startedAt }
+// sendFn(선택)으로 송신 채널을 바꿀 수 있다 — 브리핑 턴(R1)이 라벨 변환·중복
+// 방어는 그대로 쓰되 athena:briefing-tool-step으로만 내보내기 위한 주입 지점.
+// forwardNudgeGuard(선택) — 말걸기 가드 확인 카드는 채팅 전용 사람 액션이라
+// 사용자 턴에서만 전달한다. 브리핑 턴(자동 실행)이 이 카드를 띄우면 사용자
+// 승인 흐름이 자동 턴에서 새어나오는 셈이라 끈다.
+function createToolStepTracker(sendFn = sendLiveToolStep, { forwardNudgeGuard = true } = {}) {
+  const steps = new Map(); // tool_use_id -> { label, startedAt, name, input, elapsedMs? }
   return function trackToolStep(event) {
     if (!event || typeof event !== 'object') return;
     if (streamJsonParser.isSubagentInternalEvent(event)) return;
@@ -1325,8 +1636,10 @@ function createToolStepTracker() {
         if (block && block.type === 'tool_use' && block.id && !steps.has(block.id)) {
           if (streamJsonParser.isAgentToolName(block.name)) continue;
           const label = toolStepLabel(block.name);
-          steps.set(block.id, { label, startedAt: Date.now() });
-          sendLiveToolStep({ id: block.id, label, done: false, elapsedMs: null });
+          // name·input도 함께 들고 있는다 — F-stage9가 athena_nudge_guard의
+          // propose 호출을 가려내는 데 쓴다(위 maybeForwardNudgeGuardProposal).
+          steps.set(block.id, { label, startedAt: Date.now(), name: block.name, input: block.input });
+          sendFn({ id: block.id, label, done: false, elapsedMs: null });
         }
       }
     } else if (event.type === 'user') {
@@ -1335,11 +1648,17 @@ function createToolStepTracker() {
       for (const block of content) {
         if (block && block.type === 'tool_result' && block.tool_use_id) {
           const step = steps.get(block.tool_use_id);
-          if (step && step.elapsedMs === undefined) continue; // 이미 완료 처리됨
+          // 중복 tool_result 방어 — elapsedMs가 이미 있으면(=이미 done 처리)
+          // 다시 안 보낸다. [F-stage9 정정] 이 조건이 뒤집혀 있어(=== undefined)
+          // 사실상 모든 tool_result의 done 이벤트가 나간 적이 없었다 — 주석
+          // "이미 완료 처리됨"이 원래 의도였고 조건식만 틀렸다. 나머지 로직은
+          // 무수정.
+          if (step && step.elapsedMs !== undefined) continue;
           if (step) {
             const elapsedMs = Date.now() - step.startedAt;
             step.elapsedMs = elapsedMs; // 재-tool_result(있을 리 없지만) 방어
-            sendLiveToolStep({ id: block.tool_use_id, label: step.label, done: true, elapsedMs, error: !!block.is_error });
+            sendFn({ id: block.tool_use_id, label: step.label, done: true, elapsedMs, error: !!block.is_error });
+            if (forwardNudgeGuard) maybeForwardNudgeGuardProposal(step, block);
           }
         }
       }
@@ -1666,6 +1985,12 @@ async function runLiveQueryInner(query, expand, origin) {
     activeLiveQuery.kill();
     activeLiveQuery = null;
   }
+  // 진행 중 브리핑도 같은 원칙으로 끊는다(R1, MAJOR 2) — 사용자가 항상 이긴다
+  // (scheduler.py의 "대화가 우선 — 이번 주기 양보"와 대칭, 새 동시성 모델을
+  // 발명하지 않는다). 무조건 호출한다 — 카운터 게이트를 두면 예산 왕복 등
+  // 카운터가 아직 0인 창의 선점 표시를 놓친다(리뷰 확정 결함). 핸들 정체성
+  // 확인·선점 플래그는 briefing-runner.js가 한다 — 유휴 상태면 no-op.
+  briefingRunner.killInProgressBriefing();
   let myHandle = null;
 
   // 첫 카드가 실제로 확정된 시점에만 연다(목업 시절과 같은 문법 — expand:!opened).
@@ -2317,6 +2642,13 @@ if (!process.env.ATHENA_NO_AUTOSTART) {
     backendLauncher.ensureBackend({ mdlog })
       .then(async () => {
         historySink.refreshBrainReady({ mdlog });
+        // 놓친 예약 확인(R1, 5단계) — 백엔드 기동 확인 후 1회. fixture(verify)는
+        // 결정론 보호로 건너뛴다 — verify.js가 IPC 주입으로 카드 경로만 태운다.
+        if (process.env.ATHENA_CANVAS_SOURCE !== 'fixture') {
+          checkMissedSchedules().catch((err) => {
+            mdlog(`놓친 예약 확인 실패: ${String((err && err.message) || err)}`);
+          });
+        }
         try {
           const count = await restDatasetRunner.refreshStockEntityIndex(stockEntityIndex, {
             backendBase: BACKEND_HTTP_BASE,
@@ -2346,6 +2678,15 @@ module.exports = {
   getWins: () => ({ shellWin, orbWin }),
   routineEventToFactsEnvelope,
   getLayout: () => layout,
+  // startRoutineFeed()의 onEvent와 동일한 함수 참조(Rev.3 MODERATE 4) — verify.js가
+  // WS 서버 없이 routine-fired 주입에 쓴다. fixture 게이트는 startRoutineFeed()
+  // 진입만 막을 뿐 이 직접 호출과는 무관하다.
+  handleRoutineFeedEvent,
+  // 브리핑 러너 검증 훅(AC3) — claudeRunner 스텁·백엔드 왕복 교체와 세션/카운터
+  // 불변 단언용 게터. 프로덕션 경로는 아무도 부르지 않는다.
+  setBriefingClaudeRunnerForVerify,
+  getLiveSessionId: () => liveSessionId,
+  getBriefingBusyDepth: () => briefingBusyDepth,
   // 셸 창을 앞으로 — verify.js가 트레이 복귀·카드 푸시 경로를 검증할 때 쓴다.
   revealShell,
   // 트레이 클릭과 동일한 복귀 경로 — verify.js가 닫기(백그라운드 유지)를 검증할 때

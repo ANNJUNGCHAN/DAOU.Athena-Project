@@ -1024,8 +1024,8 @@ app.whenReady().then(async () => {
   // 좌표로 되돌리지 않는가"를 쟀다. 높이 경로가 사라졌으므로(리프 1.2.1) 같은
   // 회귀를 다른 자극으로 잰다: 이동 후 **모드 전환**(설정 열고 닫기)이다. 모드
   // 전환도 옛 판에서는 창 크기를 건드리던 경로라 스냅백 위험이 같은 자리에 있다.
-  // 2026-08-26: 점이 더 이상 설정을 열지 않으므로(그래프 모드 전환기로 바뀜)
-  // 커맨드바로 같은 "설정 열고 닫기" 자극을 만든다 — 이 검증이 재는 것은
+  // 리프 1.2.2: 점이 대화 상태 표시 전용이라 설정을 열지 않으므로 커맨드바로
+  // 같은 "설정 열고 닫기" 자극을 만든다 — 이 검증이 재는 것은
   // 앵커 유지이지 설정 진입 경로 자체가 아니다.
   const beforeMove = shellWin.getBounds();
   shellWin.setBounds({ x: beforeMove.x + 120, y: beforeMove.y - 40, width: beforeMove.width, height: beforeMove.height });
@@ -2326,18 +2326,21 @@ app.whenReady().then(async () => {
   // '비어 있지 않은가'의 판정은 `describeRendered()` 하나만 쓴다. 여기서 따로
   // 세면 렌더러와 검증기가 서로 다른 답을 낼 수 있다.
   // 2026-08-27(보드 45 v5): 스트립 필 줄은 전면 제거 — 진입로는 사이드바 모드
-  // 네비 하나다. 브레인 준비 여부로 **기대하는 결과**가 갈린다: 준비됐으면
-  // 실제 그래프가, 안 됐으면 캔버스 안의 정직한 안내(controller.js
-  // renderUnavailable)가 뜬다 — 둘 다 "정상"이고, 네비 클릭으로 캔버스가
-  // 안 열리는 것만 실패다.
+  // 네비 하나다(상시 노출, Paper 보드 44). 브레인 준비 여부로 **기대하는 결과**가
+  // 갈린다: 준비됐으면 실제 그래프가, 안 됐으면 캔버스 안의 정직한 안내
+  // (controller.js renderUnavailable)가 뜬다 — 둘 다 "정상"이고, 네비 항목이
+  // 숨거나 클릭해도 캔버스가 안 열리는 것만 실패다.
   try {
     const graph = await shellWin.webContents.executeJavaScript(`(async () => {
       const container = document.getElementById('graphCanvas');
-      // 스트립 필 줄은 보드 45 v5에서 전면 제거됐다(2026-08-27) — 진입로는
-      // 사이드바 모드 네비 하나다. 사람이 밟는 길 그대로 네비를 누른다.
+      // 사람이 밟는 길 그대로 사이드바 모드 네비를 누른다.
       const nav = document.getElementById('modeNavGraph');
-      if (!nav || !container || !window.AthenaGraphMode) {
+      if (!nav || !container || !window.AthenaCanvasMode) {
         return { wired: false, reason: 'missing' };
+      }
+      if (nav.hidden) {
+        // 상시 보여야 하는 진입로다(보드 44) — 숨어 있으면 사람이 못 닿는다.
+        return { wired: false, reason: 'hidden-though-always-visible' };
       }
       const status = await window.athena.invoke('athena:brain-status').catch(() => null);
       const brainReady = Boolean(status && status.ok && status.ready);
@@ -2398,8 +2401,8 @@ app.whenReady().then(async () => {
       const byClick = window.AthenaLib.GraphRender.describeRendered(container);
       // 좌표 계약은 배치 결과와 대조해야 알 수 있고, 클릭 경로는 그 값을 돌려주지
       // 않는다. 요약으로 접었다 다시 펴서 같은 화면의 배치를 받아 온다.
-      await window.AthenaGraphMode.toggle();
-      const placed = await window.AthenaGraphMode.toggle();
+      await window.AthenaCanvasMode.toggle();
+      const placed = await window.AthenaCanvasMode.toggle();
       const drawn = window.AthenaLib.GraphRender.describeRendered(container);
       return {
         wired: true,
@@ -2420,12 +2423,17 @@ app.whenReady().then(async () => {
     })()`);
     report.graphMode = graph;
     if (!graph.wired) {
-      // 네비·캔버스·전역 중 하나가 아예 없다 — 배선이 끊긴 것이므로 실패다.
-      failures.push('graph-mode: 배선이 끊겼다 (모드 네비/캔버스/전역 누락)');
+      if (graph.reason === 'hidden-though-always-visible') {
+        // 상시 보여야 하는 네비 항목이 숨어 있다 — 사람이 닿을 수 없는 기능이다.
+        failures.push('graph-mode: 모드 네비 항목이 상시 보여야 하는데 숨어 있다');
+      } else {
+        // 네비 항목·캔버스·전역 중 하나가 아예 없다 — 배선이 끊긴 것이므로 실패다.
+        failures.push('graph-mode: 배선이 끊겼다 (모드 네비/캔버스/전역 누락)');
+      }
     } else if (graph.brainReady) {
-      // 네비 클릭 하나로 열려야 한다 — API 직접 호출로만 열리면 사람은 못 쓴다.
-      assertOk('graph-mode: 칩을 누르면 그래프가 열린다', graph.clickOpened === true);
-      assertOk('graph-mode: 칩 클릭만으로 캔버스가 채워진다', graph.byClick.rendered === true);
+      // 네비 항목 클릭 하나로 열려야 한다 — API 직접 호출로만 열리면 사람은 못 쓴다.
+      assertOk('graph-mode: 네비 항목을 누르면 그래프가 열린다', graph.clickOpened === true);
+      assertOk('graph-mode: 네비 클릭만으로 캔버스가 채워진다', graph.byClick.rendered === true);
       assertOk('graph-mode: 토글하면 요약이 숨는다', graph.summaryHidden === true);
       // G-05 회귀 가드 — #graphSummaryTable이 #mosaic의 자식이던 시절엔 부모의
       // hidden(display:none) 상속에 막혀 크기가 0×0이었다(getComputedStyle의
@@ -2449,9 +2457,9 @@ app.whenReady().then(async () => {
       );
       report.graphMode.shot = await shot(shellWin, '90-graph-mode.png');
     } else {
-      // 브레인이 안 됐다 — 그래도 칩을 누르면 캔버스는 열려야 한다(막히지 않는다),
-      // 다만 그 안은 실제 그래프가 아니라 정직한 안내여야 한다.
-      assertOk('graph-mode: 브레인이 안 돼도 칩을 누르면 캔버스가 열린다', graph.clickOpened === true);
+      // 브레인이 안 됐다 — 그래도 네비 항목을 누르면 캔버스는 열려야 한다(막히지
+      // 않는다), 다만 그 안은 실제 그래프가 아니라 정직한 안내여야 한다.
+      assertOk('graph-mode: 브레인이 안 돼도 네비 항목을 누르면 캔버스가 열린다', graph.clickOpened === true);
       assertOk('graph-mode: 토글하면 요약이 숨는다', graph.summaryHidden === true);
       assertOk(
         'graph-mode: 브레인 미준비 시 캔버스 안에 정직한 안내가 뜬다(빈 화면이 아니다)',
@@ -2488,6 +2496,1525 @@ app.whenReady().then(async () => {
     report.graphMode = { error: String((err && err.message) || err) };
     failures.push('graph-mode: 검증 블록이 예외로 끝났다');
   }
+
+  // ---------- 사이드바 모드 네비 3상태 (리프 1.2.2, BLOCKER 반영) ----------
+  //
+  // #graphPill이 완전히 사라졌는지, 새 모드 네비 3항목이 캔버스 3영역
+  // (#mosaic/#graphCanvas/#agentCanvas)의 3중 배타를 실제로 쥐고 있는지,
+  // #dot 클릭이 더는 모드를 바꾸지 않는지(상태표시 전용으로 좁혀졌는지)를
+  // 잰다 — 1단계 완료 조건(AC3/AC4)이다.
+  try {
+    const modeNav = await shellWin.webContents.executeJavaScript(`(() => {
+      const pillGone = document.getElementById('graphPill') === null;
+      const items = {
+        summary: document.getElementById('modeNavSummary'),
+        graph: document.getElementById('modeNavGraph'),
+        agent: document.getElementById('modeNavAgent'),
+      };
+      const itemsPresent = Object.values(items).every(Boolean);
+      function visibleRegions() {
+        const vis = (id) => { const el = document.getElementById(id); return el && !el.hidden; };
+        const out = [];
+        if (vis('mosaic')) out.push('summary');
+        // 그래프 기능은 두 서브뷰(요약 표 #graphSummaryTable / 지도 #graphCanvas)
+        // 중 하나로 보인다(스텝2-보정, 기본은 요약 표) — 어느 쪽이든 "그래프
+        // 표면이 보인다"로 센다.
+        if (vis('graphSummaryTable') || vis('graphCanvas')) out.push('graph');
+        if (vis('agentCanvas')) out.push('agent');
+        return out;
+      }
+      const dot = document.getElementById('dot');
+      const stateBefore = window.AthenaCanvasMode ? window.AthenaCanvasMode.state.view : null;
+      if (dot) dot.click();
+      const stateAfterDotClick = window.AthenaCanvasMode ? window.AthenaCanvasMode.state.view : null;
+      if (!itemsPresent) return { pillGone, itemsPresent, stateBefore, stateAfterDotClick };
+      items.agent.click();
+      const afterAgentClick = visibleRegions();
+      items.graph.click();
+      const afterGraphClick = visibleRegions();
+      items.summary.click();
+      const afterSummaryClick = visibleRegions();
+      return {
+        pillGone, itemsPresent, stateBefore, stateAfterDotClick,
+        afterAgentClick, afterGraphClick, afterSummaryClick,
+      };
+    })()`);
+    report.modeNav = modeNav;
+    assertOk('mode-nav: #graphPill이 DOM에서 제거됐다', modeNav.pillGone === true);
+    assertOk('mode-nav: 모드 네비 3항목(대화/그래프/에이전트)이 존재한다', modeNav.itemsPresent === true);
+    assertOk('mode-nav: #dot 클릭은 더 이상 모드를 바꾸지 않는다(상태표시 전용)', modeNav.stateAfterDotClick === modeNav.stateBefore);
+    if (modeNav.itemsPresent) {
+      assertOk(
+        'mode-nav: 에이전트 클릭 시 agentCanvas만 보인다(정확히 하나)',
+        JSON.stringify(modeNav.afterAgentClick) === JSON.stringify(['agent']),
+      );
+      assertOk(
+        'mode-nav: 그래프 클릭 시 그래프 표면만 보인다(정확히 하나)',
+        JSON.stringify(modeNav.afterGraphClick) === JSON.stringify(['graph']),
+      );
+      assertOk(
+        'mode-nav: 대화 클릭 시 mosaic만 보인다(정확히 하나)',
+        JSON.stringify(modeNav.afterSummaryClick) === JSON.stringify(['summary']),
+      );
+    }
+  } catch (err) {
+    report.modeNav = { error: String((err && err.message) || err) };
+    failures.push('mode-nav: 검증 블록이 예외로 끝났다');
+  }
+
+  // ---------- 에이전트모드 사이드바 — 작업·알람 파생 방 우선 노출 (3단계) ----------
+  //
+  // GET /api/v1/routines(athena:routines-list)는 이 하네스에 실제 백엔드가
+  // 없으면 그대로 실패한다(위 #routineChip과 같은 처지) — 그래서 계획서가 쓴
+  // "fixture 시드 데이터"를 여기서 만든다: ipcMain 핸들러를 이 블록 동안만
+  // 교체해 라이브 IPC 경로(athena:routines-list → 렌더러 렌더)는 그대로 타되
+  // 값만 픽스처로 준다. 렌더러 쪽 window.athena는 contextBridge로 얼려져 있어
+  // (exposeInMainWorld) 거기서 직접 monkeypatch하면 조용히 무시될 수 있다 —
+  // 그래서 main 프로세스의 ipcMain.handle을 바꾸는 쪽이 더 안전하다. 이
+  // 블록이 스크립트의 마지막 라우틴 소비자라 복원은 "백엔드 없음"과 동일한
+  // 정직한 실패 모양으로만 되돌린다(원래 핸들러를 그대로 재현할 수단이 없다).
+  try {
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({
+      ok: true,
+      data: {
+        routines: [
+          { id: 'fx1', symbol: '005930', note: '삼성전자 88,000 감시', status: 'active', mode: 'realtime-ws' },
+          { id: 'fx2', symbol: '000660', note: 'SK하이닉스 공시 키워드', status: 'paused', mode: 'periodic' },
+          // draft도 8단계부터 우선 노출 대상이다(◌ 점선 핑크) — 포함되는지 같이 잰다.
+          { id: 'fx3', symbol: '005380', note: '현대차 실적 발표', status: 'draft', mode: 'periodic' },
+        ],
+        disclosure_ready: true,
+        last_error: null,
+      },
+    }));
+
+    const agentSidebar = await shellWin.webContents.executeJavaScript(`(async () => {
+      const nav = document.getElementById('modeNavAgent');
+      const back = document.getElementById('modeNavSummary');
+      const list = document.getElementById('sidebarList');
+      if (!nav || !back || !list) return { wired: false };
+      nav.click();
+      await new Promise((r) => setTimeout(r, 600)); // IPC 왕복 + renderList()
+      const firstLabelAfterAgent = list.firstElementChild ? list.firstElementChild.textContent : null;
+      const routineRowCount = list.querySelectorAll('.sidebar-item.is-routine').length;
+      const pausedRowCount = list.querySelectorAll('.sidebar-item.is-routine.is-paused').length;
+      const draftRowCount = list.querySelectorAll('.sidebar-item.is-routine.is-draft').length;
+      back.click();
+      await new Promise((r) => setTimeout(r, 200));
+      const firstLabelAfterReturn = list.firstElementChild ? list.firstElementChild.textContent : null;
+      const routineRowsGoneAfterReturn = list.querySelectorAll('.sidebar-item.is-routine').length === 0;
+      return {
+        wired: true, firstLabelAfterAgent, routineRowCount, pausedRowCount, draftRowCount,
+        firstLabelAfterReturn, routineRowsGoneAfterReturn,
+      };
+    })()`);
+    report.agentSidebar = agentSidebar;
+    assertOk('agent-sidebar: 모드 네비/사이드바 리스트 배선이 있다', agentSidebar.wired === true);
+    if (agentSidebar.wired) {
+      assertOk(
+        'agent-sidebar: 에이전트 모드 전환 직후 첫 섹션이 "작업·알람"이다(AC6)',
+        agentSidebar.firstLabelAfterAgent === '작업·알람',
+      );
+      assertOk(
+        'agent-sidebar: active+paused+draft 3건 모두 우선 노출된다(8단계부터 draft도 포함)',
+        agentSidebar.routineRowCount === 3,
+      );
+      assertOk('agent-sidebar: paused 1건이 is-paused로 표시된다', agentSidebar.pausedRowCount === 1);
+      assertOk('agent-sidebar: draft 1건이 is-draft로 표시된다(◌ 점선 핑크)', agentSidebar.draftRowCount === 1);
+      assertOk(
+        'agent-sidebar: 대화모드 복귀 시 라우틴 행이 사라지고 원래 이력이 복원된다(AC6)',
+        agentSidebar.routineRowsGoneAfterReturn === true && agentSidebar.firstLabelAfterReturn !== '작업·알람',
+      );
+    }
+  } catch (err) {
+    report.agentSidebar = { error: String((err && err.message) || err) };
+    failures.push('agent-sidebar: 검증 블록이 예외로 끝났다');
+  } finally {
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+  }
+
+  // ---------- 에이전트모드 캔버스 — 헤더·세그먼트 탭·통계 카드 (4단계) ----------
+  //
+  // 위 3단계 블록과 같은 이유로 athena:routines-list를 잠깐 fixture로 바꾼다
+  // (이 하네스엔 실제 백엔드가 없다) — draft 1건을 섞어 좌측 리스트 필터링을
+  // 잰다. 5단계에서 리스트가 감시(watch, 실데이터)+예약(schedule) 두 열
+  // 레이아웃으로 바뀌었고, 후속 F-stage3(F1-FE)에서 예약도 fixture가 아니라
+  // GET /api/v1/routines의 mode==='scheduled' 실데이터로 승격됐다 — 그래서
+  // fx4를 섞어 예약 행도 같은 IPC로 함께 흘려보낸다. 행 클래스는 .agent-row다.
+  try {
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({
+      ok: true,
+      data: {
+        routines: [
+          { id: 'fx1', symbol: '005930', note: '삼성전자 88,000 감시', status: 'active', mode: 'realtime-ws' },
+          { id: 'fx2', symbol: '000660', note: 'SK하이닉스 공시 키워드', status: 'paused', mode: 'periodic' },
+          { id: 'fx3', symbol: '005380', note: '현대차 실적 발표', status: 'draft', mode: 'periodic' },
+          {
+            id: 'fx4', symbol: '069500', note: '평일 아침 브리핑', status: 'active', mode: 'scheduled',
+            next_fire_at: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
+          },
+        ],
+        disclosure_ready: true,
+        last_error: null,
+        fired_today: 2,
+      },
+    }));
+
+    const agentCanvasProbe = await shellWin.webContents.executeJavaScript(`(async () => {
+      const nav = document.getElementById('modeNavAgent');
+      const back = document.getElementById('modeNavSummary');
+      const canvas = document.getElementById('agentCanvas');
+      if (!nav || !back || !canvas) return { wired: false };
+      nav.click();
+      await new Promise((r) => setTimeout(r, 600)); // IPC 왕복 + refresh()
+      const headerText = {
+        title: (canvas.querySelector('.agent-title') || {}).textContent || null,
+        subtitle: (canvas.querySelector('.agent-subtitle') || {}).textContent || null,
+        tabLabels: Array.from(canvas.querySelectorAll('.agent-tab')).map((n) => n.textContent),
+        searchPlaceholder: (canvas.querySelector('.agent-search-input') || {}).placeholder || null,
+        ctaText: (canvas.querySelector('.agent-cta') || {}).textContent || null,
+      };
+      const statCards = Array.from(canvas.querySelectorAll('.agent-stat-card'));
+      const statCount = statCards.length;
+      const fixtureStatCount = statCards.filter((n) => n.getAttribute('data-source') === 'fixture').length;
+      const allRowCount = canvas.querySelectorAll('.agent-row').length;
+      const activeTabBtn = Array.from(canvas.querySelectorAll('.agent-tab')).find((n) => n.textContent === '활성');
+      if (activeTabBtn) activeTabBtn.click();
+      await new Promise((r) => setTimeout(r, 100));
+      const activeRowCount = canvas.querySelectorAll('.agent-row').length;
+      // agentCanvas는 싱글턴이라 탭 상태가 다음 블록까지 남는다 — "모두"로
+      // 되돌려 이 블록이 뒤따르는 블록에 곁가지 상태를 남기지 않게 한다.
+      const allTabBtn = Array.from(canvas.querySelectorAll('.agent-tab')).find((n) => n.textContent === '모두');
+      if (allTabBtn) allTabBtn.click();
+      back.click();
+      await new Promise((r) => setTimeout(r, 100));
+      return { wired: true, headerText, statCount, fixtureStatCount, allRowCount, activeRowCount };
+    })()`);
+    report.agentCanvas = agentCanvasProbe;
+    assertOk('agent-canvas: 헤더/캔버스 배선이 있다', agentCanvasProbe.wired === true);
+    if (agentCanvasProbe.wired) {
+      assertOk('agent-canvas: 타이틀이 "에이전트"다', agentCanvasProbe.headerText.title === '에이전트');
+      assertOk(
+        'agent-canvas: 탭 3종(모두/활성/일시중지)이 있다',
+        JSON.stringify(agentCanvasProbe.headerText.tabLabels) === JSON.stringify(['모두', '활성', '일시중지']),
+      );
+      assertOk('agent-canvas: 검색 placeholder가 "작업 검색"이다', agentCanvasProbe.headerText.searchPlaceholder === '작업 검색');
+      assertOk('agent-canvas: CTA가 "새 작업"을 담고 있다', (agentCanvasProbe.headerText.ctaText || '').includes('새 작업'));
+      assertOk('agent-canvas: 통계 카드 4장이 렌더된다', agentCanvasProbe.statCount === 4);
+      assertOk(
+        'agent-canvas: "진행 중" 한 장만 fixture 출처다(F-stage3 — 나머지 3장은 라이브로 승격)',
+        agentCanvasProbe.fixtureStatCount === 1,
+      );
+      assertOk(
+        'agent-canvas: "모두" 탭은 감시 2건 + draft 1건 + 예약(live) 1건 = 4건이 보인다(8단계 draft·F-stage3 예약 라이브 포함)',
+        agentCanvasProbe.allRowCount === 4,
+      );
+      assertOk(
+        'agent-canvas: "활성" 탭 전환 시 2건(감시 1 + 예약 1)만 남는다(좌측 리스트 필터링, 예약도 live)',
+        agentCanvasProbe.activeRowCount === 2,
+      );
+    }
+  } catch (err) {
+    report.agentCanvas = { error: String((err && err.message) || err) };
+    failures.push('agent-canvas: 검증 블록이 예외로 끝났다');
+  } finally {
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+  }
+
+  // ---------- 에이전트모드 리스트·상세 — 감시=라이브 왕복, 예약=라이브(F-stage3) (5단계) ----------
+  //
+  // athena:routines-list와 함께 athena:routine-confirm도 이 블록 동안만
+  // stateful fixture로 바꾼다 — draft→active 전이를 진짜로 흉내 내서
+  // "draft→confirm 왕복이 실제 API로 동작"을 잰다. 이 confirm 액션 자체는
+  // 채팅의 루틴 승인 카드([승인] 버튼, chat.js renderApprovalCard)가 이미
+  // 쓰는 것과 같은 IPC 채널·계약이다 — 여기서 새 UI를 만들지 않고 그 채널을
+  // 그대로 재사용해 캔버스가 결과를 정확히 반영하는지만 본다. F-stage3부터
+  // 예약(schedule.daily)도 fixture 폴백이 아니라 이 같은 IPC로 흘러온다 —
+  // fx-scheduled를 섞어 confirm 왕복과 무관하게 live로 남는지 함께 잰다.
+  try {
+    const stage5Routines = [
+      {
+        id: 'fx-draft', symbol: '005930', note: '삼성전자 조건 도달', status: 'draft', mode: 'realtime-ws',
+        source_label: '현재가', cooldown_s: 300,
+      },
+      {
+        id: 'fx-active', symbol: '000660', note: 'SK하이닉스 감시', status: 'active', mode: 'periodic',
+        source_label: '공시 제목 키워드', cooldown_s: 600,
+      },
+      {
+        id: 'fx-scheduled', symbol: '069500', note: '평일 아침 브리핑', status: 'active', mode: 'scheduled',
+        source_label: '예약 시각(요일 지정)', cooldown_s: 0,
+        next_fire_at: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
+      },
+    ];
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({
+      ok: true,
+      data: { routines: stage5Routines, disclosure_ready: true, last_error: null },
+    }));
+    ipcMain.removeHandler('athena:routine-confirm');
+    ipcMain.handle('athena:routine-confirm', async (_e, { id } = {}) => {
+      const r = stage5Routines.find((x) => x.id === id);
+      if (!r) return { ok: false, error: '루틴이 존재하지 않는다' };
+      if (r.status !== 'draft') return { ok: false, error: '전이할 수 없다' };
+      r.status = 'active'; // routines.py confirm_routine과 같은 계약: draft → active
+      return { ok: true, data: { ...r } };
+    });
+
+    const routineRoundTrip = await shellWin.webContents.executeJavaScript(`(async () => {
+      const nav = document.getElementById('modeNavAgent');
+      const back = document.getElementById('modeNavSummary');
+      const canvas = document.getElementById('agentCanvas');
+      if (!nav || !back || !canvas || !window.AthenaAgentCanvas) return { wired: false };
+      const count = (sel) => canvas.querySelectorAll(sel).length;
+      nav.click();
+      await new Promise((r) => setTimeout(r, 600));
+      // 4단계 블록이 "활성" 탭을 누른 채로 끝났을 수 있다(agentCanvas는 싱글턴이라
+      // 탭 상태가 블록 사이에 남는다) — "모두"로 되돌려 이 블록을 그 순서와
+      // 무관하게 만든다.
+      const allTabBtn = Array.from(canvas.querySelectorAll('.agent-tab')).find((n) => n.textContent === '모두');
+      if (allTabBtn) allTabBtn.click();
+      // 8단계부터 draft도 data-source="live"다(실데이터라서) — watch/draft를
+      // is-draft 클래스로 갈라 각각 잰다. F-stage3부터 watch:not(.is-draft)엔
+      // 예약(schedule) 행도 섞여 든다(둘 다 data-source="live") — 그래서
+      // 예약 행은 아래에서 제목으로 따로 찾아 출처만 별도로 잰다.
+      const snapshot = () => ({
+        watch: count('.agent-row[data-source="live"]:not(.is-draft)'),
+        draft: count('.agent-row.is-draft'),
+        fixture: count('.agent-row[data-source="fixture"]'),
+      });
+      const scheduleRowSource = () => {
+        const row = Array.from(canvas.querySelectorAll('.agent-row')).find(
+          (r) => (r.querySelector('.agent-row-title') || {}).textContent === '평일 아침 브리핑',
+        );
+        return row ? row.getAttribute('data-source') : null;
+      };
+      const before = snapshot();
+      const scheduleSourceBefore = scheduleRowSource();
+      // 채팅의 루틴 승인 카드가 [승인]을 누를 때 부르는 것과 같은 채널.
+      const confirmRes = await window.athena.invoke('athena:routine-confirm', { id: 'fx-draft' });
+      await window.AthenaAgentCanvas.refresh();
+      await new Promise((r) => setTimeout(r, 200));
+      const after = snapshot();
+      const scheduleSourceAfter = scheduleRowSource();
+      back.click();
+      await new Promise((r) => setTimeout(r, 100));
+      return {
+        wired: true, confirmOk: !!(confirmRes && confirmRes.ok), before, after, scheduleSourceBefore, scheduleSourceAfter,
+      };
+    })()`);
+    report.routineRoundTrip = routineRoundTrip;
+    assertOk('agent-canvas-5: 배선이 있다', routineRoundTrip.wired === true);
+    if (routineRoundTrip.wired) {
+      assertOk('agent-canvas-5: confirm 호출이 성공한다(승인 카드와 같은 채널)', routineRoundTrip.confirmOk === true);
+      assertOk(
+        // watch 카운트엔 F-stage3부터 예약(schedule) 행도 섞인다(둘 다
+        // data-source="live"라 이 CSS 셀렉터로는 안 갈린다) — fx-active(watch)
+        // + fx-scheduled(schedule) = 2, draft는 fx-draft 1건.
+        'agent-canvas-5: confirm 전엔 감시+예약(live) 2건 + draft 1건이 보인다(8단계, F-stage3)',
+        routineRoundTrip.before.watch === 2 && routineRoundTrip.before.draft === 1,
+      );
+      assertOk(
+        'agent-canvas-5: draft→confirm 왕복 후 draft 행이 감시(watch) 행으로 바뀐다(실 API)',
+        routineRoundTrip.after.watch === 3 && routineRoundTrip.after.draft === 0,
+      );
+      assertOk(
+        'agent-canvas-5/F-stage3: 예약(schedule) 행은 confirm과 무관하게 항상 live 출처다(더 이상 fixture가 아니다, P3)',
+        routineRoundTrip.scheduleSourceBefore === 'live' && routineRoundTrip.scheduleSourceAfter === 'live',
+      );
+    }
+  } catch (err) {
+    report.routineRoundTrip = { error: String((err && err.message) || err) };
+    failures.push('agent-canvas-5: 검증 블록이 예외로 끝났다');
+  } finally {
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+    ipcMain.removeHandler('athena:routine-confirm');
+    ipcMain.handle('athena:routine-confirm', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+  }
+
+  // ---------- 상세 패널 일시중지·재개 → pause/resume API (6.5단계) ----------
+  //
+  // 6단계가 만든 엔드포인트를 이 화면에 처음 잇는다. athena:routines-list와
+  // 함께 athena:routine-pause/resume도 stateful fixture로 바꿔 active→paused→
+  // active 왕복이 실제로 도는지 잰다(승인 카드 confirm과 같은 패턴, 5단계
+  // routineRoundTrip 참고).
+  try {
+    const stage65Routines = [
+      {
+        id: 'fx-pause', symbol: '005930', note: '삼성전자 감시', status: 'active', mode: 'periodic',
+        source_label: '현재가', cooldown_s: 300,
+      },
+    ];
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({
+      ok: true, data: { routines: stage65Routines, disclosure_ready: true, last_error: null },
+    }));
+    ipcMain.removeHandler('athena:routine-pause');
+    ipcMain.handle('athena:routine-pause', async (_e, { id } = {}) => {
+      const r = stage65Routines.find((x) => x.id === id);
+      if (!r) return { ok: false, error: '루틴이 존재하지 않는다' };
+      r.status = 'paused';
+      return { ok: true, data: { ...r } };
+    });
+    ipcMain.removeHandler('athena:routine-resume');
+    ipcMain.handle('athena:routine-resume', async (_e, { id } = {}) => {
+      const r = stage65Routines.find((x) => x.id === id);
+      if (!r) return { ok: false, error: '루틴이 존재하지 않는다' };
+      r.status = 'active';
+      return { ok: true, data: { ...r } };
+    });
+
+    const pauseResumeProbe = await shellWin.webContents.executeJavaScript(`(async () => {
+      const nav = document.getElementById('modeNavAgent');
+      const back = document.getElementById('modeNavSummary');
+      const canvas = document.getElementById('agentCanvas');
+      if (!nav || !back || !canvas || !window.AthenaAgentCanvas) return { wired: false };
+      nav.click();
+      await new Promise((r) => setTimeout(r, 600));
+      const allTabBtn = Array.from(canvas.querySelectorAll('.agent-tab')).find((n) => n.textContent === '모두');
+      if (allTabBtn) allTabBtn.click();
+      window.AthenaAgentCanvas.selectRow('fx-pause');
+      await new Promise((r) => setTimeout(r, 100));
+      const before = (canvas.querySelector('.agent-pause-btn') || {}).textContent || null;
+      canvas.querySelector('.agent-pause-btn').click();
+      await new Promise((r) => setTimeout(r, 300));
+      const afterPause = (canvas.querySelector('.agent-pause-btn') || {}).textContent || null;
+      const badgeAfterPause = (canvas.querySelector('.agent-status-badge') || {}).textContent || null;
+      canvas.querySelector('.agent-pause-btn').click();
+      await new Promise((r) => setTimeout(r, 300));
+      const afterResume = (canvas.querySelector('.agent-pause-btn') || {}).textContent || null;
+      const badgeAfterResume = (canvas.querySelector('.agent-status-badge') || {}).textContent || null;
+      back.click();
+      await new Promise((r) => setTimeout(r, 100));
+      return { wired: true, before, afterPause, badgeAfterPause, afterResume, badgeAfterResume };
+    })()`);
+    report.pauseResume = pauseResumeProbe;
+    assertOk('agent-canvas-6.5: 배선이 있다', pauseResumeProbe.wired === true);
+    if (pauseResumeProbe.wired) {
+      assertOk('agent-canvas-6.5: 활성 항목은 "❚❚ 일시중지" 버튼을 보여준다', pauseResumeProbe.before === '❚❚ 일시중지');
+      assertOk(
+        'agent-canvas-6.5: 일시중지 클릭 후 버튼이 "재개"로 바뀐다(실 API)',
+        pauseResumeProbe.afterPause === '▶ 재개',
+      );
+      assertOk('agent-canvas-6.5: 일시중지 클릭 후 상태 배지가 "일시중지"다', pauseResumeProbe.badgeAfterPause === '일시중지');
+      assertOk(
+        'agent-canvas-6.5: 재개 클릭 후 버튼이 다시 "❚❚ 일시중지"로 바뀐다',
+        pauseResumeProbe.afterResume === '❚❚ 일시중지',
+      );
+      assertOk('agent-canvas-6.5: 재개 클릭 후 상태 배지가 "활성"이다', pauseResumeProbe.badgeAfterResume === '활성');
+    }
+  } catch (err) {
+    report.pauseResume = { error: String((err && err.message) || err) };
+    failures.push('agent-canvas-6.5: 검증 블록이 예외로 끝났다');
+  } finally {
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+    ipcMain.removeHandler('athena:routine-pause');
+    ipcMain.handle('athena:routine-pause', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+    ipcMain.removeHandler('athena:routine-resume');
+    ipcMain.handle('athena:routine-resume', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+  }
+
+  // ---------- 제안 — 그래프 성향 기반 (7단계, Paper 보드 39 하단) ----------
+  //
+  // athena:brain-profile-summary를 stateful fixture로 바꿔 실데이터 왕복을
+  // 흉내낸다(summary-table.js가 보드 07에서 쓰는 것과 같은 채널). "추가" 클릭이
+  // 시트를 열지 않고 채팅 입력에만 문장을 심는지 확인한다(43 원칙 위반 시 실패).
+  try {
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({
+      ok: true, data: { routines: [], disclosure_ready: true, last_error: null },
+    }));
+    ipcMain.removeHandler('athena:brain-profile-summary');
+    ipcMain.handle('athena:brain-profile-summary', async () => ({
+      ok: true,
+      entries: [
+        {
+          entity_id: 'e1', entity_kind: 'stock', entity_name: '삼성전자', relation_kind: '단기 회전',
+          confidence: 'EXTRACTED', tier: 'deterministic', rationale: '매매일마다 정리가 필요해 보여요',
+          observed_at: '2026-08-26T00:00:00Z', reinforcement: 21,
+        },
+        {
+          entity_id: 'e2', entity_kind: 'theme', entity_name: '배당 방어 바스켓', relation_kind: '응집 상승',
+          confidence: 'INFERRED', tier: 'conversational', rationale: null,
+          observed_at: '2026-08-25T00:00:00Z', reinforcement: 6,
+        },
+      ],
+    }));
+
+    const suggestionProbe = await shellWin.webContents.executeJavaScript(`(async () => {
+      const nav = document.getElementById('modeNavAgent');
+      const back = document.getElementById('modeNavSummary');
+      const canvas = document.getElementById('agentCanvas');
+      const input = document.getElementById('input');
+      if (!nav || !back || !canvas || !input) return { wired: false };
+      input.value = '';
+      nav.click();
+      await new Promise((r) => setTimeout(r, 600));
+      const section = canvas.querySelector('.agent-suggest-section');
+      const sectionHidden = section ? section.hidden : null;
+      const titles = Array.from(canvas.querySelectorAll('.agent-suggest-title')).map((n) => n.textContent);
+      const rationales = Array.from(canvas.querySelectorAll('.agent-suggest-rationale')).map((n) => n.textContent);
+      const addBtns = canvas.querySelectorAll('.agent-suggest-add');
+      addBtns[0].click();
+      await new Promise((r) => setTimeout(r, 50));
+      const seededValue = input.value;
+      const orderHidden = document.getElementById('order').hidden;
+      const settingsHidden = document.getElementById('settings').hidden;
+      const onboardHidden = document.getElementById('onboard').hidden;
+      back.click();
+      await new Promise((r) => setTimeout(r, 100));
+      return { wired: true, sectionHidden, titles, rationales, seededValue, orderHidden, settingsHidden, onboardHidden };
+    })()`);
+    report.suggestions = suggestionProbe;
+    assertOk('agent-canvas-7: 배선이 있다', suggestionProbe.wired === true);
+    if (suggestionProbe.wired) {
+      assertOk('agent-canvas-7: 신호가 있으면 제안 섹션이 보인다', suggestionProbe.sectionHidden === false);
+      assertOk(
+        'agent-canvas-7: 제목 2건이 실제 entity_name이다(지어낸 태스크 문구가 아니다)',
+        JSON.stringify(suggestionProbe.titles) === JSON.stringify(['삼성전자', '배당 방어 바스켓']),
+      );
+      assertOk(
+        'agent-canvas-7: 근거문이 relation_kind·reinforcement·rationale 실제 필드로만 조합된다',
+        suggestionProbe.rationales[0] === '단기 회전 성향 21회 보강 — 매매일마다 정리가 필요해 보여요'
+          && suggestionProbe.rationales[1] === '응집 상승 성향 6회 보강',
+      );
+      assertOk(
+        'agent-canvas-7: "추가" 클릭 시 채팅 입력에 문장이 심긴다',
+        suggestionProbe.seededValue === '"삼성전자"에 대한 단기 회전 성향이 21회 보강됐어요 — 관련 루틴을 만들어줄까요?',
+      );
+      assertOk(
+        'agent-canvas-7: "추가"는 시트를 열지 않는다(주문/설정/온보딩 패널 모두 hidden 유지, 43 원칙)',
+        suggestionProbe.orderHidden === true && suggestionProbe.settingsHidden === true && suggestionProbe.onboardHidden === true,
+      );
+    }
+  } catch (err) {
+    report.suggestions = { error: String((err && err.message) || err) };
+    failures.push('agent-canvas-7: 검증 블록이 예외로 끝났다');
+  } finally {
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+    ipcMain.removeHandler('athena:brain-profile-summary');
+    ipcMain.handle('athena:brain-profile-summary', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+    // 채팅 입력에 남은 시드 문장을 다음 블록으로 새지 않게 지운다.
+    await shellWin.webContents.executeJavaScript(`(() => {
+      const input = document.getElementById('input');
+      if (input) input.value = '';
+    })()`);
+  }
+
+  // ---------- 새 작업은 채팅에서 (8단계, Paper 보드 43) ----------
+  //
+  // athena:routines-list를 draft 2건이 있는 stateful fixture로 바꾸고, 아무
+  // 질의나 Enter로 트리거한다(검증5와 같은 경로) — chat.js가 턴 종료 직후
+  // refreshRoutineDrafts()를 불러 "작업 요약·초안" 카드를 스트림 파싱이 아니라
+  // 목록 재조회로 결정론적으로 띄운다(P3). "고칠 게 있어"는 채팅 입력에 문장을
+  // 심고(시트 없음), "바로 활성화"는 기존 승인 채널(athena:routine-confirm)을
+  // 그대로 부른다(채팅의 루틴 승인 카드가 이미 쓰는 것과 같은 채널).
+  try {
+    const stage8Routines = [
+      {
+        id: 'fx-draft-1', symbol: '005930', note: '삼성전자 조건 도달 시 감시', status: 'draft', mode: 'realtime-ws',
+        source_label: '현재가', cooldown_s: 300, activation_blocker: null,
+      },
+      {
+        id: 'fx-draft-2', symbol: '000660', note: 'SK하이닉스 공시 키워드 감시', status: 'draft', mode: 'periodic',
+        source_label: '공시 제목 키워드', cooldown_s: 600, activation_blocker: null,
+      },
+      // F-stage3(F1-FE) — 예약(schedule.daily) draft. approvalModeLine()의
+      // 3분기(사실11②)가 "방식 예약 실행 — 지정 요일·시각"을 만들고, "틱
+      // 즉시"(periodic 전용 문구)가 섞이지 않는지 여기서 잰다.
+      {
+        id: 'fx-draft-3', symbol: '069500', note: '평일 아침 브리핑 예약', status: 'draft', mode: 'scheduled',
+        source_label: '예약 시각(요일 지정)', cooldown_s: 0, activation_blocker: null,
+      },
+    ];
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({
+      ok: true, data: { routines: stage8Routines, disclosure_ready: true, last_error: null },
+    }));
+    ipcMain.removeHandler('athena:routine-confirm');
+    ipcMain.handle('athena:routine-confirm', async (_e, { id } = {}) => {
+      const r = stage8Routines.find((x) => x.id === id);
+      if (!r) return { ok: false, error: '루틴이 존재하지 않는다' };
+      r.status = 'active'; // routines.py confirm_routine과 같은 계약: draft → active
+      return { ok: true, data: { ...r } };
+    });
+
+    const draftFlowProbe = await shellWin.webContents.executeJavaScript(`(async () => {
+      const input = document.getElementById('input');
+      if (!input) return { wired: false };
+      input.value = '아무 질의나 — 초안 카드 트리거용';
+      input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+      let done = false;
+      const t0 = Date.now();
+      while (Date.now() - t0 < 6000) {
+        if (document.querySelectorAll('.routine-approval').length >= 3) { done = true; break; }
+        await new Promise((r) => setTimeout(r, 100));
+      }
+      if (!done) return { wired: true, cardsAppeared: false };
+
+      const cards = Array.from(document.querySelectorAll('.routine-approval'));
+      const cardFor = (title) => cards.find((c) => {
+        const t = c.querySelector('.routine-draft-title');
+        return t && t.textContent === title;
+      });
+      const card1 = cardFor('삼성전자 조건 도달 시 감시');
+      const card2 = cardFor('SK하이닉스 공시 키워드 감시');
+      const card3 = cardFor('평일 아침 브리핑 예약');
+      const pills1 = card1 ? Array.from(card1.querySelectorAll('.routine-draft-pill')).map((n) => n.textContent) : [];
+      const hint1 = card1 ? (card1.querySelector('.routine-draft-hint') || {}).textContent : null;
+      const chipLabels1 = card1 ? Array.from(card1.querySelectorAll('.routine-btn')).map((n) => n.textContent) : [];
+      const previewDisabled1 = card1 ? card1.querySelectorAll('.routine-btn')[0].disabled : null;
+      // F-stage3 — 예약 draft의 방식 고지 문구(approvalModeLine, 사실11②).
+      const desc3 = card3 ? (card3.querySelector('.agent-body') || {}).textContent : null;
+
+      // 카드1 — "고칠 게 있어" 클릭 → 채팅 입력에 문장이 심긴다.
+      if (card1) Array.from(card1.querySelectorAll('.routine-btn')).find((b) => b.textContent === '고칠 게 있어').click();
+      await new Promise((r) => setTimeout(r, 50));
+      const seededValue = input.value;
+
+      // 카드2 — "바로 활성화" 클릭 → 기존 승인 채널이 실제로 불린다.
+      let activateStatus = null;
+      if (card2) {
+        Array.from(card2.querySelectorAll('.routine-btn')).find((b) => b.textContent === '바로 활성화').click();
+        await new Promise((r) => setTimeout(r, 300));
+        activateStatus = (card2.querySelector('.agent-mode') || {}).textContent;
+      }
+
+      return {
+        wired: true, cardsAppeared: true, pills1, hint1, chipLabels1, previewDisabled1, seededValue, activateStatus, desc3,
+      };
+    })()`);
+    report.draftFlow = draftFlowProbe;
+    assertOk('routine-draft-8: 배선이 있다', draftFlowProbe.wired === true);
+    if (draftFlowProbe.wired) {
+      assertOk('routine-draft-8: 질의 완료 후 초안 카드 2건이 뜬다(refreshRoutineDrafts)', draftFlowProbe.cardsAppeared === true);
+    }
+    if (draftFlowProbe.cardsAppeared) {
+      assertOk(
+        'routine-draft-8: pill이 "작업 요약"·"초안" 2개다',
+        JSON.stringify(draftFlowProbe.pills1) === JSON.stringify(['작업 요약', '초안']),
+      );
+      assertOk('routine-draft-8: 힌트가 "← 캔버스에 초안 생성됨"이다', draftFlowProbe.hint1 === '← 캔버스에 초안 생성됨');
+      assertOk(
+        'routine-draft-8: 칩 3종(미리보기 실행/바로 활성화/고칠 게 있어)이 있다',
+        JSON.stringify(draftFlowProbe.chipLabels1) === JSON.stringify(['미리보기 실행', '바로 활성화', '고칠 게 있어']),
+      );
+      assertOk('routine-draft-8: "미리보기 실행"은 백엔드가 없어 비활성이다(P3)', draftFlowProbe.previewDisabled1 === true);
+      assertOk(
+        'routine-draft-8: "고칠 게 있어" 클릭 시 채팅 입력에 문장이 심긴다(시트 없음)',
+        draftFlowProbe.seededValue === '"삼성전자 조건 도달 시 감시" 초안을 고쳐줘 — ',
+      );
+      assertOk(
+        'routine-draft-8: "바로 활성화" 클릭이 기존 승인 채널을 실제로 부른다',
+        draftFlowProbe.activateStatus === '활성 — 감시가 시작됐습니다',
+      );
+      assertOk(
+        'routine-draft-8/F-stage3: 예약(scheduled) draft 카드가 "방식 예약 실행"으로 뜬다(사실11②)',
+        !!draftFlowProbe.desc3 && draftFlowProbe.desc3.includes('방식 예약 실행'),
+      );
+      assertOk(
+        'routine-draft-8/F-stage3: 예약 카드 문구에 "틱 즉시"가 섞이지 않는다(approvalModeLine 3분기 회귀 방지)',
+        !!draftFlowProbe.desc3 && !draftFlowProbe.desc3.includes('틱 즉시'),
+      );
+    }
+  } catch (err) {
+    report.draftFlow = { error: String((err && err.message) || err) };
+    failures.push('routine-draft-8: 검증 블록이 예외로 끝났다');
+  } finally {
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+    ipcMain.removeHandler('athena:routine-confirm');
+    ipcMain.handle('athena:routine-confirm', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+    await shellWin.webContents.executeJavaScript(`(() => {
+      const input = document.getElementById('input');
+      if (input) input.value = '';
+    })()`);
+  }
+
+  // ---------- 알람 센터 · 라이브 관제 (9단계, Paper 보드 40) ----------
+  //
+  // 검증17이 이미 routine-fired 1건(vr1)을 보내 notifyRooms에 남아 있을 수
+  // 있다 — 정확한 총 개수 대신 "방금 보낸 이벤트가 실제로 알람 행으로 뜨는가"
+  // "모두 읽음으로 후 미확인이 0인가"를 상대적으로 잰다(routine-event 주입은
+  // 검증17과 같은 경로: shellWin.webContents.send).
+  try {
+    shellWin.webContents.send('athena:routine-event', {
+      type: 'routine-fired',
+      routine_id: 'stage9-alarm-1',
+      symbol: '000660',
+      source: 'price.change_rate',
+      mode: 'periodic',
+      observed: 123456,
+      threshold: 120000,
+      note: '9단계 알람 검증',
+      fired_at: new Date().toISOString(),
+    });
+    await wait(300); // sidebar.js handleRoutineEvent가 renderList/updateAgentBadge까지 끝내도록
+
+    const alarmProbe = await shellWin.webContents.executeJavaScript(`(async () => {
+      const nav = document.getElementById('modeNavAgent');
+      const back = document.getElementById('modeNavSummary');
+      const canvas = document.getElementById('agentCanvas');
+      if (!nav || !back || !canvas || !window.AthenaAgentCanvas) return { wired: false };
+      nav.click();
+      await new Promise((r) => setTimeout(r, 600));
+      const alertsTabBtn = Array.from(canvas.querySelectorAll('.agent-view-tab')).find((n) => n.textContent.startsWith('알람'));
+      if (!alertsTabBtn) return { wired: false };
+      const labelBefore = alertsTabBtn.textContent;
+      alertsTabBtn.click();
+      await new Promise((r) => setTimeout(r, 100));
+      const rows = Array.from(canvas.querySelectorAll('.agent-alarm-row'));
+      const myRow = rows.find((r) => (r.querySelector('.agent-alarm-title') || {}).textContent === '9단계 알람 검증');
+      const myRowUnread = myRow ? myRow.className.includes('is-unread') : null;
+      const wsLabel = (canvas.querySelector('.agent-live-ws-label') || {}).textContent;
+      const liveRowCount = canvas.querySelectorAll('.agent-live-progress-row').length;
+      const timelineRowCount = canvas.querySelectorAll('.agent-live-timeline-row').length;
+
+      canvas.querySelector('.agent-mark-all-read').click();
+      await new Promise((r) => setTimeout(r, 100));
+      const labelAfterMarkAll = alertsTabBtn.textContent;
+      const stillUnreadCount = canvas.querySelectorAll('.agent-alarm-row.is-unread').length;
+
+      const tasksTabBtn = Array.from(canvas.querySelectorAll('.agent-view-tab')).find((n) => n.textContent === '작업');
+      if (tasksTabBtn) tasksTabBtn.click();
+      await new Promise((r) => setTimeout(r, 100));
+      const tasksHeadHiddenAfterReturn = (canvas.querySelector('.agent-tasks-head') || {}).hidden;
+
+      back.click();
+      await new Promise((r) => setTimeout(r, 100));
+      return {
+        wired: true, labelBefore, myRowFound: !!myRow, myRowUnread, wsLabel,
+        liveRowCount, timelineRowCount, labelAfterMarkAll, stillUnreadCount, tasksHeadHiddenAfterReturn,
+      };
+    })()`);
+    report.alarmLive = alarmProbe;
+    assertOk('agent-canvas-9: 배선이 있다', alarmProbe.wired === true);
+    if (alarmProbe.wired) {
+      assertOk(
+        'agent-canvas-9: 알람 탭 라벨에 미확인 수가 붙는다(예: "알람 N")',
+        /^알람 \d+$/.test(alarmProbe.labelBefore),
+      );
+      assertOk(
+        'agent-canvas-9: 방금 보낸 routine-fired가 알람 행으로 뜬다(notifyRooms 승격)',
+        alarmProbe.myRowFound === true,
+      );
+      assertOk('agent-canvas-9: 그 행은 미확인(is-unread)이다', alarmProbe.myRowUnread === true);
+      assertOk(
+        'agent-canvas-9: 라이브 컬럼 진행바 2건 + 타임라인 4건(fixture)',
+        alarmProbe.liveRowCount === 2 && alarmProbe.timelineRowCount === 4,
+      );
+      assertOk(
+        'agent-canvas-9: "WS 연결됨"은 검증 하네스에서 피드가 안 도니 정직하게 "연결 안 됨"이다',
+        alarmProbe.wsLabel === 'WS 연결 안 됨',
+      );
+      assertOk('agent-canvas-9: "모두 읽음으로" 후 탭 라벨이 "알람"이다(배지 0)', alarmProbe.labelAfterMarkAll === '알람');
+      assertOk('agent-canvas-9: "모두 읽음으로" 후 미확인 행이 0건이다', alarmProbe.stillUnreadCount === 0);
+      assertOk('agent-canvas-9: "작업" 뷰로 돌아오면 작업 머리가 다시 보인다', alarmProbe.tasksHeadHiddenAfterReturn === false);
+    }
+  } catch (err) {
+    report.alarmLive = { error: String((err && err.message) || err) };
+    failures.push('agent-canvas-9: 검증 블록이 예외로 끝났다');
+  }
+
+  // ---------- 알림 방 재시작 복원 — ack·opened 왕복 (7단계·F-stage5b-FE) ----------
+  //
+  // 하이드레이션 자체(hydrateNotifyRooms)는 앱 부팅 시 1회만 도는 내부
+  // 함수라 이 하네스(단일 프로세스, 이미 부팅된 shellWin 재사용)에선 재부팅
+  // 없이 재현할 방법이 없다 — 그 매핑 로직(last_fired_at/unread → read)은
+  // agent-sidebar-list.test.js의 buildHydratedRooms 단위 테스트 6건이 이미
+  // 전수 커버한다(빈 목록·미발화 제외·unread 반전·정렬·잘못된 날짜 방어).
+  // 여기서는 이 단계가 실제로 새로 배선한 부분 — selectNotifyRoom() 클릭 시
+  // athena:routine-ack와 athena:routine-engagement(event:'opened', F-stage5b-FE)가
+  // 실제로 불리는지 — 를 잰다(사이드바 좌측 "알림에서" 섹션, agent-canvas
+  // 알람 컬럼과는 다른 표면).
+  try {
+    let ackCalledWith = null;
+    ipcMain.removeHandler('athena:routine-ack');
+    ipcMain.handle('athena:routine-ack', async (_e, { id } = {}) => {
+      ackCalledWith = id;
+      return { ok: true, data: { id, last_read_fired_at: new Date().toISOString() } };
+    });
+    let engagementCalls = [];
+    ipcMain.removeHandler('athena:routine-engagement');
+    ipcMain.handle('athena:routine-engagement', async (_e, { id, event } = {}) => {
+      engagementCalls.push({ id, event });
+      return { ok: true, data: { ts: new Date().toISOString(), routine_id: id, event } };
+    });
+
+    shellWin.webContents.send('athena:routine-event', {
+      type: 'routine-fired',
+      routine_id: 'stage7-notify-1',
+      symbol: '005930',
+      source: 'price.change_rate',
+      mode: 'periodic',
+      observed: 88100,
+      threshold: 88000,
+      note: '7단계 알림 방 ack 검증',
+      fired_at: new Date().toISOString(),
+    });
+    await wait(300); // handleRoutineEvent의 renderList/updateAgentBadge까지.
+
+    const ackProbe = await shellWin.webContents.executeJavaScript(`(async () => {
+      const list = document.getElementById('sidebarList');
+      if (!list) return { wired: false };
+      const row = Array.from(list.querySelectorAll('.sidebar-item.is-notify')).find(
+        (n) => (n.querySelector('.sidebar-item-label') || {}).textContent === '7단계 알림 방 ack 검증',
+      );
+      if (!row) return { wired: false, reason: 'no-notify-row' };
+      const unreadDotBefore = !!row.querySelector('.sidebar-item-dot');
+      row.click();
+      await new Promise((r) => setTimeout(r, 200));
+      const afterRow = Array.from(list.querySelectorAll('.sidebar-item.is-notify')).find(
+        (n) => (n.querySelector('.sidebar-item-label') || {}).textContent === '7단계 알림 방 ack 검증',
+      );
+      const unreadDotAfter = afterRow ? !!afterRow.querySelector('.sidebar-item-dot') : null;
+      const bannerHidden = (document.getElementById('roomHeadBanner') || {}).hidden;
+      return { wired: true, unreadDotBefore, unreadDotAfter, bannerHidden };
+    })()`);
+    report.notifyAck = { ...ackProbe, ackCalledWith, engagementCalls };
+    assertOk('sidebar-notify-7: 배선이 있다', ackProbe.wired === true);
+    if (ackProbe.wired) {
+      assertOk('sidebar-notify-7: 클릭 전엔 미확인 점이 있다', ackProbe.unreadDotBefore === true);
+      assertOk('sidebar-notify-7: 클릭 후 즉시 미확인 점이 사라진다(화면 반영은 ack 왕복을 기다리지 않는다)', ackProbe.unreadDotAfter === false);
+      assertOk('sidebar-notify-7: 배너가 뜬다(기존 selectNotifyRoom 동작 유지)', ackProbe.bannerHidden === false);
+      assertOk('sidebar-notify-7: 클릭이 실제로 athena:routine-ack를 그 라우틴 id로 부른다(6단계 read-marks 왕복)', ackCalledWith === 'stage7-notify-1');
+      assertOk(
+        'sidebar-notify-7/F-stage5b-FE: 미확인 방을 처음 클릭하면 athena:routine-engagement(opened)를 그 라우틴 id로 부른다',
+        JSON.stringify(engagementCalls) === JSON.stringify([{ id: 'stage7-notify-1', event: 'opened' }]),
+      );
+    }
+  } catch (err) {
+    report.notifyAck = { error: String((err && err.message) || err) };
+    failures.push('sidebar-notify-7: 검증 블록이 예외로 끝났다');
+  } finally {
+    ipcMain.removeHandler('athena:routine-ack');
+    ipcMain.handle('athena:routine-ack', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+    ipcMain.removeHandler('athena:routine-engagement');
+    ipcMain.handle('athena:routine-engagement', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+  }
+
+  // ---------- "이어진 대화" 계측 — replied 왕복 (F-stage5b-FE) ----------
+  //
+  // 능동 턴(routine-fired) 직후 사용자가 처음 보내는 질의만 replied로
+  // 기록한다(chat.js maybeRecordReplied, 시간 창 판정은 프론트 몫 —
+  // engagement.py 계약). athena__render_canvas는 이 하네스의 다른 모든
+  // 블록이 공유하는 핵심 채널이라 손대지 않는다 — 실제 질의 왕복이 어떻게
+  // 응답하든 무관하게, maybeRecordReplied()는 runQuery() 진입 시점에
+  // 이미 불린다(네트워크 응답을 기다리지 않는다).
+  try {
+    let engagementCalls = [];
+    ipcMain.removeHandler('athena:routine-engagement');
+    ipcMain.handle('athena:routine-engagement', async (_e, { id, event } = {}) => {
+      engagementCalls.push({ id, event });
+      return { ok: true, data: { ts: new Date().toISOString(), routine_id: id, event } };
+    });
+
+    shellWin.webContents.send('athena:routine-event', {
+      type: 'routine-fired',
+      routine_id: 'stage5b-replied-1',
+      symbol: '005930',
+      source: 'price.change_rate',
+      mode: 'periodic',
+      observed: 88100,
+      threshold: 88000,
+      note: 'F-stage5b 이어진 대화 검증',
+      fired_at: new Date().toISOString(),
+    });
+    await wait(200); // renderAgentTurn이 lastFiredRoutine을 채울 때까지.
+
+    const repliedProbe = await shellWin.webContents.executeJavaScript(`(async () => {
+      const input = document.getElementById('input');
+      if (!input) return { wired: false };
+      input.value = 'F-stage5b 이어진 대화 검증 질의';
+      input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+      return { wired: true };
+    })()`);
+    await wait(200); // maybeRecordReplied()는 동기적으로 곧바로 불린다 — IPC 왕복만 기다린다.
+    report.repliedEngagement = { ...repliedProbe, engagementCalls };
+    assertOk('replied-5b: 배선이 있다', repliedProbe.wired === true);
+    if (repliedProbe.wired) {
+      assertOk(
+        'replied-5b: 능동 턴 직후 첫 질의가 athena:routine-engagement(replied)를 그 라우틴 id로 부른다',
+        JSON.stringify(engagementCalls) === JSON.stringify([{ id: 'stage5b-replied-1', event: 'replied' }]),
+      );
+    }
+  } catch (err) {
+    report.repliedEngagement = { error: String((err && err.message) || err) };
+    failures.push('replied-5b: 검증 블록이 예외로 끝났다');
+  } finally {
+    ipcMain.removeHandler('athena:routine-engagement');
+    ipcMain.handle('athena:routine-engagement', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+    await shellWin.webContents.executeJavaScript(`(() => {
+      const input = document.getElementById('input');
+      if (input) input.value = '';
+    })()`);
+  }
+
+  // ---------- 실행 이력 · 결과 드릴인 (10단계, Paper 보드 41) ----------
+  //
+  // athena:routines-list(감시 1건)와 athena:routine-runs(6단계 ledger 조회)를
+  // stateful fixture로 바꿔 "전체 이력 보기 →" → 브레드크럼 → 최근 30회 → 통계
+  // → "작업 ›" 복귀까지 왕복시킨다. verdict 3종(fired/near/suppressed) 아이콘만
+  // 쓰는지, 최신순 정렬인지를 확인한다(AC10). athena:routine-runs 응답에
+  // F-stage5(F2-FE)가 avg_duration_ms도 함께 태워, "30회 통계"의 "평균"
+  // 타일이 라이브로 붙었는지도 같은 왕복에서 잰다.
+  try {
+    const stage10Routines = [
+      {
+        id: 'fx-hist-1', symbol: '005930', note: '삼성전자 88,000 감시', status: 'active', mode: 'realtime-ws',
+        source_label: '현재가', cooldown_s: 300,
+      },
+    ];
+    const stage10Runs = [
+      { ts: '2026-08-25T07:30:00Z', routine_id: 'fx-hist-1', symbol: '005930', source: 'price.change_rate', verdict: 'near', observed: 87900, threshold: 88000, reason: '근접 — 임계 미달' },
+      { ts: '2026-08-26T07:30:00Z', routine_id: 'fx-hist-1', symbol: '005930', source: 'price.change_rate', verdict: 'fired', observed: 88100, threshold: 88000, reason: '조건 도달' },
+      { ts: '2026-08-24T07:30:00Z', routine_id: 'fx-hist-1', symbol: '005930', source: 'price.change_rate', verdict: 'suppressed', observed: 88100, threshold: 88000, reason: '쿨다운 중' },
+      // [6단계] 오늘자 브리핑 산출물 행 — 3단계 briefings 병합 필드
+      // (briefing_title/content/truncated/destination)로 41번 카드가 실데이터로
+      // 뜨는지 같은 왕복에서 잰다. ts는 부팅 시각(오늘)이어야 카드가 렌더된다.
+      {
+        ts: new Date().toISOString(), routine_id: 'fx-hist-1', symbol: '005930',
+        source: 'schedule.daily', verdict: 'fired', observed: '07:30', threshold: 'ALL@07:30',
+        reason: '예약 시각 도달(07:30)', briefing_title: '아침 브리핑 검증',
+        briefing_content: '오늘의 요약 본문(검증)', truncated: false, briefing_destination: 'canvas',
+      },
+    ];
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({
+      ok: true, data: { routines: stage10Routines, disclosure_ready: true, last_error: null },
+    }));
+    ipcMain.removeHandler('athena:routine-runs');
+    ipcMain.handle('athena:routine-runs', async (_e, { id } = {}) => ({
+      // avg_duration_ms(5단계, F2-FE) — runs 배열과 별개 필드다. 실제 값은
+      // 4단계 백엔드가 최근 30건 non-null duration_ms 평균으로 계산하지만
+      // (그쪽 pytest가 이미 검증), 이 하네스는 프론트 배선만 재확인하면
+      // 되므로 확정 값을 직접 준다. opened_rate·replied_count(F-stage5b-BE)도
+      // 같은 이유로 확정 값.
+      ok: true,
+      data: {
+        runs: stage10Runs.filter((r) => r.routine_id === id),
+        avg_duration_ms: 7420, opened_rate: 0.71, replied_count: 9,
+      },
+    }));
+
+    const historyProbe = await shellWin.webContents.executeJavaScript(`(async () => {
+      const nav = document.getElementById('modeNavAgent');
+      const back = document.getElementById('modeNavSummary');
+      const canvas = document.getElementById('agentCanvas');
+      if (!nav || !back || !canvas || !window.AthenaAgentCanvas) return { wired: false };
+      nav.click();
+      await new Promise((r) => setTimeout(r, 600));
+      const allTabBtn = Array.from(canvas.querySelectorAll('.agent-tab')).find((n) => n.textContent === '모두');
+      if (allTabBtn) allTabBtn.click();
+      window.AthenaAgentCanvas.selectRow('fx-hist-1');
+      await new Promise((r) => setTimeout(r, 100));
+      const openBtn = canvas.querySelector('.agent-history-open');
+      if (!openBtn) return { wired: false, reason: 'no-open-btn' };
+      openBtn.click();
+      await new Promise((r) => setTimeout(r, 300));
+      const breadcrumbVisible = !canvas.querySelector('.agent-breadcrumb').hidden;
+      const breadcrumbTitle = (canvas.querySelector('.agent-breadcrumb-title') || {}).textContent;
+      const breadcrumbBadge = (canvas.querySelector('.agent-breadcrumb-badge') || {}).textContent;
+      const tasksHeadHidden = (canvas.querySelector('.agent-tasks-head') || {}).hidden;
+      const runRows = Array.from(canvas.querySelectorAll('.agent-history-run'));
+      const reasons = runRows.map((r) => (r.querySelector('.agent-history-run-reason') || {}).textContent);
+      const marks = runRows.map((r) => (r.querySelector('.agent-history-run-mark') || {}).textContent);
+      const statTiles = Array.from(canvas.querySelectorAll('.agent-history-stat-tile'));
+      const statTileCount = statTiles.length;
+      // 5단계(F2-FE) — "평균"만 live, 나머지 3장은 fixture다(컬럼 전체가
+      // 아니라 타일 각각에 data-source가 실린다).
+      const tileByLabel = (label) => statTiles.find((t) => (t.querySelector('.agent-history-stat-label') || {}).textContent === label);
+      const tileValue = (label) => { const t = tileByLabel(label); return t ? (t.querySelector('.agent-history-stat-value') || {}).textContent : null; };
+      const avgTile = tileByLabel('평균');
+      const avgTileSource = avgTile ? avgTile.getAttribute('data-source') : null;
+      const avgTileValue = tileValue('평균');
+      // F-stage5b-FE — "발화→열람"·"이어진 대화"도 이제 live다.
+      const openedRateValue = tileValue('발화→열람');
+      const repliedCountValue = tileValue('이어진 대화');
+      const fixtureTileCount = statTiles.filter((t) => t.getAttribute('data-source') === 'fixture').length;
+
+      // "오늘 산출물" 카드(6단계부터 실데이터) — stage10Runs의 오늘자 브리핑
+      // 행(briefing_* 병합 필드)이 재료다. fixture 시절 표기는 제거됐다.
+      const outputCard = canvas.querySelector('.agent-history-output-card');
+      const outputSource = outputCard ? outputCard.getAttribute('data-source') : null;
+      const outputTitle = (canvas.querySelector('.agent-history-output-title') || {}).textContent;
+      const outputTag = (canvas.querySelector('.agent-history-output-tag') || {}).textContent;
+      const outputItemCount = canvas.querySelectorAll('.agent-history-output-item-text').length;
+      const outputBtns = Array.from(canvas.querySelectorAll('.agent-history-output-btn'));
+      const outputBtnLabels = outputBtns.map((n) => n.textContent);
+      const outputBtnsAllDisabled = outputBtns.length > 0 && outputBtns.every((n) => n.disabled === true);
+
+      canvas.querySelector('.agent-breadcrumb-back').click();
+      await new Promise((r) => setTimeout(r, 100));
+      const breadcrumbHiddenAfterBack = canvas.querySelector('.agent-breadcrumb').hidden;
+      const tasksHeadVisibleAfterBack = !canvas.querySelector('.agent-tasks-head').hidden;
+
+      back.click();
+      await new Promise((r) => setTimeout(r, 100));
+      return {
+        wired: true, breadcrumbVisible, breadcrumbTitle, breadcrumbBadge, tasksHeadHidden,
+        reasons, marks, statTileCount, avgTileSource, avgTileValue, fixtureTileCount,
+        openedRateValue, repliedCountValue,
+        breadcrumbHiddenAfterBack, tasksHeadVisibleAfterBack,
+        outputSource, outputTitle, outputTag, outputItemCount, outputBtnLabels, outputBtnsAllDisabled,
+      };
+    })()`);
+    report.historyDrillIn = historyProbe;
+    assertOk('agent-canvas-10: 배선이 있다', historyProbe.wired === true);
+    if (historyProbe.wired) {
+      assertOk('agent-canvas-10: 브레드크럼이 뜬다("작업 › 이름")', historyProbe.breadcrumbVisible === true);
+      assertOk('agent-canvas-10: 브레드크럼 제목이 실제 routine note다', historyProbe.breadcrumbTitle === '삼성전자 88,000 감시');
+      assertOk('agent-canvas-10: 브레드크럼 상태 배지가 "활성"이다', historyProbe.breadcrumbBadge === '활성');
+      assertOk('agent-canvas-10: 드릴인 진입 시 "작업" 머리가 숨는다', historyProbe.tasksHeadHidden === true);
+      assertOk(
+        // [6단계] 오늘자 브리핑 발화 행이 앞에 추가돼 4행이 됐다(최신순 유지).
+        'agent-canvas-10: 최근 30회가 GET /{id}/runs 실데이터로 최신순 정렬된다',
+        JSON.stringify(historyProbe.reasons)
+          === JSON.stringify(['예약 시각 도달(07:30)', '조건 도달', '근접 — 임계 미달', '쿨다운 중']),
+      );
+      assertOk(
+        'agent-canvas-10: 상태 아이콘이 ledger 실제 verdict 3종만 쓴다(fired=●·near=◐·suppressed=○, AC10)',
+        JSON.stringify(historyProbe.marks) === JSON.stringify(['●', '●', '◐', '○']),
+      );
+      assertOk(
+        // F-stage5b-FE — "발화→열람"·"이어진 대화"도 라이브로 승격됐다.
+        // R2(3차 라운드, agent-mode-round3-plan.md 1단계)에서 지표 정의가
+        // 끝내 확정되지 않은 타일 1개를 걷어내 3타일 전부 live가 됐다.
+        'agent-canvas-10: 30회 통계 3타일 — 전부 live다(평균·발화→열람·이어진 대화, F-stage5b-FE·R2)',
+        historyProbe.statTileCount === 3 && historyProbe.avgTileSource === 'live'
+          && historyProbe.avgTileValue === '7.4s' && historyProbe.fixtureTileCount === 0
+          && historyProbe.openedRateValue === '71%' && historyProbe.repliedCountValue === '9건',
+      );
+      // [6단계 의도적 반전] 이전 단언은 "카드가 fixture로 뜬다"였다 — 3단계
+      // briefings 스토어의 실데이터로 승격되면서 data-source=live·실제 본문·
+      // 단일 본문 블록(항목 1개)이 정답이 됐다(AC7).
+      assertOk(
+        'agent-canvas-10: "오늘 산출물" 카드가 실데이터(live)로 뜬다(6단계, fixture 제거)',
+        historyProbe.outputSource === 'live' && historyProbe.outputTitle === '아침 브리핑 검증',
+      );
+      assertOk('agent-canvas-10: 산출물 카드 태그가 destination 기반 "캔버스 카드"다', historyProbe.outputTag === '캔버스 카드');
+      assertOk('agent-canvas-10: 산출물 본문은 단일 텍스트 블록이다(지어낸 items 구조 아님)', historyProbe.outputItemCount === 1);
+      assertOk(
+        'agent-canvas-10: 산출물 카드 버튼이 "캔버스에서 열기"·"채팅으로"이고 재기동 후 복원 불가라 둘 다 비활성이다(P3)',
+        JSON.stringify(historyProbe.outputBtnLabels) === JSON.stringify(['캔버스에서 열기', '채팅으로'])
+          && historyProbe.outputBtnsAllDisabled === true,
+      );
+      assertOk('agent-canvas-10: "작업 ›" 클릭 시 브레드크럼이 숨는다', historyProbe.breadcrumbHiddenAfterBack === true);
+      assertOk('agent-canvas-10: "작업 ›" 클릭 시 "작업" 머리가 복원된다', historyProbe.tasksHeadVisibleAfterBack === true);
+    }
+  } catch (err) {
+    report.historyDrillIn = { error: String((err && err.message) || err) };
+    failures.push('agent-canvas-10: 검증 블록이 예외로 끝났다');
+  } finally {
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+    ipcMain.removeHandler('athena:routine-runs');
+    ipcMain.handle('athena:routine-runs', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+  }
+
+  // ---------- 39번 상세 패널 "채팅에서 열기 ↗" (F-fix1, 본편 이월 갭) ----------
+  //
+  // 알림 방이 있으면 sidebar-notify-7과 같은 selectNotifyRoom 경로(배너 표시
+  // +ack·opened 계측)를 타는지, 없으면 채팅 입력 포커스로 폴백하는지(죽은
+  // 버튼 아님, P3) 둘 다 잰다.
+  try {
+    let ackCalledWith = null;
+    let engagementCalls = [];
+    ipcMain.removeHandler('athena:routine-ack');
+    ipcMain.handle('athena:routine-ack', async (_e, { id } = {}) => { ackCalledWith = id; return { ok: true, data: {} }; });
+    ipcMain.removeHandler('athena:routine-engagement');
+    ipcMain.handle('athena:routine-engagement', async (_e, { id, event } = {}) => {
+      engagementCalls.push({ id, event });
+      return { ok: true, data: {} };
+    });
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({
+      ok: true,
+      data: {
+        routines: [{
+          id: 'fx-openchat-1', symbol: '005930', note: 'F-fix1 열기 검증', status: 'active', mode: 'realtime-ws',
+          source_label: '현재가', cooldown_s: 300,
+        }],
+        disclosure_ready: true, last_error: null,
+      },
+    }));
+    // fx-openchat-1의 알림 방을 먼저 만든다(sidebar-notify-7과 같은 주입 경로).
+    shellWin.webContents.send('athena:routine-event', {
+      type: 'routine-fired', routine_id: 'fx-openchat-1', symbol: '005930', source: 'price.change_rate', mode: 'realtime-ws',
+      observed: 88100, threshold: 88000, note: 'F-fix1 열기 검증', fired_at: new Date().toISOString(),
+    });
+    await wait(300);
+
+    const openChatProbe = await shellWin.webContents.executeJavaScript(`(async () => {
+      const nav = document.getElementById('modeNavAgent');
+      const back = document.getElementById('modeNavSummary');
+      const canvas = document.getElementById('agentCanvas');
+      if (!nav || !back || !canvas || !window.AthenaAgentCanvas) return { wired: false };
+      nav.click();
+      await new Promise((r) => setTimeout(r, 600));
+      const allTabBtn = Array.from(canvas.querySelectorAll('.agent-tab')).find((n) => n.textContent === '모두');
+      if (allTabBtn) allTabBtn.click();
+      window.AthenaAgentCanvas.selectRow('fx-openchat-1');
+      await new Promise((r) => setTimeout(r, 100));
+      const caption = (canvas.querySelector('.agent-detail-open-chat-caption') || {}).textContent;
+      const btn = canvas.querySelector('.agent-detail-open-chat-btn');
+      if (!btn) return { wired: false, reason: 'no-btn' };
+      const btnLabel = btn.textContent;
+      btn.click();
+      await new Promise((r) => setTimeout(r, 200));
+      const bannerHidden = (document.getElementById('roomHeadBanner') || {}).hidden;
+      const roomTitle = (document.getElementById('roomHeadTitle') || {}).textContent;
+      back.click();
+      await new Promise((r) => setTimeout(r, 100));
+      return { wired: true, caption, btnLabel, bannerHidden, roomTitle };
+    })()`);
+    report.openInChat = { ...openChatProbe, ackCalledWith, engagementCalls };
+    assertOk('open-in-chat-Ffix1: 배선이 있다', openChatProbe.wired === true);
+    if (openChatProbe.wired) {
+      assertOk('open-in-chat-Ffix1: 각주가 "루틴 발화 — 묻지 않은 턴입니다"다(Paper 39 실측)', openChatProbe.caption === '루틴 발화 — 묻지 않은 턴입니다');
+      assertOk('open-in-chat-Ffix1: 버튼 문구가 "채팅에서 열기 ↗"다', openChatProbe.btnLabel === '채팅에서 열기 ↗');
+      assertOk('open-in-chat-Ffix1: 알림 방이 있으면 배너가 뜬다(selectNotifyRoom 경로 재사용)', openChatProbe.bannerHidden === false);
+      assertOk('open-in-chat-Ffix1: 배너 제목이 그 라우틴 note다', openChatProbe.roomTitle === 'F-fix1 열기 검증');
+      assertOk('open-in-chat-Ffix1: ack가 그 라우틴 id로 불린다(6단계 read-marks 경로 자동 정합)', ackCalledWith === 'fx-openchat-1');
+      assertOk(
+        'open-in-chat-Ffix1: opened 계측이 그 라우틴 id로 불린다(F-stage5b-FE 경로 자동 정합)',
+        JSON.stringify(engagementCalls) === JSON.stringify([{ id: 'fx-openchat-1', event: 'opened' }]),
+      );
+    }
+  } catch (err) {
+    report.openInChat = { error: String((err && err.message) || err) };
+    failures.push('open-in-chat-Ffix1: 검증 블록이 예외로 끝났다');
+  } finally {
+    ipcMain.removeHandler('athena:routine-ack');
+    ipcMain.handle('athena:routine-ack', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+    ipcMain.removeHandler('athena:routine-engagement');
+    ipcMain.handle('athena:routine-engagement', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+  }
+
+  // ---------- "채팅에서 열기 ↗" 폴백 — 알림 방이 없는 라우틴 (F-fix1) ----------
+  //
+  // 이 세션에서 아직 발화한 적 없는(routine-fired를 한 번도 안 보낸) 라우틴은
+  // window.AthenaNotify.selectRoom이 false를 돌려줘 채팅 입력 포커스로
+  // 폴백해야 한다 — 죽은 버튼을 만들지 않는다(P3). 포커스 자체(document.
+  // activeElement)는 이 하네스의 창 OS 포커스 상태에 좌우될 수 있어 대신
+  // seedChatInput(text 없음)의 부작용(입력값을 비운다)으로 폴백 경로가 실제로
+  // 탔는지를 잰다 — chat.js의 registerSeedChatInput 구현 참고.
+  try {
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({
+      ok: true,
+      data: {
+        routines: [{
+          id: 'fx-openchat-2', symbol: '000660', note: 'F-fix1 폴백 검증', status: 'active', mode: 'periodic',
+          source_label: '공시 제목 키워드', cooldown_s: 600,
+        }],
+        disclosure_ready: true, last_error: null,
+      },
+    }));
+
+    const fallbackProbe = await shellWin.webContents.executeJavaScript(`(async () => {
+      const nav = document.getElementById('modeNavAgent');
+      const back = document.getElementById('modeNavSummary');
+      const canvas = document.getElementById('agentCanvas');
+      const input = document.getElementById('input');
+      if (!nav || !back || !canvas || !input || !window.AthenaAgentCanvas) return { wired: false };
+      nav.click();
+      await new Promise((r) => setTimeout(r, 600));
+      const allTabBtn = Array.from(canvas.querySelectorAll('.agent-tab')).find((n) => n.textContent === '모두');
+      if (allTabBtn) allTabBtn.click();
+      window.AthenaAgentCanvas.selectRow('fx-openchat-2');
+      await new Promise((r) => setTimeout(r, 100));
+      const btn = canvas.querySelector('.agent-detail-open-chat-btn');
+      if (!btn) return { wired: false, reason: 'no-btn' };
+      input.value = '이전에 입력해둔 문장';
+      btn.click();
+      await new Promise((r) => setTimeout(r, 100));
+      const inputValueAfter = input.value;
+      back.click();
+      await new Promise((r) => setTimeout(r, 100));
+      return { wired: true, inputValueAfter };
+    })()`);
+    report.openInChatFallback = fallbackProbe;
+    assertOk('open-in-chat-fallback-Ffix1: 배선이 있다', fallbackProbe.wired === true);
+    if (fallbackProbe.wired) {
+      assertOk(
+        'open-in-chat-fallback-Ffix1: 알림 방이 없으면 seedChatInput(빈 값)이 불려 입력이 비워진다(폴백 경로 확인, P3)',
+        fallbackProbe.inputValueAfter === '',
+      );
+    }
+  } catch (err) {
+    report.openInChatFallback = { error: String((err && err.message) || err) };
+    failures.push('open-in-chat-fallback-Ffix1: 검증 블록이 예외로 끝났다');
+  } finally {
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+    await shellWin.webContents.executeJavaScript(`(() => {
+      const input = document.getElementById('input');
+      if (input) input.value = '';
+    })()`);
+  }
+
+  // ---------- 프로액티브 + 말걸기 가드 (11단계, Paper 보드 42) ----------
+  //
+  // athena:brain-profile-summary를 stateful fixture로 바꿔(7단계와 같은 채널)
+  // "지금 읽히는 성향" 스트립·제안 카드·"그래프 모드에서 근거 보기 →"·
+  // 말걸기 가드까지 왕복시킨다. "그래프 모드에서 근거 보기 →"가 실제로
+  // 사이드바 모드 네비(#modeNavGraph)의 활성 표시까지 같이 바꾸는지 확인한다
+  // (캔버스만 바뀌고 네비가 안 바뀌는 불일치가 이 배선의 실패 형태다).
+  try {
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({
+      ok: true, data: { routines: [], disclosure_ready: true, last_error: null },
+    }));
+    ipcMain.removeHandler('athena:brain-profile-summary');
+    ipcMain.handle('athena:brain-profile-summary', async () => ({
+      ok: true,
+      entries: [
+        {
+          entity_id: 'e1', entity_kind: 'stock', entity_name: '삼성전자', relation_kind: '단기 회전',
+          confidence: 'EXTRACTED', tier: 'deterministic', rationale: '매매일마다 정리가 필요해 보여요',
+          observed_at: '2026-08-26T00:00:00Z', reinforcement: 21,
+        },
+        {
+          entity_id: 'e2', entity_kind: 'theme', entity_name: '배당 방어 바스켓', relation_kind: '응집 상승',
+          confidence: 'INFERRED', tier: 'conversational', rationale: null,
+          observed_at: '2026-08-25T00:00:00Z', reinforcement: 6,
+        },
+      ],
+    }));
+    // F-stage9 — 8단계 백엔드 GET /api/v1/nudge-guard와 같은 응답 계약.
+    ipcMain.removeHandler('athena:nudge-guard-get');
+    ipcMain.handle('athena:nudge-guard-get', async () => ({
+      ok: true,
+      data: {
+        max_daily_nudges: 2, quiet_hours: { start: '22:00', end: '07:00' },
+        show_rationale: true, learn_from_dismissals: true,
+      },
+    }));
+
+    const proactiveProbe = await shellWin.webContents.executeJavaScript(`(async () => {
+      const nav = document.getElementById('modeNavAgent');
+      const back = document.getElementById('modeNavSummary');
+      const graphNavItem = document.getElementById('modeNavGraph');
+      const canvas = document.getElementById('agentCanvas');
+      if (!nav || !back || !graphNavItem || !canvas) return { wired: false };
+      nav.click();
+      await new Promise((r) => setTimeout(r, 600));
+      const proactiveTabBtn = Array.from(canvas.querySelectorAll('.agent-view-tab')).find((n) => n.textContent.startsWith('제안'));
+      if (!proactiveTabBtn) return { wired: false, reason: 'no-proactive-tab' };
+      const tabLabelBefore = proactiveTabBtn.textContent;
+      proactiveTabBtn.click();
+      await new Promise((r) => setTimeout(r, 100));
+      const stripValue = (canvas.querySelector('.agent-proactive-strip-value') || {}).textContent;
+      const stripSub = (canvas.querySelector('.agent-proactive-strip-sub') || {}).textContent;
+      const cardCount = canvas.querySelectorAll('.agent-proactive-card').length;
+      const chipLabels = Array.from(canvas.querySelectorAll('.agent-proactive-chip')).slice(0, 2).map((n) => n.textContent);
+      const guardTagCount = canvas.querySelectorAll('.agent-nudge-guard-tag').length;
+      const guardSource = (canvas.querySelector('.agent-nudge-guard') || {}).getAttribute('data-source');
+      const guardTagLabels = Array.from(canvas.querySelectorAll('.agent-nudge-guard-tag')).map((n) => n.textContent);
+
+      // "보류" — 두 번째 카드의 보류 칩(각 카드 칩 배열의 인덱스 1).
+      const secondCardChips = canvas.querySelectorAll('.agent-proactive-card')[1].querySelectorAll('.agent-proactive-chip');
+      secondCardChips[1].click();
+      await new Promise((r) => setTimeout(r, 50));
+      const cardCountAfterHold = canvas.querySelectorAll('.agent-proactive-card').length;
+      const tabLabelAfterHold = proactiveTabBtn.textContent;
+
+      // "그래프 모드에서 근거 보기 →"
+      const graphLinkHiddenBefore = canvas.querySelector('.agent-graph-link').hidden;
+      canvas.querySelector('.agent-graph-link').click();
+      await new Promise((r) => setTimeout(r, 200));
+      // 그래프 진입의 가시 신호는 서브뷰 무관 "그래프 표면"이다(스텝2-보정 —
+      // 기본 서브뷰가 요약 표라 #graphCanvas는 지도 전환 전까지 숨어 있다).
+      const graphCanvasVisible = !document.getElementById('graphSummaryTable').hidden
+        || !document.getElementById('graphCanvas').hidden;
+      const graphNavActive = graphNavItem.className.includes('is-active');
+
+      back.click();
+      await new Promise((r) => setTimeout(r, 100));
+      return {
+        wired: true, tabLabelBefore, stripValue, stripSub, cardCount, chipLabels,
+        guardTagCount, guardSource, guardTagLabels, cardCountAfterHold, tabLabelAfterHold,
+        graphLinkHiddenBefore, graphCanvasVisible, graphNavActive,
+      };
+    })()`);
+    report.proactive = proactiveProbe;
+    assertOk('agent-canvas-11: 배선이 있다', proactiveProbe.wired === true);
+    if (proactiveProbe.wired) {
+      assertOk('agent-canvas-11: 제안 탭 라벨이 개수를 담고 있다("제안 2")', proactiveProbe.tabLabelBefore === '제안 2');
+      assertOk(
+        'agent-canvas-11: "지금 읽히는 성향" 스트립이 실제 relation_kind를 합친다',
+        proactiveProbe.stripValue === '단기 회전 · 응집 상승',
+      );
+      assertOk('agent-canvas-11: 스트립 부제가 신호 건수다', proactiveProbe.stripSub === '신호 2건');
+      assertOk('agent-canvas-11: 제안 카드 2장이 뜬다', proactiveProbe.cardCount === 2);
+      assertOk(
+        'agent-canvas-11: 칩이 "루틴으로"·"보류"다',
+        JSON.stringify(proactiveProbe.chipLabels) === JSON.stringify(['루틴으로', '보류']),
+      );
+      assertOk(
+        'agent-canvas-11: 말걸기 가드 태그 4개가 GET /api/v1/nudge-guard 라이브 값으로 뜬다(F-stage9)',
+        proactiveProbe.guardTagCount === 4 && proactiveProbe.guardSource === 'live'
+          && JSON.stringify(proactiveProbe.guardTagLabels)
+            === JSON.stringify(['하루 최대 2회', '조용 시간 22:00–07:00', '근거 표시 항상', '거절 반영 성향으로 학습']),
+      );
+      assertOk('agent-canvas-11: "보류" 클릭 후 카드가 1장으로 준다(세션 한정)', proactiveProbe.cardCountAfterHold === 1);
+      assertOk('agent-canvas-11: "보류" 후 탭 라벨도 "제안 1"로 준다', proactiveProbe.tabLabelAfterHold === '제안 1');
+      assertOk('agent-canvas-11: "그래프 모드에서 근거 보기 →"가 "제안" 뷰에서만 보인다', proactiveProbe.graphLinkHiddenBefore === false);
+      assertOk('agent-canvas-11: 클릭 시 실제로 그래프 표면이 열린다', proactiveProbe.graphCanvasVisible === true);
+      assertOk(
+        'agent-canvas-11: 사이드바 모드 네비의 활성 표시도 "그래프"로 같이 바뀐다(캔버스만 바뀌는 불일치 없음)',
+        proactiveProbe.graphNavActive === true,
+      );
+    }
+  } catch (err) {
+    report.proactive = { error: String((err && err.message) || err) };
+    failures.push('agent-canvas-11: 검증 블록이 예외로 끝났다');
+  } finally {
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+    ipcMain.removeHandler('athena:brain-profile-summary');
+    ipcMain.handle('athena:brain-profile-summary', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+    ipcMain.removeHandler('athena:nudge-guard-get');
+    ipcMain.handle('athena:nudge-guard-get', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+    // 그래프 모드로 남아 있으면 다음 실행(재실행 시)에 영향을 줄 수 있다 — 답변 모드로 되돌린다.
+    await shellWin.webContents.executeJavaScript(`(() => {
+      if (window.AthenaCanvasMode && window.AthenaCanvasMode.state && window.AthenaCanvasMode.state.view !== 'summary') {
+        window.AthenaCanvasMode.setView('summary');
+      }
+      const summaryNavItem = document.getElementById('modeNavSummary');
+      if (window.AthenaModeNav && summaryNavItem) window.AthenaModeNav.setActive('summary');
+    })()`);
+  }
+
+  // ---------- 검증 R1-4: 예약 자동 브리핑 러너 (2026-08-27, 4단계 AC3) ----------
+  // handleRoutineFeedEvent를 module.exports의 실제 함수 참조로 직접 호출해
+  // (Rev.3 MODERATE 4 — WS 서버·fixture 게이트와 무관) 스텁 claudeRunner의 호출
+  // 카운트로 실행을 단언한다 — DOM 렌더만으로 통과 처리하지 않는다. 백엔드
+  // 왕복(budget/report)도 스텁으로 바꿔 실백엔드 유무와 무관하게 결정론이다.
+  try {
+    const briefingRunnerMod = require('./lib/main/briefing-runner');
+    const sessionBefore = mainMod.getLiveSessionId();
+    let briefingStubCalls = 0;
+    let briefingKilled = false;
+    let briefingResolve = null;
+    const briefingReports = [];
+    mainMod.setBriefingClaudeRunnerForVerify({
+      runClaudeQuery(opts) {
+        briefingStubCalls += 1;
+        opts.onSpawn({
+          pid: 424242,
+          kill: () => {
+            briefingKilled = true;
+            if (briefingResolve) briefingResolve({ ok: false, aborted: true });
+          },
+        });
+        opts.onTextDelta('검증 브리핑 본문');
+        return new Promise((resolve) => { briefingResolve = resolve; });
+      },
+    }, {
+      fetchBudget: async () => ({ remaining: 99 }),
+      reportResult: async (p) => { briefingReports.push(p); },
+    });
+    const briefFiredAt = new Date().toISOString();
+    const briefEvent = {
+      type: 'routine-fired', routine_id: 'vbrief1', symbol: '005930',
+      source: 'schedule.daily', mode: 'scheduled', observed: '07:30',
+      threshold: 'ALL@07:30', note: '브리핑 검증 루틴', fired_at: briefFiredAt,
+      briefing_model: null, briefing_effort: null,
+    };
+    mainMod.handleRoutineFeedEvent(briefEvent);
+    await wait(300);
+    report.briefingRunner = {
+      stubCallsAfterFire: briefingStubCalls,
+      busyDepthDuring: mainMod.getBriefingBusyDepth(),
+      inputDisabledDuring: await shellWin.webContents.executeJavaScript(
+        "document.getElementById('input').disabled"
+      ),
+      cardBadgeDuring: await shellWin.webContents.executeJavaScript(`(() => {
+        const b = document.querySelector('.turn-agent.agent-briefing .agent-badge');
+        return b ? b.textContent : null;
+      })()`),
+    };
+    assertOk('briefing: 스텁이 정확히 1회 호출됐다(실호출 단언)', briefingStubCalls === 1);
+    assertOk('briefing: briefingBusy 깊이 1(독립 카운터 가동)', report.briefingRunner.busyDepthDuring === 1);
+    assertOk('briefing: 진행 중에도 셸 입력이 잠기지 않는다(MAJOR 2)', report.briefingRunner.inputDisabledDuring === false);
+    assertOk('briefing: 카드 배지 "브리핑 실행 중"', report.briefingRunner.cardBadgeDuring === '브리핑 실행 중');
+
+    // 같은 (routine_id, fired_at) 재주입(멱등성)과 감시형(경계) — 둘 다 무실행.
+    mainMod.handleRoutineFeedEvent(briefEvent);
+    mainMod.handleRoutineFeedEvent({ ...briefEvent, routine_id: 'vbrief-rt', mode: 'realtime-ws' });
+    await wait(200);
+    assertOk('briefing: 중복·감시형 주입 후에도 스텁 호출은 1회(멱등·경계)', briefingStubCalls === 1);
+
+    briefingResolve({ ok: true, finalResult: { session_id: 'stub-session-must-not-leak' } });
+    await wait(300);
+    report.briefingRunner.sessionAfter = mainMod.getLiveSessionId();
+    report.briefingRunner.busyDepthAfter = mainMod.getBriefingBusyDepth();
+    report.briefingRunner.reports = briefingReports;
+    assertOk('briefing: 완료 후 liveSessionId 불변(BLOCKER — 독립 세션)', mainMod.getLiveSessionId() === sessionBefore);
+    assertOk('briefing: 완료 후 busy 깊이 0', mainMod.getBriefingBusyDepth() === 0);
+    assertOk('briefing: reportResult 1회 — status ok·본문·제목·목적지·fired_at 정합', briefingReports.length === 1
+      && briefingReports[0].status === 'ok'
+      && briefingReports[0].content === '검증 브리핑 본문'
+      && briefingReports[0].title === '브리핑 검증 루틴'
+      && briefingReports[0].destination === 'chat'
+      && briefingReports[0].fired_at === briefFiredAt);
+    const briefingBadgeAfter = await shellWin.webContents.executeJavaScript(`(() => {
+      const badges = document.querySelectorAll('.turn-agent.agent-briefing .agent-badge');
+      return badges.length ? badges[badges.length - 1].textContent : null;
+    })()`);
+    assertOk('briefing: 완료 배지 "브리핑 완료"', briefingBadgeAfter === '브리핑 완료');
+
+    // 우선순위 — 사용자가 이긴다: 두 번째 브리핑을 걸어두고, 사용자 질의
+    // 진입점(runLiveQueryInner)이 부르는 것과 같은 함수 참조
+    // (killInProgressBriefing, require 캐시로 동일 모듈 인스턴스)를 직접 호출한다.
+    mainMod.handleRoutineFeedEvent({
+      ...briefEvent, routine_id: 'vbrief2', fired_at: new Date(Date.now() + 1000).toISOString(),
+    });
+    await wait(300);
+    assertOk('briefing: 두 번째 브리핑 가동(스텁 2회)', briefingStubCalls === 2);
+    const briefingKillNow = briefingRunnerMod.killInProgressBriefing();
+    await wait(300);
+    report.briefingRunner.preempt = {
+      killedNow: briefingKillNow, briefingKilled,
+      stubCalls: briefingStubCalls, busyDepth: mainMod.getBriefingBusyDepth(),
+    };
+    assertOk('briefing: 선점 kill이 실프로세스 핸들을 죽였다', briefingKillNow === true && briefingKilled === true);
+    assertOk('briefing: abort는 재시도하지 않는다(스텁 여전히 2회)', briefingStubCalls === 2);
+    assertOk('briefing: 선점 후 busy 깊이 0(사용자 질의 진행 가능)', mainMod.getBriefingBusyDepth() === 0);
+    assertOk('briefing: 종료 후 재kill은 no-op', briefingRunnerMod.killInProgressBriefing() === false);
+    assertOk('briefing: abort 보고는 failed·본문 없음(3단계 계약)', briefingReports.length === 2
+      && briefingReports[1].status === 'failed' && !('content' in briefingReports[1]));
+    const briefingBadgePreempt = await shellWin.webContents.executeJavaScript(`(() => {
+      const badges = document.querySelectorAll('.turn-agent.agent-briefing .agent-badge');
+      return badges.length ? badges[badges.length - 1].textContent : null;
+    })()`);
+    assertOk('briefing: 선점 종료 배지는 완료가 아니라 중단이다(오표시 금지)',
+      briefingBadgePreempt === '브리핑 중단 — 새 대화가 우선됨');
+    console.log('[verify] 검증R1-4(브리핑 러너):', JSON.stringify(report.briefingRunner));
+  } catch (err) {
+    report.briefingRunner = { error: String((err && err.message) || err) };
+    failures.push('briefing: 검증 블록이 예외로 끝났다');
+  }
+
+  // ---------- 검증 R1-5: 놓친 예약 캐치업 흐름 (2026-08-27, 5단계 AC4) ----------
+  // 놓친 예약 카드를 IPC 주입으로 띄우고, 확인 클릭 시 ① catchup-fire(ledger
+  // 기록) ② 브리핑 실행이 **이 순서로** 불리는지 스텁 호출 순서로 단언한다.
+  // 캐치업→runs 이력 반영(ledger 기반)은 백엔드 pytest가 커버한다(3단계 —
+  // record_scheduled_fire 공유 헬퍼·/runs 필터) — 여기는 앱 쪽 순서·카드 계약만.
+  try {
+    const missedOrder = [];
+    const missedReports = [];
+    mainMod.setBriefingClaudeRunnerForVerify({
+      runClaudeQuery(opts) {
+        missedOrder.push('claude');
+        opts.onSpawn({ pid: 5, kill() {} });
+        opts.onTextDelta('캐치업 브리핑 본문');
+        return Promise.resolve({ ok: true });
+      },
+    }, {
+      fetchBudget: async () => ({ remaining: 99 }),
+      reportResult: async (p) => { missedReports.push(p); },
+      catchupFire: async (id) => {
+        missedOrder.push(`catchup:${id}`);
+        return { ok: true, data: { fired_at: '2026-08-27T07:30:00+09:00' } };
+      },
+    });
+    const missedView = (id, note) => ({
+      id, note, symbol: '005930', mode: 'scheduled', status: 'active', missed: true,
+      briefing_model: null, briefing_effort: null,
+    });
+    const findMissedCard = (note) => `(() => {
+      const cards = Array.from(document.querySelectorAll('.turn-agent.routine-missed'));
+      return cards.find((c) => {
+        const t = c.querySelector('.routine-draft-title');
+        return t && t.textContent === ${JSON.stringify(note)};
+      });
+    })`;
+
+    shellWin.webContents.send('athena:routine-missed', { routines: [missedView('vmiss1', '캐치업 검증 1')] });
+    await wait(400);
+    report.missedCatchup = {
+      cardRendered: await shellWin.webContents.executeJavaScript(`(() => {
+        const card = ${findMissedCard('캐치업 검증 1')}();
+        if (!card) return null;
+        const badge = card.querySelector('.agent-badge');
+        const labels = Array.from(card.querySelectorAll('button')).map((b) => b.textContent);
+        return { badge: badge ? badge.textContent : null, labels };
+      })()`),
+    };
+    assertOk('missed: 카드가 뜬다(배지·버튼 2개)',
+      !!report.missedCatchup.cardRendered
+      && report.missedCatchup.cardRendered.badge === '놓친 예약'
+      && JSON.stringify(report.missedCatchup.cardRendered.labels) === JSON.stringify(['지금 브리핑', '건너뛰기']));
+
+    await shellWin.webContents.executeJavaScript(`(() => {
+      const card = ${findMissedCard('캐치업 검증 1')}();
+      Array.from(card.querySelectorAll('button')).find((b) => b.textContent === '지금 브리핑').click();
+    })()`);
+    await wait(500);
+    report.missedCatchup.order = missedOrder.slice();
+    report.missedCatchup.statusText = await shellWin.webContents.executeJavaScript(`(() => {
+      const card = ${findMissedCard('캐치업 검증 1')}();
+      const s = card.querySelector('.routine-approval-actions .agent-mode');
+      return s ? s.textContent : null;
+    })()`);
+    assertOk('missed: catchup-fire가 브리핑보다 먼저 불렸다(순서 단언, MAJOR 3)',
+      JSON.stringify(missedOrder) === JSON.stringify(['catchup:vmiss1', 'claude']));
+    assertOk('missed: 서버 authoritative fired_at이 브리핑 보고까지 흘렀다',
+      missedReports.length === 1 && missedReports[0].fired_at === '2026-08-27T07:30:00+09:00');
+    assertOk('missed: 확인 상태 문구', report.missedCatchup.statusText === '발화가 기록됐습니다 — 브리핑 시작');
+
+    // 건너뛰기 — catchup도 브리핑도 안 불리고 카드만 닫힌다.
+    shellWin.webContents.send('athena:routine-missed', { routines: [missedView('vmiss2', '캐치업 검증 2')] });
+    await wait(300);
+    await shellWin.webContents.executeJavaScript(`(() => {
+      const card = ${findMissedCard('캐치업 검증 2')}();
+      Array.from(card.querySelectorAll('button')).find((b) => b.textContent === '건너뛰기').click();
+    })()`);
+    await wait(300);
+    const skippedGone = await shellWin.webContents.executeJavaScript(`!${findMissedCard('캐치업 검증 2')}()`);
+    assertOk('missed: 건너뛰기는 카드만 닫는다(스텁 무호출)', skippedGone === true
+      && JSON.stringify(missedOrder) === JSON.stringify(['catchup:vmiss1', 'claude']));
+
+    // 이미 처리된 예약(409) — 브리핑을 태우지 않고 카드에 사실만 표시한다.
+    mainMod.setBriefingClaudeRunnerForVerify({
+      runClaudeQuery() { missedOrder.push('claude-409'); return Promise.resolve({ ok: true }); },
+    }, {
+      fetchBudget: async () => ({ remaining: 99 }),
+      reportResult: async () => {},
+      catchupFire: async () => ({ ok: false, status: 409, error: '이미 발화 처리된 예약이다' }),
+    });
+    shellWin.webContents.send('athena:routine-missed', { routines: [missedView('vmiss3', '캐치업 검증 3')] });
+    await wait(300);
+    await shellWin.webContents.executeJavaScript(`(() => {
+      const card = ${findMissedCard('캐치업 검증 3')}();
+      Array.from(card.querySelectorAll('button')).find((b) => b.textContent === '지금 브리핑').click();
+    })()`);
+    await wait(300);
+    const status409 = await shellWin.webContents.executeJavaScript(`(() => {
+      const card = ${findMissedCard('캐치업 검증 3')}();
+      const s = card.querySelector('.routine-approval-actions .agent-mode');
+      return s ? s.textContent : null;
+    })()`);
+    assertOk('missed: 409면 브리핑을 안 태우고 "이미 처리됨"을 표시한다',
+      status409 === '이미 처리된 예약입니다' && !missedOrder.includes('claude-409'));
+    console.log('[verify] 검증R1-5(놓친 예약 캐치업):', JSON.stringify(report.missedCatchup));
+  } catch (err) {
+    report.missedCatchup = { error: String((err && err.message) || err) };
+    failures.push('missed: 검증 블록이 예외로 끝났다');
+  }
+
   fs.writeFileSync(path.join(CAPTURES, 'VERIFY-REPORT.json'), JSON.stringify(report, null, 2));
   console.log('[verify] 리포트 저장:', path.join(CAPTURES, 'VERIFY-REPORT.json'));
 
