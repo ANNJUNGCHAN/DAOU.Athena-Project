@@ -566,24 +566,23 @@ html, body { background: transparent; }
   color: var(--color-k-bright);
 }
 .model-popover .mp-sep { height: 1px; background: rgb(255 255 255 / 8%); }
-/* 키우미(2026-08-27, Paper 보드 45) — 점이 키우미 얼굴이 됐다. 흰 몸체 + 바이저
- * + 흰 도형(모드별 얼굴). 신호색(브랜드 핑크)은 여전히 calling 글로우 한 곳뿐. */
+/* 키우미(2026-08-27, Paper 보드 38 스트립 실측) — 점이 키우미 얼굴이 됐다.
+ * 흰 몸체 + 브랜드 테두리 + 바이저색 도형(모드별 얼굴, 바이저 채움 없음). */
 .dot {
   width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid rgba(16, 19, 26, 0.16);
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid var(--color-brand);
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 1px 0 rgba(255, 253, 248, 0.6) inset, 0 0 10px 2px rgba(238, 19, 123, 0.16);
+  box-shadow: 0 0 10px 2px rgba(238, 19, 123, 0.18);
   transition: transform var(--dur-base) var(--ease), box-shadow var(--dur-base) var(--ease);
   padding: 0;
   appearance: none;
   cursor: pointer;
 }
 .kiumi-visor {
-  width: 15px; height: 14px; border-radius: 48%; overflow: hidden;
+  width: 15px; height: 14px;
   display: flex; align-items: center; justify-content: center;
-  background: radial-gradient(ellipse 120% 100% at 32% 24%, #5B6BE0 0%, #2F3BA8 46%, #232C7E 100%);
-  box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.28) inset, 0 1px 2px rgba(255, 255, 255, 0.3) inset;
+  color: #2F3BA8; /* 바이저색 — 보드 38 bg-kiwoome-visor */
 }
 .kiumi-face { display: block; }
 .dot[data-mode="graph"] .kiumi-face-chat { display: none; }
@@ -611,6 +610,13 @@ html, body { background: transparent; }
 .kiumi-menu {
   right: auto; left: 14px;
   min-width: 240px;
+}
+/* 모드 필(셸 v2, 보드 38) — 지금 모드를 브랜드색으로 표시만 한다. 전환은
+ * 사이드바 모드 네비의 몫이라 커서도 기본값으로 되돌린다. */
+.pill.pill-mode {
+  background: var(--color-brand);
+  color: #fff;
+  cursor: default;
 }
 .kiumi-menu .km-item {
   display: block; width: 100%; text-align: left;

@@ -2251,8 +2251,11 @@ app.whenReady().then(async () => {
       if (pill.hidden) {
         return { wired: false, reason: 'hidden-though-always-visible', brainReady };
       }
-      // 사람이 밟는 길 그대로 — API를 직접 부르지 않고 칩을 누른다.
-      pill.click();
+      // 사람이 밟는 길 그대로 — 셸 v2(2026-08-27)부터 전환은 사이드바 모드
+      // 네비가 소유한다. 모드 필은 표시 전용이라 클릭해도 아무 일 없다.
+      const nav = document.getElementById('modeNavGraph');
+      if (!nav) return { wired: false, reason: 'missing-mode-nav', brainReady };
+      nav.click();
       const deadline = Date.now() + 5000;
       while (Date.now() < deadline) {
         if (!container.hidden) {

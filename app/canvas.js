@@ -1353,6 +1353,8 @@ const graphMode = window.AthenaLib.GraphModeController.createGraphModeController
     summaryTable: document.getElementById('graphSummaryTable'),
     // 키우미(2026-08-27, Paper 보드 45) — 얼굴이 지금 모드를 수동 표시한다.
     kiumi: document.getElementById('dot'),
+    // 모드 네비(셸 v2 — 보드 37·38·44) — 활성 항목 하이라이트용 data-mode.
+    modeNav: document.getElementById('sidebarModes'),
   },
   // main은 실패를 {ok:false}로 돌려준다. 컨트롤러는 **예외**로 실패를 안다 —
   // 여기서 바꿔주지 않으면 `{ok:false}`가 정상 응답으로 흘러 빈 그래프가 그려지고,
@@ -1372,9 +1374,18 @@ window.AthenaGraphMode = graphMode;
 // 직접 건드리면 브레인 준비 타이밍에 따라 답변/그래프가 섞여 보인다(실측 결함).
 graphMode.applyVisibility();
 
-const graphPillEl = document.getElementById('graphPill');
-if (graphPillEl) {
-  graphPillEl.addEventListener('click', () => { graphMode.toggle(); });
+// 모드 전환은 사이드바 모드 네비가 소유한다(셸 v2 — 보드 37·38·44, 2026-08-27).
+// 모드 필(#graphPill)은 표시 전용이 됐다 — 클릭 배선 없음.
+const modeNavEl = document.getElementById('sidebarModes');
+const modeNavChatEl = document.getElementById('modeNavChat');
+const modeNavGraphEl = document.getElementById('modeNavGraph');
+if (modeNavEl && modeNavChatEl && modeNavGraphEl) {
+  modeNavChatEl.addEventListener('click', () => {
+    if (modeNavEl.dataset.mode === 'graph') graphMode.toggle();
+  });
+  modeNavGraphEl.addEventListener('click', () => {
+    if (modeNavEl.dataset.mode !== 'graph') graphMode.toggle();
+  });
 }
 
 // --- 그래프 모드 요약 뷰 배선 (보드 07) --------------------------------------
