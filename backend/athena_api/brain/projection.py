@@ -15,6 +15,7 @@
 
 from __future__ import annotations
 
+from collections import Counter
 from dataclasses import dataclass
 from typing import Any, Protocol
 
@@ -181,10 +182,44 @@ def cluster_cohesion(
     return cohesion
 
 
+def cluster_representative_labels(
+    projected: ProjectedGraph, assignment: dict[str, int]
+) -> dict[int, str]:
+    """군집별 기계적 설명 문자열 — 의미적 이름이 아니다.
+
+    이미 `assignment`에 있는 배정을 군집별로 되짚어(`cluster_cohesion()`과 같은
+    `members_by_cluster` 패턴), 최대 차수 멤버(동률이면 `cluster()`와 같은 관례로 최소
+    node id)와 최빈 `kind`(동률이면 알파벳순)만으로 `"{대표멤버} 외 N종목 · {kind}"`
+    문자열을 조립한다. 새 알고리즘·새 캐시 없음 — `cluster_cohesion()`과 동일 등급.
+
+    이 문자열은 의미적 이름(예: "반도체 대형주")이 아니다 — 그런 이름을 지을 근거가
+    이 함수에는 없다. "이름 없음" 배지·경고 규칙은 이 필드와 무관하게 그대로 유지된다.
+    """
+    members_by_cluster: dict[int, list[str]] = {}
+    for node, cluster_index in assignment.items():
+        members_by_cluster.setdefault(cluster_index, []).append(node)
+
+    graph = projected.graph
+    labels: dict[int, str] = {}
+    for cluster_index, members in members_by_cluster.items():
+        representative = min(members, key=lambda n: (-graph.degree(n), n))
+        representative_name = str(graph.nodes[representative].get("name", ""))
+        kind_counts = Counter(str(graph.nodes[n].get("kind", "")) for n in members)
+        most_frequent_kind = min(kind_counts.items(), key=lambda item: (-item[1], item[0]))[0]
+        n = len(members)
+        labels[cluster_index] = (
+            f"{representative_name} · {most_frequent_kind}"
+            if n == 1
+            else f"{representative_name} 외 {n - 1}종목 · {most_frequent_kind}"
+        )
+    return labels
+
+
 __all__ = [
     "GraphProjector",
     "ProjectedGraph",
     "ProjectionSource",
     "cluster",
     "cluster_cohesion",
+    "cluster_representative_labels",
 ]

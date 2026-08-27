@@ -24,7 +24,7 @@ from athena_api.brain import (
     surprising_connections,
     utc_now,
 )
-from athena_api.brain.projection import cluster_cohesion
+from athena_api.brain.projection import cluster_cohesion, cluster_representative_labels
 from athena_api.errors import BrainNotReadyError
 from athena_api.lifespan import BrainRuntime, _teardown_brain
 from athena_api.security import require_local_bearer
@@ -515,6 +515,7 @@ class ClusterMapResponse(BaseModel):
     nodes: list[ClusterMapNodeOut]
     edges: list[list[str]]
     cluster_cohesion: dict[int, float]
+    cluster_representative_labels: dict[int, str]
     edge_details: list[EdgeDetailOut]
 
 
@@ -658,6 +659,7 @@ async def get_brain_cluster_map(
     projected = await projector.project()
     assignment = await projector.clusters()
     cohesion = cluster_cohesion(projected, assignment)
+    representative_labels = cluster_representative_labels(projected, assignment)
     graph = projected.graph
     # 정렬해 내보낸다 — 순서가 흔들리면 캔버스가 이유 없이 다시 그려진다. edges와
     # edge_details가 같은 pair 목록에서 나오므로 둘의 순서가 항상 같이 간다.
@@ -676,6 +678,7 @@ async def get_brain_cluster_map(
         ],
         edges=[list(pair) for pair in sorted_edge_pairs],
         cluster_cohesion=cohesion,
+        cluster_representative_labels=representative_labels,
         edge_details=[
             EdgeDetailOut(
                 source=pair[0],
