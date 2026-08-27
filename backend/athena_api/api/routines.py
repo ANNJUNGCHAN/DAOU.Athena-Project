@@ -87,4 +87,5 @@ async def cancel_routine(request: Request, routine_id: str) -> dict[str, Any]:
     if spec is None:
         raise HTTPException(status_code=404, detail="루틴이 존재하지 않는다")
     spec = runtime.store.transition(routine_id, "cancelled")
+    await runtime.scheduler.clear_near(spec)  # 유령 watch 방지 — CP3-1
     return _view(spec, runtime)
