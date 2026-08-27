@@ -4025,6 +4025,12 @@ app.whenReady().then(async () => {
     failures.push('missed: 검증 블록이 예외로 끝났다');
   }
 
+  // 판정 신호 표준화(2026-08-28 P3c) — 리포트만 읽는 소비자가 성패를 오판하지
+  // 않게 실패 목록·exit 코드를 리포트에도 싣는다. 이전엔 콘솔("전 단언 통과"/
+  // "실패 단언 N건")과 exit code만 진짜 신호였고, 리포트의 failures 부재를
+  // 빈 배열로 오독해 실패 2건을 통과로 판정한 실측 사고가 있었다(2026-08-27).
+  report.failures = [...failures];
+  report.exitCode = failures.length ? 1 : 0;
   fs.writeFileSync(path.join(CAPTURES, 'VERIFY-REPORT.json'), JSON.stringify(report, null, 2));
   console.log('[verify] 리포트 저장:', path.join(CAPTURES, 'VERIFY-REPORT.json'));
 

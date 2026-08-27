@@ -1,0 +1,18 @@
+#!/bin/sh
+# pre-push — 결정론층 강제 (2026-08-28 안정화 랄프 P3a).
+#
+# 게이트 4종 + app 단위 테스트만 돈다. push당 지연 예산 60초 —
+# backend pytest(전체 ~17분)는 **의도적으로 제외**한다. 사후에 이 훅에
+# 추가하지 말 것: backend 결정층은 P8 최종 재검증·CI·수동 실행의 몫이다.
+# 게이트는 plain node로 실행한다(cmd /c 경유 금지 — rtk 훅이 명령을 훼손한
+# 실측, 2026-08-26).
+set -e
+cd "$(git rev-parse --show-toplevel)"
+echo "[pre-push] 결정론층 검사 시작 (게이트 4종 + app 단위, 예산 60초)"
+node scripts/gates/check-orb.mjs
+node scripts/gates/check-glass-ladder.mjs
+node scripts/gates/check-window-model.mjs
+node scripts/gates/check-harness-freshness.mjs
+cd app
+node --test lib/*.test.js lib/main/*.test.js lib/graph-mode/*.test.js > /dev/null
+echo "[pre-push] 통과 — push 진행"
