@@ -137,6 +137,13 @@ CREATE TABLE IF NOT EXISTS graph_events (
 );
 CREATE INDEX IF NOT EXISTS graph_events_subject ON graph_events(subject_id);
 CREATE INDEX IF NOT EXISTS graph_events_at ON graph_events(at);
+CREATE TABLE IF NOT EXISTS cluster_labels (
+    member_hash        TEXT PRIMARY KEY,
+    cluster_size       INTEGER NOT NULL,
+    label              TEXT NOT NULL,
+    prompt_fingerprint TEXT NOT NULL,
+    created_at         TEXT NOT NULL
+);
 CREATE VIRTUAL TABLE IF NOT EXISTS entities_fts USING fts5(
     entity_id UNINDEXED,
     name,
@@ -962,6 +969,51 @@ class GraphStore:
             return tuple(_graph_event_from_row(r) for r in rows)
 
         return await self._owner.run(read)
+
+    async def cluster_label(self, member_hash: str, prompt_fingerprint: str) -> str | None:
+        """군집 LLM 라벨 캐시 조회(WP-F) — 멤버 해시와 프롬프트 지문이 모두 맞아야 히트다.
+
+        지문이 다르면(라벨링 프롬프트가 바뀌었으면) 옛 라벨을 조용히 무시한다 —
+        `extraction.prompt_fingerprint()`가 추출 캐시를 키잉하는 것과 같은 이유로,
+        프롬프트가 바뀌었는데 옛 결과를 쓰면 조용히 틀린 것을 캐시하게 된다.
+        """
+
+        def read() -> str | None:
+            row = self._require().execute(
+                "SELECT label FROM cluster_labels"
+                " WHERE member_hash = ? AND prompt_fingerprint = ?",
+                (member_hash, prompt_fingerprint),
+            ).fetchone()
+            return None if row is None else str(row["label"])
+
+        return await self._owner.run(read)
+
+    async def save_cluster_label(
+        self,
+        member_hash: str,
+        *,
+        cluster_size: int,
+        label: str,
+        prompt_fingerprint: str,
+    ) -> None:
+        """군집 LLM 라벨 캐시 저장(WP-F).
+
+        `INSERT OR REPLACE`(member_hash PK 기준)라 같은 멤버 집합에 두 백그라운드
+        태스크가 동시 완료해도 예외 없이 마지막 쓰기가 이긴다 — F4의 fire-and-forget
+        구조가 요구하는 유일한 동시성 계약이다.
+        """
+
+        def write() -> None:
+            connection = self._require()
+            with atomic(connection, _GRAPH_WRITE):
+                connection.execute(
+                    "INSERT OR REPLACE INTO cluster_labels"
+                    "(member_hash, cluster_size, label, prompt_fingerprint, created_at)"
+                    " VALUES(?, ?, ?, ?, ?)",
+                    (member_hash, int(cluster_size), label, prompt_fingerprint, _ts(utc_now())),
+                )
+
+        await self._owner.run(write)
 
     async def investor_profile_summary(
         self, *, now: datetime, window_days: int = 90, limit: int = 50
