@@ -673,15 +673,59 @@ class SelectorService:
                 document = fallback_document
                 reasons = [ReasonCode.PREFERRED_STRUCTURED_ASSERTION]
             elif decision.status is CompatibilityDecisionStatus.AMBIGUOUS:
-                public_reasons = _public_reason_codes(decision)
-                raise AmbiguousOperationError(
-                    "Several operation profiles are compatible with the question",
-                    details={
-                        "candidates": list(decision.compatible_operation_refs[:3]),
-                        "reason": public_reasons[0].value,
-                        "reason_codes": [reason.value for reason in public_reasons],
-                    },
-                )
+                # P3 완화 게이트(2026-08-27, 호가 카드 진단): "호가"류 질문은 측정
+                # 축(measure:orderbook) 하나로만 여러 무관한 스크리너/TR과 함께
+                # 묶여 family 단위 AMBIGUOUS로 떨어진다 — 그 축을 dominance 비교에
+                # 넣는 시도는 계좌·금·업종 등 다른 도메인에서 12건 회귀를 냈다
+                # (2026-08-27 실측, active_surplus는 건드리지 않는다). 대신 REJECTED가
+                # 이미 쓰는 preferred_ref 단언 통로(`_guarded_preferred_fallback`과
+                # 동일한 안전 조건: query kind, trusted_code로 독립 검증된 대상 근거,
+                # INSTRUMENT_CODE 바인딩)를 그대로 재사용하되, 여기서는 그 단언이
+                # 이미 typed로 compatible한 후보 중 한 family에 속할 때만 구제한다
+                # — 무관한 family를 게이트 밖에서 강제로 통과시키지 않는다(다른
+                # 도메인의 안전 반문은 그대로 보존).
+                compatible_family_refs = {
+                    self.catalog.by_ref[ref].family_ref
+                    for ref in decision.compatible_operation_refs
+                }
+                fallback_document = None
+                if (
+                    preferred is not None
+                    and preferred.kind == "query"
+                    and trusted_code is not None
+                    and BindingRole.INSTRUMENT_CODE in preferred.routing.bindings
+                    and preferred.family_ref in compatible_family_refs
+                ):
+                    if preferred.group_id is not None or preferred.generic_callable:
+                        fallback_document = self._guarded_preferred_fallback(
+                            preferred, detail_group, trusted_code=trusted_code
+                        )
+                    elif detail_group is not None:
+                        try:
+                            fallback_document = self._asserted_detail(
+                                preferred.family_ref, detail_group
+                            )
+                        except UnknownDetailGroupError:
+                            fallback_document = None
+                    else:
+                        # Same shape as the DETAIL_GROUP_REQUIRED branch below: the
+                        # asserted family is real, it just still needs a projection.
+                        self._validated_arguments(
+                            self.catalog.by_ref[preferred.family_ref], request.arguments
+                        )
+                        raise self._detail_required(preferred.family_ref)
+                if fallback_document is None:
+                    public_reasons = _public_reason_codes(decision)
+                    raise AmbiguousOperationError(
+                        "Several operation profiles are compatible with the question",
+                        details={
+                            "candidates": list(decision.compatible_operation_refs[:3]),
+                            "reason": public_reasons[0].value,
+                            "reason_codes": [reason.value for reason in public_reasons],
+                        },
+                    )
+                document = fallback_document
+                reasons = [ReasonCode.PREFERRED_STRUCTURED_ASSERTION]
             else:
                 canonical_family_ref = decision.selected_family_ref
                 assert canonical_family_ref is not None
