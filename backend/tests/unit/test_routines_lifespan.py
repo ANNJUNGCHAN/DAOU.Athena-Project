@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+import json
+from datetime import UTC, datetime, timedelta
+
 import pytest
 
 from athena_api.config import Settings
@@ -16,6 +19,7 @@ def _settings(tmp_path, **over):
         routines_ledger_path=tmp_path / "ledger.jsonl",
         routines_read_marks_path=tmp_path / "read_marks.json",
         routines_engagement_path=tmp_path / "engagement.jsonl",
+        routines_ledger_archive_dir=tmp_path / "archive",
         **over,
     )
 
@@ -68,5 +72,36 @@ async def test_corrupt_store_emits_forced_notification(tmp_path):
         assert "복원 실패" in (runtime.last_error or "")
         event = runtime.events.get_nowait()
         assert event["type"] == "routine-restore-failed"
+    finally:
+        await teardown_routines(runtime)
+
+
+@pytest.mark.asyncio
+async def test_open_routines_rolls_over_ledger_once_at_startup(tmp_path):
+    """R3 — 기동 시 90일 지난 ledger 행이 즉시 아카이브로 옮겨진다(open_routines
+    1회 롤오버). scheduler에도 일일 재롤오버 콜백이 결선돼 있어야 한다."""
+    old_row = {
+        "ts": (datetime.now(UTC) - timedelta(days=95)).isoformat(),
+        "routine_id": "r1",
+        "symbol": "005930",
+        "source": "price.current",
+        "verdict": "fired",
+        "observed": 1.0,
+        "threshold": 1.0,
+        "reason": "테스트",
+        "duration_ms": None,
+    }
+    settings = _settings(tmp_path)
+    settings.routines_ledger_path.parent.mkdir(parents=True, exist_ok=True)
+    settings.routines_ledger_path.write_text(
+        json.dumps(old_row, ensure_ascii=False) + "\n", encoding="utf-8"
+    )
+
+    runtime = await open_routines(settings, ws_client=None)
+    try:
+        assert runtime.ledger.read_all() == []  # 유일한 행이 아카이브로 이동
+        archived = list(settings.routines_ledger_archive_dir.glob("ledger-*.jsonl"))
+        assert len(archived) == 1
+        assert runtime.scheduler.run_archive_once is not None  # 일일 재롤오버 결선
     finally:
         await teardown_routines(runtime)

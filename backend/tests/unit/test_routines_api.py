@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+from datetime import UTC, datetime, timedelta
 
 import pytest
 from fastapi import FastAPI
@@ -12,6 +13,7 @@ from fastapi.testclient import TestClient
 from athena_api.api.routines import router
 from athena_api.config import Settings
 from athena_api.errors import install_exception_handlers
+from athena_api.routines.archive import rollover_jsonl
 from athena_api.routines.runtime import open_routines, teardown_routines
 
 
@@ -28,6 +30,7 @@ def app_client(tmp_path):
         routines_ledger_path=tmp_path / "ledger.jsonl",
         routines_read_marks_path=tmp_path / "read_marks.json",
         routines_engagement_path=tmp_path / "engagement.jsonl",
+        routines_ledger_archive_dir=tmp_path / "archive",
     )
 
     loop = asyncio.new_event_loop()
@@ -511,6 +514,8 @@ def test_ack_persists_across_restart(tmp_path):
         routines_store_path=tmp_path / "routines.json",
         routines_ledger_path=tmp_path / "ledger.jsonl",
         routines_read_marks_path=tmp_path / "read_marks.json",
+        routines_engagement_path=tmp_path / "engagement.jsonl",
+        routines_ledger_archive_dir=tmp_path / "archive",
     )
     loop = asyncio.new_event_loop()
     runtime1 = loop.run_until_complete(open_routines(settings, ws_client=None))
@@ -552,3 +557,84 @@ def test_ack_persists_across_restart(tmp_path):
     assert row2["unread"] is False  # 재기동 후에도 읽음 유지
     loop.run_until_complete(teardown_routines(runtime2))
     loop.close()
+
+
+# ---------- 90일 아카이브 롤오버(R3)와의 상호작용 ----------
+
+
+def test_unread_calc_survives_ledger_rollover(app_client):
+    """90일 지난 유일한 발화가 아카이브로 옮겨져 원본 ledger에서 사라져도
+    list_routines()가 죽지 않는다 — last_fired_at은 None으로, unread는
+    안전한 기본값(False)으로 떨어진다(AC2, _view/_is_unread의 기존
+    None-safe 처리를 롤오버 시나리오로 확인)."""
+    client, runtime = app_client
+    rid = client.post("/api/v1/routines/draft", json=DRAFT).json()["id"]
+    old_ts = datetime.now(UTC) - timedelta(days=95)
+    runtime.ledger.record(
+        "fired",
+        routine_id=rid,
+        symbol="005930",
+        source="price.current",
+        observed=199000,
+        threshold=200000,
+        reason="조건 충족",
+        ts=old_ts,
+    )
+    listing_before = client.get("/api/v1/routines").json()["routines"]
+    row_before = next(r for r in listing_before if r["id"] == rid)
+    assert row_before["unread"] is True  # 롤오버 전에는 정상적으로 안읽음
+
+    rollover_jsonl(
+        runtime.ledger._path,
+        ts_field="ts",
+        archive_dir=runtime.ledger._path.parent / "archive",
+        cutoff_days=90,
+        lenient=False,
+    )
+
+    listing_after = client.get("/api/v1/routines").json()["routines"]
+    row_after = next(r for r in listing_after if r["id"] == rid)
+    assert row_after["last_fired_at"] is None  # 유일한 발화가 아카이브로 이동
+    assert row_after["unread"] is False  # None-safe 기본값 — 죽지 않는다
+
+
+def test_runs_may_return_fewer_than_30_after_rollover(app_client):
+    """30건 미만 반환은 수용된 트레이드오프다(Rev.3 §R3) — /runs는 활성
+    ledger 파일만 보고, 아카이브로 옮겨진 옛 행은 조회하지 않는다."""
+    client, runtime = app_client
+    rid = client.post("/api/v1/routines/draft", json=DRAFT).json()["id"]
+    old_ts = datetime.now(UTC) - timedelta(days=95)
+    for _ in range(5):
+        runtime.ledger.record(
+            "fired",
+            routine_id=rid,
+            symbol="005930",
+            source="price.current",
+            observed=199000,
+            threshold=200000,
+            reason="조건 충족",
+            ts=old_ts,
+        )
+    recent_ts = datetime.now(UTC)
+    runtime.ledger.record(
+        "fired",
+        routine_id=rid,
+        symbol="005930",
+        source="price.current",
+        observed=198000,
+        threshold=200000,
+        reason="조건 충족",
+        ts=recent_ts,
+    )
+
+    rollover_jsonl(
+        runtime.ledger._path,
+        ts_field="ts",
+        archive_dir=runtime.ledger._path.parent / "archive",
+        cutoff_days=90,
+        lenient=False,
+    )
+
+    res = client.get(f"/api/v1/routines/{rid}/runs")
+    assert res.status_code == 200
+    assert len(res.json()["runs"]) == 1  # 30건 미만(여기선 1건) — 죽지 않고 있는 만큼만

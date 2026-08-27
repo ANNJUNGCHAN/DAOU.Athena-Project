@@ -92,6 +92,9 @@ class RoutineScheduler:
     clock: Callable[[], float] = time.monotonic
     schedule_poll_interval_s: float = 20.0
     now_kst: Callable[[], datetime] = lambda: datetime.now(_KST)
+    # 90일 아카이브 롤오버(R3) — 일일 주기, 기존 3루프와 동형 패턴.
+    run_archive_once: Callable[[], None] | None = None
+    archive_poll_interval_s: float = 86400.0
     last_error: str | None = None
     _tasks: list[asyncio.Task[None]] = field(default_factory=list)
     _stopping: bool = False
@@ -105,6 +108,8 @@ class RoutineScheduler:
         self._stopping = False
         self._tasks.append(asyncio.create_task(self._periodic_loop()))
         self._tasks.append(asyncio.create_task(self._schedule_loop()))
+        if self.run_archive_once is not None:
+            self._tasks.append(asyncio.create_task(self._archive_loop()))
         if self.subscribe_ticks is not None:
             self._tasks.append(asyncio.create_task(self._realtime_loop()))
 
@@ -273,3 +278,11 @@ class RoutineScheduler:
                 reason=f"예약 시각 도달({target_hhmm})",
             )
             await self._fire(spec, hhmm)
+
+    # ---------- archive (90일 롤오버, R3) ----------
+
+    async def _archive_loop(self) -> None:
+        assert self.run_archive_once is not None
+        while not self._stopping:
+            await asyncio.sleep(self.archive_poll_interval_s)
+            self.run_archive_once()

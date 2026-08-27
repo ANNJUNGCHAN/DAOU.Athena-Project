@@ -121,6 +121,11 @@ class Settings(BaseSettings):
     routines_engagement_path: Path = Field(
         default_factory=lambda: Path.home() / ".athena" / "routines" / "engagement.jsonl"
     )
+    # ledger·engagement 90일 롤오버 보관 디렉터리 — 삭제 없음(archive.py).
+    routines_ledger_archive_dir: Path = Field(
+        default_factory=lambda: Path.home() / ".athena" / "routines" / "archive"
+    )
+    routines_ledger_archive_cutoff_days: int = 90
     # 라우틴별이 아닌 전역 설정 — routines_enabled와 무관하게 항상 로드된다.
     nudge_guard_path: Path = Field(
         default_factory=lambda: Path.home() / ".athena" / "routines" / "nudge_guard.json"
