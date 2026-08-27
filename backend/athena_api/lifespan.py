@@ -328,6 +328,29 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
         # Tests overwrite this attribute directly on the TestClient's app instance so the
         # test process never actually gets killed.
         app.state.brain_shutdown_hook = None
+        # WP-F(G-F1/G-F2) — 군집 라벨링 전용 LLM 클라이언트. 추출과 같은
+        # brain_extraction_llm_argv를 공유한다("추출 켜짐 = 라벨링도 켜짐") —
+        # argv가 없으면 None으로 두어 라벨링이 자동 휴면한다(거짓 스위치가 아니라
+        # 정직한 원인). 추출용 client(_open_brain 지역변수, timeout 120초)와 별개
+        # 인스턴스인 이유: StructuredLlmClient.complete()는 호출별 타임아웃 인자를
+        # 받지 않아, 라벨링의 20초 상한은 생성 시점에만 고정할 수 있다.
+        app.state.brain_cluster_labeling_llm_client = (
+            LocalCommandStructuredLlm(
+                tuple(runtime_settings.brain_extraction_llm_argv), timeout_seconds=20
+            )
+            if runtime_settings.brain_extraction_llm_argv
+            else None
+        )
+        # F4의 fire-and-forget 백그라운드 라벨링 태스크 참조 보관(in-flight 집합) —
+        # 참조 없는 태스크는 GC 회수 대상이라는 asyncio 문서 경고 대응(아래
+        # brain.hourly_task 저장 관례와 동일 원칙). 동시 스폰 상한 검사도 이
+        # 집합의 크기로 한다.
+        app.state.cluster_labeling_tasks = set()
+        # exposeToModel 게이트(WP-I, G-I5) — 기동 초기값은 안전측 False다. 프런트
+        # 기본값(True)과 어긋나 보이지만, Electron이 브레인 준비 폴링 자리에서
+        # 저장된 값을 재동기화(push)하므로(history-sink.js) 정상 경로에서는 곧
+        # 실제 설정값으로 수렴한다 — 동기화가 안 온 동안 닫혀 있는 쪽이 옳다.
+        app.state.expose_to_model = False
         _publish_default(app, None)
         _publish_brain(app, None)
         _publish_routines(app, None)

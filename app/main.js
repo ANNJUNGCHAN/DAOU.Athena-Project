@@ -1923,6 +1923,27 @@ ipcMain.handle('athena:brain-suggested-questions', async (_e, { limit } = {}) =>
   return { ok: true, ...result.body };
 });
 
+// 그래프 모드 요약 뷰(보드 06/07)의 "숨은 연관" 섹션 — 군집 경계를 넘는 연결.
+// 스텝7에서 신설(정찰 당시엔 백엔드 엔드포인트만 있고 이 IPC 배선이 없었다).
+ipcMain.handle('athena:brain-surprising-connections', async (_e, { limit } = {}) => {
+  const result = await fetchBrainJson('/api/v1/brain/analysis/surprising-connections', {
+    params: { limit },
+  });
+  if (!result.ok) return { ok: false, error: result.error };
+  return { ok: true, ...result.body };
+});
+
+// 엔티티 타임라인(WP-C, 그래프 후속 계획) — graph_events를 엔티티 단위로
+// 조회한다. 이 스텝은 IPC 배선까지만이다(패널 UI는 후속 작업, controller.js:286
+// 참고) — 아직 이 채널을 부르는 렌더러 코드는 없다.
+ipcMain.handle('athena:brain-entity-timeline', async (_e, { entityId, limit } = {}) => {
+  const result = await fetchBrainJson('/api/v1/brain/analysis/entity-timeline', {
+    params: { entity_id: entityId, limit },
+  });
+  if (!result.ok) return { ok: false, error: result.error };
+  return { ok: true, ...result.body };
+});
+
 // ④ 공통 테이블 카드 봉투로 접는다 — canvas.js의 renderMcpTable(envelope)이
 // 이미 그리는 {canvas_type:'table', data:{columns,rows}} 그대로다. 신규 카드
 // 타입은 0개(계획 §2(d) "신규 카드 타입 0개").
@@ -2050,6 +2071,17 @@ function handlePrefsSet(e, patch) {
 
 ipcMain.handle('athena:settings:prefs:get', handlePrefsGet);
 ipcMain.handle('athena:settings:prefs:set', handlePrefsSet);
+
+// exposeToModel 실반영(WP-I I4) — 렌더러 토글 값을 main prefs에 영속하고
+// backend 게이트(POST /settings/expose-to-model)에 즉시 민다. POST 실패는
+// {ok:false}로 알릴 뿐 로컬 토글 표시를 막지 않는다 — 브레인 준비 폴링
+// (history-sink.refreshBrainReady, G-I6)이 준비 확인 시 같은 값을 재동기화한다.
+ipcMain.handle('athena:settings:expose-to-model:set', async (_e, { enabled } = {}) => {
+  const next = prefs.set({ exposeToModel: enabled === true });
+  if (shellWin && !shellWin.isDestroyed()) shellWin.webContents.send('athena:prefs-changed', next);
+  const pushed = await historySink.pushExposeToModel({ mdlog });
+  return { ok: pushed, enabled: next.exposeToModel };
+});
 
 // ---------------------------------------------------------------------------
 // 모델 설정(모델·추론강도) — 공급자별로 저장소가 다르다(2026-08-18 Codex 실결선).

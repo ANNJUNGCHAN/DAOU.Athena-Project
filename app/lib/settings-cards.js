@@ -1730,6 +1730,22 @@ function writeGraphSettings(patch, storage) {
       // 저장 실패(용량 초과·사생활 모드)는 화면을 막을 이유가 아니다 — graph-mode-prefs.js와 같은 판단.
     }
   }
+  // WP-D1 — collectChat은 main 프로세스(history-sink.js)가 실제로 저장을
+  // 게이팅하는 유일한 그래프 설정이라, 이 카드가 쓰는 localStorage뿐 아니라
+  // main의 prefs.js에도 미러링한다(기존 athena:settings:prefs:set IPC 재사용).
+  if (patch && typeof patch.collectChat === 'boolean'
+    && typeof window !== 'undefined' && window.athena && window.athena.invoke) {
+    window.athena.invoke('athena:settings:prefs:set', { collectChat: next.collectChat }).catch(() => {
+      // 핸들러 부재/실패 — 로컬 토글 표시만 유지(refreshScreenCard의 setPref와 같은 판단).
+    });
+  }
+  // WP-I I4 — exposeToModel은 main이 prefs 영속 + backend 게이트 POST까지
+  // 한 번에 처리하는 전용 채널로 미러링한다(collectChat의 prefs:set 미러와
+  // 같은 판단, 실패해도 로컬 토글 표시만 유지).
+  if (patch && typeof patch.exposeToModel === 'boolean'
+    && typeof window !== 'undefined' && window.athena && window.athena.invoke) {
+    window.athena.invoke('athena:settings:expose-to-model:set', { enabled: next.exposeToModel }).catch(() => {});
+  }
   return next;
 }
 
@@ -1738,10 +1754,17 @@ function updateGraphNavBadge() {
   if (item && item._badgeEl && item.statusFn) item._badgeEl.textContent = item.statusFn();
 }
 
-function appendGraphSourceToggle(body, current, key, label, sub) {
+function appendGraphSourceToggle(body, current, key, label, sub, note) {
   const labelCol = el('div');
   labelCol.appendChild(el('div', 'uk-toggle-label', label));
   labelCol.appendChild(el('div', 'uk-toggle-sub', sub));
+  // note는 선택 — WP-I I4에서 exposeToModel 실효 없음 배지를 걷어낸 뒤로 쓰는
+  // 곳이 없지만, 자리는 남겨 둔다(다음 정직성 배지가 같은 자리를 쓴다).
+  if (note) {
+    const noteRow = el('div', 'uk-toggle-note');
+    noteRow.appendChild(note);
+    labelCol.appendChild(noteRow);
+  }
   const toggle = toggleSwitch(current[key], (next) => {
     writeGraphSettings({ [key]: next });
     updateGraphNavBadge();
@@ -1796,6 +1819,8 @@ function refreshHistoryCard(card, head, body) {
   appendGraphSourceToggle(
     body, current, 'exposeToModel', '대화 모델에 성향 그래프 열기',
     '켜면 답변이 사용자를 알고 시작합니다. 보유 종목 수량과 대화 원문이 모델 컨텍스트로 전달됩니다.',
+    // WP-I I4 — 옛 "실효 없음(준비 중)" 배지는 걷어냈다: MCP가 인증 헤더를
+    // 싣고 backend 게이트가 이 토글 값을 실제로 검사하므로 전제가 사라졌다.
   );
 
   const dangerNote = el('div', 'uk-settings-note');

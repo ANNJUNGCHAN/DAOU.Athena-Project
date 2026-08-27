@@ -136,7 +136,9 @@ def test_inventory_partition_and_static_openapi_coverage() -> None:
     assert len(operation_ids) == len(set(operation_ids))
     # 이 숫자는 표면이 조용히 늘거나 주는 것을 눈에 띄게 하려고 박아둔 값이므로,
     # 무엇이 왜 늘었는지 적지 않고 숫자만 고치면 이 테스트가 하는 일이 없어진다.
-    assert len(operation_ids) == 334
+    # 336 = 334 + 그래프 브렌치 병합(2026-08-27)의 2개: get_brain_entity_timeline
+    # (§10-4 엔티티 타임라인) · set_expose_to_model(그래프 노출 게이트, settings.py).
+    assert len(operation_ids) == 336
     assert "canvas_chart_page" in operation_ids
     assert "canvas_series_page" in operation_ids
     assert "get_internal_oauth_status" in operation_ids
@@ -146,6 +148,8 @@ def test_inventory_partition_and_static_openapi_coverage() -> None:
         "get_brain_suggested_questions",
         "get_brain_graph_diff",
         "get_brain_cluster_map",
+        "get_brain_entity_timeline",
+        "set_expose_to_model",
     ):
         assert added in operation_ids, f"{added}가 표면에서 사라졌다"
     manifest = json.loads(

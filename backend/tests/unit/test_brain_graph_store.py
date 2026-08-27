@@ -330,6 +330,80 @@ async def test_reset_projection_keeps_sources_and_log(store: GraphStore) -> None
     assert len(await store.events()) == before_events
 
 
+# ── 엔티티 타임라인(WP-C) ────────────────────────────────────────────────────
+
+
+async def test_entity_events_include_events_where_the_entity_is_the_subject(
+    store: GraphStore,
+) -> None:
+    await store.upsert_source(source("s1"))
+    samsung = entity(EntityKind.SECURITY, "삼성전자")
+    await store.apply_extraction(
+        "s1", "fp", (PROFILE, samsung), (relation("owns", PROFILE, samsung, "s1"),)
+    )
+    found = await store.entity_events(PROFILE.id)
+    assert any(e.subject_id == PROFILE.id for e in found)
+
+
+async def test_entity_events_include_events_where_the_entity_is_the_object(
+    store: GraphStore,
+) -> None:
+    await store.upsert_source(source("s1"))
+    samsung = entity(EntityKind.SECURITY, "삼성전자")
+    await store.apply_extraction(
+        "s1", "fp", (PROFILE, samsung), (relation("owns", PROFILE, samsung, "s1"),)
+    )
+    found = await store.entity_events(samsung.id)
+    assert any(e.object_id == samsung.id for e in found), "target으로만 등장해도 잡혀야 한다"
+
+
+async def test_entity_events_exclude_the_projection_marker(store: GraphStore) -> None:
+    """`events()`와 같은 계약 — 재투영 표식은 어떤 엔티티 조회에도 안 새어 나온다."""
+    await store.upsert_source(source("s1"))
+    samsung = entity(EntityKind.SECURITY, "삼성전자")
+    await store.apply_extraction(
+        "s1", "fp", (PROFILE, samsung), (relation("owns", PROFILE, samsung, "s1"),)
+    )
+    await store.reset_projection()
+    # 표식 이벤트의 subject_id 문자열 자체를 entity_id로 넣어도(최악의 경우) 안 나온다.
+    assert await store.entity_events("projection") == ()
+
+
+async def test_entity_events_apply_the_limit_ceiling(store: GraphStore) -> None:
+    await store.upsert_source(source("s1"))
+    themes = tuple(entity(EntityKind.THEME, f"테마{i}") for i in range(5))
+    await store.apply_extraction(
+        "s1",
+        "fp",
+        (PROFILE, *themes),
+        tuple(relation("interested_in", PROFILE, theme, "s1") for theme in themes),
+    )
+    found = await store.entity_events(PROFILE.id, limit=2)
+    assert len(found) == 2
+
+
+async def test_entity_events_are_ordered_newest_first(store: GraphStore) -> None:
+    await store.upsert_source(source("s1"))
+    first_theme = entity(EntityKind.THEME, "먼저")
+    await store.apply_extraction(
+        "s1",
+        "fp",
+        (PROFILE, first_theme),
+        (relation("interested_in", PROFILE, first_theme, "s1"),),
+    )
+    await store.upsert_source(source("s2"))
+    second_theme = entity(EntityKind.THEME, "나중")
+    await store.apply_extraction(
+        "s2",
+        "fp",
+        (PROFILE, second_theme),
+        (relation("interested_in", PROFILE, second_theme, "s2"),),
+    )
+    found = await store.entity_events(PROFILE.id)
+    seqs = [e.seq for e in found]
+    assert seqs == sorted(seqs, reverse=True), "최신(seq가 큰 것)이 먼저 나와야 한다"
+
+
 # ── 재기동 (G5) ─────────────────────────────────────────────────────────────
 
 
@@ -477,3 +551,37 @@ async def test_neighborhood_walks_to_requested_depth(store: GraphStore) -> None:
     depth_two = await store.neighborhood(PROFILE.id, depth=2)
     assert {e.kind for e in depth_two} == {"interested_in", "belongs_to"}
     assert {e.depth for e in depth_two} == {1, 2}
+
+
+# ── 군집 LLM 라벨 캐시(WP-F F2) ──────────────────────────────────────────────
+
+
+async def test_cluster_label_round_trip_and_fingerprint_mismatch(store: GraphStore) -> None:
+    assert await store.cluster_label("h1", "fp-a") is None
+    await store.save_cluster_label(
+        "h1", cluster_size=3, label="반도체 밸류체인", prompt_fingerprint="fp-a"
+    )
+    assert await store.cluster_label("h1", "fp-a") == "반도체 밸류체인"
+    # 프롬프트 지문이 다르면 미스 — 옛 라벨을 조용히 쓰면 틀린 것을 캐시하는 셈이다.
+    assert await store.cluster_label("h1", "fp-b") is None
+
+
+async def test_cluster_label_replace_wins_without_error(store: GraphStore) -> None:
+    # 같은 member_hash에 두 백그라운드 태스크가 연속 완료하는 경쟁(F4) — 예외 없이
+    # 마지막 쓰기가 이긴다(INSERT OR REPLACE).
+    await store.save_cluster_label("h1", cluster_size=3, label="첫 라벨", prompt_fingerprint="fp")
+    await store.save_cluster_label("h1", cluster_size=3, label="마지막 라벨", prompt_fingerprint="fp")
+    assert await store.cluster_label("h1", "fp") == "마지막 라벨"
+
+
+async def test_cluster_labels_table_survives_reopen(tmp_path: Path) -> None:
+    first = GraphStore(tmp_path / "brain.sqlite3")
+    await first.open()
+    await first.save_cluster_label("h", cluster_size=2, label="라벨", prompt_fingerprint="fp")
+    await first.close()
+    second = GraphStore(tmp_path / "brain.sqlite3")
+    await second.open()  # 스키마 멱등 재실행 — SCHEMA_VERSION 불변(계획 확인)
+    try:
+        assert await second.cluster_label("h", "fp") == "라벨"
+    finally:
+        await second.close()

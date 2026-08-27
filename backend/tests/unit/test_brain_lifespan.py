@@ -256,3 +256,25 @@ async def test_hourly_task_is_cancelled_symmetrically_with_the_app_lifespan(
     # _teardown_brain must have cancelled the hourly task before returning -- nothing
     # left running that could still call the now-stopped coordinator.
     assert app.state.brain_ingestion_ready is False
+
+
+# --- WP-F F1: 군집 라벨링 전용 LLM 클라이언트 -----------------------------------------
+
+
+async def test_labeling_client_is_dormant_without_extraction_argv(tmp_path: Path) -> None:
+    # G-F1/G-F2 — 추출이 꺼져 있으면(argv 미설정) 라벨링도 자동 휴면한다.
+    app = FastAPI()
+    async with build_lifespan(_brain_settings(tmp_path))(app):
+        assert app.state.brain_cluster_labeling_llm_client is None
+        assert app.state.cluster_labeling_tasks == set()
+
+
+async def test_labeling_client_is_a_separate_short_timeout_instance(tmp_path: Path) -> None:
+    # 추출용 client(120초)와 별개 인스턴스로 20초 타임아웃이 생성 시점에 고정된다 —
+    # StructuredLlmClient.complete()는 호출별 타임아웃 인자를 받지 않는다.
+    app = FastAPI()
+    settings = _brain_settings(tmp_path, brain_extraction_llm_argv=["llm-cli", "--json"])
+    async with build_lifespan(settings)(app):
+        client = app.state.brain_cluster_labeling_llm_client
+        assert client is not None
+        assert client._timeout_seconds == 20  # noqa: SLF001 - 생성자 고정값 확인

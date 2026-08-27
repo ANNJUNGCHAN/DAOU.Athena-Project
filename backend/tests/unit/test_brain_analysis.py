@@ -11,6 +11,7 @@ from __future__ import annotations
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
+import networkx as nx
 import pytest
 
 from athena_api.brain import (
@@ -22,6 +23,7 @@ from athena_api.brain import (
     GraphEventOp,
     GraphProjector,
     GraphStore,
+    ProjectedGraph,
     Relation,
     SourceKind,
     SourceRecord,
@@ -235,6 +237,64 @@ async def test_surprising_connections_on_a_single_cluster_is_empty(store: GraphS
 
 async def test_surprising_connections_on_an_empty_graph(store: GraphStore) -> None:
     assert surprising_connections(await GraphProjector(store).project()) == ()
+
+
+def _hub_leaf_bridge_graph() -> ProjectedGraph:
+    """허브-허브 다리(차수 높음)와 잎-잎 다리(차수 낮음)를 둘 다 가진 그래프.
+
+    `assignment`를 직접 넘겨 `surprising_connections()`를 부르므로 실제 군집 알고리즘의
+    분할 결과에 기대지 않는다 — 점수 계산 자체(차수 역수 → min-max 정규화)만 잰다.
+    """
+    graph = nx.Graph()
+    for leaf in ("a0", "a1", "a2", "a3"):
+        graph.add_edge("hub_a", leaf)
+    for leaf in ("b0", "b1", "b2", "b3"):
+        graph.add_edge("hub_b", leaf)
+    graph.add_edge("hub_a", "hub_b")  # 허브끼리 — 차수 4*4=16, raw=1/16(작다 → 점수도 작다)
+    graph.add_edge("a0", "b0")  # 잎끼리 — 이 엣지로 a0/b0 둘 다 차수 2, raw=1/4(크다 → 점수도 크다)
+    return ProjectedGraph(revision=1, graph=graph)
+
+
+def _hub_leaf_assignment() -> dict[str, int]:
+    return {
+        "hub_a": 0, "a0": 0, "a1": 0, "a2": 0, "a3": 0,
+        "hub_b": 1, "b0": 1, "b1": 1, "b2": 1, "b3": 1,
+    }
+
+
+def test_surprising_connections_score_favors_low_degree_bridges() -> None:
+    """차수가 낮은 쪽을 잇는 다리가 더 놀랍다 — 항상 이어지는 허브끼리는 덜 놀랍다."""
+    found = surprising_connections(_hub_leaf_bridge_graph(), assignment=_hub_leaf_assignment())
+    by_pair = {
+        frozenset((item.source_entity_id, item.target_entity_id)): item.surprise_score
+        for item in found
+    }
+    hub_bridge_score = by_pair[frozenset(("hub_a", "hub_b"))]
+    leaf_bridge_score = by_pair[frozenset(("a0", "b0"))]
+    assert leaf_bridge_score > hub_bridge_score, "차수가 낮은 다리가 더 놀라워야 한다"
+
+
+def test_surprising_connections_score_is_within_unit_range() -> None:
+    found = surprising_connections(_hub_leaf_bridge_graph(), assignment=_hub_leaf_assignment())
+    assert len(found) == 2, "이 픽스처는 다리가 2개 있어야 한다"
+    assert all(0.0 <= item.surprise_score <= 1.0 for item in found)
+
+
+async def test_surprising_connections_score_is_one_for_a_lone_crossing(store: GraphStore) -> None:
+    """max==min이면(교차 다리가 하나뿐이면) 정규화 분모가 0이라 1.0으로 둔다."""
+    left = tuple(entity(EntityKind.THEME, f"좌{i}") for i in range(4))
+    right = tuple(entity(EntityKind.COMPANY, f"우{i}") for i in range(4))
+    edges = []
+    for group in (left, right):
+        for index, node in enumerate(group):
+            for other in group[index + 1 :]:
+                edges.append(relation("relates_to", node, other))
+    edges.append(relation("relates_to", left[0], right[0]))
+    await seed(store, (PROFILE, *left, *right), tuple(edges))
+
+    found = surprising_connections(await GraphProjector(store).project())
+    assert len(found) == 1
+    assert found[0].surprise_score == 1.0
 
 
 # ── suggest_questions ───────────────────────────────────────────────────────

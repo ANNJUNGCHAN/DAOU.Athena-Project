@@ -51,6 +51,7 @@ class SurprisingConnection:
     kinds: tuple[str, ...]
     source_cluster: int
     target_cluster: int
+    surprise_score: float
 
 
 @dataclass(frozen=True, slots=True)
@@ -160,6 +161,21 @@ def surprising_connections(
             str(graph.nodes[pair[1]].get("name", "")),
         )
     )
+    # 상대 놀라움 점수 — 차수가 낮은(평소 덜 언급되는) 쪽일수록 놀랍다. limit으로 자르기
+    # **전** 전체 crossings에서 정규화해야 "이 목록 안에서의 상대 순위"라는 의미가
+    # limit 값에 따라 흔들리지 않는다. 절대 스케일(Paper의 8.5류)은 흉내 내지 않는다.
+    raw_by_pair = {
+        pair: 1.0 / (graph.degree(pair[0]) * graph.degree(pair[1])) for pair in crossings
+    }
+    if raw_by_pair:
+        lo, hi = min(raw_by_pair.values()), max(raw_by_pair.values())
+        score_by_pair = (
+            {pair: 1.0 for pair in raw_by_pair}
+            if hi == lo
+            else {pair: (value - lo) / (hi - lo) for pair, value in raw_by_pair.items()}
+        )
+    else:
+        score_by_pair = {}
     return tuple(
         SurprisingConnection(
             source_entity_id=source,
@@ -169,6 +185,7 @@ def surprising_connections(
             kinds=tuple(graph[source][target].get("kinds", ())),
             source_cluster=assignment.get(source, -1),
             target_cluster=assignment.get(target, -1),
+            surprise_score=score_by_pair[(source, target)],
         )
         for source, target in crossings[:limit]
     )

@@ -249,6 +249,7 @@
 }
 .uk-toggle-label { font-family: var(--font-strong); font-size: var(--text-md); color: var(--color-k-text); }
 .uk-toggle-sub { font-family: var(--font-body); font-size: var(--text-sm); color: var(--color-k-faint); margin-top: 4px; }
+.uk-toggle-note { margin-top: 4px; }
 .uk-toggle {
   width: 44px; height: 24px; padding: 0; flex: none;
   border-radius: 999px;

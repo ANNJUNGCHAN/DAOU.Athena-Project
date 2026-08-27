@@ -292,13 +292,49 @@ class SelectorCache:
             self._store.popitem(last=False)  # 가장 오래전에 쓰인 항목부터 축출
 
 
+_LOCAL_BEARER_ENV_VAR = "ATHENA_LOCAL_BEARER_TOKEN"
+
+
+def read_local_bearer_token() -> str | None:
+    """`backend-launcher.js`의 `readLocalBearerToken()` Python 대응(WP-I).
+
+    MCP 서버 프로세스는 pydantic Settings를 지나지 않으므로 프로세스 env를 먼저
+    보고, 없으면 backend/.env를 직접 읽는다. 둘 다 없으면 None — 토큰 미설정
+    배포(루프백 게이트)에서는 헤더를 아예 싣지 않는다."""
+    direct = os.environ.get(_LOCAL_BEARER_ENV_VAR, "").strip()
+    if direct:
+        return direct
+    env_path = Path(__file__).resolve().parents[1] / ".env"
+    try:
+        text = env_path.read_text(encoding="utf-8")
+    except OSError:
+        return None
+    for line in text.splitlines():
+        key, sep, value = line.partition("=")
+        if not sep or key.strip() != _LOCAL_BEARER_ENV_VAR:
+            continue
+        raw = value.strip().strip("\"'")
+        return raw or None
+    return None
+
+
 def default_http_client_factory() -> httpx.AsyncClient:
     """실제 서빙에서 `AthenaGateway.selector_http_client`의 기본값을 만든다.
 
     테스트는 이 팩토리를 바꾸지 않는다 — 대신 `AthenaGateway(selector_http_client=...)`
     생성자에 `transport=httpx.MockTransport(handler)`를 심은 별도
-    `httpx.AsyncClient`를 직접 주입해 네트워크 없이 왕복을 검증한다."""
-    return httpx.AsyncClient(base_url=backend_base_url())
+    `httpx.AsyncClient`를 직접 주입해 네트워크 없이 왕복을 검증한다.
+
+    `X-Athena-Caller: model`(G-I1) — 이 클라이언트로 나가는 모든 백엔드 호출은
+    모델 경로라는 자기신고다. `Authorization`은 브레인 라우트의
+    `require_local_bearer`를 지나기 위한 로컬 베어러(WP-I 이전에는 이 헤더가
+    없어 MCP가 브레인 라우트를 우연히 못 부르고 있었다 — 이제 헤더 주입과
+    exposeToModel 게이트가 같은 배포로 나간다, §8 ADR)."""
+    headers = {"X-Athena-Caller": "model"}
+    token = read_local_bearer_token()
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    return httpx.AsyncClient(base_url=backend_base_url(), headers=headers)
 
 
 _DISCOVERY_INTENT_ENUM = ["auto", "query", "order", "websocket"]
