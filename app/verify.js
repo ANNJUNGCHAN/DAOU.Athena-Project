@@ -3266,8 +3266,8 @@ app.whenReady().then(async () => {
       const repliedCountValue = tileValue('이어진 대화');
       const fixtureTileCount = statTiles.filter((t) => t.getAttribute('data-source') === 'fixture').length;
 
-      // "오늘 07:30 산출물" 카드(fixture, 팀 리드 정정으로 추가 — Paper 41번에
-      // 있는 요소는 생략이 아니라 fixture+data-source 표기로 구현한다).
+      // "오늘 산출물" 카드(6단계부터 실데이터) — stage10Runs의 오늘자 브리핑
+      // 행(briefing_* 병합 필드)이 재료다. fixture 시절 표기는 제거됐다.
       const outputCard = canvas.querySelector('.agent-history-output-card');
       const outputSource = outputCard ? outputCard.getAttribute('data-source') : null;
       const outputTitle = (canvas.querySelector('.agent-history-output-title') || {}).textContent;

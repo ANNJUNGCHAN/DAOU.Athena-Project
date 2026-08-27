@@ -574,6 +574,10 @@ async def test_schedule_loop_fires_on_weekday_time_match(tmp_path):
     rows = engine.ledger.read_all()
     assert len(rows) == 1
     assert rows[0]["verdict"] == "fired"
+    # 이벤트 fired_at은 ledger에 실제로 쓴 ts와 문자열까지 같아야 한다 — 이 값이
+    # 브리핑 보고(fired_at)와 /runs 병합의 상관 키다. 별도 now() 재계산으로
+    # 마이크로초가 어긋나면 병합이 조용히 실패한다(리뷰 확정 blocker 회귀 방지).
+    assert events[0]["fired_at"] == rows[0]["ts"]
 
 
 @pytest.mark.asyncio
