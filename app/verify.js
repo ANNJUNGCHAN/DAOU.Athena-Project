@@ -2456,6 +2456,16 @@ app.whenReady().then(async () => {
         graph.drawn.edges === graph.placedClusterEdges,
       );
       report.graphMode.shot = await shot(shellWin, '90-graph-mode.png');
+      // 지도 서브뷰도 증거로 남긴다(버블 AI 추정 라벨·숨은연관 핑크 점선은 지도
+      // 표면에만 그려진다) — 찍고 요약 탭으로 되돌려 이후 검증의 전제(요약 표
+      // 표시 상태)를 바꾸지 않는다.
+      await shellWin.webContents.executeJavaScript(
+        "(() => { const t = document.getElementById('graphViewTab'); if (t) t.click(); })()"
+      );
+      report.graphMode.mapShot = await shot(shellWin, '90b-graph-map.png');
+      await shellWin.webContents.executeJavaScript(
+        "(() => { const t = document.getElementById('summaryViewTab'); if (t) t.click(); })()"
+      );
     } else {
       // 브레인이 안 됐다 — 그래도 네비 항목을 누르면 캔버스는 열려야 한다(막히지
       // 않는다), 다만 그 안은 실제 그래프가 아니라 정직한 안내여야 한다.

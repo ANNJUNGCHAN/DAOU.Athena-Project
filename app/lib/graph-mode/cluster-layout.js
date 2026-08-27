@@ -64,6 +64,10 @@ function layoutClusterMap(payload, viewport) {
   // 구버전 backend는 이 필드 자체가 없을 수 있으므로 그때는 undefined로 남겨
   // 소비하는 쪽(스텝6/10)이 §0 원안(생략/size 대체)으로 폴백하게 한다.
   const cohesionByCluster = (payload && payload.cluster_cohesion) || null;
+  // WP-F AI 추정 라벨 — cohesion과 같은 순수 통과. name을 채우지 않는다(G-F7:
+  // 추정 이름은 name 판정("이름 없음" 배지·namedCount)에 관여하면 안 된다 —
+  // theme-clusters.js의 같은 결정을 지도 경로에서도 그대로 따른다).
+  const aiLabelByCluster = (payload && payload.cluster_ai_labels) || null;
   const centreX = width / 2;
   const centreY = height / 2;
   const mapRadius = Math.max(
@@ -111,6 +115,7 @@ function layoutClusterMap(payload, viewport) {
       y: clusterY,
       radius: clusterRadius,
       cohesion: cohesionByCluster ? cohesionByCluster[group.cluster] : undefined,
+      aiLabel: aiLabelByCluster ? aiLabelByCluster[group.cluster] : undefined,
     });
   });
 
@@ -173,8 +178,9 @@ function layoutClusterMap(payload, viewport) {
 // 않고 군집 버블 중심(placed.clusters[i].x/y, 스텝10이 이미 계산)을 그대로 쓴다
 // (원칙1, "이미 있는 결정적 배치를 존중"). surprisingPairs(선택, 기본 빈 배열)는
 // surprising-connections API 결과의 {source_cluster, target_cluster} 쌍 목록 —
-// 지금은 아무도 안 채우지만(위 layoutClusterMap 주석 참고), 채워지면 그 군집
-// 쌍의 isSurprising이 true가 된다.
+// layoutClusterMap()의 1차 계산은 빈 배열로 부르지만, controller.js(renderStage,
+// 스텝14 실배선)가 1단계 렌더마다 실데이터로 다시 불러 그 군집 쌍의
+// isSurprising을 true로 덮어쓴다.
 function aggregateClusterEdges(placed, surprisingPairs) {
   const nodes = Array.isArray(placed && placed.nodes) ? placed.nodes : [];
   const edges = Array.isArray(placed && placed.edges) ? placed.edges : [];

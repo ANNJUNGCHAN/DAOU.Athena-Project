@@ -292,6 +292,31 @@ test('cohesion이 없으면(구버전 backend) 전 군집이 같은 대체 alpha
   assert.equal(alphaOf(a), alphaOf(b), '군집 크기와 무관하게 동일 alpha(size 기준 상대값을 새로 발명하지 않는다)');
 });
 
+test('aiLabel이 있고 name이 없으면 "AI 추정:" 접두 라인이 붙고 "이름 없음" 배지는 그대로 남는다(G-F7, WP-F)', () => {
+  const placed = mockPlaced([{ cluster: 0, size: 2, x: 1, y: 1, radius: 10, aiLabel: '반도체 밸류체인' }]);
+  const container = fakeNode('div');
+  const svg = renderClusterBubbles(container, placed, { width: 800, height: 600 });
+  const ai = svg.querySelectorAll('.graph-cluster-ai-label');
+  assert.equal(ai.length, 1);
+  assert.equal(ai[0].textContent, 'AI 추정: 반도체 밸류체인');
+  assert.equal(svg.querySelectorAll('.graph-cluster-unnamed-badge').length, 1, 'AI 추정 라벨은 name 판정에 관여하지 않는다 — 배지 유지');
+});
+
+test('aiLabel이 없으면 AI 추정 라인이 없다(지어내지 않는다, §0 정책)', () => {
+  const placed = mockPlaced([{ cluster: 0, size: 2, x: 1, y: 1, radius: 10 }]);
+  const container = fakeNode('div');
+  const svg = renderClusterBubbles(container, placed, { width: 800, height: 600 });
+  assert.equal(svg.querySelectorAll('.graph-cluster-ai-label').length, 0);
+});
+
+test('name이 있으면 aiLabel이 있어도 AI 추정 라인을 붙이지 않는다(진짜 이름 우선)', () => {
+  const placed = mockPlaced([{ cluster: 0, size: 2, x: 1, y: 1, radius: 10, name: '반도체 대형주', aiLabel: '반도체 밸류체인' }]);
+  const container = fakeNode('div');
+  const svg = renderClusterBubbles(container, placed, { width: 800, height: 600 });
+  assert.equal(svg.querySelectorAll('.graph-cluster-ai-label').length, 0);
+  assert.equal(svg.querySelectorAll('.graph-cluster-unnamed-badge').length, 0, '이름이 있으니 배지도 없다');
+});
+
 test('전 군집이 무명(0/N)이면 경고 스타일이 아니라 중립 스타일이다(§0 r5)', () => {
   const placed = mockPlaced([
     { cluster: 0, size: 1, x: 1, y: 1, radius: 10, name: null },
