@@ -42,6 +42,7 @@ function groupThemeClusters(payload) {
   if (nodes.length === 0) return [];
   const groups = window.AthenaLib.GraphClusterLayout.groupByCluster(nodes);
   const cohesionByCluster = (payload && payload.cluster_cohesion) || null;
+  const representativeByCluster = (payload && payload.cluster_representative_labels) || null;
   return groups
     .filter((group) => group.cluster !== -1)
     .map((group) => ({
@@ -49,6 +50,10 @@ function groupThemeClusters(payload) {
       size: group.members.length,
       name: null, // §0 발견1 — 이름 파이프라인이 없다, 지어내지 않는다.
       cohesion: cohesionByCluster ? cohesionByCluster[group.cluster] : undefined,
+      // WP-A(그래프 후속 계획) — 규칙 기반 "대표 멤버 · 최빈 kind" 문자열.
+      // 의미적 이름이 아니다 — name(위)과 분리된 필드라 "이름 없음" 배지·
+      // namedCount 판정에는 영향을 주지 않는다.
+      representative: representativeByCluster ? representativeByCluster[group.cluster] : undefined,
     }));
 }
 
@@ -69,6 +74,15 @@ function renderClusterCard(cluster, warnUnnamed) {
   const count = el('span', 'theme-cluster-count');
   count.textContent = `${cluster.size}종목`;
   card.appendChild(count);
+
+  // 대표 설명 — 규칙 기반 문자열(의미적 이름 아님). 없으면(구버전 backend)
+  // 생략한다(§0 정책, 지어낸 문구 없음). "이름 없음" 배지는 이 값과 무관하게
+  // 그대로 유지된다(위 title 블록 참고 — cluster.name만 본다).
+  if (cluster.representative) {
+    const representative = el('div', 'theme-cluster-representative');
+    representative.textContent = `대표: ${cluster.representative}`;
+    card.appendChild(representative);
+  }
 
   // 응집도는 스텝5-2 채택 여부에 따라 있을 수도 없을 수도 있다 — 없으면
   // 진행바·수치를 아예 생략한다(지어낸 숫자 없음, §0 정책).

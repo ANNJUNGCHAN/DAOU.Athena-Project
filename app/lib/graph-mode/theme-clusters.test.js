@@ -72,6 +72,27 @@ test('groupThemeClusters — cluster_cohesion이 있으면 통과시키고, 없�
   assert.ok(withoutCohesion.every((c) => c.cohesion === undefined), '구버전 backend엔 필드 자체가 없다');
 });
 
+test('groupThemeClusters — cluster_representative_labels가 있으면 통과시키고, 없으면 undefined(WP-A)', () => {
+  const withRepresentative = groupThemeClusters(payload({
+    cluster_representative_labels: { 0: '한미반도체 외 1종목 · stock', 1: 'C · stock' },
+  }));
+  assert.equal(withRepresentative.find((c) => c.cluster === 0).representative, '한미반도체 외 1종목 · stock');
+  assert.equal(withRepresentative.find((c) => c.cluster === 1).representative, 'C · stock');
+
+  const withoutRepresentative = groupThemeClusters(payload());
+  assert.ok(
+    withoutRepresentative.every((c) => c.representative === undefined),
+    '구버전 backend엔 필드 자체가 없다',
+  );
+});
+
+test('groupThemeClusters — representative가 있어도 name은 여전히 null이다(§0 발견1, 별도 필드)', () => {
+  const clusters = groupThemeClusters(payload({
+    cluster_representative_labels: { 0: '한미반도체 외 1종목 · stock', 1: 'C · stock' },
+  }));
+  assert.ok(clusters.every((c) => c.name === null));
+});
+
 // ── shouldWarnUnnamed — 임계 규칙(§0 r5) ────────────────────────────────────
 
 test('shouldWarnUnnamed — 0/N(전부 무명)이면 경고 미적용', () => {
@@ -135,6 +156,42 @@ test('renderThemeClusters — cohesion이 없으면(undefined) 진행바·수치
   renderThemeClusters(container, [{ cluster: 0, size: 9, name: null, cohesion: undefined }]);
   assert.equal(container.querySelector('.theme-cluster-cohesion'), null);
   assert.equal(container.querySelector('.theme-cluster-bar'), null);
+});
+
+test('renderThemeClusters — representative가 있으면 대표 서브텍스트를 그린다(WP-A3)', () => {
+  const container = fakeNode('div');
+  renderThemeClusters(container, [
+    { cluster: 0, size: 2, name: null, representative: '한미반도체 외 1종목 · stock' },
+  ]);
+  const representative = container.querySelector('.theme-cluster-representative');
+  assert.equal(representative.textContent, '대표: 한미반도체 외 1종목 · stock');
+});
+
+test('renderThemeClusters — representative가 없으면(undefined, 구버전 backend) 서브텍스트를 생략한다', () => {
+  const container = fakeNode('div');
+  renderThemeClusters(container, [{ cluster: 0, size: 9, name: null, representative: undefined }]);
+  assert.equal(container.querySelector('.theme-cluster-representative'), null);
+});
+
+// 회귀 가드(사용자 확정) — 대표 설명은 name과 분리된 필드다. representative가
+// 있어도 "이름 없음" 배지·shouldWarnUnnamed 임계 판정은 절대 안 바뀐다.
+test('renderThemeClusters — representative가 있어도 "이름 없음" 배지·경고 판정은 안 바뀐다', () => {
+  const container = fakeNode('div');
+  renderThemeClusters(container, [
+    { cluster: 0, size: 9, name: '반도체 대형주', representative: undefined },
+    { cluster: 1, size: 6, name: null, representative: '한미반도체 외 5종목 · stock' },
+  ]);
+  const cards = container.querySelectorAll('.theme-cluster-card');
+  // 무명 카드(cards[1])는 representative가 있어도 "이름 없음" 배지가 그대로 뜬다.
+  const badge = cards[1].querySelector('.theme-cluster-unnamed-badge');
+  assert.equal(badge.textContent, '이름 없음');
+  assert.equal(cards[0].querySelector('.theme-cluster-unnamed-badge'), null, '이름 있는 카드는 배지 없음');
+  // 경고 클래스도 representative 유무가 아니라 name 유무로만 갈린다.
+  assert.equal(String(cards[0].attrs.class).includes('is-unnamed-warn'), false);
+  assert.equal(String(cards[1].attrs.class).includes('is-unnamed-warn'), true);
+  // representative 서브텍스트 자체는 값이 있는 카드에만 뜬다.
+  assert.equal(cards[0].querySelector('.theme-cluster-representative'), null);
+  assert.equal(cards[1].querySelector('.theme-cluster-representative').textContent, '대표: 한미반도체 외 5종목 · stock');
 });
 
 test('renderThemeClusters — 0/N(전부 무명)이면 경고 클래스가 안 붙는다', () => {
