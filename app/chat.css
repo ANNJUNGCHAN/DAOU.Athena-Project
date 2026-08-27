@@ -318,6 +318,38 @@ html, body { background: transparent; }
   color: var(--color-k-faint);
 }
 .result-dock-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+/* 하위 에이전트 도크(task #32, 보드04 2EZ-0/DG2-0) — 행 2줄: 위(설명+상태),
+ * 아래(경과+최근활동). 폰트·색 전부 기존 토큰 재사용 — 새 색 없음. */
+.result-dock-agent-list { display: flex; flex-direction: column; gap: 8px; }
+.result-dock-agent-row { display: flex; flex-direction: column; gap: 2px; }
+.result-dock-agent-row-top { display: flex; align-items: center; gap: 8px; }
+.result-dock-agent-desc {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--color-k-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.result-dock-agent-status {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-k-faint); /* 완료 */
+}
+.result-dock-agent-status.is-running { color: var(--color-k-dim); } /* 진행 중 */
+.result-dock-agent-row-bottom {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-k-faint);
+}
+.result-dock-agent-elapsed { flex-shrink: 0; }
+.result-dock-agent-activity { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .history {
   flex: 1 1 auto;

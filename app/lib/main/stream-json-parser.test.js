@@ -9,6 +9,9 @@ const {
   flushCarry,
   parseLine,
   isRenderCanvasToolName,
+  isAgentToolName,
+  classifySubagentEvent,
+  isSubagentInternalEvent,
   normalizeToolResultContent,
   extractCanvasEnvelope,
   classifyCanvasBlock,
@@ -76,6 +79,93 @@ test('isRenderCanvasToolName: 이름과 별칭이 다른 경우 둘 다 매칭',
   assert.equal(isRenderCanvasToolName('mcp__athena__athena__save_canvas'), false);
   assert.equal(isRenderCanvasToolName('mcp__everything__echo'), false);
   assert.equal(isRenderCanvasToolName(undefined), false);
+});
+
+// ---------------------------------------------------------------------------
+// 3b. 서브에이전트(Agent/Task) 인식 — task #32. 아래 고정값은
+//     app/captures/subagent-probe-1787815081507.ndjson(2026-08-27 worker-par
+//     실측, 실 claude -p --output-format stream-json 캡처 — 커밋 안 함, 재현
+//     스크립트는 app/captures/subagent-probe.js)의 실제 이벤트를 그대로
+//     옮긴 값이다. 추측이 아니다.
+// ---------------------------------------------------------------------------
+test('isAgentToolName: 툴 이름은 Task가 아니라 Agent다(CLI v2.1.63 리네임)', () => {
+  assert.equal(isAgentToolName('Agent'), true);
+  assert.equal(isAgentToolName('Task'), false);
+  assert.equal(isAgentToolName(undefined), false);
+});
+
+test('classifySubagentEvent: task_started', () => {
+  const step = classifySubagentEvent({
+    type: 'system', subtype: 'task_started',
+    task_id: 'a89a5cffc32302b35', tool_use_id: 'toolu_01UngEhHX3JMVMfVgxuV2j8E',
+    description: 'Bash echo probe', subagent_type: 'general-purpose', task_type: 'local_agent',
+  });
+  assert.deepEqual(step, {
+    subtype: 'task_started', taskId: 'a89a5cffc32302b35', toolUseId: 'toolu_01UngEhHX3JMVMfVgxuV2j8E',
+    description: 'Bash echo probe', subagentType: 'general-purpose',
+  });
+});
+
+test('classifySubagentEvent: task_progress — description은 시작 때와 다를 수 있다(실측)', () => {
+  const step = classifySubagentEvent({
+    type: 'system', subtype: 'task_progress',
+    task_id: 'a89a5cffc32302b35', description: 'Running Print hi to stdout',
+    subagent_type: 'general-purpose', last_tool_name: 'Bash',
+    usage: { total_tokens: 32857, tool_uses: 1, duration_ms: 2524 },
+  });
+  assert.deepEqual(step, {
+    subtype: 'task_progress', taskId: 'a89a5cffc32302b35', description: 'Running Print hi to stdout',
+    lastToolName: 'Bash', elapsedMs: 2524,
+  });
+});
+
+test('classifySubagentEvent: task_updated — 실측은 completed만 관측, 다른 값도 그대로 통과시킨다', () => {
+  const step = classifySubagentEvent({
+    type: 'system', subtype: 'task_updated',
+    task_id: 'a89a5cffc32302b35', patch: { status: 'completed', end_time: 1787815069532 },
+  });
+  assert.deepEqual(step, { subtype: 'task_updated', taskId: 'a89a5cffc32302b35', status: 'completed', endTime: 1787815069532 });
+});
+
+test('classifySubagentEvent: task_notification', () => {
+  const step = classifySubagentEvent({
+    type: 'system', subtype: 'task_notification',
+    task_id: 'a89a5cffc32302b35', status: 'completed',
+    summary: '(1) 시도한 명령: `echo hi`\n\n(2) 결과: 성공\n\n(3) 원문 출력: `hi`',
+    output_file: 'C:\\Users\\x\\tasks\\a89a5cffc32302b35.output',
+  });
+  assert.equal(step.subtype, 'task_notification');
+  assert.equal(step.taskId, 'a89a5cffc32302b35');
+  assert.equal(step.status, 'completed');
+  assert.ok(step.summary.includes('echo hi'));
+  assert.equal(step.outputFile, undefined); // 지금 단계는 요약만 쓴다 — output_file은 안 옮긴다(사용자 노출 경로 규율)
+});
+
+test('classifySubagentEvent: 4종이 아니거나 task_id가 없으면 null', () => {
+  assert.equal(classifySubagentEvent({ type: 'system', subtype: 'status' }), null);
+  assert.equal(classifySubagentEvent({ type: 'assistant' }), null);
+  assert.equal(classifySubagentEvent(null), null);
+  assert.equal(classifySubagentEvent({ type: 'system', subtype: 'task_started' }), null); // task_id 없음
+});
+
+test('isSubagentInternalEvent: parent_tool_use_id로 서브에이전트 내부 활동을 가른다(실측 시퀀스)', () => {
+  // 실측: Agent tool_use 자체(최상위) — parent:null.
+  assert.equal(isSubagentInternalEvent({
+    type: 'assistant', parent_tool_use_id: null,
+    message: { content: [{ type: 'tool_use', id: 'toolu_01Un', name: 'Agent' }] },
+  }), false);
+  // 실측: 서브에이전트 내부 Bash 호출 — parent:<Agent의 tool_use id>.
+  assert.equal(isSubagentInternalEvent({
+    type: 'assistant', parent_tool_use_id: 'toolu_01UngEhHX3JMVMfVgxuV2j8E',
+    message: { content: [{ type: 'tool_use', id: 'toolu_01RF', name: 'Bash' }] },
+  }), true);
+  // 실측: Agent 최종 결과가 최상위로 돌아오는 tool_result — parent:null(서브에이전트
+  // 내부가 아니다 — Agent 자체 완료는 task_updated/task_notification이 별도로 알린다).
+  assert.equal(isSubagentInternalEvent({
+    type: 'user', parent_tool_use_id: null,
+    message: { content: [{ type: 'tool_result', tool_use_id: 'toolu_01Un' }] },
+  }), false);
+  assert.equal(isSubagentInternalEvent(null), false);
 });
 
 // ---------------------------------------------------------------------------

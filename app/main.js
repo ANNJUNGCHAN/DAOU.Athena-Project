@@ -1265,15 +1265,26 @@ function toolStepLabel(name) {
 
 // tool_use_id별 시작 시각을 들고 있다가 매칭되는 tool_result가 오면 소요시간과
 // 함께 완료를 알린다. runLiveQuery 호출마다 새로 만든다(왕복 하나의 수명).
+//
+// 서브에이전트 필터링(task #32, 실측 근거는 .omc/research/2026-08-27-
+// 서브에이전트-스트림-계약.md §3) — 두 가지를 최상위 진행 라인에서 뺀다:
+//   (a) 서브에이전트 내부 활동(streamJsonParser.isSubagentInternalEvent —
+//       parent_tool_use_id가 그 Agent의 tool_use id인 이벤트) — 그 서브에이전트
+//       자신의 Bash/mcp 호출이라 최상위 "판단 중" 라인에 섞이면 이중 표시다.
+//   (b) Agent tool_use 자체(streamJsonParser.isAgentToolName) — 그 생애주기는
+//       createSubagentTracker()가 하위 에이전트 도크로 따로 추적한다. 걸러도
+//       완료 쪽(tool_result)은 steps에 애초에 없어 자동으로 조용히 무시된다.
 function createToolStepTracker() {
   const steps = new Map(); // tool_use_id -> { label, startedAt }
   return function trackToolStep(event) {
     if (!event || typeof event !== 'object') return;
+    if (streamJsonParser.isSubagentInternalEvent(event)) return;
     if (event.type === 'assistant') {
       const content = event.message && event.message.content;
       if (!Array.isArray(content)) return;
       for (const block of content) {
         if (block && block.type === 'tool_use' && block.id && !steps.has(block.id)) {
+          if (streamJsonParser.isAgentToolName(block.name)) continue;
           const label = toolStepLabel(block.name);
           steps.set(block.id, { label, startedAt: Date.now() });
           sendLiveToolStep({ id: block.id, label, done: false, elapsedMs: null });
@@ -1294,6 +1305,28 @@ function createToolStepTracker() {
         }
       }
     }
+  };
+}
+
+// 하위 에이전트 도크(task #32, 보드04 2EZ-0/DG2-0) — Agent 생애주기 system
+// 이벤트(task_started/progress/updated/notification)를 셸 렌더러로 릴레이한다.
+// 분류 자체는 stream-json-parser.js의 순수 함수(classifySubagentEvent)가 맡고,
+// 여기서는 last_tool_name만 카드 진행 표시와 같은 라벨표(toolStepLabel)를
+// 통과시킨다 — "현재가 조회" 같은 사용자 언어로, 원문 툴 이름은 새지 않는다.
+function sendLiveSubagentStep(step) {
+  if (shellWin && !shellWin.isDestroyed()) shellWin.webContents.send('athena:live-subagent-step', step);
+  // 오브에는 하위 에이전트 도크가 없다(board-33/34 "오브엔 팝오버·전환 UI가
+  // 없다") — 셸에만 보낸다, orbWin.webContents.send 없음.
+}
+
+function createSubagentTracker() {
+  return function trackSubagent(event) {
+    const step = streamJsonParser.classifySubagentEvent(event);
+    if (!step) return;
+    if (step.subtype === 'task_progress' && step.lastToolName) {
+      step.lastToolName = toolStepLabel(step.lastToolName);
+    }
+    sendLiveSubagentStep(step);
   };
 }
 
@@ -1607,6 +1640,7 @@ async function runLiveQueryInner(query, expand) {
   // 토큰을 상관시킨다. 마지막 입력끼리 우연히 결합하지 않는다.
   const replayTurnCapture = new ReplayTurnCapture();
   const trackToolStep = createToolStepTracker();
+  const trackSubagent = createSubagentTracker();
   const resumeSessionId = liveSessionId;
   // 설정 화면 모델 패널(lib/main/model-prefs.js) 값 — null이면 buildArgs가
   // --model/--effort를 안 붙여 claude CLI 기본값을 쓴다.
@@ -1622,7 +1656,7 @@ async function runLiveQueryInner(query, expand) {
     effort,
     onSpawn: (h) => { myHandle = h; activeLiveQuery = h; },
     // 성공 resolve 1건과 render 1건의 토큰이 정확히 같은 경우만 캐시한다.
-    onEvent: (ev) => { replayTurnCapture.observe(ev); trackToolStep(ev); },
+    onEvent: (ev) => { replayTurnCapture.observe(ev); trackToolStep(ev); trackSubagent(ev); },
     onTextDelta: sendLiveTextDelta,
     onThinkingDelta: sendLiveThinkingDelta,
     onCanvasResult: (r) => {
@@ -2262,4 +2296,9 @@ module.exports = {
   // 검증할 때 쓴다 — 위 ensureRealtimeForSymbol 각주와 같은 이유.
   ensureOrderbookRealtimeForSymbol,
   releaseOrderbookRealtimeForSymbol,
+  // 하위 에이전트 도크 프로브(task #32)가 합성 stream-json 이벤트를 실제
+  // runLiveQuery 왕복 없이 이 두 트래커에 직접 먹여 sendLiveToolStep/
+  // sendLiveSubagentStep(→ shellWin IPC)이 올바르게 나가는지 검증할 때 쓴다.
+  createToolStepTracker,
+  createSubagentTracker,
 };
