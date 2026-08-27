@@ -107,6 +107,7 @@ class Settings(BaseSettings):
     brain_db_path: Path = Field(default_factory=lambda: Path.home() / ".athena" / "brain.sqlite3")
     routines_enabled: bool = False
     routines_poll_interval_seconds: float = 300.0
+    routines_schedule_poll_interval_seconds: float = 20.0
     routines_store_path: Path = Field(
         default_factory=lambda: Path.home() / ".athena" / "routines" / "routines.json"
     )

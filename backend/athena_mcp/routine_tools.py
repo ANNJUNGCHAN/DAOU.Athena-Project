@@ -51,10 +51,17 @@ _INPUT_SCHEMA: dict[str, Any] = {
                 "action=draft일 때의 초안. condition.source는 카탈로그 값만: "
                 "price.current / price.change_rate / trade.strength / "
                 "volume.prev_day_ratio / vi.triggered (이상 실시간 WS) / "
-                "disclosure.title_keyword (주기 확인 — 공시). "
+                "disclosure.title_keyword (주기 확인 — 공시) / "
+                "schedule.daily (예약 — 지정 요일·시각, op는 'at' 고정). "
                 "감시 방식(mode)은 source에서 자동 유도된다 — 실시간은 WS "
                 "필드뿐이고 공시는 주기 확인이라 최대 폴링 주기만큼 늦게 "
-                "감지될 수 있다(사용자에게 이 차이를 항상 말하라)."
+                "감지될 수 있다(사용자에게 이 차이를 항상 말하라). "
+                "schedule.daily의 value는 '<요일>@<HH:MM>' 문자열이다 — "
+                "요일은 ALL(매일) 또는 ISO 요일 번호 콤마열(1=월..7=일, 예: "
+                "'1,2,3,4,5@07:30'). symbol은 이 source에서도 6자리 종목코드가 "
+                "필수다 — 종목과 무관한 예약(예: '평일 아침 브리핑')이라도 "
+                "관련 종목/ETF나 대표 보유 종목을 사용자에게 물어 정하라"
+                "(임의로 지어내지 마라)."
             ),
             "properties": {
                 "symbol": {"type": "string", "description": "6자리 종목코드"},

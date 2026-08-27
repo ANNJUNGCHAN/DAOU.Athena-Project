@@ -20,6 +20,7 @@ from athena_api.routines.models import (
     SOURCES,
     Condition,
     RoutineSpec,
+    parse_schedule_value,
 )
 
 
@@ -73,6 +74,11 @@ def validate_condition(raw: Any) -> Condition:
             _fail(f"키워드는 1~{_MAX_KEYWORD_LEN}자여야 한다")
         if not _KEYWORD_RE.match(value):
             _fail("키워드에 제어문자를 쓸 수 없다")
+        if source == "schedule.daily" and parse_schedule_value(value) is None:
+            _fail(
+                "예약 시각은 '<요일>@<HH:MM>' 형식이어야 한다"
+                "(요일: ALL 또는 1~7 콤마열, 1=월..7=일)"
+            )
     else:
         # dict·list·None 등 — 중첩 조건·표현식 흉내는 전부 여기서 죽는다.
         _fail("value는 숫자·불리언·문자열 리터럴만 허용된다")

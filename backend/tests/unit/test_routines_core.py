@@ -36,8 +36,12 @@ def test_mode_is_derived_from_source_transport():
     periodic = validate_condition(
         {"source": "disclosure.title_keyword", "op": "contains", "value": "유상증자"}
     )
+    scheduled = validate_condition(
+        {"source": "schedule.daily", "op": "at", "value": "ALL@07:30"}
+    )
     assert derive_mode(ws) == "realtime-ws"
     assert derive_mode(periodic) == "periodic"
+    assert derive_mode(scheduled) == "scheduled"
 
 
 def test_spec_roundtrip_preserves_everything():
@@ -109,6 +113,21 @@ def test_ops_are_scoped_per_source():
         validate_condition({"source": "vi.triggered", "op": "<", "value": True})
     with pytest.raises(RoutineValidationError):
         validate_condition({"source": "price.current", "op": "contains", "value": 1})
+
+
+@pytest.mark.parametrize(
+    "value",
+    ["07:99@abc", "1,2,3,4,5", "8@07:30", "ALL@25:00", "ALL@07:5", "ALL@0730", ""],
+)
+def test_schedule_daily_rejects_malformed_values(value):
+    with pytest.raises(RoutineValidationError):
+        validate_condition({"source": "schedule.daily", "op": "at", "value": value})
+
+
+def test_schedule_daily_accepts_well_formed_values():
+    for value in ("ALL@07:30", "1,2,3,4,5@09:00", "7@23:59"):
+        cond = validate_condition({"source": "schedule.daily", "op": "at", "value": value})
+        assert cond.value == value
 
 
 def test_draft_bounds_are_enforced():

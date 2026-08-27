@@ -77,6 +77,8 @@ class RoutinesRuntime:
             if self.ws_client is None:
                 return "키움 WS 미가용 — 실시간 감시를 켤 수 없다"
             return None
+        if spec.mode == "scheduled":
+            return None  # 벽시계 루프는 항상 기동 — 별도 가용성 게이트 없음
         if not self.disclosure_ready:
             return "공시 폴러 미가용(DART 키 또는 corp 카탈로그 부재)"
         return None
@@ -153,6 +155,7 @@ async def open_routines(
         engine=engine,
         notify=notify,
         poll_interval_s=settings.routines_poll_interval_seconds,
+        schedule_poll_interval_s=settings.routines_schedule_poll_interval_seconds,
         headroom=headroom or (lambda: 5),
         disclosure=disclosure,
         subscribe_ticks=(ws_client.subscribe_events if ws_client is not None else None),
