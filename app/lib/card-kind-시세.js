@@ -68,10 +68,15 @@ function mergeRollingRows(existingRows, newRows, maxRows) {
   return merged.slice(0, Math.max(0, maxRows));
 }
 
-// REST 데이터셋이면 dataset_id로 격리, 아니면(단발 라이브 조회) 싱글턴 키.
+// REST 데이터셋이면 dataset_id+item_id로 격리, 아니면(단발 라이브 조회) 싱글턴 키.
+// item_id까지 넣는 이유(2026-08-27 6종목 동시 실시간 프로브에서 실측) — dataset_id
+// 만으로는 한 데이터셋 배치 안의 서로 다른 카드(예: 시세 6종목 일괄 조회)가 링버퍼
+// 하나를 같이 써서 행이 뒤섞인다. item_id가 없으면(옛 단일 항목 배치) 예전 키 그대로다.
 function bufferKeyFor(envelope) {
   const corr = envelope && envelope.correlation;
-  if (corr && corr.dataset_id) return `ds:${corr.dataset_id}`;
+  if (corr && corr.dataset_id) {
+    return corr.item_id != null ? `ds:${corr.dataset_id}:${corr.item_id}` : `ds:${corr.dataset_id}`;
+  }
   return '__single__';
 }
 
@@ -213,7 +218,7 @@ function applyLiveTick(wrap, envelope, tick) {
   host.replaceChildren(renderTickerTable(merged));
 }
 
-const __exports = { mergeRollingRows, extractTickRows, formatTickPrice, render시세, applyLiveTick };
+const __exports = { mergeRollingRows, extractTickRows, formatTickPrice, bufferKeyFor, render시세, applyLiveTick };
 if (__isCjs) {
   module.exports = __exports;
 } else {
