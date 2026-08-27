@@ -378,6 +378,28 @@ test('예약(schedule) 상세 — "브리핑 모델" 설정값과 "실행 위치
   assert.equal(fields.get('실행 위치'), '캔버스'); // 최신(8/27) 보고의 destination 우선
 });
 
+test('"실행 위치"는 refresh()마다 재조회된다 — 같은 항목을 계속 봐도 낡은 값이 남지 않는다', async () => {
+  const container = fakeNode('div');
+  const routines = [routine({ id: 's3', status: 'active', mode: 'scheduled', note: '아침 브리핑' })];
+  let runsNow = []; // 처음엔 브리핑 이력 없음
+  const canvas = createAgentCanvas({
+    container,
+    fetchRoutines: async () => routines,
+    fetchRuns: async () => runsNow,
+  });
+  canvas.mount();
+  await canvas.refresh();
+  await new Promise((r) => setTimeout(r, 0));
+  let labels = findByClass(container, 'agent-detail-field-label').map((n) => n.textContent);
+  assert.equal(labels.includes('실행 위치'), false, '이력 없음 — 행 미렌더');
+
+  runsNow = [{ ts: '2026-08-27T07:30:00+09:00', verdict: 'fired', briefing_destination: 'chat' }];
+  await canvas.refresh(); // 캐시 무효화 → 다음 renderDetail이 1회 재조회
+  await new Promise((r) => setTimeout(r, 0));
+  labels = findByClass(container, 'agent-detail-field-label').map((n) => n.textContent);
+  assert.equal(labels.includes('실행 위치'), true, '새 브리핑 보고가 refresh로 반영된다');
+});
+
 // ── 6.5단계: 상세 패널 일시중지·재개 버튼 → pause/resume API 배선 ──
 
 test('감시(watch) active 항목은 "❚❚ 일시중지" 버튼이 활성화돼 있고 클릭 시 pauseRoutine을 부른다', async () => {

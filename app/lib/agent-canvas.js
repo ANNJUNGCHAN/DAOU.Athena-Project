@@ -1420,6 +1420,10 @@ function createAgentCanvas(deps) {
   async function refresh() {
     renderAlarmColumn();
     renderWsStatus();
+    // '실행 위치' 캐시 무효화(6단계) — 같은 항목을 계속 보고 있어도 refresh
+    // 주기마다 최신 브리핑 보고를 다시 조회한다(선택 변경 없이는 영원히 낡은
+    // 값이 남는 문제 방지). 다음 renderDetail이 1회 재조회한다.
+    detailDestinationCache = { id: null, value: null };
     const tasks = [refreshRoutines(), refreshSuggestions(), refreshNudgeGuard()];
     if (historyItem) tasks.push(refreshHistoryRuns()); // 드릴인 중이면 이력도 같이.
     await Promise.all(tasks);

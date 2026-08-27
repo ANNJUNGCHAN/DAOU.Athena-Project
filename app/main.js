@@ -535,6 +535,23 @@ function runBriefingTurnWired(event) {
 // (symbol/note/briefing_*)로 쓴다. 프로세스 로컬(재시작하면 재감지).
 const missedRoutineViews = new Map();
 
+// 셸 창·렌더러가 준비될 때까지 재시도하며 보낸다 — 백엔드가 이미 떠 있으면
+// (already-running) 헬스체크가 즉시 끝나 createWindows()의 워밍업 시퀀스
+// (~380ms+)보다 먼저 도달할 수 있다. 이 레이스에서 조용히 버리면 이번 세션
+// 동안 캐치업 기회가 사라진다(기동 시 1회 감지라서) — 유실하지 않는다.
+// 상한 후 포기: 창 자체가 안 뜨는 비정상 상황에서 영원히 들고 있지 않는다.
+function sendRoutineMissed(missed, attempt = 0) {
+  if (shellWin && !shellWin.isDestroyed() && !shellWin.webContents.isLoading()) {
+    shellWin.webContents.send('athena:routine-missed', { routines: missed });
+    return;
+  }
+  if (attempt >= 20) {
+    mdlog('놓친 예약 알림 유실 — 셸 창이 10초 내 준비되지 않았다');
+    return;
+  }
+  setTimeout(() => sendRoutineMissed(missed, attempt + 1), 500);
+}
+
 async function checkMissedSchedules() {
   const res = await routineHttp('GET', '/api/v1/routines').catch(() => null);
   if (!res || !res.ok || !res.data || !Array.isArray(res.data.routines)) return;
@@ -543,9 +560,7 @@ async function checkMissedSchedules() {
   );
   if (!missed.length) return;
   for (const r of missed) missedRoutineViews.set(r.id, r);
-  if (shellWin && !shellWin.isDestroyed()) {
-    shellWin.webContents.send('athena:routine-missed', { routines: missed });
-  }
+  sendRoutineMissed(missed);
 }
 
 function catchupFireHttp(routineId) {

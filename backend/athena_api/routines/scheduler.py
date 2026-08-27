@@ -150,8 +150,15 @@ class RoutineScheduler:
 
     # ---------- 공통 ----------
 
-    async def _fire(self, spec: RoutineSpec, observed: Any) -> None:
-        """발화 알림 조립 — 조건-감시(_handle_verdict)와 벽시계(_schedule_loop)가 공유."""
+    async def _fire(
+        self, spec: RoutineSpec, observed: Any, *, fired_at: str | None = None
+    ) -> None:
+        """발화 알림 조립 — 조건-감시(_handle_verdict)와 벽시계(_schedule_loop)가 공유.
+
+        fired_at(선택)은 ledger에 실제로 기록된 ts다 — 예약 발화는 이 값이 브리핑
+        보고(fired_at)와 /runs 병합의 상관 키가 되므로 별도 now() 재계산으로
+        마이크로초가 어긋나면 병합이 조용히 실패한다(캐치업 경로와 동일한
+        "서버 authoritative 값 하나" 원칙). 조건-감시 경로는 상관 키가 없어 생략."""
         await self.notify(
             {
                 "type": "routine-fired",
@@ -162,7 +169,7 @@ class RoutineScheduler:
                 "observed": observed,
                 "threshold": spec.condition.value,
                 "note": spec.note,
-                "fired_at": datetime.now(UTC).isoformat(),
+                "fired_at": fired_at or datetime.now(UTC).isoformat(),
                 # 브리핑 실행 설정(R1) — main이 별도 왕복 없이 즉시 받도록 동봉.
                 "briefing_model": spec.briefing_model,
                 "briefing_effort": spec.briefing_effort,
@@ -297,14 +304,16 @@ class RoutineScheduler:
             if days is not None and weekday not in days:
                 continue
             self._last_fired_date[spec.id] = today
-            record_scheduled_fire(
+            row = record_scheduled_fire(
                 spec,
                 self.engine.ledger,
                 hhmm,
                 reason=f"예약 시각 도달({target_hhmm})",
                 threshold=spec.condition.value,
             )
-            await self._fire(spec, hhmm)
+            # ledger에 실제로 쓴 ts를 그대로 이벤트에 싣는다 — 브리핑 보고·/runs
+            # 병합의 상관 키(위 _fire 독스트링, 캐치업 경로와 동일 원칙).
+            await self._fire(spec, hhmm, fired_at=row["ts"])
 
     # ---------- archive (90일 롤오버, R3) ----------
 
