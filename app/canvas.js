@@ -1608,7 +1608,7 @@ window.AthenaGraphMode = graphMode;
 graphMode.applyVisibility();
 
 // 모드 전환은 사이드바 모드 네비가 소유한다(셸 v2 — 보드 37·38·44, 2026-08-27).
-// 모드 필(#graphPill)은 표시 전용이 됐다 — 클릭 배선 없음.
+// 옛 모드 필(#graphPill)은 보드 45 v5에서 스트립 줄과 함께 제거됐다.
 const modeNavEl = document.getElementById('sidebarModes');
 const modeNavChatEl = document.getElementById('modeNavChat');
 const modeNavGraphEl = document.getElementById('modeNavGraph');
@@ -1654,7 +1654,7 @@ const graphSummaryTable = window.AthenaLib.GraphSummaryTable.createSummaryTableC
 
 // --- 요약/그래프 뷰 헤더 배선 (보드 06/07 §4-1,4-3 / 14 §1.2 — 스텝2·스텝9) ---
 //
-// "요약"/"그래프" 서브뷰 토글 — #dot/#graphPill의 그래프 기능 진입·이탈
+// "요약"/"그래프" 서브뷰 토글 — 사이드바 모드 네비의 그래프 기능 진입·이탈
 // (graphMode.toggle())과는 다른 축이다. graphMode.setSurface()가 store 상태
 // (state.surface)를 바꾸고, hidden은 계속 applyVisibility() 하나가 소유한다
 // (스텝2-보정 — 두 표면이 동시에 hidden=false였던 z-index 임시조치를 걷어냈다,

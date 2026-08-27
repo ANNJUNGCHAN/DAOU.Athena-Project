@@ -116,7 +116,7 @@ function createGraphModeController(deps) {
     layout,         // cluster-layout
     render,         // render
     prefs,          // graph-mode-prefs (선택)
-    elements,       // { pill, summary, graph(가시성 전용 — applyVisibility()만 소유),
+    elements,       // { summary, graph(가시성 전용 — applyVisibility()만 소유),
                     //   graphBody(렌더·클릭위임·크기측정 전용), summaryTable(선택 —
                     //   보드 07 성향 신호 표, 가시성 전용), panel(선택) — 보드 07/15의
                     //   "공통 패널", graphHeaderMeta(선택) — 보드 14/15 헤더 메타
@@ -163,12 +163,6 @@ function createGraphModeController(deps) {
     if (elements.summary) elements.summary.hidden = graphView;
     if (elements.graph) elements.graph.hidden = !graphView || state.surface !== store.SURFACE_MAP;
     if (elements.summaryTable) elements.summaryTable.hidden = !graphView || state.surface !== store.SURFACE_SUMMARY;
-    if (elements.pill) {
-      // 모드 필(셸 v2 — Paper 보드 38, 2026-08-27): "지금 모드"를 표시만 한다.
-      // 전환은 사이드바 모드 네비(elements.modeNav)의 몫.
-      elements.pill.textContent = graphView ? '그래프' : '대화';
-      elements.pill.setAttribute('aria-pressed', graphView ? 'true' : 'false');
-    }
     // 키우미 얼굴(2026-08-27, Paper 보드 45) — 지금 모드를 얼굴로 보여준다
     // (대화=눈 · 그래프=온톨로지 별자리). CSS가 data-mode로 얼굴을 고른다.
     if (elements.kiumi) elements.kiumi.dataset.mode = graphView ? 'graph' : 'chat';
