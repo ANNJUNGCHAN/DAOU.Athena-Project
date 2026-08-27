@@ -567,15 +567,27 @@ function cardTitleAndSubtitle(envelope, fallback) {
 
 // 시세 카드 실시간 등록(단계 8 확장) — 종목코드를 아는 경우에만 세션을 연다.
 // REST 데이터셋 직결 카드는 envelope.operation_args.stk_cd가 있다(canvas.js
-// athena:add-rest-canvas 핸들러가 채운다 — 위쪽 참고). 클로드 툴 경로로 그려진
-// 카드는 이 필드가 없어 조용히 건너뛴다 — 모르는 종목을 안다고 지어내지 않는다
-// (정보 정직성). 서버측 0B REG는 main.js ensureChartRealtime이 이미 담당한다
-// (athena:rest-canvas-painted 이후, operationArgs.stk_cd 대상 — 차트 전용이
-// 아니라 어떤 카드든 종목코드가 있으면 등록한다). 여기서는 렌더러 쪽 세션만
-// 열어서 그 종목의 체결을 이 카드의 표로 이어붙인다.
+// athena:add-rest-canvas 핸들러가 채운다 — 위쪽 참고). 서버측 0B REG는 main.js
+// ensureRealtimeForSymbol이 두 경로(REST 데이터셋 직결·클로드 툴 실시간) 모두에서
+// 같은 후보 자리를 본다 — main.js extractLiveQuoteSymbol 주석 참고. 여기서는
+// 렌더러 쪽 세션만 열어서 그 종목의 체결을 이 카드의 표로 이어붙인다.
+//
+// 알려진 제약(main.js extractLiveQuoteSymbol 주석과 동일 근거,
+// backend/athena_api/api/canvas_push.py:461-541) — 클로드 툴 경로(채팅으로
+// "삼성전자 시세" 같은 질문에 답한 결과)의 envelope엔 지금 종목코드를 담을 자리가
+// 없다("table" canvas_kind 분기가 "chart" 분기와 달리 종목코드를 안 심는다).
+// 그래서 아래 후보들도 대부분 못 찾고 조용히 건너뛴다 — 모르는 종목을 안다고
+// 지어내지 않는다(정보 정직성). 백엔드가 필드를 더하면 이 함수는 코드 변경 없이
+// 그대로 잡는다.
 function wireQuoteRealtime(card, wrap, envelope) {
   const args = envelope.operation_args || envelope.operationArgs;
-  const symbol = args && String(args.stk_cd || '').trim();
+  const symbol = String(
+    (args && args.stk_cd)
+    || envelope.stk_cd
+    || (envelope.data && envelope.data.stk_cd)
+    || (envelope.data && envelope.data.symbol)
+    || '',
+  ).trim();
   if (!symbol) return;
   quoteRealtimePanels.openPanel(card, symbol, (tick) => {
     window.AthenaLib.CardKindQuote.applyLiveTick(wrap, envelope, tick);

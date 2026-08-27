@@ -15,6 +15,18 @@
 //   (3) 카드 destroy 후 틱 주입 → 오류 없음
 // + 6장 상한 확인: 신규 코드 없이 canvas.js:1130(REST 데이터셋 카드 6장 초과 시
 // throw)가 실시간 카드에도 그대로 걸리는지(7번째 시도가 거부되는지)만 본다.
+//
+// + 실사용 경로 검증(2026-08-27 확장 2차 — team-lead 판정 "옵션 2: 트리거를
+// 클로드 툴 경로로 확장") — 위 단언들은 카드가 "이미 떠 있다"고 가정하고 시작한다.
+// 그 카드가 애초에 실시간으로 등록되는지는 별개 질문이라 여기서 따로 본다:
+// main.js의 ensureRealtimeForSymbol/extractLiveQuoteSymbol을 직접 불러
+// (onCanvasResult가 부르는 것과 같은 모듈 함수) global.fetch를 가로채고
+// (1) 오늘 실제 envelope 모양(백엔드 canvas_push.py:529-541 "table" 분기 그대로,
+//     종목코드 자리 없음) → REG 호출 0건(무해하게 건너뜀)
+// (2) 종목코드가 있다고 가정한 envelope(백엔드가 필드를 추가하면 이렇게 온다) →
+//     REG 호출 1건, 올바른 엔드포인트/종목
+// 두 가지를 확인한다 — "프로브는 통과하는데 실사용은 죽은 배선"이었던 위험을
+// 정확히 이 지점에서 잡는다.
 
 process.env.ATHENA_NO_AUTOSTART = '1';
 process.env.ATHENA_CANVAS_SOURCE = 'live'; // ensureChartRealtime의 fixture 조기-return을 피한다
@@ -22,6 +34,15 @@ process.env.ATHENA_CANVAS_SOURCE = 'live'; // ensureChartRealtime의 fixture 조
 const { app } = require('electron');
 const path = require('path');
 const fs = require('fs');
+
+// main.js가 지연 생성하는 레지스트라가 이 시점의 global.fetch를 캡처한다 —
+// require('./main.js')보다 먼저 걸어둘 필요는 없다(등록은 실제로 부를 때 일어난다),
+// 다만 실백엔드로 나가면 안 되므로 첫 실사용 호출 전에는 반드시 걸려 있어야 한다.
+const fetchCalls = [];
+global.fetch = async (url, init) => {
+  fetchCalls.push({ url, body: init && init.body ? JSON.parse(init.body) : null });
+  return { ok: true, status: 200 };
+};
 
 const chartRealtime = require('./lib/main/chart-realtime');
 
@@ -59,8 +80,52 @@ function quoteEnvelope(symbol, index) {
   };
 }
 
+// 오늘 실제 백엔드가 만드는 그대로다(canvas_push.py:529-541 "table" 분기 필드
+// 그대로 옮김 — 종목코드를 담을 자리가 없다).
+const REALISTIC_TODAY_ENVELOPE = {
+  canvas_type: 'table',
+  screen_id: 'AT-CV-014',
+  fell_back: false,
+  fallback_reason: null,
+  caption: '체결·현재가',
+  card_title: '시세',
+  data: {
+    columns: [
+      { key: 'cntr_pric', label: '체결가' },
+      { key: 'cntr_qty', label: '체결량(주)' },
+      { key: 'flu_rt', label: '등락률' },
+      { key: 'acc_trde_qty', label: '거래량(주)' },
+    ],
+    rows: [{ cntr_tm: '090000', cntr_pric: '257000', cntr_qty: '10', flu_rt: '1.37', acc_trde_qty: '311392' }],
+  },
+  layout: null,
+  drop_types: [],
+};
+
+// 백엔드가 언젠가 종목코드를 얹으면 이런 모양일 것이다(operation_args 후보 —
+// main.js extractLiveQuoteSymbol이 보는 첫 자리). 배선이 이미 준비돼 있는지만
+// 본다 — 이 필드가 실제로 온다고 주장하는 게 아니다.
+const HYPOTHETICAL_FUTURE_ENVELOPE = {
+  ...REALISTIC_TODAY_ENVELOPE,
+  operation_args: { stk_cd: '005930' },
+};
+
 async function main() {
   const mainMod = require('./main.js');
+
+  // ---------- 실사용 경로 검증 — 셸 창 없이도 되는 순수 모듈 호출 ----------
+  const noSymbol = mainMod.extractLiveQuoteSymbol(REALISTIC_TODAY_ENVELOPE);
+  console.log('[probe] 오늘 실제 envelope에서 추출한 종목코드:', JSON.stringify(noSymbol));
+  mainMod.ensureRealtimeForSymbol(noSymbol);
+  const fetchCallsAfterRealistic = fetchCalls.length;
+
+  const foundSymbol = mainMod.extractLiveQuoteSymbol(HYPOTHETICAL_FUTURE_ENVELOPE);
+  console.log('[probe] 가정 envelope(operation_args.stk_cd 있음)에서 추출한 종목코드:', JSON.stringify(foundSymbol));
+  mainMod.ensureRealtimeForSymbol(foundSymbol);
+  await wait(200); // ensureSymbol의 fetch는 비동기다
+  const fetchCallsAfterHypothetical = fetchCalls.length;
+  console.log('[probe] REG fetch 호출:', JSON.stringify(fetchCalls, null, 1));
+
   await mainMod.createWindows();
   const { shellWin } = mainMod.getWins();
   const consoleErrors = [];
@@ -159,7 +224,20 @@ async function main() {
   console.log('[probe] destroy 후 틱 주입 — 예외:', destroyTickThrew, '| 재생성된 카드 수:', cardCountAfterDestroyTick);
   console.log('[probe] 렌더러 콘솔 에러 로그 수:', consoleErrors.length);
 
-  const ok = cardsAfterOpen.length === 6
+  const realWiringHarmless = noSymbol === null && fetchCallsAfterRealistic === 0;
+  const futureWiringReady = foundSymbol === '005930'
+    && fetchCallsAfterHypothetical === 1
+    && fetchCalls[0]
+    && fetchCalls[0].url.endsWith('/api/v1/websocket/0B')
+    && fetchCalls[0].body
+    && fetchCalls[0].body.data
+    && fetchCalls[0].body.data[0]
+    && fetchCalls[0].body.data[0].item === '005930';
+  console.log('[probe] 실사용 경로 — 오늘(무해):', realWiringHarmless, '| 가정(배선 준비됨):', futureWiringReady);
+
+  const ok = realWiringHarmless
+    && futureWiringReady
+    && cardsAfterOpen.length === 6
     && cardsAfterOpen.every((c) => c.rows === 1)
     && cardCountAfterSeventh === 6 // 7번째는 거부되고 6장 유지
     && !crossContamination
@@ -170,7 +248,10 @@ async function main() {
   fs.mkdirSync(path.join(__dirname, 'captures'), { recursive: true });
   fs.writeFileSync(
     path.join(__dirname, 'captures', 'probe-quote-realtime.json'),
-    JSON.stringify({ cardsAfterOpen, cardCountAfterSeventh, cardsAfterTick, cleared, destroyTickThrew, ok }, null, 1),
+    JSON.stringify({
+      realWiringHarmless, futureWiringReady, fetchCalls,
+      cardsAfterOpen, cardCountAfterSeventh, cardsAfterTick, cleared, destroyTickThrew, ok,
+    }, null, 1),
   );
   app.exit(ok ? 0 : 1);
 }
