@@ -32,7 +32,19 @@ test('parseRealTick: 0B 체결을 읽는다(등락 부호는 크기만 쓴다)',
     { type: '0B', item: '005930', values: { 20: '090000', 10: '-257000', 15: '+120' } },
     '20260825'
   );
-  assert.deepEqual(tick, { symbol: '005930', at: NINE_AM, price: 257000, volume: 120 });
+  // 등락율(12)/누적거래량(13)이 프레임에 없으면 null — 지어내지 않는다.
+  assert.deepEqual(tick, {
+    symbol: '005930', at: NINE_AM, price: 257000, volume: 120, changeRate: null, accVolume: null,
+  });
+});
+
+test('parseRealTick: 등락율(12)은 부호를 보존하고, 누적거래량(13)은 크기만 쓴다', () => {
+  const tick = parseRealTick(
+    { type: '0B', item: '005930', values: { 20: '090000', 10: '257000', 15: '10', 12: '-1.37', 13: '+311392' } },
+    '20260825'
+  );
+  assert.equal(tick.changeRate, -1.37);
+  assert.equal(tick.accVolume, 311392);
 });
 
 test('parseRealTick: 0B가 아니거나 값이 모자라면 null이다', () => {
