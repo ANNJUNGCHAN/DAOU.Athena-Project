@@ -328,6 +328,11 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
         # Tests overwrite this attribute directly on the TestClient's app instance so the
         # test process never actually gets killed.
         app.state.brain_shutdown_hook = None
+        # exposeToModel 게이트(WP-I, G-I5) — 기동 초기값은 안전측 False다. 프런트
+        # 기본값(True)과 어긋나 보이지만, Electron이 브레인 준비 폴링 자리에서
+        # 저장된 값을 재동기화(push)하므로(history-sink.js) 정상 경로에서는 곧
+        # 실제 설정값으로 수렴한다 — 동기화가 안 온 동안 닫혀 있는 쪽이 옳다.
+        app.state.expose_to_model = False
         _publish_default(app, None)
         _publish_brain(app, None)
         _publish_routines(app, None)
