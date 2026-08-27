@@ -390,8 +390,10 @@ html, body { background: transparent; }
  * 아무 입력·클릭이면 사라지고 다시 안 나온다(localStorage 1회 플래그). */
 .coachmark {
   position: fixed;
-  left: 24px;
-  bottom: 110px; /* 입력 스택(입력줄 52 + 스트립 48) 바로 위 */
+  /* 셸 이전(단일 채팅 창) 좌표 left:24px는 지금 구조에선 사이드바 위에 떨어진다
+   * (2026-08-27 실측 — "코치마크 안 뜬다"의 원인). 채팅 영역(우측) 입력줄 위로. */
+  right: 24px;
+  bottom: 100px;
   z-index: 12; /* win-controls(11) 위 — 최초 1회뿐인 안내가 크롬에 깔리면 안 된다 */
   padding: 8px 14px;
   border-radius: 10px;
@@ -494,52 +496,52 @@ html, body { background: transparent; }
   border-top: 1px solid rgb(255 255 255 / 9%);
 }
 
-/* 모델 팝오버 — 카드 단계 유리(0.45+blur 14, tokens.css 사다리). 무채색.
- * 페이드 등장 금지 — hidden 토글로 나타난다(soul.md §7). */
+/* 모델 팝오버 · 키우미 메뉴 공용 기반 — 라이트 정제(2026-08-27, C1 '세련되게').
+ * 흰 카드 + 잉크 텍스트 + 브랜드 선택. 어두운 표면용 잔재(짙은 그림자·밝은
+ * 글자·흰 구분선)를 걷어냈다. 페이드 등장 금지 — hidden 토글(soul.md §7). */
 .model-popover {
   position: absolute;
   right: 20px;
-  bottom: 52px; /* 컨트롤 스트립 바로 위 */
+  bottom: 56px; /* 입력 스택 바로 위(스트립 제거 후 기준) */
   z-index: 8;
-  width: 240px;
-  padding: 12px 14px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.53) 0%, rgba(255, 255, 255, 0.45) 46%, rgba(255, 255, 255, 0.49) 100%);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgb(255 255 255 / 13%);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 253, 248, 0.5),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.38),
-    0 24px 60px rgba(6, 8, 12, 0.6);
+  width: 260px;
+  padding: 10px;
+  border-radius: 14px;
+  background: rgb(255 255 255 / 97%);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgb(16 19 26 / 8%);
+  box-shadow: 0 18px 44px rgb(16 19 26 / 16%), inset 0 1px 0 rgb(255 255 255 / 85%);
   display: flex; flex-direction: column; gap: 8px;
 }
 .model-popover[hidden] { display: none; }
 .model-popover .mp-title {
   font-family: var(--font-strong);
-  font-size: var(--text-sm);
-  color: var(--color-k-bright);
-  text-shadow: 0 1px 5px rgb(0 0 0 / 60%);
+  font-size: var(--text-xs);
+  letter-spacing: 0.05em;
+  color: rgb(16 19 26 / 45%);
+  padding: 2px 4px 0;
 }
 .model-popover .mp-row { display: flex; flex-wrap: wrap; gap: 6px; }
 .model-popover .mp-chip {
-  padding: 3px 10px;
+  padding: 5px 12px;
   border-radius: 999px;
-  border: 1px solid var(--color-k-line);
-  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgb(16 19 26 / 14%);
+  background: #fff;
   font-family: var(--font-mono);
   font-size: var(--text-xs);
-  color: var(--color-k-soft);
+  color: rgb(16 19 26 / 72%);
   cursor: pointer;
   appearance: none;
+  transition: border-color var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
 }
-.model-popover .mp-chip:hover { border-color: var(--color-k-dim); color: var(--color-k-text); }
+.model-popover .mp-chip:hover { border-color: var(--color-brand); color: #10131a; }
 .model-popover .mp-chip.on {
-  border-color: rgb(255 255 255 / 45%);
-  background: rgba(255, 255, 255, 0.12);
-  color: var(--color-k-bright);
+  border-color: var(--color-brand);
+  background: var(--color-brand);
+  color: #fff;
 }
-.model-popover .mp-sep { height: 1px; background: rgb(255 255 255 / 8%); }
+.model-popover .mp-sep { height: 1px; background: rgb(16 19 26 / 7%); }
 /* 키우미(2026-08-27, Paper 보드 38 스트립 실측) — 점이 키우미 얼굴이 됐다.
  * 흰 몸체 + 브랜드 테두리 + 바이저색 도형(모드별 얼굴, 바이저 채움 없음). */
 .dot {
@@ -581,14 +583,10 @@ html, body { background: transparent; }
 @media (prefers-reduced-motion: reduce) {
   .kiumi-face-chat rect, .kiumi-face-graph circle { animation: none; }
 }
-/* 키우미 메뉴 — 라이트 유리(보드 45 v5, 2026-08-27): 백색 유리 + 잉크 텍스트.
- * 어두운 모델 팝오버와 달리 우리 색으로 — 사용자 지적 "검정색이네" 반영. */
+/* 키우미 메뉴 — 위 .model-popover 라이트 기반을 쓰고 위치만 왼쪽 앵커. */
 .kiumi-menu {
   right: auto; left: 14px;
   min-width: 240px;
-  background: rgb(255 255 255 / 96%);
-  border: 1px solid rgb(16 19 26 / 8%);
-  box-shadow: 0 14px 34px rgb(16 19 26 / 13%);
 }
 .kiumi-menu .km-section {
   padding: 6px 12px 2px;
