@@ -53,6 +53,9 @@ const INVOKE_CHANNELS = new Set([
   'athena:brain-suggested-questions',
   // 그래프 모드 요약 뷰 "숨은 연관"(스텝7) — 군집 경계를 넘는 연결. 읽기 전용이다.
   'athena:brain-surprising-connections',
+  // 엔티티 타임라인(WP-C, 그래프 후속 계획) — 아직 이 채널을 부르는 렌더러
+  // 코드는 없다(IPC 배선만, 패널 UI는 후속 작업). 읽기 전용이다.
+  'athena:brain-entity-timeline',
   // 오브 대화 모드(2026-08-26 board-33) — 셸의 커맨드바가 부르는 runLiveQuery와
   // 완전히 같은 파이프라인을 오브에서 부르는 다리. orb.js가 셸 숨김일 때만 쓴다
   // (게이트는 athena:shell-visibility, scripts/gates/check-orb.mjs가 잰다).
