@@ -2255,14 +2255,17 @@ app.whenReady().then(async () => {
       pill.click();
       const deadline = Date.now() + 5000;
       while (Date.now() < deadline) {
-        if (!container.hidden) {
-          // 브레인 준비 시엔 실제 그래프가 그려질 때까지, 미준비 시엔 캔버스가
-          // 보이는 순간(안내 문구는 render.js를 거치지 않는다) 기다림을 끝낸다.
+        // 그래프 기능 진입 판정은 #mosaic(답변 모드)이 숨는지로 본다 —
+        // #graphCanvas(지도 서브뷰)는 스텝2-보정 이후 기본 서브뷰가 아니라서
+        // (기본은 요약) 그냥 클릭만으로는 안 보인다. draw()는 toggle() 안에서
+        // surface와 무관하게 여전히 즉시 실행되므로(graphBody에 내용은 쓰인다),
+        // 그 내용이 실제로 준비됐는지는 describeRendered로 확인한다.
+        if (document.getElementById('mosaic').hidden) {
           if (!brainReady || window.AthenaLib.GraphRender.describeRendered(container).rendered) break;
         }
         await new Promise((r) => setTimeout(r, 50));
       }
-      const clickOpened = !container.hidden;
+      const clickOpened = document.getElementById('mosaic').hidden;
       const summaryHidden = document.getElementById('mosaic').hidden;
       // getComputedStyle().display는 조상의 display:none에 영향받지 않는다(그
       // 자신의 display 선언만 본다) — #graphSummaryTable이 예전처럼 #mosaic의
@@ -2272,37 +2275,32 @@ app.whenReady().then(async () => {
       const graphSummaryTableEl = document.getElementById('graphSummaryTable');
       const summaryTableRect = graphSummaryTableEl.getBoundingClientRect();
       const summaryTableVisible = summaryTableRect.width > 0 && summaryTableRect.height > 0;
-      // 스텝2 회귀 가드 — 요약 뷰 헤더의 "요약"/"그래프" 서브뷰 탭은 hidden을
-      // 건드리지 않고 어느 카드가 위에 보이는지(.graph-surface-back)만 바꾼다
-      // (graphMode.toggle()을 쓰면 이미 그래프 기능 안이라 답변 모드로 튕겨나간다
-      // — 계획 원안의 함정, canvas.js focusGraphSurface() 주석 참고).
+      // 스텝2-보정 회귀 가드 — 요약 뷰 헤더의 "요약"/"그래프" 서브뷰 탭은 이제
+      // graphMode.setSurface()로 state.surface를 바꾸고, applyVisibility()
+      // 하나가 hidden을 소유한다(z-index 임시조치는 걷어냈다). setSurface()가
+      // applyVisibility()를 draw()의 await 이전에 동기 호출하므로 hidden은
+      // click() 직후 바로 반영된다 — 별도 대기 불필요. "그래프" 탭을 눌러도
+      // #mosaic(답변 모드)이 계속 hidden인지(답변 모드로 안 튕겨나가는지)도
+      // 함께 확인한다.
       const graphViewTab = document.getElementById('graphViewTab');
       const summaryViewTab = document.getElementById('summaryViewTab');
       let surfaceToggle = null;
       if (graphViewTab && summaryViewTab) {
-        const mosaicHiddenBefore = document.getElementById('mosaic').hidden;
-        const containerHiddenBefore = container.hidden;
-        const summaryTableHiddenBefore = graphSummaryTableEl.hidden;
         graphViewTab.click();
         const afterGraphClick = {
-          canvasBack: container.classList.contains('graph-surface-back'),
-          tableBack: graphSummaryTableEl.classList.contains('graph-surface-back'),
+          mosaicHidden: document.getElementById('mosaic').hidden,
+          summaryTableHidden: graphSummaryTableEl.hidden,
+          graphCanvasHidden: container.hidden,
           graphTabActive: graphViewTab.classList.contains('is-active'),
         };
         summaryViewTab.click();
         const afterSummaryClick = {
-          canvasBack: container.classList.contains('graph-surface-back'),
-          tableBack: graphSummaryTableEl.classList.contains('graph-surface-back'),
+          mosaicHidden: document.getElementById('mosaic').hidden,
+          summaryTableHidden: graphSummaryTableEl.hidden,
+          graphCanvasHidden: container.hidden,
           summaryTabActive: summaryViewTab.classList.contains('is-active'),
         };
-        surfaceToggle = {
-          afterGraphClick,
-          afterSummaryClick,
-          hiddenAttrsUnaffected:
-            document.getElementById('mosaic').hidden === mosaicHiddenBefore &&
-            container.hidden === containerHiddenBefore &&
-            graphSummaryTableEl.hidden === summaryTableHiddenBefore,
-        };
+        surfaceToggle = { afterGraphClick, afterSummaryClick };
       }
       const containerText = container.textContent;
       if (!brainReady) {
@@ -2378,24 +2376,23 @@ app.whenReady().then(async () => {
       report.graphMode.shot = await shot(shellWin, '90-graph-mode-unavailable.png');
     }
     if (graph.surfaceToggle) {
-      // 스텝2 회귀 가드 — brainReady와 무관하게 확인한다: 요약 뷰 헤더의
-      // "요약"/"그래프" 서브뷰 탭이 hidden 소유권(US-007, applyVisibility() 하나)을
-      // 건드리지 않고 어느 카드가 위에 보이는지(.graph-surface-back)만 바꾸는지.
+      // 스텝2-보정 회귀 가드 — brainReady와 무관하게 확인한다: 요약 뷰 헤더의
+      // "요약"/"그래프" 서브뷰 탭이 graphMode.setSurface()로 hidden을 올바르게
+      // 배타 전환하는지(z-index 임시조치가 아니라 진짜 hidden), 그리고 답변
+      // 모드로 튕겨나가지 않는지(#mosaic이 계속 hidden).
       const st = graph.surfaceToggle;
       assertOk(
-        'graph-mode: 그래프 탭 클릭 시 그래프 캔버스가 앞으로 온다',
-        st.afterGraphClick.canvasBack === false && st.afterGraphClick.tableBack === true,
+        'graph-mode: 그래프 탭 클릭 시 그래프 캔버스가 보이고 성향 신호 표는 숨는다',
+        st.afterGraphClick.graphCanvasHidden === false && st.afterGraphClick.summaryTableHidden === true,
       );
+      assertOk('graph-mode: 그래프 탭 클릭이 답변 모드로 튕겨나가지 않는다', st.afterGraphClick.mosaicHidden === true);
       assertOk('graph-mode: 그래프 탭이 활성 스타일을 받는다', st.afterGraphClick.graphTabActive === true);
       assertOk(
-        'graph-mode: 요약 탭 클릭 시 성향 신호 표가 다시 앞으로 온다',
-        st.afterSummaryClick.canvasBack === true && st.afterSummaryClick.tableBack === false,
+        'graph-mode: 요약 탭 클릭 시 성향 신호 표가 다시 보이고 그래프 캔버스는 숨는다',
+        st.afterSummaryClick.summaryTableHidden === false && st.afterSummaryClick.graphCanvasHidden === true,
       );
+      assertOk('graph-mode: 요약 탭 클릭도 답변 모드로 튕겨나가지 않는다', st.afterSummaryClick.mosaicHidden === true);
       assertOk('graph-mode: 요약 탭이 활성 스타일을 받는다', st.afterSummaryClick.summaryTabActive === true);
-      assertOk(
-        'graph-mode: 서브뷰 탭 클릭이 hidden 소유권(applyVisibility)을 건드리지 않는다',
-        st.hiddenAttrsUnaffected === true,
-      );
     }
   } catch (err) {
     report.graphMode = { error: String((err && err.message) || err) };

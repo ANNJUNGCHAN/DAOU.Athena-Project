@@ -1422,21 +1422,14 @@ const graphSummaryTable = window.AthenaLib.GraphSummaryTable.createSummaryTableC
 // --- 요약 뷰 헤더 배선 (보드 06/07 §4-1, 4-3) --------------------------------
 //
 // "요약"/"그래프" 서브뷰 토글 — #dot/#graphPill의 그래프 기능 진입·이탈
-// (graphMode.toggle())과는 다른 축이다. #graphSummaryTable·#graphCanvas는
-// 그래프 기능 안에서 항상 함께 hidden=false가 되므로(위 elements 주석·US-007
-// 참고), 여기서는 hidden을 안 건드리고 어느 카드가 위에 보이는지만
-// .graph-surface-back(canvas.css)로 바꾼다 — graphMode.toggle()을 쓰면 이미
-// 그래프 기능 안(그렇지 않으면 이 헤더 자체가 안 보임)이라 답변 모드로 도로
-// 나가버린다(실측 — 계획 문서의 원안 배선을 그대로 쓰면 "그래프" 탭이 채팅으로
-// 튕겨나가는 결함이 된다).
+// (graphMode.toggle())과는 다른 축이다. graphMode.setSurface()가 store 상태
+// (state.surface)를 바꾸고, hidden은 계속 applyVisibility() 하나가 소유한다
+// (스텝2-보정 — 두 표면이 동시에 hidden=false였던 z-index 임시조치를 걷어냈다,
+// canvas.css의 .graph-surface-back 삭제 참고).
 const summaryViewTabEl = document.getElementById('summaryViewTab');
 const graphViewTabEl = document.getElementById('graphViewTab');
-const graphCanvasSurfaceEl = document.getElementById('graphCanvas');
-const graphSummaryTableSurfaceEl = document.getElementById('graphSummaryTable');
-function focusGraphSurface(which) {
-  const showGraph = which === 'graph';
-  if (graphCanvasSurfaceEl) graphCanvasSurfaceEl.classList.toggle('graph-surface-back', !showGraph);
-  if (graphSummaryTableSurfaceEl) graphSummaryTableSurfaceEl.classList.toggle('graph-surface-back', showGraph);
+function updateSummaryHeaderTabs() {
+  const showGraph = graphMode.state.surface === window.AthenaLib.GraphModeStore.SURFACE_MAP;
   if (summaryViewTabEl) {
     summaryViewTabEl.classList.toggle('is-active', !showGraph);
     summaryViewTabEl.setAttribute('aria-selected', showGraph ? 'false' : 'true');
@@ -1446,8 +1439,21 @@ function focusGraphSurface(which) {
     graphViewTabEl.setAttribute('aria-selected', showGraph ? 'true' : 'false');
   }
 }
-if (summaryViewTabEl) summaryViewTabEl.addEventListener('click', () => focusGraphSurface('summary'));
-if (graphViewTabEl) graphViewTabEl.addEventListener('click', () => focusGraphSurface('graph'));
+// setSurface()는 hidden 갱신(applyVisibility())을 내부 await 이전에 동기로
+// 끝낸다 — 탭의 활성 스타일도 그 직후 바로 갱신한다(await로 미루면 draw()의
+// 네트워크 왕복이 끝날 때까지 탭이 안 눌린 것처럼 보인다, 실측으로 발견).
+if (summaryViewTabEl) {
+  summaryViewTabEl.addEventListener('click', () => {
+    graphMode.setSurface(window.AthenaLib.GraphModeStore.SURFACE_SUMMARY);
+    updateSummaryHeaderTabs();
+  });
+}
+if (graphViewTabEl) {
+  graphViewTabEl.addEventListener('click', () => {
+    graphMode.setSurface(window.AthenaLib.GraphModeStore.SURFACE_MAP);
+    updateSummaryHeaderTabs();
+  });
+}
 
 // "최근 갱신"(06 §4-1) — entries[].observed_at 중 가장 최신값으로만 채운다. Paper
 // 목업 "12분 전"을 리터럴로 박지 않는다(§0 정직한 빈 데이터 정책) — 항목이 없거나

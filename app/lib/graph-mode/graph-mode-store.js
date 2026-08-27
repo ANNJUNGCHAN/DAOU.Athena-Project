@@ -17,9 +17,16 @@ const VIEW_GRAPH = 'graph';
 const STAGE_CLUSTERS = 'clusters';
 const STAGE_EXPANDED = 'expanded';
 
+// 그래프 기능 안의 서브뷰(스텝2-보정, 옛 z-index 임시조치를 대체) — "요약 표"와
+// "군집 지도"는 그래프 기능 진입 여부(state.view)와는 다른 축이다. 값이 우연히
+// VIEW_SUMMARY와 같은 문자열이지만 별개 필드(state.surface)라 섞이지 않는다.
+const SURFACE_SUMMARY = 'summary';
+const SURFACE_MAP = 'map';
+
 function createInitialState() {
   return {
     view: VIEW_SUMMARY,
+    surface: SURFACE_SUMMARY, // 보드 06/07 기본값 — "요약"이 항상 먼저 보인다.
     stage: STAGE_CLUSTERS,
     expandedCluster: null,
     selectedEntityId: null,
@@ -30,6 +37,15 @@ function createInitialState() {
 
 function isGraphView(state) {
   return state.view === VIEW_GRAPH;
+}
+
+// 서브뷰 전환 — 그래프 기능 진입/이탈(toggleView)과 무관하다. 펼침·선택은
+// 안 건드린다(둘 다 유지할 이유가 있다: 표를 보다가 지도로 갔다 와도 선택은
+// 남아 있어야 공통 패널이 안 깜빡인다).
+function setSurface(state, surface) {
+  if (surface !== SURFACE_SUMMARY && surface !== SURFACE_MAP) return state;
+  if (surface === state.surface) return state;
+  return { ...state, surface };
 }
 
 // 요약⇄그래프 토글. 그래프에서 요약으로 나가면 펼침과 선택을 버린다 — 돌아왔을 때
@@ -104,12 +120,15 @@ function visibleEdges(state, layout) {
 const __exports = {
   VIEW_SUMMARY,
   VIEW_GRAPH,
+  SURFACE_SUMMARY,
+  SURFACE_MAP,
   STAGE_CLUSTERS,
   STAGE_EXPANDED,
   createInitialState,
   isGraphView,
   toggleView,
   setView,
+  setSurface,
   expandCluster,
   collapseCluster,
   selectEntity,

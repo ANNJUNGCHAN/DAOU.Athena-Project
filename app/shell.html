@@ -93,13 +93,12 @@
       <div id="graphSummaryTable" class="mosaic glass" hidden>
         <!-- #graphSummaryHeader — 스텝2가 뷰 토글(요약/그래프)·필터 칩·"최근 갱신"을
              채운다. 이 토글은 그래프 기능 진입(#dot/#graphPill, graphMode.toggle())과는
-             다른 축이다 — applyVisibility()가 elements.graph/elements.summaryTable을
-             둘 다 !graphView로 묶어 그래프 기능 안에서는 이 카드와 #graphCanvas가
-             동시에 hidden=false가 된다(US-007 계약: hidden 소유자는 applyVisibility()
-             하나뿐, 여기서 손대지 않는다). 그래서 "요약"/"그래프" 서브뷰는 hidden이
-             아니라 z-index(.graph-surface-back, canvas.js의 focusGraphSurface())로
-             어느 카드가 위에 보이는지만 바꾼다 — 실측: 아무 표시 없이 두면 나중에
-             오는 #graphCanvas가 항상 위에 그려져 이 카드 내용이 완전히 가려진다. -->
+             다른 축이다 — graphMode.setSurface()가 state.surface를 바꾸고,
+             applyVisibility() 하나가 여전히 hidden 전체(elements.graph/summaryTable
+             둘 다)를 소유한다(스텝2-보정, US-007 계약 유지). 요약/지도 두 표면이
+             동시에 hidden=false였던 z-index 임시조치(옛 .graph-surface-back,
+             canvas.js의 옛 focusGraphSurface())는 걷어냈다 — 실측: 두 카드 다
+             92% 불투명이라 완전히 안 가려지고 뒤 레이어 텍스트가 비쳤었다. -->
         <div id="graphSummaryHeader">
           <div class="summary-header-left">
             <div class="view-toggle" role="tablist">
@@ -144,10 +143,11 @@
       </div>
       <!-- 그래프 모드 — 요약(위 모자이크)과 **형제**다. 둘 중 하나만 보인다.
            canvasRegion 전체를 토글하는 것이 결정(deep-interview Round 5). 기본은
-           요약 서브뷰가 위(.graph-surface-back — 스텝2 참고, canvas.js가 토글).
+           요약 서브뷰가 보인다(state.surface 기본값 'summary' — graph-mode-store.js,
+           applyVisibility()가 이 카드의 hidden을 그 값으로 결정한다, 스텝2-보정).
            안쪽은 헤더(#graphHeader, 스텝9가 채운다)·본문(#graphBody, 렌더·클릭위임·크기측정
            전용) 2단 구조다. -->
-      <div id="graphCanvas" class="mosaic glass graph-surface-back" hidden>
+      <div id="graphCanvas" class="mosaic glass" hidden>
         <div id="graphHeader"></div>
         <div id="graphBody"></div>
       </div>
