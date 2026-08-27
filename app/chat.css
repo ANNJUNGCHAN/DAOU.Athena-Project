@@ -1412,6 +1412,10 @@ html, body { background: transparent; }
   display: flex; align-items: center; gap: 8px;
   font-family: var(--font-mono);
   letter-spacing: 0.08em;
+  /* 자매 컴포넌트 .turn-fail-label(질의 실패)과 동일 스펙 — 보드 09 두 카드 공통 어휘 */
+  font-size: 10px;
+  line-height: 12px;
+  color: var(--color-k-dim);
 }
 .turn-agent.agent-restore-failed .agent-source::before {
   content: ''; width: 6px; height: 6px; border-radius: 50%;
