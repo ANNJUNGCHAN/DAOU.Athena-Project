@@ -419,6 +419,52 @@ test('최근 실행 로그는 fixture로 표시된다(ledger 라이브 연결은
   assert.equal(findByClass(logsWrap, 'agent-detail-log').length, 3);
 });
 
+// ── F-fix1(본편 이월 갭, Paper 39번 실측 AAG-0): "채팅에서 열기 ↗" ──
+
+test('watch 상세: "루틴 발화 — 묻지 않은 턴입니다" + "채팅에서 열기 ↗" 버튼이 뜬다', async () => {
+  const container = fakeNode('div');
+  const routines = [routine({ id: 'a', status: 'active' })];
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => routines });
+  canvas.mount();
+  await canvas.refresh();
+  const caption = findByClass(container, 'agent-detail-open-chat-caption')[0];
+  assert.equal(caption.textContent, '루틴 발화 — 묻지 않은 턴입니다');
+  const btn = findByClass(container, 'agent-detail-open-chat-btn')[0];
+  assert.equal(btn.textContent, '채팅에서 열기 ↗');
+});
+
+test('schedule 상세에도 "채팅에서 열기 ↗"가 뜬다(watch 전용이 아니다 — 예약도 능동 턴을 만든다)', async () => {
+  const container = fakeNode('div');
+  const routines = [routine({ id: 's1', status: 'active', mode: 'scheduled', note: '평일 아침 브리핑' })];
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => routines });
+  canvas.mount();
+  await canvas.refresh();
+  assert.equal(findByClass(container, 'agent-detail-open-chat-btn').length, 1);
+});
+
+test('draft 상세에는 "채팅에서 열기 ↗"가 없다(draft는 발화한 적이 없다, 최근 실행 섹션과 같은 가드)', async () => {
+  const container = fakeNode('div');
+  const routines = [routine({ id: 'a', status: 'draft' })];
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => routines });
+  canvas.mount();
+  await canvas.refresh();
+  assert.equal(findByClass(container, 'agent-detail-open-chat-btn').length, 0);
+});
+
+test('"채팅에서 열기 ↗" 클릭은 onOpenInChat을 그 항목의 id로 부른다', async () => {
+  const container = fakeNode('div');
+  const routines = [routine({ id: 'routine-xyz', status: 'active' })];
+  let calledWith = null;
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => routines,
+    onOpenInChat: (id) => { calledWith = id; },
+  });
+  canvas.mount();
+  await canvas.refresh();
+  findByClass(container, 'agent-detail-open-chat-btn')[0].dispatchEvent({ type: 'click' });
+  assert.equal(calledWith, 'routine-xyz');
+});
+
 test('사용자가 고른 행이 필터로 사라지면 상세 패널이 남은 첫 항목으로 넘어간다', async () => {
   const container = fakeNode('div');
   const routines = [

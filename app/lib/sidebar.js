@@ -542,6 +542,15 @@
       if (changed) { renderList(); updateAgentBadge(); }
       return changed;
     },
+    // F-fix1 — 39번 상세 패널 "채팅에서 열기 ↗"가 이 다리로 알림 방을 연다.
+    // 있으면 selectNotifyRoom과 완전히 같은 경로(ack·opened 계측 포함)를 그대로
+    // 타고, 없으면 false를 돌려줘 호출자가 채팅 포커스로 폴백하게 한다(단일
+    // 소유자 원칙 — 캔버스가 notifyRooms를 직접 뒤지지 않는다).
+    selectRoom: (id) => {
+      const found = notifyRooms.some((r) => r.id === id);
+      if (found) selectNotifyRoom(id);
+      return found;
+    },
   };
 
   // ---------- 부트 ----------
