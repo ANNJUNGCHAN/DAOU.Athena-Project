@@ -2,7 +2,7 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { describeMode, relativeText, buildTurnModel, buildToast, badgeText } = require('./routine-turn');
+const { describeMode, relativeText, buildTurnModel, buildToast, badgeText, exceedRatio } = require('./routine-turn');
 
 const FIRED = {
   type: 'routine-fired',
@@ -57,4 +57,15 @@ test('relativeText: 방금·분·시간', () => {
 
 test('badgeText: 잘못된 시각은 발화로 강등', () => {
   assert.equal(badgeText('nope'), '발화');
+});
+
+test('exceedRatio: 경계·0·비수치·부호 — 급변 판정(board-31⑤)', () => {
+  assert.equal(exceedRatio(7.5, 5), true); // 1.5배 경계값 — 참
+  assert.equal(exceedRatio(7.49, 5), false); // 경계 살짝 미만
+  assert.equal(exceedRatio(5, 0), false); // 임계 0 — 나눗셈 불능
+  assert.equal(exceedRatio('bogus', 5), false); // 비수치 관측값
+  assert.equal(exceedRatio(5, 'bogus'), false); // 비수치 임계
+  assert.equal(exceedRatio(null, 5), false);
+  assert.equal(exceedRatio(undefined, 5), false);
+  assert.equal(exceedRatio(-7.5, -5), true); // 부호가 같아도 배율은 절댓값으로 본다(급락 감시)
 });

@@ -17,7 +17,8 @@ from athena_api.routines.ledger import RoutineLedger, Verdict
 from athena_api.routines.models import RoutineSpec
 
 # 근접 판정: 임계 대비 상대 거리가 (1 - NEAR_RATIO) 이내면 '근접'으로 기록.
-NEAR_RATIO = 0.8
+# Paper board-32 '임계 90% 근접' 캡션이 규범(CP3 승인 2026-08-27).
+NEAR_RATIO = 0.9
 
 
 def _condition_met(op: str, observed: float | bool | str, threshold: float | bool | str) -> bool:

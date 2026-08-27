@@ -81,9 +81,12 @@ const SEND_CHANNELS = new Set([
   // 2026-08-26 board-33 — "단일 입력 원칙"이 "셸이 보이는 동안은 오브에 입력이
   // 없다"로 바뀌었다(board-33/34, tree-34-deep.raw "상태는 둘뿐이다"). 오브는
   // 이제 athena:orb-chat-submit(INVOKE_CHANNELS)으로 질의를 낼 수 있지만, 그건
-  // 셸의 커맨드바와 같은 runLiveQuery를 부르는 것뿐 — athena:order-execute·
-  // athena:routine-confirm은 여전히 이 다리에 있어도 오브가 부르지 않는다
-  // (주문 집행·감시 승인은 여전히 오브의 액션이 아니다, scripts/gates/check-orb.mjs).
+  // 셸의 커맨드바와 같은 runLiveQuery를 부르는 것뿐이다. athena:routine-confirm/
+  // cancel은 여전히 이 다리에 있어도 오브가 부르지 않는다(감시 승인·취소는
+  // 여전히 오브의 액션이 아니다, scripts/gates/check-orb.mjs). athena:order-execute는
+  // 2026-08-27 CP2 사용자 승인으로 미니 주문 티켓(board-33⑤, orb.js
+  // renderOrbTicket)의 실행 버튼 하나에 한해 오브도 부른다 — 새 채널을
+  // 열지 않았다(같은 다리, 같은 IPC).
   'athena:orb-toggle',
   'athena:orb-open-shell',
   // 2026-08-26 board-32 — 포인터 드래그(오브가 매 이동을 main에 실어 보낸다)와
@@ -144,6 +147,10 @@ const ON_CHANNELS = new Set([
   // 오브에서 오간 턴을 셸의 대화 이력에도 늦게 채워 넣는다(셸이 숨어 있는 동안
   // chat.js가 그릴 수 없었으므로) — {query, result}. 셸에서만 구독한다.
   'athena:orb-turn-committed',
+  // 캔버스 엔벌로프 오브 릴레이(board-33③④ 선행) — origin:'orb' 질의의
+  // render_canvas 결과만 main이 여기로도 relay한다(classifyCanvasBlock의
+  // status/envelope 그대로). 오브의 표/차트 축약 카드 렌더러가 구독한다.
+  'athena:orb-canvas-result',
 ]);
 
 contextBridge.exposeInMainWorld('athena', {

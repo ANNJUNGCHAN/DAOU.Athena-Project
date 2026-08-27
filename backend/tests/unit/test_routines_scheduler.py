@@ -20,13 +20,14 @@ from athena_api.routines.store import RoutineStore, RoutineTransitionError
 from athena_api.routines.triggers import TriggerEngine
 
 
-def _spec(source="price.change_rate", op=">=", value=5.0, symbol="005930"):
+def _spec(source="price.change_rate", op=">=", value=5.0, symbol="005930", goal=False):
     return validate_draft(
         {
             "symbol": symbol,
             "condition": {"source": source, "op": op, "value": value},
             "cooldown_s": 60,
             "expires_days": 7,
+            "goal": goal,
         }
     )
 
@@ -136,6 +137,42 @@ async def test_realtime_loop_evaluates_and_notifies(tmp_path):
     assert fired[0]["type"] == "routine-fired"
     assert fired[0]["mode"] == "realtime-ws"
     assert fired[0]["routine_id"] == spec.id
+    assert fired[0]["goal"] is False  # 기본값 — goal 미지정 루틴
+
+
+@pytest.mark.asyncio
+async def test_fired_notify_carries_goal_flag(tmp_path):
+    """CP1a — goal=true 루틴이 발화하면 fired 페이로드에 goal이 실린다."""
+    store = RoutineStore(tmp_path / "r.json")
+    spec = _spec(goal=True)
+    store.upsert(spec)
+    store.transition(spec.id, "active")
+    engine = TriggerEngine(ledger=RoutineLedger(tmp_path / "l.jsonl"))
+    fired: list[dict] = []
+
+    async def notify(ev):
+        fired.append(ev)
+
+    queue: asyncio.Queue = asyncio.Queue()
+    sched = RoutineScheduler(
+        store=store,
+        engine=engine,
+        notify=notify,
+        subscribe_ticks=lambda: queue,
+        poll_interval_s=9999,
+    )
+    await sched.start()
+    await queue.put(
+        {
+            "trnm": "REAL",
+            "data": [{"type": "0B", "item": "005930", "values": {"12": "+6.00"}}],
+        }
+    )
+    await asyncio.sleep(0.05)
+    await sched.stop()
+
+    assert len(fired) == 1
+    assert fired[0]["goal"] is True
 
 
 @pytest.mark.asyncio
@@ -243,6 +280,129 @@ def test_corp_catalog_parse_and_zip_extract():
     with zipfile.ZipFile(buf, "w") as zf:
         zf.writestr("CORPCODE.xml", xml)
     assert parse_corp_xml(extract_corp_xml(buf.getvalue())) == {"005930": "00126380"}
+
+
+# ---------- routine-near 에지 이벤트 (CP3) ----------
+
+
+def _near_scheduler(store, engine, events):
+    async def notify(ev):
+        events.append(ev)
+
+    return RoutineScheduler(store=store, engine=engine, notify=notify, poll_interval_s=9999)
+
+
+@pytest.mark.asyncio
+async def test_near_enters_once_and_dedupes_consecutive_ticks(tmp_path):
+    store = RoutineStore(tmp_path / "r.json")
+    spec = _spec()
+    store.upsert(spec)
+    store.transition(spec.id, "active")
+    engine = TriggerEngine(ledger=RoutineLedger(tmp_path / "l.jsonl"))
+    events: list[dict] = []
+    sched = _near_scheduler(store, engine, events)
+
+    await sched._handle_verdict(spec, "near", 4.6)
+    await sched._handle_verdict(spec, "near", 4.7)  # 연속 틱 — 재알림 없음
+    await sched._handle_verdict(spec, "near", 4.8)
+
+    near_events = [e for e in events if e["type"] == "routine-near"]
+    assert near_events == [
+        {
+            "type": "routine-near",
+            "routine_id": spec.id,
+            "symbol": spec.symbol,
+            "active": True,
+            "observed": 4.6,
+            "threshold": 5.0,
+        }
+    ]
+
+
+@pytest.mark.asyncio
+async def test_near_exits_once_on_verdict_change(tmp_path):
+    store = RoutineStore(tmp_path / "r.json")
+    spec = _spec()
+    store.upsert(spec)
+    store.transition(spec.id, "active")
+    engine = TriggerEngine(ledger=RoutineLedger(tmp_path / "l.jsonl"))
+    events: list[dict] = []
+    sched = _near_scheduler(store, engine, events)
+
+    await sched._handle_verdict(spec, "near", 4.6)
+    await sched._handle_verdict(spec, None, 1.0)  # 조용 — 이탈
+    await sched._handle_verdict(spec, None, 1.0)  # 계속 조용 — 재이탈 없음
+
+    near_events = [e for e in events if e["type"] == "routine-near"]
+    assert [e["active"] for e in near_events] == [True, False]
+
+
+@pytest.mark.asyncio
+async def test_near_exits_before_fired_notify(tmp_path):
+    """근접에서 바로 발화로 넘어가도 이탈이 fired보다 먼저, 한 번만 나간다."""
+    store = RoutineStore(tmp_path / "r.json")
+    spec = _spec()
+    store.upsert(spec)
+    store.transition(spec.id, "active")
+    engine = TriggerEngine(ledger=RoutineLedger(tmp_path / "l.jsonl"))
+    events: list[dict] = []
+    sched = _near_scheduler(store, engine, events)
+
+    await sched._handle_verdict(spec, "near", 4.6)
+    await sched._handle_verdict(spec, "fired", 6.0)
+
+    assert [e["type"] for e in events] == [
+        "routine-near",
+        "routine-near",
+        "routine-fired",
+    ]
+    assert [e["active"] for e in events[:2]] == [True, False]
+
+
+@pytest.mark.asyncio
+async def test_clear_near_on_cancel_sends_exit_once(tmp_path):
+    store = RoutineStore(tmp_path / "r.json")
+    spec = _spec()
+    store.upsert(spec)
+    store.transition(spec.id, "active")
+    engine = TriggerEngine(ledger=RoutineLedger(tmp_path / "l.jsonl"))
+    events: list[dict] = []
+    sched = _near_scheduler(store, engine, events)
+
+    await sched._handle_verdict(spec, "near", 4.6)
+    cancelled = store.transition(spec.id, "cancelled")
+    await sched.clear_near(cancelled)
+    await sched.clear_near(cancelled)  # 중복 호출에도 이탈 알림은 1회
+
+    near_events = [e for e in events if e["type"] == "routine-near"]
+    assert [e["active"] for e in near_events] == [True, False]
+
+
+@pytest.mark.asyncio
+async def test_expire_pass_clears_ghost_near(tmp_path):
+    """만료로 평가가 끊겨도 근접 이탈 신호가 나가야 오브가 watch에 갇히지 않는다."""
+    from datetime import UTC, datetime, timedelta
+
+    store = RoutineStore(tmp_path / "r.json")
+    spec = _spec()
+    store.upsert(spec)
+    store.transition(spec.id, "active")
+    stored = store.get(spec.id)
+    stored.expires_at = datetime.now(UTC) - timedelta(seconds=1)  # 강제 만료
+
+    engine = TriggerEngine(ledger=RoutineLedger(tmp_path / "l.jsonl"))
+    events: list[dict] = []
+    sched = _near_scheduler(store, engine, events)
+
+    await sched._handle_verdict(stored, "near", 4.6)
+    await sched._expire_pass()
+
+    assert [e["type"] for e in events] == [
+        "routine-near",
+        "routine-near",
+        "routine-expired",
+    ]
+    assert [e["active"] for e in events[:2]] == [True, False]
 
 
 # ---------- 큐 포화 시 알림 손실 정책 ----------

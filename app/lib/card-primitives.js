@@ -85,6 +85,30 @@ function ladderRatio(quantity, maxQuantity) {
   return Math.min(1, Math.max(0, Math.abs(q) / m));
 }
 
+// 오브용 미니 차트(board-33④) 종가 라인 — 값 배열을 SVG 좌표(x,y)로 바꾼다.
+// x는 인덱스 균등 배치, y는 min..max를 [0,height]에 선형 매핑(값이 클수록 위 —
+// 그래서 y = height - 비율*height). 값이 전부 같으면(range 0) 세로 중앙에
+// 수평선을 그린다. 점이 2개 미만이면 선을 그릴 수 없어 빈 배열(호출부가
+// 차트를 아예 생략한다). DOM 없이 좌표 산수만 하는 순수 함수라 chart-card.js의
+// "순수 변환 분리" 관행대로 node --test로 직접 검증한다 — SVG 엘리먼트
+// 생성(createElementNS)은 렌더러(orb.js)의 몫이다.
+function chartLinePoints(values, { width = 336, height = 116 } = {}) {
+  // v != null 먼저 거른다 — Number(null)은 0(유한값)이라 필터를 그냥 통과해
+  // 없는 데이터를 "0원"으로 지어내게 된다.
+  const closes = (Array.isArray(values) ? values : [])
+    .filter((v) => v != null && Number.isFinite(Number(v)))
+    .map(Number);
+  if (closes.length < 2) return [];
+  const min = Math.min(...closes);
+  const max = Math.max(...closes);
+  const range = max - min;
+  const stepX = width / (closes.length - 1);
+  return closes.map((v, i) => ({
+    x: i * stepX,
+    y: range === 0 ? height / 2 : height - ((v - min) / range) * height,
+  }));
+}
+
 // ---------- DOM 빌더 — document가 있는 렌더러에서만 호출된다 ----------
 
 function ChangeBadge({ key, value, label } = {}) {
@@ -286,6 +310,7 @@ const __exports = {
   ladderRatio,
   priceMagnitude,
   extractDataRows,
+  chartLinePoints,
   // DOM 빌더 — 렌더러(document 존재) 전용
   QuoteHeader,
   ChangeBadge,

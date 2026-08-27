@@ -395,6 +395,17 @@ function startRoutineFeed() {
     url: `${BACKEND_WS_BASE}/api/v1/ws/routines`,
     token: LOCAL_BEARER_TOKEN, // 토큰 설정 배포는 모드 A 인증 봉투, 미설정이면 루프백 게이트
     onEvent: (event) => {
+      // 근접(routine-near)은 알림이 아니라 배경 상태다 — athena:routine-event로
+      // 보내지 않는다(unread·토스트·이력 경로 오염 금지). orbWin에만 얇게
+      // 릴레이한다(feed-status 릴레이와 같은 자리·같은 패턴, CP3-2).
+      if (event && event.type === 'routine-near') {
+        if (orbWin && !orbWin.isDestroyed()) {
+          orbWin.webContents.send('athena:orb-signal', {
+            signal: 'watch', active: event.active, observed: event.observed, threshold: event.threshold,
+          });
+        }
+        return;
+      }
       // 능동 턴은 항상 이력에 쌓인다 — 토스트를 놓쳐도 다음 열람 때 남아 있다.
       if (shellWin && !shellWin.isDestroyed()) {
         shellWin.webContents.send('athena:routine-event', event);
@@ -411,7 +422,15 @@ function startRoutineFeed() {
         n.show();
       }
     },
-    onStatus: () => {},
+    // 루틴 피드 연결 상태를 오브에 얇게 릴레이한다(board-30⑩) — 위 orb-signal
+    // 릴레이(797행 부근)와 같은 원칙: main은 판단하지 않는다. connected/
+    // disconnected/unsupported를 그대로 실어 보내고, 그중 무엇을 얼굴로 바꿀지는
+    // orb.js가 정한다.
+    onStatus: (status) => {
+      if (orbWin && !orbWin.isDestroyed()) {
+        orbWin.webContents.send('athena:orb-signal', { signal: 'feed-status', status });
+      }
+    },
   });
   routineFeed.start();
 }
@@ -532,7 +551,16 @@ ipcMain.handle('athena:routines-list', async () => {
   catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
 });
 ipcMain.handle('athena:routine-confirm', async (_e, { id }) => {
-  try { return await routineHttp('POST', `/api/v1/routines/${encodeURIComponent(id)}/confirm`); }
+  try {
+    const result = await routineHttp('POST', `/api/v1/routines/${encodeURIComponent(id)}/confirm`);
+    // 감시 확정 성공을 오브에 신호로 릴레이한다(board-30⑧) — 위 athena:orb-signal
+    // 릴레이(797행)와 같은 원칙: main은 판단하지 않는다. 신호를 받아 언제
+    // 어떤 표정으로 바꿀지는 orb.js가 정한다.
+    if (result.ok && orbWin && !orbWin.isDestroyed()) {
+      orbWin.webContents.send('athena:orb-signal', { signal: 'registered' });
+    }
+    return result;
+  }
   catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
 });
 ipcMain.handle('athena:routine-cancel', async (_e, { id }) => {
@@ -1347,18 +1375,20 @@ async function handleChartSeries(event, payload) {
 
 ipcMain.handle('athena:chart-series', handleChartSeries);
 
-async function runLiveQuery(query, expand) {
+async function runLiveQuery(query, expand, origin = 'shell') {
   liveQueryBusyDepth += 1;
   if (liveQueryBusyDepth === 1) broadcastLiveQueryBusy(true);
   try {
-    return await runLiveQueryInner(query, expand);
+    return await runLiveQueryInner(query, expand, origin);
   } finally {
     liveQueryBusyDepth -= 1;
     if (liveQueryBusyDepth === 0) broadcastLiveQueryBusy(false);
   }
 }
 
-async function runLiveQueryInner(query, expand) {
+// origin — 'shell'(기본, 커맨드바) | 'orb'(오브 대화 모드). onCanvasResult가
+// 오브 기원 엔벌로프만 orbWin에도 추가 relay하는 데 쓴다(board-33③④ 선행).
+async function runLiveQueryInner(query, expand, origin) {
   // 정형 질의 모델 우회 확장(2026-08-26 속도 레버) — 순서는 의미 없다(각자
   // 닫힌 문법이라 서로 안 겹친다, rest-dataset-runner.js 테스트로 고정).
   const directDataset = restDatasetRunner.buildQuoteDataset(query, stockEntityIndex, {
@@ -1462,6 +1492,10 @@ async function runLiveQueryInner(query, expand) {
     onCanvasResult: (r) => {
       if (r.status === 'pushed') {
         // 카드는 사이드 채널(startCanvasFeed)로 이미 도착했다 — 여기선 집계만.
+        // 이 side channel은 shellWin 고정이라(startCanvasFeed 참조, 범위 밖)
+        // 오브는 애초에 'pushed' 카드의 사본을 못 받는다 — 아래 sendLiveCanvasResult
+        // 호출부와 대칭을 맞춰 orb relay도 여기선 하지 않는다(기존 셸의 이중
+        // 렌더 방지 계약을 그대로 따른 것 — 신규 회귀 아님).
         if (r.envelope && r.envelope.canvas_type) canvasTypesSeen.push(r.envelope.canvas_type);
         return;
       }
@@ -1471,7 +1505,16 @@ async function runLiveQueryInner(query, expand) {
         // moveTop()을 반복하면 사용자가 다른 앱으로 옮겨간 뒤에도 계속 튀어나온다.
         revealShell({ focus: false });
       }
+      // 셸 캔버스 적재는 origin과 무관하게 그대로 유지한다 — "대화창으로
+      // 가기 → 메인 방 그대로 이어진다"(board-34) 계약이 셸·오브가 하나의
+      // 캔버스 히스토리를 공유한다는 뜻이라, 오브 기원 질의라고 셸 캔버스
+      // 적재를 건너뛰면 셸을 다시 열었을 때 오브에서 나온 카드가 빠진다.
       sendLiveCanvasResult(r);
+      // board-33③④ 선행 — 오브 기원 질의일 때만 같은 엔벌로프를 오브 창에도
+      // 추가로 relay한다(오브의 표/차트 축약 카드 렌더러가 구독, Step 9b/9c).
+      if (origin === 'orb' && orbWin && !orbWin.isDestroyed()) {
+        orbWin.webContents.send('athena:orb-canvas-result', r);
+      }
       if (r.envelope && r.envelope.canvas_type) canvasTypesSeen.push(r.envelope.canvas_type);
     },
   });
@@ -1490,7 +1533,10 @@ async function runLiveQueryInner(query, expand) {
     if (/session/i.test(String(result.error || ''))) {
       // 세션 문제로 죽은 게 분명하면 이번 질의만은 새 세션으로 1회 재시도한다 —
       // liveSessionId가 이미 null이라 재귀는 한 단계에서 끝난다.
-      return runLiveQuery(query, expand);
+      // origin을 반드시 실어 보낸다 — 누락하면 오브 기원 질의가 이 재시도를
+      // 타는 순간 origin이 기본값 'shell'로 조용히 리셋되어, 재시도로 살아난
+      // 응답의 캔버스 엔벌로프가 오브에 relay되지 않는 은닉 회귀가 된다.
+      return runLiveQuery(query, expand, origin);
     }
   }
 
@@ -1585,7 +1631,7 @@ ipcMain.handle('athena:orb-chat-submit', async (e, payload = {}) => {
   if (liveQueryBusyDepth > 0) {
     return { ok: false, source: 'live', error: '셸 질의 진행 중 — 잠시 후 다시 시도하라' };
   }
-  const result = await runLiveQuery(query, false);
+  const result = await runLiveQuery(query, false, 'orb');
   // 셸이 나중에 다시 열려도 같은 방이 이어져 보이도록, 오브에서 오간 턴을 셸의
   // 대화 이력에도 커밋한다("대화창으로 가기 → 메인 방 그대로 이어진다", board-34).
   // 세션·이력 저장 자체는 runLiveQuery가 이미 끝냈다 — 여기서는 셸 DOM 표시만
