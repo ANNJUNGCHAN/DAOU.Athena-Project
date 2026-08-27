@@ -9,7 +9,7 @@ const layout = require('./cluster-layout');
 const render = require('./render');
 const themeClusters = require('./theme-clusters');
 const prefs = require('./graph-mode-prefs');
-const { createGraphModeController, computeGraphHeaderMeta } = require('./controller');
+const { createGraphModeController, computeGraphHeaderMeta, formatEventDate, buildTimelineRows } = require('./controller');
 const { fakeNode, installFakeDocument, uninstallFakeDocument } = require('./fake-dom');
 
 function payload(revision) {
@@ -739,4 +739,70 @@ test('2단계 — unnamedClusterWarnEligible/unnamedClusters/clusterName이 plac
   assert.equal(capturedOptions.clusterName, '반도체 대형주');
   assert.equal(capturedOptions.unnamedClusterWarnEligible, true, '0 < 이름 붙은 군집 수(1) < 전체(2)');
   assert.deepEqual(capturedOptions.unnamedClusters, [1]);
+});
+
+// ── 엔티티 타임라인 유틸(WP-G G1+G2) — 순수 함수라 컨트롤러 없이 직접 부른다 ────
+
+test('formatEventDate — 절대 MM-DD(G-G1), 윤년·월경계·한자리 패딩', () => {
+  // 정오(Z) 고정 — 자정 경계 타임존 차로 날짜가 밀리는 플레이크를 막는다.
+  assert.equal(formatEventDate('2024-02-29T12:00:00Z'), '02-29', '윤년 2월 29일');
+  assert.equal(formatEventDate('2026-12-31T12:00:00Z'), '12-31', '연말 월경계');
+  assert.equal(formatEventDate('2026-08-04T12:00:00Z'), '08-04', '한자리 월·일 zero-pad(Paper 행3 실측값)');
+});
+
+test('formatEventDate — 파싱 불가면 빈 문자열(지어내지 않는다)', () => {
+  assert.equal(formatEventDate('not-a-date'), '');
+  assert.equal(formatEventDate(undefined), '');
+});
+
+test('buildTimelineRows — op별 문구(G-G6 초안 그대로), relation은 한글 사전으로', () => {
+  const rows = buildTimelineRows([
+    { at: '2026-08-23T12:00:00Z', op: 'entity_added' },
+    { at: '2026-08-23T12:00:00Z', op: 'entity_removed' },
+    { at: '2026-08-23T12:00:00Z', op: 'entity_merged' },
+    { at: '2026-08-23T12:00:00Z', op: 'edge_added', relation: 'interested_in' },
+    { at: '2026-08-23T12:00:00Z', op: 'edge_removed', relation: 'owns' },
+    { at: '2026-08-23T12:00:00Z', op: 'edge_rejected', relation: 'traded' },
+  ]);
+  assert.deepEqual(rows.map((r) => r.text), [
+    '노드 처음 생김', // 대화 제목 인용구는 backend에 대응 필드가 없어 생략(G-G3)
+    '노드 제거됨',
+    '다른 노드와 병합됨',
+    '관계 추가됨(관심)',
+    '관계 제거됨(보유)',
+    '제안된 관계가 기각됨(매매)',
+  ]);
+  assert.ok(rows.every((r) => r.date === '08-23'));
+});
+
+test('buildTimelineRows — 미등록 relation·미등록 op는 원문 그대로 폴백(§0 정직성)', () => {
+  const rows = buildTimelineRows([
+    { at: '2026-08-23T12:00:00Z', op: 'edge_added', relation: 'mystery_kind' },
+    { at: '2026-08-23T12:00:00Z', op: 'edge_added' }, // relation 자체가 없으면 괄호도 생략
+    { at: '2026-08-23T12:00:00Z', op: 'unknown_op' },
+  ]);
+  assert.equal(rows[0].text, '관계 추가됨(mystery_kind)');
+  assert.equal(rows[1].text, '관계 추가됨');
+  assert.equal(rows[2].text, 'unknown_op');
+});
+
+test('buildTimelineRows — edge_changed: 상승만 "…로 승격"(G-G4), 하강·동일은 "신뢰도 변경"', () => {
+  const base = { at: '2026-08-19T12:00:00Z', op: 'edge_changed', relation: 'interested_in' };
+  const rows = buildTimelineRows([
+    { ...base, confidence_before: 'INFERRED', confidence_after: 'EXTRACTED' },
+    { ...base, confidence_before: 'EXTRACTED', confidence_after: 'AMBIGUOUS' },
+    { ...base, confidence_before: 'INFERRED', confidence_after: 'INFERRED' },
+    { ...base, confidence_before: null, confidence_after: 'EXTRACTED' }, // 한쪽 미상도 중립
+  ]);
+  assert.equal(rows[0].text, '관심 관계 추론 → 사실로 승격', 'Paper 행2 실측 어휘 그대로');
+  assert.equal(rows[1].text, '관심 관계 신뢰도 변경');
+  assert.equal(rows[2].text, '관심 관계 신뢰도 변경');
+  assert.equal(rows[3].text, '관심 관계 신뢰도 변경');
+});
+
+test('buildTimelineRows — 배열이 아니면 빈 배열, null 항목은 걸러낸다', () => {
+  assert.deepEqual(buildTimelineRows(undefined), []);
+  assert.deepEqual(buildTimelineRows(null), []);
+  const rows = buildTimelineRows([null, { at: '2026-08-04T12:00:00Z', op: 'entity_added' }]);
+  assert.equal(rows.length, 1);
 });
