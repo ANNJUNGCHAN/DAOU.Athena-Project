@@ -875,6 +875,15 @@ async function runHistoryCommand(text) {
 // 참고.
 window.AthenaShell.registerOpenSettings(openSettings);
 
+// 43번 "새 작업은 채팅에서" 원칙의 공용 진입로(shell.js 버스) — 시트를 열지
+// 않고 채팅 입력에 시작 문장을 심고 포커스만 옮긴다(7단계 제안 카드 "추가"가
+// 첫 사용처, lib/agent-canvas.js).
+window.AthenaShell.registerSeedChatInput((text) => {
+  if (!$input) return;
+  $input.value = text != null ? String(text) : '';
+  $input.focus();
+});
+
 // ---------- 입력 ----------
 function dispatchUserQuery(text) {
   const normalized = String(text || '').trim() || '보유 종목 수급 요약해줘';

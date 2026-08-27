@@ -2705,6 +2705,94 @@ app.whenReady().then(async () => {
     ipcMain.handle('athena:routine-resume', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
   }
 
+  // ---------- 제안 — 그래프 성향 기반 (7단계, Paper 보드 39 하단) ----------
+  //
+  // athena:brain-profile-summary를 stateful fixture로 바꿔 실데이터 왕복을
+  // 흉내낸다(summary-table.js가 보드 07에서 쓰는 것과 같은 채널). "추가" 클릭이
+  // 시트를 열지 않고 채팅 입력에만 문장을 심는지 확인한다(43 원칙 위반 시 실패).
+  try {
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({
+      ok: true, data: { routines: [], disclosure_ready: true, last_error: null },
+    }));
+    ipcMain.removeHandler('athena:brain-profile-summary');
+    ipcMain.handle('athena:brain-profile-summary', async () => ({
+      ok: true,
+      entries: [
+        {
+          entity_id: 'e1', entity_kind: 'stock', entity_name: '삼성전자', relation_kind: '단기 회전',
+          confidence: 'EXTRACTED', tier: 'deterministic', rationale: '매매일마다 정리가 필요해 보여요',
+          observed_at: '2026-08-26T00:00:00Z', reinforcement: 21,
+        },
+        {
+          entity_id: 'e2', entity_kind: 'theme', entity_name: '배당 방어 바스켓', relation_kind: '응집 상승',
+          confidence: 'INFERRED', tier: 'conversational', rationale: null,
+          observed_at: '2026-08-25T00:00:00Z', reinforcement: 6,
+        },
+      ],
+    }));
+
+    const suggestionProbe = await shellWin.webContents.executeJavaScript(`(async () => {
+      const nav = document.getElementById('modeNavAgent');
+      const back = document.getElementById('modeNavSummary');
+      const canvas = document.getElementById('agentCanvas');
+      const input = document.getElementById('input');
+      if (!nav || !back || !canvas || !input) return { wired: false };
+      input.value = '';
+      nav.click();
+      await new Promise((r) => setTimeout(r, 600));
+      const section = canvas.querySelector('.agent-suggest-section');
+      const sectionHidden = section ? section.hidden : null;
+      const titles = Array.from(canvas.querySelectorAll('.agent-suggest-title')).map((n) => n.textContent);
+      const rationales = Array.from(canvas.querySelectorAll('.agent-suggest-rationale')).map((n) => n.textContent);
+      const addBtns = canvas.querySelectorAll('.agent-suggest-add');
+      addBtns[0].click();
+      await new Promise((r) => setTimeout(r, 50));
+      const seededValue = input.value;
+      const orderHidden = document.getElementById('order').hidden;
+      const settingsHidden = document.getElementById('settings').hidden;
+      const onboardHidden = document.getElementById('onboard').hidden;
+      back.click();
+      await new Promise((r) => setTimeout(r, 100));
+      return { wired: true, sectionHidden, titles, rationales, seededValue, orderHidden, settingsHidden, onboardHidden };
+    })()`);
+    report.suggestions = suggestionProbe;
+    assertOk('agent-canvas-7: 배선이 있다', suggestionProbe.wired === true);
+    if (suggestionProbe.wired) {
+      assertOk('agent-canvas-7: 신호가 있으면 제안 섹션이 보인다', suggestionProbe.sectionHidden === false);
+      assertOk(
+        'agent-canvas-7: 제목 2건이 실제 entity_name이다(지어낸 태스크 문구가 아니다)',
+        JSON.stringify(suggestionProbe.titles) === JSON.stringify(['삼성전자', '배당 방어 바스켓']),
+      );
+      assertOk(
+        'agent-canvas-7: 근거문이 relation_kind·reinforcement·rationale 실제 필드로만 조합된다',
+        suggestionProbe.rationales[0] === '단기 회전 성향 21회 보강 — 매매일마다 정리가 필요해 보여요'
+          && suggestionProbe.rationales[1] === '응집 상승 성향 6회 보강',
+      );
+      assertOk(
+        'agent-canvas-7: "추가" 클릭 시 채팅 입력에 문장이 심긴다',
+        suggestionProbe.seededValue === '"삼성전자"에 대한 단기 회전 성향이 21회 보강됐어요 — 관련 루틴을 만들어줄까요?',
+      );
+      assertOk(
+        'agent-canvas-7: "추가"는 시트를 열지 않는다(주문/설정/온보딩 패널 모두 hidden 유지, 43 원칙)',
+        suggestionProbe.orderHidden === true && suggestionProbe.settingsHidden === true && suggestionProbe.onboardHidden === true,
+      );
+    }
+  } catch (err) {
+    report.suggestions = { error: String((err && err.message) || err) };
+    failures.push('agent-canvas-7: 검증 블록이 예외로 끝났다');
+  } finally {
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+    ipcMain.removeHandler('athena:brain-profile-summary');
+    ipcMain.handle('athena:brain-profile-summary', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+    // 채팅 입력에 남은 시드 문장을 다음 블록으로 새지 않게 지운다.
+    await shellWin.webContents.executeJavaScript(`(() => {
+      const input = document.getElementById('input');
+      if (input) input.value = '';
+    })()`);
+  }
+
   fs.writeFileSync(path.join(CAPTURES, 'VERIFY-REPORT.json'), JSON.stringify(report, null, 2));
   console.log('[verify] 리포트 저장:', path.join(CAPTURES, 'VERIFY-REPORT.json'));
 
