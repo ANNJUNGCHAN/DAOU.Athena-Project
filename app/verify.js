@@ -3758,6 +3758,17 @@ app.whenReady().then(async () => {
       };
     })()`);
     report.proactive = proactiveProbe;
+    // 에이전트 캔버스 픽셀 증거(2026-08-28 화면 평가 관찰4) — 프로브는 DOM 질의라
+    // 화면 전환을 보장하지 않는다. 90b와 같은 패턴으로 네비를 실제로 눌러 찍고
+    // 대화 뷰로 되돌린다(이후 검증의 전제 상태 불변).
+    await shellWin.webContents.executeJavaScript(
+      "(() => { const b = document.getElementById('modeNavAgent'); if (b) b.click(); })()"
+    );
+    await wait(400);
+    report.proactive.shot = await shot(shellWin, '91-agent-canvas.png');
+    await shellWin.webContents.executeJavaScript(
+      "(() => { const b = document.getElementById('modeNavSummary'); if (b) b.click(); })()"
+    );
     assertOk('agent-canvas-11: 배선이 있다', proactiveProbe.wired === true);
     if (proactiveProbe.wired) {
       assertOk('agent-canvas-11: 제안 탭 라벨이 개수를 담고 있다("제안 2")', proactiveProbe.tabLabelBefore === '제안 2');
