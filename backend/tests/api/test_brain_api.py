@@ -18,6 +18,7 @@ CHATS_PATH = "/api/v1/brain/chats"
 CONVERSATIONS_PATH = "/api/v1/brain/conversations"
 PROFILE_SUMMARY_PATH = "/api/v1/brain/profile-summary"
 RESET_PATH = "/api/v1/brain/reset-and-restart"
+ENTITY_TIMELINE_PATH = "/api/v1/brain/analysis/entity-timeline"
 SECRET_MARKER = "지난주에 삼성전자 100주를 매수하고 싶다는 비밀스러운 계획"
 
 
@@ -797,3 +798,139 @@ def test_cluster_map_edge_details_merge_kinds_on_the_same_pair(
         assert detail["kinds"], "kind가 최소 1개는 있어야 한다"
         assert detail["tier"] in {"deterministic", "conversational"}
         assert detail["confidence"] in {"EXTRACTED", "INFERRED", "AMBIGUOUS"}
+
+
+# --- entity-timeline: 소규모 신설 엔드포인트 (WP-C) --------------------------------------
+
+
+async def _seed_one_owns_relation(app) -> None:
+    from athena_api.brain import (
+        INVESTOR_PROFILE_ENTITY_ID,
+        INVESTOR_PROFILE_NAME,
+        Confidence,
+        Entity,
+        EntityKind,
+        Relation,
+        SourceKind,
+        SourceRecord,
+        SourceTier,
+        entity_id,
+        relation_id,
+    )
+
+    store = app.state.brain_store
+    now = datetime(2026, 8, 25, 3, 0, tzinfo=UTC)
+    profile = Entity(
+        id=INVESTOR_PROFILE_ENTITY_ID,
+        kind=EntityKind.INVESTOR_PROFILE,
+        name=INVESTOR_PROFILE_NAME,
+        created_at=now,
+        updated_at=now,
+    )
+    samsung = Entity(
+        id=entity_id(EntityKind.SECURITY, "삼성전자"),
+        kind=EntityKind.SECURITY,
+        name="삼성전자",
+        created_at=now,
+        updated_at=now,
+    )
+    await store.upsert_source(
+        SourceRecord(
+            id="s1",
+            kind=SourceKind.CONVERSATION,
+            text="대화 본문",
+            fingerprint="fp-s1",
+            occurred_at=now,
+            ingested_at=now,
+        )
+    )
+    await store.apply_extraction(
+        "s1",
+        "fp-s1",
+        (profile, samsung),
+        (
+            Relation(
+                id=relation_id("owns", profile.id, samsung.id),
+                kind="owns",
+                source_entity_id=profile.id,
+                target_entity_id=samsung.id,
+                confidence=Confidence.EXTRACTED,
+                tier=SourceTier.CONVERSATIONAL,
+                source_id="s1",
+                observed_at=now,
+                extracted_at=now,
+            ),
+        ),
+    )
+
+
+@pytest.fixture
+def entity_timeline_client(tmp_path: Path):
+    app = create_app(_brain_settings(tmp_path))
+    with TestClient(app) as client:
+        client.portal.call(_seed_one_owns_relation, app)  # type: ignore[attr-defined]
+        yield client
+
+
+def test_entity_timeline_returns_events_for_a_known_entity(
+    entity_timeline_client: TestClient,
+) -> None:
+    from athena_api.brain import INVESTOR_PROFILE_ENTITY_ID
+
+    body = entity_timeline_client.get(
+        ENTITY_TIMELINE_PATH,
+        headers=_headers(),
+        params={"entity_id": INVESTOR_PROFILE_ENTITY_ID},
+    ).json()
+    assert body["entity_id"] == INVESTOR_PROFILE_ENTITY_ID
+    assert body["events"], "owns 관계가 하나 있으므로 최소 1건은 나와야 한다"
+    event = body["events"][0]
+    assert set(event) == {
+        "seq",
+        "at",
+        "revision",
+        "op",
+        "subject_id",
+        "object_id",
+        "relation",
+        "confidence_before",
+        "confidence_after",
+        "source_id",
+    }
+
+
+def test_entity_timeline_requires_the_bearer(entity_timeline_client: TestClient) -> None:
+    """기존 라우트 관례와 동일 — 헤더 자체가 없으면 422, 틀린 토큰이면 401."""
+    assert (
+        entity_timeline_client.get(
+            ENTITY_TIMELINE_PATH, params={"entity_id": "entity:x"}
+        ).status_code
+        == 422
+    )
+    assert (
+        entity_timeline_client.get(
+            ENTITY_TIMELINE_PATH,
+            headers={"Authorization": "Bearer wrong"},
+            params={"entity_id": "entity:x"},
+        ).status_code
+        == 401
+    )
+
+
+def test_entity_timeline_is_empty_for_an_unknown_entity(
+    entity_timeline_client: TestClient,
+) -> None:
+    body = entity_timeline_client.get(
+        ENTITY_TIMELINE_PATH,
+        headers=_headers(),
+        params={"entity_id": "entity:doesnotexist"},
+    ).json()
+    assert body["events"] == []
+
+
+def test_entity_timeline_503s_while_brain_disabled() -> None:
+    with _disabled_client() as client:
+        response = client.get(
+            ENTITY_TIMELINE_PATH, headers=_headers(), params={"entity_id": "entity:x"}
+        )
+    assert response.status_code == 503
