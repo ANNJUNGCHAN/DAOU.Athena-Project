@@ -1739,6 +1739,13 @@ function writeGraphSettings(patch, storage) {
       // 핸들러 부재/실패 — 로컬 토글 표시만 유지(refreshScreenCard의 setPref와 같은 판단).
     });
   }
+  // WP-I I4 — exposeToModel은 main이 prefs 영속 + backend 게이트 POST까지
+  // 한 번에 처리하는 전용 채널로 미러링한다(collectChat의 prefs:set 미러와
+  // 같은 판단, 실패해도 로컬 토글 표시만 유지).
+  if (patch && typeof patch.exposeToModel === 'boolean'
+    && typeof window !== 'undefined' && window.athena && window.athena.invoke) {
+    window.athena.invoke('athena:settings:expose-to-model:set', { enabled: next.exposeToModel }).catch(() => {});
+  }
   return next;
 }
 
@@ -1751,7 +1758,8 @@ function appendGraphSourceToggle(body, current, key, label, sub, note) {
   const labelCol = el('div');
   labelCol.appendChild(el('div', 'uk-toggle-label', label));
   labelCol.appendChild(el('div', 'uk-toggle-sub', sub));
-  // note는 선택 — 지금은 exposeToModel 한 곳(WP-D2, MCP 헤더 부재로 실효 없음)만 쓴다.
+  // note는 선택 — WP-I I4에서 exposeToModel 실효 없음 배지를 걷어낸 뒤로 쓰는
+  // 곳이 없지만, 자리는 남겨 둔다(다음 정직성 배지가 같은 자리를 쓴다).
   if (note) {
     const noteRow = el('div', 'uk-toggle-note');
     noteRow.appendChild(note);
@@ -1811,10 +1819,8 @@ function refreshHistoryCard(card, head, body) {
   appendGraphSourceToggle(
     body, current, 'exposeToModel', '대화 모델에 성향 그래프 열기',
     '켜면 답변이 사용자를 알고 시작합니다. 보유 종목 수량과 대화 원문이 모델 컨텍스트로 전달됩니다.',
-    // WP-D2(D0 실측: MCP athena_brain 클라이언트가 Authorization 헤더를 안 실어
-    // 5개 액션 전부 422로 실패한다 — 토글 값과 무관하게 이미 죽은 스위치다).
-    // 토글 자체는 유지하고(사용자 확정) 실효 없음만 정직하게 알린다.
-    pill('현재 모델 노출에 영향 없음(준비 중)', 'warn'),
+    // WP-I I4 — 옛 "실효 없음(준비 중)" 배지는 걷어냈다: MCP가 인증 헤더를
+    // 싣고 backend 게이트가 이 토글 값을 실제로 검사하므로 전제가 사라졌다.
   );
 
   const dangerNote = el('div', 'uk-settings-note');

@@ -1796,6 +1796,17 @@ function handlePrefsSet(e, patch) {
 ipcMain.handle('athena:settings:prefs:get', handlePrefsGet);
 ipcMain.handle('athena:settings:prefs:set', handlePrefsSet);
 
+// exposeToModel 실반영(WP-I I4) — 렌더러 토글 값을 main prefs에 영속하고
+// backend 게이트(POST /settings/expose-to-model)에 즉시 민다. POST 실패는
+// {ok:false}로 알릴 뿐 로컬 토글 표시를 막지 않는다 — 브레인 준비 폴링
+// (history-sink.refreshBrainReady, G-I6)이 준비 확인 시 같은 값을 재동기화한다.
+ipcMain.handle('athena:settings:expose-to-model:set', async (_e, { enabled } = {}) => {
+  const next = prefs.set({ exposeToModel: enabled === true });
+  if (shellWin && !shellWin.isDestroyed()) shellWin.webContents.send('athena:prefs-changed', next);
+  const pushed = await historySink.pushExposeToModel({ mdlog });
+  return { ok: pushed, enabled: next.exposeToModel };
+});
+
 // ---------------------------------------------------------------------------
 // 모델 설정(모델·추론강도) — 공급자별로 저장소가 다르다(2026-08-18 Codex 실결선).
 // claude는 lib/main/model-prefs.js(athena-model.json, userData 아래) —
