@@ -11,6 +11,7 @@ const {
   resolveStatusTone,
   ladderRatio,
   priceMagnitude,
+  chartLinePoints,
 } = require('./card-primitives');
 
 test('proportionalRatios — 최대 절대값 기준으로 0..1 스케일링한다', () => {
@@ -93,4 +94,34 @@ test('priceMagnitude — 부호를 걷어내도 숫자로 안 읽히면(코드�
   assert.equal(priceMagnitude('-KRX001'), '-KRX001');
   assert.equal(priceMagnitude('n/a'), 'n/a');
   assert.equal(priceMagnitude(''), '');
+});
+
+// board-33④ 오브용 미니 차트 — 종가 배열을 SVG 좌표로 바꾸는 순수 함수.
+test('chartLinePoints — 오름차순 값은 마지막 점이 제일 위(y가 제일 작다)', () => {
+  const points = chartLinePoints([10, 20, 30], { width: 100, height: 100 });
+  assert.equal(points.length, 3);
+  assert.deepEqual(points[0], { x: 0, y: 100 }); // 최솟값 → 바닥
+  assert.deepEqual(points[1], { x: 50, y: 50 });
+  assert.deepEqual(points[2], { x: 100, y: 0 }); // 최댓값 → 꼭대기
+});
+
+test('chartLinePoints — 값이 전부 같으면(range 0) 세로 중앙 수평선', () => {
+  const points = chartLinePoints([50, 50, 50, 50], { width: 90, height: 40 });
+  assert.deepEqual(points.map((p) => p.y), [20, 20, 20, 20]);
+  assert.deepEqual(points.map((p) => p.x), [0, 30, 60, 90]);
+});
+
+test('chartLinePoints — 점이 2개 미만이면 선을 그릴 수 없어 빈 배열(호출부가 차트를 생략한다)', () => {
+  assert.deepEqual(chartLinePoints([]), []);
+  assert.deepEqual(chartLinePoints([100]), []);
+});
+
+test('chartLinePoints — 비유한값은 걸러내고 나머지로만 그린다', () => {
+  const points = chartLinePoints([10, null, 'n/a', 30], { width: 10, height: 10 });
+  assert.equal(points.length, 2);
+});
+
+test('chartLinePoints — width/height 기본값은 보드 실측(4ZM-0 차트 판 336×116)', () => {
+  const points = chartLinePoints([0, 10]);
+  assert.deepEqual(points[1], { x: 336, y: 0 });
 });
