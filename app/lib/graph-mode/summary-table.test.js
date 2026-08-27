@@ -11,6 +11,8 @@ const {
   computeConfidenceBreakdown,
   renderSummaryHero,
   renderConfirmBanner,
+  dotClass,
+  relativeDaysText,
 } = require('./summary-table');
 const { fakeNode, installFakeDocument, uninstallFakeDocument } = require('./fake-dom');
 
@@ -97,6 +99,59 @@ test('접근성 요약이 붙는다', () => {
   const table = container.querySelector('.summary-table');
   assert.equal(table.attrs.role, 'table');
   assert.match(table.attrs['aria-label'], /2건/);
+});
+
+// ── dot·출처·최근 열(스텝4) ──────────────────────────────────────────────────
+
+test('dotClass — 사실+체결기반(EXTRACTED+deterministic)만 채움 검정', () => {
+  assert.equal(dotClass(entry({ confidence: 'EXTRACTED', tier: 'deterministic' })), 'summary-row-dot-fact');
+});
+
+test('dotClass — 불확실(AMBIGUOUS)은 tier와 무관하게 채움 주황', () => {
+  assert.equal(dotClass(entry({ confidence: 'AMBIGUOUS', tier: 'deterministic' })), 'summary-row-dot-warn');
+  assert.equal(dotClass(entry({ confidence: 'AMBIGUOUS', tier: 'conversational' })), 'summary-row-dot-warn');
+});
+
+test('dotClass — 나머지(추론, 또는 사실이지만 대화 출처)는 테두리만', () => {
+  assert.equal(dotClass(entry({ confidence: 'INFERRED', tier: 'conversational' })), 'summary-row-dot-soft');
+  assert.equal(dotClass(entry({ confidence: 'EXTRACTED', tier: 'conversational' })), 'summary-row-dot-soft');
+});
+
+test('renderRow — 출처 열은 tier를 한글로 번역한다(entry.source 필드가 없어도)', () => {
+  const container = fakeNode('div');
+  renderSummaryTable(container, [entry({ tier: 'deterministic' }), entry({ entity_id: 'e:b', tier: 'conversational' })]);
+  const rows = container.querySelectorAll('.summary-row');
+  const sourceOf = (row) => row.children.find((c) => String(c.attrs.class).includes('summary-row-source')).textContent;
+  assert.equal(sourceOf(rows[0]), '체결·잔고');
+  assert.equal(sourceOf(rows[1]), '대화');
+});
+
+test('relativeDaysText — 일/주 단위로 상대 시간을 낸다', () => {
+  const base = Date.parse('2026-08-27T00:00:00Z');
+  assert.equal(relativeDaysText('2026-08-27T00:00:00Z', base), '오늘');
+  assert.equal(relativeDaysText('2026-08-25T00:00:00Z', base), '2일 전');
+  assert.equal(relativeDaysText('2026-08-13T00:00:00Z', base), '2주 전');
+});
+
+test('relativeDaysText — 파싱 불가면 빈 문자열', () => {
+  assert.equal(relativeDaysText('not-a-date', Date.now()), '');
+});
+
+test('renderSummaryTable — 열 머리글 행(아이콘+6열)이 붙는다', () => {
+  const container = fakeNode('div');
+  renderSummaryTable(container, [entry()]);
+  const columns = container.querySelector('.summary-table-columns');
+  const labels = columns.children.map((c) => c.textContent);
+  assert.deepEqual(labels, ['', '대상', '관계', '근거', '출처', '보강', '최근']);
+});
+
+test('renderSummaryTable — 섹션 헤더("성향 신호"+"상위 N")가 붙고 "전체 M개"는 없다(총건수 필드가 없다)', () => {
+  const container = fakeNode('div');
+  renderSummaryTable(container, [entry(), entry({ entity_id: 'e:b' })]);
+  const head = container.querySelector('.summary-table-head');
+  assert.match(head.querySelector('.summary-table-title').textContent, /성향 신호/);
+  assert.match(head.querySelector('.summary-table-subtitle').textContent, /상위 2/);
+  assert.equal(head.children.length, 2, '전체 M개 보기 같은 3번째 조각이 없다');
 });
 
 // ── 히어로(스텝3) ────────────────────────────────────────────────────────────

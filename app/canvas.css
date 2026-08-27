@@ -245,6 +245,66 @@ html, body { background: transparent; }
   font-family: var(--font-strong); font-size: var(--text-sm); color: #fff;
 }
 
+/* 성향 신호 표(보드 06/07 §7). 열 폭은 06(6열 전체판) 기준 — 스텝0-2/4 시점엔
+ * 공통 패널이 아직 비어 있어 표 영역이 전체 폭을 쓴다. */
+.summary-table-wrap { padding: 18px 18px 4px; flex-shrink: 0; }
+.summary-table-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 9px; padding-bottom: 12px;
+}
+.summary-table-title { font-family: var(--font-strong); font-size: var(--text-base); color: var(--color-k-bright); }
+.summary-table-subtitle { font-family: var(--font-body); font-size: var(--text-xs); color: var(--color-k-hint); }
+
+.summary-table-columns, .summary-row {
+  display: flex; align-items: center; gap: 12px; padding-inline: 10px;
+}
+.summary-table-columns {
+  padding-bottom: 8px; border-bottom: 1px solid var(--color-k-line);
+  font-family: var(--font-body); font-size: var(--text-2xs); color: var(--color-k-hint);
+  letter-spacing: 0.1em;
+}
+.summary-row {
+  padding-block: 13px; border-bottom: 1px solid var(--color-k-line); cursor: pointer;
+}
+.summary-row:last-child { border-bottom: none; }
+
+/* 열 폭 — 머리글(.summary-col-*)과 행 셀(.summary-row-*)이 같은 폭을 공유한다. */
+.summary-col-icon, .summary-row-dot { width: 16px; flex-shrink: 0; }
+.summary-col-target, .summary-row-target { width: 190px; flex-shrink: 0; min-width: 0; }
+.summary-col-relation, .summary-row-relation { width: 72px; flex-shrink: 0; }
+.summary-col-rationale, .summary-row-rationale { flex: 1 1 0%; min-width: 0; }
+.summary-col-source, .summary-row-source { width: 76px; flex-shrink: 0; }
+.summary-col-reinforcement, .summary-row-reinforcement { width: 56px; flex-shrink: 0; text-align: right; }
+.summary-col-recent, .summary-row-recent { width: 72px; flex-shrink: 0; text-align: right; }
+
+/* dot 인코딩 — 확정성 추정(§0 원칙5, dotClass() 참고). */
+.summary-row-dot { width: 7px; height: 7px; border-radius: 50%; box-sizing: content-box; }
+.summary-row-dot-fact { background: var(--color-k-text); }
+.summary-row-dot-warn { background: var(--color-warn); }
+.summary-row-dot-soft { background: none; border: 1.5px solid var(--color-k-hint); }
+
+.summary-row-target { display: flex; flex-direction: column; gap: 2px; }
+.summary-row-name {
+  font-family: var(--font-strong); font-size: var(--text-base); color: var(--color-k-bright);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.summary-row-id { font-family: var(--font-mono); font-size: var(--text-2xs); color: var(--color-k-ghost); }
+
+.summary-row-relation {
+  background: var(--color-k-panel3); border-radius: 4px; padding: 3px 8px;
+  font-family: var(--font-body); font-size: var(--text-xs); color: var(--color-k-soft);
+  text-align: center;
+}
+.summary-row-rationale {
+  font-family: var(--font-body); font-size: var(--text-sm); line-height: 18px; color: var(--color-k-soft);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.summary-row-source { font-family: var(--font-body); font-size: var(--text-xs); color: var(--color-k-hint); }
+.summary-row-reinforcement {
+  font-family: var(--font-mono); font-size: var(--text-sm); font-weight: 500; color: var(--color-k-bright);
+}
+.summary-row-recent { font-family: var(--font-body); font-size: var(--text-xs); color: var(--color-k-hint); }
+
 /* 카드도 유리다 — soul.md §7 "모든 표면이 유리다. 두 창도, 창 안의 카드도 전부."
  * 2026-08-17 디자인 리뷰 [HIGH]로 정정: 이전 판은 고정 rgba 채움 + backdrop-filter
  * 0건이라 §7이 금지한 "뒤에 굴절할 것 없는 반투명 회색 사각형"이었다. 이제 알파를
