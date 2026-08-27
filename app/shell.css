@@ -712,6 +712,21 @@ body { margin: 0; overflow: hidden; }
   gap: 8px;
   padding: 5px 2px;
 }
+/* "채팅에서 열기 ↗"(F-fix1, Paper 39번 실측 AAG-0) — 이 패널의 다른 액션
+   (agent-pause-btn·agent-history-open)과 달리 테두리 있는 필 버튼이다. */
+.agent-detail-open-chat { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; }
+.agent-detail-open-chat-caption { color: var(--color-k-faint); font-family: var(--font-body); font-weight: 300; font-size: var(--text-xs); }
+.agent-detail-open-chat-btn {
+  flex-shrink: 0;
+  border: 1px solid var(--color-k-line);
+  border-radius: var(--radius-full);
+  padding: 5px 16px;
+  background: transparent;
+  color: var(--color-k-text);
+  font-family: var(--font-strong);
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
 .agent-detail-log-time {
   flex-shrink: 0;
   color: var(--color-k-faint);

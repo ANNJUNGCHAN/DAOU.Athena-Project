@@ -1437,6 +1437,17 @@ const agentCanvas = window.AthenaLib.AgentCanvas.createAgentCanvas({
   fetchAlerts: () => (window.AthenaNotify ? window.AthenaNotify.list() : []),
   markAllAlertsRead: () => { if (window.AthenaNotify) window.AthenaNotify.markAllRead(); },
   getWsConnected: () => wsConnected,
+  // F-fix1 — 39번 상세 패널 "채팅에서 열기 ↗"(본편 이월 갭). 알림 방이 있으면
+  // sidebar.js의 selectNotifyRoom과 완전히 같은 경로(ack·opened 계측 포함)를
+  // 그 다리로 타고, 없으면 채팅 입력 포커스로 폴백한다(seedChatInput을 인자
+  // 없이 부르면 시드 문장 없이 포커스만 옮긴다 — 죽은 버튼 금지, P3).
+  onOpenInChat: (routineId) => {
+    const opened = !!(window.AthenaNotify && typeof window.AthenaNotify.selectRoom === 'function'
+      && window.AthenaNotify.selectRoom(routineId));
+    if (!opened && window.AthenaShell && typeof window.AthenaShell.seedChatInput === 'function') {
+      window.AthenaShell.seedChatInput();
+    }
+  },
   // 10단계 — 실행 이력 드릴인. 6단계 GET /{id}/runs를 사람 클릭 전용 채널로.
   fetchRuns: async (id) => {
     const res = await window.athena.invoke('athena:routine-runs', { id });

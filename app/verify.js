@@ -3330,6 +3330,150 @@ app.whenReady().then(async () => {
     ipcMain.handle('athena:routine-runs', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
   }
 
+  // ---------- 39번 상세 패널 "채팅에서 열기 ↗" (F-fix1, 본편 이월 갭) ----------
+  //
+  // 알림 방이 있으면 sidebar-notify-7과 같은 selectNotifyRoom 경로(배너 표시
+  // +ack·opened 계측)를 타는지, 없으면 채팅 입력 포커스로 폴백하는지(죽은
+  // 버튼 아님, P3) 둘 다 잰다.
+  try {
+    let ackCalledWith = null;
+    let engagementCalls = [];
+    ipcMain.removeHandler('athena:routine-ack');
+    ipcMain.handle('athena:routine-ack', async (_e, { id } = {}) => { ackCalledWith = id; return { ok: true, data: {} }; });
+    ipcMain.removeHandler('athena:routine-engagement');
+    ipcMain.handle('athena:routine-engagement', async (_e, { id, event } = {}) => {
+      engagementCalls.push({ id, event });
+      return { ok: true, data: {} };
+    });
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({
+      ok: true,
+      data: {
+        routines: [{
+          id: 'fx-openchat-1', symbol: '005930', note: 'F-fix1 열기 검증', status: 'active', mode: 'realtime-ws',
+          source_label: '현재가', cooldown_s: 300,
+        }],
+        disclosure_ready: true, last_error: null,
+      },
+    }));
+    // fx-openchat-1의 알림 방을 먼저 만든다(sidebar-notify-7과 같은 주입 경로).
+    shellWin.webContents.send('athena:routine-event', {
+      type: 'routine-fired', routine_id: 'fx-openchat-1', symbol: '005930', source: 'price.change_rate', mode: 'realtime-ws',
+      observed: 88100, threshold: 88000, note: 'F-fix1 열기 검증', fired_at: new Date().toISOString(),
+    });
+    await wait(300);
+
+    const openChatProbe = await shellWin.webContents.executeJavaScript(`(async () => {
+      const nav = document.getElementById('modeNavAgent');
+      const back = document.getElementById('modeNavSummary');
+      const canvas = document.getElementById('agentCanvas');
+      if (!nav || !back || !canvas || !window.AthenaAgentCanvas) return { wired: false };
+      nav.click();
+      await new Promise((r) => setTimeout(r, 600));
+      const allTabBtn = Array.from(canvas.querySelectorAll('.agent-tab')).find((n) => n.textContent === '모두');
+      if (allTabBtn) allTabBtn.click();
+      window.AthenaAgentCanvas.selectRow('fx-openchat-1');
+      await new Promise((r) => setTimeout(r, 100));
+      const caption = (canvas.querySelector('.agent-detail-open-chat-caption') || {}).textContent;
+      const btn = canvas.querySelector('.agent-detail-open-chat-btn');
+      if (!btn) return { wired: false, reason: 'no-btn' };
+      const btnLabel = btn.textContent;
+      btn.click();
+      await new Promise((r) => setTimeout(r, 200));
+      const bannerHidden = (document.getElementById('roomHeadBanner') || {}).hidden;
+      const roomTitle = (document.getElementById('roomHeadTitle') || {}).textContent;
+      back.click();
+      await new Promise((r) => setTimeout(r, 100));
+      return { wired: true, caption, btnLabel, bannerHidden, roomTitle };
+    })()`);
+    report.openInChat = { ...openChatProbe, ackCalledWith, engagementCalls };
+    assertOk('open-in-chat-Ffix1: 배선이 있다', openChatProbe.wired === true);
+    if (openChatProbe.wired) {
+      assertOk('open-in-chat-Ffix1: 각주가 "루틴 발화 — 묻지 않은 턴입니다"다(Paper 39 실측)', openChatProbe.caption === '루틴 발화 — 묻지 않은 턴입니다');
+      assertOk('open-in-chat-Ffix1: 버튼 문구가 "채팅에서 열기 ↗"다', openChatProbe.btnLabel === '채팅에서 열기 ↗');
+      assertOk('open-in-chat-Ffix1: 알림 방이 있으면 배너가 뜬다(selectNotifyRoom 경로 재사용)', openChatProbe.bannerHidden === false);
+      assertOk('open-in-chat-Ffix1: 배너 제목이 그 라우틴 note다', openChatProbe.roomTitle === 'F-fix1 열기 검증');
+      assertOk('open-in-chat-Ffix1: ack가 그 라우틴 id로 불린다(6단계 read-marks 경로 자동 정합)', ackCalledWith === 'fx-openchat-1');
+      assertOk(
+        'open-in-chat-Ffix1: opened 계측이 그 라우틴 id로 불린다(F-stage5b-FE 경로 자동 정합)',
+        JSON.stringify(engagementCalls) === JSON.stringify([{ id: 'fx-openchat-1', event: 'opened' }]),
+      );
+    }
+  } catch (err) {
+    report.openInChat = { error: String((err && err.message) || err) };
+    failures.push('open-in-chat-Ffix1: 검증 블록이 예외로 끝났다');
+  } finally {
+    ipcMain.removeHandler('athena:routine-ack');
+    ipcMain.handle('athena:routine-ack', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+    ipcMain.removeHandler('athena:routine-engagement');
+    ipcMain.handle('athena:routine-engagement', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+  }
+
+  // ---------- "채팅에서 열기 ↗" 폴백 — 알림 방이 없는 라우틴 (F-fix1) ----------
+  //
+  // 이 세션에서 아직 발화한 적 없는(routine-fired를 한 번도 안 보낸) 라우틴은
+  // window.AthenaNotify.selectRoom이 false를 돌려줘 채팅 입력 포커스로
+  // 폴백해야 한다 — 죽은 버튼을 만들지 않는다(P3). 포커스 자체(document.
+  // activeElement)는 이 하네스의 창 OS 포커스 상태에 좌우될 수 있어 대신
+  // seedChatInput(text 없음)의 부작용(입력값을 비운다)으로 폴백 경로가 실제로
+  // 탔는지를 잰다 — chat.js의 registerSeedChatInput 구현 참고.
+  try {
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({
+      ok: true,
+      data: {
+        routines: [{
+          id: 'fx-openchat-2', symbol: '000660', note: 'F-fix1 폴백 검증', status: 'active', mode: 'periodic',
+          source_label: '공시 제목 키워드', cooldown_s: 600,
+        }],
+        disclosure_ready: true, last_error: null,
+      },
+    }));
+
+    const fallbackProbe = await shellWin.webContents.executeJavaScript(`(async () => {
+      const nav = document.getElementById('modeNavAgent');
+      const back = document.getElementById('modeNavSummary');
+      const canvas = document.getElementById('agentCanvas');
+      const input = document.getElementById('input');
+      if (!nav || !back || !canvas || !input || !window.AthenaAgentCanvas) return { wired: false };
+      nav.click();
+      await new Promise((r) => setTimeout(r, 600));
+      const allTabBtn = Array.from(canvas.querySelectorAll('.agent-tab')).find((n) => n.textContent === '모두');
+      if (allTabBtn) allTabBtn.click();
+      window.AthenaAgentCanvas.selectRow('fx-openchat-2');
+      await new Promise((r) => setTimeout(r, 100));
+      const btn = canvas.querySelector('.agent-detail-open-chat-btn');
+      if (!btn) return { wired: false, reason: 'no-btn' };
+      input.value = '이전에 입력해둔 문장';
+      btn.click();
+      await new Promise((r) => setTimeout(r, 100));
+      const inputValueAfter = input.value;
+      back.click();
+      await new Promise((r) => setTimeout(r, 100));
+      return { wired: true, inputValueAfter };
+    })()`);
+    report.openInChatFallback = fallbackProbe;
+    assertOk('open-in-chat-fallback-Ffix1: 배선이 있다', fallbackProbe.wired === true);
+    if (fallbackProbe.wired) {
+      assertOk(
+        'open-in-chat-fallback-Ffix1: 알림 방이 없으면 seedChatInput(빈 값)이 불려 입력이 비워진다(폴백 경로 확인, P3)',
+        fallbackProbe.inputValueAfter === '',
+      );
+    }
+  } catch (err) {
+    report.openInChatFallback = { error: String((err && err.message) || err) };
+    failures.push('open-in-chat-fallback-Ffix1: 검증 블록이 예외로 끝났다');
+  } finally {
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+    await shellWin.webContents.executeJavaScript(`(() => {
+      const input = document.getElementById('input');
+      if (input) input.value = '';
+    })()`);
+  }
+
   // ---------- 프로액티브 + 말걸기 가드 (11단계, Paper 보드 42) ----------
   //
   // athena:brain-profile-summary를 stateful fixture로 바꿔(7단계와 같은 채널)
