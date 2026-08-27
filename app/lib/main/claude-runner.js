@@ -8,7 +8,14 @@ const { killTree } = require('./proc-utils');
 const RENDER_CANVAS_ALLOWED_TOOL = 'mcp__athena__athena__render_canvas';
 // `mcp__<서버명>` 형태는 그 서버의 모든 툴을 허용한다(Claude Code 권한 규칙 —
 // MCP 툴 이름에는 와일드카드가 안 되고 서버 단위 접두만 된다).
-const GATEWAY_ALLOWED_TOOLS = 'mcp__athena';
+// Task(서브에이전트, 2026-08-27 개방) — CLI 2.1.220 실측: tool_use 이름은
+// "Task"가 아니라 "Agent"(v2.1.63 리네임, Task는 별칭)로 찍힌다. 허용목록은
+// 프로세스 전체에 한 벌이라 서브에이전트도 이 목록을 그대로 물려받는다 —
+// mcp__athena 조회(athena_search)는 부모와 동일하게 성공했고, 허용목록에 없는
+// Write는 부모와 동일하게 거부됐다(권한 경계가 부모보다 넓어지지 않는다).
+// 다만 이건 Task와 무관한 별도 실측인데, Bash는 애초에(Task 없이도) 허용목록
+// 밖인데도 막히지 않았다 — 별도 결함 후보로 team-lead에 따로 보고했다.
+const GATEWAY_ALLOWED_TOOLS = 'mcp__athena,Task';
 
 // 카드 랜딩 결함(2026-08-26 실측) — 오케스트레이션 셸이 사용자 설정 env로
 // ENABLE_TOOL_SEARCH=1을 내보내면, 그 셸에서 띄운 이 앱의 `claude -p` 자식
