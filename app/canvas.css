@@ -550,6 +550,25 @@ html, body { background: transparent; }
   font-family: var(--font-body); font-size: var(--text-xs); line-height: 17px; color: var(--color-k-soft);
 }
 
+/* 관계 목록(보드 15 §2.5-③, 스텝14) — 숨은 연관(surprising-connections)만
+ * 얹는다(위 티어 대조 카드가 이미 profile-summary 자체 관계를 보여준다).
+ * controller.js가 하나도 없으면 섹션 자체를 안 그리므로 여기 스타일은 항상
+ * 실제 데이터가 있을 때만 적용된다(§0 정책). */
+.panel-relations { margin: 0 16px 14px; flex-shrink: 0; }
+.panel-relations-title {
+  font-family: var(--font-body); font-size: var(--text-2xs); color: var(--color-k-hint);
+  letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px;
+}
+.panel-relation-row { display: flex; align-items: center; gap: 8px; padding: 4px 0; }
+.panel-relation-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.panel-relation-dot.is-hidden { background: var(--color-brand); }
+.panel-relation-label {
+  flex-shrink: 0; width: 40px;
+  font-family: var(--font-body); font-size: var(--text-xs);
+}
+.panel-relation-label.is-hidden { color: var(--color-brand); }
+.panel-relation-desc { font-family: var(--font-body); font-size: var(--text-sm); color: var(--color-k-bright); }
+
 /* §10-4(최근 변화)는 데이터가 없어 렌더하지 않는다 — 그 자리를 CTA가 대신
  * 채우도록 margin-top:auto로 패널 하단에 붙인다(Paper는 최근 변화 섹션의
  * flexGrow:1로 CTA를 밀어내렸다, 여기선 그 섹션 자체가 없어 CTA가 직접 민다). */

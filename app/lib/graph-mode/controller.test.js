@@ -64,6 +64,8 @@ function setup(options) {
     },
     onError: opts.onError,
     onPanelCta: opts.onPanelCta,
+    getSurprisingConnections: opts.getSurprisingConnections,
+    getProfileSummaryEntries: opts.getProfileSummaryEntries,
   });
   // 대부분의 테스트는 브레인이 켜져 있다고 가정한다 — 꺼진 채 시작하고 싶은
   // 테스트만 opts.available: false를 넘긴다.
@@ -573,6 +575,9 @@ test('draw()는 폭/높이를 elements.graphBody.clientWidth/clientHeight에서 
       capturedViewport = viewport;
       return layout.layoutClusterMap(p, viewport);
     },
+    // renderStage()가 스텝14부터 1단계 렌더 때마다 clusterEdges를 다시 계산한다
+    // (숨은 연관 실배선) — 이 스파이는 viewport만 살피면 되므로 진짜 구현에 위임한다.
+    aggregateClusterEdges: layout.aggregateClusterEdges,
   };
   const controller = createGraphModeController({
     store,
@@ -586,4 +591,152 @@ test('draw()는 폭/높이를 elements.graphBody.clientWidth/clientHeight에서 
   await controller.toggle();
   assert.equal(capturedViewport.width, 321, 'graphBody.clientWidth를 읽는다');
   assert.equal(capturedViewport.height, 654, 'graphBody.clientHeight를 읽는다');
+});
+
+// ── 스텝14: 2단계 컨텍스트 패널(관계 목록) + 스텝11·12 실배선 ─────────────────
+
+function expandBubble(elements, cluster) {
+  const bubble = elements.graphBody.querySelectorAll('.graph-node')
+    .find((n) => n.getAttribute('data-cluster') === String(cluster));
+  bubble.dispatchEvent({ type: 'click' });
+}
+
+test('selectNode() — profile-summary에 같은 entity_id가 있으면 근거·신뢰도·보강수까지 얹고 source:"node"를 단다', async () => {
+  const entries = [{ entity_id: 'e:a', entity_name: '반도체', entity_kind: 'theme', relation_kind: '관심', rationale: '질문 4회', reinforcement: 4, confidence: 'INFERRED', tier: 'conversational' }];
+  const { controller, elements } = setup({ payload: payloadTwoClusters, withPanel: true, getProfileSummaryEntries: () => entries });
+  await controller.toggle();
+  expandBubble(elements, 0);
+  const nodeEl = elements.graphBody.querySelectorAll('.graph-node').find((n) => n.getAttribute('data-entity-id') === 'e:a');
+  nodeEl.dispatchEvent({ type: 'click' });
+  assert.equal(controller.state.panel.source, 'node');
+  assert.equal(controller.state.panel.relation, '관심');
+  assert.equal(controller.state.panel.rationale, '질문 4회');
+  assert.equal(controller.state.panel.reinforcement, 4);
+  assert.equal(controller.state.panel.confidence, 'INFERRED');
+});
+
+test('selectNode() — profile-summary에 매칭이 없으면 그래프 노드 필드만으로 최소 패널이 뜬다(지어내지 않는다)', async () => {
+  const { controller, elements } = setup({ payload: payloadTwoClusters, withPanel: true, getProfileSummaryEntries: () => [] });
+  await controller.toggle();
+  expandBubble(elements, 0);
+  const nodeEl = elements.graphBody.querySelectorAll('.graph-node').find((n) => n.getAttribute('data-entity-id') === 'e:a');
+  nodeEl.dispatchEvent({ type: 'click' });
+  assert.equal(controller.state.panel.source, 'node');
+  assert.equal(controller.state.panel.rationale, undefined);
+  assert.equal(controller.state.panel.confidence, undefined);
+});
+
+test('관계 목록 — 선택 엔티티가 걸린 surprising-connections가 있으면 "숨은" 행으로 렌더된다', async () => {
+  const connections = [
+    { source_entity_id: 'e:a', source_name: '반도체', target_entity_id: 'e:x', target_name: '배당 방어', kinds: ['교차언급'] },
+  ];
+  const { controller, elements } = setup({ payload: payloadTwoClusters, withPanel: true, getSurprisingConnections: () => connections });
+  await controller.toggle();
+  expandBubble(elements, 0);
+  const nodeEl = elements.graphBody.querySelectorAll('.graph-node').find((n) => n.getAttribute('data-entity-id') === 'e:a');
+  nodeEl.dispatchEvent({ type: 'click' });
+  const relations = elements.panel.querySelectorAll('.panel-relation-row');
+  assert.equal(relations.length, 1);
+  assert.match(elements.panel.textContent, /배당 방어/);
+  assert.match(elements.panel.textContent, /숨은/);
+});
+
+test('관계 목록 — 선택 엔티티가 어느 surprising-connections에도 안 걸리면 섹션 자체가 안 뜬다(§0 정책)', async () => {
+  const connections = [{ source_entity_id: 'e:zzz', target_entity_id: 'e:yyy', kinds: [] }];
+  const { controller, elements } = setup({ payload: payloadTwoClusters, withPanel: true, getSurprisingConnections: () => connections });
+  await controller.toggle();
+  expandBubble(elements, 0);
+  const nodeEl = elements.graphBody.querySelectorAll('.graph-node').find((n) => n.getAttribute('data-entity-id') === 'e:a');
+  nodeEl.dispatchEvent({ type: 'click' });
+  assert.equal(elements.panel.querySelector('.panel-relations'), null);
+});
+
+test('관계 목록 — getSurprisingConnections를 안 주면(현재 실제 상태) 조용히 섹션이 없다', async () => {
+  const { controller, elements } = setup({ payload: payloadTwoClusters, withPanel: true });
+  await controller.toggle();
+  expandBubble(elements, 0);
+  const nodeEl = elements.graphBody.querySelectorAll('.graph-node').find((n) => n.getAttribute('data-entity-id') === 'e:a');
+  assert.doesNotThrow(() => nodeEl.dispatchEvent({ type: 'click' }));
+  assert.equal(elements.panel.querySelector('.panel-relations'), null);
+});
+
+test('1단계 — surprising-connections의 source_cluster/target_cluster와 겹치는 군집 쌍은 clusterEdges.isSurprising:true로 다시 계산된다(스텝11 실배선)', async () => {
+  // payload(): e:a는 cluster 0, e:b는 cluster 1, edges=[['e:a','e:b']] — 0↔1을 잇는 군집간 엣지가 하나 있다.
+  const connections = [{ source_entity_id: 'x', target_entity_id: 'y', source_cluster: 0, target_cluster: 1 }];
+  let capturedPlaced = null;
+  const spyRender = Object.assign({}, render, {
+    renderClusterBubbles(container, placed, options) {
+      capturedPlaced = placed;
+      return render.renderClusterBubbles(container, placed, options);
+    },
+  });
+  const controller = createGraphModeController({
+    store, layout, render: spyRender, prefs: null,
+    elements: { pill: fakeNode('button'), summary: fakeNode('div'), graph: fakeNode('div'), graphBody: fakeNode('div'), summaryTable: fakeNode('div') },
+    fetchClusterMap: async () => payload(7),
+    getSurprisingConnections: () => connections,
+  });
+  controller.setAvailable(true);
+  await controller.toggle();
+  const edge01 = capturedPlaced.clusterEdges.find((e) => (e.from === 0 && e.to === 1) || (e.from === 1 && e.to === 0));
+  assert.ok(edge01, '군집 0↔1 엣지가 있어야 한다');
+  assert.equal(edge01.isSurprising, true);
+});
+
+test('2단계 — surprising-connections의 entity 쌍이 겹치면 render.renderClusterMap에 surprisingEntityPairs로 전달된다(스텝13 실배선)', async () => {
+  const connections = [{ source_entity_id: 'e:a', target_entity_id: 'e:b' }];
+  let capturedOptions = null;
+  const spyRender = Object.assign({}, render, {
+    renderClusterMap(container, layoutArg, options) {
+      capturedOptions = options;
+      return render.renderClusterMap(container, layoutArg, options);
+    },
+  });
+  const elements = {
+    pill: fakeNode('button'), summary: fakeNode('div'), graph: fakeNode('div'),
+    graphBody: fakeNode('div'), summaryTable: fakeNode('div'),
+  };
+  const controller = createGraphModeController({
+    store, layout, render: spyRender, prefs: null, elements,
+    fetchClusterMap: async () => payloadTwoClusters(7),
+    getSurprisingConnections: () => connections,
+  });
+  controller.setAvailable(true);
+  await controller.toggle();
+  expandBubble(elements, 0); // payloadTwoClusters: e:a/e:b가 cluster 0.
+  assert.ok(capturedOptions.surprisingEntityPairs instanceof Set);
+  assert.ok(capturedOptions.surprisingEntityPairs.has(render.entityPairKey('e:a', 'e:b')));
+});
+
+test('2단계 — unnamedClusterWarnEligible/unnamedClusters/clusterName이 placed.clusters(전체 군집 기준, §15 비차단 2번)로 계산돼 전달된다(스텝12 실배선)', async () => {
+  let capturedOptions = null;
+  const spyRender = Object.assign({}, render, {
+    renderClusterMap(container, layoutArg, options) {
+      capturedOptions = options;
+      return render.renderClusterMap(container, layoutArg, options);
+    },
+  });
+  // layoutClusterMap()은 실제로 cluster.name을 안 준다(이름 파이프라인 없음) —
+  // 부분 무명 상태를 재현하려고 layoutClusterMap 결과에 name을 얹는 스파이를 쓴다.
+  const spyLayout = Object.assign({}, layout, {
+    layoutClusterMap(p, viewport) {
+      const placed = layout.layoutClusterMap(p, viewport);
+      placed.clusters = placed.clusters.map((c) => (c.cluster === 0 ? { ...c, name: '반도체 대형주' } : c));
+      return placed;
+    },
+  });
+  const elements = {
+    pill: fakeNode('button'), summary: fakeNode('div'), graph: fakeNode('div'),
+    graphBody: fakeNode('div'), summaryTable: fakeNode('div'),
+  };
+  const controller = createGraphModeController({
+    store, layout: spyLayout, render: spyRender, prefs: null, elements,
+    fetchClusterMap: async () => payloadTwoClusters(7),
+  });
+  controller.setAvailable(true);
+  await controller.toggle();
+  expandBubble(elements, 0); // cluster 0은 이름이 있다(스파이가 얹음), cluster 1은 없다 — 부분 무명.
+  assert.equal(capturedOptions.clusterName, '반도체 대형주');
+  assert.equal(capturedOptions.unnamedClusterWarnEligible, true, '0 < 이름 붙은 군집 수(1) < 전체(2)');
+  assert.deepEqual(capturedOptions.unnamedClusters, [1]);
 });

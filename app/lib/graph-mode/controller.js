@@ -47,6 +47,13 @@ function createGraphModeController(deps) {
     fetchClusterMap, // async () => payload
     onError,        // (err) => void (선택)
     onPanelCta,     // () => void (선택) — 공통 패널 CTA "채팅에서 답하기" 클릭 시(스텝8)
+    // 스텝14 — 스텝11(숨은 연관 군집 쌍)·13(숨은 연관 엔티티 쌍)이 캡able로만
+    // 만들어 뒀던 옵션을 실제로 채우는 두 소스. 둘 다 선택(없으면 그 기능이
+    // 조용히 꺼진다 — §0 정직한 빈 데이터와 같은 논리) — canvas.js가 이미
+    // loadHiddenLinks()/profile-summary 표 로드로 fetch해 둔 결과를 그대로
+    // 캐시로 얹는다(이중 fetch 금지, 리드 지침).
+    getSurprisingConnections, // () => connections[] (선택) — surprising-connections 원본.
+    getProfileSummaryEntries, // () => entries[] (선택) — profile-summary 원본.
   } = deps;
 
   let state = store.createInitialState();
@@ -112,11 +119,49 @@ function createGraphModeController(deps) {
     const node = lastPlaced && Array.isArray(lastPlaced.nodes)
       ? lastPlaced.nodes.find((n) => n.entity_id === entityId)
       : null;
-    const panelData = node
-      ? { entityId: node.entity_id, name: node.name, kind: node.kind, cluster: node.cluster, degree: node.degree }
-      : { entityId };
+    // profile-summary에 같은 entity_id가 있으면(그래프 노드와 성향 신호 표는
+    // 서로 다른 엔드포인트라 항상 겹치진 않는다) 그 항목의 근거·신뢰도·보강
+    // 수까지 얹는다 — table 선택 경로(summary-table.js의 panelDataFor())와
+    // 같은 수준의 패널을 그래프 선택에서도 보여줄 수 있으면 보여준다(스텝14,
+    // §0 정책 — 있는 걸 재사용할 뿐 지어내지 않는다).
+    const profileEntry = typeof getProfileSummaryEntries === 'function'
+      ? (getProfileSummaryEntries() || []).find((e) => e && e.entity_id === entityId)
+      : null;
+    const panelData = {
+      entityId,
+      source: 'node', // §15 선택 출처 태그 — summary-table.js의 'table'과 짝.
+      name: (node && node.name) || (profileEntry && profileEntry.entity_name) || undefined,
+      kind: (node && node.kind) || (profileEntry && profileEntry.entity_kind) || undefined,
+      cluster: node ? node.cluster : undefined,
+      degree: node ? node.degree : undefined,
+      relation: profileEntry ? profileEntry.relation_kind : undefined,
+      rationale: profileEntry ? profileEntry.rationale : undefined,
+      reinforcement: profileEntry ? profileEntry.reinforcement : undefined,
+      confidence: profileEntry ? profileEntry.confidence : undefined,
+      tier: profileEntry ? profileEntry.tier : undefined,
+    };
     state = store.selectEntity(state, entityId, panelData);
     renderSelection();
+  }
+
+  // 관계 목록(보드 15 §2.5-③, 스텝14) — 선택 엔티티가 걸린 surprising-connections를
+  // "숨은" 관계 행으로 보여준다. profile-summary 자체 관계(관심 등)는 이미
+  // 위 티어 대조 카드가 보여주므로 여기선 숨은 연관만 더한다(같은 정보를 두
+  // 곳에 중복 표기하지 않는다) — 데이터가 없으면(§0 정책) 빈 배열, 섹션 자체를
+  // 안 그린다.
+  function buildHiddenRelationships(entityId) {
+    if (typeof getSurprisingConnections !== 'function' || !entityId) return [];
+    const connections = getSurprisingConnections();
+    if (!Array.isArray(connections)) return [];
+    return connections
+      .filter((c) => c && (c.source_entity_id === entityId || c.target_entity_id === entityId))
+      .map((c) => {
+        const isSource = c.source_entity_id === entityId;
+        return {
+          otherName: (isSource ? c.target_name : c.source_name) || (isSource ? c.target_entity_id : c.source_entity_id),
+          kinds: Array.isArray(c.kinds) ? c.kinds : [],
+        };
+      });
   }
 
   // 렌더된 노드마다 클릭을 건다. 다시 그릴 때마다 SVG가 통째로 교체되므로
@@ -137,17 +182,47 @@ function createGraphModeController(deps) {
   // (스텝10) — draw()/redrawFromCache() 둘 다 이 분기를 타므로 한 곳에 모아
   // 둘이 어긋나지 않게 한다.
   function renderStage(placed) {
+    const surprisingConnections = typeof getSurprisingConnections === 'function'
+      ? (getSurprisingConnections() || [])
+      : [];
     if (state.stage === store.STAGE_CLUSTERS) {
+      // 숨은 연관 군집 쌍(스텝11이 캡able로 만들어 둔 것을 스텝14가 배선) —
+      // layoutClusterMap()이 자동 계산해 둔 clusterEdges(항상 isSurprising:false)를
+      // 실데이터로 다시 계산해 덮어쓴다. surprising-connections는 이미
+      // source_cluster/target_cluster를 주므로(SurprisingConnectionOut) 변환
+      // 없이 그대로 aggregateClusterEdges에 넘긴다.
+      placed.clusterEdges = layout.aggregateClusterEdges(placed, surprisingConnections);
       render.renderClusterBubbles(elements.graphBody, placed, {});
       return;
     }
     const nodes = store.visibleNodes(state, placed);
     const edges = store.visibleEdges(state, placed);
     const settings = prefs ? prefs.readPrefs() : null;
+    // 이름 있음 임계 규칙(§0 r5, §15 비차단 2번 — "전체 군집 수"는 그래프
+    // 전체 기준)과 지금 펼친 군집의 이름(스텝12가 캡able로 만들어 둔 것을
+    // 스텝14가 배선) — 이름 파이프라인이 아직 없어(§0 발견1) namedCount는
+    // 실제로 항상 0이지만, 로직은 실데이터가 와도 맞게 짠다. theme-clusters.js의
+    // shouldWarnUnnamed()와 같은 규칙이지만 이 판정 하나 때문에 새
+    // window.AthenaLib 의존을 걸지 않고 인라인으로 둔다(이 파일은 이미 store
+    // 주입 패턴이라 전역 참조를 안 만드는 게 원래 계약).
+    const clusters = Array.isArray(placed.clusters) ? placed.clusters : [];
+    const namedCount = clusters.filter((c) => c.name).length;
+    const unnamedClusterWarnEligible = namedCount > 0 && namedCount < clusters.length;
+    const unnamedClusters = clusters.filter((c) => !c.name).map((c) => c.cluster);
+    const expandedCluster = clusters.find((c) => c.cluster === state.expandedCluster);
+    const surprisingEntityPairs = new Set(
+      surprisingConnections
+        .filter((c) => c && c.source_entity_id != null && c.target_entity_id != null)
+        .map((c) => render.entityPairKey(c.source_entity_id, c.target_entity_id))
+    );
     render.renderClusterMap(elements.graphBody, { nodes, edges }, {
       showLabels: prefs ? prefs.shouldShowLabels(settings, nodes.length) : true,
       highlightCrossings: settings ? settings.highlightCrossings : true,
       selectedEntityId: state.selectedEntityId,
+      clusterName: expandedCluster ? expandedCluster.name : undefined,
+      unnamedClusterWarnEligible,
+      unnamedClusters,
+      surprisingEntityPairs,
     });
   }
 
@@ -275,6 +350,30 @@ function createGraphModeController(deps) {
         tierCard.appendChild(tierBody);
       }
       panel.appendChild(tierCard);
+    }
+
+    // 관계 목록(보드 15 §2.5-③, 스텝14) — 숨은 연관(surprising-connections)만
+    // 얹는다(위 티어 대조 카드가 이미 profile-summary 자체 관계를 보여준다).
+    // 하나도 없으면(§0 정책) 섹션 자체를 안 그린다 — 빈 "이 노드의 관계" 제목만
+    // 뜨는 건 없는 것보다 못하다.
+    const hiddenRelations = buildHiddenRelationships(data.entityId);
+    if (hiddenRelations.length > 0) {
+      const relations = elp('div', 'panel-relations');
+      const title = elp('div', 'panel-relations-title');
+      title.textContent = '이 노드의 관계';
+      relations.appendChild(title);
+      for (const rel of hiddenRelations) {
+        const row = elp('div', 'panel-relation-row');
+        row.appendChild(elp('span', 'panel-relation-dot is-hidden'));
+        const label = elp('span', 'panel-relation-label is-hidden');
+        label.textContent = '숨은';
+        row.appendChild(label);
+        const desc = elp('span', 'panel-relation-desc');
+        desc.textContent = rel.kinds.length > 0 ? `${rel.otherName} (${rel.kinds.join(' · ')})` : rel.otherName;
+        row.appendChild(desc);
+        relations.appendChild(row);
+      }
+      panel.appendChild(relations);
     }
 
     const cta = elp('button', 'panel-cta');

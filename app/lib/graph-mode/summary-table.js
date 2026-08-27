@@ -301,6 +301,11 @@ function createSummaryTableController(deps) {
     // 실재함을 확인했다).
     return {
       entityId: entry.entity_id,
+      // 선택 출처 태그(보드 15 §2.5, 스텝14) — controller.js의 selectNode()가
+      // 매기는 'node'와 짝을 이룬다. renderPanelContent()가 이 값으로 분기하지는
+      // 않지만(관계 목록은 출처와 무관하게 entityId로만 조회), 어디서 왔는지
+      // 정직하게 남겨 둔다.
+      source: 'table',
       name: entry.entity_name,
       kind: entry.entity_kind,
       relation: entry.relation_kind,
@@ -349,7 +354,10 @@ function createSummaryTableController(deps) {
     return entries;
   }
 
-  return { load };
+  // getEntries(스텝14) — controller.js가 그래프 노드 선택 시 같은 entity_id의
+  // profile-summary 항목을 재사용하려고 추가했다(이중 fetch 금지 — 표가 이미
+  // 받아 둔 entries를 그대로 노출만 한다). load() 전에는 빈 배열.
+  return { load, getEntries: () => entries };
 }
 
 const __exports = {

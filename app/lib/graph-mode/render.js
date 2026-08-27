@@ -502,7 +502,12 @@ function describeRendered(container) {
 
 // SVG_NS는 내보내지 않는다 — 이 파일 안에서만 쓰이고, 쓰는 쪽이 생기면 그때
 // 내보내면 된다. 아무도 안 쓰는 export는 "누군가 쓰고 있다"는 신호를 헛되이 준다.
-const __exports = { renderClusterMap, renderClusterBubbles, describeRendered, clusterHue };
+// entityPairKey를 내보낸다(스텝14) — controller.js가 surprising-connections를
+// draw()에 주입할 때 render.js와 정확히 같은 키 형식으로 Set을 만들어야 하는데
+// (엔티티 쌍 정규화 규칙이 여기 하나뿐이어야 두 쪽이 어긋나지 않는다), 3번째로
+// 다시 베끼는 대신 이번엔 재사용한다(1~11단계에서 duplicaton을 감내했던 것과
+// 달리, 이제 소비자가 하나 더 늘어 재사용 쪽이 원칙1에 더 맞는다).
+const __exports = { renderClusterMap, renderClusterBubbles, describeRendered, clusterHue, entityPairKey };
 
 // UMD 각주(2026-08-18 렌더러 격리) — column-fold.js와 같은 패턴.
 if (typeof module !== 'undefined' && module.exports) {
