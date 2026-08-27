@@ -82,6 +82,48 @@ async function main() {
   const s4 = await faceState(orbWin);
   record('04-근접 해제 → data-face≠watch', s4.face !== 'watch', s4);
 
+  // ---------- (5) 조합 결함 재현 — watch 유지 중 goal-fired(GLAD) → 펼쳐 읽음
+  // → watch 복귀(CP3 불변식: 근접 이탈 신호가 와야 풀린다). renderPresence가
+  // 읽음 처리에서 직접 setFace(FACE.IDLE)로 꽂으면 이 불변식이 깨진다 —
+  // settleAmbientFace를 거쳐 watching을 다시 읽어야 한다. ----------
+  sendWatch(orbWin, true);
+  await wait(200);
+  const s5pre = await faceState(orbWin);
+  record('05pre-사전 준비: 근접 재진입 → data-face=watch', s5pre.face === 'watch', s5pre);
+
+  orbWin.webContents.send('athena:routine-event', {
+    type: 'routine-fired', symbol: 'GOALWATCH', observed: 200000, threshold: 200000, mode: 'poll', note: 'probe-goal-watch', goal: true,
+  });
+  await wait(200);
+  const s5glad = await faceState(orbWin);
+  record('05glad-근접 중 목표달성 발화 → data-face=glad(watch를 잠시 덮는다)', s5glad.face === 'glad', s5glad);
+
+  await orbWin.webContents.executeJavaScript("document.getElementById('orbToggle').click()");
+  await wait(300);
+  const s5 = await faceState(orbWin);
+  record('05-펼쳐 읽음 → glad가 풀리고 watch로 복귀(직접 idle 아님)', s5.face === 'watch', s5);
+
+  // 다음 그룹을 위해 패널을 접고 근접도 해제한다.
+  await orbWin.webContents.executeJavaScript("document.getElementById('orbToggle').click()");
+  await wait(300);
+  sendWatch(orbWin, false);
+  await wait(200);
+
+  // ---------- (6) 회귀 확인 — watch 없는 상태에서 goal-fired → 펼쳐 읽음 →
+  // 기존대로 idle 복귀(앰비언트 신호가 하나도 없으면 settleAmbientFace도
+  // idle로 떨어진다 — 구조가 맞다는 확인). ----------
+  orbWin.webContents.send('athena:routine-event', {
+    type: 'routine-fired', symbol: 'GOALPLAIN', observed: 200000, threshold: 200000, mode: 'poll', note: 'probe-goal-plain', goal: true,
+  });
+  await wait(200);
+  const s6glad = await faceState(orbWin);
+  record('06glad-근접 없이 목표달성 발화 → data-face=glad', s6glad.face === 'glad', s6glad);
+
+  await orbWin.webContents.executeJavaScript("document.getElementById('orbToggle').click()");
+  await wait(300);
+  const s6 = await faceState(orbWin);
+  record('06-펼쳐 읽음(근접 없음) → data-face=idle(회귀 없음)', s6.face === 'idle', s6);
+
   fs.mkdirSync(path.join(__dirname, 'captures'), { recursive: true });
   fs.writeFileSync(path.join(__dirname, 'captures', 'probe-orb-watch-report.json'), JSON.stringify(report, null, 2));
   const okCount = report.steps.filter((s) => s.ok).length;
