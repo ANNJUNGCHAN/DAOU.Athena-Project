@@ -81,7 +81,7 @@ function buildTurnModel(event, nowMs) {
     return {
       kind: 'restore-failed',
       modeText: null,
-      sourceLabel: '감시 복원 실패 — 강제 알림',
+      sourceLabel: '복원 실패 — 이전 세션의 능동 턴', // 보드 09(6XE-0) 어휘
       body: event.note || '저장된 루틴을 복원하지 못했다 — 감시가 비어 있다.',
     };
   }

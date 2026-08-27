@@ -773,7 +773,7 @@ html, body { background: transparent; }
 .chat-mode-head {
   flex-shrink: 0;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 14px 18px 10px;
+  padding: 14px 16px 10px; /* 보드 38 px-5 = Paper spacing-5 = 16 */
 }
 .chat-mode-head-title {
   font-family: var(--font-strong);
@@ -783,7 +783,7 @@ html, body { background: transparent; }
 .chat-mode-head-sub {
   font-family: var(--font-body);
   font-size: var(--text-xs);
-  color: var(--color-k-dim);
+  color: var(--color-k-hint); /* 보드 38 #10131A73 = 잉크 45% — 정확 토큰 */
 }
 /* 첨부 칩(2026-08-27, 코덱스 UI 이식) — 입력줄 위에 파일/폴더가 칩으로 쌓인다. */
 .attach-chips {
@@ -1517,17 +1517,19 @@ html, body { background: transparent; }
 .routine-approval .agent-badge { color: var(--color-k-dim); border-color: var(--color-k-ghost); }
 .routine-mode-line { margin: 4px 0; }
 .routine-approval-actions { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
+/* 보드 09(1ZM-0): 승인=잉크 90% 채움+panel 텍스트, 거절=잉크 30% 외곽선.
+ * 다크 시절 하드코딩(회백 채움·밝은 외곽선)이 라이트 전환에서 누락됐던 블록(B8 감사). */
 .routine-btn {
   font-family: var(--font-kr, inherit);
   font-size: var(--text-sm, 13px);
-  color: var(--color-k-text, #e6e8ee);
+  color: var(--color-k-text);
   background: transparent;
-  border: 1px solid rgba(230, 232, 238, 0.35);
+  border: 1px solid rgb(16 19 26 / 30%);
   border-radius: 8px;
   padding: 6px 20px;
   cursor: pointer;
 }
-.routine-btn-approve { background: rgba(230, 232, 238, 0.9); color: #10131a; border-color: transparent; }
+.routine-btn-approve { background: rgb(16 19 26 / 90%); color: var(--color-k-panel); border-color: transparent; }
 .routine-btn:disabled { opacity: 0.4; cursor: default; }
 
 /* 주문 티켓 (P4) */
