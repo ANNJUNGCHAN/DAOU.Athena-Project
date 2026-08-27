@@ -8,6 +8,27 @@ function freshHistorySink() {
   return require('./history-sink');
 }
 
+// prefs.js는 electron의 app.getPath('userData')를 거쳐 실제 디스크에 쓴다 — 이
+// 테스트 파일은 순수 node --test(Electron 없음)로 돌아 그 경로를 못 태운다.
+// require.cache에 가짜 exports를 심어 history-sink.js가 require('./prefs')로
+// 보는 값을 통제한다(freshHistorySink()로 다시 불러오기 전에 심어야 한다).
+function withMockPrefs(collectChat, fn) {
+  const prefsPath = require.resolve('./prefs');
+  const prevEntry = require.cache[prefsPath];
+  require.cache[prefsPath] = {
+    id: prefsPath,
+    filename: prefsPath,
+    loaded: true,
+    exports: { get: () => ({ collectChat }), set: () => {} },
+  };
+  try {
+    return fn();
+  } finally {
+    if (prevEntry) require.cache[prefsPath] = prevEntry;
+    else delete require.cache[prefsPath];
+  }
+}
+
 // fn이 async면 finally가 fn() 완료를 기다려야 한다 — 안 그러면(동기 try/finally)
 // env 복원이 fn 내부의 await보다 먼저 실행돼(자바스크립트 try/finally는 반환값
 // 프라미스가 settle되길 기다리지 않는다) 다음 테스트로 상태가 새는 레이스가 난다.
@@ -208,5 +229,49 @@ test('saveChatMessage: 성공하면 messageId를 즉시 반환하고 onSaveFaile
     } finally {
       global.fetch = prevFetch;
     }
+  });
+});
+
+test('saveChatMessage: collectChat=false면 토큰·브레인 준비가 멀쩡해도 저장 시도 자체를 안 한다(원문 미적재)', async () => {
+  await withEnv({ ATHENA_LOCAL_BEARER_TOKEN: 'tok' }, async () => {
+    await withMockPrefs(false, async () => {
+      const historySink = freshHistorySink();
+      const prevFetch = global.fetch;
+      let chatCallCount = 0;
+      global.fetch = async (url) => {
+        if (url.endsWith('/api/v1/brain/status')) return { ok: true, json: async () => ({ ready: true }) };
+        chatCallCount += 1;
+        return { ok: true, status: 200 };
+      };
+      try {
+        await historySink.refreshBrainReady({});
+        assert.equal(historySink.canAttemptSave(), false); // collectChat 게이트가 이유
+        let failed = null;
+        historySink.saveChatMessage(
+          { conversationId: 'c1', text: '민감한 채팅 본문', role: 'user' },
+          { onSaveFailed: (p) => { failed = p; } },
+        );
+        assert.equal(chatCallCount, 0);
+        assert.equal(failed, null);
+      } finally {
+        global.fetch = prevFetch;
+      }
+    });
+  });
+});
+
+test('canAttemptSave: collectChat=true면 기존 토큰·브레인 준비 조건만 그대로 적용된다', async () => {
+  await withEnv({ ATHENA_LOCAL_BEARER_TOKEN: 'tok' }, async () => {
+    await withMockPrefs(true, async () => {
+      const historySink = freshHistorySink();
+      const prevFetch = global.fetch;
+      global.fetch = async () => ({ ok: true, json: async () => ({ ready: true }) });
+      try {
+        await historySink.refreshBrainReady({});
+        assert.equal(historySink.canAttemptSave(), true);
+      } finally {
+        global.fetch = prevFetch;
+      }
+    });
   });
 });
