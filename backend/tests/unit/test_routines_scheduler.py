@@ -405,6 +405,99 @@ async def test_expire_pass_clears_ghost_near(tmp_path):
     assert [e["active"] for e in events[:2]] == [True, False]
 
 
+# ---------- near 스냅샷 — 재연결/재시작 복원(결함6) ----------
+
+
+@pytest.mark.asyncio
+async def test_near_snapshot_reflects_current_near_set(tmp_path):
+    """근접 중이면 스냅샷에 담기고, 이탈하면 다시 빈 목록이 된다."""
+    store = RoutineStore(tmp_path / "r.json")
+    spec = _spec()
+    store.upsert(spec)
+    store.transition(spec.id, "active")
+    engine = TriggerEngine(ledger=RoutineLedger(tmp_path / "l.jsonl"))
+    events: list[dict] = []
+    sched = _near_scheduler(store, engine, events)
+
+    assert sched.near_snapshot() == []  # 근접 전 — 빈 스냅샷
+
+    await sched._handle_verdict(spec, "near", 4.6)
+    assert sched.near_snapshot() == [
+        {
+            "type": "routine-near",
+            "routine_id": spec.id,
+            "symbol": spec.symbol,
+            "active": True,
+            "observed": None,
+            "threshold": 5.0,
+        }
+    ]
+
+    await sched._handle_verdict(spec, None, 1.0)  # 이탈
+    assert sched.near_snapshot() == []
+
+
+@pytest.mark.asyncio
+async def test_near_snapshot_empty_on_new_scheduler_instance_after_restart(tmp_path):
+    """재시작은 새 프로세스=새 스케줄러 인스턴스다. _near_active는 프로세스
+    로컬이라 옮겨오지 않으므로 새 인스턴스의 스냅샷은 정직하게 비어 있어야
+    한다 — 앱이 이를 근거로 watching 리셋을 확정한다(결함6)."""
+    store = RoutineStore(tmp_path / "r.json")
+    spec = _spec()
+    store.upsert(spec)
+    store.transition(spec.id, "active")
+    engine = TriggerEngine(ledger=RoutineLedger(tmp_path / "l.jsonl"))
+
+    old_events: list[dict] = []
+    old_sched = _near_scheduler(store, engine, old_events)
+    await old_sched._handle_verdict(spec, "near", 4.6)
+    assert old_sched.near_snapshot() != []  # 재시작 전 — near 유지 중
+
+    new_events: list[dict] = []
+    new_sched = _near_scheduler(store, engine, new_events)  # 재시작 시뮬레이션
+    assert new_sched.near_snapshot() == []
+
+
+# ---------- 경계 진동 — 데드밴드가 진입/이탈 반복 발신을 막는다(결함7) ----------
+
+
+@pytest.mark.asyncio
+async def test_realtime_loop_deadband_suppresses_repeated_near_toggle(tmp_path):
+    """근접 경계 부근을 오가는 틱이 연달아 와도 진입 1회 이후 반복 이탈/재진입
+    이벤트가 나가지 않는다."""
+    store = RoutineStore(tmp_path / "r.json")
+    spec = _spec()  # threshold=5.0, op>=
+    store.upsert(spec)
+    store.transition(spec.id, "active")
+    engine = TriggerEngine(ledger=RoutineLedger(tmp_path / "l.jsonl"))
+    events: list[dict] = []
+
+    async def notify(ev):
+        events.append(ev)
+
+    queue: asyncio.Queue = asyncio.Queue()
+    sched = RoutineScheduler(
+        store=store,
+        engine=engine,
+        notify=notify,
+        subscribe_ticks=lambda: queue,
+        poll_interval_s=9999,
+    )
+    await sched.start()
+    for rate in ("+4.60", "+4.35", "+4.60", "+4.35"):  # 진입경계(0.10) 안팎 교대
+        await queue.put(
+            {
+                "trnm": "REAL",
+                "data": [{"type": "0B", "item": "005930", "values": {"12": rate}}],
+            }
+        )
+    await asyncio.sleep(0.05)
+    await sched.stop()
+
+    near_events = [e for e in events if e["type"] == "routine-near"]
+    assert [e["active"] for e in near_events] == [True]  # 진입 1회, 이탈 없음
+
+
 # ---------- 큐 포화 시 알림 손실 정책 ----------
 
 

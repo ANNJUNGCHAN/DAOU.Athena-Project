@@ -19,6 +19,10 @@ from athena_api.routines.models import RoutineSpec
 # 근접 판정: 임계 대비 상대 거리가 (1 - NEAR_RATIO) 이내면 '근접'으로 기록.
 # Paper board-32 '임계 90% 근접' 캡션이 규범(CP3 승인 2026-08-27).
 NEAR_RATIO = 0.9
+# 이탈 경계 — 진입(NEAR_RATIO)보다 낮춰 데드밴드를 만든다(Schmitt trigger).
+# 단일 경계면 경계 부근 교대 입력마다 진입/이탈이 반복 발신된다(결함7, 반증
+# 재현: 99.9/100.1 교대 입력). was_near일 때만 이 완화된 경계를 쓴다.
+NEAR_EXIT_RATIO = 0.85
 
 
 def _condition_met(op: str, observed: float | bool | str, threshold: float | bool | str) -> bool:
@@ -37,14 +41,24 @@ def _condition_met(op: str, observed: float | bool | str, threshold: float | boo
     raise ValueError(f"unknown op: {op!r}")  # rules가 막았어야 한다 — 호출부 버그
 
 
-def _is_near(observed: float | bool | str, threshold: float | bool | str) -> bool:
-    """숫자 조건만 근접이 정의된다. 불리언·키워드는 이진이라 근접이 없다."""
+def _is_near(
+    observed: float | bool | str,
+    threshold: float | bool | str,
+    *,
+    was_near: bool = False,
+) -> bool:
+    """숫자 조건만 근접이 정의된다. 불리언·키워드는 이진이라 근접이 없다.
+
+    was_near=True(이미 근접 중)면 이탈 경계(NEAR_EXIT_RATIO)를, 아니면 진입
+    경계(NEAR_RATIO)를 쓴다 — 데드밴드로 경계 진동을 흡수한다(결함7).
+    """
     if isinstance(observed, bool) or isinstance(threshold, bool):
         return False
     if not isinstance(observed, (int, float)) or not isinstance(threshold, (int, float)):
         return False
+    ratio = NEAR_EXIT_RATIO if was_near else NEAR_RATIO
     denom = max(abs(float(threshold)), 1e-9)
-    return abs(float(observed) - float(threshold)) / denom <= (1.0 - NEAR_RATIO)
+    return abs(float(observed) - float(threshold)) / denom <= (1.0 - ratio)
 
 
 @dataclass
@@ -53,6 +67,7 @@ class TriggerState:
 
     consecutive: int = 0
     last_fired_at: float | None = None  # monotonic 초
+    near_active: bool = False  # 데드밴드 판정을 위한 이전 근접 여부(결함7)
 
 
 @dataclass
@@ -76,7 +91,8 @@ class TriggerEngine:
 
         if not met:
             state.consecutive = 0
-            if _is_near(observed, cond.value):
+            if _is_near(observed, cond.value, was_near=state.near_active):
+                state.near_active = True
                 self.ledger.record(
                     "near",
                     routine_id=spec.id,
@@ -87,8 +103,10 @@ class TriggerEngine:
                     reason="임계 미달 — 관측 임계로 기록",
                 )
                 return "near"
+            state.near_active = False
             return None
 
+        state.near_active = False
         state.consecutive += 1
         if state.consecutive < cond.consecutive_ticks:
             self.ledger.record(
