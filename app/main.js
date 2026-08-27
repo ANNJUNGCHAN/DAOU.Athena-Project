@@ -548,6 +548,11 @@ ipcMain.handle('athena:routine-resume', async (_e, { id }) => {
   try { return await routineHttp('POST', `/api/v1/routines/${encodeURIComponent(id)}/resume`); }
   catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
 });
+// 실행 이력 드릴인(10단계) — 6단계 GET /{id}/runs를 사람 클릭 전용 경로로 노출한다.
+ipcMain.handle('athena:routine-runs', async (_e, { id }) => {
+  try { return await routineHttp('GET', `/api/v1/routines/${encodeURIComponent(id)}/runs`); }
+  catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
+});
 
 // ---------- OS 스냅 이벤트 정착 (2026-08-18 승급 — qa-win-arrow.json 실측 근거) ----------
 // resizable:true 승급으로 Windows가 Win+←/→(스냅)·Win+↑(최대화)·Win+↓(최소화)를
