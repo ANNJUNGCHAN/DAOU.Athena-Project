@@ -192,7 +192,24 @@ def test_ledger_rows_contain_only_whitelisted_fields(tmp_path):
         "observed",
         "threshold",
         "reason",
+        "duration_ms",
     }
+    assert rows[0]["duration_ms"] is None  # 미지정 시 기본값
+
+
+def test_ledger_records_duration_ms_when_given(tmp_path):
+    ledger = RoutineLedger(tmp_path / "ledger.jsonl")
+    ledger.record(
+        "fired",
+        routine_id="r1",
+        symbol="207940",
+        source="disclosure.title_keyword",
+        observed="유상증자결정",
+        threshold="유상증자",
+        reason="조건 도달",
+        duration_ms=812.5,
+    )
+    assert ledger.read_all()[0]["duration_ms"] == 812.5
 
 
 def test_expiry_helper(tmp_path):

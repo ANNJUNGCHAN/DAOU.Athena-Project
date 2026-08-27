@@ -184,6 +184,49 @@ async def test_periodic_once_expires_and_polls_disclosure(tmp_path):
 
 
 @pytest.mark.asyncio
+async def test_run_periodic_once_measures_disclosure_fetch_duration(tmp_path):
+    """F2 — 공시 폴링의 fetch_new_titles 소요시간이 duration_ms로 ledger에 남는다."""
+    store = RoutineStore(tmp_path / "r.json")
+    spec = validate_draft(
+        {
+            "symbol": "207940",
+            "condition": {
+                "source": "disclosure.title_keyword",
+                "op": "contains",
+                "value": "유상증자",
+            },
+            "cooldown_s": 60,
+            "expires_days": 7,
+        }
+    )
+    store.upsert(spec)
+    store.transition(spec.id, "active")
+    engine = TriggerEngine(ledger=RoutineLedger(tmp_path / "l.jsonl"))
+
+    async def notify(ev):
+        pass
+
+    class SlowDisclosure:
+        async def fetch_new_titles(self, symbol, *, bgn_de, end_de):
+            await asyncio.sleep(0.02)
+            return ["주요사항보고서(유상증자결정)"]
+
+    sched = RoutineScheduler(
+        store=store,
+        engine=engine,
+        notify=notify,
+        disclosure=SlowDisclosure(),
+        poll_interval_s=9999,
+    )
+    await sched.run_periodic_once()
+
+    rows = engine.ledger.read_all()
+    assert len(rows) == 1
+    assert rows[0]["duration_ms"] is not None
+    assert rows[0]["duration_ms"] >= 15  # 20ms 슬립보다 관대한 하한(타이밍 노이즈)
+
+
+@pytest.mark.asyncio
 async def test_periodic_once_skipped_when_headroom_low(tmp_path):
     """양보 판정은 루프에서 일어난다 — should_yield는 US-005에서 검증됐고,
     여기서는 낮은 headroom 주입 시 run_periodic_once가 호출되지 않음을 본다."""

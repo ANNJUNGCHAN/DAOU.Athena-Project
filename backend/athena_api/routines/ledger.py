@@ -39,7 +39,10 @@ class RoutineLedger:
         threshold: float | bool | str | None,
         reason: str,
         ts: datetime | None = None,
+        duration_ms: float | None = None,
     ) -> dict[str, Any]:
+        """판정 1건 기록. duration_ms(선택, 실행 소요시간)는 식별자·숫자·판정사유
+        원칙(머리말)을 안 어긴다 — 숫자 하나 추가일 뿐 upstream 본문이 아니다."""
         if verdict not in _ALLOWED_VERDICTS:
             raise LedgerError(f"unknown verdict: {verdict!r}")
         if not reason or not reason.strip():
@@ -53,6 +56,7 @@ class RoutineLedger:
             "observed": observed,
             "threshold": threshold,
             "reason": reason.strip(),
+            "duration_ms": duration_ms,
         }
         with self._path.open("a", encoding="utf-8") as fh:
             fh.write(json.dumps(row, ensure_ascii=False) + "\n")
