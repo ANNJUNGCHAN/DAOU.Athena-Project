@@ -36,7 +36,7 @@
 
   // ---------- 모드 네비(리프 1.2.2, Paper 보드 37/44) ----------
   // #graphPill을 대체한다 — 클릭이 캔버스 3영역을 바꾸는 유일한 사람 진입로다.
-  // window.AthenaGraphMode는 canvas.js가 이 스크립트보다 나중에(shell.html 로드
+  // window.AthenaCanvasMode는 canvas.js가 이 스크립트보다 나중에(shell.html 로드
   // 순서) 세운다 — 그래서 모듈 로드 시점이 아니라 클릭 시점에만 참조한다(기존
   // $newChat의 window.AthenaShell 참조와 같은 패턴, 이 파일 위 머리말 참고).
   const modeNav = (window.AthenaLib && window.AthenaLib.SidebarModeNav)
@@ -48,8 +48,8 @@
         },
         badge: document.getElementById('modeNavAgentBadge'),
         onSelect: (view) => {
-          if (window.AthenaGraphMode && typeof window.AthenaGraphMode.setView === 'function') {
-            window.AthenaGraphMode.setView(view);
+          if (window.AthenaCanvasMode && typeof window.AthenaCanvasMode.setView === 'function') {
+            window.AthenaCanvasMode.setView(view);
           }
           // 에이전트모드 진입 시 라우틴 목록을 새로 받아온다(리프 1.2.2, 3단계) —
           // loadAgentRoutines()가 안에서 renderList()까지 호출한다. 캔버스 쪽
@@ -81,7 +81,7 @@
   let agentRoutinesRequestId = 0; // stale-응답 가드 — 아래 주석 참고.
 
   function currentMode() {
-    return (window.AthenaGraphMode && window.AthenaGraphMode.state && window.AthenaGraphMode.state.view) || 'summary';
+    return (window.AthenaCanvasMode && window.AthenaCanvasMode.state && window.AthenaCanvasMode.state.view) || 'summary';
   }
 
   // GET /api/v1/routines 실데이터(IPC 경유, 기존 athena:routines-list 채널 —
