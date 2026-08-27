@@ -294,6 +294,11 @@ body { margin: 0; overflow: hidden; }
 .sidebar-item.is-routine.is-paused {
   color: var(--color-k-faint);
 }
+/* 초안(draft) 행 — ◌ 점선 핑크(8단계, agent-row.is-draft와 같은 값). */
+.sidebar-item.is-routine.is-draft {
+  background: rgba(238, 19, 123, 0.05);
+  border: 1px dashed rgba(238, 19, 123, 0.45);
+}
 .sidebar-item-status-ic {
   flex-shrink: 0;
   width: 11px;
@@ -492,6 +497,13 @@ body { margin: 0; overflow: hidden; }
   background: var(--color-k-panel);
   box-shadow: inset 0 0 0 1px var(--color-k-line);
 }
+/* 초안(draft) 행 — ◌ 점선 핑크(8단계, Paper 보드 43 실측 #EE137B/#FFF5FA).
+ * --color-brand가 정확히 #ee137b라 새 색을 만들지 않고 그 알파 변형만 쓴다. */
+.agent-row.is-draft {
+  background: rgba(238, 19, 123, 0.05);
+  border: 1px dashed rgba(238, 19, 123, 0.45);
+  box-shadow: none;
+}
 .agent-row-dot {
   flex-shrink: 0;
   width: 11px;
@@ -634,6 +646,10 @@ body { margin: 0; overflow: hidden; }
 .agent-status-badge.is-paused {
   border-color: var(--color-warn);
   color: var(--color-warn);
+}
+.agent-status-badge.is-draft {
+  border-color: var(--color-brand);
+  color: var(--color-brand);
 }
 .agent-detail-title {
   color: var(--color-k-text);

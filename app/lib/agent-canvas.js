@@ -14,16 +14,18 @@
 // 동형이다 — 지어낸 숫자가 아니라 "아직 라이브로 못 잰다"는 사실을 코드 차원에
 // 남긴다(P3). DOM에도 data-source 속성으로 새겨 둔다.
 //
-// 리스트(5단계, "예약·감시")는 두 출처를 한 화면에 섞는다:
-//   · 감시(watch) — GET /api/v1/routines 실데이터. status가 active/paused인
-//     것만(draft/expired/cancelled/failed는 "지금 도는 감시"가 아니다 — 채팅의
-//     루틴 승인 카드가 "승인 전에는 실재하지 않습니다"라고 이미 말하는 것과
-//     같은 태도). draft→confirm은 그 승인 카드가 이미 처리한다 — 여기서
-//     새로 만들지 않는다(재사용).
+// 리스트(5단계, "예약·감시")는 세 출처를 한 화면에 섞는다:
+//   · 감시(watch) — GET /api/v1/routines 실데이터. status가 active/paused인 것.
+//   · 초안(draft, 8단계 추가) — status가 draft인 것. ◌ 점선 핑크 행으로
+//     구분한다(Paper 보드 43 실측). draft→confirm 자체는 채팅의 "작업 요약·
+//     초안" 카드 칩("바로 활성화")이 처리한다 — 여기서 새로 만들지 않는다
+//     (재사용, 동선 규칙③ "확정은 채팅 카드의 칩 — 캔버스는 결과가 비치는
+//     곳"). 그래서 상세 패널은 draft 항목에서 읽기 전용이다(액션 버튼 없음).
 //   · 예약(schedule) — fixture. 백엔드 트리거 카탈로그에 벽시계 스케줄
 //     개념이 없다(재검증 확인) — **예약 트리거 백엔드 미구현, 후속 스코프**.
-// 탭(모두/활성/일시중지)·검색은 두 출처 모두에 동일하게 적용된다(화면
-// 하나이므로 필터도 하나).
+// 탭(모두/활성/일시중지)·검색은 세 출처 모두에 동일하게 적용된다(화면
+// 하나이므로 필터도 하나). "일시중지" 탭 외의 필터는 draft/watch/schedule을
+// 가리지 않는다 — 'all' 탭에서 draft가 함께 보인다.
 //
 // 일시중지·재개 버튼은 감시(watch, live) 항목에서만 활성이다(6.5단계 —
 // 6단계 pause/resume 엔드포인트를 이 화면에 배선). 예약(schedule) 항목은
@@ -62,13 +64,14 @@ function fixtureStats() {
 }
 
 function statusRowIcon(routine) {
+  if (routine.status === 'draft') return { glyph: '◌', colorVar: '--color-brand' };
   if (routine.status === 'paused') return { glyph: '❚❚', colorVar: '--color-warn' };
   if (routine.status === 'active') {
     return routine.mode === 'realtime-ws'
       ? { glyph: '●', colorVar: '--color-info' }
       : { glyph: '●', colorVar: '--color-ok' };
   }
-  return { glyph: '○', colorVar: '--color-k-faint' }; // draft/expired/cancelled/failed — 정직하게 흐리게
+  return { glyph: '○', colorVar: '--color-k-faint' }; // expired/cancelled/failed — 정직하게 흐리게
 }
 
 function createAgentCanvas(deps) {
@@ -123,8 +126,9 @@ function createAgentCanvas(deps) {
   searchWrap.appendChild(searchInput);
   actions.appendChild(searchWrap);
 
-  // 43번 "새 작업은 채팅에서" 원칙 — 시트를 열지 않고 채팅 입력에 포커스만
-  // 옮긴다(전체 자연어 플로우는 8단계 몫, sidebar.js의 selectRoutineItem과 같은 태도).
+  // 43번 "새 작업은 채팅에서" 원칙(동선 규칙①) — 시트를 열지 않는다. 시작
+  // 문장을 심고 포커스만 옮기는 실제 동작은 canvas.js가 onNewTaskClick으로
+  // 주입한다(8단계, shell.js seedChatInput 버스 — 7단계 제안 "추가"와 같은 경로).
   const cta = el('button', 'agent-cta');
   cta.type = 'button';
   cta.textContent = '＋ 새 작업 · 채팅에서';
@@ -281,7 +285,7 @@ function createAgentCanvas(deps) {
   }
 
   // GET /api/v1/routines 실데이터 → 리스트 항목. status가 active/paused인
-  // 것만 다룬다 — draft는 "감시"가 아니다(위 머리말 참고).
+  // 것만 다룬다 — draft는 별도 kind('draft', 아래)로 다룬다.
   function toWatchItem(routine) {
     return {
       id: routine.id, kind: 'watch', source: 'live', status: routine.status, mode: routine.mode,
@@ -292,11 +296,26 @@ function createAgentCanvas(deps) {
     };
   }
 
+  // 초안(draft, 8단계) — 채팅의 "작업 요약·초안" 카드가 만드는 것과 같은
+  // 실데이터다(위 머리말 참고). "채팅에서 만드는 중"이라는 출처만 알려줄 뿐
+  // 지어낸 일정 문구를 붙이지 않는다(P3 — Paper 목업의 "매매일 15:40"류는
+  // 예약 트리거 전용 예시라 실제 draft 필드에 대응이 없다).
+  function toDraftItem(routine) {
+    return {
+      id: routine.id, kind: 'draft', source: 'live', status: 'draft', mode: routine.mode,
+      title: routine.note || routine.symbol || routine.id,
+      sub: '초안 — 채팅에서 만드는 중',
+      trailing: '지금',
+      raw: routine,
+    };
+  }
+
   function allItems() {
     const watchItems = routinesCache
       .filter((r) => r.status === 'active' || r.status === 'paused')
       .map(toWatchItem);
-    return watchItems.concat(fixtureScheduleItems());
+    const draftItems = routinesCache.filter((r) => r.status === 'draft').map(toDraftItem);
+    return watchItems.concat(draftItems).concat(fixtureScheduleItems());
   }
 
   function matchesTab(item) {
@@ -316,7 +335,10 @@ function createAgentCanvas(deps) {
   }
 
   function makeListRow(item) {
-    const row = el('button', item.id === selectedId ? 'agent-row is-selected' : 'agent-row');
+    let cls = 'agent-row';
+    if (item.id === selectedId) cls += ' is-selected';
+    if (item.status === 'draft') cls += ' is-draft'; // ◌ 점선 핑크(8단계, Paper 보드 43)
+    const row = el('button', cls);
     row.type = 'button';
     row.setAttribute('data-source', item.source);
     const icon = statusRowIcon(item);
@@ -384,43 +406,50 @@ function createAgentCanvas(deps) {
     detailCol.appendChild(caption);
 
     const headRow = el('div', 'agent-detail-head');
-    const badge = el('span', item.status === 'paused' ? 'agent-status-badge is-paused' : 'agent-status-badge is-active');
-    badge.textContent = item.status === 'paused' ? '일시중지' : '활성';
+    const badge = el('span', `agent-status-badge is-${item.status}`);
+    badge.textContent = item.status === 'paused' ? '일시중지' : (item.status === 'draft' ? '초안' : '활성');
     headRow.appendChild(badge);
     const titleEl = el('span', 'agent-detail-title');
     titleEl.textContent = item.title;
     headRow.appendChild(titleEl);
-    const headActions = el('span', 'agent-detail-head-actions');
-    const pauseBtn = el('button', 'agent-pause-btn');
-    pauseBtn.type = 'button';
-    if (item.kind === 'watch') {
-      // 감시(watch, live)만 pause/resume 엔드포인트가 있다 — 위 머리말 참고.
-      const willPause = item.status !== 'paused';
-      pauseBtn.textContent = willPause ? '❚❚ 일시중지' : '▶ 재개';
-      pauseBtn.disabled = false;
-      pauseBtn.addEventListener('click', async () => {
+    if (item.kind !== 'draft') {
+      // draft는 읽기 전용이다(동선 규칙③ "확정은 채팅 카드의 칩" — 위 머리말 참고).
+      const headActions = el('span', 'agent-detail-head-actions');
+      const pauseBtn = el('button', 'agent-pause-btn');
+      pauseBtn.type = 'button';
+      if (item.kind === 'watch') {
+        // 감시(watch, live)만 pause/resume 엔드포인트가 있다 — 위 머리말 참고.
+        const willPause = item.status !== 'paused';
+        pauseBtn.textContent = willPause ? '❚❚ 일시중지' : '▶ 재개';
+        pauseBtn.disabled = false;
+        pauseBtn.addEventListener('click', async () => {
+          pauseBtn.disabled = true;
+          const action = willPause ? pauseRoutine : resumeRoutine;
+          try {
+            if (typeof action === 'function') await action(item.id);
+          } catch {
+            // 실패해도 조용히 넘어간다 — 아래 refresh()가 실제 상태를 다시 받아와
+            // 반영한다(낙관적 갱신 없음, P3 — 성공한 척하지 않는다).
+          }
+          await refresh();
+        });
+      } else {
+        // 예약(schedule)은 fixture라 대응하는 백엔드 전이가 없다 — 항상 비활성.
+        pauseBtn.textContent = '❚❚ 일시중지';
         pauseBtn.disabled = true;
-        const action = willPause ? pauseRoutine : resumeRoutine;
-        try {
-          if (typeof action === 'function') await action(item.id);
-        } catch {
-          // 실패해도 조용히 넘어간다 — 아래 refresh()가 실제 상태를 다시 받아와
-          // 반영한다(낙관적 갱신 없음, P3 — 성공한 척하지 않는다).
-        }
-        await refresh();
-      });
-    } else {
-      // 예약(schedule)은 fixture라 대응하는 백엔드 전이가 없다 — 항상 비활성.
-      pauseBtn.textContent = '❚❚ 일시중지';
-      pauseBtn.disabled = true;
-      pauseBtn.title = '예약 트리거는 아직 백엔드에 없습니다';
+        pauseBtn.title = '예약 트리거는 아직 백엔드에 없습니다';
+      }
+      headActions.appendChild(pauseBtn);
+      headRow.appendChild(headActions);
     }
-    headActions.appendChild(pauseBtn);
-    headRow.appendChild(headActions);
     detailCol.appendChild(headRow);
 
     const desc = el('div', 'agent-detail-desc');
-    desc.textContent = item.kind === 'watch' ? (item.raw.note || '') : ((item.detail && item.detail.description) || '');
+    if (item.kind === 'draft') {
+      desc.textContent = '오른쪽 채팅의 "작업 요약·초안" 카드에서 바로 활성화하거나 고칠 수 있습니다.';
+    } else {
+      desc.textContent = item.kind === 'watch' ? (item.raw.note || '') : ((item.detail && item.detail.description) || '');
+    }
     detailCol.appendChild(desc);
 
     const fieldsCaption = el('div', 'agent-panel-caption');
@@ -440,25 +469,29 @@ function createAgentCanvas(deps) {
     }
     detailCol.appendChild(fieldsWrap);
 
-    const logsCaption = el('div', 'agent-panel-caption');
-    logsCaption.textContent = '최근 실행';
-    detailCol.appendChild(logsCaption);
-    const logsWrap = el('div', 'agent-detail-logs');
-    logsWrap.setAttribute('data-source', 'fixture');
-    for (const log of fixtureLogs()) {
-      const logRow = el('div', 'agent-detail-log');
-      const t = el('span', 'agent-detail-log-time');
-      t.textContent = log.time;
-      const mark = el('span', log.ok ? 'agent-detail-log-mark is-ok' : 'agent-detail-log-mark is-warn');
-      mark.textContent = log.ok ? '✓' : '⚠';
-      const text = el('span', 'agent-detail-log-text');
-      text.textContent = log.text;
-      logRow.appendChild(t);
-      logRow.appendChild(mark);
-      logRow.appendChild(text);
-      logsWrap.appendChild(logRow);
+    // draft는 아직 한 번도 실행되지 않았다 — "최근 실행" 섹션 자체를 생략한다
+    // (빈 로그를 지어내 보여주지 않는다, P3).
+    if (item.kind !== 'draft') {
+      const logsCaption = el('div', 'agent-panel-caption');
+      logsCaption.textContent = '최근 실행';
+      detailCol.appendChild(logsCaption);
+      const logsWrap = el('div', 'agent-detail-logs');
+      logsWrap.setAttribute('data-source', 'fixture');
+      for (const log of fixtureLogs()) {
+        const logRow = el('div', 'agent-detail-log');
+        const t = el('span', 'agent-detail-log-time');
+        t.textContent = log.time;
+        const mark = el('span', log.ok ? 'agent-detail-log-mark is-ok' : 'agent-detail-log-mark is-warn');
+        mark.textContent = log.ok ? '✓' : '⚠';
+        const text = el('span', 'agent-detail-log-text');
+        text.textContent = log.text;
+        logRow.appendChild(t);
+        logRow.appendChild(mark);
+        logRow.appendChild(text);
+        logsWrap.appendChild(logRow);
+      }
+      detailCol.appendChild(logsWrap);
     }
-    detailCol.appendChild(logsWrap);
   }
 
   function selectRow(id) {

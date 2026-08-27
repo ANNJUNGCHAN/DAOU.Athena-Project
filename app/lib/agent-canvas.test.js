@@ -114,7 +114,7 @@ test('refresh(): 라우틴을 받아오면 부제(루틴 N · 감시 M)가 채�
 
 // ── 5단계: 좌측 "예약·감시" 리스트 — 감시(watch)=라이브 + 예약(schedule)=fixture ──
 
-test('"모두" 탭: draft는 감시 목록에서 빠지고(승인 전엔 실재하지 않는다), 예약 fixture 2건은 항상 보인다', async () => {
+test('"모두" 탭: watch 2건 + draft 1건(8단계, ◌ 점선 핑크) + 예약 fixture 2건이 모두 보인다', async () => {
   const container = fakeNode('div');
   const routines = [
     routine({ id: 'a', status: 'active' }),
@@ -125,11 +125,13 @@ test('"모두" 탭: draft는 감시 목록에서 빠지고(승인 전엔 실재�
   canvas.mount();
   await canvas.refresh();
   const rows = findByClass(container, 'agent-row');
-  assert.equal(rows.length, 4, 'watch 2건(a,b — draft 제외) + schedule fixture 2건');
+  assert.equal(rows.length, 5, 'watch 2건 + draft 1건 + schedule fixture 2건');
   const liveRows = rows.filter((r) => r.getAttribute('data-source') === 'live');
   const fixtureRows = rows.filter((r) => r.getAttribute('data-source') === 'fixture');
-  assert.equal(liveRows.length, 2);
+  assert.equal(liveRows.length, 3, 'watch 2건 + draft 1건 — draft도 실데이터다');
   assert.equal(fixtureRows.length, 2);
+  const draftRow = rows.find((r) => r.className.includes('is-draft'));
+  assert.ok(draftRow, 'draft 행은 is-draft 클래스를 갖는다');
 });
 
 test('예약(schedule) 행에는 fixture 출처가 코드로 표시된다(P3)', async () => {
@@ -518,4 +520,44 @@ test('라우틴 refresh가 실패해도 제안 refresh는 독립적으로 성공
   canvas.mount();
   await canvas.refresh();
   assert.equal(findByClass(container, 'agent-suggest-title')[0].textContent, '삼성전자');
+});
+
+// ── 8단계: 초안(draft) 행 — ◌ 점선 핑크, 상세 패널은 읽기 전용 ──
+
+test('draft 행은 ◌ 아이콘·"초안 — 채팅에서 만드는 중" 부제·"지금" trailing을 갖는다', async () => {
+  const container = fakeNode('div');
+  const routines = [routine({ id: 'a', status: 'draft', note: '장 마감 후 손익 요약' })];
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => routines });
+  canvas.mount();
+  await canvas.refresh();
+  const row = findByClass(container, 'agent-row').find((r) => r.className.includes('is-draft'));
+  assert.ok(row);
+  assert.equal(findByClass(row, 'agent-row-dot')[0].textContent, '◌');
+  assert.equal(findByClass(row, 'agent-row-title')[0].textContent, '장 마감 후 손익 요약');
+  assert.equal(findByClass(row, 'agent-row-sub')[0].textContent, '초안 — 채팅에서 만드는 중');
+  assert.equal(findByClass(row, 'agent-row-trailing')[0].textContent, '지금');
+});
+
+test('draft 상세: 상태 배지가 "초안"이고, 일시중지 버튼도 "최근 실행" 섹션도 없다(읽기 전용, 동선 규칙③)', async () => {
+  const container = fakeNode('div');
+  const routines = [routine({ id: 'a', status: 'draft', note: '장 마감 후 손익 요약' })];
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => routines });
+  canvas.mount();
+  await canvas.refresh();
+  assert.equal(findByClass(container, 'agent-status-badge')[0].textContent, '초안');
+  assert.equal(findByClass(container, 'agent-detail-title')[0].textContent, '장 마감 후 손익 요약');
+  assert.equal(findByClass(container, 'agent-pause-btn').length, 0, 'draft에는 일시중지 버튼이 없다');
+  assert.equal(findByClass(container, 'agent-detail-logs').length, 0, 'draft는 실행 이력이 없다 — 섹션 자체를 생략한다');
+});
+
+test('탭 "일시중지"·"활성"에는 draft가 나타나지 않는다(draft는 두 상태 어느 쪽도 아니다)', async () => {
+  const container = fakeNode('div');
+  const routines = [routine({ id: 'a', status: 'draft' })];
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => routines });
+  canvas.mount();
+  await canvas.refresh();
+  canvas.setActiveTab('paused');
+  assert.equal(findByClass(container, 'agent-row').filter((r) => r.className.includes('is-draft')).length, 0);
+  canvas.setActiveTab('active');
+  assert.equal(findByClass(container, 'agent-row').filter((r) => r.className.includes('is-draft')).length, 0);
 });

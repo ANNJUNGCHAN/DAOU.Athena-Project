@@ -1386,9 +1386,12 @@ const agentCanvas = window.AthenaLib.AgentCanvas.createAgentCanvas({
     const res = await window.athena.invoke('athena:routines-list');
     return (res && res.ok && res.data && Array.isArray(res.data.routines)) ? res.data.routines : [];
   },
+  // 동선 규칙①(8단계) — 시트를 열지 않고 채팅 입력에 시작 문장을 심고 포커스만
+  // 옮긴다(shell.js seedChatInput 버스, 7단계 제안 "추가"와 같은 경로).
   onNewTaskClick: () => {
-    const input = document.getElementById('input');
-    if (input) input.focus();
+    if (window.AthenaShell && typeof window.AthenaShell.seedChatInput === 'function') {
+      window.AthenaShell.seedChatInput('새 작업을 만들어줘 — ');
+    }
   },
   // 6.5단계 — 상세 패널 일시중지·재개. 6단계 엔드포인트를 사람 클릭 전용
   // 채널(athena:routine-confirm/cancel과 같은 자리)로 부른다.

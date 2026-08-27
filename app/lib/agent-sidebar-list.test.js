@@ -34,11 +34,21 @@ test('status.paused → 주황 일시중지 아이콘(모드와 무관)', () => 
   assert.equal(STATUS_ICON.paused.colorVar, '--color-warn');
 });
 
-test('draft/expired/cancelled/failed는 우선 노출 대상이 아니다(null)', () => {
-  for (const status of ['draft', 'expired', 'cancelled', 'failed']) {
+test('expired/cancelled/failed는 우선 노출 대상이 아니다(null)', () => {
+  for (const status of ['expired', 'cancelled', 'failed']) {
     assert.equal(statusIconFor(routine({ status })), null, status);
     assert.equal(isPriorityRoutine(routine({ status })), false, status);
   }
+});
+
+// ── 8단계: draft(초안) — ◌ 점선 핑크, Paper 보드 43 실측 ──
+
+test('status.draft → 초안 아이콘(모드와 무관), 우선 노출 대상이다', () => {
+  assert.deepEqual(statusIconFor(routine({ status: 'draft', mode: 'realtime-ws' })), STATUS_ICON.draft);
+  assert.deepEqual(statusIconFor(routine({ status: 'draft', mode: 'periodic' })), STATUS_ICON.draft);
+  assert.equal(STATUS_ICON.draft.colorVar, '--color-brand');
+  assert.equal(STATUS_ICON.draft.glyph, '◌');
+  assert.equal(isPriorityRoutine(routine({ status: 'draft' })), true);
 });
 
 test('routine이 없으면 null', () => {
@@ -46,7 +56,7 @@ test('routine이 없으면 null', () => {
   assert.equal(statusIconFor(undefined), null);
 });
 
-test('buildAgentSidebarRows: active/paused만 남기고 나머지는 걸러낸다', () => {
+test('buildAgentSidebarRows: active/paused/draft만 남기고 나머지는 걸러낸다', () => {
   const routines = [
     routine({ id: 'a', status: 'active', mode: 'periodic' }),
     routine({ id: 'b', status: 'draft' }),
@@ -55,7 +65,7 @@ test('buildAgentSidebarRows: active/paused만 남기고 나머지는 걸러낸�
     routine({ id: 'e', status: 'active', mode: 'realtime-ws' }),
   ];
   const rows = buildAgentSidebarRows(routines);
-  assert.deepEqual(rows.map((r) => r.id), ['a', 'c', 'e']);
+  assert.deepEqual(rows.map((r) => r.id), ['a', 'b', 'c', 'e']);
 });
 
 test('buildAgentSidebarRows: 제목은 note를 그대로 쓴다(지어내지 않는다)', () => {

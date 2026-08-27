@@ -753,6 +753,12 @@ async function runQueryFixture(text) {
   $history.appendChild(aLine);
   scrollAfterRender();
   $input.focus();
+
+  // runQueryLive와 같은 이유(위 654-656행 주석 참고) — fixture 모드도 턴 종료
+  // 직후 draft를 다시 조회해 승인 카드를 띄운다. canvasSource가 fixture인 건
+  // 캔버스 카드 출처일 뿐 라우틴 서브시스템과는 무관하다 — 이 호출이 없으면
+  // fixture 모드(verify.js)에서 8단계 흐름을 검증할 방법이 없다.
+  refreshRoutineDrafts();
 }
 
 // 한글 받침 유무에 따른 을/를 조사 선택 (예: "스트림"→을, "테이블"→을, "리더"→를)
@@ -1243,29 +1249,52 @@ function approvalModeLine(r) {
   return `방식 ${modeText}${suffix}${exp}`;
 }
 
+// 43번 "새 작업은 채팅에서" — 실제 백엔드 필드(mode·source_label·cooldown_s)만
+// 조합한다. Paper 목업의 "매매일 15:40 · 소스: 계좌 + 일봉 차트"류 문구는 예약
+// (schedule) 트리거 전용 예시라 실제 draft(SOURCES 카탈로그 조건-감시형)에는
+// 대응 필드가 없다 — 지어내지 않는다(P3, 8단계 재검증).
+function draftDescriptionLine(r) {
+  return `${approvalModeLine(r)} · 소스 ${r.source_label || '—'} · 쿨다운 ${r.cooldown_s}초`;
+}
+
+// "고칠 게 있어" 클릭 → 시트 없이 채팅으로(동선 규칙②: 편집도 채팅으로).
+function draftFixSeedText(r) {
+  return `"${r.note}" 초안을 고쳐줘 — `;
+}
+
 function renderApprovalCard(r) {
   const line = document.createElement('div');
   line.className = 'turn';
   const card = document.createElement('div');
   card.className = 'turn-agent routine-approval';
 
+  // 작업 요약 · 초안 카드 머리(Paper 보드 43 실측) — 옛 "루틴 제안 — 승인
+  // 전에는 실재하지 않습니다" 단일 캡션을 pill 2개 + 안내 문구로 대체한다.
   const head = document.createElement('div');
   head.className = 'agent-head';
-  const title = document.createElement('span');
-  title.className = 'agent-source';
-  title.textContent = '루틴 제안 — 승인 전에는 실재하지 않습니다';
-  head.appendChild(title);
+  const summaryPill = document.createElement('span');
+  summaryPill.className = 'routine-draft-pill';
+  summaryPill.textContent = '작업 요약';
+  head.appendChild(summaryPill);
+  const draftPill = document.createElement('span');
+  draftPill.className = 'routine-draft-pill is-draft';
+  draftPill.textContent = '초안';
+  head.appendChild(draftPill);
+  const hint = document.createElement('span');
+  hint.className = 'routine-draft-hint';
+  hint.textContent = '← 캔버스에 초안 생성됨';
+  head.appendChild(hint);
   card.appendChild(head);
 
-  const note = document.createElement('div');
-  note.className = 'agent-body';
-  note.textContent = r.note;
-  card.appendChild(note);
+  const title = document.createElement('div');
+  title.className = 'routine-draft-title';
+  title.textContent = r.note;
+  card.appendChild(title);
 
-  const mode = document.createElement('div');
-  mode.className = 'agent-mode routine-mode-line';
-  mode.textContent = approvalModeLine(r);
-  card.appendChild(mode);
+  const desc = document.createElement('div');
+  desc.className = 'agent-body';
+  desc.textContent = draftDescriptionLine(r);
+  card.appendChild(desc);
 
   if (r.activation_blocker) {
     const blocker = document.createElement('div');
@@ -1276,45 +1305,48 @@ function renderApprovalCard(r) {
 
   const notice = document.createElement('div');
   notice.className = 'agent-source';
-  notice.textContent = '승인해도 주문은 자동 집행되지 않습니다 — 조건 도달 시 알림이 옵니다.';
+  notice.textContent = '활성화해도 주문은 자동 집행되지 않습니다 — 조건 도달 시 알림이 옵니다.';
   card.appendChild(notice);
 
+  // 칩 3종(Paper 보드 43 실측): 미리보기 실행 / 바로 활성화 / 고칠 게 있어.
+  // "취소"는 이 카드에서 빠졌다 — 동선 규칙③ "확정은 채팅 카드의 칩" 그대로,
+  // 거부는 새 자연어 턴으로 이어간다(43 설계 그대로, 별도 취소 버튼 없음).
   const row = document.createElement('div');
   row.className = 'routine-approval-actions';
   const status = document.createElement('span');
   status.className = 'agent-mode';
 
-  const approve = _btn('승인', 'routine-btn routine-btn-approve');
-  approve.disabled = !!r.activation_blocker;
-  approve.addEventListener('click', async () => {
-    approve.disabled = true;
-    cancel.disabled = true;
+  // 미리보기 실행 — 백엔드에 대응 엔드포인트가 없다(재검증 확인, 실행 계획
+  // 어디에도 dry-run 개념이 없음). 기능 없는 버튼을 활성으로 두지 않는다(P3).
+  const preview = _btn('미리보기 실행', 'routine-btn');
+  preview.disabled = true;
+  preview.title = '미리보기 실행은 아직 지원하지 않습니다';
+
+  const activate = _btn('바로 활성화', 'routine-btn routine-btn-approve');
+  activate.disabled = !!r.activation_blocker;
+  activate.addEventListener('click', async () => {
+    activate.disabled = true;
+    fix.disabled = true;
     const res = await window.athena.invoke('athena:routine-confirm', { id: r.id });
     if (res && res.ok) {
       status.textContent = '활성 — 감시가 시작됐습니다';
       refreshRoutineChip();
     } else {
-      status.textContent = `승인 실패: ${(res && res.error) || '알 수 없는 오류'}`;
-      approve.disabled = !!r.activation_blocker;
-      cancel.disabled = false;
+      status.textContent = `활성화 실패: ${(res && res.error) || '알 수 없는 오류'}`;
+      activate.disabled = !!r.activation_blocker;
+      fix.disabled = false;
     }
   });
 
-  const cancel = _btn('취소', 'routine-btn');
-  cancel.addEventListener('click', async () => {
-    approve.disabled = true;
-    cancel.disabled = true;
-    const res = await window.athena.invoke('athena:routine-cancel', { id: r.id });
-    status.textContent = res && res.ok ? '취소됨' : `취소 실패: ${(res && res.error) || '오류'}`;
+  const fix = _btn('고칠 게 있어', 'routine-btn');
+  fix.addEventListener('click', () => {
+    $input.value = draftFixSeedText(r);
+    $input.focus();
   });
 
-  const edit = document.createElement('span');
-  edit.className = 'agent-mode';
-  edit.textContent = '수정은 커맨드바에 다시 말하면 됩니다';
-
-  row.appendChild(approve);
-  row.appendChild(cancel);
-  row.appendChild(edit);
+  row.appendChild(preview);
+  row.appendChild(activate);
+  row.appendChild(fix);
   row.appendChild(status);
   card.appendChild(row);
 
