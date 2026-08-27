@@ -46,6 +46,9 @@ const INVOKE_CHANNELS = new Set([
   'athena:routine-runs',
   // 알림 방 읽음 처리(7단계, F3-FE) — 6단계 POST /{id}/ack.
   'athena:routine-ack',
+  // 말걸기 가드 설정 REST(F-stage9) — GET/POST /api/v1/nudge-guard.
+  'athena:nudge-guard-get',
+  'athena:nudge-guard-set',
   'athena:order-execute',
   // 채팅→그래프 파이프라인 단계 5(.omc/plans/plan-chat-graph-pipeline.md §2(e)/(f))
   // — 대화 모드 HISTORY_COMMAND 조회, 설정 모드 "성향・이력" 상태·전체 삭제.
@@ -147,6 +150,8 @@ const ON_CHANNELS = new Set([
   // 툴 호출 진행 단계 — {id, label, done, elapsedMs}. 라벨은 한국어 고정 문구뿐,
   // 원문 TR/툴 id는 절대 안 실린다(sendLiveToolStep 주석 참고).
   'athena:live-tool-step',
+  // 말걸기 가드 확인 카드(F-stage9) — athena_nudge_guard propose 결과, 비영속.
+  'athena:nudge-guard-proposed',
   // 질의 왕복이 도는 동안 셸·오브 입력을 함께 잠그는 신호 — {busy: boolean}.
   'athena:live-query-state',
   // 오브에서 오간 턴을 셸의 대화 이력에도 늦게 채워 넣는다(셸이 숨어 있는 동안

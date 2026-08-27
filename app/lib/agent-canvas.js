@@ -82,8 +82,9 @@ const VERDICT_ICON = {
 // 같은 원칙). 칩 "루틴으로"는 7단계 "추가"와 같은 seedChatInput 경로,
 // "보류"는 세션 동안만 그 카드를 숨긴다(백엔드 저장이 없다 — 재시작하면
 // 다시 보인다, 지어낸 영속성을 암시하지 않는다, P3). 말걸기 가드 패널은
-// 정적 표시만이다 — 저장 백엔드가 없어 값을 바꾸는 UI를 만들지 않는다
-// (죽은 버튼 금지, 팀 리드 브리핑 명시). "그래프 모드에서 근거 보기 →"는
+// F-stage9부터 GET /api/v1/nudge-guard 라이브다 — 이 패널 자체엔 여전히
+// 값을 바꾸는 버튼이 없다(편집은 채팅 확인 카드로만, 아래 참고, 죽은 버튼
+// 금지 원칙은 유지). "그래프 모드에서 근거 보기 →"는
 // 사이드바 모드 네비를 그대로 재사용한다(setView + setActive 둘 다 — 하나만
 // 부르면 캔버스는 바뀌는데 사이드바 활성 표시는 안 바뀌는 불일치가 생긴다).
 
@@ -137,6 +138,7 @@ function createAgentCanvas(deps) {
     fetchProfileSummary, onAddSuggestion,
     fetchAlerts, markAllAlertsRead, getWsConnected,
     fetchRuns, fetchAvgDuration,
+    fetchNudgeGuard,
     onOpenGraph,
   } = deps || {};
   if (!container) return { mount() {}, async refresh() {} };
@@ -154,6 +156,8 @@ function createAgentCanvas(deps) {
   let heldSuggestionIds = new Set(); // "보류"한 제안(11단계) — 세션 동안만, 저장 안 됨.
   let historyRequestId = 0; // 위와 같은 이유 — 별개 요청이라 별개 가드를 쓴다.
   let avgDurationCache = null; // GET /{id}/runs의 avg_duration_ms(5단계) — 드릴인 대상별로 갱신.
+  let nudgeGuardCache = null; // GET /api/v1/nudge-guard(F-stage9) — 라이브.
+  let nudgeGuardRequestId = 0; // 위와 같은 이유 — 별개 요청이라 별개 가드를 쓴다.
 
   // ---------- 통계 카드 4장의 값 계산(3단계부터 3장이 라이브) ----------
   // routinesCache/firedTodayCache/suggestionsCache 클로저가 필요해 createAgentCanvas
@@ -432,6 +436,21 @@ function createAgentCanvas(deps) {
     if (rid !== suggestRequestId) return;
     suggestionsCache = entries;
     renderSuggestions();
+  }
+
+  // GET /api/v1/nudge-guard 실데이터(F-stage9, 8단계 백엔드) — 다른 세 소스와
+  // 무관한 독립 왕복이다(위 머리말 원칙).
+  async function refreshNudgeGuard() {
+    const rid = ++nudgeGuardRequestId;
+    let settings = null;
+    try {
+      settings = (typeof fetchNudgeGuard === 'function') ? await fetchNudgeGuard() : null;
+    } catch {
+      settings = null;
+    }
+    if (rid !== nudgeGuardRequestId) return;
+    nudgeGuardCache = settings;
+    renderNudgeGuard();
   }
 
   const detailCol = el('div', 'agent-detail-col');
@@ -829,24 +848,49 @@ function createAgentCanvas(deps) {
   const proactiveCardsWrap = el('div', 'agent-proactive-cards');
   proactiveBody.appendChild(proactiveCardsWrap);
 
-  // 말걸기 가드 — 정적 표시만이다(저장 백엔드 없음, 팀 리드 브리핑 명시 —
-  // 위 머리말). 값을 바꾸는 UI를 만들지 않는다(죽은 버튼 금지, P3).
+  // 말걸기 가드(F-stage9부터 라이브) — GET /api/v1/nudge-guard(8단계)로 4개
+  // 태그를 채운다. 편집은 여전히 채팅 경로로만(43 원칙, 아래 가드 확인 카드
+  // 참고) — 이 패널 자체엔 값을 바꾸는 버튼을 두지 않는다(죽은 버튼 금지, P3).
   const nudgeGuard = el('div', 'agent-nudge-guard');
-  nudgeGuard.setAttribute('data-source', 'fixture');
   const nudgeGuardCaption = el('div', 'agent-panel-caption');
   nudgeGuardCaption.textContent = '말걸기 가드';
   nudgeGuard.appendChild(nudgeGuardCaption);
   const nudgeGuardTags = el('div', 'agent-nudge-guard-tags');
-  for (const label of ['하루 최대 2회', '조용 시간 22:00–07:00', '근거 표시 항상', '거절 반영 성향으로 학습']) {
-    const tag = el('span', 'agent-nudge-guard-tag');
-    tag.textContent = label;
-    nudgeGuardTags.appendChild(tag);
-  }
   nudgeGuard.appendChild(nudgeGuardTags);
   const nudgeGuardNote = el('div', 'agent-nudge-guard-note');
-  nudgeGuardNote.textContent = '제안은 그래프 보강 15 이상일 때만 · 거절한 제안은 반복되지 않는다 → 발화 자체는 오른쪽 채팅에 도착';
   nudgeGuard.appendChild(nudgeGuardNote);
   proactiveBody.appendChild(nudgeGuard);
+
+  // GuardSettings 4필드 → 패널 태그 4개(guard_settings.py "42번 패널의 기존
+  // 4개 태그와 1:1 대응"과 같은 매핑).
+  function guardTagLabels(settings) {
+    const qh = settings.quiet_hours || {};
+    return [
+      `하루 최대 ${settings.max_daily_nudges}회`,
+      `조용 시간 ${qh.start || '?'}–${qh.end || '?'}`,
+      settings.show_rationale ? '근거 표시 항상' : '근거 표시 끔',
+      settings.learn_from_dismissals ? '거절 반영 성향으로 학습' : '거절 학습 끔',
+    ];
+  }
+
+  function renderNudgeGuard() {
+    while (nudgeGuardTags.firstChild) nudgeGuardTags.removeChild(nudgeGuardTags.firstChild);
+    nudgeGuard.setAttribute('data-source', 'live'); // 8단계부터 라이브 — fixture 폴백 없음(지어내지 않는다, P3).
+    if (!nudgeGuardCache) {
+      const empty = el('div', 'agent-list-empty');
+      empty.textContent = '가드 설정을 불러오는 중입니다';
+      nudgeGuardTags.appendChild(empty);
+      nudgeGuardNote.textContent = '';
+      return;
+    }
+    for (const label of guardTagLabels(nudgeGuardCache)) {
+      const tag = el('span', 'agent-nudge-guard-tag');
+      tag.textContent = label;
+      nudgeGuardTags.appendChild(tag);
+    }
+    nudgeGuardNote.textContent = '제안은 그래프 보강 15 이상일 때만 · 거절한 제안은 반복되지 않는다 → 발화 자체는 오른쪽 채팅에 도착';
+  }
+  renderNudgeGuard(); // 초기 페인트 — 라이브 데이터 도착 전엔 "불러오는 중"으로 정직하게 보인다.
 
   function updateProactiveTabLabel() {
     const n = visibleSuggestionCount(); // 3단계 — "성향 제안" 통계 타일과 같은 계산 공유.
@@ -1281,7 +1325,7 @@ function createAgentCanvas(deps) {
   async function refresh() {
     renderAlarmColumn();
     renderWsStatus();
-    const tasks = [refreshRoutines(), refreshSuggestions()];
+    const tasks = [refreshRoutines(), refreshSuggestions(), refreshNudgeGuard()];
     if (historyItem) tasks.push(refreshHistoryRuns()); // 드릴인 중이면 이력도 같이.
     await Promise.all(tasks);
   }
