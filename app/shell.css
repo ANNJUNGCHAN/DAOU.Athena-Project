@@ -130,6 +130,56 @@ body { margin: 0; overflow: hidden; }
 }
 .sidebar-search-input:focus { outline: none; border-color: var(--color-k-line); }
 
+/* 모드 네비(v2, 보드 37/38/44, 스텝16) — 268×135, 이력 목록 위·새대화 블록
+ * 아래(shell.html 순서 그대로). "그래프" 항목의 선택 상태(흰 필+진한 텍스트)는
+ * sidebar.js가 window.AthenaGraphMode.state로 동기화한다 — 정적 마크업의
+ * is-active는 부팅 기본값(답변 모드)일 뿐이다. */
+.sidebar-mode-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 10px 10px;
+  flex-shrink: 0;
+}
+.sidebar-mode-label {
+  padding: 2px 8px 6px;
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  letter-spacing: 0.1em;
+  color: var(--color-k-faint);
+}
+.sidebar-mode-item {
+  appearance: none;
+  border: 1px solid transparent;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  color: var(--color-k-dim);
+  text-align: left;
+}
+.sidebar-mode-item.is-active {
+  background: #fff;
+  border-color: var(--color-k-line);
+  color: var(--color-k-text);
+  font-family: var(--font-strong);
+}
+.sidebar-mode-icon { flex-shrink: 0; color: inherit; }
+.sidebar-mode-badge {
+  margin-left: auto;
+  background: var(--color-brand);
+  border-radius: 999px;
+  padding: 1px 6px;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  color: #fff;
+}
+
 .sidebar-divider {
   flex-shrink: 0;
   height: 1px;

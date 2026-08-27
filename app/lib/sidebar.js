@@ -139,6 +139,7 @@
       empty.textContent = q ? '검색 결과 없음' : '대화 이력 없음';
       $list.appendChild(empty);
     }
+    updateModeAgentBadge(); // notifyRooms이 바뀔 때마다 이 함수도 불리니 같이 갱신한다(아래 정의).
   }
 
   async function loadConversations() {
@@ -201,6 +202,54 @@
     $roomTitle.textContent = room.title;
     $roomBanner.hidden = false;
     renderList();
+  }
+
+  // ---------- 모드 네비(v2, 보드 37/38/44, 스텝16) ----------
+  // #graphPill(canvas.js)은 존치한다(리드 결정 — 근거는 Paper 보드44 캡션
+  // 참고) — 이 네비는 같은 목적지로 가는 두 번째 진입로다. "그래프" 항목만
+  // 배선한다(대화/에이전트는 §6 갭 분석 범위 밖이라 UI만 둔다).
+  const $modeChat = document.getElementById('sidebarModeChat');
+  const $modeGraph = document.getElementById('sidebarModeGraph');
+  const $modeAgentBadge = document.getElementById('sidebarModeAgentBadge');
+
+  // 지금 그래프 모드인지에 따라 대화/그래프 항목의 선택 표시(흰 필+볼드)를
+  // 맞춘다 — #graphPill 클릭으로 상태가 바뀌어도(이 파일을 거치지 않는 경로)
+  // 다시 맞출 수 있도록 별도 함수로 뗐다(아래에서 그 클릭도 관찰한다).
+  function syncModeNavActive() {
+    const graphMode = window.AthenaGraphMode;
+    const store = window.AthenaLib && window.AthenaLib.GraphModeStore;
+    if (!graphMode || !store || !$modeChat || !$modeGraph) return;
+    const isGraph = store.isGraphView(graphMode.state);
+    $modeChat.classList.toggle('is-active', !isGraph);
+    $modeGraph.classList.toggle('is-active', isGraph);
+  }
+
+  if ($modeGraph) {
+    $modeGraph.addEventListener('click', () => {
+      const graphMode = window.AthenaGraphMode;
+      const store = window.AthenaLib && window.AthenaLib.GraphModeStore;
+      // 내비 항목은 목적지다 — control-strip 필의 toggle()과 달리 이미
+      // 그래프 모드면 아무것도 안 한다(스텝2에서 실측한 "이미 그 화면에
+      // 있는데 토글하면 도로 나간다" 결함과 같은 종류를 여기서도 피한다).
+      if (graphMode && store && !store.isGraphView(graphMode.state)) graphMode.toggle();
+      syncModeNavActive();
+    });
+  }
+
+  // #graphPill(canvas.js 소유)도 그래프 모드를 여닫는다 — canvas.js를 안
+  // 건드리고 같은 DOM 이벤트를 관찰만 해서 네비 선택 표시를 동기화한다.
+  const $graphPillEl = document.getElementById('graphPill');
+  if ($graphPillEl) $graphPillEl.addEventListener('click', syncModeNavActive);
+
+  // 배지 = 미확인 알람 수(보드44 원칙2) — 기존 notifyRooms(라우틴 발화, 위
+  // "알림 파생 방" 절)의 미확인 개수를 그대로 쓴다(지어낸 숫자 없음, §0
+  // 정책). renderList()가 notifyRooms이 바뀔 때마다 불리므로 그 끝에서
+  // 같이 갱신한다.
+  function updateModeAgentBadge() {
+    if (!$modeAgentBadge) return;
+    const unread = notifyRooms.filter((r) => !r.read).length;
+    $modeAgentBadge.hidden = unread === 0;
+    $modeAgentBadge.textContent = unread > 0 ? String(unread) : '';
   }
 
   // ---------- 새 대화 ----------
@@ -351,6 +400,12 @@
   // ---------- 부트 ----------
   loadConversations();
   loadAccount();
+  // sidebar.js는 canvas.js보다 먼저 로드된다(shell.html 스크립트 순서) — 이
+  // 시점엔 window.AthenaGraphMode가 아직 없다. 정적 마크업의 기본값("대화"
+  // 활성)이 실제 부팅 상태(US-007, 항상 답변 모드로 시작)와 이미 같아서
+  // 당장은 안 틀리지만, "우연히 맞다"에 기대지 않고 모든 스크립트 로드가
+  // 끝난 뒤(매크로태스크) 명시적으로 한 번 맞춘다.
+  setTimeout(syncModeNavActive, 0);
   // 사이드바는 채팅 왕복(질의→답변)의 부산물을 반영할 뿐 그 자체가 실시간
   // 스트림을 갖지 않는다(대화 자체는 채팅 영역의 일이다) — 가벼운 폴링으로
   // 충분하다. 계좌 토큰 잔여시간도 같은 주기로 갱신한다.
