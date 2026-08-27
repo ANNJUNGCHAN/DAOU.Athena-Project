@@ -1486,6 +1486,23 @@ async function loadThemeClusters() {
   window.AthenaLib.ThemeClusters.renderThemeClusters(container, clusters);
 }
 
+// 숨은 연관 섹션(보드 06 §9/07 §9-2, 스텝7) — athena:brain-surprising-connections
+// (이번 스텝에서 신설한 IPC, main.js/preload.js 참고). 실패해도 조용히 숨긴다
+// (§0 정책 — 지어낸 항목을 보여주지 않는다).
+async function loadHiddenLinks() {
+  const container = document.getElementById('graphHiddenLinks');
+  if (!container) return;
+  let res;
+  try {
+    res = await window.athena.invoke('athena:brain-surprising-connections');
+  } catch (err) {
+    console.warn('[graph-mode] surprising-connections(숨은 연관) 실패', err);
+    return;
+  }
+  if (!res || !res.ok) return;
+  window.AthenaLib.HiddenLinks.renderHiddenLinks(container, res.connections);
+}
+
 // 모드 칩은 항상 보이지만, 컨트롤러는 아직 "못 씀"으로 가정한 채 태어난다
 // (controller.js 기본값) — 이 프로브가 브레인 상태를 확인해 바로잡는다. 프로브 전에
 // 사람이 그래프 모드로 들어와도 renderUnavailable()의 정직한 안내가 뜨지, 막히지 않는다.
@@ -1500,6 +1517,7 @@ async function loadThemeClusters() {
     // 같은 기존 관례).
     if (ready) graphSummaryTable.load().then(renderSummaryUpdatedAt);
     if (ready) loadThemeClusters();
+    if (ready) loadHiddenLinks();
     // 빈 상태(보드 05) 숫자·CTA·힌트 — 같은 ready 확인에 얹는다(왕복 추가 없음).
     if (ready) loadEmptyCanvasExtras();
   } catch (err) {
