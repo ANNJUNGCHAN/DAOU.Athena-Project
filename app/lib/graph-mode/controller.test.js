@@ -99,14 +99,48 @@ test('US-007: 브레인이 켜져 있어도 그래프로 토글하기 전엔 그
   assert.equal(elements.pill.classList.contains('is-active'), false);
 });
 
-test('토글하면 캔버스 영역이 그래프로 바뀌고 그려진다', async () => {
+test('토글하면 캔버스 영역이 그래프 기능으로 바뀌고, 기본 서브뷰는 요약 표다(스텝2-보정)', async () => {
   const { controller, elements } = setup();
   await controller.toggle();
   assert.equal(elements.summary.hidden, true, '요약이 숨는다');
-  assert.equal(elements.graph.hidden, false);
-  assert.equal(elements.summaryTable.hidden, false, '그래프 모드에선 성향 신호 표가 보인다');
+  assert.equal(elements.graph.hidden, true, '기본 서브뷰는 요약이라 지도는 아직 숨어 있다');
+  assert.equal(elements.summaryTable.hidden, false, '그래프 모드에선 성향 신호 표가 기본으로 보인다');
   assert.equal(elements.pill.classList.contains('is-active'), true, '모드 칩은 지금 모드를 보여준다(그래프 모드에선 활성)');
+});
+
+test('setSurface(지도)로 전환하면 군집 지도가 보이고 그려진다, 요약 표면은 숨는다', async () => {
+  const { controller, elements } = setup();
+  await controller.toggle();
+  await controller.setSurface(store.SURFACE_MAP);
+  assert.equal(elements.graph.hidden, false);
+  assert.equal(elements.summaryTable.hidden, true, '지도로 전환하면 요약 표면은 숨는다(두 표면 동시 노출 금지)');
   assert.equal(render.describeRendered(elements.graphBody).nodes, 2);
+});
+
+test('setSurface(같은 값)는 아무 일도 안 한다(불필요한 재렌더 방지)', async () => {
+  const { controller, elements } = setup();
+  await controller.toggle();
+  const result = await controller.setSurface(store.SURFACE_SUMMARY); // 이미 기본값
+  assert.equal(result, null);
+  assert.equal(elements.graph.hidden, true);
+});
+
+test('브레인 응답이 요약 서브뷰를 보는 중에 도착해도, 지도로 전환하면 그 시점 치수로 다시 그린다', async () => {
+  // 실측: #graphCanvas가 hidden인 동안엔 그 안의 elements.graphBody.clientWidth/
+  // Height가 실제로 0이다 — fake-dom은 이걸 재현 안 하니(고정 800×600) 직접 흉내낸다.
+  const { controller, elements, fetchCalls } = setup({ available: false });
+  await controller.toggle(); // 기본 surface='summary' — 지도는 숨어 있다.
+  elements.graphBody.clientWidth = 0;
+  elements.graphBody.clientHeight = 0;
+  await controller.setAvailable(true); // 브레인이 요약 서브뷰를 보는 중에 켜졌다.
+  assert.equal(fetchCalls(), 1);
+
+  elements.graphBody.clientWidth = 400; // 지도로 전환되며 실제 치수가 잡혔다.
+  elements.graphBody.clientHeight = 300;
+  await controller.setSurface(store.SURFACE_MAP);
+  assert.equal(fetchCalls(), 2, '지도로 전환하면 강제로 다시 그려 최신 치수를 반영한다(redrawFromCache는 좌표만 재필터링해 치수 문제를 못 고친다)');
+  assert.equal(elements.graph.hidden, false);
+  assert.equal(render.describeRendered(elements.graphBody).nodes, 2, '0×0이 아니라 실제로 노드가 그려진다');
 });
 
 test('다시 토글하면 요약으로 돌아오고 그래프 표면은 완전히 숨는다', async () => {
@@ -156,24 +190,26 @@ test('모드 칩은 브레인 상태와 무관하게 상시 보인다', () => {
   assert.equal(elements.pill.hidden, false);
 });
 
-test('브레인이 안 됐을 때 그래프 모드로 들어오면 캔버스 안에 정직한 안내가 뜬다', async () => {
+test('브레인이 안 됐을 때 지도 서브뷰로 전환하면 캔버스 안에 정직한 안내가 뜬다', async () => {
   // 빈 그래프를 그냥 띄우면 "성향이 없다"로 읽힌다 — 없는 것과 못 읽은 것은 다르다.
   // 그렇다고 모드 진입 자체를 막지도 않는다(예전엔 필이 숨어서 못 들어왔다).
   const { controller, elements, fetchCalls } = setup({ available: false });
   await controller.toggle();
   assert.equal(elements.summary.hidden, true, '그래프 모드 자체는 열린다');
+  await controller.setSurface(store.SURFACE_MAP);
   assert.equal(elements.graph.hidden, false);
   assert.equal(fetchCalls(), 0, '못 쓴다는 걸 이미 아니까 왕복하지 않는다');
   assert.match(elements.graphBody.children[0].textContent, /브레인|성향/);
 });
 
-test('그래프를 보는 중에 브레인이 꺼지면 화면 안에서 안내로 바뀐다(요약으로 쫓겨나지 않는다)', async () => {
+test('지도를 보는 중에 브레인이 꺼지면 화면 안에서 안내로 바뀐다(요약으로 쫓겨나지 않는다)', async () => {
   const { controller, elements } = setup();
   await controller.toggle();
+  await controller.setSurface(store.SURFACE_MAP);
   assert.equal(elements.graph.hidden, false);
   const svgBefore = elements.graphBody.children[0];
   controller.setAvailable(false);
-  assert.equal(elements.graph.hidden, false, '그래프 모드에 그대로 머문다');
+  assert.equal(elements.graph.hidden, false, '지도 서브뷰에 그대로 머문다');
   assert.equal(elements.summary.hidden, true);
   assert.notEqual(elements.graphBody.children[0], svgBefore, '그림 대신 안내로 바뀐다');
 });

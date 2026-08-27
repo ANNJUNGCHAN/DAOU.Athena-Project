@@ -37,11 +37,16 @@ function createGraphModeController(deps) {
   // 그래프 표면의 hidden을 직접 건드리지 않는다 — 소유자가 둘이면 브레인 준비
   // 타이밍에 따라 그래프 표면이 답변 모드에 새어 보이는 결함이 재발한다(실측,
   // 2026-08-26 — summaryTable이 graphView와 무관하게 ready만으로 보였다 지워졌다 했다).
+  //
+  // 스텝2-보정 — 요약 표/군집 지도 두 표면이 그래프 기능 안에서 동시에
+  // hidden=false였던 옛 결함(둘 다 92% 불투명 카드라 뒤 레이어가 비쳤다)을
+  // state.surface로 정식 해소한다. 이 함수가 여전히 유일한 hidden 소유자다 —
+  // canvas.js의 z-index 임시조치(.graph-surface-back)는 걷어냈다.
   function applyVisibility() {
     const graphView = store.isGraphView(state);
     if (elements.summary) elements.summary.hidden = graphView;
-    if (elements.graph) elements.graph.hidden = !graphView;
-    if (elements.summaryTable) elements.summaryTable.hidden = !graphView;
+    if (elements.graph) elements.graph.hidden = !graphView || state.surface !== store.SURFACE_MAP;
+    if (elements.summaryTable) elements.summaryTable.hidden = !graphView || state.surface !== store.SURFACE_SUMMARY;
     if (elements.pill) {
       // 모드 칩은 "다음에 할 동작"이 아니라 "지금 모드"를 보여준다(Paper 보드 05
       // "모드 칩 상시" — 답변/그래프 둘 중 지금 켜져 있는 쪽). 라벨은 "그래프"로
@@ -325,6 +330,26 @@ function createGraphModeController(deps) {
     collapseCluster() {
       state = store.collapseCluster(state);
       redrawFromCache();
+    },
+    // 요약 표 ↔ 군집 지도 서브뷰 전환(스텝2-보정) — canvas.js의 옛 z-index
+    // 임시조치(focusGraphSurface)를 대체한다. hidden 소유권은 applyVisibility()
+    // 하나뿐이라 여기서도 안 건드리고 store.setSurface()로만 바꾼다.
+    //
+    // 지도로 전환할 때는 항상 강제로 다시 그린다(draw(true)) — #graphCanvas가
+    // hidden인 동안엔 elements.graphBody.clientWidth/Height가 0이라(브레인
+    // 응답이 요약 서브뷰를 보는 중에 도착하면 draw()가 이미 0×0으로 한 번
+    // 그렸을 수 있다), 지도가 실제로 보이는 이 시점의 진짜 치수로 재계산해야
+    // 배치가 한쪽에 뭉치지 않는다. redrawFromCache()는 이미 계산된(잘못됐을
+    // 수 있는) 좌표를 재필터링만 할 뿐 치수를 다시 안 재므로 여기선 안 맞는다.
+    async setSurface(nextSurface) {
+      if (state.surface === nextSurface) return null;
+      state = store.setSurface(state, nextSurface);
+      applyVisibility();
+      if (state.surface === store.SURFACE_MAP) {
+        return draw(true);
+      }
+      renderSelection();
+      return null;
     },
   };
 }
