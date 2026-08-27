@@ -362,7 +362,10 @@ function renderRecommendations(turn, recommendations) {
     button.textContent = recommendation.label;
     button.setAttribute('aria-label', recommendation.label);
     button.addEventListener('click', () => {
-      if (state !== 'idle') return;
+      // Enter 게이트(아래 keydown)와 같은 두 조건이어야 한다 — remoteQueryBusy를
+      // 빼먹으면 오브 질의가 도는 중 트레이 복귀로 다시 보인 셸에 남아 있던 칩이
+      // 그 질의를 죽인다(2026-08-27 병합 점검 결함① — 결함 #1의 역방향).
+      if (state !== 'idle' || remoteQueryBusy) return;
       clearRecommendations();
       dispatchUserQuery(recommendation.query);
     });
@@ -594,7 +597,10 @@ async function runQueryLive(text) {
     unsubscribeLiveThinkingDelta();
     unsubscribeLiveTextDelta();
     releaseLadder.dispose(); // 유예 타이머 누수 방지 — 방출 자체는 아래 authoritative overwrite의 몫.
-    window.athena.send('athena:orb-signal', { signal: 'think', active: false });
+    // stale 턴은 끄지 않는다 — Esc로 죽인 질의 A가 새 질의 B 도중 뒤늦게 settle하면
+    // 무조건 끄기가 B의 THINK 얼굴을 삼킨다(2026-08-27 병합 점검 결함②).
+    // 중단된 턴의 끄기는 Esc 핸들러가 즉시 보낸다(아래 keydown의 짝 주석 참고).
+    if (myToken === abortToken) window.athena.send('athena:orb-signal', { signal: 'think', active: false });
     // 방어적 — 답변 조각이 한 번도 안 오고 턴이 끝나는 경로(예: 조기 중단)에서도
     // 미리보기가 턴 기록에 남지 않게 한다.
     clearThinkingPreview();
@@ -1150,6 +1156,8 @@ document.addEventListener('keydown', (e) => {
     if (state !== 'idle') {
       abortToken++; // 중단 — UI 반영 차단
       window.athena.send('athena:abort-live-query'); // 실배선 프로세스 트리도 실제로 죽인다
+      // 죽는 질의의 finally는 이제 stale이라 침묵한다(결함② 수정과 짝) — 여기서 즉시 끈다.
+      window.athena.send('athena:orb-signal', { signal: 'think', active: false });
       state = 'idle';
       setDot(null);
       setLocked(false);
