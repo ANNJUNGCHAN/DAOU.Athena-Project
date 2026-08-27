@@ -49,13 +49,30 @@ const $resultDockCanvasCount = resultRow.countEl;
 const $resultDockCaption = document.createElement('div');
 $resultDockCaption.className = 'result-dock-caption';
 resultRow.row.appendChild($resultDockCaption);
+resultRow.row.hidden = true;
 const sourceRow = buildResultDockRow('출처');
 const $resultDockSourceCount = sourceRow.countEl;
 const $resultDockChips = document.createElement('div');
 $resultDockChips.className = 'result-dock-chips';
 sourceRow.row.appendChild($resultDockChips);
-$resultDock.append(resultRow.row, sourceRow.row);
+sourceRow.row.hidden = true;
+// 하위 에이전트 도크(task #32, 보드04 2EZ-0/DG2-0) — 결과물·출처와 달리 턴이
+// 끝나야 채워지는 게 아니라 진행 중에 실시간으로 늘어난다(Agent 생애주기
+// system 이벤트). 세 번째(마지막) 행이라 .result-dock-row:last-child의 기존
+// 구분선 규칙(마지막 행엔 border-bottom 없음)이 새 CSS 없이 그대로 적용된다.
+const agentDockRow = buildResultDockRow('하위 에이전트');
+const $resultDockAgentCount = agentDockRow.countEl;
+const $resultDockAgentList = document.createElement('div');
+$resultDockAgentList.className = 'result-dock-agent-list';
+agentDockRow.row.appendChild($resultDockAgentList);
+agentDockRow.row.hidden = true;
+$resultDock.append(resultRow.row, sourceRow.row, agentDockRow.row);
 $app.insertBefore($resultDock, $history);
+// 세 행 중 하나라도 보이면 도크 자체를 보인다 — 개별 updateResultDock/
+// 서브에이전트 갱신 양쪽에서 부른다(단일 진실 — 도크 hidden을 직접 안 건드린다).
+function refreshResultDockVisibility() {
+  $resultDock.hidden = resultRow.row.hidden && sourceRow.row.hidden && agentDockRow.row.hidden;
+}
 const $input = document.getElementById('input');
 const $dot = document.getElementById('dot');
 const $lockHint = document.getElementById('lockHint');
@@ -375,20 +392,24 @@ function canvasTypeLabel(t) {
 function updateResultDock(cardCount, canvasTypes, canvasCaptions) {
   $resultDockCaption.textContent = '';
   $resultDockChips.textContent = '';
-  if (!cardCount) {
-    $resultDock.hidden = true;
-    return;
+  const hasResults = !!cardCount;
+  // 결과물·출처는 항상 짝으로 뜨고 짝으로 숨는다(기존 동작 그대로) — 하위
+  // 에이전트 행은 이 판정과 무관하게 자기 상태로 따로 hidden을 갖는다(아래
+  // onLiveSubagentStep).
+  resultRow.row.hidden = !hasResults;
+  sourceRow.row.hidden = !hasResults;
+  if (hasResults) {
+    $resultDockCanvasCount.textContent = `캔버스 ${cardCount}`;
+    $resultDockCaption.textContent = (canvasCaptions || []).join(' · ');
+    $resultDockSourceCount.textContent = String((canvasTypes || []).length);
+    for (const t of canvasTypes || []) {
+      const chip = document.createElement('span');
+      chip.className = 'chip';
+      chip.textContent = canvasTypeLabel(t);
+      $resultDockChips.appendChild(chip);
+    }
   }
-  $resultDockCanvasCount.textContent = `캔버스 ${cardCount}`;
-  $resultDockCaption.textContent = (canvasCaptions || []).join(' · ');
-  $resultDockSourceCount.textContent = String((canvasTypes || []).length);
-  for (const t of canvasTypes || []) {
-    const chip = document.createElement('span');
-    chip.className = 'chip';
-    chip.textContent = canvasTypeLabel(t);
-    $resultDockChips.appendChild(chip);
-  }
-  $resultDock.hidden = false;
+  refreshResultDockVisibility();
 }
 
 let activeRecommendationRow = null;
@@ -640,6 +661,77 @@ async function runQueryLive(text) {
   };
   const unsubscribeLiveToolStep = window.athena.on('athena:live-tool-step', onLiveToolStep);
 
+  // 하위 에이전트 도크(task #32) — 매 턴 이전 값을 지우고 최신 턴만 표시한다
+  // (결과물·출처 도크의 "누적 금지"와 같은 원칙, 위 updateResultDock 주석
+  // 참고). 결과물·출처와 달리 턴이 끝나야 채워지는 게 아니라 진행 중에
+  // task_started가 오는 즉시 뜬다.
+  $resultDockAgentList.textContent = '';
+  agentDockRow.row.hidden = true;
+  refreshResultDockVisibility();
+  const subagentStates = new Map(); // taskId -> { description, status, elapsedMs, lastActivity }
+  const subagentRows = new Map(); // taskId -> { row, desc, status, elapsed, activity }
+  function ensureSubagentRow(taskId) {
+    let entry = subagentRows.get(taskId);
+    if (entry) return entry;
+    const row = document.createElement('div');
+    row.className = 'result-dock-agent-row';
+    const top = document.createElement('div');
+    top.className = 'result-dock-agent-row-top';
+    const desc = document.createElement('span');
+    desc.className = 'result-dock-agent-desc';
+    const status = document.createElement('span');
+    status.className = 'result-dock-agent-status';
+    top.append(desc, status);
+    const bottom = document.createElement('div');
+    bottom.className = 'result-dock-agent-row-bottom';
+    const elapsed = document.createElement('span');
+    elapsed.className = 'result-dock-agent-elapsed';
+    const activity = document.createElement('span');
+    activity.className = 'result-dock-agent-activity';
+    bottom.append(elapsed, activity);
+    row.append(top, bottom);
+    $resultDockAgentList.appendChild(row);
+    entry = { row, desc, status, elapsed, activity };
+    subagentRows.set(taskId, entry);
+    return entry;
+  }
+  const onLiveSubagentStep = (step) => {
+    if (myToken !== abortToken || !step || !step.taskId) return;
+    let s = subagentStates.get(step.taskId);
+    if (!s) {
+      s = { description: null, status: 'running', elapsedMs: null, lastActivity: null };
+      subagentStates.set(step.taskId, s);
+    }
+    if (step.subtype === 'task_started') {
+      s.description = step.description;
+    } else if (step.subtype === 'task_progress') {
+      // description이 시작 때와 다르게 갱신될 수 있다(실측, .omc/research/
+      // 2026-08-27-서브에이전트-스트림-계약.md §2b) — 최신 값을 반영한다.
+      if (step.description) s.description = step.description;
+      if (step.lastToolName) s.lastActivity = step.lastToolName; // main.js가 이미 toolStepLabel로 매핑했다
+      if (typeof step.elapsedMs === 'number') s.elapsedMs = step.elapsedMs;
+    } else if (step.subtype === 'task_updated') {
+      // 확정된 상태값은 completed 하나뿐이다(실측 미관측 — 실패/취소 라벨을
+      // 지어내지 않는다). completed가 아니면 이미 갖고 있던 상태를 유지한다.
+      if (step.status === 'completed') s.status = 'completed';
+    }
+    // task_notification의 summary는 이번 패스 UI에 안 낸다 — 도크는 압축 행이고
+    // "자세히 보기" 드릴인은 범위 밖이다(연구 문서 §2d, output_file 노출 규율도 있다).
+    const entry = ensureSubagentRow(step.taskId);
+    entry.desc.textContent = s.description || '하위 에이전트';
+    const running = s.status !== 'completed';
+    entry.status.textContent = running ? '진행 중' : '완료';
+    entry.status.classList.toggle('is-running', running);
+    const seconds = typeof s.elapsedMs === 'number' ? (s.elapsedMs / 1000).toFixed(1) : '0.0';
+    entry.elapsed.textContent = `${seconds}s`;
+    entry.activity.textContent = s.lastActivity || '';
+    $resultDockAgentCount.textContent = String(subagentStates.size);
+    agentDockRow.row.hidden = subagentStates.size === 0;
+    refreshResultDockVisibility();
+    scrollAfterRender();
+  };
+  const unsubscribeLiveSubagentStep = window.athena.on('athena:live-subagent-step', onLiveSubagentStep);
+
   // 추론 미리보기(2026-08-26) — 답변 텍스트가 나오기 전 긴 침묵 구간을 채운다.
   // 미리보기 전용이다: 옅은 색·작은 글씨로 뚜렷이 구분하고, 답변 첫 조각이
   // 오거나 턴이 끝나면 즉시 지운다 — 턴 기록에는 절대 안 남는다.
@@ -716,6 +808,7 @@ async function runQueryLive(text) {
     clearInterval(tick);
     unsubscribeLiveCanvasAdded();
     unsubscribeLiveToolStep();
+    unsubscribeLiveSubagentStep();
     unsubscribeLiveThinkingDelta();
     unsubscribeLiveTextDelta();
     releaseLadder.dispose(); // 유예 타이머 누수 방지 — 방출 자체는 아래 authoritative overwrite의 몫.

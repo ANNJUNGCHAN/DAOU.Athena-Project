@@ -129,6 +129,9 @@ const ON_CHANNELS = new Set([
   // 호가잔량 실시간(키움 REAL 0D, task #25) — main이 파싱만, 래더 갱신은
   // card-kind-호가.js의 applyLiveTick이 한다.
   'athena:orderbook-ticks',
+  // 하위 에이전트 생애주기(task #32) — Agent(Task) system 이벤트를 그대로
+  // 릴레이한다. chat.js의 결과물·출처·하위 에이전트 3단 도크가 소비한다.
+  'athena:live-subagent-step',
   // 채팅 저장 실패 신호(2026-08-19, plan-chat-graph-pipeline.md §2(g)) —
   // history-sink의 POST가 실패하면 main이 {messageId, role}만 보낸다(본문 없음).
   'athena:history-save-failed',
