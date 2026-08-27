@@ -718,8 +718,23 @@
   // 패널이 한 프레임 잘려 보인다.
   window.athena.on('athena:orb-state', ({ expanded: isOpen, anchor } = {}) => {
     if (anchor) $root.dataset.anchor = anchor;
-    $root.dataset.state = isOpen ? 'expanded' : 'collapsed';
-    $panel.hidden = !isOpen;
+    if (isOpen && !reduceMotion.matches) {
+      // 펼침 성장 전환(board-30 3단계 근사, Option B) — hidden 해제와 data-state
+      // 전환이 한 틱에서 겹치면 display:none→flex 첫 프레임이라 orb.css의
+      // transition이 안 붙는다(전이할 "이전 프레임"이 아예 없었으므로). 그래서
+      // 작게 접힌 시작 프레임(data-panel-anim="enter")을 먼저 강제 리플로우로
+      // 확정하고, 다음 프레임에서 그 속성을 떼 최종 크기로 넘긴다.
+      $root.dataset.panelAnim = 'enter';
+      $panel.hidden = false;
+      $root.dataset.state = 'expanded';
+      void $panel.offsetHeight;
+      requestAnimationFrame(() => { delete $root.dataset.panelAnim; });
+    } else {
+      // 접힘은 즉시(과설계 금지 — 보드가 요구하는 건 등장뿐이다). reduced-motion도
+      // 여기로 와서 시작 프레임 없이 바로 최종 상태로 넘어간다.
+      $root.dataset.state = isOpen ? 'expanded' : 'collapsed';
+      $panel.hidden = !isOpen;
+    }
     expanded = !!isOpen;
     applyMode();
     if (isOpen && chatModeActive) {
