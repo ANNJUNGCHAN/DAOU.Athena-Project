@@ -549,3 +549,147 @@ def test_surprising_connections_reuses_the_cached_clusters(
     ):
         assert seeded_client.get(path, headers=_headers()).status_code == 200
     assert projector.cluster_builds == before + 1
+
+
+# --- edge_details: additive 엣지 메타데이터 (스텝13-보정) -------------------------------
+
+
+async def _seed_two_distinct_edges(app) -> None:
+    """엣지 둘 — 각자 다른 kind/tier/confidence라 값이 relation에서 그대로 나오는지 잰다."""
+    from athena_api.brain import (
+        INVESTOR_PROFILE_ENTITY_ID,
+        INVESTOR_PROFILE_NAME,
+        Confidence,
+        Entity,
+        EntityKind,
+        Relation,
+        SourceKind,
+        SourceRecord,
+        SourceTier,
+        entity_id,
+        relation_id,
+    )
+
+    store = app.state.brain_store
+    now = datetime(2026, 8, 25, 3, 0, tzinfo=UTC)
+    profile = Entity(
+        id=INVESTOR_PROFILE_ENTITY_ID,
+        kind=EntityKind.INVESTOR_PROFILE,
+        name=INVESTOR_PROFILE_NAME,
+        created_at=now,
+        updated_at=now,
+    )
+    samsung = Entity(
+        id=entity_id(EntityKind.SECURITY, "삼성전자"),
+        kind=EntityKind.SECURITY,
+        name="삼성전자",
+        created_at=now,
+        updated_at=now,
+    )
+    theme = Entity(
+        id=entity_id(EntityKind.THEME, "고배당주"),
+        kind=EntityKind.THEME,
+        name="고배당주",
+        created_at=now,
+        updated_at=now,
+    )
+    await store.upsert_source(
+        SourceRecord(
+            id="s1",
+            kind=SourceKind.CONVERSATION,
+            text="대화 본문",
+            fingerprint="fp-s1",
+            occurred_at=now,
+            ingested_at=now,
+        )
+    )
+    await store.apply_extraction(
+        "s1",
+        "fp-s1",
+        (profile, samsung, theme),
+        (
+            Relation(
+                id=relation_id("owns", profile.id, samsung.id),
+                kind="owns",
+                source_entity_id=profile.id,
+                target_entity_id=samsung.id,
+                confidence=Confidence.EXTRACTED,
+                tier=SourceTier.DETERMINISTIC,
+                source_id="s1",
+                observed_at=now,
+                extracted_at=now,
+            ),
+            Relation(
+                id=relation_id("interested_in", profile.id, theme.id),
+                kind="interested_in",
+                source_entity_id=profile.id,
+                target_entity_id=theme.id,
+                confidence=Confidence.AMBIGUOUS,
+                tier=SourceTier.CONVERSATIONAL,
+                source_id="s1",
+                observed_at=now,
+                extracted_at=now,
+            ),
+        ),
+    )
+
+
+@pytest.fixture
+def edge_detail_client(tmp_path: Path):
+    app = create_app(_brain_settings(tmp_path))
+    with TestClient(app) as client:
+        client.portal.call(_seed_two_distinct_edges, app)  # type: ignore[attr-defined]
+        yield client
+
+
+def test_cluster_map_edge_details_carry_kind_tier_confidence_from_relations(
+    edge_detail_client: TestClient,
+) -> None:
+    """edge_details는 projection이 이미 싣는 값을 그대로 낸다 — 새로 계산하지 않는다."""
+    from athena_api.brain import INVESTOR_PROFILE_ENTITY_ID, EntityKind, entity_id
+
+    body = edge_detail_client.get(
+        "/api/v1/brain/analysis/cluster-map", headers=_headers()
+    ).json()
+    profile_id = INVESTOR_PROFILE_ENTITY_ID
+    samsung_id = entity_id(EntityKind.SECURITY, "삼성전자")
+    theme_id = entity_id(EntityKind.THEME, "고배당주")
+
+    details = body["edge_details"]
+    assert len(details) == 2
+    for detail in details:
+        assert set(detail) == {"source", "target", "kinds", "tier", "confidence"}
+
+    by_pair = {(d["source"], d["target"]): d for d in details}
+    owns_pair = tuple(sorted((profile_id, samsung_id)))
+    interested_pair = tuple(sorted((profile_id, theme_id)))
+    assert set(by_pair) == {owns_pair, interested_pair}
+
+    owns_detail = by_pair[owns_pair]
+    assert owns_detail["kinds"] == ["owns"]
+    assert owns_detail["tier"] == "deterministic"
+    assert owns_detail["confidence"] == "EXTRACTED"
+
+    interested_detail = by_pair[interested_pair]
+    assert interested_detail["kinds"] == ["interested_in"]
+    assert interested_detail["tier"] == "conversational"
+    assert interested_detail["confidence"] == "AMBIGUOUS"
+
+    # edges와 edge_details가 같은 pair 목록·같은 순서에서 나온다는 계약.
+    assert body["edges"] == [list(pair) for pair in sorted([owns_pair, interested_pair])]
+
+
+def test_cluster_map_edge_details_merge_kinds_on_the_same_pair(
+    seeded_client: TestClient,
+) -> None:
+    """무연결이 아니라 실제 데이터를 쓰는 seeded_client에서도 응답 계약이 안 깨진다."""
+    body = seeded_client.get(
+        "/api/v1/brain/analysis/cluster-map", headers=_headers()
+    ).json()
+    assert len(body["edge_details"]) == len(body["edges"]), (
+        "edge_details와 edges는 같은 엣지 집합이어야 한다"
+    )
+    for detail in body["edge_details"]:
+        assert detail["kinds"], "kind가 최소 1개는 있어야 한다"
+        assert detail["tier"] in {"deterministic", "conversational"}
+        assert detail["confidence"] in {"EXTRACTED", "INFERRED", "AMBIGUOUS"}

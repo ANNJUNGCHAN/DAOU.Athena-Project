@@ -488,6 +488,23 @@ class ClusterMapNodeOut(BaseModel):
     degree: int
 
 
+class EdgeDetailOut(BaseModel):
+    """엣지 하나의 원본 관계 메타데이터.
+
+    `edges`(좌표 배치용 `[source, target]` 쌍)와 별개의 additive 필드다 — `projection.py`의
+    `project()`가 이미 각 엣지에 싣는 `kinds`/`tier`/`confidence`(101~108행)를 그대로
+    노출할 뿐, 새로 계산하지 않는다.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    source: str
+    target: str
+    kinds: list[str]
+    tier: str
+    confidence: str
+
+
 class ClusterMapResponse(BaseModel):
     """군집 지도 1단계 — Electron 그래프 모드가 처음 그리는 것."""
 
@@ -497,6 +514,7 @@ class ClusterMapResponse(BaseModel):
     nodes: list[ClusterMapNodeOut]
     edges: list[list[str]]
     cluster_cohesion: dict[int, float]
+    edge_details: list[EdgeDetailOut]
 
 
 @router.get(
@@ -639,6 +657,9 @@ async def get_brain_cluster_map(
     assignment = await projector.clusters()
     cohesion = cluster_cohesion(projected, assignment)
     graph = projected.graph
+    # 정렬해 내보낸다 — 순서가 흔들리면 캔버스가 이유 없이 다시 그려진다. edges와
+    # edge_details가 같은 pair 목록에서 나오므로 둘의 순서가 항상 같이 간다.
+    sorted_edge_pairs = sorted(tuple(sorted(edge)) for edge in graph.edges)
     return ClusterMapResponse(
         revision=projected.revision,
         nodes=[
@@ -649,9 +670,18 @@ async def get_brain_cluster_map(
                 cluster=assignment.get(node, -1),
                 degree=graph.degree(node),
             )
-            # 정렬해 내보낸다 — 순서가 흔들리면 캔버스가 이유 없이 다시 그려진다.
             for node in sorted(graph.nodes)
         ],
-        edges=[list(pair) for pair in sorted(tuple(sorted(edge)) for edge in graph.edges)],
+        edges=[list(pair) for pair in sorted_edge_pairs],
         cluster_cohesion=cohesion,
+        edge_details=[
+            EdgeDetailOut(
+                source=pair[0],
+                target=pair[1],
+                kinds=list(graph.get_edge_data(*pair).get("kinds", ())),
+                tier=str(graph.get_edge_data(*pair).get("tier", "")),
+                confidence=str(graph.get_edge_data(*pair).get("confidence", "")),
+            )
+            for pair in sorted_edge_pairs
+        ],
     )
