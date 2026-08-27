@@ -131,6 +131,10 @@ function createGraphModeController(deps) {
     // 캐시로 얹는다(이중 fetch 금지, 리드 지침).
     getSurprisingConnections, // () => connections[] (선택) — surprising-connections 원본.
     getProfileSummaryEntries, // () => entries[] (선택) — profile-summary 원본.
+    // §10-4 최근 변화(WP-G) — 위 두 소스와 달리 동기 캐시가 아니라 entity_id별
+    // IPC 왕복이 필요한 호출당 API라 async 함수로 주입받는다. 없으면 섹션이
+    // 조용히 꺼진다(다른 선택 주입과 같은 계약).
+    fetchEntityTimeline,      // async (entityId) => events[] (선택) — entity-timeline 원본.
   } = deps;
 
   let state = store.createInitialState();
@@ -356,12 +360,43 @@ function createGraphModeController(deps) {
 
   const PANEL_TIER_LABELS = { deterministic: '체결·잔고', conversational: '대화' };
 
+  // §10-4 최근 변화(보드 15 §2.5, WP-G) — 2단계 렌더의 채움 단계. 응답 시점의
+  // 실제 DOM에서 섹션을 다시 찾는다(선점해 둔 closure 노드는 같은 엔티티
+  // 재렌더로 이미 교체됐을 수 있다). 행이 없으면 섹션을 걷어낸다 — 빈 섹션보다
+  // 아예 없는 편이 정직하다(§0 정책).
+  function fillTimelineSection(entityId, rows) {
+    const panel = elements.panel;
+    // stale 응답 가드 — 빠른 재선택으로 이미 다른 엔티티가 선택됐거나 선택이
+    // 해제됐으면, 늦게 도착한 이 응답이 최신 선택 결과를 덮어쓰지 않게 버린다.
+    if (!panel || state.selectedEntityId !== entityId) return;
+    const section = panel.querySelector('.panel-recent-changes');
+    if (!section) return;
+    if (rows.length === 0) {
+      panel.removeChild(section);
+      return;
+    }
+    while (section.firstChild) section.removeChild(section.firstChild);
+    const title = elp('div', 'panel-recent-changes-title');
+    title.textContent = '최근 변화';
+    section.appendChild(title);
+    for (const row of rows) {
+      const rowEl = elp('div', 'panel-change-row');
+      const date = elp('span', 'panel-change-date');
+      date.textContent = row.date;
+      rowEl.appendChild(date);
+      const desc = elp('span', 'panel-change-desc');
+      desc.textContent = row.text;
+      rowEl.appendChild(desc);
+      section.appendChild(rowEl);
+    }
+    section.hidden = false;
+  }
+
   // 공통 패널 콘텐츠(보드 07 §10, 스텝8). §10-1 탭("이력" 탭은 Paper에 콘텐츠
   // 스펙이 없어 클릭해도 전환 없음, §6 범위 밖) · §10-2 선택 헤더 · §10-3 티어
   // 대조(가용 필드가 rationale/confidence/tier뿐이라 두 카드 비교 "어긋남"
-  // 대신 단일 카드로 축소, §0 정책) · §10-5 CTA를 그린다. §10-4(최근 변화)는
-  // 데이터가 없어 섹션 자체를 렌더하지 않는다 — 빈 섹션보다 아예 없는 편이
-  // 정직하다.
+  // 대신 단일 카드로 축소, §0 정책) · §10-4 최근 변화(엔티티 타임라인, WP-G —
+  // 유일한 비동기 채움 섹션, 아래 주석 참고) · §10-5 CTA를 그린다.
   function renderPanelContent(panel, data) {
     while (panel.firstChild) panel.removeChild(panel.firstChild);
 
@@ -450,6 +485,28 @@ function createGraphModeController(deps) {
         relations.appendChild(row);
       }
       panel.appendChild(relations);
+    }
+
+    // §10-4 최근 변화(보드 15 §2.5, WP-G) — 유일한 비동기 채움 섹션(2단계
+    // 렌더, G-G2). 다른 섹션은 전부 동기 캐시 조회지만 엔티티 타임라인은
+    // entity_id별 IPC 왕복이라 첫 렌더 시점엔 데이터가 없다. 섹션 자리를
+    // hidden으로 먼저 선점해 CTA보다 앞 순서를 고정해 두고(fake-dom에
+    // insertBefore가 없어 자리 선점이 가장 단순하다), 응답이 오면
+    // fillTimelineSection()이 채우거나(행 있음) 걷어낸다(행 없음·실패).
+    // selectNode()/selectEntity()의 동기 계약은 그대로다 — 이 fetch를
+    // 기다리지 않는다.
+    if (typeof fetchEntityTimeline === 'function' && data.entityId) {
+      const section = elp('div', 'panel-recent-changes');
+      section.hidden = true;
+      panel.appendChild(section);
+      const requestedEntityId = data.entityId;
+      Promise.resolve()
+        .then(() => fetchEntityTimeline(requestedEntityId))
+        .then((events) => fillTimelineSection(requestedEntityId, buildTimelineRows(events)))
+        // 실패는 빈 상태 유지가 정직하다 — 화면을 깨지 않고 선점해 둔 섹션도
+        // 걷어낸다(못 읽은 것을 "변화 없음"처럼 그리지 않으려면 섹션 자체가
+        // 없는 게 맞다, renderUnavailable()과 같은 논리).
+        .catch(() => fillTimelineSection(requestedEntityId, []));
     }
 
     const cta = elp('button', 'panel-cta');

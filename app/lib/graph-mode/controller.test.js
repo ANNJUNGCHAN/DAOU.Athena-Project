@@ -66,6 +66,7 @@ function setup(options) {
     onPanelCta: opts.onPanelCta,
     getSurprisingConnections: opts.getSurprisingConnections,
     getProfileSummaryEntries: opts.getProfileSummaryEntries,
+    fetchEntityTimeline: opts.fetchEntityTimeline,
   });
   // 대부분의 테스트는 브레인이 켜져 있다고 가정한다 — 꺼진 채 시작하고 싶은
   // 테스트만 opts.available: false를 넘긴다.
@@ -805,4 +806,89 @@ test('buildTimelineRows — 배열이 아니면 빈 배열, null 항목은 걸�
   assert.deepEqual(buildTimelineRows(null), []);
   const rows = buildTimelineRows([null, { at: '2026-08-04T12:00:00Z', op: 'entity_added' }]);
   assert.equal(rows.length, 1);
+});
+
+// ── §10-4 최근 변화 — 2단계 렌더 배선(WP-G G3) ─────────────────────────────────
+
+// 2단계 채움은 Promise 체인(마이크로태스크)으로 도착한다 — setImmediate 한 번이면
+// 체인 전체가 소진된 뒤 단언할 수 있다.
+const flushTimeline = () => new Promise((resolve) => setImmediate(resolve));
+
+test('§10-4 — IPC 성공 시 최근 변화 섹션이 행으로 채워진다(2단계 렌더)', async () => {
+  const { controller, elements } = setup({
+    withPanel: true,
+    fetchEntityTimeline: async () => [
+      { at: '2026-08-23T12:00:00Z', op: 'edge_added', relation: 'interested_in' },
+      { at: '2026-08-04T12:00:00Z', op: 'entity_added' },
+    ],
+  });
+  controller.selectEntity('e:samsung', tablePanelData());
+  await flushTimeline();
+  const section = elements.panel.querySelector('.panel-recent-changes');
+  assert.ok(section, '섹션이 채워져 있다');
+  assert.equal(section.hidden, false, '채워진 섹션은 보인다');
+  assert.equal(section.querySelector('.panel-recent-changes-title').textContent, '최근 변화');
+  const rows = section.querySelectorAll('.panel-change-row');
+  assert.equal(rows.length, 2);
+  assert.equal(rows[0].querySelector('.panel-change-date').textContent, '08-23');
+  assert.equal(rows[0].querySelector('.panel-change-desc').textContent, '관계 추가됨(관심)');
+  assert.equal(rows[1].querySelector('.panel-change-date').textContent, '08-04');
+  assert.equal(rows[1].querySelector('.panel-change-desc').textContent, '노드 처음 생김');
+});
+
+test('§10-4 — 이벤트가 없으면 선점해 둔 섹션을 걷어낸다(빈 섹션보다 없는 편이 정직하다)', async () => {
+  const { controller, elements } = setup({
+    withPanel: true,
+    fetchEntityTimeline: async () => [],
+  });
+  controller.selectEntity('e:samsung', tablePanelData());
+  await flushTimeline();
+  assert.equal(elements.panel.querySelector('.panel-recent-changes'), null);
+});
+
+test('§10-4 — IPC 실패면 섹션 없이 빈 상태를 유지하고 화면이 깨지지 않는다', async () => {
+  const { controller, elements } = setup({
+    withPanel: true,
+    fetchEntityTimeline: async () => { throw new Error('backend down'); },
+  });
+  controller.selectEntity('e:samsung', tablePanelData());
+  await flushTimeline();
+  assert.equal(elements.panel.querySelector('.panel-recent-changes'), null);
+  // 다른 섹션(헤더·CTA)은 멀쩡하다 — 실패가 패널 전체를 깨지 않는다.
+  assert.equal(elements.panel.querySelector('.panel-name').textContent, '삼성전자');
+  assert.ok(elements.panel.querySelector('.panel-cta'));
+});
+
+test('§10-4 — 빠른 재선택(A→B): A 응답이 B보다 늦게 도착해도 최종 렌더는 B다(stale 가드)', async () => {
+  const resolvers = {};
+  const { controller, elements } = setup({
+    withPanel: true,
+    fetchEntityTimeline: (entityId) => new Promise((resolve) => { resolvers[entityId] = resolve; }),
+  });
+  controller.selectEntity('e:a', tablePanelData({ entityId: 'e:a', name: 'A' }));
+  controller.selectEntity('e:b', tablePanelData({ entityId: 'e:b', name: 'B' }));
+  await flushTimeline();
+  // 도착 순서를 뒤집는다 — B가 먼저, A(이미 stale)가 나중에.
+  resolvers['e:b']([{ at: '2026-08-23T12:00:00Z', op: 'entity_added' }]);
+  await flushTimeline();
+  resolvers['e:a']([{ at: '2026-08-01T12:00:00Z', op: 'edge_removed', relation: 'owns' }]);
+  await flushTimeline();
+  const rows = elements.panel.querySelectorAll('.panel-change-row');
+  assert.equal(rows.length, 1, 'A의 늦은 응답이 B의 타임라인을 덮어쓰지 않는다');
+  assert.equal(rows[0].querySelector('.panel-change-desc').textContent, '노드 처음 생김');
+});
+
+test('§10-4 — 선택 해제 후 도착한 응답은 버려진다(패널을 다시 만들지 않는다)', async () => {
+  let resolveFetch;
+  const { controller, elements } = setup({
+    withPanel: true,
+    fetchEntityTimeline: () => new Promise((resolve) => { resolveFetch = resolve; }),
+  });
+  controller.selectEntity('e:samsung', tablePanelData());
+  await flushTimeline();
+  controller.clearSelection();
+  resolveFetch([{ at: '2026-08-23T12:00:00Z', op: 'entity_added' }]);
+  await flushTimeline();
+  assert.equal(elements.panel.hidden, true);
+  assert.equal(elements.panel.querySelector('.panel-recent-changes'), null);
 });
