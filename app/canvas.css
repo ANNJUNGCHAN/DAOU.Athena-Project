@@ -318,6 +318,46 @@ html, body { background: transparent; }
 }
 .summary-row.is-selected .summary-row-rationale { color: var(--color-k-bright); }
 
+/* 테마 군집(보드 06 §8/07 §8-2) — theme-clusters.js. 06(세로 리스트)이 기본,
+ * 공통 패널이 열리면(07, 스텝8) 가로 3카드로 전환한다 — 선택 여부가 06/07의
+ * 상태 축이라는 스텝0-2 설계를 :has()로 그대로 따른다(controller.js를
+ * 새로 건드리지 않는다 — 패널의 hidden은 이미 renderSelection()이 소유). */
+.theme-clusters { padding: 18px; border-top: 1px solid var(--color-k-line); }
+.theme-clusters-head {
+  display: flex; align-items: baseline; gap: 9px; padding-bottom: 12px;
+}
+.theme-clusters-title { font-family: var(--font-strong); font-size: var(--text-base); color: var(--color-k-bright); }
+.theme-clusters-subtitle { font-family: var(--font-body); font-size: var(--text-xs); color: var(--color-k-hint); }
+.theme-cluster-cards { display: flex; flex-direction: column; gap: 8px; }
+#graphSummaryBody:has(#graphPanel:not([hidden])) .theme-cluster-cards { flex-direction: row; }
+#graphSummaryBody:has(#graphPanel:not([hidden])) .theme-cluster-card { flex: 1 1 0%; }
+
+.theme-cluster-card {
+  display: flex; flex-direction: column; gap: 7px;
+  background: var(--color-k-panel2); border-radius: 8px; padding: 11px 12px;
+}
+/* 이름 붙은 군집이 하나라도 있을 때만(§0 r5 임계 규칙) 무명 카드에 붙는
+ * 경고 톤 — 지금(0/N, 전 군집 무명)은 절대 안 붙는다. */
+.theme-cluster-card.is-unnamed-warn {
+  background: rgba(255, 152, 56, 0.06); border: 1px solid rgba(255, 152, 56, 0.3);
+}
+.theme-cluster-title { display: flex; align-items: center; gap: 6px; }
+.theme-cluster-name { font-family: var(--font-strong); font-size: var(--text-sm); color: var(--color-k-bright); }
+.theme-cluster-unnamed-badge {
+  font-family: var(--font-body); font-size: var(--text-2xs); color: var(--color-k-hint);
+  background: var(--color-k-panel3); border-radius: 4px; padding: 1px 6px;
+}
+.theme-cluster-count { font-family: var(--font-body); font-size: var(--text-xs); color: var(--color-k-hint); }
+
+.theme-cluster-bar-row { display: flex; align-items: center; gap: 8px; }
+.theme-cluster-bar { flex: 1 1 0%; height: 3px; background: var(--color-k-bg); border-radius: 999px; overflow: hidden; }
+.theme-cluster-bar-fill { height: 100%; background: var(--color-k-text); border-radius: 999px; }
+.theme-cluster-bar-fill.is-warn { background: var(--color-warn); }
+.theme-cluster-cohesion {
+  font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-k-bright); white-space: nowrap;
+}
+.theme-cluster-cohesion.is-warn { color: var(--color-warn); }
+
 /* 카드도 유리다 — soul.md §7 "모든 표면이 유리다. 두 창도, 창 안의 카드도 전부."
  * 2026-08-17 디자인 리뷰 [HIGH]로 정정: 이전 판은 고정 rgba 채움 + backdrop-filter
  * 0건이라 §7이 금지한 "뒤에 굴절할 것 없는 반투명 회색 사각형"이었다. 이제 알파를
