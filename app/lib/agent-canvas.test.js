@@ -571,12 +571,12 @@ function alert1(overrides) {
   return { id: 'al1', title: '삼성전자 88,000 감시', sub: '005930 · 관측 88100', firedAt: Date.parse('2026-08-27T09:15:00Z'), read: false, ...overrides };
 }
 
-test('mount(): 뷰 탭 3종(작업/알람/라이브)이 있고 "작업"이 기본 활성이다', () => {
+test('mount(): 뷰 탭 4종(작업/알람/라이브/제안)이 있고 "작업"이 기본 활성이다(11단계에서 제안 추가)', () => {
   const container = fakeNode('div');
   const canvas = createAgentCanvas({ container, fetchRoutines: async () => [] });
   canvas.mount();
   const tabs = findByClass(container, 'agent-view-tab');
-  assert.deepEqual(tabs.map((n) => n.textContent), ['작업', '알람', '라이브']);
+  assert.deepEqual(tabs.map((n) => n.textContent), ['작업', '알람', '라이브', '제안']);
   assert.ok(tabs[0].className.includes('is-active'));
 });
 
@@ -784,4 +784,125 @@ test('"작업 ›" 클릭 시 드릴인이 닫히고 "작업" 화면이 복원�
   assert.equal(findByClass(container, 'agent-history-body')[0].hidden, true);
   assert.equal(findByClass(container, 'agent-tasks-head')[0].hidden, false);
   assert.equal(findByClass(container, 'agent-stats')[0].hidden, false);
+});
+
+test('"작업 ›" 클릭 후에는 "작업" 탭이 다시 활성으로 표시된다(실측 버그 수정 — 이전엔 복귀 후 아무 탭도 활성이 아니었다)', async () => {
+  const container = fakeNode('div');
+  const routines = [routine({ id: 'a', status: 'active' })];
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => routines, fetchRuns: async () => [] });
+  canvas.mount();
+  await canvas.refresh();
+  findByClass(container, 'agent-history-open')[0].dispatchEvent({ type: 'click' });
+  await new Promise((r) => setTimeout(r, 0));
+  findByClass(container, 'agent-breadcrumb-back')[0].dispatchEvent({ type: 'click' });
+  const tasksTab = findByClass(container, 'agent-view-tab').find((n) => n.textContent === '작업');
+  assert.ok(tasksTab.className.includes('is-active'));
+});
+
+// ── 11단계: 프로액티브(지금 읽히는 성향 · 제안 카드 · 말걸기 가드) ──
+
+test('setActiveView("proactive"): 작업 화면이 숨고 프로액티브 화면 + "그래프 모드에서 근거 보기 →"가 보인다', () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => [] });
+  canvas.mount();
+  canvas.setActiveView('proactive');
+  assert.equal(findByClass(container, 'agent-tasks-head')[0].hidden, true);
+  assert.equal(findByClass(container, 'agent-stats')[0].hidden, true);
+  assert.equal(findByClass(container, 'agent-proactive-body')[0].hidden, false);
+  assert.equal(findByClass(container, 'agent-graph-link')[0].hidden, false);
+});
+
+test('"그래프 모드에서 근거 보기 →" 클릭 시 onOpenGraph가 불린다(사이드바 모드 네비 재사용)', () => {
+  const container = fakeNode('div');
+  let called = 0;
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => [], onOpenGraph: () => { called += 1; } });
+  canvas.mount();
+  canvas.setActiveView('proactive');
+  findByClass(container, 'agent-graph-link')[0].dispatchEvent({ type: 'click' });
+  assert.equal(called, 1);
+});
+
+test('"지금 읽히는 성향" 스트립은 suggestionsCache(7단계와 같은 원천)의 relation_kind를 합친다 — 지어내지 않는다', async () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => [],
+    fetchProfileSummary: async () => [
+      profileEntry({ entity_id: 'e1', relation_kind: '단기 회전' }),
+      profileEntry({ entity_id: 'e2', relation_kind: '배당 방어' }),
+    ],
+  });
+  canvas.mount();
+  await canvas.refresh();
+  assert.equal(findByClass(container, 'agent-proactive-strip-value')[0].textContent, '단기 회전 · 배당 방어');
+  assert.equal(findByClass(container, 'agent-proactive-strip-sub')[0].textContent, '신호 2건');
+});
+
+test('신호가 없으면 스트립이 정직하게 "아직 읽히는 성향이 없습니다"를 보여준다(P3)', async () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => [] });
+  canvas.mount();
+  await canvas.refresh();
+  assert.equal(findByClass(container, 'agent-proactive-strip-value')[0].textContent, '아직 읽히는 성향이 없습니다');
+});
+
+test('제안 카드: 칩 "루틴으로"/"보류"가 있고, "루틴으로"는 7단계와 같은 문장을 채팅에 심는다', async () => {
+  const container = fakeNode('div');
+  let seeded = null;
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => [],
+    fetchProfileSummary: async () => [profileEntry()],
+    onAddSuggestion: (text) => { seeded = text; },
+  });
+  canvas.mount();
+  await canvas.refresh();
+  const cards = findByClass(container, 'agent-proactive-card');
+  assert.equal(cards.length, 1);
+  assert.equal(findByClass(cards[0], 'agent-proactive-card-title')[0].textContent, '삼성전자');
+  const chips = findByClass(cards[0], 'agent-proactive-chip').map((n) => n.textContent);
+  assert.deepEqual(chips, ['루틴으로', '보류']);
+  findByClass(cards[0], 'agent-proactive-chip')[0].dispatchEvent({ type: 'click' });
+  assert.equal(seeded, '"삼성전자"에 대한 단기 회전 성향이 21회 보강됐어요 — 관련 루틴을 만들어줄까요?');
+});
+
+test('"보류" 클릭 시 그 카드는 이번 세션에서만 숨는다(저장 안 됨, P3) — 탭 배지도 줄어든다', async () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => [],
+    fetchProfileSummary: async () => [profileEntry({ entity_id: 'e1' }), profileEntry({ entity_id: 'e2', entity_name: '배당주' })],
+  });
+  canvas.mount();
+  await canvas.refresh();
+  const proactiveTab = () => findByClass(container, 'agent-view-tab').find((n) => n.textContent.startsWith('제안'));
+  assert.equal(proactiveTab().textContent, '제안 2');
+  const firstCard = findByClass(container, 'agent-proactive-card')[0];
+  findByClass(firstCard, 'agent-proactive-chip')[1].dispatchEvent({ type: 'click' }); // "보류"
+  assert.equal(findByClass(container, 'agent-proactive-card').length, 1);
+  assert.equal(proactiveTab().textContent, '제안 1');
+});
+
+test('모든 제안을 보류하면 "지금은 표시할 제안이 없습니다"가 뜬다', async () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => [],
+    fetchProfileSummary: async () => [profileEntry()],
+  });
+  canvas.mount();
+  await canvas.refresh();
+  findByClass(container, 'agent-proactive-chip')[1].dispatchEvent({ type: 'click' }); // "보류"
+  const empty = findByClass(findByClass(container, 'agent-proactive-cards')[0], 'agent-list-empty');
+  assert.equal(empty.length, 1);
+  assert.equal(empty[0].textContent, '지금은 표시할 제안이 없습니다');
+});
+
+test('말걸기 가드는 정적 표시만이다 — 태그 4개 + 안내 문구, data-source fixture(P3, 죽은 저장 버튼 없음)', () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => [] });
+  canvas.mount();
+  const guard = findByClass(container, 'agent-nudge-guard')[0];
+  assert.equal(guard.getAttribute('data-source'), 'fixture');
+  assert.deepEqual(
+    findByClass(guard, 'agent-nudge-guard-tag').map((n) => n.textContent),
+    ['하루 최대 2회', '조용 시간 22:00–07:00', '근거 표시 항상', '거절 반영 성향으로 학습'],
+  );
+  assert.equal(findByClass(guard, 'agent-nudge-guard-note').length, 1);
 });

@@ -68,6 +68,12 @@
       })
     : null;
 
+  // 11단계(프로액티브, Paper 보드 42) — "그래프 모드에서 근거 보기 →"가 이
+  // 모드 네비를 그대로 재사용한다. setView만 부르면 캔버스는 그래프로
+  // 바뀌는데 이 네비의 활성 표시는 안 바뀌는 불일치가 생긴다 — setActive도
+  // 같이 노출한다(모드 네비 자신의 클릭 핸들러가 이미 하는 것과 동일한 순서).
+  if (modeNav) window.AthenaModeNav = { setActive: modeNav.setActive };
+
   // 3단계(리프 1.2.2, Paper 보드 39 보강본) — 순수 포매팅/상태아이콘은
   // agent-sidebar-list.js가 갖고 DOM은 여기서 조립한다(다른 make*Item과 같은 자리).
   const agentSidebarList = window.AthenaLib && window.AthenaLib.AgentSidebarList;
