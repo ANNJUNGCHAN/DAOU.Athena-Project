@@ -6,6 +6,7 @@ const {
   buildArgs,
   RENDER_CANVAS_ALLOWED_TOOL,
   GATEWAY_ALLOWED_TOOLS,
+  DISALLOWED_EXECUTION_TOOLS,
   DISABLE_TOOL_SEARCH_ENV,
 } = require('./claude-runner');
 
@@ -20,7 +21,21 @@ test('buildArgs: RESULT.md §1 실왕복 커맨드와 동일한 인자 순서 ·
     '--strict-mcp-config',
     '--setting-sources', '',
     '--allowedTools', 'mcp__athena__athena__render_canvas',
+    // 2026-08-27(#33) 추가 — RESULT.md §1 원계약 이후의 보안 차단, 아래
+    // DISALLOWED_EXECUTION_TOOLS 테스트 참고.
+    '--disallowedTools', 'Bash,Read,Write,Edit,NotebookEdit,Glob,Grep,WebFetch,WebSearch',
   ]);
+});
+
+test('buildArgs: --disallowedTools가 항상 붙는다(2026-08-27, #33) — allowedTools 값과 무관한 별도 안전망', () => {
+  // 실측: --allowedTools는 화이트리스트가 아니라 자동 승인 목록이었다.
+  // Bash/Read/Glob/Grep/Edit/NotebookEdit는 허용목록 밖인데도 기본 실행됐다
+  // (claude-runner-baseline-tool-enum-probe 캡처) — 그래서 allowedTools가
+  // 뭐든(카드 렌더용 단일 툴이든 게이트웨이 전체든) 이 차단은 항상 붙는다.
+  const args = buildArgs({ prompt: 'x', configFile: '.mcp.json', allowedTools: 'y' });
+  const i = args.indexOf('--disallowedTools');
+  assert.ok(i >= 0);
+  assert.equal(args[i + 1], DISALLOWED_EXECUTION_TOOLS);
 });
 
 test('buildArgs: --include-partial-messages가 항상 붙는다(2026-08-26 S2 — 답변 텍스트 델타 스트리밍)', () => {
@@ -103,6 +118,16 @@ test('GATEWAY_ALLOWED_TOOLS: 서버 단위 허용 — 업스트림 재노출 툴
   // 서브에이전트 권한 경계가 부모보다 넓어지지 않는다(claude-runner-subagent-probe
   // 실측: mcp__athena는 부모처럼 성공, 허용목록 밖 Write는 부모처럼 거부).
   assert.equal(GATEWAY_ALLOWED_TOOLS, 'mcp__athena,Task');
+});
+
+test('DISALLOWED_EXECUTION_TOOLS: mcp__athena/Agent를 뺀 실행류 빌트인 9종 — 이름 기반 차단이라 목록으로 고정 검증', () => {
+  // 전수 실측(baseline-tool-enum-probe, --allowedTools='mcp__athena'만으로):
+  // Bash/Read/Glob/Grep/Edit/NotebookEdit는 허용목록 밖인데도 실행됐고
+  // Write/WebFetch/WebSearch만 정상 거부됐다 — 9개 전부 명시 차단한다(이미
+  // 거부되던 3개도 방어적으로 포함, 향후 기본 동작이 바뀌어도 안전하게).
+  assert.equal(DISALLOWED_EXECUTION_TOOLS, 'Bash,Read,Write,Edit,NotebookEdit,Glob,Grep,WebFetch,WebSearch');
+  // Agent(서브에이전트)는 여기 없다 — #30에서 의도적으로 연 툴이다.
+  assert.ok(!DISALLOWED_EXECUTION_TOOLS.split(',').includes('Agent'));
 });
 
 test('DISABLE_TOOL_SEARCH_ENV: 항상 "0"으로 고정한다 — 부모 셸의 ENABLE_TOOL_SEARCH 상속을 덮는다', () => {

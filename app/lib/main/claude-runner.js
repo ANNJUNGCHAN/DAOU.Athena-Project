@@ -13,9 +13,23 @@ const RENDER_CANVAS_ALLOWED_TOOL = 'mcp__athena__athena__render_canvas';
 // 프로세스 전체에 한 벌이라 서브에이전트도 이 목록을 그대로 물려받는다 —
 // mcp__athena 조회(athena_search)는 부모와 동일하게 성공했고, 허용목록에 없는
 // Write는 부모와 동일하게 거부됐다(권한 경계가 부모보다 넓어지지 않는다).
-// 다만 이건 Task와 무관한 별도 실측인데, Bash는 애초에(Task 없이도) 허용목록
-// 밖인데도 막히지 않았다 — 별도 결함 후보로 team-lead에 따로 보고했다.
 const GATEWAY_ALLOWED_TOOLS = 'mcp__athena,Task';
+
+// 보안 실측(#33, 2026-08-27) — --allowedTools는 화이트리스트가 아니라 "자동
+// 승인 목록"이었다. 허용목록에 없어도 기본 허용되는 빌트인 툴을 전수 확인한
+// 결과: Bash·Read·Glob·Grep·Edit·NotebookEdit는 허용목록 밖인데도 그대로
+// 실행됐고, Write·WebFetch·WebSearch만 정상 거부됐다(claude-runner-baseline-
+// tool-enum-probe 캡처). live-prompt.js가 모델에게 "Bash·파일 접근은 자동
+// 거부된다"고 알리는 문구는 그래서 절반만 사실이었다.
+// `--tools`로 빌트인 표면 자체를 좁히는 방법도 재검증했지만(ENABLE_TOOL_SEARCH=0
+// 고정 이후라 위 2026-08-19 철회 사유가 이제는 안 통할 수도 있다고 보고 다시
+// 시도) mcp__athena 카드 렌더 파이프라인이 그대로 깨졌다 — buildLivePrompt로
+// 만든 실제 질의가 canvasResults:[] 로 2연속 재현됐다(claude-runner-canvas-
+// regression 캡처, --tools 없이 동일 질의는 즉시 성공). 그래서 아래
+// --disallowedTools로 이름 기반 차단을 택한다 — mcp__athena/Agent는 안
+// 건드리고 실행류 빌트인만 막는다. 새 빌트인 툴이 추가되면 이 목록도 재검토해야
+// 한다(이름 기반 차단이라 완전한 화이트리스트가 아니다).
+const DISALLOWED_EXECUTION_TOOLS = 'Bash,Read,Write,Edit,NotebookEdit,Glob,Grep,WebFetch,WebSearch';
 
 // 카드 랜딩 결함(2026-08-26 실측) — 오케스트레이션 셸이 사용자 설정 env로
 // ENABLE_TOOL_SEARCH=1을 내보내면, 그 셸에서 띄운 이 앱의 `claude -p` 자식
@@ -56,7 +70,15 @@ function buildArgs({ prompt, configFile, allowedTools, resumeSessionId, model, e
     // 기준선(무제한)의 Bash 3·Grep 1 낭비 4턴(~10초)이 깨진 지연 로딩보다 싸다 —
     // 실측이 두 번 뒤집은 끝의 결론이므로, 이 플래그를 재도입하려면 E2E 재실측을
     // 먼저 하라. 낭비 턴 억제는 프롬프트 규율(live-prompt.js 작업 규율)로만 한다.
+    // 재검증(2026-08-27, #33 보안 조사 중 — ENABLE_TOOL_SEARCH=0 고정 이후라
+    // 위 실패 모드가 없어졌는지 다시 시도): "Agent"(서브에이전트) 하나로만
+    // 좁혀도 mcp__athena 카드 렌더가 그대로 깨졌다 — 결론 안 바뀜, --tools는
+    // 계속 안 쓴다.
     '--allowedTools', allowedTools,
+    // 보안 차단(#33) — 위 DISALLOWED_EXECUTION_TOOLS 주석 참고. allowedTools가
+    // 뭐든(카드 렌더용 단일 툴이든 게이트웨이 전체든) 항상 붙는다 — 이건 화이트
+    // 리스트의 보완이 아니라 별도 안전망이라 호출자별로 켜고 끌 이유가 없다.
+    '--disallowedTools', DISALLOWED_EXECUTION_TOOLS,
   ];
   // 모델·추론강도(설정 화면 모델 패널, lib/main/model-prefs.js) — 값이 있을
   // 때만 붙인다. null/undefined면 인자 자체를 안 붙여 claude CLI 자체 기본값을
@@ -214,6 +236,7 @@ module.exports = {
   runClaudeQuery,
   RENDER_CANVAS_ALLOWED_TOOL,
   GATEWAY_ALLOWED_TOOLS,
+  DISALLOWED_EXECUTION_TOOLS,
   MAX_STDOUT_BYTES,
   DISABLE_TOOL_SEARCH_ENV,
 };
