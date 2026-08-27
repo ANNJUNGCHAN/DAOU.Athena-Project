@@ -28,9 +28,12 @@ function fakeNode(tag) {
     setAttribute(k, v) { this.attrs[k] = String(v); },
     getAttribute(k) { return Object.prototype.hasOwnProperty.call(this.attrs, k) ? this.attrs[k] : null; },
     addEventListener(type, handler) { (this._listeners[type] = this._listeners[type] || []).push(handler); },
+    // Promise.all을 돌려준다 — 동기 핸들러(기존 테스트 대부분)는 그냥 무시해도
+    // 되고, async 핸들러(6.5단계 일시중지/재개 클릭)는 호출부가 await해서
+    // 왕복이 끝난 뒤 단언할 수 있다.
     dispatchEvent(event) {
       const handlers = this._listeners[event && event.type] || [];
-      handlers.forEach((h) => h(event));
+      return Promise.all(handlers.map((h) => h(event)));
     },
   };
   return node;
@@ -258,14 +261,66 @@ test('예약(schedule) 상세는 fixture 필드(실행 위치 등)를 보여주�
   assert.ok(fieldLabels.includes('실행 위치'));
 });
 
-test('일시중지 버튼은 항상 비활성이다(6단계 엔드포인트가 있어도 이 화면 스코프는 표시만이다, P3)', async () => {
+// ── 6.5단계: 상세 패널 일시중지·재개 버튼 → pause/resume API 배선 ──
+
+test('감시(watch) active 항목은 "❚❚ 일시중지" 버튼이 활성화돼 있고 클릭 시 pauseRoutine을 부른다', async () => {
   const container = fakeNode('div');
   const routines = [routine({ id: 'a', status: 'active' })];
-  const canvas = createAgentCanvas({ container, fetchRoutines: async () => routines });
+  let pausedId = null;
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => routines,
+    pauseRoutine: async (id) => { pausedId = id; routines[0].status = 'paused'; },
+  });
+  canvas.mount();
+  await canvas.refresh();
+  const pauseBtn = findByClass(container, 'agent-pause-btn')[0];
+  assert.equal(pauseBtn.textContent, '❚❚ 일시중지');
+  assert.equal(pauseBtn.disabled, false);
+  await pauseBtn.dispatchEvent({ type: 'click' });
+  assert.equal(pausedId, 'a');
+});
+
+test('감시(watch) paused 항목은 "▶ 재개" 버튼이 활성화돼 있고 클릭 시 resumeRoutine을 부른다', async () => {
+  const container = fakeNode('div');
+  const routines = [routine({ id: 'a', status: 'paused' })];
+  let resumedId = null;
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => routines,
+    resumeRoutine: async (id) => { resumedId = id; routines[0].status = 'active'; },
+  });
+  canvas.mount();
+  await canvas.refresh();
+  const pauseBtn = findByClass(container, 'agent-pause-btn')[0];
+  assert.equal(pauseBtn.textContent, '▶ 재개');
+  assert.equal(pauseBtn.disabled, false);
+  await pauseBtn.dispatchEvent({ type: 'click' });
+  assert.equal(resumedId, 'a');
+});
+
+test('예약(schedule) 항목은 일시중지 버튼이 항상 비활성이다(예약 트리거 백엔드 미구현, P3)', async () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => [] });
   canvas.mount();
   await canvas.refresh();
   const pauseBtn = findByClass(container, 'agent-pause-btn')[0];
   assert.equal(pauseBtn.disabled, true);
+});
+
+test('pauseRoutine 호출 후 상세 패널이 refresh()로 실제 상태를 다시 받아 재개 버튼으로 바뀐다', async () => {
+  const container = fakeNode('div');
+  const routines = [routine({ id: 'a', status: 'active' })];
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => routines,
+    pauseRoutine: async () => { routines[0].status = 'paused'; },
+  });
+  canvas.mount();
+  await canvas.refresh();
+  const pauseBtn = findByClass(container, 'agent-pause-btn')[0];
+  await pauseBtn.dispatchEvent({ type: 'click' });
+  const afterBtn = findByClass(container, 'agent-pause-btn')[0];
+  assert.equal(afterBtn.textContent, '▶ 재개');
+  const badge = findByClass(container, 'agent-status-badge')[0];
+  assert.equal(badge.textContent, '일시중지');
 });
 
 test('최근 실행 로그는 fixture로 표시된다(ledger 라이브 연결은 10단계 몫)', async () => {

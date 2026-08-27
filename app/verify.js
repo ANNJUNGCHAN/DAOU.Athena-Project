@@ -2622,6 +2622,89 @@ app.whenReady().then(async () => {
     ipcMain.handle('athena:routine-confirm', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
   }
 
+  // ---------- 상세 패널 일시중지·재개 → pause/resume API (6.5단계) ----------
+  //
+  // 6단계가 만든 엔드포인트를 이 화면에 처음 잇는다. athena:routines-list와
+  // 함께 athena:routine-pause/resume도 stateful fixture로 바꿔 active→paused→
+  // active 왕복이 실제로 도는지 잰다(승인 카드 confirm과 같은 패턴, 5단계
+  // routineRoundTrip 참고).
+  try {
+    const stage65Routines = [
+      {
+        id: 'fx-pause', symbol: '005930', note: '삼성전자 감시', status: 'active', mode: 'periodic',
+        source_label: '현재가', cooldown_s: 300,
+      },
+    ];
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({
+      ok: true, data: { routines: stage65Routines, disclosure_ready: true, last_error: null },
+    }));
+    ipcMain.removeHandler('athena:routine-pause');
+    ipcMain.handle('athena:routine-pause', async (_e, { id } = {}) => {
+      const r = stage65Routines.find((x) => x.id === id);
+      if (!r) return { ok: false, error: '루틴이 존재하지 않는다' };
+      r.status = 'paused';
+      return { ok: true, data: { ...r } };
+    });
+    ipcMain.removeHandler('athena:routine-resume');
+    ipcMain.handle('athena:routine-resume', async (_e, { id } = {}) => {
+      const r = stage65Routines.find((x) => x.id === id);
+      if (!r) return { ok: false, error: '루틴이 존재하지 않는다' };
+      r.status = 'active';
+      return { ok: true, data: { ...r } };
+    });
+
+    const pauseResumeProbe = await shellWin.webContents.executeJavaScript(`(async () => {
+      const nav = document.getElementById('modeNavAgent');
+      const back = document.getElementById('modeNavSummary');
+      const canvas = document.getElementById('agentCanvas');
+      if (!nav || !back || !canvas || !window.AthenaAgentCanvas) return { wired: false };
+      nav.click();
+      await new Promise((r) => setTimeout(r, 600));
+      const allTabBtn = Array.from(canvas.querySelectorAll('.agent-tab')).find((n) => n.textContent === '모두');
+      if (allTabBtn) allTabBtn.click();
+      window.AthenaAgentCanvas.selectRow('fx-pause');
+      await new Promise((r) => setTimeout(r, 100));
+      const before = (canvas.querySelector('.agent-pause-btn') || {}).textContent || null;
+      canvas.querySelector('.agent-pause-btn').click();
+      await new Promise((r) => setTimeout(r, 300));
+      const afterPause = (canvas.querySelector('.agent-pause-btn') || {}).textContent || null;
+      const badgeAfterPause = (canvas.querySelector('.agent-status-badge') || {}).textContent || null;
+      canvas.querySelector('.agent-pause-btn').click();
+      await new Promise((r) => setTimeout(r, 300));
+      const afterResume = (canvas.querySelector('.agent-pause-btn') || {}).textContent || null;
+      const badgeAfterResume = (canvas.querySelector('.agent-status-badge') || {}).textContent || null;
+      back.click();
+      await new Promise((r) => setTimeout(r, 100));
+      return { wired: true, before, afterPause, badgeAfterPause, afterResume, badgeAfterResume };
+    })()`);
+    report.pauseResume = pauseResumeProbe;
+    assertOk('agent-canvas-6.5: 배선이 있다', pauseResumeProbe.wired === true);
+    if (pauseResumeProbe.wired) {
+      assertOk('agent-canvas-6.5: 활성 항목은 "❚❚ 일시중지" 버튼을 보여준다', pauseResumeProbe.before === '❚❚ 일시중지');
+      assertOk(
+        'agent-canvas-6.5: 일시중지 클릭 후 버튼이 "재개"로 바뀐다(실 API)',
+        pauseResumeProbe.afterPause === '▶ 재개',
+      );
+      assertOk('agent-canvas-6.5: 일시중지 클릭 후 상태 배지가 "일시중지"다', pauseResumeProbe.badgeAfterPause === '일시중지');
+      assertOk(
+        'agent-canvas-6.5: 재개 클릭 후 버튼이 다시 "❚❚ 일시중지"로 바뀐다',
+        pauseResumeProbe.afterResume === '❚❚ 일시중지',
+      );
+      assertOk('agent-canvas-6.5: 재개 클릭 후 상태 배지가 "활성"이다', pauseResumeProbe.badgeAfterResume === '활성');
+    }
+  } catch (err) {
+    report.pauseResume = { error: String((err && err.message) || err) };
+    failures.push('agent-canvas-6.5: 검증 블록이 예외로 끝났다');
+  } finally {
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+    ipcMain.removeHandler('athena:routine-pause');
+    ipcMain.handle('athena:routine-pause', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+    ipcMain.removeHandler('athena:routine-resume');
+    ipcMain.handle('athena:routine-resume', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+  }
+
   fs.writeFileSync(path.join(CAPTURES, 'VERIFY-REPORT.json'), JSON.stringify(report, null, 2));
   console.log('[verify] 리포트 저장:', path.join(CAPTURES, 'VERIFY-REPORT.json'));
 

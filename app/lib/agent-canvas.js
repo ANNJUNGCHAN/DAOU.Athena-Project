@@ -25,10 +25,11 @@
 // 탭(모두/활성/일시중지)·검색은 두 출처 모두에 동일하게 적용된다(화면
 // 하나이므로 필터도 하나).
 //
-// 일시중지 버튼은 항상 비활성이다 — 6단계가 pause 엔드포인트를 추가했지만
-// 이 화면에 그 버튼을 실제로 잇는 건 계획서가 이 단계의 스코프로 잡지 않았다
-// (기능 없는 버튼을 활성으로 두지 않는다, P3). 상세 패널의 "최근 실행" 로그도
-// fixture다(ledger API 라이브 연결은 10단계 몫).
+// 일시중지·재개 버튼은 감시(watch, live) 항목에서만 활성이다(6.5단계 —
+// 6단계 pause/resume 엔드포인트를 이 화면에 배선). 예약(schedule) 항목은
+// 백엔드에 대응 전이가 없어 항상 비활성으로 남는다(기능 없는 버튼을 활성으로
+// 두지 않는다, P3). 상세 패널의 "최근 실행" 로그는 여전히 fixture다(ledger
+// API 라이브 연결은 10단계 몫).
 
 const TABS = [
   { key: 'all', label: '모두' },
@@ -71,7 +72,7 @@ function statusRowIcon(routine) {
 }
 
 function createAgentCanvas(deps) {
-  const { container, fetchRoutines, onNewTaskClick } = deps || {};
+  const { container, fetchRoutines, onNewTaskClick, pauseRoutine, resumeRoutine } = deps || {};
   if (!container) return { mount() {}, async refresh() {} };
 
   let activeTab = 'all';
@@ -312,13 +313,30 @@ function createAgentCanvas(deps) {
     titleEl.textContent = item.title;
     headRow.appendChild(titleEl);
     const headActions = el('span', 'agent-detail-head-actions');
-    // 일시중지 버튼은 항상 비활성이다 — 위 머리말 참고(P3, 6단계 엔드포인트를
-    // 이 화면에 잇는 건 이 단계 스코프가 아니다).
     const pauseBtn = el('button', 'agent-pause-btn');
     pauseBtn.type = 'button';
-    pauseBtn.textContent = '❚❚ 일시중지';
-    pauseBtn.disabled = true;
-    pauseBtn.title = '일시중지 기능은 준비 중입니다';
+    if (item.kind === 'watch') {
+      // 감시(watch, live)만 pause/resume 엔드포인트가 있다 — 위 머리말 참고.
+      const willPause = item.status !== 'paused';
+      pauseBtn.textContent = willPause ? '❚❚ 일시중지' : '▶ 재개';
+      pauseBtn.disabled = false;
+      pauseBtn.addEventListener('click', async () => {
+        pauseBtn.disabled = true;
+        const action = willPause ? pauseRoutine : resumeRoutine;
+        try {
+          if (typeof action === 'function') await action(item.id);
+        } catch {
+          // 실패해도 조용히 넘어간다 — 아래 refresh()가 실제 상태를 다시 받아와
+          // 반영한다(낙관적 갱신 없음, P3 — 성공한 척하지 않는다).
+        }
+        await refresh();
+      });
+    } else {
+      // 예약(schedule)은 fixture라 대응하는 백엔드 전이가 없다 — 항상 비활성.
+      pauseBtn.textContent = '❚❚ 일시중지';
+      pauseBtn.disabled = true;
+      pauseBtn.title = '예약 트리거는 아직 백엔드에 없습니다';
+    }
     headActions.appendChild(pauseBtn);
     headRow.appendChild(headActions);
     detailCol.appendChild(headRow);
