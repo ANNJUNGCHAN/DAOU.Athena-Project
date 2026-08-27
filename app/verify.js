@@ -1362,7 +1362,23 @@ app.whenReady().then(async () => {
   // 위 검증13이 이미 mock 'chart' 카드(window.addCard('chart'))를 그려뒀으므로,
   // makeCard의 "같은 타입 재요청 시 갈아치운다" 규칙(카드 정리 규칙)에 따라 이
   // 봉투가 그 카드를 대체한다 — 별도 정리 호출 없이 정확히 카드 1장만 남아야 한다.
+  // 캔들 수는 HISTORY_TRIGGER_BARS=12(chart-card.js:505) 이상이어야 한다(WP-J) —
+  // 그보다 적으면 마운트 즉시 isNearLeftEdge()가 참이 되어 chart-reload.js의
+  // "권위가 없는 패널이다" 방어 예외가 매 verify마다 콘솔에 쏟아진다. 하네스
+  // 픽스처가 원인이라 하네스만 늘린다(차트 카드 기능 코드는 무변경).
   const liveChartCandles = [
+    { time: '2026-07-29', open: 69800, high: 70200, low: 69500, close: 70000, volume: 8123456 },
+    { time: '2026-07-30', open: 70000, high: 70500, low: 69800, close: 70300, volume: 7998877 },
+    { time: '2026-07-31', open: 70300, high: 70600, low: 69900, close: 70100, volume: 9012345 },
+    { time: '2026-08-03', open: 70100, high: 70700, low: 70000, close: 70500, volume: 8456789 },
+    { time: '2026-08-04', open: 70500, high: 70900, low: 70200, close: 70400, volume: 7789900 },
+    { time: '2026-08-05', open: 70400, high: 70800, low: 70100, close: 70600, volume: 8234567 },
+    { time: '2026-08-06', open: 70600, high: 71100, low: 70400, close: 70900, volume: 9345678 },
+    { time: '2026-08-07', open: 70900, high: 71300, low: 70600, close: 71100, volume: 8567890 },
+    { time: '2026-08-10', open: 71100, high: 71400, low: 70800, close: 70900, volume: 7654321 },
+    { time: '2026-08-11', open: 70900, high: 71200, low: 70500, close: 70700, volume: 8090909 },
+    { time: '2026-08-12', open: 70700, high: 71100, low: 70400, close: 70800, volume: 8345612 },
+    { time: '2026-08-13', open: 70800, high: 71200, low: 70600, close: 71000, volume: 8765432 },
     { time: '2026-08-14', open: 71000, high: 71600, low: 70800, close: 71300, volume: 9123456 },
     { time: '2026-08-17', open: 71300, high: 71900, low: 71100, close: 71700, volume: 8877665 },
     { time: '2026-08-18', open: 71700, high: 72200, low: 71500, close: 72000, volume: 10233445 },
@@ -1901,8 +1917,18 @@ app.whenReady().then(async () => {
     { id: 'T4', type: 'table', screenId: 'AT-CV-005:T4', state: 'ready', data: tableData(6, true) },
     { id: 'C1', type: 'chart', screenId: 'AT-CV-005:C1', state: 'ready', rendererId: 'aits-chart-v1', data: {
       symbol: '005930',
+      // liveChartCandles(검증13b)와 같은 이유로 HISTORY_TRIGGER_BARS=12 이상(WP-J).
       chart: { period: 'day', target: 'stock', trId: 'ka10081', candles: [
-        { time: '2026-08-18', open: 100, high: 110, low: 95, close: 105, volume: 1000 },
+        { time: '2026-08-05', open: 90, high: 98, low: 88, close: 95, volume: 700 },
+        { time: '2026-08-06', open: 95, high: 102, low: 93, close: 100, volume: 800 },
+        { time: '2026-08-07', open: 100, high: 104, low: 96, close: 98, volume: 750 },
+        { time: '2026-08-10', open: 98, high: 103, low: 95, close: 101, volume: 820 },
+        { time: '2026-08-11', open: 101, high: 106, low: 99, close: 104, volume: 900 },
+        { time: '2026-08-12', open: 104, high: 108, low: 100, close: 102, volume: 860 },
+        { time: '2026-08-13', open: 102, high: 107, low: 100, close: 106, volume: 940 },
+        { time: '2026-08-14', open: 106, high: 111, low: 104, close: 108, volume: 1010 },
+        { time: '2026-08-17', open: 108, high: 112, low: 105, close: 107, volume: 880 },
+        { time: '2026-08-18', open: 107, high: 110, low: 103, close: 105, volume: 950 },
         { time: '2026-08-19', open: 105, high: 115, low: 101, close: 112, volume: 1200 },
       ] },
     } },
