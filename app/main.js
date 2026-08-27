@@ -46,6 +46,27 @@ function mdlog(msg) {
 
 mdlog('module loaded, ATHENA_NO_AUTOSTART: ' + process.env.ATHENA_NO_AUTOSTART);
 
+// ---------- 싱글 인스턴스 락 — 앱 2개 방지 ----------
+// Electron의 락은 app.getPath('userData') 기준이라(Chromium ProcessSingleton),
+// ATHENA_USERDATA_DIR로 프로필을 격리하는 QA 하네스(verify.js/run-cases*.js/
+// probe-*.js — 전부 require('./main.js')보다 먼저 app.setPath('userData', ...)를
+// 부른다)는 실앱과 별개의 락을 가진다. 즉 하네스가 떠 있어도 실앱 기동에 영향이
+// 없고, 반대로 실앱이 떠 있어도 격리 프로필 하네스는 정상 기동한다.
+const gotSingleInstanceLock = app.requestSingleInstanceLock();
+if (!gotSingleInstanceLock) {
+  // 같은 프로필로 이미 실행 중 — 이 프로세스는 여기서 즉시 끝낸다(fail-fast).
+  // 창 생성·IPC 등록 등 나머지 모듈 로드를 진행하지 않는다.
+  mdlog('requestSingleInstanceLock 실패 — 이미 실행 중, 즉시 종료');
+  app.quit();
+  return;
+}
+app.on('second-instance', () => {
+  // 두 번째 실행 시도 — 기존 창을 앞으로(포커스/복원). revealShell은 아래에서
+  // 정의되지만 function 선언이라 호이스팅되어 여기서도 참조 가능하다.
+  mdlog('second-instance 감지 — 기존 셸 창을 앞으로');
+  revealShell({ focus: true });
+});
+
 // v2.js/v3.js와 동일 패턴 — 반드시 빈 핸들러여야 한다. 리스너 자체가 없으면
 // Electron이 조용히 app.quit()해버리는 버그가 있다(S1 RESULT.md). 그렇다고
 // 여기서 app.quit()을 호출하면 워밍업 창이 닫히는 순간(=그 시점의 "모든 창")
