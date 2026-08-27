@@ -1,19 +1,28 @@
-"""Legacy selector facade backed only by shared typed compatibility authority."""
+"""테스트 전용 셀렉터 facade 지그 — 프로덕션 selector에서 삭제된 레거시 facade의 시험대 사본.
+
+2026-08-28 P2: `athena_api/selector/policy.py`(프로덕션 미사용, 가드 테스트가 미사용을
+보증하던 레거시)를 프로덕션 트리에서 삭제하면서, 그 경로를 통해 재던 회귀
+커버리지(exact-ref 분기·detail group 규칙·순위 무권위 불변성)를 잃지 않으려고
+본문을 여기로 그대로 옮겼다. 이 모듈은 시험 지그다 — 프로덕션 코드가 다시
+import하면 안 되며, 그 금지는 test_selector_autonomous_eval의 소스 스캔과
+test_selector_service_uses_shared_compatibility_as_its_only_semantic_authority가
+계속 지킨다.
+"""
 
 from __future__ import annotations
 
 from athena_api.generated.registry import SPLIT_BASE_TR_IDS
 
-from .catalog import OperationCatalog, OperationDocument
-from .compatibility import CompatibilityDecisionStatus, decide_selector_compatibility
-from .errors import (
+from athena_api.selector.catalog import OperationCatalog, OperationDocument
+from athena_api.selector.compatibility import CompatibilityDecisionStatus, decide_selector_compatibility
+from athena_api.selector.errors import (
     AmbiguousOperationError,
     DetailGroupRequiredError,
     NoConfidentMatchError,
     UnknownDetailGroupError,
 )
-from .ranking import RankedDocument
-from .schemas import DiscoveryIntent, ReasonCode, ResponseMode
+from athena_api.selector.ranking import RankedDocument
+from athena_api.selector.schemas import DiscoveryIntent, ReasonCode, ResponseMode
 
 
 def _resolve_detail(
@@ -95,7 +104,7 @@ def select_operation(
     if exact is not None:
         return exact
 
-    from .primitive_evidence import analyze_question
+    from athena_api.selector.primitive_evidence import analyze_question
 
     execution = analyze_question(question).execution
     intent = (

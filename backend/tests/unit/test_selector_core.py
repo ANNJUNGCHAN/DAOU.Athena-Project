@@ -30,7 +30,7 @@ from athena_api.selector.errors import (
 from athena_api.selector.lexicon import synonym_only_tokens
 from athena_api.selector.normalization import tokenize
 from athena_api.selector.plans import PlanSigner, VerifiedPlan
-from athena_api.selector.policy import select_operation
+from _selector_facade import select_operation
 from athena_api.selector.primitive_evidence import TargetResolution
 from athena_api.selector.ranking import (
     _MINIMUM_SURFACE,

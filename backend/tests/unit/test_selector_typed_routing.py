@@ -30,7 +30,7 @@ from athena_api.selector.errors import (
 )
 from athena_api.selector.instrument_identity import InstrumentIdentityIndex
 from athena_api.selector.plans import PlanSigner
-from athena_api.selector.policy import select_operation
+from _selector_facade import select_operation
 from athena_api.selector.query_frame import extract_query_frame
 from athena_api.selector.ranking import RankedDocument, rank_documents
 from athena_api.selector.schemas import (

@@ -1228,7 +1228,7 @@ def test_selector_service_uses_shared_compatibility_as_its_only_semantic_authori
 def test_legacy_policy_facade_has_no_lexical_authorization_path() -> None:
     import inspect
 
-    from athena_api.selector import policy
+    import _selector_facade as policy
 
     source = inspect.getsource(policy)
     assert "decide_selector_compatibility" in source
@@ -1240,7 +1240,7 @@ def test_legacy_policy_facade_has_no_lexical_authorization_path() -> None:
 
 
 def test_legacy_policy_ignores_rank_and_title_perturbations(catalog) -> None:
-    from athena_api.selector.policy import select_operation
+    from _selector_facade import select_operation
     from athena_api.selector.ranking import RankedDocument
 
     question = "Show this stock's current price"
@@ -1270,7 +1270,7 @@ def test_legacy_policy_ignores_rank_and_title_perturbations(catalog) -> None:
 
 
 def test_legacy_policy_intent_is_invariant_to_ranked_document_kind(catalog) -> None:
-    from athena_api.selector.policy import select_operation
+    from _selector_facade import select_operation
     from athena_api.selector.ranking import RankedDocument
 
     question = "Show this stock's current price"
@@ -1301,7 +1301,7 @@ def test_legacy_policy_intent_is_invariant_to_ranked_document_kind(catalog) -> N
 def test_legacy_policy_detail_group_cannot_override_unique_typed_child(
     catalog, service
 ) -> None:
-    from athena_api.selector.policy import select_operation
+    from _selector_facade import select_operation
 
     question = "Show this stock's current price"
     with pytest.raises(UnknownDetailGroupError):

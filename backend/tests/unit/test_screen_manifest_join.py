@@ -9,7 +9,7 @@ import pytest
 from athena_api.generated.registry import DETAIL_REGISTRY, SPLIT_BASE_TR_IDS, TR_REGISTRY
 from athena_api.selector.catalog import build_operation_catalog
 from athena_api.selector.errors import DetailGroupRequiredError, NoConfidentMatchError
-from athena_api.selector.policy import select_operation
+from _selector_facade import select_operation
 from athena_api.selector.schemas import ReasonCode, ResponseMode
 
 BACKEND = Path(__file__).resolve().parents[2]

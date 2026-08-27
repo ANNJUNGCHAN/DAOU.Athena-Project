@@ -44,7 +44,6 @@ SOURCE_PATHS = (
     BACKEND / "athena_api" / "selector" / "catalog.py",
     BACKEND / "athena_api" / "selector" / "eligibility.py",
     BACKEND / "athena_api" / "selector" / "plans.py",
-    BACKEND / "athena_api" / "selector" / "policy.py",
     BACKEND / "athena_api" / "selector" / "query_frame.py",
     BACKEND / "athena_api" / "selector" / "ranking.py",
     BACKEND / "athena_api" / "selector" / "schemas.py",
