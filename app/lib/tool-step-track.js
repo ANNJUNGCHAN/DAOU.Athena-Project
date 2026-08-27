@@ -10,20 +10,25 @@
 // 아예 안 구독해 board-04 "⑧ 실행 라인"이 셸 쪽에서만 비어 있었다. 오브가
 // 이미 갖고 있던 판정을 그대로 나눠 쓴다 — 두 벌로 다시 짓지 않는다.)
 
-// steps: id → { label, done, elapsedMs } 맵(호출자가 턴 하나의 수명으로 들고
-// 있는다 — orb.js의 카드별 Map, chat.js의 턴별 Map).
-// step: main.js가 보낸 원시 이벤트 하나.
-// 반환: 이번 판정 결과 { id, label, done, timeText } — id가 없는 이벤트는
-// null(호출자는 그리지 않고 무시한다).
+// steps: id → { label, done, elapsedMs, error } 맵(호출자가 턴 하나의 수명으로
+// 들고 있는다 — orb.js의 카드별 Map, chat.js의 턴별 Map).
+// step: main.js가 보낸 원시 이벤트 하나. error는 옵셔널 필드(tool_result의
+// is_error) — 안 보내는 호출자(진행 중 이벤트 등)는 항상 false로 취급된다.
+// 반환: 이번 판정 결과 { id, label, done, timeText, error } — id가 없는
+// 이벤트는 null(호출자는 그리지 않고 무시한다). label은 error일 때 "{원본
+// 라벨} 실패"로 이미 조립돼 있다 — 오브·셸 두 호출자가 라벨을 각자 다시
+// 짓지 않게(이 모듈이 애초에 막으려던 중복) 여기서 한 번만 짓는다.
 function applyToolStep(steps, step) {
   if (!step || !step.id) return null;
-  const label = step.label || '처리 중';
+  const rawLabel = step.label || '처리 중';
   const done = !!step.done;
+  const error = !!step.error;
+  const label = error ? `${rawLabel} 실패` : rawLabel;
   const timeText = done && typeof step.elapsedMs === 'number'
     ? `${(step.elapsedMs / 1000).toFixed(1)}s`
     : (done ? '—' : '');
-  steps.set(step.id, { label, done, elapsedMs: step.elapsedMs });
-  return { id: step.id, label, done, timeText };
+  steps.set(step.id, { label, done, elapsedMs: step.elapsedMs, error });
+  return { id: step.id, label, done, timeText, error };
 }
 
 const __exports = { applyToolStep };

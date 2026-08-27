@@ -11,6 +11,13 @@ const { isValidCorrelation, waitForVisiblePaint } = window.AthenaLib.RestCanvasP
 // 모든 chart surface의 유일한 세션/DTO 권위. 실제 그리기는 기존 하나의
 // lightweight-charts controller만 주입하며 별도 renderer/BrowserWindow는 없다.
 const aitsChartPanels = createAitsChartPanelAdapter({ renderChart: createChartCard, maxPanels: 6 });
+// 시세 카드 실시간 세션(단계 8 확장) — 차트와 같은 0B 체결 피드를 나눠 쓴다
+// (아래 athena:chart-ticks 구독 하나가 둘 다에게 보낸다). 채널을 새로 안 만든다.
+const { createQuoteRealtimePanelAdapter } = window.AthenaLib.QuoteRealtimePanel;
+const quoteRealtimePanels = createQuoteRealtimePanelAdapter();
+// 호가 카드 실시간 세션(task #25) — 같은 어댑터 팩토리를 새 인스턴스로 재사용한다
+// (0B 체결과 0D 호가잔량은 완전히 다른 피드라 패널을 나눈다).
+const orderbookRealtimePanels = createQuoteRealtimePanelAdapter();
 
 // snapshot().period는 AITS 표기(day/week/…)다. 과거 조회 IPC는 툴바와 같은
 // UI 주기 코드를 쓰므로 여기서 되돌린다.
@@ -26,7 +33,15 @@ if (window.athena && typeof window.athena.on === 'function') {
     if (!Array.isArray(ticks)) return;
     for (const tick of ticks) {
       aitsChartPanels.applyRealtimeTick(tick).catch(() => { /* 진행봉 실패는 차트를 죽이지 않는다 */ });
+      quoteRealtimePanels.applyRealtimeTick(tick); // 종목 불일치·열린 카드 없음은 내부에서 조용히 버려진다
     }
+  });
+  // 호가잔량(0D, task #25) — main이 lib/main/orderbook-realtime.js로 파싱해
+  // 넘긴다. 열린 호가 카드가 없으면(wireOrderbookRealtime 미배선) 내부에서
+  // 조용히 버려진다.
+  window.athena.on('athena:orderbook-ticks', (ticks) => {
+    if (!Array.isArray(ticks)) return;
+    for (const tick of ticks) orderbookRealtimePanels.applyRealtimeTick(tick);
   });
 }
 
@@ -631,6 +646,65 @@ function cardTitleAndSubtitle(envelope, fallback) {
   return [caption || fallback, null];
 }
 
+// 시세류 카드 실시간 등록(단계 8 확장, P1 2026-08-27 카드종 확장) — 종목코드를
+// 아는 경우에만 세션을 연다. REST 데이터셋 직결 카드는 envelope.operation_args.
+// stk_cd가 있다(canvas.js athena:add-rest-canvas 핸들러가 채운다 — 위쪽 참고).
+// 서버측 0B REG는 main.js ensureRealtimeForSymbol이 두 경로(REST 데이터셋
+// 직결·클로드 툴 실시간) 모두에서 같은 후보 자리를 본다 — main.js
+// extractLiveQuoteSymbol 주석 참고. 여기서는 렌더러 쪽 세션만 열어서 그 종목의
+// 체결을 applyTick이 그 카드종 body에 이어붙이게 한다 — 카드종마다 갱신할 필드가
+// 달라(시세 카드는 표 행, 종목정보 카드는 QuoteHeader) 호출부가 자기 카드종의
+// applyLiveTick을 넘긴다.
+//
+// backend 53ece06 이후 envelope.stk_cd는 시장 데이터 3도메인(charts·stockinfo·
+// quotes)에 봉인돼 오므로 대부분의 호출에서 아래 후보 중 하나는 찾는다 — 계좌·
+// 주문류(그 게이트 밖)는 여전히 못 찾아 자연 배제된다(정보 정직성 — 모르는
+// 종목을 안다고 지어내지 않는다).
+// wireQuoteRealtime/wireOrderbookRealtime이 공유하는 종목코드 추출(2026-08-27,
+// task #25에서 두 번째 호출부가 생기며 뺐다 — 로직 자체는 그대로).
+function resolveEnvelopeSymbol(envelope) {
+  const args = envelope.operation_args || envelope.operationArgs;
+  return String(
+    (args && args.stk_cd)
+    || envelope.stk_cd
+    || (envelope.data && envelope.data.stk_cd)
+    || (envelope.data && envelope.data.symbol)
+    || '',
+  ).trim();
+}
+
+function wireQuoteRealtime(card, wrap, envelope, applyTick) {
+  const symbol = resolveEnvelopeSymbol(envelope);
+  if (!symbol || typeof applyTick !== 'function') return;
+  quoteRealtimePanels.openPanel(card, symbol, (tick) => applyTick(wrap, envelope, tick));
+  const priorDestroy = cardDestroyers.get(card);
+  cardDestroyers.set(card, () => {
+    quoteRealtimePanels.closePanel(card);
+    // 카드 1장을 참조 1개로 센다(main.js ensureChartRealtime 주석 참고) — 이
+    // 카드가 위에서 연 세션과 같은 symbol로만 해제한다. main이 acquire 때 보는
+    // 것과 같은 envelope 필드에서 뽑은 값이라 카운트가 서로 어긋나지 않는다.
+    window.athena.send('athena:realtime-release', { symbol });
+    if (priorDestroy) priorDestroy();
+  });
+}
+
+// 호가 카드(0D 호가잔량) 전용 — wireQuoteRealtime(0B)과 달리 main이 봉투만
+// 보고 알아서 acquire하지 않는다(0B는 "시장 데이터 도메인이면 무조건 REG",
+// 호가는 카드가 실제로 열려 있을 때만 REG를 쓴다 — task #25, 리미터 절약).
+// 그래서 여기서 acquire를 명시적으로 보낸다 — release와 짝이 대칭이다.
+function wireOrderbookRealtime(card, wrap, envelope, applyTick) {
+  const symbol = resolveEnvelopeSymbol(envelope);
+  if (!symbol || typeof applyTick !== 'function') return;
+  orderbookRealtimePanels.openPanel(card, symbol, (tick) => applyTick(wrap, envelope, tick));
+  window.athena.send('athena:orderbook-realtime-acquire', { symbol });
+  const priorDestroy = cardDestroyers.get(card);
+  cardDestroyers.set(card, () => {
+    orderbookRealtimePanels.closePanel(card);
+    window.athena.send('athena:orderbook-realtime-release', { symbol });
+    if (priorDestroy) priorDestroy();
+  });
+}
+
 function renderMcpTable(envelope) {
   const [title, subtitle] = cardTitleAndSubtitle(envelope, '공통 테이블');
   // 카드 v3(.omc/state/card-v3-plan.md §2.2) 카드종 후킹 — title이 Paper 16종 고정
@@ -639,12 +713,13 @@ function renderMcpTable(envelope) {
   const kindRender = window.AthenaLib.CardKinds.resolve(title);
   const built = kindRender && kindRender(envelope);
   if (built) {
-    const { card, body } = makeCard('mcp-table', title, envelope.layout, envelope.correlation, subtitle);
+    const { card, body } = makeCard('mcp-table', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope), envelope.screen_id);
     stampPaperScreen(card, envelope);
     body.appendChild(built);
+    if (title === '시세') wireQuoteRealtime(card, built, envelope, window.AthenaLib.CardKindQuote.applyLiveTick);
     return card;
   }
-  const { card, body } = makeCard('mcp-table', title, envelope.layout, envelope.correlation, subtitle);
+  const { card, body } = makeCard('mcp-table', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope), envelope.screen_id);
   stampPaperScreen(card, envelope);
   const rawCols = (envelope.data && Array.isArray(envelope.data.columns)) ? envelope.data.columns : [];
   const rows = (envelope.data && Array.isArray(envelope.data.rows)) ? envelope.data.rows : [];
@@ -759,12 +834,20 @@ function renderFactsCard(envelope) {
   const kindRender = window.AthenaLib.CardKinds.resolve(title);
   const built = kindRender && kindRender(envelope);
   if (built) {
-    const { card, body } = makeCard('facts', title, envelope.layout, envelope.correlation, subtitle);
+    const { card, body } = makeCard('facts', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope), envelope.screen_id);
     stampPaperScreen(card, envelope);
     body.appendChild(built);
+    // '종목정보' 카드종만 실시간을 켠다(P1) — QuoteHeader 조각(가격+등락)이 있는
+    // 경우에만 갱신 대상이 있다. daily-range/year-range 조각뿐인 응답은
+    // applyLiveTick 내부에서 대상 엘리먼트가 없어 조용히 건너뛴다.
+    if (title === '종목정보') wireQuoteRealtime(card, built, envelope, window.AthenaLib.CardKindStockInfo.applyLiveTick);
+    // '호가' 카드종 — 호가잔량(0D)으로 래더 행·비율바를 제자리 갱신한다(task #25).
+    // quote-emphasis(QuoteHeader) 조각은 0D에 대응 필드가 없어 갱신하지 않는다
+    // (card-kind-호가.js applyLiveTick 주석 참고 — 없는 값을 지어내지 않는다).
+    if (title === '호가') wireOrderbookRealtime(card, built, envelope, window.AthenaLib.CardKindHoga.applyLiveTick);
     return card;
   }
-  const { card, body } = makeCard('facts', title, envelope.layout, envelope.correlation, subtitle);
+  const { card, body } = makeCard('facts', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope), envelope.screen_id);
   stampPaperScreen(card, envelope);
   const fields = (envelope.data && Array.isArray(envelope.data.fields)) ? envelope.data.fields : [];
   if (!fields.length) {
@@ -792,12 +875,22 @@ function renderCompoundCard(envelope) {
   const kindRender = window.AthenaLib.CardKinds.resolve(title);
   const built = kindRender && kindRender(envelope);
   if (built) {
-    const { card, body } = makeCard('compound', title, envelope.layout, envelope.correlation, subtitle);
+    const { card, body } = makeCard('compound', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope), envelope.screen_id);
     stampPaperScreen(card, envelope);
     body.appendChild(built);
+    // 실시간 미배선(의도적 — task #24, 2026-08-27 실측). renderFactsCard/
+    // renderMcpTable과 달리 wireQuoteRealtime을 걸지 않는다: applyLiveTick을 가진
+    // 카드종은 시세·종목정보 둘뿐인데, 둘 다 compound 모양(data.header/data.table)
+    // 에는 관여하지 않는다 — render종목정보은 envelope.data.fields를,
+    // render시세는 envelope.data.columns/rows를 직접 요구해 compound envelope에서는
+    // 항상 null을 돌려준다(각 파일 주석 참고). 실제 backend 매니페스트에서도
+    // layout=compound인 quotes/stockinfo 도메인 TR 3종(ka10045/ka90004/kt20016)의
+    // card_title은 None·프로그램매매·신용거래이고, 이 둘은 애초에 applyLiveTick이
+    // 없다. 즉 지금 compound 카드에는 실시간을 이어붙일 현재가류 표시 조각이
+    // 존재하지 않는다 — 없는 REG를 지어서 걸지 않는다.
     return card;
   }
-  const { card, body } = makeCard('compound', title, envelope.layout, envelope.correlation, subtitle);
+  const { card, body } = makeCard('compound', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope), envelope.screen_id);
   stampPaperScreen(card, envelope);
   const data = (envelope.data && typeof envelope.data === 'object') ? envelope.data : {};
   const header = Array.isArray(data.header) ? data.header : [];
@@ -1017,7 +1110,7 @@ async function renderLiveChart(envelope) {
   try {
     descriptor = describeAitsChartPanel(data, envelope, 'live');
   } catch (err) {
-    const { card, body } = makeCard('chart', title, envelope.layout, envelope.correlation, subtitle);
+    const { card, body } = makeCard('chart', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope), envelope.screen_id);
     stampPaperScreen(card, envelope);
     card.dataset.renderState = 'error';
     body.appendChild(errorNote(`AITS 차트 계약 오류 — ${err && err.message ? err.message : String(err)}`));
@@ -1025,7 +1118,7 @@ async function renderLiveChart(envelope) {
   }
   const reloaded = await reloadExistingAitsChartPanel(descriptor, envelope);
   if (reloaded) return reloaded;
-  const { card, body } = makeCard('chart', title, envelope.layout, envelope.correlation, subtitle);
+  const { card, body } = makeCard('chart', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope), envelope.screen_id);
   stampPaperScreen(card, envelope);
   // 카드 v3(.omc/state/card-v3-plan.md §2.2) 카드종 후킹 — 차트 전용 변형. 다른 3곳
   // (renderFactsCard/renderMcpTable/renderCompoundCard)은 renderFn이 body 전체를
@@ -1062,7 +1155,7 @@ async function renderLiveChart(envelope) {
 }
 
 function renderFreeCanvas(envelope) {
-  const { card, body } = makeCard('free', envelope.caption || '자유 카드', envelope.layout, envelope.correlation);
+  const { card, body } = makeCard('free', envelope.caption || '자유 카드', envelope.layout, envelope.correlation, undefined, cardStkCd(envelope), envelope.screen_id);
   if (envelope.fell_back) {
     const note = document.createElement('div');
     note.className = 'fin-meta';
@@ -1180,7 +1273,17 @@ function enforceHeightBudget() {
   }
 }
 
-function makeCard(type, title, layoutHint, correlation, subtitle) {
+// 대화 경로 카드 공존 키(P2, 2026-08-27) — envelope.stk_cd(backend 53ece06, 시장
+// 데이터 3도메인(charts·stockinfo·quotes) 봉인)가 있으면 makeCard 교체 판정에
+// 종목코드까지 쓴다. "삼성전자 시세"·"SK하이닉스 시세"처럼 같은 카드종이 다른
+// 종목이면 공존해야 하는데, 옛 판은 타입만 보고 무조건 교체해 먼저 그린 카드가
+// 사라졌다(실측: datasets/eval-runs/2026-08-27-intraday-ui-clean/).
+function cardStkCd(envelope) {
+  const v = envelope && envelope.stk_cd;
+  return typeof v === 'string' && v.trim() ? v.trim() : null;
+}
+
+function makeCard(type, title, layoutHint, correlation, subtitle, stkCd, screenId) {
   const isDatasetCard = isValidCorrelation(correlation);
   if (isDatasetCard && activeDatasetId !== correlation.dataset_id) {
     for (const prior of grid.querySelectorAll('.card[data-dataset-id]')) {
@@ -1194,7 +1297,18 @@ function makeCard(type, title, layoutHint, correlation, subtitle) {
       && candidate.dataset.itemId === correlation.item_id
       && Number(candidate.dataset.ordinal) === correlation.ordinal
     ))
-    : Array.from(grid.querySelectorAll(`.card.${type}`)).find((candidate) => !candidate.dataset.datasetId);
+    : Array.from(grid.querySelectorAll(`.card.${type}`)).find((candidate) => {
+      if (candidate.dataset.datasetId) return false;
+      // stk_cd 없는 요청(종목코드 자리가 없는 카드종·구버전 envelope)은 기존
+      // 동작 그대로 — 동일 타입이면 무조건 교체(하위 호환).
+      if (!stkCd) return true;
+      // stk_cd 있는 요청은 같은 종목 + 같은 화면(screen_id)만 교체 대상 —
+      // 다른 종목은 물론, 같은 종목의 다른 화면(호가 매도/매수/총잔량처럼
+      // ka10004 detail 5장이 연달아 오는 경우)도 공존한다(2026-08-27 장중
+      // QA 실측: screen_id 없이 종목만 보면 5장이 서로를 지워 1장만 남았다).
+      return candidate.dataset.stkCd === stkCd
+        && (candidate.dataset.screenId || '') === (screenId || '');
+    });
   const activeDatasetCardCount = Array.from(grid.querySelectorAll('.card[data-dataset-id]'))
     .filter((candidate) => candidate.dataset.datasetId === correlation.dataset_id).length;
   if (isDatasetCard && !existing && activeDatasetCardCount >= 6) {
@@ -1209,6 +1323,9 @@ function makeCard(type, title, layoutHint, correlation, subtitle) {
     card.dataset.datasetId = correlation.dataset_id;
     card.dataset.itemId = correlation.item_id;
     card.dataset.ordinal = String(correlation.ordinal);
+  } else if (stkCd) {
+    card.dataset.stkCd = stkCd;
+    if (screenId) card.dataset.screenId = String(screenId);
   }
   const head = document.createElement('div');
   head.className = 'card-head';

@@ -159,8 +159,12 @@ test('buildLivePrompt: 실행 환경 제약 v3c — Bash 없음·승인 절차 �
   assert.ok(p.includes('실행 환경 제약'));
   assert.ok(p.includes('Bash'));
   assert.ok(p.includes('승인해 주시면'));       // 금지 표현을 명시적으로 지목
-  assert.ok(p.includes('접근할 수단은 없다'));
+  // 병합 정정(2026-08-27): Read·Glob(첨부)가 세션에 있어 "접근할 수단은 없다"가
+  // 거짓이 됐다 — 능력 서술 대신 지시형 문구를 단언한다.
+  assert.ok(p.includes('읽으러 가지 마라'));
   assert.ok(p.includes('받은 부분만으로 즉시 카드를'));
+  // 첨부 경로 읽기 용도 명시 — 키우미 첨부(B4)와 #33 차단의 병합 교집합.
+  assert.ok(p.includes('첨부한 파일·폴더 경로를 읽는 용도'));
 });
 
 test('buildLivePrompt: manifest-backed read 전체가 plan_token만으로 render_canvas 직행한다', () => {

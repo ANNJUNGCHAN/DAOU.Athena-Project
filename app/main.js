@@ -46,6 +46,27 @@ function mdlog(msg) {
 
 mdlog('module loaded, ATHENA_NO_AUTOSTART: ' + process.env.ATHENA_NO_AUTOSTART);
 
+// ---------- 싱글 인스턴스 락 — 앱 2개 방지 ----------
+// Electron의 락은 app.getPath('userData') 기준이라(Chromium ProcessSingleton),
+// ATHENA_USERDATA_DIR로 프로필을 격리하는 QA 하네스(verify.js/run-cases*.js/
+// probe-*.js — 전부 require('./main.js')보다 먼저 app.setPath('userData', ...)를
+// 부른다)는 실앱과 별개의 락을 가진다. 즉 하네스가 떠 있어도 실앱 기동에 영향이
+// 없고, 반대로 실앱이 떠 있어도 격리 프로필 하네스는 정상 기동한다.
+const gotSingleInstanceLock = app.requestSingleInstanceLock();
+if (!gotSingleInstanceLock) {
+  // 같은 프로필로 이미 실행 중 — 이 프로세스는 여기서 즉시 끝낸다(fail-fast).
+  // 창 생성·IPC 등록 등 나머지 모듈 로드를 진행하지 않는다.
+  mdlog('requestSingleInstanceLock 실패 — 이미 실행 중, 즉시 종료');
+  app.quit();
+  return;
+}
+app.on('second-instance', () => {
+  // 두 번째 실행 시도 — 기존 창을 앞으로(포커스/복원). revealShell은 아래에서
+  // 정의되지만 function 선언이라 호이스팅되어 여기서도 참조 가능하다.
+  mdlog('second-instance 감지 — 기존 셸 창을 앞으로');
+  revealShell({ focus: true });
+});
+
 // v2.js/v3.js와 동일 패턴 — 반드시 빈 핸들러여야 한다. 리스너 자체가 없으면
 // Electron이 조용히 app.quit()해버리는 버그가 있다(S1 RESULT.md). 그렇다고
 // 여기서 app.quit()을 호출하면 워밍업 창이 닫히는 순간(=그 시점의 "모든 창")
@@ -441,16 +462,45 @@ app.on('will-quit', () => { if (routineFeed) routineFeed.stop(); });
 // 접기(진행봉 갱신)는 렌더러가 한다(lib/chart-tick-fold.js 주석). 여기서는
 // 종목 등록과 체결 전달만 맡는다. 업스트림 구독은 프로세스당 하나다.
 const chartRealtime = require('./lib/main/chart-realtime');
+const orderbookRealtime = require('./lib/main/orderbook-realtime');
 const chartSeries = require('./lib/main/chart-series');
 
 let chartRealtimeFeed = null;
 let chartRealtimeRegistrar = null;
+let orderbookRealtimeRegistrar = null; // 호가잔량(0D) 전용 — 0B 레지스트라와 참조를 안 섞는다(task #25)
 
-function ensureChartRealtime(authority) {
+// 경로 중립 — 호출부가 REST 데이터셋 직결(athena:rest-canvas-painted)이든 클로드
+// 툴 실시간 경로(onCanvasResult, 단계 8 확장 2차)든 가리지 않는다. "종목코드를
+// 아는 순간에만 등록한다"는 계약 하나만 지키면 된다. 레지스트라가 참조 계수형
+// (2026-08-27)이라 어느 경로에서 불러도 acquire 1회로 셈된다 — 짝이 되는 release는
+// releaseRealtimeForSymbol(카드 소멸 시점, 아래) 몫이다.
+// 0B(체결)·0D(호가잔량) 둘 다 같은 업스트림 WS 소켓 하나(REAL 프레임 멀티플렉스,
+// backend api/v1/ws/stream 실측)로 온다 — REG를 뭘 걸었든 소켓은 하나만 열면
+// 된다. TR별 acquire(ensureRealtimeForSymbol/ensureOrderbookRealtimeForSymbol)가
+// 어느 쪽이 먼저 불려도 이 하나를 공유하도록 지연 생성 + 두 파서를 한 곳에서 돌린다.
+function ensureRealtimeFeed() {
+  if (chartRealtimeFeed) return;
+  chartRealtimeFeed = new RoutineFeed({
+    url: `${BACKEND_WS_BASE}/api/v1/ws/stream`,
+    token: LOCAL_BEARER_TOKEN,
+    onEvent: (frame) => {
+      if (!shellWin || shellWin.isDestroyed()) return;
+      // 거래일은 체결 시각(HHMMSS)에 날짜가 없어서 필요하다. 자정을 넘긴
+      // 시간외 체결은 다음 날로 접히지만, 정규장 진행봉에는 영향이 없다.
+      const ticks = chartRealtime.parseRealFrame(frame, chartRealtime.kstTradingDate());
+      if (ticks.length) shellWin.webContents.send('athena:chart-ticks', ticks);
+      const bookTicks = orderbookRealtime.parseQuoteBookFrame(frame);
+      if (bookTicks.length) shellWin.webContents.send('athena:orderbook-ticks', bookTicks);
+    },
+    onStatus: (s) => { if (s && s.state) mdlog(`차트 실시간 피드: ${s.state}`); },
+  });
+  chartRealtimeFeed.start();
+}
+
+function ensureRealtimeForSymbol(code) {
   if (process.env.ATHENA_CANVAS_SOURCE === 'fixture') return; // 검증 결정론 보호
-  const stock = authority && authority.chartBody && authority.chartBody.stock;
-  const code = String(stock || (authority && authority.operationArgs && authority.operationArgs.stk_cd) || '').trim();
-  if (!code) return;
+  const trimmed = String(code || '').trim();
+  if (!trimmed) return;
 
   if (!chartRealtimeRegistrar) {
     chartRealtimeRegistrar = chartRealtime.createRealtimeRegistrar({
@@ -458,25 +508,108 @@ function ensureChartRealtime(authority) {
       mdlog,
     });
   }
-  if (!chartRealtimeFeed) {
-    chartRealtimeFeed = new RoutineFeed({
-      url: `${BACKEND_WS_BASE}/api/v1/ws/stream`,
-      token: LOCAL_BEARER_TOKEN,
-      onEvent: (frame) => {
-        if (!shellWin || shellWin.isDestroyed()) return;
-        // 거래일은 체결 시각(HHMMSS)에 날짜가 없어서 필요하다. 자정을 넘긴
-        // 시간외 체결은 다음 날로 접히지만, 정규장 진행봉에는 영향이 없다.
-        const ticks = chartRealtime.parseRealFrame(frame, chartRealtime.kstTradingDate());
-        if (!ticks.length) return;
-        shellWin.webContents.send('athena:chart-ticks', ticks);
-      },
-      onStatus: (s) => { if (s && s.state) mdlog(`차트 실시간 피드: ${s.state}`); },
-    });
-    chartRealtimeFeed.start();
-  }
-  chartRealtimeRegistrar.ensureSymbol(code).catch((err) => {
+  ensureRealtimeFeed();
+  chartRealtimeRegistrar.acquire(trimmed).catch((err) => {
     mdlog(`차트 REAL 등록 예외: ${String((err && err.message) || err)}`);
   });
+}
+
+// ensureRealtimeForSymbol의 호가잔량(0D) 짝 — 종목당 열린 호가 카드가 명시적으로
+// acquire/release를 낸다(athena:orderbook-realtime-acquire/-release, canvas.js
+// wireOrderbookRealtime). 0B처럼 "봉투에 종목코드가 있으면 무조건 acquire"가
+// 아니다 — 호가 카드가 실제로 열려 있을 때만 REG를 쓴다(리미터 절약).
+function ensureOrderbookRealtimeForSymbol(code) {
+  if (process.env.ATHENA_CANVAS_SOURCE === 'fixture') return; // 검증 결정론 보호
+  const trimmed = String(code || '').trim();
+  if (!trimmed) return;
+
+  if (!orderbookRealtimeRegistrar) {
+    orderbookRealtimeRegistrar = chartRealtime.createRealtimeRegistrar({
+      backendBase: BACKEND_HTTP_BASE,
+      mdlog,
+      trId: orderbookRealtime.REAL_TR_ID,
+    });
+  }
+  ensureRealtimeFeed();
+  orderbookRealtimeRegistrar.acquire(trimmed).catch((err) => {
+    mdlog(`호가 REAL 등록 예외: ${String((err && err.message) || err)}`);
+  });
+}
+
+function releaseOrderbookRealtimeForSymbol(code) {
+  if (process.env.ATHENA_CANVAS_SOURCE === 'fixture') return;
+  const trimmed = String(code || '').trim();
+  if (!trimmed || !orderbookRealtimeRegistrar) return;
+  orderbookRealtimeRegistrar.release(trimmed).catch((err) => {
+    mdlog(`호가 REAL 해제 예외: ${String((err && err.message) || err)}`);
+  });
+}
+
+// ensureRealtimeForSymbol의 짝 — 카드/패널이 렌더러에서 소멸할 때 부른다(아래
+// athena:realtime-release, athena:chart-panel-destroyed 두 IPC가 이걸 부른다).
+// 레지스트라가 참조 계수를 들고 있으므로 여기서는 그대로 넘기기만 하면 된다 —
+// 마지막 참조였는지 판단은 레지스트라 몫이다.
+function releaseRealtimeForSymbol(code) {
+  if (process.env.ATHENA_CANVAS_SOURCE === 'fixture') return;
+  const trimmed = String(code || '').trim();
+  if (!trimmed || !chartRealtimeRegistrar) return;
+  chartRealtimeRegistrar.release(trimmed).catch((err) => {
+    mdlog(`차트 REAL 해제 예외: ${String((err && err.message) || err)}`);
+  });
+}
+
+// REST 데이터셋 직결 카드(athena:rest-canvas-painted) 전용 진입점 — "그려진 걸
+// 확인한 뒤에만 REG"를 지킨다. 어느 카드종이든(시세 카드 포함, 단계 8 확장 1차)
+// authority.operationArgs.stk_cd 폴백으로 종목코드가 있으면 등록된다.
+//
+// panelId(AITS 차트 카드만 갖는다, chart-panel-destroyed 실측)가 있으면 그
+// panelId 하나당 acquire를 정확히 1회만 낸다 — 같은 패널이 재조회 등으로 paint
+// ack를 또 보내도(카드 자체는 안 죽고 재사용) 참조를 중복으로 쌓지 않는다.
+// 패널이 실제로 죽을 때(athena:chart-panel-destroyed) 이 맵에 적어둔 종목으로
+// 정확히 1회 release한다 — chartBody.stock(여기)과 렌더러의 data.symbol(카드
+// 표시용)은 서로 다른 필드라 값이 어긋날 수 있어, release는 main이 acquire 때
+// 실제로 쓴 값을 그대로 재사용한다(필드 교차로 카운트가 새는 사고를 원천 차단).
+// panelId가 없는 카드(표/시세 등 non-AITS 카드)는 매번 그대로 acquire한다 —
+// 그쪽은 매 paint마다 makeCard가 새 DOM 카드를 만들어(재사용 없음) 늘 진짜 새
+// 참조이고, 짝이 되는 release는 wireQuoteRealtime의 destroy 훅(canvas.js)이 낸다.
+const chartRealtimePanelSymbols = new Map(); // panelId -> code
+
+function ensureChartRealtime(authority, panelId) {
+  const stock = authority && authority.chartBody && authority.chartBody.stock;
+  const code = stock || (authority && authority.operationArgs && authority.operationArgs.stk_cd);
+  const trimmed = String(code || '').trim();
+  if (!trimmed) return;
+  if (panelId) {
+    if (chartRealtimePanelSymbols.has(panelId)) return; // 이 패널은 이미 참조를 쥐고 있다
+    chartRealtimePanelSymbols.set(panelId, trimmed);
+  }
+  ensureRealtimeForSymbol(trimmed);
+}
+
+// 클로드 툴 실시간 경로(onCanvasResult) 전용 진입점 — 이 경로엔 페인트 왕복이
+// 없어(athena:add-canvas-live는 편도) "그려진 뒤에만"을 못 지킨다. 대신 결과
+// 수신 시점에 등록한다: envelope이 유효해야 카드가 뜬다는 점에서 결정적이고,
+// REG는 종목당 1회 dedup이라 낭비 상한이 작다(페인트 ack가 이 경로에도
+// 생기면 ensureChartRealtime과 합친다).
+//
+// 옛 제약은 해소됐다(2026-08-27 backend 53ece06) — canvas_kind별 envelope
+// 빌더가 비대칭이라 "table" 분기(시세 카드가 쓰는 canvas_kind)에는 종목코드를
+// 담을 자리가 아예 없었는데, 이제 canvas_context.symbol 봉인 게이트가 시장
+// 데이터 3도메인(charts·stockinfo·quotes) 전부에서 envelope.stk_cd로 실린다
+// (canvas_push.py/canvas_data.py 공통). 계좌·주문류(canvas_context 게이트 밖)는
+// 여전히 이 필드가 없어 자연 배제된다 — 아래 후보 목록은 그 신규 필드를 포함해
+// 여러 자리를 본다(chart는 data.symbol에도 실리는 AITS DTO 계약과 중복 커버).
+function extractLiveQuoteSymbol(envelope) {
+  if (!envelope) return null;
+  const candidates = [
+    envelope.operation_args && envelope.operation_args.stk_cd,
+    envelope.operationArgs && envelope.operationArgs.stk_cd,
+    envelope.stk_cd,
+    envelope.data && envelope.data.stk_cd,
+    envelope.data && envelope.data.symbol,
+  ];
+  const found = candidates.find((v) => typeof v === 'string' && v.trim());
+  return found ? found.trim() : null;
 }
 
 app.on('will-quit', () => { if (chartRealtimeFeed) chartRealtimeFeed.stop(); });
@@ -498,6 +631,11 @@ function startCanvasFeed() {
       // 옛 판은 여기서 캔버스 창을 열었다(expandCanvasWindow). 중앙 캔버스는 늘
       // 떠 있으므로 남는 의미는 "창을 앞으로"뿐이다 — 포커스는 뺏지 않는다.
       revealShell({ focus: false });
+      // 실시간 등록 — 라이브 봉투의 주 통로는 onCanvasResult(MCP 결과 콜백)가
+      // 아니라 이 push 사이드채널이다. 봉인된 종목코드가 있으면 여기서 건다
+      // (2026-08-27 장중 QA 실측: onCanvasResult에만 걸었더니 REG 0건).
+      const pushedSymbol = extractLiveQuoteSymbol(envelope);
+      if (pushedSymbol) ensureRealtimeForSymbol(pushedSymbol);
       sendLiveCanvasResult({
         toolUseId: 'canvas-push',
         status: envelope.fell_back ? 'fallback' : 'success',
@@ -985,8 +1123,9 @@ ipcMain.on('athena:rest-canvas-painted', (event, payload = {}) => {
   };
   chartReloadAuthority.registerPaint(paintResult, waiter.reloadAuthority);
   // 차트가 실제로 그려진 순간에만 실시간을 건다 — 그려지지도 않은 패널로 REG를
-  // 소모하지 않는다(REG는 리미터를 먹는다). 종목당 1회는 registrar가 보장한다.
-  ensureChartRealtime(waiter.reloadAuthority);
+  // 소모하지 않는다(REG는 리미터를 먹는다). 참조 중복은 registrar와
+  // chartRealtimePanelSymbols(panelId 단위)가 함께 막는다.
+  ensureChartRealtime(waiter.reloadAuthority, payload.panel_id || null);
   waiter.resolve(paintResult);
 });
 
@@ -1007,6 +1146,34 @@ ipcMain.on('athena:rest-receipt-painted', (event, payload = {}) => {
 ipcMain.on('athena:chart-panel-destroyed', (event, payload = {}) => {
   if (!shellWin || shellWin.isDestroyed() || event.sender !== shellWin.webContents) return;
   chartReloadAuthority.unregister(payload.panelId);
+  // 이 패널이 실시간 참조를 쥐고 있었다면(ensureChartRealtime 주석 참고) 여기서
+  // 정확히 1회 release한다 — acquire 때 실제로 쓴 종목코드를 그대로 되쓴다.
+  const code = chartRealtimePanelSymbols.get(payload.panelId);
+  if (code) {
+    chartRealtimePanelSymbols.delete(payload.panelId);
+    releaseRealtimeForSymbol(code);
+  }
+});
+
+// 렌더러 카드/패널 소멸 신호(canvas.js wireQuoteRealtime의 destroy 훅) — panelId가
+// 없는 카드종(표/시세 등, ensureChartRealtime 주석 참고)의 release는 여기로 온다.
+// 렌더러가 넘기는 symbol은 main의 extractLiveQuoteSymbol/ensureChartRealtime과
+// 같은 envelope 필드(operation_args.stk_cd 등)를 보고 뽑은 값이라 acquire 때
+// 쓴 값과 어긋나지 않는다(canvas.js wireQuoteRealtime 주석 참고).
+ipcMain.on('athena:realtime-release', (event, payload = {}) => {
+  if (!shellWin || shellWin.isDestroyed() || event.sender !== shellWin.webContents) return;
+  releaseRealtimeForSymbol(payload.symbol);
+});
+
+// 호가잔량(0D) acquire/release — 0B와 달리 카드가 직접 열고 닫는다(canvas.js
+// wireOrderbookRealtime, ensureOrderbookRealtimeForSymbol 주석 참고).
+ipcMain.on('athena:orderbook-realtime-acquire', (event, payload = {}) => {
+  if (!shellWin || shellWin.isDestroyed() || event.sender !== shellWin.webContents) return;
+  ensureOrderbookRealtimeForSymbol(payload.symbol);
+});
+ipcMain.on('athena:orderbook-realtime-release', (event, payload = {}) => {
+  if (!shellWin || shellWin.isDestroyed() || event.sender !== shellWin.webContents) return;
+  releaseOrderbookRealtimeForSymbol(payload.symbol);
 });
 
 function emitRestReceiptAndWaitForPaint(text, { timeoutMs = 3000 } = {}) {
@@ -1137,15 +1304,26 @@ function toolStepLabel(name) {
 
 // tool_use_id별 시작 시각을 들고 있다가 매칭되는 tool_result가 오면 소요시간과
 // 함께 완료를 알린다. runLiveQuery 호출마다 새로 만든다(왕복 하나의 수명).
+//
+// 서브에이전트 필터링(task #32, 실측 근거는 .omc/research/2026-08-27-
+// 서브에이전트-스트림-계약.md §3) — 두 가지를 최상위 진행 라인에서 뺀다:
+//   (a) 서브에이전트 내부 활동(streamJsonParser.isSubagentInternalEvent —
+//       parent_tool_use_id가 그 Agent의 tool_use id인 이벤트) — 그 서브에이전트
+//       자신의 Bash/mcp 호출이라 최상위 "판단 중" 라인에 섞이면 이중 표시다.
+//   (b) Agent tool_use 자체(streamJsonParser.isAgentToolName) — 그 생애주기는
+//       createSubagentTracker()가 하위 에이전트 도크로 따로 추적한다. 걸러도
+//       완료 쪽(tool_result)은 steps에 애초에 없어 자동으로 조용히 무시된다.
 function createToolStepTracker() {
   const steps = new Map(); // tool_use_id -> { label, startedAt }
   return function trackToolStep(event) {
     if (!event || typeof event !== 'object') return;
+    if (streamJsonParser.isSubagentInternalEvent(event)) return;
     if (event.type === 'assistant') {
       const content = event.message && event.message.content;
       if (!Array.isArray(content)) return;
       for (const block of content) {
         if (block && block.type === 'tool_use' && block.id && !steps.has(block.id)) {
+          if (streamJsonParser.isAgentToolName(block.name)) continue;
           const label = toolStepLabel(block.name);
           steps.set(block.id, { label, startedAt: Date.now() });
           sendLiveToolStep({ id: block.id, label, done: false, elapsedMs: null });
@@ -1161,11 +1339,33 @@ function createToolStepTracker() {
           if (step) {
             const elapsedMs = Date.now() - step.startedAt;
             step.elapsedMs = elapsedMs; // 재-tool_result(있을 리 없지만) 방어
-            sendLiveToolStep({ id: block.tool_use_id, label: step.label, done: true, elapsedMs });
+            sendLiveToolStep({ id: block.tool_use_id, label: step.label, done: true, elapsedMs, error: !!block.is_error });
           }
         }
       }
     }
+  };
+}
+
+// 하위 에이전트 도크(task #32, 보드04 2EZ-0/DG2-0) — Agent 생애주기 system
+// 이벤트(task_started/progress/updated/notification)를 셸 렌더러로 릴레이한다.
+// 분류 자체는 stream-json-parser.js의 순수 함수(classifySubagentEvent)가 맡고,
+// 여기서는 last_tool_name만 카드 진행 표시와 같은 라벨표(toolStepLabel)를
+// 통과시킨다 — "현재가 조회" 같은 사용자 언어로, 원문 툴 이름은 새지 않는다.
+function sendLiveSubagentStep(step) {
+  if (shellWin && !shellWin.isDestroyed()) shellWin.webContents.send('athena:live-subagent-step', step);
+  // 오브에는 하위 에이전트 도크가 없다(board-33/34 "오브엔 팝오버·전환 UI가
+  // 없다") — 셸에만 보낸다, orbWin.webContents.send 없음.
+}
+
+function createSubagentTracker() {
+  return function trackSubagent(event) {
+    const step = streamJsonParser.classifySubagentEvent(event);
+    if (!step) return;
+    if (step.subtype === 'task_progress' && step.lastToolName) {
+      step.lastToolName = toolStepLabel(step.lastToolName);
+    }
+    sendLiveSubagentStep(step);
   };
 }
 
@@ -1473,10 +1673,15 @@ async function runLiveQueryInner(query, expand, origin) {
   // 실제로 가능하다 — 그때 빈 유리창을 열어두지 않는다.
   let expandTriggered = false;
   const canvasTypesSeen = [];
+  // 결과물 도크(단계 8, board 25Q-0 "④ 결과물·출처 도크")용 — 카드별 표시
+  // 이름(card_title 있으면 그거, 없으면 caption)을 턴 등장 순서 그대로 모은다.
+  // 새 라벨을 짓지 않는다 — 이미 canvas.js가 카드 제목에 쓰는 값 그대로다.
+  const canvasCaptionsSeen = [];
   // 판정 캡처(시맨틱 캐시 재료) — tool_use_id로 resolve 결과 토큰과 render 입력
   // 토큰을 상관시킨다. 마지막 입력끼리 우연히 결합하지 않는다.
   const replayTurnCapture = new ReplayTurnCapture();
   const trackToolStep = createToolStepTracker();
+  const trackSubagent = createSubagentTracker();
   const resumeSessionId = liveSessionId;
   // 설정 화면 모델 패널(lib/main/model-prefs.js) 값 — null이면 buildArgs가
   // --model/--effort를 안 붙여 claude CLI 기본값을 쓴다.
@@ -1492,10 +1697,19 @@ async function runLiveQueryInner(query, expand, origin) {
     effort,
     onSpawn: (h) => { myHandle = h; activeLiveQuery = h; },
     // 성공 resolve 1건과 render 1건의 토큰이 정확히 같은 경우만 캐시한다.
-    onEvent: (ev) => { replayTurnCapture.observe(ev); trackToolStep(ev); },
+    onEvent: (ev) => { replayTurnCapture.observe(ev); trackToolStep(ev); trackSubagent(ev); },
     onTextDelta: sendLiveTextDelta,
     onThinkingDelta: sendLiveThinkingDelta,
     onCanvasResult: (r) => {
+      const label = r.envelope && (r.envelope.card_title || r.envelope.caption);
+      // 실시간 트리거 판정(P1, 2026-08-27) — card_title==='시세' 하나만 보던 옛
+      // 조건은 "삼성전자 시세 보여줘"가 실제로는 detail:ka10001 → card_title
+      // '종목정보' facts 카드로 라우팅되는(canvas_transform.py:865, 의도된 라우팅)
+      // 자연 발화를 놓쳤다 — QA 배치 전체에서 REG 0건의 원인. extractLiveQuoteSymbol이
+      // 종목코드를 뽑아내는가로 바꾼다: 이 함수가 보는 envelope.stk_cd는 backend
+      // 53ece06이 시장 데이터 3도메인(charts·stockinfo·quotes)에만 봉인하므로
+      // 계좌·주문 카드는 그대로 자연 배제된다.
+      const liveSymbol = extractLiveQuoteSymbol(r.envelope);
       if (r.status === 'pushed') {
         // 카드는 사이드 채널(startCanvasFeed)로 이미 도착했다 — 여기선 집계만.
         // 이 side channel은 shellWin 고정이라(startCanvasFeed 참조, 범위 밖)
@@ -1503,6 +1717,8 @@ async function runLiveQueryInner(query, expand, origin) {
         // 호출부와 대칭을 맞춰 orb relay도 여기선 하지 않는다(기존 셸의 이중
         // 렌더 방지 계약을 그대로 따른 것 — 신규 회귀 아님).
         if (r.envelope && r.envelope.canvas_type) canvasTypesSeen.push(r.envelope.canvas_type);
+        if (label) canvasCaptionsSeen.push(label);
+        if (liveSymbol) ensureRealtimeForSymbol(liveSymbol);
         return;
       }
       if (expand && !expandTriggered) {
@@ -1522,6 +1738,8 @@ async function runLiveQueryInner(query, expand, origin) {
         orbWin.webContents.send('athena:orb-canvas-result', r);
       }
       if (r.envelope && r.envelope.canvas_type) canvasTypesSeen.push(r.envelope.canvas_type);
+      if (label) canvasCaptionsSeen.push(label);
+      if (liveSymbol) ensureRealtimeForSymbol(liveSymbol);
     },
   });
 
@@ -1580,6 +1798,7 @@ async function runLiveQueryInner(query, expand, origin) {
     error: result.ok ? null : (result.error || `claude 종료 코드 ${result.exitCode}`),
     answerText,
     canvasTypes: [...new Set(canvasTypesSeen)],
+    canvasCaptions: canvasCaptionsSeen,
     diagnostics: result.diagnostics,
     durationMs: result.finalResult && result.finalResult.duration_ms,
   };
@@ -2138,4 +2357,20 @@ module.exports = {
     mcpAllowTool: handleMcpAllowTool,
     mcpRemove: handleMcpRemove,
   },
+  // probe-quote-realtime.js가 실백엔드·실클로드 없이 "클로드 툴 실시간 경로가
+  // 실제로 REG를 부르는지"를 검증할 때 쓴다 — onCanvasResult는 runClaudeQuery
+  // 콜백이라 진짜 왕복 없이는 못 부르지만, 이 둘은 그 콜백이 부르는 것과 같은
+  // 모듈 함수라 직접 불러도 동일한 판정이 나온다.
+  ensureRealtimeForSymbol,
+  releaseRealtimeForSymbol,
+  extractLiveQuoteSymbol,
+  // 합성 0D 프레임 프로브(task #25)가 실백엔드 없이 acquire/release를 직접
+  // 검증할 때 쓴다 — 위 ensureRealtimeForSymbol 각주와 같은 이유.
+  ensureOrderbookRealtimeForSymbol,
+  releaseOrderbookRealtimeForSymbol,
+  // 하위 에이전트 도크 프로브(task #32)가 합성 stream-json 이벤트를 실제
+  // runLiveQuery 왕복 없이 이 두 트래커에 직접 먹여 sendLiveToolStep/
+  // sendLiveSubagentStep(→ shellWin IPC)이 올바르게 나가는지 검증할 때 쓴다.
+  createToolStepTracker,
+  createSubagentTracker,
 };

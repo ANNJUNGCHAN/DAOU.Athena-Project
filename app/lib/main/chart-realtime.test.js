@@ -4,7 +4,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const {
-  parseRealTick, parseRealFrame, buildRegisterBody, kstToEpochSec, kstTradingDate,
+  parseRealTick, parseRealFrame, buildRegisterBody, buildRemoveBody, kstToEpochSec, kstTradingDate,
   createRealtimeRegistrar,
 } = require('./chart-realtime');
 
@@ -32,7 +32,19 @@ test('parseRealTick: 0B 체결을 읽는다(등락 부호는 크기만 쓴다)',
     { type: '0B', item: '005930', values: { 20: '090000', 10: '-257000', 15: '+120' } },
     '20260825'
   );
-  assert.deepEqual(tick, { symbol: '005930', at: NINE_AM, price: 257000, volume: 120 });
+  // 등락율(12)/누적거래량(13)이 프레임에 없으면 null — 지어내지 않는다.
+  assert.deepEqual(tick, {
+    symbol: '005930', at: NINE_AM, price: 257000, volume: 120, changeRate: null, accVolume: null,
+  });
+});
+
+test('parseRealTick: 등락율(12)은 부호를 보존하고, 누적거래량(13)은 크기만 쓴다', () => {
+  const tick = parseRealTick(
+    { type: '0B', item: '005930', values: { 20: '090000', 10: '257000', 15: '10', 12: '-1.37', 13: '+311392' } },
+    '20260825'
+  );
+  assert.equal(tick.changeRate, -1.37);
+  assert.equal(tick.accVolume, 311392);
 });
 
 test('parseRealTick: 0B가 아니거나 값이 모자라면 null이다', () => {
@@ -68,36 +80,162 @@ test('buildRegisterBody: data[].type이 tr_id와 정확히 일치한다', () => 
   });
 });
 
-test('createRealtimeRegistrar: 같은 종목은 한 번만 등록한다(REG는 리미터 소모)', async () => {
+test('buildRemoveBody: trnm만 REMOVE로 바뀌고 나머지는 REG와 같은 모양이다', () => {
+  // 같은 엔드포인트가 trnm만 보고 REG/REMOVE를 가른다(runtime.py 실측) — data 모양은 공유한다.
+  assert.deepEqual(buildRemoveBody(['005930']), {
+    trnm: 'REMOVE', grp_no: '1', refresh: '1', data: [{ type: '0B', item: '005930' }],
+  });
+});
+
+test('acquire: 같은 종목은 한 번만 REG를 보낸다(REG는 리미터 소모)', async () => {
   const calls = [];
   const reg = createRealtimeRegistrar({
     backendBase: 'http://127.0.0.1:8010',
     fetchImpl: async (url, init) => { calls.push({ url, body: JSON.parse(init.body) }); return { ok: true, status: 200 }; },
   });
-  assert.equal(await reg.ensureSymbol('005930'), true);
-  assert.equal(await reg.ensureSymbol('005930'), true);
+  assert.equal(await reg.acquire('005930'), true);
+  assert.equal(await reg.acquire('005930'), true);
   assert.equal(calls.length, 1);
   assert.equal(calls[0].url, 'http://127.0.0.1:8010/api/v1/websocket/0B');
+  assert.equal(calls[0].body.trnm, 'REG');
+  assert.equal(reg.refCount('005930'), 2);
   assert.equal(reg.size(), 1);
 });
 
-test('createRealtimeRegistrar: 거부되면 등록으로 치지 않는다 — 다음에 다시 시도한다', async () => {
+test('acquire: 거부되면 등록으로 치지 않는다 — 다음에 다시 시도한다', async () => {
   let n = 0;
   const reg = createRealtimeRegistrar({
     backendBase: 'http://x',
     fetchImpl: async () => { n += 1; return { ok: n > 1, status: n > 1 ? 200 : 422 }; },
   });
-  assert.equal(await reg.ensureSymbol('005930'), false);
+  assert.equal(await reg.acquire('005930'), false);
   assert.equal(reg.isRegistered('005930'), false);
-  assert.equal(await reg.ensureSymbol('005930'), true);
+  assert.equal(await reg.acquire('005930'), true);
   assert.equal(n, 2);
 });
 
-test('createRealtimeRegistrar: 네트워크 실패도 조용히 성공으로 만들지 않는다', async () => {
+test('acquire: 네트워크 실패도 조용히 성공으로 만들지 않는다', async () => {
   const reg = createRealtimeRegistrar({
     backendBase: 'http://x',
     fetchImpl: async () => { throw new Error('ECONNREFUSED'); },
   });
-  assert.equal(await reg.ensureSymbol('005930'), false);
+  assert.equal(await reg.acquire('005930'), false);
   assert.equal(reg.size(), 0);
+});
+
+test('acquire: 같은 종목이 REG 왕복 중에 겹쳐 들어와도 참조가 새지 않는다', async () => {
+  // 실측 회귀 — REST 데이터셋 하나에 같은 종목 카드가 2장 있으면 paint ack가
+  // 거의 동시에 온다. pendingRegister 없이는 둘 다 카운트를 0으로 읽고 REG를
+  // 중복 발사한 뒤 마지막 쓰기가 앞선 쓰기를 덮어써 참조가 1로 무너진다.
+  const calls = [];
+  let resolveFetch;
+  const reg = createRealtimeRegistrar({
+    backendBase: 'http://x',
+    fetchImpl: async (url, init) => {
+      calls.push(JSON.parse(init.body));
+      await new Promise((resolve) => { resolveFetch = resolve; });
+      return { ok: true, status: 200 };
+    },
+  });
+  const p1 = reg.acquire('005930'); // 카드 A — REG를 날리고 fetch가 아직 안 끝났다
+  const p2 = reg.acquire('005930'); // 카드 B(같은 종목) — REG를 또 날리면 안 된다
+  resolveFetch();
+  const [r1, r2] = await Promise.all([p1, p2]);
+  assert.equal(r1, true);
+  assert.equal(r2, true);
+  assert.equal(calls.filter((b) => b.trnm === 'REG').length, 1); // REG는 한 번만 나간다
+  assert.equal(reg.refCount('005930'), 2); // 그런데 참조 2개는 둘 다 반영된다
+});
+
+test('release: 카드 2장 중 1장만 닫으면 참조가 남아 REMOVE를 안 보낸다', async () => {
+  const calls = [];
+  const reg = createRealtimeRegistrar({
+    backendBase: 'http://x',
+    fetchImpl: async (url, init) => { calls.push(JSON.parse(init.body)); return { ok: true, status: 200 }; },
+  });
+  await reg.acquire('005930'); // 카드 A
+  await reg.acquire('005930'); // 카드 B(같은 종목)
+  assert.equal(await reg.release('005930'), true); // 카드 A만 닫힘
+  assert.equal(reg.refCount('005930'), 1);
+  assert.equal(calls.filter((b) => b.trnm === 'REMOVE').length, 0);
+  assert.equal(reg.isRegistered('005930'), true); // 카드 B가 아직 스트림을 쓴다
+});
+
+test('release: 0→1→0 — 마지막 참조가 빠지는 순간에만 REMOVE를 보낸다', async () => {
+  const calls = [];
+  const reg = createRealtimeRegistrar({
+    backendBase: 'http://x',
+    fetchImpl: async (url, init) => { calls.push(JSON.parse(init.body)); return { ok: true, status: 200 }; },
+  });
+  await reg.acquire('005930');
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].trnm, 'REG');
+  assert.equal(await reg.release('005930'), true);
+  assert.equal(calls.length, 2);
+  assert.equal(calls[1].trnm, 'REMOVE');
+  assert.equal(calls[1].data[0].item, '005930');
+  assert.equal(reg.refCount('005930'), 0);
+  assert.equal(reg.isRegistered('005930'), false);
+  assert.equal(reg.size(), 0);
+});
+
+test('release: 쥔 적 없는 종목의 release는 조용히 무시한다(REMOVE 안 보냄)', async () => {
+  const calls = [];
+  const reg = createRealtimeRegistrar({
+    backendBase: 'http://x',
+    fetchImpl: async (url, init) => { calls.push(JSON.parse(init.body)); return { ok: true, status: 200 }; },
+  });
+  assert.equal(await reg.release('005930'), false);
+  assert.equal(calls.length, 0);
+});
+
+test('createRealtimeRegistrar: trId를 넘기면 그 TR로 REG/REMOVE를 보낸다(task #25 — 0D 재사용)', async () => {
+  const calls = [];
+  const reg = createRealtimeRegistrar({
+    backendBase: 'http://127.0.0.1:8010',
+    trId: '0D',
+    fetchImpl: async (url, init) => { calls.push({ url, body: JSON.parse(init.body) }); return { ok: true, status: 200 }; },
+  });
+  assert.equal(await reg.acquire('005930'), true);
+  assert.equal(calls[0].url, 'http://127.0.0.1:8010/api/v1/websocket/0D');
+  assert.equal(calls[0].body.data[0].type, '0D');
+  assert.equal(await reg.release('005930'), true);
+  assert.equal(calls[1].url, 'http://127.0.0.1:8010/api/v1/websocket/0D');
+  assert.equal(calls[1].body.trnm, 'REMOVE');
+});
+
+test('createRealtimeRegistrar: 서로 다른 trId 인스턴스는 참조 계수를 공유하지 않는다', async () => {
+  const calls0B = [];
+  const calls0D = [];
+  const reg0B = createRealtimeRegistrar({
+    backendBase: 'http://x',
+    fetchImpl: async (url, init) => { calls0B.push(JSON.parse(init.body)); return { ok: true, status: 200 }; },
+  });
+  const reg0D = createRealtimeRegistrar({
+    backendBase: 'http://x',
+    trId: '0D',
+    fetchImpl: async (url, init) => { calls0D.push(JSON.parse(init.body)); return { ok: true, status: 200 }; },
+  });
+  await reg0B.acquire('005930');
+  assert.equal(reg0D.isRegistered('005930'), false); // 같은 종목이어도 TR이 다르면 별개 구독이다
+  assert.equal(calls0D.length, 0);
+  await reg0D.acquire('005930');
+  assert.equal(calls0B.length, 1);
+  assert.equal(calls0D.length, 1);
+});
+
+test('release: REMOVE가 실패해도 로컬 카운트는 0으로 내려간다(fail-open)', async () => {
+  const reg = createRealtimeRegistrar({
+    backendBase: 'http://x',
+    fetchImpl: async (url, init) => {
+      const body = JSON.parse(init.body);
+      if (body.trnm === 'REMOVE') return { ok: false, status: 500 };
+      return { ok: true, status: 200 };
+    },
+  });
+  await reg.acquire('005930');
+  assert.equal(await reg.release('005930'), true); // release 자체는 실패로 보고하지 않는다
+  assert.equal(reg.refCount('005930'), 0);
+  // 재시도 기계장치는 없다 — 다음 acquire는 새 REG로 취급된다.
+  assert.equal(await reg.acquire('005930'), true);
 });

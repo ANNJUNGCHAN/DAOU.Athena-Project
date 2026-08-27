@@ -936,6 +936,8 @@ html, body {
   border-color: transparent;
   background: var(--color-k-text);
 }
+/* 실패한 툴 호출(is_error:true) — done 뒤에 둬서 채움색을 경고색으로 덮는다. */
+.orb-tool-step.is-warn .orb-tool-step-icon { background: var(--color-warn); }
 
 .orb-tool-step-label {
   flex: 1 1 auto;
@@ -946,6 +948,7 @@ html, body {
   color: var(--color-k-faint);
 }
 .orb-tool-step.done .orb-tool-step-label { color: var(--color-k-text); }
+.orb-tool-step.is-warn .orb-tool-step-label { color: var(--color-warn); }
 
 .orb-tool-step-time {
   flex-shrink: 0;
