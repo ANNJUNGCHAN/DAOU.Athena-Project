@@ -459,17 +459,28 @@ async function runQuery(text) {
 // toolSteps를 다시 그리지 않고 그대로 옮겨 붙인 뒤 접는다(AC6: 펼쳤을 때
 // 라벨·소요시간이 진행 중 표시와 동일해야 한다 — 같은 DOM 노드라 항상 같다).
 // 도구 호출이 하나도 없던 턴(순수 프로즈 답변)은 접을 기록이 없으므로 null —
-// 호출자는 그때 아무것도 붙이지 않는다. Esc 중단(abortToken 경로)은 이 함수를
-// 아예 안 거친다 — liveProgressEl을 통째로 지울 뿐이다(5.3장, AC10 의도적 비대칭).
-function foldExecutionRecord(toolSteps, startedAt) {
+// 호출자는 그때 아무것도 붙이지 않는다.
+//
+// aborted(2026-08-27, Paper DFQ-0 확정 명세) — Esc 중단 턴도 이 함수를 거친다.
+// 계획 v5의 5.3 결정("Esc 중단은 이 함수를 아예 안 거친다 — AC10 의도적
+// 비대칭")을 뒤집는 사용자 지시로, AC10을 반전한다: 완료 헤더 2FW-0과 같은
+// 골격(헤어라인 구분선·접기 캐럿)에 warn-dot(기존 .turn-fail-dot 재사용,
+// 6×6 var(--color-warn) — 새 점 안 만든다)과 "{N}초 만에 중단됨" 문구만
+// 더한다. 실패 버블(turn-fail-*)보다는 조용하게 — 굵은 라벨·모노 캡스 없음.
+function foldExecutionRecord(toolSteps, startedAt, { aborted = false } = {}) {
   if (!toolSteps || !toolSteps.childElementCount) return null;
   const seconds = Math.max(0, Math.round((Date.now() - startedAt) / 1000));
   const header = document.createElement('button');
   header.type = 'button';
-  header.className = 'turn-exec-header';
+  header.className = aborted ? 'turn-exec-header is-aborted' : 'turn-exec-header';
+  if (aborted) {
+    const dot = document.createElement('span');
+    dot.className = 'turn-fail-dot'; // 재사용 — 새 warn-dot 클래스를 안 만든다
+    header.appendChild(dot);
+  }
   const label = document.createElement('span');
   label.className = 'turn-exec-header-label';
-  label.textContent = `${seconds}초 동안 작업함`;
+  label.textContent = aborted ? `${seconds}초 만에 중단됨` : `${seconds}초 동안 작업함`;
   const caret = document.createElement('span');
   caret.className = 'turn-exec-header-caret';
   caret.textContent = '⌄';
@@ -543,6 +554,7 @@ async function runQueryLive(text) {
   progress.appendChild(toolSteps);
   $history.appendChild(progress);
   liveProgressEl = progress;
+  liveProgressEl.startedAt = startedAt; // Esc 핸들러가 중단 헤더의 경과초를 재려면 필요하다
   scrollAfterRender();
 
   let cardCount = 0;
@@ -593,6 +605,10 @@ async function runQueryLive(text) {
   // tool_result에서 뽑아 보내는 단계를 그린다. orb.js가 이미 쓰는 판정
   // (lib/tool-step-track.js)을 그대로 나눠 쓴다 — 라벨을 두 벌 짓지 않는다.
   const toolStepStates = new Map();
+  // Esc 핸들러(top-level 리스너, 이 클로저 밖)가 "접을 기록이 있는가"를 판정할
+  // 유일한 다리 — liveProgressEl 프로퍼티로 노출한다(2026-08-27, foldExecutionRecord
+  // 위 주석의 aborted 분기와 짝).
+  liveProgressEl.toolStepStates = toolStepStates;
   const toolStepEls = new Map();
   const onLiveToolStep = (step) => {
     if (myToken !== abortToken) return;
@@ -1165,7 +1181,25 @@ document.addEventListener('keydown', (e) => {
       state = 'idle';
       setDot(null);
       setLocked(false);
-      if (liveProgressEl) { liveProgressEl.remove(); liveProgressEl = null; }
+      if (liveProgressEl) {
+        // AC10 반전(2026-08-27, 계획 v5 §5.3 결정을 뒤집는 사용자 지시 — Paper
+        // DFQ-0 확정 명세) — 중단 전에 이미 실행한 조각이 있으면 접힌 기록으로
+        // 남긴다. toolStepStates가 비어 있으면(순수 판단 중 중단 — 도구 호출
+        // 자체가 없었다) foldExecutionRecord가 그대로 null을 돌려줘 완료 턴의
+        // "기록 없음" 분기와 같은 취급이 된다(진행 라인만 지운다, 기존 동작).
+        const toolSteps = liveProgressEl.querySelector('.progress-tool-steps');
+        const execRecord = liveProgressEl.toolStepStates
+          ? foldExecutionRecord(toolSteps, liveProgressEl.startedAt, { aborted: true })
+          : null;
+        if (execRecord) {
+          const aLine = document.createElement('div');
+          aLine.className = 'turn';
+          aLine.appendChild(execRecord);
+          $history.appendChild(aLine);
+        }
+        liveProgressEl.remove();
+        liveProgressEl = null;
+      }
       scrollAfterRender();
     } else {
       // 옛 판에서 이 키는 캔버스 **창**을 수축시켜 닫았다(athena:collapse-canvas).
