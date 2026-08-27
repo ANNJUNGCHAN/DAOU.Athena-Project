@@ -390,6 +390,17 @@ function startRoutineFeed() {
     url: `${BACKEND_WS_BASE}/api/v1/ws/routines`,
     token: LOCAL_BEARER_TOKEN, // 토큰 설정 배포는 모드 A 인증 봉투, 미설정이면 루프백 게이트
     onEvent: (event) => {
+      // 근접(routine-near)은 알림이 아니라 배경 상태다 — athena:routine-event로
+      // 보내지 않는다(unread·토스트·이력 경로 오염 금지). orbWin에만 얇게
+      // 릴레이한다(feed-status 릴레이와 같은 자리·같은 패턴, CP3-2).
+      if (event && event.type === 'routine-near') {
+        if (orbWin && !orbWin.isDestroyed()) {
+          orbWin.webContents.send('athena:orb-signal', {
+            signal: 'watch', active: event.active, observed: event.observed, threshold: event.threshold,
+          });
+        }
+        return;
+      }
       // 능동 턴은 항상 이력에 쌓인다 — 토스트를 놓쳐도 다음 열람 때 남아 있다.
       if (shellWin && !shellWin.isDestroyed()) {
         shellWin.webContents.send('athena:routine-event', event);
