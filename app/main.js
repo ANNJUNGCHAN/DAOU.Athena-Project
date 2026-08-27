@@ -1657,6 +1657,17 @@ ipcMain.handle('athena:brain-surprising-connections', async (_e, { limit } = {})
   return { ok: true, ...result.body };
 });
 
+// 엔티티 타임라인(WP-C, 그래프 후속 계획) — graph_events를 엔티티 단위로
+// 조회한다. 이 스텝은 IPC 배선까지만이다(패널 UI는 후속 작업, controller.js:286
+// 참고) — 아직 이 채널을 부르는 렌더러 코드는 없다.
+ipcMain.handle('athena:brain-entity-timeline', async (_e, { entityId, limit } = {}) => {
+  const result = await fetchBrainJson('/api/v1/brain/analysis/entity-timeline', {
+    params: { entity_id: entityId, limit },
+  });
+  if (!result.ok) return { ok: false, error: result.error };
+  return { ok: true, ...result.body };
+});
+
 // ④ 공통 테이블 카드 봉투로 접는다 — canvas.js의 renderMcpTable(envelope)이
 // 이미 그리는 {canvas_type:'table', data:{columns,rows}} 그대로다. 신규 카드
 // 타입은 0개(계획 §2(d) "신규 카드 타입 0개").
