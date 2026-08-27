@@ -45,6 +45,9 @@ function createGraphModeController(deps) {
       elements.pill.textContent = graphView ? '그래프' : '답변';
       elements.pill.setAttribute('aria-pressed', graphView ? 'true' : 'false');
     }
+    // 키우미 얼굴(2026-08-27, Paper 보드 45) — 지금 모드를 얼굴로 보여준다
+    // (대화=눈 · 그래프=온톨로지 별자리). CSS가 data-mode로 얼굴을 고른다.
+    if (elements.kiumi) elements.kiumi.dataset.mode = graphView ? 'graph' : 'chat';
   }
 
   // 브레인이 안 됐는데 그래프 모드로 들어오면 빈 캔버스 대신 이렇게 정직하게

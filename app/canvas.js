@@ -1351,6 +1351,8 @@ const graphMode = window.AthenaLib.GraphModeController.createGraphModeController
     // 보드 07 성향 신호 표 — 그래프 표면이라 답변 모드에선 숨는다(아래 §요약 뷰
     // 배선 주석·US-007 참고). graphMode.applyVisibility() 하나가 소유한다.
     summaryTable: document.getElementById('graphSummaryTable'),
+    // 키우미(2026-08-27, Paper 보드 45) — 얼굴이 지금 모드를 수동 표시한다.
+    kiumi: document.getElementById('dot'),
   },
   // main은 실패를 {ok:false}로 돌려준다. 컨트롤러는 **예외**로 실패를 안다 —
   // 여기서 바꿔주지 않으면 `{ok:false}`가 정상 응답으로 흘러 빈 그래프가 그려지고,

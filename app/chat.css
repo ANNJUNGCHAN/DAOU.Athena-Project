@@ -566,15 +566,41 @@ html, body { background: transparent; }
   color: var(--color-k-bright);
 }
 .model-popover .mp-sep { height: 1px; background: rgb(255 255 255 / 8%); }
+/* 키우미(2026-08-27, Paper 보드 45) — 점이 키우미 얼굴이 됐다. 흰 몸체 + 바이저
+ * + 흰 도형(모드별 얼굴). 신호색(브랜드 핑크)은 여전히 calling 글로우 한 곳뿐. */
 .dot {
-  width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0;
-  background: radial-gradient(circle at 35% 35%, #fff, var(--color-brand) 55%, #8f0d57 100%);
-  box-shadow: 0 0 12px 3px rgba(238, 19, 123, 0.55);
+  width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(16, 19, 26, 0.16);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 1px 0 rgba(255, 253, 248, 0.6) inset, 0 0 10px 2px rgba(238, 19, 123, 0.16);
   transition: transform var(--dur-base) var(--ease), box-shadow var(--dur-base) var(--ease);
   padding: 0;
-  border: none;
   appearance: none;
   cursor: pointer;
+}
+.kiumi-visor {
+  width: 15px; height: 14px; border-radius: 48%; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  background: radial-gradient(ellipse 120% 100% at 32% 24%, #5B6BE0 0%, #2F3BA8 46%, #232C7E 100%);
+  box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.28) inset, 0 1px 2px rgba(255, 255, 255, 0.3) inset;
+}
+.kiumi-face { display: block; }
+.dot[data-mode="graph"] .kiumi-face-chat { display: none; }
+.dot:not([data-mode="graph"]) .kiumi-face-graph { display: none; }
+.kiumi-menu {
+  right: auto; left: 14px;
+  min-width: 240px;
+}
+.kiumi-menu .km-item {
+  display: block; width: 100%; text-align: left;
+  padding: 8px 12px; border-radius: 8px;
+  background: none; border: none; appearance: none; cursor: pointer;
+  color: var(--color-k-text); font: inherit;
+}
+.kiumi-menu .km-item:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--color-k-bright);
 }
 .dot:hover { transform: scale(1.25); }
 .dot:focus-visible {
