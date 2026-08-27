@@ -41,6 +41,48 @@ test('cluster_cohesion 필드가 없으면 cohesion은 undefined로 폴백한다
   }
 });
 
+// ── 엣지 메타데이터(스텝13, 스텝13-보정 백엔드 예외의 additive edge_details) ────
+
+test('edge_details가 있으면 kind/tier/confidence가 해당 엣지에 실린다', () => {
+  const layout = layoutClusterMap(
+    payload({
+      edge_details: [{ source: 'e:a', target: 'e:b', kinds: ['보유'], tier: 'deterministic', confidence: 'EXTRACTED' }],
+    }),
+    VIEWPORT
+  );
+  const ab = layout.edges.find((e) => (e.from === 'e:a' && e.to === 'e:b') || (e.from === 'e:b' && e.to === 'e:a'));
+  assert.deepEqual(ab.kinds, ['보유']);
+  assert.equal(ab.tier, 'deterministic');
+  assert.equal(ab.confidence, 'EXTRACTED');
+});
+
+test('edge_details의 source/target 순서가 엣지와 반대여도(무향) 그대로 매칭된다', () => {
+  const layout = layoutClusterMap(
+    payload({ edge_details: [{ source: 'e:c', target: 'e:a', kinds: ['언급'], tier: 'conversational', confidence: 'INFERRED' }] }),
+    VIEWPORT
+  );
+  const ac = layout.edges.find((e) => (e.from === 'e:a' && e.to === 'e:c') || (e.from === 'e:c' && e.to === 'e:a'));
+  assert.equal(ac.confidence, 'INFERRED');
+});
+
+test('edge_details가 없으면(백엔드 예외 미승인/구버전) kind/tier/confidence가 전부 undefined다(§0 정책)', () => {
+  const layout = layoutClusterMap(payload(), VIEWPORT);
+  for (const edge of layout.edges) {
+    assert.equal(edge.kinds, undefined);
+    assert.equal(edge.tier, undefined);
+    assert.equal(edge.confidence, undefined);
+  }
+});
+
+test('edge_details에 없는 엣지는 조용히 메타데이터 없이 남는다(부분 커버리지도 안 죽는다)', () => {
+  const layout = layoutClusterMap(
+    payload({ edge_details: [{ source: 'e:a', target: 'e:b', kinds: ['보유'], tier: 'deterministic', confidence: 'EXTRACTED' }] }),
+    VIEWPORT
+  );
+  const ac = layout.edges.find((e) => (e.from === 'e:a' && e.to === 'e:c') || (e.from === 'e:c' && e.to === 'e:a'));
+  assert.equal(ac.confidence, undefined);
+});
+
 // ── aggregateClusterEdges(스텝11) — 개별 엔티티 엣지를 군집 쌍으로 축약 ────────
 
 function mockPlaced(overrides) {

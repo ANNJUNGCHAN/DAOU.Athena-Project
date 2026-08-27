@@ -271,8 +271,31 @@ html, body { background: transparent; }
 .graph-label.is-hub { font-family: var(--font-strong); fill: var(--color-k-bright); }
 .graph-node.is-selected .graph-label { font-family: var(--font-strong); }
 
-.graph-node-tier-legend { padding: 6px 18px; border-top: 1px solid var(--color-k-line); flex-shrink: 0; }
+.graph-node-tier-legend { display: flex; gap: 14px; padding: 6px 18px; border-top: 1px solid var(--color-k-line); flex-shrink: 0; }
 .graph-node-tier-caption { font-family: var(--font-body); font-size: var(--text-2xs); color: var(--color-k-hint); font-style: italic; }
+
+/* 2단계 엣지 3종(보드 15 §2.3, 스텝13) — 사실(회색 실선)만 고정 스타일이고,
+ * 추론(회색 점선)·숨은연관(핑크 점선)은 확정 색+점선이라 여기 토큰으로 정한다.
+ * confidence 메타데이터가 없으면(스텝13-보정 백엔드 예외 미승인/구버전 backend)
+ * render.js가 전부 사실 취급으로 폴백해 이 기본 .graph-edge 스타일만 쓴다. */
+.graph-edge { stroke: rgba(16, 19, 26, 0.38); stroke-width: 1.4px; }
+.graph-edge.is-inference { stroke: rgba(16, 19, 26, 0.24); stroke-width: 1.2px; stroke-dasharray: 4 4; }
+.graph-edge.is-hidden-link { stroke: var(--color-brand); stroke-width: 2px; stroke-dasharray: 6 4; }
+
+/* 범례(보드 15 §2.4, 스텝13) — 1단계 군집 범례(.graph-cluster-legend-*)와 같은
+ * 모양이지만 화면이 배타적이라(state.stage) 별도 클래스를 쓴다(render.js 주석
+ * 참고). "원 크기 = 연결 수"만 항상 뜨고 나머지는 실제로 쓰인 종류만(§0 정책). */
+.graph-node-legend {
+  display: flex; align-items: center; gap: 18px; flex-shrink: 0;
+  padding: 11px 18px; border-top: 1px solid var(--color-k-line);
+}
+.graph-node-legend-item { display: flex; align-items: center; gap: 6px; }
+.graph-node-legend-item:has(.graph-node-legend-label.is-right) { margin-left: auto; }
+.graph-node-legend-label { font-family: var(--font-body); font-size: var(--text-xs); color: var(--color-k-soft); white-space: nowrap; }
+.graph-node-legend-swatch { display: inline-block; width: 20px; height: 0; border-top-width: 1.5px; border-top-style: solid; }
+.graph-node-legend-swatch.is-fact { border-top-color: rgba(16, 19, 26, 0.38); }
+.graph-node-legend-swatch.is-inference { border-top-color: rgba(16, 19, 26, 0.24); border-top-style: dashed; }
+.graph-node-legend-swatch.is-hidden-link { border-top-color: var(--color-brand); border-top-style: dashed; }
 
 /* 요약 뷰 본문 골격 — 표 영역(왼쪽, 헤더 아래로 히어로·배너·표가 세로로 쌓인다)
  * + 공통 패널(오른쪽, 스텝8) 좌우 배치(07 §10 스펙). */
