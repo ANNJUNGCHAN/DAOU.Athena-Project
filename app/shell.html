@@ -130,6 +130,9 @@
                  이 컨테이너의 자식만 통째로 비운다(summary-table.js:67) — #graphPanel은
                  그 바깥 형제라 표 리로드가 패널을 지울 방법이 구조적으로 없다. -->
             <div id="graphSummaryTableArea"></div>
+            <!-- 테마 군집(보드 06 §8/07 §8-2) — theme-clusters.js. 군집 이름은
+                 백엔드 어디에도 없어(§0 발견1) 전 카드가 "이름 없음"이다. -->
+            <div id="graphThemeClusters"></div>
           </div>
           <!-- 공통 패널(보드 07/15) — 스텝8이 채운다. controller.js의
                renderSelection()이 hidden·텍스트만 갱신한다(통째로 비우지 않는다). -->
@@ -302,6 +305,7 @@
 <script src="lib/graph-mode/graph-mode-prefs.js"></script>
 <script src="lib/graph-mode/render.js"></script>
 <script src="lib/graph-mode/summary-table.js"></script>
+<script src="lib/graph-mode/theme-clusters.js"></script>
 <script src="lib/graph-mode/controller.js"></script>
 <script src="lib/settings-cards.js"></script>
 <script src="lib/history-badge.js"></script>

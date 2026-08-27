@@ -1466,6 +1466,26 @@ function renderSummaryUpdatedAt(entries) {
   el.textContent = relative ? `최근 갱신 ${relative}` : '';
 }
 
+// 테마 군집 섹션(보드 06 §8/07 §8-2, 스텝6) — cluster-map을 재사용한다(이미
+// graphMode.fetchClusterMap이 쓰는 것과 같은 IPC, 여기서는 별도로 다시
+// 부른다 — 그래프 뷰를 안 열어도 요약 뷰에서 이 카드가 보여야 하므로 graphMode
+// 내부 캐시에 기대지 않는다). 실패해도 표 자체는 이미 그려졌으니 조용히
+// 숨긴다(§0 정책 — 지어낸 카드를 보여주지 않는다).
+async function loadThemeClusters() {
+  const container = document.getElementById('graphThemeClusters');
+  if (!container) return;
+  let res;
+  try {
+    res = await window.athena.invoke('athena:brain-cluster-map');
+  } catch (err) {
+    console.warn('[graph-mode] cluster-map(테마 군집) 실패', err);
+    return;
+  }
+  if (!res || !res.ok) return;
+  const clusters = window.AthenaLib.ThemeClusters.groupThemeClusters(res);
+  window.AthenaLib.ThemeClusters.renderThemeClusters(container, clusters);
+}
+
 // 모드 칩은 항상 보이지만, 컨트롤러는 아직 "못 씀"으로 가정한 채 태어난다
 // (controller.js 기본값) — 이 프로브가 브레인 상태를 확인해 바로잡는다. 프로브 전에
 // 사람이 그래프 모드로 들어와도 renderUnavailable()의 정직한 안내가 뜨지, 막히지 않는다.
@@ -1479,6 +1499,7 @@ function renderSummaryUpdatedAt(entries) {
     // 보이도록 하는 프리페치 — 안 보이는 동안 부르는 낭비는 loadEmptyCanvasExtras와
     // 같은 기존 관례).
     if (ready) graphSummaryTable.load().then(renderSummaryUpdatedAt);
+    if (ready) loadThemeClusters();
     // 빈 상태(보드 05) 숫자·CTA·힌트 — 같은 ready 확인에 얹는다(왕복 추가 없음).
     if (ready) loadEmptyCanvasExtras();
   } catch (err) {
