@@ -2411,6 +2411,10 @@ app.whenReady().then(async () => {
         surfaceToggle,
         placedNodes: placed ? placed.nodes.length : 0,
         placedEdges: placed ? placed.edges.length : 0,
+        // 1단계(기본, STAGE_CLUSTERS)는 개별 엔티티가 아니라 군집 버블을 그린다
+        // (79fbedd) — 그려진 것과 대조할 배치 값은 clusters/clusterEdges다.
+        placedClusters: placed && Array.isArray(placed.clusters) ? placed.clusters.length : 0,
+        placedClusterEdges: placed && Array.isArray(placed.clusterEdges) ? placed.clusterEdges.length : 0,
         drawn,
       };
     })()`);
@@ -2433,13 +2437,15 @@ app.whenReady().then(async () => {
       // 노드가 0개면 '빈 캔버스'와 '고장'을 구분할 수 없다. 브레인이 준비됐으면
       // 여기 왔을 때 그려진 것이 있어야 한다.
       assertOk('graph-mode: 캔버스가 비어 있지 않다', graph.drawn.rendered === true);
+      // 1단계는 군집 버블 집계다(79fbedd) — 그려진 노드/엣지는 개별 엔티티(placedNodes)가
+      // 아니라 군집 버블(placedClusters)·군집간 선(placedClusterEdges)과 일치해야 한다.
       assertOk(
-        'graph-mode: 그려진 노드 수가 배치와 일치한다',
-        graph.drawn.nodes === graph.placedNodes,
+        'graph-mode: 그려진 버블 수가 배치 군집 수와 일치한다',
+        graph.drawn.nodes === graph.placedClusters,
       );
       assertOk(
-        'graph-mode: 그려진 엣지 수가 배치와 일치한다',
-        graph.drawn.edges === graph.placedEdges,
+        'graph-mode: 그려진 군집간 선 수가 배치와 일치한다',
+        graph.drawn.edges === graph.placedClusterEdges,
       );
       report.graphMode.shot = await shot(shellWin, '90-graph-mode.png');
     } else {
