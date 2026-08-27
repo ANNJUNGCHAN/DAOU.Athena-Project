@@ -175,29 +175,36 @@ function buildEmptyCanvasIllustration() {
 // 사실 자체는 늘 참이다. 숫자·CTA·힌트는 뒤에서 준비되면 append로 더한다
 // (appendEmptyCanvasExtras) — 브레인 상태를 아직 모르는 부팅 초반에도 빈
 // 화면 대신 뼈대가 바로 보인다.
-// 대화 빈 화면의 키우미(Paper 보드 46, 2026-08-27) — 오브 원형 어휘의 축소판.
-function buildEmptyCanvasKiumi(small) {
-  const face = document.createElement('div');
-  face.className = small ? 'canvas-empty-kiumi sm' : 'canvas-empty-kiumi';
-  const visor = document.createElement('div');
-  visor.className = 'canvas-empty-kiumi-visor';
+// 대화 모드 상징 삽화(보드 46 v3, 2026-08-27) — 그래프 쪽 노드 별자리와 같은
+// 어휘(회색 선·점, currentColor)로 말풍선 둘 + 입력 중 점 셋을 그린다.
+function buildChatIllustration() {
+  const wrap = document.createElement('div');
+  wrap.className = 'canvas-empty-art';
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  svg.setAttribute('width', small ? '27' : '48');
-  svg.setAttribute('height', small ? '26' : '46');
-  svg.setAttribute('viewBox', '0 0 48 46');
-  for (const x of [14, 27]) {
-    const eye = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-    eye.setAttribute('x', x);
-    eye.setAttribute('y', 15);
-    eye.setAttribute('width', 7);
-    eye.setAttribute('height', 16);
-    eye.setAttribute('rx', 3.5);
-    eye.setAttribute('fill', '#FFFFFF');
-    svg.appendChild(eye);
-  }
-  visor.appendChild(svg);
-  face.appendChild(visor);
-  return face;
+  svg.setAttribute('width', '120');
+  svg.setAttribute('height', '72');
+  svg.setAttribute('viewBox', '0 0 120 72');
+  const mk = (tag, attrs) => {
+    const node = document.createElementNS('http://www.w3.org/2000/svg', tag);
+    for (const [k, v] of Object.entries(attrs)) node.setAttribute(k, v);
+    return node;
+  };
+  // 큰 말풍선(질문) — 윤곽선 + 왼쪽 아래 꼬리
+  svg.appendChild(mk('path', {
+    d: 'M18 8 H74 Q84 8 84 18 V32 Q84 42 74 42 H36 L26 52 V42 H18 Q8 42 8 32 V18 Q8 8 18 8 Z',
+    fill: 'none', stroke: 'currentColor', 'stroke-width': '1.5', opacity: '0.35',
+  }));
+  // 입력 중 점 셋 — 가운데 점이 진하다(그래프 삽화의 허브 노드와 같은 강세)
+  svg.appendChild(mk('circle', { cx: '34', cy: '25', r: '3', fill: 'currentColor', opacity: '0.3' }));
+  svg.appendChild(mk('circle', { cx: '46', cy: '25', r: '3.5', fill: 'currentColor', opacity: '0.55' }));
+  svg.appendChild(mk('circle', { cx: '58', cy: '25', r: '3', fill: 'currentColor', opacity: '0.3' }));
+  // 작은 답변 말풍선 — 오른쪽 아래, 옅게
+  svg.appendChild(mk('path', {
+    d: 'M78 44 H104 Q112 44 112 51 V57 Q112 64 104 64 H90 L84 70 V64 H78 Q70 64 70 57 V51 Q70 44 78 44 Z',
+    fill: 'none', stroke: 'currentColor', 'stroke-width': '1.5', opacity: '0.28',
+  }));
+  wrap.appendChild(svg);
+  return wrap;
 }
 
 // 모드가 다르면 빈 화면도 다르다(Paper 보드 46, 2026-08-27 검토 결정) — 대화
@@ -206,35 +213,19 @@ function buildEmptyCanvasKiumi(small) {
 function buildEmptyCanvasSkeleton() {
   if (!gridEmptyEl) return;
   gridEmptyEl.replaceChildren();
-  // 대화 모드 — 유령 대화 프리뷰(보드 46 v2, 2026-08-27 2차 피드백). 유령은
-  // 반투명·점선으로 '예시'임을 말한다 — 없는 기능을 진짜처럼 위장하지 않는다.
+  // 대화 모드 — 상징 삽화 + 회전 문구(보드 46 v3, 2026-08-27 3차 피드백).
+  // 문구는 applyEmptyCopy가 시간대·성향 풀에서 채운다.
   const chatBox = document.createElement('div');
   chatBox.className = 'canvas-empty canvas-empty-chat';
-  const ghostBubble = document.createElement('div');
-  ghostBubble.className = 'canvas-empty-ghost-bubble';
-  ghostBubble.textContent = '삼성전자 지금 어때?';
-  const ghostCard = document.createElement('div');
-  ghostCard.className = 'canvas-empty-ghost-card';
-  for (const w of [55, 90, 74]) {
-    const line = document.createElement('div');
-    line.className = 'canvas-empty-ghost-line';
-    line.style.width = `${w}%`;
-    ghostCard.appendChild(line);
-  }
-  const invite = document.createElement('div');
-  invite.className = 'canvas-empty-invite';
-  invite.appendChild(buildEmptyCanvasKiumi(true));
+  chatBox.appendChild(buildChatIllustration());
   const chatCopy = document.createElement('div');
   chatCopy.className = 'canvas-empty-copy';
   const chatTitle = document.createElement('div');
   chatTitle.className = 'canvas-empty-title';
-  chatTitle.textContent = '무엇이든 물어보세요';
   const chatSub = document.createElement('div');
   chatSub.className = 'canvas-empty-sub';
-  chatSub.textContent = '질문하면 답변 카드가 이 자리에 쌓입니다.';
   chatCopy.append(chatTitle, chatSub);
-  invite.appendChild(chatCopy);
-  chatBox.append(ghostBubble, ghostCard, invite);
+  chatBox.appendChild(chatCopy);
   // 그래프 모드 — 성향 축적 히어로. 옛 대화 빈 화면에서 이사 왔다(수치·힌트는
   // appendEmptyCanvasExtras가 브레인 준비 시에만 붙인다 — 정보 정직성 유지).
   const graphBox = document.createElement('div');
@@ -250,6 +241,27 @@ function buildEmptyCanvasSkeleton() {
   gridEmptyEl.append(chatBox, graphBox);
 }
 buildEmptyCanvasSkeleton();
+
+// 문구 회전(보드 46 v3) — 시간대·성향 풀에서 시드로 고른다(lib/empty-canvas.js
+// pickEmptyCopy, 순수·테스트됨). 빈 화면이 보일 때만 45초마다 다시 고른다.
+// ponytail: 회전 주기 45s 고정 — 체감 조정이 필요하면 이 상수만 바꾼다.
+let emptyCopyProfileTop = null;
+function applyEmptyCopy(seed) {
+  if (!gridEmptyEl) return;
+  const box = gridEmptyEl.querySelector('.canvas-empty-chat');
+  if (!box) return;
+  const picked = window.AthenaLib.EmptyCanvas.pickEmptyCopy({
+    hour: new Date().getHours(),
+    profileTop: emptyCopyProfileTop,
+    seed,
+  });
+  box.querySelector('.canvas-empty-title').textContent = picked.title;
+  box.querySelector('.canvas-empty-sub').textContent = picked.sub;
+}
+applyEmptyCopy(Date.now());
+setInterval(() => {
+  if (gridEmptyEl && !gridEmptyEl.hidden) applyEmptyCopy(Date.now());
+}, 45000);
 
 // 수치·CTA·힌트 — 브레인이 준비됐을 때만 붙인다(그래프 필과 같은 규율 — 없는
 // 기능을 있다고 표시하지 않는다). CTA는 그래프 모드 필과 똑같이 ready 하나에만
@@ -282,14 +294,20 @@ function appendEmptyCanvasExtras(stats, hintCount) {
 // CTA는 남는다(catch로 개별 무력화) — 숫자 하나 못 얻었다고 그래프 모드
 // 진입로까지 지울 이유는 없다.
 async function loadEmptyCanvasExtras() {
-  const [clusterRes, questionsRes] = await Promise.all([
+  const [clusterRes, questionsRes, profileRes] = await Promise.all([
     window.athena.invoke('athena:brain-cluster-map').catch(() => null),
     window.athena.invoke('athena:brain-suggested-questions').catch(() => null),
+    // 회전 문구의 성향 갈래(보드 46 v3) — 상위 1건의 이름만 쓴다.
+    window.athena.invoke('athena:brain-profile-summary', { limit: 1 }).catch(() => null),
   ]);
   const { clusterStats, suggestedCount } = window.AthenaLib.EmptyCanvas;
   const stats = clusterRes && clusterRes.ok ? clusterStats(clusterRes.nodes) : null;
   const hintCount = questionsRes && questionsRes.ok ? suggestedCount(questionsRes.questions) : null;
   appendEmptyCanvasExtras(stats, hintCount);
+  const profEntries = profileRes && profileRes.ok ? (profileRes.entries || profileRes.rows) : null;
+  const topEntry = Array.isArray(profEntries) ? profEntries[0] : null;
+  emptyCopyProfileTop = (topEntry && (topEntry.entity_name || topEntry.entity_id)) || null;
+  if (emptyCopyProfileTop) applyEmptyCopy(Date.now());
 }
 
 // ---------- 캔버스 카드 추가/초기화/하이라이트 ----------
