@@ -438,6 +438,7 @@ class SurprisingConnectionOut(BaseModel):
     kinds: list[str]
     source_cluster: int
     target_cluster: int
+    surprise_score: float
 
 
 class SurprisingConnectionsResponse(BaseModel):
@@ -572,6 +573,7 @@ async def get_brain_surprising_connections(
                 kinds=list(item.kinds),
                 source_cluster=item.source_cluster,
                 target_cluster=item.target_cluster,
+                surprise_score=item.surprise_score,
             )
             for item in surprising_connections(
                 projected, limit=_bounded(limit), assignment=assignment
