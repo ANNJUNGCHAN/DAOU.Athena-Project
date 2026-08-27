@@ -246,7 +246,12 @@ function maybeShowCoachmark() {
   mark.className = 'coachmark';
   mark.textContent = '키우미를 누르면 파일 첨부·모델 설정이 열립니다 — 설정은 사이드바 계정 메뉴나 "설정" 입력으로';
   document.body.appendChild(mark);
-  const dismiss = () => {
+  const shownAt = Date.now();
+  const dismiss = (ev) => {
+    // 창 포커스용 첫 클릭이 부착 직후 캡처 리스너에 잡혀 아무도 못 보고
+    // 사라지던 결함(2026-08-27 실측 — "코치마크 안 뜬다"의 남은 절반).
+    // 1.5초 안의 입력은 무시한다 — 자동 소멸(타임아웃)은 ev 없이 와서 통과.
+    if (ev && Date.now() - shownAt < 1500) return;
     try { localStorage.setItem('athena-coachmark-settings-v3', '1'); } catch { /* 플래그 실패 시 다음 부팅에 한 번 더 뜬다 — 치명적이지 않다 */ }
     mark.remove();
     window.removeEventListener('pointerdown', dismiss, true);
