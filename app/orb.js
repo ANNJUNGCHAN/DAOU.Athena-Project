@@ -36,6 +36,7 @@
   const toolStepTrack = window.AthenaLib.ToolStepTrack;
   const liveQueryLock = window.AthenaLib.LiveQueryLock;
   const marketHours = window.AthenaLib.MarketHours;
+  const columnFold = window.AthenaLib.ColumnFold;
 
   const $root = document.getElementById('orbRoot');
   const $orb = document.getElementById('orb');
@@ -893,6 +894,105 @@
     $chatBody.scrollTop = $chatBody.scrollHeight;
   }
 
+  // ---------- board-33③④ 선행 — 캔버스 엔벌로프 축약 카드 ----------
+  // main.js가 athena:orb-canvas-result로 relay하는 건 origin:'orb' 질의의
+  // render_canvas 결과뿐이다(9a 결정) — 셸 캔버스와 같은 종류를 오브 안에서도
+  // 실시간으로 축약해 보여준다.
+  const ORB_FOLD_CARD_WIDTH_PX = 360; // 패널 400 - 카드 padding(12px×2) - 여유
+  const ORB_TABLE_MAX_ROWS = 3; // 보드 실측(4XV-0) — 헤더 제외 3행까지만 편다
+
+  // 카드 제목/부제 — canvas.js의 cardTitleAndSubtitle과 같은 규칙(card_title이
+  // 고정 카드명이면 타이틀, caption은 부제로 내려간다). 오브는 별도 창(스크립트
+  // 스코프도 분리)이라 그대로 참조할 수 없어 3줄짜리 규칙만 그대로 복제한다 —
+  // 공유 모듈을 새로 만들 만큼 크지 않다.
+  function orbCardTitleAndSubtitle(envelope, fallback) {
+    const fixedTitle = envelope && typeof envelope.card_title === 'string' && envelope.card_title
+      ? envelope.card_title
+      : null;
+    const caption = envelope && envelope.caption;
+    if (fixedTitle) return [fixedTitle, caption || null];
+    return [caption || fallback, null];
+  }
+
+  // 표 축약 카드(board-33③, Paper 4XV-0 실측) — column-fold.js의 foldColumns를
+  // 셸 캔버스(1560px)가 아니라 오브 카드 폭(360px)에 다시 적용한다. 데이터
+  // 셀 최소폭(90px)+패딩(24px)=114px라 360px에서는 짧은 라벨 기준 최대 3컬럼
+  // 안팎까지만 보인다(column-fold.test.js가 이 가정을 고정한다). 셸의 16종
+  // CardKinds 전용 렌더러는 재사용하지 않는다 — 일반 fold 표 하나로 충분한
+  // 별도의 더 단순한 렌더러다.
+  function buildOrbTableCard(envelope) {
+    const rawCols = (envelope.data && Array.isArray(envelope.data.columns)) ? envelope.data.columns : [];
+    const rows = (envelope.data && Array.isArray(envelope.data.rows)) ? envelope.data.rows : [];
+    if (!rawCols.length || !rows.length) return null;
+
+    const { visible: cols, hidden } = columnFold.foldColumns(rawCols, ORB_FOLD_CARD_WIDTH_PX);
+    const visibleRows = rows.slice(0, ORB_TABLE_MAX_ROWS);
+    const hiddenRowCount = rows.length - visibleRows.length;
+    const [title, subtitle] = orbCardTitleAndSubtitle(envelope, '표');
+
+    const card = document.createElement('div');
+    card.className = 'orb-fold-card';
+
+    const head = document.createElement('div');
+    head.className = 'orb-fold-card-head';
+    const titleEl = document.createElement('div');
+    titleEl.className = 'orb-fold-card-title';
+    titleEl.textContent = title;
+    head.appendChild(titleEl);
+    if (subtitle) {
+      const subtitleEl = document.createElement('div');
+      subtitleEl.className = 'orb-fold-card-subtitle';
+      subtitleEl.textContent = subtitle;
+      head.appendChild(subtitleEl);
+    }
+    card.appendChild(head);
+
+    function buildRow(cells, isHead) {
+      const row = document.createElement('div');
+      row.className = isHead ? 'orb-fold-row is-head' : 'orb-fold-row';
+      cells.forEach((text, i) => {
+        const cell = document.createElement('div');
+        cell.className = i === 0 ? 'orb-fold-cell-label' : 'orb-fold-cell-value';
+        cell.textContent = text;
+        row.appendChild(cell);
+      });
+      return row;
+    }
+
+    const table = document.createElement('div');
+    table.className = 'orb-fold-table';
+    table.appendChild(buildRow(cols.map((col) => (col && col.label != null ? col.label : (col && col.key) || '')), true));
+    for (const r of visibleRows) {
+      table.appendChild(buildRow(cols.map((col) => {
+        const v = r ? r[col.key] : undefined;
+        return v == null ? '—' : String(v);
+      }), false));
+    }
+    card.appendChild(table);
+
+    // 결정론 축약 고지(보드 원문 형식) — 실제로 뭔가 접었을 때만 낸다. 아무것도
+    // 안 접혔는데 "0개를 접었습니다"를 내는 건 정직성 계약에 어긋난다.
+    if (hidden.length > 0 || hiddenRowCount > 0) {
+      const note = document.createElement('div');
+      note.className = 'orb-fold-note';
+      note.textContent = `열 ${hidden.length}개 · 행 ${hiddenRowCount}개를 접었습니다 — 전체는 캔버스에서`;
+      card.appendChild(note);
+    }
+    return card;
+  }
+
+  // canvas.js의 addLiveCard와 같은 1차 게이트(성공/폴백만 카드, 나머지는 통과)를
+  // 따른다 — 'pushed'는 main.js 9a 결정으로 애초에 relay되지 않는다. rejected/
+  // error/unparseable/그 밖의 canvas_type(chart는 Step 9c)은 카드 없이 기존
+  // "전체는 대화창에서 이어집니다" 안내로 넘어간다.
+  function buildOrbCanvasCard(r) {
+    if (!r || (r.status !== 'success' && r.status !== 'fallback')) return null;
+    const envelope = r.envelope;
+    if (!envelope || envelope.fell_back) return null;
+    if (envelope.canvas_type === 'table') return buildOrbTableCard(envelope);
+    return null;
+  }
+
   async function submitChatQuery(rawText) {
     const text = String(rawText || '').trim();
     if (!text || chatBusy || remoteQueryBusy) return;
@@ -912,6 +1012,23 @@
 
     let calling = false;
     let answer = null;
+    // board-33③④ 선행 — answer가 아직 없으면(텍스트 델타보다 카드가 먼저 오는
+    // 경로, main.js 주석 "카드 먼저, 텍스트는 나중" 참조) 카드를 잠깐 들고
+    // 있다가 answer가 생기는 순간 이어붙인다.
+    const pendingCanvasCards = [];
+    const handledCanvasTypes = new Set();
+    const unsubCanvas = window.athena.on('athena:orb-canvas-result', (r) => {
+      const el = buildOrbCanvasCard(r);
+      if (!el || !r.envelope) return;
+      handledCanvasTypes.add(r.envelope.canvas_type);
+      if (answer) {
+        answer.line.appendChild(el);
+        scrollChatToBottom();
+        requestPanelHeight();
+      } else {
+        pendingCanvasCards.push(el);
+      }
+    });
     const unsubStep = window.athena.on('athena:live-tool-step', (step) => {
       if (!calling) { calling = true; setChatDot('calling'); }
       updateProgressStep(card, step);
@@ -969,6 +1086,7 @@
     } catch (err) {
       result = { ok: false, error: String((err && err.message) || err) };
     } finally {
+      unsubCanvas();
       unsubStep();
       unsubThinking();
       unsubDelta();
@@ -991,10 +1109,15 @@
       if (card.isConnected) card.remove();
       answer = renderChatAnswer(finalText);
     }
-    // 표·차트는 여기서 다시 그리지 않는다(별도 렌더러, board-33 캡션) — 캔버스
-    // 카드 종류가 있었으면 정직하게 고지만 한다.
+    // answer가 없던 동안 도착한 카드(카드 먼저 오는 경로)를 여기서 이어붙인다.
+    for (const el of pendingCanvasCards) answer.line.appendChild(el);
+    // board-33③④에서 실제로 축약 카드를 그린 canvas_type은 이미 카드가 붙었다 —
+    // 그 종류는 "표·차트는 여기서 다시 그리지 않는다"는 옛 안내를 반복하지
+    // 않는다. 아직 오브 렌더러가 없는 나머지 canvas_type(예: reader/stream)만
+    // 정직하게 "전체는 대화창에서 이어집니다"로 넘어간다.
     const canvasTypes = (result && result.canvasTypes) || [];
-    if (canvasTypes.length) {
+    const unrenderedCanvasTypes = canvasTypes.filter((t) => !handledCanvasTypes.has(t));
+    if (unrenderedCanvasTypes.length) {
       const note = document.createElement('div');
       note.className = 'orb-turn-fold-note';
       note.textContent = '전체는 대화창에서 이어집니다';
