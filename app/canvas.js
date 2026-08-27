@@ -176,14 +176,14 @@ function buildEmptyCanvasIllustration() {
 // (appendEmptyCanvasExtras) — 브레인 상태를 아직 모르는 부팅 초반에도 빈
 // 화면 대신 뼈대가 바로 보인다.
 // 대화 빈 화면의 키우미(Paper 보드 46, 2026-08-27) — 오브 원형 어휘의 축소판.
-function buildEmptyCanvasKiumi() {
+function buildEmptyCanvasKiumi(small) {
   const face = document.createElement('div');
-  face.className = 'canvas-empty-kiumi';
+  face.className = small ? 'canvas-empty-kiumi sm' : 'canvas-empty-kiumi';
   const visor = document.createElement('div');
   visor.className = 'canvas-empty-kiumi-visor';
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  svg.setAttribute('width', '48');
-  svg.setAttribute('height', '46');
+  svg.setAttribute('width', small ? '27' : '48');
+  svg.setAttribute('height', small ? '26' : '46');
   svg.setAttribute('viewBox', '0 0 48 46');
   for (const x of [14, 27]) {
     const eye = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
@@ -206,10 +206,24 @@ function buildEmptyCanvasKiumi() {
 function buildEmptyCanvasSkeleton() {
   if (!gridEmptyEl) return;
   gridEmptyEl.replaceChildren();
-  // 대화 모드 — 키우미가 기다린다. 그래프 요소는 여기 못 들어온다.
+  // 대화 모드 — 유령 대화 프리뷰(보드 46 v2, 2026-08-27 2차 피드백). 유령은
+  // 반투명·점선으로 '예시'임을 말한다 — 없는 기능을 진짜처럼 위장하지 않는다.
   const chatBox = document.createElement('div');
   chatBox.className = 'canvas-empty canvas-empty-chat';
-  chatBox.appendChild(buildEmptyCanvasKiumi());
+  const ghostBubble = document.createElement('div');
+  ghostBubble.className = 'canvas-empty-ghost-bubble';
+  ghostBubble.textContent = '삼성전자 지금 어때?';
+  const ghostCard = document.createElement('div');
+  ghostCard.className = 'canvas-empty-ghost-card';
+  for (const w of [55, 90, 74]) {
+    const line = document.createElement('div');
+    line.className = 'canvas-empty-ghost-line';
+    line.style.width = `${w}%`;
+    ghostCard.appendChild(line);
+  }
+  const invite = document.createElement('div');
+  invite.className = 'canvas-empty-invite';
+  invite.appendChild(buildEmptyCanvasKiumi(true));
   const chatCopy = document.createElement('div');
   chatCopy.className = 'canvas-empty-copy';
   const chatTitle = document.createElement('div');
@@ -217,9 +231,10 @@ function buildEmptyCanvasSkeleton() {
   chatTitle.textContent = '무엇이든 물어보세요';
   const chatSub = document.createElement('div');
   chatSub.className = 'canvas-empty-sub';
-  chatSub.textContent = '답변 카드가 여기에 쌓입니다.\n오른쪽 대화에서 질문하면 바로 시작됩니다.';
+  chatSub.textContent = '질문하면 답변 카드가 이 자리에 쌓입니다.';
   chatCopy.append(chatTitle, chatSub);
-  chatBox.appendChild(chatCopy);
+  invite.appendChild(chatCopy);
+  chatBox.append(ghostBubble, ghostCard, invite);
   // 그래프 모드 — 성향 축적 히어로. 옛 대화 빈 화면에서 이사 왔다(수치·힌트는
   // appendEmptyCanvasExtras가 브레인 준비 시에만 붙인다 — 정보 정직성 유지).
   const graphBox = document.createElement('div');
