@@ -770,6 +770,16 @@ function renderCompoundCard(envelope) {
     const { card, body } = makeCard('compound', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope), envelope.screen_id);
     stampPaperScreen(card, envelope);
     body.appendChild(built);
+    // 실시간 미배선(의도적 — task #24, 2026-08-27 실측). renderFactsCard/
+    // renderMcpTable과 달리 wireQuoteRealtime을 걸지 않는다: applyLiveTick을 가진
+    // 카드종은 시세·종목정보 둘뿐인데, 둘 다 compound 모양(data.header/data.table)
+    // 에는 관여하지 않는다 — render종목정보은 envelope.data.fields를,
+    // render시세는 envelope.data.columns/rows를 직접 요구해 compound envelope에서는
+    // 항상 null을 돌려준다(각 파일 주석 참고). 실제 backend 매니페스트에서도
+    // layout=compound인 quotes/stockinfo 도메인 TR 3종(ka10045/ka90004/kt20016)의
+    // card_title은 None·프로그램매매·신용거래이고, 이 둘은 애초에 applyLiveTick이
+    // 없다. 즉 지금 compound 카드에는 실시간을 이어붙일 현재가류 표시 조각이
+    // 존재하지 않는다 — 없는 REG를 지어서 걸지 않는다.
     return card;
   }
   const { card, body } = makeCard('compound', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope), envelope.screen_id);
