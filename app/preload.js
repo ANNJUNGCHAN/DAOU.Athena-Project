@@ -11,6 +11,8 @@ const INVOKE_CHANNELS = new Set([
   'athena:cli-list',
   'athena:cli-login',
   'athena:cli-set-active',
+  // 키우미 메뉴(2026-08-27, Paper 보드 45) — 파일/폴더 선택 대화상자. 경로만 온다.
+  'athena:pick-files',
   // 이력 사이드바(리프 1.2.2) — 실데이터 목록·선택 상태.
   'athena:conversations-list',
   'athena:conversations-set-active',

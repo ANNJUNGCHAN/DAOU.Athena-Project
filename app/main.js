@@ -1,5 +1,5 @@
 const MODULE_LOAD_AT = Date.now();
-const { app, BrowserWindow, ipcMain, screen, Tray, Menu, nativeImage, Notification, nativeTheme } = require('electron');
+const { app, BrowserWindow, ipcMain, screen, Tray, Menu, nativeImage, Notification, nativeTheme, dialog } = require('electron');
 const { performance } = require('node:perf_hooks');
 const path = require('path');
 const fs = require('fs');
@@ -1872,6 +1872,16 @@ function handleCliSetActive(e, { accountId } = {}) {
 ipcMain.handle('athena:cli-list', handleCliList);
 ipcMain.handle('athena:cli-login', handleCliLogin);
 ipcMain.handle('athena:cli-set-active', handleCliSetActive);
+
+// 키우미 메뉴 › 파일/폴더 첨부(2026-08-27, Paper 보드 45) — 경로만 돌려준다.
+// 파일 내용은 여기서 읽지 않는다: 경로 텍스트가 입력줄에 붙고, 읽는 건 CLI의 몫.
+async function handlePickFiles(e, { directory } = {}) {
+  const properties = directory ? ['openDirectory', 'multiSelections'] : ['openFile', 'multiSelections'];
+  const res = await dialog.showOpenDialog(shellWin, { properties });
+  if (res.canceled) return { ok: false, paths: [] };
+  return { ok: true, paths: res.filePaths || [] };
+}
+ipcMain.handle('athena:pick-files', handlePickFiles);
 
 // ---------------------------------------------------------------------------
 // 계좌 (AT-SY-003, AT-ST-001/002/003, AT-CV-OAUTH)

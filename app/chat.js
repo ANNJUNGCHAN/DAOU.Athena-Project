@@ -871,7 +871,9 @@ async function runHistoryCommand(text) {
 // 사이드바 계정 메뉴(보드 16)로 옮겼다 — 커맨드바("설정")도 동등한 진입로다.
 // 실제 모드 엔진은 canvas.js의 graphMode(lib/graph-mode/controller.js) — 여기는
 // 그 위에 점 하나를 얹을 뿐, 두 번째 모드 엔진을 만들지 않는다.
-$dot.addEventListener('click', () => { window.AthenaGraphMode.toggle(); });
+// 키우미 메뉴(2026-08-27, Paper 보드 45) — 점은 더 이상 모드 전환이 아니다.
+// 전환은 모드 칩(#graphPill)·(v2)사이드바 네비의 몫이고, 얼굴은 모드 표시만 한다.
+$dot.addEventListener('click', () => { toggleKiumiMenu(); });
 // 사이드바 계정 메뉴(Paper 보드 16)의 "설정" 항목이 쓰는 다리 — lib/sidebar.js
 // 참고.
 window.AthenaShell.registerOpenSettings(openSettings);
@@ -1023,6 +1025,59 @@ document.addEventListener('mousedown', (e) => {
   if ($modelPopover.hidden) return;
   if ($modelPopover.contains(e.target) || $modelPill.contains(e.target)) return;
   closeModelPopover();
+});
+
+// ---------- 키우미 메뉴 (2026-08-27, Paper 보드 45) ----------
+// 파일·폴더는 경로 텍스트로만 입력줄에 붙는다 — 내용은 CLI(claude -p)가 읽는다.
+const $kiumiMenu = document.getElementById('kiumiMenu');
+
+function closeKiumiMenu() { $kiumiMenu.hidden = true; }
+
+function kiumiItem(label, onPick) {
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'km-item';
+  b.textContent = label;
+  b.addEventListener('click', onPick);
+  return b;
+}
+
+async function pickAndInsertPaths(directory) {
+  closeKiumiMenu();
+  try {
+    const res = await window.athena.invoke('athena:pick-files', { directory });
+    if (res && res.ok && Array.isArray(res.paths) && res.paths.length) {
+      const joined = res.paths.join(' ');
+      $input.value = ($input.value ? $input.value.replace(/\s*$/, ' ') : '') + joined + ' ';
+    }
+  } catch { /* 취소·실패는 조용히 — 입력줄을 건드리지 않는다 */ }
+  $input.focus();
+}
+
+function renderKiumiMenu() {
+  $kiumiMenu.textContent = '';
+  $kiumiMenu.appendChild(kiumiItem('파일 첨부', () => pickAndInsertPaths(false)));
+  $kiumiMenu.appendChild(kiumiItem('폴더 첨부', () => pickAndInsertPaths(true)));
+  const sep = document.createElement('div');
+  sep.className = 'mp-sep';
+  $kiumiMenu.appendChild(sep);
+  // 모드 옵션 — 그래프 수집·노출은 설정 › 성향·이력 카드가 소유한다(보드 22 병합).
+  $kiumiMenu.appendChild(kiumiItem('수집·노출 설정', () => { closeKiumiMenu(); openSettings(); }));
+}
+
+function toggleKiumiMenu() {
+  if ($kiumiMenu.hidden) {
+    renderKiumiMenu();
+    $kiumiMenu.hidden = false;
+  } else {
+    closeKiumiMenu();
+  }
+}
+
+document.addEventListener('mousedown', (e) => {
+  if ($kiumiMenu.hidden) return;
+  if ($kiumiMenu.contains(e.target) || $dot.contains(e.target)) return;
+  closeKiumiMenu();
 });
 window.athena.on('athena:model-changed', () => refreshModelPill());
 refreshModelPill();
