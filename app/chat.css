@@ -50,20 +50,9 @@ html, body { background: transparent; }
   box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.58), 0 24px 60px rgb(16 19 26 / 14%);
 }
 /* 4단계 재정의(2026-08-18 사용자 지시) — 전개의 종착은 별도 로고 화면이 아니라
- * **평소 채팅바 그 자체**다. 아래 요소들은 전부 실제 대화 창 부품(.grip 노브 ·
- * .dot · .input-row)의 1:1 복제라, +620ms 확정 화면과 finishBoot 스왑 후의
+ * **평소 채팅바 그 자체**다. 아래 요소들은 전부 실제 대화 창 부품(.dot ·
+ * .input-row)의 1:1 복제라, +620ms 확정 화면과 finishBoot 스왑 후의
  * #app이 픽셀 단위로 이어진다. 값 하나라도 바꾸면 .app 쪽과 같이 바꿔야 한다. */
-.boot-grip {
-  height: 10px; flex-shrink: 0;
-  position: relative;
-  visibility: hidden; /* 세로 전개(72%) 동안은 무지 유리 — 확정 시점에 드러난다 */
-}
-.boot-grip::after {
-  content: '';
-  position: absolute; top: 4px; left: 50%; transform: translateX(-50%);
-  width: 36px; height: 3px; border-radius: 999px;
-  background: rgb(16 19 26 / 20%);
-}
 .boot-body { flex: 1; } /* 빈 이력 자리 — 평소의 빈 채팅바와 같은 무지 유리 */
 .boot-inputbar {
   flex-shrink: 0;
@@ -95,7 +84,6 @@ html, body { background: transparent; }
   color: var(--color-k-bright);
   white-space: nowrap;
 }
-.boot-panel.final .boot-grip,
 .boot-panel.final .boot-inputbar { visibility: visible; }
 .boot-dot {
   width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0;
@@ -260,20 +248,6 @@ html, body { background: transparent; }
     0 18px 44px rgb(16 19 26 / 12%);
   overflow: hidden;
 }
-
-.grip {
-  height: 10px; flex-shrink: 0;
-  cursor: ns-resize;
-  -webkit-app-region: no-drag;
-  position: relative;
-}
-.grip::after {
-  content: '';
-  position: absolute; top: 4px; left: 50%; transform: translateX(-50%);
-  width: 36px; height: 3px; border-radius: 999px;
-  background: rgb(16 19 26 / 20%);
-}
-.grip:hover::after { background: rgb(16 19 26 / 34%); }
 
 /* 결과물·출처 도크(단계 8, Paper 25Q-0 "④ 결과물·출처 도크") — 대화 영역 상단,
  * history보다 먼저. flex-shrink:0으로 .app의 세로 배분에서 자기 크기를 지키고,
@@ -549,7 +523,7 @@ html, body { background: transparent; }
   color: var(--color-k-faint);
 }
 
-/* ---------- 설정 진입 코치마크 (2026-08-19 결정 — 최초 1회, chat.js maybeShowCoachmark) ----------
+/* ---------- 키우미 코치마크 (2026-08-19 결정·2026-08-27 문구 갱신 — 최초 1회, chat.js maybeShowCoachmark) ----------
  * 점(#dot) 바로 위에 뜨는 유리 칩. 등장 애니메이션 없음(페이드 등장 유리 금지, soul.md §7).
  * 아무 입력·클릭이면 사라지고 다시 안 나온다(localStorage 1회 플래그). */
 .coachmark {
@@ -590,7 +564,6 @@ html, body { background: transparent; }
 }
 .tr-code { color: var(--color-k-faint); }
 .tr-code.done { color: var(--color-ok); }
-.tr-fail { color: var(--color-warn); }
 
 /* 실행 라인(2026-08-26 어드버서리얼 리뷰 결함 #3, board-04 "⑧ 실행 라인") —
  * orb.js .orb-tool-step*(orb.css)과 같은 문법: 스피너 없이 아이콘 채움 +
@@ -1192,7 +1165,6 @@ html, body { background: transparent; }
 .auth-status-rows { display: flex; flex-direction: column; }
 .auth-status-rows .uk-lrow { border-bottom: 1px solid rgb(255 255 255 / 7%); }
 .auth-status-rows .uk-lrow:last-child { border-bottom: none; }
-.auth-acc-row.is-clickable,
 .uk-lrow.is-clickable { cursor: pointer; }
 .uk-lrow.is-clickable:hover .uk-lrow-value { color: var(--color-k-text); }
 

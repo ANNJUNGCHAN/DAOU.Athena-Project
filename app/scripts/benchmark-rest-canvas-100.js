@@ -333,7 +333,9 @@ async function run() {
     for (const testCase of cases) {
       producerLog(`case-start ${testCase.id}`);
       activeRendererErrors = [];
-      shellWin.webContents.send('athena:clear-canvases');
+      // 옛 athena:clear-canvases IPC는 수신자가 사라져 no-op였다(케이스 간 카드
+      // 누적 누수) — 지금 정리는 셸 버스 훅 직결이다(canvas.js registerCanvasClear).
+      await shellWin.webContents.executeJavaScript('window.AthenaShell.clearCanvases()');
       await wait(20);
       const controller = new AbortController();
       const hardController = new AbortController();

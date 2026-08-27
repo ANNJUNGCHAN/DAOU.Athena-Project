@@ -67,7 +67,6 @@
   .dim, .faint { color: #d0d3da !important; }
   .up { color: #ff8f8f !important; }
   .down { color: #86bbff !important; }
-  .k-line { border-color: #ffffff !important; }
   /* 2026-08-19 QA 결함 #1(치명) — placeholder는 자기 자신의 color 규칙
    * (.input::placeholder 등, chat.css/settings-cards.css)이 위 `body{color:#fff}`
    * 보다 명시도가 높아 고대비 모드에서도 --color-k-faint(가장 어두운 무채색)로
