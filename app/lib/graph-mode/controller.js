@@ -10,6 +10,29 @@
 // **리비전이 같으면 다시 그리지 않는다.** 백엔드가 군집을 캐시하므로 응답은 싸지만,
 // 같은 그림을 다시 그리면 SVG가 통째로 교체되어 화면이 깜빡인다.
 
+// 그래프 뷰 헤더 메타 텍스트(보드 14 §1.2/15 §2.2, 스텝9) — state.stage로
+// 분기한다. 1단계('clusters'): "군집 N개 · 엔티티 M · 미분류 K" — K는 §0
+// 발견5의 방어 코드(cluster-layout.js groupByCluster가 이미 -1로 묶어 둔 것)를
+// 그대로 센다. 2단계('expanded'): "엔티티 M · 관계 E · 군집 N" — 순서가
+// 바뀌고 미분류가 빠지며 관계 수(필터 전 원본 payload.edges)가 새로 들어간다
+// (Paper 표 그대로). 모듈 스코프 순수 함수라 stage는 문자열 리터럴로 비교한다
+// (graph-mode-store.js의 STAGE_EXPANDED 값과 반드시 같아야 한다 — 이 파일이
+// createGraphModeController(deps) 밖에서도 테스트 가능해야 해서 store 주입에
+// 기대지 않는다).
+function computeGraphHeaderMeta(stage, payload, placed) {
+  if (!payload || !placed) return '';
+  const entityCount = Array.isArray(payload.nodes) ? payload.nodes.length : 0;
+  const clusterCount = Array.isArray(placed.clusters) ? placed.clusters.length : 0;
+  if (stage === 'expanded') {
+    const relationCount = Array.isArray(payload.edges) ? payload.edges.length : 0;
+    return `엔티티 ${entityCount} · 관계 ${relationCount} · 군집 ${clusterCount}`;
+  }
+  const unassignedCount = Array.isArray(placed.nodes)
+    ? placed.nodes.filter((n) => n.cluster === -1).length
+    : 0;
+  return `군집 ${clusterCount}개 · 엔티티 ${entityCount} · 미분류 ${unassignedCount}`;
+}
+
 function createGraphModeController(deps) {
   const {
     store,          // graph-mode-store
@@ -19,7 +42,8 @@ function createGraphModeController(deps) {
     elements,       // { pill, summary, graph(가시성 전용 — applyVisibility()만 소유),
                     //   graphBody(렌더·클릭위임·크기측정 전용), summaryTable(선택 —
                     //   보드 07 성향 신호 표, 가시성 전용), panel(선택) — 보드 07/15의
-                    //   "공통 패널" }
+                    //   "공통 패널", graphHeaderMeta(선택) — 보드 14/15 헤더 메타
+                    //   텍스트(스텝9), mapGuide(선택) — 지도 안내 바(스텝9, 1단계 전용) }
     fetchClusterMap, // async () => payload
     onError,        // (err) => void (선택)
     onPanelCta,     // () => void (선택) — 공통 패널 CTA "채팅에서 답하기" 클릭 시(스텝8)
@@ -28,6 +52,10 @@ function createGraphModeController(deps) {
   let state = store.createInitialState();
   let lastDrawnRevision = null;
   let lastPlaced = null; // 마지막으로 받은 배치. 펼침·접기·선택은 새 fetch 없이 이걸 다시 필터링해서 그린다.
+  // 그래프 뷰 헤더 메타 텍스트(보드 14/15, 스텝9)의 "관계 E"는 필터 전 원본
+  // 엣지 수여야 한다 — lastPlaced.edges는 이미 유효한 것만 걸러진 배치
+  // 결과라 다르다. payload를 따로 캐싱해 redraw 시에도 재사용한다.
+  let lastPayload = null;
   // 브레인 상태를 아직 모르는 부팅 초반엔 "못 씀"으로 가정한다 — setAvailable(true)가
   // 오기 전에 그래프 모드로 들어오면 renderUnavailable()의 정직한 안내를 보여준다.
   let available = false;
@@ -119,6 +147,7 @@ function createGraphModeController(deps) {
     });
     wireNodeClicks();
     renderSelection();
+    renderGraphHeader();
   }
 
   // 성향 신호 표 선택 하이라이트(보드 07) — applyVisibility()의 32행 주석
@@ -130,6 +159,20 @@ function createGraphModeController(deps) {
     elements.summaryTable.querySelectorAll('.summary-row').forEach((row) => {
       row.classList.toggle('is-selected', row.getAttribute('data-entity-id') === state.selectedEntityId);
     });
+  }
+
+  // 헤더 메타 텍스트 + 지도 안내 바(보드 14 §1.3, 06/07 안내 바와 달리 1단계
+  // 전용) 갱신 — draw()/redrawFromCache()/renderUnavailable() 끝에서 부른다.
+  // 안내 바의 hidden은 이 함수 하나가 소유한다(applyVisibility()가 #graphCanvas
+  // 전체를 숨기면 자식인 #graphHeader와 함께 자동으로 숨으므로, 이 로직은
+  // 1단계⇄2단계 전환에만 관여하고 답변⇄그래프 모드 전환과는 무관하다).
+  function renderGraphHeader() {
+    if (elements.graphHeaderMeta) {
+      elements.graphHeaderMeta.textContent = computeGraphHeaderMeta(state.stage, lastPayload, lastPlaced);
+    }
+    if (elements.mapGuide) {
+      elements.mapGuide.hidden = state.stage !== store.STAGE_CLUSTERS;
+    }
   }
 
   function elp(name, className) {
@@ -272,6 +315,7 @@ function createGraphModeController(deps) {
       height: elements.graphBody ? elements.graphBody.clientHeight : 0,
     });
     lastPlaced = placed;
+    lastPayload = payload; // 헤더 메타의 "관계 E"(필터 전 원본)가 이 값을 읽는다.
     const nodes = store.visibleNodes(state, placed);
     const edges = store.visibleEdges(state, placed);
     const settings = prefs ? prefs.readPrefs() : null;
@@ -284,6 +328,7 @@ function createGraphModeController(deps) {
     });
     wireNodeClicks();
     renderSelection();
+    renderGraphHeader();
     lastDrawnRevision = state.revision;
     return placed;
   }
@@ -354,7 +399,7 @@ function createGraphModeController(deps) {
   };
 }
 
-const __exports = { createGraphModeController };
+const __exports = { createGraphModeController, computeGraphHeaderMeta };
 
 // UMD 각주(2026-08-18 렌더러 격리) — column-fold.js와 같은 패턴.
 if (typeof module !== 'undefined' && module.exports) {
