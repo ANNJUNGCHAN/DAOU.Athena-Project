@@ -38,7 +38,38 @@ async function fetchBrainStatus({ mdlog } = {}) {
 
 async function refreshBrainReady(opts) {
   brainReadyCache = await fetchBrainStatus(opts);
+  // WP-I(G-I6) — backend는 기동 시 게이트를 안전측 False로 시작하므로(lifespan.py),
+  // 브레인 준비를 확인한 이 자리에서 저장된 exposeToModel 값을 밀어 넣어야
+  // 재기동·재연결 후에도 토글 상태가 실제 게이트에 반영된다. 실패는 이 폴링을
+  // 막지 않는다 — 다음 준비 확인 때 다시 민다.
+  if (brainReadyCache) pushExposeToModel(opts).catch(() => {});
   return brainReadyCache;
+}
+
+// exposeToModel 현재값을 backend 게이트에 민다(WP-I I4). prefs 조회가 안 되는
+// 환경(순수 node --test)이나 토큰 미설정 배포에서는 조용히 건너뛴다 — 밀 값이
+// 없거나 밀 방법이 없는 것이지 실패가 아니다.
+async function pushExposeToModel({ mdlog } = {}) {
+  const token = getBearerToken();
+  if (!token) return false;
+  let enabled;
+  try {
+    enabled = prefs.get().exposeToModel === true;
+  } catch {
+    return false;
+  }
+  try {
+    const res = await fetch(`${getBackendUrl()}/api/v1/settings/expose-to-model`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ enabled }),
+    });
+    if (!res.ok && mdlog) mdlog(`history-sink: expose-to-model 동기화 실패 status=${res.status}`);
+    return res.ok;
+  } catch (err) {
+    if (mdlog) mdlog(`history-sink: expose-to-model 동기화 예외 — ${String((err && err.message) || err)}`);
+    return false;
+  }
 }
 
 function isBrainReadyCached() {
@@ -107,6 +138,7 @@ module.exports = {
   getBearerToken,
   fetchBrainStatus,
   refreshBrainReady,
+  pushExposeToModel,
   isBrainReadyCached,
   canAttemptSave,
   saveChatMessage,

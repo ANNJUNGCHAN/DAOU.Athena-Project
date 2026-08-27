@@ -123,3 +123,18 @@ test('window.athena가 없어도(핸들러 부재) collectChat 저장 자체는 
   const next = settingsCards.writeGraphSettings({ collectChat: false }, storage);
   assert.equal(next.collectChat, false);
 });
+
+// WP-I I4 — exposeToModel은 전용 채널로 미러링된다(main이 prefs 영속과 backend
+// 게이트 POST를 한 번에 처리한다).
+test('exposeToModel 패치는 전용 채널로 main에 미러링된다', () => {
+  const storage = fakeStorage();
+  const calls = [];
+  global.window = { athena: { invoke: (channel, patch) => { calls.push([channel, patch]); return Promise.resolve(); } } };
+  try {
+    settingsCards.writeGraphSettings({ exposeToModel: false }, storage);
+    assert.equal(calls.length, 1);
+    assert.deepEqual(calls[0], ['athena:settings:expose-to-model:set', { enabled: false }]);
+  } finally {
+    delete global.window;
+  }
+});
