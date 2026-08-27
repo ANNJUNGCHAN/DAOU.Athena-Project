@@ -565,21 +565,21 @@ function cardTitleAndSubtitle(envelope, fallback) {
   return [caption || fallback, null];
 }
 
-// 시세 카드 실시간 등록(단계 8 확장) — 종목코드를 아는 경우에만 세션을 연다.
-// REST 데이터셋 직결 카드는 envelope.operation_args.stk_cd가 있다(canvas.js
-// athena:add-rest-canvas 핸들러가 채운다 — 위쪽 참고). 서버측 0B REG는 main.js
-// ensureRealtimeForSymbol이 두 경로(REST 데이터셋 직결·클로드 툴 실시간) 모두에서
-// 같은 후보 자리를 본다 — main.js extractLiveQuoteSymbol 주석 참고. 여기서는
-// 렌더러 쪽 세션만 열어서 그 종목의 체결을 이 카드의 표로 이어붙인다.
+// 시세류 카드 실시간 등록(단계 8 확장, P1 2026-08-27 카드종 확장) — 종목코드를
+// 아는 경우에만 세션을 연다. REST 데이터셋 직결 카드는 envelope.operation_args.
+// stk_cd가 있다(canvas.js athena:add-rest-canvas 핸들러가 채운다 — 위쪽 참고).
+// 서버측 0B REG는 main.js ensureRealtimeForSymbol이 두 경로(REST 데이터셋
+// 직결·클로드 툴 실시간) 모두에서 같은 후보 자리를 본다 — main.js
+// extractLiveQuoteSymbol 주석 참고. 여기서는 렌더러 쪽 세션만 열어서 그 종목의
+// 체결을 applyTick이 그 카드종 body에 이어붙이게 한다 — 카드종마다 갱신할 필드가
+// 달라(시세 카드는 표 행, 종목정보 카드는 QuoteHeader) 호출부가 자기 카드종의
+// applyLiveTick을 넘긴다.
 //
-// 알려진 제약(main.js extractLiveQuoteSymbol 주석과 동일 근거,
-// backend/athena_api/api/canvas_push.py:461-541) — 클로드 툴 경로(채팅으로
-// "삼성전자 시세" 같은 질문에 답한 결과)의 envelope엔 지금 종목코드를 담을 자리가
-// 없다("table" canvas_kind 분기가 "chart" 분기와 달리 종목코드를 안 심는다).
-// 그래서 아래 후보들도 대부분 못 찾고 조용히 건너뛴다 — 모르는 종목을 안다고
-// 지어내지 않는다(정보 정직성). 백엔드가 필드를 더하면 이 함수는 코드 변경 없이
-// 그대로 잡는다.
-function wireQuoteRealtime(card, wrap, envelope) {
+// backend 53ece06 이후 envelope.stk_cd는 시장 데이터 3도메인(charts·stockinfo·
+// quotes)에 봉인돼 오므로 대부분의 호출에서 아래 후보 중 하나는 찾는다 — 계좌·
+// 주문류(그 게이트 밖)는 여전히 못 찾아 자연 배제된다(정보 정직성 — 모르는
+// 종목을 안다고 지어내지 않는다).
+function wireQuoteRealtime(card, wrap, envelope, applyTick) {
   const args = envelope.operation_args || envelope.operationArgs;
   const symbol = String(
     (args && args.stk_cd)
@@ -588,10 +588,8 @@ function wireQuoteRealtime(card, wrap, envelope) {
     || (envelope.data && envelope.data.symbol)
     || '',
   ).trim();
-  if (!symbol) return;
-  quoteRealtimePanels.openPanel(card, symbol, (tick) => {
-    window.AthenaLib.CardKindQuote.applyLiveTick(wrap, envelope, tick);
-  });
+  if (!symbol || typeof applyTick !== 'function') return;
+  quoteRealtimePanels.openPanel(card, symbol, (tick) => applyTick(wrap, envelope, tick));
   const priorDestroy = cardDestroyers.get(card);
   cardDestroyers.set(card, () => {
     quoteRealtimePanels.closePanel(card);
@@ -614,7 +612,7 @@ function renderMcpTable(envelope) {
     const { card, body } = makeCard('mcp-table', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope));
     stampPaperScreen(card, envelope);
     body.appendChild(built);
-    if (title === '시세') wireQuoteRealtime(card, built, envelope);
+    if (title === '시세') wireQuoteRealtime(card, built, envelope, window.AthenaLib.CardKindQuote.applyLiveTick);
     return card;
   }
   const { card, body } = makeCard('mcp-table', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope));
@@ -735,6 +733,10 @@ function renderFactsCard(envelope) {
     const { card, body } = makeCard('facts', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope));
     stampPaperScreen(card, envelope);
     body.appendChild(built);
+    // '종목정보' 카드종만 실시간을 켠다(P1) — QuoteHeader 조각(가격+등락)이 있는
+    // 경우에만 갱신 대상이 있다. daily-range/year-range 조각뿐인 응답은
+    // applyLiveTick 내부에서 대상 엘리먼트가 없어 조용히 건너뛴다.
+    if (title === '종목정보') wireQuoteRealtime(card, built, envelope, window.AthenaLib.CardKindStockInfo.applyLiveTick);
     return card;
   }
   const { card, body } = makeCard('facts', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope));
