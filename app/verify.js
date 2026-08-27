@@ -2244,7 +2244,7 @@ app.whenReady().then(async () => {
     const graph = await shellWin.webContents.executeJavaScript(`(async () => {
       const pill = document.getElementById('modeNavGraph');
       const container = document.getElementById('graphCanvas');
-      if (!pill || !container || !window.AthenaGraphMode) {
+      if (!pill || !container || !window.AthenaCanvasMode) {
         return { wired: false, reason: 'missing' };
       }
       const status = await window.athena.invoke('athena:brain-status').catch(() => null);
@@ -2272,8 +2272,8 @@ app.whenReady().then(async () => {
       const byClick = window.AthenaLib.GraphRender.describeRendered(container);
       // 좌표 계약은 배치 결과와 대조해야 알 수 있고, 클릭 경로는 그 값을 돌려주지
       // 않는다. 요약으로 접었다 다시 펴서 같은 화면의 배치를 받아 온다.
-      await window.AthenaGraphMode.toggle();
-      const placed = await window.AthenaGraphMode.toggle();
+      await window.AthenaCanvasMode.toggle();
+      const placed = await window.AthenaCanvasMode.toggle();
       const drawn = window.AthenaLib.GraphRender.describeRendered(container);
       return {
         wired: true,
@@ -2350,9 +2350,9 @@ app.whenReady().then(async () => {
           .map(([key]) => key);
       }
       const dot = document.getElementById('dot');
-      const stateBefore = window.AthenaGraphMode ? window.AthenaGraphMode.state.view : null;
+      const stateBefore = window.AthenaCanvasMode ? window.AthenaCanvasMode.state.view : null;
       if (dot) dot.click();
-      const stateAfterDotClick = window.AthenaGraphMode ? window.AthenaGraphMode.state.view : null;
+      const stateAfterDotClick = window.AthenaCanvasMode ? window.AthenaCanvasMode.state.view : null;
       if (!itemsPresent) return { pillGone, itemsPresent, stateBefore, stateAfterDotClick };
       items.agent.click();
       const afterAgentClick = visibleRegions();
@@ -3452,8 +3452,8 @@ app.whenReady().then(async () => {
     ipcMain.handle('athena:nudge-guard-get', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
     // 그래프 모드로 남아 있으면 다음 실행(재실행 시)에 영향을 줄 수 있다 — 답변 모드로 되돌린다.
     await shellWin.webContents.executeJavaScript(`(() => {
-      if (window.AthenaGraphMode && window.AthenaGraphMode.state && window.AthenaGraphMode.state.view !== 'summary') {
-        window.AthenaGraphMode.setView('summary');
+      if (window.AthenaCanvasMode && window.AthenaCanvasMode.state && window.AthenaCanvasMode.state.view !== 'summary') {
+        window.AthenaCanvasMode.setView('summary');
       }
       const summaryNavItem = document.getElementById('modeNavSummary');
       if (window.AthenaModeNav && summaryNavItem) window.AthenaModeNav.setActive('summary');

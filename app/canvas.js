@@ -1364,7 +1364,7 @@ const graphMode = window.AthenaLib.GraphModeController.createGraphModeController
   },
   onError: (err) => console.warn('[graph-mode] cluster-map 실패', err),
 });
-window.AthenaGraphMode = graphMode;
+window.AthenaCanvasMode = graphMode;
 // 부팅을 순수 답변 모드로 고정한다(US-007) — 정적 HTML의 기본 hidden 속성이
 // 우연히 답변 모드와 맞아떨어지는 데 기대지 않고, 여기서 명시적으로 한 번
 // 그린다. 이후 모든 가시성 변경은 toggle()/setView()/setAvailable() 안에서 이
@@ -1468,8 +1468,8 @@ const agentCanvas = window.AthenaLib.AgentCanvas.createAgentCanvas({
   // 11단계 — "그래프 모드에서 근거 보기 →". 사이드바 모드 네비와 같은 두 걸음
   // (캔버스 전환 + 네비 활성 표시)을 그대로 재현한다(sidebar.js 참고).
   onOpenGraph: () => {
-    if (window.AthenaGraphMode && typeof window.AthenaGraphMode.setView === 'function') {
-      window.AthenaGraphMode.setView('graph');
+    if (window.AthenaCanvasMode && typeof window.AthenaCanvasMode.setView === 'function') {
+      window.AthenaCanvasMode.setView('graph');
     }
     if (window.AthenaModeNav && typeof window.AthenaModeNav.setActive === 'function') {
       window.AthenaModeNav.setActive('graph');

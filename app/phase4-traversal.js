@@ -218,7 +218,7 @@ async function main() {
 
   // ---------- (5) 캔버스 카드 — 차트 카드 ----------
   await step('05-차트 카드', async () => {
-    await shellWin.webContents.executeJavaScript(`window.AthenaGraphMode && window.AthenaGraphMode.toggle && document.getElementById('graphCanvas') && !document.getElementById('graphCanvas').hidden ? window.AthenaGraphMode.toggle() : null`);
+    await shellWin.webContents.executeJavaScript(`window.AthenaCanvasMode && window.AthenaCanvasMode.toggle && document.getElementById('graphCanvas') && !document.getElementById('graphCanvas').hidden ? window.AthenaCanvasMode.toggle() : null`);
     await wait(200);
     await shellWin.webContents.executeJavaScript("window.addCard('chart')");
     await wait(1500);
