@@ -46,6 +46,8 @@ const INVOKE_CHANNELS = new Set([
   'athena:routine-runs',
   // 알림 방 읽음 처리(7단계, F3-FE) — 6단계 POST /{id}/ack.
   'athena:routine-ack',
+  // 발화 열람·응답 계측(F-stage5b-FE) — POST /{id}/engagement.
+  'athena:routine-engagement',
   // 말걸기 가드 설정 REST(F-stage9) — GET/POST /api/v1/nudge-guard.
   'athena:nudge-guard-get',
   'athena:nudge-guard-set',

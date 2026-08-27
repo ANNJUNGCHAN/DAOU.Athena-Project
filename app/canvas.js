@@ -1449,6 +1449,16 @@ const agentCanvas = window.AthenaLib.AgentCanvas.createAgentCanvas({
     const res = await window.athena.invoke('athena:routine-runs', { id });
     return (res && res.ok && res.data && typeof res.data.avg_duration_ms === 'number') ? res.data.avg_duration_ms : null;
   },
+  // F-stage5b-FE — 드릴인 "30회 통계"의 "발화→열람"·"이어진 대화" 타일.
+  // opened_rate·replied_count도 같은 /runs 응답의 다른 필드라 별개 왕복으로 뗀다.
+  fetchEngagement: async (id) => {
+    const res = await window.athena.invoke('athena:routine-runs', { id });
+    if (!res || !res.ok || !res.data) return null;
+    return {
+      openedRate: typeof res.data.opened_rate === 'number' ? res.data.opened_rate : null,
+      repliedCount: typeof res.data.replied_count === 'number' ? res.data.replied_count : null,
+    };
+  },
   // F-stage9 — 말걸기 가드 패널. 저장(POST)은 이 패널이 아니라 채팅 확인
   // 카드가 부른다(chat.js, 43 원칙 — 편집은 채팅 경로로만).
   fetchNudgeGuard: async () => {

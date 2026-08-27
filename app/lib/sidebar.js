@@ -333,6 +333,11 @@
   function selectNotifyRoom(id) {
     const room = notifyRooms.find((r) => r.id === id);
     if (!room) return;
+    // F-stage5b-FE — engagement.py의 "opened" 정의(능동 턴이 뜬 방을 사용자가
+    // 실제로 선택해 열람한 사건)와 맞추려면 이미 읽은 방을 다시 눌렀을 때는
+    // 세지 않는다 — 안 그러면 재클릭마다 opened가 쌓여 발화→열람 비율이
+    // 100%를 넘는 지어낸 숫자가 된다(engagement.py의 opened_rate 계산 참고).
+    const wasUnread = !room.read;
     room.read = true;
     selectedNotifyId = id;
     const d = new Date(room.firedAt);
@@ -347,6 +352,7 @@
     // 보일 뿐 — 낙관적 갱신을 성공한 척 위장하지 않는다, P3).
     if (window.athena && typeof window.athena.invoke === 'function') {
       window.athena.invoke('athena:routine-ack', { id }).catch(() => {});
+      if (wasUnread) window.athena.invoke('athena:routine-engagement', { id, event: 'opened' }).catch(() => {});
     }
   }
 

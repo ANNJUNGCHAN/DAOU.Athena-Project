@@ -3049,7 +3049,7 @@ app.whenReady().then(async () => {
     failures.push('agent-canvas-9: 검증 블록이 예외로 끝났다');
   }
 
-  // ---------- 알림 방 재시작 복원 — ack 왕복 (7단계, F3-FE) ----------
+  // ---------- 알림 방 재시작 복원 — ack·opened 왕복 (7단계·F-stage5b-FE) ----------
   //
   // 하이드레이션 자체(hydrateNotifyRooms)는 앱 부팅 시 1회만 도는 내부
   // 함수라 이 하네스(단일 프로세스, 이미 부팅된 shellWin 재사용)에선 재부팅
@@ -3057,14 +3057,21 @@ app.whenReady().then(async () => {
   // agent-sidebar-list.test.js의 buildHydratedRooms 단위 테스트 6건이 이미
   // 전수 커버한다(빈 목록·미발화 제외·unread 반전·정렬·잘못된 날짜 방어).
   // 여기서는 이 단계가 실제로 새로 배선한 부분 — selectNotifyRoom() 클릭 시
-  // athena:routine-ack가 실제로 불리는지 — 를 잰다(사이드바 좌측 "알림에서"
-  // 섹션, agent-canvas 알람 컬럼과는 다른 표면).
+  // athena:routine-ack와 athena:routine-engagement(event:'opened', F-stage5b-FE)가
+  // 실제로 불리는지 — 를 잰다(사이드바 좌측 "알림에서" 섹션, agent-canvas
+  // 알람 컬럼과는 다른 표면).
   try {
     let ackCalledWith = null;
     ipcMain.removeHandler('athena:routine-ack');
     ipcMain.handle('athena:routine-ack', async (_e, { id } = {}) => {
       ackCalledWith = id;
       return { ok: true, data: { id, last_read_fired_at: new Date().toISOString() } };
+    });
+    let engagementCalls = [];
+    ipcMain.removeHandler('athena:routine-engagement');
+    ipcMain.handle('athena:routine-engagement', async (_e, { id, event } = {}) => {
+      engagementCalls.push({ id, event });
+      return { ok: true, data: { ts: new Date().toISOString(), routine_id: id, event } };
     });
 
     shellWin.webContents.send('athena:routine-event', {
@@ -3097,13 +3104,17 @@ app.whenReady().then(async () => {
       const bannerHidden = (document.getElementById('roomHeadBanner') || {}).hidden;
       return { wired: true, unreadDotBefore, unreadDotAfter, bannerHidden };
     })()`);
-    report.notifyAck = { ...ackProbe, ackCalledWith };
+    report.notifyAck = { ...ackProbe, ackCalledWith, engagementCalls };
     assertOk('sidebar-notify-7: 배선이 있다', ackProbe.wired === true);
     if (ackProbe.wired) {
       assertOk('sidebar-notify-7: 클릭 전엔 미확인 점이 있다', ackProbe.unreadDotBefore === true);
       assertOk('sidebar-notify-7: 클릭 후 즉시 미확인 점이 사라진다(화면 반영은 ack 왕복을 기다리지 않는다)', ackProbe.unreadDotAfter === false);
       assertOk('sidebar-notify-7: 배너가 뜬다(기존 selectNotifyRoom 동작 유지)', ackProbe.bannerHidden === false);
       assertOk('sidebar-notify-7: 클릭이 실제로 athena:routine-ack를 그 라우틴 id로 부른다(6단계 read-marks 왕복)', ackCalledWith === 'stage7-notify-1');
+      assertOk(
+        'sidebar-notify-7/F-stage5b-FE: 미확인 방을 처음 클릭하면 athena:routine-engagement(opened)를 그 라우틴 id로 부른다',
+        JSON.stringify(engagementCalls) === JSON.stringify([{ id: 'stage7-notify-1', event: 'opened' }]),
+      );
     }
   } catch (err) {
     report.notifyAck = { error: String((err && err.message) || err) };
@@ -3111,6 +3122,65 @@ app.whenReady().then(async () => {
   } finally {
     ipcMain.removeHandler('athena:routine-ack');
     ipcMain.handle('athena:routine-ack', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+    ipcMain.removeHandler('athena:routine-engagement');
+    ipcMain.handle('athena:routine-engagement', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+  }
+
+  // ---------- "이어진 대화" 계측 — replied 왕복 (F-stage5b-FE) ----------
+  //
+  // 능동 턴(routine-fired) 직후 사용자가 처음 보내는 질의만 replied로
+  // 기록한다(chat.js maybeRecordReplied, 시간 창 판정은 프론트 몫 —
+  // engagement.py 계약). athena__render_canvas는 이 하네스의 다른 모든
+  // 블록이 공유하는 핵심 채널이라 손대지 않는다 — 실제 질의 왕복이 어떻게
+  // 응답하든 무관하게, maybeRecordReplied()는 runQuery() 진입 시점에
+  // 이미 불린다(네트워크 응답을 기다리지 않는다).
+  try {
+    let engagementCalls = [];
+    ipcMain.removeHandler('athena:routine-engagement');
+    ipcMain.handle('athena:routine-engagement', async (_e, { id, event } = {}) => {
+      engagementCalls.push({ id, event });
+      return { ok: true, data: { ts: new Date().toISOString(), routine_id: id, event } };
+    });
+
+    shellWin.webContents.send('athena:routine-event', {
+      type: 'routine-fired',
+      routine_id: 'stage5b-replied-1',
+      symbol: '005930',
+      source: 'price.change_rate',
+      mode: 'periodic',
+      observed: 88100,
+      threshold: 88000,
+      note: 'F-stage5b 이어진 대화 검증',
+      fired_at: new Date().toISOString(),
+    });
+    await wait(200); // renderAgentTurn이 lastFiredRoutine을 채울 때까지.
+
+    const repliedProbe = await shellWin.webContents.executeJavaScript(`(async () => {
+      const input = document.getElementById('input');
+      if (!input) return { wired: false };
+      input.value = 'F-stage5b 이어진 대화 검증 질의';
+      input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+      return { wired: true };
+    })()`);
+    await wait(200); // maybeRecordReplied()는 동기적으로 곧바로 불린다 — IPC 왕복만 기다린다.
+    report.repliedEngagement = { ...repliedProbe, engagementCalls };
+    assertOk('replied-5b: 배선이 있다', repliedProbe.wired === true);
+    if (repliedProbe.wired) {
+      assertOk(
+        'replied-5b: 능동 턴 직후 첫 질의가 athena:routine-engagement(replied)를 그 라우틴 id로 부른다',
+        JSON.stringify(engagementCalls) === JSON.stringify([{ id: 'stage5b-replied-1', event: 'replied' }]),
+      );
+    }
+  } catch (err) {
+    report.repliedEngagement = { error: String((err && err.message) || err) };
+    failures.push('replied-5b: 검증 블록이 예외로 끝났다');
+  } finally {
+    ipcMain.removeHandler('athena:routine-engagement');
+    ipcMain.handle('athena:routine-engagement', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+    await shellWin.webContents.executeJavaScript(`(() => {
+      const input = document.getElementById('input');
+      if (input) input.value = '';
+    })()`);
   }
 
   // ---------- 실행 이력 · 결과 드릴인 (10단계, Paper 보드 41) ----------
@@ -3142,8 +3212,13 @@ app.whenReady().then(async () => {
       // avg_duration_ms(5단계, F2-FE) — runs 배열과 별개 필드다. 실제 값은
       // 4단계 백엔드가 최근 30건 non-null duration_ms 평균으로 계산하지만
       // (그쪽 pytest가 이미 검증), 이 하네스는 프론트 배선만 재확인하면
-      // 되므로 확정 값을 직접 준다.
-      ok: true, data: { runs: stage10Runs.filter((r) => r.routine_id === id), avg_duration_ms: 7420 },
+      // 되므로 확정 값을 직접 준다. opened_rate·replied_count(F-stage5b-BE)도
+      // 같은 이유로 확정 값.
+      ok: true,
+      data: {
+        runs: stage10Runs.filter((r) => r.routine_id === id),
+        avg_duration_ms: 7420, opened_rate: 0.71, replied_count: 9,
+      },
     }));
 
     const historyProbe = await shellWin.webContents.executeJavaScript(`(async () => {
@@ -3172,9 +3247,14 @@ app.whenReady().then(async () => {
       const statTileCount = statTiles.length;
       // 5단계(F2-FE) — "평균"만 live, 나머지 3장은 fixture다(컬럼 전체가
       // 아니라 타일 각각에 data-source가 실린다).
-      const avgTile = statTiles.find((t) => (t.querySelector('.agent-history-stat-label') || {}).textContent === '평균');
+      const tileByLabel = (label) => statTiles.find((t) => (t.querySelector('.agent-history-stat-label') || {}).textContent === label);
+      const tileValue = (label) => { const t = tileByLabel(label); return t ? (t.querySelector('.agent-history-stat-value') || {}).textContent : null; };
+      const avgTile = tileByLabel('평균');
       const avgTileSource = avgTile ? avgTile.getAttribute('data-source') : null;
-      const avgTileValue = avgTile ? (avgTile.querySelector('.agent-history-stat-value') || {}).textContent : null;
+      const avgTileValue = tileValue('평균');
+      // F-stage5b-FE — "발화→열람"·"이어진 대화"도 이제 live다.
+      const openedRateValue = tileValue('발화→열람');
+      const repliedCountValue = tileValue('이어진 대화');
       const fixtureTileCount = statTiles.filter((t) => t.getAttribute('data-source') === 'fixture').length;
 
       // "오늘 07:30 산출물" 카드(fixture, 팀 리드 정정으로 추가 — Paper 41번에
@@ -3198,6 +3278,7 @@ app.whenReady().then(async () => {
       return {
         wired: true, breadcrumbVisible, breadcrumbTitle, breadcrumbBadge, tasksHeadHidden,
         reasons, marks, statTileCount, avgTileSource, avgTileValue, fixtureTileCount,
+        openedRateValue, repliedCountValue,
         breadcrumbHiddenAfterBack, tasksHeadVisibleAfterBack,
         outputSource, outputTitle, outputTag, outputItemCount, outputBtnLabels, outputBtnsAllDisabled,
       };
@@ -3218,11 +3299,12 @@ app.whenReady().then(async () => {
         JSON.stringify(historyProbe.marks) === JSON.stringify(['●', '◐', '○']),
       );
       assertOk(
-        // 5단계(F2-FE) — "평균"만 live(4단계 avg_duration_ms), 나머지 3장은
-        // 여전히 fixture다(성공률/발화→열람/이어진 대화, 지표 정의 미확정).
-        'agent-canvas-10: 30회 통계 4타일 — "평균"만 live(7.4s), 나머지 3장은 fixture다(F-stage5)',
+        // F-stage5b-FE — "발화→열람"·"이어진 대화"도 라이브로 승격됐다.
+        // "성공률"만 fixture로 남는다(지표 정의 미확정, 4단계 ADR).
+        'agent-canvas-10: 30회 통계 4타일 — "성공률"만 fixture, 나머지 3장(평균·발화→열람·이어진 대화)은 live다(F-stage5b-FE)',
         historyProbe.statTileCount === 4 && historyProbe.avgTileSource === 'live'
-          && historyProbe.avgTileValue === '7.4s' && historyProbe.fixtureTileCount === 3,
+          && historyProbe.avgTileValue === '7.4s' && historyProbe.fixtureTileCount === 1
+          && historyProbe.openedRateValue === '71%' && historyProbe.repliedCountValue === '9건',
       );
       assertOk(
         'agent-canvas-10: "오늘 07:30 산출물" 카드가 fixture로 뜬다(생략하지 않는다, 팀 리드 정정)',

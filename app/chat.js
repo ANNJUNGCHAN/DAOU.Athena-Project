@@ -393,7 +393,23 @@ function setDot(mode) {
   if (mode) $dot.classList.add(mode);
 }
 
+// F-stage5b-FE(F2-스트레치) — "이어진 대화" 계측. 직전 능동 턴(routine-fired)
+// 이후 처음 보내는 질의만 replied로 기록한다(engagement.py는 판정 로직이
+// 없다 — "이어졌다"의 시간 창은 여기서 정의한다). renderAgentTurn이 kind가
+// fired일 때만 채운다(만료·복원실패는 "이어갈" 발화 자체가 아니다).
+const REPLIED_WINDOW_MS = 10 * 60 * 1000; // 발화 후 10분 안에 말을 걸면 "이어졌다"로 본다.
+let lastFiredRoutine = null; // { routineId, at } | null
+
+function maybeRecordReplied() {
+  if (!lastFiredRoutine) return;
+  const { routineId, at } = lastFiredRoutine;
+  lastFiredRoutine = null; // 한 번만 — 다음 질의부터는 이미 "이어짐"이 확정됐다.
+  if (Date.now() - at > REPLIED_WINDOW_MS) return;
+  window.athena.invoke('athena:routine-engagement', { id: routineId, event: 'replied' }).catch(() => {});
+}
+
 async function runQuery(text) {
+  maybeRecordReplied();
   if (canvasSource === 'fixture') return runQueryFixture(text);
   return runQueryLive(text);
 }
@@ -1127,6 +1143,10 @@ function _mountTurn(line, el) {
 
 function renderAgentTurn(event) {
   const model = routineTurnLib.buildTurnModel(event, Date.now());
+  // F-stage5b-FE — "이어진 대화" 계측의 기준점. fired만 채운다(위 maybeRecordReplied 참고).
+  if (model.kind === 'fired' && event && event.routine_id) {
+    lastFiredRoutine = { routineId: event.routine_id, at: Date.now() };
+  }
   const line = document.createElement('div');
   line.className = 'turn';
   const box = document.createElement('div');
