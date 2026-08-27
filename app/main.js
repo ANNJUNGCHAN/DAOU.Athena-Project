@@ -545,6 +545,11 @@ function startCanvasFeed() {
       // 옛 판은 여기서 캔버스 창을 열었다(expandCanvasWindow). 중앙 캔버스는 늘
       // 떠 있으므로 남는 의미는 "창을 앞으로"뿐이다 — 포커스는 뺏지 않는다.
       revealShell({ focus: false });
+      // 실시간 등록 — 라이브 봉투의 주 통로는 onCanvasResult(MCP 결과 콜백)가
+      // 아니라 이 push 사이드채널이다. 봉인된 종목코드가 있으면 여기서 건다
+      // (2026-08-27 장중 QA 실측: onCanvasResult에만 걸었더니 REG 0건).
+      const pushedSymbol = extractLiveQuoteSymbol(envelope);
+      if (pushedSymbol) ensureRealtimeForSymbol(pushedSymbol);
       sendLiveCanvasResult({
         toolUseId: 'canvas-push',
         status: envelope.fell_back ? 'fallback' : 'success',
