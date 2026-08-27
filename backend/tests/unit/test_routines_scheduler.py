@@ -15,13 +15,18 @@ from athena_api.routines.disclosure_source import (
     DisclosureSourceError,
     parse_list_payload,
 )
+from athena_api.routines.briefings import BriefingStore
 from athena_api.routines.engagement import EngagementStore
 from athena_api.routines.ledger import RoutineLedger
 from athena_api.routines.models import Condition, derive_mode
 from athena_api.routines.read_marks import ReadMarksStore
 from athena_api.routines.rules import validate_draft
 from athena_api.routines.runtime import RoutinesRuntime
-from athena_api.routines.scheduler import RoutineScheduler, adapt_real_message
+from athena_api.routines.scheduler import (
+    RoutineScheduler,
+    adapt_real_message,
+    record_scheduled_fire,
+)
 from athena_api.routines.store import RoutineStore, RoutineTransitionError
 from athena_api.routines.triggers import TriggerEngine
 
@@ -355,6 +360,7 @@ def _runtime(tmp_path, ws=None, on_expire=None):
         events=asyncio.Queue(200),
         read_marks=ReadMarksStore(tmp_path / "read_marks.json"),
         engagement=EngagementStore(tmp_path / "engagement.jsonl"),
+        briefings=BriefingStore(tmp_path / "briefings.jsonl"),
         ws_client=ws,
     )
 
@@ -711,3 +717,32 @@ async def test_notify_drops_oldest_when_queue_full(tmp_path):
         await notify({"n": i})
     got = [q.get_nowait()["n"], q.get_nowait()["n"]]
     assert got == [2, 3]  # 최신 우선 — 가장 오래된 것을 버린다
+
+
+# ---------- record_scheduled_fire — 정시·캐치업 경로 대조(R1, 3단계) ----------
+
+
+def test_record_scheduled_fire_paths_produce_identical_shape(tmp_path):
+    """정시 경로(threshold 명시)와 캐치업 경로(생략 → 스펙 조건값 자동 대체)가
+    동일한 threshold·필드 집합의 fired 행을 낸다 — 판정 조립 지점 단일화(P4)."""
+    spec = validate_draft(
+        {
+            "symbol": "005930",
+            "condition": {"source": "schedule.daily", "op": "at", "value": "ALL@07:30"},
+            "cooldown_s": 1800,
+            "expires_days": 7,
+        }
+    )
+    ledger = RoutineLedger(tmp_path / "ledger.jsonl")
+
+    row_sched = record_scheduled_fire(
+        spec, ledger, "07:30", reason="예약 시각 도달(07:30)", threshold=spec.condition.value
+    )
+    row_catchup = record_scheduled_fire(
+        spec, ledger, "07:31", reason="놓친 예약 캐치업(사용자 승인)"
+    )
+
+    assert row_sched["threshold"] == row_catchup["threshold"] == "ALL@07:30"
+    assert row_sched["verdict"] == row_catchup["verdict"] == "fired"
+    assert set(row_sched) == set(row_catchup)  # 두 경로의 행 모양이 갈라지지 않는다
+    assert len(ledger.read_all()) == 2

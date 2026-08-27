@@ -20,6 +20,7 @@ from athena_api.routines.disclosure_source import (
     DartDisclosureSource,
     DisclosureSourceError,
 )
+from athena_api.routines.ledger import RoutineLedger
 from athena_api.routines.models import RoutineSpec, parse_schedule_value
 from athena_api.routines.store import RoutineStore
 from athena_api.routines.triggers import TriggerEngine, should_yield_to_conversation
@@ -36,6 +37,31 @@ _REAL_0B_FIELDS: dict[str, str] = {
     "228": "trade.strength",
     "851": "volume.prev_day_ratio",
 }
+
+
+def record_scheduled_fire(
+    spec: RoutineSpec,
+    ledger: RoutineLedger,
+    hhmm: str,
+    *,
+    reason: str = "예약 시각 도달",
+    threshold: float | bool | str | None = None,
+) -> dict[str, Any]:
+    """schedule.daily 발화를 ledger에 기록한다 — 정시 발화(run_schedule_once)와
+    캐치업 발화(catchup-fire 엔드포인트) 둘 다 이 헬퍼를 거친다(P4, 판정 조립
+    지점 단일화). threshold 기본값 None은 캐치업 경로(스펙의 조건값을 그대로
+    쓰면 되는 상황)를 단순화하기 위함 — 정시 경로는 반드시 spec.condition.value를
+    명시 전달한다(run_schedule_once 호출부). 반환값은 ledger.record()가 반환하는
+    dict(ts 포함, 서버 authoritative)."""
+    return ledger.record(
+        "fired",
+        routine_id=spec.id,
+        symbol=spec.symbol,
+        source=spec.condition.source,
+        observed=hhmm,
+        threshold=threshold if threshold is not None else spec.condition.value,
+        reason=reason,
+    )
 
 
 def _to_float(raw: Any) -> float | None:
@@ -137,6 +163,9 @@ class RoutineScheduler:
                 "threshold": spec.condition.value,
                 "note": spec.note,
                 "fired_at": datetime.now(UTC).isoformat(),
+                # 브리핑 실행 설정(R1) — main이 별도 왕복 없이 즉시 받도록 동봉.
+                "briefing_model": spec.briefing_model,
+                "briefing_effort": spec.briefing_effort,
             }
         )
 
@@ -268,14 +297,12 @@ class RoutineScheduler:
             if days is not None and weekday not in days:
                 continue
             self._last_fired_date[spec.id] = today
-            self.engine.ledger.record(
-                "fired",
-                routine_id=spec.id,
-                symbol=spec.symbol,
-                source=spec.condition.source,
-                observed=hhmm,
-                threshold=spec.condition.value,
+            record_scheduled_fire(
+                spec,
+                self.engine.ledger,
+                hhmm,
                 reason=f"예약 시각 도달({target_hhmm})",
+                threshold=spec.condition.value,
             )
             await self._fire(spec, hhmm)
 

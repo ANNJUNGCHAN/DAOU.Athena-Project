@@ -184,6 +184,42 @@ def test_lenient_mode_skips_corrupt_line_but_keeps_it_and_archives_valid_rows(tm
     assert EngagementStore(engagement_path).read_all() == [row_recent]
 
 
+# ---------- briefings.jsonl도 롤오버 대상(R1, 3단계) ----------
+
+
+def test_archive_once_rolls_over_briefings_too(tmp_path):
+    """runtime._archive_once()가 ledger·engagement에 더해 briefings.jsonl도
+    90일 경계로 옮긴다 — 본문은 유일 데이터라 lenient=False(엄격)로 태운다."""
+    from athena_api.config import Settings
+    from athena_api.routines.briefings import BriefingStore
+    from athena_api.routines.runtime import _archive_once
+
+    settings = Settings(
+        _env_file=None,
+        routines_ledger_path=tmp_path / "ledger.jsonl",
+        routines_engagement_path=tmp_path / "engagement.jsonl",
+        routines_briefings_path=tmp_path / "briefings.jsonl",
+        routines_ledger_archive_dir=tmp_path / "archive",
+    )
+    store = BriefingStore(settings.routines_briefings_path)
+    old_kwargs = dict(
+        routine_id="r-old", fired_at="2026-05-01T07:30:00+09:00", title="옛 브리핑",
+        content="본문", model=None, effort=None, destination="chat",
+    )
+    store.record(**old_kwargs, ts=datetime.now(UTC) - timedelta(days=91))
+    recent = store.record(
+        routine_id="r-new", fired_at="2026-08-27T07:30:00+09:00", title="최근 브리핑",
+        content="본문", model=None, effort=None, destination="chat",
+    )
+
+    _archive_once(settings)
+
+    assert store.read_all() == [recent]  # 최근 행만 원본에 남는다
+    archived = list((tmp_path / "archive").glob("briefings-*.jsonl"))
+    assert len(archived) == 1
+    assert _read_rows(archived[0])[0]["routine_id"] == "r-old"
+
+
 # ---------- 부재 파일 ----------
 
 

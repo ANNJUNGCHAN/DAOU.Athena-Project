@@ -22,6 +22,9 @@ from typing import Any
 
 MIN_MAX_DAILY_NUDGES = 0
 MAX_MAX_DAILY_NUDGES = 10
+# 자동 브리핑 하루 상한(R1) — 말걸기(nudge)와 별도 축. 0이면 자동 브리핑 정지.
+MIN_MAX_DAILY_BRIEFINGS = 0
+MAX_MAX_DAILY_BRIEFINGS = 50
 
 _DEFAULT_QUIET_START = "22:00"
 _DEFAULT_QUIET_END = "07:00"
@@ -47,6 +50,7 @@ class GuardSettings:
     quiet_hours: QuietHours = field(default_factory=QuietHours)
     show_rationale: bool = True
     learn_from_dismissals: bool = True
+    max_daily_briefings: int = 10
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -54,6 +58,7 @@ class GuardSettings:
             "quiet_hours": {"start": self.quiet_hours.start, "end": self.quiet_hours.end},
             "show_rationale": self.show_rationale,
             "learn_from_dismissals": self.learn_from_dismissals,
+            "max_daily_briefings": self.max_daily_briefings,
         }
 
     @classmethod
@@ -67,6 +72,7 @@ class GuardSettings:
             ),
             show_rationale=bool(raw.get("show_rationale", True)),
             learn_from_dismissals=bool(raw.get("learn_from_dismissals", True)),
+            max_daily_briefings=int(raw.get("max_daily_briefings", 10)),
         )
 
 
@@ -101,11 +107,20 @@ def validate_guard_settings(raw: Any) -> GuardSettings:
     if not isinstance(learn_from_dismissals, bool):
         raise GuardSettingsError("learn_from_dismissals는 불리언이어야 한다")
 
+    max_daily_briefings = raw.get("max_daily_briefings", 10)
+    if isinstance(max_daily_briefings, bool) or not isinstance(max_daily_briefings, int):
+        raise GuardSettingsError("max_daily_briefings는 정수여야 한다")
+    if not (MIN_MAX_DAILY_BRIEFINGS <= max_daily_briefings <= MAX_MAX_DAILY_BRIEFINGS):
+        raise GuardSettingsError(
+            f"max_daily_briefings는 {MIN_MAX_DAILY_BRIEFINGS}~{MAX_MAX_DAILY_BRIEFINGS} 범위다"
+        )
+
     return GuardSettings(
         max_daily_nudges=max_daily_nudges,
         quiet_hours=QuietHours(start=start, end=end),
         show_rationale=show_rationale,
         learn_from_dismissals=learn_from_dismissals,
+        max_daily_briefings=max_daily_briefings,
     )
 
 

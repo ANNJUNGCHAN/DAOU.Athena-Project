@@ -121,7 +121,12 @@ class Settings(BaseSettings):
     routines_engagement_path: Path = Field(
         default_factory=lambda: Path.home() / ".athena" / "routines" / "engagement.jsonl"
     )
-    # ledger·engagement 90일 롤오버 보관 디렉터리 — 삭제 없음(archive.py).
+    # 브리핑 본문 스토어(R1) — engagement와 분리 소유(P4), briefings.py 참고.
+    routines_briefings_path: Path = Field(
+        default_factory=lambda: Path.home() / ".athena" / "routines" / "briefings.jsonl"
+    )
+    routines_briefing_content_max_chars: int = 4000
+    # ledger·engagement·briefings 90일 롤오버 보관 디렉터리 — 삭제 없음(archive.py).
     routines_ledger_archive_dir: Path = Field(
         default_factory=lambda: Path.home() / ".athena" / "routines" / "archive"
     )

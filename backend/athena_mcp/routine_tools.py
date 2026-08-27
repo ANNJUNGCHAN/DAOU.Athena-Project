@@ -61,7 +61,10 @@ _INPUT_SCHEMA: dict[str, Any] = {
                 "'1,2,3,4,5@07:30'). symbol은 이 source에서도 6자리 종목코드가 "
                 "필수다 — 종목과 무관한 예약(예: '평일 아침 브리핑')이라도 "
                 "관련 종목/ETF나 대표 보유 종목을 사용자에게 물어 정하라"
-                "(임의로 지어내지 마라)."
+                "(임의로 지어내지 마라). briefing_model/briefing_effort는 "
+                "예약 브리핑 자동 실행에 쓸 모델·노력 설정(선택) — 생략하면 "
+                "앱 기본값을 따른다. effort는 low/medium/high/xhigh/max만 "
+                "허용된다."
             ),
             "properties": {
                 "symbol": {"type": "string", "description": "6자리 종목코드"},
@@ -77,6 +80,14 @@ _INPUT_SCHEMA: dict[str, Any] = {
                 "cooldown_s": {"type": "integer"},
                 "expires_days": {"type": "integer"},
                 "note": {"type": "string"},
+                "briefing_model": {
+                    "type": "string",
+                    "description": "예약 브리핑 실행 모델(선택, 예: claude-sonnet-5)",
+                },
+                "briefing_effort": {
+                    "type": "string",
+                    "description": "예약 브리핑 노력 수준(선택): low/medium/high/xhigh/max",
+                },
             },
         },
     },
