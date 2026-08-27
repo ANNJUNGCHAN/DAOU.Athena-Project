@@ -16,6 +16,7 @@ import httpx
 
 from athena_api.config import Settings
 from athena_api.routines.archive import rollover_jsonl
+from athena_api.routines.briefings import BriefingStore
 from athena_api.routines.corp_catalog import CorpCatalog
 from athena_api.routines.disclosure_source import DartDisclosureSource
 from athena_api.routines.engagement import EngagementStore
@@ -42,6 +43,7 @@ class RoutinesRuntime:
     events: asyncio.Queue[dict[str, Any]]
     read_marks: ReadMarksStore
     engagement: EngagementStore
+    briefings: BriefingStore
     http_client: httpx.AsyncClient | None = None
     ws_client: KiwoomWsClient | None = None
     ready: bool = False
@@ -90,10 +92,18 @@ class RoutinesRuntime:
 
 
 def _archive_once(settings: Settings) -> None:
-    """ledger·engagement를 90일 경계로 분기 보관 파일에 롤오버한다(삭제 없음).
-    기동 시 1회(open_routines) + scheduler._archive_loop()가 매일 재사용한다."""
+    """ledger·engagement·briefings를 90일 경계로 분기 보관 파일에 롤오버한다
+    (삭제 없음). 기동 시 1회(open_routines) + scheduler._archive_loop()가 매일 재사용한다."""
     rollover_jsonl(
         settings.routines_ledger_path,
+        ts_field="ts",
+        archive_dir=settings.routines_ledger_archive_dir,
+        cutoff_days=settings.routines_ledger_archive_cutoff_days,
+        lenient=False,
+    )
+    # 브리핑 본문은 사용자에게 보이는 유일 데이터 — 손상을 관대하게 건너뛰지 않는다.
+    rollover_jsonl(
+        settings.routines_briefings_path,
         ts_field="ts",
         archive_dir=settings.routines_ledger_archive_dir,
         cutoff_days=settings.routines_ledger_archive_cutoff_days,
@@ -134,6 +144,10 @@ async def open_routines(
     read_marks = ReadMarksStore(settings.routines_read_marks_path)
     read_marks.load()
     engagement = EngagementStore(settings.routines_engagement_path)
+    briefings = BriefingStore(
+        settings.routines_briefings_path,
+        max_content_chars=settings.routines_briefing_content_max_chars,
+    )
     engine = TriggerEngine(ledger=ledger)
     notify = _notify_factory(events)
     _archive_once(settings)  # 기동 시 1회 롤오버 — scheduler._archive_loop()가 이후 매일 재사용
@@ -202,6 +216,7 @@ async def open_routines(
         events=events,
         read_marks=read_marks,
         engagement=engagement,
+        briefings=briefings,
         http_client=http_client,
         ws_client=ws_client,
         disclosure_ready=disclosure_ready,

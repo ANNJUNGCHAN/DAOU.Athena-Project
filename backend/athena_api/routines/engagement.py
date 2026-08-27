@@ -26,9 +26,9 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Literal
 
-EngagementEvent = Literal["opened", "replied"]
+EngagementEvent = Literal["opened", "replied", "briefed"]
 
-_ALLOWED_EVENTS: tuple[str, ...] = ("opened", "replied")
+_ALLOWED_EVENTS: tuple[str, ...] = ("opened", "replied", "briefed")
 
 
 class EngagementError(ValueError):
@@ -48,14 +48,25 @@ class EngagementStore:
         *,
         routine_id: str,
         ts: datetime | None = None,
+        status: str | None = None,
+        duration_ms: float | None = None,
+        destination: str | None = None,
     ) -> dict[str, Any]:
+        """선택 필드(status/duration_ms/destination)는 briefed 이벤트의 실행
+        메타데이터다 — 없으면 행에 싣지 않는다(opened/replied의 기존 행 모양 보존)."""
         if event not in _ALLOWED_EVENTS:
             raise EngagementError(f"unknown event: {event!r}")
-        row = {
+        row: dict[str, Any] = {
             "ts": (ts or datetime.now(UTC)).isoformat(),
             "routine_id": routine_id,
             "event": event,
         }
+        if status is not None:
+            row["status"] = status
+        if duration_ms is not None:
+            row["duration_ms"] = duration_ms
+        if destination is not None:
+            row["destination"] = destination
         with self._path.open("a", encoding="utf-8") as fh:
             fh.write(json.dumps(row, ensure_ascii=False) + "\n")
         return row

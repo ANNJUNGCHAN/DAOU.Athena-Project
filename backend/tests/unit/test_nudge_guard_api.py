@@ -34,6 +34,7 @@ def test_get_returns_defaults(client):
         "quiet_hours": {"start": "22:00", "end": "07:00"},
         "show_rationale": True,
         "learn_from_dismissals": True,
+        "max_daily_briefings": 10,
     }
 
 
@@ -69,6 +70,10 @@ def test_post_replaces_and_get_reflects_it(client):
         {"quiet_hours": "22:00"},
         {"show_rationale": "yes"},
         {"learn_from_dismissals": 1},
+        {"max_daily_briefings": -1},
+        {"max_daily_briefings": 51},
+        {"max_daily_briefings": "10"},
+        {"max_daily_briefings": True},  # bool은 int 서브클래스 — 명시적으로 거부
     ],
 )
 def test_post_rejects_out_of_range_values(client, body):
@@ -83,6 +88,17 @@ def test_post_defaults_unspecified_fields(client):
     body = res.json()
     assert body["max_daily_nudges"] == 5
     assert body["quiet_hours"] == {"start": "22:00", "end": "07:00"}  # 기본값 유지
+    assert body["max_daily_briefings"] == 10  # 기존 4필드처럼 미지정 시 기본값
+
+
+def test_max_daily_briefings_roundtrip(client):
+    """R1 — 브리핑 하루 상한 왕복. 기존 4필드는 회귀 없이 기본값 유지."""
+    res = client.post("/api/v1/nudge-guard", json={"max_daily_briefings": 3})
+    assert res.status_code == 200
+    body = res.json()
+    assert body["max_daily_briefings"] == 3
+    assert body["max_daily_nudges"] == 2  # 별도 축 — 말걸기 상한은 무영향
+    assert client.get("/api/v1/nudge-guard").json()["max_daily_briefings"] == 3
 
 
 def test_settings_persist_across_new_store_instance(tmp_path):

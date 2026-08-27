@@ -143,6 +143,10 @@ class RoutineSpec:
     status: RoutineStatus = "draft"
     created_at: datetime = field(default_factory=_utcnow)
     approved_at: datetime | None = None
+    # 예약 브리핑 실행 설정(R1) — None이면 실행 측(main)의 기본값을 따른다.
+    # 검증은 rules.validate_draft()가 담당한다(app/lib/main/model-prefs.js와 동기화).
+    briefing_model: str | None = None
+    briefing_effort: str | None = None
 
     @property
     def mode(self) -> Mode:
@@ -173,6 +177,8 @@ class RoutineSpec:
             "mode": self.mode,  # 파생값이지만 읽는 쪽 편의로 함께 저장
             "created_at": self.created_at.isoformat(),
             "approved_at": self.approved_at.isoformat() if self.approved_at else None,
+            "briefing_model": self.briefing_model,
+            "briefing_effort": self.briefing_effort,
         }
 
     @classmethod
@@ -195,6 +201,9 @@ class RoutineSpec:
             status=raw["status"],
             created_at=datetime.fromisoformat(raw["created_at"]),
             approved_at=datetime.fromisoformat(approved) if approved else None,
+            # 옛 jsonl에는 키 자체가 없다 — .get()으로 하위호환.
+            briefing_model=raw.get("briefing_model"),
+            briefing_effort=raw.get("briefing_effort"),
         )
 
     def is_expired(self, now: datetime | None = None) -> bool:

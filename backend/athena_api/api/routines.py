@@ -9,6 +9,7 @@ from fastapi import APIRouter, HTTPException, Request
 from athena_api.routines.models import SOURCES, parse_schedule_value
 from athena_api.routines.rules import validate_draft
 from athena_api.routines.runtime import RoutinesRuntime
+from athena_api.routines.scheduler import record_scheduled_fire
 
 router = APIRouter(prefix="/api/v1/routines", tags=["routines"])
 
@@ -40,6 +41,47 @@ def _next_fire_at(spec: Any, *, now: datetime | None = None) -> str | None:
         if candidate >= base:
             return candidate.isoformat()
     return None
+
+
+def _missed_since(spec: Any, *, now: datetime | None = None) -> datetime | None:
+    """예약(schedule.daily) 스펙의 직전 예약 발생 시각 — _next_fire_at과 대칭인
+    순수 함수(과거 방향 탐색). "놓쳤는가" 판정은 호출부가 ledger의 최신 fired
+    시각과 비교해 내린다 — 이 함수는 벽시계 계산만 한다."""
+    if spec.mode != "scheduled":
+        return None
+    parsed = parse_schedule_value(spec.condition.value)
+    if parsed is None:
+        return None
+    days, hhmm = parsed
+    hour, minute = int(hhmm[:2]), int(hhmm[3:])
+    base = (now or datetime.now(_KST)).astimezone(_KST)
+    for offset in range(8):  # 오늘 포함 최대 7일 전까지 탐색
+        candidate_date = base.date() - timedelta(days=offset)
+        if days is not None and candidate_date.isoweekday() not in days:
+            continue
+        candidate = datetime(
+            candidate_date.year,
+            candidate_date.month,
+            candidate_date.day,
+            hour,
+            minute,
+            tzinfo=_KST,
+        )
+        if candidate <= base:
+            return candidate
+    return None
+
+
+def _is_missed(missed_at: datetime | None, last_fired_at: str | None) -> bool:
+    """직전 예약 발생 시각 이후로 발화 기록이 없으면 놓친 것이다."""
+    if missed_at is None:
+        return False
+    if last_fired_at is None:
+        return True
+    try:
+        return datetime.fromisoformat(last_fired_at) < missed_at
+    except ValueError:
+        return True  # 파싱 실패 시 안전한 쪽(놓침)으로 fallback
 
 
 def _is_unread(last_fired_at: str | None, last_read_at: str | None) -> bool:
@@ -90,6 +132,12 @@ def _view(
         "next_fire_at": _next_fire_at(spec),
         "last_fired_at": last_fired_at,
         "unread": _is_unread(last_fired_at, last_read_at),
+        "briefing_model": spec.briefing_model,
+        "briefing_effort": spec.briefing_effort,
+        # 놓친 예약은 활성 루틴에서만 의미가 있다 — 캐치업(catchup-fire)도
+        # active만 허용하므로 뷰와 실행 가능성이 일치한다.
+        "missed": spec.status == "active"
+        and _is_missed(_missed_since(spec), last_fired_at),
     }
 
 
@@ -132,6 +180,31 @@ async def list_routines(request: Request) -> dict[str, Any]:
         "disclosure_ready": runtime.disclosure_ready,
         "last_error": runtime.last_error,
         "fired_today": fired_today,
+    }
+
+
+@router.get("/briefing-budget")
+async def briefing_budget(request: Request) -> dict[str, Any]:
+    """자동 브리핑 하루 예산 — limit은 가드 설정, used_today는 오늘(KST)
+    "briefed" engagement 카운트. main의 러너가 실행 전에 조회한다."""
+    runtime = _runtime(request)
+    limit = request.app.state.nudge_guard_store.get().max_daily_briefings
+    today = datetime.now(_KST).date()
+    used_today = 0
+    for row in runtime.engagement.read_all():
+        if row.get("event") != "briefed":
+            continue
+        ts = row.get("ts")
+        if isinstance(ts, str):
+            try:
+                if datetime.fromisoformat(ts).astimezone(_KST).date() == today:
+                    used_today += 1
+            except ValueError:
+                pass
+    return {
+        "limit": limit,
+        "used_today": used_today,
+        "remaining": max(0, limit - used_today),
     }
 
 
@@ -197,11 +270,123 @@ async def cancel_routine(request: Request, routine_id: str) -> dict[str, Any]:
     return _view(spec, runtime)
 
 
+@router.post("/{routine_id}/catchup-fire")
+async def catchup_fire(request: Request, routine_id: str) -> dict[str, Any]:
+    """놓친 예약의 캐치업 발화 기록 — 사용자가 카드에서 승인했을 때만 호출된다.
+
+    응답 fired_at은 서버가 실제로 ledger에 쓴 ISO 시각(authoritative)이다 —
+    main이 이 값을 그대로 runBriefingTurn의 fired_at으로 쓴다(idempotency 키·
+    briefings 기록·로컬 시계 편차 방지 전부 이 값 하나로 정합)."""
+    runtime = _runtime(request)
+    spec = runtime.store.get(routine_id)
+    if spec is None:
+        raise HTTPException(status_code=404, detail="루틴이 존재하지 않는다")
+    if spec.mode != "scheduled":
+        raise HTTPException(status_code=409, detail="예약(scheduled) 루틴만 캐치업할 수 있다")
+    if spec.status != "active":
+        raise HTTPException(status_code=409, detail="활성(active) 루틴만 캐치업할 수 있다")
+    now = datetime.now(_KST)
+    missed_at = _missed_since(spec, now=now)
+    if missed_at is None:
+        raise HTTPException(status_code=409, detail="놓친 예약이 없다")
+    # 중복 클릭 방지 — 직전 예약 발생 시각 이후 fired가 이미 있으면 409.
+    for row in runtime.ledger.read_all():
+        if row.get("routine_id") != routine_id or row.get("verdict") != "fired":
+            continue
+        ts = row.get("ts")
+        if isinstance(ts, str):
+            try:
+                if datetime.fromisoformat(ts) >= missed_at:
+                    raise HTTPException(
+                        status_code=409, detail="이미 발화 처리된 예약이다"
+                    )
+            except ValueError:
+                continue
+    row = record_scheduled_fire(
+        spec,
+        runtime.ledger,
+        now.strftime("%H:%M"),
+        reason="놓친 예약 캐치업(사용자 승인)",
+    )
+    return {"fired_at": row["ts"]}
+
+
+@router.post("/{routine_id}/briefing-result")
+async def record_briefing_result(
+    request: Request, routine_id: str, body: dict[str, Any]
+) -> dict[str, Any]:
+    """브리핑 완료 후 main이 1회 호출하는 통합 보고 — engagement(메타데이터)와
+    briefings(본문) 둘 다 기록한다. 엔드포인트 하나가 두 스토어에 쓰지만
+    소유권은 여전히 분리다(각 스토어의 읽기는 각자 자기 파일만 본다, P4).
+    status="failed"면 본문이 없으므로 briefings에는 기록하지 않는다
+    (실패한 시도의 빈 본문을 저장하지 않는다)."""
+    runtime = _runtime(request)
+    spec = runtime.store.get(routine_id)
+    if spec is None:
+        raise HTTPException(status_code=404, detail="루틴이 존재하지 않는다")
+    fired_at = body.get("fired_at")
+    if not isinstance(fired_at, str) or not fired_at:
+        raise HTTPException(status_code=422, detail="fired_at은 필수 문자열이다")
+    status = body.get("status")
+    if not isinstance(status, str) or not status:
+        raise HTTPException(status_code=422, detail="status는 필수 문자열이다")
+    duration_ms = body.get("duration_ms")
+    if duration_ms is not None and not isinstance(duration_ms, (int, float)):
+        raise HTTPException(status_code=422, detail="duration_ms는 숫자여야 한다")
+    destination = body.get("destination")
+    if destination is not None and not isinstance(destination, str):
+        raise HTTPException(status_code=422, detail="destination은 문자열이어야 한다")
+    title = body.get("title")
+    content = body.get("content")
+    if status != "failed" and (not isinstance(title, str) or not isinstance(content, str)):
+        # 검증은 전부 기록 앞에 — 422 응답에 부분 기록(engagement만)을 남기지 않는다.
+        raise HTTPException(
+            status_code=422, detail="성공 보고에는 title·content 문자열이 필수다"
+        )
+
+    engagement_row = runtime.engagement.record(
+        "briefed",
+        routine_id=routine_id,
+        status=status,
+        duration_ms=duration_ms,
+        destination=destination,
+    )
+    briefing_row: dict[str, Any] | None = None
+    if status != "failed":
+        model = body.get("model")
+        effort = body.get("effort")
+        briefing_row = runtime.briefings.record(
+            routine_id=routine_id,
+            fired_at=fired_at,
+            title=title,
+            content=content,
+            model=model if isinstance(model, str) else None,
+            effort=effort if isinstance(effort, str) else None,
+            destination=destination or "",
+        )
+    return {"engagement": engagement_row, "briefing": briefing_row}
+
+
 @router.get("/{routine_id}/runs")
 async def list_routine_runs(request: Request, routine_id: str) -> dict[str, Any]:
-    """실행 이력 조회 — ledger는 그대로 두고 라우터 레벨에서 routine_id로 거른다."""
+    """실행 이력 조회 — ledger는 그대로 두고 라우터 레벨에서 routine_id로 거른다.
+
+    ledger·engagement·briefings 3개 스토어를 각각 정확히 1회씩 읽는다(단일
+    패스, N+1 방지 MAJOR 준수). briefings는 fired_at(=ledger fired 행의 ts,
+    서버 authoritative)으로 상관해 본문 필드를 병합한다."""
     runtime = _runtime(request)
     rows = [r for r in runtime.ledger.read_all() if r.get("routine_id") == routine_id]
+    briefing_by_fired_at = {
+        b["fired_at"]: b
+        for b in runtime.briefings.read_all()
+        if b.get("routine_id") == routine_id and isinstance(b.get("fired_at"), str)
+    }
+    for r in rows:
+        briefing = briefing_by_fired_at.get(r.get("ts"))
+        if briefing is not None:
+            r["briefing_title"] = briefing.get("title")
+            r["briefing_content"] = briefing.get("content")
+            r["truncated"] = briefing.get("truncated", False)
     # 최근 30건(옛 jsonl은 duration_ms 키 자체가 없을 수 있다 — 하위호환 방어).
     recent = rows[-30:]
     durations = [

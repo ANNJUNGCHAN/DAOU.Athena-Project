@@ -14,6 +14,7 @@ from athena_api.api.routines import router
 from athena_api.config import Settings
 from athena_api.errors import install_exception_handlers
 from athena_api.routines.archive import rollover_jsonl
+from athena_api.routines.guard_settings import GuardSettingsStore
 from athena_api.routines.runtime import open_routines, teardown_routines
 
 
@@ -30,12 +31,16 @@ def app_client(tmp_path):
         routines_ledger_path=tmp_path / "ledger.jsonl",
         routines_read_marks_path=tmp_path / "read_marks.json",
         routines_engagement_path=tmp_path / "engagement.jsonl",
+        routines_briefings_path=tmp_path / "briefings.jsonl",
         routines_ledger_archive_dir=tmp_path / "archive",
     )
 
     loop = asyncio.new_event_loop()
     runtime = loop.run_until_complete(open_routines(settings, ws_client=None))
     app.state.routines_runtime = runtime
+    # briefing-budget이 읽는 가드 설정 — 실제 lifespan과 동일하게 app.state에 둔다.
+    app.state.nudge_guard_store = GuardSettingsStore(tmp_path / "nudge_guard.json")
+    app.state.nudge_guard_store.load()
     yield TestClient(app), runtime
     loop.run_until_complete(teardown_routines(runtime))
     loop.close()
@@ -638,3 +643,215 @@ def test_runs_may_return_fewer_than_30_after_rollover(app_client):
     res = client.get(f"/api/v1/routines/{rid}/runs")
     assert res.status_code == 200
     assert len(res.json()["runs"]) == 1  # 30건 미만(여기선 1건) — 죽지 않고 있는 만큼만
+
+
+# ---------- 브리핑 스키마·캐치업·본문 스토어·예산(R1, 3단계) ----------
+
+
+def test_draft_briefing_model_and_effort_roundtrip(app_client):
+    client, _ = app_client
+    draft = dict(
+        SCHEDULE_DRAFT, briefing_model="claude-sonnet-5", briefing_effort="low"
+    )
+    res = client.post("/api/v1/routines/draft", json=draft)
+    assert res.status_code == 200
+    body = res.json()
+    assert body["briefing_model"] == "claude-sonnet-5"
+    assert body["briefing_effort"] == "low"
+
+    listing = client.get("/api/v1/routines").json()["routines"]
+    row = next(r for r in listing if r["id"] == body["id"])
+    assert row["briefing_model"] == "claude-sonnet-5"
+    assert row["briefing_effort"] == "low"
+
+
+@pytest.mark.parametrize(
+    "patch",
+    [
+        {"briefing_model": "-bad"},  # 선두 하이픈 금지(model-prefs.js:21 이식)
+        {"briefing_model": "한글모델"},
+        {"briefing_model": "a" * 65},
+        {"briefing_effort": "extreme"},  # 닫힌 목록 밖
+        {"briefing_effort": 3},
+    ],
+)
+def test_draft_rejects_invalid_briefing_settings(app_client, patch):
+    client, _ = app_client
+    res = client.post("/api/v1/routines/draft", json=dict(SCHEDULE_DRAFT, **patch))
+    assert res.status_code == 422
+
+
+def test_missed_is_true_for_active_schedule_without_fired(app_client):
+    """ALL 예약은 직전 발생 시각(늦어도 어제)이 항상 있다 — 발화 기록이 없으면
+    missed=true. realtime 루틴과 미승인(draft) 예약은 missed 개념이 없다."""
+    client, runtime = app_client
+    rid = client.post("/api/v1/routines/draft", json=SCHEDULE_DRAFT).json()["id"]
+    rid_rt = client.post("/api/v1/routines/draft", json=DRAFT).json()["id"]
+
+    listing = client.get("/api/v1/routines").json()["routines"]
+    assert next(r for r in listing if r["id"] == rid)["missed"] is False  # draft
+    assert next(r for r in listing if r["id"] == rid_rt)["missed"] is False
+
+    client.post(f"/api/v1/routines/{rid}/confirm")
+    listing2 = client.get("/api/v1/routines").json()["routines"]
+    assert next(r for r in listing2 if r["id"] == rid)["missed"] is True
+
+
+def test_catchup_fire_records_and_clears_missed(app_client):
+    client, runtime = app_client
+    rid = client.post("/api/v1/routines/draft", json=SCHEDULE_DRAFT).json()["id"]
+    client.post(f"/api/v1/routines/{rid}/confirm")
+
+    res = client.post(f"/api/v1/routines/{rid}/catchup-fire")
+    assert res.status_code == 200
+    fired_at = res.json()["fired_at"]
+    assert isinstance(fired_at, str) and fired_at
+
+    rows = [r for r in runtime.ledger.read_all() if r["routine_id"] == rid]
+    assert len(rows) == 1
+    assert rows[0]["verdict"] == "fired"
+    assert "캐치업" in rows[0]["reason"]
+    assert rows[0]["ts"] == fired_at  # 서버 authoritative — 기록에 쓴 값 그대로
+    assert rows[0]["threshold"] == "ALL@07:30"  # 헬퍼가 스펙 조건값으로 자동 대체
+
+    # 발화 처리 후에는 missed가 꺼지고, 중복 클릭은 409다.
+    listing = client.get("/api/v1/routines").json()["routines"]
+    assert next(r for r in listing if r["id"] == rid)["missed"] is False
+    assert client.post(f"/api/v1/routines/{rid}/catchup-fire").status_code == 409
+
+
+def test_catchup_fire_rejects_non_scheduled_and_non_active(app_client):
+    client, _ = app_client
+    rid_rt = client.post("/api/v1/routines/draft", json=DRAFT).json()["id"]
+    assert client.post(f"/api/v1/routines/{rid_rt}/catchup-fire").status_code == 409
+
+    rid_draft = client.post("/api/v1/routines/draft", json=SCHEDULE_DRAFT).json()["id"]
+    assert client.post(f"/api/v1/routines/{rid_draft}/catchup-fire").status_code == 409
+
+    assert client.post("/api/v1/routines/none/catchup-fire").status_code == 404
+
+
+def test_briefing_result_records_engagement_and_content(app_client):
+    client, runtime = app_client
+    rid = client.post("/api/v1/routines/draft", json=SCHEDULE_DRAFT).json()["id"]
+
+    res = client.post(
+        f"/api/v1/routines/{rid}/briefing-result",
+        json={
+            "fired_at": "2026-08-27T07:30:00+09:00",
+            "status": "ok",
+            "duration_ms": 4200,
+            "destination": "chat",
+            "title": "아침 브리핑",
+            "content": "오늘의 요약",
+            "model": "claude-sonnet-5",
+            "effort": "low",
+        },
+    )
+    assert res.status_code == 200
+
+    briefed = [e for e in runtime.engagement.read_all() if e["event"] == "briefed"]
+    assert len(briefed) == 1
+    assert briefed[0]["status"] == "ok"
+    assert briefed[0]["duration_ms"] == 4200
+    assert briefed[0]["destination"] == "chat"
+
+    stored = runtime.briefings.read_all()
+    assert len(stored) == 1
+    assert stored[0]["title"] == "아침 브리핑"
+    assert stored[0]["content"] == "오늘의 요약"
+    assert stored[0]["truncated"] is False
+    assert stored[0]["fired_at"] == "2026-08-27T07:30:00+09:00"
+
+
+def test_briefing_result_failed_skips_content_store(app_client):
+    """실패한 시도의 빈 본문을 저장하지 않는다 — engagement에만 남긴다."""
+    client, runtime = app_client
+    rid = client.post("/api/v1/routines/draft", json=SCHEDULE_DRAFT).json()["id"]
+
+    res = client.post(
+        f"/api/v1/routines/{rid}/briefing-result",
+        json={"fired_at": "2026-08-27T07:30:00+09:00", "status": "failed"},
+    )
+    assert res.status_code == 200
+    assert res.json()["briefing"] is None
+    assert [e["event"] for e in runtime.engagement.read_all()] == ["briefed"]
+    assert runtime.briefings.read_all() == []
+
+
+def test_briefing_result_truncates_over_4000_chars(app_client):
+    client, runtime = app_client
+    rid = client.post("/api/v1/routines/draft", json=SCHEDULE_DRAFT).json()["id"]
+
+    res = client.post(
+        f"/api/v1/routines/{rid}/briefing-result",
+        json={
+            "fired_at": "2026-08-27T07:30:00+09:00",
+            "status": "ok",
+            "title": "긴 브리핑",
+            "content": "가" * 4001,
+        },
+    )
+    assert res.status_code == 200
+    stored = runtime.briefings.read_all()
+    assert len(stored[0]["content"]) == 4000  # 잘라 저장
+    assert stored[0]["truncated"] is True  # 잘린 사실은 숨기지 않는다(P3)
+
+
+def test_briefing_result_validates_body(app_client):
+    client, _ = app_client
+    rid = client.post("/api/v1/routines/draft", json=SCHEDULE_DRAFT).json()["id"]
+    url = f"/api/v1/routines/{rid}/briefing-result"
+    ok_base = {"fired_at": "2026-08-27T07:30:00+09:00", "status": "ok"}
+    assert client.post(url, json={"status": "ok"}).status_code == 422  # fired_at 없음
+    assert client.post(url, json={"fired_at": "x"}).status_code == 422  # status 없음
+    assert client.post(url, json=ok_base).status_code == 422  # 성공인데 본문 없음
+    assert client.post("/api/v1/routines/none/briefing-result", json=ok_base).status_code == 404
+
+
+def test_runs_merges_briefing_content_by_fired_at(app_client):
+    """/runs — ledger fired 행의 ts와 briefings의 fired_at으로 상관해 병합한다."""
+    client, runtime = app_client
+    rid = client.post("/api/v1/routines/draft", json=SCHEDULE_DRAFT).json()["id"]
+    row = runtime.ledger.record(
+        "fired",
+        routine_id=rid,
+        symbol="005930",
+        source="schedule.daily",
+        observed="07:30",
+        threshold="ALL@07:30",
+        reason="예약 시각 도달(07:30)",
+    )
+    client.post(
+        f"/api/v1/routines/{rid}/briefing-result",
+        json={
+            "fired_at": row["ts"],
+            "status": "ok",
+            "title": "아침 브리핑",
+            "content": "오늘의 요약",
+        },
+    )
+
+    runs = client.get(f"/api/v1/routines/{rid}/runs").json()["runs"]
+    merged = next(r for r in runs if r["ts"] == row["ts"])
+    assert merged["briefing_title"] == "아침 브리핑"
+    assert merged["briefing_content"] == "오늘의 요약"
+    assert merged["truncated"] is False
+
+
+def test_briefing_budget_counts_today_briefed_only(app_client):
+    client, runtime = app_client
+    rid = client.post("/api/v1/routines/draft", json=SCHEDULE_DRAFT).json()["id"]
+
+    budget = client.get("/api/v1/routines/briefing-budget").json()
+    assert budget == {"limit": 10, "used_today": 0, "remaining": 10}
+
+    # 오늘 briefed 1건 + 어제 briefed 1건 + 오늘 opened 1건 — 오늘 briefed만 센다.
+    runtime.engagement.record("briefed", routine_id=rid, status="ok")
+    runtime.engagement.record(
+        "briefed", routine_id=rid, status="ok", ts=datetime.now(UTC) - timedelta(days=1)
+    )
+    runtime.engagement.record("opened", routine_id=rid)
+
+    budget2 = client.get("/api/v1/routines/briefing-budget").json()
+    assert budget2 == {"limit": 10, "used_today": 1, "remaining": 9}

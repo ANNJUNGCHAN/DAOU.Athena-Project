@@ -52,6 +52,47 @@ def test_spec_roundtrip_preserves_everything():
     assert restored.status == "draft"
 
 
+def test_briefing_settings_roundtrip_and_legacy_compat():
+    """R1 — briefing_model/briefing_effort 왕복. 키 자체가 없는 옛 dict도
+    .get() 하위호환으로 None으로 복원된다."""
+    spec = validate_draft(
+        _draft(briefing_model="claude-sonnet-5", briefing_effort="low")
+    )
+    assert spec.briefing_model == "claude-sonnet-5"
+    assert spec.briefing_effort == "low"
+    restored = RoutineSpec.from_dict(spec.to_dict())
+    assert restored.to_dict() == spec.to_dict()
+
+    legacy = spec.to_dict()
+    del legacy["briefing_model"], legacy["briefing_effort"]
+    old = RoutineSpec.from_dict(legacy)
+    assert old.briefing_model is None
+    assert old.briefing_effort is None
+
+
+@pytest.mark.parametrize(
+    "over",
+    [
+        {"briefing_model": "-claude"},  # 선두 하이픈 금지(model-prefs.js:21 이식)
+        {"briefing_model": "bad model"},  # 공백 — 문자셋 밖
+        {"briefing_model": ""},
+        {"briefing_model": "a" * 65},
+        {"briefing_effort": "extreme"},  # 닫힌 목록 밖
+        {"briefing_effort": ""},
+        {"briefing_effort": True},
+    ],
+)
+def test_invalid_briefing_settings_are_rejected(over):
+    with pytest.raises(RoutineValidationError):
+        validate_draft(_draft(**over))
+
+
+def test_valid_briefing_model_charset_examples():
+    """model-prefs.js:17의 문자셋 — 점·대괄호·하이픈(비선두)을 허용한다."""
+    for model in ("claude-sonnet-5", "claude-opus-4.1", "m[1]"):
+        assert validate_draft(_draft(briefing_model=model)).briefing_model == model
+
+
 def test_human_summary_states_mode_in_korean():
     spec = validate_draft(_draft())
     assert "실시간 (WS)" in spec.human_summary()
