@@ -4,8 +4,10 @@
 // window.athena 다리로만 main과 통신한다. lib/routine-turn.js는 orb.html이
 // <script> 태그로 미리 로드해 window.AthenaLib에 얹어둔 전역이다.
 //
-// **이 파일이 하지 않는 것이 계약이다.** 주문을 집행하지 않고(확정 결정 3),
-// 감시를 승인·취소하지 않는다 — 그 셋은 여전히 오브의 액션이 아니다.
+// **이 파일이 하지 않는 것이 계약이다.** 감시를 승인·취소하지 않는다 — 그건
+// 여전히 오브의 액션이 아니다. 주문 집행(확정 결정 3)은 2026-08-27 CP2
+// 사용자 승인으로 절반만 풀렸다 — 미니 주문 티켓(board-33⑤)의 실행 버튼
+// 하나뿐이고, 그 밖에는 여전히 오브가 스스로 주문을 내지 않는다.
 //
 // 2026-08-26 board-33/34 — "입력 지점은 셸 창 커맨드바 하나"는 "셸이 보이는
 // 동안은 오브에 입력이 없다"로 바뀌었다(tree-34-deep.raw "상태는 둘뿐이다").
@@ -44,6 +46,7 @@
   const columnFold = window.AthenaLib.ColumnFold;
   const factsCard = window.AthenaLib.FactsCard;
   const cardPrimitives = window.AthenaLib.CardPrimitives;
+  const orderTicketLib = window.AthenaLib.OrderTicket;
 
   const $root = document.getElementById('orbRoot');
   const $orb = document.getElementById('orb');
@@ -77,6 +80,20 @@
   const $chatGo = document.getElementById('orbChatGo');
   // 알림 전용 표면 — 대화 모드일 때 통째로 감춘다(applyMode).
   const ALERT_ONLY_ELS = [$badge, $mode, $relative, $body, $card, $foot];
+
+  // ── 미니 주문 티켓 DOM(board-33⑤, CP2 2026-08-27 사용자 승인) ──
+  const $ticket = document.getElementById('orbTicket');
+  const $ticketAccount = document.getElementById('orbTicketAccount');
+  const $ticketRowSymbol = document.getElementById('orbTicketRowSymbol');
+  const $ticketSymbol = document.getElementById('orbTicketSymbol');
+  const $ticketRowSide = document.getElementById('orbTicketRowSide');
+  const $ticketSide = document.getElementById('orbTicketSide');
+  const $ticketRowQty = document.getElementById('orbTicketRowQty');
+  const $ticketQty = document.getElementById('orbTicketQty');
+  const $ticketRowAmount = document.getElementById('orbTicketRowAmount');
+  const $ticketAmount = document.getElementById('orbTicketAmount');
+  const $ticketExec = document.getElementById('orbTicketExec');
+  const $ticketCancel = document.getElementById('orbTicketCancel');
 
   // 미확인 알림. 이 배열이 비어 있으면 오브는 무채색이고, 하나라도 있으면 얼굴이
   // 드러난다(renderPresence). 펼치면 가장 최근 것을 보여주고 전부 확인 처리한다.
@@ -1117,6 +1134,112 @@
     return card;
   }
 
+  // ---------- board-33⑤ 미니 주문 티켓(CP2 2026-08-27 사용자 승인) ----------
+  // 판별 관례 — canvas.js가 title로 CardKinds를 고르는 것과 같은 방식이다.
+  // 새 canvas_type을 짓지 않는다(신규 canvas_type 발명 금지): 백엔드가 이미
+  // 검증하는 8종(stream/reader/timeline/table/chart/facts/compound/free) 중
+  // 'facts'를 그대로 쓰고, card_title이 정확히 "주문 티켓"일 때만 이 특수
+  // 렌더로 분기한다 — 그 밖의 facts 엔벌로프는 지금처럼 오브에 카드가 없다.
+  const ORDER_TICKET_TITLE = '주문 티켓';
+
+  // 실행 버튼이 실제로 쏘는 구조화 값 — 표시 문자열(예: "삼성전자 005930")과
+  // 별도다. buildOrderPayload(lib/order-ticket.js, chat.js가 이미 쓰는 바로 그
+  // 함수)가 기대하는 {symbol, side, qty} 모양 그대로 들고 있는다.
+  let activeTicketOrder = null;
+
+  function orbTicketFieldValue(fields, key) {
+    const f = fields.find((f) => f && f.key === key);
+    return f ? f.value : undefined;
+  }
+
+  /**
+   * 미니 주문 티켓 — 엔벌로프 값 1:1(LLM 0, 가격×수량 계산을 오브가 하지
+   * 않는다). 없는 필드는 행 자체를 감춘다("없는 필드 행 미생성", orb.js의
+   * renderCard()와 같은 원칙). 정적 라벨 4종은 orb.html이 이미 갖고 있다
+   * (Step 10b) — 여기서는 값만 채우고 행/티켓 표시 여부만 토글한다.
+   */
+  function renderOrbTicket(envelope) {
+    const fields = (envelope.data && Array.isArray(envelope.data.fields)) ? envelope.data.fields : [];
+    const symbol = orbTicketFieldValue(fields, 'symbol');
+    const symbolName = orbTicketFieldValue(fields, 'symbol_name');
+    const side = orbTicketFieldValue(fields, 'side');
+    const qty = orbTicketFieldValue(fields, 'qty');
+    const amount = orbTicketFieldValue(fields, 'estimated_amount');
+
+    $ticketAccount.textContent = envelope.caption != null ? String(envelope.caption) : '';
+
+    if (symbol != null && symbol !== '') {
+      $ticketSymbol.textContent = symbolName ? `${symbolName} ${symbol}` : String(symbol);
+      $ticketRowSymbol.hidden = false;
+    } else {
+      $ticketRowSymbol.hidden = true;
+    }
+
+    // 시장가 고정 — order-ticket.js buildOrderPayload와 같은 P4 1차 범위
+    // 제약(지정가는 후속)이라 "· 시장가"는 데이터가 아니라 그 제약의 표기다.
+    $ticketSide.classList.remove('is-buy', 'is-sell');
+    if (side === 'buy' || side === 'sell') {
+      $ticketSide.textContent = `${side === 'buy' ? '매수' : '매도'} · 시장가`;
+      $ticketSide.classList.add(side === 'buy' ? 'is-buy' : 'is-sell');
+      $ticketRowSide.hidden = false;
+    } else {
+      $ticketRowSide.hidden = true;
+    }
+
+    if (Number.isFinite(qty) && qty > 0) {
+      $ticketQty.textContent = `${qty}주`;
+      $ticketRowQty.hidden = false;
+    } else {
+      $ticketRowQty.hidden = true;
+    }
+
+    if (Number.isFinite(amount)) {
+      $ticketAmount.textContent = `${factsCard.formatNumeric(amount)}원`;
+      $ticketRowAmount.hidden = false;
+    } else {
+      $ticketRowAmount.hidden = true;
+    }
+
+    // 실행 가능 여부 — 세 필수값(종목·방향·수량)이 다 있어야 buildOrderPayload가
+    // 던지지 않는다. 방어 장치를 새로 두는 게 아니라 이미 있는 함수의 전제를
+    // 그대로 존중하는 것뿐이다.
+    activeTicketOrder = (symbol != null && symbol !== '' && (side === 'buy' || side === 'sell') && Number.isFinite(qty) && qty > 0)
+      ? { symbol: String(symbol), side, qty: Number(qty) }
+      : null;
+    $ticketExec.disabled = !activeTicketOrder;
+
+    $ticket.hidden = false;
+    return $ticket;
+  }
+
+  function closeOrbTicket() {
+    $ticket.hidden = true;
+    activeTicketOrder = null;
+  }
+
+  $ticketCancel.addEventListener('click', closeOrbTicket);
+
+  // 실행 — 셸(chat.js execBtn 핸들러)과 같은 페이로드·같은 IPC·같은 1회
+  // 확인 흐름이다: 새 파이프라인 0개, 신규 방어 장치 0개(board-33⑤ 캡션
+  // 50G-0 — "방어 장치 없이 셸과 동일하게 1회 확인"). 이 클릭 자체가 그
+  // 1회 확인이다 — 실행 후 별도 확인 대화상자를 띄우지 않는다.
+  $ticketExec.addEventListener('click', async () => {
+    if (!activeTicketOrder || $ticketExec.disabled) return;
+    let payload;
+    try {
+      payload = orderTicketLib.buildOrderPayload(activeTicketOrder);
+    } catch {
+      return; // 값이 깨졌으면 조용히 무시 — 새 오류 UI를 짓지 않는다(방어 장치 0).
+    }
+    $ticketExec.disabled = true;
+    await window.athena.invoke('athena:order-execute', {
+      trId: payload.tr_id,
+      body: payload.body,
+      idempotencyKey: orderTicketLib.newIdempotencyKey(),
+    });
+    closeOrbTicket();
+  });
+
   // canvas.js의 addLiveCard와 같은 1차 게이트(성공/폴백만 카드, 나머지는 통과)를
   // 따른다 — 'pushed'는 main.js 9a 결정으로 애초에 relay되지 않는다. rejected/
   // error/unparseable/그 밖의 canvas_type은 카드 없이 기존 "전체는 대화창에서
@@ -1127,6 +1250,9 @@
     if (!envelope || envelope.fell_back) return null;
     if (envelope.canvas_type === 'table') return buildOrbTableCard(envelope);
     if (envelope.canvas_type === 'chart') return buildOrbChartCard(envelope);
+    if (envelope.canvas_type === 'facts' && envelope.card_title === ORDER_TICKET_TITLE) {
+      return renderOrbTicket(envelope);
+    }
     return null;
   }
 
