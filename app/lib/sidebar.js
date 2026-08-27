@@ -287,6 +287,17 @@
     return '알림';
   }
 
+  // 9단계(알람 센터, Paper 보드 40) 알람 행의 부제 — event에 실제로 있는 필드만
+  // 조합한다(symbol·observed, routineTurnLib이 능동 턴 본문에 쓰는 것과 같은
+  // 필드). 지어낸 문구 없음(P3).
+  function routineEventSub(event) {
+    if (!event) return '';
+    const parts = [];
+    if (event.symbol != null) parts.push(String(event.symbol));
+    if (event.observed != null) parts.push(`관측 ${event.observed}`);
+    return parts.join(' · ');
+  }
+
   function handleRoutineEvent(event) {
     if (!event || event.type !== 'routine-fired') return;
     const id = event.routine_id || event.id;
@@ -296,9 +307,13 @@
     if (existing) {
       existing.firedAt = firedAtMs;
       existing.title = routineEventTitle(event);
+      existing.sub = routineEventSub(event);
       existing.read = existing.id === selectedNotifyId;
     } else {
-      notifyRooms.unshift({ id, title: routineEventTitle(event), firedAt: firedAtMs, read: false, event });
+      notifyRooms.unshift({
+        id, title: routineEventTitle(event), sub: routineEventSub(event),
+        firedAt: firedAtMs, read: false, event,
+      });
     }
     renderList();
     updateAgentBadge();
@@ -462,6 +477,22 @@
       $accountToken.textContent = '';
     }
   }
+
+  // ---------- 알람 센터 다리 (9단계, Paper 보드 40) ----------
+  // notifyRooms를 캔버스 레벨로 승격한다 — 소유자는 여전히 이 파일이다(세션
+  // 메모리, 위 머리말). 캔버스(agent-canvas.js)는 이 다리로 읽기+"모두 읽음"
+  // 액션만 받는다(단일 소유자 원칙, graph-mode/controller.js applyVisibility
+  // 주석과 같은 이유 — notifyRooms 소유자가 둘이면 결함이 재발한다).
+  window.AthenaNotify = {
+    // 얕은 복제 — 캔버스가 원본 배열/객체를 직접 변형 못 하게 한다.
+    list: () => notifyRooms.map((r) => ({ id: r.id, title: r.title, sub: r.sub || '', firedAt: r.firedAt, read: r.read })),
+    markAllRead: () => {
+      let changed = false;
+      for (const r of notifyRooms) { if (!r.read) { r.read = true; changed = true; } }
+      if (changed) { renderList(); updateAgentBadge(); }
+      return changed;
+    },
+  };
 
   // ---------- 부트 ----------
   loadConversations();

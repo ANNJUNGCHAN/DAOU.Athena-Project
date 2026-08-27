@@ -1380,6 +1380,13 @@ graphMode.applyVisibility();
 // 채널)만 잇는다. refresh()는 모드 전환 시점에 sidebar.js의 모드 네비
 // onSelect가 window.AthenaAgentCanvas를 통해 부른다(사이드바 라우틴 목록
 // 새로고침과 같은 진입점, 단일 소유자 원칙).
+//
+// wsConnected는 createAgentCanvas(...)의 getWsConnected 클로저가 참조하고,
+// mount()가 그 자리에서 동기적으로 한 번 부른다(renderWsStatus) — 그래서
+// let 선언이 이 호출보다 뒤에 있으면 TDZ ReferenceError로 mount() 전체가
+// 죽는다(실측: window.AthenaAgentCanvas가 끝내 안 잡혀 이후 모든 블록이
+// 연쇄로 깨졌다). 반드시 호출보다 먼저 선언한다.
+let wsConnected = false;
 const agentCanvas = window.AthenaLib.AgentCanvas.createAgentCanvas({
   container: document.getElementById('agentCanvas'),
   fetchRoutines: async () => {
@@ -1418,9 +1425,26 @@ const agentCanvas = window.AthenaLib.AgentCanvas.createAgentCanvas({
       window.AthenaShell.seedChatInput(text);
     }
   },
+  // 9단계 — 알람 센터. notifyRooms는 sidebar.js가 소유한다(세션 메모리) —
+  // window.AthenaNotify 다리로 읽기+"모두 읽음"만 받는다(단일 소유자 원칙).
+  fetchAlerts: () => (window.AthenaNotify ? window.AthenaNotify.list() : []),
+  markAllAlertsRead: () => { if (window.AthenaNotify) window.AthenaNotify.markAllRead(); },
+  getWsConnected: () => wsConnected,
 });
 agentCanvas.mount();
 window.AthenaAgentCanvas = agentCanvas;
+
+// 9단계 — "● WS 연결됨"(알람 센터 라이브 컬럼)의 실 신호. main.js RoutineFeed의
+// onStatus를 이번에 처음 렌더러로 릴레이했다(이전엔 no-op). 검증 하네스
+// (ATHENA_CANVAS_SOURCE=fixture)는 피드 자체를 안 돌리므로 이벤트가 안 와도
+// 기본값 false(연결 안 됨)가 정직하다 — 지어내지 않는다(P3). wsConnected
+// 선언 자체는 위(createAgentCanvas 호출보다 먼저)에 있다 — 이유는 그 옆 주석.
+if (window.athena && typeof window.athena.on === 'function') {
+  window.athena.on('athena:routine-feed-status', (s) => {
+    wsConnected = !!(s && s.state === 'connected');
+    if (typeof agentCanvas.updateWsStatus === 'function') agentCanvas.updateWsStatus();
+  });
+}
 
 // --- 그래프 모드 요약 뷰 배선 (보드 07) --------------------------------------
 //

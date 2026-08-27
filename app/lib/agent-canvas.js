@@ -32,11 +32,32 @@
 // 백엔드에 대응 전이가 없어 항상 비활성으로 남는다(기능 없는 버튼을 활성으로
 // 두지 않는다, P3). 상세 패널의 "최근 실행" 로그는 여전히 fixture다(ledger
 // API 라이브 연결은 10단계 몫).
+//
+// 9단계(알람 센터·라이브 관제, Paper 보드 40) — 헤더에 뷰 탭 3종(작업/알람/
+// 라이브)이 생긴다. "작업" 뷰는 위 39번 화면 그대로(통계·리스트+상세·제안).
+// "알람"·"라이브" 뷰는 보드 40의 두 컬럼(알람 피드+라이브 관제)을 한 화면에
+// 같이 그린다 — Paper 아트보드가 둘을 분리해 그리지 않았다(제목 자체가
+// "알람 센터 · 라이브 관제"로 하나다), 그래서 지어내지 않고 같은 내용을
+// 공유한다. 알람 피드는 sidebar.js의 notifyRooms를 window.AthenaNotify로
+// 승격한 것 — 실데이터는 routine-fired 한 종류뿐이다(handleRoutineEvent가
+// 그 외 이벤트는 애초에 방을 안 만든다), 그래서 카테고리 아이콘도 ◆ 하나만
+// 쓴다(Paper 목업의 ●⚠❚❚ 3종은 대응하는 실이벤트가 없어 지어내지 않는다,
+// P3). 라이브 컬럼(진행바·"다음 24시간" 타임라인)은 fixture다(WS 진행률
+// 스트림·예약 트리거 둘 다 백엔드 미보유, 재검증 확인). "● WS 연결됨"만
+// 실데이터다 — main.js RoutineFeed의 onStatus를 이번에 처음 렌더러로
+// 릴레이했다(이전엔 no-op이라 신호가 안 왔다, 재검증에서 확인).
 
 const TABS = [
   { key: 'all', label: '모두' },
   { key: 'active', label: '활성' },
   { key: 'paused', label: '일시중지' },
+];
+
+// 상위 뷰 탭(9단계) — 위 TABS(리스트 필터, "작업" 뷰 내부용)와는 다른 층위다.
+const VIEWS = [
+  { key: 'tasks', label: '작업' },
+  { key: 'alerts', label: '알람' },
+  { key: 'live', label: '라이브' },
 ];
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -78,6 +99,7 @@ function createAgentCanvas(deps) {
   const {
     container, fetchRoutines, onNewTaskClick, pauseRoutine, resumeRoutine,
     fetchProfileSummary, onAddSuggestion,
+    fetchAlerts, markAllAlertsRead, getWsConnected,
   } = deps || {};
   if (!container) return { mount() {}, async refresh() {} };
 
@@ -87,6 +109,8 @@ function createAgentCanvas(deps) {
   let requestId = 0; // stale-응답 가드 — sidebar.js 3단계(loadAgentRoutines)와 같은 이유.
   let suggestionsCache = [];
   let suggestRequestId = 0; // 위와 같은 이유 — 별개 요청이라 별개 가드를 쓴다.
+  let activeView = 'tasks';
+  let alertsCache = [];
 
   // ---------- 헤더 ----------
   const head = el('div', 'agent-head');
@@ -94,8 +118,34 @@ function createAgentCanvas(deps) {
   title.textContent = '에이전트';
   head.appendChild(title);
 
+  // 뷰 탭 3종(9단계, 위 머리말 참고) — 항상 보인다.
+  const viewTabsWrap = el('div', 'agent-view-tabs');
+  const viewTabButtons = {};
+  for (const view of VIEWS) {
+    const btn = el('button', view.key === activeView ? 'agent-view-tab is-active' : 'agent-view-tab');
+    btn.type = 'button';
+    btn.textContent = view.label;
+    btn.addEventListener('click', () => setActiveView(view.key));
+    viewTabButtons[view.key] = btn;
+    viewTabsWrap.appendChild(btn);
+  }
+  head.appendChild(viewTabsWrap);
+
+  const markAllReadBtn = el('button', 'agent-mark-all-read');
+  markAllReadBtn.type = 'button';
+  markAllReadBtn.textContent = '모두 읽음으로';
+  markAllReadBtn.hidden = true; // "작업" 뷰에서는 숨는다 — setActiveView가 토글.
+  markAllReadBtn.addEventListener('click', () => {
+    if (typeof markAllAlertsRead === 'function') markAllAlertsRead();
+    renderAlarmColumn();
+  });
+  head.appendChild(markAllReadBtn);
+
+  // "작업" 뷰 전용 머리(부제+리스트 필터 탭+검색+CTA) — .agent-head 레이아웃을
+  // 그대로 물려받는다. "알람"·"라이브" 뷰에서는 숨는다(setActiveView).
+  const tasksHead = el('div', 'agent-head agent-tasks-head');
   const subtitle = el('div', 'agent-subtitle');
-  head.appendChild(subtitle);
+  tasksHead.appendChild(subtitle);
 
   const tabsWrap = el('div', 'agent-tabs');
   const tabButtons = {};
@@ -107,7 +157,7 @@ function createAgentCanvas(deps) {
     tabButtons[tab.key] = btn;
     tabsWrap.appendChild(btn);
   }
-  head.appendChild(tabsWrap);
+  tasksHead.appendChild(tabsWrap);
 
   const actions = el('div', 'agent-head-actions');
   const searchWrap = el('div', 'agent-search');
@@ -134,7 +184,7 @@ function createAgentCanvas(deps) {
   cta.textContent = '＋ 새 작업 · 채팅에서';
   cta.addEventListener('click', () => { if (typeof onNewTaskClick === 'function') onNewTaskClick(); });
   actions.appendChild(cta);
-  head.appendChild(actions);
+  tasksHead.appendChild(actions);
 
   // ---------- 통계 카드 4장 ----------
   const stats = el('div', 'agent-stats');
@@ -250,6 +300,155 @@ function createAgentCanvas(deps) {
   panels.appendChild(listCol);
   panels.appendChild(detailCol);
   body.appendChild(panels);
+
+  // ---------- 알람 센터 · 라이브 관제(9단계, Paper 보드 40) ----------
+  // "알람"·"라이브" 뷰가 공유하는 한 화면 — 위 머리말 참고.
+  const alarmLiveBody = el('div', 'agent-alarm-live');
+  alarmLiveBody.hidden = true;
+
+  const alarmCol = el('div', 'agent-alarm-col');
+  const alarmCaption = el('div', 'agent-panel-caption');
+  alarmCaption.textContent = '알람';
+  alarmCol.appendChild(alarmCaption);
+  const alarmList = el('div', 'agent-alarm-list');
+  alarmCol.appendChild(alarmList);
+  alarmLiveBody.appendChild(alarmCol);
+
+  function updateAlertsTabLabel() {
+    const unread = alertsCache.filter((a) => !a.read).length;
+    viewTabButtons.alerts.textContent = unread > 0 ? `알람 ${unread}` : '알람';
+  }
+
+  function formatAlarmTime(ms) {
+    const d = new Date(ms);
+    if (Number.isNaN(d.getTime())) return '';
+    const pad2 = (n) => String(n).padStart(2, '0');
+    return `${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
+  }
+
+  // 액센트 바 색으로 미확인(핑크)/읽음(라인색)을 구분한다(Paper 실측). 카테고리
+  // 아이콘은 ◆ 하나뿐이다 — 실데이터가 routine-fired 한 종류뿐이라서다(위 머리말).
+  function makeAlarmRow(alert) {
+    const row = el('div', alert.read ? 'agent-alarm-row' : 'agent-alarm-row is-unread');
+    const icon = el('span', 'agent-alarm-icon');
+    icon.textContent = '◆';
+    row.appendChild(icon);
+    const textWrap = el('span', 'agent-alarm-text');
+    const t = el('span', 'agent-alarm-title');
+    t.textContent = alert.title;
+    textWrap.appendChild(t);
+    if (alert.sub) {
+      const s = el('span', 'agent-alarm-sub');
+      s.textContent = alert.sub;
+      textWrap.appendChild(s);
+    }
+    row.appendChild(textWrap);
+    const time = el('span', 'agent-alarm-time');
+    time.textContent = formatAlarmTime(alert.firedAt);
+    row.appendChild(time);
+    return row;
+  }
+
+  // notifyRooms(sidebar.js가 소유)를 읽기만 한다 — IPC 왕복이 없어 동기다.
+  function renderAlarmColumn() {
+    while (alarmList.firstChild) alarmList.removeChild(alarmList.firstChild);
+    const alerts = (typeof fetchAlerts === 'function') ? fetchAlerts() : [];
+    alertsCache = Array.isArray(alerts) ? alerts : [];
+    updateAlertsTabLabel();
+    if (!alertsCache.length) {
+      const empty = el('div', 'agent-list-empty');
+      empty.textContent = '받은 알람이 없습니다';
+      alarmList.appendChild(empty);
+      return;
+    }
+    for (const alert of alertsCache) alarmList.appendChild(makeAlarmRow(alert));
+  }
+
+  // 라이브 컬럼 — 진행바·"다음 24시간" 전부 fixture다(위 머리말). "WS 연결됨"만
+  // getWsConnected(canvas.js가 athena:routine-feed-status를 구독해 준다)로 실데이터다.
+  function fixtureLiveProgress() {
+    return [
+      { key: 'p1', label: '● 시세 수집 — 삼성전자', badge: '실시간', sub: '조건 2/3 · 12초 전 확인', pct: 66 },
+      { key: 'p2', label: '● 평일 아침 브리핑', badge: '대기 → 07:30', sub: '49분 후 · 소스 예열됨', pct: 92 },
+    ];
+  }
+
+  function fixtureTimeline() {
+    return [
+      { label: '아침 브리핑', sub: '기존 채팅' },
+      { label: '장 시작 전 말걸기', sub: '프로액티브' },
+      { label: '감시 마감 확인', sub: '삼성 88,000' },
+      { label: '성향 제안 검토', sub: '그래프 반영' },
+    ];
+  }
+
+  const liveCol = el('div', 'agent-live-col');
+  liveCol.setAttribute('data-source', 'fixture');
+  const liveCaption = el('div', 'agent-panel-caption');
+  liveCaption.textContent = '라이브';
+  liveCol.appendChild(liveCaption);
+
+  const liveProgressWrap = el('div', 'agent-live-progress');
+  for (const p of fixtureLiveProgress()) {
+    const row = el('div', 'agent-live-progress-row');
+    const headRow = el('div', 'agent-live-progress-head');
+    const label = el('span', 'agent-live-progress-label');
+    label.textContent = p.label;
+    headRow.appendChild(label);
+    const badge = el('span', 'agent-live-progress-badge');
+    badge.textContent = p.badge;
+    headRow.appendChild(badge);
+    row.appendChild(headRow);
+    const sub = el('div', 'agent-live-progress-sub');
+    sub.textContent = p.sub;
+    row.appendChild(sub);
+    const bar = el('div', 'agent-live-progress-bar');
+    const fill = el('div', 'agent-live-progress-fill');
+    fill.style.width = `${p.pct}%`;
+    bar.appendChild(fill);
+    row.appendChild(bar);
+    liveProgressWrap.appendChild(row);
+  }
+  liveCol.appendChild(liveProgressWrap);
+
+  const timelineCaption = el('div', 'agent-panel-caption');
+  timelineCaption.textContent = '다음 24시간';
+  liveCol.appendChild(timelineCaption);
+  const timelineWrap = el('div', 'agent-live-timeline');
+  for (const t of fixtureTimeline()) {
+    const row = el('div', 'agent-live-timeline-row');
+    const dot = el('span', 'agent-live-timeline-dot');
+    dot.textContent = '●';
+    row.appendChild(dot);
+    const label = el('span', 'agent-live-timeline-label');
+    label.textContent = t.label;
+    row.appendChild(label);
+    const sub = el('span', 'agent-live-timeline-sub');
+    sub.textContent = t.sub;
+    row.appendChild(sub);
+    timelineWrap.appendChild(row);
+  }
+  liveCol.appendChild(timelineWrap);
+
+  const wsRow = el('div', 'agent-live-ws');
+  wsRow.setAttribute('data-source', 'live');
+  const wsDot = el('span', 'agent-live-ws-dot');
+  wsRow.appendChild(wsDot);
+  const wsLabel = el('span', 'agent-live-ws-label');
+  wsRow.appendChild(wsLabel);
+  liveCol.appendChild(wsRow);
+  const wsCaption = el('div', 'agent-live-ws-caption');
+  wsCaption.textContent = '발화는 채팅으로 도착 — 여긴 관제만';
+  liveCol.appendChild(wsCaption);
+
+  function renderWsStatus() {
+    const connected = typeof getWsConnected === 'function' ? !!getWsConnected() : false;
+    wsDot.textContent = '●';
+    wsDot.style.color = connected ? 'var(--color-ok)' : 'var(--color-k-faint)';
+    wsLabel.textContent = connected ? 'WS 연결됨' : 'WS 연결 안 됨';
+  }
+
+  alarmLiveBody.appendChild(liveCol);
 
   // 예약 트리거 백엔드 미구현, 후속 스코프 — 벽시계 스케줄 개념이 SOURCES
   // 카탈로그에 없다(재검증 확인). 문구·필드는 Paper 보드 39 실측 예시 그대로다.
@@ -531,14 +730,36 @@ function createAgentCanvas(deps) {
     renderPanels();
   }
 
+  // 뷰 탭 3종(9단계) — "작업"은 39번 화면(통계+리스트/상세), "알람"·"라이브"는
+  // 40번 화면(알람 피드+라이브 관제, 위 머리말 참고 — Paper가 하나로 그려서
+  // 둘이 같은 내용을 공유한다).
+  function setActiveView(key) {
+    if (!viewTabButtons[key] || key === activeView) return;
+    activeView = key;
+    for (const k of Object.keys(viewTabButtons)) {
+      viewTabButtons[k].className = k === activeView ? 'agent-view-tab is-active' : 'agent-view-tab';
+    }
+    const isTasks = activeView === 'tasks';
+    tasksHead.hidden = !isTasks;
+    stats.hidden = !isTasks;
+    body.hidden = !isTasks;
+    markAllReadBtn.hidden = isTasks;
+    alarmLiveBody.hidden = isTasks;
+    if (!isTasks) { renderAlarmColumn(); renderWsStatus(); }
+  }
+
   function mount() {
     while (container.firstChild) container.removeChild(container.firstChild);
     container.appendChild(head);
+    container.appendChild(tasksHead);
     container.appendChild(stats);
     container.appendChild(body);
+    container.appendChild(alarmLiveBody);
     renderStats();
     updateSubtitle();
     renderPanels();
+    renderAlarmColumn(); // 배지 라벨(알람 N)은 뷰와 무관하게 항상 최신이어야 한다.
+    renderWsStatus();
   }
 
   // GET /api/v1/routines 실데이터 — requestId로 낡은 응답을 버린다(sidebar.js
@@ -558,13 +779,16 @@ function createAgentCanvas(deps) {
     renderPanels();
   }
 
-  // 두 소스는 서로 무관한 왕복이다 — 하나가 느려도(또는 실패해도) 다른 쪽을
+  // 세 소스는 서로 무관한 왕복이다 — 하나가 느려도(또는 실패해도) 다른 쪽을
   // 막지 않는다(Promise.all로 병렬, 실패는 각자의 try/catch가 이미 삼킨다).
+  // 알람·WS 상태는 IPC 왕복이 없어(세션 메모리·캐시값) 동기로 같이 갱신한다.
   async function refresh() {
+    renderAlarmColumn();
+    renderWsStatus();
     await Promise.all([refreshRoutines(), refreshSuggestions()]);
   }
 
-  return { mount, refresh, setActiveTab, selectRow };
+  return { mount, refresh, setActiveTab, selectRow, setActiveView, updateWsStatus: renderWsStatus };
 }
 
 const __exports = { createAgentCanvas };

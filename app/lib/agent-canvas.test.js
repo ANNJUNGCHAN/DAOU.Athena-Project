@@ -206,7 +206,10 @@ test('검색 결과가 0건이면 "조건에 맞는 작업이 없습니다"가 �
   const input = findByClass(container, 'agent-search-input')[0];
   input.value = '존재하지않는검색어';
   input.dispatchEvent({ type: 'input' });
-  const empty = findByClass(container, 'agent-list-empty');
+  // 알람 컬럼도 같은 .agent-list-empty 스타일을 쓴다(9단계) — 예약·감시 리스트
+  // 범위로 좁혀서 잰다.
+  const watchListNode = findByClass(container, 'agent-watch-list')[0];
+  const empty = findByClass(watchListNode, 'agent-list-empty');
   assert.equal(empty.length, 1);
   assert.equal(empty[0].textContent, '조건에 맞는 작업이 없습니다');
   assert.equal(findByClass(container, 'agent-row').length, 0);
@@ -560,4 +563,116 @@ test('탭 "일시중지"·"활성"에는 draft가 나타나지 않는다(draft�
   assert.equal(findByClass(container, 'agent-row').filter((r) => r.className.includes('is-draft')).length, 0);
   canvas.setActiveTab('active');
   assert.equal(findByClass(container, 'agent-row').filter((r) => r.className.includes('is-draft')).length, 0);
+});
+
+// ── 9단계: 뷰 탭 3종(작업/알람/라이브) + 알람 센터·라이브 관제 ──
+
+function alert1(overrides) {
+  return { id: 'al1', title: '삼성전자 88,000 감시', sub: '005930 · 관측 88100', firedAt: Date.parse('2026-08-27T09:15:00Z'), read: false, ...overrides };
+}
+
+test('mount(): 뷰 탭 3종(작업/알람/라이브)이 있고 "작업"이 기본 활성이다', () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => [] });
+  canvas.mount();
+  const tabs = findByClass(container, 'agent-view-tab');
+  assert.deepEqual(tabs.map((n) => n.textContent), ['작업', '알람', '라이브']);
+  assert.ok(tabs[0].className.includes('is-active'));
+});
+
+test('mount(): "작업" 뷰에서는 통계·리스트가 보이고 알람·라이브 컬럼은 숨는다', () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => [] });
+  canvas.mount();
+  assert.equal(findByClass(container, 'agent-stats')[0].hidden, false);
+  assert.equal(findByClass(container, 'agent-alarm-live')[0].hidden, true);
+  assert.equal(findByClass(container, 'agent-mark-all-read')[0].hidden, true);
+});
+
+test('setActiveView("alerts"): 통계·리스트·검색·CTA가 숨고 알람·라이브 컬럼과 "모두 읽음으로"가 보인다', () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => [], fetchAlerts: () => [] });
+  canvas.mount();
+  canvas.setActiveView('alerts');
+  assert.equal(findByClass(container, 'agent-stats')[0].hidden, true);
+  assert.equal(findByClass(container, 'agent-tasks-head')[0].hidden, true);
+  assert.equal(findByClass(container, 'agent-alarm-live')[0].hidden, false);
+  assert.equal(findByClass(container, 'agent-mark-all-read')[0].hidden, false);
+  const tabs = findByClass(container, 'agent-view-tab');
+  assert.ok(tabs.find((n) => n.textContent.startsWith('알람')).className.includes('is-active'));
+});
+
+test('알람 행: 실제 fetchAlerts() 필드(title·sub·firedAt)만 쓴다 — 미확인은 is-unread', () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => [],
+    fetchAlerts: () => [alert1(), alert1({ id: 'al2', title: '읽은 알람', read: true })],
+  });
+  canvas.mount();
+  canvas.setActiveView('alerts');
+  const rows = findByClass(container, 'agent-alarm-row');
+  assert.equal(rows.length, 2);
+  assert.ok(rows[0].className.includes('is-unread'));
+  assert.equal(rows[1].className.includes('is-unread'), false, '읽은 알람은 is-unread가 없다');
+  assert.equal(findByClass(rows[0], 'agent-alarm-title')[0].textContent, '삼성전자 88,000 감시');
+  assert.equal(findByClass(rows[0], 'agent-alarm-sub')[0].textContent, '005930 · 관측 88100');
+  assert.equal(findByClass(rows[0], 'agent-alarm-icon')[0].textContent, '◆');
+});
+
+test('알람 탭 라벨: 미확인 개수가 있으면 "알람 N", 없으면 "알람"', () => {
+  const container = fakeNode('div');
+  let alerts = [alert1(), alert1({ id: 'al2', read: false })];
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => [], fetchAlerts: () => alerts });
+  canvas.mount();
+  const alertsTab = () => findByClass(container, 'agent-view-tab').find((n) => n.textContent.startsWith('알람'));
+  assert.equal(alertsTab().textContent, '알람 2');
+  alerts = [];
+  canvas.refresh();
+  assert.equal(alertsTab().textContent, '알람');
+});
+
+test('알람이 하나도 없으면 "받은 알람이 없습니다"가 뜬다(fixture로 채우지 않는다, P3)', () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => [], fetchAlerts: () => [] });
+  canvas.mount();
+  canvas.setActiveView('alerts');
+  const alarmCol = findByClass(container, 'agent-alarm-col')[0];
+  const empty = findByClass(alarmCol, 'agent-list-empty');
+  assert.equal(empty.length, 1);
+  assert.equal(empty[0].textContent, '받은 알람이 없습니다');
+});
+
+test('"모두 읽음으로" 클릭 시 markAllAlertsRead가 불리고 알람 컬럼이 다시 그려진다', () => {
+  const container = fakeNode('div');
+  let markCalled = 0;
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => [],
+    fetchAlerts: () => [alert1()],
+    markAllAlertsRead: () => { markCalled += 1; },
+  });
+  canvas.mount();
+  canvas.setActiveView('alerts');
+  findByClass(container, 'agent-mark-all-read')[0].dispatchEvent({ type: 'click' });
+  assert.equal(markCalled, 1);
+});
+
+test('라이브 컬럼: 진행바 2건 + "다음 24시간" 타임라인 4건이 fixture로 뜬다', () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => [] });
+  canvas.mount();
+  const liveCol = findByClass(container, 'agent-live-col')[0];
+  assert.equal(liveCol.getAttribute('data-source'), 'fixture');
+  assert.equal(findByClass(liveCol, 'agent-live-progress-row').length, 2);
+  assert.equal(findByClass(liveCol, 'agent-live-timeline-row').length, 4);
+});
+
+test('"WS 연결됨" — getWsConnected()가 실데이터다, false면 정직하게 "연결 안 됨"', () => {
+  const container = fakeNode('div');
+  let connected = false;
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => [], getWsConnected: () => connected });
+  canvas.mount();
+  assert.equal(findByClass(container, 'agent-live-ws-label')[0].textContent, 'WS 연결 안 됨');
+  connected = true;
+  canvas.updateWsStatus();
+  assert.equal(findByClass(container, 'agent-live-ws-label')[0].textContent, 'WS 연결됨');
 });
