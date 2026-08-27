@@ -210,12 +210,19 @@
   //   crying — 감시 복원 실패(routineTurn kind: restore-failed) — 옛 '미안'의 나머지 절반
   // 2026-08-26: '미안' 하나가 만료·복원실패 둘을 뭉뚱그렸는데, routine-turn.js가
   // 이미 kind로 둘을 갈라 준다 — 같은 사실을 오브만 뭉개고 있었다(board-31).
-  // watch/glad는 아직 CSS에 모양만 있고 배선하지 않는다 — 판정에 필요한 데이터가
-  // 없어 백로그로 유예했다(CP1/CP3, orb.js 상단 주석). 없는 신호에 얼굴을
-  // 붙이면 그건 정보가 아니라 지어낸 연기다(soul.md).
+  //   watch  — 루틴이 임계에 근접(routine-near active, 아직 발화 전) — 2026-08-27
+  //            CP3 신규(board-30②b·32 '셀·경계'). listen보다 아래, sleep/drowsy/idle
+  //            보다 위에 둔다: 사용자 행위·장애(생각 중·피드 끊김·듣는 중)가 배경
+  //            정보보다 급하고, watch는 무정보 상태보다는 위다(settleAmbientFace).
+  //            지속 상태다 — done/wink처럼 타이머로 풀리지 않고 근접 이탈 신호가
+  //            와야 풀린다(feedDown과 같은 축).
+  // glad는 아직 CSS에 모양만 있고 배선하지 않는다 — 판정에 필요한 데이터가
+  // 없어 백로그로 유예했다(CP1a). 없는 신호에 얼굴을 붙이면 그건 정보가
+  // 아니라 지어낸 연기다(soul.md).
   const FACE = {
     IDLE: 'idle', SLEEP: 'sleep', DROWSY: 'drowsy', LISTEN: 'listen', THINK: 'think', DONE: 'done',
     WINK: 'wink', FROWN: 'frown', FIRED: 'fired', SURPRISE: 'surprise', MOPEY: 'mopey', CRYING: 'crying',
+    WATCH: 'watch',
   };
 
   const BLINK_CLOSE = 90;          // 감는 시간
@@ -238,6 +245,11 @@
   const CURSOR_LAG = 120;          // 0이면 눈이 커서에 붙어버려 기계가 된다
 
   const LISTEN_GAZE_Y = 6;         // px — 듣는 중 시선이 입력줄 쪽(아래)으로 내려앉는 양
+  // 경계 — 임계에 붙은 쪽으로 한쪽을 붙박는다(board-32 "시선은 정보가 아니라
+  // 태도다. 틀려도 사용자가 손해 보지 않는다" — 어느 종목인지 실제로 가리키는
+  // 게 아니라 "쏠려 있다"는 태도만 낸다). 두리번(5)보다 살짝 커야 '붙박음'과
+  // '가끔 두리번'이 구분된다.
+  const WATCH_GAZE_X = 6;
   // 생각 중 시선 — "위를 훑는다"는 스피너 대신 천천히 미끄러지는 드리프트다.
   // 처음엔 520ms마다 좌우로 튀게 짜서 "왔다갔다"로 읽혔다(사용자 지적) — 간격을
   // 늘리고 전이 시간도 같이 늘려 급한 왕복이 아니라 느린 표류로 보이게 한다.
@@ -274,6 +286,7 @@
    * 별도로 --orb-gx/gy를 몬다(여기 baseGaze는 그 루프의 출발점만 준다). */
   function baseGaze() {
     if (face === FACE.LISTEN) return { gx: 0, gy: LISTEN_GAZE_Y };
+    if (face === FACE.WATCH) return { gx: WATCH_GAZE_X, gy: 0 };
     return { gx: 0, gy: 0 };
   }
 
@@ -433,6 +446,10 @@
   // 죽어 있는 동안 계속 사실이니까) — 그래서 이 축은 done/wink/frown 같은
   // DONE_HOLD 일시 표정이 아니라 앰비언트 판정(settleAmbientFace) 쪽에 있다.
   let feedDown = false;
+  // 루틴 근접(routine-near, board-30②b/32 '셀·경계', CP3) — feedDown과 같은
+  // 성격: 타이머로 안 풀리고 이탈 신호(active:false)가 와야 풀린다. 지속
+  // 배경 상태라 settleAmbientFace 쪽에 둔다(eventFaceActive가 아니다).
+  let watching = false;
 
   function eventFaceActive() {
     // WINK·FROWN은 DONE과 같은 격이다(셋 다 신호 하나에 반응해 DONE_HOLD만큼
@@ -453,6 +470,9 @@
     // 중보다는 아래(생각 중은 지금 실제로 진행 중인 일이라 더 급하다).
     if (feedDown) { setFace(FACE.FROWN); return; }
     if (listening) { setFace(FACE.LISTEN); return; }
+    // 근접(watch)은 listen보다 아래, sleep/drowsy/idle보다 위 — 사용자 행위·
+    // 장애가 배경 정보보다 급하고, watch는 무정보 상태보다는 위이기 때문이다.
+    if (watching) { setFace(FACE.WATCH); return; }
     // sleep(무활동 5분)이 drowsy(장 마감)보다 우선한다 — sleep은 drowsy 위에
     // 얹힌 더 깊은 상태로만 도달한다(위 sleep 승격 타이머가 idle뿐 아니라
     // drowsy에서도 승격을 허용한다). 그래서 이미 sleep이면 유지하고, 아니면
@@ -480,6 +500,10 @@
       triggerWinkFace();
     } else if (signal === 'feed-status') {
       handleFeedStatus(status);
+    } else if (signal === 'watch') {
+      watching = !!active;
+      if (watching) touchActivity();
+      resolveAmbientFace();
     }
   });
 
