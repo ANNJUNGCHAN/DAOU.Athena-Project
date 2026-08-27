@@ -19,17 +19,20 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
 // 시세 카드의 실시간 상태 스냅샷 — 행 수·첫 행(최신 체결) 텍스트·탭 상태.
 const QUOTE_PROBE = `(() => {
-  const card = [...document.querySelectorAll('#grid > .card')].find((c) =>
-    (c.querySelector('.card-title') || {}).textContent === '시세' || c.textContent.includes('체결가'));
+  // 종목코드가 봉인된 카드(data-stk-cd, P2에서 도입)를 찾는다 — 시세 질의는
+  // '종목정보' facts 카드로 착지하므로 카드종이 아니라 속성으로 탐지한다.
+  const card = document.querySelector('#grid > .card[data-stk-cd]');
   if (!card) return { found: false };
+  const price = card.querySelector('.card-kit-quote-price');
   const rows = [...card.querySelectorAll('tbody tr')];
-  const tabs = [...card.querySelectorAll('.quote-tab, [class*=tab]')].map((t) => ({
-    text: t.textContent, active: t.classList.contains('is-active') }));
   return {
     found: true,
+    stkCd: card.dataset.stkCd,
+    priceText: price ? price.textContent : null,
+    badgeText: (card.querySelector('.card-kit-change-badge, [class*=change]') || {}).textContent || null,
     rowCount: rows.length,
     latestRow: rows.length ? rows[0].textContent : null,
-    tabs,
+    cardText: (card.textContent || '').slice(0, 120),
   };
 })()`;
 
@@ -75,11 +78,13 @@ app.whenReady().then(async () => {
         const s = await shellWin.webContents.executeJavaScript(QUOTE_PROBE);
         report.samples.push({ at_s: i * 5, ...s });
       }
-      const r0 = report.samples[1] ? report.samples[1].rowCount : first.rowCount;
-      const rN = report.samples[report.samples.length - 1].rowCount;
-      report.rows_grew = rN > first.rowCount;
+      const base = report.samples[0];
+      report.rows_grew = report.samples[report.samples.length - 1].rowCount > base.rowCount;
+      // 종목정보 facts 카드의 라이브 신호는 행 증가가 아니라 현재가/배지 제자리 갱신이다.
+      report.price_changed = report.samples.some((s, i) =>
+        i > 0 && s.priceText && base.priceText && s.priceText !== base.priceText);
       report.latest_changed = report.samples.some((s, i) =>
-        i > 1 && s.latestRow && report.samples[1].latestRow && s.latestRow !== report.samples[1].latestRow);
+        i > 0 && s.latestRow && base.latestRow && s.latestRow !== base.latestRow);
     }
   } catch (e) {
     report.error = report.error || String((e && e.message) || e);
@@ -88,7 +93,7 @@ app.whenReady().then(async () => {
   fs.mkdirSync(path.dirname(OUT), { recursive: true });
   fs.writeFileSync(OUT, JSON.stringify(report, null, 1), 'utf8');
   process.stdout.write(`[probe] ${JSON.stringify({
-    appeared: report.card_appeared_ms, rows_grew: report.rows_grew,
+    appeared: report.card_appeared_ms, rows_grew: report.rows_grew, price_changed: report.price_changed,
     latest_changed: report.latest_changed, error: report.error || null })}\n`);
   app.exit(report.error ? 1 : 0);
 });
