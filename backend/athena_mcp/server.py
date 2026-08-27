@@ -31,7 +31,14 @@ import httpx
 import mcp.types as types
 from mcp.server.lowlevel import Server
 
-from athena_mcp import brain_tools, canvas_data, quirks, routine_tools, selector_tools
+from athena_mcp import (
+    brain_tools,
+    canvas_data,
+    nudge_guard_tools,
+    quirks,
+    routine_tools,
+    selector_tools,
+)
 from athena_mcp.aggregator import (
     ResolvedTarget,
     ToolAggregator,
@@ -383,6 +390,13 @@ class AthenaGateway:
                 "brain", brain_tools.BRAIN_TOOL, success=not result.isError
             )
             return result
+        if name == nudge_guard_tools.NUDGE_GUARD_TOOL:
+            # 같은 빌트인 우선순위·같은 감사 최소 원칙(routine_tools와 동형).
+            result = await nudge_guard_tools.dispatch(arguments, self.selector_http_client)
+            self._audit_log("nudge-guard").record(
+                "nudge-guard", nudge_guard_tools.NUDGE_GUARD_TOOL, success=not result.isError
+            )
+            return result
 
         try:
             target = self.aggregator.resolve(name)
@@ -723,6 +737,9 @@ def _builtin_tool_defs() -> list[types.Tool]:
         # (brain_tools.py 참고): 모델이 그래프에 직접 쓸 수 있으면 대화 티어가
         # 자기 주장을 결정적 사실처럼 밀어 넣는 길이 생긴다.
         *brain_tools.builtin_tool_defs(),
+        # 말걸기 가드 설정 제안·조회 툴(F4) — routine_tools와 같은 범주.
+        # propose/get만 — 저장은 사람 전용(nudge_guard_tools.py 참고).
+        *nudge_guard_tools.builtin_tool_defs(),
     ]
 
 

@@ -15,10 +15,14 @@ from typing import TYPE_CHECKING, Any
 import httpx
 
 from athena_api.config import Settings
+from athena_api.routines.archive import rollover_jsonl
+from athena_api.routines.briefings import BriefingStore
 from athena_api.routines.corp_catalog import CorpCatalog
 from athena_api.routines.disclosure_source import DartDisclosureSource
+from athena_api.routines.engagement import EngagementStore
 from athena_api.routines.ledger import RoutineLedger
 from athena_api.routines.models import RoutineSpec
+from athena_api.routines.read_marks import ReadMarksStore
 from athena_api.routines.scheduler import RoutineScheduler
 from athena_api.routines.store import RoutineStore
 from athena_api.routines.triggers import TriggerEngine
@@ -37,22 +41,38 @@ class RoutinesRuntime:
     engine: TriggerEngine
     scheduler: RoutineScheduler
     events: asyncio.Queue[dict[str, Any]]
+    read_marks: ReadMarksStore
+    engagement: EngagementStore
+    briefings: BriefingStore
     http_client: httpx.AsyncClient | None = None
     ws_client: KiwoomWsClient | None = None
     ready: bool = False
     disclosure_ready: bool = False
     last_error: str | None = None
-    _subscribed_symbols: set[str] = field(default_factory=set)
+    _symbol_refcounts: dict[str, int] = field(default_factory=dict)
 
     async def ensure_realtime_subscription(self, symbol: str) -> None:
-        """활성 realtime 루틴의 종목을 REAL로 구독한다(REG는 리미터 소모 — 1회)."""
+        """활성 realtime 루틴의 종목을 REAL로 구독한다(REG는 리미터 소모 — 참조카운트 0→1에서만)."""
         if self.ws_client is None:
             raise RuntimeError("키움 WS 미가용 — 실시간 루틴을 활성화할 수 없다")
-        if symbol in self._subscribed_symbols:
+        count = self._symbol_refcounts.get(symbol, 0)
+        if count == 0:
+            for tr_id in REALTIME_TR_IDS:
+                await self.ws_client.register(tr_id, [symbol])
+        self._symbol_refcounts[symbol] = count + 1
+
+    async def release_realtime_subscription(self, symbol: str) -> None:
+        """realtime 루틴 종료(cancel/pause/expire)의 구독 해제 — 참조카운트 1→0에서만 REMOVE."""
+        count = self._symbol_refcounts.get(symbol, 0)
+        if count <= 0:
             return
-        for tr_id in REALTIME_TR_IDS:
-            await self.ws_client.register(tr_id, [symbol])
-        self._subscribed_symbols.add(symbol)
+        count -= 1
+        if count == 0:
+            del self._symbol_refcounts[symbol]
+            for tr_id in REALTIME_TR_IDS:
+                await self.ws_client.remove(tr_id, [symbol])
+        else:
+            self._symbol_refcounts[symbol] = count
 
     def can_activate(self, spec: RoutineSpec) -> str | None:
         """활성화 가능성 사전 판정 — 불가 사유 문자열, 가능하면 None.
@@ -64,9 +84,38 @@ class RoutinesRuntime:
             if self.ws_client is None:
                 return "키움 WS 미가용 — 실시간 감시를 켤 수 없다"
             return None
+        if spec.mode == "scheduled":
+            return None  # 벽시계 루프는 항상 기동 — 별도 가용성 게이트 없음
         if not self.disclosure_ready:
             return "공시 폴러 미가용(DART 키 또는 corp 카탈로그 부재)"
         return None
+
+
+def _archive_once(settings: Settings) -> None:
+    """ledger·engagement·briefings를 90일 경계로 분기 보관 파일에 롤오버한다
+    (삭제 없음). 기동 시 1회(open_routines) + scheduler._archive_loop()가 매일 재사용한다."""
+    rollover_jsonl(
+        settings.routines_ledger_path,
+        ts_field="ts",
+        archive_dir=settings.routines_ledger_archive_dir,
+        cutoff_days=settings.routines_ledger_archive_cutoff_days,
+        lenient=False,
+    )
+    # 브리핑 본문은 사용자에게 보이는 유일 데이터 — 손상을 관대하게 건너뛰지 않는다.
+    rollover_jsonl(
+        settings.routines_briefings_path,
+        ts_field="ts",
+        archive_dir=settings.routines_ledger_archive_dir,
+        cutoff_days=settings.routines_ledger_archive_cutoff_days,
+        lenient=False,
+    )
+    rollover_jsonl(
+        settings.routines_engagement_path,
+        ts_field="ts",
+        archive_dir=settings.routines_ledger_archive_dir,
+        cutoff_days=settings.routines_ledger_archive_cutoff_days,
+        lenient=True,
+    )
 
 
 def _notify_factory(queue: asyncio.Queue[dict[str, Any]]):
@@ -92,8 +141,16 @@ async def open_routines(
     events: asyncio.Queue[dict[str, Any]] = asyncio.Queue(200)
     store = RoutineStore(settings.routines_store_path)
     ledger = RoutineLedger(settings.routines_ledger_path)
+    read_marks = ReadMarksStore(settings.routines_read_marks_path)
+    read_marks.load()
+    engagement = EngagementStore(settings.routines_engagement_path)
+    briefings = BriefingStore(
+        settings.routines_briefings_path,
+        max_content_chars=settings.routines_briefing_content_max_chars,
+    )
     engine = TriggerEngine(ledger=ledger)
     notify = _notify_factory(events)
+    _archive_once(settings)  # 기동 시 1회 롤오버 — scheduler._archive_loop()가 이후 매일 재사용
 
     report = store.load()
     http_client: httpx.AsyncClient | None = None
@@ -128,17 +185,27 @@ async def open_routines(
         if last_error is None:
             last_error = "DART 키 미설정 — 공시(periodic) 루틴 강등"
 
+    async def _release_on_expire(spec: RoutineSpec) -> None:
+        # pause/cancel과 동일한 게이트 — realtime-ws 모드만 REAL 구독을 쥔다.
+        # runtime은 정의 시점(아래)이 아니라 호출 시점(expire 발생 시)에 자유
+        # 변수로 조회되므로, scheduler 생성이 runtime 대입보다 앞서도 안전하다.
+        if spec.mode == "realtime-ws":
+            await runtime.release_realtime_subscription(spec.symbol)
+
     scheduler = RoutineScheduler(
         store=store,
         engine=engine,
         notify=notify,
         poll_interval_s=settings.routines_poll_interval_seconds,
+        schedule_poll_interval_s=settings.routines_schedule_poll_interval_seconds,
         headroom=headroom or (lambda: 5),
         disclosure=disclosure,
         subscribe_ticks=(ws_client.subscribe_events if ws_client is not None else None),
         unsubscribe_ticks=(
             ws_client.unsubscribe_events if ws_client is not None else None
         ),
+        on_expire=_release_on_expire,
+        run_archive_once=lambda: _archive_once(settings),
     )
 
     runtime = RoutinesRuntime(
@@ -147,6 +214,9 @@ async def open_routines(
         engine=engine,
         scheduler=scheduler,
         events=events,
+        read_marks=read_marks,
+        engagement=engagement,
+        briefings=briefings,
         http_client=http_client,
         ws_client=ws_client,
         disclosure_ready=disclosure_ready,

@@ -148,8 +148,9 @@ function createGraphModeController(deps) {
   // 오기 전에 그래프 모드로 들어오면 renderUnavailable()의 정직한 안내를 보여준다.
   let available = false;
 
-  // 보드 12d/US-007 — 답변⇄그래프 두 표면의 가시성은 전부 이 함수 하나가 소유한다.
-  // 부팅 시 다른 어디서도(예: canvas.js의 brain-status 콜백) summaryTable 같은
+  // 보드 12d/US-007 — 답변⇄그래프⇄에이전트 세 표면의 가시성은 전부 이 함수
+  // 하나가 소유한다(3중 배타 — 리프 1.2.2 사이드바 모드 네비, Rev.3). 부팅 시
+  // 다른 어디서도(예: canvas.js의 brain-status 콜백) summaryTable 같은
   // 그래프 표면의 hidden을 직접 건드리지 않는다 — 소유자가 둘이면 브레인 준비
   // 타이밍에 따라 그래프 표면이 답변 모드에 새어 보이는 결함이 재발한다(실측,
   // 2026-08-26 — summaryTable이 graphView와 무관하게 ready만으로 보였다 지워졌다 했다).
@@ -160,16 +161,18 @@ function createGraphModeController(deps) {
   // canvas.js의 z-index 임시조치(.graph-surface-back)는 걷어냈다.
   function applyVisibility() {
     const graphView = store.isGraphView(state);
-    if (elements.summary) elements.summary.hidden = graphView;
+    const agentView = state.view === store.VIEW_AGENT;
+    if (elements.summary) elements.summary.hidden = graphView || agentView;
     if (elements.graph) elements.graph.hidden = !graphView || state.surface !== store.SURFACE_MAP;
+    if (elements.agent) elements.agent.hidden = !agentView;
     if (elements.summaryTable) elements.summaryTable.hidden = !graphView || state.surface !== store.SURFACE_SUMMARY;
     // 키우미 얼굴(2026-08-27, Paper 보드 45) — 지금 모드를 얼굴로 보여준다
-    // (대화=눈 · 그래프=온톨로지 별자리). CSS가 data-mode로 얼굴을 고른다.
-    if (elements.kiumi) elements.kiumi.dataset.mode = graphView ? 'graph' : 'chat';
-    // 모드 네비 활성 하이라이트(셸 v2) — 같은 data-mode 축을 쓴다.
-    if (elements.modeNav) elements.modeNav.dataset.mode = graphView ? 'graph' : 'chat';
+    // (대화=눈 · 그래프=온톨로지 별자리). CSS가 data-mode로 얼굴을 고른다 —
+    // agent 얼굴은 아직 CSS에 없어 기본 얼굴로 폴백한다(보드 39~43 후속).
+    if (elements.kiumi) elements.kiumi.dataset.mode = graphView ? 'graph' : (agentView ? 'agent' : 'chat');
     // 캔버스 빈 상태의 모드별 변형(보드 46) — CSS가 이 축으로 하나만 보여준다.
-    if (elements.canvasRegion) elements.canvasRegion.dataset.mode = graphView ? 'graph' : 'chat';
+    // (모드 네비 활성 하이라이트는 lib/sidebar-mode-nav.js가 소유한다 — 리프 1.2.2.)
+    if (elements.canvasRegion) elements.canvasRegion.dataset.mode = graphView ? 'graph' : (agentView ? 'agent' : 'chat');
     // 모드별 채팅 헤더(보드 38) — 그래프 모드 전용. 대화 모드엔 헤더가 없다(보드 37).
     if (elements.chatHead) elements.chatHead.hidden = !graphView;
   }
@@ -574,6 +577,17 @@ function createGraphModeController(deps) {
     },
     async toggle() {
       state = store.toggleView(state);
+      applyVisibility();
+      renderSelection();
+      return draw(true);
+    },
+    // 사이드바 모드 네비(3항목)의 유일한 진입점 — summary/graph/agent 어느
+    // 값으로도 직접 전이한다(toggle()은 summary⇄graph 2값 순환 전용으로 그대로
+    // 둔다, verify.js의 기존 toggle() 직접 호출을 깨지 않기 위해). draw()는
+    // 그래프 뷰가 아니면 즉시 no-op을 돌려주므로 view와 무관하게 항상 불러도
+    // 안전하다(toggle()과 같은 패턴).
+    async setView(view) {
+      state = store.setView(state, view);
       applyVisibility();
       renderSelection();
       return draw(true);

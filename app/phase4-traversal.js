@@ -121,11 +121,11 @@ async function main() {
     ['모델', '03d-settings-model.png'],
     ['그래프', '03e-settings-graph.png'],
   ];
-  // 2026-08-26: 점은 이제 답변⇄그래프 모드 전환기다(보드 05) — 설정 진입은
-  // 사이드바 계정 메뉴(보드 16) 아니면 커맨드바다. 이 프로필은 계좌가
-  // 미등록이라(위 PROFILE 주석 — cliDone/accountDone만 심는다) 계정 행이 숨어
-  // 있다(단계 02가 이미 그 상태를 'no-account'로 기록한다) — 그래서 여기서는
-  // 계정 상태와 무관한 커맨드바("설정" 입력)로 연다.
+  // 리프 1.2.2: 점은 이제 대화 상태 표시 전용이라 설정으로 가는 길이 아니다 —
+  // 설정 진입은 사이드바 계정 메뉴(보드 16) 아니면 커맨드바다. 이 프로필은
+  // 계좌가 미등록이라(위 PROFILE 주석 — cliDone/accountDone만 심는다) 계정
+  // 행이 숨어 있다(단계 02가 이미 그 상태를 'no-account'로 기록한다) — 그래서
+  // 여기서는 계정 상태와 무관한 커맨드바("설정" 입력)로 연다.
   await step('03-설정 열기', async () => {
     const opened = await shellWin.webContents.executeJavaScript(`(() => {
       const el = document.getElementById('input');
@@ -172,24 +172,32 @@ async function main() {
     await shot(shellWin, '04a-canvas-summary.png', '토글 전 — 대화(카드 그리드) 모드');
     const graphProbe = await shellWin.webContents.executeJavaScript(`(async () => {
       const container = document.getElementById('graphCanvas');
-      const modeNav = document.getElementById('sidebarModes');
+      // 리프 1.2.2 네비(#sidebarModeNav) — 활성 상태는 항목의 is-active/data-view로 드러난다.
+      const modeNav = document.getElementById('sidebarModeNav');
       const nav = document.getElementById('modeNavGraph');
       const status = await window.athena.invoke('athena:brain-status').catch(() => null);
       const brainReady = Boolean(status && status.ok && status.ready);
       if (!nav || !modeNav) return { wired: false, reason: 'missing-mode-nav', brainReady };
-      const modeBefore = modeNav.dataset.mode;
+      const activeView = () => {
+        const b = modeNav.querySelector('.sidebar-mode-item.is-active');
+        return b ? b.dataset.view : null;
+      };
+      const modeBefore = activeView();
       nav.click();
+      // 그래프 진입 판정은 #mosaic이 숨는지로 본다 — 기본 서브뷰가 요약이라
+      // #graphCanvas(지도)는 클릭만으로 안 보인다(verify.js 그래프 검증과 같은 근거).
+      const mosaic = document.getElementById('mosaic');
       const deadline = Date.now() + 4000;
       while (Date.now() < deadline) {
-        if (!container.hidden) break;
+        if (mosaic.hidden) break;
         await new Promise((r) => setTimeout(r, 50));
       }
       return {
         wired: true,
-        opened: !container.hidden,
+        opened: mosaic.hidden,
         brainReady,
         modeBefore,
-        modeAfter: modeNav.dataset.mode,
+        modeAfter: activeView(),
         containerText: container.textContent,
       };
     })()`);
@@ -199,7 +207,7 @@ async function main() {
       return;
     }
     if (!graphProbe.opened) {
-      results.push({ name: '04-graph-mode', ok: false, file: null, note: `칩을 눌러도 그래프 캔버스가 안 열린다 — ${JSON.stringify(graphProbe)}` });
+      results.push({ name: '04-graph-mode', ok: false, file: null, note: `네비 항목을 눌러도 그래프 캔버스가 안 열린다 — ${JSON.stringify(graphProbe)}` });
       return;
     }
     if (graphProbe.brainReady) {
@@ -217,7 +225,7 @@ async function main() {
 
   // ---------- (5) 캔버스 카드 — 차트 카드 ----------
   await step('05-차트 카드', async () => {
-    await shellWin.webContents.executeJavaScript(`window.AthenaGraphMode && window.AthenaGraphMode.toggle && document.getElementById('graphCanvas') && !document.getElementById('graphCanvas').hidden ? window.AthenaGraphMode.toggle() : null`);
+    await shellWin.webContents.executeJavaScript(`window.AthenaCanvasMode && window.AthenaCanvasMode.toggle && document.getElementById('graphCanvas') && !document.getElementById('graphCanvas').hidden ? window.AthenaCanvasMode.toggle() : null`);
     await wait(200);
     await shellWin.webContents.executeJavaScript("window.addCard('chart')");
     await wait(1500);

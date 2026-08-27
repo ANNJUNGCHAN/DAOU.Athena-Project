@@ -481,7 +481,23 @@ function setDot(mode) {
   if (mode) $dot.classList.add(mode);
 }
 
+// F-stage5b-FE(F2-스트레치) — "이어진 대화" 계측. 직전 능동 턴(routine-fired)
+// 이후 처음 보내는 질의만 replied로 기록한다(engagement.py는 판정 로직이
+// 없다 — "이어졌다"의 시간 창은 여기서 정의한다). renderAgentTurn이 kind가
+// fired일 때만 채운다(만료·복원실패는 "이어갈" 발화 자체가 아니다).
+const REPLIED_WINDOW_MS = 10 * 60 * 1000; // 발화 후 10분 안에 말을 걸면 "이어졌다"로 본다.
+let lastFiredRoutine = null; // { routineId, at } | null
+
+function maybeRecordReplied() {
+  if (!lastFiredRoutine) return;
+  const { routineId, at } = lastFiredRoutine;
+  lastFiredRoutine = null; // 한 번만 — 다음 질의부터는 이미 "이어짐"이 확정됐다.
+  if (Date.now() - at > REPLIED_WINDOW_MS) return;
+  window.athena.invoke('athena:routine-engagement', { id: routineId, event: 'replied' }).catch(() => {});
+}
+
 async function runQuery(text) {
+  maybeRecordReplied();
   if (canvasSource === 'fixture') return runQueryFixture(text);
   return runQueryLive(text);
 }
@@ -730,6 +746,16 @@ async function runQueryLive(text) {
   };
   const unsubscribeLiveSubagentStep = window.athena.on('athena:live-subagent-step', onLiveSubagentStep);
 
+  // 말걸기 가드 확인 카드(F-stage9) — 이 턴이 athena_nudge_guard를
+  // propose로 불렀다면 main.js가 tool_result에서 뽑아 보낸다(아래
+  // renderGuardConfirmCard 참고, 폴링으로는 발견 불가능한 비영속 데이터라
+  // 이 턴 전용 구독이 유일한 신호다).
+  const onNudgeGuardProposed = (payload) => {
+    if (myToken !== abortToken) return;
+    renderGuardConfirmCard(payload, text);
+  };
+  const unsubscribeNudgeGuardProposed = window.athena.on('athena:nudge-guard-proposed', onNudgeGuardProposed);
+
   // 추론 미리보기(2026-08-26) — 답변 텍스트가 나오기 전 긴 침묵 구간을 채운다.
   // 미리보기 전용이다: 옅은 색·작은 글씨로 뚜렷이 구분하고, 답변 첫 조각이
   // 오거나 턴이 끝나면 즉시 지운다 — 턴 기록에는 절대 안 남는다.
@@ -807,6 +833,7 @@ async function runQueryLive(text) {
     unsubscribeLiveCanvasAdded();
     unsubscribeLiveToolStep();
     unsubscribeLiveSubagentStep();
+    unsubscribeNudgeGuardProposed();
     unsubscribeLiveThinkingDelta();
     unsubscribeLiveTextDelta();
     releaseLadder.dispose(); // 유예 타이머 누수 방지 — 방출 자체는 아래 authoritative overwrite의 몫.
@@ -986,6 +1013,12 @@ async function runQueryFixture(text) {
   $history.appendChild(aLine);
   scrollAfterRender();
   $input.focus();
+
+  // runQueryLive와 같은 이유(위 654-656행 주석 참고) — fixture 모드도 턴 종료
+  // 직후 draft를 다시 조회해 승인 카드를 띄운다. canvasSource가 fixture인 건
+  // 캔버스 카드 출처일 뿐 라우틴 서브시스템과는 무관하다 — 이 호출이 없으면
+  // fixture 모드(verify.js)에서 8단계 흐름을 검증할 방법이 없다.
+  refreshRoutineDrafts();
 }
 
 // 한글 받침 유무에 따른 을/를 조사 선택 (예: "스트림"→을, "테이블"→을, "리더"→를)
@@ -1100,16 +1133,23 @@ async function runHistoryCommand(text) {
   $input.focus();
 }
 
-// 점은 답변⇄그래프 모드 전환기다(Paper 보드 05, 2026-08-26). 설정 진입은
-// 사이드바 계정 메뉴(보드 16)로 옮겼다 — 커맨드바("설정")도 동등한 진입로다.
-// 실제 모드 엔진은 canvas.js의 graphMode(lib/graph-mode/controller.js) — 여기는
-// 그 위에 점 하나를 얹을 뿐, 두 번째 모드 엔진을 만들지 않는다.
-// 키우미 메뉴(2026-08-27, Paper 보드 45 v5) — 점은 더 이상 모드 전환이 아니다.
-// 전환은 사이드바 모드 네비의 몫이고, 얼굴은 모드 표시만 한다.
+// 점은 대화 상태 표시(setDot)+키우미 메뉴 트리거다(Paper 보드 45 v5, 2026-08-27).
+// 모드 전환 클릭은 사이드바 모드 네비(lib/sidebar-mode-nav.js) 몫이다(보드 44
+// "원칙 1 — 채팅은 절대 접히지 않는다, 모드는 캔버스만 바꾼다"). 실제 모드
+// 엔진은 그대로 canvas.js의 graphMode(lib/graph-mode/controller.js) 하나다.
 $dot.addEventListener('click', () => { toggleKiumiMenu(); });
 // 사이드바 계정 메뉴(Paper 보드 16)의 "설정" 항목이 쓰는 다리 — lib/sidebar.js
 // 참고.
 window.AthenaShell.registerOpenSettings(openSettings);
+
+// 43번 "새 작업은 채팅에서" 원칙의 공용 진입로(shell.js 버스) — 시트를 열지
+// 않고 채팅 입력에 시작 문장을 심고 포커스만 옮긴다(7단계 제안 카드 "추가"가
+// 첫 사용처, lib/agent-canvas.js).
+window.AthenaShell.registerSeedChatInput((text) => {
+  if (!$input) return;
+  $input.value = text != null ? String(text) : '';
+  $input.focus();
+});
 
 // ---------- 입력 ----------
 function dispatchUserQuery(text) {
@@ -1461,6 +1501,10 @@ function _mountTurn(line, el) {
 
 function renderAgentTurn(event) {
   const model = routineTurnLib.buildTurnModel(event, Date.now());
+  // F-stage5b-FE — "이어진 대화" 계측의 기준점. fired만 채운다(위 maybeRecordReplied 참고).
+  if (model.kind === 'fired' && event && event.routine_id) {
+    lastFiredRoutine = { routineId: event.routine_id, at: Date.now() };
+  }
   const line = document.createElement('div');
   line.className = 'turn';
   const box = document.createElement('div');
@@ -1582,6 +1626,144 @@ window.athena.on('athena:routine-event', (event) => {
   renderAgentTurn(event);
 });
 
+// ---------- 예약 자동 브리핑 턴(R1, 4단계) ----------
+// 사용자 턴 채널(athena:live-*)과 완전히 분리된 별개 핸들러들이다(MAJOR 2).
+// 코드 리뷰 체크포인트: 아래 세 핸들러는 setLocked를 절대 부르지 않는다 —
+// 브리핑은 배지·본문 표시만 하고 셸 입력을 잠그지 않는다(백엔드 scheduler의
+// "대화가 우선" 원칙의 렌더러 쪽 절반). 기존 athena:live-query-state 핸들러
+// (setLocked 호출)와 함수를 공유하지 않는다.
+let briefingCard = null; // { badge, steps, body } — 진행 중 브리핑 카드의 DOM 참조
+let briefingText = '';
+
+function ensureBriefingCard() {
+  if (briefingCard) return briefingCard;
+  const line = document.createElement('div');
+  line.className = 'turn';
+  const box = document.createElement('div');
+  box.className = 'turn-agent agent-briefing';
+  const head = document.createElement('div');
+  head.className = 'agent-head';
+  const badge = document.createElement('span');
+  badge.className = 'agent-badge';
+  badge.textContent = '브리핑 실행 중';
+  head.appendChild(badge);
+  box.appendChild(head);
+  const steps = document.createElement('div');
+  steps.className = 'agent-source';
+  steps.hidden = true;
+  box.appendChild(steps);
+  const body = document.createElement('div');
+  body.className = 'agent-body';
+  box.appendChild(body);
+  _mountTurn(line, box);
+  briefingCard = { badge, steps, body };
+  return briefingCard;
+}
+
+window.athena.on('athena:briefing-query-state', ({ busy, ok, aborted } = {}) => {
+  // 배지 전용 — setLocked 미호출(위 체크포인트). 입력은 계속 열려 있다.
+  if (busy) {
+    briefingText = '';
+    ensureBriefingCard();
+    return;
+  }
+  if (briefingCard) {
+    // 종료 상태는 러너가 명시한다(ok/aborted) — 본문 유무로 추측하지 않는다.
+    // 선점 중단은 부분 본문이 남아 있어도 완료로 표시하면 안 된다.
+    briefingCard.badge.textContent = ok
+      ? '브리핑 완료'
+      : (aborted ? '브리핑 중단 — 새 대화가 우선됨' : '브리핑 생성 실패 — 알림만 표시');
+    briefingCard.steps.hidden = true;
+    briefingCard = null; // 다음 브리핑은 새 카드로
+  }
+});
+
+window.athena.on('athena:briefing-text-delta', ({ text } = {}) => {
+  if (typeof text !== 'string' || !text) return;
+  briefingText += text;
+  const card = ensureBriefingCard();
+  card.body.textContent = briefingText;
+  scrollAfterRender();
+});
+
+window.athena.on('athena:briefing-tool-step', (step = {}) => {
+  if (!step || !step.label) return;
+  const card = ensureBriefingCard();
+  card.steps.hidden = false;
+  card.steps.textContent = step.done ? `${step.label} 완료` : `${step.label}…`;
+});
+
+// ---------- 놓친 예약 캐치업 카드(R1, 5단계) ----------
+// 기동 시 main이 감지한 놓친 예약을 사람이 확인해야 실행된다. 순서 보장(①
+// catchup-fire ledger 기록 → ② 브리핑 실행, MAJOR 3)은 main 쪽 invoke 핸들러
+// 몫이고, 이 카드는 물어보고 결과를 표시할 뿐이다. 건너뛰기는 백엔드 API를
+// 부르지 않고 카드만 닫는다(계획 명시).
+function renderMissedScheduleCard(r) {
+  const line = document.createElement('div');
+  line.className = 'turn';
+  const card = document.createElement('div');
+  card.className = 'turn-agent routine-missed';
+
+  const head = document.createElement('div');
+  head.className = 'agent-head';
+  const badge = document.createElement('span');
+  badge.className = 'agent-badge';
+  badge.textContent = '놓친 예약';
+  head.appendChild(badge);
+  card.appendChild(head);
+
+  const title = document.createElement('div');
+  title.className = 'routine-draft-title';
+  title.textContent = r.note || `${r.symbol || ''} 예약 브리핑`.trim();
+  card.appendChild(title);
+
+  const body = document.createElement('div');
+  body.className = 'agent-body';
+  body.textContent = '앱이 꺼져 있는 동안 예약 시각이 지났습니다. 지금 브리핑을 실행할까요?';
+  card.appendChild(body);
+
+  const row = document.createElement('div');
+  row.className = 'routine-approval-actions';
+  const status = document.createElement('span');
+  status.className = 'agent-mode';
+
+  const confirm = _btn('지금 브리핑', 'routine-btn routine-btn-approve');
+  confirm.addEventListener('click', async () => {
+    confirm.disabled = true;
+    skip.disabled = true;
+    const res = await window.athena.invoke('athena:routine-missed-confirm', { id: r.id });
+    if (res && res.ok) {
+      status.textContent = '발화가 기록됐습니다 — 브리핑 시작';
+    } else if (res && res.status === 409) {
+      // 이미 처리된 예약(중복 클릭·다른 경로 선처리) — 재시도 버튼을 되살리지 않는다.
+      status.textContent = '이미 처리된 예약입니다';
+    } else {
+      status.textContent = `실패: ${(res && res.error) || '알 수 없는 오류'}`;
+      confirm.disabled = false;
+      skip.disabled = false;
+    }
+  });
+
+  const skip = _btn('건너뛰기', 'routine-btn');
+  skip.addEventListener('click', () => {
+    // fire-and-forget — main 쪽 보관 뷰 정리뿐, 백엔드 API 호출 없음.
+    window.athena.invoke('athena:routine-missed-skip', { id: r.id }).catch(() => {});
+    line.remove(); // 카드만 닫는다
+  });
+
+  row.appendChild(confirm);
+  row.appendChild(skip);
+  row.appendChild(status);
+  card.appendChild(row);
+
+  _mountTurn(line, card);
+}
+
+window.athena.on('athena:routine-missed', ({ routines } = {}) => {
+  if (!Array.isArray(routines)) return;
+  for (const r of routines) renderMissedScheduleCard(r);
+});
+
 // ---------- 오브에서 오간 턴 반영(2026-08-26 board-33/34) ----------
 // 셸이 숨겨진 동안 오브 대화 모드가 돌린 턴은 chat.js가 그 순간에는 그릴 수
 // 없었다(창이 안 보였으니까) — main이 턴이 끝난 뒤 늦게 알려주면 여기서
@@ -1652,19 +1834,29 @@ async function refreshRoutineDrafts() {
   }
 }
 
-// 카드는 한 번 만들어지면 DOM에 그대로 남는다(대화 이력이 append-only) — 시간이
-// 지나도 "방금"에 고정되지 않도록 떠 있는 카드만 골라 30초마다 다시 계산한다.
-setInterval(() => {
-  document.querySelectorAll('.routine-approval .agent-rel[data-fired-at]').forEach((el) => {
-    el.textContent = routineTurnLib.relativeText(el.dataset.firedAt, Date.now());
-  });
-}, 30 * 1000);
-
 function approvalModeLine(r) {
   const modeText = routineTurnLib.describeMode(r.mode);
-  const suffix = r.mode === 'periodic' ? ' — 최대 폴링 주기만큼 지연' : ' — 틱 즉시';
+  // describeMode()와 짝을 이루는 3분기(3단계, 사실11②) — periodic만 따로
+  // 걷어내고 나머지를 전부 "틱 즉시"로 묶으면 예약(scheduled)에도 그 문구가
+  // 붙어 "방식 예약 실행 — 틱 즉시"라는 자기모순이 생긴다.
+  const suffix = r.mode === 'periodic' ? ' — 최대 폴링 주기만큼 지연'
+    : r.mode === 'scheduled' ? ' — 지정 요일·시각'
+    : ' — 틱 즉시';
   const exp = r.experimental_source ? ' · [실값 미확인 필드]' : '';
   return `방식 ${modeText}${suffix}${exp}`;
+}
+
+// 43번 "새 작업은 채팅에서" — 실제 백엔드 필드(mode·source_label·cooldown_s)만
+// 조합한다. Paper 목업의 "매매일 15:40 · 소스: 계좌 + 일봉 차트"류 문구는 예약
+// (schedule) 트리거 전용 예시라 실제 draft(SOURCES 카탈로그 조건-감시형)에는
+// 대응 필드가 없다 — 지어내지 않는다(P3, 8단계 재검증).
+function draftDescriptionLine(r) {
+  return `${approvalModeLine(r)} · 소스 ${r.source_label || '—'} · 쿨다운 ${r.cooldown_s}초`;
+}
+
+// "고칠 게 있어" 클릭 → 시트 없이 채팅으로(동선 규칙②: 편집도 채팅으로).
+function draftFixSeedText(r) {
+  return `"${r.note}" 초안을 고쳐줘 — `;
 }
 
 function renderApprovalCard(r) {
@@ -1673,33 +1865,33 @@ function renderApprovalCard(r) {
   const card = document.createElement('div');
   card.className = 'turn-agent routine-approval';
 
+  // 작업 요약 · 초안 카드 머리(Paper 보드 43 실측) — 옛 "루틴 제안 — 승인
+  // 전에는 실재하지 않습니다" 단일 캡션을 pill 2개 + 안내 문구로 대체한다.
   const head = document.createElement('div');
   head.className = 'agent-head';
-  const badge = document.createElement('span');
-  badge.className = 'agent-badge';
-  badge.textContent = '승인 필요';
-  head.appendChild(badge);
-  const label = document.createElement('span');
-  label.className = 'agent-source';
-  label.textContent = '감시 등록 요청';
-  head.appendChild(label);
-  const time = document.createElement('span');
-  time.className = 'agent-rel';
-  const firstSeenAt = firstSeenAtById.get(r.id) || new Date().toISOString();
-  time.dataset.firedAt = firstSeenAt;
-  time.textContent = routineTurnLib.relativeText(firstSeenAt, Date.now());
-  head.appendChild(time);
+  const summaryPill = document.createElement('span');
+  summaryPill.className = 'routine-draft-pill';
+  summaryPill.textContent = '작업 요약';
+  head.appendChild(summaryPill);
+  const draftPill = document.createElement('span');
+  draftPill.className = 'routine-draft-pill is-draft';
+  draftPill.textContent = '초안';
+  head.appendChild(draftPill);
+  const hint = document.createElement('span');
+  hint.className = 'routine-draft-hint';
+  hint.textContent = '← 캔버스에 초안 생성됨';
+  head.appendChild(hint);
   card.appendChild(head);
 
-  const note = document.createElement('div');
-  note.className = 'agent-body';
-  note.textContent = r.note;
-  card.appendChild(note);
+  const title = document.createElement('div');
+  title.className = 'routine-draft-title';
+  title.textContent = r.note;
+  card.appendChild(title);
 
-  const mode = document.createElement('div');
-  mode.className = 'agent-mode routine-mode-line';
-  mode.textContent = approvalModeLine(r);
-  card.appendChild(mode);
+  const desc = document.createElement('div');
+  desc.className = 'agent-body';
+  desc.textContent = draftDescriptionLine(r);
+  card.appendChild(desc);
 
   if (r.activation_blocker) {
     const blocker = document.createElement('div');
@@ -1710,44 +1902,47 @@ function renderApprovalCard(r) {
 
   const notice = document.createElement('div');
   notice.className = 'agent-source';
-  notice.textContent = '승인하면 백엔드에 감시가 등록됩니다. 주문은 실행되지 않습니다.';
+  notice.textContent = '활성화해도 주문은 자동 집행되지 않습니다 — 조건 도달 시 알림이 옵니다.';
   card.appendChild(notice);
 
+  // 칩 3종(Paper 보드 43 실측): 미리보기 실행 / 바로 활성화 / 고칠 게 있어.
+  // "취소"는 이 카드에서 빠졌다 — 동선 규칙③ "확정은 채팅 카드의 칩" 그대로,
+  // 거부는 새 자연어 턴으로 이어간다(43 설계 그대로, 별도 취소 버튼 없음).
   const row = document.createElement('div');
   row.className = 'routine-approval-actions';
   const status = document.createElement('span');
   status.className = 'agent-mode';
 
-  const approve = _btn('승인', 'routine-btn routine-btn-approve');
-  approve.disabled = !!r.activation_blocker;
-  approve.addEventListener('click', async () => {
-    approve.disabled = true;
-    cancel.disabled = true;
+  // 미리보기 실행 — 백엔드에 대응 엔드포인트가 없다(재검증 확인, 실행 계획
+  // 어디에도 dry-run 개념이 없음). 기능 없는 버튼을 활성으로 두지 않는다(P3).
+  const preview = _btn('미리보기 실행', 'routine-btn');
+  preview.disabled = true;
+  preview.title = '미리보기 실행은 아직 지원하지 않습니다';
+
+  const activate = _btn('바로 활성화', 'routine-btn routine-btn-approve');
+  activate.disabled = !!r.activation_blocker;
+  activate.addEventListener('click', async () => {
+    activate.disabled = true;
+    fix.disabled = true;
     const res = await window.athena.invoke('athena:routine-confirm', { id: r.id });
     if (res && res.ok) {
       status.textContent = '활성 — 감시가 시작됐습니다';
     } else {
-      status.textContent = `승인 실패: ${(res && res.error) || '알 수 없는 오류'}`;
-      approve.disabled = !!r.activation_blocker;
-      cancel.disabled = false;
+      status.textContent = `활성화 실패: ${(res && res.error) || '알 수 없는 오류'}`;
+      activate.disabled = !!r.activation_blocker;
+      fix.disabled = false;
     }
   });
 
-  const cancel = _btn('거절', 'routine-btn');
-  cancel.addEventListener('click', async () => {
-    approve.disabled = true;
-    cancel.disabled = true;
-    const res = await window.athena.invoke('athena:routine-cancel', { id: r.id });
-    status.textContent = res && res.ok ? '거절됨' : `거절 실패: ${(res && res.error) || '오류'}`;
+  const fix = _btn('고칠 게 있어', 'routine-btn');
+  fix.addEventListener('click', () => {
+    $input.value = draftFixSeedText(r);
+    $input.focus();
   });
 
-  const edit = document.createElement('span');
-  edit.className = 'agent-mode';
-  edit.textContent = '수정은 커맨드바에 다시 말하면 됩니다';
-
-  row.appendChild(approve);
-  row.appendChild(cancel);
-  row.appendChild(edit);
+  row.appendChild(preview);
+  row.appendChild(activate);
+  row.appendChild(fix);
   row.appendChild(status);
   card.appendChild(row);
 
@@ -1755,6 +1950,93 @@ function renderApprovalCard(r) {
 }
 
 refreshRoutineDrafts();
+
+// ---------- 말걸기 가드 확인 카드 (F-stage9, Paper 보드 42/BIM-0) ----------
+// athena_nudge_guard의 propose 결과는 라우틴 draft와 달리 아무것도 디스크에
+// 안 남는다(8단계, 비영속 게이트) — refreshRoutineDrafts()류 폴링으로는 발견
+// 못 하고, main.js가 이 턴의 tool_result에서 직접 뽑아 보내는
+// athena:nudge-guard-proposed 하나가 유일한 신호다(runQueryLive의 턴 전용
+// 구독, 아래). [확인] 클릭은 LLM 재스폰 없이 렌더러가 직접
+// POST /api/v1/nudge-guard를 부른다(기존 confirm 패턴과 동일, C1 결정).
+// 순수 계산(diff·병합·문구 조합)은 lib/guard-confirm.js에 있다(routine-turn.js와
+// 같은 자리 — DOM 없는 로직만 단위 테스트가 있는 lib으로 뗀다).
+const guardConfirmLib = window.AthenaLib.GuardConfirm;
+
+function renderGuardConfirmCard({ current, proposed } = {}, triggerText) {
+  if (!current || !proposed || typeof proposed !== 'object') return;
+
+  const line = document.createElement('div');
+  line.className = 'turn';
+  const card = document.createElement('div');
+  card.className = 'turn-agent guard-confirm';
+
+  // 태그 2종(Paper 실측): "가드 조정"(채움) · "제안"(외곽선).
+  const head = document.createElement('div');
+  head.className = 'agent-head';
+  const adjustPill = document.createElement('span');
+  adjustPill.className = 'routine-draft-pill is-filled';
+  adjustPill.textContent = '가드 조정';
+  head.appendChild(adjustPill);
+  const proposePill = document.createElement('span');
+  proposePill.className = 'routine-draft-pill';
+  proposePill.textContent = '제안';
+  head.appendChild(proposePill);
+  card.appendChild(head);
+
+  const body = document.createElement('div');
+  body.className = 'agent-body guard-confirm-body';
+  body.textContent = guardConfirmLib.guardConfirmBodyText(current, proposed);
+  card.appendChild(body);
+
+  const rationale = document.createElement('div');
+  rationale.className = 'agent-source';
+  rationale.textContent = guardConfirmLib.guardConfirmRationale(triggerText);
+  card.appendChild(rationale);
+
+  // 칩 2종(Paper 실측): "이렇게 바꿔줘"(핑크 필) · "그대로 둘게"(아웃라인).
+  // 42번 프로액티브 카드의 "루틴으로"/"보류"와 같은 시각 언어를 재사용한다
+  // (agent-proactive-chip, agent-canvas.js와 이 문서가 같은 shell.html에
+  // 로드돼 클래스 공유가 가능하다).
+  const row = document.createElement('div');
+  row.className = 'routine-approval-actions';
+  const status = document.createElement('span');
+  status.className = 'agent-mode';
+
+  const confirmBtn = _btn('이렇게 바꿔줘', 'agent-proactive-chip is-primary');
+  const dismissBtn = _btn('그대로 둘게', 'agent-proactive-chip');
+
+  confirmBtn.addEventListener('click', async () => {
+    confirmBtn.disabled = true;
+    dismissBtn.disabled = true;
+    const merged = guardConfirmLib.mergeGuardSettings(current, proposed);
+    const res = await window.athena.invoke('athena:nudge-guard-set', merged);
+    if (res && res.ok) {
+      status.textContent = '반영됐습니다';
+      // 캔버스 가드 패널도 같은 값을 보고 있다 — 다음 진입까지 기다리지 않고
+      // 바로 다시 그리게 한다(단일 소유자는 여전히 백엔드, 여긴 재조회만).
+      if (window.AthenaAgentCanvas && typeof window.AthenaAgentCanvas.refresh === 'function') {
+        window.AthenaAgentCanvas.refresh();
+      }
+    } else {
+      status.textContent = `저장 실패: ${(res && res.error) || '알 수 없는 오류'}`;
+      confirmBtn.disabled = false;
+      dismissBtn.disabled = false;
+    }
+  });
+  dismissBtn.addEventListener('click', () => {
+    // 8단계 비영속 설계대로 — 확인하지 않으면 제안은 그냥 사라진다(재확인 UI 없음).
+    confirmBtn.disabled = true;
+    dismissBtn.disabled = true;
+    status.textContent = '그대로 뒀습니다';
+  });
+
+  row.appendChild(confirmBtn);
+  row.appendChild(dismissBtn);
+  row.appendChild(status);
+  card.appendChild(row);
+
+  _mountTurn(line, card);
+}
 
 // ---------- 주문 확인 모드 — #order (P4, 2026-08-19) ----------
 // 유일하게 미착수였던 모드의 실체(GLOSSARY §1). 온보딩·설정과 같은 형제 패널

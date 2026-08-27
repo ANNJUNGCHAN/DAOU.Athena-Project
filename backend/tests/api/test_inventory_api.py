@@ -138,7 +138,10 @@ def test_inventory_partition_and_static_openapi_coverage() -> None:
     # 무엇이 왜 늘었는지 적지 않고 숫자만 고치면 이 테스트가 하는 일이 없어진다.
     # 336 = 334 + 그래프 브렌치 병합(2026-08-27)의 2개: get_brain_entity_timeline
     # (§10-4 엔티티 타임라인) · set_expose_to_model(그래프 노출 게이트, settings.py).
-    assert len(operation_ids) == 336
+    # 346 = 336 + 에이전트 브렌치 병합(2026-08-27)의 10개 — 라우틴 운영 표면
+    # (pause/resume/ack/catchup_fire/runs)·예약 브리핑(briefing_budget/
+    # briefing_result)·계측(engagement)·말걸기 가드(nudge_guard get/post).
+    assert len(operation_ids) == 346
     assert "canvas_chart_page" in operation_ids
     assert "canvas_series_page" in operation_ids
     assert "get_internal_oauth_status" in operation_ids

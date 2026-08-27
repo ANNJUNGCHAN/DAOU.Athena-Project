@@ -35,6 +35,7 @@ from athena_api.kiwoom import (
     TokenManager,
 )
 from athena_api.process_lock import BrainProcessLock, CredentialProcessLock
+from athena_api.routines.guard_settings import GuardSettingsStore
 from athena_api.routines.runtime import (
     RoutinesRuntime,
     open_routines,
@@ -357,6 +358,11 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
         # 캔버스 사이드 채널(api/canvas_push.py) — 자격증명·루틴과 무관한 로컬
         # 배관이라 무조건 만든다. 소비자는 단일 앱 인스턴스(routine_events와 동형).
         app.state.canvas_events = asyncio.Queue(50)
+        # 말걸기 가드 설정(F4) — routines_enabled와 무관한 전역 설정이라
+        # 캔버스 사이드 채널과 같은 이유로 무조건 연다. 외부 자격증명·WS
+        # 의존이 없어 teardown도 필요 없다(파일 기반, 프로세스 종료로 충분).
+        app.state.nudge_guard_store = GuardSettingsStore(runtime_settings.nudge_guard_path)
+        app.state.nudge_guard_store.load()
         http_client: httpx.AsyncClient | None = None
         locks: list[CredentialProcessLock] = []
         brain: BrainRuntime | None = None

@@ -41,6 +41,18 @@ const INVOKE_CHANNELS = new Set([
   'athena:routines-list',
   'athena:routine-confirm',
   'athena:routine-cancel',
+  // 상세 패널 일시중지·재개(6.5단계) — confirm/cancel과 같은 사람 클릭 전용 경로다.
+  'athena:routine-pause',
+  'athena:routine-resume',
+  // 실행 이력 드릴인(10단계) — 6단계 GET /{id}/runs.
+  'athena:routine-runs',
+  // 알림 방 읽음 처리(7단계, F3-FE) — 6단계 POST /{id}/ack.
+  'athena:routine-ack',
+  // 발화 열람·응답 계측(F-stage5b-FE) — POST /{id}/engagement.
+  'athena:routine-engagement',
+  // 말걸기 가드 설정 REST(F-stage9) — GET/POST /api/v1/nudge-guard.
+  'athena:nudge-guard-get',
+  'athena:nudge-guard-set',
   'athena:order-execute',
   // 채팅→그래프 파이프라인 단계 5(.omc/plans/plan-chat-graph-pipeline.md §2(e)/(f))
   // — 대화 모드 HISTORY_COMMAND 조회, 설정 모드 "성향・이력" 상태·전체 삭제.
@@ -66,6 +78,10 @@ const INVOKE_CHANNELS = new Set([
   // 완전히 같은 파이프라인을 오브에서 부르는 다리. orb.js가 셸 숨김일 때만 쓴다
   // (게이트는 athena:shell-visibility, scripts/gates/check-orb.mjs가 잰다).
   'athena:orb-chat-submit',
+  // 놓친 예약 캐치업(R1, 5단계) — 확인은 main이 ① catchup-fire(ledger 기록)
+  // ② 브리핑 실행 순서를 보장한다. 건너뛰기는 백엔드 API를 부르지 않는다.
+  'athena:routine-missed-confirm',
+  'athena:routine-missed-skip',
 ]);
 
 const SEND_CHANNELS = new Set([
@@ -135,6 +151,9 @@ const ON_CHANNELS = new Set([
   // 루틴 알림(능동 에이전트 P2) — main의 RoutineFeed가 백엔드 WS에서 받은
   // 발화·만료·복원실패 이벤트를 능동 턴으로 전달한다.
   'athena:routine-event',
+  // 루틴 WS 연결 상태(9단계, 알람 센터 "● WS 연결됨") — RoutineFeed의
+  // onStatus 그대로. {state: 'connected'|'disconnected'|'unsupported'}.
+  'athena:routine-feed-status',
   // 차트 실시간 체결(키움 REAL 0B) — main이 파싱만 해서 넘긴다. 진행봉으로
   // 접는 일은 마지막 봉을 들고 있는 렌더러가 한다(lib/chart-tick-fold.js).
   'athena:chart-ticks',
@@ -162,6 +181,8 @@ const ON_CHANNELS = new Set([
   // 툴 호출 진행 단계 — {id, label, done, elapsedMs}. 라벨은 한국어 고정 문구뿐,
   // 원문 TR/툴 id는 절대 안 실린다(sendLiveToolStep 주석 참고).
   'athena:live-tool-step',
+  // 말걸기 가드 확인 카드(F-stage9) — athena_nudge_guard propose 결과, 비영속.
+  'athena:nudge-guard-proposed',
   // 질의 왕복이 도는 동안 셸·오브 입력을 함께 잠그는 신호 — {busy: boolean}.
   'athena:live-query-state',
   // 오브에서 오간 턴을 셸의 대화 이력에도 늦게 채워 넣는다(셸이 숨어 있는 동안
@@ -171,6 +192,16 @@ const ON_CHANNELS = new Set([
   // render_canvas 결과만 main이 여기로도 relay한다(classifyCanvasBlock의
   // status/envelope 그대로). 오브의 표/차트 축약 카드 렌더러가 구독한다.
   'athena:orb-canvas-result',
+  // ---------- 예약 자동 브리핑(R1, 4단계) — 사용자 턴 채널과 분리 ----------
+  // 브리핑 텍스트 조각 — {text}. 사용자 턴(athena:live-text-delta)과 별개 채널.
+  'athena:briefing-text-delta',
+  // 브리핑 툴 진행 단계 — {id, label, done, elapsedMs}(live-tool-step과 동형).
+  'athena:briefing-tool-step',
+  // 브리핑 진행 배지 전용 신호 — {busy}. 입력 잠금(setLocked)에는 절대 쓰지
+  // 않는다(MAJOR 2 — 브리핑이 셸 입력을 잠그면 안 된다).
+  'athena:briefing-query-state',
+  // 놓친 예약(R1, 5단계) — 기동 시 main이 감지한 놓친 예약 목록. {routines: [뷰...]}.
+  'athena:routine-missed',
 ]);
 
 contextBridge.exposeInMainWorld('athena', {

@@ -6,7 +6,9 @@
 'use strict';
 
 function describeMode(mode) {
-  return mode === 'realtime-ws' ? '실시간 (WS)' : '주기 확인';
+  if (mode === 'realtime-ws') return '실시간 (WS)';
+  if (mode === 'scheduled') return '예약 실행';
+  return '주기 확인';
 }
 
 function relativeText(firedAtIso, nowMs) {

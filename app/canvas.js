@@ -1521,7 +1521,7 @@ function fmtWon(raw) {
 // 창에 속하는 것(창 크롬·창 단축키·네이티브 캡션 드래그 손잡이 #dragStrip)은
 // shell.js가 한 벌만 가진다 — 이 파일에는 없다. 크기는 설정 › 화면에서만 바뀐다.
 
-// --- 그래프 모드 배선 (leaf 8 / W2-3) ---------------------------------------
+// --- 그래프 모드 배선 (leaf 8 / W2-3, 3상태는 리프 1.2.2) -------------------
 //
 // 상태·배치·그리기는 lib/graph-mode/**가 순수하게 갖고 있고, 여기서는 DOM과
 // 백엔드에만 잇는다. 전환 진입로는 사이드바 모드 네비 하나다(보드 45 v5에서
@@ -1543,13 +1543,14 @@ const graphMode = window.AthenaLib.GraphModeController.createGraphModeController
     summary: document.getElementById('mosaic'),
     // 가시성 전용 — graphMode.applyVisibility() 하나만 이 hidden을 건드린다.
     graph: document.getElementById('graphCanvas'),
+    // 3영역 3중 배타의 세 번째 자리(Paper 보드 39/44) — 내용은 4/5단계에서 채운다.
+    agent: document.getElementById('agentCanvas'),
     // 보드 07 성향 신호 표 — 그래프 표면이라 답변 모드에선 숨는다(아래 §요약 뷰
     // 배선 주석·US-007 참고). graphMode.applyVisibility() 하나가 소유한다.
     summaryTable: document.getElementById('graphSummaryTable'),
     // 키우미(2026-08-27, Paper 보드 45) — 얼굴이 지금 모드를 수동 표시한다.
     kiumi: document.getElementById('dot'),
-    // 모드 네비(셸 v2 — 보드 37·38·44) — 활성 항목 하이라이트용 data-mode.
-    modeNav: document.getElementById('sidebarModes'),
+    // (모드 네비 활성 하이라이트는 lib/sidebar-mode-nav.js 소유 — 리프 1.2.2.)
     // 캔버스 영역 — 빈 상태 모드별 변형(보드 46)을 CSS로 가르는 data-mode 축.
     canvasRegion: document.getElementById('canvasRegion'),
     // 모드별 채팅 헤더(보드 38) — 그래프 모드에서만 보인다.
@@ -1599,25 +1600,141 @@ const graphMode = window.AthenaLib.GraphModeController.createGraphModeController
     return res.events;
   },
 });
-window.AthenaGraphMode = graphMode;
+window.AthenaCanvasMode = graphMode;
 // 부팅을 순수 답변 모드로 고정한다(US-007) — 정적 HTML의 기본 hidden 속성이
 // 우연히 답변 모드와 맞아떨어지는 데 기대지 않고, 여기서 명시적으로 한 번
-// 그린다. 이후 모든 가시성 변경은 toggle()/setAvailable() 안에서 이 함수가
-// 계속 소유한다 — 다른 곳(예: 아래 brain-status 콜백)이 그래프 표면의 hidden을
-// 직접 건드리면 브레인 준비 타이밍에 따라 답변/그래프가 섞여 보인다(실측 결함).
+// 그린다. 이후 모든 가시성 변경은 toggle()/setView()/setAvailable() 안에서 이
+// 함수가 계속 소유한다 — 다른 곳(예: 아래 brain-status 콜백)이 그래프 표면의
+// hidden을 직접 건드리면 브레인 준비 타이밍에 따라 답변/그래프가 섞여 보인다
+// (실측 결함).
 graphMode.applyVisibility();
 
-// 모드 전환은 사이드바 모드 네비가 소유한다(셸 v2 — 보드 37·38·44, 2026-08-27).
-// 옛 모드 필(#graphPill)은 보드 45 v5에서 스트립 줄과 함께 제거됐다.
-const modeNavEl = document.getElementById('sidebarModes');
-const modeNavChatEl = document.getElementById('modeNavChat');
-const modeNavGraphEl = document.getElementById('modeNavGraph');
-if (modeNavEl && modeNavChatEl && modeNavGraphEl) {
-  modeNavChatEl.addEventListener('click', () => {
-    if (modeNavEl.dataset.mode === 'graph') graphMode.toggle();
-  });
-  modeNavGraphEl.addEventListener('click', () => {
-    if (modeNavEl.dataset.mode !== 'graph') graphMode.toggle();
+// --- 에이전트모드 캔버스 배선 (4단계, Paper 보드 39) -------------------------
+//
+// 헤더·탭·통계 카드·리스트는 lib/agent-canvas.js가 전부 그린다 — 여기서는
+// 컨테이너와 실제 IPC(3단계 sidebar.js가 쓰는 것과 같은 athena:routines-list
+// 채널)만 잇는다. refresh()는 모드 전환 시점에 sidebar.js의 모드 네비
+// onSelect가 window.AthenaAgentCanvas를 통해 부른다(사이드바 라우틴 목록
+// 새로고침과 같은 진입점, 단일 소유자 원칙).
+//
+// wsConnected는 createAgentCanvas(...)의 getWsConnected 클로저가 참조하고,
+// mount()가 그 자리에서 동기적으로 한 번 부른다(renderWsStatus) — 그래서
+// let 선언이 이 호출보다 뒤에 있으면 TDZ ReferenceError로 mount() 전체가
+// 죽는다(실측: window.AthenaAgentCanvas가 끝내 안 잡혀 이후 모든 블록이
+// 연쇄로 깨졌다). 반드시 호출보다 먼저 선언한다.
+let wsConnected = false;
+const agentCanvas = window.AthenaLib.AgentCanvas.createAgentCanvas({
+  container: document.getElementById('agentCanvas'),
+  fetchRoutines: async () => {
+    const res = await window.athena.invoke('athena:routines-list');
+    return (res && res.ok && res.data && Array.isArray(res.data.routines)) ? res.data.routines : [];
+  },
+  // 3단계 — "오늘 발화" 통계 타일. fired_today는 routines 배열이 아니라 같은
+  // 응답의 최상위 필드(2단계, ledger 단일 스캔 집계)라 별개 왕복으로 뗀다
+  // (agent-canvas.js 머리말 "네 소스는 서로 무관한 왕복이다" 원칙 재사용).
+  fetchFiredToday: async () => {
+    const res = await window.athena.invoke('athena:routines-list');
+    return (res && res.ok && res.data && typeof res.data.fired_today === 'number') ? res.data.fired_today : null;
+  },
+  // 동선 규칙①(8단계) — 시트를 열지 않고 채팅 입력에 시작 문장을 심고 포커스만
+  // 옮긴다(shell.js seedChatInput 버스, 7단계 제안 "추가"와 같은 경로).
+  onNewTaskClick: () => {
+    if (window.AthenaShell && typeof window.AthenaShell.seedChatInput === 'function') {
+      window.AthenaShell.seedChatInput('새 작업을 만들어줘 — ');
+    }
+  },
+  // 6.5단계 — 상세 패널 일시중지·재개. 6단계 엔드포인트를 사람 클릭 전용
+  // 채널(athena:routine-confirm/cancel과 같은 자리)로 부른다.
+  pauseRoutine: async (id) => {
+    const res = await window.athena.invoke('athena:routine-pause', { id });
+    if (!res || !res.ok) throw new Error((res && res.error) || '일시중지 실패');
+    return res.data;
+  },
+  resumeRoutine: async (id) => {
+    const res = await window.athena.invoke('athena:routine-resume', { id });
+    if (!res || !res.ok) throw new Error((res && res.error) || '재개 실패');
+    return res.data;
+  },
+  // 7단계 — 제안 섹션. 그래프 모드 요약 뷰(보드 07)가 쓰는 것과 같은 엔드포인트
+  // (athena:brain-profile-summary) — 보드 39는 목업에서도 "2건 대기"라 상위 2만 요청한다.
+  fetchProfileSummary: async () => {
+    const res = await window.athena.invoke('athena:brain-profile-summary', { limit: 2 });
+    if (!res || !res.ok) throw new Error((res && res.error) || '성향 신호를 받지 못했다');
+    return Array.isArray(res.entries) ? res.entries : [];
+  },
+  // "추가" 클릭 → 시트 없이 채팅으로(43 원칙, shell.js 버스 — chat.js가 등록).
+  onAddSuggestion: (text) => {
+    if (window.AthenaShell && typeof window.AthenaShell.seedChatInput === 'function') {
+      window.AthenaShell.seedChatInput(text);
+    }
+  },
+  // 9단계 — 알람 센터. notifyRooms는 sidebar.js가 소유한다(세션 메모리) —
+  // window.AthenaNotify 다리로 읽기+"모두 읽음"만 받는다(단일 소유자 원칙).
+  fetchAlerts: () => (window.AthenaNotify ? window.AthenaNotify.list() : []),
+  markAllAlertsRead: () => { if (window.AthenaNotify) window.AthenaNotify.markAllRead(); },
+  getWsConnected: () => wsConnected,
+  // F-fix1 — 39번 상세 패널 "채팅에서 열기 ↗"(본편 이월 갭). 알림 방이 있으면
+  // sidebar.js의 selectNotifyRoom과 완전히 같은 경로(ack·opened 계측 포함)를
+  // 그 다리로 타고, 없으면 채팅 입력 포커스로 폴백한다(seedChatInput을 인자
+  // 없이 부르면 시드 문장 없이 포커스만 옮긴다 — 죽은 버튼 금지, P3).
+  onOpenInChat: (routineId) => {
+    const opened = !!(window.AthenaNotify && typeof window.AthenaNotify.selectRoom === 'function'
+      && window.AthenaNotify.selectRoom(routineId));
+    if (!opened && window.AthenaShell && typeof window.AthenaShell.seedChatInput === 'function') {
+      window.AthenaShell.seedChatInput();
+    }
+  },
+  // 10단계 — 실행 이력 드릴인. 6단계 GET /{id}/runs를 사람 클릭 전용 채널로.
+  fetchRuns: async (id) => {
+    const res = await window.athena.invoke('athena:routine-runs', { id });
+    return (res && res.ok && res.data && Array.isArray(res.data.runs)) ? res.data.runs : [];
+  },
+  // 5단계 — 드릴인 "30회 통계"의 "평균" 타일. avg_duration_ms는 runs 배열이
+  // 아니라 같은 응답의 다른 필드(4단계, 최근 30건 non-null 평균)라 별개
+  // 왕복으로 뗀다(fetchFiredToday와 같은 이유).
+  fetchAvgDuration: async (id) => {
+    const res = await window.athena.invoke('athena:routine-runs', { id });
+    return (res && res.ok && res.data && typeof res.data.avg_duration_ms === 'number') ? res.data.avg_duration_ms : null;
+  },
+  // F-stage5b-FE — 드릴인 "30회 통계"의 "발화→열람"·"이어진 대화" 타일.
+  // opened_rate·replied_count도 같은 /runs 응답의 다른 필드라 별개 왕복으로 뗀다.
+  fetchEngagement: async (id) => {
+    const res = await window.athena.invoke('athena:routine-runs', { id });
+    if (!res || !res.ok || !res.data) return null;
+    return {
+      openedRate: typeof res.data.opened_rate === 'number' ? res.data.opened_rate : null,
+      repliedCount: typeof res.data.replied_count === 'number' ? res.data.replied_count : null,
+    };
+  },
+  // F-stage9 — 말걸기 가드 패널. 저장(POST)은 이 패널이 아니라 채팅 확인
+  // 카드가 부른다(chat.js, 43 원칙 — 편집은 채팅 경로로만).
+  fetchNudgeGuard: async () => {
+    const res = await window.athena.invoke('athena:nudge-guard-get');
+    return (res && res.ok && res.data) ? res.data : null;
+  },
+  // 11단계 — "그래프 모드에서 근거 보기 →". 사이드바 모드 네비와 같은 두 걸음
+  // (캔버스 전환 + 네비 활성 표시)을 그대로 재현한다(sidebar.js 참고).
+  onOpenGraph: () => {
+    if (window.AthenaCanvasMode && typeof window.AthenaCanvasMode.setView === 'function') {
+      window.AthenaCanvasMode.setView('graph');
+    }
+    if (window.AthenaModeNav && typeof window.AthenaModeNav.setActive === 'function') {
+      window.AthenaModeNav.setActive('graph');
+    }
+  },
+});
+agentCanvas.mount();
+window.AthenaAgentCanvas = agentCanvas;
+
+// 9단계 — "● WS 연결됨"(알람 센터 라이브 컬럼)의 실 신호. main.js RoutineFeed의
+// onStatus를 이번에 처음 렌더러로 릴레이했다(이전엔 no-op). 검증 하네스
+// (ATHENA_CANVAS_SOURCE=fixture)는 피드 자체를 안 돌리므로 이벤트가 안 와도
+// 기본값 false(연결 안 됨)가 정직하다 — 지어내지 않는다(P3). wsConnected
+// 선언 자체는 위(createAgentCanvas 호출보다 먼저)에 있다 — 이유는 그 옆 주석.
+if (window.athena && typeof window.athena.on === 'function') {
+  window.athena.on('athena:routine-feed-status', (s) => {
+    wsConnected = !!(s && s.state === 'connected');
+    if (typeof agentCanvas.updateWsStatus === 'function') agentCanvas.updateWsStatus();
   });
 }
 

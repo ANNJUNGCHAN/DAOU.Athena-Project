@@ -34,6 +34,81 @@
 
   if (!$list) return; // shell.html 계약이 깨진 경우 — 조용히 물러난다(다른 영역을 막지 않는다).
 
+  // ---------- 모드 네비(리프 1.2.2, Paper 보드 37/44) ----------
+  // #graphPill을 대체한다 — 클릭이 캔버스 3영역을 바꾸는 유일한 사람 진입로다.
+  // window.AthenaCanvasMode는 canvas.js가 이 스크립트보다 나중에(shell.html 로드
+  // 순서) 세운다 — 그래서 모듈 로드 시점이 아니라 클릭 시점에만 참조한다(기존
+  // $newChat의 window.AthenaShell 참조와 같은 패턴, 이 파일 위 머리말 참고).
+  const modeNav = (window.AthenaLib && window.AthenaLib.SidebarModeNav)
+    ? window.AthenaLib.SidebarModeNav.createSidebarModeNav({
+        items: {
+          summary: document.getElementById('modeNavSummary'),
+          graph: document.getElementById('modeNavGraph'),
+          agent: document.getElementById('modeNavAgent'),
+        },
+        badge: document.getElementById('modeNavAgentBadge'),
+        onSelect: (view) => {
+          if (window.AthenaCanvasMode && typeof window.AthenaCanvasMode.setView === 'function') {
+            window.AthenaCanvasMode.setView(view);
+          }
+          // 에이전트모드 진입 시 라우틴 목록을 새로 받아온다(리프 1.2.2, 3단계) —
+          // loadAgentRoutines()가 안에서 renderList()까지 호출한다. 캔버스 쪽
+          // 통계·리스트도 같은 진입점에서 새로고침한다(4단계, canvas.js가
+          // window.AthenaAgentCanvas로 노출). 다른 모드는 라우틴 섹션과
+          // 무관하니 사이드바만 다시 그린다(대화 이력 복원).
+          if (view === 'agent') {
+            loadAgentRoutines();
+            if (window.AthenaAgentCanvas && typeof window.AthenaAgentCanvas.refresh === 'function') {
+              window.AthenaAgentCanvas.refresh();
+            }
+          } else {
+            renderList();
+          }
+        },
+      })
+    : null;
+
+  // 11단계(프로액티브, Paper 보드 42) — "그래프 모드에서 근거 보기 →"가 이
+  // 모드 네비를 그대로 재사용한다. setView만 부르면 캔버스는 그래프로
+  // 바뀌는데 이 네비의 활성 표시는 안 바뀌는 불일치가 생긴다 — setActive도
+  // 같이 노출한다(모드 네비 자신의 클릭 핸들러가 이미 하는 것과 동일한 순서).
+  if (modeNav) window.AthenaModeNav = { setActive: modeNav.setActive };
+
+  // 3단계(리프 1.2.2, Paper 보드 39 보강본) — 순수 포매팅/상태아이콘은
+  // agent-sidebar-list.js가 갖고 DOM은 여기서 조립한다(다른 make*Item과 같은 자리).
+  const agentSidebarList = window.AthenaLib && window.AthenaLib.AgentSidebarList;
+  let agentRoutinesCache = [];
+  let agentRoutinesRequestId = 0; // stale-응답 가드 — 아래 주석 참고.
+
+  function currentMode() {
+    return (window.AthenaCanvasMode && window.AthenaCanvasMode.state && window.AthenaCanvasMode.state.view) || 'summary';
+  }
+
+  // GET /api/v1/routines 실데이터(IPC 경유, 기존 athena:routines-list 채널 —
+  // chat.js의 #routineChip이 이미 쓰는 것과 동일) → active/paused만 우선 노출.
+  // 백엔드 미기동이면 조용히 빈 목록(없는 걸 있다고 꾸미지 않는다, #routineChip과 같은 태도).
+  //
+  // requestId로 낡은 응답을 버린다: 사용자가 에이전트모드를 짧게 오갔다 다시
+  // 들어오면 왕복 두 개가 동시에 떠 있을 수 있고, 네트워크 사정상 먼저 보낸
+  // 쪽이 나중에 돌아올 수 있다 — 그걸 그대로 적용하면 최신 화면이 낡은
+  // 데이터로 덮인다(실측: verify.js 3단계 검증에서 이 역전이 실제로 재현됨).
+  async function loadAgentRoutines() {
+    const requestId = ++agentRoutinesRequestId;
+    if (!agentSidebarList) { renderList(); return; }
+    let rows = [];
+    try {
+      const res = await window.athena.invoke('athena:routines-list');
+      const routines = res && res.ok && res.data && Array.isArray(res.data.routines)
+        ? res.data.routines : [];
+      rows = agentSidebarList.buildAgentSidebarRows(routines);
+    } catch {
+      rows = [];
+    }
+    if (requestId !== agentRoutinesRequestId) return; // 그 사이 더 최신 요청이 갔다 — 이 응답은 버린다.
+    agentRoutinesCache = rows;
+    renderList();
+  }
+
   const INITIAL_VISIBLE = 6; // "더 보기" 이전에 보이는 지난 7일 이전 항목 수(Paper 보드 04 실측)
 
   let conversationsCache = [];
@@ -61,8 +136,8 @@
     return node;
   }
 
-  function makeSectionLabel(text) {
-    const label = el('div', 'sidebar-section-label');
+  function makeSectionLabel(text, extraClass) {
+    const label = el('div', extraClass ? `sidebar-section-label ${extraClass}` : 'sidebar-section-label');
     label.textContent = text;
     return label;
   }
@@ -97,8 +172,44 @@
     return btn;
   }
 
+  // 43번 "새 작업은 채팅에서" 원칙과 합치시킨다(전체 자연어 플로우는 8단계 몫) —
+  // 여기서는 그 방향의 가장 얕은 형태로 채팅 입력에 포커스만 옮긴다. 시트·모달을
+  // 새로 만들지 않는다(43 원칙 위반 방지, P3 — 없는 기능을 암시하지 않는다).
+  function selectRoutineItem() {
+    if ($input) $input.focus();
+  }
+
+  function makeRoutineItem(row) {
+    const btn = el('button', 'sidebar-item is-routine');
+    btn.type = 'button';
+    btn.title = row.title;
+    if (agentSidebarList && row.icon === agentSidebarList.STATUS_ICON.paused) {
+      btn.classList.add('is-paused');
+    }
+    if (agentSidebarList && row.icon === agentSidebarList.STATUS_ICON.draft) {
+      btn.classList.add('is-draft'); // ◌ 점선 핑크(8단계, Paper 보드 43 실측)
+    }
+    const ic = el('span', 'sidebar-item-status-ic');
+    ic.textContent = row.icon.glyph;
+    ic.style.color = `var(${row.icon.colorVar})`;
+    btn.appendChild(ic);
+    const label = el('span', 'sidebar-item-label');
+    label.textContent = row.title;
+    btn.appendChild(label);
+    btn.addEventListener('click', () => selectRoutineItem(row));
+    return btn;
+  }
+
   function renderList() {
     while ($list.firstChild) $list.removeChild($list.firstChild);
+
+    // 에이전트모드 우선 노출(원칙3, Paper 보드 39 보강본) — 대화 이력보다
+    // 먼저 온다. 대화모드로 돌아오면(currentMode() !== 'agent') 이 블록을
+    // 건너뛰어 원래 이력이 그대로 복원된다 — 별도 복원 로직이 필요 없다.
+    if (currentMode() === 'agent' && agentRoutinesCache.length) {
+      $list.appendChild(makeSectionLabel('작업·알람', 'is-routine-caption'));
+      for (const row of agentRoutinesCache) $list.appendChild(makeRoutineItem(row));
+    }
 
     const q = searchQuery.trim().toLowerCase();
     const filtered = q
@@ -165,13 +276,37 @@
   }
 
   // ---------- 알림 파생 방(Paper 보드 08) ----------
-  // 세션 메모리만 — 앱을 다시 켜면 비어 있다(위 파일 머리말 참고).
+  // 7단계(F3-FE)부터는 "세션 메모리만"이 더 이상 정확하지 않다 — 배열 자체는
+  // 여전히 이 파일이 메모리에서만 들고 있지만(라우틴 *상태*의 이중 영속화는
+  // 여전히 안 한다, P4), "읽었는지"만은 6단계 read-marks가 백엔드에 영속화해
+  // 아래 hydrateNotifyRooms()가 기동 시 다시 채운다. 그래서 재시작해도 최근
+  // 발화·읽음 여부는 유지된다 — sub·title 같은 표시용 필드까지 영속화하는 건
+  // 아니다(그건 매번 routines 요약 뷰에서 다시 만든다).
   const notifyRooms = [];
+
+  // 에이전트 모드 네비 배지(원칙2) — notifyRooms의 !read 개수를 그대로 노출한다.
+  // notifyRooms 자체가 이미 "라우틴 상태의 파생물"이라 별도로 다시 세거나
+  // 디스크에 남기지 않는다(P3 — 이 파일 머리말과 같은 이유).
+  function updateAgentBadge() {
+    if (!modeNav) return;
+    modeNav.setBadgeCount(notifyRooms.filter((r) => !r.read).length);
+  }
 
   function routineEventTitle(event) {
     if (event && event.note) return String(event.note);
     if (event && event.routine_id) return `루틴 ${event.routine_id}`;
     return '알림';
+  }
+
+  // 9단계(알람 센터, Paper 보드 40) 알람 행의 부제 — event에 실제로 있는 필드만
+  // 조합한다(symbol·observed, routineTurnLib이 능동 턴 본문에 쓰는 것과 같은
+  // 필드). 지어낸 문구 없음(P3).
+  function routineEventSub(event) {
+    if (!event) return '';
+    const parts = [];
+    if (event.symbol != null) parts.push(String(event.symbol));
+    if (event.observed != null) parts.push(`관측 ${event.observed}`);
+    return parts.join(' · ');
   }
 
   function handleRoutineEvent(event) {
@@ -183,16 +318,26 @@
     if (existing) {
       existing.firedAt = firedAtMs;
       existing.title = routineEventTitle(event);
+      existing.sub = routineEventSub(event);
       existing.read = existing.id === selectedNotifyId;
     } else {
-      notifyRooms.unshift({ id, title: routineEventTitle(event), firedAt: firedAtMs, read: false, event });
+      notifyRooms.unshift({
+        id, title: routineEventTitle(event), sub: routineEventSub(event),
+        firedAt: firedAtMs, read: false, event,
+      });
     }
     renderList();
+    updateAgentBadge();
   }
 
   function selectNotifyRoom(id) {
     const room = notifyRooms.find((r) => r.id === id);
     if (!room) return;
+    // F-stage5b-FE — engagement.py의 "opened" 정의(능동 턴이 뜬 방을 사용자가
+    // 실제로 선택해 열람한 사건)와 맞추려면 이미 읽은 방을 다시 눌렀을 때는
+    // 세지 않는다 — 안 그러면 재클릭마다 opened가 쌓여 발화→열람 비율이
+    // 100%를 넘는 지어낸 숫자가 된다(engagement.py의 opened_rate 계산 참고).
+    const wasUnread = !room.read;
     room.read = true;
     selectedNotifyId = id;
     const d = new Date(room.firedAt);
@@ -201,6 +346,41 @@
     $roomTitle.textContent = room.title;
     $roomBanner.hidden = false;
     renderList();
+    updateAgentBadge();
+    // 7단계(F3-FE) — 6단계 read-marks에 남긴다. 화면은 이미 위에서 즉시
+    // 반영됐으니 실패해도 조용히 넘어간다(재조회 시 자연히 다시 unread로
+    // 보일 뿐 — 낙관적 갱신을 성공한 척 위장하지 않는다, P3).
+    if (window.athena && typeof window.athena.invoke === 'function') {
+      window.athena.invoke('athena:routine-ack', { id }).catch(() => {});
+      if (wasUnread) window.athena.invoke('athena:routine-engagement', { id, event: 'opened' }).catch(() => {});
+    }
+  }
+
+  // 7단계(F3-FE) — 기동 시 최근 발화한 라우틴으로 notifyRooms를 다시 채운다
+  // (agent-sidebar-list.js의 buildHydratedRooms, 순수 매핑만 거기서 하고 여기서는
+  // IPC 왕복 + notifyRooms 시드만 한다, 위 파일 머리말 DI 원칙). handleRoutineEvent가
+  // 실시간으로 이미 방을 만들었다면(레이스 — WS가 하이드레이션보다 먼저 뜬 경우)
+  // 그 항목은 건드리지 않는다.
+  async function hydrateNotifyRooms() {
+    if (!agentSidebarList || typeof agentSidebarList.buildHydratedRooms !== 'function') return;
+    let routines = [];
+    try {
+      const res = await window.athena.invoke('athena:routines-list');
+      routines = res && res.ok && res.data && Array.isArray(res.data.routines) ? res.data.routines : [];
+    } catch {
+      routines = [];
+    }
+    const hydrated = agentSidebarList.buildHydratedRooms(routines);
+    let changed = false;
+    for (const room of hydrated) {
+      if (notifyRooms.some((r) => r.id === room.id)) continue;
+      notifyRooms.push({ ...room, event: null });
+      changed = true;
+    }
+    if (!changed) return;
+    notifyRooms.sort((a, b) => b.firedAt - a.firedAt); // 최신 먼저 — handleRoutineEvent의 unshift와 같은 순서.
+    renderList();
+    updateAgentBadge();
   }
 
 
@@ -349,9 +529,35 @@
     }
   }
 
+  // ---------- 알람 센터 다리 (9단계, Paper 보드 40) ----------
+  // notifyRooms를 캔버스 레벨로 승격한다 — 소유자는 여전히 이 파일이다(세션
+  // 메모리, 위 머리말). 캔버스(agent-canvas.js)는 이 다리로 읽기+"모두 읽음"
+  // 액션만 받는다(단일 소유자 원칙, graph-mode/controller.js applyVisibility
+  // 주석과 같은 이유 — notifyRooms 소유자가 둘이면 결함이 재발한다).
+  window.AthenaNotify = {
+    // 얕은 복제 — 캔버스가 원본 배열/객체를 직접 변형 못 하게 한다.
+    list: () => notifyRooms.map((r) => ({ id: r.id, title: r.title, sub: r.sub || '', firedAt: r.firedAt, read: r.read })),
+    markAllRead: () => {
+      let changed = false;
+      for (const r of notifyRooms) { if (!r.read) { r.read = true; changed = true; } }
+      if (changed) { renderList(); updateAgentBadge(); }
+      return changed;
+    },
+    // F-fix1 — 39번 상세 패널 "채팅에서 열기 ↗"가 이 다리로 알림 방을 연다.
+    // 있으면 selectNotifyRoom과 완전히 같은 경로(ack·opened 계측 포함)를 그대로
+    // 타고, 없으면 false를 돌려줘 호출자가 채팅 포커스로 폴백하게 한다(단일
+    // 소유자 원칙 — 캔버스가 notifyRooms를 직접 뒤지지 않는다).
+    selectRoom: (id) => {
+      const found = notifyRooms.some((r) => r.id === id);
+      if (found) selectNotifyRoom(id);
+      return found;
+    },
+  };
+
   // ---------- 부트 ----------
   loadConversations();
   loadAccount();
+  hydrateNotifyRooms(); // 7단계 — 모드와 무관하게 항상 시도한다(알림 배지는 대화모드에서도 보인다).
   // 사이드바는 채팅 왕복(질의→답변)의 부산물을 반영할 뿐 그 자체가 실시간
   // 스트림을 갖지 않는다(대화 자체는 채팅 영역의 일이다) — 가벼운 폴링으로
   // 충분하다. 계좌 토큰 잔여시간도 같은 주기로 갱신한다.

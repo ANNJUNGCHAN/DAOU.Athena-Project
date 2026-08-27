@@ -107,11 +107,33 @@ class Settings(BaseSettings):
     brain_db_path: Path = Field(default_factory=lambda: Path.home() / ".athena" / "brain.sqlite3")
     routines_enabled: bool = False
     routines_poll_interval_seconds: float = 300.0
+    routines_schedule_poll_interval_seconds: float = 20.0
     routines_store_path: Path = Field(
         default_factory=lambda: Path.home() / ".athena" / "routines" / "routines.json"
     )
     routines_ledger_path: Path = Field(
         default_factory=lambda: Path.home() / ".athena" / "routines" / "ledger.jsonl"
+    )
+    routines_read_marks_path: Path = Field(
+        default_factory=lambda: Path.home() / ".athena" / "routines" / "read_marks.json"
+    )
+    # UI 텔레메트리(F2-스트레치) — ledger.jsonl과 별개 파일, ledger는 무수정(P4).
+    routines_engagement_path: Path = Field(
+        default_factory=lambda: Path.home() / ".athena" / "routines" / "engagement.jsonl"
+    )
+    # 브리핑 본문 스토어(R1) — engagement와 분리 소유(P4), briefings.py 참고.
+    routines_briefings_path: Path = Field(
+        default_factory=lambda: Path.home() / ".athena" / "routines" / "briefings.jsonl"
+    )
+    routines_briefing_content_max_chars: int = 4000
+    # ledger·engagement·briefings 90일 롤오버 보관 디렉터리 — 삭제 없음(archive.py).
+    routines_ledger_archive_dir: Path = Field(
+        default_factory=lambda: Path.home() / ".athena" / "routines" / "archive"
+    )
+    routines_ledger_archive_cutoff_days: int = 90
+    # 라우틴별이 아닌 전역 설정 — routines_enabled와 무관하게 항상 로드된다.
+    nudge_guard_path: Path = Field(
+        default_factory=lambda: Path.home() / ".athena" / "routines" / "nudge_guard.json"
     )
     # DART 공시 폴러 키 — 없으면 periodic 공시 루틴만 강등(realtime은 무관).
     dart_api_key: SecretStr | None = None

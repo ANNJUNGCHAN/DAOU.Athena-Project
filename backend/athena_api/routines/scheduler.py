@@ -13,16 +13,19 @@ import time
 from collections.abc import Awaitable, Callable
 from contextlib import suppress
 from dataclasses import dataclass, field
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime, timedelta, timezone
 from typing import Any
 
 from athena_api.routines.disclosure_source import (
     DartDisclosureSource,
     DisclosureSourceError,
 )
-from athena_api.routines.models import RoutineSpec
+from athena_api.routines.ledger import RoutineLedger
+from athena_api.routines.models import RoutineSpec, parse_schedule_value
 from athena_api.routines.store import RoutineStore
 from athena_api.routines.triggers import TriggerEngine, should_yield_to_conversation
+
+_KST = timezone(timedelta(hours=9))
 
 NotifyFn = Callable[[dict[str, Any]], Awaitable[None]]
 
@@ -34,6 +37,31 @@ _REAL_0B_FIELDS: dict[str, str] = {
     "228": "trade.strength",
     "851": "volume.prev_day_ratio",
 }
+
+
+def record_scheduled_fire(
+    spec: RoutineSpec,
+    ledger: RoutineLedger,
+    hhmm: str,
+    *,
+    reason: str = "예약 시각 도달",
+    threshold: float | bool | str | None = None,
+) -> dict[str, Any]:
+    """schedule.daily 발화를 ledger에 기록한다 — 정시 발화(run_schedule_once)와
+    캐치업 발화(catchup-fire 엔드포인트) 둘 다 이 헬퍼를 거친다(P4, 판정 조립
+    지점 단일화). threshold 기본값 None은 캐치업 경로(스펙의 조건값을 그대로
+    쓰면 되는 상황)를 단순화하기 위함 — 정시 경로는 반드시 spec.condition.value를
+    명시 전달한다(run_schedule_once 호출부). 반환값은 ledger.record()가 반환하는
+    dict(ts 포함, 서버 authoritative)."""
+    return ledger.record(
+        "fired",
+        routine_id=spec.id,
+        symbol=spec.symbol,
+        source=spec.condition.source,
+        observed=hhmm,
+        threshold=threshold if threshold is not None else spec.condition.value,
+        reason=reason,
+    )
 
 
 def _to_float(raw: Any) -> float | None:
@@ -86,17 +114,31 @@ class RoutineScheduler:
     disclosure: DartDisclosureSource | None = None
     subscribe_ticks: Callable[[], asyncio.Queue[dict[str, Any]]] | None = None
     unsubscribe_ticks: Callable[[asyncio.Queue[dict[str, Any]]], None] | None = None
+    on_expire: Callable[[RoutineSpec], Awaitable[None]] | None = None
     clock: Callable[[], float] = time.monotonic
+    schedule_poll_interval_s: float = 20.0
+    now_kst: Callable[[], datetime] = lambda: datetime.now(_KST)
+    # 90일 아카이브 롤오버(R3) — 일일 주기, 기존 3루프와 동형 패턴.
+    run_archive_once: Callable[[], None] | None = None
+    archive_poll_interval_s: float = 86400.0
     last_error: str | None = None
     _tasks: list[asyncio.Task[None]] = field(default_factory=list)
     _stopping: bool = False
     # routine_id → 근접(near) 진행 중 여부. 진입·이탈 각 1회만 notify하기 위한
     # 프로세스 로컬 상태(영속 안 함) — TriggerEngine._states와 같은 성격.
     _near_active: dict[str, bool] = field(default_factory=dict)
+    # 프로세스 로컬(영속 안 함, TriggerState와 동일한 트레이드오프) — 재기동하면
+    # 이 딕셔너리가 빈 상태로 시작돼 "오늘 이미 발화했다"는 사실을 잊는다.
+    # 그래서 재기동 직후 같은 날 한 번 더 발화할 수 있다 — 버그가 아니라 허용된
+    # 기존 한계다(계획 문서 Rev.3 "실행 시 참고" 참고).
+    _last_fired_date: dict[str, date] = field(default_factory=dict)
 
     async def start(self) -> None:
         self._stopping = False
         self._tasks.append(asyncio.create_task(self._periodic_loop()))
+        self._tasks.append(asyncio.create_task(self._schedule_loop()))
+        if self.run_archive_once is not None:
+            self._tasks.append(asyncio.create_task(self._archive_loop()))
         if self.subscribe_ticks is not None:
             self._tasks.append(asyncio.create_task(self._realtime_loop()))
 
@@ -111,20 +153,15 @@ class RoutineScheduler:
 
     # ---------- 공통 ----------
 
-    async def _handle_verdict(
-        self, spec: RoutineSpec, verdict: str | None, observed: Any
+    async def _fire(
+        self, spec: RoutineSpec, observed: Any, *, fired_at: str | None = None
     ) -> None:
-        was_near = self._near_active.get(spec.id, False)
-        if verdict == "near":
-            if not was_near:  # 진입 — 연속 근접 틱마다 다시 알리지 않는다
-                self._near_active[spec.id] = True
-                await self._notify_near(spec, active=True, observed=observed)
-            return
-        if was_near:  # 다른 판정(quiet·suppressed·fired)으로 넘어감 — 이탈 1회
-            self._near_active[spec.id] = False
-            await self._notify_near(spec, active=False, observed=observed)
-        if verdict != "fired":
-            return
+        """발화 알림 조립 — 조건-감시(_handle_verdict)와 벽시계(_schedule_loop)가 공유.
+
+        fired_at(선택)은 ledger에 실제로 기록된 ts다 — 예약 발화는 이 값이 브리핑
+        보고(fired_at)와 /runs 병합의 상관 키가 되므로 별도 now() 재계산으로
+        마이크로초가 어긋나면 병합이 조용히 실패한다(캐치업 경로와 동일한
+        "서버 authoritative 값 하나" 원칙). 조건-감시 경로는 상관 키가 없어 생략."""
         await self.notify(
             {
                 "type": "routine-fired",
@@ -136,7 +173,10 @@ class RoutineScheduler:
                 "threshold": spec.condition.value,
                 "note": spec.note,
                 "goal": spec.goal,
-                "fired_at": datetime.now(UTC).isoformat(),
+                "fired_at": fired_at or datetime.now(UTC).isoformat(),
+                # 브리핑 실행 설정(R1) — main이 별도 왕복 없이 즉시 받도록 동봉.
+                "briefing_model": spec.briefing_model,
+                "briefing_effort": spec.briefing_effort,
             }
         )
 
@@ -192,6 +232,22 @@ class RoutineScheduler:
             return
         await self._notify_near(spec, active=False, observed=None)
 
+    async def _handle_verdict(
+        self, spec: RoutineSpec, verdict: str | None, observed: Any
+    ) -> None:
+        was_near = self._near_active.get(spec.id, False)
+        if verdict == "near":
+            if not was_near:  # 진입 — 연속 근접 틱마다 다시 알리지 않는다
+                self._near_active[spec.id] = True
+                await self._notify_near(spec, active=True, observed=observed)
+            return
+        if was_near:  # 다른 판정(quiet·suppressed·fired)으로 넘어감 — 이탈 1회
+            self._near_active[spec.id] = False
+            await self._notify_near(spec, active=False, observed=observed)
+        if verdict != "fired":
+            return
+        await self._fire(spec, observed)
+
     async def _expire_pass(self) -> None:
         for spec in self.store.list_active():
             if spec.is_expired():
@@ -205,6 +261,8 @@ class RoutineScheduler:
                         "note": spec.note,
                     }
                 )
+                if self.on_expire is not None:
+                    await self.on_expire(spec)
 
     # ---------- realtime (WS 팬아웃) ----------
 
@@ -256,6 +314,7 @@ class RoutineScheduler:
         for spec in self.store.list_active():
             if spec.mode != "periodic":
                 continue
+            started = time.monotonic()
             try:
                 titles = await self.disclosure.fetch_new_titles(
                     spec.symbol, bgn_de=today, end_de=today
@@ -263,6 +322,69 @@ class RoutineScheduler:
             except DisclosureSourceError as exc:
                 self.last_error = str(exc)
                 continue
+            duration_ms = (time.monotonic() - started) * 1000
             for title in titles:
-                verdict = self.engine.evaluate(spec, title)
+                verdict = self.engine.evaluate(spec, title, duration_ms=duration_ms)
                 await self._handle_verdict(spec, verdict, title)
+
+    # ---------- schedule (벽시계 예약) ----------
+
+    # 경계(AC1) — 이 트랙이 하는 일은 여기까지다: 벽시계 매치 시 발화
+    # 알림(_fire, 능동 턴)과 ledger 기록뿐이다. 발화 이후 "브리핑 카드"를
+    # 자동으로 만드는 것(스케줄된 claude 턴 실행)은 이번 스코프가 아니다 —
+    # F1 확장선으로 별도 계획에 명시적으로 이연됐다(Rev.3 ADR,
+    # .omc/plans/agent-mode-followups-plan.md의 "F1 옵션 F1-B"). 예약이
+    # 뜨면 능동 턴만 뜨고, 실제 브리핑 내용은 사용자가 이어서 대화해야
+    # 만들어진다 — 이 파일이 대화 턴을 스스로 실행하는 일은 없다.
+    async def _schedule_loop(self) -> None:
+        while not self._stopping:
+            await asyncio.sleep(self.schedule_poll_interval_s)
+            await self.run_schedule_once()
+
+    async def run_schedule_once(self) -> None:
+        """벽시계 매치 1회분 — 테스트가 직접 부른다. TriggerEngine 미경유(§8) —
+        벽시계 트리거엔 near/suppressed 개념이 없다, 하루 1회는
+        `_last_fired_date`(프로세스 로컬, `TriggerState`와 동일한 트레이드오프)로
+        보장한다."""
+        now = self.now_kst()
+        today = now.date()
+        hhmm = now.strftime("%H:%M")
+        weekday = now.isoweekday()  # 1=월 .. 7=일
+        for spec in self.store.list_active():
+            if spec.mode != "scheduled":
+                continue
+            if self._last_fired_date.get(spec.id) == today:
+                continue
+            parsed = parse_schedule_value(spec.condition.value)
+            if parsed is None:
+                # rules.py가 draft 시점에 막았어야 한다 — 여기 도달하면 저장된
+                # 값이 손상된 것이다. 조용히 넘기지 않고 사유를 남긴다(프리모템 1).
+                self.last_error = (
+                    f"루틴 {spec.id}의 예약 형식이 올바르지 않다: "
+                    f"{spec.condition.value!r}"
+                )
+                continue
+            days, target_hhmm = parsed
+            if target_hhmm != hhmm:
+                continue
+            if days is not None and weekday not in days:
+                continue
+            self._last_fired_date[spec.id] = today
+            row = record_scheduled_fire(
+                spec,
+                self.engine.ledger,
+                hhmm,
+                reason=f"예약 시각 도달({target_hhmm})",
+                threshold=spec.condition.value,
+            )
+            # ledger에 실제로 쓴 ts를 그대로 이벤트에 싣는다 — 브리핑 보고·/runs
+            # 병합의 상관 키(위 _fire 독스트링, 캐치업 경로와 동일 원칙).
+            await self._fire(spec, hhmm, fired_at=row["ts"])
+
+    # ---------- archive (90일 롤오버, R3) ----------
+
+    async def _archive_loop(self) -> None:
+        assert self.run_archive_once is not None
+        while not self._stopping:
+            await asyncio.sleep(self.archive_poll_interval_s)
+            self.run_archive_once()

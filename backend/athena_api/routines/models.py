@@ -2,7 +2,11 @@
 
 소스 카탈로그가 이 모듈의 심장이다: 조건이 참조할 수 있는 값은 여기 등록된
 것뿐이고(화이트리스트), transport가 곧 감시 방식(mode)을 결정한다 —
-ws 필드는 틱 즉시(realtime-ws), 그 외 전부 주기(periodic). §8 이분법.
+ws 필드는 틱 즉시(realtime-ws), periodic은 주기 확인, clock은 벽시계
+예약(scheduled). §8 삼분법(원래 이분법에서 예약 트리거 추가로 확장).
+
+schedule.daily의 value 인코딩: "<요일>@<HH:MM>" — 요일은 "ALL"(매일)
+또는 ISO 요일 번호 콤마열(1=월..7=일, 예: "1,2,3,4,5@07:30").
 """
 
 from __future__ import annotations
@@ -12,12 +16,13 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
 from typing import Any, Literal
 
-Transport = Literal["ws", "periodic"]
-Mode = Literal["realtime-ws", "periodic"]
+Transport = Literal["ws", "periodic", "clock"]
+Mode = Literal["realtime-ws", "periodic", "scheduled"]
 
 _NUM_OPS = ("<", "<=", ">", ">=")
 _EQ_OPS = ("==",)
 _STR_OPS = ("contains",)
+_AT_OPS = ("at",)
 
 
 @dataclass(frozen=True)
@@ -45,6 +50,7 @@ SOURCES: dict[str, SourceSpec] = {
     "disclosure.title_keyword": SourceSpec(
         "periodic", "string", _STR_OPS, "공시 제목 키워드"
     ),
+    "schedule.daily": SourceSpec("clock", "string", _AT_OPS, "예약 시각(요일 지정)"),
 }
 
 RoutineStatus = Literal[
@@ -80,10 +86,44 @@ class Condition:
         }
 
 
+_TRANSPORT_TO_MODE: dict[Transport, Mode] = {
+    "ws": "realtime-ws",
+    "periodic": "periodic",
+    "clock": "scheduled",
+}
+
+
 def derive_mode(condition: Condition) -> Mode:
-    """§8 — mode는 소스의 transport에서 결정론적으로 유도된다."""
+    """§8 — mode는 소스의 transport에서 결정론적으로 유도된다(3분기 테이블)."""
     spec = SOURCES[condition.source]
-    return "realtime-ws" if spec.transport == "ws" else "periodic"
+    return _TRANSPORT_TO_MODE[spec.transport]
+
+
+def parse_schedule_value(value: str) -> tuple[frozenset[int] | None, str] | None:
+    """schedule.daily의 "<요일>@<HH:MM>" 파싱 — 요일 None은 매일(ALL) 의미.
+
+    형식 오류면 None(호출부가 판단 — draft 검증은 거부, 스케줄러는 스킵+기록).
+    rules.py의 형식 검증과 scheduler.py/api 양쪽의 다음 발화 시각 계산이
+    이 파서 하나를 공유한다 — 형식 정의가 두 곳으로 갈라지지 않게 한다.
+    """
+    try:
+        days_part, hhmm = value.split("@", 1)
+    except ValueError:
+        return None
+    if len(hhmm) != 5 or hhmm[2] != ":" or not hhmm[:2].isdigit() or not hhmm[3:].isdigit():
+        return None
+    hour, minute = int(hhmm[:2]), int(hhmm[3:])
+    if not (0 <= hour <= 23 and 0 <= minute <= 59):
+        return None
+    if days_part == "ALL":
+        return None, hhmm
+    try:
+        days = frozenset(int(d) for d in days_part.split(","))
+    except ValueError:
+        return None
+    if not days or not days.issubset(range(1, 8)):
+        return None
+    return days, hhmm
 
 
 def _utcnow() -> datetime:
@@ -104,6 +144,10 @@ class RoutineSpec:
     created_at: datetime = field(default_factory=_utcnow)
     approved_at: datetime | None = None
     goal: bool = False  # 목표가 도달 의도 — 승인 카드가 노출, 발화 시 FACE.GLAD 배선(CP1a)
+    # 예약 브리핑 실행 설정(R1) — None이면 실행 측(main)의 기본값을 따른다.
+    # 검증은 rules.validate_draft()가 담당한다(app/lib/main/model-prefs.js와 동기화).
+    briefing_model: str | None = None
+    briefing_effort: str | None = None
 
     @property
     def mode(self) -> Mode:
@@ -111,11 +155,11 @@ class RoutineSpec:
 
     def human_summary(self) -> str:
         spec = SOURCES[self.condition.source]
-        mode_text = (
-            "실시간 (WS) — 틱 즉시"
-            if self.mode == "realtime-ws"
-            else "주기 확인 — 최대 폴링 주기만큼 지연"
-        )
+        mode_text = {
+            "realtime-ws": "실시간 (WS) — 틱 즉시",
+            "periodic": "주기 확인 — 최대 폴링 주기만큼 지연",
+            "scheduled": "예약 — 지정 요일·시각",
+        }[self.mode]
         exp = " [실값 미확인 필드]" if spec.experimental else ""
         return (
             f"{self.symbol} · {spec.label} {self.condition.op} "
@@ -135,6 +179,8 @@ class RoutineSpec:
             "mode": self.mode,  # 파생값이지만 읽는 쪽 편의로 함께 저장
             "created_at": self.created_at.isoformat(),
             "approved_at": self.approved_at.isoformat() if self.approved_at else None,
+            "briefing_model": self.briefing_model,
+            "briefing_effort": self.briefing_effort,
         }
 
     @classmethod
@@ -158,6 +204,9 @@ class RoutineSpec:
             created_at=datetime.fromisoformat(raw["created_at"]),
             approved_at=datetime.fromisoformat(approved) if approved else None,
             goal=bool(raw.get("goal", False)),  # 구버전 저장분 하위호환 — 기본 False
+            # 옛 jsonl에는 키 자체가 없다 — .get()으로 하위호환.
+            briefing_model=raw.get("briefing_model"),
+            briefing_effort=raw.get("briefing_effort"),
         )
 
     def is_expired(self, now: datetime | None = None) -> bool:
