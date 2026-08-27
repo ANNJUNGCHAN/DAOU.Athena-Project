@@ -10,7 +10,7 @@ const accounts = require('./lib/main/accounts');
 const prefs = require('./lib/main/prefs');
 const modelPrefs = require('./lib/main/model-prefs');
 const codexConfig = require('./lib/main/codex-config');
-const { computeShellPlacement } = require('./lib/main/window-placement');
+const { computeShellPlacement, clampCenterToWorkArea } = require('./lib/main/window-placement');
 // 알림 오브 창(2026-08-24 리프 1.3.1) — 창 기하·옵션은 전부 저 모듈이 진다.
 const orbWindow = require('./lib/main/orb-window');
 const mcpCli = require('./lib/main/mcp-cli');
@@ -816,8 +816,14 @@ ipcMain.on('athena:orb-open-shell', (e, { event } = {}) => {
 ipcMain.on('athena:orb-drag-move', (e, { dx, dy } = {}) => {
   if (!orbWin || orbWin.isDestroyed()) return;
   const bounds = orbWin.getBounds();
-  const nx = Math.round(bounds.x + (Number(dx) || 0));
-  const ny = Math.round(bounds.y + (Number(dy) || 0));
+  const tx = Math.round(bounds.x + (Number(dx) || 0));
+  const ty = Math.round(bounds.y + (Number(dy) || 0));
+  // K4 결정(2026-08-27 질의응답) — 창 중심이 workArea 밖으로 못 나가게 자른다
+  // (최소 절반은 항상 보인다). 위치 영속화가 없어 밖으로 나가면 복귀 수단이 앱
+  // 재시작뿐이었다. 목적지 중심에 가장 가까운 디스플레이 기준이라 모니터 사이
+  // 이동은 그대로 된다 — 클램프 산수는 window-placement.js(순수 함수)에 있다.
+  const wa = screen.getDisplayNearestPoint({ x: tx + Math.round(bounds.width / 2), y: ty + Math.round(bounds.height / 2) }).workArea;
+  const { x: nx, y: ny } = clampCenterToWorkArea({ x: tx, y: ty, width: bounds.width, height: bounds.height }, wa);
   if (nx === bounds.x && ny === bounds.y) return;
   orbWin.setPosition(nx, ny);
 });

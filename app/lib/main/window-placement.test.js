@@ -2,7 +2,7 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { computeShellPlacement } = require('./window-placement');
+const { computeShellPlacement, clampCenterToWorkArea } = require('./window-placement');
 
 // 부팅 설계 치수(main.js DESIGN) 그대로 — 중앙 캔버스 1120 + 우측 채팅 400 = 1520.
 const DIMS = { width: 1520, height: 760 };
@@ -74,4 +74,38 @@ test('computeShellPlacement: 반환값에 짝 배치의 잔재가 없다(회귀 
   const p = computeShellPlacement('left', workArea, DIMS);
   assert.deepEqual(Object.keys(p), ['bounds']);
   assert.deepEqual(Object.keys(p.bounds).sort(), ['height', 'width', 'x', 'y']);
+});
+
+// ── clampCenterToWorkArea — 오브 드래그 클램프(2026-08-27 병합 점검 K4 결정) ──
+// 접힌 오브 76×76 기준. 규칙은 하나 — 창 **중심**이 workArea 밖으로 못 나간다.
+const ORB = { width: 76, height: 76 };
+const WA = { x: 0, y: 0, width: 1920, height: 1040 };
+
+test('clampCenterToWorkArea: 안쪽 이동은 손대지 않는다', () => {
+  const p = clampCenterToWorkArea({ x: 500, y: 300, ...ORB }, WA);
+  assert.deepEqual(p, { x: 500, y: 300 });
+});
+
+test('clampCenterToWorkArea: 왼쪽·위로 벗어나면 중심이 경계에 걸리는 자리까지만 간다', () => {
+  const p = clampCenterToWorkArea({ x: -5000, y: -5000, ...ORB }, WA);
+  // 중심 = x + 38이 workArea 왼끝(0)에 걸리는 x = -38 — 절반은 항상 보인다.
+  assert.deepEqual(p, { x: -38, y: -38 });
+});
+
+test('clampCenterToWorkArea: 오른쪽·아래도 같은 규칙이다', () => {
+  const p = clampCenterToWorkArea({ x: 99999, y: 99999, ...ORB }, WA);
+  assert.deepEqual(p, { x: 1920 - 38, y: 1040 - 38 });
+});
+
+test('clampCenterToWorkArea: 음수 원점 모니터(왼쪽 보조)의 workArea 오프셋을 그대로 따른다', () => {
+  const wa = { x: -1920, y: 0, width: 1920, height: 1080 };
+  const inside = clampCenterToWorkArea({ x: -1000, y: 200, ...ORB }, wa);
+  assert.deepEqual(inside, { x: -1000, y: 200 });
+  const out = clampCenterToWorkArea({ x: -9999, y: 200, ...ORB }, wa);
+  assert.equal(out.x, -1920 - 38);
+});
+
+test('clampCenterToWorkArea: 펼침 크기(400×640)도 같은 중심 규칙 — 크기만 다르다', () => {
+  const p = clampCenterToWorkArea({ x: 99999, y: 0, width: 400, height: 640 }, WA);
+  assert.equal(p.x, 1920 - 200);
 });

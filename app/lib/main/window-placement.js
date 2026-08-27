@@ -29,4 +29,16 @@ function computeShellPlacement(dir, workArea, dims) {
   return { bounds: { x, y, width: dims.width, height: dims.height } };
 }
 
-module.exports = { computeShellPlacement };
+// 오브 드래그 클램프(2026-08-27 병합 점검 K4 결정) — 창 **중심**이 workArea 안에
+// 남도록 x/y만 자른다(최소 절반은 항상 보인다). target: {x,y,width,height}(이동
+// 목적지와 현재 창 크기), workArea: 목적지 중심에 가장 가까운 디스플레이의
+// workArea — 호출자가 디스플레이 판정을 하므로 모니터 사이 이동은 막히지 않는다.
+function clampCenterToWorkArea(target, workArea) {
+  const halfW = target.width / 2;
+  const halfH = target.height / 2;
+  const x = Math.round(Math.min(Math.max(target.x, workArea.x - halfW), workArea.x + workArea.width - halfW));
+  const y = Math.round(Math.min(Math.max(target.y, workArea.y - halfH), workArea.y + workArea.height - halfH));
+  return { x, y };
+}
+
+module.exports = { computeShellPlacement, clampCenterToWorkArea };

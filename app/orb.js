@@ -401,8 +401,9 @@
     clearTimeout(saccadeTimer);
     if (reduceMotion.matches) return;
     saccadeTimer = setTimeout(() => {
-      // 커서를 쳐다보는 중이면 쉰다 — 둘이 같은 층을 써서 겹치면 시선이 튄다.
-      if (face !== FACE.IDLE || cursorHeld) { scheduleSaccade(); return; }
+      // 커서를 쳐다보는 중이거나 드래그 관성이 시선을 쥔 중이면 쉰다 — 같은 층을
+      // 써서 겹치면 시선이 튄다(드래그 조건은 2026-08-27 결함③ 커서 가드와 짝).
+      if (face !== FACE.IDLE || cursorHeld || isDragGazeActive()) { scheduleSaccade(); return; }
       const [dx, dy] = SACCADE_DIRS[Math.floor(Math.random() * SACCADE_DIRS.length)];
       setGaze(dx * SACCADE_AMP, dy * SACCADE_AMP * 0.85, SACCADE_OUT);
       setTimeout(() => {
@@ -466,6 +467,10 @@
   window.athena.on('athena:orb-cursor', (p) => {
     if (reduceMotion.matches) return;
     if (!p || typeof p.dx !== 'number' || typeof p.dy !== 'number') { releaseCursor(); return; }
+    // 드래그 확정 중엔 관성 시선(pushDragGaze)이 --orb-gx/gy를 소유한다 — 커서
+    // 추적이 같은 변수를 덮어쓰면 board-32 "관성"이 커서 방향과 경합해 흔들린다
+    // (사케이드의 cursorHeld 층 규칙과 같은 원리, 2026-08-27 병합 점검 결함③).
+    if (isDragGazeActive()) { cursorHeld = false; return; }
     lastCursorAt = Date.now();
 
     // 다가오면 깬다 — 잠듦은 시선을 안 쓰는 표정이라 여기서만 상태를 건드린다.
@@ -661,6 +666,10 @@
   let dragMoved = false;
   let justDragged = false;
   let dragGazeTimer = null;
+
+  // 문턱을 넘어 확정된 드래그 중인가 — 커서 추적·사케이드가 관성 시선에 양보할 때
+  // 쓴다(위 두 곳에서 부른다 — 함수 선언이라 앞 줄에서 불러도 안전하다).
+  function isDragGazeActive() { return dragPointerId !== null && dragMoved; }
 
   function pushDragGaze(mx, my) {
     const mag = Math.hypot(mx, my) || 1;
@@ -928,9 +937,14 @@
 
   // 알림에서 셸로 가는 경로. 셸 창을 앞으로 가져오고 대표 카드를 중앙 캔버스에
   // 쌓는다 — main이 기존 facts 봉투로 접어 보낸다(신규 카드 타입 0개).
+  // 같은 발화 이벤트의 카드는 한 번만 접어 보낸다(2026-08-27 질의응답 결정) —
+  // 재클릭의 뜻은 "보여줘"지 "하나 더"가 아니다. event 없는 전송은 main이 이미
+  // 지원한다("대화창으로 가기"와 같은 모양 — 셸만 앞으로 가져온다).
+  let moreSentEvent = null;
   $more.addEventListener('click', () => {
     if (!current) return;
-    window.athena.send('athena:orb-open-shell', { event: current });
+    window.athena.send('athena:orb-open-shell', moreSentEvent === current ? {} : { event: current });
+    moreSentEvent = current;
     setExpanded(false);
   });
 
