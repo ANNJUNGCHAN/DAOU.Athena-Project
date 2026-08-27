@@ -255,6 +255,20 @@ html, body {
 #orbRoot[data-face="frown"] .orb-eye-l { transform: rotate(-24deg); }
 #orbRoot[data-face="frown"] .orb-eye-r { transform: rotate(24deg); }
 
+/* 생각 중 — 질의 진행(query running). board-32: 눈 모양은 기본과 같은 32×21
+ * 그대로다 — 스피너를 대신하는 건 모양이 아니라 **시선**이다. 흰 도형이 위를
+ * 훑는다(orb.js startThinkSweep이 --orb-gx/gy를 좌우로 흔든다). */
+
+/* 발화 — 두 도형이 동그래진다. 화면당 신호는 여기 하나다(board-32 section C). */
+#orbRoot[data-alert="fired"] .orb-eye,
+#orbRoot[data-face="fired"] .orb-eye { width: 22.6%; height: 23%; border-radius: 50%; }
+
+/* 시무룩·우는 — 위 발화 규칙 **뒤에** 와야 한다: 미확인 알림이 있으면
+ * data-alert="fired"도 함께 서는데, 그 결합 규칙이 .orb-eye를 22.6%/23%로
+ * 고정한다 — 같은 특정성이라 소스 순서로 승자가 갈리므로, 시무룩·우는 규칙이
+ * 그 뒤에 있어야 각자의 모양(평평한 막대·눈물)으로 이긴다. 기존 결함(af8bb81
+ * 이전부터 있던 순서 문제, 실사용에서 100% 발화 모양에 덮였다) — 아래 surprise
+ * 규칙과 같은 패턴으로 이 자리로 옮겼다(2026-08-27 갭 클로징, board-30⑨⑪). */
 /* 시무룩 — 루틴이 만료로 끝남. 평평한 가로 막대 — 옛 '미안'의 만료 쪽. */
 #orbRoot[data-face="mopey"] .orb-eye { width: 22.6%; height: 11.5%; border-radius: 999px; }
 
@@ -277,14 +291,6 @@ html, body {
   border-radius: 0 50% 50% 50%;
   transform: translateX(-50%) rotate(45deg);
 }
-
-/* 생각 중 — 질의 진행(query running). board-32: 눈 모양은 기본과 같은 32×21
- * 그대로다 — 스피너를 대신하는 건 모양이 아니라 **시선**이다. 흰 도형이 위를
- * 훑는다(orb.js startThinkSweep이 --orb-gx/gy를 좌우로 흔든다). */
-
-/* 발화 — 두 도형이 동그래진다. 화면당 신호는 여기 하나다(board-32 section C). */
-#orbRoot[data-alert="fired"] .orb-eye,
-#orbRoot[data-face="fired"] .orb-eye { width: 22.6%; height: 23%; border-radius: 50%; }
 
 /* 놀람 — 발화 중 급변(변동성 급등, board-31⑤ 캡션). 위 발화 규칙 **뒤에**
  * 와야 한다: 미확인 알림이 있으면 data-alert="fired"도 함께 서는데, 그
