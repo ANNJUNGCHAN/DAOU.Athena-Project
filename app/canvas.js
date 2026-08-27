@@ -1527,6 +1527,13 @@ function fmtWon(raw) {
 // 백엔드에만 잇는다. 전환 진입로는 사이드바 모드 네비 하나다(보드 45 v5에서
 // 스트립 필 줄 전면 제거) — 브레인이 꺼져 있어도 그래프 모드 자체는 열 수 있고,
 // 못 쓰는 이유는 캔버스 안에서 정직하게 보여준다(controller.js renderUnavailable).
+
+// 숨은 연관(surprising-connections) 캐시(스텝14) — loadHiddenLinks()(아래, 보드
+// 06/07 §9 카드용으로 이미 있던 fetch)가 채우고 graphMode.draw()/노드 선택이
+// 재사용한다. 이중 fetch 금지(스텝11 보고에 대한 리드 지침) — 그래프 지도의
+// 핑크 점선·컨텍스트 패널의 "숨은" 관계 행 전부 이 한 번의 fetch에서 나온다.
+let lastSurprisingConnections = [];
+
 const graphMode = window.AthenaLib.GraphModeController.createGraphModeController({
   store: window.AthenaLib.GraphModeStore,
   layout: window.AthenaLib.GraphClusterLayout,
@@ -1534,6 +1541,7 @@ const graphMode = window.AthenaLib.GraphModeController.createGraphModeController
   prefs: window.AthenaLib.GraphModePrefs,
   elements: {
     summary: document.getElementById('mosaic'),
+    // 가시성 전용 — graphMode.applyVisibility() 하나만 이 hidden을 건드린다.
     graph: document.getElementById('graphCanvas'),
     // 보드 07 성향 신호 표 — 그래프 표면이라 답변 모드에선 숨는다(아래 §요약 뷰
     // 배선 주석·US-007 참고). graphMode.applyVisibility() 하나가 소유한다.
@@ -1546,6 +1554,19 @@ const graphMode = window.AthenaLib.GraphModeController.createGraphModeController
     canvasRegion: document.getElementById('canvasRegion'),
     // 모드별 채팅 헤더(보드 38) — 그래프 모드에서만 보인다.
     chatHead: document.getElementById('chatModeHead'),
+    // 그래프 뷰 본문 — 렌더·클릭위임·크기측정 전용(가시성은 위 graph가 계속
+    // 소유). #graphCanvas 안 #graphHeader의 영구 형제라 다시 그려도 헤더는 안 지워진다.
+    graphBody: document.getElementById('graphBody'),
+    // 공통 패널(보드 07/15) — #graphSummaryTableArea의 영구 형제. renderSelection()이
+    // hidden·텍스트만 갱신하고, 표 리로드가 이 노드를 건드릴 방법이 구조적으로 없다.
+    panel: document.getElementById('graphPanel'),
+    // 그래프 뷰 헤더 메타 텍스트(보드 14/15, 스텝9) — controller.js가
+    // draw()/redrawFromCache() 끝에서 state.stage로 계산해 채운다.
+    graphHeaderMeta: document.getElementById('graphHeaderMeta'),
+    // 지도 안내 바(보드 14 §1.3, 스텝9) — 1단계에서만 보인다. hidden 소유자는
+    // controller.js 하나(renderGraphHeader) — #graphCanvas 전체가 숨으면
+    // 자식이라 함께 자동으로 숨으므로 이 로직은 1↔2단계 전환에만 관여한다.
+    mapGuide: document.getElementById('graphMapGuide'),
   },
   // main은 실패를 {ok:false}로 돌려준다. 컨트롤러는 **예외**로 실패를 안다 —
   // 여기서 바꿔주지 않으면 `{ok:false}`가 정상 응답으로 흘러 빈 그래프가 그려지고,
@@ -1556,6 +1577,27 @@ const graphMode = window.AthenaLib.GraphModeController.createGraphModeController
     return res;
   },
   onError: (err) => console.warn('[graph-mode] cluster-map 실패', err),
+  // 공통 패널 CTA "채팅에서 답하기"(보드 07 §10-5, 스텝8) — 06 확인 필요 배너의
+  // onConfirmCta와 같은 최소 구현(새 기능 발명 없음, 입력창 포커스만).
+  onPanelCta: () => {
+    const inputEl = document.getElementById('input');
+    if (inputEl) inputEl.focus();
+  },
+  // 스텝14 — 스텝11(숨은 연관 군집 쌍)·13(숨은 연관 엔티티 쌍)의 실배선. 위
+  // lastSurprisingConnections 캐시를 그대로 읽는다(이중 fetch 없음).
+  getSurprisingConnections: () => lastSurprisingConnections,
+  // 그래프 노드 선택 시 성향 신호 표와 같은 profile-summary 항목을 재사용한다
+  // (이중 fetch 금지) — graphSummaryTable은 이 파일 아래에서 선언되지만 이
+  // 함수는 나중에(사용자가 실제로 노드를 고를 때) 불리므로 문제없다.
+  getProfileSummaryEntries: () => graphSummaryTable.getEntries(),
+  // §10-4 최근 변화(엔티티 타임라인, WP-G) — cluster-map처럼 부팅 시 1회
+  // 캐시하는 패턴을 못 쓴다(entity_id별 호출당 API). 실패는 예외로 알린다 —
+  // fetchClusterMap과 같은 이유({ok:false}가 정상 응답으로 흐르면 안 된다).
+  fetchEntityTimeline: async (entityId) => {
+    const res = await window.athena.invoke('athena:brain-entity-timeline', { entityId });
+    if (!res || !res.ok) throw new Error((res && res.error) || '엔티티 타임라인을 받지 못했다');
+    return res.events;
+  },
 });
 window.AthenaGraphMode = graphMode;
 // 부팅을 순수 답변 모드로 고정한다(US-007) — 정적 HTML의 기본 hidden 속성이
@@ -1590,12 +1632,129 @@ if (modeNavEl && modeNavChatEl && modeNavGraphEl) {
 // 답변 모드에 그래프 콘텐츠가 새어 보였다(실측). 이 파일은 데이터 로드
 // 시점(ready)만 결정하고, 보이고 숨기는 건 절대 안 건드린다.
 const graphSummaryTable = window.AthenaLib.GraphSummaryTable.createSummaryTableController({
-  container: document.getElementById('graphSummaryTable'),
+  // 표 전용 렌더 대상 — #graphSummaryTable(가시성 전용) 안 #graphSummaryTableArea.
+  // #graphPanel은 그 바깥 형제라 표 리로드(renderSummaryTable의 통째 비움)가
+  // 패널을 건드리지 않는다(스텝0-2 소유권 계약).
+  container: document.getElementById('graphSummaryTableArea'),
   limit: 5, // 보드 07 "성향 신호 상위 5"
   fetchProfileSummary: ({ limit } = {}) => window.athena.invoke('athena:brain-profile-summary', { limit }),
   selectEntity: (entityId, panelData) => graphMode.selectEntity(entityId, panelData),
   onError: (err) => console.warn('[graph-mode] profile-summary 실패', err),
+  // 히어로(보드 06 §5)·확인 필요 배너(§6, 06 전용) — 스텝3. 배너 개수원은
+  // loadEmptyCanvasExtras()가 캔버스 빈 상태 힌트에 이미 쓰는 것과 같은 IPC다.
+  heroContainer: document.getElementById('graphSummaryHero'),
+  bannerContainer: document.getElementById('graphConfirmBanner'),
+  fetchSuggestedQuestions: () => window.athena.invoke('athena:brain-suggested-questions'),
+  // CTA "채팅에서 답하기" — 새 기능을 발명하지 않는다, 입력창에 포커스만 준다.
+  onConfirmCta: () => {
+    const inputEl = document.getElementById('input');
+    if (inputEl) inputEl.focus();
+  },
 });
+
+// --- 요약/그래프 뷰 헤더 배선 (보드 06/07 §4-1,4-3 / 14 §1.2 — 스텝2·스텝9) ---
+//
+// "요약"/"그래프" 서브뷰 토글 — #dot/#graphPill의 그래프 기능 진입·이탈
+// (graphMode.toggle())과는 다른 축이다. graphMode.setSurface()가 store 상태
+// (state.surface)를 바꾸고, hidden은 계속 applyVisibility() 하나가 소유한다
+// (스텝2-보정 — 두 표면이 동시에 hidden=false였던 z-index 임시조치를 걷어냈다,
+// canvas.css의 .graph-surface-back 삭제 참고). 헤더가 두 곳(#graphSummaryHeader
+// ·#graphHeader)에 있어 탭은 4개지만 store 상태는 하나 — 이 함수 하나로 양쪽을
+// 동기화한다(스텝16 사이드바 모드 네비도 같은 축을 쓸 예정, z-index 금지).
+const summaryViewTabEl = document.getElementById('summaryViewTab');
+const graphViewTabEl = document.getElementById('graphViewTab');
+const graphHeaderSummaryTabEl = document.getElementById('graphHeaderSummaryTab');
+const graphHeaderMapTabEl = document.getElementById('graphHeaderMapTab');
+function updateSurfaceTabs() {
+  const showGraph = graphMode.state.surface === window.AthenaLib.GraphModeStore.SURFACE_MAP;
+  [summaryViewTabEl, graphHeaderSummaryTabEl].forEach((el) => {
+    if (!el) return;
+    el.classList.toggle('is-active', !showGraph);
+    el.setAttribute('aria-selected', showGraph ? 'false' : 'true');
+  });
+  [graphViewTabEl, graphHeaderMapTabEl].forEach((el) => {
+    if (!el) return;
+    el.classList.toggle('is-active', showGraph);
+    el.setAttribute('aria-selected', showGraph ? 'true' : 'false');
+  });
+}
+// setSurface()는 hidden 갱신(applyVisibility())을 내부 await 이전에 동기로
+// 끝낸다 — 탭의 활성 스타일도 그 직후 바로 갱신한다(await로 미루면 draw()의
+// 네트워크 왕복이 끝날 때까지 탭이 안 눌린 것처럼 보인다, 실측으로 발견).
+function wireSurfaceTab(el, surface) {
+  if (!el) return;
+  el.addEventListener('click', () => {
+    graphMode.setSurface(surface);
+    updateSurfaceTabs();
+  });
+}
+wireSurfaceTab(summaryViewTabEl, window.AthenaLib.GraphModeStore.SURFACE_SUMMARY);
+wireSurfaceTab(graphViewTabEl, window.AthenaLib.GraphModeStore.SURFACE_MAP);
+wireSurfaceTab(graphHeaderSummaryTabEl, window.AthenaLib.GraphModeStore.SURFACE_SUMMARY);
+wireSurfaceTab(graphHeaderMapTabEl, window.AthenaLib.GraphModeStore.SURFACE_MAP);
+
+// "최근 갱신"(06 §4-1) — entries[].observed_at 중 가장 최신값으로만 채운다. Paper
+// 목업 "12분 전"을 리터럴로 박지 않는다(§0 정직한 빈 데이터 정책) — 항목이 없거나
+// 유효한 시각이 하나도 없으면 자리를 숨긴다. 상대 시간 포맷은 새로 만들지 않고
+// 능동 턴 배지가 이미 쓰는 relativeText를 재사용한다(routine-turn.js).
+function renderSummaryUpdatedAt(entries) {
+  const el = document.getElementById('summaryUpdatedAt');
+  if (!el) return;
+  const list = Array.isArray(entries) ? entries : [];
+  let latestMs = null;
+  for (const entry of list) {
+    const t = entry && Date.parse(entry.observed_at);
+    if (Number.isFinite(t) && (latestMs === null || t > latestMs)) latestMs = t;
+  }
+  if (latestMs === null) {
+    el.hidden = true;
+    el.textContent = '';
+    return;
+  }
+  const relative = window.AthenaLib.RoutineTurn.relativeText(new Date(latestMs).toISOString(), Date.now());
+  el.hidden = !relative;
+  el.textContent = relative ? `최근 갱신 ${relative}` : '';
+}
+
+// 테마 군집 섹션(보드 06 §8/07 §8-2, 스텝6) — cluster-map을 재사용한다(이미
+// graphMode.fetchClusterMap이 쓰는 것과 같은 IPC, 여기서는 별도로 다시
+// 부른다 — 그래프 뷰를 안 열어도 요약 뷰에서 이 카드가 보여야 하므로 graphMode
+// 내부 캐시에 기대지 않는다). 실패해도 표 자체는 이미 그려졌으니 조용히
+// 숨긴다(§0 정책 — 지어낸 카드를 보여주지 않는다).
+async function loadThemeClusters() {
+  const container = document.getElementById('graphThemeClusters');
+  if (!container) return;
+  let res;
+  try {
+    res = await window.athena.invoke('athena:brain-cluster-map');
+  } catch (err) {
+    console.warn('[graph-mode] cluster-map(테마 군집) 실패', err);
+    return;
+  }
+  if (!res || !res.ok) return;
+  const clusters = window.AthenaLib.ThemeClusters.groupThemeClusters(res);
+  window.AthenaLib.ThemeClusters.renderThemeClusters(container, clusters);
+}
+
+// 숨은 연관 섹션(보드 06 §9/07 §9-2, 스텝7) — athena:brain-surprising-connections
+// (이번 스텝에서 신설한 IPC, main.js/preload.js 참고). 실패해도 조용히 숨긴다
+// (§0 정책 — 지어낸 항목을 보여주지 않는다).
+async function loadHiddenLinks() {
+  const container = document.getElementById('graphHiddenLinks');
+  if (!container) return;
+  let res;
+  try {
+    res = await window.athena.invoke('athena:brain-surprising-connections');
+  } catch (err) {
+    console.warn('[graph-mode] surprising-connections(숨은 연관) 실패', err);
+    return;
+  }
+  if (!res || !res.ok) return;
+  // 스텝14 — 그래프 지도(핑크 점선)·컨텍스트 패널("숨은" 관계 행)이 재사용할
+  // 캐시를 여기서 채운다(위 lastSurprisingConnections 선언 참고).
+  lastSurprisingConnections = Array.isArray(res.connections) ? res.connections : [];
+  window.AthenaLib.HiddenLinks.renderHiddenLinks(container, res.connections);
+}
 
 // 모드 칩은 항상 보이지만, 컨트롤러는 아직 "못 씀"으로 가정한 채 태어난다
 // (controller.js 기본값) — 이 프로브가 브레인 상태를 확인해 바로잡는다. 프로브 전에
@@ -1609,7 +1768,9 @@ const graphSummaryTable = window.AthenaLib.GraphSummaryTable.createSummaryTableC
     // 여기서는 데이터를 미리 당겨올지만 결정한다(그래프 모드로 전환했을 때 바로
     // 보이도록 하는 프리페치 — 안 보이는 동안 부르는 낭비는 loadEmptyCanvasExtras와
     // 같은 기존 관례).
-    if (ready) graphSummaryTable.load();
+    if (ready) graphSummaryTable.load().then(renderSummaryUpdatedAt);
+    if (ready) loadThemeClusters();
+    if (ready) loadHiddenLinks();
     // 빈 상태(보드 05) 숫자·CTA·힌트 — 같은 ready 확인에 얹는다(왕복 추가 없음).
     if (ready) loadEmptyCanvasExtras();
   } catch (err) {

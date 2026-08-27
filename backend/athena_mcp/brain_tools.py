@@ -108,6 +108,19 @@ def builtin_tool_defs() -> list[types.Tool]:
     ]
 
 
+# brain.py의 _MODEL_GATE_DETAIL과 짝인 마커 — exposeToModel 게이트 차단 503을
+# 브레인 미기동 503과 구분한다(G-I3).
+_EXPOSE_GATE_DETAIL = "expose-to-model-disabled"
+
+
+def _is_expose_gate_denial(response: httpx.Response) -> bool:
+    try:
+        payload = response.json()
+    except ValueError:
+        return False
+    return isinstance(payload, dict) and payload.get("detail") == _EXPOSE_GATE_DETAIL
+
+
 async def dispatch(
     arguments: dict[str, Any], http_client: httpx.AsyncClient
 ) -> types.CallToolResult:
@@ -134,7 +147,15 @@ async def dispatch(
 
     if response.status_code == 503:
         # 브레인은 선택적 기능이다. 꺼져 있는 것과 고장난 것을 구분해 말해야 모델이
-        # "데이터가 없다"와 "물어볼 수 없다"를 뒤섞지 않는다.
+        # "데이터가 없다"와 "물어볼 수 없다"를 뒤섞지 않는다. 같은 503이라도
+        # exposeToModel 게이트 차단(WP-I, detail 마커는 brain.py의
+        # _MODEL_GATE_DETAIL과 짝)은 "미기동"과 다시 구분한다 — 사용자가 노출을
+        # 꺼 둔 상태를 기동 문제처럼 말하면 안 된다.
+        if _is_expose_gate_denial(response):
+            return _blocked(
+                "설정의 exposeToModel 토글이 꺼져 있어 성향 그래프를 조회할 수 없다. "
+                "성향 데이터가 없다고 단정하지 마라 — 사용자가 모델 노출을 꺼 둔 것이다."
+            )
         return _blocked(
             "투자의 뇌가 아직 준비되지 않았다(설정에서 꺼져 있거나 기동 중). "
             "성향 데이터가 없다고 단정하지 마라."

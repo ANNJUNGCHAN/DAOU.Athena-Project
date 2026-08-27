@@ -18,6 +18,7 @@ CHATS_PATH = "/api/v1/brain/chats"
 CONVERSATIONS_PATH = "/api/v1/brain/conversations"
 PROFILE_SUMMARY_PATH = "/api/v1/brain/profile-summary"
 RESET_PATH = "/api/v1/brain/reset-and-restart"
+ENTITY_TIMELINE_PATH = "/api/v1/brain/analysis/entity-timeline"
 SECRET_MARKER = "지난주에 삼성전자 100주를 매수하고 싶다는 비밀스러운 계획"
 
 
@@ -462,6 +463,21 @@ def test_cluster_map_carries_a_revision_and_sorted_nodes(seeded_client: TestClie
     assert ids, "그래프가 비어 있으면 이 테스트가 아무것도 재지 않는다"
 
 
+def test_cluster_map_includes_representative_labels_for_every_cluster(
+    seeded_client: TestClient,
+) -> None:
+    """A2 배선 확인 — cluster_representative_labels가 모든 군집에 대해 실제로 실린다."""
+    body = seeded_client.get(
+        "/api/v1/brain/analysis/cluster-map", headers=_headers()
+    ).json()
+    labels = body["cluster_representative_labels"]
+    clusters_present = {node["cluster"] for node in body["nodes"]}
+    assert labels, "군집이 있으면 라벨도 있어야 한다"
+    assert {int(k) for k in labels} == clusters_present
+    for label in labels.values():
+        assert " · " in label, f"형식이 '대표멤버 · kind'가 아니다: {label!r}"
+
+
 def test_god_nodes_limit_is_clamped_instead_of_erroring(seeded_client: TestClient) -> None:
     """잘못된 상한이 500으로 새지 않는다 — 분석 함수는 `limit<=0`에 ValueError를 던진다."""
     for limit in (0, -5, 10_000):
@@ -549,3 +565,439 @@ def test_surprising_connections_reuses_the_cached_clusters(
     ):
         assert seeded_client.get(path, headers=_headers()).status_code == 200
     assert projector.cluster_builds == before + 1
+
+
+# --- surprise_score: additive 상대 놀라움 점수 (WP-B) -----------------------------------
+
+
+async def _seed_two_cliques_with_a_bridge(app) -> None:
+    """완전그래프 둘을 다리 하나로 잇는다 — surprising_connections가 이 다리를 잡아야 한다."""
+    from athena_api.brain import (
+        Confidence,
+        Entity,
+        EntityKind,
+        Relation,
+        SourceKind,
+        SourceRecord,
+        SourceTier,
+        entity_id,
+        relation_id,
+    )
+
+    store = app.state.brain_store
+    now = datetime(2026, 8, 25, 3, 0, tzinfo=UTC)
+
+    def make_entity(kind: object, name: str) -> Entity:
+        return Entity(id=entity_id(kind, name), kind=kind, name=name, created_at=now, updated_at=now)
+
+    def make_relation(kind: str, src: Entity, tgt: Entity) -> Relation:
+        return Relation(
+            id=relation_id(kind, src.id, tgt.id),
+            kind=kind,
+            source_entity_id=src.id,
+            target_entity_id=tgt.id,
+            confidence=Confidence.EXTRACTED,
+            tier=SourceTier.CONVERSATIONAL,
+            source_id="s1",
+            observed_at=now,
+            extracted_at=now,
+        )
+
+    left = tuple(make_entity(EntityKind.THEME, f"좌{i}") for i in range(4))
+    right = tuple(make_entity(EntityKind.COMPANY, f"우{i}") for i in range(4))
+    relations: list[Relation] = []
+    for group in (left, right):
+        for index, node in enumerate(group):
+            for other in group[index + 1 :]:
+                relations.append(make_relation("relates_to", node, other))
+    relations.append(make_relation("relates_to", left[0], right[0]))
+
+    await store.upsert_source(
+        SourceRecord(
+            id="s1",
+            kind=SourceKind.CONVERSATION,
+            text="대화 본문",
+            fingerprint="fp-s1",
+            occurred_at=now,
+            ingested_at=now,
+        )
+    )
+    await store.apply_extraction("s1", "fp-s1", (*left, *right), tuple(relations))
+
+
+@pytest.fixture
+def surprising_client(tmp_path: Path):
+    app = create_app(_brain_settings(tmp_path))
+    with TestClient(app) as client:
+        client.portal.call(_seed_two_cliques_with_a_bridge, app)  # type: ignore[attr-defined]
+        yield client
+
+
+def test_surprising_connections_response_includes_surprise_score(
+    surprising_client: TestClient,
+) -> None:
+    """지어낸 값이 아니라 backend가 낸 [0,1] 상대 점수가 응답 JSON에 실린다."""
+    body = surprising_client.get(
+        "/api/v1/brain/analysis/surprising-connections", headers=_headers()
+    ).json()
+    connections = body["connections"]
+    assert connections, "다리가 하나 있으므로 최소 1건은 나와야 한다"
+    for item in connections:
+        assert set(item) == {
+            "source_entity_id",
+            "source_name",
+            "target_entity_id",
+            "target_name",
+            "kinds",
+            "source_cluster",
+            "target_cluster",
+            "surprise_score",
+        }
+        assert 0.0 <= item["surprise_score"] <= 1.0
+
+
+# --- edge_details: additive 엣지 메타데이터 (스텝13-보정) -------------------------------
+
+
+async def _seed_two_distinct_edges(app) -> None:
+    """엣지 둘 — 각자 다른 kind/tier/confidence라 값이 relation에서 그대로 나오는지 잰다."""
+    from athena_api.brain import (
+        INVESTOR_PROFILE_ENTITY_ID,
+        INVESTOR_PROFILE_NAME,
+        Confidence,
+        Entity,
+        EntityKind,
+        Relation,
+        SourceKind,
+        SourceRecord,
+        SourceTier,
+        entity_id,
+        relation_id,
+    )
+
+    store = app.state.brain_store
+    now = datetime(2026, 8, 25, 3, 0, tzinfo=UTC)
+    profile = Entity(
+        id=INVESTOR_PROFILE_ENTITY_ID,
+        kind=EntityKind.INVESTOR_PROFILE,
+        name=INVESTOR_PROFILE_NAME,
+        created_at=now,
+        updated_at=now,
+    )
+    samsung = Entity(
+        id=entity_id(EntityKind.SECURITY, "삼성전자"),
+        kind=EntityKind.SECURITY,
+        name="삼성전자",
+        created_at=now,
+        updated_at=now,
+    )
+    theme = Entity(
+        id=entity_id(EntityKind.THEME, "고배당주"),
+        kind=EntityKind.THEME,
+        name="고배당주",
+        created_at=now,
+        updated_at=now,
+    )
+    await store.upsert_source(
+        SourceRecord(
+            id="s1",
+            kind=SourceKind.CONVERSATION,
+            text="대화 본문",
+            fingerprint="fp-s1",
+            occurred_at=now,
+            ingested_at=now,
+        )
+    )
+    await store.apply_extraction(
+        "s1",
+        "fp-s1",
+        (profile, samsung, theme),
+        (
+            Relation(
+                id=relation_id("owns", profile.id, samsung.id),
+                kind="owns",
+                source_entity_id=profile.id,
+                target_entity_id=samsung.id,
+                confidence=Confidence.EXTRACTED,
+                tier=SourceTier.DETERMINISTIC,
+                source_id="s1",
+                observed_at=now,
+                extracted_at=now,
+            ),
+            Relation(
+                id=relation_id("interested_in", profile.id, theme.id),
+                kind="interested_in",
+                source_entity_id=profile.id,
+                target_entity_id=theme.id,
+                confidence=Confidence.AMBIGUOUS,
+                tier=SourceTier.CONVERSATIONAL,
+                source_id="s1",
+                observed_at=now,
+                extracted_at=now,
+            ),
+        ),
+    )
+
+
+@pytest.fixture
+def edge_detail_client(tmp_path: Path):
+    app = create_app(_brain_settings(tmp_path))
+    with TestClient(app) as client:
+        client.portal.call(_seed_two_distinct_edges, app)  # type: ignore[attr-defined]
+        yield client
+
+
+def test_cluster_map_edge_details_carry_kind_tier_confidence_from_relations(
+    edge_detail_client: TestClient,
+) -> None:
+    """edge_details는 projection이 이미 싣는 값을 그대로 낸다 — 새로 계산하지 않는다."""
+    from athena_api.brain import INVESTOR_PROFILE_ENTITY_ID, EntityKind, entity_id
+
+    body = edge_detail_client.get(
+        "/api/v1/brain/analysis/cluster-map", headers=_headers()
+    ).json()
+    profile_id = INVESTOR_PROFILE_ENTITY_ID
+    samsung_id = entity_id(EntityKind.SECURITY, "삼성전자")
+    theme_id = entity_id(EntityKind.THEME, "고배당주")
+
+    details = body["edge_details"]
+    assert len(details) == 2
+    for detail in details:
+        assert set(detail) == {"source", "target", "kinds", "tier", "confidence"}
+
+    by_pair = {(d["source"], d["target"]): d for d in details}
+    owns_pair = tuple(sorted((profile_id, samsung_id)))
+    interested_pair = tuple(sorted((profile_id, theme_id)))
+    assert set(by_pair) == {owns_pair, interested_pair}
+
+    owns_detail = by_pair[owns_pair]
+    assert owns_detail["kinds"] == ["owns"]
+    assert owns_detail["tier"] == "deterministic"
+    assert owns_detail["confidence"] == "EXTRACTED"
+
+    interested_detail = by_pair[interested_pair]
+    assert interested_detail["kinds"] == ["interested_in"]
+    assert interested_detail["tier"] == "conversational"
+    assert interested_detail["confidence"] == "AMBIGUOUS"
+
+    # edges와 edge_details가 같은 pair 목록·같은 순서에서 나온다는 계약.
+    assert body["edges"] == [list(pair) for pair in sorted([owns_pair, interested_pair])]
+
+
+def test_cluster_map_edge_details_merge_kinds_on_the_same_pair(
+    seeded_client: TestClient,
+) -> None:
+    """무연결이 아니라 실제 데이터를 쓰는 seeded_client에서도 응답 계약이 안 깨진다."""
+    body = seeded_client.get(
+        "/api/v1/brain/analysis/cluster-map", headers=_headers()
+    ).json()
+    assert len(body["edge_details"]) == len(body["edges"]), (
+        "edge_details와 edges는 같은 엣지 집합이어야 한다"
+    )
+    for detail in body["edge_details"]:
+        assert detail["kinds"], "kind가 최소 1개는 있어야 한다"
+        assert detail["tier"] in {"deterministic", "conversational"}
+        assert detail["confidence"] in {"EXTRACTED", "INFERRED", "AMBIGUOUS"}
+
+
+# --- entity-timeline: 소규모 신설 엔드포인트 (WP-C) --------------------------------------
+
+
+async def _seed_one_owns_relation(app) -> None:
+    from athena_api.brain import (
+        INVESTOR_PROFILE_ENTITY_ID,
+        INVESTOR_PROFILE_NAME,
+        Confidence,
+        Entity,
+        EntityKind,
+        Relation,
+        SourceKind,
+        SourceRecord,
+        SourceTier,
+        entity_id,
+        relation_id,
+    )
+
+    store = app.state.brain_store
+    now = datetime(2026, 8, 25, 3, 0, tzinfo=UTC)
+    profile = Entity(
+        id=INVESTOR_PROFILE_ENTITY_ID,
+        kind=EntityKind.INVESTOR_PROFILE,
+        name=INVESTOR_PROFILE_NAME,
+        created_at=now,
+        updated_at=now,
+    )
+    samsung = Entity(
+        id=entity_id(EntityKind.SECURITY, "삼성전자"),
+        kind=EntityKind.SECURITY,
+        name="삼성전자",
+        created_at=now,
+        updated_at=now,
+    )
+    await store.upsert_source(
+        SourceRecord(
+            id="s1",
+            kind=SourceKind.CONVERSATION,
+            text="대화 본문",
+            fingerprint="fp-s1",
+            occurred_at=now,
+            ingested_at=now,
+        )
+    )
+    await store.apply_extraction(
+        "s1",
+        "fp-s1",
+        (profile, samsung),
+        (
+            Relation(
+                id=relation_id("owns", profile.id, samsung.id),
+                kind="owns",
+                source_entity_id=profile.id,
+                target_entity_id=samsung.id,
+                confidence=Confidence.EXTRACTED,
+                tier=SourceTier.CONVERSATIONAL,
+                source_id="s1",
+                observed_at=now,
+                extracted_at=now,
+            ),
+        ),
+    )
+
+
+@pytest.fixture
+def entity_timeline_client(tmp_path: Path):
+    app = create_app(_brain_settings(tmp_path))
+    with TestClient(app) as client:
+        client.portal.call(_seed_one_owns_relation, app)  # type: ignore[attr-defined]
+        yield client
+
+
+def test_entity_timeline_returns_events_for_a_known_entity(
+    entity_timeline_client: TestClient,
+) -> None:
+    from athena_api.brain import INVESTOR_PROFILE_ENTITY_ID
+
+    body = entity_timeline_client.get(
+        ENTITY_TIMELINE_PATH,
+        headers=_headers(),
+        params={"entity_id": INVESTOR_PROFILE_ENTITY_ID},
+    ).json()
+    assert body["entity_id"] == INVESTOR_PROFILE_ENTITY_ID
+    assert body["events"], "owns 관계가 하나 있으므로 최소 1건은 나와야 한다"
+    event = body["events"][0]
+    assert set(event) == {
+        "seq",
+        "at",
+        "revision",
+        "op",
+        "subject_id",
+        "object_id",
+        "relation",
+        "confidence_before",
+        "confidence_after",
+        "source_id",
+    }
+
+
+def test_entity_timeline_requires_the_bearer(entity_timeline_client: TestClient) -> None:
+    """기존 라우트 관례와 동일 — 헤더 자체가 없으면 422, 틀린 토큰이면 401."""
+    assert (
+        entity_timeline_client.get(
+            ENTITY_TIMELINE_PATH, params={"entity_id": "entity:x"}
+        ).status_code
+        == 422
+    )
+    assert (
+        entity_timeline_client.get(
+            ENTITY_TIMELINE_PATH,
+            headers={"Authorization": "Bearer wrong"},
+            params={"entity_id": "entity:x"},
+        ).status_code
+        == 401
+    )
+
+
+def test_entity_timeline_is_empty_for_an_unknown_entity(
+    entity_timeline_client: TestClient,
+) -> None:
+    body = entity_timeline_client.get(
+        ENTITY_TIMELINE_PATH,
+        headers=_headers(),
+        params={"entity_id": "entity:doesnotexist"},
+    ).json()
+    assert body["events"] == []
+
+
+def test_entity_timeline_503s_while_brain_disabled() -> None:
+    with _disabled_client() as client:
+        response = client.get(
+            ENTITY_TIMELINE_PATH, headers=_headers(), params={"entity_id": "entity:x"}
+        )
+    assert response.status_code == 503
+
+
+# --- WP-F F4/F5: cluster_ai_labels — lazy+백그라운드 채움 ------------------------------
+
+CLUSTER_MAP_PATH = "/api/v1/brain/analysis/cluster-map"
+
+
+class _SlowLlm:
+    """지연 주입 fake — 미스가 응답을 지연시키지 않는지(G-F3) 시간으로 잰다."""
+
+    def __init__(self, delay: float) -> None:
+        self.calls = 0
+        self._delay = delay
+
+    async def complete(self, prompt: str) -> bytes:
+        self.calls += 1
+        import asyncio
+
+        await asyncio.sleep(self._delay)
+        return '{"label": "AI 라벨"}'.encode()
+
+
+def test_cluster_ai_labels_first_miss_is_empty_and_fast_then_cached(
+    seeded_client: TestClient,
+) -> None:
+    import time
+
+    app = seeded_client.app  # type: ignore[attr-defined]
+    app.state.brain_cluster_labeling_llm_client = _SlowLlm(delay=0.5)
+    start = time.monotonic()
+    first = seeded_client.get(CLUSTER_MAP_PATH, headers=_headers()).json()
+    elapsed = time.monotonic() - start
+    assert first["cluster_ai_labels"] == {}, "첫 미스는 필드를 비운 채 즉시 반환한다"
+    assert elapsed < 0.4, f"미스가 LLM 왕복({elapsed:.2f}s)을 기다리면 안 된다"
+    # 캐시 미스 직후 in-flight 집합에 태스크가 추가돼 있어야 한다(참조 보관).
+    assert app.state.cluster_labeling_tasks, "백그라운드 태스크 참조가 보관된다"
+    # 완료 대기 — done_callback이 집합에서 자동 제거한다.
+    deadline = time.monotonic() + 5
+    while app.state.cluster_labeling_tasks and time.monotonic() < deadline:
+        time.sleep(0.05)
+    assert not app.state.cluster_labeling_tasks, "완료된 태스크는 집합에서 자동 제거된다"
+    second = seeded_client.get(CLUSTER_MAP_PATH, headers=_headers()).json()
+    assert second["cluster_ai_labels"], "캐시가 채워진 뒤 재요청은 라벨을 싣는다"
+    assert all(v == "AI 라벨" for v in second["cluster_ai_labels"].values())
+
+
+def test_cluster_ai_labels_stay_empty_when_labeling_is_dormant(
+    seeded_client: TestClient,
+) -> None:
+    # G-F1 — LLM 미설정(client None)이면 필드는 항상 빈 dict이고 스폰도 없다.
+    app = seeded_client.app  # type: ignore[attr-defined]
+    assert app.state.brain_cluster_labeling_llm_client is None
+    body = seeded_client.get(CLUSTER_MAP_PATH, headers=_headers()).json()
+    assert body["cluster_ai_labels"] == {}
+    assert not app.state.cluster_labeling_tasks
+
+
+def test_cluster_ai_label_spawn_respects_inflight_cap(seeded_client: TestClient) -> None:
+    llm = _SlowLlm(delay=30)
+    app = seeded_client.app  # type: ignore[attr-defined]
+    app.state.brain_cluster_labeling_llm_client = llm
+    # 상한이 이미 찬 상태를 흉내낸다 — 새 미스는 스폰을 건너뛰고 폴백만 반환한다.
+    app.state.cluster_labeling_tasks = {object() for _ in range(4)}
+    body = seeded_client.get(CLUSTER_MAP_PATH, headers=_headers()).json()
+    assert body["cluster_ai_labels"] == {}
+    assert llm.calls == 0, "상한 도달 시 태스크를 만들지 않는다"
+    assert len(app.state.cluster_labeling_tasks) == 4

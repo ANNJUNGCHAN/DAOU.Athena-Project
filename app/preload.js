@@ -53,6 +53,15 @@ const INVOKE_CHANNELS = new Set([
   'athena:brain-profile-summary',
   // 캔버스 빈 상태(보드 05) "확인이 필요한 것 N건" 힌트 — 되물을 것들. 읽기 전용이다.
   'athena:brain-suggested-questions',
+  // 그래프 모드 요약 뷰 "숨은 연관"(스텝7) — 군집 경계를 넘는 연결. 읽기 전용이다.
+  'athena:brain-surprising-connections',
+  // 엔티티 타임라인(WP-C 배선, WP-G 소비) — 선택 패널 §10-4 "최근 변화"가
+  // 부른다(controller.js fetchEntityTimeline). 읽기 전용이다.
+  'athena:brain-entity-timeline',
+  // exposeToModel 실반영(WP-I I4) — 토글 값을 main prefs에 영속하고 backend
+  // 게이트(POST /settings/expose-to-model)에 즉시 민다. 쓰기지만 대상은 로컬
+  // 게이트 상태 하나뿐이다.
+  'athena:settings:expose-to-model:set',
   // 오브 대화 모드(2026-08-26 board-33) — 셸의 커맨드바가 부르는 runLiveQuery와
   // 완전히 같은 파이프라인을 오브에서 부르는 다리. orb.js가 셸 숨김일 때만 쓴다
   // (게이트는 athena:shell-visibility, scripts/gates/check-orb.mjs가 잰다).

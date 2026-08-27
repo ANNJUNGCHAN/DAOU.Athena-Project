@@ -1,6 +1,7 @@
 'use strict';
 
 const crypto = require('crypto');
+const prefs = require('./prefs');
 
 const DEFAULT_BACKEND_URL = 'http://127.0.0.1:8010';
 
@@ -37,17 +38,61 @@ async function fetchBrainStatus({ mdlog } = {}) {
 
 async function refreshBrainReady(opts) {
   brainReadyCache = await fetchBrainStatus(opts);
+  // WP-I(G-I6) — backend는 기동 시 게이트를 안전측 False로 시작하므로(lifespan.py),
+  // 브레인 준비를 확인한 이 자리에서 저장된 exposeToModel 값을 밀어 넣어야
+  // 재기동·재연결 후에도 토글 상태가 실제 게이트에 반영된다. 실패는 이 폴링을
+  // 막지 않는다 — 다음 준비 확인 때 다시 민다.
+  if (brainReadyCache) pushExposeToModel(opts).catch(() => {});
   return brainReadyCache;
+}
+
+// exposeToModel 현재값을 backend 게이트에 민다(WP-I I4). prefs 조회가 안 되는
+// 환경(순수 node --test)이나 토큰 미설정 배포에서는 조용히 건너뛴다 — 밀 값이
+// 없거나 밀 방법이 없는 것이지 실패가 아니다.
+async function pushExposeToModel({ mdlog } = {}) {
+  const token = getBearerToken();
+  if (!token) return false;
+  let enabled;
+  try {
+    enabled = prefs.get().exposeToModel === true;
+  } catch {
+    return false;
+  }
+  try {
+    const res = await fetch(`${getBackendUrl()}/api/v1/settings/expose-to-model`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ enabled }),
+    });
+    if (!res.ok && mdlog) mdlog(`history-sink: expose-to-model 동기화 실패 status=${res.status}`);
+    return res.ok;
+  } catch (err) {
+    if (mdlog) mdlog(`history-sink: expose-to-model 동기화 예외 — ${String((err && err.message) || err)}`);
+    return false;
+  }
 }
 
 function isBrainReadyCached() {
   return brainReadyCache === true;
 }
 
-// 시도 조건(계획 §2(g)) — 토큰이 없거나 브레인이 준비 안 됐으면 시도 자체를
-// 안 한다("해당 없음"과 "실패"의 구분 — 이 경우엔 배지도 없다).
+// WP-D1(그래프 후속 계획) — collectChat이 꺼져 있으면 저장 자체를 시도하지
+// 않는다(원문 미적재). prefs 조회 자체가 실패하면(예: 순수 node --test 환경 —
+// electron의 app 모듈이 없다) 기존 시도 조건만 적용되게 열어 둔다(fail-open) —
+// 이 게이트는 명시적으로 꺼졌을 때만 막는다.
+function collectChatEnabled() {
+  try {
+    return prefs.get().collectChat !== false;
+  } catch {
+    return true;
+  }
+}
+
+// 시도 조건(계획 §2(g)) — 토큰이 없거나 브레인이 준비 안 됐거나 collectChat이
+// 꺼져 있으면 시도 자체를 안 한다("해당 없음"과 "실패"의 구분 — 이 경우엔
+// 배지도 없다).
 function canAttemptSave() {
-  return !!getBearerToken() && isBrainReadyCached();
+  return !!getBearerToken() && isBrainReadyCached() && collectChatEnabled();
 }
 
 async function postChatMessage({ conversationId, role, text, messageId, occurredAt }) {
@@ -93,6 +138,7 @@ module.exports = {
   getBearerToken,
   fetchBrainStatus,
   refreshBrainReady,
+  pushExposeToModel,
   isBrainReadyCached,
   canAttemptSave,
   saveChatMessage,

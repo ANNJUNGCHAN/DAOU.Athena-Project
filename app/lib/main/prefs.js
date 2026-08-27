@@ -13,6 +13,15 @@ const PREF_DEFAULTS = {
   // md 스케일이므로(FONT_SIZES 선언부 주석 참고) 기본값은 'md'가 맞다.
   fontSize: 'md',
   glassLevel: 'default',
+  // WP-D1(그래프 후속 계획) — false면 history-sink.js가 대화 저장 자체를
+  // 건너뛴다(원문 미적재). settings-cards.js의 그래프 설정 카드(localStorage)와
+  // 이름은 같지만 이 값이 main 프로세스에서 실제로 게이팅하는 원본이다.
+  collectChat: true,
+  // WP-I I4 — backend 게이트(POST /settings/expose-to-model)에 미는 원본.
+  // 기본값은 렌더러 카드(settings-cards.js GRAPH_SETTINGS_DEFAULTS)와 같은
+  // true다 — backend 기동 초기값이 안전측 False(G-I5)라, 재동기화가 닿기
+  // 전까지는 게이트가 닫혀 있다.
+  exposeToModel: true,
 };
 
 // 글자 크기 5단계(2026-08-19 사용자 지시 "글자가 너무 큼") — 값은 tokens.css의

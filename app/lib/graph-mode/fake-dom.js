@@ -14,13 +14,25 @@ function fakeNode(name) {
     nodeName: name,
     attrs: {},
     children: [],
-    textContent: '',
+    _text: '',
     hidden: false,
     clientWidth: 800,
     clientHeight: 600,
     _listeners: {},
     get firstChild() {
       return this.children[0] || null;
+    },
+    // 실제 DOM처럼 자식이 있으면 재귀로 이어붙인 문자열, 없으면 리프 텍스트를
+    // 낸다(controller.js가 스텝8에서 panel을 appendChild로 조립하기 시작하며
+    // 필요해졌다 — 예전엔 textContent를 직접 대입하는 리프 노드만 있었다).
+    // 대입은 실제 DOM과 같이 기존 자식을 전부 지운다.
+    get textContent() {
+      if (this.children.length === 0) return this._text;
+      return this.children.map((c) => c.textContent).join('');
+    },
+    set textContent(value) {
+      this._text = value;
+      this.children = [];
     },
     setAttribute(key, value) {
       this.attrs[key] = value;
@@ -30,12 +42,15 @@ function fakeNode(name) {
     },
     appendChild(child) {
       this.children.push(child);
+      child.parentNode = this;
       return child;
     },
     removeChild(child) {
       this.children = this.children.filter((c) => c !== child);
+      child.parentNode = null;
       return child;
     },
+    parentNode: null,
     // controller.test.js가 노드 클릭 배선을 검증하는 데만 쓴다 — 버블링은 없다,
     // 이 스텁이 흉내내는 건 이 리포가 실제로 붙이는 리스너 패턴(개별 바인딩)뿐이다.
     addEventListener(type, handler) {
@@ -45,6 +60,30 @@ function fakeNode(name) {
       const handlers = this._listeners[event && event.type] || [];
       handlers.forEach((handler) => handler(event));
       return true;
+    },
+    // controller.js의 applyVisibility()가 모드 칩에 .is-active를 토글한다(스텝1) —
+    // attrs.class를 read/write해 querySelectorAll의 클래스 파싱과 같은 자료를 공유한다.
+    get classList() {
+      const node = this;
+      const read = () => String(node.attrs.class || '').split(/\s+/).filter(Boolean);
+      const write = (list) => { node.attrs.class = list.join(' '); };
+      return {
+        add(name) {
+          const list = read();
+          if (!list.includes(name)) write([...list, name]);
+        },
+        remove(name) {
+          write(read().filter((c) => c !== name));
+        },
+        toggle(name, force) {
+          const shouldHave = force === undefined ? !read().includes(name) : Boolean(force);
+          if (shouldHave) this.add(name); else this.remove(name);
+          return shouldHave;
+        },
+        contains(name) {
+          return read().includes(name);
+        },
+      };
     },
     // '.graph-node' 같은 단일 클래스 셀렉터만 지원한다 — 두 테스트가 쓰는 전부다.
     querySelectorAll(selector) {

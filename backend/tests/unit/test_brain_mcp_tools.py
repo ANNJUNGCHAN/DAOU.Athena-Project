@@ -208,3 +208,54 @@ def test_the_tool_is_registered_in_the_builtin_set() -> None:
     from athena_mcp import routine_tools
 
     assert routine_tools.ROUTINE_TOOL in names
+
+
+async def test_an_expose_gate_denial_is_distinguished_from_not_ready() -> None:
+    """같은 503이라도 "사용자가 노출을 꺼 뒀다"(WP-I 게이트)와 "미기동"은 다르다."""
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(503, json={"detail": "expose-to-model-disabled"})
+
+    async with _client(handler) as client:
+        result = await brain_tools.dispatch({"action": "profile"}, client)
+
+    assert result.isError
+    text = result.content[0].text
+    assert "exposeToModel" in text
+    assert "단정하지 마라" in text
+    assert "준비되지 않았다" not in text, "게이트 차단을 기동 문제처럼 말하면 안 된다"
+
+
+# ── WP-I 헤더 주입(selector_tools.default_http_client_factory) ────────────────
+
+
+def test_default_http_client_declares_model_caller_and_bearer(monkeypatch) -> None:
+    """G-I1 — 모델 경로의 모든 백엔드 호출은 X-Athena-Caller: model 자기신고와
+    로컬 베어러를 싣는다(이 헤더가 없으면 브레인 라우트의 require_local_bearer를
+    못 지나 MCP가 브레인을 우연히 못 부르던 상태가 유지된다)."""
+    from athena_mcp import selector_tools
+
+    monkeypatch.setenv("ATHENA_LOCAL_BEARER_TOKEN", "unit-test-token")
+    client = selector_tools.default_http_client_factory()
+    try:
+        assert client.headers["X-Athena-Caller"] == "model"
+        assert client.headers["Authorization"] == "Bearer unit-test-token"
+    finally:
+        del client
+
+
+def test_default_http_client_omits_bearer_when_unconfigured(monkeypatch) -> None:
+    """토큰 미설정 배포(루프백 게이트)에서는 Authorization을 아예 싣지 않는다 —
+    빈 Bearer를 지어내지 않는다."""
+    from athena_mcp import selector_tools
+
+    monkeypatch.setenv("ATHENA_LOCAL_BEARER_TOKEN", "")
+    monkeypatch.setattr(
+        selector_tools, "read_local_bearer_token", lambda: None
+    )
+    client = selector_tools.default_http_client_factory()
+    try:
+        assert client.headers["X-Athena-Caller"] == "model"
+        assert "Authorization" not in client.headers
+    finally:
+        del client

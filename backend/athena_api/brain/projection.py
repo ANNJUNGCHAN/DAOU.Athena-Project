@@ -15,6 +15,7 @@
 
 from __future__ import annotations
 
+from collections import Counter
 from dataclasses import dataclass
 from typing import Any, Protocol
 
@@ -152,4 +153,73 @@ def cluster(projected: ProjectedGraph) -> dict[str, int]:
     }
 
 
-__all__ = ["GraphProjector", "ProjectedGraph", "ProjectionSource", "cluster"]
+def cluster_cohesion(
+    projected: ProjectedGraph, assignment: dict[str, int]
+) -> dict[int, float]:
+    """군집별 내부 간선 밀도.
+
+    `cluster()`가 이미 계산·버리는 커뮤니티 멤버 집합을 `assignment`에서 되짚어, 군집마다
+    완전그래프 대비 실제 내부 간선 비율(`internal_edges / (n*(n-1)/2)`)을 낸다. 새
+    알고리즘·새 캐시가 아니라 `cluster()`가 이미 순회한 것과 같은 그래프를 한 번 더
+    훑는 나눗셈이다.
+
+    군집 크기가 1 이하면 완전그래프의 분모가 0이라 밀도 자체가 정의되지 않으므로 0.0으로
+    둔다 — 단독 노드는 "결속돼 있지 않다"가 지어내지 않은 정직한 값이다.
+    """
+    members_by_cluster: dict[int, list[str]] = {}
+    for node, cluster_index in assignment.items():
+        members_by_cluster.setdefault(cluster_index, []).append(node)
+
+    graph = projected.graph
+    cohesion: dict[int, float] = {}
+    for cluster_index, members in members_by_cluster.items():
+        n = len(members)
+        if n <= 1:
+            cohesion[cluster_index] = 0.0
+            continue
+        internal_edges = graph.subgraph(members).number_of_edges()
+        cohesion[cluster_index] = internal_edges / (n * (n - 1) / 2)
+    return cohesion
+
+
+def cluster_representative_labels(
+    projected: ProjectedGraph, assignment: dict[str, int]
+) -> dict[int, str]:
+    """군집별 기계적 설명 문자열 — 의미적 이름이 아니다.
+
+    이미 `assignment`에 있는 배정을 군집별로 되짚어(`cluster_cohesion()`과 같은
+    `members_by_cluster` 패턴), 최대 차수 멤버(동률이면 `cluster()`와 같은 관례로 최소
+    node id)와 최빈 `kind`(동률이면 알파벳순)만으로 `"{대표멤버} 외 N종목 · {kind}"`
+    문자열을 조립한다. 새 알고리즘·새 캐시 없음 — `cluster_cohesion()`과 동일 등급.
+
+    이 문자열은 의미적 이름(예: "반도체 대형주")이 아니다 — 그런 이름을 지을 근거가
+    이 함수에는 없다. "이름 없음" 배지·경고 규칙은 이 필드와 무관하게 그대로 유지된다.
+    """
+    members_by_cluster: dict[int, list[str]] = {}
+    for node, cluster_index in assignment.items():
+        members_by_cluster.setdefault(cluster_index, []).append(node)
+
+    graph = projected.graph
+    labels: dict[int, str] = {}
+    for cluster_index, members in members_by_cluster.items():
+        representative = min(members, key=lambda n: (-graph.degree(n), n))
+        representative_name = str(graph.nodes[representative].get("name", ""))
+        kind_counts = Counter(str(graph.nodes[n].get("kind", "")) for n in members)
+        most_frequent_kind = min(kind_counts.items(), key=lambda item: (-item[1], item[0]))[0]
+        n = len(members)
+        labels[cluster_index] = (
+            f"{representative_name} · {most_frequent_kind}"
+            if n == 1
+            else f"{representative_name} 외 {n - 1}종목 · {most_frequent_kind}"
+        )
+    return labels
+
+
+__all__ = [
+    "GraphProjector",
+    "ProjectedGraph",
+    "ProjectionSource",
+    "cluster",
+    "cluster_cohesion",
+    "cluster_representative_labels",
+]

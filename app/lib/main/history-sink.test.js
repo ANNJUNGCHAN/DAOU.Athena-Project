@@ -8,6 +8,27 @@ function freshHistorySink() {
   return require('./history-sink');
 }
 
+// prefs.js는 electron의 app.getPath('userData')를 거쳐 실제 디스크에 쓴다 — 이
+// 테스트 파일은 순수 node --test(Electron 없음)로 돌아 그 경로를 못 태운다.
+// require.cache에 가짜 exports를 심어 history-sink.js가 require('./prefs')로
+// 보는 값을 통제한다(freshHistorySink()로 다시 불러오기 전에 심어야 한다).
+function withMockPrefs(collectChat, fn) {
+  const prefsPath = require.resolve('./prefs');
+  const prevEntry = require.cache[prefsPath];
+  require.cache[prefsPath] = {
+    id: prefsPath,
+    filename: prefsPath,
+    loaded: true,
+    exports: { get: () => ({ collectChat }), set: () => {} },
+  };
+  try {
+    return fn();
+  } finally {
+    if (prevEntry) require.cache[prefsPath] = prevEntry;
+    else delete require.cache[prefsPath];
+  }
+}
+
 // fn이 async면 finally가 fn() 완료를 기다려야 한다 — 안 그러면(동기 try/finally)
 // env 복원이 fn 내부의 await보다 먼저 실행돼(자바스크립트 try/finally는 반환값
 // 프라미스가 settle되길 기다리지 않는다) 다음 테스트로 상태가 새는 레이스가 난다.
@@ -93,8 +114,12 @@ test('refreshBrainReady: 200 + ready:true면 캐시가 true — canAttemptSave �
     // 있어서 여기서 던진 AssertionError가 "네트워크 실패"로 삼켜져 false가 나온다
     // (실제로 이 버그를 여기서 재현·수정했다). 값을 밖으로 빼서 나중에 단언한다.
     global.fetch = async (url, opts) => {
-      seenUrl = url;
-      seenAuth = opts.headers.Authorization;
+      // ready:true 확인 뒤엔 expose-to-model 재동기화(WP-I G-I6)가 이어서
+      // 나간다 — 이 테스트는 status 조회 쪽만 본다.
+      if (String(url).endsWith('/api/v1/brain/status')) {
+        seenUrl = url;
+        seenAuth = opts.headers.Authorization;
+      }
       return { ok: true, json: async () => ({ ready: true }) };
     };
     try {
@@ -136,6 +161,8 @@ test('saveChatMessage: POST 실패(401)면 onSaveFailed({messageId, role})만 �
     let chatCallCount = 0;
     global.fetch = async (url) => {
       if (url.endsWith('/api/v1/brain/status')) return { ok: true, json: async () => ({ ready: true }) };
+      // expose-to-model 재동기화(WP-I G-I6)는 이 테스트의 관심 밖 — chat POST만 센다.
+      if (!url.endsWith('/api/v1/brain/chat')) return { ok: true, status: 200 };
       chatCallCount += 1;
       return { ok: false, status: 401 };
     };
@@ -208,5 +235,155 @@ test('saveChatMessage: 성공하면 messageId를 즉시 반환하고 onSaveFaile
     } finally {
       global.fetch = prevFetch;
     }
+  });
+});
+
+test('saveChatMessage: collectChat=false면 토큰·브레인 준비가 멀쩡해도 저장 시도 자체를 안 한다(원문 미적재)', async () => {
+  await withEnv({ ATHENA_LOCAL_BEARER_TOKEN: 'tok' }, async () => {
+    await withMockPrefs(false, async () => {
+      const historySink = freshHistorySink();
+      const prevFetch = global.fetch;
+      let chatCallCount = 0;
+      global.fetch = async (url) => {
+        if (url.endsWith('/api/v1/brain/status')) return { ok: true, json: async () => ({ ready: true }) };
+        // expose-to-model 재동기화(WP-I G-I6)는 이 테스트의 관심 밖 — chat POST만 센다.
+        if (!url.endsWith('/api/v1/brain/chat')) return { ok: true, status: 200 };
+        chatCallCount += 1;
+        return { ok: true, status: 200 };
+      };
+      try {
+        await historySink.refreshBrainReady({});
+        assert.equal(historySink.canAttemptSave(), false); // collectChat 게이트가 이유
+        let failed = null;
+        historySink.saveChatMessage(
+          { conversationId: 'c1', text: '민감한 채팅 본문', role: 'user' },
+          { onSaveFailed: (p) => { failed = p; } },
+        );
+        assert.equal(chatCallCount, 0);
+        assert.equal(failed, null);
+      } finally {
+        global.fetch = prevFetch;
+      }
+    });
+  });
+});
+
+test('canAttemptSave: collectChat=true면 기존 토큰·브레인 준비 조건만 그대로 적용된다', async () => {
+  await withEnv({ ATHENA_LOCAL_BEARER_TOKEN: 'tok' }, async () => {
+    await withMockPrefs(true, async () => {
+      const historySink = freshHistorySink();
+      const prevFetch = global.fetch;
+      global.fetch = async () => ({ ok: true, json: async () => ({ ready: true }) });
+      try {
+        await historySink.refreshBrainReady({});
+        assert.equal(historySink.canAttemptSave(), true);
+      } finally {
+        global.fetch = prevFetch;
+      }
+    });
+  });
+});
+
+// ── exposeToModel 재동기화(WP-I I4 / G-I6) ──────────────────────────────────
+
+// withMockPrefs는 collectChat 단일 값 전용이라, 임의 prefs 객체를 심는 변형을
+// 따로 둔다(비동기 fn까지 안전하게 — withEnv의 try/finally 주석과 같은 이유).
+async function withPrefs(values, fn) {
+  const prefsPath = require.resolve('./prefs');
+  const prevEntry = require.cache[prefsPath];
+  require.cache[prefsPath] = {
+    id: prefsPath,
+    filename: prefsPath,
+    loaded: true,
+    exports: { get: () => ({ ...values }), set: () => {} },
+  };
+  try {
+    return await fn();
+  } finally {
+    if (prevEntry) require.cache[prefsPath] = prevEntry;
+    else delete require.cache[prefsPath];
+  }
+}
+
+test('pushExposeToModel: 토큰 없으면 fetch 없이 false — 밀 방법이 없는 것이지 실패가 아니다', async () => {
+  await withEnv({ ATHENA_LOCAL_BEARER_TOKEN: undefined }, async () => {
+    await withPrefs({ exposeToModel: true }, async () => {
+      const historySink = freshHistorySink();
+      let called = false;
+      const prevFetch = global.fetch;
+      global.fetch = async () => { called = true; return { ok: true }; };
+      try {
+        assert.equal(await historySink.pushExposeToModel({}), false);
+        assert.equal(called, false);
+      } finally {
+        global.fetch = prevFetch;
+      }
+    });
+  });
+});
+
+test('pushExposeToModel: 저장된 exposeToModel 값을 backend 게이트에 POST한다', async () => {
+  await withEnv({ ATHENA_LOCAL_BEARER_TOKEN: 'tok' }, async () => {
+    await withPrefs({ exposeToModel: false }, async () => {
+      const historySink = freshHistorySink();
+      const seen = [];
+      const prevFetch = global.fetch;
+      global.fetch = async (url, opts) => { seen.push([String(url), opts]); return { ok: true }; };
+      try {
+        assert.equal(await historySink.pushExposeToModel({}), true);
+        assert.equal(seen.length, 1);
+        assert.ok(seen[0][0].endsWith('/api/v1/settings/expose-to-model'));
+        assert.equal(seen[0][1].method, 'POST');
+        assert.deepEqual(JSON.parse(seen[0][1].body), { enabled: false });
+        assert.equal(seen[0][1].headers.Authorization, 'Bearer tok');
+      } finally {
+        global.fetch = prevFetch;
+      }
+    });
+  });
+});
+
+test('refreshBrainReady: 준비 확인 시 exposeToModel을 재동기화한다(G-I6) — backend 기동 초기값은 안전측 False라 이 push가 실제 설정값을 복원한다', async () => {
+  await withEnv({ ATHENA_LOCAL_BEARER_TOKEN: 'tok' }, async () => {
+    await withPrefs({ exposeToModel: true }, async () => {
+      const historySink = freshHistorySink();
+      const paths = [];
+      const prevFetch = global.fetch;
+      global.fetch = async (url) => {
+        paths.push(String(url));
+        if (String(url).includes('/brain/status')) {
+          return { ok: true, json: async () => ({ ready: true }) };
+        }
+        return { ok: true };
+      };
+      try {
+        assert.equal(await historySink.refreshBrainReady({}), true);
+        await new Promise((resolve) => setImmediate(resolve)); // fire-and-forget push 소진
+        assert.ok(paths.some((p) => p.endsWith('/api/v1/settings/expose-to-model')));
+      } finally {
+        global.fetch = prevFetch;
+      }
+    });
+  });
+});
+
+test('refreshBrainReady: 준비 실패면 재동기화도 안 민다 — 닫힌 게이트가 옳다', async () => {
+  await withEnv({ ATHENA_LOCAL_BEARER_TOKEN: 'tok' }, async () => {
+    await withPrefs({ exposeToModel: true }, async () => {
+      const historySink = freshHistorySink();
+      const paths = [];
+      const prevFetch = global.fetch;
+      global.fetch = async (url) => {
+        paths.push(String(url));
+        return { ok: false };
+      };
+      try {
+        assert.equal(await historySink.refreshBrainReady({}), false);
+        await new Promise((resolve) => setImmediate(resolve));
+        assert.equal(paths.filter((p) => p.includes('expose-to-model')).length, 0);
+      } finally {
+        global.fetch = prevFetch;
+      }
+    });
   });
 });

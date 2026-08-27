@@ -58,6 +58,26 @@ INVESTOR_PROFILE_ENTITY_ID: Final = entity_id(EntityKind.INVESTOR_PROFILE, INVES
 # 이 값을 걸러낸다 — 로그를 읽는 쪽이 존재하지 않는 노드를 만나지 않게 한다.
 _PROJECTION_MARKER: Final = "projection"
 
+
+def _graph_event_from_row(row: sqlite3.Row) -> GraphEvent:
+    """`graph_events` 행 하나를 `GraphEvent`로 — `events()`·`entity_events()`가 공유한다."""
+    return GraphEvent(
+        seq=int(row["seq"]),
+        at=datetime.fromisoformat(str(row["at"])),
+        revision=int(row["revision"]),
+        op=GraphEventOp(str(row["op"])),
+        subject_id=str(row["subject_id"]),
+        object_id=None if row["object_id"] is None else str(row["object_id"]),
+        relation=None if row["relation"] is None else str(row["relation"]),
+        confidence_before=(
+            None if row["confidence_before"] is None else Confidence(str(row["confidence_before"]))
+        ),
+        confidence_after=(
+            None if row["confidence_after"] is None else Confidence(str(row["confidence_after"]))
+        ),
+        source_id=None if row["source_id"] is None else str(row["source_id"]),
+    )
+
 # 그래프 쓰기 한 단위의 savepoint 이름. 그래프 쓰기끼리는 중첩하지 않으므로 하나면 된다.
 _GRAPH_WRITE: Final = "graph_write"
 
@@ -117,6 +137,13 @@ CREATE TABLE IF NOT EXISTS graph_events (
 );
 CREATE INDEX IF NOT EXISTS graph_events_subject ON graph_events(subject_id);
 CREATE INDEX IF NOT EXISTS graph_events_at ON graph_events(at);
+CREATE TABLE IF NOT EXISTS cluster_labels (
+    member_hash        TEXT PRIMARY KEY,
+    cluster_size       INTEGER NOT NULL,
+    label              TEXT NOT NULL,
+    prompt_fingerprint TEXT NOT NULL,
+    created_at         TEXT NOT NULL
+);
 CREATE VIRTUAL TABLE IF NOT EXISTS entities_fts USING fts5(
     entity_id UNINDEXED,
     name,
@@ -917,31 +944,76 @@ class GraphStore:
                 " ORDER BY seq LIMIT ?",
                 (int(after_seq), _PROJECTION_MARKER, bounded),
             ).fetchall()
-            return tuple(
-                GraphEvent(
-                    seq=int(r["seq"]),
-                    at=datetime.fromisoformat(str(r["at"])),
-                    revision=int(r["revision"]),
-                    op=GraphEventOp(str(r["op"])),
-                    subject_id=str(r["subject_id"]),
-                    object_id=None if r["object_id"] is None else str(r["object_id"]),
-                    relation=None if r["relation"] is None else str(r["relation"]),
-                    confidence_before=(
-                        None
-                        if r["confidence_before"] is None
-                        else Confidence(str(r["confidence_before"]))
-                    ),
-                    confidence_after=(
-                        None
-                        if r["confidence_after"] is None
-                        else Confidence(str(r["confidence_after"]))
-                    ),
-                    source_id=None if r["source_id"] is None else str(r["source_id"]),
-                )
-                for r in rows
-            )
+            return tuple(_graph_event_from_row(r) for r in rows)
 
         return await self._owner.run(read)
+
+    async def entity_events(
+        self, entity_id: str, *, limit: int = 50
+    ) -> tuple[GraphEvent, ...]:
+        """엔티티 하나가 얽힌 변경 이력 — 최신 먼저(엔티티 타임라인 패널의 재료).
+
+        `subject_id`(주체) 또는 `object_id`(대상) 어느 쪽으로 등장해도 잡는다.
+        `investor_profile_summary()`의 쿼리 구성 패턴(WHERE + ORDER BY + LIMIT, 기존
+        인덱스만 사용)을 그대로 따른다 — 새 테이블·새 인덱스 없음. `events()`와 같은
+        이유로 `_PROJECTION_MARKER`(재투영 표식) 이벤트는 제외한다.
+        """
+        bounded = max(1, min(int(limit), MAX_SEARCH_LIMIT))
+
+        def read() -> tuple[GraphEvent, ...]:
+            rows = self._require().execute(
+                "SELECT * FROM graph_events WHERE (subject_id = ? OR object_id = ?)"
+                " AND subject_id <> ? ORDER BY seq DESC LIMIT ?",
+                (entity_id, entity_id, _PROJECTION_MARKER, bounded),
+            ).fetchall()
+            return tuple(_graph_event_from_row(r) for r in rows)
+
+        return await self._owner.run(read)
+
+    async def cluster_label(self, member_hash: str, prompt_fingerprint: str) -> str | None:
+        """군집 LLM 라벨 캐시 조회(WP-F) — 멤버 해시와 프롬프트 지문이 모두 맞아야 히트다.
+
+        지문이 다르면(라벨링 프롬프트가 바뀌었으면) 옛 라벨을 조용히 무시한다 —
+        `extraction.prompt_fingerprint()`가 추출 캐시를 키잉하는 것과 같은 이유로,
+        프롬프트가 바뀌었는데 옛 결과를 쓰면 조용히 틀린 것을 캐시하게 된다.
+        """
+
+        def read() -> str | None:
+            row = self._require().execute(
+                "SELECT label FROM cluster_labels"
+                " WHERE member_hash = ? AND prompt_fingerprint = ?",
+                (member_hash, prompt_fingerprint),
+            ).fetchone()
+            return None if row is None else str(row["label"])
+
+        return await self._owner.run(read)
+
+    async def save_cluster_label(
+        self,
+        member_hash: str,
+        *,
+        cluster_size: int,
+        label: str,
+        prompt_fingerprint: str,
+    ) -> None:
+        """군집 LLM 라벨 캐시 저장(WP-F).
+
+        `INSERT OR REPLACE`(member_hash PK 기준)라 같은 멤버 집합에 두 백그라운드
+        태스크가 동시 완료해도 예외 없이 마지막 쓰기가 이긴다 — F4의 fire-and-forget
+        구조가 요구하는 유일한 동시성 계약이다.
+        """
+
+        def write() -> None:
+            connection = self._require()
+            with atomic(connection, _GRAPH_WRITE):
+                connection.execute(
+                    "INSERT OR REPLACE INTO cluster_labels"
+                    "(member_hash, cluster_size, label, prompt_fingerprint, created_at)"
+                    " VALUES(?, ?, ?, ?, ?)",
+                    (member_hash, int(cluster_size), label, prompt_fingerprint, _ts(utc_now())),
+                )
+
+        await self._owner.run(write)
 
     async def investor_profile_summary(
         self, *, now: datetime, window_days: int = 90, limit: int = 50

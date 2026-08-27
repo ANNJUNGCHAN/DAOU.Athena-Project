@@ -67,6 +67,21 @@ process.on('unhandledRejection', (err) => dlog('unhandledRejection: ' + (err && 
 
 function wait(ms) { return new Promise((r) => setTimeout(r, ms)); }
 
+// waitForChatBooted(아래)의 폴링 형태를 범용화한 헬퍼 — 고정 wait(ms) 대신 조건이
+// 실제로 참이 될 때까지 짧은 간격으로 재확인한다. 반환값은 조건이 참이 된 시점의
+// check() 결과(타임아웃이면 마지막 결과, 보통 falsy) — 호출부가 이 값으로 성공/
+// 타임아웃을 함께 판정할 수 있다.
+async function waitUntil(check, { timeoutMs = 1500, intervalMs = 50 } = {}) {
+  const t0 = Date.now();
+  let last;
+  while (Date.now() - t0 < timeoutMs) {
+    last = await check();
+    if (last) return last;
+    await wait(intervalMs);
+  }
+  return last;
+}
+
 // 2026-08-26: 점은 더 이상 설정을 열지 않는다(답변⇄그래프 모드 전환기로 바뀜,
 // Paper 보드 05) — 설정 진입은 사이드바 계정 메뉴 아니면 커맨드바다. 이 검증
 // 프로필은 계좌가 비어 있어(위 §"검증 전용 프로필" 주석) 계정 행이 늘 숨어 있다
@@ -228,6 +243,54 @@ async function traceBootBar(shellWin, timeoutMs = 5000) {
     // 둘 다 관측돼야 한다. reduced-motion이면 생략 자체가 스펙 준수다.
     pass: reducedMotion || (sawFullName && sawPhAfterName),
   };
+}
+
+// 검증22(알림 오브)의 접힘 상태 DOM 프로브 — 발화 눈 모양 안정화를 기다릴 때와
+// 최종 리포트 측정 때 같은 쿼리를 반복 호출한다(함수로 뽑아 재사용, 새 측정
+// 로직을 만들지 않는다).
+async function probeOrbCollapsed(win) {
+  return win.webContents.executeJavaScript(`(() => {
+    const orb = document.getElementById('orb');
+    const r = orb.getBoundingClientRect();
+    const cs = getComputedStyle(orb);
+    const visor = getComputedStyle(document.getElementById('orbVisor'));
+    return {
+      width: Math.round(r.width),
+      height: Math.round(r.height),
+      borderRadius: cs.borderRadius,
+      count: document.getElementById('orbCount').textContent,
+      panelHidden: document.getElementById('orbPanel').hidden,
+      state: document.getElementById('orbRoot').dataset.state,
+      // 2026-08-24 리프 1.3.2 — 무채색↔발화 상태. 1건 받았으니 'fired'여야 한다.
+      alert: document.getElementById('orbRoot').dataset.alert,
+      // 유리는 끝까지 무채색이다 — 셸 배경에 색이 섞이면 그건 틴트다(soul.md §7).
+      orbBackground: cs.backgroundColor,
+      // 바이저는 **페이드가 아니라** 스케일·블러 변조로 드러난다(soul.md §7).
+      visorTransition: visor.transition,
+      visorTransform: visor.transform,
+      eyeCount: document.querySelectorAll('#orbVisor .orb-eye').length,
+      // 발화(fired) 상태의 눈 기하 — orbQuietEyeProbe와 짝을 맞춰 대기↔발화의
+      // 실제 모양 차이를 잰다(더는 바이저 폭이 아니다).
+      eyeWidth: (() => {
+        const e = document.querySelector('#orbVisor .orb-eye');
+        return e ? e.getBoundingClientRect().width : null;
+      })(),
+      eyeHeight: (() => {
+        const e = document.querySelector('#orbVisor .orb-eye');
+        return e ? e.getBoundingClientRect().height : null;
+      })(),
+      // 드래그 손잡이/구멍 계약 — 같은 픽셀에 겹치면 클릭이 영영 안 온다.
+      orbRegion: (cs.getPropertyValue('app-region') || cs.getPropertyValue('-webkit-app-region') || '').trim(),
+      coreRegion: (() => {
+        const c = getComputedStyle(document.getElementById('orbToggle'));
+        return (c.getPropertyValue('app-region') || c.getPropertyValue('-webkit-app-region') || '').trim();
+      })(),
+      // 옛 마젠타 호는 걷어냈다 — 얼굴이 신호를 가져갔고 신호는 화면당 한 곳이다.
+      // 죽은 채 남았는지 확인한다: 링 배경에 브랜드 마젠타가 있으면 안 된다.
+      ringHasBrand: getComputedStyle(document.getElementById('orbRing'))
+        .backgroundImage.includes('238, 19, 123'),
+    };
+  })()`);
 }
 
 app.whenReady().then(async () => {
@@ -1314,7 +1377,23 @@ app.whenReady().then(async () => {
   // 위 검증13이 이미 mock 'chart' 카드(window.addCard('chart'))를 그려뒀으므로,
   // makeCard의 "같은 타입 재요청 시 갈아치운다" 규칙(카드 정리 규칙)에 따라 이
   // 봉투가 그 카드를 대체한다 — 별도 정리 호출 없이 정확히 카드 1장만 남아야 한다.
+  // 캔들 수는 HISTORY_TRIGGER_BARS=12(chart-card.js:505) 이상이어야 한다(WP-J) —
+  // 그보다 적으면 마운트 즉시 isNearLeftEdge()가 참이 되어 chart-reload.js의
+  // "권위가 없는 패널이다" 방어 예외가 매 verify마다 콘솔에 쏟아진다. 하네스
+  // 픽스처가 원인이라 하네스만 늘린다(차트 카드 기능 코드는 무변경).
   const liveChartCandles = [
+    { time: '2026-07-29', open: 69800, high: 70200, low: 69500, close: 70000, volume: 8123456 },
+    { time: '2026-07-30', open: 70000, high: 70500, low: 69800, close: 70300, volume: 7998877 },
+    { time: '2026-07-31', open: 70300, high: 70600, low: 69900, close: 70100, volume: 9012345 },
+    { time: '2026-08-03', open: 70100, high: 70700, low: 70000, close: 70500, volume: 8456789 },
+    { time: '2026-08-04', open: 70500, high: 70900, low: 70200, close: 70400, volume: 7789900 },
+    { time: '2026-08-05', open: 70400, high: 70800, low: 70100, close: 70600, volume: 8234567 },
+    { time: '2026-08-06', open: 70600, high: 71100, low: 70400, close: 70900, volume: 9345678 },
+    { time: '2026-08-07', open: 70900, high: 71300, low: 70600, close: 71100, volume: 8567890 },
+    { time: '2026-08-10', open: 71100, high: 71400, low: 70800, close: 70900, volume: 7654321 },
+    { time: '2026-08-11', open: 70900, high: 71200, low: 70500, close: 70700, volume: 8090909 },
+    { time: '2026-08-12', open: 70700, high: 71100, low: 70400, close: 70800, volume: 8345612 },
+    { time: '2026-08-13', open: 70800, high: 71200, low: 70600, close: 71000, volume: 8765432 },
     { time: '2026-08-14', open: 71000, high: 71600, low: 70800, close: 71300, volume: 9123456 },
     { time: '2026-08-17', open: 71300, high: 71900, low: 71100, close: 71700, volume: 8877665 },
     { time: '2026-08-18', open: 71700, high: 72200, low: 71500, close: 72000, volume: 10233445 },
@@ -1395,13 +1474,16 @@ app.whenReady().then(async () => {
   await shellWin.webContents.executeJavaScript(
     "window.athena.send('athena:toggle-maximize', { force: 'maximize' })"
   );
-  await wait(500);
+  await waitUntil(
+    () => shellWin.isMaximized() === true && shellWin.getBounds().height > heightBeforeMax,
+    { timeoutMs: 2000 }
+  );
   const afterMaximize = { bounds: shellWin.getBounds(), isMaximized: shellWin.isMaximized() };
 
   await shellWin.webContents.executeJavaScript(
     "window.athena.send('athena:toggle-maximize', { force: 'restore-or-minimize' })"
   );
-  await wait(500);
+  await waitUntil(() => shellWin.isMaximized() === false, { timeoutMs: 2000 });
   const afterRestore = { bounds: shellWin.getBounds(), isMaximized: shellWin.isMaximized() };
 
   // 앵커 유지 — 스냅 뒤 위치에서 앱 주도 이동을 한 번 더 걸어도 부팅 좌표로
@@ -1850,8 +1932,18 @@ app.whenReady().then(async () => {
     { id: 'T4', type: 'table', screenId: 'AT-CV-005:T4', state: 'ready', data: tableData(6, true) },
     { id: 'C1', type: 'chart', screenId: 'AT-CV-005:C1', state: 'ready', rendererId: 'aits-chart-v1', data: {
       symbol: '005930',
+      // liveChartCandles(검증13b)와 같은 이유로 HISTORY_TRIGGER_BARS=12 이상(WP-J).
       chart: { period: 'day', target: 'stock', trId: 'ka10081', candles: [
-        { time: '2026-08-18', open: 100, high: 110, low: 95, close: 105, volume: 1000 },
+        { time: '2026-08-05', open: 90, high: 98, low: 88, close: 95, volume: 700 },
+        { time: '2026-08-06', open: 95, high: 102, low: 93, close: 100, volume: 800 },
+        { time: '2026-08-07', open: 100, high: 104, low: 96, close: 98, volume: 750 },
+        { time: '2026-08-10', open: 98, high: 103, low: 95, close: 101, volume: 820 },
+        { time: '2026-08-11', open: 101, high: 106, low: 99, close: 104, volume: 900 },
+        { time: '2026-08-12', open: 104, high: 108, low: 100, close: 102, volume: 860 },
+        { time: '2026-08-13', open: 102, high: 107, low: 100, close: 106, volume: 940 },
+        { time: '2026-08-14', open: 106, high: 111, low: 104, close: 108, volume: 1010 },
+        { time: '2026-08-17', open: 108, high: 112, low: 105, close: 107, volume: 880 },
+        { time: '2026-08-18', open: 107, high: 110, low: 103, close: 105, volume: 950 },
         { time: '2026-08-19', open: 105, high: 115, low: 101, close: 112, volume: 1200 },
       ] },
     } },
@@ -1984,54 +2076,24 @@ app.whenReady().then(async () => {
     note: '오브 검증 루틴',
     fired_at: new Date(Date.now() - 3 * 60 * 1000).toISOString(),
   });
-  await wait(300);
+
+  // 발화 눈 모양이 안정될 때까지 기다린다 — 조건 충족(발화 종횡비) 후 짧은
+  // 간격을 두고 한 번 더 재확인해 같은 값이면 안정화로 간주한다(전이 애니메이션
+  // 중간값을 잡지 않기 위함). firedEyesAreRounder 판정과 같은 종횡비 임계(1.3)를 쓴다.
+  const looksFired = (p) => !!(p && p.eyeWidth && (p.eyeHeight / p.eyeWidth) < 1.3);
+  await waitUntil(async () => {
+    const probe = await probeOrbCollapsed(orbWin);
+    if (!looksFired(probe)) return false;
+    await wait(60);
+    const probe2 = await probeOrbCollapsed(orbWin);
+    return looksFired(probe2) && probe2.eyeWidth === probe.eyeWidth && probe2.eyeHeight === probe.eyeHeight;
+  }, { timeoutMs: 900, intervalMs: 60 });
 
   // 22-B — **알림이 오면 딥블루 바이저가 드러난다.** 같은 창, 같은 크기, 상태만 다르다.
   await shot(orbWin, '22b-orb-alerted.png');
   const pixelsAlerted = await measurePixels(orbWin);
 
-  const orbCollapsedProbe = await orbWin.webContents.executeJavaScript(`(() => {
-    const orb = document.getElementById('orb');
-    const r = orb.getBoundingClientRect();
-    const cs = getComputedStyle(orb);
-    const visor = getComputedStyle(document.getElementById('orbVisor'));
-    return {
-      width: Math.round(r.width),
-      height: Math.round(r.height),
-      borderRadius: cs.borderRadius,
-      count: document.getElementById('orbCount').textContent,
-      panelHidden: document.getElementById('orbPanel').hidden,
-      state: document.getElementById('orbRoot').dataset.state,
-      // 2026-08-24 리프 1.3.2 — 무채색↔발화 상태. 1건 받았으니 'fired'여야 한다.
-      alert: document.getElementById('orbRoot').dataset.alert,
-      // 유리는 끝까지 무채색이다 — 셸 배경에 색이 섞이면 그건 틴트다(soul.md §7).
-      orbBackground: cs.backgroundColor,
-      // 바이저는 **페이드가 아니라** 스케일·블러 변조로 드러난다(soul.md §7).
-      visorTransition: visor.transition,
-      visorTransform: visor.transform,
-      eyeCount: document.querySelectorAll('#orbVisor .orb-eye').length,
-      // 발화(fired) 상태의 눈 기하 — 위 orbQuietEyeProbe와 짝을 맞춰 대기↔발화의
-      // 실제 모양 차이를 잰다(더는 바이저 폭이 아니다).
-      eyeWidth: (() => {
-        const e = document.querySelector('#orbVisor .orb-eye');
-        return e ? e.getBoundingClientRect().width : null;
-      })(),
-      eyeHeight: (() => {
-        const e = document.querySelector('#orbVisor .orb-eye');
-        return e ? e.getBoundingClientRect().height : null;
-      })(),
-      // 드래그 손잡이/구멍 계약 — 같은 픽셀에 겹치면 클릭이 영영 안 온다.
-      orbRegion: (cs.getPropertyValue('app-region') || cs.getPropertyValue('-webkit-app-region') || '').trim(),
-      coreRegion: (() => {
-        const c = getComputedStyle(document.getElementById('orbToggle'));
-        return (c.getPropertyValue('app-region') || c.getPropertyValue('-webkit-app-region') || '').trim();
-      })(),
-      // 옛 마젠타 호는 걷어냈다 — 얼굴이 신호를 가져갔고 신호는 화면당 한 곳이다.
-      // 죽은 채 남았는지 확인한다: 링 배경에 브랜드 마젠타가 있으면 안 된다.
-      ringHasBrand: getComputedStyle(document.getElementById('orbRing'))
-        .backgroundImage.includes('238, 19, 123'),
-    };
-  })()`);
+  const orbCollapsedProbe = await probeOrbCollapsed(orbWin);
 
   // 펼침 — 실제 사용자 경로(코어 클릭)를 그대로 태운다.
   await orbWin.webContents.executeJavaScript("document.getElementById('orbToggle').click()");
@@ -2283,18 +2345,56 @@ app.whenReady().then(async () => {
       nav.click();
       const deadline = Date.now() + 5000;
       while (Date.now() < deadline) {
-        if (!container.hidden) {
-          // 브레인 준비 시엔 실제 그래프가 그려질 때까지, 미준비 시엔 캔버스가
-          // 보이는 순간(안내 문구는 render.js를 거치지 않는다) 기다림을 끝낸다.
+        // 그래프 기능 진입 판정은 #mosaic(답변 모드)이 숨는지로 본다 —
+        // #graphCanvas(지도 서브뷰)는 스텝2-보정 이후 기본 서브뷰가 아니라서
+        // (기본은 요약) 그냥 클릭만으로는 안 보인다. draw()는 toggle() 안에서
+        // surface와 무관하게 여전히 즉시 실행되므로(graphBody에 내용은 쓰인다),
+        // 그 내용이 실제로 준비됐는지는 describeRendered로 확인한다.
+        if (document.getElementById('mosaic').hidden) {
           if (!brainReady || window.AthenaLib.GraphRender.describeRendered(container).rendered) break;
         }
         await new Promise((r) => setTimeout(r, 50));
       }
-      const clickOpened = !container.hidden;
+      const clickOpened = document.getElementById('mosaic').hidden;
       const summaryHidden = document.getElementById('mosaic').hidden;
+      // getComputedStyle().display는 조상의 display:none에 영향받지 않는다(그
+      // 자신의 display 선언만 본다) — #graphSummaryTable이 예전처럼 #mosaic의
+      // 자식으로 숨어 있었어도 이 값은 그대로 'block'이었을 것이다. 실제로
+      // 화면에 그려지는지는 크기로만 판별 가능하다 — 부모가 display:none이면
+      // 자손은 레이아웃 박스 자체가 생성되지 않아 rect가 0×0이 된다.
+      const graphSummaryTableEl = document.getElementById('graphSummaryTable');
+      const summaryTableRect = graphSummaryTableEl.getBoundingClientRect();
+      const summaryTableVisible = summaryTableRect.width > 0 && summaryTableRect.height > 0;
+      // 스텝2-보정 회귀 가드 — 요약 뷰 헤더의 "요약"/"그래프" 서브뷰 탭은 이제
+      // graphMode.setSurface()로 state.surface를 바꾸고, applyVisibility()
+      // 하나가 hidden을 소유한다(z-index 임시조치는 걷어냈다). setSurface()가
+      // applyVisibility()를 draw()의 await 이전에 동기 호출하므로 hidden은
+      // click() 직후 바로 반영된다 — 별도 대기 불필요. "그래프" 탭을 눌러도
+      // #mosaic(답변 모드)이 계속 hidden인지(답변 모드로 안 튕겨나가는지)도
+      // 함께 확인한다.
+      const graphViewTab = document.getElementById('graphViewTab');
+      const summaryViewTab = document.getElementById('summaryViewTab');
+      let surfaceToggle = null;
+      if (graphViewTab && summaryViewTab) {
+        graphViewTab.click();
+        const afterGraphClick = {
+          mosaicHidden: document.getElementById('mosaic').hidden,
+          summaryTableHidden: graphSummaryTableEl.hidden,
+          graphCanvasHidden: container.hidden,
+          graphTabActive: graphViewTab.classList.contains('is-active'),
+        };
+        summaryViewTab.click();
+        const afterSummaryClick = {
+          mosaicHidden: document.getElementById('mosaic').hidden,
+          summaryTableHidden: graphSummaryTableEl.hidden,
+          graphCanvasHidden: container.hidden,
+          summaryTabActive: summaryViewTab.classList.contains('is-active'),
+        };
+        surfaceToggle = { afterGraphClick, afterSummaryClick };
+      }
       const containerText = container.textContent;
       if (!brainReady) {
-        return { wired: true, brainReady, clickOpened, summaryHidden, containerText };
+        return { wired: true, brainReady, clickOpened, summaryHidden, summaryTableVisible, surfaceToggle, containerText };
       }
       const byClick = window.AthenaLib.GraphRender.describeRendered(container);
       // 좌표 계약은 배치 결과와 대조해야 알 수 있고, 클릭 경로는 그 값을 돌려주지
@@ -2308,6 +2408,8 @@ app.whenReady().then(async () => {
         clickOpened,
         byClick,
         summaryHidden,
+        summaryTableVisible,
+        surfaceToggle,
         placedNodes: placed ? placed.nodes.length : 0,
         placedEdges: placed ? placed.edges.length : 0,
         drawn,
@@ -2322,6 +2424,13 @@ app.whenReady().then(async () => {
       assertOk('graph-mode: 칩을 누르면 그래프가 열린다', graph.clickOpened === true);
       assertOk('graph-mode: 칩 클릭만으로 캔버스가 채워진다', graph.byClick.rendered === true);
       assertOk('graph-mode: 토글하면 요약이 숨는다', graph.summaryHidden === true);
+      // G-05 회귀 가드 — #graphSummaryTable이 #mosaic의 자식이던 시절엔 부모의
+      // hidden(display:none) 상속에 막혀 크기가 0×0이었다(getComputedStyle의
+      // display 값 자체는 조상 hidden과 무관해 이 결함을 못 잡는다 — rect로 봐야 한다).
+      assertOk(
+        'graph-mode: 성향 신호 표가 실제로 렌더된다(hidden 상속에 막히지 않는다)',
+        graph.summaryTableVisible === true,
+      );
       // 노드가 0개면 '빈 캔버스'와 '고장'을 구분할 수 없다. 브레인이 준비됐으면
       // 여기 왔을 때 그려진 것이 있어야 한다.
       assertOk('graph-mode: 캔버스가 비어 있지 않다', graph.drawn.rendered === true);
@@ -2343,7 +2452,32 @@ app.whenReady().then(async () => {
         'graph-mode: 브레인 미준비 시 캔버스 안에 정직한 안내가 뜬다(빈 화면이 아니다)',
         /브레인|성향/.test(graph.containerText || ''),
       );
+      // G-05 회귀 가드 — 브레인 미준비 상태에서도 성향 신호 표 자체는 hidden
+      // 상속에 막히지 않고 렌더돼야 한다(내용은 profile-summary가 없어 비어 있을 수 있다).
+      assertOk(
+        'graph-mode: 성향 신호 표가 실제로 렌더된다(hidden 상속에 막히지 않는다)',
+        graph.summaryTableVisible === true,
+      );
       report.graphMode.shot = await shot(shellWin, '90-graph-mode-unavailable.png');
+    }
+    if (graph.surfaceToggle) {
+      // 스텝2-보정 회귀 가드 — brainReady와 무관하게 확인한다: 요약 뷰 헤더의
+      // "요약"/"그래프" 서브뷰 탭이 graphMode.setSurface()로 hidden을 올바르게
+      // 배타 전환하는지(z-index 임시조치가 아니라 진짜 hidden), 그리고 답변
+      // 모드로 튕겨나가지 않는지(#mosaic이 계속 hidden).
+      const st = graph.surfaceToggle;
+      assertOk(
+        'graph-mode: 그래프 탭 클릭 시 그래프 캔버스가 보이고 성향 신호 표는 숨는다',
+        st.afterGraphClick.graphCanvasHidden === false && st.afterGraphClick.summaryTableHidden === true,
+      );
+      assertOk('graph-mode: 그래프 탭 클릭이 답변 모드로 튕겨나가지 않는다', st.afterGraphClick.mosaicHidden === true);
+      assertOk('graph-mode: 그래프 탭이 활성 스타일을 받는다', st.afterGraphClick.graphTabActive === true);
+      assertOk(
+        'graph-mode: 요약 탭 클릭 시 성향 신호 표가 다시 보이고 그래프 캔버스는 숨는다',
+        st.afterSummaryClick.summaryTableHidden === false && st.afterSummaryClick.graphCanvasHidden === true,
+      );
+      assertOk('graph-mode: 요약 탭 클릭도 답변 모드로 튕겨나가지 않는다', st.afterSummaryClick.mosaicHidden === true);
+      assertOk('graph-mode: 요약 탭이 활성 스타일을 받는다', st.afterSummaryClick.summaryTabActive === true);
     }
   } catch (err) {
     report.graphMode = { error: String((err && err.message) || err) };
