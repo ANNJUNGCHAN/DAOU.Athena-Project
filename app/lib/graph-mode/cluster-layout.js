@@ -228,7 +228,7 @@ function pairKey(a, b) {
 // summary-table.js가 이미 이 값을 그대로 찍고 있어 알려진 형태다, §0 발견4).
 function entityPairKey(a, b) {
   const [x, y] = String(a) < String(b) ? [a, b] : [b, a];
-  return `${x} ${y}`;
+  return `${x} ${y}`;
 }
 
 const __exports = {
