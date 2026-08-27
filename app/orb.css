@@ -630,6 +630,81 @@ html, body {
   background: rgb(16 19 26 / 5%);
 }
 
+/* board-33③ 표 축약 카드(athena:orb-canvas-result, canvas_type:table) — .orb-card의
+ * 배경·테두리·모서리 어휘를 그대로 쓰되, .orb-card의 flex:1 1 auto·overflow-y:auto
+ * (알림 전용 단일 카드가 패널 나머지 높이를 다 채우는 용도)는 대화 턴 안에 얹히는
+ * 고정 크기 카드에 안 맞아 새 클래스로 최소한만 추가한다. 셸 캔버스의 16종
+ * CardKinds 전용 렌더러는 재사용하지 않는다 — 오브는 별도의 더 단순한 렌더러다
+ * (board-33 캡션 원문 "캔버스 차트의 축소판이 아니라 별도 렌더러다"). */
+.orb-fold-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, var(--glass-canvas));
+  border: 1px solid rgb(16 19 26 / 6%);
+}
+
+.orb-fold-card-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.orb-fold-card-title {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-k-text);
+}
+
+.orb-fold-card-subtitle {
+  font-size: var(--text-xs);
+  color: var(--color-k-faint);
+  font-family: var(--font-mono);
+  flex-shrink: 0;
+}
+
+.orb-fold-table { display: flex; flex-direction: column; }
+
+.orb-fold-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 0;
+  border-bottom: 1px solid rgb(16 19 26 / 8%);
+  font-size: var(--text-sm);
+}
+.orb-fold-row:last-child { border-bottom: none; }
+
+.orb-fold-row.is-head { color: var(--color-k-dim); font-weight: 600; }
+
+.orb-fold-cell-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: inherit;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.orb-fold-cell-value {
+  width: 96px;
+  flex-shrink: 0;
+  text-align: right;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: inherit;
+}
+
+/* 접힘 고지 — 결정론 축약 고지(실측값으로 동적 생성). .orb-turn-fold-note와
+ * 같은 어휘(옅은 색·작은 글자)를 쓰되, 카드 내부에 얹히므로 배경은 없다. */
+.orb-fold-note {
+  font-size: var(--text-2xs);
+  color: var(--color-k-faint);
+}
+
 /* 진행 카드 — "판단 중" + 툴 단계. 스피너는 없다(오브 시선이 대신한다) —
  * 이 카드는 텍스트·아이콘·소요시간만 그린다. */
 .orb-progress-card {

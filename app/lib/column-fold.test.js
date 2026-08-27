@@ -73,6 +73,22 @@ test('columnPixelWidth: 짧은 한글 라벨은 데이터 셀 최소폭(90px) �
   assert.equal(columnPixelWidth('현재가'), 114);
 });
 
+test('foldColumns: 오브 표 축약 카드 폭(360px, board-33③)에서는 짧은 라벨 기준 3컬럼까지만 보인다', () => {
+  // 오브 카드는 360px(패널 400 - 카드 padding)로 셸 캔버스(1560px)보다 훨씬
+  // 좁다. 2글자 안팎 라벨은 전부 114px 바닥값(위 테스트)에 걸려 360/114 ≈
+  // 3.16 — 정수 3개까지만 누적폭이 들어간다(orb.js buildOrbTableCard의
+  // ORB_FOLD_CARD_WIDTH_PX=360 가정을 여기서 고정한다).
+  const columns = [
+    { key: 'acct', label: '계정' },
+    { key: 'cur', label: '당기' },
+    { key: 'prev', label: '전기' },
+    { key: 'chg', label: '증감' },
+  ];
+  const { visible, hidden } = foldColumns(columns, 360);
+  assert.equal(visible.length, 3);
+  assert.equal(hidden.length, 1);
+});
+
 test('foldColumns: 15개 넓은 테이블 전부 total/visible/hidden이 산술적으로 닫힌다', () => {
   assert.equal(FIXTURES.trs.length, 15);
   for (const tr of FIXTURES.trs) {
