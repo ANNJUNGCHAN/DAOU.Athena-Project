@@ -14,6 +14,7 @@ def _settings(tmp_path, **over):
         routines_enabled=True,
         routines_store_path=tmp_path / "routines.json",
         routines_ledger_path=tmp_path / "ledger.jsonl",
+        routines_read_marks_path=tmp_path / "read_marks.json",
         **over,
     )
 

@@ -16,6 +16,7 @@ from athena_api.routines.disclosure_source import (
 )
 from athena_api.routines.ledger import RoutineLedger
 from athena_api.routines.models import Condition, derive_mode
+from athena_api.routines.read_marks import ReadMarksStore
 from athena_api.routines.rules import validate_draft
 from athena_api.routines.runtime import RoutinesRuntime
 from athena_api.routines.scheduler import RoutineScheduler, adapt_real_message
@@ -61,6 +62,28 @@ def test_store_corrupt_file_is_preserved_and_reported(tmp_path):
     assert report.corrupt
     assert (tmp_path / "routines.corrupt").exists()
     assert store.list_all() == []
+
+
+def test_read_marks_roundtrip_across_instances(tmp_path):
+    path = tmp_path / "read_marks.json"
+    marks = ReadMarksStore(path)
+    marks.load()  # 파일 없음 — 빈 상태
+    assert marks.last_read_fired_at("r1") is None
+
+    marks.ack("r1", "2026-08-24T07:30:00+00:00")
+
+    restored = ReadMarksStore(path)
+    restored.load()
+    assert restored.last_read_fired_at("r1") == "2026-08-24T07:30:00+00:00"
+    assert restored.last_read_fired_at("r2") is None  # 다른 routine 영향 없음
+
+
+def test_read_marks_corrupt_file_degrades_to_empty(tmp_path):
+    path = tmp_path / "read_marks.json"
+    path.write_text("{broken json", encoding="utf-8")
+    marks = ReadMarksStore(path)
+    marks.load()  # 손상 — 낮은 스테이크라 빈 상태로 조용히 강등(store.py와 다른 정책)
+    assert marks.last_read_fired_at("r1") is None
 
 
 def test_store_rejects_illegal_transitions(tmp_path):
@@ -290,6 +313,7 @@ def _runtime(tmp_path, ws=None, on_expire=None):
         engine=engine,
         scheduler=sched,
         events=asyncio.Queue(200),
+        read_marks=ReadMarksStore(tmp_path / "read_marks.json"),
         ws_client=ws,
     )
 
