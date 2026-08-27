@@ -3300,10 +3300,11 @@ app.whenReady().then(async () => {
       );
       assertOk(
         // F-stage5b-FE — "발화→열람"·"이어진 대화"도 라이브로 승격됐다.
-        // "성공률"만 fixture로 남는다(지표 정의 미확정, 4단계 ADR).
-        'agent-canvas-10: 30회 통계 4타일 — "성공률"만 fixture, 나머지 3장(평균·발화→열람·이어진 대화)은 live다(F-stage5b-FE)',
-        historyProbe.statTileCount === 4 && historyProbe.avgTileSource === 'live'
-          && historyProbe.avgTileValue === '7.4s' && historyProbe.fixtureTileCount === 1
+        // R2(3차 라운드, agent-mode-round3-plan.md 1단계)에서 지표 정의가
+        // 끝내 확정되지 않은 타일 1개를 걷어내 3타일 전부 live가 됐다.
+        'agent-canvas-10: 30회 통계 3타일 — 전부 live다(평균·발화→열람·이어진 대화, F-stage5b-FE·R2)',
+        historyProbe.statTileCount === 3 && historyProbe.avgTileSource === 'live'
+          && historyProbe.avgTileValue === '7.4s' && historyProbe.fixtureTileCount === 0
           && historyProbe.openedRateValue === '71%' && historyProbe.repliedCountValue === '9건',
       );
       assertOk(

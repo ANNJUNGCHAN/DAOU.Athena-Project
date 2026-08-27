@@ -62,9 +62,10 @@
 // 뷰 탭 대신 브레드크럼을 그린다(재검증 확인). "최근 30회"는 6단계
 // GET /{id}/runs 실데이터, 상태 아이콘은 ledger의 실제 verdict 3종
 // (fired/near/suppressed)만 쓴다 — 목업의 "재시도 ↻"·"대체 실행 ⚠"은 대응
-// verdict가 없어 만들지 않는다(AC10). 통계 4타일 중 "평균"(5단계)·"발화→열람"·
-// "이어진 대화"(F-stage5b-FE)는 라이브다 — "성공률"만 지표 정의가 미확정이라
-// fixture로 남는다(4단계 ADR). "오늘 07:30 산출물" 카드는 ledger 스키마에
+// verdict가 없어 만들지 않는다(AC10). 통계 3타일("평균"(5단계)·"발화→열람"·
+// "이어진 대화", F-stage5b-FE)은 전부 라이브다 — 지표 정의가 끝내 확정되지
+// 않은 타일 1개는 3차 라운드(R2)에서 제거됐다(agent-mode-round3-plan.md
+// 1단계). "오늘 07:30 산출물" 카드는 ledger 스키마에
 // 근거가 없다(컬럼이 식별자·숫자·판정 사유뿐, ledger.py 머리말 참고) — 그래도
 // 생략하지 않는다: 사용자 확정 규칙1("Paper에 있는 요소는 전부 구현")의
 // 합의된 처리는 fixture+data-source="fixture" 표기이지 생략이 아니다(팀 리드
@@ -649,12 +650,11 @@ function createAgentCanvas(deps) {
     return { key: 'continued', label: '이어진 대화', value: `${engagementCache.repliedCount}건`, source: 'live' };
   }
 
-  // "성공률"만 fixture로 남는다 — 지표 정의가 아직 팀 리드 승인 전이다(4단계
-  // ADR, 유일한 잔존 fixture). 나머지 셋(평균·발화→열람·이어진 대화)은
-  // F-stage5·5b-FE를 거쳐 전부 라이브다.
+  // 통계 3타일(평균·발화→열람·이어진 대화)은 F-stage5·5b-FE를 거쳐 전부
+  // 라이브다 — 지표 정의가 끝내 확정되지 않은 타일 1개는 3차 라운드(R2)에서
+  // 제거됐다(agent-mode-round3-plan.md 1단계, Paper 우선 역방향 적용).
   function buildHistoryStats() {
     return [
-      { key: 'success-rate', label: '성공률', value: '93%', source: 'fixture' },
       avgDurationTile(),
       openedRateTile(),
       repliedCountTile(),
@@ -663,9 +663,8 @@ function createAgentCanvas(deps) {
 
   // "오늘 07:30 산출물" 카드(fixture) — Paper 41번 우측 상단, 정정 반영(사용자
   // 확정 규칙1: 디자인에 있는 요소는 생략이 아니라 fixture+data-source 표기로
-  // 구현한다, 아래 통계 4타일 중 "성공률"과 같은 처리). 버튼 2종은 뒷받침
-  // 데이터(캔버스 카드 재조회·채팅 이동 경로)가 없어 비활성 — 기능 없는
-  // 버튼을 활성으로 두지 않는다(P3).
+  // 구현한다). 버튼 2종은 뒷받침 데이터(캔버스 카드 재조회·채팅 이동 경로)가
+  // 없어 비활성 — 기능 없는 버튼을 활성으로 두지 않는다(P3).
   function fixtureTodayOutput() {
     return {
       title: '# 아침 브리핑 — 8/26 화',
