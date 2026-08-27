@@ -177,4 +177,9 @@ async def list_routine_runs(request: Request, routine_id: str) -> dict[str, Any]
     """실행 이력 조회 — ledger는 그대로 두고 라우터 레벨에서 routine_id로 거른다."""
     runtime = _runtime(request)
     rows = [r for r in runtime.ledger.read_all() if r.get("routine_id") == routine_id]
-    return {"runs": rows}
+    # 최근 30건(옛 jsonl은 duration_ms 키 자체가 없을 수 있다 — 하위호환 방어).
+    durations = [
+        r["duration_ms"] for r in rows[-30:] if isinstance(r.get("duration_ms"), (int, float))
+    ]
+    avg_duration_ms = sum(durations) / len(durations) if durations else None
+    return {"runs": rows, "avg_duration_ms": avg_duration_ms}

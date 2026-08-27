@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import json
 
 import pytest
 from fastapi import FastAPI
@@ -264,3 +265,58 @@ def test_runs_filters_by_routine_id(app_client):
     assert len(runs) == 1
     assert runs[0]["routine_id"] == rid_a
     assert runs[0]["verdict"] == "fired"
+
+
+def test_runs_avg_duration_ms_ignores_legacy_rows_without_the_field(app_client):
+    """F2 — 옛 jsonl 행(필드 자체가 없음)이 섞여도 평균 계산이 죽지 않고,
+    그 행은 평균에서 자연히 제외된다(하위호환)."""
+    client, runtime = app_client
+    rid = client.post("/api/v1/routines/draft", json=DRAFT).json()["id"]
+
+    # "옛" 행 — record()를 거치지 않고 duration_ms 키 자체가 없는 과거 포맷을
+    # 파일에 직접 기록해 마이그레이션 없는 혼재 상황을 흉내낸다.
+    legacy_row = {
+        "ts": "2026-01-01T00:00:00+00:00",
+        "routine_id": rid,
+        "symbol": "005930",
+        "source": "price.current",
+        "verdict": "fired",
+        "observed": 199000,
+        "threshold": 200000,
+        "reason": "조건 충족",
+    }
+    with runtime.ledger._path.open("a", encoding="utf-8") as fh:
+        fh.write(json.dumps(legacy_row, ensure_ascii=False) + "\n")
+
+    runtime.ledger.record(
+        "fired",
+        routine_id=rid,
+        symbol="005930",
+        source="price.current",
+        observed=198000,
+        threshold=200000,
+        reason="조건 충족",
+        duration_ms=120.0,
+    )
+
+    res = client.get(f"/api/v1/routines/{rid}/runs")
+    assert res.status_code == 200
+    body = res.json()
+    assert len(body["runs"]) == 2
+    assert body["avg_duration_ms"] == 120.0  # 옛 행은 평균에서 제외
+
+
+def test_runs_avg_duration_ms_is_null_when_no_durations_recorded(app_client):
+    client, runtime = app_client
+    rid = client.post("/api/v1/routines/draft", json=DRAFT).json()["id"]
+    runtime.ledger.record(
+        "fired",
+        routine_id=rid,
+        symbol="005930",
+        source="price.current",
+        observed=199000,
+        threshold=200000,
+        reason="조건 충족",
+    )
+    res = client.get(f"/api/v1/routines/{rid}/runs")
+    assert res.json()["avg_duration_ms"] is None

@@ -207,6 +207,7 @@ class RoutineScheduler:
         for spec in self.store.list_active():
             if spec.mode != "periodic":
                 continue
+            started = time.monotonic()
             try:
                 titles = await self.disclosure.fetch_new_titles(
                     spec.symbol, bgn_de=today, end_de=today
@@ -214,8 +215,9 @@ class RoutineScheduler:
             except DisclosureSourceError as exc:
                 self.last_error = str(exc)
                 continue
+            duration_ms = (time.monotonic() - started) * 1000
             for title in titles:
-                verdict = self.engine.evaluate(spec, title)
+                verdict = self.engine.evaluate(spec, title, duration_ms=duration_ms)
                 await self._handle_verdict(spec, verdict, title)
 
     # ---------- schedule (벽시계 예약) ----------

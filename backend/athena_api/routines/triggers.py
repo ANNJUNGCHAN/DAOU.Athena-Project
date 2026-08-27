@@ -66,9 +66,17 @@ class TriggerEngine:
         return self._states.setdefault(routine_id, TriggerState())
 
     def evaluate(
-        self, spec: RoutineSpec, observed: float | bool | str
+        self,
+        spec: RoutineSpec,
+        observed: float | bool | str,
+        *,
+        duration_ms: float | None = None,
     ) -> Verdict | None:
-        """한 관측에 대한 판정. None = 조용(기록 없음)."""
+        """한 관측에 대한 판정. None = 조용(기록 없음).
+
+        duration_ms(선택)는 이 관측을 얻는 데 걸린 시간(예: 공시 폴링의
+        fetch_new_titles 호출)이다 — 판정 로직과는 무관하고, 기록되는
+        ledger 행에만 실린다(§8 F2)."""
         cond = spec.condition
         state = self._state(spec.id)
         met = _condition_met(cond.op, observed, cond.value)
@@ -84,6 +92,7 @@ class TriggerEngine:
                     observed=observed,
                     threshold=cond.value,
                     reason="임계 미달 — 관측 임계로 기록",
+                    duration_ms=duration_ms,
                 )
                 return "near"
             return None
@@ -100,6 +109,7 @@ class TriggerEngine:
                 reason=(
                     f"연속 틱 미충족 ({state.consecutive}/{cond.consecutive_ticks})"
                 ),
+                duration_ms=duration_ms,
             )
             return "suppressed"
 
@@ -115,6 +125,7 @@ class TriggerEngine:
                     observed=observed,
                     threshold=cond.value,
                     reason=f"쿨다운 {int(remaining)}초 남음",
+                    duration_ms=duration_ms,
                 )
                 return "suppressed"
 
@@ -128,6 +139,7 @@ class TriggerEngine:
             observed=observed,
             threshold=cond.value,
             reason="조건 도달",
+            duration_ms=duration_ms,
         )
         return "fired"
 
