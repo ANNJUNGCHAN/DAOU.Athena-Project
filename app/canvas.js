@@ -1435,6 +1435,16 @@ const agentCanvas = window.AthenaLib.AgentCanvas.createAgentCanvas({
     const res = await window.athena.invoke('athena:routine-runs', { id });
     return (res && res.ok && res.data && Array.isArray(res.data.runs)) ? res.data.runs : [];
   },
+  // 11단계 — "그래프 모드에서 근거 보기 →". 사이드바 모드 네비와 같은 두 걸음
+  // (캔버스 전환 + 네비 활성 표시)을 그대로 재현한다(sidebar.js 참고).
+  onOpenGraph: () => {
+    if (window.AthenaGraphMode && typeof window.AthenaGraphMode.setView === 'function') {
+      window.AthenaGraphMode.setView('graph');
+    }
+    if (window.AthenaModeNav && typeof window.AthenaModeNav.setActive === 'function') {
+      window.AthenaModeNav.setActive('graph');
+    }
+  },
 });
 agentCanvas.mount();
 window.AthenaAgentCanvas = agentCanvas;

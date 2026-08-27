@@ -65,17 +65,31 @@ const VERDICT_ICON = {
   suppressed: { glyph: '○', colorVar: '--color-k-faint' },
 };
 
+// 11단계(프로액티브, Paper 보드 42) — 4번째 뷰 탭 "제안". "지금 읽히는 성향"
+// 스트립·제안 카드 2장은 7단계와 같은 원천(GET /api/v1/brain/profile-summary,
+// suggestionsCache)을 재사용한다 — 39번 좌측 미니 목록과 42번 전체 화면이
+// 서로 다른 데이터를 보여주면 "두 개의 진실"이 생긴다(sidebar.js 머리말과
+// 같은 원칙). 칩 "루틴으로"는 7단계 "추가"와 같은 seedChatInput 경로,
+// "보류"는 세션 동안만 그 카드를 숨긴다(백엔드 저장이 없다 — 재시작하면
+// 다시 보인다, 지어낸 영속성을 암시하지 않는다, P3). 말걸기 가드 패널은
+// 정적 표시만이다 — 저장 백엔드가 없어 값을 바꾸는 UI를 만들지 않는다
+// (죽은 버튼 금지, 팀 리드 브리핑 명시). "그래프 모드에서 근거 보기 →"는
+// 사이드바 모드 네비를 그대로 재사용한다(setView + setActive 둘 다 — 하나만
+// 부르면 캔버스는 바뀌는데 사이드바 활성 표시는 안 바뀌는 불일치가 생긴다).
+
 const TABS = [
   { key: 'all', label: '모두' },
   { key: 'active', label: '활성' },
   { key: 'paused', label: '일시중지' },
 ];
 
-// 상위 뷰 탭(9단계) — 위 TABS(리스트 필터, "작업" 뷰 내부용)와는 다른 층위다.
+// 상위 뷰 탭(9단계, 11단계에서 4번째 추가) — 위 TABS(리스트 필터, "작업" 뷰
+// 내부용)와는 다른 층위다.
 const VIEWS = [
   { key: 'tasks', label: '작업' },
   { key: 'alerts', label: '알람' },
   { key: 'live', label: '라이브' },
+  { key: 'proactive', label: '제안' },
 ];
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -119,6 +133,7 @@ function createAgentCanvas(deps) {
     fetchProfileSummary, onAddSuggestion,
     fetchAlerts, markAllAlertsRead, getWsConnected,
     fetchRuns,
+    onOpenGraph,
   } = deps || {};
   if (!container) return { mount() {}, async refresh() {} };
 
@@ -131,6 +146,7 @@ function createAgentCanvas(deps) {
   let activeView = 'tasks';
   let alertsCache = [];
   let historyItem = null; // 드릴인 중인 항목(10단계) — null이면 드릴인이 아니다.
+  let heldSuggestionIds = new Set(); // "보류"한 제안(11단계) — 세션 동안만, 저장 안 됨.
   let historyRequestId = 0; // 위와 같은 이유 — 별개 요청이라 별개 가드를 쓴다.
 
   // ---------- 헤더 ----------
@@ -179,6 +195,15 @@ function createAgentCanvas(deps) {
   const breadcrumbBadge = el('span', 'agent-breadcrumb-badge');
   breadcrumb.appendChild(breadcrumbBadge);
   head.appendChild(breadcrumb);
+
+  // "그래프 모드에서 근거 보기 →"(11단계, "제안" 뷰 전용) — 사이드바 모드
+  // 네비를 그대로 재사용한다(위 머리말 참고).
+  const graphLinkBtn = el('button', 'agent-graph-link');
+  graphLinkBtn.type = 'button';
+  graphLinkBtn.textContent = '그래프 모드에서 근거 보기 →';
+  graphLinkBtn.hidden = true;
+  graphLinkBtn.addEventListener('click', () => { if (typeof onOpenGraph === 'function') onOpenGraph(); });
+  head.appendChild(graphLinkBtn);
 
   // "작업" 뷰 전용 머리(부제+리스트 필터 탭+검색+CTA) — .agent-head 레이아웃을
   // 그대로 물려받는다. "알람"·"라이브" 뷰에서는 숨는다(setActiveView).
@@ -317,6 +342,7 @@ function createAgentCanvas(deps) {
     while (suggestList.firstChild) suggestList.removeChild(suggestList.firstChild);
     suggestSection.hidden = suggestionsCache.length === 0;
     for (const entry of suggestionsCache) suggestList.appendChild(makeSuggestionRow(entry));
+    renderProactiveView(); // 11단계 — 같은 캐시를 쓰는 "제안" 뷰도 함께 갱신한다(위 머리말).
   }
 
   // GET /api/v1/brain/profile-summary 실데이터 — requestId로 낡은 응답을 버린다
@@ -592,6 +618,8 @@ function createAgentCanvas(deps) {
     stats.hidden = true;
     body.hidden = true;
     alarmLiveBody.hidden = true;
+    proactiveBody.hidden = true;
+    graphLinkBtn.hidden = true;
     markAllReadBtn.hidden = true;
     viewTabsWrap.hidden = true;
     for (const k of Object.keys(viewTabButtons)) viewTabButtons[k].className = 'agent-view-tab';
@@ -604,7 +632,8 @@ function createAgentCanvas(deps) {
   }
 
   // "작업 ›" 클릭 — 드릴인은 항상 "작업" 뷰에서만 열리므로(위 머리말) 그
-  // 상태로 직접 되돌린다.
+  // 상태로 직접 되돌린다(탭 활성 표시도 "작업"으로 되돌린다 — 실측: 이전엔
+  // 이 복원이 빠져 있어 복귀 후 어떤 탭도 활성으로 안 보였다).
   function closeHistory() {
     historyItem = null;
     breadcrumb.hidden = true;
@@ -613,6 +642,113 @@ function createAgentCanvas(deps) {
     tasksHead.hidden = false;
     stats.hidden = false;
     body.hidden = false;
+    proactiveBody.hidden = true;
+    graphLinkBtn.hidden = true;
+    activeView = 'tasks';
+    for (const k of Object.keys(viewTabButtons)) {
+      viewTabButtons[k].className = k === 'tasks' ? 'agent-view-tab is-active' : 'agent-view-tab';
+    }
+  }
+
+  // ---------- 프로액티브(11단계, Paper 보드 42) ----------
+  const proactiveBody = el('div', 'agent-proactive-body');
+  proactiveBody.hidden = true;
+
+  const proactiveStrip = el('div', 'agent-proactive-strip');
+  const proactiveStripLabel = el('div', 'agent-panel-caption');
+  proactiveStripLabel.textContent = '지금 읽히는 성향';
+  proactiveStrip.appendChild(proactiveStripLabel);
+  const proactiveStripValue = el('div', 'agent-proactive-strip-value');
+  proactiveStrip.appendChild(proactiveStripValue);
+  const proactiveStripSub = el('div', 'agent-proactive-strip-sub');
+  proactiveStrip.appendChild(proactiveStripSub);
+  proactiveBody.appendChild(proactiveStrip);
+
+  const proactiveCardsWrap = el('div', 'agent-proactive-cards');
+  proactiveBody.appendChild(proactiveCardsWrap);
+
+  // 말걸기 가드 — 정적 표시만이다(저장 백엔드 없음, 팀 리드 브리핑 명시 —
+  // 위 머리말). 값을 바꾸는 UI를 만들지 않는다(죽은 버튼 금지, P3).
+  const nudgeGuard = el('div', 'agent-nudge-guard');
+  nudgeGuard.setAttribute('data-source', 'fixture');
+  const nudgeGuardCaption = el('div', 'agent-panel-caption');
+  nudgeGuardCaption.textContent = '말걸기 가드';
+  nudgeGuard.appendChild(nudgeGuardCaption);
+  const nudgeGuardTags = el('div', 'agent-nudge-guard-tags');
+  for (const label of ['하루 최대 2회', '조용 시간 22:00–07:00', '근거 표시 항상', '거절 반영 성향으로 학습']) {
+    const tag = el('span', 'agent-nudge-guard-tag');
+    tag.textContent = label;
+    nudgeGuardTags.appendChild(tag);
+  }
+  nudgeGuard.appendChild(nudgeGuardTags);
+  const nudgeGuardNote = el('div', 'agent-nudge-guard-note');
+  nudgeGuardNote.textContent = '제안은 그래프 보강 15 이상일 때만 · 거절한 제안은 반복되지 않는다 → 발화 자체는 오른쪽 채팅에 도착';
+  nudgeGuard.appendChild(nudgeGuardNote);
+  proactiveBody.appendChild(nudgeGuard);
+
+  function updateProactiveTabLabel() {
+    const n = suggestionsCache.filter((e) => !heldSuggestionIds.has(e.entity_id)).length;
+    viewTabButtons.proactive.textContent = n > 0 ? `제안 ${n}` : '제안';
+  }
+
+  function renderProactiveStrip() {
+    const relations = [...new Set(suggestionsCache.map((e) => e.relation_kind).filter(Boolean))];
+    proactiveStripValue.textContent = relations.length ? relations.join(' · ') : '아직 읽히는 성향이 없습니다';
+    proactiveStripSub.textContent = suggestionsCache.length ? `신호 ${suggestionsCache.length}건` : '';
+  }
+
+  function makeProactiveCard(entry) {
+    const card = el('div', 'agent-proactive-card');
+    card.setAttribute('data-source', 'live'); // profile-summary는 실데이터다(7단계와 같은 원천).
+    const head2 = el('div', 'agent-proactive-card-head');
+    const icon = el('span', 'agent-proactive-card-icon');
+    icon.textContent = '◆';
+    head2.appendChild(icon);
+    const title = el('span', 'agent-proactive-card-title');
+    title.textContent = entry.entity_name || entry.entity_id;
+    head2.appendChild(title);
+    const routineBtn = el('button', 'agent-proactive-chip is-primary');
+    routineBtn.type = 'button';
+    routineBtn.textContent = '루틴으로';
+    routineBtn.addEventListener('click', () => {
+      if (typeof onAddSuggestion === 'function') onAddSuggestion(suggestionSeedText(entry));
+    });
+    head2.appendChild(routineBtn);
+    const holdBtn = el('button', 'agent-proactive-chip');
+    holdBtn.type = 'button';
+    holdBtn.textContent = '보류';
+    holdBtn.addEventListener('click', () => {
+      // 세션 동안만 숨긴다 — 저장 백엔드가 없어 재시작하면 다시 보인다(위 머리말, P3).
+      heldSuggestionIds.add(entry.entity_id);
+      renderProactiveCards();
+      updateProactiveTabLabel();
+    });
+    head2.appendChild(holdBtn);
+    card.appendChild(head2);
+    const rationale = el('div', 'agent-proactive-card-rationale');
+    rationale.textContent = `${entry.relation_kind} 성향 ${entry.reinforcement}회 보강` + (entry.rationale ? ` — ${entry.rationale}` : '');
+    card.appendChild(rationale);
+    return card;
+  }
+
+  function renderProactiveCards() {
+    while (proactiveCardsWrap.firstChild) proactiveCardsWrap.removeChild(proactiveCardsWrap.firstChild);
+    const visible = suggestionsCache.filter((e) => !heldSuggestionIds.has(e.entity_id));
+    if (!visible.length) {
+      const empty = el('div', 'agent-list-empty');
+      empty.textContent = '지금은 표시할 제안이 없습니다';
+      proactiveCardsWrap.appendChild(empty);
+    } else {
+      for (const entry of visible) proactiveCardsWrap.appendChild(makeProactiveCard(entry));
+    }
+  }
+
+  // suggestionsCache가 바뀔 때마다(refreshSuggestions) 같이 갱신된다 — 아래
+  // renderSuggestions()가 부른다(단일 갱신 지점, 위 머리말 "두 개의 진실" 참고).
+  function renderProactiveView() {
+    renderProactiveStrip();
+    renderProactiveCards();
+    updateProactiveTabLabel();
   }
 
   // 예약 트리거 백엔드 미구현, 후속 스코프 — 벽시계 스케줄 개념이 SOURCES
@@ -916,12 +1052,17 @@ function createAgentCanvas(deps) {
       viewTabButtons[k].className = k === activeView ? 'agent-view-tab is-active' : 'agent-view-tab';
     }
     const isTasks = activeView === 'tasks';
+    const isAlarmLive = activeView === 'alerts' || activeView === 'live';
+    const isProactive = activeView === 'proactive';
     tasksHead.hidden = !isTasks;
     stats.hidden = !isTasks;
     body.hidden = !isTasks;
-    markAllReadBtn.hidden = isTasks;
-    alarmLiveBody.hidden = isTasks;
-    if (!isTasks) { renderAlarmColumn(); renderWsStatus(); }
+    markAllReadBtn.hidden = !isAlarmLive;
+    alarmLiveBody.hidden = !isAlarmLive;
+    proactiveBody.hidden = !isProactive;
+    graphLinkBtn.hidden = !isProactive;
+    if (isAlarmLive) { renderAlarmColumn(); renderWsStatus(); }
+    if (isProactive) renderProactiveView();
   }
 
   function mount() {
@@ -932,11 +1073,13 @@ function createAgentCanvas(deps) {
     container.appendChild(body);
     container.appendChild(alarmLiveBody);
     container.appendChild(historyBody);
+    container.appendChild(proactiveBody);
     renderStats();
     updateSubtitle();
     renderPanels();
     renderAlarmColumn(); // 배지 라벨(알람 N)은 뷰와 무관하게 항상 최신이어야 한다.
     renderWsStatus();
+    renderProactiveView(); // 배지 라벨(제안 N)도 마찬가지 — 위와 같은 이유.
   }
 
   // GET /api/v1/routines 실데이터 — requestId로 낡은 응답을 버린다(sidebar.js

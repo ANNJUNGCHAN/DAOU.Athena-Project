@@ -3094,6 +3094,119 @@ app.whenReady().then(async () => {
     ipcMain.handle('athena:routine-runs', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
   }
 
+  // ---------- 프로액티브 + 말걸기 가드 (11단계, Paper 보드 42) ----------
+  //
+  // athena:brain-profile-summary를 stateful fixture로 바꿔(7단계와 같은 채널)
+  // "지금 읽히는 성향" 스트립·제안 카드·"그래프 모드에서 근거 보기 →"·
+  // 말걸기 가드까지 왕복시킨다. "그래프 모드에서 근거 보기 →"가 실제로
+  // 사이드바 모드 네비(#modeNavGraph)의 활성 표시까지 같이 바꾸는지 확인한다
+  // (캔버스만 바뀌고 네비가 안 바뀌는 불일치가 이 배선의 실패 형태다).
+  try {
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({
+      ok: true, data: { routines: [], disclosure_ready: true, last_error: null },
+    }));
+    ipcMain.removeHandler('athena:brain-profile-summary');
+    ipcMain.handle('athena:brain-profile-summary', async () => ({
+      ok: true,
+      entries: [
+        {
+          entity_id: 'e1', entity_kind: 'stock', entity_name: '삼성전자', relation_kind: '단기 회전',
+          confidence: 'EXTRACTED', tier: 'deterministic', rationale: '매매일마다 정리가 필요해 보여요',
+          observed_at: '2026-08-26T00:00:00Z', reinforcement: 21,
+        },
+        {
+          entity_id: 'e2', entity_kind: 'theme', entity_name: '배당 방어 바스켓', relation_kind: '응집 상승',
+          confidence: 'INFERRED', tier: 'conversational', rationale: null,
+          observed_at: '2026-08-25T00:00:00Z', reinforcement: 6,
+        },
+      ],
+    }));
+
+    const proactiveProbe = await shellWin.webContents.executeJavaScript(`(async () => {
+      const nav = document.getElementById('modeNavAgent');
+      const back = document.getElementById('modeNavSummary');
+      const graphNavItem = document.getElementById('modeNavGraph');
+      const canvas = document.getElementById('agentCanvas');
+      if (!nav || !back || !graphNavItem || !canvas) return { wired: false };
+      nav.click();
+      await new Promise((r) => setTimeout(r, 600));
+      const proactiveTabBtn = Array.from(canvas.querySelectorAll('.agent-view-tab')).find((n) => n.textContent.startsWith('제안'));
+      if (!proactiveTabBtn) return { wired: false, reason: 'no-proactive-tab' };
+      const tabLabelBefore = proactiveTabBtn.textContent;
+      proactiveTabBtn.click();
+      await new Promise((r) => setTimeout(r, 100));
+      const stripValue = (canvas.querySelector('.agent-proactive-strip-value') || {}).textContent;
+      const stripSub = (canvas.querySelector('.agent-proactive-strip-sub') || {}).textContent;
+      const cardCount = canvas.querySelectorAll('.agent-proactive-card').length;
+      const chipLabels = Array.from(canvas.querySelectorAll('.agent-proactive-chip')).slice(0, 2).map((n) => n.textContent);
+      const guardTagCount = canvas.querySelectorAll('.agent-nudge-guard-tag').length;
+      const guardSource = (canvas.querySelector('.agent-nudge-guard') || {}).getAttribute('data-source');
+
+      // "보류" — 두 번째 카드의 보류 칩(각 카드 칩 배열의 인덱스 1).
+      const secondCardChips = canvas.querySelectorAll('.agent-proactive-card')[1].querySelectorAll('.agent-proactive-chip');
+      secondCardChips[1].click();
+      await new Promise((r) => setTimeout(r, 50));
+      const cardCountAfterHold = canvas.querySelectorAll('.agent-proactive-card').length;
+      const tabLabelAfterHold = proactiveTabBtn.textContent;
+
+      // "그래프 모드에서 근거 보기 →"
+      const graphLinkHiddenBefore = canvas.querySelector('.agent-graph-link').hidden;
+      canvas.querySelector('.agent-graph-link').click();
+      await new Promise((r) => setTimeout(r, 200));
+      const graphCanvasVisible = !document.getElementById('graphCanvas').hidden;
+      const graphNavActive = graphNavItem.className.includes('is-active');
+
+      back.click();
+      await new Promise((r) => setTimeout(r, 100));
+      return {
+        wired: true, tabLabelBefore, stripValue, stripSub, cardCount, chipLabels,
+        guardTagCount, guardSource, cardCountAfterHold, tabLabelAfterHold,
+        graphLinkHiddenBefore, graphCanvasVisible, graphNavActive,
+      };
+    })()`);
+    report.proactive = proactiveProbe;
+    assertOk('agent-canvas-11: 배선이 있다', proactiveProbe.wired === true);
+    if (proactiveProbe.wired) {
+      assertOk('agent-canvas-11: 제안 탭 라벨이 개수를 담고 있다("제안 2")', proactiveProbe.tabLabelBefore === '제안 2');
+      assertOk(
+        'agent-canvas-11: "지금 읽히는 성향" 스트립이 실제 relation_kind를 합친다',
+        proactiveProbe.stripValue === '단기 회전 · 응집 상승',
+      );
+      assertOk('agent-canvas-11: 스트립 부제가 신호 건수다', proactiveProbe.stripSub === '신호 2건');
+      assertOk('agent-canvas-11: 제안 카드 2장이 뜬다', proactiveProbe.cardCount === 2);
+      assertOk(
+        'agent-canvas-11: 칩이 "루틴으로"·"보류"다',
+        JSON.stringify(proactiveProbe.chipLabels) === JSON.stringify(['루틴으로', '보류']),
+      );
+      assertOk('agent-canvas-11: 말걸기 가드 태그 4개(fixture, 정적 표시만)', proactiveProbe.guardTagCount === 4 && proactiveProbe.guardSource === 'fixture');
+      assertOk('agent-canvas-11: "보류" 클릭 후 카드가 1장으로 준다(세션 한정)', proactiveProbe.cardCountAfterHold === 1);
+      assertOk('agent-canvas-11: "보류" 후 탭 라벨도 "제안 1"로 준다', proactiveProbe.tabLabelAfterHold === '제안 1');
+      assertOk('agent-canvas-11: "그래프 모드에서 근거 보기 →"가 "제안" 뷰에서만 보인다', proactiveProbe.graphLinkHiddenBefore === false);
+      assertOk('agent-canvas-11: 클릭 시 실제로 그래프 캔버스가 열린다', proactiveProbe.graphCanvasVisible === true);
+      assertOk(
+        'agent-canvas-11: 사이드바 모드 네비의 활성 표시도 "그래프"로 같이 바뀐다(캔버스만 바뀌는 불일치 없음)',
+        proactiveProbe.graphNavActive === true,
+      );
+    }
+  } catch (err) {
+    report.proactive = { error: String((err && err.message) || err) };
+    failures.push('agent-canvas-11: 검증 블록이 예외로 끝났다');
+  } finally {
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+    ipcMain.removeHandler('athena:brain-profile-summary');
+    ipcMain.handle('athena:brain-profile-summary', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+    // 그래프 모드로 남아 있으면 다음 실행(재실행 시)에 영향을 줄 수 있다 — 답변 모드로 되돌린다.
+    await shellWin.webContents.executeJavaScript(`(() => {
+      if (window.AthenaGraphMode && window.AthenaGraphMode.state && window.AthenaGraphMode.state.view !== 'summary') {
+        window.AthenaGraphMode.setView('summary');
+      }
+      const summaryNavItem = document.getElementById('modeNavSummary');
+      if (window.AthenaModeNav && summaryNavItem) window.AthenaModeNav.setActive('summary');
+    })()`);
+  }
+
   fs.writeFileSync(path.join(CAPTURES, 'VERIFY-REPORT.json'), JSON.stringify(report, null, 2));
   console.log('[verify] 리포트 저장:', path.join(CAPTURES, 'VERIFY-REPORT.json'));
 
