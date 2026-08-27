@@ -2460,11 +2460,11 @@ app.whenReady().then(async () => {
       // 표면에만 그려진다) — 찍고 요약 탭으로 되돌려 이후 검증의 전제(요약 표
       // 표시 상태)를 바꾸지 않는다.
       await shellWin.webContents.executeJavaScript(
-        "(() => { const t = document.getElementById('graphViewTab'); if (t) t.click(); })()"
+        "document.getElementById('graphViewTab').click()"
       );
       report.graphMode.mapShot = await shot(shellWin, '90b-graph-map.png');
       await shellWin.webContents.executeJavaScript(
-        "(() => { const t = document.getElementById('summaryViewTab'); if (t) t.click(); })()"
+        "document.getElementById('summaryViewTab').click()"
       );
     } else {
       // 브레인이 안 됐다 — 그래도 네비 항목을 누르면 캔버스는 열려야 한다(막히지
@@ -3762,12 +3762,12 @@ app.whenReady().then(async () => {
     // 화면 전환을 보장하지 않는다. 90b와 같은 패턴으로 네비를 실제로 눌러 찍고
     // 대화 뷰로 되돌린다(이후 검증의 전제 상태 불변).
     await shellWin.webContents.executeJavaScript(
-      "(() => { const b = document.getElementById('modeNavAgent'); if (b) b.click(); })()"
+      "document.getElementById('modeNavAgent').click()"
     );
     await wait(400);
     report.proactive.shot = await shot(shellWin, '91-agent-canvas.png');
     await shellWin.webContents.executeJavaScript(
-      "(() => { const b = document.getElementById('modeNavSummary'); if (b) b.click(); })()"
+      "document.getElementById('modeNavSummary').click()"
     );
     assertOk('agent-canvas-11: 배선이 있다', proactiveProbe.wired === true);
     if (proactiveProbe.wired) {
