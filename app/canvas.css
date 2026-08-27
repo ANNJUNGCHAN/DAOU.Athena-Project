@@ -224,6 +224,30 @@ html, body { background: transparent; }
 .graph-cluster-stats { font-family: var(--font-mono); font-size: var(--text-2xs); fill: var(--color-k-hint); }
 .graph-cluster-stats.is-warn { fill: var(--color-warn); }
 
+/* 군집간 연결선 3종(보드 14 §1.4, 스텝11) — 실선(회색)은 count에 따라 달라지는
+ * stroke/stroke-width를 인라인 style로 받는다(버블의 fill-opacity와 같은 이유).
+ * 핑크(숨은 연관)·주황(확인 필요, r5 게이팅)은 고정색이라 여기 토큰으로 정한다. */
+.graph-cluster-edge.is-hidden-link { stroke: var(--color-brand); stroke-dasharray: 6 4; }
+.graph-cluster-edge.is-unnamed-warn { stroke: var(--color-warn); stroke-dasharray: 5 4; }
+
+/* 범례(보드 14 §1.5, 스텝11) — render.js가 실제로 쓰인 항목만 그려 넣는다(§0
+ * 정직한 데이터 정책). #graphBody의 flex-column화(아래 "그래프 뷰 본문 골격"
+ * 참고)로 SVG는 남는 공간을 채우고 범례는 아래 고정폭으로 붙는다. */
+#graphBody > svg.graph-canvas { flex: 1 1 auto; min-height: 0; }
+.graph-cluster-legend {
+  display: flex; align-items: center; gap: 18px; flex-shrink: 0;
+  padding: 11px 18px; border-top: 1px solid var(--color-k-line);
+}
+.graph-cluster-legend-item { display: flex; align-items: center; gap: 6px; }
+/* "점선 = 확인 필요"만 우측 끝에 분리해 붙인다(보드 14 §1.5 "마지막은 flexGrow
+ * spacer로 우측 분리") — 새 래퍼 없이 :has()로 그 항목 자체를 미는 쪽을 쓴다. */
+.graph-cluster-legend-item:has(.graph-cluster-legend-label.is-unnamed-warn) { margin-left: auto; }
+.graph-cluster-legend-label { font-family: var(--font-body); font-size: var(--text-xs); color: var(--color-k-soft); white-space: nowrap; }
+.graph-cluster-legend-label.is-unnamed-warn { color: var(--color-warn); }
+.graph-cluster-legend-swatch { display: inline-block; width: 20px; height: 0; border-top-width: 2px; border-top-style: solid; }
+.graph-cluster-legend-swatch.is-solid { border-top-color: var(--color-k-ghost); }
+.graph-cluster-legend-swatch.is-hidden-link { border-top-color: var(--color-brand); border-top-style: dashed; }
+
 /* 요약 뷰 본문 골격 — 표 영역(왼쪽, 헤더 아래로 히어로·배너·표가 세로로 쌓인다)
  * + 공통 패널(오른쪽, 스텝8) 좌우 배치(07 §10 스펙). */
 #graphSummaryTable { display: flex; flex-direction: column; }
@@ -235,7 +259,9 @@ html, body { background: transparent; }
  * 슬롯만 만들고 이 짝은 안 채웠다) — #graphBody가 콘텐츠 높이로 쪼그라들어
  * 그 안 SVG의 height:100%가 사실상 0에 가깝게 풀리던 실측 결함을 고친다. */
 #graphCanvas { display: flex; flex-direction: column; }
-#graphBody { flex: 1 1 auto; min-height: 0; }
+/* display:flex; flex-direction:column 추가분(스텝11) — #graphBody 스스로도
+ * flex 컨테이너가 돼야 안의 SVG(남는 공간 채움)와 범례(하단 고정)가 함께 쌓인다. */
+#graphBody { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
 
 /* 히어로(보드 06 §5) — "지금 읽히는 성향" + 사실/추론/불확실 %(실계산값만). */
 .summary-hero {

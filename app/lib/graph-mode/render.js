@@ -120,6 +120,30 @@ function clusterAlpha(cluster) {
   return DEFAULT_CLUSTER_ALPHA;
 }
 
+// 군집간 연결선(스텝11) — 정찰 보고서(paper-14-15-그래프뷰.md §1.4)가 확인한 범위
+// (굵기 2~7px, alpha 16~26%, 둘 다 "군집 간 연결 수"와 함께 단조 증가)를 재현한다.
+// 실선(회색)만 이 스케일을 쓴다 — 핑크/주황은 정찰 보고서에 데이터가 1~2건뿐이라
+// count에 따른 스케일 관계를 확인할 근거가 없고, 오히려 관찰된 예시 굵기(핑크
+// 2.4px, 주황 1.4~1.6px 평균)가 실선보다 눈에 띄게 얇다 — 굵어질수록 예외
+// 신호(핑크/주황)가 통상 신호(회색)보다 시각적으로 더 강해지는 역전을 피하려면
+// 고정폭이 더 정직하다(새 스케일을 "발명"하지 않는다는 원칙1의 정신을 여기선
+// "확인 안 된 스케일을 안 쓴다"로 적용한다).
+const MIN_EDGE_WIDTH = 2;
+const MAX_EDGE_WIDTH = 7;
+const MIN_EDGE_ALPHA = 0.16;
+const MAX_EDGE_ALPHA = 0.26;
+const EDGE_SCALE_CAP = 6; // 이 값 이상의 count는 최대 굵기/alpha로 saturate된다.
+const HIDDEN_LINK_EDGE_WIDTH = 2.4; // 정찰 보고서 관찰값 그대로.
+const UNNAMED_WARN_EDGE_WIDTH = 1.5; // 정찰 보고서 관찰값(1.4/1.6) 평균.
+
+function edgeScale(count) {
+  const t = Math.min(1, Math.max(0, (count - 1) / (EDGE_SCALE_CAP - 1)));
+  return {
+    width: MIN_EDGE_WIDTH + t * (MAX_EDGE_WIDTH - MIN_EDGE_WIDTH),
+    alpha: MIN_EDGE_ALPHA + t * (MAX_EDGE_ALPHA - MIN_EDGE_ALPHA),
+  };
+}
+
 // 군집 버블 지도(스텝10, §0-2 아키텍처 갭 해소) — 그래프 뷰 1단계를 개별 노드
 // 나열이 아니라 placed.clusters 소비로 바꾼다. 좌표·반지름은 cluster-layout.js가
 // 이미 계산한 값을 그대로 쓴다(새 스케일 발명 안 함, 원칙1) — 이 함수는 그리기만 한다.
@@ -148,6 +172,41 @@ function renderClusterBubbles(container, placed, options) {
   // 중립 스타일이지만, 이름 필드가 있는 입력(테스트용 모의 데이터 포함)에도 맞게 짠다.
   const namedCount = clusters.filter((c) => c.name).length;
   const warnEligible = window.AthenaLib.ThemeClusters.shouldWarnUnnamed(namedCount, clusters.length);
+  const clusterEdges = placed && Array.isArray(placed.clusterEdges) ? placed.clusterEdges : [];
+  const clusterById = new Map(clusters.map((c) => [c.cluster, c]));
+
+  // 엣지를 먼저 그린다(renderClusterMap과 같은 이유 — SVG는 나중에 그린 게 위로
+  // 온다, 버블이 선에 가려지면 안 된다). 실선/핑크 점선(숨은 연관)/주황 점선(확인
+  // 필요) 3종 — 주황은 §0 r5 임계 규칙으로 게이팅한다: 0/N(현재 실제 상태)이면
+  // 이 3번째 종류를 아예 안 그리고 실선으로 대체한다(cluster-layout.js 주석 참고 —
+  // isSurprising은 surprising-connections가 아직 안 이어져 있어 항상 false다).
+  const edgeLayer = el('g', { class: 'graph-cluster-edges' });
+  for (const edge of clusterEdges) {
+    const clusterA = clusterById.get(edge.from);
+    const clusterB = clusterById.get(edge.to);
+    if (!clusterA || !clusterB) continue;
+    const unnamedRelated = warnEligible && (!clusterA.name || !clusterB.name);
+    const { width, alpha } = edgeScale(edge.count);
+    let className = 'graph-edge graph-cluster-edge';
+    let style;
+    if (edge.isSurprising) {
+      className += ' is-hidden-link';
+      style = `stroke-width: ${HIDDEN_LINK_EDGE_WIDTH}px`;
+    } else if (unnamedRelated) {
+      className += ' is-unnamed-warn';
+      style = `stroke-width: ${UNNAMED_WARN_EDGE_WIDTH}px`;
+    } else {
+      style = `stroke: rgba(16, 19, 26, ${alpha.toFixed(2)}); stroke-width: ${width.toFixed(1)}px`;
+    }
+    edgeLayer.appendChild(el('line', {
+      x1: edge.x1, y1: edge.y1, x2: edge.x2, y2: edge.y2,
+      class: className,
+      style,
+      'data-from-cluster': edge.from,
+      'data-to-cluster': edge.to,
+    }));
+  }
+  svg.appendChild(edgeLayer);
 
   const bubbleLayer = el('g', { class: 'graph-cluster-bubbles' });
   const LINE_HEIGHT = 14;
@@ -205,7 +264,45 @@ function renderClusterBubbles(container, placed, options) {
   svg.appendChild(bubbleLayer);
 
   container.appendChild(svg);
+  const legend = renderClusterLegend(clusters, clusterEdges, warnEligible);
+  if (legend) container.appendChild(legend);
   return svg;
+}
+
+// SVG가 아니라 일반 DOM이다(theme-clusters.js의 el()과 같은 이유 — 텍스트 나열이라
+// 굳이 SVG일 필요가 없다).
+function elHtml(name, className) {
+  const node = document.createElement(name);
+  if (className) node.setAttribute('class', className);
+  return node;
+}
+
+function legendItem(text, swatchClass, textClass) {
+  const item = elHtml('span', 'graph-cluster-legend-item');
+  if (swatchClass) item.appendChild(elHtml('span', `graph-cluster-legend-swatch ${swatchClass}`));
+  const label = elHtml('span', textClass ? `graph-cluster-legend-label ${textClass}` : 'graph-cluster-legend-label');
+  label.textContent = text;
+  item.appendChild(label);
+  return item;
+}
+
+// 범례(보드 14 §1.5, 스텝11) — 실제로 화면에 쓰인 시각 언어만 설명한다(§0 정직한
+// 데이터 정책의 연장 — 안 쓰는 기호의 뜻을 설명하지 않는다). "응집도" 항목은
+// 군집 중 하나라도 실제 cohesion이 있어야, "숨은 연관" 항목은 실제로 그 stroke가
+// 그려졌어야, "확인 필요" 항목은 r5 임계 규칙이 켜져 있어야 보인다 — 지금(0/N,
+// surprising-connections 미배선) 실제로는 처음 두 항목만 뜬다.
+function renderClusterLegend(clusters, clusterEdges, warnEligible) {
+  const items = [];
+  if (clusters.length > 0) items.push(legendItem('원 크기 = 구성원 수'));
+  if (clusters.some((c) => Number.isFinite(c.cohesion))) items.push(legendItem('채움 진하기 = 응집도'));
+  if (clusterEdges.length > 0) items.push(legendItem('선 굵기 = 군집 간 연결 수', 'is-solid'));
+  if (clusterEdges.some((e) => e.isSurprising)) items.push(legendItem('숨은 연관', 'is-hidden-link'));
+  if (warnEligible) items.push(legendItem('점선 = 확인 필요', null, 'is-unnamed-warn'));
+  if (items.length === 0) return null;
+
+  const legend = elHtml('div', 'graph-cluster-legend');
+  items.forEach((item) => legend.appendChild(item));
+  return legend;
 }
 
 // `verify.js`와 캔버스가 같은 질문에 같은 답을 하게 하는 함수.
