@@ -413,6 +413,15 @@ html, body { background: transparent; }
 }
 .turn-exec-header-label { flex: 1 1 auto; text-align: left; }
 .turn-exec-header-caret { flex-shrink: 0; }
+/* 중단 턴 헤더(Paper DFQ-0, 2026-08-27) — 완료 헤더와 같은 골격(헤어라인
+ * 구분선·캐럿)에 warn-dot(.turn-fail-dot 재사용)만 얹는다. 완료 헤더의
+ * --color-k-faint보다 한 단계 더 보이는 --color-k-dim — 실패 버블(굵은 모노
+ * 캡스 라벨)보다는 조용하되 완료보다는 눈에 띄어야 한다는 명세 그대로다. */
+.turn-exec-header.is-aborted .turn-exec-header-label {
+  color: var(--color-k-dim);
+  line-height: 16px;
+  white-space: nowrap;
+}
 /* 실패 턴 버블(단계 7, board 1Y3-0 "실패 턴" C8B-0) — .turn-agent.agent-restore-failed의
  * 자매 컴포넌트. 기존 토큰만 쓴다(새 색·새 토큰 금지). */
 .turn-fail-card {
