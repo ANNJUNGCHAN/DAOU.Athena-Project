@@ -3605,6 +3605,117 @@ app.whenReady().then(async () => {
     })()`);
   }
 
+  // ---------- 검증 R1-4: 예약 자동 브리핑 러너 (2026-08-27, 4단계 AC3) ----------
+  // handleRoutineFeedEvent를 module.exports의 실제 함수 참조로 직접 호출해
+  // (Rev.3 MODERATE 4 — WS 서버·fixture 게이트와 무관) 스텁 claudeRunner의 호출
+  // 카운트로 실행을 단언한다 — DOM 렌더만으로 통과 처리하지 않는다. 백엔드
+  // 왕복(budget/report)도 스텁으로 바꿔 실백엔드 유무와 무관하게 결정론이다.
+  try {
+    const briefingRunnerMod = require('./lib/main/briefing-runner');
+    const sessionBefore = mainMod.getLiveSessionId();
+    let briefingStubCalls = 0;
+    let briefingKilled = false;
+    let briefingResolve = null;
+    const briefingReports = [];
+    mainMod.setBriefingClaudeRunnerForVerify({
+      runClaudeQuery(opts) {
+        briefingStubCalls += 1;
+        opts.onSpawn({
+          pid: 424242,
+          kill: () => {
+            briefingKilled = true;
+            if (briefingResolve) briefingResolve({ ok: false, aborted: true });
+          },
+        });
+        opts.onTextDelta('검증 브리핑 본문');
+        return new Promise((resolve) => { briefingResolve = resolve; });
+      },
+    }, {
+      fetchBudget: async () => ({ remaining: 99 }),
+      reportResult: async (p) => { briefingReports.push(p); },
+    });
+    const briefFiredAt = new Date().toISOString();
+    const briefEvent = {
+      type: 'routine-fired', routine_id: 'vbrief1', symbol: '005930',
+      source: 'schedule.daily', mode: 'scheduled', observed: '07:30',
+      threshold: 'ALL@07:30', note: '브리핑 검증 루틴', fired_at: briefFiredAt,
+      briefing_model: null, briefing_effort: null,
+    };
+    mainMod.handleRoutineFeedEvent(briefEvent);
+    await wait(300);
+    report.briefingRunner = {
+      stubCallsAfterFire: briefingStubCalls,
+      busyDepthDuring: mainMod.getBriefingBusyDepth(),
+      inputDisabledDuring: await shellWin.webContents.executeJavaScript(
+        "document.getElementById('input').disabled"
+      ),
+      cardBadgeDuring: await shellWin.webContents.executeJavaScript(`(() => {
+        const b = document.querySelector('.turn-agent.agent-briefing .agent-badge');
+        return b ? b.textContent : null;
+      })()`),
+    };
+    assertOk('briefing: 스텁이 정확히 1회 호출됐다(실호출 단언)', briefingStubCalls === 1);
+    assertOk('briefing: briefingBusy 깊이 1(독립 카운터 가동)', report.briefingRunner.busyDepthDuring === 1);
+    assertOk('briefing: 진행 중에도 셸 입력이 잠기지 않는다(MAJOR 2)', report.briefingRunner.inputDisabledDuring === false);
+    assertOk('briefing: 카드 배지 "브리핑 실행 중"', report.briefingRunner.cardBadgeDuring === '브리핑 실행 중');
+
+    // 같은 (routine_id, fired_at) 재주입(멱등성)과 감시형(경계) — 둘 다 무실행.
+    mainMod.handleRoutineFeedEvent(briefEvent);
+    mainMod.handleRoutineFeedEvent({ ...briefEvent, routine_id: 'vbrief-rt', mode: 'realtime-ws' });
+    await wait(200);
+    assertOk('briefing: 중복·감시형 주입 후에도 스텁 호출은 1회(멱등·경계)', briefingStubCalls === 1);
+
+    briefingResolve({ ok: true, finalResult: { session_id: 'stub-session-must-not-leak' } });
+    await wait(300);
+    report.briefingRunner.sessionAfter = mainMod.getLiveSessionId();
+    report.briefingRunner.busyDepthAfter = mainMod.getBriefingBusyDepth();
+    report.briefingRunner.reports = briefingReports;
+    assertOk('briefing: 완료 후 liveSessionId 불변(BLOCKER — 독립 세션)', mainMod.getLiveSessionId() === sessionBefore);
+    assertOk('briefing: 완료 후 busy 깊이 0', mainMod.getBriefingBusyDepth() === 0);
+    assertOk('briefing: reportResult 1회 — status ok·본문·제목·목적지·fired_at 정합', briefingReports.length === 1
+      && briefingReports[0].status === 'ok'
+      && briefingReports[0].content === '검증 브리핑 본문'
+      && briefingReports[0].title === '브리핑 검증 루틴'
+      && briefingReports[0].destination === 'chat'
+      && briefingReports[0].fired_at === briefFiredAt);
+    const briefingBadgeAfter = await shellWin.webContents.executeJavaScript(`(() => {
+      const badges = document.querySelectorAll('.turn-agent.agent-briefing .agent-badge');
+      return badges.length ? badges[badges.length - 1].textContent : null;
+    })()`);
+    assertOk('briefing: 완료 배지 "브리핑 완료"', briefingBadgeAfter === '브리핑 완료');
+
+    // 우선순위 — 사용자가 이긴다: 두 번째 브리핑을 걸어두고, 사용자 질의
+    // 진입점(runLiveQueryInner)이 부르는 것과 같은 함수 참조
+    // (killInProgressBriefing, require 캐시로 동일 모듈 인스턴스)를 직접 호출한다.
+    mainMod.handleRoutineFeedEvent({
+      ...briefEvent, routine_id: 'vbrief2', fired_at: new Date(Date.now() + 1000).toISOString(),
+    });
+    await wait(300);
+    assertOk('briefing: 두 번째 브리핑 가동(스텁 2회)', briefingStubCalls === 2);
+    const briefingKillNow = briefingRunnerMod.killInProgressBriefing();
+    await wait(300);
+    report.briefingRunner.preempt = {
+      killedNow: briefingKillNow, briefingKilled,
+      stubCalls: briefingStubCalls, busyDepth: mainMod.getBriefingBusyDepth(),
+    };
+    assertOk('briefing: 선점 kill이 실프로세스 핸들을 죽였다', briefingKillNow === true && briefingKilled === true);
+    assertOk('briefing: abort는 재시도하지 않는다(스텁 여전히 2회)', briefingStubCalls === 2);
+    assertOk('briefing: 선점 후 busy 깊이 0(사용자 질의 진행 가능)', mainMod.getBriefingBusyDepth() === 0);
+    assertOk('briefing: 종료 후 재kill은 no-op', briefingRunnerMod.killInProgressBriefing() === false);
+    assertOk('briefing: abort 보고는 failed·본문 없음(3단계 계약)', briefingReports.length === 2
+      && briefingReports[1].status === 'failed' && !('content' in briefingReports[1]));
+    const briefingBadgePreempt = await shellWin.webContents.executeJavaScript(`(() => {
+      const badges = document.querySelectorAll('.turn-agent.agent-briefing .agent-badge');
+      return badges.length ? badges[badges.length - 1].textContent : null;
+    })()`);
+    assertOk('briefing: 선점 종료 배지는 완료가 아니라 중단이다(오표시 금지)',
+      briefingBadgePreempt === '브리핑 중단 — 새 대화가 우선됨');
+    console.log('[verify] 검증R1-4(브리핑 러너):', JSON.stringify(report.briefingRunner));
+  } catch (err) {
+    report.briefingRunner = { error: String((err && err.message) || err) };
+    failures.push('briefing: 검증 블록이 예외로 끝났다');
+  }
+
   fs.writeFileSync(path.join(CAPTURES, 'VERIFY-REPORT.json'), JSON.stringify(report, null, 2));
   console.log('[verify] 리포트 저장:', path.join(CAPTURES, 'VERIFY-REPORT.json'));
 

@@ -382,6 +382,39 @@ const LOCAL_BEARER_TOKEN = process.env.ATHENA_LOCAL_BEARER_TOKEN || null;
 
 let routineFeed = null;
 
+// startRoutineFeed()의 인라인 onEvent 클로저에서 분리한 이름 있는 함수(Rev.3
+// MODERATE 4) — verify.js가 module.exports의 이 함수 참조를 직접 호출해 WS 서버
+// 없이 핸들러 로직만 태운다(revealShell/routineEventToFactsEnvelope와 동일 근거).
+// ATHENA_CANVAS_SOURCE=fixture 게이트는 startRoutineFeed() 진입만 막을 뿐 이
+// 직접 호출과는 무관하다. IPC 릴레이·OS 토스트 동작은 클로저 시절과 불변.
+function handleRoutineFeedEvent(event) {
+  // 능동 턴은 항상 이력에 쌓인다 — 토스트를 놓쳐도 다음 열람 때 남아 있다.
+  if (shellWin && !shellWin.isDestroyed()) {
+    shellWin.webContents.send('athena:routine-event', event);
+  }
+  // 같은 이벤트가 오브에도 간다(2026-08-24 리프 1.3.1). 두 표면이 같은 원장
+  // 행을 각자 렌더할 뿐이고 백엔드 신규 경로는 0건이다 — 설계서 §판단서 요지.
+  if (orbWin && !orbWin.isDestroyed()) {
+    orbWin.webContents.send('athena:routine-event', event);
+  }
+  // fixture 게이트(검증 결정론) — verify.js가 이 함수를 직접 부를 때 실제 OS
+  // 토스트가 뜨지 않게 한다. 프로덕션에서는 fixture로 부팅하지 않으므로 무영향.
+  if (event && (event.type === 'routine-fired' || event.type === 'routine-restore-failed')
+      && process.env.ATHENA_CANVAS_SOURCE !== 'fixture') {
+    const toast = routineTurn.buildToast(event);
+    const n = new Notification({ title: toast.title, body: toast.body });
+    n.on('click', () => { restoreFromBackground(); });
+    n.show();
+  }
+  // 예약형 발화만 자동 브리핑(R1, 4단계) — 감시형(realtime-ws/periodic)은 위의
+  // 알림 턴이 전부다. 실패해도 알림 경로는 이미 끝났으므로 로그만 남긴다.
+  if (event && event.type === 'routine-fired' && event.mode === 'scheduled') {
+    runBriefingTurnWired(event).catch((err) => {
+      mdlog(`브리핑 러너 실패: ${String((err && err.message) || err)}`);
+    });
+  }
+}
+
 function startRoutineFeed() {
   // 검증 결정론 보호 — verify.js(fixture)에서는 능동 피드를 돌리지 않는다.
   if (process.env.ATHENA_CANVAS_SOURCE === 'fixture') return;
@@ -389,23 +422,7 @@ function startRoutineFeed() {
   routineFeed = new RoutineFeed({
     url: `${BACKEND_WS_BASE}/api/v1/ws/routines`,
     token: LOCAL_BEARER_TOKEN, // 토큰 설정 배포는 모드 A 인증 봉투, 미설정이면 루프백 게이트
-    onEvent: (event) => {
-      // 능동 턴은 항상 이력에 쌓인다 — 토스트를 놓쳐도 다음 열람 때 남아 있다.
-      if (shellWin && !shellWin.isDestroyed()) {
-        shellWin.webContents.send('athena:routine-event', event);
-      }
-      // 같은 이벤트가 오브에도 간다(2026-08-24 리프 1.3.1). 두 표면이 같은 원장
-      // 행을 각자 렌더할 뿐이고 백엔드 신규 경로는 0건이다 — 설계서 §판단서 요지.
-      if (orbWin && !orbWin.isDestroyed()) {
-        orbWin.webContents.send('athena:routine-event', event);
-      }
-      if (event && (event.type === 'routine-fired' || event.type === 'routine-restore-failed')) {
-        const toast = routineTurn.buildToast(event);
-        const n = new Notification({ title: toast.title, body: toast.body });
-        n.on('click', () => { restoreFromBackground(); });
-        n.show();
-      }
-    },
+    onEvent: handleRoutineFeedEvent,
     // 알람 센터 "● WS 연결됨"(9단계, Paper 보드 40)이 재사용하는 실 신호 —
     // 이전엔 no-op이라 렌더러에 닿지 않았다(재검증에서 확인). 그대로 릴레이만.
     onStatus: (s) => {
@@ -415,6 +432,97 @@ function startRoutineFeed() {
     },
   });
   routineFeed.start();
+}
+
+// ---------- 예약 자동 브리핑(R1, 4단계) — 독립 세션·독립 busy 카운터 ----------
+// 브리핑은 사용자 턴과 세 겹으로 격리된다(briefing-runner.js 머리말 참고):
+// 세션(resumeSessionId 없음), 동시성(briefingBusyDepth는 liveQueryBusyDepth와
+// 별개 변수), 우선순위(사용자 질의가 killInProgressBriefing()으로 항상 선점).
+const briefingRunner = require('./lib/main/briefing-runner');
+
+let briefingBusyDepth = 0;
+
+// athena:briefing-query-state는 **배지 갱신 전용**이다(MAJOR 2) — chat.js의
+// 구독 핸들러는 이 신호로 setLocked를 절대 부르지 않는다. 입력 잠금은 사용자
+// 턴 신호(athena:live-query-state)만 만든다. 발행은 결과를 아는 러너가 한다
+// (busy:false에 ok/aborted 동봉 — 렌더러가 성공·실패·선점을 추측하지 않게).
+function sendBriefingQueryState(state) {
+  if (shellWin && !shellWin.isDestroyed()) {
+    shellWin.webContents.send('athena:briefing-query-state', state);
+  }
+}
+
+// 순수 카운터 — 브로드캐스트는 러너의 ipc.sendQueryState 몫이다(위 주석).
+const briefingBusy = {
+  increment() { briefingBusyDepth += 1; },
+  decrement() { briefingBusyDepth -= 1; },
+  depth: () => briefingBusyDepth,
+};
+
+function sendBriefingTextDelta(text) {
+  if (shellWin && !shellWin.isDestroyed()) {
+    shellWin.webContents.send('athena:briefing-text-delta', { text });
+  }
+}
+
+function sendBriefingToolStep(step) {
+  if (shellWin && !shellWin.isDestroyed()) {
+    shellWin.webContents.send('athena:briefing-tool-step', step);
+  }
+}
+
+// verify.js 전용 DI(사실14) — 실제 CLI를 스폰하지 않는 스텁으로 러너 경로를
+// 결정론으로 태우고, 스텁 호출 카운트로 실호출을 단언한다. 백엔드 왕복
+// (budget/report)도 함께 바꿔칠 수 있다 — 개발 머신에 실백엔드가 떠 있어도
+// 검증 결과가 흔들리지 않게. 프로덕션 코드는 아무도 부르지 않는다.
+let briefingClaudeRunner = null; // null이면 실제 runClaudeQuery(아래 wired에서 대체)
+let briefingBackendOverrides = null;
+function setBriefingClaudeRunnerForVerify(stub, backendOverrides) {
+  briefingClaudeRunner = stub;
+  briefingBackendOverrides = backendOverrides || null;
+}
+
+function runBriefingTurnWired(event) {
+  const { dir, configFile } = getLiveMcpConfig();
+  // 툴 진행 표시는 사용자 턴과 같은 라벨 변환기를 쓰되 채널만 브리핑 전용이고,
+  // 말걸기 가드 확인 카드는 전달하지 않는다(자동 턴에서 승인 카드 금지).
+  const trackBriefingToolStep = createToolStepTracker(sendBriefingToolStep, { forwardNudgeGuard: false });
+  const fetchBudget = (briefingBackendOverrides && briefingBackendOverrides.fetchBudget)
+    || (async () => {
+      // 조회 실패는 fail-open(1회분 허용) — 이벤트 자체가 백엔드발이라 백엔드가
+      // 죽어 있으면 발화가 여기까지 오지도 않는다. 실제 상한 집행은 백엔드
+      // (GET /briefing-budget)가 한다.
+      const res = await routineHttp('GET', '/api/v1/routines/briefing-budget').catch(() => null);
+      return res && res.ok ? res.data : { remaining: 1 };
+    });
+  const reportResult = (briefingBackendOverrides && briefingBackendOverrides.reportResult)
+    || ((payload) => routineHttp(
+      'POST',
+      `/api/v1/routines/${encodeURIComponent(event.routine_id)}/briefing-result`,
+      payload,
+    ));
+  return briefingRunner.runBriefingTurn({
+    event,
+    isUserBusy: () => liveQueryBusyDepth > 0, // 읽기 전용 — 절대 증감하지 않는다
+    briefingBusy,
+    fetchBudget,
+    reportResult,
+    ipc: {
+      sendTextDelta: sendBriefingTextDelta,
+      sendToolStep: sendBriefingToolStep,
+      sendQueryState: sendBriefingQueryState,
+    },
+    claudeRunner: briefingClaudeRunner || { runClaudeQuery },
+    cwd: dir,
+    configFile,
+    onEvent: trackBriefingToolStep,
+    onCanvasResult: (r) => {
+      // 카드 경로는 사용자 턴과 동일(athena:add-canvas-live) — 캔버스는 턴
+      // 상태와 무관해 안전하다. pushed는 사이드 채널로 이미 도착한 카드다.
+      if (r.status === 'pushed') return;
+      sendLiveCanvasResult(r);
+    },
+  });
 }
 
 app.on('will-quit', () => { if (routineFeed) routineFeed.stop(); });
@@ -495,8 +603,14 @@ app.on('will-quit', () => { if (canvasFeed) canvasFeed.stop(); });
 
 // 루틴 REST 프록시 — 렌더러는 백엔드에 직접 붙지 않는다(기존 IPC 관례).
 // confirm/cancel은 **사람 클릭 전용** 경로다(실행계획 §7-6 — 모델 툴에는 없다).
-async function routineHttp(method, path) {
-  const res = await fetch(`${BACKEND_HTTP_BASE}${path}`, { method });
+// jsonBody(선택)는 JSON 직렬화해 보낸다 — briefing-result(R1, 4단계)가 첫 사용처다.
+async function routineHttp(method, path, jsonBody) {
+  const opts = { method };
+  if (jsonBody !== undefined) {
+    opts.headers = { 'Content-Type': 'application/json' };
+    opts.body = JSON.stringify(jsonBody);
+  }
+  const res = await fetch(`${BACKEND_HTTP_BASE}${path}`, opts);
   const body = await res.json().catch(() => ({}));
   if (!res.ok) {
     return { ok: false, status: res.status, error: body.detail || `HTTP ${res.status}` };
@@ -1209,7 +1323,12 @@ function extractToolResultText(content) {
 
 // tool_use_id별 시작 시각을 들고 있다가 매칭되는 tool_result가 오면 소요시간과
 // 함께 완료를 알린다. runLiveQuery 호출마다 새로 만든다(왕복 하나의 수명).
-function createToolStepTracker() {
+// sendFn(선택)으로 송신 채널을 바꿀 수 있다 — 브리핑 턴(R1)이 라벨 변환·중복
+// 방어는 그대로 쓰되 athena:briefing-tool-step으로만 내보내기 위한 주입 지점.
+// forwardNudgeGuard(선택) — 말걸기 가드 확인 카드는 채팅 전용 사람 액션이라
+// 사용자 턴에서만 전달한다. 브리핑 턴(자동 실행)이 이 카드를 띄우면 사용자
+// 승인 흐름이 자동 턴에서 새어나오는 셈이라 끈다.
+function createToolStepTracker(sendFn = sendLiveToolStep, { forwardNudgeGuard = true } = {}) {
   const steps = new Map(); // tool_use_id -> { label, startedAt, name, input, elapsedMs? }
   return function trackToolStep(event) {
     if (!event || typeof event !== 'object') return;
@@ -1222,7 +1341,7 @@ function createToolStepTracker() {
           // name·input도 함께 들고 있는다 — F-stage9가 athena_nudge_guard의
           // propose 호출을 가려내는 데 쓴다(위 maybeForwardNudgeGuardProposal).
           steps.set(block.id, { label, startedAt: Date.now(), name: block.name, input: block.input });
-          sendLiveToolStep({ id: block.id, label, done: false, elapsedMs: null });
+          sendFn({ id: block.id, label, done: false, elapsedMs: null });
         }
       }
     } else if (event.type === 'user') {
@@ -1240,8 +1359,8 @@ function createToolStepTracker() {
           if (step) {
             const elapsedMs = Date.now() - step.startedAt;
             step.elapsedMs = elapsedMs;
-            sendLiveToolStep({ id: block.tool_use_id, label: step.label, done: true, elapsedMs });
-            maybeForwardNudgeGuardProposal(step, block);
+            sendFn({ id: block.tool_use_id, label: step.label, done: true, elapsedMs });
+            if (forwardNudgeGuard) maybeForwardNudgeGuardProposal(step, block);
           }
         }
       }
@@ -1544,6 +1663,12 @@ async function runLiveQueryInner(query, expand) {
     activeLiveQuery.kill();
     activeLiveQuery = null;
   }
+  // 진행 중 브리핑도 같은 원칙으로 끊는다(R1, MAJOR 2) — 사용자가 항상 이긴다
+  // (scheduler.py의 "대화가 우선 — 이번 주기 양보"와 대칭, 새 동시성 모델을
+  // 발명하지 않는다). 무조건 호출한다 — 카운터 게이트를 두면 예산 왕복 등
+  // 카운터가 아직 0인 창의 선점 표시를 놓친다(리뷰 확정 결함). 핸들 정체성
+  // 확인·선점 플래그는 briefing-runner.js가 한다 — 유휴 상태면 no-op.
+  briefingRunner.killInProgressBriefing();
   let myHandle = null;
 
   // 첫 카드가 실제로 확정된 시점에만 연다(목업 시절과 같은 문법 — expand:!opened).
@@ -2142,6 +2267,15 @@ module.exports = {
   getWins: () => ({ shellWin, orbWin }),
   routineEventToFactsEnvelope,
   getLayout: () => layout,
+  // startRoutineFeed()의 onEvent와 동일한 함수 참조(Rev.3 MODERATE 4) — verify.js가
+  // WS 서버 없이 routine-fired 주입에 쓴다. fixture 게이트는 startRoutineFeed()
+  // 진입만 막을 뿐 이 직접 호출과는 무관하다.
+  handleRoutineFeedEvent,
+  // 브리핑 러너 검증 훅(AC3) — claudeRunner 스텁·백엔드 왕복 교체와 세션/카운터
+  // 불변 단언용 게터. 프로덕션 경로는 아무도 부르지 않는다.
+  setBriefingClaudeRunnerForVerify,
+  getLiveSessionId: () => liveSessionId,
+  getBriefingBusyDepth: () => briefingBusyDepth,
   // 셸 창을 앞으로 — verify.js가 트레이 복귀·카드 푸시 경로를 검증할 때 쓴다.
   revealShell,
   // 트레이 클릭과 동일한 복귀 경로 — verify.js가 닫기(백그라운드 유지)를 검증할 때
