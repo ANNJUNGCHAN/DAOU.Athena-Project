@@ -438,16 +438,41 @@ app.on('will-quit', () => { if (routineFeed) routineFeed.stop(); });
 // 접기(진행봉 갱신)는 렌더러가 한다(lib/chart-tick-fold.js 주석). 여기서는
 // 종목 등록과 체결 전달만 맡는다. 업스트림 구독은 프로세스당 하나다.
 const chartRealtime = require('./lib/main/chart-realtime');
+const orderbookRealtime = require('./lib/main/orderbook-realtime');
 const chartSeries = require('./lib/main/chart-series');
 
 let chartRealtimeFeed = null;
 let chartRealtimeRegistrar = null;
+let orderbookRealtimeRegistrar = null; // 호가잔량(0D) 전용 — 0B 레지스트라와 참조를 안 섞는다(task #25)
 
 // 경로 중립 — 호출부가 REST 데이터셋 직결(athena:rest-canvas-painted)이든 클로드
 // 툴 실시간 경로(onCanvasResult, 단계 8 확장 2차)든 가리지 않는다. "종목코드를
 // 아는 순간에만 등록한다"는 계약 하나만 지키면 된다. 레지스트라가 참조 계수형
 // (2026-08-27)이라 어느 경로에서 불러도 acquire 1회로 셈된다 — 짝이 되는 release는
 // releaseRealtimeForSymbol(카드 소멸 시점, 아래) 몫이다.
+// 0B(체결)·0D(호가잔량) 둘 다 같은 업스트림 WS 소켓 하나(REAL 프레임 멀티플렉스,
+// backend api/v1/ws/stream 실측)로 온다 — REG를 뭘 걸었든 소켓은 하나만 열면
+// 된다. TR별 acquire(ensureRealtimeForSymbol/ensureOrderbookRealtimeForSymbol)가
+// 어느 쪽이 먼저 불려도 이 하나를 공유하도록 지연 생성 + 두 파서를 한 곳에서 돌린다.
+function ensureRealtimeFeed() {
+  if (chartRealtimeFeed) return;
+  chartRealtimeFeed = new RoutineFeed({
+    url: `${BACKEND_WS_BASE}/api/v1/ws/stream`,
+    token: LOCAL_BEARER_TOKEN,
+    onEvent: (frame) => {
+      if (!shellWin || shellWin.isDestroyed()) return;
+      // 거래일은 체결 시각(HHMMSS)에 날짜가 없어서 필요하다. 자정을 넘긴
+      // 시간외 체결은 다음 날로 접히지만, 정규장 진행봉에는 영향이 없다.
+      const ticks = chartRealtime.parseRealFrame(frame, chartRealtime.kstTradingDate());
+      if (ticks.length) shellWin.webContents.send('athena:chart-ticks', ticks);
+      const bookTicks = orderbookRealtime.parseQuoteBookFrame(frame);
+      if (bookTicks.length) shellWin.webContents.send('athena:orderbook-ticks', bookTicks);
+    },
+    onStatus: (s) => { if (s && s.state) mdlog(`차트 실시간 피드: ${s.state}`); },
+  });
+  chartRealtimeFeed.start();
+}
+
 function ensureRealtimeForSymbol(code) {
   if (process.env.ATHENA_CANVAS_SOURCE === 'fixture') return; // 검증 결정론 보호
   const trimmed = String(code || '').trim();
@@ -459,24 +484,40 @@ function ensureRealtimeForSymbol(code) {
       mdlog,
     });
   }
-  if (!chartRealtimeFeed) {
-    chartRealtimeFeed = new RoutineFeed({
-      url: `${BACKEND_WS_BASE}/api/v1/ws/stream`,
-      token: LOCAL_BEARER_TOKEN,
-      onEvent: (frame) => {
-        if (!shellWin || shellWin.isDestroyed()) return;
-        // 거래일은 체결 시각(HHMMSS)에 날짜가 없어서 필요하다. 자정을 넘긴
-        // 시간외 체결은 다음 날로 접히지만, 정규장 진행봉에는 영향이 없다.
-        const ticks = chartRealtime.parseRealFrame(frame, chartRealtime.kstTradingDate());
-        if (!ticks.length) return;
-        shellWin.webContents.send('athena:chart-ticks', ticks);
-      },
-      onStatus: (s) => { if (s && s.state) mdlog(`차트 실시간 피드: ${s.state}`); },
-    });
-    chartRealtimeFeed.start();
-  }
+  ensureRealtimeFeed();
   chartRealtimeRegistrar.acquire(trimmed).catch((err) => {
     mdlog(`차트 REAL 등록 예외: ${String((err && err.message) || err)}`);
+  });
+}
+
+// ensureRealtimeForSymbol의 호가잔량(0D) 짝 — 종목당 열린 호가 카드가 명시적으로
+// acquire/release를 낸다(athena:orderbook-realtime-acquire/-release, canvas.js
+// wireOrderbookRealtime). 0B처럼 "봉투에 종목코드가 있으면 무조건 acquire"가
+// 아니다 — 호가 카드가 실제로 열려 있을 때만 REG를 쓴다(리미터 절약).
+function ensureOrderbookRealtimeForSymbol(code) {
+  if (process.env.ATHENA_CANVAS_SOURCE === 'fixture') return; // 검증 결정론 보호
+  const trimmed = String(code || '').trim();
+  if (!trimmed) return;
+
+  if (!orderbookRealtimeRegistrar) {
+    orderbookRealtimeRegistrar = chartRealtime.createRealtimeRegistrar({
+      backendBase: BACKEND_HTTP_BASE,
+      mdlog,
+      trId: orderbookRealtime.REAL_TR_ID,
+    });
+  }
+  ensureRealtimeFeed();
+  orderbookRealtimeRegistrar.acquire(trimmed).catch((err) => {
+    mdlog(`호가 REAL 등록 예외: ${String((err && err.message) || err)}`);
+  });
+}
+
+function releaseOrderbookRealtimeForSymbol(code) {
+  if (process.env.ATHENA_CANVAS_SOURCE === 'fixture') return;
+  const trimmed = String(code || '').trim();
+  if (!trimmed || !orderbookRealtimeRegistrar) return;
+  orderbookRealtimeRegistrar.release(trimmed).catch((err) => {
+    mdlog(`호가 REAL 해제 예외: ${String((err && err.message) || err)}`);
   });
 }
 
@@ -1083,6 +1124,17 @@ ipcMain.on('athena:chart-panel-destroyed', (event, payload = {}) => {
 ipcMain.on('athena:realtime-release', (event, payload = {}) => {
   if (!shellWin || shellWin.isDestroyed() || event.sender !== shellWin.webContents) return;
   releaseRealtimeForSymbol(payload.symbol);
+});
+
+// 호가잔량(0D) acquire/release — 0B와 달리 카드가 직접 열고 닫는다(canvas.js
+// wireOrderbookRealtime, ensureOrderbookRealtimeForSymbol 주석 참고).
+ipcMain.on('athena:orderbook-realtime-acquire', (event, payload = {}) => {
+  if (!shellWin || shellWin.isDestroyed() || event.sender !== shellWin.webContents) return;
+  ensureOrderbookRealtimeForSymbol(payload.symbol);
+});
+ipcMain.on('athena:orderbook-realtime-release', (event, payload = {}) => {
+  if (!shellWin || shellWin.isDestroyed() || event.sender !== shellWin.webContents) return;
+  releaseOrderbookRealtimeForSymbol(payload.symbol);
 });
 
 function emitRestReceiptAndWaitForPaint(text, { timeoutMs = 3000 } = {}) {
@@ -2206,4 +2258,8 @@ module.exports = {
   ensureRealtimeForSymbol,
   releaseRealtimeForSymbol,
   extractLiveQuoteSymbol,
+  // 합성 0D 프레임 프로브(task #25)가 실백엔드 없이 acquire/release를 직접
+  // 검증할 때 쓴다 — 위 ensureRealtimeForSymbol 각주와 같은 이유.
+  ensureOrderbookRealtimeForSymbol,
+  releaseOrderbookRealtimeForSymbol,
 };
