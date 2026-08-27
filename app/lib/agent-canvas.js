@@ -136,7 +136,7 @@ function createAgentCanvas(deps) {
     container, fetchRoutines, fetchFiredToday, onNewTaskClick, pauseRoutine, resumeRoutine,
     fetchProfileSummary, onAddSuggestion,
     fetchAlerts, markAllAlertsRead, getWsConnected,
-    fetchRuns,
+    fetchRuns, fetchAvgDuration,
     onOpenGraph,
   } = deps || {};
   if (!container) return { mount() {}, async refresh() {} };
@@ -153,6 +153,7 @@ function createAgentCanvas(deps) {
   let historyItem = null; // 드릴인 중인 항목(10단계) — null이면 드릴인이 아니다.
   let heldSuggestionIds = new Set(); // "보류"한 제안(11단계) — 세션 동안만, 저장 안 됨.
   let historyRequestId = 0; // 위와 같은 이유 — 별개 요청이라 별개 가드를 쓴다.
+  let avgDurationCache = null; // GET /{id}/runs의 avg_duration_ms(5단계) — 드릴인 대상별로 갱신.
 
   // ---------- 통계 카드 4장의 값 계산(3단계부터 3장이 라이브) ----------
   // routinesCache/firedTodayCache/suggestionsCache 클로저가 필요해 createAgentCanvas
@@ -599,12 +600,23 @@ function createAgentCanvas(deps) {
   historyRunsCol.appendChild(historyRunsList);
   historyBody.appendChild(historyRunsCol);
 
-  function fixtureHistoryStats() {
+  // "평균"(5단계 라이브) — 4단계 GET /{id}/runs의 avg_duration_ms를 그대로
+  // 쓴다. 아직 못 물어봤거나(초기 상태) 최근 30건에 duration_ms가 있는 행이
+  // 하나도 없으면(구 jsonl 혼재) 지어낸 숫자 없이 "—"로 정직하게 표시한다(P3).
+  function avgDurationTile() {
+    if (avgDurationCache == null) return { key: 'avg', label: '평균', value: '—', source: 'live' };
+    return { key: 'avg', label: '평균', value: `${(avgDurationCache / 1000).toFixed(1)}s`, source: 'live' };
+  }
+
+  // "성공률"·"발화→열람"·"이어진 대화"는 지표 정의 미확정/계측 미구현이라
+  // fixture로 남는다(4단계 ADR — "성공률"은 팀 리드 승인 전 착수하지 않음,
+  // 5-b 계측은 스트레치).
+  function buildHistoryStats() {
     return [
-      { label: '성공률', value: '93%' },
-      { label: '평균', value: '7.4s' },
-      { label: '발화→열람', value: '71%' },
-      { label: '이어진 대화', value: '9건' },
+      { key: 'success-rate', label: '성공률', value: '93%', source: 'fixture' },
+      avgDurationTile(),
+      { key: 'opened-rate', label: '발화→열람', value: '71%', source: 'fixture' },
+      { key: 'continued', label: '이어진 대화', value: '9건', source: 'fixture' },
     ];
   }
 
@@ -625,8 +637,10 @@ function createAgentCanvas(deps) {
     };
   }
 
+  // 5단계부터 "평균"만 live고 나머지 셋은 fixture로 남아 컬럼 전체를 한
+  // data-source로 표기할 수 없다(P3) — 산출물 카드·통계 타일 각각에 표기한다
+  // (아래, historyOutputCard·agent-history-stat-tile 개별 attribute).
   const historyStatsCol = el('div', 'agent-history-stats-col');
-  historyStatsCol.setAttribute('data-source', 'fixture'); // ledger 스키마에 근거 없음(위 머리말).
 
   const historyOutputCaption = el('div', 'agent-panel-caption');
   historyOutputCaption.textContent = '오늘 07:30 산출물';
@@ -670,18 +684,26 @@ function createAgentCanvas(deps) {
   historyStatsCaption.textContent = '30회 통계';
   historyStatsCol.appendChild(historyStatsCaption);
   const historyStatsGrid = el('div', 'agent-history-stats-grid');
-  for (const tile of fixtureHistoryStats()) {
-    const t = el('div', 'agent-history-stat-tile');
-    const l = el('div', 'agent-history-stat-label');
-    l.textContent = tile.label;
-    t.appendChild(l);
-    const v = el('div', 'agent-history-stat-value');
-    v.textContent = tile.value;
-    t.appendChild(v);
-    historyStatsGrid.appendChild(t);
-  }
   historyStatsCol.appendChild(historyStatsGrid);
   historyBody.appendChild(historyStatsCol);
+
+  // avgDurationCache가 드릴인 대상마다 바뀌므로(5단계) 최초 1회 구성이 아니라
+  // refreshHistoryRuns() 완료 시마다 다시 그린다.
+  function renderHistoryStats() {
+    while (historyStatsGrid.firstChild) historyStatsGrid.removeChild(historyStatsGrid.firstChild);
+    for (const tile of buildHistoryStats()) {
+      const t = el('div', 'agent-history-stat-tile');
+      t.setAttribute('data-source', tile.source);
+      const l = el('div', 'agent-history-stat-label');
+      l.textContent = tile.label;
+      t.appendChild(l);
+      const v = el('div', 'agent-history-stat-value');
+      v.textContent = tile.value;
+      t.appendChild(v);
+      historyStatsGrid.appendChild(t);
+    }
+  }
+  renderHistoryStats(); // 초기 페인트 — 드릴인 열기 전엔 "평균"이 "—"로 보인다.
 
   function formatRunTime(iso) {
     const d = new Date(iso);
@@ -715,7 +737,10 @@ function createAgentCanvas(deps) {
   }
 
   // GET /api/v1/routines/{id}/runs 실데이터(6단계) — requestId로 낡은 응답을
-  // 버린다(routine 목록·제안과 같은 이유·같은 패턴).
+  // 버린다(routine 목록·제안과 같은 이유·같은 패턴). fetchAvgDuration(5단계)은
+  // 같은 엔드포인트의 다른 필드(avg_duration_ms)를 노린 별개 왕복이다 —
+  // fetchFiredToday와 같은 이유(agent-canvas.js 머리말 "네 소스는 서로 무관한
+  // 왕복이다" 원칙 재사용), fetchRuns의 기존 배열 계약을 안 건드리기 위함이다.
   async function refreshHistoryRuns() {
     if (!historyItem) return;
     const id = historyItem.id;
@@ -727,7 +752,16 @@ function createAgentCanvas(deps) {
     } catch {
       runs = [];
     }
+    let avgDuration = null;
+    try {
+      const v = (typeof fetchAvgDuration === 'function') ? await fetchAvgDuration(id) : null;
+      avgDuration = (typeof v === 'number') ? v : null;
+    } catch {
+      avgDuration = null;
+    }
     if (rid !== historyRequestId || !historyItem || historyItem.id !== id) return;
+    avgDurationCache = avgDuration;
+    renderHistoryStats();
     // ledger는 append-only(오래된 게 먼저)라 최신 먼저로 뒤집고 30건으로 자른다.
     const sorted = runs.slice().sort((a, b) => Date.parse(b.ts) - Date.parse(a.ts)).slice(0, 30);
     while (historyRunsList.firstChild) historyRunsList.removeChild(historyRunsList.firstChild);

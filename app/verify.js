@@ -3054,7 +3054,9 @@ app.whenReady().then(async () => {
   // athena:routines-list(감시 1건)와 athena:routine-runs(6단계 ledger 조회)를
   // stateful fixture로 바꿔 "전체 이력 보기 →" → 브레드크럼 → 최근 30회 → 통계
   // → "작업 ›" 복귀까지 왕복시킨다. verdict 3종(fired/near/suppressed) 아이콘만
-  // 쓰는지, 최신순 정렬인지를 확인한다(AC10).
+  // 쓰는지, 최신순 정렬인지를 확인한다(AC10). athena:routine-runs 응답에
+  // F-stage5(F2-FE)가 avg_duration_ms도 함께 태워, "30회 통계"의 "평균"
+  // 타일이 라이브로 붙었는지도 같은 왕복에서 잰다.
   try {
     const stage10Routines = [
       {
@@ -3073,7 +3075,11 @@ app.whenReady().then(async () => {
     }));
     ipcMain.removeHandler('athena:routine-runs');
     ipcMain.handle('athena:routine-runs', async (_e, { id } = {}) => ({
-      ok: true, data: { runs: stage10Runs.filter((r) => r.routine_id === id) },
+      // avg_duration_ms(5단계, F2-FE) — runs 배열과 별개 필드다. 실제 값은
+      // 4단계 백엔드가 최근 30건 non-null duration_ms 평균으로 계산하지만
+      // (그쪽 pytest가 이미 검증), 이 하네스는 프론트 배선만 재확인하면
+      // 되므로 확정 값을 직접 준다.
+      ok: true, data: { runs: stage10Runs.filter((r) => r.routine_id === id), avg_duration_ms: 7420 },
     }));
 
     const historyProbe = await shellWin.webContents.executeJavaScript(`(async () => {
@@ -3098,9 +3104,14 @@ app.whenReady().then(async () => {
       const runRows = Array.from(canvas.querySelectorAll('.agent-history-run'));
       const reasons = runRows.map((r) => (r.querySelector('.agent-history-run-reason') || {}).textContent);
       const marks = runRows.map((r) => (r.querySelector('.agent-history-run-mark') || {}).textContent);
-      const statTileCount = canvas.querySelectorAll('.agent-history-stat-tile').length;
-      const statsSource = (canvas.querySelector('.agent-history-stats-col') || {}).getAttribute
-        ? canvas.querySelector('.agent-history-stats-col').getAttribute('data-source') : null;
+      const statTiles = Array.from(canvas.querySelectorAll('.agent-history-stat-tile'));
+      const statTileCount = statTiles.length;
+      // 5단계(F2-FE) — "평균"만 live, 나머지 3장은 fixture다(컬럼 전체가
+      // 아니라 타일 각각에 data-source가 실린다).
+      const avgTile = statTiles.find((t) => (t.querySelector('.agent-history-stat-label') || {}).textContent === '평균');
+      const avgTileSource = avgTile ? avgTile.getAttribute('data-source') : null;
+      const avgTileValue = avgTile ? (avgTile.querySelector('.agent-history-stat-value') || {}).textContent : null;
+      const fixtureTileCount = statTiles.filter((t) => t.getAttribute('data-source') === 'fixture').length;
 
       // "오늘 07:30 산출물" 카드(fixture, 팀 리드 정정으로 추가 — Paper 41번에
       // 있는 요소는 생략이 아니라 fixture+data-source 표기로 구현한다).
@@ -3122,7 +3133,8 @@ app.whenReady().then(async () => {
       await new Promise((r) => setTimeout(r, 100));
       return {
         wired: true, breadcrumbVisible, breadcrumbTitle, breadcrumbBadge, tasksHeadHidden,
-        reasons, marks, statTileCount, statsSource, breadcrumbHiddenAfterBack, tasksHeadVisibleAfterBack,
+        reasons, marks, statTileCount, avgTileSource, avgTileValue, fixtureTileCount,
+        breadcrumbHiddenAfterBack, tasksHeadVisibleAfterBack,
         outputSource, outputTitle, outputTag, outputItemCount, outputBtnLabels, outputBtnsAllDisabled,
       };
     })()`);
@@ -3141,7 +3153,13 @@ app.whenReady().then(async () => {
         'agent-canvas-10: 상태 아이콘이 ledger 실제 verdict 3종만 쓴다(fired=●·near=◐·suppressed=○, AC10)',
         JSON.stringify(historyProbe.marks) === JSON.stringify(['●', '◐', '○']),
       );
-      assertOk('agent-canvas-10: 30회 통계 4타일(fixture)', historyProbe.statTileCount === 4 && historyProbe.statsSource === 'fixture');
+      assertOk(
+        // 5단계(F2-FE) — "평균"만 live(4단계 avg_duration_ms), 나머지 3장은
+        // 여전히 fixture다(성공률/발화→열람/이어진 대화, 지표 정의 미확정).
+        'agent-canvas-10: 30회 통계 4타일 — "평균"만 live(7.4s), 나머지 3장은 fixture다(F-stage5)',
+        historyProbe.statTileCount === 4 && historyProbe.avgTileSource === 'live'
+          && historyProbe.avgTileValue === '7.4s' && historyProbe.fixtureTileCount === 3,
+      );
       assertOk(
         'agent-canvas-10: "오늘 07:30 산출물" 카드가 fixture로 뜬다(생략하지 않는다, 팀 리드 정정)',
         historyProbe.outputSource === 'fixture' && historyProbe.outputTitle === '# 아침 브리핑 — 8/26 화',

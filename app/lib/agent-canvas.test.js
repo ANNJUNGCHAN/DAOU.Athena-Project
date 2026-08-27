@@ -846,7 +846,27 @@ test('실행 이력이 없으면 "실행 이력이 없습니다"가 뜬다(지�
   assert.equal(empty[0].textContent, '실행 이력이 없습니다');
 });
 
-test('30회 통계 4타일은 fixture로 표시된다(ledger에 근거 필드가 없다)', async () => {
+test('30회 통계 4타일: "평균"만 live, 나머지 3장은 fixture다(5단계 — 성공률/발화→열람/이어진 대화는 지표 정의 미확정)', async () => {
+  const container = fakeNode('div');
+  const routines = [routine({ id: 'a', status: 'active' })];
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => routines, fetchRuns: async () => [], fetchAvgDuration: async () => null,
+  });
+  canvas.mount();
+  await canvas.refresh();
+  findByClass(container, 'agent-history-open')[0].dispatchEvent({ type: 'click' });
+  await new Promise((r) => setTimeout(r, 0));
+  const statsCol = findByClass(container, 'agent-history-stats-col')[0];
+  const tiles = findByClass(statsCol, 'agent-history-stat-tile');
+  assert.equal(tiles.length, 4);
+  const bySource = (src) => tiles.filter((t) => t.getAttribute('data-source') === src);
+  assert.equal(bySource('fixture').length, 3);
+  assert.equal(bySource('live').length, 1);
+  const avgTile = tiles.find((t) => findByClass(t, 'agent-history-stat-label')[0].textContent === '평균');
+  assert.equal(avgTile.getAttribute('data-source'), 'live');
+});
+
+test('"평균" 타일: fetchAvgDuration이 없거나 실패하면 지어낸 숫자 없이 "—"를 보여준다(P3)', async () => {
   const container = fakeNode('div');
   const routines = [routine({ id: 'a', status: 'active' })];
   const canvas = createAgentCanvas({ container, fetchRoutines: async () => routines, fetchRuns: async () => [] });
@@ -855,8 +875,27 @@ test('30회 통계 4타일은 fixture로 표시된다(ledger에 근거 필드가
   findByClass(container, 'agent-history-open')[0].dispatchEvent({ type: 'click' });
   await new Promise((r) => setTimeout(r, 0));
   const statsCol = findByClass(container, 'agent-history-stats-col')[0];
-  assert.equal(statsCol.getAttribute('data-source'), 'fixture');
-  assert.equal(findByClass(statsCol, 'agent-history-stat-tile').length, 4);
+  const avgTile = findByClass(statsCol, 'agent-history-stat-tile').find(
+    (t) => findByClass(t, 'agent-history-stat-label')[0].textContent === '평균',
+  );
+  assert.equal(findByClass(avgTile, 'agent-history-stat-value')[0].textContent, '—');
+});
+
+test('"평균" 타일: avg_duration_ms(4단계, ms)를 초 단위 문자열로 라이브 표시한다', async () => {
+  const container = fakeNode('div');
+  const routines = [routine({ id: 'a', status: 'active' })];
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => routines, fetchRuns: async () => [], fetchAvgDuration: async () => 7420,
+  });
+  canvas.mount();
+  await canvas.refresh();
+  findByClass(container, 'agent-history-open')[0].dispatchEvent({ type: 'click' });
+  await new Promise((r) => setTimeout(r, 0));
+  const statsCol = findByClass(container, 'agent-history-stats-col')[0];
+  const avgTile = findByClass(statsCol, 'agent-history-stat-tile').find(
+    (t) => findByClass(t, 'agent-history-stat-label')[0].textContent === '평균',
+  );
+  assert.equal(findByClass(avgTile, 'agent-history-stat-value')[0].textContent, '7.4s');
 });
 
 test('"오늘 07:30 산출물" 카드는 fixture로 표시되고, 뒷받침 데이터가 없는 버튼 2종은 비활성이다(팀 리드 정정 반영)', async () => {
