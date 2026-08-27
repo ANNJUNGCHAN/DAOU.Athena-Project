@@ -551,3 +551,37 @@ async def test_neighborhood_walks_to_requested_depth(store: GraphStore) -> None:
     depth_two = await store.neighborhood(PROFILE.id, depth=2)
     assert {e.kind for e in depth_two} == {"interested_in", "belongs_to"}
     assert {e.depth for e in depth_two} == {1, 2}
+
+
+# ── 군집 LLM 라벨 캐시(WP-F F2) ──────────────────────────────────────────────
+
+
+async def test_cluster_label_round_trip_and_fingerprint_mismatch(store: GraphStore) -> None:
+    assert await store.cluster_label("h1", "fp-a") is None
+    await store.save_cluster_label(
+        "h1", cluster_size=3, label="반도체 밸류체인", prompt_fingerprint="fp-a"
+    )
+    assert await store.cluster_label("h1", "fp-a") == "반도체 밸류체인"
+    # 프롬프트 지문이 다르면 미스 — 옛 라벨을 조용히 쓰면 틀린 것을 캐시하는 셈이다.
+    assert await store.cluster_label("h1", "fp-b") is None
+
+
+async def test_cluster_label_replace_wins_without_error(store: GraphStore) -> None:
+    # 같은 member_hash에 두 백그라운드 태스크가 연속 완료하는 경쟁(F4) — 예외 없이
+    # 마지막 쓰기가 이긴다(INSERT OR REPLACE).
+    await store.save_cluster_label("h1", cluster_size=3, label="첫 라벨", prompt_fingerprint="fp")
+    await store.save_cluster_label("h1", cluster_size=3, label="마지막 라벨", prompt_fingerprint="fp")
+    assert await store.cluster_label("h1", "fp") == "마지막 라벨"
+
+
+async def test_cluster_labels_table_survives_reopen(tmp_path: Path) -> None:
+    first = GraphStore(tmp_path / "brain.sqlite3")
+    await first.open()
+    await first.save_cluster_label("h", cluster_size=2, label="라벨", prompt_fingerprint="fp")
+    await first.close()
+    second = GraphStore(tmp_path / "brain.sqlite3")
+    await second.open()  # 스키마 멱등 재실행 — SCHEMA_VERSION 불변(계획 확인)
+    try:
+        assert await second.cluster_label("h", "fp") == "라벨"
+    finally:
+        await second.close()
