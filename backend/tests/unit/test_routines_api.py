@@ -26,6 +26,7 @@ def app_client(tmp_path):
         routines_enabled=True,
         routines_store_path=tmp_path / "routines.json",
         routines_ledger_path=tmp_path / "ledger.jsonl",
+        routines_read_marks_path=tmp_path / "read_marks.json",
     )
 
     loop = asyncio.new_event_loop()
@@ -320,3 +321,144 @@ def test_runs_avg_duration_ms_is_null_when_no_durations_recorded(app_client):
     )
     res = client.get(f"/api/v1/routines/{rid}/runs")
     assert res.json()["avg_duration_ms"] is None
+
+
+# ---------- 읽음 상태·최근 발화(F3, read-marks) ----------
+
+
+def test_list_routines_reports_last_fired_at_and_unread(app_client):
+    client, runtime = app_client
+    rid = client.post("/api/v1/routines/draft", json=DRAFT).json()["id"]
+
+    listing = client.get("/api/v1/routines").json()["routines"]
+    row = next(r for r in listing if r["id"] == rid)
+    assert row["last_fired_at"] is None
+    assert row["unread"] is False  # 발화가 없으면 읽지 않았어도 안읽음이 아니다
+
+    runtime.ledger.record(
+        "fired",
+        routine_id=rid,
+        symbol="005930",
+        source="price.current",
+        observed=199000,
+        threshold=200000,
+        reason="조건 충족",
+    )
+    listing2 = client.get("/api/v1/routines").json()["routines"]
+    row2 = next(r for r in listing2 if r["id"] == rid)
+    assert row2["last_fired_at"] is not None
+    assert row2["unread"] is True
+
+
+def test_ack_marks_routine_read_without_affecting_others(app_client):
+    """ack 후 재조회 시 해당 routine만 unread:false, 다른 routine 영향 없음."""
+    client, runtime = app_client
+    rid_a = client.post("/api/v1/routines/draft", json=DRAFT).json()["id"]
+    rid_b = client.post("/api/v1/routines/draft", json=DRAFT).json()["id"]
+
+    for rid in (rid_a, rid_b):
+        runtime.ledger.record(
+            "fired",
+            routine_id=rid,
+            symbol="005930",
+            source="price.current",
+            observed=199000,
+            threshold=200000,
+            reason="조건 충족",
+        )
+
+    ack_res = client.post(f"/api/v1/routines/{rid_a}/ack")
+    assert ack_res.status_code == 200
+    assert ack_res.json()["last_read_fired_at"] is not None
+
+    listing = client.get("/api/v1/routines").json()["routines"]
+    row_a = next(r for r in listing if r["id"] == rid_a)
+    row_b = next(r for r in listing if r["id"] == rid_b)
+    assert row_a["unread"] is False
+    assert row_b["unread"] is True
+
+
+def test_ack_unknown_routine_is_404(app_client):
+    client, _ = app_client
+    assert client.post("/api/v1/routines/none/ack").status_code == 404
+
+
+def test_list_routines_reads_ledger_exactly_once(app_client):
+    """N+1 회귀 방지(MAJOR) — GET /routines 호출당 ledger.read_all()이
+    정확히 1회만 불려야 한다(fired_today·latest_fired 맵을 같은 스캔에서 계산)."""
+    client, runtime = app_client
+    rid = client.post("/api/v1/routines/draft", json=DRAFT).json()["id"]
+    runtime.ledger.record(
+        "fired",
+        routine_id=rid,
+        symbol="005930",
+        source="price.current",
+        observed=199000,
+        threshold=200000,
+        reason="조건 충족",
+    )
+
+    calls = {"n": 0}
+    original_read_all = runtime.ledger.read_all
+
+    def counting_read_all():
+        calls["n"] += 1
+        return original_read_all()
+
+    runtime.ledger.read_all = counting_read_all
+    res = client.get("/api/v1/routines")
+
+    assert res.status_code == 200
+    assert calls["n"] == 1
+
+
+def test_ack_persists_across_restart(tmp_path):
+    """재기동(같은 store/ledger/read-marks 경로로 새 RoutinesRuntime)해도
+    읽음 처리가 유지된다."""
+    settings = Settings(
+        _env_file=None,
+        routines_enabled=True,
+        routines_store_path=tmp_path / "routines.json",
+        routines_ledger_path=tmp_path / "ledger.jsonl",
+        routines_read_marks_path=tmp_path / "read_marks.json",
+    )
+    loop = asyncio.new_event_loop()
+    runtime1 = loop.run_until_complete(open_routines(settings, ws_client=None))
+    app1 = FastAPI()
+    install_exception_handlers(app1)
+    app1.include_router(router)
+    app1.state.routines_runtime = runtime1
+    client1 = TestClient(app1)
+
+    rid = client1.post("/api/v1/routines/draft", json=DRAFT).json()["id"]
+    runtime1.ledger.record(
+        "fired",
+        routine_id=rid,
+        symbol="005930",
+        source="price.current",
+        observed=199000,
+        threshold=200000,
+        reason="조건 충족",
+    )
+    ack_res = client1.post(f"/api/v1/routines/{rid}/ack")
+    assert ack_res.status_code == 200
+    row1 = next(
+        r for r in client1.get("/api/v1/routines").json()["routines"] if r["id"] == rid
+    )
+    assert row1["unread"] is False
+    loop.run_until_complete(teardown_routines(runtime1))
+
+    # "재기동" — 같은 경로로 새 RoutinesRuntime을 연다.
+    runtime2 = loop.run_until_complete(open_routines(settings, ws_client=None))
+    app2 = FastAPI()
+    install_exception_handlers(app2)
+    app2.include_router(router)
+    app2.state.routines_runtime = runtime2
+    client2 = TestClient(app2)
+
+    row2 = next(
+        r for r in client2.get("/api/v1/routines").json()["routines"] if r["id"] == rid
+    )
+    assert row2["unread"] is False  # 재기동 후에도 읽음 유지
+    loop.run_until_complete(teardown_routines(runtime2))
+    loop.close()

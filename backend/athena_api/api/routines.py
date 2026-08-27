@@ -1,7 +1,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta, timezone
 from typing import Any
 
 from fastapi import APIRouter, HTTPException, Request
@@ -42,23 +42,15 @@ def _next_fire_at(spec: Any, *, now: datetime | None = None) -> str | None:
     return None
 
 
-def _fired_today_kst(rows: list[dict[str, Any]], *, now: datetime | None = None) -> int:
-    """오늘(KST) 발화(fired) 건수 — list_routines()가 1회 read_all()로 계산한다."""
-    today = (now or datetime.now(_KST)).astimezone(_KST).date()
-    count = 0
-    for row in rows:
-        if row.get("verdict") != "fired":
-            continue
-        ts = row.get("ts")
-        if not isinstance(ts, str):
-            continue
-        try:
-            parsed = datetime.fromisoformat(ts)
-        except ValueError:
-            continue
-        if parsed.astimezone(_KST).date() == today:
-            count += 1
-    return count
+def _is_unread(last_fired_at: str | None, last_read_at: str | None) -> bool:
+    if last_fired_at is None:
+        return False
+    if last_read_at is None:
+        return True
+    try:
+        return datetime.fromisoformat(last_fired_at) > datetime.fromisoformat(last_read_at)
+    except ValueError:
+        return True  # 파싱 실패 시 안전한 쪽(안읽음)으로 fallback
 
 
 def _runtime(request: Request) -> RoutinesRuntime:
@@ -71,9 +63,17 @@ def _runtime(request: Request) -> RoutinesRuntime:
     return runtime
 
 
-def _view(spec: Any, runtime: RoutinesRuntime) -> dict[str, Any]:
-    """목록·응답 뷰 — 조건 원문 dict 대신 사람이 읽는 해석문만 노출한다."""
+def _view(
+    spec: Any, runtime: RoutinesRuntime, *, latest_fired: dict[str, Any] | None = None
+) -> dict[str, Any]:
+    """목록·응답 뷰 — 조건 원문 dict 대신 사람이 읽는 해석문만 노출한다.
+
+    latest_fired는 list_routines()가 ledger를 1회 스캔해 만든 routine_id→
+    최신 fired 행 맵에서 이 spec 몫만 주입한 것이다 — 이 함수 자신은
+    ledger를 읽지 않는다(N+1 스캔 방지, MAJOR)."""
     source_spec = SOURCES[spec.condition.source]
+    last_fired_at = latest_fired["ts"] if latest_fired else None
+    last_read_at = runtime.read_marks.last_read_fired_at(spec.id)
     return {
         "id": spec.id,
         "symbol": spec.symbol,
@@ -88,6 +88,8 @@ def _view(spec: Any, runtime: RoutinesRuntime) -> dict[str, Any]:
         "activation_blocker": runtime.can_activate(spec),
         "experimental_source": source_spec.experimental,
         "next_fire_at": _next_fire_at(spec),
+        "last_fired_at": last_fired_at,
+        "unread": _is_unread(last_fired_at, last_read_at),
     }
 
 
@@ -101,12 +103,35 @@ async def create_draft(request: Request, body: dict[str, Any]) -> dict[str, Any]
 
 @router.get("")
 async def list_routines(request: Request) -> dict[str, Any]:
+    """목록 — ledger.read_all()을 요청당 정확히 1회만 호출한다(N+1 방지, MAJOR).
+
+    한 번의 스캔으로 ① 오늘(KST) 발화 수와 ② routine_id→최신 fired 행
+    맵을 동시에 만들고, 맵은 _view()에 주입한다(ledger를 다시 읽지 않음)."""
     runtime = _runtime(request)
+    today = datetime.now(_KST).date()
+    fired_today = 0
+    latest_fired: dict[str, dict[str, Any]] = {}
+    for row in runtime.ledger.read_all():
+        if row.get("verdict") != "fired":
+            continue
+        rid = row.get("routine_id")
+        if isinstance(rid, str):
+            latest_fired[rid] = row  # append-only라 마지막에 만난 게 최신
+        ts = row.get("ts")
+        if isinstance(ts, str):
+            try:
+                if datetime.fromisoformat(ts).astimezone(_KST).date() == today:
+                    fired_today += 1
+            except ValueError:
+                pass
     return {
-        "routines": [_view(s, runtime) for s in runtime.store.list_all()],
+        "routines": [
+            _view(s, runtime, latest_fired=latest_fired.get(s.id))
+            for s in runtime.store.list_all()
+        ],
         "disclosure_ready": runtime.disclosure_ready,
         "last_error": runtime.last_error,
-        "fired_today": _fired_today_kst(runtime.ledger.read_all()),
+        "fired_today": fired_today,
     }
 
 
@@ -183,3 +208,20 @@ async def list_routine_runs(request: Request, routine_id: str) -> dict[str, Any]
     ]
     avg_duration_ms = sum(durations) / len(durations) if durations else None
     return {"runs": rows, "avg_duration_ms": avg_duration_ms}
+
+
+@router.post("/{routine_id}/ack")
+async def ack_routine(
+    request: Request, routine_id: str, body: dict[str, Any] | None = None
+) -> dict[str, Any]:
+    """읽음 처리 — read_marks에 확인 시각까지 기록한다. body.fired_at으로 특정
+    발화까지 지정할 수 있고, 없으면 현재 시각(그 이전 발화는 전부 읽음 처리)."""
+    runtime = _runtime(request)
+    spec = runtime.store.get(routine_id)
+    if spec is None:
+        raise HTTPException(status_code=404, detail="루틴이 존재하지 않는다")
+    fired_at = (body or {}).get("fired_at")
+    if not isinstance(fired_at, str) or not fired_at:
+        fired_at = datetime.now(UTC).isoformat()
+    runtime.read_marks.ack(routine_id, fired_at)
+    return {"id": routine_id, "last_read_fired_at": fired_at}

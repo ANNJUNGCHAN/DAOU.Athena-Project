@@ -114,6 +114,9 @@ class Settings(BaseSettings):
     routines_ledger_path: Path = Field(
         default_factory=lambda: Path.home() / ".athena" / "routines" / "ledger.jsonl"
     )
+    routines_read_marks_path: Path = Field(
+        default_factory=lambda: Path.home() / ".athena" / "routines" / "read_marks.json"
+    )
     # DART 공시 폴러 키 — 없으면 periodic 공시 루틴만 강등(realtime은 무관).
     dart_api_key: SecretStr | None = None
     # Explicit argv for the local structured-extraction command (e.g. a local claude CLI
