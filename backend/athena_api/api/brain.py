@@ -479,6 +479,30 @@ class GraphDiffResponse(BaseModel):
     edges_rejected: list[str]
 
 
+class EntityEventOut(BaseModel):
+    """`GraphEvent` 필드와 1:1 — 저장층 `entity_events()`가 낸 것을 그대로 노출한다."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    seq: int
+    at: datetime
+    revision: int
+    op: str
+    subject_id: str
+    object_id: str | None
+    relation: str | None
+    confidence_before: str | None
+    confidence_after: str | None
+    source_id: str | None
+
+
+class EntityTimelineResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    entity_id: str
+    events: list[EntityEventOut]
+
+
 class ClusterMapNodeOut(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -640,6 +664,46 @@ async def get_brain_graph_diff(
         edges_removed=list(diff.edges_removed),
         edges_changed=list(diff.edges_changed),
         edges_rejected=list(diff.edges_rejected),
+    )
+
+
+@router.get(
+    "/analysis/entity-timeline",
+    summary="엔티티 하나의 변경 이력",
+    operation_id="get_brain_entity_timeline",
+    response_model=EntityTimelineResponse,
+    openapi_extra={**_NOT_LLM_EXPOSED, "x-athena-side-effect": "none"},
+)
+async def get_brain_entity_timeline(
+    request: Request,
+    authorization: Annotated[str, Header(alias="Authorization")],
+    entity_id: str,
+    limit: int = _DEFAULT_ANALYSIS_LIMIT,
+) -> EntityTimelineResponse:
+    require_local_bearer(request, authorization)
+    store = _require_store(request)
+    events = await store.entity_events(entity_id, limit=_bounded(limit))
+    return EntityTimelineResponse(
+        entity_id=entity_id,
+        events=[
+            EntityEventOut(
+                seq=event.seq,
+                at=event.at,
+                revision=event.revision,
+                op=str(event.op),
+                subject_id=event.subject_id,
+                object_id=event.object_id,
+                relation=event.relation,
+                confidence_before=(
+                    None if event.confidence_before is None else str(event.confidence_before)
+                ),
+                confidence_after=(
+                    None if event.confidence_after is None else str(event.confidence_after)
+                ),
+                source_id=event.source_id,
+            )
+            for event in events
+        ],
     )
 
 
