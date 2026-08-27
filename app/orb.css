@@ -519,6 +519,93 @@ html, body {
   user-select: text;
 }
 
+/* 미니 주문 티켓(board-33⑤, CP2 승인) — .orb-card/.orb-row 어휘·토큰을
+ * 그대로 재사용한다(새 카드 문법을 만들지 않는다). Paper 51D-0 실측. */
+.orb-ticket {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: var(--radius-xl);
+  background-color: rgba(255, 255, 255, var(--glass-canvas));
+  border: 1px solid var(--color-k-line-soft);
+  box-shadow: 0 14px 36px rgb(16 19 26 / 10%);
+  -webkit-app-region: no-drag;
+}
+
+.orb-ticket-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.orb-ticket-title {
+  font-family: var(--font-strong);
+  font-size: var(--text-md);
+  color: var(--color-k-text);
+}
+
+.orb-ticket-account {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--color-k-faint);
+}
+
+.orb-ticket-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+/* 구분(매수/매도) 톤 — orb-chart-change의 is-up/is-down과 같은 관례. */
+.orb-ticket-rows .orb-row-value.is-buy { color: var(--color-up); }
+.orb-ticket-rows .orb-row-value.is-sell { color: var(--color-down); }
+
+.orb-ticket-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.orb-ticket-exec {
+  -webkit-app-region: no-drag;
+  appearance: none;
+  cursor: pointer;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 6px 20px;
+  background: var(--color-k-bright);
+  color: #fff;
+  font-family: var(--font-strong);
+  font-size: var(--text-base);
+}
+.orb-ticket-exec:hover { background: var(--color-k-text); }
+.orb-ticket-exec:focus-visible { outline: 2px solid var(--color-k-text); outline-offset: 2px; }
+
+.orb-ticket-cancel {
+  -webkit-app-region: no-drag;
+  appearance: none;
+  cursor: pointer;
+  border: 1px solid var(--color-k-ghost);
+  border-radius: var(--radius-sm);
+  padding: 6px 20px;
+  background: transparent;
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+}
+.orb-ticket-cancel:hover { background: rgb(16 19 26 / 5%); }
+.orb-ticket-cancel:focus-visible { outline: 2px solid var(--color-k-text); outline-offset: 2px; }
+
+.orb-ticket-confirm {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: 500;
+  color: var(--color-k-faint);
+}
+
 .orb-foot {
   display: flex;
   align-items: center;

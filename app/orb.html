@@ -56,6 +56,41 @@
           <p>긴 표와 차트는 줄여서 보여드리고, 전체는 대화창에서 이어집니다.</p>
         </div>
         <div id="orbChatTurns" class="orb-chat-turns"></div>
+
+        <!-- 미니 주문 티켓(board-33⑤, CP2 2026-08-27 사용자 승인, Paper 51D-0
+             실측) — 확정 결정 3의 주문집행 절반은 폐기됐다(캡션 50G-0/50H-0).
+             방어 장치 없이 셸과 동일한 1회 확인 — 실행을 누르는 순간이 그
+             확인이다. 라벨만 정적이고 값·표시 여부는 orb.js가 채운다(로직은
+             Step 10c) — "없는 필드 행 미생성"이라 각 행은 기본 hidden이다. -->
+        <div id="orbTicket" class="orb-ticket" hidden>
+          <div class="orb-ticket-head">
+            <span class="orb-ticket-title">주문 티켓</span>
+            <span id="orbTicketAccount" class="orb-ticket-account"></span>
+          </div>
+          <div class="orb-ticket-rows">
+            <div id="orbTicketRowSymbol" class="orb-row" hidden>
+              <span class="orb-row-label">종목</span>
+              <span id="orbTicketSymbol" class="orb-row-value"></span>
+            </div>
+            <div id="orbTicketRowSide" class="orb-row" hidden>
+              <span class="orb-row-label">구분</span>
+              <span id="orbTicketSide" class="orb-row-value"></span>
+            </div>
+            <div id="orbTicketRowQty" class="orb-row" hidden>
+              <span class="orb-row-label">수량</span>
+              <span id="orbTicketQty" class="orb-row-value"></span>
+            </div>
+            <div id="orbTicketRowAmount" class="orb-row" hidden>
+              <span class="orb-row-label">예상 체결금액</span>
+              <span id="orbTicketAmount" class="orb-row-value"></span>
+            </div>
+          </div>
+          <div class="orb-ticket-actions">
+            <button id="orbTicketExec" class="orb-ticket-exec" type="button">실행</button>
+            <button id="orbTicketCancel" class="orb-ticket-cancel" type="button">취소</button>
+            <span class="orb-ticket-confirm">1회 확인</span>
+          </div>
+        </div>
       </div>
 
       <!-- 오브의 새 부품 — 입력은 상태 A(셸 숨김)에서만 존재한다(board-34 게이트,
