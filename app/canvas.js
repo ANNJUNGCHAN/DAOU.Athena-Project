@@ -609,13 +609,13 @@ function renderMcpTable(envelope) {
   const kindRender = window.AthenaLib.CardKinds.resolve(title);
   const built = kindRender && kindRender(envelope);
   if (built) {
-    const { card, body } = makeCard('mcp-table', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope));
+    const { card, body } = makeCard('mcp-table', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope), envelope.screen_id);
     stampPaperScreen(card, envelope);
     body.appendChild(built);
     if (title === '시세') wireQuoteRealtime(card, built, envelope, window.AthenaLib.CardKindQuote.applyLiveTick);
     return card;
   }
-  const { card, body } = makeCard('mcp-table', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope));
+  const { card, body } = makeCard('mcp-table', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope), envelope.screen_id);
   stampPaperScreen(card, envelope);
   const rawCols = (envelope.data && Array.isArray(envelope.data.columns)) ? envelope.data.columns : [];
   const rows = (envelope.data && Array.isArray(envelope.data.rows)) ? envelope.data.rows : [];
@@ -730,7 +730,7 @@ function renderFactsCard(envelope) {
   const kindRender = window.AthenaLib.CardKinds.resolve(title);
   const built = kindRender && kindRender(envelope);
   if (built) {
-    const { card, body } = makeCard('facts', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope));
+    const { card, body } = makeCard('facts', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope), envelope.screen_id);
     stampPaperScreen(card, envelope);
     body.appendChild(built);
     // '종목정보' 카드종만 실시간을 켠다(P1) — QuoteHeader 조각(가격+등락)이 있는
@@ -739,7 +739,7 @@ function renderFactsCard(envelope) {
     if (title === '종목정보') wireQuoteRealtime(card, built, envelope, window.AthenaLib.CardKindStockInfo.applyLiveTick);
     return card;
   }
-  const { card, body } = makeCard('facts', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope));
+  const { card, body } = makeCard('facts', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope), envelope.screen_id);
   stampPaperScreen(card, envelope);
   const fields = (envelope.data && Array.isArray(envelope.data.fields)) ? envelope.data.fields : [];
   if (!fields.length) {
@@ -767,12 +767,12 @@ function renderCompoundCard(envelope) {
   const kindRender = window.AthenaLib.CardKinds.resolve(title);
   const built = kindRender && kindRender(envelope);
   if (built) {
-    const { card, body } = makeCard('compound', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope));
+    const { card, body } = makeCard('compound', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope), envelope.screen_id);
     stampPaperScreen(card, envelope);
     body.appendChild(built);
     return card;
   }
-  const { card, body } = makeCard('compound', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope));
+  const { card, body } = makeCard('compound', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope), envelope.screen_id);
   stampPaperScreen(card, envelope);
   const data = (envelope.data && typeof envelope.data === 'object') ? envelope.data : {};
   const header = Array.isArray(data.header) ? data.header : [];
@@ -992,7 +992,7 @@ async function renderLiveChart(envelope) {
   try {
     descriptor = describeAitsChartPanel(data, envelope, 'live');
   } catch (err) {
-    const { card, body } = makeCard('chart', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope));
+    const { card, body } = makeCard('chart', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope), envelope.screen_id);
     stampPaperScreen(card, envelope);
     card.dataset.renderState = 'error';
     body.appendChild(errorNote(`AITS 차트 계약 오류 — ${err && err.message ? err.message : String(err)}`));
@@ -1000,7 +1000,7 @@ async function renderLiveChart(envelope) {
   }
   const reloaded = await reloadExistingAitsChartPanel(descriptor, envelope);
   if (reloaded) return reloaded;
-  const { card, body } = makeCard('chart', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope));
+  const { card, body } = makeCard('chart', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope), envelope.screen_id);
   stampPaperScreen(card, envelope);
   // 카드 v3(.omc/state/card-v3-plan.md §2.2) 카드종 후킹 — 차트 전용 변형. 다른 3곳
   // (renderFactsCard/renderMcpTable/renderCompoundCard)은 renderFn이 body 전체를
@@ -1037,7 +1037,7 @@ async function renderLiveChart(envelope) {
 }
 
 function renderFreeCanvas(envelope) {
-  const { card, body } = makeCard('free', envelope.caption || '자유 카드', envelope.layout, envelope.correlation, undefined, cardStkCd(envelope));
+  const { card, body } = makeCard('free', envelope.caption || '자유 카드', envelope.layout, envelope.correlation, undefined, cardStkCd(envelope), envelope.screen_id);
   if (envelope.fell_back) {
     const note = document.createElement('div');
     note.className = 'fin-meta';
@@ -1165,7 +1165,7 @@ function cardStkCd(envelope) {
   return typeof v === 'string' && v.trim() ? v.trim() : null;
 }
 
-function makeCard(type, title, layoutHint, correlation, subtitle, stkCd) {
+function makeCard(type, title, layoutHint, correlation, subtitle, stkCd, screenId) {
   const isDatasetCard = isValidCorrelation(correlation);
   if (isDatasetCard && activeDatasetId !== correlation.dataset_id) {
     for (const prior of grid.querySelectorAll('.card[data-dataset-id]')) {
@@ -1184,8 +1184,12 @@ function makeCard(type, title, layoutHint, correlation, subtitle, stkCd) {
       // stk_cd 없는 요청(종목코드 자리가 없는 카드종·구버전 envelope)은 기존
       // 동작 그대로 — 동일 타입이면 무조건 교체(하위 호환).
       if (!stkCd) return true;
-      // stk_cd 있는 요청은 같은 종목 카드만 교체 대상 — 다른 종목은 공존한다.
-      return candidate.dataset.stkCd === stkCd;
+      // stk_cd 있는 요청은 같은 종목 + 같은 화면(screen_id)만 교체 대상 —
+      // 다른 종목은 물론, 같은 종목의 다른 화면(호가 매도/매수/총잔량처럼
+      // ka10004 detail 5장이 연달아 오는 경우)도 공존한다(2026-08-27 장중
+      // QA 실측: screen_id 없이 종목만 보면 5장이 서로를 지워 1장만 남았다).
+      return candidate.dataset.stkCd === stkCd
+        && (candidate.dataset.screenId || '') === (screenId || '');
     });
   const activeDatasetCardCount = Array.from(grid.querySelectorAll('.card[data-dataset-id]'))
     .filter((candidate) => candidate.dataset.datasetId === correlation.dataset_id).length;
@@ -1203,6 +1207,7 @@ function makeCard(type, title, layoutHint, correlation, subtitle, stkCd) {
     card.dataset.ordinal = String(correlation.ordinal);
   } else if (stkCd) {
     card.dataset.stkCd = stkCd;
+    if (screenId) card.dataset.screenId = String(screenId);
   }
   const head = document.createElement('div');
   head.className = 'card-head';
