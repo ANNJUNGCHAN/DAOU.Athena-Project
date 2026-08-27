@@ -106,6 +106,108 @@ function renderClusterMap(container, layout, options) {
   return svg;
 }
 
+// 응집도가 없을 때(구버전 backend) 쓰는 대체 alpha — §0 원안의 두 대안("동일
+// alpha" 또는 "size 기준 상대값") 중 새 스케일을 발명하지 않아도 되는 앞쪽을 쓴다.
+const DEFAULT_CLUSTER_ALPHA = 0.35;
+
+function clusterAlpha(cluster) {
+  if (Number.isFinite(cluster.cohesion)) {
+    // cohesion(0~1)을 alpha에 직접 매핑한다 — 정찰 보고서(paper-14-15-그래프뷰.md:66)가
+    // 확인한 건 "응집도와 alpha가 단조 증가"뿐이고 정확한 선형식은 확인 불가하니,
+    // 새 스케일을 발명하는 대신 이미 0~1인 값을 그대로 쓴다.
+    return Math.max(0, Math.min(1, cluster.cohesion));
+  }
+  return DEFAULT_CLUSTER_ALPHA;
+}
+
+// 군집 버블 지도(스텝10, §0-2 아키텍처 갭 해소) — 그래프 뷰 1단계를 개별 노드
+// 나열이 아니라 placed.clusters 소비로 바꾼다. 좌표·반지름은 cluster-layout.js가
+// 이미 계산한 값을 그대로 쓴다(새 스케일 발명 안 함, 원칙1) — 이 함수는 그리기만 한다.
+function renderClusterBubbles(container, placed, options) {
+  if (!container) return null;
+  const settings = options || {};
+  const clusters = placed && Array.isArray(placed.clusters) ? placed.clusters : [];
+  const width = settings.width || container.clientWidth || 0;
+  const height = settings.height || container.clientHeight || 0;
+
+  while (container.firstChild) container.removeChild(container.firstChild);
+
+  const svg = el('svg', {
+    class: 'graph-canvas',
+    viewBox: `0 0 ${Math.max(1, width)} ${Math.max(1, height)}`,
+    width: '100%',
+    height: '100%',
+    role: 'img',
+    'aria-label': `테마 지도 — 군집 ${clusters.length}개`,
+  });
+
+  // r5 "이름 있음 임계 규칙" — 0 < 이름 붙은 군집 수 < 전체 군집 수일 때만 "이름
+  // 없음" 경고 시각 언어(주황+점선)를 켠다. theme-clusters.js의 같은 판정 함수를
+  // 그대로 재사용한다(복붙하지 않는다, 원칙1) — cluster-layout.js의 placed.clusters는
+  // 지금 name 필드를 안 주므로(이름 파이프라인 없음, §0 발견1) 실제로는 항상 0/N이라
+  // 중립 스타일이지만, 이름 필드가 있는 입력(테스트용 모의 데이터 포함)에도 맞게 짠다.
+  const namedCount = clusters.filter((c) => c.name).length;
+  const warnEligible = window.AthenaLib.ThemeClusters.shouldWarnUnnamed(namedCount, clusters.length);
+
+  const bubbleLayer = el('g', { class: 'graph-cluster-bubbles' });
+  const LINE_HEIGHT = 14;
+  for (const cluster of clusters) {
+    const warn = warnEligible && !cluster.name;
+    const alpha = clusterAlpha(cluster);
+    // .graph-node — wireNodeClicks()(controller.js)가 이 클래스로 찾아 클릭을 건다.
+    // 1단계에서 버블 클릭은 그 군집을 펼치는 뜻이라 data-cluster만 있으면 되고
+    // data-entity-id는 필요 없다(handleNodeClick이 1단계에선 무시한다).
+    const group = el('g', { class: 'graph-node graph-cluster-bubble-group', 'data-cluster': cluster.cluster });
+
+    group.appendChild(el('circle', {
+      cx: cluster.x,
+      cy: cluster.y,
+      r: cluster.radius,
+      class: warn ? 'graph-cluster-bubble is-unnamed-warn' : 'graph-cluster-bubble',
+      // 색은 되도록 CSS(토큰)가 정하고, 데이터마다 달라지는 alpha만 인라인으로 얹는다.
+      // 무명 경고 버블은 색 자체가 주황(--color-warn)으로 고정이라 fill을 CSS에
+      // 맡기고, 통상 버블은 군집 번호로 회전하는 hue라 여기서 계산해야 한다.
+      style: warn
+        ? `fill-opacity: ${alpha}`
+        : `fill: hsl(${clusterHue(cluster.cluster)} 62% 55%); fill-opacity: ${alpha}`,
+    }));
+
+    let lineY = cluster.y + cluster.radius + LINE_HEIGHT;
+    const nameLabel = el('text', { x: cluster.x, y: lineY, class: 'graph-cluster-label', 'text-anchor': 'middle' });
+    nameLabel.textContent = cluster.name || `군집 ${cluster.cluster}`;
+    group.appendChild(nameLabel);
+    lineY += LINE_HEIGHT;
+
+    // "이름 없음" 배지 텍스트는 경고 스타일 여부와 무관하게 이름이 없으면 항상
+    // 표기한다(§0 정책 — 이름 갭 자체는 r5 임계 규칙과 별개로 항상 정직하게 알린다).
+    if (!cluster.name) {
+      const unnamedBadge = el('text', { x: cluster.x, y: lineY, class: 'graph-cluster-unnamed-badge', 'text-anchor': 'middle' });
+      unnamedBadge.textContent = '이름 없음';
+      group.appendChild(unnamedBadge);
+      lineY += LINE_HEIGHT;
+    }
+
+    // 종목 수는 theme-clusters.js의 "N종목" 표기를 그대로 따른다(원칙1) — 응집도는
+    // 있을 때만 붙인다(§0 정책, 지어낸 숫자 없음).
+    const statsParts = [`${cluster.size}종목`];
+    if (Number.isFinite(cluster.cohesion)) statsParts.push(`응집 ${cluster.cohesion.toFixed(2)}`);
+    const stats = el('text', {
+      x: cluster.x,
+      y: lineY,
+      class: warn ? 'graph-cluster-stats is-warn' : 'graph-cluster-stats',
+      'text-anchor': 'middle',
+    });
+    stats.textContent = statsParts.join(' · ');
+    group.appendChild(stats);
+
+    bubbleLayer.appendChild(group);
+  }
+  svg.appendChild(bubbleLayer);
+
+  container.appendChild(svg);
+  return svg;
+}
+
 // `verify.js`와 캔버스가 같은 질문에 같은 답을 하게 하는 함수.
 // "비어 있지 않은가"를 두 곳에서 따로 정의하면 하나가 거짓말할 수 있다.
 function describeRendered(container) {
@@ -121,7 +223,7 @@ function describeRendered(container) {
 
 // SVG_NS는 내보내지 않는다 — 이 파일 안에서만 쓰이고, 쓰는 쪽이 생기면 그때
 // 내보내면 된다. 아무도 안 쓰는 export는 "누군가 쓰고 있다"는 신호를 헛되이 준다.
-const __exports = { renderClusterMap, describeRendered, clusterHue };
+const __exports = { renderClusterMap, renderClusterBubbles, describeRendered, clusterHue };
 
 // UMD 각주(2026-08-18 렌더러 격리) — column-fold.js와 같은 패턴.
 if (typeof module !== 'undefined' && module.exports) {
