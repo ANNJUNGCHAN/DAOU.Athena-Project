@@ -551,6 +551,95 @@ def test_surprising_connections_reuses_the_cached_clusters(
     assert projector.cluster_builds == before + 1
 
 
+# --- surprise_score: additive 상대 놀라움 점수 (WP-B) -----------------------------------
+
+
+async def _seed_two_cliques_with_a_bridge(app) -> None:
+    """완전그래프 둘을 다리 하나로 잇는다 — surprising_connections가 이 다리를 잡아야 한다."""
+    from athena_api.brain import (
+        Confidence,
+        Entity,
+        EntityKind,
+        Relation,
+        SourceKind,
+        SourceRecord,
+        SourceTier,
+        entity_id,
+        relation_id,
+    )
+
+    store = app.state.brain_store
+    now = datetime(2026, 8, 25, 3, 0, tzinfo=UTC)
+
+    def make_entity(kind: object, name: str) -> Entity:
+        return Entity(id=entity_id(kind, name), kind=kind, name=name, created_at=now, updated_at=now)
+
+    def make_relation(kind: str, src: Entity, tgt: Entity) -> Relation:
+        return Relation(
+            id=relation_id(kind, src.id, tgt.id),
+            kind=kind,
+            source_entity_id=src.id,
+            target_entity_id=tgt.id,
+            confidence=Confidence.EXTRACTED,
+            tier=SourceTier.CONVERSATIONAL,
+            source_id="s1",
+            observed_at=now,
+            extracted_at=now,
+        )
+
+    left = tuple(make_entity(EntityKind.THEME, f"좌{i}") for i in range(4))
+    right = tuple(make_entity(EntityKind.COMPANY, f"우{i}") for i in range(4))
+    relations: list[Relation] = []
+    for group in (left, right):
+        for index, node in enumerate(group):
+            for other in group[index + 1 :]:
+                relations.append(make_relation("relates_to", node, other))
+    relations.append(make_relation("relates_to", left[0], right[0]))
+
+    await store.upsert_source(
+        SourceRecord(
+            id="s1",
+            kind=SourceKind.CONVERSATION,
+            text="대화 본문",
+            fingerprint="fp-s1",
+            occurred_at=now,
+            ingested_at=now,
+        )
+    )
+    await store.apply_extraction("s1", "fp-s1", (*left, *right), tuple(relations))
+
+
+@pytest.fixture
+def surprising_client(tmp_path: Path):
+    app = create_app(_brain_settings(tmp_path))
+    with TestClient(app) as client:
+        client.portal.call(_seed_two_cliques_with_a_bridge, app)  # type: ignore[attr-defined]
+        yield client
+
+
+def test_surprising_connections_response_includes_surprise_score(
+    surprising_client: TestClient,
+) -> None:
+    """지어낸 값이 아니라 backend가 낸 [0,1] 상대 점수가 응답 JSON에 실린다."""
+    body = surprising_client.get(
+        "/api/v1/brain/analysis/surprising-connections", headers=_headers()
+    ).json()
+    connections = body["connections"]
+    assert connections, "다리가 하나 있으므로 최소 1건은 나와야 한다"
+    for item in connections:
+        assert set(item) == {
+            "source_entity_id",
+            "source_name",
+            "target_entity_id",
+            "target_name",
+            "kinds",
+            "source_cluster",
+            "target_cluster",
+            "surprise_score",
+        }
+        assert 0.0 <= item["surprise_score"] <= 1.0
+
+
 # --- edge_details: additive 엣지 메타데이터 (스텝13-보정) -------------------------------
 
 
