@@ -248,6 +248,32 @@ html, body { background: transparent; }
 .graph-cluster-legend-swatch.is-solid { border-top-color: var(--color-k-ghost); }
 .graph-cluster-legend-swatch.is-hidden-link { border-top-color: var(--color-brand); border-top-style: dashed; }
 
+/* 2단계 군집 배경 타원(보드 15 §2.3, 스텝12) — render.js가 지금 보이는 노드들의
+ * 바운딩 박스로 계산한다(placed.clusters 좌표는 이 렌더 경로까지 안 온다). */
+.graph-cluster-ellipse { fill: rgba(16, 19, 26, 0.04); }
+.graph-cluster-ellipse.is-unnamed-warn { fill: rgba(255, 152, 56, 0.07); }
+.graph-cluster-ellipse-label {
+  font-family: var(--font-strong); font-size: var(--text-xs); fill: var(--color-k-soft); letter-spacing: 0.06em;
+}
+.graph-cluster-ellipse-label.is-unnamed-warn { fill: var(--color-warn); font-family: var(--font-body); }
+.graph-cluster-ellipse-badge { font-family: var(--font-body); font-size: var(--text-2xs); fill: var(--color-warn); }
+
+/* 2단계 노드 계층 4종(보드 15 §2.3, 스텝12) — 허브(검정 채움)/leaf(흰 채움+
+ * 테두리)는 확정적 데이터(상대 차수)의 추정 분류(§0 r4, 범례 캡션·title
+ * 툴팁으로 신호). 선택·무명 오버라이드는 :has() 없이도 이미 부모 .graph-node가
+ * 들고 있는 상태 클래스라 자손 선택자로 특이도를 올려 우선순위를 강제한다
+ * (§15 비차단 1번 — 선택이 무명 오버라이드보다 우선, 코드 근거는 render.js 참고). */
+.graph-node-circle.is-hub { fill: var(--color-k-text); }
+.graph-node-circle.is-leaf { fill: #fff; stroke: var(--color-k-hint); stroke-width: 1.5px; }
+.graph-node-circle.is-unnamed-warn { fill: #fff; stroke: rgba(255, 152, 56, 0.75); stroke-width: 1.5px; }
+.graph-node.is-selected .graph-node-circle { stroke: var(--color-brand); stroke-width: 2px; }
+.graph-label { font-family: var(--font-body); font-size: var(--text-xs); fill: var(--color-k-soft); }
+.graph-label.is-hub { font-family: var(--font-strong); fill: var(--color-k-bright); }
+.graph-node.is-selected .graph-label { font-family: var(--font-strong); }
+
+.graph-node-tier-legend { padding: 6px 18px; border-top: 1px solid var(--color-k-line); flex-shrink: 0; }
+.graph-node-tier-caption { font-family: var(--font-body); font-size: var(--text-2xs); color: var(--color-k-hint); font-style: italic; }
+
 /* 요약 뷰 본문 골격 — 표 영역(왼쪽, 헤더 아래로 히어로·배너·표가 세로로 쌓인다)
  * + 공통 패널(오른쪽, 스텝8) 좌우 배치(07 §10 스펙). */
 #graphSummaryTable { display: flex; flex-direction: column; }

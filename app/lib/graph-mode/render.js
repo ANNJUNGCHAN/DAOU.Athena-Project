@@ -28,12 +28,74 @@ function clusterHue(cluster) {
   return (index * 47) % 360;
 }
 
+// 2단계 노드 계층 분류(스텝12, §0 r4 "근거 불명확한 추정 분류") — Paper가 정확한
+// 허브 판정 함수를 안 줘서(정찰 보고서 §2.3 "정확한 함수는 특정할 수 없음") 실행자가
+// 정한 컷오프: 그 노드가 속한 군집 안에서 최대 차수의 60% 이상이면 허브, 미만이면
+// leaf. 확정적 그래픽(채움색)만으로 끝내지 않고 범례 캡션·title 툴팁으로 "추정
+// 분류"임을 신호한다(원칙5).
+const HUB_DEGREE_RATIO = 0.6;
+const HUB_LEAF_CAPTION = '허브/leaf는 상대 차수 기준 추정 분류';
+
+function classifyHubLeaf(nodes) {
+  const maxByCluster = new Map();
+  for (const node of nodes) {
+    const prev = maxByCluster.get(node.cluster) || 0;
+    if ((node.degree || 0) > prev) maxByCluster.set(node.cluster, node.degree || 0);
+  }
+  const tiers = new Map();
+  for (const node of nodes) {
+    const max = maxByCluster.get(node.cluster) || 0;
+    tiers.set(node.entity_id, max > 0 && (node.degree || 0) >= max * HUB_DEGREE_RATIO ? 'hub' : 'leaf');
+  }
+  return tiers;
+}
+
+// 군집 배경 타원(스텝12, 보드 15 §2.3) — placed.clusters의 x/y/radius는 이 함수까지
+// 안 전해진다(controller.js가 대상 파일 밖이라 layout은 {nodes,edges}만 받는다,
+// 스텝11의 clusterEdges와 같은 사정) — 그래서 지금 그려지는 노드들의 바운딩
+// 박스로 대신 계산한다(새 좌표 체계를 발명하는 게 아니라 이미 배치된 노드
+// 좌표를 그대로 감싸는 것뿐). 2단계는 지금 펼친 군집 하나만 보여주므로
+// (graph-mode-store.js의 visibleNodes가 expandedCluster로만 거른다 — 정찰
+// 보고서가 관찰한 "군집 타원 없는 컨텍스트 노드"까지 보여주려면 그 필터 자체를
+// 바꿔야 해서 이번 스텝 범위 밖이다) 타원도 항상 하나만 그리면 된다.
+function clusterEllipseBounds(nodes) {
+  if (!nodes.length) return null;
+  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+  for (const node of nodes) {
+    const r = node.radius || 0;
+    minX = Math.min(minX, node.x - r);
+    maxX = Math.max(maxX, node.x + r);
+    minY = Math.min(minY, node.y - r);
+    maxY = Math.max(maxY, node.y + r);
+  }
+  const padX = Math.max(30, (maxX - minX) * 0.18);
+  const padY = Math.max(30, (maxY - minY) * 0.22);
+  return {
+    cluster: nodes[0].cluster,
+    cx: (minX + maxX) / 2,
+    cy: (minY + maxY) / 2,
+    rx: (maxX - minX) / 2 + padX,
+    ry: (maxY - minY) / 2 + padY,
+    left: minX - padX,
+    top: minY - padY,
+  };
+}
+
 function renderClusterMap(container, layout, options) {
   if (!container) return null;
   const settings = options || {};
   const showLabels = settings.showLabels !== false;
   const highlightCrossings = settings.highlightCrossings !== false;
   const selectedEntityId = settings.selectedEntityId != null ? String(settings.selectedEntityId) : null;
+  // 이름 없는 군집 오버라이드(스텝12, §0 r5) — controller.js가 아직 안 채워주는
+  // 선택적 입력이다(대상 파일 밖이라 배선하지 않는다, 스텝11의 surprisingPairs와
+  // 같은 사정). 기본값(둘 다 안 옴)에서는 오버라이드가 항상 꺼진다 — 지금
+  // 실제 데이터(0/N, 이름 파이프라인 없음)와 같은 결과라 정직하다.
+  const unnamedOverrideEligible = settings.unnamedClusterWarnEligible === true;
+  const unnamedClusters = settings.unnamedClusters instanceof Set
+    ? settings.unnamedClusters
+    : new Set(Array.isArray(settings.unnamedClusters) ? settings.unnamedClusters : []);
+  const clusterHasName = settings.clusterName != null; // 지금 보이는(단일) 군집의 이름 여부.
 
   const nodes = (layout && layout.nodes) || [];
   const edges = (layout && layout.edges) || [];
@@ -51,6 +113,30 @@ function renderClusterMap(container, layout, options) {
     // 스크린리더가 노드를 하나씩 읽으면 수백 줄이 된다. 요약 하나로 대신한다.
     'aria-label': `투자 성향 그래프 — 노드 ${nodes.length}개, 연결 ${edges.length}개`,
   });
+
+  // 군집 배경 타원 — 가장 먼저 그린다(엣지·노드보다 아래 깔린다).
+  const ellipseLayer = el('g', { class: 'graph-cluster-ellipses' });
+  const bounds = clusterEllipseBounds(nodes);
+  if (bounds) {
+    const ellipseUnnamed = !clusterHasName;
+    ellipseLayer.appendChild(el('ellipse', {
+      cx: bounds.cx, cy: bounds.cy, rx: bounds.rx, ry: bounds.ry,
+      class: ellipseUnnamed ? 'graph-cluster-ellipse is-unnamed-warn' : 'graph-cluster-ellipse',
+    }));
+    const nameLabel = el('text', {
+      x: bounds.left + 8, y: bounds.top + 18,
+      class: ellipseUnnamed ? 'graph-cluster-ellipse-label is-unnamed-warn' : 'graph-cluster-ellipse-label',
+    });
+    // §0 정책 — 이름이 없으면 "군집 N"으로 정직하게 대체한다(지어내지 않는다).
+    nameLabel.textContent = settings.clusterName || `군집 ${bounds.cluster}`;
+    ellipseLayer.appendChild(nameLabel);
+    if (ellipseUnnamed) {
+      const badge = el('text', { x: bounds.left + 8, y: bounds.top + 34, class: 'graph-cluster-ellipse-badge' });
+      badge.textContent = '이름 없음';
+      ellipseLayer.appendChild(badge);
+    }
+  }
+  svg.appendChild(ellipseLayer);
 
   // 엣지를 먼저 그린다 — SVG는 뒤에 그린 것이 위로 오므로 노드가 선에 가려지지 않는다.
   const edgeLayer = el('g', { class: 'graph-edges' });
@@ -71,28 +157,44 @@ function renderClusterMap(container, layout, options) {
   }
   svg.appendChild(edgeLayer);
 
+  // 노드 스타일 4계층(스텝12) — 허브/leaf(채움), 선택(테두리 핑크+라벨 볼드,
+  // Paper "선택 상태는 크기가 아니라 테두리색+라벨 굵기로 표현" 그대로),
+  // 무명 군집 오버라이드(흰 채움 강제+주황 테두리, r5 게이팅). §15 비차단
+  // 1번(선택+무명 오버라이드 동시 해당 시 우선순위) — 선택이 우선한다(사용자가
+  // 방금 누른 행동 피드백이 상시 상태 경고보다 즉시성이 높다고 판단, 리드 권고
+  // 채택): CSS에서 `.is-selected .graph-node-circle` 선택자가 `.is-unnamed-warn`
+  // 단독 선택자보다 특이도가 높아 테두리색은 선택이 이긴다 — 다만 흰 채움 강제는
+  // 선택 여부와 무관하게 그대로 적용된다(Paper 규칙 "선택은 테두리+라벨만 바꾼다"
+  // 그대로, 채움은 선택의 관할이 아니다).
+  const tiers = classifyHubLeaf(nodes);
   const nodeLayer = el('g', { class: 'graph-nodes' });
   for (const node of nodes) {
     const isSelected = selectedEntityId !== null && selectedEntityId === String(node.entity_id);
+    const tier = tiers.get(node.entity_id) || 'leaf';
+    const unnamedOverride = unnamedOverrideEligible && unnamedClusters.has(node.cluster);
+
+    const groupClasses = ['graph-node'];
+    if (isSelected) groupClasses.push('is-selected');
     const group = el('g', {
-      class: isSelected ? 'graph-node is-selected' : 'graph-node',
+      class: groupClasses.join(' '),
       'data-entity-id': node.entity_id,
       'data-cluster': node.cluster,
       'data-kind': node.kind,
+      title: HUB_LEAF_CAPTION,
     });
+
+    const circleClasses = ['graph-node-circle', tier === 'hub' ? 'is-hub' : 'is-leaf'];
+    if (unnamedOverride) circleClasses.push('is-unnamed-warn');
     group.appendChild(
-      el('circle', {
-        cx: node.x,
-        cy: node.y,
-        r: node.radius,
-        fill: `hsl(${clusterHue(node.cluster)} 62% 55% / 0.85)`,
-      })
+      el('circle', { cx: node.x, cy: node.y, r: node.radius, class: circleClasses.join(' ') })
     );
     if (showLabels) {
+      const labelClasses = ['graph-label'];
+      if (tier === 'hub') labelClasses.push('is-hub');
       const label = el('text', {
         x: node.x,
         y: node.y + node.radius + 12,
-        class: 'graph-label',
+        class: labelClasses.join(' '),
         'text-anchor': 'middle',
       });
       label.textContent = node.name;
@@ -103,6 +205,13 @@ function renderClusterMap(container, layout, options) {
   svg.appendChild(nodeLayer);
 
   container.appendChild(svg);
+  if (nodes.length > 0) {
+    const legend = elHtml('div', 'graph-node-tier-legend');
+    const caption = elHtml('span', 'graph-node-tier-caption');
+    caption.textContent = HUB_LEAF_CAPTION;
+    legend.appendChild(caption);
+    container.appendChild(legend);
+  }
   return svg;
 }
 
