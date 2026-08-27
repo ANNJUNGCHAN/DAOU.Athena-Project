@@ -244,3 +244,149 @@ test('빈 클러스터 목록도 터지지 않는다', () => {
 test('컨테이너가 없으면 조용히 넘어간다(renderClusterBubbles)', () => {
   assert.equal(renderClusterBubbles(null, mockPlaced([]), {}), null);
 });
+
+// ── 군집간 연결선 3종 + 범례(스텝11) ────────────────────────────────────────
+
+function edgesOf(svg) {
+  return svg.querySelectorAll('.graph-cluster-edge');
+}
+
+test('군집간 연결선이 먼저, 버블이 나중에 그려진다(엣지가 버블에 가리지 않는다)', () => {
+  const placed = mockPlaced([
+    { cluster: 0, size: 1, x: 100, y: 100, radius: 40 },
+    { cluster: 1, size: 1, x: 300, y: 100, radius: 30 },
+  ]);
+  placed.clusterEdges = [{ from: 0, to: 1, x1: 100, y1: 100, x2: 300, y2: 100, count: 1, isSurprising: false }];
+  const container = fakeNode('div');
+  const svg = renderClusterBubbles(container, placed, { width: 800, height: 600 });
+  const layerClasses = svg.children.map((c) => c.attrs.class);
+  assert.deepEqual(layerClasses, ['graph-cluster-edges', 'graph-cluster-bubbles']);
+});
+
+test('평범한 군집 쌍은 실선(별도 클래스 없음)이고 count가 클수록 굵어진다(단조 증가)', () => {
+  const placed = mockPlaced([
+    { cluster: 0, size: 1, x: 0, y: 0, radius: 10 },
+    { cluster: 1, size: 1, x: 100, y: 0, radius: 10 },
+  ]);
+  placed.clusterEdges = [
+    { from: 0, to: 1, x1: 0, y1: 0, x2: 100, y2: 0, count: 1, isSurprising: false },
+  ];
+  const svgThin = renderClusterBubbles(fakeNode('div'), placed, { width: 800, height: 600 });
+  placed.clusterEdges[0].count = 6;
+  const svgThick = renderClusterBubbles(fakeNode('div'), placed, { width: 800, height: 600 });
+
+  const widthOf = (svg) => Number(edgesOf(svg)[0].attrs.style.match(/stroke-width: ([\d.]+)px/)[1]);
+  assert.ok(widthOf(svgThick) > widthOf(svgThin), 'count가 클수록 굵다');
+  const e = edgesOf(svgThin)[0];
+  assert.equal(String(e.attrs.class).includes('is-hidden-link'), false);
+  assert.equal(String(e.attrs.class).includes('is-unnamed-warn'), false);
+});
+
+test('surprising-connections와 겹치는 군집 쌍은 핑크 점선(is-hidden-link)이다', () => {
+  const placed = mockPlaced([
+    { cluster: 0, size: 1, x: 0, y: 0, radius: 10 },
+    { cluster: 1, size: 1, x: 100, y: 0, radius: 10 },
+  ]);
+  placed.clusterEdges = [{ from: 0, to: 1, x1: 0, y1: 0, x2: 100, y2: 0, count: 1, isSurprising: true }];
+  const svg = renderClusterBubbles(fakeNode('div'), placed, { width: 800, height: 600 });
+  assert.ok(String(edgesOf(svg)[0].attrs.class).includes('is-hidden-link'));
+});
+
+test('0/N(전부 무명)이면 이름 없는 군집 관련 엣지도 주황이 아니라 실선으로 렌더된다(§0 r5)', () => {
+  const placed = mockPlaced([
+    { cluster: 0, size: 1, x: 0, y: 0, radius: 10, name: null },
+    { cluster: 1, size: 1, x: 100, y: 0, radius: 10, name: null },
+  ]);
+  placed.clusterEdges = [{ from: 0, to: 1, x1: 0, y1: 0, x2: 100, y2: 0, count: 1, isSurprising: false }];
+  const svg = renderClusterBubbles(fakeNode('div'), placed, { width: 800, height: 600 });
+  assert.equal(String(edgesOf(svg)[0].attrs.class).includes('is-unnamed-warn'), false, '0/N이면 3번째 종류를 아예 안 그린다');
+});
+
+test('부분 무명일 때만 무명 군집이 걸린 엣지가 주황 점선(is-unnamed-warn)이다(§0 r5)', () => {
+  const placed = mockPlaced([
+    { cluster: 0, size: 1, x: 0, y: 0, radius: 10, name: '반도체' },
+    { cluster: 1, size: 1, x: 100, y: 0, radius: 10, name: null },
+  ]);
+  placed.clusterEdges = [{ from: 0, to: 1, x1: 0, y1: 0, x2: 100, y2: 0, count: 1, isSurprising: false }];
+  const svg = renderClusterBubbles(fakeNode('div'), placed, { width: 800, height: 600 });
+  assert.ok(String(edgesOf(svg)[0].attrs.class).includes('is-unnamed-warn'));
+});
+
+test('숨은 연관이면서 동시에 무명 군집도 걸려 있으면 핑크가 우선한다', () => {
+  const placed = mockPlaced([
+    { cluster: 0, size: 1, x: 0, y: 0, radius: 10, name: '반도체' },
+    { cluster: 1, size: 1, x: 100, y: 0, radius: 10, name: null },
+  ]);
+  placed.clusterEdges = [{ from: 0, to: 1, x1: 0, y1: 0, x2: 100, y2: 0, count: 1, isSurprising: true }];
+  const svg = renderClusterBubbles(fakeNode('div'), placed, { width: 800, height: 600 });
+  const cls = String(edgesOf(svg)[0].attrs.class);
+  assert.ok(cls.includes('is-hidden-link'));
+  assert.equal(cls.includes('is-unnamed-warn'), false);
+});
+
+test('clusterEdges가 없으면(구버전 배치) 엣지 레이어가 비어 있을 뿐 안 터진다', () => {
+  const placed = mockPlaced([{ cluster: 0, size: 1, x: 0, y: 0, radius: 10 }]);
+  const svg = renderClusterBubbles(fakeNode('div'), placed, { width: 800, height: 600 });
+  assert.equal(edgesOf(svg).length, 0);
+});
+
+// ── 범례 — 실제로 쓰인 시각 언어만 설명한다(§0 정직한 데이터 정책) ──────────────
+
+function legendOf(container) {
+  return container.querySelectorAll('.graph-cluster-legend-item');
+}
+
+test('cohesion이 하나도 없으면 "채움 진하기 = 응집도" 항목이 안 뜬다', () => {
+  const placed = mockPlaced([{ cluster: 0, size: 1, x: 0, y: 0, radius: 10 }]); // cohesion 없음
+  const container = fakeNode('div');
+  renderClusterBubbles(container, placed, { width: 800, height: 600 });
+  const texts = legendOf(container).map((item) => item.textContent);
+  assert.ok(!texts.some((t) => t.includes('응집도')));
+  assert.ok(texts.some((t) => t.includes('구성원 수')), '원 크기 항목은 군집이 있으면 항상 뜬다');
+});
+
+test('cohesion이 하나라도 있으면 "채움 진하기 = 응집도" 항목이 뜬다', () => {
+  const placed = mockPlaced([{ cluster: 0, size: 1, x: 0, y: 0, radius: 10, cohesion: 0.5 }]);
+  const container = fakeNode('div');
+  renderClusterBubbles(container, placed, { width: 800, height: 600 });
+  assert.ok(legendOf(container).map((item) => item.textContent).some((t) => t.includes('응집도')));
+});
+
+test('숨은 연관 stroke가 실제로 그려졌을 때만 "숨은 연관" 범례 항목이 뜬다', () => {
+  const placed = mockPlaced([
+    { cluster: 0, size: 1, x: 0, y: 0, radius: 10 },
+    { cluster: 1, size: 1, x: 100, y: 0, radius: 10 },
+  ]);
+  const container = fakeNode('div');
+  renderClusterBubbles(container, placed, { width: 800, height: 600 });
+  assert.ok(!legendOf(container).map((item) => item.textContent).some((t) => t.includes('숨은 연관')));
+
+  placed.clusterEdges = [{ from: 0, to: 1, x1: 0, y1: 0, x2: 100, y2: 0, count: 1, isSurprising: true }];
+  const container2 = fakeNode('div');
+  renderClusterBubbles(container2, placed, { width: 800, height: 600 });
+  assert.ok(legendOf(container2).map((item) => item.textContent).some((t) => t.includes('숨은 연관')));
+});
+
+test('r5 임계 규칙이 켜져 있을 때만(부분 무명) "점선 = 확인 필요" 범례 항목이 뜬다', () => {
+  const allUnnamed = mockPlaced([
+    { cluster: 0, size: 1, x: 0, y: 0, radius: 10, name: null },
+    { cluster: 1, size: 1, x: 100, y: 0, radius: 10, name: null },
+  ]);
+  const container = fakeNode('div');
+  renderClusterBubbles(container, allUnnamed, { width: 800, height: 600 });
+  assert.ok(!legendOf(container).map((item) => item.textContent).some((t) => t.includes('확인 필요')));
+
+  const partial = mockPlaced([
+    { cluster: 0, size: 1, x: 0, y: 0, radius: 10, name: '반도체' },
+    { cluster: 1, size: 1, x: 100, y: 0, radius: 10, name: null },
+  ]);
+  const container2 = fakeNode('div');
+  renderClusterBubbles(container2, partial, { width: 800, height: 600 });
+  assert.ok(legendOf(container2).map((item) => item.textContent).some((t) => t.includes('확인 필요')));
+});
+
+test('클러스터가 하나도 없으면 범례 자체를 안 그린다', () => {
+  const container = fakeNode('div');
+  renderClusterBubbles(container, mockPlaced([]), { width: 800, height: 600 });
+  assert.equal(container.querySelector('.graph-cluster-legend'), null);
+});
