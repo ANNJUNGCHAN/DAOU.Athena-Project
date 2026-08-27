@@ -23,6 +23,39 @@ const $bootName = document.getElementById('bootName');
 const $bootPh = document.getElementById('bootPh');
 const $app = document.getElementById('app');
 const $history = document.getElementById('history');
+
+// 결과물·출처 도크(단계 8, Paper 25Q-0 "④ 결과물·출처 도크") — shell.html에는
+// 마크업이 없다(계획서가 chat.js/chat.css만 지목했다): 이 조립 함수 하나가
+// #app과 #history 사이에 접어 넣는다.
+function buildResultDockRow(label) {
+  const row = document.createElement('div');
+  row.className = 'result-dock-row';
+  const head = document.createElement('div');
+  head.className = 'result-dock-head';
+  const labelEl = document.createElement('span');
+  labelEl.className = 'result-dock-label';
+  labelEl.textContent = label;
+  const countEl = document.createElement('span');
+  countEl.className = 'result-dock-count';
+  head.append(labelEl, countEl);
+  row.appendChild(head);
+  return { row, countEl };
+}
+const $resultDock = document.createElement('div');
+$resultDock.className = 'result-dock';
+$resultDock.hidden = true;
+const resultRow = buildResultDockRow('결과물');
+const $resultDockCanvasCount = resultRow.countEl;
+const $resultDockCaption = document.createElement('div');
+$resultDockCaption.className = 'result-dock-caption';
+resultRow.row.appendChild($resultDockCaption);
+const sourceRow = buildResultDockRow('출처');
+const $resultDockSourceCount = sourceRow.countEl;
+const $resultDockChips = document.createElement('div');
+$resultDockChips.className = 'result-dock-chips';
+sourceRow.row.appendChild($resultDockChips);
+$resultDock.append(resultRow.row, sourceRow.row);
+$app.insertBefore($resultDock, $history);
 const $input = document.getElementById('input');
 const $dot = document.getElementById('dot');
 const $lockHint = document.getElementById('lockHint');
@@ -332,6 +365,30 @@ function canvasTypeLabel(t) {
   // 미지의 타입도 원문 식별자를 새지 않게 한다 — 게이트웨이가 새 canvas_type을
   // 보내기 시작하면 여기 매핑에 등록하는 것이 정직한 경로다.
   return CANVAS_TYPE_LABELS[t] || '카드';
+}
+
+// 결과물·출처 도크(단계 8, Paper 25Q-0 "④ 결과물·출처 도크") — 매 턴 이전 값을
+// 지우고 최신 턴만 표시한다(누적 금지). 출처 칩은 turn-meta가 이미 쓰는
+// canvasTypeLabel()/canvasTypes를 그대로 재사용한다(새 라벨 안 짓는다) — 결과물
+// 캡션만 main.js가 새로 모아준 카드별 표시 이름(canvasCaptions)을 쓴다. 이번 턴에
+// 카드가 하나도 없으면(순수 프로즈 답변) 보여줄 결과 자체가 없으므로 숨긴다.
+function updateResultDock(cardCount, canvasTypes, canvasCaptions) {
+  $resultDockCaption.textContent = '';
+  $resultDockChips.textContent = '';
+  if (!cardCount) {
+    $resultDock.hidden = true;
+    return;
+  }
+  $resultDockCanvasCount.textContent = `캔버스 ${cardCount}`;
+  $resultDockCaption.textContent = (canvasCaptions || []).join(' · ');
+  $resultDockSourceCount.textContent = String((canvasTypes || []).length);
+  for (const t of canvasTypes || []) {
+    const chip = document.createElement('span');
+    chip.className = 'chip';
+    chip.textContent = canvasTypeLabel(t);
+    $resultDockChips.appendChild(chip);
+  }
+  $resultDock.hidden = false;
 }
 
 let activeRecommendationRow = null;
@@ -694,6 +751,7 @@ async function runQueryLive(text) {
     chip.textContent = canvasTypeLabel(t);
     meta.appendChild(chip);
   }
+  updateResultDock(cardCount, canvasTypes, result && result.canvasCaptions);
   const trace = document.createElement('span');
   const durS = result && typeof result.durationMs === 'number' ? (result.durationMs / 1000).toFixed(1) : elapsedText().replace('s', '');
   const skipped = result && result.diagnostics && result.diagnostics.skippedLines;

@@ -1432,6 +1432,10 @@ async function runLiveQueryInner(query, expand) {
   // 실제로 가능하다 — 그때 빈 유리창을 열어두지 않는다.
   let expandTriggered = false;
   const canvasTypesSeen = [];
+  // 결과물 도크(단계 8, board 25Q-0 "④ 결과물·출처 도크")용 — 카드별 표시
+  // 이름(card_title 있으면 그거, 없으면 caption)을 턴 등장 순서 그대로 모은다.
+  // 새 라벨을 짓지 않는다 — 이미 canvas.js가 카드 제목에 쓰는 값 그대로다.
+  const canvasCaptionsSeen = [];
   // 판정 캡처(시맨틱 캐시 재료) — tool_use_id로 resolve 결과 토큰과 render 입력
   // 토큰을 상관시킨다. 마지막 입력끼리 우연히 결합하지 않는다.
   const replayTurnCapture = new ReplayTurnCapture();
@@ -1455,9 +1459,11 @@ async function runLiveQueryInner(query, expand) {
     onTextDelta: sendLiveTextDelta,
     onThinkingDelta: sendLiveThinkingDelta,
     onCanvasResult: (r) => {
+      const label = r.envelope && (r.envelope.card_title || r.envelope.caption);
       if (r.status === 'pushed') {
         // 카드는 사이드 채널(startCanvasFeed)로 이미 도착했다 — 여기선 집계만.
         if (r.envelope && r.envelope.canvas_type) canvasTypesSeen.push(r.envelope.canvas_type);
+        if (label) canvasCaptionsSeen.push(label);
         return;
       }
       if (expand && !expandTriggered) {
@@ -1468,6 +1474,7 @@ async function runLiveQueryInner(query, expand) {
       }
       sendLiveCanvasResult(r);
       if (r.envelope && r.envelope.canvas_type) canvasTypesSeen.push(r.envelope.canvas_type);
+      if (label) canvasCaptionsSeen.push(label);
     },
   });
 
@@ -1523,6 +1530,7 @@ async function runLiveQueryInner(query, expand) {
     error: result.ok ? null : (result.error || `claude 종료 코드 ${result.exitCode}`),
     answerText,
     canvasTypes: [...new Set(canvasTypesSeen)],
+    canvasCaptions: canvasCaptionsSeen,
     diagnostics: result.diagnostics,
     durationMs: result.finalResult && result.finalResult.duration_ms,
   };
