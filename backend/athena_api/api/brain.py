@@ -1,6 +1,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import logging
 import os
 import shutil
@@ -24,6 +25,7 @@ from athena_api.brain import (
     surprising_connections,
     utc_now,
 )
+from athena_api.brain import labeling
 from athena_api.brain.projection import cluster_cohesion, cluster_representative_labels
 from athena_api.errors import BrainNotReadyError
 from athena_api.lifespan import BrainRuntime, _teardown_brain
@@ -559,6 +561,10 @@ class ClusterMapResponse(BaseModel):
     cluster_cohesion: dict[int, float]
     cluster_representative_labels: dict[int, str]
     edge_details: list[EdgeDetailOut]
+    # WP-F(F5) — LLM이 지은 **추정 이름**(additive, 기본 빈 dict). `name`(의미적
+    # 이름, 항상 null)·`cluster_representative_labels`(규칙 기반)와 분리된 세 번째
+    # 필드다 — 실패·휴면 시 비워 두면 프런트가 규칙 기반으로 정직하게 폴백한다.
+    cluster_ai_labels: dict[int, str] = {}
 
 
 @router.get(
@@ -751,6 +757,15 @@ async def get_brain_cluster_map(
     cohesion = cluster_cohesion(projected, assignment)
     representative_labels = cluster_representative_labels(projected, assignment)
     graph = projected.graph
+    # WP-F(F4, G-F3) — LLM 추정 라벨은 캐시 히트만 이번 응답에 싣는다. 미스는
+    # 응답을 지연시키지 않는다 — 필드를 비운 채 즉시 반환하고 백그라운드 태스크가
+    # 캐시를 채워 다음 요청부터 히트가 된다.
+    members_by_cluster: dict[int, list[str]] = {}
+    for node, cluster_index in assignment.items():
+        members_by_cluster.setdefault(cluster_index, []).append(node)
+    cluster_ai_labels = await _collect_cluster_ai_labels(
+        request, _require_store(request), graph, members_by_cluster
+    )
     # 정렬해 내보낸다 — 순서가 흔들리면 캔버스가 이유 없이 다시 그려진다. edges와
     # edge_details가 같은 pair 목록에서 나오므로 둘의 순서가 항상 같이 간다.
     sorted_edge_pairs = sorted(tuple(sorted(edge)) for edge in graph.edges)
@@ -779,4 +794,51 @@ async def get_brain_cluster_map(
             )
             for pair in sorted_edge_pairs
         ],
+        cluster_ai_labels=cluster_ai_labels,
     )
+
+
+# WP-F F4 — 백그라운드 라벨링 동시 스폰 상한. 첫 방문에 군집 여러 개가 한꺼번에
+# 캐시 미스여도 군집 수만큼 무제한 스폰되지 않는다 — 넘치는 미스는 이번엔
+# 규칙 기반 폴백만 반환하고, 다음 요청의 미스가 다시 기회를 얻는다.
+_MAX_LABELING_TASKS = 4
+
+
+async def _labeling_task(store: GraphStore, client, members: list[str], graph) -> None:
+    try:
+        await labeling.ensure_cluster_label(store, client, members, graph)
+    except Exception:
+        # 실패 무시(G-F3) — 캐시가 안 채워졌을 뿐이라 다음 요청이 같은 미스로
+        # 흘러 자연히 재시도된다. 라벨은 있으면 좋은 것이지 없다고 틀리는 게 아니다.
+        logger.debug("cluster labeling task failed", exc_info=True)
+
+
+async def _collect_cluster_ai_labels(
+    request: Request,
+    store: GraphStore,
+    graph,
+    members_by_cluster: dict[int, list[str]],
+) -> dict[int, str]:
+    """캐시 히트는 즉시 싣고, 미스는 백그라운드 태스크로 채운다(fire-and-forget).
+
+    생성된 태스크 참조는 반드시 `app.state.cluster_labeling_tasks`에 보관한다 —
+    핸들러 반환 후 로컬 참조가 사라지면 GC가 실행 중인 태스크를 중도 회수할 수
+    있다는 asyncio 문서 경고 대응(lifespan.py의 hourly_task 저장 관례와 동일).
+    """
+    client = getattr(request.app.state, "brain_cluster_labeling_llm_client", None)
+    tasks: set[asyncio.Task] = getattr(request.app.state, "cluster_labeling_tasks", set())
+    fingerprint = labeling.labeling_prompt_fingerprint()
+    labels: dict[int, str] = {}
+    for cluster_index, members in members_by_cluster.items():
+        cached = await store.cluster_label(labeling.member_set_hash(members), fingerprint)
+        if cached is not None:
+            labels[cluster_index] = cached
+            continue
+        if client is None:
+            continue  # 라벨링 휴면(G-F1) — 백그라운드 스폰도 없다.
+        if len(tasks) >= _MAX_LABELING_TASKS:
+            continue  # 동시 스폰 상한 — 이번 미스는 폴백만.
+        task = asyncio.create_task(_labeling_task(store, client, list(members), graph))
+        tasks.add(task)
+        task.add_done_callback(tasks.discard)
+    return labels
