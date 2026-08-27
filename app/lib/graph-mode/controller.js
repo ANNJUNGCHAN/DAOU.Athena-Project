@@ -33,6 +33,83 @@ function computeGraphHeaderMeta(stage, payload, placed) {
   return `군집 ${clusterCount}개 · 엔티티 ${entityCount} · 미분류 ${unassignedCount}`;
 }
 
+// ── 엔티티 타임라인(§10-4 최근 변화, WP-G) — 순수 헬퍼 3벌 ────────────────────
+//
+// computeGraphHeaderMeta와 같은 이유로 모듈 스코프 순수 함수다 —
+// createGraphModeController(deps) 밖에서도 테스트 가능해야 한다.
+
+// 날짜는 절대 MM-DD(G-G1, Paper 15 §2.5 실측 — Geist Mono 44px 고정폭 열).
+// relativeDaysText(summary-table.js)와 다른 포맷인 이유: Paper가 명시적으로
+// 절대 날짜를 그렸고 원칙3(Paper 우선)이 앱 내부 관례보다 앞선다.
+// 파싱 불가면 빈 문자열 — 지어내지 않는다.
+function formatEventDate(iso) {
+  const t = Date.parse(iso);
+  if (!Number.isFinite(t)) return '';
+  const d = new Date(t);
+  return `${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+// relation 한글 사전(G-G5: 이 패널 로컬 상수 — 공유 모듈화는 실사용 후 필요성
+// 확인 시 후속). 어휘는 백엔드 RelationKind(ontology.py:78-95) 전체를 덮고,
+// 미등록 relation은 원문 그대로 폴백한다(summary-table.js 기존 관례와 동일 —
+// 지어낸 한글을 강제하지 않음).
+const RELATION_LABELS = {
+  relates_to: '연관',
+  interested_in: '관심',
+  prefers: '선호',
+  owns: '보유',
+  traded: '매매',
+  researched: '탐색',
+  belongs_to: '소속',
+  exposed_to: '노출',
+  avoids: '회피',
+  targets: '목표',
+};
+
+// confidence 한글 라벨 — 원래 createGraphModeController 안(패널 티어 대조 카드
+// 전용)에 있던 것을 타임라인 문구 조립(timelineEventText)과 공유하려고 모듈
+// 스코프로 올렸다. 값은 그대로다(Paper 행2 "추론 → 사실로 승격"이 정확히 이 어휘).
+const PANEL_CONFIDENCE_LABELS = { EXTRACTED: '사실', INFERRED: '추론', AMBIGUOUS: '불확실' };
+
+// confidence 위계(edge_changed의 "승격" 판정 전용) — 상승만 "…로 승격"(G-G4),
+// 하강·동일·한쪽 미상은 전부 방어적 중립 "신뢰도 변경"으로 통일한다.
+const CONFIDENCE_RANK = { AMBIGUOUS: 0, INFERRED: 1, EXTRACTED: 2 };
+
+// GraphEventOp별 문구 조립(G-G6 초안 그대로 채택 — Paper 대응 사례가 없는 op는
+// GraphEventOp 주석 의미로 직역). entity_added의 대화 제목 인용구는 backend에
+// 대응 필드가 없어 조립하지 않는다(G-G3, §0 정직성 원칙).
+function timelineEventText(event) {
+  const rel = event.relation ? (RELATION_LABELS[event.relation] || event.relation) : '';
+  switch (event.op) {
+    case 'entity_added': return '노드 처음 생김';
+    case 'entity_removed': return '노드 제거됨';
+    case 'entity_merged': return '다른 노드와 병합됨';
+    case 'edge_added': return rel ? `관계 추가됨(${rel})` : '관계 추가됨';
+    case 'edge_removed': return rel ? `관계 제거됨(${rel})` : '관계 제거됨';
+    case 'edge_rejected': return rel ? `제안된 관계가 기각됨(${rel})` : '제안된 관계가 기각됨';
+    case 'edge_changed': {
+      const before = event.confidence_before;
+      const after = event.confidence_after;
+      const prefix = rel ? `${rel} 관계 ` : '관계 ';
+      if (before && after && CONFIDENCE_RANK[after] > CONFIDENCE_RANK[before]) {
+        const beforeLabel = PANEL_CONFIDENCE_LABELS[before] || before;
+        const afterLabel = PANEL_CONFIDENCE_LABELS[after] || after;
+        return `${prefix}${beforeLabel} → ${afterLabel}로 승격`;
+      }
+      return `${prefix}신뢰도 변경`;
+    }
+    default: return event.op; // 미등록 op도 원문 폴백 — relation 폴백과 같은 규칙.
+  }
+}
+
+// EntityEventOut[] → 패널 행 [{date, text}] — 렌더(G3)가 그대로 소비한다.
+function buildTimelineRows(events) {
+  if (!Array.isArray(events)) return [];
+  return events
+    .filter(Boolean)
+    .map((event) => ({ date: formatEventDate(event.at), text: timelineEventText(event) }));
+}
+
 function createGraphModeController(deps) {
   const {
     store,          // graph-mode-store
@@ -278,7 +355,6 @@ function createGraphModeController(deps) {
   }
 
   const PANEL_TIER_LABELS = { deterministic: '체결·잔고', conversational: '대화' };
-  const PANEL_CONFIDENCE_LABELS = { EXTRACTED: '사실', INFERRED: '추론', AMBIGUOUS: '불확실' };
 
   // 공통 패널 콘텐츠(보드 07 §10, 스텝8). §10-1 탭("이력" 탭은 Paper에 콘텐츠
   // 스펙이 없어 클릭해도 전환 없음, §6 범위 밖) · §10-2 선택 헤더 · §10-3 티어
@@ -500,7 +576,7 @@ function createGraphModeController(deps) {
   };
 }
 
-const __exports = { createGraphModeController, computeGraphHeaderMeta };
+const __exports = { createGraphModeController, computeGraphHeaderMeta, formatEventDate, buildTimelineRows };
 
 // UMD 각주(2026-08-18 렌더러 격리) — column-fold.js와 같은 패턴.
 if (typeof module !== 'undefined' && module.exports) {
