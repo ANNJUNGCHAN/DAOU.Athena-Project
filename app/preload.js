@@ -142,6 +142,10 @@ const ON_CHANNELS = new Set([
   // 오브에서 오간 턴을 셸의 대화 이력에도 늦게 채워 넣는다(셸이 숨어 있는 동안
   // chat.js가 그릴 수 없었으므로) — {query, result}. 셸에서만 구독한다.
   'athena:orb-turn-committed',
+  // 캔버스 엔벌로프 오브 릴레이(board-33③④ 선행) — origin:'orb' 질의의
+  // render_canvas 결과만 main이 여기로도 relay한다(classifyCanvasBlock의
+  // status/envelope 그대로). 오브의 표/차트 축약 카드 렌더러가 구독한다.
+  'athena:orb-canvas-result',
 ]);
 
 contextBridge.exposeInMainWorld('athena', {
