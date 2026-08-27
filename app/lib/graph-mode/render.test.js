@@ -91,18 +91,22 @@ test('이름표를 끄면 text가 안 생긴다', () => {
   assert.equal(describeRendered(render({ showLabels: false })).labels, 0);
 });
 
-test('엣지가 노드보다 먼저 그려진다', () => {
-  // SVG는 뒤에 그린 것이 위로 온다. 순서가 뒤집히면 노드가 선에 가려진다.
+test('배경 타원 → 엣지 → 노드 순으로 그려진다(스텝12) — 뒤에 그린 게 위로 온다', () => {
+  // SVG는 뒤에 그린 것이 위로 온다. 순서가 뒤집히면 노드가 선에, 선이 타원에 가려진다.
   const svg = render().querySelector('svg.graph-canvas');
   const layerClasses = svg.children.map((c) => c.attrs.class);
-  assert.deepEqual(layerClasses, ['graph-edges', 'graph-nodes']);
+  assert.deepEqual(layerClasses, ['graph-cluster-ellipses', 'graph-edges', 'graph-nodes']);
 });
 
-test('다시 그리면 이전 내용을 지운다', () => {
+test('다시 그리면 이전 SVG가 쌓이지 않는다', () => {
   const container = render();
   const layout = layoutClusterMap(payload(), VIEWPORT);
   renderClusterMap(container, layout, {});
-  assert.equal(container.children.length, 1, 'SVG가 쌓이지 않는다');
+  // 스텝12부터 container엔 svg 외에 노드 계층 범례(.graph-node-tier-legend)도
+  // 자식으로 들어간다(renderClusterBubbles의 범례와 같은 패턴) — 총 자식 수가
+  // 아니라 "svg가 중복 안 됐는가"를 직접 센다.
+  const svgCount = container.children.filter((c) => c.nodeName === 'svg').length;
+  assert.equal(svgCount, 1, 'SVG가 쌓이지 않는다');
   assert.equal(describeRendered(container).nodes, 3);
 });
 
@@ -133,6 +137,97 @@ test('빈 그래프도 터지지 않는다', () => {
 
 test('컨테이너가 없으면 조용히 넘어간다', () => {
   assert.equal(renderClusterMap(null, layoutClusterMap(payload(), VIEWPORT), {}), null);
+});
+
+// ── 2단계 노드 계층 스타일 + 배경 타원(스텝12) ────────────────────────────────
+// payload() 고정: cluster 0 = e:a(degree3, 군집 내 최대) + e:b(degree1, 3의 33%) →
+// e:a 허브·e:b leaf. cluster 1 = e:c(degree2) 혼자라 스스로 최대 → 허브.
+
+function nodeCircle(svg, entityId) {
+  const group = svg.querySelectorAll('.graph-node').find((g) => g.getAttribute('data-entity-id') === entityId);
+  return group ? group.querySelectorAll('.graph-node-circle')[0] : null;
+}
+
+test('군집 내 상대 차수 60% 이상은 허브, 미만은 leaf로 분류된다(§0 r4 추정 분류)', () => {
+  const svg = render().querySelector('svg.graph-canvas');
+  assert.ok(String(nodeCircle(svg, 'e:a').attrs.class).includes('is-hub'));
+  assert.ok(String(nodeCircle(svg, 'e:b').attrs.class).includes('is-leaf'));
+});
+
+test('군집에 노드가 하나뿐이면(스스로 최대 차수) 허브로 분류된다', () => {
+  const svg = render().querySelector('svg.graph-canvas');
+  assert.ok(String(nodeCircle(svg, 'e:c').attrs.class).includes('is-hub'));
+});
+
+test('노드마다 title 속성에 "추정 분류" 문구가 붙는다(§0 r4, 확정적 그래픽만으로 끝내지 않는다)', () => {
+  const svg = render().querySelector('svg.graph-canvas');
+  const group = svg.querySelectorAll('.graph-node')[0];
+  assert.match(group.getAttribute('title'), /추정 분류/);
+});
+
+test('선택된 노드는 .is-selected를 받는다(테두리색·라벨 볼드는 CSS가 담당, Paper "선택은 테두리+라벨만")', () => {
+  const svg = render({ selectedEntityId: 'e:b' }).querySelector('svg.graph-canvas');
+  const group = svg.querySelectorAll('.graph-node').find((g) => g.getAttribute('data-entity-id') === 'e:b');
+  assert.ok(String(group.attrs.class).includes('is-selected'));
+});
+
+test('배경 타원이 그려지고 좌표·반지름이 양수다(노드 바운딩 박스 기반)', () => {
+  const svg = render().querySelector('svg.graph-canvas');
+  const ellipse = svg.querySelectorAll('.graph-cluster-ellipse')[0];
+  assert.ok(ellipse);
+  assert.ok(Number(ellipse.attrs.rx) > 0 && Number(ellipse.attrs.ry) > 0);
+});
+
+test('노드가 없으면 타원도 안 그려진다(터지지 않는다)', () => {
+  const container = fakeNode('div');
+  container.clientWidth = VIEWPORT.width;
+  container.clientHeight = VIEWPORT.height;
+  renderClusterMap(container, { nodes: [], edges: [] }, {});
+  const svg = container.querySelector('svg.graph-canvas');
+  assert.equal(svg.querySelectorAll('.graph-cluster-ellipse').length, 0);
+});
+
+test('unnamedClusterWarnEligible을 안 주면(옵션 미배선, 현재 실제 상태) 오버라이드가 항상 꺼진다 — 허브가 정상 검정 채움이다(§0 r5)', () => {
+  const svg = render().querySelector('svg.graph-canvas'); // 옵션 없음 — controller.js가 아직 안 채워준다.
+  assert.equal(String(nodeCircle(svg, 'e:a').attrs.class).includes('is-unnamed-warn'), false);
+});
+
+test('unnamedClusterWarnEligible+unnamedClusters가 오면 그 군집 소속 노드는 허브라도 흰 채움+주황 테두리로 오버라이드된다(부분 무명, §0 r5)', () => {
+  const svg = render({ unnamedClusterWarnEligible: true, unnamedClusters: [0] }).querySelector('svg.graph-canvas');
+  const clusterZeroHub = nodeCircle(svg, 'e:a');
+  assert.ok(String(clusterZeroHub.attrs.class).includes('is-unnamed-warn'), '허브인데도 오버라이드가 붙는다');
+  assert.ok(String(clusterZeroHub.attrs.class).includes('is-hub'), '허브 분류 자체는 지워지지 않는다(채움만 CSS가 덮는다)');
+  assert.equal(String(nodeCircle(svg, 'e:c').attrs.class).includes('is-unnamed-warn'), false, '군집 1은 무명 목록에 없어 오버라이드가 안 붙는다');
+});
+
+test('선택 + 무명 오버라이드가 동시에 해당하면 두 클래스가 함께 실린다(우선순위는 CSS 특이도로 선택이 이긴다, §15 비차단 1번)', () => {
+  const svg = render({
+    selectedEntityId: 'e:a',
+    unnamedClusterWarnEligible: true,
+    unnamedClusters: [0],
+  }).querySelector('svg.graph-canvas');
+  const group = svg.querySelectorAll('.graph-node').find((g) => g.getAttribute('data-entity-id') === 'e:a');
+  assert.ok(String(group.attrs.class).includes('is-selected'));
+  assert.ok(String(nodeCircle(svg, 'e:a').attrs.class).includes('is-unnamed-warn'));
+});
+
+test('배경 타원 이름 — clusterName 옵션이 있으면 그 이름, 없으면 "군집 N"(§0 정책, 지어내지 않는다)', () => {
+  const svgNoName = render().querySelector('svg.graph-canvas');
+  const label = svgNoName.querySelectorAll('.graph-cluster-ellipse-label')[0];
+  assert.match(label.textContent, /^군집 \d+$/);
+  assert.ok(svgNoName.querySelectorAll('.graph-cluster-ellipse-badge').length > 0, '이름이 없으면 배지도 뜬다');
+
+  const svgNamed = render({ clusterName: '반도체 대형주' }).querySelector('svg.graph-canvas');
+  const namedLabel = svgNamed.querySelectorAll('.graph-cluster-ellipse-label')[0];
+  assert.equal(namedLabel.textContent, '반도체 대형주');
+  assert.equal(svgNamed.querySelectorAll('.graph-cluster-ellipse-badge').length, 0, '이름이 있으면 배지가 없다');
+});
+
+test('노드 계층 범례 캡션이 뜬다("추정 분류" 신호, 원칙5)', () => {
+  const container = render();
+  const captions = container.querySelectorAll('.graph-node-tier-caption');
+  assert.ok(captions.length > 0);
+  assert.match(captions[0].textContent, /추정 분류/);
 });
 
 // ── renderClusterBubbles(스텝10) — 그래프 뷰 1단계 아키텍처 전환 ──────────────
