@@ -869,10 +869,12 @@ class SelectorService:
                 next_key=next_key,
             )
         # 캔버스가 모델 제공 data에 의존하지 않도록, 검증된 signed plan의 요청
-        # 모델에서 차트 식별자만 복사한다. 차트 query 외에는 항상 빈 context다.
-        # 계좌/주문 인자나 전체 arguments는 응답 경계로 재노출하지 않는다.
+        # 모델에서 종목 식별자만 복사한다. 시장 데이터 3도메인(charts·stockinfo·
+        # quotes)의 query에 한한다 — 시세류 카드의 실시간 구독(REAL 0B)이 이
+        # 식별자를 쓴다(2026-08-27, charts 전용에서 확장). 계좌/주문 인자나
+        # 전체 arguments는 여전히 응답 경계로 재노출하지 않는다.
         canvas_symbol = None
-        if document.kind == "query" and document.domain == "charts":
+        if document.kind == "query" and document.domain in ("charts", "stockinfo", "quotes"):
             validated_arguments = payload.model_dump(by_alias=True)
             for alias in ("stk_cd", "inds_cd"):
                 value = validated_arguments.get(alias)

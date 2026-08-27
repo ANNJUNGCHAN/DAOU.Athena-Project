@@ -543,6 +543,13 @@ async def canvas_render_plan(
         envelope["renderer_id"] = renderer_id
     if correlation is not None:
         envelope["correlation"] = correlation
+    # 서명된 plan이 봉인한 종목 식별자(canvas_context.symbol)를 봉투에 싣는다 —
+    # 앱의 시세류 실시간 구독(main.js extractLiveQuoteSymbol)이 이 필드를 본다.
+    # chart는 data 안에 이미 심지만(AITS DTO) table 등은 자리가 없었다.
+    canvas_context = call_payload.get("canvas_context")
+    sealed_symbol = canvas_context.get("symbol") if isinstance(canvas_context, dict) else None
+    if isinstance(sealed_symbol, str) and sealed_symbol:
+        envelope["stk_cd"] = sealed_symbol
     transform_ms = _elapsed_ms(transform_start)
     if payload.delivery == "inline":
         return JSONResponse(
