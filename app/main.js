@@ -422,15 +422,14 @@ const chartSeries = require('./lib/main/chart-series');
 let chartRealtimeFeed = null;
 let chartRealtimeRegistrar = null;
 
-// 차트 전용이 아니다 — authority.operationArgs.stk_cd 폴백 덕에 종목코드가 있는
-// REST 데이터셋 카드라면 어느 카드종이든(시세 카드 포함, 단계 8 확장) 여기서
-// 등록된다. 호출부(athena:rest-canvas-painted)도 canvas_type을 안 가린다 —
-// "그려진 걸 확인한 뒤에만 REG" 원칙만 카드종 공통이면 된다.
-function ensureChartRealtime(authority) {
+// 경로 중립 — 호출부가 REST 데이터셋 직결(athena:rest-canvas-painted)이든 클로드
+// 툴 실시간 경로(onCanvasResult, 단계 8 확장 2차)든 가리지 않는다. "종목코드를
+// 아는 순간에만 등록한다"는 계약 하나만 지키면 된다. REG는 종목당 1회 dedup이라
+// 어느 경로에서 불러도 낭비가 누적되지 않는다.
+function ensureRealtimeForSymbol(code) {
   if (process.env.ATHENA_CANVAS_SOURCE === 'fixture') return; // 검증 결정론 보호
-  const stock = authority && authority.chartBody && authority.chartBody.stock;
-  const code = String(stock || (authority && authority.operationArgs && authority.operationArgs.stk_cd) || '').trim();
-  if (!code) return;
+  const trimmed = String(code || '').trim();
+  if (!trimmed) return;
 
   if (!chartRealtimeRegistrar) {
     chartRealtimeRegistrar = chartRealtime.createRealtimeRegistrar({
@@ -454,9 +453,49 @@ function ensureChartRealtime(authority) {
     });
     chartRealtimeFeed.start();
   }
-  chartRealtimeRegistrar.ensureSymbol(code).catch((err) => {
+  chartRealtimeRegistrar.ensureSymbol(trimmed).catch((err) => {
     mdlog(`차트 REAL 등록 예외: ${String((err && err.message) || err)}`);
   });
+}
+
+// REST 데이터셋 직결 카드(athena:rest-canvas-painted) 전용 진입점 — "그려진 걸
+// 확인한 뒤에만 REG"를 지킨다. 어느 카드종이든(시세 카드 포함, 단계 8 확장 1차)
+// authority.operationArgs.stk_cd 폴백으로 종목코드가 있으면 등록된다.
+function ensureChartRealtime(authority) {
+  const stock = authority && authority.chartBody && authority.chartBody.stock;
+  const code = stock || (authority && authority.operationArgs && authority.operationArgs.stk_cd);
+  ensureRealtimeForSymbol(code);
+}
+
+// 클로드 툴 실시간 경로(onCanvasResult) 전용 진입점 — 이 경로엔 페인트 왕복이
+// 없어(athena:add-canvas-live는 편도) "그려진 뒤에만"을 못 지킨다. 대신 결과
+// 수신 시점에 등록한다: envelope이 유효해야 카드가 뜬다는 점에서 결정적이고,
+// REG는 종목당 1회 dedup이라 낭비 상한이 작다(페인트 ack가 이 경로에도
+// 생기면 ensureChartRealtime과 합친다).
+//
+// 알려진 제약(2026-08-27 실측, backend/athena_api/api/canvas_push.py:461-541) —
+// canvas_kind별 envelope 빌더가 비대칭이다: "chart" 분기는 build_aits_chart_
+// envelope_data가 종목코드를 데이터에 심어 넣지만(AITS DTO 계약, canvas.py
+// CHART_SCHEMA의 필수 "symbol"), "table" 분기(시세 카드가 쓰는 canvas_kind)의
+// envelope 딕셔너리(529~541행: canvas_type/screen_id/fell_back/fallback_reason/
+// caption/card_title/data/layout/drop_types(+renderer_id/correlation))에는
+// 종목코드를 담을 자리가 아예 없다. 클로드가 안 채우는 게 아니라 스키마 자체에
+// 없다 — 채팅으로 "삼성전자 시세" 같은 질문에 답한 결과에서는 지금 구조상
+// 이 함수가 실제로 등록에 성공할 일이 거의 없다(백엔드가 table 분기에도 종목
+// 코드를 얹어야 풀리는 문제 — 앱 쪽 수정으로 못 만든다). 그래도 자리가 있는
+// 값(chart처럼 별도 경로로 stock이 실리는 경우, 또는 백엔드가 나중에
+// table에도 필드를 더하는 경우)은 그대로 잡히게 여러 후보 자리를 본다.
+function extractLiveQuoteSymbol(envelope) {
+  if (!envelope) return null;
+  const candidates = [
+    envelope.operation_args && envelope.operation_args.stk_cd,
+    envelope.operationArgs && envelope.operationArgs.stk_cd,
+    envelope.stk_cd,
+    envelope.data && envelope.data.stk_cd,
+    envelope.data && envelope.data.symbol,
+  ];
+  const found = candidates.find((v) => typeof v === 'string' && v.trim());
+  return found ? found.trim() : null;
 }
 
 app.on('will-quit', () => { if (chartRealtimeFeed) chartRealtimeFeed.stop(); });
@@ -1468,6 +1507,9 @@ async function runLiveQueryInner(query, expand) {
         // 카드는 사이드 채널(startCanvasFeed)로 이미 도착했다 — 여기선 집계만.
         if (r.envelope && r.envelope.canvas_type) canvasTypesSeen.push(r.envelope.canvas_type);
         if (label) canvasCaptionsSeen.push(label);
+        if (r.envelope && r.envelope.card_title === '시세') {
+          ensureRealtimeForSymbol(extractLiveQuoteSymbol(r.envelope));
+        }
         return;
       }
       if (expand && !expandTriggered) {
@@ -1479,6 +1521,9 @@ async function runLiveQueryInner(query, expand) {
       sendLiveCanvasResult(r);
       if (r.envelope && r.envelope.canvas_type) canvasTypesSeen.push(r.envelope.canvas_type);
       if (label) canvasCaptionsSeen.push(label);
+      if (r.envelope && r.envelope.card_title === '시세') {
+        ensureRealtimeForSymbol(extractLiveQuoteSymbol(r.envelope));
+      }
     },
   });
 
@@ -2078,4 +2123,10 @@ module.exports = {
     mcpAllowTool: handleMcpAllowTool,
     mcpRemove: handleMcpRemove,
   },
+  // probe-quote-realtime.js가 실백엔드·실클로드 없이 "클로드 툴 실시간 경로가
+  // 실제로 REG를 부르는지"를 검증할 때 쓴다 — onCanvasResult는 runClaudeQuery
+  // 콜백이라 진짜 왕복 없이는 못 부르지만, 이 둘은 그 콜백이 부르는 것과 같은
+  // 모듈 함수라 직접 불러도 동일한 판정이 나온다.
+  ensureRealtimeForSymbol,
+  extractLiveQuoteSymbol,
 };
