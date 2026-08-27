@@ -152,8 +152,8 @@ if (placeRaw) {
   mustNotContain("window-placement.js", place, "computePlacement", "짝 배치는 폐기됐다");
   mustNotContain("window-placement.js", place, "chatBounds", "짝 배치 반환값은 폐기됐다");
   mustNotContain("window-placement.js", place, "canvasBounds", "짝 배치 반환값은 폐기됐다");
-  mustContain("window-placement.js", place, /module\.exports\s*=\s*\{\s*computeShellPlacement\s*\}/,
-    "내보내기는 computeShellPlacement 하나여야 한다");
+  mustContain("window-placement.js", place, /module\.exports\s*=\s*\{\s*computeShellPlacement,\s*clampCenterToWorkArea\s*\}/,
+    "내보내기는 computeShellPlacement·clampCenterToWorkArea 둘뿐이어야 한다(짝 배치 잔재 금지 — 클램프는 K4 결정 2026-08-27 추가)");
 }
 
 // ─────────────────────────────────────────────────────────────────────────

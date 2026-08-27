@@ -413,6 +413,50 @@ def test_guarded_fallback_still_refuses_the_targetless_golden_case(
         )
 
 
+# ---------------------------------------------------------------------------
+# P3 완화 게이트(2026-08-27, 호가 카드 진단) — QA-ORDERBOOK 실측 재현.
+#
+# "SK하이닉스 호가 보여줘"류 질문은 typed compatibility에서 measure:orderbook
+# 축 하나로만 매칭돼 ka10004/ka10007/ka10087은 물론 무관한 스크리너(ka10011,
+# ka10016 등)까지 한 티어로 묶여 family 단위 AMBIGUOUS로 떨어졌다(athena_resolve
+# 3연속 실패, 카드 0장 — 2026-08-27 실측). 위 W2c 게이트는 REJECTED만 구제했으므로
+# AMBIGUOUS는 그대로 막혀 있었다. resolve()의 AMBIGUOUS 분기도 같은 preferred_ref
+# 단언 통로(같은 trusted_code/INSTRUMENT_CODE 안전 조건)를 재사용하되, 이미 typed로
+# compatible한(즉 이 tie에 실제로 낀) family에만 적용한다 — 아래 두 번째 테스트가
+# 그 경계를 고정한다.
+# ---------------------------------------------------------------------------
+
+
+def test_ambiguous_orderbook_question_resolves_with_asserted_family(
+    service: SelectorService,
+) -> None:
+    """"호가" 대표 발화가 ka10004로 수렴한다 — search 1위 후보를 그대로
+    preferred_ref로 넘기는 정상적인 search→resolve 흐름을 재현한다."""
+    resolved = service.resolve(
+        ResolveRequest(
+            question="삼성전자 호가 보여줘",
+            preferred_ref="base:ka10004",
+            detail_group="aggregate_totals",
+            arguments={"stk_cd": "005930"},
+        )
+    )
+    assert resolved.operation_ref == "detail:ka10004:aggregate_totals"
+    assert resolved.selection_reasons == [ReasonCode.PREFERRED_STRUCTURED_ASSERTION]
+
+
+def test_ambiguous_orderbook_question_without_an_assertion_still_asks(
+    service: SelectorService,
+) -> None:
+    """가드 확인 — 단언이 없으면 여전히 AMBIGUOUS다(회귀 없음)."""
+    with pytest.raises(AmbiguousOperationError):
+        service.resolve(
+            ResolveRequest(
+                question="삼성전자 호가 보여줘",
+                arguments={"stk_cd": "005930"},
+            )
+        )
+
+
 @pytest.mark.parametrize(
     "case",
     tuple(case for case in RESOLVE_CASES if case["id"] in SEMANTIC_AMBIGUITY_CASE_IDS),

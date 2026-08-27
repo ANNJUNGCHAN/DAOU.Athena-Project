@@ -8,6 +8,79 @@ function isRenderCanvasToolName(name) {
 }
 
 // ---------------------------------------------------------------------------
+// 0b. 서브에이전트(Agent/Task) 인식 — task #32, 실측 근거는
+//     .omc/research/2026-08-27-서브에이전트-스트림-계약.md.
+//     --allowedTools에는 'Task'(별칭)를 넘기지만 실제 tool_use 블록 이름은
+//     'Agent'로 찍힌다(CLI v2.1.63 Task→Agent 리네임) — 'Task' 문자열 매칭은
+//     실측과 어긋난다.
+// ---------------------------------------------------------------------------
+const AGENT_TOOL_NAME = 'Agent';
+
+function isAgentToolName(name) {
+  return name === AGENT_TOOL_NAME;
+}
+
+// 서브에이전트 생애주기 이벤트 4종 — 전부 type:'system', subtype으로 구분.
+const SUBAGENT_SUBTYPES = new Set(['task_started', 'task_progress', 'task_updated', 'task_notification']);
+
+// 원시 system 이벤트 → 정규화된 서브에이전트 생애주기 스텝. 4종이 아니거나
+// task_id가 없으면 null(호출자는 무시) — task_id가 도크 행의 안정 식별자다.
+// last_tool_name(원문 툴 이름)은 여기서 라벨로 바꾸지 않는다 — main.js가 이미
+// 가진 toolStepLabel/TOOL_STEP_LABELS(카드 진행 표시와 같은 매핑)를 그대로
+// 쓰려면 호출부(main.js)가 그 변환을 해야 한다(이 모듈은 main.js 라벨표에
+// 의존하지 않는 순수 분류 계층으로 남는다).
+function classifySubagentEvent(event) {
+  if (!event || event.type !== 'system' || !SUBAGENT_SUBTYPES.has(event.subtype)) return null;
+  const taskId = event.task_id;
+  if (!taskId) return null;
+  if (event.subtype === 'task_started') {
+    return {
+      subtype: 'task_started',
+      taskId,
+      toolUseId: event.tool_use_id || null,
+      description: event.description || null,
+      subagentType: event.subagent_type || null,
+    };
+  }
+  if (event.subtype === 'task_progress') {
+    return {
+      subtype: 'task_progress',
+      taskId,
+      description: event.description || null,
+      lastToolName: event.last_tool_name || null,
+      elapsedMs: event.usage && typeof event.usage.duration_ms === 'number' ? event.usage.duration_ms : null,
+    };
+  }
+  if (event.subtype === 'task_updated') {
+    const patch = event.patch || {};
+    return {
+      subtype: 'task_updated',
+      taskId,
+      status: typeof patch.status === 'string' ? patch.status : null,
+      endTime: typeof patch.end_time === 'number' ? patch.end_time : null,
+    };
+  }
+  // task_notification
+  return {
+    subtype: 'task_notification',
+    taskId,
+    status: event.status || null,
+    summary: typeof event.summary === 'string' ? event.summary : null,
+  };
+}
+
+// 서브에이전트 내부 활동 판정(실측 §3) — assistant/user 이벤트의
+// parent_tool_use_id가 null이 아니면 그 서브에이전트 자신의 내부 턴(사고·툴
+// 호출·툴 결과)이다. Agent tool_use 자체(최상위가 issue) · 그 최종 결과를
+// 최상위에 되돌리는 tool_result는 실측상 parent_tool_use_id:null이라 여기
+// 안 걸린다 — main.js가 그 둘은 isAgentToolName으로 별도 거른다(Agent 자체
+// 생애주기는 이 모듈의 task_* 이벤트로 이미 추적하므로 최상위 진행 라인에
+// 중복 안 낸다).
+function isSubagentInternalEvent(event) {
+  return !!(event && event.parent_tool_use_id != null);
+}
+
+// ---------------------------------------------------------------------------
 // 1. NDJSON 라인 분할 — 청크 경계 처리
 // ---------------------------------------------------------------------------
 // 순수 함수: 이전 남은 조각(carry) + 새 청크 → 확정된 라인들 + 다음 carry.
@@ -294,6 +367,10 @@ class StreamJsonSession {
 module.exports = {
   RENDER_CANVAS_SUFFIX,
   isRenderCanvasToolName,
+  AGENT_TOOL_NAME,
+  isAgentToolName,
+  classifySubagentEvent,
+  isSubagentInternalEvent,
   splitLines,
   flushCarry,
   parseLine,

@@ -6,6 +6,7 @@ const {
   buildArgs,
   RENDER_CANVAS_ALLOWED_TOOL,
   GATEWAY_ALLOWED_TOOLS,
+  DISALLOWED_EXECUTION_TOOLS,
   DISABLE_TOOL_SEARCH_ENV,
 } = require('./claude-runner');
 
@@ -20,7 +21,22 @@ test('buildArgs: RESULT.md §1 실왕복 커맨드와 동일한 인자 순서 ·
     '--strict-mcp-config',
     '--setting-sources', '',
     '--allowedTools', 'mcp__athena__athena__render_canvas',
+    // 2026-08-27(#33) 추가 — RESULT.md §1 원계약 이후의 보안 차단, 아래
+    // DISALLOWED_EXECUTION_TOOLS 테스트 참고. 병합(대화→main)으로 Read·Glob은
+    // 키우미 첨부 전제라 차단 목록에서 빠졌다(7종).
+    '--disallowedTools', 'Bash,Write,Edit,NotebookEdit,Grep,WebFetch,WebSearch',
   ]);
+});
+
+test('buildArgs: --disallowedTools가 항상 붙는다(2026-08-27, #33) — allowedTools 값과 무관한 별도 안전망', () => {
+  // 실측: --allowedTools는 화이트리스트가 아니라 자동 승인 목록이었다.
+  // Bash/Read/Glob/Grep/Edit/NotebookEdit는 허용목록 밖인데도 기본 실행됐다
+  // (claude-runner-baseline-tool-enum-probe 캡처) — 그래서 allowedTools가
+  // 뭐든(카드 렌더용 단일 툴이든 게이트웨이 전체든) 이 차단은 항상 붙는다.
+  const args = buildArgs({ prompt: 'x', configFile: '.mcp.json', allowedTools: 'y' });
+  const i = args.indexOf('--disallowedTools');
+  assert.ok(i >= 0);
+  assert.equal(args[i + 1], DISALLOWED_EXECUTION_TOOLS);
 });
 
 test('buildArgs: --include-partial-messages가 항상 붙는다(2026-08-26 S2 — 답변 텍스트 델타 스트리밍)', () => {
@@ -99,9 +115,24 @@ test('GATEWAY_ALLOWED_TOOLS: 서버 단위 허용 — 업스트림 재노출 툴
   // 툴 1개짜리 기본값은 게이트웨이가 재노출한 업스트림 툴(dart-mcp 등)을 전부
   // 거부하게 만든다 — 2026-08-17 실사용에서 실측된 결함. 툴 단위 게이트는
   // 게이트웨이 consent allowlist가 담당하므로 CLI는 서버 단위로 허용한다.
-  // Read·Glob(2026-08-27): 키우미 파일/폴더 첨부가 경로를 프롬프트에 싣는다 —
-  // -p 모드에선 허용 목록 밖 툴이 전부 거부라 이 둘이 없으면 첨부를 못 읽는다.
-  assert.equal(GATEWAY_ALLOWED_TOOLS, 'mcp__athena,Read,Glob');
+  // Task(서브에이전트, 2026-08-27) — 허용목록은 프로세스 전체에 한 벌이라
+  // 서브에이전트 권한 경계가 부모보다 넓어지지 않는다(claude-runner-subagent-probe
+  // 실측: mcp__athena는 부모처럼 성공, 허용목록 밖 Write는 부모처럼 거부).
+  // Read·Glob(2026-08-27) — 키우미 파일/폴더 첨부의 전제(병합 결정: 차단 목록에서도 뺐다).
+  assert.equal(GATEWAY_ALLOWED_TOOLS, 'mcp__athena,Task,Read,Glob');
+});
+
+test('DISALLOWED_EXECUTION_TOOLS: 실행류 빌트인 차단 — Read·Glob(첨부)·Agent(서브에이전트)는 의도적 제외', () => {
+  // 전수 실측(baseline-tool-enum-probe)은 9종이었으나 병합 결정(2026-08-27,
+  // 대화→main)으로 Read·Glob은 키우미 첨부(B4 사용자 확정)의 전제라 차단하지
+  // 않는다 — 나머지 7종(이미 거부되던 Write/WebFetch/WebSearch도 방어적으로
+  // 포함, 향후 기본 동작이 바뀌어도 안전하게)만 명시 차단한다.
+  assert.equal(DISALLOWED_EXECUTION_TOOLS, 'Bash,Write,Edit,NotebookEdit,Grep,WebFetch,WebSearch');
+  // Agent(서브에이전트)는 여기 없다 — #30에서 의도적으로 연 툴이다.
+  assert.ok(!DISALLOWED_EXECUTION_TOOLS.split(',').includes('Agent'));
+  // Read·Glob도 없다 — 있으면 첨부가 죽는다(명시 허용과 모순).
+  assert.ok(!DISALLOWED_EXECUTION_TOOLS.split(',').includes('Read'));
+  assert.ok(!DISALLOWED_EXECUTION_TOOLS.split(',').includes('Glob'));
 });
 
 test('DISABLE_TOOL_SEARCH_ENV: 항상 "0"으로 고정한다 — 부모 셸의 ENABLE_TOOL_SEARCH 상속을 덮는다', () => {

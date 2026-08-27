@@ -73,6 +73,13 @@ const SEND_CHANNELS = new Set([
   'athena:rest-canvas-painted',
   'athena:rest-receipt-painted',
   'athena:chart-panel-destroyed',
+  // 카드 소멸 시 실시간 구독 참조를 서버까지 해제한다(panelId가 없는 카드종 —
+  // 표/시세 등. AITS 차트는 위 athena:chart-panel-destroyed가 겸한다).
+  'athena:realtime-release',
+  // 호가잔량(0D) — 0B와 달리 카드가 뜰 때 명시적으로 acquire하고, 닫힐 때
+  // release한다(task #25, canvas.js wireOrderbookRealtime).
+  'athena:orderbook-realtime-acquire',
+  'athena:orderbook-realtime-release',
   // 알림 오브 창(2026-08-24 리프 1.3.1) — 오브가 보낼 수 있는 것은 이 둘뿐이다.
   //   athena:orb-toggle     접힘/펼침 요청. 창 크기 변경은 main이 한다(기하는
   //                         lib/main/orb-window.js).
@@ -124,6 +131,12 @@ const ON_CHANNELS = new Set([
   // 차트 실시간 체결(키움 REAL 0B) — main이 파싱만 해서 넘긴다. 진행봉으로
   // 접는 일은 마지막 봉을 들고 있는 렌더러가 한다(lib/chart-tick-fold.js).
   'athena:chart-ticks',
+  // 호가잔량 실시간(키움 REAL 0D, task #25) — main이 파싱만, 래더 갱신은
+  // card-kind-호가.js의 applyLiveTick이 한다.
+  'athena:orderbook-ticks',
+  // 하위 에이전트 생애주기(task #32) — Agent(Task) system 이벤트를 그대로
+  // 릴레이한다. chat.js의 결과물·출처·하위 에이전트 3단 도크가 소비한다.
+  'athena:live-subagent-step',
   // 채팅 저장 실패 신호(2026-08-19, plan-chat-graph-pipeline.md §2(g)) —
   // history-sink의 POST가 실패하면 main이 {messageId, role}만 보낸다(본문 없음).
   'athena:history-save-failed',

@@ -23,6 +23,56 @@ const $bootName = document.getElementById('bootName');
 const $bootPh = document.getElementById('bootPh');
 const $app = document.getElementById('app');
 const $history = document.getElementById('history');
+
+// 결과물·출처 도크(단계 8, Paper 25Q-0 "④ 결과물·출처 도크") — shell.html에는
+// 마크업이 없다(계획서가 chat.js/chat.css만 지목했다): 이 조립 함수 하나가
+// #app과 #history 사이에 접어 넣는다.
+function buildResultDockRow(label) {
+  const row = document.createElement('div');
+  row.className = 'result-dock-row';
+  const head = document.createElement('div');
+  head.className = 'result-dock-head';
+  const labelEl = document.createElement('span');
+  labelEl.className = 'result-dock-label';
+  labelEl.textContent = label;
+  const countEl = document.createElement('span');
+  countEl.className = 'result-dock-count';
+  head.append(labelEl, countEl);
+  row.appendChild(head);
+  return { row, countEl };
+}
+const $resultDock = document.createElement('div');
+$resultDock.className = 'result-dock';
+$resultDock.hidden = true;
+const resultRow = buildResultDockRow('결과물');
+const $resultDockCanvasCount = resultRow.countEl;
+const $resultDockCaption = document.createElement('div');
+$resultDockCaption.className = 'result-dock-caption';
+resultRow.row.appendChild($resultDockCaption);
+resultRow.row.hidden = true;
+const sourceRow = buildResultDockRow('출처');
+const $resultDockSourceCount = sourceRow.countEl;
+const $resultDockChips = document.createElement('div');
+$resultDockChips.className = 'result-dock-chips';
+sourceRow.row.appendChild($resultDockChips);
+sourceRow.row.hidden = true;
+// 하위 에이전트 도크(task #32, 보드04 2EZ-0/DG2-0) — 결과물·출처와 달리 턴이
+// 끝나야 채워지는 게 아니라 진행 중에 실시간으로 늘어난다(Agent 생애주기
+// system 이벤트). 세 번째(마지막) 행이라 .result-dock-row:last-child의 기존
+// 구분선 규칙(마지막 행엔 border-bottom 없음)이 새 CSS 없이 그대로 적용된다.
+const agentDockRow = buildResultDockRow('하위 에이전트');
+const $resultDockAgentCount = agentDockRow.countEl;
+const $resultDockAgentList = document.createElement('div');
+$resultDockAgentList.className = 'result-dock-agent-list';
+agentDockRow.row.appendChild($resultDockAgentList);
+agentDockRow.row.hidden = true;
+$resultDock.append(resultRow.row, sourceRow.row, agentDockRow.row);
+$app.insertBefore($resultDock, $history);
+// 세 행 중 하나라도 보이면 도크 자체를 보인다 — 개별 updateResultDock/
+// 서브에이전트 갱신 양쪽에서 부른다(단일 진실 — 도크 hidden을 직접 안 건드린다).
+function refreshResultDockVisibility() {
+  $resultDock.hidden = resultRow.row.hidden && sourceRow.row.hidden && agentDockRow.row.hidden;
+}
 const $input = document.getElementById('input');
 const $dot = document.getElementById('dot');
 const $lockHint = document.getElementById('lockHint');
@@ -244,6 +294,8 @@ function maybeShowCoachmark() {
   if (document.querySelector('.coachmark')) return;
   const mark = document.createElement('div');
   mark.className = 'coachmark';
+  // 병합 결정(2026-08-27 대화→main) — 대화측 "점=모드 전환" 문구는 셸 v2(전환=
+  // 사이드바 네비)·키우미 v5(점=키우미 메뉴) 이후 세계와 안 맞아 main 쪽을 취한다.
   mark.textContent = '키우미를 누르면 파일 첨부·모델 설정이 열립니다 — 설정은 사이드바 계정 메뉴나 "설정" 입력으로';
   document.body.appendChild(mark);
   const shownAt = Date.now();
@@ -339,6 +391,34 @@ function canvasTypeLabel(t) {
   return CANVAS_TYPE_LABELS[t] || '카드';
 }
 
+// 결과물·출처 도크(단계 8, Paper 25Q-0 "④ 결과물·출처 도크") — 매 턴 이전 값을
+// 지우고 최신 턴만 표시한다(누적 금지). 출처 칩은 turn-meta가 이미 쓰는
+// canvasTypeLabel()/canvasTypes를 그대로 재사용한다(새 라벨 안 짓는다) — 결과물
+// 캡션만 main.js가 새로 모아준 카드별 표시 이름(canvasCaptions)을 쓴다. 이번 턴에
+// 카드가 하나도 없으면(순수 프로즈 답변) 보여줄 결과 자체가 없으므로 숨긴다.
+function updateResultDock(cardCount, canvasTypes, canvasCaptions) {
+  $resultDockCaption.textContent = '';
+  $resultDockChips.textContent = '';
+  const hasResults = !!cardCount;
+  // 결과물·출처는 항상 짝으로 뜨고 짝으로 숨는다(기존 동작 그대로) — 하위
+  // 에이전트 행은 이 판정과 무관하게 자기 상태로 따로 hidden을 갖는다(아래
+  // onLiveSubagentStep).
+  resultRow.row.hidden = !hasResults;
+  sourceRow.row.hidden = !hasResults;
+  if (hasResults) {
+    $resultDockCanvasCount.textContent = `캔버스 ${cardCount}`;
+    $resultDockCaption.textContent = (canvasCaptions || []).join(' · ');
+    $resultDockSourceCount.textContent = String((canvasTypes || []).length);
+    for (const t of canvasTypes || []) {
+      const chip = document.createElement('span');
+      chip.className = 'chip';
+      chip.textContent = canvasTypeLabel(t);
+      $resultDockChips.appendChild(chip);
+    }
+  }
+  refreshResultDockVisibility();
+}
+
 let activeRecommendationRow = null;
 
 function clearRecommendations() {
@@ -406,6 +486,71 @@ async function runQuery(text) {
   return runQueryLive(text);
 }
 
+// 완료된 턴의 실행 기록 보존(단계 9, board-04 "⑥ 경과 헤더") — 진행 중 그렸던
+// toolSteps를 다시 그리지 않고 그대로 옮겨 붙인 뒤 접는다(AC6: 펼쳤을 때
+// 라벨·소요시간이 진행 중 표시와 동일해야 한다 — 같은 DOM 노드라 항상 같다).
+// 도구 호출이 하나도 없던 턴(순수 프로즈 답변)은 접을 기록이 없으므로 null —
+// 호출자는 그때 아무것도 붙이지 않는다.
+//
+// aborted(2026-08-27, Paper DFQ-0 확정 명세) — Esc 중단 턴도 이 함수를 거친다.
+// 계획 v5의 5.3 결정("Esc 중단은 이 함수를 아예 안 거친다 — AC10 의도적
+// 비대칭")을 뒤집는 사용자 지시로, AC10을 반전한다: 완료 헤더 2FW-0과 같은
+// 골격(헤어라인 구분선·접기 캐럿)에 warn-dot(기존 .turn-fail-dot 재사용,
+// 6×6 var(--color-warn) — 새 점 안 만든다)과 "{N}초 만에 중단됨" 문구만
+// 더한다. 실패 버블(turn-fail-*)보다는 조용하게 — 굵은 라벨·모노 캡스 없음.
+function foldExecutionRecord(toolSteps, startedAt, { aborted = false } = {}) {
+  if (!toolSteps || !toolSteps.childElementCount) return null;
+  const seconds = Math.max(0, Math.round((Date.now() - startedAt) / 1000));
+  const header = document.createElement('button');
+  header.type = 'button';
+  header.className = aborted ? 'turn-exec-header is-aborted' : 'turn-exec-header';
+  if (aborted) {
+    const dot = document.createElement('span');
+    dot.className = 'turn-fail-dot'; // 재사용 — 새 warn-dot 클래스를 안 만든다
+    header.appendChild(dot);
+  }
+  const label = document.createElement('span');
+  label.className = 'turn-exec-header-label';
+  label.textContent = aborted ? `${seconds}초 만에 중단됨` : `${seconds}초 동안 작업함`;
+  const caret = document.createElement('span');
+  caret.className = 'turn-exec-header-caret';
+  caret.textContent = '⌄';
+  header.append(label, caret);
+  toolSteps.hidden = true;
+  header.addEventListener('click', () => {
+    toolSteps.hidden = !toolSteps.hidden;
+    caret.textContent = toolSteps.hidden ? '⌄' : '⌃';
+  });
+  const record = document.createElement('div');
+  record.className = 'turn-exec-record';
+  record.append(header, toolSteps);
+  return record;
+}
+
+// 실패 턴 버블(단계 7, board 1Y3-0 "실패 턴" C8B-0) — 기존
+// .turn-agent.agent-restore-failed 카드 레시피의 자매 컴포넌트. 성공 버블
+// (.turn-a, 각인 text-shadow 있음)과 시각적으로 구분되는 별도 패널이다 — 워닝
+// 닷·"질의 실패" 라벨이 상태를 말해주므로 본문엔 "실패 — " 접두사 없이 원문만
+// 넣는다. runQueryLive의 정상 실패 경로와 orb-turn-committed(오브에서 오간 턴의
+// 뒤늦은 반영) 둘 다 이 함수 하나로 그린다(라벨 두 벌 방지).
+function renderFailureBubble(aLine, errorText) {
+  const card = document.createElement('div');
+  card.className = 'turn-fail-card';
+  const head = document.createElement('div');
+  head.className = 'turn-fail-head';
+  const dot = document.createElement('span');
+  dot.className = 'turn-fail-dot';
+  const label = document.createElement('span');
+  label.className = 'turn-fail-label';
+  label.textContent = '질의 실패';
+  head.append(dot, label);
+  const body = document.createElement('div');
+  body.className = 'turn-fail-body';
+  body.textContent = errorText;
+  card.append(head, body);
+  aLine.appendChild(card);
+}
+
 async function runQueryLive(text) {
   const myToken = ++abortToken;
   clearRecommendations();
@@ -439,6 +584,7 @@ async function runQueryLive(text) {
   progress.appendChild(toolSteps);
   $history.appendChild(progress);
   liveProgressEl = progress;
+  liveProgressEl.startedAt = startedAt; // Esc 핸들러가 중단 헤더의 경과초를 재려면 필요하다
   scrollAfterRender();
 
   let cardCount = 0;
@@ -467,7 +613,9 @@ async function runQueryLive(text) {
   const elapsedText = () => `${((Date.now() - startedAt) / 1000).toFixed(1)}s`;
   const renderProgress = () => {
     if (myToken !== abortToken) return;
-    const base = calling ? `카드 ${cardCount}개 렌더됨` : 'Claude에게 물어보는 중';
+    // 문구는 대화 브랜치 디자인 정합(9ce2279)을 따르고, 표시는 main 결정(2026-08-27
+    // 버블 안 중복 제거)대로 하단 잠금 힌트 한 곳에만 쓴다(병합 2026-08-27).
+    const base = calling ? `카드 ${cardCount}개 렌더됨` : '판단 중 — 어떤 TR을 부를지 고르는 중';
     setLocked(true, `${base} · ${elapsedText()} 경과`);
   };
   // 100ms 간격 — 표기는 소수 1자리(29.3s)인데 1초 간격으로 갱신하면 소수 자리가
@@ -488,6 +636,10 @@ async function runQueryLive(text) {
   // tool_result에서 뽑아 보내는 단계를 그린다. orb.js가 이미 쓰는 판정
   // (lib/tool-step-track.js)을 그대로 나눠 쓴다 — 라벨을 두 벌 짓지 않는다.
   const toolStepStates = new Map();
+  // Esc 핸들러(top-level 리스너, 이 클로저 밖)가 "접을 기록이 있는가"를 판정할
+  // 유일한 다리 — liveProgressEl 프로퍼티로 노출한다(2026-08-27, foldExecutionRecord
+  // 위 주석의 aborted 분기와 짝).
+  liveProgressEl.toolStepStates = toolStepStates;
   const toolStepEls = new Map();
   const onLiveToolStep = (step) => {
     if (myToken !== abortToken) return;
@@ -512,11 +664,83 @@ async function runQueryLive(text) {
       toolStepEls.set(result.id, el);
     }
     el.classList.toggle('done', result.done);
+    el.classList.toggle('is-warn', result.error);
     el.querySelector('.progress-tool-step-label').textContent = result.label;
     el.querySelector('.progress-tool-step-time').textContent = result.timeText;
     scrollAfterRender();
   };
   const unsubscribeLiveToolStep = window.athena.on('athena:live-tool-step', onLiveToolStep);
+
+  // 하위 에이전트 도크(task #32) — 매 턴 이전 값을 지우고 최신 턴만 표시한다
+  // (결과물·출처 도크의 "누적 금지"와 같은 원칙, 위 updateResultDock 주석
+  // 참고). 결과물·출처와 달리 턴이 끝나야 채워지는 게 아니라 진행 중에
+  // task_started가 오는 즉시 뜬다.
+  $resultDockAgentList.textContent = '';
+  agentDockRow.row.hidden = true;
+  refreshResultDockVisibility();
+  const subagentStates = new Map(); // taskId -> { description, status, elapsedMs, lastActivity }
+  const subagentRows = new Map(); // taskId -> { row, desc, status, elapsed, activity }
+  function ensureSubagentRow(taskId) {
+    let entry = subagentRows.get(taskId);
+    if (entry) return entry;
+    const row = document.createElement('div');
+    row.className = 'result-dock-agent-row';
+    const top = document.createElement('div');
+    top.className = 'result-dock-agent-row-top';
+    const desc = document.createElement('span');
+    desc.className = 'result-dock-agent-desc';
+    const status = document.createElement('span');
+    status.className = 'result-dock-agent-status';
+    top.append(desc, status);
+    const bottom = document.createElement('div');
+    bottom.className = 'result-dock-agent-row-bottom';
+    const elapsed = document.createElement('span');
+    elapsed.className = 'result-dock-agent-elapsed';
+    const activity = document.createElement('span');
+    activity.className = 'result-dock-agent-activity';
+    bottom.append(elapsed, activity);
+    row.append(top, bottom);
+    $resultDockAgentList.appendChild(row);
+    entry = { row, desc, status, elapsed, activity };
+    subagentRows.set(taskId, entry);
+    return entry;
+  }
+  const onLiveSubagentStep = (step) => {
+    if (myToken !== abortToken || !step || !step.taskId) return;
+    let s = subagentStates.get(step.taskId);
+    if (!s) {
+      s = { description: null, status: 'running', elapsedMs: null, lastActivity: null };
+      subagentStates.set(step.taskId, s);
+    }
+    if (step.subtype === 'task_started') {
+      s.description = step.description;
+    } else if (step.subtype === 'task_progress') {
+      // description이 시작 때와 다르게 갱신될 수 있다(실측, .omc/research/
+      // 2026-08-27-서브에이전트-스트림-계약.md §2b) — 최신 값을 반영한다.
+      if (step.description) s.description = step.description;
+      if (step.lastToolName) s.lastActivity = step.lastToolName; // main.js가 이미 toolStepLabel로 매핑했다
+      if (typeof step.elapsedMs === 'number') s.elapsedMs = step.elapsedMs;
+    } else if (step.subtype === 'task_updated') {
+      // 확정된 상태값은 completed 하나뿐이다(실측 미관측 — 실패/취소 라벨을
+      // 지어내지 않는다). completed가 아니면 이미 갖고 있던 상태를 유지한다.
+      if (step.status === 'completed') s.status = 'completed';
+    }
+    // task_notification의 summary는 이번 패스 UI에 안 낸다 — 도크는 압축 행이고
+    // "자세히 보기" 드릴인은 범위 밖이다(연구 문서 §2d, output_file 노출 규율도 있다).
+    const entry = ensureSubagentRow(step.taskId);
+    entry.desc.textContent = s.description || '하위 에이전트';
+    const running = s.status !== 'completed';
+    entry.status.textContent = running ? '진행 중' : '완료';
+    entry.status.classList.toggle('is-running', running);
+    const seconds = typeof s.elapsedMs === 'number' ? (s.elapsedMs / 1000).toFixed(1) : '0.0';
+    entry.elapsed.textContent = `${seconds}s`;
+    entry.activity.textContent = s.lastActivity || '';
+    $resultDockAgentCount.textContent = String(subagentStates.size);
+    agentDockRow.row.hidden = subagentStates.size === 0;
+    refreshResultDockVisibility();
+    scrollAfterRender();
+  };
+  const unsubscribeLiveSubagentStep = window.athena.on('athena:live-subagent-step', onLiveSubagentStep);
 
   // 추론 미리보기(2026-08-26) — 답변 텍스트가 나오기 전 긴 침묵 구간을 채운다.
   // 미리보기 전용이다: 옅은 색·작은 글씨로 뚜렷이 구분하고, 답변 첫 조각이
@@ -594,6 +818,7 @@ async function runQueryLive(text) {
     clearInterval(tick);
     unsubscribeLiveCanvasAdded();
     unsubscribeLiveToolStep();
+    unsubscribeLiveSubagentStep();
     unsubscribeLiveThinkingDelta();
     unsubscribeLiveTextDelta();
     releaseLadder.dispose(); // 유예 타이머 누수 방지 — 방출 자체는 아래 authoritative overwrite의 몫.
@@ -615,6 +840,7 @@ async function runQueryLive(text) {
   state = 'idle';
   setDot(null);
   setLocked(false);
+  const execRecord = foldExecutionRecord(toolSteps, startedAt);
   progress.remove();
   liveProgressEl = null;
 
@@ -622,16 +848,19 @@ async function runQueryLive(text) {
   // $history 안에 있다). 없으면(REST 직결·캐시 리플레이·조각 0개) 기존처럼 새로 만든다.
   const aLine = streamALine || document.createElement('div');
   aLine.className = 'turn';
-  const aText = streamAText || document.createElement('div');
-  aText.className = 'turn-a';
-  // 최종 텍스트는 응답값이 권위다(스트리밍 누적치가 아니다) — 조각이 유실되거나
-  // 순서가 어긋나도 이 줄이 항상 진짜 답으로 덮어쓴다.
-  aText.textContent = result && result.answerText
-    ? result.answerText
-    : (result && result.ok
-      ? `완료 — 카드 ${cardCount}개, 답변 텍스트 없음`
-      : `실패 — ${(result && result.error) || '알 수 없는 오류'}`);
-  if (!streamALine && !(result && result.answerPaintedByMain)) aLine.appendChild(aText);
+  if (execRecord) aLine.insertBefore(execRecord, aLine.firstChild);
+  if (!streamALine && result && !result.ok) {
+    renderFailureBubble(aLine, (result && result.error) || '알 수 없는 오류');
+  } else {
+    const aText = streamAText || document.createElement('div');
+    aText.className = 'turn-a';
+    // 최종 텍스트는 응답값이 권위다(스트리밍 누적치가 아니다) — 조각이 유실되거나
+    // 순서가 어긋나도 이 줄이 항상 진짜 답으로 덮어쓴다.
+    aText.textContent = result && result.answerText
+      ? result.answerText
+      : `완료 — 카드 ${cardCount}개, 답변 텍스트 없음`;
+    if (!streamALine && !(result && result.answerPaintedByMain)) aLine.appendChild(aText);
+  }
 
   const meta = document.createElement('div');
   meta.className = 'turn-meta';
@@ -644,6 +873,7 @@ async function runQueryLive(text) {
     chip.textContent = canvasTypeLabel(t);
     meta.appendChild(chip);
   }
+  updateResultDock(cardCount, canvasTypes, result && result.canvasCaptions);
   const trace = document.createElement('span');
   const durS = result && typeof result.durationMs === 'number' ? (result.durationMs / 1000).toFixed(1) : elapsedText().replace('s', '');
   const skipped = result && result.diagnostics && result.diagnostics.skippedLines;
@@ -1007,7 +1237,7 @@ function renderModelPopover() {
   const sep = document.createElement('div');
   sep.className = 'mp-sep';
   $modelPopover.appendChild(sep);
-  popoverSection('추론 노력', PILL_EFFORT_CHIPS, c.effort, 'effort');
+  popoverSection('사고 강도', PILL_EFFORT_CHIPS, c.effort, 'effort');
 }
 
 function closeModelPopover() { $modelPopover.hidden = true; }
@@ -1161,7 +1391,25 @@ document.addEventListener('keydown', (e) => {
       state = 'idle';
       setDot(null);
       setLocked(false);
-      if (liveProgressEl) { liveProgressEl.remove(); liveProgressEl = null; }
+      if (liveProgressEl) {
+        // AC10 반전(2026-08-27, 계획 v5 §5.3 결정을 뒤집는 사용자 지시 — Paper
+        // DFQ-0 확정 명세) — 중단 전에 이미 실행한 조각이 있으면 접힌 기록으로
+        // 남긴다. toolStepStates가 비어 있으면(순수 판단 중 중단 — 도구 호출
+        // 자체가 없었다) foldExecutionRecord가 그대로 null을 돌려줘 완료 턴의
+        // "기록 없음" 분기와 같은 취급이 된다(진행 라인만 지운다, 기존 동작).
+        const toolSteps = liveProgressEl.querySelector('.progress-tool-steps');
+        const execRecord = liveProgressEl.toolStepStates
+          ? foldExecutionRecord(toolSteps, liveProgressEl.startedAt, { aborted: true })
+          : null;
+        if (execRecord) {
+          const aLine = document.createElement('div');
+          aLine.className = 'turn';
+          aLine.appendChild(execRecord);
+          $history.appendChild(aLine);
+        }
+        liveProgressEl.remove();
+        liveProgressEl = null;
+      }
       scrollAfterRender();
     } else {
       // 옛 판에서 이 키는 캔버스 **창**을 수축시켜 닫았다(athena:collapse-canvas).
@@ -1278,12 +1526,14 @@ window.athena.on('athena:orb-turn-committed', ({ query, result } = {}) => {
 
   const aLine = document.createElement('div');
   aLine.className = 'turn';
-  const aText = document.createElement('div');
-  aText.className = 'turn-a';
-  aText.textContent = result && result.answerText
-    ? result.answerText
-    : (result && result.ok ? '완료 — 답변 텍스트 없음' : `실패 — ${(result && result.error) || '알 수 없는 오류'}`);
-  aLine.appendChild(aText);
+  if (result && !result.ok) {
+    renderFailureBubble(aLine, (result && result.error) || '알 수 없는 오류');
+  } else {
+    const aText = document.createElement('div');
+    aText.className = 'turn-a';
+    aText.textContent = (result && result.answerText) || '완료 — 답변 텍스트 없음';
+    aLine.appendChild(aText);
+  }
 
   const meta = document.createElement('div');
   meta.className = 'turn-meta';
@@ -1309,7 +1559,9 @@ window.athena.on('athena:orb-turn-committed', ({ query, result } = {}) => {
 // 없다). 사람이 이 카드의 [승인]을 눌러야 감시가 시작된다. [승인] 클릭은
 // LLM 재스폰 없이 렌더러가 백엔드 confirm을 직접 부른다(~200ms — C1 결정).
 // 방식 행은 필수다(§8 고지 의무 — verify 검증 대상).
-const shownDraftIds = new Set();
+// id → 초안을 처음 본 시각(ISO, 앱측 클록) — 백엔드 생성 시각이 아니라 "우리가
+// 언제부터 이 카드를 보여주고 있었나"를 잰다. dedup 겸용(Set 대신 Map).
+const firstSeenAtById = new Map();
 
 async function refreshRoutineDrafts() {
   let routines;
@@ -1319,11 +1571,19 @@ async function refreshRoutineDrafts() {
       ? res.data.routines : [];
   } catch { return; }
   for (const r of routines) {
-    if (r.status !== 'draft' || shownDraftIds.has(r.id)) continue;
-    shownDraftIds.add(r.id);
+    if (r.status !== 'draft' || firstSeenAtById.has(r.id)) continue;
+    firstSeenAtById.set(r.id, new Date().toISOString());
     renderApprovalCard(r);
   }
 }
+
+// 카드는 한 번 만들어지면 DOM에 그대로 남는다(대화 이력이 append-only) — 시간이
+// 지나도 "방금"에 고정되지 않도록 떠 있는 카드만 골라 30초마다 다시 계산한다.
+setInterval(() => {
+  document.querySelectorAll('.routine-approval .agent-rel[data-fired-at]').forEach((el) => {
+    el.textContent = routineTurnLib.relativeText(el.dataset.firedAt, Date.now());
+  });
+}, 30 * 1000);
 
 function approvalModeLine(r) {
   const modeText = routineTurnLib.describeMode(r.mode);
@@ -1340,10 +1600,20 @@ function renderApprovalCard(r) {
 
   const head = document.createElement('div');
   head.className = 'agent-head';
-  const title = document.createElement('span');
-  title.className = 'agent-source';
-  title.textContent = '루틴 제안 — 승인 전에는 실재하지 않습니다';
-  head.appendChild(title);
+  const badge = document.createElement('span');
+  badge.className = 'agent-badge';
+  badge.textContent = '승인 필요';
+  head.appendChild(badge);
+  const label = document.createElement('span');
+  label.className = 'agent-source';
+  label.textContent = '감시 등록 요청';
+  head.appendChild(label);
+  const time = document.createElement('span');
+  time.className = 'agent-rel';
+  const firstSeenAt = firstSeenAtById.get(r.id) || new Date().toISOString();
+  time.dataset.firedAt = firstSeenAt;
+  time.textContent = routineTurnLib.relativeText(firstSeenAt, Date.now());
+  head.appendChild(time);
   card.appendChild(head);
 
   const note = document.createElement('div');
@@ -1365,7 +1635,7 @@ function renderApprovalCard(r) {
 
   const notice = document.createElement('div');
   notice.className = 'agent-source';
-  notice.textContent = '승인해도 주문은 자동 집행되지 않습니다 — 조건 도달 시 알림이 옵니다.';
+  notice.textContent = '승인하면 백엔드에 감시가 등록됩니다. 주문은 실행되지 않습니다.';
   card.appendChild(notice);
 
   const row = document.createElement('div');
@@ -1388,12 +1658,12 @@ function renderApprovalCard(r) {
     }
   });
 
-  const cancel = _btn('취소', 'routine-btn');
+  const cancel = _btn('거절', 'routine-btn');
   cancel.addEventListener('click', async () => {
     approve.disabled = true;
     cancel.disabled = true;
     const res = await window.athena.invoke('athena:routine-cancel', { id: r.id });
-    status.textContent = res && res.ok ? '취소됨' : `취소 실패: ${(res && res.error) || '오류'}`;
+    status.textContent = res && res.ok ? '거절됨' : `거절 실패: ${(res && res.error) || '오류'}`;
   });
 
   const edit = document.createElement('span');

@@ -306,8 +306,10 @@ def test_search_describe_resolve_are_local_and_detail_call_is_one_projected_upst
     assert set(called.json()["data"]) == expected_fields
     assert called.json()["data"]["cur_prc"] == "70000"
     assert "ignored" not in called.json()["data"]
-    assert called.json()["canvas_context"] == {"symbol": None}
-    assert "005930" not in json.dumps(called.json()["canvas_context"])
+    # 2026-08-27 정책 확장: 시장 데이터 3도메인(charts·stockinfo·quotes)은 종목
+    # 식별자를 canvas_context에 봉인한다(시세류 실시간 구독용). 등호 단언이라
+    # 다른 인자가 새지 않는 것도 함께 증명된다.
+    assert called.json()["canvas_context"] == {"symbol": "005930"}
     assert len(upstream.calls) == 1
     assert upstream.calls[0][0] == "ka10001"
     assert upstream.calls[0][2] == {"stk_cd": "005930"}

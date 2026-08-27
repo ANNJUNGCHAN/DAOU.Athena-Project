@@ -5,7 +5,10 @@ const { app } = require('electron');
 const fs = require('fs');
 const path = require('path');
 
-app.setPath('userData', path.join(app.getPath('appData'), 'athena-shell'));
+// ATHENA_USERDATA_DIR: 사용자의 실앱이 떠 있는 채로 QA 배치를 돌릴 때 프로필
+// 충돌(LevelDB 락)을 피하는 격리 프로필 경로. 없으면 기존 그대로 athena-shell.
+app.setPath('userData', process.env.ATHENA_USERDATA_DIR
+  || path.join(app.getPath('appData'), 'athena-shell'));
 
 const REPO = path.join(__dirname, '..');
 const DATASET = path.join(REPO, 'datasets', '앱-검증-200.jsonl');
