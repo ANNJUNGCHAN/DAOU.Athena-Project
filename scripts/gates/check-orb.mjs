@@ -39,9 +39,13 @@ function read(rel) {
 
 /** 주석을 걷어낸 소스. 이력 주석에 남은 옛 이름까지 결함으로 세지 않는다. */
 function stripComments(src) {
+  // 줄 주석을 먼저 벗긴다(2026-08-27 병합 점검) — 블록을 먼저 벗기면 줄 주석 안의
+  // "lib/*.js" 같은 글롭이 블록 열림으로 잡혀 다음 */까지 코드가 통째로 삼켜진다
+  // (실측: orb.js 1151→1342 191줄이 사라져 그 구간의 존재·금지 검사가 다 눈멀었다).
+  // https:// 류 URL은 앞의 :가 지켜준다(기존 규칙 유지).
   return src
-    .replace(/\/\*[\s\S]*?\*\//g, "")
-    .replace(/(^|[^:])\/\/[^\n]*/g, "$1");
+    .replace(/(^|[^:])\/\/[^\n]*/g, "$1")
+    .replace(/\/\*[\s\S]*?\*\//g, "");
 }
 /** HTML 주석 제거 — 주석 안의 설명 문구가 금지어 검사에 걸리지 않게. */
 function stripHtmlComments(src) {
@@ -134,6 +138,12 @@ if (htmlRaw) {
     "orb.css",
     "orb.js",
     "lib/routine-turn.js",
+    // 2026-08-27 병합 점검 — 아래 둘이 빠져도 게이트가 통과를 찍었다(실측):
+    // card-primitives가 빠지면 미니 차트가 TypeError, market-hours가 빠지면
+    // drowsy가 조용히 죽는다(orb.js가 undefined 폴백). 존재+바인딩+호출 3중
+    // 검사(routine-turn과 같은 틀)로 조인다 — 바인딩·호출 검사는 §4에 있다.
+    "lib/market-hours.js",
+    "lib/card-primitives.js",
   ]) {
     must(html.includes(needle), `orb.html: ${needle}을 링크/로드해야 한다`);
   }
@@ -222,6 +232,16 @@ if (orbJsRaw) {
     "orb.js: window.AthenaLib.RoutineTurn을 바인딩해야 한다(결정론 템플릿의 진짜 출처)");
   must(/\bbuildTurnModel\s*\(/.test(orbJs),
     "orb.js: buildTurnModel()을 실제로 호출해야 한다(LLM 0, 시점 정직성 — 문장을 짓지 않는다)");
+  // market-hours·card-primitives도 같은 2중 검사(2026-08-27 병합 점검) — §2 (d)의
+  // 존재 검사와 짝이다. 하나만 걸면 스텁으로 뚫린다는 교훈(양성 대조군 ⑤)도 같다.
+  must(/window\.AthenaLib\.MarketHours/.test(orbJs),
+    "orb.js: window.AthenaLib.MarketHours를 바인딩해야 한다(장 마감 drowsy 판정의 진짜 출처)");
+  must(/\bisMarketOpen\s*\(/.test(orbJs),
+    "orb.js: isMarketOpen()을 실제로 호출해야 한다(board-30⑫ — 로컬 시계 판정의 단일 구현)");
+  must(/window\.AthenaLib\.CardPrimitives/.test(orbJs),
+    "orb.js: window.AthenaLib.CardPrimitives를 바인딩해야 한다(미니 차트 폴리라인의 진짜 출처)");
+  must(/\bchartLinePoints\s*\(/.test(orbJs),
+    "orb.js: chartLinePoints()를 실제로 호출해야 한다(board-33④ 미니 차트 축약)");
   must(orbJs.includes("athena:routine-event"),
     "orb.js: 능동 턴 이벤트를 구독해야 한다 — 오브가 받는 유일한 발생원이다");
 
