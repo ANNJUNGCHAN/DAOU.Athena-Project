@@ -1,6 +1,7 @@
 'use strict';
 
 const crypto = require('crypto');
+const prefs = require('./prefs');
 
 const DEFAULT_BACKEND_URL = 'http://127.0.0.1:8010';
 
@@ -44,10 +45,23 @@ function isBrainReadyCached() {
   return brainReadyCache === true;
 }
 
-// 시도 조건(계획 §2(g)) — 토큰이 없거나 브레인이 준비 안 됐으면 시도 자체를
-// 안 한다("해당 없음"과 "실패"의 구분 — 이 경우엔 배지도 없다).
+// WP-D1(그래프 후속 계획) — collectChat이 꺼져 있으면 저장 자체를 시도하지
+// 않는다(원문 미적재). prefs 조회 자체가 실패하면(예: 순수 node --test 환경 —
+// electron의 app 모듈이 없다) 기존 시도 조건만 적용되게 열어 둔다(fail-open) —
+// 이 게이트는 명시적으로 꺼졌을 때만 막는다.
+function collectChatEnabled() {
+  try {
+    return prefs.get().collectChat !== false;
+  } catch {
+    return true;
+  }
+}
+
+// 시도 조건(계획 §2(g)) — 토큰이 없거나 브레인이 준비 안 됐거나 collectChat이
+// 꺼져 있으면 시도 자체를 안 한다("해당 없음"과 "실패"의 구분 — 이 경우엔
+// 배지도 없다).
 function canAttemptSave() {
-  return !!getBearerToken() && isBrainReadyCached();
+  return !!getBearerToken() && isBrainReadyCached() && collectChatEnabled();
 }
 
 async function postChatMessage({ conversationId, role, text, messageId, occurredAt }) {

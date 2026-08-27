@@ -1730,6 +1730,15 @@ function writeGraphSettings(patch, storage) {
       // 저장 실패(용량 초과·사생활 모드)는 화면을 막을 이유가 아니다 — graph-mode-prefs.js와 같은 판단.
     }
   }
+  // WP-D1 — collectChat은 main 프로세스(history-sink.js)가 실제로 저장을
+  // 게이팅하는 유일한 그래프 설정이라, 이 카드가 쓰는 localStorage뿐 아니라
+  // main의 prefs.js에도 미러링한다(기존 athena:settings:prefs:set IPC 재사용).
+  if (patch && typeof patch.collectChat === 'boolean'
+    && typeof window !== 'undefined' && window.athena && window.athena.invoke) {
+    window.athena.invoke('athena:settings:prefs:set', { collectChat: next.collectChat }).catch(() => {
+      // 핸들러 부재/실패 — 로컬 토글 표시만 유지(refreshScreenCard의 setPref와 같은 판단).
+    });
+  }
   return next;
 }
 

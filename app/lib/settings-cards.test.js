@@ -89,3 +89,37 @@ test('허용되지 않은 조회 주기 값은 기본값(60분)으로 물러선�
   const missing = settingsCards.normalizeGraphSettings({});
   assert.equal(missing.holdingsIntervalMin, 60);
 });
+
+// WP-D1 — collectChat은 main 프로세스(history-sink.js)가 실제로 저장을
+// 게이팅하는 유일한 그래프 설정이라 localStorage 왕복 외에 athena:settings:prefs:set
+// IPC로도 미러링된다. 이 파일은 순수 node --test라 window가 없다 — 여기서만 흉내낸다.
+test('collectChat 패치는 window.athena.invoke로 main 프로세스에도 미러링된다', () => {
+  const storage = fakeStorage();
+  const calls = [];
+  global.window = { athena: { invoke: (channel, patch) => { calls.push([channel, patch]); return Promise.resolve(); } } };
+  try {
+    settingsCards.writeGraphSettings({ collectChat: false }, storage);
+    assert.equal(calls.length, 1);
+    assert.deepEqual(calls[0], ['athena:settings:prefs:set', { collectChat: false }]);
+  } finally {
+    delete global.window;
+  }
+});
+
+test('collectChat이 아닌 패치(collectFills 등)는 main에 미러링하지 않는다', () => {
+  const storage = fakeStorage();
+  const calls = [];
+  global.window = { athena: { invoke: (channel, patch) => { calls.push([channel, patch]); return Promise.resolve(); } } };
+  try {
+    settingsCards.writeGraphSettings({ collectFills: false }, storage);
+    assert.equal(calls.length, 0);
+  } finally {
+    delete global.window;
+  }
+});
+
+test('window.athena가 없어도(핸들러 부재) collectChat 저장 자체는 안 터진다', () => {
+  const storage = fakeStorage();
+  const next = settingsCards.writeGraphSettings({ collectChat: false }, storage);
+  assert.equal(next.collectChat, false);
+});
