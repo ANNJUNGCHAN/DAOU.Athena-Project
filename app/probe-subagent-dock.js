@@ -16,8 +16,8 @@
 //   (1) 서브에이전트 내부 활동(Bash/mcp__athena__athena_search)이 최상위
 //       진행 라인(.progress-tool-step)에 안 새고, Agent tool_use 자체도
 //       거기 안 뜬다(둘 다 도크로 흡수)
-//   (2) 하위 에이전트 도크에 행 2개 — 설명·진행 중/완료 상태 전이·경과초·
-//       최근활동(toolStepLabel 매핑 통과)까지 실제 IPC 페이로드로 정확
+//   (2) 하위 에이전트 도크에 행 2개 — 보드 37 실측 한 줄 "{이름} · {상태}"
+//       (색점 is-running 토글), 카운트 "완료 / 전체" 포맷까지 실제 IPC로 정확
 //   (3) 카드가 하나도 없는 턴 — 결과물·출처 행은 숨고 하위 에이전트 행만
 //       보인다(도크 자체는 보인다) — 행별 독립 hidden 회귀 확인
 //   (4) 서브에이전트 없는 별도 턴 — 하위 에이전트 행이 전혀 안 뜬다(기존
@@ -130,11 +130,9 @@ async function main() {
     const topLevelSteps = Array.from(document.querySelectorAll('.progress-tool-step .progress-tool-step-label'))
       .map((el) => el.textContent);
     const agentRows = Array.from(document.querySelectorAll('.result-dock-agent-row')).map((row) => ({
-      desc: row.querySelector('.result-dock-agent-desc').textContent,
-      status: row.querySelector('.result-dock-agent-status').textContent,
-      isRunning: row.querySelector('.result-dock-agent-status').classList.contains('is-running'),
-      elapsed: row.querySelector('.result-dock-agent-elapsed').textContent,
-      activity: row.querySelector('.result-dock-agent-activity').textContent,
+      label: row.querySelector('.result-dock-agent-label').textContent,
+      isRunning: row.classList.contains('is-running'),
+      hasDot: !!row.querySelector('.result-dock-agent-dot'),
     }));
     return {
       topLevelSteps,
@@ -143,9 +141,10 @@ async function main() {
       agentCountLabel: document.querySelector('.result-dock-agent-list')
         .closest('.result-dock-row').querySelector('.result-dock-count').textContent,
       resultDockHidden: document.querySelector('.result-dock').hidden,
+      // 행 순서는 보드 37: [0]결과물 [1]하위 에이전트 [2]출처.
       resultRowHidden: document.querySelectorAll('.result-dock-row')[0].hidden,
-      sourceRowHidden: document.querySelectorAll('.result-dock-row')[1].hidden,
-      agentRowHidden: document.querySelectorAll('.result-dock-row')[2].hidden,
+      agentRowHidden: document.querySelectorAll('.result-dock-row')[1].hidden,
+      sourceRowHidden: document.querySelectorAll('.result-dock-row')[2].hidden,
     };
   })()`);
   console.log('[probe] 케이스A 스냅샷:', JSON.stringify(snapshot, null, 1));
@@ -153,22 +152,20 @@ async function main() {
   const noSubagentLeakage = !snapshot.topLevelSteps.some((l) => l === '처리 중' || l.includes('echo'))
     && snapshot.topLevelSteps.length === 0; // Bash/mcp/Agent 전부 도크로 흡수 — 최상위엔 아무 것도 안 남는다
 
-  // desc는 task_progress가 오면 최신 값으로 갱신된다(설계대로 — 연구 문서 §2b
+  // 이름은 task_progress가 오면 최신 값으로 갱신된다(설계대로 — 연구 문서 §2b
   // "도크에 라벨을 쓴다면 이 필드가 매 progress마다 바뀔 수 있음을 감안해야
   // 한다"). 두 케이스 다 progress의 최신 설명으로 찾는다.
-  const rowA = snapshot.agentRows.find((r) => r.desc === 'Running Print hi to stdout');
-  const rowB = snapshot.agentRows.find((r) => r.desc === 'Searching 삼성전자');
+  const rowA = snapshot.agentRows.find((r) => r.label === 'Running Print hi to stdout · 완료');
+  const rowB = snapshot.agentRows.find((r) => r.label === 'Searching 삼성전자 · 완료');
   const rowsOk = snapshot.agentRowCount === 2
-    && !!rowA && rowA.status === '완료' && rowA.isRunning === false && rowA.elapsed === '2.5s'
-    && !!rowB && rowB.status === '완료' && rowB.isRunning === false && rowB.elapsed === '1.8s'
-    && rowB.activity === '검색' // toolStepLabel(mcp__athena__athena_search) === '검색'(main.js TOOL_STEP_LABELS)
-    && rowA.activity === '처리 중'; // toolStepLabel('Bash')는 매핑 없음 — 기본값 그대로(지어내지 않는다)
+    && !!rowA && rowA.isRunning === false && rowA.hasDot
+    && !!rowB && rowB.isRunning === false && rowB.hasDot;
 
   const visibilityOk = snapshot.resultDockHidden === false // 하위 에이전트 행이 있어 도크 자체는 보인다
     && snapshot.resultRowHidden === true // 카드 0개 — 결과물 숨음
     && snapshot.sourceRowHidden === true // 출처도 숨음
     && snapshot.agentRowHidden === false // 하위 에이전트만 보임
-    && snapshot.agentCountLabel === '2';
+    && snapshot.agentCountLabel === '2 / 2'; // 보드 37 "완료 / 전체" 포맷
 
   // 이 턴을 정리(abort)한다 — 다음 케이스를 깨끗한 상태에서 시작하기 위해.
   await shellWin.webContents.executeJavaScript(
@@ -182,7 +179,7 @@ async function main() {
   shellWin.webContents.send('athena:live-tool-step', { id: 'plain-step', label: '조회', done: false });
   await wait(200);
   const regressionSnapshot = await shellWin.webContents.executeJavaScript(`(() => ({
-    agentRowHidden: document.querySelectorAll('.result-dock-row')[2].hidden,
+    agentRowHidden: document.querySelectorAll('.result-dock-row')[1].hidden,
     agentRowCountNow: document.querySelectorAll('.result-dock-agent-row').length,
   }))()`);
   console.log('[probe] 케이스B(에이전트 없음) 스냅샷:', JSON.stringify(regressionSnapshot));
