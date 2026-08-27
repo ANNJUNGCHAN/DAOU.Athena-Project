@@ -1207,6 +1207,73 @@ window.athena.on('athena:routine-event', (event) => {
 });
 refreshRoutineChip();
 
+// ---------- 예약 자동 브리핑 턴(R1, 4단계) ----------
+// 사용자 턴 채널(athena:live-*)과 완전히 분리된 별개 핸들러들이다(MAJOR 2).
+// 코드 리뷰 체크포인트: 아래 세 핸들러는 setLocked를 절대 부르지 않는다 —
+// 브리핑은 배지·본문 표시만 하고 셸 입력을 잠그지 않는다(백엔드 scheduler의
+// "대화가 우선" 원칙의 렌더러 쪽 절반). 기존 athena:live-query-state 핸들러
+// (setLocked 호출)와 함수를 공유하지 않는다.
+let briefingCard = null; // { badge, steps, body } — 진행 중 브리핑 카드의 DOM 참조
+let briefingText = '';
+
+function ensureBriefingCard() {
+  if (briefingCard) return briefingCard;
+  const line = document.createElement('div');
+  line.className = 'turn';
+  const box = document.createElement('div');
+  box.className = 'turn-agent agent-briefing';
+  const head = document.createElement('div');
+  head.className = 'agent-head';
+  const badge = document.createElement('span');
+  badge.className = 'agent-badge';
+  badge.textContent = '브리핑 실행 중';
+  head.appendChild(badge);
+  box.appendChild(head);
+  const steps = document.createElement('div');
+  steps.className = 'agent-source';
+  steps.hidden = true;
+  box.appendChild(steps);
+  const body = document.createElement('div');
+  body.className = 'agent-body';
+  box.appendChild(body);
+  _mountTurn(line, box);
+  briefingCard = { badge, steps, body };
+  return briefingCard;
+}
+
+window.athena.on('athena:briefing-query-state', ({ busy, ok, aborted } = {}) => {
+  // 배지 전용 — setLocked 미호출(위 체크포인트). 입력은 계속 열려 있다.
+  if (busy) {
+    briefingText = '';
+    ensureBriefingCard();
+    return;
+  }
+  if (briefingCard) {
+    // 종료 상태는 러너가 명시한다(ok/aborted) — 본문 유무로 추측하지 않는다.
+    // 선점 중단은 부분 본문이 남아 있어도 완료로 표시하면 안 된다.
+    briefingCard.badge.textContent = ok
+      ? '브리핑 완료'
+      : (aborted ? '브리핑 중단 — 새 대화가 우선됨' : '브리핑 생성 실패 — 알림만 표시');
+    briefingCard.steps.hidden = true;
+    briefingCard = null; // 다음 브리핑은 새 카드로
+  }
+});
+
+window.athena.on('athena:briefing-text-delta', ({ text } = {}) => {
+  if (typeof text !== 'string' || !text) return;
+  briefingText += text;
+  const card = ensureBriefingCard();
+  card.body.textContent = briefingText;
+  scrollAfterRender();
+});
+
+window.athena.on('athena:briefing-tool-step', (step = {}) => {
+  if (!step || !step.label) return;
+  const card = ensureBriefingCard();
+  card.steps.hidden = false;
+  card.steps.textContent = step.done ? `${step.label} 완료` : `${step.label}…`;
+});
+
 // ---------- 오브에서 오간 턴 반영(2026-08-26 board-33/34) ----------
 // 셸이 숨겨진 동안 오브 대화 모드가 돌린 턴은 chat.js가 그 순간에는 그릴 수
 // 없었다(창이 안 보였으니까) — main이 턴이 끝난 뒤 늦게 알려주면 여기서

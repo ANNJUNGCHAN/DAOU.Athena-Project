@@ -159,6 +159,14 @@ const ON_CHANNELS = new Set([
   // 오브에서 오간 턴을 셸의 대화 이력에도 늦게 채워 넣는다(셸이 숨어 있는 동안
   // chat.js가 그릴 수 없었으므로) — {query, result}. 셸에서만 구독한다.
   'athena:orb-turn-committed',
+  // ---------- 예약 자동 브리핑(R1, 4단계) — 사용자 턴 채널과 분리 ----------
+  // 브리핑 텍스트 조각 — {text}. 사용자 턴(athena:live-text-delta)과 별개 채널.
+  'athena:briefing-text-delta',
+  // 브리핑 툴 진행 단계 — {id, label, done, elapsedMs}(live-tool-step과 동형).
+  'athena:briefing-tool-step',
+  // 브리핑 진행 배지 전용 신호 — {busy}. 입력 잠금(setLocked)에는 절대 쓰지
+  // 않는다(MAJOR 2 — 브리핑이 셸 입력을 잠그면 안 된다).
+  'athena:briefing-query-state',
 ]);
 
 contextBridge.exposeInMainWorld('athena', {
