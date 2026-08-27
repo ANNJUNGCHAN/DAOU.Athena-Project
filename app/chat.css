@@ -504,8 +504,8 @@ html, body { background: transparent; }
   right: 20px;
   bottom: 56px; /* 입력 스택 바로 위(스트립 제거 후 기준) */
   z-index: 8;
-  width: 260px;
-  padding: 10px;
+  width: 216px;
+  padding: 6px;
   border-radius: 14px;
   background: rgb(255 255 255 / 97%);
   backdrop-filter: blur(18px);
@@ -524,7 +524,7 @@ html, body { background: transparent; }
 }
 .model-popover .mp-row { display: flex; flex-wrap: wrap; gap: 6px; }
 .model-popover .mp-chip {
-  padding: 5px 12px;
+  padding: 4px 10px;
   border-radius: 999px;
   border: 1px solid rgb(16 19 26 / 14%);
   background: #fff;
@@ -586,10 +586,10 @@ html, body { background: transparent; }
 /* 키우미 메뉴 — 위 .model-popover 라이트 기반을 쓰고 위치만 왼쪽 앵커. */
 .kiumi-menu {
   right: auto; left: 14px;
-  min-width: 240px;
+  min-width: 200px;
 }
 .kiumi-menu .km-section {
-  padding: 6px 12px 2px;
+  padding: 4px 10px 1px;
   font-size: 10px;
   letter-spacing: 0.06em;
   color: rgb(16 19 26 / 35%);
@@ -648,7 +648,8 @@ html, body { background: transparent; }
 
 .kiumi-menu .km-item {
   display: block; width: 100%; text-align: left;
-  padding: 8px 12px; border-radius: 8px;
+  padding: 6px 10px; border-radius: 8px;
+  font-size: var(--text-sm);
   background: none; border: none; appearance: none; cursor: pointer;
   color: #10131a; font: inherit;
 }
