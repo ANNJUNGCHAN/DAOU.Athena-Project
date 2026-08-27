@@ -245,6 +245,54 @@ async function traceBootBar(shellWin, timeoutMs = 5000) {
   };
 }
 
+// 검증22(알림 오브)의 접힘 상태 DOM 프로브 — 발화 눈 모양 안정화를 기다릴 때와
+// 최종 리포트 측정 때 같은 쿼리를 반복 호출한다(함수로 뽑아 재사용, 새 측정
+// 로직을 만들지 않는다).
+async function probeOrbCollapsed(win) {
+  return win.webContents.executeJavaScript(`(() => {
+    const orb = document.getElementById('orb');
+    const r = orb.getBoundingClientRect();
+    const cs = getComputedStyle(orb);
+    const visor = getComputedStyle(document.getElementById('orbVisor'));
+    return {
+      width: Math.round(r.width),
+      height: Math.round(r.height),
+      borderRadius: cs.borderRadius,
+      count: document.getElementById('orbCount').textContent,
+      panelHidden: document.getElementById('orbPanel').hidden,
+      state: document.getElementById('orbRoot').dataset.state,
+      // 2026-08-24 리프 1.3.2 — 무채색↔발화 상태. 1건 받았으니 'fired'여야 한다.
+      alert: document.getElementById('orbRoot').dataset.alert,
+      // 유리는 끝까지 무채색이다 — 셸 배경에 색이 섞이면 그건 틴트다(soul.md §7).
+      orbBackground: cs.backgroundColor,
+      // 바이저는 **페이드가 아니라** 스케일·블러 변조로 드러난다(soul.md §7).
+      visorTransition: visor.transition,
+      visorTransform: visor.transform,
+      eyeCount: document.querySelectorAll('#orbVisor .orb-eye').length,
+      // 발화(fired) 상태의 눈 기하 — orbQuietEyeProbe와 짝을 맞춰 대기↔발화의
+      // 실제 모양 차이를 잰다(더는 바이저 폭이 아니다).
+      eyeWidth: (() => {
+        const e = document.querySelector('#orbVisor .orb-eye');
+        return e ? e.getBoundingClientRect().width : null;
+      })(),
+      eyeHeight: (() => {
+        const e = document.querySelector('#orbVisor .orb-eye');
+        return e ? e.getBoundingClientRect().height : null;
+      })(),
+      // 드래그 손잡이/구멍 계약 — 같은 픽셀에 겹치면 클릭이 영영 안 온다.
+      orbRegion: (cs.getPropertyValue('app-region') || cs.getPropertyValue('-webkit-app-region') || '').trim(),
+      coreRegion: (() => {
+        const c = getComputedStyle(document.getElementById('orbToggle'));
+        return (c.getPropertyValue('app-region') || c.getPropertyValue('-webkit-app-region') || '').trim();
+      })(),
+      // 옛 마젠타 호는 걷어냈다 — 얼굴이 신호를 가져갔고 신호는 화면당 한 곳이다.
+      // 죽은 채 남았는지 확인한다: 링 배경에 브랜드 마젠타가 있으면 안 된다.
+      ringHasBrand: getComputedStyle(document.getElementById('orbRing'))
+        .backgroundImage.includes('238, 19, 123'),
+    };
+  })()`);
+}
+
 app.whenReady().then(async () => {
   dlog('whenReady fired');
   const report = { startedAt: new Date().toISOString() };
@@ -1973,54 +2021,24 @@ app.whenReady().then(async () => {
     note: '오브 검증 루틴',
     fired_at: new Date(Date.now() - 3 * 60 * 1000).toISOString(),
   });
-  await wait(300);
+
+  // 발화 눈 모양이 안정될 때까지 기다린다 — 조건 충족(발화 종횡비) 후 짧은
+  // 간격을 두고 한 번 더 재확인해 같은 값이면 안정화로 간주한다(전이 애니메이션
+  // 중간값을 잡지 않기 위함). firedEyesAreRounder 판정과 같은 종횡비 임계(1.3)를 쓴다.
+  const looksFired = (p) => !!(p && p.eyeWidth && (p.eyeHeight / p.eyeWidth) < 1.3);
+  await waitUntil(async () => {
+    const probe = await probeOrbCollapsed(orbWin);
+    if (!looksFired(probe)) return false;
+    await wait(60);
+    const probe2 = await probeOrbCollapsed(orbWin);
+    return looksFired(probe2) && probe2.eyeWidth === probe.eyeWidth && probe2.eyeHeight === probe.eyeHeight;
+  }, { timeoutMs: 900, intervalMs: 60 });
 
   // 22-B — **알림이 오면 딥블루 바이저가 드러난다.** 같은 창, 같은 크기, 상태만 다르다.
   await shot(orbWin, '22b-orb-alerted.png');
   const pixelsAlerted = await measurePixels(orbWin);
 
-  const orbCollapsedProbe = await orbWin.webContents.executeJavaScript(`(() => {
-    const orb = document.getElementById('orb');
-    const r = orb.getBoundingClientRect();
-    const cs = getComputedStyle(orb);
-    const visor = getComputedStyle(document.getElementById('orbVisor'));
-    return {
-      width: Math.round(r.width),
-      height: Math.round(r.height),
-      borderRadius: cs.borderRadius,
-      count: document.getElementById('orbCount').textContent,
-      panelHidden: document.getElementById('orbPanel').hidden,
-      state: document.getElementById('orbRoot').dataset.state,
-      // 2026-08-24 리프 1.3.2 — 무채색↔발화 상태. 1건 받았으니 'fired'여야 한다.
-      alert: document.getElementById('orbRoot').dataset.alert,
-      // 유리는 끝까지 무채색이다 — 셸 배경에 색이 섞이면 그건 틴트다(soul.md §7).
-      orbBackground: cs.backgroundColor,
-      // 바이저는 **페이드가 아니라** 스케일·블러 변조로 드러난다(soul.md §7).
-      visorTransition: visor.transition,
-      visorTransform: visor.transform,
-      eyeCount: document.querySelectorAll('#orbVisor .orb-eye').length,
-      // 발화(fired) 상태의 눈 기하 — 위 orbQuietEyeProbe와 짝을 맞춰 대기↔발화의
-      // 실제 모양 차이를 잰다(더는 바이저 폭이 아니다).
-      eyeWidth: (() => {
-        const e = document.querySelector('#orbVisor .orb-eye');
-        return e ? e.getBoundingClientRect().width : null;
-      })(),
-      eyeHeight: (() => {
-        const e = document.querySelector('#orbVisor .orb-eye');
-        return e ? e.getBoundingClientRect().height : null;
-      })(),
-      // 드래그 손잡이/구멍 계약 — 같은 픽셀에 겹치면 클릭이 영영 안 온다.
-      orbRegion: (cs.getPropertyValue('app-region') || cs.getPropertyValue('-webkit-app-region') || '').trim(),
-      coreRegion: (() => {
-        const c = getComputedStyle(document.getElementById('orbToggle'));
-        return (c.getPropertyValue('app-region') || c.getPropertyValue('-webkit-app-region') || '').trim();
-      })(),
-      // 옛 마젠타 호는 걷어냈다 — 얼굴이 신호를 가져갔고 신호는 화면당 한 곳이다.
-      // 죽은 채 남았는지 확인한다: 링 배경에 브랜드 마젠타가 있으면 안 된다.
-      ringHasBrand: getComputedStyle(document.getElementById('orbRing'))
-        .backgroundImage.includes('238, 19, 123'),
-    };
-  })()`);
+  const orbCollapsedProbe = await probeOrbCollapsed(orbWin);
 
   // 펼침 — 실제 사용자 경로(코어 클릭)를 그대로 태운다.
   await orbWin.webContents.executeJavaScript("document.getElementById('orbToggle').click()");
