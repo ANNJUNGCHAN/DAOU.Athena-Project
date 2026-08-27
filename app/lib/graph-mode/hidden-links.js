@@ -5,11 +5,13 @@
 // 넘는 연결)를 "A ↔ B" + 관계 종류 나열로 그린다. 새 데이터(기존 3개 모듈이
 // 안 다루는)라 theme-clusters.js와 같은 이유로 새 leaf 모듈이다(원칙1).
 //
-// **"점수 8.5"는 없다(§0 발견3).** `SurprisingConnectionOut`은
-// source_entity_id/source_name/target_entity_id/target_name/kinds[]/
-// source_cluster/target_cluster만 준다 — 점수 필드도, "두 군집을 잇는 유일한
-// 연결·주변부에서 허브로·직접 말한 적 없음" 같은 서술 문장도 없다. kinds[]를
-// 조인한 텍스트만 "설명" 자리에 정직하게 채운다.
+// **절대 점수(8.5류)는 없다 — 이 목록 안에서의 상대 순위만 있다(§0 발견3 후속,
+// WP-B).** `SurprisingConnectionOut`은 source_entity_id/source_name/
+// target_entity_id/target_name/kinds[]/source_cluster/target_cluster에 더해
+// surprise_score(차수 역수 기반 min-max 정규화, [0,1])를 준다 — "두 군집을
+// 잇는 유일한 연결·주변부에서 허브로·직접 말한 적 없음" 같은 서술 문장은
+// 여전히 없다. kinds[]를 조인한 텍스트가 "설명" 자리를, surprise_score가
+// 있으면 상대 순위 배지를 채운다.
 
 function el(name, className) {
   const node = document.createElement(name);
@@ -31,6 +33,14 @@ function renderConnectionRow(connection) {
   target.textContent = connection.target_name || connection.target_entity_id;
   pair.appendChild(target);
   row.appendChild(pair);
+
+  // 상대 순위 배지 — backend가 surprise_score를 안 준다면(구버전) 렌더하지
+  // 않는다(스텝5-2와 동일한 하위 호환 방어).
+  if (Number.isFinite(connection.surprise_score)) {
+    const score = el('span', 'hidden-link-score');
+    score.textContent = `상대 ${connection.surprise_score.toFixed(2)}`;
+    row.appendChild(score);
+  }
 
   // kinds[]가 유일한 실데이터 설명 재료다 — 없으면 빈 칸(지어내지 않는다).
   const kinds = Array.isArray(connection.kinds) ? connection.kinds : [];
