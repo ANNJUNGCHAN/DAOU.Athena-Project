@@ -240,14 +240,14 @@ function finishOnboarding() {
 // 다시 안 나오고, fixture(자동 검증) 실행에선 띄우지 않는다 — 캡처 결정론 보호.
 function maybeShowCoachmark() {
   if (canvasSource === 'fixture') return;
-  try { if (localStorage.getItem('athena-coachmark-settings-v2')) return; } catch { return; }
+  try { if (localStorage.getItem('athena-coachmark-settings-v3')) return; } catch { return; }
   if (document.querySelector('.coachmark')) return;
   const mark = document.createElement('div');
   mark.className = 'coachmark';
   mark.textContent = '키우미를 누르면 파일 첨부·모델 설정이 열립니다 — 설정은 사이드바 계정 메뉴나 "설정" 입력으로';
   document.body.appendChild(mark);
   const dismiss = () => {
-    try { localStorage.setItem('athena-coachmark-settings-v2', '1'); } catch { /* 플래그 실패 시 다음 부팅에 한 번 더 뜬다 — 치명적이지 않다 */ }
+    try { localStorage.setItem('athena-coachmark-settings-v3', '1'); } catch { /* 플래그 실패 시 다음 부팅에 한 번 더 뜬다 — 치명적이지 않다 */ }
     mark.remove();
     window.removeEventListener('pointerdown', dismiss, true);
     window.removeEventListener('keydown', dismiss, true);
@@ -418,12 +418,11 @@ async function runQueryLive(text) {
   state = 'judging';
   setDot('judging');
   setLocked(true, 'Claude에게 물어보는 중 — 수십 초 걸릴 수 있다');
+  // 진행 상태 텍스트는 하단 잠금 힌트(setLocked) 한 곳에만 쓴다(2026-08-27
+  // 사용자 지적 — 버블 안 중복 표시 제거). 이 progress 요소는 툴 스텝 전용.
   const progress = document.createElement('div');
   progress.className = 'progress-line';
-  const progText = document.createElement('span');
   const startedAt = Date.now();
-  progText.textContent = 'Claude에게 물어보는 중 · 0.0s';
-  progress.appendChild(progText);
   // 실행 라인(2026-08-26 어드버서리얼 리뷰 결함 #3, board-04 "⑧ 실행 라인") —
   // progress의 자식으로 둔다: Esc 중단(위 972행 근처)이 liveProgressEl 하나만
   // remove()하므로, 여기 붙여야 중단 시에도 같이 지워진다(고아 DOM 방지).
@@ -461,7 +460,6 @@ async function runQueryLive(text) {
   const renderProgress = () => {
     if (myToken !== abortToken) return;
     const base = calling ? `카드 ${cardCount}개 렌더됨` : 'Claude에게 물어보는 중';
-    progText.textContent = `${base} · ${elapsedText()} 경과`;
     setLocked(true, `${base} · ${elapsedText()} 경과`);
   };
   // 100ms 간격 — 표기는 소수 1자리(29.3s)인데 1초 간격으로 갱신하면 소수 자리가
