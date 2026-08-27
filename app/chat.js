@@ -1483,24 +1483,80 @@ function renderAgentTurn(event) {
   if (model.relative) {
     const rel = document.createElement('span');
     rel.className = 'agent-rel';
-    rel.textContent = `지금 확인 · ${model.relative}`;
+    rel.textContent = model.relative; // 보드 37: 상대시각만, 접두사 없음
     head.appendChild(rel);
   }
   if (head.childNodes.length) box.appendChild(head);
 
-  if (model.sourceLabel) {
+  // 소스 캡션 위치는 종별로 다르다(보드 37/09): 발화 턴은 맨 아래, 나머지는 머리 다음.
+  if (model.sourceLabel && model.kind !== 'fired') {
     const src = document.createElement('div');
     src.className = 'agent-source';
     src.textContent = model.sourceLabel;
     box.appendChild(src);
   }
-  const body = document.createElement('div');
-  body.className = 'agent-body';
-  body.textContent = model.body;
-  box.appendChild(body);
+
+  if (model.kind === 'fired' && model.symbolText) {
+    // 보드 37 구조 분해 본문: 종목 필 + 조건 도달 문장 + 시점 고지(전폭 줄).
+    const body = document.createElement('div');
+    body.className = 'agent-body agent-body-fired';
+    const pill = document.createElement('span');
+    pill.className = 'agent-symbol-pill';
+    pill.textContent = model.symbolText;
+    const text = document.createElement('span');
+    text.className = 'agent-body-text';
+    text.textContent = model.bodyText;
+    const note = document.createElement('div');
+    note.className = 'agent-body-note';
+    note.textContent = model.bodyNote;
+    body.append(pill, text, note);
+    box.appendChild(body);
+
+    // 감시 조건 패널(보드 37 ③) — 헤더 + 종목 줄 + 조건 행(✓/△·라벨·관측값).
+    // 목업의 헤더 아이콘 2개는 동작 미규정이라 만들지 않는다(죽은 버튼 금지).
+    if (Array.isArray(model.conditions) && model.conditions.length) {
+      const watch = document.createElement('div');
+      watch.className = 'agent-watch';
+      const whead = document.createElement('div');
+      whead.className = 'agent-watch-head';
+      const wtitle = document.createElement('span');
+      wtitle.className = 'agent-watch-title';
+      wtitle.textContent = '감시 조건';
+      whead.appendChild(wtitle);
+      const wbody = document.createElement('div');
+      wbody.className = 'agent-watch-body';
+      const wsym = document.createElement('div');
+      wsym.className = 'agent-watch-symbol';
+      wsym.textContent = model.symbolText;
+      wbody.appendChild(wsym);
+      for (const cond of model.conditions) {
+        const row = document.createElement('div');
+        row.className = 'agent-watch-row';
+        const ic = document.createElement('span');
+        ic.className = `agent-watch-ic${cond.met ? ' is-met' : ''}`;
+        ic.textContent = cond.met ? '✓' : '△';
+        const label = document.createElement('span');
+        label.className = 'agent-watch-label';
+        label.textContent = cond.label;
+        const value = document.createElement('span');
+        value.className = 'agent-watch-value';
+        value.textContent = cond.value;
+        row.append(ic, label, value);
+        wbody.appendChild(row);
+      }
+      watch.append(whead, wbody);
+      box.appendChild(watch);
+    }
+  } else {
+    const body = document.createElement('div');
+    body.className = 'agent-body';
+    body.textContent = model.body;
+    box.appendChild(body);
+  }
 
   // 발화 턴 → 주문 티켓 직행 경로(P4, LIV-066 시나리오의 정답 구조).
   // 티켓을 여는 것뿐 — 주문은 티켓 안에서 사람이 실행한다.
+  // note: 보드 37 목업엔 이 버튼이 없다 — P4 기능 결정이 우선, Paper 역반영 후보.
   if (model.kind === 'fired') {
     const actions = document.createElement('div');
     actions.className = 'routine-approval-actions';
@@ -1510,6 +1566,13 @@ function renderAgentTurn(event) {
     });
     actions.appendChild(openBtn);
     box.appendChild(actions);
+  }
+
+  if (model.sourceLabel && model.kind === 'fired') {
+    const src = document.createElement('div');
+    src.className = 'agent-source';
+    src.textContent = model.sourceLabel;
+    box.appendChild(src);
   }
 
   _mountTurn(line, box);

@@ -33,6 +33,22 @@ test('buildTurnModel(fired): 발화 배지·상대시간·방식·소스 라벨�
   assert.ok(m.body.includes('5.3'));
 });
 
+test('buildTurnModel(fired): 보드 37 구조 분해 — 종목·본문·고지·감시 조건 1행', () => {
+  const m = buildTurnModel(FIRED, Date.parse(FIRED.fired_at));
+  assert.equal(m.symbolText, '005930');
+  assert.ok(m.bodyText.includes('관측값 5.3'));
+  assert.ok(m.bodyText.includes('임계 5'));
+  assert.ok(m.bodyNote.includes('발화 시점 기준'));
+  // 단일 조건 페이로드 → 정직한 1행: 라벨은 note(원장 소스), 값은 관측값, 충족 확정.
+  assert.equal(m.conditions.length, 1);
+  assert.deepEqual(m.conditions[0], { met: true, label: '삼성전자 급등감시', value: '5.3' });
+});
+
+test('buildTurnModel(fired): note 없으면 조건 라벨은 routine_id로 강등', () => {
+  const m = buildTurnModel({ ...FIRED, note: '' }, 0);
+  assert.equal(m.conditions[0].label, 'r1');
+});
+
 test('buildTurnModel: 만료·복원실패·미지 타입', () => {
   assert.equal(buildTurnModel({ type: 'routine-expired', note: 'x' }, 0).kind, 'expired');
   const rf = buildTurnModel({ type: 'routine-restore-failed', note: '감시가 비어 있다' }, 0);

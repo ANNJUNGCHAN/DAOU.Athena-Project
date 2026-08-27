@@ -56,6 +56,14 @@ function buildTurnModel(event, nowMs) {
       relative: relativeText(event.fired_at, nowMs),
       modeText: describeMode(event.mode),
       sourceLabel: `루틴 '${event.note || event.routine_id}' · 에이전트 발화 — 묻지 않은 턴입니다`,
+      // 보드 37 구조 분해 렌더용 — body와 같은 원장 필드의 1:1 재배열(지어낸 값 없음).
+      symbolText: String(event.symbol),
+      bodyText: `조건 도달 — 관측값 ${event.observed} (임계 ${event.threshold})`,
+      bodyNote: '값은 발화 시점 기준입니다 — 최신 확인은 다시 물어봐 주세요.',
+      // 감시 조건 행 — 페이로드가 단일 조건(threshold·observed)이라 1행이 정직한
+      // 전부다(보드 37의 다조건 예시는 스키마가 늘 때 따라온다). 라벨은 note —
+      // "사람이 읽는 유일한 조건 표현"(backend models.py:101)이라 원장 소스다.
+      conditions: [{ met: true, label: event.note || event.routine_id, value: String(event.observed) }],
       body:
         `${event.symbol} 조건 도달 — 관측값 ${event.observed} (임계 ${event.threshold}). ` +
         '값은 발화 시점 기준입니다 — 최신 확인은 다시 물어봐 주세요.',
