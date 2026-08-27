@@ -180,3 +180,33 @@ def test_expiry_helper(tmp_path):
     spec = validate_draft(_draft(expires_days=1))
     assert not spec.is_expired()
     assert spec.is_expired(now=datetime.now(UTC) + timedelta(days=2))
+
+
+# ---------- goal 플래그 (CP1a) ----------
+
+
+def test_goal_defaults_false_and_roundtrips():
+    spec = validate_draft(_draft())
+    assert spec.goal is False
+    restored = RoutineSpec.from_dict(spec.to_dict())
+    assert restored.goal is False
+
+
+def test_goal_true_is_preserved_through_roundtrip():
+    spec = validate_draft(_draft(goal=True))
+    assert spec.goal is True
+    restored = RoutineSpec.from_dict(spec.to_dict())
+    assert restored.goal is True
+
+
+def test_goal_missing_in_legacy_dict_defaults_false():
+    spec = validate_draft(_draft())
+    raw = spec.to_dict()
+    del raw["goal"]  # 구버전 저장분 흉내
+    restored = RoutineSpec.from_dict(raw)
+    assert restored.goal is False
+
+
+def test_goal_rejects_non_bool():
+    with pytest.raises(RoutineValidationError):
+        validate_draft(_draft(goal="true"))

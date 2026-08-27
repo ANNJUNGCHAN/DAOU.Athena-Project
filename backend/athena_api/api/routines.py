@@ -29,6 +29,7 @@ def _view(spec: Any, runtime: RoutinesRuntime) -> dict[str, Any]:
         "id": spec.id,
         "symbol": spec.symbol,
         "note": spec.note,
+        "goal": spec.goal,
         "source_label": source_spec.label,
         "mode": spec.mode,
         "status": spec.status,

@@ -23,6 +23,15 @@ def test_tool_schema_only_allows_draft_and_list():
     assert "자동 집행되지 않는다" in tool.description
 
 
+def test_tool_schema_goal_field_is_conservative():
+    (tool,) = routine_tools.builtin_tool_defs()
+    goal_schema = tool.inputSchema["properties"]["draft"]["properties"]["goal"]
+    assert goal_schema["type"] == "boolean"
+    # 애매하면 생략하라는 보수적 지침이 스키마 설명에 있어야 한다(오분류 완화).
+    assert "명시적으로" in goal_schema["description"]
+    assert "애매하면 생략" in goal_schema["description"]
+
+
 @pytest.mark.asyncio
 @pytest.mark.parametrize("action", ["confirm", "cancel", "activate", None, 5])
 async def test_state_changing_actions_are_gateway_blocked(action, mock_http_client):

@@ -120,12 +120,17 @@ def validate_draft(raw: Any, *, now: datetime | None = None) -> RoutineSpec:
     if note and not _KEYWORD_RE.match(note):
         _fail("note에 제어문자를 쓸 수 없다")
 
+    goal = raw.get("goal", False)
+    if not isinstance(goal, bool):
+        _fail("goal은 불리언이어야 한다")
+
     spec = RoutineSpec(
         condition=condition,
         symbol=symbol,
         cooldown_s=cooldown,
         expires_at=now + timedelta(days=expires_days),
         note=note,
+        goal=goal,
     )
     if not note:
         spec.note = spec.human_summary()
