@@ -1262,11 +1262,28 @@ const $kiumiMenu = document.getElementById('kiumiMenu');
 
 function closeKiumiMenu() { $kiumiMenu.hidden = true; }
 
-function kiumiItem(label, onPick) {
+// 보드 45 v5: 항목은 바이저색 아이콘 + 제목 + (있으면) 설명 2줄.
+function kiumiItem(icon, label, desc, onPick) {
   const b = document.createElement('button');
   b.type = 'button';
   b.className = 'km-item';
-  b.textContent = label;
+  const ic = document.createElement('span');
+  ic.className = 'km-ic';
+  ic.setAttribute('aria-hidden', 'true');
+  ic.textContent = icon;
+  const col = document.createElement('span');
+  col.className = 'km-col';
+  const title = document.createElement('span');
+  title.className = 'km-title';
+  title.textContent = label;
+  col.appendChild(title);
+  if (desc) {
+    const d = document.createElement('span');
+    d.className = 'km-desc';
+    d.textContent = desc;
+    col.appendChild(d);
+  }
+  b.append(ic, col);
   b.addEventListener('click', onPick);
   return b;
 }
@@ -1340,21 +1357,22 @@ function kiumiSection(title) {
 function renderKiumiMenu() {
   $kiumiMenu.textContent = '';
   $kiumiMenu.appendChild(kiumiSection('추가'));
-  $kiumiMenu.appendChild(kiumiItem('파일 첨부', () => pickAttachments(false)));
-  $kiumiMenu.appendChild(kiumiItem('폴더 첨부', () => pickAttachments(true)));
+  $kiumiMenu.appendChild(kiumiItem('📎', '파일 첨부', '경로가 첨부 칩으로 쌓인다', () => pickAttachments(false)));
+  $kiumiMenu.appendChild(kiumiItem('📁', '폴더 첨부', '', () => pickAttachments(true)));
   const sep = document.createElement('div');
   sep.className = 'mp-sep';
   $kiumiMenu.appendChild(sep);
   $kiumiMenu.appendChild(kiumiSection('설정'));
   // 모델·추론 노력 — 스트립 필 제거로 이 메뉴가 유일한 진입로다(보드 45 v5).
-  $kiumiMenu.appendChild(kiumiItem('모델 설정', async () => {
+  $kiumiMenu.appendChild(kiumiItem('◧', '모델 설정', '모델·사고 강도 — 모델 팝오버(보드 09)', async () => {
     closeKiumiMenu();
     await refreshModelState();
     renderModelPopover();
     $modelPopover.hidden = false;
   }));
   // 그래프 수집·노출은 설정 › 성향·이력 카드가 소유한다(보드 22 병합).
-  $kiumiMenu.appendChild(kiumiItem('수집·노출 설정', () => { closeKiumiMenu(); openSettings(); }));
+  // 보드 45 v5의 이 자리는 '플러그인'(보드 47·48) — 허브가 P2 레인이라 착수 시 교체.
+  $kiumiMenu.appendChild(kiumiItem('◨', '수집·노출 설정', '', () => { closeKiumiMenu(); openSettings(); }));
 }
 
 function toggleKiumiMenu() {

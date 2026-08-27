@@ -651,15 +651,12 @@ html, body { background: transparent; }
 }
 .input-row {
   flex-shrink: 0;
-  display: flex; align-items: center; gap: 16px;
-  padding: 0 18px;
+  display: flex; align-items: center; gap: 20px;
+  padding: 0 24px;
   height: 44px;
-  /* 2026-08-22 실측 수정(사용자 지적 "입력줄 위 검은 선이 거슬린다"):
-   * --color-k-line-soft(#262c38)는 불투명 어두운 색이라 반투명 유리 위에 얹히면
-   * 검은 띠로 읽힌다. 유리에서 경계는 어둠이 아니라 광량으로 세운다
-   * (liquid-glass.md 렌징 · soul.md §7 "깊이는 값으로"). 같은 파일의 다른 유리
-   * 경계(637·812줄)가 이미 쓰는 문법으로 통일한다. */
-  border-top: 1px solid rgb(255 255 255 / 9%);
+  /* 경계는 어둠이 아니라 광량으로 세운다(2026-08-22 사용자 지적 "검은 선" —
+   * liquid-glass.md 렌징 · soul.md §7). 세기는 보드 37(9ID-0) 실측 #FFFFFF66. */
+  border-top: 1px solid rgb(255 255 255 / 40%);
 }
 
 /* 모델 팝오버 · 키우미 메뉴 공용 기반 — 라이트 정제(2026-08-27, C1 '세련되게').
@@ -749,18 +746,22 @@ html, body { background: transparent; }
 @media (prefers-reduced-motion: reduce) {
   .kiumi-face-chat rect, .kiumi-face-graph circle { animation: none; }
 }
-/* 키우미 메뉴 — 위 .model-popover 라이트 기반을 쓰고 위치만 왼쪽 앵커. */
+/* 키우미 메뉴 — 위 .model-popover 라이트 기반을 쓰고 위치만 왼쪽 앵커.
+ * 기하는 보드 45 v5(CLE-0) 실측: 260 고정 · 8px 라운드 · 항목 간 gap 없음(패딩이 리듬). */
 .kiumi-menu {
   right: auto; left: 14px;
-  min-width: 200px;
+  width: 260px;
+  gap: 0;
+  border-radius: 8px;
+  box-shadow: 0 14px 34px rgb(16 19 26 / 13%);
 }
 .kiumi-menu .km-section {
-  padding: 4px 10px 1px;
-  font-size: 10px;
+  padding: 6px 16px 2px;
+  font-size: var(--text-2xs);
   letter-spacing: 0.06em;
   color: rgb(16 19 26 / 35%);
 }
-.kiumi-menu .mp-sep { background: rgb(16 19 26 / 6%); }
+.kiumi-menu .mp-sep { background: rgb(16 19 26 / 6%); margin: 4px 8px; }
 /* 모드별 채팅 헤더(보드 38 — 그래프 모드 전용. 보드 37 실측: 대화 모드엔 없음) */
 .chat-mode-head {
   flex-shrink: 0;
@@ -813,15 +814,23 @@ html, body { background: transparent; }
 .attach-chip-rm:hover { color: #10131a; }
 
 .kiumi-menu .km-item {
-  display: block; width: 100%; text-align: left;
-  padding: 6px 10px; border-radius: 8px;
-  font-size: var(--text-sm);
+  display: flex; align-items: center; gap: 12px;
+  width: 100%; text-align: left;
+  padding: 8px 16px; border-radius: 6px;
   background: none; border: none; appearance: none; cursor: pointer;
   color: #10131a; font: inherit;
 }
 .kiumi-menu .km-item:hover {
   background: rgb(16 19 26 / 6%);
 }
+.kiumi-menu .km-ic {
+  width: 20px; flex-shrink: 0; text-align: center;
+  color: #2F3BA8; /* 바이저색 — 보드 45 v5 아이콘 어휘 */
+  font-size: var(--text-sm); line-height: 1.1;
+}
+.kiumi-menu .km-col { display: flex; flex-direction: column; gap: 1px; }
+.kiumi-menu .km-title { font-size: var(--text-base); line-height: 1.1; color: rgb(16 19 26 / 92%); }
+.kiumi-menu .km-desc { font-size: var(--text-xs); line-height: 14px; color: rgb(16 19 26 / 40%); }
 .dot:hover { transform: scale(1.25); }
 .dot:focus-visible {
   outline: 2px solid var(--color-k-text);
