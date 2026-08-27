@@ -8,7 +8,10 @@ const { killTree } = require('./proc-utils');
 const RENDER_CANVAS_ALLOWED_TOOL = 'mcp__athena__athena__render_canvas';
 // `mcp__<서버명>` 형태는 그 서버의 모든 툴을 허용한다(Claude Code 권한 규칙 —
 // MCP 툴 이름에는 와일드카드가 안 되고 서버 단위 접두만 된다).
-const GATEWAY_ALLOWED_TOOLS = 'mcp__athena';
+// Read·Glob(2026-08-27, 키우미 파일/폴더 첨부): 첨부는 경로 텍스트를 프롬프트에
+// 싣는 방식인데, -p 모드에선 허용 목록 밖 툴이 전부 거부라 이 둘이 없으면
+// 모델이 첨부된 경로를 읽을 수단 자체가 없다(Read=파일, Glob=폴더 내용 파악).
+const GATEWAY_ALLOWED_TOOLS = 'mcp__athena,Read,Glob';
 
 // 카드 랜딩 결함(2026-08-26 실측) — 오케스트레이션 셸이 사용자 설정 env로
 // ENABLE_TOOL_SEARCH=1을 내보내면, 그 셸에서 띄운 이 앱의 `claude -p` 자식
