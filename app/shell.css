@@ -585,10 +585,14 @@ body { margin: 0; overflow: hidden; }
   border: none;
   background: transparent;
   padding: 0;
-  color: var(--color-k-faint);
+  color: var(--color-k-text);
   font-family: var(--font-body);
   font-weight: 300;
   font-size: var(--text-sm);
+  cursor: pointer;
+}
+.agent-pause-btn:disabled {
+  color: var(--color-k-faint);
   cursor: not-allowed;
 }
 .agent-detail-desc {

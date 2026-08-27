@@ -1390,6 +1390,18 @@ const agentCanvas = window.AthenaLib.AgentCanvas.createAgentCanvas({
     const input = document.getElementById('input');
     if (input) input.focus();
   },
+  // 6.5단계 — 상세 패널 일시중지·재개. 6단계 엔드포인트를 사람 클릭 전용
+  // 채널(athena:routine-confirm/cancel과 같은 자리)로 부른다.
+  pauseRoutine: async (id) => {
+    const res = await window.athena.invoke('athena:routine-pause', { id });
+    if (!res || !res.ok) throw new Error((res && res.error) || '일시중지 실패');
+    return res.data;
+  },
+  resumeRoutine: async (id) => {
+    const res = await window.athena.invoke('athena:routine-resume', { id });
+    if (!res || !res.ok) throw new Error((res && res.error) || '재개 실패');
+    return res.data;
+  },
 });
 agentCanvas.mount();
 window.AthenaAgentCanvas = agentCanvas;

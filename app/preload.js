@@ -39,6 +39,9 @@ const INVOKE_CHANNELS = new Set([
   'athena:routines-list',
   'athena:routine-confirm',
   'athena:routine-cancel',
+  // 상세 패널 일시중지·재개(6.5단계) — confirm/cancel과 같은 사람 클릭 전용 경로다.
+  'athena:routine-pause',
+  'athena:routine-resume',
   'athena:order-execute',
   // 채팅→그래프 파이프라인 단계 5(.omc/plans/plan-chat-graph-pipeline.md §2(e)/(f))
   // — 대화 모드 HISTORY_COMMAND 조회, 설정 모드 "성향・이력" 상태·전체 삭제.
