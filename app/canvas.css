@@ -459,6 +459,9 @@ html, body { background: transparent; }
   background: var(--color-k-panel3); border-radius: 4px; padding: 1px 6px;
 }
 .theme-cluster-count { font-family: var(--font-body); font-size: var(--text-xs); color: var(--color-k-hint); }
+/* 대표 설명(WP-A3) — 의미적 이름이 아닌 규칙 기반 문자열이라, Paper가 실제로
+ * 그린 값(이름·응집도)보다 한 단계 옅은 --color-k-faint로 톤을 낮춰 구분한다. */
+.theme-cluster-representative { font-family: var(--font-body); font-size: var(--text-xs); color: var(--color-k-faint); }
 
 .theme-cluster-bar-row { display: flex; align-items: center; gap: 8px; }
 .theme-cluster-bar { flex: 1 1 0%; height: 3px; background: var(--color-k-bg); border-radius: 999px; overflow: hidden; }
@@ -480,6 +483,13 @@ html, body { background: transparent; }
 .hidden-link-pair { display: flex; align-items: center; gap: 10px; }
 .hidden-link-entity { font-family: var(--font-strong); font-size: var(--text-base); color: var(--color-k-bright); }
 .hidden-link-arrow { font-family: var(--font-body); font-size: var(--text-sm); color: var(--color-k-ghost); }
+/* 상대 점수(WP-B3) — 정찰 보고서 §9-1 실측(Geist Mono 11px/500, 1번 항목
+ * #10131AEB = --color-k-bright)을 그대로 따른다. margin-left:auto도 Paper 값
+ * 그대로 — pair가 이미 block 레이아웃이라 이 배지만 자기 줄에서 우측 정렬한다. */
+.hidden-link-score {
+  display: block; width: fit-content; margin-left: auto;
+  font-family: var(--font-mono); font-size: var(--text-xs); font-weight: 500; color: var(--color-k-bright);
+}
 .hidden-link-desc {
   font-family: var(--font-body); font-size: var(--text-xs); line-height: 17px; color: var(--color-k-soft);
   margin-top: 6px;
