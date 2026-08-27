@@ -579,11 +579,38 @@ html, body { background: transparent; }
 .panel-relation-label.is-hidden { color: var(--color-brand); }
 .panel-relation-desc { font-family: var(--font-body); font-size: var(--text-sm); color: var(--color-k-bright); }
 
-/* §10-4(최근 변화)는 데이터가 없어 렌더하지 않는다 — 그 자리를 CTA가 대신
- * 채우도록 margin-top:auto로 패널 하단에 붙인다(Paper는 최근 변화 섹션의
- * flexGrow:1로 CTA를 밀어내렸다, 여기선 그 섹션 자체가 없어 CTA가 직접 민다). */
+/* §10-4 최근 변화(보드 15 §2.5, WP-G) — 엔티티 타임라인. Paper 실측(3EV-0):
+ * 컨테이너 flexGrow:1(패널의 나머지 세로 공간을 먹어 CTA를 바닥으로 민다),
+ * 패딩 14/16px, gap 10px, 날짜열 44px 고정폭 Geist Mono. 색·스케일 전부 기존
+ * 토큰으로 커버된다(--text-2xs/--text-xs, --color-k-hint/-ghost/-soft — 새 토큰
+ * 없음). 행이 없거나 IPC가 실패하면 controller.js가 섹션 자체를 걷어낸다(§0
+ * 정책) — 그 경우 CTA는 위로 붙는데, 이는 못 채운 자리를 숨기지 않는 정직한
+ * 결과다. */
+.panel-recent-changes {
+  display: flex; flex-direction: column; flex: 1 1 0;
+  padding: 14px 16px; gap: 10px;
+}
+.panel-recent-changes-title {
+  font-family: var(--font-body); font-size: var(--text-2xs); color: var(--color-k-hint);
+  letter-spacing: 0.1em;
+}
+.panel-change-row { display: flex; align-items: baseline; gap: 9px; }
+.panel-change-date {
+  width: 44px; flex-shrink: 0;
+  font-family: var(--font-mono); font-size: var(--text-2xs); line-height: 12px;
+  color: var(--color-k-ghost);
+}
+.panel-change-desc {
+  flex: 1 1 0;
+  font-family: var(--font-body); font-size: var(--text-xs); line-height: 17px;
+  color: var(--color-k-soft);
+}
+
+/* CTA — 위 §10-4 섹션의 flexGrow:1이 CTA를 바닥에 붙인다(Paper 그대로). 예전
+ * margin-top:auto 임시조치는 "§10-4를 렌더하지 않는다"는 전제가 섹션 실렌더로
+ * 사라져 걷어냈다(G-G7). */
 .panel-cta {
-  appearance: none; border: none; cursor: pointer; margin-top: auto; flex-shrink: 0;
+  appearance: none; border: none; cursor: pointer; flex-shrink: 0;
   background: var(--color-brand); border-top: 1px solid var(--color-k-line);
   padding: 9px 14px; text-align: center;
   font-family: var(--font-strong); font-size: var(--text-sm); color: #fff;

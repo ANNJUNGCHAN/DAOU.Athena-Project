@@ -1395,6 +1395,14 @@ const graphMode = window.AthenaLib.GraphModeController.createGraphModeController
   // (이중 fetch 금지) — graphSummaryTable은 이 파일 아래에서 선언되지만 이
   // 함수는 나중에(사용자가 실제로 노드를 고를 때) 불리므로 문제없다.
   getProfileSummaryEntries: () => graphSummaryTable.getEntries(),
+  // §10-4 최근 변화(엔티티 타임라인, WP-G) — cluster-map처럼 부팅 시 1회
+  // 캐시하는 패턴을 못 쓴다(entity_id별 호출당 API). 실패는 예외로 알린다 —
+  // fetchClusterMap과 같은 이유({ok:false}가 정상 응답으로 흐르면 안 된다).
+  fetchEntityTimeline: async (entityId) => {
+    const res = await window.athena.invoke('athena:brain-entity-timeline', { entityId });
+    if (!res || !res.ok) throw new Error((res && res.error) || '엔티티 타임라인을 받지 못했다');
+    return res.events;
+  },
 });
 window.AthenaGraphMode = graphMode;
 // 부팅을 순수 답변 모드로 고정한다(US-007) — 정적 HTML의 기본 hidden 속성이
