@@ -64,7 +64,7 @@
       </div>
       <div class="sidebar-divider"></div>
       <!-- 모드 네비(셸 v2 — Paper 보드 37·38·44, 2026-08-27 검토 결정): 모드 전환은
-           여기가 소유한다. 스트립의 모드 필(#graphPill)은 표시 전용이 됐다.
+           여기가 소유한다. 스트립 필 줄은 보드 45 v5에서 전면 제거됐다.
            에이전트는 준비 중(보드 39~43) — 없는 기능을 되는 척 않는다(disabled). -->
       <div id="sidebarModes" class="sidebar-modes" data-mode="chat">
         <div class="sidebar-modes-label">모드</div>
@@ -116,6 +116,12 @@
          (GLOSSARY §1). shell.css의 flex-shrink:0이 그 계약이다. -->
     <section id="chatRegion" class="shell-region">
       <div id="app" class="app glass" hidden>
+        <!-- 모드별 채팅 헤더(보드 38, 2026-08-27) — 그래프 모드 전용. 보드 37
+             실측: 대화 모드에는 헤더가 없다. graph-mode controller가 hidden 소유. -->
+        <div id="chatModeHead" class="chat-mode-head" hidden>
+          <span class="chat-mode-head-title">그래프에게 묻기</span>
+          <span class="chat-mode-head-sub">답이 캔버스를 바꿉니다</span>
+        </div>
         <!-- 알림 파생 방 머리(Paper 보드 08) — 사이드바 "알림에서" 항목을 선택했을 때만
              보인다. 메인 대화와 섞이지 않는다는 문구가 계약이다 — lib/sidebar.js가
              채운다. -->
@@ -130,30 +136,17 @@
         </div>
         <div class="history" id="history"></div>
 
-        <!-- 커맨드 카드(AT-CH-001R, Paper 47쪽) — 입력줄과 컨트롤 스트립의 2행
-             구조. 스트립에는 **실기능만** 올린다(soul.md §7 — 없는 기능을 암시하는
-             장식 UI 금지): 점(설정)·CLI 필·모델 필·루틴 칩(활성 감시 수). -->
+        <!-- 커맨드 카드(보드 45 v5, 2026-08-27) — 스트립 필 줄은 전면 제거됐다.
+             입력부는 첨부 칩(있을 때만) + 입력행(키우미·입력줄·잠금 힌트)뿐이다.
+             모델 진입=키우미 메뉴, 감시 수=사이드바 에이전트 배지(예정). -->
         <div class="input-stack" id="inputStack">
           <!-- 첨부 칩(2026-08-27, 코덱스 UI 이식) — 키우미 메뉴로 고른 파일/폴더가
                경로 텍스트 대신 칩으로 쌓인다. 전송 시 프롬프트에 동봉되고 비워진다. -->
           <div id="attachChips" class="attach-chips" hidden></div>
           <div class="input-row">
-            <input id="input" class="input" placeholder="무엇이든 물어보세요" autofocus />
-            <div class="lock-hint" id="lockHint" hidden>
-              <span id="lockText">답변 중…</span>
-              <span class="esc">ESC 중단</span>
-            </div>
-          </div>
-          <div class="control-strip" id="controlStrip">
-            <!-- 점은 두 역할을 겸한다: 대화 상태 표시 · 답변⇄그래프 모드 전환
-                 (Paper 보드 05, 2026-08-26). 설정 진입은 사이드바 계정 메뉴(보드
-                 16, lib/sidebar.js registerOpenSettings)로 옮겼다 — 커맨드바
-                 ("설정", "계좌 관리")가 동등한 진입로이고, 점으로만 갈 수 있으면
-                 soul.md §8 탈락 조건이다. 세 번째였던 "캔버스 확장 애니메이션의
-                 중심점"은 리프 1.2.1에서 사라졌다 — 확장할 창이 없다. -->
-            <!-- 2026-08-27(Paper 보드 45): 점 → 키우미. 클릭은 모드 전환이 아니라
-                 옵션 메뉴다 — 전환은 모드 칩(#graphPill)·(v2)사이드바 네비의 몫.
-                 얼굴은 지금 모드를 수동 표시한다(대화=눈 · 그래프=온톨로지 별자리). -->
+            <!-- 키우미(보드 45 v5, 2026-08-27 확정) — 입력창 안 왼쪽, 코덱스 '+' 자리.
+                 클릭=옵션 메뉴(파일·폴더 첨부, 모델 설정). 전환은 사이드바 모드 네비.
+                 얼굴은 지금 모드를 수동 표시(대화=눈 · 그래프=온톨로지 별자리). -->
             <button
               class="dot kiumi"
               id="dot"
@@ -163,8 +156,6 @@
               data-mode="chat"
             >
               <span class="kiumi-visor" aria-hidden="true">
-                <!-- 색은 CSS(.kiumi-visor의 color)가 정한다 — 보드 38 스트립 실측:
-                     흰 몸체·브랜드 테두리에 바이저색 도형(바이저 채움 없음). -->
                 <svg class="kiumi-face kiumi-face-chat" width="13" height="12" viewBox="0 0 17 16" xmlns="http://www.w3.org/2000/svg">
                   <rect x="5" y="4.5" width="3" height="7" rx="1.5" fill="currentColor"/>
                   <rect x="9.5" y="4.5" width="3" height="7" rx="1.5" fill="currentColor"/>
@@ -180,19 +171,11 @@
                 </svg>
               </span>
             </button>
-            <!-- CLI 필 — runQuery의 실제 실행기(claude -p)를 표시한다. 클릭=설정 모드
-                 (전환·계정은 거기서). 표시가 실행기와 어긋나면 정보 정직성 위반이다. -->
-            <button id="cliPill" class="pill" type="button" title="활성 CLI — 설정에서 전환">CLAUDE</button>
-            <!-- 루틴 칩 — 활성 감시 수. 백엔드 미기동이면 숨긴다(없는 감시를 있다고 표시하지 않는다). -->
-            <span id="routineChip" class="routine-chip" hidden></span>
-            <!-- 모드 필(셸 v2 — Paper 보드 38, 2026-08-27): 지금 모드를 브랜드색으로
-                 표시만 한다. 전환은 사이드바 모드 네비(#sidebarModes)가 소유 —
-                 브레인이 꺼져 있어도 숨기지 않는다(못 쓰는 이유는 캔버스 안에서
-                 설명한다 — graphMode.setAvailable 참고). -->
-            <button id="graphPill" class="pill pill-mode" type="button" title="지금 모드 — 전환은 사이드바 모드에서">대화</button>
-            <span class="strip-spacer"></span>
-            <!-- 모델 필 — athena:model-get 실상태 표시, 클릭=인라인 팝오버(새 창 아님). -->
-            <button id="modelPill" class="pill" type="button" title="모델 · 추론 노력">기본 모델</button>
+            <input id="input" class="input" placeholder="무엇이든 물어보세요" autofocus />
+            <div class="lock-hint" id="lockHint" hidden>
+              <span id="lockText">답변 중…</span>
+              <span class="esc">ESC 중단</span>
+            </div>
           </div>
           <!-- 모델 팝오버 — 창 안 오버레이. 유리 0.45+blur(카드 단계), 무채색.
                페이드 등장 금지(soul.md §7) — display 토글로 나타난다. -->

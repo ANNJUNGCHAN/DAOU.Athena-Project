@@ -52,6 +52,8 @@ function createGraphModeController(deps) {
     if (elements.modeNav) elements.modeNav.dataset.mode = graphView ? 'graph' : 'chat';
     // 캔버스 빈 상태의 모드별 변형(보드 46) — CSS가 이 축으로 하나만 보여준다.
     if (elements.canvasRegion) elements.canvasRegion.dataset.mode = graphView ? 'graph' : 'chat';
+    // 모드별 채팅 헤더(보드 38) — 그래프 모드 전용. 대화 모드엔 헤더가 없다(보드 37).
+    if (elements.chatHead) elements.chatHead.hidden = !graphView;
   }
 
   // 브레인이 안 됐는데 그래프 모드로 들어오면 빈 캔버스 대신 이렇게 정직하게

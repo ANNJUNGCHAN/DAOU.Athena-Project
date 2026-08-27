@@ -163,24 +163,21 @@ async function main() {
     await wait(500);
   });
 
-  // ---------- (4) 답변⇄그래프 모드 ----------
-  // 2026-08-26: 모드 칩(#graphPill)은 이제 상시 보인다(Paper 보드 05) — 브레인
-  // 미준비가 진입 자체를 막지 않는다. 준비됐으면 실제 그래프가, 안 됐으면
-  // 캔버스 안에 정직한 안내(controller.js renderUnavailable)가 뜬다 — 둘 다
-  // 성공이고, "칩이 숨어서 못 들어감"만 실패다.
+  // ---------- (4) 대화⇄그래프 모드 ----------
+  // 2026-08-27(보드 45 v5): 스트립 필 줄은 전면 제거 — 진입로는 사이드바 모드
+  // 네비 하나다. 브레인 미준비가 진입 자체를 막지 않는다. 준비됐으면 실제
+  // 그래프가, 안 됐으면 캔버스 안에 정직한 안내(renderUnavailable)가 뜬다 —
+  // 둘 다 성공이고, "네비가 없어 못 들어감"만 실패다.
   await step('04-그래프 모드', async () => {
-    await shot(shellWin, '04a-canvas-summary.png', '토글 전 — 답변(카드 그리드) 모드');
+    await shot(shellWin, '04a-canvas-summary.png', '토글 전 — 대화(카드 그리드) 모드');
     const graphProbe = await shellWin.webContents.executeJavaScript(`(async () => {
-      const pill = document.getElementById('graphPill');
       const container = document.getElementById('graphCanvas');
+      const modeNav = document.getElementById('sidebarModes');
+      const nav = document.getElementById('modeNavGraph');
       const status = await window.athena.invoke('athena:brain-status').catch(() => null);
       const brainReady = Boolean(status && status.ok && status.ready);
-      if (!pill) return { wired: false, reason: 'no-pill', brainReady };
-      if (pill.hidden) return { wired: false, reason: 'hidden-though-always-visible', brainReady };
-      const labelBefore = pill.textContent;
-      // 셸 v2(2026-08-27) — 전환은 사이드바 모드 네비가 소유한다. 필은 표시 전용.
-      const nav = document.getElementById('modeNavGraph');
-      if (!nav) return { wired: false, reason: 'missing-mode-nav', brainReady };
+      if (!nav || !modeNav) return { wired: false, reason: 'missing-mode-nav', brainReady };
+      const modeBefore = modeNav.dataset.mode;
       nav.click();
       const deadline = Date.now() + 4000;
       while (Date.now() < deadline) {
@@ -191,14 +188,14 @@ async function main() {
         wired: true,
         opened: !container.hidden,
         brainReady,
-        labelBefore,
-        labelAfter: pill.textContent,
+        modeBefore,
+        modeAfter: modeNav.dataset.mode,
         containerText: container.textContent,
       };
     })()`);
     fs.writeFileSync(path.join(OUT_DIR, '04-graph-probe.json'), JSON.stringify(graphProbe, null, 2));
     if (!graphProbe.wired) {
-      results.push({ name: '04-graph-mode', ok: false, file: null, note: `모드 칩 진입로가 막혀 있다 — ${JSON.stringify(graphProbe)}` });
+      results.push({ name: '04-graph-mode', ok: false, file: null, note: `모드 네비 진입로가 막혀 있다 — ${JSON.stringify(graphProbe)}` });
       return;
     }
     if (!graphProbe.opened) {

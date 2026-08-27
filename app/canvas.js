@@ -1407,16 +1407,15 @@ function fmtWon(raw) {
 // --- 그래프 모드 배선 (leaf 8 / W2-3) ---------------------------------------
 //
 // 상태·배치·그리기는 lib/graph-mode/**가 순수하게 갖고 있고, 여기서는 DOM과
-// 백엔드에만 잇는다. 모드 칩(#graphPill)은 상시 보인다(Paper 보드 05) — 브레인이
-// 꺼져 있어도 그래프 모드 자체는 열 수 있고, 못 쓰는 이유는 캔버스 안에서 정직하게
-// 보여준다(controller.js의 renderUnavailable).
+// 백엔드에만 잇는다. 전환 진입로는 사이드바 모드 네비 하나다(보드 45 v5에서
+// 스트립 필 줄 전면 제거) — 브레인이 꺼져 있어도 그래프 모드 자체는 열 수 있고,
+// 못 쓰는 이유는 캔버스 안에서 정직하게 보여준다(controller.js renderUnavailable).
 const graphMode = window.AthenaLib.GraphModeController.createGraphModeController({
   store: window.AthenaLib.GraphModeStore,
   layout: window.AthenaLib.GraphClusterLayout,
   render: window.AthenaLib.GraphRender,
   prefs: window.AthenaLib.GraphModePrefs,
   elements: {
-    pill: document.getElementById('graphPill'),
     summary: document.getElementById('mosaic'),
     graph: document.getElementById('graphCanvas'),
     // 보드 07 성향 신호 표 — 그래프 표면이라 답변 모드에선 숨는다(아래 §요약 뷰
@@ -1428,6 +1427,8 @@ const graphMode = window.AthenaLib.GraphModeController.createGraphModeController
     modeNav: document.getElementById('sidebarModes'),
     // 캔버스 영역 — 빈 상태 모드별 변형(보드 46)을 CSS로 가르는 data-mode 축.
     canvasRegion: document.getElementById('canvasRegion'),
+    // 모드별 채팅 헤더(보드 38) — 그래프 모드에서만 보인다.
+    chatHead: document.getElementById('chatModeHead'),
   },
   // main은 실패를 {ok:false}로 돌려준다. 컨트롤러는 **예외**로 실패를 안다 —
   // 여기서 바꿔주지 않으면 `{ok:false}`가 정상 응답으로 흘러 빈 그래프가 그려지고,
