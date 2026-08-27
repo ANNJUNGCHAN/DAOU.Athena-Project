@@ -387,6 +387,9 @@ async def list_routine_runs(request: Request, routine_id: str) -> dict[str, Any]
             r["briefing_title"] = briefing.get("title")
             r["briefing_content"] = briefing.get("content")
             r["truncated"] = briefing.get("truncated", False)
+            # 39번 상세 패널 "실행 위치"(6단계) — engagement의 briefed destination과
+            # 같은 보고(briefing-result)에서 기록된 값이라 별도 스캔 없이 여기서 노출.
+            r["briefing_destination"] = briefing.get("destination")
     # 최근 30건(옛 jsonl은 duration_ms 키 자체가 없을 수 있다 — 하위호환 방어).
     recent = rows[-30:]
     durations = [

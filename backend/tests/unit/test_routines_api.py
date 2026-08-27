@@ -829,6 +829,7 @@ def test_runs_merges_briefing_content_by_fired_at(app_client):
             "status": "ok",
             "title": "아침 브리핑",
             "content": "오늘의 요약",
+            "destination": "canvas",
         },
     )
 
@@ -837,6 +838,7 @@ def test_runs_merges_briefing_content_by_fired_at(app_client):
     assert merged["briefing_title"] == "아침 브리핑"
     assert merged["briefing_content"] == "오늘의 요약"
     assert merged["truncated"] is False
+    assert merged["briefing_destination"] == "canvas"  # 39번 "실행 위치"(6단계)
 
 
 def test_briefing_budget_counts_today_briefed_only(app_client):

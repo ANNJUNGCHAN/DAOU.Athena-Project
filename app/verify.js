@@ -3202,6 +3202,15 @@ app.whenReady().then(async () => {
       { ts: '2026-08-25T07:30:00Z', routine_id: 'fx-hist-1', symbol: '005930', source: 'price.change_rate', verdict: 'near', observed: 87900, threshold: 88000, reason: '근접 — 임계 미달' },
       { ts: '2026-08-26T07:30:00Z', routine_id: 'fx-hist-1', symbol: '005930', source: 'price.change_rate', verdict: 'fired', observed: 88100, threshold: 88000, reason: '조건 도달' },
       { ts: '2026-08-24T07:30:00Z', routine_id: 'fx-hist-1', symbol: '005930', source: 'price.change_rate', verdict: 'suppressed', observed: 88100, threshold: 88000, reason: '쿨다운 중' },
+      // [6단계] 오늘자 브리핑 산출물 행 — 3단계 briefings 병합 필드
+      // (briefing_title/content/truncated/destination)로 41번 카드가 실데이터로
+      // 뜨는지 같은 왕복에서 잰다. ts는 부팅 시각(오늘)이어야 카드가 렌더된다.
+      {
+        ts: new Date().toISOString(), routine_id: 'fx-hist-1', symbol: '005930',
+        source: 'schedule.daily', verdict: 'fired', observed: '07:30', threshold: 'ALL@07:30',
+        reason: '예약 시각 도달(07:30)', briefing_title: '아침 브리핑 검증',
+        briefing_content: '오늘의 요약 본문(검증)', truncated: false, briefing_destination: 'canvas',
+      },
     ];
     ipcMain.removeHandler('athena:routines-list');
     ipcMain.handle('athena:routines-list', async () => ({
@@ -3291,12 +3300,14 @@ app.whenReady().then(async () => {
       assertOk('agent-canvas-10: 브레드크럼 상태 배지가 "활성"이다', historyProbe.breadcrumbBadge === '활성');
       assertOk('agent-canvas-10: 드릴인 진입 시 "작업" 머리가 숨는다', historyProbe.tasksHeadHidden === true);
       assertOk(
+        // [6단계] 오늘자 브리핑 발화 행이 앞에 추가돼 4행이 됐다(최신순 유지).
         'agent-canvas-10: 최근 30회가 GET /{id}/runs 실데이터로 최신순 정렬된다',
-        JSON.stringify(historyProbe.reasons) === JSON.stringify(['조건 도달', '근접 — 임계 미달', '쿨다운 중']),
+        JSON.stringify(historyProbe.reasons)
+          === JSON.stringify(['예약 시각 도달(07:30)', '조건 도달', '근접 — 임계 미달', '쿨다운 중']),
       );
       assertOk(
         'agent-canvas-10: 상태 아이콘이 ledger 실제 verdict 3종만 쓴다(fired=●·near=◐·suppressed=○, AC10)',
-        JSON.stringify(historyProbe.marks) === JSON.stringify(['●', '◐', '○']),
+        JSON.stringify(historyProbe.marks) === JSON.stringify(['●', '●', '◐', '○']),
       );
       assertOk(
         // F-stage5b-FE — "발화→열람"·"이어진 대화"도 라이브로 승격됐다.
@@ -3307,14 +3318,17 @@ app.whenReady().then(async () => {
           && historyProbe.avgTileValue === '7.4s' && historyProbe.fixtureTileCount === 0
           && historyProbe.openedRateValue === '71%' && historyProbe.repliedCountValue === '9건',
       );
+      // [6단계 의도적 반전] 이전 단언은 "카드가 fixture로 뜬다"였다 — 3단계
+      // briefings 스토어의 실데이터로 승격되면서 data-source=live·실제 본문·
+      // 단일 본문 블록(항목 1개)이 정답이 됐다(AC7).
       assertOk(
-        'agent-canvas-10: "오늘 07:30 산출물" 카드가 fixture로 뜬다(생략하지 않는다, 팀 리드 정정)',
-        historyProbe.outputSource === 'fixture' && historyProbe.outputTitle === '# 아침 브리핑 — 8/26 화',
+        'agent-canvas-10: "오늘 산출물" 카드가 실데이터(live)로 뜬다(6단계, fixture 제거)',
+        historyProbe.outputSource === 'live' && historyProbe.outputTitle === '아침 브리핑 검증',
       );
-      assertOk('agent-canvas-10: 산출물 카드 태그가 "캔버스 카드"다', historyProbe.outputTag === '캔버스 카드');
-      assertOk('agent-canvas-10: 산출물 카드 요약 3항목이 뜬다', historyProbe.outputItemCount === 3);
+      assertOk('agent-canvas-10: 산출물 카드 태그가 destination 기반 "캔버스 카드"다', historyProbe.outputTag === '캔버스 카드');
+      assertOk('agent-canvas-10: 산출물 본문은 단일 텍스트 블록이다(지어낸 items 구조 아님)', historyProbe.outputItemCount === 1);
       assertOk(
-        'agent-canvas-10: 산출물 카드 버튼이 "캔버스에서 열기"·"채팅으로"이고 뒷받침 데이터가 없어 둘 다 비활성이다(P3)',
+        'agent-canvas-10: 산출물 카드 버튼이 "캔버스에서 열기"·"채팅으로"이고 재기동 후 복원 불가라 둘 다 비활성이다(P3)',
         JSON.stringify(historyProbe.outputBtnLabels) === JSON.stringify(['캔버스에서 열기', '채팅으로'])
           && historyProbe.outputBtnsAllDisabled === true,
       );
