@@ -651,8 +651,8 @@ html, body { background: transparent; }
 }
 .input-row {
   flex-shrink: 0;
-  display: flex; align-items: center; gap: 20px;
-  padding: 0 24px;
+  display: flex; align-items: center; gap: 16px;
+  padding: 0 18px;
   height: 44px;
   /* 경계는 어둠이 아니라 광량으로 세운다(2026-08-22 사용자 지적 "검은 선" —
    * liquid-glass.md 렌징 · soul.md §7). 세기는 보드 37(9ID-0) 실측 #FFFFFF66. */
@@ -747,16 +747,17 @@ html, body { background: transparent; }
   .kiumi-face-chat rect, .kiumi-face-graph circle { animation: none; }
 }
 /* 키우미 메뉴 — 위 .model-popover 라이트 기반을 쓰고 위치만 왼쪽 앵커.
- * 기하는 보드 45 v5(CLE-0) 실측: 260 고정 · 8px 라운드 · 항목 간 gap 없음(패딩이 리듬). */
+ * 기하는 보드 45 v5(CLE-0) 실측 · Paper 토큰 스케일(rounded-lg=12 · spacing-4=12):
+ * 260 고정 · 12px 라운드 · 항목 간 gap 없음(패딩이 리듬). */
 .kiumi-menu {
   right: auto; left: 14px;
   width: 260px;
   gap: 0;
-  border-radius: 8px;
+  border-radius: 12px;
   box-shadow: 0 14px 34px rgb(16 19 26 / 13%);
 }
 .kiumi-menu .km-section {
-  padding: 6px 16px 2px;
+  padding: 6px 12px 2px;
   font-size: var(--text-2xs);
   letter-spacing: 0.06em;
   color: rgb(16 19 26 / 35%);
@@ -814,9 +815,9 @@ html, body { background: transparent; }
 .attach-chip-rm:hover { color: #10131a; }
 
 .kiumi-menu .km-item {
-  display: flex; align-items: center; gap: 12px;
+  display: flex; align-items: center; gap: 10px;
   width: 100%; text-align: left;
-  padding: 8px 16px; border-radius: 6px;
+  padding: 8px 12px; border-radius: 8px;
   background: none; border: none; appearance: none; cursor: pointer;
   color: #10131a; font: inherit;
 }
@@ -824,7 +825,7 @@ html, body { background: transparent; }
   background: rgb(16 19 26 / 6%);
 }
 .kiumi-menu .km-ic {
-  width: 20px; flex-shrink: 0; text-align: center;
+  width: 16px; flex-shrink: 0; text-align: center;
   color: #2F3BA8; /* 바이저색 — 보드 45 v5 아이콘 어휘 */
   font-size: var(--text-sm); line-height: 1.1;
 }
