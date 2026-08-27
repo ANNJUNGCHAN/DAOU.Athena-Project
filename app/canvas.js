@@ -611,13 +611,13 @@ function renderMcpTable(envelope) {
   const kindRender = window.AthenaLib.CardKinds.resolve(title);
   const built = kindRender && kindRender(envelope);
   if (built) {
-    const { card, body } = makeCard('mcp-table', title, envelope.layout, envelope.correlation, subtitle);
+    const { card, body } = makeCard('mcp-table', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope));
     stampPaperScreen(card, envelope);
     body.appendChild(built);
     if (title === '시세') wireQuoteRealtime(card, built, envelope);
     return card;
   }
-  const { card, body } = makeCard('mcp-table', title, envelope.layout, envelope.correlation, subtitle);
+  const { card, body } = makeCard('mcp-table', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope));
   stampPaperScreen(card, envelope);
   const rawCols = (envelope.data && Array.isArray(envelope.data.columns)) ? envelope.data.columns : [];
   const rows = (envelope.data && Array.isArray(envelope.data.rows)) ? envelope.data.rows : [];
@@ -732,12 +732,12 @@ function renderFactsCard(envelope) {
   const kindRender = window.AthenaLib.CardKinds.resolve(title);
   const built = kindRender && kindRender(envelope);
   if (built) {
-    const { card, body } = makeCard('facts', title, envelope.layout, envelope.correlation, subtitle);
+    const { card, body } = makeCard('facts', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope));
     stampPaperScreen(card, envelope);
     body.appendChild(built);
     return card;
   }
-  const { card, body } = makeCard('facts', title, envelope.layout, envelope.correlation, subtitle);
+  const { card, body } = makeCard('facts', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope));
   stampPaperScreen(card, envelope);
   const fields = (envelope.data && Array.isArray(envelope.data.fields)) ? envelope.data.fields : [];
   if (!fields.length) {
@@ -765,12 +765,12 @@ function renderCompoundCard(envelope) {
   const kindRender = window.AthenaLib.CardKinds.resolve(title);
   const built = kindRender && kindRender(envelope);
   if (built) {
-    const { card, body } = makeCard('compound', title, envelope.layout, envelope.correlation, subtitle);
+    const { card, body } = makeCard('compound', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope));
     stampPaperScreen(card, envelope);
     body.appendChild(built);
     return card;
   }
-  const { card, body } = makeCard('compound', title, envelope.layout, envelope.correlation, subtitle);
+  const { card, body } = makeCard('compound', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope));
   stampPaperScreen(card, envelope);
   const data = (envelope.data && typeof envelope.data === 'object') ? envelope.data : {};
   const header = Array.isArray(data.header) ? data.header : [];
@@ -990,7 +990,7 @@ async function renderLiveChart(envelope) {
   try {
     descriptor = describeAitsChartPanel(data, envelope, 'live');
   } catch (err) {
-    const { card, body } = makeCard('chart', title, envelope.layout, envelope.correlation, subtitle);
+    const { card, body } = makeCard('chart', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope));
     stampPaperScreen(card, envelope);
     card.dataset.renderState = 'error';
     body.appendChild(errorNote(`AITS 차트 계약 오류 — ${err && err.message ? err.message : String(err)}`));
@@ -998,7 +998,7 @@ async function renderLiveChart(envelope) {
   }
   const reloaded = await reloadExistingAitsChartPanel(descriptor, envelope);
   if (reloaded) return reloaded;
-  const { card, body } = makeCard('chart', title, envelope.layout, envelope.correlation, subtitle);
+  const { card, body } = makeCard('chart', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope));
   stampPaperScreen(card, envelope);
   // 카드 v3(.omc/state/card-v3-plan.md §2.2) 카드종 후킹 — 차트 전용 변형. 다른 3곳
   // (renderFactsCard/renderMcpTable/renderCompoundCard)은 renderFn이 body 전체를
@@ -1035,7 +1035,7 @@ async function renderLiveChart(envelope) {
 }
 
 function renderFreeCanvas(envelope) {
-  const { card, body } = makeCard('free', envelope.caption || '자유 카드', envelope.layout, envelope.correlation);
+  const { card, body } = makeCard('free', envelope.caption || '자유 카드', envelope.layout, envelope.correlation, undefined, cardStkCd(envelope));
   if (envelope.fell_back) {
     const note = document.createElement('div');
     note.className = 'fin-meta';
@@ -1153,7 +1153,17 @@ function enforceHeightBudget() {
   }
 }
 
-function makeCard(type, title, layoutHint, correlation, subtitle) {
+// 대화 경로 카드 공존 키(P2, 2026-08-27) — envelope.stk_cd(backend 53ece06, 시장
+// 데이터 3도메인(charts·stockinfo·quotes) 봉인)가 있으면 makeCard 교체 판정에
+// 종목코드까지 쓴다. "삼성전자 시세"·"SK하이닉스 시세"처럼 같은 카드종이 다른
+// 종목이면 공존해야 하는데, 옛 판은 타입만 보고 무조건 교체해 먼저 그린 카드가
+// 사라졌다(실측: datasets/eval-runs/2026-08-27-intraday-ui-clean/).
+function cardStkCd(envelope) {
+  const v = envelope && envelope.stk_cd;
+  return typeof v === 'string' && v.trim() ? v.trim() : null;
+}
+
+function makeCard(type, title, layoutHint, correlation, subtitle, stkCd) {
   const isDatasetCard = isValidCorrelation(correlation);
   if (isDatasetCard && activeDatasetId !== correlation.dataset_id) {
     for (const prior of grid.querySelectorAll('.card[data-dataset-id]')) {
@@ -1167,7 +1177,14 @@ function makeCard(type, title, layoutHint, correlation, subtitle) {
       && candidate.dataset.itemId === correlation.item_id
       && Number(candidate.dataset.ordinal) === correlation.ordinal
     ))
-    : Array.from(grid.querySelectorAll(`.card.${type}`)).find((candidate) => !candidate.dataset.datasetId);
+    : Array.from(grid.querySelectorAll(`.card.${type}`)).find((candidate) => {
+      if (candidate.dataset.datasetId) return false;
+      // stk_cd 없는 요청(종목코드 자리가 없는 카드종·구버전 envelope)은 기존
+      // 동작 그대로 — 동일 타입이면 무조건 교체(하위 호환).
+      if (!stkCd) return true;
+      // stk_cd 있는 요청은 같은 종목 카드만 교체 대상 — 다른 종목은 공존한다.
+      return candidate.dataset.stkCd === stkCd;
+    });
   const activeDatasetCardCount = Array.from(grid.querySelectorAll('.card[data-dataset-id]'))
     .filter((candidate) => candidate.dataset.datasetId === correlation.dataset_id).length;
   if (isDatasetCard && !existing && activeDatasetCardCount >= 6) {
@@ -1182,6 +1199,8 @@ function makeCard(type, title, layoutHint, correlation, subtitle) {
     card.dataset.datasetId = correlation.dataset_id;
     card.dataset.itemId = correlation.item_id;
     card.dataset.ordinal = String(correlation.ordinal);
+  } else if (stkCd) {
+    card.dataset.stkCd = stkCd;
   }
   const head = document.createElement('div');
   head.className = 'card-head';
