@@ -277,6 +277,13 @@ async def render_with_plan(
     }
     if renderer_id is not None:
         payload["renderer_id"] = renderer_id
+    # 서명된 plan이 봉인한 종목 식별자(canvas_context.symbol)를 봉투에 싣는다 —
+    # api/canvas_push.py 성공 봉투와 같은 규칙. 앱의 시세류 실시간 구독
+    # (main.js extractLiveQuoteSymbol)이 이 필드를 본다.
+    canvas_context = call_payload.get("canvas_context")
+    sealed_symbol = canvas_context.get("symbol") if isinstance(canvas_context, dict) else None
+    if isinstance(sealed_symbol, str) and sealed_symbol:
+        payload["stk_cd"] = sealed_symbol
 
     # 봉투는 사이드 채널(POST /canvas/push → 앱 WS)로만 민다. tool result에는
     # 데이터 요약도 싣지 않는다 — 성공한 캔버스 자체가 기본 답이다.
