@@ -1215,7 +1215,7 @@ app.whenReady().then(async () => {
       const cs = getComputedStyle(el);
       return (cs.getPropertyValue('app-region') || cs.getPropertyValue('-webkit-app-region') || '').trim();
     };
-    return { strip: reg('#dragStrip'), controlStrip: reg('#controlStrip'),
+    return { strip: reg('#dragStrip'),
              winBtn: reg('.win-btn'), history: reg('#history'), grid: reg('#grid'),
              settingsHead: reg('#settings .settings-head') };
   })()`);
@@ -1243,7 +1243,6 @@ app.whenReady().then(async () => {
   assertOk('dragStandard: 크기 불변(5e0a9ab 회귀 가드 계승)', report.dragStandard.sizeUnchanged === true);
   assertOk('dragStandard: 셸 맨 위 타이틀바 = 캡션(drag)', appRegions.strip === 'drag');
   assertOk('dragStandard: 창 버튼 = no-drag 구멍', appRegions.winBtn === 'no-drag');
-  assertOk('dragStandard: 컨트롤 스트립은 캡션이 아니다(2026-08-19 개정 — 맨 위만)', appRegions.controlStrip !== 'drag');
   assertOk('dragStandard: 채팅 본문(.history)은 손잡이가 아니다', appRegions.history !== 'drag');
   assertOk('dragStandard: 캔버스 본문(#grid)도 손잡이가 아니다', appRegions.grid !== 'drag');
   assertOk('dragStandard: 설정 헤더 = 캡션(drag)', appRegions.settingsHead === 'drag');

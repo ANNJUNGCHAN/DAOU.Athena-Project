@@ -38,7 +38,6 @@ function payloadTwoClusters(revision) {
 function setup(options) {
   const opts = options || {};
   const elements = {
-    pill: fakeNode('button'),
     summary: fakeNode('div'),
     // graph(가시성 전용)와 graphBody(렌더/측정/클릭위임 전용)를 별개 노드로 둔다 —
     // 스텝0-2 소유권 분리를 fake-dom에서도 그대로 흉내낸다.
@@ -92,7 +91,6 @@ test('처음에는 요약이 보이고 그래프는 숨겨져 있다', () => {
   assert.equal(elements.summary.hidden, false);
   assert.equal(elements.graph.hidden, true);
   assert.equal(elements.summaryTable.hidden, true, '성향 신호 표도 그래프 표면이다 — 답변 모드에선 숨는다');
-  assert.equal(elements.pill.textContent, '대화', '모드 필은 지금 모드를 보여준다(셸 v2 — 보드 38)');
 });
 
 // US-007 — 부팅 시 그래프/답변 모드가 섞여 보이던 실사용 결함의 회귀 가드.
@@ -106,7 +104,6 @@ test('US-007: 브레인이 켜져 있어도 그래프로 토글하기 전엔 그
   assert.equal(elements.graph.hidden, true);
   assert.equal(elements.summaryTable.hidden, true);
   assert.equal(elements.summary.hidden, false);
-  assert.equal(elements.pill.textContent, '대화');
 });
 
 test('토글하면 캔버스 영역이 그래프 기능으로 바뀌고, 기본 서브뷰는 요약 표다(스텝2-보정)', async () => {
@@ -115,7 +112,6 @@ test('토글하면 캔버스 영역이 그래프 기능으로 바뀌고, 기본 
   assert.equal(elements.summary.hidden, true, '요약이 숨는다');
   assert.equal(elements.graph.hidden, true, '기본 서브뷰는 요약이라 지도는 아직 숨어 있다');
   assert.equal(elements.summaryTable.hidden, false, '그래프 모드에선 성향 신호 표가 기본으로 보인다');
-  assert.equal(elements.pill.textContent, '그래프', '모드 칩은 지금 모드를 보여준다');
 });
 
 test('setSurface(지도)로 전환하면 군집 지도가 보이고 그려진다, 요약 표면은 숨는다', async () => {
@@ -188,16 +184,6 @@ test('백엔드가 죽으면 요약으로 돌아간다', async () => {
   assert.equal(elements.summary.hidden, false);
   assert.equal(elements.summaryTable.hidden, true, '요약으로 돌아갔으니 그래프 표면도 같이 숨는다');
   assert.equal(seen.length, 1, '오류를 삼키지 않는다');
-});
-
-test('모드 칩은 브레인 상태와 무관하게 상시 보인다', () => {
-  // 점(대화 상태)·칩(현재 모드) 둘 다 항상 켜져 있다 — 그래프 모드 진입로를
-  // 숨기지 않는다(Paper 보드 05 "모드 칩 상시").
-  const { controller, elements } = setup({ available: false });
-  controller.applyVisibility();
-  assert.equal(elements.pill.hidden, false);
-  controller.setAvailable(true);
-  assert.equal(elements.pill.hidden, false);
 });
 
 test('브레인이 안 됐을 때 지도 서브뷰로 전환하면 캔버스 안에 정직한 안내가 뜬다', async () => {
@@ -445,7 +431,6 @@ test('collapseCluster()로 1단계로 돌아오면 헤더 메타·지도 안내 
 
 test('graphHeaderMeta·mapGuide가 없으면(선택 안 주입) 조용히 넘어간다', async () => {
   const elements = {
-    pill: fakeNode('button'),
     summary: fakeNode('div'),
     graph: fakeNode('div'),
     graphBody: fakeNode('div'),
@@ -516,7 +501,6 @@ test('clearSelection() 후 모든 row에서 is-selected가 빠진다', () => {
 
 test('summaryTable이 없으면(선택 안 주입) 조용히 넘어간다', () => {
   const elements = {
-    pill: fakeNode('button'),
     summary: fakeNode('div'),
     graph: fakeNode('div'),
     graphBody: fakeNode('div'),
@@ -560,7 +544,6 @@ test('applyVisibility()는 graphBody·panel의 hidden을 건드리지 않는다(
 
 test('draw()는 폭/높이를 elements.graphBody.clientWidth/clientHeight에서 읽는다', async () => {
   const elements = {
-    pill: fakeNode('button'),
     summary: fakeNode('div'),
     graph: fakeNode('div'),
     graphBody: fakeNode('div'),
@@ -673,7 +656,7 @@ test('1단계 — surprising-connections의 source_cluster/target_cluster와 겹
   });
   const controller = createGraphModeController({
     store, layout, render: spyRender, prefs: null,
-    elements: { pill: fakeNode('button'), summary: fakeNode('div'), graph: fakeNode('div'), graphBody: fakeNode('div'), summaryTable: fakeNode('div') },
+    elements: { summary: fakeNode('div'), graph: fakeNode('div'), graphBody: fakeNode('div'), summaryTable: fakeNode('div') },
     fetchClusterMap: async () => payload(7),
     getSurprisingConnections: () => connections,
   });
@@ -694,7 +677,7 @@ test('2단계 — surprising-connections의 entity 쌍이 겹치면 render.rende
     },
   });
   const elements = {
-    pill: fakeNode('button'), summary: fakeNode('div'), graph: fakeNode('div'),
+    summary: fakeNode('div'), graph: fakeNode('div'),
     graphBody: fakeNode('div'), summaryTable: fakeNode('div'),
   };
   const controller = createGraphModeController({
@@ -727,7 +710,7 @@ test('2단계 — unnamedClusterWarnEligible/unnamedClusters/clusterName이 plac
     },
   });
   const elements = {
-    pill: fakeNode('button'), summary: fakeNode('div'), graph: fakeNode('div'),
+    summary: fakeNode('div'), graph: fakeNode('div'),
     graphBody: fakeNode('div'), summaryTable: fakeNode('div'),
   };
   const controller = createGraphModeController({

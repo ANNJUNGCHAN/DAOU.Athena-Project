@@ -32,7 +32,7 @@ const MCP_STATE_DIR = path.join(TMP_ROOT, 'mcp-state');
 fs.mkdirSync(MCP_STATE_DIR, { recursive: true });
 process.env.ATHENA_MCP_REGISTRY_PATH = path.join(MCP_STATE_DIR, 'mcp_servers.json');
 
-const { app, ipcMain } = require('electron');
+const { app } = require('electron');
 app.setPath('userData', path.join(TMP_ROOT, 'userData'));
 
 // ---- https 스텁 (계좌 등록 "성공" 경로 전용, appkey==='VERIFY_OK_KEY'일 때만) ----
@@ -98,11 +98,6 @@ async function run() {
   // ---------------- 온보딩 ----------------
   log('onboarding.state.initial', h.onboardingState());
   const layoutBefore = main.getLayout();
-  // 실제 렌더러가 온보딩 확장 때 쓰는 것과 같은 경로(ipcMain.on 핸들러)로
-  // 창을 최대 높이까지 넓힌다 — main.js의 내부 chatHeight 변수도 이 경로를
-  // 통해야 같이 갱신된다(창 bounds를 직접 조작하면 내부 상태와 어긋난다).
-  ipcMain.emit('athena:set-chat-height', {}, { height: layoutBefore.chatMaxH });
-  await wait(50);
   log('onboarding.advance.step2', h.onboardingAdvance(null, { step: 2 }));
   log('onboarding.state.afterStep2', h.onboardingState());
   const heightBeforeStep3Done = main.getWins().shellWin.getBounds().height;

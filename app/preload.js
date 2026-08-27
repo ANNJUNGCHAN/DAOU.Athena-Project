@@ -115,9 +115,7 @@ const SEND_CHANNELS = new Set([
 
 const ON_CHANNELS = new Set([
   'athena:init',
-  'athena:glass-separation',
   'athena:add-canvas',
-  'athena:clear-canvases',
   'athena:add-canvas-live',
   'athena:add-rest-canvas',
   'athena:add-rest-receipt',
