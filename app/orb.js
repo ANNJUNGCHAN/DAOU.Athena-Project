@@ -75,9 +75,14 @@
   const unread = [];
   let current = null;
   let expanded = false;
+  // 접힌 채 도착한 대화 답(board-33⑥) 건수 — unread와 별도 카운터다. unread는
+  // 루틴 이벤트 전용 배열이라 대화 답을 그 안에 넣으면 가짜 루틴 이벤트를
+  // 위장해 넣는 꼴이 된다(정직성 위반) — renderPresence()가 아래에서 둘을
+  // 합산만 하고, 내용물은 절대 안 섞는다.
+  let foldedChatAnswers = 0;
 
   function renderPresence() {
-    const n = unread.length;
+    const n = unread.length + foldedChatAnswers;
     const fired = n > 0;
     $root.dataset.alert = fired ? 'fired' : 'none';
     // 얼굴과 배지는 같은 사실의 두 표현이다 — 한 함수가 같이 정해야 두 곳에서
@@ -715,8 +720,13 @@
     expanded = !!isOpen;
     applyMode();
     if (isOpen && chatModeActive) {
-      // 대화 모드에서는 "펼침 = 확인 처리"가 아니다 — 알림은 다른 방이다
-      // (board-34 "방은 알림에서만 생긴다"). 입력에 바로 포커스만 옮긴다.
+      // 대화 모드에서는 "펼침 = 확인 처리"가 아니다 — 알림(unread, 루틴
+      // 이벤트)은 다른 방이다(board-34 "방은 알림에서만 생긴다"), 그건 그대로
+      // 둔다. 하지만 접힌 채 도착한 대화 답(board-33⑥)은 다르다 — 지금
+      // 펼치는 이 화면(chatModeActive)이 바로 그 턴을 보여주는 화면 자체다
+      // ($chatTurns가 이미 담고 있다). "본 것을 안 봤다고 하지 않는다"가
+      // 여기서는 이 순간 확인 처리하는 쪽이다.
+      if (foldedChatAnswers > 0) { foldedChatAnswers = 0; renderPresence(); }
       $chatInput.focus();
       return;
     }
@@ -990,8 +1000,21 @@
       note.textContent = '전체는 대화창에서 이어집니다';
       answer.line.appendChild(note);
     }
-    if (result && result.ok) triggerDoneFace();
-    else if (result && result.ok === false) triggerFrownFace();
+    if (expanded) {
+      // 펴진 채 실시간으로 지켜본 턴 — 기존 그대로 잠깐 웃고/찡그리고 앰비언트로
+      // 돌아간다(DONE_HOLD). 사용자가 이미 봤으니 지속 배지가 필요 없다.
+      if (result && result.ok) triggerDoneFace();
+      else if (result && result.ok === false) triggerFrownFace();
+    } else {
+      // 접힌 채 도착(board-33⑥, "질의해놓고 접었을 때") — 성공·실패 무관하게
+      // 답이 왔다는 사실 자체가 신호다. DONE_HOLD짜리 일시 표정을 켰다가 몇 초
+      // 뒤 꺼버리면 다시 접힌 동안 생긴 알림이 사라져 버린다 — 그래서 done/
+      // frown 대신 기존 미확인 메커니즘(renderPresence)을 그대로 쓴다. 새 배지
+      // 시스템 0개, unread 배열도 안 건드린다(그건 루틴 전용 — 정직성).
+      foldedChatAnswers += 1;
+      touchActivity();
+      renderPresence();
+    }
     scrollChatToBottom();
     requestPanelHeight();
     if (!$chatInput.disabled) $chatInput.focus();
