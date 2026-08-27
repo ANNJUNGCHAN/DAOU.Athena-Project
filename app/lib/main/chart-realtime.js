@@ -90,26 +90,27 @@ function parseRealFrame(message, tradingDate) {
   return out;
 }
 
-// 0B REG 본문 — generated/runtime.py가 data[].type이 tr_id와 대소문자까지
+// REG 본문 — generated/runtime.py가 data[].type이 tr_id와 대소문자까지
 // 일치할 것을 요구한다(0g/0G 구분 사례). 여기서 문자열을 만들어 맞춘다.
-function buildRegisterBody(symbols) {
+// trId 생략 시 0B(이 모듈의 기본 TR) — 기존 호출부는 그대로 동작한다.
+function buildRegisterBody(symbols, trId = REAL_TR_ID) {
   return {
     trnm: 'REG',
     grp_no: '1',
     refresh: '1',
-    data: symbols.map((symbol) => ({ type: REAL_TR_ID, item: String(symbol) })),
+    data: symbols.map((symbol) => ({ type: trId, item: String(symbol) })),
   };
 }
 
-// 0B REMOVE 본문 — REG와 같은 엔드포인트가 trnm만 보고 키움 WS remove()로
+// REMOVE 본문 — REG와 같은 엔드포인트가 trnm만 보고 키움 WS remove()로
 // 라우팅한다(backend/athena_api/generated/runtime.py, kiwoom/ws_client.py 실측,
 // 2026-08-27). 백엔드 수정 없이 여기서 프레임만 뒤집는다.
-function buildRemoveBody(symbols) {
+function buildRemoveBody(symbols, trId = REAL_TR_ID) {
   return {
     trnm: 'REMOVE',
     grp_no: '1',
     refresh: '1',
-    data: symbols.map((symbol) => ({ type: REAL_TR_ID, item: String(symbol) })),
+    data: symbols.map((symbol) => ({ type: trId, item: String(symbol) })),
   };
 }
 
@@ -118,8 +119,14 @@ function buildRemoveBody(symbols) {
 // main.js ensureChartRealtime/wireQuoteRealtime 쪽 주석 참고). 0→1로 올라갈 때만
 // REG를, 1→0으로 내려갈 때만 REMOVE를 내보낸다 — 둘 다 리미터를 소모하므로
 // 참조가 남아 있는 동안은 조용히 넘어간다.
+//
+// tr 매개화(task #25, 2026-08-27) — 이 레지스트라는 원래 0B 전용이었다. opts.trId로
+// 다른 REAL TR(예: 호가잔량 0D)도 같은 참조 계수 로직을 재사용한다 — 생략하면
+// 이 모듈의 REAL_TR_ID(0B)로 기존 동작 그대로다. 인스턴스마다 refCounts가
+// 독립이므로(호출부가 TR별로 별도 인스턴스를 만든다) 0B/0D 참조가 서로 섞이지 않는다.
 function createRealtimeRegistrar(opts) {
   const o = opts || {};
+  const trId = o.trId || REAL_TR_ID;
   const backendBase = o.backendBase;
   const fetchImpl = o.fetchImpl || globalThis.fetch;
   const account = o.account || null;
@@ -130,10 +137,10 @@ function createRealtimeRegistrar(opts) {
   async function postFrame(trnm, code) {
     const headers = { 'Content-Type': 'application/json' };
     if (account) headers['X-Athena-Account'] = account;
-    const body = trnm === 'REMOVE' ? buildRemoveBody([code]) : buildRegisterBody([code]);
+    const body = trnm === 'REMOVE' ? buildRemoveBody([code], trId) : buildRegisterBody([code], trId);
     let res;
     try {
-      res = await fetchImpl(`${backendBase}/api/v1/websocket/${REAL_TR_ID}`, {
+      res = await fetchImpl(`${backendBase}/api/v1/websocket/${trId}`, {
         method: 'POST', headers, body: JSON.stringify(body),
       });
     } catch (err) {
@@ -171,7 +178,7 @@ function createRealtimeRegistrar(opts) {
     if (!ok) return false;
     const next = (refCounts.get(code) || 0) + 1;
     refCounts.set(code, next);
-    if (next === 1) mdlog(`REAL 0B 등록 — ${code}`);
+    if (next === 1) mdlog(`REAL ${trId} 등록 — ${code}`);
     return true;
   }
 
@@ -193,7 +200,7 @@ function createRealtimeRegistrar(opts) {
     }
     refCounts.delete(code);
     const ok = await postFrame('REMOVE', code);
-    if (ok) mdlog(`REAL 0B 해제 — ${code}`);
+    if (ok) mdlog(`REAL ${trId} 해제 — ${code}`);
     return true;
   }
 

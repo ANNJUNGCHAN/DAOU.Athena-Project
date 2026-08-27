@@ -189,6 +189,41 @@ test('release: 쥔 적 없는 종목의 release는 조용히 무시한다(REMOVE
   assert.equal(calls.length, 0);
 });
 
+test('createRealtimeRegistrar: trId를 넘기면 그 TR로 REG/REMOVE를 보낸다(task #25 — 0D 재사용)', async () => {
+  const calls = [];
+  const reg = createRealtimeRegistrar({
+    backendBase: 'http://127.0.0.1:8010',
+    trId: '0D',
+    fetchImpl: async (url, init) => { calls.push({ url, body: JSON.parse(init.body) }); return { ok: true, status: 200 }; },
+  });
+  assert.equal(await reg.acquire('005930'), true);
+  assert.equal(calls[0].url, 'http://127.0.0.1:8010/api/v1/websocket/0D');
+  assert.equal(calls[0].body.data[0].type, '0D');
+  assert.equal(await reg.release('005930'), true);
+  assert.equal(calls[1].url, 'http://127.0.0.1:8010/api/v1/websocket/0D');
+  assert.equal(calls[1].body.trnm, 'REMOVE');
+});
+
+test('createRealtimeRegistrar: 서로 다른 trId 인스턴스는 참조 계수를 공유하지 않는다', async () => {
+  const calls0B = [];
+  const calls0D = [];
+  const reg0B = createRealtimeRegistrar({
+    backendBase: 'http://x',
+    fetchImpl: async (url, init) => { calls0B.push(JSON.parse(init.body)); return { ok: true, status: 200 }; },
+  });
+  const reg0D = createRealtimeRegistrar({
+    backendBase: 'http://x',
+    trId: '0D',
+    fetchImpl: async (url, init) => { calls0D.push(JSON.parse(init.body)); return { ok: true, status: 200 }; },
+  });
+  await reg0B.acquire('005930');
+  assert.equal(reg0D.isRegistered('005930'), false); // 같은 종목이어도 TR이 다르면 별개 구독이다
+  assert.equal(calls0D.length, 0);
+  await reg0D.acquire('005930');
+  assert.equal(calls0B.length, 1);
+  assert.equal(calls0D.length, 1);
+});
+
 test('release: REMOVE가 실패해도 로컬 카운트는 0으로 내려간다(fail-open)', async () => {
   const reg = createRealtimeRegistrar({
     backendBase: 'http://x',
