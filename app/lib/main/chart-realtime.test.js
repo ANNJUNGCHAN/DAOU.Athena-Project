@@ -4,7 +4,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const {
-  parseRealTick, parseRealFrame, buildRegisterBody, kstToEpochSec, kstTradingDate,
+  parseRealTick, parseRealFrame, buildRegisterBody, buildRemoveBody, kstToEpochSec, kstTradingDate,
   createRealtimeRegistrar,
 } = require('./chart-realtime');
 
@@ -80,36 +80,103 @@ test('buildRegisterBody: data[].type이 tr_id와 정확히 일치한다', () => 
   });
 });
 
-test('createRealtimeRegistrar: 같은 종목은 한 번만 등록한다(REG는 리미터 소모)', async () => {
+test('buildRemoveBody: trnm만 REMOVE로 바뀌고 나머지는 REG와 같은 모양이다', () => {
+  // 같은 엔드포인트가 trnm만 보고 REG/REMOVE를 가른다(runtime.py 실측) — data 모양은 공유한다.
+  assert.deepEqual(buildRemoveBody(['005930']), {
+    trnm: 'REMOVE', grp_no: '1', refresh: '1', data: [{ type: '0B', item: '005930' }],
+  });
+});
+
+test('acquire: 같은 종목은 한 번만 REG를 보낸다(REG는 리미터 소모)', async () => {
   const calls = [];
   const reg = createRealtimeRegistrar({
     backendBase: 'http://127.0.0.1:8010',
     fetchImpl: async (url, init) => { calls.push({ url, body: JSON.parse(init.body) }); return { ok: true, status: 200 }; },
   });
-  assert.equal(await reg.ensureSymbol('005930'), true);
-  assert.equal(await reg.ensureSymbol('005930'), true);
+  assert.equal(await reg.acquire('005930'), true);
+  assert.equal(await reg.acquire('005930'), true);
   assert.equal(calls.length, 1);
   assert.equal(calls[0].url, 'http://127.0.0.1:8010/api/v1/websocket/0B');
+  assert.equal(calls[0].body.trnm, 'REG');
+  assert.equal(reg.refCount('005930'), 2);
   assert.equal(reg.size(), 1);
 });
 
-test('createRealtimeRegistrar: 거부되면 등록으로 치지 않는다 — 다음에 다시 시도한다', async () => {
+test('acquire: 거부되면 등록으로 치지 않는다 — 다음에 다시 시도한다', async () => {
   let n = 0;
   const reg = createRealtimeRegistrar({
     backendBase: 'http://x',
     fetchImpl: async () => { n += 1; return { ok: n > 1, status: n > 1 ? 200 : 422 }; },
   });
-  assert.equal(await reg.ensureSymbol('005930'), false);
+  assert.equal(await reg.acquire('005930'), false);
   assert.equal(reg.isRegistered('005930'), false);
-  assert.equal(await reg.ensureSymbol('005930'), true);
+  assert.equal(await reg.acquire('005930'), true);
   assert.equal(n, 2);
 });
 
-test('createRealtimeRegistrar: 네트워크 실패도 조용히 성공으로 만들지 않는다', async () => {
+test('acquire: 네트워크 실패도 조용히 성공으로 만들지 않는다', async () => {
   const reg = createRealtimeRegistrar({
     backendBase: 'http://x',
     fetchImpl: async () => { throw new Error('ECONNREFUSED'); },
   });
-  assert.equal(await reg.ensureSymbol('005930'), false);
+  assert.equal(await reg.acquire('005930'), false);
   assert.equal(reg.size(), 0);
+});
+
+test('release: 카드 2장 중 1장만 닫으면 참조가 남아 REMOVE를 안 보낸다', async () => {
+  const calls = [];
+  const reg = createRealtimeRegistrar({
+    backendBase: 'http://x',
+    fetchImpl: async (url, init) => { calls.push(JSON.parse(init.body)); return { ok: true, status: 200 }; },
+  });
+  await reg.acquire('005930'); // 카드 A
+  await reg.acquire('005930'); // 카드 B(같은 종목)
+  assert.equal(await reg.release('005930'), true); // 카드 A만 닫힘
+  assert.equal(reg.refCount('005930'), 1);
+  assert.equal(calls.filter((b) => b.trnm === 'REMOVE').length, 0);
+  assert.equal(reg.isRegistered('005930'), true); // 카드 B가 아직 스트림을 쓴다
+});
+
+test('release: 0→1→0 — 마지막 참조가 빠지는 순간에만 REMOVE를 보낸다', async () => {
+  const calls = [];
+  const reg = createRealtimeRegistrar({
+    backendBase: 'http://x',
+    fetchImpl: async (url, init) => { calls.push(JSON.parse(init.body)); return { ok: true, status: 200 }; },
+  });
+  await reg.acquire('005930');
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].trnm, 'REG');
+  assert.equal(await reg.release('005930'), true);
+  assert.equal(calls.length, 2);
+  assert.equal(calls[1].trnm, 'REMOVE');
+  assert.equal(calls[1].data[0].item, '005930');
+  assert.equal(reg.refCount('005930'), 0);
+  assert.equal(reg.isRegistered('005930'), false);
+  assert.equal(reg.size(), 0);
+});
+
+test('release: 쥔 적 없는 종목의 release는 조용히 무시한다(REMOVE 안 보냄)', async () => {
+  const calls = [];
+  const reg = createRealtimeRegistrar({
+    backendBase: 'http://x',
+    fetchImpl: async (url, init) => { calls.push(JSON.parse(init.body)); return { ok: true, status: 200 }; },
+  });
+  assert.equal(await reg.release('005930'), false);
+  assert.equal(calls.length, 0);
+});
+
+test('release: REMOVE가 실패해도 로컬 카운트는 0으로 내려간다(fail-open)', async () => {
+  const reg = createRealtimeRegistrar({
+    backendBase: 'http://x',
+    fetchImpl: async (url, init) => {
+      const body = JSON.parse(init.body);
+      if (body.trnm === 'REMOVE') return { ok: false, status: 500 };
+      return { ok: true, status: 200 };
+    },
+  });
+  await reg.acquire('005930');
+  assert.equal(await reg.release('005930'), true); // release 자체는 실패로 보고하지 않는다
+  assert.equal(reg.refCount('005930'), 0);
+  // 재시도 기계장치는 없다 — 다음 acquire는 새 REG로 취급된다.
+  assert.equal(await reg.acquire('005930'), true);
 });

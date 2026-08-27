@@ -101,40 +101,95 @@ function buildRegisterBody(symbols) {
   };
 }
 
-// 종목 등록기. REG는 리미터를 소모하므로 이미 등록한 종목은 다시 부르지 않는다.
+// 0B REMOVE 본문 — REG와 같은 엔드포인트가 trnm만 보고 키움 WS remove()로
+// 라우팅한다(backend/athena_api/generated/runtime.py, kiwoom/ws_client.py 실측,
+// 2026-08-27). 백엔드 수정 없이 여기서 프레임만 뒤집는다.
+function buildRemoveBody(symbols) {
+  return {
+    trnm: 'REMOVE',
+    grp_no: '1',
+    refresh: '1',
+    data: symbols.map((symbol) => ({ type: REAL_TR_ID, item: String(symbol) })),
+  };
+}
+
+// 종목 등록기 — 참조 계수형(2026-08-27, 카드를 닫으면 서버까지 구독을 끊는다).
+// 계약: 카드 1장이 acquire 1회, 그 카드가 닫히면 release 1회(호출부 실측은
+// main.js ensureChartRealtime/wireQuoteRealtime 쪽 주석 참고). 0→1로 올라갈 때만
+// REG를, 1→0으로 내려갈 때만 REMOVE를 내보낸다 — 둘 다 리미터를 소모하므로
+// 참조가 남아 있는 동안은 조용히 넘어간다.
 function createRealtimeRegistrar(opts) {
   const o = opts || {};
   const backendBase = o.backendBase;
   const fetchImpl = o.fetchImpl || globalThis.fetch;
   const account = o.account || null;
   const mdlog = o.mdlog || (() => {});
-  const registered = new Set();
+  const refCounts = new Map(); // code -> 열린 참조 수(0 이하는 저장하지 않는다)
 
-  async function ensureSymbol(symbol) {
-    const code = String(symbol || '').trim();
-    if (!code) return false;
-    if (registered.has(code)) return true;
+  async function postFrame(trnm, code) {
     const headers = { 'Content-Type': 'application/json' };
     if (account) headers['X-Athena-Account'] = account;
+    const body = trnm === 'REMOVE' ? buildRemoveBody([code]) : buildRegisterBody([code]);
     let res;
     try {
       res = await fetchImpl(`${backendBase}/api/v1/websocket/${REAL_TR_ID}`, {
-        method: 'POST', headers, body: JSON.stringify(buildRegisterBody([code])),
+        method: 'POST', headers, body: JSON.stringify(body),
       });
     } catch (err) {
-      mdlog(`REAL 등록 실패(${code}): ${String((err && err.message) || err)}`);
+      mdlog(`REAL ${trnm} 실패(${code}): ${String((err && err.message) || err)}`);
       return false;
     }
     if (!res || !res.ok) {
-      mdlog(`REAL 등록 거부(${code}): HTTP ${res ? res.status : '?'}`);
+      mdlog(`REAL ${trnm} 거부(${code}): HTTP ${res ? res.status : '?'}`);
       return false;
     }
-    registered.add(code);
+    return true;
+  }
+
+  async function acquire(symbol) {
+    const code = String(symbol || '').trim();
+    if (!code) return false;
+    const count = refCounts.get(code) || 0;
+    if (count > 0) {
+      refCounts.set(code, count + 1);
+      return true;
+    }
+    const ok = await postFrame('REG', code);
+    if (!ok) return false;
+    refCounts.set(code, 1);
     mdlog(`REAL 0B 등록 — ${code}`);
     return true;
   }
 
-  return { ensureSymbol, isRegistered: (s) => registered.has(String(s)), size: () => registered.size };
+  // 카드/패널이 닫힐 때 부른다. 참조가 아직 남아 있으면(같은 종목을 쓰는 다른
+  // 카드가 있다) 카운트만 내리고 REMOVE는 안 보낸다. 0으로 내려가는 순간에만
+  // REMOVE를 내보낸다. 쥔 적 없는 종목의 release는 조용히 무시한다(같은 종목을
+  // 한 번도 acquire한 적 없는 카드가 닫히는 경우 — 다른 카드의 참조를 잘못
+  // 갉아먹지 않는다). REMOVE가 네트워크 등으로 실패해도 로컬 카운트는 그대로
+  // 0으로 둔다(fail-open — 스트림이 서버에 남는 건 기존 미해제 동작과 같은
+  // 타협이고, 재시도 기계장치는 만들지 않는다).
+  async function release(symbol) {
+    const code = String(symbol || '').trim();
+    if (!code) return false;
+    const count = refCounts.get(code) || 0;
+    if (count <= 0) return false;
+    if (count > 1) {
+      refCounts.set(code, count - 1);
+      return true;
+    }
+    refCounts.delete(code);
+    const ok = await postFrame('REMOVE', code);
+    if (ok) mdlog(`REAL 0B 해제 — ${code}`);
+    return true;
+  }
+
+  return {
+    acquire,
+    release,
+    isRegistered: (s) => (refCounts.get(String(s || '').trim()) || 0) > 0,
+    refCount: (s) => refCounts.get(String(s || '').trim()) || 0,
+    size: () => refCounts.size,
+  };
 }
 
 module.exports = {
@@ -142,6 +197,7 @@ module.exports = {
   parseRealTick,
   parseRealFrame,
   buildRegisterBody,
+  buildRemoveBody,
   kstToEpochSec,
   kstTradingDate,
   createRealtimeRegistrar,
