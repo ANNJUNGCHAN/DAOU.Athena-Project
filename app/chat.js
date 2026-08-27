@@ -240,14 +240,14 @@ function finishOnboarding() {
 // 다시 안 나오고, fixture(자동 검증) 실행에선 띄우지 않는다 — 캡처 결정론 보호.
 function maybeShowCoachmark() {
   if (canvasSource === 'fixture') return;
-  try { if (localStorage.getItem('athena-coachmark-settings-v1')) return; } catch { return; }
+  try { if (localStorage.getItem('athena-coachmark-settings-v2')) return; } catch { return; }
   if (document.querySelector('.coachmark')) return;
   const mark = document.createElement('div');
   mark.className = 'coachmark';
-  mark.textContent = '이 점이 설정입니다 — 누르거나, "설정"이라고 입력해도 열립니다';
+  mark.textContent = '키우미를 누르면 파일 첨부·모델 설정이 열립니다 — 설정은 사이드바 계정 메뉴나 "설정" 입력으로';
   document.body.appendChild(mark);
   const dismiss = () => {
-    try { localStorage.setItem('athena-coachmark-settings-v1', '1'); } catch { /* 플래그 실패 시 다음 부팅에 한 번 더 뜬다 — 치명적이지 않다 */ }
+    try { localStorage.setItem('athena-coachmark-settings-v2', '1'); } catch { /* 플래그 실패 시 다음 부팅에 한 번 더 뜬다 — 치명적이지 않다 */ }
     mark.remove();
     window.removeEventListener('pointerdown', dismiss, true);
     window.removeEventListener('keydown', dismiss, true);
@@ -871,8 +871,8 @@ async function runHistoryCommand(text) {
 // 사이드바 계정 메뉴(보드 16)로 옮겼다 — 커맨드바("설정")도 동등한 진입로다.
 // 실제 모드 엔진은 canvas.js의 graphMode(lib/graph-mode/controller.js) — 여기는
 // 그 위에 점 하나를 얹을 뿐, 두 번째 모드 엔진을 만들지 않는다.
-// 키우미 메뉴(2026-08-27, Paper 보드 45) — 점은 더 이상 모드 전환이 아니다.
-// 전환은 모드 칩(#graphPill)·(v2)사이드바 네비의 몫이고, 얼굴은 모드 표시만 한다.
+// 키우미 메뉴(2026-08-27, Paper 보드 45 v5) — 점은 더 이상 모드 전환이 아니다.
+// 전환은 사이드바 모드 네비의 몫이고, 얼굴은 모드 표시만 한다.
 $dot.addEventListener('click', () => { toggleKiumiMenu(); });
 // 사이드바 계정 메뉴(Paper 보드 16)의 "설정" 항목이 쓰는 다리 — lib/sidebar.js
 // 참고.
@@ -935,8 +935,8 @@ $input.addEventListener('blur', () => {
 // 실기능만 올린다(soul.md §7): CLI 필은 runQuery의 실행기(claude -p) 표시이자
 // 설정 진입로, 모델 필은 athena:model-get 실상태 표시이자 인라인 팝오버다.
 // 팝오버는 창 안 오버레이 — 새 창을 만들지 않는다(soul.md §3).
-const $cliPill = document.getElementById('cliPill');
-const $modelPill = document.getElementById('modelPill');
+// 스트립 필 줄은 전면 제거됐다(보드 45 v5, 2026-08-27) — 모델 진입은 키우미
+// 메뉴 '모델 설정', CLI 전환·계정은 설정 모드(사이드바 계정 메뉴·커맨드바)만.
 const $modelPopover = document.getElementById('modelPopover');
 
 // lib/settings-cards.js의 CLAUDE_MODEL_CHIPS/CLAUDE_EFFORT_CHIPS와 같은 어휘 —
@@ -960,18 +960,11 @@ const PILL_EFFORT_CHIPS = [
 
 let modelStateCache = null;
 
-function modelPillLabel(st) {
-  const c = (st && st.claude) || {};
-  const m = c.model ? c.model.toUpperCase() : '기본 모델';
-  return c.effort ? `${m} · ${c.effort}` : m;
-}
-
-async function refreshModelPill() {
+async function refreshModelState() {
   try {
     modelStateCache = await window.athena.invoke('athena:model-get');
-    $modelPill.textContent = modelPillLabel(modelStateCache);
   } catch {
-    // 상태를 못 읽으면 라벨을 갱신하지 않는다 — 추측값을 쓰지 않는다(정보 정직성).
+    // 상태를 못 읽으면 캐시를 갱신하지 않는다 — 추측값을 쓰지 않는다(정보 정직성).
   }
   if (!$modelPopover.hidden) renderModelPopover();
 }
@@ -991,7 +984,7 @@ function popoverSection(title, chips, currentValue, key) {
     b.addEventListener('click', async () => {
       const res = await window.athena.invoke('athena:model-set', { provider: 'claude', patch: { [key]: c.value } });
       if (res && res.ok === false) return; // 거부된 값은 상태를 안 바꾼다(model-prefs 검증)
-      await refreshModelPill();
+      await refreshModelState();
     });
     row.appendChild(b);
   }
@@ -1010,21 +1003,11 @@ function renderModelPopover() {
 
 function closeModelPopover() { $modelPopover.hidden = true; }
 
-$modelPill.addEventListener('click', async () => {
-  if ($modelPopover.hidden) {
-    await refreshModelPill();
-    renderModelPopover();
-    $modelPopover.hidden = false;
-  } else {
-    closeModelPopover();
-  }
-});
-// CLI 전환·계정은 설정 모드의 일이다 — 필은 진입로만 제공한다.
-$cliPill.addEventListener('click', () => openSettings());
-// 바깥 클릭으로 닫는다 — 필 클릭은 토글 핸들러가 처리하므로 제외.
+// 모델 팝오버는 키우미 메뉴 '모델 설정'이 연다(보드 45 v5) — 필은 사라졌다.
+// 바깥 클릭으로 닫는다(키우미 메뉴 항목 클릭은 메뉴가 먼저 닫혀 겹치지 않는다).
 document.addEventListener('mousedown', (e) => {
   if ($modelPopover.hidden) return;
-  if ($modelPopover.contains(e.target) || $modelPill.contains(e.target)) return;
+  if ($modelPopover.contains(e.target)) return;
   closeModelPopover();
 });
 
@@ -1102,14 +1085,30 @@ function consumeAttachments(text) {
   return `${head}\n\n[첨부 — 아래 경로를 Read(파일)/Glob(폴더)으로 직접 읽어라]\n${paths.join('\n')}`;
 }
 
+function kiumiSection(title) {
+  const t = document.createElement('div');
+  t.className = 'km-section';
+  t.textContent = title;
+  return t;
+}
+
 function renderKiumiMenu() {
   $kiumiMenu.textContent = '';
+  $kiumiMenu.appendChild(kiumiSection('추가'));
   $kiumiMenu.appendChild(kiumiItem('파일 첨부', () => pickAttachments(false)));
   $kiumiMenu.appendChild(kiumiItem('폴더 첨부', () => pickAttachments(true)));
   const sep = document.createElement('div');
   sep.className = 'mp-sep';
   $kiumiMenu.appendChild(sep);
-  // 모드 옵션 — 그래프 수집·노출은 설정 › 성향·이력 카드가 소유한다(보드 22 병합).
+  $kiumiMenu.appendChild(kiumiSection('설정'));
+  // 모델·추론 노력 — 스트립 필 제거로 이 메뉴가 유일한 진입로다(보드 45 v5).
+  $kiumiMenu.appendChild(kiumiItem('모델 설정', async () => {
+    closeKiumiMenu();
+    await refreshModelState();
+    renderModelPopover();
+    $modelPopover.hidden = false;
+  }));
+  // 그래프 수집·노출은 설정 › 성향·이력 카드가 소유한다(보드 22 병합).
   $kiumiMenu.appendChild(kiumiItem('수집·노출 설정', () => { closeKiumiMenu(); openSettings(); }));
 }
 
@@ -1127,8 +1126,8 @@ document.addEventListener('mousedown', (e) => {
   if ($kiumiMenu.contains(e.target) || $dot.contains(e.target)) return;
   closeKiumiMenu();
 });
-window.athena.on('athena:model-changed', () => refreshModelPill());
-refreshModelPill();
+window.athena.on('athena:model-changed', () => refreshModelState());
+refreshModelState();
 
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
@@ -1168,22 +1167,8 @@ document.addEventListener('keydown', (e) => {
 // (lib/routine-turn.js — LLM 0)이고, 발화 시각 배지·방식 표기·소스 라벨이
 // 필수 계약이다(시점 정직성). 렌더는 전부 textContent — innerHTML 0건 유지.
 const routineTurnLib = window.AthenaLib.RoutineTurn;
-const $routineChip = document.getElementById('routineChip');
-
-async function refreshRoutineChip() {
-  if (!$routineChip) return;
-  try {
-    const res = await window.athena.invoke('athena:routines-list');
-    const routines = res && res.ok && res.data && Array.isArray(res.data.routines)
-      ? res.data.routines : [];
-    const active = routines.filter((r) => r.status === 'active').length;
-    $routineChip.hidden = active === 0;
-    $routineChip.textContent = `감시 ${active} 활성`;
-  } catch {
-    // 백엔드 미기동·루틴 비활성 — 칩을 숨긴다(없는 감시를 있다고 표시하지 않는다).
-    $routineChip.hidden = true;
-  }
-}
+// 루틴 칩은 스트립과 함께 제거됐다(보드 45 v5, 2026-08-27) — 활성 감시 수 표시는
+// 사이드바 에이전트 배지의 몫(에이전트모드 구현과 함께 배선).
 
 // 능동 턴·승인 카드·주문 티켓이 공유하는 DOM 조립 헬퍼 — 렌더는 textContent만.
 function _btn(label, className) {
@@ -1261,9 +1246,7 @@ function renderAgentTurn(event) {
 
 window.athena.on('athena:routine-event', (event) => {
   renderAgentTurn(event);
-  refreshRoutineChip();
 });
-refreshRoutineChip();
 
 // ---------- 오브에서 오간 턴 반영(2026-08-26 board-33/34) ----------
 // 셸이 숨겨진 동안 오브 대화 모드가 돌린 턴은 chat.js가 그 순간에는 그릴 수
@@ -1387,7 +1370,6 @@ function renderApprovalCard(r) {
     const res = await window.athena.invoke('athena:routine-confirm', { id: r.id });
     if (res && res.ok) {
       status.textContent = '활성 — 감시가 시작됐습니다';
-      refreshRoutineChip();
     } else {
       status.textContent = `승인 실패: ${(res && res.error) || '알 수 없는 오류'}`;
       approve.disabled = !!r.activation_blocker;

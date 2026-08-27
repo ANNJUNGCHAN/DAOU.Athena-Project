@@ -2233,28 +2233,22 @@ app.whenReady().then(async () => {
   //
   // '비어 있지 않은가'의 판정은 `describeRendered()` 하나만 쓴다. 여기서 따로
   // 세면 렌더러와 검증기가 서로 다른 답을 낼 수 있다.
-  // 2026-08-26: 모드 칩(#graphPill)은 이제 상시 보인다(Paper 보드 05) — 숨어서
-  // 못 닿는 경우가 사라졌으므로 더는 "hidden-though-ready/unavailable"로 갈라
-  // 잴 것이 없다. 대신 브레인 준비 여부로 **기대하는 결과**가 갈린다: 준비됐으면
+  // 2026-08-27(보드 45 v5): 스트립 필 줄은 전면 제거 — 진입로는 사이드바 모드
+  // 네비 하나다. 브레인 준비 여부로 **기대하는 결과**가 갈린다: 준비됐으면
   // 실제 그래프가, 안 됐으면 캔버스 안의 정직한 안내(controller.js
-  // renderUnavailable)가 뜬다 — 둘 다 "정상"이고, 칩이 숨거나 클릭해도 캔버스가
+  // renderUnavailable)가 뜬다 — 둘 다 "정상"이고, 네비 클릭으로 캔버스가
   // 안 열리는 것만 실패다.
   try {
     const graph = await shellWin.webContents.executeJavaScript(`(async () => {
-      const pill = document.getElementById('graphPill');
       const container = document.getElementById('graphCanvas');
-      if (!pill || !container || !window.AthenaGraphMode) {
+      // 스트립 필 줄은 보드 45 v5에서 전면 제거됐다(2026-08-27) — 진입로는
+      // 사이드바 모드 네비 하나다. 사람이 밟는 길 그대로 네비를 누른다.
+      const nav = document.getElementById('modeNavGraph');
+      if (!nav || !container || !window.AthenaGraphMode) {
         return { wired: false, reason: 'missing' };
       }
       const status = await window.athena.invoke('athena:brain-status').catch(() => null);
       const brainReady = Boolean(status && status.ok && status.ready);
-      if (pill.hidden) {
-        return { wired: false, reason: 'hidden-though-always-visible', brainReady };
-      }
-      // 사람이 밟는 길 그대로 — 셸 v2(2026-08-27)부터 전환은 사이드바 모드
-      // 네비가 소유한다. 모드 필은 표시 전용이라 클릭해도 아무 일 없다.
-      const nav = document.getElementById('modeNavGraph');
-      if (!nav) return { wired: false, reason: 'missing-mode-nav', brainReady };
       nav.click();
       const deadline = Date.now() + 5000;
       while (Date.now() < deadline) {
@@ -2290,15 +2284,10 @@ app.whenReady().then(async () => {
     })()`);
     report.graphMode = graph;
     if (!graph.wired) {
-      if (graph.reason === 'hidden-though-always-visible') {
-        // 상시 보여야 하는 칩이 숨어 있다 — 사람이 닿을 수 없는 기능이다.
-        failures.push('graph-mode: 모드 칩이 상시 보여야 하는데 숨어 있다');
-      } else {
-        // 칩·캔버스·전역 중 하나가 아예 없다 — 배선이 끊긴 것이므로 실패다.
-        failures.push('graph-mode: 배선이 끊겼다 (칩/캔버스/전역 누락)');
-      }
+      // 네비·캔버스·전역 중 하나가 아예 없다 — 배선이 끊긴 것이므로 실패다.
+      failures.push('graph-mode: 배선이 끊겼다 (모드 네비/캔버스/전역 누락)');
     } else if (graph.brainReady) {
-      // 칩 클릭 하나로 열려야 한다 — API 직접 호출로만 열리면 사람은 못 쓴다.
+      // 네비 클릭 하나로 열려야 한다 — API 직접 호출로만 열리면 사람은 못 쓴다.
       assertOk('graph-mode: 칩을 누르면 그래프가 열린다', graph.clickOpened === true);
       assertOk('graph-mode: 칩 클릭만으로 캔버스가 채워진다', graph.byClick.rendered === true);
       assertOk('graph-mode: 토글하면 요약이 숨는다', graph.summaryHidden === true);

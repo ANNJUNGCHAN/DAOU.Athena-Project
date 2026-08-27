@@ -493,32 +493,6 @@ html, body { background: transparent; }
    * 경계(637·812줄)가 이미 쓰는 문법으로 통일한다. */
   border-top: 1px solid rgb(255 255 255 / 9%);
 }
-.control-strip {
-  flex-shrink: 0;
-  display: flex; align-items: center; gap: 10px;
-  padding: 0 16px 6px 16px;
-  height: 40px;
-  /* 캡션이 아니다(2026-08-19 개정 — 사용자: "왜 모델 필이 있는 곳에서 끌게
-   * 하냐, 다른 앱들처럼"). 창 이동 손잡이는 맨 위 .drag-strip 하나다. */
-}
-.strip-spacer { flex: 1; }
-.pill {
-  display: flex; align-items: center; gap: 8px;
-  height: 28px; padding: 0 12px; flex-shrink: 0;
-  border-radius: 999px;
-  border: 1px solid rgb(255 255 255 / 14%);
-  background: rgba(255, 255, 255, 0.45);
-  box-shadow: inset 0 1px 0 rgba(255, 253, 248, 0.28);
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  letter-spacing: 0.1em;
-  color: var(--color-k-bright);
-  white-space: nowrap;
-  cursor: pointer;
-  appearance: none;
-}
-.pill:hover { border-color: var(--color-k-dim); }
-.pill:focus-visible { outline: 2px solid var(--color-k-text); outline-offset: 2px; }
 
 /* 모델 팝오버 — 카드 단계 유리(0.45+blur 14, tokens.css 사다리). 무채색.
  * 페이드 등장 금지 — hidden 토글로 나타난다(soul.md §7). */
@@ -607,9 +581,37 @@ html, body { background: transparent; }
 @media (prefers-reduced-motion: reduce) {
   .kiumi-face-chat rect, .kiumi-face-graph circle { animation: none; }
 }
+/* 키우미 메뉴 — 라이트 유리(보드 45 v5, 2026-08-27): 백색 유리 + 잉크 텍스트.
+ * 어두운 모델 팝오버와 달리 우리 색으로 — 사용자 지적 "검정색이네" 반영. */
 .kiumi-menu {
   right: auto; left: 14px;
   min-width: 240px;
+  background: rgb(255 255 255 / 96%);
+  border: 1px solid rgb(16 19 26 / 8%);
+  box-shadow: 0 14px 34px rgb(16 19 26 / 13%);
+}
+.kiumi-menu .km-section {
+  padding: 6px 12px 2px;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: rgb(16 19 26 / 35%);
+}
+.kiumi-menu .mp-sep { background: rgb(16 19 26 / 6%); }
+/* 모드별 채팅 헤더(보드 38 — 그래프 모드 전용. 보드 37 실측: 대화 모드엔 없음) */
+.chat-mode-head {
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px 10px;
+}
+.chat-mode-head-title {
+  font-family: var(--font-strong);
+  font-size: var(--text-sm);
+  color: var(--color-k-bright);
+}
+.chat-mode-head-sub {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  color: var(--color-k-dim);
 }
 /* 첨부 칩(2026-08-27, 코덱스 UI 이식) — 입력줄 위에 파일/폴더가 칩으로 쌓인다. */
 .attach-chips {
@@ -646,22 +648,14 @@ html, body { background: transparent; }
 }
 .attach-chip-rm:hover { color: #10131a; }
 
-/* 모드 필(셸 v2, 보드 38) — 지금 모드를 브랜드색으로 표시만 한다. 전환은
- * 사이드바 모드 네비의 몫이라 커서도 기본값으로 되돌린다. */
-.pill.pill-mode {
-  background: var(--color-brand);
-  color: #fff;
-  cursor: default;
-}
 .kiumi-menu .km-item {
   display: block; width: 100%; text-align: left;
   padding: 8px 12px; border-radius: 8px;
   background: none; border: none; appearance: none; cursor: pointer;
-  color: var(--color-k-text); font: inherit;
+  color: #10131a; font: inherit;
 }
 .kiumi-menu .km-item:hover {
-  background: rgba(255, 255, 255, 0.12);
-  color: var(--color-k-bright);
+  background: rgb(16 19 26 / 6%);
 }
 .dot:hover { transform: scale(1.25); }
 .dot:focus-visible {
@@ -1238,16 +1232,6 @@ html, body { background: transparent; }
 .agent-body { font-size: var(--text-sm, 13px); color: var(--color-k-text, #e6e8ee); line-height: 1.5; }
 .turn-agent.agent-restore-failed { border-left-color: var(--color-warn, #ff9838); background: rgba(255, 152, 56, 0.10); }
 
-.routine-chip {
-  flex-shrink: 0;
-  font-family: var(--font-mono);
-  font-size: var(--text-2xs, 11px);
-  color: var(--color-k-dim, #9aa2b1);
-  border: 1px solid rgba(154, 162, 177, 0.45);
-  border-radius: 999px;
-  padding: 3px 10px;
-  white-space: nowrap;
-}
 
 @media (prefers-reduced-motion: reduce) {
   .turn-agent { transition: none; }
