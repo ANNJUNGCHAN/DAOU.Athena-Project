@@ -128,9 +128,14 @@ def test_unknown_routine_is_404(app_client):
 class FakeWs:
     def __init__(self):
         self.registered = []
+        self.removed = []
 
     async def register(self, tr_id, items, **kw):
         self.registered.append((tr_id, tuple(items)))
+        return {}
+
+    async def remove(self, tr_id, items, **kw):
+        self.removed.append((tr_id, tuple(items)))
         return {}
 
 
@@ -141,14 +146,22 @@ def test_pause_then_resume_routine(app_client):
     res = client.post(f"/api/v1/routines/{rid}/confirm")
     assert res.status_code == 200
     assert res.json()["status"] == "active"
+    assert runtime.ws_client.registered.count(("0B", ("005930",))) == 1
+    assert runtime.ws_client.registered.count(("1h", ("005930",))) == 1
 
     res = client.post(f"/api/v1/routines/{rid}/pause")
     assert res.status_code == 200
     assert res.json()["status"] == "paused"
+    # pause는 참조카운트를 0으로 만들어 REAL 구독을 실제로 해제한다(F5).
+    assert ("0B", ("005930",)) in runtime.ws_client.removed
+    assert ("1h", ("005930",)) in runtime.ws_client.removed
 
     res = client.post(f"/api/v1/routines/{rid}/resume")
     assert res.status_code == 200
     assert res.json()["status"] == "active"
+    # resume은 confirm과 대칭으로 재구독한다.
+    assert runtime.ws_client.registered.count(("0B", ("005930",))) == 2
+    assert runtime.ws_client.registered.count(("1h", ("005930",))) == 2
 
 
 def test_pause_rejects_invalid_transition(app_client):

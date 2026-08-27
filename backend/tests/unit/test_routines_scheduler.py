@@ -5,6 +5,7 @@ from __future__ import annotations
 import asyncio
 import io
 import zipfile
+from datetime import UTC, datetime, timedelta
 
 import pytest
 
@@ -15,6 +16,7 @@ from athena_api.routines.disclosure_source import (
 )
 from athena_api.routines.ledger import RoutineLedger
 from athena_api.routines.rules import validate_draft
+from athena_api.routines.runtime import RoutinesRuntime
 from athena_api.routines.scheduler import RoutineScheduler, adapt_real_message
 from athena_api.routines.store import RoutineStore, RoutineTransitionError
 from athena_api.routines.triggers import TriggerEngine
@@ -208,6 +210,131 @@ async def test_periodic_once_skipped_when_headroom_low(tmp_path):
     await asyncio.sleep(0.06)
     await sched.stop()
     assert ran["count"] == 0  # 전 주기 양보
+
+
+# ---------- 참조카운트 기반 REAL 구독 해제(F5) ----------
+
+
+class FakeWs:
+    def __init__(self):
+        self.registered: list[tuple[str, tuple[str, ...]]] = []
+        self.removed: list[tuple[str, tuple[str, ...]]] = []
+
+    async def register(self, tr_id, items, **kw):
+        self.registered.append((tr_id, tuple(items)))
+        return {}
+
+    async def remove(self, tr_id, items, **kw):
+        self.removed.append((tr_id, tuple(items)))
+        return {}
+
+
+def _runtime(tmp_path, ws=None, on_expire=None):
+    store = RoutineStore(tmp_path / "r.json")
+    ledger = RoutineLedger(tmp_path / "l.jsonl")
+    engine = TriggerEngine(ledger=ledger)
+
+    async def noop(_ev):
+        pass
+
+    sched = RoutineScheduler(store=store, engine=engine, notify=noop, on_expire=on_expire)
+    return RoutinesRuntime(
+        store=store,
+        ledger=ledger,
+        engine=engine,
+        scheduler=sched,
+        events=asyncio.Queue(200),
+        ws_client=ws,
+    )
+
+
+@pytest.mark.asyncio
+async def test_refcount_shared_symbol_removes_only_after_last_release(tmp_path):
+    """같은 심볼을 감시하는 라우틴 A·B — A만 해제해선 REMOVE가 안 나가고 B까지 해제해야 나간다."""
+    ws = FakeWs()
+    runtime = _runtime(tmp_path, ws=ws)
+
+    await runtime.ensure_realtime_subscription("005930")  # 라우틴 A
+    await runtime.ensure_realtime_subscription("005930")  # 라우틴 B(같은 심볼)
+    assert ws.registered.count(("0B", ("005930",))) == 1  # REG는 0→1 전이에서만 1회
+    assert ws.registered.count(("1h", ("005930",))) == 1
+
+    await runtime.release_realtime_subscription("005930")  # A만 cancel
+    assert ws.removed == []  # B가 아직 살아 있다
+
+    await runtime.release_realtime_subscription("005930")  # B까지 cancel
+    assert ("0B", ("005930",)) in ws.removed
+    assert ("1h", ("005930",)) in ws.removed
+
+
+@pytest.mark.asyncio
+async def test_pause_resume_round_trip_resubscribes(tmp_path):
+    """pause(해제)→resume(재구독) 왕복 시 REG가 다시 걸린다."""
+    ws = FakeWs()
+    runtime = _runtime(tmp_path, ws=ws)
+
+    await runtime.ensure_realtime_subscription("005930")  # confirm
+    assert ws.registered.count(("0B", ("005930",))) == 1
+
+    await runtime.release_realtime_subscription("005930")  # pause
+    assert ("0B", ("005930",)) in ws.removed
+    assert ("1h", ("005930",)) in ws.removed
+
+    await runtime.ensure_realtime_subscription("005930")  # resume
+    assert ws.registered.count(("0B", ("005930",))) == 2
+    assert ws.registered.count(("1h", ("005930",))) == 2
+
+
+@pytest.mark.asyncio
+async def test_expire_releases_subscription_via_scheduler_on_expire(tmp_path):
+    """expire 경로도 refcount 감소·release 호출이 동일하게 걸린다.
+
+    같은 심볼을 쓰는 periodic 스펙이 같이 만료돼도 realtime-ws 몫의
+    구독을 잘못 건드리지 않아야 한다(모드 무관 무조건 해제는 다른
+    라우틴이 쥔 참조를 잘못 반납시키는 결함이라 게이트가 필요하다).
+    """
+    ws = FakeWs()
+
+    async def on_expire(spec):
+        if spec.mode == "realtime-ws":
+            await runtime.release_realtime_subscription(spec.symbol)
+
+    runtime = _runtime(tmp_path, ws=ws, on_expire=on_expire)
+    store = runtime.store
+
+    realtime_spec = _spec(symbol="005930")
+    store.upsert(realtime_spec)
+    store.transition(realtime_spec.id, "active")
+
+    periodic_spec = validate_draft(
+        {
+            "symbol": "005930",
+            "condition": {
+                "source": "disclosure.title_keyword",
+                "op": "contains",
+                "value": "유상증자",
+            },
+            "cooldown_s": 60,
+            "expires_days": 7,
+        }
+    )
+    store.upsert(periodic_spec)
+    store.transition(periodic_spec.id, "active")
+
+    await runtime.ensure_realtime_subscription("005930")
+    assert ws.registered.count(("0B", ("005930",))) == 1
+
+    # 만료를 강제 — 저장된 객체 참조를 그대로 갖고 있으므로 재조회 없이 반영된다.
+    expired = datetime.now(UTC) - timedelta(seconds=1)
+    realtime_spec.expires_at = expired
+    periodic_spec.expires_at = expired
+
+    await runtime.scheduler._expire_pass()
+
+    assert store.get(realtime_spec.id).status == "expired"
+    assert store.get(periodic_spec.id).status == "expired"
+    assert ws.removed.count(("0B", ("005930",))) == 1  # 딱 1회 — 이중 해제 없음
+    assert ws.removed.count(("1h", ("005930",))) == 1
 
 
 # ---------- 공시 소스·corp 카탈로그 파싱 (픽스처 — 실호출 없음) ----------
