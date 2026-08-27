@@ -7,6 +7,7 @@ const assert = require('node:assert/strict');
 const store = require('./graph-mode-store');
 const layout = require('./cluster-layout');
 const render = require('./render');
+const themeClusters = require('./theme-clusters');
 const prefs = require('./graph-mode-prefs');
 const { createGraphModeController, computeGraphHeaderMeta } = require('./controller');
 const { fakeNode, installFakeDocument, uninstallFakeDocument } = require('./fake-dom');
@@ -70,12 +71,16 @@ function setup(options) {
   return { controller, elements, fetchCalls: () => calls };
 }
 
+// render.js의 renderClusterBubbles(스텝10)가 theme-clusters.js의 shouldWarnUnnamed를
+// 재사용하므로(원칙1) render.test.js/theme-clusters.test.js와 같은 방식으로 window를 세운다.
 test.beforeEach(() => {
   installFakeDocument();
+  global.window = { AthenaLib: { ThemeClusters: themeClusters } };
 });
 
 test.afterEach(() => {
   uninstallFakeDocument();
+  delete global.window;
 });
 
 test('처음에는 요약이 보이고 그래프는 숨겨져 있다', () => {
@@ -225,7 +230,7 @@ test('그래프를 못 쓰다가 브레인이 켜지면 안내 대신 실제로 
   assert.equal(render.describeRendered(elements.graphBody).nodes, 2);
 });
 
-test('설정이 이름표 임계를 정한다', async () => {
+test('설정이 이름표 임계를 정한다(2단계 개별 노드 렌더에 적용 — 1단계 버블은 항상 이름표를 보인다, 스텝10)', async () => {
   const storage = {
     _v: JSON.stringify({ labelThreshold: 1 }),
     getItem() {
@@ -239,8 +244,11 @@ test('설정이 이름표 임계를 정한다', async () => {
     readPrefs: () => prefs.readPrefs(storage),
     shouldShowLabels: (s, n) => prefs.shouldShowLabels(s, n),
   };
-  const { controller, elements } = setup({ prefs: boundPrefs });
+  const { controller, elements } = setup({ prefs: boundPrefs, payload: payloadTwoClusters });
   await controller.toggle();
+  const clusterZeroBubble = elements.graphBody.querySelectorAll('.graph-node')
+    .find((n) => n.getAttribute('data-cluster') === '0');
+  clusterZeroBubble.dispatchEvent({ type: 'click' }); // 2단계로 — cluster 0엔 노드 2개(e:a, e:b)
   // 노드가 2개인데 임계가 1이므로 이름표가 안 붙는다.
   assert.equal(render.describeRendered(elements.graphBody).labels, 0);
 });
@@ -253,14 +261,14 @@ test('요약 화면에서는 백엔드를 부르지 않는다', async () => {
 
 // ── 보드 15: 군집 펼침 · 노드 선택 와이어링 ──────────────────────────────────
 
-test('1단계에서 노드를 클릭하면 그 군집이 펼쳐진다', async () => {
+test('1단계에서 버블을 클릭하면 그 군집이 펼쳐진다(스텝10 — 1단계는 군집 버블 집계다)', async () => {
   const { controller, elements, fetchCalls } = setup({ payload: payloadTwoClusters });
   await controller.toggle();
   assert.equal(controller.state.stage, store.STAGE_CLUSTERS);
   const nodeEls = elements.graphBody.querySelectorAll('.graph-node');
-  assert.equal(nodeEls.length, 3, '1단계는 군집 전부가 보인다');
-  const clusterZeroNode = nodeEls.find((n) => n.getAttribute('data-entity-id') === 'e:a');
-  clusterZeroNode.dispatchEvent({ type: 'click' });
+  assert.equal(nodeEls.length, 2, '1단계는 군집 버블 수만큼 보인다(개별 엔티티가 아니다)');
+  const clusterZeroBubble = nodeEls.find((n) => n.getAttribute('data-cluster') === '0');
+  clusterZeroBubble.dispatchEvent({ type: 'click' });
   assert.equal(controller.state.stage, store.STAGE_EXPANDED);
   assert.equal(controller.state.expandedCluster, 0);
   assert.equal(fetchCalls(), 1, '펼침은 새 fetch 없이 캐시로 다시 그린다');
@@ -271,9 +279,9 @@ test('1단계에서 노드를 클릭하면 그 군집이 펼쳐진다', async ()
 test('2단계에서 노드를 클릭하면 선택된다(패널이 채워진다)', async () => {
   const { controller, elements } = setup({ payload: payloadTwoClusters, withPanel: true });
   await controller.toggle();
-  const firstClick = elements.graphBody.querySelectorAll('.graph-node')
-    .find((n) => n.getAttribute('data-entity-id') === 'e:a');
-  firstClick.dispatchEvent({ type: 'click' }); // 1단계 클릭 — 펼친다
+  const clusterZeroBubble = elements.graphBody.querySelectorAll('.graph-node')
+    .find((n) => n.getAttribute('data-cluster') === '0');
+  clusterZeroBubble.dispatchEvent({ type: 'click' }); // 1단계 버블 클릭 — 펼친다
   assert.equal(controller.state.stage, store.STAGE_EXPANDED);
 
   const secondClick = elements.graphBody.querySelectorAll('.graph-node')
@@ -384,7 +392,7 @@ test('collapseCluster()로 2단계에서 1단계로 돌아간다', async () => {
   assert.equal(controller.state.stage, store.STAGE_EXPANDED);
   controller.collapseCluster();
   assert.equal(controller.state.stage, store.STAGE_CLUSTERS);
-  assert.equal(elements.graphBody.querySelectorAll('.graph-node').length, 3, '전부 다시 보인다');
+  assert.equal(elements.graphBody.querySelectorAll('.graph-node').length, 2, '군집 버블이 전부 다시 보인다(스텝10)');
 });
 
 // ── 그래프 뷰 헤더 메타 텍스트 + 지도 안내 바(보드 14/15, 스텝9) ────────────────

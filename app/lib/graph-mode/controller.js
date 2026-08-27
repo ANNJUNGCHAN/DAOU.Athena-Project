@@ -133,18 +133,29 @@ function createGraphModeController(deps) {
     }
   }
 
-  // 지금 상태로 마지막 배치를 다시 그린다 — 펼침·접기·선택 전부 이 경로를 탄다.
-  // 배치는 이미 있으니 무엇을 보여줄지만 바뀐다, 네트워크 왕복이 필요 없다.
-  function redrawFromCache() {
-    if (!lastPlaced || !elements.graphBody) return;
-    const nodes = store.visibleNodes(state, lastPlaced);
-    const edges = store.visibleEdges(state, lastPlaced);
+  // 1단계(clusters)는 군집 버블 집계, 2단계(expanded)는 기존 개별 노드 렌더
+  // (스텝10) — draw()/redrawFromCache() 둘 다 이 분기를 타므로 한 곳에 모아
+  // 둘이 어긋나지 않게 한다.
+  function renderStage(placed) {
+    if (state.stage === store.STAGE_CLUSTERS) {
+      render.renderClusterBubbles(elements.graphBody, placed, {});
+      return;
+    }
+    const nodes = store.visibleNodes(state, placed);
+    const edges = store.visibleEdges(state, placed);
     const settings = prefs ? prefs.readPrefs() : null;
     render.renderClusterMap(elements.graphBody, { nodes, edges }, {
       showLabels: prefs ? prefs.shouldShowLabels(settings, nodes.length) : true,
       highlightCrossings: settings ? settings.highlightCrossings : true,
       selectedEntityId: state.selectedEntityId,
     });
+  }
+
+  // 지금 상태로 마지막 배치를 다시 그린다 — 펼침·접기·선택 전부 이 경로를 탄다.
+  // 배치는 이미 있으니 무엇을 보여줄지만 바뀐다, 네트워크 왕복이 필요 없다.
+  function redrawFromCache() {
+    if (!lastPlaced || !elements.graphBody) return;
+    renderStage(lastPlaced);
     wireNodeClicks();
     renderSelection();
     renderGraphHeader();
@@ -316,16 +327,7 @@ function createGraphModeController(deps) {
     });
     lastPlaced = placed;
     lastPayload = payload; // 헤더 메타의 "관계 E"(필터 전 원본)가 이 값을 읽는다.
-    const nodes = store.visibleNodes(state, placed);
-    const edges = store.visibleEdges(state, placed);
-    const settings = prefs ? prefs.readPrefs() : null;
-    render.renderClusterMap(elements.graphBody, { nodes, edges }, {
-      showLabels: prefs
-        ? prefs.shouldShowLabels(settings, nodes.length)
-        : true,
-      highlightCrossings: settings ? settings.highlightCrossings : true,
-      selectedEntityId: state.selectedEntityId,
-    });
+    renderStage(placed);
     wireNodeClicks();
     renderSelection();
     renderGraphHeader();

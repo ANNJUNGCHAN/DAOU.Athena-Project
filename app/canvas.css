@@ -212,11 +212,30 @@ html, body { background: transparent; }
   flex: 1 1 auto;
 }
 
+/* 군집 버블 지도(보드 14 §1.4, 스텝10) — render.js의 renderClusterBubbles().
+ * fill 자체(hue 회전)와 fill-opacity(응집도)는 데이터마다 달라 인라인 style로
+ * 온다 — 여기서는 결정적이지 않은 통상 테두리와 무명 경고 색만 정한다. */
+.graph-cluster-bubble { stroke: var(--color-k-ghost); stroke-width: 1.5px; }
+.graph-cluster-bubble.is-unnamed-warn {
+  fill: var(--color-warn); stroke: var(--color-warn); stroke-dasharray: 4 3;
+}
+.graph-cluster-label { font-family: var(--font-strong); font-size: var(--text-xs); fill: var(--color-k-bright); }
+.graph-cluster-unnamed-badge { font-family: var(--font-body); font-size: var(--text-xs); fill: var(--color-k-soft); }
+.graph-cluster-stats { font-family: var(--font-mono); font-size: var(--text-2xs); fill: var(--color-k-hint); }
+.graph-cluster-stats.is-warn { fill: var(--color-warn); }
+
 /* 요약 뷰 본문 골격 — 표 영역(왼쪽, 헤더 아래로 히어로·배너·표가 세로로 쌓인다)
  * + 공통 패널(오른쪽, 스텝8) 좌우 배치(07 §10 스펙). */
 #graphSummaryTable { display: flex; flex-direction: column; }
 #graphSummaryBody { display: flex; flex: 1 1 auto; min-height: 0; }
 #graphSummaryMain { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; overflow: auto; }
+
+/* 그래프 뷰 본문 골격(스텝10) — #graphSummaryTable/#graphSummaryBody와 같은
+ * flex-stretch 패턴이 #graphCanvas/#graphBody엔 빠져 있었다(스텝0-2/9가 헤더
+ * 슬롯만 만들고 이 짝은 안 채웠다) — #graphBody가 콘텐츠 높이로 쪼그라들어
+ * 그 안 SVG의 height:100%가 사실상 0에 가깝게 풀리던 실측 결함을 고친다. */
+#graphCanvas { display: flex; flex-direction: column; }
+#graphBody { flex: 1 1 auto; min-height: 0; }
 
 /* 히어로(보드 06 §5) — "지금 읽히는 성향" + 사실/추론/불확실 %(실계산값만). */
 .summary-hero {

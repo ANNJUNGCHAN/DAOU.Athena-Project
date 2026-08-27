@@ -6,16 +6,21 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const { layoutClusterMap } = require('./cluster-layout');
-const { renderClusterMap, describeRendered, clusterHue } = require('./render');
+const { renderClusterMap, renderClusterBubbles, describeRendered, clusterHue } = require('./render');
+const themeClusters = require('./theme-clusters');
 const { fakeNode, installFakeDocument, uninstallFakeDocument } = require('./fake-dom');
 
 // 최소 SVG 노드 스텁. `createElementNS`·`setAttribute`·`querySelectorAll`만 있으면 된다.
+// renderClusterBubbles가 theme-clusters.js의 shouldWarnUnnamed를 재사용하므로
+// (원칙1, render.js 주석 참고) theme-clusters.test.js와 같은 방식으로 window를 세운다.
 test.beforeEach(() => {
   installFakeDocument();
+  global.window = { AthenaLib: { ThemeClusters: themeClusters } };
 });
 
 test.afterEach(() => {
   uninstallFakeDocument();
+  delete global.window;
 });
 
 const VIEWPORT = { width: 800, height: 600 };
@@ -128,4 +133,114 @@ test('빈 그래프도 터지지 않는다', () => {
 
 test('컨테이너가 없으면 조용히 넘어간다', () => {
   assert.equal(renderClusterMap(null, layoutClusterMap(payload(), VIEWPORT), {}), null);
+});
+
+// ── renderClusterBubbles(스텝10) — 그래프 뷰 1단계 아키텍처 전환 ──────────────
+
+function mockPlaced(clusters) {
+  return { revision: 1, nodes: [], edges: [], clusters };
+}
+
+function bubbles(svg) {
+  return svg.querySelectorAll('.graph-cluster-bubble');
+}
+
+test('버블 개수는 클러스터 수와 같다', () => {
+  const placed = mockPlaced([
+    { cluster: 0, size: 3, x: 100, y: 120, radius: 40 },
+    { cluster: 1, size: 2, x: 300, y: 220, radius: 30 },
+  ]);
+  const container = fakeNode('div');
+  const svg = renderClusterBubbles(container, placed, { width: 800, height: 600 });
+  assert.equal(bubbles(svg).length, 2);
+});
+
+test('좌표·반지름이 placed.clusters 값과 그대로 일치한다(새 스케일 발명 안 함, 원칙1)', () => {
+  const placed = mockPlaced([{ cluster: 0, size: 5, x: 111, y: 222, radius: 58 }]);
+  const container = fakeNode('div');
+  const svg = renderClusterBubbles(container, placed, { width: 800, height: 600 });
+  const bubble = bubbles(svg)[0];
+  assert.equal(bubble.attrs.cx, '111');
+  assert.equal(bubble.attrs.cy, '222');
+  assert.equal(bubble.attrs.r, '58');
+});
+
+test('클릭 위임용 .graph-node에 data-cluster가 실린다(controller.js의 wireNodeClicks 재사용)', () => {
+  const placed = mockPlaced([{ cluster: 3, size: 1, x: 1, y: 1, radius: 10 }]);
+  const container = fakeNode('div');
+  const svg = renderClusterBubbles(container, placed, { width: 800, height: 600 });
+  const node = svg.querySelectorAll('.graph-node')[0];
+  assert.equal(node.getAttribute('data-cluster'), '3');
+});
+
+test('cohesion이 있으면 alpha가 그 값에 단조 대응한다(직접 매핑)', () => {
+  const placed = mockPlaced([
+    { cluster: 0, size: 1, x: 1, y: 1, radius: 10, cohesion: 0.19 },
+    { cluster: 1, size: 1, x: 1, y: 1, radius: 10, cohesion: 0.74 },
+  ]);
+  const container = fakeNode('div');
+  const svg = renderClusterBubbles(container, placed, { width: 800, height: 600 });
+  const [low, high] = bubbles(svg);
+  assert.match(low.attrs.style, /fill-opacity: 0\.19/);
+  assert.match(high.attrs.style, /fill-opacity: 0\.74/);
+});
+
+test('cohesion이 없으면(구버전 backend) 전 군집이 같은 대체 alpha를 쓴다', () => {
+  const placed = mockPlaced([
+    { cluster: 0, size: 1, x: 1, y: 1, radius: 10 },
+    { cluster: 1, size: 4, x: 1, y: 1, radius: 20 },
+  ]);
+  const container = fakeNode('div');
+  const svg = renderClusterBubbles(container, placed, { width: 800, height: 600 });
+  const [a, b] = bubbles(svg);
+  const alphaOf = (node) => node.attrs.style.match(/fill-opacity: ([\d.]+)/)[1];
+  assert.equal(alphaOf(a), alphaOf(b), '군집 크기와 무관하게 동일 alpha(size 기준 상대값을 새로 발명하지 않는다)');
+});
+
+test('전 군집이 무명(0/N)이면 경고 스타일이 아니라 중립 스타일이다(§0 r5)', () => {
+  const placed = mockPlaced([
+    { cluster: 0, size: 1, x: 1, y: 1, radius: 10, name: null },
+    { cluster: 1, size: 1, x: 1, y: 1, radius: 10, name: null },
+  ]);
+  const container = fakeNode('div');
+  const svg = renderClusterBubbles(container, placed, { width: 800, height: 600 });
+  assert.ok(bubbles(svg).every((b) => !String(b.attrs.class).includes('is-unnamed-warn')), '0/N이면 전부 중립');
+  // "이름 없음" 배지 텍스트 자체는 이 임계 규칙과 무관하게 항상 표기한다(§0 정책).
+  assert.equal(svg.querySelectorAll('.graph-cluster-unnamed-badge').length, 2);
+});
+
+test('부분 무명(0 < 이름 붙은 수 < 전체)이면 무명 군집에만 경고 스타일이 붙는다(§0 r5)', () => {
+  const placed = mockPlaced([
+    { cluster: 0, size: 1, x: 1, y: 1, radius: 10, name: '반도체' },
+    { cluster: 1, size: 1, x: 1, y: 1, radius: 10, name: null },
+  ]);
+  const container = fakeNode('div');
+  const svg = renderClusterBubbles(container, placed, { width: 800, height: 600 });
+  const list = bubbles(svg);
+  const named = list.find((b) => !String(b.attrs.class).includes('is-unnamed-warn'));
+  const unnamed = list.find((b) => String(b.attrs.class).includes('is-unnamed-warn'));
+  assert.ok(named, '이름 붙은 군집은 경고 스타일이 아니다');
+  assert.ok(unnamed, '이름 없는 군집만 경고 스타일이다');
+  assert.equal(svg.querySelectorAll('.graph-cluster-unnamed-badge').length, 1);
+});
+
+test('전 군집에 이름이 있으면(N/N) 경고 스타일이 아니다(§0 r5 — 보편 상태는 예외가 아니다)', () => {
+  const placed = mockPlaced([
+    { cluster: 0, size: 1, x: 1, y: 1, radius: 10, name: '반도체' },
+    { cluster: 1, size: 1, x: 1, y: 1, radius: 10, name: '배당' },
+  ]);
+  const container = fakeNode('div');
+  const svg = renderClusterBubbles(container, placed, { width: 800, height: 600 });
+  assert.ok(bubbles(svg).every((b) => !String(b.attrs.class).includes('is-unnamed-warn')));
+  assert.equal(svg.querySelectorAll('.graph-cluster-unnamed-badge').length, 0, '이름이 있으면 배지 자체가 없다');
+});
+
+test('빈 클러스터 목록도 터지지 않는다', () => {
+  const container = fakeNode('div');
+  const svg = renderClusterBubbles(container, mockPlaced([]), { width: 800, height: 600 });
+  assert.equal(bubbles(svg).length, 0);
+});
+
+test('컨테이너가 없으면 조용히 넘어간다(renderClusterBubbles)', () => {
+  assert.equal(renderClusterBubbles(null, mockPlaced([]), {}), null);
 });
