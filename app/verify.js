@@ -2462,8 +2462,9 @@ app.whenReady().then(async () => {
   // ---------- 에이전트모드 캔버스 — 헤더·세그먼트 탭·통계 카드 (4단계) ----------
   //
   // 위 3단계 블록과 같은 이유로 athena:routines-list를 잠깐 fixture로 바꾼다
-  // (이 하네스엔 실제 백엔드가 없다) — draft 1건을 섞어 "모두" 탭엔 3건 전부,
-  // "활성" 탭엔 1건만 남는지로 좌측 리스트 필터링을 잰다.
+  // (이 하네스엔 실제 백엔드가 없다) — draft 1건을 섞어 좌측 리스트 필터링을
+  // 잰다. 5단계에서 리스트가 감시(watch, 실데이터)+예약(schedule, fixture
+  // 2건 고정)을 섞은 두 열 레이아웃으로 바뀌었다 — 행 클래스는 .agent-row다.
   try {
     ipcMain.removeHandler('athena:routines-list');
     ipcMain.handle('athena:routines-list', async () => ({
@@ -2496,11 +2497,15 @@ app.whenReady().then(async () => {
       const statCards = Array.from(canvas.querySelectorAll('.agent-stat-card'));
       const statCount = statCards.length;
       const fixtureStatCount = statCards.filter((n) => n.getAttribute('data-source') === 'fixture').length;
-      const allRowCount = canvas.querySelectorAll('.agent-list-row').length;
+      const allRowCount = canvas.querySelectorAll('.agent-row').length;
       const activeTabBtn = Array.from(canvas.querySelectorAll('.agent-tab')).find((n) => n.textContent === '활성');
       if (activeTabBtn) activeTabBtn.click();
       await new Promise((r) => setTimeout(r, 100));
-      const activeRowCount = canvas.querySelectorAll('.agent-list-row').length;
+      const activeRowCount = canvas.querySelectorAll('.agent-row').length;
+      // agentCanvas는 싱글턴이라 탭 상태가 다음 블록까지 남는다 — "모두"로
+      // 되돌려 이 블록이 뒤따르는 블록에 곁가지 상태를 남기지 않게 한다.
+      const allTabBtn = Array.from(canvas.querySelectorAll('.agent-tab')).find((n) => n.textContent === '모두');
+      if (allTabBtn) allTabBtn.click();
       back.click();
       await new Promise((r) => setTimeout(r, 100));
       return { wired: true, headerText, statCount, fixtureStatCount, allRowCount, activeRowCount };
@@ -2520,10 +2525,13 @@ app.whenReady().then(async () => {
         'agent-canvas: 통계 카드 4장 전부 fixture 출처가 코드에 표시된다(P3)',
         agentCanvasProbe.fixtureStatCount === 4,
       );
-      assertOk('agent-canvas: "모두" 탭은 draft 포함 3건 전부 보인다', agentCanvasProbe.allRowCount === 3);
       assertOk(
-        'agent-canvas: "활성" 탭 전환 시 1건만 남는다(좌측 리스트 필터링, 3단계 데이터)',
-        agentCanvasProbe.activeRowCount === 1,
+        'agent-canvas: "모두" 탭은 감시 2건(draft 제외) + 예약 fixture 2건 = 4건이 보인다',
+        agentCanvasProbe.allRowCount === 4,
+      );
+      assertOk(
+        'agent-canvas: "활성" 탭 전환 시 2건(감시 1 + 예약 fixture 1)만 남는다(좌측 리스트 필터링)',
+        agentCanvasProbe.activeRowCount === 2,
       );
     }
   } catch (err) {
@@ -2532,6 +2540,86 @@ app.whenReady().then(async () => {
   } finally {
     ipcMain.removeHandler('athena:routines-list');
     ipcMain.handle('athena:routines-list', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+  }
+
+  // ---------- 에이전트모드 리스트·상세 — 감시=라이브 왕복, 예약=fixture 배지 (5단계) ----------
+  //
+  // athena:routines-list와 함께 athena:routine-confirm도 이 블록 동안만
+  // stateful fixture로 바꾼다 — draft→active 전이를 진짜로 흉내 내서
+  // "draft→confirm 왕복이 실제 API로 동작"을 잰다. 이 confirm 액션 자체는
+  // 채팅의 루틴 승인 카드([승인] 버튼, chat.js renderApprovalCard)가 이미
+  // 쓰는 것과 같은 IPC 채널·계약이다 — 여기서 새 UI를 만들지 않고 그 채널을
+  // 그대로 재사용해 캔버스가 결과를 정확히 반영하는지만 본다.
+  try {
+    const stage5Routines = [
+      {
+        id: 'fx-draft', symbol: '005930', note: '삼성전자 조건 도달', status: 'draft', mode: 'realtime-ws',
+        source_label: '현재가', cooldown_s: 300,
+      },
+      {
+        id: 'fx-active', symbol: '000660', note: 'SK하이닉스 감시', status: 'active', mode: 'periodic',
+        source_label: '공시 제목 키워드', cooldown_s: 600,
+      },
+    ];
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({
+      ok: true,
+      data: { routines: stage5Routines, disclosure_ready: true, last_error: null },
+    }));
+    ipcMain.removeHandler('athena:routine-confirm');
+    ipcMain.handle('athena:routine-confirm', async (_e, { id } = {}) => {
+      const r = stage5Routines.find((x) => x.id === id);
+      if (!r) return { ok: false, error: '루틴이 존재하지 않는다' };
+      if (r.status !== 'draft') return { ok: false, error: '전이할 수 없다' };
+      r.status = 'active'; // routines.py confirm_routine과 같은 계약: draft → active
+      return { ok: true, data: { ...r } };
+    });
+
+    const routineRoundTrip = await shellWin.webContents.executeJavaScript(`(async () => {
+      const nav = document.getElementById('modeNavAgent');
+      const back = document.getElementById('modeNavSummary');
+      const canvas = document.getElementById('agentCanvas');
+      if (!nav || !back || !canvas || !window.AthenaAgentCanvas) return { wired: false };
+      const count = (sel) => canvas.querySelectorAll(sel).length;
+      nav.click();
+      await new Promise((r) => setTimeout(r, 600));
+      // 4단계 블록이 "활성" 탭을 누른 채로 끝났을 수 있다(agentCanvas는 싱글턴이라
+      // 탭 상태가 블록 사이에 남는다) — "모두"로 되돌려 이 블록을 그 순서와
+      // 무관하게 만든다.
+      const allTabBtn = Array.from(canvas.querySelectorAll('.agent-tab')).find((n) => n.textContent === '모두');
+      if (allTabBtn) allTabBtn.click();
+      const before = { live: count('.agent-row[data-source="live"]'), fixture: count('.agent-row[data-source="fixture"]') };
+      // 채팅의 루틴 승인 카드가 [승인]을 누를 때 부르는 것과 같은 채널.
+      const confirmRes = await window.athena.invoke('athena:routine-confirm', { id: 'fx-draft' });
+      await window.AthenaAgentCanvas.refresh();
+      await new Promise((r) => setTimeout(r, 200));
+      const after = { live: count('.agent-row[data-source="live"]'), fixture: count('.agent-row[data-source="fixture"]') };
+      back.click();
+      await new Promise((r) => setTimeout(r, 100));
+      return { wired: true, confirmOk: !!(confirmRes && confirmRes.ok), before, after };
+    })()`);
+    report.routineRoundTrip = routineRoundTrip;
+    assertOk('agent-canvas-5: 배선이 있다', routineRoundTrip.wired === true);
+    if (routineRoundTrip.wired) {
+      assertOk('agent-canvas-5: confirm 호출이 성공한다(승인 카드와 같은 채널)', routineRoundTrip.confirmOk === true);
+      assertOk('agent-canvas-5: draft는 confirm 전엔 감시 목록에 없다', routineRoundTrip.before.live === 1);
+      assertOk(
+        'agent-canvas-5: draft→confirm 왕복 후 감시 목록에 반영된다(실 API)',
+        routineRoundTrip.after.live === 2,
+      );
+      assertOk(
+        'agent-canvas-5: 예약 행 2건은 confirm과 무관하게 항상 fixture 배지가 붙어 있다',
+        routineRoundTrip.before.fixture === 2 && routineRoundTrip.after.fixture === 2,
+      );
+    }
+  } catch (err) {
+    report.routineRoundTrip = { error: String((err && err.message) || err) };
+    failures.push('agent-canvas-5: 검증 블록이 예외로 끝났다');
+  } finally {
+    ipcMain.removeHandler('athena:routines-list');
+    ipcMain.handle('athena:routines-list', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+    ipcMain.removeHandler('athena:routine-confirm');
+    ipcMain.handle('athena:routine-confirm', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
   }
 
   fs.writeFileSync(path.join(CAPTURES, 'VERIFY-REPORT.json'), JSON.stringify(report, null, 2));
