@@ -506,18 +506,13 @@ function ensureChartRealtime(authority, panelId) {
 // REG는 종목당 1회 dedup이라 낭비 상한이 작다(페인트 ack가 이 경로에도
 // 생기면 ensureChartRealtime과 합친다).
 //
-// 알려진 제약(2026-08-27 실측, backend/athena_api/api/canvas_push.py:461-541) —
-// canvas_kind별 envelope 빌더가 비대칭이다: "chart" 분기는 build_aits_chart_
-// envelope_data가 종목코드를 데이터에 심어 넣지만(AITS DTO 계약, canvas.py
-// CHART_SCHEMA의 필수 "symbol"), "table" 분기(시세 카드가 쓰는 canvas_kind)의
-// envelope 딕셔너리(529~541행: canvas_type/screen_id/fell_back/fallback_reason/
-// caption/card_title/data/layout/drop_types(+renderer_id/correlation))에는
-// 종목코드를 담을 자리가 아예 없다. 클로드가 안 채우는 게 아니라 스키마 자체에
-// 없다 — 채팅으로 "삼성전자 시세" 같은 질문에 답한 결과에서는 지금 구조상
-// 이 함수가 실제로 등록에 성공할 일이 거의 없다(백엔드가 table 분기에도 종목
-// 코드를 얹어야 풀리는 문제 — 앱 쪽 수정으로 못 만든다). 그래도 자리가 있는
-// 값(chart처럼 별도 경로로 stock이 실리는 경우, 또는 백엔드가 나중에
-// table에도 필드를 더하는 경우)은 그대로 잡히게 여러 후보 자리를 본다.
+// 옛 제약은 해소됐다(2026-08-27 backend 53ece06) — canvas_kind별 envelope
+// 빌더가 비대칭이라 "table" 분기(시세 카드가 쓰는 canvas_kind)에는 종목코드를
+// 담을 자리가 아예 없었는데, 이제 canvas_context.symbol 봉인 게이트가 시장
+// 데이터 3도메인(charts·stockinfo·quotes) 전부에서 envelope.stk_cd로 실린다
+// (canvas_push.py/canvas_data.py 공통). 계좌·주문류(canvas_context 게이트 밖)는
+// 여전히 이 필드가 없어 자연 배제된다 — 아래 후보 목록은 그 신규 필드를 포함해
+// 여러 자리를 본다(chart는 data.symbol에도 실리는 AITS DTO 계약과 중복 커버).
 function extractLiveQuoteSymbol(envelope) {
   if (!envelope) return null;
   const candidates = [
@@ -1554,13 +1549,19 @@ async function runLiveQueryInner(query, expand) {
     onThinkingDelta: sendLiveThinkingDelta,
     onCanvasResult: (r) => {
       const label = r.envelope && (r.envelope.card_title || r.envelope.caption);
+      // 실시간 트리거 판정(P1, 2026-08-27) — card_title==='시세' 하나만 보던 옛
+      // 조건은 "삼성전자 시세 보여줘"가 실제로는 detail:ka10001 → card_title
+      // '종목정보' facts 카드로 라우팅되는(canvas_transform.py:865, 의도된 라우팅)
+      // 자연 발화를 놓쳤다 — QA 배치 전체에서 REG 0건의 원인. extractLiveQuoteSymbol이
+      // 종목코드를 뽑아내는가로 바꾼다: 이 함수가 보는 envelope.stk_cd는 backend
+      // 53ece06이 시장 데이터 3도메인(charts·stockinfo·quotes)에만 봉인하므로
+      // 계좌·주문 카드는 그대로 자연 배제된다.
+      const liveSymbol = extractLiveQuoteSymbol(r.envelope);
       if (r.status === 'pushed') {
         // 카드는 사이드 채널(startCanvasFeed)로 이미 도착했다 — 여기선 집계만.
         if (r.envelope && r.envelope.canvas_type) canvasTypesSeen.push(r.envelope.canvas_type);
         if (label) canvasCaptionsSeen.push(label);
-        if (r.envelope && r.envelope.card_title === '시세') {
-          ensureRealtimeForSymbol(extractLiveQuoteSymbol(r.envelope));
-        }
+        if (liveSymbol) ensureRealtimeForSymbol(liveSymbol);
         return;
       }
       if (expand && !expandTriggered) {
@@ -1572,9 +1573,7 @@ async function runLiveQueryInner(query, expand) {
       sendLiveCanvasResult(r);
       if (r.envelope && r.envelope.canvas_type) canvasTypesSeen.push(r.envelope.canvas_type);
       if (label) canvasCaptionsSeen.push(label);
-      if (r.envelope && r.envelope.card_title === '시세') {
-        ensureRealtimeForSymbol(extractLiveQuoteSymbol(r.envelope));
-      }
+      if (liveSymbol) ensureRealtimeForSymbol(liveSymbol);
     },
   });
 

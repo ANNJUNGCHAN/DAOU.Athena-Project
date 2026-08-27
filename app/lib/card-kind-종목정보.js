@@ -46,7 +46,8 @@ const __isCjs = typeof module !== 'undefined' && module.exports;
 function __dep(reqPath, globalName) {
   return __isCjs ? require(reqPath) : window.AthenaLib[globalName];
 }
-const { QuoteHeader, RangeBar, priceMagnitude } = __dep('./card-primitives', 'CardPrimitives');
+const { QuoteHeader, RangeBar, ChangeBadge, priceMagnitude } = __dep('./card-primitives', 'CardPrimitives');
+const { formatNumeric } = __dep('./facts-card', 'FactsCard');
 
 // 가격 범위 최후 방어선(팀리드 지시로 2026-08-26 카드 데모 실측 뒤 크기 기준으로
 // 완화 — card-primitives.js priceMagnitude 주석 참고: "-255500"의 부호는 값이 아니라
@@ -130,11 +131,38 @@ function render종목정보(envelope) {
   return renderRangeSection(view);
 }
 
-const __exports = { pickPrimaryView, isValidPriceRange, render종목정보 };
+// 실시간 체결 1건을 이미 그려진 QuoteHeader 조각에 이어붙인다(P1, 2026-08-27
+// 실시간 트리거 확장 — canvas.js wireQuoteRealtime이 매 체결마다 이걸 부른다).
+// 갱신 대상은 이 카드가 실제로 그리는 필드만: 현재가(tick.price)·등락률
+// (tick.changeRate). 이 조각엔 누적거래량 표시 자리가 없어(QuoteHeader에 그
+// 필드가 없다) tick.accVolume은 쓰지 않는다 — 없는 자리에 새 시각 요소를
+// 발명하지 않는다. daily-range/year-range 조각(kind !== 'quote')은 가격표시가
+// 아니라 범위 막대라 갱신 대상이 없다 — .card-kit-quote-price가 없으면 조용히
+// 건너뛴다. changeRate가 null이면(실프레임 미실측 필드) 배지를 그대로 둔다 —
+// 모르는 값으로 톤을 지어내지 않는다(정보 정직성).
+function applyLiveTick(wrap, envelope, tick) {
+  if (!wrap || !tick) return;
+  const priceEl = wrap.querySelector('.card-kit-quote-price');
+  if (!priceEl) return;
+  if (tick.price !== null && tick.price !== undefined) {
+    priceEl.textContent = formatNumeric(priceMagnitude(tick.price));
+  }
+  if (tick.changeRate !== null && tick.changeRate !== undefined) {
+    const newBadge = ChangeBadge({ key: 'flu_rt', value: tick.changeRate });
+    const oldBadge = wrap.querySelector('.card-kit-badge-change');
+    if (oldBadge) oldBadge.replaceWith(newBadge);
+    else priceEl.insertAdjacentElement('afterend', newBadge);
+  }
+}
+
+const __exports = { pickPrimaryView, isValidPriceRange, render종목정보, applyLiveTick };
 if (__isCjs) {
   module.exports = __exports;
 } else {
   window.AthenaLib.CardKinds.register('종목정보', render종목정보);
+  // CardKindQuote와 같은 문법(card-kind-시세.js 주석) — CardKinds.resolve(title)는
+  // renderFn 하나만 돌려주는 계약이라 실시간 갱신은 별도 네임스페이스로 낸다.
+  window.AthenaLib.CardKindStockInfo = { applyLiveTick };
 }
 
 })();
