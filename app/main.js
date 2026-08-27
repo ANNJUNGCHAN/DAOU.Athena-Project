@@ -525,6 +525,75 @@ function runBriefingTurnWired(event) {
   });
 }
 
+// ---------- 놓친 예약 캐치업(R1, 5단계) ----------
+// 앱이 꺼져 있는 동안 지나간 예약을 기동 시 1회 감지해 채팅 카드로 물어본다.
+// 자동 실행하지 않는다 — 사람이 [지금 브리핑]을 눌러야 ① catchup-fire(정식
+// ledger "fired" 기록, 서버 authoritative fired_at) ② 브리핑 실행 순서로
+// 이어진다(MAJOR 3 — 기록이 실행보다 먼저, 41번 이력·지표 왜곡 방지).
+
+// 감지 시점의 라우틴 뷰 보관 — 확인 클릭 시 합성 routine-fired 이벤트의 재료
+// (symbol/note/briefing_*)로 쓴다. 프로세스 로컬(재시작하면 재감지).
+const missedRoutineViews = new Map();
+
+async function checkMissedSchedules() {
+  const res = await routineHttp('GET', '/api/v1/routines').catch(() => null);
+  if (!res || !res.ok || !res.data || !Array.isArray(res.data.routines)) return;
+  const missed = res.data.routines.filter(
+    (r) => r.mode === 'scheduled' && r.status === 'active' && r.missed === true,
+  );
+  if (!missed.length) return;
+  for (const r of missed) missedRoutineViews.set(r.id, r);
+  if (shellWin && !shellWin.isDestroyed()) {
+    shellWin.webContents.send('athena:routine-missed', { routines: missed });
+  }
+}
+
+function catchupFireHttp(routineId) {
+  if (briefingBackendOverrides && briefingBackendOverrides.catchupFire) {
+    return briefingBackendOverrides.catchupFire(routineId);
+  }
+  return routineHttp('POST', `/api/v1/routines/${encodeURIComponent(routineId)}/catchup-fire`);
+}
+
+ipcMain.handle('athena:routine-missed-confirm', async (_e, { id } = {}) => {
+  try {
+    // ① 먼저 정식 ledger 기록 — 실패(이미 처리된 409 포함)면 브리핑도 없다.
+    const res = await catchupFireHttp(id);
+    if (!res || !res.ok) {
+      return { ok: false, status: (res && res.status) || 0, error: (res && res.error) || '캐치업 실패' };
+    }
+    const firedAt = res.data && res.data.fired_at;
+    const view = missedRoutineViews.get(id);
+    // ② 서버가 실제로 기록에 쓴 fired_at으로 합성 이벤트를 만들어 4단계 러너와
+    // 같은 실행 경로를 태운다(멱등성 키·briefings 기록·시계 편차 전부 이 값 하나로 정합).
+    runBriefingTurnWired({
+      type: 'routine-fired',
+      routine_id: id,
+      symbol: view ? view.symbol : '',
+      source: 'schedule.daily',
+      mode: 'scheduled',
+      observed: firedAt,
+      note: view ? view.note : '',
+      fired_at: firedAt,
+      briefing_model: view ? view.briefing_model : null,
+      briefing_effort: view ? view.briefing_effort : null,
+    }).catch((err) => {
+      mdlog(`캐치업 브리핑 실패: ${String((err && err.message) || err)}`);
+    });
+    missedRoutineViews.delete(id);
+    return { ok: true, data: { fired_at: firedAt } };
+  } catch (e) {
+    return { ok: false, error: String((e && e.message) || e) };
+  }
+});
+
+ipcMain.handle('athena:routine-missed-skip', async (_e, { id } = {}) => {
+  // 백엔드 API는 부르지 않는다(계획 명시 — 건너뛰기는 카드만 닫는다).
+  // main 쪽 보관 뷰만 정리하는 수신 지점이다.
+  missedRoutineViews.delete(id);
+  return { ok: true };
+});
+
 app.on('will-quit', () => { if (routineFeed) routineFeed.stop(); });
 
 // ---------- 차트 실시간 진행봉 — 키움 REAL 0B → 렌더러 ----------
@@ -2238,6 +2307,13 @@ if (!process.env.ATHENA_NO_AUTOSTART) {
     backendLauncher.ensureBackend({ mdlog })
       .then(async () => {
         historySink.refreshBrainReady({ mdlog });
+        // 놓친 예약 확인(R1, 5단계) — 백엔드 기동 확인 후 1회. fixture(verify)는
+        // 결정론 보호로 건너뛴다 — verify.js가 IPC 주입으로 카드 경로만 태운다.
+        if (process.env.ATHENA_CANVAS_SOURCE !== 'fixture') {
+          checkMissedSchedules().catch((err) => {
+            mdlog(`놓친 예약 확인 실패: ${String((err && err.message) || err)}`);
+          });
+        }
         try {
           const count = await restDatasetRunner.refreshStockEntityIndex(stockEntityIndex, {
             backendBase: BACKEND_HTTP_BASE,
