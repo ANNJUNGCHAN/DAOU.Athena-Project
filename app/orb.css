@@ -699,8 +699,45 @@ html, body {
 }
 
 /* 접힘 고지 — 결정론 축약 고지(실측값으로 동적 생성). .orb-turn-fold-note와
- * 같은 어휘(옅은 색·작은 글자)를 쓰되, 카드 내부에 얹히므로 배경은 없다. */
+ * 같은 어휘(옅은 색·작은 글자)를 쓰되, 카드 내부에 얹히므로 배경은 없다.
+ * board-33④ 오브용 미니 차트의 "지표・드로잉・매물대는 캔버스에서" 고지도
+ * 같은 클래스를 쓴다(축약이든 능력 고지든 톤은 같다). */
 .orb-fold-note {
+  font-size: var(--text-2xs);
+  color: var(--color-k-faint);
+}
+
+/* board-33④ 오브용 미니 차트(Paper 4ZM-0 실측) — .orb-fold-card 셸을 그대로
+ * 쓴다(축약 카드와 같은 표면 어휘). 지표・드로잉・매물대 없음, 그리드선・면적
+ * 채움・끝점 마커도 없다 — 구성 상한(가격+등락률+선 1개+날짜 2개)을 넘지 않는다. */
+.orb-chart-headline {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.orb-chart-price {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--color-k-text);
+}
+
+.orb-chart-change {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+.orb-chart-change.is-up { color: var(--color-up); }
+.orb-chart-change.is-down { color: var(--color-down); }
+.orb-chart-change.is-flat { color: var(--color-flat); }
+
+.orb-chart-svg { display: block; width: 100%; height: auto; }
+
+.orb-chart-dates {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
   font-size: var(--text-2xs);
   color: var(--color-k-faint);
 }

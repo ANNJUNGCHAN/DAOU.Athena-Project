@@ -37,6 +37,8 @@
   const liveQueryLock = window.AthenaLib.LiveQueryLock;
   const marketHours = window.AthenaLib.MarketHours;
   const columnFold = window.AthenaLib.ColumnFold;
+  const factsCard = window.AthenaLib.FactsCard;
+  const cardPrimitives = window.AthenaLib.CardPrimitives;
 
   const $root = document.getElementById('orbRoot');
   const $orb = document.getElementById('orb');
@@ -981,15 +983,130 @@
     return card;
   }
 
+  const ORB_CHART_WIDTH_PX = 336; // Paper 4ZM-0 실측 "차트 판 (336×116)"
+  const ORB_CHART_HEIGHT_PX = 116;
+  // canvas.js PERIOD_TITLE과 같은 값 — 오브는 별도 스크립트 스코프라 그대로
+  // 참조할 수 없어 복제한다(키움 API 주기 6종 고정값이라 드리프트 위험이 낮다).
+  const ORB_CHART_PERIOD_LABEL = Object.freeze({
+    tick: '틱', min: '분봉', day: '일봉', week: '주봉', month: '월봉', year: '년봉',
+  });
+
+  // 오브용 미니 차트(board-33④, Paper 4ZM-0 실측) — 캔버스 차트(lightweight-charts
+  // 툴바·지표·드로잉·매물대)의 축소판이 아니라 완전히 별도의 렌더러다(보드 캡션
+  // 원문). 구성 상한: 가격 + 등락률 + 종가 라인 1개 + 시작/끝 날짜 2개까지 — 그
+  // 외(그리드선·면적 채움·끝점 마커 포함)는 넣지 않는다. SVG는 createElementNS만
+  // 쓴다(innerHTML 0, 게이트 규범).
+  function buildOrbChartCard(envelope) {
+    const data = envelope.data || {};
+    const chart = data.chart && typeof data.chart === 'object' ? data.chart : null;
+    const candles = chart && Array.isArray(chart.candles) ? chart.candles : [];
+    const closes = candles.map((c) => c && c.close).filter((v) => v != null);
+    if (closes.length < 2) return null; // 선 하나를 그릴 최소 조건(chartLinePoints와 같은 기준)
+
+    const last = candles[candles.length - 1];
+    const prev = candles[candles.length - 2];
+    const changeAmount = (last.close != null && prev.close != null) ? last.close - prev.close : null;
+    const changePercent = (changeAmount != null && prev.close) ? (changeAmount / prev.close) * 100 : null;
+    const tone = changeAmount != null ? factsCard.changeTone(undefined, changeAmount) : 'flat';
+
+    const [title] = orbCardTitleAndSubtitle(envelope, data.symbol || '차트');
+    const periodLabel = chart.period ? ORB_CHART_PERIOD_LABEL[chart.period] : null;
+
+    const card = document.createElement('div');
+    card.className = 'orb-fold-card';
+
+    const head = document.createElement('div');
+    head.className = 'orb-fold-card-head';
+    const titleEl = document.createElement('div');
+    titleEl.className = 'orb-fold-card-title';
+    titleEl.textContent = title;
+    head.appendChild(titleEl);
+    if (periodLabel) {
+      const subtitleEl = document.createElement('div');
+      subtitleEl.className = 'orb-fold-card-subtitle';
+      subtitleEl.textContent = periodLabel;
+      head.appendChild(subtitleEl);
+    }
+    card.appendChild(head);
+
+    // 가격 헤드라인 — 캔들 close는 이미 정규화된 순수 숫자(normalizeChartCandle의
+    // finiteOrNull)라 부호 오염이 없지만, 카드 렌더러 전반의 priceMagnitude→
+    // formatNumeric 관례(card-primitives.js/facts-card.js)를 그대로 따른다.
+    // 등락률은 방향이 의미라 부호를 그대로 남긴다(priceMagnitude를 안 거친다 —
+    // ChangeBadge와 같은 원칙, card-primitives.js 주석 참조).
+    const headline = document.createElement('div');
+    headline.className = 'orb-chart-headline';
+    const priceEl = document.createElement('span');
+    priceEl.className = 'orb-chart-price';
+    priceEl.textContent = factsCard.formatNumeric(cardPrimitives.priceMagnitude(last.close));
+    headline.appendChild(priceEl);
+    if (changeAmount != null) {
+      const changeEl = document.createElement('span');
+      changeEl.className = `orb-chart-change is-${tone}`;
+      const sign = changeAmount > 0 ? '+' : '';
+      const pct = changePercent != null ? ` (${changePercent > 0 ? '+' : ''}${changePercent.toFixed(2)}%)` : '';
+      changeEl.textContent = `${sign}${factsCard.formatNumeric(changeAmount)}${pct}`;
+      headline.appendChild(changeEl);
+    }
+    card.appendChild(headline);
+
+    // 차트 판 — 종가 라인 1개만. 좌표 변환은 card-primitives.js chartLinePoints
+    // (순수 함수, node --test 대상)가 하고 여기서는 DOM만 짓는다.
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(svgNS, 'svg');
+    svg.setAttribute('width', String(ORB_CHART_WIDTH_PX));
+    svg.setAttribute('height', String(ORB_CHART_HEIGHT_PX));
+    svg.setAttribute('viewBox', `0 0 ${ORB_CHART_WIDTH_PX} ${ORB_CHART_HEIGHT_PX}`);
+    svg.setAttribute('class', 'orb-chart-svg');
+    const points = cardPrimitives.chartLinePoints(closes, { width: ORB_CHART_WIDTH_PX, height: ORB_CHART_HEIGHT_PX });
+    if (points.length) {
+      const path = document.createElementNS(svgNS, 'path');
+      const d = points.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ');
+      path.setAttribute('d', d);
+      path.setAttribute('fill', 'none');
+      // 토큰을 SVG 프리젠테이션 속성에 그대로 쓴다(Paper 가이드 "SVGs support
+      // design tokens through CSS variables for stroke and fill attributes").
+      path.setAttribute('stroke', `var(--color-${tone})`);
+      path.setAttribute('stroke-width', '1.6');
+      path.setAttribute('stroke-linejoin', 'round');
+      svg.appendChild(path);
+    }
+    card.appendChild(svg);
+
+    // 시작/끝 날짜 2개 — 구성 상한의 마지막 항목.
+    const firstTime = candles[0] && candles[0].time;
+    const lastTime = last.time;
+    if (firstTime != null && lastTime != null) {
+      const dates = document.createElement('div');
+      dates.className = 'orb-chart-dates';
+      const startEl = document.createElement('span');
+      startEl.textContent = factsCard.formatDatetime(firstTime);
+      const endEl = document.createElement('span');
+      endEl.textContent = factsCard.formatDatetime(lastTime);
+      dates.append(startEl, endEl);
+      card.appendChild(dates);
+    }
+
+    // 능력 고지(보드 원문) — 축약 여부와 무관하게 항상 낸다(지표·드로잉·매물대가
+    // 구조적으로 없는 렌더러라는 사실 자체를 알린다).
+    const note = document.createElement('div');
+    note.className = 'orb-fold-note';
+    note.textContent = '지표 · 드로잉 · 매물대는 캔버스에서';
+    card.appendChild(note);
+
+    return card;
+  }
+
   // canvas.js의 addLiveCard와 같은 1차 게이트(성공/폴백만 카드, 나머지는 통과)를
   // 따른다 — 'pushed'는 main.js 9a 결정으로 애초에 relay되지 않는다. rejected/
-  // error/unparseable/그 밖의 canvas_type(chart는 Step 9c)은 카드 없이 기존
-  // "전체는 대화창에서 이어집니다" 안내로 넘어간다.
+  // error/unparseable/그 밖의 canvas_type은 카드 없이 기존 "전체는 대화창에서
+  // 이어집니다" 안내로 넘어간다.
   function buildOrbCanvasCard(r) {
     if (!r || (r.status !== 'success' && r.status !== 'fallback')) return null;
     const envelope = r.envelope;
     if (!envelope || envelope.fell_back) return null;
     if (envelope.canvas_type === 'table') return buildOrbTableCard(envelope);
+    if (envelope.canvas_type === 'chart') return buildOrbChartCard(envelope);
     return null;
   }
 
