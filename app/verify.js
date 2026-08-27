@@ -1947,6 +1947,20 @@ app.whenReady().then(async () => {
   const orbAlertBeforeEvent = await orbWin.webContents.executeJavaScript(
     "document.getElementById('orbRoot').dataset.alert"
   );
+  // 눈 기하 측정은 face=idle 전제 — 장외 시각엔 부팅 얼굴이 drowsy(눈이 반쯤
+  // 감겨 세로/가로 비가 낮다)라 firedEyesAreRounder가 실행 시각에 따라 흔들렸다
+  // (2026-08-27 실측: 같은 트리 2회 실행에서 통과/실패 갈림). probe-orb-drag-lift
+  // 03a·probe-orb-drowsy와 같은 기법 — isMarketOpen을 열림으로 바꿔치고 15초
+  // 주기 재판정 틱을 기다린다. listen:false는 셸 커맨드바 자동 포커스 잔재 제거.
+  await orbWin.webContents.executeJavaScript(
+    "(() => { window.AthenaLib.MarketHours.isMarketOpen = () => true; return true; })()"
+  );
+  orbWin.webContents.send('athena:orb-signal', { signal: 'listen', active: false });
+  for (let i = 0; i < 40; i += 1) {
+    const f = await orbWin.webContents.executeJavaScript("document.getElementById('orbRoot').dataset.face");
+    if (f === 'idle') break;
+    await wait(500);
+  }
   await shot(orbWin, '22-orb-collapsed.png');
   const pixelsQuiet = await measurePixels(orbWin);
   // 눈 기하 — 대기(quiet) 상태의 눈 모양. board-31/32 규범 개정 이후 발화 신호는
@@ -2153,7 +2167,9 @@ app.whenReady().then(async () => {
     // 꺼져 있어야 하므로 그 하나도 실제로 안 살아있어야 한다.
     onlyAllowedInput: JSON.stringify(orbPanelProbe.inputIds) === JSON.stringify(['orbInput']),
     chatInputGatedByShellVisibility: orbPanelProbe.chatInputStackHidden === true,
-    onlyAllowedButtons: JSON.stringify(orbPanelProbe.buttonIds) === JSON.stringify(['orbChatGo', 'orbClose', 'orbEsc', 'orbMore', 'orbToggle']),
+    // CP2 미니 티켓(3a85be5) 버튼 2종 포함 — 오브 병합 후 full verify 미실행으로
+    // 기대 목록이 낡아 있었다(2026-08-27 병합 점검 M5). 티켓은 사용자 승인 범위.
+    onlyAllowedButtons: JSON.stringify(orbPanelProbe.buttonIds) === JSON.stringify(['orbChatGo', 'orbClose', 'orbEsc', 'orbMore', 'orbTicketCancel', 'orbTicketExec', 'orbToggle']),
   };
   console.log('[verify] 검증22(알림 오브):', JSON.stringify(report.orbWindow));
   for (const key of [
