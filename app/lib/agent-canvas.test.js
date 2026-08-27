@@ -408,3 +408,114 @@ test('container가 없으면 mount/refresh가 조용히 아무 것도 안 한다
   assert.doesNotThrow(() => canvas.mount());
   await assert.doesNotReject(() => canvas.refresh());
 });
+
+// ── 7단계: 제안 — 그래프 성향 기반(GET /api/v1/brain/profile-summary) ──
+
+function profileEntry(overrides) {
+  return {
+    entity_id: 'e1', entity_kind: 'stock', entity_name: '삼성전자', relation_kind: '단기 회전',
+    confidence: 'EXTRACTED', tier: 'deterministic', rationale: '매매일마다 정리가 필요해 보여요',
+    observed_at: '2026-08-26T00:00:00Z', reinforcement: 21, ...overrides,
+  };
+}
+
+test('fetchProfileSummary가 없으면 제안 섹션이 숨는다(빈 라벨을 노출하지 않는다, P3)', async () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => [] });
+  canvas.mount();
+  await canvas.refresh();
+  const section = findByClass(container, 'agent-suggest-section')[0];
+  assert.equal(section.hidden, true);
+  assert.equal(findByClass(container, 'agent-suggest-row').length, 0);
+});
+
+test('제안 섹션: 신호가 있으면 보이고 제목·근거문이 실제 필드로만 채워진다(지어내지 않는다)', async () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => [],
+    fetchProfileSummary: async () => [profileEntry()],
+  });
+  canvas.mount();
+  await canvas.refresh();
+  const section = findByClass(container, 'agent-suggest-section')[0];
+  assert.equal(section.hidden, false);
+  assert.equal(findByClass(container, 'agent-suggest-title')[0].textContent, '삼성전자');
+  assert.equal(
+    findByClass(container, 'agent-suggest-rationale')[0].textContent,
+    '단기 회전 성향 21회 보강 — 매매일마다 정리가 필요해 보여요',
+  );
+});
+
+test('rationale이 없으면(nullable) 근거문에서 그 부분만 빠진다 — 지어내지 않는다', async () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => [],
+    fetchProfileSummary: async () => [profileEntry({ rationale: null })],
+  });
+  canvas.mount();
+  await canvas.refresh();
+  assert.equal(findByClass(container, 'agent-suggest-rationale')[0].textContent, '단기 회전 성향 21회 보강');
+});
+
+test('"추가" 클릭 시 onAddSuggestion이 실제 필드로 조합한 문장을 받는다(시트를 열지 않는다, 43 원칙)', async () => {
+  const container = fakeNode('div');
+  let seeded = null;
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => [],
+    fetchProfileSummary: async () => [profileEntry()],
+    onAddSuggestion: (text) => { seeded = text; },
+  });
+  canvas.mount();
+  await canvas.refresh();
+  const addBtn = findByClass(container, 'agent-suggest-add')[0];
+  assert.equal(addBtn.textContent, '추가');
+  addBtn.dispatchEvent({ type: 'click' });
+  assert.equal(seeded, '"삼성전자"에 대한 단기 회전 성향이 21회 보강됐어요 — 관련 루틴을 만들어줄까요?');
+});
+
+test('fetchProfileSummary가 실패하면 제안 섹션이 숨는다(지어낸 제안을 보여주지 않는다, P3)', async () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => [],
+    fetchProfileSummary: async () => { throw new Error('backend down'); },
+  });
+  canvas.mount();
+  await assert.doesNotReject(() => canvas.refresh());
+  const section = findByClass(container, 'agent-suggest-section')[0];
+  assert.equal(section.hidden, true);
+});
+
+test('제안 stale-응답 가드: 먼저 보낸 요청이 나중에 도착해도 최신 데이터를 덮지 않는다', async () => {
+  const container = fakeNode('div');
+  let call = 0;
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => [],
+    fetchProfileSummary: async () => {
+      call += 1;
+      if (call === 1) {
+        await new Promise((r) => setTimeout(r, 30));
+        return [profileEntry({ entity_name: '낡은 신호' })];
+      }
+      return [profileEntry({ entity_name: '최신 신호' })];
+    },
+  });
+  canvas.mount();
+  const first = canvas.refresh();
+  await canvas.refresh();
+  await first;
+  const titles = findByClass(container, 'agent-suggest-title').map((n) => n.textContent);
+  assert.ok(titles.includes('최신 신호'));
+  assert.equal(titles.includes('낡은 신호'), false);
+});
+
+test('라우틴 refresh가 실패해도 제안 refresh는 독립적으로 성공한다(서로 무관한 왕복)', async () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({
+    container,
+    fetchRoutines: async () => { throw new Error('routines down'); },
+    fetchProfileSummary: async () => [profileEntry()],
+  });
+  canvas.mount();
+  await canvas.refresh();
+  assert.equal(findByClass(container, 'agent-suggest-title')[0].textContent, '삼성전자');
+});

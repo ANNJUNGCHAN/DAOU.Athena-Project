@@ -72,13 +72,18 @@ function statusRowIcon(routine) {
 }
 
 function createAgentCanvas(deps) {
-  const { container, fetchRoutines, onNewTaskClick, pauseRoutine, resumeRoutine } = deps || {};
+  const {
+    container, fetchRoutines, onNewTaskClick, pauseRoutine, resumeRoutine,
+    fetchProfileSummary, onAddSuggestion,
+  } = deps || {};
   if (!container) return { mount() {}, async refresh() {} };
 
   let activeTab = 'all';
   let searchQuery = '';
   let routinesCache = [];
   let requestId = 0; // stale-응답 가드 — sidebar.js 3단계(loadAgentRoutines)와 같은 이유.
+  let suggestionsCache = [];
+  let suggestRequestId = 0; // 위와 같은 이유 — 별개 요청이라 별개 가드를 쓴다.
 
   // ---------- 헤더 ----------
   const head = el('div', 'agent-head');
@@ -164,6 +169,79 @@ function createAgentCanvas(deps) {
   listCol.appendChild(listCaption);
   const watchList = el('div', 'agent-watch-list');
   listCol.appendChild(watchList);
+
+  // ---------- 제안 — 그래프 성향 기반(7단계, Paper 보드 39 하단) ----------
+  // GET /api/v1/brain/profile-summary(athena:brain-profile-summary IPC) 실데이터 —
+  // graph-mode/summary-table.js(보드 07)가 이미 쓰는 것과 같은 엔드포인트다.
+  // brain.py 5종 분석 중 이 필드 구성(entity_name·relation_kind·reinforcement·
+  // rationale)이 Paper 목업의 "OO 성향 N회 보강 — 근거문" 패턴과 가장 가깝다 —
+  // suggested-questions("불확실한 관계 되묻기")는 성격이 달라 억지로 끼워맞추지
+  // 않는다(P3). 제목은 목업의 지어낸 태스크 문구 대신 entity_name을 정직하게
+  // 쓴다. 신호가 없으면 섹션 자체를 숨긴다(빈 라벨을 노출하지 않는다, P3).
+  const suggestSection = el('div', 'agent-suggest-section');
+  suggestSection.hidden = true;
+  const suggestDivider = el('div', 'agent-suggest-divider');
+  suggestSection.appendChild(suggestDivider);
+  const suggestCaption = el('div', 'agent-panel-caption');
+  suggestCaption.textContent = '제안 — 그래프 성향 기반';
+  suggestSection.appendChild(suggestCaption);
+  const suggestList = el('div', 'agent-suggest-list');
+  suggestSection.appendChild(suggestList);
+  listCol.appendChild(suggestSection);
+
+  // 추가 클릭 → 시트 없이 채팅으로(43 원칙). 실제 필드만 조합한다 — 지어낸
+  // 문구 없음(P3).
+  function suggestionSeedText(entry) {
+    const name = entry.entity_name || entry.entity_id;
+    return `"${name}"에 대한 ${entry.relation_kind} 성향이 ${entry.reinforcement}회 보강됐어요 — 관련 루틴을 만들어줄까요?`;
+  }
+
+  function makeSuggestionRow(entry) {
+    const row = el('div', 'agent-suggest-row');
+    row.setAttribute('data-source', 'live'); // profile-summary는 실데이터다.
+    const icon = el('span', 'agent-suggest-icon');
+    icon.textContent = '◆';
+    row.appendChild(icon);
+    const textWrap = el('span', 'agent-suggest-text');
+    const title = el('span', 'agent-suggest-title');
+    title.textContent = entry.entity_name || entry.entity_id;
+    textWrap.appendChild(title);
+    const rationale = el('span', 'agent-suggest-rationale');
+    rationale.textContent = `${entry.relation_kind} 성향 ${entry.reinforcement}회 보강` + (entry.rationale ? ` — ${entry.rationale}` : '');
+    textWrap.appendChild(rationale);
+    row.appendChild(textWrap);
+    const addBtn = el('button', 'agent-suggest-add');
+    addBtn.type = 'button';
+    addBtn.textContent = '추가';
+    addBtn.addEventListener('click', () => {
+      if (typeof onAddSuggestion === 'function') onAddSuggestion(suggestionSeedText(entry));
+    });
+    row.appendChild(addBtn);
+    return row;
+  }
+
+  function renderSuggestions() {
+    while (suggestList.firstChild) suggestList.removeChild(suggestList.firstChild);
+    suggestSection.hidden = suggestionsCache.length === 0;
+    for (const entry of suggestionsCache) suggestList.appendChild(makeSuggestionRow(entry));
+  }
+
+  // GET /api/v1/brain/profile-summary 실데이터 — requestId로 낡은 응답을 버린다
+  // (routine 목록과 같은 이유·같은 패턴, 별개 요청이라 별개 카운터를 쓴다).
+  async function refreshSuggestions() {
+    const rid = ++suggestRequestId;
+    let entries = [];
+    try {
+      entries = (typeof fetchProfileSummary === 'function') ? await fetchProfileSummary() : [];
+      if (!Array.isArray(entries)) entries = [];
+    } catch {
+      entries = [];
+    }
+    if (rid !== suggestRequestId) return;
+    suggestionsCache = entries;
+    renderSuggestions();
+  }
+
   const detailCol = el('div', 'agent-detail-col');
   panels.appendChild(listCol);
   panels.appendChild(detailCol);
@@ -432,7 +510,7 @@ function createAgentCanvas(deps) {
 
   // GET /api/v1/routines 실데이터 — requestId로 낡은 응답을 버린다(sidebar.js
   // loadAgentRoutines()와 같은 이유·같은 패턴, 실사용 결함 재현으로 확인됨).
-  async function refresh() {
+  async function refreshRoutines() {
     const rid = ++requestId;
     let rows = [];
     try {
@@ -445,6 +523,12 @@ function createAgentCanvas(deps) {
     routinesCache = rows;
     updateSubtitle();
     renderPanels();
+  }
+
+  // 두 소스는 서로 무관한 왕복이다 — 하나가 느려도(또는 실패해도) 다른 쪽을
+  // 막지 않는다(Promise.all로 병렬, 실패는 각자의 try/catch가 이미 삼킨다).
+  async function refresh() {
+    await Promise.all([refreshRoutines(), refreshSuggestions()]);
   }
 
   return { mount, refresh, setActiveTab, selectRow };

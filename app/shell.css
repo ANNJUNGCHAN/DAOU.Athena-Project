@@ -535,6 +535,71 @@ body { margin: 0; overflow: hidden; }
   font-size: var(--text-sm);
 }
 
+/* ---------- 제안 — 그래프 성향 기반(7단계, Paper 보드 39 하단 실측) ---------- */
+.agent-suggest-section {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 4px;
+}
+.agent-suggest-divider {
+  flex-shrink: 0;
+  height: 1px;
+  margin: 4px 2px 6px;
+  background: var(--color-k-line-soft);
+}
+.agent-suggest-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.agent-suggest-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 9px 10px;
+  border-radius: 8px;
+  background: var(--color-k-panel3);
+}
+.agent-suggest-icon {
+  flex-shrink: 0;
+  width: 11px;
+  color: var(--color-brand);
+  font-size: var(--text-xs);
+  line-height: 16px;
+  text-align: center;
+}
+.agent-suggest-text {
+  flex: 1 1 0%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.agent-suggest-title {
+  color: var(--color-k-text);
+  font-family: var(--font-strong);
+  font-size: var(--text-base);
+}
+.agent-suggest-rationale {
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--text-xs);
+  line-height: 1.4;
+}
+.agent-suggest-add {
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  padding: 0;
+  color: var(--color-brand);
+  font-family: var(--font-strong);
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
 .agent-detail-col {
   flex: 1 1 0%;
   min-width: 0;

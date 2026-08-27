@@ -1402,6 +1402,19 @@ const agentCanvas = window.AthenaLib.AgentCanvas.createAgentCanvas({
     if (!res || !res.ok) throw new Error((res && res.error) || '재개 실패');
     return res.data;
   },
+  // 7단계 — 제안 섹션. 그래프 모드 요약 뷰(보드 07)가 쓰는 것과 같은 엔드포인트
+  // (athena:brain-profile-summary) — 보드 39는 목업에서도 "2건 대기"라 상위 2만 요청한다.
+  fetchProfileSummary: async () => {
+    const res = await window.athena.invoke('athena:brain-profile-summary', { limit: 2 });
+    if (!res || !res.ok) throw new Error((res && res.error) || '성향 신호를 받지 못했다');
+    return Array.isArray(res.entries) ? res.entries : [];
+  },
+  // "추가" 클릭 → 시트 없이 채팅으로(43 원칙, shell.js 버스 — chat.js가 등록).
+  onAddSuggestion: (text) => {
+    if (window.AthenaShell && typeof window.AthenaShell.seedChatInput === 'function') {
+      window.AthenaShell.seedChatInput(text);
+    }
+  },
 });
 agentCanvas.mount();
 window.AthenaAgentCanvas = agentCanvas;
