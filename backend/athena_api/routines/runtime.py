@@ -15,6 +15,7 @@ from typing import TYPE_CHECKING, Any
 import httpx
 
 from athena_api.config import Settings
+from athena_api.routines.archive import rollover_jsonl
 from athena_api.routines.corp_catalog import CorpCatalog
 from athena_api.routines.disclosure_source import DartDisclosureSource
 from athena_api.routines.engagement import EngagementStore
@@ -88,6 +89,25 @@ class RoutinesRuntime:
         return None
 
 
+def _archive_once(settings: Settings) -> None:
+    """ledger·engagement를 90일 경계로 분기 보관 파일에 롤오버한다(삭제 없음).
+    기동 시 1회(open_routines) + scheduler._archive_loop()가 매일 재사용한다."""
+    rollover_jsonl(
+        settings.routines_ledger_path,
+        ts_field="ts",
+        archive_dir=settings.routines_ledger_archive_dir,
+        cutoff_days=settings.routines_ledger_archive_cutoff_days,
+        lenient=False,
+    )
+    rollover_jsonl(
+        settings.routines_engagement_path,
+        ts_field="ts",
+        archive_dir=settings.routines_ledger_archive_dir,
+        cutoff_days=settings.routines_ledger_archive_cutoff_days,
+        lenient=True,
+    )
+
+
 def _notify_factory(queue: asyncio.Queue[dict[str, Any]]):
     async def notify(event: dict[str, Any]) -> None:
         # 큐가 가득 차도 감시 루프를 막지 않는다 — 가장 오래된 것을 버리고 넣는다.
@@ -116,6 +136,7 @@ async def open_routines(
     engagement = EngagementStore(settings.routines_engagement_path)
     engine = TriggerEngine(ledger=ledger)
     notify = _notify_factory(events)
+    _archive_once(settings)  # 기동 시 1회 롤오버 — scheduler._archive_loop()가 이후 매일 재사용
 
     report = store.load()
     http_client: httpx.AsyncClient | None = None
@@ -170,6 +191,7 @@ async def open_routines(
             ws_client.unsubscribe_events if ws_client is not None else None
         ),
         on_expire=_release_on_expire,
+        run_archive_once=lambda: _archive_once(settings),
     )
 
     runtime = RoutinesRuntime(
