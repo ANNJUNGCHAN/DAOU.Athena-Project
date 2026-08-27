@@ -934,3 +934,70 @@ def test_entity_timeline_503s_while_brain_disabled() -> None:
             ENTITY_TIMELINE_PATH, headers=_headers(), params={"entity_id": "entity:x"}
         )
     assert response.status_code == 503
+
+
+# --- WP-F F4/F5: cluster_ai_labels — lazy+백그라운드 채움 ------------------------------
+
+CLUSTER_MAP_PATH = "/api/v1/brain/analysis/cluster-map"
+
+
+class _SlowLlm:
+    """지연 주입 fake — 미스가 응답을 지연시키지 않는지(G-F3) 시간으로 잰다."""
+
+    def __init__(self, delay: float) -> None:
+        self.calls = 0
+        self._delay = delay
+
+    async def complete(self, prompt: str) -> bytes:
+        self.calls += 1
+        import asyncio
+
+        await asyncio.sleep(self._delay)
+        return '{"label": "AI 라벨"}'.encode()
+
+
+def test_cluster_ai_labels_first_miss_is_empty_and_fast_then_cached(
+    seeded_client: TestClient,
+) -> None:
+    import time
+
+    app = seeded_client.app  # type: ignore[attr-defined]
+    app.state.brain_cluster_labeling_llm_client = _SlowLlm(delay=0.5)
+    start = time.monotonic()
+    first = seeded_client.get(CLUSTER_MAP_PATH, headers=_headers()).json()
+    elapsed = time.monotonic() - start
+    assert first["cluster_ai_labels"] == {}, "첫 미스는 필드를 비운 채 즉시 반환한다"
+    assert elapsed < 0.4, f"미스가 LLM 왕복({elapsed:.2f}s)을 기다리면 안 된다"
+    # 캐시 미스 직후 in-flight 집합에 태스크가 추가돼 있어야 한다(참조 보관).
+    assert app.state.cluster_labeling_tasks, "백그라운드 태스크 참조가 보관된다"
+    # 완료 대기 — done_callback이 집합에서 자동 제거한다.
+    deadline = time.monotonic() + 5
+    while app.state.cluster_labeling_tasks and time.monotonic() < deadline:
+        time.sleep(0.05)
+    assert not app.state.cluster_labeling_tasks, "완료된 태스크는 집합에서 자동 제거된다"
+    second = seeded_client.get(CLUSTER_MAP_PATH, headers=_headers()).json()
+    assert second["cluster_ai_labels"], "캐시가 채워진 뒤 재요청은 라벨을 싣는다"
+    assert all(v == "AI 라벨" for v in second["cluster_ai_labels"].values())
+
+
+def test_cluster_ai_labels_stay_empty_when_labeling_is_dormant(
+    seeded_client: TestClient,
+) -> None:
+    # G-F1 — LLM 미설정(client None)이면 필드는 항상 빈 dict이고 스폰도 없다.
+    app = seeded_client.app  # type: ignore[attr-defined]
+    assert app.state.brain_cluster_labeling_llm_client is None
+    body = seeded_client.get(CLUSTER_MAP_PATH, headers=_headers()).json()
+    assert body["cluster_ai_labels"] == {}
+    assert not app.state.cluster_labeling_tasks
+
+
+def test_cluster_ai_label_spawn_respects_inflight_cap(seeded_client: TestClient) -> None:
+    llm = _SlowLlm(delay=30)
+    app = seeded_client.app  # type: ignore[attr-defined]
+    app.state.brain_cluster_labeling_llm_client = llm
+    # 상한이 이미 찬 상태를 흉내낸다 — 새 미스는 스폰을 건너뛰고 폴백만 반환한다.
+    app.state.cluster_labeling_tasks = {object() for _ in range(4)}
+    body = seeded_client.get(CLUSTER_MAP_PATH, headers=_headers()).json()
+    assert body["cluster_ai_labels"] == {}
+    assert llm.calls == 0, "상한 도달 시 태스크를 만들지 않는다"
+    assert len(app.state.cluster_labeling_tasks) == 4
