@@ -324,7 +324,10 @@ test('감시(watch) 상세는 백엔드 실제 필드(소스·쿨다운)만 보�
   const fieldLabels = findByClass(container, 'agent-detail-field-label').map((n) => n.textContent);
   assert.ok(fieldLabels.includes('소스'));
   assert.ok(fieldLabels.includes('쿨다운'));
-  assert.equal(fieldLabels.includes('실행 위치'), false, 'watch에는 schedule 전용 fixture 필드가 없다');
+  // 6단계부터 '실행 위치'·'브리핑 모델'은 schedule 전용 **실데이터** 행이다 —
+  // watch에는 여전히 안 붙는다(브리핑 개념이 없는 종류에 지어내지 않는다).
+  assert.equal(fieldLabels.includes('실행 위치'), false, 'watch에는 브리핑 필드가 없다');
+  assert.equal(fieldLabels.includes('브리핑 모델'), false, 'watch에는 브리핑 필드가 없다');
 });
 
 test('예약(schedule) 상세는 백엔드 실제 필드(소스·쿨다운·다음 실행)를 보여주고 data-source가 live다(3단계)', async () => {
@@ -342,7 +345,37 @@ test('예약(schedule) 상세는 백엔드 실제 필드(소스·쿨다운·다�
   assert.ok(fieldLabels.includes('소스'));
   assert.ok(fieldLabels.includes('쿨다운'));
   assert.ok(fieldLabels.includes('다음 실행'));
-  assert.equal(fieldLabels.includes('실행 위치'), false, '지어낸 fixture 필드가 아니다');
+  // [6단계 의도적 반전] 이전 단언은 "'실행 위치'는 지어낸 fixture 필드라 없다"
+  // 였다 — 이제 실데이터 행이 됐으므로 '브리핑 모델'은 항상 붙고(값 없으면
+  // '앱 기본'), '실행 위치'는 **브리핑 실행 이력이 없을 때만** 안 붙는다.
+  assert.ok(fieldLabels.includes('브리핑 모델'));
+  assert.equal(fieldLabels.includes('실행 위치'), false, '실행 이력 없는 라우틴은 이 행을 렌더하지 않는다');
+});
+
+test('예약(schedule) 상세 — "브리핑 모델" 설정값과 "실행 위치"(최근 브리핑 보고 destination)가 실데이터로 렌더된다(6단계)', async () => {
+  const container = fakeNode('div');
+  const routines = [routine({
+    id: 's2', status: 'active', mode: 'scheduled', note: '평일 아침 브리핑',
+    briefing_model: 'claude-sonnet-5', briefing_effort: 'low',
+  })];
+  const canvas = createAgentCanvas({
+    container,
+    fetchRoutines: async () => routines,
+    fetchRuns: async () => [
+      { ts: '2026-08-26T07:30:00+09:00', verdict: 'fired', briefing_destination: 'chat' },
+      { ts: '2026-08-27T07:30:00+09:00', verdict: 'fired', briefing_destination: 'canvas' },
+    ],
+  });
+  canvas.mount();
+  await canvas.refresh();
+  await new Promise((r) => setTimeout(r, 0)); // '실행 위치' 비동기 1회 조회 완료 대기
+  const fieldsWrap = findByClass(container, 'agent-detail-fields')[0];
+  const fields = new Map(findByClass(fieldsWrap, 'agent-detail-field').map((f) => [
+    findByClass(f, 'agent-detail-field-label')[0].textContent,
+    findByClass(f, 'agent-detail-field-value')[0].textContent,
+  ]));
+  assert.equal(fields.get('브리핑 모델'), 'claude-sonnet-5 · low');
+  assert.equal(fields.get('실행 위치'), '캔버스'); // 최신(8/27) 보고의 destination 우선
 });
 
 // ── 6.5단계: 상세 패널 일시중지·재개 버튼 → pause/resume API 배선 ──
@@ -984,30 +1017,88 @@ test('"평균" 타일: avg_duration_ms(4단계, ms)를 초 단위 문자열로 �
   assert.equal(findByClass(avgTile, 'agent-history-stat-value')[0].textContent, '7.4s');
 });
 
-test('"오늘 07:30 산출물" 카드는 fixture로 표시되고, 뒷받침 데이터가 없는 버튼 2종은 비활성이다(팀 리드 정정 반영)', async () => {
+// [6단계 의도적 반전] 이전 테스트는 "'오늘 07:30 산출물' 카드가 fixture로 표시된다"
+// 였다 — 3단계 briefings 스토어의 실데이터(GET /{id}/runs 병합 필드)로 승격되면서
+// fixture 케이스가 사라졌고, 아래 3분기(있음/없음/truncated)가 그 자리를 대체한다.
+test('"오늘 산출물" 카드 — 오늘 발화된 브리핑 본문이 있으면 실데이터로 렌더된다(6단계, fixture 제거)', async () => {
   const container = fakeNode('div');
   const routines = [routine({ id: 'a', status: 'active' })];
-  const canvas = createAgentCanvas({ container, fetchRoutines: async () => routines, fetchRuns: async () => [] });
+  const todayTs = new Date(new Date().setHours(7, 30, 0, 0)).toISOString();
+  const canvas = createAgentCanvas({
+    container,
+    fetchRoutines: async () => routines,
+    fetchRuns: async () => [{
+      ts: todayTs, verdict: 'fired', reason: '예약 시각 도달(07:30)',
+      briefing_title: '아침 브리핑', briefing_content: '오늘의 요약 본문',
+      truncated: false, briefing_destination: 'canvas',
+    }],
+  });
   canvas.mount();
   await canvas.refresh();
   findByClass(container, 'agent-history-open')[0].dispatchEvent({ type: 'click' });
   await new Promise((r) => setTimeout(r, 0));
   const card = findByClass(container, 'agent-history-output-card')[0];
-  assert.ok(card, '산출물 카드가 렌더된다 — 생략하지 않는다');
-  assert.equal(card.getAttribute('data-source'), 'fixture');
-  assert.equal(findByClass(card, 'agent-history-output-title')[0].textContent, '# 아침 브리핑 — 8/26 화');
+  assert.equal(card.hidden, false);
+  assert.equal(card.getAttribute('data-source'), 'live'); // fixture 표기는 6단계에서 제거됐다
+  assert.equal(findByClass(card, 'agent-history-output-title')[0].textContent, '아침 브리핑');
   assert.equal(findByClass(card, 'agent-history-output-tag')[0].textContent, '캔버스 카드');
-  const items = findByClass(card, 'agent-history-output-item-text').map((n) => n.textContent);
-  assert.deepEqual(items, [
-    '1. 삼성전자 88,000 돌파 — 감시 조건 도달',
-    '2. 반도체 공급망 뉴스 — 참고',
-    '3. 배당 바스켓 응집 0.58 → 0.61',
-  ]);
-  const subs = findByClass(card, 'agent-history-output-item-sub').map((n) => n.textContent);
-  assert.deepEqual(subs, ['권장: 감시 유지 · 89,000 재설정 검토']);
+  // 자유형식 본문은 title+단일 본문 블록이다 — 지어낸 items 반복 구조가 아니다(P3).
+  assert.deepEqual(
+    findByClass(card, 'agent-history-output-item-text').map((n) => n.textContent),
+    ['오늘의 요약 본문'],
+  );
+  assert.equal(findByClass(card, 'agent-history-output-item-sub').length, 0); // 안 잘림 — 절단 표기 없음
   const btns = findByClass(card, 'agent-history-output-btn');
   assert.deepEqual(btns.map((n) => n.textContent), ['캔버스에서 열기', '채팅으로']);
-  for (const btn of btns) assert.equal(btn.disabled, true, '뒷받침 데이터가 없어 비활성이어야 한다(P3)');
+  for (const btn of btns) assert.equal(btn.disabled, true, '재기동 후 원 위치 복원 불가 — 계속 비활성(P3)');
+});
+
+test('"오늘 산출물" 카드 — 오늘 발화 브리핑이 없으면(어제 것뿐이어도) 카드 자체를 렌더하지 않는다', async () => {
+  const container = fakeNode('div');
+  const routines = [routine({ id: 'a', status: 'active' })];
+  const yesterdayTs = new Date(Date.now() - 86400000).toISOString();
+  const canvas = createAgentCanvas({
+    container,
+    fetchRoutines: async () => routines,
+    fetchRuns: async () => [{
+      ts: yesterdayTs, verdict: 'fired', reason: '예약 시각 도달(07:30)',
+      briefing_title: '어제 브리핑', briefing_content: '어제 본문', truncated: false,
+    }],
+  });
+  canvas.mount();
+  await canvas.refresh();
+  findByClass(container, 'agent-history-open')[0].dispatchEvent({ type: 'click' });
+  await new Promise((r) => setTimeout(r, 0));
+  assert.equal(findByClass(container, 'agent-history-output-card')[0].hidden, true);
+  const captions = findByClass(container, 'agent-panel-caption')
+    .filter((n) => /산출물/.test(n.textContent));
+  for (const c of captions) assert.equal(c.hidden, true, '캡션도 함께 숨긴다');
+});
+
+test('"오늘 산출물" 카드 — truncated면 절단 사실을 명시한다(잘렸다는 사실을 숨기지 않는다, P3)', async () => {
+  const container = fakeNode('div');
+  const routines = [routine({ id: 'a', status: 'active' })];
+  const todayTs = new Date(new Date().setHours(7, 30, 0, 0)).toISOString();
+  const canvas = createAgentCanvas({
+    container,
+    fetchRoutines: async () => routines,
+    fetchRuns: async () => [{
+      ts: todayTs, verdict: 'fired', reason: '예약 시각 도달(07:30)',
+      briefing_title: '긴 브리핑', briefing_content: '가'.repeat(4000),
+      truncated: true, briefing_destination: 'chat',
+    }],
+  });
+  canvas.mount();
+  await canvas.refresh();
+  findByClass(container, 'agent-history-open')[0].dispatchEvent({ type: 'click' });
+  await new Promise((r) => setTimeout(r, 0));
+  const card = findByClass(container, 'agent-history-output-card')[0];
+  assert.equal(card.hidden, false);
+  assert.equal(findByClass(card, 'agent-history-output-tag')[0].textContent, '채팅 답변');
+  assert.deepEqual(
+    findByClass(card, 'agent-history-output-item-sub').map((n) => n.textContent),
+    ['…(이하 생략 — 저장 상한 4,000자에서 잘렸습니다)'],
+  );
 });
 
 test('"작업 ›" 클릭 시 드릴인이 닫히고 "작업" 화면이 복원된다', async () => {

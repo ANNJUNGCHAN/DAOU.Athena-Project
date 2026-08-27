@@ -661,64 +661,78 @@ function createAgentCanvas(deps) {
     ];
   }
 
-  // "오늘 07:30 산출물" 카드(fixture) — Paper 41번 우측 상단, 정정 반영(사용자
-  // 확정 규칙1: 디자인에 있는 요소는 생략이 아니라 fixture+data-source 표기로
-  // 구현한다). 버튼 2종은 뒷받침 데이터(캔버스 카드 재조회·채팅 이동 경로)가
-  // 없어 비활성 — 기능 없는 버튼을 활성으로 두지 않는다(P3).
-  function fixtureTodayOutput() {
-    return {
-      title: '# 아침 브리핑 — 8/26 화',
-      tag: '캔버스 카드',
-      items: [
-        { text: '1. 삼성전자 88,000 돌파 — 감시 조건 도달', sub: '권장: 감시 유지 · 89,000 재설정 검토' },
-        { text: '2. 반도체 공급망 뉴스 — 참고' },
-        { text: '3. 배당 바스켓 응집 0.58 → 0.61' },
-      ],
-    };
-  }
-
-  // 5단계부터 "평균"만 live고 나머지 셋은 fixture로 남아 컬럼 전체를 한
-  // data-source로 표기할 수 없다(P3) — 산출물 카드·통계 타일 각각에 표기한다
-  // (아래, historyOutputCard·agent-history-stat-tile 개별 attribute).
+  // "오늘 산출물" 카드 — 6단계에서 fixture를 실데이터(GET /{id}/runs의
+  // briefing_title/briefing_content/truncated, 3단계 briefings 스토어)로 승격했다.
+  // 오늘 발화된 브리핑 본문이 없으면 카드 자체를 렌더하지 않는다(기존 P3
+  // fixture-부재 패턴 재사용 — 지어낸 산출물을 보여주지 않는다).
   const historyStatsCol = el('div', 'agent-history-stats-col');
 
   const historyOutputCaption = el('div', 'agent-panel-caption');
-  historyOutputCaption.textContent = '오늘 07:30 산출물';
+  historyOutputCaption.textContent = '오늘 산출물';
+  historyOutputCaption.hidden = true;
   historyStatsCol.appendChild(historyOutputCaption);
   const historyOutputCard = el('div', 'agent-history-output-card');
-  historyOutputCard.setAttribute('data-source', 'fixture');
-  const output = fixtureTodayOutput();
-  const outputHead = el('div', 'agent-history-output-head');
-  const outputTitle = el('span', 'agent-history-output-title');
-  outputTitle.textContent = output.title;
-  outputHead.appendChild(outputTitle);
-  const outputTag = el('span', 'agent-history-output-tag');
-  outputTag.textContent = output.tag;
-  outputHead.appendChild(outputTag);
-  historyOutputCard.appendChild(outputHead);
-  for (const item of output.items) {
-    const row = el('div', 'agent-history-output-item');
-    const text = el('div', 'agent-history-output-item-text');
-    text.textContent = item.text;
-    row.appendChild(text);
-    if (item.sub) {
-      const sub = el('div', 'agent-history-output-item-sub');
-      sub.textContent = item.sub;
-      row.appendChild(sub);
-    }
-    historyOutputCard.appendChild(row);
-  }
-  const outputActions = el('div', 'agent-history-output-actions');
-  for (const label of ['캔버스에서 열기', '채팅으로']) {
-    const btn = el('button', 'agent-history-output-btn');
-    btn.type = 'button';
-    btn.textContent = label;
-    btn.disabled = true;
-    btn.title = '뒷받침 데이터가 없어 아직 지원하지 않습니다';
-    outputActions.appendChild(btn);
-  }
-  historyOutputCard.appendChild(outputActions);
+  historyOutputCard.setAttribute('data-source', 'live');
+  historyOutputCard.hidden = true;
   historyStatsCol.appendChild(historyOutputCard);
+
+  // 본문은 자유형식 LLM 텍스트다 — 옛 fixture의 title+items(text/sub) 반복
+  // 구조에 끼워 맞추지 않고 title+단일 본문 블록으로 단순화했다(P3).
+  function renderHistoryOutput(sortedRuns) {
+    while (historyOutputCard.firstChild) historyOutputCard.removeChild(historyOutputCard.firstChild);
+    const today = new Date();
+    const isToday = (iso) => {
+      const d = new Date(iso);
+      return !Number.isNaN(d.getTime())
+        && d.getFullYear() === today.getFullYear()
+        && d.getMonth() === today.getMonth()
+        && d.getDate() === today.getDate();
+    };
+    const latest = (sortedRuns || []).find(
+      (r) => r && r.verdict === 'fired' && typeof r.briefing_content === 'string' && isToday(r.ts),
+    );
+    if (!latest) {
+      historyOutputCaption.hidden = true;
+      historyOutputCard.hidden = true;
+      return;
+    }
+    const t = new Date(latest.ts);
+    historyOutputCaption.textContent =
+      `오늘 ${String(t.getHours()).padStart(2, '0')}:${String(t.getMinutes()).padStart(2, '0')} 산출물`;
+    historyOutputCaption.hidden = false;
+    historyOutputCard.hidden = false;
+    const outputHead = el('div', 'agent-history-output-head');
+    const outputTitle = el('span', 'agent-history-output-title');
+    outputTitle.textContent = latest.briefing_title || '브리핑';
+    outputHead.appendChild(outputTitle);
+    const outputTag = el('span', 'agent-history-output-tag');
+    outputTag.textContent = latest.briefing_destination === 'canvas' ? '캔버스 카드' : '채팅 답변';
+    outputHead.appendChild(outputTag);
+    historyOutputCard.appendChild(outputHead);
+    const bodyRow = el('div', 'agent-history-output-item');
+    const bodyText = el('div', 'agent-history-output-item-text');
+    bodyText.textContent = latest.briefing_content;
+    bodyRow.appendChild(bodyText);
+    if (latest.truncated === true) {
+      // 잘렸다는 사실을 숨기지 않는다(P3) — 3단계 저장 상한과 같은 숫자.
+      const sub = el('div', 'agent-history-output-item-sub');
+      sub.textContent = '…(이하 생략 — 저장 상한 4,000자에서 잘렸습니다)';
+      bodyRow.appendChild(sub);
+    }
+    historyOutputCard.appendChild(bodyRow);
+    const outputActions = el('div', 'agent-history-output-actions');
+    for (const label of ['캔버스에서 열기', '채팅으로']) {
+      const btn = el('button', 'agent-history-output-btn');
+      btn.type = 'button';
+      btn.textContent = label;
+      // 재기동 후에는 원 캔버스 카드·채팅 턴 DOM이 사라져 있어 "열기"를 안정적으로
+      // 구현할 방법이 없다 — 죽은 버튼을 활성으로 바꾸지 않는다(P3, ADR 후속 기록).
+      btn.disabled = true;
+      btn.title = '재기동 후 원 위치를 열 방법이 없어 아직 지원하지 않습니다';
+      outputActions.appendChild(btn);
+    }
+    historyOutputCard.appendChild(outputActions);
+  }
 
   const historyStatsCaption = el('div', 'agent-panel-caption');
   historyStatsCaption.textContent = '30회 통계';
@@ -813,6 +827,7 @@ function createAgentCanvas(deps) {
     renderHistoryStats();
     // ledger는 append-only(오래된 게 먼저)라 최신 먼저로 뒤집고 30건으로 자른다.
     const sorted = runs.slice().sort((a, b) => Date.parse(b.ts) - Date.parse(a.ts)).slice(0, 30);
+    renderHistoryOutput(sorted); // "오늘 산출물" 카드(6단계) — 같은 runs 응답 재사용.
     while (historyRunsList.firstChild) historyRunsList.removeChild(historyRunsList.firstChild);
     if (!sorted.length) {
       const empty = el('div', 'agent-list-empty');
@@ -1104,10 +1119,22 @@ function createAgentCanvas(deps) {
   // watch·schedule 둘 다 백엔드가 실제로 주는 필드만 쓴다(P3 — 지어내지
   // 않는다) — 3단계부터 schedule도 raw가 live 라우틴이라 같은 필드 조합을
   // 쓴다. schedule만 "다음 실행"(next_fire_at, 2단계 순수 계산값)이 추가로 붙는다.
+  // 6단계부터 schedule에 "브리핑 모델"(3단계 briefing_model/briefing_effort,
+  // null이면 앱 기본값 의미 그대로 표기)과 "실행 위치"(가장 최근 브리핑 보고의
+  // destination — 실행 이력이 없으면 행 자체를 렌더하지 않는다)가 실데이터로 붙는다.
+  let detailDestinationCache = { id: null, value: null }; // 선택 항목별 1회 조회 캐시
   function detailFieldsFor(item) {
     const r = item.raw;
     const fields = [['소스', r.source_label || '—'], ['쿨다운', `${r.cooldown_s}초`]];
     if (item.kind === 'schedule' && r.next_fire_at) fields.push(['다음 실행', formatDateTime(r.next_fire_at)]);
+    if (item.kind === 'schedule') {
+      fields.push(['브리핑 모델', r.briefing_model
+        ? `${r.briefing_model}${r.briefing_effort ? ` · ${r.briefing_effort}` : ''}`
+        : '앱 기본']);
+      if (detailDestinationCache.id === item.id && detailDestinationCache.value) {
+        fields.push(['실행 위치', detailDestinationCache.value === 'canvas' ? '캔버스' : '채팅']);
+      }
+    }
     if (r.expires_at) fields.push(['만료', formatDateTime(r.expires_at)]);
     if (r.created_at) fields.push(['생성', formatDateTime(r.created_at)]);
     return fields;
@@ -1205,6 +1232,24 @@ function createAgentCanvas(deps) {
       fieldsWrap.appendChild(fieldRow);
     }
     detailCol.appendChild(fieldsWrap);
+
+    // "실행 위치"(6단계) — 같은 runs 엔드포인트의 briefing_destination을 선택
+    // 항목별 1회만 조회해 캐시하고, 값이 오면 아직 같은 항목이 선택돼 있을 때만
+    // 다시 그린다. 이력이 없으면 행이 안 붙는다(위 detailFieldsFor 게이트).
+    if (item.kind === 'schedule' && detailDestinationCache.id !== item.id) {
+      detailDestinationCache = { id: item.id, value: null };
+      Promise.resolve((typeof fetchRuns === 'function') ? fetchRuns(item.id) : [])
+        .then((runs) => {
+          if (!Array.isArray(runs) || detailDestinationCache.id !== item.id) return;
+          const latest = runs
+            .filter((x) => x && typeof x.briefing_destination === 'string' && x.briefing_destination)
+            .sort((a, b) => Date.parse(b.ts) - Date.parse(a.ts))[0];
+          if (!latest) return;
+          detailDestinationCache = { id: item.id, value: latest.briefing_destination };
+          if (selectedId === item.id) renderDetail();
+        })
+        .catch(() => {});
+    }
 
     // draft는 아직 한 번도 실행되지 않았다 — "최근 실행" 섹션 자체를 생략한다
     // (빈 로그를 지어내 보여주지 않는다, P3).
