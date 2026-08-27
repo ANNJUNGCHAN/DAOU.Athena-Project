@@ -53,7 +53,33 @@ function buildAgentSidebarRows(routines) {
     }));
 }
 
-const __exports = { STATUS_ICON, statusIconFor, isPriorityRoutine, buildAgentSidebarRows };
+// 알림 방 하이드레이션(7단계, F3-FE) — GET /api/v1/routines 응답의
+// last_fired_at·unread(6단계, read-marks 단일 패스 집계)로 sidebar.js의
+// notifyRooms(세션 메모리, 재시작하면 원래 비었다)를 다시 채운다. 한 번이라도
+// 발화한(last_fired_at이 있는) 라우틴만 대상이고, read는 백엔드의 unread를
+// 그대로 뒤집는다 — 이 함수 자신은 read-marks를 다시 계산하지 않는다(P4, 단일
+// 소유자는 여전히 백엔드다). sub는 실시간 이벤트 필드(symbol·observed)가
+// 요약 뷰엔 없어 빈 문자열로 정직하게 둔다(handleRoutineEvent의 sub와 달리
+// 지어낼 근거가 없다, P3). 결과는 최신 발화 먼저로 정렬한다(handleRoutineEvent가
+// unshift로 쌓는 순서와 같다).
+function buildHydratedRooms(routines) {
+  const list = Array.isArray(routines) ? routines : [];
+  return list
+    .filter((r) => r && typeof r.last_fired_at === 'string')
+    .map((r) => ({
+      id: r.id,
+      title: r.note || r.symbol || r.id,
+      sub: '',
+      firedAt: Date.parse(r.last_fired_at),
+      read: !r.unread,
+    }))
+    .filter((r) => Number.isFinite(r.firedAt))
+    .sort((a, b) => b.firedAt - a.firedAt);
+}
+
+const __exports = {
+  STATUS_ICON, statusIconFor, isPriorityRoutine, buildAgentSidebarRows, buildHydratedRooms,
+};
 
 // UMD 각주(2026-08-18 렌더러 격리) — column-fold.js와 같은 패턴.
 if (typeof module !== 'undefined' && module.exports) {

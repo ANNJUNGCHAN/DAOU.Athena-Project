@@ -276,7 +276,12 @@
   }
 
   // ---------- 알림 파생 방(Paper 보드 08) ----------
-  // 세션 메모리만 — 앱을 다시 켜면 비어 있다(위 파일 머리말 참고).
+  // 7단계(F3-FE)부터는 "세션 메모리만"이 더 이상 정확하지 않다 — 배열 자체는
+  // 여전히 이 파일이 메모리에서만 들고 있지만(라우틴 *상태*의 이중 영속화는
+  // 여전히 안 한다, P4), "읽었는지"만은 6단계 read-marks가 백엔드에 영속화해
+  // 아래 hydrateNotifyRooms()가 기동 시 다시 채운다. 그래서 재시작해도 최근
+  // 발화·읽음 여부는 유지된다 — sub·title 같은 표시용 필드까지 영속화하는 건
+  // 아니다(그건 매번 routines 요약 뷰에서 다시 만든다).
   const notifyRooms = [];
 
   // 에이전트 모드 네비 배지(원칙2) — notifyRooms의 !read 개수를 그대로 노출한다.
@@ -335,6 +340,39 @@
     $roomTime.textContent = `${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
     $roomTitle.textContent = room.title;
     $roomBanner.hidden = false;
+    renderList();
+    updateAgentBadge();
+    // 7단계(F3-FE) — 6단계 read-marks에 남긴다. 화면은 이미 위에서 즉시
+    // 반영됐으니 실패해도 조용히 넘어간다(재조회 시 자연히 다시 unread로
+    // 보일 뿐 — 낙관적 갱신을 성공한 척 위장하지 않는다, P3).
+    if (window.athena && typeof window.athena.invoke === 'function') {
+      window.athena.invoke('athena:routine-ack', { id }).catch(() => {});
+    }
+  }
+
+  // 7단계(F3-FE) — 기동 시 최근 발화한 라우틴으로 notifyRooms를 다시 채운다
+  // (agent-sidebar-list.js의 buildHydratedRooms, 순수 매핑만 거기서 하고 여기서는
+  // IPC 왕복 + notifyRooms 시드만 한다, 위 파일 머리말 DI 원칙). handleRoutineEvent가
+  // 실시간으로 이미 방을 만들었다면(레이스 — WS가 하이드레이션보다 먼저 뜬 경우)
+  // 그 항목은 건드리지 않는다.
+  async function hydrateNotifyRooms() {
+    if (!agentSidebarList || typeof agentSidebarList.buildHydratedRooms !== 'function') return;
+    let routines = [];
+    try {
+      const res = await window.athena.invoke('athena:routines-list');
+      routines = res && res.ok && res.data && Array.isArray(res.data.routines) ? res.data.routines : [];
+    } catch {
+      routines = [];
+    }
+    const hydrated = agentSidebarList.buildHydratedRooms(routines);
+    let changed = false;
+    for (const room of hydrated) {
+      if (notifyRooms.some((r) => r.id === room.id)) continue;
+      notifyRooms.push({ ...room, event: null });
+      changed = true;
+    }
+    if (!changed) return;
+    notifyRooms.sort((a, b) => b.firedAt - a.firedAt); // 최신 먼저 — handleRoutineEvent의 unshift와 같은 순서.
     renderList();
     updateAgentBadge();
   }
@@ -503,6 +541,7 @@
   // ---------- 부트 ----------
   loadConversations();
   loadAccount();
+  hydrateNotifyRooms(); // 7단계 — 모드와 무관하게 항상 시도한다(알림 배지는 대화모드에서도 보인다).
   // 사이드바는 채팅 왕복(질의→답변)의 부산물을 반영할 뿐 그 자체가 실시간
   // 스트림을 갖지 않는다(대화 자체는 채팅 영역의 일이다) — 가벼운 폴링으로
   // 충분하다. 계좌 토큰 잔여시간도 같은 주기로 갱신한다.

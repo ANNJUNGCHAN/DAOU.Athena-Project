@@ -3049,6 +3049,70 @@ app.whenReady().then(async () => {
     failures.push('agent-canvas-9: 검증 블록이 예외로 끝났다');
   }
 
+  // ---------- 알림 방 재시작 복원 — ack 왕복 (7단계, F3-FE) ----------
+  //
+  // 하이드레이션 자체(hydrateNotifyRooms)는 앱 부팅 시 1회만 도는 내부
+  // 함수라 이 하네스(단일 프로세스, 이미 부팅된 shellWin 재사용)에선 재부팅
+  // 없이 재현할 방법이 없다 — 그 매핑 로직(last_fired_at/unread → read)은
+  // agent-sidebar-list.test.js의 buildHydratedRooms 단위 테스트 6건이 이미
+  // 전수 커버한다(빈 목록·미발화 제외·unread 반전·정렬·잘못된 날짜 방어).
+  // 여기서는 이 단계가 실제로 새로 배선한 부분 — selectNotifyRoom() 클릭 시
+  // athena:routine-ack가 실제로 불리는지 — 를 잰다(사이드바 좌측 "알림에서"
+  // 섹션, agent-canvas 알람 컬럼과는 다른 표면).
+  try {
+    let ackCalledWith = null;
+    ipcMain.removeHandler('athena:routine-ack');
+    ipcMain.handle('athena:routine-ack', async (_e, { id } = {}) => {
+      ackCalledWith = id;
+      return { ok: true, data: { id, last_read_fired_at: new Date().toISOString() } };
+    });
+
+    shellWin.webContents.send('athena:routine-event', {
+      type: 'routine-fired',
+      routine_id: 'stage7-notify-1',
+      symbol: '005930',
+      source: 'price.change_rate',
+      mode: 'periodic',
+      observed: 88100,
+      threshold: 88000,
+      note: '7단계 알림 방 ack 검증',
+      fired_at: new Date().toISOString(),
+    });
+    await wait(300); // handleRoutineEvent의 renderList/updateAgentBadge까지.
+
+    const ackProbe = await shellWin.webContents.executeJavaScript(`(async () => {
+      const list = document.getElementById('sidebarList');
+      if (!list) return { wired: false };
+      const row = Array.from(list.querySelectorAll('.sidebar-item.is-notify')).find(
+        (n) => (n.querySelector('.sidebar-item-label') || {}).textContent === '7단계 알림 방 ack 검증',
+      );
+      if (!row) return { wired: false, reason: 'no-notify-row' };
+      const unreadDotBefore = !!row.querySelector('.sidebar-item-dot');
+      row.click();
+      await new Promise((r) => setTimeout(r, 200));
+      const afterRow = Array.from(list.querySelectorAll('.sidebar-item.is-notify')).find(
+        (n) => (n.querySelector('.sidebar-item-label') || {}).textContent === '7단계 알림 방 ack 검증',
+      );
+      const unreadDotAfter = afterRow ? !!afterRow.querySelector('.sidebar-item-dot') : null;
+      const bannerHidden = (document.getElementById('roomHeadBanner') || {}).hidden;
+      return { wired: true, unreadDotBefore, unreadDotAfter, bannerHidden };
+    })()`);
+    report.notifyAck = { ...ackProbe, ackCalledWith };
+    assertOk('sidebar-notify-7: 배선이 있다', ackProbe.wired === true);
+    if (ackProbe.wired) {
+      assertOk('sidebar-notify-7: 클릭 전엔 미확인 점이 있다', ackProbe.unreadDotBefore === true);
+      assertOk('sidebar-notify-7: 클릭 후 즉시 미확인 점이 사라진다(화면 반영은 ack 왕복을 기다리지 않는다)', ackProbe.unreadDotAfter === false);
+      assertOk('sidebar-notify-7: 배너가 뜬다(기존 selectNotifyRoom 동작 유지)', ackProbe.bannerHidden === false);
+      assertOk('sidebar-notify-7: 클릭이 실제로 athena:routine-ack를 그 라우틴 id로 부른다(6단계 read-marks 왕복)', ackCalledWith === 'stage7-notify-1');
+    }
+  } catch (err) {
+    report.notifyAck = { error: String((err && err.message) || err) };
+    failures.push('sidebar-notify-7: 검증 블록이 예외로 끝났다');
+  } finally {
+    ipcMain.removeHandler('athena:routine-ack');
+    ipcMain.handle('athena:routine-ack', async () => ({ ok: false, status: 0, error: '백엔드 미기동(검증 하네스)' }));
+  }
+
   // ---------- 실행 이력 · 결과 드릴인 (10단계, Paper 보드 41) ----------
   //
   // athena:routines-list(감시 1건)와 athena:routine-runs(6단계 ledger 조회)를

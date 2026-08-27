@@ -44,6 +44,8 @@ const INVOKE_CHANNELS = new Set([
   'athena:routine-resume',
   // 실행 이력 드릴인(10단계) — 6단계 GET /{id}/runs.
   'athena:routine-runs',
+  // 알림 방 읽음 처리(7단계, F3-FE) — 6단계 POST /{id}/ack.
+  'athena:routine-ack',
   'athena:order-execute',
   // 채팅→그래프 파이프라인 단계 5(.omc/plans/plan-chat-graph-pipeline.md §2(e)/(f))
   // — 대화 모드 HISTORY_COMMAND 조회, 설정 모드 "성향・이력" 상태·전체 삭제.
