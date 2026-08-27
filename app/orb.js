@@ -117,7 +117,14 @@
     // 별도 사건이 아니라서(위 FACE 주석), 읽으면(unread 비면) fired와 똑같이
     // 풀려야 한다. mopey/crying은 다른 축(만료·복원실패, 별도 사건)이라 여기서
     // 안 건드린다.
-    else if (face === FACE.FIRED || face === FACE.SURPRISE || face === FACE.GLAD) setFace(FACE.IDLE);
+    // settleAmbientFace()를 직접 부른다(resolveAmbientFace가 아니다) — 이유는
+    // triggerDoneFace 주석과 같은 자기참조 함정이다: 이 시점의 face는 아직
+    // FIRED/SURPRISE/GLAD 그대로라 eventFaceActive()가 "아직 활성"으로 오판해
+    // 못 빠져나간다. 직접 setFace(FACE.IDLE)로 꽂으면 watching/listening/
+    // thinking/feedDown/drowsy/sleep 같은 앰비언트 신호가 살아 있어도 무시하고
+    // idle로 떨어뜨려 WATCH 불변식(근접 이탈 신호가 와야 풀린다, 위 WATCH 주석)을
+    // 깬다 — settleAmbientFace가 그 사다리를 다시 타게 한다.
+    else if (face === FACE.FIRED || face === FACE.SURPRISE || face === FACE.GLAD) settleAmbientFace();
     // 0을 그리지 않는다 — 없는 알림을 있는 것처럼 보이게 하는 가장 흔한 방법이다.
     $count.textContent = fired ? String(n) : '';
     // 스크린 리더에는 색이 안 들리므로 상태를 라벨로도 말한다.
