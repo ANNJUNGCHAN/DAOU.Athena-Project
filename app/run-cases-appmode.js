@@ -93,8 +93,10 @@ function pressEsc(win) {
     "document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))");
 }
 
-function clickDot(win) {
-  return win.webContents.executeJavaScript("document.getElementById('dot').click()");
+// 점은 더 이상 설정을 열지 않는다(보드 45 — 키우미 얼굴). 커맨드바("설정")는
+// 진행 중엔 입력창이 잠겨 못 쓰니, 셸 버스의 등록 훅을 직접 부른다.
+function openSettingsPanel(win) {
+  return win.webContents.executeJavaScript('window.AthenaShell.openSettings()');
 }
 
 function clickNavItem(win, label) {
@@ -239,7 +241,7 @@ async function caseLIV092(ctx) {
     if (during.state !== 'idle') break;
     await wait(250);
   }
-  await clickDot(shellWin); // 진행 중 설정 열기
+  await openSettingsPanel(shellWin); // 진행 중 설정 열기
   await wait(600);
   const withSettings = await shellWin.webContents.executeJavaScript(CHAT_PROBE);
   await shot(shellWin, path.join(evDir, 'chat-settings-during-query.png'));
@@ -350,7 +352,7 @@ async function caseLIV098(ctx) {
   const regBackup = fs.existsSync(regPath) ? fs.readFileSync(regPath, 'utf8') : null;
   const consentBackup = fs.existsSync(consentPath) ? fs.readFileSync(consentPath, 'utf8') : null;
 
-  await clickDot(shellWin);
+  await openSettingsPanel(shellWin);
   await wait(600);
   await clickNavItem(shellWin, 'MCP 서버');
   await wait(1500);
@@ -428,7 +430,7 @@ async function caseLIV098(ctx) {
 async function caseLIV099(ctx) {
   const { shellWin, evDir } = ctx;
   const auditBefore = auditSnapshot(AUDIT_DIR);
-  await clickDot(shellWin);
+  await openSettingsPanel(shellWin);
   await wait(600);
   await clickNavItem(shellWin, 'MCP 서버');
   await wait(1500);
@@ -519,7 +521,7 @@ async function caseLIV099(ctx) {
 
 async function caseLIV100(ctx) {
   const { shellWin, evDir } = ctx;
-  await clickDot(shellWin);
+  await openSettingsPanel(shellWin);
   await wait(600);
   await clickNavItem(shellWin, 'MCP 서버');
   await wait(1500);

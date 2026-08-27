@@ -1,0 +1,6 @@
+{"id":"QA-QUOTE","tier":"qa","persona":"intraday-qa","question":"삼성전자 시세 보여줘","judge":"시세 카드(table)가 캔버스에 뜨고, 장중이므로 실시간 탭이 활성이며 체결 행이 갱신되는가"}
+{"id":"QA-CHART","tier":"qa","persona":"intraday-qa","question":"삼성전자 일봉 차트 보여줘","judge":"차트 카드가 뜨고 장중 실시간 진행봉이 도는가"}
+{"id":"QA-ORDERBOOK","tier":"qa","persona":"intraday-qa","question":"SK하이닉스 호가 보여줘","judge":"호가 래더 카드가 뜨는가"}
+{"id":"QA-FIN","tier":"qa","persona":"intraday-qa","question":"삼성전자 재무제표 요약해줘","judge":"재무 테이블/리더 카드가 뜨는가"}
+{"id":"QA-NEWS","tier":"qa","persona":"intraday-qa","question":"삼성전자 관련 최근 뉴스 알려줘","judge":"뉴스 스트림 카드가 뜨는가"}
+{"id":"QA-MULTI","tier":"qa","persona":"intraday-qa","question":"삼성전자하고 SK하이닉스 시세를 나란히 비교해줘","judge":"복수 카드가 병렬로 뜨고 각자 자기 종목 값인가"}
