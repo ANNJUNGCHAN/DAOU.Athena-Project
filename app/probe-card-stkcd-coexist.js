@@ -101,6 +101,26 @@ async function main() {
   const afterSameSymbolReplace = await readFactsCards();
   console.log('[probe] 같은 종목 재주입 후 facts 카드:', JSON.stringify(afterSameSymbolReplace));
 
+  // ---------- (2b) 같은 종목·다른 화면(screen_id) — 공존 기대 ----------
+  // 장중 QA 실측(2026-08-27): ka10004 호가 detail 5장(매도/매수/총잔량…)이 같은
+  // 종목이라 서로를 지워 1장만 남았다 — screen_id가 다르면 공존해야 한다.
+  shellWin.webContents.send('athena:add-canvas-live', {
+    status: 'success',
+    envelope: { ...factsEnvelope('005930', '삼성전자', '72,000', '+2.60%'), screen_id: 'SCR-호가-매도' },
+  });
+  await wait(400);
+  const afterOtherScreen = await readFactsCards();
+  console.log('[probe] 같은 종목·다른 화면 주입 후 facts 카드(공존 기대):', JSON.stringify(afterOtherScreen));
+
+  // 같은 종목·같은 화면 재주입 — 그 화면 카드만 교체(카드 수 불변) 기대.
+  shellWin.webContents.send('athena:add-canvas-live', {
+    status: 'success',
+    envelope: { ...factsEnvelope('005930', '삼성전자', '72,500', '+3.30%'), screen_id: 'SCR-호가-매도' },
+  });
+  await wait(400);
+  const afterSameScreenReplace = await readFactsCards();
+  console.log('[probe] 같은 종목·같은 화면 재주입 후(교체 기대):', JSON.stringify(afterSameScreenReplace));
+
   // ---------- (3) stk_cd 없는 envelope — 기존처럼 동일 타입이면 교체(하위 호환) ----------
   shellWin.webContents.send('athena:add-canvas-live', {
     status: 'success', envelope: factsEnvelopeNoStkCd('무명 종목', '1,000', '0.00%'),
@@ -119,19 +139,28 @@ async function main() {
     && afterSameSymbolReplace.some((c) => c.stkCd === '005930' && c.price === '71,500') // 갱신됨
     && afterSameSymbolReplace.some((c) => c.stkCd === '000660' && c.price === '210,500'); // 그대로
 
+  const screenCoexistOk = afterOtherScreen.length === 3
+    && afterOtherScreen.some((c) => c.stkCd === '005930' && c.price === '72,000')
+    && afterOtherScreen.some((c) => c.stkCd === '005930' && c.price === '71,500');
+
+  const screenReplaceOk = afterSameScreenReplace.length === 3
+    && afterSameScreenReplace.some((c) => c.stkCd === '005930' && c.price === '72,500')
+    && !afterSameScreenReplace.some((c) => c.price === '72,000');
+
   // stk_cd 없는 envelope은 동일 타입 아무 카드나 교체한다(문서화된 하위 호환) —
-  // 카드 수는 그대로(2장)이되, 새 카드(stkCd:null)가 그중 하나를 대체했는지만 본다.
-  const backwardCompatOk = afterNoStkCd.length === 2
+  // 카드 수는 그대로(3장)이되, 새 카드(stkCd:null)가 그중 하나를 대체했는지만 본다.
+  const backwardCompatOk = afterNoStkCd.length === 3
     && afterNoStkCd.some((c) => c.stkCd === null && c.price === '1,000');
 
-  const ok = coexistOk && replaceOk && backwardCompatOk && consoleErrors.length === 0;
+  const ok = coexistOk && replaceOk && screenCoexistOk && screenReplaceOk
+    && backwardCompatOk && consoleErrors.length === 0;
 
   fs.mkdirSync(path.join(__dirname, 'captures'), { recursive: true });
   fs.writeFileSync(
     path.join(__dirname, 'captures', 'probe-card-stkcd-coexist.json'),
     JSON.stringify({
-      afterTwoSymbols, afterSameSymbolReplace, afterNoStkCd,
-      coexistOk, replaceOk, backwardCompatOk, consoleErrors, ok,
+      afterTwoSymbols, afterSameSymbolReplace, afterOtherScreen, afterSameScreenReplace, afterNoStkCd,
+      coexistOk, replaceOk, screenCoexistOk, screenReplaceOk, backwardCompatOk, consoleErrors, ok,
     }, null, 1),
   );
   app.exit(ok ? 0 : 1);
