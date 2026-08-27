@@ -401,6 +401,13 @@ html, body {
   color: var(--color-k-text);
   font-family: var(--font-body);
   /* 헤더는 창 이동 손잡이다 — 펼친 상태에서도 창을 옮길 수 있어야 한다. */
+  /* 펼침 성장 전환(board-30 3단계 근사, Option B) — 기본값은 "다 자란" 최종
+   * 모양이다. transform-origin은 anchor별로 아래 [data-anchor] 규칙이 정한다
+   * (오브 원이 앉은 그 모서리에서 자라야 한다). scale과 border-radius를
+   * **같이** 건다 — opacity 단독 전이는 soul.md §7 금지(게이트 (e)가 #orbVisor에
+   * 거는 검사와 같은 원칙을 여기도 스스로 지킨다). */
+  transform: scale(1);
+  transition: transform 260ms var(--ease), border-radius 260ms var(--ease);
 }
 
 .orb-panel-head {
@@ -551,11 +558,25 @@ html, body {
 .orb-root[data-anchor^="bottom"] #orb { bottom: 0; }
 .orb-root[data-anchor^="top"]    #orb { top: 0; }
 
-/* 패널은 오브가 차지한 모서리(76px)를 비우고 나머지를 채운다. */
-.orb-root[data-anchor="bottom-right"] .orb-panel { left: 0; right: 0; top: 0; bottom: 76px; }
-.orb-root[data-anchor="bottom-left"]  .orb-panel { left: 0; right: 0; top: 0; bottom: 76px; }
-.orb-root[data-anchor="top-right"]    .orb-panel { left: 0; right: 0; top: 76px; bottom: 0; }
-.orb-root[data-anchor="top-left"]     .orb-panel { left: 0; right: 0; top: 76px; bottom: 0; }
+/* 패널은 오브가 차지한 모서리(76px)를 비우고 나머지를 채운다. transform-origin은
+ * 오브 원이 앉는 바로 그 모서리다 — 늘어나는 방향이 항상 원이 있던 자리에서
+ * 시작해야 "몸만 늘어난다(얼굴은 고정)"는 board-30 3단계 캡션이 성립한다. */
+.orb-root[data-anchor="bottom-right"] .orb-panel { left: 0; right: 0; top: 0; bottom: 76px; transform-origin: right bottom; }
+.orb-root[data-anchor="bottom-left"]  .orb-panel { left: 0; right: 0; top: 0; bottom: 76px; transform-origin: left bottom; }
+.orb-root[data-anchor="top-right"]    .orb-panel { left: 0; right: 0; top: 76px; bottom: 0; transform-origin: right top; }
+.orb-root[data-anchor="top-left"]     .orb-panel { left: 0; right: 0; top: 76px; bottom: 0; transform-origin: left top; }
+
+/* 등장 시작 프레임(orb.js가 hidden 해제 직후 한 틱만 얹는다) — 오브 원 자리에서
+ * 작게 접힌 채로 그려진다. scale 0.22는 Paper board-30 실측 1단계/3단계
+ * 비율(76px/360px)을 그대로 쓴 값이고, 반지름 38px은 #orb의 실제 반지름
+ * (76px/2)을 그대로 물려받은 값이다 — 둘 다 새로 지은 숫자가 아니다(24J-0
+ * 캡션 "이 모서리가 아까 그 공이라는 증거다"). orb.js가 이 프레임을 강제
+ * 리플로우로 확정한 뒤 다음 프레임에서 속성을 떼면 위 .orb-panel 전이가
+ * 최종 값(scale(1)/16px)까지 실제로 자라난다. */
+.orb-root[data-panel-anim="enter"] .orb-panel {
+  transform: scale(0.22);
+  border-radius: 38px;
+}
 
 /* 알림 전용 표면 강제 숨김(대화 모드 진입 시) — orb.js applyMode()가 토글한다.
  * 개별 요소의 콘텐츠 기반 hidden(renderPanel)과 겹쳐도 되게 !important로 눌러
@@ -956,6 +977,10 @@ html, body {
   #orbVisor, .orb-eye, .orb-gaze, .orb-lid { transition: none; }
   /* 들림(board-30③)도 같은 원칙 — 커짐·그림자 상태는 유지하고 전이만 없앤다. */
   #orb { transition: none; }
+  /* 펼침 성장 전환(Step 11)도 같은 원칙 — orb.js가 이 미디어쿼리에서는 애초에
+   * 시작 프레임(data-panel-anim="enter")을 걸지 않지만, 방어적으로 여기서도
+   * 전이 자체를 끈다. */
+  .orb-panel { transition: none; }
   /* 숨은 통째로 멈춘다. access.css의 전역 규칙은 반복을 1회로 깎을 뿐이라
    * 숨의 절반 지점(부푼 상태)에서 굳을 수 있다 — 여기서 아예 끈다. */
   #orbVisor { animation: none; }
