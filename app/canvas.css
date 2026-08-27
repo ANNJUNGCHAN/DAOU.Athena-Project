@@ -572,3 +572,39 @@ table.fin-table { width: 100%; border-collapse: collapse; font-variant-numeric: 
 
 
 /* .titlebar(창 크롬·이동 캡션)은 두 창 공용 — styles/ui-kit.css가 정의한다. */
+
+/* ---------- 빈 캔버스 모드별 변형 (Paper 보드 46, 2026-08-27) ----------
+ * 두 변형이 다 그려져 있고, #canvasRegion[data-mode](graph-mode controller 소유)가
+ * 하나만 보여준다 — 대화 캔버스에 그래프 일러스트가 나오던 문제의 처방. */
+#canvasRegion[data-mode="graph"] .canvas-empty-chat { display: none; }
+#canvasRegion:not([data-mode="graph"]) .canvas-empty-graphmode { display: none; }
+.canvas-empty-kiumi {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 90%);
+  border: 1px solid rgb(16 19 26 / 7%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.canvas-empty-kiumi-visor {
+  width: 47px;
+  height: 46px;
+  border-radius: 48%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse 120% 100% at 32% 24%, #5b6be0 0%, #2f3ba8 46%, #232c7e 100%);
+  box-shadow: 0 -2px 6px rgb(0 0 0 / 28%) inset, 0 2px 3px rgb(255 255 255 / 30%) inset;
+}
+/* 깜빡임은 chat.css의 kiumi-blink 키프레임을 같이 쓴다(같은 문서). */
+.canvas-empty-kiumi-visor rect {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: kiumi-blink 4.6s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .canvas-empty-kiumi-visor rect { animation: none; }
+}

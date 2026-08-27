@@ -50,6 +50,8 @@ function createGraphModeController(deps) {
     if (elements.kiumi) elements.kiumi.dataset.mode = graphView ? 'graph' : 'chat';
     // 모드 네비 활성 하이라이트(셸 v2) — 같은 data-mode 축을 쓴다.
     if (elements.modeNav) elements.modeNav.dataset.mode = graphView ? 'graph' : 'chat';
+    // 캔버스 빈 상태의 모드별 변형(보드 46) — CSS가 이 축으로 하나만 보여준다.
+    if (elements.canvasRegion) elements.canvasRegion.dataset.mode = graphView ? 'graph' : 'chat';
   }
 
   // 브레인이 안 됐는데 그래프 모드로 들어오면 빈 캔버스 대신 이렇게 정직하게
