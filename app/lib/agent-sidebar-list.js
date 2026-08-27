@@ -14,6 +14,10 @@
 const STATUS_ICON = {
   activeRealtime: { glyph: '●', colorVar: '--color-info', label: '실시간 감시' },
   activePeriodic: { glyph: '●', colorVar: '--color-ok', label: '활성' },
+  // 3단계(사실11⑤) — schedule.daily 예약이 활성화됐을 때 periodic 감시와
+  // 구분되는 전용 아이콘. 색은 periodic과 같게 두되(39번 리스트 쪽은 라벨
+  // 텍스트로도 구분된다) 라벨을 "예약"으로 갈라 사이드바에서 혼동을 막는다.
+  activeScheduled: { glyph: '●', colorVar: '--color-ok', label: '예약' },
   paused: { glyph: '❚❚', colorVar: '--color-warn', label: '일시중지' },
   draft: { glyph: '◌', colorVar: '--color-brand', label: '초안' },
 };
@@ -24,7 +28,9 @@ function statusIconFor(routine) {
   if (routine.status === 'draft') return STATUS_ICON.draft;
   if (routine.status === 'paused') return STATUS_ICON.paused;
   if (routine.status === 'active') {
-    return routine.mode === 'realtime-ws' ? STATUS_ICON.activeRealtime : STATUS_ICON.activePeriodic;
+    if (routine.mode === 'realtime-ws') return STATUS_ICON.activeRealtime;
+    if (routine.mode === 'scheduled') return STATUS_ICON.activeScheduled;
+    return STATUS_ICON.activePeriodic;
   }
   return null;
 }

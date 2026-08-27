@@ -8,30 +8,37 @@
 // 확장한다(성향 제안, 알람 센터 등) — shell.html은 4단계 이후로 다시 손대지
 // 않는다.
 //
-// 통계 카드 4장 중 "다음 실행"·"오늘 발화"·"성향 제안"은 대응하는 백엔드 집계가
-// 없다(재검증 확인, Rev.3 ADR). "진행 중"도 fixture다(값을 뒷받침할 진행률
-// 스트림이 없다). source:'fixture' 필드는 기존 canvasSource 컨벤션(chat.js)과
-// 동형이다 — 지어낸 숫자가 아니라 "아직 라이브로 못 잰다"는 사실을 코드 차원에
-// 남긴다(P3). DOM에도 data-source 속성으로 새겨 둔다.
+// 통계 카드 4장 중 "다음 실행"·"오늘 발화"·"성향 제안"은 3단계(F1-FE)부터
+// 라이브다 — 앞 둘은 schedule.daily 백엔드(2단계)의 next_fire_at/fired_today,
+// 성향 제안은 749행 suggestionsCache 계산(7단계와 동일 원천)을 재사용한다.
+// "진행 중"만 fixture로 남는다(값을 뒷받침할 진행률 스트림이 없다, 재검증
+// 확인). source 필드는 기존 canvasSource 컨벤션(chat.js)과 동형이다 —
+// 지어낸 숫자가 아니라 "라이브로 잰 값인지"를 코드 차원에 남긴다(P3). DOM에도
+// data-source 속성으로 새겨 둔다.
 //
-// 리스트(5단계, "예약·감시")는 세 출처를 한 화면에 섞는다:
-//   · 감시(watch) — GET /api/v1/routines 실데이터. status가 active/paused인 것.
-//   · 초안(draft, 8단계 추가) — status가 draft인 것. ◌ 점선 핑크 행으로
-//     구분한다(Paper 보드 43 실측). draft→confirm 자체는 채팅의 "작업 요약·
-//     초안" 카드 칩("바로 활성화")이 처리한다 — 여기서 새로 만들지 않는다
-//     (재사용, 동선 규칙③ "확정은 채팅 카드의 칩 — 캔버스는 결과가 비치는
-//     곳"). 그래서 상세 패널은 draft 항목에서 읽기 전용이다(액션 버튼 없음).
-//   · 예약(schedule) — fixture. 백엔드 트리거 카탈로그에 벽시계 스케줄
-//     개념이 없다(재검증 확인) — **예약 트리거 백엔드 미구현, 후속 스코프**.
+// 리스트("예약·감시")는 세 출처를 한 화면에 섞는다:
+//   · 감시(watch) — GET /api/v1/routines 실데이터. status가 active/paused고
+//     mode가 'scheduled'가 아닌 것(3단계부터 — 예약은 아래 schedule로 간다).
+//   · 초안(draft, 8단계 추가) — status가 draft인 것(mode 무관). ◌ 점선 핑크
+//     행으로 구분한다(Paper 보드 43 실측). draft→confirm 자체는 채팅의
+//     "작업 요약·초안" 카드 칩("바로 활성화")이 처리한다 — 여기서 새로
+//     만들지 않는다(재사용, 동선 규칙③ "확정은 채팅 카드의 칩 — 캔버스는
+//     결과가 비치는 곳"). 그래서 상세 패널은 draft 항목에서 읽기 전용이다
+//     (액션 버튼 없음).
+//   · 예약(schedule) — 3단계부터 GET /api/v1/routines 실데이터(mode가
+//     'scheduled'인 것). schedule.daily 벽시계 트리거가 2단계에서 백엔드에
+//     생겼다 — 더 이상 fixture가 아니다.
 // 탭(모두/활성/일시중지)·검색은 세 출처 모두에 동일하게 적용된다(화면
 // 하나이므로 필터도 하나). "일시중지" 탭 외의 필터는 draft/watch/schedule을
 // 가리지 않는다 — 'all' 탭에서 draft가 함께 보인다.
 //
-// 일시중지·재개 버튼은 감시(watch, live) 항목에서만 활성이다(6.5단계 —
-// 6단계 pause/resume 엔드포인트를 이 화면에 배선). 예약(schedule) 항목은
-// 백엔드에 대응 전이가 없어 항상 비활성으로 남는다(기능 없는 버튼을 활성으로
-// 두지 않는다, P3). 상세 패널의 "최근 실행" 로그는 여전히 fixture다(ledger
-// API 라이브 연결은 10단계 몫).
+// 일시중지·재개 버튼은 여전히 감시(watch, live) 항목에서만 활성이다(6.5단계
+// — 6단계 pause/resume 엔드포인트를 이 화면에 배선). 예약(schedule) 항목은
+// 백엔드가 이제 같은 전이를 지원하지만(store.transition은 mode를 안 가린다),
+// 이 화면에 그 배선을 잇는 건 F1 최소선(3단계) 스코프 밖이라 항상 비활성으로
+// 남겨둔다(P5 — 스코프 규율, 다음 스코프로 이연). 상세 패널의 "최근 실행"
+// 로그는 여전히 fixture다(ledger API 라이브 연결은 10단계 몫 — 예약도 watch와
+// 마찬가지로 이 화면에선 아직 라이브 붙이지 않는다).
 //
 // 9단계(알람 센터·라이브 관제, Paper 보드 40) — 헤더에 뷰 탭 3종(작업/알람/
 // 라이브)이 생긴다. "작업" 뷰는 위 39번 화면 그대로(통계·리스트+상세·제안).
@@ -109,30 +116,24 @@ function svgEl(name, attrs) {
   return node;
 }
 
-// 통계 카드 4장의 fixture 값(Paper 보드 39 실측 문구 그대로) — 위 머리말 참고.
-function fixtureStats() {
-  return [
-    { key: 'next-run', label: '다음 실행', value: '07:30 평일 아침 브리핑', sub: '49분 후 · 기존 채팅', source: 'fixture' },
-    { key: 'in-progress', label: '진행 중', value: '● 시세 수집 — 삼성전자', sub: '감시 조건 2/3 · 12초 전', source: 'fixture' },
-    { key: 'fired-today', label: '오늘 발화', value: '3건', sub: '마지막 15:30 · 조건 도달 1', source: 'fixture' },
-    { key: 'suggestions', label: '성향 제안', value: '2건 대기', sub: '그래프 신호 312개 기반', source: 'fixture', accent: true },
-  ];
-}
-
+// 3단계(사실11⑥) — active 상태를 3분기로 가른다. periodic·scheduled는 같은
+// 색(--color-ok)을 쓰지만(39번 리스트는 item.sub/title 텍스트로도 이미
+// 구분된다), 구조 자체는 3분기다 — 다음에 색을 분리하고 싶을 때 이진 삼항으로
+// 되돌아가지 않도록.
 function statusRowIcon(routine) {
   if (routine.status === 'draft') return { glyph: '◌', colorVar: '--color-brand' };
   if (routine.status === 'paused') return { glyph: '❚❚', colorVar: '--color-warn' };
   if (routine.status === 'active') {
-    return routine.mode === 'realtime-ws'
-      ? { glyph: '●', colorVar: '--color-info' }
-      : { glyph: '●', colorVar: '--color-ok' };
+    if (routine.mode === 'realtime-ws') return { glyph: '●', colorVar: '--color-info' };
+    if (routine.mode === 'scheduled') return { glyph: '●', colorVar: '--color-ok' };
+    return { glyph: '●', colorVar: '--color-ok' };
   }
   return { glyph: '○', colorVar: '--color-k-faint' }; // expired/cancelled/failed — 정직하게 흐리게
 }
 
 function createAgentCanvas(deps) {
   const {
-    container, fetchRoutines, onNewTaskClick, pauseRoutine, resumeRoutine,
+    container, fetchRoutines, fetchFiredToday, onNewTaskClick, pauseRoutine, resumeRoutine,
     fetchProfileSummary, onAddSuggestion,
     fetchAlerts, markAllAlertsRead, getWsConnected,
     fetchRuns,
@@ -143,6 +144,7 @@ function createAgentCanvas(deps) {
   let activeTab = 'all';
   let searchQuery = '';
   let routinesCache = [];
+  let firedTodayCache = null; // GET /api/v1/routines의 fired_today(3단계) — 독립 왕복.
   let requestId = 0; // stale-응답 가드 — sidebar.js 3단계(loadAgentRoutines)와 같은 이유.
   let suggestionsCache = [];
   let suggestRequestId = 0; // 위와 같은 이유 — 별개 요청이라 별개 가드를 쓴다.
@@ -151,6 +153,72 @@ function createAgentCanvas(deps) {
   let historyItem = null; // 드릴인 중인 항목(10단계) — null이면 드릴인이 아니다.
   let heldSuggestionIds = new Set(); // "보류"한 제안(11단계) — 세션 동안만, 저장 안 됨.
   let historyRequestId = 0; // 위와 같은 이유 — 별개 요청이라 별개 가드를 쓴다.
+
+  // ---------- 통계 카드 4장의 값 계산(3단계부터 3장이 라이브) ----------
+  // routinesCache/firedTodayCache/suggestionsCache 클로저가 필요해 createAgentCanvas
+  // 안에 둔다(statusRowIcon()처럼 순수 함수가 아니다).
+
+  // "진행 중" 타일만 fixture 값이 남는다(Paper 보드 39 실측 문구 그대로) — 위
+  // 머리말 참고, 대응하는 진행률 스트림이 없다.
+  function fixtureInProgressStat() {
+    return { key: 'in-progress', label: '진행 중', value: '● 시세 수집 — 삼성전자', sub: '감시 조건 2/3 · 12초 전', source: 'fixture' };
+  }
+
+  // "다음 실행"(3단계 라이브) — routinesCache의 예약(mode==='scheduled')
+  // 스펙 중 active만 보고 next_fire_at(2단계 백엔드, 순수 계산값)이 가장 이른
+  // 것을 고른다. 활성 예약이 없으면 지어내지 않고 정직하게 "없음"을 보여준다(P3).
+  function nextRunStat() {
+    let best = null;
+    for (const r of routinesCache) {
+      if (r.mode !== 'scheduled' || r.status !== 'active' || !r.next_fire_at) continue;
+      const t = Date.parse(r.next_fire_at);
+      if (!Number.isFinite(t)) continue;
+      if (!best || t < best.t) best = { t, r };
+    }
+    if (!best) {
+      return { key: 'next-run', label: '다음 실행', value: '없음', sub: '활성 예약이 없습니다', source: 'live' };
+    }
+    const diffMin = Math.max(0, Math.round((best.t - Date.now()) / 60000));
+    const relative = diffMin < 60 ? `${diffMin}분 후` : `${Math.floor(diffMin / 60)}시간 ${diffMin % 60}분 후`;
+    return {
+      key: 'next-run', label: '다음 실행',
+      value: `${formatAlarmTime(best.t)} ${best.r.note || best.r.symbol || best.r.id}`,
+      sub: `${relative} · 예약 실행`, source: 'live',
+    };
+  }
+
+  // "오늘 발화"(3단계 라이브) — GET /api/v1/routines 응답의 fired_today(2단계,
+  // ledger 단일 스캔 집계)를 그대로 쓴다. fetchFiredToday가 없거나 실패하면
+  // firedTodayCache가 null로 남아 "—"로 정직하게 표시한다(지어낸 숫자 없음).
+  function firedTodayStat() {
+    if (firedTodayCache == null) {
+      return { key: 'fired-today', label: '오늘 발화', value: '—', sub: '', source: 'live' };
+    }
+    return { key: 'fired-today', label: '오늘 발화', value: `${firedTodayCache}건`, sub: 'KST 기준', source: 'live' };
+  }
+
+  // "보류"하지 않은 성향 제안 수 — updateProactiveTabLabel()과 같은 계산을
+  // 공유한다(재검증 사실5, "두 개의 진실" 방지 — 위 머리말).
+  function visibleSuggestionCount() {
+    return suggestionsCache.filter((e) => !heldSuggestionIds.has(e.entity_id)).length;
+  }
+
+  // "성향 제안"(3단계 라이브) — 7단계와 같은 원천(suggestionsCache)을 그대로
+  // 재사용한다. 그래프 "신호 개수" 같은 지어낸 통계는 붙이지 않는다(P3 — 실제로
+  // 아는 값은 "몇 건 대기 중인가"뿐이다).
+  function suggestionsStat() {
+    const n = visibleSuggestionCount();
+    return {
+      key: 'suggestions', label: '성향 제안',
+      value: n > 0 ? `${n}건 대기` : '없음',
+      sub: n > 0 ? '그래프 성향 기반' : '',
+      source: 'live', accent: true,
+    };
+  }
+
+  function buildStats() {
+    return [nextRunStat(), fixtureInProgressStat(), firedTodayStat(), suggestionsStat()];
+  }
 
   // ---------- 헤더 ----------
   const head = el('div', 'agent-head');
@@ -257,7 +325,7 @@ function createAgentCanvas(deps) {
   const stats = el('div', 'agent-stats');
   function renderStats() {
     while (stats.firstChild) stats.removeChild(stats.firstChild);
-    for (const stat of fixtureStats()) {
+    for (const stat of buildStats()) {
       const card = el('div', stat.accent ? 'agent-stat-card is-accent' : 'agent-stat-card');
       card.setAttribute('data-source', stat.source); // 출처 표시(P3) — 지어낸 숫자가 아님을 코드 차원에 남긴다.
       const label = el('div', 'agent-stat-label');
@@ -346,6 +414,7 @@ function createAgentCanvas(deps) {
     suggestSection.hidden = suggestionsCache.length === 0;
     for (const entry of suggestionsCache) suggestList.appendChild(makeSuggestionRow(entry));
     renderProactiveView(); // 11단계 — 같은 캐시를 쓰는 "제안" 뷰도 함께 갱신한다(위 머리말).
+    renderStats(); // 3단계 — "성향 제안" 통계 타일도 같은 캐시를 쓴다(위와 같은 이유).
   }
 
   // GET /api/v1/brain/profile-summary 실데이터 — requestId로 낡은 응답을 버린다
@@ -746,7 +815,7 @@ function createAgentCanvas(deps) {
   proactiveBody.appendChild(nudgeGuard);
 
   function updateProactiveTabLabel() {
-    const n = suggestionsCache.filter((e) => !heldSuggestionIds.has(e.entity_id)).length;
+    const n = visibleSuggestionCount(); // 3단계 — "성향 제안" 통계 타일과 같은 계산 공유.
     viewTabButtons.proactive.textContent = n > 0 ? `제안 ${n}` : '제안';
   }
 
@@ -781,6 +850,7 @@ function createAgentCanvas(deps) {
       heldSuggestionIds.add(entry.entity_id);
       renderProactiveCards();
       updateProactiveTabLabel();
+      renderStats(); // 3단계 — "성향 제안" 통계 타일도 heldSuggestionIds를 본다(위와 같은 이유).
     });
     head2.appendChild(holdBtn);
     card.appendChild(head2);
@@ -810,47 +880,33 @@ function createAgentCanvas(deps) {
     updateProactiveTabLabel();
   }
 
-  // 예약 트리거 백엔드 미구현, 후속 스코프 — 벽시계 스케줄 개념이 SOURCES
-  // 카탈로그에 없다(재검증 확인). 문구·필드는 Paper 보드 39 실측 예시 그대로다.
-  function fixtureScheduleItems() {
-    return [
-      {
-        id: 'fx-schedule-1', kind: 'schedule', source: 'fixture', status: 'active',
-        title: '평일 아침 브리핑', sub: '주중 오전 7:30 · 기존 채팅', trailing: '49분 후',
-        detail: {
-          description: '매주 평일 아침 브리핑을 생성한다. 이전 성공 실행 이후를 조회하고, 첫 실행이면 지난 3일만 본다.',
-          fields: [
-            ['실행 위치', '새 캔버스 카드'],
-            ['사용 소스', '네이버 뉴스 · DART · 계좌'],
-            ['반복', '평일'],
-            ['시각', '오전 7:30'],
-            ['알림', '중요 업데이트만'],
-          ],
-        },
-      },
-      {
-        id: 'fx-schedule-2', kind: 'schedule', source: 'fixture', status: 'paused',
-        title: '반도체 ETF 리밸런스 점검', sub: '매월 1일 · 새 캔버스 카드', trailing: '6일 후',
-        detail: {
-          description: '매월 1일 반도체 ETF 구성 비중을 점검하고 리밸런스 필요 여부를 캔버스 카드로 정리한다.',
-          fields: [
-            ['실행 위치', '새 캔버스 카드'],
-            ['반복', '매월 1일'],
-            ['시각', '오전 9:00'],
-          ],
-        },
-      },
-    ];
-  }
-
   // GET /api/v1/routines 실데이터 → 리스트 항목. status가 active/paused인
   // 것만 다룬다 — draft는 별도 kind('draft', 아래)로 다룬다.
+  //
+  // 전제(Critic 조건부 코멘트, 3단계): 이 함수는 호출자(allItems())가
+  // mode !== 'scheduled'로 이미 걸렀다는 전제 위에서 동작한다 — 새 호출부를
+  // 추가할 때도 이 전제를 지켜야 한다(그렇지 않으면 예약 항목이 "주기 확인"
+  // sub 라벨을 잘못 받는다, 사실11③).
   function toWatchItem(routine) {
     return {
       id: routine.id, kind: 'watch', source: 'live', status: routine.status, mode: routine.mode,
       title: routine.note || routine.symbol || routine.id,
       sub: routine.mode === 'realtime-ws' ? '실시간 감시' : '주기 확인',
       trailing: routine.mode === 'realtime-ws' ? '실시간' : '',
+      raw: routine,
+    };
+  }
+
+  // 예약(schedule, 3단계) — toWatchItem()과 대칭이다. mode==='scheduled'
+  // 스펙만 이쪽으로 온다(allItems()의 상보 필터). trailing엔 2단계 백엔드가
+  // 계산한 next_fire_at(순수 함수, 저장 안 함)을 쓴다 — 없으면 빈 문자열로
+  // 정직하게 남긴다(지어내지 않는다, P3).
+  function toScheduleItem(routine) {
+    return {
+      id: routine.id, kind: 'schedule', source: 'live', status: routine.status, mode: routine.mode,
+      title: routine.note || routine.symbol || routine.id,
+      sub: '예약 실행',
+      trailing: routine.next_fire_at ? formatAlarmTime(Date.parse(routine.next_fire_at)) : '',
       raw: routine,
     };
   }
@@ -869,12 +925,19 @@ function createAgentCanvas(deps) {
     };
   }
 
+  // 3단계(사실11③) — watchItems 필터에 mode !== 'scheduled'를 추가해 예약을
+  // 걷어낸다. scheduleItems가 그 상보 집합을 가져간다 — 같은 라우틴이 감시·
+  // 예약 리스트 양쪽에 중복 노출되는 걸 구조적으로 막는다(toWatchItem 자체는
+  // 무수정, 위 전제 주석 참고).
   function allItems() {
     const watchItems = routinesCache
-      .filter((r) => r.status === 'active' || r.status === 'paused')
+      .filter((r) => (r.status === 'active' || r.status === 'paused') && r.mode !== 'scheduled')
       .map(toWatchItem);
     const draftItems = routinesCache.filter((r) => r.status === 'draft').map(toDraftItem);
-    return watchItems.concat(draftItems).concat(fixtureScheduleItems());
+    const scheduleItems = routinesCache
+      .filter((r) => (r.status === 'active' || r.status === 'paused') && r.mode === 'scheduled')
+      .map(toScheduleItem);
+    return watchItems.concat(draftItems).concat(scheduleItems);
   }
 
   function matchesTab(item) {
@@ -930,11 +993,13 @@ function createAgentCanvas(deps) {
     return d.toLocaleString('ko-KR', { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
   }
 
-  // watch는 백엔드가 실제로 주는 필드만 쓴다(P3 — 지어내지 않는다).
+  // watch·schedule 둘 다 백엔드가 실제로 주는 필드만 쓴다(P3 — 지어내지
+  // 않는다) — 3단계부터 schedule도 raw가 live 라우틴이라 같은 필드 조합을
+  // 쓴다. schedule만 "다음 실행"(next_fire_at, 2단계 순수 계산값)이 추가로 붙는다.
   function detailFieldsFor(item) {
-    if (item.kind === 'schedule') return (item.detail && item.detail.fields) || [];
     const r = item.raw;
     const fields = [['소스', r.source_label || '—'], ['쿨다운', `${r.cooldown_s}초`]];
+    if (item.kind === 'schedule' && r.next_fire_at) fields.push(['다음 실행', formatDateTime(r.next_fire_at)]);
     if (r.expires_at) fields.push(['만료', formatDateTime(r.expires_at)]);
     if (r.created_at) fields.push(['생성', formatDateTime(r.created_at)]);
     return fields;
@@ -993,10 +1058,13 @@ function createAgentCanvas(deps) {
           await refresh();
         });
       } else {
-        // 예약(schedule)은 fixture라 대응하는 백엔드 전이가 없다 — 항상 비활성.
+        // 예약(schedule)은 백엔드가 이제 같은 pause/resume 전이를 지원하지만
+        // (store.transition은 mode를 안 가린다), 이 화면에 그 배선을 잇는 건
+        // F1 최소선(3단계) 스코프 밖이다 — 항상 비활성으로 남겨둔다(P5, 다음
+        // 스코프로 이연. "백엔드에 없다"는 옛 사유는 더 이상 사실이 아니다).
         pauseBtn.textContent = '❚❚ 일시중지';
         pauseBtn.disabled = true;
-        pauseBtn.title = '예약 트리거는 아직 백엔드에 없습니다';
+        pauseBtn.title = '예약 항목의 일시중지 제어는 이번 스코프 밖입니다';
       }
       headActions.appendChild(pauseBtn);
       headRow.appendChild(headActions);
@@ -1007,7 +1075,9 @@ function createAgentCanvas(deps) {
     if (item.kind === 'draft') {
       desc.textContent = '오른쪽 채팅의 "작업 요약·초안" 카드에서 바로 활성화하거나 고칠 수 있습니다.';
     } else {
-      desc.textContent = item.kind === 'watch' ? (item.raw.note || '') : ((item.detail && item.detail.description) || '');
+      // watch·schedule 둘 다 3단계부터 raw가 live 라우틴이다 — 지어낸 설명문
+      // 없이 실제 note만 쓴다(P3).
+      desc.textContent = item.raw.note || '';
     }
     detailCol.appendChild(desc);
 
@@ -1035,8 +1105,9 @@ function createAgentCanvas(deps) {
       const logsCaption = el('span', 'agent-panel-caption');
       logsCaption.textContent = '최근 실행';
       logsCaptionRow.appendChild(logsCaption);
-      // 드릴인(10단계)은 감시(watch)만 연다 — schedule은 실제 라우틴이 아니라
-      // ledger에 대응 행이 있을 수 없다(위 머리말).
+      // 드릴인(10단계)은 감시(watch)만 연다 — schedule도 3단계부터 실제
+      // 라우틴이라 ledger에 대응 행이 생길 수 있지만, 이 화면에 그 배선을
+      // 잇는 건 F1 최소선 스코프 밖이다(위 머리말, P5 — 다음 스코프로 이연).
       if (item.kind === 'watch') {
         const openHistoryBtn = el('button', 'agent-history-open');
         openHistoryBtn.type = 'button';
@@ -1143,6 +1214,9 @@ function createAgentCanvas(deps) {
 
   // GET /api/v1/routines 실데이터 — requestId로 낡은 응답을 버린다(sidebar.js
   // loadAgentRoutines()와 같은 이유·같은 패턴, 실사용 결함 재현으로 확인됨).
+  // fetchFiredToday(3단계)는 같은 응답의 다른 필드(fired_today, 라우틴별이
+  // 아닌 전체 집계)를 노린 별개 왕복이다 — "네 소스는 서로 무관한 왕복이다"
+  // 원칙(위 머리말)을 그대로 따른다, 실패해도 routinesCache 갱신을 막지 않는다.
   async function refreshRoutines() {
     const rid = ++requestId;
     let rows = [];
@@ -1152,9 +1226,18 @@ function createAgentCanvas(deps) {
     } catch {
       rows = [];
     }
+    let firedToday = null;
+    try {
+      const v = (typeof fetchFiredToday === 'function') ? await fetchFiredToday() : null;
+      firedToday = (typeof v === 'number') ? v : null;
+    } catch {
+      firedToday = null;
+    }
     if (rid !== requestId) return;
     routinesCache = rows;
+    firedTodayCache = firedToday;
     updateSubtitle();
+    renderStats();
     renderPanels();
   }
 

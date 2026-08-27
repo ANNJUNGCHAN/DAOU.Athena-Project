@@ -1393,6 +1393,13 @@ const agentCanvas = window.AthenaLib.AgentCanvas.createAgentCanvas({
     const res = await window.athena.invoke('athena:routines-list');
     return (res && res.ok && res.data && Array.isArray(res.data.routines)) ? res.data.routines : [];
   },
+  // 3단계 — "오늘 발화" 통계 타일. fired_today는 routines 배열이 아니라 같은
+  // 응답의 최상위 필드(2단계, ledger 단일 스캔 집계)라 별개 왕복으로 뗀다
+  // (agent-canvas.js 머리말 "네 소스는 서로 무관한 왕복이다" 원칙 재사용).
+  fetchFiredToday: async () => {
+    const res = await window.athena.invoke('athena:routines-list');
+    return (res && res.ok && res.data && typeof res.data.fired_today === 'number') ? res.data.fired_today : null;
+  },
   // 동선 규칙①(8단계) — 시트를 열지 않고 채팅 입력에 시작 문장을 심고 포커스만
   // 옮긴다(shell.js seedChatInput 버스, 7단계 제안 "추가"와 같은 경로).
   onNewTaskClick: () => {

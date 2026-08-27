@@ -28,6 +28,15 @@ test('status.active + mode.realtime-ws → 파란 실시간 아이콘', () => {
   assert.equal(icon.colorVar, '--color-info');
 });
 
+// ── 3단계(사실11⑤): schedule.daily 예약 — periodic과 구분되는 전용 아이콘 ──
+
+test('status.active + mode.scheduled → 예약 전용 아이콘(activePeriodic이 아니다)', () => {
+  const icon = statusIconFor(routine({ status: 'active', mode: 'scheduled' }));
+  assert.deepEqual(icon, STATUS_ICON.activeScheduled);
+  assert.notEqual(icon, STATUS_ICON.activePeriodic);
+  assert.equal(icon.label, '예약');
+});
+
 test('status.paused → 주황 일시중지 아이콘(모드와 무관)', () => {
   assert.deepEqual(statusIconFor(routine({ status: 'paused', mode: 'realtime-ws' })), STATUS_ICON.paused);
   assert.deepEqual(statusIconFor(routine({ status: 'paused', mode: 'periodic' })), STATUS_ICON.paused);
