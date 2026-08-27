@@ -462,6 +462,21 @@ def test_cluster_map_carries_a_revision_and_sorted_nodes(seeded_client: TestClie
     assert ids, "그래프가 비어 있으면 이 테스트가 아무것도 재지 않는다"
 
 
+def test_cluster_map_includes_representative_labels_for_every_cluster(
+    seeded_client: TestClient,
+) -> None:
+    """A2 배선 확인 — cluster_representative_labels가 모든 군집에 대해 실제로 실린다."""
+    body = seeded_client.get(
+        "/api/v1/brain/analysis/cluster-map", headers=_headers()
+    ).json()
+    labels = body["cluster_representative_labels"]
+    clusters_present = {node["cluster"] for node in body["nodes"]}
+    assert labels, "군집이 있으면 라벨도 있어야 한다"
+    assert {int(k) for k in labels} == clusters_present
+    for label in labels.values():
+        assert " · " in label, f"형식이 '대표멤버 · kind'가 아니다: {label!r}"
+
+
 def test_god_nodes_limit_is_clamped_instead_of_erroring(seeded_client: TestClient) -> None:
     """잘못된 상한이 500으로 새지 않는다 — 분석 함수는 `limit<=0`에 ValueError를 던진다."""
     for limit in (0, -5, 10_000):

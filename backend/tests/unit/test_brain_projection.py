@@ -29,7 +29,7 @@ from athena_api.brain import (
     entity_id,
     relation_id,
 )
-from athena_api.brain.projection import cluster_cohesion
+from athena_api.brain.projection import cluster_cohesion, cluster_representative_labels
 
 NOW = datetime(2026, 8, 25, 3, 0, tzinfo=UTC)
 
@@ -328,3 +328,70 @@ def test_cohesion_of_a_single_node_cluster_is_zero() -> None:
     cohesion = cluster_cohesion(projected, {"a": 0})
 
     assert cohesion[0] == 0.0
+
+
+# ── 대표 설명 문자열(WP-A) ──────────────────────────────────────────────────
+
+
+def test_representative_picks_the_max_degree_member() -> None:
+    """최대 차수 멤버가 대표로 뽑히고, 최빈 kind가 문구에 실린다."""
+    graph = nx.Graph()
+    graph.add_node("high", name="High", kind="theme")
+    graph.add_node("mid", name="Mid", kind="theme")
+    graph.add_node("low", name="Low", kind="company")
+    graph.add_node("out1")
+    graph.add_node("out2")
+    graph.add_edge("high", "out1")
+    graph.add_edge("high", "out2")
+    graph.add_edge("mid", "out1")
+    projected = ProjectedGraph(revision=1, graph=graph)
+
+    labels = cluster_representative_labels(
+        projected, {"high": 0, "mid": 0, "low": 0, "out1": 1, "out2": 1}
+    )
+
+    assert labels[0] == "High 외 2종목 · theme", "차수 2인 High가 대표, theme이 2:1로 최빈"
+
+
+def test_representative_breaks_degree_ties_by_min_node_id() -> None:
+    """`cluster()`와 같은 관례 — 동률이면 최소 node id."""
+    graph = nx.Graph()
+    graph.add_node("zzz", name="Zzz", kind="theme")
+    graph.add_node("aaa", name="Aaa", kind="theme")
+    graph.add_node("out", name="Out", kind="theme")
+    graph.add_edge("zzz", "out")
+    graph.add_edge("aaa", "out")
+    projected = ProjectedGraph(revision=1, graph=graph)
+
+    labels = cluster_representative_labels(projected, {"zzz": 0, "aaa": 0, "out": 1})
+
+    assert labels[0].startswith("Aaa"), "차수가 같으면(둘 다 1) 최소 id(aaa < zzz)가 대표다"
+
+
+def test_representative_breaks_kind_ties_alphabetically() -> None:
+    """최빈 kind가 동률이면 알파벳순으로 끊는다."""
+    graph = nx.Graph()
+    graph.add_node("m1", name="M1", kind="zeta")
+    graph.add_node("m2", name="M2", kind="alpha")
+    projected = ProjectedGraph(revision=1, graph=graph)
+
+    labels = cluster_representative_labels(projected, {"m1": 0, "m2": 0})
+
+    assert labels[0].endswith("· alpha"), "zeta와 alpha가 동률(1:1)이면 alpha가 먼저다"
+
+
+def test_representative_label_omits_the_count_suffix_for_a_single_member() -> None:
+    """멤버가 하나면 "외 N종목"이 없다 — N-1=0을 굳이 "외 0종목"으로 안 보여준다."""
+    graph = nx.Graph()
+    graph.add_node("solo", name="Solo", kind="theme")
+    projected = ProjectedGraph(revision=1, graph=graph)
+
+    labels = cluster_representative_labels(projected, {"solo": 0})
+
+    assert labels[0] == "Solo · theme"
+    assert "외" not in labels[0]
+
+
+def test_representative_labels_are_empty_for_an_empty_assignment() -> None:
+    projected = ProjectedGraph(revision=1, graph=nx.Graph())
+    assert cluster_representative_labels(projected, {}) == {}
