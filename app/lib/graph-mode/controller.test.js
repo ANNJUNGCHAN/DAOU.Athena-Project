@@ -8,7 +8,7 @@ const store = require('./graph-mode-store');
 const layout = require('./cluster-layout');
 const render = require('./render');
 const prefs = require('./graph-mode-prefs');
-const { createGraphModeController } = require('./controller');
+const { createGraphModeController, computeGraphHeaderMeta } = require('./controller');
 const { fakeNode, installFakeDocument, uninstallFakeDocument } = require('./fake-dom');
 
 function payload(revision) {
@@ -44,6 +44,8 @@ function setup(options) {
     graph: fakeNode('div'),
     graphBody: fakeNode('div'),
     summaryTable: fakeNode('div'),
+    graphHeaderMeta: fakeNode('span'),
+    mapGuide: fakeNode('div'),
   };
   if (opts.withPanel) elements.panel = fakeNode('div');
   let calls = 0;
@@ -383,6 +385,67 @@ test('collapseCluster()로 2단계에서 1단계로 돌아간다', async () => {
   controller.collapseCluster();
   assert.equal(controller.state.stage, store.STAGE_CLUSTERS);
   assert.equal(elements.graphBody.querySelectorAll('.graph-node').length, 3, '전부 다시 보인다');
+});
+
+// ── 그래프 뷰 헤더 메타 텍스트 + 지도 안내 바(보드 14/15, 스텝9) ────────────────
+
+test('computeGraphHeaderMeta — 1단계(clusters): "군집 N개 · 엔티티 M · 미분류 K"', () => {
+  const placed = { nodes: [{ cluster: 0 }, { cluster: 0 }, { cluster: -1 }], clusters: [{ cluster: 0 }] };
+  const meta = computeGraphHeaderMeta('clusters', { nodes: [1, 2, 3], edges: [1, 2] }, placed);
+  assert.equal(meta, '군집 1개 · 엔티티 3 · 미분류 1');
+});
+
+test('computeGraphHeaderMeta — 2단계(expanded): "엔티티 M · 관계 E · 군집 N"(관계는 필터 전 원본)', () => {
+  const placed = { nodes: [{ cluster: 0 }, { cluster: 1 }], clusters: [{ cluster: 0 }, { cluster: 1 }] };
+  const meta = computeGraphHeaderMeta('expanded', { nodes: [1, 2, 3], edges: [1, 2, 3, 4] }, placed);
+  assert.equal(meta, '엔티티 3 · 관계 4 · 군집 2');
+});
+
+test('computeGraphHeaderMeta — payload/placed가 없으면 빈 문자열(지어내지 않는다)', () => {
+  assert.equal(computeGraphHeaderMeta('clusters', null, null), '');
+  assert.equal(computeGraphHeaderMeta('clusters', { nodes: [] }, null), '');
+});
+
+test('그래프 진입(1단계) 시 헤더 메타가 "군집 N개 · 엔티티 M · 미분류 K"로 채워지고 지도 안내 바가 보인다', async () => {
+  const { controller, elements } = setup({ payload: payloadTwoClusters });
+  await controller.toggle();
+  assert.equal(elements.graphHeaderMeta.textContent, '군집 2개 · 엔티티 3 · 미분류 0');
+  assert.equal(elements.mapGuide.hidden, false, '1단계에서는 지도 안내 바가 보인다');
+});
+
+test('군집을 펼치면(2단계) 헤더 메타가 "엔티티 M · 관계 E · 군집 N"으로 바뀌고 지도 안내 바가 숨는다', async () => {
+  const { controller, elements } = setup({ payload: payloadTwoClusters });
+  await controller.toggle();
+  elements.graphBody.querySelectorAll('.graph-node')[0].dispatchEvent({ type: 'click' });
+  assert.equal(controller.state.stage, store.STAGE_EXPANDED);
+  assert.equal(elements.graphHeaderMeta.textContent, '엔티티 3 · 관계 1 · 군집 2');
+  assert.equal(elements.mapGuide.hidden, true, '2단계에서는 지도 안내 바가 사라진다');
+});
+
+test('collapseCluster()로 1단계로 돌아오면 헤더 메타·지도 안내 바가 원래대로 돌아온다', async () => {
+  const { controller, elements } = setup({ payload: payloadTwoClusters });
+  await controller.toggle();
+  elements.graphBody.querySelectorAll('.graph-node')[0].dispatchEvent({ type: 'click' });
+  controller.collapseCluster();
+  assert.equal(controller.state.stage, store.STAGE_CLUSTERS);
+  assert.equal(elements.graphHeaderMeta.textContent, '군집 2개 · 엔티티 3 · 미분류 0');
+  assert.equal(elements.mapGuide.hidden, false);
+});
+
+test('graphHeaderMeta·mapGuide가 없으면(선택 안 주입) 조용히 넘어간다', async () => {
+  const elements = {
+    pill: fakeNode('button'),
+    summary: fakeNode('div'),
+    graph: fakeNode('div'),
+    graphBody: fakeNode('div'),
+    // graphHeaderMeta·mapGuide 없음
+  };
+  const controller = createGraphModeController({
+    store, layout, render, prefs: null, elements,
+    fetchClusterMap: async () => payload(7),
+  });
+  controller.setAvailable(true);
+  await assert.doesNotReject(() => controller.toggle());
 });
 
 test('clearSelection()으로 패널이 닫힌다', async () => {
