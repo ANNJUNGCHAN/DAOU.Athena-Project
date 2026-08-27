@@ -424,8 +424,9 @@ let chartRealtimeRegistrar = null;
 
 // 경로 중립 — 호출부가 REST 데이터셋 직결(athena:rest-canvas-painted)이든 클로드
 // 툴 실시간 경로(onCanvasResult, 단계 8 확장 2차)든 가리지 않는다. "종목코드를
-// 아는 순간에만 등록한다"는 계약 하나만 지키면 된다. REG는 종목당 1회 dedup이라
-// 어느 경로에서 불러도 낭비가 누적되지 않는다.
+// 아는 순간에만 등록한다"는 계약 하나만 지키면 된다. 레지스트라가 참조 계수형
+// (2026-08-27)이라 어느 경로에서 불러도 acquire 1회로 셈된다 — 짝이 되는 release는
+// releaseRealtimeForSymbol(카드 소멸 시점, 아래) 몫이다.
 function ensureRealtimeForSymbol(code) {
   if (process.env.ATHENA_CANVAS_SOURCE === 'fixture') return; // 검증 결정론 보호
   const trimmed = String(code || '').trim();
@@ -453,18 +454,50 @@ function ensureRealtimeForSymbol(code) {
     });
     chartRealtimeFeed.start();
   }
-  chartRealtimeRegistrar.ensureSymbol(trimmed).catch((err) => {
+  chartRealtimeRegistrar.acquire(trimmed).catch((err) => {
     mdlog(`차트 REAL 등록 예외: ${String((err && err.message) || err)}`);
+  });
+}
+
+// ensureRealtimeForSymbol의 짝 — 카드/패널이 렌더러에서 소멸할 때 부른다(아래
+// athena:realtime-release, athena:chart-panel-destroyed 두 IPC가 이걸 부른다).
+// 레지스트라가 참조 계수를 들고 있으므로 여기서는 그대로 넘기기만 하면 된다 —
+// 마지막 참조였는지 판단은 레지스트라 몫이다.
+function releaseRealtimeForSymbol(code) {
+  if (process.env.ATHENA_CANVAS_SOURCE === 'fixture') return;
+  const trimmed = String(code || '').trim();
+  if (!trimmed || !chartRealtimeRegistrar) return;
+  chartRealtimeRegistrar.release(trimmed).catch((err) => {
+    mdlog(`차트 REAL 해제 예외: ${String((err && err.message) || err)}`);
   });
 }
 
 // REST 데이터셋 직결 카드(athena:rest-canvas-painted) 전용 진입점 — "그려진 걸
 // 확인한 뒤에만 REG"를 지킨다. 어느 카드종이든(시세 카드 포함, 단계 8 확장 1차)
 // authority.operationArgs.stk_cd 폴백으로 종목코드가 있으면 등록된다.
-function ensureChartRealtime(authority) {
+//
+// panelId(AITS 차트 카드만 갖는다, chart-panel-destroyed 실측)가 있으면 그
+// panelId 하나당 acquire를 정확히 1회만 낸다 — 같은 패널이 재조회 등으로 paint
+// ack를 또 보내도(카드 자체는 안 죽고 재사용) 참조를 중복으로 쌓지 않는다.
+// 패널이 실제로 죽을 때(athena:chart-panel-destroyed) 이 맵에 적어둔 종목으로
+// 정확히 1회 release한다 — chartBody.stock(여기)과 렌더러의 data.symbol(카드
+// 표시용)은 서로 다른 필드라 값이 어긋날 수 있어, release는 main이 acquire 때
+// 실제로 쓴 값을 그대로 재사용한다(필드 교차로 카운트가 새는 사고를 원천 차단).
+// panelId가 없는 카드(표/시세 등 non-AITS 카드)는 매번 그대로 acquire한다 —
+// 그쪽은 매 paint마다 makeCard가 새 DOM 카드를 만들어(재사용 없음) 늘 진짜 새
+// 참조이고, 짝이 되는 release는 wireQuoteRealtime의 destroy 훅(canvas.js)이 낸다.
+const chartRealtimePanelSymbols = new Map(); // panelId -> code
+
+function ensureChartRealtime(authority, panelId) {
   const stock = authority && authority.chartBody && authority.chartBody.stock;
   const code = stock || (authority && authority.operationArgs && authority.operationArgs.stk_cd);
-  ensureRealtimeForSymbol(code);
+  const trimmed = String(code || '').trim();
+  if (!trimmed) return;
+  if (panelId) {
+    if (chartRealtimePanelSymbols.has(panelId)) return; // 이 패널은 이미 참조를 쥐고 있다
+    chartRealtimePanelSymbols.set(panelId, trimmed);
+  }
+  ensureRealtimeForSymbol(trimmed);
 }
 
 // 클로드 툴 실시간 경로(onCanvasResult) 전용 진입점 — 이 경로엔 페인트 왕복이
@@ -989,8 +1022,9 @@ ipcMain.on('athena:rest-canvas-painted', (event, payload = {}) => {
   };
   chartReloadAuthority.registerPaint(paintResult, waiter.reloadAuthority);
   // 차트가 실제로 그려진 순간에만 실시간을 건다 — 그려지지도 않은 패널로 REG를
-  // 소모하지 않는다(REG는 리미터를 먹는다). 종목당 1회는 registrar가 보장한다.
-  ensureChartRealtime(waiter.reloadAuthority);
+  // 소모하지 않는다(REG는 리미터를 먹는다). 참조 중복은 registrar와
+  // chartRealtimePanelSymbols(panelId 단위)가 함께 막는다.
+  ensureChartRealtime(waiter.reloadAuthority, payload.panel_id || null);
   waiter.resolve(paintResult);
 });
 
@@ -1011,6 +1045,23 @@ ipcMain.on('athena:rest-receipt-painted', (event, payload = {}) => {
 ipcMain.on('athena:chart-panel-destroyed', (event, payload = {}) => {
   if (!shellWin || shellWin.isDestroyed() || event.sender !== shellWin.webContents) return;
   chartReloadAuthority.unregister(payload.panelId);
+  // 이 패널이 실시간 참조를 쥐고 있었다면(ensureChartRealtime 주석 참고) 여기서
+  // 정확히 1회 release한다 — acquire 때 실제로 쓴 종목코드를 그대로 되쓴다.
+  const code = chartRealtimePanelSymbols.get(payload.panelId);
+  if (code) {
+    chartRealtimePanelSymbols.delete(payload.panelId);
+    releaseRealtimeForSymbol(code);
+  }
+});
+
+// 렌더러 카드/패널 소멸 신호(canvas.js wireQuoteRealtime의 destroy 훅) — panelId가
+// 없는 카드종(표/시세 등, ensureChartRealtime 주석 참고)의 release는 여기로 온다.
+// 렌더러가 넘기는 symbol은 main의 extractLiveQuoteSymbol/ensureChartRealtime과
+// 같은 envelope 필드(operation_args.stk_cd 등)를 보고 뽑은 값이라 acquire 때
+// 쓴 값과 어긋나지 않는다(canvas.js wireQuoteRealtime 주석 참고).
+ipcMain.on('athena:realtime-release', (event, payload = {}) => {
+  if (!shellWin || shellWin.isDestroyed() || event.sender !== shellWin.webContents) return;
+  releaseRealtimeForSymbol(payload.symbol);
 });
 
 function emitRestReceiptAndWaitForPaint(text, { timeoutMs = 3000 } = {}) {
@@ -2128,5 +2179,6 @@ module.exports = {
   // 콜백이라 진짜 왕복 없이는 못 부르지만, 이 둘은 그 콜백이 부르는 것과 같은
   // 모듈 함수라 직접 불러도 동일한 판정이 나온다.
   ensureRealtimeForSymbol,
+  releaseRealtimeForSymbol,
   extractLiveQuoteSymbol,
 };

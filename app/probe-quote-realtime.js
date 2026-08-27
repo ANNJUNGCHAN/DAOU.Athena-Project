@@ -224,6 +224,74 @@ async function main() {
   console.log('[probe] destroy 후 틱 주입 — 예외:', destroyTickThrew, '| 재생성된 카드 수:', cardCountAfterDestroyTick);
   console.log('[probe] 렌더러 콘솔 에러 로그 수:', consoleErrors.length);
 
+  // ---------- (4) 참조 계수 해제(2026-08-27) — 카드 destroy 시 REMOVE가 정확한
+  // 바디로 나가는지, 같은 종목 카드 2장 중 1장만 닫으면 REMOVE가 안 나가는지 ----------
+  // 렌더 파이프라인은 카드를 만들 뿐 acquire를 부르지 않는다(그건 REST paint
+  // ack/onCanvasResult 몫, main.js ensureChartRealtime 주석) — 위 실사용 경로
+  // 검증과 같은 방식으로 카드 2장분의 acquire를 직접 흉내낸다. 종목은 이 파일
+  // 다른 어떤 시나리오에도 안 쓰는 걸 고른다 — SYMBOLS(6종목)엔 이미 wireQuoteRealtime
+  // destroy 훅이 걸린 카드가 있어(위 clearCanvases가 비동기 IPC로 release를
+  // 늦게 보낸다), 겹치면 그 release가 여기 카운트에 섞여 든다(실측: 000660
+  // 재사용 시 REMOVE가 한 박자 일찍 나갔다 — registrar 로직이 아니라 이 시나리오
+  // 오염이 원인이었다).
+  const REFCOUNT_SYMBOL = '999001';
+  const REFCOUNT_DATASET = 'probe-refcount-2';
+  function refcountQuoteEnvelope(itemId, ordinal) {
+    return {
+      canvas_type: 'table',
+      card_title: '시세',
+      correlation: { dataset_id: REFCOUNT_DATASET, item_id: itemId, ordinal },
+      operation_args: { stk_cd: REFCOUNT_SYMBOL },
+      data: {
+        columns: [
+          { key: 'cntr_pric', label: '체결가' },
+          { key: 'cntr_qty', label: '체결량(주)' },
+          { key: 'flu_rt', label: '등락률' },
+          { key: 'acc_trde_qty', label: '거래량(주)' },
+        ],
+        rows: [{ cntr_tm: '090000', cntr_pric: '100000', cntr_qty: '1', flu_rt: '0.10', acc_trde_qty: '1000' }],
+      },
+    };
+  }
+  mainMod.ensureRealtimeForSymbol(REFCOUNT_SYMBOL); // 카드 A분 acquire
+  mainMod.ensureRealtimeForSymbol(REFCOUNT_SYMBOL); // 카드 B분 acquire(참조 2)
+  await wait(200);
+  const fetchCallsBeforeRefcount = fetchCalls.length;
+
+  shellWin.webContents.send('athena:add-canvas-live', { status: 'success', envelope: refcountQuoteEnvelope('rc-a', 1) });
+  shellWin.webContents.send('athena:add-canvas-live', { status: 'success', envelope: refcountQuoteEnvelope('rc-b', 2) });
+  await wait(400);
+  const refcountCardCount = await shellWin.webContents.executeJavaScript(
+    `document.querySelectorAll('.card[data-dataset-id="${REFCOUNT_DATASET}"]').length`,
+  );
+
+  // 1장만 닫는다 — 참조가 아직 남아 있으니 REMOVE가 나가면 안 된다.
+  await shellWin.webContents.executeJavaScript(`
+    (() => { document.querySelector('.card[data-item-id="rc-a"] .uk-card-close').click(); })()
+  `);
+  await wait(300);
+  const removedTooEarly = fetchCalls.slice(fetchCallsBeforeRefcount)
+    .some((c) => c.body && c.body.trnm === 'REMOVE');
+
+  // 마지막 카드를 닫는다 — 참조가 0이 되어 REMOVE가 정확한 바디로 나가야 한다.
+  await shellWin.webContents.executeJavaScript(`
+    (() => { document.querySelector('.card[data-item-id="rc-b"] .uk-card-close').click(); })()
+  `);
+  await wait(300);
+  const removeCall = fetchCalls.find((c) => (
+    c.body && c.body.trnm === 'REMOVE' && c.body.data && c.body.data[0] && c.body.data[0].item === REFCOUNT_SYMBOL
+  ));
+  const refcountOk = refcountCardCount === 2
+    && !removedTooEarly
+    && !!removeCall
+    && removeCall.url.endsWith('/api/v1/websocket/0B')
+    && removeCall.body.grp_no === '1'
+    && removeCall.body.refresh === '1'
+    && removeCall.body.data.length === 1
+    && removeCall.body.data[0].type === '0B';
+  console.log('[probe] 참조 계수 — 카드 2장 생성, 1장만 닫음(REMOVE 무발 기대):', { refcountCardCount, removedTooEarly });
+  console.log('[probe] 참조 계수 — 마지막 카드 닫음(REMOVE 발화 기대):', JSON.stringify(removeCall));
+
   const realWiringHarmless = noSymbol === null && fetchCallsAfterRealistic === 0;
   const futureWiringReady = foundSymbol === '005930'
     && fetchCallsAfterHypothetical === 1
@@ -243,14 +311,16 @@ async function main() {
     && !crossContamination
     && cleared === true
     && destroyTickThrew === false
-    && cardCountAfterDestroyTick === 0; // destroy 후 틱이 카드를 되살리지 않는다
+    && cardCountAfterDestroyTick === 0 // destroy 후 틱이 카드를 되살리지 않는다
+    && refcountOk; // 참조 계수 해제 — 2장 중 1장 닫음(REMOVE 무발) + 마지막 닫음(REMOVE 발화)
 
   fs.mkdirSync(path.join(__dirname, 'captures'), { recursive: true });
   fs.writeFileSync(
     path.join(__dirname, 'captures', 'probe-quote-realtime.json'),
     JSON.stringify({
       realWiringHarmless, futureWiringReady, fetchCalls,
-      cardsAfterOpen, cardCountAfterSeventh, cardsAfterTick, cleared, destroyTickThrew, ok,
+      cardsAfterOpen, cardCountAfterSeventh, cardsAfterTick, cleared, destroyTickThrew,
+      refcountCardCount, removedTooEarly, removeCall, refcountOk, ok,
     }, null, 1),
   );
   app.exit(ok ? 0 : 1);
