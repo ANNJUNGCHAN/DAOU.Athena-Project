@@ -175,23 +175,64 @@ function buildEmptyCanvasIllustration() {
 // 사실 자체는 늘 참이다. 숫자·CTA·힌트는 뒤에서 준비되면 append로 더한다
 // (appendEmptyCanvasExtras) — 브레인 상태를 아직 모르는 부팅 초반에도 빈
 // 화면 대신 뼈대가 바로 보인다.
+// 대화 빈 화면의 키우미(Paper 보드 46, 2026-08-27) — 오브 원형 어휘의 축소판.
+function buildEmptyCanvasKiumi() {
+  const face = document.createElement('div');
+  face.className = 'canvas-empty-kiumi';
+  const visor = document.createElement('div');
+  visor.className = 'canvas-empty-kiumi-visor';
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('width', '48');
+  svg.setAttribute('height', '46');
+  svg.setAttribute('viewBox', '0 0 48 46');
+  for (const x of [14, 27]) {
+    const eye = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    eye.setAttribute('x', x);
+    eye.setAttribute('y', 15);
+    eye.setAttribute('width', 7);
+    eye.setAttribute('height', 16);
+    eye.setAttribute('rx', 3.5);
+    eye.setAttribute('fill', '#FFFFFF');
+    svg.appendChild(eye);
+  }
+  visor.appendChild(svg);
+  face.appendChild(visor);
+  return face;
+}
+
+// 모드가 다르면 빈 화면도 다르다(Paper 보드 46, 2026-08-27 검토 결정) — 대화
+// 캔버스에 그래프 일러스트가 나오던 문제의 처방. 두 변형을 모두 만들어 두고
+// #canvasRegion[data-mode](graph-mode controller가 소유)가 하나만 보여준다.
 function buildEmptyCanvasSkeleton() {
   if (!gridEmptyEl) return;
   gridEmptyEl.replaceChildren();
-  const box = document.createElement('div');
-  box.className = 'canvas-empty';
-  box.appendChild(buildEmptyCanvasIllustration());
-  const copy = document.createElement('div');
-  copy.className = 'canvas-empty-copy';
-  const title = document.createElement('div');
-  title.className = 'canvas-empty-title';
-  title.textContent = '아직 답변 카드가 없습니다';
-  const sub = document.createElement('div');
-  sub.className = 'canvas-empty-sub';
-  sub.textContent = '그동안 나눈 대화와 체결로 성향은 계속 쌓이고 있습니다.\n무엇이 쌓였는지 지금 볼 수 있습니다.';
-  copy.append(title, sub);
-  box.appendChild(copy);
-  gridEmptyEl.appendChild(box);
+  // 대화 모드 — 키우미가 기다린다. 그래프 요소는 여기 못 들어온다.
+  const chatBox = document.createElement('div');
+  chatBox.className = 'canvas-empty canvas-empty-chat';
+  chatBox.appendChild(buildEmptyCanvasKiumi());
+  const chatCopy = document.createElement('div');
+  chatCopy.className = 'canvas-empty-copy';
+  const chatTitle = document.createElement('div');
+  chatTitle.className = 'canvas-empty-title';
+  chatTitle.textContent = '무엇이든 물어보세요';
+  const chatSub = document.createElement('div');
+  chatSub.className = 'canvas-empty-sub';
+  chatSub.textContent = '답변 카드가 여기에 쌓입니다.\n오른쪽 대화에서 질문하면 바로 시작됩니다.';
+  chatCopy.append(chatTitle, chatSub);
+  chatBox.appendChild(chatCopy);
+  // 그래프 모드 — 성향 축적 히어로. 옛 대화 빈 화면에서 이사 왔다(수치·힌트는
+  // appendEmptyCanvasExtras가 브레인 준비 시에만 붙인다 — 정보 정직성 유지).
+  const graphBox = document.createElement('div');
+  graphBox.className = 'canvas-empty canvas-empty-graphmode';
+  graphBox.appendChild(buildEmptyCanvasIllustration());
+  const graphCopy = document.createElement('div');
+  graphCopy.className = 'canvas-empty-copy';
+  const graphTitle = document.createElement('div');
+  graphTitle.className = 'canvas-empty-title';
+  graphTitle.textContent = '그동안 나눈 대화와 체결로 성향은 계속 쌓이고 있습니다';
+  graphCopy.appendChild(graphTitle);
+  graphBox.appendChild(graphCopy);
+  gridEmptyEl.append(chatBox, graphBox);
 }
 buildEmptyCanvasSkeleton();
 
@@ -202,7 +243,10 @@ buildEmptyCanvasSkeleton();
 // "7일 전 리비전"을 알 방법이 없어 실측 없는 숫자를 만들게 된다(정보 정직성).
 function appendEmptyCanvasExtras(stats, hintCount) {
   if (!gridEmptyEl) return;
-  const box = gridEmptyEl.querySelector('.canvas-empty');
+  // 수치·힌트는 그래프 변형에만 붙는다(보드 46) — 대화 빈 화면은 깨끗하게.
+  // '성향 그래프 열기' CTA는 없앴다: 진입로는 사이드바 모드 네비(셸 v2)가
+  // 이미 상시 제공하고, 그래프 모드 안에서는 자기 자신을 여는 버튼이 된다.
+  const box = gridEmptyEl.querySelector('.canvas-empty-graphmode');
   if (!box) return;
   if (stats) {
     const row = document.createElement('div');
@@ -210,12 +254,6 @@ function appendEmptyCanvasExtras(stats, hintCount) {
     row.textContent = `엔티티 ${stats.entities} · 테마 군집 ${stats.clusters}`;
     box.appendChild(row);
   }
-  const cta = document.createElement('button');
-  cta.type = 'button';
-  cta.className = 'uk-btn uk-btn-primary canvas-empty-cta';
-  cta.textContent = '성향 그래프 열기';
-  cta.addEventListener('click', () => { graphMode.toggle(); });
-  box.appendChild(cta);
   if (hintCount) {
     const hint = document.createElement('div');
     hint.className = 'canvas-empty-hint';
@@ -1355,6 +1393,8 @@ const graphMode = window.AthenaLib.GraphModeController.createGraphModeController
     kiumi: document.getElementById('dot'),
     // 모드 네비(셸 v2 — 보드 37·38·44) — 활성 항목 하이라이트용 data-mode.
     modeNav: document.getElementById('sidebarModes'),
+    // 캔버스 영역 — 빈 상태 모드별 변형(보드 46)을 CSS로 가르는 data-mode 축.
+    canvasRegion: document.getElementById('canvasRegion'),
   },
   // main은 실패를 {ok:false}로 돌려준다. 컨트롤러는 **예외**로 실패를 안다 —
   // 여기서 바꿔주지 않으면 `{ok:false}`가 정상 응답으로 흘러 빈 그래프가 그려지고,
