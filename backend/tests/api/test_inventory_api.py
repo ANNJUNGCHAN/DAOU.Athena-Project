@@ -138,10 +138,11 @@ def test_inventory_partition_and_static_openapi_coverage() -> None:
     # 무엇이 왜 늘었는지 적지 않고 숫자만 고치면 이 테스트가 하는 일이 없어진다.
     # 336 = 334 + 그래프 브렌치 병합(2026-08-27)의 2개: get_brain_entity_timeline
     # (§10-4 엔티티 타임라인) · set_expose_to_model(그래프 노출 게이트, settings.py).
-    # 346 = 336 + 에이전트 브렌치 병합(2026-08-27)의 10개 — 라우틴 운영 표면
+    # 347 = 346 + Selector one-shot dispatch 1개 — 앱의 카드 hot path가
+    # 모델 왕복 없이 select/validate/call/render를 한 HTTP 요청으로 끝낸다.
     # (pause/resume/ack/catchup_fire/runs)·예약 브리핑(briefing_budget/
     # briefing_result)·계측(engagement)·말걸기 가드(nudge_guard get/post).
-    assert len(operation_ids) == 346
+    assert len(operation_ids) == 347
     assert "canvas_chart_page" in operation_ids
     assert "canvas_series_page" in operation_ids
     assert "get_internal_oauth_status" in operation_ids
@@ -172,7 +173,7 @@ def test_inventory_partition_and_static_openapi_coverage() -> None:
     assert SPLIT_BASE_TR_IDS <= {DETAIL_REGISTRY[ref].tr_id for ref in DETAIL_REGISTRY}
 
 
-def test_catalog_exposes_embedded_output_profile_and_candidate_projection_routes() -> None:
+def test_catalog_exposes_only_callable_generated_operations() -> None:
     client = TestClient(create_app(Settings()))
 
     profile_response = client.get("/api/v1/catalog/output-profile")
@@ -182,38 +183,54 @@ def test_catalog_exposes_embedded_output_profile_and_candidate_projection_routes
     catalog_response = client.get("/api/v1/catalog")
     assert catalog_response.status_code == 200
     catalog = catalog_response.json()
-    assert catalog["counts"] == {**INVENTORY_COUNTS, "total": 208}
+    assert catalog["counts"] == {
+        "query": 264,
+        "order": 12,
+        "websocket": 23,
+        "oauth": 2,
+        "base": 186,
+        "detail": 115,
+        "total": 301,
+    }
     assert catalog["output_profile"] == {
         "operation_count": OUTPUT_PROFILE["operation_count"],
         "shape_counts": OUTPUT_PROFILE["shape_counts"],
         "distributions": OUTPUT_PROFILE["distributions"],
         "policy": OUTPUT_PROFILE["policy"],
     }
-    operations = {operation["tr_id"]: operation for operation in catalog["operations"]}
-    assert set(operations) == ALL_TR_IDS
-    assert len(operations) == 208
+    operations = {
+        operation["operation_ref"]: operation for operation in catalog["operations"]
+    }
+    assert len(operations) == 301
+    assert len({ref for ref in operations if ref.startswith("base:")}) == 186
+    assert len({ref for ref in operations if ref.startswith("detail:")}) == 115
+    assert not {f"base:{tr_id}" for tr_id in SPLIT_BASE_TR_IDS}.intersection(
+        operations
+    )
 
-    for tr_id, metadata in operations.items():
-        assert metadata["output_profile"] == OUTPUT_PROFILE_BY_ID[tr_id]
-        projection = RESPONSE_PROJECTION_BY_TR_ID.get(tr_id)
-        if projection is None:
-            assert "projection" not in metadata
-            assert "detail_groups" not in metadata
-            assert "detail_routes" not in metadata
-            continue
-        expected_routes = [
-            f"/api/v1/tr/{TR_REGISTRY[tr_id].domain}/{tr_id}/detail/{group['id']}"
-            for group in projection["groups"]
-        ]
-        assert metadata["projection"] == projection
-        assert metadata["detail_groups"] == projection["groups"]
-        assert metadata["detail_routes"] == expected_routes
+    for operation_ref, metadata in operations.items():
+        tr_id = metadata["tr_id"]
+        assert metadata["operation_ref"] == operation_ref
+        if operation_ref.startswith("base:"):
+            assert metadata["output_profile"] == OUTPUT_PROFILE_BY_ID[tr_id]
+        else:
+            detail = DETAIL_REGISTRY[operation_ref]
+            assert "output_profile" not in metadata
+            assert metadata["response_field_count"] == len(
+                detail.response_model.model_fields
+            )
+            assert metadata["response_schema"] == detail.response_model.model_json_schema()
 
-    assert operations["ka10007"]["detail_groups"] == KA10007_DETAIL_MANIFEST["groups"]
-    for tr_id in ("ka10007", "00"):
-        detail_response = client.get(f"/api/v1/catalog/{tr_id}")
+    detail_ref = "detail:ka10007:identity"
+    assert detail_ref in operations
+    assert operations[detail_ref]["group_id"] == "identity"
+    for operation_ref in (detail_ref, "base:00"):
+        detail_response = client.get(f"/api/v1/catalog/{operation_ref}")
         assert detail_response.status_code == 200
-        assert detail_response.json() == operations[tr_id]
+        assert detail_response.json() == operations[operation_ref]
+    for tr_id in SPLIT_BASE_TR_IDS:
+        assert client.get(f"/api/v1/catalog/{tr_id}").status_code == 404
+        assert client.get(f"/api/v1/catalog/base:{tr_id}").status_code == 404
     assert client.get("/api/v1/catalog/not-a-tr").status_code == 404
 
 

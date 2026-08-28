@@ -7,6 +7,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 import pytest
+from _selector_facade import select_operation
 from fastapi import Request, Response
 from pydantic import ValidationError
 
@@ -15,7 +16,6 @@ from athena_api.routing_contract import EntityKind
 from athena_api.selector.catalog import build_operation_catalog, realtime_item_model
 from athena_api.selector.errors import (
     AmbiguousOperationError,
-    DetailGroupRequiredError,
     ExpiredPlanError,
     InvalidArgumentsError,
     InvalidPlanError,
@@ -25,12 +25,10 @@ from athena_api.selector.errors import (
     PreferredOperationError,
     ReplayStateCapacityError,
     StalePlanError,
-    UnknownDetailGroupError,
 )
 from athena_api.selector.lexicon import synonym_only_tokens
 from athena_api.selector.normalization import tokenize
 from athena_api.selector.plans import PlanSigner, VerifiedPlan
-from _selector_facade import select_operation
 from athena_api.selector.primitive_evidence import TargetResolution
 from athena_api.selector.ranking import (
     _MINIMUM_SURFACE,
@@ -61,10 +59,13 @@ def _identity_only_test_target_resolver(question: str) -> TargetResolution | Non
         ("삼성전자", EntityKind.STOCK),
         ("kodex 200", EntityKind.ETF),
     ):
-        if re.search(
-            rf"(?<![0-9a-z가-힣]){re.escape(alias)}(?![0-9a-z가-힣])",
-            normalized,
-        ) is not None:
+        if (
+            re.search(
+                rf"(?<![0-9a-z가-힣]){re.escape(alias)}(?![0-9a-z가-힣])",
+                normalized,
+            )
+            is not None
+        ):
             return TargetResolution(entity_kind)
     return None
 
@@ -103,9 +104,8 @@ def service(catalog):
 
 
 def test_catalog_has_exact_domestic_visibility_and_callability_counts(catalog) -> None:
-    assert len(catalog.documents) == 323
+    assert len(catalog.documents) == 299
     # 149 unsplit query bases + 115 projections + 12 orders + 23 websocket controls.
-    # Only the 22 split families and the 2 OAuth controls are uncallable.
     assert sum(document.generic_callable for document in catalog.documents) == 299
     manifest = json.loads(
         (BACKEND / "ref" / "kiwoom-common-screen-manifest.json").read_text(encoding="utf-8")
@@ -117,8 +117,8 @@ def test_catalog_has_exact_domestic_visibility_and_callability_counts(catalog) -
     )
     assert read_callable == 264
     assert sum(document.visibility == "explicit" for document in catalog.documents) == 35
-    assert sum(document.visibility == "hidden" for document in catalog.documents) == 2
-    assert len({document.operation_ref for document in catalog.documents}) == 323
+    assert sum(document.visibility == "hidden" for document in catalog.documents) == 0
+    assert len({document.operation_ref for document in catalog.documents}) == 299
 
     source_profile = json.loads(
         (BACKEND / "ref" / "kiwoom-io-source-profile.json").read_text(encoding="utf-8")
@@ -138,7 +138,7 @@ def test_search_is_deterministic_independent_of_catalog_order(catalog) -> None:
     assert [(item.document.operation_ref, item.score) for item in forward] == [
         (item.document.operation_ref, item.score) for item in reverse
     ]
-    assert forward[0].document.operation_ref == "base:kt00018"
+    assert forward[0].document.operation_ref == "detail:kt00018:portfolio_summary"
     assert forward[0].contributions
 
 
@@ -147,10 +147,8 @@ def test_korean_and_english_finance_queries_use_the_controlled_lexicon(service) 
     english = service.search(SearchRequest(query="portfolio valuation summary", limit=3))
 
     assert korean.results
-    assert any(hit.operation_ref == "base:kt00018" for hit in korean.results)
-    # An English question reaches a Korean-named TR through the projection
-    # vocabulary its base document absorbed.
-    assert english.results[0].operation_ref == "base:kt00018"
+    assert any(hit.operation_ref.startswith("detail:kt00018:") for hit in korean.results)
+    assert english.results[0].operation_ref == "detail:kt00018:portfolio_summary"
     assert any(
         contribution.reason_code.value == "SYNONYM_MATCH"
         for hit in korean.results
@@ -218,7 +216,7 @@ def _ranked(document, points: int) -> RankedDocument:
     )
 
 
-def test_family_policy_defaults_to_base_and_prefers_explicit_or_unique_typed_detail(
+def test_family_policy_uses_unsplit_bases_and_direct_split_details(
     catalog,
 ) -> None:
     # An unsplit family still answers from its base.
@@ -232,57 +230,36 @@ def test_family_policy_defaults_to_base_and_prefers_explicit_or_unique_typed_det
     assert selected is unsplit
     assert reasons == [ReasonCode.EXACT_OPERATION_REF]
 
-    # A split family auto-selects only a uniquely compatible family-local detail.
-    base = catalog.by_ref["base:ka10001"]
+    # A split family has no base document; its detail is directly selectable.
+    assert catalog.find_exact("base:ka10001") is None
+    detail = catalog.by_ref["detail:ka10001:current_trading"]
     selected, reasons = select_operation(
         catalog,
-        "이 종목 오늘 주가",
-        (_ranked(base, 300),),
+        detail.operation_ref,
+        (_ranked(detail, 300),),
         ResponseMode.AUTO,
     )
-    assert selected.operation_ref == "detail:ka10001:current_trading"
-    assert reasons == [ReasonCode.TYPED_DETAIL_MATCH]
-
-    selected, reasons = select_operation(
-        catalog,
-        "이 종목 오늘 주가",
-        (_ranked(base, 300),),
-        ResponseMode.AUTO,
-        "current_trading",
-    )
-    assert selected.operation_ref == "detail:ka10001:current_trading"
-    assert reasons == [ReasonCode.TYPED_DETAIL_MATCH]
+    assert selected is detail
+    assert reasons == [ReasonCode.EXACT_OPERATION_REF]
 
 
 def test_unknown_detail_group_is_rejected_with_the_available_groups(catalog) -> None:
-    base = catalog.by_ref["base:ka10001"]
-    with pytest.raises(UnknownDetailGroupError) as caught:
-        select_operation(
-            catalog,
-            "base:ka10001",
-            (_ranked(base, 300),),
-            ResponseMode.AUTO,
-            "not_a_group",
-        )
-    details = caught.value.details
-    assert details["operation_ref"] == "base:ka10001"
-    assert details["detail_group"] == "not_a_group"
-    assert "current_trading" in details["available_groups"]
-    assert len(details["available_groups"]) == 7
+    assert catalog.find_exact("detail:ka10001:not_a_group") is None
+    assert {item.group_id for item in catalog.details_for("ka10001")} == {
+        "identity_and_capital",
+        "market_scale_and_ownership",
+        "price_range",
+        "valuation",
+        "financial_performance",
+        "daily_price_band",
+        "current_trading",
+    }
 
 
 def test_detail_group_of_another_family_cannot_be_borrowed(catalog) -> None:
     """``holdings`` is a real group id - but not one of ka10001's."""
-    base = catalog.by_ref["base:ka10001"]
     assert catalog.find_exact("detail:kt00018:holdings") is not None
-    with pytest.raises(UnknownDetailGroupError):
-        select_operation(
-            catalog,
-            "base:ka10001",
-            (_ranked(base, 300),),
-            ResponseMode.AUTO,
-            "holdings",
-        )
+    assert catalog.find_exact("detail:ka10001:holdings") is None
 
 
 def test_family_policy_keeps_pure_lists_and_explicit_full_requests_on_base(catalog) -> None:
@@ -307,27 +284,24 @@ def test_family_policy_keeps_pure_lists_and_explicit_full_requests_on_base(catal
     assert selected is unsplit
     assert reasons == [ReasonCode.EXPLICIT_FULL_RESPONSE]
 
-    # On a split family there is no full response left to ask for.
-    detail = catalog.by_ref["detail:ka10001:current_trading"]
-    with pytest.raises(DetailGroupRequiredError):
+    # On a split family there is no base document left to ask for.
+    with pytest.raises(NoConfidentMatchError):
         select_operation(
             catalog,
             "base:ka10001",
-            (_ranked(detail, 400),),
+            (),
             ResponseMode.FULL,
         )
 
 
 def test_resolve_validates_required_arguments_and_issues_allowlisted_plan(service) -> None:
-    # Arguments are reported before the group requirement, because every projection of a
-    # family shares the family's request contract: the caller must fix this either way.
+    detail_ref = "detail:ka10001:current_trading"
     with pytest.raises(InvalidArgumentsError):
-        service.resolve(ResolveRequest(question="base:ka10001", arguments={}))
+        service.resolve(ResolveRequest(question=detail_ref, arguments={}))
 
     resolved = service.resolve(
         ResolveRequest(
-            question="base:ka10001",
-            detail_group="current_trading",
+            question=detail_ref,
             arguments={"stk_cd": "005930"},
         )
     )
@@ -356,7 +330,7 @@ def test_explicit_full_response_cannot_resurrect_a_split_base(service) -> None:
     ]
 
     # With no projection named, a full-response request is refused rather than widened.
-    with pytest.raises(DetailGroupRequiredError):
+    with pytest.raises(OperationNotFoundError):
         service.resolve(
             ResolveRequest(
                 question="base:ka10001",
@@ -419,7 +393,7 @@ def test_plan_rejects_tampering_expiry_and_stale_catalog(catalog) -> None:
         clock=lambda: now[0],
         nonce_factory=lambda: "fixed",
     )
-    document = catalog.by_ref["base:ka10001"]
+    document = catalog.by_ref["detail:ka10001:current_trading"]
     token, _ = signer.issue(
         catalog=catalog,
         document=document,

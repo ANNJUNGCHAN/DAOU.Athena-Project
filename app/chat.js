@@ -1626,6 +1626,14 @@ window.athena.on('athena:routine-event', (event) => {
   renderAgentTurn(event);
 });
 
+// Fast Selector의 guarded order 결과는 기존 주문 확인 티켓에만 착지한다.
+// 이 이벤트 경로에서는 athena:order-execute를 호출하지 않는다 — 실행은 아래
+// 티켓 안의 사용자 클릭 핸들러 하나로 계속 제한된다.
+window.athena.on('athena:selector-order-draft', (payload) => {
+  const prefill = orderTicketLib.buildSelectorOrderPrefill(payload);
+  if (prefill) openOrderTicket(prefill);
+});
+
 // ---------- 예약 자동 브리핑 턴(R1, 4단계) ----------
 // 사용자 턴 채널(athena:live-*)과 완전히 분리된 별개 핸들러들이다(MAJOR 2).
 // 코드 리뷰 체크포인트: 아래 세 핸들러는 setLocked를 절대 부르지 않는다 —
@@ -2096,7 +2104,7 @@ async function renderOrderTicket(prefill) {
     }
   }
 
-  // 방향 — 사람이 고른다(프리필 아님).
+  // Selector 초안은 방향·수량까지 채울 수 있지만 실행은 여전히 사람 클릭 전용이다.
   const sideRow = document.createElement('div');
   sideRow.className = 'ticket-row';
   const sideLabel = document.createElement('span');
@@ -2116,6 +2124,7 @@ async function renderOrderTicket(prefill) {
   qtyInput.type = 'number';
   qtyInput.min = '1';
   qtyInput.className = 'ticket-qty';
+  if (ticket.qty) qtyInput.value = String(ticket.qty);
   qtyRow.append(qtyLabel, qtyInput);
   card.appendChild(qtyRow);
 
@@ -2152,6 +2161,8 @@ async function renderOrderTicket(prefill) {
     execBtn.disabled = !!gateBlocked || !ticket.side || !Number(qtyInput.value)
       || ticket.state === 'done' || ticket.state === 'in_doubt';
   };
+  if (ticket.side === 'buy') buyBtn.classList.add('routine-btn-approve');
+  if (ticket.side === 'sell') sellBtn.classList.add('routine-btn-approve');
   syncExec();
 
   buyBtn.addEventListener('click', () => {

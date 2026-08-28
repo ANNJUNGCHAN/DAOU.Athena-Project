@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 import re
 from dataclasses import replace
 
@@ -91,10 +90,10 @@ def test_manifest_exposes_only_four_meta_tools_and_exact_catalog_counts() -> Non
     manifest = response.json()
     assert manifest["catalog_version"] == service.catalog.version
     assert manifest["counts"] == {
-        "total": 323,
+        "total": 299,
         "generic_callable": 299,
         "discovery_only": 35,
-        "hidden": 2,
+        "hidden": 0,
     }
     assert manifest["workflow"] == [
         "athena_search",
@@ -176,7 +175,7 @@ def test_matching_preferred_detail_preserves_autonomous_plan_semantics() -> None
         "/api/v1/llm/tools/resolve",
         json={
             **payload,
-            "preferred_ref": "base:ka10001",
+            "preferred_ref": "detail:ka10001:current_trading",
             "detail_group": "current_trading",
         },
     )
@@ -201,7 +200,7 @@ def test_http_search_suggestion_and_soft_candidates_share_canonical_selection() 
     )
     assert searched.status_code == 200
     top = searched.json()["results"][0]
-    assert top["operation_ref"] == "base:ka10001"
+    assert top["operation_ref"] == "detail:ka10001:current_trading"
     assert top["confidence"] == "high"
     assert top["suggested_detail_group"] == "current_trading"
     assert top["suggested_operation_ref"] == "detail:ka10001:current_trading"
@@ -209,7 +208,11 @@ def test_http_search_suggestion_and_soft_candidates_share_canonical_selection() 
     payload = {
         "question": question,
         "arguments": {"stk_cd": "005930"},
-        "candidate_refs": ["base:ka10019", "base:ka10001", "base:ka10019"],
+        "candidate_refs": [
+            "base:ka10019",
+            "detail:ka10001:current_trading",
+            "base:ka10019",
+        ],
         "preferred_ref": top["operation_ref"],
         "detail_group": top["suggested_detail_group"],
     }
@@ -326,7 +329,7 @@ def test_missing_arguments_and_unknown_fields_fail_before_upstream() -> None:
 
     missing = client.post(
         "/api/v1/llm/tools/resolve",
-        json={"question": "base:ka10001", "arguments": {}},
+        json={"question": "detail:ka10001:current_trading", "arguments": {}},
     )
     assert missing.status_code == 422
     assert missing.json()["code"] == "INVALID_ARGUMENTS"

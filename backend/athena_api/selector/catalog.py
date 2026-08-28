@@ -1,4 +1,4 @@
-"""Canonical 323-operation selector catalog built from generated allowlists."""
+"""Canonical 299-operation selector catalog built from callable operations."""
 
 from __future__ import annotations
 
@@ -137,15 +137,7 @@ class OperationCatalog:
         return None if document is None or document.visibility == "hidden" else document
 
     def visible_for(self, intent: DiscoveryIntent) -> tuple[OperationDocument, ...]:
-        """Return the searchable surface: one document per TR family.
-
-        Detail projections are deliberately excluded from global ranking. After
-        a family is fixed, policy evaluates only its owned details and may choose
-        one uniquely supported by typed compatibility and authoritative canonical
-        evidence; otherwise ``ResolveRequest.detail_group`` is required. Details
-        stay addressable by exact identity through :meth:`find_exact` and
-        :meth:`details_for`.
-        """
+        """Return callable documents on the explicitly requested intent surface."""
         if intent in {DiscoveryIntent.AUTO, DiscoveryIntent.QUERY}:
             allowed = {"query"}
         elif intent is DiscoveryIntent.ORDER:
@@ -155,9 +147,7 @@ class OperationCatalog:
         return tuple(
             document
             for document in self.documents
-            if document.kind in allowed
-            and document.visibility != "hidden"
-            and document.group_id is None
+            if document.kind in allowed and document.visibility != "hidden"
         )
 
     def details_for(self, tr_id: str) -> tuple[OperationDocument, ...]:
@@ -318,9 +308,9 @@ def build_operation_catalog() -> OperationCatalog:
     documents: list[OperationDocument] = []
     for tr_id in sorted(TR_REGISTRY):
         spec = TR_REGISTRY[tr_id]
-        visibility: Visibility = (
-            "hidden" if spec.kind == "oauth" else "normal" if spec.kind == "query" else "explicit"
-        )
+        if spec.kind == "oauth" or tr_id in SPLIT_BASE_TR_IDS:
+            continue
+        visibility: Visibility = "normal" if spec.kind == "query" else "explicit"
         documents.append(
             OperationDocument(
                 operation_ref=f"base:{tr_id}",
@@ -342,10 +332,7 @@ def build_operation_catalog() -> OperationCatalog:
                 # Callable does not mean reachable by a vague question. Order and websocket
                 # operations keep `explicit` visibility, so a natural-language search never
                 # ranks them; the model must declare the intent and then name the operation.
-                # A split family is the inverse: searchable, but replaced by its projections.
-                generic_callable=(
-                    spec.kind in {"query", "order", "websocket"} and tr_id not in SPLIT_BASE_TR_IDS
-                ),
+                generic_callable=True,
                 request_schema_hash=model_schema_hash(spec.request_model),
                 response_schema_hash=model_schema_hash(spec.response_model),
                 routing=ROUTING_REGISTRY[f"base:{tr_id}"],

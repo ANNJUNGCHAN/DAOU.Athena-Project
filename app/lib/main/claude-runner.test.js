@@ -49,6 +49,22 @@ test('buildArgs: --tools를 붙이지 않는다 — 표면 축소 실험 철회(
   assert.equal(args.indexOf('--tools'), -1); // 재도입하려면 E2E 재실측 먼저
 });
 
+test('buildArgs: classification-only 실행은 모든 툴을 닫고 MCP 허용 플래그를 싣지 않는다', () => {
+  const args = buildArgs({
+    prompt: 'strict json only',
+    configFile: '.mcp.json',
+    allowedTools: GATEWAY_ALLOWED_TOOLS,
+    disableAllTools: true,
+  });
+  const toolsIndex = args.indexOf('--tools');
+  assert.ok(toolsIndex >= 0);
+  assert.equal(args[toolsIndex + 1], '');
+  assert.equal(args.includes('--allowedTools'), false);
+  assert.equal(args.includes('mcp__athena'), false);
+  assert.equal(args.includes('--mcp-config'), false);
+  assert.equal(args.includes('--strict-mcp-config'), false);
+});
+
 test('buildArgs: --setting-sources 값은 항상 빈 문자열 하나뿐 — 콤마 값 등으로 오염되지 않는다', () => {
   const args = buildArgs({ prompt: 'x', configFile: '.mcp.json', allowedTools: 'y' });
   const i = args.indexOf('--setting-sources');

@@ -415,18 +415,17 @@ _RESOLVE_INPUT_SCHEMA: dict[str, Any] = {
         "preferred_ref": {
             "type": ["string", "null"],
             "description": (
-                "canonical family assertion이다. override가 아니며 detail ref는 그 "
-                "group을 암시하고 명시 detail_group과 충돌하면 실패한다."
+                "실제 callable operation_ref 단언이다. split base alias는 허용하지 "
+                "않으며 detail은 detail:<tr_id>:<group_id>를 그대로 사용한다."
             ),
         },
         "detail_group": {
             "type": ["string", "null"],
             "maxLength": 64,
             "description": (
-                "athena_describe 또는 search의 suggested_detail_group에 나온 canonical "
-                "group만 허용한다. resolve는 canonical family를 다시 검증하며, 생략 시 "
-                "typed 호환성과 권위 있는 canonical 근거가 유일하게 지지하는 "
-                "family-local detail만 자동 선택할 수 있다."
+                "exact detail operation_ref와 함께 전달할 때 그 detail의 group_id와 "
+                "일치해야 한다. 자연어 선택에서는 생략하며 selector가 실제 detail "
+                "문서 중 하나를 직접 선택한다."
             ),
         },
         "arguments": {"type": "object", "description": "선택된 오퍼레이션의 요청 인자."},
@@ -461,8 +460,9 @@ _INPUT_SCHEMA_BY_TOOL: dict[str, dict[str, Any]] = {
 _FLOW_NOTE = (
     "4단계 흐름의 일부다: athena_search -> athena_describe -> athena_resolve -> "
     "athena_call. search의 top hit에 suggested_detail_group/operation_ref가 있으면 "
-    "resolve가 같은 full intent surface에서 재검증한다. candidate_refs는 soft hint, "
-    "preferred_ref는 canonical family assertion이다. athena_resolve가 "
+    "resolve가 같은 callable intent surface에서 재검증한다. candidate_refs는 soft "
+    "hint, preferred_ref는 실제 operation_ref 단언이다. split base와 OAuth 문서는 "
+    "selector catalog에 없다. athena_resolve가 "
     "발급하는 plan_token은 1회용이다 — athena_call에 정확히 한 번만 넘기고, "
     "실패해도(타임아웃 포함) 재시도하지 말고 athena_resolve를 다시 불러 새 "
     "토큰을 받는다."
@@ -475,8 +475,7 @@ _DESCRIPTION_BY_TOOL: dict[str, str] = {
         f"명시해야 그 표면이 랭킹에 들어온다. {_FLOW_NOTE}"
     ),
     DESCRIBE_TOOL: (
-        "2/4단계 — operation_ref 하나의 정확한 인자·응답 계약과 detail_groups를 "
-        f"읽는다. {_FLOW_NOTE}"
+        f"2/4단계 — 실제 operation_ref 하나의 정확한 인자·응답 계약을 읽는다. {_FLOW_NOTE}"
     ),
     RESOLVE_TOOL: (
         f"3/4단계 — 오퍼레이션을 선택하고 인자를 검증해 서명된 실행 계획을 발급한다. {_FLOW_NOTE}"

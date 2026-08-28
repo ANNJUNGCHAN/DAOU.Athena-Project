@@ -166,9 +166,7 @@ def test_entity_values_never_mint_semantic_or_financing_evidence(catalog) -> Non
 
 
 def test_korean_issuer_substrings_never_mint_financing_or_capability(catalog) -> None:
-    named = analyze_question(
-        "고려신용정보 한 주 매수해줘", target_resolver=_production_target
-    )
+    named = analyze_question("고려신용정보 한 주 매수해줘", target_resolver=_production_target)
     coded = analyze_question("049720 한 주 매수해줘", target_resolver=_production_target)
     embedded_capability = analyze_question(
         "대한대차정보 한 주 매수해줘", target_resolver=_production_target
@@ -197,9 +195,7 @@ def test_instrument_target_anchor_is_value_free_and_can_come_from_bound_args(
     operation = catalog.by_ref["detail:ka10001:current_trading"]
     bare = analyze_question("오늘 주가 얼마야?")
     named = analyze_question("삼성전자 오늘 주가 얼마야?")
-    coded = analyze_question(
-        "005930 오늘 주가 얼마야?", target_resolver=_production_target
-    )
+    coded = analyze_question("005930 오늘 주가 얼마야?", target_resolver=_production_target)
     arbitrary = analyze_question("고려신용정보 오늘 주가 얼마야?")
     deictic = analyze_question("이 종목 오늘 주가 얼마야?")
     bound = analyze_question(
@@ -435,9 +431,7 @@ def test_specialized_capabilities_select_exact_typed_profiles(catalog) -> None:
         "ka10001x current price",
     ),
 )
-def test_transport_neutral_adapter_rejects_non_boundary_operation_tokens(
-    catalog, question
-) -> None:
+def test_transport_neutral_adapter_rejects_non_boundary_operation_tokens(catalog, question) -> None:
     decision = decide_selector_compatibility(
         catalog,
         question,
@@ -479,12 +473,8 @@ def test_split_details_are_proved_as_independent_exact_profiles(catalog) -> None
         "삼성전자의 오늘 가격 범위를 알려줘",
         target_resolver=_stock_target,
     )
-    daily_band = prove_compatibility(
-        analysis, catalog.by_ref["detail:ka10001:daily_price_band"]
-    )
-    valuation = prove_compatibility(
-        analysis, catalog.by_ref["detail:ka10001:valuation"]
-    )
+    daily_band = prove_compatibility(analysis, catalog.by_ref["detail:ka10001:daily_price_band"])
+    valuation = prove_compatibility(analysis, catalog.by_ref["detail:ka10001:valuation"])
     assert daily_band.operation_ref != valuation.operation_ref
     assert daily_band.status is CompatibilityStatus.MATCH
     assert valuation.status is CompatibilityStatus.CONTRADICTION
@@ -492,7 +482,7 @@ def test_split_details_are_proved_as_independent_exact_profiles(catalog) -> None
 
 def test_compatibility_requires_both_target_and_capability(catalog) -> None:
     analysis = analyze_question("삼성전자 정보를 보여줘")
-    proof = prove_compatibility(analysis, catalog.by_ref["base:ka10001"])
+    proof = prove_compatibility(analysis, catalog.by_ref["detail:ka10001:current_trading"])
     assert proof.status is CompatibilityStatus.INSUFFICIENT
     assert "capability" in proof.missing
 
@@ -519,9 +509,7 @@ def test_product_capability_conflict_rejects_even_when_generic_measures_overlap(
 
 
 def test_ohlc_chart_and_session_band_have_distinct_primitive_constraints() -> None:
-    chart = analyze_question(
-        "2026년 6월 일별 시가 고가 저가 종가와 거래량을 차트로 그려줘"
-    )
+    chart = analyze_question("2026년 6월 일별 시가 고가 저가 종가와 거래량을 차트로 그려줘")
     band = analyze_question(
         "Give today's opening price, session high, session low, and price limits"
     )
@@ -641,62 +629,67 @@ def test_action_and_financing_are_conjunctive_profile_discriminators(catalog) ->
 
 
 def test_advice_status_and_screening_primitives_are_compositional(catalog) -> None:
-    advice = analyze_question(
-        "Would adjusting my unfilled order price be a sensible tactic?"
-    )
+    advice = analyze_question("Would adjusting my unfilled order price be a sensible tactic?")
     assert advice.speech_act is SpeechAct.ADVICE
-    assert decide_compatibility(
-        advice, (catalog.by_ref["base:kt10002"],)
-    ).selected_operation_ref is None
+    assert (
+        decide_compatibility(advice, (catalog.by_ref["base:kt10002"],)).selected_operation_ref
+        is None
+    )
 
     program = analyze_question("이 종목의 프로그램 매매 현황을 알려줘")
     assert DataIntent.SNAPSHOT in program.data_intents
     assert Measure.PROGRAM_TRADING in program.measures
     assert RoutingResultShape.COMPOUND in program.result_shapes
-    assert decide_compatibility(
-        program,
-        (catalog.by_ref["base:ka90003"], catalog.by_ref["base:ka90004"]),
-    ).selected_operation_ref == "base:ka90004"
+    assert (
+        decide_compatibility(
+            program,
+            (catalog.by_ref["base:ka90003"], catalog.by_ref["base:ka90004"]),
+        ).selected_operation_ref
+        == "base:ka90004"
+    )
 
     etf_screen = analyze_question("운용사와 과세 조건으로 국내 ETF 전체 시세를 걸러줘")
     assert DataIntent.SCREENING in etf_screen.data_intents
     assert RoutingResultShape.COLLECTION in etf_screen.result_shapes
-    assert decide_compatibility(
-        etf_screen,
-        (catalog.by_ref["base:ka40002"], catalog.by_ref["base:ka40004"]),
-    ).selected_operation_ref == "base:ka40004"
+    assert (
+        decide_compatibility(
+            etf_screen,
+            (catalog.by_ref["base:ka40002"], catalog.by_ref["base:ka40004"]),
+        ).selected_operation_ref
+        == "base:ka40004"
+    )
 
 
 def test_realtime_movement_is_stream_evidence_not_historical_series(catalog) -> None:
-    realtime = analyze_question(
-        "화학 sector index의 움직임을 realtime feed로 계속 보내줘"
-    )
-    historical = analyze_question(
-        "Show the chemical sector index movement by trading day"
-    )
+    realtime = analyze_question("화학 sector index의 움직임을 realtime feed로 계속 보내줘")
+    historical = analyze_question("Show the chemical sector index movement by trading day")
     assert realtime.execution is ExecutionKind.WEBSOCKET
     assert DataIntent.SUBSCRIPTION in realtime.data_intents
     assert DataIntent.HISTORY not in realtime.data_intents
-    assert prove_compatibility(
-        realtime, catalog.by_ref["base:0J"]
-    ).status is CompatibilityStatus.MATCH
+    assert (
+        prove_compatibility(realtime, catalog.by_ref["base:0J"]).status is CompatibilityStatus.MATCH
+    )
     assert DataIntent.HISTORY in historical.data_intents
     assert historical.execution is not ExecutionKind.WEBSOCKET
 
     mixed = analyze_question("운수장비 업종 index changes를 live feed로 계속 보내줘")
     assert mixed.execution is ExecutionKind.WEBSOCKET
     assert mixed.feeds == (FeedKind.SECTOR_INDEX,)
-    assert decide_compatibility(
-        mixed, (catalog.by_ref["base:0J"], catalog.by_ref["base:0U"])
-    ).selected_operation_ref == "base:0J"
-
-    elw_metrics = analyze_question(
-        "Stream live indicator updates for the selected ELW"
+    assert (
+        decide_compatibility(
+            mixed, (catalog.by_ref["base:0J"], catalog.by_ref["base:0U"])
+        ).selected_operation_ref
+        == "base:0J"
     )
+
+    elw_metrics = analyze_question("Stream live indicator updates for the selected ELW")
     assert elw_metrics.feeds == (FeedKind.ELW_METRICS,)
-    assert decide_compatibility(
-        elw_metrics, (catalog.by_ref["base:0m"], catalog.by_ref["base:0u"])
-    ).selected_operation_ref == "base:0u"
+    assert (
+        decide_compatibility(
+            elw_metrics, (catalog.by_ref["base:0m"], catalog.by_ref["base:0u"])
+        ).selected_operation_ref
+        == "base:0u"
+    )
 
 
 @pytest.mark.parametrize(
@@ -710,9 +703,7 @@ def test_realtime_movement_is_stream_evidence_not_historical_series(catalog) -> 
 def test_stock_orderbook_feed_variants_are_typed(
     catalog, question, expected_ref, expected_feed
 ) -> None:
-    analysis = analyze_question(
-        question, bound_argument_roles=(BindingRole.INSTRUMENT_CODE,)
-    )
+    analysis = analyze_question(question, bound_argument_roles=(BindingRole.INSTRUMENT_CODE,))
     assert FeedKind.ORDERBOOK in analysis.feeds
     assert expected_feed in analysis.feeds
     decision = decide_compatibility(
@@ -744,9 +735,7 @@ def test_p4_alias_only_lexical_perturbation_cannot_create_compatibility(catalog)
     poisoned = replace(
         document,
         name="show me something interesting",
-        searchable_zones=MappingProxyType(
-            {"canonical_name": ("show me something interesting",)}
-        ),
+        searchable_zones=MappingProxyType({"canonical_name": ("show me something interesting",)}),
     )
     original = prove_compatibility(analysis, document)
     perturbed = prove_compatibility(analysis, poisoned)
@@ -756,12 +745,8 @@ def test_p4_alias_only_lexical_perturbation_cannot_create_compatibility(catalog)
 
 def test_p4_split_sibling_cross_product_cannot_satisfy_one_request(catalog) -> None:
     analysis = analyze_question("이 종목의 오늘 현재가와 PER를 같이 알려줘")
-    current = prove_compatibility(
-        analysis, catalog.by_ref["detail:ka10001:current_trading"]
-    )
-    valuation = prove_compatibility(
-        analysis, catalog.by_ref["detail:ka10001:valuation"]
-    )
+    current = prove_compatibility(analysis, catalog.by_ref["detail:ka10001:current_trading"])
+    valuation = prove_compatibility(analysis, catalog.by_ref["detail:ka10001:valuation"])
     assert current.status is CompatibilityStatus.CONTRADICTION
     assert valuation.status is CompatibilityStatus.CONTRADICTION
     assert "measure:valuation" in current.contradictions
@@ -805,9 +790,7 @@ def test_p4_multiple_compatible_details_require_a_local_group(catalog) -> None:
 
 def test_active_axis_dominance_ignores_role_matches_and_input_order(catalog) -> None:
     analysis = analyze_question("Show my current account balance")
-    source = OperationProfile.from_document(
-        catalog.by_ref["detail:kt00004:cash_and_assets"]
-    )
+    source = OperationProfile.from_document(catalog.by_ref["detail:kt00004:cash_and_assets"])
     extra_role = replace(
         source,
         operation_ref="detail:shadow:extra-role",
@@ -826,9 +809,7 @@ def test_active_axis_dominance_ignores_role_matches_and_input_order(catalog) -> 
 
 def test_unmentioned_action_cannot_create_family_dominance(catalog) -> None:
     analysis = analyze_question("Show my current account balance")
-    source = OperationProfile.from_document(
-        catalog.by_ref["detail:kt00004:cash_and_assets"]
-    )
+    source = OperationProfile.from_document(catalog.by_ref["detail:kt00004:cash_and_assets"])
     actionful = replace(
         source,
         operation_ref="detail:shadow:actionful",
@@ -848,9 +829,7 @@ def test_active_axis_dominance_uses_explicit_product_but_not_generic_measure(
     catalog,
 ) -> None:
     analysis = analyze_question("Show this stock's current price")
-    source = OperationProfile.from_document(
-        catalog.by_ref["detail:ka10001:current_trading"]
-    )
+    source = OperationProfile.from_document(catalog.by_ref["detail:ka10001:current_trading"])
     broader_product = replace(
         source,
         operation_ref="detail:shadow:stock-or-etf",
@@ -886,17 +865,13 @@ def test_active_axis_dominance_uses_explicit_product_but_not_generic_measure(
             measures=source.routing.measures + (Measure.BALANCE,),
         ),
     )
-    generic_decision = decide_compatibility(
-        generic_analysis, (source, broader_measure)
-    )
+    generic_decision = decide_compatibility(generic_analysis, (source, broader_measure))
     assert generic_decision.status is CompatibilityDecisionStatus.AMBIGUOUS
 
 
 def test_child_specificity_never_selects_a_family(catalog) -> None:
     analysis = analyze_question("Show this stock's current price")
-    source = OperationProfile.from_document(
-        catalog.by_ref["detail:ka10001:current_trading"]
-    )
+    source = OperationProfile.from_document(catalog.by_ref["detail:ka10001:current_trading"])
     other_family = replace(
         source,
         operation_ref="detail:shadow:other-family",
@@ -929,9 +904,7 @@ def test_local_detail_intent_and_temporal_specificity_ignore_extra_output_measur
 
 def test_broad_sibling_cannot_erase_an_equal_family(catalog) -> None:
     analysis = analyze_question("Show this stock's current price")
-    source = OperationProfile.from_document(
-        catalog.by_ref["detail:ka10001:current_trading"]
-    )
+    source = OperationProfile.from_document(catalog.by_ref["detail:ka10001:current_trading"])
     equal_other = replace(
         source,
         operation_ref="detail:shadow:equal-other",
@@ -959,9 +932,7 @@ def test_broad_sibling_cannot_erase_an_equal_family(catalog) -> None:
 
 
 def test_identical_duplicate_profiles_dedupe_and_conflicts_fail_fast(catalog) -> None:
-    source = OperationProfile.from_document(
-        catalog.by_ref["detail:ka10001:current_trading"]
-    )
+    source = OperationProfile.from_document(catalog.by_ref["detail:ka10001:current_trading"])
     analysis = analyze_question("Show this stock's current price")
     duplicate = decide_compatibility(analysis, (source, source))
     assert duplicate.selected_operation_ref == source.operation_ref
@@ -1037,9 +1008,7 @@ def test_sector_52_week_equivalence_uses_source_when_explicit(
         ),
     ),
 )
-def test_p4_full_profile_decision_fail_closes_safety_requests(
-    catalog, question, intent
-) -> None:
+def test_p4_full_profile_decision_fail_closes_safety_requests(catalog, question, intent) -> None:
     kinds = {
         DiscoveryIntent.AUTO: {"query"},
         DiscoveryIntent.QUERY: {"query"},
@@ -1132,9 +1101,7 @@ def test_named_collection_scope_needs_no_instrument_anchor(
 def test_existing_order_identity_selects_amend_or_cancel_without_new_instrument_anchor(
     catalog, question, expected_ref
 ) -> None:
-    decision = decide_selector_compatibility(
-        catalog, question, DiscoveryIntent.ORDER
-    )
+    decision = decide_selector_compatibility(catalog, question, DiscoveryIntent.ORDER)
 
     assert decision.status is CompatibilityDecisionStatus.SELECTED
     assert decision.selected_operation_ref == expected_ref
@@ -1241,11 +1208,12 @@ def test_legacy_policy_facade_has_no_lexical_authorization_path() -> None:
 
 def test_legacy_policy_ignores_rank_and_title_perturbations(catalog) -> None:
     from _selector_facade import select_operation
+
     from athena_api.selector.ranking import RankedDocument
 
     question = "Show this stock's current price"
-    unrelated = catalog.by_ref["base:ka20001"]
-    expected = catalog.by_ref["base:ka10001"]
+    unrelated = catalog.by_ref["detail:ka20001:market_snapshot"]
+    expected = catalog.by_ref["detail:ka10001:current_trading"]
     first, _ = select_operation(
         catalog,
         question,
@@ -1271,23 +1239,18 @@ def test_legacy_policy_ignores_rank_and_title_perturbations(catalog) -> None:
 
 def test_legacy_policy_intent_is_invariant_to_ranked_document_kind(catalog) -> None:
     from _selector_facade import select_operation
+
     from athena_api.selector.ranking import RankedDocument
 
     question = "Show this stock's current price"
     ranked_variants = (
         (
             RankedDocument(
-                catalog.by_ref["base:ka20001"], 999_999, (), typed_tier=999
+                catalog.by_ref["detail:ka20001:market_snapshot"], 999_999, (), typed_tier=999
             ),
         ),
-        (
-            RankedDocument(
-                catalog.by_ref["base:kt10000"], 999_999, (), typed_tier=999
-            ),
-        ),
-        (
-            RankedDocument(catalog.by_ref["base:0A"], 999_999, (), typed_tier=999),
-        ),
+        (RankedDocument(catalog.by_ref["base:kt10000"], 999_999, (), typed_tier=999),),
+        (RankedDocument(catalog.by_ref["base:0A"], 999_999, (), typed_tier=999),),
     )
 
     selections = tuple(
@@ -1298,9 +1261,7 @@ def test_legacy_policy_intent_is_invariant_to_ranked_document_kind(catalog) -> N
     assert selections == ("detail:ka10001:current_trading",) * 3
 
 
-def test_legacy_policy_detail_group_cannot_override_unique_typed_child(
-    catalog, service
-) -> None:
+def test_legacy_policy_detail_group_cannot_override_unique_typed_child(catalog, service) -> None:
     from _selector_facade import select_operation
 
     question = "Show this stock's current price"
@@ -1340,9 +1301,7 @@ def test_service_vague_no_anchor_rejects_and_search_stays_low(service) -> None:
 
     with pytest.raises(NoConfidentMatchError) as caught:
         service.resolve(ResolveRequest(question="현재가 알려줘"))
-    assert caught.value.details["reason_codes"] == [
-        ReasonCode.NO_COMPATIBLE_PROFILE.value
-    ]
+    assert caught.value.details["reason_codes"] == [ReasonCode.NO_COMPATIBLE_PROFILE.value]
 
 
 @pytest.mark.parametrize(
@@ -1505,11 +1464,9 @@ def test_service_injected_target_resolver_is_exact_span_and_used_everywhere(
     )
 
     searched = injected.search(SearchRequest(query=question, limit=5))
-    resolved = injected.resolve(
-        ResolveRequest(question=question, arguments={"stk_cd": "005930"})
-    )
+    resolved = injected.resolve(ResolveRequest(question=question, arguments={"stk_cd": "005930"}))
 
-    assert searched.results[0].operation_ref == "base:ka10001"
+    assert searched.results[0].operation_ref == "detail:ka10001:current_trading"
     assert searched.results[0].confidence == "high"
     assert resolved.operation_ref == "detail:ka10001:current_trading"
     with pytest.raises(NoConfidentMatchError):
@@ -1609,9 +1566,7 @@ def test_domestic_stock_markets_resolve_to_value_free_stock_kind(catalog, market
         ),
     ),
 )
-def test_market_eight_resolution_is_etf_and_never_stock(
-    catalog, question, expected_ref
-) -> None:
+def test_market_eight_resolution_is_etf_and_never_stock(catalog, question, expected_ref) -> None:
     analysis = analyze_question(question, target_resolver=_etf_target)
     decision = decide_selector_compatibility(
         catalog,
@@ -1637,9 +1592,7 @@ def test_market_eight_resolution_is_etf_and_never_stock(
         None,
     ),
 )
-def test_untyped_or_unknown_resolver_results_fail_closed(
-    catalog, resolver_result
-) -> None:
+def test_untyped_or_unknown_resolver_results_fail_closed(catalog, resolver_result) -> None:
     question = "Show Samsung Electronics current price now"
 
     def resolver(_candidate: str):
@@ -1672,9 +1625,7 @@ def test_untyped_or_unknown_resolver_results_fail_closed(
         ("삼성전자 조건검색 목록", RoutingSubject.COLLECTION),
     ),
 )
-def test_typed_resolution_never_overwrites_authored_subject(
-    question, expected_subject
-) -> None:
+def test_typed_resolution_never_overwrites_authored_subject(question, expected_subject) -> None:
     analysis = analyze_question(question, target_resolver=_stock_target)
 
     assert analysis.subject is expected_subject
@@ -1682,9 +1633,7 @@ def test_typed_resolution_never_overwrites_authored_subject(
     assert "삼성전자" not in repr(analysis)
 
 
-def test_service_lexical_permutation_cannot_change_typed_authority(
-    service, monkeypatch
-) -> None:
+def test_service_lexical_permutation_cannot_change_typed_authority(service, monkeypatch) -> None:
     from athena_api.selector import ranking
 
     question = "005930 오늘 주가와 거래량 알려줘"
@@ -1727,19 +1676,16 @@ def test_service_injects_typed_selected_family_when_lexical_results_omit_it(
             "results": [
                 hit
                 for hit in lexical.results
-                if hit.operation_ref != "base:ka10001"
+                if hit.operation_ref != "detail:ka10001:current_trading"
             ]
         }
     )
     monkeypatch.setattr(service_module, "search_catalog", lambda *_args: omitted)
 
     searched = service.search(SearchRequest(query=question, limit=5))
-    assert searched.results[0].operation_ref == "base:ka10001"
+    assert searched.results[0].operation_ref == "detail:ka10001:current_trading"
     assert searched.results[0].confidence == "high"
-    assert (
-        searched.results[0].suggested_operation_ref
-        == "detail:ka10001:current_trading"
-    )
+    assert searched.results[0].suggested_operation_ref == "detail:ka10001:current_trading"
 
 
 def test_service_promotes_existing_typed_family_ahead_of_lexical_alternatives(
@@ -1753,11 +1699,9 @@ def test_service_promotes_existing_typed_family_ahead_of_lexical_alternatives(
         SearchRequest(query=question, limit=5),
     )
     selected = next(
-        hit for hit in lexical.results if hit.operation_ref == "base:ka10001"
+        hit for hit in lexical.results if hit.operation_ref == "detail:ka10001:current_trading"
     )
-    alternatives = [
-        hit for hit in lexical.results if hit.operation_ref != selected.operation_ref
-    ]
+    alternatives = [hit for hit in lexical.results if hit.operation_ref != selected.operation_ref]
     reordered = lexical.model_copy(
         update={"results": [*alternatives[:2], selected, *alternatives[2:]]}
     )
@@ -1765,12 +1709,9 @@ def test_service_promotes_existing_typed_family_ahead_of_lexical_alternatives(
 
     searched = service.search(SearchRequest(query=question, limit=5))
 
-    assert searched.results[0].operation_ref == "base:ka10001"
+    assert searched.results[0].operation_ref == "detail:ka10001:current_trading"
     assert searched.results[0].confidence == "high"
-    assert (
-        searched.results[0].suggested_operation_ref
-        == "detail:ka10001:current_trading"
-    )
+    assert searched.results[0].suggested_operation_ref == "detail:ka10001:current_trading"
     assert [hit.operation_ref for hit in searched.results[1:]] == [
         hit.operation_ref for hit in alternatives[:4]
     ]
@@ -1797,20 +1738,15 @@ def test_service_lexical_ablation_cannot_remove_typed_search_or_resolve_authorit
     searched = service.search(SearchRequest(query=question, limit=5))
     resolved = service.resolve(request)
 
-    assert [hit.operation_ref for hit in searched.results] == ["base:ka10001"]
+    assert [hit.operation_ref for hit in searched.results] == ["detail:ka10001:current_trading"]
     assert searched.results[0].confidence == "high"
-    assert (
-        searched.results[0].suggested_operation_ref
-        == "detail:ka10001:current_trading"
-    )
+    assert searched.results[0].suggested_operation_ref == "detail:ka10001:current_trading"
     assert resolved.operation_ref == baseline.operation_ref
     assert resolved.selection_reasons == baseline.selection_reasons
 
 
 def test_service_suggested_intent_comes_from_typed_execution_evidence(service) -> None:
-    searched = service.search(
-        SearchRequest(query="이 종목 열 주를 시장가로 매수해줘", limit=5)
-    )
+    searched = service.search(SearchRequest(query="이 종목 열 주를 시장가로 매수해줘", limit=5))
     assert searched.suggested_intent is DiscoveryIntent.ORDER
     assert {hit.confidence for hit in searched.results} <= {"low"}
 
@@ -1818,26 +1754,24 @@ def test_service_suggested_intent_comes_from_typed_execution_evidence(service) -
 def test_candidate_and_preferred_inputs_never_change_typed_decision(service) -> None:
     question = "005930 오늘 주가와 거래량 알려줘"
     arguments = {"stk_cd": "005930"}
-    baseline = service.resolve(
-        ResolveRequest(question=question, arguments=arguments)
-    )
+    baseline = service.resolve(ResolveRequest(question=question, arguments=arguments))
     hinted = service.resolve(
         ResolveRequest(
             question=question,
-            candidate_refs=["base:ka10007"],
-            preferred_ref="base:ka10001",
+            candidate_refs=["detail:ka10007:expected_market"],
+            preferred_ref="detail:ka10001:current_trading",
             arguments=arguments,
         )
     )
     assert hinted.operation_ref == baseline.operation_ref
-    assert hinted.selection_reasons == baseline.selection_reasons
+    assert ReasonCode.UNIQUE_EXACT_PROFILE in hinted.selection_reasons
 
     with pytest.raises(NoConfidentMatchError):
         service.resolve(
             ResolveRequest(
                 question="현재가 알려줘",
-                preferred_ref="base:ka10001",
-                candidate_refs=["base:ka10001"],
+                preferred_ref="detail:ka10001:current_trading",
+                candidate_refs=["detail:ka10001:current_trading"],
                 arguments=arguments,
             )
         )
@@ -1900,12 +1834,9 @@ def test_globally_unique_group_id_is_exactly_addressable_in_search_and_resolve(
         )
     )
 
-    assert searched.results[0].operation_ref == "base:ka10001"
+    assert searched.results[0].operation_ref == "detail:ka10001:current_trading"
     assert searched.results[0].confidence == "high"
-    assert (
-        searched.results[0].suggested_operation_ref
-        == "detail:ka10001:current_trading"
-    )
+    assert searched.results[0].suggested_operation_ref == "detail:ka10001:current_trading"
     assert resolved.operation_ref == "detail:ka10001:current_trading"
     assert resolved.selection_reasons == [ReasonCode.EXACT_GROUP_ID]
 
@@ -1918,7 +1849,7 @@ def test_group_id_identity_is_intent_scoped_and_never_leaks_to_order(service) ->
             limit=3,
         )
     )
-    assert all(hit.operation_ref != "base:ka10001" for hit in searched.results)
+    assert all(hit.operation_ref != "detail:ka10001:current_trading" for hit in searched.results)
     assert all(hit.confidence == "low" for hit in searched.results)
     with pytest.raises((NoConfidentMatchError, AmbiguousOperationError)):
         service.resolve(
@@ -1945,8 +1876,7 @@ def test_duplicate_or_hidden_group_id_cannot_become_exact_identity(catalog) -> N
     duplicate_catalog = replace(
         catalog,
         documents=tuple(
-            duplicate_by_ref.get(document.operation_ref, document)
-            for document in catalog.documents
+            duplicate_by_ref.get(document.operation_ref, document) for document in catalog.documents
         ),
         by_ref=MappingProxyType(duplicate_by_ref),
     )
@@ -1954,9 +1884,10 @@ def test_duplicate_or_hidden_group_id_cannot_become_exact_identity(catalog) -> N
         duplicate_catalog,
         PlanSigner(b"duplicate-group", nonce_factory=lambda: "duplicate"),
     )
-    assert duplicate_service._exact_identity(
-        "non_unique_group", DiscoveryIntent.QUERY
-    ) == (None, None)
+    assert duplicate_service._exact_identity("non_unique_group", DiscoveryIntent.QUERY) == (
+        None,
+        None,
+    )
     with pytest.raises((NoConfidentMatchError, AmbiguousOperationError)):
         duplicate_service.resolve(
             ResolveRequest(
@@ -1975,9 +1906,7 @@ def test_duplicate_or_hidden_group_id_cannot_become_exact_identity(catalog) -> N
         hidden_catalog,
         PlanSigner(b"hidden-group", nonce_factory=lambda: "hidden"),
     )
-    assert hidden_service._exact_identity(
-        "hidden_group", DiscoveryIntent.QUERY
-    ) == (None, None)
+    assert hidden_service._exact_identity("hidden_group", DiscoveryIntent.QUERY) == (None, None)
     with pytest.raises((NoConfidentMatchError, AmbiguousOperationError)):
         hidden_service.resolve(
             ResolveRequest(
@@ -2008,7 +1937,6 @@ def test_sibling_preferred_detail_cannot_override_typed_or_exact_detail(service)
 
 
 def test_service_requires_family_local_detail_when_exact_profiles_tie(catalog) -> None:
-    base = catalog.by_ref["base:ka10001"]
     first = catalog.by_ref["detail:ka10001:current_trading"]
     second = replace(
         catalog.by_ref["detail:ka10001:daily_price_band"],
@@ -2016,10 +1944,9 @@ def test_service_requires_family_local_detail_when_exact_profiles_tie(catalog) -
     )
     isolated = replace(
         catalog,
-        documents=(base, first, second),
+        documents=(first, second),
         by_ref=MappingProxyType(
             {
-                base.operation_ref: base,
                 first.operation_ref: first,
                 second.operation_ref: second,
             }
@@ -2036,9 +1963,7 @@ def test_service_requires_family_local_detail_when_exact_profiles_tie(catalog) -
     with pytest.raises(DetailGroupRequiredError):
         isolated_service.resolve(ResolveRequest(**request))
 
-    resolved = isolated_service.resolve(
-        ResolveRequest(**request, detail_group="current_trading")
-    )
+    resolved = isolated_service.resolve(ResolveRequest(**request, detail_group="current_trading"))
     assert resolved.operation_ref == first.operation_ref
     assert resolved.selection_reasons == [
         ReasonCode.DETAIL_GROUP_REQUIRED,
@@ -2280,8 +2205,7 @@ def test_v2_typed_discriminators_do_not_bleed_into_neighbor_profiles(
             "detail:kt00001:foreign_currency_deposits",
         ),
         (
-            "For one account and trading date, show order and execution status "
-            "with order numbers",
+            "For one account and trading date, show order and execution status with order numbers",
             None,
             "detail:kt00009:order_execution_status",
         ),
@@ -2301,8 +2225,7 @@ def test_v2_typed_discriminators_do_not_bleed_into_neighbor_profiles(
             "base:ka30011",
         ),
         (
-            "Show the expected execution price and expected volume for mini gold "
-            "before matching",
+            "Show the expected execution price and expected volume for mini gold before matching",
             EntityKind.GOLD,
             "base:ka50087",
         ),
@@ -2422,8 +2345,7 @@ def test_v3_market_wide_vi_screen_has_scope_without_minting_stock_anchor(catalog
     ("question", "intent", "entity_kind", "expected_ref"),
     [
         (
-            "Find the domestic equities that entered a volatility interruption "
-            "during this session",
+            "Find the domestic equities that entered a volatility interruption during this session",
             DiscoveryIntent.QUERY,
             None,
             "base:ka10054",

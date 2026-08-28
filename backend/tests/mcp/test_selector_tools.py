@@ -343,8 +343,6 @@ async def test_audit_log_never_contains_plan_token_or_arguments(tmp_path, make_g
     assert secret_token not in raw_log_text
 
 
-
-
 def _timing_log_path(tmp_path: Path) -> Path:
     return tmp_path / "audit" / "kiwoom-selector-timing.jsonl"
 
@@ -419,7 +417,8 @@ async def test_list_tools_includes_selector_tools_with_contract_names(tmp_path, 
     resolve = next(tool for tool in result.root.tools if tool.name == RESOLVE_TOOL)
     properties = resolve.inputSchema["properties"]
     assert "soft hint" in properties["candidate_refs"]["description"]
-    assert "canonical family assertion" in properties["preferred_ref"]["description"]
+    assert "callable operation_ref" in properties["preferred_ref"]["description"]
+    assert "split base alias" in properties["preferred_ref"]["description"]
 
 
 # ---------------------------------------------------------------------------

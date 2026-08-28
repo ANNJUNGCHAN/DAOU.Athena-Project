@@ -7,7 +7,7 @@ import time
 from typing import Annotated, Any, Literal
 
 import httpx
-from fastapi import APIRouter, Request, Response, WebSocket
+from fastapi import APIRouter, Depends, Request, Response, WebSocket
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field, model_validator
 
@@ -29,15 +29,54 @@ from athena_api.dependencies import (
     AccountAliasDep,
     KiwoomClientDep,
     SelectorServiceDep,
+    get_kiwoom_client,
 )
 from athena_api.errors import KiwoomError
-from athena_api.selector.schemas import CallRequest
+from athena_api.kiwoom import KiwoomClient
+from athena_api.selector import SelectorService
+from athena_api.selector.errors import (
+    AmbiguousOperationError,
+    DetailGroupRequiredError,
+    InvalidArgumentsError,
+    NoConfidentMatchError,
+    UnknownDetailGroupError,
+)
+from athena_api.selector.schemas import (
+    CallRequest,
+    DescribeRequest,
+    DiscoveryIntent,
+    ResolveRequest,
+    SearchRequest,
+)
 
 logger = logging.getLogger(__name__)
 
 _INLINE_SERVER_BUDGET_MS = 2700
 
 router = APIRouter(tags=["canvas side-channel"])
+
+OptionalDataClientDep = Annotated[KiwoomClient | None, Depends(get_kiwoom_client)]
+
+_ORDER_DRAFT_FIELDS = frozenset(
+    {
+        "dmst_stex_tp",
+        "stk_cd",
+        "ord_qty",
+        "ord_uv",
+        "trde_tp",
+        "cond_uv",
+        "orig_ord_no",
+        "mdfy_qty",
+        "mdfy_uv",
+        "mdfy_cond_uv",
+        "cncl_qty",
+        "crd_deal_tp",
+        "crd_loan_dt",
+    }
+)
+_WEBSOCKET_ACK_FIELDS = frozenset(
+    {"return_code", "return_msg", "trnm", "seq", "cont_yn", "next_key"}
+)
 
 # facts/compound는 TR 응답 본문(`call_payload["data"]`)만 보고 top-level 스칼라를
 # 뽑는다 — chart/table처럼 전체 응답 트리를 재귀 탐색하지 않는다. call_payload
@@ -100,7 +139,32 @@ class RenderPlanRequest(BaseModel):
         return self
 
 
-def _correlation(payload: RenderPlanRequest) -> dict[str, str | int] | None:
+class SelectorDispatchRequest(ResolveRequest):
+    """One-shot app-internal selector request.
+
+    The selector fields intentionally stay identical to ``ResolveRequest``. The
+    extra fields control only inline delivery and never participate in operation
+    selection or the signed plan.
+    """
+
+    dataset_id: str | None = Field(default=None, min_length=1, max_length=64)
+    item_id: str | None = Field(default=None, min_length=1, max_length=128)
+    ordinal: int | None = Field(default=None, ge=1, le=6)
+    deadline_ms: int = Field(default=_INLINE_SERVER_BUDGET_MS, ge=100, le=3000)
+
+    @model_validator(mode="after")
+    def validate_dispatch_correlation(self) -> SelectorDispatchRequest:
+        correlation = (self.dataset_id, self.item_id, self.ordinal)
+        if any(value is not None for value in correlation) and not all(
+            value is not None for value in correlation
+        ):
+            raise ValueError("dataset_id, item_id, ordinal must be provided together")
+        return self
+
+
+def _correlation(
+    payload: RenderPlanRequest | SelectorDispatchRequest,
+) -> dict[str, str | int] | None:
     if payload.dataset_id is None:
         return None
     assert payload.item_id is not None and payload.ordinal is not None
@@ -109,6 +173,123 @@ def _correlation(payload: RenderPlanRequest) -> dict[str, str | int] | None:
         "item_id": payload.item_id,
         "ordinal": payload.ordinal,
     }
+
+
+def _resolve_request(payload: SelectorDispatchRequest) -> ResolveRequest:
+    return ResolveRequest.model_validate(
+        payload.model_dump(
+            exclude={"dataset_id", "item_id", "ordinal", "deadline_ms"}
+        )
+    )
+
+
+def _sanitized_order_draft(arguments: dict[str, Any]) -> dict[str, Any]:
+    return {
+        key: value
+        for key, value in arguments.items()
+        if key in _ORDER_DRAFT_FIELDS and value is not None
+    }
+
+
+_PREFLIGHT_ERRORS = (
+    AmbiguousOperationError,
+    NoConfidentMatchError,
+    InvalidArgumentsError,
+    DetailGroupRequiredError,
+    UnknownDetailGroupError,
+)
+
+
+def _selector_preflight(
+    payload: SelectorDispatchRequest,
+    selector: SelectorService,
+    error: Exception,
+) -> JSONResponse | None:
+    """Return a local, effect-free shortlist for recoverable cold-path misses."""
+
+    search = selector.search(
+        SearchRequest(query=payload.question, intent=payload.intent, limit=3)
+    )
+    candidate_search = search
+    if search.suggested_intent in {
+        DiscoveryIntent.ORDER,
+        DiscoveryIntent.WEBSOCKET,
+    }:
+        candidate_search = selector.search(
+            SearchRequest(
+                query=payload.question,
+                intent=search.suggested_intent,
+                limit=3,
+            )
+        )
+
+    candidate_refs: list[str] = []
+    candidate_intent = search.suggested_intent or payload.intent
+    for hit in candidate_search.results:
+        candidate_ref = hit.suggested_operation_ref or hit.operation_ref
+        description = selector.describe(
+            DescribeRequest(operation_ref=candidate_ref, intent=candidate_intent)
+        )
+        if description.execution_policy == "selector_detail_required":
+            candidate_refs.extend(group.operation_ref for group in description.detail_groups)
+        else:
+            candidate_refs.append(candidate_ref)
+
+    candidates: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for operation_ref in candidate_refs:
+        if operation_ref in seen or len(candidates) == 3:
+            continue
+        document = selector.catalog.find_exact(operation_ref)
+        if document is None:
+            continue
+        description = selector.describe(
+            DescribeRequest(operation_ref=operation_ref, intent=candidate_intent)
+        )
+        seen.add(operation_ref)
+        candidates.append(
+            {
+                "operation_ref": description.operation_ref,
+                "kind": description.kind,
+                "name": description.name,
+                "required_arguments": [
+                    {
+                        "alias": field.alias,
+                        "description": field.description,
+                        "json_schema": {
+                            key: value
+                            for key, value in field.json_schema.items()
+                            if key not in {"title", "description"}
+                        },
+                    }
+                    for field in description.required_arguments
+                ],
+            }
+        )
+
+    if not candidates:
+        return None
+    content: dict[str, Any] = {
+        "status": "needs_inference",
+        "code": getattr(error, "code", "SELECTOR_ERROR"),
+        "catalog_version": search.catalog_version,
+        "candidates": candidates,
+    }
+    if search.suggested_intent is not None:
+        content["suggested_intent"] = search.suggested_intent
+    return JSONResponse(content=content)
+
+
+def _compact_websocket_ack(data: dict[str, Any], arguments: dict[str, Any]) -> dict[str, Any]:
+    acknowledgement = {
+        key: value
+        for key, value in data.items()
+        if key in _WEBSOCKET_ACK_FIELDS and value is not None
+    }
+    command = arguments.get("trnm")
+    if isinstance(command, str) and command:
+        acknowledgement["command"] = command
+    return acknowledgement
 
 
 def _elapsed_ms(start: float) -> float:
@@ -272,6 +453,109 @@ def _render_error(
                 delivery_ms=0.0,
             ),
             "next_actions": next_actions or [],
+        },
+    )
+
+
+@router.post(
+    "/api/v1/selector/dispatch",
+    operation_id="selector_dispatch",
+    summary="Resolve and dispatch one app-internal selector request",
+    openapi_extra={"x-athena-llm-exposed": False},
+)
+async def selector_dispatch(
+    payload: SelectorDispatchRequest,
+    request: Request,
+    response: Response,
+    client: OptionalDataClientDep,
+    ws_client: OptionalWsClientDep,
+    selector: SelectorServiceDep,
+    account: AccountAliasDep,
+) -> JSONResponse:
+    """Resolve exactly once, then finish the selected safe workflow in-process."""
+
+    try:
+        resolved = selector.resolve(_resolve_request(payload), account=account)
+    except _PREFLIGHT_ERRORS as exc:
+        preflight = _selector_preflight(payload, selector, exc)
+        if preflight is None:
+            raise
+        return preflight
+    plan_token = resolved.plan_token
+
+    if resolved.kind == "query":
+        return await canvas_render_plan(
+            RenderPlanRequest(
+                plan_token=plan_token,
+                delivery="inline",
+                dataset_id=payload.dataset_id,
+                item_id=payload.item_id,
+                ordinal=payload.ordinal,
+                deadline_ms=payload.deadline_ms,
+            ),
+            request,
+            response,
+            client,
+            None,
+            None,
+            selector,
+            account,
+        )
+
+    verified_plan = selector.signer.verify(
+        plan_token, selector.catalog, expected_account=account
+    )
+
+    if resolved.kind == "order":
+        # Resolution validates and seals the order arguments. This endpoint only
+        # returns a ticket prefill; it never receives confirmation/auth headers and
+        # never dispatches to the order client.
+        selector._consume_nonce(verified_plan)
+        return JSONResponse(
+            content={
+                "status": "guarded",
+                "operation_ref": resolved.operation_ref,
+                "order_draft": _sanitized_order_draft(verified_plan.arguments),
+            }
+        )
+
+    if resolved.kind == "websocket":
+        if payload.intent is not DiscoveryIntent.WEBSOCKET:
+            selector._consume_nonce(verified_plan)
+            return JSONResponse(
+                status_code=422,
+                content={
+                    "status": "rejected",
+                    "code": "WEBSOCKET_INTENT_REQUIRED",
+                    "operation_ref": resolved.operation_ref,
+                },
+            )
+        call_response = await selector.call(
+            CallRequest(plan_token=plan_token),
+            request,
+            response,
+            None,
+            account=account,
+            order_client=None,
+            ws_client=ws_client,
+        )
+        return JSONResponse(
+            content={
+                "status": "acknowledged",
+                "operation_ref": call_response.operation_ref,
+                "acknowledgement": _compact_websocket_ack(
+                    call_response.data, verified_plan.arguments
+                ),
+            }
+        )
+
+    selector._consume_nonce(verified_plan)
+    return JSONResponse(
+        status_code=422,
+        content={
+            "status": "rejected",
+            "code": "UNSUPPORTED_SELECTOR_KIND",
+            "operation_ref": resolved.operation_ref,
         },
     )
 
