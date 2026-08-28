@@ -246,19 +246,24 @@ function createSelectorColdHedge({ limiter = globalPairLimiter } = {}) {
       .then(() => classify({ prompt, signal: controller.signal, index }))
       .then(extractClassifierText)
       .then((text) => validateProposal(text, preflight)));
-    Promise.allSettled(tasks).finally(release);
+    Promise.allSettled(tasks).finally(() => {
+      if (signal) signal.removeEventListener('abort', abortChildren);
+      release();
+    });
 
     let proposal;
     try {
       proposal = await Promise.any(tasks);
     } catch {
-      if (signal) signal.removeEventListener('abort', abortChildren);
       abortChildren();
       if (signal && signal.aborted) throw abortError(signal);
       return { handled: false, reason: 'classification_failed', modelCalls: CLASSIFIERS_PER_TURN };
     }
-    abortChildren();
-    if (signal) signal.removeEventListener('abort', abortChildren);
+    // 첫 유효안이 도착해도 나머지 분류 턴은 중단하지 않는다. 지속형 Claude
+    // worker는 턴 중단 시 프로세스 자체를 교체해야 하므로, 정상 hedge마다 loser를
+    // abort하면 매 요청마다 다시 CLI를 기동하게 된다. 늦은 결과는 버리되 worker는
+    // 같은 프로세스에서 턴을 끝내고 warm 상태로 돌아간다. 부모 signal(사용자 취소·
+    // 새 질의 선점)은 위 리스너가 두 턴을 계속 중단하므로 취소 계약은 유지된다.
     if ((signal && signal.aborted) || !isCurrent()) throw abortError(signal);
 
     const dispatched = await dispatchProposal(proposal);

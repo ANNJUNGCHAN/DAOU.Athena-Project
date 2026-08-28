@@ -25,6 +25,7 @@ const { buildLivePrompt } = require('./lib/main/live-prompt');
 const restDatasetRunner = require('./lib/main/rest-dataset-runner');
 const selectorFastPath = require('./lib/main/selector-fast-path');
 const selectorColdHedge = require('./lib/main/selector-cold-hedge');
+const { createClaudeSelectorWorkerPool } = require('./lib/main/claude-selector-worker-pool');
 const chartReload = require('./lib/main/chart-reload');
 const chartReloadAuthority = chartReload.createChartReloadAuthority();
 const { correlationKey: restCorrelationKey } = require('./lib/rest-canvas-paint');
@@ -45,6 +46,16 @@ const MDEBUGLOG = path.join(__dirname, 'captures', 'main-debug.log');
 function mdlog(msg) {
   try { fs.appendFileSync(MDEBUGLOG, `${new Date().toISOString()} ${msg}\n`); } catch {}
 }
+
+// Selector cold path의 claude CLI는 앱 수명 동안 8개를 상시 유지한다. 전역
+// 동시 분류 상한 4개 + 이미 warm인 예비 4개라서, 취소·장애로 처리 중 worker를
+// 배수하거나 교체해도 다음 허용 요청은 새 CLI spawn을 기다리지 않는다. MCP와
+// 모든 도구가 닫힌 전용 프로세스라 주문·실시간 등록 같은 외부 효과는 이 풀에서
+// 실행될 수 없다.
+const selectorClaudePool = createClaudeSelectorWorkerPool({
+  cwd: __dirname,
+  timeoutMs: 12_000,
+});
 
 mdlog('module loaded, ATHENA_NO_AUTOSTART: ' + process.env.ATHENA_NO_AUTOSTART);
 
@@ -88,6 +99,9 @@ app.on('before-quit', () => {
   isQuitting = true;
   stopOrbCursorPoll(); // 인터벌 누수 금지 — 창이 죽기 전에 정리한다
   chartReloadAuthority.clear();
+  // 앱이 트레이로 숨겨진 동안에도 selector worker는 유지한다. before-quit은
+  // 실제 앱 종료에서만 오므로 여기서만 stdin과 프로세스 트리를 닫는다.
+  selectorClaudePool.stop(new Error('Athena 앱 종료'));
   // 우리가 스폰했을 때만 죽인다(backend-launcher.js의 backendChild 판정) — 사용자가
   // 별도 콘솔에서 수동 기동한 백엔드 인스턴스는 이 앱의 생애주기와 무관하게 산다.
   backendLauncher.shutdownBackend();
@@ -1995,21 +2009,14 @@ async function runLiveQueryInner(query, expand, origin) {
       return selectorResult;
     }
     if (selectorResult.preflight) {
-      const { model: selectorModel } = modelPrefs.get().claude;
       const coldResult = await selectorColdHedge.runSelectorColdHedge({
         question: query,
         preflight: selectorResult.preflight,
         signal: selectorController.signal,
         isCurrent: () => activeSelectorFastRun === selectorController,
-        classify: ({ prompt, signal }) => runClaudeQuery({
+        classify: ({ prompt, signal }) => selectorClaudePool.run({
           prompt,
-          // classification-only 프로세스는 MCP 설정도 파일도 읽지 않는다.
-          // 존재가 보장된 앱 디렉터리는 spawn cwd 역할만 한다.
-          cwd: __dirname,
-          model: selectorModel,
-          effort: 'low',
           timeoutMs: 12_000,
-          disableAllTools: true,
           signal,
         }),
         // 두 분류기는 읽기 전용이다. 첫 유효안이 정해진 뒤에만 단 하나의
@@ -2569,10 +2576,24 @@ function handleModelSet(e, payload = {}) {
   const result = provider === 'codex' ? codexConfig.writeModelSettings(patch || {}) : modelPrefs.set(payload);
   if (!result.ok) return result;
   const state = handleModelGet();
+  let selectorActivation = null;
+  if (provider === 'claude') {
+    // 기존 세대를 먼저 죽이지 않는다. 풀은 새 모델 worker 세대를 모두 올린 뒤
+    // 구세대를 정리한다. warming 동안의 신규 요청에는 구 모델을 섞지 않는다.
+    const poolState = selectorClaudePool.configure({ model: state.claude.model, effort: 'low' });
+    selectorActivation = {
+      status: poolState.activation,
+      targetGeneration: poolState.targetGeneration,
+      servingGeneration: poolState.servingGeneration,
+      readyWorkers: poolState.readyCurrent,
+      desiredWorkers: poolState.desiredSize,
+    };
+    mdlog(`Selector Claude worker pool 모델 전환 — ${JSON.stringify(selectorActivation)}`);
+  }
   if (shellWin && !shellWin.isDestroyed()) {
     shellWin.webContents.send('athena:model-changed', state);
   }
-  return { ok: true, state };
+  return selectorActivation ? { ok: true, state, selectorActivation } : { ok: true, state };
 }
 
 ipcMain.handle('athena:model-get', handleModelGet);
@@ -2770,6 +2791,10 @@ if (!process.env.ATHENA_NO_AUTOSTART) {
     // 검정이 아니라 밝은 값이 된다. 시스템 테마를 따라가지 않고 고정하는 이유:
     // 이 앱의 팔레트가 흰 유리 위 잉크 하나뿐이라 다크에서 성립하지 않는다.
     nativeTheme.themeSource = 'light';
+    const { model: selectorModel } = modelPrefs.get().claude;
+    selectorClaudePool.configure({ model: selectorModel, effort: 'low' });
+    selectorClaudePool.start();
+    mdlog(`Selector Claude worker pool 선기동 — ${JSON.stringify(selectorClaudePool.snapshot())}`);
     createWindows();
     mcpEnv.migratePlaintextEnv().catch((err) => {
       mdlog(`부팅 시 mcp-env 마이그레이션 실패: ${String((err && err.message) || err)}`);
