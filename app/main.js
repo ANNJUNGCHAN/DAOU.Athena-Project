@@ -1934,6 +1934,19 @@ async function handleChartSeries(event, payload) {
 
 ipcMain.handle('athena:chart-series', handleChartSeries);
 
+function persistLocalLiveResult(query, result) {
+  historySink.saveChatMessage(
+    { conversationId: historyConversationId(), text: query, role: 'user' },
+    { onSaveFailed: emitHistorySaveFailed, mdlog },
+  );
+  touchConversationEntry(query);
+  historySink.saveChatMessage(
+    { conversationId: historyConversationId(), text: result.answerText, role: 'assistant' },
+    { onSaveFailed: emitHistorySaveFailed, mdlog },
+  );
+  return result;
+}
+
 async function runLiveQuery(query, expand, origin = 'shell') {
   liveQueryBusyDepth += 1;
   if (liveQueryBusyDepth === 1) broadcastLiveQueryBusy(true);
@@ -2078,6 +2091,10 @@ async function runLiveQueryInner(query, expand, origin) {
       mdlog(`Selector 단일 dispatch 적중 — ${selectorResult.durationMs}ms (모델 무호출)`);
       return selectorResult;
     }
+    if (simpleChartRoute.inferenceFallback) {
+      mdlog('종목 인덱스 준비 전 Selector 직접 처리 불가 — Claude 폴백 차단');
+      return persistLocalLiveResult(query, simpleChartRoute.inferenceFallback);
+    }
     if (selectorResult.preflight) {
       const coldResult = await selectorColdHedge.runSelectorColdHedge({
         question: query,
@@ -2140,6 +2157,10 @@ async function runLiveQueryInner(query, expand, origin) {
         canvasTypes: [],
         modelCalls: 0,
       };
+    }
+    if (simpleChartRoute.inferenceFallback) {
+      mdlog(`종목 인덱스 준비 전 Selector 오류 — Claude 폴백 차단: ${String((error && error.message) || error)}`);
+      return persistLocalLiveResult(query, simpleChartRoute.inferenceFallback);
     }
     // 계약 위반/네트워크 오류는 UI side effect 없이 기존 추론 경로로 복구한다.
     mdlog(`Selector 단일 dispatch 오류 — Claude 폴백: ${String((error && error.message) || error)}`);

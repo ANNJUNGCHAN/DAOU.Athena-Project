@@ -46,9 +46,9 @@ async function runSimpleChartFastPath({
   const startedAt = performance.now();
   if (index.size === 0 && !await ensureReady(readyTimeoutMs)) {
     return {
-      handled: true,
-      dataset: null,
-      result: localResult(
+      handled: false,
+      reason: 'stock-index-not-ready',
+      inferenceFallback: localResult(
         'stock-index-not-ready',
         '종목 정보를 준비하고 있어요. 잠시 후 다시 차트를 요청해 주세요.',
         startedAt,

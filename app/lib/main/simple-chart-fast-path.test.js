@@ -57,12 +57,13 @@ test('returns a local readiness response instead of falling through when the ind
   });
 
   assert.deepEqual(calls, { build: 0, run: 0 });
-  assert.equal(routed.handled, true);
-  assert.equal(routed.result.ok, true);
-  assert.equal(routed.result.source, 'stock-index-not-ready');
-  assert.equal(routed.result.modelCalls, 0);
-  assert.equal(routed.result.error, null);
-  assert.match(routed.result.answerText, /종목 정보를 준비/);
+  assert.equal(routed.handled, false);
+  assert.equal(routed.reason, 'stock-index-not-ready');
+  assert.equal(routed.inferenceFallback.ok, true);
+  assert.equal(routed.inferenceFallback.source, 'stock-index-not-ready');
+  assert.equal(routed.inferenceFallback.modelCalls, 0);
+  assert.equal(routed.inferenceFallback.error, null);
+  assert.match(routed.inferenceFallback.answerText, /종목 정보를 준비/);
 });
 
 test('keeps a confirmed stock or explicit stock code out of Selector and Claude when binding still fails', async () => {
@@ -96,6 +97,21 @@ test('does not intercept ETF or general chart requests that the stock binder rej
       runDataset: async () => assert.fail('must not run a stock chart'),
     });
     assert.equal(routed.handled, false, query);
+  }
+});
+
+test('does not claim ETF or general chart requests while the stock index is unavailable', async () => {
+  for (const query of ['KODEX 200 차트', '매출 차트 보여줘']) {
+    const routed = await runSimpleChartFastPath({
+      query,
+      index: { size: 0, resolveQuery: () => null },
+      ensureReady: async () => false,
+      buildDataset: () => assert.fail('unready index must not bind'),
+      runDataset: async () => assert.fail('unready index must not run'),
+    });
+    assert.equal(routed.handled, false, query);
+    assert.equal(routed.reason, 'stock-index-not-ready', query);
+    assert.equal(routed.inferenceFallback.source, 'stock-index-not-ready', query);
   }
 });
 
