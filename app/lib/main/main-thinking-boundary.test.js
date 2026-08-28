@@ -19,9 +19,14 @@ test('an unready simple-chart guard allows one model-free Selector attempt but b
   const selectorHandled = mainSource.indexOf('if (selectorResult.handled)');
   const inferenceGuard = mainSource.indexOf('if (simpleChartRoute.inferenceFallback)', selectorHandled);
   const coldSelector = mainSource.indexOf('selectorColdHedge.runSelectorColdHedge', selectorHandled);
+  const catchGuard = mainSource.indexOf('if (simpleChartRoute.inferenceFallback)', coldSelector);
+  const fullClaude = mainSource.indexOf('const { dir, configFile } = getLiveMcpConfig()', catchGuard);
 
   assert.ok(selectorHandled >= 0);
   assert.ok(inferenceGuard > selectorHandled);
   assert.ok(coldSelector > inferenceGuard);
-  assert.ok(mainSource.indexOf('simpleChartRoute.inferenceFallback', coldSelector) >= 0);
+  assert.ok(catchGuard > coldSelector);
+  assert.ok(fullClaude > catchGuard);
+  assert.match(mainSource.slice(inferenceGuard, coldSelector), /durationMs:\s*Math\.max\(0, performance\.now\(\) - queryStartedAt\)/);
+  assert.match(mainSource.slice(catchGuard, fullClaude), /durationMs:\s*Math\.max\(0, performance\.now\(\) - queryStartedAt\)/);
 });
