@@ -343,7 +343,16 @@ class SelectorService:
         if selected_hits:
             selected_hit = selected_hits[0]
         else:
-            document = self.catalog.by_ref[family_ref]
+            selected_ref = decision.selected_operation_ref
+            document = (
+                self.catalog.by_ref[selected_ref]
+                if selected_ref is not None
+                else next(
+                    item
+                    for item in self.catalog.documents
+                    if item.family_ref == family_ref
+                )
+            )
             selected_hit = SearchHit(
                 operation_ref=document.operation_ref,
                 kind=document.kind,  # type: ignore[arg-type]
@@ -361,13 +370,13 @@ class SelectorService:
         )
 
     def _detail_required(self, family_ref: str) -> DetailGroupRequiredError:
-        base = self.catalog.by_ref[family_ref]
+        tr_id = family_ref.removeprefix("base:")
         return DetailGroupRequiredError(
             "Operation family is served through its detail projections",
             details={
                 "operation_ref": family_ref,
                 "available_groups": [
-                    detail.group_id for detail in self.catalog.details_for(base.tr_id)
+                    detail.group_id for detail in self.catalog.details_for(tr_id)
                 ],
                 "reason_codes": [ReasonCode.DETAIL_GROUP_REQUIRED.value],
             },
@@ -378,8 +387,8 @@ class SelectorService:
         family_ref: str,
         detail_group: str,
     ) -> OperationDocument:
-        base = self.catalog.by_ref[family_ref]
-        detail = self.catalog.find_exact(f"detail:{base.tr_id}:{detail_group}")
+        tr_id = family_ref.removeprefix("base:")
+        detail = self.catalog.find_exact(f"detail:{tr_id}:{detail_group}")
         if detail is None:
             raise UnknownDetailGroupError(
                 "Detail group does not belong to the selected operation family",
@@ -387,7 +396,7 @@ class SelectorService:
                     "operation_ref": family_ref,
                     "detail_group": detail_group,
                     "available_groups": [
-                        item.group_id for item in self.catalog.details_for(base.tr_id)
+                        item.group_id for item in self.catalog.details_for(tr_id)
                     ],
                 },
             )
@@ -432,9 +441,8 @@ class SelectorService:
           쓰되, `detail_group`이 같이 왔다면 반드시 일치해야 한다(불일치는 포기).
         - `preferred`가 detail 없이 바로 호출 가능한 base면(`generic_callable`)
           `detail_group`이 없어야만 그대로 쓴다 — 있는데 안 맞으면 포기.
-        - `preferred`가 detail 선택이 필요한 base(SPLIT_BASE_TR_IDS)면
-          `detail_group`이 반드시 있어야 하고, 그 조합이 실제로 카탈로그에
-          존재해야 한다 — 어느 하나라도 없으면 포기.
+        Split base aliases are absent from the catalog; callers must assert an actual
+        detail operation ref instead.
         """
         if preferred is None or preferred.kind != "query":
             return None
@@ -446,16 +454,9 @@ class SelectorService:
             if detail_group is not None and detail_group != preferred.group_id:
                 return None
             return preferred
-        if preferred.generic_callable:
-            if detail_group is not None:
-                return None
-            return preferred
-        if detail_group is None:
+        if detail_group is not None:
             return None
-        try:
-            return self._asserted_detail(preferred.family_ref, detail_group)
-        except UnknownDetailGroupError:
-            return None
+        return preferred
 
     def describe(self, request: DescribeRequest) -> OperationDescription:
         document = self.catalog.find_exact(request.operation_ref)
@@ -465,10 +466,6 @@ class SelectorService:
             policy_reasons: list[ReasonCode] = []
             if document.group_id:
                 execution_policy = "selector_detail"
-            elif document.tr_id in SPLIT_BASE_TR_IDS:
-                # Discoverable so the model can read detail_groups, then call one of them.
-                execution_policy = "selector_detail_required"
-                policy_reasons = [ReasonCode.DETAIL_GROUP_REQUIRED]
             else:
                 execution_policy = "selector_query"
         elif document.kind == "order":
@@ -560,29 +557,23 @@ class SelectorService:
         explicit, identity_reason = self._exact_identity(
             request.question, request.intent
         )
+        removed_identity = request.question.strip().removeprefix("base:")
+        if explicit is None and removed_identity in SPLIT_BASE_TR_IDS:
+            raise OperationNotFoundError("Operation was not found")
         if explicit is not None and not _intent_allows(explicit, request.intent):
             # Exact operation identities are authoritative only inside the requested
             # visibility surface. Otherwise a caller could bypass the same intent gate
             # enforced for ranked, candidate, and preferred operations merely by putting
             # a WebSocket/order/TR identity in ``question``.
             raise OperationNotFoundError("Operation was not found")
-        if (
-            explicit is not None
-            and not explicit.generic_callable
-            # A split family is uncallable but not undiscoverable: let it reach the policy,
-            # which either honours an explicit detail_group or names the groups on offer.
-            and explicit.tr_id not in SPLIT_BASE_TR_IDS
-        ):
+        if explicit is not None and not explicit.generic_callable:
             raise UnsupportedOperationError("Operation cannot be called by the generic selector")
         for operation_ref in request.candidate_refs:
             candidate = self.catalog.find_exact(operation_ref)
             if (
                 candidate is None
                 or not _intent_allows(candidate, request.intent)
-                or not (
-                    candidate.generic_callable
-                    or (candidate.group_id is None and candidate.tr_id in SPLIT_BASE_TR_IDS)
-                )
+                or not candidate.generic_callable
             ):
                 raise OperationNotFoundError("Candidate operation was not found")
         detail_group = request.detail_group
@@ -591,7 +582,7 @@ class SelectorService:
             preferred = self.catalog.find_exact(request.preferred_ref)
             if (
                 preferred is None
-                or not (preferred.generic_callable or preferred.tr_id in SPLIT_BASE_TR_IDS)
+                or not preferred.generic_callable
                 or not _intent_allows(preferred, request.intent)
             ):
                 raise PreferredOperationError("Preferred operation is unavailable")
@@ -633,11 +624,9 @@ class SelectorService:
                 document = explicit
                 reasons = [identity_reason]
             elif detail_group is not None:
-                document = self._asserted_detail(explicit.family_ref, detail_group)
-                reasons = [ReasonCode.EXPLICIT_DETAIL_GROUP]
-            elif explicit.tr_id in SPLIT_BASE_TR_IDS:
-                self._validated_arguments(explicit, request.arguments)
-                raise self._detail_required(explicit.family_ref)
+                raise UnknownDetailGroupError(
+                    "Detail group can only accompany its exact detail operation"
+                )
             else:
                 document = explicit
                 reasons = [identity_reason]
@@ -710,9 +699,7 @@ class SelectorService:
                     else:
                         # Same shape as the DETAIL_GROUP_REQUIRED branch below: the
                         # asserted family is real, it just still needs a projection.
-                        self._validated_arguments(
-                            self.catalog.by_ref[preferred.family_ref], request.arguments
-                        )
+                        self._validated_arguments(preferred, request.arguments)
                         raise self._detail_required(preferred.family_ref)
                 if fallback_document is None:
                     public_reasons = _public_reason_codes(decision)
@@ -742,9 +729,12 @@ class SelectorService:
 
                 if decision.status is CompatibilityDecisionStatus.DETAIL_GROUP_REQUIRED:
                     if detail_group is None:
-                        self._validated_arguments(
-                            self.catalog.by_ref[canonical_family_ref], request.arguments
+                        representative = next(
+                            item
+                            for item in self.catalog.documents
+                            if item.family_ref == canonical_family_ref
                         )
+                        self._validated_arguments(representative, request.arguments)
                         raise self._detail_required(canonical_family_ref)
                     document = self._asserted_detail(canonical_family_ref, detail_group)
                     reasons = [

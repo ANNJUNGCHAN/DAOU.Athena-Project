@@ -6,6 +6,7 @@ from dataclasses import replace
 from types import MappingProxyType
 
 import pytest
+from _selector_facade import select_operation
 
 from athena_api.routing_contract import (
     DataIntent,
@@ -30,7 +31,6 @@ from athena_api.selector.errors import (
 )
 from athena_api.selector.instrument_identity import InstrumentIdentityIndex
 from athena_api.selector.plans import PlanSigner
-from _selector_facade import select_operation
 from athena_api.selector.query_frame import extract_query_frame
 from athena_api.selector.ranking import RankedDocument, rank_documents
 from athena_api.selector.schemas import (
@@ -89,7 +89,6 @@ def _two_detail_catalog(
     first_descriptions: tuple[str, ...] = (),
     second_descriptions: tuple[str, ...] = (),
 ) -> tuple[OperationCatalog, OperationDocument, OperationDocument]:
-    base = catalog.by_ref["base:ka10001"]
     first = replace(
         catalog.by_ref["detail:ka10001:current_trading"],
         routing=replace(
@@ -118,10 +117,9 @@ def _two_detail_catalog(
     )
     isolated = replace(
         catalog,
-        documents=(base, first, second),
+        documents=(first, second),
         by_ref=MappingProxyType(
             {
-                base.operation_ref: base,
                 first.operation_ref: first,
                 second.operation_ref: second,
             }
@@ -134,20 +132,20 @@ def _select_isolated_detail(
     catalog: OperationCatalog,
     question: str,
 ) -> tuple[OperationDocument, list[ReasonCode]]:
-    base = catalog.by_ref["base:ka10001"]
+    first = catalog.by_ref["detail:ka10001:current_trading"]
     bound_question = f"이 종목 {question}"
     return select_operation(
         catalog,
         bound_question,
-        (RankedDocument(base, 300, (), typed_tier=1),),
+        (RankedDocument(first, 300, (), typed_tier=1),),
         ResponseMode.AUTO,
     )
 
 
 def test_stock_price_excludes_sector_and_daily_chart_before_lexical_ranking(catalog) -> None:
     frame = extract_query_frame("삼성전자 오늘 주가 얼마야?")
-    stock = evaluate_eligibility(frame, catalog.by_ref["base:ka10001"])
-    sector = evaluate_eligibility(frame, catalog.by_ref["base:ka20001"])
+    stock = evaluate_eligibility(frame, catalog.by_ref["detail:ka10001:current_trading"])
+    sector = evaluate_eligibility(frame, catalog.by_ref["detail:ka20001:market_snapshot"])
     daily = evaluate_eligibility(frame, catalog.by_ref["base:ka10081"])
     assert stock.eligible
     assert not sector.eligible
@@ -158,7 +156,7 @@ def test_stock_price_excludes_sector_and_daily_chart_before_lexical_ranking(cata
 
 def test_search_places_typed_family_first_and_explains_only_canonical_facets(service) -> None:
     response = service.search(SearchRequest(query="삼성전자 오늘 주가 얼마야?", limit=5))
-    assert response.results[0].operation_ref == "base:ka10001"
+    assert response.results[0].operation_ref == "detail:ka10001:current_trading"
     assert all(
         hit.operation_ref not in {"base:ka20001", "base:ka20009", "base:ka10081"}
         for hit in response.results
@@ -193,8 +191,7 @@ def test_matching_preferred_detail_is_monotonic_with_autonomous_selection(servic
     asserted = service.resolve(
         ResolveRequest(
             **request,
-            preferred_ref="base:ka10001",
-            detail_group="current_trading",
+            preferred_ref="detail:ka10001:current_trading",
         )
     )
     assert asserted.operation_ref == autonomous.operation_ref
@@ -212,8 +209,8 @@ def test_expected_quote_requires_direct_evidence_and_selects_specialized_detail(
 ) -> None:
     current = service.search(SearchRequest(query="삼성전자 주가를 알려줘", limit=3))
     expected = service.search(SearchRequest(query="삼성전자 주식 예상체결가를 알려줘", limit=3))
-    assert current.results[0].operation_ref == "base:ka10001"
-    assert expected.results[0].operation_ref == "base:ka10007"
+    assert current.results[0].operation_ref == "detail:ka10001:current_trading"
+    assert expected.results[0].operation_ref == "detail:ka10007:expected_market"
     resolved = service.resolve(
         ResolveRequest(
             question="삼성전자 주식 예상체결가를 알려줘",
@@ -267,22 +264,20 @@ def test_condition_subscription_and_unsubscription_are_exclusive(service) -> Non
 def test_soft_measure_and_binding_matches_do_not_override_family_evidence(catalog) -> None:
     question = "매수 10단계 호가 가격만 보여줘"
     frame = extract_query_frame(question)
-    target = evaluate_eligibility(frame, catalog.by_ref["base:ka10004"])
+    target = evaluate_eligibility(frame, catalog.by_ref["detail:ka10004:sell_bid_prices"])
     side_bound = evaluate_eligibility(frame, catalog.by_ref["base:ka10021"])
     assert target.tier == side_bound.tier
     ranked = rank_documents(
         question,
-        (catalog.by_ref["base:ka10004"], catalog.by_ref["base:ka10021"]),
+        (catalog.by_ref["detail:ka10004:sell_bid_prices"], catalog.by_ref["base:ka10021"]),
     )
-    assert ranked[0].document.operation_ref == "base:ka10004"
+    assert ranked[0].document.operation_ref == "detail:ka10004:sell_bid_prices"
 
 
 def test_embedded_split_tr_id_does_not_gain_exact_identity_authority(service) -> None:
     question = "ka10001 정보를 알려줘"
     searched = service.search(SearchRequest(query=question, limit=3))
-    stock = next(
-        hit for hit in searched.results if hit.operation_ref == "base:ka10001"
-    )
+    stock = next(hit for hit in searched.results if hit.operation_ref.startswith("detail:ka10001:"))
     assert stock.confidence == "low"
     assert stock.suggested_operation_ref is None
 
@@ -322,12 +317,12 @@ def test_candidate_refs_are_validated_order_insensitive_soft_hints(service) -> N
         ResolveRequest(question=question, arguments={"stk_cd": "005930"})
     ).operation_ref
     variants = (
-        ["base:ka10001"],
+        ["detail:ka10001:current_trading"],
         ["base:ka10019"],
-        ["base:ka10019", "base:ka10001"],
-        ["base:ka10001", "base:ka10019"],
-        ["base:ka10001", "base:ka10001", "base:ka10019"],
-        ["detail:ka10001:current_trading", "base:ka10001"],
+        ["base:ka10019", "detail:ka10001:current_trading"],
+        ["detail:ka10001:current_trading", "base:ka10019"],
+        ["detail:ka10001:current_trading", "detail:ka10001:current_trading", "base:ka10019"],
+        ["detail:ka10001:current_trading"],
     )
     for candidate_refs in variants:
         result = service.resolve(
@@ -359,20 +354,20 @@ def test_candidate_hint_cannot_turn_rejection_into_a_plan(service) -> None:
         )
 
 
-def test_preferred_ref_is_a_canonical_family_assertion(service) -> None:
+def test_preferred_ref_must_be_a_callable_operation_assertion(service) -> None:
     request = {
         "question": "삼성전자 오늘 주가 얼마야?",
         "arguments": {"stk_cd": "005930"},
     }
-    base_assertion = service.resolve(ResolveRequest(**request, preferred_ref="base:ka10001"))
     detail_assertion = service.resolve(
         ResolveRequest(
             **request,
             preferred_ref="detail:ka10001:current_trading",
         )
     )
-    assert base_assertion.operation_ref == "detail:ka10001:current_trading"
-    assert detail_assertion.operation_ref == base_assertion.operation_ref
+    assert detail_assertion.operation_ref == "detail:ka10001:current_trading"
+    with pytest.raises(PreferredOperationError):
+        service.resolve(ResolveRequest(**request, preferred_ref="base:ka10001"))
     with pytest.raises(PreferredOperationError):
         service.resolve(ResolveRequest(**request, preferred_ref="base:ka10007"))
     with pytest.raises(PreferredOperationError):
@@ -414,9 +409,7 @@ def test_search_omits_detail_suggestion_for_ambiguous_or_full_request(service) -
 
 
 @pytest.mark.parametrize("question", ("가격 좀 알려줘", "top ranking 조회해줘"))
-def test_search_confidence_is_low_when_shared_typed_seam_rejects(
-    service, question
-) -> None:
+def test_search_confidence_is_low_when_shared_typed_seam_rejects(service, question) -> None:
     searched = service.search(SearchRequest(query=question, limit=5))
     assert searched.results
     assert {hit.confidence for hit in searched.results} == {"low"}
@@ -575,8 +568,7 @@ def test_multi_instrument_etf_comparison_requires_decomposition(service) -> None
         service.resolve(
             ResolveRequest(
                 question=(
-                    "Compare the returns of two selected domestic ETFs over "
-                    "the requested period"
+                    "Compare the returns of two selected domestic ETFs over the requested period"
                 ),
                 intent=DiscoveryIntent.QUERY,
             )
@@ -590,9 +582,7 @@ def test_multi_instrument_etf_comparison_requires_decomposition(service) -> None
         "Explain whether changing my limit price would improve execution odds",
     ),
 )
-def test_allocation_and_amendment_advice_never_authorize_an_operation(
-    service, question
-) -> None:
+def test_allocation_and_amendment_advice_never_authorize_an_operation(service, question) -> None:
     searched = service.search(SearchRequest(query=question, limit=5))
     assert all(hit.confidence == "low" for hit in searched.results)
     with pytest.raises(NoConfidentMatchError):
@@ -601,14 +591,10 @@ def test_allocation_and_amendment_advice_never_authorize_an_operation(
 
 def test_third_party_account_without_authorization_abstains(service) -> None:
     question = "그 사람 계좌의 잔고를 조회해줘"
-    searched = service.search(
-        SearchRequest(query=question, intent=DiscoveryIntent.QUERY, limit=5)
-    )
+    searched = service.search(SearchRequest(query=question, intent=DiscoveryIntent.QUERY, limit=5))
     assert all(hit.confidence == "low" for hit in searched.results)
     with pytest.raises((NoConfidentMatchError, AmbiguousOperationError)):
-        service.resolve(
-            ResolveRequest(question=question, intent=DiscoveryIntent.QUERY)
-        )
+        service.resolve(ResolveRequest(question=question, intent=DiscoveryIntent.QUERY))
 
 
 @pytest.mark.parametrize(
@@ -620,17 +606,13 @@ def test_third_party_account_without_authorization_abstains(service) -> None:
 )
 def test_unestablished_third_party_account_wording_abstains(service, question) -> None:
     with pytest.raises(NoConfidentMatchError):
-        service.resolve(
-            ResolveRequest(question=question, intent=DiscoveryIntent.QUERY)
-        )
+        service.resolve(ResolveRequest(question=question, intent=DiscoveryIntent.QUERY))
 
 
 def test_owned_account_balance_wording_remains_queryable(catalog) -> None:
     question = "내 계좌의 잔고를 조회해줘"
     ranked = rank_documents(question, catalog.visible_for(DiscoveryIntent.QUERY))
-    selected, _ = select_operation(
-        catalog, question, ranked, ResponseMode.AUTO
-    )
+    selected, _ = select_operation(catalog, question, ranked, ResponseMode.AUTO)
     assert selected.operation_ref.startswith("detail:kt")
 
 
@@ -642,13 +624,9 @@ def test_owned_account_balance_wording_remains_queryable(catalog) -> None:
         "미니금 현물의 PER과 EPS를 조회해줘",
     ),
 )
-def test_product_contracts_reject_unsupported_company_fundamentals(
-    service, question
-) -> None:
+def test_product_contracts_reject_unsupported_company_fundamentals(service, question) -> None:
     with pytest.raises((NoConfidentMatchError, AmbiguousOperationError)):
-        service.resolve(
-            ResolveRequest(question=question, intent=DiscoveryIntent.QUERY)
-        )
+        service.resolve(ResolveRequest(question=question, intent=DiscoveryIntent.QUERY))
 
 
 def test_gold_rejects_equity_valuation_ratio_capability(service) -> None:
@@ -693,8 +671,7 @@ def test_two_named_etfs_require_decomposition_even_without_reviewed_brand(servic
         service.resolve(
             ResolveRequest(
                 question=(
-                    "Compare the dated performance of ACE 200 and KODEX 200 "
-                    "with a single request"
+                    "Compare the dated performance of ACE 200 and KODEX 200 with a single request"
                 ),
                 intent=DiscoveryIntent.QUERY,
             )
@@ -702,18 +679,14 @@ def test_two_named_etfs_require_decomposition_even_without_reviewed_brand(servic
 
 
 def test_legacy_policy_facade_accepts_exact_etf_performance_identity(catalog) -> None:
-    selected, _ = select_operation(
-        catalog, "base:ka40001", (), ResponseMode.AUTO
-    )
+    selected, _ = select_operation(catalog, "base:ka40001", (), ResponseMode.AUTO)
     assert selected.operation_ref == "base:ka40001"
 
 
 def test_generic_order_status_without_open_or_filled_scope_abstains(service) -> None:
     question = "오늘 내 주문 현황을 전부 보여줘"
     with pytest.raises((NoConfidentMatchError, AmbiguousOperationError)):
-        service.resolve(
-            ResolveRequest(question=question, intent=DiscoveryIntent.QUERY)
-        )
+        service.resolve(ResolveRequest(question=question, intent=DiscoveryIntent.QUERY))
 
 
 def test_legacy_policy_facade_accepts_exact_combined_order_status_identity(catalog) -> None:
@@ -778,9 +751,7 @@ def test_exact_query_detail_never_leaks_into_a_wrong_intent_search(service, inte
     assert all(hit.confidence == "low" for hit in searched.results)
 
 
-def test_exact_query_identity_resolve_skips_full_catalog_ranking(
-    service, monkeypatch
-) -> None:
+def test_exact_query_identity_resolve_skips_full_catalog_ranking(service, monkeypatch) -> None:
     def unexpected_compatibility(*_args, **_kwargs):
         raise AssertionError("exact identity must not analyze the visible catalog")
 
@@ -800,7 +771,7 @@ def test_exact_query_identity_resolve_skips_full_catalog_ranking(
 
 
 def test_fallback_only_family_projection_cannot_resolve_or_issue_plan(catalog) -> None:
-    original = catalog.by_ref["base:ka10001"]
+    original = catalog.by_ref["detail:ka10001:current_trading"]
     fallback = replace(
         original,
         searchable_zones=MappingProxyType({"family_projection": ("fallback-only-needle",)}),
@@ -822,7 +793,7 @@ def test_fallback_only_family_projection_cannot_resolve_or_issue_plan(catalog) -
 
 
 def test_field_descriptions_are_describe_only_and_never_rank(catalog) -> None:
-    original = catalog.by_ref["base:ka10001"]
+    original = catalog.by_ref["detail:ka10001:current_trading"]
     display_only = replace(
         original,
         searchable_zones=MappingProxyType(
@@ -911,9 +882,7 @@ def test_family_local_detail_ignores_description_and_example_poison(catalog) -> 
         "현재 지수를 코스피 업종 기준으로 보여줘",
     ),
 )
-def test_family_local_canonical_title_resolves_sector_current_snapshot(
-    service, question
-) -> None:
+def test_family_local_canonical_title_resolves_sector_current_snapshot(service, question) -> None:
     resolved = service.resolve(
         ResolveRequest(
             question=question,
@@ -940,40 +909,28 @@ def test_entity_bound_family_abstains_without_any_entity_evidence(service) -> No
         "ka10001x current price",
     ),
 )
-def test_non_boundary_operation_id_cannot_exempt_missing_entity_gate(
-    service, question
-) -> None:
+def test_non_boundary_operation_id_cannot_exempt_missing_entity_gate(service, question) -> None:
     searched = service.search(SearchRequest(query=question, limit=3))
-    stock = next(
-        hit for hit in searched.results if hit.operation_ref == "base:ka10001"
-    )
+    stock = next(hit for hit in searched.results if hit.operation_ref.startswith("detail:ka10001:"))
     assert stock.confidence == "low"
     assert stock.suggested_operation_ref is None
 
     with pytest.raises(NoConfidentMatchError):
-        service.resolve(
-            ResolveRequest(question=question, arguments={"stk_cd": "005930"})
-        )
+        service.resolve(ResolveRequest(question=question, arguments={"stk_cd": "005930"}))
 
 
 @pytest.mark.parametrize(
     "question",
     ("ka10001 현재가 알려줘", "ka10001 current price"),
 )
-def test_embedded_operation_id_token_is_not_exact_identity_authority(
-    service, question
-) -> None:
+def test_embedded_operation_id_token_is_not_exact_identity_authority(service, question) -> None:
     searched = service.search(SearchRequest(query=question, limit=3))
-    stock = next(
-        hit for hit in searched.results if hit.operation_ref == "base:ka10001"
-    )
+    stock = next(hit for hit in searched.results if hit.operation_ref.startswith("detail:ka10001:"))
     assert stock.confidence == "low"
     assert stock.suggested_operation_ref is None
 
     with pytest.raises(NoConfidentMatchError):
-        service.resolve(
-            ResolveRequest(question=question, arguments={"stk_cd": "005930"})
-        )
+        service.resolve(ResolveRequest(question=question, arguments={"stk_cd": "005930"}))
 
 
 def test_exact_detail_accepts_matching_detail_group(service) -> None:
@@ -1015,8 +972,7 @@ def test_explicit_preferred_detail_uses_local_canonical_evidence(service) -> Non
     response = service.resolve(
         ResolveRequest(
             question="금일 재사용 금액만",
-            preferred_ref="base:kt00013",
-            detail_group="today_reuse",
+            preferred_ref="detail:kt00013:today_reuse",
         )
     )
     assert response.operation_ref == "detail:kt00013:today_reuse"
@@ -1024,8 +980,7 @@ def test_explicit_preferred_detail_uses_local_canonical_evidence(service) -> Non
         service.resolve(
             ResolveRequest(
                 question="삼성전자 오늘 주가 얼마야?",
-                preferred_ref="base:kt00013",
-                detail_group="today_reuse",
+                preferred_ref="detail:kt00013:today_reuse",
             )
         )
 

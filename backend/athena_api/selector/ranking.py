@@ -442,26 +442,8 @@ def rank_documents(
 def searchable_surface(
     catalog: OperationCatalog, request: SearchRequest
 ) -> tuple[OperationDocument, ...]:
-    """Base families, plus one detail when the query *is* that detail's identity.
-
-    Detail projections are not ranked against their siblings, but an exact
-    canonical identity must always stay addressable.
-    """
-    surface = catalog.visible_for(request.intent)
-    exact = catalog.find_exact(request.query.strip())
-    exact_is_visible = exact is not None and (
-        (exact.kind == "query" and request.intent in {DiscoveryIntent.AUTO, DiscoveryIntent.QUERY})
-        or (exact.kind == "order" and request.intent is DiscoveryIntent.ORDER)
-        or (exact.kind == "websocket" and request.intent is DiscoveryIntent.WEBSOCKET)
-    )
-    if (
-        exact is not None
-        and exact_is_visible
-        and exact.group_id is not None
-        and exact not in surface
-    ):
-        return (*surface, exact)
-    return surface
+    """Return the complete callable surface for the requested intent."""
+    return catalog.visible_for(request.intent)
 
 
 _WEBSOCKET_SIGNALS = (

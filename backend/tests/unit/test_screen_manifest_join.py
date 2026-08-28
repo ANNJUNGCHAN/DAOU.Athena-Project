@@ -5,11 +5,10 @@ import json
 from pathlib import Path
 
 import pytest
+from _selector_facade import select_operation
 
 from athena_api.generated.registry import DETAIL_REGISTRY, SPLIT_BASE_TR_IDS, TR_REGISTRY
 from athena_api.selector.catalog import build_operation_catalog
-from athena_api.selector.errors import DetailGroupRequiredError, NoConfidentMatchError
-from _selector_facade import select_operation
 from athena_api.selector.schemas import ReasonCode, ResponseMode
 
 BACKEND = Path(__file__).resolve().parents[2]
@@ -100,7 +99,7 @@ def test_every_callable_base_mapping_resolves_through_real_select_operation(
     assert misses == []
 
 
-def test_oauth_base_mappings_join_the_registry_but_are_deliberately_hidden_from_the_selector(
+def test_oauth_base_mappings_join_the_registry_but_are_absent_from_the_selector(
     catalog, base_mappings: list[dict]
 ) -> None:
     oauth_mappings = [m for m in base_mappings if m["classification"]["category"] == "oauth"]
@@ -109,15 +108,8 @@ def test_oauth_base_mappings_join_the_registry_but_are_deliberately_hidden_from_
         mapping_id = mapping["mapping_id"]
         tr_id = mapping["operation"]["tr_id"]
         assert tr_id in TR_REGISTRY
-        document = catalog.by_ref.get(mapping_id)
-        assert document is not None
-        assert document.visibility == "hidden"
-        assert document.generic_callable is False
-        # find_exact makes hidden operations "deliberately look absent" (catalog.py:127) —
-        # confirm select_operation really refuses it end to end, not just by inspection.
+        assert catalog.by_ref.get(mapping_id) is None
         assert catalog.find_exact(mapping_id) is None
-        with pytest.raises(NoConfidentMatchError):
-            select_operation(catalog, mapping_id, (), ResponseMode.AUTO)
 
 
 # ---------------------------------------------------------------------------
@@ -136,11 +128,10 @@ def test_every_detail_mapping_key_exists_in_generated_detail_registry(
     assert missing == []
 
 
-def test_every_detail_mapping_resolves_through_real_split_base_branch(
+def test_every_detail_mapping_resolves_through_its_callable_operation_ref(
     catalog, detail_mappings: list[dict]
 ) -> None:
-    """Drives the legacy exact/detail facade for a split family: question equals
-    the base operation_ref and detail_group equals the projection's owned group id."""
+    """Every split-derived mapping is a directly selectable operation document."""
     assert detail_mappings  # sanity
     misses: list[str] = []
     for mapping in detail_mappings:
@@ -149,10 +140,8 @@ def test_every_detail_mapping_resolves_through_real_split_base_branch(
         group_id = mapping["operation"]["detail_group_id"]
         assert mapping_id == f"detail:{tr_id}:{group_id}"
         assert tr_id in SPLIT_BASE_TR_IDS
-        document, reasons = select_operation(
-            catalog, f"base:{tr_id}", (), ResponseMode.AUTO, group_id
-        )
-        if document.operation_ref != mapping_id or reasons != [ReasonCode.EXPLICIT_DETAIL_GROUP]:
+        document, reasons = select_operation(catalog, mapping_id, (), ResponseMode.AUTO)
+        if document.operation_ref != mapping_id or reasons != [ReasonCode.EXACT_OPERATION_REF]:
             misses.append(mapping_id)
     assert misses == []
 
@@ -191,22 +180,10 @@ def test_ka10001_has_no_base_mapping_and_resolves_only_through_its_seven_details
     assert len(ka10001_details) == 7
 
     for mapping_id in ka10001_details:
-        group_id = mapping_id.removeprefix("detail:ka10001:")
-        document, reasons = select_operation(
-            catalog, "base:ka10001", (), ResponseMode.AUTO, group_id
-        )
+        document, reasons = select_operation(catalog, mapping_id, (), ResponseMode.AUTO)
         assert document.operation_ref == mapping_id
-        assert reasons == [ReasonCode.EXPLICIT_DETAIL_GROUP]
-
-    # Asking for the family without a detail_group must fail the same way a live caller's
-    # omission would — proving the manifest's exclusion of base:ka10001 matches runtime
-    # behaviour rather than being an arbitrary omission.
-    with pytest.raises(DetailGroupRequiredError) as caught:
-        select_operation(catalog, "base:ka10001", (), ResponseMode.AUTO)
-    assert caught.value.details["operation_ref"] == "base:ka10001"
-    assert sorted(caught.value.details["available_groups"]) == [
-        group_id.removeprefix("detail:ka10001:") for group_id in ka10001_details
-    ]
+        assert reasons == [ReasonCode.EXACT_OPERATION_REF]
+    assert catalog.find_exact("base:ka10001") is None
 
 
 # ---------------------------------------------------------------------------
@@ -230,9 +207,8 @@ def test_exclusions_replacement_mapping_ids_are_all_real_resolvable_detail_mappi
         for replacement_id in replacements:
             assert replacement_id in mapping_ids
             assert replacement_id in DETAIL_REGISTRY
-            group_id = replacement_id.removeprefix(f"detail:{tr_id}:")
             document, reasons = select_operation(
-                catalog, f"base:{tr_id}", (), ResponseMode.AUTO, group_id
+                catalog, replacement_id, (), ResponseMode.AUTO
             )
             assert document.operation_ref == replacement_id
-            assert reasons == [ReasonCode.EXPLICIT_DETAIL_GROUP]
+            assert reasons == [ReasonCode.EXACT_OPERATION_REF]

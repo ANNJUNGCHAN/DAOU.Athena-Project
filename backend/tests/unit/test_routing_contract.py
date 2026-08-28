@@ -271,8 +271,9 @@ def test_sparse_override_rejects_protected_axes_and_unknown_refs() -> None:
 
 def test_catalog_document_carries_routing_and_hash_seals_it() -> None:
     catalog = build_operation_catalog()
-    document = catalog.by_ref["base:ka10001"]
-    assert document.routing is ROUTING_REGISTRY["base:ka10001"]
+    operation_ref = "detail:ka10001:current_trading"
+    document = catalog.by_ref[operation_ref]
+    assert document.routing is ROUTING_REGISTRY[operation_ref]
     changed_routing = replace(document.routing, measures=(Measure.GENERIC,))
     changed_document = replace(document, routing=changed_routing)
     changed_documents = tuple(

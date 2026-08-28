@@ -55,7 +55,7 @@ const DEFAULT_TIMEOUT_MS = 180_000;
 
 const MAX_STDOUT_BYTES = 5_000_000;
 
-function buildArgs({ prompt, configFile, allowedTools, resumeSessionId, model, effort }) {
+function buildArgs({ prompt, configFile, allowedTools, resumeSessionId, model, effort, disableAllTools = false }) {
   const args = [
     '-p', prompt,
     '--output-format', 'stream-json',
@@ -65,9 +65,6 @@ function buildArgs({ prompt, configFile, allowedTools, resumeSessionId, model, e
     // (session.feed의 onCanvasResult가 매 청크마다 부르므로) — 텍스트만 밀려 있었다.
     '--include-partial-messages',
     '--verbose',
-    '--mcp-config', configFile,
-    '--strict-mcp-config',
-    '--setting-sources', '',
     // `--tools` 표면 축소는 시도 후 **철회**됐다 (2026-08-19, W2b E2E 5회 실측 —
     // PROBE-KIWOOM-CHART-run1~5.json). 기록으로 남긴다:
     //   ""(전체 비활성)        → MCP 지연 로딩의 로더(ToolSearch)까지 끊겨 툴 0건.
@@ -80,12 +77,20 @@ function buildArgs({ prompt, configFile, allowedTools, resumeSessionId, model, e
     // 위 실패 모드가 없어졌는지 다시 시도): "Agent"(서브에이전트) 하나로만
     // 좁혀도 mcp__athena 카드 렌더가 그대로 깨졌다 — 결론 안 바뀜, --tools는
     // 계속 안 쓴다.
-    '--allowedTools', allowedTools,
-    // 보안 차단(#33) — 위 DISALLOWED_EXECUTION_TOOLS 주석 참고. allowedTools가
-    // 뭐든(카드 렌더용 단일 툴이든 게이트웨이 전체든) 항상 붙는다 — 이건 화이트
-    // 리스트의 보완이 아니라 별도 안전망이라 호출자별로 켜고 끌 이유가 없다.
-    '--disallowedTools', DISALLOWED_EXECUTION_TOOLS,
   ];
+  if (!disableAllTools) args.push('--mcp-config', configFile, '--strict-mcp-config');
+  args.push('--setting-sources', '');
+  if (disableAllTools) {
+    // Selector cold-path 분류기는 JSON 분류만 한다. MCP와 빌트인 툴 표면을
+    // 프로세스 수준에서 모두 닫아, 병렬 분류가 외부 부작용을 낼 수 없게 한다.
+    args.push('--tools', '');
+  } else {
+    args.push('--allowedTools', allowedTools);
+  }
+  // 보안 차단(#33) — 위 DISALLOWED_EXECUTION_TOOLS 주석 참고. allowedTools가
+  // 뭐든(카드 렌더용 단일 툴이든 게이트웨이 전체든) 항상 붙는다 — 이건 화이트
+  // 리스트의 보완이 아니라 별도 안전망이라 호출자별로 켜고 끌 이유가 없다.
+  args.push('--disallowedTools', DISALLOWED_EXECUTION_TOOLS);
   // 모델·추론강도(설정 화면 모델 패널, lib/main/model-prefs.js) — 값이 있을
   // 때만 붙인다. null/undefined면 인자 자체를 안 붙여 claude CLI 자체 기본값을
   // 쓴다("기본"의 의미). RESULT.md §1의 실왕복 계약(위 커맨드 블록)에는 없던
@@ -122,6 +127,8 @@ function runClaudeQuery({
   onEvent,
   onTextDelta,
   onThinkingDelta,
+  signal,
+  disableAllTools = false,
 } = {}) {
   return new Promise((resolve) => {
     if (!prompt || !String(prompt).trim()) {
@@ -133,7 +140,7 @@ function runClaudeQuery({
       return;
     }
 
-    const args = buildArgs({ prompt, configFile, allowedTools, resumeSessionId, model, effort });
+    const args = buildArgs({ prompt, configFile, allowedTools, resumeSessionId, model, effort, disableAllTools });
     const session = new StreamJsonSession();
     let child;
     try {
@@ -157,6 +164,15 @@ function runClaudeQuery({
     let settled = false;
     let killedBy = null; // 'timeout' | 'abort' | 'stdout-cap' — close 핸들러가 에러 메시지를 고른다
     let stdoutBytes = 0; // 누적 총량 — MAX_STDOUT_BYTES 초과 시 트리를 죽인다
+    const abortFromSignal = () => {
+      killedBy = killedBy || 'abort';
+      killTree(child);
+    };
+
+    if (signal) {
+      if (signal.aborted) abortFromSignal();
+      else signal.addEventListener('abort', abortFromSignal, { once: true });
+    }
 
     if (typeof onSpawn === 'function') {
       onSpawn({
@@ -188,6 +204,7 @@ function runClaudeQuery({
       if (settled) return;
       settled = true;
       if (timer) clearTimeout(timer);
+      if (signal) signal.removeEventListener('abort', abortFromSignal);
       // `shell:false`는 PATH에서 실행 파일(.exe)을 찾는다. `claude`가 이 머신에
       // `.cmd`/`.ps1` 래퍼로 깔려 있으면 여기서 ENOENT가 난다. `shell:true`로
       // 되돌리면 안 된다 — 빈 문자열 인자가 사라져 `--setting-sources`가
@@ -212,6 +229,7 @@ function runClaudeQuery({
       if (settled) return;
       settled = true;
       if (timer) clearTimeout(timer);
+      if (signal) signal.removeEventListener('abort', abortFromSignal);
       session.end({ onCanvasResult, onEvent, onTextDelta, onThinkingDelta });
       const finalResult = session.finalResult();
       const isError = !!killedBy || code !== 0 || (finalResult && finalResult.is_error === true) || !finalResult;

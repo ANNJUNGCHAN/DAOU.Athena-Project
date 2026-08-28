@@ -23,6 +23,8 @@ const streamJsonParser = require('./lib/main/stream-json-parser');
 const { ensureMcpConfig } = require('./lib/main/mcp-config');
 const { buildLivePrompt } = require('./lib/main/live-prompt');
 const restDatasetRunner = require('./lib/main/rest-dataset-runner');
+const selectorFastPath = require('./lib/main/selector-fast-path');
+const selectorColdHedge = require('./lib/main/selector-cold-hedge');
 const chartReload = require('./lib/main/chart-reload');
 const chartReloadAuthority = chartReload.createChartReloadAuthority();
 const { correlationKey: restCorrelationKey } = require('./lib/rest-canvas-paint');
@@ -1703,6 +1705,7 @@ function broadcastLiveQueryBusy(busy) {
 // Esc 후 재질의로 프로세스가 쌓이던 갭(README "다중 세션도 없다")의 해소.
 let activeLiveQuery = null;
 let activeRestRun = null;
+let activeSelectorFastRun = null;
 
 // 멀티턴(2026-08-17) — 직전 성공 왕복의 session_id. 다음 질의를 --resume으로
 // 이어 이전 대화 내용(질문·답변·툴 결과)이 반영되게 한다. -p 재개는 세션을
@@ -1914,6 +1917,12 @@ async function runLiveQuery(query, expand, origin = 'shell') {
 // origin — 'shell'(기본, 커맨드바) | 'orb'(오브 대화 모드). onCanvasResult가
 // 오브 기원 엔벌로프만 orbWin에도 추가 relay하는 데 쓴다(board-33③④ 선행).
 async function runLiveQueryInner(query, expand, origin) {
+  // Selector 단일 dispatch도 새 질의가 선점한다. fetch 구현이 abort를 늦게
+  // 관찰하더라도 run identity를 함께 검사해 이전 카드/주문 초안은 표시하지 않는다.
+  if (activeSelectorFastRun) {
+    activeSelectorFastRun.abort(new Error('새 질의가 이전 Selector fast path를 대체했다'));
+    activeSelectorFastRun = null;
+  }
   // 정형 질의 모델 우회 확장(2026-08-26 속도 레버) — 순서는 의미 없다(각자
   // 닫힌 문법이라 서로 안 겹친다, rest-dataset-runner.js 테스트로 고정).
   const directDataset = restDatasetRunner.buildQuoteDataset(query, stockEntityIndex, {
@@ -1934,6 +1943,131 @@ async function runLiveQueryInner(query, expand, origin) {
   if (directDataset) {
     mdlog('Kiwoom REST 직결 화면 경로 선택 — 모델/MCP/WS 무호출');
     return runDirectRestDataset(directDataset, expand);
+  }
+
+  // 닫힌 7개 문법이 놓친 조회는 백엔드 Selector가 한 번에 선택·호출·inline
+  // render까지 끝낸다. 애매함/인자 부족/비조회 응답만 기존 Claude 경로로 넘긴다.
+  // 단순 시장가 주문은 별도 닫힌 문법에서만 intent=order로 보내고, 실행하지 않은
+  // guarded 초안을 채팅 주문확인 UI에 전달한다.
+  const orderDraft = selectorFastPath.buildMarketOrderDraft(query, stockEntityIndex);
+  const selectorController = new AbortController();
+  activeSelectorFastRun = selectorController;
+  try {
+    const selectorResult = await selectorFastPath.runSelectorFastPath({
+      question: query,
+      backendBase: BACKEND_HTTP_BASE,
+      intent: orderDraft ? orderDraft.intent : 'auto',
+      arguments: orderDraft ? orderDraft.arguments : {},
+      orderDraft,
+      signal: selectorController.signal,
+      isCurrent: () => activeSelectorFastRun === selectorController,
+      emitCanvas: (payload) => {
+        if (activeSelectorFastRun !== selectorController) {
+          throw new Error('교체된 Selector fast path의 늦은 카드는 표시하지 않는다');
+        }
+        return emitRestCanvasAndWaitForPaint(payload, {
+          expand,
+          timeoutMs: Math.max(1, payload.paintDeadlineAt - performance.now()),
+        });
+      },
+      emitOrderDraft: (payload) => {
+        if (activeSelectorFastRun !== selectorController) {
+          throw new Error('교체된 Selector fast path의 늦은 주문 초안은 표시하지 않는다');
+        }
+        if (!shellWin || shellWin.isDestroyed()) throw new Error('셸 창이 준비되지 않았다');
+        if (expand) revealShell({ focus: false });
+        shellWin.webContents.send('athena:selector-order-draft', payload);
+      },
+      persistTurn: ({ question, answerText }) => {
+        historySink.saveChatMessage(
+          { conversationId: historyConversationId(), text: question, role: 'user' },
+          { onSaveFailed: emitHistorySaveFailed, mdlog },
+        );
+        touchConversationEntry(question);
+        historySink.saveChatMessage(
+          { conversationId: historyConversationId(), text: answerText, role: 'assistant' },
+          { onSaveFailed: emitHistorySaveFailed, mdlog },
+        );
+      },
+    });
+    if (selectorResult.handled) {
+      mdlog(`Selector 단일 dispatch 적중 — ${selectorResult.durationMs}ms (모델 무호출)`);
+      return selectorResult;
+    }
+    if (selectorResult.preflight) {
+      const { model: selectorModel } = modelPrefs.get().claude;
+      const coldResult = await selectorColdHedge.runSelectorColdHedge({
+        question: query,
+        preflight: selectorResult.preflight,
+        signal: selectorController.signal,
+        isCurrent: () => activeSelectorFastRun === selectorController,
+        classify: ({ prompt, signal }) => runClaudeQuery({
+          prompt,
+          // classification-only 프로세스는 MCP 설정도 파일도 읽지 않는다.
+          // 존재가 보장된 앱 디렉터리는 spawn cwd 역할만 한다.
+          cwd: __dirname,
+          model: selectorModel,
+          effort: 'low',
+          timeoutMs: 12_000,
+          disableAllTools: true,
+          signal,
+        }),
+        // 두 분류기는 읽기 전용이다. 첫 유효안이 정해진 뒤에만 단 하나의
+        // proposal을 순차 dispatch하여 조회 외 operation의 중복 효과를 막는다.
+        dispatchProposal: (proposal) => selectorFastPath.runSelectorFastPath({
+          question: query,
+          backendBase: BACKEND_HTTP_BASE,
+          intent: proposal.intent,
+          arguments: proposal.arguments,
+          candidateRefs: [proposal.operation_ref],
+          preferredRef: proposal.operation_ref,
+          detailGroup: proposal.detail_group,
+          signal: selectorController.signal,
+          isCurrent: () => activeSelectorFastRun === selectorController,
+          emitCanvas: (payload) => {
+            if (activeSelectorFastRun !== selectorController) {
+              throw new Error('교체된 Selector cold path의 늦은 카드는 표시하지 않는다');
+            }
+            return emitRestCanvasAndWaitForPaint(payload, {
+              expand,
+              timeoutMs: Math.max(1, payload.paintDeadlineAt - performance.now()),
+            });
+          },
+          persistTurn: ({ question, answerText }) => {
+            historySink.saveChatMessage(
+              { conversationId: historyConversationId(), text: question, role: 'user' },
+              { onSaveFailed: emitHistorySaveFailed, mdlog },
+            );
+            touchConversationEntry(question);
+            historySink.saveChatMessage(
+              { conversationId: historyConversationId(), text: answerText, role: 'assistant' },
+              { onSaveFailed: emitHistorySaveFailed, mdlog },
+            );
+          },
+        }),
+      });
+      if (coldResult.handled) {
+        mdlog(`Selector 병렬 분류 적중 — ${coldResult.operationRef || coldResult.classifiedOperationRef} (모델 2회, dispatch 1회)`);
+        return coldResult;
+      }
+      mdlog(`Selector 병렬 분류 폴백 — ${coldResult.reason}`);
+    }
+    mdlog(`Selector 단일 dispatch 폴백 — ${selectorResult.reason}`);
+  } catch (error) {
+    if (selectorController.signal.aborted) {
+      return {
+        ok: false,
+        source: 'selector-fast',
+        error: String((selectorController.signal.reason && selectorController.signal.reason.message) || 'Selector fast path 중단'),
+        answerText: null,
+        canvasTypes: [],
+        modelCalls: 0,
+      };
+    }
+    // 계약 위반/네트워크 오류는 UI side effect 없이 기존 추론 경로로 복구한다.
+    mdlog(`Selector 단일 dispatch 오류 — Claude 폴백: ${String((error && error.message) || error)}`);
+  } finally {
+    if (activeSelectorFastRun === selectorController) activeSelectorFastRun = null;
   }
   const { dir, configFile } = getLiveMcpConfig();
 
@@ -2131,6 +2265,10 @@ async function runLiveQueryInner(query, expand, origin) {
 
 // Esc 중단 — 렌더러의 abortToken은 UI 반영만 막는다. 프로세스는 여기서 실제로 죽인다.
 ipcMain.on('athena:abort-live-query', () => {
+  if (activeSelectorFastRun) {
+    activeSelectorFastRun.abort(new Error('사용자가 Selector fast path 요청을 취소했다'));
+    activeSelectorFastRun = null;
+  }
   if (activeRestRun) {
     activeRestRun.abort(new Error('사용자가 REST 데이터셋 요청을 취소했다'));
   }

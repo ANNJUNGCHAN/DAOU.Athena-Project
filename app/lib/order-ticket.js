@@ -15,6 +15,35 @@ function buildPrefill(event) {
   };
 }
 
+// Selector one-shot 응답 → 사람 확인용 주문 티켓 프리필.
+// 현금 주식 시장가 매수/매도만 1차 범위로 허용하며 실행 능력은 전혀 없다.
+function buildSelectorOrderPrefill(payload) {
+  if (!payload || payload.status !== 'guarded') return null;
+  const side = payload.operation_ref === 'base:kt10000' ? 'buy'
+    : payload.operation_ref === 'base:kt10001' ? 'sell' : null;
+  if (!side) return null;
+
+  const draft = payload.order_draft;
+  if (!draft || typeof draft !== 'object' || Array.isArray(draft)) return null;
+  if (draft.side != null && draft.side !== side) return null;
+  if (draft.dmst_stex_tp !== 'KRX' || String(draft.trde_tp) !== '3') return null;
+  if (typeof draft.stk_cd !== 'string' || !/^\d{6}$/.test(draft.stk_cd)) return null;
+
+  const qtyText = typeof draft.ord_qty === 'number'
+    ? String(draft.ord_qty) : draft.ord_qty;
+  if (typeof qtyText !== 'string' || !/^[1-9]\d*$/.test(qtyText)) return null;
+  const qty = Number(qtyText);
+  if (!Number.isSafeInteger(qty) || qty > 100000) return null;
+
+  return {
+    symbol: draft.stk_cd,
+    side,
+    qty,
+    orderType: 'market',
+    reason: `시장가 ${side === 'buy' ? '매수' : '매도'} 주문 초안 — 실행 전 내용을 확인하세요`,
+  };
+}
+
 // 게이트 사전 판정 — 비활성이면 실행 버튼을 잠그고 사유를 보여준다(정직 고지).
 function gateBlocker(accountInfo) {
   if (!accountInfo) return '계좌 정보를 확인할 수 없다 — 백엔드 기동을 확인해 달라';
@@ -56,7 +85,11 @@ function interpretExecuteStatus(status) {
 // 상태기계: review → executing → done | in_doubt | failed.
 // in_doubt/done은 종결 — 같은 티켓으로 재실행 불가(1회용, 중복 주문 방지).
 function createTicket(prefill) {
-  return { state: 'review', prefill, side: null, qty: null, result: null };
+  const side = prefill && (prefill.side === 'buy' || prefill.side === 'sell')
+    ? prefill.side : null;
+  const qty = prefill && Number.isInteger(prefill.qty)
+    && prefill.qty > 0 && prefill.qty <= 100000 ? prefill.qty : null;
+  return { state: 'review', prefill, side, qty, result: null };
 }
 
 const _TRANSITIONS = {
@@ -83,6 +116,7 @@ function newIdempotencyKey(randomFn) {
 
 const __exports = {
   buildPrefill,
+  buildSelectorOrderPrefill,
   gateBlocker,
   buildOrderPayload,
   interpretExecuteStatus,

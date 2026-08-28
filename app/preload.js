@@ -151,6 +151,9 @@ const ON_CHANNELS = new Set([
   // 루틴 알림(능동 에이전트 P2) — main의 RoutineFeed가 백엔드 WS에서 받은
   // 발화·만료·복원실패 이벤트를 능동 턴으로 전달한다.
   'athena:routine-event',
+  // Selector의 guarded order 결과 — 실행이 아니라 기존 주문 확인 티켓의
+  // 프리필만 연다. 실제 집행은 athena:order-execute 사용자 클릭 경로뿐이다.
+  'athena:selector-order-draft',
   // 루틴 WS 연결 상태(9단계, 알람 센터 "● WS 연결됨") — RoutineFeed의
   // onStatus 그대로. {state: 'connected'|'disconnected'|'unsupported'}.
   'athena:routine-feed-status',

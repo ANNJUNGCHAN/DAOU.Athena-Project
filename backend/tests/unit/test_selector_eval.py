@@ -7,10 +7,10 @@ from typing import Any
 
 import pytest
 
+from athena_api.generated.registry import SPLIT_BASE_TR_IDS
 from athena_api.selector.catalog import OperationCatalog, build_operation_catalog
 from athena_api.selector.errors import (
     AmbiguousOperationError,
-    DetailGroupRequiredError,
     InvalidArgumentsError,
     NoConfidentMatchError,
     OperationNotFoundError,
@@ -83,9 +83,7 @@ TARGETLESS_DETAIL_CASE_IDS = frozenset(
 )
 SEMANTIC_AMBIGUITY_CASE_IDS = frozenset({"detail-kt00005-mixed"})
 FAIL_CLOSED_RESOLVE_CASE_IDS = (
-    EMBEDDED_ID_CASE_IDS
-    | TARGETLESS_DETAIL_CASE_IDS
-    | SEMANTIC_AMBIGUITY_CASE_IDS
+    EMBEDDED_ID_CASE_IDS | TARGETLESS_DETAIL_CASE_IDS | SEMANTIC_AMBIGUITY_CASE_IDS
 )
 
 MISSING_ARGUMENT_CASES = tuple(case for case in GOLDEN if case["disposition"] == "missing_args")
@@ -217,6 +215,17 @@ _STRICT_RESOLVE_CASES = tuple(
 )
 
 
+def _callable_preferred_ref(case: dict[str, Any]) -> str | None:
+    """Translate pre-projection fixtures to the callable operation they assert."""
+    preferred = case["preferred_ref"]
+    if preferred and preferred.removeprefix("base:") in SPLIT_BASE_TR_IDS:
+        return next(
+            (ref for ref in case["accepted_refs"] if ref.startswith("detail:")),
+            None,
+        )
+    return preferred
+
+
 @pytest.mark.parametrize("case", _STRICT_RESOLVE_CASES, ids=lambda case: case["id"])
 def test_resolve_selects_the_gold_base_or_detail(
     service: SelectorService, case: dict[str, Any]
@@ -225,8 +234,12 @@ def test_resolve_selects_the_gold_base_or_detail(
         ResolveRequest(
             question=case["question"],
             intent=DiscoveryIntent(case["intent"]),
-            preferred_ref=case["preferred_ref"],
-            detail_group=case["detail_group"],
+            preferred_ref=_callable_preferred_ref(case),
+            detail_group=(
+                None
+                if (_callable_preferred_ref(case) or "").startswith("detail:")
+                else case["detail_group"]
+            ),
             arguments=case["arguments"],
             response_mode=ResponseMode(case["response_mode"]),
         )
@@ -237,9 +250,7 @@ def test_resolve_selects_the_gold_base_or_detail(
         # BASE_DEFAULT was the pre-typed policy reason.  Natural-language semantic
         # selection now records the shared seam's unique-profile authority.
         expected_reasons = {"UNIQUE_EXACT_PROFILE"}
-    assert {reason.value for reason in result.selection_reasons}.intersection(
-        expected_reasons
-    )
+    assert {reason.value for reason in result.selection_reasons}.intersection(expected_reasons)
 
 
 @pytest.mark.parametrize(
@@ -258,8 +269,8 @@ def test_embedded_operation_ids_never_gain_exact_control_plane_authority(
             ResolveRequest(
                 question=case["question"],
                 intent=DiscoveryIntent(case["intent"]),
-                preferred_ref=case["preferred_ref"],
-                detail_group=case["detail_group"],
+                preferred_ref=_callable_preferred_ref(case),
+                detail_group=None,
                 arguments=case["arguments"],
             )
         )
@@ -280,8 +291,8 @@ def test_preferred_detail_cannot_cure_missing_target_evidence(
             ResolveRequest(
                 question=case["question"],
                 intent=DiscoveryIntent(case["intent"]),
-                preferred_ref=case["preferred_ref"],
-                detail_group=case["detail_group"],
+                preferred_ref=_callable_preferred_ref(case),
+                detail_group=None,
                 arguments=case["arguments"],
             )
         )
@@ -315,8 +326,7 @@ def test_guarded_fallback_rescues_the_diagnosed_paraphrase(service: SelectorServ
     rescued = service.resolve(
         ResolveRequest(
             question=paraphrase,
-            preferred_ref="base:ka10001",
-            detail_group="current_trading",
+            preferred_ref="detail:ka10001:current_trading",
             arguments={"stk_cd": "005930"},
         )
     )
@@ -349,8 +359,7 @@ def test_guarded_fallback_refuses_an_instrument_mismatched_with_the_question(
         service.resolve(
             ResolveRequest(
                 question="삼성전자 현재가 주가 추이",
-                preferred_ref="base:ka10001",
-                detail_group="current_trading",
+                preferred_ref="detail:ka10001:current_trading",
                 arguments={"stk_cd": "035720"},  # 카카오 — 질문 속 종목과 불일치
             )
         )
@@ -389,8 +398,7 @@ def test_guarded_fallback_still_refuses_the_embedded_id_golden_case(
         service.resolve(
             ResolveRequest(
                 question="ka10001 가치평가 지표만 알려줘",
-                preferred_ref="base:ka10001",
-                detail_group="valuation",
+                preferred_ref="detail:ka10001:valuation",
                 arguments={"stk_cd": "005930"},
             )
         )
@@ -406,8 +414,7 @@ def test_guarded_fallback_still_refuses_the_targetless_golden_case(
         service.resolve(
             ResolveRequest(
                 question="D+1 D+2 정산 전망",
-                preferred_ref="base:kt00001",
-                detail_group="settlement_forecast",
+                preferred_ref="detail:kt00001:settlement_forecast",
                 arguments={"qry_tp": "2"},
             )
         )
@@ -430,13 +437,12 @@ def test_guarded_fallback_still_refuses_the_targetless_golden_case(
 def test_ambiguous_orderbook_question_resolves_with_asserted_family(
     service: SelectorService,
 ) -> None:
-    """"호가" 대표 발화가 ka10004로 수렴한다 — search 1위 후보를 그대로
+    """ "호가" 대표 발화가 ka10004로 수렴한다 — search 1위 후보를 그대로
     preferred_ref로 넘기는 정상적인 search→resolve 흐름을 재현한다."""
     resolved = service.resolve(
         ResolveRequest(
             question="삼성전자 호가 보여줘",
-            preferred_ref="base:ka10004",
-            detail_group="aggregate_totals",
+            preferred_ref="detail:ka10004:aggregate_totals",
             arguments={"stk_cd": "005930"},
         )
     )
@@ -470,57 +476,42 @@ def test_preferred_detail_cannot_cure_true_family_ambiguity(
             ResolveRequest(
                 question=case["question"],
                 intent=DiscoveryIntent(case["intent"]),
-                preferred_ref=case["preferred_ref"],
-                detail_group=case["detail_group"],
+                preferred_ref=_callable_preferred_ref(case),
+                detail_group=None,
                 arguments=case["arguments"],
             )
         )
 
 
 @pytest.mark.parametrize("case", DETAIL_REQUIRED_CASES, ids=lambda case: case["id"])
-def test_split_families_refuse_to_resolve_without_a_detail_group(
+def test_split_base_legacy_aliases_fail_closed(
     service: SelectorService, case: dict[str, Any]
 ) -> None:
-    """A split family is discoverable but not callable, and says what to call instead.
-
-    Every one of these asks for the full response, which is exactly what the split
-    removed, so the refusal has to carry the groups that replaced it.
-    """
+    """Removed split bases cannot be rediscovered or revived as legacy aliases."""
     tr_id = case["accepted_refs"][0].removeprefix("base:")
-    with pytest.raises(DetailGroupRequiredError) as caught:
+    assert service.catalog.find_exact(f"base:{tr_id}") is None
+    with pytest.raises((NoConfidentMatchError, OperationNotFoundError)):
         service.resolve(
             ResolveRequest(
-                question=case["question"],
+                question=f"base:{tr_id}",
                 intent=DiscoveryIntent(case["intent"]),
                 arguments=case["arguments"],
                 response_mode=ResponseMode(case["response_mode"]),
             )
         )
-    details = caught.value.details
-    assert details["operation_ref"] == f"base:{tr_id}"
-    assert details["available_groups"]
-
-    # The offered groups are not decoration: naming one resolves the same question.
-    group = details["available_groups"][0]
-    resolved = service.resolve(
-        ResolveRequest(
-            question=case["question"],
-            intent=DiscoveryIntent(case["intent"]),
-            arguments=case["arguments"],
-            detail_group=group,
-        )
-    )
-    assert resolved.operation_ref == f"detail:{tr_id}:{group}"
 
 
 @pytest.mark.parametrize("case", MISSING_ARGUMENT_CASES, ids=lambda case: case["id"])
 def test_resolve_reports_every_expected_missing_argument(
     service: SelectorService, case: dict[str, Any]
 ) -> None:
+    detail_ref = service.catalog.details_for(case["accepted_refs"][0].removeprefix("base:"))[
+        0
+    ].operation_ref
     with pytest.raises(InvalidArgumentsError) as caught:
         service.resolve(
             ResolveRequest(
-                question=case["question"],
+                question=detail_ref,
                 intent=DiscoveryIntent(case["intent"]),
                 arguments=case["arguments"],
             )
@@ -593,64 +584,51 @@ def test_forbidden_ambiguous_and_adversarial_questions_issue_no_plan(
         )
 
 
-def test_catalog_contains_323_unique_refs_and_208_base_refs(
+def test_catalog_contains_only_299_callable_selector_documents(
     catalog: OperationCatalog,
 ) -> None:
     refs = [document.operation_ref for document in catalog.documents]
     base_refs = [ref for ref in refs if ref.startswith("base:")]
-    assert len(refs) == len(set(refs)) == 323
-    assert len(base_refs) == 208
+    assert len(refs) == len(set(refs)) == 299
+    assert len(base_refs) == 184
+    assert len([ref for ref in refs if ref.startswith("detail:")]) == 115
+    assert all(document.generic_callable for document in catalog.documents)
 
 
-def test_all_non_oauth_base_refs_are_exactly_addressable(
+def test_split_bases_and_oauth_are_absent_from_selector_catalog(
     catalog: OperationCatalog,
 ) -> None:
-    bases = [document for document in catalog.documents if document.group_id is None]
-    addressed = [catalog.find_exact(document.operation_ref) for document in bases]
-    assert sum(document is not None for document in addressed) == 206
-    assert {
-        document.operation_ref
-        for document, found in zip(bases, addressed, strict=True)
-        if found is None
-    } == {"base:au10001", "base:au10002"}
+    assert catalog.find_exact("base:au10001") is None
+    assert catalog.find_exact("base:au10002") is None
+    for tr_id in SPLIT_BASE_TR_IDS:
+        assert catalog.find_exact(f"base:{tr_id}") is None
+        assert catalog.find_exact(tr_id) is None
 
 
-def test_search_surface_is_one_document_per_family_and_excludes_projections(
+def test_query_search_surface_contains_149_bases_and_115_projections(
     catalog: OperationCatalog,
 ) -> None:
     surface = catalog.visible_for(DiscoveryIntent.QUERY)
-    assert len(surface) == 171
-    assert all(document.group_id is None for document in surface)
-    assert len({document.tr_id for document in surface}) == len(surface)
+    assert len(surface) == 264
+    assert len([document for document in surface if document.group_id is None]) == 149
+    assert len([document for document in surface if document.group_id is not None]) == 115
+    assert all(document.generic_callable for document in surface)
 
 
-def test_every_detail_group_is_addressable_from_its_base_description(
+def test_every_detail_projection_is_directly_describable_without_a_base_document(
     service: SelectorService, catalog: OperationCatalog
 ) -> None:
-    """Projections are reached by naming them, not by out-ranking siblings.
-
-    ``describe(base)`` must advertise every projection of that family, each
-    group id must be unique inside the family, and each advertised id must
-    resolve back to exactly one catalog document.
-    """
+    """Each projection is a first-class selector document and split bases are absent."""
     details = [document for document in catalog.documents if document.group_id is not None]
-    advertised: set[str] = set()
-    for tr_id in sorted({document.tr_id for document in details}):
-        description = service.describe(
-            DescribeRequest(operation_ref=f"base:{tr_id}", intent=DiscoveryIntent.QUERY)
-        )
-        group_ids = [group.group_id for group in description.detail_groups]
-        assert group_ids, f"base:{tr_id} advertises no detail groups"
-        assert len(group_ids) == len(set(group_ids))
-        for group in description.detail_groups:
-            document = catalog.find_exact(group.operation_ref)
-            assert document is not None
-            assert document.tr_id == tr_id
-            assert document.group_id == group.group_id
-            assert group.response_field_count == len(document.response_model.model_fields)
-            advertised.add(group.operation_ref)
     assert len(details) == 115
-    assert advertised == {document.operation_ref for document in details}
+    for document in details:
+        description = service.describe(
+            DescribeRequest(operation_ref=document.operation_ref, intent=DiscoveryIntent.QUERY)
+        )
+        assert description.operation_ref == document.operation_ref
+        assert description.group_id == document.group_id
+        assert description.detail_groups == []
+        assert catalog.find_exact(f"base:{document.tr_id}") is None
 
 
 @pytest.mark.parametrize("language", ["ko", "en"])
