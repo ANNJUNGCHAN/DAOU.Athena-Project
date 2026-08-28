@@ -2093,7 +2093,10 @@ async function runLiveQueryInner(query, expand, origin) {
     }
     if (simpleChartRoute.inferenceFallback) {
       mdlog('종목 인덱스 준비 전 Selector 직접 처리 불가 — Claude 폴백 차단');
-      return persistLocalLiveResult(query, simpleChartRoute.inferenceFallback);
+      return persistLocalLiveResult(query, {
+        ...simpleChartRoute.inferenceFallback,
+        durationMs: Math.max(0, performance.now() - queryStartedAt),
+      });
     }
     if (selectorResult.preflight) {
       const coldResult = await selectorColdHedge.runSelectorColdHedge({
@@ -2160,7 +2163,10 @@ async function runLiveQueryInner(query, expand, origin) {
     }
     if (simpleChartRoute.inferenceFallback) {
       mdlog(`종목 인덱스 준비 전 Selector 오류 — Claude 폴백 차단: ${String((error && error.message) || error)}`);
-      return persistLocalLiveResult(query, simpleChartRoute.inferenceFallback);
+      return persistLocalLiveResult(query, {
+        ...simpleChartRoute.inferenceFallback,
+        durationMs: Math.max(0, performance.now() - queryStartedAt),
+      });
     }
     // 계약 위반/네트워크 오류는 UI side effect 없이 기존 추론 경로로 복구한다.
     mdlog(`Selector 단일 dispatch 오류 — Claude 폴백: ${String((error && error.message) || error)}`);
