@@ -47,10 +47,15 @@ SOURCES: dict[str, SourceSpec] = {
         "ws", "number", _NUM_OPS, "전일 동시간 거래량 비율", experimental=True
     ),
     "vi.triggered": SourceSpec("ws", "bool", _EQ_OPS, "VI 발동"),
-    "disclosure.title_keyword": SourceSpec(
-        "periodic", "string", _STR_OPS, "공시 제목 키워드"
-    ),
     "schedule.daily": SourceSpec("clock", "string", _AT_OPS, "예약 시각(요일 지정)"),
+}
+
+# 저장된 구버전 루틴을 읽고 사용자에게 상태를 설명하기 위한 전용 카탈로그다.
+# 신규 초안 검증에는 사용하지 않으며, 외부 사업자 데이터는 앱 플러그인이 소유한다.
+LEGACY_DISABLED_SOURCES: dict[str, SourceSpec] = {
+    "disclosure.title_keyword": SourceSpec(
+        "periodic", "string", _STR_OPS, "공시 제목 키워드 (앱 플러그인 전용)"
+    ),
 }
 
 RoutineStatus = Literal[
@@ -95,8 +100,15 @@ _TRANSPORT_TO_MODE: dict[Transport, Mode] = {
 
 def derive_mode(condition: Condition) -> Mode:
     """§8 — mode는 소스의 transport에서 결정론적으로 유도된다(3분기 테이블)."""
-    spec = SOURCES[condition.source]
+    spec = source_spec(condition.source)
     return _TRANSPORT_TO_MODE[spec.transport]
+
+
+def source_spec(source: str) -> SourceSpec:
+    """활성 카탈로그와 읽기 전용 레거시 카탈로그에서 소스 명세를 찾는다."""
+    if source in SOURCES:
+        return SOURCES[source]
+    return LEGACY_DISABLED_SOURCES[source]
 
 
 def parse_schedule_value(value: str) -> tuple[frozenset[int] | None, str] | None:
@@ -135,7 +147,7 @@ class RoutineSpec:
     """루틴 한 건. 저장·전이는 store가, 검증은 rules가 담당한다."""
 
     condition: Condition
-    symbol: str  # 6자리 종목코드. disclosure 계열도 대상 종목 기준으로 필터한다
+    symbol: str  # 6자리 종목코드
     cooldown_s: int
     expires_at: datetime
     note: str  # 사람이 읽는 해석문 — 목록·승인 카드가 노출하는 유일한 조건 표현
@@ -154,7 +166,7 @@ class RoutineSpec:
         return derive_mode(self.condition)
 
     def human_summary(self) -> str:
-        spec = SOURCES[self.condition.source]
+        spec = source_spec(self.condition.source)
         mode_text = {
             "realtime-ws": "실시간 (WS) — 틱 즉시",
             "periodic": "주기 확인 — 최대 폴링 주기만큼 지연",

@@ -14,6 +14,7 @@ from datetime import UTC, datetime, timedelta
 from typing import Any
 
 from athena_api.routines.models import (
+    LEGACY_DISABLED_SOURCES,
     MAX_COOLDOWN_S,
     MAX_EXPIRY,
     MIN_COOLDOWN_S,
@@ -55,6 +56,8 @@ def validate_condition(raw: Any) -> Condition:
         _fail(f"허용되지 않는 조건 키: {sorted(extra)}")
 
     source = raw.get("source")
+    if isinstance(source, str) and source in LEGACY_DISABLED_SOURCES:
+        _fail("이 source는 앱 플러그인 전용이므로 백엔드 루틴 초안에 사용할 수 없다")
     if not isinstance(source, str) or source not in SOURCES:
         _fail("source가 소스 카탈로그에 없다")
     spec = SOURCES[source]

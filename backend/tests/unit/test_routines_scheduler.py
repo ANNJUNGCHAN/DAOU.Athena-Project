@@ -3,18 +3,11 @@
 from __future__ import annotations
 
 import asyncio
-import io
-import zipfile
 from datetime import UTC, datetime, timedelta, timezone
 from pathlib import Path
 
 import pytest
 
-from athena_api.routines.corp_catalog import extract_corp_xml, parse_corp_xml
-from athena_api.routines.disclosure_source import (
-    DisclosureSourceError,
-    parse_list_payload,
-)
 from athena_api.routines.briefings import BriefingStore
 from athena_api.routines.engagement import EngagementStore
 from athena_api.routines.ledger import RoutineLedger
@@ -194,7 +187,6 @@ async def test_realtime_loop_evaluates_and_notifies(tmp_path):
         engine=engine,
         notify=notify,
         subscribe_ticks=lambda: queue,
-        poll_interval_s=9999,
     )
     await sched.start()
     await queue.put(
@@ -232,7 +224,6 @@ async def test_fired_notify_carries_goal_flag(tmp_path):
         engine=engine,
         notify=notify,
         subscribe_ticks=lambda: queue,
-        poll_interval_s=9999,
     )
     await sched.start()
     await queue.put(
@@ -246,121 +237,6 @@ async def test_fired_notify_carries_goal_flag(tmp_path):
 
     assert len(fired) == 1
     assert fired[0]["goal"] is True
-
-
-@pytest.mark.asyncio
-async def test_periodic_once_expires_and_polls_disclosure(tmp_path):
-    store = RoutineStore(tmp_path / "r.json")
-    spec = validate_draft(
-        {
-            "symbol": "207940",
-            "condition": {
-                "source": "disclosure.title_keyword",
-                "op": "contains",
-                "value": "유상증자",
-            },
-            "cooldown_s": 60,
-            "expires_days": 7,
-        }
-    )
-    store.upsert(spec)
-    store.transition(spec.id, "active")
-    engine = TriggerEngine(ledger=RoutineLedger(tmp_path / "l.jsonl"))
-    events: list[dict] = []
-
-    async def notify(ev):
-        events.append(ev)
-
-    class FakeDisclosure:
-        async def fetch_new_titles(self, symbol, *, bgn_de, end_de):
-            assert symbol == "207940"
-            return ["주요사항보고서(유상증자결정)", "반기보고서"]
-
-    sched = RoutineScheduler(
-        store=store,
-        engine=engine,
-        notify=notify,
-        disclosure=FakeDisclosure(),
-        poll_interval_s=9999,
-    )
-    await sched.run_periodic_once()
-    assert [e["type"] for e in events] == ["routine-fired"]
-    assert events[0]["mode"] == "periodic"
-
-
-@pytest.mark.asyncio
-async def test_run_periodic_once_measures_disclosure_fetch_duration(tmp_path):
-    """F2 — 공시 폴링의 fetch_new_titles 소요시간이 duration_ms로 ledger에 남는다."""
-    store = RoutineStore(tmp_path / "r.json")
-    spec = validate_draft(
-        {
-            "symbol": "207940",
-            "condition": {
-                "source": "disclosure.title_keyword",
-                "op": "contains",
-                "value": "유상증자",
-            },
-            "cooldown_s": 60,
-            "expires_days": 7,
-        }
-    )
-    store.upsert(spec)
-    store.transition(spec.id, "active")
-    engine = TriggerEngine(ledger=RoutineLedger(tmp_path / "l.jsonl"))
-
-    async def notify(ev):
-        pass
-
-    class SlowDisclosure:
-        async def fetch_new_titles(self, symbol, *, bgn_de, end_de):
-            await asyncio.sleep(0.02)
-            return ["주요사항보고서(유상증자결정)"]
-
-    sched = RoutineScheduler(
-        store=store,
-        engine=engine,
-        notify=notify,
-        disclosure=SlowDisclosure(),
-        poll_interval_s=9999,
-    )
-    await sched.run_periodic_once()
-
-    rows = engine.ledger.read_all()
-    assert len(rows) == 1
-    assert rows[0]["duration_ms"] is not None
-    assert rows[0]["duration_ms"] >= 15  # 20ms 슬립보다 관대한 하한(타이밍 노이즈)
-
-
-@pytest.mark.asyncio
-async def test_periodic_once_skipped_when_headroom_low(tmp_path):
-    """양보 판정은 루프에서 일어난다 — should_yield는 US-005에서 검증됐고,
-    여기서는 낮은 headroom 주입 시 run_periodic_once가 호출되지 않음을 본다."""
-    store = RoutineStore(tmp_path / "r.json")
-    engine = TriggerEngine(ledger=RoutineLedger(tmp_path / "l.jsonl"))
-    calls: list[str] = []
-
-    async def notify(ev):
-        calls.append(ev["type"])
-
-    sched = RoutineScheduler(
-        store=store,
-        engine=engine,
-        notify=notify,
-        poll_interval_s=0.01,
-        headroom=lambda: 0,  # 대화 burst 상황
-    )
-    ran = {"count": 0}
-    orig = sched.run_periodic_once
-
-    async def counting():
-        ran["count"] += 1
-        await orig()
-
-    sched.run_periodic_once = counting  # type: ignore[method-assign]
-    await sched.start()
-    await asyncio.sleep(0.06)
-    await sched.stop()
-    assert ran["count"] == 0  # 전 주기 양보
 
 
 # ---------- 참조카운트 기반 REAL 구독 해제(F5) ----------
@@ -441,12 +317,7 @@ async def test_pause_resume_round_trip_resubscribes(tmp_path):
 
 @pytest.mark.asyncio
 async def test_expire_releases_subscription_via_scheduler_on_expire(tmp_path):
-    """expire 경로도 refcount 감소·release 호출이 동일하게 걸린다.
-
-    같은 심볼을 쓰는 periodic 스펙이 같이 만료돼도 realtime-ws 몫의
-    구독을 잘못 건드리지 않아야 한다(모드 무관 무조건 해제는 다른
-    라우틴이 쥔 참조를 잘못 반납시키는 결함이라 게이트가 필요하다).
-    """
+    """expire 경로도 realtime refcount 감소·release 호출이 동일하게 걸린다."""
     ws = FakeWs()
 
     async def on_expire(spec):
@@ -460,33 +331,16 @@ async def test_expire_releases_subscription_via_scheduler_on_expire(tmp_path):
     store.upsert(realtime_spec)
     store.transition(realtime_spec.id, "active")
 
-    periodic_spec = validate_draft(
-        {
-            "symbol": "005930",
-            "condition": {
-                "source": "disclosure.title_keyword",
-                "op": "contains",
-                "value": "유상증자",
-            },
-            "cooldown_s": 60,
-            "expires_days": 7,
-        }
-    )
-    store.upsert(periodic_spec)
-    store.transition(periodic_spec.id, "active")
-
     await runtime.ensure_realtime_subscription("005930")
     assert ws.registered.count(("0B", ("005930",))) == 1
 
     # 만료를 강제 — 저장된 객체 참조를 그대로 갖고 있으므로 재조회 없이 반영된다.
     expired = datetime.now(UTC) - timedelta(seconds=1)
     realtime_spec.expires_at = expired
-    periodic_spec.expires_at = expired
 
-    await runtime.scheduler._expire_pass()
+    await runtime.scheduler.run_schedule_once()
 
     assert store.get(realtime_spec.id).status == "expired"
-    assert store.get(periodic_spec.id).status == "expired"
     assert ws.removed.count(("0B", ("005930",))) == 1  # 딱 1회 — 이중 해제 없음
     assert ws.removed.count(("1h", ("005930",))) == 1
 
@@ -510,8 +364,7 @@ def _schedule_spec(value="ALL@07:30", symbol="005930", store=None):
 
 
 def test_derive_mode_full_regression_after_scheduled_mode_added():
-    """BLOCKER 회귀 방지(사실10) — schedule.daily 도입이 기존 6종 소스 라우팅을
-    안 건드리고, schedule.daily 자신은 정확히 scheduled로 라우팅됨을 전수 확인."""
+    """활성 source와 읽기 전용 레거시 source의 mode 유도를 고정한다."""
     realtime_cases = [
         ("price.current", "<", 200000),
         ("price.change_rate", ">=", 5.0),
@@ -523,71 +376,13 @@ def test_derive_mode_full_regression_after_scheduled_mode_added():
         cond = _spec(source=source, op=op, value=value).condition
         assert derive_mode(cond) == "realtime-ws", source
 
-    disclosure = validate_draft(
-        {
-            "symbol": "207940",
-            "condition": {
-                "source": "disclosure.title_keyword",
-                "op": "contains",
-                "value": "유상증자",
-            },
-            "cooldown_s": 60,
-            "expires_days": 7,
-        }
-    ).condition
-    assert derive_mode(disclosure) == "periodic"
+    legacy = Condition(
+        source="disclosure.title_keyword", op="contains", value="유상증자"
+    )
+    assert derive_mode(legacy) == "periodic"
 
     scheduled = _schedule_spec().condition
     assert derive_mode(scheduled) == "scheduled"
-
-
-@pytest.mark.asyncio
-async def test_run_periodic_once_skips_schedule_daily(tmp_path):
-    """BLOCKER 회귀 방지 — schedule.daily가 periodic 폴링(fetch_new_titles·
-    evaluate)에 전혀 걸리지 않고, disclosure 스펙만 정상 평가됨을 명시 단언."""
-    store = RoutineStore(tmp_path / "r.json")
-    _schedule_spec(store=store)
-
-    disclosure_spec = validate_draft(
-        {
-            "symbol": "207940",
-            "condition": {
-                "source": "disclosure.title_keyword",
-                "op": "contains",
-                "value": "유상증자",
-            },
-            "cooldown_s": 60,
-            "expires_days": 7,
-        }
-    )
-    store.upsert(disclosure_spec)
-    store.transition(disclosure_spec.id, "active")
-
-    engine = TriggerEngine(ledger=RoutineLedger(tmp_path / "l.jsonl"))
-    events: list[dict] = []
-
-    async def notify(ev):
-        events.append(ev)
-
-    fetched: list[str] = []
-
-    class FakeDisclosure:
-        async def fetch_new_titles(self, symbol, *, bgn_de, end_de):
-            fetched.append(symbol)
-            return ["주요사항보고서(유상증자결정)"]
-
-    sched = RoutineScheduler(
-        store=store,
-        engine=engine,
-        notify=notify,
-        disclosure=FakeDisclosure(),
-        poll_interval_s=9999,
-    )
-    await sched.run_periodic_once()
-
-    assert fetched == ["207940"]  # schedule.daily(005930)은 조회 자체가 없었다
-    assert [e["type"] for e in events] == ["routine-fired"]
-    assert events[0]["mode"] == "periodic"
 
 
 @pytest.mark.asyncio
@@ -710,41 +505,6 @@ async def test_schedule_loop_records_last_error_on_corrupt_stored_value(tmp_path
     assert spec.id in sched.last_error
 
 
-# ---------- 공시 소스·corp 카탈로그 파싱 (픽스처 — 실호출 없음) ----------
-
-
-def test_parse_list_payload_states():
-    ok = {
-        "status": "000",
-        "list": [
-            {"rcept_no": "1", "report_nm": "유상증자결정", "rcept_dt": "20260819"},
-            {"rcept_no": "", "report_nm": "무시"},
-        ],
-    }
-    assert parse_list_payload(ok) == [
-        {"rcept_no": "1", "title": "유상증자결정", "date": "20260819"}
-    ]
-    assert parse_list_payload({"status": "013"}) == []
-    with pytest.raises(DisclosureSourceError):
-        parse_list_payload({"status": "020"})
-
-
-def test_corp_catalog_parse_and_zip_extract():
-    xml = (
-        b"<result>"
-        b"<list><corp_code>126380</corp_code><stock_code>005930</stock_code></list>"
-        b"<list><corp_code>99999999</corp_code><stock_code></stock_code></list>"
-        b"</result>"
-    )
-    mapping = parse_corp_xml(xml)
-    assert mapping == {"005930": "00126380"}  # zfill(8) 함정 고정
-
-    buf = io.BytesIO()
-    with zipfile.ZipFile(buf, "w") as zf:
-        zf.writestr("CORPCODE.xml", xml)
-    assert parse_corp_xml(extract_corp_xml(buf.getvalue())) == {"005930": "00126380"}
-
-
 # ---------- routine-near 에지 이벤트 (CP3) ----------
 
 
@@ -752,7 +512,7 @@ def _near_scheduler(store, engine, events):
     async def notify(ev):
         events.append(ev)
 
-    return RoutineScheduler(store=store, engine=engine, notify=notify, poll_interval_s=9999)
+    return RoutineScheduler(store=store, engine=engine, notify=notify)
 
 
 @pytest.mark.asyncio
@@ -944,7 +704,6 @@ async def test_realtime_loop_deadband_suppresses_repeated_near_toggle(tmp_path):
         engine=engine,
         notify=notify,
         subscribe_ticks=lambda: queue,
-        poll_interval_s=9999,
     )
     await sched.start()
     for rate in ("+4.60", "+4.35", "+4.60", "+4.35"):  # 진입경계(0.10) 안팎 교대

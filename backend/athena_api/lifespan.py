@@ -420,11 +420,6 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
                 routines = await open_routines(
                     runtime_settings,
                     ws_client=default_rt.ws_client if default_rt is not None else None,
-                    headroom=(
-                        default_rt.rate_limiter.headroom
-                        if default_rt is not None
-                        else None
-                    ),
                 )
                 _publish_routines(app, routines)
         except BaseException:

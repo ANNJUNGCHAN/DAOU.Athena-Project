@@ -21,6 +21,9 @@ def test_tool_schema_only_allows_draft_and_list():
     # 설명이 정직성 계약을 담는다 — 승인 전 미등록·자동 집행 없음.
     assert "등록이 아니다" in tool.description
     assert "자동 집행되지 않는다" in tool.description
+    schema_text = json.dumps(tool.inputSchema, ensure_ascii=False)
+    assert "disclosure.title_keyword" not in schema_text
+    assert "앱 플러그인" in schema_text
 
 
 def test_tool_schema_goal_field_is_conservative():
@@ -50,7 +53,7 @@ async def test_list_proxies_get(mock_http_client):
     async def handler(request):
         assert request.method == "GET"
         assert request.url.path == "/api/v1/routines"
-        return httpx.Response(200, json={"routines": [], "disclosure_ready": False})
+        return httpx.Response(200, json={"routines": []})
 
     async with mock_http_client(handler, base_url="http://127.0.0.1:8010") as client:
         result = await routine_tools.dispatch({"action": "list"}, client)

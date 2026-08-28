@@ -8,7 +8,9 @@ from datetime import UTC, datetime, timedelta
 import pytest
 
 from athena_api.config import Settings
+from athena_api.routines.models import Condition, RoutineSpec
 from athena_api.routines.runtime import open_routines, teardown_routines
+from athena_api.routines.store import RoutineStore
 
 
 def _settings(tmp_path, **over):
@@ -19,6 +21,7 @@ def _settings(tmp_path, **over):
         routines_ledger_path=tmp_path / "ledger.jsonl",
         routines_read_marks_path=tmp_path / "read_marks.json",
         routines_engagement_path=tmp_path / "engagement.jsonl",
+        routines_briefings_path=tmp_path / "briefings.jsonl",
         routines_ledger_archive_dir=tmp_path / "archive",
         **over,
     )
@@ -29,13 +32,11 @@ def test_routines_disabled_by_default():
 
 
 @pytest.mark.asyncio
-async def test_open_without_key_degrades_but_ready(tmp_path):
+async def test_open_without_external_provider_configuration_is_ready(tmp_path):
     runtime = await open_routines(_settings(tmp_path), ws_client=None)
     try:
         assert runtime.ready is True
-        assert runtime.disclosure_ready is False
-        assert "DART" in (runtime.last_error or "")
-        # 정직 게이트 — 평가 경로가 없는 활성화는 사유와 함께 거부된다.
+        assert runtime.last_error is None
         from athena_api.routines.rules import validate_draft
 
         rt = validate_draft(
@@ -47,21 +48,93 @@ async def test_open_without_key_degrades_but_ready(tmp_path):
             }
         )
         assert runtime.can_activate(rt) is not None  # WS 미가용
-        periodic = validate_draft(
-            {
-                "symbol": "207940",
-                "condition": {
-                    "source": "disclosure.title_keyword",
-                    "op": "contains",
-                    "value": "유상증자",
-                },
-                "cooldown_s": 60,
-                "expires_days": 1,
-            }
-        )
-        assert "공시 폴러" in (runtime.can_activate(periodic) or "")
     finally:
         await teardown_routines(runtime)
+
+
+@pytest.mark.asyncio
+async def test_open_migrates_all_nonterminal_legacy_external_sources_once(tmp_path):
+    settings = _settings(tmp_path)
+    original_statuses = ("draft", "active", "paused", "cancelled", "expired", "failed")
+    legacy_specs = [
+        RoutineSpec(
+            condition=Condition(
+                source="disclosure.title_keyword", op="contains", value="유상증자"
+            ),
+            symbol="207940",
+            cooldown_s=3600,
+            expires_at=datetime.now(UTC) + timedelta(days=7),
+            note=f"저장된 레거시 루틴({status})",
+            status=status,
+            approved_at=(datetime.now(UTC) if status != "draft" else None),
+        )
+        for status in original_statuses
+    ]
+    settings.routines_store_path.write_text(
+        json.dumps(
+            {"routines": [spec.to_dict() for spec in legacy_specs]},
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+
+    runtime = await open_routines(settings, ws_client=None)
+    try:
+        statuses = {
+            spec.id: runtime.store.get(spec.id).status for spec in legacy_specs
+        }
+        assert [statuses[spec.id] for spec in legacy_specs] == [
+            "failed",
+            "failed",
+            "failed",
+            "cancelled",
+            "expired",
+            "failed",
+        ]
+        for spec in legacy_specs:
+            restored = runtime.store.get(spec.id)
+            assert restored is not None
+            assert restored.mode == "periodic"
+            assert "앱 플러그인 전용" in restored.human_summary()
+            assert "앱 플러그인 전용" in (runtime.can_activate(restored) or "")
+
+        events = [runtime.events.get_nowait() for _ in range(3)]
+        assert [event["type"] for event in events] == [
+            "routine-source-disabled",
+            "routine-source-disabled",
+            "routine-source-disabled",
+        ]
+        assert [event["routine_id"] for event in events] == [
+            spec.id for spec in legacy_specs[:3]
+        ]
+        assert all(
+            event["note"]
+            == (
+                "외부 사업자 데이터 source의 백엔드 실행 경로가 제거되어 "
+                "이 루틴을 failed로 전환했다."
+            )
+            for event in events
+        )
+        assert all(
+            word not in event["note"]
+            for event in events
+            for word in ("시작", "감시", "중지")
+        )
+        assert runtime.events.empty()
+    finally:
+        await teardown_routines(runtime)
+
+    reloaded = RoutineStore(settings.routines_store_path)
+    report = reloaded.load()
+    assert report.restored == len(legacy_specs)
+    assert [reloaded.get(spec.id).status for spec in legacy_specs] == [
+        "failed",
+        "failed",
+        "failed",
+        "cancelled",
+        "expired",
+        "failed",
+    ]
 
 
 @pytest.mark.asyncio

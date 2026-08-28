@@ -1,29 +1,23 @@
-"""루틴 스케줄러 — 두 트랙(§8), 하나의 판정 파이프라인.
+"""루틴 스케줄러 — 실시간·예약 두 트랙, 하나의 판정 파이프라인.
 
 - realtime 루프: 키움 WS REAL 팬아웃 큐를 구독해 틱 즉시 평가 (수신은 예산 0).
-- periodic 루프: 주기 타이머 — 공유 리미터 headroom이 임계 미만이면 이번
-  주기를 양보한다(대화가 항상 우선). 놓친 주기는 1회만 캐치업한다(§12).
+- schedule 루프: 벽시계 예약을 평가하고 전체 활성 루틴의 만료도 정리한다.
 발화는 notify 콜백(asyncio 큐 → WS 라우트)으로 나간다. LLM 0.
 """
 
 from __future__ import annotations
 
 import asyncio
-import time
 from collections.abc import Awaitable, Callable
 from contextlib import suppress
 from dataclasses import dataclass, field
 from datetime import UTC, date, datetime, timedelta, timezone
 from typing import Any
 
-from athena_api.routines.disclosure_source import (
-    DartDisclosureSource,
-    DisclosureSourceError,
-)
 from athena_api.routines.ledger import RoutineLedger
 from athena_api.routines.models import RoutineSpec, parse_schedule_value
 from athena_api.routines.store import RoutineStore
-from athena_api.routines.triggers import TriggerEngine, should_yield_to_conversation
+from athena_api.routines.triggers import TriggerEngine
 
 _KST = timezone(timedelta(hours=9))
 
@@ -108,14 +102,9 @@ class RoutineScheduler:
     store: RoutineStore
     engine: TriggerEngine
     notify: NotifyFn
-    poll_interval_s: float = 300.0
-    headroom: Callable[[], int] = lambda: 5
-    min_headroom: int = 3
-    disclosure: DartDisclosureSource | None = None
     subscribe_ticks: Callable[[], asyncio.Queue[dict[str, Any]]] | None = None
     unsubscribe_ticks: Callable[[asyncio.Queue[dict[str, Any]]], None] | None = None
     on_expire: Callable[[RoutineSpec], Awaitable[None]] | None = None
-    clock: Callable[[], float] = time.monotonic
     schedule_poll_interval_s: float = 20.0
     now_kst: Callable[[], datetime] = lambda: datetime.now(_KST)
     # 90일 아카이브 롤오버(R3) — 일일 주기, 기존 3루프와 동형 패턴.
@@ -135,7 +124,6 @@ class RoutineScheduler:
 
     async def start(self) -> None:
         self._stopping = False
-        self._tasks.append(asyncio.create_task(self._periodic_loop()))
         self._tasks.append(asyncio.create_task(self._schedule_loop()))
         if self.run_archive_once is not None:
             self._tasks.append(asyncio.create_task(self._archive_loop()))
@@ -288,45 +276,6 @@ class RoutineScheduler:
             if self.unsubscribe_ticks is not None:
                 self.unsubscribe_ticks(queue)
 
-    # ---------- periodic ----------
-
-    async def _periodic_loop(self) -> None:
-        last_run = self.clock()
-        while not self._stopping:
-            await asyncio.sleep(self.poll_interval_s)
-            now = self.clock()
-            missed = int((now - last_run) / self.poll_interval_s)
-            last_run = now  # 놓친 주기는 1회만 캐치업 — 몰아 실행하지 않는다(§12)
-            if missed > 1:
-                self.last_error = f"{missed - 1}개 주기 건너뜀(캐치업 1회)"
-            if should_yield_to_conversation(
-                self.headroom(), min_headroom=self.min_headroom
-            ):
-                continue  # 대화가 우선 — 이번 주기 양보
-            await self.run_periodic_once()
-
-    async def run_periodic_once(self) -> None:
-        """한 주기 실행 — 테스트와 캐치업이 직접 부른다."""
-        await self._expire_pass()
-        if self.disclosure is None:
-            return
-        today = datetime.now(UTC).strftime("%Y%m%d")
-        for spec in self.store.list_active():
-            if spec.mode != "periodic":
-                continue
-            started = time.monotonic()
-            try:
-                titles = await self.disclosure.fetch_new_titles(
-                    spec.symbol, bgn_de=today, end_de=today
-                )
-            except DisclosureSourceError as exc:
-                self.last_error = str(exc)
-                continue
-            duration_ms = (time.monotonic() - started) * 1000
-            for title in titles:
-                verdict = self.engine.evaluate(spec, title, duration_ms=duration_ms)
-                await self._handle_verdict(spec, verdict, title)
-
     # ---------- schedule (벽시계 예약) ----------
 
     # 경계(AC1) — 이 트랙이 하는 일은 여기까지다: 벽시계 매치 시 발화
@@ -346,6 +295,7 @@ class RoutineScheduler:
         벽시계 트리거엔 near/suppressed 개념이 없다, 하루 1회는
         `_last_fired_date`(프로세스 로컬, `TriggerState`와 동일한 트레이드오프)로
         보장한다."""
+        await self._expire_pass()
         now = self.now_kst()
         today = now.date()
         hhmm = now.strftime("%H:%M")

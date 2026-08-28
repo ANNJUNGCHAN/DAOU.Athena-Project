@@ -106,7 +106,6 @@ class Settings(BaseSettings):
     # 확장자도 바로잡았다: `.lbug`는 LadybugDB 시절 이름인데 내용은 이미 SQLite였다.
     brain_db_path: Path = Field(default_factory=lambda: Path.home() / ".athena" / "brain.sqlite3")
     routines_enabled: bool = False
-    routines_poll_interval_seconds: float = 300.0
     routines_schedule_poll_interval_seconds: float = 20.0
     routines_store_path: Path = Field(
         default_factory=lambda: Path.home() / ".athena" / "routines" / "routines.json"
@@ -135,8 +134,6 @@ class Settings(BaseSettings):
     nudge_guard_path: Path = Field(
         default_factory=lambda: Path.home() / ".athena" / "routines" / "nudge_guard.json"
     )
-    # DART 공시 폴러 키 — 없으면 periodic 공시 루틴만 강등(realtime은 무관).
-    dart_api_key: SecretStr | None = None
     # Explicit argv for the local structured-extraction command (e.g. a local claude CLI
     # invocation). Empty means extraction is disabled -- IngestionCoordinator still
     # projects raw SourceRecords, it just never derives Entity/Claim/Relation from them.

@@ -6,7 +6,7 @@ from typing import Any
 
 from fastapi import APIRouter, HTTPException, Request
 
-from athena_api.routines.models import SOURCES, parse_schedule_value
+from athena_api.routines.models import parse_schedule_value, source_spec
 from athena_api.routines.rules import validate_draft
 from athena_api.routines.runtime import RoutinesRuntime
 from athena_api.routines.scheduler import record_scheduled_fire
@@ -113,7 +113,7 @@ def _view(
     latest_fired는 list_routines()가 ledger를 1회 스캔해 만든 routine_id→
     최신 fired 행 맵에서 이 spec 몫만 주입한 것이다 — 이 함수 자신은
     ledger를 읽지 않는다(N+1 스캔 방지, MAJOR)."""
-    source_spec = SOURCES[spec.condition.source]
+    source = source_spec(spec.condition.source)
     last_fired_at = latest_fired["ts"] if latest_fired else None
     last_read_at = runtime.read_marks.last_read_fired_at(spec.id)
     return {
@@ -121,7 +121,7 @@ def _view(
         "symbol": spec.symbol,
         "note": spec.note,
         "goal": spec.goal,
-        "source_label": source_spec.label,
+        "source_label": source.label,
         "mode": spec.mode,
         "status": spec.status,
         "cooldown_s": spec.cooldown_s,
@@ -129,7 +129,7 @@ def _view(
         "created_at": spec.created_at.isoformat(),
         "approved_at": spec.approved_at.isoformat() if spec.approved_at else None,
         "activation_blocker": runtime.can_activate(spec),
-        "experimental_source": source_spec.experimental,
+        "experimental_source": source.experimental,
         "next_fire_at": _next_fire_at(spec),
         "last_fired_at": last_fired_at,
         "unread": _is_unread(last_fired_at, last_read_at),
@@ -178,7 +178,6 @@ async def list_routines(request: Request) -> dict[str, Any]:
             _view(s, runtime, latest_fired=latest_fired.get(s.id))
             for s in runtime.store.list_all()
         ],
-        "disclosure_ready": runtime.disclosure_ready,
         "last_error": runtime.last_error,
         "fired_today": fired_today,
     }
@@ -248,6 +247,9 @@ async def resume_routine(request: Request, routine_id: str) -> dict[str, Any]:
     spec = runtime.store.get(routine_id)
     if spec is None:
         raise HTTPException(status_code=404, detail="루틴이 존재하지 않는다")
+    blocker = runtime.can_activate(spec)
+    if blocker is not None:
+        raise HTTPException(status_code=409, detail=blocker)
     if spec.mode == "realtime-ws":
         try:
             await runtime.ensure_realtime_subscription(spec.symbol)
