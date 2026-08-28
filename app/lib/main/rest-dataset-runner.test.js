@@ -728,6 +728,8 @@ test('chart binder uses a closed standalone grammar and rejects every residual s
     '삼성전자 일봉',
     '삼성전자 일봉 차트',
     '삼성전자 일봉차트 보여줘',
+    '삼성전자 주가 차트 보여줘',
+    '삼성전자 주식 차트 확인해줘',
     '005930 차트 그려줘',
     '005930 일봉 차트 띄워줘',
   ]) {
@@ -1131,6 +1133,36 @@ test('stock-master fetch or response validation failure preserves the prior snap
   }), /stock-master/i);
   assert.equal(index.resolveQuery('삼성전자 현재가')?.code, '005930');
   assert.equal(buildQuoteDataset('삼성전자 현재가', index)?.items[0].args.stk_cd, '005930');
+});
+
+test('stock-master refresh forwards cancellation to fetch and aborts an inter-market wait', async () => {
+  const index = new StockEntityIndex();
+  index.replace([{ code: '005930', name: '삼성전자', market: '0' }]);
+  const controller = new AbortController();
+  let fetchCalls = 0;
+  let releaseWait;
+  const waitStarted = new Promise((resolve) => { releaseWait = resolve; });
+
+  const refresh = refreshStockEntityIndex(index, {
+    backendBase: 'http://backend',
+    signal: controller.signal,
+    wait: async () => {
+      releaseWait();
+      await new Promise(() => {});
+    },
+    fetchImpl: async (_url, options) => {
+      fetchCalls += 1;
+      assert.equal(options.signal, controller.signal);
+      return response({ list: [{ code: '222222', name: '미게시종목', marketCode: '0' }] });
+    },
+  });
+
+  await waitStarted;
+  controller.abort(new Error('앱 종료'));
+  await assert.rejects(refresh, /앱 종료/);
+  assert.equal(fetchCalls, 1);
+  assert.equal(index.resolveQuery('삼성전자 현재가')?.code, '005930');
+  assert.equal(index.resolveQuery('미게시종목 현재가'), null);
 });
 
 test('recommendations accept only predeclared safe query actions, dedupe, and cap at three', () => {

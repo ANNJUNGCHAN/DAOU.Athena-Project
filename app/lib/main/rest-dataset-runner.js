@@ -24,7 +24,7 @@ const ENGLISH_QUOTE_CORE = '(?:current\\s+(?:stock\\s+)?price|stock\\s+price\\s+
 // 일봉 차트만 대상이다(base:ka10081) — "주봉/시세/호가"는 다른 TR·다른 렌더러라
 // 닫힌 문법에 안 넣는다(팀 지침의 "불확실하면 미매치"). 영어 문법도 뺐다 —
 // "chart"는 조직도 등과 겹쳐 한국어보다 오탐 위험이 크다.
-const KOREAN_CHART_CORE = '(?:일봉\\s*차트|차트|일봉)';
+const KOREAN_CHART_CORE = '(?:(?:주가|주식)\\s*)?(?:일봉\\s*차트|차트|일봉)';
 const KOREAN_CHART_COURTESY = '(?:\\s*(?:를|은|는))?(?:\\s*(?:좀|한번))?(?:\\s*(?:(?:보여|그려|띄워)\\s*(?:줘|주세요|줄래)?|(?:조회|확인)\\s*(?:해)?\\s*(?:줘|주세요)|해\\s*(?:줘|주세요)))?';
 
 // 카드 v3 정형 질의 5종(2026-08-26, 속도 레버) — QUOTE_COURTESY를 그대로
@@ -406,6 +406,21 @@ function abortError(signal) {
   return signal && signal.reason instanceof Error
     ? signal.reason
     : new RestDatasetError('aborted', 'REST 데이터셋 실행이 중단됐다');
+}
+
+async function waitWithAbort(wait, ms, signal) {
+  if (!signal) return wait(ms);
+  if (signal.aborted) throw abortError(signal);
+  let onAbort;
+  const aborted = new Promise((resolve, reject) => {
+    onAbort = () => reject(abortError(signal));
+    signal.addEventListener('abort', onAbort, { once: true });
+  });
+  try {
+    return await Promise.race([Promise.resolve().then(() => wait(ms)), aborted]);
+  } finally {
+    signal.removeEventListener('abort', onAbort);
+  }
 }
 
 async function runPool(items, limit, worker) {
@@ -833,6 +848,7 @@ async function refreshStockEntityIndex(index, {
   fetchImpl = globalThis.fetch,
   markets = ['0', '10', '8'],
   wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
+  signal,
 }) {
   const reviewedMarkets = markets
     .map(String)
@@ -842,17 +858,20 @@ async function refreshStockEntityIndex(index, {
   }
   const marketRecords = {};
   for (let marketIndex = 0; marketIndex < reviewedMarkets.length; marketIndex += 1) {
+    if (signal && signal.aborted) throw abortError(signal);
     const market = reviewedMarkets[marketIndex];
     const response = await fetchImpl(`${backendBase}/api/v1/tr/stockinfo/ka10099`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ mrkt_tp: market }),
+      signal,
     });
     const body = await readJson(response, 'stock-master');
     marketRecords[market] = extractStockMasterRecords(body);
     // 같은 API ID는 초당 1회 제한이다. 대기 중에도 기존 snapshot을 유지한다.
-    if (marketIndex < reviewedMarkets.length - 1) await wait(1050);
+    if (marketIndex < reviewedMarkets.length - 1) await waitWithAbort(wait, 1050, signal);
   }
+  if (signal && signal.aborted) throw abortError(signal);
   const records = buildStockMasterRefreshRecords(marketRecords);
   // 모든 fetch/검증/충돌 제거가 성공한 뒤 단 한 번 게시한다.
   return index.replace(records);

@@ -23,6 +23,9 @@ const streamJsonParser = require('./lib/main/stream-json-parser');
 const { ensureMcpConfig } = require('./lib/main/mcp-config');
 const { buildLivePrompt } = require('./lib/main/live-prompt');
 const restDatasetRunner = require('./lib/main/rest-dataset-runner');
+const { createStockEntityIndexReadiness } = require('./lib/main/stock-entity-index-readiness');
+const { createChartFollowupTracker } = require('./lib/main/chart-followup');
+const simpleChartFastPath = require('./lib/main/simple-chart-fast-path');
 const selectorFastPath = require('./lib/main/selector-fast-path');
 const selectorColdHedge = require('./lib/main/selector-cold-hedge');
 const { createClaudeSelectorWorkerPool } = require('./lib/main/claude-selector-worker-pool');
@@ -99,6 +102,7 @@ app.on('before-quit', () => {
   isQuitting = true;
   stopOrbCursorPoll(); // 인터벌 누수 금지 — 창이 죽기 전에 정리한다
   chartReloadAuthority.clear();
+  stockEntityIndexReadiness.stop();
   // 앱이 트레이로 숨겨진 동안에도 selector worker는 유지한다. before-quit은
   // 실제 앱 종료에서만 오므로 여기서만 stdin과 프로세스 트리를 닫는다.
   selectorClaudePool.stop(new Error('Athena 앱 종료'));
@@ -1555,13 +1559,6 @@ function sendLiveTextDelta(text) {
   if (orbWin && !orbWin.isDestroyed()) orbWin.webContents.send('athena:live-text-delta', { text });
 }
 
-// 추론 조각 — 미리보기 전용이다(chat.js/orb.js가 답변 첫 조각이나 턴 종료에서 지운다).
-// 여기서도 이력에 저장하지 않는다 — historySink는 finalResult.result만 다룬다.
-function sendLiveThinkingDelta(text) {
-  if (shellWin && !shellWin.isDestroyed()) shellWin.webContents.send('athena:live-thinking-delta', { text });
-  if (orbWin && !orbWin.isDestroyed()) orbWin.webContents.send('athena:live-thinking-delta', { text });
-}
-
 // 툴 호출 진행 단계(2026-08-26 board-33) — StreamJsonSession이 이미 넘겨주는
 // 원시 이벤트(assistant의 tool_use 블록 시작 / user의 tool_result 블록 종료)에서
 // 뽑는다. 새 파서 채널을 만들지 않는다 — runLiveQuery의 onEvent 콜백 하나가
@@ -1765,6 +1762,25 @@ const { QueryCache, ReplayTurnCapture } = require('./lib/main/query-cache');
 const fastPath = require('./lib/main/fast-path');
 const liveQueryCache = new QueryCache();
 const stockEntityIndex = new restDatasetRunner.StockEntityIndex();
+let lastStockIndexErrorLogAt = 0;
+const stockEntityIndexReadiness = createStockEntityIndexReadiness({
+  index: stockEntityIndex,
+  refresh: async (index, { signal }) => {
+    const count = await restDatasetRunner.refreshStockEntityIndex(index, {
+      backendBase: BACKEND_HTTP_BASE,
+      signal,
+    });
+    mdlog(`Kiwoom 종목명 인덱스 갱신 — 종목 ${count}개`);
+    return count;
+  },
+  onError: (error) => {
+    const now = Date.now();
+    if (now - lastStockIndexErrorLogAt < 30_000) return;
+    lastStockIndexErrorLogAt = now;
+    mdlog(`Kiwoom 종목명 인덱스 갱신 보류(재시도 예정): ${String((error && error.message) || error)}`);
+  },
+});
+const chartFollowupTracker = createChartFollowupTracker();
 const DIRECT_FEEDBACK_WATCHDOG_MS = 2200;
 
 async function runDirectRestDataset(dataset, expand = true, overrides = {}) {
@@ -1830,6 +1846,7 @@ async function runDirectRestDataset(dataset, expand = true, overrides = {}) {
   } else if (watchdogOutcome && watchdogOutcome.error && !result.feedbackOk) {
     result.feedbackError = String((watchdogOutcome.error && watchdogOutcome.error.message) || watchdogOutcome.error);
   }
+  chartFollowupTracker.observe(result, dataset);
   if (!overrides.skipHistory && dataset && dataset.question) {
     historySink.saveChatMessage(
       { conversationId: historyConversationId(), text: dataset.question, role: 'user' },
@@ -1931,11 +1948,64 @@ async function runLiveQuery(query, expand, origin = 'shell') {
 // origin — 'shell'(기본, 커맨드바) | 'orb'(오브 대화 모드). onCanvasResult가
 // 오브 기원 엔벌로프만 orbWin에도 추가 relay하는 데 쓴다(board-33③④ 선행).
 async function runLiveQueryInner(query, expand, origin) {
+  const queryStartedAt = performance.now();
   // Selector 단일 dispatch도 새 질의가 선점한다. fetch 구현이 abort를 늦게
   // 관찰하더라도 run identity를 함께 검사해 이전 카드/주문 초안은 표시하지 않는다.
   if (activeSelectorFastRun) {
     activeSelectorFastRun.abort(new Error('새 질의가 이전 Selector fast path를 대체했다'));
     activeSelectorFastRun = null;
+  }
+  const chartFollowup = chartFollowupTracker.answer(query);
+  if (chartFollowup) {
+    historySink.saveChatMessage(
+      { conversationId: historyConversationId(), text: query, role: 'user' },
+      { onSaveFailed: emitHistorySaveFailed, mdlog },
+    );
+    touchConversationEntry(query);
+    historySink.saveChatMessage(
+      { conversationId: historyConversationId(), text: chartFollowup.answerText, role: 'assistant' },
+      { onSaveFailed: emitHistorySaveFailed, mdlog },
+    );
+    mdlog(`최근 차트 후속 질문 로컬 응답 — ${chartFollowup.direction} (모델/HTTP 무호출)`);
+    return {
+      ok: true,
+      source: 'chart-followup',
+      error: null,
+      answerText: chartFollowup.answerText,
+      canvasTypes: [],
+      modelCalls: 0,
+      durationMs: Math.max(0, performance.now() - queryStartedAt),
+    };
+  }
+  chartFollowupTracker.invalidateForQuery(query);
+
+  const simpleChartRoute = await simpleChartFastPath.runSimpleChartFastPath({
+    query,
+    index: stockEntityIndex,
+    ensureReady: (timeoutMs) => stockEntityIndexReadiness.ensureReady(timeoutMs),
+    buildDataset: (question, index) => restDatasetRunner.buildChartDataset(question, index, {
+      idFactory: () => `rest-${crypto.randomUUID()}`,
+    }),
+    runDataset: (dataset) => runDirectRestDataset(dataset, expand),
+  });
+  if (simpleChartRoute.handled) {
+    if (!simpleChartRoute.dataset) {
+      historySink.saveChatMessage(
+        { conversationId: historyConversationId(), text: query, role: 'user' },
+        { onSaveFailed: emitHistorySaveFailed, mdlog },
+      );
+      touchConversationEntry(query);
+      historySink.saveChatMessage(
+        { conversationId: historyConversationId(), text: simpleChartRoute.result.answerText, role: 'assistant' },
+        { onSaveFailed: emitHistorySaveFailed, mdlog },
+      );
+      mdlog(simpleChartRoute.result.source === 'stock-index-not-ready'
+        ? '단순 일봉 차트 대기 한도 초과 — Selector/Claude 폴백 차단'
+        : '단순 일봉 차트 종목 확인 필요 — Selector/Claude 폴백 차단');
+    } else {
+      mdlog('단순 일봉 차트 REST 직결 — Selector/Claude 무호출');
+    }
+    return simpleChartRoute.result;
   }
   // 정형 질의 모델 우회 확장(2026-08-26 속도 레버) — 순서는 의미 없다(각자
   // 닫힌 문법이라 서로 안 겹친다, rest-dataset-runner.js 테스트로 고정).
@@ -2165,7 +2235,6 @@ async function runLiveQueryInner(query, expand, origin) {
     // 성공 resolve 1건과 render 1건의 토큰이 정확히 같은 경우만 캐시한다.
     onEvent: (ev) => { replayTurnCapture.observe(ev); trackToolStep(ev); trackSubagent(ev); },
     onTextDelta: sendLiveTextDelta,
-    onThinkingDelta: sendLiveThinkingDelta,
     onCanvasResult: (r) => {
       const label = r.envelope && (r.envelope.card_title || r.envelope.caption);
       // 실시간 트리거 판정(P1, 2026-08-27) — card_title==='시세' 하나만 보던 옛
@@ -2796,6 +2865,7 @@ if (!process.env.ATHENA_NO_AUTOSTART) {
     selectorClaudePool.start();
     mdlog(`Selector Claude worker pool 선기동 — ${JSON.stringify(selectorClaudePool.snapshot())}`);
     createWindows();
+    stockEntityIndexReadiness.start();
     mcpEnv.migratePlaintextEnv().catch((err) => {
       mdlog(`부팅 시 mcp-env 마이그레이션 실패: ${String((err && err.message) || err)}`);
     });
@@ -2803,7 +2873,7 @@ if (!process.env.ATHENA_NO_AUTOSTART) {
     // 떠 있으면(사용자가 수동 기동) 손대지 않는다 — backend-launcher.js의
     // 헬스체크 우선 판정이 중복 스폰을 막는다.
     backendLauncher.ensureBackend({ mdlog })
-      .then(async () => {
+      .then(() => {
         historySink.refreshBrainReady({ mdlog });
         // 놓친 예약 확인(R1, 5단계) — 백엔드 기동 확인 후 1회. fixture(verify)는
         // 결정론 보호로 건너뛴다 — verify.js가 IPC 주입으로 카드 경로만 태운다.
@@ -2811,16 +2881,6 @@ if (!process.env.ATHENA_NO_AUTOSTART) {
           checkMissedSchedules().catch((err) => {
             mdlog(`놓친 예약 확인 실패: ${String((err && err.message) || err)}`);
           });
-        }
-        try {
-          const count = await restDatasetRunner.refreshStockEntityIndex(stockEntityIndex, {
-            backendBase: BACKEND_HTTP_BASE,
-          });
-          mdlog(`Kiwoom 종목명 인덱스 갱신 — 종목 ${count}개`);
-        } catch (err) {
-          // 인덱스가 없으면 이름과 코드 질의 모두 기존 경로로 abstain한다.
-          // snapshot에 없는 6자리 코드를 신뢰하거나 추측해 만들어내지 않는다.
-          mdlog(`Kiwoom 종목명 인덱스 갱신 보류: ${String((err && err.message) || err)}`);
         }
       })
       .catch((err) => {
