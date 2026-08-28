@@ -44,12 +44,13 @@ function classificationResult(text) {
   return { ok: true, finalResult: { result: text } };
 }
 
-test('two classifiers start in parallel; first valid wins, aborts loser, and dispatches once', async () => {
+test('two classifiers start in parallel; first valid wins without recycling the warm loser worker', async () => {
   const run = createSelectorColdHedge({ limiter: createPairLimiter(4) });
   const started = [];
   let loserAborted = false;
   let dispatches = 0;
   let releaseWinner;
+  let releaseLoser;
   const pending = run({
     question: '삼성전자 현재 거래 정보',
     preflight,
@@ -59,6 +60,7 @@ test('two classifiers start in parallel; first valid wins, aborts loser, and dis
         return new Promise((resolve) => { releaseWinner = () => resolve(classificationResult(valid())); });
       }
       return new Promise((resolve) => {
+        releaseLoser = () => resolve(classificationResult(valid('base:ka10002')));
         signal.addEventListener('abort', () => {
           loserAborted = true;
           resolve({ ok: false, aborted: true });
@@ -79,7 +81,9 @@ test('two classifiers start in parallel; first valid wins, aborts loser, and dis
   assert.equal(result.source, 'selector-cold');
   assert.equal(result.modelCalls, 2);
   assert.equal(dispatches, 1);
-  assert.equal(loserAborted, true);
+  assert.equal(loserAborted, false);
+  releaseLoser();
+  await new Promise((resolve) => setImmediate(resolve));
 });
 
 test('malformed JSON and candidate mismatch fall through without backend dispatch', async () => {
