@@ -8,6 +8,7 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Collection
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
@@ -78,6 +79,27 @@ class RoutineStore:
 
     def list_active(self) -> list[RoutineSpec]:
         return [s for s in self.list_all() if s.status == "active"]
+
+    def migrate_disabled_sources(
+        self, source_names: Collection[str]
+    ) -> list[RoutineSpec]:
+        """실행 불가능해진 source의 비종결 루틴을 한 번의 저장으로 강등한다.
+
+        일반 상태 전이 표를 우회하는 유일한 마이그레이션 경로다. 사용자 선택으로
+        이미 종결된 항목과 앞선 기동에서 강등된 항목은 그대로 보존한다.
+        """
+        changed = [
+            spec
+            for spec in self.list_all()
+            if spec.condition.source in source_names
+            and spec.status in {"draft", "active", "paused"}
+        ]
+        if not changed:
+            return []
+        for spec in changed:
+            spec.status = "failed"
+        self._save()
+        return changed
 
     def transition(self, routine_id: str, new_status: str) -> RoutineSpec:
         spec = self._items.get(routine_id)

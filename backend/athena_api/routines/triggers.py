@@ -161,12 +161,3 @@ class TriggerEngine:
             duration_ms=duration_ms,
         )
         return "fired"
-
-
-def should_yield_to_conversation(headroom: int, *, min_headroom: int = 3) -> bool:
-    """감시 폴링의 양보 판정 — 대화가 항상 우선(실행계획 P1).
-
-    공유 리미터의 남은 여유가 임계 미만이면 이번 폴링 주기를 건너뛴다.
-    리미터를 새로 만들지 않는다 — 호출자가 단일 리미터의 headroom()을 넘긴다.
-    """
-    return headroom < min_headroom

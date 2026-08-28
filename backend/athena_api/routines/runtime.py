@@ -12,16 +12,12 @@ from contextlib import suppress
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any
 
-import httpx
-
 from athena_api.config import Settings
 from athena_api.routines.archive import rollover_jsonl
 from athena_api.routines.briefings import BriefingStore
-from athena_api.routines.corp_catalog import CorpCatalog
-from athena_api.routines.disclosure_source import DartDisclosureSource
 from athena_api.routines.engagement import EngagementStore
 from athena_api.routines.ledger import RoutineLedger
-from athena_api.routines.models import RoutineSpec
+from athena_api.routines.models import LEGACY_DISABLED_SOURCES, RoutineSpec
 from athena_api.routines.read_marks import ReadMarksStore
 from athena_api.routines.scheduler import RoutineScheduler
 from athena_api.routines.store import RoutineStore
@@ -44,10 +40,8 @@ class RoutinesRuntime:
     read_marks: ReadMarksStore
     engagement: EngagementStore
     briefings: BriefingStore
-    http_client: httpx.AsyncClient | None = None
     ws_client: KiwoomWsClient | None = None
     ready: bool = False
-    disclosure_ready: bool = False
     last_error: str | None = None
     _symbol_refcounts: dict[str, int] = field(default_factory=dict)
 
@@ -80,15 +74,15 @@ class RoutinesRuntime:
         조용히 죽은 감시를 만들지 않기 위한 정직 게이트: 평가 경로가 실제로
         살아 있을 때만 활성화를 허용한다.
         """
+        if spec.condition.source in LEGACY_DISABLED_SOURCES:
+            return "이 외부 데이터 source는 앱 플러그인 전용이라 백엔드에서 활성화할 수 없다"
         if spec.mode == "realtime-ws":
             if self.ws_client is None:
                 return "키움 WS 미가용 — 실시간 감시를 켤 수 없다"
             return None
         if spec.mode == "scheduled":
             return None  # 벽시계 루프는 항상 기동 — 별도 가용성 게이트 없음
-        if not self.disclosure_ready:
-            return "공시 폴러 미가용(DART 키 또는 corp 카탈로그 부재)"
-        return None
+        return "이 source는 백엔드 실행 경로가 없어 활성화할 수 없다"
 
 
 def _archive_once(settings: Settings) -> None:
@@ -136,7 +130,6 @@ async def open_routines(
     settings: Settings,
     *,
     ws_client: KiwoomWsClient | None,
-    headroom: Any = None,
 ) -> RoutinesRuntime:
     events: asyncio.Queue[dict[str, Any]] = asyncio.Queue(200)
     store = RoutineStore(settings.routines_store_path)
@@ -153,9 +146,6 @@ async def open_routines(
     _archive_once(settings)  # 기동 시 1회 롤오버 — scheduler._archive_loop()가 이후 매일 재사용
 
     report = store.load()
-    http_client: httpx.AsyncClient | None = None
-    disclosure: DartDisclosureSource | None = None
-    disclosure_ready = False
     last_error: str | None = None
 
     if report.corrupt:
@@ -168,22 +158,18 @@ async def open_routines(
             }
         )
 
-    if settings.dart_api_key is not None:
-        http_client = httpx.AsyncClient(timeout=10.0)
-        catalog = CorpCatalog(
-            api_key=settings.dart_api_key.get_secret_value(),
-            cache_path=settings.routines_store_path.parent / "corpcode.xml",
-            client=http_client,
+    for spec in store.migrate_disabled_sources(LEGACY_DISABLED_SOURCES):
+        await notify(
+            {
+                "type": "routine-source-disabled",
+                "routine_id": spec.id,
+                "source": spec.condition.source,
+                "note": (
+                    "외부 사업자 데이터 source의 백엔드 실행 경로가 제거되어 "
+                    "이 루틴을 failed로 전환했다."
+                ),
+            }
         )
-        disclosure = DartDisclosureSource(
-            api_key=settings.dart_api_key.get_secret_value(),
-            resolve_corp_code=catalog.resolve,
-            client=http_client,
-        )
-        disclosure_ready = True
-    else:
-        if last_error is None:
-            last_error = "DART 키 미설정 — 공시(periodic) 루틴 강등"
 
     async def _release_on_expire(spec: RoutineSpec) -> None:
         # pause/cancel과 동일한 게이트 — realtime-ws 모드만 REAL 구독을 쥔다.
@@ -196,10 +182,7 @@ async def open_routines(
         store=store,
         engine=engine,
         notify=notify,
-        poll_interval_s=settings.routines_poll_interval_seconds,
         schedule_poll_interval_s=settings.routines_schedule_poll_interval_seconds,
-        headroom=headroom or (lambda: 5),
-        disclosure=disclosure,
         subscribe_ticks=(ws_client.subscribe_events if ws_client is not None else None),
         unsubscribe_ticks=(
             ws_client.unsubscribe_events if ws_client is not None else None
@@ -217,9 +200,7 @@ async def open_routines(
         read_marks=read_marks,
         engagement=engagement,
         briefings=briefings,
-        http_client=http_client,
         ws_client=ws_client,
-        disclosure_ready=disclosure_ready,
         last_error=last_error,
     )
 
@@ -246,9 +227,6 @@ async def open_routines(
     except BaseException:
         with suppress(BaseException):
             await scheduler.stop()
-        if http_client is not None:
-            with suppress(BaseException):
-                await http_client.aclose()
         raise
 
 
@@ -256,5 +234,3 @@ async def teardown_routines(runtime: RoutinesRuntime | None) -> None:
     if runtime is None:
         return
     await runtime.scheduler.stop()
-    if runtime.http_client is not None:
-        await runtime.http_client.aclose()

@@ -1,13 +1,10 @@
-"""트리거 엔진(US-005) — 합성 틱으로 3판정·쿨다운·연속 틱·양보를 고정한다."""
+"""트리거 엔진(US-005) — 합성 틱으로 3판정·쿨다운·연속 틱을 고정한다."""
 
 from __future__ import annotations
 
-import pytest
-
-from athena_api.kiwoom.rate_limiter import RateLimiter
 from athena_api.routines.ledger import RoutineLedger
 from athena_api.routines.rules import validate_draft
-from athena_api.routines.triggers import TriggerEngine, should_yield_to_conversation
+from athena_api.routines.triggers import TriggerEngine
 
 
 class FakeClock:
@@ -121,42 +118,3 @@ def test_vi_boolean_has_no_near(tmp_path):
     )
     assert eng.evaluate(spec, False) is None  # 근접 없음 — 조용
     assert eng.evaluate(spec, True) == "fired"
-
-
-def test_disclosure_keyword_contains(tmp_path):
-    eng = _engine(tmp_path)
-    spec = validate_draft(
-        {
-            "symbol": "207940",
-            "condition": {
-                "source": "disclosure.title_keyword",
-                "op": "contains",
-                "value": "유상증자",
-            },
-            "cooldown_s": 3600,
-            "expires_days": 7,
-        }
-    )
-    assert eng.evaluate(spec, "주요사항보고서(유상증자결정)") == "fired"
-    assert eng.evaluate(spec, "반기보고서") is None
-
-
-# ---------- 대화 우선 — headroom 양보 (동시 경쟁) ----------
-
-
-@pytest.mark.asyncio
-async def test_polling_yields_during_conversation_burst():
-    """대화발 burst가 롤링 창을 채우면 폴링은 skip, 창이 비면 재개."""
-    clock = FakeClock()
-
-    async def no_sleep(_s: float) -> None:
-        clock.now += 0.05
-
-    limiter = RateLimiter(rate_per_second=5.0, clock=clock, sleep=no_sleep)
-    # 대화발 셀렉터 호출 burst — 전역 창 5칸을 다 쓴다
-    for api in ("ka10001", "ka10081", "ka10095", "ka10016", "ka10007"):
-        await limiter.acquire(api)
-    assert should_yield_to_conversation(limiter.headroom(), min_headroom=3)
-
-    clock.now += 1.1  # 롤링 창 경과 — 대화가 조용해짐
-    assert not should_yield_to_conversation(limiter.headroom(), min_headroom=3)

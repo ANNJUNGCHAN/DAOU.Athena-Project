@@ -15,6 +15,7 @@ from athena_api.config import Settings
 from athena_api.errors import install_exception_handlers
 from athena_api.routines.archive import rollover_jsonl
 from athena_api.routines.guard_settings import GuardSettingsStore
+from athena_api.routines.models import Condition, RoutineSpec
 from athena_api.routines.runtime import open_routines, teardown_routines
 
 
@@ -193,14 +194,8 @@ SCHEDULE_DRAFT = {
 }
 
 
-def test_schedule_confirm_succeeds_without_dart_key_disclosure_still_blocked(app_client):
-    """Rev.3 BLOCKER 회귀 — DART 키 미설정(기본 배포, 이 fixture 상태)에서도
-    schedule.daily confirm은 성공해야 하고(사실11④), disclosure.title_keyword는
-    여전히 공시 폴러 미가용으로 409여야 한다(scheduled 분기가 periodic 게이트를
-    훼손하지 않았음을 대조 확인)."""
+def test_schedule_confirm_succeeds_and_external_source_draft_is_rejected(app_client):
     client, runtime = app_client
-    assert runtime.disclosure_ready is False  # 이 fixture는 DART 키를 안 준다
-
     rid = client.post("/api/v1/routines/draft", json=SCHEDULE_DRAFT).json()["id"]
     res = client.post(f"/api/v1/routines/{rid}/confirm")
     assert res.status_code == 200
@@ -217,10 +212,41 @@ def test_schedule_confirm_succeeds_without_dart_key_disclosure_still_blocked(app
             "value": "유상증자",
         },
     )
-    rid2 = client.post("/api/v1/routines/draft", json=disclosure_draft).json()["id"]
-    res2 = client.post(f"/api/v1/routines/{rid2}/confirm")
-    assert res2.status_code == 409
-    assert "공시 폴러" in res2.json()["detail"]
+    res2 = client.post("/api/v1/routines/draft", json=disclosure_draft)
+    assert res2.status_code == 422
+    assert "앱 플러그인 전용" in res2.json()["message"]
+    assert len(runtime.store.list_all()) == 1
+
+
+def test_legacy_external_source_lists_but_confirm_and_resume_are_blocked(app_client):
+    client, runtime = app_client
+    legacy = RoutineSpec(
+        condition=Condition(
+            source="disclosure.title_keyword", op="contains", value="유상증자"
+        ),
+        symbol="207940",
+        cooldown_s=3600,
+        expires_at=datetime.now(UTC) + timedelta(days=7),
+        note="저장된 레거시 루틴",
+    )
+    runtime.store.upsert(legacy)
+
+    listing = client.get("/api/v1/routines").json()
+    assert "disclosure_ready" not in listing
+    row = next(item for item in listing["routines"] if item["id"] == legacy.id)
+    assert row["mode"] == "periodic"
+    assert "앱 플러그인 전용" in row["source_label"]
+    assert "앱 플러그인 전용" in row["activation_blocker"]
+
+    confirm = client.post(f"/api/v1/routines/{legacy.id}/confirm")
+    assert confirm.status_code == 409
+    assert "앱 플러그인 전용" in confirm.json()["detail"]
+
+    legacy.status = "paused"
+    runtime.store.upsert(legacy)
+    resume = client.post(f"/api/v1/routines/{legacy.id}/resume")
+    assert resume.status_code == 409
+    assert "앱 플러그인 전용" in resume.json()["detail"]
 
 
 def test_list_routines_includes_fired_today_and_next_fire_at(app_client):

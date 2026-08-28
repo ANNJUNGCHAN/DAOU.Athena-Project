@@ -9,7 +9,7 @@ from pathlib import Path
 import pytest
 
 from athena_api.routines.ledger import LedgerError, RoutineLedger
-from athena_api.routines.models import RoutineSpec, derive_mode
+from athena_api.routines.models import Condition, RoutineSpec, derive_mode
 from athena_api.routines.rules import (
     RoutineValidationError,
     validate_condition,
@@ -33,14 +33,14 @@ def _draft(**over):
 
 def test_mode_is_derived_from_source_transport():
     ws = validate_condition({"source": "price.change_rate", "op": ">=", "value": 5})
-    periodic = validate_condition(
-        {"source": "disclosure.title_keyword", "op": "contains", "value": "유상증자"}
+    legacy_periodic = Condition(
+        source="disclosure.title_keyword", op="contains", value="유상증자"
     )
     scheduled = validate_condition(
         {"source": "schedule.daily", "op": "at", "value": "ALL@07:30"}
     )
     assert derive_mode(ws) == "realtime-ws"
-    assert derive_mode(periodic) == "periodic"
+    assert derive_mode(legacy_periodic) == "periodic"
     assert derive_mode(scheduled) == "scheduled"
 
 
@@ -96,13 +96,30 @@ def test_valid_briefing_model_charset_examples():
 def test_human_summary_states_mode_in_korean():
     spec = validate_draft(_draft())
     assert "실시간 (WS)" in spec.human_summary()
-    disclosure_cond = {
-        "source": "disclosure.title_keyword",
-        "op": "contains",
-        "value": "유상증자",
-    }
-    disclosure = validate_draft(_draft(condition=disclosure_cond))
-    assert "주기 확인" in disclosure.human_summary()
+    legacy = RoutineSpec(
+        condition=Condition(
+            source="disclosure.title_keyword", op="contains", value="유상증자"
+        ),
+        symbol="005930",
+        cooldown_s=1800,
+        expires_at=datetime.now(UTC) + timedelta(days=7),
+        note="legacy",
+    )
+    assert "앱 플러그인 전용" in legacy.human_summary()
+    assert RoutineSpec.from_dict(legacy.to_dict()).to_dict() == legacy.to_dict()
+
+
+def test_external_provider_source_is_explicitly_rejected_for_new_draft():
+    with pytest.raises(RoutineValidationError, match="앱 플러그인 전용"):
+        validate_draft(
+            _draft(
+                condition={
+                    "source": "disclosure.title_keyword",
+                    "op": "contains",
+                    "value": "유상증자",
+                }
+            )
+        )
 
 
 def test_experimental_source_is_flagged_in_summary():
