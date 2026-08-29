@@ -1,0 +1,296 @@
+.card-kit-hoga-live {
+  --hoga-ask: var(--color-down, #1f6fd4);
+  --hoga-bid: var(--color-up, #d92b2b);
+  width: 100%;
+  overflow: hidden;
+  color: var(--color-k-text, #14171d);
+  background: var(--color-k-panel, #fff);
+  border: 1px solid var(--color-k-line-soft, rgb(16 19 26 / 8%));
+  border-radius: var(--radius-xl, 14px);
+  box-shadow: 0 8px 26px rgb(16 19 26 / 6%);
+  font-family: var(--font-body, system-ui, sans-serif);
+}
+
+.card-kit-hoga-live-header,
+.card-kit-hoga-live-toolbar,
+.card-kit-hoga-live-totals {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-kit-hoga-live-header {
+  min-height: 58px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--color-k-line-soft, rgb(16 19 26 / 8%));
+}
+
+.card-kit-hoga-live-title-block {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.card-kit-hoga-live-title {
+  font-family: var(--font-strong, system-ui, sans-serif);
+  font-size: 15px;
+  line-height: 20px;
+}
+
+.card-kit-hoga-live-subtitle,
+.card-kit-hoga-live-time {
+  color: var(--color-k-faint, #8b93a1);
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 10px;
+  line-height: 14px;
+}
+
+.card-kit-hoga-live-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px;
+  color: var(--color-k-dim, #5b6270);
+  background: var(--color-k-panel3, #f4f5f8);
+  border-radius: 999px;
+  font-size: 11px;
+  line-height: 15px;
+}
+
+.card-kit-hoga-live-status-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--color-k-faint, #8b93a1);
+  border-radius: 999px;
+}
+
+.card-kit-hoga-live-status.is-live {
+  color: #327522;
+  background: #f3faf0;
+}
+
+.card-kit-hoga-live-status.is-live .card-kit-hoga-live-status-dot {
+  background: var(--color-ok, #5fce3f);
+  animation: hoga-packet 360ms ease-out;
+}
+
+.card-kit-hoga-live-toolbar {
+  min-height: 38px;
+  padding: 7px 12px;
+  background: var(--color-k-panel2, #fafbfc);
+  border-bottom: 1px solid var(--color-k-line-soft, rgb(16 19 26 / 8%));
+}
+
+.card-kit-hoga-live-focus,
+.card-kit-hoga-live-depth {
+  padding: 4px 7px;
+  border-radius: var(--radius-sm, 6px);
+  font-size: 10px;
+  line-height: 14px;
+}
+
+.card-kit-hoga-live-focus {
+  color: var(--color-brand, #ee137b);
+  background: rgb(238 19 123 / 8%);
+}
+
+.card-kit-hoga-live-depth {
+  color: var(--color-k-dim, #5b6270);
+  background: var(--color-k-panel3, #f4f5f8);
+}
+
+.card-kit-hoga-live-columns,
+.card-kit-hoga-live-row {
+  display: grid;
+  grid-template-columns: 58px minmax(72px, 1fr) 66px 88px minmax(78px, 1fr);
+  align-items: center;
+  column-gap: 8px;
+}
+
+.card-kit-hoga-live-columns {
+  min-height: 26px;
+  padding: 0 12px;
+  color: var(--color-k-faint, #8b93a1);
+  background: #f8f9fb;
+  border-bottom: 1px solid var(--color-k-line-soft, rgb(16 19 26 / 8%));
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 9px;
+  line-height: 12px;
+}
+
+.card-kit-hoga-live-columns span:not(:first-child) {
+  text-align: right;
+}
+
+.card-kit-hoga-live-row {
+  position: relative;
+  min-height: 27px;
+  padding: 0 12px;
+  border-bottom: 1px solid rgb(16 19 26 / 5%);
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 10px;
+  line-height: 14px;
+  font-variant-numeric: tabular-nums;
+}
+
+.card-kit-hoga-live-row--ask {
+  color: var(--hoga-ask);
+}
+
+.card-kit-hoga-live-row--bid {
+  color: var(--hoga-bid);
+}
+
+.card-kit-hoga-live-count {
+  color: var(--color-k-faint, #8b93a1);
+}
+
+.card-kit-hoga-live-quantity,
+.card-kit-hoga-live-change,
+.card-kit-hoga-live-price {
+  text-align: right;
+}
+
+.card-kit-hoga-live-price {
+  font-weight: 600;
+}
+
+.card-kit-hoga-live-bar-track {
+  position: relative;
+  height: 17px;
+  overflow: hidden;
+  background: var(--color-k-panel3, #f4f5f8);
+  border-radius: var(--radius-xs, 4px);
+}
+
+.card-kit-hoga-live-bar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  border-radius: inherit;
+  transition: width 180ms ease-out;
+}
+
+.card-kit-hoga-live-row--ask .card-kit-hoga-live-bar {
+  right: 0;
+  background: rgb(31 111 212 / 18%);
+}
+
+.card-kit-hoga-live-row--bid .card-kit-hoga-live-bar {
+  left: 0;
+  background: rgb(217 43 43 / 17%);
+}
+
+.card-kit-hoga-live-center {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  color: var(--hoga-bid);
+  background: #fff7f9;
+  border-top: 1px solid #f6dde6;
+  border-bottom: 1px solid #f6dde6;
+}
+
+.card-kit-hoga-live-center-label,
+.card-kit-hoga-live-center-hint {
+  color: var(--color-k-faint, #8b93a1);
+  font-size: 10px;
+  line-height: 14px;
+}
+
+.card-kit-hoga-live-current {
+  font-family: var(--font-display, var(--font-strong, system-ui, sans-serif));
+  font-size: 23px;
+  line-height: 28px;
+  font-variant-numeric: tabular-nums;
+}
+
+.card-kit-hoga-live-footer {
+  padding: 11px 12px 12px;
+  background: var(--color-k-panel2, #fafbfc);
+}
+
+.card-kit-hoga-live-totals {
+  color: var(--color-k-faint, #8b93a1);
+  font-size: 10px;
+  line-height: 14px;
+}
+
+.card-kit-hoga-live-total {
+  font-family: var(--font-mono, ui-monospace, monospace);
+}
+
+.card-kit-hoga-live-total--ask {
+  margin-right: auto;
+  padding-left: 6px;
+  color: var(--hoga-ask);
+}
+
+.card-kit-hoga-live-total--bid {
+  padding-left: 6px;
+  color: var(--hoga-bid);
+}
+
+.card-kit-hoga-live-imbalance {
+  height: 5px;
+  display: flex;
+  margin-top: 7px;
+  overflow: hidden;
+  background: #e8ebf0;
+  border-radius: 999px;
+}
+
+.card-kit-hoga-live-imbalance span {
+  width: 50%;
+  transition: width 200ms ease-out;
+}
+
+.card-kit-hoga-live-imbalance-ask {
+  background: #8ab6ec;
+}
+
+.card-kit-hoga-live-imbalance-bid {
+  background: #ed8f9d;
+}
+
+.card-kit-hoga-live .is-live-rise {
+  animation: hoga-rise 420ms ease-out;
+}
+
+.card-kit-hoga-live .is-live-fall {
+  animation: hoga-fall 420ms ease-out;
+}
+
+@keyframes hoga-rise {
+  0% { background: rgb(217 43 43 / 22%); transform: translateY(1px); }
+  100% { background: transparent; transform: translateY(0); }
+}
+
+@keyframes hoga-fall {
+  0% { background: rgb(31 111 212 / 22%); transform: translateY(-1px); }
+  100% { background: transparent; transform: translateY(0); }
+}
+
+@keyframes hoga-packet {
+  0% { box-shadow: 0 0 0 0 rgb(95 206 63 / 38%); }
+  100% { box-shadow: 0 0 0 5px rgb(95 206 63 / 0%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-kit-hoga-live *,
+  .card-kit-hoga-live *::before,
+  .card-kit-hoga-live *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .card-kit-hoga-live .is-live-rise,
+  .card-kit-hoga-live .is-live-fall {
+    outline: 1px solid currentColor;
+    outline-offset: 1px;
+  }
+}

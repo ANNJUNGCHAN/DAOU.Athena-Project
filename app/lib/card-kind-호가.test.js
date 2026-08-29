@@ -11,8 +11,18 @@ const {
   detectLadderShape,
   detectTotals,
   detectQuoteEmphasis,
+  buildOrderbookState,
+  mergeTickIntoState,
+  mergeTicks,
+  supportsLive0D,
   render호가,
 } = require('./card-kind-호가');
+
+test('supportsLive0D — 정규장 0D 카드만 Canvas 구독을 허용한다', () => {
+  assert.equal(supportsLive0D({ dataset: { liveSource: '0D' } }), true);
+  assert.equal(supportsLive0D({ dataset: { liveSource: '' } }), false);
+  assert.equal(supportsLive0D(null), false);
+});
 
 function facts(pairs) {
   return Object.entries(pairs).map(([key, value]) => ({ key, label: `라벨:${key}`, value }));
@@ -31,9 +41,27 @@ test('detectTotals — ka10007/ka10004 공용 tot_sel_req/tot_buy_req', () => {
   assert.deepEqual(detectTotals(map), { sellKey: 'tot_sel_req', buyKey: 'tot_buy_req' });
 });
 
+test('detectTotals — ka10004 시간외 합계 ovt_sel_req/ovt_buy_req', () => {
+  const map = fieldsMap(facts({ ovt_sel_req: '1200', ovt_buy_req: '1400' }));
+  assert.deepEqual(detectTotals(map), { sellKey: 'ovt_sel_req', buyKey: 'ovt_buy_req' });
+});
+
 test('detectTotals — ka10087 전용 sel_bid_tot_req/buy_bid_tot_req', () => {
   const map = fieldsMap(facts({ sel_bid_tot_req: '1', buy_bid_tot_req: '2' }));
   assert.deepEqual(detectTotals(map), { sellKey: 'sel_bid_tot_req', buyKey: 'buy_bid_tot_req' });
+});
+
+test('detectTotals — ka10087 응답에 정규장·시간외 합계가 함께 있으면 시간외을 선택한다', () => {
+  const map = fieldsMap(facts({
+    sel_bid_tot_req: '9999',
+    buy_bid_tot_req: '8888',
+    ovt_sigpric_sel_bid_tot_req: '1200',
+    ovt_sigpric_buy_bid_tot_req: '1400',
+  }));
+  assert.deepEqual(detectTotals(map), {
+    sellKey: 'ovt_sigpric_sel_bid_tot_req',
+    buyKey: 'ovt_sigpric_buy_bid_tot_req',
+  });
 });
 
 test('detectTotals — 둘 다 없으면 null(범용 렌더러로 폴백)', () => {
@@ -86,7 +114,149 @@ test('render호가 — facts 필드가 없으면(table/event 등) null — all-o
   assert.equal(render호가({ data: { rows: [], columns: [] } }), null); // ka50101(table) 경로
 });
 
-test('render호가 — 아는 조각이 하나도 없으면 null(예: identity/session 디테일)', () => {
-  const envelope = { data: { fields: facts({ stk_nm: '삼성전자', stk_cd: '005930' }) } };
-  assert.equal(render호가(envelope), null);
+test('buildOrderbookState — identity projection도 통합 호가창의 종목 헤더로 유지한다', () => {
+  const state = buildOrderbookState(facts({ stk_nm: '삼성전자', stk_cd: '005930' }));
+  assert.equal(state.name, '삼성전자');
+  assert.equal(state.symbol, '005930');
+  assert.equal(state.focus, '종목 식별');
+});
+
+test('buildOrderbookState — 분리된 가격 detail도 통합 10단의 정확한 레벨을 채운다', () => {
+  const state = buildOrderbookState(facts({
+    sel_10th_pre_bid: '-89000',
+    sel_fpr_bid: '-88100',
+    buy_fpr_bid: '+88000',
+    buy_10th_pre_bid: '+87100',
+  }));
+  assert.equal(state.asks[9].price, 89000);
+  assert.equal(state.asks[0].price, 88100);
+  assert.equal(state.bids[0].price, 88000);
+  assert.equal(state.bids[9].price, 87100);
+  assert.equal(state.focus, '가격축');
+});
+
+test('buildOrderbookState — 잔량/증감/총잔량 detail도 같은 상태 모델을 채운다', () => {
+  const state = buildOrderbookState(facts({
+    sel_fpr_req: '120',
+    sel_1th_pre_req_pre: '+17',
+    buy_fpr_req: '200',
+    buy_1th_pre_req_pre: '-9',
+    tot_sel_req: '5000',
+    tot_buy_req: '6200',
+  }));
+  assert.equal(state.asks[0].quantity, 120);
+  assert.equal(state.asks[0].change, 17);
+  assert.equal(state.bids[0].quantity, 200);
+  assert.equal(state.bids[0].change, -9);
+  assert.equal(state.sellTotal, 5000);
+  assert.equal(state.buyTotal, 6200);
+});
+
+test('buildOrderbookState — ka10007 가격·잔량·증감·건수·LP 잔량을 통합 10단에 정확히 배치한다', () => {
+  const state = buildOrderbookState(facts({
+    sel_10bid: '-89000',
+    sel_1bid: '-88100',
+    sel_1bid_req: '120',
+    sel_1bid_jub_pre: '+17',
+    sel_1bid_cnt: '4',
+    lpsel_1bid_req: '35',
+    buy_1bid: '+88000',
+    buy_10bid: '+87100',
+    buy_1bid_req: '200',
+    buy_1bid_jub_pre: '-9',
+    buy_1bid_cnt: '6',
+    lpbuy_1bid_req: '48',
+  }));
+  assert.equal(state.asks[9].price, 89000);
+  assert.deepEqual(state.asks[0], { level: 1, price: 88100, quantity: 120, change: 17, count: 4, auxQuantity: 35 });
+  assert.deepEqual(state.bids[0], { level: 1, price: 88000, quantity: 200, change: -9, count: 6, auxQuantity: 48 });
+  assert.equal(state.bids[9].price, 87100);
+  assert.equal(state.focus, 'LP 잔량');
+});
+
+test('buildOrderbookState — 건수와 총잔량 projection의 포커스를 구분한다', () => {
+  assert.equal(buildOrderbookState(facts({ sel_1bid_cnt: '4' })).focus, '주문 건수');
+  assert.equal(buildOrderbookState(facts({ tot_sel_req: '5000', tot_buy_req: '6200' })).focus, '총잔량');
+});
+
+test('buildOrderbookState — ka10007 session의 REST 예상체결가·수량을 seed한다', () => {
+  const state = buildOrderbookState(facts({ exp_cntr_pric: '+88100', exp_cntr_qty: '240' }));
+  assert.equal(state.expectedExecutionPrice, 88100);
+  assert.equal(state.expectedExecutionQuantity, 240);
+  assert.equal(state.focus, '예상체결');
+});
+
+test('buildOrderbookState — ka10004 after_hours_totals는 시간외 요약으로 고정하고 0D를 받지 않는다', () => {
+  const state = buildOrderbookState(
+    facts({ ovt_sel_req: '1200', ovt_buy_req: '1400' }),
+    'kiwoom_rest:detail:ka10004:after_hours_totals'
+  );
+  assert.equal(state.marketMode, 'after-hours-summary');
+  assert.equal(state.depth, 0);
+  assert.equal(state.liveSource, null);
+  assert.equal(state.focus, '총잔량');
+  assert.equal(state.sellTotal, 1200);
+  assert.equal(state.buyTotal, 1400);
+});
+
+test('buildOrderbookState — ka10087은 시간외 5단 REST 모드로 고정한다', () => {
+  const state = buildOrderbookState(facts({
+    ovt_sigpric_sel_bid_5: '88500',
+    ovt_sigpric_sel_bid_1: '88100',
+    ovt_sigpric_buy_bid_1: '88000',
+    ovt_sigpric_buy_bid_5: '87600',
+  }));
+  assert.equal(state.marketMode, 'after-hours');
+  assert.equal(state.depth, 5);
+  assert.equal(state.liveSource, null);
+  assert.equal(state.asks[4].price, 88500);
+  assert.equal(state.bids[0].price, 88000);
+});
+
+test('buildOrderbookState — ka10087 snapshot_time은 operation_ref로 시간외 모드를 판단한다', () => {
+  const state = buildOrderbookState(
+    facts({ bid_req_base_tm: '160001' }),
+    'kiwoom_rest:detail:ka10087:snapshot_time'
+  );
+  assert.equal(state.marketMode, 'after-hours');
+  assert.equal(state.depth, 5);
+  assert.equal(state.liveSource, null);
+});
+
+test('mergeTickIntoState — 0D의 값 있는 칸만 REST 스냅샷 위에 병합한다', () => {
+  const state = buildOrderbookState(facts({ sel_fpr_bid: '88100', sel_fpr_req: '120' }));
+  mergeTickIntoState(state, {
+    sellPrices: [88200, null],
+    sellQuantities: [145, null],
+    buyPrices: [88000],
+    currentPrice: 88100,
+    expectedExecutionPrice: 88050,
+    expectedExecutionQuantity: 240,
+    time: '102418',
+  });
+  assert.equal(state.asks[0].price, 88200);
+  assert.equal(state.asks[0].quantity, 145);
+  assert.equal(state.asks[1].price, null);
+  assert.equal(state.bids[0].price, 88000);
+  assert.equal(state.currentPrice, 88100);
+  assert.equal(state.expectedExecutionPrice, 88050);
+  assert.equal(state.expectedExecutionQuantity, 240);
+  assert.equal(state.time, '102418');
+});
+
+test('mergeTickIntoState — 시간외 5단 REST는 정규장 0D로 덮어쓰지 않는다', () => {
+  const state = buildOrderbookState(facts({ ovt_sigpric_sel_bid_1: '88100' }));
+  mergeTickIntoState(state, { sellPrices: [99000], expectedExecutionPrice: 99000 });
+  assert.equal(state.asks[0].price, 88100);
+  assert.equal(state.expectedExecutionPrice, null);
+});
+
+test('mergeTicks — 한 프레임 안의 여러 틱은 최신 non-null 값으로 합친다', () => {
+  const merged = mergeTicks(
+    { sellPrices: [88100, 88200], sellQuantities: [100, 200], currentPrice: 88000 },
+    { sellPrices: [null, 88300], sellQuantities: [120, null], currentPrice: null }
+  );
+  assert.deepEqual(merged.sellPrices.slice(0, 2), [88100, 88300]);
+  assert.deepEqual(merged.sellQuantities.slice(0, 2), [120, 200]);
+  assert.equal(merged.currentPrice, 88000);
 });

@@ -844,7 +844,7 @@ function renderFactsCard(envelope) {
     // '호가' 카드종 — 호가잔량(0D)으로 래더 행·비율바를 제자리 갱신한다(task #25).
     // quote-emphasis(QuoteHeader) 조각은 0D에 대응 필드가 없어 갱신하지 않는다
     // (card-kind-호가.js applyLiveTick 주석 참고 — 없는 값을 지어내지 않는다).
-    if (title === '호가') wireOrderbookRealtime(card, built, envelope, window.AthenaLib.CardKindHoga.applyLiveTick);
+    if (title === '호가' && window.AthenaLib.CardKindHoga.supportsLive0D(built)) wireOrderbookRealtime(card, built, envelope, window.AthenaLib.CardKindHoga.applyLiveTick);
     return card;
   }
   const { card, body } = makeCard('facts', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope), envelope.screen_id);
