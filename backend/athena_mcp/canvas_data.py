@@ -266,7 +266,7 @@ async def render_with_plan(
         "fell_back": result_fell_back,
         "fallback_reason": result_fallback_reason,
         "caption": arguments.get("caption"),
-        # TR이 Paper 보드 12d 카드 16종 중 하나로 확정되면 카드 헤드는 이
+        # TR이 Paper 카드 페이지 14~30의 카드 16종 중 하나로 확정되면 카드 헤드는 이
         # 고정 이름을 타이틀로 쓰고, 위 caption(종목명·주기 등 가변 정보)은
         # 서브타이틀로 내려간다(app/canvas.js makeCard). 16종 밖이면 None —
         # 렌더러가 기존처럼 caption을 타이틀로 쓴다(정보 손실 없음).

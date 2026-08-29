@@ -237,6 +237,7 @@ def test_render_plan_inline_returns_envelope_without_queueing() -> None:
             "ordinal": 1,
         }
         assert body["envelope"]["correlation"] == body["correlation"]
+        assert body["envelope"]["card_title"] == "종목정보"
         assert body["envelope"]["data"]["fields"][0]["key"] == "cur_prc"
         receipt_text = json.dumps(body["receipt"], ensure_ascii=False)
         for canvas_token in ("+71000", "+1200", "cur_prc", "pred_pre"):
@@ -621,6 +622,7 @@ def test_render_plan_inline_chart_uses_only_plan_token_context_for_symbol():
         assert response.json()["canvas_type"] == "chart"
         envelope = response.json()["envelope"]
         assert envelope["canvas_type"] == "chart"
+        assert envelope["card_title"] == "차트"
         assert envelope["renderer_id"] == "aits-chart-v1"
         assert envelope["data"]["symbol"] == "005930"
         assert envelope["data"]["chart"] == {
