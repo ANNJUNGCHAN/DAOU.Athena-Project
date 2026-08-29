@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Athena AITS 통합 호가 검증</title>
+  <style>
+    :root {
+      --color-k-bg: #eef0f4;
+      --color-k-panel: #ffffff;
+      --color-k-panel2: #fafbfc;
+      --color-k-panel3: #f4f5f8;
+      --color-k-line-soft: rgb(16 19 26 / 8%);
+      --color-k-text: #14171d;
+      --color-k-dim: #5b6270;
+      --color-k-faint: #8b93a1;
+      --color-brand: #ee137b;
+      --color-up: #d92b2b;
+      --color-down: #1f6fd4;
+      --color-ok: #5fce3f;
+      --font-body: Arial, sans-serif;
+      --font-strong: Arial, sans-serif;
+      --font-display: Arial, sans-serif;
+      --font-mono: Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; padding: 24px; background: var(--color-k-bg); }
+    #root { width: 620px; margin: 0 auto; }
+  </style>
+</head>
+<body>
+  <main id="root"></main>
+  <script>window.AthenaLib = {};</script>
+  <script src="lib/card-kinds.js"></script>
+  <script src="lib/main/orderbook-realtime.js"></script>
+  <script src="lib/card-kind-호가.js"></script>
+  <script>
+    function field(key, value) { return { key, label: key, value }; }
+    const fields = [
+      field('cur_prc', '88100'), field('flu_rt', '+1.38'),
+      field('tot_sel_req', '32884'), field('tot_buy_req', '38621'),
+      field('bid_req_base_tm', '102417'),
+    ];
+    for (let level = 10; level >= 1; level -= 1) {
+      const askPrefix = level === 1 ? 'sel_fpr' : `sel_${level}th_pre`;
+      fields.push(field(`${askPrefix}_bid`, String(88100 + (level * 100))));
+      fields.push(field(`${askPrefix}_req`, String(900 + (level * 310))));
+    }
+    for (let level = 1; level <= 10; level += 1) {
+      const bidPrefix = level === 1 ? 'buy_fpr' : `buy_${level}th_pre`;
+      fields.push(field(`${bidPrefix}_bid`, String(88100 - (level * 100))));
+      fields.push(field(`${bidPrefix}_req`, String(1100 + (level * 280))));
+    }
+
+    const render = window.AthenaLib.CardKinds.resolve('호가');
+    const card = render({ data: { fields } });
+    document.querySelector('#root').appendChild(card);
+
+    const sellPrices = Array.from({ length: 10 }, (_, index) => 88200 + (index * 100));
+    const buyPrices = Array.from({ length: 10 }, (_, index) => 88000 - (index * 100));
+    const sellQuantities = Array.from({ length: 10 }, (_, index) => 1320 + (index * 230));
+    const buyQuantities = Array.from({ length: 10 }, (_, index) => 1640 + (index * 190));
+    const sellChanges = Array.from({ length: 10 }, (_, index) => index % 2 ? -18 : 34);
+    const buyChanges = Array.from({ length: 10 }, (_, index) => index % 2 ? 27 : -11);
+    const values = { 21: '102418', 23: '+88200', 24: '240', 121: '34122', 125: '39780' };
+    for (let index = 0; index < 10; index += 1) {
+      values[41 + index] = String(sellPrices[index]);
+      values[51 + index] = String(buyPrices[index]);
+      values[61 + index] = String(sellQuantities[index]);
+      values[71 + index] = String(buyQuantities[index]);
+      values[81 + index] = String(sellChanges[index]);
+      values[91 + index] = String(buyChanges[index]);
+    }
+    const frame = { trnm: 'REAL', data: [{ type: '0D', item: '005930', values }] };
+    const [tick] = window.AthenaLib.OrderbookRealtime.parseQuoteBookFrame(frame);
+    window.AthenaLib.CardKindHoga.applyLiveTick(card, {}, tick);
+
+    requestAnimationFrame(() => requestAnimationFrame(() => { window.__HOGA_LIVE_READY__ = true; }));
+  </script>
+</body>
+</html>
