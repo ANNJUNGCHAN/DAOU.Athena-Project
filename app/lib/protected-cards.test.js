@@ -69,7 +69,12 @@ test('buildOrderActionCard: done — 실측 kt10000/kt10001 응답 필드만 영
     response: { ok: true, status: 200, data: { ord_no: '0000123', dmst_stex_tp: 'KRX' } },
   });
   assert.equal(built.envelope.canvas_type, 'action');
+  assert.equal(built.envelope.card_title, '주문');
   assert.equal(built.envelope.data.lifecycle, 'done');
+  assert.equal(built.envelope.data.state_label, '체결 완료');
+  assert.deepEqual(built.envelope.data.order, {
+    stk_cd: '005930', ord_qty: '20', side: '매수',
+  });
   assert.deepEqual(built.envelope.data.receipt, { ord_no: '0000123', dmst_stex_tp: 'KRX' });
   assert.ok(built.envelope.caption.includes('005930'));
   assert.ok(built.envelope.caption.includes('매수'));

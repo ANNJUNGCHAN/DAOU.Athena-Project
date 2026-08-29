@@ -10,6 +10,10 @@ const {
   detectContinuousTrade,
   detectForeignDaily,
   detectGoldInvestor,
+  detectStockNetFlow,
+  detectForeignInstitutionRanking,
+  detectInstitutionForeignDaily,
+  extractFlowRows,
   detectShape,
   render수급,
 } = require('./card-kind-수급');
@@ -57,6 +61,30 @@ test('detectShape — 빈 배열/모르는 모양은 null', () => {
   assert.equal(detectShape([]), null);
   assert.equal(detectShape(null), null);
   assert.equal(detectShape([{ unknown_field: '1' }]), null);
+});
+
+test('신규 수급 5종의 실측 행 모양을 전용 수급 화면으로 판정한다', () => {
+  const cases = [
+    [{ stk_cd: '005930', stk_nm: '삼성전자', buy_qty: '100', sel_qty: '80', netslmt: '20' }, 'stock_net_flow'],
+    [{ stk_cd: '005930', stk_nm: '삼성전자', netprps_qty: '20', netprps_amt: '1762000' }, 'stock_net_flow'],
+    [{ stk_cd: '005930', stk_nm: '삼성전자', buy_qty: '100', sell_qty: '80', netprps_qty: '20' }, 'stock_net_flow'],
+    [{
+      for_netslmt_stk_nm: '삼성전자', for_netslmt_qty: '100',
+      for_netprps_stk_nm: 'SK하이닉스', for_netprps_qty: '90',
+      orgn_netslmt_stk_nm: 'NAVER', orgn_netslmt_qty: '80',
+      orgn_netprps_stk_nm: '카카오', orgn_netprps_qty: '70',
+    }, 'foreign_institution_ranking'],
+    [{ dt: '20260828', orgn_daly_nettrde_qty: '100', for_daly_nettrde_qty: '-50' }, 'institution_foreign_daily'],
+  ];
+  for (const [row, shape] of cases) assert.equal(detectShape([row]), shape);
+  assert.equal(detectStockNetFlow(cases[0][0]), true);
+  assert.equal(detectForeignInstitutionRanking(cases[3][0]), true);
+  assert.equal(detectInstitutionForeignDaily(cases[4][0]), true);
+});
+
+test('extractFlowRows — ka10045 compound의 table rows를 잃지 않는다', () => {
+  const rows = [{ dt: '20260828', orgn_daly_nettrde_qty: '100', for_daly_nettrde_qty: '-50' }];
+  assert.deepEqual(extractFlowRows({ data: { header: [], table: { columns: [], rows } } }), rows);
 });
 
 test('render수급 — rows가 없으면(facts/compound 등 다른 레이아웃) null — all-or-nothing', () => {

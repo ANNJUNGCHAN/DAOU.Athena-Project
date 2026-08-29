@@ -434,7 +434,7 @@ def test_runtime_rejects_ambiguous_gold_reload_group(
 
 
 # ---------------------------------------------------------------------------
-# resolve_fixed_card_title — Paper 보드 12d 카드 16종 고정 타이틀 매핑
+# resolve_fixed_card_title — Paper 카드 v3 카탈로그 16종 고정 타이틀 매핑
 # (근거: .omc/state/card-backend-coverage.md / card-diff.md, 2026-08-26)
 # ---------------------------------------------------------------------------
 
@@ -448,6 +448,19 @@ def test_runtime_rejects_ambiguous_gold_reload_group(
         ("base:ka10173", "종목발굴"),
         ("base:ka10174", "종목발굴"),
         ("base:ka30005", "종목발굴"),
+        # WebSocket 12종 — 별도 카드가 아니라 연결된 창의 실시간 상태로 귀속
+        ("base:00", "주문"),
+        ("base:04", "보유주식"),
+        ("base:0B", "시세"),
+        ("base:0G", "종목발굴"),
+        ("base:0H", "시세"),
+        ("base:0I", "시세"),
+        ("base:0J", "종목발굴"),
+        ("base:0U", "종목발굴"),
+        ("base:0m", "종목발굴"),
+        ("base:0s", "시세"),
+        ("base:0u", "종목발굴"),
+        ("base:1h", "시세"),
         # 프로그램매매 (websocket/sector/stockinfo/quotes 분산, "프로그램" 키워드)
         ("base:0w", "프로그램매매"),
         ("base:ka10010", "프로그램매매"),
@@ -530,6 +543,13 @@ def test_runtime_rejects_ambiguous_gold_reload_group(
         # 수급 — investor 도메인 기본값
         ("base:ka10008", "수급"),
         ("base:ka10131", "수급"),
+        # Paper 카드 v3 카탈로그에서 수급 카드로 확정된 순위/시세 6종
+        ("base:ka10065", "수급"),
+        ("base:ka90009", "수급"),
+        ("base:ka10044", "수급"),
+        ("base:ka10045", "수급"),
+        ("base:ka10063", "수급"),
+        ("base:ka10066", "수급"),
         # 수급 — 명시 예외 오버라이드(2026-08-26 Lane 2 실측 제보: stockinfo
         # 도메인 기본값 "종목정보"로 새고 있었다. 응답 모델
         # Ka10061ResponseStkInvsrOrgnTotItem이 ind_invsr(개인투자자)/
@@ -579,9 +599,15 @@ def test_runtime_rejects_ambiguous_gold_reload_group(
         ("base:ka10055", "시세"),  # 당일전일체결량요청
         ("base:ka10084", "시세"),  # 당일전일체결요청
         ("detail:ka10002:market_snapshot", "시세"),  # 종목 시세 요약
+        # Paper 카드 v3 카탈로그의 종목발굴 창: 순위·ELW·업종·ETF·테마와 그 detail
+        ("base:ka10020", "종목발굴"),
+        ("base:ka40001", "종목발굴"),
+        ("base:ka90001", "종목발굴"),
+        ("detail:ka20001:market_snapshot", "종목발굴"),
+        ("detail:ka30012:valuation_and_rights", "종목발굴"),
     ],
 )
-def test_resolve_fixed_card_title_matches_paper_board_12d(
+def test_resolve_fixed_card_title_matches_paper_card_v3_catalog(
     mapping_id: str, expected_title: str
 ) -> None:
     assert resolve_fixed_card_title(mapping_id) == expected_title
@@ -590,18 +616,14 @@ def test_resolve_fixed_card_title_matches_paper_board_12d(
 @pytest.mark.parametrize(
     "mapping_id",
     [
-        "base:au10001",  # auth — 인증은 카드 16종 밖(Paper가 스스로 제외)
-        "base:ka40001",  # etf — 16종 밖 독립 도메인
-        "base:ka90001",  # theme — 16종 밖 독립 도메인
-        "base:ka10020",  # ranking, 거래원/증권사/이탈원 키워드 미매칭(호가잔량상위요청)
-        "base:ka10044",  # quotes, 일별기관매매종목요청 — 호가/주가/시세 키워드 미매칭
+        "base:au10001",
+        "base:au10002",
     ],
 )
-def test_resolve_fixed_card_title_is_none_outside_the_16_card_taxonomy(
+def test_resolve_fixed_card_title_keeps_auth_outside_the_16_card_taxonomy(
     mapping_id: str,
 ) -> None:
-    """16종 밖이거나 애매한 TR은 강제로 채우지 않는다 — 캡션이 그대로 타이틀로 남는
-    현재 동작을 유지해야 하므로 None이 맞다."""
+    """OAuth 발급·폐기는 카드가 아니라 시스템 인증 화면이므로 None이 맞다."""
     assert resolve_fixed_card_title(mapping_id) is None
 
 
@@ -645,3 +667,39 @@ def test_resolve_fixed_card_title_only_ever_returns_one_of_the_16_card_names() -
     }
     assert resolved <= CARD_TITLES
     assert resolved  # 최소 하나 이상은 실제로 매칭돼야 이 가드에 의미가 있다
+
+
+def test_resolve_fixed_card_title_covers_all_299_non_auth_operations() -> None:
+    """OAuth 2종을 뺀 키움 operation 299개가 Paper 공통 카드 v3에 전수 귀속된다."""
+    from collections import Counter
+
+    from athena_api import screen_manifest
+
+    auth_refs = {"base:au10001", "base:au10002"}
+    operation_refs = [
+        mapping["operation_ref"]
+        for mapping in screen_manifest._manifest()["mappings"]
+        if mapping["operation_ref"] not in auth_refs
+    ]
+    assert len(operation_refs) == 299
+
+    resolved = [resolve_fixed_card_title(operation_ref) for operation_ref in operation_refs]
+    assert None not in resolved
+    assert Counter(resolved) == {
+        "종목발굴": 66,
+        "시세": 23,
+        "수급": 10,
+        "거래원": 17,
+        "계좌": 50,
+        "주문내역": 11,
+        "보유주식": 7,
+        "관심종목": 3,
+        "차트": 21,
+        "호가": 28,
+        "주문": 9,
+        "프로그램매매": 10,
+        "종목정보": 25,
+        "신용거래": 14,
+        "대차거래": 4,
+        "공매도": 1,
+    }

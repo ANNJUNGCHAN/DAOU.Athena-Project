@@ -78,10 +78,21 @@ function buildOrderActionCard({ trId, body, outcome, response }) {
   const sideLabel = trId === 'kt10000' ? '매수' : trId === 'kt10001' ? '매도' : trId;
   const symbol = body && body.stk_cd;
   const caption = symbol ? `${symbol} ${sideLabel} 주문 결과` : `${sideLabel} 주문 결과`;
-  return {
+  const built = {
     status: 'success',
-    envelope: _baseEnvelope('action', caption, { lifecycle, receipt }),
+    envelope: _baseEnvelope('action', caption, {
+      lifecycle,
+      state_label: lifecycle === 'done' ? '체결 완료' : lifecycle === 'in_doubt' ? '확인 필요' : '실패',
+      receipt,
+      order: {
+        stk_cd: symbol,
+        ord_qty: body && body.ord_qty,
+        side: sideLabel,
+      },
+    }),
   };
+  built.envelope.card_title = '주문';
+  return built;
 }
 
 const __exports = {
