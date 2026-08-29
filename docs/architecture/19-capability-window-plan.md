@@ -1,6 +1,6 @@
 # Athena 19개 통합 창 전환 계획서
 
-- 상태: 구현 기준안
+- 상태: Paper 실제 19개 창 반영 완료 · Runtime 전환 기준안
 - 작성 기준: 2026-08-29 KST
 - 대상: Kiwoom REST·WebSocket·주문을 사용하는 Athena Selector, Backend, Canvas, Paper UI
 
@@ -20,12 +20,41 @@ Athena가 보유한 OAuth 제외 299개 Kiwoom operation을 사용자와 Selecto
 | 구분 | 수량 | 처리 원칙 |
 |---|---:|---|
 | 비-OAuth operation | 299 | 내부 adapter로 유지 |
-| 일반 base operation | 184 | 내부 resolver가 선택 |
+| base operation | 184 | 일반 조회 149 + WebSocket control 23 + 주문 12; 내부 resolver가 선택 |
 | Detail Projection | 115 | 22개 TR family 안으로 숨김 |
 | Selector 노출 Capability | 19 | 사용자 의도 단위 |
 | OAuth route | 2 | 이번 통합 대상 제외 |
 | WebSocket control operation | 23 | 서버 자동 등록 정책으로 전환 |
 | 주문 operation | 12 | draft → confirmation 경계 유지 |
+
+개별 operation 귀속 정본은 `backend/ref/kiwoom-capability-assignment.json`이다. `tr_id`가 아니라 `mapping_id`를 assignment key로 사용해 115개 Detail Projection까지 정확히 한 번씩 배정한다. `backend/tests/unit/test_capability_assignment.py`가 assigned 299, unassigned 0, duplicated 0과 manifest 집합 일치를 고정한다.
+
+### 2.1 Ordered Capability Ledger
+
+계획·API·UI·Paper는 아래 순서와 수량을 공통 계약으로 사용한다.
+
+| # | `capability_id` | 창 | operation |
+|---:|---|---|---:|
+| 1 | `account` | 계좌 워크스페이스 | 76 |
+| 2 | `order` | 통합 주문 티켓 | 12 |
+| 3 | `chart` | 통합 차트 | 21 |
+| 4 | `orderbook` | 통합 호가 | 31 |
+| 5 | `program-trading` | 프로그램매매 | 9 |
+| 6 | `etf` | ETF | 10 |
+| 7 | `elw` | ELW | 22 |
+| 8 | `sector` | 업종 | 16 |
+| 9 | `investor-flow` | 투자자·기관 수급 | 16 |
+| 10 | `broker` | 거래원 | 16 |
+| 11 | `discovery` | 종목발굴·순위 | 10 |
+| 12 | `credit-lending-short` | 신용·대차·공매도 | 9 |
+| 13 | `stock-info` | 종목정보 | 21 |
+| 14 | `watchlist` | 관심종목·목록 | 8 |
+| 15 | `quote` | 현재시세·체결 | 9 |
+| 16 | `gold` | 금현물 | 5 |
+| 17 | `theme` | 테마 | 2 |
+| 18 | `market-status` | 시장상태·VI | 2 |
+| 19 | `condition-search` | 조건검색 | 4 |
+|  | **합계** |  | **299** |
 
 ## 3. 핵심 결정
 
@@ -170,10 +199,12 @@ order draft 생성
 
 ### Phase 0 — 계약 고정
 
-- 299개 operation이 19개 Capability에 정확히 한 번씩 배정되는 fixture를 만든다.
+- 299개 operation이 19개 Capability에 정확히 한 번씩 배정되는 fixture를 유지한다.
 - OAuth 2개가 포함되지 않는지 검증한다.
 - WebSocket code를 대소문자 그대로 검증한다.
 - 22개 split TR family와 115개 Detail 합계를 고정한다.
+- canonical manifest의 모든 `(operation_ref, response json_path)`를 `semantic`, `transport`, `internal`로 분류한다.
+- 모든 semantic field를 `capability_id`, mode, section, tier, component 또는 `SemanticDetailSheet`에 연결한다.
 
 완료 조건:
 
@@ -181,6 +212,11 @@ order draft 생성
 - unassigned 0
 - duplicated 0
 - capability 19
+- unclassified response field 0
+- semantic rendered / semantic total 100%
+- diagnostic-only semantic field 0
+
+응답 필드 기준 원천은 `backend/ref/kiwoom-common-screen-manifest.json`이다. 현재 확인된 규모는 response field occurrence 3,705개, 고유 alias 1,877종이다. `generated/models.py`에서 의미가 `Extra Item`으로만 남은 `951`, `924`, `1279` 세 필드는 공식 의미가 확인되기 전까지 임의 분류하지 않고 field-coverage blocker로 유지한다.
 
 ### Phase 1 — Capability Catalog 병행 추가
 
@@ -319,8 +355,10 @@ UI는 snapshot이 `ready`이면 realtime이 `registering` 또는 `recovering`이
 ## 11. 완료 정의
 
 - 계획·API·UI 문서가 동일한 19개 `capability_id`를 사용한다.
-- Paper `19 통합 창` 페이지에 19개 창과 realtime lifecycle이 표현된다.
+- Paper `19 통합 창` 페이지에 19개 실제 1440×900 창과 realtime lifecycle이 표현된다.
 - 299개 operation의 합계가 문서에서 299로 검증된다.
+- 모든 semantic response field가 primary, secondary, detail 중 하나로 접근 가능하고 자동화 fixture에서 100% 렌더 검증된다.
+- transport/internal field는 오류, pagination, realtime lifecycle 행동 테스트로 100% 커버된다.
 - 실시간 지원 창에 수동 등록 UI가 없다.
 - 실시간 미지원 창은 `not_applicable`로 명시된다.
 - mode·section별 realtime matrix가 API·UI·Paper에서 일치한다.

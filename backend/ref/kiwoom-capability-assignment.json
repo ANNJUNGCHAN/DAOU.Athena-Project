@@ -1,0 +1,430 @@
+{
+  "version": "capability-assignment/1.0.0",
+  "description": "OAuth를 제외한 Kiwoom callable mapping_id 299개를 19개 Athena capability에 정확히 한 번 배정한다.",
+  "source_manifest": "kiwoom-common-screen-manifest.json",
+  "assignment_key": "mapping_id",
+  "excluded_categories": [
+    "oauth"
+  ],
+  "counts": {
+    "capabilities": 19,
+    "assigned": 299,
+    "unassigned": 0,
+    "duplicated": 0
+  },
+  "capabilities": [
+    {
+      "capability_id": "account",
+      "operation_count": 76,
+      "mapping_ids": [
+        "base:00",
+        "base:04",
+        "base:ka00001",
+        "base:ka01690",
+        "base:ka10072",
+        "base:ka10073",
+        "base:ka10074",
+        "base:ka10075",
+        "base:ka10076",
+        "base:ka10077",
+        "base:ka10085",
+        "base:ka10088",
+        "base:ka10170",
+        "base:kt00002",
+        "base:kt00003",
+        "base:kt00007",
+        "base:kt00008",
+        "base:kt00015",
+        "base:kt50021",
+        "base:kt50030",
+        "base:kt50031",
+        "base:kt50075",
+        "detail:kt00001:cash_and_margin",
+        "detail:kt00001:special_deposits_and_credit",
+        "detail:kt00001:substitute_collateral",
+        "detail:kt00001:withdrawal_and_order_capacity",
+        "detail:kt00001:receivables_and_arrears",
+        "detail:kt00001:loans_and_collateral",
+        "detail:kt00001:settlement_forecast",
+        "detail:kt00001:foreign_currency_deposits",
+        "detail:kt00004:account_identity",
+        "detail:kt00004:cash_and_assets",
+        "detail:kt00004:profit_and_loss",
+        "detail:kt00004:position_valuation",
+        "detail:kt00005:cash_and_capacity",
+        "detail:kt00005:receivables_and_margin",
+        "detail:kt00005:portfolio_summary",
+        "detail:kt00005:margin_order_capacity",
+        "detail:kt00005:credit_and_collateral",
+        "detail:kt00005:settled_positions",
+        "detail:kt00009:contract_amounts",
+        "detail:kt00009:order_execution_status",
+        "detail:kt00010:margin_order_capacity",
+        "detail:kt00010:cash_and_withdrawal_capacity",
+        "detail:kt00010:purchase_settlement",
+        "detail:kt00011:margin_rates",
+        "detail:kt00011:margin_capacity_20_to_50",
+        "detail:kt00011:margin_capacity_60_to_cash_only",
+        "detail:kt00011:account_funding",
+        "detail:kt00012:guarantee_rate",
+        "detail:kt00012:guarantee_order_capacity",
+        "detail:kt00012:account_and_receivable_capacity",
+        "detail:kt00013:today_reuse",
+        "detail:kt00013:previous_day_reuse",
+        "detail:kt00013:cash_resources",
+        "detail:kt00013:substitute_resources",
+        "detail:kt00013:credit_and_lending_collateral",
+        "detail:kt00013:margin_order_capacity",
+        "detail:kt00013:repayment_losses",
+        "detail:kt00013:substitute_valuation_and_limits",
+        "detail:kt00013:d2_funding_capacity",
+        "detail:kt00016:account_manager",
+        "detail:kt00016:asset_balance_change",
+        "detail:kt00016:liability_balance_change",
+        "detail:kt00016:performance_summary",
+        "detail:kt00016:period_flows",
+        "detail:kt00017:d2_account_position",
+        "detail:kt00017:daily_cash_and_trading_flows",
+        "detail:kt00017:other_assets_and_income",
+        "detail:kt00018:portfolio_summary",
+        "detail:kt00018:financing_summary",
+        "detail:kt00018:holdings",
+        "detail:kt50020:gold_account_summary",
+        "detail:kt50020:gold_holdings",
+        "detail:kt50032:account_identity",
+        "detail:kt50032:gold_trade_history"
+      ]
+    },
+    {
+      "capability_id": "order",
+      "operation_count": 12,
+      "mapping_ids": [
+        "base:kt10000",
+        "base:kt10001",
+        "base:kt10002",
+        "base:kt10003",
+        "base:kt10006",
+        "base:kt10007",
+        "base:kt10008",
+        "base:kt10009",
+        "base:kt50000",
+        "base:kt50001",
+        "base:kt50002",
+        "base:kt50003"
+      ]
+    },
+    {
+      "capability_id": "chart",
+      "operation_count": 21,
+      "mapping_ids": [
+        "base:ka10060",
+        "base:ka10064",
+        "base:ka10079",
+        "base:ka10080",
+        "base:ka10081",
+        "base:ka10082",
+        "base:ka10083",
+        "base:ka10094",
+        "base:ka20004",
+        "base:ka20005",
+        "base:ka20006",
+        "base:ka20007",
+        "base:ka20008",
+        "base:ka20019",
+        "base:ka50079",
+        "base:ka50080",
+        "base:ka50081",
+        "base:ka50082",
+        "base:ka50083",
+        "base:ka50091",
+        "base:ka50092"
+      ]
+    },
+    {
+      "capability_id": "orderbook",
+      "operation_count": 31,
+      "mapping_ids": [
+        "base:0C",
+        "base:0D",
+        "base:0E",
+        "base:ka50101",
+        "detail:ka10004:snapshot_time",
+        "detail:ka10004:sell_bid_prices",
+        "detail:ka10004:sell_bid_quantities",
+        "detail:ka10004:sell_bid_changes",
+        "detail:ka10004:buy_bid_prices",
+        "detail:ka10004:buy_bid_quantities",
+        "detail:ka10004:buy_bid_changes",
+        "detail:ka10004:aggregate_totals",
+        "detail:ka10004:after_hours_totals",
+        "detail:ka10007:identity",
+        "detail:ka10007:expected_market",
+        "detail:ka10007:session",
+        "detail:ka10007:bid_prices",
+        "detail:ka10007:bid_quantities",
+        "detail:ka10007:bid_changes",
+        "detail:ka10007:order_counts",
+        "detail:ka10007:liquidity_provider",
+        "detail:ka10007:totals",
+        "detail:ka10087:snapshot_time",
+        "detail:ka10087:sell_bid_changes",
+        "detail:ka10087:sell_bid_quantities",
+        "detail:ka10087:sell_bid_prices",
+        "detail:ka10087:buy_bid_prices",
+        "detail:ka10087:buy_bid_quantities",
+        "detail:ka10087:buy_bid_changes",
+        "detail:ka10087:aggregate_totals",
+        "detail:ka10087:trading_summary"
+      ]
+    },
+    {
+      "capability_id": "program-trading",
+      "operation_count": 9,
+      "mapping_ids": [
+        "base:0w",
+        "base:ka90003",
+        "base:ka90004",
+        "base:ka90005",
+        "base:ka90006",
+        "base:ka90007",
+        "base:ka90008",
+        "base:ka90010",
+        "base:ka90013"
+      ]
+    },
+    {
+      "capability_id": "etf",
+      "operation_count": 10,
+      "mapping_ids": [
+        "base:0G",
+        "base:ka40001",
+        "base:ka40002",
+        "base:ka40003",
+        "base:ka40004",
+        "base:ka40006",
+        "base:ka40007",
+        "base:ka40008",
+        "base:ka40009",
+        "base:ka40010"
+      ]
+    },
+    {
+      "capability_id": "elw",
+      "operation_count": 22,
+      "mapping_ids": [
+        "base:0m",
+        "base:0u",
+        "base:ka10048",
+        "base:ka10050",
+        "base:ka30001",
+        "base:ka30002",
+        "base:ka30003",
+        "base:ka30004",
+        "base:ka30005",
+        "base:ka30009",
+        "base:ka30010",
+        "base:ka30011",
+        "detail:ka30012:market_snapshot",
+        "detail:ka30012:liquidity_providers",
+        "detail:ka30012:valuation_and_rights",
+        "detail:ka30012:liquidity_and_leverage",
+        "detail:ka30012:key_dates",
+        "detail:ka30012:administration",
+        "detail:ka30012:payoff_conditions",
+        "detail:ka30012:underlying_basket",
+        "detail:ka30012:evaluation_window",
+        "detail:ka30012:evaluation_extrema"
+      ]
+    },
+    {
+      "capability_id": "sector",
+      "operation_count": 16,
+      "mapping_ids": [
+        "base:0J",
+        "base:0U",
+        "base:ka10010",
+        "base:ka10051",
+        "base:ka20002",
+        "base:ka20003",
+        "detail:ka20001:market_snapshot",
+        "detail:ka20001:session_range",
+        "detail:ka20001:market_breadth",
+        "detail:ka20001:fifty_two_week_range",
+        "detail:ka20001:intraday_history",
+        "detail:ka20009:market_snapshot",
+        "detail:ka20009:session_range",
+        "detail:ka20009:market_breadth",
+        "detail:ka20009:fifty_two_week_range",
+        "detail:ka20009:daily_history"
+      ]
+    },
+    {
+      "capability_id": "investor-flow",
+      "operation_count": 16,
+      "mapping_ids": [
+        "base:ka10008",
+        "base:ka10034",
+        "base:ka10035",
+        "base:ka10036",
+        "base:ka10037",
+        "base:ka10044",
+        "base:ka10045",
+        "base:ka10058",
+        "base:ka10059",
+        "base:ka10061",
+        "base:ka10063",
+        "base:ka10065",
+        "base:ka10066",
+        "base:ka10131",
+        "base:ka52301",
+        "base:ka90009"
+      ]
+    },
+    {
+      "capability_id": "broker",
+      "operation_count": 16,
+      "mapping_ids": [
+        "base:0F",
+        "base:ka10038",
+        "base:ka10039",
+        "base:ka10042",
+        "base:ka10043",
+        "base:ka10052",
+        "base:ka10053",
+        "base:ka10062",
+        "base:ka10078",
+        "detail:ka10002:market_snapshot",
+        "detail:ka10002:sell_brokers",
+        "detail:ka10002:buy_brokers",
+        "detail:ka10040:sell_brokers",
+        "detail:ka10040:buy_brokers",
+        "detail:ka10040:foreign_broker_estimates",
+        "detail:ka10040:broker_departures"
+      ]
+    },
+    {
+      "capability_id": "discovery",
+      "operation_count": 10,
+      "mapping_ids": [
+        "base:ka10020",
+        "base:ka10021",
+        "base:ka10022",
+        "base:ka10023",
+        "base:ka10027",
+        "base:ka10029",
+        "base:ka10030",
+        "base:ka10031",
+        "base:ka10032",
+        "base:ka10098"
+      ]
+    },
+    {
+      "capability_id": "credit-lending-short",
+      "operation_count": 9,
+      "mapping_ids": [
+        "base:ka10013",
+        "base:ka10014",
+        "base:ka10033",
+        "base:ka10068",
+        "base:ka10069",
+        "base:ka20068",
+        "base:ka90012",
+        "base:kt20016",
+        "base:kt20017"
+      ]
+    },
+    {
+      "capability_id": "stock-info",
+      "operation_count": 21,
+      "mapping_ids": [
+        "base:0g",
+        "base:ka10003",
+        "base:ka10015",
+        "base:ka10016",
+        "base:ka10017",
+        "base:ka10018",
+        "base:ka10019",
+        "base:ka10024",
+        "base:ka10025",
+        "base:ka10026",
+        "base:ka10028",
+        "base:ka10054",
+        "base:ka10055",
+        "base:ka10084",
+        "detail:ka10001:identity_and_capital",
+        "detail:ka10001:market_scale_and_ownership",
+        "detail:ka10001:price_range",
+        "detail:ka10001:valuation",
+        "detail:ka10001:financial_performance",
+        "detail:ka10001:daily_price_band",
+        "detail:ka10001:current_trading"
+      ]
+    },
+    {
+      "capability_id": "watchlist",
+      "operation_count": 8,
+      "mapping_ids": [
+        "base:ka00198",
+        "base:ka01300",
+        "base:ka01301",
+        "base:ka10095",
+        "base:ka10099",
+        "base:ka10100",
+        "base:ka10101",
+        "base:ka10102"
+      ]
+    },
+    {
+      "capability_id": "quote",
+      "operation_count": 9,
+      "mapping_ids": [
+        "base:0A",
+        "base:0B",
+        "base:0H",
+        "base:ka10005",
+        "base:ka10006",
+        "base:ka10011",
+        "base:ka10046",
+        "base:ka10047",
+        "base:ka10086"
+      ]
+    },
+    {
+      "capability_id": "gold",
+      "operation_count": 5,
+      "mapping_ids": [
+        "base:0I",
+        "base:ka50010",
+        "base:ka50012",
+        "base:ka50087",
+        "base:ka50100"
+      ]
+    },
+    {
+      "capability_id": "theme",
+      "operation_count": 2,
+      "mapping_ids": [
+        "base:ka90001",
+        "base:ka90002"
+      ]
+    },
+    {
+      "capability_id": "market-status",
+      "operation_count": 2,
+      "mapping_ids": [
+        "base:0s",
+        "base:1h"
+      ]
+    },
+    {
+      "capability_id": "condition-search",
+      "operation_count": 4,
+      "mapping_ids": [
+        "base:ka10171",
+        "base:ka10172",
+        "base:ka10173",
+        "base:ka10174"
+      ]
+    }
+  ]
+}
