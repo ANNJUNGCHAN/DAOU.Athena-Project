@@ -1,6 +1,6 @@
 # Athena 19개 Capability API 내역서
 
-- 상태: 구현 전 계약 기준안
+- 상태: Paper 실제 19개 창 반영 완료 · Runtime 구현 전 계약 기준안
 - 버전: `capability-contract/1.0.0`
 - 대상 operation: OAuth 제외 299개
 
@@ -22,6 +22,8 @@ Internal adapter surface
 ```
 
 내부 adapter 299개는 삭제하지 않는다. Selector와 프론트엔드가 직접 호출하지 못하게 내린다.
+
+개별 귀속 정본은 `backend/ref/kiwoom-capability-assignment.json`이다. assignment key는 case-sensitive `mapping_id`이며, `backend/tests/unit/test_capability_assignment.py`가 OAuth 제외 manifest 299개와 fixture의 exact set equality를 검증한다.
 
 ## 2. 공통 Route
 
@@ -126,7 +128,7 @@ WebSocket control ACK를 기다리느라 snapshot 응답을 지연시키지 않�
 | 5 | `program-trading` | 프로그램매매 | 9 | 9 | `market`, `instrument`, `intraday`, `daily` | `conditional_required` | 종목 mode의 `0w` |
 | 6 | `etf` | ETF | 10 | 10 | `overview`, `nav`, `returns`, `trades`, `flows` | `conditional_required` | 종목 target의 `0G` |
 | 7 | `elw` | ELW | 22 | 13 | `overview`, `greeks`, `theoretical`, `spread`, `ranking` | `conditional_required` | 종목 target의 `0m`, `0u` |
-| 8 | `sector` | 업종 | 16 | 8 | `quote`, `index`, `change`, `members`, `daily` | `conditional_required` | 지수 target의 `0J`, `0U` |
+| 8 | `sector` | 업종 | 16 | 8 | `quote`, `index`, `program`, `investor-flow`, `change`, `members`, `daily` | `conditional_required` | 지수 target의 `0J`, `0U` |
 | 9 | `investor-flow` | 투자자·기관 수급 | 16 | 16 | `investor`, `institution`, `foreign`, `streak`, `ranking` | `conditional_required` | 종목 target header의 `0B`; 본문은 snapshot |
 | 10 | `broker` | 거래원 | 16 | 11 | `buy`, `sell`, `net`, `broker-ranking` | `conditional_required` | 현재 종목 mode의 `0F` |
 | 11 | `discovery` | 종목발굴·순위 | 10 | 10 | `volume`, `change`, `price`, `orderbook`, `credit` | `conditional_required` | visible rows의 `0B`, `0H` |
@@ -134,7 +136,7 @@ WebSocket control ACK를 기다리느라 snapshot 응답을 지연시키지 않�
 | 13 | `stock-info` | 종목정보 | 21 | 15 | `overview`, `range`, `trading`, `warnings`, `facts` | `required` | 소유 `0g`; 가격 header에 shared `0B` |
 | 14 | `watchlist` | 관심종목·목록 | 8 | 8 | `groups`, `instruments`, `industry-members`, `brokers` | `conditional_required` | visible rows의 `0B`, `0g` |
 | 15 | `quote` | 현재시세·체결 | 9 | 9 | `realtime`, `daily`, `expected` | `required` | `0A`, `0B`, `0H` |
-| 16 | `gold` | 금현물 | 5 | 5 | `quote`, `trades`, `expected`, `conversion` | `required` | `0I` |
+| 16 | `gold` | 금현물 | 5 | 5 | `quote`, `trades`, `daily`, `expected`, `conversion` | `required` | `0I` |
 | 17 | `theme` | 테마 | 2 | 2 | `themes`, `members` | `not_applicable` | 없음 |
 | 18 | `market-status` | 시장상태·VI | 2 | 2 | `session`, `vi` | `required` | `0s`, `1h` |
 | 19 | `condition-search` | 조건검색 | 4 | 4 | `conditions`, `results`, `live` | `conditional_required` | 조건 실행 후 `ka10173`, 종료 시 `ka10174` |
@@ -527,3 +529,37 @@ Idempotency-Key: ...
 - 내부 299 route는 `x-athena-internal: true`를 유지·추가한다.
 - Detail route는 `x-athena-llm-exposed: false`를 유지한다.
 - 주문 mutation은 Window Instance schema에 섞지 않는다.
+
+## 15. 응답 필드 커버리지 계약
+
+19개 Capability는 299개 operation을 사용자 의도 단위로 묶는 API 표면이다. 이것만으로 모든 응답 필드가 자동으로 표현된다고 간주하지 않는다. 필드 단위 정본과 검증 기준은 다음과 같다.
+
+- canonical source: `backend/ref/kiwoom-common-screen-manifest.json`
+- generated model source: `backend/athena_api/generated/models.py`
+- OAuth 제외 operation: 299개
+- response field occurrence: 3,705개
+- 고유 response alias: 1,877종
+
+필드 레지스트리는 최소한 아래 속성을 가진다.
+
+```text
+operation_ref, json_path, alias, label_ko, description, unit_or_format,
+sensitivity, field_class, capability_id, mode, section_id, tier,
+component_id, visibility_condition, realtime_merge_key,
+fallback_section_id, fixture_id
+```
+
+`field_class`는 `semantic`, `transport`, `internal` 중 하나다. 사용자 의미가 있는 필드는 `primary`, `secondary`, `detail` tier 중 하나 또는 사용자용 `SemanticDetailSheet`로 반드시 접근 가능해야 한다. raw JSON이나 내부 alias를 그대로 노출하는 것은 fallback으로 인정하지 않는다.
+
+transport/internal 필드는 카드 본문에 그대로 그리지 않는다. 대신 `return_code`, `return_msg`, `trnm`, pagination token, trace id, WebSocket REG/REMOVE envelope, raw WS value의 의미를 오류·pagination·realtime lifecycle 행동으로 검증한다.
+
+필드 커버리지 완료 게이트:
+
+- 299 operation assigned, unassigned 0, duplicated 0
+- 모든 `(operation_ref, response json_path)` 분류, unclassified 0
+- semantic rendered / semantic total 100%
+- diagnostic-only semantic field 0
+- compound scalar/list, pagination, REST/WebSocket merge, masking fixture 통과
+- 의미 기반 상세 영역에서도 접근할 수 없는 semantic field 0
+
+현재 `generated/models.py`에 의미가 `Extra Item`으로만 정의된 `951`, `924`, `1279` 세 필드는 공식 의미 확인 전까지 임의 분류하지 않는다. 따라서 19개 창의 operation 귀속과 Paper 정보 구조는 확정되었지만, 모든 응답 필드의 100% 표현은 이 세 blocker 해결과 필드 레지스트리 자동 검증 전에는 완료로 선언하지 않는다.
