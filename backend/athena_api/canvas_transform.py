@@ -831,11 +831,12 @@ def describe_unsupported_render_plan_kind(operation_ref: str | None) -> str:
     )
 
 
-# Paper 보드 12d의 카드 16종 고정 이름. TR별 캡션(예: "일봉 — 삼성전자")은 이
+# Paper `14 · 카드 v3 카탈로그`의 카드 16종 고정 이름. TR별 캡션(예: "일봉 — 삼성전자")은 이
 # 16종 중 하나로 카드가 분류될 때 타이틀에서 서브타이틀로 강등된다(카드-TR 대조
 # 조사 `.omc/state/card-backend-coverage.md`/`card-diff.md` 2026-08-26 기준).
-# 이 16종 밖의 TR(auth, elw/etf/theme 단독 화면 등)은 매핑하지 않는다 — 강제로
-# 끼워 맞추지 않고 현재 동작(캡션이 곧 타이틀)을 유지한다.
+# 인증 2종만 카드 밖 시스템 화면으로 남긴다. 나머지 키움 REST/WebSocket/주문
+# operation 299개는 모두 이 16종 중 하나로 귀속한다(Paper 카드 페이지의
+# `13 · 공통 카드 v3 기준안`과 `14 · 카드 v3 카탈로그` 대조, 2026-08-29).
 _CARD_TITLES = frozenset(
     {
         "종목발굴", "시세", "수급", "거래원", "계좌", "주문내역", "보유주식",
@@ -847,6 +848,28 @@ _CARD_TITLES = frozenset(
 # 알려진 예외 — 라벨 키워드만으로는 못 잡는 소수의 operation_ref를 직접 못박는다
 # (2026-08-26 카드-TR 대조 조사에서 특정된 항목만, 추측 추가 없음).
 _CARD_TITLE_OVERRIDES: dict[str, str] = {
+    # WebSocket 12종 — Paper 카드 v3 카탈로그의 실제 operation 배치를 그대로 고정한다.
+    # 실시간은 별도 17번째 카드가 아니라 시세·주문·보유주식·종목발굴 카드의
+    # 상태/스트림으로 들어간다.
+    "base:00": "주문",  # 주문체결
+    "base:04": "보유주식",  # 잔고
+    "base:0B": "시세",  # 주식체결
+    "base:0G": "종목발굴",  # ETF NAV
+    "base:0H": "시세",  # 주식예상체결
+    "base:0I": "시세",  # 국제금환산가격
+    "base:0J": "종목발굴",  # 업종지수
+    "base:0U": "종목발굴",  # 업종등락
+    "base:0m": "종목발굴",  # ELW 이론가
+    "base:0s": "시세",  # 장시작시간
+    "base:0u": "종목발굴",  # ELW 지표
+    "base:1h": "시세",  # VI발동/해제
+    # 순위/시세 도메인 안의 투자자 매매 6종은 Paper 수급 카드에 배치한다.
+    "base:ka10065": "수급",  # 장중투자자별매매상위요청
+    "base:ka90009": "수급",  # 외국인기관매매상위요청
+    "base:ka10044": "수급",  # 일별기관매매종목요청
+    "base:ka10045": "수급",  # 종목별기관매매추이요청
+    "base:ka10063": "수급",  # 장중투자자별매매요청
+    "base:ka10066": "수급",  # 장마감후투자자별매매요청
     "detail:ka10040:foreign_broker_estimates": "거래원",
     "detail:kt00004:position_valuation": "보유주식",
     "detail:kt00005:settled_positions": "보유주식",
@@ -955,9 +978,9 @@ _DOMAIN_LABEL_KEYWORDS: dict[str, tuple[tuple[str, str], ...]] = {
 }
 
 # 도메인이 16종 중 정확히 하나로 좁혀지는 경우의 기본값 — 위 키워드 규칙에서
-# 안 걸린 나머지에 적용한다. websocket/quotes/ranking/sector/elw/etf/theme/auth는
-# 도메인 하나가 여러 카드로 갈라지거나(위 키워드가 담당) 16종 밖이라 기본값이
-# 없다 — 매칭 실패는 None(캡션이 곧 타이틀인 현재 동작 유지).
+# 안 걸린 나머지에 적용한다. ranking/elw/sector/etf/theme의 조회·상세 화면은
+# Paper 카드 v3 카탈로그에서 모두 종목발굴 창에 배치된다. websocket/quotes는 한 도메인이
+# 여러 카드로 갈라지므로 위 키워드/명시 예외가 담당하고, auth만 None으로 남는다.
 _DOMAIN_DEFAULT_TITLE: dict[str, str] = {
     "charts": "차트",
     "watchlist": "관심종목",
@@ -967,6 +990,11 @@ _DOMAIN_DEFAULT_TITLE: dict[str, str] = {
     "investor": "수급",
     "account": "계좌",
     "order": "주문",
+    "ranking": "종목발굴",
+    "elw": "종목발굴",
+    "sector": "종목발굴",
+    "etf": "종목발굴",
+    "theme": "종목발굴",
 }
 
 
@@ -982,12 +1010,12 @@ def _screen_reader_label(operation_ref: str) -> str | None:
 
 
 def resolve_fixed_card_title(operation_ref: str | None) -> str | None:
-    """operation_ref → Paper 보드 12d 카드 16종 중 고정 이름, 없으면 None.
+    """operation_ref → Paper 카드 v3 카탈로그 16종 중 고정 이름, 없으면 None.
 
     도메인(`operation.domain`)과 화면 정의의 접근성 라벨(`screen_reader_label`)
-    만으로 결정한다 — 둘 다 이미 매니페스트/생성 화면 정의에 있는 값이라 206개를
+    만으로 결정한다 — 둘 다 이미 매니페스트/생성 화면 정의에 있는 값이라 299개를
     손으로 나열하지 않는다. 판정 근거는 `.omc/state/card-backend-coverage.md`/
-    `card-diff.md`(2026-08-26). 애매한 TR은 강제로 채우지 않고 None을 돌려준다.
+    `card-diff.md`(2026-08-26). OAuth 발급·폐기만 카드 밖이므로 None을 돌려준다.
     """
     if not isinstance(operation_ref, str):
         return None

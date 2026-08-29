@@ -925,32 +925,38 @@ function appendWorkflowState(body, state, label = '상태') {
 }
 
 function renderEventCard(envelope) {
-  const { card, body } = makeCard('event', envelope.caption || '실시간 이벤트', envelope.layout, envelope.correlation);
+  const [title, subtitle] = cardTitleAndSubtitle(envelope, '실시간 이벤트');
+  const { card, body } = makeCard('event', title, envelope.layout, envelope.correlation, subtitle);
   stampPaperScreen(card, envelope);
   const data = envelope.data && typeof envelope.data === 'object' ? envelope.data : {};
   const lifecycle = data.lifecycle || data.state || 'connecting';
   card.dataset.workflow = 'websocket_lifecycle';
   card.dataset.screenState = lifecycle;
-  appendWorkflowState(body, lifecycle, '수신 상태');
+  appendWorkflowState(body, data.state_label || lifecycle, '수신 상태');
+  const kindRender = window.AthenaLib.CardKinds.resolve(title);
+  const built = kindRender && kindRender(envelope);
+  if (built) body.appendChild(built);
   const records = Array.isArray(data.records) ? data.records.slice(0, 20) : [];
-  const list = document.createElement('ol');
-  list.className = 'event-log';
-  list.setAttribute('aria-label', '제한된 이벤트 로그');
-  for (const record of records) {
-    const item = document.createElement('li');
-    item.className = 'event-log-item';
-    item.textContent = typeof record === 'string'
-      ? record
-      : Object.entries(record || {}).slice(0, 5).map(([key, value]) => `${key} ${value}`).join(' · ');
-    list.appendChild(item);
+  if (!built) {
+    const list = document.createElement('ol');
+    list.className = 'event-log';
+    list.setAttribute('aria-label', '제한된 이벤트 로그');
+    for (const record of records) {
+      const item = document.createElement('li');
+      item.className = 'event-log-item';
+      item.textContent = typeof record === 'string'
+        ? record
+        : Object.entries(record || {}).slice(0, 5).map(([key, value]) => `${key} ${value}`).join(' · ');
+      list.appendChild(item);
+    }
+    if (!records.length) {
+      const item = document.createElement('li');
+      item.className = 'event-log-item is-empty';
+      item.textContent = '표시할 이벤트가 없습니다.';
+      list.appendChild(item);
+    }
+    body.appendChild(list);
   }
-  if (!records.length) {
-    const item = document.createElement('li');
-    item.className = 'event-log-item is-empty';
-    item.textContent = '표시할 이벤트가 없습니다.';
-    list.appendChild(item);
-  }
-  body.appendChild(list);
   const guard = document.createElement('div');
   guard.className = 'workflow-guard';
   guard.textContent = '표시 전용 · 원본 프레임과 인증값은 노출하지 않음';
@@ -959,18 +965,22 @@ function renderEventCard(envelope) {
 }
 
 function renderActionCard(envelope) {
-  const { card, body } = makeCard('action', envelope.caption || '주문 확인', envelope.layout, envelope.correlation);
+  const [title, subtitle] = cardTitleAndSubtitle(envelope, '주문 확인');
+  const { card, body } = makeCard('action', title, envelope.layout, envelope.correlation, subtitle);
   stampPaperScreen(card, envelope);
   const data = envelope.data && typeof envelope.data === 'object' ? envelope.data : {};
   card.dataset.workflow = 'guarded_order';
   card.dataset.screenState = data.lifecycle || data.state || 'review';
-  appendWorkflowState(body, card.dataset.screenState, '주문 단계');
+  appendWorkflowState(body, data.state_label || card.dataset.screenState, '주문 단계');
+  const kindRender = window.AthenaLib.CardKinds.resolve(title);
+  const built = kindRender && kindRender(envelope);
+  if (built) body.appendChild(built);
   const receipt = data.receipt && typeof data.receipt === 'object' ? data.receipt : {};
   const allowlisted = [
     { key: 'ord_no', label: '주문번호' },
     { key: 'dmst_stex_tp', label: '거래소 구분' },
   ].filter((field) => receipt[field.key] !== undefined);
-  if (allowlisted.length) {
+  if (!built && allowlisted.length) {
     body.appendChild(renderFactsGrid(allowlisted.map((field) => ({
       key: field.key,
       label: field.label,

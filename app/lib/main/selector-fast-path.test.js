@@ -274,6 +274,7 @@ test('closed market-order grammar dispatches guarded draft without execution', a
         json: async () => ({
           status: 'guarded',
           operation_ref: 'base:kt10000',
+          card_title: '주문',
           order_draft: draft.arguments,
         }),
       };
@@ -286,10 +287,71 @@ test('closed market-order grammar dispatches guarded draft without execution', a
   assert.deepEqual(emitted, [{
     status: 'guarded',
     operation_ref: 'base:kt10000',
+    card_title: '주문',
     order_draft: { dmst_stex_tp: 'KRX', stk_cd: '005930', ord_qty: '10', trde_tp: '3', side: 'buy' },
   }]);
   assert.equal(buildMarketOrderDraft('삼성전자와 하이닉스 10주 매수해줘', index), null);
   assert.equal(buildMarketOrderDraft('삼성전자 10주 매수해줘', index), null);
   assert.equal(buildMarketOrderDraft('삼성전자 10만원어치 매수해줘', index), null);
   assert.equal(buildMarketOrderDraft('삼성전자 100001주 매수해줘', index), null);
+});
+
+test('explicit websocket acknowledgement paints the mapped family event card once', async () => {
+  const painted = [];
+  const persisted = [];
+  const result = await runSelectorFastPath({
+    question: '삼성전자 호가 실시간 연결해줘',
+    backendBase: 'http://backend',
+    intent: 'websocket',
+    preferredRef: 'base:0D',
+    candidateRefs: ['base:0D'],
+    arguments: {
+      trnm: 'REG',
+      grp_no: '1',
+      refresh: '1',
+      data: [{ type: '0D', item: '005930' }],
+    },
+    idFactory: (() => { const values = ['ws-dataset', 'ws-item']; return () => values.shift(); })(),
+    fetchImpl: async (_url, options) => {
+      const request = JSON.parse(options.body);
+      const correlation = {
+        dataset_id: request.dataset_id,
+        item_id: request.item_id,
+        ordinal: request.ordinal,
+      };
+      return {
+        ok: true,
+        status: 200,
+        json: async () => ({
+          status: 'acknowledged',
+          operation_ref: 'base:0D',
+          card_title: '호가',
+          canvas_type: 'event',
+          correlation,
+          envelope: {
+            canvas_type: 'event',
+            card_title: '호가',
+            caption: '실시간 연결 상태',
+            correlation,
+            data: { lifecycle: 'connected', state_label: '실시간 연결됨', records: [] },
+          },
+          acknowledgement: { command: 'REG' },
+        }),
+      };
+    },
+    emitCanvas: async (payload) => {
+      painted.push(payload);
+      return { visiblePaintAt: 10 };
+    },
+    persistTurn: async (turn) => persisted.push(turn),
+  });
+
+  assert.equal(result.handled, true);
+  assert.equal(result.websocketAcknowledged, true);
+  assert.equal(result.operationRef, 'base:0D');
+  assert.deepEqual(result.canvasCaptions, ['호가']);
+  assert.equal(painted.length, 1);
+  assert.equal(painted[0].canvasType, 'event');
+  assert.equal(painted[0].envelope.card_title, '호가');
+  assert.equal(persisted.length, 1);
 });

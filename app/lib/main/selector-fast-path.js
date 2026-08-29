@@ -117,7 +117,8 @@ function verifyInlineQuery(body, expected) {
 function verifyGuardedOrder(body, orderDraft) {
   if (!body || body.status !== 'guarded'
       || (body.kind != null && body.kind !== 'order')
-      || (body.guarded != null && body.guarded !== true)) {
+      || (body.guarded != null && body.guarded !== true)
+      || body.card_title !== '주문') {
     throw new SelectorFastPathError('invalid_order_response', 'Selector dispatch가 guarded order 계약을 지키지 않았다');
   }
   if (Object.hasOwn(body, 'plan_token')) {
@@ -134,6 +135,25 @@ function verifyGuardedOrder(body, orderDraft) {
   if (!returnedDraft || Object.entries(orderDraft.arguments)
     .some(([key, value]) => String(returnedDraft[key]) !== String(value))) {
     throw new SelectorFastPathError('order_draft_mismatch', 'Selector dispatch 주문 초안이 요청과 일치하지 않는다');
+  }
+  return body;
+}
+
+function verifyAcknowledgedWebsocket(body, expected) {
+  if (!body || body.status !== 'acknowledged' || body.canvas_type !== 'event') {
+    throw new SelectorFastPathError('invalid_websocket_response', 'Selector dispatch가 실시간 연결 카드 계약을 지키지 않았다');
+  }
+  if (Object.hasOwn(body, 'plan_token')) {
+    throw new SelectorFastPathError('unexpected_plan_token', '실시간 연결 응답에 plan_token이 포함됐다');
+  }
+  if (!body.operation_ref || !body.card_title || !body.envelope
+      || body.envelope.canvas_type !== 'event'
+      || body.envelope.card_title !== body.card_title) {
+    throw new SelectorFastPathError('missing_websocket_envelope', '실시간 연결 응답에 전용 카드 정보가 없다');
+  }
+  if (!correlationMatches(body.correlation, expected)
+      || !correlationMatches(body.envelope.correlation, expected)) {
+    throw new SelectorFastPathError('correlation_mismatch', '실시간 연결 카드 correlation이 요청과 일치하지 않는다');
   }
   return body;
 }
@@ -217,6 +237,7 @@ async function runSelectorFastPath({
     await emitOrderDraft({
       status: 'guarded',
       operation_ref: verified.operation_ref,
+      card_title: verified.card_title,
       order_draft: sanitizedDraft,
     });
     ensureCurrent(signal, isCurrent);
@@ -236,7 +257,50 @@ async function runSelectorFastPath({
     };
   }
 
-  if (body && ['guarded', 'acknowledged'].includes(body.status)) {
+  if (body && body.status === 'acknowledged') {
+    if (intent !== 'websocket') {
+      throw new SelectorFastPathError('unexpected_websocket_effect', '명시적 실시간 요청이 아닌데 연결 효과가 발생했다');
+    }
+    const verified = verifyAcknowledgedWebsocket(body, correlation);
+    if (preferredRef && verified.operation_ref !== preferredRef) {
+      throw new SelectorFastPathError('preferred_operation_mismatch', 'Selector dispatch 실시간 operation이 선택안과 일치하지 않는다');
+    }
+    const inlineAt = clock();
+    ensureCurrent(signal, isCurrent);
+    const paint = await emitCanvas({
+      datasetId,
+      itemId,
+      ordinal: 1,
+      operationRef: verified.operation_ref,
+      operationArgs: operationArguments,
+      canvasType: 'event',
+      envelope: verified.envelope,
+      requestStartedAt: startedAt,
+      inlineAt,
+      paintDeadlineAt: startedAt + 3000,
+      firstFeedbackPending: true,
+      signal,
+    });
+    ensureCurrent(signal, isCurrent);
+    const answerText = '실시간 연결 상태를 카드로 표시했습니다.';
+    await persistTurn({ question: rawQuestion, answerText });
+    return {
+      handled: true,
+      ok: true,
+      source: 'selector-fast',
+      error: null,
+      answerText,
+      canvasTypes: ['event'],
+      canvasCaptions: [verified.card_title],
+      operationRef: verified.operation_ref,
+      firstCanvasMs: Math.max(0, (Number(paint && paint.visiblePaintAt) || clock()) - startedAt),
+      durationMs: Math.max(0, clock() - startedAt),
+      modelCalls: 0,
+      websocketAcknowledged: true,
+    };
+  }
+
+  if (body && body.status === 'guarded') {
     return { handled: false, reason: body.status };
   }
   const verified = verifyInlineQuery(body, correlation);
@@ -288,4 +352,5 @@ module.exports = {
   SelectorFastPathError,
   buildMarketOrderDraft,
   runSelectorFastPath,
+  verifyAcknowledgedWebsocket,
 };

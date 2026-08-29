@@ -155,6 +155,7 @@ def test_order_returns_only_a_burned_sanitized_draft_without_execution() -> None
     assert response.json() == {
         "status": "guarded",
         "operation_ref": "base:kt10000",
+        "card_title": "주문",
         "order_draft": {
             "dmst_stex_tp": "KRX",
             "stk_cd": "005930",
@@ -175,6 +176,9 @@ def test_websocket_executes_only_with_explicit_intent_and_uses_only_ws_client() 
     websocket = WebSocketSpy()
     request = {
         "question": "base:0G",
+        "dataset_id": "ws-1",
+        "item_id": "connection",
+        "ordinal": 1,
         "arguments": {
             "trnm": "REG",
             "grp_no": "1",
@@ -195,6 +199,32 @@ def test_websocket_executes_only_with_explicit_intent_and_uses_only_ws_client() 
     assert explicit.json() == {
         "status": "acknowledged",
         "operation_ref": "base:0G",
+        "card_title": "종목발굴",
+        "canvas_type": "event",
+        "correlation": {
+            "dataset_id": "ws-1",
+            "item_id": "connection",
+            "ordinal": 1,
+        },
+        "envelope": {
+            "canvas_type": "event",
+            "fell_back": False,
+            "fallback_reason": None,
+            "caption": "실시간 연결 상태",
+            "card_title": "종목발굴",
+            "data": {
+                "lifecycle": "connected",
+                "state_label": "실시간 연결됨",
+                "records": [{"상태": "실시간 연결됨"}],
+            },
+            "layout": None,
+            "drop_types": [],
+            "correlation": {
+                "dataset_id": "ws-1",
+                "item_id": "connection",
+                "ordinal": 1,
+            },
+        },
         "acknowledgement": {
             "return_code": "0",
             "return_msg": "OK",

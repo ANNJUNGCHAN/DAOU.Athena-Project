@@ -301,7 +301,20 @@
    card-kind-호가.js 머리말) — .card-kit-row-ladder를 세로로 쌓기만 한다. */
 .card-kit-hoga-ladder { display: flex; flex-direction: column; gap: 2px; }
 
-/* KIND: 주문 */
+/* KIND: 주문 — 실행 전 guarded action은 canvas.js가 담당하고, 여기서는 주문체결
+   WebSocket·주문 결과를 읽기 전용 receipt로 표시한다. */
+
+.card-kind-order-receipt,
+.card-kind-order-facts { display: flex; flex-direction: column; }
+.card-kind-order-receipt-state {
+  display: flex;
+  justify-content: flex-end;
+  padding: 2px 0 8px;
+}
+.card-kind-order-receipt .card-kit-row-two-line:not(:last-child),
+.card-kind-order-facts .card-kit-row-two-line:not(:last-child) {
+  border-bottom: 1px solid var(--color-k-panel3);
+}
 
 /* KIND: 프로그램매매 */
 
@@ -316,10 +329,7 @@
 .card-kind-종목정보-range { display: flex; flex-direction: column; gap: 4px; }
 .card-kind-종목정보-range-label { font-size: var(--text-xs); color: var(--color-k-faint); }
 
-/* ---------- US-004 잔여 4종(.omc/state/card-v3-wave5-specs.json) ----------
-   신용거래·대차거래·공매도·종목발굴 — Wave 0에는 스텁이 없었다(당시 gap 분석
-   인풋 밖). 종목발굴은 전량 생략(사유는 .omc/state/phase3-list.md) — 그래서
-   섹션만 남겨 두고 비워 둔다("주문" 섹션과 같은 관례. */
+/* ---------- US-004 잔여 4종(.omc/state/card-v3-wave5-specs.json) ---------- */
 
 /* KIND: 신용거래 */
 
@@ -343,3 +353,15 @@
 }
 
 /* KIND: 종목발굴 */
+
+.card-kind-discovery-list,
+.card-kind-discovery-facts,
+.card-kind-discovery-compound { display: flex; flex-direction: column; }
+.card-kind-discovery-compound { gap: 12px; }
+.card-kind-discovery-list .card-kit-row-two-line:not(:last-child),
+.card-kind-discovery-facts .card-kit-row-two-line:not(:last-child) {
+  border-bottom: 1px solid var(--color-k-panel3);
+}
+.card-kind-discovery-list .card-kit-row-two-line:first-child {
+  border-top: 2px solid var(--color-brand);
+}

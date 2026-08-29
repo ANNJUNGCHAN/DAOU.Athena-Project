@@ -515,6 +515,7 @@ async def selector_dispatch(
             content={
                 "status": "guarded",
                 "operation_ref": resolved.operation_ref,
+                "card_title": resolve_fixed_card_title(resolved.operation_ref),
                 "order_draft": _sanitized_order_draft(verified_plan.arguments),
             }
         )
@@ -539,13 +540,38 @@ async def selector_dispatch(
             order_client=None,
             ws_client=ws_client,
         )
+        acknowledgement = _compact_websocket_ack(
+            call_response.data, verified_plan.arguments
+        )
+        command = str(verified_plan.arguments.get("trnm") or "").upper()
+        lifecycle = "disconnected" if command in {"REMOVE", "STOP", "CNSRCLR"} else "connected"
+        state_label = "연결 해제됨" if lifecycle == "disconnected" else "실시간 연결됨"
+        card_title = resolve_fixed_card_title(call_response.operation_ref)
+        correlation = _correlation(payload)
+        envelope = {
+            "canvas_type": "event",
+            "fell_back": False,
+            "fallback_reason": None,
+            "caption": "실시간 연결 상태",
+            "card_title": card_title,
+            "data": {
+                "lifecycle": lifecycle,
+                "state_label": state_label,
+                "records": [{"상태": state_label}],
+            },
+            "layout": None,
+            "drop_types": [],
+            "correlation": correlation,
+        }
         return JSONResponse(
             content={
                 "status": "acknowledged",
                 "operation_ref": call_response.operation_ref,
-                "acknowledgement": _compact_websocket_ack(
-                    call_response.data, verified_plan.arguments
-                ),
+                "card_title": card_title,
+                "canvas_type": "event",
+                "correlation": correlation,
+                "envelope": envelope,
+                "acknowledgement": acknowledgement,
             }
         )
 
