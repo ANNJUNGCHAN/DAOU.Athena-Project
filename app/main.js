@@ -24,7 +24,10 @@ const { runClaudeQuery } = require('./lib/main/claude-runner');
 // 파서 자체는 손대지 않는다(sendLiveToolStep 근처 주석 참고).
 const streamJsonParser = require('./lib/main/stream-json-parser');
 const { ensureMcpConfig } = require('./lib/main/mcp-config');
-const { buildLivePrompt } = require('./lib/main/live-prompt');
+const { buildLivePrompt, buildLiveSystemPrompt, buildLiveTurnPrompt } = require('./lib/main/live-prompt');
+// 상주 채팅 세션(2026-08-30 속도 작업) — 매 턴 claude -p 콜드 스폰의 고정비를
+// 세션당 1회로 바꾼다(모듈 상단 주석 참고).
+const { createClaudeChatSession } = require('./lib/main/claude-chat-session');
 const restDatasetRunner = require('./lib/main/rest-dataset-runner');
 const { createStockEntityIndexReadiness } = require('./lib/main/stock-entity-index-readiness');
 const { createChartFollowupTracker } = require('./lib/main/chart-followup');
@@ -786,6 +789,7 @@ const integratedRealtimeShutdown = integratedCardRealtime.createBoundedShutdownC
     stockEntityIndexReadiness.stop();
     // 트레이로 숨겨진 동안에는 selector worker를 유지하고 실제 종료에서만 닫는다.
     selectorClaudePool.stop(new Error('Athena 앱 종료'));
+    if (liveChatSession) liveChatSession.stop(new Error('Athena 앱 종료'));
   },
   releaseAll: () => integratedCardRealtimeManager
     ? integratedCardRealtimeManager.releaseAll()
@@ -1912,6 +1916,30 @@ function getLiveMcpConfig() {
   return liveMcpConfig;
 }
 
+// 상주 채팅 세션 — 매 턴 콜드 스폰이 내던 턴당 고정비(CLI 기동 + MCP 게이트웨이
+// 재스폰 + --resume 포크 + 규칙 프리앰블 재전송·이력 누적)를 세션당 1회로 바꾼다.
+// 대화형 CLI(Claude Code 인터랙티브)가 빠른 조건과 같아진다.
+// ATHENA_PERSISTENT_CHAT=0 이면 기존 콜드 스폰 경로로 되돌린다(킬 스위치).
+let liveChatSession = null;
+
+function persistentChatEnabled() {
+  return process.env.ATHENA_PERSISTENT_CHAT !== '0';
+}
+
+function getLiveChatSession() {
+  if (!liveChatSession) {
+    const { dir, configFile } = getLiveMcpConfig();
+    liveChatSession = createClaudeChatSession({
+      cwd: dir,
+      configFile,
+      // 불변 규칙(live-prompt.js)은 --append-system-prompt로 세션당 1회 —
+      // 턴 페이로드는 buildLiveTurnPrompt(질문만)로 가볍다.
+      appendSystemPrompt: buildLiveSystemPrompt(),
+    });
+  }
+  return liveChatSession;
+}
+
 // 캔버스 결과 하나(stream-json-parser.classifyCanvasBlock의 출력)를 캔버스
 // 창으로 보낸다. 렌더러(canvas.js)가 status별로 카드를 그리거나 안내를 띄운다.
 function sendLiveCanvasResult(result) {
@@ -2635,15 +2663,8 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   // 설정 화면 모델 패널(lib/main/model-prefs.js) 값 — null이면 buildArgs가
   // --model/--effort를 안 붙여 claude CLI 기본값을 쓴다.
   const { model, effort } = modelPrefs.get().claude;
-  const result = await runClaudeQuery({
-    // 날것 질문을 그대로 넘기면 모델이 조회만 하고 캔버스를 건너뛸 수 있다 —
-    // 렌더 지시·스키마 힌트로 감싼다(lib/main/live-prompt.js의 실측 근거 참조).
-    prompt: buildLivePrompt(query),
-    cwd: dir,
-    configFile,
-    resumeSessionId,
-    model,
-    effort,
+  // 두 경로(상주 세션/콜드 스폰)가 같은 콜백을 공유한다 — 스트림 계약이 동일하다.
+  const turnCallbacks = {
     onSpawn: (h) => { myHandle = h; activeLiveQuery = h; },
     // 성공 resolve 1건과 render 1건의 토큰이 정확히 같은 경우만 캐시한다.
     onEvent: (ev) => { replayTurnCapture.observe(ev); trackToolStep(ev); trackSubagent(ev); },
@@ -2689,7 +2710,34 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
       if (label) canvasCaptionsSeen.push(label);
       if (liveSymbol) ensureRealtimeForSymbol(liveSymbol);
     },
-  });
+  };
+  // 상주 세션(기본) — 매 턴 콜드 스폰의 고정비가 없다. 결과 형상이 동일해
+  // 아래 세션 체인·캐시·저장 로직은 분기를 모른다. ATHENA_PERSISTENT_CHAT=0
+  // 이면 기존 왕복(runClaudeQuery)으로 폴백한다(킬 스위치).
+  const result = persistentChatEnabled()
+    ? await getLiveChatSession().run({
+      // 규칙은 세션 system prompt로 이미 갔다 — 턴에는 질문만 보낸다.
+      prompt: buildLiveTurnPrompt(query),
+      model,
+      effort,
+      resumeSessionId,
+      ...turnCallbacks,
+    })
+    : await runClaudeQuery({
+      // 날것 질문을 그대로 넘기면 모델이 조회만 하고 캔버스를 건너뛸 수 있다 —
+      // 렌더 지시·스키마 힌트로 감싼다(lib/main/live-prompt.js의 실측 근거 참조).
+      prompt: buildLivePrompt(query),
+      cwd: dir,
+      configFile,
+      resumeSessionId,
+      model,
+      effort,
+      ...turnCallbacks,
+    });
+  if (typeof result.firstEventMs === 'number') {
+    mdlog(`상주 채팅 턴 — 제출→첫 스트림 이벤트 ${Math.round(result.firstEventMs)}ms `
+      + `(프로세스 ${result.spawnedFresh ? '신규 기동' : '재사용'})`);
+  }
 
   // 내가 등록한 핸들일 때만 지운다 — 이 await 동안 새 질의가 선점해 자기 핸들을
   // 걸어뒀다면 그걸 지우면 안 된다.
@@ -3078,6 +3126,18 @@ function handleModelSet(e, payload = {}) {
       desiredWorkers: poolState.desiredSize,
     };
     mdlog(`Selector Claude worker pool 모델 전환 — ${JSON.stringify(selectorActivation)}`);
+    // 상주 채팅 세션도 새 모델로 백그라운드 재예열한다 — 진행 중 턴이 있으면
+    // warm()이 건드리지 않고, 다음 run()이 config 불일치로 --resume 재활용한다.
+    // resumeSessionId는 반드시 liveSessionId를 명시한다 — 생략하면 모듈 내부
+    // 커서로 폴백하는데, 그 값이 중단된 턴의 포크를 가리킬 수 있다(아키텍트
+    // 리뷰 결함 1). 대화 커서의 진실은 이 파일의 liveSessionId 하나다.
+    if (persistentChatEnabled() && liveChatSession) {
+      liveChatSession.warm({
+        model: state.claude.model,
+        effort: state.claude.effort,
+        resumeSessionId: liveSessionId,
+      });
+    }
   }
   if (shellWin && !shellWin.isDestroyed()) {
     shellWin.webContents.send('athena:model-changed', state);
@@ -3487,6 +3547,13 @@ function registerLiveBootRunners(createWindowsPromise) {
     selectorClaudePool.configure({ model: selectorModel, effort: 'low' });
     selectorClaudePool.start();
     mdlog(`Selector Claude worker pool 선기동 — ${JSON.stringify(selectorClaudePool.snapshot())}`);
+    // 상주 채팅 세션 예열 — 첫 질문이 오기 전에 CLI + MCP 게이트웨이(및
+    // upstream 연결)를 미리 끝내둔다. 첫 턴부터 콜드 스폰 고정비가 없다.
+    if (persistentChatEnabled()) {
+      const { model: chatModel, effort: chatEffort } = modelPrefs.get().claude;
+      const chatState = getLiveChatSession().warm({ model: chatModel, effort: chatEffort });
+      mdlog(`상주 채팅 세션 선기동 — ${JSON.stringify(chatState)}`);
+    }
     return { detail: 'Selector pool 시작 · 주기 및 재연결 작업은 백그라운드에서 지속' };
   });
   startupReadiness.disable('fixture-readiness', '실사용 모드에서는 합성 작업을 사용하지 않음');
