@@ -9,8 +9,10 @@
     "test": "node --test lib/*.test.js lib/main/*.test.js lib/graph-mode/*.test.js",
     "verify": "electron verify.js",
     "verify:hoga-live": "electron verify-hoga-live.js",
+    "verify:integrated-cards": "electron verify-integrated-cards.js",
     "verify:settings": "electron verify-settings.js",
     "verify:settings-cards": "electron verify-settings-cards.js",
+    "verify:life003": "node verify-life003.js",
     "capture:wide15": "electron capture-wide15.js"
   },
   "author": "",

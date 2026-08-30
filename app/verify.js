@@ -9,19 +9,31 @@
 // 막아야 한다 — verify.js가 createWindows()를 직접, 통제된 시점에 호출한다.
 process.env.ATHENA_NO_AUTOSTART = '1';
 process.env.ATHENA_CANVAS_SOURCE = 'fixture';
+process.env.ATHENA_BOOT_FIXTURE_DELAY_MS = '3500';
+process.env.ATHENA_BOOT_FIXTURE_FAIL_TASK = 'fixture-readiness';
+process.env.ATHENA_BOOT_FIXTURE_FAIL_ATTEMPTS = '1';
+// 과거 선택형 OS material 환경변수가 있어도 부팅의 실제 픽셀은 투명해야 한다.
+// 의도적으로 값을 주입한 채 main.js를 불러와 해당 회귀 경로를 매 실행 검증한다.
+process.env.ATHENA_WINDOW_MATERIAL = 'mica';
 
 const { app, ipcMain, BrowserWindow } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
 const { execFileSync } = require('child_process');
+const {
+  createFreshVerifyProfile,
+  seedVerifyProfile,
+  startVerifyProfileCleanupWatchdog,
+} = require('./lib/main/verify-profile');
 // 지표 행 수의 단일 출처 — 검증이 숫자를 따로 갖지 않는다(2026-08-25).
 const INDICATOR_DEFS_LENGTH = require('./lib/chart-indicator-registry').INDICATOR_DEFS.length;
 
 const CAPTURES = path.join(__dirname, 'captures');
 if (!fs.existsSync(CAPTURES)) fs.mkdirSync(CAPTURES, { recursive: true });
+fs.rmSync(path.join(CAPTURES, '01b-boot-complete-hold.png'), { force: true });
 
-// ---------- 검증 전용 프로필 — 시작 상태를 이 머신에 맡기지 않는다 ----------
+// ---------- 매 실행 새 검증 프로필 — 시작 상태를 이 머신이나 이전 실행에 맡기지 않는다 ----------
 // 실측으로 드러난 결함이다(2026-08-17). `lib/main/`의 네 모듈이 전부
 // `app.getPath('userData')` 아래를 읽는다 — `onboarding.js`(온보딩 진행),
 // `accounts.js`, `cli-accounts.js`, `secrets.js`. 그래서 **검증 결과가 이 머신에
@@ -35,20 +47,19 @@ if (!fs.existsSync(CAPTURES)) fs.mkdirSync(CAPTURES, { recursive: true });
 // `manualOverride=true`를 걸고, 숨은 `#history`의 `scrollHeight`는 0이라
 // `measureNeededHeight()`가 기본 높이만 돌려준다.
 //
-// userData를 검증 전용 디렉토리로 갈아끼우고 온보딩을 완료로 심어 **항상 같은
-// 시작 상태**에서 잰다. 개인 프로필은 건드리지 않는다(백업·복원도 필요 없다).
+// userData를 매 실행 고유한 임시 디렉토리로 갈아끼우고 온보딩을 완료로 심어
+// **항상 같은 시작 상태**에서 잰다. 고정 `.verify-profile`은 재사용하지 않으며,
+// 개인 프로필도 건드리지 않는다(백업·복원도 필요 없다).
 // 대가: 계좌·MCP 목록이 빈 상태로 검증된다. 검증 7·8은 카드의 **존재와 경계**를
 // 보는 것이라 유효하지만, 데이터가 찬 상태의 증거는 `npm run verify:settings-cards`
 // 쪽이다(캡처 11장). 두 검증의 역할이 다르다.
-const VERIFY_PROFILE = path.join(__dirname, '.verify-profile');
-fs.rmSync(VERIFY_PROFILE, { recursive: true, force: true });
-fs.mkdirSync(VERIFY_PROFILE, { recursive: true });
-fs.writeFileSync(
-  path.join(VERIFY_PROFILE, 'athena-onboarding.json'),
-  JSON.stringify({ cliDone: true, accountDone: true }, null, 2),
-  'utf-8'
-);
-app.setPath('userData', VERIFY_PROFILE);
+const VERIFY_PROFILE = createFreshVerifyProfile({ scenario: 'configured' });
+const FIXED_VERIFY_PROFILE = path.join(__dirname, '.verify-profile');
+const VERIFY_PROFILE_CLEANUP_WATCHDOG_PID = startVerifyProfileCleanupWatchdog(VERIFY_PROFILE.directory, {
+  tempRoot: VERIFY_PROFILE.tempRoot,
+  expectedRunId: VERIFY_PROFILE.runId,
+});
+app.setPath('userData', VERIFY_PROFILE.directory);
 
 // Codex 설정 격리 — codex-config.js는 userData가 아니라 CODEX_HOME/config.toml에
 // 직접 쓴다(2026-08-18 실결선). 검증15 확장이 실제 파일 쓰기를 하므로, 이 머신의
@@ -56,7 +67,7 @@ app.setPath('userData', VERIFY_PROFILE);
 // detectCodex()도 이 값을 읽으므로 require('./main.js')보다 먼저 세팅한다 —
 // Codex가 이 격리 디렉토리에선 항상 미연결로 보이지만, 검증7의 모델 패널
 // 단언(modelPanelHasClaudeAccountRow 등)은 Claude 쪽만 보므로 간섭이 없다.
-process.env.CODEX_HOME = path.join(VERIFY_PROFILE, '.codex-home');
+process.env.CODEX_HOME = path.join(VERIFY_PROFILE.directory, '.codex-home');
 fs.mkdirSync(process.env.CODEX_HOME, { recursive: true });
 
 const DEBUGLOG = path.join(CAPTURES, 'verify-debug.log');
@@ -121,15 +132,140 @@ function stats(timestamps) {
 // captureLog는 재발 방지 단언(§검증17)이 읽는다 — 같은 창을 연속으로 찍은 캡처가
 // 완전히 동일한 PNG가 되면 캡처 타이밍 회귀로 본다.
 const captureLog = [];
+const bootPixelFrames = new Map();
 async function shot(win, name) {
-  await win.webContents.executeJavaScript(
-    'new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))'
+  const viewport = await win.webContents.executeJavaScript(
+    'new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve({ width: innerWidth, height: innerHeight }))))'
   );
   const img = await win.webContents.capturePage();
   const buf = img.toPNG();
   fs.writeFileSync(path.join(CAPTURES, name), buf);
   captureLog.push({ name, hash: crypto.createHash('md5').update(buf).digest('hex'), winTitle: win.getTitle() });
+  if (/^(01(?:w|c)?|02)-/.test(name)) {
+    const size = img.getSize();
+    bootPixelFrames.set(name, { ...size, viewport, bitmap: img.toBitmap() });
+  }
   return img.getSize();
+}
+
+// BOOT-001 합성 가시성 — readiness-waiting과 expansion 중간의 **compact 바깥 픽셀**이
+// 바뀌어야 실제 셸이 boot(20) 위에서 확장된 것이다. DOM clip만 움직이고 불투명
+// boot가 계속 덮으면 이 영역은 waiting과 동일해 반드시 실패한다.
+function measureBootCompositeReveal(waiting, mid, full) {
+  if (!waiting || !mid || !full
+    || waiting.width !== mid.width || waiting.height !== mid.height
+    || waiting.width !== full.width || waiting.height !== full.height) {
+    return { pass: false, reason: 'frame-size-mismatch' };
+  }
+  const scaleX = waiting.width / waiting.viewport.width;
+  const scaleY = waiting.height / waiting.viewport.height;
+  const compact = {
+    left: (waiting.viewport.width / 2 - 360) * scaleX,
+    right: (waiting.viewport.width / 2 + 360) * scaleX,
+    top: (waiting.viewport.height / 2 - 130) * scaleY,
+    bottom: (waiting.viewport.height / 2 + 130) * scaleY,
+  };
+  let sampled = 0;
+  let changedFromWaiting = 0;
+  let stillChangingToFull = 0;
+  let shellLike = 0;
+  for (let y = 0; y < waiting.height; y += 4) {
+    for (let x = 0; x < waiting.width; x += 4) {
+      if (x >= compact.left && x <= compact.right && y >= compact.top && y <= compact.bottom) continue;
+      const i = (y * waiting.width + x) * 4;
+      const hm = Math.abs(waiting.bitmap[i] - mid.bitmap[i])
+        + Math.abs(waiting.bitmap[i + 1] - mid.bitmap[i + 1])
+        + Math.abs(waiting.bitmap[i + 2] - mid.bitmap[i + 2]);
+      const mf = Math.abs(mid.bitmap[i] - full.bitmap[i])
+        + Math.abs(mid.bitmap[i + 1] - full.bitmap[i + 1])
+        + Math.abs(mid.bitmap[i + 2] - full.bitmap[i + 2]);
+      const hf = Math.abs(waiting.bitmap[i] - full.bitmap[i])
+        + Math.abs(waiting.bitmap[i + 1] - full.bitmap[i + 1])
+        + Math.abs(waiting.bitmap[i + 2] - full.bitmap[i + 2]);
+      sampled += 1;
+      if (hm > 24) changedFromWaiting += 1;
+      if (mf > 24) stillChangingToFull += 1;
+      if (hm > 24 && mf < hf) shellLike += 1;
+    }
+  }
+  return {
+    sampled,
+    changedFromWaiting,
+    stillChangingToFull,
+    shellLike,
+    pass: changedFromWaiting >= 25 && stillChangingToFull >= 25 && shellLike >= 10,
+  };
+}
+
+// BOOT-001 투명 부팅 증거 — capturePage bitmap의 alpha를 직접 세어 화면 대부분이
+// 실제 alpha 0이고 로고·타이핑·caret·현재 작업명에 해당하는 작은 painted island만 존재하는지
+// 확인한다. CSS 문자열만 transparent여도 조상/가상요소가 면을 칠하면 실패한다.
+function measureBootTransparency(frame) {
+  if (!frame || !frame.bitmap || !frame.width || !frame.height) {
+    return { pass: false, reason: 'frame-missing' };
+  }
+  let clearPixels = 0;
+  let paintedPixels = 0;
+  let opaquePixels = 0;
+  let offMaskPaintedPixels = 0;
+  let alphaSum = 0;
+  const totalPixels = frame.bitmap.length / 4;
+  const allowedBounds = {
+    minX: Math.floor(frame.width * 0.32),
+    maxX: Math.ceil(frame.width * 0.7),
+    minY: Math.floor(frame.height * 0.28),
+    maxY: Math.ceil(frame.height * 0.7),
+  };
+  const paintedBounds = {
+    minX: frame.width,
+    maxX: -1,
+    minY: frame.height,
+    maxY: -1,
+  };
+  for (let i = 3, pixelIndex = 0; i < frame.bitmap.length; i += 4, pixelIndex += 1) {
+    const alpha = frame.bitmap[i];
+    alphaSum += alpha;
+    if (alpha <= 5) clearPixels += 1;
+    else {
+      paintedPixels += 1;
+      const x = pixelIndex % frame.width;
+      const y = Math.floor(pixelIndex / frame.width);
+      paintedBounds.minX = Math.min(paintedBounds.minX, x);
+      paintedBounds.maxX = Math.max(paintedBounds.maxX, x);
+      paintedBounds.minY = Math.min(paintedBounds.minY, y);
+      paintedBounds.maxY = Math.max(paintedBounds.maxY, y);
+      if (x < allowedBounds.minX || x > allowedBounds.maxX
+        || y < allowedBounds.minY || y > allowedBounds.maxY) {
+        offMaskPaintedPixels += 1;
+      }
+    }
+    if (alpha >= 200) opaquePixels += 1;
+  }
+  const transparentRatio = totalPixels ? clearPixels / totalPixels : 0;
+  const paintedRatio = totalPixels ? paintedPixels / totalPixels : 1;
+  const boundsFit = paintedPixels > 0
+    && paintedBounds.minX >= allowedBounds.minX
+    && paintedBounds.maxX <= allowedBounds.maxX
+    && paintedBounds.minY >= allowedBounds.minY
+    && paintedBounds.maxY <= allowedBounds.maxY;
+  return {
+    totalPixels,
+    clearPixels,
+    paintedPixels,
+    opaquePixels,
+    offMaskPaintedPixels,
+    allowedBounds,
+    paintedBounds,
+    transparentRatio: Number(transparentRatio.toFixed(4)),
+    paintedRatio: Number(paintedRatio.toFixed(4)),
+    meanAlpha: totalPixels ? Number((alphaSum / totalPixels).toFixed(2)) : null,
+    boundsFit,
+    pass: transparentRatio >= 0.97
+      && paintedPixels >= 1000
+      && paintedRatio <= 0.025
+      && offMaskPaintedPixels === 0
+      && boundsFit,
+  };
 }
 
 // 2026-08-24 리프 1.3.2 — **렌더된 픽셀**의 채도를 잰다.
@@ -203,45 +339,376 @@ async function waitForChatBooted(shellWin, timeoutMs = 5000) {
   };
 }
 
-// 부팅 4단계 재정의(2026-08-18) 실측 — 확정된 채팅바의 입력줄에 ATHENA가 적혔다가
-// 지워지고 placeholder로 돌아오는지, 부팅이 끝날 때까지 DOM을 60ms 간격으로
-// 표집한다. 스크린샷은 타이밍 레이스가 있어 상태 자체를 잰다. reduced-motion
-// 환경이면 시퀀스가 통째로 생략되는 게 스펙이므로 그 사실을 함께 기록한다.
-async function traceBootBar(shellWin, timeoutMs = 5000) {
+// BOOT-001 C1 실측 — 시각적으로 투명한 ATHENA 폭 guide 위에서 파란 글자가 접두사
+// 순서대로 끝까지 입력되고, 글자 뒤 별도 색상 면 없이 핑크 커서가 유지되며, borderless 조판이 실제
+// Page 1 셸 위에서 확장되는지 60ms 간격으로 표집한다. reduced-motion은 완성된
+// 정적 조판만 짧게 보여주고 같은 단일 finishBoot 경로로 완료하는 것이 계약이다.
+async function traceBootBar(shellWin, timeoutMs = 12000, completionSnapshotProvider = null) {
+  const senderId = shellWin.webContents.id;
   const probe = `(() => {
     const boot = document.getElementById('boot');
     const name = document.getElementById('bootName');
-    const ph = document.getElementById('bootPh');
+    const panel = document.getElementById('bootPanel');
+    const cursor = document.querySelector('.boot-cursor');
+    const logo = document.querySelector('.boot-logo');
+    const stage = document.querySelector('.boot-stage');
+    const base = document.querySelector('.boot-base');
+    const typedLayer = document.querySelector('.boot-typed-layer');
+    const wordline = document.querySelector('.boot-wordline');
+    const status = document.querySelector('.boot-status');
+    const task = document.getElementById('bootTask');
+    const shell = document.getElementById('shell');
+    const chars = name ? Array.from(name.children) : [];
+    const shellMapCells = Array.from(document.querySelectorAll('.boot-shell-map > span'));
+    const bootStyle = boot ? getComputedStyle(boot) : null;
+    const baseStyle = base ? getComputedStyle(base) : null;
+    const cursorStyle = cursor ? getComputedStyle(cursor) : null;
+    const stageStyle = stage ? getComputedStyle(stage) : null;
+    const logoRect = logo ? logo.getBoundingClientRect() : null;
+    const shellStyle = shell ? getComputedStyle(shell) : null;
+    const shellRect = shell ? shell.getBoundingClientRect() : null;
+    const bootSurfaceNodes = [
+      boot, panel, stage, logo, wordline, base, typedLayer, name, cursor, task, status,
+    ].filter(Boolean);
     return {
       booting: !!boot && !boot.hidden,
       name: name ? name.textContent : '',
-      phVisible: !!ph && !ph.hidden,
+      recordedTypedPrefixes: boot ? (boot.dataset.typedPrefixes || '').split('|').filter(Boolean) : [],
+      phase: boot ? boot.dataset.phase : null,
+      startupPhase: boot ? boot.dataset.startupPhase : null,
+      localReadiness: boot ? boot.dataset.localReadiness : null,
+      localFailureReason: boot ? boot.dataset.localFailureReason : null,
+      finishCount: boot ? Number(boot.dataset.finishCount || '0') : 0,
+      timings: boot ? {
+        startedAt: Number(boot.dataset.startedAt || '0'),
+        typingAt: Number(boot.dataset.typingAt || '0'),
+        typedAt: Number(boot.dataset.typedAt || '0'),
+        visualMinimumAt: Number(boot.dataset.visualMinimumAt || '0'),
+        reducedStaticAt: Number(boot.dataset.reducedStaticAt || '0'),
+        expandingAt: Number(boot.dataset.expandingAt || '0'),
+        completedAt: Number(boot.dataset.completedAt || '0'),
+      } : null,
+      expanding: !!boot && boot.classList.contains('is-expanding'),
+      shellVisible: !!shell && !shell.hidden,
+      appVisible: !document.getElementById('app').hidden,
+      modeSurfaceVisible: ['app', 'onboard', 'settings', 'order']
+        .map((id) => document.getElementById(id))
+        .some((node) => node && !node.hidden),
+      viewport: { width: innerWidth, height: innerHeight },
+      shellClipPath: shellStyle ? shellStyle.clipPath : '',
+      shellTransform: shellStyle ? shellStyle.transform : '',
+      shellTransitionProperty: shellStyle ? shellStyle.transitionProperty : '',
+      shellTransitionDuration: shellStyle ? shellStyle.transitionDuration : '',
+      shellRect: shellRect ? {
+        left: shellRect.left,
+        top: shellRect.top,
+        width: shellRect.width,
+        height: shellRect.height,
+      } : null,
+      clipPath: panel ? getComputedStyle(panel).clipPath : '',
+      panelSurface: panel ? {
+        backgroundColor: getComputedStyle(panel).backgroundColor,
+        backgroundImage: getComputedStyle(panel).backgroundImage,
+        borderWidth: getComputedStyle(panel).borderWidth,
+        borderRadius: getComputedStyle(panel).borderRadius,
+        boxShadow: getComputedStyle(panel).boxShadow,
+      } : null,
+      bootSurface: bootStyle ? {
+        backgroundColor: bootStyle.backgroundColor,
+        backgroundImage: bootStyle.backgroundImage,
+        zIndex: bootStyle.zIndex,
+      } : null,
+      shellZIndex: shellStyle ? shellStyle.zIndex : '',
+      failureVisible: false,
+      retryVisible: false,
+      statusText: status ? status.textContent : '',
+      taskVisible: !!task && !task.hidden,
+      taskText: task ? task.textContent : '',
+      taskId: boot ? boot.dataset.currentTaskId : '',
+      taskState: boot ? boot.dataset.currentTaskState : '',
+      taskLabel: boot ? boot.dataset.currentTaskLabel : '',
+      taskSurface: task ? {
+        backgroundColor: getComputedStyle(task).backgroundColor,
+        backgroundImage: getComputedStyle(task).backgroundImage,
+        borderWidth: getComputedStyle(task).borderWidth,
+        borderRadius: getComputedStyle(task).borderRadius,
+        boxShadow: getComputedStyle(task).boxShadow,
+        fontSize: getComputedStyle(task).fontSize,
+        lineHeight: getComputedStyle(task).lineHeight,
+      } : null,
+      noBootProgress: !document.querySelector('.boot progress, .boot [role="progressbar"]'),
+      baseText: base ? base.textContent : '',
+      baseColor: baseStyle ? baseStyle.color : '',
+      baseBackgroundColor: baseStyle ? baseStyle.backgroundColor : '',
+      baseFontSize: baseStyle ? baseStyle.fontSize : '',
+      baseLineHeight: baseStyle ? baseStyle.lineHeight : '',
+      baseLetterSpacing: baseStyle ? baseStyle.letterSpacing : '',
+      stageGap: stageStyle ? stageStyle.gap : '',
+      logoSize: logoRect ? { width: Math.round(logoRect.width), height: Math.round(logoRect.height) } : null,
+      typedLayerIsOverlay: !!typedLayer && getComputedStyle(typedLayer).position === 'absolute',
+      noExtraCopy: !document.querySelector('.boot-folio, .boot-caption'),
+      charColors: chars.map((n) => getComputedStyle(n).color),
+      cursorText: cursor ? cursor.textContent : '',
+      cursorColor: cursorStyle ? cursorStyle.color : '',
+      cursorFontSize: cursorStyle ? cursorStyle.fontSize : '',
+      cursorAnimation: cursorStyle ? cursorStyle.animationName : '',
+      cursorOpacity: cursorStyle ? Number.parseFloat(cursorStyle.opacity) : null,
+      staticLogoPresent: !!logo
+        && logo.getAttribute('aria-label') === '키움증권'
+        && getComputedStyle(logo).transform === 'none',
+      staticLogoVisible: !!logo && logo.getBoundingClientRect().width > 0,
+      noHandoff: document.getElementById('bootArrow') === null
+        && !document.querySelector('.boot-arrow, .is-arrow-handoff'),
+      noInternalWindows: shellMapCells.length === 0,
+      bootHierarchyBorderless: bootSurfaceNodes.every((node) => {
+        const cs = getComputedStyle(node);
+        return cs.borderWidth === '0px'
+          && cs.borderRadius === '0px'
+          && cs.boxShadow === 'none';
+      }),
+      stableStatusAnnouncement: !!status
+        && document.querySelectorAll('.boot-status[role="status"]').length === 1
+        && status.getAttribute('aria-live') === 'polite'
+        && status.getAttribute('aria-atomic') === 'true'
+        && status.textContent.trim().length > 0
+        && task.getAttribute('aria-hidden') === 'true'
+        && name.getAttribute('aria-hidden') === 'true'
+        && wordline.getAttribute('aria-hidden') === 'true',
       reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
     };
   })()`;
   const t0 = Date.now();
   let sawFullName = false;
-  let sawPhAfterName = false;
+  const typedPrefixes = new Set();
+  const phases = new Set();
+  let sawCompactStage = false;
+  let sawBorderlessSurface = false;
+  let sawExpansionOverShell = false;
+  let sawStaticLogo = false;
+  let sawCaretVisible = false;
+  let sawCaretHidden = false;
+  let sawShellCompactMask = false;
+  let sawShellAboveBoot = false;
+  let shellTransitionContract = false;
+  const shellClipPaths = new Set();
+  let sawTransparentBootSurface = false;
+  let sawVisibleTask = false;
+  let taskAppearedBeforeFullName = false;
+  let taskSurfacePlain = false;
+  const taskLabels = new Set();
+  const taskStates = new Set();
+  let sawPaperTypeScale = false;
   let maxName = '';
   let reducedMotion = false;
+  let lastState = null;
   while (Date.now() - t0 < timeoutMs) {
     let s;
     try { s = await shellWin.webContents.executeJavaScript(probe); } catch { break; }
+    lastState = s;
     reducedMotion = s.reducedMotion;
     if (!s.booting) break;
+    if (s.phase) phases.add(s.phase);
     if (s.name.length > maxName.length) maxName = s.name;
+    if (s.name && 'ATHENA'.startsWith(s.name)) typedPrefixes.add(s.name);
+    for (const prefix of s.recordedTypedPrefixes || []) {
+      if (prefix && 'ATHENA'.startsWith(prefix)) typedPrefixes.add(prefix);
+    }
     if (s.name === 'ATHENA') sawFullName = true;
-    if (sawFullName && s.name === '' && s.phVisible) sawPhAfterName = true;
+    if (s.taskVisible) {
+      sawVisibleTask = true;
+      if (s.name !== 'ATHENA') taskAppearedBeforeFullName = true;
+      if (s.taskText) taskLabels.add(s.taskText);
+      if (s.taskState) taskStates.add(s.taskState);
+    }
+    if (s.taskSurface
+      && s.taskSurface.backgroundColor === 'rgba(0, 0, 0, 0)'
+      && s.taskSurface.backgroundImage === 'none'
+      && s.taskSurface.borderWidth === '0px'
+      && s.taskSurface.borderRadius === '0px'
+      && s.taskSurface.boxShadow === 'none'
+      && Number.parseFloat(s.taskSurface.fontSize) === 13
+      && Number.parseFloat(s.taskSurface.lineHeight) === 18
+      && s.noBootProgress === true) taskSurfacePlain = true;
+    if (!s.expanding && s.clipPath && s.clipPath !== 'none') sawCompactStage = true;
+    if (s.panelSurface
+      && s.panelSurface.backgroundColor === 'rgba(0, 0, 0, 0)'
+      && s.panelSurface.backgroundImage === 'none'
+      && s.panelSurface.borderWidth === '0px'
+      && s.panelSurface.borderRadius === '0px'
+      && s.panelSurface.boxShadow === 'none') sawBorderlessSurface = true;
+    if (s.bootSurface
+      && s.bootSurface.backgroundColor === 'rgba(0, 0, 0, 0)'
+      && s.bootSurface.backgroundImage === 'none') {
+      sawTransparentBootSurface = true;
+    }
+    if (Number.parseFloat(s.baseFontSize) === 112
+      && Number.parseFloat(s.baseLineHeight) === 112
+      && Number.parseFloat(s.baseLetterSpacing) >= -4.6
+      && Number.parseFloat(s.baseLetterSpacing) <= -4.3
+      && Number.parseFloat(s.cursorFontSize) === 112
+      && s.stageGap === '28px'
+      && s.logoSize && s.logoSize.width === 220 && s.logoSize.height === 69
+      && s.typedLayerIsOverlay === true
+      && s.noExtraCopy === true) {
+      sawPaperTypeScale = true;
+    }
+    if (s.staticLogoVisible) sawStaticLogo = true;
+    if (s.cursorOpacity >= 0.95) sawCaretVisible = true;
+    if (s.cursorOpacity <= 0.05) sawCaretHidden = true;
+    if (s.expanding && s.shellVisible && s.shellClipPath && s.shellClipPath !== 'none') {
+      shellClipPaths.add(s.shellClipPath);
+      if (Number.parseInt(s.shellZIndex, 10) > Number.parseInt(s.bootSurface.zIndex, 10)) {
+        sawShellAboveBoot = true;
+      }
+      if (s.shellTransitionProperty.split(',').map((value) => value.trim()).includes('clip-path')
+        && s.shellTransitionDuration.split(',').map((value) => value.trim()).includes('0.48s')) {
+        shellTransitionContract = true;
+      }
+      if (s.shellRect && s.viewport
+        && s.shellRect.width < s.viewport.width - 1
+        && s.shellRect.height < s.viewport.height - 1) sawShellCompactMask = true;
+    }
+    if (s.expanding && s.shellVisible && s.modeSurfaceVisible) sawExpansionOverShell = true;
     await wait(60);
   }
+  try { lastState = await shellWin.webContents.executeJavaScript(probe); } catch { /* 창 종료 */ }
+  const finalColors = (lastState && lastState.charColors) || [];
+  const baseWordPresent = !!lastState && lastState.baseText === 'ATHENA';
+  const baseIsTransparent = !!lastState
+    && lastState.baseColor === 'rgba(0, 0, 0, 0)'
+    && lastState.baseBackgroundColor === 'rgba(0, 0, 0, 0)';
+  const overlayIsBlue = finalColors.length === 6
+    && finalColors.every((c) => c === 'rgb(14, 32, 178)');
+  const cursorIsPink = !!lastState
+    && lastState.cursorText === '|'
+    && lastState.cursorColor === 'rgb(238, 19, 123)';
+  const backgroundIsTransparent = sawTransparentBootSurface || (!!lastState && !!lastState.bootSurface
+    && lastState.bootSurface.backgroundColor === 'rgba(0, 0, 0, 0)'
+    && lastState.bootSurface.backgroundImage === 'none');
+  const typeScaleMatchesPaper = sawPaperTypeScale || (!!lastState
+    && Number.parseFloat(lastState.baseFontSize) === 112
+    && Number.parseFloat(lastState.baseLineHeight) === 112
+    && Number.parseFloat(lastState.cursorFontSize) === 112
+    && lastState.stageGap === '28px'
+    && lastState.logoSize && lastState.logoSize.width === 220 && lastState.logoSize.height === 69
+    && lastState.typedLayerIsOverlay === true && lastState.noExtraCopy === true);
+  const cursorBlinks = !!lastState && (
+    lastState.reducedMotion
+    || /boot-caret-blink/.test(lastState.cursorAnimation)
+  );
+  const staticLogoPresent = !!lastState && lastState.staticLogoPresent === true;
+  const noHandoff = !!lastState && lastState.noHandoff === true;
+  const noInternalWindows = !!lastState && lastState.noInternalWindows === true;
+  const bootHierarchyBorderless = !!lastState && lastState.bootHierarchyBorderless === true;
+  const stableStatusAnnouncement = !!lastState && lastState.stableStatusAnnouncement === true;
+  const sawShellMaskProgress = shellClipPaths.size >= 2;
+  const completionSnapshot = typeof completionSnapshotProvider === 'function'
+    ? completionSnapshotProvider(senderId)
+    : null;
+  const shellFinishedFull = completionSnapshot?.shellFinishedFull === true || (!!lastState
+    && lastState.shellVisible === true
+    && lastState.shellClipPath === 'none'
+    && lastState.shellRect && lastState.viewport
+    && Math.abs(lastState.shellRect.width - lastState.viewport.width) <= 1
+    && Math.abs(lastState.shellRect.height - lastState.viewport.height) <= 1);
+  const finishCount = completionSnapshot?.finishCount ?? (lastState ? lastState.finishCount : 0);
+  const expandedFromTypedFrame = !!lastState && lastState.expanding === true;
+  const prefixCount = typedPrefixes.size;
+  const timingSource = completionSnapshot?.timings || (lastState && lastState.timings) || {};
+  const taskFirstShownAfterTyped = timingSource.taskFirstShownAt > 0
+    && timingSource.typedAt > 0
+    && timingSource.taskFirstShownAt >= timingSource.typedAt;
+  const reducedStaticCommitted = !!lastState
+    && (!lastState.reducedMotion || timingSource.reducedStaticAt > 0);
+  const reducedReadinessWaitMs = reducedMotion
+    ? timingSource.reducedStaticAt - timingSource.visualMinimumAt
+    : null;
+  const reducedBootMs = reducedMotion
+    ? timingSource.completedAt - timingSource.startedAt
+    : null;
+  const bootTiming = reducedMotion ? null : {
+    readyMs: timingSource.typingAt - timingSource.startedAt,
+    typingMs: timingSource.typedAt - timingSource.typingAt,
+    minimumHoldMs: timingSource.visualMinimumAt - timingSource.typedAt,
+    readinessWaitMs: timingSource.expandingAt - timingSource.visualMinimumAt,
+    holdMs: timingSource.expandingAt - timingSource.typedAt,
+    expandMs: timingSource.completedAt - timingSource.expandingAt,
+    totalMs: timingSource.completedAt - timingSource.startedAt,
+  };
+  const timingMatches = reducedMotion ? reducedBootMs >= 1920 : (
+    bootTiming.readyMs >= 180 && bootTiming.readyMs <= 340
+    && bootTiming.typingMs >= 860 && bootTiming.typingMs <= 1080
+    && bootTiming.minimumHoldMs >= 180 && bootTiming.minimumHoldMs <= 340
+    && bootTiming.readinessWaitMs >= 0
+    && bootTiming.expandMs >= 400 && bootTiming.expandMs <= 580
+    && bootTiming.totalMs >= 1850
+  );
   return {
     sawFullName,
-    sawPhAfterName,
+    prefixCount,
+    typedPrefixes: Array.from(typedPrefixes),
+    baseWordPresent,
+    baseIsTransparent,
+    overlayIsBlue,
+    cursorIsPink,
+    backgroundIsTransparent,
+    typeScaleMatchesPaper,
+    cursorBlinks,
+    sawCaretVisible,
+    sawCaretHidden,
+    staticLogoPresent,
+    sawStaticLogo,
+    noHandoff,
+    noInternalWindows,
+    bootHierarchyBorderless,
+    stableStatusAnnouncement,
+    sawVisibleTask,
+    taskAppearedBeforeFullName,
+    taskSurfacePlain,
+    taskLabels: Array.from(taskLabels),
+    taskStates: Array.from(taskStates),
+    sawShellCompactMask,
+    sawShellAboveBoot,
+    sawShellMaskProgress,
+    shellTransitionContract,
+    shellClipPaths: Array.from(shellClipPaths),
+    shellFinishedFull,
+    sawCompactStage,
+    sawBorderlessSurface,
+    sawExpansionOverShell,
+    expandedFromTypedFrame,
+    finishCount,
+    reducedStaticCommitted,
+    reducedReadinessWaitMs,
+    reducedBootMs,
+    bootTiming,
+    timingMatches,
+    taskFirstShownAfterTyped,
+    phases: Array.from(phases),
     maxName,
     reducedMotion,
-    // 판정 — 모션이 살아 있으면 "이름을 다 썼고, 지운 뒤 placeholder로 돌아왔다"
-    // 둘 다 관측돼야 한다. reduced-motion이면 생략 자체가 스펙 준수다.
-    pass: reducedMotion || (sawFullName && sawPhAfterName),
+    pass: baseWordPresent && baseIsTransparent && overlayIsBlue && cursorIsPink
+      && backgroundIsTransparent && typeScaleMatchesPaper
+      && cursorBlinks && timingMatches
+      && staticLogoPresent
+      && noHandoff && noInternalWindows && bootHierarchyBorderless
+      && stableStatusAnnouncement && taskSurfacePlain && !taskAppearedBeforeFullName && finishCount === 1
+      && reducedStaticCommitted
+      && (reducedMotion || (
+        sawFullName
+        && prefixCount >= 4
+        && sawCaretVisible
+        && (sawCaretHidden || cursorBlinks)
+        && sawCompactStage
+        && sawBorderlessSurface
+        && sawStaticLogo
+        && sawExpansionOverShell
+        && sawShellCompactMask
+        && sawShellAboveBoot
+        && (sawShellMaskProgress || shellTransitionContract)
+        && shellFinishedFull
+        && expandedFromTypedFrame
+      )),
   };
 }
 
@@ -304,33 +771,326 @@ app.whenReady().then(async () => {
   function assertOk(label, cond) {
     if (!cond) failures.push(label);
   }
+  report.verifyProfile = {
+    runId: VERIFY_PROFILE.runId,
+    scenario: VERIFY_PROFILE.scenario,
+    directoryName: path.basename(VERIFY_PROFILE.directory),
+    uniqueTemporaryProfile: path.basename(VERIFY_PROFILE.directory).startsWith('athena-verify-'),
+    fixedProfileUnused: path.resolve(app.getPath('userData')) !== path.resolve(FIXED_VERIFY_PROFILE),
+    capturesOutsideProfile: !path.resolve(CAPTURES).startsWith(`${path.resolve(VERIFY_PROFILE.directory)}${path.sep}`),
+    cleanupWatchdogStarted: Number.isInteger(VERIFY_PROFILE_CLEANUP_WATCHDOG_PID),
+    previousCleanupDiagnostics: VERIFY_PROFILE.cleanupDiagnostics,
+  };
+  assertOk('verify profile: every run uses a fresh temporary userData directory',
+    report.verifyProfile.uniqueTemporaryProfile === true
+      && report.verifyProfile.fixedProfileUnused === true
+      && report.verifyProfile.capturesOutsideProfile === true
+      && report.verifyProfile.cleanupWatchdogStarted === true);
   const mainMod = require('./main.js');
   dlog('main.js required');
 
   // ---------- 창 생성 (main.js와 동일 경로) ----------
   await mainMod.createWindows();
   dlog('createWindows done');
-  const { shellWin, orbWin } = mainMod.getWins();
+  const { bootWin, shellWin, orbWin } = mainMod.getWins();
   const layout = mainMod.getLayout();
   report.layout = layout;
 
-  const bootBarPromise = traceBootBar(shellWin);
-  await wait(200);
+  async function createBootScenarioWindow() {
+    const win = new BrowserWindow({
+      x: layout.originX,
+      y: layout.originY,
+      width: layout.shellW,
+      height: layout.shellH,
+      frame: false,
+      transparent: true,
+      backgroundColor: '#00000000',
+      show: false,
+      resizable: true,
+      webPreferences: {
+        nodeIntegration: false,
+        contextIsolation: true,
+        sandbox: true,
+        preload: path.join(__dirname, 'preload.js'),
+        backgroundThrottling: false,
+      },
+    });
+    mainMod.registerVerifyBootWindow(win);
+    const loaded = new Promise((resolve) => win.webContents.once('did-finish-load', resolve));
+    win.loadFile(path.join(__dirname, 'shell.html'));
+    await loaded;
+    win.show();
+    win.focus();
+    win.webContents.send('athena:init', { scale: layout.scale, canvasSource: 'fixture' });
+    return win;
+  }
+
+  const bootBarPromise = traceBootBar(bootWin, 12000, mainMod.getBootCompletionSnapshotForVerify);
+  const initialVisibleWindows = BrowserWindow.getAllWindows().filter((win) => win.isVisible());
+  const preHandoffShellOverlay = await shellWin.webContents.executeJavaScript(`({
+    nativeOverlayAvailable: !!navigator.windowControlsOverlay,
+    nativeControlsSelected: document.documentElement.classList.contains('uses-native-window-controls'),
+    customControlsHidden: document.getElementById('winControls').hidden,
+  })`);
   report.bootChatOnly = {
-    openWindowCount: BrowserWindow.getAllWindows().length,
-    chatVisibleAtBoot: shellWin.isVisible(),
+    openWindowCount: initialVisibleWindows.length,
+    bootVisibleAtBoot: bootWin.isVisible(),
+    shellHiddenAtBoot: !shellWin.isVisible(),
     orbVisibleAtBoot: !!orbWin && orbWin.isVisible(),
+    preHandoffShellOverlay,
   };
-  dlog('before shot 01'); const s1 = await shot(shellWin, '01-boot-sequence.png'); dlog('after shot 01');
+  const typingFrameState = await bootWin.webContents.executeJavaScript(`(() => {
+    const boot = document.getElementById('boot');
+    const task = document.getElementById('bootTask');
+    return { phase: boot.dataset.phase, name: document.getElementById('bootName').textContent,
+      taskHidden: task.hidden, taskState: boot.dataset.currentTaskState || '' };
+  })()`);
+  dlog('before shot 01'); const s1 = await shot(bootWin, '01-boot-sequence.png'); dlog('after shot 01');
+  // 첫 캡처는 아직 readiness runner를 시작하지 않은 실제 typing 상태다. 캡처 뒤
+  // runner를 시작해 다음 증거가 ATHENA+현재 작업명 waiting 상태임을 보장한다.
+  mainMod.startBootReadinessForVerify();
+  const bootTaskReachedAfterAthena = await waitUntil(
+    () => bootWin.webContents.executeJavaScript(`(() => {
+      const boot = document.getElementById('boot');
+      const name = document.getElementById('bootName');
+      const task = document.getElementById('bootTask');
+      return !!boot && !boot.hidden && !boot.classList.contains('is-expanding')
+        && !!name && name.textContent === 'ATHENA'
+        && !!task && !task.hidden
+        && task.textContent === '검증용 합성 준비 작업'
+        && boot.dataset.currentTaskState === 'running';
+    })()`),
+    { timeoutMs: 2200, intervalMs: 30 },
+  );
+  const initialTaskStatus = await bootWin.webContents.executeJavaScript(`(() => {
+    const boot = document.getElementById('boot');
+    const task = document.getElementById('bootTask');
+    const style = getComputedStyle(task);
+    return {
+      visible: !task.hidden,
+      text: task.textContent,
+      id: boot.dataset.currentTaskId,
+      state: boot.dataset.currentTaskState,
+      statusText: document.getElementById('bootStatus').textContent,
+      plain: style.backgroundColor === 'rgba(0, 0, 0, 0)'
+        && style.backgroundImage === 'none'
+        && style.borderWidth === '0px'
+        && style.borderRadius === '0px'
+        && style.boxShadow === 'none'
+        && !document.querySelector('.boot progress, .boot [role="progressbar"]'),
+    };
+  })()`);
+  const waitingAfterMinimum = await waitUntil(
+    () => bootWin.webContents.executeJavaScript(`(() => {
+      const boot = document.getElementById('boot');
+      const name = document.getElementById('bootName');
+      const cursor = document.querySelector('.boot-cursor');
+      const stage = document.querySelector('.boot-stage');
+      const task = document.getElementById('bootTask');
+      const elapsed = performance.now() - Number(boot.dataset.startedAt || '0');
+      return elapsed >= 1920
+        && boot.dataset.phase === 'waiting'
+        && boot.dataset.startupPhase === 'running'
+        && Number(boot.dataset.finishCount || '0') === 0
+        && name.textContent === 'ATHENA'
+        && cursor.getBoundingClientRect().height > 0
+        && getComputedStyle(cursor).animationName === 'boot-caret-blink'
+        && getComputedStyle(stage).opacity === '1'
+        && !task.hidden
+        && task.textContent === '검증용 합성 준비 작업'
+        && boot.dataset.currentTaskState === 'running'
+        && document.getElementById('shell').hidden;
+    })()`),
+    { timeoutMs: 2600, intervalMs: 25 },
+  );
+  const waitingFrameState = await bootWin.webContents.executeJavaScript(`(() => {
+    const boot = document.getElementById('boot');
+    const task = document.getElementById('bootTask');
+    return { phase: boot.dataset.phase, name: document.getElementById('bootName').textContent,
+      taskHidden: task.hidden, taskText: task.textContent, taskState: boot.dataset.currentTaskState || '' };
+  })()`);
+  dlog('before shot 01w'); const s1w = await shot(bootWin, '01w-boot-readiness-waiting.png'); dlog('after shot 01w');
+  const authoritativeRunning = await mainMod.bootReadinessHandlers.get({ sender: bootWin.webContents });
+  const orbReadinessRejected = await orbWin.webContents.executeJavaScript(
+    `window.athena.invoke('athena:boot-readiness:get').then(() => false, () => true)`,
+  );
+  bootWin.webContents.send('athena:boot-readiness', {
+    ...authoritativeRunning,
+    revision: Math.max(0, authoritativeRunning.revision - 1),
+    phase: 'ready',
+  });
+  bootWin.webContents.send('athena:boot-readiness', {
+    ...authoritativeRunning,
+    runId: 'stale-foreign-run',
+    revision: authoritativeRunning.revision + 1000,
+    phase: 'ready',
+  });
+  await wait(100);
+  const staleReadinessIgnored = await bootWin.webContents.executeJavaScript(`(() => {
+    const boot = document.getElementById('boot');
+    return boot.dataset.phase === 'waiting'
+      && boot.dataset.startupRunId === ${JSON.stringify(authoritativeRunning.runId)}
+      && boot.dataset.currentTaskLabel === '검증용 합성 준비 작업'
+      && boot.dataset.currentTaskState === 'running'
+      && Number(boot.dataset.finishCount || '0') === 0
+      && document.getElementById('shell').hidden;
+  })()`);
+  const degradedReached = await waitUntil(
+    () => bootWin.webContents.executeJavaScript(`(() => {
+      const boot = document.getElementById('boot');
+      return boot.dataset.startupPhase === 'degraded'
+        && document.getElementById('bootFailure') === null
+        && document.getElementById('bootRetry') === null;
+    })()`),
+    { timeoutMs: 5000, intervalMs: 30 },
+  );
+  const bootExpansionReached = await waitUntil(
+    () => bootWin.webContents.executeJavaScript(`(() => {
+      const boot = document.getElementById('boot');
+      return !!boot && !boot.hidden && boot.classList.contains('is-expanding');
+    })()`),
+    { timeoutMs: 5000, intervalMs: 15 },
+  );
+  await wait(140);
+  dlog('before shot 01c'); const s1c = await shot(bootWin, '01c-boot-shell-expanding.png'); dlog('after shot 01c');
   const boot = await waitForChatBooted(shellWin);
   const bootBar = await bootBarPromise;
+  const startupNotificationVisible = await waitUntil(
+    () => shellWin.webContents.executeJavaScript(`(() => {
+      const notice = document.getElementById('appNotification');
+      return !notice.hidden && Number(notice.dataset.showCount || '0') === 1
+        && notice.textContent.includes('검증용 합성 준비 작업');
+    })()`),
+    { timeoutMs: 1500, intervalMs: 25 },
+  );
+  const orbStartupNotificationCount = await orbWin.webContents.executeJavaScript(
+    `Number(document.getElementById('orbCount').textContent || '0')`,
+  );
+  await orbWin.webContents.executeJavaScript(`document.getElementById('orb').click()`);
+  await waitUntil(
+    () => orbWin.webContents.executeJavaScript(
+      `document.getElementById('orbRoot').dataset.state === 'expanded'`,
+    ),
+    { timeoutMs: 1200, intervalMs: 25 },
+  );
+  const orbStartupPanel = await orbWin.webContents.executeJavaScript(`(() => ({
+    badge: document.getElementById('orbBadge').textContent,
+    body: document.getElementById('orbBody').textContent,
+    source: document.getElementById('orbSource').textContent,
+  }))()`);
+  await orbWin.webContents.executeJavaScript(`document.getElementById('orbClose').click()`);
+  await waitUntil(
+    () => orbWin.webContents.executeJavaScript(
+      `document.getElementById('orbRoot').dataset.state === 'collapsed'`,
+    ),
+    { timeoutMs: 1200, intervalMs: 25 },
+  );
+  orbWin.webContents.send('athena:app-notification', {
+    title: '시작 알림 순서 검증', body: '먼저 도착한 시작 알림입니다.',
+  });
+  orbWin.webContents.send('athena:routine-event', {
+    type: 'routine-fired', routine_id: 'boot-order-routine', symbol: '005930', source: 'price.change_rate',
+    observed: 5.3, threshold: 5.0, note: '나중에 도착한 루틴 알림',
+    fired_at: new Date().toISOString(),
+  });
+  await waitUntil(
+    () => orbWin.webContents.executeJavaScript(
+      `document.getElementById('orbCount').textContent === '2'`,
+    ),
+    { timeoutMs: 1200, intervalMs: 25 },
+  );
+  await orbWin.webContents.executeJavaScript(`document.getElementById('orb').click()`);
+  await waitUntil(
+    () => orbWin.webContents.executeJavaScript(
+      `document.getElementById('orbRoot').dataset.state === 'expanded'`,
+    ),
+    { timeoutMs: 1200, intervalMs: 25 },
+  );
+  const orbOrderedFirst = await orbWin.webContents.executeJavaScript(`({
+    badge: document.getElementById('orbBadge').textContent,
+    body: document.getElementById('orbBody').textContent,
+    remaining: document.getElementById('orbCount').textContent,
+  })`);
+  await orbWin.webContents.executeJavaScript(`document.getElementById('orbClose').click()`);
+  await waitUntil(
+    () => orbWin.webContents.executeJavaScript(
+      `document.getElementById('orbRoot').dataset.state === 'collapsed'`,
+    ),
+    { timeoutMs: 1200, intervalMs: 25 },
+  );
+  await orbWin.webContents.executeJavaScript(`document.getElementById('orb').click()`);
+  await waitUntil(
+    () => orbWin.webContents.executeJavaScript(
+      `document.getElementById('orbRoot').dataset.state === 'expanded'`,
+    ),
+    { timeoutMs: 1200, intervalMs: 25 },
+  );
+  const orbOrderedSecond = await orbWin.webContents.executeJavaScript(`({
+    body: document.getElementById('orbBody').textContent,
+    source: document.getElementById('orbSource').textContent,
+    remaining: document.getElementById('orbCount').textContent,
+  })`);
+  await orbWin.webContents.executeJavaScript(`document.getElementById('orbClose').click()`);
+  await waitUntil(
+    () => orbWin.webContents.executeJavaScript(
+      `document.getElementById('orbRoot').dataset.state === 'collapsed'`,
+    ),
+    { timeoutMs: 1200, intervalMs: 25 },
+  );
+  await waitUntil(
+    () => JSON.stringify(mainMod.getStartupFailureNotificationResult().delivered)
+      === JSON.stringify(['shell', 'orb', 'os']),
+    { timeoutMs: 3000, intervalMs: 25 },
+  );
+  const notificationDelivery = mainMod.getStartupFailureNotificationResult();
   dlog('boot done, before shot 02'); const s2 = await shot(shellWin, '02-chat-only-idle.png'); dlog('after shot 02');
-  report.bootChatOnly.shots = { boot: s1, idle: s2 };
+  const postHandoffVisibleWindows = BrowserWindow.getAllWindows().filter((win) => win.isVisible());
+  const postHandoffShellOverlay = await shellWin.webContents.executeJavaScript(`({
+    nativeOverlayAvailable: !!navigator.windowControlsOverlay,
+    nativeControlsSelected: document.documentElement.classList.contains('uses-native-window-controls'),
+    customControlsHidden: document.getElementById('winControls').hidden,
+  })`);
+  const compositeReveal = measureBootCompositeReveal(
+    bootPixelFrames.get('01w-boot-readiness-waiting.png'),
+    bootPixelFrames.get('01c-boot-shell-expanding.png'),
+    bootPixelFrames.get('02-chat-only-idle.png'),
+  );
+  const transparentFrames = {
+    typing: measureBootTransparency(bootPixelFrames.get('01-boot-sequence.png')),
+    waiting: measureBootTransparency(bootPixelFrames.get('01w-boot-readiness-waiting.png')),
+  };
+  report.bootChatOnly.shots = {
+    typing: s1, readinessWaiting: s1w, expanding: s1c, idle: s2,
+  };
+  report.bootChatOnly.bootTaskReachedAfterAthena = bootTaskReachedAfterAthena === true;
+  report.bootChatOnly.frameStates = { typing: typingFrameState, readinessWaiting: waitingFrameState };
+  report.bootChatOnly.currentTaskStatus = initialTaskStatus;
+  report.bootChatOnly.waitingAfterVisualMinimum = waitingAfterMinimum === true;
+  report.bootChatOnly.staleReadinessIgnored = staleReadinessIgnored === true;
+  report.bootChatOnly.orbReadinessRejected = orbReadinessRejected === true;
+  report.bootChatOnly.degradedNotification = {
+    degradedReached: degradedReached === true,
+    shellVisibleOnce: startupNotificationVisible === true,
+    orbUnreadCount: orbStartupNotificationCount,
+    orbPanel: orbStartupPanel,
+    orbArrivalOrder: { first: orbOrderedFirst, second: orbOrderedSecond },
+    delivery: notificationDelivery,
+  };
+  report.bootChatOnly.expansionFrameCaptured = bootExpansionReached === true;
+  report.bootChatOnly.compositeReveal = compositeReveal;
+  report.bootChatOnly.transparentFrames = transparentFrames;
   report.bootChatOnly.chatBootedAfterBoot = boot.booted;
   report.bootChatOnly.bootMode = boot.mode;
   report.bootChatOnly.exactlyOneModeVisible = boot.exactlyOneModeVisible;
   report.bootChatOnly.panels = boot.panels;
-  // 1b — 부팅 4단계 재정의(2026-08-18): 채팅바가 제 이름을 쓰고 되돌아온다
+  report.bootChatOnly.postHandoff = {
+    bootDestroyed: bootWin.isDestroyed(),
+    shellVisible: shellWin.isVisible(),
+    visibleWindowCount: postHandoffVisibleWindows.length,
+    shellOverlay: postHandoffShellOverlay,
+    visibilityAudit: mainMod.getShellHandoffVisibilityAudit(),
+  };
+  // 1b — BOOT-001 C1: 자리표시자를 덮어쓴 ATHENA 프레임이 실제 Page 1 셸로 확장된다.
   report.bootChatOnly.bootBar = bootBar;
   report.bootChatOnly.bootBarWritesName = bootBar.pass;
   // 검증 전용 프로필은 온보딩을 완료로 심는다(파일 상단 참조) — 그러므로 여기서
@@ -343,12 +1103,77 @@ app.whenReady().then(async () => {
     '| 모드 배타성:', boot.exactlyOneModeVisible,
     '| 부팅바 이름쓰기:', JSON.stringify(bootBar)
   );
-  assertOk('boot: exactly two OS windows (셸 + 알림 오브 — GLOSSARY §1)', report.bootChatOnly.openWindowCount === 2);
-  assertOk('boot: shell window visible at boot', report.bootChatOnly.chatVisibleAtBoot === true);
+  assertOk('boot: before handoff only transparent boot renderer and orb are visible',
+    report.bootChatOnly.openWindowCount === 2
+      && report.bootChatOnly.bootVisibleAtBoot === true
+      && report.bootChatOnly.shellHiddenAtBoot === true
+      && report.bootChatOnly.orbVisibleAtBoot === true
+      && report.bootChatOnly.preHandoffShellOverlay.nativeOverlayAvailable === true
+      && report.bootChatOnly.preHandoffShellOverlay.nativeControlsSelected === true
+      && report.bootChatOnly.preHandoffShellOverlay.customControlsHidden === true);
+  assertOk('boot: handoff destroys boot and reveals exactly one WCO shell without duplicate visible windows',
+    report.bootChatOnly.postHandoff.bootDestroyed === true
+      && report.bootChatOnly.postHandoff.shellVisible === true
+      && report.bootChatOnly.postHandoff.visibleWindowCount === 2
+      && report.bootChatOnly.postHandoff.shellOverlay.nativeOverlayAvailable === true
+      && report.bootChatOnly.postHandoff.shellOverlay.nativeControlsSelected === true
+      && report.bootChatOnly.postHandoff.shellOverlay.customControlsHidden === true
+      && JSON.stringify(report.bootChatOnly.postHandoff.visibilityAudit.map((sample) => sample.phase))
+        === JSON.stringify(['before', 'boot-hidden', 'shell-shown'])
+      && report.bootChatOnly.postHandoff.visibilityAudit.every(
+        (sample) => !(sample.bootVisible && sample.shellVisible),
+      ));
+  assertOk('boot: typing and readiness-waiting evidence represent distinct authoritative states',
+    report.bootChatOnly.bootTaskReachedAfterAthena === true
+      && bootBar.prefixCount >= 4
+      && bootBar.taskFirstShownAfterTyped === true
+      && waitingFrameState.phase === 'waiting'
+      && waitingFrameState.taskHidden === false
+      && waitingFrameState.taskText === '검증용 합성 준비 작업'
+      && waitingFrameState.taskState === 'running');
+  assertOk('boot task: exact authoritative task label appears immediately after ATHENA with no surface or fake progress',
+    initialTaskStatus.visible === true
+      && initialTaskStatus.text === '검증용 합성 준비 작업'
+      && initialTaskStatus.id === 'fixture-readiness'
+      && initialTaskStatus.state === 'running'
+      && initialTaskStatus.statusText === '검증용 합성 준비 작업.'
+      && initialTaskStatus.plain === true);
+  assertOk('boot readiness: ATHENA and caret remain visible after 1.92s while startup is running',
+    report.bootChatOnly.waitingAfterVisualMinimum === true);
+  assertOk('boot readiness: stale revision and foreign run cannot bypass waiting',
+    report.bootChatOnly.staleReadinessIgnored === true);
+  assertOk('boot readiness: raw startup snapshot is available only to the shell renderer',
+    report.bootChatOnly.orbReadinessRejected === true);
+  assertOk('boot readiness: degraded startup opens without retry UI and notifies shell, orb, and OS exactly once',
+    report.bootChatOnly.degradedNotification.degradedReached === true
+      && report.bootChatOnly.degradedNotification.shellVisibleOnce === true
+      && report.bootChatOnly.degradedNotification.orbUnreadCount === 1
+      && report.bootChatOnly.degradedNotification.orbPanel.badge === '시작 알림'
+      && report.bootChatOnly.degradedNotification.orbPanel.body.includes('검증용 합성 준비 작업')
+      && report.bootChatOnly.degradedNotification.orbPanel.source === 'ATHENA'
+      && report.bootChatOnly.degradedNotification.orbArrivalOrder.first.badge === '시작 알림'
+      && report.bootChatOnly.degradedNotification.orbArrivalOrder.first.body.includes('먼저 도착한 시작 알림')
+      && report.bootChatOnly.degradedNotification.orbArrivalOrder.first.remaining === '1'
+      && report.bootChatOnly.degradedNotification.orbArrivalOrder.second.body.includes('조건 도달')
+      && report.bootChatOnly.degradedNotification.orbArrivalOrder.second.source.includes('나중에 도착한 루틴 알림')
+      && report.bootChatOnly.degradedNotification.orbArrivalOrder.second.remaining === ''
+      && JSON.stringify(report.bootChatOnly.degradedNotification.delivery.delivered)
+        === JSON.stringify(['shell', 'orb', 'os']));
+  assertOk('boot readiness: readiness delay grows total time and still finishes exactly once',
+    bootBar.finishCount === 1
+      && bootBar.bootTiming.readinessWaitMs >= 480
+      && bootBar.bootTiming.totalMs > 2400
+      && bootBar.phases.includes('waiting')
+      && report.bootChatOnly.degradedNotification.degradedReached === true);
+  assertOk('boot: actual shell pixels visibly expand above boot layer',
+    report.bootChatOnly.expansionFrameCaptured === true && compositeReveal.pass === true);
+  assertOk('boot: material override cannot paint a window surface; only centered logo, ATHENA, caret, and task-label pixels remain',
+    transparentFrames.typing.pass === true
+      && transparentFrames.waiting.pass === true);
   assertOk('boot: orb window visible at boot (상시 표시가 사양이다)', report.bootChatOnly.orbVisibleAtBoot === true);
   assertOk('boot: chat reached a mode after boot sequence', report.bootChatOnly.chatBootedAfterBoot === true);
   assertOk('boot: exactly one mode panel visible (no overlap)', report.bootChatOnly.exactlyOneModeVisible === true);
-  assertOk('boot: boot bar wrote full name then returned to placeholder', report.bootChatOnly.bootBarWritesName === true);
+  assertOk('boot: C1 overtyped full ATHENA then expanded into Page 1 shell', report.bootChatOnly.bootBarWritesName === true);
   assertOk('boot: booted into chat(app) mode, not onboarding (verify profile isolation)', report.bootChatOnly.bootedIntoChatMode === true);
 
   // ---------- 검증 1b-2: 빈 이력 안내 문구(Paper 05·3KM-0) ----------
@@ -367,15 +1192,18 @@ app.whenReady().then(async () => {
   assertOk('emptyHistory: 안내 서브텍스트 노출', !!emptyHistory && emptyHistory.after.includes('종목') && emptyHistory.after.includes('캔버스에 카드로 쌓입니다'));
 
   // ---------- 검증 1c: fail-closed REST 영수증 실제 표시 ----------
-  // 거절 요청은 캔버스가 없으므로 이 영수증이 유일한 피드백이다. 매 회 온보딩
+  // 거절 요청은 캔버스가 없으므로 이 영수증이 유일한 피드백이다. 매 회 설정
   // 패널이 앱을 가린 상태를 재현한 뒤, production main→IPC→chat DOM→doubleRAF
   // paint ack를 여섯 번 반복해 모드 복구와 반복 waiter 정리를 함께 검증한다.
+  // 온보딩은 최신 production 계약상 receipt가 침범하지 않는 보호 모드이므로
+  // 여기서 강제로 열면 ack가 없는 것이 맞다(옛 검증은 반대 계약을 기대했다).
   const receiptPaints = [];
   for (let index = 0; index < 6; index += 1) {
     await shellWin.webContents.executeJavaScript(`
       (() => {
         document.getElementById('app').hidden = true;
-        document.getElementById('onboard').hidden = false;
+        document.getElementById('onboard').hidden = true;
+        document.getElementById('settings').hidden = false;
       })()
     `);
     const receiptStartedAt = Date.now();
@@ -387,12 +1215,14 @@ app.whenReady().then(async () => {
       (() => {
         const appPanel = document.getElementById('app');
         const onboard = document.getElementById('onboard');
+        const settings = document.getElementById('settings');
         const receipts = [...document.querySelectorAll('.rest-receipt')];
         const last = receipts[receipts.length - 1];
         const rect = last && last.getBoundingClientRect();
         return {
           appVisible: !!appPanel && !appPanel.hidden,
           onboardingHidden: !!onboard && onboard.hidden,
+          settingsHidden: !!settings && settings.hidden,
           receiptCount: receipts.length,
           nonzero: !!rect && rect.width > 0 && rect.height > 0,
         };
@@ -406,10 +1236,34 @@ app.whenReady().then(async () => {
   }
   report.restReceiptPaint = { repeats: receiptPaints };
   const receiptPaintPass = receiptPaints.length === 6 && receiptPaints.every((item, index) => (
-    item.verifiedVisible && item.appVisible && item.onboardingHidden
+    item.verifiedVisible && item.appVisible && item.onboardingHidden && item.settingsHidden
     && item.nonzero && item.receiptCount === index + 1 && item.elapsedMs < 1500
   ));
   assertOk('restReceiptPaint: six hidden-mode receipts become visible with bounded paint ack', receiptPaintPass);
+  const receiptCountBeforeProtectedOnboarding = receiptPaints.length;
+  await shellWin.webContents.executeJavaScript(`(() => {
+    document.getElementById('app').hidden = true;
+    document.getElementById('onboard').hidden = false;
+  })()`);
+  shellWin.webContents.send('athena:add-rest-receipt', {
+    receiptId: 'verify-protected-onboarding',
+    text: '보호 모드 침범 금지 검증',
+  });
+  await wait(100);
+  const protectedOnboarding = await shellWin.webContents.executeJavaScript(`(() => ({
+    onboardingVisible: !document.getElementById('onboard').hidden,
+    appHidden: document.getElementById('app').hidden,
+    receiptCount: document.querySelectorAll('.rest-receipt').length,
+  }))()`);
+  report.restReceiptPaint.protectedOnboarding = protectedOnboarding;
+  assertOk('restReceiptPaint: receipt does not replace protected onboarding mode',
+    protectedOnboarding.onboardingVisible === true
+      && protectedOnboarding.appHidden === true
+      && protectedOnboarding.receiptCount === receiptCountBeforeProtectedOnboarding);
+  await shellWin.webContents.executeJavaScript(`(() => {
+    document.getElementById('onboard').hidden = true;
+    document.getElementById('app').hidden = false;
+  })()`);
   await shellWin.webContents.executeJavaScript(`
     document.querySelectorAll('.rest-receipt').forEach((node) => node.remove())
   `);
@@ -638,6 +1492,272 @@ app.whenReady().then(async () => {
   assertOk('regionContract: moving the window keeps both region widths', report.regionContract.moveKeepsWidths === true);
   assertOk('regionContract: chat region never shrinks when the window narrows', report.regionContract.chatNeverShrinks === true);
   assertOk('regionContract: canvas region absorbs the shrink', report.regionContract.canvasAbsorbsShrink === true);
+
+  // ---------- 검증 3b: Paper 53 실제 반응형/Snap 표면 ----------
+  const responsiveProbe = () => shellWin.webContents.executeJavaScript(`(() => {
+    const shell = document.getElementById('shell');
+    const historyRegion = document.getElementById('historyRegion');
+    const canvasRegion = document.getElementById('canvasRegion');
+    const chatRegion = document.getElementById('chatRegion');
+    const input = document.getElementById('input');
+    const modeLabels = Array.from(document.querySelectorAll('.sidebar-mode-item-label'));
+    const compactToggle = document.getElementById('sidebarCompactToggle');
+    const sidebarList = document.getElementById('sidebarList');
+    const rect = (node) => { const r = node.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: r.height, bottom: r.bottom }; };
+    return {
+      viewport: { width: innerWidth, height: innerHeight },
+      shellDisplay: getComputedStyle(shell).display,
+      gridColumns: getComputedStyle(shell).gridTemplateColumns,
+      history: rect(historyRegion),
+      canvas: rect(canvasRegion),
+      chat: rect(chatRegion),
+      input: rect(input),
+      labelsHidden: modeLabels.every((node) => getComputedStyle(node).display === 'none'),
+      compactToggleDisplay: getComputedStyle(compactToggle).display,
+      compactExpanded: compactToggle.getAttribute('aria-expanded'),
+      sidebarListDisplay: getComputedStyle(sidebarList).display,
+      sameInputNode: document.querySelectorAll('#input').length === 1,
+    };
+  })()`);
+  const responsiveOrigin = shellWin.getBounds();
+  shellWin.setBounds({ ...responsiveOrigin, width: 900, height: Math.max(620, responsiveOrigin.height) });
+  mainMod.noteAppBounds(shellWin);
+  await wait(220);
+  const twoPane = await responsiveProbe();
+  await shot(shellWin, '03d-responsive-900-two-pane.png');
+
+  shellWin.setBounds({ ...shellWin.getBounds(), width: 500 });
+  mainMod.noteAppBounds(shellWin);
+  await wait(220);
+  const compact = await responsiveProbe();
+  await shellWin.webContents.executeJavaScript(`document.getElementById('sidebarCompactToggle').click()`);
+  await wait(120);
+  const compactOverlay = await responsiveProbe();
+  await shot(shellWin, '03e-responsive-500-rail-overlay.png');
+  await shellWin.webContents.executeJavaScript(`document.getElementById('sidebarCompactToggle').click()`);
+
+  shellWin.setBounds(responsiveOrigin);
+  mainMod.noteAppBounds(shellWin);
+  await wait(220);
+  report.responsiveShell = { twoPane, compact, compactOverlay };
+  console.log('[verify] 검증3b(Paper 53 반응형/Snap):', JSON.stringify(report.responsiveShell));
+  assertOk('responsiveShell: 900px uses 268px sidebar + canvas + 54px bottom composer',
+    twoPane.shellDisplay === 'grid'
+    && near(twoPane.history.width, 268, 2)
+    && near(twoPane.chat.height, 54, 2)
+    && twoPane.chat.y >= twoPane.canvas.bottom - 1
+    && twoPane.input.width > 0);
+  assertOk('responsiveShell: 500px uses 44px rail and keeps the same mounted input',
+    compact.shellDisplay === 'grid'
+    && near(compact.history.width, 44, 2)
+    && compact.labelsHidden === true
+    && compact.sameInputNode === true
+    && compact.input.width > 0);
+  assertOk('responsiveShell: compact project/recent overlay is reachable from the rail',
+    compact.compactToggleDisplay === 'flex'
+    && compactOverlay.compactExpanded === 'true'
+    && compactOverlay.sidebarListDisplay === 'flex');
+
+  // ---------- 검증 3c: Paper 25/26/47/48 플러그인 네 번째 모드 ----------
+  await shellWin.webContents.executeJavaScript(`document.getElementById('modeNavPlugin').click()`);
+  await wait(180);
+  const pluginHub = await shellWin.webContents.executeJavaScript(`(() => ({
+    pluginVisible: !document.getElementById('pluginCanvas').hidden,
+    summaryHidden: document.getElementById('mosaic').hidden,
+    graphHidden: document.getElementById('graphCanvas').hidden,
+    agentHidden: document.getElementById('agentCanvas').hidden,
+    chatVisible: !document.getElementById('chatRegion').hidden,
+    activeMode: document.querySelector('.sidebar-mode-item.is-active')?.dataset.view || null,
+    installed: document.querySelectorAll('.plugin-canvas-card[data-plugin-kind="installed"]').length,
+    recommended: document.querySelectorAll('.plugin-canvas-card[data-plugin-kind="recommended"]').length,
+  }))()`);
+  await shot(shellWin, '03f-plugin-hub-paper-47.png');
+  await shellWin.webContents.executeJavaScript(`document.querySelector('.plugin-canvas-recommended .plugin-canvas-action').click()`);
+  await wait(80);
+  const pluginInstallModal = await shellWin.webContents.executeJavaScript(`(() => {
+    const dialog = document.querySelector('.plugin-canvas-install-sheet');
+    const panel = document.querySelector('.plugin-canvas-panel');
+    const controls = Array.from(dialog?.querySelectorAll('button:not([disabled])') || []);
+    const focusedInitially = dialog?.contains(document.activeElement) || false;
+    const initialClass = document.activeElement?.className || '';
+    document.activeElement?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true, cancelable: true }));
+    const wrappedBackward = document.activeElement === controls[controls.length - 1];
+    document.activeElement?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true }));
+    const wrappedForward = document.activeElement === controls[0];
+    return {
+      dialogCount: document.querySelectorAll('.plugin-canvas-sheet[role="dialog"]').length,
+      title: dialog?.querySelector('.plugin-canvas-sheet-title')?.textContent || '',
+      confirmLabel: dialog?.querySelector('.is-sheet-confirm')?.textContent || '',
+      panelInert: panel?.hasAttribute('inert') || false,
+      focusedInitially,
+      initialClass,
+      wrappedBackward,
+      wrappedForward,
+    };
+  })()`);
+  await shellWin.webContents.executeJavaScript(`document.querySelector('.plugin-canvas-install-sheet')?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }))`);
+  await wait(80);
+  pluginInstallModal.closed = await shellWin.webContents.executeJavaScript(`!document.querySelector('.plugin-canvas-install-sheet')`);
+  pluginInstallModal.focusRestored = await shellWin.webContents.executeJavaScript(`document.activeElement?.closest('.plugin-canvas-card')?.getAttribute('data-plugin-id') === 'pdf-report'`);
+  await shellWin.webContents.executeJavaScript(`document.querySelector('.plugin-canvas-action.is-manage').click()`);
+  await wait(120);
+  const pluginManage = await shellWin.webContents.executeJavaScript(`(() => ({
+    title: document.querySelector('.plugin-canvas-title')?.textContent || '',
+    counts: Array.from(document.querySelectorAll('.plugin-canvas-count')).map((node) => node.textContent),
+    toggles: Array.from(document.querySelectorAll('.plugin-canvas-toggle')).map((node) => node.getAttribute('aria-checked')),
+  }))()`);
+  await shot(shellWin, '03g-plugin-manage-paper-48.png');
+  await shellWin.webContents.executeJavaScript(`
+    window.AthenaPluginCanvas.setView('hub');
+    document.querySelector('.plugin-canvas-card[data-plugin-id="dart"] .plugin-canvas-action').click();
+  `);
+  await wait(120);
+  const pluginPermission = await shellWin.webContents.executeJavaScript(`(() => {
+    const panel = document.querySelector('.plugin-canvas-permissions-view');
+    return {
+      dialogCount: document.querySelectorAll('.plugin-canvas-sheet[role="dialog"]').length,
+      overlayCount: document.querySelectorAll('.plugin-canvas-sheet-overlay').length,
+      title: panel?.querySelector('.plugin-canvas-title')?.textContent || '',
+      counts: Array.from(panel?.querySelectorAll('.plugin-canvas-count') || []).map((node) => node.textContent),
+      allowed: panel?.querySelector('.plugin-canvas-sheet-count')?.textContent || '',
+      features: panel?.querySelectorAll('.plugin-canvas-sheet-feature').length || 0,
+      inert: panel?.hasAttribute('inert') || false,
+    };
+  })()`);
+  await shot(shellWin, '03h-plugin-permission-paper-26.png');
+  await shellWin.webContents.executeJavaScript(`document.querySelector('.plugin-canvas-action.is-sheet-cancel')?.click(); document.getElementById('modeNavSummary').click()`);
+  await wait(100);
+  report.pluginMode = { hub: pluginHub, install: pluginInstallModal, manage: pluginManage, permission: pluginPermission };
+  console.log('[verify] 검증3c(Paper 플러그인 25/26/47/48):', JSON.stringify(report.pluginMode));
+  assertOk('pluginMode: fourth mode is exclusive while chat persists',
+    pluginHub.pluginVisible === true
+    && pluginHub.summaryHidden === true
+    && pluginHub.graphHidden === true
+    && pluginHub.agentHidden === true
+    && pluginHub.chatVisible === true
+    && pluginHub.activeMode === 'plugin');
+  assertOk('pluginMode: Paper 47 hub renders installed 2 and recommended 6', pluginHub.installed === 2 && pluginHub.recommended === 6);
+  assertOk('pluginMode: install preview owns focus, traps Tab, closes with Escape, and restores focus',
+    pluginInstallModal.dialogCount === 1
+    && /설치 미리보기/.test(pluginInstallModal.title)
+    && pluginInstallModal.confirmLabel === '세션 반영'
+    && pluginInstallModal.panelInert === true
+    && pluginInstallModal.focusedInitially === true
+    && pluginInstallModal.wrappedBackward === true
+    && pluginInstallModal.wrappedForward === true
+    && pluginInstallModal.closed === true
+    && pluginInstallModal.focusRestored === true);
+  assertOk('pluginMode: Paper 48 management counts and switches match',
+    JSON.stringify(pluginManage.counts) === JSON.stringify(['플러그인 2', '기능 8', '마켓플레이스 1'])
+    && JSON.stringify(pluginManage.toggles) === JSON.stringify(['true', 'false', 'true']));
+  assertOk('pluginMode: Paper 26 DART permission is a non-blocking 3/4 detail view',
+    pluginPermission.dialogCount === 0
+    && pluginPermission.overlayCount === 0
+    && pluginPermission.title === 'DART 전자공시'
+    && pluginPermission.counts.includes('UI 초안')
+    && pluginPermission.features === 4
+    && /3\s*\/\s*4/.test(pluginPermission.allowed)
+    && pluginPermission.inert === false);
+
+  // ---------- 검증 3d: Paper 49 Kiumi 메뉴 + Paper 54 프로젝트 상호작용 ----------
+  await shellWin.webContents.executeJavaScript(`document.getElementById('dot').click()`);
+  await wait(100);
+  const kiumiMenu = await shellWin.webContents.executeJavaScript(`(() => {
+    const menu = document.getElementById('kiumiMenu');
+    const rect = menu.getBoundingClientRect();
+    const style = getComputedStyle(menu);
+    const items = Array.from(menu.querySelectorAll('.km-item'));
+    return {
+      visible: !menu.hidden,
+      width: rect.width,
+      itemCount: items.length,
+      sections: Array.from(menu.querySelectorAll('.km-section')).map((node) => node.textContent),
+      allIconsAreSvg: items.every((item) => item.querySelector('.km-ic > svg')),
+      rowHeights: items.map((item) => item.getBoundingClientRect().height),
+      backdropFilter: style.backdropFilter || style.webkitBackdropFilter || '',
+    };
+  })()`);
+  await shot(shellWin, '03i-kiumi-menu-paper-49.png');
+  await shellWin.webContents.executeJavaScript(`document.getElementById('dot').click()`);
+
+  const projectHover = await shellWin.webContents.executeJavaScript(`(() => {
+    const main = document.querySelector('.sidebar-project-main');
+    main.focus();
+    const description = main.querySelector('.sidebar-project-description');
+    const add = document.querySelector('.sidebar-project-new-chat');
+    const menu = document.querySelector('.sidebar-project-menu-trigger');
+    const current = document.querySelector('.sidebar-project.is-current');
+    const size = (node) => { const rect = node.getBoundingClientRect(); return { width: rect.width, height: rect.height }; };
+    return {
+      currentProject: current?.querySelector('.sidebar-project-name')?.textContent || '',
+      descriptionVisible: !!description && !description.hidden,
+      description: description?.textContent || '',
+      addSize: size(add),
+      menuSize: size(menu),
+    };
+  })()`);
+  await wait(80);
+  await shot(shellWin, '03j-project-hover-paper-54.png');
+  const projectMenuImmediate = await shellWin.webContents.executeJavaScript(`(() => {
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    const trigger = document.querySelector('.sidebar-project-menu-trigger');
+    trigger.click();
+    const menu = document.querySelector('.sidebar-project-menu');
+    return { expanded: trigger.getAttribute('aria-expanded'), visible: !menu.hidden };
+  })()`);
+  await wait(5300);
+  const projectMenu = await shellWin.webContents.executeJavaScript(`(() => {
+    const trigger = document.querySelector('.sidebar-project-menu-trigger');
+    const menu = document.querySelector('.sidebar-project-menu');
+    const actions = menu.closest('.sidebar-project-actions');
+    const rect = menu.getBoundingClientRect();
+    return {
+      expanded: trigger.getAttribute('aria-expanded'),
+      visible: !menu.hidden,
+      role: menu.getAttribute('role'),
+      firstAction: menu.querySelector('[role="menuitem"]')?.textContent || '',
+      actionsOpacity: Number(getComputedStyle(actions).opacity),
+      display: getComputedStyle(menu).display,
+      rect: { width: rect.width, height: rect.height },
+      focusedRole: document.activeElement?.getAttribute('role') || '',
+      itemLabels: Array.from(menu.querySelectorAll('[role="menuitem"]')).map((node) => node.textContent),
+    };
+  })()`);
+  await shot(shellWin, '03k-project-menu-paper-54.png');
+  await shellWin.webContents.executeJavaScript(`document.querySelector('.sidebar-project-menu-trigger').click(); document.getElementById('input').focus()`);
+  report.kiumiAndProjects = { kiumiMenu, projectHover, projectMenuImmediate, projectMenu };
+  console.log('[verify] 검증3d(Paper 49 Kiumi / Paper 54 프로젝트):', JSON.stringify(report.kiumiAndProjects));
+  assertOk('kiumiMenu: Paper 49 uses a 380px Liquid Glass menu with neutral SVG actions',
+    kiumiMenu.visible === true
+    && near(kiumiMenu.width, 380, 2)
+    && kiumiMenu.itemCount === 8
+    && JSON.stringify(kiumiMenu.sections) === JSON.stringify(['추가', '플러그인 UI 초안', '설정'])
+    && kiumiMenu.allIconsAreSvg === true
+    && kiumiMenu.rowHeights.every((height) => height >= 36)
+    && /blur\(3px\)/.test(kiumiMenu.backdropFilter));
+  assertOk('projects: Paper 54 exposes current-project description and 32px actions',
+    projectHover.currentProject.length > 0
+    && projectHover.descriptionVisible === true
+    && projectHover.description.length > 0
+    && near(projectHover.addSize.width, 32, 1)
+    && near(projectHover.addSize.height, 32, 1)
+    && near(projectHover.menuSize.width, 32, 1)
+    && near(projectHover.menuSize.height, 32, 1));
+  assertOk('projects: Paper 54 overflow menu is keyboard-shaped and reachable',
+    projectMenuImmediate.expanded === 'true'
+    && projectMenuImmediate.visible === true
+    && projectMenu.expanded === 'true'
+    && projectMenu.visible === true
+    && projectMenu.role === 'menu'
+    && projectMenu.firstAction === '고정'
+    && projectMenu.actionsOpacity === 1
+    && projectMenu.display !== 'none'
+    && projectMenu.rect.width > 0
+    && projectMenu.rect.height > 0
+    && projectMenu.focusedRole === 'menuitem'
+    && JSON.stringify(projectMenu.itemLabels) === JSON.stringify([
+      '고정', '편집', '탐색기에서 열기', '영구 작업 트리 생성', '대화 보관', '프로젝트 제거',
+    ]));
 
   // ---------- 검증 4: 접근성 3종 (CDP Emulation.setEmulatedMedia) ----------
   // 캔버스에 카드가 찬 상태 그대로 캡처한다 — 유리 표면이 실제로 보여야 의미가 있다.
@@ -1162,7 +2282,7 @@ app.whenReady().then(async () => {
   await wait(250);
   const afterBudget = await gridProbe();
   shellWin.setBounds(cbBefore);
-  shellWin.setMinimumSize(900, 480); // 하한 복구 — main.js DESIGN.minW/minH와 같은 값
+  shellWin.setMinimumSize(330, 480); // 하한 복구 — main.js DESIGN.minW/minH와 같은 값
   mainMod.noteAppBounds(shellWin);
   await wait(150);
 
@@ -1540,7 +2660,7 @@ app.whenReady().then(async () => {
   // 없이 직접 호출해 저장 계약(디스크 실재·검증 거부·거부 시 무변경)을 확인한다.
   const modelSetOk = mainMod.settingsHandlers.modelSet(null, { provider: 'claude', patch: { model: 'sonnet', effort: 'low' } });
   const modelGetAfterSet = mainMod.settingsHandlers.modelGet();
-  const modelPrefsPath = path.join(VERIFY_PROFILE, 'athena-model.json');
+  const modelPrefsPath = path.join(VERIFY_PROFILE.directory, 'athena-model.json');
   const modelPrefsOnDisk = fs.existsSync(modelPrefsPath)
     ? JSON.parse(fs.readFileSync(modelPrefsPath, 'utf-8'))
     : null;
@@ -4034,6 +5154,324 @@ app.whenReady().then(async () => {
   } catch (err) {
     report.missedCatchup = { error: String((err && err.message) || err) };
     failures.push('missed: 검증 블록이 예외로 끝났다');
+  }
+
+  // ---------- BOOT-001 C1 이미 준비된 fast reload ----------
+  let fastBootWin = null;
+  try {
+    fastBootWin = await createBootScenarioWindow();
+    const fastBoot = await traceBootBar(fastBootWin, 12000, mainMod.getBootCompletionSnapshotForVerify);
+    const fastMode = await waitForChatBooted(fastBootWin);
+    const duplicateNotificationCount = await fastBootWin.webContents.executeJavaScript(
+      `Number(document.getElementById('appNotification').dataset.showCount || '0')`,
+    );
+    report.bootFastReady = { ...fastBoot, mode: fastMode.mode, duplicateNotificationCount };
+    assertOk('boot fast readiness: ready snapshot keeps the 1.92s minimum path',
+      fastBoot.reducedMotion === false
+      && fastBoot.pass === true
+      && fastBoot.finishCount === 1
+      && fastBoot.bootTiming.readinessWaitMs >= 0
+      && fastBoot.bootTiming.readinessWaitMs <= 250
+      && fastBoot.bootTiming.totalMs >= 1850
+      && fastBoot.bootTiming.totalMs <= 2200
+      && fastMode.booted === true
+      && duplicateNotificationCount === 0);
+    console.log('[verify] BOOT-001 fast readiness:', JSON.stringify(report.bootFastReady));
+  } catch (err) {
+    report.bootFastReady = { error: String((err && err.message) || err) };
+    failures.push('boot fast readiness: 검증 블록이 예외로 끝났다');
+  } finally {
+    if (fastBootWin && !fastBootWin.isDestroyed()) fastBootWin.destroy();
+  }
+
+  // ---------- BOOT-001 C1 reduced-motion 재부팅 ----------
+  // 일반 부팅 검증과 별개로 미디어 조건을 건 채 같은 문서를 다시 로드한다.
+  // 완성된 ATHENA 자리표시자/파란 overlay/빨간 caret은 유지하되, 타이핑과
+  // 프레임 확장은 생략한다. local readiness를 의도적으로 늦춰도 정적 ATHENA를
+  // 유지하다가 readiness 뒤 80ms 정적 상태를 거쳐 finishBoot가 정확히 1회여야 한다.
+  let reducedBootWin = null;
+  try {
+    ipcMain.removeHandler('athena:onboarding-state');
+    ipcMain.handle('athena:onboarding-state', async () => {
+      await wait(2250);
+      return mainMod.settingsHandlers.onboardingState();
+    });
+    reducedBootWin = await createBootScenarioWindow();
+    await forceMedia(reducedBootWin, [{ name: 'prefers-reduced-motion', value: 'reduce' }]);
+    const loaded = new Promise((resolve) => reducedBootWin.webContents.once('did-finish-load', resolve));
+    reducedBootWin.webContents.reload();
+    await loaded;
+    const reducedBoot = await traceBootBar(reducedBootWin, 12000, mainMod.getBootCompletionSnapshotForVerify);
+    const reducedMode = await waitForChatBooted(reducedBootWin);
+    report.bootReducedMotion = { ...reducedBoot, mode: reducedMode.mode };
+    assertOk('boot reduced-motion: static completed frame uses the same single finish path',
+      reducedBoot.reducedMotion === true
+      && reducedBoot.pass === true
+      && reducedBoot.finishCount === 1
+      && reducedBoot.taskAppearedBeforeFullName === false
+      && reducedBoot.taskLabels.includes('화면 설정 확인')
+      && reducedBoot.taskStates.includes('running')
+      && reducedBoot.reducedBootMs >= 1920
+      && reducedBoot.reducedReadinessWaitMs >= 250
+      && reducedBoot.reducedReadinessWaitMs <= 900
+      && reducedMode.booted === true);
+    await clearMedia(reducedBootWin);
+    console.log('[verify] BOOT-001 reduced-motion:', JSON.stringify(report.bootReducedMotion));
+  } catch (err) {
+    if (reducedBootWin && !reducedBootWin.isDestroyed() && reducedBootWin.webContents.debugger.isAttached()) {
+      try { await clearMedia(reducedBootWin); } catch { /* 검증 종료 중 */ }
+    }
+    report.bootReducedMotion = { error: String((err && err.message) || err) };
+    failures.push('boot reduced-motion: 검증 블록이 예외로 끝났다');
+  } finally {
+    if (reducedBootWin && !reducedBootWin.isDestroyed()) reducedBootWin.destroy();
+    ipcMain.removeHandler('athena:onboarding-state');
+    ipcMain.handle('athena:onboarding-state', mainMod.settingsHandlers.onboardingState);
+  }
+
+  // ---------- BOOT-003 local UI readiness timeout → dedicated onboarding fallback ----------
+  // 응답이 영원히 안 오는 invoke는 완료로 추측하지 않는다. bounded timeout 뒤
+  // 앱은 열리되 메인 대화는 숨김·inert인 전용 온보딩으로만 진입한다.
+  let releaseHungOnboarding = null;
+  let timeoutBootWin = null;
+  try {
+    // 앞선 close-to-background/오브 검증이 창의 표시 상태를 바꿀 수 있다. Chromium은
+    // 숨은 renderer 타이머를 throttle하므로, 실제 사용자가 보는 부팅과 같은 전경
+    // 조건을 복원한 뒤 3.5초 local deadline을 실측한다.
+    ipcMain.removeHandler('athena:onboarding-state');
+    ipcMain.handle('athena:onboarding-state', () => new Promise((resolve) => {
+      // resolver를 보관해 검증 중 in-flight IPC를 실제 pending 상태로 유지하고,
+      // 검증 뒤 명시적으로 정리한다. live root 없는 영구 Promise는 Electron bridge가
+      // renderer deadline보다 먼저 reject할 수 있어 timeout 검증으로 쓸 수 없다.
+      releaseHungOnboarding = resolve;
+    }));
+    timeoutBootWin = await createBootScenarioWindow();
+    const timeoutBoot = await traceBootBar(timeoutBootWin, 12000, mainMod.getBootCompletionSnapshotForVerify);
+    const timeoutMode = await waitForChatBooted(timeoutBootWin);
+    const timeoutFallbackState = await timeoutBootWin.webContents.executeJavaScript(`(() => {
+        const boot = document.getElementById('boot');
+        const shell = document.getElementById('shell');
+        return {
+          phase: boot.dataset.phase,
+          localReadiness: boot.dataset.localReadiness,
+          localFailureReason: boot.dataset.localFailureReason,
+          retryUiAbsent: document.getElementById('bootFailure') === null
+            && document.getElementById('bootRetry') === null,
+          onboardingVisible: !document.getElementById('onboard').hidden,
+          appHidden: document.getElementById('app').hidden,
+          shellBlocked: shell.classList.contains('is-onboarding-hidden') && shell.inert
+            && getComputedStyle(shell).display === 'none',
+          finishCount: Number(boot.dataset.finishCount || '0'),
+        };
+      })()`);
+    const timeoutFallbackReached = !!timeoutFallbackState
+      && timeoutFallbackState.phase === 'complete'
+      && timeoutFallbackState.localReadiness === 'fallback'
+      && timeoutFallbackState.localFailureReason === 'timeout'
+      && timeoutFallbackState.retryUiAbsent === true
+      && timeoutFallbackState.onboardingVisible === true
+      && timeoutFallbackState.appHidden === true
+      && timeoutFallbackState.shellBlocked === true
+      && timeoutFallbackState.finishCount === 1;
+    if (releaseHungOnboarding) {
+      releaseHungOnboarding(mainMod.settingsHandlers.onboardingState());
+      releaseHungOnboarding = null;
+    }
+    report.bootLocalReadinessTimeout = {
+      ...timeoutBoot,
+      fallbackReached: timeoutFallbackReached === true,
+      fallbackState: timeoutFallbackState || null,
+      mode: timeoutMode.mode,
+    };
+    assertOk('boot local readiness timeout: hang opens dedicated onboarding and never exposes main chat',
+      timeoutFallbackReached === true
+      && timeoutBoot.timingMatches === true
+      && timeoutBoot.finishCount === 1
+      && timeoutBoot.bootTiming.readinessWaitMs >= 1800
+      && timeoutMode.booted === true
+      && timeoutMode.mode === 'onboard');
+    console.log('[verify] BOOT-001 local readiness timeout:', JSON.stringify(report.bootLocalReadinessTimeout));
+  } catch (err) {
+    report.bootLocalReadinessTimeout = { error: String((err && err.message) || err) };
+    failures.push('boot local readiness timeout: 검증 블록이 예외로 끝났다');
+  } finally {
+    if (timeoutBootWin && !timeoutBootWin.isDestroyed()) timeoutBootWin.destroy();
+    if (releaseHungOnboarding) {
+      releaseHungOnboarding(mainMod.settingsHandlers.onboardingState());
+      releaseHungOnboarding = null;
+    }
+    ipcMain.removeHandler('athena:onboarding-state');
+    ipcMain.handle('athena:onboarding-state', mainMod.settingsHandlers.onboardingState);
+  }
+
+  // ---------- BOOT-003 corrupt/unconfirmed onboarding state → dedicated onboarding ----------
+  let corruptBootWin = null;
+  try {
+    ipcMain.removeHandler('athena:onboarding-state');
+    ipcMain.handle('athena:onboarding-state', async () => ({ needed: false, step: 2, extra: 'corrupt' }));
+    corruptBootWin = await createBootScenarioWindow();
+    const corruptBoot = await traceBootBar(corruptBootWin, 12000, mainMod.getBootCompletionSnapshotForVerify);
+    const corruptMode = await waitForChatBooted(corruptBootWin);
+    const corruptState = await corruptBootWin.webContents.executeJavaScript(`(() => {
+      const shell = document.getElementById('shell');
+      return {
+        localReadiness: document.getElementById('boot').dataset.localReadiness,
+        localFailureReason: document.getElementById('boot').dataset.localFailureReason,
+        onboardingVisible: !document.getElementById('onboard').hidden,
+        appHidden: document.getElementById('app').hidden,
+        shellBlocked: shell.inert && shell.classList.contains('is-onboarding-hidden'),
+      };
+    })()`);
+    report.bootCorruptOnboarding = { ...corruptBoot, mode: corruptMode.mode, state: corruptState };
+    assertOk('boot corrupt onboarding state: unconfirmed completion falls back to dedicated onboarding',
+      corruptBoot.finishCount === 1
+      && corruptMode.mode === 'onboard'
+      && corruptState.localReadiness === 'fallback'
+      && corruptState.localFailureReason === 'unconfirmed'
+      && corruptState.onboardingVisible === true
+      && corruptState.appHidden === true
+      && corruptState.shellBlocked === true);
+  } catch (err) {
+    report.bootCorruptOnboarding = { error: String((err && err.message) || err) };
+    failures.push('boot corrupt onboarding state: 검증 블록이 예외로 끝났다');
+  } finally {
+    if (corruptBootWin && !corruptBootWin.isDestroyed()) corruptBootWin.destroy();
+    ipcMain.removeHandler('athena:onboarding-state');
+    ipcMain.handle('athena:onboarding-state', mainMod.settingsHandlers.onboardingState);
+  }
+
+  // ---------- BOOT-001 C1 지연 local UI readiness 회귀 ----------
+  // onboarding-state는 실제 셸 모드를 결정하는 local readiness다. 응답이 늦으면
+  // 완성 ATHENA 상태에서 기다리고, 성공한 뒤에만 480ms 확장을 시작해야 한다.
+  let delayedBootWin = null;
+  try {
+    ipcMain.removeHandler('athena:onboarding-state');
+    ipcMain.handle('athena:onboarding-state', async () => {
+      await wait(2600);
+      return mainMod.settingsHandlers.onboardingState();
+    });
+    delayedBootWin = await createBootScenarioWindow();
+    const delayedBoot = await traceBootBar(delayedBootWin, 12000, mainMod.getBootCompletionSnapshotForVerify);
+    const delayedMode = await waitForChatBooted(delayedBootWin);
+    report.bootDelayedOnboarding = { ...delayedBoot, mode: delayedMode.mode };
+    assertOk('boot delayed onboarding IPC: local readiness extends total without bypassing the gate',
+      delayedBoot.reducedMotion === false
+      && delayedBoot.timingMatches === true
+      && delayedBoot.bootTiming.readinessWaitMs >= 900
+      && delayedBoot.bootTiming.totalMs >= 2900
+      && delayedBoot.taskAppearedBeforeFullName === false
+      && delayedBoot.taskLabels.includes('화면 설정 확인')
+      && delayedBoot.finishCount === 1
+      && delayedBoot.sawShellCompactMask === true
+      && delayedBoot.shellTransitionContract === true
+      && delayedBoot.shellFinishedFull === true
+      && delayedMode.booted === true);
+    console.log('[verify] BOOT-001 delayed onboarding IPC:', JSON.stringify(report.bootDelayedOnboarding));
+  } catch (err) {
+    report.bootDelayedOnboarding = { error: String((err && err.message) || err) };
+    failures.push('boot delayed onboarding IPC: 검증 블록이 예외로 끝났다');
+  } finally {
+    if (delayedBootWin && !delayedBootWin.isDestroyed()) delayedBootWin.destroy();
+    ipcMain.removeHandler('athena:onboarding-state');
+    ipcMain.handle('athena:onboarding-state', mainMod.settingsHandlers.onboardingState);
+  }
+
+  // ---------- 검증 프로필 상태 매트릭스 (LIFE-001) ----------
+  // 새 임시 디렉터리라는 사실만 믿지 않고, 기본 앱 진입·완전 신규·CLI만 완료된
+  // 부분 상태를 같은 production onboarding reader로 직접 확인한다. 각 시드는 계정
+  // 파일도 함께 비우므로 실행 머신이나 앞선 검증 블록의 상태가 섞이지 않는다.
+  try {
+    const scenarioStates = {};
+    for (const scenario of ['configured', 'new-user', 'cli-complete']) {
+      seedVerifyProfile(VERIFY_PROFILE.directory, scenario);
+      scenarioStates[scenario] = mainMod.settingsHandlers.onboardingState();
+    }
+    report.verifyProfile.scenarioStates = scenarioStates;
+    assertOk('verify profile: configured seed opens the app shell',
+      scenarioStates.configured.needed === false && scenarioStates.configured.step === 3);
+    assertOk('verify profile: LIFE-001 new-user seed starts at CLI connection',
+      scenarioStates['new-user'].needed === true && scenarioStates['new-user'].step === 2);
+    assertOk('verify profile: LIFE-001 partial seed resumes at account connection',
+      scenarioStates['cli-complete'].needed === true && scenarioStates['cli-complete'].step === 3);
+  } catch (err) {
+    report.verifyProfile.scenarioError = String((err && err.message) || err);
+    failures.push('verify profile: LIFE-001 상태 시드 검증 블록이 예외로 끝났다');
+  } finally {
+    seedVerifyProfile(VERIFY_PROFILE.directory, 'configured');
+  }
+
+  // ---------- LIFE-001: 온보딩 3 / 3 열린 표면 실계산 스타일 ----------
+  // 정규식으로 첫 CSS 규칙만 읽으면 뒤쪽 override를 놓칠 수 있다. production
+  // shell.html에 로드된 실제 cascade에서 기본·포커스·등록 계좌 상태를 직접 잰다.
+  try {
+    if (shellWin.isMinimized()) shellWin.restore();
+    if (!shellWin.isVisible()) shellWin.show();
+    shellWin.focus();
+    await wait(40);
+    const accountSurface = await shellWin.webContents.executeJavaScript(`(async () => {
+      const host = document.createElement('div');
+      host.style.cssText = 'position:fixed;inset:0;z-index:9999;background:white';
+      document.body.appendChild(host);
+      const cleanup = window.AthenaLib.Onboarding.renderAccountStep(host, {
+        connectedAccountId: 'verify-account',
+        onUseRegistered: () => {},
+        onRegistered: () => {},
+        onBack: () => {},
+      });
+
+      const inputRow = host.querySelector('.onb-input-row');
+      const input = host.querySelector('.onb-input');
+      const savebox = host.querySelector('.onb-savebox:not(.onb-connected-account)');
+      const connected = host.querySelector('.onb-connected-account');
+      const brandProbe = document.createElement('div');
+      brandProbe.style.border = '1px solid var(--color-brand)';
+      host.appendChild(brandProbe);
+      const surface = (node) => {
+        const style = node ? getComputedStyle(node) : null;
+        return style ? {
+          backgroundColor: style.backgroundColor,
+          backgroundImage: style.backgroundImage,
+          borderColor: style.borderTopColor,
+        } : null;
+      };
+      const baseInput = surface(inputRow);
+      const storage = surface(savebox);
+      const connectedAccount = surface(connected);
+      input.focus();
+      await new Promise((resolve) => setTimeout(resolve, 180));
+      const focusedInput = surface(inputRow);
+      const brandBorderColor = getComputedStyle(brandProbe).borderTopColor;
+      const result = {
+        baseInput,
+        storage,
+        connectedAccount,
+        focusedInput,
+        brandBorderColor,
+        inputFocused: document.activeElement === input,
+        rowFocusWithin: inputRow.matches(':focus-within'),
+        connectedAccountPresent: !!connected,
+      };
+      cleanup();
+      host.remove();
+      return result;
+    })()`);
+    const isOpenSurface = (surface) => !!surface
+      && surface.backgroundColor === 'rgba(0, 0, 0, 0)'
+      && surface.backgroundImage === 'none';
+    report.onboardingAccountSurface = accountSurface;
+    assertOk('onboarding 3/3: input and storage use transparent open surfaces in the real shell cascade',
+      isOpenSurface(accountSurface.baseInput)
+      && isOpenSurface(accountSurface.storage));
+    assertOk('onboarding 3/3: focus uses the existing brand border',
+      accountSurface.inputFocused === true
+      && accountSurface.rowFocusWithin === true
+      && accountSurface.focusedInput.borderColor === accountSurface.brandBorderColor);
+    assertOk('onboarding 3/3: connected-account state remains present and unfilled',
+      accountSurface.connectedAccountPresent === true
+      && isOpenSurface(accountSurface.connectedAccount));
+  } catch (err) {
+    report.onboardingAccountSurface = { error: String((err && err.message) || err) };
+    failures.push('onboarding 3/3: 실제 cascade 열린 표면 검증 블록이 예외로 끝났다');
   }
 
   // 판정 신호 표준화(2026-08-28 P3c) — 리포트만 읽는 소비자가 성패를 오판하지
