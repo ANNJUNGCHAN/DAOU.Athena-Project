@@ -461,8 +461,19 @@ window.athena.on('athena:add-rest-canvas', async (payload) => {
 // main.js가 athena__render_canvas(source:'live')로 claude -p를 실왕복한 뒤 매
 // render_canvas tool_result마다 이걸 보낸다. status는 success/fallback(둘 다
 // canvas_type을 읽어 렌더한다) · rejected/error/unparseable(카드 대신 안내만).
-window.athena.on('athena:add-canvas-live', (result) => {
-  addLiveCard(result);
+window.athena.on('athena:add-canvas-live', async (result) => {
+  const rendererReceivedAt = performance.now();
+  const node = await addLiveCard(result);
+  if (!node || !result || (result.status !== 'success' && result.status !== 'fallback')) return;
+  window.AthenaProviderFirstPaint.claimFirstVisible({
+    clientSubmitId: result.clientSubmitId,
+    turnId: result.turnId,
+    sequence: result.sequence,
+    origin: 'shell',
+    owner: 'canvas',
+    node,
+    rendererReceivedAt,
+  });
 });
 
 async function addLiveCard(result) {

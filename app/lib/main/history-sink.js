@@ -111,12 +111,12 @@ async function postChatMessage({ conversationId, role, text, messageId, occurred
   return { ok: res.ok, status: res.status };
 }
 
-function saveChatMessage({ conversationId, text, role }, { onSaveFailed, mdlog } = {}) {
+function startChatMessageSave({ conversationId, text, role }, { onSaveFailed, mdlog } = {}) {
   const messageId = crypto.randomUUID();
-  if (!canAttemptSave()) return messageId; // 해당 없음 — 시도도 배지도 없음
+  if (!canAttemptSave()) return { messageId, attempted: false, completion: Promise.resolve() };
 
   const occurredAt = new Date().toISOString();
-  postChatMessage({ conversationId, role, text, messageId, occurredAt })
+  const completion = postChatMessage({ conversationId, role, text, messageId, occurredAt })
     .then((result) => {
       if (result.ok) return;
       if (mdlog) mdlog(`history-sink: 저장 실패 role=${role} status=${result.status}`);
@@ -124,13 +124,29 @@ function saveChatMessage({ conversationId, text, role }, { onSaveFailed, mdlog }
       // 저장 실패 시 재확인 허용(계획 §2(g)) — 다음 시도가 최신 상태를 반영하게
       // fire-and-forget으로 다시 조회한다(이 실패 자체를 막지 않는다).
       refreshBrainReady({ mdlog }).catch(() => {});
+      throw new Error(`history persistence failed with status ${result.status}`);
     })
     .catch((err) => {
-      if (mdlog) mdlog(`history-sink: 저장 예외 role=${role} — ${String((err && err.message) || err)}`);
-      if (onSaveFailed) onSaveFailed({ messageId, role });
-      refreshBrainReady({ mdlog }).catch(() => {});
+      if (!String((err && err.message) || err).startsWith('history persistence failed with status')) {
+        if (mdlog) mdlog(`history-sink: 저장 예외 role=${role} — ${String((err && err.message) || err)}`);
+        if (onSaveFailed) onSaveFailed({ messageId, role });
+        refreshBrainReady({ mdlog }).catch(() => {});
+      }
+      throw err;
     });
-  return messageId;
+  return { messageId, attempted: true, completion };
+}
+
+function saveChatMessage(input, options) {
+  const operation = startChatMessageSave(input, options);
+  operation.completion.catch(() => {});
+  return operation.messageId;
+}
+
+async function saveChatMessageAwaited(input, options) {
+  const operation = startChatMessageSave(input, options);
+  await operation.completion;
+  return operation.messageId;
 }
 
 module.exports = {
@@ -142,6 +158,7 @@ module.exports = {
   isBrainReadyCached,
   canAttemptSave,
   saveChatMessage,
+  saveChatMessageAwaited,
   // 테스트 전용 — 모듈 스코프 캐시를 초기화한다(테스트 간 상태 누수 방지).
   _resetBrainReadyCacheForTest: () => { brainReadyCache = null; },
 };

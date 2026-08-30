@@ -98,6 +98,12 @@ class ReplayTurnCapture {
   }
 
   observe(event) {
+    if (event && typeof event.type === 'string' && event.payload
+        && (event.type === 'tool_started' || event.type === 'tool_completed'
+          || event.type === 'canvas_result')) {
+      this.observeProviderEvent(event);
+      return;
+    }
     const content = event && event.message && event.message.content;
     if (event && event.type === 'assistant' && Array.isArray(content)) {
       for (const block of content) {
@@ -117,6 +123,33 @@ class ReplayTurnCapture {
       const call = this._resolveByToolUseId.get(result.toolUseId);
       if (!call || result.isError) continue;
       const body = parseToolResultObject(result.content);
+      if (body && body.plan_token) call.planToken = String(body.plan_token);
+    }
+  }
+
+  observeProviderEvent(event) {
+    const payload = event && event.payload;
+    if (!payload || typeof payload !== 'object') return;
+    if (event.type === 'tool_started') {
+      const name = String(payload.canonicalToolName || '');
+      if (name.endsWith('athena_resolve') && payload.input) {
+        const call = {
+          toolUseId: payload.toolUseId || null,
+          input: payload.input,
+          planToken: null,
+        };
+        this._resolveCalls.push(call);
+        if (call.toolUseId) this._resolveByToolUseId.set(call.toolUseId, call);
+      } else if (name.endsWith('athena__render_canvas') && payload.input) {
+        this._renderCalls.push(payload.input);
+      }
+      return;
+    }
+
+    if (event.type === 'tool_completed') {
+      const call = this._resolveByToolUseId.get(payload.toolUseId);
+      if (!call || payload.isError) return;
+      const body = parseToolResultObject(payload.content);
       if (body && body.plan_token) call.planToken = String(body.plan_token);
     }
   }

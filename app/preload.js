@@ -95,6 +95,7 @@ const INVOKE_CHANNELS = new Set([
 ]);
 
 const SEND_CHANNELS = new Set([
+  'athena:provider-paint-ack',
   'athena:minimize-windows',
   'athena:close-windows',
   'athena:zoom',
