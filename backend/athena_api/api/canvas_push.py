@@ -16,6 +16,11 @@ from pydantic import BaseModel, Field, model_validator
 from athena_api.api.llm_tools import OptionalOrderClientDep, OptionalWsClientDep
 from athena_api.api.ws_auth import authenticate_downstream_ws
 from athena_api.api.ws_pump import pump_queue_to_websocket
+from athena_api.canvas_card_registry import (
+    CanvasCardRegistryError,
+    resolve_canvas_card,
+)
+from athena_api.canvas_field_registry import get_operation_field_contract
 from athena_api.canvas_transform import (
     build_aits_chart_envelope_data,
     build_compound_generic,
@@ -87,6 +92,76 @@ _BUILD_FROM_TR_DATA = {
     "compound": build_compound_generic,
 }
 
+_INTEGRATED_CARD_FIELDS = frozenset(
+    {
+        "card_id",
+        "card_kind",
+        "capability_id",
+        "mode",
+        "section",
+        "operation_refs",
+        "field_contract",
+        "coverage_receipt",
+    }
+)
+
+
+def _integrated_card_contract(operation_ref: str) -> dict[str, Any]:
+    """Derive all integrated-card routing from one authoritative operation."""
+
+    resolved = resolve_canvas_card(operation_ref)
+    field_contract = get_operation_field_contract(operation_ref)
+    if not field_contract:
+        raise CanvasCardRegistryError(
+            f"operation {operation_ref!r} has no Canvas field contract"
+        )
+    for field in field_contract:
+        if (
+            field.get("card_id") != resolved.card_id
+            or field.get("card_kind") != resolved.card_kind
+            or field.get("capability_id") != resolved.capability_id
+        ):
+            raise CanvasCardRegistryError(
+                f"operation {operation_ref!r} field contract disagrees with card registry"
+            )
+    unresolved = [
+        field["occurrence_id"]
+        for field in field_contract
+        if field.get("semantic_status") == "unresolved"
+    ]
+    metadata = resolved.runtime_metadata()
+    metadata.update(
+        {
+            "field_contract": field_contract,
+            "coverage_receipt": {
+                "operation_ref": operation_ref,
+                "field_occurrence_count": len(field_contract),
+                "reachable_occurrence_count": len(field_contract),
+                "unresolved_occurrence_ids": unresolved,
+                "lossless": not unresolved,
+            },
+        }
+    )
+    return metadata
+
+
+def _lossless_source_data(call_payload: dict[str, Any]) -> dict[str, Any]:
+    """Keep the complete selector page without copying any execution secret."""
+
+    source_data = {
+        key: value
+        for key, value in call_payload.items()
+        if key in {"operation_ref", "data", "continuation", "canvas_context"}
+    }
+    continuation = source_data.get("continuation")
+    if isinstance(continuation, dict):
+        source_data["continuation"] = {
+            key: value
+            for key, value in continuation.items()
+            if key != "next_plan_token"
+        }
+    return source_data
+
 
 def _enqueue_envelope(queue: asyncio.Queue, envelope: dict[str, Any]) -> None:
     """큐가 가득 차도 최신 카드가 이긴다 — 가장 오래된 것을 버리고 넣는다."""
@@ -107,6 +182,38 @@ async def canvas_push(request: Request, envelope: dict[str, Any]) -> JSONRespons
         return JSONResponse(
             status_code=422, content={"detail": "envelope에 canvas_type(str)이 필요하다"}
         )
+    supplied_integrated_fields = _INTEGRATED_CARD_FIELDS.intersection(envelope)
+    if supplied_integrated_fields:
+        operation_ref = envelope.get("operation_ref")
+        if not isinstance(operation_ref, str) or not operation_ref:
+            return JSONResponse(
+                status_code=422,
+                content={
+                    "detail": "통합 카드 envelope에는 canonical operation_ref가 필요하다"
+                },
+            )
+        try:
+            canonical = _integrated_card_contract(operation_ref)
+        except (CanvasCardRegistryError, KeyError, ValueError) as exc:
+            return JSONResponse(status_code=422, content={"detail": str(exc)})
+        mismatched = sorted(
+            field
+            for field in supplied_integrated_fields
+            if envelope[field] != canonical[field]
+        )
+        if mismatched:
+            return JSONResponse(
+                status_code=422,
+                content={
+                    "detail": "통합 카드 metadata가 canonical operation_ref와 일치하지 않는다",
+                    "mismatched_fields": mismatched,
+                },
+            )
+        # Do not forward caller-owned object identities even when values match.
+        # Replace every integrated field with a fresh server-derived contract.
+        for field in _INTEGRATED_CARD_FIELDS:
+            envelope.pop(field, None)
+        envelope.update(canonical)
     queue = getattr(request.app.state, "canvas_events", None)
     if queue is None:
         # fail-closed — 조용히 버리면 게이트웨이가 "밀었다"고 믿는다(정직성 위반).
@@ -375,6 +482,7 @@ def _error_state_response(
     call_ms: float,
 ) -> JSONResponse:
     correlation = _correlation(payload)
+    card_contract = _integrated_card_contract(operation_ref)
     envelope: dict[str, Any] = {
         "canvas_type": canvas_kind,
         "screen_id": screen_id,
@@ -385,6 +493,7 @@ def _error_state_response(
         "layout": None,
         "drop_types": [],
         "error": {"code": code, "retryable": retryable},
+        **card_contract,
     }
     if renderer_id is not None:
         envelope["renderer_id"] = renderer_id
@@ -405,6 +514,7 @@ def _error_state_response(
             "status": "error_rendered",
             "code": code,
             "operation_ref": operation_ref,
+            **card_contract,
             "canvas_type": canvas_kind,
             "screen_id": screen_id,
             "correlation": correlation,
@@ -505,18 +615,44 @@ async def selector_dispatch(
     verified_plan = selector.signer.verify(
         plan_token, selector.catalog, expected_account=account
     )
+    try:
+        card_contract = _integrated_card_contract(verified_plan.operation_ref)
+    except (CanvasCardRegistryError, KeyError, ValueError) as exc:
+        selector._consume_nonce(verified_plan)
+        return JSONResponse(
+            status_code=422,
+            content={
+                "status": "rejected",
+                "code": "CANVAS_CARD_COVERAGE_MISSING",
+                "operation_ref": verified_plan.operation_ref,
+                "detail": str(exc),
+            },
+        )
 
     if resolved.kind == "order":
         # Resolution validates and seals the order arguments. This endpoint only
         # returns a ticket prefill; it never receives confirmation/auth headers and
         # never dispatches to the order client.
         selector._consume_nonce(verified_plan)
+        order_draft = _sanitized_order_draft(verified_plan.arguments)
+        card_title = resolve_fixed_card_title(resolved.operation_ref)
+        envelope = {
+            "canvas_type": "action",
+            "card_title": card_title,
+            "data": {"order_draft": order_draft, "state": "draft"},
+            "layout": None,
+            "drop_types": [],
+            **card_contract,
+        }
         return JSONResponse(
             content={
                 "status": "guarded",
                 "operation_ref": resolved.operation_ref,
-                "card_title": resolve_fixed_card_title(resolved.operation_ref),
-                "order_draft": _sanitized_order_draft(verified_plan.arguments),
+                **card_contract,
+                "card_title": card_title,
+                "canvas_type": "action",
+                "order_draft": order_draft,
+                "envelope": envelope,
             }
         )
 
@@ -543,6 +679,16 @@ async def selector_dispatch(
         acknowledgement = _compact_websocket_ack(
             call_response.data, verified_plan.arguments
         )
+        response_aliases = {
+            field["alias"]
+            for field in card_contract["field_contract"]
+            if isinstance(field.get("alias"), str)
+        }
+        raw_ack_data = {
+            key: value
+            for key, value in call_response.data.items()
+            if key in response_aliases
+        }
         command = str(verified_plan.arguments.get("trnm") or "").upper()
         lifecycle = "disconnected" if command in {"REMOVE", "STOP", "CNSRCLR"} else "connected"
         state_label = "연결 해제됨" if lifecycle == "disconnected" else "실시간 연결됨"
@@ -559,14 +705,21 @@ async def selector_dispatch(
                 "state_label": state_label,
                 "records": [{"상태": state_label}],
             },
+            "raw_data": raw_ack_data,
+            "source_data": {
+                "operation_ref": call_response.operation_ref,
+                "data": raw_ack_data,
+            },
             "layout": None,
             "drop_types": [],
             "correlation": correlation,
+            **card_contract,
         }
         return JSONResponse(
             content={
                 "status": "acknowledged",
                 "operation_ref": call_response.operation_ref,
+                **card_contract,
                 "card_title": card_title,
                 "canvas_type": "event",
                 "correlation": correlation,
@@ -620,6 +773,20 @@ async def canvas_render_plan(
             operation_ref=verified_plan.operation_ref,
             total_start=total_start,
             next_actions=["resolve_query_plan"],
+        )
+
+    try:
+        card_contract = _integrated_card_contract(verified_plan.operation_ref)
+    except (CanvasCardRegistryError, KeyError, ValueError) as exc:
+        selector._consume_nonce(verified_plan)
+        return _render_error(
+            payload=payload,
+            status_code=422,
+            code="CANVAS_CARD_COVERAGE_MISSING",
+            detail=str(exc),
+            operation_ref=verified_plan.operation_ref,
+            total_start=total_start,
+            next_actions=["register_canvas_card_contract"],
         )
 
     queue = getattr(request.app.state, "canvas_events", None)
@@ -735,6 +902,18 @@ async def canvas_render_plan(
 
     transform_start = time.perf_counter()
     operation_ref = call_payload.get("operation_ref")
+    if operation_ref != verified_plan.operation_ref:
+        return _render_error(
+            payload=payload,
+            status_code=422,
+            code="SIGNED_OPERATION_MISMATCH",
+            detail="selector call response operation_ref differs from the signed plan",
+            operation_ref=verified_plan.operation_ref,
+            total_start=total_start,
+            call_ms=call_ms,
+            transform_ms=_elapsed_ms(transform_start),
+            next_actions=["resolve_again"],
+        )
     screen_contract = inline_contract or _screen_contract(operation_ref)
 
     if screen_contract is None:
@@ -837,6 +1016,7 @@ async def canvas_render_plan(
         data, meta = built
 
     envelope = {
+        "operation_ref": operation_ref,
         "canvas_type": canvas_kind,
         "screen_id": screen_id,
         "fell_back": False,
@@ -848,6 +1028,12 @@ async def canvas_render_plan(
         "data": data,
         "layout": None,
         "drop_types": [],
+        # ``data`` is the optimized primary projection.  The full selector page
+        # remains available to the integrated card's detail sheet regardless of
+        # the legacy 40-field/50-row projection limits.
+        "raw_data": call_payload.get("data"),
+        "source_data": _lossless_source_data(call_payload),
+        **card_contract,
     }
     if renderer_id is not None:
         envelope["renderer_id"] = renderer_id
@@ -868,6 +1054,7 @@ async def canvas_render_plan(
                 "queued": False,
                 "status": "rendered",
                 "operation_ref": operation_ref,
+                **card_contract,
                 "canvas_type": canvas_kind,
                 "screen_id": screen_id,
                 "correlation": correlation,
@@ -897,6 +1084,7 @@ async def canvas_render_plan(
             "delivery": "side_channel",
             "status": "queued",
             "operation_ref": operation_ref,
+            **card_contract,
             "canvas_type": canvas_kind,
             "screen_id": screen_id,
             "correlation": correlation,
@@ -929,4 +1117,5 @@ async def canvas_side_channel(websocket: WebSocket) -> None:
         # 준비 안 된 배포 — 조용한 무한대기 대신 정직하게 닫는다(1013 = try later).
         await websocket.close(code=1013)
         return
+    await websocket.send_json({"type": "feed-ready", "feed": "canvas"})
     await pump_queue_to_websocket(websocket, queue)

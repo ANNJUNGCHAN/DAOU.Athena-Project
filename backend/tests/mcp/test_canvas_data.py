@@ -6,11 +6,13 @@ import logging
 
 import httpx
 import pytest
+from mcp import types
 
 from athena_mcp.canvas_data import (
     TABLE_ROWS_MAX,
     build_table,
     render_with_plan,
+    websocket_lifecycle_receipt,
 )
 
 _AITS_CHART_CASES = [
@@ -64,6 +66,31 @@ _AITS_RELOAD_CONTRACTS = {
         "min": ("base:ka50092", ["stk_cd", "tic_scope"]),
     },
 }
+
+
+@pytest.mark.parametrize("return_code", [None, "", "   "])
+def test_websocket_receipt_fails_closed_without_explicit_success_code(
+    return_code: str | None,
+) -> None:
+    data = {"trnm": "REG"}
+    if return_code is not None:
+        data["return_code"] = return_code
+    payload = {"operation_ref": "base:0B", "data": data}
+    source = types.CallToolResult(
+        content=[
+            types.TextContent(type="text", text=json.dumps(payload, ensure_ascii=False))
+        ],
+        structuredContent=payload,
+        isError=False,
+    )
+
+    result = websocket_lifecycle_receipt(source)
+
+    assert result.isError is True
+    assert result.structuredContent == {
+        "lifecycle": "error",
+        "receipt": "실시간 데이터 연결에 실패했습니다. 인증 및 연결 상태를 확인하세요.",
+    }
 
 
 def _aits_chart_rows(time_alias: str, close_alias: str, volume_alias: str) -> list[dict[str, str]]:
@@ -189,6 +216,12 @@ async def test_render_with_plan_all_generated_chart_contracts_push_aits_envelope
         assert forbidden not in receipt_text
     pushed = seen["pushed_envelope"]
     assert pushed["canvas_type"] == "chart"
+    assert pushed["card_id"] == "CC-03"
+    assert pushed["card_kind"] == "instrument"
+    assert pushed["capability_id"] in {"chart", "gold"}
+    assert pushed["operation_refs"] == [f"base:{tr_id}"]
+    assert pushed["raw_data"] == pushed["source_data"]["data"]
+    assert pushed["coverage_receipt"]["lossless"] is True
     assert pushed["fell_back"] is False
     assert pushed["renderer_id"] == "aits-chart-v1"
     assert set(pushed["data"]) == {"symbol", "chart", "chart_meta"}
@@ -283,6 +316,14 @@ async def test_render_with_plan_manifest_wins_over_mismatched_model_canvas_type_
     pushed = seen["pushed_envelope"]
     # manifest(facts)가 이겼다 — 모델이 보낸 "table"이 아니다.
     assert pushed["canvas_type"] == "facts"
+    assert pushed["card_id"] == "CC-01"
+    assert pushed["card_kind"] == "account"
+    assert pushed["raw_data"] == {
+        "stk_cd": "005930",
+        "stk_nm": "삼성전자",
+        "cur_prc": "71000",
+    }
+    assert pushed["source_data"]["continuation"] == {"cont_yn": "N"}
     # 봉투 필드(operation_ref/continuation)를 TR 필드로 오인하지 않았다 —
     # call_payload["data"]만 넘겼다는 증거(추출된 3필드만 있어야 한다).
     assert [f["key"] for f in pushed["data"]["fields"]] == ["stk_cd", "stk_nm", "cur_prc"]
@@ -316,6 +357,8 @@ async def test_render_with_plan_facts_golden_path(mock_http_client):
     pushed = seen["pushed_envelope"]
     assert "renderer_id" not in pushed
     assert pushed["data"]["fields"] == [{"key": "acctNo", "label": "acctNo", "value": "1234567890"}]
+    assert pushed["raw_data"] == {"acctNo": "1234567890"}
+    assert pushed["field_contract"]
 
 
 async def test_render_with_plan_compound_generic_golden_path(mock_http_client):

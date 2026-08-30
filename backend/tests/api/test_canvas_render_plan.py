@@ -72,6 +72,29 @@ def test_render_plan_request_canvas_type_is_optional() -> None:
     assert explicit_none.canvas_type is None
 
 
+def test_canvas_push_rejects_forged_integrated_card_metadata() -> None:
+    with _client(_service(), FakeClient({})) as client:
+        response = client.post(
+            "/api/v1/canvas/push",
+            json={
+                "operation_ref": "base:kt10000",
+                "canvas_type": "event",
+                "card_id": "CC-06",
+                "card_kind": "explorer",
+                "capability_id": "discovery",
+                "data": {"state": "forged"},
+            },
+        )
+
+        assert response.status_code == 422
+        assert response.json()["mismatched_fields"] == [
+            "capability_id",
+            "card_id",
+            "card_kind",
+        ]
+        assert client.app.state.canvas_events.empty()
+
+
 def test_render_plan_request_inline_correlation_is_all_or_none_and_bounded() -> None:
     valid = RenderPlanRequest(
         plan_token="tok",
@@ -194,6 +217,13 @@ def test_render_plan_http_roundtrip_facts_reaches_route_body_without_422():
         assert envelope["data"]["fields"] == [
             {"key": "acctNo", "label": "acctNo", "value": "1234567890"}
         ]
+        assert envelope["card_id"] == body["card_id"] == "CC-01"
+        assert envelope["card_kind"] == "account"
+        assert envelope["capability_id"] == "account"
+        assert envelope["operation_refs"] == ["base:ka00001"]
+        assert envelope["raw_data"] == {"acctNo": "1234567890"}
+        assert envelope["source_data"]["operation_ref"] == "base:ka00001"
+        assert envelope["coverage_receipt"]["lossless"] is True
         assert body["receipt"] == {
             "pushed": True,
             "delivery": "side_channel",
@@ -239,6 +269,12 @@ def test_render_plan_inline_returns_envelope_without_queueing() -> None:
         assert body["envelope"]["correlation"] == body["correlation"]
         assert body["envelope"]["card_title"] == "종목정보"
         assert body["envelope"]["data"]["fields"][0]["key"] == "cur_prc"
+        assert body["card_id"] == "CC-03"
+        assert body["card_kind"] == "instrument"
+        assert body["capability_id"] == "stock-info"
+        assert body["envelope"]["raw_data"]["cur_prc"] == "+71000"
+        assert body["envelope"]["raw_data"]["pred_pre"] == "+1200"
+        assert body["envelope"]["source_data"]["data"] == body["envelope"]["raw_data"]
         receipt_text = json.dumps(body["receipt"], ensure_ascii=False)
         for canvas_token in ("+71000", "+1200", "cur_prc", "pred_pre"):
             assert canvas_token not in receipt_text
@@ -1060,7 +1096,7 @@ def test_render_plan_http_roundtrip_compound_generic_watchlist():
 class _StubSelector:
     def __init__(self, operation_ref: str, data: dict) -> None:
         self.signer = SimpleNamespace(
-            verify=lambda *args, **kwargs: SimpleNamespace(operation_ref="base:ka00001")
+            verify=lambda *args, **kwargs: SimpleNamespace(operation_ref=operation_ref)
         )
         self.catalog = SimpleNamespace(
             find_exact=lambda operation_ref: SimpleNamespace(kind="query")
