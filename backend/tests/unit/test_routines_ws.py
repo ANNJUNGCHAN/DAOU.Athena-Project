@@ -28,6 +28,7 @@ def _app(token: str | None, with_queue: bool = True):
 def test_mode_b_loopback_receives_event():
     client = TestClient(_app(token=None))
     with client.websocket_connect("/api/v1/ws/routines") as ws:
+        assert ws.receive_json() == {"type": "feed-ready", "feed": "routines"}
         event = ws.receive_json()
         assert event["type"] == "routine-fired"
         assert event["mode"] == "realtime-ws"
@@ -38,6 +39,7 @@ def test_mode_a_header_auth_receives_event():
     with client.websocket_connect(
         "/api/v1/ws/routines", headers={"Authorization": "Bearer sekrit"}
     ) as ws:
+        assert ws.receive_json() == {"type": "feed-ready", "feed": "routines"}
         assert ws.receive_json()["type"] == "routine-fired"
 
 
@@ -45,6 +47,7 @@ def test_mode_a_envelope_auth_receives_event():
     client = TestClient(_app(token="sekrit"))
     with client.websocket_connect("/api/v1/ws/routines") as ws:
         ws.send_json({"type": "auth", "token": "sekrit"})
+        assert ws.receive_json() == {"type": "feed-ready", "feed": "routines"}
         assert ws.receive_json()["type"] == "routine-fired"
 
 
@@ -100,6 +103,11 @@ def test_reconnect_sends_near_snapshot_before_queued_events():
     with client.websocket_connect("/api/v1/ws/routines") as ws:
         first = ws.receive_json()
         assert first == {
+            "type": "feed-ready",
+            "feed": "routines",
+        }
+        second = ws.receive_json()
+        assert second == {
             "type": "routine-near",
             "routine_id": "r9",
             "symbol": "005930",
@@ -107,8 +115,8 @@ def test_reconnect_sends_near_snapshot_before_queued_events():
             "observed": None,
             "threshold": 5.0,
         }
-        second = ws.receive_json()
-        assert second["type"] == "routine-fired"  # 큐 이벤트는 스냅샷 다음
+        third = ws.receive_json()
+        assert third["type"] == "routine-fired"  # 큐 이벤트는 스냅샷 다음
 
 
 def test_reconnect_without_near_state_skips_snapshot():
@@ -116,5 +124,6 @@ def test_reconnect_without_near_state_skips_snapshot():
     app.state.routines_runtime = _FakeRuntime([])  # 재시작 직후 — near 소실
     client = TestClient(app)
     with client.websocket_connect("/api/v1/ws/routines") as ws:
+        assert ws.receive_json() == {"type": "feed-ready", "feed": "routines"}
         event = ws.receive_json()
         assert event["type"] == "routine-fired"  # 스냅샷 없이 바로 큐 이벤트
