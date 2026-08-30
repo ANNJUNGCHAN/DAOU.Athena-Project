@@ -260,8 +260,8 @@ const mainRaw = read("main.js");
 if (mainRaw) {
   const main = stripComments(mainRaw);
   must(/\borbWin\b/.test(main), "main.js: orbWin이 없다");
-  must(/getWins:\s*\(\)\s*=>\s*\(\{\s*shellWin,\s*orbWin\s*\}\)/.test(main),
-    "main.js: getWins()는 { shellWin, orbWin }을 돌려줘야 한다 — verify.js가 이 모양에 의존한다");
+  must(/getWins:\s*\(\)\s*=>\s*\(\{\s*bootWin,\s*shellWin,\s*orbWin\s*\}\)/.test(main),
+    "main.js: getWins()는 { bootWin, shellWin, orbWin }을 돌려줘야 한다 — verify.js가 handoff와 오브를 검사한다");
   must(/orbWin\.webContents\.send\('athena:routine-event'/.test(main),
     "main.js: RoutineFeed 이벤트를 오브에도 보내야 한다");
   // 셸은 alwaysOnTop이 아니다 — 2026-08-17 결정("다른 앱 위에 영구히 떠서 창을

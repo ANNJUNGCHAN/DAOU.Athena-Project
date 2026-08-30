@@ -7,6 +7,8 @@ const { createChartCard } = window.AthenaLib.ChartCard;
 const { AITS_CHART_RENDERER_ID, createAitsChartPanelAdapter, fromAthenaChartData, parseAitsChartSnapshot, panelIdFor } = window.AthenaLib.AitsChartPanel;
 const { classifyCell, changeTone, formatNumeric, formatDatetime, groupFactsFields } = window.AthenaLib.FactsCard;
 const { isValidCorrelation, waitForVisiblePaint } = window.AthenaLib.RestCanvasPaint;
+const integratedCardSurface = window.AthenaLib.IntegratedCardSurface;
+const semanticDetailSheet = window.AthenaLib.SemanticDetailSheet;
 
 // 모든 chart surface의 유일한 세션/DTO 권위. 실제 그리기는 기존 하나의
 // lightweight-charts controller만 주입하며 별도 renderer/BrowserWindow는 없다.
@@ -77,6 +79,10 @@ window.__athenaChartProbe = {
 };
 
 window.addEventListener('beforeunload', () => {
+  // main의 releaseAll은 active/pending lease를 한 번에 drain한다. 개별 카드 DOM이
+  // 브라우저 teardown으로 먼저 사라져도 REG가 남지 않게 renderer dispose 경로에서
+  // 반드시 호출한다.
+  void window.athena.invoke('athena:integrated-card-realtime-release-all').catch(() => {});
   for (const session of aitsChartPanels.snapshot()) {
     window.athena.send('athena:chart-panel-destroyed', { panelId: session.panelId });
   }
@@ -109,19 +115,76 @@ window.athena.on('athena:prefs-changed', (next) => applyFontSizePref(next));
 // 카드별 destroy 콜백 — closeCard가 lightweight-charts 인스턴스를 누수 없이
 // 정리하도록 카드 DOM 노드에 매달아둔다(WeakMap: 카드가 GC되면 콜백도 같이 사라짐).
 const cardDestroyers = new WeakMap();
+// 통합 카드 하나 안의 각 mode/section은 기존 차트·호가 renderer의 lifecycle을
+// 그대로 소유한다. 같은 panel key가 갱신될 때만 해당 lifecycle을 닫고, 카드가
+// 닫히면 남은 panel을 모두 닫는다.
+const integratedPanelDestroyers = new WeakMap();
+const integratedRealtimeTasks = new WeakMap();
+let integratedRealtimePoliciesPromise = null;
+const INTEGRATED_CLEANUP_TIMEOUT_MS = 1500;
+
+function settleCleanup(pending, timeoutMs = INTEGRATED_CLEANUP_TIMEOUT_MS) {
+  if (!pending || typeof pending.then !== 'function') return Promise.resolve();
+  return new Promise((resolve) => {
+    const timer = setTimeout(resolve, timeoutMs);
+    Promise.resolve(pending).catch(() => {}).finally(() => {
+      clearTimeout(timer);
+      resolve();
+    });
+  });
+}
 
 function destroyCard(card) {
   if (!card) return;
   const destroy = cardDestroyers.get(card);
+  cardDestroyers.delete(card);
+  // DOM 소유권은 정리 IPC보다 먼저 끝낸다. clear 직후 같은 instance가 다시
+  // 렌더돼도 죽는 root를 재발견하지 않고, hung IPC가 화면을 붙잡지 못한다.
+  integratedCardSurface.detachForDestroy(card);
   if (destroy) {
-    try { destroy(); } catch {}
-    cardDestroyers.delete(card);
+    try {
+      const pending = destroy();
+      if (pending && typeof pending.then === 'function') {
+        return settleCleanup(pending);
+      }
+    } catch {}
   }
-  card.remove();
 }
 
 const grid = document.getElementById('grid');
 let activeDatasetId = null;
+
+if (window.athena && typeof window.athena.on === 'function') {
+  window.athena.on('athena:integrated-card-realtime-state', (state) => {
+    if (!state || !state.leaseId) return;
+    const root = Array.from(grid.querySelectorAll('.card[data-realtime-lease-id]'))
+      .find((candidate) => candidate.dataset.realtimeLeaseId === String(state.leaseId));
+    if (!root) return;
+    stampIntegratedRealtimeState(root, state);
+  });
+  window.athena.on('athena:integrated-card-realtime-ticks', (ticks) => {
+    for (const tick of Array.isArray(ticks) ? ticks : [ticks]) {
+      if (!tick || !tick.leaseId) continue;
+      const root = Array.from(grid.querySelectorAll('.card[data-realtime-lease-id]'))
+        .find((candidate) => candidate.dataset.realtimeLeaseId === String(tick.leaseId));
+      if (!root) continue;
+      let operationIds = [];
+      try { operationIds = JSON.parse(root.dataset.realtimeOperationIds || '[]'); } catch {}
+      const accepts = integratedCardSurface.matchesRealtimeTick({
+        leaseId: root.dataset.realtimeLeaseId,
+        cardId: root.dataset.cardId,
+        mode: root.dataset.mode,
+        target: root.dataset.realtimeTarget,
+        generation: root.dataset.realtimeGeneration,
+        connectionGeneration: root.dataset.realtimeConnectionGeneration,
+        operationIds,
+      }, tick);
+      if (!accepts) continue;
+      semanticDetailSheet.applyRealtimeTick(root, tick);
+      root.dispatchEvent(new CustomEvent('athena-integrated-card-tick', { detail: tick }));
+    }
+  });
+}
 
 // 정지 상태 규범(soul.md §8 정보 정직성 — 데이터 위에 잔류 블러가 남으면 안 된다)은
 // CSS 하나로 성립한다: canvas.css .glass-sheen의 blur(0px)가 유일한 값이고
@@ -431,16 +494,241 @@ async function addLiveCard(result) {
   // (backend/athena_mcp/canvas.py L152-157) 이론상 fell_back=true인데 canvas_type이
   // 'stream'/'reader'/'table'로 남는 조합은 안 나오지만, 계약이 바뀌어도 조용히
   // 깨진 카드를 그리지 않도록 남겨둔다.
+  if (integratedCardSurface && integratedCardSurface.integratedDefinition(envelope)) {
+    return renderIntegratedCard(envelope);
+  }
+  return renderPrimaryEnvelope(envelope);
+}
+
+function renderPrimaryEnvelope(envelope, options = {}) {
   if (envelope.canvas_type === 'table' && !envelope.fell_back) return renderMcpTable(envelope);
   if (envelope.canvas_type === 'stream' && !envelope.fell_back) return renderLiveStream(envelope);
   if (envelope.canvas_type === 'reader' && !envelope.fell_back) return renderLiveReader(envelope);
-  if (envelope.canvas_type === 'chart' && !envelope.fell_back) return renderLiveChart(envelope);
+  if (envelope.canvas_type === 'chart' && !envelope.fell_back) return renderLiveChart(envelope, options.integratedRoot);
   if (envelope.canvas_type === 'facts' && !envelope.fell_back) return renderFactsCard(envelope);
   if (envelope.canvas_type === 'compound' && !envelope.fell_back) return renderCompoundCard(envelope);
   if (envelope.canvas_type === 'event' && !envelope.fell_back) return renderEventCard(envelope);
   if (envelope.canvas_type === 'action' && !envelope.fell_back) return renderActionCard(envelope);
   if (envelope.canvas_type === 'status' && !envelope.fell_back) return renderStatusCard(envelope);
   return renderFreeCanvas(envelope);
+}
+
+async function renderIntegratedCard(envelope) {
+  const instanceKey = integratedCardSurface.instanceKeyFor(envelope);
+  const existing = integratedCardSurface.findReusableRoot(
+    grid.querySelectorAll('.card[data-integrated-instance-key]'), instanceKey,
+  );
+  // makeCard의 구형 type/dataset 교체 규칙이 같은 통합 root를 먼저 지우지 못하게
+  // 잠시 중립화한다. 실제 renderer는 별도 임시 root에 완전한 primary UI를 만든다.
+  integratedCardSurface.prepareExisting(existing);
+  const rendered = await renderPrimaryEnvelope(envelope, { integratedRoot: existing });
+  if (!rendered) return existing;
+  // AITS는 같은 panel_id를 기존 `.card.chart`에서 직접 reload하고 같은 root를
+  // 돌려준다. 이 경우 scaffold를 다시 만들거나 lifecycle ownership을 옮기지 않는다.
+  if (rendered === existing) {
+    integratedCardSurface.refreshExisting(existing, envelope);
+    semanticDetailSheet.upsert(existing, envelope);
+    syncIntegratedRealtime(existing, envelope);
+    return existing;
+  }
+
+  const incomingDestroy = cardDestroyers.get(rendered) || null;
+  const mounted = integratedCardSurface.mountOrUpdate({
+    envelope,
+    renderedCard: rendered,
+    existingCard: existing,
+  });
+  if (!mounted) return rendered;
+
+  const { root, panelKey, replacedPanel, transientCard } = mounted;
+  let panelDestroyers = integratedPanelDestroyers.get(root);
+  if (!panelDestroyers) {
+    panelDestroyers = new Map();
+    integratedPanelDestroyers.set(root, panelDestroyers);
+  }
+  if (replacedPanel) {
+    const priorDestroy = panelDestroyers.get(panelKey);
+    if (priorDestroy) {
+      try { priorDestroy(); } catch {}
+      panelDestroyers.delete(panelKey);
+    }
+    integratedCardSurface.forgetPanelSession(root, panelKey);
+  }
+  if (incomingDestroy) panelDestroyers.set(panelKey, incomingDestroy);
+  integratedCardSurface.rememberPanelSession(root, envelope, rendered);
+
+  // rendered의 destroyer를 호출하면 방금 옮긴 chart/orderbook DOM까지 닫히므로
+  // ownership만 root aggregate로 넘기고 임시 껍데기는 조용히 제거한다.
+  cardDestroyers.delete(rendered);
+  cardDestroyers.set(root, () => {
+    // 차트/호가 세션은 첫 await 전에 닫는다. clear 직후 동일 operation이 오면
+    // adapter에 남은 옛 panelId를 재사용해 새 root와 충돌할 수 있기 때문이다.
+    const panelCleanup = [];
+    for (const destroy of panelDestroyers.values()) {
+      try {
+        const pending = destroy();
+        if (pending && typeof pending.then === 'function') panelCleanup.push(settleCleanup(pending));
+      } catch {}
+    }
+    panelDestroyers.clear();
+    integratedPanelDestroyers.delete(root);
+    integratedCardSurface.clearPanelSessions(root);
+    const realtimeCleanup = (async () => {
+      const realtimeTask = integratedRealtimeTasks.get(root);
+      if (realtimeTask) await settleCleanup(realtimeTask);
+      const leaseId = root.dataset.realtimeLeaseId;
+      if (leaseId && root.dataset.realtimeMounted === 'true') {
+        await settleCleanup(window.athena.invoke('athena:integrated-card-realtime-unmount', { leaseId }));
+      }
+      integratedRealtimeTasks.delete(root);
+    })();
+    return Promise.all([realtimeCleanup, ...panelCleanup]);
+  });
+  if (transientCard) transientCard.remove();
+
+  semanticDetailSheet.upsert(root, envelope);
+  syncIntegratedRealtime(root, envelope);
+  // 모든 상세 행이 occurrence id를 갖는지 DOM 경계에서 fail closed한다.
+  if (root.querySelector('.semantic-detail-row:not([data-field-occurrence-id])')) {
+    destroyCard(root);
+    throw new Error('통합 카드 field occurrence identity가 누락됐다');
+  }
+  return root;
+}
+
+function integratedRealtimePayload(root, envelope) {
+  const args = (envelope.operation_args && typeof envelope.operation_args === 'object')
+    ? envelope.operation_args : {};
+  const context = envelope.source_data && envelope.source_data.canvas_context
+    && typeof envelope.source_data.canvas_context === 'object'
+    ? envelope.source_data.canvas_context : {};
+  const first = (...values) => values.find((value) => typeof value === 'string' && value.trim()) || '';
+  const target = integratedCardSurface.targetIdentity(envelope);
+  return {
+    leaseId: root.dataset.integratedInstanceKey,
+    cardId: envelope.card_id,
+    mode: envelope.mode || envelope.capability || 'overview',
+    target,
+    symbol: first(envelope.stk_cd, envelope.symbol, args.stk_cd, args.symbol, context.symbol),
+    accountId: first(envelope.account_id, envelope.account_no, args.account_id, args.account_no, args.acnt_no),
+    conditionId: first(envelope.condition_id, args.condition_id, args.seq),
+    sectorId: first(envelope.sector_id, args.sector_id, args.sect_code),
+    visibleTargets: Array.isArray(envelope.visible_targets) ? envelope.visible_targets : undefined,
+    verifiedOperationRefs: integratedCardSurface.verifiedOperationRefsFor(envelope),
+  };
+}
+
+function stampIntegratedRealtimeState(root, state) {
+  if (!root || !state) return;
+  root.dataset.realtimeStatus = String(state.status || 'unknown');
+  if (Number.isFinite(Number(state.generation))) root.dataset.realtimeGeneration = String(Number(state.generation));
+  if (Number.isFinite(Number(state.connectionGeneration))) {
+    root.dataset.realtimeConnectionGeneration = String(Number(state.connectionGeneration));
+  }
+  const operationIds = Array.isArray(state.bindings)
+    ? [...new Set(state.bindings.map((binding) => String(binding.operationId || '')).filter(Boolean))]
+    : [];
+  if (operationIds.length) root.dataset.realtimeOperationIds = JSON.stringify(operationIds);
+}
+
+function realtimePolicies() {
+  if (!integratedRealtimePoliciesPromise) {
+    integratedRealtimePoliciesPromise = window.athena.invoke('athena:integrated-card-realtime-policy')
+      .then((result) => {
+        if (result && result.ok === false) throw new Error(result.error || '실시간 정책 조회 실패');
+        const policies = Array.isArray(result) ? result : (result && (result.operations || result.policies));
+        if (!Array.isArray(policies) || !policies.length) throw new Error('실시간 정책이 비어 있다');
+        return policies;
+      })
+      .catch((error) => {
+        // 실패를 성공적인 빈 정책으로 영구 캐시하지 않는다. 사용자 재시도 또는 다음
+        // envelope에서 반드시 정책 IPC를 다시 호출한다.
+        integratedRealtimePoliciesPromise = null;
+        throw error;
+      });
+  }
+  return integratedRealtimePoliciesPromise;
+}
+
+function hasRealtimePolicy(policies, payload) {
+  return policies.some((policy) => Array.isArray(policy.rules) && policy.rules.some((rule) => (
+    rule.cardId === payload.cardId
+      && Array.isArray(rule.modes)
+      && rule.modes.includes(payload.mode)
+  )));
+}
+
+function syncIntegratedRealtime(root, envelope) {
+  if (!window.athena || typeof window.athena.invoke !== 'function') return;
+  const payload = integratedRealtimePayload(root, envelope);
+  root.dataset.realtimeLeaseId = payload.leaseId;
+  root.dataset.realtimeTarget = integratedCardSurface.normalizeIdentity(payload.target);
+  root.dataset.realtimeStatus = 'registering';
+  const prior = integratedRealtimeTasks.get(root) || Promise.resolve();
+  const task = prior.catch(() => {}).then(async () => {
+    const policies = await realtimePolicies();
+    if (!hasRealtimePolicy(policies, payload)) {
+      if (root.dataset.realtimeMounted === 'true') {
+        await window.athena.invoke('athena:integrated-card-realtime-unmount', { leaseId: payload.leaseId });
+        delete root.dataset.realtimeMounted;
+      }
+      if (root.isConnected) root.dataset.realtimeStatus = 'static';
+      clearIntegratedRealtimeError(root);
+      return { ok: true, status: 'static' };
+    }
+    const channel = root.dataset.realtimeMounted === 'true'
+      ? 'athena:integrated-card-realtime-update'
+      : 'athena:integrated-card-realtime-mount';
+    const state = await window.athena.invoke(channel, payload);
+    if (!root.isConnected && state && state.ok) {
+      // close가 REG보다 먼저 끝난 경우 mount 성공 직후 즉시 REMOVE한다. destroyer는
+      // realtimeMounted dataset이 찍히기 전이라 이 해제를 대신할 수 없다.
+      await window.athena.invoke('athena:integrated-card-realtime-unmount', { leaseId: payload.leaseId }).catch(() => {});
+      return state;
+    }
+    if (!root.isConnected) return state;
+    integratedCardSurface.requireRealtimeSuccess(state);
+    root.dataset.realtimeStatus = String(state.status || 'active');
+    root.dataset.realtimeMounted = 'true';
+    stampIntegratedRealtimeState(root, state);
+    clearIntegratedRealtimeError(root);
+    if (state && Number.isFinite(Number(state.generation))) {
+      root.dataset.realtimeGeneration = String(Number(state.generation));
+    }
+    if (state && Number.isFinite(Number(state.connectionGeneration))) {
+      root.dataset.realtimeConnectionGeneration = String(Number(state.connectionGeneration));
+    }
+    return state;
+  }).catch((error) => {
+    if (root.isConnected) {
+      root.dataset.realtimeStatus = 'error';
+      showIntegratedRealtimeError(root, envelope, error);
+    }
+  });
+  integratedRealtimeTasks.set(root, task);
+}
+
+function clearIntegratedRealtimeError(root) {
+  const prior = root && root.querySelector('.integrated-realtime-error');
+  if (prior) prior.remove();
+}
+
+function showIntegratedRealtimeError(root, envelope, error) {
+  if (!root) return;
+  clearIntegratedRealtimeError(root);
+  const note = document.createElement('div');
+  note.className = 'integrated-realtime-error';
+  note.setAttribute('role', 'alert');
+  const text = document.createElement('span');
+  text.textContent = `실시간 연결 실패 — ${(error && error.message) || '정책을 불러오지 못했습니다.'}`;
+  const retry = document.createElement('button');
+  retry.type = 'button';
+  retry.textContent = '다시 시도';
+  retry.addEventListener('click', () => syncIntegratedRealtime(root, envelope));
+  note.appendChild(text);
+  note.appendChild(retry);
+  const content = root.querySelector('.integrated-card-content');
+  if (content) content.prepend(note);
 }
 
 function renderRestStateCard(envelope) {
@@ -558,8 +846,16 @@ function refreshChartSubtitle(card, envelope) {
   if (subtitle) subtitleEl.textContent = subtitle;
 }
 
-async function reloadExistingAitsChartPanel(descriptor, envelope) {
-  const card = Array.from(grid.querySelectorAll('.card.chart')).find(
+async function reloadExistingAitsChartPanel(descriptor, envelope, integratedRoot = null) {
+  const integratedSession = integratedCardSurface.panelSessionFor(integratedRoot, envelope);
+  if (integratedSession) {
+    descriptor.panelId = integratedSession.panelId;
+    descriptor.context.panelId = integratedSession.panelId;
+    const active = aitsChartPanels.snapshot().find((session) => session.panelId === integratedSession.panelId);
+    descriptor.generation = active ? active.generation + 1 : integratedSession.generation + 1;
+    descriptor.context.generation = descriptor.generation;
+  }
+  const card = integratedSession ? integratedRoot : Array.from(grid.querySelectorAll('.card.chart')).find(
     (candidate) => candidate.dataset.chartPanelId === descriptor.panelId
   );
   if (!card || !aitsChartPanels.has(descriptor.panelId)) return null;
@@ -571,10 +867,13 @@ async function reloadExistingAitsChartPanel(descriptor, envelope) {
     generation: descriptor.generation,
     interval: Number.isFinite(ticScope) && ticScope > 0 ? ticScope : 1,
   });
+  if (integratedSession) integratedSession.generation = descriptor.generation;
   retitleChartCard(card, descriptor.body.period);
   refreshChartSubtitle(card, envelope);
   stampPaperScreen(card, envelope);
   card.dataset.renderState = descriptor.body.candles.length ? 'data' : 'empty';
+  card.dataset.chartPanelId = descriptor.panelId;
+  card.dataset.rendererId = descriptor.rendererId;
   card.dataset.chartGeneration = String(descriptor.generation);
   card.scrollIntoView({ block: 'nearest' });
   return card;
@@ -1113,7 +1412,7 @@ function renderLiveReader(envelope) {
 // ChartCardBody만 받는다. renderer는 period/target/trId를 추측하지 않고, 계약이
 // 빠지거나 다르면 같은 카드 슬롯에 error 상태를 표시한다. fixture도 최종 DOM은
 // 동일한 aitsChartPanels adapter를 거치며 저수준 createChartCard 직접 호출은 없다.
-async function renderLiveChart(envelope) {
+async function renderLiveChart(envelope, integratedRoot = null) {
   const data = (envelope.data && typeof envelope.data === 'object') ? envelope.data : {};
   const [title, subtitle] = cardTitleAndSubtitle(envelope, '차트');
   let descriptor;
@@ -1126,7 +1425,7 @@ async function renderLiveChart(envelope) {
     body.appendChild(errorNote(`AITS 차트 계약 오류 — ${err && err.message ? err.message : String(err)}`));
     return card;
   }
-  const reloaded = await reloadExistingAitsChartPanel(descriptor, envelope);
+  const reloaded = await reloadExistingAitsChartPanel(descriptor, envelope, integratedRoot);
   if (reloaded) return reloaded;
   const { card, body } = makeCard('chart', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope), envelope.screen_id);
   stampPaperScreen(card, envelope);
@@ -1308,6 +1607,7 @@ function makeCard(type, title, layoutHint, correlation, subtitle, stkCd, screenI
       && Number(candidate.dataset.ordinal) === correlation.ordinal
     ))
     : Array.from(grid.querySelectorAll(`.card.${type}`)).find((candidate) => {
+      if (candidate.classList.contains('integrated-card')) return false;
       if (candidate.dataset.datasetId) return false;
       // stk_cd 없는 요청(종목코드 자리가 없는 카드종·구버전 envelope)은 기존
       // 동작 그대로 — 동일 타입이면 무조건 교체(하위 호환).
@@ -1555,6 +1855,9 @@ const graphMode = window.AthenaLib.GraphModeController.createGraphModeController
     graph: document.getElementById('graphCanvas'),
     // 3영역 3중 배타의 세 번째 자리(Paper 보드 39/44) — 내용은 4/5단계에서 채운다.
     agent: document.getElementById('agentCanvas'),
+    // Paper 47/48의 네 번째 모드. 허브·관리 내용은 PluginCanvas가 소유하고,
+    // 이 컨트롤러는 다른 중앙 표면과의 배타 가시성만 소유한다.
+    plugin: document.getElementById('pluginCanvas'),
     // 보드 07 성향 신호 표 — 그래프 표면이라 답변 모드에선 숨는다(아래 §요약 뷰
     // 배선 주석·US-007 참고). graphMode.applyVisibility() 하나가 소유한다.
     summaryTable: document.getElementById('graphSummaryTable'),
@@ -1618,6 +1921,16 @@ window.AthenaCanvasMode = graphMode;
 // hidden을 직접 건드리면 브레인 준비 타이밍에 따라 답변/그래프가 섞여 보인다
 // (실측 결함).
 graphMode.applyVisibility();
+
+// --- 플러그인 모드 캔버스 배선 (Paper 47/48) -------------------------------
+// 설치 승인 시트와 권한 상세까지 lib/plugin-canvas.js가 같은 중앙 표면 안에서
+// 렌더한다. 실제 플러그인 실행 IPC는 아직 없으므로 화면에도 "UI 세션 초안"으로
+// 명시한다. 런타임 연결은 별도 플러그인 백엔드가 생길 때만 명시적으로 붙인다.
+const pluginCanvas = window.AthenaLib.PluginCanvas.createPluginCanvas({
+  container: document.getElementById('pluginCanvas'),
+});
+pluginCanvas.mount();
+window.AthenaPluginCanvas = pluginCanvas;
 
 // --- 에이전트모드 캔버스 배선 (4단계, Paper 보드 39) -------------------------
 //

@@ -51,11 +51,13 @@ function buildHead(root, { kicker, title, sub }) {
 //                진입로를 막고, 상태가 "준비됨"이 되면 온보딩을 이어간다.
 //   onContinue — embedded일 때만 사용. async () => boolean. 다음 화면(정상
 //                대화 창)으로 넘어가도 되는지 chat.js에 위임한다.
+//   onBack     — embedded일 때만 사용. 저장된 계좌를 지우지 않고 계좌 단계로 돌아간다.
 function renderAuthTokenStatus(root, opts) {
   const o = opts || {};
   let accountId = o.accountId;
   const embedded = !!o.embedded;
   const onContinue = o.onContinue;
+  const onBack = o.onBack;
 
   const wrap = buildHead(root, {
     kicker: embedded ? '3 / 3' : null,
@@ -154,6 +156,7 @@ function renderAuthTokenStatus(root, opts) {
     foot.appendChild(statusLeft);
 
     const btnGroup = el('div', 'auth-btn-group');
+    if (embedded) btnGroup.appendChild(button('text', '이전', { onClick: goBack }));
     if (currentState === 'ready' || currentState === 'refreshing') {
       btnGroup.appendChild(button('text', revoking ? '해제 중…' : '연결 해제', {
         disabled: currentState === 'refreshing' || revoking,
@@ -236,10 +239,12 @@ function renderAuthTokenStatus(root, opts) {
         window.athena.invoke('athena:auth-token-status', { id: accountId }),
         window.athena.invoke('athena:account-list'),
       ]);
+      if (destroyed) return;
       const acc = accountsRes && accountsRes.accounts ? accountsRes.accounts.find((a) => a.id === accountId) : null;
       accountAlias = acc ? acc.alias : '';
       if (view === 'status') applyState(statusRes && statusRes.state, statusRes && statusRes.expiresInSec);
     } catch (err) {
+      if (destroyed) return;
       if (view === 'status') { paint(); showErr('인증 상태를 불러오지 못했습니다.'); }
     }
   }
@@ -259,11 +264,23 @@ function renderAuthTokenStatus(root, opts) {
     if (currentState !== 'ready') return;
     autoContinueFired = true;
     if (autoContinueTimer) { clearTimeout(autoContinueTimer); autoContinueTimer = null; }
-    const ok = onContinue ? await onContinue() : true;
-    if (!ok && !destroyed) {
+    const result = onContinue ? await onContinue() : true;
+    if (destroyed) return;
+    const ok = result && typeof result === 'object' ? result.ok === true : result === true;
+    if (!ok) {
       autoContinueFired = false;
-      showErr('다음 화면으로 진행하지 못했습니다. 다시 시도해주세요.');
+      if (!(result && typeof result === 'object' && result.stale)) {
+        showErr((result && typeof result === 'object' && result.error)
+          || '다음 화면으로 진행하지 못했습니다. 다시 시도해주세요.');
+      }
     }
+  }
+
+  function goBack() {
+    if (!embedded || destroyed) return;
+    if (autoContinueTimer) { clearTimeout(autoContinueTimer); autoContinueTimer = null; }
+    autoContinueFired = true;
+    if (onBack) onBack();
   }
 
   // ---------- 계좌 전환 하위 뷰 (AT-CV-OAUTH-계좌-전환) ----------

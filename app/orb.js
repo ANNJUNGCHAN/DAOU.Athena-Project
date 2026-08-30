@@ -100,8 +100,10 @@
   const $ticketStatus = document.getElementById('orbTicketStatus');
 
   // 미확인 알림. 이 배열이 비어 있으면 오브는 무채색이고, 하나라도 있으면 얼굴이
-  // 드러난다(renderPresence). 펼치면 가장 최근 것을 보여주고 전부 확인 처리한다.
+  // 드러난다(renderPresence). 펼치면 도착 순서의 한 건만 보여주고 그 건만 확인한다.
   const unread = [];
+  const startupNotices = [];
+  const pendingAlerts = [];
   let current = null;
   let expanded = false;
   // 접힌 채 도착한 대화 답(board-33⑥) 건수 — unread와 별도 카운터다. unread는
@@ -111,7 +113,7 @@
   let foldedChatAnswers = 0;
 
   function renderPresence() {
-    const n = unread.length + foldedChatAnswers;
+    const n = unread.length + startupNotices.length + foldedChatAnswers;
     const fired = n > 0;
     $root.dataset.alert = fired ? 'fired' : 'none';
     // 얼굴과 배지는 같은 사실의 두 표현이다 — 한 함수가 같이 정해야 두 곳에서
@@ -775,6 +777,20 @@
     requestPanelHeight();
   }
 
+  function renderAppNotification(payload) {
+    $badge.textContent = '시작 알림';
+    $badge.hidden = false;
+    $mode.textContent = '';
+    $mode.hidden = true;
+    $relative.textContent = '';
+    $relative.hidden = true;
+    $body.textContent = `${payload.title}\n${payload.body}`;
+    $source.textContent = 'ATHENA';
+    renderCard(null);
+    $more.hidden = true;
+    requestPanelHeight();
+  }
+
   // ── 패널 높이 — 400 기본, 콘텐츠만큼 자라 640에서 멈춘다(board-33) ──
   // 창 크기는 여기서도 main이 정한다(orb-toggle의 기존 계약 그대로) — 렌더러는
   // "이 정도면 안 잘린다"는 값만 재서 실어 보낸다. 얼굴(#orb)은 anchor 배치라
@@ -872,12 +888,40 @@
       return;
     }
     if (isOpen) {
-      // 펼치는 순간 전부 확인 처리한다 — 사용자가 본 것을 안 봤다고 하지 않는다.
-      current = unread.length ? unread[unread.length - 1] : current;
-      unread.length = 0;
+      // 도착 순서의 첫 알림 하나만 확인 처리한다. 실제로 렌더하지 않은 나머지를
+      // 지우지 않아 app-notification 뒤 routine이 와도 시작 알림이 소실되지 않는다.
+      const nextAlert = pendingAlerts.shift();
+      if (nextAlert && nextAlert.kind === 'app') {
+        const index = startupNotices.indexOf(nextAlert.payload);
+        if (index >= 0) startupNotices.splice(index, 1);
+      } else if (nextAlert && nextAlert.kind === 'routine') {
+        const index = unread.indexOf(nextAlert.payload);
+        if (index >= 0) unread.splice(index, 1);
+        current = nextAlert.payload;
+      }
       renderPresence();
-      if (current) renderPanel(current);
+      if (nextAlert && nextAlert.kind === 'app') renderAppNotification(nextAlert.payload);
+      else if (nextAlert && nextAlert.kind === 'routine') renderPanel(nextAlert.payload);
+      reapplyUnreadFace();
     }
+  });
+
+  window.athena.on('athena:app-notification', (payload = {}) => {
+    const title = typeof payload.title === 'string' ? payload.title.trim() : '';
+    const body = typeof payload.body === 'string' ? payload.body.trim() : '';
+    if (!title || !body) return;
+    const notice = { title, body };
+    touchActivity();
+    if (expanded && !chatModeActive) {
+      renderAppNotification(notice);
+      window.athena.send('athena:app-notification-shown');
+      return;
+    }
+    startupNotices.push(notice);
+    pendingAlerts.push({ kind: 'app', payload: notice });
+    renderPresence();
+    setFace(FACE.FIRED);
+    window.athena.send('athena:app-notification-shown');
   });
 
   window.athena.on('athena:routine-event', (event) => {
@@ -895,6 +939,7 @@
       return;
     }
     unread.push(event);
+    pendingAlerts.push({ kind: 'routine', payload: event });
     renderPresence();
     // 발화가 아닌 종류(만료·복원 실패)는 활짝 여는 얼굴이 아니다. 같은 결정론
     // 템플릿의 kind를 그대로 읽어 쓴다 — 여기서 따로 판정하면 두 벌이 된다.

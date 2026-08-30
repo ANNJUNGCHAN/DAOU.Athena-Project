@@ -21,6 +21,8 @@
   const $newChat = document.getElementById('sidebarNewChat');
   const $searchToggle = document.getElementById('sidebarSearchToggle');
   const $searchInput = document.getElementById('sidebarSearchInput');
+  const $compactToggle = document.getElementById('sidebarCompactToggle');
+  const $historyRegion = document.getElementById('historyRegion');
   const $accountRow = document.getElementById('sidebarAccountRow');
   const $accountDot = document.getElementById('sidebarAccountDot');
   const $accountAlias = document.getElementById('sidebarAccountAlias');
@@ -45,11 +47,17 @@
           summary: document.getElementById('modeNavSummary'),
           graph: document.getElementById('modeNavGraph'),
           agent: document.getElementById('modeNavAgent'),
+          plugin: document.getElementById('modeNavPlugin'),
         },
         badge: document.getElementById('modeNavAgentBadge'),
         onSelect: (view) => {
           if (window.AthenaCanvasMode && typeof window.AthenaCanvasMode.setView === 'function') {
             window.AthenaCanvasMode.setView(view);
+          }
+          if (view === 'plugin'
+              && window.AthenaPluginCanvas
+              && typeof window.AthenaPluginCanvas.setView === 'function') {
+            window.AthenaPluginCanvas.setView('hub');
           }
           // 에이전트모드 진입 시 라우틴 목록을 새로 받아온다(리프 1.2.2, 3단계) —
           // loadAgentRoutines()가 안에서 renderList()까지 호출한다. 캔버스 쪽
@@ -112,28 +120,36 @@
   const INITIAL_VISIBLE = 6; // "더 보기" 이전에 보이는 지난 7일 이전 항목 수(Paper 보드 04 실측)
 
   let conversationsCache = [];
+  let projectsCache = [];
+  let currentProjectId = null;
   let activeConversationId = null;
+  let openProjectMenuId = null;
   let selectedNotifyId = null;
   let showOlder = false;
   let searchQuery = '';
 
-  // ---------- 날짜 섹션 ----------
-  function startOfDay(d) { const x = new Date(d); x.setHours(0, 0, 0, 0); return x; }
-
-  function bucketOf(updatedAt) {
-    const now = startOfDay(new Date());
-    const day = startOfDay(new Date(updatedAt));
-    const diffDays = Math.round((now.getTime() - day.getTime()) / 86400000);
-    if (diffDays <= 0) return 'today';
-    if (diffDays === 1) return 'yesterday';
-    if (diffDays <= 7) return 'week';
-    return 'older';
-  }
-
-  function el(tag, className) {
+  function el(tag, className, text) {
     const node = document.createElement(tag);
     if (className) node.className = className;
+    if (text !== undefined) node.textContent = text;
     return node;
+  }
+
+  function pencilIcon() {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('width', '16');
+    svg.setAttribute('height', '16');
+    svg.setAttribute('aria-hidden', 'true');
+    svg.setAttribute('fill', 'none');
+    svg.setAttribute('stroke', 'currentColor');
+    svg.setAttribute('stroke-width', '1.8');
+    svg.setAttribute('stroke-linecap', 'round');
+    svg.setAttribute('stroke-linejoin', 'round');
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', 'M4 20h4.2L19 9.2 14.8 5 4 15.8V20Zm9.4-13.6 4.2 4.2');
+    svg.appendChild(path);
+    return svg;
   }
 
   function makeSectionLabel(text, extraClass) {
@@ -142,21 +158,160 @@
     return label;
   }
 
-  function makeConversationItem(conv) {
-    const btn = el('button', 'sidebar-item');
+  function makeConversationItem(conv, projection) {
+    const btn = el('button', projection === 'project'
+      ? 'sidebar-item sidebar-project-conversation'
+      : 'sidebar-item sidebar-recent-conversation');
     btn.type = 'button';
     btn.title = conv.title;
+    btn.dataset.conversationId = conv.id;
+    btn.dataset.projectId = conv.projectId || '';
     const isSelected = conv.id === activeConversationId && !selectedNotifyId;
-    if (isSelected) btn.classList.add('is-selected');
+    if (isSelected) btn.classList.add('is-selected', 'is-current-conversation');
     const label = el('span', 'sidebar-item-label');
     label.textContent = conv.title;
     btn.appendChild(label);
     if (isSelected) {
-      const dot = el('span', 'sidebar-item-dot');
+      const dot = el('span', 'sidebar-item-dot sidebar-current-dot');
       btn.appendChild(dot);
     }
     btn.addEventListener('click', () => selectConversation(conv.id));
     return btn;
+  }
+
+  function closeProjectMenus(except) {
+    if (!except) openProjectMenuId = null;
+    for (const menu of $list.querySelectorAll('.sidebar-project-menu')) {
+      if (menu === except) continue;
+      menu.hidden = true;
+      const actions = menu.parentElement;
+      if (actions) actions.classList.remove('is-open');
+      const trigger = actions && actions.querySelector('.sidebar-project-menu-trigger');
+      if (trigger) trigger.setAttribute('aria-expanded', 'false');
+    }
+  }
+
+  function makeProjectRow(project, conversations) {
+    const wrap = el('div', 'sidebar-project');
+    wrap.dataset.projectId = project.id;
+    if (project.id === currentProjectId) wrap.classList.add('is-current');
+
+    const row = el('div', 'sidebar-project-row');
+    const main = el('button', 'sidebar-project-main');
+    main.type = 'button';
+    const descriptionText = project.description || '이 프로젝트에 속한 대화와 작업';
+    main.title = descriptionText;
+    const name = el('span', 'sidebar-project-name');
+    name.textContent = project.label;
+    main.appendChild(name);
+    const description = el('span', 'sidebar-project-description');
+    description.appendChild(el('span', 'sidebar-project-description-name', project.label));
+    description.appendChild(el(
+      'span',
+      'sidebar-project-description-meta',
+      `대화 ${conversations.length}개 · 현재 프로젝트`,
+    ));
+    description.appendChild(el('span', 'sidebar-project-description-id', project.id));
+    description.appendChild(el('span', 'sidebar-project-description-copy', descriptionText));
+    description.appendChild(el('span', 'sidebar-project-description-action', '프로젝트 수정'));
+    description.hidden = true;
+    main.appendChild(description);
+    const showDescription = () => {
+      const rect = main.getBoundingClientRect();
+      description.style.left = `${Math.round(rect.right + 8)}px`;
+      description.style.top = `${Math.round(rect.top)}px`;
+      description.hidden = false;
+    };
+    const hideDescription = () => { description.hidden = true; };
+    main.addEventListener('mouseenter', showDescription);
+    main.addEventListener('mouseleave', hideDescription);
+    main.addEventListener('focus', showDescription);
+    main.addEventListener('blur', hideDescription);
+    main.addEventListener('click', () => {
+      currentProjectId = project.id;
+      closeProjectMenus();
+      renderList();
+    });
+    row.appendChild(main);
+
+    const actions = el('div', 'sidebar-project-actions');
+    if (openProjectMenuId === project.id) actions.classList.add('is-open');
+    const newChat = el('button', 'sidebar-project-new-chat');
+    newChat.type = 'button';
+    newChat.setAttribute('aria-label', `${project.label} 프로젝트 수정`);
+    newChat.title = '프로젝트 수정';
+    newChat.appendChild(pencilIcon());
+    newChat.addEventListener('click', (event) => {
+      event.stopPropagation();
+      if (description.hidden) showDescription();
+      else hideDescription();
+    });
+    actions.appendChild(newChat);
+
+    const menuTrigger = el('button', 'sidebar-project-menu-trigger');
+    menuTrigger.type = 'button';
+    menuTrigger.setAttribute('aria-label', `${project.label} 관리 메뉴`);
+    menuTrigger.setAttribute('aria-haspopup', 'menu');
+    menuTrigger.setAttribute('aria-expanded', openProjectMenuId === project.id ? 'true' : 'false');
+    menuTrigger.textContent = '…';
+    actions.appendChild(menuTrigger);
+
+    const menu = el('div', 'sidebar-project-menu');
+    menu.hidden = openProjectMenuId !== project.id;
+    menu.setAttribute('role', 'menu');
+    menu.setAttribute('aria-label', `${project.label} 관리`);
+    const menuItems = [
+      { label: '고정', action: () => wrap.classList.toggle('is-pinned') },
+      { label: '편집', action: showDescription },
+      { label: '탐색기에서 열기', unavailable: true },
+      { label: '영구 작업 트리 생성', unavailable: true },
+      { label: '대화 보관', unavailable: true },
+      { label: '프로젝트 제거', unavailable: true, danger: true },
+    ];
+    let firstMenuItem = null;
+    for (const item of menuItems) {
+      const button = el('button', `sidebar-project-menu-item${item.danger ? ' is-danger' : ''}`);
+      button.type = 'button';
+      button.setAttribute('role', 'menuitem');
+      button.textContent = item.label;
+      if (item.unavailable) {
+        button.disabled = true;
+        button.title = '프로젝트 연결 정보가 있을 때 사용할 수 있습니다';
+      } else {
+        button.addEventListener('click', () => {
+          if (item.action) item.action();
+          openProjectMenuId = null;
+          menu.hidden = true;
+          actions.classList.remove('is-open');
+          menuTrigger.setAttribute('aria-expanded', 'false');
+        });
+      }
+      if (!firstMenuItem) firstMenuItem = button;
+      menu.appendChild(button);
+    }
+    actions.appendChild(menu);
+
+    menuTrigger.addEventListener('click', (event) => {
+      event.stopPropagation();
+      // aria-expanded를 단일 상태 권위로 쓴다. CSS/플랫폼이 [hidden] 표시를
+      // 재계산해도 첫 클릭이 닫기 동작으로 뒤집히지 않아야 한다.
+      const opening = menuTrigger.getAttribute('aria-expanded') !== 'true';
+      openProjectMenuId = opening ? project.id : null;
+      closeProjectMenus(menu);
+      menu.hidden = !opening;
+      actions.classList.toggle('is-open', opening);
+      menuTrigger.setAttribute('aria-expanded', opening ? 'true' : 'false');
+      if (opening && firstMenuItem) firstMenuItem.focus();
+    });
+
+    row.appendChild(actions);
+    wrap.appendChild(row);
+    if (project.id === currentProjectId) {
+      for (const conversation of conversations) {
+        wrap.appendChild(makeConversationItem(conversation, 'project'));
+      }
+    }
+    return wrap;
   }
 
   function makeNotifyItem(room) {
@@ -201,6 +356,11 @@
   }
 
   function renderList() {
+    const focusedMenuItem = document.activeElement && document.activeElement.getAttribute
+      && document.activeElement.getAttribute('role') === 'menuitem'
+      ? document.activeElement.closest('.sidebar-project')
+      : null;
+    const focusedProjectId = focusedMenuItem && focusedMenuItem.dataset.projectId;
     while ($list.firstChild) $list.removeChild($list.firstChild);
 
     // 에이전트모드 우선 노출(원칙3, Paper 보드 39 보강본) — 대화 이력보다
@@ -221,25 +381,24 @@
       for (const room of notifyRooms) $list.appendChild(makeNotifyItem(room));
     }
 
-    const buckets = { today: [], yesterday: [], week: [], older: [] };
-    for (const conv of filtered) buckets[bucketOf(conv.updatedAt)].push(conv);
-
-    const sections = [['today', '오늘'], ['yesterday', '어제'], ['week', '지난 7일']];
-    for (const [key, label] of sections) {
-      if (!buckets[key].length) continue;
-      $list.appendChild(makeSectionLabel(label));
-      for (const conv of buckets[key]) $list.appendChild(makeConversationItem(conv));
+    if (projectsCache.length) {
+      $list.appendChild(makeSectionLabel('프로젝트', 'is-project-caption'));
+      for (const project of projectsCache) {
+        const projectRows = filtered.filter((conversation) => conversation.projectId === project.id);
+        $list.appendChild(makeProjectRow(project, projectRows));
+      }
     }
 
-    if (buckets.older.length) {
-      const visible = showOlder || q ? buckets.older : buckets.older.slice(0, INITIAL_VISIBLE);
-      for (const conv of visible) $list.appendChild(makeConversationItem(conv));
-      // 이미 다 보이면(older 6개 이하) 눌러도 아무 것도 안 늘어나는 버튼을
-      // 남기지 않는다 — INITIAL_VISIBLE을 넘을 때만 보여준다.
-      if (!showOlder && !q && buckets.older.length > INITIAL_VISIBLE) {
+    if (filtered.length) {
+      $list.appendChild(makeSectionLabel('최근', 'is-recent-caption'));
+      const visible = showOlder || q ? filtered : filtered.slice(0, INITIAL_VISIBLE);
+      for (const conversation of visible) {
+        $list.appendChild(makeConversationItem(conversation, 'recent'));
+      }
+      if (!showOlder && !q && filtered.length > INITIAL_VISIBLE) {
         const more = el('button', 'sidebar-item sidebar-more');
         more.type = 'button';
-        more.textContent = `더 보기 (${buckets.older.length})`;
+        more.textContent = `더 보기 (${filtered.length})`;
         more.addEventListener('click', () => { showOlder = true; renderList(); });
         $list.appendChild(more);
       }
@@ -250,15 +409,27 @@
       empty.textContent = q ? '검색 결과 없음' : '대화 이력 없음';
       $list.appendChild(empty);
     }
+
+    if (openProjectMenuId && focusedProjectId === openProjectMenuId) {
+      const restored = Array.from($list.querySelectorAll('.sidebar-project'))
+        .find((project) => project.dataset.projectId === openProjectMenuId);
+      const firstAction = restored && restored.querySelector('.sidebar-project-menu-item:not(:disabled)');
+      if (firstAction) firstAction.focus();
+    }
   }
 
   async function loadConversations() {
     try {
       const res = await window.athena.invoke('athena:conversations-list');
       conversationsCache = (res && Array.isArray(res.conversations)) ? res.conversations : [];
+      projectsCache = (res && Array.isArray(res.projects)) ? res.projects : [];
+      currentProjectId = (res && res.currentProjectId)
+        || (projectsCache[0] && projectsCache[0].id)
+        || null;
       activeConversationId = res && res.activeId ? res.activeId : null;
     } catch {
       conversationsCache = [];
+      projectsCache = [];
     }
     renderList();
   }
@@ -385,12 +556,8 @@
 
 
   // ---------- 새 대화 ----------
-  // 배경 대화(historyConversationId)는 앱 수명 단위로 고정돼 있어 진짜 새
-  // 세션을 열 수는 없다(위 머리말) — "새 대화"는 눈에 보이는 캔버스·이력을
-  // 비우는 것까지만 한다. save-failed 배지 라우터는 lineEl.isConnected를
-  // 먼저 확인하므로(lib/history-badge.js) 지워진 줄을 향한 배지 시도는
-  // 조용히 무시된다.
-  $newChat.addEventListener('click', () => {
+  function clearConversationUi() {
+    window.dispatchEvent(new Event('athena:new-conversation'));
     if (window.AthenaShell && typeof window.AthenaShell.clearCanvases === 'function') {
       window.AthenaShell.clearCanvases();
     }
@@ -399,7 +566,64 @@
     selectedNotifyId = null;
     renderList();
     if ($input) { $input.value = ''; $input.focus(); }
-  });
+  }
+
+  async function startNewConversation(projectId) {
+    const selectedProjectId = projectsCache.some((project) => project.id === projectId)
+      ? projectId
+      : currentProjectId;
+    currentProjectId = selectedProjectId;
+    let pending = null;
+    if (window.athena && typeof window.athena.invoke === 'function') {
+      try {
+        pending = window.athena.invoke('athena:conversations-new', {
+          projectId: selectedProjectId,
+          mode: currentMode(),
+        });
+      } catch {
+        pending = null;
+      }
+    }
+    clearConversationUi();
+    if (!pending || typeof pending.then !== 'function') {
+      activeConversationId = null;
+      return;
+    }
+    try {
+      const res = await pending;
+      conversationsCache = res && Array.isArray(res.conversations) ? res.conversations : conversationsCache;
+      projectsCache = res && Array.isArray(res.projects) ? res.projects : projectsCache;
+      currentProjectId = (res && res.currentProjectId) || selectedProjectId;
+      activeConversationId = res && res.activeId ? res.activeId : null;
+    } catch {
+      activeConversationId = null;
+    }
+    renderList();
+  }
+
+  $newChat.addEventListener('click', () => startNewConversation(currentProjectId));
+
+  if ($compactToggle && $historyRegion) {
+    const closeCompactPanel = () => {
+      $historyRegion.classList.remove('is-compact-open');
+      $compactToggle.setAttribute('aria-expanded', 'false');
+    };
+    $compactToggle.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const opening = !$historyRegion.classList.contains('is-compact-open');
+      $historyRegion.classList.toggle('is-compact-open', opening);
+      $compactToggle.setAttribute('aria-expanded', opening ? 'true' : 'false');
+    });
+    document.addEventListener('mousedown', (event) => {
+      if (!$historyRegion.contains(event.target)) closeCompactPanel();
+    });
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 700) closeCompactPanel();
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') closeCompactPanel();
+    });
+  }
 
   // ---------- 검색 ----------
   $searchToggle.addEventListener('click', () => {
@@ -497,8 +721,20 @@
   });
 
   document.addEventListener('mousedown', (e) => {
-    if ($accountMenu.hidden) return;
-    if ($accountMenu.contains(e.target) || $accountRow.contains(e.target)) return;
+    const inProjectActions = e.target && typeof e.target.closest === 'function'
+      ? e.target.closest('.sidebar-project-actions')
+      : null;
+    if (!inProjectActions) closeProjectMenus();
+    if (!$accountMenu.hidden
+        && !$accountMenu.contains(e.target)
+        && !$accountRow.contains(e.target)) {
+      closeAccountMenu();
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    closeProjectMenus();
     closeAccountMenu();
   });
 

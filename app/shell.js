@@ -7,18 +7,74 @@
   const $winMin = document.getElementById('winMin');
   const $winMax = document.getElementById('winMax');
   const $winClose = document.getElementById('winClose');
+  const nativeWindowControls = Boolean(window.location
+    && /(?:^|[?&])shellHandoff=1(?:&|$)/.test(window.location.search || ''));
+  if (document.documentElement && document.documentElement.classList) {
+    document.documentElement.classList.toggle('uses-native-window-controls', nativeWindowControls);
+  }
 
   // 영역이 등록하는 콜백. 서로 다른 <script>가 같은 문서에 살지만 모듈 경계는
   // 유지한다 — chat.js가 canvas.js의 내부 함수를 직접 부르지 않고 여기를 지난다.
   const hooks = { clearCanvases: null, openSettings: null, seedChatInput: null };
+  const chromeGeometryGeneration = window.crypto?.randomUUID?.()
+    || `${performance.timeOrigin}-${Math.random()}`;
+  let chromeGeometryRevision = 0;
+  let chromeZoomFactor = 1;
 
   // ---------- 창 크롬 ----------
+  function chromeRect(element) {
+    const rect = element.getBoundingClientRect();
+    return { x: rect.x, y: rect.y, width: rect.width, height: rect.height };
+  }
+
+  function publishWindowChromeGeometry() {
+    const titlebarStyle = window.getComputedStyle($dragStrip);
+    const controlsStyle = window.getComputedStyle($winControls);
+    const visible = !$dragStrip.hidden && titlebarStyle.display !== 'none'
+      && titlebarStyle.visibility !== 'hidden';
+    const overlayRect = nativeWindowControls
+      ? window.navigator?.windowControlsOverlay?.getTitlebarAreaRect?.()
+      : null;
+    const titlebar = overlayRect && overlayRect.width > 0 && overlayRect.height > 0
+      ? { x: overlayRect.x, y: overlayRect.y, width: overlayRect.width, height: overlayRect.height }
+      : chromeRect($dragStrip);
+    const nativeControls = overlayRect && overlayRect.right < window.innerWidth
+      ? {
+        x: overlayRect.right,
+        y: overlayRect.y,
+        width: window.innerWidth - overlayRect.right,
+        height: overlayRect.height,
+      }
+      : null;
+    window.athena.send('athena:window-chrome-geometry', {
+      generation: chromeGeometryGeneration,
+      revision: ++chromeGeometryRevision,
+      zoomFactor: chromeZoomFactor,
+      viewport: { width: window.innerWidth, height: window.innerHeight },
+      visible,
+      titlebar,
+      controls: nativeControls || (
+        !$winControls.hidden && controlsStyle.display !== 'none'
+        && controlsStyle.visibility !== 'hidden' ? chromeRect($winControls) : null
+      ),
+    });
+  }
+
+  function publishWindowChromeGeometryAfterLayout() {
+    if (typeof window.requestAnimationFrame === 'function') {
+      window.requestAnimationFrame(publishWindowChromeGeometry);
+    } else {
+      publishWindowChromeGeometry();
+    }
+  }
+
   // 부팅 연출(chat.js)이 끝나야 창이 확정된다 — 그 전에는 크롬도 셸도 없다.
   // 옛 판에서 chat.js finishBoot()가 하던 세 줄이 여기로 왔다.
   function revealChrome() {
     $shell.hidden = false;
     $dragStrip.hidden = false;
-    $winControls.hidden = false;
+    $winControls.hidden = nativeWindowControls;
+    publishWindowChromeGeometryAfterLayout();
   }
 
   $winMin.addEventListener('click', () => {
@@ -39,23 +95,24 @@
     window.athena.send('athena:close-windows');
   });
 
-  // 최대화 여부는 창 크기가 워크에어리어를 꽉 채웠는지로 파생한다. main에서
-  // isMaximized()를 되물어오는 채널을 새로 파지 않는 이유: 그 왕복은 비동기라
-  // resize 프레임마다 한 박자 늦은 라벨을 만든다. screen 좌표는 렌더러에서
-  // 직접 읽을 수 있고(window.screen.avail*), 오차 허용치 4px면 DPI 반올림을
-  // 흡수한다 — 라벨 하나를 위해 IPC 표면을 늘리지 않는다.
-  function syncMaxButton() {
-    const t = 4;
-    const maximized = Math.abs(window.outerWidth - window.screen.availWidth) <= t
-      && Math.abs(window.outerHeight - window.screen.availHeight) <= t;
+  // 프레임리스 창도 최대화 상태의 소유자는 OS다. 멀티 모니터·DPI·작업 표시줄
+  // 위치에 따라 outerWidth/availWidth 기하 비교는 오판할 수 있으므로 main의
+  // BrowserWindow maximize/unmaximize 이벤트에서 보낸 권위 있는 상태만 그린다.
+  function syncMaxButton({ maximized = false } = {}) {
     $winMax.classList.toggle('is-max', maximized);
     const label = maximized ? '이전 크기로 복원' : '최대화';
     $winMax.title = label;
     $winMax.setAttribute('aria-label', label);
   }
 
-  window.addEventListener('resize', syncMaxButton);
-  syncMaxButton();
+  window.athena.on('athena:window-state', syncMaxButton);
+  window.athena.on('athena:zoom-changed', ({ zoom } = {}) => {
+    if (Number.isFinite(zoom) && zoom > 0) chromeZoomFactor = zoom;
+    publishWindowChromeGeometryAfterLayout();
+  });
+  window.addEventListener('resize', publishWindowChromeGeometryAfterLayout);
+  syncMaxButton({ maximized: false });
+  publishWindowChromeGeometryAfterLayout();
 
   // ---------- 창 단축키 ----------
   // 주 경로는 Windows 네이티브 Win+방향키다(main.js가 before-input-event로 직접
@@ -98,6 +155,7 @@
   // ---------- 영역 간 버스 ----------
   window.AthenaShell = {
     revealChrome,
+    usesNativeWindowControls: nativeWindowControls,
     syncMaxButton,
     // canvas.js가 등록한다. chat.js의 Esc(유휴 상태)가 부른다 — 옛 판에서 그
     // 키는 `athena:collapse-canvas` IPC로 캔버스 **창**을 닫았다. 닫을 창이

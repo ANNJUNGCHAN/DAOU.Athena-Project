@@ -2,6 +2,7 @@ const { contextBridge, ipcRenderer, webFrame } = require('electron');
 
 const INVOKE_CHANNELS = new Set([
   'athena__render_canvas',
+  'athena:boot-readiness:get',
   'athena:onboarding-state',
   'athena:onboarding-advance',
   'athena:settings:prefs:get',
@@ -16,6 +17,7 @@ const INVOKE_CHANNELS = new Set([
   // 이력 사이드바(리프 1.2.2) — 실데이터 목록·선택 상태.
   'athena:conversations-list',
   'athena:conversations-set-active',
+  'athena:conversations-new',
   'athena:account-list',
   'athena:account-register',
   'athena:account-set-active',
@@ -54,6 +56,14 @@ const INVOKE_CHANNELS = new Set([
   'athena:nudge-guard-get',
   'athena:nudge-guard-set',
   'athena:order-execute',
+  // 6종 통합 카드 실시간 lease. 주문 mutation과 분리된 REG/REMOVE 제어 경로다.
+  'athena:integrated-card-realtime-policy',
+  'athena:integrated-card-realtime-mount',
+  'athena:integrated-card-realtime-update',
+  'athena:integrated-card-realtime-unmount',
+  'athena:integrated-card-realtime-release-all',
+  'athena:integrated-card-realtime-status',
+  'athena:integrated-card-realtime-command',
   // 채팅→그래프 파이프라인 단계 5(.omc/plans/plan-chat-graph-pipeline.md §2(e)/(f))
   // — 대화 모드 HISTORY_COMMAND 조회, 설정 모드 "성향・이력" 상태·전체 삭제.
   'athena:brain-status',
@@ -92,6 +102,7 @@ const SEND_CHANNELS = new Set([
   // 대화 창 높이 토글이 OS 창 최대화로 바뀌면서 상태 소유자가 렌더러에서 OS로
   // 넘어갔고, 그래서 렌더러는 요청만 보내고 판정은 main이 한다.
   'athena:toggle-maximize',
+  'athena:window-chrome-geometry',
   'athena:highlight-canvas',
   'athena:abort-live-query',
   'athena:place-windows',
@@ -127,10 +138,18 @@ const SEND_CHANNELS = new Set([
   // preload가 두 창에 다 실리므로 한 Set에 같이 둔다.
   'athena:orb-drag-move',
   'athena:orb-signal',
+  'athena:boot-complete',
+  'athena:shell-handoff-ready',
+  'athena:app-notification-shown',
 ]);
 
 const ON_CHANNELS = new Set([
   'athena:init',
+  // 프레임리스 창의 최대화 표시는 렌더러 기하 추정이 아니라 BrowserWindow의
+  // 권위 있는 isMaximized() 상태만 소비한다.
+  'athena:window-state',
+  'athena:boot-readiness',
+  'athena:app-notification',
   'athena:add-canvas',
   'athena:add-canvas-live',
   'athena:add-rest-canvas',
@@ -163,6 +182,10 @@ const ON_CHANNELS = new Set([
   // 호가잔량 실시간(키움 REAL 0D, task #25) — main이 파싱만, 래더 갱신은
   // card-kind-호가.js의 applyLiveTick이 한다.
   'athena:orderbook-ticks',
+  // 6종 통합 카드 상태와 generation이 붙은 REAL rows. 렌더러는 자신의 최신
+  // lease generation과 일치하는 이벤트만 카드 section에 병합한다.
+  'athena:integrated-card-realtime-state',
+  'athena:integrated-card-realtime-ticks',
   // 하위 에이전트 생애주기(task #32) — Agent(Task) system 이벤트를 그대로
   // 릴레이한다. chat.js의 결과물·출처·하위 에이전트 3단 도크가 소비한다.
   'athena:live-subagent-step',

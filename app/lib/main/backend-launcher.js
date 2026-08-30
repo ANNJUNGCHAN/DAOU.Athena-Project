@@ -24,6 +24,17 @@ function buildUvicornArgs() {
   return [...UVICORN_ARGS];
 }
 
+function buildBackendEnv(baseEnv = process.env) {
+  const env = { ...baseEnv };
+  if (!Object.prototype.hasOwnProperty.call(baseEnv, 'ATHENA_BRAIN_ENABLED')) {
+    env.ATHENA_BRAIN_ENABLED = 'true';
+  }
+  if (!Object.prototype.hasOwnProperty.call(baseEnv, 'ATHENA_ROUTINES_ENABLED')) {
+    env.ATHENA_ROUTINES_ENABLED = 'true';
+  }
+  return env;
+}
+
 // 순수 판정 — 헬스 상태·venv 존재 여부만으로 무엇을 할지 결정한다. fetch/spawn과
 // 분리해 net·fs 의존 없이 단위 테스트한다.
 function decideAction({ healthy, venvExists }) {
@@ -73,11 +84,11 @@ async function ensureBackend({ mdlog } = {}) {
 
   if (action === 'already-running') {
     log(`ensureBackend: 헬스체크 성공 — 이미 기동 중이라 스폰하지 않는다 (${Date.now() - t0}ms, ${HEALTH_URL})`);
-    return { ok: true, spawned: false, reason: 'already-running' };
+    return { ok: true, spawned: false, ready: true, reason: 'already-running' };
   }
   if (action === 'no-venv') {
-    log(`ensureBackend: ${PYTHON_EXE} 없음 — backend/.venv 미설치(개발 레이아웃 전제), 스킵`);
-    return { ok: true, spawned: false, reason: 'no-venv' };
+    log(`ensureBackend: ${PYTHON_EXE} 없음 — backend/.venv 미설치(개발 레이아웃 전제)`);
+    return { ok: false, spawned: false, ready: false, reason: 'no-venv', error: 'backend virtualenv missing' };
   }
 
   log(`ensureBackend: 헬스체크 실패 — 백엔드 스폰 (${PYTHON_EXE} ${buildUvicornArgs().join(' ')}, cwd=${BACKEND_DIR})`);
@@ -86,6 +97,7 @@ async function ensureBackend({ mdlog } = {}) {
   try {
     child = spawn(PYTHON_EXE, buildUvicornArgs(), {
       cwd: BACKEND_DIR,
+      env: buildBackendEnv(),
       stdio: 'ignore',
       windowsHide: true,
       // claude-runner.js와 같은 이유(실측, 2026-08-17) — shell:true는 Windows에서
@@ -112,7 +124,15 @@ async function ensureBackend({ mdlog } = {}) {
   if (ready) {
     log(`ensureBackend: 기동 완료 — 준비까지 ${elapsedMs}ms (스폰→manifest 200: ${spawnToHealthyMs}ms)`);
   } else {
-    log(`ensureBackend: ${STARTUP_POLL_TIMEOUT_MS}ms 안에 준비 확인 실패 — 계속 기동 중일 수 있다(elapsed=${elapsedMs}ms, 스폰 이후=${spawnToHealthyMs}ms)`);
+    log(`ensureBackend: ${STARTUP_POLL_TIMEOUT_MS}ms 안에 준비 확인 실패 — 자가스폰 프로세스를 정리한다(elapsed=${elapsedMs}ms, 스폰 이후=${spawnToHealthyMs}ms)`);
+    if (backendChild === child) {
+      killTree(child);
+      backendChild = null;
+    }
+    return {
+      ok: false, spawned: true, ready: false, elapsedMs, spawnToHealthyMs,
+      error: 'backend readiness timeout',
+    };
   }
   return { ok: true, spawned: true, ready, elapsedMs, spawnToHealthyMs };
 }
@@ -185,6 +205,7 @@ module.exports = {
   STARTUP_POLL_TIMEOUT_MS,
   STARTUP_POLL_INTERVAL_MS,
   buildUvicornArgs,
+  buildBackendEnv,
   decideAction,
   venvExists,
   checkHealth,

@@ -45,9 +45,15 @@ function setup(options) {
     graphBody: fakeNode('div'),
     summaryTable: fakeNode('div'),
     agent: fakeNode('div'),
+    plugin: fakeNode('div'),
+    kiumi: fakeNode('div'),
+    canvasRegion: fakeNode('main'),
+    chatHead: fakeNode('div'),
     graphHeaderMeta: fakeNode('span'),
     mapGuide: fakeNode('div'),
   };
+  elements.kiumi.dataset = {};
+  elements.canvasRegion.dataset = {};
   if (opts.withPanel) elements.panel = fakeNode('div');
   let calls = 0;
   const controller = createGraphModeController({
@@ -906,6 +912,38 @@ test('setView("summary")로 돌아오면 세 표면 중 요약만 보인다', as
   assert.equal(elements.summary.hidden, false);
   assert.equal(elements.graph.hidden, true);
   assert.equal(elements.agent.hidden, true);
+});
+
+test('setView는 summary/graph/agent/plugin 네 표면을 항상 하나만 보이고 plugin 모드를 DOM에 공개한다', async () => {
+  const { controller, elements } = setup();
+  const visibleSurface = {
+    summary: 'summary',
+    graph: 'summaryTable',
+    agent: 'agent',
+    plugin: 'plugin',
+  };
+
+  for (const view of Object.keys(visibleSurface)) {
+    await controller.setView(view);
+    for (const surface of ['summary', 'graph', 'summaryTable', 'agent', 'plugin']) {
+      assert.equal(elements[surface].hidden, surface !== visibleSurface[view], `${view}: ${surface}`);
+    }
+    const expectedMode = view === 'summary' ? 'chat' : view;
+    assert.equal(elements.kiumi.dataset.mode, expectedMode);
+    assert.equal(elements.canvasRegion.dataset.mode, expectedMode);
+    assert.equal(elements.chatHead.hidden, view !== 'graph', '그래프 전용 채팅 헤더 규칙');
+  }
+});
+
+test('controller.setView()는 모르는 mode를 무시하고 현재 plugin 가시성을 유지한다', async () => {
+  const { controller, elements, fetchCalls } = setup();
+  await controller.setView('plugin');
+  const previousState = controller.state;
+  await controller.setView('bogus');
+  assert.equal(controller.state, previousState);
+  assert.equal(elements.plugin.hidden, false);
+  assert.equal(elements.summary.hidden, true);
+  assert.equal(fetchCalls(), 0);
 });
 
 test('agent로 전환할 때는 백엔드를 부르지 않는다(그래프 뷰가 아니므로 draw()가 no-op)', async () => {

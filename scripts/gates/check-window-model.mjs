@@ -101,19 +101,19 @@ if (mainRaw) {
   mustContain("main.js", main, /\bshellWin\b/, "셸 창 변수 `shellWin`이 있어야 한다");
   mustContain("main.js", main, /computeShellPlacement/, "셸 단일 배치 계산을 써야 한다");
   mustContain("main.js", main, /['"]shell\.html['"]/, "셸 창이 shell.html을 로드해야 한다");
-  // getWins()가 돌려주는 창 집합 = 이 앱의 OS 창 전부. 2026-08-24 리프 1.3.1에서
-  // `{ shellWin }` → `{ shellWin, orbWin }`으로 늘었다. 이름을 정확히 나열해
-  // **세 번째 창이 조용히 끼어드는 것**을 막는다.
+  // getWins()는 검증기가 보는 전체 창 handle을 돌려준다. bootWin은 WCO 셸이
+  // 준비될 때까지만 존재하는 전환 창이고, 정상 상태에는 shellWin + orbWin만 남는다.
+  // 이름을 정확히 나열해 handoff 창 외의 추가 창이 조용히 끼어드는 것을 막는다.
   const wins = /getWins:\s*\(\)\s*=>\s*\(\{([^}]*)\}\)/.exec(main);
   if (!wins) {
     failures.push("main.js: getWins() 반환 형상을 찾지 못했다 — verify.js가 이 모양에 의존한다");
   } else {
     const names = wins[1].split(",").map((s) => s.trim()).filter(Boolean);
-    const expected = ["shellWin", "orbWin"];
+    const expected = ["bootWin", "shellWin", "orbWin"];
     if (names.join(",") !== expected.join(",")) {
       failures.push(
         `main.js: getWins()가 [${names.join(", ")}] — [${expected.join(", ")}] 이어야 한다 ` +
-          `(창은 둘뿐이다, GLOSSARY §1)`
+          `(boot 전환 창 + 정상 상태의 셸·오브만 허용)`
       );
     }
   }
