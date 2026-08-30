@@ -147,6 +147,7 @@ class ClaudeChatSession {
       state: proc && !proc.removed ? proc.state : 'down',
       pid: proc && !proc.removed ? proc.child.pid : null,
       warm: !!proc && !proc.removed && proc.initSeen,
+      lineage: proc && !proc.removed ? proc.lineage : null,
       config: { ...this._lastConfig },
       lastSessionId: this._lastSessionId,
       stopped: this._stopped,
@@ -156,18 +157,22 @@ class ClaudeChatSession {
   // 예열 — 앱 기동 시(첫 질문 전에 CLI + MCP 게이트웨이를 미리 띄운다)와 설정
   // 변경 시(백그라운드 재예열) 호출한다. 턴이 진행 중이면 건드리지 않는다 —
   // 설정 변경분은 다음 run()이 config 불일치로 재활용한다.
-  warm({ model = null, effort = null, resumeSessionId = null } = {}) {
+  // resumeSessionId 계약(run()과 동일) — undefined는 "의견 없음"(내부 커서를
+  // 따른다), null은 명시적 "새 대화", 문자열은 그 세션에서 잇기. 호출자
+  // (main.js liveSessionId)가 준 값이 진실이다 — 아키텍트 리뷰 결함 1의 봉합.
+  warm({ model = null, effort = null, resumeSessionId } = {}) {
     if (this._stopped) return this.snapshot();
     const config = { model: model || null, effort: effort || null };
     const proc = this._proc;
     if (proc && !proc.removed) {
-      if (proc.config.model === config.model && proc.config.effort === config.effort) {
-        return this.snapshot();
-      }
+      const configMatch = proc.config.model === config.model && proc.config.effort === config.effort;
+      const lineageMatch = resumeSessionId === undefined || (resumeSessionId || null) === proc.lineage;
+      if (configMatch && lineageMatch) return this.snapshot();
       if (proc.state !== 'idle') return this.snapshot();
       this._removeProcess(proc);
     }
-    this._spawnProcess({ config, resumeSessionId: resumeSessionId || this._lastSessionId });
+    const spawnCursor = resumeSessionId !== undefined ? resumeSessionId : this._lastSessionId;
+    this._spawnProcess({ config, resumeSessionId: spawnCursor });
     return this.snapshot();
   }
 
@@ -192,7 +197,7 @@ class ClaudeChatSession {
     prompt,
     model = null,
     effort = null,
-    resumeSessionId = null,
+    resumeSessionId,
     timeoutMs = this._timeoutMs,
     signal,
     onSpawn,
@@ -237,11 +242,22 @@ class ClaudeChatSession {
       proc = null;
     }
 
+    // 대화 커서 검증(아키텍트 리뷰 결함 1) — 호출자(main.js liveSessionId)가
+    // 진실이다. 프로세스의 실제 계보(lineage)와 다르면 재사용하지 않고 그
+    // 커서로 새로 스폰한다. undefined는 "의견 없음"(벤치마크류)이라 안 막는다.
+    if (proc && !proc.removed && resumeSessionId !== undefined
+      && (resumeSessionId || null) !== proc.lineage) {
+      this._removeProcess(proc);
+      proc = null;
+    }
+
     let spawnedFresh = false;
     if (!proc || proc.removed) {
       // 스폰 시점의 재개 커서 — main.js가 판단한 liveSessionId(명시적 null이면
-      // 새 대화 시작)를 그대로 따른다. 내부 커서는 백그라운드 재예열 전용이다.
-      proc = this._spawnProcess({ config, resumeSessionId });
+      // 새 대화 시작)를 그대로 따른다. 생략(undefined)이면 내부 커서(완결 턴
+      // 기준)로 잇는다.
+      const spawnCursor = resumeSessionId !== undefined ? resumeSessionId : this._lastSessionId;
+      proc = this._spawnProcess({ config, resumeSessionId: spawnCursor });
       spawnedFresh = true;
       if (!proc) {
         return Promise.resolve({
@@ -358,13 +374,16 @@ class ClaudeChatSession {
           + '(Windows: `where claude`, 그 외: `which claude`).'
         : String((error && error.message) || error);
       this._lastSpawnErrorCode = code || null;
-      this._recordFailure(0);
+      this._recordFailure(1);
       return null;
     }
     const proc = {
       child,
       config: { ...config },
       state: 'idle',
+      // 이 프로세스가 실제로 물고 있는 대화 계보 — 스폰 커서로 시작해 완결된
+      // 턴의 result.session_id로 갱신한다. run()/warm()의 커서 검증 재료.
+      lineage: resumeSessionId || null,
       turn: null,
       // 턴 밖(스폰 직후 init 등) 이벤트에서 session_id·예열 완료를 읽는다.
       idleSession: new StreamJsonSession(),
@@ -393,9 +412,9 @@ class ClaudeChatSession {
   }
 
   _observeEvent(proc, event) {
-    if (event && typeof event.session_id === 'string' && event.session_id) {
-      this._lastSessionId = event.session_id;
-    }
+    // 커서(_lastSessionId)는 여기서 갱신하지 않는다 — 중단된 턴의 스트림
+    // 이벤트가 실은 포크 id로 대화 커서가 오염되는 경로였다(아키텍트 리뷰
+    // 결함 1). 커서는 완결된 result에서만 갱신한다(_handleStdout).
     if (event && event.type === 'system' && event.subtype === 'init') {
       proc.initSeen = true;
       this._failureStreak = 0;
@@ -450,6 +469,11 @@ class ClaudeChatSession {
     turn.resultSeen = true;
     this._failureStreak = 0;
     const isError = finalResult.is_error === true;
+    if (typeof finalResult.session_id === 'string' && finalResult.session_id) {
+      // 완결된 턴만 계보·커서를 갱신한다 — 중단 턴의 포크 id는 여기 못 온다.
+      proc.lineage = finalResult.session_id;
+      if (!isError) this._lastSessionId = finalResult.session_id;
+    }
     this._settleTurn(proc, {
       ok: !isError,
       exitCode: null,

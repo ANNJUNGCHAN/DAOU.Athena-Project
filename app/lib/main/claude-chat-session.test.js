@@ -218,22 +218,92 @@ test('onTextDelta·onCanvasResult·onEvent가 턴 스트림에서 전달된다',
   assert.deepEqual(events, ['stream_event', 'assistant', 'user', 'result']);
 });
 
-test('kill 핸들 — aborted로 즉시 resolve하고 프로세스를 죽인 뒤 백그라운드 재예열한다', async () => {
+test('kill 핸들 — aborted 즉시 resolve + 재예열은 완결 턴 커서로(중단 턴 포크 무시)', async () => {
   const { session, spawns, kills } = createHarness();
   session.warm({});
   const child = lastChild(spawns);
-  emitLine(child, { type: 'system', subtype: 'init', session_id: 'sess-5' });
+  // 턴1 완결 — 커서는 sess-A가 된다.
+  const p1 = session.run({ prompt: 'q1' });
+  emitResult(child, 'a1', { session_id: 'sess-A' });
+  await p1;
+  await delay(4);
+  // 턴2 진행 중 스트림 이벤트가 포크 id를 실어 보낸다 — 이건 커서가 아니다.
   let handle = null;
-  const p = session.run({ prompt: 'q', onSpawn: (h) => { handle = h; } });
+  const p2 = session.run({ prompt: 'q2', onSpawn: (h) => { handle = h; } });
+  emitLine(child, { type: 'system', subtype: 'init', session_id: 'fork-B' });
   handle.kill();
-  const r = await p;
+  const r = await p2;
   assert.equal(r.aborted, true);
   assert.equal(r.ok, false);
   assert.equal(kills.length, 1);
+  assert.equal(session.lastSessionId(), 'sess-A', '중단 턴의 포크 id로 커서를 오염시키지 않는다');
   await delay(10); // respawnBaseDelayMs(1ms) 경과
   assert.equal(spawns.length, 2, '백그라운드 재예열이 있어야 한다');
   const args = spawns[1].args;
-  assert.equal(args[args.indexOf('--resume') + 1], 'sess-5', '마지막 session_id로 문맥을 복구한다');
+  assert.equal(args[args.indexOf('--resume') + 1], 'sess-A', '마지막 완결 턴의 session_id로 문맥을 복구한다');
+});
+
+test('재사용 게이트 — 호출자 커서와 프로세스 계보가 다르면 재사용하지 않는다', async () => {
+  const { session, spawns } = createHarness();
+  session.warm({});
+  const child = lastChild(spawns);
+  const p1 = session.run({ prompt: 'q1', resumeSessionId: null });
+  emitResult(child, 'a1', { session_id: 'sess-A' });
+  await p1;
+  await delay(4);
+
+  // 커서 일치(sess-A) — 재사용.
+  const p2 = session.run({ prompt: 'q2', resumeSessionId: 'sess-A' });
+  assert.equal(spawns.length, 1, '계보가 일치하면 같은 프로세스를 쓴다');
+  emitResult(child, 'a2', { session_id: 'sess-A' });
+  await p2;
+  await delay(4);
+
+  // 명시적 새 대화(null) — 계보(sess-A)와 다르므로 갈아치운다(--resume 없음).
+  const p3 = session.run({ prompt: 'q3', resumeSessionId: null });
+  assert.equal(spawns.length, 2, '커서 불일치는 새 프로세스');
+  assert.equal(spawns[1].args.includes('--resume'), false, '새 대화는 --resume 없이 뜬다');
+  emitResult(lastChild(spawns), 'a3');
+  await p3;
+});
+
+test('resumeSessionId 생략(undefined)은 재사용을 막지 않는다', async () => {
+  const { session, spawns } = createHarness();
+  session.warm({});
+  const child = lastChild(spawns);
+  const p1 = session.run({ prompt: 'q1' });
+  emitResult(child, 'a1', { session_id: 'sess-A' });
+  await p1;
+  await delay(4);
+  const p2 = session.run({ prompt: 'q2' }); // 벤치마크류 — 커서에 의견 없음
+  assert.equal(spawns.length, 1);
+  emitResult(child, 'a2', { session_id: 'sess-A' });
+  await p2;
+});
+
+test('stdout 누적 상한 초과 — stdoutCapped:true + 프로세스 교체', async () => {
+  const { session, spawns, kills } = createHarness({ maxStdoutBytes: 16 });
+  session.warm({});
+  const child = lastChild(spawns);
+  const p = session.run({ prompt: 'q' });
+  child.stdout.emit('data', 'x'.repeat(64));
+  const r = await p;
+  assert.equal(r.stdoutCapped, true);
+  assert.equal(r.ok, false);
+  assert.equal(kills.length, 1);
+  await delay(10);
+  assert.equal(spawns.length, 2, '상한 초과 후 재예열된다');
+});
+
+test('스폰 실패 — runClaudeQuery와 같은 에러 형상으로 resolve한다', async () => {
+  const { session, spawns } = createHarness({
+    spawnFn: () => { const e = new Error('spawn claude ENOENT'); e.code = 'ENOENT'; throw e; },
+  });
+  const r = await session.run({ prompt: 'q' });
+  assert.equal(r.ok, false);
+  assert.equal(r.errorCode, 'ENOENT');
+  assert.match(r.error, /ATHENA_CLAUDE_BIN/);
+  assert.equal(spawns.length, 0);
 });
 
 test('signal abort — aborted:true, reason 메시지 유지', async () => {

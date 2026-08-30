@@ -2735,8 +2735,15 @@ function handleModelSet(e, payload = {}) {
     mdlog(`Selector Claude worker pool 모델 전환 — ${JSON.stringify(selectorActivation)}`);
     // 상주 채팅 세션도 새 모델로 백그라운드 재예열한다 — 진행 중 턴이 있으면
     // warm()이 건드리지 않고, 다음 run()이 config 불일치로 --resume 재활용한다.
+    // resumeSessionId는 반드시 liveSessionId를 명시한다 — 생략하면 모듈 내부
+    // 커서로 폴백하는데, 그 값이 중단된 턴의 포크를 가리킬 수 있다(아키텍트
+    // 리뷰 결함 1). 대화 커서의 진실은 이 파일의 liveSessionId 하나다.
     if (persistentChatEnabled() && liveChatSession) {
-      liveChatSession.warm({ model: state.claude.model, effort: state.claude.effort });
+      liveChatSession.warm({
+        model: state.claude.model,
+        effort: state.claude.effort,
+        resumeSessionId: liveSessionId,
+      });
     }
   }
   if (shellWin && !shellWin.isDestroyed()) {
