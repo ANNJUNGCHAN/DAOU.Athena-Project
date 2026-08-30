@@ -120,6 +120,13 @@ def test_query_resolves_once_and_returns_the_inline_card_in_one_request() -> Non
     assert body["delivery"] == "inline"
     assert body["status"] == "rendered"
     assert body["operation_ref"] == "detail:ka10001:current_trading"
+    assert body["card_id"] == "CC-03"
+    assert body["card_kind"] == "instrument"
+    assert body["capability_id"] == "stock-info"
+    assert body["envelope"]["raw_data"]["cur_prc"] == "+71000"
+    assert body["envelope"]["raw_data"]["pred_pre"] == "+1200"
+    assert body["envelope"]["source_data"]["operation_ref"] == body["operation_ref"]
+    assert body["coverage_receipt"]["lossless"] is True
     assert body["correlation"] == {
         "dataset_id": "chat-1",
         "item_id": "price",
@@ -152,17 +159,26 @@ def test_order_returns_only_a_burned_sanitized_draft_without_execution() -> None
 
     assert response.status_code == 200, response.text
     resolve.assert_called_once()
-    assert response.json() == {
-        "status": "guarded",
-        "operation_ref": "base:kt10000",
-        "card_title": "주문",
-        "order_draft": {
-            "dmst_stex_tp": "KRX",
-            "stk_cd": "005930",
-            "ord_qty": "10",
-            "trde_tp": "3",
-        },
+    body = response.json()
+    assert body["status"] == "guarded"
+    assert body["operation_ref"] == "base:kt10000"
+    assert body["card_title"] == "주문"
+    assert body["card_id"] == "CC-02"
+    assert body["card_kind"] == "order"
+    assert body["capability_id"] == "order"
+    assert body["order_draft"] == {
+        "dmst_stex_tp": "KRX",
+        "stk_cd": "005930",
+        "ord_qty": "10",
+        "trde_tp": "3",
     }
+    assert body["envelope"]["canvas_type"] == "action"
+    assert body["envelope"]["card_id"] == "CC-02"
+    assert body["envelope"]["data"] == {
+        "order_draft": body["order_draft"],
+        "state": "draft",
+    }
+    assert body["coverage_receipt"]["lossless"] is True
     assert len(service._consumed_nonces) == 1
     assert data.calls == []
     assert order.calls == []
@@ -196,7 +212,8 @@ def test_websocket_executes_only_with_explicit_intent_and_uses_only_ws_client() 
     assert implicit.status_code == 404
     assert implicit.json()["code"] == "OPERATION_NOT_FOUND"
     assert explicit.status_code == 200, explicit.text
-    assert explicit.json() == {
+    body = explicit.json()
+    expected = {
         "status": "acknowledged",
         "operation_ref": "base:0G",
         "card_title": "종목발굴",
@@ -217,6 +234,8 @@ def test_websocket_executes_only_with_explicit_intent_and_uses_only_ws_client() 
                 "state_label": "실시간 연결됨",
                 "records": [{"상태": "실시간 연결됨"}],
             },
+            "raw_data": body["envelope"]["raw_data"],
+            "source_data": body["envelope"]["source_data"],
             "layout": None,
             "drop_types": [],
             "correlation": {
@@ -232,6 +251,23 @@ def test_websocket_executes_only_with_explicit_intent_and_uses_only_ws_client() 
             "command": "REG",
         },
     }
+    for key in (
+        "card_id",
+        "card_kind",
+        "capability_id",
+        "mode",
+        "section",
+        "operation_refs",
+        "field_contract",
+        "coverage_receipt",
+    ):
+        expected[key] = body[key]
+        expected["envelope"][key] = body["envelope"][key]
+    assert body == expected
+    assert body["card_id"] == "CC-03"
+    assert body["card_kind"] == "instrument"
+    assert body["capability_id"] == "etf"
+    assert body["coverage_receipt"]["lossless"] is True
     assert websocket.registered == [("0G", ["005930"], "1", "1")]
     assert websocket.removed == []
     assert data.calls == []

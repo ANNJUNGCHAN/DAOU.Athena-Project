@@ -8,6 +8,12 @@ from typing import Any
 import httpx
 from mcp import types
 
+from athena_api.canvas_card_registry import (
+    CanvasCardRegistryError,
+    resolve_canvas_card,
+)
+from athena_api.canvas_field_registry import get_operation_field_contract
+
 # 순수 변환·manifest 기반 카드 종류 결정은 백엔드 단일 소재지로 이동
 # (athena_api/canvas_transform.py) — 캐시 리플레이 라우트와 공용이다. 여기서는
 # 재수출만 한다(테스트·호출부 계약 유지 — `as` 동일명 별칭은 의도적 재수출
@@ -51,6 +57,59 @@ _BUILD_FROM_TR_DATA = {
 }
 
 
+def _integrated_card_contract(operation_ref: str) -> dict[str, Any]:
+    resolved = resolve_canvas_card(operation_ref)
+    field_contract = get_operation_field_contract(operation_ref)
+    if not field_contract:
+        raise CanvasCardRegistryError(
+            f"operation {operation_ref!r} has no Canvas field contract"
+        )
+    for field in field_contract:
+        if (
+            field.get("card_id") != resolved.card_id
+            or field.get("card_kind") != resolved.card_kind
+            or field.get("capability_id") != resolved.capability_id
+        ):
+            raise CanvasCardRegistryError(
+                f"operation {operation_ref!r} field contract disagrees with card registry"
+            )
+    unresolved = [
+        field["occurrence_id"]
+        for field in field_contract
+        if field.get("semantic_status") == "unresolved"
+    ]
+    metadata = resolved.runtime_metadata()
+    metadata.update(
+        {
+            "field_contract": field_contract,
+            "coverage_receipt": {
+                "operation_ref": operation_ref,
+                "field_occurrence_count": len(field_contract),
+                "reachable_occurrence_count": len(field_contract),
+                "unresolved_occurrence_ids": unresolved,
+                "lossless": not unresolved,
+            },
+        }
+    )
+    return metadata
+
+
+def _lossless_source_data(call_payload: dict[str, Any]) -> dict[str, Any]:
+    source_data = {
+        key: value
+        for key, value in call_payload.items()
+        if key in {"operation_ref", "data", "continuation", "canvas_context"}
+    }
+    continuation = source_data.get("continuation")
+    if isinstance(continuation, dict):
+        source_data["continuation"] = {
+            key: value
+            for key, value in continuation.items()
+            if key != "next_plan_token"
+        }
+    return source_data
+
+
 def _error(text: str) -> types.CallToolResult:
     return types.CallToolResult(
         content=[types.TextContent(type="text", text=text)],
@@ -86,7 +145,7 @@ def _ws_state(payload: dict[str, Any]) -> str | None:
         data = {}
 
     return_code = data.get("return_code", payload.get("return_code"))
-    if return_code is not None and str(return_code).strip() not in {"0", "+0", "00"}:
+    if return_code is None or str(return_code).strip() not in {"0", "+0", "00"}:
         return "error"
 
     raw_state = data.get("lifecycle") or data.get("state")
@@ -193,6 +252,10 @@ async def render_with_plan(
     mapping = get_mapping(operation_ref) if isinstance(operation_ref, str) else None
     if mapping is None:
         return _error(f"키움 화면 계약 누락: {operation_ref!r}의 mapping")
+    try:
+        card_contract = _integrated_card_contract(operation_ref)
+    except (CanvasCardRegistryError, KeyError, ValueError) as exc:
+        return _error(f"통합 카드 계약 누락: {exc}")
     screen_reference = mapping.get("screen_reference")
     if not isinstance(screen_reference, dict) or not screen_reference.get("screen_id"):
         return _error(f"키움 화면 계약 누락: {operation_ref}의 screen_reference")
@@ -262,6 +325,7 @@ async def render_with_plan(
         result_data = result.data
 
     payload = {
+        "operation_ref": operation_ref,
         "canvas_type": result_canvas_type,
         "fell_back": result_fell_back,
         "fallback_reason": result_fallback_reason,
@@ -272,8 +336,11 @@ async def render_with_plan(
         # 렌더러가 기존처럼 caption을 타이틀로 쓴다(정보 손실 없음).
         "card_title": resolve_fixed_card_title(operation_ref),
         "data": result_data,
+        "raw_data": call_payload.get("data"),
+        "source_data": _lossless_source_data(call_payload),
         "layout": None,
         "drop_types": [],
+        **card_contract,
     }
     if renderer_id is not None:
         payload["renderer_id"] = renderer_id
