@@ -282,7 +282,6 @@ class ClaudeChatSession {
         resolve,
         settled: false,
         resultSeen: false,
-        killedBy: null, // 'timeout' | 'abort' | 'stdout-cap'
         timeoutMs,
         submittedAt: this._now(),
         firstEventMs: null,
@@ -310,7 +309,6 @@ class ClaudeChatSession {
       }
       if (timeoutMs > 0) {
         turn.timer = this._setTimeout(() => {
-          turn.killedBy = 'timeout';
           this._settleTurn(activeProc, {
             ok: false,
             exitCode: null,
@@ -374,7 +372,7 @@ class ClaudeChatSession {
           + '(Windows: `where claude`, 그 외: `which claude`).'
         : String((error && error.message) || error);
       this._lastSpawnErrorCode = code || null;
-      this._recordFailure(1);
+      this._failureStreak += 1;
       return null;
     }
     const proc = {
@@ -429,13 +427,13 @@ class ClaudeChatSession {
       proc.idleSession.feed(chunk, { onEvent: (event) => this._observeEvent(proc, event) });
       return;
     }
-    if (turn.killedBy || turn.resultSeen) {
-      // 죽이는 중이거나 result 이후 잔여 조각 — 더 파싱하지 않는다.
+    if (turn.resultSeen) {
+      // result 이후 잔여 조각 — 더 파싱하지 않는다. (중단·타임아웃류는 settle과
+      // 동시에 _removeProcess가 붙어 위 proc.removed 가드가 걸러낸다.)
       return;
     }
     turn.stdoutBytes += Buffer.byteLength(String(chunk), 'utf8');
     if (turn.stdoutBytes > this._maxStdoutBytes) {
-      turn.killedBy = 'stdout-cap';
       this._settleTurn(proc, {
         ok: false,
         exitCode: null,
@@ -507,7 +505,6 @@ class ClaudeChatSession {
     const turn = proc.turn;
     // 진행 중 턴이 없으면(이미 settled 포함) 웜 프로세스를 지킨다 — 죽일 이유가 없다.
     if (!turn || turn.settled) return;
-    turn.killedBy = turn.killedBy || 'abort';
     this._settleTurn(proc, this._abortedResult(proc, reason));
     this._removeProcess(proc);
     // Esc 직후의 다음 질의가 웜 프로세스를 만나도록 백그라운드로 재예열한다.
@@ -559,7 +556,7 @@ class ClaudeChatSession {
     }
     const early = Math.max(0, this._now() - proc.bornAt) < this._earlyFailureWindowMs && !proc.initSeen;
     this._removeProcess(proc);
-    if (early) this._recordFailure(1);
+    if (early) this._failureStreak += 1;
     this._scheduleRespawn();
   }
 
@@ -594,10 +591,6 @@ class ClaudeChatSession {
     }
   }
 
-  _recordFailure(increment) {
-    this._failureStreak += increment;
-  }
-
   _scheduleRespawn() {
     if (this._stopped || this._respawnTimer !== null) return;
     if (this._proc && !this._proc.removed) return;
@@ -618,8 +611,6 @@ function createClaudeChatSession(options) {
 }
 
 module.exports = {
-  DEFAULT_TIMEOUT_MS,
-  DEFAULT_QUIET_BOUNDARY_MS,
   buildChatSessionArgs,
   ClaudeChatSession,
   createClaudeChatSession,
