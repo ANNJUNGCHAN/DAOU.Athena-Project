@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "athena-provider-benchmark-report-v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "provider", "mode", "samples"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "provider": { "enum": ["claude", "codex"] },
+    "mode": { "enum": ["cold", "warm", "disabled"] },
+    "samples": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["sample", "outcome", "elapsedMs"],
+        "properties": {
+          "sample": { "type": "integer", "minimum": 1 },
+          "outcome": { "enum": ["completed", "interrupted", "failed", "action-needed"] },
+          "elapsedMs": { "type": "number", "minimum": 0 }
+        }
+      }
+    }
+  }
+}

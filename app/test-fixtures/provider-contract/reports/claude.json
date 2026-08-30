@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "provider": "claude",
+  "version": "0.3.251",
+  "sha256": "9235fac983c29e614d7f572a578406dc5dbda006305faa99f9447f577738eb93",
+  "gates": {
+    "exactVersion": true,
+    "fileHashes": true,
+    "runtimeExports": true,
+    "warmQueryTypes": true,
+    "delayedTranscriptFixture": true,
+    "generationScopedPreToolUse": true
+  },
+  "liveQueryExecuted": false
+}

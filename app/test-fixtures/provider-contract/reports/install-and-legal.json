@@ -1,0 +1,19 @@
+{
+  "scope": "local-development-only",
+  "productionRolloutAllowed": false,
+  "package": "@anthropic-ai/claude-agent-sdk",
+  "version": "0.3.251",
+  "license": "Anthropic proprietary; use subject to Legal Agreements",
+  "gates": {
+    "commercialTermsConfirmed": false,
+    "deploymentTopologyConfirmed": false,
+    "endUserOwnedCredentials": false,
+    "noClaudeAiCredentialIntermediation": true,
+    "bundledAuthUnmodified": true,
+    "privacyTelemetryDisclosureConfirmed": false
+  },
+  "notes": [
+    "Local implementation and deterministic testing only.",
+    "Default-on or production rollout remains blocked until every gate is explicitly confirmed."
+  ]
+}
