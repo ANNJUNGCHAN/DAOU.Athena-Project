@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Athena 6 Integrated Cards — Production Fixture Review</title>
+  <style>
+    :root { font-family: Inter, "Noto Sans KR", system-ui, sans-serif; background: #eef1f6; color: #111827; font-variant-numeric: tabular-nums; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; background: radial-gradient(circle at 22% 0%, #fff 0, #f6f7fa 28%, #e9edf4 100%); }
+    #fixture-stage { width: 1320px; margin: 0 auto; padding: 36px 30px 60px; }
+    .card.integrated-card { width: 1260px; min-height: 940px; overflow: hidden; border: 1px solid rgba(15,23,42,.09); border-radius: 28px; background: rgba(255,255,255,.97); box-shadow: 0 24px 70px rgba(31,41,55,.11); }
+    .card-head { display: flex; justify-content: space-between; align-items: flex-start; padding: 30px 34px 25px; border-bottom: 1px solid #e8ebf0; }
+    .card-title { display: block; font-size: 30px; font-weight: 780; letter-spacing: -.035em; }
+    .fixture-eyebrow { margin: 0 0 8px; color: #687386; font-size: 12px; font-weight: 760; letter-spacing: .11em; text-transform: uppercase; }
+    .fixture-subtitle { margin: 10px 0 0; color: #667085; font-size: 14px; }
+    .fixture-status { display: flex; align-items: center; gap: 9px; color: #435066; font-size: 13px; }
+    .fixture-dot { width: 9px; height: 9px; border-radius: 50%; background: #16a34a; box-shadow: 0 0 0 5px #dcfce7; }
+    .fixture-dot.static { background: #64748b; box-shadow: 0 0 0 5px #e2e8f0; }
+    .integrated-card-content { padding: 0; }
+    .integrated-card-tabs { display: flex; gap: 8px; max-width: 100%; overflow: hidden; padding: 18px 34px; border-bottom: 1px solid #e8ebf0; }
+    .integrated-card-tab { flex: 0 0 auto; border: 0; border-radius: 999px; padding: 8px 12px; background: #eef2f7; color: #526074; font: inherit; font-size: 11px; }
+    .integrated-card-tab.is-active { background: #111827; color: white; }
+    .integrated-card-panel[hidden] { display: none; }
+    .fixture-primary { min-height: 625px; }
+    .fixture-metrics { display: grid; grid-template-columns: repeat(4,1fr); border-bottom: 1px solid #e8ebf0; }
+    .fixture-metric { padding: 22px 30px; border-right: 1px solid #e8ebf0; }
+    .fixture-metric:last-child { border-right: 0; }
+    .fixture-metric-label { color: #7a8496; font-size: 12px; }
+    .fixture-metric-value { margin-top: 6px; font-size: 25px; font-weight: 760; }
+    .fixture-body { display: grid; grid-template-columns: 1.35fr .65fr; min-height: 500px; }
+    .fixture-main { padding: 30px 34px; border-right: 1px solid #e8ebf0; }
+    .fixture-aside { padding: 30px; background: #fafbfc; }
+    .fixture-main h2,.fixture-aside h2 { margin: 0 0 18px; font-size: 16px; }
+    .fixture-operation { padding: 18px 0; border-top: 1px solid #edf0f3; font-size: 18px; font-weight: 700; }
+    .fixture-copy { color: #5f6b7c; font-size: 13px; line-height: 1.7; }
+    .fixture-line { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #e8ebf0; color: #586579; font-size: 12px; }
+    .fixture-line strong { color: #1f2937; }
+    .fixture-safety { margin-top: 24px; padding: 16px 0 16px 15px; border-left: 3px solid #d97706; color: #6b4b16; font-size: 12px; line-height: 1.55; }
+    .semantic-detail-sheet { margin: 0; border: 0; border-top: 1px solid #dfe4ea; }
+    .semantic-detail-summary { padding: 18px 34px; color: #334155; font-size: 14px; font-weight: 700; cursor: pointer; }
+    .semantic-detail-groups { max-height: 690px; overflow: auto; border-top: 1px solid #e8ebf0; }
+    .semantic-detail-operation-head { padding: 12px 34px; background: #f2f5f8; color: #526074; font-size: 11px; font-weight: 700; }
+    .semantic-detail-row { display: grid; grid-template-columns: 1fr 210px 260px; gap: 16px; min-height: 43px; align-items: center; padding: 8px 34px; border-bottom: 1px solid #eef0f3; font-size: 11px; }
+    .semantic-detail-row:nth-child(even) { background: #fbfcfd; }
+    .semantic-detail-label,.semantic-detail-value,.semantic-detail-wire { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .semantic-detail-value { color: #9a3412; }
+    .semantic-detail-wire { color: #667085; text-align: right; }
+    .semantic-detail-row.is-official-opaque .semantic-detail-label { color: #b45309; }
+    .fixture-detail-open .integrated-card-tabs,.fixture-detail-open .integrated-card-panels { display: none; }
+    .fixture-detail-open .semantic-detail-summary { font-size: 18px; }
+    .fixture-detail-open .semantic-detail-groups { max-height: 740px; }
+  </style>
+</head>
+<body>
+  <main id="fixture-stage"></main>
+  <script src="lib/semantic-detail-sheet.js"></script>
+  <script src="lib/integrated-card-surface.js"></script>
+  <script>
+    (() => {
+      const stage = document.getElementById('fixture-stage');
+      const surface = window.AthenaLib.IntegratedCardSurface;
+      const detailSheet = window.AthenaLib.SemanticDetailSheet;
+      let bundle = null;
+
+      function primaryCard(card, envelope) {
+        const root = document.createElement('article');
+        root.className = 'card';
+        const head = document.createElement('header');
+        head.className = 'card-head';
+        const heading = document.createElement('div');
+        heading.innerHTML = `<p class="fixture-eyebrow">${card.card_id} · ${card.card_kind}</p><span class="card-title"></span><p class="fixture-subtitle">production integrated-card surface · canonical fixture envelope</p>`;
+        const status = document.createElement('div');
+        status.className = 'fixture-status';
+        status.innerHTML = `<span class="fixture-dot${card.realtime_required ? '' : ' static'}"></span>${card.realtime_required ? '실시간 자동 등록 검증' : '주문 draft-only fixture'}`;
+        head.append(heading, status);
+        const body = document.createElement('div');
+        body.className = 'card-body';
+        const primary = document.createElement('section');
+        primary.className = 'fixture-primary';
+        primary.innerHTML = `<div class="fixture-metrics"><div class="fixture-metric"><div class="fixture-metric-label">내부 operation</div><div class="fixture-metric-value">${card.operation_count}</div></div><div class="fixture-metric"><div class="fixture-metric-label">필드 occurrence</div><div class="fixture-metric-value">${card.field_count.toLocaleString()}</div></div><div class="fixture-metric"><div class="fixture-metric-label">누락</div><div class="fixture-metric-value">0</div></div><div class="fixture-metric"><div class="fixture-metric-label">공식 opaque</div><div class="fixture-metric-value">${card.opaque_count}</div></div></div><div class="fixture-body"><div class="fixture-main"><h2>현재 활성 operation</h2><div class="fixture-operation">${envelope.operation_ref}</div><p class="fixture-copy">같은 card instance 안에서 mode·section panel만 교체됩니다. 모든 원문 필드는 production SemanticDetailSheet에 occurrence identity로 누적됩니다.</p></div><aside class="fixture-aside"><h2>Lossless coverage receipt</h2><div class="fixture-line"><span>operation destination</span><strong>${card.operation_count}/${card.operation_count}</strong></div><div class="fixture-line"><span>field destination</span><strong>${card.field_count}/${card.field_count}</strong></div><div class="fixture-line"><span>unresolved</span><strong>0</strong></div><div class="fixture-line"><span>external request</span><strong>차단</strong></div>${card.card_id === 'CC-02' ? '<div class="fixture-safety">synthetic response와 draft receipt만 사용합니다. 확인·인증·broker 전송은 호출할 수 없습니다.</div>' : ''}</aside></div>`;
+        body.appendChild(primary);
+        root.append(head, body);
+        return root;
+      }
+
+      function render(cardId, detailOpen) {
+        const card = bundle.cards.find((item) => item.card_id === cardId);
+        if (!card) throw new Error(`unknown card: ${cardId}`);
+        stage.replaceChildren();
+        let root = null;
+        for (const fixture of card.operation_fixtures) {
+          const envelope = { card_id: card.card_id, card_kind: card.card_kind, capability: fixture.capability_id, mode: fixture.mode, section: fixture.section, operation_ref: fixture.operation_ref, raw_data: fixture.raw_data, field_contract: fixture.field_contract, operation_args: { stk_cd: '005930', account_no: 'fixture-account' } };
+          surface.prepareExisting(root);
+          const rendered = primaryCard(card, envelope);
+          if (!root) stage.appendChild(rendered);
+          const mounted = surface.mountOrUpdate({ envelope, renderedCard: rendered, existingCard: root });
+          root = mounted.root;
+          if (mounted.transientCard) mounted.transientCard.remove();
+          detailSheet.upsert(root, envelope);
+        }
+        const details = root.querySelector('.semantic-detail-sheet');
+        details.open = Boolean(detailOpen);
+        root.classList.toggle('fixture-detail-open', Boolean(detailOpen));
+        root.dataset.detailOpen = String(Boolean(detailOpen));
+        return true;
+      }
+
+      window.loadIntegratedCardFixtures = (value) => { bundle = value; return true; };
+      window.renderIntegratedCardFixture = render;
+      window.__INTEGRATED_CARDS_READY__ = true;
+    })();
+  </script>
+</body>
+</html>
