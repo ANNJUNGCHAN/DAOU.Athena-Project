@@ -17,12 +17,27 @@ const toolStepTrack = window.AthenaLib.ToolStepTrack;
 const { createTextReleaseLadder } = window.AthenaLib.TextReleaseLadder;
 
 const $boot = document.getElementById('boot');
-const $bootLine = document.getElementById('bootLine');
-const $bootPanel = document.getElementById('bootPanel');
 const $bootName = document.getElementById('bootName');
-const $bootPh = document.getElementById('bootPh');
+const $shell = document.getElementById('shell');
 const $app = document.getElementById('app');
 const $history = document.getElementById('history');
+const $appNotification = document.getElementById('appNotification');
+const $appNotificationTitle = document.getElementById('appNotificationTitle');
+const $appNotificationBody = document.getElementById('appNotificationBody');
+let appNotificationTimer = null;
+
+window.athena.on('athena:app-notification', (payload = {}) => {
+  const title = typeof payload.title === 'string' ? payload.title.trim() : '';
+  const body = typeof payload.body === 'string' ? payload.body.trim() : '';
+  if (!title || !body) return;
+  $appNotificationTitle.textContent = title;
+  $appNotificationBody.textContent = body;
+  $appNotification.hidden = false;
+  $appNotification.dataset.showCount = String(Number($appNotification.dataset.showCount || '0') + 1);
+  if (appNotificationTimer) clearTimeout(appNotificationTimer);
+  appNotificationTimer = setTimeout(() => { $appNotification.hidden = true; }, 8000);
+  window.athena.send('athena:app-notification-shown');
+});
 
 // 결과물·출처 도크(단계 8, Paper 25Q-0 "④ 결과물·출처 도크") — shell.html에는
 // 마크업이 없다(계획서가 chat.js/chat.css만 지목했다): 이 조립 함수 하나가
@@ -96,22 +111,29 @@ let abortToken = 0;
 // (main.js broadcastLiveQueryBusy — "단일 실행 잠금은 공유한다").
 let remoteQueryBusy = false;
 let onboardCleanup = null; // 현재 노출 중인 온보딩/인증 화면의 정리 함수(리스너·타이머 해제)
+const onboardingRevision = onboarding.createOnboardingRevisionGuard();
+let onboardingAccountId = null;
 
 function prepareRestReceiptSurface() {
   // A fail-closed receipt is the only visible result for rejected/no-render
   // requests. It must not be appended beneath boot, onboarding, settings or
   // order panels. Return the existing window to chat mode before measuring it.
+  if (!$onboard.hidden) return false;
   $boot.hidden = true;
-  $onboard.hidden = true;
   $settings.hidden = true;
   $order.hidden = true;
   $app.hidden = false;
   settingsOpen = false;
   orderOpen = false;
+  return true;
 }
-
 window.athena.on('athena:add-rest-receipt', async (payload = {}) => {
-  prepareRestReceiptSurface();
+  if (onboarding.ackRestReceiptBlockedByOnboarding(
+    $onboard,
+    (channel, ack) => window.athena.send(channel, ack),
+    payload.receiptId,
+  )) return;
+  if (!prepareRestReceiptSurface()) return;
   const line = document.createElement('div');
   line.className = 'turn rest-receipt';
   line.dataset.receiptId = String(payload.receiptId || '');
@@ -174,70 +196,363 @@ const saveFailedRouter = historyBadge.createSaveFailedRouter();
 window.athena.on('athena:history-save-failed', (payload) => saveFailedRouter.handleFailure(payload));
 
 window.addEventListener('DOMContentLoaded', () => {
-  const onboardStatePromise = window.athena.invoke('athena:onboarding-state').catch(() => {
-    // 채널이 아직 없거나 실패하면 "온보딩 필요"로 가정한다 — 온보딩을 건너
-    // 뛰고 정상 대화 화면을 보여주는 쪽이 훨씬 위험하다("건너뛰기 없음"
-    // 원칙, AT-SY-002/003). 이 fail-closed 결정은 발명이다 — 리포트 참고.
-    return { needed: true, step: 2 };
-  });
   loadPrefs(); // 화면 설정 — 부팅을 막지 않는다. 로드 전에는 기본값(둘 다 켜짐)으로 동작한다.
 
-  const finishBoot = async () => {
+  if (window.AthenaShell.usesNativeWindowControls) {
     $boot.hidden = true;
-    // 창 크롬(셸·타이틀바·창 제어 3버튼)은 창이 확정된 뒤에만 존재한다 —
-    // 부팅 연출 보호. 크롬 자체는 shell.js가 소유한다(리프 1.2.1).
     window.AthenaShell.revealChrome();
-    const onboardState = await onboardStatePromise;
-    if (onboardState && onboardState.needed) {
-      startOnboarding(onboardState.step);
+    window.athena.invoke('athena:onboarding-state').then((state) => {
+      if (state && state.needed === true) {
+        startOnboarding(onboarding.resolveOnboardingStartStep(state));
+      } else {
+        $app.hidden = false;
+      }
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        window.athena.send('athena:shell-handoff-ready');
+      }));
+    }, () => {
+      startOnboarding(2);
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        window.athena.send('athena:shell-handoff-ready');
+      }));
+    });
+    return;
+  }
+
+  // BOOT-001 C1의 모든 예약 작업은 이 Set 하나가 소유한다. 페이지 종료·완료 시
+  // 남은 타이머를 전부 취소해, 숨은 DOM에 뒤늦게 클래스나 글자가 붙지 않게 한다.
+  const bootTimers = new Set();
+  let bootDisposed = false;
+  let bootFinishStarted = false;
+  let focusChatAfterBoot = false;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const $bootStatus = document.getElementById('bootStatus');
+  const $bootTask = document.getElementById('bootTask');
+  let visualMinimumReached = false;
+  let startupSnapshot = null;
+  let startupTransportFailed = false;
+  let localReadiness = 'running';
+  let localFailureReason = '';
+  let localOnboardState = null;
+  let localReadinessRequestId = 0;
+  let offBootReadiness = null;
+  let reducedSwapScheduled = false;
+  const scheduleBoot = (fn, delay) => {
+    const id = setTimeout(() => {
+      bootTimers.delete(id);
+      if (!bootDisposed) fn();
+    }, delay);
+    bootTimers.add(id);
+    return id;
+  };
+  const cancelBootTimers = () => {
+    bootTimers.forEach((id) => clearTimeout(id));
+    bootTimers.clear();
+  };
+  $boot.dataset.startedAt = String(performance.now());
+  $boot.setAttribute('aria-busy', 'true');
+  const markBootTime = (name) => { $boot.dataset[name] = String(performance.now()); };
+  const appendBootChar = (ch) => {
+    const span = document.createElement('span');
+    span.className = 'boot-name-char';
+    span.textContent = ch;
+    $bootName.appendChild(span);
+    const prefixes = ($boot.dataset.typedPrefixes || '').split('|').filter(Boolean);
+    prefixes.push($bootName.textContent);
+    $boot.dataset.typedPrefixes = prefixes.join('|');
+  };
+
+  const snapshotIsValid = (snapshot) => snapshot
+    && typeof snapshot.runId === 'string' && snapshot.runId.length > 0
+    && Number.isInteger(snapshot.revision) && snapshot.revision >= 0
+    && ['running', 'ready', 'degraded'].includes(snapshot.phase)
+    && Array.isArray(snapshot.tasks);
+
+  const updateReadinessDataset = () => {
+    $boot.dataset.startupPhase = startupTransportFailed
+      ? 'degraded'
+      : ((startupSnapshot && startupSnapshot.phase) || 'running');
+    $boot.dataset.startupRunId = (startupSnapshot && startupSnapshot.runId) || '';
+    $boot.dataset.startupRevision = String((startupSnapshot && startupSnapshot.revision) || 0);
+    $boot.dataset.localReadiness = localReadiness;
+    $boot.dataset.localFailureReason = localFailureReason;
+  };
+
+  const applyInitialMode = () => {
+    if (!localOnboardState || localOnboardState.needed !== false) {
+      startOnboarding(onboarding.resolveOnboardingStartStep(localOnboardState));
     } else if (settingsOpen || !$onboard.hidden) {
-      // 부팅이 끝나기 전에 다른 모드가 먼저 열렸다 — 사람 조작으로는 불가능하고
-      // 자동화(verify-settings-cards.js가 600ms 시점에 점을 클릭)만 밟는 경로다.
-      // #app을 다시 드러내면 모드 배타성이 깨진다(GLOSSARY §1) — 모드에 양보한다.
+      // 부팅 중 자동화가 다른 모드를 먼저 연 경우 그 모드의 배타성을 보존한다.
     } else {
       $app.hidden = false;
+      focusChatAfterBoot = true;
+    }
+  };
+
+  const completeBootSwap = () => {
+    if (bootDisposed) return;
+    $boot.dataset.phase = 'complete';
+    markBootTime('completedAt');
+    $shell.classList.remove('boot-shell-reveal', 'is-boot-expanded');
+    document.documentElement.classList.remove('is-boot-expanding');
+    $boot.hidden = true;
+    $boot.setAttribute('aria-busy', 'false');
+    bootDisposed = true;
+    cancelBootTimers();
+    if (offBootReadiness) offBootReadiness();
+    const shellRect = $shell.getBoundingClientRect();
+    window.athena.send('athena:boot-complete', {
+      phase: $boot.dataset.phase,
+      finishCount: Number($boot.dataset.finishCount || '0'),
+      timings: {
+        startedAt: Number($boot.dataset.startedAt || '0'),
+        typingAt: Number($boot.dataset.typingAt || '0'),
+        typedAt: Number($boot.dataset.typedAt || '0'),
+        visualMinimumAt: Number($boot.dataset.visualMinimumAt || '0'),
+        reducedStaticAt: Number($boot.dataset.reducedStaticAt || '0'),
+        expandingAt: Number($boot.dataset.expandingAt || '0'),
+        completedAt: Number($boot.dataset.completedAt || '0'),
+        taskFirstShownAt: Number($boot.dataset.taskFirstShownAt || '0'),
+      },
+      shellFinishedFull: !$shell.hidden
+        && ['none', 'inset(0px)'].includes(getComputedStyle($shell).clipPath)
+        && Math.abs(shellRect.width - window.innerWidth) <= 1
+        && Math.abs(shellRect.height - window.innerHeight) <= 1,
+    });
+    if (focusChatAfterBoot) {
       $input.focus();
       scrollHistoryToBottom();
       maybeShowCoachmark();
     }
   };
 
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    finishBoot();
+  // startup snapshot + local UI readiness + visual minimum이 모두 충족된 경우에만
+  // 이 단일 경로로 셸을 연다. 실패/재시도/중복 push는 finishCount를 늘릴 수 없다.
+  const finishBoot = () => {
+    if (bootFinishStarted || bootDisposed) return;
+    bootFinishStarted = true;
+    cancelBootTimers();
+    applyInitialMode();
+
+    if (!reducedMotion) {
+      $shell.classList.add('boot-shell-reveal');
+      document.documentElement.classList.add('is-boot-expanding');
+    }
+    window.AthenaShell.revealChrome();
+    $boot.dataset.finishCount = String(Number($boot.dataset.finishCount || '0') + 1);
+    $bootStatus.textContent = 'ATHENA가 준비되었습니다.';
+
+    if (reducedMotion) {
+      completeBootSwap();
+      return;
+    }
+
+    $boot.dataset.phase = 'expanding';
+    markBootTime('expandingAt');
+    $boot.classList.add('is-expanding');
+    void $shell.offsetWidth;
+    $shell.classList.add('is-boot-expanded');
+    scheduleBoot(completeBootSwap, 480);
+  };
+
+  const gateIsReady = () => visualMinimumReached
+    && (startupTransportFailed
+      || (startupSnapshot && ['ready', 'degraded'].includes(startupSnapshot.phase)))
+    && (localReadiness === 'ready' || localReadiness === 'fallback');
+
+  const selectVisibleBootTask = () => {
+    if ($bootName.textContent !== 'ATHENA'
+      || startupTransportFailed
+      || !startupSnapshot) return null;
+    const tasks = startupSnapshot.tasks.filter((task) => task && typeof task.label === 'string');
+    const activeGate = tasks.find(
+      (task) => task.kind === 'gate' && (task.state === 'running' || task.state === 'retrying'),
+    );
+    const activeContinuous = tasks.find(
+      (task) => task.kind === 'continuous' && (task.state === 'running' || task.state === 'retrying'),
+    );
+    const pendingGate = tasks.find((task) => task.kind === 'gate' && task.state === 'pending');
+    const selected = activeGate || activeContinuous || pendingGate;
+    if (selected) return { id: selected.id, state: selected.state, label: selected.label.trim() };
+    if (['ready', 'degraded'].includes(startupSnapshot.phase) && localReadiness === 'running') {
+      return { id: 'local-readiness', state: 'running', label: '화면 설정 확인' };
+    }
+    return null;
+  };
+
+  const renderVisibleBootTask = () => {
+    const task = selectVisibleBootTask();
+    if (task && !$boot.dataset.taskFirstShownAt) {
+      $boot.dataset.taskFirstShownAt = String(performance.now());
+    }
+    $bootTask.hidden = !task;
+    $bootTask.textContent = task ? task.label : '';
+    $boot.dataset.currentTaskId = task ? task.id : '';
+    $boot.dataset.currentTaskState = task ? task.state : '';
+    $boot.dataset.currentTaskLabel = task ? task.label : '';
+    return task;
+  };
+
+  const renderBootGate = () => {
+    if (bootDisposed || bootFinishStarted) return;
+    updateReadinessDataset();
+    const visibleTask = renderVisibleBootTask();
+    if (gateIsReady()) {
+      if (reducedMotion) {
+        if (!reducedSwapScheduled) {
+          reducedSwapScheduled = true;
+          $boot.dataset.phase = 'static';
+          markBootTime('reducedStaticAt');
+          $bootStatus.textContent = 'ATHENA가 준비되었습니다.';
+          // readiness 성공 뒤의 정적 paint hold다. readiness를 시간으로 우회하지
+          // 않으며, 완성 조판을 실제 합성 프레임으로 제출한 뒤 atomic swap한다.
+          scheduleBoot(finishBoot, 80);
+        }
+        return;
+      }
+      finishBoot();
+      return;
+    }
+    if (visualMinimumReached) {
+      $boot.dataset.phase = 'waiting';
+      $bootStatus.textContent = visibleTask ? `${visibleTask.label}.` : '시작 준비 중입니다.';
+    } else if (visibleTask) {
+      $bootStatus.textContent = `${visibleTask.label}.`;
+    }
+  };
+
+  const acceptStartupSnapshot = (snapshot, { allowNewRun = false } = {}) => {
+    if (!snapshotIsValid(snapshot)) return false;
+    if (startupSnapshot) {
+      if (snapshot.runId === startupSnapshot.runId) {
+        if (snapshot.revision <= startupSnapshot.revision) return false;
+      } else if (!allowNewRun) {
+        return false;
+      }
+    }
+    startupSnapshot = snapshot;
+    startupTransportFailed = false;
+    renderBootGate();
+    return true;
+  };
+
+  const requestLocalReadiness = () => {
+    const requestId = ++localReadinessRequestId;
+    localReadiness = 'running';
+    localFailureReason = '';
+    localOnboardState = null;
+    renderBootGate();
+    return new Promise((resolve) => {
+      let settled = false;
+      const settle = (state, failureReason = '') => {
+        if (settled || requestId !== localReadinessRequestId) return;
+        settled = true;
+        clearTimeout(timeoutId);
+        bootTimers.delete(timeoutId);
+        if (failureReason) {
+          localOnboardState = { needed: true, step: 2 };
+          localReadiness = 'fallback';
+          localFailureReason = failureReason;
+        } else {
+          const validNeeded = state && state.needed === true && (state.step === 2 || state.step === 3);
+          const validComplete = state && state.needed === false && state.step === 3;
+          if (validNeeded || validComplete) {
+            localOnboardState = { needed: state.needed, step: state.step };
+            localReadiness = 'ready';
+            localFailureReason = '';
+          } else {
+            localOnboardState = { needed: true, step: 2 };
+            localReadiness = 'fallback';
+            localFailureReason = 'unconfirmed';
+          }
+        }
+        renderBootGate();
+        resolve();
+      };
+      // 이 deadline도 부팅 생애주기 Set이 소유해야 pagehide/완료 뒤 숨은 callback이
+      // 남지 않는다. scheduleBoot은 renderer가 살아 있는 동안 같은 3.5초를 보장한다.
+      const timeoutId = scheduleBoot(() => settle(null, 'timeout'), 3500);
+      window.athena.invoke('athena:onboarding-state').then(
+        (state) => settle(state),
+        () => settle(null, 'rejected'),
+      );
+    });
+  };
+
+  // push를 먼저 구독해야 get과 push 사이의 revision을 놓치지 않는다.
+  offBootReadiness = window.athena.on('athena:boot-readiness', (snapshot) => {
+    acceptStartupSnapshot(snapshot, { allowNewRun: !startupSnapshot });
+  });
+  window.athena.invoke('athena:boot-readiness:get').then((snapshot) => {
+    const accepted = acceptStartupSnapshot(snapshot, { allowNewRun: !startupSnapshot });
+    if (!accepted && !startupSnapshot) {
+      startupTransportFailed = true;
+      renderBootGate();
+    }
+  }, () => {
+    startupTransportFailed = true;
+    renderBootGate();
+  });
+  void requestLocalReadiness();
+
+  window.addEventListener('pagehide', () => {
+    bootDisposed = true;
+    cancelBootTimers();
+    if (offBootReadiness) offBootReadiness();
+  }, { once: true });
+
+  if (reducedMotion) {
+    // 모션 감소는 타이핑/확장 애니메이션만 생략한다. 부팅 시작부터 완성된 정적
+    // ATHENA 프레임을 최소 1.92초 유지한 뒤 같은 readiness gate를 통과한다.
+    'ATHENA'.split('').forEach(appendBootChar);
+    markBootTime('typedAt');
+    $boot.dataset.phase = 'static';
+    renderBootGate();
+    scheduleBoot(() => {
+      visualMinimumReached = true;
+      markBootTime('visualMinimumAt');
+      renderBootGate();
+    }, 1920);
     return;
   }
 
-  // 1단계(0ms)는 CSS 초기 상태(발광점 16px)다. 이후 단계는 시각 경계에 클래스 토글.
-  setTimeout(() => $bootLine.classList.add('expand'), 180); // 2단계 — 가로 확장
-  setTimeout(() => $bootPanel.classList.add('unfold'), 420); // 3단계 — 세로 전개(72%)
-  setTimeout(() => $bootPanel.classList.add('final'), 620); // 4단계 — 채팅바 확정
-  // 4단계 후반부(2026-08-18 재정의) — 확정된 바가 입력줄에 제 이름을 쓴다.
-  // 한 자씩 40ms(텍스트 추가는 유리 페이드가 아니다), 다 쓰고 300ms 들었다가
-  // 지우고 placeholder를 드러낸다 — "다시 채팅바로 돌아온다".
+  // 0~240ms: 투명한 폭 guide + 정적 키움증권 로고 + 빨간 caret 준비 상태.
+  scheduleBoot(() => {
+    $boot.dataset.phase = 'typing';
+    markBootTime('typingAt');
+  }, 240);
+  // 240~1200ms: 160ms 슬롯 여섯 번. 각 슬롯 끝에 한 글자를 확정하고 caret을
+  // 다시 ON으로 만든다. ATHENA는 지우지 않고 다음 셸 확장의 기점으로 쓴다.
   'ATHENA'.split('').forEach((ch, i) => {
-    setTimeout(() => { $bootName.textContent += ch; }, 660 + i * 40);
+    scheduleBoot(() => {
+      appendBootChar(ch);
+      if (i === 5) {
+        markBootTime('typedAt');
+        renderBootGate();
+      }
+    }, 240 + (i + 1) * 160);
   });
-  setTimeout(() => {
-    $bootName.textContent = '';
-    $bootPh.hidden = false;
-  }, 1160);
-  // placeholder 상태가 한 박자(200ms) 정착한 뒤 실제 대화 창으로 바꿔치운다 — 부팅
-  // 바의 최종 유리(0.30 — 2026-08-18 하향 후 현행)·그립·점·입력줄이 전부 .app과 같은
-  // 값이라 이음새가 보이지 않는다. 200ms는 verify.js의 60ms 폴링이 이 상태를 놓치지
-  // 않는 하한이기도 하다.
-  setTimeout(finishBoot, 1360);
+  // 1200~1440ms 완성 상태 유지. 1440ms는 expand의 최소 시작점일 뿐이며,
+  // startup/local readiness가 아직 running이면 완성 ATHENA 상태로 기다린다.
+  scheduleBoot(() => {
+    visualMinimumReached = true;
+    markBootTime('visualMinimumAt');
+    renderBootGate();
+  }, 1440);
 });
 
 async function onboardAdvance(step) {
   try {
     const res = await window.athena.invoke('athena:onboarding-advance', { step });
-    return !!(res && res.ok);
+    return onboarding.normalizeOnboardingAdvanceResult(res);
   } catch (err) {
-    return false;
+    return { ok: false, done: false };
   }
 }
-
 function startOnboarding(step) {
+  onboardingRevision.invalidate();
+  onboardingAccountId = null;
+  onboarding.setAppBlockedForOnboarding($shell, $app, true);
   $onboard.hidden = false;
   // 스펙 전체에 "1 / 3" 화면이 없다(00-통합-계획.md §7-2 열린 질문) — main이
   // step:1을 돌려줘도 CLI 연결(2/3)부터 시작한다. 발명 — 리포트에 명시.
@@ -246,38 +561,67 @@ function startOnboarding(step) {
 
 function showOnboardingStep(step) {
   if (onboardCleanup) { onboardCleanup(); onboardCleanup = null; }
+  const viewRevision = onboardingRevision.next();
   if (step === 3) {
     onboardCleanup = onboarding.renderAccountStep($onboardBody, {
-      onRegistered: (accountId) => showAuthConfirm(accountId),
+      connectedAccountId: onboardingAccountId,
+      onRegistered: (accountId) => {
+        if (onboardingRevision.isCurrent(viewRevision)) showAuthConfirm(accountId);
+      },
+      onUseRegistered: (accountId) => {
+        if (onboardingRevision.isCurrent(viewRevision)) showAuthConfirm(accountId);
+      },
+      onBack: () => {
+        if (onboardingRevision.isCurrent(viewRevision)) showOnboardingStep(2);
+      },
     });
   } else {
     onboardCleanup = onboarding.renderCliStep($onboardBody, {
       onContinue: async () => {
-        const ok = await onboardAdvance(2);
-        if (ok) showOnboardingStep(3);
-        return ok;
+        const result = await onboardAdvance(2);
+        if (!onboardingRevision.isCurrent(viewRevision)) return false;
+        if (result.ok) showOnboardingStep(3);
+        return result.ok;
       },
     });
   }
+  focusOnboardingContent();
 }
 
+function focusOnboardingContent() {
+  $onboardBody.tabIndex = -1;
+  requestAnimationFrame(() => {
+    if (!$onboard.hidden) $onboardBody.focus({ preventScroll: true });
+  });
+}
 function showAuthConfirm(accountId) {
   if (onboardCleanup) { onboardCleanup(); onboardCleanup = null; }
+  onboardingAccountId = accountId;
+  const viewRevision = onboardingRevision.next();
   onboardCleanup = authScreen.renderAuthTokenStatus($onboardBody, {
     accountId,
     embedded: true,
+    onBack: () => {
+      if (onboardingRevision.isCurrent(viewRevision)) showOnboardingStep(3);
+    },
     onContinue: async () => {
-      const ok = await onboardAdvance(3);
-      if (ok) finishOnboarding();
-      return ok;
+      const result = await onboardAdvance(3);
+      return onboarding.completeOnboardingIfCurrent(
+        result,
+        onboardingRevision,
+        viewRevision,
+        finishOnboarding,
+      );
     },
   });
+  focusOnboardingContent();
 }
-
 function finishOnboarding() {
+  onboardingRevision.invalidate();
   if (onboardCleanup) { onboardCleanup(); onboardCleanup = null; }
   $onboard.hidden = true;
-  $app.hidden = false;
+  onboarding.setAppBlockedForOnboarding($shell, $app, false);
+  onboardingAccountId = null;
   $input.focus();
   scrollAfterRender();
   maybeShowCoachmark(); // 최초 실행은 온보딩을 지나므로 여기가 첫 대화 화면이다
@@ -1290,15 +1634,43 @@ const $kiumiMenu = document.getElementById('kiumiMenu');
 
 function closeKiumiMenu() { $kiumiMenu.hidden = true; }
 
-// 보드 45 v5: 항목은 바이저색 아이콘 + 제목 + (있으면) 설명 2줄.
-function kiumiItem(icon, label, desc, onPick) {
+const KIUMI_ICON_PATHS = Object.freeze({
+  file: 'M7.5 2.5H4A1.5 1.5 0 0 0 2.5 4v6A1.5 1.5 0 0 0 4 11.5h6A1.5 1.5 0 0 0 11.5 10V6.5Zm0 0v4h4',
+  folder: 'M1.8 3.4h4l1.1 1.3h5.3v6.2H1.8z',
+  target: 'M7 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0-3a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0-2h5',
+  plan: 'M3 3h8M3 7h8M3 11h5M1.5 3h.01M1.5 7h.01M1.5 11h.01',
+  model: 'M4 4V2.5M10 4V2.5M3.5 4h7A1.5 1.5 0 0 1 12 5.5v4a1.5 1.5 0 0 1-1.5 1.5h-7A1.5 1.5 0 0 1 2 9.5v-4A1.5 1.5 0 0 1 3.5 4ZM5 7h.01M9 7h.01M5 9h4',
+  plugin: 'M4.5 1.5v2M9.5 1.5v2M3 3.5h8v3A4 4 0 0 1 7 10.5 4 4 0 0 1 3 6.5v-3ZM7 10.5v2',
+  search: 'M6.2 10.4a4.2 4.2 0 1 1 0-8.4 4.2 4.2 0 0 1 0 8.4Zm3-1.2 3 3',
+  sheet: 'M2.5 2.5h9v9h-9zM2.5 6h9M6 2.5v9',
+});
+
+function kiumiIcon(kind) {
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', '0 0 14 14');
+  svg.setAttribute('width', '16');
+  svg.setAttribute('height', '16');
+  svg.setAttribute('aria-hidden', 'true');
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  path.setAttribute('d', KIUMI_ICON_PATHS[kind] || KIUMI_ICON_PATHS.plugin);
+  path.setAttribute('fill', 'none');
+  path.setAttribute('stroke', 'currentColor');
+  path.setAttribute('stroke-width', '1.2');
+  path.setAttribute('stroke-linecap', 'round');
+  path.setAttribute('stroke-linejoin', 'round');
+  svg.appendChild(path);
+  return svg;
+}
+
+// 보드 45/49: 항목은 중립 선형 SVG + 제목 + (있으면) 설명 2줄.
+function kiumiItem(iconKind, label, desc, onPick) {
   const b = document.createElement('button');
   b.type = 'button';
   b.className = 'km-item';
   const ic = document.createElement('span');
   ic.className = 'km-ic';
   ic.setAttribute('aria-hidden', 'true');
-  ic.textContent = icon;
+  ic.appendChild(kiumiIcon(iconKind));
   const col = document.createElement('span');
   col.className = 'km-col';
   const title = document.createElement('span');
@@ -1329,7 +1701,7 @@ function renderAttachChips() {
     chip.className = 'attach-chip';
     const ic = document.createElement('span');
     ic.className = 'attach-chip-ic';
-    ic.textContent = att.isDir ? '📁' : '📄';
+    ic.appendChild(kiumiIcon(att.isDir ? 'folder' : 'file'));
     const name = document.createElement('span');
     name.className = 'attach-chip-name';
     name.textContent = att.path.split(/[\\/]/).pop() || att.path;
@@ -1385,22 +1757,48 @@ function kiumiSection(title) {
 function renderKiumiMenu() {
   $kiumiMenu.textContent = '';
   $kiumiMenu.appendChild(kiumiSection('추가'));
-  $kiumiMenu.appendChild(kiumiItem('📎', '파일 첨부', '경로가 첨부 칩으로 쌓인다', () => pickAttachments(false)));
-  $kiumiMenu.appendChild(kiumiItem('📁', '폴더 첨부', '', () => pickAttachments(true)));
+  $kiumiMenu.appendChild(kiumiItem('file', '파일 첨부', '경로가 첨부 칩으로 쌓인다', () => pickAttachments(false)));
+  $kiumiMenu.appendChild(kiumiItem('folder', '폴더 첨부', '', () => pickAttachments(true)));
+  $kiumiMenu.appendChild(kiumiItem('target', '목표', '목표를 대화에서 구체화한다', () => {
+    closeKiumiMenu();
+    $input.value = '달성할 목표를 구체화해줘: ';
+    $input.focus();
+  }));
+  $kiumiMenu.appendChild(kiumiItem('plan', '계획 모드', '실행 전 단계를 먼저 정리한다', () => {
+    closeKiumiMenu();
+    $input.value = '다음 작업을 실행 가능한 단계와 검증 기준으로 계획해줘: ';
+    $input.focus();
+  }));
   const sep = document.createElement('div');
   sep.className = 'mp-sep';
   $kiumiMenu.appendChild(sep);
+  $kiumiMenu.appendChild(kiumiSection('플러그인 UI 초안'));
+  const openPlugin = (view) => {
+    closeKiumiMenu();
+    if (window.AthenaCanvasMode && typeof window.AthenaCanvasMode.setView === 'function') {
+      window.AthenaCanvasMode.setView('plugin');
+    }
+    if (window.AthenaModeNav && typeof window.AthenaModeNav.setActive === 'function') {
+      window.AthenaModeNav.setActive('plugin');
+    }
+    if (window.AthenaPluginCanvas && typeof window.AthenaPluginCanvas.setView === 'function') {
+      window.AthenaPluginCanvas.setView(view);
+    }
+  };
+  $kiumiMenu.appendChild(kiumiItem('search', 'DART 전자공시', '세션 미리보기 · 기능 허용', () => openPlugin('hub')));
+  $kiumiMenu.appendChild(kiumiItem('sheet', 'Google Sheets 내보내기', '세션 미리보기 · 현재 꺼짐', () => openPlugin('manage')));
+  const settingsSep = document.createElement('div');
+  settingsSep.className = 'mp-sep';
+  $kiumiMenu.appendChild(settingsSep);
   $kiumiMenu.appendChild(kiumiSection('설정'));
   // 모델·추론 노력 — 스트립 필 제거로 이 메뉴가 유일한 진입로다(보드 45 v5).
-  $kiumiMenu.appendChild(kiumiItem('◧', '모델 설정', '모델·사고 강도 — 모델 팝오버(보드 09)', async () => {
+  $kiumiMenu.appendChild(kiumiItem('model', '모델 설정', '모델·사고 강도 — 모델 팝오버(보드 09)', async () => {
     closeKiumiMenu();
     await refreshModelState();
     renderModelPopover();
     $modelPopover.hidden = false;
   }));
-  // 그래프 수집·노출은 설정 › 성향·이력 카드가 소유한다(보드 22 병합).
-  // 보드 45 v5의 이 자리는 '플러그인'(보드 47·48) — 허브가 P2 레인이라 착수 시 교체.
-  $kiumiMenu.appendChild(kiumiItem('◨', '수집·노출 설정', '', () => { closeKiumiMenu(); openSettings(); }));
+  $kiumiMenu.appendChild(kiumiItem('plugin', '플러그인 관리', '설치·기능 허용·마켓플레이스', () => openPlugin('manage')));
 }
 
 function toggleKiumiMenu() {
@@ -1419,6 +1817,22 @@ document.addEventListener('mousedown', (e) => {
 });
 window.athena.on('athena:model-changed', () => refreshModelState());
 refreshModelState();
+
+// Paper 54의 새 대화는 DOM만 비우는 동작이 아니다. 진행 중인 턴의 렌더 토큰을
+// 먼저 폐기해 이전 응답이 새 방에 뒤늦게 붙는 것을 막고, main의 실행도 함께
+// 중단한다. sidebar.js가 새 기록 id를 요청하기 직전에 이 이벤트를 보낸다.
+window.addEventListener('athena:new-conversation', () => {
+  abortToken += 1;
+  window.athena.send('athena:abort-live-query');
+  window.athena.send('athena:orb-signal', { signal: 'think', active: false });
+  state = 'idle';
+  setDot(null);
+  setLocked(false);
+  if (liveProgressEl) {
+    liveProgressEl.remove();
+    liveProgressEl = null;
+  }
+});
 
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {

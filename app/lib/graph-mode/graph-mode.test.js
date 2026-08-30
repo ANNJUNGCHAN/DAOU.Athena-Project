@@ -226,6 +226,12 @@ test('setView(state, "agent")는 실제로 agent로 전이한다', () => {
   assert.equal(state.view, 'agent');
 });
 
+test('VIEW_PLUGIN을 export하고 setView(state, "plugin")은 plugin으로 전이한다', () => {
+  assert.equal(store.VIEW_PLUGIN, 'plugin');
+  const state = store.setView(store.createInitialState(), store.VIEW_PLUGIN);
+  assert.equal(state.view, 'plugin');
+});
+
 test('setView는 summary⇄agent⇄graph 어느 방향으로도 직접 전이한다', () => {
   let state = store.createInitialState();
   state = store.setView(state, 'agent');
@@ -234,6 +240,8 @@ test('setView는 summary⇄agent⇄graph 어느 방향으로도 직접 전이한
   assert.equal(state.view, store.VIEW_GRAPH);
   state = store.setView(state, 'summary');
   assert.equal(state.view, store.VIEW_SUMMARY);
+  state = store.setView(state, 'plugin');
+  assert.equal(state.view, store.VIEW_PLUGIN);
 });
 
 test('setView는 그래프를 떠날 때(목적지가 agent여도) 펼침·선택을 버린다', () => {
@@ -260,6 +268,11 @@ test('setView는 같은 view로 부르면 같은 객체를 돌려준다(헛된 �
 
 test('toggleView는 agent 상태에서 no-op이다(agent에서 요약·그래프로 토글할 근거가 없다)', () => {
   const state = store.setView(store.createInitialState(), 'agent');
+  assert.equal(store.toggleView(state), state, '같은 객체를 그대로 돌려줘야 한다');
+});
+
+test('toggleView는 plugin 상태에서도 no-op이다', () => {
+  const state = store.setView(store.createInitialState(), store.VIEW_PLUGIN);
   assert.equal(store.toggleView(state), state, '같은 객체를 그대로 돌려줘야 한다');
 });
 

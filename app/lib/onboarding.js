@@ -35,6 +35,73 @@ function buildShell(root, { kicker, title, sub }) {
   return { wrap, head, body, foot };
 }
 
+// 온보딩은 #shell 밖의 sibling overlay다. 반투명 패널만 올리면 실제 대화·캔버스가
+// 뒤에서 계속 보이고 포커스도 받을 수 있으므로, 진행 중에는 셸 전체를 렌더·입력·
+// 접근성 트리에서 함께 차단한다. revealChrome()이 hidden 속성을 다시 풀 수 있어
+// 표시 차단은 전용 class가 소유하고, hidden은 채팅 영역에 한 번 더 적용한다.
+function setAppBlockedForOnboarding(shell, app, blocked) {
+  if (!shell || !app) return;
+  if (blocked) {
+    shell.classList.add('is-onboarding-hidden');
+    shell.setAttribute('aria-hidden', 'true');
+    shell.inert = true;
+    app.hidden = true;
+    return;
+  }
+  shell.classList.remove('is-onboarding-hidden');
+  shell.removeAttribute('aria-hidden');
+  shell.inert = false;
+  shell.hidden = false;
+  app.hidden = false;
+}
+
+function createOnboardingRevisionGuard() {
+  let revision = 0;
+  return {
+    next: () => { revision += 1; return revision; },
+    isCurrent: (candidate) => candidate === revision,
+    invalidate: () => { revision += 1; },
+  };
+}
+
+function resolveOnboardingStartStep(state) {
+  if (!state || state.needed !== true) return null;
+  return state.step === 3 ? 3 : 2;
+}
+
+function normalizeOnboardingAdvanceResult(result) {
+  return {
+    ok: !!(result && result.ok === true),
+    done: !!(result && result.done === true),
+  };
+}
+
+function completeOnboardingIfCurrent(result, revisionGuard, viewRevision, finish) {
+  if (!revisionGuard || !revisionGuard.isCurrent(viewRevision)) return { ok: false, stale: true };
+  if (result && result.ok === true && result.done === true) {
+    if (typeof finish === 'function') finish();
+    return { ok: true };
+  }
+  if (result && result.ok === true) {
+    return { ok: false, error: '온보딩 완료 상태를 확인하지 못했습니다. 계좌 연결 상태를 다시 확인해주세요.' };
+  }
+  return { ok: false, error: '온보딩 완료 상태를 저장하지 못했습니다. 다시 시도해주세요.' };
+}
+
+// 온보딩 중에는 receipt를 화면에 그릴 수 없다. 조용히 버리면 main의 3초 waiter가
+// timeout되므로 즉시 fail ACK한다. 원 요청은 reject되어 호출자가 온보딩 완료 뒤
+// 다시 요청할 수 있고, receipt 본문은 큐에 보관하지 않아 오래된 내용·비밀이 후속
+// 대화에 나타나지 않는다. 외부로 내보내는 사유는 이 안정된 공개 코드 하나뿐이다.
+function ackRestReceiptBlockedByOnboarding(onboard, send, receiptId) {
+  if (!onboard || onboard.hidden || typeof send !== 'function') return false;
+  send('athena:rest-receipt-painted', {
+    receipt_id: receiptId,
+    verified_visible: false,
+    error: 'onboarding_active',
+  });
+  return true;
+}
+
 // ---------- 2 / 3 — CLI 연결 (AT-SY-002) ----------
 // onContinue: async () => boolean — [계속] 클릭 시 호출. false를 돌려주면 이
 // 화면에 머무르며 오류를 보여준다(다음 단계 이동은 호출자=chat.js가 결정한다).
@@ -221,7 +288,9 @@ function renderCliStep(root, { onContinue }) {
 // ---------- 3 / 3 — 계좌 연결 (AT-SY-003) ----------
 // onRegistered: (accountId) => void — 등록·검증 성공 시 1회 호출. 다음 화면(인증
 // 토큰 상태)으로의 전환은 호출자(chat.js)가 담당한다.
-function renderAccountStep(root, { onRegistered }) {
+function renderAccountStep(root, {
+  onRegistered, onBack, connectedAccountId, onUseRegistered,
+}) {
   const { body, foot } = buildShell(root, {
     kicker: '3 / 3',
     title: '증권 계좌를 연결합니다',
@@ -230,6 +299,34 @@ function renderAccountStep(root, { onRegistered }) {
 
   const form = el('div', 'onb-form');
   body.appendChild(form);
+
+  let destroyed = false;
+  if (connectedAccountId) {
+    const connected = el('div', 'onb-savebox onb-connected-account');
+    const connectedInner = el('div', 'onb-savebox-inner');
+    const connectedTitle = el('div', 'onb-savebox-title', '이미 연결된 계좌');
+    const connectedBody = el('div', 'onb-savebox-body', '등록된 계좌 정보를 확인하고 있습니다.');
+    const useRegistered = button('ghost', '인증 확인으로 돌아가기', {
+      onClick: () => {
+        if (!destroyed && onUseRegistered) onUseRegistered(connectedAccountId);
+      },
+    });
+    connectedInner.appendChild(connectedTitle);
+    connectedInner.appendChild(connectedBody);
+    connected.appendChild(connectedInner);
+    connected.appendChild(useRegistered);
+    form.appendChild(connected);
+    window.athena.invoke('athena:account-list').then((data) => {
+      if (destroyed) return;
+      const accounts = data && Array.isArray(data.accounts) ? data.accounts : [];
+      const account = accounts.find((item) => item && item.id === connectedAccountId);
+      connectedBody.textContent = account && account.alias
+        ? `${account.alias} · 자격증명 저장됨`
+        : '등록된 계좌 · 자격증명 저장됨';
+    }, () => {
+      if (!destroyed) connectedBody.textContent = '등록된 계좌 · 자격증명 저장됨';
+    });
+  }
 
   // 별칭 — 자유 텍스트로 다룬다. "선택" 라벨은 정적 보조 텍스트로 해석했다
   // (스펙 Open question: 피커일 가능성도 있으나 근거 부족 — 발명/결정 사항).
@@ -299,9 +396,11 @@ function renderAccountStep(root, { onRegistered }) {
 
   const dots = progressDots(3, 3);
   const spacer = el('div', 'onb-spacer');
+  const backBtn = button('text', '이전', { onClick: () => { if (!destroyed && onBack) onBack(); } });
   const submitBtn = button('primary', '검증 후 시작', { icon: 'right', disabled: true });
   foot.appendChild(dots);
   foot.appendChild(spacer);
+  foot.appendChild(backBtn);
   foot.appendChild(submitBtn);
 
   function updateSubmitEnabled() {
@@ -327,6 +426,7 @@ function renderAccountStep(root, { onRegistered }) {
       });
       appKeyInput.value = '';
       secretKeyInput.value = '';
+      if (destroyed) return;
       if (res && res.ok) {
         onRegistered(res.id);
       } else {
@@ -336,16 +436,30 @@ function renderAccountStep(root, { onRegistered }) {
     } catch (err) {
       appKeyInput.value = '';
       secretKeyInput.value = '';
+      if (destroyed) return;
       errSlot.appendChild(errorNote('등록 요청 중 오류가 발생했습니다.'));
       updateSubmitEnabled();
     }
   });
 
-  return function cleanup() {};
+  return function cleanup() {
+    destroyed = true;
+    appKeyInput.value = '';
+    secretKeyInput.value = '';
+  };
 }
 
 // UMD 각주(2026-08-18 렌더러 격리) — sanitize.js와 같은 패턴.
-const __exports = { renderCliStep, renderAccountStep };
+const __exports = {
+  renderCliStep,
+  renderAccountStep,
+  setAppBlockedForOnboarding,
+  createOnboardingRevisionGuard,
+  resolveOnboardingStartStep,
+  normalizeOnboardingAdvanceResult,
+  completeOnboardingIfCurrent,
+  ackRestReceiptBlockedByOnboarding,
+};
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = __exports;
 } else {

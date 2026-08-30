@@ -1,125 +1,199 @@
 html, body { background: transparent; }
 
-/* ---------- 부팅(AT-SY-001) — 4단계 생성 시퀀스 (기획안 8쪽 그대로) ----------
- * 발광점(0ms) → 가로 확장(+180ms) → 세로 전개(+420ms, 유리 72%) → 창 확정(+620ms).
- * 이징은 스펙의 cubic-bezier(.2,0,0,1). 배경 시트를 깔지 않는다 — 1단계에는
- * "창 프레임을 그리지 않는다"가 스펙이다. 창 자체의 acrylic 재질은 Electron이
- * DOM과 무관하게 항상 그리는 것이라 여기서 없앨 수 없다(README 부팅 절 참조).
- * 스펙의 "굴절 강도 변화" 표현도 같은 한계로 불가 — 기획안 각주가 제시한 저사양
- * 대체 경로("굴절 변조 대신 크기 전이만")를 기본 구현으로 채택했다. */
-.boot { position: fixed; inset: 0; overflow: hidden; }
-.boot-line {
-  position: absolute; left: 50%; top: 50%;
-  width: 16px; height: 3px; border-radius: 999px;
-  transform: translate(-50%, -50%);
-  background: var(--color-brand);
-  box-shadow: 0 0 22px rgba(238, 19, 123, 0.95);
-  transition: width 240ms cubic-bezier(0.2, 0, 0, 1), box-shadow 240ms cubic-bezier(0.2, 0, 0, 1);
-}
-/* 2단계 — 창 너비만큼 확장, 양 끝 투명도 그라데이션(스펙 명시) */
-.boot-line.expand {
-  width: 100%;
-  background: linear-gradient(90deg,
-    rgba(238, 19, 123, 0) 0%, #ee137b 22%, #ee137b 78%, rgba(238, 19, 123, 0) 100%);
-  box-shadow: 0 0 26px rgba(238, 19, 123, 0.85);
-}
-/* 3단계 — 선을 축으로 위아래 전개. 유리 불투명도는 최종값의 ~72%(스펙의 "최종보다
- * 낮은 중간값" 의미 유지 — 2026-08-18 유리 전체 하향으로 절대값은 0.22가 됐다).
- * visibility 토글은 opacity 페이드가 아니다 — "투명도 페이드 금지" 준수. */
-.boot-panel {
-  position: absolute; left: 0; right: 0; top: 50%;
-  height: 0;
-  transform: translateY(-50%);
-  visibility: hidden;
-  display: flex; flex-direction: column;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.22);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.4), 0 14px 34px rgb(16 19 26 / 12%);
+/* ---------- 부팅(BOOT-001 C1) — Borderless type → Page 1 ----------
+ * 전체 BrowserWindow 크기는 처음부터 최종값이다. borderless 조판의 확장 기하는
+ * full-size 패널의 clip-path만 사용한다. OS 창 리사이즈나 레이아웃 재측정 없이
+ * transform/opacity 중심으로 움직이므로 268 / fluid / 400 셸 계약을 건드리지 않는다. */
+.boot {
+  position: fixed;
+  inset: 0;
   overflow: hidden;
-  transition: height 200ms cubic-bezier(0.2, 0, 0, 1),
-    background-color 160ms cubic-bezier(0.2, 0, 0, 1),
-    border-color 160ms cubic-bezier(0.2, 0, 0, 1),
-    box-shadow 160ms cubic-bezier(0.2, 0, 0, 1);
+  isolation: isolate;
+  /* BOOT-001 최신 사용자 결정: 부팅 자체는 어떤 유리·색상·그라데이션 면도
+     칠하지 않는다. 투명 BrowserWindow 위에 로고·ATHENA·caret만 직접 합성하고,
+     실제 셸 재질은 readiness 성공 후 확장되는 순간에만 나타난다. */
+  background-color: transparent;
+  background-image: none;
 }
-.boot-panel.unfold { visibility: visible; height: 100%; }
-/* 4단계 — 유리 불투명도 최종값(.app 기본 --glass-alpha 0.30와 동일), 로고·입력줄 표시 */
-.boot-panel.final {
-  background: rgba(255, 255, 255, 0.30);
-  border-color: rgba(255, 255, 255, 0.3);
-  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.58), 0 24px 60px rgb(16 19 26 / 14%);
-}
-/* 4단계 재정의(2026-08-18 사용자 지시) — 전개의 종착은 별도 로고 화면이 아니라
- * **평소 채팅바 그 자체**다. 아래 요소들은 전부 실제 대화 창 부품(.dot ·
- * .input-row)의 1:1 복제라, +620ms 확정 화면과 finishBoot 스왑 후의
- * #app이 픽셀 단위로 이어진다. 값 하나라도 바꾸면 .app 쪽과 같이 바꿔야 한다. */
-.boot-body { flex: 1; } /* 빈 이력 자리 — 평소의 빈 채팅바와 같은 무지 유리 */
-.boot-inputbar {
-  flex-shrink: 0;
-  height: 84px; /* 실제 .input-stack(입력줄 44 + 스트립 40)과 동일 — 부팅 창이 곧 대화 창이다 */
-  display: flex; flex-direction: column; align-items: stretch;
-  border-top: 1px solid rgb(255 255 255 / 9%); /* 2026-08-22: .input-row와 같은 수정 */
-  visibility: hidden;
-}
-.boot-input-line {
-  height: 44px; flex-shrink: 0;
-  display: flex; align-items: center; gap: 14px;
-  padding: 0 18px;
-}
-.boot-strip {
-  height: 40px; flex-shrink: 0;
-  display: flex; align-items: center; gap: 8px;
-  padding: 0 16px 6px 16px;
-}
-.boot-pill {
-  display: flex; align-items: center;
-  height: 28px; padding: 0 12px; flex-shrink: 0;
-  border-radius: 999px;
-  border: 1px solid rgb(255 255 255 / 14%);
-  background: rgba(255, 255, 255, 0.45);
-  box-shadow: inset 0 1px 0 rgba(255, 253, 248, 0.28);
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  letter-spacing: 0.1em;
-  color: var(--color-k-bright);
+.boot-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
   white-space: nowrap;
+  border: 0;
 }
-.boot-panel.final .boot-inputbar { visibility: visible; }
-.boot-dot {
-  width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0;
-  background: radial-gradient(circle at 35% 35%, #fff, var(--color-brand) 55%, #8f0d57 100%);
-  box-shadow: 0 0 12px 3px rgba(238, 19, 123, 0.55);
+.boot-panel {
+  position: absolute;
+  inset: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  clip-path: inset(calc(50% - 130px) calc(50% - 360px));
+  transition: clip-path 480ms cubic-bezier(0.2, 0, 0, 1);
 }
-/* 창 확정 직후 바가 제 이름을 쓴다 — 입력줄 텍스트 자리에 한 자씩(chat.js) */
+.boot-stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  transition: opacity 160ms cubic-bezier(0.4, 0, 1, 1), transform 220ms cubic-bezier(0.4, 0, 1, 1);
+}
+.boot-logo {
+  width: 220px;
+  height: 69px;
+  display: block;
+  flex-shrink: 0;
+}
+.boot-wordline {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  height: 112px;
+}
+.boot-base,
 .boot-name {
   font-family: var(--font-display);
-  font-size: var(--text-lg);
-  letter-spacing: 0.3em;
-  color: var(--color-k-bright);
+  font-size: 112px;
+  font-weight: 400;
+  line-height: 112px;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
 }
-.boot-name:empty { display: none; } /* 빈 상태에서 letter-spacing 잔여폭이 커서를 밀지 않게 */
+.boot-base {
+  /* 글자 폭을 고정하는 투명한 layout guide다. 타이핑 글자 뒤로 회색 문자가
+     비치거나 별도 색상 면처럼 보이지 않아야 한다. */
+  color: transparent;
+  background: none;
+}
+.boot-typed-layer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.boot-name {
+  color: #0e20b2;
+}
+.boot-name-char { color: inherit; }
 .boot-cursor {
-  width: 2px; height: 17px; flex-shrink: 0;
-  /* 실제 캐럿과 동일한 무채색(보드 11 "입력 커서는 무채색") — 마젠타는 점 하나뿐 */
-  background: var(--color-k-text);
-  box-shadow: 0 0 10px rgba(230, 232, 238, 0.7);
+  flex-shrink: 0;
+  color: #ee137b;
+  font-family: var(--font-mono);
+  font-size: 112px;
+  font-weight: 300;
+  line-height: 112px;
+  transform-origin: center;
+  animation: boot-caret-blink 800ms steps(1, end) infinite;
 }
-/* 타이핑 중에는 커서가 글자 끝에, 지워진 뒤에는 placeholder가 커서에 붙는다 —
- * 실제 입력창의 캐럿 문법을 흉내낸다(flex gap 16px를 되무른다). */
-.boot-name:not(:empty) ~ .boot-cursor { margin-left: -12px; }
-.boot-ph {
+.boot-task {
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 10px);
+  width: max-content;
+  max-width: min(680px, 72vw);
+  transform: translateX(-50%);
+  overflow: hidden;
+  color: #4f5663;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
   font-family: var(--font-body);
-  font-size: var(--text-lg); /* 실제 .input placeholder와 동일 */
-  color: var(--color-k-faint);
-  margin-left: -12px;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 18px;
+  letter-spacing: 0;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.boot-task[hidden] { display: none; }
+@keyframes boot-caret-blink {
+  0%, 59.9% { opacity: 1; }
+  60%, 100% { opacity: 0; }
+}
+.boot.is-expanding .boot-panel {
+  clip-path: inset(0);
+  transform: scale(1);
+}
+.boot.is-expanding .boot-stage {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.98);
+}
+.app-notification {
+  position: fixed;
+  top: 52px;
+  left: 50%;
+  z-index: 80;
+  width: min(520px, calc(100vw - 48px));
+  box-sizing: border-box;
+  transform: translateX(-50%);
+  display: grid;
+  gap: 4px;
+  padding: 14px 16px;
+  border: 1px solid rgba(14, 32, 178, 0.16);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 10px 30px rgba(22, 28, 45, 0.14);
+  color: #202531;
+  font-family: var(--font-body);
+  pointer-events: none;
+}
+.app-notification[hidden] { display: none; }
+.app-notification strong { font-size: 14px; line-height: 20px; }
+.app-notification span { color: #59606d; font-size: 13px; line-height: 18px; }
+
+/* 실제 Page 1 셸 콘텐츠가 중앙 완성 조판 영역에서 전체 창으로 직접 열린다.
+ * 부팅용 카드나 내부 창 목업은 만들지 않고, 최종 셸 한 장의 가시 마스크만 푼다. */
+#shell.boot-shell-reveal {
+  z-index: 21; /* shell.css .boot(20) 위 — clip 안의 실제 셸 픽셀만 합성한다. */
+  clip-path: inset(calc(50% - 130px) calc(50% - 360px));
+  transform: scale(0.985);
+  transform-origin: center;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  transition:
+    clip-path 480ms cubic-bezier(0.2, 0, 0, 1),
+    transform 480ms cubic-bezier(0.2, 0, 0, 1);
+  will-change: clip-path, transform;
+}
+#shell.boot-shell-reveal.is-boot-expanded {
+  clip-path: inset(0);
+  transform: scale(1);
+}
+html.is-boot-expanding #dragStrip,
+html.is-boot-expanding #winControls { opacity: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .boot,
+  .boot-panel,
+  .boot-stage,
+  #shell.boot-shell-reveal { transition: none !important; }
+  .boot-cursor { animation: none !important; opacity: 1; }
+  .boot-task { transition: none !important; }
 }
 
 /* ---------- 유리 sheen — 가장자리 하이라이트만. 블러는 넣지 않는다 ----------
- * 대화 창의 "굴절" 값(0.46→0.17, two-windows.md)은 개념적으로 창 자체의
- * 네이티브 유리 재질(backgroundMaterial:'acrylic')이 얼마나 강하게 뒤(데스크톱/
- * 캔버스)를 흐리는가를 말한다 — Electron backgroundMaterial은 그 흐림 강도를
- * 런타임에 파라미터화하는 API를 주지 않는다(on/off + 타입만). 이 sheen 레이어에
- * backdrop-filter blur를 걸면 창 "뒤"가 아니라 이 창 자신의 전경 텍스트(대화
+ * BrowserWindow는 부팅부터 항상 투명하다. 부팅 완료 뒤 셸의 renderer alpha와
+ * backdrop 계층이 데스크톱 위 유리 깊이를 만들며, boot 단계에는 이 sheen을 포함한
+ * 셸 전체가 숨겨진다. 이 sheen 레이어에 backdrop-filter blur를 걸면 창 "뒤"가
+ * 아니라 이 창 자신의 전경 텍스트(대화
  * 이력·입력)가 흐려진다 — 실측으로 확인된 설계 오류라 걷어냈다. 실제로 조절 가능한
  * 값은 --glass-alpha(패널 배경 불투명도, 0.30→0.55 — 2026-08-18 하향 후 현행)뿐이라 그것만 보간한다.
  */
@@ -724,15 +798,24 @@ html, body { background: transparent; }
 @media (prefers-reduced-motion: reduce) {
   .kiumi-face-chat rect, .kiumi-face-graph circle { animation: none; }
 }
-/* 키우미 메뉴 — 위 .model-popover 라이트 기반을 쓰고 위치만 왼쪽 앵커.
- * 기하는 보드 45 v5(CLE-0) 실측 · Paper 토큰 스케일(rounded-lg=12 · spacing-4=12):
- * 260 고정 · 12px 라운드 · 항목 간 gap 없음(패딩이 리듬). */
+/* 키우미 메뉴 — Paper 49의 380px 폭과 Paper 57의 승인된 굴절형 재질.
+ * 큰 셸이 아니라 입력 위에 뜨는 직접 조작 표면이므로 25% 흰 틴트·3px 환경
+ * 블러·양방향 인셋 광택을 적용한다. */
 .kiumi-menu {
-  right: auto; left: 14px;
-  width: 260px;
+  right: 14px; left: auto;
+  width: min(380px, calc(100vw - 28px));
   gap: 0;
-  border-radius: 12px;
-  box-shadow: 0 14px 34px rgb(16 19 26 / 13%);
+  border-radius: 16px;
+  background:
+    linear-gradient(135deg, rgb(255 255 255 / 20%) 0%, rgb(255 255 255 / 2%) 48%, rgb(14 32 178 / 5%) 100%),
+    rgb(255 255 255 / 25%);
+  border: 1px solid rgb(255 255 255 / 30%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 74%),
+    inset 0 -1px 0 rgb(16 19 26 / 10%),
+    0 6px 6px rgb(16 19 26 / 20%);
+  backdrop-filter: blur(3px) saturate(1.12);
+  -webkit-backdrop-filter: blur(3px) saturate(1.12);
 }
 .kiumi-menu .km-section {
   padding: 6px 12px 2px;
@@ -780,6 +863,13 @@ html, body { background: transparent; }
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.attach-chip-ic,
+.attach-chip-ic svg {
+  width: 14px;
+  height: 14px;
+  flex: 0 0 14px;
+  color: #5b6270;
+}
 .attach-chip-rm {
   border: none;
   background: none;
@@ -795,7 +885,8 @@ html, body { background: transparent; }
 .kiumi-menu .km-item {
   display: flex; align-items: center; gap: 10px;
   width: 100%; text-align: left;
-  padding: 8px 12px; border-radius: 8px;
+  min-height: 36px;
+  padding: 5px 12px; border-radius: 8px;
   background: none; border: none; appearance: none; cursor: pointer;
   color: #10131a; font: inherit;
 }
@@ -803,13 +894,14 @@ html, body { background: transparent; }
   background: rgb(16 19 26 / 6%);
 }
 .kiumi-menu .km-ic {
-  width: 16px; flex-shrink: 0; text-align: center;
+  width: 16px; height: 16px; flex-shrink: 0; text-align: center;
   color: #2F3BA8; /* 바이저색 — 보드 45 v5 아이콘 어휘 */
   font-size: var(--text-sm); line-height: 1.1;
 }
+.kiumi-menu .km-ic svg { display: block; width: 16px; height: 16px; }
 .kiumi-menu .km-col { display: flex; flex-direction: column; gap: 1px; }
 .kiumi-menu .km-title { font-size: var(--text-base); line-height: 1.1; color: rgb(16 19 26 / 92%); }
-.kiumi-menu .km-desc { font-size: var(--text-xs); line-height: 14px; color: rgb(16 19 26 / 40%); }
+.kiumi-menu .km-desc { font-size: var(--text-xs); line-height: 12px; color: #5b6270; }
 .dot:hover { transform: scale(1.25); }
 .dot:focus-visible {
   outline: 2px solid var(--color-k-text);
@@ -1032,12 +1124,16 @@ html, body { background: transparent; }
   height: 44px;
   padding: 0 14px;
   border-radius: 6px;
-  background: rgb(16 19 26 / 55%);
-  border: 1px solid var(--color-k-line);
+  background: transparent;
+  border: 1px solid var(--color-k-line-soft);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
+}
+.onb-input-row:focus-within {
+  border-color: var(--color-brand);
+  box-shadow: 0 0 0 1px color-mix(in oklab, var(--color-brand) 24%, transparent);
 }
 .onb-input {
   flex: 1;
@@ -1071,11 +1167,14 @@ html, body { background: transparent; }
 .onb-savebox {
   padding: 14px 16px;
   border-radius: 6px;
-  background: rgb(29 34 44 / 50%);
-  border: 1px solid #262c38;
+  background: transparent;
+  border: 1px solid var(--color-k-line-soft);
   display: flex;
 }
 .onb-savebox-inner { display: flex; flex-direction: column; gap: 4px; }
+.onb-connected-account { align-items: center; gap: 16px; }
+.onb-connected-account .onb-savebox-inner { min-width: 0; flex: 1 1 auto; }
+.onb-connected-account > .uk-btn { flex: 0 0 auto; }
 .onb-savebox-title {
   font-family: var(--font-strong);
   font-size: var(--text-sm);
@@ -1111,11 +1210,12 @@ html, body { background: transparent; }
 .auth-timer-card {
   padding: 26px 28px;
   border-radius: 14px;
-  /* 유리화(2026-08-18) — 카드 표준 재질(0.45 + blur 14px)로 통일 */
-  background: rgb(36 42 54 / 45%);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgb(255 255 255 / 9%);
+  /* LIFE-001 승인 기준 — 계좌 입력 화면과 같은 열린 표면. 큰 회색 면을 만들지 않고
+     밝은 hairline만으로 시간 영역의 경계를 구분한다. */
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: 1px solid var(--color-k-line-soft);
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -1179,6 +1279,10 @@ html, body { background: transparent; }
 .auth-btn-group .uk-btn-ghost,
 .auth-btn-group .uk-btn-primary { height: 40px; padding: 0 20px; border-radius: 6px; }
 .auth-btn-group .uk-btn-text { height: 40px; padding: 0 20px; }
+.onb-auth .auth-btn-group .uk-btn-ghost:disabled {
+  background: transparent;
+  border-color: var(--color-k-line-soft);
+}
 
 /* ---------- 계좌 전환 (AT-CV-OAUTH-계좌-전환) ---------- */
 .switch-count {

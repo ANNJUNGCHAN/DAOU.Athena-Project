@@ -18,6 +18,15 @@
 html, body { background: transparent; }
 body { margin: 0; overflow: hidden; }
 
+.uses-native-window-controls .titlebar {
+  height: 32px;
+  padding-right: 138px;
+}
+
+.uses-native-window-controls .win-controls {
+  display: none !important;
+}
+
 /* ---------- 창 표면 ----------
  * 유리 사다리의 `--glass-window` 단이 여기다. 옛 판에서는 대화 창의 `.app`이
  * 창 표면이었지만(chat.css), `.app`이 셸 위의 한 영역으로 내려오면서 표면 역할이
@@ -111,6 +120,7 @@ body { margin: 0; overflow: hidden; }
   cursor: pointer;
 }
 .sidebar-head-btn:hover { background: rgb(16 19 26 / 6%); }
+.sidebar-compact-toggle { display: none; }
 .sidebar-head-ic {
   width: 14px;
   flex-shrink: 0;
@@ -258,6 +268,170 @@ body { margin: 0; overflow: hidden; }
   border-radius: 50%;
   background: var(--color-brand);
 }
+
+/* Paper 52/54 — 프로젝트 소속과 전역 최근는 같은 conversation id를 두 위치에
+ * 투영한다. 현재 대화는 블루 강조선이 아니라 흰 행 + 우측 초록 점이다. */
+.sidebar-section-label.is-project-caption,
+.sidebar-section-label.is-recent-caption {
+  color: #5b6270;
+  font-family: var(--font-strong);
+  letter-spacing: 0.02em;
+}
+.sidebar-project {
+  position: relative;
+  padding: 0 0 2px;
+}
+.sidebar-project-row {
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.sidebar-project-main {
+  min-width: 0;
+  flex: 1 1 auto;
+  height: 34px;
+  padding: 0 8px;
+  display: flex;
+  align-items: center;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-k-soft);
+  cursor: pointer;
+  text-align: left;
+}
+.sidebar-project-main:focus-visible {
+  outline: 2px solid rgb(47 59 168 / 72%);
+  outline-offset: 2px;
+}
+.sidebar-project.is-current .sidebar-project-main,
+.sidebar-project-main:hover {
+  background: rgb(255 255 255 / 48%);
+  color: var(--color-k-text);
+}
+.sidebar-project-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-strong);
+  font-size: var(--text-sm);
+}
+.sidebar-project-description {
+  position: fixed;
+  z-index: 30;
+  width: 252px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  border: 1px solid rgb(255 255 255 / 30%);
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 8% 12%, rgb(14 32 178 / 18%) 0%, transparent 38%),
+    radial-gradient(circle at 96% 14%, rgb(238 19 123 / 14%) 0%, transparent 34%),
+    linear-gradient(135deg, rgb(255 255 255 / 28%) 0%, rgb(255 255 255 / 4%) 50%, rgb(14 32 178 / 8%) 100%),
+    rgb(255 255 255 / 25%);
+  box-shadow:
+    inset 0 2px 0 rgb(255 255 255 / 82%),
+    inset 0 -1px 0 rgb(16 19 26 / 16%),
+    0 6px 20px rgb(16 19 26 / 20%);
+  backdrop-filter: blur(3px) saturate(1.12);
+  color: #5b6270;
+  font-size: var(--text-xs);
+  line-height: 16px;
+  pointer-events: none;
+}
+.sidebar-project-description-name {
+  color: var(--color-k-text);
+  font: 400 var(--text-sm)/18px var(--font-strong);
+}
+.sidebar-project-description-meta,
+.sidebar-project-description-id { color: rgb(91 98 112 / 88%); }
+.sidebar-project-description-id {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sidebar-project-description-copy {
+  margin-top: 3px;
+  padding-top: 8px;
+  border-top: 1px solid rgb(255 255 255 / 36%);
+  color: var(--color-k-text);
+}
+.sidebar-project-description-action {
+  margin-top: 4px;
+  color: var(--color-down);
+  font-family: var(--font-strong);
+}
+.sidebar-project-actions {
+  position: relative;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  opacity: 0;
+}
+.sidebar-project:hover .sidebar-project-actions,
+.sidebar-project:focus-within .sidebar-project-actions,
+.sidebar-project-actions.is-open { opacity: 1; }
+.sidebar-project-new-chat,
+.sidebar-project-menu-trigger {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #5b6270;
+  cursor: pointer;
+}
+.sidebar-project-new-chat:hover,
+.sidebar-project-new-chat:focus-visible,
+.sidebar-project-menu-trigger:hover,
+.sidebar-project-menu-trigger:focus-visible { background: rgb(16 19 26 / 6%); color: #10131a; }
+.sidebar-project-menu {
+  position: absolute;
+  z-index: 14;
+  top: 32px;
+  right: 0;
+  width: 196px;
+  padding: 5px;
+  border: 1px solid rgb(255 255 255 / 30%);
+  border-radius: 12px;
+  background: rgb(255 255 255 / 86%);
+  box-shadow: 0 8px 24px rgb(16 19 26 / 16%), inset 0 1px 0 rgb(255 255 255 / 72%);
+}
+.sidebar-project-menu-item {
+  width: 100%;
+  min-height: 32px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-k-text);
+  font: 400 var(--text-sm)/16px var(--font-body);
+  text-align: left;
+  cursor: pointer;
+}
+.sidebar-project-menu-item:hover { background: rgb(16 19 26 / 6%); }
+.sidebar-project-menu-item:disabled {
+  color: rgb(91 98 112 / 58%);
+  cursor: not-allowed;
+}
+.sidebar-project-menu-item.is-danger:not(:disabled) { color: #c03445; }
+.sidebar-project-menu-item:focus-visible {
+  background: rgb(16 19 26 / 6%);
+  outline: 2px solid rgb(47 59 168 / 72%);
+  outline-offset: -2px;
+}
+.sidebar-project-conversation { margin-left: 8px; width: calc(100% - 8px); }
+.sidebar-item.is-current-conversation {
+  background: #fff;
+  color: #10131a;
+}
+.sidebar-item.is-current-conversation:hover { background: #fff; }
+.sidebar-item .sidebar-current-dot { background: var(--color-ok); }
 /* 알림 파생 방 항목 — 왼쪽 강조 막대로 "여기서 넘어왔다"는 출처를 표시한다
  * (Paper 보드 08, 각 항목 안의 3×16 사각형). */
 .sidebar-item.is-notify::before {
@@ -1205,6 +1379,7 @@ body { margin: 0; overflow: hidden; }
  * main.js DESIGN.minW(900)가 창 자체의 하한을 건다. */
 #chatRegion {
   width: 400px;
+  max-width: 400px;
   flex-shrink: 0;
 }
 
@@ -1273,8 +1448,185 @@ body { margin: 0; overflow: hidden; }
   z-index: 10;
 }
 
+/* LIFE-001 — 온보딩 overlay는 #shell의 sibling이다. 완료 전 실제 앱 본체가
+ * 반투명 재질 뒤로 비치거나 포커스되는 일이 없도록 셸 자체를 합성에서 제외한다. */
+#shell.is-onboarding-hidden {
+  display: none !important;
+}
+
 /* 부팅 연출은 셸·크롬 위에 있어야 한다 — 연출이 끝나야 창이 확정된다. */
 .boot {
   z-index: 20;
 }
 
+/* ---------- Windows 반응형/Snap (Paper 53) ----------
+ * 1280px 이상은 위의 기본 3열(268px + 가변 캔버스 + 400px 채팅)이다.
+ * 그 아래에서는 채팅 DOM을 없애지 않고 작성창만 하단 행으로 옮긴다. 따라서 Snap,
+ * 복원, 모니터 이동 중에도 대화 내용과 입력 초안은 같은 노드에 그대로 남는다. */
+@media (max-width: 1279px) {
+  #shell {
+    display: grid;
+    grid-template-columns: 268px minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) 54px;
+  }
+
+  #historyRegion {
+    grid-column: 1;
+    grid-row: 1 / 3;
+  }
+
+  #canvasRegion {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  #chatRegion {
+    grid-column: 2;
+    grid-row: 2;
+    width: auto;
+    max-width: none;
+    height: 54px;
+  }
+
+  #chatRegion > .app {
+    overflow: visible;
+  }
+
+  /* 좁은 창은 전체 대화 열 대신 작성창만 노출한다. display 토글일 뿐 DOM을
+   * 재생성하지 않으므로 이력/스크롤/입력 초안 상태가 Snap 왕복 뒤 복구된다. */
+  #chatRegion > .app > :not(.input-stack) {
+    display: none !important;
+  }
+
+  #chatRegion .input-stack {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    min-height: 54px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  #chatRegion .input-row {
+    height: 54px;
+    padding: 0 14px;
+  }
+
+  #chatRegion::before {
+    left: 6px;
+    right: 6px;
+    top: -5px;
+    bottom: auto;
+    width: auto;
+    height: 1px;
+    background: linear-gradient(90deg,
+      rgba(255, 253, 248, 0) 0%,
+      rgba(255, 253, 248, 0.34) 22%,
+      rgba(255, 253, 248, 0.34) 78%,
+      rgba(255, 253, 248, 0) 100%);
+  }
+}
+
+/* 4분할/최소폭 — 좌측은 기능 진입만 남긴 44px 레일, 중앙은 단일 열이다.
+ * 프로젝트/최근 목록은 레일에서 숨기되 같은 DOM을 보존해 다시 넓힐 때 즉시 복구한다. */
+@media (max-width: 699px) {
+  #shell {
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 6px;
+    padding-right: 6px;
+    padding-bottom: 6px;
+    padding-left: 6px;
+  }
+
+  #historyRegion {
+    width: 44px;
+    padding-right: 0;
+    overflow: visible;
+  }
+
+  .sidebar-head {
+    align-items: center;
+    padding: 2px 0 6px;
+  }
+
+  .sidebar-head-btn {
+    width: 34px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .sidebar-compact-toggle {
+    display: flex;
+  }
+
+  .sidebar-head-btn > :not(.sidebar-head-ic),
+  .sidebar-mode-caption,
+  .sidebar-mode-item-label,
+  .sidebar-divider,
+  .sidebar-list,
+  .sidebar-search-input,
+  .sidebar-account-text,
+  .sidebar-account-caret {
+    display: none !important;
+  }
+
+  #historyRegion.is-compact-open .sidebar-list {
+    position: absolute;
+    z-index: 12;
+    top: 42px;
+    left: 44px;
+    display: flex !important;
+    flex-direction: column;
+    width: min(278px, calc(100vw - 58px));
+    max-height: calc(100vh - 64px);
+    padding: 10px;
+    overflow: auto;
+    border: 1px solid rgb(255 255 255 / 30%);
+    border-radius: 16px;
+    background:
+      radial-gradient(circle at 14% 8%, rgb(255 255 255 / 74%) 0, transparent 42%),
+      linear-gradient(135deg, rgb(255 255 255 / 34%) 0%, rgb(255 255 255 / 8%) 52%, rgb(14 32 178 / 7%) 100%),
+      rgb(247 250 254 / 84%);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 72%),
+      inset 0 -1px 0 rgb(16 19 26 / 10%),
+      0 6px 6px rgb(16 19 26 / 20%);
+    backdrop-filter: blur(3px) saturate(1.12);
+  }
+
+  .sidebar-mode-nav {
+    align-items: center;
+    padding: 4px 0 8px;
+  }
+
+  .sidebar-mode-item {
+    position: relative;
+    width: 34px;
+    height: 34px;
+    padding: 9px;
+    justify-content: center;
+  }
+
+  .sidebar-mode-badge {
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    min-width: 14px;
+    height: 14px;
+    padding: 0 3px;
+  }
+
+  .sidebar-account-row {
+    align-self: center;
+    width: 34px;
+    min-height: 34px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  #chatRegion .input-row {
+    gap: 10px;
+    padding: 0 10px;
+  }
+}

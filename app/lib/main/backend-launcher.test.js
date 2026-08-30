@@ -5,7 +5,7 @@ const assert = require('node:assert/strict');
 const { EventEmitter } = require('events');
 const {
   HEALTH_URL, HEALTH_HOST, HEALTH_PORT,
-  buildUvicornArgs, decideAction, hasSpawnedChild,
+  buildUvicornArgs, buildBackendEnv, decideAction, hasSpawnedChild,
   awaitChildExit, restartAfterReset, _setBackendChildForTest,
 } = require('./backend-launcher');
 
@@ -30,6 +30,21 @@ test('buildUvicornArgs: 매 호출 새 배열 — 호출자가 변형해도 다�
   a.push('--reload');
   const b = buildUvicornArgs();
   assert.equal(b.includes('--reload'), false);
+});
+
+test('buildBackendEnv: Electron이 스폰한 제품 백엔드는 brain/routines를 기본 활성화한다', () => {
+  assert.deepEqual(buildBackendEnv({ PATH: 'bin' }), {
+    PATH: 'bin', ATHENA_BRAIN_ENABLED: 'true', ATHENA_ROUTINES_ENABLED: 'true',
+  });
+});
+
+test('buildBackendEnv: 명시적인 프로세스 override는 true/false 모두 그대로 보존한다', () => {
+  const env = buildBackendEnv({
+    ATHENA_BRAIN_ENABLED: 'false', ATHENA_ROUTINES_ENABLED: 'true', OTHER: 'value',
+  });
+  assert.equal(env.ATHENA_BRAIN_ENABLED, 'false');
+  assert.equal(env.ATHENA_ROUTINES_ENABLED, 'true');
+  assert.equal(env.OTHER, 'value');
 });
 
 test('decideAction: 헬스체크 성공이면 venv 여부와 무관하게 already-running — 중복 스폰 금지', () => {
