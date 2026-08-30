@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "decision": "CLAUDE_ONLY",
+  "providers": {
+    "claude": {
+      "enabled": true,
+      "version": "0.3.251",
+      "sha256": "9235fac983c29e614d7f572a578406dc5dbda006305faa99f9447f577738eb93",
+      "gates": {
+        "exactVersion": true,
+        "fileHashes": true,
+        "runtimeExports": true,
+        "warmQueryTypes": true,
+        "delayedTranscriptFixture": true,
+        "generationScopedPreToolUse": true
+      }
+    },
+    "codex": {
+      "enabled": false,
+      "version": "0.147.0",
+      "sha256": "935a1911ed2556e4ffcec995f4886ac2ac425863ba26fed264df62e30272ad9d",
+      "gates": {
+        "exactBinary": true,
+        "stableSchema": true,
+        "privateRuntimeHome": true,
+        "globalStateUnchanged": true,
+        "privateAuthReady": false,
+        "threadScopedMcpInventory": false,
+        "builtinCapabilityNegativeProbe": false
+      }
+    }
+  },
+  "failedGates": [
+    "codex.privateAuthReady",
+    "codex.threadScopedMcpInventory",
+    "codex.builtinCapabilityNegativeProbe"
+  ],
+  "rolloutAuthorization": {
+    "productionRolloutAllowed": false,
+    "scope": "local-development-only",
+    "gates": {
+      "commercialTermsConfirmed": false,
+      "deploymentTopologyConfirmed": false,
+      "endUserOwnedCredentials": false,
+      "noClaudeAiCredentialIntermediation": true,
+      "bundledAuthUnmodified": true,
+      "privacyTelemetryDisclosureConfirmed": false
+    },
+    "failedGates": [
+      "commercialTermsConfirmed",
+      "deploymentTopologyConfirmed",
+      "endUserOwnedCredentials",
+      "privacyTelemetryDisclosureConfirmed"
+    ]
+  }
+}

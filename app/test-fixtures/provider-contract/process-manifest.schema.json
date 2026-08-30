@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "athena-provider-process-manifest-line-v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "runId", "recordType", "pid", "creationTime", "ownerId"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "runId": { "type": "string", "minLength": 1 },
+    "recordType": { "enum": ["baseline", "owned-root", "descendant", "post-grace-survivor"] },
+    "pid": { "type": "integer", "minimum": 1 },
+    "creationTime": { "type": "string", "minLength": 1 },
+    "ownerId": { "type": "string", "minLength": 1 },
+    "parentPid": { "type": ["integer", "null"], "minimum": 1 },
+    "provider": { "enum": ["claude", "codex", "electron", "fixture"] }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "provider": "codex",
+  "version": "0.147.0",
+  "sha256": "935a1911ed2556e4ffcec995f4886ac2ac425863ba26fed264df62e30272ad9d",
+  "upstreamTag": "rust-v0.147.0",
+  "upstreamCommit": "be6e8eac029b183056b7e4402879f15d2c85f61b",
+  "stableSchemaSha256": "d9fadbaf9e976d19f512d581461fec94409fe5a7fbbb14f25f8f74e9688e42d2",
+  "referenceSchemaSha256": "8c21123972ceb53e787f72b5321e8a56a271d4094e6147a44f51b64199fb4a11",
+  "methods": [
+    "initialize",
+    "thread/start",
+    "thread/resume",
+    "thread/fork",
+    "turn/start",
+    "turn/interrupt",
+    "config/read",
+    "mcpServerStatus/list"
+  ],
+  "gates": {
+    "exactBinary": true,
+    "stableSchema": true,
+    "privateRuntimeHome": true,
+    "globalStateUnchanged": true,
+    "privateAuthReady": false,
+    "threadScopedMcpInventory": false,
+    "builtinCapabilityNegativeProbe": false
+  },
+  "liveTurnExecuted": false,
+  "liveAppServerSpawned": false
+}

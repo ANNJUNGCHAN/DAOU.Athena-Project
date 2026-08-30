@@ -1,0 +1,2 @@
+{"id":2,"method":"thread/resume","params":{"threadId":"thread-existing"}}
+{"id":2,"result":{"thread":{"id":"thread-existing"}}}
