@@ -94,19 +94,14 @@ async function main() {
     envOverridesFn: () => ({}),
     timeoutMs: TIMEOUT_MS,
   });
+  // 실측(probe-chat-idle-init, 2026-08-30): CLI는 첫 입력 전에는 아무 이벤트도
+  // 안 내보내지만 MCP 게이트웨이는 스폰 ~3초 내에 eager로 미리 뜬다 — init
+  // 이벤트를 기다리면 영원히 안 온다. 고정 10초만 쉬어 예열 창을 준다(실제
+  // 앱에서는 사용자가 첫 질문을 치기까지의 시간이 이 창이다).
   const warmStartedAt = Date.now();
   session.warm({ model: MODEL });
-  while (!session.snapshot().warm) {
-    if (Date.now() - warmStartedAt > 120_000) {
-      console.error('[예열] 120초 안에 init 이벤트가 안 왔다');
-      session.stop();
-      process.exitCode = 1;
-      return;
-    }
-    await delay(200);
-  }
-  const warmupMs = Date.now() - warmStartedAt;
-  console.log(`[예열] 스폰→init ${fmt(warmupMs)} (앱 기동 시 1회 — 턴 비용 아님)`);
+  await delay(10_000);
+  console.log(`[예열] 스폰 후 ${fmt(Date.now() - warmStartedAt)} 대기 (앱 기동 시 1회 — 턴 비용 아님)`);
 
   const warm = [];
   for (let i = 0; i < WARM_TURNS; i += 1) {
