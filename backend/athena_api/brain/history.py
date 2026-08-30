@@ -39,6 +39,7 @@ class TradeSide(StrEnum):
 
 
 class JobTrigger(StrEnum):
+    STARTUP = "startup"
     HOURLY = "hourly"
     MANUAL = "manual"
     RETRY = "retry"

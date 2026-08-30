@@ -19,13 +19,15 @@ from athena_api.brain import (
     GraphProjector,
     GraphStore,
     HistoryStore,
+    JobStatus,
+    JobTrigger,
     god_nodes,
     graph_diff,
+    labeling,
     suggest_questions,
     surprising_connections,
     utc_now,
 )
-from athena_api.brain import labeling
 from athena_api.brain.projection import cluster_cohesion, cluster_representative_labels
 from athena_api.errors import BrainNotReadyError
 from athena_api.lifespan import BrainRuntime, _teardown_brain
@@ -119,6 +121,17 @@ class BrainStatusResponse(BaseModel):
     ready: bool
     ingestion_ready: bool
     extraction_enabled: bool
+    startup_ingestion_job_id: str | None
+    startup_ingestion_status: JobStatus | None
+    startup_ingestion_detail: str | None
+
+
+class StartupIngestionRetryResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    created: bool
+    job_id: str
+    status: JobStatus
 
 
 class ChatMessageOut(BaseModel):
@@ -240,11 +253,73 @@ async def get_brain_status(
 ) -> BrainStatusResponse:
     require_local_bearer(request, authorization)
     state = request.app.state
+    runtime: BrainRuntime | None = getattr(state, "brain_runtime", None)
+    startup_job = None
+    if runtime is not None and runtime.startup_ingestion_job_id is not None:
+        startup_job = await runtime.history.get_job(runtime.startup_ingestion_job_id)
+
+    settings = getattr(state, "settings", None)
+    if not bool(getattr(settings, "brain_enabled", False)):
+        startup_detail = "brain_disabled"
+    elif runtime is None:
+        startup_detail = "brain_unavailable"
+    elif not runtime.ingestion_ready:
+        startup_detail = "brain_ingestion_degraded"
+    elif startup_job is None:
+        startup_detail = "startup_ingestion_unavailable"
+    elif startup_job.status is JobStatus.RETRY_WAIT:
+        startup_detail = "startup_ingestion_retry_wait"
+    elif startup_job.status is JobStatus.FAILED:
+        startup_detail = "startup_ingestion_failed"
+    else:
+        startup_detail = None
     return BrainStatusResponse(
         ready=bool(getattr(state, "brain_ready", False)),
         ingestion_ready=bool(getattr(state, "brain_ingestion_ready", False)),
         extraction_enabled=bool(getattr(state, "brain_extraction_enabled", False)),
+        startup_ingestion_job_id=(startup_job.id if startup_job is not None else None),
+        startup_ingestion_status=(startup_job.status if startup_job is not None else None),
+        startup_ingestion_detail=startup_detail,
     )
+
+@router.post(
+    "/startup-ingestion/retry",
+    summary="실패한 부팅 수집 다시 실행",
+    operation_id="retry_startup_brain_ingestion",
+    response_model=StartupIngestionRetryResponse,
+    openapi_extra={
+        **_NOT_LLM_EXPOSED,
+        "x-athena-side-effect": "write",
+    },
+)
+async def retry_startup_brain_ingestion(
+    request: Request,
+    authorization: Annotated[str, Header(alias="Authorization")],
+) -> StartupIngestionRetryResponse:
+    require_local_bearer(request, authorization)
+    runtime: BrainRuntime | None = getattr(request.app.state, "brain_runtime", None)
+    if runtime is None or not runtime.ingestion_ready or runtime.coordinator is None:
+        raise BrainNotReadyError("investment brain ingestion is not ready")
+
+    async with runtime.startup_ingestion_lock:
+        job_id = runtime.startup_ingestion_job_id
+        job = await runtime.history.get_job(job_id) if job_id is not None else None
+        if job is None:
+            raise BrainNotReadyError("startup ingestion job is not available")
+        if job.status is not JobStatus.FAILED:
+            return StartupIngestionRetryResponse(
+                created=False,
+                job_id=job.id,
+                status=job.status,
+            )
+
+        retry_job = await runtime.coordinator.enqueue(JobTrigger.STARTUP)
+        runtime.startup_ingestion_job_id = retry_job.id
+        return StartupIngestionRetryResponse(
+            created=True,
+            job_id=retry_job.id,
+            status=retry_job.status,
+        )
 
 
 @router.get(

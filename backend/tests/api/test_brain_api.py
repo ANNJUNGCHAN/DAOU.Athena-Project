@@ -1,19 +1,23 @@
 
 from __future__ import annotations
 
+import asyncio
 import logging
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 from fastapi.testclient import TestClient
 
+from athena_api.brain import IngestionJob, JobStatus, JobTrigger
 from athena_api.config import Settings
 from athena_api.main import create_app
 
 BEARER = "local-test-bearer"
 CHAT_PATH = "/api/v1/brain/chat"
 STATUS_PATH = "/api/v1/brain/status"
+STARTUP_RETRY_PATH = "/api/v1/brain/startup-ingestion/retry"
 CHATS_PATH = "/api/v1/brain/chats"
 CONVERSATIONS_PATH = "/api/v1/brain/conversations"
 PROFILE_SUMMARY_PATH = "/api/v1/brain/profile-summary"
@@ -35,6 +39,65 @@ def _brain_settings(tmp_path: Path, **overrides: object) -> Settings:
         brain_db_path=tmp_path / "brain.sqlite3",
         **overrides,
     )
+
+
+def _ingestion_job(job_id: str, status: JobStatus) -> IngestionJob:
+    now = datetime.now(UTC)
+    return IngestionJob(
+        id=job_id,
+        trigger=JobTrigger.STARTUP,
+        status=status,
+        attempts=1,
+        created_at=now,
+        started_at=now if status is not JobStatus.PENDING else None,
+        completed_at=now if status in {JobStatus.SUCCEEDED, JobStatus.FAILED} else None,
+        next_retry_at=(now + timedelta(seconds=1)) if status is JobStatus.RETRY_WAIT else None,
+        error=(
+            "  startup failed\nwith internal detail  "
+            if status in {JobStatus.RETRY_WAIT, JobStatus.FAILED}
+            else None
+        ),
+    )
+
+
+class _FakeStartupHistory:
+    def __init__(self, job: IngestionJob) -> None:
+        self.jobs = {job.id: job}
+
+    async def get_job(self, job_id: str) -> IngestionJob | None:
+        return self.jobs.get(job_id)
+
+
+class _FakeStartupCoordinator:
+    def __init__(self, history: _FakeStartupHistory) -> None:
+        self.history = history
+        self.calls = 0
+
+    async def enqueue(self, trigger: JobTrigger) -> IngestionJob:
+        assert trigger is JobTrigger.STARTUP
+        self.calls += 1
+        job = _ingestion_job(f"job:retry-{self.calls}", JobStatus.PENDING)
+        self.history.jobs[job.id] = job
+        return job
+
+
+def _install_fake_startup_runtime(client: TestClient, job: IngestionJob) -> SimpleNamespace:
+    history = _FakeStartupHistory(job)
+    coordinator = _FakeStartupCoordinator(history)
+    runtime = SimpleNamespace(
+        history=history,
+        coordinator=coordinator,
+        ingestion_ready=True,
+        ingestion_last_error=None,
+        startup_ingestion_job_id=job.id,
+        startup_ingestion_lock=asyncio.Lock(),
+    )
+    client.app.state.settings = Settings(_env_file=None, brain_enabled=True)
+    client.app.state.brain_runtime = runtime
+    client.app.state.brain_ready = True
+    client.app.state.brain_ingestion_ready = True
+    client.app.state.brain_extraction_enabled = False
+    return runtime
 
 
 # --- auth: 401/422, independent of brain readiness ------------------------------------
@@ -174,7 +237,120 @@ def test_status_always_answers_200_even_while_disabled() -> None:
         "ready": False,
         "ingestion_ready": False,
         "extraction_enabled": False,
+        "startup_ingestion_job_id": None,
+        "startup_ingestion_status": None,
+        "startup_ingestion_detail": "brain_disabled",
     }
+
+
+def test_status_reports_terminal_startup_failure_with_public_detail_code() -> None:
+    with _disabled_client() as client:
+        failed = _ingestion_job("job:failed", JobStatus.FAILED)
+        _install_fake_startup_runtime(client, failed)
+        response = client.get(STATUS_PATH, headers={"Authorization": f"Bearer {BEARER}"})
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["startup_ingestion_job_id"] == failed.id
+    assert body["startup_ingestion_status"] == "failed"
+    assert body["startup_ingestion_detail"] == "startup_ingestion_failed"
+    assert "internal detail" not in response.text
+
+
+def test_status_reports_ingestion_degradation_explicitly() -> None:
+    with _disabled_client() as client:
+        client.app.state.settings = Settings(_env_file=None, brain_enabled=True)
+        client.app.state.brain_runtime = SimpleNamespace(
+            history=None,
+            coordinator=None,
+            ingestion_ready=False,
+            ingestion_last_error="  history open failed\ninternal frame  ",
+            startup_ingestion_job_id=None,
+        )
+        response = client.get(STATUS_PATH, headers={"Authorization": f"Bearer {BEARER}"})
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["startup_ingestion_job_id"] is None
+    assert body["startup_ingestion_status"] is None
+    assert body["startup_ingestion_detail"] == "brain_ingestion_degraded"
+    assert "internal frame" not in response.text
+
+
+@pytest.mark.parametrize(
+    "status",
+    [
+        JobStatus.PENDING,
+        JobStatus.RUNNING,
+        JobStatus.RETRY_WAIT,
+        JobStatus.SUCCEEDED,
+    ],
+)
+def test_status_reports_startup_job_progress(status: JobStatus) -> None:
+    with _disabled_client() as client:
+        current = _ingestion_job("job:progress", status)
+        _install_fake_startup_runtime(client, current)
+        response = client.get(STATUS_PATH, headers={"Authorization": f"Bearer {BEARER}"})
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["startup_ingestion_job_id"] == current.id
+    assert body["startup_ingestion_status"] == status.value
+    if status is JobStatus.RETRY_WAIT:
+        assert body["startup_ingestion_detail"] == "startup_ingestion_retry_wait"
+    else:
+        assert body["startup_ingestion_detail"] is None
+
+
+@pytest.mark.parametrize(
+    "status", [JobStatus.PENDING, JobStatus.RUNNING, JobStatus.RETRY_WAIT]
+)
+def test_startup_retry_does_not_duplicate_nonterminal_job(status: JobStatus) -> None:
+    with _disabled_client() as client:
+        current = _ingestion_job("job:current", status)
+        runtime = _install_fake_startup_runtime(client, current)
+        response = client.post(
+            STARTUP_RETRY_PATH,
+            headers={"Authorization": f"Bearer {BEARER}"},
+        )
+
+    assert response.status_code == 200
+    assert response.json() == {
+        "created": False,
+        "job_id": current.id,
+        "status": status.value,
+    }
+    assert runtime.coordinator.calls == 0
+    assert runtime.startup_ingestion_job_id == current.id
+
+
+def test_startup_retry_replaces_only_terminal_failed_job() -> None:
+    with _disabled_client() as client:
+        failed = _ingestion_job("job:failed", JobStatus.FAILED)
+        runtime = _install_fake_startup_runtime(client, failed)
+        first = client.post(
+            STARTUP_RETRY_PATH,
+            headers={"Authorization": f"Bearer {BEARER}"},
+        )
+        second = client.post(
+            STARTUP_RETRY_PATH,
+            headers={"Authorization": f"Bearer {BEARER}"},
+        )
+
+    assert first.status_code == 200
+    assert first.json() == {
+        "created": True,
+        "job_id": "job:retry-1",
+        "status": "pending",
+    }
+    assert second.status_code == 200
+    assert second.json() == {
+        "created": False,
+        "job_id": "job:retry-1",
+        "status": "pending",
+    }
+    assert runtime.coordinator.calls == 1
+    assert runtime.startup_ingestion_job_id == "job:retry-1"
 
 
 # --- happy path -----------------------------------------------------------------------
@@ -189,7 +365,16 @@ def test_chat_round_trip_and_status_and_no_body_leak_in_logs(
     with caplog.at_level(logging.INFO), TestClient(app) as client:
         status_response = client.get(STATUS_PATH, headers={"Authorization": f"Bearer {BEARER}"})
         assert status_response.status_code == 200
-        assert status_response.json()["ingestion_ready"] is True
+        status_body = status_response.json()
+        assert status_body["ingestion_ready"] is True
+        assert status_body["startup_ingestion_job_id"] is not None
+        assert status_body["startup_ingestion_status"] in {
+            "pending",
+            "running",
+            "retry_wait",
+            "succeeded",
+        }
+        assert status_body["startup_ingestion_detail"] is None
 
         user_response = client.post(
             CHAT_PATH,
@@ -588,7 +773,13 @@ async def _seed_two_cliques_with_a_bridge(app) -> None:
     now = datetime(2026, 8, 25, 3, 0, tzinfo=UTC)
 
     def make_entity(kind: object, name: str) -> Entity:
-        return Entity(id=entity_id(kind, name), kind=kind, name=name, created_at=now, updated_at=now)
+        return Entity(
+            id=entity_id(kind, name),
+            kind=kind,
+            name=name,
+            created_at=now,
+            updated_at=now,
+        )
 
     def make_relation(kind: str, src: Entity, tgt: Entity) -> Relation:
         return Relation(
@@ -942,7 +1133,7 @@ CLUSTER_MAP_PATH = "/api/v1/brain/analysis/cluster-map"
 
 
 class _SlowLlm:
-    """지연 주입 fake — 미스가 응답을 지연시키지 않는지(G-F3) 시간으로 잰다."""
+    """지연 주입 fake — in-flight 상한 검증에서 호출 완료를 늦춘다."""
 
     def __init__(self, delay: float) -> None:
         self.calls = 0
@@ -956,24 +1147,49 @@ class _SlowLlm:
         return '{"label": "AI 라벨"}'.encode()
 
 
+class _BlockingLlm:
+    """완료 장벽 fake — 첫 응답이 LLM 완료보다 먼저인지 인과 순서로 검증한다."""
+
+    def __init__(self) -> None:
+        from threading import Event
+
+        self.calls = 0
+        self.started = Event()
+        self.release = Event()
+
+    async def complete(self, prompt: str) -> bytes:
+        self.calls += 1
+        self.started.set()
+        await asyncio.to_thread(self.release.wait)
+        return '{"label": "AI 라벨"}'.encode()
+
+
 def test_cluster_ai_labels_first_miss_is_empty_and_fast_then_cached(
     seeded_client: TestClient,
 ) -> None:
-    import time
+    from concurrent.futures import ThreadPoolExecutor
 
     app = seeded_client.app  # type: ignore[attr-defined]
-    app.state.brain_cluster_labeling_llm_client = _SlowLlm(delay=0.5)
-    start = time.monotonic()
-    first = seeded_client.get(CLUSTER_MAP_PATH, headers=_headers()).json()
-    elapsed = time.monotonic() - start
-    assert first["cluster_ai_labels"] == {}, "첫 미스는 필드를 비운 채 즉시 반환한다"
-    assert elapsed < 0.4, f"미스가 LLM 왕복({elapsed:.2f}s)을 기다리면 안 된다"
-    # 캐시 미스 직후 in-flight 집합에 태스크가 추가돼 있어야 한다(참조 보관).
-    assert app.state.cluster_labeling_tasks, "백그라운드 태스크 참조가 보관된다"
-    # 완료 대기 — done_callback이 집합에서 자동 제거한다.
-    deadline = time.monotonic() + 5
-    while app.state.cluster_labeling_tasks and time.monotonic() < deadline:
-        time.sleep(0.05)
+    llm = _BlockingLlm()
+    app.state.brain_cluster_labeling_llm_client = llm
+    with ThreadPoolExecutor(max_workers=1) as executor:
+        first_request = executor.submit(seeded_client.get, CLUSTER_MAP_PATH, headers=_headers())
+        assert llm.started.wait(timeout=10), "백그라운드 LLM 태스크가 시작된다"
+        try:
+            first = first_request.result(timeout=10).json()
+            assert first["cluster_ai_labels"] == {}, "첫 미스는 필드를 비운 채 즉시 반환한다"
+            assert not llm.release.is_set(), "첫 응답은 LLM 완료 장벽보다 먼저 반환한다"
+            # 캐시 미스 직후 in-flight 집합에 태스크가 추가돼 있어야 한다(참조 보관).
+            assert app.state.cluster_labeling_tasks, "백그라운드 태스크 참조가 보관된다"
+        finally:
+            llm.release.set()
+    # 완료 대기 — TestClient portal 안에서 태스크를 직접 기다리고 done_callback을 한 tick 진행한다.
+    async def wait_for_labels() -> None:
+        await asyncio.gather(*tuple(app.state.cluster_labeling_tasks))
+        await asyncio.sleep(0)
+
+    assert seeded_client.portal is not None
+    seeded_client.portal.call(wait_for_labels)
     assert not app.state.cluster_labeling_tasks, "완료된 태스크는 집합에서 자동 제거된다"
     second = seeded_client.get(CLUSTER_MAP_PATH, headers=_headers()).json()
     assert second["cluster_ai_labels"], "캐시가 채워진 뒤 재요청은 라벨을 싣는다"
