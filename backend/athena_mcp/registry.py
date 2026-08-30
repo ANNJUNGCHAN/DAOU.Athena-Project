@@ -1,13 +1,17 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import re
+from copy import deepcopy
 from dataclasses import asdict, dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Literal
+
+from .atomic_json_state import atomic_write_json, exclusive_state_lock
 
 ALIAS_CHARSET_RE = re.compile(r"^[A-Za-z0-9_-]+$")
 QUALIFIED_NAME_SEPARATOR = "__"
@@ -18,6 +22,16 @@ SECRET_SENTINEL = "__ATHENA_SAFESTORAGE__"
 MAX_ALIAS_LEN = MAX_QUALIFIED_NAME_LEN - len(QUALIFIED_NAME_SEPARATOR) - OBSERVED_MAX_TOOL_NAME_LEN
 
 SourceKind = Literal["manual", "claude_desktop_snippet"]
+
+
+def _canonical_hash(value: Any) -> str:
+    encoded = json.dumps(
+        value,
+        ensure_ascii=False,
+        separators=(",", ":"),
+        sort_keys=True,
+    ).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
 
 
 class AliasValidationError(ValueError):
@@ -161,6 +175,13 @@ class ServerEntry:
         return " ".join(parts)
 
 
+@dataclass(frozen=True)
+class RegistrySnapshot:
+    revision: int
+    fingerprint: str
+    servers: tuple[dict[str, Any], ...]
+
+
 def default_registry_path() -> Path:
     override = os.environ.get("ATHENA_MCP_REGISTRY_PATH")
     if override:
@@ -174,23 +195,87 @@ class ServerRegistry:
     def __init__(self, path: Path | None = None) -> None:
         self.path = path or default_registry_path()
         self._entries: dict[str, ServerEntry] = {}
+        self._revision = 0
+        self._fingerprint = _canonical_hash({})
         if self.path.exists():
             self._load()
 
     # -- 영속 --------------------------------------------------------------
 
     def _load(self) -> None:
+        entries, revision, fingerprint = self._read_disk_state()
+        self._entries = entries
+        self._revision = revision
+        self._fingerprint = fingerprint
+
+    def _read_disk_state(self) -> tuple[dict[str, ServerEntry], int, str]:
+        if not self.path.exists():
+            return {}, 0, _canonical_hash({})
         raw = json.loads(self.path.read_text(encoding="utf-8"))
-        self._entries = {
-            alias: ServerEntry.from_dict(d) for alias, d in raw.get("servers", {}).items()
+        servers = raw.get("servers", {})
+        entries = {alias: ServerEntry.from_dict(d) for alias, d in servers.items()}
+        canonical = {alias: entry.to_dict() for alias, entry in entries.items()}
+        fingerprint = _canonical_hash(canonical)
+        stored = raw.get("fingerprint")
+        if stored is not None and stored != fingerprint:
+            raise ValueError("registry fingerprint mismatch")
+        return entries, int(raw.get("revision", 0)), fingerprint
+
+    def _payload(self, entries: dict[str, ServerEntry], revision: int) -> dict[str, Any]:
+        servers = {alias: entry.to_dict() for alias, entry in entries.items()}
+        return {
+            "revision": revision,
+            "fingerprint": _canonical_hash(servers),
+            "servers": servers,
         }
 
+    def _mutate(self, mutation):
+        lock_path = self.path.with_name(f".{self.path.name}.lock")
+        with exclusive_state_lock(lock_path):
+            entries, revision, _ = self._read_disk_state()
+            working = deepcopy(entries)
+            result = mutation(working)
+            next_revision = revision + 1
+            payload = self._payload(working, next_revision)
+            atomic_write_json(self.path, payload)
+            self._entries = working
+            self._revision = next_revision
+            self._fingerprint = payload["fingerprint"]
+            return result
+
     def save(self) -> None:
-        self.path.parent.mkdir(parents=True, exist_ok=True)
-        payload = {"servers": {alias: e.to_dict() for alias, e in self._entries.items()}}
-        tmp = self.path.with_suffix(".json.tmp")
-        tmp.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
-        tmp.replace(self.path)
+        desired = deepcopy(self._entries)
+        self._mutate(lambda entries: (entries.clear(), entries.update(desired)))
+
+    @property
+    def revision(self) -> int:
+        return self._revision
+
+    @property
+    def fingerprint(self) -> str:
+        return self._fingerprint
+
+    def reload(self) -> RegistrySnapshot:
+        lock_path = self.path.with_name(f".{self.path.name}.lock")
+        with exclusive_state_lock(lock_path):
+            self._load()
+        return self.snapshot()
+
+    def snapshot(self) -> RegistrySnapshot:
+        servers: list[dict[str, Any]] = []
+        for alias in sorted(self._entries):
+            entry = self._entries[alias]
+            data = entry.to_dict()
+            data["env"] = {
+                key: SECRET_SENTINEL if value == SECRET_SENTINEL else "__ATHENA_REDACTED__"
+                for key, value in sorted(entry.env.items())
+            }
+            servers.append(data)
+        return RegistrySnapshot(
+            revision=self._revision,
+            fingerprint=self._fingerprint,
+            servers=tuple(deepcopy(servers)),
+        )
 
     # -- CRUD ----------------------------------------------------------------
 
@@ -204,20 +289,21 @@ class ServerRegistry:
         notes: str | None = None,
     ) -> ServerEntry:
         validate_alias(alias)
-        if alias in self._entries:
-            raise DuplicateAliasError(f"별칭 {alias!r}은 이미 등록돼 있다")
         validate_server_spec(command, list(args or []), dict(env or {}))
-        entry = ServerEntry(
-            alias=alias,
-            command=command,
-            args=list(args or []),
-            env=dict(env or {}),
-            source=source,
-            notes=notes,
-        )
-        self._entries[alias] = entry
-        self.save()
-        return entry
+        def mutation(entries: dict[str, ServerEntry]) -> ServerEntry:
+            if alias in entries:
+                raise DuplicateAliasError(f"별칭 {alias!r}은 이미 등록돼 있다")
+            entry = ServerEntry(
+                alias=alias,
+                command=command,
+                args=list(args or []),
+                env=dict(env or {}),
+                source=source,
+                notes=notes,
+            )
+            entries[alias] = entry
+            return entry
+        return self._mutate(mutation)
 
     def get(self, alias: str) -> ServerEntry:
         try:
@@ -226,10 +312,11 @@ class ServerRegistry:
             raise UnknownAliasError(alias) from None
 
     def remove(self, alias: str) -> None:
-        if alias not in self._entries:
-            raise UnknownAliasError(alias)
-        del self._entries[alias]
-        self.save()
+        def mutation(entries: dict[str, ServerEntry]) -> None:
+            if alias not in entries:
+                raise UnknownAliasError(alias)
+            del entries[alias]
+        self._mutate(mutation)
 
     def list(self) -> list[ServerEntry]:
         return list(self._entries.values())
@@ -241,19 +328,23 @@ class ServerRegistry:
         reported_version: str | None,
         protocol_version: str | None,
     ) -> None:
-        entry = self.get(alias)
-        entry.self_reported_server_info = SelfReportedServerInfo(
-            reported_name=reported_name,
-            reported_version=reported_version,
-            protocol_version=protocol_version,
-            observed_at=datetime.now(UTC).isoformat(),
-        )
-        self.save()
+        def mutation(entries: dict[str, ServerEntry]) -> None:
+            if alias not in entries:
+                raise UnknownAliasError(alias)
+            entries[alias].self_reported_server_info = SelfReportedServerInfo(
+                reported_name=reported_name,
+                reported_version=reported_version,
+                protocol_version=protocol_version,
+                observed_at=datetime.now(UTC).isoformat(),
+            )
+        self._mutate(mutation)
 
     def record_encoding_smoke_test(self, alias: str, mojibake_detected: bool) -> None:
-        entry = self.get(alias)
-        entry.encoding_smoke_test_warning = mojibake_detected
-        self.save()
+        def mutation(entries: dict[str, ServerEntry]) -> None:
+            if alias not in entries:
+                raise UnknownAliasError(alias)
+            entries[alias].encoding_smoke_test_warning = mojibake_detected
+        self._mutate(mutation)
 
     def set_env_sentinel(self, alias: str, key: str) -> None:
         """`env[key]`를 `SECRET_SENTINEL`로 치환한다 — 마이그레이션 전용 연산.
@@ -263,26 +354,30 @@ class ServerRegistry:
         평문을 지운다"만 한다 — 값 자체를 여기서 다루지 않으므로 이 프로세스가
         평문을 아는 순간이 아예 없다.
         """
-        entry = self.get(alias)
-        if key not in entry.env:
-            raise KeyError(f"{alias!r}에 env 키 {key!r}가 없다")
-        entry.env[key] = SECRET_SENTINEL
-        self.save()
+        def mutation(entries: dict[str, ServerEntry]) -> None:
+            if alias not in entries:
+                raise UnknownAliasError(alias)
+            entry = entries[alias]
+            if key not in entry.env:
+                raise KeyError(f"{alias!r}에 env 키 {key!r}가 없다")
+            entry.env[key] = SECRET_SENTINEL
+        self._mutate(mutation)
 
     def rename(self, old_alias: str, new_alias: str) -> ServerEntry:
         """별칭 이름을 바꾼다. 등록 정보만 옮긴다 — in-flight 호출 안전성은
         aggregator.py의 리졸루션 테이블이 별도로 보장한다(등록소 rename과
         무관하게 옛 qualified name 매핑을 유지)."""
-        if old_alias not in self._entries:
-            raise UnknownAliasError(old_alias)
         validate_alias(new_alias)
-        if new_alias in self._entries:
-            raise DuplicateAliasError(f"별칭 {new_alias!r}은 이미 등록돼 있다")
-        entry = self._entries.pop(old_alias)
-        entry.alias = new_alias
-        self._entries[new_alias] = entry
-        self.save()
-        return entry
+        def mutation(entries: dict[str, ServerEntry]) -> ServerEntry:
+            if old_alias not in entries:
+                raise UnknownAliasError(old_alias)
+            if new_alias in entries:
+                raise DuplicateAliasError(f"별칭 {new_alias!r}은 이미 등록돼 있다")
+            entry = entries.pop(old_alias)
+            entry.alias = new_alias
+            entries[new_alias] = entry
+            return entry
+        return self._mutate(mutation)
 
 
 # ---------------------------------------------------------------------------
