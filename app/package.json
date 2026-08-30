@@ -6,7 +6,18 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "test": "node --test lib/*.test.js lib/main/*.test.js lib/graph-mode/*.test.js",
+    "test": "npm run test:provider-contract && npm run test:provider-sessions && npm run test:unit",
+    "test:unit": "node --test lib/*.test.js lib/main/*.test.js lib/graph-mode/*.test.js",
+    "test:provider-contract:unit": "node --test scripts/check-claude-agent-sdk-contract.test.mjs scripts/check-codex-app-server-contract.test.js scripts/write-provider-contract-decision.test.js scripts/check-provider-process-leaks.test.js",
+    "probe:provider-contract": "node scripts/check-claude-agent-sdk-contract.mjs && node scripts/check-codex-app-server-contract.js && node scripts/write-provider-contract-decision.js --expect-decision CLAUDE_ONLY",
+    "test:provider-contract": "npm run test:provider-contract:unit && npm run probe:provider-contract",
+    "test:provider-sessions": "node --test scripts/benchmark-provider-sessions.test.js verify-provider-sessions.test.js scripts/verify-provider-sessions-electron.test.js scripts/run-claude-native-athena-live-benchmark.test.js",
+    "benchmark:provider-sessions:node-injected": "node scripts/benchmark-provider-sessions.js",
+    "benchmark:provider-sessions:claude-live-paired": "node scripts/run-claude-native-athena-live-benchmark.js",
+    "verify:provider-sessions:node-injected": "node verify-provider-sessions.js --scenario all",
+    "verify:provider-sessions:electron-runtime": "electron scripts/verify-provider-sessions-electron.js --scenario all",
+    "verify:provider-sessions:os-leak": "node scripts/check-provider-process-leaks.js --record-path ../artifacts/provider-sessions/process-manifest.ndjson --grace-ms 5000 -- node verify-provider-sessions.js --scenario all --require-orchestrator",
+    "gate:provider-sessions:pure": "npm run test:provider-sessions && npm run benchmark:provider-sessions:node-injected -- --provider claude --mode deterministic --samples 1000 && npm run benchmark:provider-sessions:node-injected -- --provider codex --mode assert-disabled --samples 30 && npm run verify:provider-sessions:node-injected",
     "verify": "electron verify.js",
     "verify:hoga-live": "electron verify-hoga-live.js",
     "verify:integrated-cards": "electron verify-integrated-cards.js",
@@ -21,6 +32,7 @@
     "electron": "^43.4.0"
   },
   "dependencies": {
+    "@anthropic-ai/claude-agent-sdk": "0.3.251",
     "lightweight-charts": "^5.2.1"
   }
 }

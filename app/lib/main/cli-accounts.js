@@ -1,262 +1,381 @@
+'use strict';
 
-const fs = require('fs');
-const os = require('os');
-const path = require('path');
-const { spawn } = require('child_process');
-const { app } = require('electron');
-const { writeJsonAtomic } = require('./json-store');
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
+const { spawn } = require('node:child_process');
+const { performance } = require('node:perf_hooks');
+const electron = require('electron');
+const { resolveCodexRuntimeHome, createCodexRuntime } = require('./codex-runtime-home');
 
-// 고정 순서 규칙(AT-SY-002 Description 2)은 유지한다 — Claude 다음 Codex.
-// Gemini·Grok이 빠진 이유는 위 D6 주석 참고.
-const PROVIDER_ORDER = ['claude', 'codex'];
-const PROVIDER_NAMES = { claude: 'Claude', codex: 'Codex' };
-
-const LOGIN_COMMANDS = {
-  claude: {
-    command: 'claude',
-    args: ['auth', 'login'],
+const PROVIDER_ORDER = Object.freeze(['claude', 'codex']);
+const PROVIDER_NAMES = Object.freeze({ claude: 'Claude', codex: 'Codex' });
+const CODEX_ACCOUNT_ID = 'codex:athena-runtime';
+const CODEX_STATUS_TIMEOUT_MS = 5_000;
+const LOGIN_COMMANDS = Object.freeze({
+  claude: Object.freeze({
+    command: 'claude', args: Object.freeze(['auth', 'login']),
     message: '터미널에서 로그인 진행 — 브라우저에서 인증 후 표시되는 코드를 터미널에 붙여넣어야 완료된다.',
-  },
-  codex: {
-    command: 'codex',
-    args: ['login'],
-    message: '터미널에서 로그인 진행 — 로컬 콜백으로 자동 완료된다. 주의: 중단해도 기존 로그인 세션이 로그아웃될 수 있다(조사 문서 실측).',
-  },
-};
+  }),
+  codex: Object.freeze({
+    command: 'codex', args: Object.freeze(['login']),
+    message: '터미널에서 로그인 진행 — 로컬 콜백으로 자동 완료된다.',
+  }),
+});
 
-function statePath() {
-  return path.join(app.getPath('userData'), 'athena-cli-accounts.json');
-}
-
-function readState() {
+function defaultAtomicWrite(fsImpl, file, state) {
+  fsImpl.mkdirSync(path.dirname(file), { recursive: true });
+  const tmp = `${file}.${process.pid}.tmp`;
+  let handle;
   try {
-    const raw = fs.readFileSync(statePath(), 'utf-8');
-    const parsed = JSON.parse(raw);
-    return { activeId: parsed.activeId || null, accounts: parsed.accounts || {} };
-  } catch {
-    return { activeId: null, accounts: {} };
+    handle = fsImpl.openSync(tmp, 'w');
+    fsImpl.writeFileSync(handle, JSON.stringify(state, null, 2), 'utf8');
+    fsImpl.fsyncSync(handle);
+  } finally {
+    if (handle !== undefined) fsImpl.closeSync(handle);
   }
-}
-
-function writeState(state) {
-  writeJsonAtomic(statePath(), state);
-}
-
-// ---------------------------------------------------------------------------
-// 감지 — 이미 로그인된 CLI를 (비밀값을 건드리지 않고) 찾아 계정 목록에 반영
-// ---------------------------------------------------------------------------
-
-function detectClaude() {
-  const credPath = path.join(os.homedir(), '.claude', '.credentials.json');
-  const connected = fs.existsSync(credPath);
-  if (!connected) return null;
-  let label = 'Claude 계정';
+  fsImpl.renameSync(tmp, file);
   try {
-    const raw = fs.readFileSync(path.join(os.homedir(), '.claude.json'), 'utf-8');
-    const parsed = JSON.parse(raw);
-    const email = parsed && parsed.oauthAccount && parsed.oauthAccount.emailAddress;
-    if (typeof email === 'string' && email) label = email;
+    const directoryHandle = fsImpl.openSync(path.dirname(file), 'r');
+    try { fsImpl.fsyncSync(directoryHandle); } finally { fsImpl.closeSync(directoryHandle); }
   } catch {
-    // .claude.json이 없거나 이메일 필드가 없어도 자격증명 파일 존재만으로 연결로 본다.
-  }
-  return { identifier: label, label };
-}
-
-function codexHome() {
-  return process.env.CODEX_HOME || path.join(os.homedir(), '.codex');
-}
-
-function detectCodex() {
-  const authPath = path.join(codexHome(), 'auth.json');
-  try {
-    const raw = fs.readFileSync(authPath, 'utf-8');
-    const parsed = JSON.parse(raw);
-    // account_id만 꺼낸다 — id_token/access_token/refresh_token은 여기서도
-    // 절대 읽지 않는다(조사 문서: 이메일을 얻으려면 JWT를 열어야 하는데 그건
-    // 비밀값에 손대는 것이라 하지 않는다는 결론).
-    // 현행 codex-cli(0.147 실측)는 account_id를 최상위가 아니라 tokens 안에 둔다 —
-    // 구(최상위)·신(tokens.account_id) 스키마 둘 다 받는다. tokens에서도
-    // account_id 외에는 여전히 아무것도 읽지 않는다.
-    const tokens = parsed && parsed.tokens;
-    const accountId =
-      parsed && typeof parsed.account_id === 'string' ? parsed.account_id
-        : tokens && typeof tokens.account_id === 'string' ? tokens.account_id
-        : null;
-    if (!accountId) return null;
-    return { identifier: accountId, label: `Codex · ${accountId.slice(0, 8)}` };
-  } catch {
-    return null;
+    // Windows may reject directory handles. The file was already fsynced and renamed.
   }
 }
 
-const DETECTORS = { claude: detectClaude, codex: detectCodex };
-
-// 감지된-그러나-아직 목록에 없는 계정을 병합한다. "최초 연결된 계정은 자동으로
-// 활성"(AT-SY-002 Desc 4) — 앱 전체에 활성 계정이 하나도 없을 때 처음 감지된
-// 계정을 활성으로 삼는다(00-통합-계획.md 조사 문서의 §열린질문3 권고를 따름 —
-// 새 계정은 기본 비활성, 앱 콜드스타트 때만 최초 1개가 활성이 된다).
-function detectAndMerge() {
-  const state = readState();
-  let changed = false;
-  for (const providerId of Object.keys(DETECTORS)) {
-    let found;
-    try {
-      found = DETECTORS[providerId]();
-    } catch {
-      found = null;
-    }
-    if (!found) continue;
-    const id = `${providerId}:${found.identifier}`;
-    if (!state.accounts[id]) {
-      state.accounts[id] = {
-        id,
-        providerId,
-        label: found.label,
-        source: 'detected',
-        addedAt: new Date().toISOString(),
-      };
-      changed = true;
-      if (!state.activeId) {
-        state.activeId = id;
-      }
-    }
+function immutableSnapshot(state, codexStatus, reconciledAtMonotonicMs) {
+  const accounts = {};
+  for (const [id, account] of Object.entries(state.accounts)) {
+    accounts[id] = Object.freeze({ ...account });
   }
-  if (changed) writeState(state);
-  return state;
-}
-
-// ---------------------------------------------------------------------------
-// 공개 API
-// ---------------------------------------------------------------------------
-
-// athena:cli-list -> { providers: [ { id, name, connected, accounts } ] }
-function list() {
-  const state = detectAndMerge();
-  const byProvider = {};
-  for (const p of PROVIDER_ORDER) byProvider[p] = [];
-  for (const acc of Object.values(state.accounts)) {
-    if (!byProvider[acc.providerId]) continue;
-    byProvider[acc.providerId].push({
-      id: acc.id,
-      label: acc.label,
-      active: acc.id === state.activeId,
-    });
-  }
-  return {
-    providers: PROVIDER_ORDER.map((id) => ({
-      id,
-      name: PROVIDER_NAMES[id],
-      connected: byProvider[id].length > 0,
-      accounts: byProvider[id],
-    })),
-  };
-}
-
-function probeBinaryExists(command) {
-  return new Promise((resolve) => {
-    let settled = false;
-    let child;
-    // Windows: npm 전역 CLI(claude/codex)는 .cmd 셔임이라 shell 없는 직접 spawn이
-    // EINVAL로 죽는다(Node CVE-2024-27980 대응 이후) — 실행해 보는 대신 where로
-    // 존재만 묻는다(있으면 종료코드 0).
-    const isWin = process.platform === 'win32';
-    try {
-      child = isWin
-        ? spawn('where', [command], { stdio: 'ignore', windowsHide: true })
-        : spawn(command, ['--version'], { stdio: 'ignore', windowsHide: true });
-    } catch {
-      resolve(false);
-      return;
-    }
-    child.on('error', () => {
-      if (!settled) { settled = true; resolve(false); }
-    });
-    child.on('exit', (code) => {
-      if (!settled) { settled = true; resolve(isWin ? code === 0 : true); }
-    });
+  return Object.freeze({
+    accounts: Object.freeze(accounts),
+    activeId: state.activeId,
+    codexStatus,
+    reconciledAtMonotonicMs,
   });
 }
 
-// athena:cli-login { providerId } -> { ok, launched, message }
-// 실제 OAuth/디바이스 로그인은 이 프로세스가 대행하지 않는다 — 각 CLI의 실제
-// 서브커맨드를 사용자가 보는 새 콘솔 창에서 실행할 뿐이다. 완료 여부는 앱이
-// 알 수 없으므로(로그인 완료 콜백을 이 프로세스가 가로채는 메커니즘이 스펙
-// 자체에 미정으로 남아 있다 — Open Question 4), 다음 `cli-list` 호출 시
-// `detectAndMerge()`가 파일 시스템을 다시 훑어 새로 로그인된 계정을 찾는다.
-async function login(providerId) {
-  const cfg = LOGIN_COMMANDS[providerId];
-  const name = PROVIDER_NAMES[providerId];
-  if (!cfg || !name) {
-    return { ok: false, launched: false, message: '알 수 없는 CLI다' };
-  }
-  const exists = await probeBinaryExists(cfg.command);
-  if (!exists) {
-    return { ok: false, launched: false, message: `${name} CLI가 이 컴퓨터에 설치되어 있지 않다` };
-  }
-  try {
-    // Windows: 새 콘솔 창을 열어 로그인 명령을 실행한다 — 이 프로세스는 그
-    // 창의 표준입출력을 가로채지 않는다(OAuth 코드 붙여넣기 등은 전부 사용자가
-    // 그 창에서 직접 한다).
-    const child = spawn(
-      'cmd.exe',
-      ['/c', 'start', `"Athena · ${name} 로그인"`, 'cmd', '/k', cfg.command, ...cfg.args],
-      // windowsVerbatimArguments: Node의 기본 재인용이 start의 제목 인자
-      // "..."를 \"로 이스케이프해 cmd가 빈 명령('')을 찾다 죽는다(실측
-      // 2026-08-27) — cmd.exe에는 인자를 조립한 그대로 넘겨야 한다.
-      { detached: true, stdio: 'ignore', windowsHide: false, windowsVerbatimArguments: true },
-    );
-    child.unref();
-    return { ok: true, launched: true, message: cfg.message };
-  } catch {
-    return { ok: false, launched: false, message: '로그인 창을 열지 못했다' };
-  }
-}
+function createCliAccounts({
+  appImpl = electron.app,
+  runtime,
+  fsImpl = fs,
+  osImpl = os,
+  spawnImpl = spawn,
+  monotonicNow = () => performance.now(),
+  statusTimeoutMs = CODEX_STATUS_TIMEOUT_MS,
+  writeStateAtomicImpl,
+} = {}) {
+  if (!appImpl || typeof appImpl.getPath !== 'function') throw new TypeError('appImpl.getPath is required');
+  if (!fsImpl || typeof fsImpl.readFileSync !== 'function') throw new TypeError('fsImpl is required');
+  if (!osImpl || typeof osImpl.homedir !== 'function') throw new TypeError('osImpl.homedir is required');
+  if (typeof spawnImpl !== 'function') throw new TypeError('spawnImpl is required');
+  if (!Number.isFinite(statusTimeoutMs) || statusTimeoutMs <= 0) throw new TypeError('statusTimeoutMs must be positive');
 
-// athena:cli-set-active { accountId } -> { ok }
-function setActive(accountId) {
-  const state = readState();
-  if (!state.accounts[accountId]) {
-    return { ok: false };
-  }
-  state.activeId = accountId;
-  writeState(state);
-  return { ok: true };
-}
+  const userDataPath = appImpl.getPath('userData');
+  const runtimeHome = resolveCodexRuntimeHome(userDataPath);
+  const codexRuntime = runtime || createCodexRuntime({
+    runtimeHome,
+    codexExecutable: 'codex',
+    spawnImpl,
+  });
+  const persist = writeStateAtomicImpl || ((file, state) => defaultAtomicWrite(fsImpl, file, state));
+  let mutexTail = Promise.resolve();
 
-// 로그인 = 활성 전환(2026-08-27 검토 결정) — 로그인 흐름이 끝난 provider의
-// 현재 감지 계정을 활성으로 승격한다. "새 계정 기본 비활성" 규칙의 예외는
-// 이 한 곳뿐이다: 로그인은 명시적 사용자 행위라 의도가 분명하다.
-function activateProviderCurrent(providerId) {
-  const detector = DETECTORS[providerId];
-  if (!detector) return { ok: false };
-  let found;
-  try {
-    found = detector();
-  } catch {
-    found = null;
+  const statePath = () => path.join(userDataPath, 'athena-cli-accounts.json');
+  function readState() {
+    try {
+      const parsed = JSON.parse(fsImpl.readFileSync(statePath(), 'utf8'));
+      return {
+        activeId: typeof parsed.activeId === 'string' ? parsed.activeId : null,
+        accounts: parsed.accounts && typeof parsed.accounts === 'object' ? { ...parsed.accounts } : {},
+      };
+    } catch {
+      return { activeId: null, accounts: {} };
+    }
   }
-  if (!found) return { ok: false };
-  const id = `${providerId}:${found.identifier}`;
-  const state = detectAndMerge();
-  if (!state.accounts[id]) return { ok: false };
-  if (state.activeId !== id) {
+  const writeState = (state) => persist(statePath(), state);
+
+  function detectClaude() {
+    const home = osImpl.homedir();
+    if (!fsImpl.existsSync(path.join(home, '.claude', '.credentials.json'))) return null;
+    let label = 'Claude 계정';
+    try {
+      const parsed = JSON.parse(fsImpl.readFileSync(path.join(home, '.claude.json'), 'utf8'));
+      const email = parsed && parsed.oauthAccount && parsed.oauthAccount.emailAddress;
+      if (typeof email === 'string' && email) label = email;
+    } catch {
+      // Preserve the legacy credential-existence signal without requiring an email.
+    }
+    return { identifier: label, label };
+  }
+
+  function mergeClaude(state) {
+    const found = detectClaude();
+    if (!found) return;
+    const id = `claude:${found.identifier}`;
+    if (!state.accounts[id]) {
+      state.accounts[id] = {
+        id, providerId: 'claude', label: found.label, source: 'detected', addedAt: new Date().toISOString(),
+      };
+      if (!state.activeId) state.activeId = id;
+    }
+  }
+
+  function probeCodexStatus() {
+    return new Promise((resolve) => {
+      let child;
+      let settled = false;
+      let timer;
+      const finish = (status) => {
+        if (settled) return;
+        settled = true;
+        if (timer) clearTimeout(timer);
+        if (child && typeof child.removeAllListeners === 'function') {
+          child.removeAllListeners('error');
+          child.removeAllListeners('exit');
+        }
+        resolve(status);
+      };
+      try {
+        child = codexRuntime.spawnPrivateHomeCommand(['login', 'status'], {
+          timeoutMs: statusTimeoutMs,
+          stdio: 'ignore',
+        });
+      } catch {
+        finish('unavailable');
+        return;
+      }
+      child.once('error', () => finish('unavailable'));
+      child.once('exit', (code, signal) => {
+        if (signal || !Number.isInteger(code)) finish('unavailable');
+        else finish(code === 0 ? 'connected' : 'disconnected');
+      });
+      timer = setTimeout(() => {
+        try { child.kill(); } catch { /* fail closed */ }
+        finish('unavailable');
+      }, statusTimeoutMs);
+    });
+  }
+
+  function withMutex(task) {
+    const run = mutexTail.then(task, task);
+    mutexTail = run.then(() => undefined, () => undefined);
+    return run;
+  }
+
+  async function reconcileCodexRuntimeAccountLocked() {
+    const state = readState();
+    mergeClaude(state);
+    const priorCodexIds = Object.values(state.accounts)
+      .filter((account) => account && account.providerId === 'codex')
+      .map((account) => account.id);
+    const priorRuntimeAccount = state.accounts[CODEX_ACCOUNT_ID];
+    const activeWasStaleCodex = priorCodexIds.includes(state.activeId)
+      && state.activeId !== CODEX_ACCOUNT_ID;
+    const codexStatus = await probeCodexStatus();
+
+    for (const id of priorCodexIds) delete state.accounts[id];
+    if (priorCodexIds.includes(state.activeId)) state.activeId = null;
+    if (codexStatus === 'connected') {
+      state.accounts[CODEX_ACCOUNT_ID] = {
+        id: CODEX_ACCOUNT_ID,
+        providerId: 'codex',
+        label: 'Codex',
+        source: 'detected',
+        addedAt: priorRuntimeAccount && typeof priorRuntimeAccount.addedAt === 'string'
+          ? priorRuntimeAccount.addedAt
+          : new Date().toISOString(),
+      };
+      if (!state.activeId && !activeWasStaleCodex) state.activeId = CODEX_ACCOUNT_ID;
+    }
+
+    writeState(state);
+    return immutableSnapshot(state, codexStatus, monotonicNow());
+  }
+
+  const reconcileCodexRuntimeAccount = () => withMutex(reconcileCodexRuntimeAccountLocked);
+
+  function selectList(snapshot) {
+    const byProvider = { claude: [], codex: [] };
+    for (const account of Object.values(snapshot.accounts)) {
+      if (!byProvider[account.providerId]) continue;
+      byProvider[account.providerId].push({
+        id: account.id,
+        label: account.label,
+        active: account.id === snapshot.activeId,
+      });
+    }
+    return {
+      providers: PROVIDER_ORDER.map((id) => ({
+        id,
+        name: PROVIDER_NAMES[id],
+        connected: byProvider[id].length > 0,
+        accounts: byProvider[id],
+      })),
+    };
+  }
+
+  function selectActiveAccount(snapshot) {
+    if (!snapshot.activeId) return null;
+    const account = snapshot.accounts[snapshot.activeId];
+    return account ? { accountId: account.id, providerId: account.providerId } : null;
+  }
+
+  const list = async () => selectList(await reconcileCodexRuntimeAccount());
+  const getActiveAccount = async () => selectActiveAccount(await reconcileCodexRuntimeAccount());
+
+  function probeBinaryExists(command) {
+    return new Promise((resolve) => {
+      let settled = false;
+      let child;
+      const isWin = process.platform === 'win32';
+      try {
+        child = isWin
+          ? spawnImpl('where', [command], { stdio: 'ignore', windowsHide: true })
+          : spawnImpl(command, ['--version'], { stdio: 'ignore', windowsHide: true });
+      } catch {
+        resolve(false);
+        return;
+      }
+      child.on('error', () => { if (!settled) { settled = true; resolve(false); } });
+      child.on('exit', (code) => { if (!settled) { settled = true; resolve(isWin ? code === 0 : true); } });
+    });
+  }
+
+  async function login(providerId) {
+    const cfg = LOGIN_COMMANDS[providerId];
+    const name = PROVIDER_NAMES[providerId];
+    if (!cfg || !name) return { ok: false, launched: false, message: '알 수 없는 CLI다' };
+    if (!await probeBinaryExists(cfg.command)) {
+      return { ok: false, launched: false, message: `${name} CLI가 이 컴퓨터에 설치되어 있지 않다` };
+    }
+    try {
+      const child = providerId === 'codex'
+        ? codexRuntime.spawnPrivateHomeInteractiveCommand(cfg.args, {
+          title: `Athena · ${name} 로그인`,
+        })
+        : spawnImpl(
+          'cmd.exe',
+          ['/c', 'start', `"Athena · ${name} 로그인"`, 'cmd', '/k', cfg.command, ...cfg.args],
+          { detached: true, stdio: 'ignore', windowsHide: false, windowsVerbatimArguments: true },
+        );
+      child.unref();
+      return { ok: true, launched: true, message: cfg.message };
+    } catch {
+      return { ok: false, launched: false, message: '로그인 창을 열지 못했다' };
+    }
+  }
+
+  async function logout(providerId) {
+    if (providerId !== 'codex') return { ok: false, message: '지원하지 않는 로그아웃 대상이다' };
+    return withMutex(async () => {
+      const logoutStatus = await new Promise((resolve) => {
+        let child;
+        let settled = false;
+        let timer;
+        const finish = (ok) => {
+          if (settled) return;
+          settled = true;
+          if (timer) clearTimeout(timer);
+          if (child && typeof child.removeAllListeners === 'function') {
+            child.removeAllListeners('error');
+            child.removeAllListeners('exit');
+          }
+          resolve(ok);
+        };
+        try {
+          child = codexRuntime.spawnPrivateHomeCommand(['logout'], {
+            timeoutMs: statusTimeoutMs,
+            stdio: 'ignore',
+          });
+        } catch {
+          finish(false);
+          return;
+        }
+        child.once('error', () => finish(false));
+        child.once('exit', (code, signal) => finish(!signal && code === 0));
+        timer = setTimeout(() => {
+          try { child.kill(); } catch { /* fail closed */ }
+          finish(false);
+        }, statusTimeoutMs);
+      });
+      const snapshot = await reconcileCodexRuntimeAccountLocked();
+      return Object.freeze({
+        ok: logoutStatus && snapshot.codexStatus === 'disconnected',
+        codexStatus: snapshot.codexStatus,
+      });
+    });
+  }
+
+  function setActive(accountId) {
+    const state = readState();
+    if (!state.accounts[accountId]) return { ok: false };
+    state.activeId = accountId;
+    writeState(state);
+    return { ok: true };
+  }
+
+  async function activateProviderCurrent(providerId) {
+    if (providerId === 'codex') {
+      const snapshot = await reconcileCodexRuntimeAccount();
+      if (!snapshot.accounts[CODEX_ACCOUNT_ID]) return { ok: false };
+      return setActive(CODEX_ACCOUNT_ID).ok
+        ? { ok: true, accountId: CODEX_ACCOUNT_ID }
+        : { ok: false };
+    }
+    if (providerId !== 'claude') return { ok: false };
+    const found = detectClaude();
+    if (!found) return { ok: false };
+    const id = `claude:${found.identifier}`;
+    const state = readState();
+    if (!state.accounts[id]) {
+      state.accounts[id] = {
+        id, providerId: 'claude', label: found.label, source: 'detected', addedAt: new Date().toISOString(),
+      };
+    }
     state.activeId = id;
     writeState(state);
+    return { ok: true, accountId: id };
   }
-  return { ok: true, accountId: id };
+
+  function credentialsSignature() {
+    return [
+      path.join(osImpl.homedir(), '.claude', '.credentials.json'),
+      path.join(runtimeHome, 'auth.json'),
+    ].map((file) => {
+      try { return String(fsImpl.statSync(file).mtimeMs); } catch { return '0'; }
+    }).join('|');
+  }
+
+  return Object.freeze({
+    reconcileCodexRuntimeAccount,
+    list,
+    getActiveAccount,
+    login,
+    logout,
+    setActive,
+    probeBinaryExists,
+    credentialsSignature,
+    activateProviderCurrent,
+  });
 }
 
-// 재로그인(이미 목록에 있는 계정으로 다시 로그인)은 계정 목록을 바꾸지 않아
-// 목록 비교만으로는 감지되지 않는다(실측 2026-08-27: 로그인 대기가 영영 안
-// 풀리던 원인) — 자격증명 파일의 mtime을 서명으로 쓴다. 내용은 읽지 않는다.
-function credentialsSignature() {
-  const paths = [
-    path.join(os.homedir(), '.claude', '.credentials.json'),
-    path.join(codexHome(), 'auth.json'),
-  ];
-  return paths.map((p) => {
-    try { return String(fs.statSync(p).mtimeMs); } catch { return '0'; }
-  }).join('|');
-}
+let defaultInstance;
+const getDefaultInstance = () => {
+  if (!defaultInstance) defaultInstance = createCliAccounts();
+  return defaultInstance;
+};
 
-module.exports = { list, login, setActive, probeBinaryExists, credentialsSignature, activateProviderCurrent };
+module.exports = {
+  createCliAccounts,
+  reconcileCodexRuntimeAccount: (...args) => getDefaultInstance().reconcileCodexRuntimeAccount(...args),
+  list: (...args) => getDefaultInstance().list(...args),
+  getActiveAccount: (...args) => getDefaultInstance().getActiveAccount(...args),
+  login: (...args) => getDefaultInstance().login(...args),
+  logout: (...args) => getDefaultInstance().logout(...args),
+  setActive: (...args) => getDefaultInstance().setActive(...args),
+  probeBinaryExists: (...args) => getDefaultInstance().probeBinaryExists(...args),
+  credentialsSignature: (...args) => getDefaultInstance().credentialsSignature(...args),
+  activateProviderCurrent: (...args) => getDefaultInstance().activateProviderCurrent(...args),
+};

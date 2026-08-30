@@ -233,6 +233,7 @@ function showStartupOsNotification(NotificationCtor, payload, { timeoutMs = 2000
 async function runStartupOrchestration({
   readiness,
   concurrentTaskIds = [],
+  dependencyTaskChains = [],
   dependencyTaskId,
   dependentTaskIds = [],
   continuousTaskIds = [],
@@ -242,9 +243,13 @@ async function runStartupOrchestration({
   }
   for (const id of continuousTaskIds) void readiness.start(id);
   const concurrent = concurrentTaskIds.map((id) => readiness.start(id));
+  const chains = dependencyTaskChains.map((ids) => ids.reduce(
+    (prior, id) => prior.then(() => readiness.start(id)),
+    Promise.resolve(),
+  ));
   if (dependencyTaskId) await readiness.start(dependencyTaskId);
   const dependent = dependentTaskIds.map((id) => readiness.start(id));
-  await Promise.all([...concurrent, ...dependent]);
+  await Promise.all([...concurrent, ...chains, ...dependent]);
   return readiness.snapshot();
 }
 

@@ -913,6 +913,19 @@ function renderFailureBubble(aLine, errorText) {
 
 async function runQueryLive(text) {
   const myToken = ++abortToken;
+  let clientSubmitId = null;
+  const claimProviderVisible = (meta, owner, node) => {
+    if (!meta || !clientSubmitId || meta.clientSubmitId !== clientSubmitId) return false;
+    return window.AthenaProviderFirstPaint.claimFirstVisible({
+      clientSubmitId,
+      turnId: meta.turnId,
+      sequence: meta.sequence,
+      origin: 'shell',
+      owner,
+      node,
+      rendererReceivedAt: meta.rendererReceivedAt,
+    });
+  };
   clearRecommendations();
 
   const qLine = document.createElement('div');
@@ -961,12 +974,14 @@ async function runQueryLive(text) {
   // 안 한다 — 턴이 끝나면 아래("최종 텍스트는 응답값이 권위" 블록)가 버블을
   // 새로 만들어서라도 authoritative answerText로 항상 덮어쓴다.
   let bufferedText = '';
+  let bufferedTextMeta = null;
   const releaseLadder = createTextReleaseLadder({
     onRelease: () => {
       if (bufferedText) {
         clearThinkingPreview(); // appendToBubble보다 먼저 선언돼도 클로저라 호출 시점엔 문제없다.
-        appendToBubble(bufferedText);
+        appendToBubble(bufferedText, bufferedTextMeta);
         bufferedText = '';
+        bufferedTextMeta = null;
       }
     },
   });
@@ -1028,6 +1043,7 @@ async function runQueryLive(text) {
     el.querySelector('.progress-tool-step-label').textContent = result.label;
     el.querySelector('.progress-tool-step-time').textContent = result.timeText;
     scrollAfterRender();
+    claimProviderVisible({ ...step, rendererReceivedAt: performance.now() }, 'chat', el);
   };
   const unsubscribeLiveToolStep = window.athena.on('athena:live-tool-step', onLiveToolStep);
 
@@ -1140,7 +1156,7 @@ async function runQueryLive(text) {
   let streamALine = null;
   let streamAText = null;
   let streamedText = '';
-  const appendToBubble = (text) => {
+  const appendToBubble = (text, meta = null) => {
     if (!streamALine) {
       streamALine = document.createElement('div');
       streamALine.className = 'turn';
@@ -1152,17 +1168,20 @@ async function runQueryLive(text) {
     streamedText += text;
     streamAText.textContent = streamedText;
     scrollAfterRender();
+    claimProviderVisible(meta, 'chat', streamAText);
   };
-  const onLiveTextDelta = ({ text: delta } = {}) => {
+  const onLiveTextDelta = (payload = {}) => {
+    const { text: delta } = payload;
     if (myToken !== abortToken || !delta) return;
     if (!calling) { calling = true; state = 'calling'; setDot('calling'); }
     releaseLadder.onTextDelta(); // 첫 조각에서만 조건(c) 유예 타이머를 켠다(사다리 내부 판단).
     if (!releaseLadder.released) {
       bufferedText += delta; // 아직 방출 조건이 안 왔다 — 화면엔 안 그리고 모아만 둔다.
+      if (!bufferedTextMeta) bufferedTextMeta = { ...payload, rendererReceivedAt: performance.now() };
       return;
     }
     clearThinkingPreview(); // 답변이 시작됐다 — 추론 미리보기는 자리를 비켜준다
-    appendToBubble(delta);
+    appendToBubble(delta, { ...payload, rendererReceivedAt: performance.now() });
   };
   const unsubscribeLiveTextDelta = window.athena.on('athena:live-text-delta', onLiveTextDelta);
 
@@ -1171,7 +1190,13 @@ async function runQueryLive(text) {
   // 훑는다. 여기 감싸는 구간이 실제 질의 왕복이다(claude -p 또는 캐시 리플레이).
   window.athena.send('athena:orb-signal', { signal: 'think', active: true });
   try {
-    result = await window.athena.invoke('athena__render_canvas', { source: 'live', query: text, expand: prefs.autoExpandCanvas });
+    clientSubmitId = window.crypto.randomUUID();
+    const rendererSubmittedAt = performance.now();
+    window.AthenaProviderFirstPaint.registerSubmit({ clientSubmitId, rendererSubmittedAt, origin: 'shell' });
+    result = await window.athena.invoke('athena__render_canvas', {
+      source: 'live', query: text, expand: prefs.autoExpandCanvas,
+      clientSubmitId, rendererSubmittedAt,
+    });
   } finally {
     clearInterval(tick);
     unsubscribeLiveCanvasAdded();

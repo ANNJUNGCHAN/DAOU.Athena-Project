@@ -4,6 +4,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
+const { createConversationRotationQueue } = require('./provider-main-lifecycle');
 
 function mainSource() {
   return fs.readFileSync(path.join(__dirname, '..', '..', 'main.js'), 'utf8');
@@ -24,17 +25,27 @@ test('live turn captures one conversation id and never re-reads the mutable acti
   assert.match(turn, /historyConversationId\(\) === turnConversationId[\s\S]*liveSessionId = result\.finalResult\.session_id/);
 });
 
-test('new conversation aborts prior work, drops the resume cursor, and rotates the record id in order', () => {
-  const source = mainSource();
-  const start = source.indexOf("ipcMain.handle('athena:conversations-new'");
-  const end = source.indexOf("ipcMain.handle('athena:account-list'", start);
-  const handler = source.slice(start, end);
+test('new conversation serializes abort, record publication, persistence, and provider rotation', async () => {
+  const events = [];
+  let publishedId = null;
+  const queue = createConversationRotationQueue({
+    isShuttingDown: () => false,
+    blockAdmission: () => events.push('block'),
+    interrupt: () => events.push('abort'),
+    createConversationId: () => 'conversation-next',
+    publishConversationId: (id) => { publishedId = id; events.push('publish'); },
+    beginConversation: ({ id }) => { events.push(`begin:${id}`); return { activeId: id }; },
+    rotateProvider: () => events.push(`rotate:${publishedId}`),
+  });
 
-  const abortAt = handler.indexOf('abortConversationWork(');
-  const resetAt = handler.indexOf('liveSessionId = null');
-  const rotateAt = handler.indexOf('historyActiveConversationId = crypto.randomUUID()');
-  const beginAt = handler.indexOf('conversations.begin(');
-  assert.ok(abortAt >= 0 && abortAt < resetAt && resetAt < rotateAt && rotateAt < beginAt);
+  assert.deepEqual(await queue.begin(), { activeId: 'conversation-next' });
+  assert.deepEqual(events, [
+    'block',
+    'abort',
+    'publish',
+    'begin:conversation-next',
+    'rotate:conversation-next',
+  ]);
 });
 
 test('metadata-only history selection cannot retarget the live record boundary', () => {

@@ -21,7 +21,7 @@
 // 질문을 답해버릴 수 있다(예: dart-mcp로 시세를 지어내는 식) — 명시적으로 못 박는다.
 'use strict';
 
-function buildLivePrompt(query) {
+function buildLiveSystemPrompt() {
   return [
     '아래 사용자 질문에 답하라. 데이터 조회가 필요하면 연결된 MCP 툴을 호출하라.',
     '',
@@ -194,10 +194,16 @@ function buildLivePrompt(query) {
     '  문장도 프리앰블이다. 카드가 먼저 뜨고, 설명은 그 다음에 쓴다.',
     '캔버스를 그린 뒤 최종 텍스트 답변은 핵심 요약 3문장 이내로 끝낸다.',
     '데이터 조회가 필요 없는 질문(인사·설명 등)이면 캔버스 없이 짧게 답한다.',
-    '',
-    '사용자 질문:',
-    String(query),
   ].join('\n');
 }
 
-module.exports = { buildLivePrompt };
+function buildLiveTurnPrompt(input) {
+  const userText = input && typeof input === 'object' ? input.userText : input;
+  return ['사용자 질문:', String(userText == null ? '' : userText)].join('\n');
+}
+
+function buildLivePrompt(query) {
+  return `${buildLiveSystemPrompt()}\n\n${buildLiveTurnPrompt(query)}`;
+}
+
+module.exports = { buildLivePrompt, buildLiveSystemPrompt, buildLiveTurnPrompt };
