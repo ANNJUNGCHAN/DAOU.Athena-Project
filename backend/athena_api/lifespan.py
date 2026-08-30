@@ -4,7 +4,7 @@ import asyncio
 import logging
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager, suppress
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import httpx
 from fastapi import FastAPI
@@ -66,6 +66,8 @@ class BrainRuntime:
     ingestion_last_error: str | None = None
     extraction_enabled: bool = False
     hourly_task: asyncio.Task[None] | None = None
+    startup_ingestion_job_id: str | None = None
+    startup_ingestion_lock: asyncio.Lock = field(default_factory=asyncio.Lock, repr=False)
 
 
 async def _hourly_ingest_loop(coordinator: IngestionCoordinator, interval_seconds: float) -> None:
@@ -207,13 +209,18 @@ async def _open_brain(
                 dedup=DedupService(store),
             )
             await coordinator.start()
+            startup_job = await coordinator.enqueue(JobTrigger.STARTUP)
         except Exception as exc:
             brain.ingestion_last_error = str(exc)
+            if coordinator is not None:
+                with suppress(BaseException):
+                    await coordinator.stop()
             await history.close()
         else:
             brain.coordinator = coordinator
             brain.ingestion_ready = True
             brain.extraction_enabled = source_projector is not None
+            brain.startup_ingestion_job_id = startup_job.id
             interval_seconds = (
                 hourly_interval_seconds
                 if hourly_interval_seconds is not None

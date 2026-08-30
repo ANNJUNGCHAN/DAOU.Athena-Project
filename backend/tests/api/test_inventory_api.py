@@ -140,9 +140,10 @@ def test_inventory_partition_and_static_openapi_coverage() -> None:
     # (§10-4 엔티티 타임라인) · set_expose_to_model(그래프 노출 게이트, settings.py).
     # 347 = 346 + Selector one-shot dispatch 1개 — 앱의 카드 hot path가
     # 모델 왕복 없이 select/validate/call/render를 한 HTTP 요청으로 끝낸다.
+    # 348 = 347 + 실패한 brain startup ingestion을 다시 시작하는 retry endpoint 1개.
     # (pause/resume/ack/catchup_fire/runs)·예약 브리핑(briefing_budget/
     # briefing_result)·계측(engagement)·말걸기 가드(nudge_guard get/post).
-    assert len(operation_ids) == 347
+    assert len(operation_ids) == 348
     assert "canvas_chart_page" in operation_ids
     assert "canvas_series_page" in operation_ids
     assert "get_internal_oauth_status" in operation_ids
@@ -153,6 +154,7 @@ def test_inventory_partition_and_static_openapi_coverage() -> None:
         "get_brain_graph_diff",
         "get_brain_cluster_map",
         "get_brain_entity_timeline",
+        "retry_startup_brain_ingestion",
         "set_expose_to_model",
     ):
         assert added in operation_ids, f"{added}가 표면에서 사라졌다"

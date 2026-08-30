@@ -246,6 +246,55 @@ async def test_hourly_self_enqueue_calls_coordinator_enqueue_on_a_fast_tick(
         await _teardown_brain(FastAPI(), brain)
 
 
+async def test_open_brain_enqueues_exactly_one_startup_job(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    calls: list[JobTrigger] = []
+    original_enqueue = IngestionCoordinator.enqueue
+
+    async def spy_enqueue(self: IngestionCoordinator, trigger: JobTrigger):
+        calls.append(trigger)
+        return await original_enqueue(self, trigger)
+
+    monkeypatch.setattr(IngestionCoordinator, "enqueue", spy_enqueue)
+    brain = await _open_brain(_brain_settings(tmp_path), hourly_interval_seconds=60)
+    try:
+        assert brain.ingestion_ready is True
+        assert calls.count(JobTrigger.STARTUP) == 1
+        assert brain.startup_ingestion_job_id is not None
+        startup_job = await brain.history.get_job(brain.startup_ingestion_job_id)
+        assert startup_job is not None
+        assert startup_job.trigger is JobTrigger.STARTUP
+    finally:
+        await _teardown_brain(FastAPI(), brain)
+
+
+async def test_open_brain_does_not_wait_for_startup_ingestion_to_finish(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    writer_started = asyncio.Event()
+    release_writer = asyncio.Event()
+    original_run_job_id = IngestionCoordinator._run_job_id  # noqa: SLF001
+
+    async def blocked_run_job_id(self: IngestionCoordinator, job_id: str):
+        writer_started.set()
+        await release_writer.wait()
+        return await original_run_job_id(self, job_id)
+
+    monkeypatch.setattr(IngestionCoordinator, "_run_job_id", blocked_run_job_id)
+    brain = await asyncio.wait_for(
+        _open_brain(_brain_settings(tmp_path), hourly_interval_seconds=60),
+        timeout=1,
+    )
+    try:
+        await asyncio.wait_for(writer_started.wait(), timeout=1)
+        assert brain.ingestion_ready is True
+        assert brain.startup_ingestion_job_id is not None
+    finally:
+        release_writer.set()
+        await _teardown_brain(FastAPI(), brain)
+
+
 async def test_hourly_task_is_cancelled_symmetrically_with_the_app_lifespan(
     tmp_path: Path
 ) -> None:
