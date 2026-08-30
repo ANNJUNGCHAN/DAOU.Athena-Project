@@ -186,9 +186,9 @@ function createRealtimeRegistrar(opts) {
   // 카드가 있다) 카운트만 내리고 REMOVE는 안 보낸다. 0으로 내려가는 순간에만
   // REMOVE를 내보낸다. 쥔 적 없는 종목의 release는 조용히 무시한다(같은 종목을
   // 한 번도 acquire한 적 없는 카드가 닫히는 경우 — 다른 카드의 참조를 잘못
-  // 갉아먹지 않는다). REMOVE가 네트워크 등으로 실패해도 로컬 카운트는 그대로
-  // 0으로 둔다(fail-open — 스트림이 서버에 남는 건 기존 미해제 동작과 같은
-  // 타협이고, 재시도 기계장치는 만들지 않는다).
+  // 갉아먹지 않는다). REMOVE가 네트워크/ACK 오류로 실패하면 참조 1을 pending
+  // 상태로 유지한다. 호출자는 false를 받아 오류를 표시하고 release를 재시도할
+  // 수 있다. 0으로 지우면 서버 구독이 남았는데도 재시도할 방법이 사라진다.
   async function release(symbol) {
     const code = String(symbol || '').trim();
     if (!code) return false;
@@ -201,7 +201,8 @@ function createRealtimeRegistrar(opts) {
     refCounts.delete(code);
     const ok = await postFrame('REMOVE', code);
     if (ok) mdlog(`REAL ${trId} 해제 — ${code}`);
-    return true;
+    else refCounts.set(code, 1);
+    return ok;
   }
 
   return {

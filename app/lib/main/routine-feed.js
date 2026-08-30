@@ -13,14 +13,19 @@ class RoutineFeed {
     this._WebSocketImpl = opts.WebSocketImpl || globalThis.WebSocket;
     this._onEvent = opts.onEvent;
     this._onStatus = opts.onStatus || (() => {});
+    this._readyFeed = opts.readyFeed || null;
+    this._handshakeTimeoutMs = opts.handshakeTimeoutMs ?? 5_000;
     this._baseDelayMs = opts.baseDelayMs ?? 1000;
     this._maxDelayMs = opts.maxDelayMs ?? 30_000;
     this._setTimeout = opts.setTimeoutImpl || setTimeout;
     this._clearTimeout = opts.clearTimeoutImpl || clearTimeout;
     this._ws = null;
     this._timer = null;
+    this._handshakeTimer = null;
+    this._disconnectDetail = null;
     this._delayMs = this._baseDelayMs;
     this._stopped = true;
+    this._connectionEpoch = 0;
   }
 
   start() {
@@ -29,12 +34,14 @@ class RoutineFeed {
       return;
     }
     this._stopped = false;
+    this._onStatus({ state: 'connecting' });
     this._connect();
   }
 
   stop() {
     this._stopped = true;
     if (this._timer) { this._clearTimeout(this._timer); this._timer = null; }
+    this._clearHandshakeTimer();
     if (this._ws) {
       try { this._ws.close(); } catch { /* 이미 닫힘 */ }
       this._ws = null;
@@ -47,40 +54,86 @@ class RoutineFeed {
     try {
       ws = new this._WebSocketImpl(this._url);
     } catch (e) {
-      this._scheduleReconnect();
+      this._onStatus({ state: 'disconnected', detail: String((e && e.message) || e) });
+      this._scheduleReconnect(e);
       return;
     }
+    const connectionEpoch = ++this._connectionEpoch;
     this._ws = ws;
     ws.onopen = () => {
-      this._delayMs = this._baseDelayMs; // 성공 — 백오프 리셋
       if (this._token) {
         ws.send(JSON.stringify({ type: 'auth', token: this._token }));
       }
-      this._onStatus({ state: 'connected' });
+      if (this._readyFeed) {
+        this._onStatus({ state: 'authenticating', feed: this._readyFeed, connectionEpoch });
+        this._handshakeTimer = this._setTimeout(() => {
+          this._handshakeTimer = null;
+          if (this._ws !== ws || this._stopped) return;
+          this._disconnectDetail = 'feed-ready handshake timeout';
+          try { ws.close(); } catch {
+            this._ws = null;
+            this._onStatus({ state: 'disconnected', detail: this._disconnectDetail });
+            this._disconnectDetail = null;
+            this._scheduleReconnect();
+          }
+        }, this._handshakeTimeoutMs);
+      } else {
+        // feed-ready 계약이 없는 범용 스트림은 raw open을 connected라고 부르지 않는다.
+        this._delayMs = this._baseDelayMs;
+        this._onStatus({ state: 'open', connectionEpoch });
+      }
     };
     ws.onmessage = (msg) => {
       let event;
       try {
         event = JSON.parse(typeof msg.data === 'string' ? msg.data : String(msg.data));
       } catch { return; } // 해석 불가 프레임은 버린다 — 재연결 사유 아님
-      this._onEvent(event);
+      if (event && event.type === 'feed-ready') {
+        if (this._readyFeed && event.feed === this._readyFeed && this._ws === ws) {
+          this._clearHandshakeTimer();
+          this._delayMs = this._baseDelayMs;
+          this._onStatus({ state: 'connected', feed: this._readyFeed, connectionEpoch });
+        }
+        return; // 제어 프레임은 도메인 이벤트로 전달하지 않는다.
+      }
+      if (this._readyFeed && this._handshakeTimer !== null) return;
+      this._onEvent(event, { connectionEpoch });
     };
     ws.onclose = () => {
+      this._clearHandshakeTimer();
       this._ws = null;
-      this._onStatus({ state: 'disconnected' });
+      this._onStatus({
+        state: 'disconnected',
+        connectionEpoch,
+        ...(this._disconnectDetail ? { detail: this._disconnectDetail } : {}),
+      });
+      this._disconnectDetail = null;
       this._scheduleReconnect();
     };
     ws.onerror = () => { /* onclose가 뒤따른다 — 이중 재연결 방지 */ };
   }
 
-  _scheduleReconnect() {
+  _scheduleReconnect(error) {
     if (this._stopped || this._timer) return;
     const delay = this._delayMs;
     this._delayMs = Math.min(this._delayMs * 2, this._maxDelayMs);
+    this._onStatus({
+      state: 'retrying',
+      retryInMs: delay,
+      ...(error ? { detail: String((error && error.message) || error) } : {}),
+    });
     this._timer = this._setTimeout(() => {
       this._timer = null;
+      this._onStatus({ state: 'connecting' });
       this._connect();
     }, delay);
+  }
+
+  _clearHandshakeTimer() {
+    if (this._handshakeTimer !== null) {
+      this._clearTimeout(this._handshakeTimer);
+      this._handshakeTimer = null;
+    }
   }
 }
 

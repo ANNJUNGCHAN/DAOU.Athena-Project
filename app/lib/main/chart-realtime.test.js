@@ -224,18 +224,22 @@ test('createRealtimeRegistrar: 서로 다른 trId 인스턴스는 참조 계수�
   assert.equal(calls0D.length, 1);
 });
 
-test('release: REMOVE가 실패해도 로컬 카운트는 0으로 내려간다(fail-open)', async () => {
+test('release: REMOVE 실패를 호출자에게 전파하고 pending 참조를 재시도한다', async () => {
+  let removeAttempts = 0;
   const reg = createRealtimeRegistrar({
     backendBase: 'http://x',
     fetchImpl: async (url, init) => {
       const body = JSON.parse(init.body);
-      if (body.trnm === 'REMOVE') return { ok: false, status: 500 };
+      if (body.trnm === 'REMOVE') {
+        removeAttempts += 1;
+        return { ok: removeAttempts > 1, status: removeAttempts > 1 ? 200 : 500 };
+      }
       return { ok: true, status: 200 };
     },
   });
   await reg.acquire('005930');
-  assert.equal(await reg.release('005930'), true); // release 자체는 실패로 보고하지 않는다
+  assert.equal(await reg.release('005930'), false);
+  assert.equal(reg.refCount('005930'), 1);
+  assert.equal(await reg.release('005930'), true);
   assert.equal(reg.refCount('005930'), 0);
-  // 재시도 기계장치는 없다 — 다음 acquire는 새 REG로 취급된다.
-  assert.equal(await reg.acquire('005930'), true);
 });

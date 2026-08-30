@@ -26,6 +26,8 @@ async def routine_notifications(websocket: WebSocket) -> None:
         await websocket.close(code=1013)
         return
 
+    await websocket.send_json({"type": "feed-ready", "feed": "routines"})
+
     # 재연결 시 큐 펌프 전에 현재 near 스냅샷을 먼저 보낸다(결함6) — 재시작으로
     # 소실됐으면 비어 있고(앱이 watching 리셋 확정), 순단이면 그대로 복원된다.
     runtime = getattr(websocket.app.state, "routines_runtime", None)
