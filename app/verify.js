@@ -2658,7 +2658,7 @@ app.whenReady().then(async () => {
   // UI 쪽(모델 칩·Claude 계정 행 존재)은 검증7의 settingsSurface.modelPanel*
   // 단언이 이미 커버한다 — 여기서는 main.js가 노출한 settingsHandlers를 렌더러
   // 없이 직접 호출해 저장 계약(디스크 실재·검증 거부·거부 시 무변경)을 확인한다.
-  const modelSetOk = mainMod.settingsHandlers.modelSet(null, { provider: 'claude', patch: { model: 'sonnet', effort: 'low' } });
+  const modelSetOk = await mainMod.settingsHandlers.modelSet(null, { provider: 'claude', patch: { model: 'sonnet', effort: 'low' } });
   const modelGetAfterSet = mainMod.settingsHandlers.modelGet();
   const modelPrefsPath = path.join(VERIFY_PROFILE.directory, 'athena-model.json');
   const modelPrefsOnDisk = fs.existsSync(modelPrefsPath)
@@ -2666,8 +2666,8 @@ app.whenReady().then(async () => {
     : null;
   // 선두 '-'는 claude CLI 인자 파서가 값을 플래그로 오독하는 걸 막으려고
   // model-prefs.js가 명시적으로 거부한다(isValidModel). 무효 effort는 화이트리스트 밖.
-  const modelSetRejectLeadingDash = mainMod.settingsHandlers.modelSet(null, { provider: 'claude', patch: { model: '-sonnet' } });
-  const modelSetRejectInvalidEffort = mainMod.settingsHandlers.modelSet(null, { provider: 'claude', patch: { effort: 'not-a-real-effort' } });
+  const modelSetRejectLeadingDash = await mainMod.settingsHandlers.modelSet(null, { provider: 'claude', patch: { model: '-sonnet' } });
+  const modelSetRejectInvalidEffort = await mainMod.settingsHandlers.modelSet(null, { provider: 'claude', patch: { effort: 'not-a-real-effort' } });
   const modelGetAfterRejects = mainMod.settingsHandlers.modelGet();
 
   report.modelPrefs = {
@@ -2696,15 +2696,15 @@ app.whenReady().then(async () => {
   // CODEX_HOME을 검증 전용 디렉토리로 격리했으므로(이 머신의 실제 Codex 세션에
   // 손대지 않는다) 여기서 실제 파일 I/O를 안전하게 검증할 수 있다.
   const codexConfigPath = path.join(process.env.CODEX_HOME, 'config.toml');
-  const codexSetOk = mainMod.settingsHandlers.modelSet(null, { provider: 'codex', patch: { model: 'gpt-5-codex', effort: 'medium' } });
+  const codexSetOk = await mainMod.settingsHandlers.modelSet(null, { provider: 'codex', patch: { model: 'gpt-5-codex', effort: 'medium' } });
   const codexGetAfterSet = mainMod.settingsHandlers.modelGet();
   const codexConfigAfterSet = fs.existsSync(codexConfigPath) ? fs.readFileSync(codexConfigPath, 'utf-8') : '';
   // 무효 모델(선두 '-')·무효 effort(화이트리스트 밖)는 codex-config.js가
   // 파일을 건드리기 전에 거부한다 — 부분 적용이 없어야 한다.
-  const codexSetRejectInvalidModel = mainMod.settingsHandlers.modelSet(null, { provider: 'codex', patch: { model: '-bad-flag-like' } });
-  const codexSetRejectInvalidEffort = mainMod.settingsHandlers.modelSet(null, { provider: 'codex', patch: { effort: 'not-a-real-effort' } });
+  const codexSetRejectInvalidModel = await mainMod.settingsHandlers.modelSet(null, { provider: 'codex', patch: { model: '-bad-flag-like' } });
+  const codexSetRejectInvalidEffort = await mainMod.settingsHandlers.modelSet(null, { provider: 'codex', patch: { effort: 'not-a-real-effort' } });
   const codexConfigAfterRejects = fs.existsSync(codexConfigPath) ? fs.readFileSync(codexConfigPath, 'utf-8') : '';
-  const codexSetNullRemovesModel = mainMod.settingsHandlers.modelSet(null, { provider: 'codex', patch: { model: null } });
+  const codexSetNullRemovesModel = await mainMod.settingsHandlers.modelSet(null, { provider: 'codex', patch: { model: null } });
   const codexConfigAfterNull = fs.existsSync(codexConfigPath) ? fs.readFileSync(codexConfigPath, 'utf-8') : '';
 
   report.codexConfig = {
