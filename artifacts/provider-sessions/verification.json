@@ -1,0 +1,338 @@
+{
+  "schemaVersion": 1,
+  "scenario": "all",
+  "surface": "injected-headless-electron",
+  "paidQueries": 0,
+  "processManifest": {
+    "orchestrated": true,
+    "pathProvided": true,
+    "fakeProviderOsRecords": 0
+  },
+  "integration": {
+    "samples": 100,
+    "completedTurns": 100,
+    "paintAcks": 100,
+    "correlatedSamples": 100,
+    "duplicatePaintAcks": 0,
+    "hiddenOnlyPaintAcks": 0,
+    "noVisibleMutationPaintAcks": 0,
+    "visibleAckTimeouts": 1,
+    "timings": {
+      "main_ipc_to_provider_write_ms": {
+        "count": 100,
+        "p50": 4,
+        "p95": 4,
+        "max": 4
+      },
+      "provider_event_to_main_dispatch_ms": {
+        "count": 100,
+        "p50": 3,
+        "p95": 3,
+        "max": 3
+      },
+      "warm_submit_to_first_text_ms": {
+        "count": 100,
+        "p50": 6,
+        "p95": 6,
+        "max": 6
+      },
+      "total_turn_ms": {
+        "count": 100,
+        "p50": 14,
+        "p95": 14,
+        "max": 14
+      },
+      "renderer_event_to_first_paint_ms": {
+        "count": 100,
+        "p50": 14,
+        "p95": 14,
+        "max": 14
+      },
+      "renderer_submit_to_first_paint_ms": {
+        "count": 100,
+        "p50": 22,
+        "p95": 22,
+        "max": 22
+      }
+    }
+  },
+  "hardening": {
+    "totalTurns": 502,
+    "completedTurns": 500,
+    "interruptedTurns": 1,
+    "failedTurns": 1,
+    "staleEventsDelivered": 0,
+    "staleEventsDropped": 0,
+    "processSpawns": 1,
+    "gatewaySpawns": 1,
+    "spawnAccounting": "injected-fake-runtime",
+    "warmedTurnSpawns": 0,
+    "maxConcurrentTurns": 1,
+    "shutdownClean": true
+  },
+  "codexDisabled": {
+    "schemaVersion": 1,
+    "provider": "codex",
+    "mode": "assert-disabled",
+    "contractDecision": "CLAUDE_ONLY",
+    "samples": 30,
+    "successes": 30,
+    "failures": 0,
+    "actionNeeded": 30,
+    "processSpawns": 0,
+    "gatewaySpawns": 0,
+    "providerTurns": 0,
+    "fallbackTurns": 0,
+    "environment": {
+      "platform": "win32",
+      "arch": "x64",
+      "node": "v22.14.0",
+      "cpuCount": 22,
+      "cwdSha256": "547b1c7d5e159f4e08e436182259cbac6209461b91de7fe8c2ec225019595897"
+    },
+    "rawSamples": [
+      {
+        "sample": 1,
+        "result": "action-needed",
+        "code": "CODEX_LIVE_DISABLED_BY_CONTRACT",
+        "processSpawns": 0,
+        "providerTurns": 0,
+        "fallbackTurns": 0
+      },
+      {
+        "sample": 2,
+        "result": "action-needed",
+        "code": "CODEX_LIVE_DISABLED_BY_CONTRACT",
+        "processSpawns": 0,
+        "providerTurns": 0,
+        "fallbackTurns": 0
+      },
+      {
+        "sample": 3,
+        "result": "action-needed",
+        "code": "CODEX_LIVE_DISABLED_BY_CONTRACT",
+        "processSpawns": 0,
+        "providerTurns": 0,
+        "fallbackTurns": 0
+      },
+      {
+        "sample": 4,
+        "result": "action-needed",
+        "code": "CODEX_LIVE_DISABLED_BY_CONTRACT",
+        "processSpawns": 0,
+        "providerTurns": 0,
+        "fallbackTurns": 0
+      },
+      {
+        "sample": 5,
+        "result": "action-needed",
+        "code": "CODEX_LIVE_DISABLED_BY_CONTRACT",
+        "processSpawns": 0,
+        "providerTurns": 0,
+        "fallbackTurns": 0
+      },
+      {
+        "sample": 6,
+        "result": "action-needed",
+        "code": "CODEX_LIVE_DISABLED_BY_CONTRACT",
+        "processSpawns": 0,
+        "providerTurns": 0,
+        "fallbackTurns": 0
+      },
+      {
+        "sample": 7,
+        "result": "action-needed",
+        "code": "CODEX_LIVE_DISABLED_BY_CONTRACT",
+        "processSpawns": 0,
+        "providerTurns": 0,
+        "fallbackTurns": 0
+      },
+      {
+        "sample": 8,
+        "result": "action-needed",
+        "code": "CODEX_LIVE_DISABLED_BY_CONTRACT",
+        "processSpawns": 0,
+        "providerTurns": 0,
+        "fallbackTurns": 0
+      },
+      {
+        "sample": 9,
+        "result": "action-needed",
+        "code": "CODEX_LIVE_DISABLED_BY_CONTRACT",
+        "processSpawns": 0,
+        "providerTurns": 0,
+        "fallbackTurns": 0
+      },
+      {
+        "sample": 10,
+        "result": "action-needed",
+        "code": "CODEX_LIVE_DISABLED_BY_CONTRACT",
+        "processSpawns": 0,
+        "providerTurns": 0,
+        "fallbackTurns": 0
+      },
+      {
+        "sample": 11,
+        "result": "action-needed",
+        "code": "CODEX_LIVE_DISABLED_BY_CONTRACT",
+        "processSpawns": 0,
+        "providerTurns": 0,
+        "fallbackTurns": 0
+      },
+      {
+        "sample": 12,
+        "result": "action-needed",
+        "code": "CODEX_LIVE_DISABLED_BY_CONTRACT",
+        "processSpawns": 0,
+        "providerTurns": 0,
+        "fallbackTurns": 0
+      },
+      {
+        "sample": 13,
+        "result": "action-needed",
+        "code": "CODEX_LIVE_DISABLED_BY_CONTRACT",
+        "processSpawns": 0,
+        "providerTurns": 0,
+        "fallbackTurns": 0
+      },
+      {
+        "sample": 14,
+        "result": "action-needed",
+        "code": "CODEX_LIVE_DISABLED_BY_CONTRACT",
+        "processSpawns": 0,
+        "providerTurns": 0,
+        "fallbackTurns": 0
+      },
+      {
+        "sample": 15,
+        "result": "action-needed",
+        "code": "CODEX_LIVE_DISABLED_BY_CONTRACT",
+        "processSpawns": 0,
+        "providerTurns": 0,
+        "fallbackTurns": 0
+      },
+      {
+        "sample": 16,
+        "result": "action-needed",
+        "code": "CODEX_LIVE_DISABLED_BY_CONTRACT",
+        "processSpawns": 0,
+        "providerTurns": 0,
+        "fallbackTurns": 0
+      },
+      {
+        "sample": 17,
+        "result": "action-needed",
+        "code": "CODEX_LIVE_DISABLED_BY_CONTRACT",
+        "processSpawns": 0,
+        "providerTurns": 0,
+        "fallbackTurns": 0
+      },
+      {
+        "sample": 18,
+        "result": "action-needed",
+        "code": "CODEX_LIVE_DISABLED_BY_CONTRACT",
+        "processSpawns": 0,
+        "providerTurns": 0,
+        "fallbackTurns": 0
+      },
+      {
+        "sample": 19,
+        "result": "action-needed",
+        "code": "CODEX_LIVE_DISABLED_BY_CONTRACT",
+        "processSpawns": 0,
+        "providerTurns": 0,
+        "fallbackTurns": 0
+      },
+      {
+        "sample": 20,
+        "result": "action-needed",
+        "code": "CODEX_LIVE_DISABLED_BY_CONTRACT",
+        "processSpawns": 0,
+        "providerTurns": 0,
+        "fallbackTurns": 0
+      },
+      {
+        "sample": 21,
+        "result": "action-needed",
+        "code": "CODEX_LIVE_DISABLED_BY_CONTRACT",
+        "processSpawns": 0,
+        "providerTurns": 0,
+        "fallbackTurns": 0
+      },
+      {
+        "sample": 22,
+        "result": "action-needed",
+        "code": "CODEX_LIVE_DISABLED_BY_CONTRACT",
+        "processSpawns": 0,
+        "providerTurns": 0,
+        "fallbackTurns": 0
+      },
+      {
+        "sample": 23,
+        "result": "action-needed",
+        "code": "CODEX_LIVE_DISABLED_BY_CONTRACT",
+        "processSpawns": 0,
+        "providerTurns": 0,
+        "fallbackTurns": 0
+      },
+      {
+        "sample": 24,
+        "result": "action-needed",
+        "code": "CODEX_LIVE_DISABLED_BY_CONTRACT",
+        "processSpawns": 0,
+        "providerTurns": 0,
+        "fallbackTurns": 0
+      },
+      {
+        "sample": 25,
+        "result": "action-needed",
+        "code": "CODEX_LIVE_DISABLED_BY_CONTRACT",
+        "processSpawns": 0,
+        "providerTurns": 0,
+        "fallbackTurns": 0
+      },
+      {
+        "sample": 26,
+        "result": "action-needed",
+        "code": "CODEX_LIVE_DISABLED_BY_CONTRACT",
+        "processSpawns": 0,
+        "providerTurns": 0,
+        "fallbackTurns": 0
+      },
+      {
+        "sample": 27,
+        "result": "action-needed",
+        "code": "CODEX_LIVE_DISABLED_BY_CONTRACT",
+        "processSpawns": 0,
+        "providerTurns": 0,
+        "fallbackTurns": 0
+      },
+      {
+        "sample": 28,
+        "result": "action-needed",
+        "code": "CODEX_LIVE_DISABLED_BY_CONTRACT",
+        "processSpawns": 0,
+        "providerTurns": 0,
+        "fallbackTurns": 0
+      },
+      {
+        "sample": 29,
+        "result": "action-needed",
+        "code": "CODEX_LIVE_DISABLED_BY_CONTRACT",
+        "processSpawns": 0,
+        "providerTurns": 0,
+        "fallbackTurns": 0
+      },
+      {
+        "sample": 30,
+        "result": "action-needed",
+        "code": "CODEX_LIVE_DISABLED_BY_CONTRACT",
+        "processSpawns": 0,
+        "providerTurns": 0,
+        "fallbackTurns": 0
+      }
+    ]
+  },
+  "ok": true,
+  "errors": []
+}
