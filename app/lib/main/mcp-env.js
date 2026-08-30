@@ -23,6 +23,21 @@ function readRegistry() {
   }
 }
 
+function readRegistryStrict() {
+  const registry = JSON.parse(fs.readFileSync(registryPath(), 'utf-8'));
+  if (!registry || typeof registry !== 'object' || Array.isArray(registry)
+    || !registry.servers || typeof registry.servers !== 'object' || Array.isArray(registry.servers)) {
+    throw new TypeError('invalid MCP registry state');
+  }
+  return registry;
+}
+
+function unredactedMigrationKeys(registry, alias, keys) {
+  const env = registry && registry.servers && registry.servers[alias]
+    && registry.servers[alias].env;
+  return keys.filter((key) => !env || env[key] !== SENTINEL);
+}
+
 function envVarName(alias, key) {
   return `ATHENA_MCP_ENV__${alias}__${key}`;
 }
@@ -57,7 +72,7 @@ function runRedactEnv(alias, keys) {
 // **멱등**이다 — 이미 센티널이거나 빈 값이면 아무것도 하지 않는다. 값 자체는
 // 반환값에 절대 담지 않는다(alias/key만).
 async function migratePlaintextEnv() {
-  const registry = readRegistry();
+  const registry = readRegistryStrict();
   const migrated = [];
   const skipped = [];
 
@@ -84,7 +99,13 @@ async function migratePlaintextEnv() {
 
     const redacted = await runRedactEnv(alias, encryptedKeys);
     if (redacted.ok) {
-      migrated.push(...encryptedKeys.map((key) => ({ alias, key })));
+      const unredacted = new Set(unredactedMigrationKeys(readRegistryStrict(), alias, encryptedKeys));
+      migrated.push(...encryptedKeys
+        .filter((key) => !unredacted.has(key))
+        .map((key) => ({ alias, key })));
+      skipped.push(...encryptedKeys
+        .filter((key) => unredacted.has(key))
+        .map((key) => ({ alias, key, reason: 'registry redaction was not durably committed' })));
     } else {
       // secrets.js엔 이미 암호화 저장됐는데 레지스트리 치환만 실패했다 —
       // 평문이 디스크에 남아있으므로 다음 호출에서 다시 시도된다(멱등, 값은
@@ -129,4 +150,5 @@ module.exports = {
   migratePlaintextEnv,
   buildEnvOverrides,
   registryPath,
+  unredactedMigrationKeys,
 };
