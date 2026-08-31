@@ -149,7 +149,12 @@ def test_inventory_partition_and_static_openapi_coverage() -> None:
     # data/coverage·data/plan·data/backfill·jobs/{id}·runs(GET/POST)·
     # runs/{id}·runs/{id}/trades. DELETE /runs/{id}는 이 필터(get/post만)에
     # 안 잡혀 카운트에 없다.
-    assert len(operation_ids) == 362
+    # 376 = 362 + 백테스트 P5·P6 라우트(Paper 보드 06~09) GET/POST 14개:
+    # flow·diagnose·strategies(GET/POST)·strategies/{id}/versions(GET/POST)·
+    # strategies/{id}/activate·strategies/{id}/diff·optimize/plan·optimize·
+    # deployments(GET/POST)·deployments/{id}/signals·deployments/{id}/evaluate.
+    # DELETE /deployments/{id}는 위 DELETE /runs/{id}와 같은 이유로 카운트에 없다.
+    assert len(operation_ids) == 376
     assert "canvas_chart_page" in operation_ids
     assert "canvas_series_page" in operation_ids
     assert "get_internal_oauth_status" in operation_ids
