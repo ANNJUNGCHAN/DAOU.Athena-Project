@@ -28,6 +28,12 @@ from typing import Any, Final
 
 from athena_api.brain.db import SqliteOwner, atomic
 
+# **왜 표를 더하면서 버전을 올리지 않나.** `SqliteOwner.install_schema()`는 저장된 버전과
+# 넘긴 버전이 다르면 마이그레이션 없이 `RuntimeError`로 거부한다 — 이 저장소에는 마이그레이션
+# 경로 자체가 없다. 버전을 2로 올리면 이미 캔들 캐시를 채워둔 사용자의 DB가 열리지 않고,
+# 그 캐시를 다시 받으려면 §5.2 레이트 리밋을 처음부터 다시 태워야 한다. 새 표는 전부
+# `CREATE TABLE IF NOT EXISTS`라 기존 파일에도 그대로 얹힌다 — 파괴적 변경이 아니다.
+# 열 타입을 바꾸거나 표를 지우는 날이 오면 그때 마이그레이션과 함께 버전을 올린다.
 SCHEMA_VERSION: Final = 1
 
 # 이 저장소의 쓰기 한 단위가 공유하는 savepoint 이름. 브레인의 `_GRAPH_WRITE`와 같은
@@ -122,6 +128,34 @@ CREATE TABLE IF NOT EXISTS bt_optimize (
     status          TEXT NOT NULL,
     best_run_id     TEXT
 );
+CREATE TABLE IF NOT EXISTS bt_deployment (
+    id                  TEXT PRIMARY KEY,
+    strategy_version_id TEXT NOT NULL REFERENCES bt_strategy_version(id) ON DELETE CASCADE,
+    run_id              TEXT,
+    stk_cd              TEXT NOT NULL,
+    period              TEXT NOT NULL,
+    adjusted            INTEGER NOT NULL,
+    mode                TEXT NOT NULL,
+    params_json         TEXT NOT NULL,
+    limits_json         TEXT NOT NULL,
+    status              TEXT NOT NULL,
+    created_at          TEXT NOT NULL,
+    stopped_at          TEXT
+);
+CREATE TABLE IF NOT EXISTS bt_signal (
+    id             TEXT PRIMARY KEY,
+    deployment_id  TEXT NOT NULL REFERENCES bt_deployment(id) ON DELETE CASCADE,
+    dt             TEXT NOT NULL,
+    side           TEXT,
+    stage          TEXT NOT NULL,
+    reason         TEXT NOT NULL,
+    basis          TEXT NOT NULL,
+    blocked_reason TEXT,
+    fill_price     REAL,
+    created_at     TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS bt_signal_by_deployment
+    ON bt_signal(deployment_id, dt DESC);
 """
 
 
@@ -195,6 +229,42 @@ class Trade:
     tax: float
     pnl: float | None
     reason: str | None
+
+
+@dataclass(frozen=True, slots=True)
+class DeploymentRow:
+    """배포 한 건의 저장 모양. `mode`/`limits_json`은 `deploy.py`가 해석한다 —
+    저장층은 값을 해석하지 않고 그대로 왕복시킨다(다른 표들과 같은 태도)."""
+
+    id: str
+    strategy_version_id: str
+    run_id: str | None
+    stk_cd: str
+    period: str
+    adjusted: bool
+    mode: str
+    params_json: str
+    limits_json: str
+    status: str
+    created_at: str
+    stopped_at: str | None
+
+
+@dataclass(frozen=True, slots=True)
+class SignalRow:
+    """배포가 낸 판정 한 건. 신호가 안 난 날은 저장하지 않는다 — 조용한 날을
+    행으로 남기면 이력이 조용한 날로 가득 차 사람이 읽을 수 없다."""
+
+    id: str
+    deployment_id: str
+    dt: str
+    side: str | None
+    stage: str
+    reason: str
+    basis: str
+    blocked_reason: str | None
+    fill_price: float | None
+    created_at: str
 
 
 @dataclass(frozen=True, slots=True)
@@ -503,6 +573,32 @@ class BacktestStore:
 
         return await self._owner.run(read)
 
+    async def version(self, version_id: str) -> StrategyVersion | None:
+        """버전 하나를 id로 찾는다. 배포(`bt_deployment.strategy_version_id`)와 실행
+        (`bt_run.strategy_version_id`)은 전략이 아니라 버전을 가리키므로, 전략을 거치지 않고
+        바로 여는 길이 필요하다 — `versions(strategy_id)`만으로는 전략 id를 먼저 알아야 한다."""
+
+        def read() -> StrategyVersion | None:
+            row = self._require().execute(
+                "SELECT id, strategy_id, version, source, note, origin, created_at, active"
+                " FROM bt_strategy_version WHERE id = ?",
+                (version_id,),
+            ).fetchone()
+            if row is None:
+                return None
+            return StrategyVersion(
+                id=str(row["id"]),
+                strategy_id=str(row["strategy_id"]),
+                version=int(row["version"]),
+                source=str(row["source"]),
+                note=None if row["note"] is None else str(row["note"]),
+                origin=str(row["origin"]),
+                created_at=str(row["created_at"]),
+                active=bool(row["active"]),
+            )
+
+        return await self._owner.run(read)
+
     # ── 실행 ────────────────────────────────────────────────────────────────
 
     async def create_run(
@@ -675,6 +771,163 @@ class BacktestStore:
 
         return await self._owner.run(read)
 
+    # ── 배포 · 실전 신호 ─────────────────────────────────────────────────────
+
+    async def create_deployment(
+        self,
+        deployment_id: str,
+        *,
+        strategy_version_id: str,
+        run_id: str | None,
+        stk_cd: str,
+        period: str,
+        adjusted: bool,
+        mode: str,
+        params_json: str,
+        limits_json: str,
+        created_at: datetime,
+    ) -> str:
+        def write() -> str:
+            connection = self._require()
+            with atomic(connection, _BACKTEST_WRITE):
+                connection.execute(
+                    "INSERT INTO bt_deployment(id, strategy_version_id, run_id, stk_cd, period,"
+                    " adjusted, mode, params_json, limits_json, status, created_at, stopped_at)"
+                    " VALUES(?,?,?,?,?,?,?,?,?,'active',?,NULL)",
+                    (
+                        deployment_id, strategy_version_id, run_id, stk_cd, period,
+                        int(adjusted), mode, params_json, limits_json, _ts(created_at),
+                    ),
+                )
+            return deployment_id
+
+        return await self._owner.run(write)
+
+    async def deployment(self, deployment_id: str) -> DeploymentRow | None:
+        def read() -> DeploymentRow | None:
+            row = self._require().execute(
+                "SELECT * FROM bt_deployment WHERE id = ?", (deployment_id,)
+            ).fetchone()
+            return None if row is None else _deployment_from_row(row)
+
+        return await self._owner.run(read)
+
+    async def deployments(self) -> tuple[DeploymentRow, ...]:
+        def read() -> tuple[DeploymentRow, ...]:
+            return tuple(
+                _deployment_from_row(row)
+                for row in self._require().execute(
+                    "SELECT * FROM bt_deployment ORDER BY created_at DESC"
+                ).fetchall()
+            )
+
+        return await self._owner.run(read)
+
+    async def stop_deployment(self, deployment_id: str, *, stopped_at: datetime) -> None:
+        """이미 멈춘 배포를 다시 멈춰도 조용히 성공한다 — 중지는 멱등해야 한다.
+        (이미 나간 주문을 되돌리지는 않는다: 그건 주문 게이트의 일이다.)"""
+
+        def write() -> None:
+            connection = self._require()
+            with atomic(connection, _BACKTEST_WRITE):
+                connection.execute(
+                    "UPDATE bt_deployment SET status='stopped', stopped_at=?"
+                    " WHERE id = ? AND status='active'",
+                    (_ts(stopped_at), deployment_id),
+                )
+
+        await self._owner.run(write)
+
+    async def add_signal(
+        self,
+        signal_id: str,
+        *,
+        deployment_id: str,
+        dt: str,
+        side: str | None,
+        stage: str,
+        reason: str,
+        basis: str,
+        blocked_reason: str | None,
+        created_at: datetime,
+        fill_price: float | None = None,
+    ) -> str:
+        def write() -> str:
+            connection = self._require()
+            with atomic(connection, _BACKTEST_WRITE):
+                connection.execute(
+                    "INSERT INTO bt_signal(id, deployment_id, dt, side, stage, reason, basis,"
+                    " blocked_reason, fill_price, created_at) VALUES(?,?,?,?,?,?,?,?,?,?)",
+                    (
+                        signal_id, deployment_id, dt, side, stage, reason, basis,
+                        blocked_reason, fill_price, _ts(created_at),
+                    ),
+                )
+            return signal_id
+
+        return await self._owner.run(write)
+
+    async def signals(self, deployment_id: str, *, limit: int = 100) -> tuple[SignalRow, ...]:
+        def read() -> tuple[SignalRow, ...]:
+            return tuple(
+                _signal_from_row(row)
+                for row in self._require().execute(
+                    "SELECT * FROM bt_signal WHERE deployment_id = ?"
+                    " ORDER BY dt DESC, created_at DESC LIMIT ?",
+                    (deployment_id, limit),
+                ).fetchall()
+            )
+
+        return await self._owner.run(read)
+
+    async def update_signal_stage(
+        self, signal_id: str, stage: str, *, fill_price: float | None = None
+    ) -> None:
+        """승인·주문·체결로 단계를 올린다. 되돌리지는 않는다 — 이력은 앞으로만 간다."""
+
+        def write() -> None:
+            connection = self._require()
+            with atomic(connection, _BACKTEST_WRITE):
+                connection.execute(
+                    "UPDATE bt_signal SET stage = ?,"
+                    " fill_price = COALESCE(?, fill_price) WHERE id = ?",
+                    (stage, fill_price, signal_id),
+                )
+
+        await self._owner.run(write)
+
+
+def _deployment_from_row(row: sqlite3.Row) -> DeploymentRow:
+    return DeploymentRow(
+        id=str(row["id"]),
+        strategy_version_id=str(row["strategy_version_id"]),
+        run_id=None if row["run_id"] is None else str(row["run_id"]),
+        stk_cd=str(row["stk_cd"]),
+        period=str(row["period"]),
+        adjusted=bool(row["adjusted"]),
+        mode=str(row["mode"]),
+        params_json=str(row["params_json"]),
+        limits_json=str(row["limits_json"]),
+        status=str(row["status"]),
+        created_at=str(row["created_at"]),
+        stopped_at=None if row["stopped_at"] is None else str(row["stopped_at"]),
+    )
+
+
+def _signal_from_row(row: sqlite3.Row) -> SignalRow:
+    return SignalRow(
+        id=str(row["id"]),
+        deployment_id=str(row["deployment_id"]),
+        dt=str(row["dt"]),
+        side=None if row["side"] is None else str(row["side"]),
+        stage=str(row["stage"]),
+        reason=str(row["reason"]),
+        basis=str(row["basis"]),
+        blocked_reason=None if row["blocked_reason"] is None else str(row["blocked_reason"]),
+        fill_price=None if row["fill_price"] is None else float(row["fill_price"]),
+        created_at=str(row["created_at"]),
+    )
+
 
 def _run_from_row(row: sqlite3.Row) -> Run:
     return Run(
@@ -696,8 +949,10 @@ __all__ = [
     "BacktestStore",
     "Candle",
     "Coverage",
+    "DeploymentRow",
     "EquityPoint",
     "Run",
+    "SignalRow",
     "Strategy",
     "StrategyVersion",
     "Trade",

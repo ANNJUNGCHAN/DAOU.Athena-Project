@@ -93,6 +93,107 @@ function fetchRuns({ backendBase, fetchImpl }) {
   return backtestHttp('GET', '/api/v1/backtest/runs', undefined, { backendBase, fetchImpl });
 }
 
+// ── 2026-09-01 확장분 — Paper 보드 02·05·06·07·08·09가 쓰는 라우트 ──────────
+// 위 함수들과 같은 봉투 계약을 그대로 따른다. 새 규칙은 하나뿐이다: **사람 클릭 전용
+// 라우트(activate·deployments·backfill)도 여기서는 그냥 프록시한다** — 사람 전용이라는
+// 규율은 MCP 표면에서 지키는 것이지(모델이 못 부른다), 렌더러가 사람의 클릭을 대신
+// 전달하는 이 층에서 막을 것이 아니다.
+
+function validateBacktest({ backendBase, fetchImpl, ...body }) {
+  return backtestHttp('POST', '/api/v1/backtest/validate', body, { backendBase, fetchImpl });
+}
+
+function fetchCoverage({ backendBase, fetchImpl, stk_cd, period, adjusted }) {
+  const query = new URLSearchParams({
+    stk_cd: String(stk_cd), period: String(period), adjusted: String(!!adjusted),
+  });
+  return backtestHttp(
+    'GET', `/api/v1/backtest/data/coverage?${query}`, undefined, { backendBase, fetchImpl },
+  );
+}
+
+function fetchFlow({ backendBase, fetchImpl, ...body }) {
+  return backtestHttp('POST', '/api/v1/backtest/flow', body, { backendBase, fetchImpl });
+}
+
+function diagnoseBacktest({ backendBase, fetchImpl, ...body }) {
+  return backtestHttp('POST', '/api/v1/backtest/diagnose', body, { backendBase, fetchImpl });
+}
+
+function optimizeBacktest({ backendBase, fetchImpl, ...body }) {
+  return backtestHttp('POST', '/api/v1/backtest/optimize', body, { backendBase, fetchImpl });
+}
+
+function optimizePlan({ backendBase, fetchImpl, ...body }) {
+  return backtestHttp('POST', '/api/v1/backtest/optimize/plan', body, { backendBase, fetchImpl });
+}
+
+function fetchStrategies({ backendBase, fetchImpl }) {
+  return backtestHttp('GET', '/api/v1/backtest/strategies', undefined, { backendBase, fetchImpl });
+}
+
+function createStrategy({ backendBase, fetchImpl, ...body }) {
+  return backtestHttp('POST', '/api/v1/backtest/strategies', body, { backendBase, fetchImpl });
+}
+
+function fetchVersions({ backendBase, fetchImpl, strategy_id }) {
+  return backtestHttp(
+    'GET', `/api/v1/backtest/strategies/${encodeURIComponent(strategy_id)}/versions`,
+    undefined, { backendBase, fetchImpl },
+  );
+}
+
+function addVersion({ backendBase, fetchImpl, strategy_id, ...body }) {
+  return backtestHttp(
+    'POST', `/api/v1/backtest/strategies/${encodeURIComponent(strategy_id)}/versions`,
+    body, { backendBase, fetchImpl },
+  );
+}
+
+function activateVersion({ backendBase, fetchImpl, strategy_id, ...body }) {
+  return backtestHttp(
+    'POST', `/api/v1/backtest/strategies/${encodeURIComponent(strategy_id)}/activate`,
+    body, { backendBase, fetchImpl },
+  );
+}
+
+function fetchVersionDiff({ backendBase, fetchImpl, strategy_id, base, head }) {
+  const query = new URLSearchParams({ base: String(base), head: String(head) });
+  return backtestHttp(
+    'GET', `/api/v1/backtest/strategies/${encodeURIComponent(strategy_id)}/diff?${query}`,
+    undefined, { backendBase, fetchImpl },
+  );
+}
+
+function fetchDeployments({ backendBase, fetchImpl }) {
+  return backtestHttp('GET', '/api/v1/backtest/deployments', undefined, { backendBase, fetchImpl });
+}
+
+function createDeployment({ backendBase, fetchImpl, ...body }) {
+  return backtestHttp('POST', '/api/v1/backtest/deployments', body, { backendBase, fetchImpl });
+}
+
+function stopDeployment({ backendBase, fetchImpl, deployment_id }) {
+  return backtestHttp(
+    'DELETE', `/api/v1/backtest/deployments/${encodeURIComponent(deployment_id)}`,
+    undefined, { backendBase, fetchImpl },
+  );
+}
+
+function fetchSignals({ backendBase, fetchImpl, deployment_id }) {
+  return backtestHttp(
+    'GET', `/api/v1/backtest/deployments/${encodeURIComponent(deployment_id)}/signals`,
+    undefined, { backendBase, fetchImpl },
+  );
+}
+
+function evaluateDeployment({ backendBase, fetchImpl, deployment_id, ...body }) {
+  return backtestHttp(
+    'POST', `/api/v1/backtest/deployments/${encodeURIComponent(deployment_id)}/evaluate`,
+    body, { backendBase, fetchImpl },
+  );
+}
+
 module.exports = {
   backtestHttp,
   fetchPresets,
@@ -103,4 +204,21 @@ module.exports = {
   fetchRunResult,
   fetchRunTrades,
   fetchRuns,
+  validateBacktest,
+  fetchCoverage,
+  fetchFlow,
+  diagnoseBacktest,
+  optimizeBacktest,
+  optimizePlan,
+  fetchStrategies,
+  createStrategy,
+  fetchVersions,
+  addVersion,
+  activateVersion,
+  fetchVersionDiff,
+  fetchDeployments,
+  createDeployment,
+  stopDeployment,
+  fetchSignals,
+  evaluateDeployment,
 };

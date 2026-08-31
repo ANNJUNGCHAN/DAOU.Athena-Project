@@ -1,6 +1,7 @@
 # Athena 백테스트 모드 도입 계획서
 
-- 상태: P0~P4 구현 완료(P1.5·P2는 실서버 실측만 남음) · P5·P6 미착수
+- 상태: P0~P6 구현 완료(P1.5·P2는 실서버 실측만 남음) · 전수 파리티 완료(2026-09-01)
+- 파리티 감사와 구현 결과: `docs/architecture/backtest-parity-audit.md`
 - 작성 기준: 2026-08-31 KST
 - 브랜치: `claude/backtester-new-mode-integration-536ff0`
 - 원본 참조: `koreainvestment/open-trading-api` → `backtester/` (KIS 백테스터)
@@ -511,8 +512,8 @@ athena:backtest-backfill       ← 사람 클릭 전용
 | **P2** ◐ | 데이터 층 — `store.py`·`data.py`·백필·coverage·plan | unit 18+28 passed · 시드 캐시로 종단 확인. **실서버 수집 실측은 남았다**(페이지 크기 600행 가정·최대 과거 시점·모의/실서버 차이) — 자격증명 필요 |
 | **P3** ✅ | 엔진 — `schema`/`indicators`(25종)/`rules`/`compile`/`engine`/`metrics`/`costs` + 프리셋 10종 | 백테스트 계열 157 passed · 손계산 골든 8종(SMA/EMA/RSI/MACD/ATR/Bollinger/Stochastic + 엔진 1왕복 26봉) · 프리셋 10종 컴파일·실행 무오류 |
 | **P4** ✅ | 샌드박스 + 잡 러너 + API 10라우트 + MCP 툴 + IPC 8채널 + 결과 캔버스 | 샌드박스 6종(자격증명 미노출은 자식 `os.environ` 덤프로 실측) · api+mcp 579 passed · **실백엔드 종단 실측**: 409 정직 거부 → 시드 후 694봉 실행 → 지표·체결 7건·flags `비용 미설정` 확인 |
-| **P5** ○ | 코드 편집기(CodeMirror 6) + diff + LLM `propose_code` → 사람 적용 | 미착수. MCP 쪽 `backfill`/`activate` **부재**는 이미 테스트로 고정됨 |
-| **P6** ○ | 지표 55종 파리티 + 그리드/랜덤 최적화 + 이력 비교 + 과최적화 경고 + 자산곡선 차트 | 미착수 |
+| **P5** ✅ | 코드 편집기 + diff + LLM `propose_code` → 사람 적용 | **CodeMirror를 쓰지 않았다**(§11-6의 두 번째 런타임 의존을 지금 치를 이유가 없다) — 투명 textarea + 색칠 pre + 줄번호 + LCS diff로 같은 요구를 채운다. `propose_code`는 툴이 `origin=llm_draft`를 못박아 저장만 되고 활성화되지 않는다 |
+| **P6** ◐ | 지표 55종 파리티 + 그리드/랜덤 최적화 + 이력 비교 + 과최적화 경고 + 자산곡선 차트 | 최적화·과최적화 경고·자산곡선·이력 비교 완료. **지표는 25/80 그대로** — `pandas-ta` 채택 여부는 어댑터 뒤에서 지표 단위로 남긴다 |
 
 P0~P4가 "쓸 수 있는 백테스트 모드"의 최소선이다. P5가 D3의 본체, P6이 D2의 파리티 마무리다.
 
