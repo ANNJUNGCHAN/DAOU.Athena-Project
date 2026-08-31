@@ -29,21 +29,39 @@ def test_push_enqueues_envelope():
     assert app.state.canvas_events.get_nowait() == envelope
 
 
-def test_generic_push_gains_server_derived_paper_card_contract():
-    """canonical operation_ref만 실어도 서버가 CC 카드 계약을 붙인다.
+def test_generic_push_derives_card_contract_only_when_caller_signals_card_intent():
+    """카드 의도를 밝힌 봉투에만 서버가 CC 계약을 파생해 덮어쓴다.
 
-    모델이 MCP로 밀어넣는 캔버스 블록은 통합 카드 필드를 자원해서 싣지 않는다.
-    그 봉투가 계약 없이 통과하면 렌더러가 레거시 범용 카드로 떨어뜨리므로,
-    Paper 카드 전용 배선을 서버에서 강제한다.
+    이 엔드포인트에는 bearer 검사가 없다. canonical operation_ref만으로 계약을
+    파생하도록 넓히면, 아무나 TR 이름 하나만 대고 자기 data를 'lossless 공식 카드'로
+    세탁할 수 있게 된다. 그래서 게이트는 "호출자가 통합 카드 필드를 실었는가"로 유지한다.
+    실제 프로덕션 호출자(athena_mcp/canvas_data.py의 render_with_plan)는 이미
+    _integrated_card_contract를 실어 보내므로 이 게이트로 충분하다.
     """
 
     app = _app()
     client = TestClient(app)
+    # 카드 의도를 밝히지 않은 봉투 — operation_ref가 canonical이어도 계약이 붙지 않는다.
     response = client.post(
         "/api/v1/canvas/push",
         json={
             "canvas_type": "facts",
             "operation_ref": "base:ka10060",
+            "data": {"stk_cd": "005930"},
+        },
+    )
+    assert response.status_code == 200
+    queued = app.state.canvas_events.get_nowait()
+    assert "card_id" not in queued
+    assert "presentation_contract" not in queued
+
+    # 카드 의도를 밝힌 봉투 — 서버가 canonical 계약을 파생해 덮어쓴다.
+    response = client.post(
+        "/api/v1/canvas/push",
+        json={
+            "canvas_type": "facts",
+            "operation_ref": "base:ka10060",
+            "card_id": "CC-03",
             "data": {"stk_cd": "005930"},
         },
     )
