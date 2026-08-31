@@ -6,7 +6,7 @@
 const fs = require('fs');
 const path = require('path');
 const { app } = require('electron');
-const { writeJsonAtomic } = require('./json-store');
+const { writeJsonAtomic, writeJsonAtomicAsync } = require('./json-store');
 
 const TITLE_MAX = 40;
 const STATE_VERSION = 2;
@@ -78,16 +78,41 @@ function normalizeState(raw) {
   };
 }
 
+// 같은 프로세스 안에서 begin/touch/setActive가 남긴 최신 상태를 재사용해
+// 턴마다 반복되는 디스크 재읽기를 없앤다. 경로가 바뀌면(테스트가
+// ATHENA_CONVERSATIONS_PATH를 매번 새로 지정) 캐시를 무효화한다.
+let cachedState = null;
+let cachedPath = null;
+
 function readState() {
+  const currentPath = statePath();
+  if (cachedState && cachedPath === currentPath) return cachedState;
+  cachedPath = currentPath;
   try {
-    return normalizeState(JSON.parse(fs.readFileSync(statePath(), 'utf-8')));
+    cachedState = normalizeState(JSON.parse(fs.readFileSync(currentPath, 'utf-8')));
   } catch {
-    return normalizeState(null);
+    cachedState = normalizeState(null);
   }
+  return cachedState;
 }
 
+// 실제 파일 쓰기는 턴을 막지 않도록 백그라운드로 미루되, 캐시는 즉시 갱신해
+// 뒤이은 읽기가 예약된 쓰기를 기다리지 않고도 최신 상태를 본다. 연속 호출이
+// 서로 앞지르지 않도록 쓰기는 체인으로 직렬화한다.
+let pendingWrite = Promise.resolve();
+// 예약만 되고 아직 디스크에 닿지 않은 마지막 상태. flushSync()가 종료 직전에
+// 이걸 동기로 마저 쓴다 — 안 그러면 턴 직후 종료에서 사이드바 행이 사라진다.
+let unflushed = null;
+
 function writeState(state) {
-  writeJsonAtomic(statePath(), normalizeState(state));
+  cachedState = state;
+  const targetPath = statePath();
+  const payload = normalizeState(state);
+  unflushed = { targetPath, payload };
+  pendingWrite = pendingWrite
+    .then(() => writeJsonAtomicAsync(targetPath, payload))
+    .then(() => { if (unflushed && unflushed.payload === payload) unflushed = null; })
+    .catch(() => { /* 사이드바 영속화 실패는 대화 성공의 필요조건이 아니다 */ });
 }
 
 function truncateTitle(text) {
@@ -108,14 +133,17 @@ function projectConversations(state, projectId) {
   return sortedConversations(state).filter((conversation) => conversation.projectId === projectId);
 }
 
-function list() {
-  const state = readState();
+function snapshot(state) {
   return {
     activeId: state.activeId,
     currentProjectId: state.currentProjectId,
     projects: state.projects,
     conversations: sortedConversations(state),
   };
+}
+
+function list() {
+  return snapshot(readState());
 }
 
 // 새 id를 현재 대화로 시작하되, 첫 사용자 입력 전에는 목록에 빈 행을 만들지 않는다.
@@ -129,7 +157,7 @@ function begin({ id, projectId } = {}) {
   state.activeId = nextId;
   state.currentProjectId = selectedProjectId;
   writeState(state);
-  return list();
+  return snapshot(state);
 }
 
 // 첫 사용자 메시지에서 목록에 한 번만 추가한다. begin()을 거치지 않은 기존
@@ -157,7 +185,7 @@ function touch({ id, title, projectId } = {}) {
   state.activeId = conversationId;
   state.currentProjectId = existing ? existing.projectId : requestedProjectId;
   writeState(state);
-  return list();
+  return snapshot(state);
 }
 
 function setActive(id) {
@@ -167,7 +195,26 @@ function setActive(id) {
   state.activeId = conversation.id;
   state.currentProjectId = conversation.projectId;
   writeState(state);
-  return list();
+  return snapshot(state);
+}
+
+// 백그라운드로 미룬 파일 쓰기가 실제로 끝났는지 기다려야 할 때(테스트) 쓴다.
+function flush() {
+  return pendingWrite;
+}
+
+// 앱 종료 경로에서 부른다. before-quit은 await할 수 없으므로, 아직 디스크에
+// 닿지 않은 마지막 상태만 동기로 마저 쓴다.
+function flushSync() {
+  if (!unflushed) return false;
+  const { targetPath, payload } = unflushed;
+  unflushed = null;
+  try {
+    writeJsonAtomic(targetPath, payload);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 module.exports = {
@@ -179,4 +226,6 @@ module.exports = {
   begin,
   touch,
   setActive,
+  flush,
+  flushSync,
 };

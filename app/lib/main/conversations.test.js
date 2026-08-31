@@ -95,3 +95,21 @@ test('setActive는 선택 대화의 프로젝트도 현재 프로젝트로 맞�
     assert.equal(selected.currentProjectId, 'p2');
   });
 });
+
+test('연속으로 몰아친 touch가 서로를 덮어써 갱신을 잃지 않는다', async () => {
+  await withTempState({
+    projects: [{ id: 'p1', label: '프로젝트 1' }],
+    currentProjectId: 'p1',
+    conversations: [],
+  }, async (file) => {
+    for (let i = 0; i < 20; i++) {
+      conversations.touch({ id: `rapid-${i}`, title: `질문 ${i}` });
+    }
+    await conversations.flush();
+
+    const onDisk = JSON.parse(fs.readFileSync(file, 'utf-8'));
+    assert.equal(onDisk.conversations.length, 20);
+    const ids = onDisk.conversations.map((row) => row.id).sort();
+    assert.deepEqual(ids, Array.from({ length: 20 }, (_, i) => `rapid-${i}`).sort());
+  });
+});
