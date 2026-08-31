@@ -103,6 +103,25 @@ const INVOKE_CHANNELS = new Set([
   'athena:backtest-trades',
   'athena:backtest-runs',
   'athena:backtest-backfill',
+  // 2026-09-01 전수 파리티 — Paper 보드 02·05·06·07·08·09가 쓰는 채널.
+  // activate·deployment-create·deployment-stop도 사람 클릭 전용 경로다(모델 툴에 없다).
+  'athena:backtest-validate',
+  'athena:backtest-coverage',
+  'athena:backtest-flow',
+  'athena:backtest-diagnose',
+  'athena:backtest-optimize',
+  'athena:backtest-optimize-plan',
+  'athena:backtest-strategies',
+  'athena:backtest-strategy-create',
+  'athena:backtest-versions',
+  'athena:backtest-version-add',
+  'athena:backtest-activate',
+  'athena:backtest-version-diff',
+  'athena:backtest-deployments',
+  'athena:backtest-deployment-create',
+  'athena:backtest-deployment-stop',
+  'athena:backtest-signals',
+  'athena:backtest-evaluate',
 ]);
 
 const SEND_CHANNELS = new Set([
