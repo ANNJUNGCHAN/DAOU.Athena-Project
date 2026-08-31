@@ -20,7 +20,16 @@ const DEFAULTS = Object.freeze({
   labelThreshold: 40,
   // 군집 경계를 넘는 엣지를 강조할지. 이것이 "놀라운 연결"의 화면 표현이다.
   highlightCrossings: true,
+  // 헤더 필터 칩 3종(graph-filters.js). 창마다 다를 수 있는 "어떻게 볼까"라서
+  // 위 두 값과 같은 저장소를 쓴다 — 백엔드에 왕복하지 않는다.
+  windowDays: 90,
+  minDegree: 0,
+  summarySort: 'reinforcement',
 });
+
+const VALID_WINDOW_DAYS = [30, 90, 180, 365];
+const VALID_MIN_DEGREES = [0, 2, 3, 5];
+const VALID_SORTS = ['reinforcement', 'recent'];
 
 const VALID_VIEWS = ['summary', 'graph'];
 const MIN_LABEL_THRESHOLD = 0;
@@ -49,6 +58,15 @@ function normalize(raw) {
       typeof source.highlightCrossings === 'boolean'
         ? source.highlightCrossings
         : DEFAULTS.highlightCrossings,
+    windowDays: VALID_WINDOW_DAYS.includes(Number(source.windowDays))
+      ? Number(source.windowDays)
+      : DEFAULTS.windowDays,
+    minDegree: VALID_MIN_DEGREES.includes(Number(source.minDegree))
+      ? Number(source.minDegree)
+      : DEFAULTS.minDegree,
+    summarySort: VALID_SORTS.includes(source.summarySort)
+      ? source.summarySort
+      : DEFAULTS.summarySort,
   };
 }
 
@@ -89,6 +107,9 @@ const __exports = {
   STORAGE_KEY,
   DEFAULTS,
   VALID_VIEWS,
+  VALID_WINDOW_DAYS,
+  VALID_MIN_DEGREES,
+  VALID_SORTS,
   normalize,
   readPrefs,
   writePrefs,

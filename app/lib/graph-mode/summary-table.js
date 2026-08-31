@@ -61,16 +61,48 @@ function dotClass(entry) {
   return 'summary-row-dot-soft';
 }
 
-// 대상 열 — 이름 + entity_id. entity_id가 종목 코드가 아닐 수도 있어(테마 등)
-// 그대로 보조 텍스트로만 쓴다, 종목코드라고 새로 판정하지 않는다.
+// entity kind → 한글 라벨. 대상 열의 보조 텍스트와 지도 라벨(render.js)이 같은
+// 어휘를 써야 사용자가 두 화면을 같은 것으로 읽는다. 미등록 kind는 원문 폴백.
+const ENTITY_KIND_LABELS = {
+  security: '종목',
+  company: '기업',
+  sector: '섹터',
+  theme: '테마',
+  goal: '목표',
+  preference: '성향',
+  risk_signal: '위험 신호',
+  investor_profile: '프로필',
+};
+
+// 관계 종류 → 한글 라벨. 백엔드 RelationKind 전체를 덮고, 미등록 값은 원문 폴백
+// (controller.js의 같은 사전과 어휘가 일치해야 표와 패널이 같은 말을 한다).
+const RELATION_LABELS = {
+  relates_to: '연관',
+  interested_in: '관심',
+  prefers: '선호',
+  owns: '보유',
+  traded: '매매',
+  researched: '탐색',
+  belongs_to: '소속',
+  exposed_to: '노출',
+  avoids: '회피',
+  targets: '목표',
+};
+
+// 대상 열 — 이름 + 종류. 옛 판은 보조 텍스트에 `entity_id`를 그대로 찍었는데,
+// 그 값은 `entity:0db19be781a0…` 같은 64자 해시라 화면에서 읽을 수 없고 잘린
+// 채로 이름 아래를 채웠다(실측). Paper 보드 01의 보조 텍스트는 종목이면 코드,
+// 테마면 "테마" — 즉 **그것이 무엇인지**다. 우리에겐 코드가 없으므로 종류를 쓴다.
 function renderTargetCell(entry) {
   const wrap = el('div', 'summary-row-target');
   const name = el('span', 'summary-row-name');
   name.textContent = entry.entity_name || entry.entity_id;
   wrap.appendChild(name);
-  const id = el('span', 'summary-row-id');
-  id.textContent = entry.entity_id;
-  wrap.appendChild(id);
+  const kind = el('span', 'summary-row-kind');
+  kind.textContent = ENTITY_KIND_LABELS[entry.entity_kind] || entry.entity_kind || '';
+  // 원본 id는 화면에서 빼되 완전히 잃지는 않는다 — 진단할 때 필요하다.
+  kind.setAttribute('title', String(entry.entity_id || ''));
+  wrap.appendChild(kind);
   return wrap;
 }
 
@@ -86,9 +118,11 @@ function renderRow(entry) {
 
   row.appendChild(renderTargetCell(entry));
 
-  // 관계 배지 — pill 스타일(canvas.css).
+  // 관계 배지 — pill 스타일(canvas.css). 백엔드는 `prefers` 같은 원문을 주는데
+  // 화면에 그대로 찍으면 한글 표 안에서 그 열만 영어가 된다(실측). Paper 보드 01은
+  // 보유·선호·관심 같은 한글 배지다.
   const relation = el('span', 'summary-row-relation');
-  relation.textContent = entry.relation_kind;
+  relation.textContent = RELATION_LABELS[entry.relation_kind] || entry.relation_kind;
   row.appendChild(relation);
 
   // 근거(rationale)는 nullable이다(brain.py ProfileSummaryEntryOut) — 없으면
@@ -133,26 +167,38 @@ function renderColumnHeads() {
   return row;
 }
 
-// 히어로(보드 06 §5) — confidence 3종 분포를 %로. entries가 이미 fetch된(대개
-// "상위 N") 표본이라 이 %는 "지금 표에 보이는 신호들의" 분포이지 전체 모집단
-// 정확 통계라는 보장은 아니다 — profile-summary가 총건수를 안 줘서(정직 기록)
-// 더 정밀한 표본을 구할 방법이 없다.
-function computeConfidenceBreakdown(entries) {
-  const list = Array.isArray(entries) ? entries : [];
-  const counts = { EXTRACTED: 0, INFERRED: 0, AMBIGUOUS: 0 };
+// 히어로(보드 01 §5) — confidence 3종 분포를 %로.
+//
+// `counts`(응답의 `confidence_counts`, 창 전체 집계)가 오면 그것을 쓰고, 없으면
+// 넘어온 entries로 센다. 옛 판은 후자뿐이었는데 entries는 "보강 순 상위 N"이라
+// 정렬 기준이 곧 표본 편향이었다 — 실측에서 상위 5가 전부 대화발 추론이라 화면이
+// "사실 0% · 추론 100%"라고 말했고, 그래프에는 체결 기반 사실 관계가 분명히 있었다.
+function computeConfidenceBreakdown(entries, counts) {
+  const tally = { EXTRACTED: 0, INFERRED: 0, AMBIGUOUS: 0 };
   let counted = 0;
-  for (const entry of list) {
-    const c = entry && entry.confidence;
-    if (Object.prototype.hasOwnProperty.call(counts, c)) {
-      counts[c] += 1;
-      counted += 1;
+  if (counts && typeof counts === 'object') {
+    for (const key of Object.keys(tally)) {
+      const value = Number(counts[key]);
+      if (Number.isFinite(value) && value > 0) {
+        tally[key] = value;
+        counted += value;
+      }
+    }
+  }
+  if (counted === 0) {
+    for (const entry of Array.isArray(entries) ? entries : []) {
+      const c = entry && entry.confidence;
+      if (Object.prototype.hasOwnProperty.call(tally, c)) {
+        tally[c] += 1;
+        counted += 1;
+      }
     }
   }
   if (counted === 0) return { fact: 0, inference: 0, ambiguous: 0, total: 0 };
   return {
-    fact: Math.round((counts.EXTRACTED / counted) * 100),
-    inference: Math.round((counts.INFERRED / counted) * 100),
-    ambiguous: Math.round((counts.AMBIGUOUS / counted) * 100),
+    fact: Math.round((tally.EXTRACTED / counted) * 100),
+    inference: Math.round((tally.INFERRED / counted) * 100),
+    ambiguous: Math.round((tally.AMBIGUOUS / counted) * 100),
     total: counted,
   };
 }
@@ -170,15 +216,33 @@ function heroStat(label, pct, kind) {
 
 // 순수 렌더 — entries가 비었으면(아직 못 읽음) 히어로 자체를 안 그린다. "성향을
 // 0%씩 나눠 보여준다"보다 아예 없는 편이 정직하다(§0 정책).
-function renderSummaryHero(container, entries) {
+function renderSummaryHero(container, entries, counts, scope) {
   if (!container) return null;
   while (container.firstChild) container.removeChild(container.firstChild);
-  const breakdown = computeConfidenceBreakdown(entries);
+  const breakdown = computeConfidenceBreakdown(entries, counts);
   if (breakdown.total === 0) return null;
   const wrap = el('div', 'summary-hero');
+  const heading = el('div', 'summary-hero-heading');
   const label = el('span', 'summary-hero-label');
   label.textContent = '지금 읽히는 성향';
-  wrap.appendChild(label);
+  heading.appendChild(label);
+  // 보드 01의 "테마 군집 7개 · 성향 신호 312개" 부제. 두 숫자 다 실값이다
+  // (군집 수는 cluster-map, 신호 수는 profile-summary의 total). 그 위에 있던
+  // "반도체 대형주 중심, 배당으로 방어" 같은 자연어 문장은 payload 어디에도
+  // 없어 여전히 안 짓는다(§0 정책) — 없는 문장 대신 셀 수 있는 것만 쓴다.
+  const scopeParts = [];
+  if (scope && Number.isFinite(scope.clusterCount) && scope.clusterCount > 0) {
+    scopeParts.push(`테마 군집 ${scope.clusterCount}개`);
+  }
+  if (scope && Number.isFinite(scope.total) && scope.total > 0) {
+    scopeParts.push(`성향 신호 ${scope.total}개`);
+  }
+  if (scopeParts.length > 0) {
+    const scopeEl = el('span', 'summary-hero-scope');
+    scopeEl.textContent = scopeParts.join(' · ');
+    heading.appendChild(scopeEl);
+  }
+  wrap.appendChild(heading);
   const stats = el('div', 'summary-hero-stats');
   stats.appendChild(heroStat('사실', breakdown.fact, 'fact'));
   stats.appendChild(heroStat('추론', breakdown.inference, 'inference'));
@@ -218,16 +282,17 @@ function renderConfirmBanner(container, hintCount, onCtaClick) {
 
 // 순수 렌더 — DOM만 만든다, 클릭은 걸지 않는다(controller가 건다, render.js와
 // 같은 분업). container는 통째로 다시 채운다.
-function renderSummaryTable(container, entries) {
+function renderSummaryTable(container, entries, options) {
   if (!container) return null;
   while (container.firstChild) container.removeChild(container.firstChild);
   const list = Array.isArray(entries) ? entries : [];
+  const total = options && Number.isFinite(options.total) ? options.total : null;
 
   const wrap = el('div', 'summary-table-wrap');
 
-  // 섹션 헤더(06/07 §7 공통) — "전체 M개 보기"는 안 넣는다: profile-summary
-  // 응답(ProfileSummaryResponse)엔 entries 목록만 있고 총건수 필드가 없어 M을
-  // 정직하게 채울 방법이 없다(§0 정책).
+  // 섹션 헤더(보드 01 §7) — "전체 M개"는 응답의 `total`이 있을 때만 붙인다.
+  // 그 필드가 없던 동안(구버전 backend)엔 M을 정직하게 채울 방법이 없어 아예
+  // 안 그렸다 — 지금도 없으면 그대로 생략한다(§0 정책).
   const head = el('div', 'summary-table-head');
   const title = el('span', 'summary-table-title');
   title.textContent = '성향 신호';
@@ -235,6 +300,11 @@ function renderSummaryTable(container, entries) {
   const subtitle = el('span', 'summary-table-subtitle');
   subtitle.textContent = `상위 ${list.length}`;
   head.appendChild(subtitle);
+  if (total !== null && total > list.length) {
+    const totalEl = el('span', 'summary-table-total');
+    totalEl.textContent = `전체 ${total}개`;
+    head.appendChild(totalEl);
+  }
   wrap.appendChild(head);
 
   const table = el('div', 'summary-table');
@@ -271,14 +341,17 @@ function createSummaryTableController(deps) {
     bannerContainer,         // 선택 — 확인 필요 배너 렌더 대상(스텝3, 06 전용)
     fetchSuggestedQuestions, // 선택 — async () => { ok, questions }(배너 개수원)
     onConfirmCta,            // 선택 — 배너 CTA 클릭 시 호출(예: 채팅 입력 포커스)
+    filters,                 // 선택 — graph-filters 모듈(기간·정렬 실적용)
+    getFilters,              // 선택 — () => {windowDays, summarySort}
+    getClusterCount,         // 선택 — () => number(히어로 부제 "테마 군집 N개")
   } = deps;
 
   let entries = [];
 
   // 표와 같은 fetch 결과로 히어로·배너도 채운다(둘 다 "얹는" 부가 정보라 이
   // 함수가 던지지 않는다 — 실패해도 표는 이미 그려졌다).
-  async function renderExtras(list) {
-    renderSummaryHero(heroContainer, list);
+  async function renderExtras(list, counts, scope) {
+    renderSummaryHero(heroContainer, list, counts, scope);
     if (!bannerContainer) return;
     if (typeof fetchSuggestedQuestions !== 'function') {
       renderConfirmBanner(bannerContainer, null, onConfirmCta);
@@ -296,15 +369,20 @@ function createSummaryTableController(deps) {
 
   function panelDataFor(entry) {
     // 페이로드에 실재하는 필드만 담는다 — 지어낸 값 없음. confidence/tier는
-    // 스텝8 공통 패널의 "티어 대조" 카드가 쓴다(§0 발견3 갱신 — 처음엔 이 두
-    // 필드가 없는 줄 알고 패널을 축소하려 했으나, 표(dotClass/출처 열)를 만들며
-    // 실재함을 확인했다).
+    // 공통 패널의 "티어 대조" 카드가 쓴다.
+    //
+    // **sources(보드 02 "두 출처가 다르게 말합니다").** profile-summary는 관계
+    // 종류별로 한 행을 내므로, 같은 엔티티에 체결·잔고발(deterministic) 행과
+    // 대화발(conversational) 행이 함께 올 수 있다 — 그것이 Paper가 그린 "말과
+    // 행동이 어긋남"의 실제 자료다. 여기서 같은 entity_id의 행을 전부 모아
+    // 넘기고, 대조 제목을 붙일지는 패널이 판단한다(하나뿐이면 안 붙인다).
+    const sameEntity = entries.filter((e) => e && e.entity_id === entry.entity_id);
+    const maxReinforcement = entries.reduce(
+      (max, e) => (e && Number.isFinite(e.reinforcement) ? Math.max(max, e.reinforcement) : max), 0);
     return {
       entityId: entry.entity_id,
-      // 선택 출처 태그(보드 15 §2.5, 스텝14) — controller.js의 selectNode()가
-      // 매기는 'node'와 짝을 이룬다. renderPanelContent()가 이 값으로 분기하지는
-      // 않지만(관계 목록은 출처와 무관하게 entityId로만 조회), 어디서 왔는지
-      // 정직하게 남겨 둔다.
+      // 선택 출처 태그 — controller.js의 selectNode()가 매기는 'node'와 짝이다.
+      // 패널 헤더 부제가 이 값으로 갈린다(보드 02 vs 04).
       source: 'table',
       name: entry.entity_name,
       kind: entry.entity_kind,
@@ -313,6 +391,21 @@ function createSummaryTableController(deps) {
       reinforcement: entry.reinforcement,
       confidence: entry.confidence,
       tier: entry.tier,
+      // 보드 02 부제 "보강 21회로 그래프에서 가장 강한 신호 · 최근 1일 전".
+      // "가장 강한"은 지금 읽은 표 안에서의 최대라는 뜻이다(표본 한계는
+      // computeConfidenceBreakdown 주석과 같은 사정).
+      isStrongest: Number.isFinite(entry.reinforcement)
+        && maxReinforcement > 0 && entry.reinforcement === maxReinforcement,
+      // 상대 시각은 여기서 계산해 넘긴다 — controller.js가 전역
+      // window.AthenaLib을 새로 참조하지 않게(그 파일의 주입 계약) 하면서
+      // 두 화면이 같은 시각을 같은 말로 부르게 하는 방법이다.
+      observedRelative: relativeDaysText(entry.observed_at),
+      sources: sameEntity.map((e) => ({
+        tier: e.tier,
+        confidence: e.confidence,
+        rationale: e.rationale,
+        relation: e.relation_kind,
+      })),
     };
   }
 
@@ -332,25 +425,32 @@ function createSummaryTableController(deps) {
   }
 
   async function load() {
+    // 헤더 필터(보드 01)의 기간·정렬. 안 주면 백엔드 기본 창을 그대로 쓴다 —
+    // 다른 선택 주입과 같은 계약이다.
+    const filterState = typeof getFilters === 'function' ? getFilters() : null;
     let res;
     try {
-      res = await fetchProfileSummary({ limit });
+      res = await fetchProfileSummary({ limit, windowDays: filterState ? filterState.windowDays : undefined });
     } catch (err) {
       if (onError) onError(err);
       renderSummaryTable(container, []);
-      await renderExtras([]);
+      await renderExtras([], null);
       return null;
     }
     if (!res || !res.ok) {
       if (onError) onError(new Error((res && res.error) || '성향 신호를 받지 못했다'));
       renderSummaryTable(container, []);
-      await renderExtras([]);
+      await renderExtras([], null);
       return null;
     }
-    entries = Array.isArray(res.entries) ? res.entries : [];
-    renderSummaryTable(container, entries);
+    const received = Array.isArray(res.entries) ? res.entries : [];
+    entries = filters && filterState ? filters.sortEntries(received, filterState.summarySort) : received;
+    renderSummaryTable(container, entries, { total: res.total });
     wireRowClicks();
-    await renderExtras(entries);
+    await renderExtras(entries, res.confidence_counts, {
+      total: res.total,
+      clusterCount: typeof getClusterCount === 'function' ? getClusterCount() : undefined,
+    });
     return entries;
   }
 
@@ -369,6 +469,8 @@ const __exports = {
   renderConfirmBanner,
   dotClass,
   relativeDaysText,
+  ENTITY_KIND_LABELS,
+  RELATION_LABELS,
 };
 
 // UMD 각주(2026-08-18 렌더러 격리) — column-fold.js와 같은 패턴.

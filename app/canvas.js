@@ -2050,6 +2050,13 @@ function fmtWon(raw) {
 // 스트립 필 줄 전면 제거) — 브레인이 꺼져 있어도 그래프 모드 자체는 열 수 있고,
 // 못 쓰는 이유는 캔버스 안에서 정직하게 보여준다(controller.js renderUnavailable).
 
+// 성향 신호 전체 캐시(창 안 전량) — 지도의 노드 채움과 패널의 관계 목록이 읽는다.
+// 요약 표의 "상위 5"(graphSummaryTable.getEntries())와는 다른 목록이다.
+let lastProfileSignals = [];
+
+// 테마 군집 수 — 히어로 부제("테마 군집 7개")가 읽는다. loadThemeClusters()가 채운다.
+let lastThemeClusterCount = 0;
+
 // 숨은 연관(surprising-connections) 캐시(스텝14) — loadHiddenLinks()(아래, 보드
 // 06/07 §9 카드용으로 이미 있던 fetch)가 채우고 graphMode.draw()/노드 선택이
 // 재사용한다. 이중 fetch 금지(스텝11 보고에 대한 리드 지침) — 그래프 지도의
@@ -2096,6 +2103,9 @@ const graphMode = window.AthenaLib.GraphModeController.createGraphModeController
     // controller.js 하나(renderGraphHeader) — #graphCanvas 전체가 숨으면
     // 자식이라 함께 자동으로 숨으므로 이 로직은 1↔2단계 전환에만 관여한다.
     mapGuide: document.getElementById('graphMapGuide'),
+    // 세 번째 서브뷰(보드 05 수집·노출) — 요약 표·군집 지도와 같은 축이라
+    // 가시성도 같은 함수가 소유한다.
+    graphSettings: document.getElementById('graphSettingsCanvas'),
   },
   // main은 실패를 {ok:false}로 돌려준다. 컨트롤러는 **예외**로 실패를 안다 —
   // 여기서 바꿔주지 않으면 `{ok:false}`가 정상 응답으로 흘러 빈 그래프가 그려지고,
@@ -2115,10 +2125,12 @@ const graphMode = window.AthenaLib.GraphModeController.createGraphModeController
   // 스텝14 — 스텝11(숨은 연관 군집 쌍)·13(숨은 연관 엔티티 쌍)의 실배선. 위
   // lastSurprisingConnections 캐시를 그대로 읽는다(이중 fetch 없음).
   getSurprisingConnections: () => lastSurprisingConnections,
-  // 그래프 노드 선택 시 성향 신호 표와 같은 profile-summary 항목을 재사용한다
-  // (이중 fetch 금지) — graphSummaryTable은 이 파일 아래에서 선언되지만 이
-  // 함수는 나중에(사용자가 실제로 노드를 고를 때) 불리므로 문제없다.
-  getProfileSummaryEntries: () => graphSummaryTable.getEntries(),
+  // 지도·패널이 읽는 성향 신호는 표의 "상위 5"가 아니라 **창 전체**여야 한다.
+  // 표가 받아 둔 5건만 주면 지도의 노드 채움(확정성 인코딩)이 다섯 노드 빼고
+  // 전부 "모름"으로 떨어지고, 패널의 관계 목록도 상위 5에 든 엔티티에서만 뜬다
+  // (실측: 9개 노드가 전부 테두리만 남았다). 그래서 별도 전체 캐시를 둔다 —
+  // 표와 다른 limit이라 같은 fetch를 나눠 쓸 수 없다.
+  getProfileSummaryEntries: () => lastProfileSignals,
   // §10-4 최근 변화(엔티티 타임라인, WP-G) — cluster-map처럼 부팅 시 1회
   // 캐시하는 패턴을 못 쓴다(entity_id별 호출당 API). 실패는 예외로 알린다 —
   // fetchClusterMap과 같은 이유({ok:false}가 정상 응답으로 흐르면 안 된다).
@@ -2127,6 +2139,12 @@ const graphMode = window.AthenaLib.GraphModeController.createGraphModeController
     if (!res || !res.ok) throw new Error((res && res.error) || '엔티티 타임라인을 받지 못했다');
     return res.events;
   },
+  // 보드 05 수집·노출 — 탭에 들어올 때마다 다시 그린다(설정 오버레이가 같은
+  // 저장소를 보는 두 번째 입구라, 거기서 바꾸고 돌아왔을 수 있다).
+  onEnterSettings: () => renderGraphCollectionSettings(),
+  // 헤더 필터 칩(보드 03/04) — 기간·최소 연결 수를 배치 전에 건다.
+  filters: window.AthenaLib.GraphFilters,
+  getFilters: () => window.AthenaLib.GraphModePrefs.readPrefs(),
 });
 window.AthenaCanvasMode = graphMode;
 // 부팅을 순수 답변 모드로 고정한다(US-007) — 정적 HTML의 기본 hidden 속성이
@@ -2525,6 +2543,11 @@ const graphSummaryTable = window.AthenaLib.GraphSummaryTable.createSummaryTableC
   heroContainer: document.getElementById('graphSummaryHero'),
   bannerContainer: document.getElementById('graphConfirmBanner'),
   fetchSuggestedQuestions: () => window.athena.invoke('athena:brain-suggested-questions'),
+  // 헤더 필터 칩(보드 01) — 기간은 window_days로 백엔드에, 정렬은 표 재정렬로.
+  filters: window.AthenaLib.GraphFilters,
+  getFilters: () => window.AthenaLib.GraphModePrefs.readPrefs(),
+  // 히어로 부제 "테마 군집 N개" — 테마 군집 카드가 이미 받아 둔 수를 재사용한다.
+  getClusterCount: () => lastThemeClusterCount,
   // CTA "채팅에서 답하기" — 새 기능을 발명하지 않는다, 입력창에 포커스만 준다.
   onConfirmCta: () => {
     const inputEl = document.getElementById('input');
@@ -2541,42 +2564,134 @@ const graphSummaryTable = window.AthenaLib.GraphSummaryTable.createSummaryTableC
 // canvas.css의 .graph-surface-back 삭제 참고). 헤더가 두 곳(#graphSummaryHeader
 // ·#graphHeader)에 있어 탭은 4개지만 store 상태는 하나 — 이 함수 하나로 양쪽을
 // 동기화한다(스텝16 사이드바 모드 네비도 같은 축을 쓸 예정, z-index 금지).
-const summaryViewTabEl = document.getElementById('summaryViewTab');
-const graphViewTabEl = document.getElementById('graphViewTab');
-const graphHeaderSummaryTabEl = document.getElementById('graphHeaderSummaryTab');
-const graphHeaderMapTabEl = document.getElementById('graphHeaderMapTab');
+// 세 헤더(#graphSummaryHeader · #graphHeader · #graphSettingsHeader)에 같은 3탭이
+// 있어 버튼은 9개지만 store 상태는 하나다 — 서브뷰 키로 묶어 한 번에 동기화한다.
+const SURFACE_TAB_IDS = {
+  summary: ['summaryViewTab', 'graphHeaderSummaryTab', 'graphSettingsSummaryTab'],
+  map: ['graphViewTab', 'graphHeaderMapTab', 'graphSettingsMapTab'],
+  settings: ['settingsViewTab', 'graphHeaderSettingsTab', 'graphSettingsOwnTab'],
+};
 function updateSurfaceTabs() {
-  const showGraph = graphMode.state.surface === window.AthenaLib.GraphModeStore.SURFACE_MAP;
-  [summaryViewTabEl, graphHeaderSummaryTabEl].forEach((el) => {
-    if (!el) return;
-    el.classList.toggle('is-active', !showGraph);
-    el.setAttribute('aria-selected', showGraph ? 'false' : 'true');
-  });
-  [graphViewTabEl, graphHeaderMapTabEl].forEach((el) => {
-    if (!el) return;
-    el.classList.toggle('is-active', showGraph);
-    el.setAttribute('aria-selected', showGraph ? 'true' : 'false');
-  });
+  const active = graphMode.state.surface;
+  for (const [surface, ids] of Object.entries(SURFACE_TAB_IDS)) {
+    for (const id of ids) {
+      const el = document.getElementById(id);
+      if (!el) continue;
+      el.classList.toggle('is-active', surface === active);
+      el.setAttribute('aria-selected', surface === active ? 'true' : 'false');
+    }
+  }
 }
 // setSurface()는 hidden 갱신(applyVisibility())을 내부 await 이전에 동기로
 // 끝낸다 — 탭의 활성 스타일도 그 직후 바로 갱신한다(await로 미루면 draw()의
 // 네트워크 왕복이 끝날 때까지 탭이 안 눌린 것처럼 보인다, 실측으로 발견).
-function wireSurfaceTab(el, surface) {
+for (const [surface, ids] of Object.entries(SURFACE_TAB_IDS)) {
+  for (const id of ids) {
+    const el = document.getElementById(id);
+    if (!el) continue;
+    el.addEventListener('click', () => {
+      graphMode.setSurface(surface);
+      updateSurfaceTabs();
+    });
+  }
+}
+
+// --- 헤더 필터 칩 배선 (보드 01/03) ----------------------------------------
+//
+// 옛 판은 `<span class="filter-chip">최근 90일</span>` 정적 라벨이라 화면이
+// "최근 90일"이라 주장하면서 실제로는 아무것도 안 걸고 있었다. 이제 세 컨트롤이
+// 실제로 건다:
+//   기간   → profile-summary의 window_days(표) + 엣지 observed_at(지도)
+//   정렬   → 표 재정렬(graph-filters.sortEntries)
+//   최소 연결 수 → 지도의 노드·엣지 필터
+// 값은 graph-mode-prefs(localStorage)에 남아 다음에 열어도 같은 화면이 뜬다.
+const GraphFilters = window.AthenaLib.GraphFilters;
+const GraphPrefs = window.AthenaLib.GraphModePrefs;
+
+function fillFilterSelect(el, options, current, labelFor, narrowedWhen) {
   if (!el) return;
-  el.addEventListener('click', () => {
-    graphMode.setSurface(surface);
-    updateSurfaceTabs();
+  while (el.firstChild) el.removeChild(el.firstChild);
+  for (const value of options) {
+    const opt = document.createElement('option');
+    opt.value = String(value);
+    opt.textContent = labelFor(value);
+    if (value === current) opt.selected = true;
+    el.appendChild(opt);
+  }
+  el.classList.toggle('is-narrowed', narrowedWhen(current));
+}
+
+function renderFilterChips() {
+  const prefs = GraphPrefs.readPrefs();
+  // 기간 칩은 두 헤더(요약·지도)에 하나씩 있고 같은 값을 본다 — 한쪽에서 바꾸면
+  // 다른 쪽도 그 값으로 열려야 "지금 보고 있는 창"이 하나다.
+  for (const id of ['summaryWindowFilter', 'graphWindowFilter']) {
+    fillFilterSelect(document.getElementById(id), GraphFilters.WINDOW_DAY_OPTIONS,
+      prefs.windowDays, GraphFilters.windowLabel, (v) => v !== GraphFilters.DEFAULTS.windowDays);
+  }
+  fillFilterSelect(document.getElementById('summarySortFilter'), GraphFilters.SORT_OPTIONS,
+    prefs.summarySort, GraphFilters.sortLabel, (v) => v !== GraphFilters.DEFAULTS.summarySort);
+  fillFilterSelect(document.getElementById('graphDegreeFilter'), GraphFilters.MIN_DEGREE_OPTIONS,
+    prefs.minDegree, GraphFilters.minDegreeLabel, (v) => v > 0);
+}
+
+function wireFilterSelect(id, read) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener('change', () => {
+    GraphPrefs.writePrefs(read(el.value));
+    renderFilterChips();
+    void applyGraphFilterChange();
   });
 }
-wireSurfaceTab(summaryViewTabEl, window.AthenaLib.GraphModeStore.SURFACE_SUMMARY);
-wireSurfaceTab(graphViewTabEl, window.AthenaLib.GraphModeStore.SURFACE_MAP);
-wireSurfaceTab(graphHeaderSummaryTabEl, window.AthenaLib.GraphModeStore.SURFACE_SUMMARY);
-wireSurfaceTab(graphHeaderMapTabEl, window.AthenaLib.GraphModeStore.SURFACE_MAP);
 
-// "최근 갱신"(06 §4-1) — entries[].observed_at 중 가장 최신값으로만 채운다. Paper
-// 목업 "12분 전"을 리터럴로 박지 않는다(§0 정직한 빈 데이터 정책) — 항목이 없거나
-// 유효한 시각이 하나도 없으면 자리를 숨긴다. 상대 시간 포맷은 새로 만들지 않고
-// 능동 턴 배지가 이미 쓰는 relativeText를 재사용한다(routine-turn.js).
+// 필터가 바뀌면 표와 지도를 둘 다 다시 읽는다 — 두 표면이 다른 창을 보고 있으면
+// 같은 그래프에 대해 서로 다른 숫자를 말하게 된다.
+async function applyGraphFilterChange() {
+  // 기간이 바뀌면 채움 인코딩의 근거(성향 신호)와 히어로 부제의 군집 수가 함께
+  // 바뀐다 — 둘 다 뒤 렌더의 입력이라 먼저 채운다(refreshConversationGraphSurfaces와 같은 순서).
+  await Promise.allSettled([loadProfileSignals(), loadThemeClusters()]);
+  await Promise.allSettled([
+    graphSummaryTable.load().then(renderSummaryUpdatedAt),
+    graphMode.refreshFiltered(),
+  ]);
+}
+
+wireFilterSelect('summaryWindowFilter', (v) => ({ windowDays: Number(v) }));
+wireFilterSelect('graphWindowFilter', (v) => ({ windowDays: Number(v) }));
+wireFilterSelect('summarySortFilter', (v) => ({ summarySort: v }));
+wireFilterSelect('graphDegreeFilter', (v) => ({ minDegree: Number(v) }));
+renderFilterChips();
+
+// 수집·노출 서브뷰(보드 05) — 렌더는 collection-settings.js가, 저장은
+// settings-cards.js가 이미 갖고 있다. 여기서는 둘을 잇기만 한다(같은 규칙을
+// 두 벌 쓰지 않는다 — 설정 오버레이와 이 탭은 같은 localStorage 키를 본다).
+let graphBrainReady = false;
+function renderGraphCollectionSettings() {
+  const container = document.getElementById('graphSettingsBody');
+  if (!container) return;
+  const settingsCards = window.AthenaLib.SettingsCards;
+  window.AthenaLib.GraphCollectionSettings.renderCollectionSettings(container, {
+    readSettings: () => settingsCards.readGraphSettings(),
+    writeSettings: (patch) => settingsCards.writeGraphSettings(patch),
+    setCollectChat: (enabled) => settingsCards.setCollectChatPreference(enabled),
+    intervalOptions: settingsCards.HOLDINGS_INTERVAL_MINUTES,
+    brainReady: graphBrainReady,
+    // 백엔드 기본값(ATHENA_BRAIN_INGEST_INTERVAL_MINUTES)이다 — 이 화면이
+    // 바꾸는 값이 아니라 알려 주기만 하는 값이라 상수로 둔다.
+    defaultIngestIntervalMinutes: 60,
+    resetBrain: () => window.athena.invoke('athena:brain-reset'),
+  });
+}
+
+// "최근 갱신"(보드 01 §4-1) — entries[].observed_at 중 가장 최신값으로만 채운다.
+// Paper 목업 "12분 전"을 리터럴로 박지 않는다(§0 정직한 빈 데이터 정책) — 항목이
+// 없거나 유효한 시각이 하나도 없으면 자리를 숨긴다.
+//
+// 포맷은 표의 "최근" 열과 같은 일 단위 자(relativeDaysText)를 쓴다. 예전엔 능동 턴
+// 배지의 분·시간 자(routine-turn.relativeText)를 재사용했는데, 성향 신호는 날짜
+// 단위로 쌓이는 값이라 "최근 갱신 24시간 0분 전" 같은 문구가 나왔다(실측) — 같은
+// 사건을 표에서는 "1일 전", 헤더에서는 "24시간 0분 전"이라 부르는 셈이었다.
 function renderSummaryUpdatedAt(entries) {
   const el = document.getElementById('summaryUpdatedAt');
   if (!el) return;
@@ -2591,7 +2706,8 @@ function renderSummaryUpdatedAt(entries) {
     el.textContent = '';
     return;
   }
-  const relative = window.AthenaLib.RoutineTurn.relativeText(new Date(latestMs).toISOString(), Date.now());
+  const relative = window.AthenaLib.GraphSummaryTable.relativeDaysText(
+    new Date(latestMs).toISOString(), Date.now());
   el.hidden = !relative;
   el.textContent = relative ? `최근 갱신 ${relative}` : '';
 }
@@ -2613,6 +2729,7 @@ async function loadThemeClusters() {
   }
   if (!res || !res.ok) return;
   const clusters = window.AthenaLib.ThemeClusters.groupThemeClusters(res);
+  lastThemeClusterCount = clusters.length;
   window.AthenaLib.ThemeClusters.renderThemeClusters(container, clusters);
 }
 
@@ -2636,12 +2753,32 @@ async function loadHiddenLinks() {
   window.AthenaLib.HiddenLinks.renderHiddenLinks(container, res.connections);
 }
 
+// 성향 신호 전체를 받아 캐시에 담는다(위 lastProfileSignals 주석 참고).
+// 기간 칩과 같은 창을 봐야 지도와 표가 같은 시점을 말한다.
+async function loadProfileSignals() {
+  const prefs = window.AthenaLib.GraphModePrefs.readPrefs();
+  let res;
+  try {
+    res = await window.athena.invoke('athena:brain-profile-summary', {
+      limit: 500, windowDays: prefs.windowDays,
+    });
+  } catch (err) {
+    console.warn('[graph-mode] profile-summary(전체) 실패', err);
+    return;
+  }
+  if (!res || !res.ok) return;
+  lastProfileSignals = Array.isArray(res.entries) ? res.entries : [];
+}
+
 async function refreshConversationGraphSurfaces() {
+  // 순서가 있다. 성향 신호 캐시는 지도의 노드 채움 인코딩이 읽고, 테마 군집 수는
+  // 히어로 부제("테마 군집 7개")가 읽는다 — 둘 다 뒤에 오는 렌더의 **입력**이라
+  // 병렬로 두면 첫 렌더가 "모름"·"0개"로 나온다(실측).
+  await Promise.allSettled([loadProfileSignals(), loadThemeClusters()]);
   const visibleGraphRefresh = graphMode.setAvailable(true);
   await Promise.allSettled([
     Promise.resolve(visibleGraphRefresh),
     graphSummaryTable.load().then(renderSummaryUpdatedAt),
-    loadThemeClusters(),
     loadHiddenLinks(),
     loadEmptyCanvasExtras(),
   ]);
@@ -2660,13 +2797,19 @@ if (window.athena && typeof window.athena.on === 'function') {
   try {
     const status = await window.athena.invoke('athena:brain-status');
     const ready = Boolean(status && status.ok && status.ready);
+    graphBrainReady = ready; // 보드 05 "브레인 준비됨" 배지가 읽는 값.
     graphMode.setAvailable(ready);
     // hidden은 안 건드린다 — graphMode.applyVisibility()가 유일한 소유자다(US-007).
     // 여기서는 데이터를 미리 당겨올지만 결정한다(그래프 모드로 전환했을 때 바로
     // 보이도록 하는 프리페치 — 안 보이는 동안 부르는 낭비는 loadEmptyCanvasExtras와
     // 같은 기존 관례).
-    if (ready) graphSummaryTable.load().then(renderSummaryUpdatedAt);
-    if (ready) loadThemeClusters();
+    // 프리페치도 같은 순서를 지킨다 — 캐시 둘을 먼저 채우고 그 위에 렌더를 얹는다.
+    if (ready) {
+      void Promise.allSettled([loadProfileSignals(), loadThemeClusters()]).then(() => {
+        void graphMode.refreshFiltered();
+        void graphSummaryTable.load().then(renderSummaryUpdatedAt);
+      });
+    }
     if (ready) loadHiddenLinks();
     // 빈 상태(보드 05) 숫자·CTA·힌트 — 같은 ready 확인에 얹는다(왕복 추가 없음).
     if (ready) loadEmptyCanvasExtras();

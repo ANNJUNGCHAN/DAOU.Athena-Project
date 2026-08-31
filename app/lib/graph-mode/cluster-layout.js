@@ -18,6 +18,76 @@ const MIN_CLUSTER_RADIUS_PX = 48;
 const NODE_RADIUS_MIN_PX = 6;
 const NODE_RADIUS_MAX_PX = 22;
 const CANVAS_PADDING_PX = 40;
+// 2단계에서 노드 이름표 하나가 차지하는 최소 호 길이. 한글 이름 6~8자에
+// 여백을 더한 실측 폭이다 — 이보다 좁으면 이웃 이름표와 겹친다.
+const MIN_MEMBER_ARC_PX = 104;
+
+// 군집 버블의 **그리기** 반지름(보드 03 실측) — 멤버 배치용 링 반지름(`radius`,
+// 아래 clusterRadius)과 다른 값이다. Paper 보드 03의 7개 버블에서 지름을 재고
+// 구성원 수의 제곱근에 회귀했다:
+//   size 84→r52 · 61→44 · 47→39 · 38→35 · 29→31 · 21→27 · 14→22
+//   ⇒ r ≈ 1.4 + 5.52·√size (7점 모두 ±0.4px 안에 든다)
+// 링 반지름(√size × 26)을 그대로 버블 반지름으로 쓰면 size 84에서 238px가 되어
+// 캔버스를 삼킨다 — 두 값이 같아야 할 이유가 없어 여기서 갈라 둔다.
+const BUBBLE_RADIUS_BASE_PX = 1.4;
+const BUBBLE_RADIUS_SCALE_PX = 5.52;
+// Paper가 그린 가장 작은 버블(지름 44px, 구성원 14명)을 하한으로 둔다. 회귀식을
+// 그 아래로 외삽하면 구성원 7명에서 r16이 되고, 그 안의 숫자가 원에 눌려 읽히지
+// 않는다(실측). 작은 그래프에서도 버블은 읽을 수 있어야 한다.
+const MIN_BUBBLE_RADIUS_PX = 22;
+
+function bubbleRadiusPx(size) {
+  return Math.max(
+    MIN_BUBBLE_RADIUS_PX,
+    BUBBLE_RADIUS_BASE_PX + BUBBLE_RADIUS_SCALE_PX * Math.sqrt(Math.max(0, size))
+  );
+}
+
+// 군집의 대표 멤버 이름 — 이름 파이프라인이 없을 때 제목 사다리의 마지막 실단서다
+// (render.js clusterTitle). 백엔드의 `cluster_representative_labels`는 "미국 지수
+// ETF 외 6종목 · security" 같은 설명 문장이라 지도 이름표에는 너무 길고 raw kind가
+// 섞인다 — 여기서는 이미 payload에 있는 kind/degree/name만으로 **이름 하나**를 고른다.
+//
+// 고르는 순서는 kind → 차수 → 이름이다. 종류를 먼저 보는 이유: 군집에 이름을 붙이는
+// 일이라 **테마가 종목보다 낫다**. 종목 이름을 쓰면 "한미반도체 군집"처럼 방금 고른
+// 노드가 자기가 속한 군집의 이름이 되는 순환이 생긴다(실측). 테마·섹터는 애초에
+// 묶음을 가리키는 말이다. 마지막 이름 오름차순은 동률을 결정적으로 끊기 위한 것이다.
+const REPRESENTATIVE_KIND_RANK = { theme: 0, sector: 1 };
+
+function representativeName(members) {
+  let best = null;
+  for (const member of members) {
+    const name = String((member && member.name) || '');
+    if (!name) continue;
+    const rank = REPRESENTATIVE_KIND_RANK[String((member && member.kind) || '')] ?? 2;
+    const degree = member.degree || 0;
+    const better = best === null
+      || rank < best.rank
+      || (rank === best.rank && degree > best.degree)
+      || (rank === best.rank && degree === best.degree && name.localeCompare(best.name) < 0);
+    if (better) best = { name, degree, rank };
+  }
+  return best ? best.name : null;
+}
+
+// 군집 라벨의 "종목 9 · 응집 0.74"에서 앞 절(보드 03 실측) — 군집 안에서 가장
+// 많은 entity kind와 그 개수다. 거시 환경 군집이 "테마 12"인 것이 이 규칙의
+// 증거다(총원 47명 중 theme이 12명으로 최다). 동수면 kind 이름 오름차순으로
+// 결정적으로 고른다 — 같은 그래프를 다시 열면 같은 라벨이어야 한다.
+function dominantKind(members) {
+  const counts = new Map();
+  for (const member of members) {
+    const kind = String((member && member.kind) || '');
+    if (!kind) continue;
+    counts.set(kind, (counts.get(kind) || 0) + 1);
+  }
+  if (counts.size === 0) return null;
+  let best = null;
+  for (const [kind, count] of [...counts.entries()].sort((a, b) => a[0].localeCompare(b[0]))) {
+    if (best === null || count > best.count) best = { kind, count };
+  }
+  return best;
+}
 
 function clamp(value, low, high) {
   return Math.min(high, Math.max(low, value));
@@ -78,16 +148,57 @@ function layoutClusterMap(payload, viewport) {
   const placed = new Map();
   const clusters = [];
 
+  // 초점 군집(2단계, 보드 04) — 그 군집을 한가운데 놓고 나머지는 그 링 **바깥**에
+  // 두른다. 안 그러면 이웃 군집의 노드가 초점 군집의 타원 안쪽에 떨어져, 그 군집
+  // 소속이 아닌 노드가 타원 안에 들어앉은 것처럼 보인다(실측 — "배당·인컴"이
+  // 미국 지수 ETF 타원 안에 있었다).
+  const focusCluster = viewport && Number.isInteger(viewport.focusCluster)
+    ? viewport.focusCluster
+    : null;
+  const focusIndex = focusCluster === null
+    ? -1
+    : groups.findIndex((group) => group.cluster === focusCluster);
+  const focusRingRadius = focusIndex >= 0
+    ? Math.max(
+      MIN_CLUSTER_RADIUS_PX,
+      Math.sqrt(groups[focusIndex].members.length) * 26,
+      (groups[focusIndex].members.length * MIN_MEMBER_ARC_PX) / (2 * Math.PI)
+    )
+    : 0;
+  // 이웃이 놓일 반경 — 초점 링 + 이름표 한 줄 여유. 캔버스를 넘지 않게 접는다.
+  const neighbourRadius = Math.min(mapRadius, focusRingRadius + 110);
+
   groups.forEach((group, index) => {
-    // 군집이 하나면 한가운데. 여럿이면 황금각으로 흩는다 — 균등 분할은 군집 수가
-    // 바뀔 때 모든 군집이 한꺼번에 움직이지만, 황금각은 기존 자리를 대체로 지킨다.
-    const angle = groups.length === 1 ? 0 : index * GOLDEN_ANGLE_RAD;
-    const distance = groups.length === 1 ? 0 : mapRadius * Math.sqrt(index / groups.length);
+    let angle;
+    let distance;
+    if (focusIndex >= 0) {
+      if (index === focusIndex) {
+        angle = 0;
+        distance = 0;
+      } else {
+        // 초점을 뺀 순번으로 원을 균등 분할한다 — 이웃은 대개 서넛이라 황금각의
+        // 이점(수가 바뀌어도 자리가 대체로 유지됨)보다 고른 간격이 더 값을 한다.
+        const rank = index > focusIndex ? index - 1 : index;
+        angle = (rank / Math.max(1, groups.length - 1)) * Math.PI * 2;
+        distance = neighbourRadius;
+      }
+    } else {
+      // 1단계 — 군집이 하나면 한가운데, 여럿이면 황금각으로 흩는다. 균등 분할은
+      // 군집 수가 바뀔 때 모든 군집이 한꺼번에 움직이지만, 황금각은 기존 자리를
+      // 대체로 지킨다.
+      angle = groups.length === 1 ? 0 : index * GOLDEN_ANGLE_RAD;
+      distance = groups.length === 1 ? 0 : mapRadius * Math.sqrt(index / groups.length);
+    }
     const clusterX = centreX + Math.cos(angle) * distance;
     const clusterY = centreY + Math.sin(angle) * distance;
+    // 멤버 링 반지름 — 이름표가 서로 겹치지 않을 만큼은 벌어져야 한다. 옛 판은
+    // √n·26이라 7명이 68px 링에 놓였고, 그 둘레 427px에 100px짜리 이름표 7개가
+    // 들어가 서로를 덮었다(실측). 이름표 하나가 차지하는 호 길이를 최소치로 잡고
+    // 둘레에서 역산한다: r ≥ n·ARC / 2π.
     const clusterRadius = Math.max(
       MIN_CLUSTER_RADIUS_PX,
-      Math.sqrt(group.members.length) * 26
+      Math.sqrt(group.members.length) * 26,
+      (group.members.length * MIN_MEMBER_ARC_PX) / (2 * Math.PI)
     );
 
     group.members.forEach((node, memberIndex) => {
@@ -114,6 +225,13 @@ function layoutClusterMap(payload, viewport) {
       x: clusterX,
       y: clusterY,
       radius: clusterRadius,
+      // 버블 그리기 전용 반지름(보드 03) — radius(멤버 링)와 별개다, 위 주석 참고.
+      bubbleRadius: bubbleRadiusPx(group.members.length),
+      // 라벨 앞 절("종목 9") 재료 — 없으면(kind가 전부 빈 문자열) null.
+      dominantKind: dominantKind(group.members),
+      // 제목 폴백 사다리의 마지막 실단서(render.js clusterTitle) — 확정 이름이
+      // 아니므로 "· 추정"이 붙는다.
+      representative: representativeName(group.members),
       cohesion: cohesionByCluster ? cohesionByCluster[group.cluster] : undefined,
       aiLabel: aiLabelByCluster ? aiLabelByCluster[group.cluster] : undefined,
     });
@@ -241,6 +359,9 @@ const __exports = {
   layoutClusterMap,
   aggregateClusterEdges,
   nodeRadiusPx,
+  bubbleRadiusPx,
+  dominantKind,
+  representativeName,
   groupByCluster,
   NODE_RADIUS_MIN_PX,
   NODE_RADIUS_MAX_PX,

@@ -176,3 +176,60 @@ test('nodes/edges/clusters 중 하나라도 없으면 빈 배열(터지지 않�
   assert.deepEqual(aggregateClusterEdges(mockPlaced({ edges: [] })), []);
   assert.deepEqual(aggregateClusterEdges(mockPlaced({ clusters: [] })), []);
 });
+
+// ── 초점 군집 배치(2단계, 보드 04) ────────────────────────────────────────────
+
+test('focusCluster를 주면 그 군집이 한가운데, 나머지는 그 링 바깥에 놓인다', () => {
+  const payload = {
+    revision: 1,
+    nodes: [
+      { entity_id: 'a1', name: 'A1', kind: 'security', cluster: 0, degree: 2 },
+      { entity_id: 'a2', name: 'A2', kind: 'security', cluster: 0, degree: 2 },
+      { entity_id: 'a3', name: 'A3', kind: 'security', cluster: 0, degree: 2 },
+      { entity_id: 'b1', name: 'B1', kind: 'theme', cluster: 1, degree: 1 },
+      { entity_id: 'c1', name: 'C1', kind: 'theme', cluster: 2, degree: 1 },
+    ],
+    edges: [],
+  };
+  const viewport = { width: 1000, height: 800, focusCluster: 0 };
+  const placed = layoutClusterMap(payload, viewport);
+  const centre = { x: viewport.width / 2, y: viewport.height / 2 };
+  const focus = placed.clusters.find((c) => c.cluster === 0);
+  assert.equal(focus.x, centre.x, '초점 군집은 캔버스 한가운데다');
+  assert.equal(focus.y, centre.y);
+
+  // 이웃은 초점 링보다 멀리 있어야 타원 안으로 들어오지 않는다.
+  for (const cluster of placed.clusters.filter((c) => c.cluster !== 0)) {
+    const distance = Math.hypot(cluster.x - centre.x, cluster.y - centre.y);
+    assert.ok(distance > focus.radius, `이웃 군집 ${cluster.cluster}이 초점 링 안에 있다`);
+  }
+});
+
+test('focusCluster가 없으면 1단계 황금각 배치를 그대로 쓴다(결정적)', () => {
+  const payload = {
+    revision: 1,
+    nodes: [
+      { entity_id: 'a', name: 'A', kind: 'theme', cluster: 0, degree: 1 },
+      { entity_id: 'b', name: 'B', kind: 'theme', cluster: 1, degree: 1 },
+    ],
+    edges: [],
+  };
+  const first = layoutClusterMap(payload, { width: 800, height: 600 });
+  const second = layoutClusterMap(payload, { width: 800, height: 600 });
+  assert.deepEqual(first.clusters.map((c) => [c.x, c.y]), second.clusters.map((c) => [c.x, c.y]));
+});
+
+test('멤버 링은 이름표가 겹치지 않을 만큼 벌어진다(구성원이 많을수록 크다)', () => {
+  const make = (count) => ({
+    revision: 1,
+    nodes: Array.from({ length: count }, (_, i) => ({
+      entity_id: `n${i}`, name: `노드${i}`, kind: 'security', cluster: 0, degree: 1,
+    })),
+    edges: [],
+  });
+  const small = layoutClusterMap(make(3), { width: 1000, height: 800 }).clusters[0].radius;
+  const large = layoutClusterMap(make(10), { width: 1000, height: 800 }).clusters[0].radius;
+  assert.ok(large > small);
+  // 둘레를 구성원 수로 나눈 값이 이름표 최소 폭 이상이어야 한다.
+  assert.ok((2 * Math.PI * large) / 10 >= 100, `10명 링의 이름표 간격이 좁다: ${(2 * Math.PI * large) / 10}`);
+});
