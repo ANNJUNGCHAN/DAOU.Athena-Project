@@ -19,6 +19,7 @@
     "verify:provider-sessions:os-leak": "node scripts/check-provider-process-leaks.js --record-path ../artifacts/provider-sessions/process-manifest.ndjson --grace-ms 5000 -- node verify-provider-sessions.js --scenario all --require-orchestrator",
     "gate:provider-sessions:pure": "npm run test:provider-sessions && npm run benchmark:provider-sessions:node-injected -- --provider claude --mode deterministic --samples 1000 && npm run benchmark:provider-sessions:node-injected -- --provider codex --mode assert-disabled --samples 30 && npm run verify:provider-sessions:node-injected",
     "verify": "electron verify.js",
+    "verify:plugins": "node verify-plugins.js",
     "verify:hoga-live": "electron verify-hoga-live.js",
     "verify:integrated-cards": "electron verify-integrated-cards.js",
     "verify:semantic-workspaces": "electron verify-semantic-workspaces.js",

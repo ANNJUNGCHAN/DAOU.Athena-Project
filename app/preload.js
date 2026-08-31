@@ -30,6 +30,7 @@ const INVOKE_CHANNELS = new Set([
   'athena:mcp-stage-snippet',
   'athena:mcp-register',
   'athena:mcp-approve',
+  'athena:mcp-revoke',
   'athena:mcp-probe',
   'athena:mcp-allow-tool',
   'athena:mcp-remove',
