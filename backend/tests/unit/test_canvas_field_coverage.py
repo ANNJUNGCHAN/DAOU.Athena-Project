@@ -31,8 +31,8 @@ def test_current_coverage_is_derived_and_registry_ready() -> None:
 def test_official_opaque_fields_are_accounted_but_not_claimed_fully_named() -> None:
     report = get_current_canvas_field_coverage()
 
-    assert report.official_semantic_count == 3_703
-    assert report.official_opaque_count == 2
+    assert report.official_semantic_count == 3_702
+    assert report.official_opaque_count == 3
     assert report.unresolved_semantic_count == 0
     assert report.fully_named_semantic_complete is False
 

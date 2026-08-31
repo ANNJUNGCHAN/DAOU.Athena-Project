@@ -92,6 +92,7 @@ const $input = document.getElementById('input');
 const $dot = document.getElementById('dot');
 const $lockHint = document.getElementById('lockHint');
 const $lockText = document.getElementById('lockText');
+const $lockTime = document.getElementById('lockTime');
 const $onboard = document.getElementById('onboard');
 const $onboardBody = document.getElementById('onboardBody');
 const $settings = document.getElementById('settings');
@@ -814,10 +815,18 @@ function pickCardTypes(text) {
 }
 
 // ---------- 상태 전이 ----------
-function setLocked(locked, text) {
+// time — 경과 시간처럼 매 틱 바뀌는 짧은 값만 따로 받는다. 상태 문구와 한
+// 문자열로 합치면 좁은 창에서 말줄임이 시간을 먼저 삼킨다(2026-08-31 사용자
+// 지적 — 글자 짤림). 생략하면 시간 표기를 지운다(정적 힌트 호출자들).
+function setLocked(locked, text, time) {
   $input.disabled = locked;
+  // 잠금 중에는 placeholder를 숨긴다 — 입력이 min-width:0으로 눌리며
+  // "무엇이든 물어보세요"가 "무엇이"로 잘려 힌트 옆에 남았다(2026-08-31
+  // 사용자 지적). 답하는 중에 질문을 권하는 문구가 떠 있을 이유도 없다.
+  $input.placeholder = locked ? '' : '무엇이든 물어보세요';
   $lockHint.hidden = !locked;
   if (text) $lockText.textContent = text;
+  $lockTime.textContent = locked && time ? time : '';
 }
 
 function setDot(mode) {
@@ -874,9 +883,11 @@ function foldExecutionRecord(toolSteps, startedAt, { aborted = false } = {}) {
   label.textContent = aborted ? `${seconds}초 만에 중단됨` : `${seconds}초 동안 작업함`;
   const caret = document.createElement('span');
   caret.className = 'turn-exec-header-caret';
-  caret.textContent = '⌄';
+  // 기본 펼침(2026-08-31 사용자 지적) — 어떤 플러그인/도구가 실제로 호출됐는지가
+  // 신뢰의 근거라 접어서 숨기지 않는다. 접기는 여전히 클릭 한 번.
+  caret.textContent = '⌃';
   header.append(label, caret);
-  toolSteps.hidden = true;
+  toolSteps.hidden = false;
   header.addEventListener('click', () => {
     toolSteps.hidden = !toolSteps.hidden;
     caret.textContent = toolSteps.hidden ? '⌄' : '⌃';
@@ -976,7 +987,7 @@ async function runQueryLive(text) {
     // 문구는 대화 브랜치 디자인 정합(9ce2279)을 따르고, 표시는 main 결정(2026-08-27
     // 버블 안 중복 제거)대로 하단 잠금 힌트 한 곳에만 쓴다(병합 2026-08-27).
     const base = calling ? `카드 ${cardCount}개 렌더됨` : '판단 중 — 어떤 TR을 부를지 고르는 중';
-    setLocked(true, `${base} · ${elapsedText()} 경과`);
+    setLocked(true, base, elapsedText());
   };
   // 100ms 간격 — 표기는 소수 1자리(29.3s)인데 1초 간격으로 갱신하면 소수 자리가
   // 항상 .0으로만 보여 정수 표시와 구별되지 않았다(2026-08-18 사용자 지시).
@@ -1039,22 +1050,74 @@ async function runQueryLive(text) {
   agentDockRow.row.hidden = true;
   refreshResultDockVisibility();
   const subagentStates = new Map(); // taskId -> { description, status }
-  const subagentRows = new Map(); // taskId -> { row, label }
-  // 행은 보드 37 실측 한 줄: 색점(작업 중=info · 완료=ok) + "{이름} · {상태}".
-  function ensureSubagentRow(taskId) {
-    let entry = subagentRows.get(taskId);
-    if (entry) return entry;
-    const row = document.createElement('div');
-    row.className = 'result-dock-agent-row';
-    const dot = document.createElement('span');
-    dot.className = 'result-dock-agent-dot';
-    const label = document.createElement('span');
-    label.className = 'result-dock-agent-label';
-    row.append(dot, label);
-    $resultDockAgentList.appendChild(row);
-    entry = { row, label };
-    subagentRows.set(taskId, entry);
-    return entry;
+  // 알약 칩 레이아웃(2026-08-31 사용자 확정 — Claude 데스크톱과 같은 형태):
+  // [아이콘+이름] 알약을 가로로 늘어놓고, 3개를 넘으면 "및 다른 서브에이전트
+  // N개 …"로 접는다. 작업 중 줄과 완료 줄을 나눠 그린다.
+  const AGENT_PILL_GLYPHS = ['✳', '◈', '#', '✦', '❖'];
+  function agentPill(description, glyphIndex) {
+    const pill = document.createElement('span');
+    pill.className = 'agent-pill';
+    const glyph = document.createElement('span');
+    glyph.className = `agent-pill-glyph g${glyphIndex % AGENT_PILL_GLYPHS.length}`;
+    glyph.textContent = AGENT_PILL_GLYPHS[glyphIndex % AGENT_PILL_GLYPHS.length];
+    const name = document.createElement('span');
+    name.className = 'agent-pill-name';
+    name.textContent = description || '하위 에이전트';
+    pill.append(glyph, name);
+    return pill;
+  }
+  function agentPillLine(items, suffixWhenAll, suffixWhenMore) {
+    const line = document.createElement('div');
+    line.className = 'agent-pill-line';
+    items.slice(0, 3).forEach((item) => line.appendChild(agentPill(item.description, item.glyphIndex)));
+    const suffix = document.createElement('span');
+    suffix.className = 'agent-pill-suffix';
+    suffix.textContent = items.length > 3
+      ? `및 다른 서브에이전트 ${items.length - 3}개 ${suffixWhenMore}`
+      : suffixWhenAll;
+    line.appendChild(suffix);
+    return line;
+  }
+  function renderSubagentDock() {
+    $resultDockAgentList.textContent = '';
+    const running = [];
+    const done = [];
+    let i = 0;
+    for (const s of subagentStates.values()) {
+      const item = { description: s.description, glyphIndex: i };
+      (s.status === 'completed' ? done : running).push(item);
+      i += 1;
+    }
+    if (running.length) $resultDockAgentList.appendChild(agentPillLine(running, '작업 중', '작업 중'));
+    if (done.length) $resultDockAgentList.appendChild(agentPillLine(done, '완료됨', '업데이트됨'));
+  }
+
+  // 대화 기록 속 알약 줄(2026-08-31 사용자 확정 — Codex와 같은 형태): 시작·완료
+  // 전이가 있을 때마다 실행 기록(toolSteps) 안에 한 줄씩 남긴다. 도크는 실시간
+  // 현황이고, 이 줄들은 턴이 끝나도 기록으로 남는다. 같은 전이가 짧은 간격으로
+  // 몰리면(에이전트 여러 개 동시 기동) 한 줄로 묶는다.
+  const agentGlyphByTask = new Map(); // taskId -> glyphIndex (부여 순서 고정)
+  const agentStartBatch = [];
+  const agentDoneBatch = [];
+  let agentStartTimer = null;
+  let agentDoneTimer = null;
+  function flushAgentTranscriptBatch(batch, suffix) {
+    if (myToken !== abortToken || !batch.length) return;
+    const line = agentPillLine(batch.splice(0, batch.length), suffix, suffix);
+    line.classList.add('in-transcript');
+    toolSteps.appendChild(line);
+    scrollAfterRender();
+  }
+  function queueAgentTranscript(kind, item) {
+    if (kind === 'start') {
+      agentStartBatch.push(item);
+      clearTimeout(agentStartTimer);
+      agentStartTimer = setTimeout(() => flushAgentTranscriptBatch(agentStartBatch, '작업을 시작했습니다'), 500);
+    } else {
+      agentDoneBatch.push(item);
+      clearTimeout(agentDoneTimer);
+      agentDoneTimer = setTimeout(() => flushAgentTranscriptBatch(agentDoneBatch, '완료됨'), 500);
+    }
   }
   const onLiveSubagentStep = (step) => {
     if (myToken !== abortToken || !step || !step.taskId) return;
@@ -1062,9 +1125,14 @@ async function runQueryLive(text) {
     if (!s) {
       s = { description: null, status: 'running' };
       subagentStates.set(step.taskId, s);
+      agentGlyphByTask.set(step.taskId, agentGlyphByTask.size);
     }
     if (step.subtype === 'task_started') {
       s.description = step.description;
+      queueAgentTranscript('start', {
+        description: s.description,
+        glyphIndex: agentGlyphByTask.get(step.taskId) || 0,
+      });
     } else if (step.subtype === 'task_progress') {
       // description이 시작 때와 다르게 갱신될 수 있다(실측, .omc/research/
       // 2026-08-27-서브에이전트-스트림-계약.md §2b) — 최신 값을 반영한다.
@@ -1072,14 +1140,17 @@ async function runQueryLive(text) {
     } else if (step.subtype === 'task_updated') {
       // 확정된 상태값은 completed 하나뿐이다(실측 미관측 — 실패/취소 라벨을
       // 지어내지 않는다). completed가 아니면 이미 갖고 있던 상태를 유지한다.
-      if (step.status === 'completed') s.status = 'completed';
+      if (step.status === 'completed' && s.status !== 'completed') {
+        s.status = 'completed';
+        queueAgentTranscript('done', {
+          description: s.description,
+          glyphIndex: agentGlyphByTask.get(step.taskId) || 0,
+        });
+      }
     }
-    // task_notification의 summary는 이번 패스 UI에 안 낸다 — 도크는 압축 행이고
+    // task_notification의 summary는 이번 패스 UI에 안 낸다 — 도크는 압축 표시고
     // "자세히 보기" 드릴인은 범위 밖이다(연구 문서 §2d, output_file 노출 규율도 있다).
-    const entry = ensureSubagentRow(step.taskId);
-    const running = s.status !== 'completed';
-    entry.label.textContent = `${s.description || '하위 에이전트'} · ${running ? '작업 중' : '완료'}`;
-    entry.row.classList.toggle('is-running', running);
+    renderSubagentDock();
     // 카운트는 보드 37 실측 "완료 / 전체" 포맷.
     let doneCount = 0;
     for (const st of subagentStates.values()) if (st.status === 'completed') doneCount += 1;
@@ -1150,7 +1221,10 @@ async function runQueryLive(text) {
       $history.appendChild(streamALine);
     }
     streamedText += text;
-    streamAText.textContent = streamedText;
+    // 마크다운으로 다시 그린다 — **강조**·`코드`·목록 기호가 원문 그대로
+    // 노출되던 문제(2026-08-31 사용자 지적). 전체 재렌더지만 조각당 정규식
+    // 몇 개 수준이라 스트리밍에 부담이 없다.
+    window.AthenaLib.Markdown.render(streamAText, streamedText);
     scrollAfterRender();
   };
   const onLiveTextDelta = ({ text: delta } = {}) => {
@@ -1171,7 +1245,12 @@ async function runQueryLive(text) {
   // 훑는다. 여기 감싸는 구간이 실제 질의 왕복이다(claude -p 또는 캐시 리플레이).
   window.athena.send('athena:orb-signal', { signal: 'think', active: true });
   try {
-    result = await window.athena.invoke('athena__render_canvas', { source: 'live', query: text, expand: prefs.autoExpandCanvas });
+    // @멘션은 여기서만 동봉한다 — 사용자 버블(qText)에는 타이핑 원문이 남는다.
+    result = await window.athena.invoke('athena__render_canvas', { source: 'live', query: augmentMentions(text), expand: prefs.autoExpandCanvas });
+  } catch (err) {
+    // 핸들러가 reject하면(예: main 쪽 미처리 예외) 결과 없이 아래로 떨어져
+    // 잠금·타이머가 얼어붙었다(2026-08-31 실측). 실패 턴으로 정직하게 그린다.
+    result = { ok: false, error: String((err && err.message) || err) };
   } finally {
     clearInterval(tick);
     unsubscribeLiveCanvasAdded();
@@ -1221,9 +1300,12 @@ async function runQueryLive(text) {
     aText.className = 'turn-a';
     // 최종 텍스트는 응답값이 권위다(스트리밍 누적치가 아니다) — 조각이 유실되거나
     // 순서가 어긋나도 이 줄이 항상 진짜 답으로 덮어쓴다.
-    aText.textContent = result && result.answerText
-      ? result.answerText
-      : `완료 — 카드 ${cardCount}개, 답변 텍스트 없음`;
+    window.AthenaLib.Markdown.render(
+      aText,
+      result && result.answerText
+        ? result.answerText
+        : `완료 — 카드 ${cardCount}개, 답변 텍스트 없음`,
+    );
     if (!streamALine && !(result && result.answerPaintedByMain)) aLine.appendChild(aText);
   }
 
@@ -1239,14 +1321,8 @@ async function runQueryLive(text) {
     meta.appendChild(chip);
   }
   updateResultDock(cardCount, canvasTypes, result && result.canvasCaptions);
-  const trace = document.createElement('span');
-  const durS = result && typeof result.durationMs === 'number' ? (result.durationMs / 1000).toFixed(1) : elapsedText().replace('s', '');
-  const skipped = result && result.diagnostics && result.diagnostics.skippedLines;
-  const traceSource = result && result.source === 'kiwoom-rest'
-    ? '키움 REST'
-    : (result && result.source === 'live-cache' ? '키움 REST · 이전 해석 재사용' : 'claude -p');
-  trace.textContent = `${traceSource} · ${durS}s` + (skipped ? ` · 비JSON 라인 ${skipped}건 건너뜀` : '');
-  meta.appendChild(trace);
+  // 처리 경로·소요시간 푸터("claude -p · 11.0s")는 내부 진단 정보라 제거했다
+  // (2026-08-31 사용자 확정) — 실행 세부는 접히는 실행 기록이 이미 갖고 있다.
   aLine.appendChild(meta);
   renderRecommendations(aLine, result && result.recommendations);
 
@@ -1349,9 +1425,6 @@ async function runQueryFixture(text) {
     chip.addEventListener('click', () => window.athena.send('athena:highlight-canvas', type));
     meta.appendChild(chip);
   }
-  const trace = document.createElement('span');
-  trace.textContent = types.map((t) => CARD_PLAN[t].toolLabel).join(' · ') + ` · ${((types.length * 0.5) + 0.55).toFixed(1)}s`;
-  meta.appendChild(trace);
   aLine.appendChild(meta);
 
   $history.appendChild(aLine);
@@ -1495,6 +1568,106 @@ window.AthenaShell.registerSeedChatInput((text) => {
   $input.focus();
 });
 
+// ---------- @ 플러그인 멘션 ----------
+// Claude 데스크톱의 @ 멘션과 같은 UX: 입력란에서 @를 치면 등록된 MCP 서버 목록이
+// 뜨고, 고르면 @alias가 삽입된다. 제출 시 @alias가 실제 등록 서버와 일치하면
+// 모델에게 그 서버의 도구를 우선 쓰라는 지시를 질의에 동봉한다(화면의 사용자
+// 버블에는 타이핑한 원문만 남는다).
+const mentionState = { aliases: [], loaded: false, open: false, items: [], active: 0 };
+const $mentionMenu = document.createElement('div');
+$mentionMenu.className = 'mention-menu';
+$mentionMenu.hidden = true;
+document.body.appendChild($mentionMenu);
+
+async function loadMentionAliases() {
+  if (mentionState.loaded) return;
+  try {
+    const res = await window.athena.invoke('athena:mcp-list');
+    mentionState.aliases = ((res && res.servers) || [])
+      .filter((s) => s && s.approved)
+      .map((s) => ({ alias: s.alias, hint: [s.command, s.argsPreview].filter(Boolean).join(' ') }));
+    mentionState.loaded = true;
+  } catch { /* 목록 실패 — 멘션 없이도 입력은 정상이어야 한다 */ }
+}
+void loadMentionAliases();
+
+// 커서 앞의 "@토큰"을 찾는다. 없으면 null.
+function mentionTokenAtCaret() {
+  const caret = $input.selectionStart == null ? $input.value.length : $input.selectionStart;
+  const before = $input.value.slice(0, caret);
+  const match = before.match(/@([A-Za-z0-9_-]*)$/);
+  if (!match) return null;
+  return { start: caret - match[0].length, end: caret, query: match[1] };
+}
+
+function closeMentionMenu() {
+  mentionState.open = false;
+  $mentionMenu.hidden = true;
+  $mentionMenu.textContent = '';
+}
+
+function insertMention(alias) {
+  const token = mentionTokenAtCaret();
+  if (!token) { closeMentionMenu(); return; }
+  const value = $input.value;
+  $input.value = `${value.slice(0, token.start)}@${alias} ${value.slice(token.end)}`;
+  const caret = token.start + alias.length + 2;
+  $input.setSelectionRange(caret, caret);
+  $input.focus();
+  closeMentionMenu();
+}
+
+function renderMentionMenu(items) {
+  $mentionMenu.textContent = '';
+  items.forEach((item, i) => {
+    const row = document.createElement('button');
+    row.type = 'button';
+    row.className = `mention-item${i === mentionState.active ? ' is-active' : ''}`;
+    const name = document.createElement('span');
+    name.className = 'mention-item-name';
+    name.textContent = `@${item.alias}`;
+    const hint = document.createElement('span');
+    hint.className = 'mention-item-hint';
+    hint.textContent = item.hint;
+    row.append(name, hint);
+    // mousedown — click은 input blur 뒤라 토큰 위치가 흔들린다.
+    row.addEventListener('mousedown', (e) => { e.preventDefault(); insertMention(item.alias); });
+    $mentionMenu.appendChild(row);
+  });
+  const rect = $input.getBoundingClientRect();
+  $mentionMenu.style.left = `${rect.left}px`;
+  $mentionMenu.style.bottom = `${window.innerHeight - rect.top + 6}px`;
+  $mentionMenu.style.minWidth = `${Math.min(420, Math.max(240, rect.width * 0.6))}px`;
+  $mentionMenu.hidden = false;
+  mentionState.open = true;
+  mentionState.items = items;
+}
+
+$input.addEventListener('input', () => {
+  const token = mentionTokenAtCaret();
+  if (!token) { closeMentionMenu(); return; }
+  void loadMentionAliases();
+  const needle = token.query.toLowerCase();
+  const items = mentionState.aliases
+    .filter((s) => s.alias.toLowerCase().includes(needle))
+    .slice(0, 8);
+  if (!items.length) { closeMentionMenu(); return; }
+  mentionState.active = 0;
+  renderMentionMenu(items);
+});
+$input.addEventListener('blur', () => closeMentionMenu());
+
+// 제출 직전 호출 — @alias가 실제 등록 서버명일 때만 지시를 동봉한다. 오탈자나
+// 이메일 주소 같은 우연한 @는 그대로 평문으로 남는다.
+function augmentMentions(text) {
+  const known = new Set(mentionState.aliases.map((s) => s.alias));
+  const mentioned = [...new Set(
+    [...String(text).matchAll(/@([A-Za-z0-9_-]+)/g)].map((m) => m[1]).filter((a) => known.has(a)),
+  )];
+  if (!mentioned.length) return text;
+  return `${text}\n\n(사용자가 지정한 플러그인: ${mentioned.map((a) => `@${a}`).join(', ')} — 이 MCP 서버의 도구를 우선 사용해 답하라.)`;
+}
+
 // ---------- 입력 ----------
 function dispatchUserQuery(text) {
   const normalized = String(text || '').trim() || '보유 종목 수급 요약해줘';
@@ -1510,6 +1683,23 @@ function dispatchUserQuery(text) {
 }
 
 $input.addEventListener('keydown', (e) => {
+  // 멘션 메뉴가 열려 있으면 방향키·Enter·Tab·Esc는 메뉴 몫이다 — 제출보다 먼저.
+  if (mentionState.open) {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      const delta = e.key === 'ArrowDown' ? 1 : -1;
+      mentionState.active = (mentionState.active + delta + mentionState.items.length) % mentionState.items.length;
+      renderMentionMenu(mentionState.items);
+      return;
+    }
+    if (e.key === 'Enter' || e.key === 'Tab') {
+      e.preventDefault();
+      const item = mentionState.items[mentionState.active];
+      if (item) insertMention(item.alias);
+      return;
+    }
+    if (e.key === 'Escape') { e.preventDefault(); closeMentionMenu(); return; }
+  }
   if (e.key !== 'Enter' || state !== 'idle' || remoteQueryBusy) return;
   // 첨부 칩이 있으면 전송 직전에 경로를 동봉한다(코덱스 UI 이식, 2026-08-27).
   const text = consumeAttachments($input.value);
@@ -2210,7 +2400,7 @@ window.athena.on('athena:orb-turn-committed', ({ query, result } = {}) => {
   } else {
     const aText = document.createElement('div');
     aText.className = 'turn-a';
-    aText.textContent = (result && result.answerText) || '완료 — 답변 텍스트 없음';
+    window.AthenaLib.Markdown.render(aText, (result && result.answerText) || '완료 — 답변 텍스트 없음');
     aLine.appendChild(aText);
   }
 
@@ -2223,10 +2413,6 @@ window.athena.on('athena:orb-turn-committed', ({ query, result } = {}) => {
     chip.textContent = canvasTypeLabel(t);
     meta.appendChild(chip);
   }
-  const trace = document.createElement('span');
-  const durS = result && typeof result.durationMs === 'number' ? (result.durationMs / 1000).toFixed(1) : null;
-  trace.textContent = '오브에서 대화' + (durS ? ` · ${durS}s` : '');
-  meta.appendChild(trace);
   aLine.appendChild(meta);
 
   $history.appendChild(aLine);

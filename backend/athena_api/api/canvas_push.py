@@ -2,12 +2,18 @@
 from __future__ import annotations
 
 import asyncio
+import hashlib
+import json
 import logging
+import threading
 import time
+import unicodedata
+from dataclasses import dataclass
+from dataclasses import field as dataclass_field
 from typing import Annotated, Any, Literal
 
 import httpx
-from fastapi import APIRouter, Depends, Request, Response, WebSocket
+from fastapi import APIRouter, Depends, Header, HTTPException, Request, Response, WebSocket
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field, model_validator
 
@@ -37,7 +43,9 @@ from athena_api.dependencies import (
     get_kiwoom_client,
 )
 from athena_api.errors import KiwoomError
+from athena_api.generated.registry import WEBSOCKET_TR_IDS
 from athena_api.kiwoom import KiwoomClient
+from athena_api.security import require_local_bearer
 from athena_api.selector import SelectorService
 from athena_api.selector.errors import (
     AmbiguousOperationError,
@@ -53,6 +61,8 @@ from athena_api.selector.schemas import (
     ResolveRequest,
     SearchRequest,
 )
+from athena_api.semantic_presentation_registry import get_semantic_presentation_registry
+from athena_api.view_recipe_registry import get_view_recipe_registry
 
 logger = logging.getLogger(__name__)
 
@@ -92,6 +102,32 @@ _BUILD_FROM_TR_DATA = {
     "compound": build_compound_generic,
 }
 
+_LEGACY_PROJECTION_PUBLIC_LABELS = {
+    "detail:ka10004:buy_bid_prices": {
+        "stk_cd": "종목코드",
+        "stk_nm": "종목명",
+        "bid_req_base_tm": "호가 기준 시각",
+        "sel_bid_tot_req": "총매도 잔량",
+        "buy_bid_tot_req": "총매수 잔량",
+        **{
+            f"sel_{level}bid": f"매도 {level}호가"
+            for level in range(1, 11)
+        },
+        **{
+            f"sel_{level}bid_req": f"매도 {level}호가 잔량"
+            for level in range(1, 11)
+        },
+        **{
+            f"buy_{level}bid": f"매수 {level}호가"
+            for level in range(1, 11)
+        },
+        **{
+            f"buy_{level}bid_req": f"매수 {level}호가 잔량"
+            for level in range(1, 11)
+        },
+    }
+}
+
 _INTEGRATED_CARD_FIELDS = frozenset(
     {
         "card_id",
@@ -102,11 +138,581 @@ _INTEGRATED_CARD_FIELDS = frozenset(
         "operation_refs",
         "field_contract",
         "coverage_receipt",
+        "envelope_version",
+        "view_recipe",
+        "presentation_contract",
+        "view_instance_id",
+        "semantic_observations",
+        "realtime_bindings",
+        "workspace_generation",
+        "view_generation",
+        "update_policy",
     }
 )
 
+# 최상위에 실려도 통합 카드 블록이 canonical과 대조·치환하는 계약 필드다
+# (_INTEGRATED_CARD_FIELDS의 부분집합). 중첩 위치에는 그 대조가 없으므로 예외가
+# 적용되지 않는다 — _forbidden_generic_task_canvas_aliases 주석 참고.
+_TOP_LEVEL_RECONCILED_CONTRACT_FIELDS = frozenset(
+    {"field_contract", "coverage_receipt"}
+)
 
-def _integrated_card_contract(operation_ref: str) -> dict[str, Any]:
+_GENERIC_TASK_CANVAS_CONTRACT_ALIASES = frozenset(
+    {
+        "task_canvas",
+        "taskCanvas",
+        "envelope_version",
+        "envelopeVersion",
+        "view_recipe",
+        "viewRecipe",
+        "presentation_contract",
+        "presentationContract",
+        "view_instance_id",
+        "viewInstanceId",
+        "semantic_observations",
+        "semanticObservations",
+        "realtime_bindings",
+        "realtimeBindings",
+        "workspace_generation",
+        "workspaceGeneration",
+        "view_generation",
+        "viewGeneration",
+        "update_policy",
+        "updatePolicy",
+        "field_contract",
+        "fieldContract",
+        "coverage_receipt",
+        "coverageReceipt",
+    }
+)
+
+_TASK_CANVAS_ENVELOPE_VERSION = "task-canvas.v1"
+_REALTIME_BINDING_VERSION = "semantic-realtime.v1"
+_TECHNICAL_DESCRIPTION_TOKENS = (
+    "응답키",
+    "응답 키",
+    "response key",
+    "json path",
+    "alias",
+    "mapping_id",
+    "operation_ref",
+    "fid ",
+    "raw ",
+)
+
+
+def _observation_id(wire_occurrence_id: str, array_index: int | None = None) -> str:
+    suffix = "scalar" if array_index is None else f"row:{array_index}"
+    digest = hashlib.sha256(
+        f"semantic-observation\0{wire_occurrence_id}\0{suffix}".encode()
+    ).hexdigest()[:20]
+    return f"obs_{digest}"
+
+
+def _realtime_binding_id(concept_id: str, display_slot: int | None) -> str:
+    slot = "scalar" if display_slot is None else f"slot:{display_slot}"
+    digest = hashlib.sha256(
+        f"semantic-realtime-binding\0{concept_id}\0{slot}".encode()
+    ).hexdigest()[:20]
+    return f"rtb_{digest}"
+
+
+def _internal_realtime_binding_contract(operation_id: str) -> dict[str, Any]:
+    """Return the raw-key registry for the trusted main-process boundary only.
+
+    Raw WebSocket aliases must never enter the Task Canvas envelope.  The local
+    Electron main process fetches this bearer-guarded contract, converts a wire
+    tick to opaque ``semantic_updates``, and sends only those updates onward.
+    """
+
+    if operation_id not in WEBSOCKET_TR_IDS:
+        raise KeyError(f"unknown realtime operation: {operation_id!r}")
+    contracts = get_semantic_presentation_registry().for_operation(
+        f"base:{operation_id}"
+    )
+    source_bindings: dict[str, dict[str, Any]] = {}
+    for contract in contracts:
+        public = _product_field(contract)
+        if public is None:
+            continue
+        descriptor = {
+            "binding_id": public["realtime_binding_id"],
+            **(
+                {"display_slot": public["display_slot"]}
+                if public.get("display_slot") is not None
+                else {}
+            ),
+        }
+        prior = source_bindings.setdefault(contract.alias, descriptor)
+        if prior != descriptor:
+            raise ValueError(
+                f"ambiguous realtime source alias for {operation_id!r}"
+            )
+    return {
+        "binding_version": _REALTIME_BINDING_VERSION,
+        "operation_id": operation_id,
+        "source_bindings": source_bindings,
+    }
+
+
+def _product_field(contract: Any) -> dict[str, Any] | None:
+    public = contract.public_serializable()
+    if public is None or contract.field_class not in {"semantic", "derived"}:
+        return None
+    description = public.get("description")
+    if isinstance(description, str) and any(
+        token in description.lower() for token in _TECHNICAL_DESCRIPTION_TOKENS
+    ):
+        public["description"] = None
+    public["observation_id"] = _observation_id(contract.wire_occurrence_id)
+    public["realtime_binding_id"] = _realtime_binding_id(
+        public["concept_id"], public.get("display_slot")
+    )
+    public["field_class"] = contract.field_class
+    return public
+
+
+def _authoritative_public_labels(operation_ref: str) -> dict[str, str]:
+    """Return only unambiguous, operation-scoped product labels by wire alias."""
+
+    labels_by_alias: dict[str, set[str]] = {}
+    for contract in get_semantic_presentation_registry().for_operation(operation_ref):
+        if not contract.user_visible or not contract.label_ko:
+            continue
+        labels_by_alias.setdefault(contract.alias, set()).add(contract.label_ko)
+    labels = {
+        alias: next(iter(labels))
+        for alias, labels in labels_by_alias.items()
+        if len(labels) == 1
+    }
+    for alias, label in _LEGACY_PROJECTION_PUBLIC_LABELS.get(
+        operation_ref, {}
+    ).items():
+        existing = labels.get(alias)
+        if existing is not None and existing != label:
+            raise CanvasCardRegistryError(
+                f"operation {operation_ref!r} has conflicting public labels "
+                f"for projection field {alias!r}"
+            )
+        labels[alias] = label
+    return labels
+
+
+def _apply_authoritative_public_labels(
+    operation_ref: str,
+    data: dict[str, Any],
+) -> tuple[dict[str, str], ...]:
+    """Replace legacy projection labels without guessing from aliases or text."""
+
+    labels = _authoritative_public_labels(operation_ref)
+    contracts_by_alias: dict[str, list[Any]] = {}
+    for contract in get_semantic_presentation_registry().for_operation(operation_ref):
+        contracts_by_alias.setdefault(contract.alias, []).append(contract)
+    dropped: list[dict[str, str]] = []
+
+    def relabel(items: Any, *, location: str, rows: Any = None) -> None:
+        if not isinstance(items, list):
+            return
+        public_items: list[dict[str, Any]] = []
+        dropped_keys: set[str] = set()
+        for item in items:
+            if not isinstance(item, dict):
+                continue
+            key = item.get("key")
+            if not isinstance(key, str):
+                continue
+            label = labels.get(key)
+            if label is None:
+                contracts = contracts_by_alias.get(key, [])
+                field_classes = {contract.field_class for contract in contracts}
+                if contracts and field_classes <= {
+                    "internal",
+                    "transport",
+                    "unresolved",
+                }:
+                    reason = "+".join(sorted(field_classes))
+                    dropped.append(
+                        {"location": location, "key": key, "reason": reason}
+                    )
+                    dropped_keys.add(key)
+                    continue
+                raise CanvasCardRegistryError(
+                    f"operation {operation_ref!r} has no unambiguous public label "
+                    f"for projection field {key!r}"
+                )
+            item["label"] = label
+            public_items.append(item)
+        items[:] = public_items
+        if dropped_keys and isinstance(rows, list):
+            for row in rows:
+                if not isinstance(row, dict):
+                    continue
+                for key in dropped_keys:
+                    row.pop(key, None)
+
+    relabel(data.get("fields"), location="fields")
+    relabel(data.get("columns"), location="columns", rows=data.get("rows"))
+    relabel(data.get("header"), location="header")
+    table = data.get("table")
+    if isinstance(table, dict):
+        relabel(
+            table.get("columns"),
+            location="table.columns",
+            rows=table.get("rows"),
+        )
+    return tuple(dropped)
+
+
+def _canonical_identity_value(value: Any) -> Any:
+    """Normalize signed JSON values without deriving meaning from user-visible text."""
+
+    if isinstance(value, str):
+        return unicodedata.normalize("NFKC", value).strip()
+    if isinstance(value, list):
+        return [_canonical_identity_value(item) for item in value]
+    if isinstance(value, dict):
+        normalized: dict[str, Any] = {}
+        for raw_key, raw_value in value.items():
+            key = unicodedata.normalize("NFKC", str(raw_key)).strip()
+            if not key or key in normalized:
+                raise ValueError("signed plan arguments have ambiguous normalized keys")
+            normalized[key] = _canonical_identity_value(raw_value)
+        return normalized
+    return value
+
+
+def _view_instance_id(
+    operation_ref: str,
+    recipe_id: str,
+    *,
+    arguments: dict[str, Any],
+    question_hash: str,
+    account: str,
+    dataset_id: str | None,
+) -> str:
+    """Build an opaque workspace identity only from signed and canonical inputs."""
+
+    request_scope = (
+        {"dataset_id": unicodedata.normalize("NFKC", dataset_id).strip()}
+        if dataset_id is not None
+        else {"question_hash": question_hash}
+    )
+    identity = {
+        "request_scope": request_scope,
+        "task": {"recipe_id": recipe_id},
+        "target_query": {
+            "operation_ref": operation_ref,
+            "arguments": _canonical_identity_value(arguments),
+        },
+        "account": unicodedata.normalize("NFKC", account).strip(),
+    }
+    canonical = json.dumps(
+        identity,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+        allow_nan=False,
+    )
+    digest = hashlib.sha256(f"task-canvas-view\0{canonical}".encode()).hexdigest()[:20]
+    return f"view_{digest}"
+
+
+@dataclass(frozen=True, slots=True)
+class _WorkspaceReservation:
+    view_instance_id: str
+    generation: int
+    update_policy: Literal["replace", "enrich"]
+
+
+@dataclass(slots=True)
+class _WorkspaceGenerationLedger:
+    """In-process latest-request-wins clock for one FastAPI application instance."""
+
+    generation: int = 0
+    emitted_views: set[str] = dataclass_field(default_factory=set)
+    latest_generation_by_view: dict[str, int] = dataclass_field(default_factory=dict)
+    lock: threading.Lock = dataclass_field(default_factory=threading.Lock)
+
+    def reserve(self, view_instance_id: str) -> _WorkspaceReservation:
+        with self.lock:
+            self.generation += 1
+            reservation = _WorkspaceReservation(
+                view_instance_id=view_instance_id,
+                generation=self.generation,
+                update_policy=(
+                    "enrich" if view_instance_id in self.emitted_views else "replace"
+                ),
+            )
+            self.latest_generation_by_view[view_instance_id] = reservation.generation
+            return reservation
+
+    def finalize(self, reservation: _WorkspaceReservation) -> bool:
+        with self.lock:
+            if (
+                self.latest_generation_by_view.get(reservation.view_instance_id)
+                != reservation.generation
+            ):
+                return False
+            self.emitted_views.add(reservation.view_instance_id)
+            return True
+
+
+_WORKSPACE_LEDGER_INIT_LOCK = threading.Lock()
+
+
+def _workspace_generation_ledger(app: Any) -> _WorkspaceGenerationLedger:
+    ledger = getattr(app.state, "task_canvas_generation_ledger", None)
+    if isinstance(ledger, _WorkspaceGenerationLedger):
+        return ledger
+    with _WORKSPACE_LEDGER_INIT_LOCK:
+        ledger = getattr(app.state, "task_canvas_generation_ledger", None)
+        if not isinstance(ledger, _WorkspaceGenerationLedger):
+            ledger = _WorkspaceGenerationLedger()
+            app.state.task_canvas_generation_ledger = ledger
+    return ledger
+
+
+def _reserve_workspace(app: Any, card_contract: dict[str, Any]) -> _WorkspaceReservation:
+    return _workspace_generation_ledger(app).reserve(card_contract["view_instance_id"])
+
+
+def _apply_workspace_reservation(
+    app: Any,
+    card_contract: dict[str, Any],
+    reservation: _WorkspaceReservation,
+) -> bool:
+    if not _workspace_generation_ledger(app).finalize(reservation):
+        return False
+    card_contract.update(
+        {
+            "workspace_generation": reservation.generation,
+            "view_generation": reservation.generation,
+            "update_policy": reservation.update_policy,
+        }
+    )
+    return True
+
+
+def _task_canvas_contract(
+    operation_ref: str,
+    *,
+    arguments: dict[str, Any] | None = None,
+    question_hash: str = "0" * 64,
+    account: str | None = None,
+    dataset_id: str | None = None,
+) -> dict[str, Any]:
+    """Derive product-safe presentation solely from canonical server registries."""
+
+    recipe = get_view_recipe_registry().for_operation(operation_ref)
+    semantic_contracts = get_semantic_presentation_registry().for_operation(operation_ref)
+    fields_by_section: dict[str, list[dict[str, Any]]] = {
+        section_id: [] for section_id in recipe.section_ids
+    }
+    for contract in semantic_contracts:
+        public = _product_field(contract)
+        if public is None:
+            continue
+        fields_by_section[contract.section_id].append(public)
+
+    sections = []
+    for section_id in recipe.section_ids:
+        policy = recipe.section_policy(section_id)
+        sections.append(
+            {
+                "section_id": section_id,
+                "title_ko": section_id.replace("-", " "),
+                "section_order": policy.section_order,
+                "visibility_policy": policy.visibility_policy,
+                "required": policy.required,
+                "workflow_only": policy.workflow_only,
+                "fields": fields_by_section[section_id],
+            }
+        )
+    return {
+        "envelope_version": _TASK_CANVAS_ENVELOPE_VERSION,
+        "view_instance_id": _view_instance_id(
+            operation_ref,
+            recipe.recipe_id,
+            arguments=arguments or {},
+            question_hash=question_hash,
+            account=account or "",
+            dataset_id=dataset_id,
+        ),
+        "view_recipe": {
+            "recipe_id": recipe.recipe_id,
+            "title_ko": recipe.title_ko,
+            "user_task": recipe.user_task,
+            "section_ids": list(recipe.section_ids),
+            "primary_component_id": recipe.primary_component_id,
+            "source_precedence": list(recipe.source_precedence),
+            "section_policies": [
+                policy.serializable() for policy in recipe.section_policies
+            ],
+        },
+        "presentation_contract": {
+            "recipe_id": recipe.recipe_id,
+            "title_ko": recipe.title_ko,
+            "description_ko": recipe.user_task,
+            "primary_component_id": recipe.primary_component_id,
+            "sections": sections,
+        },
+        "semantic_observations": [],
+        "realtime_bindings": [],
+    }
+
+
+def _json_path_values(source: Any, json_path: str) -> list[Any]:
+    """Evaluate the registry's small ``$.key`` / ``$.rows[].key`` path subset."""
+
+    if json_path == "$":
+        return [source]
+    if not json_path.startswith("$."):
+        return []
+    nodes = [source]
+    for raw_part in json_path[2:].split("."):
+        expands_array = raw_part.endswith("[]")
+        key = raw_part[:-2] if expands_array else raw_part
+        next_nodes: list[Any] = []
+        for node in nodes:
+            if not isinstance(node, dict) or key not in node:
+                continue
+            value = node[key]
+            if expands_array:
+                if isinstance(value, list):
+                    next_nodes.extend(value)
+            else:
+                next_nodes.append(value)
+        nodes = next_nodes
+        if not nodes:
+            break
+    return nodes
+
+
+def _bind_semantic_values(
+    card_contract: dict[str, Any],
+    operation_ref: str,
+    source: Any,
+) -> None:
+    """Attach only product-safe values while retaining occurrence identity."""
+
+    observations: list[dict[str, Any]] = []
+    first_value_by_observation: dict[str, Any] = {}
+    columns_by_section: dict[str, dict[str, dict[str, Any]]] = {}
+    rows_by_section: dict[str, dict[int, dict[str, Any]]] = {}
+    for contract in get_semantic_presentation_registry().for_operation(operation_ref):
+        public = _product_field(contract)
+        if public is None:
+            continue
+        indexed_values = [
+            (index, value)
+            for index, value in enumerate(_json_path_values(source, contract.json_path))
+            if not isinstance(value, (dict, list, tuple, set))
+        ]
+        is_array_field = "[]" in contract.json_path
+        column_key = f"col_{_observation_id(contract.wire_occurrence_id)[4:]}"
+        for index, value in indexed_values:
+            observation = {
+                **public,
+                "observation_id": _observation_id(
+                    contract.wire_occurrence_id,
+                    index if is_array_field else None,
+                ),
+                "value": value,
+            }
+            if is_array_field:
+                observation["array_index"] = index
+                columns_by_section.setdefault(contract.section_id, {}).setdefault(
+                    column_key,
+                    {
+                        "key": column_key,
+                        "label_ko": public["label_ko"],
+                        "unit_or_format": public.get("unit_or_format"),
+                        "display_metadata": public.get("display_metadata"),
+                        "display_tier": public.get("display_tier"),
+                        "display_group": public.get("display_group"),
+                        "display_order": public.get("display_order"),
+                        "display_slot": public.get("display_slot"),
+                        "visibility_policy": public.get("visibility_policy"),
+                        "realtime_binding_id": public["realtime_binding_id"],
+                    },
+                )
+                rows_by_section.setdefault(contract.section_id, {}).setdefault(
+                    index, {}
+                )[column_key] = value
+            observations.append(observation)
+        if indexed_values and not is_array_field:
+            first_value_by_observation[public["observation_id"]] = indexed_values[0][1]
+
+    visible_sections: list[dict[str, Any]] = []
+    for section in card_contract["presentation_contract"]["sections"]:
+        section["fields"].sort(
+            key=lambda field: (
+                field.get("display_order") is None,
+                field.get("display_order") or 0,
+                field.get("display_slot") is None,
+                field.get("display_slot") or 0,
+                field.get("observation_id") or "",
+            )
+        )
+        for field in section["fields"]:
+            observation_id = field.get("observation_id")
+            if observation_id in first_value_by_observation:
+                field["value"] = first_value_by_observation[observation_id]
+        section_id = section["section_id"]
+        section_columns = columns_by_section.get(section_id)
+        section_rows = rows_by_section.get(section_id)
+        if section_columns and section_rows:
+            section["columns"] = sorted(
+                section_columns.values(),
+                key=lambda column: (
+                    column.get("display_order") is None,
+                    column.get("display_order") or 0,
+                    column.get("display_slot") is None,
+                    column.get("display_slot") or 0,
+                    column["key"],
+                ),
+            )
+            section["rows"] = [section_rows[index] for index in sorted(section_rows)]
+        section["fields"] = [field for field in section["fields"] if "value" in field]
+        has_data = bool(section["fields"] or section.get("rows"))
+        if section["visibility_policy"] == "when-data" and not has_data:
+            continue
+        section["status"] = "available" if has_data or section["workflow_only"] else "empty"
+        visible_sections.append(section)
+    card_contract["presentation_contract"]["sections"] = visible_sections
+    observations.sort(
+        key=lambda item: (
+            item.get("display_order") is None,
+            item.get("display_order") or 0,
+            item.get("display_slot") is None,
+            item.get("display_slot") or 0,
+            item.get("array_index", -1),
+            item["observation_id"],
+        )
+    )
+    card_contract["semantic_observations"] = observations
+    card_contract["realtime_bindings"] = [
+        {
+            "binding_id": observation["realtime_binding_id"],
+            "observation_id": observation["observation_id"],
+            **(
+                {"array_index": observation["array_index"]}
+                if "array_index" in observation
+                else {}
+            ),
+        }
+        for observation in observations
+    ]
+
+
+def _integrated_card_contract(
+    operation_ref: str,
+    *,
+    arguments: dict[str, Any] | None = None,
+    question_hash: str = "0" * 64,
+    account: str | None = None,
+    dataset_id: str | None = None,
+) -> dict[str, Any]:
     """Derive all integrated-card routing from one authoritative operation."""
 
     resolved = resolve_canvas_card(operation_ref)
@@ -140,6 +746,13 @@ def _integrated_card_contract(operation_ref: str) -> dict[str, Any]:
                 "unresolved_occurrence_ids": unresolved,
                 "lossless": not unresolved,
             },
+            **_task_canvas_contract(
+                operation_ref,
+                arguments=arguments,
+                question_hash=question_hash,
+                account=account,
+                dataset_id=dataset_id,
+            ),
         }
     )
     return metadata
@@ -176,15 +789,91 @@ def _enqueue_envelope(queue: asyncio.Queue, envelope: dict[str, Any]) -> None:
                 pass
 
 
+def _forbidden_generic_task_canvas_aliases(envelope: dict[str, Any]) -> list[str]:
+    """Find client-owned Task Canvas contracts anywhere on the generic wire.
+
+    The generic side channel may still carry ordinary nested card data.  Task
+    Canvas contracts, however, are server-derived by signed selector dispatch;
+    accepting their renderer aliases from any nested object would bypass that
+    authority boundary.
+    """
+
+    forbidden: set[str] = set()
+    stack: list[Any] = []
+    # 최상위의 field_contract·coverage_receipt만 예외다. 그 둘은 아래 통합 카드
+    # 블록이 canonical operation_ref로 다시 파생해 값을 대조하고(불일치 → 422)
+    # 최종적으로 canonical로 덮어쓰므로 위조가 통하지 않는다. 여기서까지 막으면
+    # 그 블록이 도달 불가가 되어, MCP render_with_plan이 항상 싣는 두 필드 때문에
+    # 정상 카드 push가 전부 422로 거부된다(2026-08-31 실측). 중첩 객체 안에서는
+    # 대조 경로가 없으므로 같은 이름도 그대로 금지다.
+    for key, child in envelope.items():
+        if key in _TOP_LEVEL_RECONCILED_CONTRACT_FIELDS:
+            continue
+        if key in _GENERIC_TASK_CANVAS_CONTRACT_ALIASES:
+            forbidden.add(key)
+        stack.append(child)
+    while stack:
+        value = stack.pop()
+        if isinstance(value, dict):
+            for key, child in value.items():
+                if key in _GENERIC_TASK_CANVAS_CONTRACT_ALIASES:
+                    forbidden.add(key)
+                stack.append(child)
+        elif isinstance(value, list):
+            stack.extend(value)
+    return sorted(forbidden)
+
+
 @router.post("/api/v1/canvas/push", operation_id="canvas_push")
 async def canvas_push(request: Request, envelope: dict[str, Any]) -> JSONResponse:
     if not isinstance(envelope.get("canvas_type"), str) or not envelope["canvas_type"]:
         return JSONResponse(
             status_code=422, content={"detail": "envelope에 canvas_type(str)이 필요하다"}
         )
+    operation_ref = envelope.get("operation_ref")
+    if envelope["canvas_type"] == "action":
+        return JSONResponse(
+            status_code=422,
+            content={
+                "code": "GENERIC_ORDER_PUSH_FORBIDDEN",
+                "detail": "주문 action은 signed selector dispatch에서만 생성할 수 있다",
+            },
+        )
+    if envelope["canvas_type"] in {"event", "status"}:
+        return JSONResponse(
+            status_code=422,
+            content={
+                "code": "GENERIC_WORKFLOW_PUSH_FORBIDDEN",
+                "detail": "workflow 상태는 signed selector dispatch에서만 생성할 수 있다",
+            },
+        )
+    if isinstance(operation_ref, str) and operation_ref:
+        try:
+            resolved_operation = resolve_canvas_card(operation_ref)
+        except (CanvasCardRegistryError, KeyError, ValueError):
+            resolved_operation = None
+        if resolved_operation is not None and resolved_operation.capability_id == "order":
+            return JSONResponse(
+                status_code=422,
+                content={
+                    "code": "GENERIC_ORDER_PUSH_FORBIDDEN",
+                    "detail": "주문 receipt/status는 signed selector dispatch에서만 파생한다",
+                },
+            )
+    forbidden_task_canvas_aliases = _forbidden_generic_task_canvas_aliases(envelope)
+    if (
+        envelope["canvas_type"] in {"task_canvas", "task-canvas"}
+        or forbidden_task_canvas_aliases
+    ):
+        return JSONResponse(
+            status_code=422,
+            content={
+                "code": "GENERIC_TASK_CANVAS_CONTRACT_FORBIDDEN",
+                "detail": "Task Canvas contract는 signed selector dispatch에서만 생성할 수 있다",
+            },
+        )
     supplied_integrated_fields = _INTEGRATED_CARD_FIELDS.intersection(envelope)
     if supplied_integrated_fields:
-        operation_ref = envelope.get("operation_ref")
         if not isinstance(operation_ref, str) or not operation_ref:
             return JSONResponse(
                 status_code=422,
@@ -222,6 +911,26 @@ async def canvas_push(request: Request, envelope: dict[str, Any]) -> JSONRespons
         )
     _enqueue_envelope(queue, envelope)  # 최신 우선 — routines notify와 같은 정책
     return JSONResponse(content={"queued": True})
+
+
+@router.get(
+    "/api/v1/internal/canvas/realtime-bindings/{operation_id}",
+    operation_id="internal_canvas_realtime_bindings",
+    openapi_extra={"x-athena-llm-exposed": False},
+)
+async def internal_canvas_realtime_bindings(
+    request: Request,
+    operation_id: str,
+    authorization: Annotated[str, Header(alias="Authorization")] = "",
+) -> JSONResponse:
+    """Give trusted app-main the wire-to-opaque tick translation registry."""
+
+    require_local_bearer(request, authorization)
+    try:
+        contract = _internal_realtime_binding_contract(operation_id)
+    except (KeyError, ValueError) as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    return JSONResponse(content=contract)
 
 
 class RenderPlanRequest(BaseModel):
@@ -470,6 +1179,7 @@ def _screen_contract(operation_ref: str | None) -> tuple[str, str, str | None] |
 
 def _error_state_response(
     *,
+    app: Any,
     payload: RenderPlanRequest,
     operation_ref: str,
     canvas_kind: str,
@@ -480,9 +1190,18 @@ def _error_state_response(
     retryable: bool,
     total_start: float,
     call_ms: float,
+    card_contract: dict[str, Any],
+    reservation: _WorkspaceReservation,
 ) -> JSONResponse:
+    if not _apply_workspace_reservation(app, card_contract, reservation):
+        return _stale_workspace_response(
+            operation_ref=operation_ref,
+            reservation=reservation,
+        )
     correlation = _correlation(payload)
-    card_contract = _integrated_card_contract(operation_ref)
+    card_contract["presentation_contract"]["status"] = state
+    for section in card_contract["presentation_contract"]["sections"]:
+        section["status"] = state
     envelope: dict[str, Any] = {
         "canvas_type": canvas_kind,
         "screen_id": screen_id,
@@ -527,6 +1246,28 @@ def _error_state_response(
                 delivery_ms=0.0,
             ),
             "next_actions": ["retry_query"] if retryable else [],
+        }
+    )
+
+
+def _stale_workspace_response(
+    *,
+    operation_ref: str,
+    reservation: _WorkspaceReservation,
+) -> JSONResponse:
+    """A newer app-scoped request won; never emit the obsolete envelope."""
+
+    return JSONResponse(
+        content={
+            "queued": False,
+            "status": "stale_discarded",
+            "code": "STALE_WORKSPACE_GENERATION",
+            "operation_ref": operation_ref,
+            "view_instance_id": reservation.view_instance_id,
+            "workspace_generation": reservation.generation,
+            "view_generation": reservation.generation,
+            "envelope": None,
+            "next_actions": [],
         }
     )
 
@@ -616,7 +1357,13 @@ async def selector_dispatch(
         plan_token, selector.catalog, expected_account=account
     )
     try:
-        card_contract = _integrated_card_contract(verified_plan.operation_ref)
+        card_contract = _integrated_card_contract(
+            verified_plan.operation_ref,
+            arguments=getattr(verified_plan, "arguments", None),
+            question_hash=verified_plan.question_hash,
+            account=account,
+            dataset_id=payload.dataset_id,
+        )
     except (CanvasCardRegistryError, KeyError, ValueError) as exc:
         selector._consume_nonce(verified_plan)
         return JSONResponse(
@@ -629,12 +1376,24 @@ async def selector_dispatch(
             },
         )
 
+    reservation = _reserve_workspace(request.app, card_contract)
+
     if resolved.kind == "order":
         # Resolution validates and seals the order arguments. This endpoint only
         # returns a ticket prefill; it never receives confirmation/auth headers and
         # never dispatches to the order client.
         selector._consume_nonce(verified_plan)
         order_draft = _sanitized_order_draft(verified_plan.arguments)
+        _bind_semantic_values(
+            card_contract,
+            resolved.operation_ref,
+            {**order_draft, "state": "draft"},
+        )
+        if not _apply_workspace_reservation(request.app, card_contract, reservation):
+            return _stale_workspace_response(
+                operation_ref=resolved.operation_ref,
+                reservation=reservation,
+            )
         card_title = resolve_fixed_card_title(resolved.operation_ref)
         envelope = {
             "canvas_type": "action",
@@ -679,6 +1438,16 @@ async def selector_dispatch(
         acknowledgement = _compact_websocket_ack(
             call_response.data, verified_plan.arguments
         )
+        _bind_semantic_values(
+            card_contract,
+            call_response.operation_ref,
+            call_response.data,
+        )
+        if not _apply_workspace_reservation(request.app, card_contract, reservation):
+            return _stale_workspace_response(
+                operation_ref=call_response.operation_ref,
+                reservation=reservation,
+            )
         response_aliases = {
             field["alias"]
             for field in card_contract["field_contract"]
@@ -776,7 +1545,13 @@ async def canvas_render_plan(
         )
 
     try:
-        card_contract = _integrated_card_contract(verified_plan.operation_ref)
+        card_contract = _integrated_card_contract(
+            verified_plan.operation_ref,
+            arguments=getattr(verified_plan, "arguments", None),
+            question_hash=verified_plan.question_hash,
+            account=account,
+            dataset_id=payload.dataset_id,
+        )
     except (CanvasCardRegistryError, KeyError, ValueError) as exc:
         selector._consume_nonce(verified_plan)
         return _render_error(
@@ -795,21 +1570,24 @@ async def canvas_render_plan(
             status_code=503, content={"detail": "캔버스 채널이 준비되지 않았다"}
         )
 
-    inline_contract: tuple[str, str, str | None] | None = None
-    inline_operation_ref: str | None = None
-    if payload.delivery == "inline":
-        inline_operation_ref = verified_plan.operation_ref
-        inline_contract = _screen_contract(inline_operation_ref)
-        if inline_contract is None:
-            return _render_error(
-                payload=payload,
-                status_code=422,
-                code="CANVAS_COVERAGE_MISSING",
-                detail="signed query plan has no authoritative read/display screen contract",
-                operation_ref=inline_operation_ref,
-                total_start=total_start,
-                next_actions=["register_manifest_screen"],
-            )
+    authoritative_screen_contract = _screen_contract(verified_plan.operation_ref)
+    if authoritative_screen_contract is None:
+        return _render_error(
+            payload=payload,
+            status_code=422,
+            code="CANVAS_COVERAGE_MISSING",
+            detail="signed query plan has no authoritative read/display screen contract",
+            operation_ref=verified_plan.operation_ref,
+            total_start=total_start,
+            next_actions=["register_manifest_screen"],
+        )
+    inline_operation_ref = (
+        verified_plan.operation_ref if payload.delivery == "inline" else None
+    )
+    inline_contract = (
+        authoritative_screen_contract if payload.delivery == "inline" else None
+    )
+    reservation = _reserve_workspace(request.app, card_contract)
 
     # 주문 확인 헤더를 아예 받지 않는다 — 조회 plan만 실행 가능(주문 plan은
     # selector.call의 3중 게이트가 헤더 부재로 거부한다).
@@ -841,6 +1619,7 @@ async def canvas_render_plan(
         if inline_contract is None or inline_operation_ref is None:
             raise
         return _error_state_response(
+            app=request.app,
             payload=payload,
             operation_ref=inline_operation_ref,
             canvas_kind=inline_contract[0],
@@ -851,11 +1630,14 @@ async def canvas_render_plan(
             retryable=True,
             total_start=total_start,
             call_ms=_elapsed_ms(call_start),
+            card_contract=card_contract,
+            reservation=reservation,
         )
     except httpx.TimeoutException:
         if inline_contract is None or inline_operation_ref is None:
             raise
         return _error_state_response(
+            app=request.app,
             payload=payload,
             operation_ref=inline_operation_ref,
             canvas_kind=inline_contract[0],
@@ -866,11 +1648,14 @@ async def canvas_render_plan(
             retryable=True,
             total_start=total_start,
             call_ms=_elapsed_ms(call_start),
+            card_contract=card_contract,
+            reservation=reservation,
         )
     except asyncio.CancelledError:
         if inline_contract is None or inline_operation_ref is None:
             raise
         return _error_state_response(
+            app=request.app,
             payload=payload,
             operation_ref=inline_operation_ref,
             canvas_kind=inline_contract[0],
@@ -881,11 +1666,14 @@ async def canvas_render_plan(
             retryable=True,
             total_start=total_start,
             call_ms=_elapsed_ms(call_start),
+            card_contract=card_contract,
+            reservation=reservation,
         )
     except KiwoomError:
         if inline_contract is None or inline_operation_ref is None:
             raise
         return _error_state_response(
+            app=request.app,
             payload=payload,
             operation_ref=inline_operation_ref,
             canvas_kind=inline_contract[0],
@@ -896,6 +1684,8 @@ async def canvas_render_plan(
             retryable=True,
             total_start=total_start,
             call_ms=_elapsed_ms(call_start),
+            card_contract=card_contract,
+            reservation=reservation,
         )
     call_ms = _elapsed_ms(call_start)
     call_payload = call_response.model_dump()
@@ -914,7 +1704,8 @@ async def canvas_render_plan(
             transform_ms=_elapsed_ms(transform_start),
             next_actions=["resolve_again"],
         )
-    screen_contract = inline_contract or _screen_contract(operation_ref)
+    _bind_semantic_values(card_contract, operation_ref, call_payload.get("data"))
+    screen_contract = authoritative_screen_contract
 
     if screen_contract is None:
         reason = describe_unsupported_render_plan_kind(operation_ref)
@@ -1014,6 +1805,28 @@ async def canvas_render_plan(
                 next_actions=["resolve_again"],
             )
         data, meta = built
+
+    if canvas_kind != "chart":
+        try:
+            _apply_authoritative_public_labels(operation_ref, data)
+        except CanvasCardRegistryError as exc:
+            return _render_error(
+                payload=payload,
+                status_code=422,
+                code="CANVAS_COVERAGE_MISSING",
+                detail=str(exc),
+                operation_ref=operation_ref,
+                total_start=total_start,
+                call_ms=call_ms,
+                transform_ms=_elapsed_ms(transform_start),
+                next_actions=["register_public_projection_label"],
+            )
+
+    if not _apply_workspace_reservation(request.app, card_contract, reservation):
+        return _stale_workspace_response(
+            operation_ref=operation_ref,
+            reservation=reservation,
+        )
 
     envelope = {
         "operation_ref": operation_ref,

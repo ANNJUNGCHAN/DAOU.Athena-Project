@@ -58,6 +58,7 @@ const OPERATION_POLICIES = Object.freeze([
   }),
 ]);
 const WEBSOCKET_OPERATION_IDS = new Set(OPERATION_POLICIES.map((entry) => entry.operationId));
+const OPAQUE_REALTIME_BINDING = /^rtb_[a-f0-9]{12,64}$/i;
 
 function rule(cardId, modes, targetSource) {
   return Object.freeze({ cardId, modes: Object.freeze([...modes]), targetSource });
@@ -85,6 +86,64 @@ function commandPolicy(operationId, mode) {
 
 function clean(value) {
   return String(value == null ? '' : value).trim();
+}
+
+function semanticBindingIds(config = {}) {
+  const values = Array.isArray(config.semanticBindingIds) ? config.semanticBindingIds : [];
+  return new Set(values.map(clean).filter((value) => OPAQUE_REALTIME_BINDING.test(value)));
+}
+
+function semanticUpdatesFor(row, sourceBindings) {
+  const values = row && row.values && typeof row.values === 'object' ? row.values : {};
+  if (!(sourceBindings instanceof Map)) return [];
+  const updates = [];
+  for (const [sourceKey, value] of Object.entries(values)) {
+    const bindingId = sourceBindings.get(sourceKey);
+    if (bindingId) updates.push({ binding_id: bindingId, value });
+  }
+  return updates;
+}
+
+function createSemanticBindingSourceProvider(options = {}) {
+  const backendBase = clean(options.backendBase);
+  const token = clean(options.token);
+  const fetchImpl = options.fetchImpl || globalThis.fetch;
+  const cache = new Map();
+  return async (operationId) => {
+    const operation = clean(operationId);
+    if (!WEBSOCKET_OPERATION_IDS.has(operation)) return new Map();
+    if (cache.has(operation)) return cache.get(operation);
+    const pending = (async () => {
+      const response = await fetchImpl(
+        `${backendBase}/api/v1/internal/canvas/realtime-bindings/${encodeURIComponent(operation)}`,
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      if (!response || !response.ok || typeof response.json !== 'function') {
+        throw new Error('semantic realtime binding lookup failed');
+      }
+      const body = await response.json();
+      if (!body || body.binding_version !== 'semantic-realtime.v1' || clean(body.operation_id) !== operation) {
+        throw new Error('invalid semantic realtime binding contract');
+      }
+      const sourceBindings = body.source_bindings && typeof body.source_bindings === 'object'
+        ? body.source_bindings : {};
+      const bindings = new Map();
+      for (const [sourceKey, descriptor] of Object.entries(sourceBindings)) {
+        const bindingId = clean(descriptor && descriptor.binding_id);
+        if (!sourceKey || !descriptor || typeof descriptor !== 'object'
+          || !OPAQUE_REALTIME_BINDING.test(bindingId)) {
+          throw new Error('invalid semantic realtime binding entry');
+        }
+        bindings.set(sourceKey, bindingId);
+      }
+      return bindings;
+    })().catch((error) => {
+      cache.delete(operation);
+      throw error;
+    });
+    cache.set(operation, pending);
+    return pending;
+  };
 }
 
 function normalizeSecurityTarget(value) {
@@ -334,6 +393,7 @@ class CardLeaseManager {
     if (!options.transport) throw new TypeError('transport is required');
     this._transport = options.transport;
     this._onState = options.onState || (() => {});
+    this._semanticBindingSourceProvider = options.semanticBindingSourceProvider || (async () => new Map());
     this._leases = new Map();
     this._physical = new Map();
     this._tombstones = new Map();
@@ -446,15 +506,18 @@ class CardLeaseManager {
           // Its state is error (so UI can show the failure), but its already-valid ticks
           // must continue until the caller retries or unmounts.
           if (!lease || !['active', 'error'].includes(lease.status)) continue;
+          const semanticUpdates = semanticUpdatesFor(
+            row,
+            lease.semanticSourceBindings && lease.semanticSourceBindings.get(operationId),
+          );
+          if (!semanticUpdates.length) continue;
           events.push({
             leaseId,
             cardId: lease.config.cardId,
             mode: lease.config.mode,
             generation: lease.generation,
             connectionGeneration: lease.connectionGeneration,
-            operationId,
-            target: entry.binding.target,
-            row,
+            semantic_updates: semanticUpdates,
           });
         }
       }
@@ -496,11 +559,30 @@ class CardLeaseManager {
       return { ok: false, status: 'error', error: String((error && error.message) || error) };
     }
     if (bindings.length === 0) return { ok: false, status: 'error', error: 'no realtime policy matched this card/mode/target' };
+    const allowedSemanticBindings = semanticBindingIds(config);
+    const semanticSourceBindings = new Map();
+    if (allowedSemanticBindings.size) {
+      try {
+        for (const operationId of new Set(bindings.map((binding) => binding.operationId))) {
+          const sources = await this._semanticBindingSourceProvider(operationId);
+          semanticSourceBindings.set(operationId, new Map(
+            [...sources].filter(([, bindingId]) => allowedSemanticBindings.has(bindingId)),
+          ));
+        }
+      } catch (error) {
+        return { ok: false, status: 'error', error: String((error && error.message) || error) };
+      }
+    }
     const oldKeys = new Set(old ? old.bindings.map(physicalKey) : []);
     const nextKeys = new Set(bindings.map(physicalKey));
     if (old && oldKeys.size === nextKeys.size && [...oldKeys].every((key) => nextKeys.has(key))) {
-      if (samePresentation(old.config, config)) return { ok: true, ...this._snapshotLease(old) };
+      if (samePresentation(old.config, config)) {
+        old.config = { ...config, leaseId: id };
+        old.semanticSourceBindings = semanticSourceBindings;
+        return { ok: true, ...this._snapshotLease(old) };
+      }
       old.config = { ...config, leaseId: id };
+      old.semanticSourceBindings = semanticSourceBindings;
       old.generation += 1;
       old.status = 'active';
       old.error = null;
@@ -535,6 +617,7 @@ class CardLeaseManager {
       id,
       config: { ...config, leaseId: id },
       bindings,
+      semanticSourceBindings,
       generation: (old ? old.generation : 0) + 1,
       connectionGeneration: this._connectionGeneration,
       status: 'active',
@@ -691,9 +774,11 @@ module.exports = {
   CardLeaseManager,
   createBoundedShutdownCoordinator,
   createRegistrarTransport,
+  createSemanticBindingSourceProvider,
   createValidatedFetch,
   normalizeFrameRows,
   physicalKey,
   publicPolicies,
   resolveLeaseBindings,
+  semanticUpdatesFor,
 };

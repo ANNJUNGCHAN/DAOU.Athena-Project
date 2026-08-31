@@ -9,6 +9,17 @@ const { classifyCell, changeTone, formatNumeric, formatDatetime, groupFactsField
 const { isValidCorrelation, waitForVisiblePaint } = window.AthenaLib.RestCanvasPaint;
 const integratedCardSurface = window.AthenaLib.IntegratedCardSurface;
 const semanticDetailSheet = window.AthenaLib.SemanticDetailSheet;
+const semanticWorkspace = window.AthenaLib.SemanticWorkspace;
+const SEMANTIC_PRIMARY_TYPES = new Set(['table', 'chart', 'facts', 'compound', 'event', 'action', 'status']);
+
+function developerDiagnosticsEnabled() {
+  return window.__ATHENA_DEVELOPER_DIAGNOSTICS__ === true;
+}
+
+function upsertDeveloperDiagnostics(root, envelope) {
+  if (!developerDiagnosticsEnabled() || !semanticDetailSheet) return null;
+  return semanticDetailSheet.upsert(root, envelope);
+}
 
 // 모든 chart surface의 유일한 세션/DTO 권위. 실제 그리기는 기존 하나의
 // lightweight-charts controller만 주입하며 별도 renderer/BrowserWindow는 없다.
@@ -157,30 +168,36 @@ let activeDatasetId = null;
 if (window.athena && typeof window.athena.on === 'function') {
   window.athena.on('athena:integrated-card-realtime-state', (state) => {
     if (!state || !state.leaseId) return;
-    const root = Array.from(grid.querySelectorAll('.card[data-realtime-lease-id]'))
-      .find((candidate) => candidate.dataset.realtimeLeaseId === String(state.leaseId));
+    const root = Array.from(grid.querySelectorAll('.card'))
+      .find((candidate) => candidate.__athenaIntegratedRealtime
+        && candidate.__athenaIntegratedRealtime.leaseId === String(state.leaseId));
     if (!root) return;
     stampIntegratedRealtimeState(root, state);
   });
   window.athena.on('athena:integrated-card-realtime-ticks', (ticks) => {
     for (const tick of Array.isArray(ticks) ? ticks : [ticks]) {
       if (!tick || !tick.leaseId) continue;
-      const root = Array.from(grid.querySelectorAll('.card[data-realtime-lease-id]'))
-        .find((candidate) => candidate.dataset.realtimeLeaseId === String(tick.leaseId));
+      const root = Array.from(grid.querySelectorAll('.card'))
+        .find((candidate) => candidate.__athenaIntegratedRealtime
+          && candidate.__athenaIntegratedRealtime.leaseId === String(tick.leaseId));
       if (!root) continue;
-      let operationIds = [];
-      try { operationIds = JSON.parse(root.dataset.realtimeOperationIds || '[]'); } catch {}
+      const realtime = integratedRealtimeMeta(root);
       const accepts = integratedCardSurface.matchesRealtimeTick({
-        leaseId: root.dataset.realtimeLeaseId,
+        leaseId: realtime.leaseId,
         cardId: root.dataset.cardId,
-        mode: root.dataset.mode,
-        target: root.dataset.realtimeTarget,
-        generation: root.dataset.realtimeGeneration,
-        connectionGeneration: root.dataset.realtimeConnectionGeneration,
-        operationIds,
+        mode: root.__athenaIntegratedMetadata && root.__athenaIntegratedMetadata.mode,
+        target: realtime.target,
+        generation: realtime.generation,
+        connectionGeneration: realtime.connectionGeneration,
+        operationIds: realtime.operationIds || [],
       }, tick);
       if (!accepts) continue;
-      semanticDetailSheet.applyRealtimeTick(root, tick);
+      if (root.dataset.taskCanvas === 'true' && semanticWorkspace) {
+        semanticWorkspace.applyRealtimeTick(root, tick);
+      }
+      if (developerDiagnosticsEnabled() && semanticDetailSheet) {
+        semanticDetailSheet.applyRealtimeTick(root, tick);
+      }
       root.dispatchEvent(new CustomEvent('athena-integrated-card-tick', { detail: tick }));
     }
   });
@@ -415,6 +432,11 @@ window.athena.on('athena:add-rest-canvas', async (payload) => {
       operation_args: payload.operationArgs,
     });
     const card = await addLiveCard({ status: 'success', envelope });
+    if (card && REST_RETRY_CARD_ID_PATTERN.test(String(payload.retryCardId || ''))) {
+      Object.defineProperty(card, '__athenaRestRetryCardId', {
+        value: String(payload.retryCardId), configurable: true, writable: false,
+      });
+    }
     const domAttachedAt = performance.now();
     const chartImportReadyAt = card && card.dataset.chartImportReadyAt
       ? Number(card.dataset.chartImportReadyAt) : null;
@@ -457,6 +479,72 @@ window.athena.on('athena:add-rest-canvas', async (payload) => {
   }
 });
 
+const REST_RETRY_STATES = new Set(['timeout', 'cancelled', 'error']);
+const REST_RETRY_ID_PATTERN = /^[A-Za-z0-9_-]{43}$/;
+const REST_RETRY_CARD_ID_PATTERN = /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i;
+
+function attachRestRetryAction(card, retryId) {
+  if (!card || !retryId) return;
+  const body = card.querySelector('.card-body');
+  if (!body) return;
+  const prior = card.querySelector('.rest-retry-action');
+  if (prior) prior.remove();
+  const action = document.createElement('div');
+  action.className = 'rest-retry-action';
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.textContent = '다시 시도';
+  const status = document.createElement('span');
+  status.setAttribute('role', 'status');
+  status.setAttribute('aria-live', 'polite');
+  const finishConsumed = (message) => {
+    button.remove();
+    action.dataset.consumed = 'true';
+    status.textContent = message;
+  };
+  button.addEventListener('click', async () => {
+    button.disabled = true;
+    button.textContent = '다시 시도 중…';
+    status.textContent = '';
+    try {
+      const result = await window.athena.invoke('athena__render_canvas', {
+        source: 'rest-retry',
+        retryId,
+      });
+      if (!result || !result.ok) {
+        finishConsumed((result && result.error) || '다시 조회하지 못했습니다.');
+        return;
+      }
+      status.textContent = '다시 조회했습니다.';
+      if (card.isConnected) destroyCard(card);
+      else button.remove();
+    } catch {
+      finishConsumed('다시 조회하지 못했습니다.');
+    }
+  });
+  action.appendChild(button);
+  action.appendChild(status);
+  body.appendChild(action);
+}
+
+window.athena.on('athena:rest-retry-available', (payload = {}) => {
+  const retryId = typeof payload.retryId === 'string' ? payload.retryId : '';
+  const state = String(payload.state || '');
+  const cardId = typeof payload.cardId === 'string' ? payload.cardId : '';
+  if (retryId.length !== 43 || !REST_RETRY_ID_PATTERN.test(retryId)
+    || cardId.length !== 36 || !REST_RETRY_CARD_ID_PATTERN.test(cardId)
+    || !REST_RETRY_STATES.has(state)) return;
+  let card = Array.from(grid.querySelectorAll('.card'))
+    .find((candidate) => candidate.__athenaRestRetryCardId === cardId);
+  if (!card) {
+    card = renderRestStateCard({ canvas_type: 'notice', state });
+    Object.defineProperty(card, '__athenaRestRetryCardId', {
+      value: cardId, configurable: true, writable: false,
+    });
+  }
+  attachRestRetryAction(card, retryId);
+});
+
 // ---------- 실배선 — stream-json-parser.classifyCanvasBlock()의 결과를 렌더 ----------
 // main.js가 athena__render_canvas(source:'live')로 claude -p를 실왕복한 뒤 매
 // render_canvas tool_result마다 이걸 보낸다. status는 success/fallback(둘 다
@@ -497,6 +585,9 @@ async function addLiveCard(result) {
   if (integratedCardSurface && integratedCardSurface.integratedDefinition(envelope)) {
     return renderIntegratedCard(envelope);
   }
+  if (semanticWorkspace && semanticWorkspace.isTaskCanvasEnvelope(envelope)) {
+    return renderTaskCanvasEnvelope(envelope);
+  }
   return renderPrimaryEnvelope(envelope);
 }
 
@@ -513,6 +604,45 @@ function renderPrimaryEnvelope(envelope, options = {}) {
   return renderFreeCanvas(envelope);
 }
 
+async function renderTaskCanvasEnvelope(envelope) {
+  // task-canvas는 presentation_contract가 유일한 표시 계약이다. 전문 renderer가
+  // 명시된 경우 기존 CardKinds/AITS 결과를 primary surface로 유지하지만, 알 수
+  // 없는 canvas_type을 free JSON tree로 내리는 경로는 사용하지 않는다.
+  let root = null;
+  if (SEMANTIC_PRIMARY_TYPES.has(envelope.canvas_type) && !envelope.fell_back) {
+    root = await renderPrimaryEnvelope(envelope);
+  } else {
+    root = createSemanticWorkspaceCard(envelope);
+  }
+  if (!root) root = createSemanticWorkspaceCard(envelope);
+  root = replaceUnsafeTaskPrimary(root, envelope);
+  semanticWorkspace.upsert(root, envelope);
+  upsertDeveloperDiagnostics(root, envelope);
+  return root;
+}
+
+function createSemanticWorkspaceCard(envelope) {
+  const presentation = semanticWorkspace.normalizePresentation(envelope);
+  return makeCard(
+    'semantic-workspace-card',
+    presentation ? presentation.title : '분석 결과',
+    envelope.layout,
+    envelope.correlation,
+    undefined,
+    cardStkCd(envelope),
+    envelope.screen_id,
+  ).card;
+}
+
+function replaceUnsafeTaskPrimary(rendered, envelope) {
+  if (!rendered || semanticWorkspace.isSafePrimary(envelope, rendered)) return rendered;
+  // Generic table/facts/compound/free renderers can contain backend alias keys.
+  // task-canvas production DOM is presentation_contract-only, so discard the
+  // transient generic card before any of its nodes enter an integrated root.
+  destroyCard(rendered);
+  return createSemanticWorkspaceCard(envelope);
+}
+
 async function renderIntegratedCard(envelope) {
   const instanceKey = integratedCardSurface.instanceKeyFor(envelope);
   const existing = integratedCardSurface.findReusableRoot(
@@ -521,13 +651,22 @@ async function renderIntegratedCard(envelope) {
   // makeCard의 구형 type/dataset 교체 규칙이 같은 통합 root를 먼저 지우지 못하게
   // 잠시 중립화한다. 실제 renderer는 별도 임시 root에 완전한 primary UI를 만든다.
   integratedCardSurface.prepareExisting(existing);
-  const rendered = await renderPrimaryEnvelope(envelope, { integratedRoot: existing });
+  const isTaskCanvas = semanticWorkspace && semanticWorkspace.isTaskCanvasEnvelope(envelope);
+  const hasPrimaryRenderer = SEMANTIC_PRIMARY_TYPES.has(envelope.canvas_type) && !envelope.fell_back;
+  let rendered = isTaskCanvas && !hasPrimaryRenderer
+    ? createSemanticWorkspaceCard(envelope)
+    : await renderPrimaryEnvelope(envelope, { integratedRoot: existing });
+  if (!rendered && isTaskCanvas) rendered = createSemanticWorkspaceCard(envelope);
+  if (isTaskCanvas && hasPrimaryRenderer && rendered !== existing) {
+    rendered = replaceUnsafeTaskPrimary(rendered, envelope);
+  }
   if (!rendered) return existing;
   // AITS는 같은 panel_id를 기존 `.card.chart`에서 직접 reload하고 같은 root를
   // 돌려준다. 이 경우 scaffold를 다시 만들거나 lifecycle ownership을 옮기지 않는다.
   if (rendered === existing) {
     integratedCardSurface.refreshExisting(existing, envelope);
-    semanticDetailSheet.upsert(existing, envelope);
+    if (semanticWorkspace) semanticWorkspace.upsert(existing, envelope);
+    upsertDeveloperDiagnostics(existing, envelope);
     syncIntegratedRealtime(existing, envelope);
     return existing;
   }
@@ -576,8 +715,9 @@ async function renderIntegratedCard(envelope) {
     const realtimeCleanup = (async () => {
       const realtimeTask = integratedRealtimeTasks.get(root);
       if (realtimeTask) await settleCleanup(realtimeTask);
-      const leaseId = root.dataset.realtimeLeaseId;
-      if (leaseId && root.dataset.realtimeMounted === 'true') {
+      const realtime = integratedRealtimeMeta(root);
+      const leaseId = realtime.leaseId;
+      if (leaseId && realtime.mounted === true) {
         await settleCleanup(window.athena.invoke('athena:integrated-card-realtime-unmount', { leaseId }));
       }
       integratedRealtimeTasks.delete(root);
@@ -586,10 +726,12 @@ async function renderIntegratedCard(envelope) {
   });
   if (transientCard) transientCard.remove();
 
-  semanticDetailSheet.upsert(root, envelope);
+  if (semanticWorkspace) semanticWorkspace.upsert(root, envelope);
+  upsertDeveloperDiagnostics(root, envelope);
   syncIntegratedRealtime(root, envelope);
-  // 모든 상세 행이 occurrence id를 갖는지 DOM 경계에서 fail closed한다.
-  if (root.querySelector('.semantic-detail-row:not([data-field-occurrence-id])')) {
+  // 개발자 진단 surface를 명시적으로 켠 경우에만 wire occurrence identity를
+  // 검사한다. production 제품 UI에는 이 DOM 자체를 만들지 않는다.
+  if (developerDiagnosticsEnabled() && root.querySelector('.semantic-detail-row:not([data-field-occurrence-id])')) {
     destroyCard(root);
     throw new Error('통합 카드 field occurrence identity가 누락됐다');
   }
@@ -604,6 +746,11 @@ function integratedRealtimePayload(root, envelope) {
     ? envelope.source_data.canvas_context : {};
   const first = (...values) => values.find((value) => typeof value === 'string' && value.trim()) || '';
   const target = integratedCardSurface.targetIdentity(envelope);
+  const semanticBindingIds = [...new Set(
+    (Array.isArray(envelope.realtime_bindings) ? envelope.realtime_bindings : [])
+      .map((binding) => String(binding && (binding.binding_id || binding.bindingId) || '').trim())
+      .filter((bindingId) => /^rtb_[a-f0-9]{12,64}$/i.test(bindingId)),
+  )];
   return {
     leaseId: root.dataset.integratedInstanceKey,
     cardId: envelope.card_id,
@@ -615,20 +762,31 @@ function integratedRealtimePayload(root, envelope) {
     sectorId: first(envelope.sector_id, args.sector_id, args.sect_code),
     visibleTargets: Array.isArray(envelope.visible_targets) ? envelope.visible_targets : undefined,
     verifiedOperationRefs: integratedCardSurface.verifiedOperationRefsFor(envelope),
+    semanticBindingIds,
   };
 }
 
 function stampIntegratedRealtimeState(root, state) {
   if (!root || !state) return;
-  root.dataset.realtimeStatus = String(state.status || 'unknown');
-  if (Number.isFinite(Number(state.generation))) root.dataset.realtimeGeneration = String(Number(state.generation));
+  const realtime = integratedRealtimeMeta(root);
+  realtime.status = String(state.status || 'unknown');
+  if (Number.isFinite(Number(state.generation))) realtime.generation = Number(state.generation);
   if (Number.isFinite(Number(state.connectionGeneration))) {
-    root.dataset.realtimeConnectionGeneration = String(Number(state.connectionGeneration));
+    realtime.connectionGeneration = Number(state.connectionGeneration);
   }
   const operationIds = Array.isArray(state.bindings)
     ? [...new Set(state.bindings.map((binding) => String(binding.operationId || '')).filter(Boolean))]
     : [];
-  if (operationIds.length) root.dataset.realtimeOperationIds = JSON.stringify(operationIds);
+  if (operationIds.length) realtime.operationIds = operationIds;
+}
+
+function integratedRealtimeMeta(root) {
+  if (!root.__athenaIntegratedRealtime) {
+    Object.defineProperty(root, '__athenaIntegratedRealtime', {
+      value: {}, configurable: true, writable: true,
+    });
+  }
+  return root.__athenaIntegratedRealtime;
 }
 
 function realtimePolicies() {
@@ -661,22 +819,23 @@ function hasRealtimePolicy(policies, payload) {
 function syncIntegratedRealtime(root, envelope) {
   if (!window.athena || typeof window.athena.invoke !== 'function') return;
   const payload = integratedRealtimePayload(root, envelope);
-  root.dataset.realtimeLeaseId = payload.leaseId;
-  root.dataset.realtimeTarget = integratedCardSurface.normalizeIdentity(payload.target);
-  root.dataset.realtimeStatus = 'registering';
+  const realtime = integratedRealtimeMeta(root);
+  realtime.leaseId = payload.leaseId;
+  realtime.target = integratedCardSurface.normalizeIdentity(payload.target);
+  realtime.status = 'registering';
   const prior = integratedRealtimeTasks.get(root) || Promise.resolve();
   const task = prior.catch(() => {}).then(async () => {
     const policies = await realtimePolicies();
     if (!hasRealtimePolicy(policies, payload)) {
-      if (root.dataset.realtimeMounted === 'true') {
+      if (realtime.mounted === true) {
         await window.athena.invoke('athena:integrated-card-realtime-unmount', { leaseId: payload.leaseId });
-        delete root.dataset.realtimeMounted;
+        realtime.mounted = false;
       }
-      if (root.isConnected) root.dataset.realtimeStatus = 'static';
+      if (root.isConnected) realtime.status = 'static';
       clearIntegratedRealtimeError(root);
       return { ok: true, status: 'static' };
     }
-    const channel = root.dataset.realtimeMounted === 'true'
+    const channel = realtime.mounted === true
       ? 'athena:integrated-card-realtime-update'
       : 'athena:integrated-card-realtime-mount';
     const state = await window.athena.invoke(channel, payload);
@@ -688,20 +847,20 @@ function syncIntegratedRealtime(root, envelope) {
     }
     if (!root.isConnected) return state;
     integratedCardSurface.requireRealtimeSuccess(state);
-    root.dataset.realtimeStatus = String(state.status || 'active');
-    root.dataset.realtimeMounted = 'true';
+    realtime.status = String(state.status || 'active');
+    realtime.mounted = true;
     stampIntegratedRealtimeState(root, state);
     clearIntegratedRealtimeError(root);
     if (state && Number.isFinite(Number(state.generation))) {
-      root.dataset.realtimeGeneration = String(Number(state.generation));
+      realtime.generation = Number(state.generation);
     }
     if (state && Number.isFinite(Number(state.connectionGeneration))) {
-      root.dataset.realtimeConnectionGeneration = String(Number(state.connectionGeneration));
+      realtime.connectionGeneration = Number(state.connectionGeneration);
     }
     return state;
   }).catch((error) => {
     if (root.isConnected) {
-      root.dataset.realtimeStatus = 'error';
+      realtime.status = 'error';
       showIntegratedRealtimeError(root, envelope, error);
     }
   });
@@ -924,8 +1083,12 @@ async function mountAitsChartPanel(card, chartBody, descriptor) {
   });
   const session = await aitsChartPanels.openPanel(chartBody, descriptor.body, descriptor.context);
   mountedChartSessions.set(descriptor.panelId, session);
-  card.dataset.chartSessionId = session.sessionId;
-  card.dataset.chartTrId = session.body.trId;
+  Object.defineProperty(card, '__athenaChartSessionId', {
+    value: session.sessionId, configurable: true, writable: true,
+  });
+  Object.defineProperty(card, '__athenaChartTrId', {
+    value: session.body.trId, configurable: true, writable: true,
+  });
   card.dataset.chartGeneration = String(session.generation);
   card.dataset.renderState = session.body.candles.length ? 'data' : 'empty';
   return session;
@@ -1013,11 +1176,13 @@ function renderMcpTable(envelope) {
   const built = kindRender && kindRender(envelope);
   if (built) {
     const { card, body } = makeCard('mcp-table', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope), envelope.screen_id);
+    card.dataset.semanticPrimary = 'specialized';
     stampPaperScreen(card, envelope);
     body.appendChild(built);
     if (title === '시세') wireQuoteRealtime(card, built, envelope, window.AthenaLib.CardKindQuote.applyLiveTick);
     return card;
   }
+  if (semanticWorkspace.isTaskCanvasEnvelope(envelope)) return null;
   const { card, body } = makeCard('mcp-table', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope), envelope.screen_id);
   stampPaperScreen(card, envelope);
   const rawCols = (envelope.data && Array.isArray(envelope.data.columns)) ? envelope.data.columns : [];
@@ -1134,6 +1299,7 @@ function renderFactsCard(envelope) {
   const built = kindRender && kindRender(envelope);
   if (built) {
     const { card, body } = makeCard('facts', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope), envelope.screen_id);
+    card.dataset.semanticPrimary = 'specialized';
     stampPaperScreen(card, envelope);
     body.appendChild(built);
     // '종목정보' 카드종만 실시간을 켠다(P1) — QuoteHeader 조각(가격+등락)이 있는
@@ -1146,6 +1312,7 @@ function renderFactsCard(envelope) {
     if (title === '호가' && window.AthenaLib.CardKindHoga.supportsLive0D(built)) wireOrderbookRealtime(card, built, envelope, window.AthenaLib.CardKindHoga.applyLiveTick);
     return card;
   }
+  if (semanticWorkspace.isTaskCanvasEnvelope(envelope)) return null;
   const { card, body } = makeCard('facts', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope), envelope.screen_id);
   stampPaperScreen(card, envelope);
   const fields = (envelope.data && Array.isArray(envelope.data.fields)) ? envelope.data.fields : [];
@@ -1175,6 +1342,7 @@ function renderCompoundCard(envelope) {
   const built = kindRender && kindRender(envelope);
   if (built) {
     const { card, body } = makeCard('compound', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope), envelope.screen_id);
+    card.dataset.semanticPrimary = 'specialized';
     stampPaperScreen(card, envelope);
     body.appendChild(built);
     // 실시간 미배선(의도적 — task #24, 2026-08-27 실측). renderFactsCard/
@@ -1189,6 +1357,7 @@ function renderCompoundCard(envelope) {
     // 존재하지 않는다 — 없는 REG를 지어서 걸지 않는다.
     return card;
   }
+  if (semanticWorkspace.isTaskCanvasEnvelope(envelope)) return null;
   const { card, body } = makeCard('compound', title, envelope.layout, envelope.correlation, subtitle, cardStkCd(envelope), envelope.screen_id);
   stampPaperScreen(card, envelope);
   const data = (envelope.data && typeof envelope.data === 'object') ? envelope.data : {};
@@ -1216,11 +1385,32 @@ function appendWorkflowState(body, state, label = '상태') {
   key.textContent = label;
   const value = document.createElement('span');
   value.className = 'workflow-state-value';
-  value.textContent = state || 'unavailable';
+  value.textContent = integratedCardSurface.workflowStateLabel(state);
   row.appendChild(key);
   row.appendChild(value);
   body.appendChild(row);
   return row;
+}
+
+function stampWorkflowState(card, envelope, workflow, state) {
+  if (semanticWorkspace && semanticWorkspace.isTaskCanvasEnvelope(envelope)) {
+    Object.defineProperty(card, '__athenaWorkflowState', {
+      value: { workflow, state }, configurable: true, writable: true,
+    });
+    delete card.dataset.workflow;
+    delete card.dataset.screenState;
+    return;
+  }
+  card.dataset.workflow = workflow;
+  card.dataset.screenState = state;
+}
+
+function taskRealtimeLifecycle(value) {
+  const state = typeof value === 'string' ? value.trim().toLowerCase() : '';
+  return new Set([
+    'connecting', 'connected', 'reconnected', 'reconnecting',
+    'disconnected', 'stopped', 'paused', 'error',
+  ]).has(state) ? state : 'connecting';
 }
 
 function renderEventCard(envelope) {
@@ -1228,9 +1418,21 @@ function renderEventCard(envelope) {
   const { card, body } = makeCard('event', title, envelope.layout, envelope.correlation, subtitle);
   stampPaperScreen(card, envelope);
   const data = envelope.data && typeof envelope.data === 'object' ? envelope.data : {};
-  const lifecycle = data.lifecycle || data.state || 'connecting';
-  card.dataset.workflow = 'websocket_lifecycle';
-  card.dataset.screenState = lifecycle;
+  const taskCanvas = semanticWorkspace.isTaskCanvasEnvelope(envelope);
+  const lifecycle = taskCanvas
+    ? taskRealtimeLifecycle(data.lifecycle || data.state)
+    : data.lifecycle || data.state || 'connecting';
+  stampWorkflowState(card, envelope, 'websocket_lifecycle', lifecycle);
+  if (taskCanvas) {
+    card.dataset.semanticPrimary = 'specialized';
+    const state = appendWorkflowState(body, lifecycle, '실시간 상태');
+    state.classList.add('task-realtime-lifecycle');
+    const guard = document.createElement('div');
+    guard.className = 'workflow-guard';
+    guard.textContent = '실시간 데이터 수신 상태를 표시합니다.';
+    body.appendChild(guard);
+    return card;
+  }
   appendWorkflowState(body, data.state_label || lifecycle, '수신 상태');
   const kindRender = window.AthenaLib.CardKinds.resolve(title);
   const built = kindRender && kindRender(envelope);
@@ -1268,9 +1470,9 @@ function renderActionCard(envelope) {
   const { card, body } = makeCard('action', title, envelope.layout, envelope.correlation, subtitle);
   stampPaperScreen(card, envelope);
   const data = envelope.data && typeof envelope.data === 'object' ? envelope.data : {};
-  card.dataset.workflow = 'guarded_order';
-  card.dataset.screenState = data.lifecycle || data.state || 'review';
-  appendWorkflowState(body, data.state_label || card.dataset.screenState, '주문 단계');
+  const workflowState = data.lifecycle || data.state || 'review';
+  stampWorkflowState(card, envelope, 'guarded_order', workflowState);
+  appendWorkflowState(body, data.state_label || workflowState, '주문 단계');
   const kindRender = window.AthenaLib.CardKinds.resolve(title);
   const built = kindRender && kindRender(envelope);
   if (built) body.appendChild(built);
@@ -1298,8 +1500,7 @@ function renderStatusCard(envelope) {
   stampPaperScreen(card, envelope);
   const data = envelope.data && typeof envelope.data === 'object' ? envelope.data : {};
   const lifecycle = data.lifecycle || data.state || (data.ready ? 'ready' : 'auth_required');
-  card.dataset.workflow = 'oauth_lifecycle';
-  card.dataset.screenState = lifecycle;
+  stampWorkflowState(card, envelope, 'oauth_lifecycle', lifecycle);
   appendWorkflowState(body, lifecycle, '인증 상태');
   body.appendChild(renderFactsGrid([
     { key: 'configured', label: '설정됨', value: data.configured === true ? '예' : '아니오' },
@@ -1456,8 +1657,8 @@ async function renderLiveChart(envelope, integratedRoot = null) {
     delete card.dataset.rendererId;
     delete card.dataset.chartPanelId;
     delete card.dataset.chartGeneration;
-    delete card.dataset.chartSessionId;
-    delete card.dataset.chartTrId;
+    delete card.__athenaChartSessionId;
+    delete card.__athenaChartTrId;
     body.appendChild(errorNote(`차트를 그리지 못했다 — ${err && err.message ? err.message : String(err)}`));
   }
   return card;
@@ -1923,14 +2124,159 @@ window.AthenaCanvasMode = graphMode;
 graphMode.applyVisibility();
 
 // --- 플러그인 모드 캔버스 배선 (Paper 47/48) -------------------------------
-// 설치 승인 시트와 권한 상세까지 lib/plugin-canvas.js가 같은 중앙 표면 안에서
-// 렌더한다. 실제 플러그인 실행 IPC는 아직 없으므로 화면에도 "UI 세션 초안"으로
-// 명시한다. 런타임 연결은 별도 플러그인 백엔드가 생길 때만 명시적으로 붙인다.
+// 플러그인 = MCP 서버다. 등록·승인·도구 허용·삭제는 전부 main.js의 athena:mcp-*
+// 핸들러(= backend/athena_mcp CLI)가 소유한다 — 이 화면은 그 결과만 그리고 사람의
+// 의도를 그대로 되돌려준다. 하드코딩 목록은 쓰지 않는다: 설치된 적 없는 서버를
+// 설치된 것처럼 보여주면 화면 전체가 신뢰를 잃고, 실제로 설치된 서버가 그 가짜에
+// 가려진다(BETA-017 실측 — dart-mcp가 등록돼 있는데 가짜 "DART 전자공시"만 떴다).
 const pluginCanvas = window.AthenaLib.PluginCanvas.createPluginCanvas({
   container: document.getElementById('pluginCanvas'),
+  // 실제 목록이 도착하기 전에도 샘플 폴백을 타지 않도록 항상 명시적으로 넘긴다.
+  installed: [],
+  recommended: [],
+  marketplaces: [],
+  onPermission: (plugin) => { void pluginProbe(plugin && plugin.id); },
+  onSavePermissions: (plugin, features) => { void pluginSaveTools(plugin && plugin.id, features); },
+  onManage: () => { void pluginRefresh(); },
+  onStageSnippet: (snippet) => pluginStageSnippet(snippet),
+  onApproveServer: (staged) => pluginApproveStaged(staged),
+  onDiscardStaged: (staged) => { void pluginDiscardStaged(staged); },
 });
 pluginCanvas.mount();
 window.AthenaPluginCanvas = pluginCanvas;
+
+// probe는 실제 upstream 서버를 spawn한다(mcp-cli.js probe 주석) — 목록을 새로고칠
+// 때마다 등록된 서버를 전부 띄우지 않는다. 권한 화면을 연 그 서버만 한 번 띄우고
+// 결과를 캐시한다.
+const pluginToolCache = new Map();
+
+function pluginHealthLabel(server) {
+  if (!server.approved) return '승인 대기 — 도구가 아직 허용되지 않았다';
+  if (server.health === 'ok') return '연결 확인됨';
+  if (server.health === 'warning') return '연결됨 · 인코딩 경고';
+  // probe를 한 번도 안 한 상태다. 임의로 "정상"이라고 쓰지 않는다.
+  return '연결 미확인 — 권한 화면을 열면 확인한다';
+}
+
+function pluginRowFromServer(server) {
+  const tools = pluginToolCache.get(server.alias) || null;
+  return {
+    id: server.alias,
+    name: server.alias,
+    description: [server.command, server.argsPreview].filter(Boolean).join(' '),
+    source: pluginHealthLabel(server),
+    enabled: !!server.approved,
+    // probe 전에는 consent.json이 아는 허용 도구 수만 안다 — 그 수를 그대로 쓴다.
+    featureCount: tools ? tools.length : server.toolCount,
+    features: tools || [],
+    warnings: Array.isArray(server.warnings) ? server.warnings : [],
+  };
+}
+
+// 게이트웨이는 기동 시점에 레지스트리를 읽는다 — 이번 세션에서 서버를 승인·허용·
+// 삭제했다면 그 변경은 다음 실행부터 대화에 반영된다. 사용자가 "설치했는데 안 쓰인다"로
+// 오해하지 않도록 화면에 명시한다.
+let pluginRegistryChangedThisSession = false;
+
+async function pluginRefresh() {
+  try {
+    const res = await window.athena.invoke('athena:mcp-list');
+    const servers = (res && Array.isArray(res.servers)) ? res.servers : [];
+    pluginCanvas.setData({
+      installed: servers.map(pluginRowFromServer),
+      restartRequired: pluginRegistryChangedThisSession,
+    });
+  } catch (err) {
+    console.warn('athena:mcp-list 실패', err);
+  }
+}
+
+async function pluginProbe(alias) {
+  if (!alias) return;
+  try {
+    const res = await window.athena.invoke('athena:mcp-probe', { alias });
+    if (!res || !res.ok || !Array.isArray(res.tools)) return;
+    pluginToolCache.set(alias, res.tools.map((tool) => ({
+      id: tool.name,
+      name: tool.name,
+      description: tool.description || '',
+      allowed: !!tool.allowed,
+    })));
+    await pluginRefresh();
+  } catch (err) {
+    console.warn('athena:mcp-probe 실패', err);
+  }
+}
+
+async function pluginSaveTools(alias, features) {
+  if (!alias || !Array.isArray(features)) return;
+  const known = new Map((pluginToolCache.get(alias) || []).map((tool) => [tool.name, !!tool.allowed]));
+  for (const feature of features) {
+    const name = feature && feature.name;
+    // probe로 실재가 확인된 도구만 건드린다. probe 전 시트는 설명 한 줄을 가짜
+    // 기능 행으로 채우는데(featureRowsFor 폴백), 그 이름으로 allow를 부르면
+    // 존재하지 않는 도구를 승인 목록에 넣게 된다.
+    if (!name || !known.has(name)) continue;
+    if (known.get(name) === !!feature.allowed) continue; // 바뀐 것만 CLI를 부른다
+    await window.athena.invoke('athena:mcp-allow-tool', { alias, tool: name, allowed: !!feature.allowed });
+  }
+  pluginRegistryChangedThisSession = true;
+  pluginToolCache.delete(alias);
+  await pluginProbe(alias);
+}
+
+// 스니펫 분석 = athena:mcp-stage-snippet. 이름과 달리 실제로 레지스트리에 등록까지
+// 한다(mcp-cli.js stageSnippet 주석 — 파이썬 백엔드에 dry-run이 없다). 승인 전에는
+// consent 게이트가 서버 spawn을 막으므로 안전하고, 취소는 아래 discard가 되돌린다.
+async function pluginStageSnippet(snippet) {
+  try {
+    return await window.athena.invoke('athena:mcp-stage-snippet', { snippet });
+  } catch (err) {
+    return { ok: false, error: String((err && err.message) || err) };
+  }
+}
+
+// 승인 = register 재확인 → approve → probe. probe까지 해야 노출 도구를 알 수 있고,
+// 그래야 사용자가 도구를 하나씩 허용할 수 있다.
+async function pluginApproveStaged(staged) {
+  const servers = Array.isArray(staged) ? staged : [];
+  if (!servers.length) return { ok: false, error: '승인할 서버가 없다' };
+  for (const server of servers) {
+    try {
+      const registered = await window.athena.invoke('athena:mcp-register', { staged: server });
+      if (!registered || !registered.ok) {
+        return { ok: false, error: (registered && registered.error) || '등록 확인에 실패했다' };
+      }
+      const approved = await window.athena.invoke('athena:mcp-approve', { alias: server.alias });
+      if (!approved || !approved.ok) {
+        return { ok: false, error: (approved && approved.error) || '승인에 실패했다' };
+      }
+    } catch (err) {
+      return { ok: false, error: String((err && err.message) || err) };
+    }
+  }
+  pluginRegistryChangedThisSession = true;
+  // probe는 서버를 실제로 띄운다 — 실패해도 등록·승인은 유효하므로 승인 자체를
+  // 실패로 만들지 않는다. 도구 목록은 권한 화면에서 다시 시도할 수 있다.
+  for (const server of servers) await pluginProbe(server.alias);
+  await pluginRefresh();
+  return { ok: true };
+}
+
+// 취소는 흔적을 남기지 않는다 — 분석 단계가 이미 등록했으므로 되돌린다.
+async function pluginDiscardStaged(staged) {
+  for (const server of (Array.isArray(staged) ? staged : [])) {
+    try {
+      await window.athena.invoke('athena:mcp-remove', { alias: server.alias });
+    } catch (err) {
+      console.warn('athena:mcp-remove 실패', err);
+    }
+    pluginToolCache.delete(server.alias);
+  }
+  await pluginRefresh();
+}
+
+void pluginRefresh();
 
 // --- 에이전트모드 캔버스 배선 (4단계, Paper 보드 39) -------------------------
 //
@@ -2194,6 +2540,23 @@ async function loadHiddenLinks() {
   // 캐시를 여기서 채운다(위 lastSurprisingConnections 선언 참고).
   lastSurprisingConnections = Array.isArray(res.connections) ? res.connections : [];
   window.AthenaLib.HiddenLinks.renderHiddenLinks(container, res.connections);
+}
+
+async function refreshConversationGraphSurfaces() {
+  const visibleGraphRefresh = graphMode.setAvailable(true);
+  await Promise.allSettled([
+    Promise.resolve(visibleGraphRefresh),
+    graphSummaryTable.load().then(renderSummaryUpdatedAt),
+    loadThemeClusters(),
+    loadHiddenLinks(),
+    loadEmptyCanvasExtras(),
+  ]);
+}
+
+if (window.athena && typeof window.athena.on === 'function') {
+  window.athena.on('athena:brain-graph-updated', () => {
+    void refreshConversationGraphSurfaces();
+  });
 }
 
 // 모드 칩은 항상 보이지만, 컨트롤러는 아직 "못 씀"으로 가정한 채 태어난다

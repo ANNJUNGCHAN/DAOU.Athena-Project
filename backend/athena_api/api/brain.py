@@ -8,7 +8,7 @@ import shutil
 import signal
 from datetime import datetime
 from pathlib import Path
-from typing import Annotated
+from typing import Annotated, Literal
 
 from fastapi import APIRouter, BackgroundTasks, Header, HTTPException, Request
 from pydantic import BaseModel, ConfigDict, Field
@@ -19,6 +19,7 @@ from athena_api.brain import (
     GraphProjector,
     GraphStore,
     HistoryStore,
+    IngestionJob,
     JobStatus,
     JobTrigger,
     god_nodes,
@@ -28,6 +29,7 @@ from athena_api.brain import (
     surprising_connections,
     utc_now,
 )
+from athena_api.brain.ontology import MAX_RAW_CHAT_TEXT_CHARS
 from athena_api.brain.projection import cluster_cohesion, cluster_representative_labels
 from athena_api.errors import BrainNotReadyError
 from athena_api.lifespan import BrainRuntime, _teardown_brain
@@ -103,7 +105,7 @@ class ChatIngestRequest(BaseModel):
 
     conversation_id: str
     role: ChatRole
-    text: str = Field(min_length=1, max_length=10_000)
+    text: str = Field(min_length=1, max_length=MAX_RAW_CHAT_TEXT_CHARS)
     message_id: str
     occurred_at: datetime
 
@@ -121,6 +123,7 @@ class BrainStatusResponse(BaseModel):
     ready: bool
     ingestion_ready: bool
     extraction_enabled: bool
+    ingest_schedule_owner: Literal["backend", "external"]
     startup_ingestion_job_id: str | None
     startup_ingestion_status: JobStatus | None
     startup_ingestion_detail: str | None
@@ -132,6 +135,41 @@ class StartupIngestionRetryResponse(BaseModel):
     created: bool
     job_id: str
     status: JobStatus
+
+
+class IngestionJobResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    id: str
+    trigger: JobTrigger
+    status: JobStatus
+    attempts: int
+    created_at: datetime
+    started_at: datetime | None
+    completed_at: datetime | None
+    next_retry_at: datetime | None
+    error: str | None
+
+
+def _public_ingestion_job(job: IngestionJob) -> IngestionJobResponse:
+    error = None
+    if job.error:
+        error = (
+            "ingestion_retry_wait"
+            if job.status is JobStatus.RETRY_WAIT
+            else "ingestion_failed"
+        )
+    return IngestionJobResponse(
+        id=job.id,
+        trigger=job.trigger,
+        status=job.status,
+        attempts=job.attempts,
+        created_at=job.created_at,
+        started_at=job.started_at,
+        completed_at=job.completed_at,
+        next_retry_at=job.next_retry_at,
+        error=error,
+    )
 
 
 class ChatMessageOut(BaseModel):
@@ -277,6 +315,7 @@ async def get_brain_status(
         ready=bool(getattr(state, "brain_ready", False)),
         ingestion_ready=bool(getattr(state, "brain_ingestion_ready", False)),
         extraction_enabled=bool(getattr(state, "brain_extraction_enabled", False)),
+        ingest_schedule_owner=getattr(settings, "brain_ingest_schedule_owner", "backend"),
         startup_ingestion_job_id=(startup_job.id if startup_job is not None else None),
         startup_ingestion_status=(startup_job.status if startup_job is not None else None),
         startup_ingestion_detail=startup_detail,
@@ -320,6 +359,52 @@ async def retry_startup_brain_ingestion(
             job_id=retry_job.id,
             status=retry_job.status,
         )
+
+
+@router.post(
+    "/ingestion/jobs",
+    summary="브레인 수집 수동 실행",
+    operation_id="enqueue_brain_ingestion",
+    response_model=IngestionJobResponse,
+    openapi_extra={
+        **_NOT_LLM_EXPOSED,
+        "x-athena-side-effect": "write",
+    },
+)
+async def enqueue_brain_ingestion(
+    request: Request,
+    authorization: Annotated[str, Header(alias="Authorization")],
+) -> IngestionJobResponse:
+    require_local_bearer(request, authorization)
+    runtime: BrainRuntime | None = getattr(request.app.state, "brain_runtime", None)
+    if runtime is None or not runtime.ingestion_ready or runtime.coordinator is None:
+        raise BrainNotReadyError("investment brain ingestion is not ready")
+    return _public_ingestion_job(await runtime.coordinator.enqueue(JobTrigger.MANUAL))
+
+
+@router.get(
+    "/ingestion/jobs/{job_id}",
+    summary="브레인 수집 작업 상태 조회",
+    operation_id="get_brain_ingestion_job",
+    response_model=IngestionJobResponse,
+    openapi_extra={
+        **_NOT_LLM_EXPOSED,
+        "x-athena-side-effect": "none",
+    },
+)
+async def get_brain_ingestion_job(
+    job_id: str,
+    request: Request,
+    authorization: Annotated[str, Header(alias="Authorization")],
+) -> IngestionJobResponse:
+    require_local_bearer(request, authorization)
+    runtime: BrainRuntime | None = getattr(request.app.state, "brain_runtime", None)
+    if runtime is None or not runtime.ingestion_ready:
+        raise BrainNotReadyError("investment brain ingestion is not ready")
+    job = await runtime.history.get_job(job_id)
+    if job is None:
+        raise HTTPException(status_code=404, detail="ingestion job not found")
+    return _public_ingestion_job(job)
 
 
 @router.get(
@@ -896,24 +981,35 @@ async def _collect_cluster_ai_labels(
 ) -> dict[int, str]:
     """캐시 히트는 즉시 싣고, 미스는 백그라운드 태스크로 채운다(fire-and-forget).
 
-    생성된 태스크 참조는 반드시 `app.state.cluster_labeling_tasks`에 보관한다 —
+    생성된 태스크 참조는 반드시 `app.state.cluster_labeling_tasks`의 요청 키에 보관한다 —
     핸들러 반환 후 로컬 참조가 사라지면 GC가 실행 중인 태스크를 중도 회수할 수
     있다는 asyncio 문서 경고 대응(lifespan.py의 hourly_task 저장 관례와 동일).
     """
     client = getattr(request.app.state, "brain_cluster_labeling_llm_client", None)
-    tasks: set[asyncio.Task] = getattr(request.app.state, "cluster_labeling_tasks", set())
+    tasks: dict[tuple[str, str], asyncio.Task[None]] = getattr(
+        request.app.state, "cluster_labeling_tasks", {}
+    )
     fingerprint = labeling.labeling_prompt_fingerprint()
     labels: dict[int, str] = {}
     for cluster_index, members in members_by_cluster.items():
-        cached = await store.cluster_label(labeling.member_set_hash(members), fingerprint)
+        member_hash = labeling.member_set_hash(members)
+        cached = await store.cluster_label(member_hash, fingerprint)
         if cached is not None:
             labels[cluster_index] = cached
             continue
         if client is None:
             continue  # 라벨링 휴면(G-F1) — 백그라운드 스폰도 없다.
+        task_key = (fingerprint, member_hash)
+        if task_key in tasks:
+            continue  # 같은 프롬프트·멤버 집합은 이미 한 태스크가 채우고 있다.
         if len(tasks) >= _MAX_LABELING_TASKS:
             continue  # 동시 스폰 상한 — 이번 미스는 폴백만.
         task = asyncio.create_task(_labeling_task(store, client, list(members), graph))
-        tasks.add(task)
-        task.add_done_callback(tasks.discard)
+        tasks[task_key] = task
+
+        def discard_finished(done: asyncio.Task[None], *, key=task_key) -> None:
+            if tasks.get(key) is done:
+                tasks.pop(key, None)
+
+        task.add_done_callback(discard_finished)
     return labels

@@ -19,7 +19,9 @@ test('live turn captures one conversation id and never re-reads the mutable acti
   assert.match(source, /async function runLiveQuery\([^)]*turnConversationId = historyConversationId\(\)/);
   assert.match(source, /runLiveQueryInner\(query, expand, origin, turnConversationId\)/);
   assert.doesNotMatch(turn, /conversationId:\s*historyConversationId\(\)/);
-  assert.ok((turn.match(/conversationId:\s*turnConversationId/g) || []).length >= 10);
+  const saveCalls = [...turn.matchAll(/historySink\.saveChatMessage\(\s*\{([\s\S]*?)\}\s*,/g)];
+  assert.ok(saveCalls.length > 0);
+  for (const call of saveCalls) assert.match(call[1], /conversationId:\s*turnConversationId/);
   assert.doesNotMatch(turn, /touchConversationEntry\((query|question)\);/);
   assert.match(turn, /historyConversationId\(\) === turnConversationId[\s\S]*liveSessionId = result\.finalResult\.session_id/);
 });

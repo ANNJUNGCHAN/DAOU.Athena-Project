@@ -82,7 +82,7 @@ function createDrawingLayer(deps) {
   toolbar.setAttribute('role', 'toolbar');
   toolbar.setAttribute('aria-label', '드로잉 도구');
   const toolBtns = {};
-  for (const def of DRAW_TOOLS) {
+  for (const def of DRAW_TOOLS.filter((candidate) => candidate.implemented)) {
     const b = document.createElement('button');
     b.type = 'button';
     b.className = 'chart-drawbar-btn' + (def.implemented ? '' : ' is-unimplemented');

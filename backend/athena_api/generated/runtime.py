@@ -11,6 +11,7 @@ from enum import StrEnum
 from typing import Any, TypeVar
 
 from fastapi import HTTPException, Request, Response, status
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
 from athena_api.accounts import account_runtimes, order_scope_for
@@ -52,6 +53,17 @@ def apply_continuation_headers(response: Response, envelope: ResponseEnvelope) -
         response.headers["next-key"] = envelope.next_key
 
 
+def _is_business_result(body: dict[str, Any]) -> bool:
+    return normalize_return_code(body.get("return_code")) not in {"", "0"}
+
+
+def _business_result_response(envelope: ResponseEnvelope) -> JSONResponse:
+    headers = {"cont-yn": envelope.cont_yn}
+    if envelope.next_key:
+        headers["next-key"] = envelope.next_key
+    return JSONResponse(status_code=200, content=envelope.body, headers=headers)
+
+
 def _require_bearer(request: Request, authorization: str) -> None:
     scheme, _, credential = authorization.partition(" ")
     if scheme.lower() != "bearer" or not credential.strip():
@@ -73,7 +85,7 @@ async def call_typed_tr(
     client: Any,
     *,
     response_model: type[ModelT] | None = None,
-) -> ModelT:
+) -> ModelT | JSONResponse:
     spec = TR_REGISTRY[tr_id]
     envelope = await client.post_with_headers(
         tr_id,
@@ -81,6 +93,8 @@ async def call_typed_tr(
         payload.model_dump(by_alias=True, exclude_none=True),
         _request_options(request),
     )
+    if _is_business_result(envelope.body):
+        return _business_result_response(envelope)
     apply_continuation_headers(response, envelope)
     model = response_model or spec.response_model
     if response_model is None:
@@ -137,6 +151,13 @@ async def call_websocket_tr(tr_id: str, payload: BaseModel, client: Any) -> Base
     normalized["return_code"] = normalize_return_code(normalized["return_code"])
     if not normalized["return_code"]:
         raise HTTPException(status_code=502, detail="Kiwoom WebSocket response was invalid")
+    if tr_id == "ka10171" and isinstance(normalized.get("data"), list):
+        normalized["data"] = [
+            {"seq": row[0], "name": row[1]}
+            if isinstance(row, list) and len(row) == 2
+            else row
+            for row in normalized["data"]
+        ]
     return TR_REGISTRY[tr_id].response_model.model_validate(normalized)
 
 
@@ -150,7 +171,7 @@ async def call_order_tr(
     confirmation: str,
     idempotency_key: str,
     account: str = "",
-) -> BaseModel:
+) -> BaseModel | JSONResponse:
     _require_bearer(request, authorization)
     if confirmation.strip().lower() != "true":
         raise HTTPException(status_code=428, detail="X-Athena-Confirm: true is required")
@@ -239,6 +260,8 @@ async def call_order_tr(
                 reservation.state = OrderState.IN_DOUBT
                 reservation.completed.set()
             raise
+    if _is_business_result(envelope.body):
+        return _business_result_response(envelope)
     apply_continuation_headers(response, envelope)
     return TR_REGISTRY[tr_id].response_model.model_validate(envelope.body)
 

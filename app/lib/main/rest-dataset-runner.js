@@ -10,6 +10,7 @@ const BACKEND_MIN_DEADLINE_MS = 100;
 const PRIMARY_UPSTREAM_DEADLINE_MS = 1500;
 const PAINT_RESERVE_MS = 100;
 const SECONDARY_PAINT_TIMEOUT_MS = 3000;
+let retryDatasetSequence = 0;
 const STOCK_ENTITY_RESOLVER_ALGORITHM = 'stock-entity-index';
 const STOCK_ENTITY_RESOLVER_VERSION = 3;
 const STOCK_ENTITY_RESOLVER_ADAPTER_VERSION = `${STOCK_ENTITY_RESOLVER_ALGORITHM}-v${STOCK_ENTITY_RESOLVER_VERSION}`;
@@ -191,6 +192,10 @@ function normalizeDataset(input) {
   }
   const question = String(input.question || '').trim();
   if (!question) throw new RestDatasetError('empty_question', '질의가 비어 있다');
+  const generation = input.generation == null ? 1 : Number(input.generation);
+  if (!Number.isInteger(generation) || generation < 1) {
+    throw new RestDatasetError('invalid_generation', 'generation은 1 이상의 정수여야 한다');
+  }
 
   const rawItems = Array.isArray(input.items)
     ? input.items
@@ -238,12 +243,44 @@ function normalizeDataset(input) {
 
   return {
     datasetId,
+    generation,
     question,
     items,
     firstCanvasDeadlineMs: Math.min(
       DEFAULT_FIRST_CANVAS_DEADLINE_MS,
       Math.max(1, Number(input.firstCanvasDeadlineMs || input.first_canvas_deadline_ms) || DEFAULT_FIRST_CANVAS_DEADLINE_MS),
     ),
+  };
+}
+
+function defaultRetryDatasetId() {
+  retryDatasetSequence += 1;
+  return `rest-retry-${Date.now().toString(36)}-${retryDatasetSequence.toString(36)}`;
+}
+
+function buildRetryAction(dataset, state, idFactory = defaultRetryDatasetId) {
+  let datasetId = String(idFactory()).trim().slice(0, 64);
+  if (!datasetId || datasetId === dataset.datasetId) datasetId = defaultRetryDatasetId().slice(0, 64);
+  const generation = dataset.generation + 1;
+  return {
+    id: `retry-rest-dataset:${datasetId}`,
+    type: 'retry-rest-dataset',
+    label: '다시 시도',
+    retryable: true,
+    state,
+    dataset: {
+      datasetId,
+      generation,
+      question: dataset.question,
+      firstCanvasDeadlineMs: dataset.firstCanvasDeadlineMs,
+      items: dataset.items.map((item) => ({
+        itemId: `${datasetId}-${item.ordinal}`,
+        ordinal: item.ordinal,
+        operationRef: item.operationRef,
+        args: Object.assign({}, item.args),
+        caption: item.caption,
+      })),
+    },
   };
 }
 
@@ -365,7 +402,10 @@ function toCancelledInlineResponse(body) {
   };
 }
 
-function buildDeterministicAnswer(canvases, errors = []) {
+function buildDeterministicAnswer(canvases, errors = [], localState = null) {
+  if (localState === 'timeout') return '조회 시간이 초과되었습니다. 다시 시도할 수 있습니다.';
+  if (localState === 'cancelled') return '조회가 취소되었습니다. 다시 시도할 수 있습니다.';
+  if (localState === 'error') return '조회 중 오류가 발생했습니다. 다시 시도할 수 있습니다.';
   if (!canvases.length) return '캔버스에 표시하지 못했습니다. 화면 오류를 확인해 주세요.';
   const state = canvases.find((canvas) => canvas.state)?.state;
   if (state === 'timeout') return '조회 시간이 초과되어 캔버스에 시간 초과 상태를 표시했습니다.';
@@ -444,6 +484,7 @@ async function runRestDataset({
   hardSignal,
   clock = () => performance.now(),
   onEvent = () => {},
+  retryIdFactory = defaultRetryDatasetId,
 } = {}) {
   let dataset;
   try {
@@ -513,6 +554,7 @@ async function runRestDataset({
   const canvases = [];
   const errors = [];
   const singleFlight = new Map();
+  const signedQueryOperations = new Set();
   let physicalCalls = 0;
   let lateCanvases = 0;
 
@@ -536,6 +578,7 @@ async function runRestDataset({
     if (!resolveBody.plan_token) {
       throw new RestDatasetError('missing_plan_token', 'resolve가 실행 가능한 plan_token을 주지 않았다');
     }
+    signedQueryOperations.add(operationKey(item));
     onEvent({ type: 'inline-start', datasetId: dataset.datasetId, itemId: item.itemId, ordinal: item.ordinal });
     const renderDeadlineMs = firstPainted
       ? BACKEND_MAX_DEADLINE_MS
@@ -665,7 +708,17 @@ async function runRestDataset({
 
   canvases.sort((a, b) => a.ordinal - b.ordinal);
   const durationMs = Math.max(0, clock() - startedAt);
-  const answerText = buildDeterministicAnswer(canvases, errors);
+  const authoritativeState = canvases.find((canvas) => canvas.state)?.state || null;
+  const abortCode = controller.signal.reason && controller.signal.reason.code;
+  const localState = canvases.length ? null : (
+    cancelRequested || (hardSignal && hardSignal.aborted) || abortCode === 'hard_abort'
+      ? 'cancelled'
+      : (abortCode === 'first_canvas_deadline' || errors.some((error) => error.code === 'first_canvas_deadline')
+        ? 'timeout'
+        : (errors.length ? 'error' : null))
+  );
+  const state = authoritativeState || localState;
+  const answerText = buildDeterministicAnswer(canvases, errors, localState);
   const recommendations = [];
   const recommendationIds = new Set();
   for (const canvas of canvases) {
@@ -679,11 +732,28 @@ async function runRestDataset({
   const dataCanvasCount = canvases.filter((canvas) => canvas.isDataCanvas).length;
   const stateCanvasCount = canvases.length - dataCanvasCount;
   const stateErrorCode = canvases.find((canvas) => canvas.state)?.receipt?.error_code || null;
+  const retryAction = !dataCanvasCount && state
+    ? buildRetryAction(dataset, state, retryIdFactory)
+    : null;
+  if (retryAction) {
+    retryAction.verifiedQueryOnly = dataset.items.every((item) => signedQueryOperations.has(operationKey(item)));
+  }
   return {
     ok: dataCanvasCount > 0 && firstCanvasMs <= dataset.firstCanvasDeadlineMs,
     feedbackOk: feedbackDeadlineMet,
     source: 'kiwoom-rest',
     datasetId: dataset.datasetId,
+    generation: dataset.generation,
+    state,
+    retryable: Boolean(retryAction),
+    retryAction,
+    localState: localState ? {
+      state: localState,
+      errorCode: localState === 'timeout'
+        ? 'LOCAL_FIRST_CANVAS_TIMEOUT'
+        : (localState === 'cancelled' ? 'LOCAL_REQUEST_CANCELLED' : 'LOCAL_REQUEST_FAILED'),
+      retryable: true,
+    } : null,
     error: dataCanvasCount ? null : (stateErrorCode || (errors[0] && errors[0].message) || '렌더할 데이터 카드가 없다'),
     errorCode: dataCanvasCount ? null : (stateErrorCode || (errors[0] && errors[0].code) || 'no_data_canvas'),
     answerText,
@@ -720,7 +790,9 @@ class StockEntityIndex {
     this.version = STOCK_ENTITY_RESOLVER_VERSION;
     this.adapterVersion = STOCK_ENTITY_RESOLVER_ADAPTER_VERSION;
     this._aliases = new Map();
+    this._aliasSpans = new Map();
     this._entities = new Map();
+    this._resolveMemo = null;
     this.refreshedAt = null;
   }
 
@@ -743,8 +815,17 @@ class StockEntityIndex {
         next.get(normalized).add(entityKey);
       }
     }
+    // resolveQuery의 alias 스캔이 매번 new RegExp를 던지지 않도록 스킵 대상을
+    // 뺀 나머지만 여기서 한 번에 컴파일해둔다(빌드는 refresh 주기당 1회).
+    const aliasSpans = new Map();
+    for (const alias of next.keys()) {
+      if (alias.length < 2 || /^\d{6}$/.test(alias)) continue;
+      aliasSpans.set(alias, aliasSpanPattern(alias));
+    }
     this._aliases = next;
+    this._aliasSpans = aliasSpans;
     this._entities = entities;
+    this._resolveMemo = null;
     this.refreshedAt = Date.now();
     return this.size;
   }
@@ -771,35 +852,44 @@ class StockEntityIndex {
 
   resolveQuery(query) {
     const text = String(query || '').normalize('NFKC').toLocaleLowerCase('ko-KR');
-    if (AMBIGUOUS_ENTITY_CONTEXT_RE.test(text)) return null;
+    // 카드 v3의 6개 빌더가 같은 턴에 같은 질의 문자열로 전부 이 메서드를
+    // 부른다 — 직전 질의 하나만 기억해도 2~6번째 호출은 재계산 없이 끝난다.
+    // replace()가 유일한 색인 변경점이라 거기서만 무효화하면 된다.
+    if (this._resolveMemo && this._resolveMemo.text === text) return this._resolveMemo.result;
 
-    const explicitCodes = new Set(
-      [...text.matchAll(/(?:^|\D)(\d{6})(?=\D|$)/g)].map((match) => match[1]),
-    );
-    if (explicitCodes.size > 1) return null;
+    const result = (() => {
+      if (AMBIGUOUS_ENTITY_CONTEXT_RE.test(text)) return null;
 
-    const matchedEntities = new Set();
-    for (const code of explicitCodes) {
-      const entities = this._aliases.get(code);
-      if (!entities || entities.size !== 1) return null;
-      matchedEntities.add([...entities][0]);
-    }
-    let matchedAlias = false;
-    for (const [alias, entities] of this._aliases) {
-      if (alias.length < 2 || /^\d{6}$/.test(alias) || !aliasSpanPattern(alias).test(text)) continue;
-      matchedAlias = true;
-      if (entities.size !== 1) return null;
-      matchedEntities.add([...entities][0]);
-    }
-    if (matchedEntities.size !== 1) return null;
-    const entity = this._entities.get([...matchedEntities][0]);
-    if (!entity) return null;
-    return {
-      code: entity.code,
-      kind: entity.kind,
-      market: entity.market,
-      source: explicitCodes.size === 1 && !matchedAlias ? 'explicit-code' : 'entity-index',
-    };
+      const explicitCodes = new Set(
+        [...text.matchAll(/(?:^|\D)(\d{6})(?=\D|$)/g)].map((match) => match[1]),
+      );
+      if (explicitCodes.size > 1) return null;
+
+      const matchedEntities = new Set();
+      for (const code of explicitCodes) {
+        const entities = this._aliases.get(code);
+        if (!entities || entities.size !== 1) return null;
+        matchedEntities.add([...entities][0]);
+      }
+      let matchedAlias = false;
+      for (const [alias, entities] of this._aliases) {
+        if (alias.length < 2 || /^\d{6}$/.test(alias) || !this._aliasSpans.get(alias).test(text)) continue;
+        matchedAlias = true;
+        if (entities.size !== 1) return null;
+        matchedEntities.add([...entities][0]);
+      }
+      if (matchedEntities.size !== 1) return null;
+      const entity = this._entities.get([...matchedEntities][0]);
+      if (!entity) return null;
+      return Object.freeze({
+        code: entity.code,
+        kind: entity.kind,
+        market: entity.market,
+        source: explicitCodes.size === 1 && !matchedAlias ? 'explicit-code' : 'entity-index',
+      });
+    })();
+    this._resolveMemo = { text, result };
+    return result;
   }
 }
 
@@ -1056,6 +1146,7 @@ module.exports = {
   RestDatasetError,
   StockEntityIndex,
   normalizeDataset,
+  buildRetryAction,
   normalizeRecommendations,
   isEligibleOperationRef,
   buildDeterministicAnswer,

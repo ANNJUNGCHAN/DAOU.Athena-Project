@@ -30,6 +30,69 @@ function tracker(overrides = {}) {
   });
 }
 
+function skipQuotedSource(source, start, quote) {
+  for (let index = start + 1; index < source.length; index += 1) {
+    if (source[index] === '\\') {
+      index += 1;
+    } else if (source[index] === quote) {
+      return index;
+    }
+  }
+  return -1;
+}
+
+function skipTemplateSource(source, start) {
+  for (let index = start + 1; index < source.length; index += 1) {
+    if (source[index] === '\\') {
+      index += 1;
+    } else if (source[index] === '`') {
+      return index;
+    } else if (source[index] === '$' && source[index + 1] === '{') {
+      const expressionEnd = findClosingSourceBrace(source, index + 1);
+      if (expressionEnd < 0) return -1;
+      index = expressionEnd;
+    }
+  }
+  return -1;
+}
+
+function findClosingSourceBrace(source, openingBrace) {
+  let depth = 0;
+  for (let index = openingBrace; index < source.length; index += 1) {
+    const char = source[index];
+    const next = source[index + 1];
+    if (char === '\'' || char === '"') {
+      index = skipQuotedSource(source, index, char);
+      if (index < 0) return -1;
+    } else if (char === '`') {
+      index = skipTemplateSource(source, index);
+      if (index < 0) return -1;
+    } else if (char === '/' && next === '/') {
+      const lineEnd = source.indexOf('\n', index + 2);
+      if (lineEnd < 0) return -1;
+      index = lineEnd;
+    } else if (char === '/' && next === '*') {
+      const commentEnd = source.indexOf('*/', index + 2);
+      if (commentEnd < 0) return -1;
+      index = commentEnd + 1;
+    } else if (char === '{') {
+      depth += 1;
+    } else if (char === '}') {
+      depth -= 1;
+      if (depth === 0) return index;
+    }
+  }
+  return -1;
+}
+
+function extractFunctionSource(source, signature) {
+  const start = source.indexOf(signature);
+  const openingBrace = start < 0 ? -1 : source.indexOf('{', start + signature.length);
+  const closingBrace = openingBrace < 0 ? -1 : findClosingSourceBrace(source, openingBrace);
+  assert.ok(start >= 0 && openingBrace > start && closingBrace > openingBrace);
+  return source.slice(start, closingBrace + 1);
+}
+
 test('snapshot preserves task order and increments revision on transitions', async () => {
   const seen = [];
   const readiness = tracker({ onChange: (snapshot) => seen.push(snapshot) });
@@ -191,6 +254,37 @@ test('verify entrypoint is exported, fixture-only, and guarded against duplicate
   assert.match(source, /module\.exports = \{[\s\S]*startBootReadinessForVerify,/);
 });
 
+test('LIFE-003 main source keeps one shell-to-orb visibility policy from boot through background entry', () => {
+  const source = fs.readFileSync(path.join(__dirname, '..', '..', 'main.js'), 'utf8');
+  const visibilityStart = source.indexOf('function broadcastShellVisibility()');
+  const visibilityEnd = source.indexOf('function commonWinOpts(', visibilityStart);
+  const handoffStart = source.indexOf('function attemptShellHandoff()');
+  const handoffEnd = source.indexOf('const startupReadiness =', handoffStart);
+  const realtimeStart = source.indexOf('function ensureIntegratedCardRealtimeManager()');
+  const realtimeEnd = source.indexOf('function ensureRealtimeForSymbol(', realtimeStart);
+
+  assert.ok(visibilityStart >= 0 && visibilityEnd > visibilityStart);
+  assert.ok(handoffStart >= 0 && handoffEnd > handoffStart);
+  assert.ok(realtimeStart >= 0 && realtimeEnd > realtimeStart);
+
+  const createWindows = extractFunctionSource(source, 'async function createWindows()');
+  const visibilitySync = source.slice(visibilityStart, visibilityEnd);
+  const handoff = source.slice(handoffStart, handoffEnd);
+  const realtimeManager = source.slice(realtimeStart, realtimeEnd);
+
+  assert.doesNotMatch(createWindows, /\borbWin\.(?:show|showInactive)\s*\(/);
+  assert.doesNotMatch(createWindows, /broadcastShellVisibility\(\)/);
+  assert.match(createWindows, /for \(const ev of \['show', 'hide', 'minimize', 'restore'\]\) \{\s*shellWin\.on\(ev, broadcastShellVisibility\);\s*\}/);
+  assert.equal((createWindows.match(/shellWin\.on\(ev, broadcastShellVisibility\)/g) || []).length, 1);
+  assert.doesNotMatch(createWindows, /shellWin\.on\(\s*['"](?:show|hide|minimize|restore)['"]/);
+  assert.match(createWindows, /orbWin\.on\('close', \(event\) => \{[\s\S]*?orbWindow\.syncOrbVisibility\(shellWin, orbWin\);[\s\S]*?\n  \}\);/);
+  assert.equal((createWindows.match(/orbWindow\.syncOrbVisibility\(shellWin, orbWin\)/g) || []).length, 1);
+  assert.match(visibilitySync, /orbWindow\.syncOrbVisibility\(shellWin, orbWin\)/);
+  assert.match(handoff, /broadcastShellVisibility\(\)/);
+  assert.match(source, /ensureOrbVisible:\s*\(\)\s*=>\s*orbWindow\.syncOrbVisibility\(shellWin, orbWin\)/);
+  assert.match(realtimeManager, /semanticBindingSourceProvider:\s*integratedCardRealtime\.createSemanticBindingSourceProvider\(\{\s*backendBase:\s*BACKEND_HTTP_BASE,\s*token:\s*LOCAL_BEARER_TOKEN,\s*fetchImpl:\s*fetch,\s*\}\)/);
+});
+
 test('BOOT-003 production surfaces have no retry UI or retry IPC and retain the real task label', () => {
   const appDir = path.join(__dirname, '..', '..');
   const shell = fs.readFileSync(path.join(appDir, 'shell.html'), 'utf8');
@@ -240,6 +334,35 @@ test('live orchestration attempts every dependent gate after backend failure and
   assert.deepEqual(calls, ['loops', 'independent', 'backend', 'brain', 'alarm', 'routine', 'canvas']);
   assert.equal(snapshot.phase, 'degraded');
   assert.equal(snapshot.tasks.find((task) => task.id === 'loops').state, 'running');
+});
+
+test('graph boot gates run in strict sequence while feed gates connect in parallel', async () => {
+  const calls = [];
+  const readiness = new StartupReadiness({
+    runId: 'graph-orchestration-run',
+    tasks: [
+      { id: 'backend', label: 'Backend', kind: 'gate' },
+      { id: 'feed', label: 'Feed', kind: 'gate' },
+      { id: 'brain-ready', label: 'Brain ready', kind: 'gate' },
+      { id: 'outbox', label: 'Outbox', kind: 'gate' },
+      { id: 'graph', label: 'Graph', kind: 'gate' },
+    ],
+  });
+  readiness.setRunner('backend', async () => { calls.push('backend'); return {}; });
+  readiness.setRunner('feed', async () => { calls.push('feed'); return {}; });
+  readiness.setRunner('brain-ready', async () => { calls.push('brain-ready'); return {}; });
+  readiness.setRunner('outbox', async () => { calls.push('outbox'); return {}; });
+  readiness.setRunner('graph', async () => { calls.push('graph'); return {}; });
+
+  const snapshot = await runStartupOrchestration({
+    readiness,
+    dependencyTaskId: 'backend',
+    dependentTaskIds: ['feed'],
+    sequentialDependentTaskIds: ['brain-ready', 'outbox', 'graph'],
+  });
+
+  assert.deepEqual(calls, ['backend', 'feed', 'brain-ready', 'outbox', 'graph']);
+  assert.equal(snapshot.phase, 'ready');
 });
 
 test('bounded initial readiness fails after its task-specific attempt budget', async () => {

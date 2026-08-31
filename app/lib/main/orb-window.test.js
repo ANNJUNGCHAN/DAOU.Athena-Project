@@ -15,6 +15,8 @@ const {
   computeCollapsedBounds,
   buildOrbWindowOptions,
   applyOrbBounds,
+  shouldShowOrbForShell,
+  syncOrbVisibility,
 } = require('./orb-window');
 
 const WORK_AREA = { x: 0, y: 0, width: 1920, height: 1080 };
@@ -152,4 +154,81 @@ test('applyOrbBounds: 파괴된/없는 창에는 아무것도 안 한다', () =>
   };
   assert.equal(applyOrbBounds(destroyed, { x: 0, y: 0, width: 76, height: 76 }), false);
   assert.equal(touched, false);
+});
+
+function fakeShellWindow({ visible, minimized = false, destroyed = false }) {
+  return {
+    isDestroyed: () => destroyed,
+    isVisible: () => visible,
+    isMinimized: () => minimized,
+  };
+}
+
+function fakeOrbWindow({ visible, destroyed = false }) {
+  const calls = [];
+  let currentVisible = visible;
+  return {
+    calls,
+    isDestroyed: () => destroyed,
+    isVisible: () => currentVisible,
+    showInactive: () => {
+      calls.push('showInactive');
+      currentVisible = true;
+    },
+    hide: () => {
+      calls.push('hide');
+      currentVisible = false;
+    },
+  };
+}
+
+test('orb visibility: 보이는 메인창이 있으면 키우미 native 창을 숨긴다', () => {
+  const shell = fakeShellWindow({ visible: true });
+  const orb = fakeOrbWindow({ visible: true });
+
+  assert.equal(shouldShowOrbForShell(shell), false);
+  assert.equal(syncOrbVisibility(shell, orb), false);
+  assert.deepEqual(orb.calls, ['hide']);
+});
+
+test('orb visibility: 닫기-백그라운드로 숨은 메인창이면 키우미를 표시한다', () => {
+  const shell = fakeShellWindow({ visible: false });
+  const orb = fakeOrbWindow({ visible: false });
+
+  assert.equal(shouldShowOrbForShell(shell), true);
+  assert.equal(syncOrbVisibility(shell, orb), true);
+  assert.deepEqual(orb.calls, ['showInactive']);
+});
+
+test('orb visibility: 최소화된 메인창도 눈에 보이지 않는 상태라 키우미를 표시한다', () => {
+  const shell = fakeShellWindow({ visible: false, minimized: true });
+  const orb = fakeOrbWindow({ visible: false });
+
+  assert.equal(shouldShowOrbForShell(shell), true);
+  assert.equal(syncOrbVisibility(shell, orb), true);
+  assert.deepEqual(orb.calls, ['showInactive']);
+});
+
+test('orb visibility: 이미 원하는 상태면 show/hide를 중복 호출하지 않는다', () => {
+  const visibleShell = fakeShellWindow({ visible: true });
+  const hiddenShell = fakeShellWindow({ visible: false });
+  const hiddenOrb = fakeOrbWindow({ visible: false });
+  const visibleOrb = fakeOrbWindow({ visible: true });
+
+  assert.equal(syncOrbVisibility(visibleShell, hiddenOrb), false);
+  assert.equal(syncOrbVisibility(hiddenShell, visibleOrb), true);
+  assert.deepEqual(hiddenOrb.calls, []);
+  assert.deepEqual(visibleOrb.calls, []);
+});
+
+test('orb visibility: 앱 종료 중 파괴된 창에는 키우미를 다시 표시하지 않는다', () => {
+  const destroyedShell = fakeShellWindow({ visible: false, destroyed: true });
+  const visibleOrb = fakeOrbWindow({ visible: true });
+  const destroyedOrb = fakeOrbWindow({ visible: false, destroyed: true });
+
+  assert.equal(shouldShowOrbForShell(destroyedShell), false);
+  assert.equal(syncOrbVisibility(destroyedShell, visibleOrb), false);
+  assert.deepEqual(visibleOrb.calls, ['hide']);
+  assert.equal(syncOrbVisibility(fakeShellWindow({ visible: false }), destroyedOrb), false);
+  assert.deepEqual(destroyedOrb.calls, []);
 });

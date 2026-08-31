@@ -21,14 +21,20 @@ try {
   const second = run();
   assert.equal(first.pass, true); assert.equal(first.firstCloseNotice.markedBeforeClose, false);
   assert.equal(first.firstCloseNotice.afterSecond.shown, 1);
+  assert.deepEqual(first.orbOpenShellIpc, {
+    channel: 'athena:orb-open-shell', rendererSubmitted: true, restored: true,
+    shellVisible: true, orbHidden: true, returnedToBackgroundForTray: true,
+  });
   assert.equal(first.trayExit.beforeQuitObserved, true);
   assert.equal(second.pass, true); assert.equal(second.firstCloseNotice.markedBeforeClose, true);
   assert.equal(second.firstCloseNotice.afterSecond.shown, 0);
+  assert.deepEqual(second.orbOpenShellIpc, first.orbOpenShellIpc);
   assert.equal(second.trayExit.beforeQuitObserved, true);
   fs.writeFileSync(path.join(appDir, 'captures', 'LIFE-003-VERIFY.json'), `${JSON.stringify({
     pass: true, profile: path.basename(profile), firstRun: first, secondRun: second,
   }, null, 2)}\n`, 'utf8');
   console.log(JSON.stringify({ pass: true, firstShown: 1, secondShown: 0,
+    orbOpenShellIpc: first.orbOpenShellIpc,
     nativeAltF4: first.nativeAltF4, trayExit: first.trayExit,
     localBackgroundActivity: first.localBackgroundActivity,
     liveServicesVerified: false }));

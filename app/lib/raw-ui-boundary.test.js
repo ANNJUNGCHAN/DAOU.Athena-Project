@@ -1,0 +1,113 @@
+'use strict';
+
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+
+test('production canvas never mounts raw detail diagnostics without the explicit developer flag', () => {
+  const canvas = fs.readFileSync(path.join(__dirname, '..', 'canvas.js'), 'utf8');
+  assert.match(canvas, /window\.__ATHENA_DEVELOPER_DIAGNOSTICS__ === true/);
+  assert.match(canvas, /function upsertDeveloperDiagnostics/);
+  assert.equal((canvas.match(/semanticDetailSheet\.upsert\(root, envelope\)/g) || []).length, 1);
+  const helper = canvas.slice(canvas.indexOf('function upsertDeveloperDiagnostics'), canvas.indexOf('// 모든 chart surface'));
+  assert.match(helper, /if \(!developerDiagnosticsEnabled\(\) \|\| !semanticDetailSheet\) return null/);
+  assert.match(helper, /semanticDetailSheet\.upsert\(root, envelope\)/);
+  assert.doesNotMatch(canvas, /semanticDetailSheet\.upsert\(existing, envelope\)/);
+});
+
+test('task-canvas is routed through semantic presentation and cannot use free JSON fallback', () => {
+  const canvas = fs.readFileSync(path.join(__dirname, '..', 'canvas.js'), 'utf8');
+  assert.match(canvas, /semanticWorkspace\.isTaskCanvasEnvelope\(envelope\)/);
+  assert.match(canvas, /isTaskCanvas && !hasPrimaryRenderer[\s\S]*createSemanticWorkspaceCard\(envelope\)/);
+  const renderer = canvas.slice(canvas.indexOf('async function renderTaskCanvasEnvelope'), canvas.indexOf('async function renderIntegratedCard'));
+  assert.match(renderer, /semanticWorkspace\.normalizePresentation/);
+  assert.match(renderer, /semanticWorkspace\.upsert/);
+  assert.doesNotMatch(renderer, /renderFreeCanvas|renderJsonTree|source_data|operation_ref|json_path/i);
+});
+
+test('generic task-canvas primary DOM is destroyed before semantic-only replacement', () => {
+  const canvas = fs.readFileSync(path.join(__dirname, '..', 'canvas.js'), 'utf8');
+  const start = canvas.indexOf('function replaceUnsafeTaskPrimary');
+  const end = canvas.indexOf('async function renderIntegratedCard');
+  const helper = canvas.slice(start, end);
+  assert.match(helper, /semanticWorkspace\.isSafePrimary\(envelope, rendered\)/);
+  assert.match(helper, /destroyCard\(rendered\)/);
+  assert.match(helper, /createSemanticWorkspaceCard\(envelope\)/);
+  assert.equal((canvas.match(/card\.dataset\.semanticPrimary = 'specialized'/g) || []).length, 4);
+  assert.match(canvas, /rendered = replaceUnsafeTaskPrimary\(rendered, envelope\)/);
+  assert.equal((canvas.match(/if \(semanticWorkspace\.isTaskCanvasEnvelope\(envelope\)\) return null;/g) || []).length, 3);
+});
+
+test('task-canvas uses a sanitized lifecycle event while legacy event records remain available', () => {
+  const canvas = fs.readFileSync(path.join(__dirname, '..', 'canvas.js'), 'utf8');
+  const primaryTypes = canvas.match(/const SEMANTIC_PRIMARY_TYPES = new Set\((\[[^;]+\])\)/)?.[1] || '';
+  const taskRenderer = canvas.slice(canvas.indexOf('async function renderTaskCanvasEnvelope'), canvas.indexOf('async function renderIntegratedCard'));
+  const legacyRenderer = canvas.slice(canvas.indexOf('function renderPrimaryEnvelope'), canvas.indexOf('async function renderTaskCanvasEnvelope'));
+  const eventRenderer = canvas.slice(canvas.indexOf('function renderEventCard'), canvas.indexOf('function renderActionCard'));
+  assert.match(primaryTypes, /['"]event['"]/);
+  assert.match(taskRenderer, /renderPrimaryEnvelope/);
+  assert.match(legacyRenderer, /canvas_type === 'event'[\s\S]*renderEventCard\(envelope\)/);
+  const safeBranch = eventRenderer.slice(0, eventRenderer.indexOf('appendWorkflowState(body, data.state_label'));
+  assert.match(safeBranch, /isTaskCanvasEnvelope\(envelope\)/);
+  assert.match(safeBranch, /task-realtime-lifecycle/);
+  assert.doesNotMatch(safeBranch, /Object\.entries|records|state_label/);
+  assert.match(eventRenderer, /Object\.entries\(record \|\| \{\}\)/);
+  const malicious = { records: [{ FID_1279: 'raw secret', operation_ref: 'detail:ka10004' }] };
+  assert.match(JSON.stringify(malicious), /FID_1279|operation_ref/);
+});
+
+test('semantic product DOM emits no raw concept, unit, or realtime merge-key attributes', () => {
+  const source = fs.readFileSync(path.join(__dirname, 'semantic-workspace.js'), 'utf8');
+  assert.doesNotMatch(source, /dataset\.(?:semanticConcept|semanticUnit|realtimeMergeKey)\s*=/);
+  assert.doesNotMatch(source, /\[data-realtime-merge-key\]/);
+  assert.match(source, /dataset\.semanticObservationId = observationId/);
+  assert.match(source, /Object\.defineProperty\(field, '__athenaSemanticNode'/);
+  const realtimeReducer = source.slice(source.indexOf('function semanticRealtimeUpdates'), source.indexOf('function boundObservations'));
+  assert.doesNotMatch(realtimeReducer, /realtime_merge_key|source_key|\.values\b/);
+  assert.match(source, /safeRealtimeBindingId/);
+  assert.match(source, /state\.realtimeBindings = new Map\(\)/);
+});
+
+test('AITS chart keeps its TR identity in internal state and never stamps it into product DOM', () => {
+  const canvas = fs.readFileSync(path.join(__dirname, '..', 'canvas.js'), 'utf8');
+  const mount = canvas.slice(canvas.indexOf('async function mountAitsChartPanel'), canvas.indexOf('function buildFoldedTable'));
+  const probe = fs.readFileSync(path.join(__dirname, '..', 'probe-live-chart.js'), 'utf8');
+  assert.doesNotMatch(canvas, /dataset\.chart(?:TrId|SessionId)|data-chart-(?:tr|session)-id/i);
+  assert.match(mount, /aitsChartPanels\.openPanel\(chartBody, descriptor\.body, descriptor\.context\)/);
+  assert.match(mount, /Object\.defineProperty\(card, '__athenaChartTrId'/);
+  assert.match(mount, /value: session\.body\.trId/);
+  assert.match(mount, /Object\.defineProperty\(card, '__athenaChartSessionId'/);
+  assert.match(probe, /card\.__athenaChartTrId/);
+  assert.doesNotMatch(probe, /dataset\.chartTrId|data-chart-tr-id/i);
+});
+
+test('integrated task metadata stays in JS state instead of technical product DOM attributes', () => {
+  const surface = fs.readFileSync(path.join(__dirname, 'integrated-card-surface.js'), 'utf8');
+  const stamp = surface.slice(surface.indexOf('function stampRoot'), surface.indexOf('function refreshExisting'));
+  assert.doesNotMatch(stamp, /dataset\.(?:operationRef|capability|mode|section)\s*=/);
+  assert.match(stamp, /Object\.defineProperty\(root, '__athenaIntegratedMetadata'/);
+  assert.match(stamp, /operationRef:[\s\S]*capability:[\s\S]*mode:[\s\S]*section:/);
+  assert.doesNotMatch(surface, /dataset\.panelKey|data-panel-key/i);
+  assert.match(surface, /Object\.defineProperty\(node, '__athenaPanelKey'/);
+});
+
+test('semantic workspace module has no raw response traversal surface', () => {
+  const source = fs.readFileSync(path.join(__dirname, 'semantic-workspace.js'), 'utf8');
+  assert.doesNotMatch(source, /source_data|raw_data|json_path|operation_ref|field_occurrence_id/i);
+});
+
+test('chart and orderbook product copy excludes transport and TR implementation terms', () => {
+  const chart = fs.readFileSync(path.join(__dirname, 'chart-card.js'), 'utf8');
+  const chartNote = chart.slice(chart.indexOf('function updateNote()'), chart.indexOf('function applyAdjusted('));
+  const orderbook = fs.readFileSync(path.join(__dirname, 'card-kind-호가.js'), 'utf8');
+  const orderbookDom = orderbook.slice(orderbook.indexOf('function buildIntegratedOrderbook('), orderbook.indexOf('function render호가('));
+  assert.doesNotMatch(chartNote, /AITS ka10081 canonical snapshot|canonical snapshot/i);
+  assert.match(chartNote, /서버에서 조회한 차트 데이터/);
+  assert.doesNotMatch(orderbookDom, /['"`]([^'"`]*\b(?:REST|0D)\b[^'"`]*)['"`]/i);
+  assert.match(orderbookDom, /실시간 호가 데이터/);
+  assert.match(orderbook, /wrap\.__athenaOrderbookState = state/);
+  assert.doesNotMatch(orderbook, /dataset\.liveSource|data-live-source/i);
+  assert.match(chart, /if \(replacement\.trId\) currentTrId = replacement\.trId/);
+  assert.match(chart, /preSampled/);
+});

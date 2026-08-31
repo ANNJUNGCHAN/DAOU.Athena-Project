@@ -16,6 +16,25 @@
 }
 .settings-grid > .card { scroll-snap-align: start; }
 
+/* 설정 화면은 선택된 카드 하나로 남은 높이를 전부 채운다. 그리드 자체는
+   스크롤하지 않고, 내용이 실제 카드 높이를 넘을 때만 카드 본문이 스크롤된다.
+   주문 화면도 .settings-grid를 공유하므로 반드시 #settingsGrid에만 적용한다. */
+#settingsGrid {
+  gap: 0;
+  overflow: hidden;
+  scroll-snap-type: none;
+}
+#settingsGrid > .card {
+  flex: 1 1 0;
+  height: 100%;
+  min-height: 0;
+  max-height: none;
+}
+#settingsGrid > .card > .card-body {
+  min-height: 0;
+  overflow-y: auto;
+}
+
 /* 시트가 열려 있는 동안 마젠타는 그 시트 하나다 — palette.md "화면에서 마젠타가
    보이는 곳은 정확히 하나: 지금 입력을 받는 자리". 시트가 곧 지금 입력을 받는
    자리이므로, 시트 밖(스크롤로 걸쳐 보이는 다른 카드 포함)의 주 액션은 중립 톤으로
@@ -248,7 +267,6 @@
   border-bottom: 1px solid var(--color-k-line-soft);
 }
 .uk-toggle-label { font-family: var(--font-strong); font-size: var(--text-md); color: var(--color-k-text); }
-.uk-toggle-sub { font-family: var(--font-body); font-size: var(--text-sm); color: var(--color-k-faint); margin-top: 4px; }
 .uk-toggle-note { margin-top: 4px; }
 .uk-toggle {
   width: 44px; height: 24px; padding: 0; flex: none;
@@ -431,10 +449,9 @@ button.uk-model-account-row:focus-visible { outline: 2px solid rgb(255 255 255 /
   font-family: var(--font-strong);
 }
 
-/* 보유잔고 조회 주기 — 부제 한 줄에 끼는 인라인 선택기(Paper 보드 22:
-   "조회 주기 [60분] 수량이 바뀔 때만 기록"). 칩과 같은 무채색 문법, 크기만
-   부제 텍스트에 맞춰 낮췄다. */
-.uk-holdings-sub { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+/* 보유잔고 조회 주기 — 토글과 같은 우측 기능 그룹에 둔다. */
+.uk-holdings-controls { display: flex; align-items: center; gap: 10px; flex: none; }
+.uk-holdings-interval-label { font-family: var(--font-body); font-size: var(--text-sm); color: var(--color-k-dim); }
 .uk-holdings-interval-select {
   font-family: var(--font-body);
   font-size: var(--text-sm);

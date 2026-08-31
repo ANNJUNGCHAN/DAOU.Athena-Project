@@ -1,12 +1,13 @@
-// 알림 오브 창 — 데스크톱 구석 상시 원형 창 (2026-08-24 리프 1.3.1).
+// 알림 오브 창 — 메인 셸이 안 보일 때 데스크톱 구석에 뜨는 원형 창.
 //
 // GLOSSARY §1: 76px 원형 · alwaysOnTop · 자유 드래그 · 클릭으로 펼침. 펼침은
 // **대화체 문장 1 + 대표 카드 1 + 더보기**까지이고 **실행 버튼도 미니 입력창도 없다**
 // (확정 결정 3 — 주문은 사람이 낸다, 입력 지점은 셸 창 커맨드바 하나).
 //
-// 이 파일은 **기하와 옵션만** 진다. Electron 의존을 얇게 유지한 이유는 셸 창의
-// window-placement.js와 같다: 좌표 계산은 순수 함수로 두고 단위 테스트로 고정한다.
-// createOrbWindow()만 BrowserWindow를 만지고, 그것도 주입받은 생성자를 쓴다.
+// 이 파일은 **기하·옵션·셸과의 가시성 정책**만 진다. Electron 의존을 얇게 유지한
+// 이유는 셸 창의 window-placement.js와 같다: 좌표/상태 판정은 순수 함수로 두고
+// 단위 테스트로 고정한다. createOrbWindow()만 BrowserWindow를 만들며, 나머지는
+// main이 넘긴 창의 공개 메서드만 호출한다.
 'use strict';
 
 const path = require('path');
@@ -116,7 +117,7 @@ function buildOrbWindowOptions(bounds, preloadPath) {
     // 보인다). #orb 자신의 box-shadow(orb.css)가 이미 원형 그림자를 그려주므로
     // OS 그림자는 중복이자 결함의 원인이다 — 꺼서 없앤다.
     hasShadow: false,
-    // 상시 표시가 사양이다(GLOSSARY §1). 셸 창과 달리 이건 의도된 예외다.
+    // 표시되는 동안에는 다른 창 뒤로 사라지지 않는 알림 표면이어야 한다.
     alwaysOnTop: true,
     // 작업 표시줄을 차지하지 않는다 — 앱 창이 아니라 상주 표면이다.
     skipTaskbar: true,
@@ -154,6 +155,29 @@ function applyOrbBounds(win, bounds) {
 }
 
 /**
+ * 사용자가 메인 셸을 볼 수 없는 창 상태인지 판정한다. 최소화는 Electron에서
+ * isVisible() 결과와 무관하게 명시적으로 키우미 표시 상태다. 파괴된 셸은 앱 종료
+ * 중일 수 있으므로 새 상주 창을 띄우지 않는다.
+ */
+function shouldShowOrbForShell(shellWin) {
+  if (!shellWin || shellWin.isDestroyed()) return false;
+  return shellWin.isMinimized() || !shellWin.isVisible();
+}
+
+/**
+ * 메인 셸과 키우미 native 창의 가시성을 한 번에 맞춘다. 이미 원하는 상태면
+ * show/hide를 반복하지 않아 포커스·컴포지터 이벤트를 불필요하게 만들지 않는다.
+ * 반환값은 동기화 뒤 키우미가 보여야 하는지다.
+ */
+function syncOrbVisibility(shellWin, orbWin) {
+  if (!orbWin || orbWin.isDestroyed()) return false;
+  const shouldShow = shouldShowOrbForShell(shellWin);
+  if (shouldShow && !orbWin.isVisible()) orbWin.showInactive();
+  if (!shouldShow && orbWin.isVisible()) orbWin.hide();
+  return shouldShow;
+}
+
+/**
  * 오브 창 생성. BrowserWindow를 주입받아 이 모듈이 electron을 require하지 않게 한다
  * (단위 테스트가 Electron 없이 돈다 — window-placement.js와 같은 원칙).
  */
@@ -174,5 +198,7 @@ module.exports = {
   computeCollapsedBounds,
   buildOrbWindowOptions,
   applyOrbBounds,
+  shouldShowOrbForShell,
+  syncOrbVisibility,
   createOrbWindow,
 };

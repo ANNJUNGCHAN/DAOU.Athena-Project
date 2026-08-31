@@ -181,12 +181,12 @@ function createGraphModeController(deps) {
 
   // 브레인이 안 됐는데 그래프 모드로 들어오면 빈 캔버스 대신 이렇게 정직하게
   // 알린다 — 없는 것(성향 자체가 없다)과 못 읽은 것(브레인 미기동)은 다르다.
-  function renderUnavailable() {
+  function renderUnavailable(message) {
     if (!elements.graphBody) return;
     while (elements.graphBody.firstChild) elements.graphBody.removeChild(elements.graphBody.firstChild);
     const note = document.createElement('div');
     note.className = 'graph-mode-unavailable';
-    note.textContent = '아직 성향을 읽을 수 없습니다 — 브레인이 준비되면 여기 그래프로 보입니다.';
+    note.textContent = message || '아직 성향을 읽을 수 없습니다 — 브레인이 준비되면 여기 그래프로 보입니다.';
     elements.graphBody.appendChild(note);
     lastDrawnRevision = null; // available해지면 실제 그림으로 다시 그리게 한다.
   }
@@ -548,11 +548,10 @@ function createGraphModeController(deps) {
     try {
       payload = await fetchClusterMap();
     } catch (err) {
-      // 그래프를 못 받으면 요약으로 돌아간다 — 빈 캔버스를 띄우면 "성향이 없다"로
-      // 읽힌다. 없는 것과 못 읽은 것은 다르다.
+      // 지도 요청 실패가 그래프 기능 전체를 닫게 하지 않는다. 현재 map 표면과
+      // 헤더를 남겨야 사용자가 눈에 보이는 '요약' 탭으로 다시 돌아갈 수 있다.
       if (onError) onError(err);
-      state = store.setView(state, store.VIEW_SUMMARY);
-      applyVisibility();
+      renderUnavailable('그래프 데이터를 불러오지 못했습니다. 요약 탭은 계속 사용할 수 있습니다.');
       return null;
     }
 

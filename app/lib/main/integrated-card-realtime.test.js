@@ -7,10 +7,12 @@ const {
   CardLeaseManager,
   createBoundedShutdownCoordinator,
   createRegistrarTransport,
+  createSemanticBindingSourceProvider,
   createValidatedFetch,
   normalizeFrameRows,
   publicPolicies,
   resolveLeaseBindings,
+  semanticUpdatesFor,
 } = require('./integrated-card-realtime');
 
 function fakeTransport(overrides = {}) {
@@ -135,6 +137,84 @@ test('frame identities normalize account 9201, security 9001/item, broadcasts, a
       .map(({ operationId, target }) => [operationId, target]),
     [['ka10173', '7']],
   );
+});
+
+test('trusted binding provider accepts only the exact descriptor contract and caches per operation', async () => {
+  const bindingId = 'rtb_aaaaaaaaaaaaaaaaaaaa';
+  const calls = [];
+  const provider = createSemanticBindingSourceProvider({
+    backendBase: 'http://127.0.0.1:8010',
+    token: 'local-secret',
+    fetchImpl: async (url, init) => {
+      calls.push({ url, init });
+      return {
+        ok: true,
+        json: async () => ({
+          binding_version: 'semantic-realtime.v1',
+          operation_id: '0D',
+          source_bindings: { 10: { binding_id: bindingId, display_slot: 1 } },
+        }),
+      };
+    },
+  });
+
+  const first = await provider('0D');
+  const second = await provider('0D');
+  assert.deepEqual([...first], [['10', bindingId]]);
+  assert.equal(second, first);
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].url, 'http://127.0.0.1:8010/api/v1/internal/canvas/realtime-bindings/0D');
+  assert.equal(calls[0].init.headers.Authorization, 'Bearer local-secret');
+
+  const wrongShape = createSemanticBindingSourceProvider({
+    backendBase: 'http://127.0.0.1:8010', token: 'local-secret',
+    fetchImpl: async () => ({
+      ok: true,
+      json: async () => ({
+        binding_version: 'semantic-realtime.v1', operation_id: '0D',
+        source_bindings: { 10: bindingId },
+      }),
+    }),
+  });
+  await assert.rejects(wrongShape('0D'), /invalid semantic realtime binding entry/);
+});
+
+test('raw normalized frame becomes an opaque renderer event without wire fields', async () => {
+  const bindingId = 'rtb_bbbbbbbbbbbbbbbbbbbb';
+  let providerCalls = 0;
+  const manager = new CardLeaseManager({
+    transport: fakeTransport(),
+    semanticBindingSourceProvider: async (operationId) => {
+      providerCalls += 1;
+      assert.ok(['0C', '0D'].includes(operationId));
+      return operationId === '0D' ? new Map([['10', bindingId], ['15', 'rtb_cccccccccccccccccccc']]) : new Map();
+    },
+  });
+  const mounted = await manager.mount({
+    leaseId: 'book', cardId: 'CC-04', mode: 'regular', symbol: '005930',
+    semanticBindingIds: [bindingId],
+  });
+  assert.equal(mounted.ok, true);
+  const events = manager.routeFrame({
+    trnm: 'REAL', data: [{ type: '0D', item: '005930', values: { 10: '73500', 15: '1200' } }],
+  });
+  assert.equal(providerCalls, 2);
+  assert.deepEqual(events, [{
+    leaseId: 'book', cardId: 'CC-04', mode: 'regular',
+    generation: 1, connectionGeneration: 1,
+    semantic_updates: [{ binding_id: bindingId, value: '73500' }],
+  }]);
+  const serialized = JSON.stringify(events);
+  for (const forbidden of ['"row"', '"values"', '"operationId"', '"operation_ref"', '"10"', '"15"']) {
+    assert.equal(serialized.includes(forbidden), false, forbidden);
+  }
+  manager.routeFrame({
+    trnm: 'REAL', data: [{ type: '0D', item: '005930', values: { 10: '73600' } }],
+  });
+  assert.equal(providerCalls, 2, 'tick path must not refetch source bindings');
+  assert.deepEqual(semanticUpdatesFor({ values: { 10: '1' } }, new Map([['10', bindingId]])), [
+    { binding_id: bindingId, value: '1' },
+  ]);
 });
 
 test('all 23 operation fixtures have an explicit frame or control normalization disposition', () => {
@@ -329,12 +409,23 @@ test('releaseAll reports pending cleanup instead of false unmounted success', as
 
 test('stale connection generation and old-target ticks are blocked', async () => {
   const transport = fakeTransport();
-  const manager = new CardLeaseManager({ transport });
-  const mounted = await manager.mount({ leaseId: 'book', cardId: 'CC-04', mode: 'regular', symbol: '005930' });
+  const bindingId = 'rtb_dddddddddddddddddddd';
+  const manager = new CardLeaseManager({
+    transport,
+    semanticBindingSourceProvider: async (operationId) => operationId === '0D'
+      ? new Map([['10', bindingId]]) : new Map(),
+  });
+  const mounted = await manager.mount({
+    leaseId: 'book', cardId: 'CC-04', mode: 'regular', symbol: '005930',
+    semanticBindingIds: [bindingId],
+  });
   const initialConnection = mounted.connectionGeneration;
-  const live = manager.routeFrame({ trnm: 'REAL', data: [{ type: '0D', item: '005930', values: {} }] });
+  const live = manager.routeFrame({ trnm: 'REAL', data: [{ type: '0D', item: '005930', values: { 10: '1' } }] });
   assert.equal(live.length, 1);
-  await manager.update({ leaseId: 'book', cardId: 'CC-04', mode: 'regular', symbol: '000660' });
+  await manager.update({
+    leaseId: 'book', cardId: 'CC-04', mode: 'regular', symbol: '000660',
+    semanticBindingIds: [bindingId],
+  });
   assert.deepEqual(manager.routeFrame({ trnm: 'REAL', data: [{ type: '0D', item: '005930' }] }), []);
   await manager.handleFeedStatus({ state: 'disconnected' });
   await manager.handleFeedStatus({ state: 'open' });

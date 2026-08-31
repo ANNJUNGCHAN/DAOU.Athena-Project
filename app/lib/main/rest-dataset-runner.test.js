@@ -467,7 +467,7 @@ test('partial failure is truthful and never uses the success receipt', async () 
   assert.notEqual(result.answerText, '캔버스에 표시했습니다.');
 });
 
-test('first-canvas deadline aborts a hung request and emits no late card', async () => {
+test('first-canvas deadline exposes an explicit retryable timeout and retry advances dataset generation', async () => {
   const input = dataset();
   input.firstCanvasDeadlineMs = 10;
   let emitted = 0;
@@ -479,10 +479,93 @@ test('first-canvas deadline aborts a hung request and emits no late card', async
     backendBase: 'http://backend',
     fetchImpl,
     emitCanvas: async () => { emitted += 1; },
+    retryIdFactory: () => 'd-retry-1',
   });
   assert.equal(result.ok, false);
   assert.equal(emitted, 0);
-  assert.match(result.answerText, /표시하지 못했습니다/);
+  assert.equal(result.state, 'timeout');
+  assert.equal(result.retryable, true);
+  assert.deepEqual(result.localState, {
+    state: 'timeout',
+    errorCode: 'LOCAL_FIRST_CANVAS_TIMEOUT',
+    retryable: true,
+  });
+  assert.match(result.answerText, /시간이 초과/);
+  assert.equal(result.retryAction.type, 'retry-rest-dataset');
+  assert.equal(result.retryAction.dataset.datasetId, 'd-retry-1');
+  assert.equal(result.retryAction.dataset.generation, 2);
+  assert.equal(result.retryAction.dataset.items[0].itemId, 'd-retry-1-1');
+
+  const retryFetch = successfulFetch();
+  const retried = await runRestDataset({
+    dataset: result.retryAction.dataset,
+    backendBase: 'http://backend',
+    fetchImpl: retryFetch,
+    emitCanvas: async (payload) => ({
+      verifiedVisible: true,
+      visiblePaintAt: payload.requestStartedAt + 5,
+      generation: result.retryAction.dataset.generation,
+    }),
+  });
+  assert.equal(retried.ok, true);
+  assert.equal(retried.datasetId, 'd-retry-1');
+  assert.equal(retried.generation, 2);
+  assert.equal(retried.canvases[0].generation, 2);
+  assert.equal(retryFetch.calls[1].body.dataset_id, 'd-retry-1');
+  assert.equal(retried.retryAction, null);
+});
+
+test('fetch failure before the first card is an explicit retryable local error', async () => {
+  const result = await runRestDataset({
+    dataset: dataset(),
+    backendBase: 'http://backend',
+    fetchImpl: async () => { throw new Error('network unavailable'); },
+    retryIdFactory: () => 'd-retry-error',
+  });
+  assert.equal(result.renderedCount, 0);
+  assert.equal(result.state, 'error');
+  assert.equal(result.retryable, true);
+  assert.equal(result.localState.errorCode, 'LOCAL_REQUEST_FAILED');
+  assert.equal(result.retryAction.dataset.datasetId, 'd-retry-error');
+  assert.equal(result.retryAction.dataset.generation, 2);
+  assert.equal(result.retryAction.verifiedQueryOnly, false);
+  assert.match(result.answerText, /오류가 발생/);
+});
+
+test('retry authority is granted only after every query operation receives a signed plan', async () => {
+  const input = dataset();
+  input.firstCanvasDeadlineMs = 10;
+  const fetchImpl = async (url, options) => {
+    if (url.endsWith('/resolve')) return response({ plan_token: 'signed-query-plan' });
+    return new Promise((_resolve, reject) => {
+      options.signal.addEventListener('abort', () => reject(options.signal.reason), { once: true });
+    });
+  };
+  const result = await runRestDataset({
+    dataset: input,
+    backendBase: 'http://backend',
+    fetchImpl,
+    retryIdFactory: () => 'd-retry-signed',
+  });
+  assert.equal(result.state, 'timeout');
+  assert.equal(result.retryAction.verifiedQueryOnly, true);
+});
+
+test('user cancellation falls back to cancelled only when no authoritative response arrives', async () => {
+  const controller = new AbortController();
+  controller.abort(new Error('user cancelled'));
+  const result = await runRestDataset({
+    dataset: dataset(),
+    backendBase: 'http://backend',
+    signal: controller.signal,
+    fetchImpl: async () => { throw new Error('transport closed before response'); },
+    retryIdFactory: () => 'd-retry-cancelled',
+  });
+  assert.equal(result.renderedCount, 0);
+  assert.equal(result.state, 'cancelled');
+  assert.equal(result.localState.errorCode, 'LOCAL_REQUEST_CANCELLED');
+  assert.equal(result.retryAction.dataset.datasetId, 'd-retry-cancelled');
+  assert.match(result.answerText, /취소/);
 });
 
 test('authoritative timeout state is painted in the same dataset slot and counts as feedback, not data', async () => {
@@ -559,6 +642,9 @@ test('user cancellation keeps the request long enough to preserve authoritative 
   assert.equal(emitted[0].envelope.screen_id, 'facts-test-screen');
   assert.equal(emitted[0].envelope.state, 'cancelled');
   assert.equal('data' in emitted[0].envelope, false);
+  assert.equal(result.state, 'cancelled');
+  assert.equal(result.localState, null);
+  assert.equal(result.retryable, true);
 });
 
 test('hard abort cancels the in-flight fetch, emits no late card, and the next dataset stays clean', async () => {
@@ -665,6 +751,19 @@ test('stock entity index consumes the shared Python/JS conformance vector at a s
     );
     assert.equal(resolution?.kind || null, vectorCase.expected_kind || null, `${vectorCase.id}: kind`);
   }
+});
+
+test('resolveQuery 메모는 같은 질의를 재사용하고 replace()로만 무효화된다', () => {
+  const index = new StockEntityIndex();
+  index.replace([{ code: '005930', name: '삼성전자', market: '0' }]);
+  const first = index.resolveQuery('삼성전자 현재가');
+  assert.equal(first.code, '005930');
+  assert.equal(index.resolveQuery('삼성전자 현재가'), first);
+  assert.ok(Object.isFrozen(first));
+
+  index.replace([{ code: '015760', name: '한국전력', market: '0' }]);
+  assert.equal(index.resolveQuery('삼성전자 현재가'), null);
+  assert.equal(index.resolveQuery('한국전력 현재가')?.code, '015760');
 });
 
 test('quote binder keeps entity resolution separate from quote intent routing', () => {

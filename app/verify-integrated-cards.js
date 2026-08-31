@@ -5,7 +5,12 @@ const crypto = require('node:crypto');
 const fs = require('node:fs');
 const path = require('node:path');
 const { spawnSync } = require('node:child_process');
-const { CardLeaseManager, publicPolicies } = require('./lib/main/integrated-card-realtime');
+const {
+  CardLeaseManager,
+  createSemanticBindingSourceProvider,
+  publicPolicies,
+  resolveLeaseBindings,
+} = require('./lib/main/integrated-card-realtime');
 
 const APP = __dirname;
 const ROOT = path.resolve(APP, '..');
@@ -28,6 +33,76 @@ function loadBundle() {
   return JSON.parse(result.stdout);
 }
 
+function loadProductionSemanticContracts() {
+  const script = [
+    'import json',
+    'from athena_api.api.canvas_push import _bind_semantic_values, _integrated_card_contract, _internal_realtime_binding_contract',
+    'from athena_api.generated.registry import WEBSOCKET_TR_IDS',
+    "card = _integrated_card_contract('base:ka10081')",
+    "_bind_semantic_values(card, 'base:ka10081', {'stk_cd': '005930', 'stk_dt_pole_chart_qry': [{'dt': '20260831', 'cur_prc': '150850', 'open_pric': '149000', 'trde_qty': '1234'}]})",
+    "print(json.dumps({'card': card, 'realtime': {operation: _internal_realtime_binding_contract(operation) for operation in sorted(WEBSOCKET_TR_IDS)}}))",
+  ].join('\n');
+  const result = spawnSync(process.env.ATHENA_FIXTURE_PYTHON || 'python', ['-c', script], {
+    cwd: BACKEND,
+    encoding: 'utf8',
+    env: { ...process.env, PYTHONPATH: BACKEND },
+    windowsHide: true,
+    maxBuffer: 16 * 1024 * 1024,
+  });
+  if (result.status !== 0) throw new Error(`semantic contract factory failed:\n${result.stderr}`);
+  return JSON.parse(result.stdout);
+}
+
+function productionSemanticBindingProvider(contracts) {
+  return createSemanticBindingSourceProvider({
+    backendBase: 'http://127.0.0.1:8010',
+    token: 'fixture-in-memory-only',
+    fetchImpl: async (url) => {
+      const operationId = decodeURIComponent(String(url).split('/').pop());
+      const contract = contracts.realtime[operationId];
+      if (!contract) return { ok: false, status: 404, json: async () => ({}) };
+      return { ok: true, status: 200, json: async () => contract };
+    },
+  });
+}
+
+function exactSemanticTick(config, contracts) {
+  for (const binding of resolveLeaseBindings(config)) {
+    const contract = contracts.realtime[binding.operationId];
+    const entries = contract && Object.entries(contract.source_bindings || {});
+    if (!entries || !entries.length) continue;
+    const targetSourceField = binding.operationId === '00' || binding.operationId === '04'
+      ? '9201' : binding.operationId === 'ka10173' ? '841' : '';
+    const [sourceField, descriptor] = entries.find(([field]) => field !== targetSourceField)
+      || entries[0];
+    return {
+      binding,
+      sourceField,
+      bindingId: descriptor.binding_id,
+      value: '150850',
+      mismatchedSourceField: entries.find(([, candidate]) => (
+        candidate.binding_id !== descriptor.binding_id
+      ))?.[0] || '__not_authorized__',
+    };
+  }
+  throw new Error(`${config.cardId}: no authoritative semantic realtime source`);
+}
+
+function frameForExactSemanticTick(exact, sourceField, value) {
+  const values = { [sourceField]: value };
+  if (exact.binding.operationId === '00' || exact.binding.operationId === '04') {
+    values['9201'] = exact.binding.target;
+  }
+  if (exact.binding.operationId === 'ka10173') {
+    values['841'] = exact.binding.target;
+    return { trnm: 'REAL', seq: exact.binding.target, values };
+  }
+  return {
+    trnm: 'REAL',
+    data: [{ type: exact.binding.operationId, item: exact.binding.target, values }],
+  };
+}
+
 function sha256(buffer) {
   return crypto.createHash('sha256').update(buffer).digest('hex');
 }
@@ -42,9 +117,11 @@ function realtimeConfig(cardId, leaseId, target) {
   return null;
 }
 
-async function productionRealtimeTrace(card) {
+async function productionRealtimeTrace(card, contracts) {
   const initial = realtimeConfig(card.card_id, `fixture-${card.card_id}`, '005930');
   if (!initial) return { calls: [], states: [], tick_count: 0 };
+  const exact = exactSemanticTick(initial, contracts);
+  initial.semanticBindingIds = [exact.bindingId];
   const calls = [];
   const states = [];
   const transport = {
@@ -56,21 +133,40 @@ async function productionRealtimeTrace(card) {
     },
     command: async () => ({ ok: true }),
   };
-  const manager = new CardLeaseManager({ transport, onState: (state) => states.push(state) });
+  const manager = new CardLeaseManager({
+    transport,
+    semanticBindingSourceProvider: productionSemanticBindingProvider(contracts),
+    onState: (state) => states.push(state),
+  });
   const mounted = await manager.mount(initial);
   if (!mounted.ok || !mounted.bindings.length) throw new Error(`${card.card_id}: production realtime mount failed`);
-  const binding = mounted.bindings[0];
-  const ticks = manager.routeFrame({
-    trnm: 'REAL',
-    data: [{ type: binding.operationId, item: binding.target, values: { fixture: 'tick' } }],
-  });
+  const ticks = manager.routeFrame(frameForExactSemanticTick(
+    exact, exact.sourceField,
+    (exact.binding.operationId === '00' || exact.binding.operationId === '04')
+      && exact.sourceField === '9201' ? exact.binding.target : exact.value,
+  ));
+  const mismatchedTicks = manager.routeFrame(frameForExactSemanticTick(
+    exact, exact.mismatchedSourceField, '151000',
+  ));
+  if (mismatchedTicks.length !== 0) {
+    throw new Error(`${card.card_id}: unauthorized semantic source produced a tick`);
+  }
   const next = realtimeConfig(card.card_id, initial.leaseId, '000660');
+  next.semanticBindingIds = [exact.bindingId];
   const updated = await manager.update(next);
   if (!updated.ok) throw new Error(`${card.card_id}: production realtime target update failed`);
   await manager.handleFeedStatus({ state: 'disconnected' });
   await manager.handleFeedStatus({ state: 'open' });
   await manager.unmount(initial.leaseId);
-  return { calls, states, tick_count: ticks.length };
+  return {
+    calls,
+    states,
+    tick_count: ticks.length,
+    mismatched_tick_count: mismatchedTicks.length,
+    semantic_binding_id: exact.bindingId,
+    source_operation_id: exact.binding.operationId,
+    source_field: exact.sourceField,
+  };
 }
 
 function registerSafeShellIpc(records, realtimeManager) {
@@ -110,10 +206,13 @@ function registerSafeShellIpc(records, realtimeManager) {
   }
 }
 
-async function exerciseShellRealtime(win, manager) {
+async function exerciseShellRealtime(win, manager, contracts) {
   const mounted = await win.webContents.executeJavaScript(`(() => {
-    const root = document.querySelector('#grid .integrated-card[data-card-id="CC-04"]');
-    return { leaseId: root.dataset.realtimeLeaseId, mode: root.dataset.mode };
+    const root = document.querySelector('#grid .integrated-card[data-card-id="CC-03"]');
+    return {
+      leaseId: root.__athenaIntegratedRealtime?.leaseId || '',
+      mode: root.__athenaIntegratedMetadata?.mode || '',
+    };
   })()`);
   let state = manager.status(mounted.leaseId);
   const activeDeadline = Date.now() + 3000;
@@ -124,13 +223,25 @@ async function exerciseShellRealtime(win, manager) {
   if (!state || state.status !== 'active' || !state.bindings.length) {
     throw new Error(`actual shell realtime lease is not active: ${JSON.stringify(state)}`);
   }
-  const binding = state.bindings[0];
+  const binding = state.bindings.find((item) => item.operationId === '0B');
+  if (!binding) throw new Error('actual shell quote lease is missing 0B');
+  const source = contracts.realtime['0B'].source_bindings['10'];
+  const observation = contracts.card.semantic_observations.find((item) => (
+    item.realtime_binding_id === source.binding_id && item.label_ko === '현재가'
+  ));
+  if (!observation) throw new Error('production current-price observation is missing');
+  const before = await win.webContents.executeJavaScript(`(() => {
+    const root = document.querySelector('#grid .integrated-card[data-card-id="CC-03"]');
+    const target = root.querySelector('[data-semantic-observation-id="${observation.observation_id}"]');
+    return { found: Boolean(target), text: target?.textContent || '' };
+  })()`);
+  if (!before.found) throw new Error(`actual shell semantic observation is missing: ${JSON.stringify(before)}`);
   const ticks = manager.routeFrame({
     trnm: 'REAL',
     data: [{
       type: binding.operationId,
       item: binding.target,
-      values: { fixture_tick: 'accepted-generation' },
+      values: { 10: '151000' },
     }],
   }, state.connectionGeneration);
   if (!ticks.length) throw new Error('actual shell realtime manager produced no tick');
@@ -139,34 +250,48 @@ async function exerciseShellRealtime(win, manager) {
     'new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))',
   );
   const accepted = await win.webContents.executeJavaScript(`(() => {
-    const root = document.querySelector('#grid .integrated-card[data-card-id="CC-04"]');
+    const root = document.querySelector('#grid .integrated-card[data-card-id="CC-03"]');
+    const target = root.querySelector('[data-semantic-observation-id="${observation.observation_id}"]');
     return {
-      operation: root.dataset.lastRealtimeOperation,
-      target: root.dataset.lastRealtimeTarget,
-      text: root.querySelector('.integrated-realtime-strip')?.textContent || '',
+      found: Boolean(target),
+      text: target?.textContent || '',
     };
   })()`);
-  if (accepted.operation !== binding.operationId
-    || accepted.target !== binding.target
-    || !accepted.text.includes('accepted-generation')) {
+  if (!accepted.found || !accepted.text.includes('151,000원')) {
     throw new Error(`generation-matching realtime tick was not rendered: ${JSON.stringify(accepted)}`);
+  }
+  const mismatchedTicks = manager.routeFrame({
+    trnm: 'REAL',
+    data: [{ type: binding.operationId, item: binding.target, values: { 11: '999' } }],
+  }, state.connectionGeneration);
+  if (mismatchedTicks.length !== 0) {
+    throw new Error('actual shell mismatched semantic binding produced a tick');
   }
   const staleTick = {
     ...ticks[0],
     generation: Math.max(0, ticks[0].generation - 1),
-    row: { ...ticks[0].row, values: { fixture_tick: 'stale-generation' } },
+    semantic_updates: [{ binding_id: source.binding_id, value: '152000' }],
   };
   win.webContents.send('athena:integrated-card-realtime-ticks', [staleTick]);
   await win.webContents.executeJavaScript(
     'new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))',
   );
   const afterStale = await win.webContents.executeJavaScript(`(() =>
-    document.querySelector('#grid .integrated-card[data-card-id="CC-04"] .integrated-realtime-strip')?.textContent || ''
+    document.querySelector('#grid .integrated-card[data-card-id="CC-03"] [data-semantic-observation-id="${observation.observation_id}"]')?.textContent || ''
   )()`);
-  if (!afterStale.includes('accepted-generation') || afterStale.includes('stale-generation')) {
+  if (!afterStale.includes('151,000원') || afterStale.includes('152,000원')) {
     throw new Error(`stale realtime tick changed the renderer: ${afterStale}`);
   }
-  return { lease: state, accepted, stale_tick_ignored: true };
+  return {
+    lease: state,
+    before,
+    accepted,
+    source_operation_id: '0B',
+    source_field: '10',
+    semantic_binding_id: source.binding_id,
+    mismatched_tick_count: mismatchedTicks.length,
+    stale_tick_ignored: true,
+  };
 }
 
 function shellMode(cardId) {
@@ -328,6 +453,33 @@ async function sendRestEnvelope(win, card, fixture, cardOrdinal) {
   }
 }
 
+async function installProductionSemanticSnapshot(win, manager, contracts) {
+  const mounted = await win.webContents.executeJavaScript(`(() => {
+    const root = document.querySelector('#grid .integrated-card[data-card-id="CC-03"]');
+    const workspace = window.AthenaLib.SemanticWorkspace.upsert(
+      root, ${JSON.stringify(contracts.card)},
+    );
+    return {
+      leaseId: root.__athenaIntegratedRealtime?.leaseId || '',
+      workspace: Boolean(workspace),
+      taskCanvas: root.dataset.taskCanvas,
+    };
+  })()`);
+  if (!mounted.workspace || mounted.taskCanvas !== 'true' || !mounted.leaseId) {
+    throw new Error(`production semantic snapshot was not installed: ${JSON.stringify(mounted)}`);
+  }
+  const config = realtimeConfig('CC-03', mounted.leaseId, '005930');
+  config.semanticBindingIds = contracts.card.realtime_bindings.map((item) => item.binding_id);
+  const state = await manager.update(config);
+  if (!state.ok || state.status !== 'active') {
+    throw new Error(`production semantic realtime binding update failed: ${JSON.stringify(state)}`);
+  }
+  await win.webContents.executeJavaScript(
+    'new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))',
+  );
+  return { lease_id: mounted.leaseId, binding_count: config.semanticBindingIds.length };
+}
+
 async function captureShellCard(win, card) {
   const dom = await win.webContents.executeJavaScript(`(() => {
     const root = document.querySelector('#grid .integrated-card[data-card-id="${card.card_id}"]');
@@ -340,9 +492,6 @@ async function captureShellCard(win, card) {
       fields: rows.length,
       uniqueFields: new Set(rows.map((row) => row.dataset.fieldOccurrenceId)).size,
       coveredOperations: new Set(rows.map((row) => row.dataset.fieldOccurrenceId.split('|')[0])).size,
-      leaseId: root.dataset.realtimeLeaseId || null,
-      generation: Number(root.dataset.realtimeGeneration || 0),
-      connectionGeneration: Number(root.dataset.realtimeConnectionGeneration || 0),
     };
   })()`);
   if (dom.rootCount !== 6 || dom.nestedRootCount !== 0 || dom.cardId !== card.card_id
@@ -350,16 +499,6 @@ async function captureShellCard(win, card) {
     || dom.fields !== card.field_count
     || dom.uniqueFields !== card.field_count) {
     throw new Error(`${card.card_id}: actual shell Canvas DOM failed: ${JSON.stringify(dom)}`);
-  }
-  if (dom.leaseId && dom.generation) {
-    win.webContents.send('athena:integrated-card-realtime-ticks', [{
-      leaseId: dom.leaseId, generation: dom.generation,
-      connectionGeneration: dom.connectionGeneration, operationId: 'fixture',
-      target: '005930', row: { type: 'fixture', item: '005930', values: { fixture: 'tick' } },
-    }]);
-    await win.webContents.executeJavaScript(
-      'new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))',
-    );
   }
   const screenshots = [];
   for (const detailOpen of [false, true]) {
@@ -515,6 +654,7 @@ async function inspect(win, cardId, detailOpen, expectedFields, expectedOperatio
 
 async function main() {
   const bundle = loadBundle();
+  const semanticContracts = loadProductionSemanticContracts();
   if (
     bundle.operation_count !== 299
     || bundle.field_occurrence_count !== 3705
@@ -556,6 +696,7 @@ async function main() {
       },
       command: async () => ({ ok: true }),
     },
+    semanticBindingSourceProvider: productionSemanticBindingProvider(semanticContracts),
     onState: (state) => {
       shellRealtimeStates.push(state);
       if (!win.isDestroyed()) {
@@ -600,7 +741,7 @@ async function main() {
       const summary = await inspect(win, card.card_id, false, card.field_count, card.operation_count);
       const detail = await inspect(win, card.card_id, true, card.field_count, card.operation_count);
       renderedFields += detail.dom.fieldCount;
-      const trace = await productionRealtimeTrace(card);
+      const trace = await productionRealtimeTrace(card, semanticContracts);
       if (card.realtime_required) {
         const actions = trace.calls.map((item) => item[0]);
         if (!actions.includes('REG') || !actions.includes('REMOVE')
@@ -628,6 +769,7 @@ async function main() {
     // canvas.js event path. Every canonical operation envelope is dispatched
     // separately; the production surface must aggregate them into six roots.
     await win.loadFile(path.join(APP, 'shell.html'));
+    await win.webContents.executeJavaScript('window.__ATHENA_DEVELOPER_DIAGNOSTICS__ = true');
     win.show();
     const bootState = await win.webContents.executeJavaScript(`new Promise((resolve, reject) => {
       const started = Date.now();
@@ -667,8 +809,11 @@ async function main() {
       throw new Error(`actual shell dispatched ${dispatchedOperations}/299 operations`);
     }
     report.actual_shell_dispatched_operations = dispatchedOperations;
+    report.actual_shell_semantic_snapshot = await installProductionSemanticSnapshot(
+      win, shellRealtimeManager, semanticContracts,
+    );
     report.actual_shell_realtime = await exerciseShellRealtime(
-      win, shellRealtimeManager,
+      win, shellRealtimeManager, semanticContracts,
     );
     for (const card of bundle.cards) {
       const shellCapture = await captureShellCard(win, card);

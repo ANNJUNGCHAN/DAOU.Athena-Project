@@ -377,20 +377,19 @@ function buildIntegratedOrderbook(envelope, state) {
   const isAfterHoursSummary = state.marketMode === 'after-hours-summary';
   const title = isAfterHoursSummary ? '시간외 호가 잔량' : (isAfterHours ? '시간외 단일가 5단 호가' : '실시간 10단 호가');
   wrap.setAttribute('aria-label', title);
-  wrap.dataset.liveSource = state.liveSource || '';
   wrap.__athenaOrderbookState = state;
   wrap.__athenaOrderbookRows = { ask: [], bid: [] };
 
   const header = dom('header', 'card-kit-hoga-live-header');
   const titleBlock = dom('div', 'card-kit-hoga-live-title-block');
   const identity = [state.name, state.symbol].filter(Boolean).join(' · ');
-  titleBlock.append(dom('strong', 'card-kit-hoga-live-title', title), dom('span', 'card-kit-hoga-live-subtitle', identity || `AITS 통합창 · ${isAfterHours ? 'REST' : 'REST + 0D'}`));
+  titleBlock.append(dom('strong', 'card-kit-hoga-live-title', title), dom('span', 'card-kit-hoga-live-subtitle', identity || (isAfterHours ? '시간외 호가 데이터' : '실시간 호가 데이터')));
   const status = dom('div', 'card-kit-hoga-live-status');
   status.dataset.role = 'status';
   status.setAttribute('role', 'status');
   status.setAttribute('aria-live', 'polite');
   status.setAttribute('aria-atomic', 'true');
-  status.append(dom('span', 'card-kit-hoga-live-status-dot'), dom('span', '', isAfterHours ? 'REST' : '연결 중'), dom('time', 'card-kit-hoga-live-time', '수신 대기'));
+  status.append(dom('span', 'card-kit-hoga-live-status-dot'), dom('span', '', isAfterHours ? '조회 데이터' : '연결 중'), dom('time', 'card-kit-hoga-live-time', '수신 대기'));
   status.lastChild.dataset.role = 'time';
   header.append(titleBlock, status);
 
@@ -415,7 +414,7 @@ function buildIntegratedOrderbook(envelope, state) {
   const center = dom('div', 'card-kit-hoga-live-center');
   center.setAttribute('role', 'row');
   center.setAttribute('aria-label', '현재가와 예상체결가');
-  center.append(dom('span', 'card-kit-hoga-live-center-label', '현재가'), dom('strong', 'card-kit-hoga-live-current', '—'), dom('span', 'card-kit-hoga-live-center-hint', isAfterHours ? 'REST 스냅샷' : '예상체결 수신 대기'));
+  center.append(dom('span', 'card-kit-hoga-live-center-label', '현재가'), dom('strong', 'card-kit-hoga-live-current', '—'), dom('span', 'card-kit-hoga-live-center-hint', isAfterHours ? '최근 조회 기준' : '예상체결 수신 대기'));
   for (const cell of center.children) cell.setAttribute('role', 'cell');
   center.children[1].dataset.role = 'current-price';
   center.children[2].dataset.role = 'expected-execution';
@@ -519,7 +518,7 @@ function applyLiveTick(wrap, envelope, tick) {
 }
 
 function supportsLive0D(wrap) {
-  return Boolean(wrap && wrap.dataset && wrap.dataset.liveSource === '0D');
+  return Boolean(wrap && wrap.__athenaOrderbookState && wrap.__athenaOrderbookState.liveSource === '0D');
 }
 
 const __exports = {

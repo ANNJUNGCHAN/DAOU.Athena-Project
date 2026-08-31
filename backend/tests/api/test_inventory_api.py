@@ -8,7 +8,7 @@ import subprocess
 import sys
 import threading
 from pathlib import Path
-from typing import get_origin
+from typing import Any, get_origin
 
 import httpx
 import pytest
@@ -54,7 +54,7 @@ BACKEND = Path(__file__).resolve().parents[2]
 class FakeClient:
     is_ready = True
 
-    def __init__(self, body: dict[str, str] | None = None) -> None:
+    def __init__(self, body: dict[str, Any] | None = None) -> None:
         self.body = body if body is not None else {"return_code": "0"}
         self.calls: list[tuple[str, str, dict[str, str], object]] = []
 
@@ -141,9 +141,11 @@ def test_inventory_partition_and_static_openapi_coverage() -> None:
     # 347 = 346 + Selector one-shot dispatch 1개 — 앱의 카드 hot path가
     # 모델 왕복 없이 select/validate/call/render를 한 HTTP 요청으로 끝낸다.
     # 348 = 347 + 실패한 brain startup ingestion을 다시 시작하는 retry endpoint 1개.
+    # 349 = 348 + 내부 realtime binding contract 조회 endpoint 1개.
+    # 351 = 349 + 같은 coordinator에 수동 수집을 넣고 exact job을 조회하는 endpoint 2개.
     # (pause/resume/ack/catchup_fire/runs)·예약 브리핑(briefing_budget/
     # briefing_result)·계측(engagement)·말걸기 가드(nudge_guard get/post).
-    assert len(operation_ids) == 348
+    assert len(operation_ids) == 351
     assert "canvas_chart_page" in operation_ids
     assert "canvas_series_page" in operation_ids
     assert "get_internal_oauth_status" in operation_ids
@@ -155,6 +157,8 @@ def test_inventory_partition_and_static_openapi_coverage() -> None:
         "get_brain_cluster_map",
         "get_brain_entity_timeline",
         "retry_startup_brain_ingestion",
+        "enqueue_brain_ingestion",
+        "get_brain_ingestion_job",
         "set_expose_to_model",
     ):
         assert added in operation_ids, f"{added}가 표면에서 사라졌다"
@@ -448,6 +452,30 @@ def test_websocket_numeric_success_is_normalized_before_generated_model() -> Non
     )
     assert response.status_code == 200
     assert response.json()["return_code"] == "0"
+
+
+def test_websocket_condition_list_rows_are_normalized_before_generated_model() -> None:
+    class PositionalConditionWsClient(FakeWsClient):
+        async def execute(self, tr_id: str, payload: dict[str, object]) -> dict[str, object]:
+            self.executed.append((tr_id, payload))
+            return {
+                "return_code": "0",
+                "trnm": "CNSRLST",
+                "data": [["7", "Synthetic Alpha"], ["8", "Synthetic Beta"]],
+            }
+
+    app = create_app(Settings(_env_file=None))
+    app.dependency_overrides[require_kiwoom_ws_client] = lambda: PositionalConditionWsClient()
+    response = TestClient(app, raise_server_exceptions=False).post(
+        "/api/v1/websocket/ka10171",
+        json={"trnm": "CNSRLST"},
+    )
+
+    assert response.status_code == 200
+    assert response.json()["data"] == [
+        {"seq": "7", "name": "Synthetic Alpha"},
+        {"seq": "8", "name": "Synthetic Beta"},
+    ]
 
 
 def test_websocket_transport_error_is_mapped_to_secret_safe_502() -> None:
@@ -816,6 +844,41 @@ def test_raw_query_preserves_body_and_continuation_headers() -> None:
     assert (options.cont_yn, options.next_key) == ("Y", "PREVIOUS")
 
 
+def test_typed_detail_and_batch_preserve_business_result_body_verbatim() -> None:
+    body = {
+        "return_code": 20,
+        "return_msg": "no matching data",
+        "opaque": {"source": "kiwoom"},
+    }
+    fake = FakeClient(body)
+    app = create_app(Settings(_env_file=None))
+    app.dependency_overrides[require_kiwoom_client] = lambda: fake
+    client = TestClient(app)
+
+    typed = client.post("/api/v1/tr/quotes/ka10006", json={"stk_cd": "005930"})
+    detail = client.post(
+        "/api/v1/tr/stockinfo/ka10001/detail/current_trading",
+        json={"stk_cd": "005930"},
+    )
+    batch = client.post(
+        "/api/v1/batch", json={"items": [{"tr_id": "ka10006", "body": {}}]}
+    )
+
+    assert typed.status_code == 200
+    assert typed.json() == body
+    assert detail.status_code == 200
+    assert detail.json() == body
+    assert batch.status_code == 200
+    assert batch.json()["results"][0] == {
+        "tr_id": "ka10006",
+        "ok": True,
+        "body": body,
+        "cont_yn": "Y",
+        "next_key": "NEXT-1",
+        "error": None,
+    }
+
+
 def test_generic_raw_route_cannot_reach_order_or_websocket_operations() -> None:
     fake = FakeClient()
     app = create_app(Settings())
@@ -883,6 +946,47 @@ def test_order_requires_guards_and_idempotency_prevents_duplicate_submission() -
     )
     assert conflict_response.status_code == 409
     assert len(fake.calls) == 1
+
+
+@pytest.mark.parametrize("return_code", [5, "1700"])
+def test_order_business_result_is_completed_and_replayed_without_retry(
+    return_code: int | str,
+) -> None:
+    body = {"return_code": return_code, "return_msg": "order was not accepted"}
+    fake = FakeClient(body)
+    app = create_app(
+        Settings(
+            enable_order_api=True,
+            local_bearer_token="local-test",
+            _env_file=None,
+        )
+    )
+    app.dependency_overrides[require_order_kiwoom_client] = lambda: fake
+    payload = {
+        "dmst_stex_tp": "KRX",
+        "stk_cd": "005930",
+        "ord_qty": "1",
+        "trde_tp": "0",
+    }
+    headers = {
+        "Authorization": "Bearer local-test",
+        "X-Athena-Confirm": "true",
+        "Idempotency-Key": "business-result-order",
+    }
+
+    with TestClient(app) as client:
+        first = client.post("/api/v1/order/kt10000", json=payload, headers=headers)
+        replay = client.post("/api/v1/order/kt10000", json=payload, headers=headers)
+
+    assert first.status_code == 200
+    assert first.json() == body
+    assert replay.status_code == 200
+    assert replay.json() == body
+    assert len(fake.calls) == 1
+    reservation = app.state.order_idempotency_cache[
+        ("", "kt10000", "business-result-order")
+    ]
+    assert reservation.state is OrderState.COMPLETED
 
 
 def test_order_and_oauth_bearer_fail_closed_without_configuration() -> None:

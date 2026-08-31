@@ -5,7 +5,9 @@ const assert = require('node:assert/strict');
 
 function freshHistorySink() {
   delete require.cache[require.resolve('./history-sink')];
-  return require('./history-sink');
+  const historySink = require('./history-sink');
+  historySink.configureChatHistoryStore({ dbPath: ':memory:' });
+  return historySink;
 }
 
 // prefs.js는 electron의 app.getPath('userData')를 거쳐 실제 디스크에 쓴다 — 이
@@ -23,6 +25,41 @@ function withMockPrefs(collectChat, fn) {
   };
   try {
     return fn();
+  } finally {
+    if (prevEntry) require.cache[prefsPath] = prevEntry;
+    else delete require.cache[prefsPath];
+  }
+}
+
+async function withThrowingPrefs(fn) {
+  const prefsPath = require.resolve('./prefs');
+  const prevEntry = require.cache[prefsPath];
+  require.cache[prefsPath] = {
+    id: prefsPath,
+    filename: prefsPath,
+    loaded: true,
+    exports: { get: () => { throw new Error('prefs unreadable'); }, set: () => {} },
+  };
+  try {
+    return await fn();
+  } finally {
+    if (prevEntry) require.cache[prefsPath] = prevEntry;
+    else delete require.cache[prefsPath];
+  }
+}
+
+async function withMutablePrefs(initialValues, fn) {
+  const values = { ...initialValues };
+  const prefsPath = require.resolve('./prefs');
+  const prevEntry = require.cache[prefsPath];
+  require.cache[prefsPath] = {
+    id: prefsPath,
+    filename: prefsPath,
+    loaded: true,
+    exports: { get: () => ({ ...values }), set: () => {} },
+  };
+  try {
+    return await fn(values);
   } finally {
     if (prevEntry) require.cache[prefsPath] = prevEntry;
     else delete require.cache[prefsPath];
@@ -134,22 +171,30 @@ test('refreshBrainReady: 200 + ready:true면 캐시가 true — canAttemptSave �
   });
 });
 
-test('saveChatMessage: 시도 조건 불충족이면 fetch를 아예 호출하지 않는다("해당 없음")', () => {
-  withEnv({ ATHENA_LOCAL_BEARER_TOKEN: undefined }, () => {
+test('saveChatMessage: 토큰/브레인 준비가 없어도 HTTP 없이 로컬 pending 원문을 먼저 저장한다', async () => {
+  await withEnv({ ATHENA_LOCAL_BEARER_TOKEN: undefined }, async () => {
     const historySink = freshHistorySink();
     const prevFetch = global.fetch;
     let called = false;
     global.fetch = async () => { called = true; return { ok: true, status: 200 }; };
     try {
       let failed = null;
-      historySink.saveChatMessage(
+      const receipt = historySink.saveChatMessage(
         { conversationId: 'c1', text: '질문', role: 'user' },
         { onSaveFailed: (p) => { failed = p; } },
       );
+      assert.deepEqual(receipt, {
+        status: 'persisted', messageId: receipt.messageId,
+        persisted: true, skipped: false, failed: false, inserted: true,
+      });
       assert.equal(called, false);
       assert.equal(failed, null);
+      const row = historySink._getChatHistoryStoreForTest().getMessage(receipt.messageId);
+      assert.equal(row.text, '질문');
+      assert.equal(row.sync_state, 'pending');
     } finally {
       global.fetch = prevFetch;
+      historySink.closeChatHistoryStore();
     }
   });
 });
@@ -178,8 +223,13 @@ test('saveChatMessage: POST 실패(401)면 onSaveFailed({messageId, role})만 �
       assert.equal(failed.role, 'assistant');
       assert.equal(typeof failed.messageId, 'string');
       assert.deepEqual(Object.keys(failed).sort(), ['messageId', 'role']); // text/conversationId 누락 확인 — 함정 ⑫
+      const row = historySink._getChatHistoryStoreForTest().getMessage(failed.messageId);
+      assert.equal(row.text, '민감한 채팅 본문');
+      assert.equal(row.sync_state, 'pending');
+      assert.equal(row.last_error_code, 'http-401');
     } finally {
       global.fetch = prevFetch;
+      historySink.closeChatHistoryStore();
     }
   });
 });
@@ -201,8 +251,12 @@ test('saveChatMessage: fetch가 예외를 던져도(네트워크 다운) onSaveF
         );
       });
       assert.equal(failed.role, 'user');
+      const row = historySink._getChatHistoryStoreForTest().getMessage(failed.messageId);
+      assert.equal(row.sync_state, 'pending');
+      assert.equal(row.last_error_code, 'network-error');
     } finally {
       global.fetch = prevFetch;
+      historySink.closeChatHistoryStore();
     }
   });
 });
@@ -215,25 +269,32 @@ test('saveChatMessage: 성공하면 messageId를 즉시 반환하고 onSaveFaile
     global.fetch = async (url, opts) => {
       if (url.endsWith('/api/v1/brain/status')) return { ok: true, json: async () => ({ ready: true }) };
       bodySent = JSON.parse(opts.body);
-      return { ok: true, status: 200 };
+      return {
+        ok: true,
+        status: 200,
+        json: async () => ({ source_id: `chat:${bodySent.message_id}` }),
+      };
     };
     try {
       await historySink.refreshBrainReady({});
       let failed = false;
-      const messageId = historySink.saveChatMessage(
+      const receipt = historySink.saveChatMessage(
         { conversationId: 'conv-1', text: '안녕', role: 'user' },
         { onSaveFailed: () => { failed = true; } },
       );
-      assert.equal(typeof messageId, 'string');
+      assert.equal(receipt.status, 'persisted');
+      assert.equal(typeof receipt.messageId, 'string');
       await new Promise((r) => setTimeout(r, 10)); // fire-and-forget 완료 대기
       assert.equal(failed, false);
       assert.equal(bodySent.conversation_id, 'conv-1');
       assert.equal(bodySent.role, 'user');
       assert.equal(bodySent.text, '안녕');
-      assert.equal(bodySent.message_id, messageId);
+      assert.equal(bodySent.message_id, receipt.messageId);
       assert.equal(typeof bodySent.occurred_at, 'string');
+      assert.equal(historySink._getChatHistoryStoreForTest().getMessage(receipt.messageId).sync_state, 'synced');
     } finally {
       global.fetch = prevFetch;
+      historySink.closeChatHistoryStore();
     }
   });
 });
@@ -255,16 +316,442 @@ test('saveChatMessage: collectChat=false면 토큰·브레인 준비가 멀쩡�
         await historySink.refreshBrainReady({});
         assert.equal(historySink.canAttemptSave(), false); // collectChat 게이트가 이유
         let failed = null;
-        historySink.saveChatMessage(
+        const receipt = historySink.saveChatMessage(
           { conversationId: 'c1', text: '민감한 채팅 본문', role: 'user' },
           { onSaveFailed: (p) => { failed = p; } },
         );
+        assert.deepEqual(receipt, {
+          status: 'skipped', messageId: receipt.messageId,
+          persisted: false, skipped: true, failed: false, reason: 'collect_chat_disabled',
+        });
         assert.equal(chatCallCount, 0);
         assert.equal(failed, null);
+        assert.equal(historySink._getChatHistoryStoreForTest().countPendingMessages(), 0);
       } finally {
         global.fetch = prevFetch;
+        historySink.closeChatHistoryStore();
       }
     });
+  });
+});
+
+test('saveChatMessage: SQLite 저장 실패는 failed receipt이고 chat POST는 0회다', async () => {
+  await withEnv({ ATHENA_LOCAL_BEARER_TOKEN: 'tok' }, async () => {
+    await withMockPrefs(true, async () => {
+      const historySink = freshHistorySink();
+      const store = historySink._getChatHistoryStoreForTest();
+      const originalPersist = store.persistMessage;
+      const prevFetch = global.fetch;
+      let chatCallCount = 0;
+      global.fetch = async (url) => {
+        if (String(url).endsWith('/api/v1/brain/chat')) chatCallCount += 1;
+        return { ok: true, status: 200, json: async () => ({ ready: true }) };
+      };
+      store.persistMessage = () => { throw new Error('SQLITE_FULL'); };
+      try {
+        await historySink.refreshBrainReady({});
+        const receipt = historySink.saveChatMessage({
+          conversationId: 'failed-db', role: 'user', text: '저장되면 안 됨', messageId: 'db-fail',
+        });
+        assert.deepEqual(receipt, {
+          status: 'failed', messageId: 'db-fail',
+          persisted: false, skipped: false, failed: true, reason: 'store_unavailable',
+        });
+        assert.equal(chatCallCount, 0);
+      } finally {
+        store.persistMessage = originalPersist;
+        global.fetch = prevFetch;
+        historySink.closeChatHistoryStore();
+      }
+    });
+  });
+});
+
+test('saveChatMessage: collectChat prefs 조회 실패는 fail-closed skipped이고 SQLite/HTTP를 건드리지 않는다', async () => {
+  await withEnv({ ATHENA_LOCAL_BEARER_TOKEN: 'tok' }, async () => {
+    await withThrowingPrefs(async () => {
+      const historySink = freshHistorySink();
+      const prevFetch = global.fetch;
+      let fetchCount = 0;
+      global.fetch = async () => { fetchCount += 1; return { ok: true, status: 200 }; };
+      try {
+        const receipt = historySink.saveChatMessage({
+          conversationId: 'prefs-fail', role: 'user', text: '저장되면 안 됨', messageId: 'prefs-fail',
+        });
+        assert.deepEqual(receipt, {
+          status: 'skipped', messageId: 'prefs-fail',
+          persisted: false, skipped: true, failed: false, reason: 'prefs_unavailable',
+        });
+        assert.equal(fetchCount, 0);
+        assert.equal(historySink._getChatHistoryStoreForTest().countPendingMessages(), 0);
+      } finally {
+        global.fetch = prevFetch;
+        historySink.closeChatHistoryStore();
+      }
+    });
+  });
+});
+
+test('saveChatMessage: 동일 messageId 재호출은 원문을 덮어쓰거나 중복 저장하지 않는다', async () => {
+  await withEnv({ ATHENA_LOCAL_BEARER_TOKEN: undefined }, async () => {
+    const historySink = freshHistorySink();
+    try {
+      const first = historySink.saveChatMessage({
+        conversationId: 'c1', text: '원본', role: 'user', messageId: 'fixed-id',
+        occurredAt: '2026-08-31T00:00:00.000Z',
+      });
+      const second = historySink.saveChatMessage({
+        conversationId: 'c2', text: '변경 시도', role: 'assistant', messageId: 'fixed-id',
+        occurredAt: '2026-08-31T01:00:00.000Z',
+      });
+      assert.equal(first.messageId, 'fixed-id');
+      assert.equal(first.status, 'persisted');
+      assert.equal(first.inserted, true);
+      assert.equal(second.messageId, 'fixed-id');
+      assert.equal(second.status, 'persisted');
+      assert.equal(second.inserted, false);
+      const store = historySink._getChatHistoryStoreForTest();
+      assert.equal(store.countPendingMessages(), 1);
+      assert.equal(store.getMessage('fixed-id').text, '원본');
+    } finally {
+      historySink.closeChatHistoryStore();
+    }
+  });
+});
+
+test('saveChatMessage: 프로세스 재시작처럼 모듈을 다시 열어도 pending 원문이 남는다', async (t) => {
+  const fs = require('node:fs');
+  const os = require('node:os');
+  const path = require('node:path');
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'athena-history-sink-'));
+  const dbPath = path.join(dir, 'chat.sqlite3');
+  await withEnv({ ATHENA_LOCAL_BEARER_TOKEN: undefined }, async () => {
+    let historySink = freshHistorySink();
+    historySink.configureChatHistoryStore({ dbPath });
+    const receipt = historySink.saveChatMessage({ conversationId: 'restart', text: '재시작 후에도 보존', role: 'user' });
+    historySink.closeChatHistoryStore();
+
+    historySink = freshHistorySink();
+    historySink.configureChatHistoryStore({ dbPath });
+    assert.equal(historySink._getChatHistoryStoreForTest().getMessage(receipt.messageId).text, '재시작 후에도 보존');
+    assert.equal(historySink._getChatHistoryStoreForTest().countPendingMessages(), 1);
+    historySink.closeChatHistoryStore();
+  });
+  fs.rmSync(dir, { recursive: true, force: true });
+});
+
+test('flushPendingChatMessages: 부분 성공만 synced 처리하고 동시 호출은 한 번만 전송한다', async () => {
+  await withEnv({ ATHENA_LOCAL_BEARER_TOKEN: 'tok' }, async () => {
+    const historySink = freshHistorySink();
+    const prevFetch = global.fetch;
+    const chatIds = [];
+    const failedPayloads = [];
+    let releaseFirst;
+    const firstGate = new Promise((resolve) => { releaseFirst = resolve; });
+    global.fetch = async (url, opts) => {
+      if (String(url).endsWith('/api/v1/brain/status')) return { ok: true, json: async () => ({ ready: true }) };
+      if (!String(url).endsWith('/api/v1/brain/chat')) return { ok: true, status: 200 };
+      const body = JSON.parse(opts.body);
+      chatIds.push(body.message_id);
+      if (chatIds.length === 1) await firstGate;
+      return body.message_id === 'm2'
+        ? { ok: false, status: 503 }
+        : { ok: true, status: 200, json: async () => ({ source_id: `chat:${body.message_id}` }) };
+    };
+    try {
+      historySink.saveChatMessage({ conversationId: 'c', role: 'user', text: '1', messageId: 'm1' });
+      historySink.saveChatMessage({ conversationId: 'c', role: 'assistant', text: '2', messageId: 'm2' });
+      historySink.saveChatMessage({ conversationId: 'c', role: 'user', text: '3', messageId: 'm3' });
+      assert.equal(historySink._getChatHistoryStoreForTest().countPendingMessages(), 3);
+      await historySink.refreshBrainReady({});
+
+      const flush1 = historySink.flushPendingChatMessages({ onSaveFailed: (payload) => failedPayloads.push(payload) });
+      const flush2 = historySink.flushPendingChatMessages({ onSaveFailed: (payload) => failedPayloads.push(payload) });
+      releaseFirst();
+      const [result1, result2] = await Promise.all([flush1, flush2]);
+      assert.deepEqual(result1, { pending: 3, attempted: 3, synced: 2, failed: 1, remaining: 1 });
+      assert.deepEqual(result2, result1);
+      assert.deepEqual(chatIds, ['m1', 'm2', 'm3']);
+      assert.deepEqual(failedPayloads, [{ messageId: 'm2', role: 'assistant' }]);
+      assert.equal(historySink._getChatHistoryStoreForTest().getMessage('m2').sync_state, 'pending');
+      assert.equal(historySink._getChatHistoryStoreForTest().getMessage('m1').sync_state, 'synced');
+    } finally {
+      global.fetch = prevFetch;
+      historySink.closeChatHistoryStore();
+    }
+  });
+});
+
+test('flushPendingChatMessages: bounded batch를 반복해 모든 pending을 전송한다', async () => {
+  await withEnv({ ATHENA_LOCAL_BEARER_TOKEN: 'tok' }, async () => {
+    const historySink = freshHistorySink();
+    const prevFetch = global.fetch;
+    const sent = [];
+    global.fetch = async (url, opts) => {
+      if (String(url).endsWith('/api/v1/brain/status')) return { ok: true, json: async () => ({ ready: true }) };
+      if (!String(url).endsWith('/api/v1/brain/chat')) return { ok: true, status: 200 };
+      const body = JSON.parse(opts.body);
+      sent.push(body.message_id);
+      return { ok: true, status: 200, json: async () => ({ source_id: `chat:${body.message_id}` }) };
+    };
+    try {
+      for (let index = 0; index < 5; index += 1) {
+        historySink.saveChatMessage({
+          conversationId: 'batch', role: 'user', text: `message-${index}`,
+          messageId: `batch-${index}`, occurredAt: `2026-08-31T00:00:0${index}.000Z`,
+        });
+      }
+      await historySink.refreshBrainReady({});
+      const result = await historySink.flushPendingChatMessages({ batchSize: 2, maxBatches: 3 });
+      assert.deepEqual(result, { pending: 5, attempted: 5, synced: 5, failed: 0, remaining: 0 });
+      assert.deepEqual(sent, ['batch-0', 'batch-1', 'batch-2', 'batch-3', 'batch-4']);
+    } finally {
+      global.fetch = prevFetch;
+      historySink.closeChatHistoryStore();
+    }
+  });
+});
+
+test('flushPendingChatMessages: maxBatches를 넘겨 같은 호출에서 무한 처리하지 않는다', async () => {
+  await withEnv({ ATHENA_LOCAL_BEARER_TOKEN: 'tok' }, async () => {
+    const historySink = freshHistorySink();
+    const prevFetch = global.fetch;
+    const sent = [];
+    global.fetch = async (url, opts) => {
+      if (String(url).endsWith('/api/v1/brain/status')) return { ok: true, json: async () => ({ ready: true }) };
+      if (!String(url).endsWith('/api/v1/brain/chat')) return { ok: true, status: 200 };
+      const body = JSON.parse(opts.body);
+      sent.push(body.message_id);
+      return { ok: true, status: 200, json: async () => ({ source_id: `chat:${body.message_id}` }) };
+    };
+    try {
+      for (let index = 0; index < 5; index += 1) {
+        historySink.saveChatMessage({
+          conversationId: 'bounded', role: 'user', text: `${index}`,
+          messageId: `bounded-${index}`, occurredAt: `2026-08-31T00:00:0${index}.000Z`,
+        });
+      }
+      await historySink.refreshBrainReady({});
+      const result = await historySink.flushPendingChatMessages({ batchSize: 2, maxBatches: 2 });
+      assert.deepEqual(result, { pending: 5, attempted: 4, synced: 4, failed: 0, remaining: 1 });
+      assert.deepEqual(sent, ['bounded-0', 'bounded-1', 'bounded-2', 'bounded-3']);
+    } finally {
+      global.fetch = prevFetch;
+      historySink.closeChatHistoryStore();
+    }
+  });
+});
+
+test('2xx여도 source_id가 messageId와 일치해야 ACK하고 원문을 지운다', async () => {
+  await withEnv({ ATHENA_LOCAL_BEARER_TOKEN: 'tok' }, async () => {
+    const historySink = freshHistorySink();
+    const prevFetch = global.fetch;
+    global.fetch = async (url, opts) => {
+      if (String(url).endsWith('/api/v1/brain/status')) return { ok: true, json: async () => ({ ready: true }) };
+      if (!String(url).endsWith('/api/v1/brain/chat')) return { ok: true, status: 200 };
+      const body = JSON.parse(opts.body);
+      return { ok: true, status: 200, json: async () => ({ source_id: body.message_id === 'ok' ? 'chat:ok' : 'chat:other' }) };
+    };
+    try {
+      historySink.saveChatMessage({ conversationId: 'c', role: 'user', text: '지워질 원문', messageId: 'ok' });
+      historySink.saveChatMessage({ conversationId: 'c', role: 'user', text: '남아야 할 원문', messageId: 'mismatch' });
+      await historySink.refreshBrainReady({});
+      const result = await historySink.flushPendingChatMessages({ batchSize: 10, maxBatches: 1 });
+      assert.deepEqual(result, { pending: 2, attempted: 2, synced: 1, failed: 1, remaining: 1 });
+      assert.equal(historySink._getChatHistoryStoreForTest().getMessage('ok').text, '');
+      assert.equal(historySink._getChatHistoryStoreForTest().getMessage('mismatch').text, '남아야 할 원문');
+      assert.equal(historySink._getChatHistoryStoreForTest().getMessage('mismatch').last_error_code, 'source-id-mismatch');
+    } finally {
+      global.fetch = prevFetch;
+      historySink.closeChatHistoryStore();
+    }
+  });
+});
+
+test('purgePendingChatMessages: collectChat 해제 시 아직 전송하지 않은 원문을 제거한다', async () => {
+  await withEnv({ ATHENA_LOCAL_BEARER_TOKEN: undefined }, async () => {
+    const historySink = freshHistorySink();
+    try {
+      historySink.saveChatMessage({ conversationId: 'c', role: 'user', text: '삭제 대상', messageId: 'purge-me' });
+      assert.equal(historySink.purgePendingChatMessages(), 1);
+      assert.equal(historySink._getChatHistoryStoreForTest().getMessage('purge-me'), null);
+    } finally {
+      historySink.closeChatHistoryStore();
+    }
+  });
+});
+
+test('재활성화 전 purge가 실패하면 stale 원문은 전송되지 않고 OFF에서만 제거할 수 있다', async () => {
+  await withEnv({ ATHENA_LOCAL_BEARER_TOKEN: 'tok' }, async () => {
+    await withMutablePrefs({ collectChat: false, exposeToModel: false }, async (values) => {
+      const historySink = freshHistorySink();
+      const prevFetch = global.fetch;
+      const posted = [];
+      try {
+        const store = historySink._getChatHistoryStoreForTest();
+        values.collectChat = true;
+        historySink.saveChatMessage({ conversationId: 'c', role: 'user', text: 'stale raw text', messageId: 'stale' });
+        values.collectChat = false;
+
+        const originalPurge = store.purgePendingMessages.bind(store);
+        store.purgePendingMessages = () => { throw new Error('disk locked'); };
+        assert.throws(() => historySink.purgePendingChatMessages(), /disk locked/);
+
+        global.fetch = async (url, opts = {}) => {
+          if (String(url).endsWith('/api/v1/brain/status')) return { ok: true, json: async () => ({ ready: true }) };
+          if (String(url).endsWith('/api/v1/brain/chat')) posted.push(JSON.parse(opts.body).message_id);
+          return { ok: true, status: 200, json: async () => ({ source_id: 'chat:stale' }) };
+        };
+        await historySink.refreshBrainReady({});
+        assert.deepEqual(await historySink.flushPendingChatMessages(), { pending: 1, attempted: 0, synced: 0, failed: 0, remaining: 1 });
+        assert.deepEqual(posted, []);
+
+        store.purgePendingMessages = originalPurge;
+        assert.equal(historySink.purgePendingChatMessages(), 1);
+        values.collectChat = true;
+        assert.deepEqual(await historySink.flushPendingChatMessages(), { pending: 0, attempted: 0, synced: 0, failed: 0, remaining: 0 });
+        assert.deepEqual(posted, []);
+      } finally {
+        global.fetch = prevFetch;
+        historySink.closeChatHistoryStore();
+      }
+    });
+  });
+});
+
+test('flushPendingChatMessages: 수집 해제+purge가 진행 중 POST를 취소하고 후속 POST/ACK를 막는다', async () => {
+  await withEnv({ ATHENA_LOCAL_BEARER_TOKEN: 'tok' }, async () => {
+    await withMutablePrefs({ collectChat: true, exposeToModel: false }, async (values) => {
+      const historySink = freshHistorySink();
+      const prevFetch = global.fetch;
+      const chatIds = [];
+      let chatSignal = null;
+      let releaseChat;
+      let notifyChatStarted;
+      const chatStarted = new Promise((resolve) => { notifyChatStarted = resolve; });
+      const chatGate = new Promise((resolve) => { releaseChat = resolve; });
+      global.fetch = async (url, opts = {}) => {
+        if (String(url).endsWith('/api/v1/brain/status')) {
+          return { ok: true, status: 200, json: async () => ({ ready: true }) };
+        }
+        if (!String(url).endsWith('/api/v1/brain/chat')) return { ok: true, status: 200 };
+        const body = JSON.parse(opts.body);
+        chatIds.push(body.message_id);
+        chatSignal = opts.signal;
+        notifyChatStarted();
+        await chatGate;
+        return { ok: true, status: 200, json: async () => ({ source_id: `chat:${body.message_id}` }) };
+      };
+      try {
+        historySink.saveChatMessage({ conversationId: 'race', role: 'user', text: '1', messageId: 'race-1' });
+        historySink.saveChatMessage({ conversationId: 'race', role: 'assistant', text: '2', messageId: 'race-2' });
+        await historySink.refreshBrainReady({});
+        const flush = historySink.flushPendingChatMessages({ batchSize: 10, maxBatches: 1 });
+        await chatStarted;
+        values.collectChat = false;
+        assert.equal(historySink.purgePendingChatMessages(), 2);
+        assert.equal(chatSignal.aborted, true);
+        releaseChat();
+        const result = await flush;
+        assert.deepEqual(chatIds, ['race-1']);
+        assert.deepEqual(result, { pending: 2, attempted: 1, synced: 0, failed: 0, remaining: 0 });
+        assert.equal(historySink._getChatHistoryStoreForTest().getMessage('race-1'), null);
+        assert.equal(historySink._getChatHistoryStoreForTest().getMessage('race-2'), null);
+      } finally {
+        releaseChat();
+        global.fetch = prevFetch;
+        historySink.closeChatHistoryStore();
+      }
+    });
+  });
+});
+
+test('closeChatHistoryStore: 진행 중 fire-and-forget ACK를 취소해 닫힌 store 접근/unhandled rejection을 막는다', async () => {
+  await withEnv({ ATHENA_LOCAL_BEARER_TOKEN: 'tok' }, async () => {
+    await withMockPrefs(true, async () => {
+      const historySink = freshHistorySink();
+      const prevFetch = global.fetch;
+      const unhandled = [];
+      const onUnhandled = (reason) => { unhandled.push(reason); };
+      let releaseChat;
+      let notifyChatStarted;
+      let chatSignal = null;
+      const chatStarted = new Promise((resolve) => { notifyChatStarted = resolve; });
+      const chatGate = new Promise((resolve) => { releaseChat = resolve; });
+      global.fetch = async (url, opts = {}) => {
+        if (String(url).endsWith('/api/v1/brain/status')) {
+          return { ok: true, status: 200, json: async () => ({ ready: true }) };
+        }
+        if (!String(url).endsWith('/api/v1/brain/chat')) return { ok: true, status: 200 };
+        const body = JSON.parse(opts.body);
+        chatSignal = opts.signal;
+        notifyChatStarted();
+        await chatGate;
+        return { ok: true, status: 200, json: async () => ({ source_id: `chat:${body.message_id}` }) };
+      };
+      process.on('unhandledRejection', onUnhandled);
+      try {
+        await historySink.refreshBrainReady({});
+        const receipt = historySink.saveChatMessage({
+          conversationId: 'close-race', role: 'user', text: '종료 중', messageId: 'close-race',
+        });
+        assert.equal(receipt.status, 'persisted');
+        await chatStarted;
+        historySink.closeChatHistoryStore();
+        assert.equal(chatSignal.aborted, true);
+        releaseChat();
+        await new Promise((resolve) => setImmediate(resolve));
+        await new Promise((resolve) => setImmediate(resolve));
+        assert.deepEqual(unhandled, []);
+      } finally {
+        releaseChat();
+        process.off('unhandledRejection', onUnhandled);
+        global.fetch = prevFetch;
+        historySink.closeChatHistoryStore();
+      }
+    });
+  });
+});
+
+test('astral Unicode 코드 포인트 2만 자까지 로컬 원문이 완전하게 남는다', async () => {
+  await withEnv({ ATHENA_LOCAL_BEARER_TOKEN: undefined }, async () => {
+    const historySink = freshHistorySink();
+    try {
+      const text = '😀'.repeat(historySink.MAX_CHAT_MESSAGE_CHARS);
+      assert.equal(Array.from(text).length, 20_000);
+      assert.equal(text.length, 40_000);
+      const receipt = historySink.saveChatMessage({ conversationId: 'long', role: 'user', text, messageId: 'long' });
+      assert.equal(receipt.persisted, true);
+      assert.equal(historySink._getChatHistoryStoreForTest().getMessage('long').text, text);
+    } finally {
+      historySink.closeChatHistoryStore();
+    }
+  });
+});
+
+test('astral Unicode 코드 포인트 2만 1자는 poison pending row 없이 동기 실패한다', async () => {
+  await withEnv({ ATHENA_LOCAL_BEARER_TOKEN: 'tok' }, async () => {
+    const historySink = freshHistorySink();
+    let fetchCalls = 0;
+    const previousFetch = global.fetch;
+    global.fetch = async () => { fetchCalls += 1; throw new Error('must not fetch'); };
+    try {
+      const text = '😀'.repeat(historySink.MAX_CHAT_MESSAGE_CHARS + 1);
+      assert.equal(Array.from(text).length, 20_001);
+      const receipt = historySink.saveChatMessage({
+        conversationId: 'too-long',
+        role: 'user',
+        text,
+        messageId: 'too-long',
+      });
+      assert.equal(receipt.failed, true);
+      assert.equal(receipt.reason, 'invalid_message_length');
+      assert.equal(historySink._getChatHistoryStoreForTest().getMessage('too-long'), null);
+      assert.equal(fetchCalls, 0);
+    } finally {
+      global.fetch = previousFetch;
+      historySink.closeChatHistoryStore();
+    }
   });
 });
 

@@ -121,7 +121,7 @@ def install_exception_handlers(app: FastAPI) -> None:
 
     @app.exception_handler(KiwoomApiError)
     async def api_handler(_request: Request, exc: KiwoomApiError) -> JSONResponse:
-        status_code = 429 if exc.http_status == 429 or exc.code in {"5", "1700"} else 502
+        status_code = 429 if exc.http_status == 429 else 502
         content: dict[str, Any] = {
             "detail": "Kiwoom upstream request failed",
             "code": exc.code,

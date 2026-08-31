@@ -10,6 +10,11 @@ test('도구 7종 — 구현 2(수평선·추세선), 미구현 5 (spec §5 표)
   assert.deepEqual(impl, ['hline', 'trend']);
 });
 
+test('제품 도구 모음은 구현된 드로잉만 생성한다', () => {
+  const source = require('node:fs').readFileSync(require.resolve('./chart-drawings'), 'utf8');
+  assert.match(source, /DRAW_TOOLS\.filter\(\(candidate\) => candidate\.implemented\)/);
+});
+
 test('sanitizeDrawings: 유효 항목만 통과, 손상 항목은 버린다', () => {
   const out = sanitizeDrawings({
     hlines: [{ id: 'h1', price: 70000 }, { price: 'oops' }, null],

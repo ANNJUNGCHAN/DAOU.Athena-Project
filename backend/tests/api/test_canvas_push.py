@@ -35,6 +35,143 @@ def test_push_requires_canvas_type():
     assert response.status_code == 422
 
 
+@pytest.mark.parametrize(
+    "envelope",
+    [
+        {"canvas_type": "task_canvas", "data": {}},
+        {"canvas_type": "task-canvas", "data": {}},
+        {"canvas_type": "facts", "task_canvas": {"status": "available"}},
+        {"canvas_type": "facts", "taskCanvas": {"status": "available"}},
+        {
+            "canvas_type": "facts",
+            "data": {"presentation_contract": {"status": "available"}},
+        },
+        {
+            "canvas_type": "facts",
+            "data": {"presentationContract": {"status": "available"}},
+        },
+        {
+            "canvas_type": "facts",
+            "viewRecipe": {"recipeId": "forged"},
+        },
+        {
+            "canvas_type": "facts",
+            "data": {"field_contract": [{"value": "forged"}]},
+        },
+        {
+            "canvas_type": "facts",
+            "data": {"coverageReceipt": {"lossless": True}},
+        },
+        {
+            "canvas_type": "facts",
+            "data": {
+                "rows": [
+                    {
+                        "payload": {
+                            "semantic_observations": [{"value": "forged"}]
+                        }
+                    }
+                ]
+            },
+        },
+        {
+            "canvas_type": "facts",
+            "data": {
+                "rows": [
+                    {
+                        "payload": {
+                            "semanticObservations": [{"value": "forged"}],
+                            "realtimeBindings": [{"bindingId": "forged"}],
+                        }
+                    }
+                ]
+            },
+        },
+    ],
+    ids=[
+        "task-canvas-type",
+        "task-canvas-hyphen-type",
+        "task-canvas-snake",
+        "task-canvas-camel",
+        "nested-presentation-snake",
+        "nested-presentation-camel",
+        "top-level-recipe-camel",
+        "nested-field-contract-snake",
+        "nested-coverage-receipt-camel",
+        "deep-list-semantic-snake",
+        "deep-list-semantic-camel",
+    ],
+)
+def test_generic_push_rejects_task_canvas_contracts_before_queue_access(envelope):
+    app = _app()
+    sentinel = {"canvas_type": "chart", "data": {"kept": True}}
+    app.state.canvas_events.put_nowait(sentinel)
+    client = TestClient(app)
+
+    response = client.post("/api/v1/canvas/push", json=envelope)
+
+    assert response.status_code == 422
+    assert response.json() == {
+        "code": "GENERIC_TASK_CANVAS_CONTRACT_FORBIDDEN",
+        "detail": "Task Canvas contract는 signed selector dispatch에서만 생성할 수 있다",
+    }
+    assert app.state.canvas_events.qsize() == 1
+    assert app.state.canvas_events.get_nowait() == sentinel
+
+
+@pytest.mark.parametrize(
+    "alias",
+    [
+        "envelope_version",
+        "envelopeVersion",
+        "view_recipe",
+        "viewRecipe",
+        "presentation_contract",
+        "presentationContract",
+        "view_instance_id",
+        "viewInstanceId",
+        "semantic_observations",
+        "semanticObservations",
+        "realtime_bindings",
+        "realtimeBindings",
+        "field_contract",
+        "fieldContract",
+        "coverage_receipt",
+        "coverageReceipt",
+    ],
+)
+def test_generic_push_rejects_every_nested_semantic_contract_alias(alias):
+    app = _app()
+    client = TestClient(app)
+
+    response = client.post(
+        "/api/v1/canvas/push",
+        json={
+            "canvas_type": "facts",
+            "data": {"outer": {alias: {"forged": True}}},
+        },
+    )
+
+    assert response.status_code == 422
+    assert response.json()["code"] == "GENERIC_TASK_CANVAS_CONTRACT_FORBIDDEN"
+    assert app.state.canvas_events.empty()
+
+
+def test_generic_task_canvas_rejection_precedes_queue_readiness_check():
+    client = TestClient(_app(with_queue=False))
+
+    response = client.post(
+        "/api/v1/canvas/push",
+        json={
+            "canvas_type": "facts",
+            "data": {"presentationContract": {"sections": []}},
+        },
+    )
+
+    assert response.status_code == 422
+    assert response.json()["code"] == "GENERIC_TASK_CANVAS_CONTRACT_FORBIDDEN"
+
+
 def test_push_fail_closed_without_queue():
     client = TestClient(_app(with_queue=False))
     response = client.post("/api/v1/canvas/push", json={"canvas_type": "chart"})

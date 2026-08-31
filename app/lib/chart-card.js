@@ -753,10 +753,10 @@ async function createChartCard(container, opts) {
   // REST control-plane을 새로 왕복한다. fixture만 로컬 재샘플임을 표시한다.
   function updateNote() {
     const parts = o.preSampled
-      ? [`AITS ${currentTrId || 'chart'} canonical snapshot`]
+      ? ['서버에서 조회한 차트 데이터']
       : ['서버 보정(upd_stkpc_tp) 미연결 — 목업 동일 데이터'];
     if (intradayUnavailable) parts.push(`${intradayUnavailable} — 일봉을 그대로 보여준다`);
-    if (authoringStore.enabled) parts.push('저작 상태 로컬 저장 1판 — 백엔드 영속은 후속 라운드');
+    if (authoringStore.enabled) parts.push('차트 설정이 이 기기에 저장되었습니다');
     if (reloadFailure) parts.push(`재조회 실패 — ${reloadFailure}`);
     adjustedNote.textContent = parts.join(' · ');
   }

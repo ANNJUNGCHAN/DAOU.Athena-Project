@@ -5,16 +5,24 @@ from pathlib import Path
 import pytest
 from fastapi import FastAPI
 
+import athena_api.lifespan as lifespan_module
 from athena_api.brain import (
     SCHEMA_VERSION,
+    ClaudeCliStructuredLlm,
     GraphStore,
     HistoryStore,
     IngestionCoordinator,
     JobTrigger,
+    LocalCommandStructuredLlm,
     SourceKind,
 )
 from athena_api.config import Settings
-from athena_api.lifespan import _open_brain, _teardown_brain, build_lifespan
+from athena_api.lifespan import (
+    _hourly_ingest_loop,
+    _open_brain,
+    _teardown_brain,
+    build_lifespan,
+)
 from athena_api.process_lock import BrainProcessLock
 
 
@@ -30,9 +38,10 @@ def _brain_settings(tmp_path: Path, **overrides: object) -> Settings:
 # --- disabled by default -------------------------------------------------------------
 
 
-async def test_brain_disabled_by_default_never_touches_app_state_or_disk() -> None:
+async def test_brain_disabled_by_default_never_touches_app_state_or_disk(tmp_path: Path) -> None:
     app = FastAPI()
-    settings = Settings(_env_file=None)
+    isolated_db = tmp_path / "disabled-brain.sqlite3"
+    settings = Settings(_env_file=None, brain_db_path=isolated_db)
     assert settings.brain_enabled is False
     async with build_lifespan(settings)(app):
         assert app.state.brain_ready is False
@@ -40,9 +49,8 @@ async def test_brain_disabled_by_default_never_touches_app_state_or_disk() -> No
         assert app.state.brain_last_error is None
         assert app.state.brain_ingestion_ready is False
         assert app.state.brain_ingestion_last_error is None
-    # A disabled brain must never create a file under the real default path.
-    assert not settings.brain_db_path.exists()
-    assert not settings.brain_db_path.exists()
+    # A disabled brain must not create even its explicitly isolated target.
+    assert not isolated_db.exists()
 
 
 # --- happy path -----------------------------------------------------------------------
@@ -179,6 +187,17 @@ async def test_open_brain_raises_immediately_when_the_lock_is_already_held(
 # --- extraction injection (gap b, ADR §2(b')) -----------------------------------------
 
 
+def test_claude_cli_extraction_opt_in_parses_from_environment(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("ATHENA_BRAIN_USE_CLAUDE_CLI_EXTRACTION", "true")
+    assert Settings(_env_file=None).brain_use_claude_cli_extraction is True
+
+
+def test_claude_cli_extraction_is_opted_out_by_default() -> None:
+    assert Settings(_env_file=None).brain_use_claude_cli_extraction is False
+
+
 async def test_extraction_is_disabled_by_default(
     tmp_path: Path
 ) -> None:
@@ -187,6 +206,39 @@ async def test_extraction_is_disabled_by_default(
     async with build_lifespan(settings)(app):
         assert app.state.brain_extraction_enabled is False
     assert app.state.brain_extraction_enabled is False
+
+
+async def test_claude_cli_extraction_is_selected_only_when_explicitly_enabled(
+    tmp_path: Path,
+) -> None:
+    brain = await _open_brain(
+        _brain_settings(tmp_path, brain_use_claude_cli_extraction=True)
+    )
+    try:
+        assert brain.extraction_enabled is True
+        assert brain.coordinator is not None
+        projector = brain.coordinator._projectors[SourceKind.CONVERSATION]  # noqa: SLF001
+        assert isinstance(projector._client, ClaudeCliStructuredLlm)  # noqa: SLF001
+    finally:
+        await _teardown_brain(FastAPI(), brain)
+
+
+async def test_custom_extraction_argv_has_priority_over_claude_cli_opt_in(
+    tmp_path: Path,
+) -> None:
+    brain = await _open_brain(
+        _brain_settings(
+            tmp_path,
+            brain_extraction_llm_argv=["custom-llm", "--json"],
+            brain_use_claude_cli_extraction=True,
+        )
+    )
+    try:
+        assert brain.coordinator is not None
+        projector = brain.coordinator._projectors[SourceKind.CONVERSATION]  # noqa: SLF001
+        assert isinstance(projector._client, LocalCommandStructuredLlm)  # noqa: SLF001
+    finally:
+        await _teardown_brain(FastAPI(), brain)
 
 
 async def test_extraction_is_injected_into_the_coordinator_when_argv_is_configured(
@@ -223,6 +275,15 @@ async def test_extraction_is_injected_into_the_coordinator_when_argv_is_configur
 # --- hourly self-enqueue (G005) ---------------------------------------------------------
 
 
+def test_ingest_schedule_owner_defaults_to_backend_and_reads_env(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.delenv("ATHENA_BRAIN_INGEST_SCHEDULE_OWNER", raising=False)
+    assert Settings(_env_file=None).brain_ingest_schedule_owner == "backend"
+    monkeypatch.setenv("ATHENA_BRAIN_INGEST_SCHEDULE_OWNER", "external")
+    assert Settings(_env_file=None).brain_ingest_schedule_owner == "external"
+
+
 async def test_hourly_self_enqueue_calls_coordinator_enqueue_on_a_fast_tick(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
@@ -237,11 +298,62 @@ async def test_hourly_self_enqueue_calls_coordinator_enqueue_on_a_fast_tick(
     settings = _brain_settings(tmp_path)
     brain = await _open_brain(settings, hourly_interval_seconds=0.02)
     try:
+        assert brain.hourly_task is not None
         for _ in range(50):
             await asyncio.sleep(0.02)
             if JobTrigger.HOURLY in calls:
                 break
         assert JobTrigger.HOURLY in calls
+    finally:
+        await _teardown_brain(FastAPI(), brain)
+
+
+async def test_hourly_self_enqueue_recovers_after_one_failed_tick(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    calls = 0
+    recovered = asyncio.Event()
+
+    class FlakyCoordinator:
+        async def enqueue(self, trigger: JobTrigger) -> None:
+            nonlocal calls
+            assert trigger is JobTrigger.HOURLY
+            calls += 1
+            if calls == 1:
+                raise RuntimeError("sensitive upstream detail must not stop the loop")
+            recovered.set()
+
+    task = asyncio.create_task(_hourly_ingest_loop(FlakyCoordinator(), 0.001))  # type: ignore[arg-type]
+    try:
+        await asyncio.wait_for(recovered.wait(), timeout=1)
+        assert calls >= 2
+        assert not task.done()
+        assert "RuntimeError" in caplog.text
+        assert "sensitive upstream detail" not in caplog.text
+    finally:
+        task.cancel()
+        with pytest.raises(asyncio.CancelledError):
+            await task
+
+
+async def test_external_schedule_owner_does_not_start_backend_hourly_timer(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    calls: list[JobTrigger] = []
+    original_enqueue = IngestionCoordinator.enqueue
+
+    async def spy_enqueue(self: IngestionCoordinator, trigger: JobTrigger):
+        calls.append(trigger)
+        return await original_enqueue(self, trigger)
+
+    monkeypatch.setattr(IngestionCoordinator, "enqueue", spy_enqueue)
+    settings = _brain_settings(tmp_path, brain_ingest_schedule_owner="external")
+    brain = await _open_brain(settings, hourly_interval_seconds=0.01)
+    try:
+        await asyncio.sleep(0.05)
+        assert calls.count(JobTrigger.STARTUP) == 1
+        assert JobTrigger.HOURLY not in calls
+        assert brain.hourly_task is None
     finally:
         await _teardown_brain(FastAPI(), brain)
 
@@ -307,6 +419,34 @@ async def test_hourly_task_is_cancelled_symmetrically_with_the_app_lifespan(
     assert app.state.brain_ingestion_ready is False
 
 
+async def test_faulted_hourly_task_does_not_block_brain_resource_cleanup(tmp_path: Path) -> None:
+    settings = _brain_settings(tmp_path)
+    brain = await _open_brain(settings, hourly_interval_seconds=60)
+    assert brain.hourly_task is not None
+    brain.hourly_task.cancel()
+    with pytest.raises(asyncio.CancelledError):
+        await brain.hourly_task
+
+    async def faulted_task() -> None:
+        raise RuntimeError("hourly task fault")
+
+    brain.hourly_task = asyncio.create_task(faulted_task())
+    await asyncio.sleep(0)
+
+    with pytest.raises(RuntimeError, match="hourly task fault"):
+        await _teardown_brain(FastAPI(), brain)
+
+    assert not brain.history.is_open
+    assert not brain.store.is_open
+    assert brain.owner is not None
+    assert not brain.owner.is_open
+    replacement_lock = BrainProcessLock.for_db_path(
+        settings.brain_db_path, label=str(settings.brain_db_path)
+    )
+    replacement_lock.acquire()
+    replacement_lock.release()
+
+
 # --- WP-F F1: 군집 라벨링 전용 LLM 클라이언트 -----------------------------------------
 
 
@@ -315,7 +455,117 @@ async def test_labeling_client_is_dormant_without_extraction_argv(tmp_path: Path
     app = FastAPI()
     async with build_lifespan(_brain_settings(tmp_path))(app):
         assert app.state.brain_cluster_labeling_llm_client is None
-        assert app.state.cluster_labeling_tasks == set()
+        assert app.state.cluster_labeling_tasks == {}
+
+
+async def test_labeling_tasks_are_cancelled_before_brain_store_closes(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    task_started = asyncio.Event()
+    task_cancelled = asyncio.Event()
+    task_holder: dict[str, asyncio.Task[None]] = {}
+    original_close = GraphStore.close
+
+    async def close_after_label_task(self: GraphStore) -> None:
+        task = task_holder["task"]
+        assert task.done()
+        assert task.cancelled()
+        await original_close(self)
+
+    monkeypatch.setattr(GraphStore, "close", close_after_label_task)
+
+    async def blocking_label() -> None:
+        task_started.set()
+        try:
+            await asyncio.Event().wait()
+        finally:
+            task_cancelled.set()
+
+    app = FastAPI()
+    async with build_lifespan(_brain_settings(tmp_path))(app):
+        task = asyncio.create_task(blocking_label())
+        task_holder["task"] = task
+        app.state.cluster_labeling_tasks[("prompt", "members")] = task
+        await asyncio.wait_for(task_started.wait(), timeout=1)
+
+    assert task_cancelled.is_set()
+    assert app.state.cluster_labeling_tasks == {}
+
+
+async def test_early_cleanup_failure_does_not_skip_later_cleanup_phases(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    calls: list[str] = []
+    original_label_cleanup = lifespan_module._teardown_cluster_labeling_tasks
+    original_brain_cleanup = lifespan_module._teardown_brain
+    original_routines_cleanup = lifespan_module.teardown_routines
+
+    async def failed_accounts_cleanup(*args, **kwargs) -> None:
+        calls.append("accounts")
+        raise RuntimeError("account cleanup failed")
+
+    async def label_cleanup(app: FastAPI) -> None:
+        calls.append("labels")
+        await original_label_cleanup(app)
+
+    async def brain_cleanup(app: FastAPI, brain) -> None:
+        calls.append("brain")
+        await original_brain_cleanup(app, brain)
+
+    async def routines_cleanup(routines) -> None:
+        calls.append("routines")
+        await original_routines_cleanup(routines)
+
+    monkeypatch.setattr(lifespan_module, "_teardown", failed_accounts_cleanup)
+    monkeypatch.setattr(lifespan_module, "_teardown_cluster_labeling_tasks", label_cleanup)
+    monkeypatch.setattr(lifespan_module, "_teardown_brain", brain_cleanup)
+    monkeypatch.setattr(lifespan_module, "teardown_routines", routines_cleanup)
+
+    app = FastAPI()
+    with pytest.raises(RuntimeError, match="account cleanup failed"):
+        async with build_lifespan(_brain_settings(tmp_path))(app):
+            pass
+
+    assert calls == ["accounts", "labels", "brain", "routines"]
+    assert app.state.cluster_labeling_tasks == {}
+    assert app.state.brain_ready is False
+
+
+async def test_startup_primary_error_survives_cleanup_failures(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    primary_error = RuntimeError("startup primary")
+    calls: list[str] = []
+
+    async def failed_open_brain(settings) -> None:
+        raise primary_error
+
+    async def failed_accounts_cleanup(*args, **kwargs) -> None:
+        calls.append("accounts")
+        raise RuntimeError("cleanup secondary")
+
+    async def label_cleanup(app: FastAPI) -> None:
+        calls.append("labels")
+
+    async def brain_cleanup(app: FastAPI, brain) -> None:
+        calls.append("brain")
+
+    async def routines_cleanup(routines) -> None:
+        calls.append("routines")
+
+    monkeypatch.setattr(lifespan_module, "_open_brain", failed_open_brain)
+    monkeypatch.setattr(lifespan_module, "_teardown", failed_accounts_cleanup)
+    monkeypatch.setattr(lifespan_module, "_teardown_cluster_labeling_tasks", label_cleanup)
+    monkeypatch.setattr(lifespan_module, "_teardown_brain", brain_cleanup)
+    monkeypatch.setattr(lifespan_module, "teardown_routines", routines_cleanup)
+
+    app = FastAPI()
+    with pytest.raises(RuntimeError, match="startup primary") as raised:
+        async with build_lifespan(_brain_settings(tmp_path))(app):
+            pass
+
+    assert raised.value is primary_error
+    assert calls == ["accounts", "labels", "brain", "routines"]
 
 
 async def test_labeling_client_is_a_separate_short_timeout_instance(tmp_path: Path) -> None:
@@ -327,3 +577,27 @@ async def test_labeling_client_is_a_separate_short_timeout_instance(tmp_path: Pa
         client = app.state.brain_cluster_labeling_llm_client
         assert client is not None
         assert client._timeout_seconds == 20  # noqa: SLF001 - 생성자 고정값 확인
+
+
+async def test_claude_extraction_opt_in_also_wires_the_labeling_client(tmp_path: Path) -> None:
+    app = FastAPI()
+    settings = _brain_settings(tmp_path, brain_use_claude_cli_extraction=True)
+
+    async with build_lifespan(settings)(app):
+        client = app.state.brain_cluster_labeling_llm_client
+        assert isinstance(client, ClaudeCliStructuredLlm)
+        assert client._timeout_seconds == 20  # noqa: SLF001 - 라벨링 상한 고정 확인
+
+
+async def test_custom_argv_has_priority_for_the_labeling_client(tmp_path: Path) -> None:
+    app = FastAPI()
+    settings = _brain_settings(
+        tmp_path,
+        brain_extraction_llm_argv=["custom-llm", "--json"],
+        brain_use_claude_cli_extraction=True,
+    )
+
+    async with build_lifespan(settings)(app):
+        client = app.state.brain_cluster_labeling_llm_client
+        assert isinstance(client, LocalCommandStructuredLlm)
+        assert client._argv == ("custom-llm", "--json")  # noqa: SLF001

@@ -16,7 +16,6 @@
 from __future__ import annotations
 
 import asyncio
-import logging
 from collections.abc import AsyncIterator, Callable, Mapping
 from contextlib import asynccontextmanager, suppress
 from dataclasses import dataclass
@@ -63,9 +62,6 @@ EXTRACTABLE_SOURCE_KINDS: frozenset[SourceKind] = frozenset({SourceKind.CONVERSA
 DETERMINISTIC_SOURCE_KINDS: frozenset[SourceKind] = frozenset(
     {SourceKind.TRADE, SourceKind.HOLDING}
 )
-
-logger = logging.getLogger(__name__)
-
 
 class SourceAdapter(Protocol):
     name: str
@@ -661,6 +657,13 @@ class IngestionCoordinator:
             await self._history.compact_conversations(now=self._clock())
             for adapter in self._adapters:
                 reports.append(await self._run_adapter(adapter))
+            total = sum(report.projected for report in reports)
+            if (total or job.attempts > 1) and self._dedup is not None:
+                # 새 투영 직후 중복을 정리한다. 이 단계가 실패한 잡은 성공이 아니다:
+                # 그래프에 원본 투영은 남아도 정본화가 끝나지 않았으므로 retry 상태로
+                # 기록한다. 재시도에서는 커서가 이미 전진해 total=0일 수 있으므로
+                # attempts>1인 잡도 dedup을 다시 실행해야 실패 단계가 실제로 복구된다.
+                await self._dedup.run()
         except asyncio.CancelledError:
             await self._history.fail_job(
                 job.id,
@@ -677,22 +680,6 @@ class IngestionCoordinator:
                 now=self._clock(),
             )
             raise
-        total = sum(report.projected for report in reports)
-        if total and self._dedup is not None:
-            # **투영된 것이 있을 때만** 접는다.
-            #
-            # 매 잡마다 무조건 돌리면 아무것도 안 들어온 시간당 틱에서도 그래프 전체를
-            # 훑는다(엔티티 쌍을 O(n²)로 본다). 아예 안 돌리면 "이차전지"와 "2차전지"가
-            # 영원히 따로 남는다 — 새 소스가 들어온 직후가 바로 중복이 생기는 시점이다.
-            #
-            # 실패해도 잡을 실패시키지 않는다. dedup은 보정이지 적재가 아니고, 여기서
-            # 터지면 이미 그래프에 잘 들어간 소스까지 재시도로 되돌아온다.
-            try:
-                await self._dedup.run()
-            except asyncio.CancelledError:
-                raise
-            except Exception:
-                logger.warning("brain dedup pass failed after ingestion", exc_info=True)
 
         completed = await self._history.succeed_job(job.id, now=self._clock())
         return IngestionReport(

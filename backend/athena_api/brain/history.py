@@ -139,8 +139,9 @@ class ConversationSummary:
 # test_brain_history.py::test_compact_conversations_renders_role_labelled_transcript.
 _CONVERSATION_TRANSCRIPT_LINE_FORMAT: Final = "{role}: {text}"
 
-# Hard ceiling on a rendered transcript. `SourceRecord.text` is `LongText`
-# (ontology.py: max_length=10_000) and a real conversation blows past that in a few dozen
+# Hard ceiling on a rendered transcript. Raw chat accepts up to 20,000 characters,
+# while a derived conversation source still needs a bounded extraction context; a real
+# conversation blows past that budget in a few dozen
 # turns. Without a budget the oversized row would fail `SourceRecord` validation on the way
 # back out, the rollup would raise, and -- because a rollup failure fails the whole job by
 # design -- a single long conversation would permanently wedge ingestion for *everything*.
