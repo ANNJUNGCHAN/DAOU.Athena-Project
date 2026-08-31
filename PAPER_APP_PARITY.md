@@ -146,6 +146,35 @@ Paper 파일: `Athena — 코드 기반 화면 (chat · canvas · settings · or
 
 16개 창의 합은 정확히 299다. `backend/athena_api/canvas_transform.py`가 operation의 도메인·화면 접근성 라벨·검증된 예외만으로 고정 제목을 결정하며, 미분류를 허용하지 않는 전수 테스트가 있다.
 
+## 그래프 페이지 — 7/7
+
+Paper 파일의 별도 **그래프** 페이지. 화면 페이지의 06·07·14·15·22가 이 페이지로 정리됐고,
+06·07 두 보드는 2026-09-01 전수 검증에서 새로 추가했다(실앱에 있는데 Paper에 없던 것).
+
+| Paper artboard | 실앱 소유 표면 | 판정 |
+| --- | --- | --- |
+| 01 · 셸 — 그래프 모드 · 요약 뷰 | `graph-mode/summary-table.js` · `theme-clusters.js` · `hidden-links.js` | 적용 |
+| 02 · 셸 — 그래프 요약 · 행 선택 | `graph-mode/controller.js` 공통 패널(티어 대조) | 적용 |
+| 03 · 그래프 — 기본 군집 지도 | `graph-mode/render.js` `renderClusterBubbles()` | 적용 |
+| 04 · 그래프 — 군집 펼침 · 노드 선택 | `render.js` `renderClusterMap()` + 공통 패널 | 적용 |
+| 05 · 그래프 — 수집·노출·브레인 제어 | `graph-mode/collection-settings.js` (그래프 모드 3번째 탭) | 적용 |
+| 06 · 그래프 — 헤더 필터 (기간·정렬·연결 수) | `graph-mode/graph-filters.js` + `graph-mode-prefs.js` | **Paper 후행 추가** |
+| 07 · 그래프 — 정직성 상태 (이름·인코딩·빈 값) | 이름 폴백 사다리 · 채움 인코딩 · 미분류 · 브레인 미준비 | **Paper 후행 추가** |
+
+2026-09-01 전수 검증에서 정정한 실앱 쪽 괴리(전부 Paper 기준으로 맞춤):
+
+| 항목 | 옛 상태 | 지금 |
+| --- | --- | --- |
+| 군집 버블 | 무지개 hue 회전 · 중앙 숫자 없음 · 채움 알파 = 응집도(0.74 → 74%) | Paper 실측 회귀: 반지름 `1.4+5.52√n`, 알파 `0.02+0.19·응집도`, 중앙 구성원 수, 흰 라벨 칩 |
+| 2단계 | 펼친 군집 하나만 · 1단계 좌표 재사용(이름표 겹침) | 펼친 군집 + 이웃 1홉, 보이는 부분만 재배치(초점 중앙), 이웃 군집 타원 |
+| 공통 패널 | 요약 카드 **안**에 있어 지도에서는 화면에 안 나타남 | 세 표면의 형제 — 요약·지도 어느 쪽에서 골라도 옆에 선다 |
+| 패널 내용 | 보강 수 한 줄 + 숨은 연관만 | 헤더 부제(군집·연결·유일 노드 / 보강·최근), 관계 목록 전체, 왜 숨은 연관인가, CTA 리드인 |
+| 필터 칩 | 정적 `<span>` — "최근 90일"이라 쓰고 아무것도 안 걸었다 | 기간·정렬·연결 수 실적용 + 기본값 아님을 파란 칩으로 표시 |
+| 수집·노출 | 설정 오버레이에만 존재 | 그래프 모드 3번째 탭(보드 05) + 브레인 상태 카드 |
+| 지도 노드 | 투자자 프로필이 차수 39 허브로 지도를 지배 | 분석용 투영에서 제외 — 그 관계는 노드 속성으로 패널에 |
+| 성향 신호 표 | 대상 열에 64자 해시, 관계 배지 `prefers` 원문 | 종류 한글 라벨, 관계 한글 배지, "전체 N개" |
+| 히어로 % | 상위 5 표본 — 실측에서 "사실 0% · 추론 100%" | 창 전체 `confidence_counts` |
+
 ## 검증 증거
 
 - 앱 단위/회귀(2026-08-30 재실행): `npm test` — 1,296 passed, 0 failed, 0 skipped, 0 todo.
@@ -154,7 +183,19 @@ Paper 파일: `Athena — 코드 기반 화면 (chat · canvas · settings · or
 - 반응형: 900px 2열/하단 작성창, 500px 44px 레일/프로젝트 오버레이 실측.
 - 플러그인: 허브·관리·설치 모달 포커스 순환·DART 비차단형 3/4 권한 상세 화면 실측. 실제 플러그인 런타임은 미연동.
 - Paper 49/54: Kiumi 380px/8 SVG 액션, 프로젝트 설명·32px 액션·폴링 후 메뉴 지속 실측.
+- 그래프 모드 단위: `node --test app/lib/graph-mode/*.test.js` — 325 passed, 0 failed.
+- 그래프 모드 실앱 전수(2026-09-01 신설): `electron app/verify-graph-mode.js` — 75 checks, 0 failures.
+  실제 백엔드 + 실제 성향 그래프(장기·ETF·중대형주 페르소나 41 엔티티 / 91 관계 /
+  성향 신호 48건)를 프로덕션 셸에 붙여 보드 01~05의 요소·클릭·필터를 전부 잰다.
+  씨앗은 `backend/scripts/seed_long_term_etf_persona.py`(결정적). 캡처는
+  `artifacts/graph-mode/*.png`, 리포트는 `artifacts/graph-mode/verify-graph-mode.json`.
+- 백엔드 브레인/그래프: `pytest -k "brain or graph or projection"` — 443 passed.
 - 백엔드 카드 변환: `backend/tests/unit/test_canvas_transform.py` — 174 passed.
+- **미해결(그래프와 무관, 선행 상태)**: `npm run verify`(앱 전역 하네스)는 부팅 shot 02
+  직후 렌더러 `executeJavaScript`에서 unhandledRejection이 나며 캡처 10장에서 멈춘다.
+  2026-09-01 확인: 이 작업 변경을 전부 stash한 깨끗한 트리에서도 같은 지점에서 같은
+  방식으로 멈춘다 — 그래프 변경이 만든 회귀가 아니다. 그래프 표면의 실앱 검증은 위
+  `verify-graph-mode.js`가 독립적으로 덮는다.
 - 화면 정의/주입/카드 사실: 21 passed.
 - 렌더 캡처와 JSON 리포트: `app/captures/` 및 `app/captures/VERIFY-REPORT.json`.
 
