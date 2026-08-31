@@ -4,8 +4,13 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const { spawnSync } = require('child_process');
+const { resolveHarnessProfile } = require('./lib/main/harness-profile');
 const appDir = __dirname;
-const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'athena-life003-two-run-'));
+// 이 스크립트는 자식 Electron 두 번에 ATHENA_USERDATA_DIR을 넘기는 오케스트레이터다.
+// 호출자가 이미 그 변수를 줬으면(실제로 등록한 계좌·CLI 계정으로 검증하고 싶을 때)
+// 새 임시 프로필을 만들지 않고 그대로 물려주며, finally의 정리도 no-op이 된다.
+const harnessProfile = resolveHarnessProfile({ prefix: 'athena-life003-two-run-' });
+const profile = harnessProfile.dir;
 const electron = path.join(appDir, 'node_modules', 'electron', 'dist', 'electron.exe');
 const reportPath = path.join(appDir, 'captures', 'LIFE-003-REVIEW.json');
 function run() {
@@ -39,5 +44,5 @@ try {
     localBackgroundActivity: first.localBackgroundActivity,
     liveServicesVerified: false }));
 } finally {
-  fs.rmSync(profile, { recursive: true, force: true });
+  harnessProfile.cleanup(); // 공유 프로필이면 지우지 않는다.
 }
