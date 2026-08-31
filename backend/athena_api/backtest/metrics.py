@@ -37,6 +37,19 @@ class Metrics:
     open_positions: int
     profit_factor: float
     buy_hold_return: float
+    # 낙폭이 가장 깊었던 구간 — 결과 화면 MDD 타일의 부제(`2020-03 · 87일`)가 그대로 쓴다.
+    # 숫자 하나(-27.9%)만으로는 "언제 · 얼마나 오래"를 알 수 없어 사람이 감당 가능성을
+    # 판단하지 못한다. 봉이 없으면 지어내지 않고 None으로 둔다.
+    mdd_start: str | None = None
+    mdd_end: str | None = None
+    mdd_bars: int = 0
+    # 승률 타일 부제(`41전 19승`) — 비율만 있으면 표본 크기를 알 수 없다.
+    closed_trades: int = 0
+    winning_trades: int = 0
+    # Sharpe 타일 부제(`워밍업 60봉 제외`) — 어떤 구간을 뺐는지 밝힌다.
+    warmup_bars: int = 0
+    # CAGR 타일 부제(`거래일 252일 기준`)의 근거 — 연환산에 쓴 실제 봉 수.
+    bars: int = 0
 
 
 def _equity_values(equity: Sequence[EquityPoint]) -> pd.Series:
@@ -93,6 +106,24 @@ def max_drawdown(equity: Sequence[EquityPoint]) -> float:
     return min(p.drawdown for p in equity)
 
 
+def max_drawdown_window(equity: Sequence[EquityPoint]) -> tuple[str | None, str | None, int]:
+    """최대 낙폭 구간의 (시작일, 저점일, 봉 수).
+
+    시작일은 그 낙폭이 시작된 직전 고점의 날짜다 — 엔진이 시점마다 남긴 `drawdown`만으로는
+    "언제부터"를 알 수 없어서, 저점에서 거꾸로 훑어 `drawdown == 0`인 마지막 봉(=직전 고점)을
+    찾는다. 낙폭이 한 번도 없었으면 (None, None, 0) — 없는 구간을 지어내지 않는다.
+    """
+    if not equity:
+        return None, None, 0
+    trough_idx = min(range(len(equity)), key=lambda i: equity[i].drawdown)
+    if equity[trough_idx].drawdown >= 0:
+        return None, None, 0
+    peak_idx = trough_idx
+    while peak_idx > 0 and equity[peak_idx].drawdown < 0:
+        peak_idx -= 1
+    return equity[peak_idx].dt, equity[trough_idx].dt, trough_idx - peak_idx + 1
+
+
 def win_rate(trades: Sequence[Trade]) -> tuple[float, int]:
     """청산(매도) 거래 중 pnl>0 비율과 미청산 건수. §6.5: 미청산은 승률 계산에서 빼되
     숫자를 숨기지 않고 둘째 원소로 별도 표기한다."""
@@ -134,6 +165,8 @@ def compute_metrics(
 ) -> Metrics:
     """개별 지표 함수를 한 번씩 불러 묶는다 — 계산 자체는 각 함수가 갖고, 여기는 조립만 한다."""
     win, open_positions = win_rate(trades)
+    mdd_start, mdd_end, mdd_bars = max_drawdown_window(equity)
+    closed = [t for t in trades if t.side == "sell" and t.pnl is not None]
     return Metrics(
         total_return=total_return(equity, initial_cash),
         cagr=cagr(equity, initial_cash, trading_days_per_year),
@@ -145,6 +178,13 @@ def compute_metrics(
         open_positions=open_positions,
         profit_factor=profit_factor(trades),
         buy_hold_return=buy_and_hold_return(df),
+        mdd_start=mdd_start,
+        mdd_end=mdd_end,
+        mdd_bars=mdd_bars,
+        closed_trades=len(closed),
+        winning_trades=sum(1 for t in closed if t.pnl > 0),
+        warmup_bars=warmup_bars,
+        bars=len(equity),
     )
 
 
@@ -155,6 +195,7 @@ __all__ = [
     "cagr",
     "compute_metrics",
     "max_drawdown",
+    "max_drawdown_window",
     "profit_factor",
     "sharpe_ratio",
     "total_return",

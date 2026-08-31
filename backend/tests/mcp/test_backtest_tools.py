@@ -1,5 +1,11 @@
-"""athena_backtest — list_presets/list_indicators/validate/plan/run/status/result만,
-무재시도, backfill·activate 부재(사람 전용 액션 차단)."""
+"""athena_backtest — 허용 액션 13종, 무재시도, backfill·activate·deploy 부재(사람 전용 차단).
+
+**왜 propose_code가 허용으로 옮겨졌나(2026-09-01).** Paper 보드 02가 요구하는 저작 흐름은
+"모델이 초안을 쓰고 → 사람이 diff를 보고 → 사람이 적용"이다. 초안 저장까지 막으면 그 흐름의
+첫 칸이 성립하지 않는다. 대신 규율은 그대로다 — `propose_code`는 `origin=llm_draft`를
+**툴이 못박아** 보내므로 저장은 되되 활성화되지 않는다. 사람이 눌러야 하는 `activate`는
+여전히 이 툴에 없다. 이 파일이 그 둘을 각각 고정한다.
+"""
 
 from __future__ import annotations
 
@@ -15,19 +21,22 @@ from athena_mcp.result import ERROR_ORIGIN_META_KEY
 # 이 파일은 백엔드 기본값과 다른 base_url(127.0.0.1:8010)을 명시적으로 넘긴다.
 
 
-def test_tool_schema_lists_seven_actions_only():
+def test_tool_schema_lists_allowed_actions_only():
     (tool,) = backtest_tools.builtin_tool_defs()
     assert tool.name == "athena_backtest"
     assert tool.inputSchema["properties"]["action"]["enum"] == [
         "list_presets", "list_indicators", "validate", "plan", "run", "status", "result",
+        "list_strategies", "read_code", "propose_code", "flow", "diagnose", "optimize",
     ]
-    # backfill·activate는 이 툴에 없다는 것을 설명문이 명시한다.
+    # backfill·activate·deploy는 이 툴에 없다는 것을 설명문이 명시한다.
     assert "backfill" in tool.description or "백필" in tool.description
+    assert "activate" in tool.description
+    assert "deploy" in tool.description or "배포" in tool.description
     assert "사람이" in tool.description or "사용자가" in tool.description
 
 
 @pytest.mark.asyncio
-@pytest.mark.parametrize("action", ["backfill", "activate", "propose_code", None, 5])
+@pytest.mark.parametrize("action", ["backfill", "activate", "deploy", None, 5])
 async def test_state_changing_actions_are_gateway_blocked(action, mock_http_client):
     async def handler(request):  # 호출 자체가 없어야 한다
         raise AssertionError("사람 전용 액션이 백엔드에 도달했다")
@@ -207,3 +216,83 @@ async def test_backend_down_says_do_not_pretend(mock_http_client):
     assert result.isError
     assert result.meta[ERROR_ORIGIN_META_KEY] == "upstream-failed"
     assert "기동돼 있지 않다" in result.content[0].text
+
+
+# ── propose_code 규율: 저장은 되되 켜지지 않는다 (Paper 보드 02, §7.3) ──────────
+
+
+@pytest.mark.asyncio
+async def test_propose_code_requires_strategy_id(mock_http_client):
+    async def handler(request):
+        raise AssertionError("strategy_id 없이 백엔드에 도달했다")
+
+    async with mock_http_client(handler, base_url="http://127.0.0.1:8010") as client:
+        result = await backtest_tools.dispatch({"action": "propose_code"}, client)
+    assert result.isError
+    assert result.meta[ERROR_ORIGIN_META_KEY] == "gateway-blocked"
+    assert "strategy_id" in result.content[0].text
+
+
+@pytest.mark.asyncio
+async def test_propose_code_forces_llm_draft_origin(mock_http_client):
+    """모델이 origin=human을 넣어도 툴이 llm_draft로 덮어쓴다 — 즉시 활성화 경로 차단."""
+    seen = {}
+
+    async def handler(request):
+        assert request.method == "POST"
+        assert request.url.path == "/api/v1/backtest/strategies/s1/versions"
+        seen.update(json.loads(request.content))
+        return httpx.Response(200, json={"version_id": "v9", "version": 9, "active": False})
+
+    async with mock_http_client(handler, base_url="http://127.0.0.1:8010") as client:
+        result = await backtest_tools.dispatch(
+            {
+                "action": "propose_code",
+                "strategy_id": "s1",
+                "propose_code": {"source": "x = 1", "origin": "human"},
+            },
+            client,
+        )
+    assert seen["origin"] == "llm_draft"
+    assert not result.isError
+    payload = json.loads(result.content[0].text)
+    assert payload["active"] is False
+    assert "적용됐다고 말하지 마라" in payload["message"]
+
+
+@pytest.mark.asyncio
+async def test_flow_and_diagnose_do_not_execute_code(mock_http_client):
+    """flow·diagnose는 읽기 전용 라우트로만 간다 — 실행 라우트(/runs)를 건드리지 않는다."""
+    paths = []
+
+    async def handler(request):
+        paths.append(request.url.path)
+        return httpx.Response(200, json={})
+
+    async with mock_http_client(handler, base_url="http://127.0.0.1:8010") as client:
+        await backtest_tools.dispatch(
+            {"action": "flow", "flow": {"source": "x = 1"}}, client
+        )
+        await backtest_tools.dispatch(
+            {"action": "diagnose", "diagnose": {"error": "boom", "source": "x = 1"}}, client
+        )
+    assert paths == ["/api/v1/backtest/flow", "/api/v1/backtest/diagnose"]
+
+
+@pytest.mark.asyncio
+async def test_optimize_cache_shortage_reports_blocked_not_error(mock_http_client):
+    """최적화도 run과 같다 — 캐시가 부족하면 실행했다고 말하지 않고 blocked를 돌려준다."""
+
+    async def handler(request):
+        return httpx.Response(
+            409, json={"detail": {"needed_pages": 4, "est_seconds": 5}}
+        )
+
+    async with mock_http_client(handler, base_url="http://127.0.0.1:8010") as client:
+        result = await backtest_tools.dispatch(
+            {"action": "optimize", "optimize": {"yaml": "x", "ranges": []}}, client
+        )
+    assert not result.isError
+    payload = json.loads(result.content[0].text)
+    assert payload["status"] == "blocked"
+    assert payload["needed_pages"] == 4
