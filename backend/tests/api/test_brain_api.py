@@ -649,7 +649,11 @@ def test_profile_summary_empty_result_is_not_treated_as_not_ready(
             PROFILE_SUMMARY_PATH, headers={"Authorization": f"Bearer {BEARER}"}
         )
     assert response.status_code == 200
-    assert response.json() == {"entries": []}
+    # total/window_days는 항상 실린다 — 비어 있어도 "몇 개 중 0개인지"와
+    # "어느 창을 봤는지"는 말할 수 있어야 한다.
+    assert response.json() == {
+        "entries": [], "total": 0, "window_days": 90, "confidence_counts": {},
+    }
 
 
 # --- reset-and-restart: teardown + on-disk delete + shutdown hook + post-reset 503 ------
@@ -770,6 +774,7 @@ def test_profile_summary_survives_a_non_empty_graph(seeded_client: TestClient) -
     assert entries, "체결이 성향으로 잡혀야 한다"
     entry = entries[0]
     # 새 온톨로지의 필드들. `tier`가 있어야 말과 행동을 구분해 읽을 수 있다.
+    assert set(response.json()) == {"entries", "total", "window_days", "confidence_counts"}
     assert set(entry) == {
         "entity_id",
         "entity_kind",
@@ -782,6 +787,60 @@ def test_profile_summary_survives_a_non_empty_graph(seeded_client: TestClient) -
         "reinforcement",
     }
     assert entry["tier"] == "deterministic"
+
+
+def test_profile_summary_reports_total_and_window(seeded_client: TestClient) -> None:
+    """`entries`가 잘린 상위 N일 때 화면이 "상위 5 / 전체 M개"를 쓸 수 있어야 한다.
+
+    total이 없던 동안 화면은 그 문구를 아예 안 그렸다 — M을 정직하게 채울 방법이
+    없었기 때문이다. 여기서 지키는 계약은 둘이다: total은 limit에 안 잘리고,
+    window_days는 요청한 창을 그대로 되돌려준다.
+    """
+    full = seeded_client.get(PROFILE_SUMMARY_PATH, headers=_headers()).json()
+    assert full["window_days"] == 90
+    assert full["total"] == len(full["entries"]), "자르지 않았으면 둘이 같다"
+    assert sum(full["confidence_counts"].values()) == full["total"], (
+        "히어로 분포는 잘리기 전 전체를 덮어야 한다"
+    )
+
+    limited = seeded_client.get(
+        PROFILE_SUMMARY_PATH, headers=_headers(), params={"limit": 1}
+    ).json()
+    assert len(limited["entries"]) == 1
+    assert limited["total"] == full["total"], "total은 limit에 잘리지 않는다"
+
+
+def test_profile_summary_window_days_narrows_both_entries_and_total(
+    seeded_client: TestClient,
+) -> None:
+    """창을 좁히면 entries와 total이 **함께** 줄어든다.
+
+    둘이 다른 조건을 보면 "상위 5 / 전체 3" 같은 모순이 화면에 뜬다.
+    """
+    narrow = seeded_client.get(
+        PROFILE_SUMMARY_PATH, headers=_headers(), params={"window_days": 1}
+    ).json()
+    assert narrow["window_days"] == 1
+    assert narrow["total"] >= len(narrow["entries"])
+    wide = seeded_client.get(
+        PROFILE_SUMMARY_PATH, headers=_headers(), params={"window_days": 365}
+    ).json()
+    assert wide["total"] >= narrow["total"]
+
+
+def test_cluster_map_edge_details_carry_observed_at(edge_detail_client: TestClient) -> None:
+    """엣지마다 마지막 관측 시각이 실린다 — 지도의 기간 필터가 이 값으로 거른다.
+
+    이 필드가 없던 동안 화면은 "최근 90일"이라 써 놓고 전체 기간을 그리고 있었다.
+    """
+    body = edge_detail_client.get(
+        "/api/v1/brain/analysis/cluster-map", headers=_headers()
+    ).json()
+    assert body["edge_details"], "씨앗에 종목↔테마 엣지가 있어야 이 계약을 잴 수 있다"
+    for detail in body["edge_details"]:
+        assert detail["observed_at"], "관측 시각이 비어 있으면 기간 필터가 못 건다"
+        # ISO-8601이어야 렌더러의 Date.parse가 읽는다.
+        datetime.fromisoformat(detail["observed_at"])
 
 
 def test_no_claim_era_field_survives_on_the_surface(seeded_client: TestClient) -> None:
@@ -1111,6 +1170,18 @@ async def _seed_two_distinct_edges(app) -> None:
                 observed_at=now,
                 extracted_at=now,
             ),
+            # 지도에 실제로 남는 유일한 엣지 — 프로필이 빠져도 종목↔테마는 남는다.
+            Relation(
+                id=relation_id("belongs_to", samsung.id, theme.id),
+                kind="belongs_to",
+                source_entity_id=samsung.id,
+                target_entity_id=theme.id,
+                confidence=Confidence.INFERRED,
+                tier=SourceTier.CONVERSATIONAL,
+                source_id="s1",
+                observed_at=now,
+                extracted_at=now,
+            ),
         ),
     )
 
@@ -1136,28 +1207,26 @@ def test_cluster_map_edge_details_carry_kind_tier_confidence_from_relations(
     samsung_id = entity_id(EntityKind.SECURITY, "삼성전자")
     theme_id = entity_id(EntityKind.THEME, "고배당주")
 
+    # 프로필에서 뻗은 두 엣지는 지도에서 빠지고(analysis 투영), 종목↔테마 하나만 남는다.
     details = body["edge_details"]
-    assert len(details) == 2
+    assert len(details) == 1
     for detail in details:
-        assert set(detail) == {"source", "target", "kinds", "tier", "confidence"}
+        assert set(detail) == {
+            "source", "target", "kinds", "tier", "confidence", "observed_at",
+        }
+    assert profile_id not in {node["entity_id"] for node in body["nodes"]}
 
     by_pair = {(d["source"], d["target"]): d for d in details}
-    owns_pair = tuple(sorted((profile_id, samsung_id)))
-    interested_pair = tuple(sorted((profile_id, theme_id)))
-    assert set(by_pair) == {owns_pair, interested_pair}
+    belongs_pair = tuple(sorted((samsung_id, theme_id)))
+    assert set(by_pair) == {belongs_pair}
 
-    owns_detail = by_pair[owns_pair]
-    assert owns_detail["kinds"] == ["owns"]
-    assert owns_detail["tier"] == "deterministic"
-    assert owns_detail["confidence"] == "EXTRACTED"
-
-    interested_detail = by_pair[interested_pair]
-    assert interested_detail["kinds"] == ["interested_in"]
-    assert interested_detail["tier"] == "conversational"
-    assert interested_detail["confidence"] == "AMBIGUOUS"
+    belongs_detail = by_pair[belongs_pair]
+    assert belongs_detail["kinds"] == ["belongs_to"]
+    assert belongs_detail["tier"] == "conversational"
+    assert belongs_detail["confidence"] == "INFERRED"
 
     # edges와 edge_details가 같은 pair 목록·같은 순서에서 나온다는 계약.
-    assert body["edges"] == [list(pair) for pair in sorted([owns_pair, interested_pair])]
+    assert body["edges"] == [list(belongs_pair)]
 
 
 def test_cluster_map_edge_details_merge_kinds_on_the_same_pair(

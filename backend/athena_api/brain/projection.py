@@ -21,6 +21,7 @@ from typing import Any, Protocol
 
 import networkx as nx
 
+from .ontology import EntityKind
 from .store import EntityRow
 
 
@@ -57,6 +58,10 @@ class GraphProjector:
     def __init__(self, graph: ProjectionSource) -> None:
         self._graph = graph
         self._cached: ProjectedGraph | None = None
+        # 분석용(투자자 프로필을 뺀) 투영. `_cached`와 따로 두는 이유는 소비자가
+        # 다르기 때문이다 — 프로필 요약·되물을 것은 프로필 노드가 있는 전체 그래프를
+        # 읽고, 지도·군집·중심성은 뺀 그래프를 읽는다.
+        self._cached_analysis: ProjectedGraph | None = None
         self._cached_clusters: dict[str, int] | None = None
         # 실제로 몇 번 지었는지. 캐시가 도는지를 추측이 아니라 측정으로 확인하려면
         # 이 값이 필요하다.
@@ -98,6 +103,13 @@ class GraphProjector:
                     sorted({*built[source][target]["kinds"], relation.kind})
                 )
                 built[source][target]["weight"] += 1
+                # 합쳐진 엣지의 관측 시각은 **가장 최근**이다. 이 연결이 언제부터
+                # 있었는가가 아니라 마지막으로 확인된 것이 언제인가를 묻는 값이라,
+                # 화면의 기간 필터("최근 90일")가 이 기준으로 걸러야 "요즘 살아
+                # 있는 연결"이 남는다. 최솟값을 쓰면 오래전에 한 번 생긴 뒤 계속
+                # 갱신되는 연결이 창 밖으로 밀려난다.
+                if relation.observed_at > built[source][target]["observed_at"]:
+                    built[source][target]["observed_at"] = relation.observed_at
                 continue
             built.add_edge(
                 source,
@@ -106,15 +118,39 @@ class GraphProjector:
                 weight=1,
                 tier=relation.tier,
                 confidence=relation.confidence,
+                observed_at=relation.observed_at,
             )
 
         self.builds += 1
         projected = ProjectedGraph(revision=revision, graph=built)
         self._cached = projected
-        # 그래프가 바뀌었으니 군집도 무효다. 여기서 안 버리면 새 그래프에 옛 배정을
-        # 씌우게 되고, 그건 화면이 조용히 거짓말하는 종류의 실패다.
+        # 그래프가 바뀌었으니 군집도, 분석용 투영도 무효다. 여기서 안 버리면 새
+        # 그래프에 옛 배정을 씌우게 되고, 그건 화면이 조용히 거짓말하는 종류의 실패다.
+        self._cached_analysis = None
         self._cached_clusters = None
         return projected
+
+    async def analysis(self) -> ProjectedGraph:
+        """군집·중심성·놀라운 연결이 보는 그래프 — **투자자 프로필 노드를 뺀다.**
+
+        프로필은 그래프의 원점이지 테마 지도의 구성원이 아니다. 넣어 두면 세 가지가
+        동시에 망가진다(실측, 페르소나 41노드 그래프):
+
+        1. 모든 성향 관계가 프로필에서 뻗으므로 차수가 39가 되어 `god_nodes`의 1위가
+           항상 프로필이다 — "내 투자의 중심"을 묻는 질문에 "당신"이라고 답하는 셈이다.
+        2. 그 허브가 서로 무관한 테마들을 한 군집으로 묶는다(16/8/7/7/3 중 16이
+           프로필 군집이었다). 군집 지도의 요점이 사라진다.
+        3. `surprising_connections`가 "프로필 ↔ 종목" 쌍으로 도배된다 — 프로필과의
+           연결은 정의상 놀랍지 않다(그게 성향이다).
+
+        프로필에서 뻗은 관계 자체는 사라지지 않는다 — `profile-summary`가 그것을
+        엔티티별 성향 신호로 계속 낸다. 화면도 그렇게 읽는다: 관심·보유·선호는
+        노드의 **속성**이고, 종목↔테마만 지도의 **간선**이다.
+        """
+        projected = await self.project()
+        if self._cached_analysis is None or self._cached_analysis.revision != projected.revision:
+            self._cached_analysis = without_investor_profile(projected)
+        return self._cached_analysis
 
     async def clusters(self) -> dict[str, int]:
         """현재 리비전의 군집 배정. 리비전이 그대로면 다시 계산하지 않는다.
@@ -123,15 +159,35 @@ class GraphProjector:
         1000노드에서 0.5초다. 투영은 캐시하면서 군집은 안 하고 있었고, 분석 화면이
         이걸 여러 번 부르므로 캐시가 실제로 값을 한다.
         """
-        projected = await self.project()
+        analysis = await self.analysis()
         if self._cached_clusters is None:
             self.cluster_builds += 1
-            self._cached_clusters = cluster(projected)
+            self._cached_clusters = cluster(analysis)
         return self._cached_clusters
 
     def invalidate(self) -> None:
         self._cached = None
+        self._cached_analysis = None
         self._cached_clusters = None
+
+
+def without_investor_profile(projected: ProjectedGraph) -> ProjectedGraph:
+    """투자자 프로필 노드를 뺀 같은 리비전의 그래프.
+
+    이유는 `GraphProjector.analysis()` docstring에 있다. 여기서는 **복사본**을
+    만든다 — 원본을 제자리에서 고치면 `project()`의 캐시가 오염되어, 프로필 요약이
+    다음 호출에서 자기 노드를 잃는다.
+    """
+    kept = [
+        node
+        for node, data in projected.graph.nodes(data=True)
+        if str(data.get("kind", "")) != EntityKind.INVESTOR_PROFILE.value
+    ]
+    if len(kept) == projected.graph.number_of_nodes():
+        return projected
+    return ProjectedGraph(
+        revision=projected.revision, graph=projected.graph.subgraph(kept).copy()
+    )
 
 
 def cluster(projected: ProjectedGraph) -> dict[str, int]:
@@ -146,11 +202,23 @@ def cluster(projected: ProjectedGraph) -> dict[str, int]:
     """
     if projected.is_empty:
         return {}
-    communities = nx.community.greedy_modularity_communities(projected.graph)
-    ordered = sorted(communities, key=lambda members: (-len(members), min(members)))
-    return {
-        node: index for index, members in enumerate(ordered) for node in sorted(members)
-    }
+    graph = projected.graph
+    # 연결이 하나도 없는 노드는 **군집이 아니라 미분류(-1)**다. 알고리즘은 그것을
+    # "1인 커뮤니티"로 돌려주지만, 화면에서 그 결과는 지도에 흩뿌려진 점 하나짜리
+    # 버블이 된다 — 군집이라는 말이 뜻을 잃는다. 성향 그래프에서는 실제로 흔한
+    # 모양이다: "장기 보유" 같은 선호는 투자자 프로필하고만 이어져 있어, 프로필을
+    # 뺀 분석용 투영에서 고립된다. Paper 보드 03의 헤더가 이들을 "미분류 K"로
+    # 따로 세는 것이 같은 판단이다.
+    isolated = {node for node in graph.nodes if graph.degree(node) == 0}
+    connected = graph.subgraph([node for node in graph.nodes if node not in isolated])
+    assignment: dict[str, int] = {node: -1 for node in isolated}
+    if connected.number_of_nodes() > 0:
+        communities = nx.community.greedy_modularity_communities(connected)
+        ordered = sorted(communities, key=lambda members: (-len(members), min(members)))
+        for index, members in enumerate(ordered):
+            for node in sorted(members):
+                assignment[node] = index
+    return assignment
 
 
 def cluster_cohesion(

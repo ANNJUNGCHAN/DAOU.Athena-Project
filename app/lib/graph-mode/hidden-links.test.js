@@ -45,12 +45,25 @@ test('renderHiddenLinks — surprise_score가 없으면(구버전 backend) 점�
   assert.ok(!/8\.5/.test(container.querySelector('.hidden-link-row').textContent), '지어낸 점수가 없다');
 });
 
-test('renderHiddenLinks — surprise_score가 있으면 상대 점수 배지를 그린다(WP-B)', () => {
+test('renderHiddenLinks — 상대 점수 배지는 공통 패널과 같은 0~10 스케일이다', () => {
   const container = fakeNode('div');
   renderHiddenLinks(container, [connection({ surprise_score: 0.734 })]);
   const score = container.querySelector('.hidden-link-score');
-  assert.equal(score.textContent, '상대 0.73');
-  assert.ok(!/8\.5/.test(container.querySelector('.hidden-link-row').textContent), '절대 점수는 여전히 안 지어낸다');
+  // controller.js relativeScoreText와 같은 값이어야 한다 — 같은 연결을 한 화면은
+  // 0.73으로, 다른 화면은 7.3으로 부르면 두 숫자가 다른 값처럼 읽힌다.
+  assert.equal(score.textContent, '상대 7.3');
+  // "상대"라는 말이 여전히 절대 점수가 아님을 밝힌다.
+  assert.match(score.textContent, /^상대 /);
+});
+
+test('renderHiddenLinks — 상대 점수가 0이거나 없으면 배지를 안 붙인다', () => {
+  const zero = fakeNode('div');
+  renderHiddenLinks(zero, [connection({ surprise_score: 0 })]);
+  assert.equal(zero.querySelector('.hidden-link-score'), null, '0은 "가장 덜 놀랍다"는 뜻이다');
+
+  const missing = fakeNode('div');
+  renderHiddenLinks(missing, [connection({ surprise_score: undefined })]);
+  assert.equal(missing.querySelector('.hidden-link-score'), null, '구버전 backend는 이 필드가 없다');
 });
 
 test('renderHiddenLinks — name이 없으면 entity_id로 대체한다', () => {

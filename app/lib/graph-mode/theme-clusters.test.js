@@ -72,18 +72,20 @@ test('groupThemeClusters — cluster_cohesion이 있으면 통과시키고, 없�
   assert.ok(withoutCohesion.every((c) => c.cohesion === undefined), '구버전 backend엔 필드 자체가 없다');
 });
 
-test('groupThemeClusters — cluster_representative_labels가 있으면 통과시키고, 없으면 undefined(WP-A)', () => {
-  const withRepresentative = groupThemeClusters(payload({
-    cluster_representative_labels: { 0: '한미반도체 외 1종목 · stock', 1: 'C · stock' },
-  }));
-  assert.equal(withRepresentative.find((c) => c.cluster === 0).representative, '한미반도체 외 1종목 · stock');
-  assert.equal(withRepresentative.find((c) => c.cluster === 1).representative, 'C · stock');
+test('groupThemeClusters — 대표는 지도와 같은 규칙(최대 차수)으로 고른 멤버 이름이다', () => {
+  // 백엔드의 cluster_representative_labels("… 외 N종목 · security")는 설명 문장이라
+  // 카드 제목에 쓰기엔 길고 raw kind가 섞인다 — 같은 payload의 degree/name으로
+  // 지도와 같은 이름 하나를 고른다(두 화면이 같은 군집을 같은 이름으로 부른다).
+  const grouped = groupThemeClusters(payload());
+  const first = grouped.find((c) => c.cluster === 0);
+  assert.ok(first.representative, 'cluster 0에 대표 이름이 붙는다');
 
-  const withoutRepresentative = groupThemeClusters(payload());
-  assert.ok(
-    withoutRepresentative.every((c) => c.representative === undefined),
-    '구버전 backend엔 필드 자체가 없다',
-  );
+  // 이름이 하나도 없는(구버전) payload면 백엔드 라벨로 폴백한다.
+  const nameless = groupThemeClusters({
+    nodes: [{ entity_id: 'x', name: '', kind: 'security', cluster: 0, degree: 1 }],
+    cluster_representative_labels: { 0: '한미반도체 외 1종목 · security' },
+  });
+  assert.equal(nameless[0].representative, '한미반도체 외 1종목 · security');
 });
 
 test('groupThemeClusters — representative가 있어도 name은 여전히 null이다(§0 발견1, 별도 필드)', () => {
@@ -110,7 +112,7 @@ test('shouldWarnUnnamed — 0 < named < total(부분 무명)이면 경고 적용
 
 // ── renderThemeClusters — 순수 렌더 ──────────────────────────────────────────
 
-test('renderThemeClusters — 카드마다 이름없음 배지·종목수를 그린다', () => {
+test('renderThemeClusters — 단서가 하나도 없으면 "이름 없는 군집"으로 떨어지고 종목수를 그린다', () => {
   const container = fakeNode('div');
   renderThemeClusters(container, [
     { cluster: 0, size: 9, name: null, cohesion: undefined },
@@ -118,10 +120,9 @@ test('renderThemeClusters — 카드마다 이름없음 배지·종목수를 그
   ]);
   const cards = container.querySelectorAll('.theme-cluster-card');
   assert.equal(cards.length, 2);
-  const badge = cards[0].querySelector('.theme-cluster-unnamed-badge');
-  assert.equal(badge.textContent, '이름 없음');
-  const count = cards[0].querySelector('.theme-cluster-count');
-  assert.equal(count.textContent, '9종목');
+  assert.equal(cards[0].querySelector('.theme-cluster-name').textContent, '이름 없는 군집');
+  assert.equal(cards[0].querySelector('.theme-cluster-unnamed-badge'), null, '추정이 아니라 없는 것이다');
+  assert.equal(cards[0].querySelector('.theme-cluster-count').textContent, '9종목');
 });
 
 test('renderThemeClusters — 항목이 없으면 아예 안 그린다(§0 정직한 빈 데이터)', () => {
@@ -158,13 +159,15 @@ test('renderThemeClusters — cohesion이 없으면(undefined) 진행바·수치
   assert.equal(container.querySelector('.theme-cluster-bar'), null);
 });
 
-test('renderThemeClusters — representative가 있으면 대표 서브텍스트를 그린다(WP-A3)', () => {
+test('renderThemeClusters — 이름이 없으면 대표 이름이 제목이 되고 "추정"으로 신호한다', () => {
   const container = fakeNode('div');
   renderThemeClusters(container, [
-    { cluster: 0, size: 2, name: null, representative: '한미반도체 외 1종목 · stock' },
+    { cluster: 0, size: 2, name: null, representative: '한미반도체' },
   ]);
-  const representative = container.querySelector('.theme-cluster-representative');
-  assert.equal(representative.textContent, '대표: 한미반도체 외 1종목 · stock');
+  const card = container.querySelector('.theme-cluster-card');
+  assert.equal(card.querySelector('.theme-cluster-name').textContent, '한미반도체');
+  assert.equal(card.querySelector('.theme-cluster-unnamed-badge').textContent, '추정');
+  assert.ok(String(card.querySelector('.theme-cluster-name').attrs.class).includes('is-estimated'));
 });
 
 test('renderThemeClusters — representative가 없으면(undefined, 구버전 backend) 서브텍스트를 생략한다', () => {
@@ -175,23 +178,19 @@ test('renderThemeClusters — representative가 없으면(undefined, 구버전 b
 
 // 회귀 가드(사용자 확정) — 대표 설명은 name과 분리된 필드다. representative가
 // 있어도 "이름 없음" 배지·shouldWarnUnnamed 임계 판정은 절대 안 바뀐다.
-test('renderThemeClusters — representative가 있어도 "이름 없음" 배지·경고 판정은 안 바뀐다', () => {
+test('renderThemeClusters — 대표 이름을 써도 경고 판정은 여전히 name 유무로만 갈린다', () => {
   const container = fakeNode('div');
   renderThemeClusters(container, [
     { cluster: 0, size: 9, name: '반도체 대형주', representative: undefined },
-    { cluster: 1, size: 6, name: null, representative: '한미반도체 외 5종목 · stock' },
+    { cluster: 1, size: 6, name: null, representative: '한미반도체' },
   ]);
   const cards = container.querySelectorAll('.theme-cluster-card');
-  // 무명 카드(cards[1])는 representative가 있어도 "이름 없음" 배지가 그대로 뜬다.
-  const badge = cards[1].querySelector('.theme-cluster-unnamed-badge');
-  assert.equal(badge.textContent, '이름 없음');
-  assert.equal(cards[0].querySelector('.theme-cluster-unnamed-badge'), null, '이름 있는 카드는 배지 없음');
-  // 경고 클래스도 representative 유무가 아니라 name 유무로만 갈린다.
+  assert.equal(cards[0].querySelector('.theme-cluster-name').textContent, '반도체 대형주');
+  assert.equal(cards[0].querySelector('.theme-cluster-unnamed-badge'), null, '확정 이름엔 추정 배지가 없다');
+  assert.equal(cards[1].querySelector('.theme-cluster-unnamed-badge').textContent, '추정');
+  // 경고 클래스는 대표 이름 유무가 아니라 name 유무로만 갈린다(§0 r5).
   assert.equal(String(cards[0].attrs.class).includes('is-unnamed-warn'), false);
   assert.equal(String(cards[1].attrs.class).includes('is-unnamed-warn'), true);
-  // representative 서브텍스트 자체는 값이 있는 카드에만 뜬다.
-  assert.equal(cards[0].querySelector('.theme-cluster-representative'), null);
-  assert.equal(cards[1].querySelector('.theme-cluster-representative').textContent, '대표: 한미반도체 외 5종목 · stock');
 });
 
 test('renderThemeClusters — 0/N(전부 무명)이면 경고 클래스가 안 붙는다', () => {
@@ -238,15 +237,20 @@ test('groupThemeClusters — cluster_ai_labels가 있으면 aiLabel로 통과시
   assert.ok(withoutAi.every((c) => c.aiLabel === undefined), '휴면·구버전 backend엔 필드 자체가 없다');
 });
 
-test('renderThemeClusters — aiLabel이 있으면 "AI 추정:" 배지를 그리고, 없으면 생략한다', () => {
+test('renderThemeClusters — aiLabel이 대표 이름보다 앞선다(더 의미적인 단서다)', () => {
   const container = fakeNode('div');
   renderThemeClusters(container, [
-    { cluster: 0, size: 2, name: null, aiLabel: '반도체 밸류체인' },
-    { cluster: 1, size: 3, name: null, aiLabel: undefined },
+    { cluster: 0, size: 2, name: null, aiLabel: '반도체 밸류체인', representative: '한미반도체' },
+    { cluster: 1, size: 3, name: null, aiLabel: undefined, representative: 'KB금융' },
   ]);
   const cards = container.querySelectorAll('.theme-cluster-card');
-  assert.equal(cards[0].querySelector('.theme-cluster-ai-label').textContent, 'AI 추정: 반도체 밸류체인');
-  assert.equal(cards[1].querySelector('.theme-cluster-ai-label'), null);
+  assert.equal(cards[0].querySelector('.theme-cluster-name').textContent, '반도체 밸류체인');
+  assert.equal(cards[1].querySelector('.theme-cluster-name').textContent, 'KB금융');
+  assert.deepEqual(
+    cards.map((c) => c.querySelector('.theme-cluster-unnamed-badge').textContent),
+    ['추정', '추정'],
+    '둘 다 확정 이름이 아니다',
+  );
 });
 
 // 회귀 가드(G-F7) — aiLabel은 name을 대체하지 않는다. 라벨이 있어도 "이름 없음"
