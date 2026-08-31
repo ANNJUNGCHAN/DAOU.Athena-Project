@@ -92,6 +92,17 @@ const INVOKE_CHANNELS = new Set([
   // ② 브리핑 실행 순서를 보장한다. 건너뛰기는 백엔드 API를 부르지 않는다.
   'athena:routine-missed-confirm',
   'athena:routine-missed-skip',
+  // 백테스트 모드(P4, backtest-mode-plan.md §8.2) — 프리셋 조회부터 결과 폴링까지.
+  // backfill(수집)만 사람 클릭 전용 경로다 — 쿼터를 태우는 백필은 모델 툴에 없다
+  // (routine-confirm/cancel과 같은 원칙).
+  'athena:backtest-presets',
+  'athena:backtest-plan',
+  'athena:backtest-run',
+  'athena:backtest-status',
+  'athena:backtest-result',
+  'athena:backtest-trades',
+  'athena:backtest-runs',
+  'athena:backtest-backfill',
 ]);
 
 const SEND_CHANNELS = new Set([

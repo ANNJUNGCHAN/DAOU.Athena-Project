@@ -2059,6 +2059,9 @@ const graphMode = window.AthenaLib.GraphModeController.createGraphModeController
     // Paper 47/48의 네 번째 모드. 허브·관리 내용은 PluginCanvas가 소유하고,
     // 이 컨트롤러는 다른 중앙 표면과의 배타 가시성만 소유한다.
     plugin: document.getElementById('pluginCanvas'),
+    // 5번째 모드(P1 모드 골격, backtest-mode-plan.md §3.2). 내용은
+    // BacktestCanvas가 소유하고, 이 컨트롤러는 배타 가시성만 소유한다.
+    backtest: document.getElementById('backtestCanvas'),
     // 보드 07 성향 신호 표 — 그래프 표면이라 답변 모드에선 숨는다(아래 §요약 뷰
     // 배선 주석·US-007 참고). graphMode.applyVisibility() 하나가 소유한다.
     summaryTable: document.getElementById('graphSummaryTable'),
@@ -2277,6 +2280,86 @@ async function pluginDiscardStaged(staged) {
 }
 
 void pluginRefresh();
+
+// --- 백테스트모드 캔버스 배선 (P4, backtest-mode-plan.md §8.2) ---------------
+// 8채널을 agentCanvas의 fetchRoutines와 같은 모양으로 잇는다 — IPC 봉투
+// ({ok,data}|{ok:false,status,error,detail})를 여기서 벗기고, 실패는 던져서
+// backtest-canvas.js가 하나의 try/catch로 처리하게 한다. backfill만 사람 클릭
+// 전용 경로다(라우틴 confirm/cancel과 같은 원칙 — 쿼터를 태우는 백필은 모델
+// 툴에 없다).
+// 실패 문구 — 봉투의 status를 버리고 error 원문만 보여주면 404가 "Not Found"로
+// 끝나 사용자가 무엇을 해야 할지 알 수 없다(2026-08-31 프로브 실측). 손쓸 수 있는
+// 두 상태만 문장으로 바꾸고 원문은 괄호로 남긴다 — 감추지 않는다.
+function backtestError(res, fallback) {
+  const raw = (res && res.error) || fallback;
+  if (res && res.status === 503) return `백테스트 기능이 꺼져 있습니다 — 백엔드에서 ATHENA_BACKTEST_ENABLED를 켜야 합니다 (${raw})`;
+  if (res && res.status === 404) return `백엔드에 백테스트 경로가 없습니다 — 백엔드가 이 브랜치 버전인지 확인하세요 (${raw})`;
+  return raw;
+}
+
+const backtestCanvas = window.AthenaLib.BacktestCanvas.createBacktestCanvas({
+  container: document.getElementById('backtestCanvas'),
+  fetchPresets: async () => {
+    const res = await window.athena.invoke('athena:backtest-presets');
+    if (!res || !res.ok) throw new Error(backtestError(res, '프리셋을 불러오지 못했습니다'));
+    return (res.data && Array.isArray(res.data.presets)) ? res.data.presets : [];
+  },
+  // P4 상태 기계는 직접 부르지 않는다(설계 폼이 최소 입력뿐이라 사전 계획
+  // 조회를 안 거친다, backtest-canvas.js 머리말 참고) — P5/P6이 이어 쓸 자리다.
+  plan: async (params) => {
+    const res = await window.athena.invoke('athena:backtest-plan', params);
+    if (!res || !res.ok) throw new Error(backtestError(res, '데이터 계획을 불러오지 못했습니다'));
+    return res.data;
+  },
+  // 409(캐시 부족)는 실패가 아니라 승인 화면 전환 신호다(backtest-bridge.js
+  // 머리말과 같은 원칙) — blocked로 정규화해 돌려주고, 그 외 실패만 던진다.
+  run: async ({ yaml, params } = {}) => {
+    const body = params !== undefined ? { yaml, params } : { yaml };
+    const res = await window.athena.invoke('athena:backtest-run', body);
+    if (res && res.ok) {
+      const runId = res.data && res.data.run_id;
+      if (!runId) throw new Error('run_id를 받지 못했습니다');
+      return { blocked: false, run_id: runId };
+    }
+    if (res && res.status === 409 && res.detail) {
+      return { blocked: true, needed_pages: res.detail.needed_pages, est_seconds: res.detail.est_seconds };
+    }
+    throw new Error(backtestError(res, '백테스트 실행에 실패했습니다'));
+  },
+  // 백필 잡 상태 — 수집 승인 카드 이후 running 상태가 1초 간격으로 부른다.
+  status: async ({ job_id } = {}) => {
+    const res = await window.athena.invoke('athena:backtest-status', { job_id });
+    if (!res || !res.ok) throw new Error(backtestError(res, '수집 상태를 불러오지 못했습니다'));
+    return res.data;
+  },
+  // 실행 상태+지표+자산곡선+stdout — running 상태가 1초 간격으로 부른다.
+  result: async ({ run_id } = {}) => {
+    const res = await window.athena.invoke('athena:backtest-result', { run_id });
+    if (!res || !res.ok) throw new Error(backtestError(res, '실행 결과를 불러오지 못했습니다'));
+    return res.data;
+  },
+  trades: async ({ run_id } = {}) => {
+    const res = await window.athena.invoke('athena:backtest-trades', { run_id });
+    if (!res || !res.ok) throw new Error(backtestError(res, '체결 내역을 불러오지 못했습니다'));
+    return (res.data && Array.isArray(res.data.trades)) ? res.data.trades : [];
+  },
+  // 이력 목록 — P4 상태 기계는 직접 부르지 않는다(이력 비교 화면은 P6).
+  runs: async () => {
+    const res = await window.athena.invoke('athena:backtest-runs');
+    if (!res || !res.ok) throw new Error(backtestError(res, '실행 이력을 불러오지 못했습니다'));
+    return (res.data && Array.isArray(res.data.runs)) ? res.data.runs : [];
+  },
+  // 사람 클릭 전용 — 캔버스의 [수집하고 실행] 버튼에서만 부른다.
+  backfill: async (params) => {
+    const res = await window.athena.invoke('athena:backtest-backfill', params);
+    if (!res || !res.ok) throw new Error(backtestError(res, '데이터 수집을 시작하지 못했습니다'));
+    const jobId = res.data && res.data.job_id;
+    if (!jobId) throw new Error('job_id를 받지 못했습니다');
+    return { job_id: jobId };
+  },
+});
+backtestCanvas.mount();
+window.AthenaBacktestCanvas = backtestCanvas;
 
 // --- 에이전트모드 캔버스 배선 (4단계, Paper 보드 39) -------------------------
 //

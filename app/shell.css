@@ -483,6 +483,260 @@ body { margin: 0; overflow: hidden; }
   text-align: center;
 }
 
+/* ---------- 백테스트모드 캔버스(P1 모드 골격, backtest-mode-plan.md §3.2) ----------
+ * 모드 네비 버튼(#modeNavBacktest)은 .sidebar-mode-item이 이미 클래스 기반이라
+ * 추가 CSS가 필요 없다(위 규칙을 그대로 상속). #backtestCanvas는 #mosaic/
+ * #agentCanvas와 형제라 .mosaic.glass 공통 규칙을 이미 받는다 — 이번 단계는
+ * 정직한 빈 상태 하나뿐이라(lib/backtest-canvas.js) canvas.css의
+ * .graph-mode-unavailable과 같은 톤으로 제목+부제를 가운데 두는 것만 얹는다.
+ * 폼/코드/결과 화면 스타일은 Paper 58~64 선행 후 후속 단계(키우미 백테스트
+ * 얼굴도 마찬가지 — agent/plugin처럼 지금은 기본 얼굴로 폴백한다). */
+#backtestCanvas {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 32px;
+}
+.backtest-canvas-empty-title {
+  font-family: var(--font-body);
+  font-size: var(--text-lg);
+  color: var(--color-k-text);
+}
+.backtest-canvas-empty-sub {
+  margin-top: 8px;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--color-k-faint);
+}
+.backtest-canvas-error .backtest-canvas-empty-sub {
+  color: var(--color-down);
+}
+
+/* ---------- 백테스트모드 1차 기능(P4, backtest-mode-plan.md §8) ----------
+ * design/approval/running/result 4표면 — Paper 보드 01/03/04 토큰(패널 흰
+ * 배경·radius 12·라벨 11px)은 agent-stat-card가 이미 같은 값으로 쓰고 있어
+ * 그 값을 그대로 재사용한다. #backtestCanvas 자체 레이아웃(중앙 정렬)은 빈
+ * 상태 전용이라 각 표면 wrap이 자기 스크롤 영역을 새로 연다. */
+#backtestCanvas:has(.backtest-design),
+#backtestCanvas:has(.backtest-approval),
+#backtestCanvas:has(.backtest-running),
+#backtestCanvas:has(.backtest-result) {
+  display: block;
+  padding: 20px 24px;
+  overflow-y: auto;
+}
+.backtest-design-title,
+.backtest-approval-title,
+.backtest-running-title,
+.backtest-result-title {
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--text-lg);
+  margin-bottom: 12px;
+}
+.backtest-preset-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.backtest-preset-item {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--color-k-panel);
+  border: 1px solid var(--color-k-line);
+  border-radius: 12px;
+  cursor: pointer;
+  text-align: left;
+}
+.backtest-preset-item.is-selected {
+  border-color: var(--color-brand);
+}
+.backtest-preset-name {
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+}
+.backtest-preset-category {
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  letter-spacing: 0.1em;
+}
+.backtest-design-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.backtest-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.backtest-field.backtest-field-checkbox {
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+}
+.backtest-field-label {
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  letter-spacing: 0.1em;
+}
+.backtest-field-input {
+  padding: 6px 10px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 8px;
+  background: var(--color-k-panel);
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+}
+.backtest-design-error {
+  min-height: 16px;
+  margin-bottom: 8px;
+  color: var(--color-down);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+}
+.backtest-run-button,
+.backtest-approval-confirm {
+  border: none;
+  border-radius: 999px;
+  padding: 8px 18px;
+  background: var(--color-brand);
+  color: #fff;
+  font-family: var(--font-strong);
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+.backtest-approval-stats {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.backtest-approval-stat {
+  padding: 12px 14px;
+  background: var(--color-k-panel);
+  border: 1px solid var(--color-k-line);
+  border-radius: 12px;
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+}
+.backtest-approval-actions {
+  display: flex;
+  gap: 8px;
+}
+.backtest-approval-cancel {
+  border: 1px solid var(--color-k-line);
+  border-radius: 999px;
+  padding: 8px 18px;
+  background: transparent;
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+.backtest-running-sub {
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+}
+.backtest-metric-tiles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.backtest-metric-tile {
+  flex: 1 1 140px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  background: var(--color-k-panel);
+  border: 1px solid var(--color-k-line);
+  border-radius: 12px;
+}
+.backtest-metric-label {
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--text-2xs);
+  letter-spacing: 0.1em;
+}
+.backtest-metric-value {
+  color: var(--color-k-text);
+  font-family: var(--font-strong);
+  font-size: var(--text-md);
+}
+.backtest-metric-sub {
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+}
+.backtest-equity-note {
+  margin-bottom: 16px;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+}
+.backtest-trades-title {
+  margin-bottom: 8px;
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+}
+.backtest-trades-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 16px;
+}
+.backtest-trades-cell {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--color-k-line);
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  text-align: left;
+}
+.backtest-trades-head .backtest-trades-cell {
+  color: var(--color-k-faint);
+  font-weight: 400;
+}
+/* 가정 섹션(§6.4/§5.5) — 상시 표기, 접기 토글 없음(과업 지시 원문). */
+.backtest-assumptions {
+  padding: 12px 14px;
+  background: var(--color-k-panel);
+  border: 1px solid var(--color-k-line);
+  border-radius: 12px;
+}
+.backtest-assumptions-title {
+  margin-bottom: 6px;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  letter-spacing: 0.1em;
+}
+.backtest-assumptions-text,
+.backtest-assumptions-flags {
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  line-height: 18px;
+}
+.backtest-assumptions-flags {
+  margin-top: 6px;
+  color: var(--color-down);
+}
+
 /* ---------- 에이전트모드 캔버스(리프 1.2.2, 4단계, Paper 보드 39 실측) ----------
  * #agentCanvas는 #mosaic/#graphCanvas와 형제라 .mosaic.glass 공통 규칙을 이미
  * 받는다 — 여기서는 레이아웃(padding/flex)만 이 요소 하나에 얹는다. */
