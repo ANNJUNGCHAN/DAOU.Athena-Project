@@ -16,6 +16,12 @@ dependencies = [
   # 네이티브 휠·DLL 경로 세금이 없다 — Electron 앱을 일반 사용자에게 배포하는 우리에게
   # 그 차이가 의존성을 다시 들이는 근거다.
   "networkx>=3.4,<4",
+  # 백테스트 엔진(결정 D1, docs/architecture/backtest-mode-plan.md §1). 위 networkx
+  # 주석이 말한 "네이티브 휠 세금"을 여기서 처음 낸다 — 되갚는 것은 지표 80종을 손으로
+  # 짜지 않아도 되는 것, 그리고 사용자·LLM이 쓰는 전략 코드가 pandas를 기대한다는 것이다.
+  # 그 대가가 실제로 배포에서 문제를 내는지는 P1.5가 실측한다.
+  "numpy>=1.26,<3",
+  "pandas>=2.2,<3",
   "pydantic-settings>=2.6,<3",
   "uvicorn[standard]>=0.32,<1",
   "websockets>=15,<16",
