@@ -150,3 +150,50 @@ test('축 라벨로 쓸 처음·중간·마지막 날짜를 낸다', () => {
   assert.equal(g.lastDt, '2026-01-03');
   assert.equal(g.midDt, '2026-01-02');
 });
+
+// ── 겹쳐보기(보드 05) ────────────────────────────────────────────────────────
+
+test('두 실행을 같은 축에 겹친다', () => {
+  const g = chart.buildOverlay({
+    series: [
+      { label: '#41', equity: equity([100, 120, 150]) },
+      { label: '#38', equity: equity([100, 110, 120]) },
+    ],
+    width: 300, height: 120,
+  });
+  assert.equal(g.empty, false);
+  assert.equal(g.paths.length, 2);
+  assert.equal(g.paths[0].label, '#41');
+  assert.ok(g.paths.every((p) => p.d.startsWith('M')));
+});
+
+test('길이가 다르면 짧은 쪽이 먼저 끝난다 — 없는 구간을 이어 붙이지 않는다', () => {
+  const g = chart.buildOverlay({
+    series: [
+      { label: 'long', equity: equity([100, 110, 120, 130]) },
+      { label: 'short', equity: equity([100, 105]) },
+    ],
+    width: 400, height: 120,
+  });
+  const segments = (d) => d.split('L').length;
+  assert.equal(segments(g.paths[0].d), 4);
+  assert.equal(segments(g.paths[1].d), 2);
+});
+
+test('겹칠 곡선이 없으면 empty', () => {
+  assert.equal(chart.buildOverlay({ series: [] }).empty, true);
+  assert.equal(chart.buildOverlay({ series: [{ label: 'a', equity: [] }] }).empty, true);
+});
+
+test('두 곡선이 같은 범위를 공유한다 — 축이 갈라지면 비교가 성립하지 않는다', () => {
+  const g = chart.buildOverlay({
+    series: [
+      { label: 'a', equity: equity([100, 200]) },
+      { label: 'b', equity: equity([100, 110]) },
+    ],
+    width: 200, height: 100,
+  });
+  // 같은 시작값(배수 1)이므로 두 path의 첫 점 y가 정확히 같아야 한다.
+  const firstY = (d) => d.split(' ')[1];
+  assert.equal(firstY(g.paths[0].d), firstY(g.paths[1].d));
+});

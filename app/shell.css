@@ -2898,3 +2898,11 @@ body { margin: 0; overflow: hidden; }
     padding: 0 10px;
   }
 }
+
+/* 이력 비교의 곡선 겹쳐보기(보드 05) — 실행 두 건을 같은 축에 놓는다. */
+.backtest-compare-chart { height: 180px; margin-top: 6px; }
+.backtest-equity-overlay { stroke-width: 2; fill: none; }
+.backtest-equity-overlay.is-0 { stroke: var(--color-brand); }
+.backtest-equity-overlay.is-1 { stroke: var(--color-navy); }
+.backtest-legend-overlay.is-0 { color: var(--color-brand); }
+.backtest-legend-overlay.is-1 { color: var(--color-navy); }
