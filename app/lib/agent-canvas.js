@@ -47,9 +47,11 @@
 // "알람 센터 · 라이브 관제"로 하나다), 그래서 지어내지 않고 같은 내용을
 // 공유한다. 알람 피드는 sidebar.js의 notifyRooms를 window.AthenaNotify로
 // 승격한 것 — 실데이터는 routine-fired 한 종류뿐이다(handleRoutineEvent가
-// 그 외 이벤트는 애초에 방을 안 만든다), 그래서 카테고리 아이콘도 ◆ 하나만
-// 쓴다(Paper 목업의 ●⚠❚❚ 3종은 대응하는 실이벤트가 없어 지어내지 않는다,
-// P3). 라이브 컬럼(진행바·"다음 24시간" 타임라인)은 fixture다(WS 진행률
+// 그 외 이벤트는 애초에 방을 안 만든다). 그 한 이벤트가 싣고 오는 mode로
+// 카테고리 아이콘 2종을 가른다(◆ 조건 감시 발화 · ● 예약 실행 산출물 —
+// alarmIcon() 참고). Paper 목업의 나머지 2종(⚠ 응답 지연 · ❚❚ 사용자
+// 일시중지)은 대응하는 실이벤트가 없어 지어내지 않고 Paper를 정정했다(P3).
+// 라이브 컬럼(진행바·"다음 24시간" 타임라인)은 fixture다(WS 진행률
 // 스트림·예약 트리거 둘 다 백엔드 미보유, 재검증 확인). "● WS 연결됨"만
 // 실데이터다 — main.js RoutineFeed의 onStatus를 이번에 처음 렌더러로
 // 릴레이했다(이전엔 no-op이라 신호가 안 왔다, 재검증에서 확인).
@@ -96,6 +98,13 @@ const TABS = [
   { key: 'paused', label: '일시중지' },
 ];
 
+// 드릴인 안의 세그먼트(Paper 보드 03 우상단) — 위 두 층위와 또 다른 층위다.
+// 드릴인에서만 보이므로 뷰 탭(VIEWS)과 자리를 다투지 않는다.
+const HISTORY_TABS = [
+  { key: 'runs', label: '이력' },
+  { key: 'settings', label: '설정' },
+];
+
 // 상위 뷰 탭(9단계, 11단계에서 4번째 추가) — 위 TABS(리스트 필터, "작업" 뷰
 // 내부용)와는 다른 층위다.
 const VIEWS = [
@@ -104,6 +113,11 @@ const VIEWS = [
   { key: 'live', label: '라이브' },
   { key: 'proactive', label: '제안' },
 ];
+
+// 알람 피드가 접힌 상태에서 보이는 행 수(Paper 보드 02 실측 — 6행 + 나머지는
+// "지난 알람 N건 더" 버튼 뒤). 드릴인 실행 목록의 HISTORY_RUNS_COLLAPSED와
+// 같은 값이지만 서로 다른 화면의 서로 다른 결정이라 상수를 공유하지 않는다.
+const ALERTS_COLLAPSED = 6;
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
@@ -143,6 +157,7 @@ function createAgentCanvas(deps) {
     fetchNudgeGuard,
     onOpenGraph,
     onOpenInChat,
+    onEditInChat,
   } = deps || {};
   if (!container) return { mount() {}, async refresh() {} };
 
@@ -156,8 +171,12 @@ function createAgentCanvas(deps) {
   let activeView = 'tasks';
   let alertsCache = [];
   let historyItem = null; // 드릴인 중인 항목(10단계) — null이면 드릴인이 아니다.
+  let historyTab = 'runs'; // 드릴인 세그먼트(Paper 보드 03) — 이력 | 설정.
   let heldSuggestionIds = new Set(); // "보류"한 제안(11단계) — 세션 동안만, 저장 안 됨.
   let historyRequestId = 0; // 위와 같은 이유 — 별개 요청이라 별개 가드를 쓴다.
+  let historyRunsCache = []; // 최신 30건(정렬 완료) — 접기/펼치기가 같은 배열을 다시 그린다.
+  let historyRunsExpanded = false; // "지난 실행 N건 더"를 눌렀는가. 드릴인을 새로 열면 접힌 상태로 돌아간다.
+  let alertsExpanded = false; // 알람 피드의 같은 접기 상태 — 뷰를 떠나도 세션 동안 유지한다.
   let avgDurationCache = null; // GET /{id}/runs의 avg_duration_ms(5단계) — 드릴인 대상별로 갱신.
   let engagementCache = null; // GET /{id}/runs의 opened_rate/replied_count(F-stage5b-FE) — 드릴인 대상별로 갱신.
   let nudgeGuardCache = null; // GET /api/v1/nudge-guard(F-stage9) — 라이브.
@@ -275,6 +294,23 @@ function createAgentCanvas(deps) {
   const breadcrumbBadge = el('span', 'agent-breadcrumb-badge');
   breadcrumb.appendChild(breadcrumbBadge);
   head.appendChild(breadcrumb);
+
+  // 드릴인 세그먼트 [이력][설정](Paper 보드 03 우상단) — 브레드크럼과 같이
+  // 드릴인에서만 보인다. "설정"은 읽기 전용 명세 + 채팅으로 고치기 한 경로다
+  // (동선 규칙② "편집도 채팅으로 — 상세 패널은 보기 전용" 그대로 — 이 패널에
+  // 값을 바꾸는 입력을 두면 그 규칙과 정면으로 어긋난다).
+  const historyTabs = el('div', 'agent-history-tabs');
+  historyTabs.hidden = true;
+  const historyTabButtons = {};
+  for (const tab of HISTORY_TABS) {
+    const btn = el('button', tab.key === 'runs' ? 'agent-history-tab is-active' : 'agent-history-tab');
+    btn.type = 'button';
+    btn.textContent = tab.label;
+    btn.addEventListener('click', () => setHistoryTab(tab.key));
+    historyTabButtons[tab.key] = btn;
+    historyTabs.appendChild(btn);
+  }
+  head.appendChild(historyTabs);
 
   // "그래프 모드에서 근거 보기 →"(11단계, "제안" 뷰 전용) — 사이드바 모드
   // 네비를 그대로 재사용한다(위 머리말 참고).
@@ -462,6 +498,27 @@ function createAgentCanvas(deps) {
   panels.appendChild(detailCol);
   body.appendChild(panels);
 
+  // ---------- 동선 규칙(Paper 에이전트 보드 05 하단) ----------
+  // 이 화면이 "새 작업"을 어떻게 다루는지 적어 둔 고정 안내다 — 데이터가 아니라
+  // 화면 자신의 계약이라 fixture/live 구분이 없다(그래서 data-source를 안 붙인다).
+  // 세 줄은 Paper 원문 그대로다. 코드 곳곳의 "동선 규칙①/③" 주석이 가리키던
+  // 원본이 그동안 화면에 없었다 — 이제 사람도 같은 문장을 본다.
+  const ROUTE_RULES = [
+    '① ＋ 새 작업 버튼은 시트를 열지 않는다 — 채팅 입력창에 시작 문장을 넣고 커서를 옮긴다.',
+    '② 편집도 채팅으로 — 행을 고르고 "이거 고쳐줘". 상세 패널은 보기 전용.',
+    '③ 확정(미리보기·활성화)은 채팅 카드의 칩 — 캔버스는 결과가 비치는 곳.',
+  ];
+  const routeRules = el('div', 'agent-route-rules');
+  const routeRulesCaption = el('div', 'agent-panel-caption');
+  routeRulesCaption.textContent = '동선 규칙';
+  routeRules.appendChild(routeRulesCaption);
+  for (const text of ROUTE_RULES) {
+    const line = el('div', 'agent-route-rule');
+    line.textContent = text;
+    routeRules.appendChild(line);
+  }
+  body.appendChild(routeRules);
+
   // ---------- 알람 센터 · 라이브 관제(9단계, Paper 보드 40) ----------
   // "알람"·"라이브" 뷰가 공유하는 한 화면 — 위 머리말 참고.
   const alarmLiveBody = el('div', 'agent-alarm-live');
@@ -487,12 +544,29 @@ function createAgentCanvas(deps) {
     return `${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
   }
 
-  // 액센트 바 색으로 미확인(핑크)/읽음(라인색)을 구분한다(Paper 실측). 카테고리
-  // 아이콘은 ◆ 하나뿐이다 — 실데이터가 routine-fired 한 종류뿐이라서다(위 머리말).
+  // 액센트 바 색으로 미확인(핑크)/읽음(라인색)을 구분한다(Paper 실측).
+  //
+  // 카테고리 아이콘은 실데이터로 갈리는 2종이다(Paper 보드 02의 ◆·● 두 갈래와
+  // 같다). 근거는 routine-fired 이벤트의 mode 하나뿐이다 — sidebar.js가
+  // notifyRooms에 실어 AthenaNotify.list()로 넘긴다.
+  //   · scheduled  → ● 예약 실행이 산출물을 냈다("브리핑 카드 생성"·"실행 완료")
+  //   · 그 외      → ◆ 조건 감시가 발화했다("조건 도달"·"성향 제안")
+  // Paper 목업의 나머지 두 갈래(⚠ 응답 지연 · ❚❚ 사용자 일시중지)는 대응하는
+  // 알람 이벤트가 아예 없다 — handleRoutineEvent가 routine-fired 외에는 방을
+  // 만들지 않는다. 지어내지 않고 Paper 쪽을 실계약에 맞춰 정정했다(검수 대장
+  // 결정 로그 2026-09-01 참고).
+  function alarmIcon(alert) {
+    return alert && alert.mode === 'scheduled'
+      ? { glyph: '●', colorVar: '--color-ok' }
+      : { glyph: '◆', colorVar: '--color-brand' };
+  }
+
   function makeAlarmRow(alert) {
     const row = el('div', alert.read ? 'agent-alarm-row' : 'agent-alarm-row is-unread');
+    const mark = alarmIcon(alert);
     const icon = el('span', 'agent-alarm-icon');
-    icon.textContent = '◆';
+    icon.textContent = mark.glyph;
+    icon.style.color = `var(${mark.colorVar})`;
     row.appendChild(icon);
     const textWrap = el('span', 'agent-alarm-text');
     const t = el('span', 'agent-alarm-title');
@@ -522,7 +596,17 @@ function createAgentCanvas(deps) {
       alarmList.appendChild(empty);
       return;
     }
-    for (const alert of alertsCache) alarmList.appendChild(makeAlarmRow(alert));
+    // 실행 이력과 같은 접기 규칙(Paper 보드 02 실측 — 6행 + "지난 알람 24건 더").
+    const shown = alertsExpanded ? alertsCache : alertsCache.slice(0, ALERTS_COLLAPSED);
+    for (const alert of shown) alarmList.appendChild(makeAlarmRow(alert));
+    const remaining = alertsCache.length - shown.length;
+    if (remaining > 0) {
+      const more = el('button', 'agent-list-more');
+      more.type = 'button';
+      more.textContent = `지난 알람 ${remaining}건 더`;
+      more.addEventListener('click', () => { alertsExpanded = true; renderAlarmColumn(); });
+      alarmList.appendChild(more);
+    }
   }
 
   // 라이브 컬럼 — 진행바·"다음 24시간" 전부 fixture다(위 머리말). "WS 연결됨"만
@@ -534,12 +618,16 @@ function createAgentCanvas(deps) {
     ];
   }
 
+  // 시각·점 색까지 Paper 보드 02 실측 그대로다 — 시각이 없으면 "다음 24시간"이
+  // 순서만 있고 언제인지는 없는 목록이 된다(원 목업의 핵심 열이 빠진 상태였다).
+  // 점 색은 그 줄이 어떤 갈래인지를 말한다(예약=ok · 프로액티브=brand ·
+  // 감시=info) — 리스트 행의 statusRowIcon 색 규칙과 같은 어휘를 쓴다.
   function fixtureTimeline() {
     return [
-      { label: '아침 브리핑', sub: '기존 채팅' },
-      { label: '장 시작 전 말걸기', sub: '프로액티브' },
-      { label: '감시 마감 확인', sub: '삼성 88,000' },
-      { label: '성향 제안 검토', sub: '그래프 반영' },
+      { time: '07:30', label: '아침 브리핑', sub: '기존 채팅', colorVar: '--color-ok' },
+      { time: '08:55', label: '장 시작 전 말걸기', sub: '프로액티브', colorVar: '--color-brand' },
+      { time: '15:30', label: '감시 마감 확인', sub: '삼성 88,000', colorVar: '--color-info' },
+      { time: '16:00', label: '성향 제안 검토', sub: '그래프 반영', colorVar: '--color-brand' },
     ];
   }
 
@@ -578,8 +666,12 @@ function createAgentCanvas(deps) {
   const timelineWrap = el('div', 'agent-live-timeline');
   for (const t of fixtureTimeline()) {
     const row = el('div', 'agent-live-timeline-row');
+    const time = el('span', 'agent-live-timeline-time');
+    time.textContent = t.time;
+    row.appendChild(time);
     const dot = el('span', 'agent-live-timeline-dot');
     dot.textContent = '●';
+    dot.style.color = `var(${t.colorVar})`;
     row.appendChild(dot);
     const label = el('span', 'agent-live-timeline-label');
     label.textContent = t.label;
@@ -759,10 +851,28 @@ function createAgentCanvas(deps) {
   }
   renderHistoryStats(); // 초기 페인트 — 드릴인 열기 전엔 "평균"이 "—"로 보인다.
 
+  // 행에는 시각만 남는다 — 날짜는 위의 그룹 머리가 한 번만 말한다(Paper 보드 03
+  // 실측: 행 좌측 열이 "07:30"·"07:31"이고 날짜는 "오늘 — 8/26 화" 머리에 있다).
   function formatRunTime(iso) {
     const d = new Date(iso);
     if (Number.isNaN(d.getTime())) return String(iso);
-    return d.toLocaleString('ko-KR', { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+    return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+  }
+
+  const WEEKDAY_KO = ['일', '월', '화', '수', '목', '금', '토'];
+
+  // 날짜 그룹 머리 문구(Paper 보드 03) — 오늘·어제만 이름을 붙이고 그 앞은
+  // "8/22 금"처럼 날짜+요일만 쓴다. 파싱 실패한 ts는 그룹을 만들지 않는다(빈
+  // 머리를 지어내지 않는다, P3) — 호출부가 null을 받으면 머리를 생략한다.
+  function runDateGroupLabel(iso, now) {
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return null;
+    const dayOf = (x) => new Date(x.getFullYear(), x.getMonth(), x.getDate()).getTime();
+    const diffDays = Math.round((dayOf(now) - dayOf(d)) / 86400000);
+    const stamp = `${d.getMonth() + 1}/${d.getDate()} ${WEEKDAY_KO[d.getDay()]}`;
+    if (diffDays === 0) return `오늘 — ${stamp}`;
+    if (diffDays === 1) return `어제 — ${stamp}`;
+    return stamp;
   }
 
   // ledger 실제 verdict 3종(fired/near/suppressed)만 쓴다 — 목업의 "재시도"·
@@ -788,6 +898,45 @@ function createAgentCanvas(deps) {
     }
     row.appendChild(textWrap);
     return row;
+  }
+
+  // 접힌 상태에서 보이는 실행 행 수(Paper 보드 03 실측 — 6행 + "지난 실행 24건
+  // 더"로 30건을 가린다). 푸터는 죽은 글자가 아니라 나머지를 펼치는 버튼이다.
+  const HISTORY_RUNS_COLLAPSED = 6;
+
+  // 그룹 머리 + 접기/펼치기를 한자리에서 그린다 — refreshHistoryRuns()(데이터
+  // 도착)와 푸터 클릭(펼치기) 둘 다 이 함수만 부른다(단일 그리기 지점).
+  function renderHistoryRuns() {
+    while (historyRunsList.firstChild) historyRunsList.removeChild(historyRunsList.firstChild);
+    if (!historyRunsCache.length) {
+      const empty = el('div', 'agent-list-empty');
+      empty.textContent = '실행 이력이 없습니다';
+      historyRunsList.appendChild(empty);
+      return;
+    }
+    const shown = historyRunsExpanded
+      ? historyRunsCache
+      : historyRunsCache.slice(0, HISTORY_RUNS_COLLAPSED);
+    const now = new Date();
+    let lastGroup = null;
+    for (const run of shown) {
+      const group = runDateGroupLabel(run.ts, now);
+      if (group && group !== lastGroup) {
+        const head2 = el('div', 'agent-history-run-group');
+        head2.textContent = group;
+        historyRunsList.appendChild(head2);
+        lastGroup = group;
+      }
+      historyRunsList.appendChild(makeHistoryRunRow(run));
+    }
+    const remaining = historyRunsCache.length - shown.length;
+    if (remaining > 0) {
+      const more = el('button', 'agent-list-more');
+      more.type = 'button';
+      more.textContent = `지난 실행 ${remaining}건 더`;
+      more.addEventListener('click', () => { historyRunsExpanded = true; renderHistoryRuns(); });
+      historyRunsList.appendChild(more);
+    }
   }
 
   // GET /api/v1/routines/{id}/runs 실데이터(6단계) — requestId로 낡은 응답을
@@ -828,18 +977,100 @@ function createAgentCanvas(deps) {
     // ledger는 append-only(오래된 게 먼저)라 최신 먼저로 뒤집고 30건으로 자른다.
     const sorted = runs.slice().sort((a, b) => Date.parse(b.ts) - Date.parse(a.ts)).slice(0, 30);
     renderHistoryOutput(sorted); // "오늘 산출물" 카드(6단계) — 같은 runs 응답 재사용.
-    while (historyRunsList.firstChild) historyRunsList.removeChild(historyRunsList.firstChild);
-    if (!sorted.length) {
-      const empty = el('div', 'agent-list-empty');
-      empty.textContent = '실행 이력이 없습니다';
-      historyRunsList.appendChild(empty);
-    } else {
-      for (const run of sorted) historyRunsList.appendChild(makeHistoryRunRow(run));
+    historyRunsCache = sorted;
+    renderHistoryRuns();
+  }
+
+  // ---------- 드릴인 "설정" 탭 — 읽기 전용 명세(Paper 보드 03) ----------
+  // 백엔드가 실제로 주는 필드만 보여준다(상세 패널 detailFieldsFor와 같은 원천·
+  // 같은 원칙, P3). 값을 바꾸는 입력은 두지 않는다 — 고치는 경로는 아래 버튼
+  // 하나(채팅)뿐이다(동선 규칙②).
+  const historySettingsBody = el('div', 'agent-history-settings');
+  historySettingsBody.hidden = true;
+
+  const MODE_LABEL = {
+    'realtime-ws': '실시간 감시',
+    scheduled: '예약 실행',
+    periodic: '주기 확인',
+  };
+
+  function historySettingsFields(item) {
+    const r = (item && item.raw) || {};
+    const fields = [];
+    if (r.note) fields.push(['조건', r.note]);
+    fields.push(['모드', MODE_LABEL[r.mode] || r.mode || '—']);
+    fields.push(['소스', r.source_label || '—']);
+    if (r.symbol) fields.push(['종목', String(r.symbol)]);
+    if (r.cooldown_s != null) fields.push(['쿨다운', `${r.cooldown_s}초`]);
+    // 아래 둘은 mode가 아니라 "그 값이 실제로 있는가"로 가른다 — 드릴인은 지금
+    // 감시(watch)만 열리므로 mode==='scheduled' 분기를 두면 영영 안 도는 죽은
+    // 가지가 된다. 필드 기준이면 예약 드릴인이 열리는 날 그대로 살아난다.
+    if (r.briefing_model) {
+      fields.push(['브리핑 모델', `${r.briefing_model}${r.briefing_effort ? ` · ${r.briefing_effort}` : ''}`]);
     }
+    if (r.next_fire_at) fields.push(['다음 실행', formatDateTime(r.next_fire_at)]);
+    if (r.expires_at) fields.push(['만료', formatDateTime(r.expires_at)]);
+    if (r.created_at) fields.push(['생성', formatDateTime(r.created_at)]);
+    return fields;
+  }
+
+  function renderHistorySettings() {
+    while (historySettingsBody.firstChild) historySettingsBody.removeChild(historySettingsBody.firstChild);
+    if (!historyItem) return;
+    const caption = el('div', 'agent-panel-caption');
+    caption.textContent = '설정 — 보기 전용';
+    historySettingsBody.appendChild(caption);
+
+    const fieldsWrap = el('div', 'agent-detail-fields');
+    fieldsWrap.setAttribute('data-source', 'live');
+    for (const [label, value] of historySettingsFields(historyItem)) {
+      const fieldRow = el('div', 'agent-detail-field');
+      const l = el('span', 'agent-detail-field-label');
+      l.textContent = label;
+      const v = el('span', 'agent-detail-field-value');
+      v.textContent = value;
+      fieldRow.appendChild(l);
+      fieldRow.appendChild(v);
+      fieldsWrap.appendChild(fieldRow);
+    }
+    historySettingsBody.appendChild(fieldsWrap);
+
+    const note = el('div', 'agent-history-settings-note');
+    note.textContent = '이 화면에서는 값을 바꾸지 않습니다 — 고칠 내용은 채팅에서 말하면 됩니다.';
+    historySettingsBody.appendChild(note);
+
+    const editBtn = el('button', 'agent-history-settings-edit');
+    editBtn.type = 'button';
+    editBtn.textContent = '채팅에서 고치기 ↗';
+    editBtn.addEventListener('click', () => {
+      if (typeof onEditInChat === 'function') onEditInChat(historyItem.title);
+    });
+    historySettingsBody.appendChild(editBtn);
+  }
+
+  function setHistoryTab(key) {
+    if (!historyTabButtons[key] || key === historyTab) return;
+    historyTab = key;
+    for (const k of Object.keys(historyTabButtons)) {
+      historyTabButtons[k].className = k === historyTab ? 'agent-history-tab is-active' : 'agent-history-tab';
+    }
+    const isRuns = historyTab === 'runs';
+    historyBody.hidden = !isRuns;
+    historySettingsBody.hidden = isRuns;
+    if (!isRuns) renderHistorySettings();
   }
 
   function openHistory(item) {
     historyItem = item;
+    historyRunsCache = [];
+    historyRunsExpanded = false; // 다른 작업의 드릴인을 펼친 채로 물려받지 않는다.
+    // 드릴인은 항상 "이력"으로 연다 — 지난 드릴인의 "설정" 상태를 물려받지 않는다.
+    historyTab = 'runs';
+    for (const k of Object.keys(historyTabButtons)) {
+      historyTabButtons[k].className = k === 'runs' ? 'agent-history-tab is-active' : 'agent-history-tab';
+    }
+    historyTabs.hidden = false;
+    historySettingsBody.hidden = true;
     tasksHead.hidden = true;
     stats.hidden = true;
     body.hidden = true;
@@ -863,6 +1094,9 @@ function createAgentCanvas(deps) {
   function closeHistory() {
     historyItem = null;
     breadcrumb.hidden = true;
+    historyTabs.hidden = true;
+    historySettingsBody.hidden = true;
+    historyTab = 'runs';
     historyBody.hidden = true;
     viewTabsWrap.hidden = false;
     tasksHead.hidden = false;
@@ -942,10 +1176,37 @@ function createAgentCanvas(deps) {
     viewTabButtons.proactive.textContent = n > 0 ? `제안 ${n}` : '제안';
   }
 
+  // "N분 전" — profile-summary가 실제로 주는 observed_at 중 가장 최근 것이다
+  // (지어낸 신선도가 아니다, P3). 값이 없거나 파싱이 안 되면 이 조각을 통째로
+  // 빼고 "신호 N"만 남긴다.
+  function freshestSignalAge() {
+    let newest = null;
+    for (const e of suggestionsCache) {
+      const t = Date.parse(e && e.observed_at);
+      if (!Number.isFinite(t)) continue;
+      if (newest === null || t > newest) newest = t;
+    }
+    if (newest === null) return '';
+    const min = Math.max(0, Math.round((Date.now() - newest) / 60000));
+    if (min < 1) return '방금';
+    if (min < 60) return `${min}분 전`;
+    const hr = Math.floor(min / 60);
+    if (hr < 24) return `${hr}시간 전`;
+    return `${Math.floor(hr / 24)}일 전`;
+  }
+
   function renderProactiveStrip() {
     const relations = [...new Set(suggestionsCache.map((e) => e.relation_kind).filter(Boolean))];
     proactiveStripValue.textContent = relations.length ? relations.join(' · ') : '아직 읽히는 성향이 없습니다';
-    proactiveStripSub.textContent = suggestionsCache.length ? `신호 ${suggestionsCache.length}건` : '';
+    // 우측 메타(Paper 보드 04 실측 "신호 312 · 12분 전") — 신호 수와 신선도.
+    if (!suggestionsCache.length) {
+      proactiveStripSub.textContent = '';
+      return;
+    }
+    const age = freshestSignalAge();
+    proactiveStripSub.textContent = age
+      ? `신호 ${suggestionsCache.length} · ${age}`
+      : `신호 ${suggestionsCache.length}`;
   }
 
   function makeProactiveCard(entry) {
@@ -977,8 +1238,16 @@ function createAgentCanvas(deps) {
     });
     head2.appendChild(holdBtn);
     card.appendChild(head2);
+    // Paper 보드 04의 카드는 두 줄이다 — 사람이 읽는 설명(rationale)과 그 아래
+    // "근거:" 한 줄(성향·보강 횟수). 39번 좌측 미니 목록은 좁아서 한 줄로
+    // 합치지만(makeSuggestionRow), 전체 화면 카드는 원본대로 나눈다.
+    if (entry.rationale) {
+      const desc = el('div', 'agent-proactive-card-desc');
+      desc.textContent = entry.rationale;
+      card.appendChild(desc);
+    }
     const rationale = el('div', 'agent-proactive-card-rationale');
-    rationale.textContent = `${entry.relation_kind} 성향 ${entry.reinforcement}회 보강` + (entry.rationale ? ` — ${entry.rationale}` : '');
+    rationale.textContent = `근거: ${entry.relation_kind} 성향 ${entry.reinforcement}회 보강`;
     card.appendChild(rationale);
     return card;
   }
@@ -1376,6 +1645,7 @@ function createAgentCanvas(deps) {
     container.appendChild(body);
     container.appendChild(alarmLiveBody);
     container.appendChild(historyBody);
+    container.appendChild(historySettingsBody);
     container.appendChild(proactiveBody);
     renderStats();
     updateSubtitle();
@@ -1429,7 +1699,7 @@ function createAgentCanvas(deps) {
     await Promise.all(tasks);
   }
 
-  return { mount, refresh, setActiveTab, selectRow, setActiveView, updateWsStatus: renderWsStatus };
+  return { mount, refresh, setActiveTab, selectRow, setActiveView, setHistoryTab, updateWsStatus: renderWsStatus };
 }
 
 const __exports = { createAgentCanvas };

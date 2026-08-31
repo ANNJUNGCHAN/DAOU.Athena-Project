@@ -4343,7 +4343,19 @@ app.whenReady().then(async () => {
         tabLabels: Array.from(canvas.querySelectorAll('.agent-tab')).map((n) => n.textContent),
         searchPlaceholder: (canvas.querySelector('.agent-search-input') || {}).placeholder || null,
         ctaText: (canvas.querySelector('.agent-cta') || {}).textContent || null,
+        // 뷰 탭 4종(Paper 에이전트 보드 02·04·05 공통) — 배지 숫자는 데이터에
+        // 따라 붙으므로 접두사만 본다.
+        viewTabLabels: Array.from(canvas.querySelectorAll('.agent-view-tab')).map((n) => n.textContent.split(' ')[0]),
       };
+      // 동선 규칙(Paper 보드 05 하단) — 세 줄 원문과 출처 표기 없음까지 잰다.
+      const routeRulesEl = canvas.querySelector('.agent-route-rules');
+      const routeRules = {
+        present: !!routeRulesEl,
+        sourceAttr: routeRulesEl ? routeRulesEl.getAttribute('data-source') : 'MISSING',
+        lines: Array.from(canvas.querySelectorAll('.agent-route-rule')).map((n) => n.textContent),
+      };
+      // 라이브 "다음 24시간" 시각 열(Paper 보드 02) — 뷰를 옮기지 않고 DOM만 읽는다.
+      const timelineTimes = Array.from(canvas.querySelectorAll('.agent-live-timeline-time')).map((n) => n.textContent);
       const statCards = Array.from(canvas.querySelectorAll('.agent-stat-card'));
       const statCount = statCards.length;
       const fixtureStatCount = statCards.filter((n) => n.getAttribute('data-source') === 'fixture').length;
@@ -4358,7 +4370,7 @@ app.whenReady().then(async () => {
       if (allTabBtn) allTabBtn.click();
       back.click();
       await new Promise((r) => setTimeout(r, 100));
-      return { wired: true, headerText, statCount, fixtureStatCount, allRowCount, activeRowCount };
+      return { wired: true, headerText, statCount, fixtureStatCount, allRowCount, activeRowCount, routeRules, timelineTimes };
     })()`);
     report.agentCanvas = agentCanvasProbe;
     assertOk('agent-canvas: 헤더/캔버스 배선이 있다', agentCanvasProbe.wired === true);
@@ -4382,6 +4394,28 @@ app.whenReady().then(async () => {
       assertOk(
         'agent-canvas: "활성" 탭 전환 시 2건(감시 1 + 예약 1)만 남는다(좌측 리스트 필터링, 예약도 live)',
         agentCanvasProbe.activeRowCount === 2,
+      );
+      // ---- Paper 에이전트 페이지 대조(2026-09-01) ----
+      assertOk(
+        'agent-canvas: 뷰 탭 4종(작업/알람/라이브/제안)이 있다(Paper 보드 02·04·05 통일안)',
+        JSON.stringify(agentCanvasProbe.headerText.viewTabLabels) === JSON.stringify(['작업', '알람', '라이브', '제안']),
+      );
+      assertOk('agent-canvas: 동선 규칙 패널이 작업 뷰에 있다(Paper 보드 05)', agentCanvasProbe.routeRules.present === true);
+      assertOk(
+        'agent-canvas: 동선 규칙 3줄이 Paper 원문 그대로다',
+        JSON.stringify(agentCanvasProbe.routeRules.lines) === JSON.stringify([
+          '① ＋ 새 작업 버튼은 시트를 열지 않는다 — 채팅 입력창에 시작 문장을 넣고 커서를 옮긴다.',
+          '② 편집도 채팅으로 — 행을 고르고 "이거 고쳐줘". 상세 패널은 보기 전용.',
+          '③ 확정(미리보기·활성화)은 채팅 카드의 칩 — 캔버스는 결과가 비치는 곳.',
+        ]),
+      );
+      assertOk(
+        'agent-canvas: 동선 규칙은 데이터가 아니라 화면 계약이라 data-source를 달지 않는다',
+        agentCanvasProbe.routeRules.sourceAttr === null,
+      );
+      assertOk(
+        'agent-canvas: 라이브 타임라인 4행 모두 시각 열을 갖는다(Paper 보드 02)',
+        JSON.stringify(agentCanvasProbe.timelineTimes) === JSON.stringify(['07:30', '08:55', '15:30', '16:00']),
       );
     }
   } catch (err) {
@@ -5118,10 +5152,38 @@ app.whenReady().then(async () => {
       const outputBtnLabels = outputBtns.map((n) => n.textContent);
       const outputBtnsAllDisabled = outputBtns.length > 0 && outputBtns.every((n) => n.disabled === true);
 
+      // ---- 드릴인 세그먼트 [이력][설정](Paper 보드 03·06, 2026-09-01) ----
+      const segTabs = Array.from(canvas.querySelectorAll('.agent-history-tab'));
+      const segLabels = segTabs.map((n) => n.textContent);
+      const segVisible = !canvas.querySelector('.agent-history-tabs').hidden;
+      // 날짜 그룹 머리는 실행 행 위에 한 번씩만 붙는다(같은 날은 한 번).
+      const runGroupLabels = Array.from(canvas.querySelectorAll('.agent-history-run-group')).map((n) => n.textContent);
+      const runTimes = Array.from(canvas.querySelectorAll('.agent-history-run-time')).map((n) => n.textContent);
+
+      const settingsTab = segTabs.find((n) => n.textContent === '설정');
+      if (settingsTab) settingsTab.click();
+      await new Promise((r) => setTimeout(r, 100));
+      const settingsPanel = canvas.querySelector('.agent-history-settings');
+      const settingsVisible = settingsPanel ? settingsPanel.hidden === false : false;
+      const historyBodyHiddenOnSettings = (canvas.querySelector('.agent-history-body') || {}).hidden;
+      const settingsLabels = settingsPanel
+        ? Array.from(settingsPanel.querySelectorAll('.agent-detail-field-label')).map((n) => n.textContent) : [];
+      // 동선 규칙2 - 보기 전용이므로 입력 컨트롤이 하나도 없어야 한다.
+      const settingsInputCount = settingsPanel
+        ? settingsPanel.querySelectorAll('input, select, textarea').length : -1;
+      const settingsEditLabel = settingsPanel
+        ? (settingsPanel.querySelector('.agent-history-settings-edit') || {}).textContent : null;
+
+      const runsTab = segTabs.find((n) => n.textContent === '이력');
+      if (runsTab) runsTab.click();
+      await new Promise((r) => setTimeout(r, 100));
+      const historyBodyBackOnRuns = (canvas.querySelector('.agent-history-body') || {}).hidden === false;
+
       canvas.querySelector('.agent-breadcrumb-back').click();
       await new Promise((r) => setTimeout(r, 100));
       const breadcrumbHiddenAfterBack = canvas.querySelector('.agent-breadcrumb').hidden;
       const tasksHeadVisibleAfterBack = !canvas.querySelector('.agent-tasks-head').hidden;
+      const segHiddenAfterBack = canvas.querySelector('.agent-history-tabs').hidden;
 
       back.click();
       await new Promise((r) => setTimeout(r, 100));
@@ -5131,6 +5193,9 @@ app.whenReady().then(async () => {
         openedRateValue, repliedCountValue,
         breadcrumbHiddenAfterBack, tasksHeadVisibleAfterBack,
         outputSource, outputTitle, outputTag, outputItemCount, outputBtnLabels, outputBtnsAllDisabled,
+        segVisible, segLabels, segHiddenAfterBack, runGroupLabels, runTimes,
+        settingsVisible, historyBodyHiddenOnSettings, settingsLabels, settingsInputCount,
+        settingsEditLabel, historyBodyBackOnRuns,
       };
     })()`);
     report.historyDrillIn = historyProbe;
@@ -5140,6 +5205,40 @@ app.whenReady().then(async () => {
       assertOk('agent-canvas-10: 브레드크럼 제목이 실제 routine note다', historyProbe.breadcrumbTitle === '삼성전자 88,000 감시');
       assertOk('agent-canvas-10: 브레드크럼 상태 배지가 "활성"이다', historyProbe.breadcrumbBadge === '활성');
       assertOk('agent-canvas-10: 드릴인 진입 시 "작업" 머리가 숨는다', historyProbe.tasksHeadHidden === true);
+      // ---- Paper 보드 03·06 대조(2026-09-01) ----
+      assertOk(
+        'agent-canvas-10: 드릴인에서 [이력][설정] 세그먼트가 보인다(Paper 보드 03 우상단)',
+        historyProbe.segVisible === true && JSON.stringify(historyProbe.segLabels) === JSON.stringify(['이력', '설정']),
+      );
+      assertOk(
+        'agent-canvas-10: 실행 행 시각이 날짜 없이 HH:MM만 남는다(날짜는 그룹 머리 몫)',
+        historyProbe.runTimes.length === 4 && historyProbe.runTimes.every((t) => /^\d{2}:\d{2}$/.test(t)),
+      );
+      assertOk(
+        'agent-canvas-10: 날짜 그룹 머리가 붙고, 그룹 수가 행 수를 넘지 않는다',
+        historyProbe.runGroupLabels.length > 0
+          && historyProbe.runGroupLabels.length <= historyProbe.runTimes.length
+          && new Set(historyProbe.runGroupLabels).size === historyProbe.runGroupLabels.length,
+      );
+      assertOk(
+        'agent-canvas-10: "설정" 탭을 누르면 이력 본문이 숨고 보기 전용 명세가 뜬다(Paper 보드 06)',
+        historyProbe.settingsVisible === true && historyProbe.historyBodyHiddenOnSettings === true,
+      );
+      assertOk(
+        'agent-canvas-10: 설정 패널은 백엔드가 실제로 준 필드만 라벨로 낸다',
+        historyProbe.settingsLabels.length > 0
+          && historyProbe.settingsLabels.every((l) => ['조건', '모드', '소스', '종목', '쿨다운', '브리핑 모델', '다음 실행', '만료', '생성'].includes(l)),
+      );
+      assertOk(
+        'agent-canvas-10: 설정 패널에 값을 바꾸는 입력이 없다(동선 규칙2 보기 전용)',
+        historyProbe.settingsInputCount === 0,
+      );
+      assertOk(
+        'agent-canvas-10: 고치는 경로는 "채팅에서 고치기 ↗" 하나뿐이다',
+        historyProbe.settingsEditLabel === '채팅에서 고치기 ↗',
+      );
+      assertOk('agent-canvas-10: "이력"으로 되돌리면 이력 본문이 다시 보인다', historyProbe.historyBodyBackOnRuns === true);
+      assertOk('agent-canvas-10: 드릴인을 닫으면 세그먼트도 함께 숨는다', historyProbe.segHiddenAfterBack === true);
       assertOk(
         // [6단계] 오늘자 브리핑 발화 행이 앞에 추가돼 4행이 됐다(최신순 유지).
         'agent-canvas-10: 최근 30회가 GET /{id}/runs 실데이터로 최신순 정렬된다',

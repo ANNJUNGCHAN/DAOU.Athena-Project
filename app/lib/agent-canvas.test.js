@@ -1186,7 +1186,35 @@ test('"지금 읽히는 성향" 스트립은 suggestionsCache(7단계와 같은 
   canvas.mount();
   await canvas.refresh();
   assert.equal(findByClass(container, 'agent-proactive-strip-value')[0].textContent, '단기 회전 · 배당 방어');
-  assert.equal(findByClass(container, 'agent-proactive-strip-sub')[0].textContent, '신호 2건');
+  // 우측 메타는 Paper 보드 04 문법("신호 312 · 12분 전")이다 — 신선도는 실제
+  // observed_at에서 나오므로 벽시계에 따라 달라진다, 접두사만 고정으로 본다.
+  assert.match(findByClass(container, 'agent-proactive-strip-sub')[0].textContent, /^신호 2 · /);
+});
+
+test('스트립 우측 메타: 가장 최근 observed_at으로 신선도를 낸다(분 단위)', async () => {
+  const container = fakeNode('div');
+  const recent = new Date(Date.now() - 12 * 60000).toISOString();
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => [],
+    fetchProfileSummary: async () => [
+      profileEntry({ entity_id: 'e1', observed_at: '2026-01-01T00:00:00Z' }),
+      profileEntry({ entity_id: 'e2', observed_at: recent }), // 가장 최근 = 이 값이 이긴다
+    ],
+  });
+  canvas.mount();
+  await canvas.refresh();
+  assert.equal(findByClass(container, 'agent-proactive-strip-sub')[0].textContent, '신호 2 · 12분 전');
+});
+
+test('스트립 우측 메타: observed_at이 없으면 신선도를 지어내지 않고 신호 수만 남긴다(P3)', async () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => [],
+    fetchProfileSummary: async () => [profileEntry({ entity_id: 'e1', observed_at: null })],
+  });
+  canvas.mount();
+  await canvas.refresh();
+  assert.equal(findByClass(container, 'agent-proactive-strip-sub')[0].textContent, '신호 1');
 });
 
 test('신호가 없으면 스트립이 정직하게 "아직 읽히는 성향이 없습니다"를 보여준다(P3)', async () => {
@@ -1305,4 +1333,428 @@ test('말걸기 가드: fetchNudgeGuard가 실패해도 지어낸 값으로 채�
   const guard = findByClass(container, 'agent-nudge-guard')[0];
   assert.equal(findByClass(guard, 'agent-nudge-guard-tag').length, 0);
   assert.equal(findByClass(guard, 'agent-list-empty')[0].textContent, '가드 설정을 불러오는 중입니다');
+});
+
+// ---------- 동선 규칙(Paper 에이전트 보드 05 하단) ----------
+
+test('동선 규칙: 작업 뷰에 Paper 원문 3줄이 그대로 렌더된다', () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => [] });
+  canvas.mount();
+
+  const panel = findByClass(container, 'agent-route-rules')[0];
+  assert.ok(panel, '동선 규칙 패널이 있어야 한다');
+  assert.equal(findByClass(panel, 'agent-panel-caption')[0].textContent, '동선 규칙');
+  assert.deepEqual(findByClass(panel, 'agent-route-rule').map((n) => n.textContent), [
+    '① ＋ 새 작업 버튼은 시트를 열지 않는다 — 채팅 입력창에 시작 문장을 넣고 커서를 옮긴다.',
+    '② 편집도 채팅으로 — 행을 고르고 "이거 고쳐줘". 상세 패널은 보기 전용.',
+    '③ 확정(미리보기·활성화)은 채팅 카드의 칩 — 캔버스는 결과가 비치는 곳.',
+  ]);
+});
+
+test('동선 규칙: 화면 자신의 계약이라 data-source 표기를 달지 않는다', () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => [] });
+  canvas.mount();
+
+  assert.equal(findByClass(container, 'agent-route-rules')[0].getAttribute('data-source'), null);
+});
+
+test('동선 규칙: 알람·라이브·제안 뷰로 가면 작업 뷰와 함께 숨는다', () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => [] });
+  canvas.mount();
+
+  const body = findByClass(container, 'agent-body')[0];
+  assert.equal(body.hidden, false);
+  for (const view of ['alerts', 'live', 'proactive']) {
+    canvas.setActiveView(view);
+    assert.equal(body.hidden, true, `${view} 뷰에서는 동선 규칙이 든 작업 본문이 숨어야 한다`);
+    canvas.setActiveView('tasks');
+    assert.equal(body.hidden, false);
+  }
+});
+
+// ---------- 드릴인 실행 목록 — 날짜 그룹 · 접기(Paper 보드 03) ----------
+
+// ts를 오늘 기준 상대 일수로 만든다 — 그룹 머리("오늘 — M/D 요일")가 벽시계에
+// 의존하므로 고정 날짜를 쓰면 테스트가 달력에 따라 깨진다.
+function daysAgoIso(days, hour) {
+  const d = new Date();
+  d.setDate(d.getDate() - days);
+  d.setHours(hour, 30, 0, 0);
+  return d.toISOString();
+}
+
+function stampOf(days) {
+  const d = new Date();
+  d.setDate(d.getDate() - days);
+  return `${d.getMonth() + 1}/${d.getDate()} ${['일', '월', '화', '수', '목', '금', '토'][d.getDay()]}`;
+}
+
+async function openDrillIn(container, canvas) {
+  findByClass(container, 'agent-history-open')[0].dispatchEvent({ type: 'click' });
+  await new Promise((r) => setTimeout(r, 0));
+}
+
+test('실행 목록: 오늘·어제·그 이전을 날짜 그룹 머리로 끊는다(Paper 보드 03)', async () => {
+  const container = fakeNode('div');
+  const routines = [routine({ id: 'a', status: 'active' })];
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => routines,
+    fetchRuns: async () => [
+      run({ ts: daysAgoIso(0, 7), verdict: 'fired', reason: '오늘 실행' }),
+      run({ ts: daysAgoIso(1, 7), verdict: 'fired', reason: '어제 실행' }),
+      run({ ts: daysAgoIso(4, 7), verdict: 'fired', reason: '나흘 전 실행' }),
+    ],
+  });
+  canvas.mount();
+  await canvas.refresh();
+  await openDrillIn(container, canvas);
+
+  assert.deepEqual(
+    findByClass(container, 'agent-history-run-group').map((n) => n.textContent),
+    [`오늘 — ${stampOf(0)}`, `어제 — ${stampOf(1)}`, stampOf(4)],
+  );
+});
+
+test('실행 목록: 같은 날 실행 2건은 그룹 머리를 한 번만 만든다', async () => {
+  const container = fakeNode('div');
+  const routines = [routine({ id: 'a', status: 'active' })];
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => routines,
+    fetchRuns: async () => [
+      run({ ts: daysAgoIso(0, 7), verdict: 'fired', reason: '아침' }),
+      run({ ts: daysAgoIso(0, 15), verdict: 'near', reason: '오후' }),
+    ],
+  });
+  canvas.mount();
+  await canvas.refresh();
+  await openDrillIn(container, canvas);
+
+  assert.equal(findByClass(container, 'agent-history-run-group').length, 1);
+  assert.equal(findByClass(container, 'agent-history-run').length, 2);
+});
+
+test('실행 목록: 행 시각은 날짜 없이 HH:MM만 남는다(날짜는 그룹 머리 몫)', async () => {
+  const container = fakeNode('div');
+  const routines = [routine({ id: 'a', status: 'active' })];
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => routines,
+    fetchRuns: async () => [run({ ts: daysAgoIso(0, 7), verdict: 'fired', reason: '조건 도달' })],
+  });
+  canvas.mount();
+  await canvas.refresh();
+  await openDrillIn(container, canvas);
+
+  assert.match(findByClass(container, 'agent-history-run-time')[0].textContent, /^\d{2}:\d{2}$/);
+});
+
+test('실행 목록: 6건까지만 펼쳐 두고 나머지는 "지난 실행 N건 더" 뒤에 둔다', async () => {
+  const container = fakeNode('div');
+  const routines = [routine({ id: 'a', status: 'active' })];
+  const rows = Array.from({ length: 10 }, (_, i) =>
+    run({ ts: daysAgoIso(i, 7), verdict: 'fired', reason: `실행 ${i}` }));
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => routines, fetchRuns: async () => rows,
+  });
+  canvas.mount();
+  await canvas.refresh();
+  await openDrillIn(container, canvas);
+
+  assert.equal(findByClass(container, 'agent-history-run').length, 6);
+  const more = findByClass(container, 'agent-list-more')[0];
+  assert.equal(more.textContent, '지난 실행 4건 더');
+
+  more.dispatchEvent({ type: 'click' });
+  assert.equal(findByClass(container, 'agent-history-run').length, 10);
+  assert.equal(findByClass(container, 'agent-list-more').length, 0, '다 펼치면 푸터가 사라진다');
+});
+
+test('실행 목록: 6건 이하면 더보기 푸터를 만들지 않는다', async () => {
+  const container = fakeNode('div');
+  const routines = [routine({ id: 'a', status: 'active' })];
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => routines,
+    fetchRuns: async () => [run({ ts: daysAgoIso(0, 7), verdict: 'fired', reason: '한 건' })],
+  });
+  canvas.mount();
+  await canvas.refresh();
+  await openDrillIn(container, canvas);
+
+  assert.equal(findByClass(container, 'agent-list-more').length, 0);
+});
+
+// ---------- 알람 피드 접기(Paper 보드 02) ----------
+
+test('알람 피드: 6건까지만 보이고 나머지는 "지난 알람 N건 더" 뒤에 둔다', () => {
+  const container = fakeNode('div');
+  const alerts = Array.from({ length: 9 }, (_, i) => ({
+    id: `a${i}`, title: `알람 ${i}`, sub: '', firedAt: Date.now() - i * 60000, read: false,
+  }));
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => [], fetchAlerts: () => alerts,
+  });
+  canvas.mount();
+
+  assert.equal(findByClass(container, 'agent-alarm-row').length, 6);
+  const more = findByClass(container, 'agent-list-more')[0];
+  assert.equal(more.textContent, '지난 알람 3건 더');
+
+  more.dispatchEvent({ type: 'click' });
+  assert.equal(findByClass(container, 'agent-alarm-row').length, 9);
+  assert.equal(findByClass(container, 'agent-list-more').length, 0);
+});
+
+test('알람 피드: 접혀 있어도 탭 배지는 전체 미확인 수를 센다(가려진 건도 미확인이다)', () => {
+  const container = fakeNode('div');
+  const alerts = Array.from({ length: 9 }, (_, i) => ({
+    id: `a${i}`, title: `알람 ${i}`, sub: '', firedAt: Date.now(), read: false,
+  }));
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => [], fetchAlerts: () => alerts,
+  });
+  canvas.mount();
+
+  const alertsTab = findByClass(container, 'agent-view-tab')[1];
+  assert.equal(alertsTab.textContent, '알람 9');
+});
+
+// ---------- 라이브 "다음 24시간" 타임라인(Paper 보드 02) ----------
+
+test('타임라인: 각 행이 시각 열을 갖는다', () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => [] });
+  canvas.mount();
+
+  assert.deepEqual(
+    findByClass(container, 'agent-live-timeline-time').map((n) => n.textContent),
+    ['07:30', '08:55', '15:30', '16:00'],
+  );
+});
+
+test('타임라인: 점 색이 갈래별로 갈린다(예약·프로액티브·감시)', () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => [] });
+  canvas.mount();
+
+  assert.deepEqual(
+    findByClass(container, 'agent-live-timeline-dot').map((n) => n.style.color),
+    ['var(--color-ok)', 'var(--color-brand)', 'var(--color-info)', 'var(--color-brand)'],
+  );
+});
+
+// ---------- 알람 카테고리 아이콘(Paper 보드 02 · 실데이터 mode 근거) ----------
+
+test('알람 아이콘: 예약(scheduled) 발화는 ● 초록, 조건 감시 발화는 ◆ 핑크', () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => [],
+    fetchAlerts: () => [
+      { id: 's', title: '아침 브리핑', sub: '', mode: 'scheduled', firedAt: Date.now(), read: true },
+      { id: 'w', title: '삼성전자 88,000 돌파', sub: '', mode: 'realtime-ws', firedAt: Date.now(), read: true },
+      { id: 'p', title: '주기 확인', sub: '', mode: 'periodic', firedAt: Date.now(), read: true },
+    ],
+  });
+  canvas.mount();
+
+  const icons = findByClass(container, 'agent-alarm-icon');
+  assert.deepEqual(icons.map((n) => n.textContent), ['●', '◆', '◆']);
+  assert.deepEqual(icons.map((n) => n.style.color), [
+    'var(--color-ok)', 'var(--color-brand)', 'var(--color-brand)',
+  ]);
+});
+
+test('알람 아이콘: mode가 없는(하이드레이션 이전) 방은 조건 감시 쪽 ◆로 떨어진다', () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => [],
+    fetchAlerts: () => [{ id: 'x', title: '루틴 x', sub: '', firedAt: Date.now(), read: true }],
+  });
+  canvas.mount();
+
+  assert.equal(findByClass(container, 'agent-alarm-icon')[0].textContent, '◆');
+});
+
+// ---------- 드릴인 세그먼트 [이력][설정](Paper 보드 03) ----------
+
+function drillInRoutine(overrides) {
+  return routine({
+    id: 'a', status: 'active', mode: 'periodic', note: '삼성전자 88,000 감시',
+    source_label: '키움 시세', cooldown_s: 300, created_at: '2026-08-20T01:00:00Z',
+    ...overrides,
+  });
+}
+
+test('드릴인 세그먼트: 작업 뷰에서는 숨고, 드릴인을 열면 [이력][설정]이 나온다', async () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => [drillInRoutine()], fetchRuns: async () => [],
+  });
+  canvas.mount();
+  await canvas.refresh();
+
+  assert.equal(findByClass(container, 'agent-history-tabs')[0].hidden, true);
+  await openDrillIn(container, canvas);
+  assert.equal(findByClass(container, 'agent-history-tabs')[0].hidden, false);
+  assert.deepEqual(
+    findByClass(container, 'agent-history-tab').map((n) => n.textContent), ['이력', '설정'],
+  );
+});
+
+test('드릴인 세그먼트: "설정"을 누르면 이력 본문이 숨고 읽기 전용 명세가 나온다', async () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => [drillInRoutine()], fetchRuns: async () => [],
+  });
+  canvas.mount();
+  await canvas.refresh();
+  await openDrillIn(container, canvas);
+
+  canvas.setHistoryTab('settings');
+  assert.equal(findByClass(container, 'agent-history-body')[0].hidden, true);
+  const panel = findByClass(container, 'agent-history-settings')[0];
+  assert.equal(panel.hidden, false);
+  assert.equal(findByClass(panel, 'agent-panel-caption')[0].textContent, '설정 — 보기 전용');
+
+  canvas.setHistoryTab('runs');
+  assert.equal(findByClass(container, 'agent-history-body')[0].hidden, false);
+  assert.equal(findByClass(container, 'agent-history-settings')[0].hidden, true);
+});
+
+test('드릴인 설정: 백엔드가 실제로 준 필드만 라벨로 낸다(지어내지 않는다, P3)', async () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({
+    container,
+    fetchRoutines: async () => [drillInRoutine({ expires_at: null, symbol: '005930' })],
+    fetchRuns: async () => [],
+  });
+  canvas.mount();
+  await canvas.refresh();
+  await openDrillIn(container, canvas);
+  canvas.setHistoryTab('settings');
+
+  const panel = findByClass(container, 'agent-history-settings')[0];
+  const labels = findByClass(panel, 'agent-detail-field-label').map((n) => n.textContent);
+  assert.deepEqual(labels, ['조건', '모드', '소스', '종목', '쿨다운', '생성']);
+  assert.equal(labels.includes('만료'), false, 'expires_at이 없으면 만료 행을 만들지 않는다');
+  assert.equal(labels.includes('브리핑 모델'), false, '예약이 아니면 브리핑 모델 행이 없다');
+});
+
+test('드릴인 설정: 값을 바꾸는 입력이 없고 고치는 경로는 채팅 버튼 하나다(동선 규칙②)', async () => {
+  const container = fakeNode('div');
+  let seeded = null;
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => [drillInRoutine()], fetchRuns: async () => [],
+    onEditInChat: (title) => { seeded = title; },
+  });
+  canvas.mount();
+  await canvas.refresh();
+  await openDrillIn(container, canvas);
+  canvas.setHistoryTab('settings');
+
+  const panel = findByClass(container, 'agent-history-settings')[0];
+  const inputs = [];
+  (function walk(n) { if (n.tag === 'input' || n.tag === 'select' || n.tag === 'textarea') inputs.push(n); (n.children || []).forEach(walk); })(panel);
+  assert.equal(inputs.length, 0, '보기 전용 패널에 입력 컨트롤이 있으면 안 된다');
+
+  const editBtn = findByClass(panel, 'agent-history-settings-edit')[0];
+  assert.equal(editBtn.textContent, '채팅에서 고치기 ↗');
+  editBtn.dispatchEvent({ type: 'click' });
+  assert.equal(seeded, '삼성전자 88,000 감시');
+});
+
+test('드릴인 설정: 브리핑 모델·다음 실행은 그 값이 실제로 있을 때만 붙는다', async () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({
+    container,
+    fetchRoutines: async () => [drillInRoutine({
+      briefing_model: 'opus', briefing_effort: 'high', next_fire_at: '2026-08-27T07:30:00Z',
+    })],
+    fetchRuns: async () => [],
+  });
+  canvas.mount();
+  await canvas.refresh();
+  await openDrillIn(container, canvas);
+  canvas.setHistoryTab('settings');
+
+  const panel = findByClass(container, 'agent-history-settings')[0];
+  const pairs = findByClass(panel, 'agent-detail-field').map((row) => [
+    findByClass(row, 'agent-detail-field-label')[0].textContent,
+    findByClass(row, 'agent-detail-field-value')[0].textContent,
+  ]);
+  const byLabel = Object.fromEntries(pairs);
+  assert.equal(byLabel['브리핑 모델'], 'opus · high');
+  assert.ok(byLabel['다음 실행'], '다음 실행 값이 채워진다');
+  assert.equal(byLabel['모드'], '주기 확인');
+});
+
+test('드릴인 세그먼트: 드릴인을 닫으면 세그먼트가 숨고 다음 진입은 "이력"으로 시작한다', async () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => [drillInRoutine()], fetchRuns: async () => [],
+  });
+  canvas.mount();
+  await canvas.refresh();
+  await openDrillIn(container, canvas);
+  canvas.setHistoryTab('settings');
+
+  findByClass(container, 'agent-breadcrumb-back')[0].dispatchEvent({ type: 'click' });
+  assert.equal(findByClass(container, 'agent-history-tabs')[0].hidden, true);
+  assert.equal(findByClass(container, 'agent-history-settings')[0].hidden, true);
+
+  await openDrillIn(container, canvas);
+  assert.equal(findByClass(container, 'agent-history-tab')[0].className, 'agent-history-tab is-active');
+  assert.equal(findByClass(container, 'agent-history-body')[0].hidden, false);
+});
+
+// ---------- 제안 카드 두 줄 구조(Paper 보드 04) ----------
+
+test('제안 카드: 설명(rationale)과 "근거:" 줄을 따로 낸다', async () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => [],
+    fetchProfileSummary: async () => [profileEntry({
+      entity_id: 'e1', entity_name: '장 마감 후 손익 요약 루틴',
+      relation_kind: '단기 회전', reinforcement: 21,
+      rationale: '매매일마다 마감 뒤 손익·보유 변화 정리',
+    })],
+  });
+  canvas.mount();
+  await canvas.refresh();
+
+  const card = findByClass(container, 'agent-proactive-card')[0];
+  assert.equal(findByClass(card, 'agent-proactive-card-desc')[0].textContent, '매매일마다 마감 뒤 손익·보유 변화 정리');
+  assert.equal(findByClass(card, 'agent-proactive-card-rationale')[0].textContent, '근거: 단기 회전 성향 21회 보강');
+});
+
+test('제안 카드: rationale이 없으면 설명 줄 자체를 만들지 않는다(빈 줄 금지, P3)', async () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => [],
+    fetchProfileSummary: async () => [profileEntry({ entity_id: 'e1', rationale: '' })],
+  });
+  canvas.mount();
+  await canvas.refresh();
+
+  const card = findByClass(container, 'agent-proactive-card')[0];
+  assert.equal(findByClass(card, 'agent-proactive-card-desc').length, 0);
+  assert.equal(findByClass(card, 'agent-proactive-card-rationale').length, 1);
+});
+
+test('제안 미니 목록(작업 뷰)은 좁은 폭이라 여전히 한 줄로 합친다', async () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => [],
+    fetchProfileSummary: async () => [profileEntry({
+      entity_id: 'e1', relation_kind: '단기 회전', reinforcement: 21, rationale: '매매일마다 정리가 필요해 보여요',
+    })],
+  });
+  canvas.mount();
+  await canvas.refresh();
+
+  assert.equal(
+    findByClass(container, 'agent-suggest-rationale')[0].textContent,
+    '단기 회전 성향 21회 보강 — 매매일마다 정리가 필요해 보여요',
+  );
 });

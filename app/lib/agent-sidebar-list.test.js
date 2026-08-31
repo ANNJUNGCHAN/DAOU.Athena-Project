@@ -151,3 +151,18 @@ test('buildHydratedRooms: 배열이 아니거나 비어 있으면 빈 배열', (
   assert.deepEqual(buildHydratedRooms(undefined), []);
   assert.deepEqual(buildHydratedRooms([]), []);
 });
+
+test('buildHydratedRooms: mode를 실어 보낸다 — 알람 센터 카테고리 아이콘의 근거다', () => {
+  const rooms = buildHydratedRooms([
+    routine({ id: 'a', mode: 'scheduled', last_fired_at: '2026-08-26T07:30:00Z', unread: true }),
+    routine({ id: 'b', mode: 'realtime-ws', last_fired_at: '2026-08-25T07:30:00Z', unread: false }),
+  ]);
+  assert.deepEqual(rooms.map((r) => r.mode), ['scheduled', 'realtime-ws']);
+});
+
+test('buildHydratedRooms: mode가 문자열이 아니면 빈 문자열로 정직하게 남긴다', () => {
+  const rooms = buildHydratedRooms([
+    routine({ id: 'a', mode: undefined, last_fired_at: '2026-08-26T07:30:00Z', unread: false }),
+  ]);
+  assert.equal(rooms[0].mode, '');
+});
