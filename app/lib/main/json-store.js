@@ -10,4 +10,12 @@ function writeJsonAtomic(p, data) {
   fs.writeFileSync(tmp, JSON.stringify(data, null, 2), 'utf-8');
   fs.renameSync(tmp, p);
 }
-module.exports = { writeJsonAtomic };
+// 위와 같은 tmp+rename 절차의 비동기판 — 호출부가 메인 스레드를 막지 않고
+// 영속화를 예약만 하고 싶을 때 사용한다(conversations.js의 백그라운드 저장).
+async function writeJsonAtomicAsync(p, data) {
+  await fs.promises.mkdir(path.dirname(p), { recursive: true });
+  const tmp = `${p}.tmp`;
+  await fs.promises.writeFile(tmp, JSON.stringify(data, null, 2), 'utf-8');
+  await fs.promises.rename(tmp, p);
+}
+module.exports = { writeJsonAtomic, writeJsonAtomicAsync };
