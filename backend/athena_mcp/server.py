@@ -59,6 +59,7 @@ from athena_mcp.result import (
     UnsupportedContentBlockError,
     parse_call_tool_result,
 )
+from athena_mcp.security_epoch import GatewayCapabilityGuard
 
 # `on_progress`/`send_progress_notification` 콜백 시그니처 — mcp SDK의
 # `ProgressFnT`(mcp/shared/session.py)와 동일한 모양이다. SDK 타입을 직접
@@ -250,6 +251,9 @@ class AthenaGateway:
     selector_cache: selector_tools.SelectorCache = field(
         default_factory=selector_tools.SelectorCache
     )
+    capability_guard: GatewayCapabilityGuard = field(
+        default_factory=GatewayCapabilityGuard.from_env
+    )
 
     def _audit_log(self, alias: str) -> AuditLog:
         return AuditLog(self.audit_log_dir / f"{alias}.jsonl")
@@ -333,6 +337,9 @@ class AthenaGateway:
         `finally`에서 정리하는 것뿐이다. 삼키면 실제로는 안 끝난 upstream
         호출을 다운스트림에는 끝난 것처럼 보고하게 된다.
         """
+        if not self.capability_guard.is_current():
+            return _gateway_blocked_result("도구 권한 세대가 만료되어 호출할 수 없다")
+
         name = qualified_or_builtin_name
         if name == RENDER_CANVAS_TOOL:
             if not arguments.get("plan_token") and not arguments.get("data"):

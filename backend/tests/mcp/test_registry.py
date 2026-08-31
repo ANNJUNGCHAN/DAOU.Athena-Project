@@ -3,6 +3,9 @@
 
 from __future__ import annotations
 
+import json
+from concurrent.futures import ThreadPoolExecutor
+
 import pytest
 
 from athena_mcp import registry as reg
@@ -254,3 +257,101 @@ def test_resolve_secret_env_does_not_mutate_original_dict(monkeypatch):
     env = {"DART_API_KEY": reg.SECRET_SENTINEL}
     reg.resolve_secret_env("dart", env)
     assert env["DART_API_KEY"] == reg.SECRET_SENTINEL  # 원본은 그대로
+
+
+def test_revision_is_monotonic_and_reload_observes_external_mutation(tmp_path):
+    path = tmp_path / "mcp_servers.json"
+    first = reg.ServerRegistry(path)
+    second = reg.ServerRegistry(path)
+    first.add("one", "npx")
+    assert first.revision == 1
+    second.add("two", "uvx")
+    assert second.revision == 2
+
+    snapshot = first.reload()
+    assert snapshot.revision == 2
+    assert {entry["alias"] for entry in snapshot.servers} == {"one", "two"}
+
+
+def test_concurrent_registry_mutations_do_not_lose_updates(tmp_path):
+    path = tmp_path / "mcp_servers.json"
+    stores = [reg.ServerRegistry(path), reg.ServerRegistry(path)]
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        futures = [
+            pool.submit(stores[0].add, "one", "npx"),
+            pool.submit(stores[1].add, "two", "uvx"),
+        ]
+        for future in futures:
+            future.result()
+
+    reloaded = reg.ServerRegistry(path)
+    assert reloaded.revision == 2
+    assert {entry.alias for entry in reloaded.list()} == {"one", "two"}
+
+
+def test_failed_atomic_registry_write_preserves_disk_and_memory(tmp_path, monkeypatch):
+    path = tmp_path / "mcp_servers.json"
+    store = reg.ServerRegistry(path)
+    store.add("one", "npx")
+    before = path.read_bytes()
+    before_snapshot = store.snapshot()
+
+    def fail_write(_path, _payload):
+        raise OSError("simulated write failure")
+
+    monkeypatch.setattr(reg, "atomic_write_json", fail_write)
+    with pytest.raises(OSError, match="simulated"):
+        store.add("two", "uvx")
+
+    assert path.read_bytes() == before
+    assert store.snapshot() == before_snapshot
+    assert not list(tmp_path.glob("*.tmp"))
+
+
+def test_registry_fingerprint_is_canonical_and_order_independent(tmp_path):
+    first_path = tmp_path / "first.json"
+    second_path = tmp_path / "second.json"
+    created_at = "2026-08-31T00:00:00+00:00"
+    one = {
+        "servers": {
+            "alpha": {
+                "alias": "alpha", "command": "npx", "args": ["a"],
+                "env": {"B": "2", "A": "1"}, "created_at": created_at,
+            },
+            "beta": {
+                "alias": "beta", "command": "uvx", "args": [],
+                "env": {}, "created_at": created_at,
+            },
+        }
+    }
+    two = {
+        "servers": {
+            "beta": {
+                "created_at": created_at, "env": {}, "args": [],
+                "command": "uvx", "alias": "beta",
+            },
+            "alpha": {
+                "created_at": created_at, "env": {"A": "1", "B": "2"},
+                "args": ["a"], "command": "npx", "alias": "alpha",
+            },
+        }
+    }
+    first_path.write_text(json.dumps(one), encoding="utf-8")
+    second_path.write_text(json.dumps(two), encoding="utf-8")
+    assert reg.ServerRegistry(first_path).fingerprint == reg.ServerRegistry(second_path).fingerprint
+
+
+def test_registry_snapshot_redacts_plaintext_env_and_preserves_sentinel_metadata(tmp_path):
+    store = reg.ServerRegistry(tmp_path / "registry.json")
+    store.add(
+        "dart",
+        "npx",
+        env={"PLAIN": "do-not-serialize", "SAFE": reg.SECRET_SENTINEL},
+    )
+    snapshot = store.snapshot()
+    raw = repr(snapshot)
+    assert "do-not-serialize" not in raw
+    assert snapshot.servers[0]["env"] == {
+        "PLAIN": "__ATHENA_REDACTED__",
+        "SAFE": reg.SECRET_SENTINEL,
+    }

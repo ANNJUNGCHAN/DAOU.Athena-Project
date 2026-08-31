@@ -1,0 +1,150 @@
+{
+  "version": "0.147.0",
+  "upstreamTag": "rust-v0.147.0",
+  "upstreamCommit": "be6e8eac029b183056b7e4402879f15d2c85f61b",
+  "binary": {
+    "bytes": 298668336,
+    "sha256": "935a1911ed2556e4ffcec995f4886ac2ac425863ba26fed264df62e30272ad9d"
+  },
+  "stableSchema": {
+    "experimentalApi": false,
+    "referenceSha256": "8c21123972ceb53e787f72b5321e8a56a271d4094e6147a44f51b64199fb4a11",
+    "generatedFileCount": 285,
+    "nameAndBytesSha256": "d9fadbaf9e976d19f512d581461fec94409fe5a7fbbb14f25f8f74e9688e42d2"
+  },
+  "requiredMethods": [
+    "initialize",
+    "thread/start",
+    "thread/resume",
+    "thread/fork",
+    "turn/start",
+    "turn/interrupt",
+    "config/read",
+    "mcpServerStatus/list"
+  ],
+  "stableRules": {
+    "wireJsonrpcField": false,
+    "threadResumeFields": ["threadId"],
+    "threadForkOptionalFields": ["lastTurnId"],
+    "notificationDiagnosticFields": ["emittedAtMs"],
+    "mcpPluginId": false
+  },
+  "requests": {
+    "initialize": {
+      "id": 1,
+      "method": "initialize",
+      "params": {
+        "clientInfo": { "name": "athena", "title": "Athena", "version": "<app-version>" },
+        "capabilities": { "experimentalApi": false }
+      }
+    },
+    "threadStart": {
+      "id": 10,
+      "method": "thread/start",
+      "params": {
+        "model": "<selected-model>",
+        "cwd": "<absolute-workspace-path>",
+        "approvalPolicy": "never",
+        "sandbox": "read-only",
+        "developerInstructions": "<Athena persistent developer instructions>",
+        "config": { "model_reasoning_effort": "<selected-effort>" },
+        "serviceName": "athena"
+      }
+    },
+    "threadResume": {
+      "id": 11,
+      "method": "thread/resume",
+      "params": { "threadId": "<stored-thread-id>" }
+    },
+    "threadFork": {
+      "id": 12,
+      "method": "thread/fork",
+      "params": { "threadId": "<stored-thread-id>", "lastTurnId": "<optional-last-turn-id>" }
+    },
+    "firstTurn": {
+      "id": 13,
+      "method": "turn/start",
+      "params": {
+        "threadId": "<stored-thread-id>",
+        "clientUserMessageId": "<Athena-turn-id>",
+        "input": [{ "type": "text", "text": "<turn prompt>" }],
+        "model": "<selected-model>",
+        "effort": "<selected-effort>",
+        "cwd": "<absolute-workspace-path>",
+        "approvalPolicy": "never",
+        "sandboxPolicy": { "type": "readOnly", "networkAccess": false }
+      }
+    },
+    "turnInterrupt": {
+      "id": 14,
+      "method": "turn/interrupt",
+      "params": { "threadId": "<stored-thread-id>", "turnId": "<active-turn-id>" }
+    },
+    "configRead": {
+      "id": 15,
+      "method": "config/read",
+      "params": { "cwd": "<absolute-workspace-path>", "includeLayers": true }
+    },
+    "mcpInventory": {
+      "id": 16,
+      "method": "mcpServerStatus/list",
+      "params": { "threadId": "<stored-thread-id>", "detail": "full", "cursor": null, "limit": 100 }
+    }
+  },
+  "responses": {
+    "initialize": {
+      "id": 1,
+      "result": {
+        "codexHome": "<private-runtime-home>",
+        "platformFamily": "windows",
+        "platformOs": "windows",
+        "userAgent": "codex-cli/0.147.0"
+      }
+    },
+    "threadStart": {
+      "id": 10,
+      "result": {
+        "approvalPolicy": "never",
+        "approvalsReviewer": "user",
+        "cwd": "<absolute-workspace-path>",
+        "model": "<selected-model>",
+        "modelProvider": "openai",
+        "sandbox": "read-only",
+        "thread": { "id": "<stored-thread-id>" }
+      }
+    },
+    "threadResume": {
+      "id": 11,
+      "result": {
+        "approvalPolicy": "never",
+        "approvalsReviewer": "user",
+        "cwd": "<absolute-workspace-path>",
+        "model": "<selected-model>",
+        "modelProvider": "openai",
+        "sandbox": "read-only",
+        "thread": { "id": "<stored-thread-id>" }
+      }
+    },
+    "threadFork": {
+      "id": 12,
+      "result": {
+        "approvalPolicy": "never",
+        "approvalsReviewer": "user",
+        "cwd": "<absolute-workspace-path>",
+        "model": "<selected-model>",
+        "modelProvider": "openai",
+        "sandbox": "read-only",
+        "thread": { "id": "<forked-thread-id>" }
+      }
+    },
+    "turnStart": { "id": 13, "result": { "turn": { "id": "<turn-id>", "status": "inProgress" } } },
+    "turnInterrupt": { "id": 14, "result": {} },
+    "configRead": { "id": 15, "result": { "config": {}, "origins": {}, "layers": [] } },
+    "mcpInventory": { "id": 16, "result": { "data": [], "nextCursor": null } }
+  },
+  "notifications": {
+    "threadStarted": { "method": "thread/started", "params": { "thread": { "id": "<stored-thread-id>" } } },
+    "turnStarted": { "method": "turn/started", "params": { "threadId": "<stored-thread-id>", "turn": { "id": "<turn-id>" } } },
+    "turnCompleted": { "method": "turn/completed", "params": { "threadId": "<stored-thread-id>", "turn": { "id": "<turn-id>", "status": "completed" } }, "emittedAtMs": 0 }
+  }
+}

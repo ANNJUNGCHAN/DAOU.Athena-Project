@@ -377,6 +377,42 @@ function purgePendingChatMessages() {
   return getChatHistoryStore().purgePendingMessages();
 }
 
+// 프로바이더 런타임 전용 경로(ATHENA_PROVIDER_RUNTIME=1) — 위 saveChatMessage는
+// 설계상 절대 throw하지 않는 fire-and-forget이라 "성공까지 기다렸다가 실패면 거절"
+// 하는 commit barrier 계약을 만족할 수 없다. 그 계약이 필요한 호출부(app/main.js의
+// commitSuccess)를 위해 별도 함수로 둔다.
+function startChatMessageSave({ conversationId, text, role }, { onSaveFailed, mdlog } = {}) {
+  const messageId = crypto.randomUUID();
+  if (!canAttemptSave()) return { messageId, attempted: false, completion: Promise.resolve() };
+
+  const occurredAt = new Date().toISOString();
+  const completion = postChatMessage({ conversationId, role, text, messageId, occurredAt })
+    .then((result) => {
+      if (result.ok) return;
+      if (mdlog) mdlog(`history-sink: 저장 실패 role=${role} status=${result.status}`);
+      if (onSaveFailed) onSaveFailed({ messageId, role });
+      // 저장 실패 시 재확인 허용(계획 §2(g)) — 다음 시도가 최신 상태를 반영하게
+      // fire-and-forget으로 다시 조회한다(이 실패 자체를 막지 않는다).
+      refreshBrainReady({ mdlog }).catch(() => {});
+      throw new Error(`history persistence failed with status ${result.status}`);
+    })
+    .catch((err) => {
+      if (!String((err && err.message) || err).startsWith('history persistence failed with status')) {
+        if (mdlog) mdlog(`history-sink: 저장 예외 role=${role} — ${String((err && err.message) || err)}`);
+        if (onSaveFailed) onSaveFailed({ messageId, role });
+        refreshBrainReady({ mdlog }).catch(() => {});
+      }
+      throw err;
+    });
+  return { messageId, attempted: true, completion };
+}
+
+async function saveChatMessageAwaited(input, options) {
+  const operation = startChatMessageSave(input, options);
+  await operation.completion;
+  return operation.messageId;
+}
+
 module.exports = {
   getBackendUrl,
   getBearerToken,
@@ -391,6 +427,7 @@ module.exports = {
   flushPendingChatMessages,
   purgePendingChatMessages,
   MAX_CHAT_MESSAGE_CHARS,
+  saveChatMessageAwaited,
   // 테스트 전용 — 모듈 스코프 캐시를 초기화한다(테스트 간 상태 누수 방지).
   _resetBrainReadyCacheForTest: () => { brainReadyCache = null; },
   _resetForTest: () => {

@@ -216,8 +216,11 @@ function buildLiveSystemPrompt() {
 
 // 상주 세션의 턴 페이로드 — 질문만. 레거시와 같은 '사용자 질문:' 프레이밍을
 // 유지해 규칙 문구("아래 사용자 질문에 답하라")가 두 경로 모두에서 성립한다.
-function buildLiveTurnPrompt(query) {
-  return `사용자 질문:\n${String(query)}`;
+// 프로바이더 런타임은 { userText } 객체로 부르므로(app/main.js) 문자열과 객체를
+// 모두 받는다 — 문자열 호출자는 이전과 바이트 동일하다.
+function buildLiveTurnPrompt(input) {
+  const userText = input && typeof input === 'object' ? input.userText : input;
+  return `사용자 질문:\n${String(userText == null ? '' : userText)}`;
 }
 
 // 콜드 스폰 경로(킬 스위치 ATHENA_PERSISTENT_CHAT=0) — 분리 전 출력과 바이트

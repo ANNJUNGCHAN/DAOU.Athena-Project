@@ -1553,26 +1553,46 @@
 
     let calling = false;
     let answer = null;
+    const clientSubmitId = window.crypto.randomUUID();
+    const rendererSubmittedAt = performance.now();
+    window.AthenaProviderFirstPaint.registerSubmit({ clientSubmitId, rendererSubmittedAt, origin: 'orb' });
+    const claimProviderVisible = (meta, node) => {
+      if (!meta || meta.clientSubmitId !== clientSubmitId) return false;
+      return window.AthenaProviderFirstPaint.claimFirstVisible({
+        clientSubmitId,
+        turnId: meta.turnId,
+        sequence: meta.sequence,
+        origin: 'orb',
+        owner: 'orb',
+        node,
+        rendererReceivedAt: meta.rendererReceivedAt,
+      });
+    };
     // board-33③④ 선행 — answer가 아직 없으면(텍스트 델타보다 카드가 먼저 오는
     // 경로, main.js 주석 "카드 먼저, 텍스트는 나중" 참조) 카드를 잠깐 들고
     // 있다가 answer가 생기는 순간 이어붙인다.
     const pendingCanvasCards = [];
     const handledCanvasTypes = new Set();
     const unsubCanvas = window.athena.on('athena:orb-canvas-result', (r) => {
+      const rendererReceivedAt = performance.now();
       const el = buildOrbCanvasCard(r);
       if (!el || !r.envelope) return;
       handledCanvasTypes.add(r.envelope.canvas_type);
       if (answer) {
         answer.line.appendChild(el);
+        claimProviderVisible({ ...r, rendererReceivedAt }, el);
         scrollChatToBottom();
         requestPanelHeight();
       } else {
+        el.__athenaProviderPaintMeta = { ...r, rendererReceivedAt };
         pendingCanvasCards.push(el);
       }
     });
     const unsubStep = window.athena.on('athena:live-tool-step', (step) => {
+      const rendererReceivedAt = performance.now();
       if (!calling) { calling = true; setChatDot('calling'); }
       updateProgressStep(card, step);
+      claimProviderVisible({ ...step, rendererReceivedAt }, card);
     });
 
     // 추론 미리보기(2026-08-26 어드버서리얼 리뷰 결함 #2) — chat.js의
@@ -1609,7 +1629,9 @@
       requestPanelHeight();
     });
 
-    const unsubDelta = window.athena.on('athena:live-text-delta', ({ text: delta } = {}) => {
+    const unsubDelta = window.athena.on('athena:live-text-delta', (payload = {}) => {
+      const rendererReceivedAt = performance.now();
+      const { text: delta } = payload;
       if (!delta) return;
       if (!calling) { calling = true; setChatDot('calling'); }
       clearThinkingPreview(); // 답변이 시작됐다 — 추론 미리보기는 자리를 비켜준다
@@ -1619,11 +1641,14 @@
       }
       answer.textEl.textContent += delta;
       scrollChatToBottom();
+      claimProviderVisible({ ...payload, rendererReceivedAt }, answer.textEl);
     });
 
     let result;
     try {
-      result = await window.athena.invoke('athena:orb-chat-submit', { query: text });
+      result = await window.athena.invoke('athena:orb-chat-submit', {
+        query: text, clientSubmitId, rendererSubmittedAt,
+      });
     } catch (err) {
       result = { ok: false, error: String((err && err.message) || err) };
     } finally {
@@ -1651,7 +1676,11 @@
       answer = renderChatAnswer(finalText);
     }
     // answer가 없던 동안 도착한 카드(카드 먼저 오는 경로)를 여기서 이어붙인다.
-    for (const el of pendingCanvasCards) answer.line.appendChild(el);
+    for (const el of pendingCanvasCards) {
+      answer.line.appendChild(el);
+      claimProviderVisible(el.__athenaProviderPaintMeta, el);
+      delete el.__athenaProviderPaintMeta;
+    }
     // board-33③④에서 실제로 축약 카드를 그린 canvas_type은 이미 카드가 붙었다 —
     // 그 종류는 "표·차트는 여기서 다시 그리지 않는다"는 옛 안내를 반복하지
     // 않는다. 아직 오브 렌더러가 없는 나머지 canvas_type(예: reader/stream)만

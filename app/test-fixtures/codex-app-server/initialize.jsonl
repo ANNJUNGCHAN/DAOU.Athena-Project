@@ -1,0 +1,3 @@
+{"id":1,"method":"initialize","params":{"clientInfo":{"name":"athena","title":"Athena","version":"0.1.0"},"capabilities":{"experimentalApi":false}}}
+{"id":1,"result":{"userAgent":"codex-cli/0.147.0"}}
+{"method":"initialized"}

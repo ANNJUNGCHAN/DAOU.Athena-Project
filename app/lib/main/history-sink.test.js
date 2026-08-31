@@ -299,6 +299,38 @@ test('saveChatMessage: 성공하면 messageId를 즉시 반환하고 onSaveFaile
   });
 });
 
+test('saveChatMessageAwaited: 성공 응답까지 기다리고 실패는 commit barrier로 거부한다', async () => {
+  await withEnv({ ATHENA_LOCAL_BEARER_TOKEN: 'tok' }, async () => {
+    const historySink = freshHistorySink();
+    const prevFetch = global.fetch;
+    let postOk = true;
+    // 성공 응답은 ACK 계약(source_id === `chat:${messageId}`)까지 만족해야 한다 —
+    // postChatMessage가 2xx만으로는 성공으로 치지 않는다.
+    global.fetch = async (url, opts) => {
+      if (url.endsWith('/api/v1/brain/status')) return { ok: true, json: async () => ({ ready: true }) };
+      if (!postOk) return { ok: false, status: 503 };
+      const body = JSON.parse(opts.body);
+      return { ok: true, status: 200, json: async () => ({ source_id: `chat:${body.message_id}` }) };
+    };
+    try {
+      await historySink.refreshBrainReady({});
+      const messageId = await historySink.saveChatMessageAwaited(
+        { conversationId: 'conv-1', text: '완료', role: 'assistant' },
+      );
+      assert.equal(typeof messageId, 'string');
+      postOk = false;
+      await assert.rejects(
+        historySink.saveChatMessageAwaited(
+          { conversationId: 'conv-1', text: '실패', role: 'assistant' },
+        ),
+        /history persistence failed/,
+      );
+    } finally {
+      global.fetch = prevFetch;
+    }
+  });
+});
+
 test('saveChatMessage: collectChat=false면 토큰·브레인 준비가 멀쩡해도 저장 시도 자체를 안 한다(원문 미적재)', async () => {
   await withEnv({ ATHENA_LOCAL_BEARER_TOKEN: 'tok' }, async () => {
     await withMockPrefs(false, async () => {

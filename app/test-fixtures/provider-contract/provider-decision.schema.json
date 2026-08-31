@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "athena-provider-contract-decision-v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "decision", "providers", "failedGates", "rolloutAuthorization"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "decision": { "enum": ["GO", "CLAUDE_ONLY", "NO_GO"] },
+    "providers": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["claude", "codex"],
+      "properties": {
+        "claude": { "$ref": "#/$defs/provider" },
+        "codex": { "$ref": "#/$defs/provider" }
+      }
+    },
+    "failedGates": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+    "rolloutAuthorization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["productionRolloutAllowed", "scope", "gates", "failedGates"],
+      "properties": {
+        "productionRolloutAllowed": { "type": "boolean" },
+        "scope": { "type": "string", "minLength": 1 },
+        "gates": { "type": "object", "additionalProperties": { "type": "boolean" } },
+        "failedGates": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true }
+      }
+    }
+  },
+  "$defs": {
+    "provider": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "version", "sha256", "gates"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "version": { "type": "string", "minLength": 1 },
+        "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "gates": { "type": "object", "additionalProperties": { "type": "boolean" } }
+      }
+    }
+  }
+}

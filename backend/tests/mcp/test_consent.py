@@ -3,6 +3,9 @@
 
 from __future__ import annotations
 
+import json
+from concurrent.futures import ThreadPoolExecutor
+
 import pytest
 
 from athena_mcp import consent
@@ -172,6 +175,21 @@ def test_disallow_tool_on_never_registered_server_does_not_raise(store):
     assert store.is_tool_allowed("never-registered", "search_disclosure") is False
 
 
+def test_stale_store_disallow_uses_fresh_disk_state(tmp_path):
+    path = tmp_path / "consent.json"
+    stale = consent.ConsentStore(path)
+    writer = consent.ConsentStore(path)
+    writer.request_consent("dart", "npx", [], {})
+    writer.approve("dart", approved_tools={"search_disclosure"})
+
+    stale.disallow_tool("dart", "search_disclosure")
+
+    reloaded = consent.ConsentStore(path)
+    assert reloaded.is_server_approved("dart") is True
+    assert reloaded.is_tool_allowed("dart", "search_disclosure") is False
+    assert reloaded.revision == 3
+
+
 def test_disallowed_tool_rejected_at_dispatch_gate_afterwards(store):
     store.request_consent("dart", "npx", ["-y", "x"], {})
     store.approve("dart", approved_tools={"search_disclosure"})
@@ -191,6 +209,111 @@ def test_consent_persists_across_reload(tmp_path):
     store2 = consent.ConsentStore(path=path)
     assert store2.is_server_approved("dart") is True
     assert store2.is_tool_allowed("dart", "search_disclosure") is True
+
+
+def test_consent_revision_is_monotonic_and_reload_observes_external_mutation(tmp_path):
+    path = tmp_path / "consent.json"
+    first = consent.ConsentStore(path)
+    second = consent.ConsentStore(path)
+    first.request_consent("one", "npx", [], {})
+    second.request_consent("two", "uvx", [], {})
+
+    snapshot = first.reload()
+    assert snapshot.revision == 2
+    assert {record["alias"] for record in snapshot.records} == {"one", "two"}
+
+
+def test_concurrent_consent_mutations_do_not_lose_updates(tmp_path):
+    path = tmp_path / "consent.json"
+    stores = [consent.ConsentStore(path), consent.ConsentStore(path)]
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        futures = [
+            pool.submit(stores[0].request_consent, "one", "npx", [], {}),
+            pool.submit(stores[1].request_consent, "two", "uvx", [], {}),
+        ]
+        for future in futures:
+            future.result()
+
+    reloaded = consent.ConsentStore(path)
+    assert reloaded.revision == 2
+    assert reloaded.get("one") is not None
+    assert reloaded.get("two") is not None
+
+
+def test_failed_atomic_consent_write_preserves_disk_and_memory(tmp_path, monkeypatch):
+    path = tmp_path / "consent.json"
+    store = consent.ConsentStore(path)
+    store.request_consent("one", "npx", [], {})
+    before = path.read_bytes()
+    before_snapshot = store.snapshot()
+
+    def fail_write(_path, _payload):
+        raise OSError("simulated write failure")
+
+    monkeypatch.setattr(consent, "atomic_write_json", fail_write)
+    with pytest.raises(OSError, match="simulated"):
+        store.request_consent("two", "uvx", [], {})
+
+    assert path.read_bytes() == before
+    assert store.snapshot() == before_snapshot
+    assert not list(tmp_path.glob("*.tmp"))
+
+
+def test_consent_fingerprint_is_canonical_and_order_independent(tmp_path):
+    first_path = tmp_path / "first.json"
+    second_path = tmp_path / "second.json"
+    alpha = {
+        "alias": "alpha", "full_command_text": "npx a", "risk_warnings": [],
+        "approved": True, "approved_at": None, "approved_tools": ["z", "a"],
+    }
+    beta = {
+        "alias": "beta", "full_command_text": "uvx b", "risk_warnings": [],
+        "approved": False, "approved_at": None, "approved_tools": [],
+    }
+    first_path.write_text(json.dumps({"alpha": alpha, "beta": beta}), encoding="utf-8")
+    second_path.write_text(json.dumps({"beta": beta, "alpha": alpha}), encoding="utf-8")
+    first_fingerprint = consent.ConsentStore(first_path).fingerprint
+    second_fingerprint = consent.ConsentStore(second_path).fingerprint
+    assert first_fingerprint == second_fingerprint
+
+
+def test_consent_metadata_keeps_legacy_alias_lookup_shape(tmp_path):
+    path = tmp_path / "consent.json"
+    store = consent.ConsentStore(path)
+    store.request_consent("dart", "npx", [], {})
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    assert raw["dart"]["alias"] == "dart"
+    assert raw["$athena"]["revision"] == 1
+
+
+def test_stale_store_rename_uses_fresh_disk_state(tmp_path):
+    path = tmp_path / "consent.json"
+    stale = consent.ConsentStore(path)
+    writer = consent.ConsentStore(path)
+    writer.request_consent("old", "npx", [], {})
+    writer.approve("old", approved_tools={"search"})
+
+    stale.rename("old", "new")
+
+    reloaded = consent.ConsentStore(path)
+    assert reloaded.get("old") is None
+    renamed = reloaded.get("new")
+    assert renamed is not None
+    assert renamed.alias == "new"
+    assert renamed.approved_tools == {"search"}
+    assert reloaded.revision == 3
+
+
+def test_stale_idempotent_decision_refreshes_memory_without_revision_bump(tmp_path):
+    path = tmp_path / "consent.json"
+    stale = consent.ConsentStore(path)
+    writer = consent.ConsentStore(path)
+    writer.request_consent("new", "npx", [], {})
+
+    stale.rename("old", "new")
+
+    assert stale.get("new") is not None
+    assert stale.revision == 1
 
 
 # ---------------------------------------------------------------------------
