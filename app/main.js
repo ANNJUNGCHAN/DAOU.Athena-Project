@@ -773,6 +773,9 @@ const chartRealtime = require('./lib/main/chart-realtime');
 const orderbookRealtime = require('./lib/main/orderbook-realtime');
 const integratedCardRealtime = require('./lib/main/integrated-card-realtime');
 const chartSeries = require('./lib/main/chart-series');
+// 백테스트 REST 프록시(P4, backtest-mode-plan.md §8.1) — routineHttp와 같은 원칙이지만
+// main.js 밖 순수 함수라 단위 테스트(backtest-bridge.test.js)를 직접 붙일 수 있다.
+const backtestBridge = require('./lib/main/backtest-bridge');
 
 let chartRealtimeFeed = null;
 let chartRealtimeRegistrar = null;
@@ -1191,6 +1194,46 @@ ipcMain.handle('athena:nudge-guard-set', async (_e, body) => {
   } catch (e) {
     return { ok: false, error: String((e && e.message) || e) };
   }
+});
+
+// 백테스트 REST 프록시(P4, backtest-mode-plan.md §8.2) — routineHttp와 같은 원칙(렌더러는
+// 백엔드에 직접 붙지 않는다). 별도 파일(lib/main/backtest-bridge.js)로 뺀 이유는 단위 테스트
+// (backtest-bridge.test.js) — routineHttp는 main.js 안에 있어 직접 테스트하지 못했다.
+ipcMain.handle('athena:backtest-presets', async () => {
+  try { return await backtestBridge.fetchPresets({ backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch }); }
+  catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
+});
+ipcMain.handle('athena:backtest-plan', async (_e, body = {}) => {
+  try { return await backtestBridge.planBacktest({ backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch, ...body }); }
+  catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
+});
+ipcMain.handle('athena:backtest-run', async (_e, body = {}) => {
+  try { return await backtestBridge.runBacktest({ backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch, ...body }); }
+  catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
+});
+// 백필 잡 상태(수집 승인 카드가 진행률을 폴링한다).
+ipcMain.handle('athena:backtest-status', async (_e, { job_id } = {}) => {
+  try { return await backtestBridge.fetchJobStatus({ backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch, job_id }); }
+  catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
+});
+// 실행 상태+지표+자산곡선+stdout — running 상태가 1초 간격으로 이 채널을 폴링한다.
+ipcMain.handle('athena:backtest-result', async (_e, { run_id } = {}) => {
+  try { return await backtestBridge.fetchRunResult({ backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch, run_id }); }
+  catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
+});
+ipcMain.handle('athena:backtest-trades', async (_e, { run_id } = {}) => {
+  try { return await backtestBridge.fetchRunTrades({ backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch, run_id }); }
+  catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
+});
+ipcMain.handle('athena:backtest-runs', async () => {
+  try { return await backtestBridge.fetchRuns({ backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch }); }
+  catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
+});
+// 사람 클릭 전용 경로(계획서 §7.6/§9와 같은 원칙) — 쿼터를 태우는 백필은 모델 툴에 없다.
+// 캔버스의 [수집하고 실행] 버튼 클릭에서만 이 IPC를 부른다.
+ipcMain.handle('athena:backtest-backfill', async (_e, body = {}) => {
+  try { return await backtestBridge.backfillBacktest({ backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch, ...body }); }
+  catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
 });
 
 // ---------- OS 스냅 이벤트 정착 (2026-08-18 승급 — qa-win-arrow.json 실측 근거) ----------

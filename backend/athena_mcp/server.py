@@ -32,6 +32,7 @@ import mcp.types as types
 from mcp.server.lowlevel import Server
 
 from athena_mcp import (
+    backtest_tools,
     brain_tools,
     canvas_data,
     nudge_guard_tools,
@@ -397,6 +398,13 @@ class AthenaGateway:
                 "nudge-guard", nudge_guard_tools.NUDGE_GUARD_TOOL, success=not result.isError
             )
             return result
+        if name == backtest_tools.BACKTEST_TOOL:
+            # 같은 빌트인 우선순위·같은 감사 최소 원칙(routine_tools와 동형).
+            result = await backtest_tools.dispatch(arguments, self.selector_http_client)
+            self._audit_log("backtest").record(
+                "backtest", backtest_tools.BACKTEST_TOOL, success=not result.isError
+            )
+            return result
 
         try:
             target = self.aggregator.resolve(name)
@@ -740,6 +748,10 @@ def _builtin_tool_defs() -> list[types.Tool]:
         # 말걸기 가드 설정 제안·조회 툴(F4) — routine_tools와 같은 범주.
         # propose/get만 — 저장은 사람 전용(nudge_guard_tools.py 참고).
         *nudge_guard_tools.builtin_tool_defs(),
+        # 백테스트 조회·검증·실행 툴(P4) — routine_tools와 같은 범주. backfill·activate는
+        # 없다 — 쿼터를 태우거나 사람 검토가 필요한 상태 변경은 사람 전용
+        # (backtest_tools.py 참고).
+        *backtest_tools.builtin_tool_defs(),
     ]
 
 

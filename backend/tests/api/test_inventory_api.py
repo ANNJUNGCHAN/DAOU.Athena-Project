@@ -143,7 +143,11 @@ def test_inventory_partition_and_static_openapi_coverage() -> None:
     # 348 = 347 + 실패한 brain startup ingestion을 다시 시작하는 retry endpoint 1개.
     # (pause/resume/ack/catchup_fire/runs)·예약 브리핑(briefing_budget/
     # briefing_result)·계측(engagement)·말걸기 가드(nudge_guard get/post).
-    assert len(operation_ids) == 348
+    # 359 = 348 + 백테스트 라우트(P4) GET/POST 11개: presets·indicators·validate·
+    # data/coverage·data/plan·data/backfill·jobs/{id}·runs(GET/POST)·
+    # runs/{id}·runs/{id}/trades. DELETE /runs/{id}는 이 필터(get/post만)에
+    # 안 잡혀 카운트에 없다.
+    assert len(operation_ids) == 359
     assert "canvas_chart_page" in operation_ids
     assert "canvas_series_page" in operation_ids
     assert "get_internal_oauth_status" in operation_ids
