@@ -34,11 +34,14 @@ function renderConnectionRow(connection) {
   pair.appendChild(target);
   row.appendChild(pair);
 
-  // 상대 순위 배지 — backend가 surprise_score를 안 준다면(구버전) 렌더하지
-  // 않는다(스텝5-2와 동일한 하위 호환 방어).
-  if (Number.isFinite(connection.surprise_score)) {
+  // 상대 순위 배지 — 공통 패널의 "왜 숨은 연관인가" 점수와 **같은 스케일**을 쓴다
+  // (controller.js relativeScoreText). 같은 연결을 한 화면은 0.85로, 다른 화면은
+  // 8.5로 부르면 두 숫자가 다른 값처럼 읽힌다. 0은 "이 목록에서 가장 덜 놀랍다"는
+  // 뜻이라 배지를 안 붙인다 — 숨은 연관이라 부르면서 0을 적으면 스스로를 반박한다.
+  // backend가 surprise_score를 안 주는 구버전에서도 마찬가지로 생략한다.
+  if (Number.isFinite(connection.surprise_score) && connection.surprise_score > 0) {
     const score = el('span', 'hidden-link-score');
-    score.textContent = `상대 ${connection.surprise_score.toFixed(2)}`;
+    score.textContent = `상대 ${(connection.surprise_score * 10).toFixed(1)}`;
     row.appendChild(score);
   }
 

@@ -103,19 +103,19 @@ test('graph cluster and tier structures are flat ledger rows while controls and 
 test('horizontal unnamed-cluster warnings win the divider cascade without restoring a card shell', () => {
   const horizontalDivider = ruleBody(
     canvasCss,
-    '#graphSummaryBody:has(#graphPanel:not([hidden])) .theme-cluster-card + .theme-cluster-card',
+    '#canvasRegion:has(> .graph-panel:not([hidden])) .theme-cluster-card + .theme-cluster-card',
   );
   assert.match(horizontalDivider, /border-inline-start:\s*1px solid var\(--color-k-line\)/);
 
   const horizontalWarn = ruleBody(
     canvasCss,
-    '#graphSummaryBody:has(#graphPanel:not([hidden])) .theme-cluster-card + .theme-cluster-card.is-unnamed-warn',
+    '#canvasRegion:has(> .graph-panel:not([hidden])) .theme-cluster-card + .theme-cluster-card.is-unnamed-warn',
   );
   assert.match(horizontalWarn, /border-inline-start-color:\s*rgba\(255, 152, 56, 0\.55\)/);
 
   const horizontalWarnBadge = ruleBody(
     canvasCss,
-    '#graphSummaryBody:has(#graphPanel:not([hidden])) .theme-cluster-card.is-unnamed-warn .theme-cluster-unnamed-badge',
+    '#canvasRegion:has(> .graph-panel:not([hidden])) .theme-cluster-card.is-unnamed-warn .theme-cluster-unnamed-badge',
   );
   assert.match(horizontalWarnBadge, /color:\s*var\(--color-warn\)/);
 

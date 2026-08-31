@@ -11,7 +11,10 @@ const layout = require('./cluster-layout');
 const render = require('./render');
 const themeClusters = require('./theme-clusters');
 const prefs = require('./graph-mode-prefs');
-const { createGraphModeController, computeGraphHeaderMeta, formatEventDate, buildTimelineRows } = require('./controller');
+const {
+  createGraphModeController, computeGraphHeaderMeta, formatEventDate, buildTimelineRows,
+  countRelationEvents, hiddenLinkReasonClauses, relativeScoreText, topSurprising,
+} = require('./controller');
 const { fakeNode, installFakeDocument, uninstallFakeDocument } = require('./fake-dom');
 
 function payload(revision) {
@@ -54,6 +57,7 @@ function setup(options) {
     chatHead: fakeNode('div'),
     graphHeaderMeta: fakeNode('span'),
     mapGuide: fakeNode('div'),
+    graphSettings: fakeNode('div'),
   };
   elements.kiumi.dataset = {};
   elements.canvasRegion.dataset = {};
@@ -76,6 +80,9 @@ function setup(options) {
     getSurprisingConnections: opts.getSurprisingConnections,
     getProfileSummaryEntries: opts.getProfileSummaryEntries,
     fetchEntityTimeline: opts.fetchEntityTimeline,
+    onEnterSettings: opts.onEnterSettings,
+    filters: opts.filters,
+    getFilters: opts.getFilters,
   });
   // 대부분의 테스트는 브레인이 켜져 있다고 가정한다 — 꺼진 채 시작하고 싶은
   // 테스트만 opts.available: false를 넘긴다.
@@ -667,6 +674,310 @@ test('관계 목록 — 선택 엔티티가 어느 surprising-connections에도 
   assert.equal(elements.panel.querySelector('.panel-relations'), null);
 });
 
+// ── 필터가 화면을 비웠을 때(보드 07 정직성 상태) ─────────────────────────────
+
+const filtersModule = require('./graph-filters');
+
+test('필터에 맞는 노드가 없으면 빈 화면 대신 무엇이 걸렸는지 적는다', async () => {
+  const { controller, elements } = setup({
+    payload: payloadTwoClusters,
+    filters: filtersModule,
+    // 이 그래프의 최대 차수는 1이라 "연결 5개 이상"은 전부 걷어낸다.
+    getFilters: () => ({ windowDays: 90, minDegree: 5, summarySort: 'reinforcement' }),
+  });
+  await controller.toggle();
+  const text = elements.graphBody.textContent;
+  assert.match(text, /연결 5개 이상/, '어느 조건이 걸렸는지 적는다');
+  assert.match(text, /완화해 보세요/, '되돌릴 길을 준다');
+  assert.equal(elements.graphBody.querySelectorAll('.graph-node').length, 0);
+});
+
+test('필터가 선택 노드를 걷어내면 패널도 함께 닫힌다(지도와 패널이 다른 그래프를 말하지 않는다)', async () => {
+  let minDegree = 0;
+  const { controller, elements } = setup({
+    payload: payloadTwoClusters, withPanel: true,
+    filters: filtersModule,
+    getFilters: () => ({ windowDays: 90, minDegree, summarySort: 'reinforcement' }),
+  });
+  await controller.toggle();
+  controller.selectEntity('e:a', { entityId: 'e:a', source: 'node', name: '반도체' });
+  assert.equal(elements.panel.hidden, false);
+  minDegree = 5; // 전부 걷어내는 조건.
+  await controller.refreshFiltered();
+  assert.equal(elements.panel.hidden, true);
+  assert.equal(controller.state.selectedEntityId, null);
+});
+
+// ── 보드 05 수집·노출 서브뷰 ─────────────────────────────────────────────────
+
+test('수집·노출로 전환하면 그 표면만 보이고 요약 표·지도는 숨는다(3중 배타)', async () => {
+  const { controller, elements } = setup({});
+  await controller.toggle(); // 그래프 기능 진입 — 기본 서브뷰는 요약.
+  assert.equal(elements.summaryTable.hidden, false);
+  await controller.setSurface(store.SURFACE_SETTINGS);
+  assert.equal(elements.graphSettings.hidden, false);
+  assert.equal(elements.summaryTable.hidden, true);
+  assert.equal(elements.graph.hidden, true);
+});
+
+test('수집·노출 표면은 그래프 기능 밖에서는 항상 숨는다', async () => {
+  const { controller, elements } = setup({});
+  await controller.toggle();
+  await controller.setSurface(store.SURFACE_SETTINGS);
+  await controller.setView(store.VIEW_SUMMARY); // 대화 모드로 나간다.
+  assert.equal(elements.graphSettings.hidden, true);
+});
+
+test('수집·노출로 가면 노드 패널이 접히고, 돌아오면 다시 뜬다(선택은 안 지운다)', async () => {
+  const { controller, elements } = setup({ withPanel: true });
+  await controller.toggle();
+  controller.selectEntity('e:a', { entityId: 'e:a', source: 'node', name: '반도체' });
+  assert.equal(elements.panel.hidden, false);
+  await controller.setSurface(store.SURFACE_SETTINGS);
+  assert.equal(elements.panel.hidden, true, '설정 화면 옆에 노드 패널이 남지 않는다');
+  assert.equal(controller.state.selectedEntityId, 'e:a', '선택 자체는 살아 있다');
+  await controller.setSurface(store.SURFACE_SUMMARY);
+  assert.equal(elements.panel.hidden, false, '돌아오면 같은 선택이 다시 보인다');
+});
+
+test('수집·노출 진입 훅은 들어올 때만 불린다(설정 오버레이에서 바꾸고 돌아올 수 있다)', async () => {
+  let entered = 0;
+  const { controller } = setup({ onEnterSettings: () => { entered += 1; } });
+  await controller.toggle();
+  assert.equal(entered, 0);
+  await controller.setSurface(store.SURFACE_SETTINGS);
+  assert.equal(entered, 1);
+  await controller.setSurface(store.SURFACE_SETTINGS); // 같은 값 — 전이가 아니다.
+  assert.equal(entered, 1);
+  await controller.setSurface(store.SURFACE_SUMMARY);
+  await controller.setSurface(store.SURFACE_SETTINGS);
+  assert.equal(entered, 2);
+});
+
+test('수집·노출로 갈 때는 지도를 다시 그리지 않는다(불필요한 왕복 없음)', async () => {
+  let fetches = 0;
+  const { controller } = setup({
+    fetchClusterMap: async () => { fetches += 1; return payload(7); },
+  });
+  await controller.toggle();
+  const before = fetches;
+  await controller.setSurface(store.SURFACE_SETTINGS);
+  assert.equal(fetches, before, '설정 탭은 군집 지도를 요청하지 않는다');
+});
+
+// ── 보드 04 패널 — 관계 목록 전체 · 근거 블록 · 헤더 부제 ─────────────────────
+
+// edge_details가 실린 페이로드 — cluster-map 응답(ClusterMapResponse)이 실제로
+// 주는 모양 그대로다. 관계 목록은 이것을 조인해 만든다(새 왕복 없음).
+function payloadWithDetails(revision) {
+  return {
+    revision,
+    nodes: [
+      { entity_id: 'e:a', name: '한미반도체', kind: 'security', cluster: 0, degree: 3 },
+      { entity_id: 'e:b', name: 'SK하이닉스', kind: 'security', cluster: 0, degree: 2 },
+      { entity_id: 'e:c', name: '반도체 대형주', kind: 'theme', cluster: 0, degree: 2 },
+      { entity_id: 'e:d', name: '고배당주', kind: 'theme', cluster: 1, degree: 2 },
+    ],
+    edges: [['e:a', 'e:b'], ['e:a', 'e:c'], ['e:a', 'e:d']],
+    edge_details: [
+      { source: 'e:a', target: 'e:b', kinds: ['interested_in'], tier: 'conversational', confidence: 'EXTRACTED' },
+      { source: 'e:a', target: 'e:c', kinds: ['belongs_to'], tier: 'conversational', confidence: 'INFERRED' },
+      { source: 'e:a', target: 'e:d', kinds: ['relates_to'], tier: 'conversational', confidence: 'INFERRED' },
+    ],
+  };
+}
+
+function selectNodeInPanel(elements, entityId) {
+  const nodeEl = elements.graphBody.querySelectorAll('.graph-node')
+    .find((n) => n.getAttribute('data-entity-id') === entityId);
+  nodeEl.dispatchEvent({ type: 'click' });
+}
+
+test('관계 목록 — 성향 관계(profile-summary)와 구조 관계(edge_details)가 한 목록에 온다(보드 04)', async () => {
+  const entries = [
+    { entity_id: 'e:a', entity_name: '한미반도체', entity_kind: 'security', relation_kind: 'interested_in',
+      rationale: 'HBM 장비 질문 4회', reinforcement: 4, confidence: 'INFERRED', tier: 'conversational' },
+  ];
+  const { controller, elements } = setup({
+    payload: payloadWithDetails, withPanel: true, getProfileSummaryEntries: () => entries,
+  });
+  await controller.toggle();
+  expandBubble(elements, 0);
+  selectNodeInPanel(elements, 'e:a');
+  const rows = elements.panel.querySelectorAll('.panel-relation-row');
+  const labels = rows.map((r) => r.querySelectorAll('.panel-relation-label')[0].textContent);
+  // 성향 관계(관심)가 먼저, 그다음 구조 관계 — 프로필 노드가 지도에서 빠졌어도
+  // 그 관계는 패널에서 사라지지 않는다.
+  assert.equal(labels[0], '관심');
+  const counts = rows.map((r) => r.querySelectorAll('.panel-relation-count')[0].textContent);
+  assert.equal(counts[0], '4', '보강 수는 profile-summary가 이미 준다 — 타임라인을 기다리지 않는다');
+  assert.equal(rows[0].querySelectorAll('.panel-relation-desc')[0].textContent, 'HBM 장비 질문 4회');
+});
+
+test('관계 목록 — edge_details가 있으면 통상 관계까지 전부 나오고 숨은 연관이 맨 뒤다(보드 04)', async () => {
+  const connections = [{
+    source_entity_id: 'e:a', source_name: '한미반도체', target_entity_id: 'e:d', target_name: '고배당주',
+    kinds: ['relates_to'], source_cluster: 0, target_cluster: 1, surprise_score: 0.9,
+  }];
+  const { controller, elements } = setup({
+    payload: payloadWithDetails, withPanel: true, getSurprisingConnections: () => connections,
+  });
+  await controller.toggle();
+  expandBubble(elements, 0);
+  selectNodeInPanel(elements, 'e:a');
+  const rows = elements.panel.querySelectorAll('.panel-relation-row');
+  const labels = rows.map((r) => r.querySelectorAll('.panel-relation-label')[0].textContent);
+  // EXTRACTED(관심) → INFERRED(소속) → 숨은. 마지막이 숨은 연관이다.
+  assert.deepEqual(labels, ['관심', '소속', '숨은']);
+  const descs = rows.map((r) => r.querySelectorAll('.panel-relation-desc')[0].textContent);
+  assert.deepEqual(descs, ['SK하이닉스', '반도체 대형주', '고배당주']);
+});
+
+test('선택 헤더 부제 — 그래프 노드는 "군집 · 연결 N · 두 군집을 잇는 유일한 노드"(보드 04)', async () => {
+  const connections = [{
+    source_entity_id: 'e:a', target_entity_id: 'e:d',
+    kinds: ['relates_to'], source_cluster: 0, target_cluster: 1, surprise_score: 0.9,
+  }];
+  const { controller, elements } = setup({
+    payload: payloadWithDetails, withPanel: true, getSurprisingConnections: () => connections,
+  });
+  await controller.toggle();
+  expandBubble(elements, 0);
+  selectNodeInPanel(elements, 'e:a');
+  const sub = elements.panel.querySelector('.panel-header-row2').textContent;
+  // 확정 이름이 없으므로 제목 사다리가 대표 멤버로 떨어진다 — 군집을 가리키는
+  // 말이어야 하므로 종목(한미반도체)이 아니라 테마(반도체 대형주)를 고른다.
+  assert.match(sub, /반도체 대형주\(추정\) 군집/);
+  assert.match(sub, /연결 3/);
+  assert.match(sub, /두 군집을 잇는 유일한 노드/, 'e:a만 군집 0에서 군집 1로 건너간다');
+});
+
+test('왜 숨은 연관인가 — 세 절이 전부 실데이터에서 나온다(보드 04 근거 블록)', async () => {
+  const connections = [{
+    source_entity_id: 'e:a', target_entity_id: 'e:d',
+    kinds: ['relates_to'], source_cluster: 0, target_cluster: 1, surprise_score: 0.85,
+  }];
+  const { controller, elements } = setup({
+    payload: payloadWithDetails, withPanel: true, getSurprisingConnections: () => connections,
+  });
+  await controller.toggle();
+  expandBubble(elements, 0);
+  selectNodeInPanel(elements, 'e:a');
+  const body = elements.panel.querySelector('.panel-reason-body').textContent;
+  assert.match(body, /두 군집을 잇는 유일한 연결/, '군집 0↔1을 잇는 엣지가 하나뿐이다');
+  assert.match(body, /주변부\(2\)에서 허브\(3\)로/, 'e:d 차수 2, e:a 차수 3');
+  assert.match(body, /직접 말한 적 없음/, 'confidence가 INFERRED다');
+  const score = elements.panel.querySelector('.panel-reason-score').textContent;
+  assert.equal(score, '상대 8.5 — 이 그래프에서 가장 높음');
+});
+
+test('왜 숨은 연관인가 — 숨은 연관이 없는 노드에는 블록도 CTA 리드인도 없다(§0 정책)', async () => {
+  const { controller, elements } = setup({ payload: payloadWithDetails, withPanel: true });
+  await controller.toggle();
+  expandBubble(elements, 0);
+  selectNodeInPanel(elements, 'e:b');
+  assert.equal(elements.panel.querySelector('.panel-reason'), null);
+  assert.equal(elements.panel.querySelector('.panel-cta-lead'), null);
+  assert.equal(elements.panel.querySelector('.panel-cta').textContent, '채팅에서 답하기');
+});
+
+test('CTA — 숨은 연관 노드는 리드인 + "채팅에서 물어보기"다(보드 04)', async () => {
+  const connections = [{
+    source_entity_id: 'e:a', target_entity_id: 'e:d',
+    kinds: ['relates_to'], source_cluster: 0, target_cluster: 1, surprise_score: 0.9,
+  }];
+  const { controller, elements } = setup({
+    payload: payloadWithDetails, withPanel: true, getSurprisingConnections: () => connections,
+  });
+  await controller.toggle();
+  expandBubble(elements, 0);
+  selectNodeInPanel(elements, 'e:a');
+  assert.equal(elements.panel.querySelector('.panel-cta-lead').textContent, '이 연결을 확인하지 않으셨습니다.');
+  assert.equal(elements.panel.querySelector('.panel-cta').textContent, '채팅에서 물어보기');
+});
+
+// ── 보드 02 패널 — 티어 대조 ─────────────────────────────────────────────────
+
+test('티어 대조 — 출처가 둘이고 서로 다르면 제목과 "↕ 어긋남"이 붙고 카드가 두 장이다(보드 02)', () => {
+  const { controller, elements } = setup({ withPanel: true });
+  controller.selectEntity('e:turnover', {
+    entityId: 'e:turnover', source: 'table', name: '단기 회전', reinforcement: 21, isStrongest: true,
+    observedRelative: '1일 전',
+    sources: [
+      { tier: 'deterministic', confidence: 'EXTRACTED', rationale: '체결 21건 · 평균 보유 3.2일' },
+      { tier: 'conversational', confidence: 'INFERRED', rationale: '5개 대화에서 "장기로 간다"' },
+    ],
+  });
+  assert.equal(elements.panel.querySelector('.panel-tier-contrast-title').textContent, '두 출처가 다르게 말합니다');
+  assert.equal(elements.panel.querySelector('.panel-tier-divider').textContent, '↕ 어긋남');
+  assert.equal(elements.panel.querySelectorAll('.panel-tier-card').length, 2);
+  assert.deepEqual(
+    elements.panel.querySelectorAll('.panel-tier-label').map((n) => n.textContent),
+    ['체결·잔고', '대화']);
+  assert.equal(elements.panel.querySelector('.panel-header-row2').textContent,
+    '보강 21회로 그래프에서 가장 강한 신호 · 최근 1일 전');
+  assert.equal(elements.panel.querySelector('.panel-cta-lead').textContent,
+    '어느 쪽이 실제에 가까운지 아직 답하지 않으셨습니다.');
+});
+
+test('티어 대조 — 출처가 둘이어도 같은 tier면 갈등 제목을 안 붙인다(없는 갈등을 만들지 않는다)', () => {
+  const { controller, elements } = setup({ withPanel: true });
+  controller.selectEntity('e:x', {
+    entityId: 'e:x', source: 'table', name: '삼성전자', reinforcement: 12,
+    sources: [
+      { tier: 'deterministic', confidence: 'EXTRACTED', rationale: '체결 4건' },
+      { tier: 'deterministic', confidence: 'EXTRACTED', rationale: '잔고 일치' },
+    ],
+  });
+  assert.equal(elements.panel.querySelector('.panel-tier-contrast-title'), null);
+  assert.equal(elements.panel.querySelector('.panel-tier-divider'), null);
+  assert.equal(elements.panel.querySelectorAll('.panel-tier-card').length, 2, '카드는 둘 다 보여준다');
+  assert.equal(elements.panel.querySelector('.panel-cta-lead'), null);
+});
+
+// ── 순수 헬퍼 ────────────────────────────────────────────────────────────────
+
+test('countRelationEvents — (관계, 상대) 쌍별로 이벤트를 센다', () => {
+  const counts = countRelationEvents([
+    { relation: 'interested_in', object_id: 'e:b' },
+    { relation: 'interested_in', object_id: 'e:b' },
+    { relation: 'belongs_to', object_id: 'e:c' },
+    { relation: null, object_id: 'e:d' },   // relation 없는 이벤트는 안 센다
+    { relation: 'owns', object_id: null },  // 상대 없는 이벤트도 안 센다
+  ]);
+  assert.equal(counts.get('interested_in e:b'), 2);
+  assert.equal(counts.get('belongs_to e:c'), 1);
+  assert.equal(counts.size, 2);
+});
+
+test('hiddenLinkReasonClauses — 근거가 없는 절은 아예 빠진다(§0 정책)', () => {
+  assert.deepEqual(
+    hiddenLinkReasonClauses({ crossingEdgeCount: 1, sourceDegree: 11, targetDegree: 2, confidence: 'INFERRED' }),
+    ['두 군집을 잇는 유일한 연결', '주변부(2)에서 허브(11)로', '직접 말한 적 없음']);
+  // 엣지가 여럿이면 "유일한" 절이 빠지고, 차수가 같으면 허브 절이, EXTRACTED면 마지막 절이 빠진다.
+  assert.deepEqual(
+    hiddenLinkReasonClauses({ crossingEdgeCount: 3, sourceDegree: 4, targetDegree: 4, confidence: 'EXTRACTED' }),
+    []);
+});
+
+test('relativeScoreText — [0,1] 정규화 점수를 Paper의 0~10 스케일로 옮기되 "상대"를 남긴다', () => {
+  assert.equal(relativeScoreText(0.85), '상대 8.5');
+  assert.equal(relativeScoreText(1), '상대 10.0');
+  assert.equal(relativeScoreText(undefined), '', '없는 점수를 지어내지 않는다');
+  // 0은 "이 목록에서 가장 덜 놀랍다"는 뜻이라 숨은 연관의 근거가 못 된다.
+  assert.equal(relativeScoreText(0), '');
+});
+
+test('topSurprising — 점수 내림차순 상한 3, 동점은 이름으로 끊는다(다시 열어도 같은 셋)', () => {
+  const make = (name, score) => ({ source_name: name, source_entity_id: name, target_entity_id: 'x', surprise_score: score });
+  const picked = topSurprising([
+    make('D', 0.1), make('A', 0.9), make('B', 0.5), make('C', 0.9),
+  ]);
+  assert.deepEqual(picked.map((c) => c.source_name), ['A', 'C', 'B']);
+  assert.deepEqual(topSurprising([]), []);
+  assert.deepEqual(topSurprising(null), []);
+});
+
 test('관계 목록 — getSurprisingConnections를 안 주면(현재 실제 상태) 조용히 섹션이 없다', async () => {
   const { controller, elements } = setup({ payload: payloadTwoClusters, withPanel: true });
   await controller.toggle();
@@ -752,7 +1063,9 @@ test('2단계 — unnamedClusterWarnEligible/unnamedClusters/clusterName이 plac
   controller.setAvailable(true);
   await controller.toggle();
   expandBubble(elements, 0); // cluster 0은 이름이 있다(스파이가 얹음), cluster 1은 없다 — 부분 무명.
-  assert.equal(capturedOptions.clusterName, '반도체 대형주');
+  // 보드 04 — 이웃 군집 타원도 그리므로 이름 한 줄이 아니라 군집 목록 전체가 간다.
+  assert.equal(capturedOptions.expandedCluster, 0);
+  assert.deepEqual(capturedOptions.clusters.map((c) => c.name), ['반도체 대형주', undefined]);
   assert.equal(capturedOptions.unnamedClusterWarnEligible, true, '0 < 이름 붙은 군집 수(1) < 전체(2)');
   assert.deepEqual(capturedOptions.unnamedClusters, [1]);
 });
@@ -810,10 +1123,35 @@ test('buildTimelineRows — edge_changed: 상승만 "…로 승격"(G-G4), 하�
     { ...base, confidence_before: 'INFERRED', confidence_after: 'INFERRED' },
     { ...base, confidence_before: null, confidence_after: 'EXTRACTED' }, // 한쪽 미상도 중립
   ]);
+  // 뒤 세 건은 같은 날 같은 문구라 한 줄로 접히고 횟수가 붙는다.
+  assert.equal(rows.length, 2);
   assert.equal(rows[0].text, '관심 관계 추론 → 사실로 승격', 'Paper 행2 실측 어휘 그대로');
+  assert.equal(rows[0].count, 1);
   assert.equal(rows[1].text, '관심 관계 신뢰도 변경');
-  assert.equal(rows[2].text, '관심 관계 신뢰도 변경');
-  assert.equal(rows[3].text, '관심 관계 신뢰도 변경');
+  assert.equal(rows[1].count, 3);
+});
+
+test('buildTimelineRows — 같은 날 같은 문구가 잇달으면 접고, 사이에 다른 사건이 끼면 안 접는다', () => {
+  const at = '2026-08-19T12:00:00Z';
+  const rows = buildTimelineRows([
+    { at, op: 'entity_added' },
+    { at, op: 'entity_added' },
+    { at, op: 'edge_added', relation: 'owns' },
+    { at, op: 'entity_added' },
+  ]);
+  assert.deepEqual(rows.map((r) => [r.text, r.count]), [
+    ['노드 처음 생김', 2],
+    ['관계 추가됨(보유)', 1],
+    ['노드 처음 생김', 1],
+  ]);
+});
+
+test('buildTimelineRows — 날짜가 다르면 문구가 같아도 안 접는다(다른 날의 사건이다)', () => {
+  const rows = buildTimelineRows([
+    { at: '2026-08-19T12:00:00Z', op: 'entity_added' },
+    { at: '2026-08-18T12:00:00Z', op: 'entity_added' },
+  ]);
+  assert.equal(rows.length, 2);
 });
 
 test('buildTimelineRows — 배열이 아니면 빈 배열, null 항목은 걸러낸다', () => {

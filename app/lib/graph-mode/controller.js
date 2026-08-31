@@ -22,7 +22,12 @@
 function computeGraphHeaderMeta(stage, payload, placed) {
   if (!payload || !placed) return '';
   const entityCount = Array.isArray(payload.nodes) ? payload.nodes.length : 0;
-  const clusterCount = Array.isArray(placed.clusters) ? placed.clusters.length : 0;
+  // 미분류(-1)는 군집이 아니다 — 같은 문장 뒤쪽에서 "미분류 K"로 따로 세므로,
+  // 앞의 군집 수에도 넣으면 같은 노드 뭉치를 두 번 말하게 된다(실측: 실제 군집이
+  // 7개인데 헤더가 "군집 8개"라고 했다).
+  const clusterCount = Array.isArray(placed.clusters)
+    ? placed.clusters.filter((c) => c.cluster !== -1).length
+    : 0;
   if (stage === 'expanded') {
     const relationCount = Array.isArray(payload.edges) ? payload.edges.length : 0;
     return `엔티티 ${entityCount} · 관계 ${relationCount} · 군집 ${clusterCount}`;
@@ -71,6 +76,14 @@ const RELATION_LABELS = {
 // 스코프로 올렸다. 값은 그대로다(Paper 행2 "추론 → 사실로 승격"이 정확히 이 어휘).
 const PANEL_CONFIDENCE_LABELS = { EXTRACTED: '사실', INFERRED: '추론', AMBIGUOUS: '불확실' };
 
+// entity kind 한글 라벨 — 요약 표(summary-table.js ENTITY_KIND_LABELS)와 같은
+// 어휘여야 표에서 고른 것과 패널에 뜬 것이 같은 말로 불린다. 배지에 `preference`
+// 같은 원문이 그대로 뜨던 결함을 막는다(실측).
+const PANEL_KIND_LABELS = {
+  security: '종목', company: '기업', sector: '섹터', theme: '테마',
+  goal: '목표', preference: '성향', risk_signal: '위험 신호', investor_profile: '프로필',
+};
+
 // confidence 위계(edge_changed의 "승격" 판정 전용) — 상승만 "…로 승격"(G-G4),
 // 하강·동일·한쪽 미상은 전부 방어적 중립 "신뢰도 변경"으로 통일한다.
 const CONFIDENCE_RANK = { AMBIGUOUS: 0, INFERRED: 1, EXTRACTED: 2 };
@@ -103,11 +116,93 @@ function timelineEventText(event) {
 }
 
 // EntityEventOut[] → 패널 행 [{date, text}] — 렌더(G3)가 그대로 소비한다.
+// 같은 날 같은 문구가 잇달아 나오면 한 줄로 접고 횟수를 적는다. 적재가 한 번에
+// 여러 소스를 처리하면 "선호 관계 신뢰도 변경"이 같은 날짜로 네 줄 반복되는데
+// (실측), 네 줄은 한 줄보다 정보가 많지 않으면서 자리는 네 배를 쓴다. 접힌
+// 횟수를 적으므로 사건 수는 잃지 않는다.
 function buildTimelineRows(events) {
   if (!Array.isArray(events)) return [];
-  return events
-    .filter(Boolean)
-    .map((event) => ({ date: formatEventDate(event.at), text: timelineEventText(event) }));
+  const rows = [];
+  for (const event of events.filter(Boolean)) {
+    const date = formatEventDate(event.at);
+    const text = timelineEventText(event);
+    const last = rows[rows.length - 1];
+    if (last && last.date === date && last.text === text) {
+      last.count += 1;
+      continue;
+    }
+    rows.push({ date, text, count: 1 });
+  }
+  return rows;
+}
+
+// 관계별 보강 횟수(보드 04 관계 목록의 우측 숫자) — 타임라인 이벤트에서
+// (관계, 상대 노드) 쌍이 몇 번 기록됐는지 센다. profile-summary의 `reinforcement`가
+// 쓰는 것과 같은 자료(graph_events)라 두 화면의 "보강"이 같은 뜻이다.
+// 이벤트를 못 읽었거나 그 쌍이 없으면 키가 없다 — 0을 지어내지 않는다.
+function countRelationEvents(events) {
+  const counts = new Map();
+  for (const event of Array.isArray(events) ? events : []) {
+    if (!event || !event.object_id || !event.relation) continue;
+    const key = `${event.relation} ${event.object_id}`;
+    counts.set(key, (counts.get(key) || 0) + 1);
+  }
+  return counts;
+}
+
+// 숨은 연관 근거 문장(보드 04 "왜 숨은 연관인가") — Paper의 세 절을 전부 실데이터로
+// 만든다. 지어낸 절은 없다: 근거가 없는 절은 아예 빠진다(§0 정책).
+//   ① "두 군집을 잇는 유일한 연결"  — 그 군집 쌍을 잇는 엣지가 정확히 1개일 때
+//   ② "주변부(N)에서 허브(M)로"     — 양 끝 차수가 다를 때(작은 쪽이 주변부)
+//   ③ "직접 말한 적 없음"           — 그 엣지의 confidence가 EXTRACTED가 아닐 때
+function hiddenLinkReasonClauses({ crossingEdgeCount, sourceDegree, targetDegree, confidence }) {
+  const clauses = [];
+  if (crossingEdgeCount === 1) clauses.push('두 군집을 잇는 유일한 연결');
+  if (Number.isFinite(sourceDegree) && Number.isFinite(targetDegree) && sourceDegree !== targetDegree) {
+    const low = Math.min(sourceDegree, targetDegree);
+    const high = Math.max(sourceDegree, targetDegree);
+    clauses.push(`주변부(${low})에서 허브(${high})로`);
+  }
+  if (confidence && confidence !== 'EXTRACTED') clauses.push('직접 말한 적 없음');
+  return clauses;
+}
+
+// 숨은 연관 강조 상한(보드 03 실측 — 핑크 점선은 지도에 **하나**뿐이다).
+//
+// backend의 `surprising_connections`는 군집 경계를 넘는 엣지를 **전부** 낸다.
+// 작은 그래프에서는 군집이 바로 그 경계를 따라 갈리므로 거의 모든 종목↔테마
+// 연결이 여기 걸린다 — 실측에서 지도의 연결선 8개가 전부 핑크였고, 그러면
+// "예외"라는 뜻이 사라진다(모두가 예외면 아무도 예외가 아니다).
+//
+// 그래서 요약 뷰의 "숨은 연관" 카드가 보여주는 개수와 **같은 상한**을 지도와
+// 패널에도 건다: 화면들이 같은 세 연결을 가리키게 된다. 순위는 backend가 매긴
+// surprise_score를 그대로 쓰고, 동점은 이름으로 끊는다(다시 열어도 같은 셋).
+const SURPRISING_HIGHLIGHT_LIMIT = 3;
+
+function topSurprising(connections, limit) {
+  const list = Array.isArray(connections) ? connections.filter(Boolean) : [];
+  const cap = Number.isInteger(limit) ? limit : SURPRISING_HIGHLIGHT_LIMIT;
+  return list
+    .slice()
+    .sort((a, b) => {
+      const sa = Number.isFinite(a.surprise_score) ? a.surprise_score : -Infinity;
+      const sb = Number.isFinite(b.surprise_score) ? b.surprise_score : -Infinity;
+      if (sa !== sb) return sb - sa;
+      return String(a.source_name || a.source_entity_id)
+        .localeCompare(String(b.source_name || b.source_entity_id));
+    })
+    .slice(0, cap);
+}
+
+// 상대 점수 표기(보드 01/02/04 "8.5") — backend의 surprise_score는 이 목록 안에서
+// min-max 정규화된 [0,1]이라 절대 점수가 아니다. Paper의 0~10 스케일에 맞추되
+// "상대"를 앞에 붙여 그 한계를 문구로 남긴다.
+function relativeScoreText(score) {
+  // 0은 "이 목록 안에서 가장 덜 놀랍다"는 뜻이다 — 숨은 연관이라고 부르면서
+  // 0.0을 붙이면 화면이 스스로를 반박한다. 그 경우엔 아예 적지 않고 근거 절만
+  // 남긴다(§0 정책: 정보가 없는 숫자를 쓰지 않는다).
+  if (!Number.isFinite(score) || score <= 0) return '';
+  return `상대 ${(score * 10).toFixed(1)}`;
 }
 
 function createGraphModeController(deps) {
@@ -137,6 +232,13 @@ function createGraphModeController(deps) {
     // IPC 왕복이 필요한 호출당 API라 async 함수로 주입받는다. 없으면 섹션이
     // 조용히 꺼진다(다른 선택 주입과 같은 계약).
     fetchEntityTimeline,      // async (entityId) => events[] (선택) — entity-timeline 원본.
+    // 보드 05 수집·노출 서브뷰 진입 훅(선택) — 이 파일은 그 카드를 직접 그리지
+    // 않는다(collection-settings.js 소관). 언제 다시 그려야 하는지만 알린다.
+    onEnterSettings,          // () => void (선택)
+    // 헤더 필터 칩(보드 03/04 "최근 90일 · 연결 N개 이상")의 실적용(선택).
+    // 안 주면 필터가 없는 것처럼 전체를 그린다 — 다른 선택 주입과 같은 계약이다.
+    filters,                  // graph-filters 모듈 (선택)
+    getFilters,               // () => {windowDays, minDegree} (선택)
   } = deps;
 
   let state = store.createInitialState();
@@ -183,6 +285,10 @@ function createGraphModeController(deps) {
     if (elements.plugin) elements.plugin.hidden = activeSurface !== 'plugin';
     if (elements.backtest) elements.backtest.hidden = activeSurface !== 'backtest';
     if (elements.summaryTable) elements.summaryTable.hidden = !graphView || state.surface !== store.SURFACE_SUMMARY;
+    // 세 번째 서브뷰(보드 05 수집·노출) — 요약/지도와 같은 축이라 같은 규칙을 쓴다.
+    if (elements.graphSettings) {
+      elements.graphSettings.hidden = !graphView || state.surface !== store.SURFACE_SETTINGS;
+    }
     // 키우미 얼굴(2026-08-27, Paper 보드 45) — 지금 모드를 얼굴로 보여준다
     // (대화=눈 · 그래프=온톨로지 별자리). CSS가 data-mode로 얼굴을 고른다 —
     // agent·backtest 얼굴은 아직 CSS에 없어 기본 얼굴로 폴백한다(보드 39~43·45 후속).
@@ -219,10 +325,59 @@ function createGraphModeController(deps) {
     selectNode(entityId);
   }
 
-  function selectNode(entityId) {
-    const node = lastPlaced && Array.isArray(lastPlaced.nodes)
-      ? lastPlaced.nodes.find((n) => n.entity_id === entityId)
+  // 지금 배치에서 노드 하나 찾기 — 관계 목록·근거 블록이 상대 노드의 이름/차수/
+  // 군집을 읽는 데 쓴다.
+  function findNode(entityId) {
+    return lastPlaced && Array.isArray(lastPlaced.nodes)
+      ? lastPlaced.nodes.find((n) => n.entity_id === entityId) || null
       : null;
+  }
+
+  // 군집 쌍을 잇는 엣지 수 — "두 군집을 잇는 유일한 연결" 판정의 근거(보드 04).
+  // aggregateClusterEdges를 다시 부르지 않고 lastPlaced.edges를 직접 센다(1단계
+  // 전용 clusterEdges는 2단계에서 최신이 아닐 수 있다).
+  function countCrossingEdges(clusterA, clusterB) {
+    if (!lastPlaced || !Array.isArray(lastPlaced.edges)) return null;
+    if (!Number.isInteger(clusterA) || !Number.isInteger(clusterB) || clusterA === clusterB) return null;
+    const clusterOf = new Map((lastPlaced.nodes || []).map((n) => [n.entity_id, n.cluster]));
+    let count = 0;
+    for (const edge of lastPlaced.edges) {
+      const from = clusterOf.get(edge.from);
+      const to = clusterOf.get(edge.to);
+      if ((from === clusterA && to === clusterB) || (from === clusterB && to === clusterA)) count += 1;
+    }
+    return count;
+  }
+
+  // 그 군집에서 반대 군집으로 건너가는 노드가 이 노드 하나뿐인가(보드 04 선택
+  // 헤더 "두 군집을 잇는 유일한 노드").
+  function isOnlyBridgeNode(entityId, clusterA, clusterB) {
+    if (!lastPlaced || !Array.isArray(lastPlaced.edges)) return false;
+    if (!Number.isInteger(clusterA) || !Number.isInteger(clusterB) || clusterA === clusterB) return false;
+    const clusterOf = new Map((lastPlaced.nodes || []).map((n) => [n.entity_id, n.cluster]));
+    const bridges = new Set();
+    for (const edge of lastPlaced.edges) {
+      const from = clusterOf.get(edge.from);
+      const to = clusterOf.get(edge.to);
+      if (from === clusterA && to === clusterB) bridges.add(edge.from);
+      else if (from === clusterB && to === clusterA) bridges.add(edge.to);
+    }
+    return bridges.size === 1 && bridges.has(entityId);
+  }
+
+  // 군집 제목 — 지도 타원과 같은 사다리(render.js clusterTitle)를 재사용한다.
+  // 두 곳이 다른 이름을 부르면 사용자는 다른 군집으로 읽는다.
+  function clusterTitleText(cluster) {
+    const meta = lastPlaced && Array.isArray(lastPlaced.clusters)
+      ? lastPlaced.clusters.find((c) => c.cluster === cluster)
+      : null;
+    if (!meta) return null;
+    const title = render.clusterTitle(meta);
+    return title.estimated ? `${title.text}(추정)` : title.text;
+  }
+
+  function selectNode(entityId) {
+    const node = findNode(entityId);
     // profile-summary에 같은 entity_id가 있으면(그래프 노드와 성향 신호 표는
     // 서로 다른 엔드포인트라 항상 겹치진 않는다) 그 항목의 근거·신뢰도·보강
     // 수까지 얹는다 — table 선택 경로(summary-table.js의 panelDataFor())와
@@ -243,29 +398,189 @@ function createGraphModeController(deps) {
       reinforcement: profileEntry ? profileEntry.reinforcement : undefined,
       confidence: profileEntry ? profileEntry.confidence : undefined,
       tier: profileEntry ? profileEntry.tier : undefined,
+      // 선택 헤더 부제(보드 04 "반도체 대형주 군집 · 연결 7 · 두 군집을 잇는
+      // 유일한 노드") — 세 절 전부 실데이터에서 나온다, 없는 절은 빠진다.
+      clusterTitle: node ? clusterTitleText(node.cluster) : undefined,
     };
     state = store.selectEntity(state, entityId, panelData);
-    renderSelection();
+    // 지도를 다시 그린다 — 선택 테두리(보드 04의 핑크 링)는 renderClusterMap이
+    // 그리기 시점에 얹는 클래스라 패널만 갱신하면 지도에는 아무 표시도 안 난다
+    // (실측: 노드를 눌러도 어느 노드를 골랐는지 지도에서 알 수 없었다).
+    // redrawFromCache()가 renderSelection()까지 부르므로 여기서 따로 안 부른다.
+    redrawFromCache();
   }
 
-  // 관계 목록(보드 15 §2.5-③, 스텝14) — 선택 엔티티가 걸린 surprising-connections를
-  // "숨은" 관계 행으로 보여준다. profile-summary 자체 관계(관심 등)는 이미
-  // 위 티어 대조 카드가 보여주므로 여기선 숨은 연관만 더한다(같은 정보를 두
-  // 곳에 중복 표기하지 않는다) — 데이터가 없으면(§0 정책) 빈 배열, 섹션 자체를
-  // 안 그린다.
-  function buildHiddenRelationships(entityId) {
-    if (typeof getSurprisingConnections !== 'function' || !entityId) return [];
-    const connections = getSurprisingConnections();
-    if (!Array.isArray(connections)) return [];
-    return connections
-      .filter((c) => c && (c.source_entity_id === entityId || c.target_entity_id === entityId))
-      .map((c) => {
-        const isSource = c.source_entity_id === entityId;
-        return {
-          otherName: (isSource ? c.target_name : c.source_name) || (isSource ? c.target_entity_id : c.source_entity_id),
-          kinds: Array.isArray(c.kinds) ? c.kinds : [],
-        };
+  // 선택 헤더 부제 조립. 출처(node/table)에 따라 말이 달라진다 — 보드 04는
+  // 그래프에서 고른 노드라 "군집 · 연결 수"를, 보드 02는 표에서 고른 신호라
+  // "보강 N회 · 최근 언제"를 쓴다.
+  function panelHeaderSubtext(data) {
+    const parts = [];
+    if (data.source === 'node') {
+      // 군집 제목이 이 노드 이름에서 온 경우(테마가 자기 군집의 대표일 때)
+      // "배당·인컴(추정) 군집"처럼 같은 말을 두 번 하게 된다 — 그 절을 뺀다.
+      const selfNamesCluster = Boolean(data.name)
+        && String(data.clusterTitle || '').startsWith(String(data.name));
+      if (data.clusterTitle && !selfNamesCluster) parts.push(`${data.clusterTitle} 군집`);
+      if (Number.isFinite(data.degree)) parts.push(`연결 ${data.degree}`);
+      const reason = buildHiddenLinkReason(data.entityId);
+      if (reason && isOnlyBridgeNode(data.entityId, reason.selfCluster, reason.partnerCluster)) {
+        parts.push('두 군집을 잇는 유일한 노드');
+      }
+    } else {
+      if (Number.isFinite(data.reinforcement)) {
+        parts.push(data.isStrongest
+          ? `보강 ${data.reinforcement}회로 그래프에서 가장 강한 신호`
+          : `보강 ${data.reinforcement}회`);
+      }
+      // observedRelative는 표 쪽(summary-table.js panelDataFor)이 이미 계산해
+      // 넘긴 문자열이다 — 이 파일이 window.AthenaLib을 새로 참조하지 않으려는
+      // 원래 계약(의존은 전부 주입) 때문에 여기서 다시 계산하지 않는다. 두
+      // 화면이 같은 시각을 다르게 말하지 않게 하는 효과도 같이 얻는다.
+      if (data.observedRelative) parts.push(`최근 ${data.observedRelative}`);
+    }
+    return parts.join(' · ');
+  }
+
+  // 이 노드의 관계 전체(보드 04 §관계 목록) — 옛 판은 숨은 연관만 보여줬는데,
+  // Paper는 관심·속함 같은 통상 관계까지 한 목록에 둔다("이 노드의 관계"라는
+  // 제목이 그 뜻이다). 재료는 cluster-map 응답의 `edge_details`(kinds/tier/
+  // confidence)와 이미 배치된 노드 이름이다 — 새 왕복 없이 있는 것만 조인한다.
+  //
+  // 정렬은 Paper 행 순서(관심 → 속함 → 숨은)를 규칙으로 옮긴다: 숨은 연관을
+  // 맨 뒤로 보내고, 그 앞은 confidence가 높은(사실에 가까운) 순이다. 같으면
+  // 상대 이름 오름차순 — 다시 열어도 같은 순서여야 한다.
+  const RELATION_SORT_CONFIDENCE = { EXTRACTED: 0, INFERRED: 1, AMBIGUOUS: 2 };
+
+  function buildRelationships(entityId, fromNode) {
+    if (!entityId) return [];
+    const hiddenPartners = new Set();
+    const hiddenMeta = new Map();
+    if (typeof getSurprisingConnections === 'function') {
+      for (const c of topSurprising(getSurprisingConnections())) {
+        if (!c) continue;
+        if (c.source_entity_id === entityId) { hiddenPartners.add(c.target_entity_id); hiddenMeta.set(c.target_entity_id, c); }
+        else if (c.target_entity_id === entityId) { hiddenPartners.add(c.source_entity_id); hiddenMeta.set(c.source_entity_id, c); }
+      }
+    }
+
+    const rows = [];
+
+    // ① 성향 관계(관심·보유·선호…) — 투자자 프로필에서 이 노드로 뻗은 관계다.
+    // 지도의 **간선이 아니라 노드의 속성**이라 cluster-map의 edge_details에는 없고
+    // (백엔드가 프로필 노드를 분석 투영에서 뺀다), profile-summary가 낸다.
+    // 보드 04의 "관심 · HBM 장비 질문 4회 · 4" 행이 정확히 이것이다 — 보강 수까지
+    // 여기서 온다(타임라인을 기다리지 않는다).
+    //
+    // 표에서 고른 선택(보드 02)에는 넣지 않는다: 그 화면은 바로 위 티어 대조
+    // 카드가 같은 관계를 근거 문장까지 이미 보여줘서, 여기 또 넣으면 같은 문장이
+    // 한 패널에 두 번 뜬다(실측).
+    if (fromNode && typeof getProfileSummaryEntries === 'function') {
+      for (const entry of getProfileSummaryEntries() || []) {
+        if (!entry || entry.entity_id !== entityId) continue;
+        rows.push({
+          otherId: null,
+          otherName: entry.rationale || '',
+          relationLabel: RELATION_LABELS[entry.relation_kind] || entry.relation_kind,
+          kinds: [entry.relation_kind],
+          confidence: entry.confidence,
+          tier: entry.tier,
+          isHidden: false,
+          isProfile: true,
+          reinforcement: entry.reinforcement,
+        });
+      }
+    }
+
+    // ② 구조 관계(소속 등) — 종목↔테마처럼 엔티티끼리 이어진 지도의 실제 간선.
+    const details = lastPayload && Array.isArray(lastPayload.edge_details) ? lastPayload.edge_details : [];
+    for (const detail of details) {
+      if (!detail) continue;
+      let otherId = null;
+      if (detail.source === entityId) otherId = detail.target;
+      else if (detail.target === entityId) otherId = detail.source;
+      if (!otherId) continue;
+      const other = findNode(otherId);
+      const kinds = Array.isArray(detail.kinds) ? detail.kinds : [];
+      rows.push({
+        otherId,
+        otherName: (other && other.name) || otherId,
+        // 관계 라벨은 첫 kind를 한글로 — RELATION_LABELS는 타임라인 문구와 공유한다.
+        relationLabel: kinds.length > 0 ? (RELATION_LABELS[kinds[0]] || kinds[0]) : '관계',
+        kinds,
+        confidence: detail.confidence,
+        tier: detail.tier,
+        isHidden: hiddenPartners.has(otherId),
+        surpriseScore: hiddenMeta.get(otherId) ? hiddenMeta.get(otherId).surprise_score : undefined,
       });
+    }
+
+    // ③ 숨은 연관 — 위 두 경로에 이미 나온 상대는 거기서 isHidden으로 표시되므로,
+    // 여기서는 edge_details에 없는 쌍만 보탠다(구버전 backend나, 지도 필터로
+    // 엣지가 걸러진 경우).
+    const seenPartners = new Set(rows.map((row) => row.otherId).filter(Boolean));
+    {
+      for (const [otherId, c] of hiddenMeta) {
+        if (seenPartners.has(otherId)) continue;
+        const isSource = c.source_entity_id === entityId;
+        rows.push({
+          otherId,
+          otherName: (isSource ? c.target_name : c.source_name) || otherId,
+          relationLabel: '숨은',
+          kinds: Array.isArray(c.kinds) ? c.kinds : [],
+          confidence: undefined,
+          tier: undefined,
+          isHidden: true,
+          surpriseScore: c.surprise_score,
+        });
+      }
+    }
+
+    // 보드 04의 행 순서(관심 → 속함 → 숨은)를 규칙으로 옮긴다: 성향 관계(내가
+    // 말했거나 체결한 것)가 먼저, 구조 관계(그래프가 이은 것)가 다음, 숨은 연관이
+    // 맨 뒤. 같은 층에서는 confidence가 높은 순, 그다음 이름 오름차순 — 다시 열어도
+    // 같은 순서여야 한다.
+    return rows.sort((a, b) => {
+      if (a.isHidden !== b.isHidden) return a.isHidden ? 1 : -1;
+      if (Boolean(a.isProfile) !== Boolean(b.isProfile)) return a.isProfile ? -1 : 1;
+      const ca = RELATION_SORT_CONFIDENCE[a.confidence] ?? 3;
+      const cb = RELATION_SORT_CONFIDENCE[b.confidence] ?? 3;
+      if (ca !== cb) return ca - cb;
+      return String(a.otherName).localeCompare(String(b.otherName));
+    });
+  }
+
+  // "왜 숨은 연관인가" 블록 재료(보드 04) — 선택 노드가 실제로 숨은 연관에
+  // 걸려 있을 때만 값을 낸다. 아니면 null이고 섹션 자체가 안 그려진다.
+  function buildHiddenLinkReason(entityId) {
+    if (typeof getSurprisingConnections !== 'function' || !entityId) return null;
+    const connections = topSurprising(getSurprisingConnections());
+    const mine = connections.filter((c) => c && (c.source_entity_id === entityId || c.target_entity_id === entityId));
+    if (mine.length === 0) return null;
+    // 여러 건이면 상대 점수가 가장 높은 하나를 대표로 설명한다 — 나머지는 위
+    // 관계 목록에 "숨은" 행으로 이미 다 나와 있다.
+    const top = mine.reduce((best, c) =>
+      (best === null || (c.surprise_score || 0) > (best.surprise_score || 0) ? c : best), null);
+    const isSource = top.source_entity_id === entityId;
+    const otherId = isSource ? top.target_entity_id : top.source_entity_id;
+    const self = findNode(entityId);
+    const other = findNode(otherId);
+    const detail = (lastPayload && Array.isArray(lastPayload.edge_details) ? lastPayload.edge_details : [])
+      .find((d) => d && ((d.source === entityId && d.target === otherId) || (d.source === otherId && d.target === entityId)));
+    const clauses = hiddenLinkReasonClauses({
+      crossingEdgeCount: countCrossingEdges(top.source_cluster, top.target_cluster),
+      sourceDegree: self ? self.degree : undefined,
+      targetDegree: other ? other.degree : undefined,
+      confidence: detail ? detail.confidence : undefined,
+    });
+    const maxScore = connections.reduce((m, c) => Math.max(m, c && Number.isFinite(c.surprise_score) ? c.surprise_score : -Infinity), -Infinity);
+    const isTop = Number.isFinite(top.surprise_score) && top.surprise_score === maxScore;
+    return {
+      partnerCluster: isSource ? top.target_cluster : top.source_cluster,
+      selfCluster: isSource ? top.source_cluster : top.target_cluster,
+      clauses,
+      scoreText: relativeScoreText(top.surprise_score),
+      isTop,
+    };
   }
 
   // 렌더된 노드마다 클릭을 건다. 다시 그릴 때마다 SVG가 통째로 교체되므로
@@ -282,13 +597,41 @@ function createGraphModeController(deps) {
     }
   }
 
+  // 필터가 화면을 통째로 비웠을 때의 안내(보드 07 정직성 상태). 빈 캔버스는
+  // "성향이 없다"로 읽히는데, 실제로는 방금 건 조건이 너무 빡빡한 것이다 —
+  // 어느 조건이 얼마나 걸려 있는지까지 적어 되돌릴 길을 준다. 실측: "연결 3개
+  // 이상"을 걸면 이 그래프의 3-core가 비어 화면이 통째로 비었는데 아무 말이
+  // 없었다(성긴 종목↔테마 그래프에서는 수학적으로 정상인 결과다).
+  function renderFilteredEmpty() {
+    if (!elements.graphBody) return;
+    while (elements.graphBody.firstChild) elements.graphBody.removeChild(elements.graphBody.firstChild);
+    const settings = typeof getFilters === 'function' ? getFilters() : null;
+    const clauses = [];
+    if (settings && filters) {
+      if (settings.minDegree > 0) clauses.push(filters.minDegreeLabel(settings.minDegree));
+      if (settings.windowDays && settings.windowDays !== filters.DEFAULTS.windowDays) {
+        clauses.push(filters.windowLabel(settings.windowDays));
+      }
+    }
+    const note = document.createElement('div');
+    note.className = 'graph-mode-unavailable';
+    note.textContent = clauses.length > 0
+      ? `지금 걸린 조건(${clauses.join(' · ')})에 맞는 노드가 없습니다 — 헤더의 필터를 완화해 보세요.`
+      : '아직 그릴 연결이 없습니다 — 대화와 체결이 쌓이면 여기 지도로 보입니다.';
+    elements.graphBody.appendChild(note);
+  }
+
   // 1단계(clusters)는 군집 버블 집계, 2단계(expanded)는 기존 개별 노드 렌더
   // (스텝10) — draw()/redrawFromCache() 둘 다 이 분기를 타므로 한 곳에 모아
   // 둘이 어긋나지 않게 한다.
   function renderStage(placed) {
-    const surprisingConnections = typeof getSurprisingConnections === 'function'
-      ? (getSurprisingConnections() || [])
-      : [];
+    const surprisingConnections = topSurprising(
+      typeof getSurprisingConnections === 'function' ? getSurprisingConnections() : []
+    );
+    if (!Array.isArray(placed.nodes) || placed.nodes.length === 0) {
+      renderFilteredEmpty();
+      return;
+    }
     if (state.stage === store.STAGE_CLUSTERS) {
       // 숨은 연관 군집 쌍(스텝11이 캡able로 만들어 둔 것을 스텝14가 배선) —
       // layoutClusterMap()이 자동 계산해 둔 clusterEdges(항상 isSurprising:false)를
@@ -299,8 +642,33 @@ function createGraphModeController(deps) {
       render.renderClusterBubbles(elements.graphBody, placed, {});
       return;
     }
-    const nodes = store.visibleNodes(state, placed);
-    const edges = store.visibleEdges(state, placed);
+    // 2단계는 보이는 것만으로 **다시 배치한다**(보드 04). 1단계 좌표를 그대로
+    // 걸러 쓰면 군집 하나가 원래 자리에서 반지름 68px 링에 뭉친 채 남아 이름표가
+    // 서로를 덮고, 캔버스의 나머지 90%가 빈 채로 남는다(실측). 같은 결정적 배치
+    // 함수를 보이는 부분집합에 다시 적용하면 그 부분집합이 캔버스를 채운다.
+    const visible = store.visibleNodes(state, placed);
+    const visibleIds = new Set(visible.map((n) => n.entity_id));
+    const subPayload = {
+      revision: lastPayload ? lastPayload.revision : 0,
+      nodes: (lastPayload && Array.isArray(lastPayload.nodes) ? lastPayload.nodes : [])
+        .filter((n) => visibleIds.has(String(n.entity_id))),
+      edges: (lastPayload && Array.isArray(lastPayload.edges) ? lastPayload.edges : [])
+        .filter((pair) => Array.isArray(pair) && visibleIds.has(String(pair[0])) && visibleIds.has(String(pair[1]))),
+      edge_details: lastPayload && Array.isArray(lastPayload.edge_details) ? lastPayload.edge_details : [],
+      cluster_cohesion: lastPayload ? lastPayload.cluster_cohesion : undefined,
+      cluster_representative_labels: lastPayload ? lastPayload.cluster_representative_labels : undefined,
+      cluster_ai_labels: lastPayload ? lastPayload.cluster_ai_labels : undefined,
+    };
+    const expandedPlaced = subPayload.nodes.length > 0
+      ? layout.layoutClusterMap(subPayload, {
+        width: elements.graphBody ? elements.graphBody.clientWidth : 0,
+        height: elements.graphBody ? elements.graphBody.clientHeight : 0,
+        // 펼친 군집을 한가운데 놓고 이웃은 그 바깥에 두른다(보드 04).
+        focusCluster: state.expandedCluster,
+      })
+      : { nodes: [], edges: [], clusters: [] };
+    const nodes = expandedPlaced.nodes;
+    const edges = expandedPlaced.edges;
     const settings = prefs ? prefs.readPrefs() : null;
     // 이름 있음 임계 규칙(§0 r5, §15 비차단 2번 — "전체 군집 수"는 그래프
     // 전체 기준)과 지금 펼친 군집의 이름(스텝12가 캡able로 만들어 둔 것을
@@ -313,7 +681,6 @@ function createGraphModeController(deps) {
     const namedCount = clusters.filter((c) => c.name).length;
     const unnamedClusterWarnEligible = namedCount > 0 && namedCount < clusters.length;
     const unnamedClusters = clusters.filter((c) => !c.name).map((c) => c.cluster);
-    const expandedCluster = clusters.find((c) => c.cluster === state.expandedCluster);
     const surprisingEntityPairs = new Set(
       surprisingConnections
         .filter((c) => c && c.source_entity_id != null && c.target_entity_id != null)
@@ -323,7 +690,17 @@ function createGraphModeController(deps) {
       showLabels: prefs ? prefs.shouldShowLabels(settings, nodes.length) : true,
       highlightCrossings: settings ? settings.highlightCrossings : true,
       selectedEntityId: state.selectedEntityId,
-      clusterName: expandedCluster ? expandedCluster.name : undefined,
+      // 노드 채움 인코딩의 근거(render.js classifyNodeFill) — 성향 신호 표와
+      // 같은 confidence/tier를 쓴다. 표가 이미 받아 둔 것을 조인만 한다.
+      nodeConfidence: new Map(
+        (typeof getProfileSummaryEntries === 'function' ? getProfileSummaryEntries() || [] : [])
+          .filter((e) => e && e.entity_id)
+          .map((e) => [String(e.entity_id), { confidence: e.confidence, tier: e.tier }])
+      ),
+      // 보드 04 — 타원 이름표가 군집 제목·전체 크기를 쓴다. 옛 판은 펼친 군집의
+      // name 한 줄만 넘겼는데, 이제 이웃 군집 타원도 그리므로 전체 목록이 필요하다.
+      clusters,
+      expandedCluster: state.expandedCluster,
       unnamedClusterWarnEligible,
       unnamedClusters,
       surprisingEntityPairs,
@@ -408,7 +785,7 @@ function createGraphModeController(deps) {
       date.textContent = row.date;
       rowEl.appendChild(date);
       const desc = elp('span', 'panel-change-desc');
-      desc.textContent = row.text;
+      desc.textContent = row.count > 1 ? `${row.text} ×${row.count}` : row.text;
       rowEl.appendChild(desc);
       section.appendChild(rowEl);
     }
@@ -451,63 +828,110 @@ function createGraphModeController(deps) {
     row1.appendChild(name);
     if (data.kind) {
       const kindBadge = elp('span', 'panel-kind-badge');
-      kindBadge.textContent = data.kind;
+      kindBadge.textContent = PANEL_KIND_LABELS[data.kind] || data.kind;
       row1.appendChild(kindBadge);
     }
     header.appendChild(row1);
-    if (Number.isFinite(data.reinforcement)) {
+    const subtext = panelHeaderSubtext(data);
+    if (subtext) {
       const row2 = elp('div', 'panel-header-row2');
-      row2.textContent = `보강 ${data.reinforcement}회`;
+      row2.textContent = subtext;
       header.appendChild(row2);
     }
     panel.appendChild(header);
 
-    // 가용 필드가 하나라도 있을 때만 카드를 그린다 — 전부 없으면(그래프 노드
-    // 선택 경로처럼 rationale/confidence/tier가 아예 없는 panelData) 빈
-    // 카드를 만들지 않는다.
-    if (data.rationale || data.tier || data.confidence) {
+    // 티어 대조(보드 02 "두 출처가 다르게 말합니다") — 같은 엔티티에 대해
+    // 출처(체결·잔고 vs 대화)가 둘 이상이고 서로 다른 말을 할 때만 대조 제목과
+    // "↕ 어긋남" 구분자를 붙인다. 하나뿐이면 카드 한 장만 — 없는 갈등을
+    // 만들어내지 않는다(§0 정책).
+    const sources = Array.isArray(data.sources) && data.sources.length > 0
+      ? data.sources
+      : ((data.rationale || data.tier || data.confidence) ? [data] : []);
+    const distinctTiers = new Set(sources.map((s) => s.tier).filter(Boolean));
+    const conflicting = sources.length > 1 && distinctTiers.size > 1;
+    if (conflicting) {
+      const title = elp('div', 'panel-tier-contrast-title');
+      title.textContent = '두 출처가 다르게 말합니다';
+      panel.appendChild(title);
+    }
+    sources.forEach((source, index) => {
+      if (conflicting && index > 0) {
+        const divider = elp('div', 'panel-tier-divider');
+        divider.textContent = '↕ 어긋남';
+        panel.appendChild(divider);
+      }
       const tierCard = elp('div', 'panel-tier-card');
       const tierRow = elp('div', 'panel-tier-row');
-      tierRow.appendChild(elp('span', `panel-dot ${panelDotClass(data)}`));
+      tierRow.appendChild(elp('span', `panel-dot ${panelDotClass(source)}`));
       const tierLabel = elp('span', 'panel-tier-label');
-      tierLabel.textContent = PANEL_TIER_LABELS[data.tier] || '출처 불명';
+      tierLabel.textContent = PANEL_TIER_LABELS[source.tier] || '출처 불명';
       tierRow.appendChild(tierLabel);
-      if (data.confidence) {
+      if (source.confidence) {
         const confBadge = elp('span', 'panel-tier-confidence');
-        confBadge.textContent = PANEL_CONFIDENCE_LABELS[data.confidence] || data.confidence;
+        confBadge.textContent = PANEL_CONFIDENCE_LABELS[source.confidence] || source.confidence;
         tierRow.appendChild(confBadge);
       }
       tierCard.appendChild(tierRow);
-      if (data.rationale) {
+      if (source.rationale) {
         const tierBody = elp('div', 'panel-tier-body');
-        tierBody.textContent = data.rationale;
+        tierBody.textContent = source.rationale;
         tierCard.appendChild(tierBody);
       }
       panel.appendChild(tierCard);
-    }
+    });
 
-    // 관계 목록(보드 15 §2.5-③, 스텝14) — 숨은 연관(surprising-connections)만
-    // 얹는다(위 티어 대조 카드가 이미 profile-summary 자체 관계를 보여준다).
-    // 하나도 없으면(§0 정책) 섹션 자체를 안 그린다 — 빈 "이 노드의 관계" 제목만
-    // 뜨는 건 없는 것보다 못하다.
-    const hiddenRelations = buildHiddenRelationships(data.entityId);
-    if (hiddenRelations.length > 0) {
+    // 이 노드의 관계(보드 04) — 숨은 연관만이 아니라 통상 관계까지 한 목록에
+    // 둔다. 관계별 보강 수는 아래 타임라인 응답이 오면 채운다(첫 렌더 시점엔
+    // 없다 — 0을 지어내지 않는다). 하나도 없으면 섹션 자체를 안 그린다.
+    const relationRows = buildRelationships(data.entityId, data.source === 'node');
+    if (relationRows.length > 0) {
       const relations = elp('div', 'panel-relations');
       const title = elp('div', 'panel-relations-title');
       title.textContent = '이 노드의 관계';
       relations.appendChild(title);
-      for (const rel of hiddenRelations) {
+      for (const rel of relationRows) {
         const row = elp('div', 'panel-relation-row');
-        row.appendChild(elp('span', 'panel-relation-dot is-hidden'));
-        const label = elp('span', 'panel-relation-label is-hidden');
-        label.textContent = '숨은';
+        if (rel.otherId) row.setAttribute('data-other-id', rel.otherId);
+        row.setAttribute('data-relation', rel.kinds[0] || '');
+        row.appendChild(elp('span', `panel-relation-dot ${rel.isHidden ? 'is-hidden' : panelDotClass(rel)}`));
+        const label = elp('span', `panel-relation-label${rel.isHidden ? ' is-hidden' : ''}`);
+        label.textContent = rel.isHidden ? '숨은' : rel.relationLabel;
         row.appendChild(label);
         const desc = elp('span', 'panel-relation-desc');
-        desc.textContent = rel.kinds.length > 0 ? `${rel.otherName} (${rel.kinds.join(' · ')})` : rel.otherName;
+        desc.textContent = rel.otherName;
         row.appendChild(desc);
+        // 보강 수 — 성향 관계는 profile-summary가 이미 준다. 구조 관계는 값이
+        // 없어 빈 칸으로 두고, 타임라인이 오면 fillRelationCounts()가 채운다
+        // (열 자리는 항상 만든다 — 행마다 오른쪽 끝이 흔들리면 훑을 수 없다).
+        const count = elp('span', 'panel-relation-count');
+        if (Number.isFinite(rel.reinforcement) && rel.reinforcement > 0) {
+          count.textContent = String(rel.reinforcement);
+        }
+        row.appendChild(count);
         relations.appendChild(row);
       }
       panel.appendChild(relations);
+    }
+
+    // 왜 숨은 연관인가(보드 04 근거 블록) — 선택 노드가 실제로 숨은 연관에
+    // 걸렸을 때만. 절이 하나도 안 만들어지면(근거 없음) 블록을 안 그린다.
+    const reason = buildHiddenLinkReason(data.entityId);
+    if (reason && (reason.clauses.length > 0 || reason.scoreText)) {
+      const block = elp('div', 'panel-reason');
+      const title = elp('div', 'panel-reason-title');
+      title.textContent = '왜 숨은 연관인가';
+      block.appendChild(title);
+      if (reason.clauses.length > 0) {
+        const body = elp('div', 'panel-reason-body');
+        body.textContent = reason.clauses.join(' · ');
+        block.appendChild(body);
+      }
+      if (reason.scoreText) {
+        const score = elp('div', 'panel-reason-score');
+        score.textContent = reason.isTop ? `${reason.scoreText} — 이 그래프에서 가장 높음` : reason.scoreText;
+        block.appendChild(score);
+      }
+      panel.appendChild(block);
     }
 
     // §10-4 최근 변화(보드 15 §2.5, WP-G) — 유일한 비동기 채움 섹션(2단계
@@ -525,18 +949,57 @@ function createGraphModeController(deps) {
       const requestedEntityId = data.entityId;
       Promise.resolve()
         .then(() => fetchEntityTimeline(requestedEntityId))
-        .then((events) => fillTimelineSection(requestedEntityId, buildTimelineRows(events)))
+        .then((events) => {
+          fillTimelineSection(requestedEntityId, buildTimelineRows(events));
+          // 같은 응답으로 관계 목록의 보강 수도 채운다 — 왕복을 하나 더 쓰지 않는다.
+          fillRelationCounts(requestedEntityId, countRelationEvents(events));
+        })
         // 실패는 빈 상태 유지가 정직하다 — 화면을 깨지 않고 선점해 둔 섹션도
         // 걷어낸다(못 읽은 것을 "변화 없음"처럼 그리지 않으려면 섹션 자체가
         // 없는 게 맞다, renderUnavailable()과 같은 논리).
         .catch(() => fillTimelineSection(requestedEntityId, []));
     }
 
+    // CTA(보드 02/04 §패널 CTA) — 리드인 문장과 버튼 문구가 무엇을 아직 안
+    // 했는지에 따라 달라진다. 확인할 것이 없으면 리드인 없이 버튼만 둔다.
+    const ctaBlock = elp('div', 'panel-cta-block');
+    let ctaLabel = '채팅에서 답하기';
+    let leadIn = '';
+    if (reason) {
+      leadIn = '이 연결을 확인하지 않으셨습니다.';
+      ctaLabel = '채팅에서 물어보기';
+    } else if (conflicting) {
+      leadIn = '어느 쪽이 실제에 가까운지 아직 답하지 않으셨습니다.';
+    }
+    if (leadIn) {
+      const lead = elp('div', 'panel-cta-lead');
+      lead.textContent = leadIn;
+      ctaBlock.appendChild(lead);
+    }
     const cta = elp('button', 'panel-cta');
     cta.setAttribute('type', 'button');
-    cta.textContent = '채팅에서 답하기';
+    cta.textContent = ctaLabel;
     if (typeof onPanelCta === 'function') cta.addEventListener('click', onPanelCta);
-    panel.appendChild(cta);
+    ctaBlock.appendChild(cta);
+    panel.appendChild(ctaBlock);
+  }
+
+  // 관계 목록의 보강 수 채움(보드 04 우측 숫자) — fillTimelineSection과 같은
+  // stale 가드를 쓴다. 해당 쌍의 이벤트가 없으면 칸을 빈 채로 둔다(0을 찍으면
+  // "관계가 0번 기록됐다"는 거짓이 된다 — 못 센 것과 없는 것은 다르다).
+  function fillRelationCounts(entityId, counts) {
+    const panel = elements.panel;
+    if (!panel || state.selectedEntityId !== entityId) return;
+    if (typeof panel.querySelectorAll !== 'function') return;
+    for (const row of panel.querySelectorAll('.panel-relation-row')) {
+      const relation = row.getAttribute('data-relation');
+      const otherId = row.getAttribute('data-other-id');
+      if (!relation || !otherId) continue;
+      const count = counts.get(`${relation} ${otherId}`);
+      if (!Number.isFinite(count) || count <= 0) continue;
+      const cell = row.querySelectorAll('.panel-relation-count')[0];
+      if (cell) cell.textContent = String(count);
+    }
   }
 
   // 공통 패널 — 선택된 노드가 있으면 채우고 없으면 숨긴다. panel 요소는
@@ -546,6 +1009,13 @@ function createGraphModeController(deps) {
     highlightSelectedRow();
     const panel = elements.panel;
     if (!panel) return;
+    // 수집·노출(보드 05)은 노드가 아니라 설정을 보는 화면이다 — 그 옆에 노드
+    // 패널이 남아 있으면 무엇을 보고 있는지가 흐려진다. 선택 자체는 지우지
+    // 않는다(요약·지도로 돌아오면 그대로 다시 뜬다).
+    if (state.surface === store.SURFACE_SETTINGS) {
+      panel.hidden = true;
+      return;
+    }
     if (!state.selectedEntityId || !state.panel) {
       panel.hidden = true;
       while (panel.firstChild) panel.removeChild(panel.firstChild);
@@ -575,12 +1045,24 @@ function createGraphModeController(deps) {
     state = store.applyRevision(state, payload && payload.revision);
     if (!force && lastDrawnRevision === state.revision) return null;
 
+    // 헤더 필터를 배치 **전에** 건다(보드 03/04) — 그려 놓고 숨기면 좌표가 이미
+    // 걸러진 노드까지 자리를 잡은 뒤라 남은 노드가 화면 한쪽에 뭉친다.
+    if (filters && typeof getFilters === 'function') {
+      payload = filters.applyGraphFilters(payload, getFilters());
+    }
+
     const placed = layout.layoutClusterMap(payload, {
       width: elements.graphBody ? elements.graphBody.clientWidth : 0,
       height: elements.graphBody ? elements.graphBody.clientHeight : 0,
     });
     lastPlaced = placed;
     lastPayload = payload; // 헤더 메타의 "관계 E"(필터 전 원본)가 이 값을 읽는다.
+    // 필터가 선택 노드를 걷어냈으면 선택도 놓는다 — 화면에 없는 노드의 패널이
+    // 옆에 남아 있으면 지도와 패널이 다른 그래프를 말하게 된다(실측).
+    if (state.selectedEntityId
+      && !placed.nodes.some((node) => node.entity_id === state.selectedEntityId)) {
+      state = store.clearSelection(state);
+    }
     renderStage(placed);
     wireNodeClicks();
     renderSelection();
@@ -612,6 +1094,11 @@ function createGraphModeController(deps) {
     },
     async refresh() {
       return draw(false);
+    },
+    // 헤더 필터가 바뀌었다 — 리비전은 그대로지만 그릴 것이 달라졌으므로
+    // refresh()(리비전 같으면 no-op)로는 안 되고 강제로 다시 그린다.
+    async refreshFiltered() {
+      return draw(true);
     },
     // 모드 칩은 상시 보인다(Paper 보드 05) — 브레인 꺼짐은 칩을 숨기는 대신
     // 그래프 화면 안에서 renderUnavailable()로 정직하게 알린다. 그래프 모드
@@ -657,6 +1144,13 @@ function createGraphModeController(deps) {
       if (state.surface === nextSurface) return null;
       state = store.setSurface(state, nextSurface);
       applyVisibility();
+      // 수집·노출(보드 05)은 진입할 때마다 다시 그린다 — 설정 오버레이(같은
+      // 저장소를 보는 두 번째 입구)에서 값을 바꾸고 돌아왔을 수 있다.
+      if (state.surface === store.SURFACE_SETTINGS) {
+        renderSelection(); // 노드 패널을 접는다(위 renderSelection 주석 참고).
+        if (typeof onEnterSettings === 'function') onEnterSettings();
+        return null;
+      }
       if (state.surface === store.SURFACE_MAP) {
         return draw(true);
       }
@@ -666,7 +1160,16 @@ function createGraphModeController(deps) {
   };
 }
 
-const __exports = { createGraphModeController, computeGraphHeaderMeta, formatEventDate, buildTimelineRows };
+const __exports = {
+  createGraphModeController,
+  computeGraphHeaderMeta,
+  formatEventDate,
+  buildTimelineRows,
+  topSurprising,
+  countRelationEvents,
+  hiddenLinkReasonClauses,
+  relativeScoreText,
+};
 
 // UMD 각주(2026-08-18 렌더러 격리) — column-fold.js와 같은 패턴.
 if (typeof module !== 'undefined' && module.exports) {

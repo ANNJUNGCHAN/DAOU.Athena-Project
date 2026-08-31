@@ -51,10 +51,9 @@ function groupThemeClusters(payload) {
       size: group.members.length,
       name: null, // §0 발견1 — 이름 파이프라인이 없다, 지어내지 않는다.
       cohesion: cohesionByCluster ? cohesionByCluster[group.cluster] : undefined,
-      // WP-A(그래프 후속 계획) — 규칙 기반 "대표 멤버 · 최빈 kind" 문자열.
-      // 의미적 이름이 아니다 — name(위)과 분리된 필드라 "이름 없음" 배지·
-      // namedCount 판정에는 영향을 주지 않는다.
-      representative: representativeByCluster ? representativeByCluster[group.cluster] : undefined,
+      // 제목 사다리의 마지막 실단서 — 지도와 같은 값을 쓴다(위 representativeName).
+      representative: window.AthenaLib.GraphClusterLayout.representativeName(group.members)
+        || (representativeByCluster ? representativeByCluster[group.cluster] : undefined),
       // WP-F — LLM이 지은 **추정 이름**. name을 대체하지 않는다(아직 의미적으로
       // 100% 신뢰 가능한 이름이 아니다, G-F7) — "이름 없음" 배지·namedCount
       // 판정은 계속 name만 본다. 없으면(휴면·실패·구버전 backend) undefined.
@@ -62,41 +61,38 @@ function groupThemeClusters(payload) {
     }));
 }
 
+// 카드 제목도 지도 버블과 **같은 폴백 사다리**를 쓴다(render.js clusterTitle):
+// name → AI 추정 → 규칙 기반 대표 → "이름 없는 군집". 두 화면이 같은 군집을
+// 다른 이름으로 부르면 사용자는 다른 군집으로 읽는다. 옛 판은 여기서만 "군집 0"
+// + "이름 없음" 배지를 썼고, 그 결과 요약 카드는 "군집 0"인데 지도는 "미국 지수
+// ETF · 추정"이었다(실측).
+function clusterCardTitle(cluster) {
+  if (cluster.name) return { text: cluster.name, estimated: false };
+  if (cluster.aiLabel) return { text: cluster.aiLabel, estimated: true };
+  if (cluster.representative) return { text: cluster.representative, estimated: true };
+  return { text: '이름 없는 군집', estimated: false };
+}
+
 function renderClusterCard(cluster, warnUnnamed) {
   const card = el('div', warnUnnamed ? 'theme-cluster-card is-unnamed-warn' : 'theme-cluster-card');
 
   const title = el('div', 'theme-cluster-title');
-  const nameEl = el('span', 'theme-cluster-name');
-  nameEl.textContent = cluster.name || `군집 ${cluster.cluster}`;
+  const heading = clusterCardTitle(cluster);
+  const nameEl = el('span', heading.estimated ? 'theme-cluster-name is-estimated' : 'theme-cluster-name');
+  nameEl.textContent = heading.text;
   title.appendChild(nameEl);
-  if (!cluster.name) {
+  if (heading.estimated) {
     const badge = el('span', 'theme-cluster-unnamed-badge');
-    badge.textContent = '이름 없음';
+    badge.textContent = '추정';
     title.appendChild(badge);
   }
-  card.appendChild(title);
-
+  // 종목 수는 제목 줄의 오른쪽 끝에 붙는다(보드 01) — 이름과 수가 한 줄에 있어야
+  // 카드 하나가 두 줄(제목+막대)로 끝난다. 별도 줄로 빼면 카드가 세 줄이 되어
+  // 세 장을 세로로 쌓았을 때 표 아래가 스크롤 없이는 안 보인다(실측).
   const count = el('span', 'theme-cluster-count');
   count.textContent = `${cluster.size}종목`;
-  card.appendChild(count);
-
-  // 대표 설명 — 규칙 기반 문자열(의미적 이름 아님). 없으면(구버전 backend)
-  // 생략한다(§0 정책, 지어낸 문구 없음). "이름 없음" 배지는 이 값과 무관하게
-  // 그대로 유지된다(위 title 블록 참고 — cluster.name만 본다).
-  if (cluster.representative) {
-    const representative = el('div', 'theme-cluster-representative');
-    representative.textContent = `대표: ${cluster.representative}`;
-    card.appendChild(representative);
-  }
-
-  // AI 추정 라벨(WP-F, G-F7) — 기존 "추정 분류" 관례(HUB_LEAF_CAPTION류)를
-  // 확장한 문구로, LLM이 지었음을 항상 명시한다. 없으면 생략 — 대표 설명만
-  // 남는 것이 정직한 폴백이다(§0 정책). "이름 없음" 배지는 이 값과 무관하다.
-  if (cluster.aiLabel) {
-    const aiLabel = el('div', 'theme-cluster-ai-label');
-    aiLabel.textContent = `AI 추정: ${cluster.aiLabel}`;
-    card.appendChild(aiLabel);
-  }
+  title.appendChild(count);
+  card.appendChild(title);
 
   // 응집도는 스텝5-2 채택 여부에 따라 있을 수도 없을 수도 있다 — 없으면
   // 진행바·수치를 아예 생략한다(지어낸 숫자 없음, §0 정책).
