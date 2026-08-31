@@ -19,16 +19,22 @@
 const { app } = require('electron');
 const path = require('path');
 const fs = require('fs');
-const os = require('os');
+const { resolveHarnessProfile } = require('./lib/main/harness-profile');
 
-// 프로필은 매 실행 새 디렉터리다. 고정 이름을 지우고 다시 만드는 판은
+// 프로필은 기본적으로 매 실행 새 디렉터리다. 고정 이름을 지우고 다시 만드는 판은
 // 앱이 띄운 MCP 서버 자식이 `mcp-config`를 붙잡고 있으면 rmSync가 EPERM으로
 // 죽어 프로브가 통째로 멈춘다(2026-08-31 실측 — 저장소 안에 남은 프로필을
 // 다음 실행이 못 지웠다). 임시 폴더에 유일 이름으로 만들고 끝에 최선노력으로
 // 지운다 — 못 지워도 다음 실행을 막지 않는다.
-const PROFILE = fs.mkdtempSync(path.join(os.tmpdir(), 'athena-probe-backtest-'));
-// 온보딩을 건너뛴다 — 이 프로브는 모드 전환만 본다.
-fs.writeFileSync(path.join(PROFILE, 'athena-onboarding.json'), JSON.stringify({ cliDone: true, accountDone: true }));
+//
+// ATHENA_USERDATA_DIR을 주면 그 프로필을 그대로 쓴다(실제로 등록한 계좌·CLI
+// 계정으로 검증하고 싶을 때). 그때는 정리와 온보딩 시딩이 no-op이 된다 —
+// lib/main/harness-profile.js가 그 규칙을 소유한다.
+const profile = resolveHarnessProfile({ prefix: 'athena-probe-backtest-' });
+const PROFILE = profile.dir;
+// 온보딩을 건너뛴다 — 이 프로브는 모드 전환만 본다(공유 프로필이면 실제
+// 온보딩 상태를 덮지 않으려고 아무것도 쓰지 않는다).
+profile.seedOnboarding();
 app.setPath('userData', PROFILE);
 
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -142,7 +148,7 @@ async function main() {
     JSON.stringify(report, null, 1)
   );
   console.log(`[probe-backtest-mode] ${okAll ? 'ALL OK' : 'FAIL'} (${report.steps.filter((s) => s.ok).length}/${report.steps.length})`);
-  try { fs.rmSync(PROFILE, { recursive: true, force: true }); } catch { /* 앱 자식이 붙잡고 있으면 남긴다 — 다음 실행은 새 디렉터리다 */ }
+  profile.cleanup(); // 공유 프로필(ATHENA_USERDATA_DIR)이면 아무것도 지우지 않는다.
   app.exit(okAll ? 0 : 1);
 }
 

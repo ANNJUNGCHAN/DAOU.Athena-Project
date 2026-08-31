@@ -25,6 +25,7 @@ const { spawn } = require('child_process');
 const { StreamJsonSession } = require('./stream-json-parser');
 const mcpEnv = require('./mcp-env');
 const { killTree } = require('./proc-utils');
+const { getClaudeBin } = require('./claude-bin');
 const {
   GATEWAY_ALLOWED_TOOLS,
   DISALLOWED_EXECUTION_TOOLS,
@@ -92,7 +93,7 @@ class ClaudeChatSession {
     configFile = '.mcp.json',
     allowedTools = GATEWAY_ALLOWED_TOOLS,
     appendSystemPrompt = null,
-    claudeBin = process.env.ATHENA_CLAUDE_BIN || 'claude',
+    claudeBin = getClaudeBin(),
     timeoutMs = DEFAULT_TIMEOUT_MS,
     quietBoundaryMs = DEFAULT_QUIET_BOUNDARY_MS,
     maxStdoutBytes = MAX_STDOUT_BYTES,

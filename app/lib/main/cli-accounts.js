@@ -6,6 +6,7 @@ const path = require('node:path');
 const { spawn } = require('node:child_process');
 const { performance } = require('node:perf_hooks');
 const electron = require('electron');
+const { getClaudeBin, claudeBinCandidates } = require('./claude-bin');
 const { resolveCodexRuntimeHome, createCodexRuntime } = require('./codex-runtime-home');
 
 const PROVIDER_ORDER = Object.freeze(['claude', 'codex']);
@@ -62,6 +63,7 @@ function createCliAccounts({
   fsImpl = fs,
   osImpl = os,
   spawnImpl = spawn,
+  claudeBinImpl = getClaudeBin,
   monotonicNow = () => performance.now(),
   statusTimeoutMs = CODEX_STATUS_TIMEOUT_MS,
   writeStateAtomicImpl,
@@ -225,7 +227,13 @@ function createCliAccounts({
   const list = async () => selectList(await reconcileCodexRuntimeAccount());
   const getActiveAccount = async () => selectActiveAccount(await reconcileCodexRuntimeAccount());
 
+  // 절대경로는 파일 존재로 판정한다 — `where`는 PATH만 뒤지므로 PATH 밖에
+  // 깔린 실행 파일(예: ~/.local/bin/claude.exe)을 절대 못 찾는다. 이게
+  // "설치되어 있지 않다"가 잘못 뜨던 원인이다(2026-09-01 실측).
   function probeBinaryExists(command) {
+    if (path.isAbsolute(command)) {
+      return Promise.resolve(fsImpl.existsSync(command));
+    }
     return new Promise((resolve) => {
       let settled = false;
       let child;
@@ -247,8 +255,15 @@ function createCliAccounts({
     const cfg = LOGIN_COMMANDS[providerId];
     const name = PROVIDER_NAMES[providerId];
     if (!cfg || !name) return { ok: false, launched: false, message: '알 수 없는 CLI다' };
-    if (!await probeBinaryExists(cfg.command)) {
-      return { ok: false, launched: false, message: `${name} CLI가 이 컴퓨터에 설치되어 있지 않다` };
+    // claude는 PATH에만 기대지 않는다 — claude-bin.js가 오버라이드·PATH·네이티브
+    // 설치 순으로 푼다. codex는 아직 PATH 전제 그대로다(런타임이 별도 홈을 쓴다).
+    const command = providerId === 'claude' ? claudeBinImpl() : cfg.command;
+    if (!await probeBinaryExists(command)) {
+      // 어디를 봤는지 말한다 — "설치되어 있지 않다"만으로는 다음에 뭘 할지 알 수 없다.
+      const where = providerId === 'claude'
+        ? ` (찾아본 곳: ${claudeBinCandidates().join(' · ')})`
+        : '';
+      return { ok: false, launched: false, message: `${name} CLI가 이 컴퓨터에 설치되어 있지 않다${where}` };
     }
     try {
       const child = providerId === 'codex'
@@ -257,7 +272,7 @@ function createCliAccounts({
         })
         : spawnImpl(
           'cmd.exe',
-          ['/c', 'start', `"Athena · ${name} 로그인"`, 'cmd', '/k', cfg.command, ...cfg.args],
+          ['/c', 'start', `"Athena · ${name} 로그인"`, 'cmd', '/k', command, ...cfg.args],
           { detached: true, stdio: 'ignore', windowsHide: false, windowsVerbatimArguments: true },
         );
       child.unref();

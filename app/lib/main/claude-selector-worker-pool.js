@@ -3,6 +3,7 @@
 const { spawn } = require('child_process');
 const { StreamJsonSession } = require('./stream-json-parser');
 const { killTree } = require('./proc-utils');
+const { getClaudeBin } = require('./claude-bin');
 const {
   DISALLOWED_EXECUTION_TOOLS,
   DISABLE_TOOL_SEARCH_ENV,
@@ -84,7 +85,7 @@ class ClaudeSelectorWorkerPool {
     desiredSize = DEFAULT_POOL_SIZE,
     model = null,
     effort = null,
-    claudeBin = process.env.ATHENA_CLAUDE_BIN || 'claude',
+    claudeBin = getClaudeBin(),
     timeoutMs = DEFAULT_TIMEOUT_MS,
     warmupTimeoutMs = DEFAULT_WARMUP_TIMEOUT_MS,
     quietBoundaryMs = DEFAULT_QUIET_BOUNDARY_MS,

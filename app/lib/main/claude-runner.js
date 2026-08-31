@@ -4,6 +4,7 @@ const { spawn } = require('child_process');
 const { StreamJsonSession } = require('./stream-json-parser');
 const mcpEnv = require('./mcp-env');
 const { killTree } = require('./proc-utils');
+const { getClaudeBin } = require('./claude-bin');
 const {
   RENDER_CANVAS_ALLOWED_TOOL,
   GATEWAY_ALLOWED_TOOLS,
@@ -73,7 +74,9 @@ function buildArgs({ prompt, configFile, allowedTools, resumeSessionId, model, e
 // onThinkingDelta(text) — 추론 조각마다(같은 플래그, 미리보기 전용, 선택).
 // onSpawn({pid, kill}) — 프로세스가 뜨자마자. kill()은 트리 전체를 끊는다(Esc 중단용).
 // timeoutMs — 왕복 상한. 넘기면 트리를 죽이고 ok:false·timedOut:true로 끝낸다. 0이면 무제한.
-// claudeBin — 테스트/오버라이드용. 기본은 PATH의 `claude`.
+// claudeBin — 테스트/오버라이드용. 기본은 claude-bin.js가 해석한 실행 파일
+// (ATHENA_CLAUDE_BIN → PATH의 .exe → ~/.local/bin). PATH만 믿던 옛 기본값은
+// 바로가기·패키징 exe처럼 PATH가 얕은 환경에서 ENOENT를 냈다.
 function runClaudeQuery({
   prompt,
   cwd,
@@ -82,7 +85,7 @@ function runClaudeQuery({
   resumeSessionId = null,
   model = null,
   effort = null,
-  claudeBin = process.env.ATHENA_CLAUDE_BIN || 'claude',
+  claudeBin = getClaudeBin(),
   timeoutMs = DEFAULT_TIMEOUT_MS,
   onSpawn,
   onCanvasResult,
