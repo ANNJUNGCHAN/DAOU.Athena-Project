@@ -12,6 +12,7 @@
 from __future__ import annotations
 
 import ast
+import difflib
 import hashlib
 import json
 from datetime import UTC, datetime, timedelta
@@ -22,7 +23,11 @@ import pandas as pd
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import JSONResponse
 
+from athena_api.backtest import deploy as deploy_mod
+from athena_api.backtest import diagnose as diagnose_mod
+from athena_api.backtest import flow as flow_mod
 from athena_api.backtest import indicators as indicators_mod
+from athena_api.backtest import optimize as optimize_mod
 from athena_api.backtest import presets as presets_mod
 from athena_api.backtest.data import compute_plan, kiwoom_fetch_page
 from athena_api.backtest.runner import BacktestRunner
@@ -302,7 +307,13 @@ async def start_run(request: Request, body: dict[str, Any]) -> JSONResponse:
         stk_cd=stk_cd, period=period, adjusted=adjusted,
         from_dt=from_dt, to_dt=to_dt, coverage=coverage,
     )
-    if plan.estimated_pages > 0:
+    # `allow_partial`은 "보유 구간만으로 실행"(Paper 보드 04·10)이다. 이 출구가 없으면
+    # 계획서 §11-9의 휴장일 함정에서 사용자가 영원히 빠져나오지 못한다 — 휴장일을 `from`으로
+    # 주면 채울 수 없는 하루가 남아 백필을 아무리 돌려도 `needed_pages`가 0이 되지 않고,
+    # 승인 카드를 눌러도 같은 자리로 돌아온다. 대신 이 경로로 들어온 실행에는 `partial`
+    # 플래그를 남긴다 — 요청 구간 전부를 돌린 결과인 척하지 않는다.
+    allow_partial = bool(body.get("allow_partial", False))
+    if plan.estimated_pages > 0 and not allow_partial:
         # 캐시 부족 — 실행하지 않는다(계획서 §6.6). 사람이 승인 카드(data/backfill)를
         # 먼저 통과해야 한다.
         raise HTTPException(
@@ -311,7 +322,17 @@ async def start_run(request: Request, body: dict[str, Any]) -> JSONResponse:
         )
 
     candles = await store.candles(stk_cd, period, adjusted, start=from_dt, end=to_dt)
+    if not candles:
+        raise HTTPException(
+            status_code=422,
+            detail="캐시에 이 구간의 봉이 하나도 없다 — 먼저 수집해야 한다",
+        )
     df = _candles_to_frame(candles)
+    partial_flag = (
+        f"보유 구간만 실행 · {candles[0].dt}~{candles[-1].dt}"
+        if plan.estimated_pages > 0
+        else None
+    )
 
     now = datetime.now(UTC)
     # POST /runs는 {yaml, params}만 받는다 — 저장된 전략 CRUD(§6.6의 strategies 라우트군)는
@@ -331,8 +352,8 @@ async def start_run(request: Request, body: dict[str, Any]) -> JSONResponse:
         run_id, version_id, params_json=params_json, spec_hash=spec_hash,
         status="running", started_at=now,
     )
-    runner.start_run(run_id, spec=spec, df=df, overrides=params)
-    return JSONResponse(status_code=202, content={"run_id": run_id})
+    runner.start_run(run_id, spec=spec, df=df, overrides=params, extra_flags=partial_flag)
+    return JSONResponse(status_code=202, content={"run_id": run_id, "partial": partial_flag})
 
 
 @router.get("/runs")
@@ -410,6 +431,500 @@ async def cancel_run(request: Request, run_id: str) -> dict[str, Any]:
     if row.status == "running":
         runner.cancel(run_id)
     return {"ok": True}
+
+
+# ── 코드 플로우 · 오류 진단 (조회 전용) ───────────────────────────────────────
+
+
+@router.post("/flow")
+async def flow_route(body: dict[str, Any]) -> dict[str, Any]:
+    """전략 파이썬 소스를 단계 지도로 옮긴다(Paper 보드 08). 실행하지 않는다 —
+    `ast`로 읽기만 하므로 사용자 코드가 이 요청에서 도는 일은 없다."""
+    source = body.get("source")
+    if not isinstance(source, str) or not source.strip():
+        raise HTTPException(status_code=422, detail="source는 비어 있지 않은 문자열이어야 한다")
+    return flow_mod.to_payload(flow_mod.build_flow(source))
+
+
+@router.post("/diagnose")
+async def diagnose_route(body: dict[str, Any]) -> dict[str, Any]:
+    """오류 텍스트와 소스로 진단·수정안을 만든다(Paper 보드 09). **적용하지 않는다** —
+    새 소스를 계산해 돌려줄 뿐이고, 저장은 사람이 누른 뒤 버전 라우트가 한다(§7.3)."""
+    error_text = body.get("error")
+    source = body.get("source")
+    if not isinstance(error_text, str) or not error_text.strip():
+        raise HTTPException(status_code=422, detail="error는 비어 있지 않은 문자열이어야 한다")
+    if not isinstance(source, str):
+        raise HTTPException(status_code=422, detail="source는 문자열이어야 한다")
+    known_indicators = [s.id for s in indicators_mod.list_all()]
+    known_params = body.get("params") if isinstance(body.get("params"), list) else None
+    return diagnose_mod.to_payload(
+        diagnose_mod.diagnose(
+            error_text, source,
+            known_indicators=known_indicators,
+            known_params=known_params,
+        )
+    )
+
+
+# ── 전략 · 버전 (§6.6 strategies 라우트군) ────────────────────────────────────
+
+
+@router.get("/strategies")
+async def list_strategies_route(request: Request) -> dict[str, Any]:
+    store = _store(request)
+    return {
+        "strategies": [
+            {"id": s.id, "name": s.name, "kind": s.kind, "created_at": s.created_at}
+            for s in await store.strategies()
+        ]
+    }
+
+
+@router.post("/strategies")
+async def create_strategy_route(request: Request, body: dict[str, Any]) -> dict[str, Any]:
+    store = _store(request)
+    name = body.get("name")
+    kind = body.get("kind")
+    source = body.get("source")
+    if not isinstance(name, str) or not name.strip():
+        raise HTTPException(status_code=422, detail="name은 비어 있지 않은 문자열이어야 한다")
+    if kind not in ("yaml", "python"):
+        raise HTTPException(status_code=422, detail="kind는 yaml 또는 python이어야 한다")
+    if not isinstance(source, str) or not source.strip():
+        raise HTTPException(status_code=422, detail="source는 비어 있지 않은 문자열이어야 한다")
+    now = datetime.now(UTC)
+    strategy_id = str(uuid4())
+    version_id = str(uuid4())
+    await store.create_strategy(strategy_id, name, kind, created_at=now)
+    # 첫 버전은 사람이 만든 것이므로 바로 활성이다(§7.3 — 사람의 편집은 사람의 클릭이다).
+    await store.add_version(
+        version_id, strategy_id, 1, source, origin="human", created_at=now, active=True,
+    )
+    return {"strategy_id": strategy_id, "version_id": version_id, "version": 1}
+
+
+@router.get("/strategies/{strategy_id}/versions")
+async def list_versions_route(request: Request, strategy_id: str) -> dict[str, Any]:
+    store = _store(request)
+    if await store.strategy(strategy_id) is None:
+        raise HTTPException(status_code=404, detail="전략이 존재하지 않는다")
+    return {
+        "versions": [
+            {
+                "id": v.id,
+                "version": v.version,
+                "source": v.source,
+                "note": v.note,
+                "origin": v.origin,
+                "created_at": v.created_at,
+                "active": v.active,
+            }
+            for v in await store.versions(strategy_id)
+        ]
+    }
+
+
+@router.post("/strategies/{strategy_id}/versions")
+async def add_version_route(
+    request: Request, strategy_id: str, body: dict[str, Any]
+) -> dict[str, Any]:
+    """새 버전을 만든다.
+
+    `origin`이 `llm_draft`면 **활성화하지 않는다** — 모델이 코드를 바꿔놓고 사람은 옛 코드가
+    도는 줄 아는 경로를 원천 차단한다(§7.3). `human`은 즉시 활성이다(사람의 편집은 사람의
+    클릭이다). 이 분기가 이 라우트의 존재 이유다.
+    """
+    store = _store(request)
+    if await store.strategy(strategy_id) is None:
+        raise HTTPException(status_code=404, detail="전략이 존재하지 않는다")
+    source = body.get("source")
+    origin = body.get("origin", "human")
+    if not isinstance(source, str) or not source.strip():
+        raise HTTPException(status_code=422, detail="source는 비어 있지 않은 문자열이어야 한다")
+    if origin not in ("human", "form", "llm_draft"):
+        raise HTTPException(status_code=422, detail="origin은 human|form|llm_draft여야 한다")
+    existing = await store.versions(strategy_id)
+    next_version = max((v.version for v in existing), default=0) + 1
+    version_id = str(uuid4())
+    await store.add_version(
+        version_id, strategy_id, next_version, source,
+        note=body.get("note"), origin=origin,
+        created_at=datetime.now(UTC), active=origin != "llm_draft",
+    )
+    return {"version_id": version_id, "version": next_version, "active": origin != "llm_draft"}
+
+
+@router.post("/strategies/{strategy_id}/activate")
+async def activate_version_route(
+    request: Request, strategy_id: str, body: dict[str, Any]
+) -> dict[str, Any]:
+    """버전을 활성화한다 — **사람 클릭 전용**이다(MCP에는 이 액션이 없다, §9)."""
+    store = _store(request)
+    version_id = body.get("version_id")
+    if not isinstance(version_id, str) or not version_id:
+        raise HTTPException(status_code=422, detail="version_id가 필요하다")
+    versions = await store.versions(strategy_id)
+    if not any(v.id == version_id for v in versions):
+        raise HTTPException(status_code=404, detail="그 전략에 속한 버전이 아니다")
+    await store.activate_version(strategy_id, version_id)
+    return {"ok": True, "active_version_id": version_id}
+
+
+@router.get("/strategies/{strategy_id}/diff")
+async def diff_versions_route(
+    request: Request, strategy_id: str, base: str, head: str
+) -> dict[str, Any]:
+    """두 버전의 줄 단위 diff(Paper 보드 05 "코드 diff"). 라이브러리 없이 difflib 하나로
+    낸다 — 전략 파일은 수백 줄 규모라 그 이상이 필요하지 않다(§7.4)."""
+    store = _store(request)
+    versions = {v.id: v for v in await store.versions(strategy_id)}
+    if base not in versions or head not in versions:
+        raise HTTPException(status_code=404, detail="그 전략에 속한 버전이 아니다")
+    base_lines = versions[base].source.splitlines()
+    head_lines = versions[head].source.splitlines()
+    lines: list[dict[str, str]] = []
+    added = removed = 0
+    for line in difflib.unified_diff(base_lines, head_lines, lineterm="", n=2):
+        if line.startswith(("---", "+++")):
+            continue
+        mark = line[0] if line and line[0] in "+-@" else " "
+        if mark == "+":
+            added += 1
+        elif mark == "-":
+            removed += 1
+        lines.append({"mark": mark, "text": line[1:] if mark in "+- " else line})
+    return {
+        "base_version": versions[base].version,
+        "head_version": versions[head].version,
+        "added": added,
+        "removed": removed,
+        "lines": lines,
+    }
+
+
+# ── 최적화 (Paper 보드 06) ───────────────────────────────────────────────────
+
+
+def _parse_ranges(raw: Any) -> list[optimize_mod.ParamRange]:
+    if not isinstance(raw, list) or not raw:
+        raise HTTPException(status_code=422, detail="ranges는 비어 있지 않은 배열이어야 한다")
+    out: list[optimize_mod.ParamRange] = []
+    for item in raw:
+        if not isinstance(item, dict):
+            raise HTTPException(status_code=422, detail="ranges 항목은 객체여야 한다")
+        try:
+            out.append(
+                optimize_mod.ParamRange(
+                    name=str(item["name"]),
+                    start=float(item["start"]),
+                    stop=float(item["stop"]),
+                    step=float(item["step"]),
+                    is_int=bool(item.get("is_int", True)),
+                )
+            )
+        except KeyError as exc:
+            raise HTTPException(status_code=422, detail=f"필수 필드가 없다: {exc}") from None
+        except (TypeError, ValueError) as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from None
+    return out
+
+
+@router.post("/optimize/plan")
+async def optimize_plan_route(body: dict[str, Any]) -> dict[str, Any]:
+    """실행 전에 조합 수만 센다 — 보드 06의 "조합 276개 · 예상 ~2초"가 이 값을 쓴다.
+    상한을 넘는지도 여기서 알려준다(눌러 놓고 거절당하지 않게)."""
+    ranges = _parse_ranges(body.get("ranges"))
+    ascending = body.get("ascending")
+    constraint = (
+        optimize_mod.ascending_constraint(*ascending)
+        if isinstance(ascending, list) and len(ascending) >= 2
+        else None
+    )
+    try:
+        total = optimize_mod.count_combinations(ranges, constraint)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from None
+    return {
+        "combinations": total,
+        "max_combinations": optimize_mod.MAX_COMBINATIONS,
+        "over_limit": total > optimize_mod.MAX_COMBINATIONS,
+        "values_per_param": {r.name: len(r.values()) for r in ranges},
+    }
+
+
+@router.post("/optimize")
+async def optimize_route(request: Request, body: dict[str, Any]) -> dict[str, Any]:
+    """그리드·랜덤 서치를 돌린다. **캐시만 쓴다** — 캐시 밖 구간이 있으면 409로 거절하고
+    수집 승인을 먼저 받게 한다(보드 06 "추가 TR 호출 없음")."""
+    store = _store(request)
+    yaml_text = body.get("yaml")
+    if not isinstance(yaml_text, str) or not yaml_text.strip():
+        raise HTTPException(status_code=422, detail="yaml은 비어 있지 않은 문자열이어야 한다")
+    try:
+        spec = from_kis_yaml(yaml_text)
+    except Exception as exc:  # noqa: BLE001 — 사용자 입력 검증 결과를 그대로 옮긴다
+        raise HTTPException(status_code=422, detail=str(exc)) from None
+    if spec.data is None or len(spec.data.symbols) != 1:
+        raise HTTPException(status_code=422, detail="data에 종목 1개와 기간이 있어야 한다")
+
+    ranges = _parse_ranges(body.get("ranges"))
+    unknown = [r.name for r in ranges if r.name not in spec.strategy.params]
+    if unknown:
+        raise HTTPException(status_code=422, detail=f"알 수 없는 전략 파라미터: {unknown}")
+
+    stk_cd = spec.data.symbols[0]
+    coverage = await store.coverage(stk_cd, spec.data.period, spec.data.adjusted)
+    plan = compute_plan(
+        stk_cd=stk_cd, period=spec.data.period, adjusted=spec.data.adjusted,
+        from_dt=spec.data.from_, to_dt=spec.data.to, coverage=coverage,
+    )
+    if plan.estimated_pages > 0:
+        raise HTTPException(
+            status_code=409,
+            detail={"needed_pages": plan.estimated_pages, "est_seconds": plan.estimated_seconds},
+        )
+    candles = await store.candles(
+        stk_cd, spec.data.period, spec.data.adjusted, start=spec.data.from_, end=spec.data.to
+    )
+    if not candles:
+        raise HTTPException(status_code=422, detail="캐시에 이 구간의 봉이 하나도 없다")
+    df = _candles_to_frame(candles)
+
+    ascending = body.get("ascending")
+    constraint = (
+        optimize_mod.ascending_constraint(*ascending)
+        if isinstance(ascending, list) and len(ascending) >= 2
+        else None
+    )
+    method = body.get("method", "grid")
+    if method not in ("grid", "random"):
+        raise HTTPException(status_code=422, detail="method는 grid 또는 random이어야 한다")
+    try:
+        result = optimize_mod.optimize(
+            spec, df, ranges,
+            method=method,
+            samples=body.get("samples"),
+            seed=body.get("seed"),
+            constraint=constraint,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from None
+
+    payload: dict[str, Any] = {
+        "method": result.method,
+        "best": None if result.best is None else {
+            "params": result.best.params,
+            "sharpe": result.best.sharpe,
+            "total_return": result.best.total_return,
+            "mdd": result.best.mdd,
+            "trades": result.best.trades,
+        },
+        "neighbour_mean_sharpe": result.neighbour_mean_sharpe,
+        "plateau": None if result.plateau is None else {
+            k: list(v) for k, v in result.plateau.items()
+        },
+        "warnings": [{"kind": w.kind, "message": w.message} for w in result.warnings],
+        "trials": [
+            {
+                "params": t.params, "sharpe": t.sharpe, "total_return": t.total_return,
+                "mdd": t.mdd, "trades": t.trades, "error": t.error,
+            }
+            for t in result.trials
+        ],
+    }
+    if len(ranges) >= 2:
+        payload["heatmap"] = optimize_mod.heatmap(result, ranges[0].name, ranges[1].name)
+    return payload
+
+
+# ── 배포 · 실전 적용 (Paper 보드 07) ─────────────────────────────────────────
+
+
+def _limits_from(body: dict[str, Any]) -> deploy_mod.Limits:
+    raw = body.get("limits")
+    if not isinstance(raw, dict):
+        raise HTTPException(status_code=422, detail="limits 객체가 필요하다")
+    try:
+        return deploy_mod.Limits(
+            max_order_amount=float(raw["max_order_amount"]),
+            max_orders_per_day=int(raw["max_orders_per_day"]),
+            valid_from=str(raw["valid_from"]),
+            valid_to=str(raw["valid_to"]),
+            stop_on_drawdown_pct=float(raw["stop_on_drawdown_pct"]),
+            stop_on_consecutive_losses=int(raw["stop_on_consecutive_losses"]),
+        )
+    except KeyError as exc:
+        raise HTTPException(status_code=422, detail=f"limits에 필수 필드가 없다: {exc}") from None
+    except (TypeError, ValueError) as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from None
+
+
+def _deployment_view(row: Any) -> dict[str, Any]:
+    return {
+        "id": row.id,
+        "strategy_version_id": row.strategy_version_id,
+        "run_id": row.run_id,
+        "stk_cd": row.stk_cd,
+        "period": row.period,
+        "adjusted": row.adjusted,
+        "mode": row.mode,
+        "mode_label": deploy_mod.MODE_LABELS.get(row.mode, row.mode),
+        "params": json.loads(row.params_json),
+        "limits": json.loads(row.limits_json),
+        "status": row.status,
+        "created_at": row.created_at,
+        "stopped_at": row.stopped_at,
+    }
+
+
+@router.get("/deployments")
+async def list_deployments_route(request: Request) -> dict[str, Any]:
+    store = _store(request)
+    return {"deployments": [_deployment_view(d) for d in await store.deployments()]}
+
+
+@router.post("/deployments")
+async def create_deployment_route(request: Request, body: dict[str, Any]) -> dict[str, Any]:
+    """배포를 만든다 — **사람 클릭 전용**이다. MCP에 이 액션을 두지 않는 이유는 배포가
+    돈이 나가는 경로의 스위치이기 때문이다(`backfill`/`activate`와 같은 규율, §9)."""
+    store = _store(request)
+    version_id = body.get("strategy_version_id")
+    mode = body.get("mode")
+    stk_cd = body.get("stk_cd")
+    if not isinstance(version_id, str) or not version_id:
+        raise HTTPException(status_code=422, detail="strategy_version_id가 필요하다")
+    if mode not in ("observe", "approve", "auto"):
+        raise HTTPException(status_code=422, detail="mode는 observe|approve|auto여야 한다")
+    if not isinstance(stk_cd, str) or not stk_cd:
+        raise HTTPException(status_code=422, detail="stk_cd가 필요하다")
+    limits = _limits_from(body)
+    params = body.get("params") if isinstance(body.get("params"), dict) else {}
+    deployment_id = str(uuid4())
+    await store.create_deployment(
+        deployment_id,
+        strategy_version_id=version_id,
+        run_id=body.get("run_id"),
+        stk_cd=stk_cd,
+        period=str(body.get("period", "day")),
+        adjusted=bool(body.get("adjusted", True)),
+        mode=mode,
+        params_json=json.dumps(params, ensure_ascii=False),
+        limits_json=json.dumps(
+            {
+                "max_order_amount": limits.max_order_amount,
+                "max_orders_per_day": limits.max_orders_per_day,
+                "valid_from": limits.valid_from,
+                "valid_to": limits.valid_to,
+                "stop_on_drawdown_pct": limits.stop_on_drawdown_pct,
+                "stop_on_consecutive_losses": limits.stop_on_consecutive_losses,
+            },
+            ensure_ascii=False,
+        ),
+        created_at=datetime.now(UTC),
+    )
+    return {"deployment_id": deployment_id}
+
+
+@router.delete("/deployments/{deployment_id}")
+async def stop_deployment_route(request: Request, deployment_id: str) -> dict[str, Any]:
+    store = _store(request)
+    if await store.deployment(deployment_id) is None:
+        raise HTTPException(status_code=404, detail="배포가 존재하지 않는다")
+    await store.stop_deployment(deployment_id, stopped_at=datetime.now(UTC))
+    return {"ok": True, "note": "이미 나간 주문은 취소되지 않는다"}
+
+
+@router.get("/deployments/{deployment_id}/signals")
+async def list_signals_route(request: Request, deployment_id: str) -> dict[str, Any]:
+    store = _store(request)
+    if await store.deployment(deployment_id) is None:
+        raise HTTPException(status_code=404, detail="배포가 존재하지 않는다")
+    return {
+        "signals": [
+            {
+                "id": s.id, "dt": s.dt, "side": s.side, "stage": s.stage,
+                "reason": s.reason, "basis": s.basis,
+                "blocked_reason": s.blocked_reason, "fill_price": s.fill_price,
+            }
+            for s in await store.signals(deployment_id)
+        ]
+    }
+
+
+@router.post("/deployments/{deployment_id}/evaluate")
+async def evaluate_deployment_route(
+    request: Request, deployment_id: str, body: dict[str, Any]
+) -> dict[str, Any]:
+    """마지막 봉으로 오늘의 신호를 판정한다. **주문을 내지 않는다** — 판정과 한도 검사만
+    하고, 주문은 앱의 기존 주문 게이트가 사람 클릭으로 낸다(deploy.py 머리말)."""
+    store = _store(request)
+    row = await store.deployment(deployment_id)
+    if row is None:
+        raise HTTPException(status_code=404, detail="배포가 존재하지 않는다")
+    version = await store.version(row.strategy_version_id)
+    if version is None:
+        raise HTTPException(status_code=404, detail="배포에 묶인 전략 버전을 찾을 수 없다")
+    try:
+        spec = from_kis_yaml(version.source)
+    except Exception as exc:  # noqa: BLE001 — 저장된 소스가 yaml이 아닐 수 있다
+        raise HTTPException(
+            status_code=422, detail=f"배포에 묶인 버전을 스펙으로 읽지 못했다: {exc}"
+        ) from None
+
+    candles = await store.candles(row.stk_cd, row.period, row.adjusted)
+    if not candles:
+        raise HTTPException(status_code=422, detail="캐시에 이 종목의 봉이 없다")
+    df = _candles_to_frame(candles)
+
+    limits_raw = json.loads(row.limits_json)
+    deployment = deploy_mod.Deployment(
+        id=row.id,
+        strategy_version_id=row.strategy_version_id,
+        run_id=row.run_id,
+        stk_cd=row.stk_cd,
+        period=row.period,
+        adjusted=row.adjusted,
+        mode=row.mode,  # type: ignore[arg-type]
+        params=json.loads(row.params_json),
+        limits=deploy_mod.Limits(**limits_raw),
+        status=row.status,  # type: ignore[arg-type]
+    )
+    today = str(body.get("today") or deploy_mod.today_str())
+    decision = deploy_mod.evaluate_latest(
+        spec, df, deployment,
+        today=today,
+        holding=bool(body.get("holding", False)),
+        orders_today=int(body.get("orders_today", 0)),
+        order_amount=float(body.get("order_amount", 0.0)),
+        consecutive_losses=int(body.get("consecutive_losses", 0)),
+        drawdown_pct=float(body.get("drawdown_pct", 0.0)),
+    )
+
+    signal_id = None
+    # 조건이 안 맞은 날은 기록하지 않는다 — 조용한 날로 이력을 채우면 사람이 못 읽는다.
+    if decision.stage != "skipped":
+        signal_id = str(uuid4())
+        await store.add_signal(
+            signal_id,
+            deployment_id=deployment_id,
+            dt=decision.dt,
+            side=decision.side,
+            stage=decision.stage,
+            reason=decision.reason,
+            basis=decision.basis,
+            blocked_reason=decision.blocked_reason,
+            created_at=datetime.now(UTC),
+        )
+    return {
+        "signal_id": signal_id,
+        "dt": decision.dt,
+        "side": decision.side,
+        "stage": decision.stage,
+        "reason": decision.reason,
+        "basis": decision.basis,
+        "blocked_reason": decision.blocked_reason,
+    }
 
 
 __all__ = ["router"]

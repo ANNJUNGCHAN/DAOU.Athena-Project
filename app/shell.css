@@ -737,6 +737,980 @@ body { margin: 0; overflow: hidden; }
   color: var(--color-down);
 }
 
+/* ---------- 백테스트 전수 파리티(2026-09-01, Paper 보드 01~10) ----------
+ * 표면이 4개에서 9개로 늘었다. 공통 규칙 하나로 묶는 이유: 모드 탭이 생기면서
+ * 모든 표면이 같은 셸(.backtest-shell) 안에 살게 됐고, 스크롤 소유자도 하나다.
+ * 색·radius·글자 크기는 위 P4 블록과 Paper 토큰을 그대로 이어 쓴다. */
+#backtestCanvas:has(.backtest-shell) {
+  display: block;
+  padding: 0;
+  overflow: hidden;
+}
+.backtest-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+.backtest-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 16px 20px 24px;
+}
+
+/* 헤더 — 전략 이름·모드 탭·실행. 결과에서 설계로 돌아갈 길이 항상 여기 있다. */
+.backtest-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 0 0 auto;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--color-k-line);
+}
+.backtest-head-title {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
+.backtest-head-name {
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-lg);
+}
+.backtest-head-strategy,
+.backtest-head-version {
+  color: var(--color-k-faint);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.backtest-tabs,
+.backtest-subtabs,
+.backtest-segment {
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  background: var(--color-k-panel3);
+  border-radius: 999px;
+}
+.backtest-tabs { margin-left: auto; }
+.backtest-tab,
+.backtest-subtab,
+.backtest-segment-item {
+  padding: 5px 12px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  cursor: pointer;
+}
+.backtest-tab.is-on,
+.backtest-subtab.is-on,
+.backtest-segment-item.is-on {
+  background: var(--color-k-panel);
+  color: var(--color-k-text);
+}
+.backtest-subtabs { margin-bottom: 12px; width: fit-content; }
+
+/* 카드 — 설계 폼의 네 덩어리(대상·지표·조건·리스크)가 공유한다. */
+.backtest-card {
+  margin-bottom: 12px;
+  padding: 14px;
+  background: var(--color-k-panel);
+  border: 1px solid var(--color-k-line);
+  border-radius: 12px;
+}
+.backtest-card-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.backtest-card-title {
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+}
+.backtest-card-note {
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  text-align: right;
+}
+.backtest-card-empty {
+  padding: 10px 0;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+}
+
+/* 종목 칩 — 다종목 입력(보드 01). */
+.backtest-symbol-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.backtest-symbol-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 4px 3px 9px;
+  background: var(--color-k-panel3);
+  border-radius: 999px;
+}
+.backtest-symbol-code {
+  color: var(--color-k-text);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+.backtest-symbol-remove {
+  width: 16px;
+  height: 16px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-k-faint);
+  cursor: pointer;
+  line-height: 1;
+}
+.backtest-symbol-add { width: 180px; }
+.backtest-field-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px;
+}
+.backtest-field-pct { width: 64px; }
+
+/* 지표 행 — 별칭 + 파라미터 슬라이더(보드 01). */
+.backtest-indicator-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--color-k-line);
+}
+.backtest-indicator-row:last-child { border-bottom: 0; }
+.backtest-indicator-id {
+  width: 56px;
+  flex-shrink: 0;
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+}
+.backtest-indicator-alias {
+  width: 84px;
+  flex-shrink: 0;
+  color: var(--color-info);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+.backtest-indicator-fixed {
+  color: var(--color-k-faint);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+}
+.backtest-param {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1 1 220px;
+}
+.backtest-param-name {
+  color: var(--color-k-faint);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+}
+.backtest-param-slider { flex: 1 1 auto; min-width: 90px; }
+.backtest-param-value {
+  min-width: 34px;
+  text-align: right;
+  color: var(--color-k-text);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+.backtest-param-range {
+  color: var(--color-k-ghost);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+}
+
+/* 조건 빌더(보드 01) — 진입·청산 두 장을 나란히. */
+.backtest-condition-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.backtest-condition-card { flex: 1 1 0; margin-bottom: 0; }
+.backtest-logic-badge {
+  padding: 3px 9px;
+  border: 0;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  cursor: pointer;
+}
+.backtest-logic-badge.is-and { background: rgb(95 206 63 / 16%); color: #2E7D1F; }
+.backtest-logic-badge.is-or { background: rgb(255 152 56 / 18%); color: #A85C10; }
+.backtest-condition {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 9px;
+  margin-bottom: 6px;
+  background: var(--color-k-panel2);
+  border-radius: 8px;
+}
+.backtest-condition-name,
+.backtest-condition-target {
+  color: var(--color-info);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+.backtest-condition-op {
+  flex: 1 1 auto;
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+}
+.backtest-condition-remove {
+  width: 18px;
+  border: 0;
+  background: transparent;
+  color: var(--color-k-ghost);
+  cursor: pointer;
+}
+.backtest-condition-add {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+.backtest-condition-select,
+.backtest-condition-target-input {
+  padding: 5px 8px;
+  background: var(--color-k-panel2);
+  border: 1px solid var(--color-k-line);
+  border-radius: 8px;
+  color: var(--color-k-text);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+}
+.backtest-condition-target-input { width: 110px; }
+.backtest-condition-add-button {
+  padding: 5px 12px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 999px;
+  background: var(--color-k-panel3);
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  cursor: pointer;
+}
+.backtest-design-error-line {
+  color: var(--color-down);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  margin-bottom: 3px;
+}
+
+/* 코드 편집기(보드 02) — 투명 textarea를 색칠한 pre 위에 정확히 겹친다. */
+.backtest-code-host { margin-bottom: 10px; }
+.backtest-code-editor {
+  display: flex;
+  max-height: 380px;
+  background: var(--color-k-panel2);
+  border: 1px solid var(--color-k-line);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.backtest-code-gutter {
+  flex: 0 0 auto;
+  padding: 10px 8px;
+  background: var(--color-k-panel3);
+  overflow: hidden;
+  text-align: right;
+}
+.backtest-code-line {
+  color: var(--color-k-ghost);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 18px;
+}
+.backtest-code-line.is-lit { color: var(--color-brand); }
+.backtest-code-stack {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.backtest-code-pre,
+.backtest-code-textarea {
+  margin: 0;
+  padding: 10px 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 18px;
+  white-space: pre;
+  overflow: auto;
+  border: 0;
+}
+.backtest-code-pre {
+  min-height: 220px;
+  max-height: 380px;
+  color: var(--color-k-soft);
+}
+.backtest-code-textarea {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  resize: none;
+  background: transparent;
+  color: transparent;
+  caret-color: var(--color-k-text);
+  outline: none;
+}
+.backtest-code-tok-keyword { color: #7A3BD8; }
+.backtest-code-tok-string { color: #2E7D1F; }
+.backtest-code-tok-comment { color: var(--color-k-ghost); }
+.backtest-code-tok-number { color: var(--color-down); }
+.backtest-code-actions { display: flex; gap: 8px; margin-bottom: 8px; }
+.backtest-code-validate,
+.backtest-code-save {
+  padding: 7px 14px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 999px;
+  background: var(--color-k-panel3);
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  cursor: pointer;
+}
+.backtest-code-bounds {
+  padding: 12px 14px;
+  background: var(--color-k-panel);
+  border: 1px solid var(--color-k-line);
+  border-radius: 12px;
+}
+.backtest-code-bounds-ok,
+.backtest-code-bounds-no,
+.backtest-code-bounds-note {
+  margin-top: 5px;
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  line-height: 16px;
+}
+.backtest-code-bounds-ok { color: #2E7D1F; }
+.backtest-code-bounds-no { color: var(--color-down); }
+.backtest-code-bounds-note { color: var(--color-k-faint); }
+
+/* 플로우 지도(보드 08) — 앱/내 코드 경계 두 줄이 이 화면의 핵심이다. */
+.backtest-flow-boundary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0 8px;
+}
+.backtest-flow-boundary-label {
+  flex: 0 0 auto;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+}
+.backtest-flow-boundary.is-mine .backtest-flow-boundary-label { color: var(--color-brand); }
+.backtest-flow-boundary-line {
+  flex: 1 1 auto;
+  height: 1px;
+  background: var(--color-k-line);
+}
+.backtest-flow-boundary.is-mine .backtest-flow-boundary-line {
+  background: rgb(238 19 123 / 28%);
+}
+.backtest-flow-node {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 6px;
+  padding: 11px 12px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: var(--color-k-panel3);
+  text-align: left;
+}
+.backtest-flow-node.is-mine {
+  background: var(--color-k-panel2);
+  border-color: var(--color-k-line);
+  cursor: pointer;
+}
+.backtest-flow-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+.backtest-flow-badge.is-app { background: var(--color-k-line); color: var(--color-k-soft); }
+.backtest-flow-badge.is-info { background: rgb(77 159 255 / 16%); color: #1F6FD4; }
+.backtest-flow-badge.is-navy { background: rgb(155 159 230 / 26%); color: #5B5FC7; }
+.backtest-flow-badge.is-brand { background: rgb(238 19 123 / 12%); color: var(--color-brand); }
+.backtest-flow-badge.is-ok { background: rgb(95 206 63 / 18%); color: #2E7D1F; }
+.backtest-flow-body { flex: 1 1 auto; min-width: 0; }
+.backtest-flow-title {
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+}
+.backtest-flow-detail {
+  margin-top: 2px;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+}
+.backtest-flow-shape {
+  flex: 0 0 220px;
+  text-align: right;
+  white-space: pre-line;
+  color: var(--color-k-soft);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  line-height: 15px;
+}
+.backtest-flow-unknown {
+  margin-top: 10px;
+  padding: 10px 12px;
+  background: rgb(255 152 56 / 10%);
+  border-radius: 10px;
+}
+.backtest-flow-unknown-title,
+.backtest-flow-unknown-line {
+  color: #A85C10;
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  line-height: 16px;
+}
+.backtest-flow-error {
+  padding: 14px;
+  background: rgb(217 43 43 / 7%);
+  border-radius: 10px;
+}
+.backtest-flow-error-title { color: var(--color-down); font-size: var(--text-xs); }
+.backtest-flow-error-detail {
+  margin-top: 4px;
+  color: var(--color-k-dim);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+}
+
+/* 수집 승인 보강(보드 04) — 커버리지 막대와 세 갈래 버튼. */
+.backtest-approval-badge {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgb(255 152 56 / 18%);
+  color: #A85C10;
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+}
+.backtest-coverage-bar {
+  display: flex;
+  height: 8px;
+  margin: 10px 0;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--color-k-panel3);
+}
+.backtest-coverage-missing { background: var(--color-warn); }
+.backtest-coverage-held { background: var(--color-ok); }
+.backtest-approval-note {
+  margin: 8px 0 12px;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  line-height: 16px;
+}
+.backtest-approval-partial {
+  padding: 8px 14px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 999px;
+  background: var(--color-k-panel);
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  cursor: pointer;
+}
+.backtest-progress-bar {
+  height: 6px;
+  margin: 10px 0 6px;
+  border-radius: 999px;
+  background: var(--color-k-panel3);
+  overflow: hidden;
+}
+.backtest-progress-fill { height: 100%; background: var(--color-info); }
+.backtest-progress-log {
+  color: var(--color-k-faint);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+}
+
+/* 자산곡선(보드 03) — SVG 두 선과 체결 마커. */
+.backtest-equity { margin-bottom: 12px; }
+.backtest-equity-host { height: 220px; }
+.backtest-equity-svg { width: 100%; height: 100%; }
+.backtest-equity-strategy { stroke: var(--color-brand); stroke-width: 2; }
+.backtest-equity-benchmark { stroke: var(--color-k-ghost); stroke-width: 1.5; }
+.backtest-equity-marker.is-buy { fill: var(--color-k-panel); stroke: var(--color-up); stroke-width: 1.5; }
+.backtest-equity-marker.is-sell { fill: var(--color-k-panel); stroke: var(--color-down); stroke-width: 1.5; }
+.backtest-equity-axis {
+  display: flex;
+  justify-content: space-between;
+  color: var(--color-k-ghost);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+}
+.backtest-equity-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+}
+.backtest-equity-legend {
+  display: flex;
+  gap: 10px;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+}
+.backtest-legend-strategy { color: var(--color-brand); }
+.backtest-legend-entry { color: var(--color-up); }
+.backtest-legend-exit { color: var(--color-down); }
+.backtest-stdout { margin-bottom: 12px; }
+.backtest-stdout-text {
+  margin: 0;
+  padding: 10px 12px;
+  max-height: 140px;
+  overflow: auto;
+  background: var(--color-k-panel2);
+  border-radius: 10px;
+  color: var(--color-k-soft);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  line-height: 16px;
+  white-space: pre-wrap;
+}
+.backtest-trades-cell.is-buy { color: var(--color-up); }
+.backtest-trades-cell.is-sell { color: var(--color-down); }
+
+/* 이력·비교(보드 05). */
+.backtest-history-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 4px;
+  padding: 9px 12px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: var(--color-k-panel2);
+  text-align: left;
+  cursor: pointer;
+}
+.backtest-history-row.is-on {
+  border-color: var(--color-info);
+  background: rgb(77 159 255 / 8%);
+}
+.backtest-history-check { color: var(--color-info); font-size: var(--text-xs); }
+.backtest-history-id {
+  flex: 1 1 auto;
+  color: var(--color-k-text);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+.backtest-history-status {
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+}
+.backtest-history-status.is-failed { color: var(--color-down); }
+.backtest-history-return {
+  width: 80px;
+  text-align: right;
+  color: var(--color-up);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+.backtest-compare {
+  margin-top: 12px;
+  padding: 14px;
+  background: var(--color-k-panel);
+  border: 1px solid var(--color-k-line);
+  border-radius: 12px;
+}
+.backtest-compare-row {
+  display: flex;
+  gap: 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--color-k-line);
+}
+.backtest-compare-label {
+  flex: 1 1 auto;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+}
+.backtest-compare-a,
+.backtest-compare-b {
+  width: 90px;
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+.backtest-compare-a { color: var(--color-brand); }
+.backtest-compare-b { color: var(--color-navy); }
+
+/* 최적화(보드 06) — 히트맵과 과최적화 경고. */
+.backtest-optimize-setup { margin-bottom: 10px; }
+.backtest-optimize-range {
+  color: var(--color-k-dim);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  padding: 3px 0;
+}
+.backtest-optimize-start,
+.backtest-optimize-apply,
+.backtest-deploy-create {
+  margin-top: 10px;
+  padding: 8px 16px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--color-brand);
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  cursor: pointer;
+}
+.backtest-optimize-warn {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 10px 0;
+  padding: 10px 12px;
+  background: rgb(255 152 56 / 12%);
+  border-radius: 10px;
+}
+.backtest-optimize-warn-badge {
+  flex: 0 0 auto;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--color-warn);
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+}
+.backtest-optimize-warn-text,
+.backtest-optimize-plateau,
+.backtest-optimize-neighbour {
+  color: #A85C10;
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  line-height: 16px;
+}
+.backtest-optimize-best {
+  padding: 12px;
+  background: var(--color-k-panel2);
+  border-radius: 10px;
+}
+.backtest-optimize-best-title {
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+}
+.backtest-optimize-best-params {
+  margin-top: 3px;
+  color: var(--color-k-dim);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+.backtest-heatmap-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  margin-top: 8px;
+  max-width: 460px;
+}
+.backtest-heatmap-cell {
+  width: 30px;
+  height: 26px;
+  border-radius: 4px;
+  background: var(--color-info);
+}
+
+/* 배포(보드 07) — 기본은 승인 모드다. 자동 주문은 사람이 한도를 정한 뒤에만. */
+.backtest-deploy-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+  padding: 10px 12px;
+  background: var(--color-k-panel2);
+  border: 1px solid var(--color-k-line);
+  border-radius: 10px;
+}
+.backtest-deploy-row.is-stopped { opacity: 0.6; }
+.backtest-deploy-symbol {
+  color: var(--color-k-text);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+.backtest-deploy-mode {
+  flex: 1 1 auto;
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+}
+.backtest-deploy-status {
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+}
+.backtest-deploy-stop {
+  padding: 5px 12px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 999px;
+  background: var(--color-k-panel3);
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  cursor: pointer;
+}
+.backtest-deploy-modes {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.backtest-deploy-mode-item {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 10px;
+  background: var(--color-k-panel2);
+  text-align: left;
+  cursor: pointer;
+}
+.backtest-deploy-mode-item.is-on {
+  border-color: var(--color-brand);
+  background: rgb(238 19 123 / 5%);
+}
+.backtest-deploy-mode-label {
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+}
+.backtest-deploy-mode-detail {
+  margin-top: 2px;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  line-height: 15px;
+}
+.backtest-deploy-note {
+  margin-top: 12px;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  line-height: 16px;
+}
+
+/* 오류 진단(보드 09) — 원문을 버리지 않고 접어둔다. */
+.backtest-diag-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 13px 14px;
+  background: rgb(217 43 43 / 7%);
+  border: 1px solid rgb(217 43 43 / 22%);
+  border-radius: 12px;
+}
+.backtest-diag-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: var(--color-up);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+.backtest-diag-banner-body { flex: 1 1 auto; min-width: 0; }
+.backtest-diag-title {
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+}
+.backtest-diag-detail {
+  margin-top: 3px;
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+}
+.backtest-diag-raw-toggle {
+  flex: 0 0 auto;
+  padding: 4px 10px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 999px;
+  background: var(--color-k-panel);
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  cursor: pointer;
+}
+.backtest-diag-raw {
+  margin: 8px 0 0;
+  padding: 10px 12px;
+  max-height: 160px;
+  overflow: auto;
+  background: var(--color-k-panel2);
+  border-radius: 10px;
+  color: var(--color-k-soft);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  white-space: pre-wrap;
+}
+.backtest-diag-section { margin-top: 14px; }
+.backtest-diag-section-title {
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  margin-bottom: 6px;
+}
+.backtest-diag-why {
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  line-height: 19px;
+}
+.backtest-diag-fix-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.backtest-diag-fix-stat,
+.backtest-diag-fix-summary {
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+}
+.backtest-diag-fix-summary { margin-bottom: 6px; }
+.backtest-diag-diff,
+.backtest-diff {
+  border: 1px solid var(--color-k-line);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.backtest-diff-row {
+  display: flex;
+  gap: 8px;
+  padding: 4px 12px;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  line-height: 17px;
+  white-space: pre;
+}
+.backtest-diff-row.is-add { background: rgb(95 206 63 / 13%); color: #256B18; }
+.backtest-diff-row.is-del { background: rgb(217 43 43 / 9%); color: #8E1F1F; }
+.backtest-diff-row.is-same { color: var(--color-k-soft); }
+.backtest-diff-mark { width: 10px; flex: 0 0 auto; }
+.backtest-diff-no { width: 26px; flex: 0 0 auto; color: var(--color-k-ghost); text-align: right; }
+.backtest-diff-text { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.backtest-diff-gap {
+  padding: 3px 12px;
+  color: var(--color-k-ghost);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+}
+.backtest-diag-nofix {
+  margin-top: 14px;
+  padding: 12px;
+  background: var(--color-k-panel3);
+  border-radius: 10px;
+}
+.backtest-diag-nofix-title {
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+}
+.backtest-diag-nofix-detail {
+  margin-top: 3px;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+}
+.backtest-diag-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--color-k-line);
+}
+.backtest-diag-apply {
+  padding: 9px 18px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--color-brand);
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  cursor: pointer;
+}
+.backtest-diag-apply-only {
+  padding: 9px 16px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 999px;
+  background: var(--color-k-panel);
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  cursor: pointer;
+}
+.backtest-diag-discard {
+  padding: 9px 14px;
+  border: 0;
+  background: transparent;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  cursor: pointer;
+}
+.backtest-diag-actions-note {
+  flex: 1 1 auto;
+  text-align: right;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+}
+
+
 /* ---------- 에이전트모드 캔버스(리프 1.2.2, 4단계, Paper 보드 39 실측) ----------
  * #agentCanvas는 #mosaic/#graphCanvas와 형제라 .mosaic.glass 공통 규칙을 이미
  * 받는다 — 여기서는 레이아웃(padding/flex)만 이 요소 하나에 얹는다. */
@@ -2028,3 +3002,11 @@ body { margin: 0; overflow: hidden; }
     padding: 0 10px;
   }
 }
+
+/* 이력 비교의 곡선 겹쳐보기(보드 05) — 실행 두 건을 같은 축에 놓는다. */
+.backtest-compare-chart { height: 180px; margin-top: 6px; }
+.backtest-equity-overlay { stroke-width: 2; fill: none; }
+.backtest-equity-overlay.is-0 { stroke: var(--color-brand); }
+.backtest-equity-overlay.is-1 { stroke: var(--color-navy); }
+.backtest-legend-overlay.is-0 { color: var(--color-brand); }
+.backtest-legend-overlay.is-1 { color: var(--color-navy); }
