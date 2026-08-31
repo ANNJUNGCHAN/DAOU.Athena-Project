@@ -2143,6 +2143,44 @@ graphMode.applyVisibility();
 // 의도를 그대로 되돌려준다. 하드코딩 목록은 쓰지 않는다: 설치된 적 없는 서버를
 // 설치된 것처럼 보여주면 화면 전체가 신뢰를 잃고, 실제로 설치된 서버가 그 가짜에
 // 가려진다(BETA-017 실측 — dart-mcp가 등록돼 있는데 가짜 "DART 전자공시"만 떴다).
+const pluginCatalog = window.AthenaLib.PluginCatalog;
+
+// 마켓플레이스 on/off는 "추천에 이 카탈로그를 보여줄까"만 정한다 — 레지스트리를
+// 건드리지 않으므로 앱 로컬 설정으로 충분하다. 끄면 추천이 비고, 이미 설치한
+// 서버는 그대로 남는다(끄기가 삭제로 읽히면 안 된다).
+const PLUGIN_MARKETPLACE_PREFS_KEY = 'athena.plugin.marketplaces';
+
+function readMarketplacePrefs() {
+  try {
+    const raw = window.localStorage.getItem(PLUGIN_MARKETPLACE_PREFS_KEY);
+    const parsed = raw ? JSON.parse(raw) : null;
+    return (parsed && typeof parsed === 'object') ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+function writeMarketplacePref(id, enabled) {
+  try {
+    const prefs = readMarketplacePrefs();
+    prefs[id] = !!enabled;
+    window.localStorage.setItem(PLUGIN_MARKETPLACE_PREFS_KEY, JSON.stringify(prefs));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function pluginMarketplaceRows() {
+  const prefs = readMarketplacePrefs();
+  return pluginCatalog.MARKETPLACES.map((marketplace) => ({
+    id: marketplace.id,
+    name: marketplace.name,
+    description: marketplace.description,
+    enabled: prefs[marketplace.id] !== false,
+  }));
+}
+
 const pluginCanvas = window.AthenaLib.PluginCanvas.createPluginCanvas({
   container: document.getElementById('pluginCanvas'),
   // 실제 목록이 도착하기 전에도 샘플 폴백을 타지 않도록 항상 명시적으로 넘긴다.
@@ -2150,11 +2188,15 @@ const pluginCanvas = window.AthenaLib.PluginCanvas.createPluginCanvas({
   recommended: [],
   marketplaces: [],
   onPermission: (plugin) => { void pluginProbe(plugin && plugin.id); },
-  onSavePermissions: (plugin, features) => { void pluginSaveTools(plugin && plugin.id, features); },
+  onSavePermissions: (plugin, features) => pluginSaveTools(plugin && plugin.id, features),
   onManage: () => { void pluginRefresh(); },
   onStageSnippet: (snippet) => pluginStageSnippet(snippet),
   onApproveServer: (staged) => pluginApproveStaged(staged),
   onDiscardStaged: (staged) => { void pluginDiscardStaged(staged); },
+  onApproveInstall: (plugin) => pluginInstallCatalogEntry(plugin),
+  onTogglePlugin: (plugin, enabled) => pluginSetEnabled(plugin && plugin.id, enabled),
+  onToggleMarketplace: (marketplace, enabled) => pluginSetMarketplaceEnabled(marketplace && marketplace.id, enabled),
+  onRemovePlugin: (plugin) => pluginRemove(plugin && plugin.id),
 });
 pluginCanvas.mount();
 window.AthenaPluginCanvas = pluginCanvas;
@@ -2163,9 +2205,12 @@ window.AthenaPluginCanvas = pluginCanvas;
 // 때마다 등록된 서버를 전부 띄우지 않는다. 권한 화면을 연 그 서버만 한 번 띄우고
 // 결과를 캐시한다.
 const pluginToolCache = new Map();
+// probe 실패 사유. console.warn으로만 흘리면 화면에는 "기능 0개"만 남아서
+// 사용자가 이유를 알 수 없다(2026-09-01 전수검사에서 확인한 결함).
+const pluginProbeErrors = new Map();
 
 function pluginHealthLabel(server) {
-  if (!server.approved) return '승인 대기 — 도구가 아직 허용되지 않았다';
+  if (!server.approved) return '꺼짐 — 대화에서 쓰이지 않습니다';
   if (server.health === 'ok') return '연결 확인됨';
   if (server.health === 'warning') return '연결됨 · 인코딩 경고';
   // probe를 한 번도 안 한 상태다. 임의로 "정상"이라고 쓰지 않는다.
@@ -2174,15 +2219,21 @@ function pluginHealthLabel(server) {
 
 function pluginRowFromServer(server) {
   const tools = pluginToolCache.get(server.alias) || null;
+  // 카탈로그에서 설치한 서버는 사람이 읽는 이름을 되돌려준다. 모르는 별칭에는
+  // 이름을 지어내지 않고 별칭 그대로 쓴다(BETA-017의 가짜 이름 재발 방지).
+  const catalogEntry = pluginCatalog.findEntry(server.alias);
   return {
     id: server.alias,
-    name: server.alias,
-    description: [server.command, server.argsPreview].filter(Boolean).join(' '),
+    name: catalogEntry ? catalogEntry.name : server.alias,
+    description: catalogEntry
+      ? catalogEntry.description
+      : [server.command, server.argsPreview].filter(Boolean).join(' '),
     source: pluginHealthLabel(server),
     enabled: !!server.approved,
     // probe 전에는 consent.json이 아는 허용 도구 수만 안다 — 그 수를 그대로 쓴다.
     featureCount: tools ? tools.length : server.toolCount,
     features: tools || [],
+    error: pluginProbeErrors.get(server.alias) || null,
     warnings: Array.isArray(server.warnings) ? server.warnings : [],
   };
 }
@@ -2196,10 +2247,17 @@ async function pluginRefresh() {
   try {
     const res = await window.athena.invoke('athena:mcp-list');
     const servers = (res && Array.isArray(res.servers)) ? res.servers : [];
+    const marketplaces = pluginMarketplaceRows();
+    const enabledMarketplaceIds = marketplaces.filter((m) => m.enabled).map((m) => m.id);
     pluginCanvas.setData({
       installed: servers.map(pluginRowFromServer),
+      recommended: pluginCatalog.recommendedFor(servers.map((s) => s.alias), enabledMarketplaceIds),
+      marketplaces,
       restartRequired: pluginRegistryChangedThisSession,
     });
+    // 채팅의 @멘션 목록과 키우미 메뉴가 같은 레지스트리를 본다 — 여기서만
+    // 알리고, 그쪽은 이 신호로 캐시를 버린다(양쪽이 각자 폴링하지 않는다).
+    window.dispatchEvent(new CustomEvent('athena:plugins-changed', { detail: { servers } }));
   } catch (err) {
     console.warn('athena:mcp-list 실패', err);
   }
@@ -2209,7 +2267,12 @@ async function pluginProbe(alias) {
   if (!alias) return;
   try {
     const res = await window.athena.invoke('athena:mcp-probe', { alias });
-    if (!res || !res.ok || !Array.isArray(res.tools)) return;
+    if (!res || !res.ok || !Array.isArray(res.tools)) {
+      pluginProbeErrors.set(alias, (res && res.error) || '도구 목록을 받지 못했습니다');
+      await pluginRefresh();
+      return;
+    }
+    pluginProbeErrors.delete(alias);
     pluginToolCache.set(alias, res.tools.map((tool) => ({
       id: tool.name,
       name: tool.name,
@@ -2218,25 +2281,35 @@ async function pluginProbe(alias) {
     })));
     await pluginRefresh();
   } catch (err) {
-    console.warn('athena:mcp-probe 실패', err);
+    pluginProbeErrors.set(alias, String((err && err.message) || err));
+    await pluginRefresh();
   }
 }
 
+// 저장 결과를 그대로 화면에 돌려준다 — 한 도구라도 실패하면 저장 실패다.
+// features는 "허용할 것"의 목록이므로, 캐시에 있는데 목록에 없는 도구는 해제다.
 async function pluginSaveTools(alias, features) {
-  if (!alias || !Array.isArray(features)) return;
+  if (!alias || !Array.isArray(features)) return { ok: false, error: '대상 플러그인을 찾지 못했습니다' };
   const known = new Map((pluginToolCache.get(alias) || []).map((tool) => [tool.name, !!tool.allowed]));
-  for (const feature of features) {
-    const name = feature && feature.name;
-    // probe로 실재가 확인된 도구만 건드린다. probe 전 시트는 설명 한 줄을 가짜
-    // 기능 행으로 채우는데(featureRowsFor 폴백), 그 이름으로 allow를 부르면
-    // 존재하지 않는 도구를 승인 목록에 넣게 된다.
-    if (!name || !known.has(name)) continue;
-    if (known.get(name) === !!feature.allowed) continue; // 바뀐 것만 CLI를 부른다
-    await window.athena.invoke('athena:mcp-allow-tool', { alias, tool: name, allowed: !!feature.allowed });
+  const wanted = new Set(features.map((feature) => feature && feature.name).filter(Boolean));
+  for (const [name, wasAllowed] of known) {
+    const allowed = wanted.has(name);
+    if (wasAllowed === allowed) continue; // 바뀐 것만 CLI를 부른다
+    try {
+      const res = await window.athena.invoke('athena:mcp-allow-tool', { alias, tool: name, allowed });
+      if (!res || !res.ok) {
+        await pluginProbe(alias);
+        return { ok: false, error: (res && res.error) || `${name} 허용 변경에 실패했습니다` };
+      }
+    } catch (err) {
+      await pluginProbe(alias);
+      return { ok: false, error: String((err && err.message) || err) };
+    }
   }
   pluginRegistryChangedThisSession = true;
   pluginToolCache.delete(alias);
   await pluginProbe(alias);
+  return { ok: true };
 }
 
 // 스니펫 분석 = athena:mcp-stage-snippet. 이름과 달리 실제로 레지스트리에 등록까지
@@ -2277,6 +2350,85 @@ async function pluginApproveStaged(staged) {
   return { ok: true };
 }
 
+// 카탈로그 설치 — 추천 카드의 "설치"가 승인되면 여기로 온다. 스니펫 경로를 그대로
+// 재사용한다: 카탈로그 항목을 Claude 설정 스니펫 한 줄로 만들어 같은 등록·승인·
+// probe를 태운다. 별도 등록 경로를 하나 더 만들면 위험 스캔·별칭 정규화·동의
+// 게이트가 두 벌이 된다.
+async function pluginInstallCatalogEntry(plugin) {
+  const entry = pluginCatalog.findEntry(plugin && plugin.id);
+  if (!entry) return { ok: false, error: '카탈로그에서 이 플러그인을 찾지 못했습니다' };
+  try {
+    const listed = await window.athena.invoke('athena:mcp-list');
+    const already = ((listed && listed.servers) || []).some((s) => s.alias === entry.id);
+    if (already) {
+      await pluginRefresh();
+      return { ok: false, error: '이미 등록된 서버입니다 — 설치됨 목록에서 권한을 엽니다' };
+    }
+  } catch {
+    // 목록 조회 실패는 설치를 막을 이유가 아니다 — 중복이면 아래 등록이 거절한다.
+  }
+  const snippet = JSON.stringify({
+    mcpServers: { [entry.id]: { command: entry.command, args: [...entry.args] } },
+  });
+  const staged = await pluginStageSnippet(snippet);
+  if (!staged || !staged.ok || !Array.isArray(staged.staged) || !staged.staged.length) {
+    return { ok: false, error: (staged && staged.error) || '등록에 실패했습니다' };
+  }
+  const approved = await pluginApproveStaged(staged.staged);
+  if (!approved || !approved.ok) {
+    // 승인 단계에서 멈췄으면 등록만 남는다 — 흔적을 지우고 원래대로 돌린다.
+    await pluginDiscardStaged(staged.staged);
+    return approved || { ok: false, error: '승인에 실패했습니다' };
+  }
+  return { ok: true };
+}
+
+// 관리 화면의 켜기/끄기 = consent approve/revoke. 삭제와 다르다: 등록은 남고
+// 대화 노출만 끊긴다. revoke는 허용 도구 목록까지 비우므로 캐시도 함께 버린다.
+async function pluginSetEnabled(alias, enabled) {
+  if (!alias) return { ok: false, error: '대상 플러그인을 찾지 못했습니다' };
+  try {
+    const res = await window.athena.invoke(
+      enabled ? 'athena:mcp-approve' : 'athena:mcp-revoke',
+      { alias },
+    );
+    if (!res || !res.ok) {
+      return { ok: false, error: (res && res.error) || (enabled ? '승인에 실패했습니다' : '승인 철회에 실패했습니다') };
+    }
+  } catch (err) {
+    return { ok: false, error: String((err && err.message) || err) };
+  }
+  pluginRegistryChangedThisSession = true;
+  pluginToolCache.delete(alias);
+  pluginProbeErrors.delete(alias);
+  await pluginRefresh();
+  return { ok: true };
+}
+
+async function pluginSetMarketplaceEnabled(id, enabled) {
+  if (!id) return { ok: false, error: '대상 마켓플레이스를 찾지 못했습니다' };
+  if (!writeMarketplacePref(id, enabled)) {
+    return { ok: false, error: '설정을 저장하지 못했습니다' };
+  }
+  await pluginRefresh();
+  return { ok: true };
+}
+
+async function pluginRemove(alias) {
+  if (!alias) return { ok: false, error: '대상 플러그인을 찾지 못했습니다' };
+  try {
+    const res = await window.athena.invoke('athena:mcp-remove', { alias });
+    if (!res || !res.ok) return { ok: false, error: '삭제에 실패했습니다' };
+  } catch (err) {
+    return { ok: false, error: String((err && err.message) || err) };
+  }
+  pluginToolCache.delete(alias);
+  pluginProbeErrors.delete(alias);
+  pluginRegistryChangedThisSession = true;
+  await pluginRefresh();
+  return { ok: true };
+}
+
 // 취소는 흔적을 남기지 않는다 — 분석 단계가 이미 등록했으므로 되돌린다.
 async function pluginDiscardStaged(staged) {
   for (const server of (Array.isArray(staged) ? staged : [])) {
@@ -2286,6 +2438,7 @@ async function pluginDiscardStaged(staged) {
       console.warn('athena:mcp-remove 실패', err);
     }
     pluginToolCache.delete(server.alias);
+    pluginProbeErrors.delete(server.alias);
   }
   await pluginRefresh();
 }

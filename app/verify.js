@@ -70,6 +70,15 @@ app.setPath('userData', VERIFY_PROFILE.directory);
 process.env.CODEX_HOME = path.join(VERIFY_PROFILE.directory, '.codex-home');
 fs.mkdirSync(process.env.CODEX_HOME, { recursive: true });
 
+// MCP(=플러그인) 레지스트리 격리 — 위 userData/CODEX_HOME과 같은 이유다.
+// 이걸 안 하면 플러그인 검증이 **이 머신에 무엇이 등록돼 있느냐**에 따라 달라진다
+// (설치됨 개수·추천 개수·관리 집계가 전부 흔들린다). registry.py
+// default_registry_path()와 lib/main/mcp-cli.js registryPath()가 같은 환경변수를
+// 보고, runner.py default_state_dir()이 그 부모를 쓰므로 consent.json도 함께
+// 격리된다. 자식 파이썬 CLI는 process.env를 상속하니 양쪽이 같은 파일을 본다.
+process.env.ATHENA_MCP_REGISTRY_PATH = path.join(VERIFY_PROFILE.directory, '.athena', 'mcp_servers.json');
+fs.mkdirSync(path.dirname(process.env.ATHENA_MCP_REGISTRY_PATH), { recursive: true });
+
 const DEBUGLOG = path.join(CAPTURES, 'verify-debug.log');
 fs.writeFileSync(DEBUGLOG, `start ${new Date().toISOString()}\n`);
 function dlog(msg) { fs.appendFileSync(DEBUGLOG, `${new Date().toISOString()} ${msg}\n`); }
@@ -1930,9 +1939,12 @@ app.whenReady().then(async () => {
     }
   }
 
-  // ---------- 검증 3c: Paper 25/26/47/48 플러그인 네 번째 모드 ----------
+  // ---------- 검증 3c: Paper 플러그인 01~04 (기능 허용·설치 승인·허브·관리) ----------
+  // 레지스트리를 검증 프로필로 격리했으므로(상단 ATHENA_MCP_REGISTRY_PATH) 이
+  // 시점의 설치 목록은 항상 비어 있다 — 추천은 내장 카탈로그 5종 전부다.
   await shellWin.webContents.executeJavaScript(`document.getElementById('modeNavPlugin').click()`);
   await wait(180);
+  const CATALOG_SIZE = require('./lib/plugin-catalog').CATALOG.length;
   const pluginHub = await shellWin.webContents.executeJavaScript(`(() => ({
     pluginVisible: !document.getElementById('pluginCanvas').hidden,
     summaryHidden: document.getElementById('mosaic').hidden,
@@ -1942,8 +1954,13 @@ app.whenReady().then(async () => {
     activeMode: document.querySelector('.sidebar-mode-item.is-active')?.dataset.view || null,
     installed: document.querySelectorAll('.plugin-canvas-card[data-plugin-kind="installed"]').length,
     recommended: document.querySelectorAll('.plugin-canvas-card[data-plugin-kind="recommended"]').length,
+    sections: Array.from(document.querySelectorAll('.plugin-canvas-section-title')).map((n) => n.textContent),
+    emptyCopy: Array.from(document.querySelectorAll('.plugin-canvas-empty')).map((n) => n.textContent),
+    installedAction: document.querySelector('.plugin-canvas-installed .plugin-canvas-action')?.textContent || null,
+    recommendedAction: document.querySelector('.plugin-canvas-recommended .plugin-canvas-action')?.textContent || '',
+    description: document.querySelector('.plugin-canvas-description')?.textContent || '',
   }))()`);
-  await shot(shellWin, '03f-plugin-hub-paper-47.png');
+  await shot(shellWin, '03f-plugin-hub.png');
   await shellWin.webContents.executeJavaScript(`document.querySelector('.plugin-canvas-recommended .plugin-canvas-action').click()`);
   await wait(80);
   const pluginInstallModal = await shellWin.webContents.executeJavaScript(`(() => {
@@ -1959,7 +1976,13 @@ app.whenReady().then(async () => {
     return {
       dialogCount: document.querySelectorAll('.plugin-canvas-sheet[role="dialog"]').length,
       title: dialog?.querySelector('.plugin-canvas-sheet-title')?.textContent || '',
+      subtitle: dialog?.querySelector('.plugin-canvas-sheet-subtitle')?.textContent || '',
       confirmLabel: dialog?.querySelector('.is-sheet-confirm')?.textContent || '',
+      cancelLabel: dialog?.querySelector('.is-sheet-cancel')?.textContent || '',
+      provider: dialog?.querySelector('.plugin-canvas-sheet-source')?.textContent || '',
+      command: dialog?.querySelector('.plugin-canvas-sheet-command')?.textContent || '',
+      location: dialog?.querySelector('.plugin-canvas-sheet-location')?.textContent || '',
+      badges: Array.from(dialog?.querySelectorAll('.plugin-canvas-sheet-badges .plugin-canvas-count') || []).map((n) => n.textContent),
       panelInert: panel?.hasAttribute('inert') || false,
       focusedInitially,
       initialClass,
@@ -1967,21 +1990,45 @@ app.whenReady().then(async () => {
       wrappedForward,
     };
   })()`);
+  await shot(shellWin, '03f2-plugin-install-approval.png');
   await shellWin.webContents.executeJavaScript(`document.querySelector('.plugin-canvas-install-sheet')?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }))`);
   await wait(80);
   pluginInstallModal.closed = await shellWin.webContents.executeJavaScript(`!document.querySelector('.plugin-canvas-install-sheet')`);
-  pluginInstallModal.focusRestored = await shellWin.webContents.executeJavaScript(`document.activeElement?.closest('.plugin-canvas-card')?.getAttribute('data-plugin-id') === 'pdf-report'`);
+  pluginInstallModal.focusRestored = await shellWin.webContents.executeJavaScript(`document.activeElement?.closest('.plugin-canvas-card')?.getAttribute('data-plugin-id') === 'fetch'`);
   await shellWin.webContents.executeJavaScript(`document.querySelector('.plugin-canvas-action.is-manage').click()`);
   await wait(120);
   const pluginManage = await shellWin.webContents.executeJavaScript(`(() => ({
     title: document.querySelector('.plugin-canvas-title')?.textContent || '',
     counts: Array.from(document.querySelectorAll('.plugin-canvas-count')).map((node) => node.textContent),
     toggles: Array.from(document.querySelectorAll('.plugin-canvas-toggle')).map((node) => node.getAttribute('aria-checked')),
+    marketplaceNote: document.querySelector('.plugin-canvas-marketplace-note')?.textContent || '',
   }))()`);
-  await shot(shellWin, '03g-plugin-manage-paper-48.png');
+  await shot(shellWin, '03g-plugin-manage.png');
+
+  // 기능 허용 화면(Paper 01)은 probe 결과가 있어야 의미가 있다. 검증에서 실제
+  // upstream 서버를 띄우면 네트워크·패키지 캐시에 의존하게 되므로, 호스트 계약인
+  // setData로 probe가 돌아온 그 모양을 그대로 넣고 렌더만 잰다. 실제 왕복은
+  // `npm run verify:plugins`가 따로 검증한다.
   await shellWin.webContents.executeJavaScript(`
     window.AthenaPluginCanvas.setView('hub');
-    document.querySelector('.plugin-canvas-card[data-plugin-id="dart"] .plugin-canvas-action').click();
+    window.AthenaPluginCanvas.setData({
+      installed: [{
+        id: 'korea-stock', name: '한국 주식 시세',
+        description: '국내 종목 시세·재무를 대화에서 조회합니다',
+        source: '연결 확인됨', enabled: true, featureCount: 6, error: null,
+        features: [
+          { id: 'search_stock_code', name: 'search_stock_code', description: '종목 검색', allowed: true },
+          { id: 'get_stock_price_by_code', name: 'get_stock_price_by_code', description: '종목 시세', allowed: true },
+          { id: 'get_market_cap_stocks', name: 'get_market_cap_stocks', description: '시총 상위', allowed: true },
+          { id: 'get_dividend_yield_stocks', name: 'get_dividend_yield_stocks', description: '배당 상위', allowed: true },
+          { id: 'get_themes_with_leaders', name: 'get_themes_with_leaders', description: '테마주', allowed: false },
+          { id: 'get_etfs_by_market_cap', name: 'get_etfs_by_market_cap', description: 'ETF', allowed: false },
+        ],
+      }],
+      recommended: [],
+      marketplaces: [{ id: 'athena-official', name: 'athena-official', description: '앱 내장 카탈로그', enabled: true }],
+    });
+    document.querySelector('.plugin-canvas-card[data-plugin-id="korea-stock"] .plugin-canvas-action').click();
   `);
   await wait(120);
   const pluginPermission = await shellWin.webContents.executeJavaScript(`(() => {
@@ -1992,15 +2039,48 @@ app.whenReady().then(async () => {
       title: panel?.querySelector('.plugin-canvas-title')?.textContent || '',
       counts: Array.from(panel?.querySelectorAll('.plugin-canvas-count') || []).map((node) => node.textContent),
       allowed: panel?.querySelector('.plugin-canvas-sheet-count')?.textContent || '',
+      hint: panel?.querySelector('.plugin-canvas-permission-hint')?.textContent || '',
+      saveLabel: panel?.querySelector('.is-sheet-confirm')?.textContent || '',
+      boundaryNote: panel?.querySelector('.plugin-canvas-boundary-note')?.textContent || '',
       features: panel?.querySelectorAll('.plugin-canvas-sheet-feature').length || 0,
+      errorBanner: panel?.querySelectorAll('.plugin-canvas-error-banner').length || 0,
       inert: panel?.hasAttribute('inert') || false,
     };
   })()`);
-  await shot(shellWin, '03h-plugin-permission-paper-26.png');
+  await shot(shellWin, '03h-plugin-permission.png');
+
+  // probe 실패 상태 — 이유가 화면에 남고 다시 확인이 있어야 한다.
+  await shellWin.webContents.executeJavaScript(`
+    window.AthenaPluginCanvas.setData({
+      installed: [{
+        id: 'korea-stock', name: '한국 주식 시세', description: '국내 종목 시세·재무를 대화에서 조회합니다',
+        source: '연결 미확인 — 권한 화면을 열면 확인한다', enabled: true, featureCount: 0,
+        features: [], error: 'spawn npx ENOENT',
+      }],
+      recommended: [], marketplaces: [],
+    });
+  `);
+  await wait(100);
+  const pluginProbeFailure = await shellWin.webContents.executeJavaScript(`(() => {
+    const panel = document.querySelector('.plugin-canvas-permissions-view');
+    return {
+      bannerText: panel?.querySelector('.plugin-canvas-error-text')?.textContent || '',
+      retryLabel: panel?.querySelector('.is-retry')?.textContent || '',
+      emptyCopy: panel?.querySelector('.plugin-canvas-empty')?.textContent || '',
+    };
+  })()`);
+  await shot(shellWin, '03h2-plugin-probe-failure.png');
   await shellWin.webContents.executeJavaScript(`document.querySelector('.plugin-canvas-action.is-sheet-cancel')?.click(); document.getElementById('modeNavSummary').click()`);
   await wait(100);
-  report.pluginMode = { hub: pluginHub, install: pluginInstallModal, manage: pluginManage, permission: pluginPermission };
-  console.log('[verify] 검증3c(Paper 플러그인 25/26/47/48):', JSON.stringify(report.pluginMode));
+  report.pluginMode = {
+    hub: pluginHub,
+    install: pluginInstallModal,
+    manage: pluginManage,
+    permission: pluginPermission,
+    probeFailure: pluginProbeFailure,
+    catalogSize: CATALOG_SIZE,
+  };
+  console.log('[verify] 검증3c(Paper 플러그인 01~04):', JSON.stringify(report.pluginMode));
   assertOk('pluginMode: fourth mode is exclusive while chat persists',
     pluginHub.pluginVisible === true
     && pluginHub.summaryHidden === true
@@ -2008,28 +2088,53 @@ app.whenReady().then(async () => {
     && pluginHub.agentHidden === true
     && pluginHub.chatVisible === true
     && pluginHub.activeMode === 'plugin');
-  assertOk('pluginMode: Paper 47 hub renders installed 2 and recommended 6', pluginHub.installed === 2 && pluginHub.recommended === 6);
-  assertOk('pluginMode: install preview owns focus, traps Tab, closes with Escape, and restores focus',
+  assertOk('pluginMode: Paper 03 hub shows 설치됨/추천 sections with catalog recommendations',
+    JSON.stringify(pluginHub.sections) === JSON.stringify(['설치됨', '추천'])
+    && pluginHub.installed === 0
+    && pluginHub.recommended === CATALOG_SIZE
+    && pluginHub.recommendedAction === '설치'
+    && pluginHub.installedAction === null
+    && pluginHub.description === '플러그인은 설치 후 기능별로 허용합니다. Kiwoom·brain은 Athena 내장 API라 이 목록에 표시하지 않습니다.');
+  assertOk('pluginMode: empty installed list says nothing installed, not "no search match"',
+    pluginHub.emptyCopy.length === 1
+    && pluginHub.emptyCopy[0] === '설치한 플러그인이 없습니다 · 아래 추천에서 설치합니다');
+  assertOk('pluginMode: Paper 02 install approval shows provider/command/location and owns focus',
     pluginInstallModal.dialogCount === 1
-    && /설치 미리보기/.test(pluginInstallModal.title)
-    && pluginInstallModal.confirmLabel === '세션 반영'
+    && pluginInstallModal.title === '웹 문서 읽기 설치'
+    && pluginInstallModal.subtitle === '설치할 플러그인과 요청 권한을 확인하고 한 번에 하나씩 승인합니다'
+    && pluginInstallModal.confirmLabel === '승인'
+    && pluginInstallModal.cancelLabel === '거부'
+    && /^제공: /.test(pluginInstallModal.provider)
+    && pluginInstallModal.command === '실행 명령: uvx mcp-server-fetch'
+    && pluginInstallModal.location === '설치 위치 · 플러그인 모드 > 웹 문서 읽기'
+    && JSON.stringify(pluginInstallModal.badges) === JSON.stringify(['권한 1개 요청', '설치형 플러그인'])
     && pluginInstallModal.panelInert === true
     && pluginInstallModal.focusedInitially === true
     && pluginInstallModal.wrappedBackward === true
     && pluginInstallModal.wrappedForward === true
     && pluginInstallModal.closed === true
     && pluginInstallModal.focusRestored === true);
-  assertOk('pluginMode: Paper 48 management counts and switches match',
-    JSON.stringify(pluginManage.counts) === JSON.stringify(['플러그인 2', '기능 8', '마켓플레이스 1'])
-    && JSON.stringify(pluginManage.toggles) === JSON.stringify(['true', 'false', 'true']));
-  assertOk('pluginMode: Paper 26 DART permission is a non-blocking 3/4 detail view',
+  assertOk('pluginMode: Paper 04 management counts follow the live registry',
+    pluginManage.title === '플러그인 관리'
+    && JSON.stringify(pluginManage.counts) === JSON.stringify(['플러그인 0', '기능 0', '마켓플레이스 1'])
+    && JSON.stringify(pluginManage.toggles) === JSON.stringify(['true'])
+    && /등록만으로는 아무것도 실행되지 않습니다/.test(pluginManage.marketplaceNote));
+  assertOk('pluginMode: Paper 01 permission is a non-blocking detail view with 설치됨/기능/허용/상태 badges',
     pluginPermission.dialogCount === 0
     && pluginPermission.overlayCount === 0
-    && pluginPermission.title === 'DART 전자공시'
-    && pluginPermission.counts.includes('UI 초안')
-    && pluginPermission.features === 4
-    && /3\s*\/\s*4/.test(pluginPermission.allowed)
+    && pluginPermission.title === '한국 주식 시세'
+    && JSON.stringify(pluginPermission.counts) === JSON.stringify(['설치됨', '기능 6', '허용 4', '연결 확인됨'])
+    && pluginPermission.features === 6
+    && /4\s*\/\s*6/.test(pluginPermission.allowed)
+    && pluginPermission.hint === '선택한 기능만 한국 주식 시세 플러그인에 노출됩니다'
+    && pluginPermission.saveLabel === '선택 저장'
+    && /Athena 내장 API이므로 플러그인 권한 목록에 표시하지 않습니다/.test(pluginPermission.boundaryNote)
+    && pluginPermission.errorBanner === 0
     && pluginPermission.inert === false);
+  assertOk('pluginMode: probe failure surfaces the reason and a retry instead of an empty toggle list',
+    pluginProbeFailure.bannerText === '연결 실패 — spawn npx ENOENT'
+    && pluginProbeFailure.retryLabel === '다시 확인'
+    && pluginProbeFailure.emptyCopy === '노출 기능을 아직 확인하지 못했습니다 · 다시 확인을 누릅니다');
 
   // ---------- 검증 3d: Paper 49 Kiumi 메뉴 + Paper 54 프로젝트 상호작용 ----------
   await shellWin.webContents.executeJavaScript(`document.getElementById('dot').click()`);
@@ -2044,6 +2149,7 @@ app.whenReady().then(async () => {
       width: rect.width,
       itemCount: items.length,
       sections: Array.from(menu.querySelectorAll('.km-section')).map((node) => node.textContent),
+      itemTitles: items.map((item) => item.querySelector('.km-title')?.textContent || ''),
       allIconsAreSvg: items.every((item) => item.querySelector('.km-ic > svg')),
       rowHeights: items.map((item) => item.getBoundingClientRect().height),
       backdropFilter: style.backdropFilter || style.webkitBackdropFilter || '',
@@ -2102,8 +2208,12 @@ app.whenReady().then(async () => {
   assertOk('kiumiMenu: Paper 49 uses a 380px Liquid Glass menu with neutral SVG actions',
     kiumiMenu.visible === true
     && near(kiumiMenu.width, 380, 2)
-    && kiumiMenu.itemCount === 8
-    && JSON.stringify(kiumiMenu.sections) === JSON.stringify(['추가', '플러그인 UI 초안', '설정'])
+    // 플러그인 구역은 고정 목록이 아니라 실제로 등록·승인된 서버다. 검증
+    // 프로필의 레지스트리는 비어 있으므로(상단 ATHENA_MCP_REGISTRY_PATH) 안내
+    // 항목 한 줄만 뜬다 — 추가 4 + 플러그인 1 + 설정 2 = 7.
+    && kiumiMenu.itemCount === 7
+    && JSON.stringify(kiumiMenu.sections) === JSON.stringify(['추가', '플러그인', '설정'])
+    && kiumiMenu.itemTitles[4] === '설치된 플러그인 없음'
     && kiumiMenu.allIconsAreSvg === true
     && kiumiMenu.rowHeights.every((height) => height >= 36)
     && /blur\(3px\)/.test(kiumiMenu.backdropFilter));
@@ -2338,7 +2448,7 @@ app.whenReady().then(async () => {
     "document.querySelectorAll('#settingsGrid .card.accounts').length"
   );
 
-  const navClickMcp = await shellWin.webContents.executeJavaScript(clickNavItemScript('MCP 서버'));
+  const navClickMcp = await shellWin.webContents.executeJavaScript(clickNavItemScript('플러그인'));
   await wait(1000); // mcp-list는 Python CLI 콜드 스폰이라 실측 ~850ms 걸린다(verify-settings.js 주석 참고)
   const mcpPanelCardCount = await shellWin.webContents.executeJavaScript(
     "document.querySelectorAll('#settingsGrid .card.mcp').length"
@@ -2404,7 +2514,7 @@ app.whenReady().then(async () => {
     // 셸 창이 설정 모드로 바뀐다
     renderedInChatWindow: chatProbe.settingsVisible === true && chatProbe.url === 'shell.html',
     chatModeSteppedAside: chatProbe.appHidden === true,
-    // 사이드바 nav — 존재 + 항목 5개(화면·계좌·MCP 서버·모델·성향・이력, 채팅→그래프
+    // 사이드바 nav — 존재 + 항목 5개(화면·계좌·플러그인·모델·성향・이력, 채팅→그래프
     // 파이프라인 단계 5로 늘었다 — .omc/plans/plan-chat-graph-pipeline.md §2(e)) +
     // 기본 선택은 '화면'
     navExists: navProbe.navExists === true,

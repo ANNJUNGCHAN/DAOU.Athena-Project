@@ -117,7 +117,7 @@ async function main() {
   const NAV_LABELS = [
     ['화면', '03a-settings-screen.png'],
     ['계좌', '03b-settings-accounts.png'],
-    ['MCP 서버', '03c-settings-mcp.png'],
+    ['플러그인', '03c-settings-mcp.png'],
     ['모델', '03d-settings-model.png'],
     ['그래프', '03e-settings-graph.png'],
   ];
@@ -149,7 +149,7 @@ async function main() {
         btn.click();
         return 'clicked';
       })()`);
-      await wait(label === 'MCP 서버' ? 1200 : 600); // mcp-list는 콜드 스폰이라 더 기다린다(probe-chart-card.js/verify.js 관례)
+      await wait(label === '플러그인' ? 1200 : 600); // mcp-list는 콜드 스폰이라 더 기다린다(probe-chart-card.js/verify.js 관례)
       await shot(shellWin, file, clicked);
       if (clicked !== 'clicked') {
         results.push({ name: `03-nav-${label}`, ok: false, file: null, note: `nav 항목을 못 찾음: ${clicked}` });

@@ -556,6 +556,115 @@
   line-height: 16px;
 }
 
+/* --- 관리 행: 실패 사유는 그 행 아래에 붙는다 (토글 되돌림과 한 쌍) --- */
+.plugin-canvas-manage-row {
+  flex-wrap: wrap;
+}
+
+.plugin-canvas-manage-error {
+  flex: 0 0 100%;
+  margin-top: 6px;
+  padding: 6px 9px;
+  border-radius: 7px;
+  background: #fdecf3;
+  color: #a3084b;
+  font-size: 11px;
+  line-height: 15px;
+}
+
+.plugin-canvas-action.is-danger {
+  padding: 5px 12px;
+  border: 1px solid #a3084b29;
+  background: #fdecf3;
+  color: #a3084b;
+}
+
+.plugin-canvas-action.is-sheet-danger {
+  padding: 10px 20px;
+  border-radius: 9px;
+  background: #a3084b;
+  color: #fff;
+  font-family: var(--font-strong, "Daki B", system-ui, sans-serif);
+  font-size: 13px;
+  line-height: 16px;
+}
+
+/* 연결 상태 배지 — 설치됨/기능/허용과 달리 관측값이라 중립 회색을 쓴다. */
+.plugin-canvas-count.is-health {
+  max-width: 100%;
+  overflow: hidden;
+  background: #10131a0f;
+  color: #5b6270;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* --- probe 실패 배너 (기능 허용 화면) --- */
+.plugin-canvas-error-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid #a3084b29;
+  border-radius: 10px;
+  background: #fdecf3;
+}
+
+.plugin-canvas-error-text {
+  min-width: 0;
+  flex: 1 1 auto;
+  color: #a3084b;
+  font-size: 12px;
+  line-height: 17px;
+}
+
+.plugin-canvas-action.is-retry {
+  flex: 0 0 auto;
+  padding: 5px 12px;
+  border: 1px solid #a3084b29;
+  background: #fff;
+  color: #a3084b;
+}
+
+.plugin-canvas-permission-hint {
+  min-width: 0;
+  flex: 0 1 auto;
+  color: #5b6270;
+  font-size: 12px;
+  line-height: 17px;
+}
+
+.plugin-canvas-boundary-note {
+  margin: 0;
+  color: #5b6270;
+  font-size: 11px;
+  line-height: 16px;
+}
+
+/* --- 설치 승인 시트 (Paper 플러그인 02) --- */
+.plugin-canvas-sheet-boundary,
+.plugin-canvas-sheet-command,
+.plugin-canvas-sheet-location {
+  padding: 8px 12px;
+  border: 1px solid #10131a12;
+  border-radius: 8px;
+  background: #10131a05;
+  color: #5b6270;
+  font-size: 12px;
+  line-height: 17px;
+}
+
+.plugin-canvas-sheet-command {
+  font-family: var(--font-mono, "Geist Mono", ui-monospace, monospace);
+  overflow-wrap: anywhere;
+}
+
+.plugin-canvas-sheet-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 @media (max-width: 760px) {
   .plugin-canvas-panel {
     padding: 18px;
@@ -586,6 +695,10 @@
   .plugin-canvas-permission-footer {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .plugin-canvas-permission-hint {
+    order: 3;
   }
 
   .plugin-canvas-manage-source {

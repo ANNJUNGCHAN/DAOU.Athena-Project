@@ -156,7 +156,7 @@ app.whenReady().then(async () => {
   // 사용자 경로(renderNav onSelect)를 타야 grid.replaceChildren()이 먼저 불려
   // 계좌 카드가 정리된다 — 안 그러면 두 카드가 같은 grid에 함께 남는, 실제로는
   // 도달 불가능한 상태가 된다(사이드바는 한 번에 카드 하나만 보여준다).
-  await clickAndLog(shellWin, 'select nav MCP 서버', clickNavItem('MCP 서버'));
+  await clickAndLog(shellWin, 'select nav 플러그인', clickNavItem('플러그인'));
   await wait(1000); // mcp-list는 Python CLI 콜드 스폰이라 실측 ~850ms 걸린다(verify-settings.js 주석 참고)
   await shot(shellWin, 'SETTINGS-07-mcp-list.png');
 

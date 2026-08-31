@@ -32,7 +32,7 @@ import json
 import sys
 from pathlib import Path
 
-from athena_mcp.consent import AuditLog, ConsentStore
+from athena_mcp.consent import AuditLog, ConsentNotGrantedError, ConsentStore
 from athena_mcp.onboarding import (
     ProbeReport,
     apply_probe_findings,
@@ -40,7 +40,16 @@ from athena_mcp.onboarding import (
     stage_from_snippet,
     stage_registration,
 )
-from athena_mcp.registry import ServerRegistry, default_registry_path
+from athena_mcp.registry import (
+    AliasValidationError,
+    DuplicateAliasError,
+    InvalidServerSpecError,
+    MissingSecretEnvError,
+    ServerRegistry,
+    SnippetParseError,
+    UnknownAliasError,
+    default_registry_path,
+)
 from athena_mcp.runner import GatewayRunner, default_state_dir
 
 
@@ -408,10 +417,45 @@ def _force_utf8_console() -> None:
                 pass
 
 
+# 사람이 낼 수 있는 오류들 — 없는 별칭, 중복 별칭, 깨진 스니펫, 미승인 서버.
+# 이건 버그가 아니라 입력이므로 트레이스백을 찍지 않는다.
+#
+# 왜 중요한가: 앱(lib/main/mcp-cli.js)은 실패한 CLI의 stderr **첫 줄**을 그대로
+# 사용자 화면에 옮긴다. 트레이스백을 찍으면 그 첫 줄이 항상
+# "Traceback (most recent call last):"이라, 화면에는 이유가 아니라 이 문자열이
+# 뜬다(2026-09-01 verify:plugins 실측). 여기서 한 줄로 끝내면 그 한 줄이
+# 그대로 사람이 읽을 수 있는 이유가 된다.
+USER_FACING_ERRORS = (
+    AliasValidationError,
+    ConsentNotGrantedError,
+    DuplicateAliasError,
+    InvalidServerSpecError,
+    MissingSecretEnvError,
+    SnippetParseError,
+    UnknownAliasError,
+)
+
+
+def _user_error_text(exc: BaseException) -> str:
+    if isinstance(exc, UnknownAliasError):
+        return f"등록되지 않은 별칭이다: {exc.args[0] if exc.args else ''}"
+    if isinstance(exc, DuplicateAliasError):
+        return f"이미 등록된 별칭이다: {exc.args[0] if exc.args else ''}"
+    # KeyError 계열은 str()이 따옴표를 덧씌운다 — 사람이 읽을 문장만 남긴다.
+    text = str(exc).strip()
+    if isinstance(exc, KeyError) and text.startswith("'") and text.endswith("'"):
+        text = text[1:-1]
+    return text or exc.__class__.__name__
+
+
 def main(argv: list[str] | None = None) -> int:
     _force_utf8_console()
     args = build_parser().parse_args(argv)
-    return args.func(args)
+    try:
+        return args.func(args)
+    except USER_FACING_ERRORS as exc:
+        print(_user_error_text(exc), file=sys.stderr)
+        return 2
 
 
 if __name__ == "__main__":

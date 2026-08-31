@@ -79,9 +79,23 @@ function runCli(args, opts = {}) {
   });
 }
 
+// 실패 이유 한 줄. 사람이 낸 오류는 파이썬 CLI가 이미 한 줄로 끝내므로
+// (`__main__.py` USER_FACING_ERRORS) 그 줄이 그대로 온다. 예상 못한 크래시로
+// 트레이스백이 오면 첫 줄은 항상 "Traceback (most recent call last):"이라
+// 화면에 이유가 아니라 그 문자열이 뜬다 — 그때는 예외가 찍힌 **마지막** 줄을
+// 쓰고 모듈 경로 접두사를 떼어 사람이 읽을 수 있게 만든다.
 function firstErrorLine(text) {
   const lines = String(text || '').split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
-  return lines[0] || '알 수 없는 오류';
+  if (!lines.length) return '알 수 없는 오류';
+  const tracebackAt = lines.findIndex((l) => l.startsWith('Traceback (most recent call last)'));
+  if (tracebackAt < 0) return lines[0];
+  // 트레이스백 앞에 CLI가 찍은 사람용 줄이 있으면 그게 더 정확하다.
+  if (tracebackAt > 0) return lines[0];
+  const last = lines[lines.length - 1];
+  const named = last.match(/^(?:[A-Za-z_][\w.]*\.)?([A-Za-z_]\w*(?:Error|Exception)):\s*(.*)$/);
+  if (!named) return last;
+  const detail = named[2].replace(/^'(.*)'$/, '$1').trim();
+  return detail ? `${named[1]}: ${detail}` : named[1];
 }
 
 // ---------------------------------------------------------------------------
@@ -265,6 +279,17 @@ async function allowTool(alias, tool, allowed) {
   return { ok: true };
 }
 
+// athena:mcp-revoke — approve의 역연산. consent.revoke()가 approved=false로
+// 되돌리고 approved_tools까지 비운다(consent.py). 관리 화면의 끄기가 이걸 부른다:
+// 서버를 지우지 않고 대화에서만 빼는 유일한 방법이다.
+async function revoke(alias) {
+  const result = await runCli(['revoke', alias]);
+  if (result.code !== 0) {
+    return { ok: false, error: firstErrorLine(result.stderr || result.stdout) };
+  }
+  return { ok: true };
+}
+
 async function remove(alias) {
   const result = await runCli(['remove', alias]);
   return { ok: result.code === 0 };
@@ -275,6 +300,7 @@ module.exports = {
   stageSnippet,
   register,
   approve,
+  revoke,
   probe,
   allowTool,
   remove,
