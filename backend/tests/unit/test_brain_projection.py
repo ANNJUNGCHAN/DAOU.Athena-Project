@@ -284,13 +284,91 @@ async def test_cluster_numbers_run_from_largest_to_smallest(store: GraphStore) -
     edges.append(relation("relates_to", small[0], small[1]))
     await seed(store, (PROFILE, *big, *small), tuple(edges))
 
-    assignment = cluster(await GraphProjector(store).project())
+    # 프로필을 뺀 분석용 투영으로 잰다 — 프로필이 있으면 모든 노드가 그 허브로
+    # 이어져 군집이 하나로 뭉쳐 "크기 순 번호" 규칙 자체를 잴 수 없다.
+    assignment = cluster(await GraphProjector(store).analysis())
     sizes: dict[int, int] = {}
     for number in assignment.values():
         sizes[number] = sizes.get(number, 0) + 1
     ordered = [sizes[number] for number in sorted(sizes)]
     assert ordered == sorted(ordered, reverse=True), f"크기 내림차순이 아니다: {ordered}"
     assert assignment[big[0].id] == 0, "완전연결 6개가 가장 큰 군집이다"
+
+
+# ── 분석용 투영(투자자 프로필 제외) ─────────────────────────────────────────
+
+
+async def test_analysis_view_drops_the_investor_profile_node(store: GraphStore) -> None:
+    """지도·군집·중심성이 보는 그래프에는 투자자 프로필이 없다.
+
+    프로필은 모든 성향 관계의 출발점이라 차수가 그래프 최대가 된다 — 넣어 두면
+    "내 투자의 중심"이 언제나 "당신"이고, 그 허브가 무관한 테마들을 한 군집으로
+    묶는다. 저장층과 `project()`에는 그대로 남아 프로필 요약이 계속 읽는다.
+    """
+    theme = entity(EntityKind.THEME, "고배당주")
+    stock = entity(EntityKind.SECURITY, "KB금융")
+    await seed(
+        store,
+        (PROFILE, theme, stock),
+        (
+            relation("interested_in", PROFILE, theme),
+            relation("owns", PROFILE, stock),
+            relation("belongs_to", stock, theme),
+        ),
+    )
+
+    projector = GraphProjector(store)
+    full = await projector.project()
+    analysis = await projector.analysis()
+
+    assert INVESTOR_PROFILE_ENTITY_ID in full.graph, "전체 투영에는 그대로 있다"
+    assert INVESTOR_PROFILE_ENTITY_ID not in analysis.graph
+    assert analysis.revision == full.revision, "같은 시점의 두 관점이다"
+    # 프로필에서 뻗은 두 엣지는 빠지고 종목↔테마 하나만 남는다.
+    assert analysis.graph.number_of_edges() == 1
+    assert set(analysis.graph.nodes) == {theme.id, stock.id}
+
+
+async def test_analysis_view_is_cached_per_revision(store: GraphStore) -> None:
+    """리비전이 그대로면 서브그래프를 다시 만들지 않는다(전체 투영과 같은 계약)."""
+    theme = entity(EntityKind.THEME, "고배당주")
+    await seed(store, (PROFILE, theme), (relation("interested_in", PROFILE, theme),))
+    projector = GraphProjector(store)
+    first = await projector.analysis()
+    assert await projector.analysis() is first
+
+
+async def test_analysis_view_does_not_mutate_the_cached_projection(
+    store: GraphStore,
+) -> None:
+    """서브그래프를 복사본으로 만든다 — 원본을 제자리에서 고치면 프로필 요약이 깨진다."""
+    theme = entity(EntityKind.THEME, "고배당주")
+    await seed(store, (PROFILE, theme), (relation("interested_in", PROFILE, theme),))
+    projector = GraphProjector(store)
+    await projector.analysis()
+    full = await projector.project()
+    assert INVESTOR_PROFILE_ENTITY_ID in full.graph
+
+
+async def test_isolated_nodes_are_unassigned_not_singleton_clusters(
+    store: GraphStore,
+) -> None:
+    """연결이 없는 노드는 군집이 아니라 미분류(-1)다.
+
+    성향 그래프에서 흔한 모양이다: "장기 보유" 같은 선호는 프로필하고만 이어져 있어
+    분석용 투영에서 고립된다. 1인 군집으로 돌려주면 지도가 점 하나짜리 버블로 뒤덮인다.
+    """
+    a = entity(EntityKind.THEME, "반도체")
+    b = entity(EntityKind.SECURITY, "삼성전자")
+    lonely = entity(EntityKind.PREFERENCE, "장기 보유")
+    await seed(
+        store,
+        (PROFILE, a, b, lonely),
+        (relation("belongs_to", b, a), relation("prefers", PROFILE, lonely)),
+    )
+    assignment = cluster(await GraphProjector(store).analysis())
+    assert assignment[lonely.id] == -1
+    assert assignment[a.id] == assignment[b.id] >= 0
 
 
 # ── 응집도 ──────────────────────────────────────────────────────────────────

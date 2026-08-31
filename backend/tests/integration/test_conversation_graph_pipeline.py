@@ -215,15 +215,20 @@ def test_conversation_history_builds_a_deduplicated_cluster_map_through_public_r
     assert "user: 이차전지와 삼성전자 관계를 계속 보고 싶어." in extractor.prompts[0]
     assert "assistant: 배터리 산업과 삼성전자를 함께 추적할게요." in extractor.prompts[0]
     assert evidence == {"sources": 3, "entities": 3, "relations": 3, "merged": 1}
-    assert len(cluster["nodes"]) == 3
+    # 지도는 테마·종목만 그린다 — 투자자 프로필은 그래프의 원점이지 구성원이 아니라
+    # 빠진다(projection.GraphProjector.analysis). 저장층에는 그대로 3개다.
+    assert len(cluster["nodes"]) == 2
     assert [node["name"] for node in cluster["nodes"] if node["kind"] == "theme"] == [
         "이차전지"
     ]
     assert [node["name"] for node in cluster["nodes"] if node["kind"] == "security"] == [
         "삼성전자"
     ]
-    assert sum(node["kind"] == "investor_profile" for node in cluster["nodes"]) == 1
-    assert len(cluster["edges"]) == 2
+    assert sum(node["kind"] == "investor_profile" for node in cluster["nodes"]) == 0
+    # 프로필에서 뻗은 엣지는 지도에서 빠지고(그 관계는 profile-summary가 낸다),
+    # 종목↔테마 하나만 남는다 — 지도가 그리는 것이 바로 그 관계다.
+    map_node_ids = sorted(node["entity_id"] for node in cluster["nodes"])
+    assert cluster["edges"] == [map_node_ids]
     assert cluster["revision"] > 0
     assert cluster["cluster_cohesion"]
     assert cluster["cluster_representative_labels"]
