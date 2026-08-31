@@ -275,10 +275,11 @@ def test_authoritative_labels_cover_fields_columns_and_compound_headers() -> Non
         "rows": [{"bgb_clr": "#ffffff"}],
     }
     dropped = _apply_authoritative_public_labels("base:ka01301", internal)
-    assert dropped == (
-        {"location": "columns", "key": "bgb_clr", "reason": "internal"},
-    )
-    assert internal == {"columns": [], "rows": [{}]}
+    assert dropped == ()
+    assert internal == {
+        "columns": [{"key": "bgb_clr", "label": "북마크 컬러"}],
+        "rows": [{"bgb_clr": "#ffffff"}],
+    }
 
 
 def test_recipe_and_view_identity_are_deterministic_and_server_derived() -> None:
@@ -509,7 +510,7 @@ def test_internal_realtime_binding_registry_is_guarded_and_normalizes_raw_tick()
     assert registry["operation_id"] == "1h"
     assert set(registry["source_bindings"]["9001"]) == {"binding_id"}
     assert registry["source_bindings"]["9001"]["binding_id"].startswith("rtb_")
-    assert "1279" not in registry["source_bindings"]
+    assert registry["source_bindings"]["1279"]["binding_id"].startswith("rtb_")
 
     raw_values = {"9001": "005930", "13": "+1200", "1279": "opaque"}
     semantic_updates = [
@@ -522,10 +523,10 @@ def test_internal_realtime_binding_registry_is_guarded_and_normalizes_raw_tick()
     ]
     public_tick = {"semantic_updates": semantic_updates}
     public_text = json.dumps(public_tick, ensure_ascii=False)
-    assert len(semantic_updates) == 2
+    assert len(semantic_updates) == 3
     assert "9001" not in public_text
     assert "1279" not in public_text
-    assert "opaque" not in public_text
+    assert "opaque" in public_text
 
 
 def test_internal_realtime_registry_rejects_non_websocket_operations() -> None:
@@ -619,7 +620,7 @@ def test_error_state_keeps_all_authoritative_sections_with_explicit_state() -> N
     assert body["envelope"]["update_policy"] == "replace"
 
 
-def test_unresolved_and_transport_values_never_enter_product_presentation() -> None:
+def test_official_opaque_values_enter_named_detail_while_transport_stays_hidden() -> None:
     contract = _integrated_card_contract("base:1h")
     _bind_semantic_values(
         contract,
@@ -645,9 +646,11 @@ def test_unresolved_and_transport_values_never_enter_product_presentation() -> N
         },
         ensure_ascii=False,
     )
-    assert "opaque-a" not in product_json
-    assert "opaque-b" not in product_json
+    assert "opaque-a" in product_json
+    assert "opaque-b" in product_json
     assert "nested-opaque" not in product_json
+    assert "명세 추가 항목" in product_json
+    assert '"label_ko": "1279"' not in product_json
     assert "return_code" not in product_json
     stock_code_contract = next(
         item
@@ -702,7 +705,7 @@ def test_unresolved_and_transport_values_never_enter_product_presentation() -> N
     }
     assert "market-state" in section_ids
     assert stock_code_contract.section_id in section_ids
-    assert "vi-events" not in section_ids
+    assert "vi-events" in section_ids
     public_subtree = {
         "presentation_contract": contract["presentation_contract"],
         "semantic_observations": contract["semantic_observations"],
@@ -742,8 +745,12 @@ def test_unresolved_and_transport_values_never_enter_product_presentation() -> N
         },
         ensure_ascii=False,
     )
-    assert "opaque-951" not in balance_product_text
-    assert "opaque-924" not in balance_product_text
+    assert "opaque-951" in balance_product_text
+    assert "opaque-924" in balance_product_text
+    assert "명세 추가 항목 1" in balance_product_text
+    assert "명세 추가 항목 2" in balance_product_text
+    assert '"label_ko": "951"' not in balance_product_text
+    assert '"label_ko": "924"' not in balance_product_text
 
 
 def test_numbered_field_families_keep_public_slots_without_numeric_labels() -> None:

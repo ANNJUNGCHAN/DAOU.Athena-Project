@@ -59,15 +59,19 @@ Athena 사용자는 API를 탐색하려는 사람이 아니다. 사용자는 다
 | 응답 필드 occurrence | 3,705개 | `canvas_field_registry.py`, field coverage 테스트 |
 | 고유 `(mapping_id, json_path)` | 3,703개 | field registry와 fixture 테스트 |
 | 중복 occurrence | 2개 | `base:ka10173`의 `$.trnm`, `$.data`; ordinal로 보존 |
-| Presentation field class | semantic 3,500 / transport 92 / internal 110 / unresolved 3 | `semantic_presentation_registry.py` summary |
+| Presentation field class | semantic business raw 3,531 / transport 92 / structural internal 79 / official opaque raw 3 | `semantic_presentation_registry.py` summary |
 | 공식 의미가 확정되지 않은 occurrence | 3개 | 현행 REST occurrence `951`, `924`, `1279` |
 | View Recipe | 12개 | `view_recipe_registry.py` |
 | Section policy | 36개 | 12개 recipe의 `section_policies` 합계 |
-| 의미 배치 review gate | 준비됨 | `review_ready=true`, placed semantic 3,500 |
+| 의미 배치 review gate | 준비됨 | `review_ready=true`, placed business raw 3,534 |
 | 의미 렌더 release gate | 미완료 | `release_ready=false`; unresolved 3개 |
 | Electron recipe capture | 12개 | fixture-only receipt; 외부 호출 차단 |
 
-현행 Kiwoom REST/WebSocket inventory는 `base:04`의 `951`·`924`와 `base:1h`의 `1279`를 모두 `Extra Item`으로만 제공한다. 레거시 OpenAPI+ OCX 가이드의 `951=예수금` 의미를 현재 REST 계약에 전역 이식하지 않고, 이 세 occurrence를 `official_opaque`·`unresolved`로 격리한다. 공식 의미를 임의로 붙이지 않으며 제품 UI에도 노출하지 않는다.
+현행 Kiwoom REST/WebSocket inventory는 `base:04`의 `951`·`924`와 `base:1h`의 `1279`를 모두 `Extra Item`으로만 제공한다. 레거시 OpenAPI+ OCX 가이드의 `951=예수금` 의미를 현재 REST 계약에 전역 이식하지 않는다. 세 occurrence는 `official_opaque`·`unresolved`로 보존하고, 공식 의미·단위·색상 의미를 만들지 않은 중립 라벨(`명세 추가 항목`)로 이름 있는 상세 영역에서 값에 접근할 수 있게 한다.
+
+Raw/derived 판정은 화면 문구나 값의 모양이 아니라 `(공식 명세 revision, mapping/operation ID, response JSON path 또는 FID, occurrence ordinal)`의 exact source tuple로 한다. 공식 tuple이 있으면 `평균`, `괴리`, `비중`, `누적`, `상환`, `대비`라는 단어를 포함해도 raw다. Athena가 하나 이상의 raw 값을 계산·비교·환산·순위화·해석해 만든 값만 derived다. 쉼표, 날짜, 부호, 공식 단위 표기는 formatter이며 derived가 아니다.
+
+공식 포털의 현재 JSON 명세와 공식 GitHub current spec이 다를 때는 둘의 response field 합집합을 보존한다. 한 공식 원천에만 존재한다는 이유로 raw를 삭제하지 않고 `official-source divergence`로 기록한다. 2026-08-31 감사에서 포털은 347개, GitHub는 337개 API를 제공했다. 현재 Athena 299 범위 안에서 포털에만 추가된 operation/response field는 0개였고, `0D`·`ka10173`은 GitHub 쪽 response field가 더 많아 해당 필드도 그대로 유지한다. 포털에만 있는 신규 operation 10개는 현행 299 범위의 raw 삭제 판단과 분리해 별도 onboarding 대상으로 관리한다.
 
 ### 3.2 현재 구조가 증명하는 것
 
@@ -75,7 +79,7 @@ Athena 사용자는 API를 탐색하려는 사람이 아니다. 사용자는 다
 
 - 299개 operation의 소유권이 누락·중복 없이 정해져 있다.
 - 3,705개 wire occurrence가 보존된다.
-- 3,500개 semantic field에 recipe/section/component 목적지가 존재한다.
+- 3,531개 semantic business raw와 3개 official opaque raw에 recipe/section/component 목적지가 존재한다.
 - 299개 operation이 12개 recipe 중 하나에 도달하고, workflow-only를 제외한 section이 비어 있지 않다.
 - public presentation은 `display_tier`, `display_group`, `display_slot`, `display_order`, `visibility_policy`를 사용해 값의 우선순위와 반복 family를 표현한다.
 - 합성 fixture가 299개 response model을 통과한다.
@@ -90,7 +94,8 @@ Athena 사용자는 API를 탐색하려는 사람이 아니다. 사용자는 다
 - Task Canvas는 `semantic-workspace.js`가 이름 있는 section과 semantic observation만 렌더한다.
 - production에서는 raw detail sheet를 마운트하지 않는다.
 - wire occurrence viewer는 명시적 developer diagnostics flag에서만 사용할 수 있다.
-- unresolved, transport, internal 값과 raw-looking label은 제품 presentation과 DOM에서 제외한다.
+- official opaque raw는 중립 라벨의 이름 있는 상세 영역으로 노출한다.
+- transport와 structural internal 값은 wire registry에서 삭제하지 않으며, 오류·pagination·continuation·realtime lifecycle·binding 같은 제품 상태와 동작으로 소비한다. 기술 alias/FID를 사용자 taxonomy처럼 노출하지 않는다.
 - AITS 차트와 실시간 호가 전문 renderer는 generic semantic UI로 대체하지 않고 primary renderer로 보존한다.
 
 Legacy detail sheet 파일은 호환·개발 진단 목적으로 남아 있다. 파일이 존재한다는 사실과 production 제품 UI에 노출된다는 사실을 혼동하지 않는다.
@@ -111,7 +116,7 @@ Legacy detail sheet 파일은 호환·개발 진단 목적으로 남아 있다. 
 
 - **Operation coverage:** 완료
 - **Wire occurrence preservation:** 완료
-- **Presentation classification:** 완료; semantic 3,500 / transport 92 / internal 110 / unresolved 3
+- **Presentation classification:** 완료; semantic business raw 3,531 / transport 92 / structural internal 79 / official opaque raw 3
 - **Task-oriented semantic placement:** 구조·fixture 검증 완료
 - **실제 Canvas fixture 렌더:** 12 recipe 대표 capture 완료
 - **실제 Kiwoom/WebSocket/broker live E2E:** 미완료
@@ -220,18 +225,18 @@ visibility_policy, source_precedence, product_destination
 
 | 분류 | 처리 |
 | --- | --- |
-| `semantic` | 반드시 이름 있는 recipe/section/component에 연결 |
-| `transport` | 오류, pagination, continuation, realtime lifecycle 동작에 사용하고 본문에 표시하지 않음 |
-| `internal` | trace, subscription key, operation ID 등 내부 동작에만 사용 |
-| `unresolved` | wire registry에 보존하고 제품 UI에는 표시하지 않음 |
-| `derived` | 공식, 입력 concept, 기준 시각, 반올림 규칙을 함께 관리 |
+| `semantic` | 공식 source tuple이 있는 business raw. 반드시 이름 있는 recipe/section/component에 연결 |
+| `transport` | 공식 wire raw를 삭제하지 않고 오류, pagination, continuation, realtime lifecycle 동작에 사용. 독립 business 셀로 반복 표시하지 않음 |
+| `internal` | 공식 구조 wrapper와 내부 binding/식별 계약을 wire registry에 보존하고 내부 동작에 사용 |
+| `unresolved` | 공식 source tuple이 있는 opaque raw. 의미·단위를 만들지 않고 중립 라벨의 이름 있는 상세 영역에 연결 |
+| `derived` | Athena가 raw를 계산·비교·환산·순위화·해석해 생성한 값. 공식 raw처럼 위장하지 않으며 명시적 제품 요구 없이는 표시하지 않음 |
 
 현재 분류 결과는 다음과 같다.
 
 ```text
-semantic  3,500
+semantic  3,531
 transport    92
-internal    110
+internal     79
 unresolved    3  (951, 924, 1279)
 derived       0
 합계       3,705
@@ -528,11 +533,11 @@ draft → preview → explicit confirmation → broker request
 
 ### 단계 1. Registry 분리
 
-- **현재 상태: 구조 구현 완료, unresolved 3개로 release 미완료.**
+- **현재 상태: 구조 구현 완료, official opaque raw 3개의 공식 의미 미확정으로 release 미완료.**
 - 기존 `CanvasFieldContract`를 wire 보존 계약으로 한정한다.
 - Semantic Concept layer와 Presentation Registry를 추가한다.
-- 3,500개 semantic field를 recipe/section/component 및 display tier/group/slot에 배치한다.
-- 현행 REST occurrence `951`, `924`, `1279`는 공식 의미 확인 전까지 제품 UI에서 격리한다.
+- 3,531개 semantic business raw와 3개 official opaque raw를 recipe/section/component 및 display tier/group/slot에 배치한다.
+- 현행 REST occurrence `951`, `924`, `1279`는 공식 의미 확인 전까지 의미·단위를 발명하지 않고 중립 라벨의 named detail로 값을 보존한다.
 
 ### 단계 2. Recipe Resolver
 
@@ -555,7 +560,8 @@ draft → preview → explicit confirmation → broker request
 - **현재 상태: production 경계와 로컬 회귀 테스트 완료.**
 - production은 semantic workspace를 사용하고 raw `SemanticDetailSheet`를 마운트하지 않는다.
 - wire coverage viewer는 명시적 developer diagnostics flag에서만 접근한다.
-- transport/internal/unresolved 값과 기술 식별자가 제품 DOM·접근성 tree에 노출되지 않는지 검사한다.
+- transport/internal 기술 식별자가 제품 taxonomy로 노출되지 않는지 검사한다.
+- official opaque raw는 값이 소실되지 않고 중립 라벨의 named detail에만 노출되는지 검사한다.
 
 ### 단계 5. Paper와 Runtime 일치
 
@@ -575,7 +581,8 @@ draft → preview → explicit confirmation → broker request
 - 3,703 unique path와 `ka10173` 중복 ordinal 보존
 - 모든 occurrence의 field class 분류
 - 모든 semantic concept의 presentation destination 존재
-- transport/internal/unresolved의 제품 destination 0
+- transport/internal의 독립 business destination 0
+- official opaque raw의 named-detail destination 3/3
 - 공식 의미 미확정 필드 0일 때만 full semantic gate 통과
 
 ### 15.2 Recipe 계약 테스트
@@ -626,11 +633,11 @@ draft → preview → explicit confirmation → broker request
 
 ### 15.7 현재 로컬 자동 검증 증거
 
-2026-08-30 현재 문서 갱신 과정에서 다음 표적 검증을 새로 실행했다.
+2026-08-31 현재 문서 갱신 과정에서 다음 표적 검증을 새로 실행했다.
 
 | 검증 | 결과 | 증명 범위 |
 | --- | --- | --- |
-| backend registry/recipe/envelope/fixture 테스트 | 56 passed | 299/3,705/3,703, 3,500/92/110/3, 12 recipe/36 policy, forged order 차단, opaque binding |
+| backend registry/recipe/envelope/fixture 테스트 | 103 passed | 299/3,705/3,703, 3,531/92/79/3, 12 recipe/36 policy, 공식 code/color raw 보존, official opaque named detail, forged order 차단, opaque binding |
 | frontend semantic workspace/raw boundary/integrated surface 테스트 | 66 passed | named section, raw 미노출, AITS·호가 primary 보존, opaque realtime update, lifecycle 상태, 접근성 상태 |
 | Electron semantic workspace receipt | 12 recipe capture | fixture-only 렌더, 외부 호출 없음, `390×844` 좁은 데스크톱 창 회귀 |
 
@@ -697,9 +704,9 @@ Paper의 `화면`과 `카드`는 다음 정본을 표현한다.
 
 - [x] 299/299 operation assigned, unassigned 0, duplicated 0
 - [x] 3,705/3,705 field occurrence와 3,703 unique path 보존
-- [x] 모든 occurrence 분류: semantic 3,500 / transport 92 / internal 110 / unresolved 3
+- [x] 모든 occurrence 분류: semantic business raw 3,531 / transport 92 / structural internal 79 / official opaque raw 3
 - [ ] 공식 의미 미확정 occurrence 0
-- [x] 3,500개 semantic field에 이름 있는 recipe/section/component destination 존재
+- [x] 3,534개 user-accessible official raw에 이름 있는 recipe/section/component destination 존재
 - [x] unsafe/diagnostic-only semantic product destination 0
 - [x] 12개 recipe, 36개 section policy, 299개 operation reachability 검증
 - [ ] 동일 의미 중복 노출 0
@@ -740,7 +747,7 @@ Paper의 `화면`과 `카드`는 다음 정본을 표현한다.
 - 직접 답을 찾는 데 걸린 시간
 - 관련 상세까지 필요한 상호작용 수
 - 사용자 의미 필드의 named destination coverage
-- 제품 UI의 raw/internal 노출 건수
+- 공식 business raw의 사용자 접근 가능 coverage와 transport/internal 기술 alias 노출 건수
 - 부분 실패가 전체 업무를 막은 비율
 - 실시간 stale·재연결 복구율
 - 주문 중복 제출과 결과불명 오판 건수
@@ -750,7 +757,7 @@ Paper의 `화면`과 `카드`는 다음 정본을 표현한다.
 
 - `backend/athena_api/canvas_card_registry.py`: 6 root, 19 Capability, 299 operation 소유권
 - `backend/athena_api/canvas_field_registry.py`: 3,705 occurrence, 3,703 unique path, 현행 REST `951`·`924`·`1279` occurrence의 opaque 상태
-- `backend/athena_api/semantic_presentation_registry.py`: 3,500/92/110/3 분류, display tier/group/slot과 제품-safe 목적지
+- `backend/athena_api/semantic_presentation_registry.py`: 3,531/92/79/3 분류, display tier/group/slot과 official raw 보존 목적지
 - `backend/athena_api/view_recipe_registry.py`: 12 Task View Recipe, 36 section policy, 19 Capability, 299 operation reachability
 - `backend/athena_api/canvas_field_coverage.py`: registry/review/release gate 분리
 - `backend/tests/unit/test_canvas_field_coverage.py`: 현재 field coverage 검증값
@@ -763,7 +770,7 @@ Paper의 `화면`과 `카드`는 다음 정본을 표현한다.
 - `app/canvas.js`: semantic workspace, developer diagnostics gate, AITS 차트·호가 primary, realtime lifecycle 연결 경로
 - `artifacts/task-canvas/semantic-workspaces/receipt.json`: 12 recipe fixture capture, 외부 연결 미검증, `390×844` 좁은 데스크톱 창 회귀
 - `docs/api/19-capability-api-inventory.md`: 19 Capability API와 field coverage 계약
-- [Kiwoom REST API 공식 spec 고정 커밋](https://raw.githubusercontent.com/Kiwoom-Securities/Kiwoom-REST-API/69642586f7d84ba9fd8a6faf1f1537c7fda6568b/kiwoom/_data/kiwoom_api_spec.json): 현행 WebSocket `04`의 `951`·`924`, `1h`의 `1279`를 `Extra Item`으로 정의
+- [Kiwoom REST API 공식 spec 고정 커밋](https://raw.githubusercontent.com/Kiwoom-Securities/Kiwoom-REST-API/e24843fc82a78fe7b6ec68625b57f267eda95e77/kiwoom/_data/kiwoom_api_spec.json): 2026-08-31 공식 `main` 기준. 이전 검증 커밋과 spec SHA-256이 동일하며, WebSocket `04`의 `951`·`924`, `1h`의 `1279`를 `Extra Item`으로 정의
 - [Kiwoom REST API 공식 현재 커밋](https://github.com/Kiwoom-Securities/Kiwoom-REST-API/commit/9180debf7aea0074715dd8f7a15af432afbfc403): 같은 opaque 정의가 유지되는지 재검증한 기준
 - [Kiwoom OpenAPI+ 개발가이드 v1.7](https://download.kiwoom.com/web/openapi/kiwoom_openapi_plus_devguide_ver_1.7.pdf): 레거시 OCX 잔고통보에서만 `951=예수금`을 정의하며 현행 REST와의 동치를 보장하지 않음
 - `docs/architecture/6-canvas-card-compression-plan.md`: 기존 6-card projection과 미완료 semantic render gate
