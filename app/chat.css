@@ -897,12 +897,22 @@ html.is-boot-expanding #winControls { opacity: 0; }
   display: flex; align-items: center; justify-content: center;
   color: #2F3BA8; /* 바이저색 — 보드 38 bg-kiwoome-visor */
 }
-.kiumi-face { display: block; }
-.dot[data-mode="graph"] .kiumi-face-chat { display: none; }
-.dot:not([data-mode="graph"]) .kiumi-face-graph { display: none; }
-/* 키우미는 산다 — 눈 깜빡임(대화)·별자리 반짝임(그래프). 오브 blinkOnce와 같은
- * 정신을 CSS만으로. 모션 감소 환경에선 끈다(access.css 전역 규칙과 별개로 명시). */
-.kiumi-face-chat rect {
+/* 모드별 얼굴(Paper 키우미 보드 08) — 다섯 모드가 각자 얼굴을 가진다. 얼굴이
+ * 없어 기본 얼굴로 떨어지면 화면이 "지금 대화 중"이라고 거짓말하는 셈이다.
+ * data-mode의 유일한 소유자는 graph-mode/controller.js applyVisibility()다. */
+.kiumi-face { display: none; }
+.dot[data-mode="graph"] .kiumi-face-graph { display: block; }
+.dot[data-mode="agent"] .kiumi-face-agent { display: block; }
+.dot[data-mode="plugin"] .kiumi-face-plugin { display: block; }
+.dot[data-mode="backtest"] .kiumi-face-backtest { display: block; }
+/* 알 수 없는 값·미지정에서는 대화 얼굴로 남는다 — 얼굴 0개인 프레임을 만들지
+ * 않기 위한 마지막 그물이지, 위 네 모드의 폴백이 아니다(보드 08 FALLBACK 금지). */
+.dot:not([data-mode="graph"]):not([data-mode="agent"]):not([data-mode="plugin"]):not([data-mode="backtest"]) .kiumi-face-chat { display: block; }
+/* 키우미는 산다 — 눈 깜빡임(대화·플러그인)·반짝임(그래프·에이전트)·되감기 맥동
+ * (백테스트). 오브 blinkOnce와 같은 정신을 CSS만으로. 모션 감소 환경에선 끈다
+ * (access.css 전역 규칙과 별개로 명시) — 모양은 남는다, 움직임만 멈춘다. */
+.kiumi-face-chat rect,
+.kiumi-face-plugin circle {
   transform-box: fill-box; transform-origin: center;
   animation: kiumi-blink 4.6s ease-in-out infinite;
 }
@@ -910,15 +920,29 @@ html.is-boot-expanding #winControls { opacity: 0; }
   0%, 93%, 98%, 100% { transform: scaleY(1); }
   95.5% { transform: scaleY(0.12); }
 }
-.kiumi-face-graph circle { animation: kiumi-twinkle 3.8s ease-in-out infinite; }
-.kiumi-face-graph circle:nth-of-type(2) { animation-delay: 1.1s; }
-.kiumi-face-graph circle:nth-of-type(3) { animation-delay: 2.3s; }
+.kiumi-face-graph circle,
+.kiumi-face-agent circle { animation: kiumi-twinkle 3.8s ease-in-out infinite; }
+.kiumi-face-graph circle:nth-of-type(2),
+.kiumi-face-agent circle:nth-of-type(2) { animation-delay: 1.1s; }
+.kiumi-face-graph circle:nth-of-type(3),
+.kiumi-face-agent circle:nth-of-type(3) { animation-delay: 2.3s; }
 @keyframes kiumi-twinkle {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.45; }
 }
+/* 되감기 — 왼쪽 화살표가 먼저 밝아지고 오른쪽이 따라온다. 방향이 뒤로 읽힌다. */
+.kiumi-face-backtest path { animation: kiumi-rewind 2.4s ease-in-out infinite; }
+.kiumi-face-backtest path:nth-of-type(2) { animation-delay: 0.3s; }
+@keyframes kiumi-rewind {
+  0%, 60%, 100% { opacity: 1; }
+  30% { opacity: 0.4; }
+}
 @media (prefers-reduced-motion: reduce) {
-  .kiumi-face-chat rect, .kiumi-face-graph circle { animation: none; }
+  .kiumi-face-chat rect,
+  .kiumi-face-plugin circle,
+  .kiumi-face-graph circle,
+  .kiumi-face-agent circle,
+  .kiumi-face-backtest path { animation: none; }
 }
 /* 키우미 메뉴 — Paper 49의 380px 폭과 Paper 57의 승인된 굴절형 재질.
  * 큰 셸이 아니라 입력 위에 뜨는 직접 조작 표면이므로 25% 흰 틴트·3px 환경
