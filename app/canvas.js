@@ -2324,13 +2324,17 @@ const backtestCanvas = window.AthenaLib.BacktestCanvas.createBacktestCanvas({
   },
   // 409(캐시 부족)는 실패가 아니라 승인 화면 전환 신호다(backtest-bridge.js
   // 머리말과 같은 원칙) — blocked로 정규화해 돌려주고, 그 외 실패만 던진다.
-  run: async ({ yaml, params } = {}) => {
-    const body = params !== undefined ? { yaml, params } : { yaml };
+  run: async ({ yaml, params, allow_partial } = {}) => {
+    const body = { yaml };
+    if (params !== undefined) body.params = params;
+    // 보유 구간만으로 실행(Paper 보드 04) — 휴장일을 from으로 준 경우의 영구 409
+    // (계획서 §11-9)에서 빠져나오는 유일한 출구다. 사람이 그 버튼을 눌렀을 때만 붙는다.
+    if (allow_partial) body.allow_partial = true;
     const res = await window.athena.invoke('athena:backtest-run', body);
     if (res && res.ok) {
       const runId = res.data && res.data.run_id;
       if (!runId) throw new Error('run_id를 받지 못했습니다');
-      return { blocked: false, run_id: runId };
+      return { blocked: false, run_id: runId, partial: res.data.partial || null };
     }
     if (res && res.status === 409 && res.detail) {
       return { blocked: true, needed_pages: res.detail.needed_pages, est_seconds: res.detail.est_seconds };
@@ -2367,6 +2371,89 @@ const backtestCanvas = window.AthenaLib.BacktestCanvas.createBacktestCanvas({
     const jobId = res.data && res.data.job_id;
     if (!jobId) throw new Error('job_id를 받지 못했습니다');
     return { job_id: jobId };
+  },
+  // 2026-09-01 전수 파리티 — Paper 보드 02·05·06·07·08·09.
+  validate: async (body) => {
+    const res = await window.athena.invoke('athena:backtest-validate', body);
+    if (!res || !res.ok) throw new Error(backtestError(res, '검증에 실패했습니다'));
+    return res.data;
+  },
+  coverage: async (params) => {
+    const res = await window.athena.invoke('athena:backtest-coverage', params);
+    if (!res || !res.ok) throw new Error(backtestError(res, '캐시 상태를 불러오지 못했습니다'));
+    return res.data;
+  },
+  flow: async (body) => {
+    const res = await window.athena.invoke('athena:backtest-flow', body);
+    if (!res || !res.ok) throw new Error(backtestError(res, '코드 흐름을 읽지 못했습니다'));
+    return res.data;
+  },
+  diagnose: async (body) => {
+    const res = await window.athena.invoke('athena:backtest-diagnose', body);
+    if (!res || !res.ok) throw new Error(backtestError(res, '오류를 진단하지 못했습니다'));
+    return res.data;
+  },
+  // 409(캐시 부족)를 실패로 던지지 않는 것은 run과 같은 이유다 — 실행하지 않았다는
+  // 사실을 알려야지, 실패했다고 말하면 안 된다.
+  optimize: async (body) => {
+    const res = await window.athena.invoke('athena:backtest-optimize', body);
+    if (res && res.ok) return res.data;
+    if (res && res.status === 409 && res.detail) {
+      throw new Error(
+        `캐시가 부족해 탐색하지 않았습니다 — ${res.detail.needed_pages}페이지를 먼저 수집하세요`,
+      );
+    }
+    throw new Error(backtestError(res, '최적화에 실패했습니다'));
+  },
+  createStrategy: async (body) => {
+    const res = await window.athena.invoke('athena:backtest-strategy-create', body);
+    if (!res || !res.ok) throw new Error(backtestError(res, '전략을 저장하지 못했습니다'));
+    return res.data;
+  },
+  addVersion: async (strategyId, body) => {
+    const res = await window.athena.invoke(
+      'athena:backtest-version-add', Object.assign({ strategy_id: strategyId }, body),
+    );
+    if (!res || !res.ok) throw new Error(backtestError(res, '버전을 저장하지 못했습니다'));
+    return res.data;
+  },
+  versions: async (strategyId) => {
+    const res = await window.athena.invoke('athena:backtest-versions', { strategy_id: strategyId });
+    if (!res || !res.ok) throw new Error(backtestError(res, '버전 목록을 불러오지 못했습니다'));
+    return (res.data && Array.isArray(res.data.versions)) ? res.data.versions : [];
+  },
+  // 사람 클릭 전용 — 모델의 MCP 툴에는 이 액션이 없다(§7.3).
+  activate: async (strategyId, versionId) => {
+    const res = await window.athena.invoke(
+      'athena:backtest-activate', { strategy_id: strategyId, version_id: versionId },
+    );
+    if (!res || !res.ok) throw new Error(backtestError(res, '버전을 활성화하지 못했습니다'));
+    return res.data;
+  },
+  deployments: async () => {
+    const res = await window.athena.invoke('athena:backtest-deployments');
+    if (!res || !res.ok) throw new Error(backtestError(res, '배포 목록을 불러오지 못했습니다'));
+    return (res.data && Array.isArray(res.data.deployments)) ? res.data.deployments : [];
+  },
+  // 사람 클릭 전용 — 돈이 나가는 경로의 스위치다.
+  createDeployment: async (body) => {
+    const res = await window.athena.invoke('athena:backtest-deployment-create', body);
+    if (!res || !res.ok) throw new Error(backtestError(res, '배포를 만들지 못했습니다'));
+    return res.data;
+  },
+  stopDeployment: async (deploymentId) => {
+    const res = await window.athena.invoke(
+      'athena:backtest-deployment-stop', { deployment_id: deploymentId },
+    );
+    if (!res || !res.ok) throw new Error(backtestError(res, '배포를 중지하지 못했습니다'));
+    return res.data;
+  },
+  signals: async (deploymentId) => {
+    const res = await window.athena.invoke(
+      'athena:backtest-signals', { deployment_id: deploymentId },
+    );
+    if (!res || !res.ok) throw new Error(backtestError(res, '신호 이력을 불러오지 못했습니다'));
+    return (res.data && Array.isArray(res.data.signals)) ? res.data.signals : [];
   },
 });
 backtestCanvas.mount();

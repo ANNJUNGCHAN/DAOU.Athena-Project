@@ -1336,6 +1336,37 @@ ipcMain.handle('athena:backtest-backfill', async (_e, body = {}) => {
   catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
 });
 
+// 2026-09-01 전수 파리티 — Paper 보드 02·05·06·07·08·09. 전부 같은 프록시 모양이라
+// 표 하나로 등록한다(핸들러마다 같은 try/catch를 스무 번 복사할 이유가 없다).
+// `athena:backtest-activate`·`-deployment-create`·`-deployment-stop`은 사람 클릭 전용
+// 경로다 — 모델의 MCP 툴에는 이 액션들이 없다(backtest_tools.py `_ALLOWED_ACTIONS`).
+const BACKTEST_EXTRA_CHANNELS = {
+  'athena:backtest-validate': backtestBridge.validateBacktest,
+  'athena:backtest-coverage': backtestBridge.fetchCoverage,
+  'athena:backtest-flow': backtestBridge.fetchFlow,
+  'athena:backtest-diagnose': backtestBridge.diagnoseBacktest,
+  'athena:backtest-optimize': backtestBridge.optimizeBacktest,
+  'athena:backtest-optimize-plan': backtestBridge.optimizePlan,
+  'athena:backtest-strategies': backtestBridge.fetchStrategies,
+  'athena:backtest-strategy-create': backtestBridge.createStrategy,
+  'athena:backtest-versions': backtestBridge.fetchVersions,
+  'athena:backtest-version-add': backtestBridge.addVersion,
+  'athena:backtest-activate': backtestBridge.activateVersion,
+  'athena:backtest-version-diff': backtestBridge.fetchVersionDiff,
+  'athena:backtest-deployments': backtestBridge.fetchDeployments,
+  'athena:backtest-deployment-create': backtestBridge.createDeployment,
+  'athena:backtest-deployment-stop': backtestBridge.stopDeployment,
+  'athena:backtest-signals': backtestBridge.fetchSignals,
+  'athena:backtest-evaluate': backtestBridge.evaluateDeployment,
+};
+Object.keys(BACKTEST_EXTRA_CHANNELS).forEach((channel) => {
+  const call = BACKTEST_EXTRA_CHANNELS[channel];
+  ipcMain.handle(channel, async (_e, body = {}) => {
+    try { return await call({ backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch, ...body }); }
+    catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
+  });
+});
+
 // ---------- OS 스냅 이벤트 정착 (2026-08-18 승급 — qa-win-arrow.json 실측 근거) ----------
 // resizable:true 승급으로 Windows가 Win+←/→(스냅)·Win+↑(최대화)·Win+↓(최소화)를
 // 직접 실행하게 됐다. 그 결과 이벤트를 받아 앱이 의미론을 정착시킨다:
