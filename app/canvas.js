@@ -10,6 +10,7 @@ const { isValidCorrelation, waitForVisiblePaint } = window.AthenaLib.RestCanvasP
 const integratedCardSurface = window.AthenaLib.IntegratedCardSurface;
 const semanticDetailSheet = window.AthenaLib.SemanticDetailSheet;
 const semanticWorkspace = window.AthenaLib.SemanticWorkspace;
+const paperCardRouting = window.AthenaLib.PaperCardRouting;
 const SEMANTIC_PRIMARY_TYPES = new Set(['table', 'chart', 'facts', 'compound', 'event', 'action', 'status']);
 
 function developerDiagnosticsEnabled() {
@@ -593,12 +594,17 @@ async function addLiveCard(result) {
   // (backend/athena_mcp/canvas.py L152-157) 이론상 fell_back=true인데 canvas_type이
   // 'stream'/'reader'/'table'로 남는 조합은 안 나오지만, 계약이 바뀌어도 조용히
   // 깨진 카드를 그리지 않도록 남겨둔다.
-  if (integratedCardSurface && integratedCardSurface.integratedDefinition(envelope)) {
-    return renderIntegratedCard(envelope);
-  }
-  if (semanticWorkspace && semanticWorkspace.isTaskCanvasEnvelope(envelope)) {
-    return renderTaskCanvasEnvelope(envelope);
-  }
+  // Paper 카드 전용 배선 — 판정 규칙은 lib/paper-card-routing.js가 단독 소유한다
+  // (canvas.js는 shell.html에서만 도는 렌더러라 단위 테스트가 안 걸린다).
+  // 키움 봉투인데 카드 계약이 없으면 레거시 범용 카드로 조용히 떨어뜨리지 않는다 —
+  // 그건 백엔드 계약 파생 실패이고, 감추면 사용자는 알 수 없는 표를 본다.
+  const route = paperCardRouting.paperCardRoute(envelope, {
+    integratedCardSurface,
+    semanticWorkspace,
+  });
+  if (route === 'integrated') return renderIntegratedCard(envelope);
+  if (route === 'workspace') return renderTaskCanvasEnvelope(envelope);
+  if (route === 'blocked') return renderLiveNotice(paperCardRouting.blockedReason(envelope));
   return renderPrimaryEnvelope(envelope);
 }
 

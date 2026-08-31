@@ -2,18 +2,21 @@
 
 The lossless :mod:`canvas_field_registry` remains the wire contract.  This
 module uses its immutable ``occurrence_id`` as a foreign key and decides which
-values may enter product UI.  Protocol, internal, and unresolved values remain
-addressable for diagnostics but never receive a product destination.
+values may enter product UI.  Protocol and structural envelope values remain
+diagnostic-only.  Official opaque values stay user-accessible with neutral
+labels so the product never discards a field present in the Kiwoom contract.
 """
 
 from __future__ import annotations
 
 import hashlib
+import json
 import re
 import unicodedata
 from collections import Counter
 from dataclasses import asdict, dataclass
 from functools import lru_cache
+from pathlib import Path
 from types import MappingProxyType
 from typing import Any
 
@@ -39,8 +42,26 @@ UNRESOLVED_OCCURRENCES = frozenset(
 )
 GENERIC_DESTINATION_TERMS = ("raw", "detail-sheet", "all-fields", "전체-필드", "원본")
 
-_TRANSPORT_ALIASES = frozenset({"return_code", "return_msg", "trnm", "data"})
-_INTERNAL_ALIASES = frozenset({"type", "name", "item", "values"})
+_BACKEND = Path(__file__).resolve().parents[1]
+_HIDDEN_OCCURRENCE_AUTHORITY_PATH = (
+    _BACKEND / "ref" / "kiwoom-presentation-hidden-occurrences.json"
+)
+_HIDDEN_OCCURRENCE_SOURCE_PATHS = MappingProxyType(
+    {
+        "ref/kiwoom-capability-assignment.json": (
+            _BACKEND / "ref" / "kiwoom-capability-assignment.json"
+        ),
+        "ref/kiwoom-common-screen-manifest.json": (
+            _BACKEND / "ref" / "kiwoom-common-screen-manifest.json"
+        ),
+        "ref/kiwoom-tr-inventory.json": (
+            _BACKEND / "ref" / "kiwoom-tr-inventory.json"
+        ),
+    }
+)
+_EXPECTED_HIDDEN_OCCURRENCE_COUNTS = MappingProxyType(
+    {"transport": 92, "internal": 79}
+)
 _PUBLIC_LABEL_OVERRIDES = {
     "VI적용구분": "VI 적용 방식",
     "동적괴리율": "동적 VI 괴리율",
@@ -53,6 +74,9 @@ _PUBLIC_LABEL_OVERRIDES = {
 _OPERATION_FIELD_PUBLIC_LABEL_OVERRIDES = {
     ("detail:ka10001:current_trading", "pre_sig"): "전일 대비 기호",
     ("base:ka10003", "sign"): "전일 대비 기호",
+    ("base:04", "951"): "명세 추가 항목 1",
+    ("base:04", "924"): "명세 추가 항목 2",
+    ("base:1h", "1279"): "명세 추가 항목",
 }
 _FAMILY_LABEL_OVERRIDES = {
     "매도거래원": "매도 거래원",
@@ -67,8 +91,6 @@ _FAMILY_LABEL_OVERRIDES = {
     "매수거래량": "매수 거래량",
     "LP회원사명": "LP 회원사",
 }
-_BROKER_CODE_LABEL = re.compile(r"^(?:매수|매도)거래원코드\d+$")
-_PRESENTATION_CONTROL_LABEL = re.compile(r"(?:색깔\d*|색상|컬러)$")
 _NUMBERED_SCHEMA_LABEL = re.compile(r"^(.*?)(\d+)$")
 
 
@@ -118,7 +140,7 @@ class SemanticPresentationContract:
 
     @property
     def user_visible(self) -> bool:
-        return self.field_class in {"semantic", "derived"}
+        return self.field_class in {"semantic", "unresolved", "derived"}
 
     def serializable(self) -> dict[str, Any]:
         """Return the lossless engineering contract, including its wire FK."""
@@ -193,7 +215,9 @@ class SemanticPresentationRegistrySummary:
 
     @property
     def semantic_placement_complete(self) -> bool:
-        return self.placed_user_field_count == self.semantic_count + self.derived_count
+        return self.placed_user_field_count == (
+            self.semantic_count + self.unresolved_count + self.derived_count
+        )
 
     @property
     def product_destination_safe(self) -> bool:
@@ -917,29 +941,83 @@ def _placement_for(field: CanvasFieldContract, recipe_id: str) -> _PlacementDeci
     )
 
 
-def _is_realtime_envelope_field(field: CanvasFieldContract) -> bool:
-    return field.alias in _INTERNAL_ALIASES and field.label.replace(" ", "").startswith(
-        "실시간"
-    )
+@lru_cache(maxsize=1)
+def _hidden_occurrence_authority() -> MappingProxyType[str, str]:
+    payload = json.loads(_HIDDEN_OCCURRENCE_AUTHORITY_PATH.read_text(encoding="utf-8"))
+    if payload.get("schema_version") != 1:
+        raise SemanticPresentationRegistryError(
+            "unsupported hidden occurrence authority schema version"
+        )
+    source_contract = payload.get("source_contract", {})
+    if source_contract.get("operation_count") != EXPECTED_OPERATION_COUNT:
+        raise SemanticPresentationRegistryError(
+            "hidden occurrence authority operation count does not match the wire registry"
+        )
+    if source_contract.get("field_occurrence_count") != EXPECTED_FIELD_OCCURRENCE_COUNT:
+        raise SemanticPresentationRegistryError(
+            "hidden occurrence authority field count does not match the wire registry"
+        )
 
+    expected_hashes = source_contract.get("source_hashes", {})
+    if set(expected_hashes) != set(_HIDDEN_OCCURRENCE_SOURCE_PATHS):
+        raise SemanticPresentationRegistryError(
+            "hidden occurrence authority source set does not match the wire registry"
+        )
+    for relative_path, source_path in _HIDDEN_OCCURRENCE_SOURCE_PATHS.items():
+        actual_hash = hashlib.sha256(source_path.read_bytes()).hexdigest()
+        if expected_hashes.get(relative_path) != actual_hash:
+            raise SemanticPresentationRegistryError(
+                f"hidden occurrence authority source hash mismatch: {relative_path}"
+            )
 
-def _is_internal_presentation_field(field: CanvasFieldContract) -> bool:
-    normalized_label = field.label.replace(" ", "")
-    return bool(
-        _is_realtime_envelope_field(field)
-        or _PRESENTATION_CONTROL_LABEL.search(normalized_label)
-        or _BROKER_CODE_LABEL.fullmatch(normalized_label)
-    )
+    classified = payload.get("occurrence_ids", {})
+    authority: dict[str, str] = {}
+    for field_class, expected_count in _EXPECTED_HIDDEN_OCCURRENCE_COUNTS.items():
+        occurrence_ids = classified.get(field_class)
+        if not isinstance(occurrence_ids, list) or len(occurrence_ids) != expected_count:
+            raise SemanticPresentationRegistryError(
+                f"hidden occurrence authority count mismatch: {field_class}"
+            )
+        for occurrence_id in occurrence_ids:
+            if not isinstance(occurrence_id, str) or occurrence_id in authority:
+                raise SemanticPresentationRegistryError(
+                    f"invalid hidden occurrence authority identity: {occurrence_id!r}"
+                )
+            authority[occurrence_id] = field_class
+
+    counts = payload.get("classification_counts", {})
+    if counts != {
+        **_EXPECTED_HIDDEN_OCCURRENCE_COUNTS,
+        "hidden_total": sum(_EXPECTED_HIDDEN_OCCURRENCE_COUNTS.values()),
+    }:
+        raise SemanticPresentationRegistryError(
+            "hidden occurrence authority summary does not match its frozen contract"
+        )
+
+    wire_occurrence_ids = {
+        field.occurrence_id for field in get_canvas_field_registry().contracts
+    }
+    unknown = set(authority).difference(wire_occurrence_ids)
+    if unknown:
+        raise SemanticPresentationRegistryError(
+            f"hidden occurrence authority references unknown wire identities: {sorted(unknown)!r}"
+        )
+    unresolved_ids = {
+        field.occurrence_id
+        for field in get_canvas_field_registry().contracts
+        if (field.mapping_id, field.json_path) in UNRESOLVED_OCCURRENCES
+    }
+    if unresolved_ids.intersection(authority):
+        raise SemanticPresentationRegistryError(
+            "official opaque occurrences cannot be hidden by presentation authority"
+        )
+    return MappingProxyType(authority)
 
 
 def _classify(field: CanvasFieldContract) -> str:
     if (field.mapping_id, field.json_path) in UNRESOLVED_OCCURRENCES:
         return "unresolved"
-    if field.alias in _TRANSPORT_ALIASES:
-        return "transport"
-    if _is_internal_presentation_field(field):
-        return "internal"
-    return "semantic"
+    return _hidden_occurrence_authority().get(field.occurrence_id, "semantic")
 
 
 def _public_label(field: CanvasFieldContract) -> str:
@@ -1029,6 +1107,8 @@ def _slot_family(
 
 
 def _public_description(field: CanvasFieldContract, label: str) -> str:
+    if (field.mapping_id, field.json_path) in UNRESOLVED_OCCURRENCES:
+        return "키움 공식 명세 표기: Extra Item"
     if field.description == field.label:
         return label
     if field.label == "VI적용구분":
@@ -1407,7 +1487,7 @@ def build_semantic_presentation_registry() -> SemanticPresentationRegistry:
 
     for field in wire_registry.contracts:
         field_class = _classify(field)
-        user_visible = field_class in {"semantic", "derived"}
+        user_visible = field_class in {"semantic", "unresolved", "derived"}
         recipe = recipe_registry.for_operation(field.mapping_id) if user_visible else None
         placement = _placement_for(field, recipe.recipe_id) if recipe else None
         section_id = placement.section_id if placement else None
@@ -1471,6 +1551,10 @@ def build_semantic_presentation_registry() -> SemanticPresentationRegistry:
             else (None, None, None, None)
         )
         display_tier, display_group, display_order, visibility_policy = display_metadata
+        if field_class == "unresolved":
+            display_tier = "detail"
+            display_group = "명세 추가 항목"
+            visibility_policy = "named-detail"
         product_destination = (
             f"{recipe.recipe_id}/{section_id}/{component_id}"
             if recipe and section_id and component_id

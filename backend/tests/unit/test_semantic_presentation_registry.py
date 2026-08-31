@@ -16,6 +16,8 @@ from athena_api.semantic_presentation_registry import (
     SemanticPresentationRegistry,
     SemanticPresentationRegistryError,
     _canonical_concept_id,
+    _classify,
+    _hidden_occurrence_authority,
     get_public_operation_presentation,
     get_public_recipe_sections,
     get_semantic_presentation_registry,
@@ -71,7 +73,7 @@ def test_every_semantic_occurrence_has_stable_named_product_placement() -> None:
         for item in semantic
     )
     assert all(item.product_destination for item in semantic)
-    assert len(semantic) == len({item.wire_occurrence_id for item in semantic}) == 3_500
+    assert len(semantic) == len({item.wire_occurrence_id for item in semantic}) == 3_531
     assert all(
         token not in item.product_destination.lower()
         for item in semantic
@@ -79,11 +81,11 @@ def test_every_semantic_occurrence_has_stable_named_product_placement() -> None:
     )
 
 
-def test_transport_internal_and_unresolved_never_receive_product_destination() -> None:
+def test_transport_and_structural_internal_fields_never_receive_product_destination() -> None:
     hidden = [
         item
         for item in get_semantic_presentation_registry().contracts
-        if item.field_class in {"transport", "internal", "unresolved"}
+        if item.field_class in {"transport", "internal"}
     ]
 
     assert hidden
@@ -93,24 +95,64 @@ def test_transport_internal_and_unresolved_never_receive_product_destination() -
     assert all(item.public_serializable() is None for item in hidden)
 
 
-def test_technical_presentation_controls_never_enter_public_ui() -> None:
+def test_hidden_presentation_fields_equal_the_exact_171_occurrence_authority() -> None:
+    registry = get_semantic_presentation_registry()
+    classified = {
+        item.wire_occurrence_id: item.field_class
+        for item in registry.contracts
+        if item.field_class in {"transport", "internal"}
+    }
+    authority = dict(_hidden_occurrence_authority())
+
+    assert authority == classified
+    assert len(authority) == 171
+    assert Counter(authority.values()) == {"transport": 92, "internal": 79}
+
+
+@pytest.mark.parametrize("alias", ["data", "item", "values"])
+def test_off_manifest_alias_that_looks_structural_remains_public_raw(alias: str) -> None:
+    source = get_canvas_field_registry().contracts[0]
+    synthetic = replace(
+        source,
+        occurrence_id=f"base:synthetic|$.{alias}|1",
+        mapping_id="base:synthetic",
+        json_path=f"$.{alias}",
+        ordinal=1,
+        alias=alias,
+        label=f"실시간 {alias}",
+    )
+
+    assert _classify(synthetic) == "semantic"
+
+
+def test_official_broker_codes_and_colors_remain_public_raw_fields() -> None:
     registry = get_semantic_presentation_registry()
     internal = [item for item in registry.contracts if item.field_class == "internal"]
 
-    assert registry.summary.internal_count == 110
-    assert registry.summary.semantic_count == 3_500
+    assert registry.summary.internal_count == 79
+    assert registry.summary.semantic_count == 3_531
     assert any(item.alias == "values" and item.mapping_id == "base:0F" for item in internal)
-    assert any(item.label_ko is None and item.alias == "282" for item in internal)
-    assert any(item.alias == "buy_trde_ori_cd_2" for item in internal)
+    broker_code = next(
+        item
+        for item in registry.contracts
+        if item.alias == "buy_trde_ori_cd_2"
+    )
+    broker_color = next(
+        item
+        for item in registry.contracts
+        if item.alias == "282" and item.mapping_id == "base:0F"
+    )
+    assert broker_code.field_class == broker_color.field_class == "semantic"
+    assert broker_code.public_serializable() is not None
+    assert broker_color.public_serializable() is not None
 
     public_text = json.dumps(
         [item.public_serializable() for item in registry.contracts if item.user_visible],
         ensure_ascii=False,
     )
-    assert all(
-        token not in public_text
-        for token in ("거래원색깔", "거래원코드", "실시간 값 리스트", "values")
-    )
+    assert "거래원코드" in public_text
+    assert "실시간 값 리스트" not in public_text
+    assert '"values"' not in public_text
 
 
 def test_nontechnical_name_and_named_code_detail_policy_are_preserved() -> None:
@@ -146,7 +188,7 @@ def test_vi_schema_labels_are_normalized_for_investor_ui() -> None:
     assert labels["1239"] == "동적 VI 괴리율"
 
 
-def test_current_rest_951_924_and_1279_are_the_only_unresolved_occurrences() -> None:
+def test_official_opaque_951_924_and_1279_are_preserved_in_named_detail() -> None:
     contracts = get_semantic_presentation_registry().contracts
     unresolved = [item for item in contracts if item.field_class == "unresolved"]
 
@@ -156,8 +198,20 @@ def test_current_rest_951_924_and_1279_are_the_only_unresolved_occurrences() -> 
         "1279",
     }
     assert len(unresolved) == 3
-    assert all(item.product_destination is None for item in unresolved)
-    assert all(item.label_ko is None for item in unresolved)
+    assert all(item.user_visible for item in unresolved)
+    assert all(item.product_destination for item in unresolved)
+    assert all(item.visibility_policy == "named-detail" for item in unresolved)
+    assert {item.label_ko for item in unresolved} == {
+        "명세 추가 항목",
+        "명세 추가 항목 1",
+        "명세 추가 항목 2",
+    }
+    assert all(item.description == "키움 공식 명세 표기: Extra Item" for item in unresolved)
+    assert all(item.unit_or_format == "source-defined-number-or-text" for item in unresolved)
+    public = [item.public_serializable() for item in unresolved]
+    serialized = json.dumps(public, ensure_ascii=False)
+    assert all(item is not None for item in public)
+    assert all(alias not in serialized for alias in UNRESOLVED_ALIASES)
 
 
 def test_all_299_operations_are_recipe_reachable_and_public_contract_is_safe() -> None:
@@ -189,7 +243,7 @@ def test_numbered_wire_schema_is_expressed_as_label_family_and_slot() -> None:
         item for item in registry.contracts if item.user_visible and item.display_slot is not None
     ]
 
-    assert len(slotted) == 264
+    assert len(slotted) == 294
     assert all(not re.search(r"\d+$", item.label_ko) for item in slotted)
     assert all(item.display_group for item in slotted)
 

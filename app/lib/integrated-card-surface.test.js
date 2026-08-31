@@ -160,11 +160,17 @@ test('shell loads integrated CSS and both libraries before canvas runtime', () =
   assert.ok(html.indexOf('lib/semantic-detail-sheet.js') < html.indexOf('<script src="canvas.js"'));
   assert.ok(html.indexOf('lib/semantic-workspace.js') < html.indexOf('<script src="canvas.js"'));
   assert.ok(html.indexOf('lib/integrated-card-surface.js') < html.indexOf('<script src="canvas.js"'));
+  assert.ok(html.indexOf('lib/paper-card-routing.js') < html.indexOf('<script src="canvas.js"'));
 });
 
 test('canvas routes canonical envelopes through one integrated root and semantic workspace', () => {
   const canvas = fs.readFileSync(path.join(__dirname, '..', 'canvas.js'), 'utf8');
-  assert.match(canvas, /integratedCardSurface\.integratedDefinition\(envelope\)/);
+  // 디스패치 판정은 lib/paper-card-routing.js가 단독 소유한다 — canvas.js는 결과만 쓴다.
+  // 키움 봉투가 레거시 범용 카드로 새지 않는다는 계약을 여기서 함께 고정한다.
+  assert.match(canvas, /paperCardRouting\.paperCardRoute\(envelope, \{/);
+  assert.match(canvas, /route === 'integrated'/);
+  assert.match(canvas, /route === 'workspace'/);
+  assert.match(canvas, /route === 'blocked'/);
   assert.match(canvas, /data-integrated-instance-key/);
   assert.match(canvas, /semanticWorkspace\.upsert\(root, envelope\)/);
   assert.match(canvas, /upsertDeveloperDiagnostics\(root, envelope\)/);

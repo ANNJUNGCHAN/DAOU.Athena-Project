@@ -45,6 +45,22 @@ def _top_level_response_aliases(operation: dict) -> list[str]:
     return aliases
 
 
+def test_official_source_profile_preserves_current_portal_and_github_union() -> None:
+    profile = _json(PROFILE_PATH)
+    inventory_ids = {operation["id"] for operation in _json(INVENTORY_PATH)}
+    github = profile["official_github_audit"]
+    portal = profile["official_portal_audit"]
+
+    assert len(github["spec_sha256"]) == 64
+    assert github["spec_unchanged_from_previous_verified_commit"] is True
+    assert portal["operation_count"] >= github["operation_count"]
+    assert set(portal["portal_only_operation_ids"]).isdisjoint(inventory_ids)
+    assert portal["current_299_scope_portal_only_operation_ids"] == []
+    assert portal["current_299_scope_response_field_additions"] == []
+    assert set(portal["official_source_divergence_ids_in_current_scope"]) <= inventory_ids
+    assert "Preserve the union" in portal["authority_policy"]
+
+
 def test_projection_manifest_candidates_exactly_match_output_profile() -> None:
     profile = _json(OUTPUT_PROFILE_PATH)
     manifest = _json(PROJECTION_PATH)
