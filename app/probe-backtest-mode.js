@@ -19,10 +19,14 @@
 const { app } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const os = require('os');
 
-const PROFILE = path.join(__dirname, '.probe-backtest-mode-profile');
-fs.rmSync(PROFILE, { recursive: true, force: true });
-fs.mkdirSync(PROFILE, { recursive: true });
+// 프로필은 매 실행 새 디렉터리다. 고정 이름을 지우고 다시 만드는 판은
+// 앱이 띄운 MCP 서버 자식이 `mcp-config`를 붙잡고 있으면 rmSync가 EPERM으로
+// 죽어 프로브가 통째로 멈춘다(2026-08-31 실측 — 저장소 안에 남은 프로필을
+// 다음 실행이 못 지웠다). 임시 폴더에 유일 이름으로 만들고 끝에 최선노력으로
+// 지운다 — 못 지워도 다음 실행을 막지 않는다.
+const PROFILE = fs.mkdtempSync(path.join(os.tmpdir(), 'athena-probe-backtest-'));
 // 온보딩을 건너뛴다 — 이 프로브는 모드 전환만 본다.
 fs.writeFileSync(path.join(PROFILE, 'athena-onboarding.json'), JSON.stringify({ cliDone: true, accountDone: true }));
 app.setPath('userData', PROFILE);
@@ -113,9 +117,15 @@ async function main() {
   // error 상태로 넘어가는지, 목업 프리셋으로 얼버무리지 않는지를 잰다.
   await wait(2000);
   const errorState = await backtestErrorState(shellWin);
+  // 부제는 "있기만" 하면 안 된다 — 404 원문("Not Found")만 보여주던 판을
+  // 2026-08-31 실측으로 잡았다. 사용자가 손쓸 수 있는 문장인지까지 잰다.
+  const sub = errorState.sub || '';
   record(
-    '04-백엔드 미기동 → 정직한 에러 상태(목업 없음)',
-    errorState.rendered && errorState.title === '백테스트' && !!errorState.sub,
+    '04-백엔드 미기동 → 손쓸 수 있는 에러 문구(목업 없음)',
+    errorState.rendered
+      && errorState.title === '백테스트'
+      && sub.length > 12
+      && (sub.includes('백엔드') || sub.includes('불러오지')),
     errorState,
   );
 
@@ -132,6 +142,7 @@ async function main() {
     JSON.stringify(report, null, 1)
   );
   console.log(`[probe-backtest-mode] ${okAll ? 'ALL OK' : 'FAIL'} (${report.steps.filter((s) => s.ok).length}/${report.steps.length})`);
+  try { fs.rmSync(PROFILE, { recursive: true, force: true }); } catch { /* 앱 자식이 붙잡고 있으면 남긴다 — 다음 실행은 새 디렉터리다 */ }
   app.exit(okAll ? 0 : 1);
 }
 
