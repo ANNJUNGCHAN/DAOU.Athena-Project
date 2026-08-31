@@ -40,3 +40,7 @@ __pycache__/
 
 # QA eval-run artifacts (screenshots/observations) - not for commit
 datasets/eval-runs/
+
+# Provider 검증/벤치마크 실행 산출물 — 실행마다 달라지는 로컬 증거.
+/artifacts/provider-session-benchmark/*.json
+/artifacts/provider-sessions/*.json

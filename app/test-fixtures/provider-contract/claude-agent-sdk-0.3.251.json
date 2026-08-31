@@ -1,0 +1,49 @@
+{
+  "package": "@anthropic-ai/claude-agent-sdk",
+  "version": "0.3.251",
+  "files": {
+    "package.json": {
+      "bytes": 2380,
+      "sha256": "0559ea545c7cbe07cf8fbc163cbacfa3bf6f79c767226302f6b64a27cdb7f92f"
+    },
+    "sdk.mjs": {
+      "bytes": 1475586,
+      "sha256": "9235fac983c29e614d7f572a578406dc5dbda006305faa99f9447f577738eb93"
+    },
+    "sdk.d.ts": {
+      "bytes": 413604,
+      "sha256": "4b30226ce2ea3d4ff0b81b4f3a229fa9fc1d60bf464452263608d26547a72cfe"
+    },
+    "manifest.json": {
+      "bytes": 1804,
+      "sha256": "34912d27251d3afb3f9214c4e48b8ec180c8e38d64b10ce3d81bf474feac3c4c"
+    },
+    "manifest.zst.json": {
+      "bytes": 2108,
+      "sha256": "8c788c70420dc1fd436c8e16cce37a5630aa047e6fa04c63902eebf97aa1c481"
+    }
+  },
+  "runtimeExports": [
+    "forkSession",
+    "getSessionMessages",
+    "query",
+    "startup"
+  ],
+  "typeContracts": [
+    "WarmQuery",
+    "WarmQuery.query",
+    "Query.interrupt",
+    "Query.close",
+    "Options.resume",
+    "Options.resumeSessionAt",
+    "Options.spawnClaudeCodeProcess",
+    "Options.effort",
+    "forkSession.upToMessageId",
+    "SDKAssistantMessage.uuid",
+    "PreToolUse"
+  ],
+  "security": {
+    "generationFence": "PreToolUse",
+    "canUseToolRole": "unmatched-interactive-approval-only"
+  }
+}

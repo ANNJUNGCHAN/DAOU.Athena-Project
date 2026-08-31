@@ -1,0 +1,4 @@
+{"id":4,"method":"config/read","params":{"cwd":"C:\\workspace","includeLayers":true}}
+{"id":4,"result":{"config":{},"layers":[]}}
+{"id":5,"method":"mcpServerStatus/list","params":{"threadId":"thread-existing","detail":"full","cursor":null,"limit":100}}
+{"id":5,"result":{"data":[{"name":"athena","authStatus":"notRequired","tools":[{"name":"mcp__athena__resolve"}],"resources":[],"resourceTemplates":[],"serverInfo":{"name":"athena-gateway","version":"1.0.0"}}],"nextCursor":null}}

@@ -23,11 +23,30 @@ const { runClaudeQuery } = require('./lib/main/claude-runner');
 // 툴 호출 진행 단계(board-33) 라벨링에 render_canvas 판정 하나만 빌려 쓴다 —
 // 파서 자체는 손대지 않는다(sendLiveToolStep 근처 주석 참고).
 const streamJsonParser = require('./lib/main/stream-json-parser');
-const { ensureMcpConfig } = require('./lib/main/mcp-config');
+const { ensureMcpConfig, createMcpRuntimeSnapshot, canonicalHash } = require('./lib/main/mcp-config');
 const { buildLivePrompt, buildLiveSystemPrompt, buildLiveTurnPrompt } = require('./lib/main/live-prompt');
 // 상주 채팅 세션(2026-08-30 속도 작업) — 매 턴 claude -p 콜드 스폰의 고정비를
-// 세션당 1회로 바꾼다(모듈 상단 주석 참고).
+// 세션당 1회로 바꾼다(모듈 상단 주석 참고). 기본 경로는 이쪽이다.
 const { createClaudeChatSession } = require('./lib/main/claude-chat-session');
+// 벤더 무관 프로바이더 런타임(ATHENA_PROVIDER_RUNTIME=1일 때만 기동) — 위 상주
+// 세션과 별개의 실험 경로다.
+const {
+  buildMainMcpRuntimeSnapshot, buildProviderToolPolicy, createProviderRuntimeController,
+  createProviderTurnContextRegistry, resolvePersistentChatEnabled,
+  shouldMarkProviderCanvasVisible, validateMainMcpSecurityState,
+} = require('./lib/main/provider-runtime-bootstrap');
+const { createProviderRuntimeMetrics } = require('./lib/main/provider-runtime-metrics');
+const { createProviderPaintAckRegistry } = require('./lib/main/provider-paint-ack');
+const { createProviderVerifierTelemetry } = require('./lib/main/provider-verifier-telemetry');
+const {
+  createConversationRotationQueue,
+  createRestartableControllerLifecycle,
+} = require('./lib/main/provider-main-lifecycle');
+const { createMcpRuntimeCoordinator } = require('./lib/main/mcp-runtime-coordinator');
+const { createMcpSecurityEpochStore } = require('./lib/main/mcp-security-epoch');
+const { resolveCodexDisabledSelection } = require('./lib/main/codex-live-disabled');
+const { GATEWAY_ALLOWED_TOOLS, DISALLOWED_EXECUTION_TOOLS } = require('./lib/main/claude-tool-policy');
+const providerContractDecision = require('./test-fixtures/provider-contract/decision.json');
 const restDatasetRunner = require('./lib/main/rest-dataset-runner');
 const { RestRetryRegistry } = require('./lib/main/rest-retry-registry');
 const { createStockEntityIndexReadiness } = require('./lib/main/stock-entity-index-readiness');
@@ -74,6 +93,12 @@ const {
 } = require('./lib/main/conversation-graph-refresh');
 const conversations = require('./lib/main/conversations');
 const crypto = require('crypto');
+
+// 프로바이더 런타임 스위치 — ATHENA_PERSISTENT_CHAT은 이미 상주 채팅 세션
+// (claude-chat-session.js, 기본 켜짐)의 킬 스위치라 같은 이름을 정반대 기본값으로
+// 쓸 수 없다. 이 실험 경로는 자기 변수를 쓰고 기본은 꺼짐이다.
+const PROVIDER_RUNTIME_DEFAULT = false;
+const providerRuntimeEnabled = resolvePersistentChatEnabled(process.env, PROVIDER_RUNTIME_DEFAULT, 'ATHENA_PROVIDER_RUNTIME');
 
 const MDEBUGLOG = path.join(__dirname, 'captures', 'main-debug.log');
 function mdlog(msg) {
@@ -386,7 +411,10 @@ async function createWindows() {
   // CLI 로그인은 브라우저/콘솔에서 일어난다 — 사용자가 앱으로 돌아온 순간이
   // 갱신 시점이다. 로그인이 pollCliChangesAfterLogin의 60초 창보다 오래 걸리면
   // 목록이 안 갱신되던 실측 결함(2026-08-27)의 근본 처방.
-  shellWin.on('focus', () => broadcastCliChanged());
+  shellWin.on('focus', () => {
+    void broadcastCliChanged({ rotateReason: 'shell_focus_reconcile' })
+      .catch(reportSafeCliError);
+  });
 
   // ---------- 알림 오브 창 (2026-08-24 리프 1.3.1) ----------
   // 셸 창 다음에 만든다 — 오브의 "더보기"가 셸을 앞으로 가져오므로 셸이 먼저 있어야 한다.
@@ -830,6 +858,11 @@ let realtimeFeedEpoch = 1;
 const integratedRealtimeShutdown = integratedCardRealtime.createBoundedShutdownCoordinator({
   prepare: () => {
     isQuitting = true;
+    if (providerRuntimeController) providerRuntimeController.blockNewTurns('app_shutdown');
+    if (providerEpochStore) {
+      try { providerEpochStore.invalidate(providerSecurityGeneration); }
+      catch (error) { mdlog(`provider capability 종료 무효화 실패: ${String((error && error.message) || error)}`); }
+    }
     stopOrbCursorPoll(); // 인터벌 누수 금지 — 창이 죽기 전에 정리한다
     chartReloadAuthority.clear();
     stockEntityIndexReadiness.stop();
@@ -838,9 +871,27 @@ const integratedRealtimeShutdown = integratedCardRealtime.createBoundedShutdownC
     if (liveChatSession) liveChatSession.stop(new Error('Athena 앱 종료'));
     conversations.flushSync(); // 예약만 된 사이드바 상태를 마저 저장한다
   },
-  releaseAll: () => integratedCardRealtimeManager
-    ? integratedCardRealtimeManager.releaseAll()
-    : Promise.resolve({ ok: true, pending: 0 }),
+  releaseAll: async () => {
+    const shutdownRuntime = providerRuntimeController;
+    const shutdownGeneration = shutdownRuntime
+      ? shutdownRuntime.snapshot().runtimeGeneration
+      : null;
+    const realtimeRelease = integratedCardRealtimeManager
+      ? integratedCardRealtimeManager.releaseAll()
+      : Promise.resolve({ ok: true, pending: 0 });
+    const providerStop = shutdownRuntime
+      ? shutdownRuntime.stop('app_shutdown')
+      : Promise.resolve();
+    const [result] = await Promise.all([realtimeRelease, providerStop]);
+    providerRuntimeReady = false;
+    if (shutdownRuntime) {
+      providerVerifierTelemetry.recordShutdownCompletion({
+        runtimeGeneration: shutdownGeneration,
+        stoppedSnapshot: shutdownRuntime.snapshot(),
+      });
+    }
+    return result;
+  },
   // REMOVE 요청이 끝나거나 제한 시간에 도달한 뒤에만 소유 백엔드를 종료한다.
   shutdownBackend: () => backendLauncher.shutdownBackend(),
   quit: () => app.quit(),
@@ -2012,9 +2063,10 @@ function getLiveChatSession() {
 
 // 캔버스 결과 하나(stream-json-parser.classifyCanvasBlock의 출력)를 캔버스
 // 창으로 보낸다. 렌더러(canvas.js)가 status별로 카드를 그리거나 안내를 띄운다.
-function sendLiveCanvasResult(result) {
+function sendLiveCanvasResult(result, metadata = null) {
   if (!shellWin || shellWin.isDestroyed()) return;
-  shellWin.webContents.send('athena:add-canvas-live', result);
+  const payload = metadata ? { ...result, ...metadata } : result;
+  shellWin.webContents.send('athena:add-canvas-live', payload);
   // 채팅 영역의 3상태 표시가 실제 진행을 보여줄 수 있도록 카드 하나가 뜰 때마다
   // 알린다 — 43초짜리 왕복 동안 조용히 멈춘 것처럼 보이면 안 된다(오케스트레이터 지시).
   // 두 채널은 같은 렌더러의 서로 다른 영역이 받는다(shell.html — 캔버스 영역은
@@ -2026,9 +2078,10 @@ function sendLiveCanvasResult(result) {
 // 이어붙일 델타 하나. 셸의 채팅 영역(chat.js)과 오브의 대화 모드(orb.js, board-33)가
 // 같은 채널을 구독한다 — 둘이 동시에 질의를 돌리는 일은 없으므로(board-34 "상태는
 // 둘뿐이다") 무조건 relay해도 엉뚱한 창이 남의 조각을 먹는 사고가 안 난다.
-function sendLiveTextDelta(text) {
-  if (shellWin && !shellWin.isDestroyed()) shellWin.webContents.send('athena:live-text-delta', { text });
-  if (orbWin && !orbWin.isDestroyed()) orbWin.webContents.send('athena:live-text-delta', { text });
+function sendLiveTextDelta(text, metadata = null) {
+  const payload = metadata ? { text, ...metadata } : { text };
+  if (shellWin && !shellWin.isDestroyed()) shellWin.webContents.send('athena:live-text-delta', payload);
+  if (orbWin && !orbWin.isDestroyed()) orbWin.webContents.send('athena:live-text-delta', payload);
 }
 
 // 툴 호출 진행 단계(2026-08-26 board-33) — StreamJsonSession이 이미 넘겨주는
@@ -2187,6 +2240,7 @@ function broadcastLiveQueryBusy(busy) {
 // 지금 떠 있는 실배선 claude 프로세스의 kill 핸들. 정확히 하나만 유지한다 —
 // Esc 후 재질의로 프로세스가 쌓이던 갭(README "다중 세션도 없다")의 해소.
 let activeLiveQuery = null;
+let activeLegacyQueryCompletion = null;
 let activeRestRun = null;
 let activeSelectorFastRun = null;
 
@@ -2256,6 +2310,438 @@ function emitHistorySaveFailed({ messageId, role }) {
 const { QueryCache, ReplayTurnCapture } = require('./lib/main/query-cache');
 const fastPath = require('./lib/main/fast-path');
 const liveQueryCache = new QueryCache();
+const providerRuntimeMetrics = createProviderRuntimeMetrics();
+let providerRuntimeController = null;
+const providerControllerLifecycle = createRestartableControllerLifecycle({
+  createController: createProviderRuntimeControllerInstance,
+  getController: () => providerRuntimeController,
+  setController: (controller) => { providerRuntimeController = controller; },
+});
+let providerRuntimeReady = false;
+let providerEpochStore = null;
+let providerMutationCoordinator = null;
+let providerConfigGeneration = 0;
+let providerSecurityGeneration = 1;
+let providerRotationTail = Promise.resolve();
+let currentProviderSelection = Object.freeze({
+  activeAccount: null, desiredState: null, disabled: null,
+});
+const persistentTurnContexts = createProviderTurnContextRegistry();
+let currentPersistentRuntimeGeneration = 0;
+
+function verifierSourceHash(filePath) {
+  return crypto.createHash('sha256').update(fs.readFileSync(filePath)).digest('hex');
+}
+
+const providerVerifierTelemetry = createProviderVerifierTelemetry({
+  mainSourceHash: verifierSourceHash(__filename),
+  firstPaintSourceHash: verifierSourceHash(path.join(__dirname, 'provider-first-paint.js')),
+});
+app.athenaProviderVerifierTelemetry = Object.freeze({
+  beginScenario: providerVerifierTelemetry.beginScenario,
+  snapshot: providerVerifierTelemetry.snapshot,
+});
+
+const providerPaintAckRegistry = createProviderPaintAckRegistry({
+  onAccepted: (sample) => providerRuntimeMetrics.acknowledgePaint(sample),
+  onRejected: () => providerRuntimeMetrics.increment('paint_ack_rejected_total'),
+});
+
+function markProviderFirstVisible(metadata) {
+  if (metadata && metadata.turnId && Number.isSafeInteger(metadata.sequence)) {
+    providerPaintAckRegistry.markFirstVisible(metadata.turnId, metadata.sequence);
+  }
+}
+
+function handlePersistentCanvasResult(result) {
+  const context = persistentTurnContexts.get(result.clientSubmitId);
+  if (!context) return;
+  const metadata = {
+    clientSubmitId: result.clientSubmitId,
+    turnId: result.turnId,
+    sequence: result.sequence,
+    origin: result.origin,
+  };
+  if (shouldMarkProviderCanvasVisible(result)) markProviderFirstVisible(metadata);
+  const label = result.envelope && (result.envelope.card_title || result.envelope.caption);
+  const liveSymbol = extractLiveQuoteSymbol(result.envelope);
+  if (result.status === 'pushed') {
+    if (result.envelope && result.envelope.canvas_type) context.canvasTypesSeen.push(result.envelope.canvas_type);
+    if (label) context.canvasCaptionsSeen.push(label);
+    if (liveSymbol) ensureRealtimeForSymbol(liveSymbol);
+    return;
+  }
+  if (context.expand && !context.expandTriggered) {
+    context.expandTriggered = true;
+    revealShell({ focus: false });
+  }
+  sendLiveCanvasResult(result, metadata);
+  if (context.origin === 'orb' && orbWin && !orbWin.isDestroyed()) {
+    orbWin.webContents.send('athena:orb-canvas-result', { ...result, ...metadata });
+  }
+  if (result.envelope && result.envelope.canvas_type) context.canvasTypesSeen.push(result.envelope.canvas_type);
+  if (label) context.canvasCaptionsSeen.push(label);
+  if (liveSymbol) ensureRealtimeForSymbol(liveSymbol);
+}
+
+function createProviderRuntimeControllerInstance(stateDir) {
+  return createProviderRuntimeController({
+    persistentEnabled: providerRuntimeEnabled,
+    contractDecision: providerContractDecision.decision,
+    stateDir,
+    epochStore: providerEpochStore,
+    metrics: providerRuntimeMetrics,
+    commitSuccess: (result) => historySink.saveChatMessageAwaited(
+      { conversationId: result.conversationId, text: result.finalText, role: 'assistant' },
+      { onSaveFailed: emitHistorySaveFailed, mdlog },
+    ),
+    capabilityEnv: () => mcpEnv.buildEnvOverrides(),
+    callbacks: {
+      onTurnBound(event, binding) {
+        const context = persistentTurnContexts.get(event.clientSubmitId);
+        if (!context) return;
+        currentPersistentRuntimeGeneration = event.runtimeGeneration;
+        providerPaintAckRegistry.registerTurn({
+          clientSubmitId: event.clientSubmitId,
+          turnId: event.turnId,
+          runtimeGeneration: event.runtimeGeneration,
+          origin: context.origin,
+          expectedWebContentsId: binding.expectedRendererId,
+        });
+      },
+      onInternalEvent(event) {
+        providerVerifierTelemetry.recordTerminal(event);
+        const context = persistentTurnContexts.get(event.clientSubmitId);
+        if (context) context.replayTurnCapture.observeProviderEvent(event);
+      },
+      onTextDelta(text, metadata) {
+        if (!persistentTurnContexts.has(metadata.clientSubmitId)) return;
+        markProviderFirstVisible(metadata);
+        sendLiveTextDelta(text, metadata);
+      },
+      onCanvasResult: handlePersistentCanvasResult,
+      onToolStep(step) {
+        if (!persistentTurnContexts.has(step.clientSubmitId)) return;
+        markProviderFirstVisible(step);
+        sendLiveToolStep(step);
+      },
+      onSubagentStep(step) {
+        if (!persistentTurnContexts.has(step.clientSubmitId)) return;
+        markProviderFirstVisible(step);
+        sendLiveSubagentStep(step);
+      },
+    },
+  });
+}
+
+function ensureProviderRuntimeController() {
+  assertProviderLifecycleOpen();
+  const stateDir = path.join(app.getPath('userData'), 'provider-runtime');
+  if (!providerEpochStore) providerEpochStore = createMcpSecurityEpochStore({ stateDir });
+  providerRuntimeController = providerControllerLifecycle.ensure(stateDir);
+  if (!providerMutationCoordinator) providerMutationCoordinator = createMcpRuntimeCoordinator({
+    mode: 'persistent',
+    epochStore: providerEpochStore,
+    migratePlaintextEnv: () => mcpEnv.migratePlaintextEnv(),
+    readSnapshot: async ({ securityGeneration, capabilityContext }) => {
+      providerSecurityGeneration = securityGeneration;
+      return resolveProviderDesiredState({
+        gatewayEpochRevision: capabilityContext.stamp.epochRevision,
+      });
+    },
+    enabledProviders: () => currentProviderSelection.disabled ? [] : ['claude'],
+    initialSecurityGeneration: providerSecurityGeneration,
+    runtime: {
+      async blockNewTurns(reason) { providerRuntimeController.blockNewTurns(reason); },
+      async interruptAndDrain() { await providerRuntimeController.interrupt('mcp_security_mutation'); },
+      async fenceAndStop() {
+        const fencedRuntime = providerRuntimeController;
+        await providerControllerLifecycle.stopAndDiscard('mcp_security_mutation', fencedRuntime);
+        providerRuntimeReady = false;
+        return { ok: true };
+      },
+      async startGeneration({ snapshot, capabilityContext }) {
+        if (snapshot.disabled) return { ok: true, disabled: true };
+        const runtime = ensureProviderRuntimeController();
+        await runtime.start(snapshot.desiredState, capabilityContext);
+        await runtime.ready();
+        return { ok: true };
+      },
+      async publishGeneration({ started }) { providerRuntimeReady = !started.disabled; },
+      async unblockTurns() { providerRuntimeController?.unblockTurns(); },
+    },
+  });
+  return providerRuntimeController;
+}
+
+async function runMcpMutation(kind, apply) {
+  let applyResult = null;
+  if (!providerRuntimeEnabled) {
+    if (!providerMutationCoordinator) {
+      providerMutationCoordinator = createMcpRuntimeCoordinator({
+        mode: 'cold',
+        coldRuntime: { interruptAndTerminate: terminateColdLegacyRuntime },
+        migratePlaintextEnv: () => mcpEnv.migratePlaintextEnv(),
+        readSnapshot: async () => {
+          const { configPath } = getLiveMcpConfig();
+          const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+          return readMainMcpRuntimeSnapshot(config, 0);
+        },
+      });
+    }
+    const coordinated = await providerMutationCoordinator.mutate({
+      kind,
+      apply: async () => {
+        applyResult = await apply();
+        if (!applyResult || applyResult.ok !== true) {
+          throw new Error((applyResult && applyResult.error) || 'MCP 설정 변경 실패');
+        }
+      },
+    });
+    return applyResult ? { ...applyResult, ...coordinated } : coordinated;
+  }
+  ensureProviderRuntimeController();
+  const coordinated = await providerMutationCoordinator.mutate({
+    kind,
+    apply: async () => {
+      applyResult = await apply();
+      if (!applyResult || applyResult.ok !== true) {
+        throw new Error((applyResult && applyResult.error) || 'MCP 설정 변경 실패');
+      }
+    },
+  });
+  return applyResult ? { ...applyResult, ...coordinated } : coordinated;
+}
+
+function activeAccountFromCliList(list) {
+  for (const provider of (list && list.providers) || []) {
+    const active = Array.isArray(provider.accounts)
+      ? provider.accounts.find((account) => account && account.active === true)
+      : null;
+    if (active) return { accountId: active.id, providerId: provider.id };
+  }
+  return null;
+}
+
+function readJsonStateStrict(filePath, label) {
+  let raw;
+  try { raw = fs.readFileSync(filePath, 'utf8'); }
+  catch (error) { throw new Error(`${label} state unavailable`, { cause: error }); }
+  try { return JSON.parse(raw); }
+  catch (error) { throw new Error(`${label} state is invalid JSON`, { cause: error }); }
+}
+
+function fileRevision(filePath) {
+  try { return Math.max(0, Math.trunc(fs.statSync(filePath).mtimeMs)); }
+  catch { return 0; }
+}
+
+function readMainMcpRuntimeSnapshot(config, gatewayEpochRevision) {
+  const registryPath = mcpEnv.registryPath();
+  const registry = readJsonStateStrict(registryPath, 'MCP registry');
+  const consent = readJsonStateStrict(path.join(path.dirname(registryPath), 'consent.json'), 'MCP consent');
+  validateMainMcpSecurityState({ registry, consent, canonicalHash });
+  return buildMainMcpRuntimeSnapshot({
+    createSnapshot: createMcpRuntimeSnapshot,
+    registry,
+    consent,
+    claudeServers: config.mcpServers || {},
+    securityGeneration: providerSecurityGeneration,
+    secretRevision: fileRevision(path.join(app.getPath('userData'), 'athena-secrets.json')),
+    gatewayEpochRevision,
+    codexConfigRevision: fileRevision(codexConfig.configPath()),
+    disallowedTools: DISALLOWED_EXECUTION_TOOLS.split(',').map((tool) => tool.trim()).filter(Boolean),
+  });
+}
+
+async function resolveProviderDesiredState(options = {}) {
+  const activeAccount = Object.prototype.hasOwnProperty.call(options, 'activeAccount')
+    ? options.activeAccount
+    : await cliAccounts.getActiveAccount();
+  const resolvedAccount = activeAccount || null;
+  if (!resolvedAccount) {
+    const disabled = Object.freeze({
+      ok: false,
+      type: 'action-needed',
+      provider: null,
+      code: 'NO_ACTIVE_PROVIDER_ACCOUNT',
+    });
+    currentProviderSelection = Object.freeze({ activeAccount: null, desiredState: null, disabled });
+    return currentProviderSelection;
+  }
+  const disabled = resolveCodexDisabledSelection({
+    activeAccount: resolvedAccount,
+    contractDecision: providerContractDecision.decision,
+    persistentEnabled: providerRuntimeEnabled,
+  });
+  if (disabled) {
+    currentProviderSelection = Object.freeze({ activeAccount: resolvedAccount, desiredState: null, disabled });
+    return currentProviderSelection;
+  }
+  const { dir, configPath } = getLiveMcpConfig();
+  const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+  const { model, effort } = resolvedAccount.providerId === 'codex'
+    ? codexConfig.readModelSettings()
+    : modelPrefs.get().claude;
+  const systemPrompt = buildLiveSystemPrompt();
+  const gatewayEpochRevision = Number(options.gatewayEpochRevision);
+  if (providerRuntimeEnabled && (!Number.isSafeInteger(gatewayEpochRevision) || gatewayEpochRevision < 1)) {
+    throw new Error('issued gateway capability epoch is required for persistent provider startup');
+  }
+  const mcpSnapshot = readMainMcpRuntimeSnapshot(
+    config,
+    providerRuntimeEnabled ? gatewayEpochRevision : 0,
+  );
+  const desiredState = Object.freeze({
+    provider: resolvedAccount.providerId,
+    accountId: resolvedAccount.accountId,
+    conversationId: historyConversationId(),
+    cwd: dir,
+    model,
+    effort,
+    systemPrompt,
+    systemPromptHash: crypto.createHash('sha256').update(systemPrompt, 'utf8').digest('hex'),
+    configGeneration: ++providerConfigGeneration,
+    securityGeneration: providerSecurityGeneration,
+    mcpSnapshot,
+    toolPolicy: buildProviderToolPolicy(mcpSnapshot, GATEWAY_ALLOWED_TOOLS, DISALLOWED_EXECUTION_TOOLS),
+  });
+  currentProviderSelection = Object.freeze({ activeAccount: resolvedAccount, desiredState, disabled: null });
+  return currentProviderSelection;
+}
+
+function providerShutdownError() {
+  const error = new Error('provider lifecycle is closed because the app is shutting down');
+  error.code = 'APP_SHUTTING_DOWN';
+  return error;
+}
+
+function assertProviderLifecycleOpen() {
+  if (isQuitting) throw providerShutdownError();
+}
+
+async function awaitProviderLifecycle(promise) {
+  const result = await promise;
+  assertProviderLifecycleOpen();
+  return result;
+}
+
+async function rotatePersistentProviderInner(reason, options = {}) {
+  // 기능이 꺼져 있으면 프로바이더 상태를 아예 건드리지 않는다. broadcastCliChanged가
+  // 셸 포커스·CLI 로그인·setActive마다 이 경로를 무조건 부르는데, 여기서 계정·MCP
+  // 스냅샷을 계속 재계산하면 기본 경로에 없던 일이 조용히 생긴다.
+  if (!providerRuntimeEnabled) return currentProviderSelection;
+  assertProviderLifecycleOpen();
+  const activeAccount = Object.prototype.hasOwnProperty.call(options, 'activeAccount')
+    ? options.activeAccount
+    : await awaitProviderLifecycle(cliAccounts.getActiveAccount());
+  if (!activeAccount) {
+    const disabledSelection = await awaitProviderLifecycle(
+      resolveProviderDesiredState({ ...options, activeAccount: null }),
+    );
+    if (providerRuntimeController) {
+      providerRuntimeController.blockNewTurns('no_active_provider_account');
+      providerEpochStore.invalidate(providerSecurityGeneration);
+      const stoppedRuntime = providerRuntimeController;
+      await awaitProviderLifecycle(providerControllerLifecycle.stopAndDiscard(reason, stoppedRuntime));
+      providerRuntimeReady = false;
+    }
+    return disabledSelection;
+  }
+  if (activeAccount.providerId === 'codex') {
+    const disabledSelection = await awaitProviderLifecycle(
+      resolveProviderDesiredState({ ...options, activeAccount }),
+    );
+    if (disabledSelection.disabled) {
+      if (providerRuntimeController) {
+        providerRuntimeController.blockNewTurns('provider_disabled_by_contract');
+        providerEpochStore.invalidate(providerSecurityGeneration);
+        const stoppedRuntime = providerRuntimeController;
+        await awaitProviderLifecycle(providerControllerLifecycle.stopAndDiscard(reason, stoppedRuntime));
+        providerRuntimeReady = false;
+      }
+      return disabledSelection;
+    }
+  }
+  const runtime = ensureProviderRuntimeController();
+  const previousRuntimeSnapshot = runtime.snapshot();
+  const capabilityContext = providerEpochStore.publishGeneration(providerSecurityGeneration);
+  let selection;
+  try {
+    selection = await awaitProviderLifecycle(resolveProviderDesiredState({
+      ...options,
+      activeAccount,
+      gatewayEpochRevision: capabilityContext.stamp.epochRevision,
+    }));
+  } catch (error) {
+    capabilityContext.dispose();
+    providerEpochStore.invalidate(providerSecurityGeneration);
+    throw error;
+  }
+  if (selection.disabled) {
+    capabilityContext.dispose();
+    providerEpochStore.invalidate(providerSecurityGeneration);
+    await awaitProviderLifecycle(providerControllerLifecycle.stopAndDiscard(reason, runtime));
+    providerRuntimeReady = false;
+    return selection;
+  }
+  try {
+    if (!providerRuntimeReady) {
+      await awaitProviderLifecycle(runtime.start(selection.desiredState, capabilityContext));
+      await awaitProviderLifecycle(runtime.ready());
+      providerRuntimeReady = true;
+    } else {
+      await awaitProviderLifecycle(runtime.rotate(selection.desiredState, reason, capabilityContext));
+      providerVerifierTelemetry.recordRotationCompletion({
+        correlationId: options.verifierCorrelationId,
+        previousSnapshot: previousRuntimeSnapshot,
+        nextSnapshot: runtime.snapshot(),
+      });
+    }
+    assertProviderLifecycleOpen();
+    runtime.unblockTurns();
+  } catch (error) {
+    capabilityContext.dispose();
+    providerEpochStore.invalidate(providerSecurityGeneration);
+    await providerControllerLifecycle.stopAndDiscard('provider_generation_start_failed', runtime).catch(() => {});
+    providerRuntimeReady = false;
+    throw error;
+  }
+  return selection;
+}
+
+function enqueueProviderRotation(operation) {
+  const rotation = providerRotationTail.then(operation, operation);
+  providerRotationTail = rotation.catch(() => {});
+  return rotation;
+}
+
+function rotatePersistentProvider(reason, options = {}) {
+  return enqueueProviderRotation(() => rotatePersistentProviderInner(reason, options));
+}
+
+const providerConversationRotationQueue = createConversationRotationQueue({
+  isShuttingDown: () => isQuitting,
+  shutdownError: providerShutdownError,
+  enqueue: enqueueProviderRotation,
+  blockAdmission: () => {
+    if (providerRuntimeEnabled) {
+      ensureProviderRuntimeController().blockNewTurns('conversation_rotation');
+    }
+  },
+  interrupt: () => abortConversationWork(new Error('새 대화가 진행 중인 이전 작업을 대체했다')),
+  createConversationId: () => crypto.randomUUID(),
+  publishConversationId: (conversationId) => {
+    liveSessionId = null;
+    historyActiveConversationId = conversationId;
+  },
+  beginConversation: ({ id, projectId }) => conversations.begin({ id, projectId }),
+  rotateProvider: (reason, metadata) => providerRuntimeEnabled
+    ? rotatePersistentProviderInner(reason, {
+      verifierCorrelationId: metadata.verifierCorrelationId,
+    })
+    : Promise.resolve(),
+});
 const stockEntityIndex = new restDatasetRunner.StockEntityIndex();
 let lastStockIndexErrorLogAt = 0;
 const stockEntityIndexReadiness = createStockEntityIndexReadiness({
@@ -2465,7 +2951,16 @@ function persistLocalLiveResult(query, result, conversationId = historyConversat
   return result;
 }
 
-async function runLiveQuery(query, expand, origin = 'shell', turnConversationId = historyConversationId()) {
+const liveSubmitContexts = new Map();
+
+async function runLiveQuery(query, expand, origin = 'shell', turnConversationId = historyConversationId(), submit = {}) {
+  if (isQuitting) {
+    return {
+      ok: false, type: 'action-needed', code: 'APP_SHUTTING_DOWN', source: 'live',
+      error: '앱이 종료 중이라 새 질의를 시작할 수 없습니다.', answerText: null,
+      canvasTypes: [], canvasCaptions: [],
+    };
+  }
   // 어떤 빠른 경로가 선택되든 네트워크·Selector·모델보다 먼저 사용자 원문을
   // durable outbox에 넣는다. 이후 분기들은 assistant만 한 번 저장한다.
   const historyReceipt = historySink.saveChatMessage(
@@ -2482,9 +2977,11 @@ async function runLiveQuery(query, expand, origin = 'shell', turnConversationId 
   touchConversationEntry(query, turnConversationId);
   liveQueryBusyDepth += 1;
   if (liveQueryBusyDepth === 1) broadcastLiveQueryBusy(true);
+  liveSubmitContexts.set(turnConversationId, submit);
   try {
     return await runLiveQueryInner(query, expand, origin, turnConversationId);
   } finally {
+    liveSubmitContexts.delete(turnConversationId);
     liveQueryBusyDepth -= 1;
     if (liveQueryBusyDepth === 0) broadcastLiveQueryBusy(false);
   }
@@ -2494,6 +2991,7 @@ async function runLiveQuery(query, expand, origin = 'shell', turnConversationId 
 // 오브 기원 엔벌로프만 orbWin에도 추가 relay하는 데 쓴다(board-33③④ 선행).
 async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   const queryStartedAt = performance.now();
+  const submit = liveSubmitContexts.get(turnConversationId) || {};
   // Selector 단일 dispatch도 새 질의가 선점한다. fetch 구현이 abort를 늦게
   // 관찰하더라도 run identity를 함께 검사해 이전 카드/주문 초안은 표시하지 않는다.
   if (activeSelectorFastRun) {
@@ -2757,6 +3255,63 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   // 설정 화면 모델 패널(lib/main/model-prefs.js) 값 — null이면 buildArgs가
   // --model/--effort를 안 붙여 claude CLI 기본값을 쓴다.
   const { model, effort } = modelPrefs.get().claude;
+  if (providerRuntimeEnabled && currentProviderSelection.disabled) {
+    return {
+      ...currentProviderSelection.disabled,
+      source: 'live',
+      error: 'Codex 대화 연결은 현재 사용할 수 없습니다. 계정 설정에서 Claude를 선택해 주세요.',
+      answerText: null,
+      canvasTypes: [],
+      canvasCaptions: [],
+    };
+  }
+  if (providerRuntimeEnabled) {
+    const runtime = ensureProviderRuntimeController();
+    const clientSubmitId = String(submit.clientSubmitId || '');
+    const rendererSubmittedAt = Number(submit.rendererSubmittedAt);
+    const expectedRendererId = Number(submit.expectedRendererId);
+    const persistentTurnContext = {
+      replayTurnCapture,
+      canvasTypesSeen,
+      canvasCaptionsSeen,
+      expand: expand === true,
+      expandTriggered: false,
+      origin,
+    };
+    persistentTurnContexts.set(clientSubmitId, persistentTurnContext);
+    let persistentResult;
+    try {
+      persistentResult = await runtime.sendTurn({
+        request: {
+          clientSubmitId,
+          conversationId: turnConversationId,
+          origin,
+          userText: buildLiveTurnPrompt({ userText: query }),
+        },
+        expectedRendererId,
+        rendererSubmittedAt,
+      });
+    } finally {
+      persistentTurnContexts.deleteIfSame(clientSubmitId, persistentTurnContext);
+    }
+    const answerText = persistentResult.ok ? persistentResult.finalText : null;
+    const replayJudgment = persistentResult.ok
+      ? replayTurnCapture.buildJudgment(canvasTypesSeen)
+      : null;
+    if (replayJudgment) liveQueryCache.set(query, replayJudgment);
+    return {
+      ok: !!persistentResult.ok,
+      source: 'live',
+      error: persistentResult.ok ? null : persistentResult.error,
+      answerText,
+      canvasTypes: [...new Set(canvasTypesSeen)],
+      canvasCaptions: canvasCaptionsSeen,
+      diagnostics: null,
+      durationMs: persistentResult.timings && persistentResult.timings.totalMs,
+      turnId: persistentResult.turnId,
+      clientSubmitId,
+    };
+  }
   // 두 경로(상주 세션/콜드 스폰)가 같은 콜백을 공유한다 — 스트림 계약이 동일하다.
   const turnCallbacks = {
     onSpawn: (h) => { myHandle = h; activeLiveQuery = h; },
@@ -2808,16 +3363,18 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   // 상주 세션(기본) — 매 턴 콜드 스폰의 고정비가 없다. 결과 형상이 동일해
   // 아래 세션 체인·캐시·저장 로직은 분기를 모른다. ATHENA_PERSISTENT_CHAT=0
   // 이면 기존 왕복(runClaudeQuery)으로 폴백한다(킬 스위치).
-  const result = persistentChatEnabled()
-    ? await getLiveChatSession().run({
+  let result;
+  if (persistentChatEnabled()) {
+    result = await getLiveChatSession().run({
       // 규칙은 세션 system prompt로 이미 갔다 — 턴에는 질문만 보낸다.
       prompt: buildLiveTurnPrompt(query),
       model,
       effort,
       resumeSessionId,
       ...turnCallbacks,
-    })
-    : await runClaudeQuery({
+    });
+  } else {
+    const legacyQueryOperation = runClaudeQuery({
       // 날것 질문을 그대로 넘기면 모델이 조회만 하고 캔버스를 건너뛸 수 있다 —
       // 렌더 지시·스키마 힌트로 감싼다(lib/main/live-prompt.js의 실측 근거 참조).
       prompt: buildLivePrompt(query),
@@ -2828,6 +3385,16 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
       effort,
       ...turnCallbacks,
     });
+    // MCP 뮤테이션이 진행 중인 콜드 질의를 끊을 수 있게 완료 핸들을 남긴다
+    // (terminateColdLegacyRuntime — 프로바이더 런타임 opt-in 경로에서만 쓴다).
+    const legacyQueryCompletion = Promise.resolve(legacyQueryOperation).then(() => undefined, () => undefined);
+    activeLegacyQueryCompletion = legacyQueryCompletion;
+    try {
+      result = await legacyQueryOperation;
+    } finally {
+      if (activeLegacyQueryCompletion === legacyQueryCompletion) activeLegacyQueryCompletion = null;
+    }
+  }
   if (typeof result.firstEventMs === 'number') {
     mdlog(`상주 채팅 턴 — 제출→첫 스트림 이벤트 ${Math.round(result.firstEventMs)}ms `
       + `(프로세스 ${result.spawnedFresh ? '신규 기동' : '재사용'})`);
@@ -2852,6 +3419,9 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
       // origin을 반드시 실어 보낸다 — 누락하면 오브 기원 질의가 이 재시도를
       // 타는 순간 origin이 기본값 'shell'로 조용히 리셋되어, 재시도로 살아난
       // 응답의 캔버스 엔벌로프가 오브에 relay되지 않는 은닉 회귀가 된다.
+      // runLiveQuery로 되돌아가면 사용자 메시지 저장이 한 번 더 돌아 이력이
+      // 중복된다 — Inner로 직접 재진입한다. submit은 바깥 runLiveQuery의
+      // finally가 아직 안 돌아 liveSubmitContexts에 그대로 살아 있다.
       return runLiveQueryInner(query, expand, origin, turnConversationId);
     }
   }
@@ -2909,6 +3479,17 @@ function abortConversationWork(reason) {
     activeLiveQuery.kill();
     activeLiveQuery = null;
   }
+  if (providerRuntimeController && providerRuntimeEnabled) {
+    void providerRuntimeController.interrupt(String((reason && reason.message) || reason || 'user_interrupt'))
+      .catch((error) => mdlog(`provider interrupt 실패: ${String((error && error.message) || error)}`));
+  }
+}
+
+async function terminateColdLegacyRuntime(reason = 'mcp-security-mutation') {
+  const completion = activeLegacyQueryCompletion;
+  abortConversationWork(new Error(reason));
+  if (completion) await completion;
+  return { ok: true };
 }
 
 // Esc 중단 — 렌더러의 abortToken은 UI 반영만 막는다. 프로세스는 여기서 실제로 죽인다.
@@ -2916,7 +3497,26 @@ ipcMain.on('athena:abort-live-query', () => {
   abortConversationWork(new Error('사용자가 진행 중인 대화 작업을 취소했다'));
 });
 
+ipcMain.on('athena:provider-paint-ack', (event, payload) => {
+  const ackResult = providerPaintAckRegistry.accept(
+    event.sender.id,
+    payload,
+    currentPersistentRuntimeGeneration,
+  );
+  if (ackResult.accepted) {
+    providerVerifierTelemetry.recordPaintAck({
+      senderWebContentsId: event.sender.id,
+      senderFrameUrl: event.senderFrame?.url
+        || (typeof event.sender.getURL === 'function' ? event.sender.getURL() : null),
+      runtimeGeneration: currentPersistentRuntimeGeneration,
+      ackResult,
+      payload,
+    });
+  }
+});
+
 ipcMain.handle('athena__render_canvas', async (e, payload = {}) => {
+  if (isQuitting) return { ok: false, type: 'action-needed', code: 'APP_SHUTTING_DOWN' };
   if (payload.source === 'rest-retry') {
     if (!shellWin || shellWin.isDestroyed() || e.sender !== shellWin.webContents) {
       return { ok: false, source: 'rest-retry', error: '유효하지 않은 재시도 요청입니다.' };
@@ -2958,7 +3558,11 @@ ipcMain.handle('athena__render_canvas', async (e, payload = {}) => {
   if (!query || !String(query).trim()) {
     return { ok: false, source: 'live', error: '질의가 비어 있다' };
   }
-  return runLiveQuery(query, expand);
+  return runLiveQuery(query, expand, 'shell', historyConversationId(), {
+    clientSubmitId: payload.clientSubmitId,
+    rendererSubmittedAt: payload.rendererSubmittedAt,
+    expectedRendererId: e.sender.id,
+  });
 });
 
 // 오브 대화 모드(2026-08-26 board-33) — 셸이 숨겨졌을 때만 오브 렌더러가 이
@@ -2968,6 +3572,7 @@ ipcMain.handle('athena__render_canvas', async (e, payload = {}) => {
 // 이미 그려진다(startCanvasFeed). 파이프라인은 새로 만들지 않는다 — 셸의
 // 커맨드바가 부르는 runLiveQuery와 완전히 같은 함수를 그대로 호출한다.
 ipcMain.handle('athena:orb-chat-submit', async (e, payload = {}) => {
+  if (isQuitting) return { ok: false, type: 'action-needed', code: 'APP_SHUTTING_DOWN' };
   const query = payload && typeof payload.query === 'string' ? payload.query.trim() : '';
   if (!query) return { ok: false, source: 'live', error: '질의가 비어 있다' };
   // 2026-08-26 어드버서리얼 리뷰 결함 #1 — runLiveQueryInner의 "새 질의가 항상
@@ -2984,7 +3589,11 @@ ipcMain.handle('athena:orb-chat-submit', async (e, payload = {}) => {
   if (liveQueryBusyDepth > 0) {
     return { ok: false, source: 'live', error: '셸 질의 진행 중 — 잠시 후 다시 시도하라' };
   }
-  const result = await runLiveQuery(query, false, 'orb');
+  const result = await runLiveQuery(query, false, 'orb', historyConversationId(), {
+    clientSubmitId: payload.clientSubmitId,
+    rendererSubmittedAt: payload.rendererSubmittedAt,
+    expectedRendererId: e.sender.id,
+  });
   // 셸이 나중에 다시 열려도 같은 방이 이어져 보이도록, 오브에서 오간 턴을 셸의
   // 대화 이력에도 커밋한다("대화창으로 가기 → 메인 방 그대로 이어진다", board-34).
   // 세션·이력 저장 자체는 runLiveQuery가 이미 끝냈다 — 여기서는 셸 DOM 표시만
@@ -3276,7 +3885,7 @@ function handleModelGet() {
   return { claude, codex: { model, effort } };
 }
 
-function handleModelSet(e, payload = {}) {
+async function handleModelSet(e, payload = {}) {
   const { provider, patch } = payload || {};
   const result = provider === 'codex' ? codexConfig.writeModelSettings(patch || {}) : modelPrefs.set(payload);
   if (!result.ok) return result;
@@ -3310,6 +3919,7 @@ function handleModelSet(e, payload = {}) {
   if (shellWin && !shellWin.isDestroyed()) {
     shellWin.webContents.send('athena:model-changed', state);
   }
+  if (providerRuntimeEnabled) await rotatePersistentProvider('model_settings_changed');
   return selectorActivation ? { ok: true, state, selectorActivation } : { ok: true, state };
 }
 
@@ -3331,45 +3941,59 @@ ipcMain.handle('athena:load-fixture', handleLoadFixture);
 // CLI 계정 (AT-SY-002)
 // ---------------------------------------------------------------------------
 
-function broadcastCliChanged() {
-  if (shellWin && !shellWin.isDestroyed()) {
-    shellWin.webContents.send('athena:cli-changed', cliAccounts.list());
-  }
+function reportSafeCliError(error) {
+  mdlog(`CLI 계정 상태 갱신 실패: ${String((error && error.message) || error)}`);
 }
 
-function pollCliChangesAfterLogin(providerId) {
-  const before = JSON.stringify(cliAccounts.list());
+async function broadcastCliChanged({ rotateReason = null, list: suppliedList = null } = {}) {
+  const list = suppliedList || await cliAccounts.list();
+  if (shellWin && !shellWin.isDestroyed()) {
+    shellWin.webContents.send('athena:cli-changed', list);
+  }
+  if (rotateReason) {
+    await rotatePersistentProvider(rotateReason, { activeAccount: activeAccountFromCliList(list) });
+  }
+  return list;
+}
+
+async function pollCliChangesAfterLogin(providerId) {
+  const before = JSON.stringify(await cliAccounts.list());
   // 목록이 안 변하는 재로그인(기존 계정으로 다시 로그인)은 자격증명 파일
   // mtime 서명으로 잡는다 — 없으면 온보딩 '로그인 대기 중'이 영영 안 풀린다.
   const sigBefore = cliAccounts.credentialsSignature();
   let attempts = 0;
+  let pollInFlight = false;
   const timer = setInterval(() => {
+    if (pollInFlight) return;
+    pollInFlight = true;
+    void (async () => {
     attempts += 1;
-    const now = JSON.stringify(cliAccounts.list());
+    const now = JSON.stringify(await cliAccounts.list());
     if (now !== before || cliAccounts.credentialsSignature() !== sigBefore) {
       clearInterval(timer);
       // 로그인 = 활성 전환(2026-08-27 검토 결정)
-      cliAccounts.activateProviderCurrent(providerId);
-      broadcastCliChanged();
+      await cliAccounts.activateProviderCurrent(providerId);
+      await broadcastCliChanged({ rotateReason: 'cli_login_completed' });
     } else if (attempts >= 30) {
       clearInterval(timer);
     }
+    })().catch(reportSafeCliError).finally(() => { pollInFlight = false; });
   }, 2000);
 }
 
-function handleCliList() {
+async function handleCliList() {
   return cliAccounts.list();
 }
 
 async function handleCliLogin(e, { providerId } = {}) {
   const result = await cliAccounts.login(providerId);
-  if (result.launched) pollCliChangesAfterLogin(providerId);
+  if (result.launched) void pollCliChangesAfterLogin(providerId).catch(reportSafeCliError);
   return result;
 }
 
-function handleCliSetActive(e, { accountId } = {}) {
+async function handleCliSetActive(e, { accountId } = {}) {
   const result = cliAccounts.setActive(accountId);
-  if (result.ok) broadcastCliChanged();
+  if (result.ok) await broadcastCliChanged({ rotateReason: 'active_provider_changed' });
   return result;
 }
 
@@ -3443,11 +4067,11 @@ ipcMain.handle('athena:conversations-set-active', (e, { id } = {}) => {
 // Paper 54: 빈 대화는 첫 입력 전에는 목록에 만들지 않는다. 캔버스 mode는
 // renderer가 그대로 보존하고, main은 새 기록 id와 프로젝트 소속만 원자적으로
 // 바꾼다.
-ipcMain.handle('athena:conversations-new', (e, { projectId } = {}) => {
-  abortConversationWork(new Error('새 대화가 진행 중인 이전 작업을 대체했다'));
-  liveSessionId = null;
-  historyActiveConversationId = crypto.randomUUID();
-  return conversations.begin({ id: historyActiveConversationId, projectId });
+ipcMain.handle('athena:conversations-new', async (e, { projectId, verifierCorrelationId } = {}) => {
+  if (verifierCorrelationId !== undefined) {
+    providerVerifierTelemetry.authorizeRotation(verifierCorrelationId);
+  }
+  return providerConversationRotationQueue.begin({ projectId, verifierCorrelationId });
 });
 
 ipcMain.handle('athena:account-list', handleAccountList);
@@ -3469,17 +4093,21 @@ accounts.onTokenChange((payload) => {
 // MCP (AT-ST-004/005/006) — backend/athena_mcp CLI를 감싼다, 재구현하지 않는다.
 // ---------------------------------------------------------------------------
 
+// 아래 다섯은 프로바이더 런타임이 꺼져 있으면 병합 전 main의 몸통 그대로 돈다.
+// 켜져 있을 때만 runMcpMutation의 조정자(재기동·에폭 회전·평문 환경값 이전)를 탄다.
 async function handleMcpList() {
-  try {
-    const { migrated, skipped } = await mcpEnv.migratePlaintextEnv();
-    if (migrated.length) {
-      mdlog(`mcp-env 마이그레이션: ${migrated.length}건 (${migrated.map((m) => `${m.alias}.${m.key}`).join(', ')})`);
+  if (!providerRuntimeEnabled) {
+    try {
+      const { migrated, skipped } = await mcpEnv.migratePlaintextEnv();
+      if (migrated.length) {
+        mdlog(`mcp-env 마이그레이션: ${migrated.length}건 (${migrated.map((m) => `${m.alias}.${m.key}`).join(', ')})`);
+      }
+      if (skipped.length) {
+        mdlog(`mcp-env 마이그레이션 스킵: ${skipped.map((s) => `${s.alias}.${s.key}: ${s.reason}`).join('; ')}`);
+      }
+    } catch (err) {
+      mdlog(`mcp-env 마이그레이션 실패: ${String((err && err.message) || err)}`);
     }
-    if (skipped.length) {
-      mdlog(`mcp-env 마이그레이션 스킵: ${skipped.map((s) => `${s.alias}.${s.key}: ${s.reason}`).join('; ')}`);
-    }
-  } catch (err) {
-    mdlog(`mcp-env 마이그레이션 실패: ${String((err && err.message) || err)}`);
   }
   return mcpCli.list();
 }
@@ -3488,12 +4116,14 @@ function handleMcpStageSnippet(e, { snippet } = {}) {
   return mcpCli.stageSnippet(snippet);
 }
 
-function handleMcpRegister(e, { staged } = {}) {
-  return mcpCli.register(staged);
+async function handleMcpRegister(e, { staged } = {}) {
+  if (!providerRuntimeEnabled) return mcpCli.register(staged);
+  return runMcpMutation('register', () => mcpCli.register(staged));
 }
 
-function handleMcpApprove(e, { alias } = {}) {
-  return mcpCli.approve(alias);
+async function handleMcpApprove(e, { alias } = {}) {
+  if (!providerRuntimeEnabled) return mcpCli.approve(alias);
+  return runMcpMutation('approve', () => mcpCli.approve(alias));
 }
 
 function handleMcpProbe(e, { alias } = {}) {
@@ -3502,12 +4132,14 @@ function handleMcpProbe(e, { alias } = {}) {
   return mcpCli.probe(alias, mcpEnv.buildEnvOverrides(alias));
 }
 
-function handleMcpAllowTool(e, { alias, tool, allowed } = {}) {
-  return mcpCli.allowTool(alias, tool, allowed);
+async function handleMcpAllowTool(e, { alias, tool, allowed } = {}) {
+  if (!providerRuntimeEnabled) return mcpCli.allowTool(alias, tool, allowed);
+  return runMcpMutation(allowed ? 'allow' : 'disallow', () => mcpCli.allowTool(alias, tool, allowed));
 }
 
-function handleMcpRemove(e, { alias } = {}) {
-  return mcpCli.remove(alias);
+async function handleMcpRemove(e, { alias } = {}) {
+  if (!providerRuntimeEnabled) return mcpCli.remove(alias);
+  return runMcpMutation('remove', () => mcpCli.remove(alias));
 }
 
 ipcMain.handle('athena:mcp-list', handleMcpList);
@@ -3667,6 +4299,7 @@ app.on('will-quit', () => {
 // 장기 재연결 루프는 시작 여부만 기록하고 종료를 기다리지 않는다.
 const BOOT_TASKS = [
   { id: 'mcp-env', label: '보안 환경 확인', kind: 'gate' },
+  { id: 'provider-warm', label: '대화 연결 준비', kind: 'gate' },
   { id: 'backend', label: 'ATHENA 서비스 연결', kind: 'gate' },
   { id: 'stock-index', label: '종목 검색 데이터 준비', kind: 'gate' },
   { id: 'brain-ingestion', label: '대화 분석기 준비', kind: 'gate' },
@@ -3849,6 +4482,15 @@ function registerLiveBootRunners(createWindowsPromise) {
     return { detail: result.migrated.length ? `${result.migrated.length}건 이전 완료` : '이전할 평문 환경값 없음' };
   });
   startupReadiness.setRunner('backend', ensureBackendStrict);
+  startupReadiness.setRunner('provider-warm', async () => {
+    // 플래그를 먼저 본다 — 뒤에 두면 기능이 꺼져 있어도 매 부팅마다 CLI 계정
+    // 조회·MCP 스냅샷·시스템 프롬프트 해시를 계산하고, 이 태스크는 gate라
+    // 실패하면 앱 기동 자체를 막는다.
+    if (!providerRuntimeEnabled) return { disabled: true, detail: '기존 단일 요청 대화 모드' };
+    const selection = await rotatePersistentProvider('startup_warmup');
+    if (selection.disabled) return { disabled: true, detail: 'Codex 대화 연결은 현재 비활성화됨' };
+    return { detail: '지속 대화 연결 준비 완료' };
+  });
   startupReadiness.setRunner('stock-index', waitForStockIndex);
   startupReadiness.setRunner('brain-ingestion', waitForBrainStartup);
   startupReadiness.setRunner('chat-history-flush', async () => {
@@ -3910,7 +4552,8 @@ async function startLiveBoot(createWindowsPromise) {
   registerLiveBootRunners(createWindowsPromise);
   await runStartupOrchestration({
     readiness: startupReadiness,
-    concurrentTaskIds: ['mcp-env', 'stock-index'],
+    concurrentTaskIds: ['stock-index'],
+    dependencyTaskChains: [['mcp-env', 'provider-warm']],
     dependencyTaskId: 'backend',
     dependentTaskIds: ['alarm-bootstrap', 'routine-feed', 'canvas-feed'],
     sequentialDependentTaskIds: ['brain-ingestion', 'chat-history-flush', 'graph-projection'],

@@ -1,0 +1,32 @@
+{
+  "description": "A result may arrive before its assistant UUID becomes durable in getSessionMessages.",
+  "pollIntervalMs": 25,
+  "timeoutMs": 250,
+  "assistantUuid": "00000000-0000-4000-8000-000000000002",
+  "failedTurnSentinelUuid": "00000000-0000-4000-8000-000000000003",
+  "reads": [
+    {
+      "elapsedMs": 0,
+      "messages": [
+        { "type": "user", "uuid": "00000000-0000-4000-8000-000000000001" }
+      ]
+    },
+    {
+      "elapsedMs": 25,
+      "messages": [
+        { "type": "user", "uuid": "00000000-0000-4000-8000-000000000001" },
+        { "type": "assistant", "uuid": "00000000-0000-4000-8000-000000000002" }
+      ]
+    }
+  ],
+  "fork": {
+    "dir": "<absolute-workspace-path>",
+    "upToMessageId": "00000000-0000-4000-8000-000000000002"
+  },
+  "assertions": {
+    "immediateReadFindsAssistant": false,
+    "boundedPollFindsAssistant": true,
+    "forkIncludesAssistant": true,
+    "forkExcludesFailedTurnSentinel": true
+  }
+}

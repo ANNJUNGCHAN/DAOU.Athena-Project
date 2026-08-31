@@ -1,11 +1,28 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import re
+from copy import deepcopy
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
+from typing import Any
+
+from .atomic_json_state import atomic_write_json, exclusive_state_lock
+
+_METADATA_KEY = "$athena"
+
+
+def _canonical_hash(value: Any) -> str:
+    encoded = json.dumps(
+        value,
+        ensure_ascii=False,
+        separators=(",", ":"),
+        sort_keys=True,
+    ).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
 
 # ---------------------------------------------------------------------------
 # 위험 패턴 경고
@@ -110,6 +127,13 @@ class ConsentRecord:
         )
 
 
+@dataclass(frozen=True)
+class ConsentSnapshot:
+    revision: int
+    fingerprint: str
+    records: tuple[dict[str, Any], ...]
+
+
 class ConsentNotGrantedError(PermissionError):
     """서버가 아직 승인되지 않았다 — spawn 금지."""
 
@@ -123,16 +147,91 @@ class ConsentStore:
     def __init__(self, path: Path) -> None:
         self.path = path
         self._records: dict[str, ConsentRecord] = {}
+        self._revision = 0
+        self._fingerprint = _canonical_hash({})
         if self.path.exists():
-            raw = json.loads(self.path.read_text(encoding="utf-8"))
-            self._records = {alias: ConsentRecord.from_dict(d) for alias, d in raw.items()}
+            self._load()
+
+    def _load(self) -> None:
+        records, revision, fingerprint = self._read_disk_state()
+        self._records = records
+        self._revision = revision
+        self._fingerprint = fingerprint
+
+    def _read_disk_state(self) -> tuple[dict[str, ConsentRecord], int, str]:
+        if not self.path.exists():
+            return {}, 0, _canonical_hash({})
+        raw = json.loads(self.path.read_text(encoding="utf-8"))
+        metadata = raw.get(_METADATA_KEY, {})
+        records = {
+            alias: ConsentRecord.from_dict(d)
+            for alias, d in raw.items()
+            if alias != _METADATA_KEY
+        }
+        canonical = {alias: record.to_dict() for alias, record in records.items()}
+        fingerprint = _canonical_hash(canonical)
+        stored = metadata.get("fingerprint")
+        if stored is not None and stored != fingerprint:
+            raise ValueError("consent fingerprint mismatch")
+        return records, int(metadata.get("revision", 0)), fingerprint
+
+    def _payload(self, records: dict[str, ConsentRecord], revision: int) -> dict[str, Any]:
+        canonical = {alias: record.to_dict() for alias, record in records.items()}
+        return {
+            _METADATA_KEY: {
+                "revision": revision,
+                "fingerprint": _canonical_hash(canonical),
+            },
+            **canonical,
+        }
+
+    def _mutate(self, mutation):
+        lock_path = self.path.with_name(f".{self.path.name}.lock")
+        with exclusive_state_lock(lock_path):
+            records, revision, fingerprint = self._read_disk_state()
+            working = deepcopy(records)
+            result = mutation(working)
+            if working == records:
+                self._records = records
+                self._revision = revision
+                self._fingerprint = fingerprint
+                return result
+            next_revision = revision + 1
+            payload = self._payload(working, next_revision)
+            atomic_write_json(self.path, payload)
+            self._records = working
+            self._revision = next_revision
+            self._fingerprint = payload[_METADATA_KEY]["fingerprint"]
+            return result
 
     def save(self) -> None:
-        self.path.parent.mkdir(parents=True, exist_ok=True)
-        payload = {alias: r.to_dict() for alias, r in self._records.items()}
-        tmp = self.path.with_suffix(".json.tmp")
-        tmp.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
-        tmp.replace(self.path)
+        desired = deepcopy(self._records)
+        self._mutate(lambda records: (records.clear(), records.update(desired)))
+
+    @property
+    def revision(self) -> int:
+        return self._revision
+
+    @property
+    def fingerprint(self) -> str:
+        return self._fingerprint
+
+    def reload(self) -> ConsentSnapshot:
+        lock_path = self.path.with_name(f".{self.path.name}.lock")
+        with exclusive_state_lock(lock_path):
+            self._load()
+        return self.snapshot()
+
+    def snapshot(self) -> ConsentSnapshot:
+        records = tuple(
+            deepcopy(self._records[alias].to_dict())
+            for alias in sorted(self._records)
+        )
+        return ConsentSnapshot(
+            revision=self._revision,
+            fingerprint=self._fingerprint,
+            records=records,
+        )
 
     def request_consent(
         self, alias: str, command: str, args: list[str], env: dict[str, str]
@@ -147,39 +246,43 @@ class ConsentStore:
             approved=False,
             approved_at=None,
         )
-        self._records[alias] = record
-        self.save()
-        return record
+        def mutation(records: dict[str, ConsentRecord]) -> ConsentRecord:
+            records[alias] = record
+            return record
+        return self._mutate(mutation)
 
     def approve(self, alias: str, approved_tools: set[str] | None = None) -> ConsentRecord:
         """사용자의 명시 승인. `approved_tools`가 None이면 "서버 시작"만 승인하고
         툴 allowlist는 비워둔다(별도로 `allow_tool()`을 호출해야 aggregator가
         노출한다) — "서버 등록 = 모든 툴 자동 허용"을 피한다."""
-        if alias not in self._records:
-            raise KeyError(f"승인 요청이 먼저 필요하다: {alias!r}")
-        record = self._records[alias]
-        record.approved = True
-        record.approved_at = datetime.now(UTC).isoformat()
-        if approved_tools is not None:
-            record.approved_tools |= set(approved_tools)
-        self.save()
-        return record
+        def mutation(records: dict[str, ConsentRecord]) -> ConsentRecord:
+            if alias not in records:
+                raise KeyError(f"승인 요청이 먼저 필요하다: {alias!r}")
+            record = records[alias]
+            record.approved = True
+            record.approved_at = datetime.now(UTC).isoformat()
+            if approved_tools is not None:
+                record.approved_tools |= set(approved_tools)
+            return record
+        return self._mutate(mutation)
 
     def revoke(self, alias: str) -> None:
-        if alias not in self._records:
-            raise KeyError(alias)
-        record = self._records[alias]
-        record.approved = False
-        record.approved_at = None
-        record.approved_tools = set()
-        self.save()
+        def mutation(records: dict[str, ConsentRecord]) -> None:
+            if alias not in records:
+                raise KeyError(alias)
+            record = records[alias]
+            record.approved = False
+            record.approved_at = None
+            record.approved_tools = set()
+        self._mutate(mutation)
 
     def allow_tool(self, alias: str, tool_name: str) -> None:
-        record = self._records.get(alias)
-        if record is None or not record.approved:
-            raise ConsentNotGrantedError(f"{alias!r} 서버가 아직 승인되지 않았다")
-        record.approved_tools.add(tool_name)
-        self.save()
+        def mutation(records: dict[str, ConsentRecord]) -> None:
+            record = records.get(alias)
+            if record is None or not record.approved:
+                raise ConsentNotGrantedError(f"{alias!r} 서버가 아직 승인되지 않았다")
+            record.approved_tools.add(tool_name)
+        self._mutate(mutation)
 
     def disallow_tool(self, alias: str, tool_name: str) -> None:
         """`allow_tool()`의 역연산 — 툴별 allowlist에서 하나를 뺀다.
@@ -195,11 +298,11 @@ class ConsentStore:
         실패한다. `조용히 자르지 않는다` 원칙과는 충돌하지 않는다 — 결과를
         숨기거나 왜곡하는 게 아니라 이미 도달한 상태를 정확히 보고할 뿐이다.
         """
-        record = self._records.get(alias)
-        if record is None:
-            return
-        record.approved_tools.discard(tool_name)
-        self.save()
+        def mutation(records: dict[str, ConsentRecord]) -> None:
+            record = records.get(alias)
+            if record is not None:
+                record.approved_tools.discard(tool_name)
+        self._mutate(mutation)
 
     def is_server_approved(self, alias: str) -> bool:
         record = self._records.get(alias)
@@ -226,12 +329,13 @@ class ConsentStore:
         승인은 따라가는 게 맞다. 기록이 없으면 조용히 아무것도 하지 않는다
         (등록만 하고 승인 요청 전인 서버의 rename은 정상 흐름이다).
         """
-        record = self._records.pop(old_alias, None)
-        if record is None:
-            return
-        record.alias = new_alias
-        self._records[new_alias] = record
-        self.save()
+        def mutation(records: dict[str, ConsentRecord]) -> None:
+            record = records.pop(old_alias, None)
+            if record is None:
+                return
+            record.alias = new_alias
+            records[new_alias] = record
+        self._mutate(mutation)
 
     def get(self, alias: str) -> ConsentRecord | None:
         return self._records.get(alias)

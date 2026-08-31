@@ -2,7 +2,16 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { buildLivePrompt } = require('./live-prompt');
+const { buildLivePrompt, buildLiveSystemPrompt, buildLiveTurnPrompt } = require('./live-prompt');
+
+test('persistent prompt split keeps generation rules static and turn text isolated', () => {
+  const system = buildLiveSystemPrompt();
+  const turn = buildLiveTurnPrompt({ userText: '삼성전자 시세' });
+  assert.match(system, /athena__render_canvas/);
+  assert.doesNotMatch(system, /삼성전자 시세/);
+  assert.equal(turn, '사용자 질문:\n삼성전자 시세');
+  assert.equal(buildLivePrompt('삼성전자 시세'), `${system}\n\n${turn}`);
+});
 
 test('buildLivePrompt: 사용자 질문이 원문 그대로 마지막에 들어간다', () => {
   const p = buildLivePrompt('삼성전자 최근 공시에 대해서 알려줘');

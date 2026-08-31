@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "provider": "fixture",
+  "runtimeGeneration": 7,
+  "turns": [
+    {
+      "clientSubmitId": "fixture-submit-1",
+      "events": [
+        { "type": "turn-started", "sequence": 1 },
+        { "type": "text-delta", "sequence": 2, "text": "fixture" },
+        { "type": "turn-completed", "sequence": 3, "status": "completed" }
+      ]
+    }
+  ]
+}

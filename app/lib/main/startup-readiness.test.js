@@ -376,6 +376,34 @@ test('bounded initial readiness fails after its task-specific attempt budget', a
   assert.deepEqual(attempts, [25, 25, 25]);
 });
 
+test('dependency task chains never start provider warmup before secret migration completes', async () => {
+  const migration = deferred();
+  const calls = [];
+  const readiness = new StartupReadiness({
+    runId: 'provider-warm-order',
+    tasks: [
+      { id: 'mcp-env', label: 'MCP migration', kind: 'gate' },
+      { id: 'provider-warm', label: 'Provider warmup', kind: 'gate' },
+    ],
+  });
+  readiness.setRunner('mcp-env', async () => {
+    calls.push('migration:start');
+    await migration.promise;
+    calls.push('migration:end');
+    return {};
+  });
+  readiness.setRunner('provider-warm', async () => { calls.push('warmup'); return {}; });
+  const running = runStartupOrchestration({
+    readiness,
+    dependencyTaskChains: [['mcp-env', 'provider-warm']],
+  });
+  await Promise.resolve();
+  assert.deepEqual(calls, ['migration:start']);
+  migration.resolve();
+  await running;
+  assert.deepEqual(calls, ['migration:start', 'migration:end', 'warmup']);
+});
+
 test('brain startup classification distinguishes deliberate disable from unavailable/degraded failure', () => {
   assert.deepEqual(classifyBrainStartupStatus({
     startup_ingestion_status: null,
