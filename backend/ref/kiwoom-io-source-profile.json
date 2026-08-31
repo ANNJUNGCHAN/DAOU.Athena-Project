@@ -32,10 +32,13 @@
   },
   "official_github_audit": {
     "repository": "https://github.com/Kiwoom-Securities/Kiwoom-REST-API",
-    "commit": "69642586f7d84ba9fd8a6faf1f1537c7fda6568b",
-    "commit_date": "2026-07-30",
-    "spec_url": "https://github.com/Kiwoom-Securities/Kiwoom-REST-API/blob/69642586f7d84ba9fd8a6faf1f1537c7fda6568b/kiwoom/_data/kiwoom_api_spec.json",
-    "license_url": "https://github.com/Kiwoom-Securities/Kiwoom-REST-API/blob/69642586f7d84ba9fd8a6faf1f1537c7fda6568b/LICENSE.md",
+    "commit": "e24843fc82a78fe7b6ec68625b57f267eda95e77",
+    "commit_date": "2026-08-31",
+    "spec_url": "https://github.com/Kiwoom-Securities/Kiwoom-REST-API/blob/e24843fc82a78fe7b6ec68625b57f267eda95e77/kiwoom/_data/kiwoom_api_spec.json",
+    "spec_sha256": "42a7b3912c9d9588c83bdc2db7779c8d2e038703a2b5562e54ef46ae905cba79",
+    "previous_verified_commit": "69642586f7d84ba9fd8a6faf1f1537c7fda6568b",
+    "spec_unchanged_from_previous_verified_commit": true,
+    "license_url": "https://github.com/Kiwoom-Securities/Kiwoom-REST-API/blob/e24843fc82a78fe7b6ec68625b57f267eda95e77/LICENSE.md",
     "license_summary": "All rights reserved; use derived audit facts and links only",
     "operation_count": 337,
     "http_operation_count": 306,
@@ -247,5 +250,32 @@
         "0u"
       ]
     ]
+  },
+  "official_portal_audit": {
+    "endpoint": "https://openapi.kiwoom.com/guide/getApiInfoListAjax",
+    "method": "POST",
+    "fetched_at": "2026-08-31T19:08:14+09:00",
+    "response_sha256": "5091b10c2935297770180737994d4fb930d866a0e5b5b66c70b9d62180e703e0",
+    "operation_count": 347,
+    "shared_with_official_github_count": 337,
+    "portal_only_operation_ids": [
+      "ka00190",
+      "ka00196",
+      "ka04196",
+      "ka10103",
+      "usa10103",
+      "ust21200",
+      "ust21201",
+      "ust21203",
+      "ust21204",
+      "ust21205"
+    ],
+    "current_299_scope_portal_only_operation_ids": [],
+    "current_299_scope_response_field_additions": [],
+    "official_source_divergence_ids_in_current_scope": [
+      "0D",
+      "ka10173"
+    ],
+    "authority_policy": "Preserve the union of response fields published by the current official portal and current official GitHub spec; source divergence is never grounds for deleting raw data."
   }
 }

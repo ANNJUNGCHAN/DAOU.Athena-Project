@@ -766,6 +766,34 @@ test('resolveQuery 메모는 같은 질의를 재사용하고 replace()로만 �
   assert.equal(index.resolveQuery('한국전력 현재가')?.code, '015760');
 });
 
+// 카드 v3의 6개 빌더는 각자 독립적으로 resolveQuery(text)를 먼저 부른 뒤에야
+// 자기 닫힌 문법을 검사한다 — 호출 자체는 6번이 맞다. 증명해야 하는 건
+// "실계산"이 1번만 도는지다. _resolveMemo는 계산이 끝난 뒤 딱 한 번만
+// 쓰이고(캐시 히트 경로는 읽기만 한다) replace()로만 리셋되므로, 그 슬롯에
+// 대한 쓰기 횟수를 세면 재계산 없이 캐시가 재사용됐는지 직접 증명된다.
+test('카드 v3의 6개 빌더가 같은 질의를 공유해도 resolveQuery 실계산은 한 번만 돈다', () => {
+  const index = new StockEntityIndex();
+  index.replace([{ code: '005930', name: '삼성전자', market: '0' }]);
+
+  let computeCount = 0;
+  let memo = null;
+  Object.defineProperty(index, '_resolveMemo', {
+    configurable: true,
+    get() { return memo; },
+    set(value) { computeCount += 1; memo = value; },
+  });
+
+  const text = '005930 현재가';
+  buildQuoteDataset(text, index);
+  buildChartDataset(text, index);
+  buildOrderBookDataset(text, index);
+  buildInvestorFlowDataset(text, index);
+  buildTradingSourceDataset(text, index);
+  buildStockInfoDataset(text, index);
+
+  assert.equal(computeCount, 1);
+});
+
 test('quote binder keeps entity resolution separate from quote intent routing', () => {
   const index = new StockEntityIndex();
   index.replace(resolverRecords());

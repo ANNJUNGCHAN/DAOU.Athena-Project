@@ -251,6 +251,8 @@ Athena Paper file `01M0VGPX92K1TER4ZV9PWGQJJZ`의 page `7-2` `통합 카드`에�
 
 Paper의 QA annotation에는 다음 수치를 표시할 수 있지만 일반 사용자 본문에는 내부 operation ID나 alias를 노출하지 않는다.
 
+여기서 299는 Athena가 현재 고정한 non-OAuth Canvas route 집합이다. 2026-08-31 키움 공식 포털 catalog 전체 347개와 동일한 숫자가 아니다. 포털에만 추가된 10개 operation은 현행 299에 포함되지 않으며, 이 문서의 raw coverage와 섞지 않고 별도 onboarding 범위로 관리한다.
+
 | 항목 | 현재 값 | 상태 |
 |---|---:|---|
 | 카드 종류 | 6 | registry·Paper 검증됨 |
@@ -259,9 +261,12 @@ Paper의 QA annotation에는 다음 수치를 표시할 수 있지만 일반 사
 | unassigned / duplicated | 0 / 0 | 검증됨 |
 | raw field occurrence | 3,705 | 보존 기준 검증됨 |
 | unique field path | 3,703 | 보존 기준 검증됨 |
-| unresolved semantic alias | 3 (`951`, `924`, `1279`) | 미완료 |
+| semantic business raw | 3,531 | backend destination 검증됨; Paper 실표시 전수 검증 필요 |
+| official opaque raw | 3 (`951`, `924`, `1279`) | 값·경로 보존 및 중립 named-detail 배치 완료; 공식 의미 미확정 |
 
-Paper 디자인과 6-card registry만으로 semantic render 100%를 선언하지 않는다. 현재 field coverage의 `release_ready`는 `false`다. 각 field가 실제 Runtime payload에서 올바른 section·column·detail view에 도달하는 자동 검증과 세 alias의 공식 의미 확인이 끝나야 한다.
+Paper 디자인과 6-card registry만으로 semantic render 100%를 선언하지 않는다. 현재 field coverage의 `release_ready`는 `false`다. exact 공식 source tuple이 있는 3,534개 business raw 각각이 Paper와 Runtime의 올바른 section·column·chart·detail view에 도달하는 자동 검증이 끝나야 한다. `951`, `924`, `1279`는 삭제하거나 의미를 추측하지 않고, 명세가 `Extra Item`으로 제공한 값임을 중립적으로 표시한다.
+
+검수 시 `평균`, `괴리`, `비중`, `누적`, `상환`, `대비` 같은 단어를 삭제 기준으로 사용하지 않는다. 공식 operation과 response JSON path/FID가 존재하면 raw로 유지한다. Athena가 raw를 계산·비교·환산·순위화·해석해 추가한 값만 제거 대상이다.
 
 ## 15. 완료 기준
 
@@ -272,4 +277,5 @@ Paper 디자인과 6-card registry만으로 semantic render 100%를 선언하지
 - 실시간 자동 등록, stale, partial error, 재연결 상태가 카드별로 정의된다.
 - 주문 카드가 draft·preview·confirmation·receipt 경계를 시각적으로 유지한다.
 - 실제 Paper artboard screenshot과 Runtime capture를 비교해 fit, 대비, 정렬, 정보 계층을 검증한다.
-- semantic alias `951`, `924`, `1279`가 해소되고 field-level release gate가 통과한다.
+- official opaque raw `951`, `924`, `1279`의 값이 중립 named-detail에서 소실 없이 접근 가능하고, 의미·단위는 공식 명세가 제공하기 전까지 추측하지 않는다.
+- 3,534개 official business raw의 Paper artboard/layer 및 Runtime renderer coverage가 모두 0 missing을 기록한다.

@@ -29,6 +29,44 @@ def test_push_enqueues_envelope():
     assert app.state.canvas_events.get_nowait() == envelope
 
 
+def test_generic_push_gains_server_derived_paper_card_contract():
+    """canonical operation_ref만 실어도 서버가 CC 카드 계약을 붙인다.
+
+    모델이 MCP로 밀어넣는 캔버스 블록은 통합 카드 필드를 자원해서 싣지 않는다.
+    그 봉투가 계약 없이 통과하면 렌더러가 레거시 범용 카드로 떨어뜨리므로,
+    Paper 카드 전용 배선을 서버에서 강제한다.
+    """
+
+    app = _app()
+    client = TestClient(app)
+    response = client.post(
+        "/api/v1/canvas/push",
+        json={
+            "canvas_type": "facts",
+            "operation_ref": "base:ka10060",
+            "data": {"stk_cd": "005930"},
+        },
+    )
+    assert response.status_code == 200
+    queued = app.state.canvas_events.get_nowait()
+    assert queued["card_id"] == "CC-03"
+    assert queued["card_kind"] == "instrument"
+    assert queued["view_recipe"]["recipe_id"]
+    assert queued["presentation_contract"]["sections"]
+
+
+def test_generic_push_without_operation_ref_stays_uncontracted():
+    """operation_ref가 없는 봉투(비 키움 소스)는 그대로 통과한다."""
+
+    app = _app()
+    client = TestClient(app)
+    envelope = {"canvas_type": "chart", "data": {"symbol": "005930", "bars": []}}
+    response = client.post("/api/v1/canvas/push", json=envelope)
+    assert response.status_code == 200
+    queued = app.state.canvas_events.get_nowait()
+    assert "card_id" not in queued
+
+
 def test_push_requires_canvas_type():
     client = TestClient(_app())
     response = client.post("/api/v1/canvas/push", json={"data": {}})
