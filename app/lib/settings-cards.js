@@ -113,7 +113,7 @@ function closeWarnBar(message) {
 }
 
 // 확인 버튼은 ghost + is-danger(경고색)다 — primary(브랜드색)를 쓰지 않는다.
-// MCP 카드는 "+ 서버 등록"이 이미 화면 내 유일한 브랜드색 자리를 쓰고
+// 플러그인 카드는 "+ 서버 등록"이 이미 화면 내 유일한 브랜드색 자리를 쓰고
 // 있고(AT-ST-004 Desc 1.2), 계좌 카드도 같은 규칙으로 맞춘다. 클릭 핸들러는
 // 호출자가 붙인다 — 여기서는 뼈대만 만든다.
 function deleteConfirmBar(message) {
@@ -186,7 +186,9 @@ function detachSheet(card, root) {
 const NAV_ITEMS = [
   { key: 'screen', label: '화면' },
   { key: 'accounts', label: '계좌', countChannel: 'athena:account-list', countKey: 'accounts' },
-  { key: 'mcp', label: 'MCP 서버', countChannel: 'athena:mcp-list', countKey: 'servers' },
+  // Paper 플러그인 02 — 설정에서도 이름은 "플러그인"이다. 플러그인 모드가
+  // 허브·추천 설치를 맡고, 이 카드는 스니펫 직접 등록과 감사 로그를 맡는다.
+  { key: 'mcp', label: '플러그인', countChannel: 'athena:mcp-list', countKey: 'servers' },
   { key: 'model', label: '모델' },
   // Paper 보드 22 — 그래프 수집·노출 설정. 배지는 개수가 아니라 노출 on/off
   // 상태다: 대화 모델에 성향 그래프가 열려 있는지를 켜짐/꺼짐으로 보여준다.
@@ -884,7 +886,7 @@ async function refreshMcpCard(card, head, body) {
   } catch (err) {
     clear(head);
     clear(body);
-    missingHandlerCard(head, body, 'MCP 서버', 'athena:mcp-list');
+    missingHandlerCard(head, body, '플러그인', 'athena:mcp-list');
     body.appendChild(errorNote(String((err && err.message) || err)));
     return;
   }
@@ -898,7 +900,7 @@ async function refreshMcpCard(card, head, body) {
   const toolTotal = servers.reduce((sum, s) => sum + (Number(s.toolCount) || 0), 0);
 
   head.appendChild(row('uk-settings-title', [
-    el('span', 'uk-settings-name', 'MCP 서버'),
+    el('span', 'uk-settings-name', '플러그인'),
     el('span', 'uk-settings-count', `${servers.length}개 등록 · ${connectedCount}개 연결됨 · ${toolTotal}개 툴 노출`),
   ]));
   const actions = row('uk-settings-actions', []);
@@ -908,7 +910,7 @@ async function refreshMcpCard(card, head, body) {
   head.appendChild(actions);
 
   if (!servers.length) {
-    body.appendChild(emptyState('등록된 MCP 서버가 없다', '스니펫 붙여넣기 또는 + 서버 등록으로 시작한다'));
+    body.appendChild(emptyState('등록된 플러그인이 없다', '플러그인 모드의 추천에서 설치하거나 여기서 스니펫으로 직접 등록한다'));
   } else {
     body.appendChild(buildMcpTable(servers, refresh, (alias) => openMcpProbeSheet(card, alias, refresh)));
   }
@@ -995,7 +997,7 @@ function buildMcpTable(servers, refresh, onRowClick) {
           res = await window.athena.invoke('athena:mcp-remove', { alias: s.alias });
         } catch { threw = true; }
         if (threw || !(res && res.ok)) {
-          bar.appendChild(errorNote(threw ? 'MCP 서버 삭제 기능을 아직 사용할 수 없다 (athena:mcp-remove 핸들러 없음)' : '삭제에 실패했다'));
+          bar.appendChild(errorNote(threw ? '플러그인 삭제 기능을 아직 사용할 수 없다 (athena:mcp-remove 핸들러 없음)' : '삭제에 실패했다'));
           cancelBtn.disabled = false;
           confirmBtn.disabled = false;
           confirmBtn.querySelector('.uk-btn-label').textContent = '삭제';
@@ -1011,13 +1013,13 @@ function buildMcpTable(servers, refresh, onRowClick) {
   return wrap;
 }
 
-// ---- AT-ST-005: MCP 등록 — 스니펫 · 승인 시트 ----
+// ---- AT-ST-005: 플러그인 직접 등록 — 스니펫 · 승인 시트 ----
 // 카드 1(스니펫 붙여넣기·별칭 정규화)과 카드 2(동의 게이트·승인)를 한 시트
 // 안에서 순서대로 보여준다. 카드 2는 스니펫에서 감지된 서버를 "한 번에 하나씩"
 // 심사한다(승인/거부 버튼이 스펙상 화면 내 유일한 브랜드색 요소이므로, staged
 // 서버가 여럿이어도 동시에 여러 개의 브랜드색 "승인" 버튼을 띄우지 않는다).
 function openMcpRegisterSheet(card, onDone) {
-  const { root, body } = sheet('MCP 서버 등록', {
+  const { root, body } = sheet('플러그인 직접 등록', {
     subtitle: '클로드 데스크탑 설정 블록을 그대로 붙여넣는다',
     onClose: () => detachSheet(card, root),
   });
@@ -1109,7 +1111,7 @@ function openMcpRegisterSheet(card, onDone) {
     }
     const current = stagedList[queueIndex];
     const gateHead = row('uk-settings-title', [
-      el('span', 'uk-settings-name', 'MCP 서버 시작 승인'),
+      el('span', 'uk-settings-name', '플러그인 시작 승인'),
       pill('대기 중', 'dim'),
     ]);
     gateWrap.appendChild(gateHead);

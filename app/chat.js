@@ -1610,11 +1610,26 @@ async function loadMentionAliases() {
     const res = await window.athena.invoke('athena:mcp-list');
     mentionState.aliases = ((res && res.servers) || [])
       .filter((s) => s && s.approved)
-      .map((s) => ({ alias: s.alias, hint: [s.command, s.argsPreview].filter(Boolean).join(' ') }));
+      .map((s) => ({
+        alias: s.alias,
+        // 카탈로그에서 설치한 서버는 사람이 읽는 이름을 함께 보여준다. 모르는
+        // 별칭에는 이름을 지어내지 않고 실행 명령을 그대로 힌트로 쓴다.
+        name: (window.AthenaLib && window.AthenaLib.PluginCatalog
+          && window.AthenaLib.PluginCatalog.displayNameFor(s.alias)) || null,
+        hint: [s.command, s.argsPreview].filter(Boolean).join(' '),
+      }));
     mentionState.loaded = true;
   } catch { /* 목록 실패 — 멘션 없이도 입력은 정상이어야 한다 */ }
 }
 void loadMentionAliases();
+
+// 플러그인을 설치·승인·철회·삭제하면 이 목록이 바로 낡는다. 한 번 읽고 세션
+// 내내 캐시하면 "방금 설치했는데 @로 안 뜬다"가 된다 — canvas.js가 레지스트리를
+// 다시 읽을 때마다 보내는 신호로 무효화한다.
+window.addEventListener('athena:plugins-changed', () => {
+  mentionState.loaded = false;
+  void loadMentionAliases().then(() => { if (!$kiumiMenu.hidden) renderKiumiMenu(); });
+});
 
 // 커서 앞의 "@토큰"을 찾는다. 없으면 null.
 function mentionTokenAtCaret() {
@@ -1653,7 +1668,7 @@ function renderMentionMenu(items) {
     name.textContent = `@${item.alias}`;
     const hint = document.createElement('span');
     hint.className = 'mention-item-hint';
-    hint.textContent = item.hint;
+    hint.textContent = item.name ? `${item.name} · ${item.hint}` : item.hint;
     row.append(name, hint);
     // mousedown — click은 input blur 뒤라 토큰 위치가 흔들린다.
     row.addEventListener('mousedown', (e) => { e.preventDefault(); insertMention(item.alias); });
@@ -1674,7 +1689,8 @@ $input.addEventListener('input', () => {
   void loadMentionAliases();
   const needle = token.query.toLowerCase();
   const items = mentionState.aliases
-    .filter((s) => s.alias.toLowerCase().includes(needle))
+    .filter((s) => s.alias.toLowerCase().includes(needle)
+      || String(s.name || '').toLocaleLowerCase('ko-KR').includes(token.query.toLocaleLowerCase('ko-KR')))
     .slice(0, 8);
   if (!items.length) { closeMentionMenu(); return; }
   mentionState.active = 0;
@@ -1987,7 +2003,10 @@ function renderKiumiMenu() {
   const sep = document.createElement('div');
   sep.className = 'mp-sep';
   $kiumiMenu.appendChild(sep);
-  $kiumiMenu.appendChild(kiumiSection('플러그인 UI 초안'));
+  // 키우미의 플러그인 구역은 "현재 대화에서 빠르게 부르기"다(설계서: 키우미는
+  // 설치된 플러그인의 빠른 실행 진입점). 그래서 고정 목록이 아니라 실제로
+  // 등록·승인된 서버만 싣고, 고르면 입력란에 @별칭을 넣어 다음 턴이 그 서버의
+  // 도구를 먼저 쓰게 한다. 관리는 아래 설정 구역의 항목이 맡는다.
   const openPlugin = (view) => {
     closeKiumiMenu();
     if (window.AthenaCanvasMode && typeof window.AthenaCanvasMode.setView === 'function') {
@@ -2000,8 +2019,26 @@ function renderKiumiMenu() {
       window.AthenaPluginCanvas.setView(view);
     }
   };
-  $kiumiMenu.appendChild(kiumiItem('search', 'DART 전자공시', '세션 미리보기 · 기능 허용', () => openPlugin('hub')));
-  $kiumiMenu.appendChild(kiumiItem('sheet', 'Google Sheets 내보내기', '세션 미리보기 · 현재 꺼짐', () => openPlugin('manage')));
+  $kiumiMenu.appendChild(kiumiSection('플러그인'));
+  if (mentionState.aliases.length) {
+    mentionState.aliases.slice(0, 6).forEach((server) => {
+      $kiumiMenu.appendChild(kiumiItem(
+        'plugin',
+        server.name || server.alias,
+        `@${server.alias} · ${server.hint}`,
+        () => {
+          closeKiumiMenu();
+          const value = $input.value;
+          const spacer = value && !/\s$/.test(value) ? ' ' : '';
+          $input.value = `${value}${spacer}@${server.alias} `;
+          $input.focus();
+          $input.setSelectionRange($input.value.length, $input.value.length);
+        },
+      ));
+    });
+  } else {
+    $kiumiMenu.appendChild(kiumiItem('plugin', '설치된 플러그인 없음', '플러그인 모드에서 추천을 설치합니다', () => openPlugin('hub')));
+  }
   const settingsSep = document.createElement('div');
   settingsSep.className = 'mp-sep';
   $kiumiMenu.appendChild(settingsSep);
@@ -2020,6 +2057,9 @@ function toggleKiumiMenu() {
   if ($kiumiMenu.hidden) {
     renderKiumiMenu();
     $kiumiMenu.hidden = false;
+    // 첫 로드가 아직 안 끝났으면 "설치된 플러그인 없음"이 잠깐 뜬다 — 목록이
+    // 도착하면 열려 있는 메뉴를 그 자리에서 다시 그린다(이미 로드됐으면 즉시 반환).
+    void loadMentionAliases().then(() => { if (!$kiumiMenu.hidden) renderKiumiMenu(); });
   } else {
     closeKiumiMenu();
   }

@@ -354,7 +354,7 @@ async function caseLIV098(ctx) {
 
   await openSettingsPanel(shellWin);
   await wait(600);
-  await clickNavItem(shellWin, 'MCP 서버');
+  await clickNavItem(shellWin, '플러그인');
   await wait(1500);
   const openSheet = await clickByText(shellWin, '.card.mcp button', '+ 서버 등록');
   await wait(400);
@@ -432,7 +432,7 @@ async function caseLIV099(ctx) {
   const auditBefore = auditSnapshot(AUDIT_DIR);
   await openSettingsPanel(shellWin);
   await wait(600);
-  await clickNavItem(shellWin, 'MCP 서버');
+  await clickNavItem(shellWin, '플러그인');
   await wait(1500);
   const openRow = await shellWin.webContents.executeJavaScript(`(() => {
     const rows = Array.from(document.querySelectorAll('.card.mcp .uk-row.is-clickable'));
@@ -523,7 +523,7 @@ async function caseLIV100(ctx) {
   const { shellWin, evDir } = ctx;
   await openSettingsPanel(shellWin);
   await wait(600);
-  await clickNavItem(shellWin, 'MCP 서버');
+  await clickNavItem(shellWin, '플러그인');
   await wait(1500);
   const listDump = await shellWin.webContents.executeJavaScript(`(() => {
     return Array.from(document.querySelectorAll('.card.mcp .uk-row')).map((r) => ({

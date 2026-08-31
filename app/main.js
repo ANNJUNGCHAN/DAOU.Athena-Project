@@ -4126,6 +4126,11 @@ async function handleMcpApprove(e, { alias } = {}) {
   return runMcpMutation('approve', () => mcpCli.approve(alias));
 }
 
+async function handleMcpRevoke(e, { alias } = {}) {
+  if (!providerRuntimeEnabled) return mcpCli.revoke(alias);
+  return runMcpMutation('revoke', () => mcpCli.revoke(alias));
+}
+
 function handleMcpProbe(e, { alias } = {}) {
   // probe는 실제로 upstream 서버를 spawn한다 — 그 서버 하나만의 env override를
   // 넘긴다(전체가 아니라 alias로 필터링, mcp-env.js buildEnvOverrides() 참고).
@@ -4146,6 +4151,7 @@ ipcMain.handle('athena:mcp-list', handleMcpList);
 ipcMain.handle('athena:mcp-stage-snippet', handleMcpStageSnippet);
 ipcMain.handle('athena:mcp-register', handleMcpRegister);
 ipcMain.handle('athena:mcp-approve', handleMcpApprove);
+ipcMain.handle('athena:mcp-revoke', handleMcpRevoke);
 ipcMain.handle('athena:mcp-probe', handleMcpProbe);
 ipcMain.handle('athena:mcp-allow-tool', handleMcpAllowTool);
 ipcMain.handle('athena:mcp-remove', handleMcpRemove);
@@ -4749,6 +4755,7 @@ module.exports = {
     mcpStageSnippet: handleMcpStageSnippet,
     mcpRegister: handleMcpRegister,
     mcpApprove: handleMcpApprove,
+    mcpRevoke: handleMcpRevoke,
     mcpProbe: handleMcpProbe,
     mcpAllowTool: handleMcpAllowTool,
     mcpRemove: handleMcpRemove,
