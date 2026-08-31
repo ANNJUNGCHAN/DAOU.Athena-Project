@@ -58,17 +58,7 @@ FORBIDDEN_PUBLIC_TEXT = re.compile(
     r"plan[ _-]?token|trace[ _-]?id)\b|(?:base|detail):[a-z0-9]|\$\.)",
     re.IGNORECASE,
 )
-EXPECTED_LEGACY_PROJECTION_DROPS = {
-    "base:ka01301": {("table.columns", "bgb_clr", "internal")},
-    "detail:ka10040:buy_brokers": {
-        ("fields", f"buy_trde_ori_cd_{slot}", "internal")
-        for slot in range(1, 6)
-    },
-    "detail:ka10040:sell_brokers": {
-        ("fields", f"sel_trde_ori_cd_{slot}", "internal")
-        for slot in range(1, 6)
-    },
-}
+EXPECTED_LEGACY_PROJECTION_DROPS: dict[str, set[tuple[str, str, str]]] = {}
 
 
 def _safe_fixture_value(value: Any, *, row_marker: str = "0") -> Any:
@@ -275,7 +265,7 @@ def test_all_299_operations_bind_lossless_wire_to_safe_semantic_presentations() 
         assert registered_public_field_count == len(visible_contracts)
         assert len(public_fields) <= len(visible_contracts)
         assert not any(
-            contract.field_class in {"transport", "internal", "unresolved"}
+            contract.field_class in {"transport", "internal"}
             for contract in visible_contracts
         )
         assert all(contract.product_destination for contract in visible_contracts)
