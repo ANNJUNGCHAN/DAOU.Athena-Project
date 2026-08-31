@@ -1858,6 +1858,9 @@ const graphMode = window.AthenaLib.GraphModeController.createGraphModeController
     // Paper 47/48의 네 번째 모드. 허브·관리 내용은 PluginCanvas가 소유하고,
     // 이 컨트롤러는 다른 중앙 표면과의 배타 가시성만 소유한다.
     plugin: document.getElementById('pluginCanvas'),
+    // 5번째 모드(P1 모드 골격, backtest-mode-plan.md §3.2). 내용은
+    // BacktestCanvas가 소유하고, 이 컨트롤러는 배타 가시성만 소유한다.
+    backtest: document.getElementById('backtestCanvas'),
     // 보드 07 성향 신호 표 — 그래프 표면이라 답변 모드에선 숨는다(아래 §요약 뷰
     // 배선 주석·US-007 참고). graphMode.applyVisibility() 하나가 소유한다.
     summaryTable: document.getElementById('graphSummaryTable'),
@@ -1931,6 +1934,14 @@ const pluginCanvas = window.AthenaLib.PluginCanvas.createPluginCanvas({
 });
 pluginCanvas.mount();
 window.AthenaPluginCanvas = pluginCanvas;
+
+// --- 백테스트모드 캔버스 배선 (P1 모드 골격, backtest-mode-plan.md §3.2) -------
+// 이번 단계는 정직한 빈 상태 하나뿐이다 — 전략 설계·실행·결과는 P2~P4가 붙인다.
+const backtestCanvas = window.AthenaLib.BacktestCanvas.createBacktestCanvas({
+  container: document.getElementById('backtestCanvas'),
+});
+backtestCanvas.mount();
+window.AthenaBacktestCanvas = backtestCanvas;
 
 // --- 에이전트모드 캔버스 배선 (4단계, Paper 보드 39) -------------------------
 //

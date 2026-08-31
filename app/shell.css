@@ -483,6 +483,33 @@ body { margin: 0; overflow: hidden; }
   text-align: center;
 }
 
+/* ---------- 백테스트모드 캔버스(P1 모드 골격, backtest-mode-plan.md §3.2) ----------
+ * 모드 네비 버튼(#modeNavBacktest)은 .sidebar-mode-item이 이미 클래스 기반이라
+ * 추가 CSS가 필요 없다(위 규칙을 그대로 상속). #backtestCanvas는 #mosaic/
+ * #agentCanvas와 형제라 .mosaic.glass 공통 규칙을 이미 받는다 — 이번 단계는
+ * 정직한 빈 상태 하나뿐이라(lib/backtest-canvas.js) canvas.css의
+ * .graph-mode-unavailable과 같은 톤으로 제목+부제를 가운데 두는 것만 얹는다.
+ * 폼/코드/결과 화면 스타일은 Paper 58~64 선행 후 후속 단계(키우미 백테스트
+ * 얼굴도 마찬가지 — agent/plugin처럼 지금은 기본 얼굴로 폴백한다). */
+#backtestCanvas {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 32px;
+}
+.backtest-canvas-empty-title {
+  font-family: var(--font-body);
+  font-size: var(--text-lg);
+  color: var(--color-k-text);
+}
+.backtest-canvas-empty-sub {
+  margin-top: 8px;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--color-k-faint);
+}
+
 /* ---------- 에이전트모드 캔버스(리프 1.2.2, 4단계, Paper 보드 39 실측) ----------
  * #agentCanvas는 #mosaic/#graphCanvas와 형제라 .mosaic.glass 공통 규칙을 이미
  * 받는다 — 여기서는 레이아웃(padding/flex)만 이 요소 하나에 얹는다. */

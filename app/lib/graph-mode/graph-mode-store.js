@@ -16,6 +16,7 @@ const VIEW_SUMMARY = 'summary';
 const VIEW_GRAPH = 'graph';
 const VIEW_AGENT = 'agent';
 const VIEW_PLUGIN = 'plugin';
+const VIEW_BACKTEST = 'backtest'; // 5번째 모드(D4, backtest-mode-plan.md §3.2) — 캔버스 자리 #backtestCanvas.
 const STAGE_CLUSTERS = 'clusters';
 const STAGE_EXPANDED = 'expanded';
 
@@ -64,13 +65,13 @@ function toggleView(state) {
   return { ...state, view: VIEW_GRAPH };
 }
 
-// 4값 독립 전이 — toggleView를 재사용하지 않는다. toggleView는 summary⇄graph
+// 5값 독립 전이 — toggleView를 재사용하지 않는다. toggleView는 summary⇄graph
 // 2값 하드코딩이라 setView(state,'agent')를 재사용하면 무조건 VIEW_GRAPH로
 // 튄다(실사용 결함, Rev.2에서 발견). 요청된 view를 직접 대입하고, 그래프를
 // 떠날 때만(목적지가 무엇이든) 펼침·선택을 버린다 — 그 상태는 그래프 밖에서
 // 의미가 없다.
 function setView(state, view) {
-  if (view !== VIEW_SUMMARY && view !== VIEW_GRAPH && view !== VIEW_AGENT && view !== VIEW_PLUGIN) return state;
+  if (view !== VIEW_SUMMARY && view !== VIEW_GRAPH && view !== VIEW_AGENT && view !== VIEW_PLUGIN && view !== VIEW_BACKTEST) return state;
   if (view === state.view) return state;
   if (state.view === VIEW_GRAPH) {
     return { ...state, view, stage: STAGE_CLUSTERS, expandedCluster: null, selectedEntityId: null, panel: null };
@@ -137,6 +138,7 @@ const __exports = {
   VIEW_GRAPH,
   VIEW_AGENT,
   VIEW_PLUGIN,
+  VIEW_BACKTEST,
   SURFACE_SUMMARY,
   SURFACE_MAP,
   STAGE_CLUSTERS,

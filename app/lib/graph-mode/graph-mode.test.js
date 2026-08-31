@@ -232,6 +232,12 @@ test('VIEW_PLUGIN을 export하고 setView(state, "plugin")은 plugin으로 전�
   assert.equal(state.view, 'plugin');
 });
 
+test('VIEW_BACKTEST를 export하고 setView(state, "backtest")는 backtest로 전이한다(D4, 5번째 모드)', () => {
+  assert.equal(store.VIEW_BACKTEST, 'backtest');
+  const state = store.setView(store.createInitialState(), store.VIEW_BACKTEST);
+  assert.equal(state.view, 'backtest');
+});
+
 test('setView는 summary⇄agent⇄graph 어느 방향으로도 직접 전이한다', () => {
   let state = store.createInitialState();
   state = store.setView(state, 'agent');
