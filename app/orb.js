@@ -49,6 +49,7 @@
   const factsCard = window.AthenaLib.FactsCard;
   const cardPrimitives = window.AthenaLib.CardPrimitives;
   const orderTicketLib = window.AthenaLib.OrderTicket;
+  const orbMiniCard = window.AthenaLib.OrbMiniCard;
 
   const $root = document.getElementById('orbRoot');
   const $orb = document.getElementById('orb');
@@ -1518,20 +1519,337 @@
     }
   });
 
+  // ---------- 미니 카드 확장(Paper 키우미 보드 09, 2026-09-01 전수검사) ----------
+  // 보드 09가 캔버스 9종 → 미니 10종의 상한과 공통 규칙을 확정했다. 그 전까지는
+  // table·chart·주문 티켓 셋만 카드가 되고 facts 일반·compound·event·action·
+  // status·reader·stream은 카드 없이 텍스트로 흘러갔다 — 사용자 쪽에서 보면
+  // "오브에서는 안 보이는 응답"이 있었다는 뜻이다.
+  //
+  // 무엇을 보여주고 무엇을 접을지는 lib/orb-mini-card.js(순수 함수, 단위 테스트로
+  // 상한과 고지 문구를 고정)가 정하고, 여기서는 DOM만 짓는다. 셸 캔버스의 16종
+  // 전용 렌더러는 여전히 재사용하지 않는다(보드 09 "축소판이 아니다") —
+  // buildOrbTableCard/buildOrbChartCard가 이미 그 방침으로 서 있는 것과 같다.
+
+  /** 카드 껍데기 — 표·차트 카드가 쓰는 것과 같은 머리(제목 + 부제). */
+  function orbCardShell(envelope, fallbackTitle, titleOverride) {
+    const [resolvedTitle, subtitle] = orbCardTitleAndSubtitle(envelope, fallbackTitle);
+    const card = document.createElement('div');
+    card.className = 'orb-fold-card';
+    const head = document.createElement('div');
+    head.className = 'orb-fold-card-head';
+    const titleEl = document.createElement('div');
+    titleEl.className = 'orb-fold-card-title';
+    titleEl.textContent = titleOverride || resolvedTitle;
+    head.appendChild(titleEl);
+    if (subtitle) {
+      const subtitleEl = document.createElement('div');
+      subtitleEl.className = 'orb-fold-card-subtitle';
+      subtitleEl.textContent = subtitle;
+      head.appendChild(subtitleEl);
+    }
+    card.appendChild(head);
+    return card;
+  }
+
+  /** 고지 한 줄. 빈 문자열·null이면 아무것도 붙이지 않는다(보드 09 규칙 2). */
+  function appendOrbNote(card, text) {
+    if (!text) return;
+    const note = document.createElement('div');
+    note.className = 'orb-fold-note';
+    note.textContent = text;
+    card.appendChild(note);
+  }
+
+  /** 라벨·값 한 줄. 표 카드의 .orb-fold-row 어휘를 그대로 쓴다. */
+  function orbLabelValueRow(label, value, tone) {
+    const row = document.createElement('div');
+    row.className = 'orb-fold-row';
+    const labelEl = document.createElement('div');
+    labelEl.className = 'orb-fold-cell-label';
+    labelEl.textContent = label;
+    const valueEl = document.createElement('div');
+    valueEl.className = tone ? `orb-fold-cell-value is-${tone}` : 'orb-fold-cell-value';
+    valueEl.textContent = value;
+    row.append(labelEl, valueEl);
+    return row;
+  }
+
+  /** 상태 배지 — 이벤트·주문 확인·인증 상태가 공유한다. 색은 상태를 나르되
+   * 색만으로 말하지 않는다: 항상 "무엇의 상태인지"를 라벨로 함께 쓴다
+   * (Paper 56 접근성 결정 — 비색상 단서를 같이 둔다). */
+  const ORB_STATE_TONE = Object.freeze({
+    connected: 'ok', ready: 'ok', done: 'ok', filled: 'ok',
+    connecting: 'warn', review: 'warn', executing: 'warn', in_doubt: 'warn', refreshing: 'warn',
+    disconnected: 'down', failed: 'down', error: 'down', expired: 'down', auth_required: 'down',
+  });
+  function orbStateBadge(kind, state) {
+    const badge = document.createElement('div');
+    const tone = ORB_STATE_TONE[String(state)] || 'flat';
+    badge.className = `orb-state-badge is-${tone}`;
+    const dot = document.createElement('span');
+    dot.className = 'orb-state-dot';
+    dot.setAttribute('aria-hidden', 'true');
+    const text = document.createElement('span');
+    text.className = 'orb-state-text';
+    text.textContent = `${kind} · ${state}`;
+    badge.append(dot, text);
+    return badge;
+  }
+
+  /** facts 필드 한 개의 표시 문자열과 톤 — 셸 캔버스 renderFactsFieldGroup과
+   * 같은 셀 프리미티브(lib/facts-card.js)를 쓴다. 두 표면이 같은 값을 다른
+   * 문자열로 보여주면 어느 쪽이 맞는지 사용자가 알 수 없다. */
+  function orbFactsValue(field) {
+    const key = field && field.key;
+    const value = field ? field.value : undefined;
+    const cell = factsCard.classifyCell(key);
+    if (cell === 'price' || cell === 'quantity') return { text: factsCard.formatNumeric(value), tone: null };
+    if (cell === 'datetime') return { text: factsCard.formatDatetime(value), tone: null };
+    if (cell === 'change') return { text: String(value), tone: factsCard.changeTone(key, value) };
+    return { text: String(value), tone: null };
+  }
+
+  function orbFieldRow(field) {
+    const { text, tone } = orbFactsValue(field);
+    const label = (field && (field.label != null ? field.label : field.key)) || '';
+    return orbLabelValueRow(String(label), text, tone);
+  }
+
+  function orbTableEl() {
+    const table = document.createElement('div');
+    table.className = 'orb-fold-table';
+    return table;
+  }
+
+  // ── 03 사실(facts 일반) ──
+  function buildOrbFactsCard(envelope) {
+    const fields = (envelope.data && Array.isArray(envelope.data.fields)) ? envelope.data.fields : [];
+    const picked = orbMiniCard.pickFactsRows(fields);
+    if (!picked.shown.length) return null; // 빈 카드를 그리지 않는다
+    const card = orbCardShell(envelope, '사실');
+    const table = orbTableEl();
+    for (const field of picked.shown) table.appendChild(orbFieldRow(field));
+    card.appendChild(table);
+    appendOrbNote(card, orbMiniCard.foldNote('facts', { items: picked.hidden }));
+    return card;
+  }
+
+  // ── 04 복합(compound) ──
+  // 봉투 계약은 canvas.js와 같다: data.header(스칼라 필드) + data.table{columns,rows}.
+  function buildOrbCompoundCard(envelope) {
+    const data = (envelope.data && typeof envelope.data === 'object') ? envelope.data : {};
+    const tableData = (data.table && typeof data.table === 'object') ? data.table : {};
+    const rawCols = Array.isArray(tableData.columns) ? tableData.columns : [];
+    const rawRows = Array.isArray(tableData.rows) ? tableData.rows : [];
+    const picked = orbMiniCard.pickCompound(data.header, rawRows);
+    if (!picked.scalars.shown.length && !picked.table.shown.length) return null;
+    const card = orbCardShell(envelope, '복합');
+
+    if (picked.scalars.shown.length) {
+      const band = document.createElement('div');
+      band.className = 'orb-band';
+      for (const field of picked.scalars.shown) {
+        const cell = document.createElement('div');
+        cell.className = 'orb-band-cell';
+        const label = document.createElement('div');
+        label.className = 'orb-band-label';
+        label.textContent = String((field.label != null ? field.label : field.key) || '');
+        const { text, tone } = orbFactsValue(field);
+        const value = document.createElement('div');
+        value.className = tone ? `orb-band-value is-${tone}` : 'orb-band-value';
+        value.textContent = text;
+        cell.append(label, value);
+        band.appendChild(cell);
+      }
+      card.appendChild(band);
+    }
+
+    let hiddenCols = 0;
+    if (picked.table.shown.length && rawCols.length) {
+      const folded = columnFold.foldColumns(rawCols, ORB_FOLD_CARD_WIDTH_PX);
+      hiddenCols = folded.hidden.length;
+      const grid = orbTableEl();
+      const head = document.createElement('div');
+      head.className = 'orb-fold-row is-head';
+      folded.visible.forEach((col, i) => {
+        const cell = document.createElement('div');
+        cell.className = i === 0 ? 'orb-fold-cell-label' : 'orb-fold-cell-value';
+        cell.textContent = (col && col.label != null ? col.label : (col && col.key) || '');
+        head.appendChild(cell);
+      });
+      grid.appendChild(head);
+      for (const row of picked.table.shown) {
+        const tr = document.createElement('div');
+        tr.className = 'orb-fold-row';
+        folded.visible.forEach((col, i) => {
+          const cell = document.createElement('div');
+          cell.className = i === 0 ? 'orb-fold-cell-label' : 'orb-fold-cell-value';
+          const v = row ? row[col.key] : undefined;
+          cell.textContent = v == null ? '—' : String(v);
+          tr.appendChild(cell);
+        });
+        grid.appendChild(tr);
+      }
+      card.appendChild(grid);
+    }
+
+    appendOrbNote(card, orbMiniCard.foldNote('compound', {
+      scalars: picked.scalars.hidden,
+      rows: picked.table.hidden + hiddenCols,
+    }));
+    return card;
+  }
+
+  // ── 07 실시간 이벤트(event) ──
+  function buildOrbEventCard(envelope) {
+    const data = (envelope.data && typeof envelope.data === 'object') ? envelope.data : {};
+    const lifecycle = data.state_label || data.lifecycle || data.state || 'connecting';
+    const picked = orbMiniCard.pickLogRecords(data.records);
+    const card = orbCardShell(envelope, '실시간 이벤트');
+    card.appendChild(orbStateBadge('수신 상태', lifecycle));
+    const table = orbTableEl();
+    if (picked.shown.length) {
+      for (const record of picked.shown) {
+        const row = document.createElement('div');
+        row.className = 'orb-fold-row';
+        const line = document.createElement('div');
+        line.className = 'orb-log-line';
+        line.textContent = orbMiniCard.recordLine(record);
+        row.appendChild(line);
+        table.appendChild(row);
+      }
+    } else {
+      // 건수를 지어내지 않는다 — 없으면 없다고 말한다(캔버스와 같은 문구).
+      const row = document.createElement('div');
+      row.className = 'orb-fold-row';
+      const line = document.createElement('div');
+      line.className = 'orb-log-line is-empty';
+      line.textContent = '표시할 이벤트가 없습니다.';
+      row.appendChild(line);
+      table.appendChild(row);
+    }
+    card.appendChild(table);
+    appendOrbNote(card, orbMiniCard.foldNote('log', { shown: picked.shown.length, total: picked.total })
+      || '표시 전용 · 원본 프레임과 인증값은 노출하지 않음');
+    return card;
+  }
+
+  // ── 06 주문 확인(action) ──
+  // 05 미니 주문 티켓과 다르다: 이미 낸 주문의 상태이지 새 주문이 아니라 버튼이
+  // 없다. 영수증 필드는 캔버스와 같은 허용 목록 2개만 그린다(그 밖은 원문 유출).
+  const ORB_ACTION_RECEIPT_FIELDS = Object.freeze([
+    { key: 'ord_no', label: '주문번호' },
+    { key: 'dmst_stex_tp', label: '거래소 구분' },
+  ]);
+  function buildOrbActionCard(envelope) {
+    const data = (envelope.data && typeof envelope.data === 'object') ? envelope.data : {};
+    const state = data.state_label || data.lifecycle || data.state || 'review';
+    const receipt = (data.receipt && typeof data.receipt === 'object') ? data.receipt : {};
+    const card = orbCardShell(envelope, '주문 확인');
+    card.appendChild(orbStateBadge('주문 단계', state));
+    const rows = ORB_ACTION_RECEIPT_FIELDS.filter((f) => orbMiniCard.hasValue(receipt[f.key]));
+    if (rows.length) {
+      const table = orbTableEl();
+      for (const field of rows) table.appendChild(orbLabelValueRow(field.label, String(receipt[field.key]), null));
+      card.appendChild(table);
+    }
+    appendOrbNote(card, '표시 전용 · 실행과 최종 확인은 대화창에서만');
+    return card;
+  }
+
+  // ── 08 인증 상태(status) ──
+  function buildOrbStatusCard(envelope) {
+    const data = (envelope.data && typeof envelope.data === 'object') ? envelope.data : {};
+    const lifecycle = data.lifecycle || data.state || (data.ready === true ? 'ready' : 'auth_required');
+    const card = orbCardShell(envelope, '연결 상태');
+    card.appendChild(orbStateBadge('인증 상태', lifecycle));
+    const table = orbTableEl();
+    // 캔버스 renderStatusCard와 같은 세 행 고정 — 두 표면에서 다른 사실이
+    // 보이지 않게 한다. 만료 시각이 없을 때의 '—'도 캔버스와 같다.
+    table.appendChild(orbLabelValueRow('설정됨', data.configured === true ? '예' : '아니오', null));
+    table.appendChild(orbLabelValueRow('사용 가능', data.ready === true ? '예' : '아니오', null));
+    table.appendChild(orbLabelValueRow('만료 시각', orbMiniCard.hasValue(data.expires_at) ? String(data.expires_at) : '—', null));
+    card.appendChild(table);
+    appendOrbNote(card, '토큰과 자격 증명 값은 표시하지 않음');
+    return card;
+  }
+
+  // ── 09 본문(reader) ──
+  function buildOrbReaderCard(envelope) {
+    const data = (envelope.data && typeof envelope.data === 'object') ? envelope.data : {};
+    const title = orbMiniCard.hasValue(data.title) ? String(data.title) : null;
+    if (data.error_state === 'not_found' || data.error_state === 'processing_delayed') {
+      const card = orbCardShell(envelope, '리더 · 공시 원문', title);
+      appendOrbNote(card, data.error_state === 'not_found'
+        ? '문서를 찾을 수 없습니다 — not_found'
+        : '문서 처리가 지연되고 있습니다 — processing_delayed');
+      return card;
+    }
+    const clamped = orbMiniCard.clampReaderBody(data.body_markdown);
+    if (!clamped.text) return null;
+    const card = orbCardShell(envelope, '리더 · 공시 원문', title);
+    const body = document.createElement('div');
+    body.className = 'orb-reader-body';
+    body.textContent = clamped.text;
+    card.appendChild(body);
+    if (clamped.clipped) appendOrbNote(card, orbMiniCard.foldNote('reader', { total: clamped.total }));
+    return card;
+  }
+
+  // ── 10 스트림(stream) ──
+  function buildOrbStreamCard(envelope) {
+    const data = (envelope.data && typeof envelope.data === 'object') ? envelope.data : {};
+    const picked = orbMiniCard.pickLogRecords(data.records);
+    if (!picked.shown.length) return null;
+    const card = orbCardShell(envelope, '스트림 · 뉴스');
+    const list = orbTableEl();
+    for (const record of picked.shown) {
+      const row = document.createElement('div');
+      row.className = 'orb-fold-row orb-stream-item';
+      const title = document.createElement('div');
+      title.className = 'orb-stream-title';
+      title.textContent = orbMiniCard.hasValue(record && record.title) ? String(record.title) : '(제목 없음)';
+      row.appendChild(title);
+      const time = orbMiniCard.formatStreamTime(record && record.ts, record && record.ts_precision);
+      const source = orbMiniCard.streamSource(record);
+      // 시각도 출처도 없으면 메타 줄 자체를 만들지 않는다 — 빈 줄은 정보가 아니다.
+      if (time || source) {
+        const meta = document.createElement('div');
+        meta.className = 'orb-stream-meta';
+        meta.textContent = [time, source].filter(Boolean).join(' · ');
+        row.appendChild(meta);
+      }
+      list.appendChild(row);
+    }
+    card.appendChild(list);
+    appendOrbNote(card, orbMiniCard.foldNote('log', { shown: picked.shown.length, total: picked.total }));
+    return card;
+  }
+
   // canvas.js의 addLiveCard와 같은 1차 게이트(성공/폴백만 카드, 나머지는 통과)를
   // 따른다 — 'pushed'는 main.js 9a 결정으로 애초에 relay되지 않는다. rejected/
-  // error/unparseable/그 밖의 canvas_type은 카드 없이 기존 "전체는 대화창에서
-  // 이어집니다" 안내로 넘어간다.
+  // error/unparseable은 카드 없이 기존 "전체는 대화창에서 이어집니다" 안내로
+  // 넘어간다. 알 수 없는 canvas_type도 마찬가지다 — 모르는 봉투를 아는 척
+  // 그리지 않는다(보드 09는 지금 계약에 있는 9종만 받는다).
   function buildOrbCanvasCard(r) {
     if (!r || (r.status !== 'success' && r.status !== 'fallback')) return null;
     const envelope = r.envelope;
     if (!envelope || envelope.fell_back) return null;
-    if (envelope.canvas_type === 'table') return buildOrbTableCard(envelope);
-    if (envelope.canvas_type === 'chart') return buildOrbChartCard(envelope);
-    if (envelope.canvas_type === 'facts' && envelope.card_title === ORDER_TICKET_TITLE) {
-      return renderOrbTicket(envelope);
+    switch (envelope.canvas_type) {
+      case 'table': return buildOrbTableCard(envelope);
+      case 'chart': return buildOrbChartCard(envelope);
+      case 'facts':
+        return envelope.card_title === ORDER_TICKET_TITLE
+          ? renderOrbTicket(envelope)
+          : buildOrbFactsCard(envelope);
+      case 'compound': return buildOrbCompoundCard(envelope);
+      case 'event': return buildOrbEventCard(envelope);
+      case 'action': return buildOrbActionCard(envelope);
+      case 'status': return buildOrbStatusCard(envelope);
+      case 'reader': return buildOrbReaderCard(envelope);
+      case 'stream': return buildOrbStreamCard(envelope);
+      default: return null;
     }
-    return null;
   }
 
   async function submitChatQuery(rawText) {
@@ -1681,10 +1999,12 @@
       claimProviderVisible(el.__athenaProviderPaintMeta, el);
       delete el.__athenaProviderPaintMeta;
     }
-    // board-33③④에서 실제로 축약 카드를 그린 canvas_type은 이미 카드가 붙었다 —
-    // 그 종류는 "표·차트는 여기서 다시 그리지 않는다"는 옛 안내를 반복하지
-    // 않는다. 아직 오브 렌더러가 없는 나머지 canvas_type(예: reader/stream)만
-    // 정직하게 "전체는 대화창에서 이어집니다"로 넘어간다.
+    // 실제로 미니 카드를 그린 canvas_type은 이미 카드가 붙었다 — 그 종류는
+    // "표·차트는 여기서 다시 그리지 않는다"는 옛 안내를 반복하지 않는다.
+    // 2026-09-01(보드 09)부로 계약상 9종 전부에 렌더러가 생겼으므로 이 안내는
+    // 이제 **카드를 만들지 못한 봉투**에만 남는다: 값이 하나도 없어 builder가
+    // null을 돌려준 경우(빈 facts·빈 stream 등)와, 계약에 없는 새 canvas_type이
+    // 나중에 추가되는 경우다. 그때도 "여기 없다"는 사실은 정직하게 말한다.
     const canvasTypes = (result && result.canvasTypes) || [];
     const unrenderedCanvasTypes = canvasTypes.filter((t) => !handledCanvasTypes.has(t));
     if (unrenderedCanvasTypes.length) {
