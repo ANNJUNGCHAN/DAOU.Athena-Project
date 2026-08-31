@@ -120,7 +120,9 @@ function createGraphModeController(deps) {
                     //   graphBody(렌더·클릭위임·크기측정 전용), summaryTable(선택 —
                     //   보드 07 성향 신호 표, 가시성 전용), panel(선택) — 보드 07/15의
                     //   "공통 패널", graphHeaderMeta(선택) — 보드 14/15 헤더 메타
-                    //   텍스트(스텝9), mapGuide(선택) — 지도 안내 바(스텝9, 1단계 전용) }
+                    //   텍스트(스텝9), mapGuide(선택) — 지도 안내 바(스텝9, 1단계 전용),
+                    //   backtest(선택 — 5번째 모드 표면 #backtestCanvas, D4) — 안 들어오면
+                    //   다른 선택 elements와 같은 계약으로 조용히 무시된다 }
     fetchClusterMap, // async () => payload
     onError,        // (err) => void (선택)
     onPanelCta,     // () => void (선택) — 공통 패널 CTA "채팅에서 답하기" 클릭 시(스텝8)
@@ -148,8 +150,8 @@ function createGraphModeController(deps) {
   // 오기 전에 그래프 모드로 들어오면 renderUnavailable()의 정직한 안내를 보여준다.
   let available = false;
 
-  // 보드 12d/US-007 — 답변⇄그래프⇄에이전트⇄플러그인 네 표면의 가시성은 전부 이 함수
-  // 하나가 소유한다(4중 배타 — 리프 1.2.2 사이드바 모드 네비). 부팅 시
+  // 보드 12d/US-007 — 답변⇄그래프⇄에이전트⇄플러그인⇄백테스트 다섯 표면의 가시성은
+  // 전부 이 함수 하나가 소유한다(5중 배타 — 리프 1.2.2 사이드바 모드 네비). 부팅 시
   // 다른 어디서도(예: canvas.js의 brain-status 콜백) summaryTable 같은
   // 그래프 표면의 hidden을 직접 건드리지 않는다 — 소유자가 둘이면 브레인 준비
   // 타이밍에 따라 그래프 표면이 답변 모드에 새어 보이는 결함이 재발한다(실측,
@@ -159,23 +161,38 @@ function createGraphModeController(deps) {
   // hidden=false였던 옛 결함(둘 다 92% 불투명 카드라 뒤 레이어가 비쳤다)을
   // state.surface로 정식 해소한다. 이 함수가 여전히 유일한 hidden 소유자다 —
   // canvas.js의 z-index 임시조치(.graph-surface-back)는 걷어냈다.
+  //
+  // D4 정규화(2026-08-31, backtest-mode-plan.md §3.3) — 5번째 모드(backtest)를
+  // 옛 삼항 사슬(OR 4항·삼항 4중첩)에 그대로 이어 붙이는 대신, 함수 본문 안에서만
+  // view→표면 키 맵으로 바꿨다. graph만 surface 축(요약 표/군집 지도)이 하나 더
+  // 있어 맵 밖 예외로 남는다 — summary/agent/plugin/backtest는 view와 표면이 1:1이다.
   function applyVisibility() {
     const graphView = store.isGraphView(state);
-    const agentView = state.view === store.VIEW_AGENT;
-    const pluginView = state.view === store.VIEW_PLUGIN;
-    if (elements.summary) elements.summary.hidden = graphView || agentView || pluginView;
+    // view → 표면 키. graph는 surface 축이 따로 있어(요약 표/군집 지도) 이 맵에
+    // 넣지 않는다 — 아래 elements.graph/summaryTable 두 줄이 그 축을 그대로 맡는다.
+    const SURFACE_BY_VIEW = {
+      [store.VIEW_SUMMARY]: 'summary',
+      [store.VIEW_AGENT]: 'agent',
+      [store.VIEW_PLUGIN]: 'plugin',
+      [store.VIEW_BACKTEST]: 'backtest',
+    };
+    const activeSurface = graphView ? null : SURFACE_BY_VIEW[state.view];
+    if (elements.summary) elements.summary.hidden = graphView || activeSurface !== 'summary';
     if (elements.graph) elements.graph.hidden = !graphView || state.surface !== store.SURFACE_MAP;
-    if (elements.agent) elements.agent.hidden = !agentView;
-    if (elements.plugin) elements.plugin.hidden = !pluginView;
+    if (elements.agent) elements.agent.hidden = activeSurface !== 'agent';
+    if (elements.plugin) elements.plugin.hidden = activeSurface !== 'plugin';
+    if (elements.backtest) elements.backtest.hidden = activeSurface !== 'backtest';
     if (elements.summaryTable) elements.summaryTable.hidden = !graphView || state.surface !== store.SURFACE_SUMMARY;
     // 키우미 얼굴(2026-08-27, Paper 보드 45) — 지금 모드를 얼굴로 보여준다
     // (대화=눈 · 그래프=온톨로지 별자리). CSS가 data-mode로 얼굴을 고른다 —
-    // agent 얼굴은 아직 CSS에 없어 기본 얼굴로 폴백한다(보드 39~43 후속).
-    if (elements.kiumi) elements.kiumi.dataset.mode = graphView ? 'graph' : (agentView ? 'agent' : (pluginView ? 'plugin' : 'chat'));
+    // agent·backtest 얼굴은 아직 CSS에 없어 기본 얼굴로 폴백한다(보드 39~43·45 후속).
+    const modeLabel = graphView ? 'graph' : (activeSurface === 'summary' ? 'chat' : activeSurface);
+    if (elements.kiumi) elements.kiumi.dataset.mode = modeLabel;
     // 캔버스 빈 상태의 모드별 변형(보드 46) — CSS가 이 축으로 하나만 보여준다.
     // (모드 네비 활성 하이라이트는 lib/sidebar-mode-nav.js가 소유한다 — 리프 1.2.2.)
-    if (elements.canvasRegion) elements.canvasRegion.dataset.mode = graphView ? 'graph' : (agentView ? 'agent' : (pluginView ? 'plugin' : 'chat'));
+    if (elements.canvasRegion) elements.canvasRegion.dataset.mode = modeLabel;
     // 모드별 채팅 헤더(보드 38) — 그래프 모드 전용. 대화 모드엔 헤더가 없다(보드 37).
+    // 백테스트 채팅 헤더는 P5 범위다(계획서 §3.4) — 여기서 새로 발명하지 않는다.
     if (elements.chatHead) elements.chatHead.hidden = !graphView;
   }
 

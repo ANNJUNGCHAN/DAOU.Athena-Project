@@ -48,6 +48,7 @@ function setup(options) {
     summaryTable: fakeNode('div'),
     agent: fakeNode('div'),
     plugin: fakeNode('div'),
+    backtest: fakeNode('div'), // D4 — 5번째 모드 표면.
     kiumi: fakeNode('div'),
     canvasRegion: fakeNode('main'),
     chatHead: fakeNode('div'),
@@ -984,4 +985,28 @@ test('elements.agent가 없어도 setView("agent")가 터지지 않는다(옵셔
   });
   await assert.doesNotReject(() => controller.setView('agent'));
   assert.equal(elements.summary.hidden, true);
+});
+
+// ── D4: 5 view × 5 표면 배타표(backtest-mode-plan.md §3.3) ──────────────────
+// 5번째 모드(backtest) 추가로 applyVisibility()를 view→표면 맵으로 정규화했다
+// (함수 본문 안에서만, graph만 surface 축 예외로 남는다) — 이 표가 그 정규화의
+// 회귀 가드다. graph는 surface 축(요약 표/군집 지도)이 따로 있어, 여기서 다루는
+// elements.graph(군집 지도 표면)는 기본 진입(setSurface 호출 전) 상태에서는
+// summary/agent/plugin/backtest와 마찬가지로 hidden이다 — 그 축은 위 setSurface
+// 테스트들이 이미 따로 지킨다.
+test('D4 — 5 view × 5 표면 배타표: 각 view에서 정확히 그 표면만 보인다(25칸)', async () => {
+  const { controller, elements } = setup();
+  const VIEWS = ['summary', 'graph', 'agent', 'plugin', 'backtest'];
+  const SURFACES = ['summary', 'graph', 'agent', 'plugin', 'backtest'];
+  // view → 이 표에서 보여야 할 표면 키. graph는 기본 서브뷰가 요약 표라
+  // elements.graph 자체는 이 표 안에서 항상 hidden이다(null = 5개 전부 숨음).
+  const visibleSurfaceKey = { summary: 'summary', graph: null, agent: 'agent', plugin: 'plugin', backtest: 'backtest' };
+
+  for (const view of VIEWS) {
+    await controller.setView(view);
+    for (const surface of SURFACES) {
+      const expectedHidden = surface !== visibleSurfaceKey[view];
+      assert.equal(elements[surface].hidden, expectedHidden, `${view} 진입 시 ${surface} hidden 기대값 불일치`);
+    }
+  }
 });

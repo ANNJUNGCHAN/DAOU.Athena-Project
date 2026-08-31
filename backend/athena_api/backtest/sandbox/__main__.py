@@ -1,0 +1,104 @@
+"""샌드박스 자식 진입점 — 별도 프로세스에서만 실행된다 (§7.2).
+
+진입: `python -I -B -m athena_api.backtest.sandbox <jobdir>`. host.py가 이 명령으로만
+띄운다 — 사람이 직접 부를 일이 없다.
+
+책임은 signals 생성까지다. 체결·비용·성과 계산·DB 쓰기는 전부 부모(engine.py)의 몫이고,
+이 프로세스는 DB 핸들도 자격증명도 받지 않는다 — 전략 코드가 성과 수치를 직접 쓸 방법이
+구조적으로 없다.
+
+프로토콜: jobdir에서 spec.json(파라미터 값 + stdout 상한) · bars.csv(OHLCV) · strategy.py
+(사용자 코드)를 읽고, jobdir에 signals.csv(성공) 또는 error.json(실패)과 stdout.txt를 쓴다.
+"""
+
+from __future__ import annotations
+
+import io
+import json
+import sys
+import traceback
+from pathlib import Path
+
+import pandas as pd
+
+from athena_api.backtest.sandbox import api as _bt_api
+from athena_api.backtest.sandbox import guard
+
+_TRUNCATION_MARK = "\n[잘림]"
+
+
+def _write_error(jobdir: Path, exc: BaseException) -> None:
+    tb = "".join(traceback.format_exception(type(exc), exc, exc.__traceback__))
+    payload = {
+        "type": type(exc).__name__,
+        "message": str(exc),
+        # 트레이스백은 참고용이라 지나치게 길 필요가 없다 — 꼬리 4000자만 남긴다.
+        "traceback": tb[-4000:],
+    }
+    (jobdir / "error.json").write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+
+
+def _write_stdout(jobdir: Path, text: str, cap_bytes: int) -> None:
+    data = text.encode("utf-8")
+    if len(data) > cap_bytes:
+        # 바이트 경계에서 자르면 마지막 UTF-8 문자가 깨질 수 있어 errors="ignore"로 흘린다
+        # — 디버그용 print 로그라 한 글자 유실이 문제 되지 않는다.
+        text = data[:cap_bytes].decode("utf-8", errors="ignore") + _TRUNCATION_MARK
+    (jobdir / "stdout.txt").write_text(text, encoding="utf-8")
+
+
+def main(argv: list[str]) -> int:
+    if len(argv) != 2:
+        print("usage: python -m athena_api.backtest.sandbox <jobdir>", file=sys.stderr)
+        return 2
+    jobdir = Path(argv[1]).resolve()
+
+    # athena_bt를 top-level 이름으로 별칭 건다 — 전략 코드의 `import athena_bt as bt`가
+    # 실제 설치된 패키지 없이도 sys.modules 캐시로 바로 해석되게 하는 배선이다. guard 설치
+    # 전에(=신뢰 구간에서) 해야 한다 — api.py 내부의 athena_api.backtest.indicators import가
+    # 허용목록 검사에 걸리면 안 되기 때문이다.
+    sys.modules["athena_bt"] = _bt_api
+
+    cap_bytes = 64 * 1024
+    captured = io.StringIO()
+    real_stdout = sys.stdout
+    sys.stdout = captured
+    try:
+        spec = json.loads((jobdir / "spec.json").read_text(encoding="utf-8"))
+        params = spec.get("params", {})
+        cap_bytes = int(spec.get("stdout_cap_bytes", cap_bytes))
+        bars = pd.read_csv(jobdir / "bars.csv", index_col=0, parse_dates=True)
+        strategy_path = jobdir / "strategy.py"
+        source = strategy_path.read_text(encoding="utf-8")
+
+        strategy_globals: dict = {"__name__": "__athena_strategy__"}
+        guard.install(strategy_globals, jobdir)
+
+        code = compile(source, str(strategy_path), "exec")
+        exec(code, strategy_globals)  # noqa: S102 — 이 프로세스의 존재 이유 자체가 이 실행이다.
+
+        signals_fn = strategy_globals.get("signals")
+        if not callable(signals_fn):
+            raise ValueError("전략 코드에 signals(df, p) 함수가 없다")
+
+        result = signals_fn(bars, params)
+        if not isinstance(result, pd.DataFrame):
+            raise TypeError("signals()는 DataFrame을 반환해야 한다")
+        missing = {"entry", "exit"} - set(result.columns)
+        if missing:
+            raise ValueError(f"signals() 반환에 필요한 열이 없다: {sorted(missing)}")
+
+        result.to_csv(jobdir / "signals.csv", index=True, index_label="date")
+    except BaseException as exc:
+        sys.stdout = real_stdout
+        _write_stdout(jobdir, captured.getvalue(), cap_bytes)
+        _write_error(jobdir, exc)
+        return 1
+    else:
+        sys.stdout = real_stdout
+        _write_stdout(jobdir, captured.getvalue(), cap_bytes)
+        return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv))

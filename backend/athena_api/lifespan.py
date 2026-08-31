@@ -10,6 +10,8 @@ import httpx
 from fastapi import FastAPI
 
 from athena_api.accounts import AccountRuntime
+from athena_api.backtest.runner import BacktestRunner
+from athena_api.backtest.store import BacktestStore
 from athena_api.brain import (
     ClaudeCliStructuredLlm,
     DedupService,
@@ -271,6 +273,53 @@ def _publish_routines(app: FastAPI, routines: "RoutinesRuntime | None") -> None:
     app.state.routine_events = routines.events if routines is not None else None
 
 
+@dataclass(slots=True)
+class BacktestRuntime:
+    """캔들 캐시 · 실행 이력 SqliteOwner + 잡 러너 — 브레인과 같은 자리, 다른 파일(§5.3:
+    브레인의 reset-and-restart가 캔들 캐시까지 날리면 안 된다)."""
+
+    store: BacktestStore
+    runner: BacktestRunner
+    owner: SqliteOwner
+    ready: bool = False
+    last_error: str | None = None
+
+
+def _publish_backtest(app: FastAPI, backtest: "BacktestRuntime | None") -> None:
+    app.state.backtest_store = backtest.store if backtest is not None and backtest.ready else None
+    app.state.backtest_runner = backtest.runner if backtest is not None and backtest.ready else None
+    app.state.backtest_last_error = backtest.last_error if backtest is not None else None
+
+
+async def _open_backtest(settings: Settings) -> BacktestRuntime:
+    """브레인(_open_brain)과 같은 best-effort 원칙 — 저장층을 못 열어도 기동을 중단시키지
+    않고 런타임에 기록만 한다(백테스트도 선택적 기능이다)."""
+    settings.backtest_db_path.parent.mkdir(parents=True, exist_ok=True)
+    owner = SqliteOwner(settings.backtest_db_path)
+    store = BacktestStore(owner)
+    runner = BacktestRunner(store)
+    backtest = BacktestRuntime(store=store, runner=runner, owner=owner)
+    try:
+        await owner.open()
+        await store.open()
+    except Exception as exc:
+        backtest.last_error = str(exc)
+        with suppress(BaseException):
+            await owner.close()
+        return backtest
+    backtest.ready = True
+    return backtest
+
+
+async def _teardown_backtest(app: FastAPI, backtest: BacktestRuntime | None) -> None:
+    if backtest is not None and backtest.ready:
+        # 살아있는 잡부터 취소 — owner를 먼저 닫으면 진행 중인 store 쓰기가 닫힌
+        # 연결을 만난다.
+        await backtest.runner.shutdown()
+        await backtest.owner.close()
+    _publish_backtest(app, None)
+
+
 async def _teardown_brain(app: FastAPI, brain: BrainRuntime | None) -> None:
     primary_error: BaseException | None = None
     if brain is not None:
@@ -341,6 +390,7 @@ async def _cleanup_lifespan_resources(
     locks: list[CredentialProcessLock],
     brain: BrainRuntime | None,
     routines: RoutinesRuntime | None,
+    backtest: BacktestRuntime | None,
     *,
     primary_error: BaseException | None = None,
 ) -> None:
@@ -350,6 +400,7 @@ async def _cleanup_lifespan_resources(
         ("cluster-labeling", lambda: _teardown_cluster_labeling_tasks(app)),
         ("brain", lambda: _teardown_brain(app, brain)),
         ("routines", lambda: teardown_routines(routines)),
+        ("backtest", lambda: _teardown_backtest(app, backtest)),
     )
     for phase, cleanup in phases:
         try:
@@ -452,6 +503,7 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
         _publish_default(app, None)
         _publish_brain(app, None)
         _publish_routines(app, None)
+        _publish_backtest(app, None)
         # 캔버스 사이드 채널(api/canvas_push.py) — 자격증명·루틴과 무관한 로컬
         # 배관이라 무조건 만든다. 소비자는 단일 앱 인스턴스(routine_events와 동형).
         app.state.canvas_events = asyncio.Queue(50)
@@ -464,6 +516,7 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
         locks: list[CredentialProcessLock] = []
         brain: BrainRuntime | None = None
         routines: RoutinesRuntime | None = None
+        backtest: BacktestRuntime | None = None
         try:
             if runtime_settings.has_credentials:
                 http_client = httpx.AsyncClient()
@@ -519,6 +572,9 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
                     ws_client=default_rt.ws_client if default_rt is not None else None,
                 )
                 _publish_routines(app, routines)
+            if runtime_settings.backtest_enabled:
+                backtest = await _open_backtest(runtime_settings)
+                _publish_backtest(app, backtest)
         except BaseException as primary_error:
             await _cleanup_lifespan_resources(
                 app,
@@ -527,6 +583,7 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
                 locks,
                 brain,
                 routines,
+                backtest,
                 primary_error=primary_error,
             )
         try:
@@ -539,11 +596,12 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
                 locks,
                 brain,
                 routines,
+                backtest,
                 primary_error=primary_error,
             )
         else:
             await _cleanup_lifespan_resources(
-                app, runtimes, http_client, locks, brain, routines
+                app, runtimes, http_client, locks, brain, routines, backtest
             )
 
     return lifespan

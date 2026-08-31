@@ -48,6 +48,7 @@
           graph: document.getElementById('modeNavGraph'),
           agent: document.getElementById('modeNavAgent'),
           plugin: document.getElementById('modeNavPlugin'),
+          backtest: document.getElementById('modeNavBacktest'),
         },
         badge: document.getElementById('modeNavAgentBadge'),
         onSelect: (view) => {
@@ -58,6 +59,11 @@
               && window.AthenaPluginCanvas
               && typeof window.AthenaPluginCanvas.setView === 'function') {
             window.AthenaPluginCanvas.setView('hub');
+          }
+          if (view === 'backtest'
+              && window.AthenaBacktestCanvas
+              && typeof window.AthenaBacktestCanvas.refresh === 'function') {
+            window.AthenaBacktestCanvas.refresh();
           }
           // 에이전트모드 진입 시 라우틴 목록을 새로 받아온다(리프 1.2.2, 3단계) —
           // loadAgentRoutines()가 안에서 renderList()까지 호출한다. 캔버스 쪽
