@@ -3,11 +3,51 @@
 const crypto = require('node:crypto');
 const fs = require('node:fs');
 const path = require('node:path');
-const { spawn } = require('node:child_process');
+const { spawn, spawnSync } = require('node:child_process');
 const { summarize } = require('../lib/main/provider-runtime-metrics');
 const { extractTextDelta, StreamJsonSession } = require('../lib/main/stream-json-parser');
 
 const REQUIRED_CONFIGURATION = Object.freeze(['account', 'model', 'effort', 'cwd', 'mcpFingerprint', 'promptHash']);
+const trustedLiveReceipts = new WeakMap();
+const trustedLiveReports = new WeakSet();
+
+function observeProcessInstance(pid) {
+  if (!Number.isInteger(pid) || pid <= 0) throw new Error('provider PID is invalid');
+  if (process.platform === 'win32') {
+    const powershell = path.join(process.env.SystemRoot || 'C:\\Windows', 'System32', 'WindowsPowerShell', 'v1.0', 'powershell.exe');
+    const observed = spawnSync(powershell, [
+      '-NoProfile', '-NonInteractive', '-Command',
+      `(Get-Process -Id ${pid} -ErrorAction Stop).StartTime.ToUniversalTime().Ticks`,
+    ], { encoding: 'utf8', windowsHide: true });
+    const creationTime = String(observed.stdout || '').trim();
+    if (observed.status !== 0 || !/^\d+$/.test(creationTime)) throw new Error('provider process creation time observation failed');
+    return creationTime;
+  }
+  if (process.platform === 'linux') {
+    const fields = fs.readFileSync(`/proc/${pid}/stat`, 'utf8').trim().split(/\s+/);
+    if (!/^\d+$/.test(fields[21] || '')) throw new Error('provider process creation time observation failed');
+    return fields[21];
+  }
+  const observed = spawnSync('ps', ['-o', 'lstart=', '-p', String(pid)], { encoding: 'utf8' });
+  const creationTime = String(observed.stdout || '').trim();
+  if (observed.status !== 0 || !creationTime) throw new Error('provider process creation time observation failed');
+  return creationTime;
+}
+
+function issueTrustedLiveReceipt(identity) {
+  const receipt = Object.freeze(Object.create(null));
+  trustedLiveReceipts.set(receipt, Object.freeze({ ...identity }));
+  return receipt;
+}
+
+function trustedReceiptMatches(receipt, measurement) {
+  const observed = receipt && trustedLiveReceipts.get(receipt);
+  return Boolean(observed
+    && observed.processId === measurement.processId
+    && observed.processCreationTime === measurement.processCreationTime
+    && observed.sessionId === measurement.sessionId
+    && observed.generation === measurement.generation);
+}
 
 function stableFingerprint(configuration) {
   const canonical = Object.fromEntries(REQUIRED_CONFIGURATION.map((key) => [key, configuration?.[key]]));
@@ -46,7 +86,7 @@ async function runLiveComparison({ allowPaid, coldSamples = 5, warmSamples = 30,
   const generatedAt = new Date();
   const scriptHash = crypto.createHash('sha256').update(fs.readFileSync(__filename)).digest('hex');
   const result = {
-    schemaVersion: 1,
+    schemaVersion: 2,
     scenario: 'claude-native-athena-abba',
     provider: 'claude',
     sourceClass: 'claude-live-paired',
@@ -65,7 +105,13 @@ async function runLiveComparison({ allowPaid, coldSamples = 5, warmSamples = 30,
         sequence += 1;
         const measured = await runLane({ lane, temperature, index, sequence, configurationFingerprint, configuration });
         if (!Number.isFinite(measured?.firstTextMs) || measured.firstTextMs < 0
-          || measured.configurationFingerprint !== configurationFingerprint) {
+          || measured.configurationFingerprint !== configurationFingerprint
+          || !Number.isInteger(measured.processId) || measured.processId <= 0
+          || typeof measured.processCreationTime !== 'string' || measured.processCreationTime.length === 0
+          || typeof measured.sessionId !== 'string' || measured.sessionId.length === 0
+          || !Number.isInteger(measured.generation) || measured.generation <= 0
+          || typeof measured.sessionReused !== 'boolean'
+          || !trustedReceiptMatches(measured.liveReceipt, measured)) {
           throw new Error('live lane returned invalid or mismatched evidence');
         }
         samples[lane].push({
@@ -75,15 +121,48 @@ async function runLiveComparison({ allowPaid, coldSamples = 5, warmSamples = 30,
           temperature,
           configurationFingerprint,
           firstTextMs: measured.firstTextMs,
+          processId: measured.processId,
+          processCreationTime: measured.processCreationTime,
+          sessionId: measured.sessionId,
+          generation: measured.generation,
+          sessionReused: measured.sessionReused,
         });
       }
+    }
+    for (const lane of ['native', 'athena']) {
+      const continuityErrors = validateSessionContinuity(samples[lane], temperature);
+      if (continuityErrors.length) throw new Error(`${temperature}.${lane} ${continuityErrors.join('; ')}`);
     }
     result[temperature] = Object.fromEntries(['native', 'athena'].map((lane) => [lane, {
       rawSamples: samples[lane],
       firstTextMs: summarize(samples[lane].map((sample) => sample.firstTextMs)),
     }]));
   }
+  trustedLiveReports.add(result);
   return result;
+}
+
+function validateSessionContinuity(samples, temperature) {
+  const errors = [];
+  const processInstances = samples.map((sample) => `${sample?.processId}:${sample?.processCreationTime}`);
+  const sessions = samples.map((sample) => sample?.sessionId);
+  const identities = samples.map((sample) => `${sample?.processId}:${sample?.processCreationTime}:${sample?.sessionId}:${sample?.generation}`);
+  if (temperature === 'cold') {
+    if (samples.some((sample) => sample?.sessionReused !== false)
+      || new Set(processInstances).size !== samples.length
+      || new Set(sessions).size !== samples.length) {
+      errors.push('cold samples must each use a distinct process instance and provider session');
+    }
+  } else if (temperature === 'warm') {
+    if (samples[0]?.sessionReused !== false
+      || samples.slice(1).some((sample) => sample?.sessionReused !== true)
+      || new Set(identities).size !== 1) {
+      errors.push('warm samples must prove one process, session, and generation with reuse after the first sample');
+    }
+  } else {
+    errors.push('temperature is invalid');
+  }
+  return errors;
 }
 
 function summariesEqual(actual, expected) {
@@ -93,7 +172,8 @@ function summariesEqual(actual, expected) {
 
 function validateLiveReport(report) {
   const errors = [];
-  if (report?.schemaVersion !== 1 || report?.scenario !== 'claude-native-athena-abba'
+  if (!trustedLiveReports.has(report)) errors.push('live report lacks runner-owned observation receipts');
+  if (report?.schemaVersion !== 2 || report?.scenario !== 'claude-native-athena-abba'
     || report?.provider !== 'claude' || report?.sourceClass !== 'claude-live-paired') errors.push('live report identity is invalid');
   for (const field of ['sourceRevision', 'scriptHash', 'configurationFingerprint']) {
     const minimum = field === 'sourceRevision' ? 7 : 64;
@@ -116,7 +196,12 @@ function validateLiveReport(report) {
       for (let index = 0; index < count; index += 1) {
         const sample = section.rawSamples[index];
         if (!sample || sample.sample !== index + 1 || sample.lane !== lane || sample.temperature !== temperature
-          || !Number.isFinite(sample.firstTextMs) || sample.firstTextMs < 0) {
+          || !Number.isFinite(sample.firstTextMs) || sample.firstTextMs < 0
+          || !Number.isInteger(sample.processId) || sample.processId <= 0
+          || typeof sample.processCreationTime !== 'string' || sample.processCreationTime.length === 0
+          || typeof sample.sessionId !== 'string' || sample.sessionId.length === 0
+          || !Number.isInteger(sample.generation) || sample.generation <= 0
+          || typeof sample.sessionReused !== 'boolean') {
           errors.push(`${temperature}.${lane} raw sample is invalid`);
         }
         if (sample?.configurationFingerprint !== report.configurationFingerprint) {
@@ -127,6 +212,8 @@ function validateLiveReport(report) {
       if (!summariesEqual(section.firstTextMs, expectedSummary)) {
         errors.push(`${temperature}.${lane} summary does not match raw samples`);
       }
+      errors.push(...validateSessionContinuity(section.rawSamples, temperature)
+        .map((error) => `${temperature}.${lane} ${error}`));
     }
     for (let index = 0; index < count; index += 1) {
       const order = index % 2 === 0 ? ['native', 'athena'] : ['athena', 'native'];
@@ -141,10 +228,17 @@ function validateLiveReport(report) {
   return errors;
 }
 
-function createFirstModelTextParser(onFirstText) {
+function createFirstModelTextParser(onFirstText, onSession, onGeneration) {
   const session = new StreamJsonSession();
   const callbacks = {
     onEvent(event) {
+      if (typeof onSession === 'function' && typeof event?.session_id === 'string' && event.session_id.length > 0) {
+        onSession(event.session_id);
+      }
+      const generation = event?.provider_generation ?? event?.generation;
+      if (typeof onGeneration === 'function' && Number.isInteger(generation) && generation > 0) {
+        onGeneration(generation);
+      }
       const text = extractTextDelta(event);
       if (text && event.parent_tool_use_id == null) onFirstText();
     },
@@ -162,16 +256,48 @@ function createProcessLaneRunner({
   now = () => performance.now(),
   parserFactory = createFirstModelTextParser,
 }) {
-  return ({ lane, configurationFingerprint, configuration }) => new Promise((resolve, reject) => {
+  return ({ lane, temperature, configurationFingerprint, configuration }) => new Promise((resolve, reject) => {
+    if (temperature === 'warm') {
+      reject(new Error(`${lane} process runner cannot prove persistent warm session continuity`));
+      return;
+    }
     const command = commands?.[lane];
     if (!command?.file || !Array.isArray(command.args)) return reject(new Error(`${lane} command is missing`));
     const startedAt = now();
     const child = spawnProcess(command.file, command.args, { cwd: configuration.cwd, env: { ...process.env, ...command.env }, stdio: ['pipe', 'pipe', 'pipe'] });
+    let processCreationTime = null;
+    if (spawnProcess === spawn) {
+      try {
+        processCreationTime = observeProcessInstance(child.pid);
+      } catch (error) {
+        child.kill?.();
+        reject(error);
+        return;
+      }
+    }
+    let sessionId = null;
+    let generation = null;
     let settled = false;
     const finish = () => {
       if (settled) return;
+      if (!Number.isInteger(child.pid) || child.pid <= 0 || !processCreationTime || !sessionId
+        || !Number.isInteger(generation) || generation <= 0) {
+        fail(new Error(`${lane} first text lacks observed process, session, or provider generation identity`));
+        child.kill?.();
+        return;
+      }
       settled = true;
-      resolve({ firstTextMs: now() - startedAt, configurationFingerprint });
+      const measurement = {
+        firstTextMs: now() - startedAt,
+        configurationFingerprint,
+        processId: child.pid,
+        processCreationTime,
+        sessionId,
+        generation,
+        sessionReused: false,
+      };
+      measurement.liveReceipt = issueTrustedLiveReceipt(measurement);
+      resolve(measurement);
       child.kill?.();
     };
     const fail = (error) => {
@@ -179,7 +305,11 @@ function createProcessLaneRunner({
       settled = true;
       reject(error);
     };
-    const parser = parserFactory(finish);
+    const parser = parserFactory(
+      finish,
+      (value) => { sessionId = value; },
+      (value) => { generation = value; },
+    );
     child.once('error', fail);
     child.stdout.on('data', (chunk) => parser.feed(chunk));
     child.once('exit', (code) => {
@@ -221,5 +351,6 @@ module.exports = {
   parseLiveArgs,
   runLiveComparison,
   stableFingerprint,
+  validateSessionContinuity,
   validateLiveReport,
 };

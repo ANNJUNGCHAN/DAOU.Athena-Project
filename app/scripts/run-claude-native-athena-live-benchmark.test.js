@@ -9,60 +9,58 @@ const {
   createProcessLaneRunner,
   parseLiveArgs,
   runLiveComparison,
+  validateSessionContinuity,
   validateLiveReport,
 } = require('./run-claude-native-athena-live-benchmark');
 
-test('live runner is paid-opt-in and runs cold5/warm30 in A/B/B/A order with identical fingerprints', async () => {
+test('arbitrary callback cannot mint claude-live-paired evidence from matching scalar identities', async () => {
   assert.throws(() => parseLiveArgs([]), /paid opt-in/);
   const calls = [];
-  const result = await runLiveComparison({
+  await assert.rejects(runLiveComparison({
     allowPaid: true,
     coldSamples: 5,
     warmSamples: 30,
     configuration: { account: 'acct', model: 'model', effort: 'high', cwd: 'C:\\repo', mcpFingerprint: 'd'.repeat(64), promptHash: 'e'.repeat(64) },
     async runLane(input) {
       calls.push(`${input.temperature}:${input.lane}`);
-      return { firstTextMs: input.lane === 'native' ? 10 : 12, configurationFingerprint: input.configurationFingerprint };
+      const laneOffset = input.lane === 'native' ? 1000 : 2000;
+      const warm = input.temperature === 'warm';
+      return {
+        firstTextMs: 10,
+        configurationFingerprint: input.configurationFingerprint,
+        processId: warm ? laneOffset : laneOffset + input.index + 1,
+        processCreationTime: warm ? `${input.lane}-warm-start` : `${input.lane}-cold-start-${input.index + 1}`,
+        sessionId: warm ? `${input.lane}-warm-session` : `${input.lane}-cold-${input.index + 1}`,
+        generation: warm ? 7 : input.index + 1,
+        sessionReused: warm && input.index > 0,
+        liveReceipt: Object.freeze({}),
+      };
     },
+  }), /invalid or mismatched evidence/);
+  assert.deepEqual(calls, ['cold:native']);
+  assert.ok(validateLiveReport({}).some((entry) => entry.includes('runner-owned observation receipts')));
+});
+
+test('continuity compares process instances and sessions separately from generation', () => {
+  const sample = (processId, processCreationTime, sessionId, generation, sessionReused) => ({
+    processId, processCreationTime, sessionId, generation, sessionReused,
   });
-  assert.deepEqual(calls.slice(0, 4), ['cold:native', 'cold:athena', 'cold:athena', 'cold:native']);
-  assert.equal(result.cold.native.rawSamples.length, 5);
-  assert.equal(result.warm.athena.rawSamples.length, 30);
-  assert.deepEqual(result.cold.native.rawSamples[0], {
-    sequence: 1,
-    sample: 1,
-    lane: 'native',
-    temperature: 'cold',
-    configurationFingerprint: result.configurationFingerprint,
-    firstTextMs: 10,
-  });
-  assert.equal(result.cold.athena.rawSamples[0].sequence, 2);
-  assert.equal(result.cold.athena.rawSamples[1].sequence, 3);
-  assert.equal(result.cold.native.rawSamples[1].sequence, 4);
-  assert.equal(result.promptBody, undefined);
-  assert.equal(result.secret, undefined);
-  assert.equal(result.warm.athena.firstTextMs.max, 12);
-  assert.deepEqual(validateLiveReport(result), []);
-  const stale = structuredClone(result);
-  stale.freshness.expiresAt = '2000-01-01T00:00:00.000Z';
-  assert.ok(validateLiveReport(stale).some((entry) => entry.includes('stale')));
-
-  const forged = structuredClone(result);
-  forged.warm.native.firstTextMs.p50 += 1;
-  assert.ok(validateLiveReport(forged).some((entry) => entry.includes('does not match raw samples')));
-
-  const negative = structuredClone(result);
-  negative.cold.native.rawSamples[0].firstTextMs = -1;
-  assert.ok(validateLiveReport(negative).some((entry) => entry.includes('raw sample')));
-
-  const outOfOrder = structuredClone(result);
-  [outOfOrder.cold.native.rawSamples[0].sequence, outOfOrder.cold.athena.rawSamples[0].sequence] =
-    [outOfOrder.cold.athena.rawSamples[0].sequence, outOfOrder.cold.native.rawSamples[0].sequence];
-  assert.ok(validateLiveReport(outOfOrder).some((entry) => entry.includes('sequence')));
-
-  const mismatched = structuredClone(result);
-  mismatched.warm.athena.rawSamples[0].configurationFingerprint = 'f'.repeat(64);
-  assert.ok(validateLiveReport(mismatched).some((entry) => entry.includes('configuration fingerprint')));
+  assert.deepEqual(validateSessionContinuity([
+    sample(10, 'a', 's1', 1, false),
+    sample(10, 'a', 's1', 2, false),
+  ], 'cold'), ['cold samples must each use a distinct process instance and provider session']);
+  assert.deepEqual(validateSessionContinuity([
+    sample(10, 'a', 's1', 1, false),
+    sample(11, 'b', 's1', 1, false),
+  ], 'cold'), ['cold samples must each use a distinct process instance and provider session']);
+  assert.deepEqual(validateSessionContinuity([
+    sample(10, 'a', 'warm', 7, false),
+    sample(10, 'a', 'warm', 7, true),
+  ], 'warm'), []);
+  assert.ok(validateSessionContinuity([
+    sample(10, 'a', 'warm', 7, false),
+    sample(10, 'b', 'warm', 7, true),
+  ], 'warm').some((entry) => entry.includes('one process')));
 });
 
 test('process lane waits through startup/log/framing output for canonical prompt-correlated model text', async () => {
@@ -70,9 +68,10 @@ test('process lane waits through startup/log/framing output for canonical prompt
   child.stdout = new PassThrough();
   child.stderr = new PassThrough();
   child.stdin = new PassThrough();
+  child.pid = 4321;
   let kills = 0;
   child.kill = () => { kills += 1; };
-  const times = [100, 137];
+  const times = [100];
   const runner = createProcessLaneRunner({
     commands: { native: { file: 'claude', args: ['-p'] } },
     promptText: 'redacted prompt',
@@ -103,6 +102,43 @@ test('process lane waits through startup/log/framing output for canonical prompt
     type: 'stream_event', session_id: 's1',
     event: { type: 'content_block_delta', index: 0, delta: { type: 'text_delta', text: 'model answer' } },
   })}\n`);
-  assert.deepEqual(await measurement, { firstTextMs: 37, configurationFingerprint: 'a'.repeat(64) });
+  await assert.rejects(measurement, /lacks observed process, session, or provider generation identity/);
   assert.equal(kills, 1);
+
+  await assert.rejects(runner({
+    lane: 'native',
+    temperature: 'warm',
+    index: 0,
+    configurationFingerprint: 'a'.repeat(64),
+    configuration: { cwd: 'C:\\repo' },
+  }), /cannot prove persistent warm session continuity/);
+  assert.equal(kills, 1);
+});
+
+test('in-tree runner observes an actual child process, session id, and provider generation', async () => {
+  const frames = [
+    { type: 'system', subtype: 'init', session_id: 'observed-session', provider_generation: 4 },
+    {
+      type: 'stream_event', session_id: 'observed-session', provider_generation: 4,
+      event: { type: 'content_block_delta', index: 0, delta: { type: 'text_delta', text: 'observed text' } },
+    },
+  ];
+  const source = `for (const frame of ${JSON.stringify(frames)}) process.stdout.write(JSON.stringify(frame) + '\\n'); setTimeout(() => {}, 5000);`;
+  const runner = createProcessLaneRunner({
+    commands: { native: { file: process.execPath, args: ['-e', source] } },
+    promptText: 'fixture prompt',
+  });
+  const measurement = await runner({
+    lane: 'native',
+    temperature: 'cold',
+    index: 0,
+    configurationFingerprint: 'a'.repeat(64),
+    configuration: { cwd: process.cwd() },
+  });
+
+  assert.equal(measurement.sessionId, 'observed-session');
+  assert.equal(measurement.generation, 4);
+  assert.ok(Number.isInteger(measurement.processId));
+  assert.ok(measurement.processCreationTime.length > 0);
+  assert.equal(Object.keys(measurement.liveReceipt).length, 0);
 });

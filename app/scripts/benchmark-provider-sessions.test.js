@@ -142,7 +142,7 @@ test('validator refuses the former fabricated arithmetic/spawn report shape', as
   assert.ok(errors.some((entry) => entry.includes('explicitly pending')));
 });
 
-test('paired/live mode is rejected unless paid live execution is explicitly opted in', () => {
+test('paid paired callback mode is rejected unless execution is explicitly opted in', () => {
   assert.throws(
     () => parseCli(['--provider', 'claude', '--mode', 'paired', '--warm-samples', '30', '--cold-samples', '5'], {}),
     /explicit --allow-live/,
@@ -153,18 +153,25 @@ test('paired/live mode is rejected unless paid live execution is explicitly opte
   assert.equal(parsed.allowLive, true);
 });
 
-test('opted-in paired runner uses A/B/B/A ordering and validates cold/warm report schema', async () => {
+test('opted-in paired callback uses A/B/B/A ordering but remains injected evidence', async () => {
   const calls = [];
   const report = await runPairedBenchmark({
     provider: 'claude', allowLive: true, coldSamples: 5, warmSamples: 30,
     async liveRunner(input) {
       calls.push(`${input.temperature}:${input.lane}`);
+      const laneOffset = input.lane === 'native' ? 1000 : 2000;
+      const warm = input.temperature === 'warm';
       return {
         firstTextMs: input.lane === 'native' ? 10 : 12,
         localOverheadMs: input.lane === 'native' ? 0 : 2,
         configurationFingerprint: 'c'.repeat(64),
         processSpawned: input.lane === 'athena' && (input.temperature === 'cold' || input.index === 0),
         gatewaySpawned: input.lane === 'athena' && (input.temperature === 'cold' || input.index === 0),
+        processId: warm ? laneOffset : laneOffset + input.index + 1,
+        processCreationTime: warm ? `${input.lane}-warm-start` : `${input.lane}-cold-start-${input.index + 1}`,
+        sessionId: warm ? `${input.lane}-warm` : `${input.lane}-cold-${input.index + 1}`,
+        providerGeneration: warm ? 9 : input.index + 1,
+        sessionReused: warm && input.index > 0,
       };
     },
   });
@@ -187,8 +194,20 @@ test('opted-in paired runner uses A/B/B/A ordering and validates cold/warm repor
     localOverheadMs: 0,
     processSpawned: false,
     gatewaySpawned: false,
+    processId: 1001,
+    processCreationTime: 'native-cold-start-1',
+    sessionId: 'native-cold-1',
+    providerGeneration: 1,
+    sessionReused: false,
   });
   assert.deepEqual(validateBenchmarkReport(report), []);
+  assert.equal(report.sourceClass, 'node-injected-paired');
+  assert.equal(report.productionLiveEligible, false);
+  assert.ok(report.pendingRuntimeEvidence.includes('trusted-in-tree-process-observer'));
+
+  const falselyRelabeledLive = structuredClone(report);
+  falselyRelabeledLive.sourceClass = 'claude-live-paired';
+  assert.ok(validateBenchmarkReport(falselyRelabeledLive).some((entry) => entry.includes('sourceClass')));
 
   const forged = structuredClone(report);
   forged.warm.athena.firstTextMs.p95 += 1;
@@ -218,6 +237,39 @@ test('opted-in paired runner uses A/B/B/A ordering and validates cold/warm repor
   const mismatched = structuredClone(report);
   mismatched.warm.native.rawSamples[0].configurationFingerprint = 'd'.repeat(64);
   assert.ok(validateBenchmarkReport(mismatched).some((entry) => entry.includes('configuration fingerprint')));
+
+  const forgedWarmProcess = structuredClone(report);
+  forgedWarmProcess.warm.athena.rawSamples[1].processId += 1;
+  assert.ok(validateBenchmarkReport(forgedWarmProcess)
+    .some((entry) => entry.includes('warm provider session continuity')));
+
+  const generationOnlyCold = structuredClone(report);
+  Object.assign(generationOnlyCold.cold.native.rawSamples[1], {
+    processId: generationOnlyCold.cold.native.rawSamples[0].processId,
+    processCreationTime: generationOnlyCold.cold.native.rawSamples[0].processCreationTime,
+    sessionId: generationOnlyCold.cold.native.rawSamples[0].sessionId,
+    providerGeneration: generationOnlyCold.cold.native.rawSamples[0].providerGeneration + 1,
+  });
+  assert.ok(validateBenchmarkReport(generationOnlyCold)
+    .some((entry) => entry.includes('cold process instances and provider sessions')));
+
+  await assert.rejects(runPairedBenchmark({
+    provider: 'claude', allowLive: true, coldSamples: 5, warmSamples: 30,
+    async liveRunner(input) {
+      return {
+        firstTextMs: 1,
+        localOverheadMs: 0,
+        configurationFingerprint: 'c'.repeat(64),
+        processSpawned: true,
+        gatewaySpawned: true,
+        processId: input.index + 1,
+        processCreationTime: `fresh-start-${input.temperature}-${input.lane}-${input.index}`,
+        sessionId: `fresh-${input.temperature}-${input.lane}-${input.index}`,
+        providerGeneration: input.index + 1,
+        sessionReused: false,
+      };
+    },
+  }), /warm.native provider session continuity is not proven/);
 });
 
 test('CLAUDE_ONLY refuses a fake Codex deterministic success in favor of disabled probes', async () => {

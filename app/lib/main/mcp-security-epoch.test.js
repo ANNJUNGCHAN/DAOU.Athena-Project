@@ -59,4 +59,3 @@ test('disposed capability context can no longer reconstruct spawn environment', 
 test('state directory must be an explicit absolute path', () => {
   assert.throws(() => createMcpSecurityEpochStore({ stateDir: 'relative' }), /absolute/);
 });
-

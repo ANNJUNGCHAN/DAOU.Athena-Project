@@ -364,8 +364,14 @@ function validateCorrelatedSample(sample) {
 }
 
 function validatePairedReport(report) {
-  const errors = validateEvidenceMetadata(report, 'claude-live-paired');
+  const errors = validateEvidenceMetadata(report, 'node-injected-paired');
   if (report.mode !== 'paired') return ['paired report mode is invalid'];
+  if (report.surface !== 'external-callback-injected'
+    || report.productionLiveEligible !== false
+    || !Array.isArray(report.pendingRuntimeEvidence)
+    || !report.pendingRuntimeEvidence.includes('trusted-in-tree-process-observer')) {
+    errors.push('paired callback report must remain explicitly injected and pending live observation');
+  }
   if (!/^[0-9a-f]{64}$/i.test(String(report.configurationFingerprint || ''))) {
     errors.push('paired configuration fingerprint is invalid');
   }
@@ -386,7 +392,12 @@ function validatePairedReport(report) {
         const sample = section[lane].rawSamples[index];
         if (!sample || sample.sample !== index + 1 || sample.lane !== lane || sample.temperature !== temperature
           || !Number.isFinite(sample.firstTextMs) || sample.firstTextMs < 0
-          || typeof sample.processSpawned !== 'boolean' || typeof sample.gatewaySpawned !== 'boolean') {
+          || typeof sample.processSpawned !== 'boolean' || typeof sample.gatewaySpawned !== 'boolean'
+          || !Number.isInteger(sample.processId) || sample.processId <= 0
+          || typeof sample.processCreationTime !== 'string' || sample.processCreationTime.length === 0
+          || typeof sample.sessionId !== 'string' || sample.sessionId.length === 0
+          || !Number.isInteger(sample.providerGeneration) || sample.providerGeneration <= 0
+          || typeof sample.sessionReused !== 'boolean') {
           errors.push(`${temperature}.${lane} raw sample is invalid`);
         }
         if (sample?.configurationFingerprint !== report.configurationFingerprint) {
@@ -396,6 +407,21 @@ function validatePairedReport(report) {
       const expectedSummary = summarize(section[lane].rawSamples.map((sample) => sample?.firstTextMs));
       if (!summariesEqual(section[lane].firstTextMs, expectedSummary)) {
         errors.push(`${temperature}.${lane} summary does not match raw samples`);
+      }
+      const processInstances = section[lane].rawSamples
+        .map((sample) => `${sample?.processId}:${sample?.processCreationTime}`);
+      const sessions = section[lane].rawSamples.map((sample) => sample?.sessionId);
+      const identities = section[lane].rawSamples
+        .map((sample) => `${sample?.processId}:${sample?.processCreationTime}:${sample?.sessionId}:${sample?.providerGeneration}`);
+      if (temperature === 'cold') {
+        if (section[lane].rawSamples.some((sample) => sample?.sessionReused !== false)
+          || new Set(processInstances).size !== expected || new Set(sessions).size !== expected) {
+          errors.push(`${temperature}.${lane} cold process instances and provider sessions are not distinct`);
+        }
+      } else if (section[lane].rawSamples[0]?.sessionReused !== false
+        || section[lane].rawSamples.slice(1).some((sample) => sample?.sessionReused !== true)
+        || new Set(identities).size !== 1) {
+        errors.push(`${temperature}.${lane} warm provider session continuity is invalid`);
       }
     }
     for (let index = 0; index < expected; index += 1) {
@@ -529,7 +555,7 @@ function writeReport(report, outputDirectory) {
 async function runPairedBenchmark(options) {
   if (!options.allowLive) throw new Error('paired benchmark requires explicit --allow-live');
   if (typeof options.liveRunner !== 'function') {
-    throw new Error('live benchmark runner is not configured; pass --live-runner with --allow-live');
+    throw new Error('paired callback runner is not configured; pass --live-runner with --allow-live');
   }
   const sections = {};
   let configurationFingerprint = null;
@@ -551,6 +577,13 @@ async function runPairedBenchmark(options) {
         if (measurement.configurationFingerprint !== configurationFingerprint) {
           throw new Error('native and Athena live lanes do not share one provider configuration');
         }
+        if (!Number.isInteger(measurement.processId) || measurement.processId <= 0
+          || typeof measurement.sessionId !== 'string' || measurement.sessionId.length === 0
+          || typeof measurement.processCreationTime !== 'string' || measurement.processCreationTime.length === 0
+          || !Number.isInteger(measurement.providerGeneration) || measurement.providerGeneration <= 0
+          || typeof measurement.sessionReused !== 'boolean') {
+          throw new Error('live runner must provide process, session, and generation continuity evidence');
+        }
         lanes[lane].push({
           sequence,
           sample: index + 1,
@@ -561,8 +594,27 @@ async function runPairedBenchmark(options) {
           localOverheadMs: Number.isFinite(measurement.localOverheadMs) ? measurement.localOverheadMs : null,
           processSpawned: measurement.processSpawned === true,
           gatewaySpawned: measurement.gatewaySpawned === true,
+          processId: measurement.processId,
+          processCreationTime: measurement.processCreationTime,
+          sessionId: measurement.sessionId,
+          providerGeneration: measurement.providerGeneration,
+          sessionReused: measurement.sessionReused,
         });
       }
+    }
+    for (const lane of ['native', 'athena']) {
+      const processInstances = lanes[lane].map((sample) => `${sample.processId}:${sample.processCreationTime}`);
+      const sessions = lanes[lane].map((sample) => sample.sessionId);
+      const identities = lanes[lane]
+        .map((sample) => `${sample.processId}:${sample.processCreationTime}:${sample.sessionId}:${sample.providerGeneration}`);
+      const valid = temperature === 'cold'
+        ? lanes[lane].every((sample) => sample.sessionReused === false)
+          && new Set(processInstances).size === lanes[lane].length
+          && new Set(sessions).size === lanes[lane].length
+        : lanes[lane][0].sessionReused === false
+          && lanes[lane].slice(1).every((sample) => sample.sessionReused === true)
+          && new Set(identities).size === 1;
+      if (!valid) throw new Error(`${temperature}.${lane} provider session continuity is not proven`);
     }
     sections[temperature] = {
       samples: sampleCount, successes: sampleCount, failures: 0,
@@ -578,6 +630,9 @@ async function runPairedBenchmark(options) {
   }
   return withEvidenceMetadata({
     provider: options.provider, mode: 'paired',
+    surface: 'external-callback-injected',
+    productionLiveEligible: false,
+    pendingRuntimeEvidence: ['trusted-in-tree-process-observer'],
     environment: environmentFingerprint(), configurationFingerprint,
     cold: sections.cold, warm: sections.warm,
     comparison: {
@@ -589,7 +644,7 @@ async function runPairedBenchmark(options) {
   }, {
     scenario: 'claude-native-athena-abba',
     provider: options.provider,
-    sourceClass: 'claude-live-paired',
+    sourceClass: 'node-injected-paired',
     config: { configurationFingerprint, coldSamples: options.coldSamples, warmSamples: options.warmSamples },
   });
 }

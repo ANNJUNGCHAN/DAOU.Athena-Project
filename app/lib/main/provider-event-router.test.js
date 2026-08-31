@@ -101,4 +101,3 @@ test('invalid or unstamped events fail before any callback', () => {
   assert.deepEqual(router.route({ type: 'text_delta', payload: { text: 'x' } }), { accepted: false, reason: 'invalid-event' });
   assert.equal(calls, 0);
 });
-

@@ -205,4 +205,3 @@ module.exports = {
   sanitizeDescription,
   validateProviderEvent,
 };
-
