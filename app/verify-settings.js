@@ -27,6 +27,18 @@ const path = require('path');
 const fs = require('fs');
 const { EventEmitter } = require('events');
 
+// **이 스크립트는 공유 프로필로 돌릴 수 없다.** 아래에서 계좌를 등록하고
+// (`검증-실패계좌`·`검증-성공계좌`) 다시 삭제한다 — ATHENA_USERDATA_DIR로
+// 실프로필을 가리키면 사용자가 등록한 계좌 옆에 검증용 쓰레기를 쓰고 remove까지
+// 부른다. 다른 하네스와 달리 harness-profile.js를 쓰지 않고 명시적으로 거부한다.
+if (process.env.ATHENA_USERDATA_DIR) {
+  console.error(
+    '[verify-settings] ATHENA_USERDATA_DIR이 설정돼 있다. 이 스크립트는 계좌를 등록·삭제하므로\n'
+    + '                  실프로필로 돌릴 수 없다. 변수를 해제하고 다시 실행하라.'
+  );
+  process.exit(2);
+}
+
 const TMP_ROOT = fs.mkdtempSync(path.join(os.tmpdir(), 'athena-verify-'));
 const MCP_STATE_DIR = path.join(TMP_ROOT, 'mcp-state');
 fs.mkdirSync(MCP_STATE_DIR, { recursive: true });

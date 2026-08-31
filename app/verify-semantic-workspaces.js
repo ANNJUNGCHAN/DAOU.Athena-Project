@@ -22,6 +22,7 @@ const ROOT = path.resolve(APP, '..');
 const BACKEND = path.join(ROOT, 'backend');
 const ARTIFACT_DIR = path.join(ROOT, 'artifacts', 'task-canvas', 'semantic-workspaces');
 const TEMP_PROFILE_PREFIX = 'athena-semantic-workspaces-';
+const { resolveHarnessProfile } = require('./lib/main/harness-profile');
 
 fs.mkdirSync(ARTIFACT_DIR, { recursive: true });
 const legacyArtifactProfile = path.join(ARTIFACT_DIR, '.electron-user-data');
@@ -32,16 +33,23 @@ for (const entry of fs.readdirSync(os.tmpdir(), { withFileTypes: true })) {
   if (Date.now() - fs.statSync(staleProfile).mtimeMs < 30_000) continue;
   fs.rmSync(staleProfile, { recursive: true, force: true });
 }
-const electronUserDataDir = fs.mkdtempSync(path.join(os.tmpdir(), TEMP_PROFILE_PREFIX));
+// ATHENA_USERDATA_DIR을 주면 실제로 등록한 계좌·CLI 계정이 있는 프로필을 그대로
+// 쓴다. 그때는 아래 정리가 전부 no-op이다 — lib/main/harness-profile.js가 그
+// 규칙을 소유하므로, 실프로필이 이 스크립트의 rmSync에 지워질 길이 없다.
+const harnessProfile = resolveHarnessProfile({ prefix: TEMP_PROFILE_PREFIX });
+const electronUserDataDir = harnessProfile.dir;
 app.setPath('userData', electronUserDataDir);
 function cleanupElectronUserData() {
-  try {
-    fs.rmSync(electronUserDataDir, { recursive: true, force: true });
-  } catch {
-    // Chromium may retain file handles until the Electron process fully exits.
-  }
+  // Chromium이 프로세스가 완전히 끝날 때까지 핸들을 잡고 있을 수 있다 —
+  // 헬퍼가 실패를 삼킨다.
+  harnessProfile.cleanup();
 }
 function scheduleElectronUserDataCleanup() {
+  // 공유 프로필(ATHENA_USERDATA_DIR)이면 예약 자체를 하지 않는다. 이 헬퍼는
+  // 부모가 죽은 뒤에 detached 프로세스로 rmSync를 돌리므로 harnessProfile의
+  // no-op cleanup을 우회한다 — 여기서 안 막으면 실제로 등록한 계좌·자격증명이
+  // 검증이 끝나고 나서 조용히 지워진다.
+  if (harnessProfile.shared) return;
   const cleanupScript = String.raw`
 const fs = require('node:fs');
 const [target, parentPidText] = process.argv.slice(1);
