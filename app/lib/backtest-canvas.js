@@ -397,6 +397,20 @@ function createBacktestCanvas(options) {
     catch (err) { fail(err); }
   }
 
+  // 이력 비교의 곡선 겹쳐보기(보드 05). 목록 응답에는 equity가 없어 실행별로 한 번씩
+  // 더 받는다 — 목록에 곡선 400점씩을 늘 실어 보내면 이력 화면이 무거워진다.
+  async function loadCompareEquity(runIds) {
+    if (!deps.result) return;
+    try {
+      const loaded = await Promise.all(runIds.map((id) => deps.result({ run_id: id })));
+      const series = loaded.map((r, i) => ({
+        label: String(runIds[i]).slice(0, 8),
+        equity: (r && r.equity) || [],
+      }));
+      setState({ compareEquity: series });
+    } catch { setState({ compareEquity: null }); }
+  }
+
   async function runOptimize() {
     const ranges = optimizeRanges();
     if (!ranges.length) { setState({ optimizeError: '훑을 파라미터가 없습니다' }); return; }
@@ -1133,6 +1147,8 @@ function createBacktestCanvas(options) {
           ? selected.filter((id) => id !== run.run_id)
           : selected.concat([run.run_id]).slice(-2);
         setState({ compare: next });
+        // 두 건이 모이면 곡선을 겹치기 위해 각 실행의 equity를 받아온다(보드 05).
+        if (next.length === 2) void loadCompareEquity(next);
       });
       row.setAttribute('aria-pressed', String(isOn));
       row.appendChild(el('span', 'backtest-history-check', isOn ? '■' : '□'));
@@ -1171,6 +1187,20 @@ function createBacktestCanvas(options) {
       table.appendChild(row);
     });
     wrap.appendChild(table);
+
+    const series = state.compareEquity;
+    if (series && series.length === 2) {
+      const legend = el('div', 'backtest-equity-legend');
+      series.forEach((s, i) => {
+        legend.appendChild(el('span', `backtest-legend-overlay is-${i}`, s.label));
+      });
+      wrap.appendChild(legend);
+      const host = el('div', 'backtest-compare-chart');
+      if (typeof document.createElementNS === 'function') {
+        EquityChart.renderOverlayChart(host, { series });
+      }
+      wrap.appendChild(host);
+    }
     return wrap;
   }
 

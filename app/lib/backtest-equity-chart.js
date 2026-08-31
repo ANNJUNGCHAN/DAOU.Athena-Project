@@ -131,6 +131,28 @@ function buildGeometry(options) {
   };
 }
 
+// 두 실행을 같은 축에 겹친다(Paper 보드 05). 길이가 다르면 짧은 쪽이 먼저 끝날 뿐
+// 늘리지 않는다 — 없는 구간을 마지막 값으로 이어 붙이면 "그 기간에도 들고 있었다"는
+// 거짓이 된다.
+function buildOverlay(options) {
+  const opts = options || {};
+  const width = opts.width || 900;
+  const height = opts.height || 220;
+  const series = (opts.series || [])
+    .map((s) => ({ label: s.label, values: normalize((s.equity || []).map((p) => p.equity)) }))
+    .filter((s) => s.values.length);
+  if (!series.length) return { empty: true, width, height };
+  const range = extent(series.map((s) => s.values));
+  const longest = Math.max(...series.map((s) => s.values.length));
+  const project = projector(width, height, longest, range);
+  return {
+    empty: false,
+    width,
+    height,
+    paths: series.map((s) => ({ label: s.label, d: pathFrom(s.values, project) })),
+  };
+}
+
 // ---------- DOM ----------
 
 function svgEl(tag, attrs) {
@@ -188,6 +210,32 @@ function renderEquityChart(container, options) {
   return geometry;
 }
 
+function renderOverlayChart(container, options) {
+  const geometry = buildOverlay(options);
+  while (container.firstChild) container.removeChild(container.firstChild);
+  if (geometry.empty) {
+    const empty = document.createElement('div');
+    empty.className = 'backtest-equity-empty';
+    empty.textContent = '겹쳐 볼 자산곡선이 없습니다';
+    container.appendChild(empty);
+    return geometry;
+  }
+  const svg = svgEl('svg', {
+    class: 'backtest-equity-svg',
+    viewBox: `0 0 ${geometry.width} ${geometry.height}`,
+    preserveAspectRatio: 'none',
+    role: 'img',
+    'aria-label': '두 실행의 자산곡선 겹쳐보기',
+  });
+  geometry.paths.forEach((p, i) => {
+    svg.appendChild(svgEl('path', {
+      class: `backtest-equity-overlay is-${i}`, d: p.d, fill: 'none',
+    }));
+  });
+  container.appendChild(svg);
+  return geometry;
+}
+
 const __exports = {
   PAD,
   normalize,
@@ -197,7 +245,9 @@ const __exports = {
   pathFrom,
   markerPoints,
   buildGeometry,
+  buildOverlay,
   renderEquityChart,
+  renderOverlayChart,
 };
 
 // UMD 각주(2026-08-18 렌더러 격리) — column-fold.js와 같은 패턴.
