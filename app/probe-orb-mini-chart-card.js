@@ -8,6 +8,18 @@
 // 컴파일한 가짜 claude 실행 파일로 오버라이드해 실제 claude를 부르지 않는다.
 // 6개 일봉 캔들(68,900→88,100, 우상향)을 흘려서 종가 라인 6점과 상승(양수)
 // 등락 톤(--color-up)이 실제로 나오는지까지 확인한다.
+//
+// 2026-09-01 정정 — 일봉·분봉 두 봉투를 **한 턴에** 흘린다. 이전 판은 첫 턴
+// 뒤에 ATHENA_CLAUDE_BIN을 분봉용 실행 파일로 바꾸고 둘째 턴을 태웠는데,
+// 상주 프로바이더 세션(lib/main/claude-chat-session.js:117 `this._claudeBin`)이
+// 세션 생성 시점의 경로를 붙들고 있어 둘째 턴도 **첫 실행 파일**을 다시 돌렸다.
+// 그래서 10~15단계가 첫 턴 카드를 보고 계속 실패했다(앱이 아니라 프로브의
+// 결함 — 진단 결과 둘째 턴에도 '첫 턴 차트'가 그대로 그려졌다). 한 턴 안에
+// 두 봉투를 보내면 실행 파일을 갈아끼울 필요 자체가 없다.
+//
+// NDJSON은 Node에서 만들어 base64로 넘기고 C#은 디코드해 그대로 뱉기만 한다 —
+// q-연결로 JSON을 짓던 옛 방식은 봉투가 둘 이상이면 이스케이프가 감당이 안 된다
+// (probe-orb-mini-cards.js와 같은 방식).
 
 const { app } = require('electron');
 const path = require('path');
@@ -39,87 +51,87 @@ function findCsc() {
   return found;
 }
 
-// render_canvas 성공 1건(6개 일봉 캔들짜리 chart 엔벌로프)만 stdout에 쏟는
-// 최소 실행 파일. Console.OutputEncoding을 UTF-8로 고정한다 — 기본 콘솔
-// 코드페이지로는 한글 라벨이 깨져 나간다(probe-orb-table-fold-card.js 실측).
+// 일봉 6개 + 분봉 2개, 두 봉투를 한 턴에 내는 가짜 claude.
+// 분봉 candle.time은 문자열이 아니라 백엔드 canvas_transform.py _aits_time()이
+// 만드는 Unix epoch 초 정수다(2026-08-27 결함 3 회귀 케이스).
+const DAY_ENVELOPE = {
+  card_title: '삼성전자 005930(테스트)',
+  canvas_type: 'chart',
+  fell_back: false,
+  data: {
+    symbol: '005930',
+    chart: {
+      period: 'day',
+      target: 'stock',
+      trId: 'ka10081',
+      candles: [
+        { time: '2026-05-26', open: 68000, high: 69500, low: 67800, close: 68900, volume: 1000 },
+        { time: '2026-06-10', open: 68900, high: 74500, low: 68500, close: 74000, volume: 1200 },
+        { time: '2026-06-25', open: 74000, high: 80000, low: 73800, close: 79500, volume: 1300 },
+        { time: '2026-07-05', open: 79500, high: 83500, low: 79000, close: 83000, volume: 1400 },
+        { time: '2026-07-12', open: 83000, high: 85500, low: 82500, close: 85000, volume: 1500 },
+        { time: '2026-07-19', open: 85000, high: 88500, low: 84800, close: 88100, volume: 1600 },
+      ],
+    },
+  },
+};
+
+// 2026-08-27 09:31/09:35 KST → epoch 초.
+const MIN_ENVELOPE = {
+  card_title: '삼성전자 005930(분봉테스트)',
+  canvas_type: 'chart',
+  fell_back: false,
+  data: {
+    symbol: '005930',
+    chart: {
+      period: 'min',
+      target: 'stock',
+      trId: 'ka10080',
+      candles: [
+        { time: 1787790660, open: 68800, high: 69000, low: 68700, close: 68900, volume: 500 },
+        { time: 1787790900, open: 68900, high: 69300, low: 68850, close: 69200, volume: 600 },
+      ],
+    },
+  },
+};
+
+function buildNdjson() {
+  const lines = [];
+  [DAY_ENVELOPE, MIN_ENVELOPE].forEach((envelope, i) => {
+    const id = `tu${i + 1}`;
+    lines.push(JSON.stringify({
+      type: 'assistant',
+      message: { content: [{ type: 'tool_use', id, name: 'mcp__athena__athena__render_canvas' }] },
+    }));
+    lines.push(JSON.stringify({
+      type: 'user',
+      message: { content: [{ type: 'tool_result', tool_use_id: id, content: JSON.stringify(envelope) }] },
+    }));
+  });
+  lines.push(JSON.stringify({
+    type: 'result',
+    is_error: false,
+    result: '3개월 저점 68,900에서 88,100까지 올라왔습니다. 최근 1분봉은 68,900에서 69,200으로 올랐습니다.',
+    session_id: 'FAKE-SESSION-CHART',
+  }));
+  return `${lines.join('\n')}\n`;
+}
+
 function compileFakeClaude() {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'athena-fake-claude-chartcard-'));
   const csPath = path.join(dir, 'fakeclaude.cs');
   const exePath = path.join(dir, 'fakeclaude.exe');
+  const payload = Buffer.from(buildNdjson(), 'utf-8').toString('base64');
   const src = `
 using System;
+using System.Text;
 
 class Program {
   static void Main(string[] args) {
-    Console.OutputEncoding = new System.Text.UTF8Encoding(false);
-    char q = (char)34;
-
-    string c1 = "{" + q + "time" + q + ":" + q + "2026-05-26" + q + "," + q + "open" + q + ":68000," + q + "high" + q + ":69500," + q + "low" + q + ":67800," + q + "close" + q + ":68900," + q + "volume" + q + ":1000}";
-    string c2 = "{" + q + "time" + q + ":" + q + "2026-06-10" + q + "," + q + "open" + q + ":68900," + q + "high" + q + ":74500," + q + "low" + q + ":68500," + q + "close" + q + ":74000," + q + "volume" + q + ":1200}";
-    string c3 = "{" + q + "time" + q + ":" + q + "2026-06-25" + q + "," + q + "open" + q + ":74000," + q + "high" + q + ":80000," + q + "low" + q + ":73800," + q + "close" + q + ":79500," + q + "volume" + q + ":1300}";
-    string c4 = "{" + q + "time" + q + ":" + q + "2026-07-05" + q + "," + q + "open" + q + ":79500," + q + "high" + q + ":83500," + q + "low" + q + ":79000," + q + "close" + q + ":83000," + q + "volume" + q + ":1400}";
-    string c5 = "{" + q + "time" + q + ":" + q + "2026-07-12" + q + "," + q + "open" + q + ":83000," + q + "high" + q + ":85500," + q + "low" + q + ":82500," + q + "close" + q + ":85000," + q + "volume" + q + ":1500}";
-    string c6 = "{" + q + "time" + q + ":" + q + "2026-07-19" + q + "," + q + "open" + q + ":85000," + q + "high" + q + ":88500," + q + "low" + q + ":84800," + q + "close" + q + ":88100," + q + "volume" + q + ":1600}";
-    string candles = "[" + c1 + "," + c2 + "," + c3 + "," + c4 + "," + c5 + "," + c6 + "]";
-
-    string chart = "{" + q + "period" + q + ":" + q + "day" + q + "," + q + "target" + q + ":" + q + "stock" + q + "," + q + "trId" + q + ":" + q + "ka10081" + q + "," + q + "candles" + q + ":" + candles + "}";
-
-    string envelope =
-      "{" + q + "card_title" + q + ":" + q + "삼성전자 005930(테스트)" + q + "," +
-      q + "canvas_type" + q + ":" + q + "chart" + q + "," +
-      q + "fell_back" + q + ":false," +
-      q + "data" + q + ":{" + q + "symbol" + q + ":" + q + "005930" + q + "," + q + "chart" + q + ":" + chart + "}" +
-      "}";
-
-    string esc = envelope.Replace(q.ToString(), "\\\\" + q);
-
-    Console.WriteLine("{" + q + "type" + q + ":" + q + "assistant" + q + "," + q + "message" + q + ":{" + q + "content" + q + ":[{" + q + "type" + q + ":" + q + "tool_use" + q + "," + q + "id" + q + ":" + q + "tu1" + q + "," + q + "name" + q + ":" + q + "mcp__athena__athena__render_canvas" + q + "}]}}");
-    Console.WriteLine("{" + q + "type" + q + ":" + q + "user" + q + "," + q + "message" + q + ":{" + q + "content" + q + ":[{" + q + "type" + q + ":" + q + "tool_result" + q + "," + q + "tool_use_id" + q + ":" + q + "tu1" + q + "," + q + "content" + q + ":" + q + esc + q + "}]}}");
-    Console.WriteLine("{" + q + "type" + q + ":" + q + "result" + q + "," + q + "is_error" + q + ":false," + q + "result" + q + ":" + q + "3개월 저점 68,900에서 88,100까지 올라왔습니다." + q + "," + q + "session_id" + q + ":" + q + "FAKE-SESSION-CHART" + q + "}");
-    Environment.Exit(0);
-  }
-}`;
-  fs.writeFileSync(csPath, src, 'utf-8');
-  execFileSync(findCsc(), ['/nologo', `/out:${exePath}`, csPath], { stdio: 'pipe' });
-  return exePath;
-}
-
-// 2026-08-27 결함 3 회귀 — render_canvas 성공 1건(분봉 2개짜리 chart 엔벌로프,
-// candle.time이 문자열이 아니라 백엔드 _aits_time()과 같은 Unix epoch 초
-// 정수)만 stdout에 쏟는다. 위 compileFakeClaude(일봉, time이 'YYYY-MM-DD'
-// 문자열)와 달리 time을 JSON 숫자로 박아 넣는다.
-function compileFakeClaudeMin() {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'athena-fake-claude-chartcard-min-'));
-  const csPath = path.join(dir, 'fakeclaudemin.cs');
-  const exePath = path.join(dir, 'fakeclaudemin.exe');
-  const src = `
-using System;
-
-class Program {
-  static void Main(string[] args) {
-    Console.OutputEncoding = new System.Text.UTF8Encoding(false);
-    char q = (char)34;
-
-    // 2026-08-27 09:31/09:35 KST → epoch 초(canvas_transform.py _aits_time()과
-    // 같은 산출: 14자리 KST 타임스탬프를 tzinfo(+9)로 파싱한 뒤 int(timestamp())).
-    string c1 = "{" + q + "time" + q + ":1787790660," + q + "open" + q + ":68800," + q + "high" + q + ":69000," + q + "low" + q + ":68700," + q + "close" + q + ":68900," + q + "volume" + q + ":500}";
-    string c2 = "{" + q + "time" + q + ":1787790900," + q + "open" + q + ":68900," + q + "high" + q + ":69300," + q + "low" + q + ":68850," + q + "close" + q + ":69200," + q + "volume" + q + ":600}";
-    string candles = "[" + c1 + "," + c2 + "]";
-
-    string chart = "{" + q + "period" + q + ":" + q + "min" + q + "," + q + "target" + q + ":" + q + "stock" + q + "," + q + "trId" + q + ":" + q + "ka10080" + q + "," + q + "candles" + q + ":" + candles + "}";
-
-    string envelope =
-      "{" + q + "card_title" + q + ":" + q + "삼성전자 005930(분봉테스트)" + q + "," +
-      q + "canvas_type" + q + ":" + q + "chart" + q + "," +
-      q + "fell_back" + q + ":false," +
-      q + "data" + q + ":{" + q + "symbol" + q + ":" + q + "005930" + q + "," + q + "chart" + q + ":" + chart + "}" +
-      "}";
-
-    string esc = envelope.Replace(q.ToString(), "\\\\" + q);
-
-    Console.WriteLine("{" + q + "type" + q + ":" + q + "assistant" + q + "," + q + "message" + q + ":{" + q + "content" + q + ":[{" + q + "type" + q + ":" + q + "tool_use" + q + "," + q + "id" + q + ":" + q + "tu1" + q + "," + q + "name" + q + ":" + q + "mcp__athena__athena__render_canvas" + q + "}]}}");
-    Console.WriteLine("{" + q + "type" + q + ":" + q + "user" + q + "," + q + "message" + q + ":{" + q + "content" + q + ":[{" + q + "type" + q + ":" + q + "tool_result" + q + "," + q + "tool_use_id" + q + ":" + q + "tu1" + q + "," + q + "content" + q + ":" + q + esc + q + "}]}}");
-    Console.WriteLine("{" + q + "type" + q + ":" + q + "result" + q + "," + q + "is_error" + q + ":false," + q + "result" + q + ":" + q + "최근 1분봉은 68,900에서 69,200으로 올랐습니다." + q + "," + q + "session_id" + q + ":" + q + "FAKE-SESSION-CHART-MIN" + q + "}");
+    Console.OutputEncoding = new UTF8Encoding(false);
+    string payload = "${payload}";
+    Console.Write(Encoding.UTF8.GetString(Convert.FromBase64String(payload)));
+    Console.Out.Flush();
     Environment.Exit(0);
   }
 }`;
@@ -164,7 +176,11 @@ async function main() {
   let cardState = null;
   while (Date.now() < deadline) {
     cardState = await orbWin.webContents.executeJavaScript(`(() => {
-      const card = document.querySelector('#orbChatTurns .orb-fold-card');
+      const cards = Array.from(document.querySelectorAll('#orbChatTurns .orb-fold-card'));
+      const card = cards.find((c) => {
+        const t = c.querySelector('.orb-fold-card-title');
+        return t && t.textContent === '삼성전자 005930(테스트)';
+      });
       if (!card) return null;
       const svg = card.querySelector('.orb-chart-svg');
       const path = svg ? svg.querySelector('path') : null;
@@ -203,23 +219,19 @@ async function main() {
   // candle.time이 'YYYY-MM-DD' 문자열이 아니라 숫자 epoch(canvas_transform.py
   // _aits_time()이 분·틱봉에 만드는 형태)일 때도 orbChartDateLabel()이 KST
   // 날짜·시각으로 바꿔 찍는지 — 수정 전엔 facts-card.js formatDatetime이
-  // 8자리 문자열만 인식해 "1787790660"이 그대로 찍혔다.
-  const minExePath = compileFakeClaudeMin();
-  process.env.ATHENA_CLAUDE_BIN = minExePath;
-
-  await orbWin.webContents.executeJavaScript(`(() => {
-    const input = document.getElementById('orbInput');
-    input.value = ${JSON.stringify('삼성전자 1분봉 보여줘')};
-    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
-  })()`);
-
+  // 8자리 문자열만 인식해 "1787790660"이 그대로 찍혔다. 같은 턴에 이미 도착한
+  // 둘째 봉투를 제목으로 골라 본다(위 머리말 — 실행 파일 교체는 상주 세션에서
+  // 통하지 않는다).
   const minDeadline = Date.now() + 20000;
   let minCardState = null;
   while (Date.now() < minDeadline) {
     minCardState = await orbWin.webContents.executeJavaScript(`(() => {
-      const cards = document.querySelectorAll('#orbChatTurns .orb-fold-card');
-      const card = cards[cards.length - 1];
-      if (!card || !card.querySelector('.orb-fold-card-title') || card.querySelector('.orb-fold-card-title').textContent !== '삼성전자 005930(분봉테스트)') return null;
+      const cards = Array.from(document.querySelectorAll('#orbChatTurns .orb-fold-card'));
+      const card = cards.find((c) => {
+        const t = c.querySelector('.orb-fold-card-title');
+        return t && t.textContent === '삼성전자 005930(분봉테스트)';
+      });
+      if (!card) return null;
       const svg = card.querySelector('.orb-chart-svg');
       const path = svg ? svg.querySelector('path') : null;
       const d = path ? path.getAttribute('d') : null;
