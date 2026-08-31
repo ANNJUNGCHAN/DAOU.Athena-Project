@@ -26,7 +26,7 @@ from typing import Any, Literal
 
 import pandas as pd
 
-from athena_api.backtest.compile import compile_signals
+from athena_api.backtest.compile import compile_signals_with_warmup
 from athena_api.backtest.data import FetchPage
 from athena_api.backtest.data import backfill as run_backfill
 from athena_api.backtest.engine import DEFAULT_INITIAL_CASH, run_backtest
@@ -134,6 +134,7 @@ class BacktestRunner:
         df: pd.DataFrame,
         overrides: dict[str, int | float] | None,
         initial_cash: float = DEFAULT_INITIAL_CASH,
+        extra_flags: str | None = None,
     ) -> Job:
         """`run_id`의 `bt_run` 행은 호출자가 이미 status="running"으로 만들어뒀다고
         전제한다(spec_hash·strategy_version_id는 API 층의 책임 — 재현성 축은 store가 쥔다).
@@ -143,16 +144,23 @@ class BacktestRunner:
 
         async def run() -> None:
             try:
-                signals = compile_signals(spec, df, overrides)
+                # 워밍업 봉 수를 컴파일러에게서 받아 그대로 넘긴다 — metrics가 다시
+                # 추정하면 두 계산이 갈라진다(§6.5, metrics.py 머리말).
+                signals, warmup_bars = compile_signals_with_warmup(spec, df, overrides)
                 result = run_backtest(
                     df, signals, spec.risk, spec.costs, initial_cash=initial_cash
                 )
                 metrics = compute_metrics(
-                    result.equity, result.trades, df, initial_cash=initial_cash
+                    result.equity, result.trades, df,
+                    initial_cash=initial_cash, warmup_bars=warmup_bars,
                 )
                 metrics_payload: dict[str, Any] = asdict(metrics)
-                if result.costs_flag:
-                    metrics_payload["flags"] = [result.costs_flag]
+                # 정직 표기 플래그는 결과 화면 "가정" 섹션이 그대로 노출한다(§8.3).
+                # `extra_flags`는 호출자만 아는 사실(예: 보유 구간만 실행)이라 여기서
+                # 지어낼 수 없어 인자로 받는다.
+                flags = [f for f in (result.costs_flag, extra_flags) if f]
+                if flags:
+                    metrics_payload["flags"] = flags
                 await self._store.save_trades(
                     run_id,
                     [

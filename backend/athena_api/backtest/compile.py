@@ -39,6 +39,46 @@ def _indicator_columns(
     return {f"{ind_spec.alias}_{name}": result[name] for name in registry_spec.outputs}
 
 
+def compile_signals_with_warmup(
+    spec: StrategySpec,
+    df: pd.DataFrame,
+    overrides: dict[str, int | float] | None = None,
+) -> tuple[pd.DataFrame, int]:
+    """`compile_signals`와 같은 계산을 하되 워밍업 봉 수를 같이 돌려준다.
+
+    **왜 워밍업을 여기서 세나.** SMA(60)은 앞 59봉이 NaN이다 — 그 구간에는 신호가 원천적으로
+    나올 수 없으므로 수익률이 0으로 깔린다. metrics.py가 그 0수익일을 Sharpe 표준편차에
+    넣으면 Sharpe가 부풀려진다(§6.5가 KIS 원본의 결함으로 지목한 바로 그것). 워밍업 길이는
+    지표와 파라미터에 따라 달라지므로 metrics가 스스로 추정하면 두 계산이 갈라진다 —
+    지표 프레임을 실제로 만든 이 함수만이 그 값을 사실로 안다.
+
+    세는 방법: 지표 열 중 하나라도 NaN인 **선두 구간**의 길이. 중간에 뚫린 NaN은 세지 않는다
+    (그건 워밍업이 아니라 데이터 결손이고, 다른 문제다).
+    """
+    resolved = resolve_params(spec, overrides)
+
+    frame = df[list(_RAW_COLUMNS)].copy()
+    indicator_columns: list[str] = []
+    for ind_spec in resolved.strategy.indicators:
+        registry_spec = indicators.get(ind_spec.id)
+        known_params = {k: v for k, v in ind_spec.params.items() if k in registry_spec.params}
+        result = registry_spec.fn(df, **known_params)
+        for column, series in _indicator_columns(ind_spec, result).items():
+            frame[column] = series
+            indicator_columns.append(column)
+
+    warmup = 0
+    if indicator_columns:
+        valid = frame[indicator_columns].notna().all(axis=1)
+        # 첫 True의 위치가 곧 워밍업 길이다. 전부 False면 신호가 아예 못 나오므로 전체 길이.
+        warmup = int(valid.values.argmax()) if bool(valid.any()) else len(frame)
+
+    entry = rules.evaluate_group(frame, resolved.strategy.entry)
+    exit_ = rules.evaluate_group(frame, resolved.strategy.exit)
+    signals = pd.DataFrame({"entry": entry, "exit": exit_}, index=df.index)
+    return signals, warmup
+
+
 def compile_signals(
     spec: StrategySpec,
     df: pd.DataFrame,
@@ -53,22 +93,12 @@ def compile_signals(
     반환값의 `size` 컬럼은 없다 — P3의 유일한 사이징(`risk.position.sizing == "all_in"`)은
     "없으면 1.0"이라는 signals 계약의 기본값과 정확히 같으므로, 엔진이 항상 이미 알고 있는
     값을 새 컬럼으로 지어내지 않는다.
+
+    워밍업 길이도 필요하면 `compile_signals_with_warmup()`을 쓴다 — 이 함수는 그 래퍼다.
+    레지스트리가 모르는 키(예: KIS 원본이 남긴 `source: close`)는 조용히 무시한다.
     """
-    resolved = resolve_params(spec, overrides)
-
-    frame = df[list(_RAW_COLUMNS)].copy()
-    for ind_spec in resolved.strategy.indicators:
-        registry_spec = indicators.get(ind_spec.id)
-        # 레지스트리가 모르는 키(예: KIS 원본이 남긴 `source: close`)는 조용히 무시한다 —
-        # 여기서 계산 함수가 받는 파라미터는 등록된 것만이다(§6.3, 지표별 계약).
-        known_params = {k: v for k, v in ind_spec.params.items() if k in registry_spec.params}
-        result = registry_spec.fn(df, **known_params)
-        for column, series in _indicator_columns(ind_spec, result).items():
-            frame[column] = series
-
-    entry = rules.evaluate_group(frame, resolved.strategy.entry)
-    exit_ = rules.evaluate_group(frame, resolved.strategy.exit)
-    return pd.DataFrame({"entry": entry, "exit": exit_}, index=df.index)
+    signals, _warmup = compile_signals_with_warmup(spec, df, overrides)
+    return signals
 
 
-__all__ = ["compile_signals"]
+__all__ = ["compile_signals", "compile_signals_with_warmup"]
