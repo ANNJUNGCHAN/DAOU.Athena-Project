@@ -134,6 +134,13 @@ class Settings(BaseSettings):
     nudge_guard_path: Path = Field(
         default_factory=lambda: Path.home() / ".athena" / "routines" / "nudge_guard.json"
     )
+    # 백테스트도 브레인과 같은 이유로 기본 off다(brain_enabled 주석 참고) — 옵트인하지
+    # 않은 배포와 기존 테스트는 캔들 캐시 파일을 건드리지 않는다. 파일은 브레인과
+    # 분리한다 — brain의 reset-and-restart가 캔들 캐시까지 날리면 안 된다(§5.3).
+    backtest_enabled: bool = False
+    backtest_db_path: Path = Field(
+        default_factory=lambda: Path.home() / ".athena" / "backtest.sqlite3"
+    )
     # Explicit argv for the local structured-extraction command (e.g. a local claude CLI
     # invocation). Empty means extraction is disabled -- IngestionCoordinator still
     # projects raw SourceRecords, it just never derives Entity/Claim/Relation from them.

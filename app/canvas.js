@@ -1935,10 +1935,72 @@ const pluginCanvas = window.AthenaLib.PluginCanvas.createPluginCanvas({
 pluginCanvas.mount();
 window.AthenaPluginCanvas = pluginCanvas;
 
-// --- 백테스트모드 캔버스 배선 (P1 모드 골격, backtest-mode-plan.md §3.2) -------
-// 이번 단계는 정직한 빈 상태 하나뿐이다 — 전략 설계·실행·결과는 P2~P4가 붙인다.
+// --- 백테스트모드 캔버스 배선 (P4, backtest-mode-plan.md §8.2) ---------------
+// 8채널을 agentCanvas의 fetchRoutines와 같은 모양으로 잇는다 — IPC 봉투
+// ({ok,data}|{ok:false,status,error,detail})를 여기서 벗기고, 실패는 던져서
+// backtest-canvas.js가 하나의 try/catch로 처리하게 한다. backfill만 사람 클릭
+// 전용 경로다(라우틴 confirm/cancel과 같은 원칙 — 쿼터를 태우는 백필은 모델
+// 툴에 없다).
 const backtestCanvas = window.AthenaLib.BacktestCanvas.createBacktestCanvas({
   container: document.getElementById('backtestCanvas'),
+  fetchPresets: async () => {
+    const res = await window.athena.invoke('athena:backtest-presets');
+    if (!res || !res.ok) throw new Error((res && res.error) || '프리셋을 불러오지 못했습니다');
+    return (res.data && Array.isArray(res.data.presets)) ? res.data.presets : [];
+  },
+  // P4 상태 기계는 직접 부르지 않는다(설계 폼이 최소 입력뿐이라 사전 계획
+  // 조회를 안 거친다, backtest-canvas.js 머리말 참고) — P5/P6이 이어 쓸 자리다.
+  plan: async (params) => {
+    const res = await window.athena.invoke('athena:backtest-plan', params);
+    if (!res || !res.ok) throw new Error((res && res.error) || '데이터 계획을 불러오지 못했습니다');
+    return res.data;
+  },
+  // 409(캐시 부족)는 실패가 아니라 승인 화면 전환 신호다(backtest-bridge.js
+  // 머리말과 같은 원칙) — blocked로 정규화해 돌려주고, 그 외 실패만 던진다.
+  run: async ({ yaml, params } = {}) => {
+    const body = params !== undefined ? { yaml, params } : { yaml };
+    const res = await window.athena.invoke('athena:backtest-run', body);
+    if (res && res.ok) {
+      const runId = res.data && res.data.run_id;
+      if (!runId) throw new Error('run_id를 받지 못했습니다');
+      return { blocked: false, run_id: runId };
+    }
+    if (res && res.status === 409 && res.detail) {
+      return { blocked: true, needed_pages: res.detail.needed_pages, est_seconds: res.detail.est_seconds };
+    }
+    throw new Error((res && res.error) || '백테스트 실행에 실패했습니다');
+  },
+  // 백필 잡 상태 — 수집 승인 카드 이후 running 상태가 1초 간격으로 부른다.
+  status: async ({ job_id } = {}) => {
+    const res = await window.athena.invoke('athena:backtest-status', { job_id });
+    if (!res || !res.ok) throw new Error((res && res.error) || '수집 상태를 불러오지 못했습니다');
+    return res.data;
+  },
+  // 실행 상태+지표+자산곡선+stdout — running 상태가 1초 간격으로 부른다.
+  result: async ({ run_id } = {}) => {
+    const res = await window.athena.invoke('athena:backtest-result', { run_id });
+    if (!res || !res.ok) throw new Error((res && res.error) || '실행 결과를 불러오지 못했습니다');
+    return res.data;
+  },
+  trades: async ({ run_id } = {}) => {
+    const res = await window.athena.invoke('athena:backtest-trades', { run_id });
+    if (!res || !res.ok) throw new Error((res && res.error) || '체결 내역을 불러오지 못했습니다');
+    return (res.data && Array.isArray(res.data.trades)) ? res.data.trades : [];
+  },
+  // 이력 목록 — P4 상태 기계는 직접 부르지 않는다(이력 비교 화면은 P6).
+  runs: async () => {
+    const res = await window.athena.invoke('athena:backtest-runs');
+    if (!res || !res.ok) throw new Error((res && res.error) || '실행 이력을 불러오지 못했습니다');
+    return (res.data && Array.isArray(res.data.runs)) ? res.data.runs : [];
+  },
+  // 사람 클릭 전용 — 캔버스의 [수집하고 실행] 버튼에서만 부른다.
+  backfill: async (params) => {
+    const res = await window.athena.invoke('athena:backtest-backfill', params);
+    if (!res || !res.ok) throw new Error((res && res.error) || '데이터 수집을 시작하지 못했습니다');
+    const jobId = res.data && res.data.job_id;
+    if (!jobId) throw new Error('job_id를 받지 못했습니다');
+    return { job_id: jobId };
+  },
 });
 backtestCanvas.mount();
 window.AthenaBacktestCanvas = backtestCanvas;
