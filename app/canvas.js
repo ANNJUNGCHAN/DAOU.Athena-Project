@@ -2303,6 +2303,10 @@ void pluginRefresh();
 // 두 상태만 문장으로 바꾸고 원문은 괄호로 남긴다 — 감추지 않는다.
 function backtestError(res, fallback) {
   const raw = (res && res.error) || fallback;
+  // status 0 = 연결 자체가 안 됐다. Node fetch는 이때 "fetch failed" 열두 글자만
+  // 던지는데, 그 문구로는 사용자가 무엇을 해야 할지 알 수 없다 — 백엔드를 안 띄운
+  // 것이 원인의 거의 전부다(2026-09-01 probe-backtest-mode 실측으로 잡았다).
+  if (res && res.status === 0) return `백엔드에 연결하지 못했습니다 — 백엔드가 떠 있는지 확인하세요 (${raw})`;
   if (res && res.status === 503) return `백테스트 기능이 꺼져 있습니다 — 백엔드에서 ATHENA_BACKTEST_ENABLED를 켜야 합니다 (${raw})`;
   if (res && res.status === 404) return `백엔드에 백테스트 경로가 없습니다 — 백엔드가 이 브랜치 버전인지 확인하세요 (${raw})`;
   return raw;

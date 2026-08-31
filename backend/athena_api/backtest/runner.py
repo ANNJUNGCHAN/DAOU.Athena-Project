@@ -20,6 +20,7 @@ from __future__ import annotations
 import asyncio
 import contextlib
 import json
+import math
 from dataclasses import asdict, dataclass, field
 from datetime import UTC, datetime
 from typing import Any, Literal
@@ -42,6 +43,30 @@ JobStatus = Literal["running", "done", "failed", "cancelled"]
 
 def _now() -> datetime:
     return datetime.now(UTC)
+
+
+def _json_safe(payload: dict[str, Any]) -> dict[str, Any]:
+    """무한대·NaN을 JSON이 실을 수 있는 모양으로 옮긴다.
+
+    **왜 필요한가(2026-09-01 종단 실측).** `profit_factor`는 손실이 0이면 `inf`다 —
+    metrics.py가 "손실 없는 전략을 임의의 유한값으로 낮잡아 왜곡하지 않는다"고 고른 값이다.
+    그런데 `json.dumps(inf)`는 표준 JSON이 아닌 `Infinity`를 쓰고, pydantic이 응답을
+    직렬화할 때 그 값을 `null`로 바꿔버린다. 결과적으로 화면에는 `∞`가 아니라 `—`가 떠서
+    **"무한대"가 "모름"으로 바뀐다** — 정직하려던 선택이 전송 중에 뒤집힌 것이다.
+
+    그래서 값은 `None`으로 두되 `<이름>_infinite` 플래그를 같이 실어, 화면이 "모름"과
+    "무한대"를 구분할 수 있게 한다. NaN은 그냥 모르는 값이라 플래그 없이 None이다.
+    """
+    out: dict[str, Any] = {}
+    for key, value in payload.items():
+        if isinstance(value, float) and math.isinf(value):
+            out[key] = None
+            out[f"{key}_infinite"] = value > 0
+        elif isinstance(value, float) and math.isnan(value):
+            out[key] = None
+        else:
+            out[key] = value
+    return out
 
 
 @dataclass(frozen=True, slots=True)
@@ -154,7 +179,7 @@ class BacktestRunner:
                     result.equity, result.trades, df,
                     initial_cash=initial_cash, warmup_bars=warmup_bars,
                 )
-                metrics_payload: dict[str, Any] = asdict(metrics)
+                metrics_payload: dict[str, Any] = _json_safe(asdict(metrics))
                 # 정직 표기 플래그는 결과 화면 "가정" 섹션이 그대로 노출한다(§8.3).
                 # `extra_flags`는 호출자만 아는 사실(예: 보유 구간만 실행)이라 여기서
                 # 지어낼 수 없어 인자로 받는다.

@@ -453,3 +453,24 @@ def test_deployment_rejects_unknown_mode(tmp_path: Path) -> None:
 def test_deployment_routes_are_gated_when_backtest_disabled() -> None:
     client = _disabled_client()
     assert client.get(f"{BASE}/deployments").status_code == 503
+
+
+def test_infinite_profit_factor_survives_json_as_a_flag(tmp_path: Path) -> None:
+    """손실이 0인 전략의 Profit Factor는 무한대다. JSON은 그 값을 실을 수 없어
+    pydantic이 null로 바꾸는데, 그러면 화면에 "모름(—)"이 뜬다 — 사실과 다르다.
+    `_json_safe`가 값을 null로 두되 `_infinite` 플래그를 같이 실어 구분을 지킨다."""
+    from athena_api.backtest.runner import _json_safe
+
+    payload = _json_safe({"profit_factor": float("inf"), "sharpe": 0.5})
+    assert payload["profit_factor"] is None
+    assert payload["profit_factor_infinite"] is True
+    assert payload["sharpe"] == 0.5
+
+
+def test_nan_becomes_null_without_an_infinite_flag() -> None:
+    """NaN은 그냥 모르는 값이다 — 무한대와 같은 취급을 하면 안 된다."""
+    from athena_api.backtest.runner import _json_safe
+
+    payload = _json_safe({"x": float("nan")})
+    assert payload["x"] is None
+    assert "x_infinite" not in payload
