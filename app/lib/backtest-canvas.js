@@ -132,6 +132,11 @@ function formatRatioValue(raw) {
 
 function metricTileValue(tile, metrics) {
   if (!metrics) return '—';
+  // 무한대는 JSON을 건널 수 없어 백엔드가 `<이름>_infinite` 플래그로 따로 실어 보낸다
+  // (runner.py `_json_safe`). 그 플래그가 없으면 null은 "모름"이고, 있으면 "무한대"다 —
+  // 손실이 0인 전략의 Profit Factor를 "모름"으로 표시하면 사실과 다르다.
+  if (metrics[`${tile.key}_infinite`] === true) return '∞';
+  if (metrics[`${tile.key}_infinite`] === false) return '-∞';
   const raw = metrics[tile.key];
   return tile.kind === 'ratio' ? formatRatioValue(raw) : formatPercentValue(raw);
 }
