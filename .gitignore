@@ -27,6 +27,16 @@ __pycache__/
 
 # 디자인 레퍼런스 스크린샷 드롭 — 커밋 금지
 /toss-*.png
+/audit-*.png
+/paper-*.png
+/app/design-references/
+
+# 로컬 실행 증거(스윕 덤프·프로브 출력·핸드오프 키트·.bak) — 재현 가능하므로 커밋 금지
+/artifacts/
+
+# npm 패키지 내려받기 찌꺼기 — 의존성은 package.json이 소유한다
+/package/
+/*.tgz
 
 # QA eval-run artifacts (screenshots/observations) - not for commit
 datasets/eval-runs/
