@@ -2447,6 +2447,14 @@ const agentCanvas = window.AthenaLib.AgentCanvas.createAgentCanvas({
       window.AthenaShell.seedChatInput();
     }
   },
+  // 드릴인 "설정" 탭의 "채팅에서 고치기 ↗"(Paper 보드 03) — 동선 규칙②가
+  // 말하는 그 경로다. 시트를 열지 않고 채팅 입력에 문장을 심는다(＋새 작업·
+  // 제안 "추가"와 같은 seedChatInput 버스 — 편집 진입로를 새로 만들지 않는다).
+  onEditInChat: (title) => {
+    if (window.AthenaShell && typeof window.AthenaShell.seedChatInput === 'function') {
+      window.AthenaShell.seedChatInput(`"${title}" 루틴을 고치고 싶어요 — `);
+    }
+  },
   // 10단계 — 실행 이력 드릴인. 6단계 GET /{id}/runs를 사람 클릭 전용 채널로.
   fetchRuns: async (id) => {
     const res = await window.athena.invoke('athena:routine-runs', { id });
