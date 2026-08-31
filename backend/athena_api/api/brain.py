@@ -232,6 +232,16 @@ class ProfileSummaryResponse(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     entries: list[ProfileSummaryEntryOut]
+    # 자르기 전 전체 개수. `entries`는 `limit`으로 잘린 상위 N이라 이 값이 없으면
+    # 화면이 "상위 5 / 전체 312개"를 정직하게 쓸 수 없다(그동안 "전체 M개 보기"를
+    # 아예 안 그린 이유가 이 필드의 부재였다).
+    total: int
+    # 어느 창을 봤는지. 화면의 기간 칩이 자기가 요청한 값이 아니라 **응답이 실제로
+    # 쓴 값**을 표시해야 둘이 어긋나지 않는다.
+    window_days: int
+    # 창 전체의 confidence 분포(EXTRACTED/INFERRED/AMBIGUOUS → 개수). 히어로의
+    # "사실 %·추론 %·불확실 %"가 잘라 온 상위 N이 아니라 전체를 말하게 하는 값이다.
+    confidence_counts: dict[str, int]
 
 
 class BrainResetResponse(BaseModel):
@@ -492,10 +502,18 @@ async def get_brain_profile_summary(
     require_local_bearer(request, authorization)
     _require_model_exposure(request, x_athena_caller)
     store = _require_store(request)
+    now = utc_now()
     entries = await store.investor_profile_summary(
-        now=utc_now(), window_days=window_days, limit=limit
+        now=now, window_days=window_days, limit=limit
+    )
+    total = await store.investor_profile_signal_count(now=now, window_days=window_days)
+    confidence_counts = await store.investor_profile_confidence_counts(
+        now=now, window_days=window_days
     )
     return ProfileSummaryResponse(
+        total=total,
+        window_days=window_days,
+        confidence_counts=confidence_counts,
         entries=[
             ProfileSummaryEntryOut(
                 entity_id=entry.entity_id,
@@ -708,6 +726,10 @@ class EdgeDetailOut(BaseModel):
     kinds: list[str]
     tier: str
     confidence: str
+    # 이 연결이 마지막으로 관측된 시각(`projection.py`가 합쳐진 관계들의 최댓값을
+    # 싣는다). 그래프 모드 지도의 기간 필터가 이 값으로 거른다 — 이 필드가 없던
+    # 동안 화면은 "최근 90일"이라 써 놓고 전체 기간을 그리고 있었다.
+    observed_at: str
 
 
 class ClusterMapResponse(BaseModel):
@@ -742,7 +764,9 @@ async def get_brain_god_nodes(
 ) -> GodNodesResponse:
     require_local_bearer(request, authorization)
     _require_model_exposure(request, x_athena_caller)
-    projected = await _require_projector(request).project()
+    # 프로필을 뺀 분석용 투영 — 안 그러면 1위가 항상 투자자 자신이다
+    # (projection.GraphProjector.analysis 참고).
+    projected = await _require_projector(request).analysis()
     return GodNodesResponse(
         revision=projected.revision,
         nodes=[
@@ -773,7 +797,8 @@ async def get_brain_surprising_connections(
     require_local_bearer(request, authorization)
     _require_model_exposure(request, x_athena_caller)
     projector = _require_projector(request)
-    projected = await projector.project()
+    # 프로필과의 연결은 정의상 놀랍지 않다(그게 성향이다) — 분석용 투영을 쓴다.
+    projected = await projector.analysis()
     assignment = await projector.clusters()
     return SurprisingConnectionsResponse(
         revision=projected.revision,
@@ -912,7 +937,10 @@ async def get_brain_cluster_map(
 ) -> ClusterMapResponse:
     require_local_bearer(request, authorization)
     projector = _require_projector(request)
-    projected = await projector.project()
+    # 지도는 테마·종목의 관계를 그린다 — 투자자 프로필 노드는 원점이지 구성원이
+    # 아니라서 뺀다(projection.GraphProjector.analysis 참고). 프로필에서 뻗은 성향
+    # 관계는 profile-summary가 계속 낸다.
+    projected = await projector.analysis()
     assignment = await projector.clusters()
     cohesion = cluster_cohesion(projected, assignment)
     representative_labels = cluster_representative_labels(projected, assignment)
@@ -951,6 +979,7 @@ async def get_brain_cluster_map(
                 kinds=list(graph.get_edge_data(*pair).get("kinds", ())),
                 tier=str(graph.get_edge_data(*pair).get("tier", "")),
                 confidence=str(graph.get_edge_data(*pair).get("confidence", "")),
+                observed_at=str(graph.get_edge_data(*pair).get("observed_at", "")),
             )
             for pair in sorted_edge_pairs
         ],
