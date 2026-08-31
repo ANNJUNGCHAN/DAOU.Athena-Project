@@ -191,14 +191,18 @@ test('리비전이 그대로면 아무것도 버리지 않는다', () => {
 
 // ── 단계별로 무엇이 보이는가 ────────────────────────────────────────────────
 
-test('1단계는 전부, 2단계는 펼친 군집만 보인다', () => {
+test('1단계는 전부, 2단계는 펼친 군집 + 이웃 1홉이 보인다(보드 04)', () => {
   const layout = layoutClusterMap(payload(), VIEWPORT);
   let state = store.applyRevision(store.toggleView(store.createInitialState()), 7);
   assert.equal(store.visibleNodes(state, layout).length, 4);
 
   state = store.expandCluster(state, 0);
   const visible = store.visibleNodes(state, layout);
-  assert.deepEqual(visible.map((n) => n.entity_id).sort(), ['e:a', 'e:b']);
+  // e:a·e:b는 군집 0. e:c는 e:a와 이어진 이웃이라 함께 보인다 — 군집 경계를 넘는
+  // 연결의 반대쪽 끝을 지우면 그 연결 자체가 화면에서 사라진다.
+  assert.deepEqual(visible.map((n) => n.entity_id).sort(), ['e:a', 'e:b', 'e:c']);
+  // e:d는 2홉(e:c의 이웃)이라 안 보인다 — 1홉에서 끊는다.
+  assert.ok(!visible.some((n) => n.entity_id === 'e:d'));
 });
 
 test('2단계에서는 양 끝이 보이는 엣지만 그린다', () => {
@@ -207,8 +211,48 @@ test('2단계에서는 양 끝이 보이는 엣지만 그린다', () => {
   let state = store.applyRevision(store.toggleView(store.createInitialState()), 7);
   state = store.expandCluster(state, 0);
   const edges = store.visibleEdges(state, layout);
-  assert.equal(edges.length, 1);
-  assert.deepEqual([edges[0].from, edges[0].to].sort(), ['e:a', 'e:b']);
+  const pairs = edges.map((e) => [e.from, e.to].sort().join('~')).sort();
+  // e:a~e:b(군집 내부)와 e:a~e:c(군집 경계 넘음) 둘 다 양 끝이 보인다.
+  // e:c~e:d는 e:d가 안 보이므로 빠진다.
+  assert.deepEqual(pairs, ['e:a~e:b', 'e:a~e:c']);
+});
+
+test('이웃이 하나도 없는 군집을 펼치면 그 군집만 보인다', () => {
+  const isolated = {
+    revision: 7,
+    nodes: [node('e:x', 0, 1), node('e:y', 0, 1), node('e:z', 1, 1)],
+    edges: [['e:x', 'e:y']],
+  };
+  const layout = layoutClusterMap(isolated, VIEWPORT);
+  let state = store.applyRevision(store.toggleView(store.createInitialState()), 7);
+  state = store.expandCluster(state, 0);
+  assert.deepEqual(store.visibleNodes(state, layout).map((n) => n.entity_id).sort(), ['e:x', 'e:y']);
+});
+
+test('없는 군집을 펼치면 빈 화면이다(지어내지 않는다)', () => {
+  const layout = layoutClusterMap(payload(), VIEWPORT);
+  let state = store.applyRevision(store.toggleView(store.createInitialState()), 7);
+  state = store.expandCluster(state, 99);
+  assert.deepEqual(store.visibleNodes(state, layout), []);
+  assert.deepEqual(store.visibleEdges(state, layout), []);
+});
+
+test('서브뷰는 요약·지도·수집노출 셋뿐이고 모르는 값은 무시된다(보드 05)', () => {
+  const base = store.createInitialState();
+  assert.equal(base.surface, store.SURFACE_SUMMARY, '기본은 요약이다');
+  assert.equal(store.setSurface(base, store.SURFACE_SETTINGS).surface, store.SURFACE_SETTINGS);
+  assert.equal(store.setSurface(base, store.SURFACE_MAP).surface, store.SURFACE_MAP);
+  assert.equal(store.setSurface(base, 'nope'), base, '모르는 서브뷰는 상태를 안 바꾼다');
+  assert.deepEqual(store.SURFACES, [store.SURFACE_SUMMARY, store.SURFACE_MAP, store.SURFACE_SETTINGS]);
+});
+
+test('서브뷰 전환은 펼침·선택을 건드리지 않는다(같은 그래프를 다르게 보는 것뿐)', () => {
+  let state = store.expandCluster(store.toggleView(store.createInitialState()), 0);
+  state = store.selectEntity(state, 'e:a', { name: '반도체' });
+  const moved = store.setSurface(state, store.SURFACE_SETTINGS);
+  assert.equal(moved.expandedCluster, 0);
+  assert.equal(moved.selectedEntityId, 'e:a');
+  assert.equal(moved.stage, store.STAGE_EXPANDED);
 });
 
 test('빈 배치에서도 보이는 것 계산이 터지지 않는다', () => {

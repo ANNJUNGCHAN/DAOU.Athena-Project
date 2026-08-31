@@ -25,6 +25,10 @@ const STAGE_EXPANDED = 'expanded';
 // VIEW_SUMMARY와 같은 문자열이지만 별개 필드(state.surface)라 섞이지 않는다.
 const SURFACE_SUMMARY = 'summary';
 const SURFACE_MAP = 'map';
+// 세 번째 서브뷰(보드 05) — "수집·노출". 요약/지도와 같은 축이다: 그래프 기능
+// 안에서 무엇을 보고 있는가일 뿐, 그래프 기능 진입 여부(state.view)와는 무관하다.
+const SURFACE_SETTINGS = 'settings';
+const SURFACES = [SURFACE_SUMMARY, SURFACE_MAP, SURFACE_SETTINGS];
 
 function createInitialState() {
   return {
@@ -46,7 +50,7 @@ function isGraphView(state) {
 // 안 건드린다(둘 다 유지할 이유가 있다: 표를 보다가 지도로 갔다 와도 선택은
 // 남아 있어야 공통 패널이 안 깜빡인다).
 function setSurface(state, surface) {
-  if (surface !== SURFACE_SUMMARY && surface !== SURFACE_MAP) return state;
+  if (!SURFACES.includes(surface)) return state;
   if (surface === state.surface) return state;
   return { ...state, surface };
 }
@@ -117,15 +121,42 @@ function applyRevision(state, revision) {
   };
 }
 
-// 지금 그려야 할 노드. 1단계는 전부, 2단계는 펼친 군집만.
+// 지금 그려야 할 노드. 1단계는 전부, 2단계는 **펼친 군집 + 그 이웃 1홉**.
+//
+// **왜 이웃까지 보이나(보드 04).** 옛 판은 펼친 군집 하나만 남겼다. 그러면 그래프
+// 모드의 핵심 질문 — "이 군집이 바깥과 어떻게 이어져 있나" — 에 화면이 답을 못
+// 한다. 군집 경계를 넘는 연결(= 숨은 연관)은 정의상 한쪽 끝이 다른 군집인데,
+// 그 끝을 지우면 숨은 연관 자체가 2단계에서 사라진다. Paper 보드 04가 펼친
+// 군집 옆에 이웃 군집 타원과 군집 밖 컨텍스트 노드(금리 인하·원/달러 환율)를
+// 함께 그린 이유가 이것이다.
+//
+// 1홉에서 끊는다 — 2홉까지 열면 큰 그래프에서 사실상 전체가 되어 "펼침"이라는
+// 말이 무의미해진다.
 function visibleNodes(state, layout) {
   const nodes = Array.isArray(layout && layout.nodes) ? layout.nodes : [];
   if (state.stage !== STAGE_EXPANDED || state.expandedCluster === null) return nodes;
-  return nodes.filter((node) => node.cluster === state.expandedCluster);
+  const core = new Set(
+    nodes.filter((node) => node.cluster === state.expandedCluster).map((node) => node.entity_id)
+  );
+  if (core.size === 0) return [];
+  const edges = Array.isArray(layout && layout.edges) ? layout.edges : [];
+  const neighbours = new Set();
+  for (const edge of edges) {
+    if (core.has(edge.from) && !core.has(edge.to)) neighbours.add(edge.to);
+    else if (core.has(edge.to) && !core.has(edge.from)) neighbours.add(edge.from);
+  }
+  return nodes.filter((node) => core.has(node.entity_id) || neighbours.has(node.entity_id));
 }
 
 // 지금 그려야 할 엣지. 2단계에서는 양 끝이 모두 보이는 것만 — 한쪽이 화면 밖인 선을
-// 그리면 어디로도 가지 않는 선이 된다.
+// 그리면 어디로도 가지 않는 선이 된다. 이웃끼리의 연결(둘 다 펼친 군집 밖)도
+// 양 끝이 보이면 그린다: 보드 04에서 이웃 군집 내부 구조가 보이는 것이 그 군집을
+// 하나의 덩어리로 읽게 해 준다.
+//
+// controller.js는 2단계에서 보이는 부분집합을 **다시 배치**하므로(캔버스를 채우기
+// 위해) 이 함수 대신 그 재배치 결과의 edges를 쓴다. 여기 남아 있는 이유는 배치
+// 없이 "무엇이 보이는가"만 묻는 순수 계약이라 상태 기계 테스트가 그것을 재기
+// 때문이다 — visibleNodes와 짝을 이룬다.
 function visibleEdges(state, layout) {
   const edges = Array.isArray(layout && layout.edges) ? layout.edges : [];
   if (state.stage !== STAGE_EXPANDED || state.expandedCluster === null) return edges;
@@ -141,6 +172,8 @@ const __exports = {
   VIEW_BACKTEST,
   SURFACE_SUMMARY,
   SURFACE_MAP,
+  SURFACE_SETTINGS,
+  SURFACES,
   STAGE_CLUSTERS,
   STAGE_EXPANDED,
   createInitialState,

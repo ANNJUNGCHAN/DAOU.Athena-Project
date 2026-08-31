@@ -184,6 +184,31 @@ test('renderSummaryHero — entries가 있으면 라벨과 %를 그린다', () =
   assert.deepEqual(values, ['50%', '0%', '50%'], '사실·추론·불확실 순서로 그려진다');
 });
 
+test('renderSummaryHero — scope를 주면 "테마 군집 N개 · 성향 신호 M개" 부제가 붙는다(보드 01)', () => {
+  const container = fakeNode('div');
+  renderSummaryHero(container, [entry()], null, { clusterCount: 7, total: 312 });
+  assert.equal(container.querySelector('.summary-hero-scope').textContent, '테마 군집 7개 · 성향 신호 312개');
+});
+
+test('renderSummaryHero — 셀 수 없는 절은 빠지고, 둘 다 없으면 부제 자체가 없다(§0 정책)', () => {
+  const onlyTotal = fakeNode('div');
+  renderSummaryHero(onlyTotal, [entry()], null, { total: 312 });
+  assert.equal(onlyTotal.querySelector('.summary-hero-scope').textContent, '성향 신호 312개');
+
+  const neither = fakeNode('div');
+  renderSummaryHero(neither, [entry()], null, {});
+  assert.equal(neither.querySelector('.summary-hero-scope'), null);
+});
+
+test('renderSummaryHero — confidence_counts가 오면 창 전체 분포를 쓴다(상위 N 표본이 아니다)', () => {
+  const container = fakeNode('div');
+  // entries는 전부 추론인 상위 표본이지만, 창 전체는 사실이 더 많다.
+  renderSummaryHero(container, [entry({ confidence: 'INFERRED' })], { EXTRACTED: 30, INFERRED: 10, AMBIGUOUS: 10 });
+  assert.deepEqual(
+    container.querySelectorAll('.summary-hero-stat-value').map((n) => n.textContent),
+    ['60%', '20%', '20%']);
+});
+
 test('renderSummaryHero — 항목이 없으면 아예 안 그린다(§0 정직한 빈 데이터)', () => {
   const container = fakeNode('div');
   renderSummaryHero(container, []);
@@ -239,12 +264,16 @@ function setupController(options) {
       if (opts.fail) throw new Error('backend down');
       if (opts.notOk) return { ok: false, error: 'boom' };
       opts.onFetch && opts.onFetch(params);
-      return { ok: true, entries: opts.entries || [entry()] };
+      const res = { ok: true, entries: opts.entries || [entry()] };
+      if (opts.total !== undefined) res.total = opts.total;
+      return res;
     },
     fetchSuggestedQuestions: opts.fetchSuggestedQuestions,
     onConfirmCta: opts.onConfirmCta,
     selectEntity: (entityId, panelData) => selected.push({ entityId, panelData }),
     onError: (err) => errors.push(err),
+    filters: opts.filters,
+    getFilters: opts.getFilters,
   });
   return { controller, container, heroContainer, bannerContainer, selected, errors };
 }
@@ -255,11 +284,57 @@ test('load()가 성향 신호를 그린다', async () => {
   assert.equal(describeRendered(container).rows, 2);
 });
 
-test('limit이 fetchProfileSummary로 그대로 전달된다', async () => {
+test('limit이 fetchProfileSummary로 그대로 전달된다(필터 미주입이면 windowDays는 안 정한다)', async () => {
   let seenParams = null;
   const { controller } = setupController({ limit: 5, onFetch: (params) => { seenParams = params; } });
   await controller.load();
-  assert.deepEqual(seenParams, { limit: 5 });
+  // getFilters를 안 주면 백엔드 기본 창을 그대로 쓴다 — 임의의 창을 강요하지 않는다.
+  assert.deepEqual(seenParams, { limit: 5, windowDays: undefined });
+});
+
+test('필터가 주입되면 기간이 백엔드 요청에 실리고 정렬이 표에 적용된다(보드 01 필터 칩)', async () => {
+  const filters = require('./graph-filters');
+  const older = entry({ entity_id: 'e:old', entity_name: '오래된', observed_at: '2026-08-01T00:00:00+00:00', reinforcement: 30 });
+  const newer = entry({ entity_id: 'e:new', entity_name: '최근', observed_at: '2026-08-29T00:00:00+00:00', reinforcement: 2 });
+  let seenParams = null;
+  const { controller, container } = setupController({
+    limit: 5,
+    entries: [older, newer], // 백엔드 순서(보강 내림차순)
+    onFetch: (params) => { seenParams = params; },
+    filters,
+    getFilters: () => ({ windowDays: 180, summarySort: 'recent' }),
+  });
+  await controller.load();
+  assert.deepEqual(seenParams, { limit: 5, windowDays: 180 });
+  const names = container.querySelectorAll('.summary-row-name').map((n) => n.textContent);
+  assert.deepEqual(names, ['최근', '오래된'], '최근 순이면 관측 시각 내림차순이다');
+});
+
+test('보강 순이면 백엔드가 준 순서를 그대로 둔다(같은 값을 두 번 정렬하지 않는다)', async () => {
+  const filters = require('./graph-filters');
+  const a = entry({ entity_id: 'e:a', entity_name: 'A', reinforcement: 30, observed_at: '2026-08-01T00:00:00+00:00' });
+  const b = entry({ entity_id: 'e:b', entity_name: 'B', reinforcement: 2, observed_at: '2026-08-29T00:00:00+00:00' });
+  const { controller, container } = setupController({
+    entries: [a, b], filters, getFilters: () => ({ windowDays: 90, summarySort: 'reinforcement' }),
+  });
+  await controller.load();
+  assert.deepEqual(container.querySelectorAll('.summary-row-name').map((n) => n.textContent), ['A', 'B']);
+});
+
+test('응답에 total이 있으면 "전체 N개"가 붙고, 없으면 안 붙는다(§0 정책)', async () => {
+  const withTotal = setupController({ entries: [entry()], total: 312 });
+  await withTotal.controller.load();
+  assert.equal(withTotal.container.querySelector('.summary-table-total').textContent, '전체 312개');
+
+  const without = setupController({ entries: [entry()] });
+  await without.controller.load();
+  assert.equal(without.container.querySelector('.summary-table-total'), null);
+});
+
+test('total이 보이는 행 수와 같으면 "전체 N개"를 안 붙인다(같은 수를 두 번 말하지 않는다)', async () => {
+  const { controller, container } = setupController({ entries: [entry()], total: 1 });
+  await controller.load();
+  assert.equal(container.querySelector('.summary-table-total'), null);
 });
 
 test('행을 클릭하면 selectEntity가 실재 필드로만 채운 panelData로 불린다', async () => {
@@ -271,7 +346,7 @@ test('행을 클릭하면 selectEntity가 실재 필드로만 채운 panelData�
   assert.equal(selected[0].entityId, 'e:samsung');
   assert.deepEqual(selected[0].panelData, {
     entityId: 'e:samsung',
-    source: 'table', // 선택 출처 태그(스텝14) — controller.js의 selectNode()가 매기는 'node'와 짝.
+    source: 'table', // 선택 출처 태그 — controller.js의 selectNode()가 매기는 'node'와 짝.
     name: '삼성전자',
     kind: 'stock',
     relation: '보유',
@@ -279,7 +354,35 @@ test('행을 클릭하면 selectEntity가 실재 필드로만 채운 panelData�
     reinforcement: 12,
     confidence: 'EXTRACTED',
     tier: 'deterministic',
+    // 표 안에서 유일한 행이니 최댓값이기도 하다(보드 02 "가장 강한 신호").
+    isStrongest: true,
+    observedRelative: relativeDaysText('2026-08-24T00:00:00+00:00'),
+    // 같은 엔티티의 행이 하나뿐이라 대조할 출처가 없다 — 패널이 "두 출처가
+    // 다르게 말합니다" 제목을 안 붙일 근거가 이 배열 길이다.
+    sources: [{ tier: 'deterministic', confidence: 'EXTRACTED', rationale: '체결 4건 · 평균 71,200원', relation: '보유' }],
   });
+});
+
+test('같은 엔티티에 출처가 둘이면 panelData.sources가 둘 다 싣는다(보드 02 티어 대조)', async () => {
+  const conversational = entry({
+    relation_kind: '선호', confidence: 'INFERRED', tier: 'conversational',
+    rationale: '5개 대화에서 "장기로 간다"', reinforcement: 5,
+  });
+  const { controller, container, selected } = setupController({ entries: [entry(), conversational] });
+  await controller.load();
+  container.querySelector('.summary-row').dispatchEvent({ type: 'click' });
+  const { sources, isStrongest } = selected[0].panelData;
+  assert.deepEqual(sources.map((s) => s.tier), ['deterministic', 'conversational']);
+  assert.equal(isStrongest, true, '보강 12가 5보다 크다');
+});
+
+test('보강이 최대가 아니면 isStrongest가 false다(없는 최상급을 붙이지 않는다)', async () => {
+  const stronger = entry({ entity_id: 'e:hynix', entity_name: 'SK하이닉스', reinforcement: 21 });
+  const { controller, container, selected } = setupController({ entries: [stronger, entry()] });
+  await controller.load();
+  // 두 번째 행(삼성전자, 보강 12)을 고른다.
+  container.querySelectorAll('.summary-row')[1].dispatchEvent({ type: 'click' });
+  assert.equal(selected[0].panelData.isStrongest, false);
 });
 
 test('getEntries()는 load() 전엔 빈 배열, 후엔 같은 entries를 그대로 돌려준다(스텝14, controller.js 재사용용)', async () => {

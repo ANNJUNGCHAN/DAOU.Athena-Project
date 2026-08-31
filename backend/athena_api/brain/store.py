@@ -520,6 +520,57 @@ class GraphStore:
 
         return await self._owner.run(read)
 
+    async def investor_profile_signal_count(self, *, now: datetime, window_days: int = 90) -> int:
+        """같은 창 안의 성향 신호 **전체** 개수.
+
+        `investor_profile_summary()`는 `limit`으로 잘라 낸 상위 N만 준다 — 화면이
+        "상위 5"라고 쓰면서 "전체 몇 개 중"인지 말하려면 자르기 전 개수가 따로
+        필요하다. 같은 WHERE 절을 쓰되 정렬·LIMIT만 뺀다: 두 쿼리가 다른 조건을
+        보면 "상위 5 / 전체 3" 같은 모순이 화면에 뜬다.
+        """
+        if now.tzinfo is None or now.utcoffset() is None:
+            raise ValueError("now must be UTC-aware")
+        if window_days <= 0:
+            raise ValueError("window_days must be positive")
+        cutoff = _ts(now.astimezone(UTC) - timedelta(days=window_days))
+
+        def read() -> int:
+            row = self._require().execute(
+                "SELECT count(*) AS n FROM relations r"
+                " WHERE r.source_entity_id = ? AND r.observed_at >= ?",
+                (INVESTOR_PROFILE_ENTITY_ID, cutoff),
+            ).fetchone()
+            return 0 if row is None else int(row["n"])
+
+        return await self._owner.run(read)
+
+    async def investor_profile_confidence_counts(
+        self, *, now: datetime, window_days: int = 90
+    ) -> dict[str, int]:
+        """같은 창 안의 성향 신호를 confidence별로 센다.
+
+        화면의 "사실 34% · 추론 58% · 불확실 8%"(Paper 보드 01 히어로)는 성향 전체의
+        분포여야 한다. 잘라 온 상위 N만으로 계산하면 정렬 기준(보강 순)이 곧 표본
+        편향이 된다 — 실측에서 상위 5가 전부 대화발 추론이라 화면이 "사실 0% ·
+        추론 100%"라고 말했다. 그래프에는 체결 기반 사실 관계가 분명히 있었다.
+        """
+        if now.tzinfo is None or now.utcoffset() is None:
+            raise ValueError("now must be UTC-aware")
+        if window_days <= 0:
+            raise ValueError("window_days must be positive")
+        cutoff = _ts(now.astimezone(UTC) - timedelta(days=window_days))
+
+        def read() -> dict[str, int]:
+            rows = self._require().execute(
+                "SELECT r.confidence AS confidence, count(*) AS n FROM relations r"
+                " WHERE r.source_entity_id = ? AND r.observed_at >= ?"
+                " GROUP BY r.confidence",
+                (INVESTOR_PROFILE_ENTITY_ID, cutoff),
+            ).fetchall()
+            return {str(row["confidence"]): int(row["n"]) for row in rows}
+
+        return await self._owner.run(read)
+
     async def merge_entities(self, winner_id: str, loser_id: str) -> None:
         """진 엔티티를 승자에 접고, 그 관계를 승자로 옮긴다.
 
