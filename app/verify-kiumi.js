@@ -162,13 +162,22 @@ async function main() {
 
   record('보드 07: 메뉴는 380px 굴절형이다', menu.visible === true && near(menu.width, 380, 2) && /blur\(3px\)/.test(menu.backdropFilter),
     { width: menu.width, backdropFilter: menu.backdropFilter });
-  record('보드 06: 세 구역 — 추가 · 플러그인 UI 초안 · 설정',
-    JSON.stringify(menu.sections) === JSON.stringify(['추가', '플러그인 UI 초안', '설정']), { sections: menu.sections });
-  record('보드 06: 여덟 항목이 Paper 목록과 같다',
-    JSON.stringify(menu.titles) === JSON.stringify([
-      '파일 첨부', '폴더 첨부', '목표', '계획 모드',
-      'DART 전자공시', 'Google Sheets 내보내기', '모델 설정', '플러그인 관리',
-    ]), { titles: menu.titles });
+  record('보드 06: 세 구역 — 추가 · 플러그인 · 설정',
+    JSON.stringify(menu.sections) === JSON.stringify(['추가', '플러그인', '설정']), { sections: menu.sections });
+  // 플러그인 구역은 고정 목록이 아니다. chat.js renderKiumiMenu()가 실제로
+  // 등록·승인된 MCP 서버를 최대 6개까지 싣고, 하나도 없으면 "설치된 플러그인
+  // 없음" 빈 상태 항목 하나를 대신 세운다. 이 머신에 무엇이 등록돼 있느냐로
+  // 달라지므로 가운데를 통째로 못 박으면 검증이 아니라 환경 사진이 된다.
+  // 고정된 계약은 앞 4개·뒤 2개, 그리고 가운데가 1~6개라는 것이다.
+  const KIUMI_HEAD = ['파일 첨부', '폴더 첨부', '목표', '계획 모드'];
+  const KIUMI_TAIL = ['모델 설정', '플러그인 관리'];
+  const kiumiMiddle = menu.titles.slice(KIUMI_HEAD.length, menu.titles.length - KIUMI_TAIL.length);
+  record('보드 06: 앞 4항목과 뒤 2항목이 Paper 목록과 같다',
+    JSON.stringify(menu.titles.slice(0, KIUMI_HEAD.length)) === JSON.stringify(KIUMI_HEAD)
+      && JSON.stringify(menu.titles.slice(-KIUMI_TAIL.length)) === JSON.stringify(KIUMI_TAIL),
+    { titles: menu.titles });
+  record('보드 06: 플러그인 구역은 등록된 서버 1~6개(없으면 빈 상태 1개)',
+    kiumiMiddle.length >= 1 && kiumiMiddle.length <= 6, { middle: kiumiMiddle });
   record('보드 06: 아이콘은 전부 선형 SVG이고 바이저색 하나로 통일',
     menu.allIconsAreSvg === true && menu.iconColors.length === 1 && menu.iconColors[0] === 'rgb(47, 59, 168)',
     { colors: menu.iconColors });
