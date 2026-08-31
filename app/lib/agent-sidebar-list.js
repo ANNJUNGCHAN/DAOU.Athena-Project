@@ -72,6 +72,9 @@ function buildHydratedRooms(routines) {
       sub: '',
       firedAt: Date.parse(r.last_fired_at),
       read: !r.unread,
+      // 알람 센터(Paper 보드 02)가 갈래별 아이콘을 고를 때 쓴다 — 실시간
+      // 이벤트 경로(handleRoutineEvent)가 event.mode로 넣는 것과 같은 값이다.
+      mode: typeof r.mode === 'string' ? r.mode : '',
     }))
     .filter((r) => Number.isFinite(r.firedAt))
     .sort((a, b) => b.firedAt - a.firedAt);

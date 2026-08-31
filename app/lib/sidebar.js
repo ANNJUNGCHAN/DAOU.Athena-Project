@@ -496,10 +496,14 @@
       existing.firedAt = firedAtMs;
       existing.title = routineEventTitle(event);
       existing.sub = routineEventSub(event);
+      existing.mode = typeof event.mode === 'string' ? event.mode : '';
       existing.read = existing.id === selectedNotifyId;
     } else {
       notifyRooms.unshift({
         id, title: routineEventTitle(event), sub: routineEventSub(event),
+        // 알람 센터(Paper 보드 02)가 갈래 아이콘을 고르는 유일한 근거다 —
+        // 예약 실행(scheduled)과 조건 감시를 실데이터로 가른다.
+        mode: typeof event.mode === 'string' ? event.mode : '',
         firedAt: firedAtMs, read: false, event,
       });
     }
@@ -778,7 +782,7 @@
   // 주석과 같은 이유 — notifyRooms 소유자가 둘이면 결함이 재발한다).
   window.AthenaNotify = {
     // 얕은 복제 — 캔버스가 원본 배열/객체를 직접 변형 못 하게 한다.
-    list: () => notifyRooms.map((r) => ({ id: r.id, title: r.title, sub: r.sub || '', firedAt: r.firedAt, read: r.read })),
+    list: () => notifyRooms.map((r) => ({ id: r.id, title: r.title, sub: r.sub || '', mode: r.mode || '', firedAt: r.firedAt, read: r.read })),
     markAllRead: () => {
       let changed = false;
       for (const r of notifyRooms) { if (!r.read) { r.read = true; changed = true; } }
