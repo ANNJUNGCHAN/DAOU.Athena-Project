@@ -45,7 +45,16 @@ GraphId = Annotated[
     ),
 ]
 ShortText = Annotated[str, StringConstraints(strict=True, min_length=1, max_length=256)]
-LongText = Annotated[str, StringConstraints(strict=True, min_length=1, max_length=10_000)]
+MAX_DERIVED_TEXT_CHARS: Final = 10_000
+MAX_RAW_CHAT_TEXT_CHARS: Final = 20_000
+LongText = Annotated[
+    str,
+    StringConstraints(strict=True, min_length=1, max_length=MAX_RAW_CHAT_TEXT_CHARS),
+]
+DerivedText = Annotated[
+    str,
+    StringConstraints(strict=True, min_length=1, max_length=MAX_DERIVED_TEXT_CHARS),
+]
 
 # 관계 이름. graphify의 `validate.py`는 `file_type`과 `confidence`만 폐쇄형으로 강제하고
 # `relation`은 필수 필드이기만 하면 통과시킨다 — 프롬프트에서 열거하고 저장에서는
@@ -262,6 +271,17 @@ class SourceRecord(StrictGraphModel):
     occurred_at: datetime
     ingested_at: datetime
 
+    @model_validator(mode="after")
+    def validate_text_bound(self) -> Self:
+        # Raw chat messages are the durable source of truth and may use the larger local
+        # API allowance. Every derived/non-chat source keeps the original graph bound;
+        # conversation extraction separately uses history.MAX_TRANSCRIPT_CHARS (9,000).
+        if self.kind is not SourceKind.CHAT_MESSAGE and len(self.text) > MAX_DERIVED_TEXT_CHARS:
+            raise ValueError(
+                f"non-chat source text must not exceed {MAX_DERIVED_TEXT_CHARS} characters"
+            )
+        return self
+
 
 class Relation(StrictGraphModel):
     """엔티티 사이의 단일 엣지.
@@ -277,7 +297,7 @@ class Relation(StrictGraphModel):
     target_entity_id: GraphId
     confidence: Confidence
     tier: SourceTier
-    rationale: LongText | None = None
+    rationale: DerivedText | None = None
     source_id: GraphId
     attributes: dict[str, Any] = Field(default_factory=dict)
     observed_at: datetime

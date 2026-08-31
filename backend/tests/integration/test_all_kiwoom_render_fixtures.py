@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from collections import Counter
+import json
 import sys
 from pathlib import Path
 
@@ -17,6 +18,7 @@ from athena_api.canvas_field_registry import (
 from support.canvas_fixture_factory import (
     build_fixture_bundle,
     build_operation_fixtures,
+    build_recipe_display_sections,
 )
 
 
@@ -45,9 +47,7 @@ def test_all_299_response_models_accept_lossless_synthetic_fixtures() -> None:
 
 def test_all_3705_occurrences_have_exact_runtime_destinations_and_sentinels() -> None:
     fixtures = build_operation_fixtures()
-    occurrences = [
-        occurrence for fixture in fixtures for occurrence in fixture.occurrences
-    ]
+    occurrences = [occurrence for fixture in fixtures for occurrence in fixture.occurrences]
     registry = get_canvas_card_registry()
 
     assert len(occurrences) == 3_705
@@ -56,8 +56,7 @@ def test_all_3705_occurrences_have_exact_runtime_destinations_and_sentinels() ->
     assert all(item.sentinel_id == f"sentinel::{item.occurrence_id}" for item in occurrences)
     assert all(item.card_id in {card.card_id for card in registry.cards} for item in occurrences)
     assert all(
-        item.mode and item.section and item.surface == "detail-sheet"
-        for item in occurrences
+        item.mode and item.section and item.surface == "detail-sheet" for item in occurrences
     )
     assert all(item.semantic_status in {"official", "official_opaque"} for item in occurrences)
 
@@ -74,17 +73,13 @@ def test_all_3705_occurrences_have_exact_runtime_destinations_and_sentinels() ->
                 str(item["surface"]),
             )
             for item in public_contract
-        } == {
-            (item.card_id, item.mode, item.section, item.surface)
-            for item in fixture.occurrences
-        }
+        } == {(item.card_id, item.mode, item.section, item.surface) for item in fixture.occurrences}
 
 
 def test_ka10173_duplicate_wire_paths_keep_both_ordinals() -> None:
     fixtures = {item.mapping_id: item for item in build_operation_fixtures()}
     counts = Counter(
-        (item.json_path, item.ordinal)
-        for item in fixtures["base:ka10173"].occurrences
+        (item.json_path, item.ordinal) for item in fixtures["base:ka10173"].occurrences
     )
 
     assert counts[("$.trnm", 1)] == 1
@@ -124,11 +119,7 @@ def test_all_order_fixtures_are_draft_only_and_reach_required_receipt_fields() -
         *(f"base:kt5000{suffix}" for suffix in (0, 1, 2, 3)),
     }
     order_fixtures = [item for item in fixtures if item.mapping_id in order_ids]
-    aliases = {
-        occurrence.alias
-        for fixture in order_fixtures
-        for occurrence in fixture.occurrences
-    }
+    aliases = {occurrence.alias for fixture in order_fixtures for occurrence in fixture.occurrences}
 
     assert {item.mapping_id for item in order_fixtures} == order_ids
     assert len(order_fixtures) == 12
@@ -143,3 +134,79 @@ def test_all_order_fixtures_are_draft_only_and_reach_required_receipt_fields() -
     # The factory validates response models only: it cannot build a request,
     # call a selector execution endpoint, or reach a broker client.
     assert build_fixture_bundle()["external_calls_allowed"] is False
+
+
+def test_specialized_screenshot_fixtures_exercise_real_renderers() -> None:
+    fixtures = {item.mapping_id: item for item in build_operation_fixtures()}
+
+    chart = fixtures["base:ka10081"].primary_data["chart"]
+    assert len(chart["candles"]) == 6
+    assert len({candle["time"] for candle in chart["candles"]}) == 6
+    assert all(
+        candle["low"]
+        <= min(candle["open"], candle["close"])
+        <= max(candle["open"], candle["close"])
+        <= candle["high"]
+        for candle in chart["candles"]
+    )
+
+    orderbook_fields = {
+        field["key"]: field["value"]
+        for field in fixtures["detail:ka10004:buy_bid_prices"].primary_data["fields"]
+    }
+    for level in range(1, 11):
+        assert int(orderbook_fields[f"sel_{level}bid"]) > 0
+        assert int(orderbook_fields[f"sel_{level}bid_req"]) > 0
+        assert int(orderbook_fields[f"buy_{level}bid"]) > 0
+        assert int(orderbook_fields[f"buy_{level}bid_req"]) > 0
+
+    order = fixtures["base:kt10000"].primary_data
+    assert order["state"] == "draft"
+    assert order["order_draft"] == {
+        "dmst_stex_tp": "KRX",
+        "stk_cd": "005930",
+        "ord_qty": "10",
+        "trde_tp": "3",
+    }
+    assert order["order"] == {
+        "stk_cd": "005930",
+        "stk_nm": "삼성전자",
+        "ord_qty": "10",
+        "side": "매수",
+    }
+
+
+def test_semantic_screenshot_recipes_use_distinct_product_data() -> None:
+    sections_by_recipe = build_recipe_display_sections()
+    required_sections = {
+        "instrument-chart": {"identity-and-quote", "price-history"},
+        "why-move-flow": {"move-summary"},
+        "discovery-value": {"ranked-results"},
+        "sector-theme": {"market-group-summary"},
+        "watchlist-condition": {"matching-instruments"},
+        "etf-product": {"etf-summary", "nav-and-performance"},
+        "elw-product": {"elw-summary"},
+        "market-vi": {"market-state"},
+        "account-risk": {"account-summary"},
+        "gold-market": {"gold-summary", "gold-market-data"},
+    }
+
+    assert set(sections_by_recipe) == set(required_sections)
+    serialized = json.dumps(sections_by_recipe, ensure_ascii=False)
+    assert '"72000"' not in serialized
+    assert '"12400"' not in serialized
+    assert '"18.6"' not in serialized
+
+    for recipe_id, required in required_sections.items():
+        sections = sections_by_recipe[recipe_id]
+        for section_id in required:
+            section = sections[section_id]
+            assert section.get("fields") or section.get("rows"), (recipe_id, section_id)
+        for section_id, section in sections.items():
+            rows = section.get("rows", [])
+            if rows:
+                assert len(rows) >= 2, (recipe_id, section_id)
+                rendered_rows = {
+                    json.dumps(row, ensure_ascii=False, sort_keys=True) for row in rows
+                }
+                assert len(rendered_rows) == len(rows), (recipe_id, section_id)

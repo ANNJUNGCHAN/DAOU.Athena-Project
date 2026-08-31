@@ -6,8 +6,54 @@ const { EventEmitter } = require('events');
 const {
   HEALTH_URL, HEALTH_HOST, HEALTH_PORT,
   buildUvicornArgs, buildBackendEnv, decideAction, hasSpawnedChild,
+  ensureBackend, ensureBackendReady, shutdownBackend,
   awaitChildExit, restartAfterReset, _setBackendChildForTest,
 } = require('./backend-launcher');
+
+function createFakeClock(startMs = 0) {
+  let nowMs = startMs;
+  let nextId = 1;
+  const timers = new Map();
+  return {
+    now: () => nowMs,
+    setNow: (value) => { nowMs = value; },
+    setTimeoutFn: (fn, delayMs) => {
+      const id = nextId++;
+      timers.set(id, { at: nowMs + Math.max(0, delayMs), fn });
+      return id;
+    },
+    clearTimeoutFn: (id) => { timers.delete(id); },
+    advanceTo: async (targetMs) => {
+      while (true) {
+        const due = [...timers.entries()]
+          .filter(([, timer]) => timer.at <= targetMs)
+          .sort((a, b) => a[1].at - b[1].at || a[0] - b[0])[0];
+        if (!due) break;
+        const [id, timer] = due;
+        timers.delete(id);
+        nowMs = timer.at;
+        await timer.fn();
+      }
+      nowMs = targetMs;
+    },
+  };
+}
+
+function hardDeadlineDependencies({ clock, childFactory, healthyFn, killed }) {
+  return {
+    checkHealthFn: async () => healthyFn(),
+    venvExistsFn: () => true,
+    spawnFn: childFactory,
+    waitUntilHealthyFn: async () => {
+      clock.setNow(12_000);
+      return false;
+    },
+    killTreeFn: (child) => killed.push(child),
+    nowFn: clock.now,
+    setTimeoutFn: clock.setTimeoutFn,
+    clearTimeoutFn: clock.clearTimeoutFn,
+  };
+}
 
 test('HEALTH_URL: 실행법과 같은 host:port(127.0.0.1:8010), llm/manifest 부트스트랩 경로', () => {
   assert.equal(HEALTH_HOST, '127.0.0.1');
@@ -34,17 +80,35 @@ test('buildUvicornArgs: 매 호출 새 배열 — 호출자가 변형해도 다�
 
 test('buildBackendEnv: Electron이 스폰한 제품 백엔드는 brain/routines를 기본 활성화한다', () => {
   assert.deepEqual(buildBackendEnv({ PATH: 'bin' }), {
-    PATH: 'bin', ATHENA_BRAIN_ENABLED: 'true', ATHENA_ROUTINES_ENABLED: 'true',
+    PATH: 'bin',
+    ATHENA_BRAIN_ENABLED: 'true',
+    ATHENA_ROUTINES_ENABLED: 'true',
+    ATHENA_BRAIN_INGEST_SCHEDULE_OWNER: 'external',
+    ATHENA_BRAIN_USE_CLAUDE_CLI_EXTRACTION: 'true',
   });
 });
 
 test('buildBackendEnv: 명시적인 프로세스 override는 true/false 모두 그대로 보존한다', () => {
   const env = buildBackendEnv({
-    ATHENA_BRAIN_ENABLED: 'false', ATHENA_ROUTINES_ENABLED: 'true', OTHER: 'value',
+    ATHENA_BRAIN_ENABLED: 'false',
+    ATHENA_ROUTINES_ENABLED: 'true',
+    ATHENA_BRAIN_USE_CLAUDE_CLI_EXTRACTION: 'false',
+    ATHENA_BRAIN_INGEST_SCHEDULE_OWNER: 'backend',
+    OTHER: 'value',
   });
   assert.equal(env.ATHENA_BRAIN_ENABLED, 'false');
   assert.equal(env.ATHENA_ROUTINES_ENABLED, 'true');
+  assert.equal(env.ATHENA_BRAIN_USE_CLAUDE_CLI_EXTRACTION, 'false');
+  assert.equal(env.ATHENA_BRAIN_INGEST_SCHEDULE_OWNER, 'backend');
   assert.equal(env.OTHER, 'value');
+});
+
+test('buildBackendEnv: custom extraction argv가 있으면 Claude CLI 기본 opt-in을 추가하지 않는다', () => {
+  const env = buildBackendEnv({
+    ATHENA_BRAIN_EXTRACTION_LLM_ARGV: '["custom-extractor"]',
+  });
+  assert.equal(env.ATHENA_BRAIN_EXTRACTION_LLM_ARGV, '["custom-extractor"]');
+  assert.equal(Object.hasOwn(env, 'ATHENA_BRAIN_USE_CLAUDE_CLI_EXTRACTION'), false);
 });
 
 test('decideAction: 헬스체크 성공이면 venv 여부와 무관하게 already-running — 중복 스폰 금지', () => {
@@ -62,6 +126,281 @@ test('decideAction: 헬스체크 실패 + venv 있음 → spawn', () => {
 
 test('hasSpawnedChild: ensureBackend를 부르기 전에는 false — 아직 아무것도 스폰하지 않았다', () => {
   assert.equal(hasSpawnedChild(), false);
+});
+
+test('ensureBackendReady: 빠른 readiness 예산 뒤에도 hard deadline 안에서 같은 backend를 기다린다', async () => {
+  let now = 0;
+  let calls = 0;
+  const progress = [];
+  const result = await ensureBackendReady({
+    onProgress: (entry) => progress.push(entry),
+    _dependencies: {
+      nowFn: () => now,
+      sleepFn: async (ms) => { now += ms; },
+      hardTimeoutMs: 2_000,
+      pollIntervalMs: 500,
+      ensureBackendFn: async () => {
+        calls += 1;
+        return calls < 3
+          ? { ok: true, ready: false, reason: 'startup-pending' }
+          : { ok: true, ready: true, reason: 'already-running' };
+      },
+    },
+  });
+  assert.equal(result.ready, true);
+  assert.equal(calls, 3);
+  assert.deepEqual(progress.map((entry) => entry.elapsedMs), [0, 500]);
+});
+
+test('ensureBackendReady: hard deadline까지 준비되지 않으면 terminal failure를 반환한다', async () => {
+  let now = 0;
+  const result = await ensureBackendReady({
+    _dependencies: {
+      nowFn: () => now,
+      sleepFn: async (ms) => { now += ms; },
+      hardTimeoutMs: 1_000,
+      pollIntervalMs: 250,
+      ensureBackendFn: async () => ({ ok: true, ready: false, reason: 'startup-pending' }),
+    },
+  });
+  assert.equal(result.ok, false);
+  assert.equal(result.ready, false);
+  assert.equal(result.reason, 'readiness-hard-timeout');
+  assert.equal(now, 1_000);
+});
+
+test('ensureBackend: readiness 예산을 넘겨도 self-spawn child를 유지하고 중복 스폰하지 않는다', async () => {
+  _setBackendChildForTest(null);
+  const child = new EventEmitter();
+  let spawnCount = 0;
+  let healthy = false;
+  const dependencies = {
+    checkHealthFn: async () => healthy,
+    venvExistsFn: () => true,
+    spawnFn: () => {
+      spawnCount += 1;
+      return child;
+    },
+    waitUntilHealthyFn: async () => false,
+  };
+
+  const timedOut = await ensureBackend({ _dependencies: dependencies });
+  assert.equal(timedOut.ok, true);
+  assert.equal(timedOut.ready, false);
+  assert.equal(timedOut.reason, 'readiness-pending');
+  assert.equal(hasSpawnedChild(), true, 'readiness timeout은 소유 child를 해제하지 않는다');
+  assert.equal(spawnCount, 1);
+
+  const pending = await ensureBackend({ _dependencies: dependencies });
+  assert.deepEqual(pending, {
+    ok: true, spawned: false, ready: false, reason: 'startup-pending',
+  });
+  assert.equal(spawnCount, 1, 'pending child가 있으면 두 번째 child를 만들지 않는다');
+
+  healthy = true;
+  const ready = await ensureBackend({ _dependencies: dependencies });
+  assert.equal(ready.reason, 'already-running');
+  assert.equal(ready.ready, true);
+  assert.equal(spawnCount, 1, 'eventual readiness 뒤에도 새 child를 만들지 않는다');
+
+  const killed = [];
+  shutdownBackend({ killTreeFn: (ownedChild) => killed.push(ownedChild) });
+  assert.deepEqual(killed, [child], '명시적 shutdown만 소유 child를 종료한다');
+  assert.equal(hasSpawnedChild(), false);
+});
+
+test('ensureBackend: self-spawn child exit은 소유 상태를 정리한다', async () => {
+  _setBackendChildForTest(null);
+  const child = new EventEmitter();
+  await ensureBackend({
+    _dependencies: {
+      checkHealthFn: async () => false,
+      venvExistsFn: () => true,
+      spawnFn: () => child,
+      waitUntilHealthyFn: async () => false,
+    },
+  });
+  assert.equal(hasSpawnedChild(), true);
+  child.emit('exit', 0, null);
+  assert.equal(hasSpawnedChild(), false);
+});
+
+test('ensureBackend: spawn error도 소유 상태를 정리해 이후 재시도를 막지 않는다', async () => {
+  _setBackendChildForTest(null);
+  const child = new EventEmitter();
+  await ensureBackend({
+    _dependencies: {
+      checkHealthFn: async () => false,
+      venvExistsFn: () => true,
+      spawnFn: () => child,
+      waitUntilHealthyFn: async () => false,
+    },
+  });
+  assert.equal(hasSpawnedChild(), true);
+  child.emit('error', new Error('synthetic spawn failure'));
+  assert.equal(hasSpawnedChild(), false);
+});
+
+test('ensureBackend: 31초 eventual readiness는 hard deadline을 취소하고 child를 유지한다', async () => {
+  _setBackendChildForTest(null);
+  const clock = createFakeClock();
+  const child = new EventEmitter();
+  const killed = [];
+  await ensureBackend({
+    _dependencies: hardDeadlineDependencies({
+      clock,
+      childFactory: () => child,
+      healthyFn: () => clock.now() >= 31_000,
+      killed,
+    }),
+  });
+
+  await clock.advanceTo(31_000);
+  assert.equal(hasSpawnedChild(), true);
+  assert.deepEqual(killed, []);
+  await clock.advanceTo(60_000);
+  assert.equal(hasSpawnedChild(), true, 'ready 확인 뒤 취소된 hard timer가 child를 죽이면 안 된다');
+  assert.deepEqual(killed, []);
+  _setBackendChildForTest(null);
+});
+
+test('ensureBackend: 60초까지 hung이면 그 child만 retire하고 다음 ensure가 재스폰할 수 있다', async () => {
+  _setBackendChildForTest(null);
+  const clock = createFakeClock();
+  const firstChild = new EventEmitter();
+  const secondChild = new EventEmitter();
+  const children = [firstChild, secondChild];
+  const killed = [];
+  let spawnCount = 0;
+  const dependencies = hardDeadlineDependencies({
+    clock,
+    childFactory: () => children[spawnCount++],
+    healthyFn: () => false,
+    killed,
+  });
+
+  await ensureBackend({ _dependencies: dependencies });
+  await clock.advanceTo(60_000);
+  assert.deepEqual(killed, [firstChild]);
+  assert.equal(hasSpawnedChild(), false);
+
+  const retried = await ensureBackend({
+    _dependencies: {
+      ...dependencies,
+      waitUntilHealthyFn: async () => true,
+    },
+  });
+  assert.equal(spawnCount, 2);
+  assert.equal(retried.ready, true);
+  assert.equal(hasSpawnedChild(), true);
+  shutdownBackend({ killTreeFn: () => {} });
+});
+
+test('ensureBackend: exit/error가 hard deadline보다 먼저 오면 watcher를 취소한다', async () => {
+  for (const eventName of ['exit', 'error']) {
+    _setBackendChildForTest(null);
+    const clock = createFakeClock();
+    const child = new EventEmitter();
+    const killed = [];
+    await ensureBackend({
+      _dependencies: hardDeadlineDependencies({
+        clock,
+        childFactory: () => child,
+        healthyFn: () => false,
+        killed,
+      }),
+    });
+    clock.setNow(20_000);
+    if (eventName === 'exit') child.emit('exit', 1, null);
+    else child.emit('error', new Error('synthetic failure'));
+    await clock.advanceTo(60_000);
+    assert.deepEqual(killed, [], `${eventName} 뒤 hard watcher가 중복 kill하면 안 된다`);
+    assert.equal(hasSpawnedChild(), false);
+  }
+});
+
+test('shutdownBackend: hard watcher를 취소해 deadline 중복 kill을 막는다', async () => {
+  _setBackendChildForTest(null);
+  const clock = createFakeClock();
+  const child = new EventEmitter();
+  const killed = [];
+  const dependencies = hardDeadlineDependencies({
+    clock,
+    childFactory: () => child,
+    healthyFn: () => false,
+    killed,
+  });
+  await ensureBackend({ _dependencies: dependencies });
+  clock.setNow(20_000);
+  shutdownBackend({ killTreeFn: dependencies.killTreeFn });
+  await clock.advanceTo(60_000);
+  assert.deepEqual(killed, [child]);
+  assert.equal(hasSpawnedChild(), false);
+});
+
+test('ensureBackend: 59.9초 ready 재확인은 60초 hard timer를 취소해 child를 보존한다', async () => {
+  _setBackendChildForTest(null);
+  const clock = createFakeClock();
+  const child = new EventEmitter();
+  const killed = [];
+  let healthy = false;
+  const dependencies = hardDeadlineDependencies({
+    clock,
+    childFactory: () => child,
+    healthyFn: () => healthy,
+    killed,
+  });
+  await ensureBackend({ _dependencies: dependencies });
+  await clock.advanceTo(59_500);
+
+  healthy = true;
+  clock.setNow(59_900);
+  const ready = await ensureBackend({ _dependencies: dependencies });
+  assert.equal(ready.reason, 'already-running');
+  await clock.advanceTo(60_000);
+  assert.deepEqual(killed, []);
+  assert.equal(hasSpawnedChild(), true);
+  shutdownBackend({ killTreeFn: () => {} });
+});
+
+test('hard deadline final health await 중 exit/replacement가 생기면 이전 child를 kill하지 않는다', async () => {
+  for (const race of ['exit', 'replacement']) {
+    _setBackendChildForTest(null);
+    const clock = createFakeClock();
+    const child = new EventEmitter();
+    const replacement = new EventEmitter();
+    const killed = [];
+    let checkCount = 0;
+    let resolveFinalCheck;
+    let markFinalCheckStarted;
+    const finalCheckStarted = new Promise((resolve) => { markFinalCheckStarted = resolve; });
+    const dependencies = {
+      ...hardDeadlineDependencies({
+        clock,
+        childFactory: () => child,
+        healthyFn: () => false,
+        killed,
+      }),
+      pollIntervalMs: 60_000,
+      checkHealthFn: async () => {
+        checkCount += 1;
+        if (checkCount === 1) return false;
+        markFinalCheckStarted();
+        return new Promise((resolve) => { resolveFinalCheck = resolve; });
+      },
+    };
+    await ensureBackend({ _dependencies: dependencies });
+    const advancing = clock.advanceTo(60_000);
+    await finalCheckStarted;
+    if (race === 'exit') child.emit('exit', 1, null);
+    else _setBackendChildForTest(replacement);
+    resolveFinalCheck(false);
+    await advancing;
+
+    assert.deepEqual(killed, [], `${race} race에서 이전 child를 kill하면 안 된다`);
+    assert.equal(hasSpawnedChild(), race === 'replacement');
+    if (race === 'replacement') shutdownBackend({ killTreeFn: () => {} });
+  }
 });
 
 // ---------- 리셋 후 재기동 — 계획 §2(f), 전역 exit 훅과 별개인 1회성 대기 ----------

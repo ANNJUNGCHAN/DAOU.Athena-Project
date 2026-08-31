@@ -16,8 +16,6 @@ from athena_api.kiwoom.auth import KiwoomAuth
 from athena_api.kiwoom.rate_limiter import RateLimiter
 from athena_api.kiwoom.return_codes import normalize_return_code
 
-RATE_LIMIT_RETURN_CODES = frozenset({"5", "1700"})
-
 
 @dataclass(slots=True)
 class RequestOptions:
@@ -109,6 +107,12 @@ class KiwoomClient:
                 jitter = 0.75 + self._random_value() * 0.5
                 await self._sleep(0.2 * (2 ** (attempt - 1)) * jitter)
                 continue
+            if response.status_code == 429:
+                raise KiwoomApiError(
+                    code="429",
+                    message="upstream request failed",
+                    http_status=429,
+                )
             try:
                 body = response.json()
             except ValueError as exc:
@@ -130,21 +134,13 @@ class KiwoomClient:
                     http_status=502,
                 )
             return_code = normalize_return_code(body.get("return_code"))
-            is_limited = (
-                200 <= response.status_code < 300 and return_code in RATE_LIMIT_RETURN_CODES
-            )
-            if is_limited and attempt < self._max_retries:
-                attempt += 1
-                jitter = 0.75 + self._random_value() * 0.5
-                await self._sleep(0.2 * (2 ** (attempt - 1)) * jitter)
-                continue
             if 200 <= response.status_code < 300 and not body:
                 raise KiwoomApiError(
                     code="invalid_response",
                     message="upstream response was invalid",
                     http_status=502,
                 )
-            if not 200 <= response.status_code < 300 or return_code not in {"", "0"}:
+            if not 200 <= response.status_code < 300:
                 raise KiwoomApiError(
                     code=return_code or str(response.status_code),
                     message="upstream request failed",

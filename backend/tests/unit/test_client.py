@@ -25,7 +25,7 @@ async def no_sleep(_seconds: float) -> None:
 
 
 @pytest.mark.asyncio
-async def test_headers_and_bounded_rate_limit_retry() -> None:
+async def test_http_2xx_business_rate_result_is_not_retried() -> None:
     limiter = RateLimiter(rate_per_second=1000, per_api_rate=None)
     with respx.mock(base_url="https://mockapi.kiwoom.com") as mock:
         route = mock.post("/api/dostk/stkinfo")
@@ -38,8 +38,8 @@ async def test_headers_and_bounded_rate_limit_retry() -> None:
             body = await client.post("ka10001", "/api/dostk/stkinfo", {"stk_cd": "005930"})
         finally:
             await client.aclose()
-    assert body["stk_nm"] == "OK"
-    assert route.call_count == 2
+    assert body == {"return_code": "01700"}
+    assert route.call_count == 1
     headers = route.calls[0].request.headers
     assert headers["api-id"] == "ka10001"
     assert headers["authorization"] == "Bearer token"
@@ -58,6 +58,43 @@ async def test_http_429_retry_is_bounded() -> None:
         finally:
             await client.aclose()
     assert route.call_count == 2
+
+
+@pytest.mark.parametrize(
+    "upstream_response",
+    [
+        httpx.Response(429, text="secret-invalid-json"),
+        httpx.Response(429, json=[{"secret": "raw-body"}]),
+    ],
+)
+def test_http_429_is_preserved_before_response_body_validation(
+    upstream_response: httpx.Response,
+) -> None:
+    limiter = RateLimiter(rate_per_second=1000, per_api_rate=None)
+    upstream_client = KiwoomClient(
+        ready_auth(), limiter, max_rate_limit_retries=0
+    )
+    app = create_app(Settings(_env_file=None))
+    app.dependency_overrides[require_kiwoom_client] = lambda: upstream_client
+
+    with respx.mock(base_url="https://mockapi.kiwoom.com") as mock:
+        mock.post("/api/dostk/stkinfo").mock(return_value=upstream_response)
+        try:
+            with TestClient(app) as client:
+                response = client.post(
+                    "/api/v1/tr/stockinfo/ka10001/detail/current_trading",
+                    json={"stk_cd": "005930"},
+                )
+        finally:
+            asyncio.run(upstream_client.aclose())
+
+    assert response.status_code == 429
+    assert response.json() == {
+        "detail": "Kiwoom upstream request failed",
+        "code": "429",
+    }
+    assert "secret-invalid-json" not in response.text
+    assert "raw-body" not in response.text
 
 
 @pytest.mark.asyncio
@@ -107,6 +144,36 @@ async def test_all_malformed_and_non_success_responses_are_secret_safe(
     assert error.value.code == expected_code
     assert secret not in str(error.value)
     assert secret not in error.value.message
+
+
+def test_upstream_http_500_with_business_rate_code_is_not_reclassified_as_429() -> None:
+    limiter = RateLimiter(rate_per_second=1000, per_api_rate=None)
+    upstream_client = KiwoomClient(ready_auth(), limiter)
+    app = create_app(Settings(_env_file=None))
+    app.dependency_overrides[require_kiwoom_client] = lambda: upstream_client
+
+    with respx.mock(base_url="https://mockapi.kiwoom.com") as mock:
+        mock.post("/api/dostk/stkinfo").mock(
+            return_value=httpx.Response(
+                500,
+                json={"return_code": 5, "return_msg": "upstream detail"},
+            )
+        )
+        try:
+            with TestClient(app) as client:
+                response = client.post(
+                    "/api/v1/tr/stockinfo/ka10001/detail/current_trading",
+                    json={"stk_cd": "005930"},
+                )
+        finally:
+            asyncio.run(upstream_client.aclose())
+
+    assert response.status_code == 502
+    assert response.json() == {
+        "detail": "Kiwoom upstream request failed",
+        "code": "5",
+    }
+    assert "upstream detail" not in response.text
 
 
 @pytest.mark.asyncio
@@ -167,19 +234,41 @@ def test_empty_success_object_is_fail_closed_on_detail_route() -> None:
 
 
 @pytest.mark.asyncio
-async def test_zero_padded_error_code_is_canonicalized() -> None:
+@pytest.mark.parametrize("return_code", [20, "2", 8104])
+async def test_http_2xx_business_result_is_returned_verbatim(return_code: int | str) -> None:
+    body = {"return_code": return_code, "return_msg": "upstream business result"}
     limiter = RateLimiter(rate_per_second=1000, per_api_rate=None)
     with respx.mock(base_url="https://mockapi.kiwoom.com") as mock:
-        mock.post("/query").mock(
-            return_value=httpx.Response(200, json={"return_code": "0009"})
-        )
+        mock.post("/query").mock(return_value=httpx.Response(200, json=body))
         client = KiwoomClient(ready_auth(), limiter)
         try:
-            with pytest.raises(KiwoomApiError) as error:
-                await client.post("ka10001", "/query")
+            result = await client.post("ka10001", "/query")
         finally:
             await client.aclose()
-    assert error.value.code == "9"
+
+    assert result == body
+    assert type(result["return_code"]) is type(return_code)
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("return_code", [5, "1700"])
+async def test_business_rate_limit_result_is_returned_without_retry(
+    return_code: int | str,
+) -> None:
+    body = {"return_code": return_code, "return_msg": "rate limited"}
+    limiter = RateLimiter(rate_per_second=1000, per_api_rate=None)
+    with respx.mock(base_url="https://mockapi.kiwoom.com") as mock:
+        route = mock.post("/query").mock(return_value=httpx.Response(200, json=body))
+        client = KiwoomClient(
+            ready_auth(), limiter, max_rate_limit_retries=1, sleep=no_sleep
+        )
+        try:
+            result = await client.post("ka10001", "/query")
+        finally:
+            await client.aclose()
+
+    assert result == body
+    assert route.call_count == 1
 
 
 def test_live_domain_is_rejected() -> None:

@@ -531,6 +531,10 @@ class ClaudeCliStructuredLlm:
             "--output-format",
             "json",
             "--no-session-persistence",
+            "--tools",
+            "",
+            "--setting-sources",
+            "",
         ]
         if await self._supports_json_schema():
             argv += ["--json-schema", json.dumps(EXTRACTION_JSON_SCHEMA, ensure_ascii=False)]
@@ -605,6 +609,9 @@ async def _run_capturing(
             asyncio.gather(read_stdout(), feed_stdin(), drain_stderr()),
             timeout=timeout_seconds,
         )
+    except asyncio.CancelledError:
+        await _reap_cancelled_process(process)
+        raise
     except TimeoutError as exc:
         process.kill()
         await process.wait()
@@ -625,6 +632,53 @@ async def _run_capturing(
     if returncode != 0:
         raise RuntimeError("structured extraction command failed")
     return stdout
+
+
+async def _reap_cancelled_process(process: asyncio.subprocess.Process) -> None:
+    """Stop an owned child before propagating cancellation to the caller.
+
+    Cancellation is the normal shutdown path for the Electron-owned backend.  A
+    second cancellation must not interrupt process reaping, so cleanup runs in a
+    shielded task.  ``terminate`` and ``kill`` are both supported by asyncio's
+    Windows subprocess implementation; no POSIX-only signal or process-group
+    behavior is assumed here.
+    """
+
+    async def stop_and_wait() -> None:
+        if process.returncode is not None:
+            await process.wait()
+            return
+        try:
+            process.terminate()
+        except ProcessLookupError:
+            await process.wait()
+            return
+        try:
+            await asyncio.wait_for(process.wait(), timeout=1.0)
+            return
+        except TimeoutError:
+            pass
+        if process.returncode is None:
+            try:
+                process.kill()
+            except ProcessLookupError:
+                pass
+        await process.wait()
+
+    cleanup = asyncio.create_task(stop_and_wait())
+    while not cleanup.done():
+        try:
+            await asyncio.shield(cleanup)
+        except asyncio.CancelledError:
+            # Preserve every cancellation request, but finish reaping first.
+            continue
+        except Exception:
+            break
+    try:
+        cleanup.result()
+    except BaseException:
+        # Cleanup failure must not replace the caller's original CancelledError.
+        pass
 
 
 def utc_now() -> datetime:

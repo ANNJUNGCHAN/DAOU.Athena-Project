@@ -77,8 +77,8 @@ def test_canvas_push_rejects_forged_integrated_card_metadata() -> None:
         response = client.post(
             "/api/v1/canvas/push",
             json={
-                "operation_ref": "base:kt10000",
-                "canvas_type": "event",
+                "operation_ref": "base:ka00001",
+                "canvas_type": "facts",
                 "card_id": "CC-06",
                 "card_kind": "explorer",
                 "capability_id": "discovery",
@@ -215,7 +215,7 @@ def test_render_plan_http_roundtrip_facts_reaches_route_body_without_422():
         envelope = client.app.state.canvas_events.get_nowait()
         assert envelope["canvas_type"] == "facts"
         assert envelope["data"]["fields"] == [
-            {"key": "acctNo", "label": "acctNo", "value": "1234567890"}
+            {"key": "acctNo", "label": "계좌번호", "value": "1234567890"}
         ]
         assert envelope["card_id"] == body["card_id"] == "CC-01"
         assert envelope["card_kind"] == "account"
@@ -236,6 +236,27 @@ def test_render_plan_http_roundtrip_facts_reaches_route_body_without_422():
             "cache_reused": False,
         }
         assert "1234567890" not in json.dumps(body["receipt"])
+
+
+def test_render_plan_public_label_authority_gap_returns_coverage_422():
+    upstream = FakeClient({"acctNo": "1234567890"})
+    with _client(_service(), upstream) as client:
+        token = _resolve(client, "base:ka00001", {})
+        with patch(
+            "athena_api.api.canvas_push._authoritative_public_labels",
+            return_value={},
+        ):
+            response = client.post(
+                "/api/v1/canvas/render-plan",
+                json={"plan_token": token, "canvas_type": "facts", "data": {}},
+            )
+
+        assert response.status_code == 422, response.text
+        body = response.json()
+        assert body["code"] == "CANVAS_COVERAGE_MISSING"
+        assert body["envelope"] is None
+        assert body["next_actions"] == ["register_public_projection_label"]
+        assert client.app.state.canvas_events.empty()
 
 
 def test_render_plan_inline_returns_envelope_without_queueing() -> None:
@@ -322,6 +343,12 @@ def test_render_plan_inline_timeout_returns_authoritative_error_state_before_dea
             "ordinal": 1,
         }
         assert body["envelope"]["state"] == "timeout"
+        assert body["workspace_generation"] == body["view_generation"] == 1
+        assert body["update_policy"] == "replace"
+        assert body["envelope"]["workspace_generation"] == 1
+        assert body["envelope"]["view_generation"] == 1
+        assert body["envelope"]["update_policy"] == "replace"
+        assert body["envelope"]["realtime_bindings"] == body["realtime_bindings"]
         assert body["envelope"]["screen_id"] == "AT-CV-005:F1"
         assert "data" not in body["envelope"]
         assert body["receipt"]["state"] == "timeout"
@@ -1080,7 +1107,9 @@ def test_render_plan_http_roundtrip_compound_generic_watchlist():
         assert response.json()["canvas_type"] == "compound"
         envelope = client.app.state.canvas_events.get_nowait()
         assert envelope["canvas_type"] == "compound"
-        assert envelope["data"]["header"] == [{"key": "rtcd", "label": "rtcd", "value": "S"}]
+        assert envelope["data"]["header"] == [
+            {"key": "rtcd", "label": "처리결과", "value": "S"}
+        ]
         assert envelope["data"]["table"]["rows"] == [{"gcod": "001", "name": "삼성전자"}]
 
 
@@ -1096,7 +1125,10 @@ def test_render_plan_http_roundtrip_compound_generic_watchlist():
 class _StubSelector:
     def __init__(self, operation_ref: str, data: dict) -> None:
         self.signer = SimpleNamespace(
-            verify=lambda *args, **kwargs: SimpleNamespace(operation_ref=operation_ref)
+            verify=lambda *args, **kwargs: SimpleNamespace(
+                operation_ref=operation_ref,
+                question_hash="0" * 64,
+            )
         )
         self.catalog = SimpleNamespace(
             find_exact=lambda operation_ref: SimpleNamespace(kind="query")
@@ -1113,24 +1145,23 @@ def _fake_request(queue: asyncio.Queue) -> SimpleNamespace:
     return SimpleNamespace(app=SimpleNamespace(state=SimpleNamespace(canvas_events=queue)))
 
 
-async def test_canvas_render_plan_fails_closed_when_manifest_kind_unsupported(caplog):
+async def test_canvas_render_plan_fails_closed_when_manifest_kind_unsupported():
     """base:ka10173은 websocket TR이라 manifest layout="event" — 이 read/display
     plan_token 경로 범위 밖이다. free 카드로 강등하지 않고 coverage 오류로 닫는다."""
     queue: asyncio.Queue = asyncio.Queue(10)
     selector = _StubSelector("base:ka10173", {"some": "ws-field"})
     payload = RenderPlanRequest(plan_token="tok", canvas_type="table", data={})
 
-    with caplog.at_level(logging.WARNING, logger="athena_api.api.canvas_push"):
-        result = await canvas_render_plan(
-            payload,
-            _fake_request(queue),
-            Response(),
-            client=None,
-            order_client=None,
-            ws_client=None,
-            selector=selector,
-            account="",
-        )
+    result = await canvas_render_plan(
+        payload,
+        _fake_request(queue),
+        Response(),
+        client=None,
+        order_client=None,
+        ws_client=None,
+        selector=selector,
+        account="",
+    )
 
     body = json.loads(result.body)
     assert result.status_code == 422
@@ -1139,7 +1170,9 @@ async def test_canvas_render_plan_fails_closed_when_manifest_kind_unsupported(ca
     assert body["envelope"] is None
     assert body["receipt"] is None
     assert queue.empty()
-    assert any("coverage 결함" in record.message for record in caplog.records)
+    assert body["detail"] == (
+        "signed query plan has no authoritative read/display screen contract"
+    )
 
 
 async def test_canvas_render_plan_logs_mismatch_but_manifest_wins():

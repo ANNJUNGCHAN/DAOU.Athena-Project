@@ -9,7 +9,7 @@ const {
   specializedClassNames, copySpecializedDatasets,
   matchesRealtimeTick, requireRealtimeSuccess, verifiedOperationRefsFor,
   rememberPanelSession, panelSessionFor, forgetPanelSession,
-  detachForDestroy, findReusableRoot,
+  detachForDestroy, findReusableRoot, buttonLabel, workflowStateLabel,
 } = require('./integrated-card-surface');
 
 test('canonical taxonomy has exactly six root surfaces', () => {
@@ -23,6 +23,15 @@ test('instance key is card plus normalized account or target', () => {
   assert.equal(normalizeIdentity(' 삼성 전자 '), '삼성-전자');
 });
 
+test('view instance identity wins while legacy card and target fallback remains stable', () => {
+  assert.equal(instanceKeyFor({
+    card_id: 'CC-03', card_kind: 'instrument', stk_cd: '005930', view_instance_id: ' conversation 7 / chart ',
+  }), 'view:conversation-7-/-chart');
+  assert.equal(instanceKeyFor({
+    card_id: 'CC-03', card_kind: 'instrument', stk_cd: '005930', viewInstanceId: 'chart:005930',
+  }), 'view:chart:005930');
+});
+
 test('kind mismatch and legacy card ids fail closed', () => {
   assert.equal(integratedDefinition({ card_id: 'ACCOUNT', card_kind: 'account' }), null);
   assert.equal(integratedDefinition({ card_id: 'CC-04', card_kind: 'flow' }), null);
@@ -30,6 +39,44 @@ test('kind mismatch and legacy card ids fail closed', () => {
 
 test('mode and section form an internal panel key, never another card id', () => {
   assert.equal(panelKeyFor({ mode: 'quote', section: 'overview', capability: 'quote', operation_ref: 'base:ka10001' }), 'quote:overview:quote:base:ka10001');
+});
+
+test('internal fundamentals taxonomy is presented as an investor-facing Korean tab label', () => {
+  assert.equal(buttonLabel({
+    section: 'valuation-and-profile',
+    presentation_contract: { sections: [{
+      section_id: 'valuation-and-profile', title_ko: '가치와 기업 정보',
+    }] },
+  }), '가치와 기업 정보');
+  assert.equal(buttonLabel({
+    section: 'fundamentals',
+    presentation_contract: { title_ko: '기업 기본 정보와 가치', sections: [] },
+  }), '기업 기본 정보와 가치');
+});
+
+test('internal panel taxonomy and operation refs never become tab copy', () => {
+  for (const token of ['visualization', 'depth-ladder', 'result-table', 'product-detail', 'summary']) {
+    assert.equal(buttonLabel({
+      section: token, mode: token, capability: token, operation_ref: 'detail:ka10004:buy_bid_prices',
+      view_recipe: { title_ko: '종목 분석' },
+      presentation_contract: { sections: [{ section_id: token, title_ko: token }] },
+    }), '종목 분석');
+  }
+});
+
+test('order routing and state tokens are localized before reaching product text', () => {
+  assert.equal(workflowStateLabel('entry'), '주문 입력');
+  assert.equal(workflowStateLabel('draft'), '주문 초안');
+  assert.equal(buttonLabel({ mode: 'entry', section: 'draft' }), '요약');
+  assert.equal(workflowStateLabel('draft'), '주문 초안');
+  assert.equal(workflowStateLabel('review'), '확인 대기');
+});
+
+test('websocket lifecycle tokens use allowlisted investor-facing Korean states', () => {
+  assert.equal(workflowStateLabel('connecting'), '실시간 연결 중');
+  assert.equal(workflowStateLabel('connected'), '실시간 연결됨');
+  assert.equal(workflowStateLabel('reconnecting'), '실시간 재연결 중');
+  assert.equal(workflowStateLabel('stopped'), '실시간 연결 중지');
 });
 
 test('renderer passes the production verifiedOperationRefs key without suppressing query refs', () => {
@@ -85,7 +132,7 @@ test('integrated root preserves specialized chart/orderbook class contracts', ()
   });
 });
 
-test('realtime tick reducer gate checks target, operation, and both generations', () => {
+test('realtime tick reducer gate uses opaque lease identity and both generations', () => {
   const meta = {
     leaseId: 'CC-04:005930', cardId: 'CC-04', mode: 'regular', target: '005930',
     generation: 2, connectionGeneration: 4, operationIds: ['0D'],
@@ -95,8 +142,8 @@ test('realtime tick reducer gate checks target, operation, and both generations'
     generation: 2, connectionGeneration: 4, operationId: '0D',
   };
   assert.equal(matchesRealtimeTick(meta, tick), true);
-  assert.equal(matchesRealtimeTick(meta, { ...tick, target: '000660' }), false);
-  assert.equal(matchesRealtimeTick(meta, { ...tick, operationId: '0B' }), false);
+  assert.equal(matchesRealtimeTick(meta, { ...tick, leaseId: 'another-lease' }), false);
+  assert.equal(matchesRealtimeTick(meta, { ...tick, cardId: 'CC-03' }), false);
   assert.equal(matchesRealtimeTick(meta, { ...tick, generation: 1 }), false);
   assert.equal(matchesRealtimeTick(meta, { ...tick, connectionGeneration: 3 }), false);
 });
@@ -111,26 +158,31 @@ test('shell loads integrated CSS and both libraries before canvas runtime', () =
   const html = fs.readFileSync(path.join(__dirname, '..', 'shell.html'), 'utf8');
   assert.ok(html.includes('styles/integrated-cards.css'));
   assert.ok(html.indexOf('lib/semantic-detail-sheet.js') < html.indexOf('<script src="canvas.js"'));
+  assert.ok(html.indexOf('lib/semantic-workspace.js') < html.indexOf('<script src="canvas.js"'));
   assert.ok(html.indexOf('lib/integrated-card-surface.js') < html.indexOf('<script src="canvas.js"'));
 });
 
-test('canvas routes canonical envelopes through one integrated root and detail sheet', () => {
+test('canvas routes canonical envelopes through one integrated root and semantic workspace', () => {
   const canvas = fs.readFileSync(path.join(__dirname, '..', 'canvas.js'), 'utf8');
   assert.match(canvas, /integratedCardSurface\.integratedDefinition\(envelope\)/);
   assert.match(canvas, /data-integrated-instance-key/);
-  assert.match(canvas, /semanticDetailSheet\.upsert\(root, envelope\)/);
+  assert.match(canvas, /semanticWorkspace\.upsert\(root, envelope\)/);
+  assert.match(canvas, /upsertDeveloperDiagnostics\(root, envelope\)/);
+  assert.match(canvas, /__ATHENA_DEVELOPER_DIAGNOSTICS__/);
   assert.match(canvas, /semantic-detail-row:not\(\[data-field-occurrence-id\]\)/);
   assert.match(canvas, /athena:integrated-card-realtime-mount/);
   assert.match(canvas, /athena:integrated-card-realtime-update/);
   assert.match(canvas, /athena:integrated-card-realtime-unmount/);
   assert.match(canvas, /integratedCardSurface\.matchesRealtimeTick/);
-  assert.match(canvas, /semanticDetailSheet\.applyRealtimeTick\(root, tick\)/);
+  assert.match(canvas, /semanticWorkspace\.applyRealtimeTick\(root, tick\)/);
   assert.match(canvas, /candidate\.classList\.contains\('integrated-card'\)/);
   assert.match(canvas, /rendered === existing/);
   assert.match(canvas, /if \(!root\.isConnected && state && state\.ok\)/);
   assert.match(canvas, /integratedRealtimePoliciesPromise = null/);
   assert.match(canvas, /athena:integrated-card-realtime-release-all/);
   assert.match(canvas, /verifiedOperationRefs/);
+  assert.match(canvas, /semanticBindingIds/);
+  assert.match(canvas, /envelope\.realtime_bindings/);
   assert.match(canvas, /requireRealtimeSuccess\(state\)/);
   assert.match(canvas, /showIntegratedRealtimeError\(root, envelope, error\)/);
   assert.doesNotMatch(canvas, /state\s*&&\s*state\.ok\s*\?[^\n]*:\s*'static'/);
@@ -138,4 +190,8 @@ test('canvas routes canonical envelopes through one integrated root and detail s
   assert.match(canvas, /detachForDestroy\(card\)/);
   assert.match(canvas, /settleCleanup\(realtimeTask\)/);
   assert.ok(canvas.indexOf('for (const destroy of panelDestroyers.values())') < canvas.indexOf('const realtimeCleanup = (async () =>'));
+
+  const main = fs.readFileSync(path.join(__dirname, '..', 'main.js'), 'utf8');
+  assert.match(main, /semanticBindingSourceProvider:\s*integratedCardRealtime\.createSemanticBindingSourceProvider/);
+  assert.match(main, /token:\s*LOCAL_BEARER_TOKEN/);
 });

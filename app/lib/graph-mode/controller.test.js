@@ -3,6 +3,8 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
 
 const store = require('./graph-mode-store');
 const layout = require('./cluster-layout');
@@ -182,15 +184,37 @@ test('리비전이 바뀌면 다시 그린다', async () => {
   assert.notEqual(redrawn, null, '새 리비전이면 다시 그린다');
 });
 
-test('백엔드가 죽으면 요약으로 돌아간다', async () => {
-  // 빈 캔버스를 띄우면 "성향이 없다"로 읽힌다. 없는 것과 못 읽은 것은 다르다.
+test('백엔드가 죽어도 지도 헤더를 남기고 요약↔지도로 왕복할 수 있다', async () => {
   const seen = [];
   const { controller, elements } = setup({ fail: true, onError: (e) => seen.push(e) });
   await controller.toggle();
-  assert.equal(elements.graph.hidden, true, '그래프를 띄우지 않는다');
-  assert.equal(elements.summary.hidden, false);
-  assert.equal(elements.summaryTable.hidden, true, '요약으로 돌아갔으니 그래프 표면도 같이 숨는다');
-  assert.equal(seen.length, 1, '오류를 삼키지 않는다');
+  await controller.setSurface(store.SURFACE_MAP);
+  assert.equal(controller.state.view, store.VIEW_GRAPH, '요청 실패가 상위 그래프 모드를 닫지 않는다');
+  assert.equal(controller.state.surface, store.SURFACE_MAP);
+  assert.equal(elements.graph.hidden, false, '지도 헤더와 요약 탭을 눌러야 한다');
+  assert.equal(elements.summary.hidden, true, '대화 요약 표면으로 잘못 탈출하지 않는다');
+  assert.equal(elements.summaryTable.hidden, true);
+  assert.match(elements.graphBody.children[0].textContent, /불러오지 못했습니다/);
+  assert.equal(seen.length, 2, '요약 선행 로드와 지도 진입 실패를 모두 삼키지 않는다');
+
+  await controller.setSurface(store.SURFACE_SUMMARY);
+  assert.equal(elements.graph.hidden, true);
+  assert.equal(elements.summaryTable.hidden, false, '눈에 보이는 요약 탭으로 돌아간다');
+
+  await controller.setSurface(store.SURFACE_MAP);
+  assert.equal(elements.graph.hidden, false, '요약에서 지도로도 다시 전환한다');
+  assert.equal(seen.length, 3, '재진입 실패도 오류 경로에 전달한다');
+});
+
+test('그래프 오류 안내는 #graphBody 안에만 배치되어 헤더 클릭 영역을 덮지 않는다', () => {
+  const css = fs.readFileSync(path.join(__dirname, '..', '..', 'canvas.css'), 'utf8');
+  const graphBodyRule = css.match(/#graphBody\s*\{([^}]*)\}/);
+  const unavailableRule = css.match(/\.graph-mode-unavailable\s*\{([^}]*)\}/);
+  assert.ok(graphBodyRule, '#graphBody 규칙이 있다');
+  assert.match(graphBodyRule[1], /position\s*:\s*relative\s*;/, '절대 배치 안내의 containing block이다');
+  assert.ok(unavailableRule, '그래프 오류 안내 규칙이 있다');
+  assert.match(unavailableRule[1], /position\s*:\s*absolute\s*;/);
+  assert.match(unavailableRule[1], /inset\s*:\s*0\s*;/, '안내는 #graphBody 범위만 채운다');
 });
 
 test('브레인이 안 됐을 때 지도 서브뷰로 전환하면 캔버스 안에 정직한 안내가 뜬다', async () => {

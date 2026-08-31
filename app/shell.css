@@ -1459,15 +1459,26 @@ body { margin: 0; overflow: hidden; }
   z-index: 20;
 }
 
-/* ---------- Windows 반응형/Snap (Paper 53) ----------
+/* ---------- Windows 반응형/Snap (현재 Paper 50) ----------
  * 1280px 이상은 위의 기본 3열(268px + 가변 캔버스 + 400px 채팅)이다.
- * 그 아래에서는 채팅 DOM을 없애지 않고 작성창만 하단 행으로 옮긴다. 따라서 Snap,
- * 복원, 모니터 이동 중에도 대화 내용과 입력 초안은 같은 노드에 그대로 남는다. */
+ * 그 아래에서는 같은 채팅 DOM을 캔버스 아래로 옮긴다. 빈 대화는 작성창 54px만
+ * 남기고, 이력이 있으면 최근 질문·답변을 읽을 수 있는 하단 트레이를 연다. DOM을
+ * 복제하지 않으므로 Snap·복원·모니터 이동 중에도 이력·스크롤·초안이 보존된다. */
 @media (max-width: 1279px) {
   #shell {
     display: grid;
     grid-template-columns: 268px minmax(0, 1fr);
     grid-template-rows: minmax(0, 1fr) 54px;
+  }
+
+  #shell:has(#chatRegion .history:not(:empty)) {
+    grid-template-rows: minmax(0, 1fr) clamp(196px, 30vh, 248px);
+  }
+
+  /* 빈 대화라도 첨부 칩이 생기면 작성 스택의 실제 높이를 하단 행이 받아야 한다.
+   * 고정 54px을 유지하면 여러 칩이 줄바꿈될 때 셸 overflow 경계에서 잘린다. */
+  #shell:has(#chatRegion .history:empty):has(#chatRegion .attach-chips:not([hidden])) {
+    grid-template-rows: minmax(0, 1fr) auto;
   }
 
   #historyRegion {
@@ -1488,21 +1499,50 @@ body { margin: 0; overflow: hidden; }
     height: 54px;
   }
 
+  #chatRegion:has(.history:empty):has(.attach-chips:not([hidden])) {
+    height: auto;
+  }
+
+  #chatRegion:has(.history:empty):has(.attach-chips:not([hidden])) > .app {
+    position: relative;
+    inset: auto;
+  }
+
+  #shell:has(#chatRegion .history:not(:empty)) #chatRegion {
+    height: auto;
+  }
+
   #chatRegion > .app {
+    /* 작성창에 앵커된 키우미·모델 메뉴는 채팅 트레이 위로 펼쳐진다. 대화
+     * 스크롤 경계는 .history가 맡고, 앱 표면은 메뉴를 자르지 않는다. */
     overflow: visible;
   }
 
-  /* 좁은 창은 전체 대화 열 대신 작성창만 노출한다. display 토글일 뿐 DOM을
-   * 재생성하지 않으므로 이력/스크롤/입력 초안 상태가 Snap 왕복 뒤 복구된다. */
-  #chatRegion > .app > :not(.input-stack) {
+  /* 모드 머리·결과 도크는 좁은 트레이에서 감추되 권위 있는 대화 이력은 그대로 쓴다.
+   * 별도 요약 DOM을 만들지 않아 질문·답변·스트리밍 상태가 넓은 창과 갈라지지 않는다. */
+  #chatRegion > .app > :not(.history):not(.input-stack) {
+    display: none !important;
+  }
+
+  #chatRegion .history {
+    display: flex;
+    flex: 1 1 auto;
+    min-height: 0;
+    padding: 10px 16px 8px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  #chatRegion .history:empty {
     display: none !important;
   }
 
   #chatRegion .input-stack {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    position: relative;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    margin-top: auto;
     min-height: 54px;
     padding: 0;
     justify-content: center;

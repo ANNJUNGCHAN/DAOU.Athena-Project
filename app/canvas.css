@@ -313,7 +313,7 @@ html, body { background: transparent; }
 #graphCanvas { display: flex; flex-direction: column; }
 /* display:flex; flex-direction:column 추가분(스텝11) — #graphBody 스스로도
  * flex 컨테이너가 돼야 안의 SVG(남는 공간 채움)와 범례(하단 고정)가 함께 쌓인다. */
-#graphBody { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
+#graphBody { position: relative; display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
 
 /* 히어로(보드 06 §5) — "지금 읽히는 성향" + 사실/추론/불확실 %(실계산값만). */
 .summary-hero {
@@ -442,24 +442,40 @@ html, body { background: transparent; }
 }
 .theme-clusters-title { font-family: var(--font-strong); font-size: var(--text-base); color: var(--color-k-bright); }
 .theme-clusters-subtitle { font-family: var(--font-body); font-size: var(--text-xs); color: var(--color-k-hint); }
-.theme-cluster-cards { display: flex; flex-direction: column; gap: 8px; }
+.theme-cluster-cards { display: flex; flex-direction: column; gap: 0; }
 #graphSummaryBody:has(#graphPanel:not([hidden])) .theme-cluster-cards { flex-direction: row; }
 #graphSummaryBody:has(#graphPanel:not([hidden])) .theme-cluster-card { flex: 1 1 0%; }
+#graphSummaryBody:has(#graphPanel:not([hidden])) .theme-cluster-card + .theme-cluster-card {
+  border-top: 0;
+  border-inline-start: 1px solid var(--color-k-line);
+  padding-inline-start: 12px;
+}
+#graphSummaryBody:has(#graphPanel:not([hidden])) .theme-cluster-card + .theme-cluster-card.is-unnamed-warn {
+  border-inline-start-color: rgba(255, 152, 56, 0.55);
+}
+#graphSummaryBody:has(#graphPanel:not([hidden])) .theme-cluster-card.is-unnamed-warn .theme-cluster-unnamed-badge {
+  color: var(--color-warn);
+}
 
 .theme-cluster-card {
   display: flex; flex-direction: column; gap: 7px;
-  background: var(--color-k-panel2); border-radius: 8px; padding: 11px 12px;
+  padding: 11px 0;
+  border-top: 1px solid var(--color-k-line);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 /* 이름 붙은 군집이 하나라도 있을 때만(§0 r5 임계 규칙) 무명 카드에 붙는
  * 경고 톤 — 지금(0/N, 전 군집 무명)은 절대 안 붙는다. */
 .theme-cluster-card.is-unnamed-warn {
-  background: rgba(255, 152, 56, 0.06); border: 1px solid rgba(255, 152, 56, 0.3);
+  border-top-color: rgba(255, 152, 56, 0.55);
+  background: transparent;
 }
 .theme-cluster-title { display: flex; align-items: center; gap: 6px; }
 .theme-cluster-name { font-family: var(--font-strong); font-size: var(--text-sm); color: var(--color-k-bright); }
 .theme-cluster-unnamed-badge {
   font-family: var(--font-body); font-size: var(--text-2xs); color: var(--color-k-hint);
-  background: var(--color-k-panel3); border-radius: 4px; padding: 1px 6px;
+  background: transparent; border-radius: 0; padding: 1px 0;
 }
 .theme-cluster-count { font-family: var(--font-body); font-size: var(--text-xs); color: var(--color-k-hint); }
 /* 대표 설명(WP-A3) — 의미적 이름이 아닌 규칙 기반 문자열이라, Paper가 실제로
@@ -550,8 +566,8 @@ html, body { background: transparent; }
 /* 티어 대조(§10-3) — 가용 필드가 rationale/confidence/tier뿐이라 단일 카드로
  * 축소(§0 정책, controller.js renderPanelContent 참고). */
 .panel-tier-card {
-  margin: 14px 16px; padding: 11px 12px; flex-shrink: 0;
-  background: var(--color-k-panel); border: 1px solid var(--color-k-line); border-radius: 8px;
+  margin: 14px 16px; padding: 11px 0; flex-shrink: 0;
+  background: transparent; border-block: 1px solid var(--color-k-line); border-radius: 0; box-shadow: none;
   display: flex; flex-direction: column; gap: 5px;
 }
 .panel-tier-row { display: flex; align-items: center; gap: 8px; }
@@ -560,7 +576,7 @@ html, body { background: transparent; }
   font-family: var(--font-strong); font-size: var(--text-sm); color: var(--color-k-bright);
 }
 .panel-tier-confidence {
-  background: var(--color-k-panel3); border-radius: 4px; padding: 2px 7px;
+  background: transparent; border-radius: 0; padding: 2px 0;
   font-family: var(--font-body); font-size: var(--text-2xs); color: var(--color-k-soft);
 }
 .panel-tier-body {
@@ -700,7 +716,6 @@ html, body { background: transparent; }
   font-size: var(--text-md);
   letter-spacing: 0.3px;
   /* 각인(engraving, 2026-08-19) — 카드 유리 위가 아니라 안에 새겨진 것처럼. */
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
 }
 /* TR이 카드 16종 중 하나로 확정되면 card-title은 고정 카드명, 이전까지
    타이틀이던 caption(종목명·주기 등)은 여기로 내려온다(2026-08-26). */
@@ -739,7 +754,6 @@ html, body { background: transparent; }
 .stream-item { display: flex; gap: 10px; align-items: baseline; font-size: var(--text-base); }
 .stream-time { font-family: var(--font-mono); color: var(--color-k-faint); flex-shrink: 0; width: 76px; }
 .stream-source { color: var(--color-k-dim); flex-shrink: 0; width: 92px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.stream-title { color: var(--color-k-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6); }
 .stream-more { color: var(--color-k-faint); font-size: var(--text-sm); padding-top: 4px; }
 
 /* ---- 리더(마크다운) ---- */
@@ -747,7 +761,6 @@ html, body { background: transparent; }
    크면 위계가 뒤집힌다. 카드 안 텍스트는 card-title을 넘지 않는다. */
 .md-h1 { font-family: var(--font-strong); font-size: var(--text-base); margin: 4px 0 8px; }
 .md-h2 { font-family: var(--font-strong); font-size: var(--text-base); margin: 10px 0 6px; color: var(--color-k-dim); }
-.md-p { font-size: var(--text-base); line-height: 1.6; color: var(--color-k-text); margin: 0 0 8px; text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6); }
 .md-list { margin: 0 0 8px 18px; padding: 0; font-size: var(--text-base); line-height: 1.6; }
 .md-table { border-collapse: collapse; width: 100%; font-size: var(--text-sm); margin: 4px 0 10px; } /* 11.5→12 — 공시 표는 판단 자료다(12px 하한) */
 .md-table td { border: 1px solid var(--color-k-line-soft); padding: 3px 6px; color: var(--color-k-dim); vertical-align: top; }
@@ -757,7 +770,6 @@ html, body { background: transparent; }
    "숫자가 안 읽히면 실패"가 corp_code·사업연도 같은 컨텍스트에도 적용된다). */
 .fin-meta { font-family: var(--font-mono); font-size: var(--text-sm); color: var(--color-k-faint); margin-bottom: 8px; }
 table.fin-table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: var(--text-base); }
-.fin-table th, .fin-table td { padding: 5px 10px; text-align: right; border-bottom: 1px solid var(--color-k-line-soft); white-space: nowrap; text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6); }
 .fin-table th:first-child, .fin-table td:first-child { text-align: left; }
 .fin-table thead th { position: sticky; top: 0; background: rgba(255, 255, 255, 0.96); color: var(--color-k-dim); font-weight: 400; font-family: var(--font-strong); }
 
@@ -984,7 +996,6 @@ table.fin-table { width: 100%; border-collapse: collapse; font-variant-numeric: 
 .facts-key { font-size: var(--text-sm); color: var(--color-k-faint); }
 .facts-value {
   margin: 0; font-size: var(--text-base); color: var(--color-k-text);
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .facts-value-price, .facts-value-change, .facts-value-quantity {

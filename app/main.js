@@ -29,6 +29,7 @@ const { buildLivePrompt, buildLiveSystemPrompt, buildLiveTurnPrompt } = require(
 // 세션당 1회로 바꾼다(모듈 상단 주석 참고).
 const { createClaudeChatSession } = require('./lib/main/claude-chat-session');
 const restDatasetRunner = require('./lib/main/rest-dataset-runner');
+const { RestRetryRegistry } = require('./lib/main/rest-retry-registry');
 const { createStockEntityIndexReadiness } = require('./lib/main/stock-entity-index-readiness');
 const { createChartFollowupTracker } = require('./lib/main/chart-followup');
 const simpleChartFastPath = require('./lib/main/simple-chart-fast-path');
@@ -37,12 +38,26 @@ const selectorColdHedge = require('./lib/main/selector-cold-hedge');
 const { createClaudeSelectorWorkerPool } = require('./lib/main/claude-selector-worker-pool');
 const chartReload = require('./lib/main/chart-reload');
 const chartReloadAuthority = chartReload.createChartReloadAuthority();
+
+function isQueryOnlyRetryDataset(dataset) {
+  try {
+    restDatasetRunner.normalizeDataset(dataset);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+const restRetryRegistry = new RestRetryRegistry({
+  isQueryOnlyDataset: isQueryOnlyRetryDataset,
+});
 const { correlationKey: restCorrelationKey } = require('./lib/rest-canvas-paint');
 const { resolveWindowHtmlPath, waitForWindowReady } = require('./lib/main/window-readiness');
 const {
   StartupReadiness, StartupFailureNotifier, showStartupOsNotification,
   runStartupOrchestration, waitForInitialReadiness, classifyBrainStartupStatus,
 } = require('./lib/main/startup-readiness');
+const { StartupRoutineBuffer } = require('./lib/main/startup-routine-buffer');
 // 목업 데이터 로더 — 렌더러 격리 이관(2026-08-18). canvas.js가 더는 fs를
 // 직접 못 쓴다 — athena:load-fixture가 이 모듈을 대신 호출해준다.
 const mockdata = require('./lib/main/mockdata');
@@ -52,6 +67,11 @@ const backendLauncher = require('./lib/main/backend-launcher');
 // 채팅 → HistoryStore 영속 훅(.omc/plans/plan-chat-graph-pipeline.md §2(a)/(g)).
 // fire-and-forget — 절대 await로 채팅 UX를 막지 않는다(모듈 상단 주석 참조).
 const historySink = require('./lib/main/history-sink');
+const {
+  createConversationGraphBroadcastKey,
+  createConversationGraphRefresher,
+  shouldBroadcastConversationGraph,
+} = require('./lib/main/conversation-graph-refresh');
 const conversations = require('./lib/main/conversations');
 const crypto = require('crypto');
 
@@ -223,18 +243,18 @@ function revealShell({ focus = true } = {}) {
 }
 
 // ---------- 셸 표시 여부 → 오브 (2026-08-26 board-33/34 "상태는 둘뿐이다") ----------
-// 오브의 대화 모드는 셸이 숨겨졌는지 하나로 결정된다. 판정은 isVisible()이지만
-// **최소화는 예외다** — 작업 표시줄에 남아 있으면 아직 셸을 쓰는 중이라고 본다
-// (board-34 "예외·최소화"). 가려짐(다른 앱에 덮임)은 따로 판정하지 않는다 —
-// 그 경우 isVisible()이 그대로 true라 자연히 셸 표시로 남는다(board-34 "예외·가려짐").
+// 사용자가 메인 셸을 볼 수 있으면 키우미 native 창 자체를 숨기고, 셸이 숨었거나
+// 최소화됐을 때만 키우미를 표시한다. 다른 앱에 덮인 정도는 Electron isVisible()로
+// 판정할 수 없으므로 셸 표시 상태로 남긴다.
 function isShellHidden() {
-  if (!shellWin || shellWin.isDestroyed()) return false;
-  return !shellWin.isVisible() && !shellWin.isMinimized();
+  return orbWindow.shouldShowOrbForShell(shellWin);
 }
 
 function broadcastShellVisibility() {
   if (!orbWin || orbWin.isDestroyed()) return;
-  orbWin.webContents.send('athena:shell-visibility', { hidden: isShellHidden() });
+  const hidden = isShellHidden();
+  orbWin.webContents.send('athena:shell-visibility', { hidden });
+  orbWindow.syncOrbVisibility(shellWin, orbWin);
 }
 
 function commonWinOpts(bounds) {
@@ -370,8 +390,8 @@ async function createWindows() {
 
   // ---------- 알림 오브 창 (2026-08-24 리프 1.3.1) ----------
   // 셸 창 다음에 만든다 — 오브의 "더보기"가 셸을 앞으로 가져오므로 셸이 먼저 있어야 한다.
-  // 부팅 시 곧바로 보인다: 상시 표시가 사양이고(GLOSSARY §1), 숨어 있으면 알림이
-  // 와도 사용자가 볼 표면이 없다.
+  // 창은 지금 만들되 메인 셸 handoff 전에는 보이지 않는다. 이후 shell의
+  // show/hide/minimize/restore 이벤트가 키우미 표시 여부를 단일하게 결정한다.
   const orbDisplay = screen.getDisplayMatching(shellWin.getBounds());
   const created = orbWindow.createOrbWindow({
     BrowserWindow,
@@ -381,15 +401,14 @@ async function createWindows() {
   orbWin = created.win;
   const orbReady = waitForWindowReady(orbWin, { label: 'orb window' });
   await orbReady;
-  orbWin.showInactive(); // 포커스를 뺏지 않는다 — 셸 창이 방금 focus()를 가져갔다
-  mdlog(`orbWin created + shown at ${JSON.stringify(created.bounds)}`);
+  mdlog(`orbWin created hidden at ${JSON.stringify(created.bounds)}`);
 
   // Alt+F4가 오브에 직접 오면 흡수한다 — 오브를 닫는 것은 앱 종료가 아니다.
   // isQuitting이면(before-quit 이후) 진짜 종료 경로이므로 막지 않는다.
   orbWin.on('close', (event) => {
     if (isQuitting) return;
     event.preventDefault();
-    orbWin.hide();
+    orbWindow.syncOrbVisibility(shellWin, orbWin);
   });
 
   // 오브 창이 76px이라 렌더러 mousemove는 커서가 창 위에 있을 때만 온다 — 정작
@@ -398,22 +417,16 @@ async function createWindows() {
   orbWin.on('show', startOrbCursorPoll);
   orbWin.on('hide', stopOrbCursorPoll);
   orbWin.on('closed', stopOrbCursorPoll);
-  startOrbCursorPoll(); // showInactive() 직후라 이미 보이는 상태 — hide 전까지 돈다
 
-  // 셸 표시/숨김 전이마다 오브에 알린다(board-33/34). show/hide/minimize/restore
-  // 네 이벤트가 hideToBackground·revealShell·athena:minimize-windows·OS 복원을
-  // 전부 덮는다 — 새 판정 지점을 늘리지 않고 기존 창 수명 이벤트에 얹는다.
+  // 셸 표시/숨김 전이마다 오브 renderer 모드와 native 창을 함께 맞춘다. 네 이벤트가
+  // hideToBackground·revealShell·athena:minimize-windows·OS 복원을 전부 덮는다.
   for (const ev of ['show', 'hide', 'minimize', 'restore']) {
     shellWin.on(ev, broadcastShellVisibility);
   }
-  broadcastShellVisibility(); // 부팅 직후 초기 상태 — 셸이 막 show()된 뒤라 '표시'다
-
+  // 부팅 중에는 bootWin이 사용자에게 보이는 메인 표면이라 키우미는 숨긴 채 둔다.
+  // 실제 shell handoff 직후 attemptShellHandoff()가 첫 동기화를 수행한다.
   // ---------- 창 기본 기능 (2026-08-17) — frame:false라 OS 타이틀바가 없어 직접 배선 ----------
-  // Win+방향키(2026-08-18) — OS 창 스냅과 같은 손버릇. globalShortcut은 다른 앱과
-  // 전역 충돌 위험이 있어 쓰지 않고(electron#9206), 창의 webContents에
-  // before-input-event로만 건다 — OS(Windows 자체 스냅)가 먼저 먹으면 이벤트가
-  // 그냥 안 올 뿐이라 무해하다.
-  wireWindowsKeyShortcuts(shellWin);
+  // Win+방향키와 Win+Shift+방향키는 가로채지 않고 Windows 기본 Snap·모니터 이동에 맡긴다.
   wireOsSnapEvents(shellWin);
 
   // 루틴 알림 구독 시작(2026-08-19 능동 에이전트 P2) — fixture면 내부에서 no-op.
@@ -443,6 +456,7 @@ const LOCAL_BEARER_TOKEN = process.env.ATHENA_LOCAL_BEARER_TOKEN || null;
 let routineFeed = null;
 const feedStartupWaiters = new Map();
 const feedFirstConnected = new Set();
+const startupRoutineBuffer = new StartupRoutineBuffer();
 
 function reportStartupFeedStatus(taskId, status) {
   const waiter = feedStartupWaiters.get(taskId);
@@ -530,15 +544,12 @@ function handleRoutineFeedEvent(event) {
     }
     return;
   }
-  // 능동 턴은 항상 이력에 쌓인다 — 토스트를 놓쳐도 다음 열람 때 남아 있다.
-  if (shellWin && !shellWin.isDestroyed()) {
-    shellWin.webContents.send('athena:routine-event', event);
-  }
-  // 같은 이벤트가 오브에도 간다(2026-08-24 리프 1.3.1). 두 표면이 같은 원장
-  // 행을 각자 렌더할 뿐이고 백엔드 신규 경로는 0건이다 — 설계서 §판단서 요지.
-  if (orbWin && !orbWin.isDestroyed()) {
-    orbWin.webContents.send('athena:routine-event', event);
-  }
+  // 부팅 handoff 전에는 렌더러가 로드돼 있어도 사용자 표면이 아직 bootWin이다.
+  // 이 구간의 이벤트를 webContents.send()로 바로 흘리면 navigation/초기화 경계에서
+  // 조용히 사라질 수 있으므로 버퍼에 보관하고 실제 셸이 열린 뒤 한 번만 전달한다.
+  const bootHandoffPending = bootWin && !bootWin.isDestroyed() && !shellExpansionAcknowledged;
+  if (bootHandoffPending) startupRoutineBuffer.addEvent(event);
+  else sendRoutineEventToRenderers(event);
   // fixture 게이트(검증 결정론) — verify.js가 이 함수를 직접 부를 때 실제 OS
   // 토스트가 뜨지 않게 한다. 프로덕션에서는 fixture로 부팅하지 않으므로 무영향.
   if (event && (event.type === 'routine-fired' || event.type === 'routine-restore-failed')
@@ -554,6 +565,18 @@ function handleRoutineFeedEvent(event) {
     runBriefingTurnWired(event).catch((err) => {
       mdlog(`브리핑 러너 실패: ${String((err && err.message) || err)}`);
     });
+  }
+}
+
+function sendRoutineEventToRenderers(event) {
+  // 능동 턴은 항상 이력에 쌓인다 — 토스트를 놓쳐도 다음 열람 때 남아 있다.
+  if (shellWin && !shellWin.isDestroyed()) {
+    shellWin.webContents.send('athena:routine-event', event);
+  }
+  // 같은 이벤트가 오브에도 간다(2026-08-24 리프 1.3.1). 두 표면이 같은 원장
+  // 행을 각자 렌더할 뿐이고 백엔드 신규 경로는 0건이다 — 설계서 §판단서 요지.
+  if (orbWin && !orbWin.isDestroyed()) {
+    orbWin.webContents.send('athena:routine-event', event);
   }
 }
 
@@ -689,16 +712,36 @@ const missedRoutineViews = new Map();
 // (~380ms+)보다 먼저 도달할 수 있다. 이 레이스에서 조용히 버리면 이번 세션
 // 동안 캐치업 기회가 사라진다(기동 시 1회 감지라서) — 유실하지 않는다.
 // 상한 후 포기: 창 자체가 안 뜨는 비정상 상황에서 영원히 들고 있지 않는다.
-function sendRoutineMissed(missed, attempt = 0) {
-  if (shellWin && !shellWin.isDestroyed() && !shellWin.webContents.isLoading()) {
+function sendRoutineMissed(missed) {
+  const bootHandoffPending = bootWin && !bootWin.isDestroyed() && !shellExpansionAcknowledged;
+  if (!bootHandoffPending && shellWin && !shellWin.isDestroyed()
+      && !shellWin.webContents.isLoading()) {
     shellWin.webContents.send('athena:routine-missed', { routines: missed });
-    return;
+    return true;
   }
-  if (attempt >= 20) {
-    mdlog('놓친 예약 알림 유실 — 셸 창이 10초 내 준비되지 않았다');
-    return;
+  startupRoutineBuffer.addMissed(missed);
+  return false;
+}
+
+function flushStartupRoutineBuffer() {
+  try {
+    const result = startupRoutineBuffer.flush({
+      sendEvent: sendRoutineEventToRenderers,
+      sendMissed: (routines) => {
+        if (!shellWin || shellWin.isDestroyed() || shellWin.webContents.isLoading()) {
+          throw new Error('셸 렌더러가 아직 알림을 받을 수 없음');
+        }
+        shellWin.webContents.send('athena:routine-missed', { routines });
+      },
+    });
+    if (result.events || result.missed) {
+      mdlog(`부팅 중 보관 알림 전달 완료 — routine ${result.events}건, missed ${result.missed}건`);
+    }
+    return result;
+  } catch (error) {
+    mdlog(`부팅 중 보관 알림 전달 보류 — ${String((error && error.message) || error)}`);
+    return { events: 0, missed: 0, pending: startupRoutineBuffer.snapshot() };
   }
-  setTimeout(() => sendRoutineMissed(missed, attempt + 1), 500);
 }
 
 async function checkMissedSchedules({ signal } = {}) {
@@ -790,6 +833,7 @@ const integratedRealtimeShutdown = integratedCardRealtime.createBoundedShutdownC
     // 트레이로 숨겨진 동안에는 selector worker를 유지하고 실제 종료에서만 닫는다.
     selectorClaudePool.stop(new Error('Athena 앱 종료'));
     if (liveChatSession) liveChatSession.stop(new Error('Athena 앱 종료'));
+    conversations.flushSync(); // 예약만 된 사이드바 상태를 마저 저장한다
   },
   releaseAll: () => integratedCardRealtimeManager
     ? integratedCardRealtimeManager.releaseAll()
@@ -899,6 +943,11 @@ function ensureIntegratedCardRealtimeManager() {
   integratedCardRealtimeManager = new integratedCardRealtime.CardLeaseManager({
     transport: integratedCardRealtimeTransport,
     initialConnectionGeneration: realtimeFeedEpoch,
+    semanticBindingSourceProvider: integratedCardRealtime.createSemanticBindingSourceProvider({
+      backendBase: BACKEND_HTTP_BASE,
+      token: LOCAL_BEARER_TOKEN,
+      fetchImpl: fetch,
+    }),
     onState: (state) => {
       if (shellWin && !shellWin.isDestroyed()) {
         shellWin.webContents.send('athena:integrated-card-realtime-state', state);
@@ -1512,35 +1561,6 @@ function centerWindows() {
   noteAppBounds(shellWin);
 }
 
-// Win+방향키 — 1차 구현(보너스 아님, 주 경로). meta는 Windows 키(Electron의
-// input.meta가 Windows에서 Win 키를 가리킨다). OS가 이 조합을 먼저 가로채면
-// (실제 Windows 창 스냅) 이 핸들러엔 이벤트가 아예 안 온다 — 조합별 도달
-// 여부를 mdlog로 남겨 QA 실측이 OS 선점 여부를 판정하게 한다(globalShortcut은
-// 전역 충돌 위험 때문에 안 쓴다).
-const WIN_ARROW_DIR = { ArrowLeft: 'left', ArrowRight: 'right', ArrowUp: 'up', ArrowDown: 'down' };
-
-function wireWindowsKeyShortcuts(win) {
-  win.webContents.on('before-input-event', (event, input) => {
-    if (!input.meta || input.type !== 'keyDown') return;
-    const dir = WIN_ARROW_DIR[input.key];
-    if (!dir) return;
-    mdlog(`win+arrow 도달: ${input.key} -> ${dir}`);
-    event.preventDefault();
-    if (dir === 'left' || dir === 'right') {
-      placeWindows(dir);
-      return;
-    }
-    if (!shellWin || shellWin.isDestroyed()) return;
-    if (dir === 'up') {
-      shellWin.maximize();
-      return;
-    }
-    // Windows의 restore-then-minimize — 최대화 상태면 복원부터, 아니면 내린다.
-    if (shellWin.isMaximized()) shellWin.unmaximize();
-    else shellWin.minimize();
-  });
-}
-
 // ---------- 닫기(백그라운드 유지) + 트레이 복귀 (AT-CH-001, 2026-08-18) ----------
 // 닫기 버튼은 종료가 아니다 — 셸 창을 숨기고 프로세스(세션·자격증명·감시)는 그대로
 // 산다(사용자 지시 "백그라운드는 살아있음"). 숨은 창은 작업 표시줄에도 없으므로
@@ -1605,9 +1625,7 @@ function showBackgroundCloseNoticeOnce() {
 const enterBackground = backgroundClose.createBackgroundEntry({
   ensureTray,
   hideShell: hideToBackground,
-  ensureOrbVisible: () => {
-    if (orbWin && !orbWin.isDestroyed() && !orbWin.isVisible()) orbWin.showInactive();
-  },
+  ensureOrbVisible: () => orbWindow.syncOrbVisibility(shellWin, orbWin),
   showNotice: showBackgroundCloseNoticeOnce,
   log: (error, stage) => mdlog(`background-entry ${stage} failed: ${String(error && error.message || error)}`),
 });
@@ -1638,6 +1656,14 @@ function showTrayMenuForReview() {
     x: workArea.x + workArea.width - 8,
     y: workArea.y + workArea.height - 8,
   });
+  return true;
+}
+
+function openFromTrayForReview() {
+  ensureTray();
+  const openItem = trayMenu && trayMenu.getMenuItemById('open');
+  if (!openItem || typeof openItem.click !== 'function') return false;
+  openItem.click(openItem, shellWin, {});
   return true;
 }
 
@@ -1905,6 +1931,7 @@ async function emitRestCanvasAndWaitForPaint(payload, { expand = true, timeoutMs
       operationRef: payload.operationRef,
       operationArgs: payload.operationArgs,
       canvasType: payload.canvasType,
+      retryCardId: payload.retryCardId,
     });
   });
 }
@@ -2154,6 +2181,18 @@ function historyConversationId() {
   return historyActiveConversationId;
 }
 
+function activeRestAccountId() {
+  try {
+    const listed = accounts.list();
+    const active = listed && Array.isArray(listed.accounts)
+      ? listed.accounts.find((account) => account.active)
+      : null;
+    return active ? String(active.id) : '';
+  } catch {
+    return '';
+  }
+}
+
 // 이력 사이드바(리프 1.2.2) 최소 영속화 — 첫 사용자 메시지에서 제목을 뽑아
 // athena-conversations.json에 적는다. historyConversationId()는 현재 선택된
 // 대화 하나에 고정되며, 새 대화/기존 대화 선택 경계에서만 교체된다.
@@ -2199,6 +2238,12 @@ const DIRECT_FEEDBACK_WATCHDOG_MS = 2200;
 async function runDirectRestDataset(dataset, expand = true, overrides = {}) {
   const startedAt = performance.now();
   const turnConversationId = overrides.conversationId || historyConversationId();
+  const retryAccountId = overrides.accountId == null ? activeRestAccountId() : String(overrides.accountId);
+  const retryCardId = overrides.allowRetry ? crypto.randomUUID() : null;
+  let retryView = null;
+  if (overrides.allowRetry) {
+    retryView = restRetryRegistry.beginView({ dataset, accountId: retryAccountId });
+  }
   const ownController = overrides.signal ? null : new AbortController();
   if (!overrides.signal && activeRestRun) activeRestRun.abort(new Error('새 REST 데이터셋 요청이 이전 요청을 대체했다'));
   if (ownController) activeRestRun = ownController;
@@ -2229,7 +2274,7 @@ async function runDirectRestDataset(dataset, expand = true, overrides = {}) {
         if (ownController && activeRestRun !== ownController) {
           throw new Error('교체된 REST 데이터셋의 늦은 카드는 표시하지 않는다');
         }
-        return emitRestCanvasAndWaitForPaint(payload, {
+        return emitRestCanvasAndWaitForPaint({ ...payload, retryCardId }, {
           expand,
           timeoutMs: Math.max(1, payload.paintDeadlineAt - performance.now()),
         });
@@ -2260,8 +2305,29 @@ async function runDirectRestDataset(dataset, expand = true, overrides = {}) {
   } else if (watchdogOutcome && watchdogOutcome.error && !result.feedbackOk) {
     result.feedbackError = String((watchdogOutcome.error && watchdogOutcome.error.message) || watchdogOutcome.error);
   }
+  let retryId = null;
+  if (retryView && result.retryAction && shellWin && !shellWin.isDestroyed()) {
+    retryId = restRetryRegistry.issue({
+      retryAction: result.retryAction,
+      senderId: shellWin.webContents.id,
+      conversationId: turnConversationId,
+      accountId: retryAccountId,
+      ...retryView,
+    });
+    if (retryId) {
+      shellWin.webContents.send('athena:rest-retry-available', {
+        retryId,
+        state: result.state,
+        cardId: retryCardId,
+      });
+    }
+  }
+  // retryAction에는 operation/args/account 계보가 들어 있으므로 main 밖으로 절대
+  // 반환하지 않는다. 렌더러가 받는 권한은 위에서 발급한 opaque one-shot ID뿐이다.
+  delete result.retryAction;
+  result.retryable = Boolean(retryId);
   chartFollowupTracker.observe(result, dataset);
-  if (!overrides.skipHistory && dataset && dataset.question) {
+  if (!overrides.skipHistory && !overrides.userAlreadyPersisted && dataset && dataset.question) {
     historySink.saveChatMessage(
       { conversationId: turnConversationId, text: dataset.question, role: 'user' },
       { onSaveFailed: emitHistorySaveFailed, mdlog },
@@ -2282,7 +2348,7 @@ async function handleChartPanelReload(event, payload) {
     throw new Error('AITS chart reload는 셸 창에서만 허용된다');
   }
   const request = chartReloadAuthority.buildDataset(payload);
-  const result = await runDirectRestDataset(request, false, { skipHistory: true });
+  const result = await runDirectRestDataset(request, false, { skipHistory: true, allowRetry: true });
   return chartReloadAuthority.acceptResult(request, result);
 }
 
@@ -2350,11 +2416,6 @@ ipcMain.handle('athena:chart-series', handleChartSeries);
 
 function persistLocalLiveResult(query, result, conversationId = historyConversationId()) {
   historySink.saveChatMessage(
-    { conversationId, text: query, role: 'user' },
-    { onSaveFailed: emitHistorySaveFailed, mdlog },
-  );
-  touchConversationEntry(query, conversationId);
-  historySink.saveChatMessage(
     { conversationId, text: result.answerText, role: 'assistant' },
     { onSaveFailed: emitHistorySaveFailed, mdlog },
   );
@@ -2362,6 +2423,20 @@ function persistLocalLiveResult(query, result, conversationId = historyConversat
 }
 
 async function runLiveQuery(query, expand, origin = 'shell', turnConversationId = historyConversationId()) {
+  // 어떤 빠른 경로가 선택되든 네트워크·Selector·모델보다 먼저 사용자 원문을
+  // durable outbox에 넣는다. 이후 분기들은 assistant만 한 번 저장한다.
+  const historyReceipt = historySink.saveChatMessage(
+    { conversationId: turnConversationId, text: query, role: 'user' },
+    { onSaveFailed: emitHistorySaveFailed, mdlog },
+  );
+  if (historyReceipt && historyReceipt.failed) {
+    return {
+      ok: false,
+      source: 'local',
+      error: '대화 이력을 안전하게 저장하지 못해 질문을 보내지 않았습니다.',
+    };
+  }
+  touchConversationEntry(query, turnConversationId);
   liveQueryBusyDepth += 1;
   if (liveQueryBusyDepth === 1) broadcastLiveQueryBusy(true);
   try {
@@ -2384,11 +2459,6 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   }
   const chartFollowup = chartFollowupTracker.answer(query);
   if (chartFollowup) {
-    historySink.saveChatMessage(
-      { conversationId: turnConversationId, text: query, role: 'user' },
-      { onSaveFailed: emitHistorySaveFailed, mdlog },
-    );
-    touchConversationEntry(query, turnConversationId);
     historySink.saveChatMessage(
       { conversationId: turnConversationId, text: chartFollowup.answerText, role: 'assistant' },
       { onSaveFailed: emitHistorySaveFailed, mdlog },
@@ -2413,15 +2483,14 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
     buildDataset: (question, index) => restDatasetRunner.buildChartDataset(question, index, {
       idFactory: () => `rest-${crypto.randomUUID()}`,
     }),
-    runDataset: (dataset) => runDirectRestDataset(dataset, expand),
+    runDataset: (dataset) => runDirectRestDataset(dataset, expand, {
+      allowRetry: true,
+      conversationId: turnConversationId,
+      userAlreadyPersisted: true,
+    }),
   });
   if (simpleChartRoute.handled) {
     if (!simpleChartRoute.dataset) {
-      historySink.saveChatMessage(
-        { conversationId: turnConversationId, text: query, role: 'user' },
-        { onSaveFailed: emitHistorySaveFailed, mdlog },
-      );
-      touchConversationEntry(query, turnConversationId);
       historySink.saveChatMessage(
         { conversationId: turnConversationId, text: simpleChartRoute.result.answerText, role: 'assistant' },
         { onSaveFailed: emitHistorySaveFailed, mdlog },
@@ -2453,7 +2522,11 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   });
   if (directDataset) {
     mdlog('Kiwoom REST 직결 화면 경로 선택 — 모델/MCP/WS 무호출');
-    return runDirectRestDataset(directDataset, expand);
+    return runDirectRestDataset(directDataset, expand, {
+      allowRetry: true,
+      conversationId: turnConversationId,
+      userAlreadyPersisted: true,
+    });
   }
 
   // 닫힌 7개 문법이 놓친 조회는 백엔드 Selector가 한 번에 선택·호출·inline
@@ -2490,11 +2563,6 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
         shellWin.webContents.send('athena:selector-order-draft', payload);
       },
       persistTurn: ({ question, answerText }) => {
-        historySink.saveChatMessage(
-          { conversationId: turnConversationId, text: question, role: 'user' },
-          { onSaveFailed: emitHistorySaveFailed, mdlog },
-        );
-        touchConversationEntry(question, turnConversationId);
         historySink.saveChatMessage(
           { conversationId: turnConversationId, text: answerText, role: 'assistant' },
           { onSaveFailed: emitHistorySaveFailed, mdlog },
@@ -2546,11 +2614,6 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
           },
           persistTurn: ({ question, answerText }) => {
             historySink.saveChatMessage(
-              { conversationId: turnConversationId, text: question, role: 'user' },
-              { onSaveFailed: emitHistorySaveFailed, mdlog },
-            );
-            touchConversationEntry(question, turnConversationId);
-            historySink.saveChatMessage(
               { conversationId: turnConversationId, text: answerText, role: 'assistant' },
               { onSaveFailed: emitHistorySaveFailed, mdlog },
             );
@@ -2600,11 +2663,6 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
     if (replay.ok) {
       mdlog(`캐시 리플레이 적중 — ${replay.durationMs}ms (모델 무호출)`);
       historySink.saveChatMessage(
-        { conversationId: turnConversationId, text: query, role: 'user' },
-        { onSaveFailed: emitHistorySaveFailed, mdlog },
-      );
-      touchConversationEntry(query, turnConversationId);
-      historySink.saveChatMessage(
         { conversationId: turnConversationId, text: replay.answerText, role: 'assistant' },
         { onSaveFailed: emitHistorySaveFailed, mdlog },
       );
@@ -2624,13 +2682,6 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
     liveQueryCache.invalidate(query);
     mdlog(`캐시 리플레이 실패 — 정상 경로 폴백: ${replay.reason}`);
   }
-
-  // 사용자 질의 진입 직후 role:user 1건 — fire-and-forget(호출을 await하지 않는다).
-  historySink.saveChatMessage(
-    { conversationId: turnConversationId, text: query, role: 'user' },
-    { onSaveFailed: emitHistorySaveFailed, mdlog },
-  );
-  touchConversationEntry(query, turnConversationId);
 
   // 이전 질의 프로세스가 아직 살아 있으면 먼저 트리째 끊는다 — 새 질의가 항상 선점한다.
   if (activeLiveQuery) {
@@ -2758,7 +2809,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
       // origin을 반드시 실어 보낸다 — 누락하면 오브 기원 질의가 이 재시도를
       // 타는 순간 origin이 기본값 'shell'로 조용히 리셋되어, 재시도로 살아난
       // 응답의 캔버스 엔벌로프가 오브에 relay되지 않는 은닉 회귀가 된다.
-      return runLiveQuery(query, expand, origin, turnConversationId);
+      return runLiveQueryInner(query, expand, origin, turnConversationId);
     }
   }
 
@@ -2823,6 +2874,33 @@ ipcMain.on('athena:abort-live-query', () => {
 });
 
 ipcMain.handle('athena__render_canvas', async (e, payload = {}) => {
+  if (payload.source === 'rest-retry') {
+    if (!shellWin || shellWin.isDestroyed() || e.sender !== shellWin.webContents) {
+      return { ok: false, source: 'rest-retry', error: '유효하지 않은 재시도 요청입니다.' };
+    }
+    const accountId = activeRestAccountId();
+    const consumed = restRetryRegistry.consume({
+      retryId: payload.retryId,
+      senderId: e.sender.id,
+      conversationId: historyConversationId(),
+      accountId,
+    });
+    if (!consumed) {
+      return { ok: false, source: 'rest-retry', error: '재시도 권한이 만료되었거나 이미 사용되었습니다.' };
+    }
+    const result = await runDirectRestDataset(consumed.dataset, true, {
+      allowRetry: true,
+      conversationId: historyConversationId(),
+      accountId,
+    });
+    return {
+      ok: Boolean(result.ok),
+      source: 'rest-retry',
+      state: result.state || null,
+      error: result.ok ? null : (result.error || '다시 조회하지 못했습니다.'),
+      retryable: Boolean(result.retryable),
+    };
+  }
   if (payload.source === 'rest-dataset') {
     return runDirectRestDataset(payload.dataset, payload.expand !== false);
   }
@@ -3066,8 +3144,55 @@ function handlePrefsGet() {
   return prefs.get();
 }
 
+function purgePendingChatForPreferenceChange(mode) {
+  const isEnabling = mode === 'enable';
+  const actionLabel = isEnabling ? '재활성화' : '해제';
+  try {
+    configureConversationGraphPipeline();
+    return historySink.purgePendingChatMessages();
+  } catch (error) {
+    mdlog(`대화 이력 수집 ${actionLabel} 실패 — 전송 전 원문 삭제 불가: ${String((error && error.message) || error)}`);
+    const message = isEnabling
+      ? '대화 이력 수집을 켜지 못했습니다. 수집은 OFF로 유지됩니다.'
+      : '대화 이력 수집은 OFF로 유지됐지만 남은 원문을 삭제하지 못했습니다.';
+    const publicError = new Error(message);
+    publicError.code = 'chat-history-purge-failed';
+    throw publicError;
+  }
+}
+
 function handlePrefsSet(e, patch) {
+  const previous = prefs.get();
+  const requestedCollectChat = patch && typeof patch.collectChat === 'boolean'
+    ? patch.collectChat
+    : null;
+
+  // 재활성화 전에 과거 OFF 전환에서 삭제하지 못했을 수 있는 pending 원문을
+  // 반드시 먼저 지운다. 삭제가 실패하면 prefs는 아직 false이므로 stale 원문이
+  // 다음 flush에서 업로드될 수 없다.
+  if (previous.collectChat === false && requestedCollectChat === true) {
+    try {
+      const purged = purgePendingChatForPreferenceChange('enable');
+      mdlog(`대화 이력 수집 재활성화 준비 — 잔여 전송 전 원문 ${purged}건 삭제`);
+    } catch (error) {
+      const safe = { ...previous, collectChat: false };
+      if (shellWin && !shellWin.isDestroyed()) shellWin.webContents.send('athena:prefs-changed', safe);
+      throw error;
+    }
+  }
+
   const next = prefs.set(patch || {});
+  if (previous.collectChat && requestedCollectChat === false) {
+    try {
+      const purged = purgePendingChatForPreferenceChange('disable');
+      mdlog(`대화 이력 수집 해제 — 전송 전 원문 ${purged}건 삭제`);
+    } catch (error) {
+      // prefs는 이미 false다. 다른 렌더러에도 fail-closed 상태를 먼저 방송한 뒤
+      // 호출자에는 실패를 돌려 화면에서 OFF와 오류를 함께 표시한다.
+      if (shellWin && !shellWin.isDestroyed()) shellWin.webContents.send('athena:prefs-changed', next);
+      throw error;
+    }
+  }
   // 설정 카드는 셸 창 안의 같은 렌더러다(#settings 패널) — 그래도 원본과 같이
   // 명시적으로 방송한다. 다른 진입점이 생겨도 이 계약이 그대로 맞는다.
   // 유리 단계·fontSize는 캔버스 영역 텍스트에도 적용되는데, 이제 두 영역이 같은
@@ -3350,6 +3475,149 @@ ipcMain.handle('athena:mcp-probe', handleMcpProbe);
 ipcMain.handle('athena:mcp-allow-tool', handleMcpAllowTool);
 ipcMain.handle('athena:mcp-remove', handleMcpRemove);
 
+const BRAIN_GRAPH_REFRESH_INTERVAL_MS = 60 * 60 * 1000;
+const BRAIN_GRAPH_OBSERVER_INTERVAL_MS = 60 * 1000;
+const BRAIN_GRAPH_REFRESH_TIMEOUT_MS = 300_000;
+let conversationGraphRefresher = null;
+let conversationGraphRefreshTimer = null;
+let conversationGraphObserverTimer = null;
+let conversationGraphScheduleOwner = null;
+let lastBroadcastGraphKey = null;
+let lastConversationGraphRefreshFailure = null;
+
+function configureConversationGraphPipeline() {
+  if (conversationGraphRefresher) return conversationGraphRefresher;
+  historySink.configureChatHistoryStore({
+    dbPath: path.join(app.getPath('userData'), 'athena-chat-outbox.sqlite3'),
+  });
+  conversationGraphRefresher = createConversationGraphRefresher({
+    baseUrl: historySink.getBackendUrl(),
+    getBearerToken: historySink.getBearerToken,
+    flushPending: async (options = {}) => {
+      await historySink.refreshBrainReady({ mdlog });
+      return historySink.flushPendingChatMessages({
+        ...options,
+        onSaveFailed: emitHistorySaveFailed,
+        mdlog,
+      });
+    },
+    fetchImpl: fetch,
+  });
+  return conversationGraphRefresher;
+}
+
+function broadcastConversationGraphUpdated(report) {
+  if (!shouldBroadcastConversationGraph(lastBroadcastGraphKey, report)) return false;
+  if (!shellWin || shellWin.isDestroyed() || shellWin.webContents.isDestroyed()) return false;
+  shellWin.webContents.send('athena:brain-graph-updated', {
+    revision: report.graph.revision,
+    labelFingerprint: report.graph.labelFingerprint,
+    nodes: report.graph.nodes,
+    edges: report.graph.edges,
+    clusters: report.graph.clusters,
+    trigger: report.trigger,
+  });
+  lastBroadcastGraphKey = createConversationGraphBroadcastKey(report);
+  return true;
+}
+
+async function notifyConversationGraphRefreshFailure(error) {
+  const code = String((error && error.code) || 'graph-refresh-failed');
+  if (lastConversationGraphRefreshFailure === code) return;
+  lastConversationGraphRefreshFailure = code;
+  const payload = {
+    title: '그래프 업데이트 실패',
+    body: '대화 이력을 그래프에 반영하지 못했습니다. 다음 한 시간 주기에 다시 시도합니다.',
+  };
+  await Promise.allSettled([
+    sendRendererStartupNotification(shellWin, payload),
+    showStartupOsNotification(Notification, payload),
+  ]);
+}
+
+async function runConversationGraphRefresh(trigger) {
+  try {
+    const report = await configureConversationGraphPipeline().run({
+      trigger,
+      timeoutMs: BRAIN_GRAPH_REFRESH_TIMEOUT_MS,
+    });
+    conversationGraphScheduleOwner = report.scheduleOwner;
+    lastConversationGraphRefreshFailure = null;
+    broadcastConversationGraphUpdated(report);
+    mdlog(`대화 그래프 갱신 완료 — trigger=${trigger} mode=${report.mode} revision=${report.graph.revision} nodes=${report.graph.nodes} edges=${report.graph.edges}`);
+    return report;
+  } catch (error) {
+    if (error && error.report && error.report.scheduleOwner) {
+      conversationGraphScheduleOwner = error.report.scheduleOwner;
+    }
+    mdlog(`대화 그래프 갱신 실패 — trigger=${trigger} code=${String((error && error.code) || 'unknown')}`);
+    if (trigger === 'hourly') await notifyConversationGraphRefreshFailure(error);
+    throw error;
+  }
+}
+
+async function observeConversationGraph() {
+  try {
+    const report = await configureConversationGraphPipeline().observe({
+      timeoutMs: BRAIN_GRAPH_REFRESH_TIMEOUT_MS,
+    });
+    conversationGraphScheduleOwner = report.scheduleOwner;
+    const broadcast = broadcastConversationGraphUpdated(report);
+    mdlog(`대화 그래프 관찰 완료 — owner=${report.scheduleOwner} revision=${report.graph.revision} broadcast=${broadcast}`);
+    return report;
+  } catch (error) {
+    if (error && error.report && error.report.scheduleOwner) {
+      conversationGraphScheduleOwner = error.report.scheduleOwner;
+    }
+    mdlog(`대화 그래프 관찰 실패 — code=${String((error && error.code) || 'unknown')}`);
+    throw error;
+  }
+}
+
+function startHourlyConversationGraphRefresh() {
+  if (conversationGraphRefreshTimer) return false;
+  conversationGraphRefreshTimer = setInterval(
+    () => void runConversationGraphRefresh('hourly').catch(() => {}),
+    BRAIN_GRAPH_REFRESH_INTERVAL_MS,
+  );
+  if (typeof conversationGraphRefreshTimer.unref === 'function') {
+    conversationGraphRefreshTimer.unref();
+  }
+  return true;
+}
+
+function startConversationGraphObserver() {
+  if (conversationGraphObserverTimer) return false;
+  conversationGraphObserverTimer = setInterval(() => {
+    void observeConversationGraph().catch(() => {});
+  }, BRAIN_GRAPH_OBSERVER_INTERVAL_MS);
+  if (typeof conversationGraphObserverTimer.unref === 'function') {
+    conversationGraphObserverTimer.unref();
+  }
+  return true;
+}
+
+function stopHourlyConversationGraphRefresh() {
+  if (!conversationGraphRefreshTimer) return false;
+  clearInterval(conversationGraphRefreshTimer);
+  conversationGraphRefreshTimer = null;
+  return true;
+}
+
+function stopConversationGraphObserver() {
+  if (!conversationGraphObserverTimer) return false;
+  clearInterval(conversationGraphObserverTimer);
+  conversationGraphObserverTimer = null;
+  return true;
+}
+
+app.on('will-quit', () => {
+  stopHourlyConversationGraphRefresh();
+  stopConversationGraphObserver();
+  historySink.closeChatHistoryStore();
+  conversationGraphRefresher = null;
+});
+
 // ---------- 부팅 준비 원장 — main이 단일 권위 상태를 소유한다 ----------
 // 타이핑 애니메이션은 최소 1.92초를 보장하지만, 실제 셸 진입은 이 원장의 gate가
 // 모두 성공(또는 fixture에서 명시적으로 disabled)한 뒤에만 가능하다. selector 풀과
@@ -3358,7 +3626,9 @@ const BOOT_TASKS = [
   { id: 'mcp-env', label: '보안 환경 확인', kind: 'gate' },
   { id: 'backend', label: 'ATHENA 서비스 연결', kind: 'gate' },
   { id: 'stock-index', label: '종목 검색 데이터 준비', kind: 'gate' },
-  { id: 'brain-ingestion', label: '브레인 데이터 불러오기', kind: 'gate' },
+  { id: 'brain-ingestion', label: '대화 분석기 준비', kind: 'gate' },
+  { id: 'chat-history-flush', label: '대화 이력 SQLite 반영', kind: 'gate' },
+  { id: 'graph-projection', label: '대화 성향 그래프·군집 구성', kind: 'gate' },
   { id: 'alarm-bootstrap', label: '알람·루틴 복원 및 놓친 일정 확인', kind: 'gate' },
   { id: 'routine-feed', label: '알람 실시간 연결', kind: 'gate' },
   { id: 'canvas-feed', label: '그래프·캔버스 실시간 연결', kind: 'gate' },
@@ -3428,6 +3698,7 @@ function attemptShellHandoff() {
   shellHandoffVisibilityAudit = windowHandoff.revealShellWithoutVisibleOverlap(bootWin, shellWin);
   shellWin.focus();
   shellWin.moveTop();
+  flushStartupRoutineBuffer();
   bootWin.destroy();
   bootWin = null;
   broadcastShellWindowState(shellWin);
@@ -3445,8 +3716,14 @@ const startupReadiness = new StartupReadiness({
   },
 });
 
-async function ensureBackendStrict() {
-  const result = await backendLauncher.ensureBackend({ mdlog });
+async function ensureBackendStrict(context) {
+  const result = await backendLauncher.ensureBackendReady({
+    mdlog,
+    onProgress: ({ elapsedMs, remainingMs }) => context.update({
+      state: 'waiting',
+      detail: `ATHENA 서비스 준비 중 · ${Math.ceil(elapsedMs / 1_000)}초 경과 · 최대 ${Math.ceil(remainingMs / 1_000)}초 남음`,
+    }),
+  });
   if (!result || result.ok !== true) {
     throw new Error((result && result.error) || '백엔드 기동 실패');
   }
@@ -3488,9 +3765,12 @@ async function waitForStockIndex(context) {
 }
 
 async function waitForBrainStartup(context) {
-  const deadlineAt = Date.now() + 60_000;
+  // Startup ingestion uses the same Claude extraction path as graph projection;
+  // a legitimate extraction may take up to 180s. Keep one shared 5-minute
+  // watchdog so BOOT does not report a false failure while the real job runs.
+  const deadlineAt = Date.now() + BRAIN_GRAPH_REFRESH_TIMEOUT_MS;
   for (;;) {
-    if (Date.now() >= deadlineAt) throw new Error('브레인 시작 수집 제한시간(60초) 초과');
+    if (Date.now() >= deadlineAt) throw new Error('브레인 시작 수집 제한시간(5분) 초과');
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(new Error('brain status timeout')), 3_000);
     const result = await fetchBrainJson('/api/v1/brain/status', { signal: controller.signal });
@@ -3502,7 +3782,11 @@ async function waitForBrainStartup(context) {
       return { disabled: true, detail: classification.detail };
     }
     if (classification.state === 'succeeded') {
-      void historySink.refreshBrainReady({ mdlog });
+      if (body.extraction_enabled !== true) {
+        throw new Error('대화 기반 그래프 추출기가 비활성화되어 있음');
+      }
+      const sinkReady = await historySink.refreshBrainReady({ mdlog });
+      if (!sinkReady) throw new Error('대화 이력 저장소 준비 상태를 확인하지 못함');
       return { detail: classification.detail };
     }
     if (classification.state === 'failed') throw new Error(classification.detail);
@@ -3524,6 +3808,26 @@ function registerLiveBootRunners(createWindowsPromise) {
   startupReadiness.setRunner('backend', ensureBackendStrict);
   startupReadiness.setRunner('stock-index', waitForStockIndex);
   startupReadiness.setRunner('brain-ingestion', waitForBrainStartup);
+  startupReadiness.setRunner('chat-history-flush', async () => {
+    const result = await historySink.flushPendingChatMessages({
+      batchSize: 100,
+      maxBatches: 100,
+      onSaveFailed: emitHistorySaveFailed,
+      mdlog,
+    });
+    if (result.failed > 0 || result.remaining > 0) {
+      throw new Error(`보류 대화 ${result.remaining}건을 그래프 저장소에 반영하지 못함`);
+    }
+    return { detail: `대화 이력 ${result.synced}건 반영 · 보류 0건` };
+  });
+  startupReadiness.setRunner('graph-projection', async () => {
+    const report = await runConversationGraphRefresh('boot');
+    return {
+      detail: report.warmStatus === 'ready_empty'
+        ? '반영할 대화 성향 없음 · 빈 그래프 준비 완료'
+        : `엔티티 ${report.graph.nodes}개 · 관계 ${report.graph.edges}개 · 군집 ${report.graph.clusters}개`,
+    };
+  });
   startupReadiness.setRunner('alarm-bootstrap', async () => {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(new Error('routine bootstrap timeout')), 10_000);
@@ -3565,9 +3869,13 @@ async function startLiveBoot(createWindowsPromise) {
     readiness: startupReadiness,
     concurrentTaskIds: ['mcp-env', 'stock-index'],
     dependencyTaskId: 'backend',
-    dependentTaskIds: ['brain-ingestion', 'alarm-bootstrap', 'routine-feed', 'canvas-feed'],
+    dependentTaskIds: ['alarm-bootstrap', 'routine-feed', 'canvas-feed'],
+    sequentialDependentTaskIds: ['brain-ingestion', 'chat-history-flush', 'graph-projection'],
     continuousTaskIds: ['background-loops'],
   });
+  startHourlyConversationGraphRefresh();
+  startConversationGraphObserver();
+  mdlog(`대화 그래프 갱신 예약 — 1시간 action + 60초 read-only observer · owner=${conversationGraphScheduleOwner || 'unknown'}`);
 }
 
 let fixtureBootStarted = false;
@@ -3659,6 +3967,11 @@ if (!process.env.ATHENA_NO_AUTOSTART) {
     // 검정이 아니라 밝은 값이 된다. 시스템 테마를 따라가지 않고 고정하는 이유:
     // 이 앱의 팔레트가 흰 유리 위 잉크 하나뿐이라 다크에서 성립하지 않는다.
     nativeTheme.themeSource = 'light';
+    try {
+      configureConversationGraphPipeline();
+    } catch (error) {
+      mdlog(`대화 이력 SQLite 준비 실패 — ${String((error && error.message) || error)}`);
+    }
     const createWindowsPromise = createWindows();
     if (process.env.ATHENA_CANVAS_SOURCE === 'fixture') startBootReadinessForVerify();
     else void startLiveBoot(createWindowsPromise);
@@ -3678,6 +3991,9 @@ module.exports = {
   getBootCompletionSnapshotForVerify: (senderId) => verifyBootCompletionSnapshots.get(senderId) || null,
   computeLayout,
   createWindows,
+  // 실제 대화→outbox flush→수집 job→군집 warm-up→renderer 갱신 경로를
+  // 격리 Electron E2E가 그대로 호출한다. 별도 refresher나 수동 IPC를 만들지 않는다.
+  runConversationGraphRefreshForProbe: runConversationGraphRefresh,
   emitRestCanvasAndWaitForPaint,
   emitRestReceiptAndWaitForPaint,
   runDirectRestDataset,
@@ -3710,6 +4026,7 @@ module.exports = {
   // LIFE-004 실화면 검수 전용 — 프로덕션 메뉴와 별도 fixture를 만들지 않고,
   // ensureTray()가 소유한 실제 `열기 / 종료` OS 메뉴를 그대로 펼친다.
   showTrayMenuForReview,
+  openFromTrayForReview,
   quitFromTrayForReview,
   // OS 배치 감지의 기준점 갱신 — verify.js가 창을 직접 setBounds로 움직이는
   // 검증에서는 그 이동이 "앱 주도"임을 이걸로 표시해야 한다. 안 하면

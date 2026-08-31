@@ -260,6 +260,15 @@ def test_websocket_executes_only_with_explicit_intent_and_uses_only_ws_client() 
         "operation_refs",
         "field_contract",
         "coverage_receipt",
+        "envelope_version",
+        "view_recipe",
+        "presentation_contract",
+        "view_instance_id",
+        "semantic_observations",
+        "realtime_bindings",
+        "workspace_generation",
+        "view_generation",
+        "update_policy",
     ):
         expected[key] = body[key]
         expected["envelope"][key] = body["envelope"][key]

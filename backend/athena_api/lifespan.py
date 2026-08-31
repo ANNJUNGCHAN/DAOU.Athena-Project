@@ -11,6 +11,7 @@ from fastapi import FastAPI
 
 from athena_api.accounts import AccountRuntime
 from athena_api.brain import (
+    ClaudeCliStructuredLlm,
     DedupService,
     DeterministicHoldingProjector,
     DeterministicTradeProjector,
@@ -80,7 +81,18 @@ async def _hourly_ingest_loop(coordinator: IngestionCoordinator, interval_second
     """
     while True:
         await asyncio.sleep(interval_seconds)
-        await coordinator.enqueue(JobTrigger.HOURLY)
+        try:
+            await coordinator.enqueue(JobTrigger.HOURLY)
+        except asyncio.CancelledError:
+            raise
+        except Exception as exc:
+            # A transient scheduler/coordinator failure must not permanently disable
+            # later hourly refreshes. Log only the exception type: upstream messages
+            # can contain paths, command arguments, or provider response fragments.
+            logger.warning(
+                "brain hourly ingestion tick failed type=%s; retrying next interval",
+                type(exc).__name__,
+            )
 
 
 def _publish_default(app: FastAPI, runtime: AccountRuntime | None) -> None:
@@ -195,6 +207,8 @@ async def _open_brain(
             if settings.brain_extraction_llm_argv:
                 client = LocalCommandStructuredLlm(tuple(settings.brain_extraction_llm_argv))
                 source_projector = ExtractionService(client, store)
+            elif settings.brain_use_claude_cli_extraction:
+                source_projector = ExtractionService(ClaudeCliStructuredLlm(), store)
             # 체결은 LLM을 타지 않는다. 추출이 꺼져 있어도(설정에 argv가 없어도) 결정적
             # 티어는 항상 돌아야 한다 — 체결은 사실이고, 사실을 적재하는 데 모델 설정이
             # 필요할 이유가 없다.
@@ -204,8 +218,8 @@ async def _open_brain(
                 source_projector=source_projector,
                 deterministic_projector=DeterministicTradeProjector(store),
                 holding_projector=DeterministicHoldingProjector(store),
-                # 새 소스가 들어온 직후가 중복이 생기는 시점이다. 잡이 실제로 뭔가를
-                # 투영했을 때만 돌고, 실패해도 잡을 실패시키지 않는다(보정이지 적재가 아님).
+                # 새 소스가 들어온 직후가 중복이 생기는 시점이다. 실패하면 정본화가
+                # 끝나지 않은 것이므로 잡도 retry 상태가 되어 같은 단계를 다시 수행한다.
                 dedup=DedupService(store),
             )
             await coordinator.start()
@@ -226,10 +240,11 @@ async def _open_brain(
                 if hourly_interval_seconds is not None
                 else settings.brain_ingest_interval_minutes * 60
             )
-            brain.hourly_task = asyncio.create_task(
-                _hourly_ingest_loop(coordinator, interval_seconds),
-                name="athena-brain-hourly-ingest",
-            )
+            if settings.brain_ingest_schedule_owner == "backend":
+                brain.hourly_task = asyncio.create_task(
+                    _hourly_ingest_loop(coordinator, interval_seconds),
+                    name="athena-brain-hourly-ingest",
+                )
         return brain
     except BaseException:
         if brain.hourly_task is not None:
@@ -257,6 +272,7 @@ def _publish_routines(app: FastAPI, routines: "RoutinesRuntime | None") -> None:
 
 
 async def _teardown_brain(app: FastAPI, brain: BrainRuntime | None) -> None:
+    primary_error: BaseException | None = None
     if brain is not None:
         # The hourly self-enqueue timer must stop before IngestionCoordinator.stop()
         # begins rejecting new enqueue() calls (ADR §4.2 step 3) -- otherwise a tick that
@@ -264,20 +280,91 @@ async def _teardown_brain(app: FastAPI, brain: BrainRuntime | None) -> None:
         # timer is only started once the coordinator itself is up in _open_brain.
         if brain.hourly_task is not None:
             brain.hourly_task.cancel()
-            with suppress(asyncio.CancelledError):
+            try:
                 await brain.hourly_task
+            except asyncio.CancelledError:
+                pass
+            except BaseException as exc:
+                primary_error = exc
         # ADR §4.2 step 3: reject new enqueue -> drain/checkpoint -> writer cancel and
         # await -> DB close -> lock release. IngestionCoordinator.stop() implements the
         # first three; it must finish before the stores it writes through are closed.
         if brain.coordinator is not None:
-            await brain.coordinator.stop()
-        await brain.history.close()
-        await brain.store.close()
+            try:
+                await brain.coordinator.stop()
+            except BaseException as exc:
+                if primary_error is None:
+                    primary_error = exc
+        try:
+            await brain.history.close()
+        except BaseException as exc:
+            if primary_error is None:
+                primary_error = exc
+        try:
+            await brain.store.close()
+        except BaseException as exc:
+            if primary_error is None:
+                primary_error = exc
         # 공유 연결은 빌려 쓰는 저장소가 닫지 않는다. 소유자만 닫을 수 있다.
         if brain.owner is not None:
-            await brain.owner.close()
-        brain.lock.release()
+            try:
+                await brain.owner.close()
+            except BaseException as exc:
+                if primary_error is None:
+                    primary_error = exc
+        try:
+            brain.lock.release()
+        except BaseException as exc:
+            if primary_error is None:
+                primary_error = exc
     _publish_brain(app, None)
+    if primary_error is not None:
+        raise primary_error
+
+
+async def _teardown_cluster_labeling_tasks(app: FastAPI) -> None:
+    tasks: dict[tuple[str, str], asyncio.Task[None]] = getattr(
+        app.state, "cluster_labeling_tasks", {}
+    )
+    pending = tuple(tasks.values())
+    for task in pending:
+        task.cancel()
+    if pending:
+        await asyncio.gather(*pending, return_exceptions=True)
+    tasks.clear()
+
+
+async def _cleanup_lifespan_resources(
+    app: FastAPI,
+    runtimes: dict[str, AccountRuntime],
+    http_client: httpx.AsyncClient | None,
+    locks: list[CredentialProcessLock],
+    brain: BrainRuntime | None,
+    routines: RoutinesRuntime | None,
+    *,
+    primary_error: BaseException | None = None,
+) -> None:
+    first_error = primary_error
+    phases = (
+        ("accounts", lambda: _teardown(app, runtimes, http_client, locks)),
+        ("cluster-labeling", lambda: _teardown_cluster_labeling_tasks(app)),
+        ("brain", lambda: _teardown_brain(app, brain)),
+        ("routines", lambda: teardown_routines(routines)),
+    )
+    for phase, cleanup in phases:
+        try:
+            await cleanup()
+        except BaseException as exc:
+            logger.warning(
+                "lifespan cleanup phase failed phase=%s type=%s",
+                phase,
+                type(exc).__name__,
+            )
+            if first_error is None:
+                first_error = exc
+    _publish_routines(app, None)
+    if first_error is not None:
+        raise first_error
 
 
 def _build_runtime(
@@ -336,24 +423,27 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
         # Tests overwrite this attribute directly on the TestClient's app instance so the
         # test process never actually gets killed.
         app.state.brain_shutdown_hook = None
-        # WP-F(G-F1/G-F2) — 군집 라벨링 전용 LLM 클라이언트. 추출과 같은
-        # brain_extraction_llm_argv를 공유한다("추출 켜짐 = 라벨링도 켜짐") —
-        # argv가 없으면 None으로 두어 라벨링이 자동 휴면한다(거짓 스위치가 아니라
-        # 정직한 원인). 추출용 client(_open_brain 지역변수, timeout 120초)와 별개
+        # WP-F(G-F1/G-F2) — 군집 라벨링 전용 LLM 클라이언트. 추출과 같은 설정을
+        # 공유한다("추출 켜짐 = 라벨링도 켜짐"). custom argv가 Claude opt-in보다
+        # 우선하고, 둘 다 없을 때만 None으로 두어 라벨링이 자동 휴면한다.
+        # 추출용 client(_open_brain 지역변수)와 별개
         # 인스턴스인 이유: StructuredLlmClient.complete()는 호출별 타임아웃 인자를
         # 받지 않아, 라벨링의 20초 상한은 생성 시점에만 고정할 수 있다.
-        app.state.brain_cluster_labeling_llm_client = (
-            LocalCommandStructuredLlm(
+        if runtime_settings.brain_extraction_llm_argv:
+            app.state.brain_cluster_labeling_llm_client = LocalCommandStructuredLlm(
                 tuple(runtime_settings.brain_extraction_llm_argv), timeout_seconds=20
             )
-            if runtime_settings.brain_extraction_llm_argv
-            else None
-        )
-        # F4의 fire-and-forget 백그라운드 라벨링 태스크 참조 보관(in-flight 집합) —
+        elif runtime_settings.brain_use_claude_cli_extraction:
+            app.state.brain_cluster_labeling_llm_client = ClaudeCliStructuredLlm(
+                timeout_seconds=20
+            )
+        else:
+            app.state.brain_cluster_labeling_llm_client = None
+        # F4의 fire-and-forget 백그라운드 라벨링 태스크 참조 보관(in-flight 맵) —
         # 참조 없는 태스크는 GC 회수 대상이라는 asyncio 문서 경고 대응(아래
         # brain.hourly_task 저장 관례와 동일 원칙). 동시 스폰 상한 검사도 이
-        # 집합의 크기로 한다.
-        app.state.cluster_labeling_tasks = set()
+        # 맵의 크기로 한다. 키는 (프롬프트 지문, 멤버 집합 해시)라 동일 요청을 합친다.
+        app.state.cluster_labeling_tasks = {}
         # exposeToModel 게이트(WP-I, G-I5) — 기동 초기값은 안전측 False다. 프런트
         # 기본값(True)과 어긋나 보이지만, Electron이 브레인 준비 폴링 자리에서
         # 저장된 값을 재동기화(push)하므로(history-sink.js) 정상 경로에서는 곧
@@ -429,18 +519,32 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
                     ws_client=default_rt.ws_client if default_rt is not None else None,
                 )
                 _publish_routines(app, routines)
-        except BaseException:
-            await _teardown(app, runtimes, http_client, locks)
-            await _teardown_brain(app, brain)
-            await teardown_routines(routines)
-            raise
+        except BaseException as primary_error:
+            await _cleanup_lifespan_resources(
+                app,
+                runtimes,
+                http_client,
+                locks,
+                brain,
+                routines,
+                primary_error=primary_error,
+            )
         try:
             yield
-        finally:
-            await _teardown(app, runtimes, http_client, locks)
-            await _teardown_brain(app, brain)
-            await teardown_routines(routines)
-            _publish_routines(app, None)
+        except BaseException as primary_error:
+            await _cleanup_lifespan_resources(
+                app,
+                runtimes,
+                http_client,
+                locks,
+                brain,
+                routines,
+                primary_error=primary_error,
+            )
+        else:
+            await _cleanup_lifespan_resources(
+                app, runtimes, http_client, locks, brain, routines
+            )
 
     return lifespan
 

@@ -269,7 +269,7 @@
           <div id="roomHeadTitle" class="room-head-title"></div>
           <div class="room-head-sub">오브에서 넘어왔습니다. 이 감시 건에 대해서만 이어서 이야기합니다 — 메인 대화와 섞이지 않습니다.</div>
         </div>
-        <div class="history" id="history"></div>
+        <div class="history" id="history" role="log" aria-label="현재 대화" tabindex="0"></div>
 
         <!-- 커맨드 카드(보드 45 v5, 2026-08-27) — 스트립 필 줄은 전면 제거됐다.
              입력부는 첨부 칩(있을 때만) + 입력행(키우미·입력줄·잠금 힌트)뿐이다.
@@ -308,7 +308,8 @@
             </button>
             <input id="input" class="input" placeholder="무엇이든 물어보세요" autofocus />
             <div class="lock-hint" id="lockHint" hidden>
-              <span id="lockText">답변 중…</span>
+              <span id="lockText" class="lock-text">답변 중…</span>
+              <span id="lockTime" class="lock-time"></span>
               <span class="esc">ESC 중단</span>
             </div>
           </div>
@@ -374,6 +375,7 @@
 <script src="lib/card-primitives.js"></script>
 <script src="lib/card-kinds.js"></script>
 <script src="lib/semantic-detail-sheet.js"></script>
+<script src="lib/semantic-workspace.js"></script>
 <script src="lib/integrated-card-surface.js"></script>
 <script src="lib/card-kind-종목발굴.js"></script>
 <script src="lib/card-kind-시세.js"></script>

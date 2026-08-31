@@ -1,5 +1,5 @@
 .card.integrated-card {
-  min-height: 420px;
+  min-height: 0;
   max-height: min(820px, calc(100vh - 72px));
 }
 
@@ -31,6 +31,30 @@
 .integrated-card-tab.is-active {
   color: var(--text, #eef1f7);
   background: rgba(122, 137, 255, .16);
+}
+
+/* Canvas integrated cards sit on the app's light glass surface. Keep this
+ * override at the card chrome boundary so specialized AITS/chart/orderbook
+ * renderers retain their own palettes. */
+.card.integrated-card .integrated-card-tab {
+  color: #5b6270;
+}
+
+.card.integrated-card .integrated-card-tab.is-active {
+  color: #14171d;
+  background: #e9ebff;
+}
+
+.card.integrated-card .card-subtitle,
+.card.integrated-card .card-fresh,
+.card.integrated-card .fin-meta,
+.card.integrated-card .workflow-guard,
+.card.integrated-card .integrated-realtime-strip {
+  color: #5b6270;
+}
+
+.card.integrated-card .integrated-realtime-strip-head {
+  color: #3147a8;
 }
 
 .integrated-card-panel[hidden] { display: none !important; }
@@ -74,6 +98,17 @@
   background: rgba(255, 255, 255, .09);
   font: inherit;
   cursor: pointer;
+}
+
+.card.integrated-card .integrated-realtime-error {
+  border-color: #c54735;
+  color: #842f24;
+  background: #fff0ed;
+}
+
+.card.integrated-card .integrated-realtime-error button {
+  color: #842f24;
+  background: #ffe1dc;
 }
 
 .semantic-detail-sheet {
@@ -122,6 +157,309 @@
 .semantic-detail-row.is-official-opaque .semantic-detail-label,
 .semantic-detail-row.is-official-opaque .semantic-detail-wire { color: #d49a55; }
 
+.semantic-workspace {
+  --semantic-ink: #14171d;
+  --semantic-muted: #5b6270;
+  --semantic-line: rgba(20, 23, 29, .14);
+  --semantic-soft: rgba(20, 23, 29, .045);
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+  color: var(--semantic-ink);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.semantic-workspace-title,
+.semantic-workspace-section-title {
+  margin: 0;
+  color: var(--semantic-ink);
+  letter-spacing: -.012em;
+}
+
+.semantic-workspace-title { font-size: 18px; }
+.semantic-workspace-section-title { font-size: 15px; }
+
+.semantic-workspace-description-copy,
+.semantic-workspace-section-description,
+.semantic-workspace-help {
+  margin: 0;
+  color: var(--semantic-muted);
+}
+
+.semantic-workspace-section {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  padding: 14px 0;
+  border-block: 1px solid var(--semantic-line);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.semantic-workspace-status {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 9px 0;
+  border-block: 1px solid var(--semantic-line);
+  border-radius: 0;
+  color: #4f596b;
+  background: transparent;
+  box-shadow: none;
+}
+
+.semantic-workspace-status::before {
+  width: 7px;
+  height: 7px;
+  margin-top: 7px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: currentColor;
+  content: '';
+}
+
+.semantic-workspace-status.is-partial,
+.semantic-workspace-status.is-stale,
+.semantic-workspace-status.is-reconnecting {
+  color: #694500;
+}
+
+.semantic-workspace-status.is-error,
+.semantic-workspace-status.is-unavailable {
+  color: #842f24;
+}
+
+.semantic-workspace-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0;
+  margin: 0;
+}
+
+.semantic-workspace-metric,
+.semantic-workspace-description {
+  display: grid;
+  align-content: start;
+  gap: 5px;
+  min-width: 0;
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.semantic-workspace-metric + .semantic-workspace-metric { border-inline-start: 1px solid var(--semantic-line); }
+.semantic-workspace-description { grid-column: 1 / -1; border-top: 1px solid var(--semantic-line); }
+.semantic-workspace-label { color: var(--semantic-muted); font-size: 13px; }
+.semantic-workspace-value { margin: 0; color: var(--semantic-ink); font-size: 18px; font-weight: 720; overflow-wrap: anywhere; }
+.semantic-workspace-description .semantic-workspace-value { font-size: 14px; font-weight: 520; }
+.semantic-workspace-help,
+.semantic-workspace-asof { color: var(--semantic-muted); font-size: 12px; }
+
+.semantic-workspace-slot-group {
+  overflow: visible;
+  border-block: 1px solid var(--semantic-line);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.semantic-workspace-slot-title {
+  margin: 0;
+  padding: 10px 12px;
+  color: var(--semantic-ink);
+  font-size: 14px;
+  border-bottom: 1px solid var(--semantic-line);
+}
+
+.semantic-workspace-slot-list { margin: 0; }
+.semantic-workspace-slot-row {
+  display: grid;
+  grid-template-columns: minmax(72px, .5fr) minmax(0, 1.5fr);
+  gap: 12px;
+  align-items: center;
+  padding: 10px 12px;
+}
+.semantic-workspace-slot-row + .semantic-workspace-slot-row { border-top: 1px solid var(--semantic-line); }
+.semantic-workspace-slot-rank { color: var(--semantic-muted); font-weight: 650; }
+.semantic-workspace-slot-fields { margin: 0; min-width: 0; }
+.semantic-workspace-slot-subfields { display: grid; gap: 8px; margin: 0; }
+.semantic-workspace-slot-subfield {
+  display: grid;
+  grid-template-columns: minmax(96px, .8fr) minmax(0, 1.2fr);
+  gap: 10px;
+  align-items: baseline;
+}
+.semantic-workspace-slot-subfield .semantic-workspace-value { font-size: 14px; }
+
+.semantic-workspace-detail {
+  min-width: 0;
+  padding: 9px 0;
+  border-block: 1px solid var(--semantic-line);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.semantic-workspace-detail-summary,
+.semantic-workspace-row-detail-summary {
+  min-height: 44px;
+  color: #3f4858;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.semantic-workspace-detail-summary { display: flex; align-items: center; }
+.semantic-workspace-metrics.is-detail { margin-top: 8px; }
+
+.semantic-workspace-table-wrap {
+  min-width: 0;
+  overflow: auto;
+  border-block: 1px solid var(--semantic-line);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.semantic-workspace-table-wrap:focus-visible {
+  outline: 2px solid #4057c8;
+  outline-offset: 2px;
+}
+
+.semantic-workspace-table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.semantic-workspace-table th,
+.semantic-workspace-table td { padding: 10px 12px; border-bottom: 1px solid rgba(20, 23, 29, .1); color: var(--semantic-ink); text-align: start; white-space: nowrap; }
+.semantic-workspace-table th { color: #4f596b; font-size: 13px; font-weight: 650; }
+.semantic-workspace-table tbody tr:last-child td { border-bottom: 0; }
+
+.semantic-workspace-table-detail-row > td {
+  padding: 0 12px 8px;
+  border-bottom: 0;
+  background: transparent;
+}
+
+.semantic-workspace-row-detail {
+  min-width: 0;
+  margin-inline: 0;
+  border-block: 1px solid var(--semantic-line);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.semantic-workspace-row-detail-summary {
+  display: flex;
+  align-items: center;
+  padding-inline: 10px;
+  font-size: 13px;
+}
+
+.semantic-workspace-row-detail-values {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+  margin: 0 10px 10px;
+}
+
+.semantic-workspace-row-detail-item {
+  min-width: 0;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--semantic-line);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.semantic-workspace-row-detail-item:last-child { border-bottom: 0; }
+
+.semantic-workspace-row-detail-item .semantic-workspace-value { font-size: 14px; }
+
+.semantic-workspace-live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.semantic-workspace-metric.is-realtime-updated .semantic-workspace-value,
+.semantic-workspace-description.is-realtime-updated .semantic-workspace-value {
+  color: #3147a8;
+}
+
 @media (max-width: 720px) {
   .semantic-detail-row { grid-template-columns: 1fr; gap: 3px; }
+  .integrated-card-tab,
+  .integrated-realtime-error button { min-height: 44px; min-width: 44px; }
+  .semantic-workspace { font-size: 14px; }
+  .semantic-workspace-section { padding: 12px 0; }
+  .semantic-workspace-metrics { grid-template-columns: 1fr; }
+  .semantic-workspace-metric + .semantic-workspace-metric {
+    border-inline-start: 0;
+    border-top: 1px solid var(--semantic-line);
+  }
+  .semantic-workspace-slot-row,
+  .semantic-workspace-slot-subfield { grid-template-columns: 1fr; gap: 4px; }
+  .semantic-workspace-label,
+  .semantic-workspace-help,
+  .semantic-workspace-asof,
+  .semantic-workspace-table th,
+  .semantic-workspace-table td { font-size: 14px; }
+  .semantic-workspace-table-wrap {
+    overflow: visible;
+    border: 0;
+  }
+  .semantic-workspace-table,
+  .semantic-workspace-table tbody {
+    display: grid;
+    gap: 10px;
+  }
+  .semantic-workspace-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .semantic-workspace-table tbody > tr:not(.semantic-workspace-table-detail-row) {
+    display: grid;
+    overflow: visible;
+    border: 0;
+    border-bottom: 1px solid var(--semantic-line);
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+  .semantic-workspace-table tbody > tr:not(.semantic-workspace-table-detail-row) > td {
+    display: grid;
+    grid-template-columns: minmax(92px, .8fr) minmax(0, 1.2fr);
+    gap: 12px;
+    align-items: start;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  .semantic-workspace-table tbody > tr:not(.semantic-workspace-table-detail-row) > td::before {
+    content: attr(data-semantic-label);
+    color: var(--semantic-muted);
+    font-weight: 650;
+  }
+  .semantic-workspace-table-detail-row {
+    display: block;
+    margin-top: -10px;
+  }
+  .semantic-workspace-table-detail-row > td {
+    display: block;
+    padding: 0;
+    white-space: normal;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .semantic-workspace-metric,
+  .semantic-workspace-description,
+  .semantic-workspace-value { transition: none !important; animation: none !important; }
 }

@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import sqlite3
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from types import SimpleNamespace
@@ -18,6 +19,7 @@ BEARER = "local-test-bearer"
 CHAT_PATH = "/api/v1/brain/chat"
 STATUS_PATH = "/api/v1/brain/status"
 STARTUP_RETRY_PATH = "/api/v1/brain/startup-ingestion/retry"
+INGESTION_JOBS_PATH = "/api/v1/brain/ingestion/jobs"
 CHATS_PATH = "/api/v1/brain/chats"
 CONVERSATIONS_PATH = "/api/v1/brain/conversations"
 PROFILE_SUMMARY_PATH = "/api/v1/brain/profile-summary"
@@ -140,6 +142,21 @@ def test_status_rejects_wrong_bearer() -> None:
     assert response.status_code == 401
 
 
+def test_manual_ingestion_requires_bearer_header() -> None:
+    with _disabled_client() as client:
+        response = client.post(INGESTION_JOBS_PATH)
+    assert response.status_code == 422
+
+
+def test_manual_ingestion_rejects_wrong_bearer() -> None:
+    with _disabled_client() as client:
+        response = client.post(
+            INGESTION_JOBS_PATH,
+            headers={"Authorization": "Bearer nope"},
+        )
+    assert response.status_code == 401
+
+
 def test_chats_requires_bearer_header() -> None:
     with _disabled_client() as client:
         response = client.get(CHATS_PATH, params={"conversation_id": "conv:1"})
@@ -195,6 +212,13 @@ def test_chat_503s_while_brain_disabled() -> None:
     assert response.status_code == 503
 
 
+def test_manual_ingestion_and_status_503_while_brain_disabled() -> None:
+    with _disabled_client() as client:
+        headers = {"Authorization": f"Bearer {BEARER}"}
+        assert client.post(INGESTION_JOBS_PATH, headers=headers).status_code == 503
+        assert client.get(f"{INGESTION_JOBS_PATH}/job:missing", headers=headers).status_code == 503
+
+
 def test_chats_503s_while_brain_disabled() -> None:
     with _disabled_client() as client:
         response = client.get(
@@ -237,10 +261,20 @@ def test_status_always_answers_200_even_while_disabled() -> None:
         "ready": False,
         "ingestion_ready": False,
         "extraction_enabled": False,
+        "ingest_schedule_owner": "backend",
         "startup_ingestion_job_id": None,
         "startup_ingestion_status": None,
         "startup_ingestion_detail": "brain_disabled",
     }
+
+
+def test_status_exposes_external_ingestion_schedule_owner(tmp_path: Path) -> None:
+    settings = _brain_settings(tmp_path, brain_ingest_schedule_owner="external")
+    with TestClient(create_app(settings)) as client:
+        response = client.get(STATUS_PATH, headers={"Authorization": f"Bearer {BEARER}"})
+
+    assert response.status_code == 200
+    assert response.json()["ingest_schedule_owner"] == "external"
 
 
 def test_status_reports_terminal_startup_failure_with_public_detail_code() -> None:
@@ -353,6 +387,68 @@ def test_startup_retry_replaces_only_terminal_failed_job() -> None:
     assert runtime.startup_ingestion_job_id == "job:retry-1"
 
 
+def test_manual_ingestion_enqueue_and_exact_job_status_lifecycle(tmp_path: Path) -> None:
+    app = create_app(_brain_settings(tmp_path))
+    headers = {"Authorization": f"Bearer {BEARER}"}
+    with TestClient(app) as client:
+        queued = client.post(INGESTION_JOBS_PATH, headers=headers)
+        assert queued.status_code == 200
+        body = queued.json()
+        assert body["trigger"] == "manual"
+        assert body["status"] == "pending"
+        assert body["attempts"] == 0
+        assert body["created_at"] is not None
+        assert body["started_at"] is None
+        assert body["completed_at"] is None
+        assert body["next_retry_at"] is None
+        assert body["error"] is None
+
+        job_id = body["id"]
+        for _ in range(100):
+            current = client.get(f"{INGESTION_JOBS_PATH}/{job_id}", headers=headers)
+            assert current.status_code == 200
+            if current.json()["status"] == "succeeded":
+                break
+        final = current.json()
+        assert final["id"] == job_id
+        assert final["trigger"] == "manual"
+        assert final["status"] == "succeeded"
+        assert final["attempts"] == 1
+        assert final["started_at"] is not None
+        assert final["completed_at"] is not None
+        assert final["error"] is None
+
+        missing = client.get(f"{INGESTION_JOBS_PATH}/job:missing", headers=headers)
+        assert missing.status_code == 404
+        assert missing.json() == {"detail": "ingestion job not found"}
+
+
+def test_ingestion_job_error_is_generic_and_does_not_leak_internal_detail() -> None:
+    with _disabled_client() as client:
+        failed = _ingestion_job("job:failed-manual", JobStatus.FAILED)
+        runtime = _install_fake_startup_runtime(client, failed)
+        failed = IngestionJob(
+            id=failed.id,
+            trigger=JobTrigger.MANUAL,
+            status=failed.status,
+            attempts=failed.attempts,
+            created_at=failed.created_at,
+            started_at=failed.started_at,
+            completed_at=failed.completed_at,
+            next_retry_at=failed.next_retry_at,
+            error=failed.error,
+        )
+        runtime.history.jobs[failed.id] = failed
+        response = client.get(
+            f"{INGESTION_JOBS_PATH}/{failed.id}",
+            headers={"Authorization": f"Bearer {BEARER}"},
+        )
+
+    assert response.status_code == 200
+    assert response.json()["error"] == "ingestion_failed"
+    assert "internal detail" not in response.text
+
+
 # --- happy path -----------------------------------------------------------------------
 
 
@@ -416,6 +512,95 @@ def test_chat_round_trip_and_status_and_no_body_leak_in_logs(
     # Trap ⑫: the chat body must never reach any log record, success or otherwise.
     for record in caplog.records:
         assert SECRET_MARKER not in record.getMessage()
+
+
+@pytest.mark.parametrize("length", [12_345, 20_000])
+def test_chat_preserves_long_raw_text_and_replay_is_idempotent(
+    tmp_path: Path, length: int
+) -> None:
+    db_path = tmp_path / "brain.sqlite3"
+    prefix, suffix = "시작|", "|끝"
+    text = prefix + ("가" * (length - len(prefix) - len(suffix))) + suffix
+    assert len(text) == length
+    payload = {
+        "conversation_id": f"conv:long-{length}",
+        "role": "user",
+        "text": text,
+        "message_id": f"msg:long-{length}",
+        "occurred_at": datetime.now(UTC).isoformat(),
+    }
+    app = create_app(_brain_settings(tmp_path))
+
+    with TestClient(app) as client:
+        first = client.post(CHAT_PATH, headers={"Authorization": f"Bearer {BEARER}"}, json=payload)
+        replay = client.post(CHAT_PATH, headers={"Authorization": f"Bearer {BEARER}"}, json=payload)
+
+    assert first.status_code == 200
+    assert replay.status_code == 200
+    assert replay.json() == first.json()
+    with sqlite3.connect(db_path) as connection:
+        rows = connection.execute(
+            "SELECT text FROM source_records WHERE source_id = ?",
+            (f"chat:msg:long-{length}",),
+        ).fetchall()
+    assert rows == [(text,)]
+
+
+def test_chat_rejects_text_above_the_local_raw_history_limit(tmp_path: Path) -> None:
+    app = create_app(_brain_settings(tmp_path))
+    with TestClient(app) as client:
+        response = client.post(
+            CHAT_PATH,
+            headers={"Authorization": f"Bearer {BEARER}"},
+            json={
+                "conversation_id": "conv:too-long",
+                "role": "user",
+                "text": "가" * 20_001,
+                "message_id": "msg:too-long",
+                "occurred_at": datetime.now(UTC).isoformat(),
+            },
+        )
+
+    assert response.status_code == 422
+    with sqlite3.connect(tmp_path / "brain.sqlite3") as connection:
+        count = connection.execute(
+            "SELECT COUNT(*) FROM source_records WHERE source_id = 'chat:msg:too-long'"
+        ).fetchone()
+    assert count == (0,)
+
+
+@pytest.mark.parametrize(
+    ("length", "expected_status"),
+    [(20_000, 200), (20_001, 422)],
+)
+def test_chat_raw_history_limit_counts_astral_unicode_code_points(
+    tmp_path: Path, length: int, expected_status: int
+) -> None:
+    text = "😀" * length
+    assert len(text) == length
+    message_id = f"msg:astral-{length}"
+    app = create_app(_brain_settings(tmp_path))
+
+    with TestClient(app) as client:
+        response = client.post(
+            CHAT_PATH,
+            headers={"Authorization": f"Bearer {BEARER}"},
+            json={
+                "conversation_id": "conv:astral-boundary",
+                "role": "user",
+                "text": text,
+                "message_id": message_id,
+                "occurred_at": datetime.now(UTC).isoformat(),
+            },
+        )
+
+    assert response.status_code == expected_status
+    with sqlite3.connect(tmp_path / "brain.sqlite3") as connection:
+        rows = connection.execute(
+            "SELECT text FROM source_records WHERE source_id = ?",
+            (f"chat:{message_id}",),
+        ).fetchall()
+    assert rows == ([(text,)] if expected_status == 200 else [])
 
 
 def test_conversations_lists_ids_counts_and_timestamps_without_transcript_body(
@@ -1185,7 +1370,7 @@ def test_cluster_ai_labels_first_miss_is_empty_and_fast_then_cached(
             llm.release.set()
     # 완료 대기 — TestClient portal 안에서 태스크를 직접 기다리고 done_callback을 한 tick 진행한다.
     async def wait_for_labels() -> None:
-        await asyncio.gather(*tuple(app.state.cluster_labeling_tasks))
+        await asyncio.gather(*tuple(app.state.cluster_labeling_tasks.values()))
         await asyncio.sleep(0)
 
     assert seeded_client.portal is not None
@@ -1212,8 +1397,50 @@ def test_cluster_ai_label_spawn_respects_inflight_cap(seeded_client: TestClient)
     app = seeded_client.app  # type: ignore[attr-defined]
     app.state.brain_cluster_labeling_llm_client = llm
     # 상한이 이미 찬 상태를 흉내낸다 — 새 미스는 스폰을 건너뛰고 폴백만 반환한다.
-    app.state.cluster_labeling_tasks = {object() for _ in range(4)}
-    body = seeded_client.get(CLUSTER_MAP_PATH, headers=_headers()).json()
-    assert body["cluster_ai_labels"] == {}
-    assert llm.calls == 0, "상한 도달 시 태스크를 만들지 않는다"
-    assert len(app.state.cluster_labeling_tasks) == 4
+    app.state.cluster_labeling_tasks = {
+        (f"prompt-{index}", f"members-{index}"): object() for index in range(4)
+    }
+    try:
+        body = seeded_client.get(CLUSTER_MAP_PATH, headers=_headers()).json()
+        assert body["cluster_ai_labels"] == {}
+        assert llm.calls == 0, "상한 도달 시 태스크를 만들지 않는다"
+        assert len(app.state.cluster_labeling_tasks) == 4
+    finally:
+        app.state.cluster_labeling_tasks = {}
+
+
+def test_identical_inflight_cluster_requests_reuse_labeling_tasks(
+    seeded_client: TestClient,
+) -> None:
+    from concurrent.futures import ThreadPoolExecutor
+
+    app = seeded_client.app  # type: ignore[attr-defined]
+    llm = _BlockingLlm()
+    app.state.brain_cluster_labeling_llm_client = llm
+
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        first_request = executor.submit(
+            seeded_client.get, CLUSTER_MAP_PATH, headers=_headers()
+        )
+        assert llm.started.wait(timeout=10)
+        initial_tasks = dict(app.state.cluster_labeling_tasks)
+        initial_calls = llm.calls
+        second_request = executor.submit(
+            seeded_client.get, CLUSTER_MAP_PATH, headers=_headers()
+        )
+        try:
+            first = first_request.result(timeout=10).json()
+            second = second_request.result(timeout=10).json()
+            assert first["cluster_ai_labels"] == {}
+            assert second["cluster_ai_labels"] == {}
+            assert app.state.cluster_labeling_tasks == initial_tasks
+            assert llm.calls == initial_calls
+        finally:
+            llm.release.set()
+
+    async def wait_for_labels() -> None:
+        await asyncio.gather(*tuple(app.state.cluster_labeling_tasks.values()))
+        await asyncio.sleep(0)
+
+    assert seeded_client.portal is not None
+    seeded_client.portal.call(wait_for_labels)

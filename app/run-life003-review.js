@@ -38,11 +38,30 @@ function sendNativeAltF4(shellWin) {
 }
 app.whenReady().then(async () => {
   nativeTheme.themeSource = 'light'; fs.mkdirSync(captureDir, { recursive: true });
-  await main.createWindows(); main.startBootReadinessForVerify();
-  const { shellWin, orbWin } = main.getWins();
+  await main.createWindows();
+  const { bootWin, shellWin, orbWin } = main.getWins();
+  let orbShowEvents = 0;
+  orbWin.on('show', () => { orbShowEvents += 1; });
+  const bootVisibleBeforeHandoff = !!bootWin && bootWin.isVisible();
+  const shellHiddenBeforeHandoff = !shellWin.isVisible();
+  const orbHiddenBeforeHandoff = !orbWin.isVisible();
+  main.startBootReadinessForVerify();
   const booted = await waitUntil(() => shellWin.webContents.executeJavaScript(
     "document.getElementById('boot').hidden === true"));
   if (!booted) throw new Error('LIFE-003 review shell did not finish booting');
+
+  const shellVisibleAfterHandoff = await waitUntil(
+    () => shellWin.isVisible() && !shellWin.isMinimized(),
+  );
+  const orbHiddenAfterHandoff = await waitUntil(() => !orbWin.isVisible());
+  shellWin.minimize();
+  const shellMinimized = await waitUntil(() => shellWin.isMinimized());
+  const orbVisibleWhileMinimized = await waitUntil(() => orbWin.isVisible());
+  shellWin.restore();
+  const shellRestoredAfterMinimize = await waitUntil(
+    () => shellWin.isVisible() && !shellWin.isMinimized(),
+  );
+  const orbHiddenAfterRestore = await waitUntil(() => !orbWin.isVisible());
 
   let localBackgroundCounter = 0;
   const localCounterTimer = setInterval(() => { localBackgroundCounter += 1; }, 40);
@@ -52,36 +71,114 @@ app.whenReady().then(async () => {
   const closeClicked = await shellWin.webContents.executeJavaScript(
     "document.getElementById('winClose').click(); true");
   const hiddenAfterClose = await waitUntil(() => !shellWin.isVisible());
+  const orbVisibleAfterClose = await waitUntil(() => orbWin.isVisible());
+  let orbCloseEventObserved = false;
+  let orbCloseDefaultPrevented = false;
+  orbWin.once('close', (event) => {
+    orbCloseEventObserved = true;
+    orbCloseDefaultPrevented = event.defaultPrevented;
+  });
+  orbWin.close();
+  const orbCloseSuppressedWhileShellHidden = await waitUntil(
+    () => orbCloseEventObserved && !orbWin.isDestroyed() && orbWin.isVisible(),
+  );
   await wait(320);
   const counterAfterHide = localBackgroundCounter;
   const markedAfterClose = fs.existsSync(marker);
   const markerStat = markedAfterClose ? fs.statSync(marker) : null;
   const noticeAfterFirst = main.getBackgroundCloseNoticeStats();
 
-  main.restoreFromBackground(); await waitUntil(() => shellWin.isVisible());
+  const orbOpenShellIpcSubmitted = await orbWin.webContents.executeJavaScript(
+    "window.athena.send('athena:orb-open-shell', {}); true",
+  );
+  const restoredThroughOrbIpc = await waitUntil(
+    () => shellWin.isVisible() && !shellWin.isMinimized() && !orbWin.isVisible(),
+  );
+  const shellVisibleAfterOrbIpc = shellWin.isVisible() && !shellWin.isMinimized();
+  const orbHiddenAfterOrbIpc = !orbWin.isVisible();
+  const closeClickedAfterOrbIpc = await shellWin.webContents.executeJavaScript(
+    "document.getElementById('winClose').click(); true",
+  );
+  const hiddenForTrayRestore = await waitUntil(() => !shellWin.isVisible());
+  const orbVisibleForTrayRestore = await waitUntil(() => orbWin.isVisible());
+
+  const trayOpenInvokedAfterClose = main.openFromTrayForReview();
+  const restoredAfterClose = await waitUntil(
+    () => shellWin.isVisible() && !shellWin.isMinimized() && !orbWin.isVisible(),
+  );
   shellWin.focus(); await wait(150);
   const nativeAltF4Sent = await sendNativeAltF4(shellWin);
   const hiddenAfterNativeAltF4 = await waitUntil(() => !shellWin.isVisible());
+  const orbVisibleAfterNativeAltF4 = await waitUntil(() => orbWin.isVisible());
   const aliveAfterNativeAltF4 = !shellWin.isDestroyed() && !orbWin.isDestroyed();
 
-  main.restoreFromBackground(); await waitUntil(() => shellWin.isVisible());
+  const trayOpenInvokedAfterNativeAltF4 = main.openFromTrayForReview();
+  const restoredAfterNativeAltF4 = await waitUntil(
+    () => shellWin.isVisible() && !shellWin.isMinimized() && !orbWin.isVisible(),
+  );
   await shellWin.webContents.executeJavaScript("document.getElementById('winClose').click()");
   const hiddenAfterSecondClose = await waitUntil(() => !shellWin.isVisible());
+  const orbVisibleAfterSecondClose = await waitUntil(() => orbWin.isVisible());
   const markerAfterSecond = fs.statSync(marker);
   const noticeAfterSecond = main.getBackgroundCloseNoticeStats();
   const markerUnchanged = !!markerStat && markerStat.mtimeMs === markerAfterSecond.mtimeMs
     && markerStat.size === markerAfterSecond.size;
 
   const expectedShowCount = markedBeforeClose ? 0 : 1;
-  const basePass = closeClicked && hiddenAfterClose && counterAfterHide > counterBeforeHide
-    && markedAfterClose && nativeAltF4Sent && hiddenAfterNativeAltF4 && aliveAfterNativeAltF4
-    && orbWin.isVisible() && hiddenAfterSecondClose && markerUnchanged
+  const basePass = bootVisibleBeforeHandoff && shellHiddenBeforeHandoff && orbHiddenBeforeHandoff
+    && shellVisibleAfterHandoff && orbHiddenAfterHandoff
+    && shellMinimized && orbVisibleWhileMinimized
+    && shellRestoredAfterMinimize && orbHiddenAfterRestore
+    && closeClicked && hiddenAfterClose && orbVisibleAfterClose
+    && orbCloseEventObserved && orbCloseDefaultPrevented && orbCloseSuppressedWhileShellHidden
+    && counterAfterHide > counterBeforeHide
+    && orbOpenShellIpcSubmitted && restoredThroughOrbIpc
+    && shellVisibleAfterOrbIpc && orbHiddenAfterOrbIpc
+    && closeClickedAfterOrbIpc && hiddenForTrayRestore && orbVisibleForTrayRestore
+    && markedAfterClose && trayOpenInvokedAfterClose && restoredAfterClose
+    && nativeAltF4Sent && hiddenAfterNativeAltF4 && orbVisibleAfterNativeAltF4
+    && aliveAfterNativeAltF4 && trayOpenInvokedAfterNativeAltF4 && restoredAfterNativeAltF4
+    && hiddenAfterSecondClose && orbVisibleAfterSecondClose && markerUnchanged
     && noticeAfterSecond.shown === expectedShowCount
     && noticeAfterSecond.durableWrites === expectedShowCount;
   const report = {
     pass: basePass,
     profile: path.basename(reviewProfile), fixtureMode: true, autostartDisabled: true,
     liveServicesVerified: false,
+    visibilityPolicy: {
+      bootVisibleBeforeHandoff,
+      shellHiddenBeforeHandoff,
+      orbHiddenBeforeHandoff,
+      shellVisibleAfterHandoff,
+      orbHiddenAfterHandoff,
+      shellMinimized,
+      orbVisibleWhileMinimized,
+      shellRestoredAfterMinimize,
+      orbHiddenAfterRestore,
+      shellVisibleAfterOrbIpc,
+      orbHiddenAfterOrbIpc,
+      restoredAfterClose,
+      orbVisibleAfterNativeAltF4,
+      restoredAfterNativeAltF4,
+      orbVisibleAfterSecondClose,
+    },
+    orbCloseWhileShellHidden: {
+      eventObserved: orbCloseEventObserved,
+      defaultPrevented: orbCloseDefaultPrevented,
+      remainedVisible: orbCloseSuppressedWhileShellHidden,
+    },
+    orbOpenShellIpc: {
+      channel: 'athena:orb-open-shell',
+      rendererSubmitted: orbOpenShellIpcSubmitted,
+      restored: restoredThroughOrbIpc,
+      shellVisible: shellVisibleAfterOrbIpc,
+      orbHidden: orbHiddenAfterOrbIpc,
+      returnedToBackgroundForTray: hiddenForTrayRestore && orbVisibleForTrayRestore,
+    },
+    trayRestore: {
+      afterCloseInvoked: trayOpenInvokedAfterClose,
+      afterNativeAltF4Invoked: trayOpenInvokedAfterNativeAltF4,
+    },
     closeButton: { closeClicked, hiddenAfterClose, hiddenAfterSecondClose },
     nativeAltF4: { sent: nativeAltF4Sent, hidden: hiddenAfterNativeAltF4, processStillRunning: aliveAfterNativeAltF4 },
     localBackgroundActivity: { counterBeforeHide, counterAfterHide, increased: counterAfterHide > counterBeforeHide },
@@ -90,7 +187,13 @@ app.whenReady().then(async () => {
       notificationSupported: Notification.isSupported(), markedBeforeClose, markedAfterClose,
       markerUnchanged, afterFirst: noticeAfterFirst, afterSecond: noticeAfterSecond,
     },
-    trayExit: { invoked: false, beforeQuitObserved: false },
+    trayExit: {
+      invoked: false,
+      beforeQuitObserved: false,
+      orbShowEventsBeforeQuit: null,
+      orbShowEventsAfterQuit: null,
+      orbDestroyedAtWillQuit: false,
+    },
   };
   writeReport(report);
   if (!basePass) throw new Error('LIFE-003 Electron lifecycle regression failed');
@@ -98,9 +201,17 @@ app.whenReady().then(async () => {
   if (process.env.ATHENA_REVIEW_EXIT_AFTER_REPORT === '1') {
     clearInterval(localCounterTimer);
     report.trayExit.invoked = true;
+    report.trayExit.orbShowEventsBeforeQuit = orbShowEvents;
     app.once('before-quit', () => {
       report.trayExit.beforeQuitObserved = true;
-      report.pass = basePass && report.trayExit.invoked;
+    });
+    app.once('will-quit', () => {
+      report.trayExit.orbShowEventsAfterQuit = orbShowEvents
+        - report.trayExit.orbShowEventsBeforeQuit;
+      report.trayExit.orbDestroyedAtWillQuit = orbWin.isDestroyed();
+      report.pass = basePass && report.trayExit.invoked && report.trayExit.beforeQuitObserved
+        && report.trayExit.orbShowEventsAfterQuit === 0
+        && report.trayExit.orbDestroyedAtWillQuit;
       writeReport(report);
     });
     if (!main.quitFromTrayForReview()) throw new Error('tray quit menu item unavailable');

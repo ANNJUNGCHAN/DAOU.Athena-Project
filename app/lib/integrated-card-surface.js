@@ -40,7 +40,11 @@ function normalizeIdentity(value) {
 
 function instanceKeyFor(envelope) {
   const definition = integratedDefinition(envelope);
-  return definition ? `${definition.cardId}:${normalizeIdentity(targetIdentity(envelope))}` : null;
+  if (!definition) return null;
+  const viewInstanceId = clean(envelope && (envelope.view_instance_id || envelope.viewInstanceId));
+  return viewInstanceId
+    ? `view:${normalizeIdentity(viewInstanceId)}`
+    : `${definition.cardId}:${normalizeIdentity(targetIdentity(envelope))}`;
 }
 
 function matchesRealtimeTick(meta, tick) {
@@ -50,11 +54,9 @@ function matchesRealtimeTick(meta, tick) {
   if (String(meta.mode || '') !== String(tick.mode || '')) return false;
   if (Number(meta.generation) !== Number(tick.generation)) return false;
   if (Number(meta.connectionGeneration) !== Number(tick.connectionGeneration)) return false;
-  const operations = Array.isArray(meta.operationIds) ? meta.operationIds : [];
-  if (!operations.includes(String(tick.operationId || ''))) return false;
-  const expectedTarget = normalizeIdentity(meta.target);
-  const observedTarget = normalizeIdentity(tick.target);
-  return expectedTarget === 'default' || expectedTarget === observedTarget;
+  // Raw operation and target identities are consumed in the trusted main process.
+  // The renderer receives only the lease identity, generations, and opaque updates.
+  return true;
 }
 
 function requireRealtimeSuccess(state) {
@@ -167,18 +169,61 @@ function copySpecializedDatasets(root, renderedCard) {
 }
 
 function buttonLabel(envelope) {
-  return clean(envelope.section) || clean(envelope.mode) || clean(envelope.capability)
-    || clean(envelope.operation_ref || envelope.operationRef) || '요약';
+  const contract = envelope && (envelope.presentation_contract || envelope.presentationContract) || {};
+  const recipe = envelope && (envelope.view_recipe || envelope.viewRecipe) || {};
+  const sectionKey = clean(envelope && envelope.section);
+  const sections = Array.isArray(contract.sections) ? contract.sections : [];
+  const activeSection = sections.find((section) => (
+    clean(section && (section.section_id || section.sectionId)) === sectionKey
+  ));
+  const candidates = [
+    activeSection && (activeSection.title_ko || activeSection.titleKo),
+    contract.title_ko || contract.titleKo,
+    recipe.title_ko || recipe.titleKo,
+  ];
+  return candidates.map(clean).find((label) => label && /[가-힣]/.test(label)) || '요약';
+}
+
+function workflowStateLabel(value) {
+  const state = clean(value);
+  if (!state) return '상태 확인 중';
+  const productLabels = {
+    connecting: '실시간 연결 중',
+    connected: '실시간 연결됨',
+    reconnected: '실시간 다시 연결됨',
+    reconnecting: '실시간 재연결 중',
+    disconnected: '실시간 연결 중지',
+    stopped: '실시간 연결 중지',
+    paused: '실시간 수신 일시 중지',
+    error: '실시간 연결 오류',
+    entry: '주문 입력',
+    draft: '주문 초안',
+    review: '확인 대기',
+    confirmation: '최종 확인',
+    confirmed: '확인 완료',
+    submitted: '주문 접수',
+    accepted: '접수 완료',
+    filled: '체결 완료',
+    rejected: '주문 거절',
+    cancelled: '주문 취소',
+  };
+  return productLabels[state.toLowerCase()] || state;
+}
+
+function stampPanelKey(node, panelKey) {
+  Object.defineProperty(node, '__athenaPanelKey', {
+    value: panelKey, configurable: true, writable: true,
+  });
 }
 
 function activatePanel(root, panelKey) {
   root.querySelectorAll('.integrated-card-tab').forEach((tab) => {
-    const active = tab.dataset.panelKey === panelKey;
+    const active = tab.__athenaPanelKey === panelKey;
     tab.classList.toggle('is-active', active);
     tab.setAttribute('aria-selected', String(active));
   });
   root.querySelectorAll('.integrated-card-panel').forEach((panel) => {
-    panel.hidden = panel.dataset.panelKey !== panelKey;
+    panel.hidden = panel.__athenaPanelKey !== panelKey;
   });
 }
 
@@ -210,10 +255,16 @@ function stampRoot(root, envelope, definition, renderedCard = root) {
   root.dataset.cardKind = definition.kind;
   root.dataset.integratedInstanceKey = instanceKeyFor(envelope);
   root.dataset.integratedTarget = normalizeIdentity(targetIdentity(envelope));
-  root.dataset.operationRef = String(envelope.operation_ref || envelope.operationRef || '');
-  root.dataset.capability = clean(envelope.capability) || '';
-  root.dataset.mode = clean(envelope.mode) || '';
-  root.dataset.section = clean(envelope.section) || '';
+  Object.defineProperty(root, '__athenaIntegratedMetadata', {
+    value: {
+      operationRef: String(envelope.operation_ref || envelope.operationRef || ''),
+      capability: clean(envelope.capability) || '',
+      mode: clean(envelope.mode) || '',
+      section: clean(envelope.section) || '',
+    },
+    configurable: true,
+    writable: true,
+  });
   for (const key of ['datasetId', 'itemId', 'ordinal']) delete root.dataset[key];
   const title = root.querySelector(':scope > .card-head .card-title');
   if (title) title.textContent = definition.title;
@@ -243,17 +294,17 @@ function mountOrUpdate({ envelope, renderedCard, existingCard }) {
   const content = ensureScaffold(root, definition);
   const panels = content.querySelector('.integrated-card-panels');
   const tabs = content.querySelector('.integrated-card-tabs');
-  let panel = Array.from(panels.children).find((node) => node.dataset.panelKey === panelKey);
+  let panel = Array.from(panels.children).find((node) => node.__athenaPanelKey === panelKey);
   const replacedPanel = Boolean(panel);
   if (!panel) {
     panel = document.createElement('section');
     panel.className = 'integrated-card-panel';
-    panel.dataset.panelKey = panelKey;
+    stampPanelKey(panel, panelKey);
     panels.appendChild(panel);
     const tab = document.createElement('button');
     tab.type = 'button';
     tab.className = 'integrated-card-tab';
-    tab.dataset.panelKey = panelKey;
+    stampPanelKey(tab, panelKey);
     tab.setAttribute('role', 'tab');
     tab.textContent = buttonLabel(envelope);
     tab.addEventListener('click', () => activatePanel(root, panelKey));
@@ -272,7 +323,7 @@ const api = {
   specializedClassNames, copySpecializedDatasets, refreshExisting,
   matchesRealtimeTick, requireRealtimeSuccess, verifiedOperationRefsFor,
   rememberPanelSession, panelSessionFor, forgetPanelSession, clearPanelSessions,
-  detachForDestroy, findReusableRoot,
+  detachForDestroy, findReusableRoot, buttonLabel, workflowStateLabel,
 };
 if (typeof module !== 'undefined' && module.exports) module.exports = api;
 else {

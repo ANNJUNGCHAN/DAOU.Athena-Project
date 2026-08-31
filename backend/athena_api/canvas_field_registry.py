@@ -45,24 +45,24 @@ CARD_KINDS = MappingProxyType(
     }
 )
 
-# 951 is named by the Kiwoom OpenAPI+ developer guide v1.7.  The current REST
-# inventory still exposes 924 and 1279 only as Extra Item, so their values stay
-# addressable while their meaning remains deliberately opaque.
+# The current REST/WebSocket inventory exposes these fields only as Extra Item.
+# Legacy OpenAPI+ OCX FID meanings are not safe aliases for this contract, so
+# overrides are scoped to the exact mapping and JSON path rather than alias-only.
 SEMANTIC_OVERRIDES = MappingProxyType(
     {
-        "951": {
-            "label": "예수금",
-            "description": "예수금 (Kiwoom OpenAPI+ developer guide v1.7)",
-            "semantic_status": "official",
-            "semantic_source": "Kiwoom OpenAPI+ developer guide v1.7",
+        ("base:04", "$.data[].951"): {
+            "label": "기타 항목 (FID 951)",
+            "description": "현재 Kiwoom REST 명세가 Extra Item으로 공개한 원본 값",
+            "semantic_status": "official_opaque",
+            "semantic_source": "current Kiwoom REST inventory",
         },
-        "924": {
+        ("base:04", "$.data[].924"): {
             "label": "기타 항목 (FID 924)",
             "description": "현재 Kiwoom REST 명세가 Extra Item으로 공개한 원본 값",
             "semantic_status": "official_opaque",
             "semantic_source": "current Kiwoom REST inventory",
         },
-        "1279": {
+        ("base:1h", "$.data[].1279"): {
             "label": "기타 항목 (FID 1279)",
             "description": "현재 Kiwoom REST 명세가 Extra Item으로 공개한 원본 값",
             "semantic_status": "official_opaque",
@@ -416,7 +416,7 @@ def build_canvas_field_registry(
             key = (mapping_id, json_path)
             path_ordinals[key] += 1
             ordinal = path_ordinals[key]
-            override = SEMANTIC_OVERRIDES.get(alias)
+            override = SEMANTIC_OVERRIDES.get((mapping_id, json_path))
             label = str(override["label"]) if override else source_metadata["label"]
             description = (
                 str(override["description"])

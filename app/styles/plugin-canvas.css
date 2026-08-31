@@ -100,6 +100,51 @@
   line-height: 14px;
 }
 
+/* 서버 추가는 이 화면의 주 동작이지만 "관리"와 색을 다투지 않게 외곽선으로 둔다. */
+.plugin-canvas-action.is-add {
+  margin-right: 6px;
+  padding: 4px 12px;
+  border: 1px solid #d5d8de;
+  background: #fff;
+  color: #10131a;
+  font-family: var(--font-strong, "Daki B", system-ui, sans-serif);
+  line-height: 14px;
+}
+
+.plugin-canvas-snippet-input {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d5d8de;
+  border-radius: 8px;
+  background: #fbfbfc;
+  color: #10131a;
+  font: 400 12px/17px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  resize: vertical;
+}
+
+/* 재시작 안내 — 경고가 아니라 사실 고지라 톤을 낮춘다. */
+.plugin-canvas-restart-notice {
+  margin: 4px 0 12px;
+  padding: 9px 12px;
+  border: 1px solid #f0d8a8;
+  border-radius: 8px;
+  background: #fdf6e7;
+  color: #7a5a12;
+  font-size: 11px;
+  line-height: 16px;
+}
+
+.plugin-canvas-sheet-error {
+  margin-top: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #fdecf3;
+  color: #a3084b;
+  font-size: 11px;
+  line-height: 15px;
+}
+
 .plugin-canvas-action.is-primary {
   padding: 5px 14px;
   background: #e31272;
@@ -194,6 +239,18 @@
   color: #5b6270;
   font-size: 11px;
   line-height: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 연결·승인 상태 한 줄. 설명보다 한 단계 더 옅게 둬서 서버 이름 → 실행 커맨드
+   → 상태 순서로 읽히게 한다. */
+.plugin-canvas-card-source {
+  overflow: hidden;
+  margin-top: 2px;
+  color: #7b8290;
+  font-size: 10px;
+  line-height: 13px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }

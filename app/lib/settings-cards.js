@@ -22,12 +22,13 @@ function pill(text, tone) {
 
 // 44×24 토글. 브랜드색은 켜진 트랙 테두리에만 쓴다 — 배경 채움은 쓰지 않는다
 // (화면당 유일 브랜드 요소 규칙은 버튼 쪽에서 지킨다).
-function toggleSwitch(initial, onChange) {
+function toggleSwitch(initial, onChange, ariaLabel) {
   let on = !!initial;
   const t = el('button', `uk-toggle${on ? ' is-on' : ''}`);
   t.type = 'button';
   t.setAttribute('role', 'switch');
   t.setAttribute('aria-checked', String(on));
+  if (ariaLabel) t.setAttribute('aria-label', ariaLabel);
   t.appendChild(el('span', 'uk-toggle-thumb'));
   t.addEventListener('click', () => {
     on = !on;
@@ -313,14 +314,20 @@ async function refreshScreenCard(card, head, body) {
 
   const expandLabelCol = el('div');
   expandLabelCol.appendChild(el('div', 'uk-toggle-label', '질의하면 캔버스 창을 자동으로 연다'));
-  expandLabelCol.appendChild(el('div', 'uk-toggle-sub', 'OFF면 캔버스 창을 손으로 열어야 한다'));
-  const expandToggle = toggleSwitch(!!data.autoExpandCanvas, (next) => setPref('autoExpandCanvas', next));
+  const expandToggle = toggleSwitch(
+    !!data.autoExpandCanvas,
+    (next) => setPref('autoExpandCanvas', next),
+    '질의하면 캔버스 창을 자동으로 연다',
+  );
   body.appendChild(row('uk-toggle-row', [expandLabelCol, expandToggle]));
 
   const growLabelCol = el('div');
   growLabelCol.appendChild(el('div', 'uk-toggle-label', '답변 길이에 따라 대화 창이 자란다'));
-  growLabelCol.appendChild(el('div', 'uk-toggle-sub', 'OFF면 그립을 끌어야만 창이 커진다'));
-  const growToggle = toggleSwitch(!!data.autoGrowChat, (next) => setPref('autoGrowChat', next));
+  const growToggle = toggleSwitch(
+    !!data.autoGrowChat,
+    (next) => setPref('autoGrowChat', next),
+    '답변 길이에 따라 대화 창이 자란다',
+  );
   body.appendChild(row('uk-toggle-row', [growLabelCol, growToggle]));
 
   // ---- 글자 크기 5단계 (2026-08-19 사용자 지시 "글자가 너무 큼") ----
@@ -335,7 +342,6 @@ async function refreshScreenCard(card, head, body) {
   ];
   const fontLabelCol = el('div');
   fontLabelCol.appendChild(el('div', 'uk-toggle-label', '글자 크기'));
-  fontLabelCol.appendChild(el('div', 'uk-toggle-sub', '두 창의 모든 텍스트에 적용된다'));
   const fontChipRow = row('uk-chip-row', []);
   const currentFont = data.fontSize || 'md';
   const fontChips = [];
@@ -367,9 +373,6 @@ async function refreshScreenCard(card, head, body) {
   ];
   const glassLabelCol = el('div');
   glassLabelCol.appendChild(el('div', 'uk-toggle-label', '유리 투명도'));
-  glassLabelCol.appendChild(
-    el('div', 'uk-toggle-sub', '두 창과 카드에 함께 적용된다 — 바탕이 복잡하면 불투명 쪽이 읽힌다'),
-  );
   const glassChipRow = row('uk-chip-row', []);
   const currentGlass = data.glassLevel || 'default';
   const glassChips = [];
@@ -387,31 +390,32 @@ async function refreshScreenCard(card, head, body) {
   }
   body.appendChild(row('uk-toggle-row', [glassLabelCol, glassChipRow]));
 
-  // ---- UI 배율 — 기존 Ctrl+=/Ctrl+-/Ctrl+휠(chat.js)과 같은 채널을 버튼으로 노출 ----
+  // ---- UI 배율 — 단축키 없이 이 설정의 버튼으로만 조절한다. ----
   const zoomLabelCol = el('div');
   zoomLabelCol.appendChild(el('div', 'uk-toggle-label', 'UI 배율'));
-  zoomLabelCol.appendChild(el('div', 'uk-toggle-sub', 'Ctrl+= / Ctrl+- / Ctrl+휠과 같은 조작이다'));
   const zoomControls = el('div', 'uk-zoom-controls');
+  zoomControls.setAttribute('role', 'group');
+  zoomControls.setAttribute('aria-label', 'UI 배율');
   const zoomValue = el('span', 'uk-zoom-value uk-mono-faint', `${Math.round(window.athena.getZoomFactor() * 100)}%`);
-  zoomControls.appendChild(button('ghost', '−', { onClick: () => window.athena.send('athena:zoom', { dir: 'out' }) }));
+  zoomValue.setAttribute('role', 'status');
+  zoomValue.setAttribute('aria-live', 'polite');
+  zoomValue.setAttribute('aria-label', '현재 UI 배율');
+  const zoomOutButton = button('ghost', '−', { onClick: () => window.athena.send('athena:zoom', { dir: 'out' }) });
+  zoomOutButton.setAttribute('aria-label', 'UI 배율 축소');
+  zoomControls.appendChild(zoomOutButton);
   zoomControls.appendChild(zoomValue);
-  zoomControls.appendChild(button('ghost', '+', { onClick: () => window.athena.send('athena:zoom', { dir: 'in' }) }));
-  zoomControls.appendChild(button('text', '재설정', { onClick: () => window.athena.send('athena:zoom', { dir: 'reset' }) }));
+  const zoomInButton = button('ghost', '+', { onClick: () => window.athena.send('athena:zoom', { dir: 'in' }) });
+  zoomInButton.setAttribute('aria-label', 'UI 배율 확대');
+  zoomControls.appendChild(zoomInButton);
+  const zoomResetButton = button('text', '재설정', { onClick: () => window.athena.send('athena:zoom', { dir: 'reset' }) });
+  zoomResetButton.setAttribute('aria-label', 'UI 배율 재설정');
+  zoomControls.appendChild(zoomResetButton);
   body.appendChild(row('uk-toggle-row', [zoomLabelCol, zoomControls]));
 
   unsubscribeScreenZoom = window.athena.on('athena:zoom-changed', (payload) => {
     const z = (payload && typeof payload.zoom === 'number') ? payload.zoom : window.athena.getZoomFactor();
     zoomValue.textContent = `${Math.round(z * 100)}%`;
   });
-
-  // ---- 창 배치 — 읽기 전용 안내. 주 경로는 Windows 네이티브 Win+방향키
-  // (main.js WIN_ARROW_DIR가 before-input-event로 직접 처리), Ctrl+Alt+방향키는
-  // 보조 경로이고 같은 의미론이다 — up=최대화 토글(□ 버튼과 동일), down=복원→최소화
-  // (2026-08-18 정정, chat.js 키다운과 짝을 이룬다). ----
-  const placeLabelCol = el('div');
-  placeLabelCol.appendChild(el('div', 'uk-toggle-label', '창 배치'));
-  placeLabelCol.appendChild(el('div', 'uk-toggle-sub', 'Win+←/→/↑/↓ — Windows 창 단축키 그대로 (좌/우 배치 · 최대화 · 최소화) · 보조: Ctrl+Alt+방향키'));
-  body.appendChild(row('uk-toggle-row', [placeLabelCol]));
 
   const a11yWrap = el('div', 'uk-a11y-status');
   a11yWrap.appendChild(el('div', 'uk-field-label', '접근성 — 이 컴퓨터의 OS 설정을 따른다'));
@@ -791,7 +795,6 @@ function openOrderApiSheet(card, account, onDone) {
   let toggleState = !!account.orderApi;
   const toggleLabelCol = el('div');
   toggleLabelCol.appendChild(el('div', 'uk-toggle-label', 'AI가 이 계좌의 주문 API를 호출하도록 허용'));
-  toggleLabelCol.appendChild(el('div', 'uk-toggle-sub', 'OFF일 때는 어떤 주문 요청도 실행되지 않는다'));
   const toggleEl = toggleSwitch(toggleState, async (next) => {
     toggleState = next;
     // Desc 5 "되돌리기": 이미 켜진 상태에서 끄는 것은 즉시·무확인으로 반영한다.
@@ -806,7 +809,7 @@ function openOrderApiSheet(card, account, onDone) {
       } catch { /* 핸들러 부재 — 로컬 토글 표시만 유지 */ }
     }
     renderChecklist();
-  });
+  }, 'AI가 이 계좌의 주문 API를 호출하도록 허용');
   body.appendChild(row('uk-toggle-row', [toggleLabelCol, toggleEl]));
 
   const checklistWrap = el('div', 'uk-checklist');
@@ -1720,7 +1723,7 @@ function readGraphSettings(storage) {
   return normalizeGraphSettings(raw);
 }
 
-function writeGraphSettings(patch, storage) {
+function writeGraphSettingsLocal(patch, storage) {
   const store = storage || (typeof localStorage !== 'undefined' ? localStorage : null);
   const next = normalizeGraphSettings({ ...readGraphSettings(store), ...(patch || {}) });
   if (store) {
@@ -1730,18 +1733,13 @@ function writeGraphSettings(patch, storage) {
       // 저장 실패(용량 초과·사생활 모드)는 화면을 막을 이유가 아니다 — graph-mode-prefs.js와 같은 판단.
     }
   }
-  // WP-D1 — collectChat은 main 프로세스(history-sink.js)가 실제로 저장을
-  // 게이팅하는 유일한 그래프 설정이라, 이 카드가 쓰는 localStorage뿐 아니라
-  // main의 prefs.js에도 미러링한다(기존 athena:settings:prefs:set IPC 재사용).
-  if (patch && typeof patch.collectChat === 'boolean'
-    && typeof window !== 'undefined' && window.athena && window.athena.invoke) {
-    window.athena.invoke('athena:settings:prefs:set', { collectChat: next.collectChat }).catch(() => {
-      // 핸들러 부재/실패 — 로컬 토글 표시만 유지(refreshScreenCard의 setPref와 같은 판단).
-    });
-  }
+  return next;
+}
+
+function writeGraphSettings(patch, storage) {
+  const next = writeGraphSettingsLocal(patch, storage);
   // WP-I I4 — exposeToModel은 main이 prefs 영속 + backend 게이트 POST까지
-  // 한 번에 처리하는 전용 채널로 미러링한다(collectChat의 prefs:set 미러와
-  // 같은 판단, 실패해도 로컬 토글 표시만 유지).
+  // 한 번에 처리하는 전용 채널로 미러링한다. 실패해도 로컬 토글 표시는 유지한다.
   if (patch && typeof patch.exposeToModel === 'boolean'
     && typeof window !== 'undefined' && window.athena && window.athena.invoke) {
     window.athena.invoke('athena:settings:expose-to-model:set', { enabled: next.exposeToModel }).catch(() => {});
@@ -1749,15 +1747,45 @@ function writeGraphSettings(patch, storage) {
   return next;
 }
 
+function collectChatPreferenceErrorMessage(error) {
+  const message = String((error && error.message) || error || '');
+  if (/켜지 못했습니다/.test(message)) {
+    return '대화 이력 수집을 켜지 못했습니다. 개인정보 보호를 위해 OFF로 유지됩니다.';
+  }
+  if (/남은 원문을 삭제하지 못했습니다/.test(message)) {
+    return '대화 이력 수집은 OFF지만 남아 있던 원문을 삭제하지 못했습니다. 저장소 상태를 확인해 주세요.';
+  }
+  return '대화 이력 수집 설정을 변경하지 못했습니다. 개인정보 보호를 위해 OFF로 유지됩니다.';
+}
+
+async function setCollectChatPreference(enabled, storage) {
+  try {
+    if (typeof window === 'undefined' || !window.athena || typeof window.athena.invoke !== 'function') {
+      throw new Error('settings bridge unavailable');
+    }
+    const result = await window.athena.invoke('athena:settings:prefs:set', { collectChat: enabled === true });
+    if (!result || result.collectChat !== (enabled === true)) {
+      throw new Error('collectChat preference was not applied');
+    }
+    return writeGraphSettingsLocal({ collectChat: result.collectChat }, storage);
+  } catch (error) {
+    writeGraphSettingsLocal({ collectChat: false }, storage);
+    if (error instanceof Error && /대화 이력 수집(?:을 켜지 못했습니다|은 OFF로 유지됐지만 남은 원문을 삭제하지 못했습니다)/.test(error.message)) {
+      throw error;
+    }
+    const action = enabled === true ? '켜지' : '변경하지';
+    throw new Error(`대화 이력 수집을 ${action} 못했습니다. 개인정보 보호를 위해 OFF로 유지됩니다.`);
+  }
+}
+
 function updateGraphNavBadge() {
   const item = NAV_ITEMS.find((i) => i.key === 'history');
   if (item && item._badgeEl && item.statusFn) item._badgeEl.textContent = item.statusFn();
 }
 
-function appendGraphSourceToggle(body, current, key, label, sub, note) {
+function appendGraphSourceToggle(body, current, key, label, note) {
   const labelCol = el('div');
   labelCol.appendChild(el('div', 'uk-toggle-label', label));
-  labelCol.appendChild(el('div', 'uk-toggle-sub', sub));
   // note는 선택 — WP-I I4에서 exposeToModel 실효 없음 배지를 걷어낸 뒤로 쓰는
   // 곳이 없지만, 자리는 남겨 둔다(다음 정직성 배지가 같은 자리를 쓴다).
   if (note) {
@@ -1768,19 +1796,16 @@ function appendGraphSourceToggle(body, current, key, label, sub, note) {
   const toggle = toggleSwitch(current[key], (next) => {
     writeGraphSettings({ [key]: next });
     updateGraphNavBadge();
-  });
+  }, label);
   body.appendChild(row('uk-toggle-row', [labelCol, toggle]));
 }
 
-// 보유잔고 행 전용 — 다른 3개(대화·체결내역·모델 노출)와 달리 부제에 조회
-// 주기 선택기가 끼어 있다(Paper 보드 22: "조회 주기 [60분] 수량이 바뀔 때만
-// 기록"). appendGraphSourceToggle로는 표현이 안 돼 따로 뺐다.
+// 보유잔고 행 전용 — 토글 옆에 조회 주기 선택기가 함께 있는 기능 행이다.
 function appendHoldingsToggle(body, current) {
   const labelCol = el('div');
   labelCol.appendChild(el('div', 'uk-toggle-label', '보유잔고'));
-  const sub = el('div', 'uk-toggle-sub uk-holdings-sub');
-  sub.appendChild(el('span', null, '조회 주기'));
   const select = el('select', 'uk-holdings-interval-select');
+  select.setAttribute('aria-label', '보유잔고 조회 주기');
   for (const min of HOLDINGS_INTERVAL_MINUTES) {
     const opt = el('option', null, `${min}분`);
     opt.value = String(min);
@@ -1790,17 +1815,18 @@ function appendHoldingsToggle(body, current) {
   select.addEventListener('change', () => {
     writeGraphSettings({ holdingsIntervalMin: Number(select.value) });
   });
-  sub.appendChild(select);
-  sub.appendChild(el('span', null, '· 수량이 바뀔 때만 기록'));
-  labelCol.appendChild(sub);
   const toggle = toggleSwitch(current.collectHoldings, (next) => {
     writeGraphSettings({ collectHoldings: next });
     updateGraphNavBadge();
-  });
-  body.appendChild(row('uk-toggle-row', [labelCol, toggle]));
+  }, '보유잔고 수집');
+  const controls = el('div', 'uk-holdings-controls');
+  controls.appendChild(el('span', 'uk-holdings-interval-label', '조회 주기'));
+  controls.appendChild(select);
+  controls.appendChild(toggle);
+  body.appendChild(row('uk-toggle-row', [labelCol, controls]));
 }
 
-function refreshHistoryCard(card, head, body) {
+function refreshHistoryCard(card, head, body, initialError = '', collectChatOverride = null) {
   clear(head);
   clear(body);
 
@@ -1813,15 +1839,26 @@ function refreshHistoryCard(card, head, body) {
   head.appendChild(actions);
 
   const current = readGraphSettings();
-  appendGraphSourceToggle(body, current, 'collectChat', '대화', '대화가 끝날 때마다 · LLM 추출');
-  appendGraphSourceToggle(body, current, 'collectFills', '체결내역', '60분마다 · LLM 없이 그대로');
+  if (typeof collectChatOverride === 'boolean') current.collectChat = collectChatOverride;
+  const collectChatLabel = el('div');
+  collectChatLabel.appendChild(el('div', 'uk-toggle-label', '대화'));
+  let collectChatToggle;
+  collectChatToggle = toggleSwitch(current.collectChat, async (enabled) => {
+    collectChatToggle.disabled = true;
+    try {
+      await setCollectChatPreference(enabled);
+      updateGraphNavBadge();
+      collectChatToggle.disabled = false;
+    } catch (error) {
+      refreshHistoryCard(card, head, body, collectChatPreferenceErrorMessage(error), false);
+    }
+  }, '대화');
+  body.appendChild(row('uk-toggle-row', [collectChatLabel, collectChatToggle]));
+  appendGraphSourceToggle(body, current, 'collectFills', '체결내역');
   appendHoldingsToggle(body, current);
-  appendGraphSourceToggle(
-    body, current, 'exposeToModel', '대화 모델에 성향 그래프 열기',
-    '켜면 답변이 사용자를 알고 시작합니다. 보유 종목 수량과 대화 원문이 모델 컨텍스트로 전달됩니다.',
-    // WP-I I4 — 옛 "실효 없음(준비 중)" 배지는 걷어냈다: MCP가 인증 헤더를
-    // 싣고 backend 게이트가 이 토글 값을 실제로 검사하므로 전제가 사라졌다.
-  );
+  // WP-I I4 — 옛 "실효 없음(준비 중)" 배지는 걷어냈다: MCP가 인증 헤더를
+  // 싣고 backend 게이트가 이 토글 값을 실제로 검사하므로 전제가 사라졌다.
+  appendGraphSourceToggle(body, current, 'exposeToModel', '보유 종목·수량과 대화 원문을 모델에 전달');
 
   const dangerNote = el('div', 'uk-settings-note');
   dangerNote.appendChild(el('div', null, '전체 삭제 — 저장된 채팅 이력과 투자 성향 그래프를 모두 지우고 백엔드를 재기동한다. 되돌릴 수 없다.'));
@@ -1829,6 +1866,7 @@ function refreshHistoryCard(card, head, body) {
 
   const resultBox = el('div');
   body.appendChild(resultBox);
+  if (initialError) resultBox.appendChild(errorNote(initialError));
 
   const deleteRow = row('uk-btn-row-end', []);
   const deleteBtn = button('ghost', '전체 삭제', { onClick: () => onDeleteClick() });
@@ -1883,7 +1921,8 @@ function refreshHistoryCard(card, head, body) {
 // UMD 각주(2026-08-18 렌더러 격리) — sanitize.js와 같은 패턴.
 const __exports = {
   renderAccounts, renderMcp, renderScreen, renderModel, renderHistory, renderNav,
-  normalizeGraphSettings, readGraphSettings, writeGraphSettings, GRAPH_SETTINGS_DEFAULTS,
+  normalizeGraphSettings, readGraphSettings, writeGraphSettings, setCollectChatPreference,
+  collectChatPreferenceErrorMessage, GRAPH_SETTINGS_DEFAULTS,
   HOLDINGS_INTERVAL_MINUTES,
 };
 if (typeof module !== 'undefined' && module.exports) {

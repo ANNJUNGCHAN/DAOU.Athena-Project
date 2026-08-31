@@ -43,7 +43,7 @@ const MEASURE = `(() => {
   return {
     card: true,
     renderState: card.dataset.renderState,
-    trId: card.dataset.chartTrId || null,
+    trId: card.__athenaChartTrId || null,
     tabs,
     note: note && !note.hidden ? note.textContent.trim() : '',
     lastPrice: (card.querySelector('.chart-legend-foot') || {}).textContent || null,

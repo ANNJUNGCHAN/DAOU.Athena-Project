@@ -7,6 +7,7 @@ from pathlib import Path
 import pytest
 
 from athena_api.canvas_field_registry import (
+    SEMANTIC_OVERRIDES,
     CanvasFieldRegistryError,
     build_canvas_field_registry,
     get_canvas_field_registry,
@@ -88,7 +89,7 @@ def test_occurrence_id_preserves_ka10173_repeated_wire_paths() -> None:
     assert len({item["occurrence_id"] for item in repeated}) == 4
 
 
-def test_official_semantic_overrides_preserve_values_without_guessing() -> None:
+def test_current_rest_extra_items_remain_source_scoped_and_opaque() -> None:
     by_alias = {
         item["alias"]: item
         for operation in ("base:04", "base:1h")
@@ -96,12 +97,18 @@ def test_official_semantic_overrides_preserve_values_without_guessing() -> None:
         if item["alias"] in {"951", "924", "1279"}
     }
 
-    assert by_alias["951"]["label"] == "예수금"
-    assert by_alias["951"]["semantic_status"] == "official"
-    for alias in ("924", "1279"):
+    for alias in ("951", "924", "1279"):
         assert by_alias[alias]["label"] == f"기타 항목 (FID {alias})"
         assert by_alias[alias]["semantic_status"] == "official_opaque"
         assert by_alias[alias]["json_path"].endswith(f".{alias}")
+        assert by_alias[alias]["provenance"]["semantic_source"] == (
+            "current Kiwoom REST inventory"
+        )
+    assert set(SEMANTIC_OVERRIDES) == {
+        ("base:04", "$.data[].951"),
+        ("base:04", "$.data[].924"),
+        ("base:1h", "$.data[].1279"),
+    }
 
 
 def test_public_operation_contract_is_json_serializable() -> None:

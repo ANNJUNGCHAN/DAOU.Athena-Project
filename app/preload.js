@@ -154,6 +154,7 @@ const ON_CHANNELS = new Set([
   'athena:add-canvas-live',
   'athena:add-rest-canvas',
   'athena:add-rest-receipt',
+  'athena:rest-retry-available',
   'athena:highlight-canvas',
   'athena:prefs-changed',
   'athena:model-changed',
@@ -192,6 +193,9 @@ const ON_CHANNELS = new Set([
   // 채팅 저장 실패 신호(2026-08-19, plan-chat-graph-pipeline.md §2(g)) —
   // history-sink의 POST가 실패하면 main이 {messageId, role}만 보낸다(본문 없음).
   'athena:history-save-failed',
+  // 부팅/1시간 주기 대화 그래프 갱신 완료 — 현재 보이는 요약·지도를 실데이터로
+  // 다시 읽는다. payload에는 본문 없이 revision/개수/trigger만 들어온다.
+  'athena:brain-graph-updated',
   // 오브 접힘/펼침 확정 통보(2026-08-24 리프 1.3.1) — main이 창 크기를 실제로
   // 바꾼 뒤에 보낸다. 렌더러가 먼저 펼치면 창보다 큰 패널이 한 프레임 잘린다.
   'athena:orb-state',

@@ -834,9 +834,11 @@ app.whenReady().then(async () => {
   })`);
   report.bootChatOnly = {
     openWindowCount: initialVisibleWindows.length,
+    preHandoffVisibleWindowCount: initialVisibleWindows.length,
     bootVisibleAtBoot: bootWin.isVisible(),
     shellHiddenAtBoot: !shellWin.isVisible(),
     orbVisibleAtBoot: !!orbWin && orbWin.isVisible(),
+    orbHiddenAtBoot: !!orbWin && !orbWin.isVisible(),
     preHandoffShellOverlay,
   };
   const typingFrameState = await bootWin.webContents.executeJavaScript(`(() => {
@@ -1045,6 +1047,7 @@ app.whenReady().then(async () => {
   const notificationDelivery = mainMod.getStartupFailureNotificationResult();
   dlog('boot done, before shot 02'); const s2 = await shot(shellWin, '02-chat-only-idle.png'); dlog('after shot 02');
   const postHandoffVisibleWindows = BrowserWindow.getAllWindows().filter((win) => win.isVisible());
+  const postHandoffAllWindows = BrowserWindow.getAllWindows();
   const postHandoffShellOverlay = await shellWin.webContents.executeJavaScript(`({
     nativeOverlayAvailable: !!navigator.windowControlsOverlay,
     nativeControlsSelected: document.documentElement.classList.contains('uses-native-window-controls'),
@@ -1086,7 +1089,10 @@ app.whenReady().then(async () => {
   report.bootChatOnly.postHandoff = {
     bootDestroyed: bootWin.isDestroyed(),
     shellVisible: shellWin.isVisible(),
+    orbVisible: !!orbWin && orbWin.isVisible(),
+    orbHidden: !!orbWin && !orbWin.isVisible(),
     visibleWindowCount: postHandoffVisibleWindows.length,
+    allWindowCountBaseline: postHandoffAllWindows.length,
     shellOverlay: postHandoffShellOverlay,
     visibilityAudit: mainMod.getShellHandoffVisibilityAudit(),
   };
@@ -1103,18 +1109,19 @@ app.whenReady().then(async () => {
     '| 모드 배타성:', boot.exactlyOneModeVisible,
     '| 부팅바 이름쓰기:', JSON.stringify(bootBar)
   );
-  assertOk('boot: before handoff only transparent boot renderer and orb are visible',
-    report.bootChatOnly.openWindowCount === 2
+  assertOk('boot: before handoff only the transparent boot renderer is visible; shell and orb stay hidden',
+    report.bootChatOnly.preHandoffVisibleWindowCount === 1
       && report.bootChatOnly.bootVisibleAtBoot === true
       && report.bootChatOnly.shellHiddenAtBoot === true
-      && report.bootChatOnly.orbVisibleAtBoot === true
+      && report.bootChatOnly.orbHiddenAtBoot === true
       && report.bootChatOnly.preHandoffShellOverlay.nativeOverlayAvailable === true
       && report.bootChatOnly.preHandoffShellOverlay.nativeControlsSelected === true
       && report.bootChatOnly.preHandoffShellOverlay.customControlsHidden === true);
-  assertOk('boot: handoff destroys boot and reveals exactly one WCO shell without duplicate visible windows',
+  assertOk('boot: handoff destroys boot and reveals exactly one WCO shell while the orb stays hidden',
     report.bootChatOnly.postHandoff.bootDestroyed === true
       && report.bootChatOnly.postHandoff.shellVisible === true
-      && report.bootChatOnly.postHandoff.visibleWindowCount === 2
+      && report.bootChatOnly.postHandoff.orbHidden === true
+      && report.bootChatOnly.postHandoff.visibleWindowCount === 1
       && report.bootChatOnly.postHandoff.shellOverlay.nativeOverlayAvailable === true
       && report.bootChatOnly.postHandoff.shellOverlay.nativeControlsSelected === true
       && report.bootChatOnly.postHandoff.shellOverlay.customControlsHidden === true
@@ -1170,7 +1177,9 @@ app.whenReady().then(async () => {
   assertOk('boot: material override cannot paint a window surface; only centered logo, ATHENA, caret, and task-label pixels remain',
     transparentFrames.typing.pass === true
       && transparentFrames.waiting.pass === true);
-  assertOk('boot: orb window visible at boot (상시 표시가 사양이다)', report.bootChatOnly.orbVisibleAtBoot === true);
+  assertOk('boot: orb window stays hidden while the boot or shell window is visible',
+    report.bootChatOnly.orbHiddenAtBoot === true
+    && report.bootChatOnly.postHandoff.orbHidden === true);
   assertOk('boot: chat reached a mode after boot sequence', report.bootChatOnly.chatBootedAfterBoot === true);
   assertOk('boot: exactly one mode panel visible (no overlap)', report.bootChatOnly.exactlyOneModeVisible === true);
   assertOk('boot: C1 overtyped full ATHENA then expanded into Page 1 shell', report.bootChatOnly.bootBarWritesName === true);
@@ -1493,17 +1502,22 @@ app.whenReady().then(async () => {
   assertOk('regionContract: chat region never shrinks when the window narrows', report.regionContract.chatNeverShrinks === true);
   assertOk('regionContract: canvas region absorbs the shrink', report.regionContract.canvasAbsorbsShrink === true);
 
-  // ---------- 검증 3b: Paper 53 실제 반응형/Snap 표면 ----------
+  // ---------- 검증 3b: 현재 Paper 50 실제 반응형/Snap 표면 ----------
   const responsiveProbe = () => shellWin.webContents.executeJavaScript(`(() => {
     const shell = document.getElementById('shell');
     const historyRegion = document.getElementById('historyRegion');
     const canvasRegion = document.getElementById('canvasRegion');
     const chatRegion = document.getElementById('chatRegion');
+    const history = document.getElementById('history');
+    const inputStack = document.getElementById('inputStack');
     const input = document.getElementById('input');
     const modeLabels = Array.from(document.querySelectorAll('.sidebar-mode-item-label'));
     const compactToggle = document.getElementById('sidebarCompactToggle');
     const sidebarList = document.getElementById('sidebarList');
-    const rect = (node) => { const r = node.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: r.height, bottom: r.bottom }; };
+    const rect = (node) => { const r = node.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: r.height, right: r.right, bottom: r.bottom }; };
+    const conversation = rect(history);
+    const responsiveTurn = document.getElementById('verifyResponsiveTurn');
+    const responsiveTurnRect = responsiveTurn ? rect(responsiveTurn) : null;
     return {
       viewport: { width: innerWidth, height: innerHeight },
       shellDisplay: getComputedStyle(shell).display,
@@ -1511,7 +1525,22 @@ app.whenReady().then(async () => {
       history: rect(historyRegion),
       canvas: rect(canvasRegion),
       chat: rect(chatRegion),
+      conversation,
+      inputStack: rect(inputStack),
       input: rect(input),
+      conversationDisplay: getComputedStyle(history).display,
+      conversationOverflowY: getComputedStyle(history).overflowY,
+      conversationChildCount: history.childElementCount,
+      responsiveTurn: responsiveTurnRect,
+      responsiveTurnVisible: !!responsiveTurn
+        && getComputedStyle(responsiveTurn).display !== 'none'
+        && responsiveTurnRect.bottom > conversation.y
+        && responsiveTurnRect.y < conversation.bottom
+        && responsiveTurnRect.right > conversation.x
+        && responsiveTurnRect.x < conversation.right,
+      conversationRole: history.getAttribute('role'),
+      conversationLabel: history.getAttribute('aria-label'),
+      conversationTabIndex: history.tabIndex,
       labelsHidden: modeLabels.every((node) => getComputedStyle(node).display === 'none'),
       compactToggleDisplay: getComputedStyle(compactToggle).display,
       compactExpanded: compactToggle.getAttribute('aria-expanded'),
@@ -1519,44 +1548,387 @@ app.whenReady().then(async () => {
       sameInputNode: document.querySelectorAll('#input').length === 1,
     };
   })()`);
+  const responsiveSettle = () => shellWin.webContents.executeJavaScript(
+    'new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))'
+  );
+  const setResponsiveWidth = async (origin, requestedViewportWidth) => {
+    let requestedOuterWidth = Math.max(330, requestedViewportWidth);
+    let actualOuterWidth = shellWin.getBounds().width;
+    let actualInnerWidth = await shellWin.webContents.executeJavaScript('innerWidth');
+    for (let attempt = 0; attempt < 4; attempt += 1) {
+      shellWin.setBounds({
+        ...origin,
+        width: Math.round(requestedOuterWidth),
+        height: Math.max(620, origin.height),
+      });
+      mainMod.noteAppBounds(shellWin);
+      await responsiveSettle();
+      actualOuterWidth = shellWin.getBounds().width;
+      actualInnerWidth = await shellWin.webContents.executeJavaScript('innerWidth');
+      if (actualInnerWidth === requestedViewportWidth) break;
+      requestedOuterWidth = actualOuterWidth + requestedViewportWidth - actualInnerWidth;
+    }
+    return { requestedViewportWidth, actualOuterWidth, actualInnerWidth };
+  };
+  const responsiveAttachmentProbe = async (origin, requestedViewportWidth) => {
+    const viewport = await setResponsiveWidth(origin, requestedViewportWidth);
+    const paths = [
+      'C:\\verify-fixtures\\responsive-attachments\\a-very-long-folder-name\\quarterly-market-analysis-with-a-long-name.pdf',
+      'C:\\verify-fixtures\\responsive-attachments\\another-very-long-folder-name\\portfolio-risk-notes-with-a-long-name.txt',
+    ];
+    const layout = await shellWin.webContents.executeJavaScript(`new Promise((resolve) => {
+      document.getElementById('verifyResponsiveTurn')?.remove();
+      attachments = ${JSON.stringify(paths.map((attachmentPath) => ({ path: attachmentPath, isDir: false })))};
+      renderAttachChips();
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        const chat = document.getElementById('chatRegion');
+        const stack = document.getElementById('inputStack');
+        const container = document.getElementById('attachChips');
+        const inputRow = stack.querySelector('.input-row');
+        const input = document.getElementById('input');
+        const chips = Array.from(container.querySelectorAll('.attach-chip'));
+        const removeButtons = Array.from(container.querySelectorAll('.attach-chip-rm'));
+        const rect = (node) => {
+          const r = node.getBoundingClientRect();
+          return { x: r.x, y: r.y, width: r.width, height: r.height, right: r.right, bottom: r.bottom };
+        };
+        const withinViewport = (node) => {
+          const r = node.getBoundingClientRect();
+          return r.width > 0 && r.height > 0 && r.left >= 0 && r.top >= 0
+            && r.right <= innerWidth && r.bottom <= innerHeight;
+        };
+        const centerHit = (node) => {
+          const r = node.getBoundingClientRect();
+          const hit = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+          return !!hit && node.contains(hit);
+        };
+        input.focus();
+        const chatRect = rect(chat);
+        const inputRowRect = rect(inputRow);
+        resolve({
+          requestedViewportWidth: ${requestedViewportWidth},
+          actualInnerWidth: innerWidth,
+          historyChildCount: document.getElementById('history').childElementCount,
+          attachmentCount: attachments.length,
+          stack: rect(stack),
+          chat: chatRect,
+          container: rect(container),
+          chips: chips.map(rect),
+          removeButtons: removeButtons.map(rect),
+          inputRow: inputRowRect,
+          input: rect(input),
+          withinViewport: {
+            stack: withinViewport(stack),
+            container: withinViewport(container),
+            chips: chips.every(withinViewport),
+            removeButtons: removeButtons.every(withinViewport),
+            inputRow: withinViewport(inputRow),
+            input: withinViewport(input),
+          },
+          centerHit: {
+            stack: centerHit(stack),
+            container: centerHit(container),
+            chips: chips.every(centerHit),
+            removeButtons: removeButtons.every(centerHit),
+            inputRow: centerHit(inputRow),
+            input: centerHit(input),
+          },
+          removeAccessibility: removeButtons.map((button) => ({
+            tagName: button.tagName,
+            type: button.type,
+            ariaLabel: button.getAttribute('aria-label'),
+            tabIndex: button.tabIndex,
+            disabled: button.disabled,
+          })),
+          inputFocused: document.activeElement === input,
+          inputRowBottomAligned: Math.abs(inputRowRect.bottom - chatRect.bottom) <= 1,
+        });
+      }));
+    })`);
+    let captureName = null;
+    if (requestedViewportWidth === 500) {
+      captureName = '03d-responsive-500-attachments.png';
+      await shot(shellWin, captureName);
+    }
+    const removal = await shellWin.webContents.executeJavaScript(`new Promise((resolve) => {
+      document.querySelector('#attachChips .attach-chip-rm')?.click();
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        const afterFirstRemove = attachments.length;
+        attachments = [];
+        renderAttachChips();
+        resolve({
+          afterFirstRemove,
+          afterReset: attachments.length,
+          containerHiddenAfterReset: document.getElementById('attachChips').hidden,
+        });
+      }));
+    })`);
+    return { ...layout, ...viewport, captureName, removal };
+  };
+  const resetResponsivePopoverCase = (populated) => shellWin.webContents.executeJavaScript(`new Promise((resolve) => {
+    closeKiumiMenu();
+    closeModelPopover();
+    document.getElementById('verifyResponsiveTurn')?.remove();
+    if (${populated}) {
+      const history = document.getElementById('history');
+      const turn = document.createElement('article');
+      turn.id = 'verifyResponsiveTurn';
+      turn.className = 'turn';
+      const question = document.createElement('div');
+      question.className = 'turn-q';
+      question.textContent = '반폭 팝오버 검증 질문';
+      const answer = document.createElement('div');
+      answer.className = 'turn-a';
+      answer.textContent = '반폭 팝오버 검증 답변';
+      turn.append(question, answer);
+      history.appendChild(turn);
+      history.scrollTop = history.scrollHeight;
+    }
+    requestAnimationFrame(() => requestAnimationFrame(resolve));
+  })`);
+  const responsivePopoverProbe = async (origin, requestedViewportWidth, populated, id) => {
+    const viewport = await setResponsiveWidth(origin, requestedViewportWidth);
+    await resetResponsivePopoverCase(populated);
+    if (id === 'kiumiMenu') {
+      await shellWin.webContents.executeJavaScript(`document.getElementById('dot').click()`);
+    } else {
+      await shellWin.webContents.executeJavaScript(`(() => {
+        document.getElementById('dot').click();
+        Array.from(document.querySelectorAll('#kiumiMenu .km-item'))
+          .find((node) => node.querySelector('.km-title')?.textContent === '모델 설정')?.click();
+      })()`);
+      await waitUntil(
+        () => shellWin.webContents.executeJavaScript(`document.getElementById('modelPopover').hidden === false`),
+        { timeoutMs: 1500, intervalMs: 25 },
+      );
+    }
+    await responsiveSettle();
+    const probe = await shellWin.webContents.executeJavaScript(`(() => {
+      const menu = document.getElementById(${JSON.stringify(id)});
+      const menuRect = menu.getBoundingClientRect();
+      const rect = (node) => {
+        const r = node.getBoundingClientRect();
+        return { x: r.x, y: r.y, width: r.width, height: r.height, right: r.right, bottom: r.bottom };
+      };
+      const withinViewport = (node) => {
+        const r = node.getBoundingClientRect();
+        return r.width > 0 && r.height > 0 && r.left >= 0 && r.top >= 0
+          && r.right <= innerWidth && r.bottom <= innerHeight;
+      };
+      const hitInside = (node, x, y) => {
+        const hit = document.elementFromPoint(x, y);
+        return !!hit && node.contains(hit);
+      };
+      const corners = {
+        topLeft: hitInside(menu, menuRect.left + 12, menuRect.top + 12),
+        topRight: hitInside(menu, menuRect.right - 12, menuRect.top + 12),
+        bottomLeft: hitInside(menu, menuRect.left + 12, menuRect.bottom - 12),
+        bottomRight: hitInside(menu, menuRect.right - 12, menuRect.bottom - 12),
+      };
+      const buttons = Array.from(menu.querySelectorAll('button')).filter((button) => {
+        const r = button.getBoundingClientRect();
+        return getComputedStyle(button).display !== 'none' && getComputedStyle(button).visibility !== 'hidden'
+          && r.width > 0 && r.height > 0;
+      });
+      const buttonResults = buttons.map((button) => {
+        const buttonRect = button.getBoundingClientRect();
+        return {
+          label: button.querySelector('.km-title')?.textContent.trim() || button.textContent.trim(),
+          rect: rect(button),
+          withinViewport: withinViewport(button),
+          centerHit: hitInside(button, buttonRect.left + buttonRect.width / 2, buttonRect.top + buttonRect.height / 2),
+        };
+      });
+      const requiredLabelCounts = ${JSON.stringify({
+        kiumiMenu: { '파일 첨부': 1, '폴더 첨부': 1, '모델 설정': 1 },
+        modelPopover: {
+          기본: 2,
+          fable: 1,
+          opus: 1,
+          sonnet: 1,
+          haiku: 1,
+          low: 1,
+          medium: 1,
+          high: 1,
+          xhigh: 1,
+          max: 1,
+        },
+      })}[${JSON.stringify(id)}];
+      const requiredItems = Object.entries(requiredLabelCounts).map(([label, expectedCount]) => {
+        const matches = buttonResults.filter((button) => button.label === label);
+        return {
+          label,
+          expectedCount,
+          actualCount: matches.length,
+          withinViewport: matches.length === expectedCount && matches.every((button) => button.withinViewport),
+          centerHit: matches.length === expectedCount && matches.every((button) => button.centerHit),
+        };
+      });
+      return {
+        requestedViewportWidth: ${requestedViewportWidth},
+        actualInnerWidth: innerWidth,
+        populated: ${populated},
+        id: ${JSON.stringify(id)},
+        historyChildCount: document.getElementById('history').childElementCount,
+        visible: !menu.hidden && getComputedStyle(menu).display !== 'none' && menuRect.width > 0 && menuRect.height > 0,
+        menu: rect(menu),
+        menuWithinViewport: withinViewport(menu),
+        corners,
+        buttons: buttonResults,
+        requiredItems,
+      };
+    })()`);
+    await shellWin.webContents.executeJavaScript(`closeKiumiMenu(); closeModelPopover()`);
+    await responsiveSettle();
+    return { ...probe, ...viewport };
+  };
   const responsiveOrigin = shellWin.getBounds();
-  shellWin.setBounds({ ...responsiveOrigin, width: 900, height: Math.max(620, responsiveOrigin.height) });
-  mainMod.noteAppBounds(shellWin);
-  await wait(220);
-  const twoPane = await responsiveProbe();
-  await shot(shellWin, '03d-responsive-900-two-pane.png');
+  const attachmentMatrix = [];
+  const popoverMatrix = [];
+  let responsiveMatrixError = null;
+  try {
+    for (const requestedViewportWidth of [330, 500, 699, 700, 900, 1279]) {
+      attachmentMatrix.push(await responsiveAttachmentProbe(responsiveOrigin, requestedViewportWidth));
+    }
+    for (const requestedViewportWidth of [330, 699, 700, 1279]) {
+      for (const populated of [false, true]) {
+        for (const id of ['kiumiMenu', 'modelPopover']) {
+          popoverMatrix.push(await responsivePopoverProbe(responsiveOrigin, requestedViewportWidth, populated, id));
+        }
+      }
+    }
+    await setResponsiveWidth(responsiveOrigin, 900);
+    await resetResponsivePopoverCase(false);
+    const historyEmptyBeforeSeed = await shellWin.webContents.executeJavaScript(`document.getElementById('history').childElementCount === 0`);
+    await shellWin.webContents.executeJavaScript(`(() => {
+      const history = document.getElementById('history');
+      const turn = document.createElement('article');
+      turn.id = 'verifyResponsiveTurn';
+      turn.className = 'turn';
+      turn.innerHTML = '<div class="turn-q">삼성전자 흐름을 짧게 알려줘</div><div class="turn-a">최근 질문에 대한 답변이 반폭에서도 입력창 위에 이어집니다.</div>';
+      history.appendChild(turn);
+      history.scrollTop = history.scrollHeight;
+    })()`);
+    await wait(120);
+    const twoPane = await responsiveProbe();
+    await shot(shellWin, '03d-responsive-900-chat-tray.png');
 
-  shellWin.setBounds({ ...shellWin.getBounds(), width: 500 });
-  mainMod.noteAppBounds(shellWin);
-  await wait(220);
-  const compact = await responsiveProbe();
-  await shellWin.webContents.executeJavaScript(`document.getElementById('sidebarCompactToggle').click()`);
-  await wait(120);
-  const compactOverlay = await responsiveProbe();
-  await shot(shellWin, '03e-responsive-500-rail-overlay.png');
-  await shellWin.webContents.executeJavaScript(`document.getElementById('sidebarCompactToggle').click()`);
+    await setResponsiveWidth(responsiveOrigin, 500);
+    const compact = await responsiveProbe();
+    await shellWin.webContents.executeJavaScript(`document.getElementById('sidebarCompactToggle').click()`);
+    await wait(120);
+    const compactOverlay = await responsiveProbe();
+    await shot(shellWin, '03e-responsive-500-rail-overlay.png');
+    await shellWin.webContents.executeJavaScript(`document.getElementById('sidebarCompactToggle').click()`);
 
-  shellWin.setBounds(responsiveOrigin);
-  mainMod.noteAppBounds(shellWin);
-  await wait(220);
-  report.responsiveShell = { twoPane, compact, compactOverlay };
-  console.log('[verify] 검증3b(Paper 53 반응형/Snap):', JSON.stringify(report.responsiveShell));
-  assertOk('responsiveShell: 900px uses 268px sidebar + canvas + 54px bottom composer',
-    twoPane.shellDisplay === 'grid'
-    && near(twoPane.history.width, 268, 2)
-    && near(twoPane.chat.height, 54, 2)
-    && twoPane.chat.y >= twoPane.canvas.bottom - 1
-    && twoPane.input.width > 0);
-  assertOk('responsiveShell: 500px uses 44px rail and keeps the same mounted input',
-    compact.shellDisplay === 'grid'
-    && near(compact.history.width, 44, 2)
-    && compact.labelsHidden === true
-    && compact.sameInputNode === true
-    && compact.input.width > 0);
-  assertOk('responsiveShell: compact project/recent overlay is reachable from the rail',
-    compact.compactToggleDisplay === 'flex'
-    && compactOverlay.compactExpanded === 'true'
-    && compactOverlay.sidebarListDisplay === 'flex');
+    report.responsiveShell = {
+      twoPane,
+      compact,
+      compactOverlay,
+      attachments: attachmentMatrix,
+      popovers: { historyEmptyBeforeSeed, matrix: popoverMatrix },
+    };
+    console.log('[verify] 검증3b(현재 Paper 50 반응형/Snap):', JSON.stringify(report.responsiveShell));
+    assertOk('responsiveShell: 900px keeps the authoritative conversation above the composer',
+      twoPane.shellDisplay === 'grid'
+      && near(twoPane.history.width, 268, 2)
+      && twoPane.chat.height >= 196
+      && twoPane.chat.height <= 248
+      && twoPane.chat.y >= twoPane.canvas.bottom - 1
+      && twoPane.canvas.height > 0
+      && twoPane.conversationDisplay === 'flex'
+      && twoPane.conversationOverflowY === 'auto'
+      && twoPane.conversation.height > 80
+      && twoPane.responsiveTurnVisible === true
+      && near(twoPane.inputStack.y, twoPane.conversation.bottom, 2)
+      && twoPane.inputStack.bottom <= twoPane.chat.bottom + 1
+      && twoPane.input.width > 0
+      && twoPane.conversationRole === 'log'
+      && twoPane.conversationLabel === '현재 대화'
+      && twoPane.conversationTabIndex === 0);
+    assertOk('responsiveShell: 500px uses 44px rail and keeps the same mounted input',
+      compact.shellDisplay === 'grid'
+      && near(compact.history.width, 44, 2)
+      && compact.labelsHidden === true
+      && compact.sameInputNode === true
+      && compact.responsiveTurnVisible === true
+      && compact.conversationDisplay === 'flex'
+      && compact.conversation.height > 80
+      && compact.canvas.height > 0
+      && near(compact.inputStack.y, compact.conversation.bottom, 2)
+      && compact.inputStack.bottom <= compact.chat.bottom + 1
+      && compact.input.width > 0);
+    assertOk('responsiveShell: empty-history attachment chips stay reachable at responsive boundaries',
+      attachmentMatrix.length === 6
+      && attachmentMatrix.every((item) => item.actualInnerWidth === item.requestedViewportWidth
+        && item.historyChildCount === 0
+        && item.attachmentCount === 2
+        && item.stack.height > 54
+        && item.chips.length === 2
+        && item.removeButtons.length === 2
+        && Object.values(item.withinViewport).every(Boolean)
+        && Object.values(item.centerHit).every(Boolean)
+        && item.removeAccessibility.every((button) => button.tagName === 'BUTTON'
+          && button.type === 'button'
+          && button.ariaLabel === '첨부 제거'
+          && button.tabIndex >= 0
+          && button.disabled === false)
+        && item.inputFocused === true
+        && item.inputRowBottomAligned === true
+        && item.removal.afterFirstRemove === 1
+        && item.removal.afterReset === 0
+        && item.removal.containerHiddenAfterReset === true)
+      && attachmentMatrix.some((item) => item.captureName === '03d-responsive-500-attachments.png'));
+    assertOk('responsiveShell: composer popovers pass viewport and hit tests at 330/699/700/1279 boundaries',
+      historyEmptyBeforeSeed === true
+      && popoverMatrix.length === 16
+      && popoverMatrix.every((item) => item.actualInnerWidth === item.requestedViewportWidth
+        && item.visible === true
+        && item.menuWithinViewport === true
+        && item.historyChildCount === (item.populated ? 1 : 0)
+        && Object.values(item.corners).every(Boolean)
+        && item.buttons.length > 0
+        && item.buttons.every((button) => button.withinViewport === true && button.centerHit === true)
+        && item.requiredItems.every((required) => required.actualCount === required.expectedCount
+          && required.withinViewport === true
+          && required.centerHit === true)));
+    assertOk('responsiveShell: compact project/recent overlay is reachable from the rail',
+      compact.compactToggleDisplay === 'flex'
+      && compactOverlay.compactExpanded === 'true'
+      && compactOverlay.sidebarListDisplay === 'flex');
+  } catch (err) {
+    responsiveMatrixError = err;
+    throw err;
+  } finally {
+    const cleanupErrors = [];
+    try {
+      await shellWin.webContents.executeJavaScript(`(() => {
+        attachments = [];
+        renderAttachChips();
+        closeKiumiMenu();
+        closeModelPopover();
+        document.getElementById('verifyResponsiveTurn')?.remove();
+        const compactToggle = document.getElementById('sidebarCompactToggle');
+        if (compactToggle?.getAttribute('aria-expanded') === 'true') compactToggle.click();
+      })()`);
+    } catch (err) {
+      cleanupErrors.push(err);
+    }
+    try {
+      shellWin.setBounds(responsiveOrigin);
+      mainMod.noteAppBounds(shellWin);
+      await responsiveSettle();
+    } catch (err) {
+      cleanupErrors.push(err);
+    }
+    if (cleanupErrors.length) {
+      if (responsiveMatrixError) {
+        dlog(`responsive cleanup after error: ${cleanupErrors.map((err) => err && err.stack || err).join(' | ')}`);
+      } else {
+        throw cleanupErrors[0];
+      }
+    }
+  }
 
   // ---------- 검증 3c: Paper 25/26/47/48 플러그인 네 번째 모드 ----------
   await shellWin.webContents.executeJavaScript(`document.getElementById('modeNavPlugin').click()`);
@@ -2844,14 +3216,17 @@ app.whenReady().then(async () => {
       execDisabled: execBtn ? execBtn.disabled : null,
     };
   })()`);
-  report.orderTicket.windowCount = BrowserWindow.getAllWindows().length;
+  report.orderTicket.allWindowCount = BrowserWindow.getAllWindows().length;
+  report.orderTicket.visibleWindowCount = BrowserWindow.getAllWindows().filter((win) => win.isVisible()).length;
+  report.orderTicket.handoffAllWindowCountBaseline = report.bootChatOnly.postHandoff.allWindowCountBaseline;
   console.log('[verify] 검증17(주문 티켓):', JSON.stringify(report.orderTicket));
   assertOk('orderTicket: 모드 전이(#order 표시·#app 후퇴)',
     report.orderTicket.orderVisible === true && report.orderTicket.appHidden === true);
-  // 주문 확인도 새 창이 아니라 모드다 — 부팅 시점 창 수와 같아야 한다(기대값을
-  // 상수로 박지 않는다: 오브 창(1.3.1)이 붙어 기준선이 2가 돼도 이 단언은 그대로 산다).
-  assertOk('orderTicket: 창 수가 부팅 시점과 같다(새 창 없음)',
-    report.orderTicket.windowCount === report.bootChatOnly.openWindowCount);
+  // 주문 확인도 새 창이 아니라 모드다. handoff 직후 살아 있던 전체 BrowserWindow
+  // 수를 baseline으로 삼는다 — 가시 창 수와 전체 창 수를 섞으면 hidden orb 때문에
+  // 실제로 새 창이 없어도 실패한다.
+  assertOk('orderTicket: handoff 이후 전체 BrowserWindow 수가 그대로다(새 창 없음)',
+    report.orderTicket.allWindowCount === report.orderTicket.handoffAllWindowCountBaseline);
   assertOk('orderTicket: 발화 시점 라벨(시점 정직성)', report.orderTicket.firedAtLabel === true);
   assertOk('orderTicket: 게이트 잠금(주문 API 부재 시 실행 비활성)', report.orderTicket.execDisabled === true);
   await shellWin.webContents.executeJavaScript(
@@ -3150,6 +3525,29 @@ app.whenReady().then(async () => {
   //  (b) 펼침의 정직성 계약 — 발화 배지 · 방식 표기 · 소스 라벨 · 시점 고지
   //  (c) **없어야 하는 것** — 실행 버튼 0 · 입력창 0(확정 결정 3 · 단일 입력 원칙)
   // 그리고 왕복 불변: 펼쳤다 접으면 오브가 원래 자리로 돌아온다.
+  const orbWasVisibleBeforeVisualVerification = orbWin.isVisible();
+  report.orbVisualVisibility = {
+    originalVisible: orbWasVisibleBeforeVisualVerification,
+    shownInactiveForVerification: false,
+    visibleAfterPaintSettle: false,
+    restoredOriginalVisibility: false,
+  };
+  let orbVisualPrimaryError = null;
+  try {
+    if (!orbWasVisibleBeforeVisualVerification) {
+      orbWin.showInactive();
+      report.orbVisualVisibility.shownInactiveForVerification = true;
+    }
+    const orbBecameVisible = await waitUntil(() => orbWin.isVisible(), { timeoutMs: 1500, intervalMs: 25 });
+    if (!orbBecameVisible) throw new Error('검증22 오브가 시각 검증 전에 표시되지 않았다');
+    const orbPaintSettled = await orbWin.webContents.executeJavaScript(
+      'new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve(true))))'
+    );
+    report.orbVisualVisibility.visibleAfterPaintSettle = orbWin.isVisible() && orbPaintSettled === true;
+    if (!report.orbVisualVisibility.visibleAfterPaintSettle) {
+      throw new Error('검증22 오브가 표시·paint settle 상태에 도달하지 않았다');
+    }
+
   const orbCollapsedBefore = orbWin.getBounds();
 
   // 22-A — **알림 0건: 오브에 색이 없다.** 리프 1.3.2의 핵심 계약이다.
@@ -3414,6 +3812,35 @@ app.whenReady().then(async () => {
   assertOk('orbMoreToShell: 대표 카드가 중앙 캔버스에 실제로 그려진다', report.orbMoreToShell.cardRendered === true);
   assertOk('orbMoreToShell: 시점 고지가 카드까지 따라온다', report.orbMoreToShell.captionStatesFireTime === true);
   assertOk('orbMoreToShell: 카드에 실행 어포던스가 없다(확정 결정 3)', report.orbMoreToShell.noExecAffordanceOnCard === true);
+  } catch (err) {
+    orbVisualPrimaryError = err;
+    throw err;
+  } finally {
+    const orbVisualCleanupErrors = [];
+    try {
+      if (!orbWasVisibleBeforeVisualVerification && !orbWin.isDestroyed() && orbWin.isVisible()) {
+        orbWin.hide();
+      }
+    } catch (err) {
+      orbVisualCleanupErrors.push(err);
+    }
+    try {
+      report.orbVisualVisibility.restoredOriginalVisibility = !orbWin.isDestroyed()
+        && orbWin.isVisible() === orbWasVisibleBeforeVisualVerification;
+    } catch (err) {
+      orbVisualCleanupErrors.push(err);
+    }
+    if (orbVisualCleanupErrors.length) {
+      if (orbVisualPrimaryError) {
+        dlog(`orb visual cleanup after primary error: ${orbVisualCleanupErrors.map((err) => err && err.stack || err).join(' | ')}`);
+      } else {
+        throw orbVisualCleanupErrors[0];
+      }
+    }
+  }
+  assertOk('orbVisualVisibility: hidden-policy orb is shown only for visual checks and restored afterward',
+    report.orbVisualVisibility.visibleAfterPaintSettle === true
+    && report.orbVisualVisibility.restoredOriginalVisibility === true);
 
   // ---------- 검증 18: 캡처 신뢰성 — 연속 캡처 중복 감지 (2026-08-19 QA 결함 #2 재발 방지,
   // 디자인 갈래에서는 검증17이었다 — 병합 시 능동 턴 검증17과 번호가 겹쳐 18로 재부여) ----------

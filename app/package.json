@@ -10,6 +10,7 @@
     "verify": "electron verify.js",
     "verify:hoga-live": "electron verify-hoga-live.js",
     "verify:integrated-cards": "electron verify-integrated-cards.js",
+    "verify:semantic-workspaces": "electron verify-semantic-workspaces.js",
     "verify:settings": "electron verify-settings.js",
     "verify:settings-cards": "electron verify-settings-cards.js",
     "verify:life003": "node verify-life003.js",

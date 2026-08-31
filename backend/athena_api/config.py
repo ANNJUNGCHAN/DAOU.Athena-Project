@@ -6,7 +6,7 @@ import re
 from enum import StrEnum
 from functools import lru_cache
 from pathlib import Path
-from typing import Self
+from typing import Literal, Self
 
 from pydantic import BaseModel, ConfigDict, Field, SecretStr, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -135,13 +135,19 @@ class Settings(BaseSettings):
         default_factory=lambda: Path.home() / ".athena" / "routines" / "nudge_guard.json"
     )
     # Explicit argv for the local structured-extraction command (e.g. a local claude CLI
-    # invocation). Empty means extraction is disabled -- IngestionCoordinator still
-    # projects raw SourceRecords, it just never derives Entity/Claim/Relation from them.
-    # No implicit discovery: this is the only way extraction turns on (ADR §4, gap b).
+    # invocation). Empty delegates to the explicit Claude opt-in below; with both unset,
+    # IngestionCoordinator still projects raw SourceRecords but derives no graph facts.
+    # Custom argv has highest priority. The Claude CLI path below is a separate explicit
+    # opt-in; neither setting causes implicit executable discovery or probing by default.
     brain_extraction_llm_argv: list[str] = []
+    brain_use_claude_cli_extraction: bool = False
     # Hourly self-enqueue period for IngestionCoordinator (ADR §9 gate G005). Manual runs
     # still go through the existing enqueue(JobTrigger.MANUAL) path unaffected by this.
     brain_ingest_interval_minutes: int = 60
+    # Exactly one process owns the periodic ingestion schedule. Standalone backend
+    # deployments keep the historical self-timer; Electron-spawned backends explicitly
+    # delegate the one-hour cadence to the app process.
+    brain_ingest_schedule_owner: Literal["backend", "external"] = "backend"
 
     @field_validator("brain_extraction_llm_argv", mode="before")
     @classmethod

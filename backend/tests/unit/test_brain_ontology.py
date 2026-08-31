@@ -259,6 +259,28 @@ def test_source_record_round_trips() -> None:
     assert source.locator is None
 
 
+def test_only_raw_chat_sources_use_the_larger_text_bound() -> None:
+    raw_chat = SourceRecord(
+        id="chat:long",
+        kind=SourceKind.CHAT_MESSAGE,
+        text="가" * 20_000,
+        fingerprint="fp-long-chat",
+        occurred_at=NOW,
+        ingested_at=NOW,
+    )
+    assert len(raw_chat.text) == 20_000
+
+    with pytest.raises(ValidationError, match="non-chat source text must not exceed 10000"):
+        SourceRecord(
+            id="conversation:long",
+            kind=SourceKind.CONVERSATION,
+            text="가" * 10_001,
+            fingerprint="fp-long-conversation",
+            occurred_at=NOW,
+            ingested_at=NOW,
+        )
+
+
 def test_normalize_identity_folds_case_width_and_space() -> None:
     assert normalize_identity("  Samsung   Electronics ") == "samsung electronics"
     # NFKC — 전각이 반각으로 접힌다.

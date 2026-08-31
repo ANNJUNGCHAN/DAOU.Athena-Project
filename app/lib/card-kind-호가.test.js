@@ -19,8 +19,8 @@ const {
 } = require('./card-kind-호가');
 
 test('supportsLive0D — 정규장 0D 카드만 Canvas 구독을 허용한다', () => {
-  assert.equal(supportsLive0D({ dataset: { liveSource: '0D' } }), true);
-  assert.equal(supportsLive0D({ dataset: { liveSource: '' } }), false);
+  assert.equal(supportsLive0D({ __athenaOrderbookState: { liveSource: '0D' } }), true);
+  assert.equal(supportsLive0D({ __athenaOrderbookState: { liveSource: null } }), false);
   assert.equal(supportsLive0D(null), false);
 });
 

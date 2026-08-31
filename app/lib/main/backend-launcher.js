@@ -11,6 +11,7 @@ const HEALTH_PORT = 8010;
 const HEALTH_URL = `http://${HEALTH_HOST}:${HEALTH_PORT}/api/v1/llm/manifest`;
 const HEALTH_TIMEOUT_MS = 1500;
 const STARTUP_POLL_TIMEOUT_MS = 12_000;
+const STARTUP_HARD_TIMEOUT_MS = 60_000;
 const STARTUP_POLL_INTERVAL_MS = 500;
 const UVICORN_ARGS = [
   '-m', 'uvicorn', 'athena_api.main:app',
@@ -31,6 +32,21 @@ function buildBackendEnv(baseEnv = process.env) {
   }
   if (!Object.prototype.hasOwnProperty.call(baseEnv, 'ATHENA_ROUTINES_ENABLED')) {
     env.ATHENA_ROUTINES_ENABLED = 'true';
+  }
+  if (!Object.prototype.hasOwnProperty.call(baseEnv, 'ATHENA_BRAIN_INGEST_SCHEDULE_OWNER')) {
+    env.ATHENA_BRAIN_INGEST_SCHEDULE_OWNER = 'external';
+  }
+  const hasExtractionArgv = Object.prototype.hasOwnProperty.call(
+    baseEnv, 'ATHENA_BRAIN_EXTRACTION_LLM_ARGV',
+  );
+  const hasClaudeExtractionOverride = Object.prototype.hasOwnProperty.call(
+    baseEnv, 'ATHENA_BRAIN_USE_CLAUDE_CLI_EXTRACTION',
+  );
+  if (!hasExtractionArgv && !hasClaudeExtractionOverride) {
+    // 제품 앱이 직접 띄운 backend는 대화 기반 그래프를 실제로 구성해야 한다.
+    // 외부에서 띄운 backend의 환경은 건드릴 수 없으므로 brain status gate가
+    // extraction_enabled=false를 정직한 degraded 원인으로 보고한다.
+    env.ATHENA_BRAIN_USE_CLAUDE_CLI_EXTRACTION = 'true';
   }
   return env;
 }
@@ -73,17 +89,108 @@ async function waitUntilHealthy(timeoutMs, intervalMs) {
 // 존재 여부로 "우리가 스폰했는가"를 판정한다(사용자 기동 인스턴스는 이 변수에
 // 잡히지 않으므로 절대 안 건드린다).
 let backendChild = null;
+let backendReadinessWatch = null;
+
+function cancelBackendReadinessWatch(child = null) {
+  const watch = backendReadinessWatch;
+  if (!watch || (child && watch.child !== child)) return false;
+  watch.cancelled = true;
+  if (watch.pollTimer !== null) watch.clearTimeoutFn(watch.pollTimer);
+  if (watch.hardTimer !== null) watch.clearTimeoutFn(watch.hardTimer);
+  backendReadinessWatch = null;
+  return true;
+}
+
+function watchBackendUntilHardDeadline({
+  child,
+  spawnAt,
+  log,
+  checkHealthFn,
+  killTreeFn = killTree,
+  nowFn = Date.now,
+  setTimeoutFn = setTimeout,
+  clearTimeoutFn = clearTimeout,
+  pollIntervalMs = STARTUP_POLL_INTERVAL_MS,
+  hardTimeoutMs = STARTUP_HARD_TIMEOUT_MS,
+}) {
+  cancelBackendReadinessWatch();
+  const watch = {
+    child, cancelled: false, pollTimer: null, hardTimer: null, clearTimeoutFn,
+  };
+  backendReadinessWatch = watch;
+
+  const isCurrent = () => !watch.cancelled
+    && backendReadinessWatch === watch
+    && backendChild === child;
+
+  const retireHungChild = async () => {
+    if (!isCurrent()) return;
+    const healthy = await checkHealthFn();
+    if (!isCurrent()) {
+      if (backendReadinessWatch === watch) cancelBackendReadinessWatch(child);
+      return;
+    }
+    if (healthy) {
+      cancelBackendReadinessWatch(child);
+      log(`ensureBackend: hard deadline 최종 readiness 확인 완료 — self-spawn 프로세스를 유지한다 (${nowFn() - spawnAt}ms)`);
+      return;
+    }
+    cancelBackendReadinessWatch(child);
+    if (backendChild !== child) return;
+    backendChild = null;
+    log(`ensureBackend: ${hardTimeoutMs}ms hard deadline 초과 — 응답 없는 self-spawn 프로세스만 정리한다`);
+    killTreeFn(child);
+  };
+
+  const poll = async () => {
+    if (!isCurrent()) return;
+    const healthy = await checkHealthFn();
+    if (!isCurrent()) return;
+    if (healthy) {
+      cancelBackendReadinessWatch(child);
+      log(`ensureBackend: background readiness 확인 완료 — self-spawn 프로세스를 유지한다 (${nowFn() - spawnAt}ms)`);
+      return;
+    }
+    const remainingMs = Math.max(0, hardTimeoutMs - (nowFn() - spawnAt));
+    if (remainingMs === 0) {
+      await retireHungChild();
+      return;
+    }
+    watch.pollTimer = setTimeoutFn(poll, Math.min(pollIntervalMs, remainingMs));
+  };
+
+  const remainingMs = Math.max(0, hardTimeoutMs - (nowFn() - spawnAt));
+  watch.hardTimer = setTimeoutFn(retireHungChild, remainingMs);
+  watch.pollTimer = setTimeoutFn(poll, Math.min(pollIntervalMs, remainingMs));
+}
 
 // 앱 부팅 시 fire-and-forget으로 부른다(main.js — createWindows()를 막지 않는다).
 // mdlog는 main.js의 파일 로거(선택) — 없으면 조용히 무시한다.
-async function ensureBackend({ mdlog } = {}) {
+async function ensureBackend({ mdlog, _dependencies = {} } = {}) {
   const log = typeof mdlog === 'function' ? mdlog : () => {};
-  const t0 = Date.now();
-  const healthy = await checkHealth();
-  const action = decideAction({ healthy, venvExists: venvExists() });
+  const checkHealthFn = _dependencies.checkHealthFn || checkHealth;
+  const venvExistsFn = _dependencies.venvExistsFn || venvExists;
+  const spawnFn = _dependencies.spawnFn || spawn;
+  const waitUntilHealthyFn = _dependencies.waitUntilHealthyFn || waitUntilHealthy;
+  const killTreeFn = _dependencies.killTreeFn || killTree;
+  const nowFn = _dependencies.nowFn || Date.now;
+  const setTimeoutFn = _dependencies.setTimeoutFn || setTimeout;
+  const clearTimeoutFn = _dependencies.clearTimeoutFn || clearTimeout;
+  const hardTimeoutMs = _dependencies.hardTimeoutMs || STARTUP_HARD_TIMEOUT_MS;
+  const pollIntervalMs = _dependencies.pollIntervalMs || STARTUP_POLL_INTERVAL_MS;
+  const t0 = nowFn();
+  const healthy = await checkHealthFn();
+
+  if (!healthy && backendChild) {
+    log('ensureBackend: 기존 self-spawn 백엔드가 아직 기동 중 — 중복 스폰하지 않는다');
+    return { ok: true, spawned: false, ready: false, reason: 'startup-pending' };
+  }
+
+  const action = decideAction({ healthy, venvExists: venvExistsFn() });
 
   if (action === 'already-running') {
-    log(`ensureBackend: 헬스체크 성공 — 이미 기동 중이라 스폰하지 않는다 (${Date.now() - t0}ms, ${HEALTH_URL})`);
+    if (backendChild) cancelBackendReadinessWatch(backendChild);
+    log(`ensureBackend: 헬스체크 성공 — 이미 기동 중이라 스폰하지 않는다 (${nowFn() - t0}ms, ${HEALTH_URL})`);
     return { ok: true, spawned: false, ready: true, reason: 'already-running' };
   }
   if (action === 'no-venv') {
@@ -92,10 +199,10 @@ async function ensureBackend({ mdlog } = {}) {
   }
 
   log(`ensureBackend: 헬스체크 실패 — 백엔드 스폰 (${PYTHON_EXE} ${buildUvicornArgs().join(' ')}, cwd=${BACKEND_DIR})`);
-  const spawnAt = Date.now(); // 부팅 지연 계측(합의 계획 W1) — "스폰→manifest 200" 구간의 시작점
+  const spawnAt = nowFn(); // 부팅 지연 계측(합의 계획 W1) — "스폰→manifest 200" 구간의 시작점
   let child;
   try {
-    child = spawn(PYTHON_EXE, buildUvicornArgs(), {
+    child = spawnFn(PYTHON_EXE, buildUvicornArgs(), {
       cwd: BACKEND_DIR,
       env: buildBackendEnv(),
       stdio: 'ignore',
@@ -112,36 +219,82 @@ async function ensureBackend({ mdlog } = {}) {
   backendChild = child;
   child.on('exit', (code, signal) => {
     log(`ensureBackend: 백엔드 프로세스 종료 감지 — code=${code} signal=${signal}`);
+    cancelBackendReadinessWatch(child);
     if (backendChild === child) backendChild = null;
   });
   child.on('error', (err) => {
     log(`ensureBackend: 백엔드 프로세스 에러 — ${String((err && err.message) || err)}`);
+    cancelBackendReadinessWatch(child);
+    if (backendChild === child) backendChild = null;
   });
 
-  const ready = await waitUntilHealthy(STARTUP_POLL_TIMEOUT_MS, STARTUP_POLL_INTERVAL_MS);
-  const elapsedMs = Date.now() - t0;
-  const spawnToHealthyMs = Date.now() - spawnAt;
+  const ready = await waitUntilHealthyFn(STARTUP_POLL_TIMEOUT_MS, STARTUP_POLL_INTERVAL_MS);
+  const elapsedMs = nowFn() - t0;
+  const spawnToHealthyMs = nowFn() - spawnAt;
   if (ready) {
     log(`ensureBackend: 기동 완료 — 준비까지 ${elapsedMs}ms (스폰→manifest 200: ${spawnToHealthyMs}ms)`);
   } else {
-    log(`ensureBackend: ${STARTUP_POLL_TIMEOUT_MS}ms 안에 준비 확인 실패 — 자가스폰 프로세스를 정리한다(elapsed=${elapsedMs}ms, 스폰 이후=${spawnToHealthyMs}ms)`);
+    log(`ensureBackend: ${STARTUP_POLL_TIMEOUT_MS}ms 안에 준비 확인 실패 — self-spawn 프로세스는 계속 기동한다(elapsed=${elapsedMs}ms, 스폰 이후=${spawnToHealthyMs}ms)`);
     if (backendChild === child) {
-      killTree(child);
-      backendChild = null;
+      watchBackendUntilHardDeadline({
+        child, spawnAt, log, checkHealthFn, killTreeFn, nowFn,
+        setTimeoutFn, clearTimeoutFn, pollIntervalMs, hardTimeoutMs,
+      });
     }
     return {
-      ok: false, spawned: true, ready: false, elapsedMs, spawnToHealthyMs,
-      error: 'backend readiness timeout',
+      ok: true, spawned: true, ready: false, reason: 'readiness-pending', elapsedMs, spawnToHealthyMs,
     };
   }
   return { ok: true, spawned: true, ready, elapsedMs, spawnToHealthyMs };
 }
 
+async function ensureBackendReady({ mdlog, onProgress, _dependencies = {} } = {}) {
+  const ensureBackendFn = _dependencies.ensureBackendFn || ensureBackend;
+  const nowFn = _dependencies.nowFn || Date.now;
+  const sleepFn = _dependencies.sleepFn
+    || ((ms) => new Promise((resolve) => setTimeout(resolve, ms)));
+  const hardTimeoutMs = _dependencies.hardTimeoutMs || STARTUP_HARD_TIMEOUT_MS;
+  const pollIntervalMs = _dependencies.pollIntervalMs || STARTUP_POLL_INTERVAL_MS;
+  const startedAt = nowFn();
+  let lastResult = null;
+
+  while (nowFn() - startedAt < hardTimeoutMs) {
+    lastResult = await ensureBackendFn({ mdlog });
+    if (!lastResult || lastResult.ok !== true) {
+      return lastResult || {
+        ok: false, ready: false, reason: 'backend-start-failed', error: 'backend start failed',
+      };
+    }
+    if (lastResult.ready === true) return lastResult;
+
+    const elapsedMs = nowFn() - startedAt;
+    const remainingMs = Math.max(0, hardTimeoutMs - elapsedMs);
+    if (typeof onProgress === 'function') {
+      onProgress({
+        elapsedMs,
+        remainingMs,
+        reason: lastResult.reason || 'readiness-pending',
+      });
+    }
+    if (remainingMs === 0) break;
+    await sleepFn(Math.min(pollIntervalMs, remainingMs));
+  }
+
+  return {
+    ok: false,
+    ready: false,
+    reason: 'readiness-hard-timeout',
+    error: 'backend readiness hard timeout',
+    lastResult,
+  };
+}
+
 // 우리가 스폰한 경우에만 트리를 끊는다 — 사용자가 별도로 기동한 인스턴스는
 // backendChild에 잡히지 않으므로 이 함수는 그런 인스턴스에 대해 no-op이다.
-function shutdownBackend() {
+function shutdownBackend({ killTreeFn = killTree } = {}) {
   if (backendChild) {
-    killTree(backendChild);
+    cancelBackendReadinessWatch(backendChild);
+    killTreeFn(backendChild);
     backendChild = null;
   }
 }
@@ -203,6 +356,7 @@ module.exports = {
   HEALTH_PORT,
   HEALTH_TIMEOUT_MS,
   STARTUP_POLL_TIMEOUT_MS,
+  STARTUP_HARD_TIMEOUT_MS,
   STARTUP_POLL_INTERVAL_MS,
   buildUvicornArgs,
   buildBackendEnv,
@@ -210,6 +364,7 @@ module.exports = {
   venvExists,
   checkHealth,
   ensureBackend,
+  ensureBackendReady,
   shutdownBackend,
   awaitChildExit,
   restartAfterReset,

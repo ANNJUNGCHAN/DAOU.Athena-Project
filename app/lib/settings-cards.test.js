@@ -91,16 +91,21 @@ test('허용되지 않은 조회 주기 값은 기본값(60분)으로 물러선�
 });
 
 // WP-D1 — collectChat은 main 프로세스(history-sink.js)가 실제로 저장을
-// 게이팅하는 유일한 그래프 설정이라 localStorage 왕복 외에 athena:settings:prefs:set
-// IPC로도 미러링된다. 이 파일은 순수 node --test라 window가 없다 — 여기서만 흉내낸다.
-test('collectChat 패치는 window.athena.invoke로 main 프로세스에도 미러링된다', () => {
+// 게이팅하므로 main 성공을 확인한 뒤에만 localStorage를 갱신한다.
+test('collectChat 변경은 main 성공 응답 뒤에만 로컬 상태를 저장한다', async () => {
   const storage = fakeStorage();
   const calls = [];
   global.window = { athena: { invoke: (channel, patch) => { calls.push([channel, patch]); return Promise.resolve(); } } };
   try {
-    settingsCards.writeGraphSettings({ collectChat: false }, storage);
+    global.window.athena.invoke = (channel, patch) => {
+      calls.push([channel, patch]);
+      return Promise.resolve({ collectChat: false });
+    };
+    const next = await settingsCards.setCollectChatPreference(false, storage);
     assert.equal(calls.length, 1);
     assert.deepEqual(calls[0], ['athena:settings:prefs:set', { collectChat: false }]);
+    assert.equal(next.collectChat, false);
+    assert.equal(settingsCards.readGraphSettings(storage).collectChat, false);
   } finally {
     delete global.window;
   }
@@ -118,10 +123,41 @@ test('collectChat이 아닌 패치(collectFills 등)는 main에 미러링하지 
   }
 });
 
-test('window.athena가 없어도(핸들러 부재) collectChat 저장 자체는 안 터진다', () => {
-  const storage = fakeStorage();
-  const next = settingsCards.writeGraphSettings({ collectChat: false }, storage);
-  assert.equal(next.collectChat, false);
+test('collectChat 재활성화 실패는 로컬 상태를 OFF로 복원하고 사람이 읽을 오류를 낸다', async () => {
+  const storage = fakeStorage(JSON.stringify({ ...settingsCards.GRAPH_SETTINGS_DEFAULTS, collectChat: false }));
+  global.window = { athena: { invoke: () => Promise.reject(new Error('disk locked')) } };
+  try {
+    await assert.rejects(
+      settingsCards.setCollectChatPreference(true, storage),
+      /대화 이력 수집을 켜지 못했습니다.*OFF/,
+    );
+    assert.equal(settingsCards.readGraphSettings(storage).collectChat, false);
+  } finally {
+    delete global.window;
+  }
+});
+
+test('collectChat 비활성화 purge 실패는 메인의 정제 오류를 보존해 삭제 전용 안내를 표시한다', async () => {
+  const storage = fakeStorage(JSON.stringify({ ...settingsCards.GRAPH_SETTINGS_DEFAULTS, collectChat: true }));
+  const mainError = new Error('대화 이력 수집은 OFF로 유지됐지만 남은 원문을 삭제하지 못했습니다.');
+  global.window = { athena: { invoke: () => Promise.reject(mainError) } };
+  try {
+    let renderedMessage = '';
+    await assert.rejects(
+      settingsCards.setCollectChatPreference(false, storage).catch((error) => {
+        renderedMessage = settingsCards.collectChatPreferenceErrorMessage(error);
+        throw error;
+      }),
+      (error) => error === mainError,
+    );
+    assert.equal(
+      renderedMessage,
+      '대화 이력 수집은 OFF지만 남아 있던 원문을 삭제하지 못했습니다. 저장소 상태를 확인해 주세요.',
+    );
+    assert.equal(settingsCards.readGraphSettings(storage).collectChat, false);
+  } finally {
+    delete global.window;
+  }
 });
 
 // WP-I I4 — exposeToModel은 전용 채널로 미러링된다(main이 prefs 영속과 backend

@@ -235,6 +235,7 @@ async function runStartupOrchestration({
   concurrentTaskIds = [],
   dependencyTaskId,
   dependentTaskIds = [],
+  sequentialDependentTaskIds = [],
   continuousTaskIds = [],
 }) {
   if (!readiness || typeof readiness.start !== 'function') {
@@ -244,6 +245,7 @@ async function runStartupOrchestration({
   const concurrent = concurrentTaskIds.map((id) => readiness.start(id));
   if (dependencyTaskId) await readiness.start(dependencyTaskId);
   const dependent = dependentTaskIds.map((id) => readiness.start(id));
+  for (const id of sequentialDependentTaskIds) await readiness.start(id);
   await Promise.all([...concurrent, ...dependent]);
   return readiness.snapshot();
 }

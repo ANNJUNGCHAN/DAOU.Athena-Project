@@ -2,12 +2,19 @@
 //
 // 이 파일은 설치 파이프라인이나 저장소를 가정하지 않는다. 화면은 전달받은
 // 목록만 그리고, 권한·설치·활성화 의도는 콜백으로 상위 셸에 돌려준다.
+//
+// 실제 설치는 MCP 서버 등록이다(canvas.js가 athena:mcp-* IPC로 잇는다) —
+// Claude 커넥터와 같은 흐름: 스니펫 붙여넣기 → 노출 도구 확인 → 승인 →
+// 연결 확인 → 도구별 허용 → 제거. 아래 SAMPLE_* 는 **호스트가 아무 목록도
+// 넘기지 않았을 때만** 쓰는 단위테스트용 샘플이다. 실제 셸은 언제나 명시적으로
+// 배열을 넘기므로(빈 배열이라도) 앱 화면에 이 샘플이 뜨는 경로는 없다 —
+// 설치된 적 없는 플러그인을 설치된 것처럼 보여주지 않기 위한 경계다.
 (function () {
 'use strict';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
-const DEFAULT_INSTALLED = Object.freeze([
+const SAMPLE_INSTALLED = Object.freeze([
   Object.freeze({
     id: 'dart',
     name: 'DART 전자공시',
@@ -38,7 +45,7 @@ const DEFAULT_INSTALLED = Object.freeze([
   }),
 ]);
 
-const DEFAULT_RECOMMENDED = Object.freeze([
+const SAMPLE_RECOMMENDED = Object.freeze([
   Object.freeze({ id: 'pdf-report', name: 'PDF 리포트 분석', description: '리서치·사업보고서 PDF를 카드로', source: 'marketplace · athena-official', requestedFeatures: ['PDF 문서 읽기', '표·본문 추출', '분석 카드 생성'] }),
   Object.freeze({ id: 'naver-finance-news', name: '네이버 금융 뉴스', description: '종목 뉴스·리서치를 대화로', source: 'marketplace · athena-official', requestedFeatures: ['종목 뉴스 검색', '기사 본문 읽기', '대화에 출처 첨부'] }),
   Object.freeze({ id: 'telegram-alerts', name: '텔레그램 알림', description: '감시 발화·체결을 폰으로', source: 'marketplace · athena-official', requestedFeatures: ['감시 발화 전송', '체결 알림 전송', '봇 연결 상태 확인'] }),
@@ -47,7 +54,7 @@ const DEFAULT_RECOMMENDED = Object.freeze([
   Object.freeze({ id: 'krx-data', name: 'KRX 정보데이터', description: '지수·업종·수급 통계 원천', source: 'marketplace · athena-official', requestedFeatures: ['지수 통계 조회', '업종 통계 조회', '수급 통계 조회'] }),
 ]);
 
-const DEFAULT_MARKETPLACES = Object.freeze([
+const SAMPLE_MARKETPLACES = Object.freeze([
   Object.freeze({
     id: 'athena-official',
     name: 'athena-official',
@@ -103,10 +110,14 @@ function createPluginCanvas(options) {
     return { mount() {}, setView() {}, setSearch() {}, getState: () => ({ view: 'hub', search: '' }) };
   }
 
-  const installed = cloneRows(deps.installed || DEFAULT_INSTALLED);
-  const recommended = cloneRows(deps.recommended || DEFAULT_RECOMMENDED);
-  const marketplaces = cloneRows(deps.marketplaces || DEFAULT_MARKETPLACES);
+  const installed = cloneRows(deps.installed || SAMPLE_INSTALLED);
+  const recommended = cloneRows(deps.recommended || SAMPLE_RECOMMENDED);
+  const marketplaces = cloneRows(deps.marketplaces || SAMPLE_MARKETPLACES);
   let view = deps.initialView === 'manage' ? 'manage' : 'hub';
+  // 게이트웨이(athena_mcp serve)는 기동 시점에 레지스트리를 읽는다. 앱이 떠 있는
+  // 동안 서버를 설치·승인·삭제해도 이미 실행 중인 대화 세션은 그 서버를 모른다 —
+  // "설치했는데 대화에서 안 쓰인다"로 보이므로 화면에서 명시한다.
+  let restartRequired = false;
   let search = '';
   let mounted = false;
   let root = null;
@@ -140,10 +151,15 @@ function createPluginCanvas(options) {
     const copy = el('div', 'plugin-canvas-card-copy');
     copy.appendChild(el('div', 'plugin-canvas-card-name', plugin.name));
     copy.appendChild(el('div', 'plugin-canvas-card-description', plugin.description || ''));
+    // 연결·승인 상태는 카드에서 바로 보여야 한다 — 목록만 보고 "연결됐다"고
+    // 넘겨짚게 두지 않는다(호스트가 probe 결과로만 채운다).
+    if (plugin.source) {
+      copy.appendChild(el('div', 'plugin-canvas-card-source', plugin.source));
+    }
     card.appendChild(copy);
 
     if (kind === 'installed') {
-      card.appendChild(actionButton('권한 초안', 'is-primary', () => {
+      card.appendChild(actionButton('도구 허용', 'is-primary', () => {
         if (typeof deps.onPermission === 'function') deps.onPermission(plugin);
         openPermissionSheet(plugin);
       }));
@@ -181,6 +197,83 @@ function createPluginCanvas(options) {
       description: feature.description || '',
       allowed: feature.allowed !== false,
     }));
+  }
+
+  // --- MCP 서버 추가(스니펫 붙여넣기) ---------------------------------------
+  // Claude 커넥터와 같은 순서다: 스니펫 → 무엇이 등록되는지 확인 → 승인.
+  // 호스트가 실제 athena:mcp-stage-snippet/register/approve/remove를 소유한다.
+  function openAddSheet() {
+    activeSheet = { kind: 'add', snippet: '', staged: null, error: null, busy: false };
+    render();
+  }
+
+  async function runSheetStep(sheet, run, fallbackError) {
+    if (sheet.busy) return null;
+    sheet.busy = true;
+    sheet.error = null;
+    render();
+    let result;
+    try {
+      result = await run();
+    } catch (err) {
+      result = { ok: false, error: String((err && err.message) || err) };
+    }
+    // 사용자가 그 사이 시트를 닫았으면 늦게 온 결과로 화면을 되돌리지 않는다.
+    if (activeSheet !== sheet) return null;
+    sheet.busy = false;
+    if (!result || !result.ok) {
+      sheet.error = (result && result.error) || fallbackError;
+      render();
+      return null;
+    }
+    return result;
+  }
+
+  async function stageSnippet(sheet) {
+    if (!String(sheet.snippet || '').trim()) {
+      sheet.error = 'Claude 설정 스니펫을 붙여넣습니다';
+      render();
+      return;
+    }
+    const result = await runSheetStep(
+      sheet,
+      () => (typeof deps.onStageSnippet === 'function'
+        ? deps.onStageSnippet(sheet.snippet)
+        : Promise.resolve({ ok: false, error: '설치 경로가 연결되지 않았다' })),
+      '스니펫을 해석하지 못했다',
+    );
+    if (!result) return;
+    const staged = Array.isArray(result.staged) ? result.staged : [];
+    if (!staged.length) {
+      sheet.error = '등록된 서버가 없다 — 스니펫 형식을 확인한다';
+      render();
+      return;
+    }
+    sheet.staged = staged;
+    render();
+  }
+
+  async function approveStaged(sheet) {
+    const result = await runSheetStep(
+      sheet,
+      () => (typeof deps.onApproveServer === 'function'
+        ? deps.onApproveServer(sheet.staged)
+        : Promise.resolve({ ok: false, error: '승인 경로가 연결되지 않았다' })),
+      '승인에 실패했다',
+    );
+    if (!result) return;
+    activeSheet = null;
+    render();
+  }
+
+  // stage는 미리보기가 아니라 실제 등록까지 한다(mcp-cli.js stageSnippet 주석:
+  // 파이썬 백엔드에 dry-run이 없다). 승인 없이 닫으면 미승인 서버가 레지스트리에
+  // 남으므로 되돌리기를 호스트에 맡긴다 — 취소가 흔적을 남기면 안 된다.
+  function cancelAddSheet(sheet) {
+    if (sheet.staged && typeof deps.onDiscardStaged === 'function') {
+      deps.onDiscardStaged(sheet.staged);
+    }
+    closeSheet();
   }
 
   function openInstallSheet(plugin) {
@@ -248,6 +341,7 @@ function createPluginCanvas(options) {
       renderHubLists();
     });
     header.appendChild(searchInput);
+    header.appendChild(actionButton('+ 서버 추가', 'is-add', openAddSheet));
     header.appendChild(actionButton('관리', 'is-manage', () => {
       if (typeof deps.onManage === 'function') deps.onManage('manage');
       setView('manage');
@@ -256,10 +350,17 @@ function createPluginCanvas(options) {
     panel.appendChild(el(
       'p',
       'plugin-canvas-description',
-      '플러그인은 설치 후 기능별로 허용합니다. 현재 화면의 변경은 연결 전 UI 세션 초안이며, Kiwoom·brain은 Athena 내장 API라 표시하지 않습니다.',
+      '플러그인은 MCP 서버입니다. 등록한 서버의 도구를 하나씩 허용해 대화에서 쓰게 합니다. Kiwoom·brain은 Athena 내장 API라 여기 표시하지 않습니다.',
     ));
 
-    panel.appendChild(el('h2', 'plugin-canvas-section-title', 'UI 세션 초안'));
+    if (restartRequired) {
+      panel.appendChild(el(
+        'div',
+        'plugin-canvas-restart-notice',
+        '이번에 바꾼 서버는 Athena를 다시 시작한 뒤의 대화부터 적용됩니다. 진행 중인 대화에는 아직 반영되지 않았습니다.',
+      ));
+    }
+    panel.appendChild(el('h2', 'plugin-canvas-section-title', '등록된 서버'));
     const installedGrid = el('div', 'plugin-canvas-grid plugin-canvas-installed');
     panel.appendChild(installedGrid);
     panel.appendChild(el('h2', 'plugin-canvas-section-title', '추천'));
@@ -354,15 +455,14 @@ function createPluginCanvas(options) {
       toggle.type = 'button';
       toggle.setAttribute('role', 'switch');
       toggle.setAttribute('aria-checked', String(feature.allowed));
-      toggle.setAttribute('aria-label', `${feature.name} UI 초안 ${feature.allowed ? '끄기' : '켜기'}`);
+      toggle.setAttribute('aria-label', `${feature.name} ${feature.allowed ? '허용 끄기' : '허용 켜기'}`);
       toggle.appendChild(el('span', 'plugin-canvas-toggle-knob'));
       toggle.addEventListener('click', () => {
         feature.allowed = !feature.allowed;
         toggle.className = `plugin-canvas-toggle ${feature.allowed ? 'is-on' : 'is-off'}`;
         toggle.setAttribute('aria-checked', String(feature.allowed));
-        toggle.setAttribute('aria-label', `${feature.name} UI 초안 ${feature.allowed ? '끄기' : '켜기'}`);
-        const count = findAllowedCountLabel();
-        if (count) count.textContent = `허용 ${allowedFeatures(activeSheet).length} / ${activeSheet.features.length}`;
+        toggle.setAttribute('aria-label', `${feature.name} ${feature.allowed ? '허용 끄기' : '허용 켜기'}`);
+        refreshAllowedCounts();
       });
       row.appendChild(toggle);
     } else {
@@ -371,15 +471,33 @@ function createPluginCanvas(options) {
     return row;
   }
 
-  function findAllowedCountLabel() {
+  function findByClassName(className) {
     if (!root) return null;
     const stack = [root];
     while (stack.length) {
       const current = stack.pop();
-      if (String(current.className || '').split(/\s+/).includes('plugin-canvas-sheet-count')) return current;
-      (current.children || []).forEach((child) => stack.push(child));
+      if (String(current.className || '').split(/\s+/).includes(className)) return current;
+      // children은 실제 DOM에서 HTMLCollection이라 forEach가 없다(단위테스트의 가짜
+      // DOM만 배열이었다) — 인덱스로 돈다. 이걸 forEach로 두면 앱에서만 예외가 나
+      // 허용 수가 토글에 반응하지 않는다(2026-08-31 실측).
+      const kids = current.children;
+      if (kids) for (let i = 0; i < kids.length; i += 1) stack.push(kids[i]);
     }
     return null;
+  }
+
+  function findAllowedCountLabel() {
+    return findByClassName('plugin-canvas-sheet-count');
+  }
+
+  // 토글 하나가 바뀌면 하단 "허용 N / M"과 헤더 배지를 함께 다시 쓴다.
+  function refreshAllowedCounts() {
+    if (!activeSheet) return;
+    const allowed = allowedFeatures(activeSheet).length;
+    const footer = findAllowedCountLabel();
+    if (footer) footer.textContent = `허용 ${allowed} / ${activeSheet.features.length}`;
+    const badge = findByClassName('is-allowed-count');
+    if (badge) badge.textContent = `허용 ${allowed}`;
   }
 
   function approveInstall(sheet) {
@@ -415,10 +533,11 @@ function createPluginCanvas(options) {
     header.appendChild(el('div', 'plugin-canvas-spacer'));
     const allowed = allowedFeatures(sheet).length;
     [
-      ['UI 초안', 'is-primary'],
+      // 실제 등록·승인·핸드셰이크가 끝난 서버에까지 "UI 초안"을 붙이지 않는다 —
+      // 호스트가 넣어준 연결 상태(source)를 그대로 쓴다.
+      [sheet.plugin.source || '연결 미확인', 'is-primary'],
       [`기능 ${sheet.features.length}`, ''],
-      [`허용 ${allowed}`, ''],
-      ['상세', ''],
+      [`허용 ${allowed}`, 'is-allowed-count'],
     ].forEach(([label, className]) => {
       header.appendChild(el('span', `plugin-canvas-count ${className}`.trim(), label));
     });
@@ -426,7 +545,7 @@ function createPluginCanvas(options) {
     panel.appendChild(el(
       'p',
       'plugin-canvas-description',
-      `${sheet.plugin.description || '이 플러그인에 노출할 기능만 선택합니다.'} · UI 세션 초안이며 실제 런타임은 연결되지 않았습니다.`,
+      `${sheet.plugin.description || '이 서버에서 대화에 노출할 도구만 선택합니다.'} · 허용한 도구만 대화에서 호출됩니다.`,
     ));
 
     const featureList = el('div', 'plugin-canvas-sheet-features plugin-canvas-permission-features');
@@ -443,9 +562,70 @@ function createPluginCanvas(options) {
     return panel;
   }
 
+  function stagedServerBlock(server) {
+    const block = el('div', 'plugin-canvas-sheet-info');
+    block.appendChild(el('div', 'plugin-canvas-sheet-plugin-name', server.alias));
+    if (server.originalName && server.originalName !== server.alias) {
+      block.appendChild(el('div', 'plugin-canvas-sheet-source', `스니펫 이름: ${server.originalName} → 별칭 ${server.alias}`));
+    }
+    block.appendChild(el(
+      'div',
+      'plugin-canvas-sheet-plugin-description',
+      [server.command, (Array.isArray(server.args) ? server.args.join(' ') : '')].filter(Boolean).join(' '),
+    ));
+    // 값은 절대 싣지 않는다 — mcp-cli.js가 키 이름만 돌려준다(비밀은 safestorage).
+    if (Array.isArray(server.envKeys) && server.envKeys.length) {
+      block.appendChild(el('div', 'plugin-canvas-sheet-source', `환경변수 키: ${server.envKeys.join(', ')}`));
+    }
+    (Array.isArray(server.risks) ? server.risks : []).forEach((risk) => {
+      block.appendChild(el('div', 'plugin-canvas-sheet-warning', risk));
+    });
+    return block;
+  }
+
+  function renderAddSheetBody(sheet) {
+    const body = el('div', 'plugin-canvas-sheet-body');
+
+    if (!sheet.staged) {
+      const field = el('textarea', 'plugin-canvas-snippet-input');
+      field.value = sheet.snippet || '';
+      field.setAttribute('rows', '8');
+      field.setAttribute('spellcheck', 'false');
+      field.setAttribute('aria-label', 'MCP 서버 스니펫');
+      field.placeholder = '{\n  "mcpServers": {\n    "server-name": {\n      "command": "npx",\n      "args": ["-y", "some-mcp"]\n    }\n  }\n}';
+      field.addEventListener('input', (event) => {
+        sheet.snippet = String(event && event.target ? event.target.value : '');
+      });
+      body.appendChild(field);
+      body.appendChild(el(
+        'div',
+        'plugin-canvas-sheet-warning',
+        '분석하면 서버가 레지스트리에 등록되지만 승인 전에는 실행되지 않습니다. 취소하면 등록을 되돌립니다.',
+      ));
+    } else {
+      body.appendChild(el('h3', 'plugin-canvas-sheet-section-title', '등록할 서버'));
+      sheet.staged.forEach((server) => body.appendChild(stagedServerBlock(server)));
+      body.appendChild(el(
+        'div',
+        'plugin-canvas-sheet-warning',
+        '승인하면 서버를 한 번 실행해 노출 도구를 확인합니다. 도구는 그 뒤 하나씩 허용합니다.',
+      ));
+    }
+
+    if (sheet.error) body.appendChild(el('div', 'plugin-canvas-sheet-error', sheet.error));
+
+    const actions = el('div', 'plugin-canvas-sheet-actions');
+    actions.appendChild(actionButton('취소', 'is-sheet-cancel', () => cancelAddSheet(sheet)));
+    actions.appendChild(sheet.staged
+      ? actionButton(sheet.busy ? '승인하는 중…' : '승인', 'is-sheet-confirm', () => { void approveStaged(sheet); })
+      : actionButton(sheet.busy ? '분석하는 중…' : '분석', 'is-sheet-confirm', () => { void stageSnippet(sheet); }));
+    body.appendChild(actions);
+    return body;
+  }
+
   function renderSheet() {
     const sheet = activeSheet;
-    if (!sheet || sheet.kind !== 'install') return null;
+    if (!sheet || (sheet.kind !== 'install' && sheet.kind !== 'add')) return null;
     const overlay = el('div', 'plugin-canvas-sheet-overlay');
     overlay.setAttribute('data-sheet-kind', sheet.kind);
     const dialog = el('section', `plugin-canvas-sheet plugin-canvas-${sheet.kind}-sheet`);
@@ -474,16 +654,29 @@ function createPluginCanvas(options) {
       }
     });
 
+    const isAdd = sheet.kind === 'add';
     const header = el('div', 'plugin-canvas-sheet-header');
-    const title = el('h2', 'plugin-canvas-sheet-title', `${sheet.plugin.name} 설치 미리보기`);
+    const title = el(
+      'h2',
+      'plugin-canvas-sheet-title',
+      isAdd ? 'MCP 서버 추가' : `${sheet.plugin.name} 설치 미리보기`,
+    );
     title.setAttribute('id', titleId);
     header.appendChild(title);
     header.appendChild(el(
       'div',
       'plugin-canvas-sheet-subtitle',
-      '설치할 플러그인과 요청 권한을 확인합니다',
+      isAdd
+        ? 'Claude 설정 형식의 스니펫을 붙여넣습니다'
+        : '설치할 플러그인과 요청 권한을 확인합니다',
     ));
     dialog.appendChild(header);
+
+    if (isAdd) {
+      dialog.appendChild(renderAddSheetBody(sheet));
+      overlay.appendChild(dialog);
+      return overlay;
+    }
 
     const body = el('div', 'plugin-canvas-sheet-body');
     const info = el('div', 'plugin-canvas-sheet-info');
@@ -513,7 +706,7 @@ function createPluginCanvas(options) {
     const panel = activeSheet && activeSheet.kind === 'permissions'
       ? renderPermissionView()
       : (view === 'manage' ? renderManage() : renderHub());
-    if (activeSheet && activeSheet.kind === 'install') {
+    if (activeSheet && (activeSheet.kind === 'install' || activeSheet.kind === 'add')) {
       panel.setAttribute('aria-hidden', 'true');
       panel.setAttribute('inert', '');
     }
@@ -553,6 +746,38 @@ function createPluginCanvas(options) {
     render();
   }
 
+  // 마운트 뒤 목록을 실제 데이터로 갈아끼운다. 호스트(canvas.js)가 athena:mcp-list
+  // 결과를 받을 때마다, 그리고 probe로 도구 목록이 늦게 도착할 때마다 부른다 —
+  // 생성 시점 한 번만 캡처하면 등록·승인·삭제 뒤 화면이 옛 목록에 머문다.
+  // 열려 있는 시트가 있으면 같은 행의 최신 스냅샷으로 다시 만든다(늦게 온 도구
+  // 목록이 그 시트에 그대로 반영돼야 하므로).
+  function replaceRows(target, next) {
+    if (!Array.isArray(next)) return;
+    target.length = 0;
+    target.push(...cloneRows(next));
+  }
+
+  function setData(next) {
+    if (!next) return;
+    if (typeof next.restartRequired === 'boolean') restartRequired = next.restartRequired;
+    replaceRows(installed, next.installed);
+    replaceRows(recommended, next.recommended);
+    replaceRows(marketplaces, next.marketplaces);
+    if (activeSheet) {
+      const openId = activeSheet.plugin.id || activeSheet.plugin.name;
+      const fresh = installed.concat(recommended)
+        .find((row) => (row.id || row.name) === openId);
+      if (fresh) {
+        activeSheet = {
+          ...activeSheet,
+          plugin: fresh,
+          features: featureRowsFor(fresh, activeSheet.kind === 'install'),
+        };
+      }
+    }
+    render();
+  }
+
   function getState() {
     return {
       view,
@@ -564,14 +789,14 @@ function createPluginCanvas(options) {
     };
   }
 
-  return { mount, setView, setSearch, getState };
+  return { mount, setView, setSearch, setData, getState };
 }
 
 const __exports = {
   createPluginCanvas,
-  DEFAULT_INSTALLED,
-  DEFAULT_RECOMMENDED,
-  DEFAULT_MARKETPLACES,
+  SAMPLE_INSTALLED,
+  SAMPLE_RECOMMENDED,
+  SAMPLE_MARKETPLACES,
 };
 
 if (typeof module !== 'undefined' && module.exports) {

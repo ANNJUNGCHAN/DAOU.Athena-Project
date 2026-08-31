@@ -107,6 +107,16 @@ class RecordingProjector:
         self.projected_kinds.append(source.kind)
 
 
+class FailOnceDedup:
+    def __init__(self) -> None:
+        self.calls = 0
+
+    async def run(self) -> None:
+        self.calls += 1
+        if self.calls == 1:
+            raise RuntimeError("dedup failure")
+
+
 class FailAfterResetProjection:
     def __init__(self, graph: GraphStore) -> None:
         self._graph = graph
@@ -246,6 +256,38 @@ async def test_mid_batch_failure_retries_from_last_success_without_duplicates(st
     assert retry.total_projected == 2
     assert (await graph.summary()).sources == 3
     assert (await history.get_job(job.id)).status is JobStatus.SUCCEEDED
+
+
+async def test_dedup_failure_keeps_the_job_in_retry_until_dedup_succeeds(stores) -> None:
+    history, graph = stores
+    await history.upsert_holding(holding(), changed_at=NOW)
+    clock = ManualClock(NOW)
+    dedup = FailOnceDedup()
+    coordinator = IngestionCoordinator(
+        history,
+        graph,
+        clock=clock,
+        retry_policy=RetryPolicy(max_attempts=3, base_delay_seconds=1, max_delay_seconds=1),
+        holding_projector=DeterministicHoldingProjector(graph, clock=clock),
+        dedup=dedup,
+    )
+    job = await coordinator.enqueue(JobTrigger.MANUAL)
+
+    with pytest.raises(RuntimeError, match="dedup failure"):
+        await coordinator.run_next()
+
+    failed = await history.get_job(job.id)
+    assert failed is not None
+    assert failed.status is JobStatus.RETRY_WAIT
+    assert failed.error == "RuntimeError: dedup failure"
+    assert dedup.calls == 1
+
+    clock.advance(timedelta(seconds=1))
+    retried = await coordinator.run_next()
+    assert retried is not None
+    assert retried.status is JobStatus.SUCCEEDED
+    assert retried.total_projected == 0
+    assert dedup.calls == 2, "이미 전진한 커서와 무관하게 dedup 단계 자체를 재시도한다"
 
 
 async def test_cancellation_persists_retry_and_replays_idempotently(stores) -> None:

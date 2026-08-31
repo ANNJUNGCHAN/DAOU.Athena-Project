@@ -15,6 +15,7 @@ leaf 3 재작성(2026-08-25). 이전 판은 `Claim`·부동소수 confidence·La
 
 from __future__ import annotations
 
+import asyncio
 import json
 import sys
 from datetime import UTC, datetime
@@ -587,6 +588,88 @@ async def test_local_command_refuses_an_oversize_prompt() -> None:
         await client.complete("가" * 200_000)
 
 
+class _BlockingReader:
+    def __init__(self, started: asyncio.Event) -> None:
+        self._started = started
+
+    async def read(self, _size: int) -> bytes:
+        self._started.set()
+        await asyncio.Future()
+        return b""
+
+
+class _FakeStdin:
+    def write(self, _payload: bytes) -> None:
+        pass
+
+    async def drain(self) -> None:
+        await asyncio.sleep(0)
+
+    def close(self) -> None:
+        pass
+
+
+class _CancellableFakeProcess:
+    """Windows-compatible fake: only terminate/kill/wait are available."""
+
+    def __init__(self, *, exits_on_terminate: bool) -> None:
+        self.read_started = asyncio.Event()
+        self.stdin = _FakeStdin()
+        self.stdout = _BlockingReader(self.read_started)
+        self.stderr = _BlockingReader(self.read_started)
+        self.returncode: int | None = None
+        self.exits_on_terminate = exits_on_terminate
+        self.terminate_calls = 0
+        self.kill_calls = 0
+        self.wait_calls = 0
+
+    def terminate(self) -> None:
+        self.terminate_calls += 1
+        if self.exits_on_terminate:
+            self.returncode = -15
+
+    def kill(self) -> None:
+        self.kill_calls += 1
+        self.returncode = -9
+
+    async def wait(self) -> int:
+        self.wait_calls += 1
+        if self.returncode is None:
+            raise TimeoutError
+        return self.returncode
+
+
+@pytest.mark.parametrize("exits_on_terminate", [True, False])
+async def test_command_cancellation_reaps_owned_process_and_propagates_cancelled_error(
+    monkeypatch: pytest.MonkeyPatch, exits_on_terminate: bool
+) -> None:
+    process = _CancellableFakeProcess(exits_on_terminate=exits_on_terminate)
+
+    async def create_process(*_argv: str, **_kwargs: object) -> _CancellableFakeProcess:
+        return process
+
+    monkeypatch.setattr(asyncio, "create_subprocess_exec", create_process)
+    command = asyncio.create_task(
+        extraction_module._run_capturing(
+            ("claude", "-p"),
+            b"prompt",
+            timeout_seconds=30,
+            max_response_bytes=1024,
+        )
+    )
+    await process.read_started.wait()
+    command.cancel()
+
+    with pytest.raises(asyncio.CancelledError):
+        await command
+
+    assert command.cancelled()
+    assert process.terminate_calls == 1
+    assert process.wait_calls >= 1
+    assert process.returncode is not None
+    assert process.kill_calls == (0 if exits_on_terminate else 1)
+
+
 # ── claude CLI 실행기 ───────────────────────────────────────────────────────
 
 
@@ -604,7 +687,7 @@ class FakeRunner:
 
 
 @pytest.mark.parametrize("supported", [True, False])
-async def test_claude_cli_attaches_json_schema_only_when_supported(
+async def test_claude_cli_isolates_tools_and_settings_in_both_schema_branches(
     monkeypatch: pytest.MonkeyPatch, supported: bool
 ) -> None:
     runner = FakeRunner(
@@ -620,6 +703,15 @@ async def test_claude_cli_attaches_json_schema_only_when_supported(
     calls = [argv for argv in runner.argvs if argv[-1] != "--help"]
     assert len(calls) == 2
     assert all(("--json-schema" in argv) is supported for argv in calls)
+    for argv in calls:
+        assert argv.count("--tools") == 1
+        assert argv[argv.index("--tools") : argv.index("--tools") + 2] == ("--tools", "")
+        assert argv.count("--setting-sources") == 1
+        setting_sources_index = argv.index("--setting-sources")
+        assert argv[setting_sources_index : setting_sources_index + 2] == (
+            "--setting-sources",
+            "",
+        )
     # 지원 여부는 한 번만 묻는다 — 매 추출마다 --help를 부르면 왕복이 두 배가 된다.
     assert sum(1 for argv in runner.argvs if argv[-1] == "--help") == 1
 

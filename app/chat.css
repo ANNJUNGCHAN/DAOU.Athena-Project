@@ -463,9 +463,46 @@ html.is-boot-expanding #winControls { opacity: 0; }
   font-size: var(--text-lg);
   line-height: 1.5;
   color: var(--color-k-text);
-  /* 각인(engraving) — 텍스트가 유리 위가 아니라 안에 있는 것처럼(palette.md 밝은
-     배경 해법 §각인). 유리 두께가 얇아지는 상태(창 최소 높이)에서도 대비를 지킨다. */
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+  /* 각인 text-shadow는 제거됐다(2026-08-31 사용자 확정) — 줄인 그림자도
+     "블러된 느낌"이 남아 평평한 텍스트가 가장 또렷하다. */
+}
+/* ---------- 답변 마크다운(lib/chat-markdown.js) ---------- */
+/* canvas.css의 전역 .md-p(리더 카드용 base 크기)가 채팅 답변의 크기·색을 덮지
+   않게 상속으로 고정한다 — 렌더러는 하나(lib/markdown.js), 표면별 차이는 CSS로만. */
+.turn-a .md-p { margin: 0 0 8px; font-size: inherit; line-height: inherit; color: inherit; }
+.turn-a .md-p:last-child { margin-bottom: 0; }
+.turn-a .md-strong { font-family: var(--font-strong, "Daki B", system-ui, sans-serif); font-weight: 700; }
+.turn-a .md-h {
+  margin: 12px 0 6px;
+  font-family: var(--font-strong, "Daki B", system-ui, sans-serif);
+  font-weight: 700;
+}
+.turn-a .md-h:first-child { margin-top: 0; }
+.turn-a .md-h1 { font-size: 1.25em; }
+.turn-a .md-h2 { font-size: 1.15em; }
+.turn-a .md-h3, .turn-a .md-h4 { font-size: 1.05em; }
+.turn-a .md-ul, .turn-a .md-ol { margin: 0 0 8px; padding-left: 20px; }
+.turn-a .md-ul li, .turn-a .md-ol li { margin: 2px 0; }
+/* 하위 목록 — 번호 항목 밑에 붙는 불릿. 위아래 여백을 죽여 상위 항목에 붙인다. */
+.turn-a .md-sub { margin: 2px 0 4px; padding-left: 18px; }
+.turn-a .md-code {
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: rgba(16, 19, 26, 0.08);
+  font-family: var(--font-mono, ui-monospace, Consolas, monospace);
+  font-size: 0.92em;
+  text-shadow: none;
+}
+.turn-a .md-pre {
+  margin: 6px 0 8px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  overflow-x: auto;
+  background: rgba(16, 19, 26, 0.08);
+  font-family: var(--font-mono, ui-monospace, Consolas, monospace);
+  font-size: 0.9em;
+  line-height: 1.45;
+  text-shadow: none;
 }
 /* 추론 미리보기(2026-08-26) — 답변(.turn-a)과 뚜렷이 구분되는 옅은·작은 글씨.
    미리보기 전용이라 각인 효과(.turn-a의 text-shadow) 없이 평평하게 둔다. */
@@ -644,8 +681,12 @@ html.is-boot-expanding #winControls { opacity: 0; }
  * 글자·소요시간만. 비어 있을 땐(:empty) 자리를 차지하지 않는다. */
 .progress-tool-steps {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  /* 코덱스 서브에이전트와 같은 가로 알약 흐름(2026-08-31 사용자 확정) —
+     세로 전폭 박스 목록이 아니라 칩이 옆으로 흐르고 넘치면 줄바꿈한다. */
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
   flex-basis: 100%; /* .progress-line의 flex-wrap에서 항상 새 줄로 시작한다 */
 }
 .progress-tool-steps:empty { display: none; }
@@ -654,35 +695,118 @@ html.is-boot-expanding #winControls { opacity: 0; }
  * hidden만으로는 안 숨는다). */
 .progress-tool-steps[hidden] { display: none; }
 
+/* 도구 호출 칩(2026-08-31 사용자 확정 — 코덱스 서브에이전트와 같은 알약) —
+   전폭 박스가 아니라 [점 + 이름 + 시간]이 한 알약에 담겨 옆으로 흐른다.
+   어떤 플러그인/도구가 호출됐는지가 신뢰 근거라 접어 숨기지 않는다. */
 .progress-tool-step {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
+  max-width: 100%;
+  padding: 3px 11px;
+  border: 1px solid rgb(16 19 26 / 16%);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 60%);
   font-size: var(--text-xs);
 }
 
 .progress-tool-step-icon {
-  width: 12px;
-  height: 12px;
+  width: 8px;
+  height: 8px;
   flex-shrink: 0;
-  border-radius: 3px;
+  border-radius: 50%;
   border: 1.5px solid rgb(16 19 26 / 30%);
   box-sizing: border-box;
 }
 .progress-tool-step.done .progress-tool-step-icon {
   border-color: transparent;
-  background: var(--color-k-text);
+  background: var(--color-ok, #1a7f4e);
 }
 /* 실패한 툴 호출(is_error:true) — done 뒤에 둬서 채움색을 경고색으로 덮는다. */
-.progress-tool-step.is-warn .progress-tool-step-icon { background: var(--color-warn); }
+.progress-tool-step.is-warn .progress-tool-step-icon {
+  border-color: transparent;
+  background: var(--color-warn);
+}
 
 .progress-tool-step-label {
-  flex: 1 1 auto;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  color: var(--color-k-text);
+}
+
+/* ---------- 서브에이전트 알약 칩(2026-08-31 사용자 확정) ---------- */
+.agent-pill-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 3px 0;
+}
+.agent-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 11px;
+  border: 1px solid rgb(16 19 26 / 16%);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 60%);
+  font-size: var(--text-xs);
+  color: var(--color-k-text);
+  white-space: nowrap;
+}
+.agent-pill-glyph { font-size: 11px; line-height: 1; }
+.agent-pill-glyph.g0 { color: #d97706; }
+.agent-pill-glyph.g1 { color: #7c3aed; }
+.agent-pill-glyph.g2 { color: #2563eb; }
+.agent-pill-glyph.g3 { color: #db2777; }
+.agent-pill-glyph.g4 { color: #0d9488; }
+.agent-pill-suffix {
+  font-size: var(--text-xs);
   color: var(--color-k-faint);
+  white-space: nowrap;
+}
+
+/* ---------- @ 플러그인 멘션 메뉴 ---------- */
+.mention-menu {
+  position: fixed;
+  z-index: 80;
+  display: flex;
+  flex-direction: column;
+  max-height: 240px;
+  overflow-y: auto;
+  padding: 4px;
+  border: 1px solid rgb(16 19 26 / 16%);
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgb(16 19 26 / 18%);
+}
+.mention-item {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 7px 10px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+.mention-item.is-active,
+.mention-item:hover { background: rgb(227 18 114 / 9%); }
+.mention-item-name {
+  font-family: var(--font-mono, ui-monospace, Consolas, monospace);
+  font-size: var(--text-sm);
+  color: #10131a;
+  white-space: nowrap;
+}
+.mention-item-hint {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--text-xs);
+  color: #7b8290;
 }
 .progress-tool-step.done .progress-tool-step-label { color: var(--color-k-text); }
 .progress-tool-step.is-warn .progress-tool-step-label { color: var(--color-warn); }
@@ -692,8 +816,6 @@ html.is-boot-expanding #winControls { opacity: 0; }
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
   color: var(--color-k-faint);
-  min-width: 32px;
-  text-align: right;
 }
 
 /* ---------- 커맨드 카드 하단(AT-CH-001R) — 입력줄 + 컨트롤 스트립 ---------- */
@@ -944,21 +1066,37 @@ html.is-boot-expanding #winControls { opacity: 0; }
 .input::placeholder { color: var(--color-k-dim); }
 .input:disabled { color: var(--color-k-faint); }
 
+/* 진행 힌트(2026-08-31 재설계 — 사용자 지적 "글자 짤림·디자인 별로").
+   이전 판은 mono 폰트 한 문자열 + flex-shrink:0이라 긴 문구가 컨테이너 밖으로
+   하드 클리핑됐다. 이제 상태 문구만 말줄임되고, 시간과 ESC 칩은 항상 온전하다. */
 .lock-hint {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--text-sm);
   color: var(--color-k-dim);
-  display: flex; align-items: center; gap: 10px;
-  white-space: nowrap;
-  /* .input이 min-width:0으로 끝까지 줄어드는 쪽 — 이 쪽(ESC 중단 칩 포함)은
-   * 절대 안 줄어든다(Paper 보드 04: 입력이 잘리고 칩은 온전하다). */
-  flex-shrink: 0;
+  display: flex; align-items: center; gap: 8px;
+  min-width: 0;
+  overflow: hidden;
 }
+.lock-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lock-time {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-k-faint);
+}
+.lock-time:empty { display: none; }
 .lock-hint .esc {
+  flex-shrink: 0;
   color: var(--color-k-faint);
   border: 1px solid var(--color-k-line);
-  border-radius: 4px;
-  padding: 1px 6px;
+  border-radius: 999px;
+  padding: 2px 9px;
+  white-space: nowrap;
 }
 
 .onb-root { position: absolute; inset: 0; }
@@ -1243,7 +1381,6 @@ html.is-boot-expanding #winControls { opacity: 0; }
   color: var(--color-k-text);
   white-space: nowrap;
   /* 각인(engraving) — 큰 숫자는 본문보다 그림자를 더 깊게(palette.md 각인 물리). */
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.66);
 }
 .auth-timer-digits.is-warn { color: var(--color-warn); }
 .auth-timer-digits.is-dim { color: var(--color-k-ghost); }
