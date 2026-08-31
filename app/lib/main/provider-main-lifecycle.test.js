@@ -14,7 +14,7 @@ function deferred() {
   return { promise, resolve };
 }
 
-test('concurrent new conversations serialize block, interrupt, publication, begin, and rotation', async () => {
+test('concurrent new conversations serialize block, interrupt, rotation, publication, and begin', async () => {
   const events = [];
   const firstRotation = deferred();
   let id = 0;
@@ -30,8 +30,8 @@ test('concurrent new conversations serialize block, interrupt, publication, begi
       return { activeId: nextId };
     },
     rotateProvider: async (reason) => {
-      events.push(`rotate:${activeId}:${reason}`);
-      if (activeId === 'conversation-1') await firstRotation.promise;
+      events.push(`rotate:${reason}`);
+      if (events.filter((event) => event === `rotate:${reason}`).length === 1) await firstRotation.promise;
     },
   });
 
@@ -39,17 +39,19 @@ test('concurrent new conversations serialize block, interrupt, publication, begi
   const b = queue.begin({ projectId: 'B' });
   await new Promise((resolve) => setImmediate(resolve));
   assert.deepEqual(events, [
-    'block', 'interrupt', 'publish:conversation-1',
-    'begin:conversation-1:A', 'rotate:conversation-1:new_conversation',
+    'block', 'interrupt', 'rotate:new_conversation',
   ]);
+  assert.equal(activeId, 'initial');
   firstRotation.resolve();
   assert.deepEqual(await Promise.all([a, b]), [
     { activeId: 'conversation-1' },
     { activeId: 'conversation-2' },
   ]);
-  assert.deepEqual(events.slice(5), [
-    'block', 'interrupt', 'publish:conversation-2',
-    'begin:conversation-2:B', 'rotate:conversation-2:new_conversation',
+  assert.deepEqual(events, [
+    'block', 'interrupt', 'rotate:new_conversation',
+    'publish:conversation-1', 'begin:conversation-1:A',
+    'block', 'interrupt', 'rotate:new_conversation',
+    'publish:conversation-2', 'begin:conversation-2:B',
   ]);
 });
 
@@ -87,7 +89,7 @@ test('conversation queue carries verifier correlation through an already-queued 
   ]);
 });
 
-test('conversation rotation rejects shutdown before publication and after rotation', async () => {
+test('conversation rotation rejects shutdown without publishing after provider rotation', async () => {
   let shuttingDown = false;
   let published = 0;
   const rotation = deferred();
@@ -104,14 +106,32 @@ test('conversation rotation rejects shutdown before publication and after rotati
 
   const pending = queue.begin({});
   await new Promise((resolve) => setImmediate(resolve));
-  assert.equal(published, 1);
+  assert.equal(published, 0);
   shuttingDown = true;
   rotation.resolve();
   await assert.rejects(pending, (error) => error.code === 'APP_SHUTTING_DOWN');
 
   const blocked = queue.begin({});
   await assert.rejects(blocked, (error) => error.code === 'APP_SHUTTING_DOWN');
-  assert.equal(published, 1);
+  assert.equal(published, 0);
+});
+
+test('provider rotation failure leaves conversation publication and persistence unchanged', async () => {
+  let published = 0;
+  let begun = 0;
+  const queue = createConversationRotationQueue({
+    isShuttingDown: () => false,
+    blockAdmission: () => {},
+    interrupt: () => {},
+    createConversationId: () => 'conversation-rejected',
+    publishConversationId: () => { published += 1; },
+    beginConversation: () => { begun += 1; return { ok: true }; },
+    rotateProvider: async () => { throw new Error('rotation failed'); },
+  });
+
+  await assert.rejects(queue.begin({}), /rotation failed/);
+  assert.equal(published, 0);
+  assert.equal(begun, 0);
 });
 
 test('stopped controller is discarded and mutation, logout, or disabled restart constructs fresh runtime', async () => {

@@ -25,7 +25,7 @@ test('live turn captures one conversation id and never re-reads the mutable acti
   assert.match(turn, /historyConversationId\(\) === turnConversationId[\s\S]*liveSessionId = result\.finalResult\.session_id/);
 });
 
-test('new conversation serializes abort, record publication, persistence, and provider rotation', async () => {
+test('new conversation serializes abort and provider rotation before record publication and persistence', async () => {
   const events = [];
   let publishedId = null;
   const queue = createConversationRotationQueue({
@@ -42,9 +42,9 @@ test('new conversation serializes abort, record publication, persistence, and pr
   assert.deepEqual(events, [
     'block',
     'abort',
+    'rotate:null',
     'publish',
     'begin:conversation-next',
-    'rotate:conversation-next',
   ]);
 });
 

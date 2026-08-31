@@ -166,4 +166,3 @@ module.exports = {
   percentile,
   summarize,
 };
-

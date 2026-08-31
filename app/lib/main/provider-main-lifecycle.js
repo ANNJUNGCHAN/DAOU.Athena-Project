@@ -32,10 +32,10 @@ function createConversationRotationQueue({
         assertOpen();
         const id = createConversationId();
         assertOpen();
-        publishConversationId(id);
-        const state = beginConversation({ id, projectId });
         await rotateProvider('new_conversation', Object.freeze({ verifierCorrelationId }));
         assertOpen();
+        publishConversationId(id);
+        const state = beginConversation({ id, projectId });
         return state;
       });
     },

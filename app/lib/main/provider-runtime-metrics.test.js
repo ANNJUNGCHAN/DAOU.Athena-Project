@@ -57,4 +57,3 @@ test('unknown counters and duplicate turn identities fail closed', () => {
   metrics.beginTurn({ clientSubmitId: 'c', turnId: 't', provider: 'codex' });
   assert.throws(() => metrics.beginTurn({ clientSubmitId: 'c2', turnId: 't', provider: 'codex' }), /duplicate/);
 });
-
