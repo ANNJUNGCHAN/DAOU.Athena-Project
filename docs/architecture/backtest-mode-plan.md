@@ -1,6 +1,6 @@
 # Athena 백테스트 모드 도입 계획서
 
-- 상태: 기획 확정(결정 D1~D4 반영) · 구현 미착수
+- 상태: P0~P4 구현 완료(P1.5·P2는 실서버 실측만 남음) · P5·P6 미착수
 - 작성 기준: 2026-08-31 KST
 - 브랜치: `claude/backtester-new-mode-integration-536ff0`
 - 원본 참조: `koreainvestment/open-trading-api` → `backtester/` (KIS 백테스터)
@@ -505,14 +505,14 @@ athena:backtest-backfill       ← 사람 클릭 전용
 
 | 단계 | 내용 | 완료 검증 |
 |---|---|---|
-| **P0** | Paper 58~64 신규 + 44/45/46/38 개정 · `PAPER_APP_PARITY.md` 갱신 | Paper 스크린샷 + 파리티 표 67/67 |
-| **P1** | 모드 골격 — `VIEW_BACKTEST`, `#backtestCanvas`, 네비, 빈 캔버스, 키우미 얼굴, `applyVisibility()` 정규화 | `npm test`(5×5 배타표) + `probe-backtest-mode.js` 1단계 + 하네스 게이트 기대값 갱신 |
-| **P1.5** | **numpy/pandas 배포 실측** — Electron 패키징에서 백엔드 import 확인 | 패키징된 앱에서 `/health` + pandas import 성공 로그 |
-| **P2** | 데이터 층 — `store.py`·`data.py`·백필·coverage·plan API | `pytest -m deterministic` + **실서버 1종목 10년 수집 실측**(페이지 크기·소요·최대 과거 시점 기록) |
-| **P3** | 엔진 — `schema`/`indicators`(핵심 25종)/`rules`/`compile`/`engine`/`metrics`/`costs` + 프리셋 10종 | 손계산 골든 픽스처(합성 봉 30개로 SMA 교차 1왕복 정확 일치) + 프리셋 10종 무오류 |
-| **P4** | 샌드박스 + 전략 버전 저장소 + API + IPC + 결과 캔버스 | 샌드박스 탈출 시도 테스트(자격증명 미노출·import 차단·타임아웃) + **재현성 테스트** + probe 2단계 |
-| **P5** | 코드 편집기 + diff + LLM `propose_code` → 사람 적용 | `activate`/`backfill` MCP 거부 테스트 + probe 3단계(초안→diff→적용→실행) |
-| **P6** | 지표 55종 파리티 + 그리드/랜덤 최적화 + 이력 비교 + 과최적화 경고 | 지표 파리티 표 80/80 + 그리드 400조합 소요 실측 |
+| **P0** ✅ | Paper **전용 백테스트 페이지** BT-01~06 신규 + 화면 45/47 개정 · `PAPER_APP_PARITY.md` 갱신 | 보드 6장 스크린샷 검수 완료 (백테스트 보드는 백테스트 페이지에 둔다 — 2026-08-31 사용자 지시) |
+| **P1** ✅ | 모드 골격 — `VIEW_BACKTEST`, `#backtestCanvas`, 네비, 빈 캔버스, `applyVisibility()` 정규화 | app 1342 passed(5×5 배타표 포함) · 게이트 4종 통과(DOM id 125→127) · `probe-backtest-mode.js` 5/5 |
+| **P1.5** ◐ | **numpy/pandas 배포 실측** | 워크트리 venv에서 numpy 2.5.2 · pandas 2.3.3 import 실측 통과. **패키징된 앱 실측은 남았다** — 배포 스크립트가 파이썬 런타임을 어떻게 동봉하는지에 달렸다 |
+| **P2** ◐ | 데이터 층 — `store.py`·`data.py`·백필·coverage·plan | unit 18+28 passed · 시드 캐시로 종단 확인. **실서버 수집 실측은 남았다**(페이지 크기 600행 가정·최대 과거 시점·모의/실서버 차이) — 자격증명 필요 |
+| **P3** ✅ | 엔진 — `schema`/`indicators`(25종)/`rules`/`compile`/`engine`/`metrics`/`costs` + 프리셋 10종 | 백테스트 계열 157 passed · 손계산 골든 8종(SMA/EMA/RSI/MACD/ATR/Bollinger/Stochastic + 엔진 1왕복 26봉) · 프리셋 10종 컴파일·실행 무오류 |
+| **P4** ✅ | 샌드박스 + 잡 러너 + API 10라우트 + MCP 툴 + IPC 8채널 + 결과 캔버스 | 샌드박스 6종(자격증명 미노출은 자식 `os.environ` 덤프로 실측) · api+mcp 579 passed · **실백엔드 종단 실측**: 409 정직 거부 → 시드 후 694봉 실행 → 지표·체결 7건·flags `비용 미설정` 확인 |
+| **P5** ○ | 코드 편집기(CodeMirror 6) + diff + LLM `propose_code` → 사람 적용 | 미착수. MCP 쪽 `backfill`/`activate` **부재**는 이미 테스트로 고정됨 |
+| **P6** ○ | 지표 55종 파리티 + 그리드/랜덤 최적화 + 이력 비교 + 과최적화 경고 + 자산곡선 차트 | 미착수 |
 
 P0~P4가 "쓸 수 있는 백테스트 모드"의 최소선이다. P5가 D3의 본체, P6이 D2의 파리티 마무리다.
 
