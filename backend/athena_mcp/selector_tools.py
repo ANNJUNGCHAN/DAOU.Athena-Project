@@ -468,6 +468,10 @@ _FLOW_NOTE = (
     "토큰을 받는다."
 )
 
+# 다른 세 툴 설명은 위 문단 전체를 반복하지 않고 이 문장으로만 가리킨다 —
+# 전체 흐름 설명은 athena_search 쪽 한 곳에만 둔다.
+_FLOW_NOTE_POINTER = "4단계 흐름 전체 설명은 athena_search 설명을 참고한다."
+
 _DESCRIPTION_BY_TOOL: dict[str, str] = {
     SEARCH_TOOL: (
         "1/4단계 — 자연어 질문으로 국내 키움 오퍼레이션 후보를 검색한다. 조회가 "
@@ -475,15 +479,15 @@ _DESCRIPTION_BY_TOOL: dict[str, str] = {
         f"명시해야 그 표면이 랭킹에 들어온다. {_FLOW_NOTE}"
     ),
     DESCRIBE_TOOL: (
-        f"2/4단계 — 실제 operation_ref 하나의 정확한 인자·응답 계약을 읽는다. {_FLOW_NOTE}"
+        f"2/4단계 — 실제 operation_ref 하나의 정확한 인자·응답 계약을 읽는다. {_FLOW_NOTE_POINTER}"
     ),
     RESOLVE_TOOL: (
-        f"3/4단계 — 오퍼레이션을 선택하고 인자를 검증해 서명된 실행 계획을 발급한다. {_FLOW_NOTE}"
+        f"3/4단계 — 오퍼레이션을 선택하고 인자를 검증해 서명된 실행 계획을 발급한다. {_FLOW_NOTE_POINTER}"
     ),
     CALL_TOOL: (
         "4/4단계 — 서명된 계획을 실행한다. 웹소켓 계획은 등록 프레임 하나를 보내고 "
         "그 확인 응답만 돌려준다 — 구독 이벤트는 이 응답에 없고 별도 WS 스트림으로 "
-        f"온다. {_FLOW_NOTE} 같은 토큰을 재사용하면 서버가 PLAN_ALREADY_USED로 거부한다. "
+        f"온다. {_FLOW_NOTE_POINTER} 같은 토큰을 재사용하면 서버가 PLAN_ALREADY_USED로 거부한다. "
         "대형 응답(차트 이력 등)은 게이트웨이가 가장 큰 배열의 앞쪽(최신)만 남기고 "
         "_athena_trimmed 마커를 붙인다 — 남은 행으로 즉시 진행하고 다른 주기 "
         "오퍼레이션을 다시 찾지 마라."
