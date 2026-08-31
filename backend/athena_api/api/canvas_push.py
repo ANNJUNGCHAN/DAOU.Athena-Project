@@ -824,26 +824,6 @@ def _forbidden_generic_task_canvas_aliases(envelope: dict[str, Any]) -> list[str
     return sorted(forbidden)
 
 
-def _generic_push_semantic_source(envelope: dict[str, Any]) -> Any:
-    """Pick the rawest Kiwoom-shaped payload a generic push carries.
-
-    Semantic binding evaluates official JSON paths (``$.stk_cd``,
-    ``$.rows[].key``) against the wire response.  A generic push may already
-    carry display-shaped ``data`` (columns/rows), so prefer the untransformed
-    copies when they are present and fall back to ``data`` otherwise.
-    """
-
-    raw = envelope.get("raw_data")
-    if isinstance(raw, dict):
-        return raw
-    source_data = envelope.get("source_data")
-    if isinstance(source_data, dict):
-        nested = source_data.get("data")
-        if isinstance(nested, dict):
-            return nested
-    return envelope.get("data")
-
-
 @router.post("/api/v1/canvas/push", operation_id="canvas_push")
 async def canvas_push(request: Request, envelope: dict[str, Any]) -> JSONResponse:
     if not isinstance(envelope.get("canvas_type"), str) or not envelope["canvas_type"]:
@@ -892,49 +872,43 @@ async def canvas_push(request: Request, envelope: dict[str, Any]) -> JSONRespons
                 "detail": "Task Canvas contract는 signed selector dispatch에서만 생성할 수 있다",
             },
         )
+    # 통합 카드 계약은 호출자가 카드 의도를 명시했을 때만 파생한다. 이 엔드포인트에는
+    # bearer 검사가 없으므로(같은 파일의 internal_canvas_realtime_bindings와 대비),
+    # "canonical operation_ref만 대면 누구나 lossless 딱지가 붙은 공식 카드를 만든다"로
+    # 넓히면 호출자 데이터를 공식 라벨로 세탁해주는 통로가 된다. 실제 프로덕션 호출자는
+    # athena_mcp/canvas_data.py의 render_with_plan 하나뿐이고, 그쪽은 이미
+    # _integrated_card_contract를 실어 보내므로 이 게이트로 충분하다.
     supplied_integrated_fields = _INTEGRATED_CARD_FIELDS.intersection(envelope)
-    if supplied_integrated_fields and (
-        not isinstance(operation_ref, str) or not operation_ref
-    ):
-        return JSONResponse(
-            status_code=422,
-            content={"detail": "통합 카드 envelope에는 canonical operation_ref가 필요하다"},
-        )
-    # Paper 카드 전용 배선 — canonical operation_ref가 실린 봉투에는 호출자가 통합 카드
-    # 필드를 자원해서 실었는지와 무관하게 서버가 계약을 파생해 붙인다. 이렇게 해야 모델이
-    # MCP로 밀어넣은 캔버스 블록도 레거시 범용 카드가 아니라 CC-01..CC-06으로만 그려진다.
-    # 위조 방지 경계는 그대로다: 값은 언제나 서버 파생으로 덮어쓰고, 호출자가 실어 보낸
-    # task-canvas alias는 위 _forbidden_generic_task_canvas_aliases에서 이미 422로 막았다.
-    if isinstance(operation_ref, str) and operation_ref:
+    if supplied_integrated_fields:
+        if not isinstance(operation_ref, str) or not operation_ref:
+            return JSONResponse(
+                status_code=422,
+                content={
+                    "detail": "통합 카드 envelope에는 canonical operation_ref가 필요하다"
+                },
+            )
         try:
             canonical = _integrated_card_contract(operation_ref)
         except (CanvasCardRegistryError, KeyError, ValueError) as exc:
-            if supplied_integrated_fields:
-                return JSONResponse(status_code=422, content={"detail": str(exc)})
-            # canonical 목록에 없는 operation은 통합 카드 대상이 아니다 — 봉투를 그대로 둔다.
-            canonical = None
-        if canonical is not None:
-            mismatched = sorted(
-                field
-                for field in supplied_integrated_fields
-                if envelope[field] != canonical[field]
+            return JSONResponse(status_code=422, content={"detail": str(exc)})
+        mismatched = sorted(
+            field
+            for field in supplied_integrated_fields
+            if envelope[field] != canonical[field]
+        )
+        if mismatched:
+            return JSONResponse(
+                status_code=422,
+                content={
+                    "detail": "통합 카드 metadata가 canonical operation_ref와 일치하지 않는다",
+                    "mismatched_fields": mismatched,
+                },
             )
-            if mismatched:
-                return JSONResponse(
-                    status_code=422,
-                    content={
-                        "detail": "통합 카드 metadata가 canonical operation_ref와 일치하지 않는다",
-                        "mismatched_fields": mismatched,
-                    },
-                )
-            _bind_semantic_values(
-                canonical, operation_ref, _generic_push_semantic_source(envelope)
-            )
-            # Do not forward caller-owned object identities even when values match.
-            # Replace every integrated field with a fresh server-derived contract.
-            for field in _INTEGRATED_CARD_FIELDS:
-                envelope.pop(field, None)
-            envelope.update(canonical)
+        # Do not forward caller-owned object identities even when values match.
+        # Replace every integrated field with a fresh server-derived contract.
+        for field in _INTEGRATED_CARD_FIELDS:
+            envelope.pop(field, None)
+        envelope.update(canonical)
     queue = getattr(request.app.state, "canvas_events", None)
     if queue is None:
         # fail-closed — 조용히 버리면 게이트웨이가 "밀었다"고 믿는다(정직성 위반).
