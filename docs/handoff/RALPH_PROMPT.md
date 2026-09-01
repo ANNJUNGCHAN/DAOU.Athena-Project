@@ -78,8 +78,8 @@ rtk 훅이 명령을 훼손한 실측이 있다.
 
 `docs/handoff/README.md` §4의 표가 정본이다. 요약하면:
 
-1. **backend 전수 pytest 재실행** — `289ca65`(canvas_push 되돌리기) 위에서 끝까지 돈 적이 없다.
-   직전 `b414e06`에서는 2,584 passed / 5 skipped / 0 failed였다. 약 25~30분.
+1. ~~backend 전수 pytest 재실행~~ — **2026-09-01에 닫혔다** (2,638 passed / 5 skipped / 0 failed).
+   §4-A에서 확인 목적으로 한 번 더 돌리되, 이걸 미완 항목으로 취급하지 않는다.
 2. **키우미 오브 프로브 20개** — 9/20에서 끊겼다. `KIUMI_AUDIT_STATUS.md` §2.3의 **기준선 대조**가
    다음 단계다. 배치 자체가 불안정하다는 직접 증거가 있으므로(단독 22/22였던 mini-cards가
    배치에서 실패) 판정이 갈리면 단독 3회 재실행. `glad 02b` 한 건은 미판정으로 남아 있다.
@@ -139,7 +139,7 @@ cd app && ./node_modules/.bin/electron probe-backtest-mode.js
 |---|---|
 | 게이트 4종 | 4/4 PASS |
 | app 단위 | 1,946 / 0 fail |
-| backend 전수 | 2,584 passed / 5 skipped / 0 failed (`b414e06` 시점) |
+| backend 전수 | 2,638 passed / 5 skipped / 0 failed (2026-09-01 실측, 격리 HOME) |
 | verify:plugins | 116 단언 / 0 |
 | verify:kiumi | 19 / 0 |
 | verify:integrated-cards | 6 카드 / 299 op / missing 0 / unresolved 0 |
