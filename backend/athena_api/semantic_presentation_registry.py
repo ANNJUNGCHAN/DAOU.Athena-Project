@@ -2,9 +2,8 @@
 
 The lossless :mod:`canvas_field_registry` remains the wire contract.  This
 module uses its immutable ``occurrence_id`` as a foreign key and decides which
-values may enter product UI.  Protocol and structural envelope values remain
-diagnostic-only.  Official opaque values stay user-accessible with neutral
-labels so the product never discards a field present in the Kiwoom contract.
+values may enter product UI.  Protocol, internal, and unresolved values remain
+addressable for diagnostics but never receive a product destination.
 """
 
 from __future__ import annotations
@@ -140,7 +139,7 @@ class SemanticPresentationContract:
 
     @property
     def user_visible(self) -> bool:
-        return self.field_class in {"semantic", "unresolved", "derived"}
+        return self.field_class in {"semantic", "derived"}
 
     def serializable(self) -> dict[str, Any]:
         """Return the lossless engineering contract, including its wire FK."""
@@ -215,9 +214,7 @@ class SemanticPresentationRegistrySummary:
 
     @property
     def semantic_placement_complete(self) -> bool:
-        return self.placed_user_field_count == (
-            self.semantic_count + self.unresolved_count + self.derived_count
-        )
+        return self.placed_user_field_count == self.semantic_count + self.derived_count
 
     @property
     def product_destination_safe(self) -> bool:
@@ -1487,7 +1484,7 @@ def build_semantic_presentation_registry() -> SemanticPresentationRegistry:
 
     for field in wire_registry.contracts:
         field_class = _classify(field)
-        user_visible = field_class in {"semantic", "unresolved", "derived"}
+        user_visible = field_class in {"semantic", "derived"}
         recipe = recipe_registry.for_operation(field.mapping_id) if user_visible else None
         placement = _placement_for(field, recipe.recipe_id) if recipe else None
         section_id = placement.section_id if placement else None
@@ -1551,10 +1548,6 @@ def build_semantic_presentation_registry() -> SemanticPresentationRegistry:
             else (None, None, None, None)
         )
         display_tier, display_group, display_order, visibility_policy = display_metadata
-        if field_class == "unresolved":
-            display_tier = "detail"
-            display_group = "명세 추가 항목"
-            visibility_policy = "named-detail"
         product_destination = (
             f"{recipe.recipe_id}/{section_id}/{component_id}"
             if recipe and section_id and component_id

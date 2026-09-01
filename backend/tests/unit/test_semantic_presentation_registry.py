@@ -81,11 +81,11 @@ def test_every_semantic_occurrence_has_stable_named_product_placement() -> None:
     )
 
 
-def test_transport_and_structural_internal_fields_never_receive_product_destination() -> None:
+def test_transport_internal_and_unresolved_never_receive_product_destination() -> None:
     hidden = [
         item
         for item in get_semantic_presentation_registry().contracts
-        if item.field_class in {"transport", "internal"}
+        if item.field_class in {"transport", "internal", "unresolved"}
     ]
 
     assert hidden
@@ -188,7 +188,7 @@ def test_vi_schema_labels_are_normalized_for_investor_ui() -> None:
     assert labels["1239"] == "동적 VI 괴리율"
 
 
-def test_official_opaque_951_924_and_1279_are_preserved_in_named_detail() -> None:
+def test_current_rest_951_924_and_1279_are_the_only_unresolved_occurrences() -> None:
     contracts = get_semantic_presentation_registry().contracts
     unresolved = [item for item in contracts if item.field_class == "unresolved"]
 
@@ -198,20 +198,10 @@ def test_official_opaque_951_924_and_1279_are_preserved_in_named_detail() -> Non
         "1279",
     }
     assert len(unresolved) == 3
-    assert all(item.user_visible for item in unresolved)
-    assert all(item.product_destination for item in unresolved)
-    assert all(item.visibility_policy == "named-detail" for item in unresolved)
-    assert {item.label_ko for item in unresolved} == {
-        "명세 추가 항목",
-        "명세 추가 항목 1",
-        "명세 추가 항목 2",
-    }
-    assert all(item.description == "키움 공식 명세 표기: Extra Item" for item in unresolved)
-    assert all(item.unit_or_format == "source-defined-number-or-text" for item in unresolved)
-    public = [item.public_serializable() for item in unresolved]
-    serialized = json.dumps(public, ensure_ascii=False)
-    assert all(item is not None for item in public)
-    assert all(alias not in serialized for alias in UNRESOLVED_ALIASES)
+    assert all(item.user_visible is False for item in unresolved)
+    assert all(item.product_destination is None for item in unresolved)
+    assert all(item.label_ko is None for item in unresolved)
+    assert all(item.public_serializable() is None for item in unresolved)
 
 
 def test_all_299_operations_are_recipe_reachable_and_public_contract_is_safe() -> None:
