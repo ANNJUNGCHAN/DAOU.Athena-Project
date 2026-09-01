@@ -7,18 +7,30 @@
 > **바로 이어서 돌리려면** [RALPH_PROMPT.md](./RALPH_PROMPT.md)를 열어 블록을 통째로 복사해
 > Claude Code에 붙여넣는다. 이 문서(§2~§6)를 실행 가능한 루프로 옮겨둔 것이다.
 
+> 🔴 **2026-09-01 정규장에 실 키움(모의투자) 연결을 처음으로 검증했다.**
+> 결과·provenance 분류·새로 찾은 결함은
+> [2026-09-01-live-market-verification.md](./2026-09-01-live-market-verification.md)에 있다.
+> 이 문서 §7의 "실 키움 연결은 어느 대화에서도 검증되지 않았다"는 그 문서 §1로 대체됐다 —
+> **프로덕션 브로커 연결은 설계상 불가능**하고(도메인 하드락), 검증된 것은
+> *mock 브로커 + live 시장 데이터*다.
+
 ---
 
 ## 1. 저장소 상태 (2026-09-01 확인)
 
 | 항목 | 값 |
 |---|---|
-| 브랜치 | 로컬·원격 모두 **`main` 하나뿐** |
+| 브랜치 | 로컬 **`main` 하나뿐** (claude/* 7개는 2026-09-01 삭제 — 전부 main에 반영 확인 후) |
 | 열린 PR | 0건 — #1~#6 전부 MERGED |
-| 워크트리 | 없음 (`.claude/worktrees/` 껍데기 4개는 정리됨) |
+| 워크트리 | **0개** (`git worktree list`에 main만) |
 | 게이트 4종 | 4/4 PASS |
 | app 단위 | **1,946 / 1,946** (`cd app && npm run test:unit`) |
-| backend 전수 | **2,638 passed / 5 skipped / 0 failed** (22분 49초, 격리 HOME) |
+| backend 전수 | **2,638 passed / 5 skipped / 0 failed** |
+
+> ⚠ **새 컴퓨터에서 app 단위가 1,945/1,946이거나 backend가 32건 무더기로 깨지면
+> 코드 문제가 아니라 PATH 문제다.** 원인과 조치는
+> [장중 검증 문서 §5.1~5.2](./2026-09-01-live-market-verification.md)에 있다 —
+> 백엔드 의존성은 `backend/.venv`에만 있고, `evaluate_selector_ablations.py`는 `node`를 부른다.
 
 `main`에 들어간 마지막 묶음: PR 6건 스윕 → `b414e06`, Paper 카드 라우팅 + 키움 공식 스펙
 감사 → `84b0ed9`, `canvas_push` 게이트 되돌리기 → `289ca65`, 키우미 인계 문서 회수 → `0ec8161`.
@@ -90,10 +102,11 @@ cd backend && uv run pytest -q -p no:randomly
 
 | # | 대화 | 상태 | 정본 문서 |
 |---|---|---|---|
-| 1 | Paper 카드 디자인·배선 | 구현 완료, 검증 1건 미완 | [2026-09-01-paper-card-wiring.md](./2026-09-01-paper-card-wiring.md) |
-| 2 | 백테스터를 새 모드로 통합 | P0~P6 완료, 실서버 실측만 남음 | [backtest-mode-plan.md](../architecture/backtest-mode-plan.md) · [backtest-parity-audit.md](../architecture/backtest-parity-audit.md) |
-| 3 | 키우미 전수 검사 | 프로브 9/20에서 중단 | [KIUMI_AUDIT_STATUS.md](../../KIUMI_AUDIT_STATUS.md) |
+| 1 | Paper 카드 디자인·배선 | 구현 완료. 남은 건 Paper 캡처·페이지 정리(둘 다 Paper UI 수동) | [2026-09-01-paper-card-wiring.md](./2026-09-01-paper-card-wiring.md) |
+| 2 | 백테스터를 새 모드로 통합 | **P2 실서버 실측 완료(2026-09-01).** P1.5(패키징 실측)만 남음 | [backtest-mode-plan.md](../architecture/backtest-mode-plan.md) · [backtest-parity-audit.md](../architecture/backtest-parity-audit.md) |
+| 3 | 키우미 전수 검사 | **프로브 20/20 완주(2026-09-01).** `glad 02b` 원인 규명됨 | [KIUMI_AUDIT_STATUS.md](../../KIUMI_AUDIT_STATUS.md) |
 | 4 | Athena 3일 실사용 베타테스트 | 1일차 1세션만 진행, 미완 | [beta-test-3day/README.md](./beta-test-3day/README.md) |
+| 5 | **장중 실연결 검증** | **§4-B 완료(2026-09-01 정규장).** 주문 0회 | [2026-09-01-live-market-verification.md](./2026-09-01-live-market-verification.md) |
 
 ### 4.1 Paper 카드 배선
 
@@ -109,8 +122,21 @@ ELW·금현물 라우팅 지시어 의존. 근거와 판단 이유는 전부 정
 
 ### 4.2 백테스트 모드
 
-P0~P6 구현 완료, 전수 파리티 완료(60/60). **P1.5·P2는 실서버 실측만 남았다.**
+P0~P6 구현 완료, 전수 파리티 완료(60/60).
 `probe-backtest-mode` 5/5, 백테스트 P5·P6 라우트 14개가 라우트 수 단언에 반영됨(`8609815`).
+
+**P2 실서버 실측은 2026-09-01 정규장에 끝났다.** 설계서 §5.2의 "600행/페이지"는 가정이었는데
+`ka10081`을 19페이지 연속 조회해 **정확히 600행**임을 확인했고, §10-2의 "최대 과거 시점
+미실측"도 **하한 1985-01-04**(약 10,938 거래일)로 닫혔다. 설계서 §11의 해법 ⓑ(첫 백필 응답의
+가장 오래된 봉을 조회 하한으로 기록)가 실현 가능함이 확인된다 — 마지막 페이지가 600 미만
+행으로 끝나므로 감지된다. 근거는
+[장중 검증 문서 §3(4)](./2026-09-01-live-market-verification.md).
+
+**남은 것은 P1.5뿐이다** — numpy/pandas의 *패키징된 앱* 실측이라 배포 빌드가 필요하고
+장중과 무관하다.
+
+> `probe-backtest-mode`는 **백엔드를 내린 상태에서** 돌려야 한다. 04번 단언이
+> "백엔드 미기동 → 손쓸 수 있는 에러 문구"를 검사하므로 백엔드가 떠 있으면 반드시 실패한다.
 
 알아둘 함정: `backtest_db_path` 기본값도 `~/.athena/backtest.sqlite3`라 §3의
 brain 함정과 같은 구조다. 지금은 런처가 `ATHENA_BACKTEST_ENABLED`를 켜지 않아 파일이

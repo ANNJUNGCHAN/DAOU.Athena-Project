@@ -33,13 +33,38 @@ async function faceState(orbWin) {
  * [data-alert="fired"] 결합 규칙이 뒤에서 이겨버리는 것)을 못 잡는다.
  * getComputedStyle로 진짜 렌더 크기를 재서 glad 전용 아치가 실제로 이겼는지
  * 확인한다(probe-orb-surprise.js와 같은 기법). */
-async function eyeShape(orbWin) {
+// 2026-09-01 정정 — 눈 모양은 **전이가 끝난 뒤에** 재야 한다. orb.css의 .orb-eye는
+// width/height/border-radius를 220ms에 걸쳐 옮기는데, 부팅 직후처럼 기계가 바쁘면
+// routine-event 200ms 뒤에도 전이가 **아직 시작조차 안 한** 평탄 구간일 수 있다
+// (실측: 배경·테두리는 이미 아치인데 width/height는 직전 얼굴 값 그대로였다).
+// 그래서 "두 번 연속 같으면 안정"으로 판정하면 그 평탄 구간을 안정으로 오인한다 —
+// 목표 모양이 될 때까지 기다리되, 안 되면 마지막 실측값을 그대로 돌려준다
+// (기다림이 판정을 대신하지 않는다 — 실패는 실패로 보고돼야 한다).
+const EYE_SETTLE_TIMEOUT_MS = 3000;
+
+async function readEyeShape(orbWin) {
   return orbWin.webContents.executeJavaScript(`(() => {
     const eye = document.querySelector('.orb-eye-l');
     const cs = getComputedStyle(eye);
     return { width: parseFloat(cs.width), height: parseFloat(cs.height), radius: cs.borderRadius };
   })()`);
 }
+
+/** predicate가 참이 될 때까지 폴링한다. 시간 안에 못 만나면 마지막 값을 돌려준다. */
+async function eyeShape(orbWin, predicate = null) {
+  const deadline = Date.now() + EYE_SETTLE_TIMEOUT_MS;
+  let last = await readEyeShape(orbWin);
+  if (!predicate) return last;
+  while (Date.now() < deadline) {
+    if (predicate(last)) return last;
+    await new Promise((r) => setTimeout(r, 80));
+    last = await readEyeShape(orbWin);
+  }
+  return last;
+}
+
+/** glad/done 아치 판정 — 위쪽만 둥근 테두리이거나 가로가 세로보다 확실히 넓다. */
+const isArch = (s) => s.radius.includes('0px 0px') || s.width > s.height;
 
 async function main() {
   const mainMod = require('./main.js');
@@ -66,9 +91,9 @@ async function main() {
 
   // 실제 렌더 크기 대조 — [data-alert="fired"] 결합 규칙에 눌리지 않고 glad
   // 전용 27.4%/16.4% 아치가 실제로 이겼는지(캐스케이드 순서 검증).
-  const eyeArch = await eyeShape(orbWin);
+  const eyeArch = await eyeShape(orbWin, isArch);
   record('02b-glad 눈이 아치 모양(사각 아님, done/glad 공용 규칙)으로 렌더된다',
-    Math.abs(eyeArch.width - eyeArch.height * (27.4 / 16.4)) < 5 || eyeArch.radius.includes('0px 0px'),
+    isArch(eyeArch) && Math.abs(eyeArch.width - eyeArch.height * (27.4 / 16.4)) < 5,
     eyeArch);
 
   // ---------- (3) 급변(exceedRatio 충족)+goal=true 동시 → glad가 surprise를 이긴다 ----------

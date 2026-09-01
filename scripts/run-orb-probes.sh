@@ -19,13 +19,17 @@ for f in probe-orb-*.js; do
   rm -rf ".${name}-profile" 2>/dev/null
 
   start=$(date +%s)
-  ./node_modules/.bin/electron "$f" > "$LOGDIR/$name.log" 2>&1
+  # 프로브가 매달리면 배치 전체가 멈춘다 — 실측으로 probe-orb-mini-cards가 1시간 반
+  # 진행을 막았다(2026-09-01). 개별 상한을 걸어 배치가 반드시 끝까지 가게 한다.
+  timeout "${ORB_PROBE_TIMEOUT_S:-180}" ./node_modules/.bin/electron "$f" > "$LOGDIR/$name.log" 2>&1
   code=$?
   dur=$(( $(date +%s) - start ))
+  # timeout(1)은 상한 초과를 124로 알린다. 판정이 흐려지지 않게 따로 표시한다.
+  [ "$code" = "124" ] && code="TIMEOUT"
 
   ok=$(grep -c "OK —" "$LOGDIR/$name.log" 2>/dev/null || echo 0)
   fail=$(grep -c "FAIL —" "$LOGDIR/$name.log" 2>/dev/null || echo 0)
-  printf "%-34s exit=%-3s ok=%-4s fail=%-4s %ss\n" "$name" "$code" "$ok" "$fail" "$dur" >> "$SUMMARY"
+  printf "%-34s exit=%-7s ok=%-4s fail=%-4s %ss\n" "$name" "$code" "$ok" "$fail" "$dur" >> "$SUMMARY"
   echo "[done] $name exit=$code ok=$ok fail=$fail ${dur}s"
 done
 
