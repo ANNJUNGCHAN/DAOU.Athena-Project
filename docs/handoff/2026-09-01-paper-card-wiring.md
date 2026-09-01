@@ -87,7 +87,10 @@ Paper 디자인의 카드(CC-01~CC-06 + 12 recipe)만 캔버스에 뜨게 하고
 instrument-chart `candle_count 6`, 둘 다 `primary_renderer_preserved: true`.
 
 > ⚠ 위 backend 2,545는 **되돌리기 전** 코드로 돈 결과다. 되돌리기 반영 전수 실행은
-> 중단됐다(79%까지 무실패). 이어받으면 `pytest -q` 한 번 다시 돌릴 것. 약 25분.
+> 중단됐다(79%까지 무실패).
+>
+> **해결됨 (2026-09-01)** — 되돌리기 반영 상태에서 격리 HOME으로 완주했다:
+> `2638 passed, 5 skipped in 1369.25s (0:22:49)`, exit 0. 아래 §7-1은 닫혔다.
 
 **모든 런타임 근거는 fixture 기반이다** (`fixture_only: true`,
 `live_kiwoom_connectivity_verified: false`). 실 키움 연결은 검증되지 않았다.
@@ -101,7 +104,7 @@ instrument-chart `candle_count 6`, 둘 다 `primary_renderer_preserved: true`.
 
 ## 7. 남은 일
 
-1. **되돌리기 반영 backend 전수 재실행** (약 25분)
+1. ~~되돌리기 반영 backend 전수 재실행~~ — **완료 (2026-09-01): 2,638 passed / 5 skipped / 0 failed**
 2. **Paper 캡처 불가** — `export`가 `No DOM element found`. 캔버스가 마운트되지 않은
    상태라 헤드리스로 못 푼다. Paper 창을 포그라운드로 올리고 `카드` 페이지를 띄운 뒤
    재시도해야 최종 시각 검수가 가능하다.

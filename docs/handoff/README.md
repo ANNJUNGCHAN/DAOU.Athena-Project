@@ -18,7 +18,7 @@
 | 워크트리 | 없음 (`.claude/worktrees/` 껍데기 4개는 정리됨) |
 | 게이트 4종 | 4/4 PASS |
 | app 단위 | **1,946 / 1,946** (`cd app && npm run test:unit`) |
-| backend 전수 | §3 참고 — 이 커밋에서 재실행이 필요했던 항목 |
+| backend 전수 | **2,638 passed / 5 skipped / 0 failed** (22분 49초, 격리 HOME) |
 
 `main`에 들어간 마지막 묶음: PR 6건 스윕 → `b414e06`, Paper 카드 라우팅 + 키움 공식 스펙
 감사 → `84b0ed9`, `canvas_push` 게이트 되돌리기 → `289ca65`, 키우미 인계 문서 회수 → `0ec8161`.
@@ -56,12 +56,22 @@ git config core.hooksPath scripts/hooks
 
 ---
 
-## 3. 이어받자마자 할 것 — 미완 검증 1건
+## 3. backend 전수 — 닫혔다 (2026-09-01)
 
-`289ca65`(canvas_push 되돌리기) 위에서 **backend 전수 pytest가 끝까지 돌지 않았다.**
-직전 커밋 `b414e06`에서는 2,584 passed / 5 skipped / 0 failed였고, 그 뒤 병합이
-`canvas_push.py`·`semantic_presentation_registry.py`와 백엔드 테스트 3종을 건드렸다.
-되돌리기 반영 상태의 전수 결과가 **없다.** 약 25~30분:
+`289ca65`(canvas_push 되돌리기) 위에서 backend 전수 pytest가 끝까지 돈 적이 없다는 것이
+이 인계의 유일한 미완 항목이었다. **2026-09-01에 격리 HOME으로 완주했다.**
+
+```
+2638 passed, 5 skipped, 1 warning in 1369.25s (0:22:49)   exit 0
+```
+
+직전 `b414e06`의 2,584에서 54건 늘었다 — Paper 카드 배선이 넣은
+`test_question_to_card_routing.py`(38 라우팅 + 1 커버리지)와 `test_canvas_push.py` 신뢰 경계
+2건이 여기 포함된다. **이 결과 이후 `backend/`·`app/` 코드는 한 줄도 바뀌지 않았다**
+(`git diff --name-only 289ca65 HEAD -- backend app` 이 비어 있다). 새 컴퓨터에서 이 숫자가
+재현되지 않으면 환경 차이를 먼저 의심한다.
+
+재실행 명령 (약 25분):
 
 ```bash
 cd backend && uv run pytest -q -p no:randomly
@@ -92,10 +102,10 @@ cd backend && uv run pytest -q -p no:randomly
 `card-kind-*.js`는 잔재가 아니라 CC 카드의 **본문**이다 — 삭제하면 CC-04 호가 래더와
 CC-03 AITS 차트가 사라진다. 다시 조사하지 말 것.
 
-남은 일 4가지 — 되돌리기 반영 backend 전수 재실행(§3과 같은 건), Paper 캡처(`export`가
-`No DOM element found` — Paper 창을 앞으로 올려 `카드` 페이지를 띄워야 함), Paper 페이지
-7→3장 정리(`delete_page` 도구가 없어 UI 수동), ELW·금현물 라우팅 지시어 의존.
-근거와 판단 이유는 전부 정본 문서에 있다.
+남은 일 3가지 — Paper 캡처(`export`가 `No DOM element found` — Paper 창을 앞으로 올려
+`카드` 페이지를 띄워야 함), Paper 페이지 7→3장 정리(`delete_page` 도구가 없어 UI 수동),
+ELW·금현물 라우팅 지시어 의존. 근거와 판단 이유는 전부 정본 문서에 있다.
+정본 문서 §7의 "1. 되돌리기 반영 backend 전수 재실행"은 **§3에서 닫혔다.**
 
 ### 4.2 백테스트 모드
 
@@ -165,7 +175,7 @@ push에서도 돈다. 작업트리에 미추적 빨간 테스트가 하나라도
 |---|---|---|
 | 게이트 4종 | `node scripts/gates/check-{orb,glass-ladder,window-model,harness-freshness}.mjs` | 4/4 PASS |
 | app 단위 | `cd app && npm run test:unit` | 1,946 / 0 fail |
-| backend 전수 | `cd backend && uv run pytest -q -p no:randomly` | §3 |
+| backend 전수 | `cd backend && uv run pytest -q -p no:randomly` | 2,638 / 5 skipped / 0 fail |
 | 플러그인 | `cd app && npm run verify:plugins` | 116 단언 / 0 |
 | 키우미 | `cd app && npm run verify:kiumi` | 19 / 0 |
 | 통합 카드 | `cd app && npm run verify:integrated-cards` | 6 카드 / 299 op / missing 0 |
