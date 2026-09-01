@@ -260,9 +260,15 @@ async function main() {
     minCardState);
 
   await wait(500);
-  await orbWin.webContents.capturePage().then((img) => {
+  // 캡처 실패가 판정을 삼키지 않게 한다 — probe-orb-mini-cards.js와 같은 이유다.
+  // (실측 2026-09-01: 단언 15/15 통과 후 UnknownVizError로 프로세스가 안 죽었다.)
+  try {
+    const img = await orbWin.webContents.capturePage();
     fs.writeFileSync(path.join(OUT_DIR, 'probe-orb-mini-chart-card.png'), img.toPNG());
-  });
+  } catch (err) {
+    report.capture_error = String((err && err.message) || err);
+    console.warn(`[probe-orb-mini-chart-card] 캡처 실패(판정과 무관): ${report.capture_error}`);
+  }
 
   fs.writeFileSync(path.join(OUT_DIR, 'probe-orb-mini-chart-card-report.json'), JSON.stringify(report, null, 2));
   const okCount = report.steps.filter((s) => s.ok).length;

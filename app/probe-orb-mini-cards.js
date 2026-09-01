@@ -348,8 +348,17 @@ async function main() {
     "document.getElementById('orbPanel').scrollTop = 0",
   );
   await wait(200);
-  const img = await orbWin.webContents.capturePage();
-  fs.writeFileSync(path.join(OUT_DIR, 'probe-orb-mini-cards.png'), img.toPNG());
+  // 캡처는 부가 산출물이지 판정이 아니다. 여기서 던지면 main()이 통째로 catch로 빠져
+  // 리포트도 못 쓰고 app.exit도 안 먹는다 — viz가 깨진 뒤라 종료가 막혀서 프로브가
+  // 무한 정지한다(실측 2026-09-01: 단언 22/22 통과 후 UnknownVizError로 배치가 멈췄다).
+  // 실패는 삼키지 않고 리포트에 남긴다.
+  try {
+    const img = await orbWin.webContents.capturePage();
+    fs.writeFileSync(path.join(OUT_DIR, 'probe-orb-mini-cards.png'), img.toPNG());
+  } catch (err) {
+    report.capture_error = String((err && err.message) || err);
+    console.warn(`[probe-orb-mini-cards] 캡처 실패(판정과 무관): ${report.capture_error}`);
+  }
 
   report.ok = failures === 0;
   fs.writeFileSync(
