@@ -126,8 +126,10 @@ async function main() {
   record('보드 08: 어느 모드에서도 보이는 얼굴은 정확히 하나다',
     faceRuns.every((r) => r.seen.visibleCount === 1),
     faceRuns.map((r) => ({ mode: r.mode, visibleCount: r.seen.visibleCount })));
-  record('보드 08: 그 하나가 그 모드의 얼굴이다 — 대화 얼굴로 떨어지지 않는다',
-    faceRuns.every((r) => r.seen.visibleClass[0] === `kiumi-face-${r.mode}`),
+  // 2026-09-01 사용자 결정 — 얼굴은 하나다. 모드마다 얼굴을 갈아끼우지 않으므로
+  // 다섯 모드가 **같은** 키우미 얼굴을 보여야 한다(모드별 전용 얼굴이 남아 있으면 회귀다).
+  record('보드 08: 다섯 모드가 같은 키우미 얼굴 하나를 쓴다 — 모드별 얼굴은 없다',
+    faceRuns.every((r) => r.seen.visibleClass[0] === 'kiumi-face'),
     faceRuns.map((r) => ({ mode: r.mode, face: r.seen.visibleClass[0] })));
   record('보드 08: 얼굴은 도형으로 그려진다(빈 얼굴 없음)',
     faceRuns.every((r) => r.seen.shapeCount >= 2),
