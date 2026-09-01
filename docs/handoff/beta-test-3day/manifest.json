@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "status": "active",
+  "startedAtKst": "2026-08-31T01:24:13+09:00",
+  "earliestCompletionAtKst": "2026-09-03T01:28:48+09:00",
+  "timezone": "Asia/Seoul",
+  "threadId": "01a05378-6fd5-7b41-96ef-b72475931226",
+  "automation": {
+    "id": "athena-3",
+    "name": "Athena 3일 실사용 베타테스트",
+    "status": "ACTIVE",
+    "schedule": "hourly",
+    "plannedRuns": 72
+  },
+  "persona": {
+    "krShortTermSeedKrw": 10000000,
+    "monthlyIncomeTargetKrw": 2000000,
+    "longTermCapitalKrwRange": [50000000, 100000000],
+    "krStrategy": "대형주와 ETF 중심 중기 운용, 단타 구간은 한 시간 단위 확인",
+    "usStrategy": "ETF 중심 장기 적립식, 필요 시 투자 논리 기준으로 전술적 축소"
+  },
+  "safety": {
+    "analysisAllowed": true,
+    "alertDraftAllowed": true,
+    "orderTicketInspectionAllowed": true,
+    "orderExecutionAllowed": false,
+    "brokerMutationCount": 0
+  },
+  "baseline": {
+    "gitHead": "d5693f849d866301a3d2383a1644dc7f3a2100f7",
+    "gitStatusFingerprint": "cbb84716c3f16679475207e8cc7492477d81765f",
+    "trackedDirtyFiles": 34,
+    "untrackedEntries": 22,
+    "orcaRuntimeId": "c87a4378-5d9e-4a9b-9ca0-3d45971848ca",
+    "orcaAppVersion": "1.4.183",
+    "athenaProcessId": 48316,
+    "athenaWindowId": 10161436,
+    "athenaUserData": "C:\\Users\\USER\\AppData\\Roaming\\athena-shell"
+  },
+  "runtimeRecovery": {
+    "backendParentProcessId": 40044,
+    "backendListenerProcessId": 18644,
+    "backendStartedAtKst": "2026-08-31T01:37:29+09:00",
+    "backendReadyLatencySeconds": 47,
+    "athenaProcessId": 53300,
+    "athenaWindowId": 159058250,
+    "athenaRestartedAtKst": "2026-08-31T01:41:01+09:00",
+    "backendApiVerified": true,
+    "shellWebSocketVerified": true,
+    "kiwoomMockApiVerified": true,
+    "kiwoomProductionVerified": false,
+    "brainProfileVerified": false
+  },
+  "currentEvidence": {
+    "sessions": 2,
+    "naturalLanguageQueries": 7,
+    "followUpQueries": 2,
+    "successfulResponses": 4,
+    "silentFailures": 2,
+    "graphVisits": 2,
+    "alertViews": 2,
+    "pluginPreviews": 1,
+    "captures": 20,
+    "brokerMutationCount": 0,
+    "liveExternalConnectivityVerified": false
+  },
+  "claudeContinuation": {
+    "resumedAtKst": "2026-08-31T09:03:47+09:00",
+    "haltedAtKst": "2026-08-31T10:05:00+09:00",
+    "haltReason": "사용자 지시 — 카드 UI 결함이 존재하면 즉시 검증 중단",
+    "backendReadyLatencySeconds": 45.4,
+    "bootPhase": "ready",
+    "kiwoomSymbolIndexCount": 3527,
+    "kiwoomMockApiVerified": true,
+    "kiwoomProductionVerified": false,
+    "liveMarketDataVerified": false,
+    "newIssueRange": "BETA-009..BETA-016",
+    "sourceFixesApplied": [
+      {
+        "file": "backend/athena_api/api/canvas_push.py",
+        "issue": "BETA-009",
+        "summary": "최상위 field_contract·coverage_receipt를 alias 금지에서 제외해 통합 카드 canonical 대조 경로를 복구",
+        "regression": "139 passed / 0 failed (canvas_data, canvas_push, task_canvas_envelope, canvas_render_plan)",
+        "verifiedInApp": true
+      }
+    ],
+    "openCardUiDefects": ["BETA-010", "BETA-011", "BETA-012", "BETA-013"],
+    "missedSlots": "H+1..H+6 (인계 공백, 사유 기록됨)"
+  }
+}

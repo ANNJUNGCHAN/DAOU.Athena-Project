@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 # 오브 프로브 전수 실행 — 하나씩 순서대로 돌린다(각자 Electron 창을 띄우므로 병렬은 서로 방해한다).
-export PATH="$HOME/AppData/Roaming/fnm/node-versions/v22.14.0/installation:$PATH"
-APP="C:/Projects/DAOU.Athena/.claude/worktrees/kiummi-full-audit-f99978/app"
+command -v node >/dev/null 2>&1 || export PATH="$HOME/AppData/Roaming/fnm/node-versions/v22.14.0/installation:$PATH"
+# 기본은 이 저장소의 app/. 기준선 대조(KIUMI_AUDIT_STATUS.md §2.3)처럼 다른 체크아웃에서
+# 돌릴 때는 ATHENA_APP_DIR로 넘긴다 — 스크립트를 편집하지 않는다.
+APP="${ATHENA_APP_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../app" && pwd)}"
 LOGDIR="/tmp/orb-probes"
 mkdir -p "$LOGDIR"
 cd "$APP" || exit 1

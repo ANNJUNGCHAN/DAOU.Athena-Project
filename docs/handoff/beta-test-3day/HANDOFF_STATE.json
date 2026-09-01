@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "createdAtKst": "2026-08-31T08:36:50+09:00",
+  "snapshotOnly": true,
+  "objective": "Athena desktop app 72-hour real-user beta test",
+  "objectiveStatus": "incomplete",
+  "codexGoalStatusAtHandoff": "paused",
+  "repository": {
+    "path": "C:\\Projects\\DAOU.Athena",
+    "branch": "main",
+    "gitHead": "b4a46c00d334fad6eb1982736f4cc62e38392cd2",
+    "dirtyEntryCount": 56,
+    "preserveExistingChanges": true
+  },
+  "canonicalEvidenceRoot": "C:\\Projects\\DAOU.Athena\\artifacts\\beta-test-3day",
+  "canonicalFiles": {
+    "manifest": "C:\\Projects\\DAOU.Athena\\artifacts\\beta-test-3day\\manifest.json",
+    "protocol": "C:\\Projects\\DAOU.Athena\\artifacts\\beta-test-3day\\PROTOCOL.md",
+    "sessionLog": "C:\\Projects\\DAOU.Athena\\artifacts\\beta-test-3day\\sessions\\2026-08-31.md",
+    "issues": "C:\\Projects\\DAOU.Athena\\artifacts\\beta-test-3day\\ISSUES.md",
+    "captureManifest": "C:\\Projects\\DAOU.Athena\\artifacts\\beta-test-3day\\captures\\2026-08-31\\manifest.csv",
+    "runtimeLogs": "C:\\Projects\\DAOU.Athena\\artifacts\\beta-test-3day\\runtime"
+  },
+  "currentRuntime": {
+    "verifiedAtKst": "2026-08-31T08:36:50+09:00",
+    "athenaElectronRunning": false,
+    "backendRunning": false,
+    "port8010Listening": false,
+    "historicalProcessIdsAreReusable": false
+  },
+  "evidence": {
+    "substantiveSessions": 1,
+    "naturalLanguageQueries": 4,
+    "followUpQueries": 2,
+    "successfulResponses": 2,
+    "silentFailures": 2,
+    "graphVisits": 2,
+    "alertViews": 2,
+    "pluginPreviews": 1,
+    "captures": 14
+  },
+  "verifiedBoundaries": {
+    "kiwoomMockApi": true,
+    "kiwoomProductionBroker": false,
+    "liveExternalConnectivity": false,
+    "ordersExecuted": 0,
+    "brokerMutations": 0,
+    "sourceChangesByBetaTester": 0
+  },
+  "codexAutomation": {
+    "id": "athena-3",
+    "lastKnownStatus": "ACTIVE",
+    "lastKnownSchedule": "FREQ=HOURLY;INTERVAL=1;COUNT=72",
+    "portableToClaudeCode": false,
+    "mustEstablishOwnVerifiedContinuation": true
+  },
+  "tools": {
+    "claudeCode": "C:\\Users\\USER\\.local\\bin\\claude.exe",
+    "orca": "C:\\Users\\USER\\AppData\\Local\\Programs\\orca\\resources\\bin\\orca.exe"
+  },
+  "knownIssueRange": "BETA-001..BETA-008",
+  "nextAction": "Run preflight.ps1, read canonical evidence, rediscover runtime, then execute the next real UI session.",
+  "completionGateFile": "C:\\Projects\\DAOU.Athena\\artifacts\\beta-test-3day\\PROTOCOL.md"
+}

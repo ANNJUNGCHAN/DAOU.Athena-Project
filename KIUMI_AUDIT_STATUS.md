@@ -4,9 +4,10 @@
 > 남은 것, 그리고 다음 사람이 바로 이어받는 데 필요한 환경 정보를 담는다.
 > 설계 결정 자체는 `PAPER_DESIGN_AUDIT.md`의 결정 로그, 화면 대응은 `PAPER_APP_PARITY.md`가 소유한다.
 
-- 브랜치: `claude/kiummi-full-audit-f99978`
+- 브랜치: ~~`claude/kiummi-full-audit-f99978`~~ → **삭제됨. 전부 `main`에 있다** (2026-09-01)
 - 커밋: `16a7b0e` — feat(kiumi): 키우미 전수 검사 — Paper 정합과 미니 카드 10종
-- PR: https://github.com/ANNJUNGCHAN/DAOU.Athena/pull/2 (open, base `main`)
+- PR: [#2](https://github.com/ANNJUNGCHAN/DAOU.Athena/pull/2) — **MERGED** (2026-08-31 23:25Z, `b414e06` 스윕)
+- 배치 실행기: `scripts/run-orb-probes.sh` (본문 §2의 `.../scratchpad/run-orb-probes.sh`는 옛 경로)
 - Paper 파일: `Athena` → `키우미` 페이지 (7장 → 9장)
 
 ---
