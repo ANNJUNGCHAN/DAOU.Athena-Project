@@ -144,7 +144,12 @@ function productionCurrentPriceContracts() {
     "_bind_semantic_values(rate_card, 'detail:ka10001:current_trading', {'flu_rt': '2.35'})",
     "print(json.dumps({'card': card, 'rate_card': rate_card, 'realtime': {operation: _internal_realtime_binding_contract(operation) for operation in sorted(WEBSOCKET_TR_IDS)}}))",
   ].join('\n');
-  const result = spawnSync(process.env.ATHENA_FIXTURE_PYTHON || 'python', ['-c', script], {
+  // 백엔드 의존성(fastapi 등)은 backend/.venv에만 있다. PATH의 맨 python으로 부르면
+  // ModuleNotFoundError로 죽는다 — mcp-config.js의 PYTHON_EXE와 같은 인터프리터를 쓴다.
+  const venvPython = path.join(backendDir, '.venv', 'Scripts', 'python.exe');
+  const python = process.env.ATHENA_FIXTURE_PYTHON
+    || (fs.existsSync(venvPython) ? venvPython : 'python');
+  const result = spawnSync(python, ['-c', script], {
     cwd: backendDir,
     encoding: 'utf8',
     env: { ...process.env, PYTHONPATH: backendDir },
