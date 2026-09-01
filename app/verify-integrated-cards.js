@@ -17,13 +17,19 @@ const ROOT = path.resolve(APP, '..');
 const BACKEND = path.join(ROOT, 'backend');
 const CAPTURE_DIR = path.join(APP, 'captures', 'integrated-cards');
 
+// 백엔드 의존성(fastapi·pydantic 등)은 backend/.venv에만 있다. PATH의 맨 python으로
+// 부르면 ModuleNotFoundError로 죽는다 — mcp-config.js의 PYTHON_EXE와 같은 경로를 쓴다.
+const VENV_PYTHON = path.join(BACKEND, '.venv', 'Scripts', 'python.exe');
+const FIXTURE_PYTHON = process.env.ATHENA_FIXTURE_PYTHON
+  || (fs.existsSync(VENV_PYTHON) ? VENV_PYTHON : 'python');
+
 fs.mkdirSync(CAPTURE_DIR, { recursive: true });
 app.setPath('userData', path.join(CAPTURE_DIR, '.electron-user-data'));
 app.disableHardwareAcceleration();
 
 function loadBundle() {
   const script = path.join(BACKEND, 'tests', 'support', 'canvas_fixture_factory.py');
-  const result = spawnSync(process.env.ATHENA_FIXTURE_PYTHON || 'python', [script, '--json'], {
+  const result = spawnSync(FIXTURE_PYTHON, [script, '--json'], {
     cwd: BACKEND,
     encoding: 'utf8',
     windowsHide: true,
@@ -42,7 +48,7 @@ function loadProductionSemanticContracts() {
     "_bind_semantic_values(card, 'base:ka10081', {'stk_cd': '005930', 'stk_dt_pole_chart_qry': [{'dt': '20260831', 'cur_prc': '150850', 'open_pric': '149000', 'trde_qty': '1234'}]})",
     "print(json.dumps({'card': card, 'realtime': {operation: _internal_realtime_binding_contract(operation) for operation in sorted(WEBSOCKET_TR_IDS)}}))",
   ].join('\n');
-  const result = spawnSync(process.env.ATHENA_FIXTURE_PYTHON || 'python', ['-c', script], {
+  const result = spawnSync(FIXTURE_PYTHON, ['-c', script], {
     cwd: BACKEND,
     encoding: 'utf8',
     env: { ...process.env, PYTHONPATH: BACKEND },

@@ -20,6 +20,12 @@ const { publicPolicies: publicRealtimePolicies } = require('./lib/main/integrate
 const APP = __dirname;
 const ROOT = path.resolve(APP, '..');
 const BACKEND = path.join(ROOT, 'backend');
+
+// 백엔드 의존성(fastapi·pydantic 등)은 backend/.venv에만 있다. PATH의 맨 python으로
+// 부르면 ModuleNotFoundError로 죽는다 — mcp-config.js의 PYTHON_EXE와 같은 경로를 쓴다.
+const VENV_PYTHON = path.join(BACKEND, '.venv', 'Scripts', 'python.exe');
+const FIXTURE_PYTHON = process.env.ATHENA_FIXTURE_PYTHON
+  || (fs.existsSync(VENV_PYTHON) ? VENV_PYTHON : 'python');
 const ARTIFACT_DIR = path.join(ROOT, 'artifacts', 'task-canvas', 'semantic-workspaces');
 const TEMP_PROFILE_PREFIX = 'athena-semantic-workspaces-';
 const { resolveHarnessProfile } = require('./lib/main/harness-profile');
@@ -265,7 +271,7 @@ print(json.dumps({
 
 function loadFixtureBundle() {
   const result = spawnSync(
-    process.env.ATHENA_FIXTURE_PYTHON || 'python',
+    FIXTURE_PYTHON,
     ['-c', PYTHON_BUNDLE],
     {
       cwd: BACKEND,
