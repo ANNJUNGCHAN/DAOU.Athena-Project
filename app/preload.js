@@ -134,6 +134,7 @@ const INVOKE_CHANNELS = new Set([
   'athena:backtest-version-add',
   'athena:backtest-activate',
   'athena:backtest-version-diff',
+  'athena:backtest-version-detail',
   'athena:backtest-deployments',
   'athena:backtest-deployment-create',
   'athena:backtest-deployment-stop',

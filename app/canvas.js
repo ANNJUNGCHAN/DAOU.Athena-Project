@@ -2791,6 +2791,13 @@ const backtestCanvas = window.AthenaLib.BacktestCanvas.createBacktestCanvas({
     if (!res || !res.ok) throw new Error(backtestError(res, '버전 목록을 불러오지 못했습니다'));
     return (res.data && Array.isArray(res.data.versions)) ? res.data.versions : [];
   },
+  versionDetail: async (strategyId, versionId) => {
+    const res = await window.athena.invoke(
+      'athena:backtest-version-detail', { strategy_id: strategyId, version_id: versionId },
+    );
+    if (!res || !res.ok) throw new Error(backtestError(res, '버전을 다시 열지 못했습니다'));
+    return res.data;
+  },
   // 사람 클릭 전용 — 모델의 MCP 툴에는 이 액션이 없다(§7.3).
   activate: async (strategyId, versionId) => {
     const res = await window.athena.invoke(

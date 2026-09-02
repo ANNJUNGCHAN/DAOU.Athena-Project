@@ -161,6 +161,19 @@ function addVersion({ backendBase, fetchImpl, strategy_id, ...body }) {
   );
 }
 
+// 버전 하나를 bundle까지 펼쳐 읽는다(GET .../versions/{version_id}, 2026-09-03 백엔드
+// e52c101). 목록 라우트는 소스만 준다 — 지난 시각 버전을 **다시 열어** 그래프를 보려면
+// graph·spec_yaml·source_map·hashes·compiler_version이 있어야 하고, 없으면 화면은 예전
+// 그래프를 새로 추정할 수밖에 없다(그것은 재현이 아니라 창작이다).
+function fetchVersionDetail({ backendBase, fetchImpl, strategy_id, version_id }) {
+  return backtestHttp(
+    'GET',
+    `/api/v1/backtest/strategies/${encodeURIComponent(strategy_id)}`
+    + `/versions/${encodeURIComponent(version_id)}`,
+    undefined, { backendBase, fetchImpl },
+  );
+}
+
 function activateVersion({ backendBase, fetchImpl, strategy_id, ...body }) {
   return backtestHttp(
     'POST', `/api/v1/backtest/strategies/${encodeURIComponent(strategy_id)}/activate`,
@@ -380,6 +393,7 @@ module.exports = {
   fetchStrategies,
   createStrategy,
   fetchVersions,
+  fetchVersionDetail,
   addVersion,
   activateVersion,
   fetchVersionDiff,

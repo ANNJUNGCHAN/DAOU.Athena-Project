@@ -376,3 +376,42 @@ test('지도→코드 생성: 422(읽을 수 없는 yaml)도 봉투를 지킨다
   });
   assert.deepEqual(bad, { ok: false, status: 422, error: 'yaml은 비어 있지 않은 문자열이어야 한다' });
 });
+
+// ── US-010 · 버전 되열기 ─────────────────────────────────────────────────────
+
+test('버전 상세: GET .../versions/{version_id} 하나로 bundle까지 펼쳐 받는다', async () => {
+  const calls = [];
+  const fetchImpl = async (url, opts) => {
+    calls.push([opts.method, url, opts.body || null]);
+    return {
+      ok: true,
+      status: 200,
+      json: async () => ({
+        id: 'v 2', version: 2, origin: 'visual', source: 'x', spec_yaml: 'y',
+        graph: { nodes: [] }, source_map: { entries: [] }, hashes: { graph_hash: 'gh-2' },
+        compiler_version: 'visual-1.0.0', is_active: false,
+      }),
+    };
+  };
+  const res = await backtestBridge.fetchVersionDetail({
+    backendBase: 'http://x', fetchImpl, strategy_id: 's 1', version_id: 'v 2',
+  });
+  assert.deepEqual(calls, [
+    ['GET', 'http://x/api/v1/backtest/strategies/s%201/versions/v%202', null],
+  ]);
+  assert.equal(res.ok, true);
+  assert.equal(res.data.origin, 'visual');
+  assert.equal(res.data.hashes.graph_hash, 'gh-2');
+  assert.equal(res.data.is_active, false);
+});
+
+test('버전 상세 404(그 전략에 속한 버전이 아니다)도 같은 봉투다', async () => {
+  const res = await backtestBridge.fetchVersionDetail({
+    backendBase: 'http://x',
+    fetchImpl: async () => ({
+      ok: false, status: 404, json: async () => ({ detail: '그 전략에 속한 버전이 아니다' }),
+    }),
+    strategy_id: 's1', version_id: 'nope',
+  });
+  assert.deepEqual(res, { ok: false, status: 404, error: '그 전략에 속한 버전이 아니다' });
+});

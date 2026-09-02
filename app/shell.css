@@ -4845,3 +4845,132 @@ body { margin: 0; overflow: hidden; }
   font-size: var(--text-2xs);
   white-space: nowrap;
 }
+
+/* ── US-010 · P3 왕복 경계(코드 전용 분기 · 버전 되열기) ─────────────────────
+   코드가 지도보다 앞섰을 때의 두 갈래, 분기한 뒤의 읽기 전용 snapshot 배지, 그리고
+   이력 탭의 저장된 버전 목록. 어느 문구도 "동기화됨"을 쓰지 않는다 — 그것이 이
+   분기의 전부다(연구 문서 §표현 불가능한 코드 수정). */
+.backtest-code-ahead {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+  padding: 10px 12px;
+  border: 1px solid rgb(255 152 56 / 34%);
+  border-radius: 10px;
+  background: rgb(255 152 56 / 10%);
+}
+.backtest-code-ahead-text {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgb(255 152 56 / 18%);
+  color: #A85C10;
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}
+.backtest-code-ahead-note {
+  flex: 1 1 240px;
+  color: #A85C10;
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  word-break: keep-all;
+}
+.backtest-code-ahead-regraph,
+.backtest-code-ahead-fork,
+.backtest-version-edit {
+  flex: 0 0 auto;
+  padding: 6px 14px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 999px;
+  background: var(--color-k-panel3);
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.backtest-code-ahead-error {
+  flex: 1 1 100%;
+  color: var(--color-down);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+}
+/* 마지막 호환 그래프는 snapshot일 뿐이다 — 배지가 그 사실을 배타적으로 말한다. */
+.backtest-snapshot-badge {
+  margin-left: auto;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgb(255 152 56 / 14%);
+  color: #A85C10;
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}
+.backtest-visual-host.is-snapshot { opacity: 0.86; }
+.backtest-visual.is-snapshot .backtest-version-edit { align-self: flex-start; margin-top: 10px; }
+/* 이력 탭의 저장된 버전 — 실행 이력과 다른 축이라 목록도 따로 선다. */
+.backtest-version-list { margin-bottom: 14px; }
+.backtest-version-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 4px;
+  padding: 9px 12px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: var(--color-k-panel2);
+  text-align: left;
+  cursor: pointer;
+}
+.backtest-version-row.is-on {
+  border-color: var(--color-info);
+  background: rgb(77 159 255 / 8%);
+}
+.backtest-version-no {
+  color: var(--color-k-text);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+}
+.backtest-version-origin {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--color-k-panel3);
+  color: var(--color-k-dim);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.backtest-version-origin.is-visual { color: var(--color-brand); }
+.backtest-version-origin.is-code_only { color: #A85C10; }
+.backtest-version-note {
+  flex: 1 1 auto;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  word-break: keep-all;
+}
+.backtest-version-active {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgb(238 19 123 / 12%);
+  color: var(--color-brand);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+/* 이력에서 연 버전이 무엇인지 — 제목 옆 한 줄(origin=visual · v2 · 해시 …). */
+.backtest-head-opened {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--color-k-panel3);
+  color: var(--color-k-dim);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}

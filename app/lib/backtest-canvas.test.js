@@ -2332,6 +2332,8 @@ test('getContext().map: 마지막으로 받아온 칸만 싣는다 — 없으면
     nodes: [],
     graph: null,
     validation_state: 'unvalidated',
+    // 코드 전용으로 분기했는가(US-010) — 분기 전에는 false다.
+    code_only: false,
     hashes: null,
     diagnostics: [],
     pendingQuestion: null,
@@ -2997,4 +2999,270 @@ test('[코드 열기]는 패치가 건드린 노드의 줄로 간다 — RFC 690
     /ma_fast/,
   );
   assert.equal(made.calls.run, 0);
+});
+
+// ── US-010 · P3 왕복 경계(코드 전용 분기 · 409 보존 · 버전 되열기) ───────────
+//
+// 여기서 보는 것은 셋이다: ① 그래프로 못 옮기는 코드 수정이 자동 왕복을 가장하지 않고
+// origin=code_only 새 버전으로 갈라지는가, ② 409가 그래프와 대기 수정안을 버리지 않고
+// [다시 검토]가 최신 base를 다시 읽는가, ③ 이력에서 연 버전이 읽기 전용으로 서고
+// [이 버전으로 편집]을 눌러야 편집 표면이 되는가.
+
+// 이력에서 되열 버전의 그래프 — 지금 그래프와 구분되는 이름표를 하나 심는다.
+const HISTORY_GRAPH = {
+  graph_version: '1',
+  nodes: [
+    { id: 'data-ohlcv', kind: 'data.ohlcv', label: '캔들', params: {} },
+    { id: 'ind-ma_hist', kind: 'indicator.SMA', label: 'ma_hist', params: { period: 77 } },
+  ],
+  edges: [],
+  scenario: { period: 'day', adjusted: true },
+  meta: { spec_version: '1.0', name: '시각 전략', strategy_id: 'visual_strategy' },
+};
+
+// 지도에서 코드를 열고 사람이 한 줄을 손으로 더한다 — 코드가 지도보다 앞서는 유일한 길.
+async function typeAheadOfMap(made) {
+  await clickVisualValidate(made);
+  await click(findByClass(made.container, 'backtest-visual-open-code')[0]);
+  await flush();
+  await flush();
+  const textarea = findByClass(made.container, 'backtest-code-textarea')[0];
+  textarea.value = `${VISUAL_SOURCE}# 그래프로 못 옮기는 수정\n`;
+  await textarea.dispatchEvent({ type: 'input' });
+  made.canvas.refresh();
+  await flush();
+}
+
+test('코드가 지도보다 앞서면 코드 탭이 두 갈래를 명시한다 — 자동 왕복은 없다', async () => {
+  const made = await mountVisual();
+  await typeAheadOfMap(made);
+  assert.equal(findByClass(made.container, 'backtest-code-ahead').length, 1);
+  assert.match(textOf(made.container), /코드가 지도보다 앞섬/);
+  assert.equal(
+    findByClass(made.container, 'backtest-code-ahead-regraph')[0].textContent,
+    '그래프에서 다시 만들기',
+  );
+  assert.equal(
+    findByClass(made.container, 'backtest-code-ahead-fork')[0].textContent,
+    '코드 전용으로 분기',
+  );
+});
+
+test('[그래프에서 다시 만들기]는 코드 초안을 버리고 그래프를 지킨다', async () => {
+  const made = await mountVisual();
+  await typeAheadOfMap(made);
+  await click(findByClass(made.container, 'backtest-code-ahead-regraph')[0]);
+  await flush();
+  const ctx = made.canvas.getContext();
+  assert.equal(ctx.code.source, '');
+  assert.equal(ctx.runPath, 'form');
+  assert.equal(ctx.map.code_only, false);
+  assert.ok(ctx.map.graph && ctx.map.graph.nodes.length, '그래프는 그대로 남는다');
+});
+
+test('[코드 전용으로 분기]: origin=code_only 새 버전을 남기고 지도를 읽기 전용으로 접는다', async () => {
+  const versions = [];
+  const made = await mountVisual({
+    createStrategy: async () => ({ strategy_id: 's1', version_id: 'v1' }),
+    addVersion: async (id, body) => {
+      versions.push([id, body]);
+      return { version_id: 'v2', version: 2, active: false, is_active: false, origin: 'code_only' };
+    },
+  });
+  await typeAheadOfMap(made);
+  await click(findByClass(made.container, 'backtest-code-ahead-fork')[0]);
+  await flush();
+  await flush();
+
+  // 저장된 것: 초안 그대로, origin=code_only, bundle 없음(서버가 422로 거절하는 모양).
+  assert.equal(versions.length, 1);
+  assert.equal(versions[0][0], 's1');
+  assert.equal(versions[0][1].origin, 'code_only');
+  assert.equal(versions[0][1].note, '코드 전용 분기');
+  assert.match(versions[0][1].source, /그래프로 못 옮기는 수정/);
+  assert.equal(versions[0][1].bundle, undefined, 'code_only 버전은 bundle을 가질 수 없다');
+
+  // 지도는 마지막 호환 snapshot이고, 동기화됐다고 말하지 않는다.
+  made.canvas.onChatAction({ kind: 'navigate', tab: 'design', designTab: 'flow' });
+  await flush();
+  assert.equal(
+    findByClass(made.container, 'backtest-snapshot-badge')[0].textContent,
+    '동기화되지 않음 · 코드 전용',
+  );
+  assert.equal(findByClass(made.container, 'backtest-vis').length, 1, 'snapshot 그래프는 선다');
+  assert.equal(findByClass(made.container, 'backtest-vis-undo').length, 0, '읽기 전용이다');
+  assert.doesNotMatch(textOf(made.container), /그래프·코드 검증 완료/);
+  assert.doesNotMatch(textOf(made.container), /일치/);
+
+  const ctx = made.canvas.getContext();
+  assert.equal(ctx.runPath, 'code');
+  assert.equal(ctx.map.code_only, true);
+  assert.notEqual(ctx.map.validation_state, 'synced');
+  // 분기는 활성화도 실행도 아니다.
+  assert.equal(made.calls.run, 0);
+  assert.equal(made.calls.activate, 0);
+  assert.equal(made.calls.backfill, 0);
+  // 갈래를 이미 골랐으므로 코드 탭은 더 묻지 않는다.
+  made.canvas.onChatAction({ kind: 'navigate', tab: 'design', designTab: 'code' });
+  await flush();
+  assert.equal(findByClass(made.container, 'backtest-code-ahead').length, 0);
+});
+
+test('409는 그래프도 대기 수정안도 버리지 않고, [다시 검토]가 최신 base를 다시 읽는다', async () => {
+  const sent = [];
+  const detailed = [];
+  const made = await mountVisual({
+    createStrategy: async () => ({ strategy_id: 's1', version_id: 'v1' }),
+    visualSave: async () => {
+      const error = new Error('base 버전이 최신이 아니다 — 최신 버전을 다시 읽어야 한다');
+      error.status = 409;
+      throw error;
+    },
+    versions: async () => ([
+      { id: 'v1', version: 1, origin: 'human', active: true },
+      { id: 'v9', version: 9, origin: 'visual', active: false },
+    ]),
+    versionDetail: async (strategyId, versionId) => {
+      detailed.push([strategyId, versionId]);
+      return {
+        id: versionId, version: 9, origin: 'visual',
+        hashes: { graph_hash: 'gh-9', artifact_hash: 'ah-9' },
+      };
+    },
+    visualQuestion: async () => ({
+      question: { code: 'E_PORT_REQUIRED', question_ko: '무엇을 이을까요?', choices: [] },
+    }),
+    visualPatch: async (body) => { sent.push(body); return VISUAL_PATCH; },
+  });
+  await clickVisualValidate(made);
+  made.canvas.onChatAction({ kind: 'visual_patch', patch: VISUAL_PATCH });
+  const receipt = await made.canvas.applyVisualPatch('patch-1');
+  assert.equal(receipt.kind, 'visual_conflict');
+  assert.equal(receipt.patch.patch_id, 'patch-1', '영수증이 그 수정안을 그대로 들고 온다');
+
+  const kept = made.canvas.getContext();
+  assert.equal(kept.map.pendingPatch.patch_id, 'patch-1', '수정안을 버리지 않는다');
+  assert.ok(kept.map.graph && kept.map.graph.nodes.length, '그래프도 그대로다');
+
+  // [다시 검토] — 서버의 머리(v9)를 다시 읽고, 다음 수정안은 그 base로 서명한다.
+  await made.canvas.retryVisualPatch();
+  assert.deepEqual(detailed, [['s1', 'v9']]);
+  await made.canvas.answerVisualQuestion({ code: 'E_PORT_REQUIRED', choice_id: 'connect-close' });
+  const last = sent[sent.length - 1];
+  assert.equal(last.base_version_id, 'v9');
+  assert.equal(last.base_graph_hash, 'gh-9');
+  assert.equal(made.calls.run, 0);
+  assert.equal(made.calls.activate, 0);
+});
+
+// 이력 되열기의 밑자락 — 먼저 [적용]으로 s1/v2를 만들어 두고 이력 탭으로 간다.
+async function mountWithHistory(extra) {
+  const made = await mountVisual(Object.assign({
+    createStrategy: async () => ({ strategy_id: 's1', version_id: 'v1' }),
+    visualSave: async () => ({
+      version_id: 'v2', version: 2, active: false, is_active: false,
+      origin: 'visual', active_version_id: 'v1', hashes: {},
+    }),
+    versions: async () => ([
+      { id: 'v1', version: 1, origin: 'human', active: true, note: null },
+      { id: 'v2', version: 2, origin: 'visual', active: false, note: '입력 연결' },
+      { id: 'v3', version: 3, origin: 'code_only', active: false, note: '코드 전용 분기' },
+    ]),
+    versionDetail: async (strategyId, versionId) => {
+      if (versionId === 'v3') {
+        return {
+          id: 'v3', version: 3, origin: 'code_only', source: '# 코드 전용 원문\n',
+          graph: null, spec_yaml: null, hashes: null, compiler_version: null,
+        };
+      }
+      return {
+        id: 'v2', version: 2, origin: 'visual', source: VISUAL_SOURCE,
+        graph: JSON.parse(JSON.stringify(HISTORY_GRAPH)),
+        spec_yaml: COMPILED_YAML,
+        hashes: { graph_hash: 'gh-2', spec_hash: 'sh-2', artifact_hash: 'ah-2' },
+        compiler_version: 'visual-1.0.0',
+      };
+    },
+  }, extra || {}));
+  await clickVisualValidate(made);
+  made.canvas.onChatAction({ kind: 'visual_patch', patch: VISUAL_PATCH });
+  await made.canvas.applyVisualPatch('patch-1');
+  await flush();
+  made.canvas.onChatAction({ kind: 'navigate', tab: 'history' });
+  await flush();
+  await flush();
+  return made;
+}
+
+test('이력에서 origin=visual 버전을 열면 그때의 그래프가 읽기 전용으로 선다', async () => {
+  const made = await mountWithHistory();
+  assert.match(textOf(made.container), /저장된 버전 3개/);
+  const rows = findByClass(made.container, 'backtest-version-row');
+  assert.equal(rows.length, 3);
+  await click(rows[1]);
+  await flush();
+  await flush();
+
+  assert.match(textOf(made.container), /origin=visual · v2 · 해시 gh-2/);
+  assert.equal(
+    findByClass(made.container, 'backtest-snapshot-badge')[0].textContent,
+    '읽기 전용 · 이력에서 연 버전',
+  );
+  // 그때의 그래프다 — 지금 편집 중인 그래프가 아니다.
+  assert.match(textOf(made.container), /ma_hist/);
+  assert.equal(findByClass(made.container, 'backtest-vis-undo').length, 0, '읽기 전용이다');
+  const ctx = made.canvas.getContext();
+  assert.equal(ctx.designTab, 'flow');
+  assert.equal(ctx.code.source, VISUAL_SOURCE, '그 버전의 원문도 함께 돌아온다');
+  assert.equal(made.calls.run, 0);
+  assert.equal(made.calls.activate, 0);
+});
+
+test('[이 버전으로 편집]을 눌러야 편집 표면이 되고, 그때 지도 판이 하나 오른다', async () => {
+  const made = await mountWithHistory();
+  await click(findByClass(made.container, 'backtest-version-row')[1]);
+  await flush();
+  await flush();
+  const before = made.canvas.getContext().map.version;
+
+  await click(findByClass(made.container, 'backtest-version-edit')[0]);
+  await flush();
+  const ctx = made.canvas.getContext();
+  assert.equal(ctx.map.version, before + 1);
+  assert.equal(ctx.runPath, 'form');
+  assert.equal(findByClass(made.container, 'backtest-snapshot-badge').length, 0);
+  assert.equal(findByClass(made.container, 'backtest-vis-undo').length, 1, '이제 편집할 수 있다');
+  assert.ok(
+    ctx.map.graph.nodes.some((n) => n.label === 'ma_hist'),
+    '작업 초안이 그 버전의 그래프가 된다',
+  );
+});
+
+test('origin=code_only 버전은 코드 탭에서 열리고 지도는 읽기 전용 snapshot뿐이다', async () => {
+  const made = await mountWithHistory();
+  await click(findByClass(made.container, 'backtest-version-row')[2]);
+  await flush();
+  await flush();
+  const ctx = made.canvas.getContext();
+  assert.equal(ctx.designTab, 'code');
+  assert.match(ctx.code.source, /코드 전용 원문/);
+  assert.equal(ctx.map.code_only, true);
+  assert.match(textOf(made.container), /origin=code_only · v3/);
+
+  made.canvas.onChatAction({ kind: 'navigate', tab: 'design', designTab: 'flow' });
+  await flush();
+  assert.equal(
+    findByClass(made.container, 'backtest-snapshot-badge')[0].textContent,
+    '동기화되지 않음 · 코드 전용',
+  );
+  assert.equal(findByClass(made.container, 'backtest-vis-undo').length, 0);
+  assert.doesNotMatch(textOf(made.container), /그래프·코드 검증 완료/);
+});
+
+test('버전 되열기 배선이 없으면 그 자리에 이유를 적는다 — 화면을 오류로 바꾸지 않는다', async () => {
+  const made = await mountWithHistory({ versionDetail: undefined });
+  await click(findByClass(made.container, 'backtest-version-row')[1]);
+  await flush();
+  assert.equal(findByClass(made.container, 'backtest-canvas-error').length, 0);
+  assert.match(textOf(made.container), /버전 되열기 배선이 없습니다/);
 });
