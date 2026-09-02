@@ -8,11 +8,13 @@
 from __future__ import annotations
 
 import math
+import subprocess
 import sys
 import types
 from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 
+import pandas as pd
 import pytest
 from fastapi.testclient import TestClient
 
@@ -997,3 +999,140 @@ def test_youtube_brief_refuses_a_url_that_is_not_youtube(tmp_path: Path) -> None
 
         empty = client.post(f"{BASE}/youtube/brief", json={})
         assert empty.status_code == 422
+
+
+# ── 프로젝트 가상환경으로 파일 실행 (WAVE-3: 등록 → 실행 → 배포) ──────────────
+
+# 가상환경에만 설치돼 있는 사용자 패키지. dist-info까지 같이 두는 이유는 허용목록이
+# **거기서** 나오기 때문이다 — 파일만 떨어뜨리면 import 이름이 목록에 안 잡힌다.
+_VENV_ONLY_PACKAGE = """def mean(series, n):
+    return series.rolling(n).mean()
+"""
+
+_VENV_STRATEGY_SOURCE = """import myindicator
+
+PARAMS = {}
+
+
+def signals(df, p):
+    fast = myindicator.mean(df.close, 2)
+    slow = myindicator.mean(df.close, 5)
+    return df.assign(entry=fast > slow, exit=fast <= slow)[["entry", "exit"]]
+"""
+
+
+def _seed_project_with_venv(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
+    """프로젝트 폴더 + 그 안의 진짜 `.venv` + 그 환경에만 있는 패키지 하나.
+
+    `--without-pip`에 백엔드 site-packages를 `.pth`로 이어 pandas만 빌려온다 — 네트워크
+    없이 "다른 인터프리터로 떴는가"를 물을 수 있는 가장 짧은 배치다.
+    """
+    from athena_api.projects.store import venv_site_packages
+
+    root = tmp_path / "projects" / "my-quant"
+    root.mkdir(parents=True)
+    subprocess.run(
+        [sys.executable, "-m", "venv", "--without-pip", str(root / ".venv")],
+        check=True, capture_output=True, timeout=180,
+    )
+    site = venv_site_packages(root)
+    assert site is not None
+    site.joinpath("_athena_test_link.pth").write_text(
+        str(Path(pd.__file__).resolve().parent.parent), encoding="utf-8"
+    )
+    site.joinpath("myindicator.py").write_text(_VENV_ONLY_PACKAGE, encoding="utf-8")
+    site.joinpath("myindicator-1.0.dist-info").mkdir()
+    _install_projects_registry(monkeypatch, {"p1": root})
+    return root
+
+
+def test_run_returns_the_ids_the_canvas_needs_to_deploy(tmp_path: Path) -> None:
+    """실행 응답이 strategy_id·version_id를 같이 준다 — 없으면 화면이 "방금 그 실행이 어느
+    전략 버전이었나"를 추측해야 하고, 추측은 다른 행을 배포한다."""
+    with _client(tmp_path) as client:
+        rows = _synthetic_candle_rows()
+        _seed_candles(client, "005930", "day", True, rows)
+        yaml_text = _RUN_YAML_TEMPLATE.format(
+            stk_cd="005930", from_dt=rows[0].dt, to_dt=rows[-1].dt
+        )
+
+        accepted = client.post(f"{BASE}/runs", json={"yaml": yaml_text, "source": _CODE_SOURCE})
+        assert accepted.status_code == 202
+        body = accepted.json()
+        _await_run(client, body["run_id"])
+
+        versions = client.get(f"{BASE}/strategies/{body['strategy_id']}/versions").json()
+        assert [v["id"] for v in versions["versions"]] == [body["version_id"]]
+        assert versions["versions"][0]["source"] == _CODE_SOURCE
+
+        # 그 version_id 하나로 곧바로 배포가 선다 — 이것이 "실매매 적용"의 다음 칸이다.
+        deployed = client.post(f"{BASE}/deployments", json=_deploy_body(body["version_id"]))
+        assert deployed.status_code == 200, deployed.text
+
+
+def test_run_with_project_id_uses_the_project_venv(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """`project_id`를 실으면 그 폴더의 가상환경으로 돈다 — 사용자가 자기 환경에 깐 패키지를
+    전략 코드가 실제로 쓸 수 있어야 "내 전략"이 성립한다."""
+    _seed_project_with_venv(tmp_path, monkeypatch)
+    with _client(tmp_path) as client:
+        rows = _synthetic_candle_rows()
+        _seed_candles(client, "005930", "day", True, rows)
+        yaml_text = _RUN_YAML_TEMPLATE.format(
+            stk_cd="005930", from_dt=rows[0].dt, to_dt=rows[-1].dt
+        )
+        payload = {"yaml": yaml_text, "source": _VENV_STRATEGY_SOURCE, "project_id": "p1"}
+
+        accepted = client.post(f"{BASE}/runs", json=payload)
+        assert accepted.status_code == 202
+        run_id = accepted.json()["run_id"]
+        _await_run(client, run_id)
+
+        result = client.get(f"{BASE}/runs/{run_id}").json()
+        assert result["status"] == "done", result["error"]
+        assert result["metrics"]["run_path"] == "code"
+        assert len(result["equity"]) == len(rows)
+
+
+def test_same_run_without_the_project_cannot_see_that_package(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """앞 테스트가 정말 프로젝트 환경 덕인지 — `project_id` 없이 같은 코드를 돌리면
+    그 패키지가 없어서 실패한다. 실패 문구는 사용자 코드의 것 그대로다."""
+    _seed_project_with_venv(tmp_path, monkeypatch)
+    with _client(tmp_path) as client:
+        rows = _synthetic_candle_rows()
+        _seed_candles(client, "005930", "day", True, rows)
+        yaml_text = _RUN_YAML_TEMPLATE.format(
+            stk_cd="005930", from_dt=rows[0].dt, to_dt=rows[-1].dt
+        )
+
+        run_id = client.post(
+            f"{BASE}/runs", json={"yaml": yaml_text, "source": _VENV_STRATEGY_SOURCE}
+        ).json()["run_id"]
+        _await_run(client, run_id)
+
+        result = client.get(f"{BASE}/runs/{run_id}").json()
+        assert result["status"] == "failed"
+        assert "myindicator" in result["error"]
+
+
+def test_run_rejects_an_unknown_project_and_a_non_string_one(tmp_path: Path) -> None:
+    with _client(tmp_path) as client:
+        rows = _synthetic_candle_rows()
+        _seed_candles(client, "005930", "day", True, rows)
+        yaml_text = _RUN_YAML_TEMPLATE.format(
+            stk_cd="005930", from_dt=rows[0].dt, to_dt=rows[-1].dt
+        )
+
+        bad_type = client.post(
+            f"{BASE}/runs", json={"yaml": yaml_text, "source": _CODE_SOURCE, "project_id": 7}
+        )
+        assert bad_type.status_code == 422
+
+        unknown = client.post(
+            f"{BASE}/runs",
+            json={"yaml": yaml_text, "source": _CODE_SOURCE, "project_id": "없는프로젝트"},
+        )
+        assert unknown.status_code == 404

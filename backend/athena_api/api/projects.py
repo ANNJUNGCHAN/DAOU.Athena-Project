@@ -2,7 +2,8 @@
 
 `backtest.py`와 같은 규율을 따른다: 별도 인증을 걸지 않고(로컬 앱이 유일한 호출자),
 바디는 dict로 받아 한국어 4xx로 직접 번역한다. 다른 점은 **서브시스템 비활성 게이트가
-없다**는 것이다 — 이 라우트가 다루는 것은 사용자의 폴더뿐이라 켜고 끌 스위치가 없다.
+거의 없다**는 것이다 — 이 라우트가 다루는 것은 사용자의 폴더뿐이라 켜고 끌 스위치가 없다.
+예외는 `POST /{id}/env` 하나다(`_env_runner` 주석 참고).
 
 두 가지 규칙이 이 모듈 전체를 지배한다.
 
@@ -21,11 +22,15 @@ from __future__ import annotations
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
+from uuid import uuid4
 
 from fastapi import APIRouter, HTTPException, Request
+from fastapi.responses import JSONResponse
 
+from athena_api.backtest.runner import BacktestRunner
 from athena_api.config import get_settings
 from athena_api.projects.store import (
+    BASE_ENV_PACKAGES,
     MAX_FILE_BYTES,
     SEED_STRATEGY_FILENAME,
     ProjectEntry,
@@ -37,8 +42,11 @@ from athena_api.projects.store import (
     ProjectStore,
     build_tree,
     count_py_files,
+    is_valid_package_spec,
     relative_path,
     resolve_in_project,
+    venv_packages,
+    venv_python,
 )
 
 router = APIRouter(prefix="/api/v1/projects", tags=["projects"])
@@ -48,6 +56,23 @@ def _store(request: Request) -> ProjectStore:
     """설정의 `projects_root` 하나로 매번 새 스토어를 만든다 — 상태가 없어 캐시할 것도 없다."""
     settings = getattr(request.app.state, "settings", None) or get_settings()
     return ProjectStore(settings.projects_root)
+
+
+def _env_runner(request: Request) -> BacktestRunner:
+    """환경 구성 잡만 백테스트 러너를 빌린다.
+
+    잡 진행 폴링 표면을 둘로 늘리지 않기 위해서다 — 화면과 대화는 이미
+    `GET /api/v1/backtest/jobs/{id}` 하나만 본다. 그래서 이 모듈에서 유일하게
+    서브시스템 비활성(503)이 보이는 자리가 된다. 조회(`GET /{id}/env`)는 러너가 없어도
+    답할 수 있으니 이 gate를 지나지 않는다.
+    """
+    runner = getattr(request.app.state, "backtest_runner", None)
+    if runner is None:
+        raise HTTPException(
+            status_code=503,
+            detail="백테스트 서브시스템이 비활성이다 (ATHENA_BACKTEST_ENABLED=true 필요)",
+        )
+    return runner
 
 
 def _entry(request: Request, project_id: str) -> ProjectEntry:
@@ -289,3 +314,61 @@ async def delete_path(request: Request, project_id: str, path: str) -> dict[str,
     except OSError as exc:
         raise HTTPException(status_code=400, detail="지우지 못했다") from exc
     return {"deleted": relative, "is_dir": is_dir}
+
+
+# ── 프로젝트 환경 ─────────────────────────────────────────────────────────────
+#
+# 폴더 안의 `.venv` 하나가 "내 전략이 도는 환경"이다. 만드는 것은 돈도 할당량도 지나지
+# 않는 준비 작업이라 대화가 몰아도 되는 경로다(WAVE-3 계약) — 사람 손이 필요한 자리는
+# 실행·수집 승인·배포 쪽이지 여기가 아니다.
+
+
+@router.get("/{project_id}/env")
+async def project_env(request: Request, project_id: str) -> dict[str, Any]:
+    """가상환경의 지금 상태 — 캐시가 아니라 지금 찍은 디스크다(`_project_view`와 같은 규율)."""
+    root = _root(_entry(request, project_id))
+    python = venv_python(root)
+    packages = venv_packages(root) if python is not None else []
+    return {
+        "project_id": project_id,
+        "exists": python is not None,
+        "python": str(python) if python is not None else None,
+        "packages": packages,
+        "base_ok": all(name in packages for name in BASE_ENV_PACKAGES),
+    }
+
+
+@router.post("/{project_id}/env")
+async def setup_project_env(
+    request: Request, project_id: str, body: dict[str, Any] | None = None
+) -> JSONResponse:
+    """가상환경을 만들고 기본 패키지(pandas·numpy)와 요청분을 설치한다 — 202 + job_id.
+
+    진행은 `GET /api/v1/backtest/jobs/{job_id}`가 보여준다. 같은 프로젝트의 환경 잡이
+    아직 돌고 있으면 409다 — 같은 `.venv`에 pip을 둘 동시에 붙이면 무엇이 깔렸는지
+    아무도 답할 수 없게 된다.
+    """
+    root = _root(_entry(request, project_id))
+    raw = (body or {}).get("packages", [])
+    if not isinstance(raw, list):
+        raise HTTPException(status_code=422, detail="'packages'는 문자열 배열이어야 한다")
+    packages: list[str] = []
+    for item in raw:
+        text = item.strip() if isinstance(item, str) else ""
+        if not is_valid_package_spec(text):
+            raise HTTPException(
+                status_code=422,
+                detail=f"설치할 수 있는 이름이 아니다: {item!r} (예: pandas, pandas==2.2.3)",
+            )
+        packages.append(text)
+
+    runner = _env_runner(request)
+    busy = runner.env_job_for(root)
+    if busy is not None:
+        raise HTTPException(
+            status_code=409,
+            detail=f"이 프로젝트의 환경 구성이 아직 돌고 있다 (job_id={busy.id})",
+        )
+    job_id = str(uuid4())
+    runner.start_env(job_id, project_path=root, packages=packages)
+    return JSONResponse(status_code=202, content={"job_id": job_id})

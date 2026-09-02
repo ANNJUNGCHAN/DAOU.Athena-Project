@@ -35,9 +35,11 @@ from athena_api.backtest import user_strategies as user_strategies_mod
 from athena_api.backtest import youtube as youtube_mod
 from athena_api.backtest.data import compute_plan, kiwoom_fetch_page
 from athena_api.backtest.runner import BacktestRunner, _align_signals, _run_code_signals
+from athena_api.backtest.sandbox.guard import BLOCKED_TOP_LEVEL_IMPORTS
 from athena_api.backtest.schema import StrategySpec, from_kis_yaml
 from athena_api.backtest.store import BacktestStore, Candle, Coverage
 from athena_api.dependencies import KiwoomClientDep
+from athena_api.projects.store import venv_packages, venv_python
 
 router = APIRouter(prefix="/api/v1/backtest", tags=["backtest"])
 
@@ -277,13 +279,9 @@ async def get_job(request: Request, job_id: str) -> dict[str, Any]:
     job = runner.get(job_id)
     if job is None:
         raise HTTPException(status_code=404, detail="잡이 존재하지 않는다")
-    progress = None
-    if job.progress is not None:
-        progress = {
-            "page": job.progress.page,
-            "rows": job.progress.rows,
-            "oldest_dt": job.progress.oldest_dt,
-        }
+    # 진행의 모양은 잡 종류마다 다르다(백필 page/rows, 환경 구성 step/line) — 각 진행
+    # 객체가 자기 직렬화를 갖고 여기서는 그것을 그대로 싣는다(runner.py `to_dict`).
+    progress = job.progress.to_dict() if job.progress is not None else None
     return {
         "job_id": job.id,
         "kind": job.kind,
@@ -312,6 +310,11 @@ async def start_run(request: Request, body: dict[str, Any]) -> JSONResponse:
     if source is not None and not isinstance(source, str):
         raise HTTPException(status_code=422, detail="source는 문자열이어야 한다")
     code_source = source if source and source.strip() else None
+    # 어느 프로젝트의 코드인가 — 있으면 그 폴더의 가상환경으로 돈다. yaml 경로는 이 값을
+    # 쓰지 않는다(폼 전략에는 사용자 환경이라는 개념이 없다).
+    project_id = body.get("project_id")
+    if project_id is not None and not isinstance(project_id, str):
+        raise HTTPException(status_code=422, detail="project_id는 문자열이어야 한다")
 
     # 코드 경로에서는 폼의 진입/청산 조건이 읽히지 않는다 — 그 칸이 비었다고 실행을
     # 막으면 쓰지도 않는 규칙이 코드 전략을 가둔다(2026-09-02 실측). 완화는 조건 개수
@@ -393,10 +396,39 @@ async def start_run(request: Request, body: dict[str, Any]) -> JSONResponse:
         run_id, version_id, params_json=params_json, spec_hash=spec_hash,
         status="running", started_at=now,
     )
+    # 프로젝트 가상환경으로 실행한다 — 사용자가 자기 폴더에 깐 패키지를 코드가 실제로
+    # 쓸 수 있어야 "내 전략"이 성립한다. 가상환경이 아직 없으면 막지 않고 기본
+    # 인터프리터로 돈다(pandas/numpy만 쓰는 코드는 그대로 돌아간다).
+    python_exe: str | None = None
+    allowed_imports: list[str] | None = None
+    if code_source and project_id:
+        project_root = _project_root(project_id)
+        if project_root is None:
+            raise HTTPException(status_code=404, detail=f"프로젝트가 존재하지 않는다: {project_id}")
+        interpreter = venv_python(project_root)
+        if interpreter is not None:
+            python_exe = str(interpreter)
+            # 차단목록은 자식(guard.py)이 다시 적용한다 — 여기서 빼는 것은 "애초에 보내지
+            # 않는다"는 두 번째 그물이지 유일한 그물이 아니다.
+            allowed_imports = sorted(
+                set(venv_packages(project_root)) - BLOCKED_TOP_LEVEL_IMPORTS
+            )
+
     runner.start_run(
         run_id, spec=spec, df=df, overrides=params, extra_flags=partial_flag, source=code_source,
+        python_exe=python_exe, allowed_imports=allowed_imports,
     )
-    return JSONResponse(status_code=202, content={"run_id": run_id, "partial": partial_flag})
+    # strategy_id·version_id를 같이 돌려준다 — 파일을 한 번 돌린 뒤 곧바로 배포로 넘어가려면
+    # 화면이 "방금 그 실행이 어느 전략 버전이었는가"를 알아야 한다(추측하면 다른 행을 배포한다).
+    return JSONResponse(
+        status_code=202,
+        content={
+            "run_id": run_id,
+            "partial": partial_flag,
+            "strategy_id": strategy_id,
+            "version_id": version_id,
+        },
+    )
 
 
 @router.get("/runs")

@@ -17,6 +17,7 @@ from athena_api.api.routines import router as routines_router
 from athena_api.api.routines_ws import router as routines_ws_router
 from athena_api.api.series_page import router as series_page_router
 from athena_api.api.settings import router as settings_router
+from athena_api.api.sources import router as sources_router
 from athena_api.api.stream import router as stream_router
 from athena_api.generated.routes import router as generated_router
 
@@ -37,6 +38,7 @@ router.include_router(routines_router)
 router.include_router(routines_ws_router)
 router.include_router(series_page_router)
 router.include_router(settings_router)
+router.include_router(sources_router)
 router.include_router(stream_router)
 
 __all__ = ["router"]

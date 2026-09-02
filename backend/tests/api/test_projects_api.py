@@ -11,20 +11,44 @@ from __future__ import annotations
 
 import json
 import shutil
+import subprocess
+import sys
 from pathlib import Path
 
+import pandas as pd
 from fastapi.testclient import TestClient
 
 from athena_api.config import Settings
 from athena_api.main import create_app
-from athena_api.projects.store import MAX_FILE_BYTES
+from athena_api.projects.store import MAX_FILE_BYTES, venv_site_packages
 
 BASE = "/api/v1/projects"
+JOBS = "/api/v1/backtest/jobs"
 
 
 def _client(tmp_path: Path) -> TestClient:
     app = create_app(Settings(_env_file=None, projects_root=tmp_path / "projects"))
     return TestClient(app)
+
+
+def _env_client(tmp_path: Path) -> TestClient:
+    """환경 라우트만 백테스트 러너를 빌린다 — 잡 진행 폴링이 `GET /backtest/jobs` 하나로
+    모여 있어서다(api/projects.py `_env_runner`). 러너는 lifespan이 만들므로 `with`로 연다."""
+    app = create_app(
+        Settings(
+            _env_file=None,
+            projects_root=tmp_path / "projects",
+            backtest_enabled=True,
+            backtest_db_path=tmp_path / "backtest.sqlite3",
+        )
+    )
+    return TestClient(app)
+
+
+def _await_job(client: TestClient, job_id: str) -> None:
+    job = client.app.state.backtest_runner.get(job_id)
+    assert job is not None and job.task is not None
+    client.portal.call(lambda: job.task)
 
 
 def _create(client: TestClient, name: str = "알파") -> dict:
@@ -432,3 +456,142 @@ def test_registry_file_stays_valid_json_after_a_full_session(tmp_path: Path) -> 
 
     assert [row["name"] for row in payload["projects"]] == ["둘"]
     assert list((tmp_path / "projects").glob("*.tmp")) == []
+
+
+# ── 프로젝트 환경(.venv) ─────────────────────────────────────────────────────
+
+
+def test_env_says_nothing_is_there_before_and_reads_the_real_layout_after(tmp_path: Path) -> None:
+    """`GET /env`는 캐시가 아니라 지금 찍은 디스크다 — 폴더가 생기면 다음 호출이 곧바로 안다."""
+    client = _client(tmp_path)
+    project = _create(client, "환경없음")
+    root = Path(project["path"])
+
+    before = client.get(f"{BASE}/{project['id']}/env")
+    assert before.status_code == 200, before.text
+    assert before.json() == {
+        "project_id": project["id"],
+        "exists": False,
+        "python": None,
+        "packages": [],
+        "base_ok": False,
+    }
+
+    scripts = root / ".venv" / "Scripts"
+    scripts.mkdir(parents=True)
+    (scripts / "python.exe").write_bytes(b"")
+    site = root / ".venv" / "Lib" / "site-packages"
+    site.mkdir(parents=True)
+    for name in ("pandas-2.3.3.dist-info", "numpy-2.5.2.dist-info"):
+        (site / name).mkdir()
+
+    after = client.get(f"{BASE}/{project['id']}/env").json()
+    assert after["exists"] is True
+    assert after["python"] == str((scripts / "python.exe").resolve())
+    assert after["packages"] == ["numpy", "pandas"]
+    assert after["base_ok"] is True
+
+    assert client.get(f"{BASE}/없는프로젝트/env").status_code == 404
+
+
+def test_env_setup_refuses_package_names_that_are_not_package_names(tmp_path: Path) -> None:
+    """이름 검증이 첫 그물이다 — 명령은 argv 리스트라 셸을 지나지 않지만, 그 사실에
+    기대어 무엇이든 받아주지는 않는다. 거절된 요청은 잡을 하나도 남기지 않는다."""
+    with _env_client(tmp_path) as client:
+        project = _create(client, "이름검증")
+
+        for bad in (["pandas; rm -rf"], ["-r requirements.txt"], ["https://evil/x.whl"], [7]):
+            response = client.post(f"{BASE}/{project['id']}/env", json={"packages": bad})
+            assert response.status_code == 422, (bad, response.text)
+
+        not_a_list = client.post(f"{BASE}/{project['id']}/env", json={"packages": "pandas"})
+        assert not_a_list.status_code == 422
+        assert "배열" in not_a_list.json()["detail"]
+
+        assert client.app.state.backtest_runner._jobs == {}
+
+
+def test_env_setup_streams_progress_and_refuses_a_second_run_meanwhile(tmp_path: Path) -> None:
+    """202 + job_id → `GET /jobs/{id}`가 단계와 방금 나온 줄을 보여준다. 같은 프로젝트에
+    두 번째 요청은 409다.
+
+    여기 가상환경은 `--without-pip`이라 install 단계가 반드시 실패한다 — 일부러 그렇게
+    골랐다. 실패해도 **어느 단계에서 무슨 말이 나왔는지**가 남는지가 이 테스트의 질문이고,
+    그 답을 얻는 데 네트워크가 필요 없다.
+    """
+    with _env_client(tmp_path) as client:
+        project = _create(client, "진행표시")
+        root = Path(project["path"])
+        subprocess.run(
+            [sys.executable, "-m", "venv", "--without-pip", str(root / ".venv")],
+            check=True, capture_output=True, timeout=180,
+        )
+
+        accepted = client.post(f"{BASE}/{project['id']}/env", json={})
+        assert accepted.status_code == 202, accepted.text
+        job_id = accepted.json()["job_id"]
+
+        busy = client.post(f"{BASE}/{project['id']}/env", json={})
+        assert busy.status_code == 409
+        assert job_id in busy.json()["detail"]
+
+        _await_job(client, job_id)
+
+        job = client.get(f"{JOBS}/{job_id}").json()
+        assert job["kind"] == "env"
+        assert job["status"] == "failed"
+        assert set(job["progress"]) == {"step", "line"}
+        assert job["progress"]["step"] == "install"
+        assert "install" in job["error"]
+        assert "pip" in job["error"]
+
+        # 끝난 잡은 더 이상 막지 않는다 — 409는 "지금 도는 중"에만이다.
+        assert client.post(f"{BASE}/{project['id']}/env", json={}).status_code == 202
+
+
+def test_env_setup_really_installs_the_base_packages(tmp_path: Path) -> None:
+    """진짜 `python -m venv` + 진짜 `pip install pandas numpy`가 끝나면 `GET /env`의
+    `base_ok`가 참이 된다.
+
+    네트워크를 타지 않게 두 가지를 미리 놓는다: ① 백엔드 venv의 site-packages를 `.pth`로
+    이어 실제 모듈이 보이게 하고, ② pandas/numpy의 dist-info를 복사해 pip이 "이미 설치됨"
+    으로 끝나게 한다. 검증 대상은 잡 배선(단계·상태·설치 명령)이지 회선이 아니다.
+    """
+    with _env_client(tmp_path) as client:
+        project = _create(client, "실환경")
+        root = Path(project["path"])
+        subprocess.run(
+            [sys.executable, "-m", "venv", str(root / ".venv")],
+            check=True, capture_output=True, timeout=600,
+        )
+        site = venv_site_packages(root)
+        assert site is not None
+        backend_site = Path(pd.__file__).resolve().parent.parent
+        (site / "_athena_test_link.pth").write_text(str(backend_site), encoding="utf-8")
+        for pattern in ("pandas-*.dist-info", "numpy-*.dist-info"):
+            for source in backend_site.glob(pattern):
+                shutil.copytree(source, site / source.name)
+
+        job_id = client.post(f"{BASE}/{project['id']}/env", json={}).json()["job_id"]
+        _await_job(client, job_id)
+
+        job = client.get(f"{JOBS}/{job_id}").json()
+        assert job["status"] == "done", job
+        assert job["error"] is None
+        assert job["progress"] == {"step": "done", "line": "환경 구성 완료"}
+
+        env = client.get(f"{BASE}/{project['id']}/env").json()
+        assert env["exists"] is True
+        assert env["base_ok"] is True
+        assert {"pandas", "numpy"} <= set(env["packages"])
+
+
+def test_env_setup_needs_the_backtest_subsystem_and_says_so(tmp_path: Path) -> None:
+    """조회는 러너 없이도 답한다. 만들기만 503이다 — 진행 폴링이 그쪽에 있기 때문이다."""
+    client = _client(tmp_path)
+    project = _create(client, "러너없음")
+
+    assert client.get(f"{BASE}/{project['id']}/env").status_code == 200
+    denied = client.post(f"{BASE}/{project['id']}/env", json={})
+    assert denied.status_code == 503
+    assert "ATHENA_BACKTEST_ENABLED" in denied.json()["detail"]

@@ -21,8 +21,13 @@ import asyncio
 import contextlib
 import json
 import math
+import os
 import shutil
+import subprocess
+import sys
 import tempfile
+from collections import deque
+from collections.abc import Sequence
 from dataclasses import asdict, dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
@@ -41,8 +46,9 @@ from athena_api.backtest.schema import StrategySpec
 from athena_api.backtest.store import BacktestStore
 from athena_api.backtest.store import EquityPoint as StoreEquityPoint
 from athena_api.backtest.store import Trade as StoreTrade
+from athena_api.projects.store import BASE_ENV_PACKAGES, venv_path, venv_python
 
-JobKind = Literal["run", "backfill"]
+JobKind = Literal["run", "backfill", "env"]
 JobStatus = Literal["running", "done", "failed", "cancelled"]
 
 # 코드 경로는 워밍업 봉 수를 알 수 없다 — 지표 프레임을 만든 것이 사용자 코드라 앞
@@ -78,12 +84,18 @@ async def _run_code_signals(
     df: pd.DataFrame,
     overrides: dict[str, int | float] | None,
     base_params: dict[str, int | float] | None = None,
+    *,
+    python_exe: str | None = None,
+    allowed_imports: Sequence[str] | None = None,
 ) -> dict[str, Any]:
     """전략 코드를 샌드박스 자식 프로세스에서 돌리고 결과 한 장을 회수한다(§7.2).
 
     jobdir은 실행마다 새로 만들고 끝나면 지운다 — 사용자 코드가 쓴 파일이 다음 실행에
     남지 않는다. 프로세스 기동은 블로킹이라 `to_thread`로 옮긴다(이벤트 루프를 막으면
     같은 루프의 다른 잡 폴링이 멈춘다).
+
+    `python_exe`/`allowed_imports`는 프로젝트 가상환경으로 돌릴 때만 채워진다 — 그 결정은
+    호출자(POST /runs)가 하고 여기서는 그대로 넘기기만 한다.
     """
     # p의 우선순위: 폼(yaml)의 파라미터 기본값 < 코드의 PARAMS 기본값 < 호출자 override.
     # 폼 값을 바닥에 까는 이유(2026-09-02 실측): 모델이 짠 코드가 PARAMS를 빠뜨리거나 이름을
@@ -98,7 +110,10 @@ async def _run_code_signals(
         # cwd로 붙들고 있는 채로 지우게 된다. 윈도우에선 그 삭제가 실패하고
         # ignore_errors가 그 사실을 삼켜 임시 디렉터리가 남는다.
         try:
-            return sandbox_host.run_strategy(jobdir, source, df, params)
+            return sandbox_host.run_strategy(
+                jobdir, source, df, params,
+                python_exe=python_exe, allowed_imports=allowed_imports,
+            )
         finally:
             shutil.rmtree(jobdir, ignore_errors=True)
 
@@ -155,6 +170,24 @@ class BackfillProgress:
     rows: int
     oldest_dt: str
 
+    def to_dict(self) -> dict[str, Any]:
+        return {"page": self.page, "rows": self.rows, "oldest_dt": self.oldest_dt}
+
+
+@dataclass(frozen=True, slots=True)
+class EnvProgress:
+    """환경 구성 잡의 진행 — 지금 어느 단계고, 방금 어떤 줄이 나왔는가.
+
+    백필의 page/rows와 모양이 다르다. 잡마다 진행의 뜻이 달라서다 — 그래서 직렬화를
+    각자 `to_dict()`로 갖고, `GET /jobs/{id}`는 그것을 그대로 싣는다.
+    """
+
+    step: str
+    line: str
+
+    def to_dict(self) -> dict[str, Any]:
+        return {"step": self.step, "line": self.line}
+
 
 @dataclass(slots=True)
 class Job:
@@ -163,7 +196,7 @@ class Job:
     id: str
     kind: JobKind
     status: JobStatus = "running"
-    progress: BackfillProgress | None = None
+    progress: BackfillProgress | EnvProgress | None = None
     error: str | None = None
     task: asyncio.Task[Any] | None = field(default=None, repr=False)
 
@@ -174,9 +207,17 @@ class BacktestRunner:
     def __init__(self, store: BacktestStore) -> None:
         self._store = store
         self._jobs: dict[str, Job] = {}
+        # 프로젝트 폴더(normcase) -> 그 폴더에 대해 마지막으로 띄운 환경 잡 id.
+        self._env_projects: dict[str, str] = {}
 
     def get(self, job_id: str) -> Job | None:
         return self._jobs.get(job_id)
+
+    def env_job_for(self, project_path: Path) -> Job | None:
+        """같은 프로젝트에 대해 **지금 도는** 환경 잡. 없으면 None(409의 유일한 근거)."""
+        job_id = self._env_projects.get(os.path.normcase(str(project_path)))
+        job = self._jobs.get(job_id) if job_id is not None else None
+        return job if job is not None and job.status == "running" else None
 
     def cancel(self, job_id: str) -> bool:
         """실행 중인 잡을 취소한다. 이미 끝났거나 없으면 False."""
@@ -229,6 +270,80 @@ class BacktestRunner:
         job.task = asyncio.create_task(run(), name=f"athena-backtest-backfill-{job_id}")
         return job
 
+    # ── 프로젝트 환경 구성 ───────────────────────────────────────────────────
+
+    def start_env(self, job_id: str, *, project_path: Path, packages: Sequence[str]) -> Job:
+        """프로젝트 폴더에 가상환경을 만들고 기본 패키지(+요청분)를 설치한다.
+
+        **왜 백테스트 러너가 이 잡을 드는가.** 진행 폴링 표면을 둘로 늘리지 않기 위해서다 —
+        화면과 대화는 이미 `GET /jobs/{id}` 하나만 본다. 잡 종류가 하나 더 늘 뿐이다.
+
+        명령은 전부 argv 리스트다 — 이 메서드에 셸이 없다. 패키지 이름 검증은 라우트가
+        이미 끝냈고(`is_valid_package_spec`), 여기서는 그 값을 리스트 원소로만 다룬다.
+        """
+        job = Job(id=job_id, kind="env")
+        self._jobs[job_id] = job
+        self._env_projects[os.path.normcase(str(project_path))] = job_id
+
+        def stream(step: str, cmd: list[str]) -> None:
+            """자식의 출력을 줄 단위로 받아 마지막 줄을 진행 상태에 남긴다. 실패면 예외.
+
+            줄 전체를 쌓아두지 않는다 — 진행은 "지금 어디인가"라 한 줄이면 되고, 실패
+            메시지에 붙일 꼬리만 20줄 남긴다(pip 오류는 마지막 몇 줄에 이유가 있다).
+            """
+            job.progress = EnvProgress(step=step, line="시작")
+            tail: deque[str] = deque(maxlen=20)
+            proc = subprocess.Popen(
+                cmd,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+            )
+            with proc:
+                for raw in proc.stdout:  # stdout=PIPE라 항상 있다
+                    line = raw.strip()
+                    if not line:
+                        continue
+                    job.progress = EnvProgress(step=step, line=line)
+                    tail.append(line)
+            if proc.returncode != 0:
+                raise RuntimeError(
+                    f"{step} 단계가 실패했다(returncode={proc.returncode})\n" + "\n".join(tail)
+                )
+
+        def work() -> None:
+            if venv_python(project_path) is None:
+                stream("venv", [sys.executable, "-m", "venv", str(venv_path(project_path))])
+            python = venv_python(project_path)
+            if python is None:
+                raise RuntimeError("가상환경을 만들었는데 인터프리터가 보이지 않는다")
+            stream(
+                "install",
+                [
+                    str(python), "-m", "pip", "install", "--disable-pip-version-check",
+                    *BASE_ENV_PACKAGES, *packages,
+                ],
+            )
+            job.progress = EnvProgress(step="done", line="환경 구성 완료")
+
+        async def run() -> None:
+            try:
+                # 프로세스 기동·설치는 블로킹이라 스레드로 옮긴다(_run_code_signals와 같은 규율).
+                await asyncio.to_thread(work)
+            except asyncio.CancelledError:
+                job.status = "cancelled"
+                raise
+            except Exception as exc:  # noqa: BLE001 — 잡 실패를 상태로 옮기는 경계
+                job.status = "failed"
+                job.error = str(exc)
+            else:
+                job.status = "done"
+
+        job.task = asyncio.create_task(run(), name=f"athena-project-env-{job_id}")
+        return job
+
     # ── run ─────────────────────────────────────────────────────────────────
 
     def start_run(
@@ -241,6 +356,8 @@ class BacktestRunner:
         initial_cash: float = DEFAULT_INITIAL_CASH,
         extra_flags: str | None = None,
         source: str | None = None,
+        python_exe: str | None = None,
+        allowed_imports: Sequence[str] | None = None,
     ) -> Job:
         """`run_id`의 `bt_run` 행은 호출자가 이미 status="running"으로 만들어뒀다고
         전제한다(spec_hash·strategy_version_id는 API 층의 책임 — 재현성 축은 store가 쥔다).
@@ -248,6 +365,9 @@ class BacktestRunner:
 
         `source`가 있으면 signals를 폼(spec) 대신 그 파이썬 코드에서 만든다 — 체결·비용·
         성과는 두 경로가 정확히 같은 코드를 지난다(§6.2, 두 저작 경로가 갈라지지 않는 이유).
+
+        `python_exe`/`allowed_imports`가 있으면 그 인터프리터(프로젝트 가상환경)로 돌고
+        허용목록이 그만큼 넓어진다 — 코드 경로에서만 뜻이 있어 `source`가 없으면 무시된다.
         """
         job = Job(id=run_id, kind="run")
         self._jobs[run_id] = job
@@ -259,6 +379,8 @@ class BacktestRunner:
                     outcome = await _run_code_signals(
                         source, df, overrides,
                         base_params={name: p.default for name, p in spec.strategy.params.items()},
+                        python_exe=python_exe,
+                        allowed_imports=allowed_imports,
                     )
                     stdout_text = outcome["stdout"]
                     if not outcome["ok"]:
@@ -359,6 +481,7 @@ __all__ = [
     "CODE_PATH_WARMUP_FLAG",
     "BackfillProgress",
     "BacktestRunner",
+    "EnvProgress",
     "Job",
     "JobKind",
     "JobStatus",

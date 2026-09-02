@@ -39,7 +39,18 @@ MAX_FILE_BYTES: Final = 1024 * 1024
 # 목록의 py_files는 "몇 개나 되는지 감"을 주는 값이라 여기서 세기를 멈춘다.
 PY_FILE_COUNT_CAP: Final = 1000
 
+# 프로젝트 가상환경은 폴더 안의 `.venv` 하나로 고정한다 — 이름을 고르게 하면 "어느
+# 환경으로 돌았는가"가 실행마다 달라진다. IGNORED_DIRS가 이미 이 이름을 트리에서 뺀다.
+VENV_DIRNAME: Final = ".venv"
+# 환경 구성이 언제나 깔아주는 기본 패키지. 샌드박스 자식이 실제로 쓰는 것이 이 둘뿐이라
+# (sandbox/api.py → indicators/core.py) 여기가 "돌아가는 최소 환경"의 정의다.
+BASE_ENV_PACKAGES: Final[tuple[str, ...]] = ("pandas", "numpy")
+
 _DRIVE_PREFIX = re.compile(r"^[A-Za-z]:")
+# 설치 요청에 실릴 수 있는 이름의 전부 — `pandas`와 `pandas==2.2.3`까지다. 공백·세미콜론·
+# 따옴표·경로·URL·`-r`/`--index-url` 같은 옵션이 전부 여기서 걸린다. 명령은 argv 리스트로만
+# 만들어져 셸을 지나지 않으니 이 정규식은 두 번째 그물이지 유일한 그물이 아니다.
+_PACKAGE_SPEC = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]*(==[A-Za-z0-9][A-Za-z0-9._+!-]*)?$")
 _WINDOWS_RESERVED: Final[frozenset[str]] = frozenset(
     {"CON", "PRN", "AUX", "NUL"}
     | {f"COM{i}" for i in range(1, 10)}
@@ -215,6 +226,70 @@ def count_py_files(root: Path, *, cap: int = PY_FILE_COUNT_CAP) -> int:
                 if total >= cap:
                     return total
     return total
+
+
+# ── 프로젝트 가상환경 ────────────────────────────────────────────────────────
+#
+# 프로젝트 폴더가 "내 코드"라면 그 옆의 `.venv`는 "내 코드가 도는 환경"이다. 등록도 실행도
+# 이 둘을 같이 봐야 성립한다 — 여기 함수들은 그 환경을 **읽기만** 한다. 만드는 것(venv 생성·
+# pip 설치)은 잡 러너의 몫이라 이 모듈에 서브프로세스가 없다.
+
+
+def venv_path(project: Path) -> Path:
+    """프로젝트 가상환경 폴더의 위치."""
+    return project / VENV_DIRNAME
+
+
+def venv_python(project: Path) -> Path | None:
+    """가상환경 인터프리터의 절대경로. 없으면 None.
+
+    윈도우는 `Scripts/python.exe`, POSIX는 `bin/python`이다. 지금 도는 OS로 고르지 않고
+    **둘 다 찾아본다** — 프로젝트 폴더는 사용자 디스크의 물건이라 다른 OS에서 만들어진
+    폴더가 올 수 있고, 없는 쪽은 파일이 없어 그냥 걸리지 않는다.
+    """
+    for parts in (("Scripts", "python.exe"), ("bin", "python")):
+        candidate = venv_path(project).joinpath(*parts)
+        if candidate.is_file():
+            return candidate.resolve()
+    return None
+
+
+def venv_site_packages(project: Path) -> Path | None:
+    """가상환경의 site-packages. 윈도우는 `Lib/`, POSIX는 `lib/python3.X/` 아래다."""
+    base = venv_path(project)
+    windows = base / "Lib" / "site-packages"
+    if windows.is_dir():
+        return windows
+    for candidate in sorted((base / "lib").glob("python*/site-packages")):
+        if candidate.is_dir():
+            return candidate
+    return None
+
+
+def venv_packages(project: Path) -> list[str]:
+    """가상환경에 설치된 패키지 이름 — `site-packages/*.dist-info` 폴더 이름에서 읽는다.
+
+    **왜 `pip list`가 아닌가.** ① 이 값을 읽는 `GET /env`는 화면이 되풀이해 부르는
+    조회 라우트라 매번 인터프리터를 하나 더 띄울 자리가 아니다. ② pip이 없는 가상환경
+    (`--without-pip`)에서도 답이 나온다. ③ 무엇보다 우리가 필요한 것은 **import 이름**인데,
+    dist-info 폴더 이름은 PEP 427 이스케이프를 거쳐 `httpx-sse`가 아니라 `httpx_sse`로
+    적혀 있다 — `pip list`가 주는 배포 이름보다 import 이름에 가깝다.
+
+    정직한 한계: 배포 이름과 import 이름이 아예 다른 패키지(scikit-learn → sklearn)는
+    여기서 못 맞춘다. 그 경우 샌드박스 허용목록에 안 잡혀 import가 막힌다 — 틀리는 방향이
+    "막힘"이라 안전한 쪽이다.
+    """
+    site = venv_site_packages(project)
+    if site is None:
+        return []
+    return sorted(
+        {entry.stem.rsplit("-", 1)[0] for entry in site.glob("*.dist-info") if entry.is_dir()}
+    )
+
+
+def is_valid_package_spec(text: str) -> bool:
+    """설치를 요청할 수 있는 이름인가 — `pandas`, `pandas==2.2.3`까지만 참이다."""
+    return len(text) <= 128 and bool(_PACKAGE_SPEC.match(text))
 
 
 @dataclass(frozen=True)
