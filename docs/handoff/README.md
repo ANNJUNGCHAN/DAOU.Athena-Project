@@ -7,6 +7,10 @@
 > **바로 이어서 돌리려면** [RALPH_PROMPT.md](./RALPH_PROMPT.md)를 열어 블록을 통째로 복사해
 > Claude Code에 붙여넣는다. 이 문서(§2~§6)를 실행 가능한 루프로 옮겨둔 것이다.
 
+> 🟣 **2026-09-03 백테스트 시각 설계 ↔ 코드 왕복이 들어갔다.** 지도 탭이 편집 가능한 그래프가 되고
+> 코드는 지도에서 생성된다. 계약·검증법·남은 P4는
+> [2026-09-03-visual-strategy-roundtrip.md](./2026-09-03-visual-strategy-roundtrip.md)에 있다.
+
 > 🔴 **2026-09-01 정규장에 실 키움(모의투자) 연결을 처음으로 검증했다.**
 > 결과·provenance 분류·새로 찾은 결함은
 > [2026-09-01-live-market-verification.md](./2026-09-01-live-market-verification.md)에 있다.
