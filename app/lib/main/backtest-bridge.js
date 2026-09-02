@@ -194,6 +194,67 @@ function evaluateDeployment({ backendBase, fetchImpl, deployment_id, ...body }) 
   );
 }
 
+// -- 2026-09-02 프로젝트 파일 API -- 코드 탭이 "내 컴퓨터의 폴더 하나"를 여는 자리 -------
+// 위와 같은 봉투 계약을 그대로 따른다(athena_api/api/projects.py). 이 층은 경로를
+// 검사하지 않는다 -- 프로젝트 밖 탈출·비 .py 거절은 백엔드가 400/415로 판정하고,
+// 여기서 한 번 더 흉내내면 두 판정이 갈라지는 날 화면만 거짓말한다.
+
+function listProjects({ backendBase, fetchImpl }) {
+  return backtestHttp('GET', '/api/v1/projects', undefined, { backendBase, fetchImpl });
+}
+
+function createProject({ backendBase, fetchImpl, ...body }) {
+  return backtestHttp('POST', '/api/v1/projects', body, { backendBase, fetchImpl });
+}
+
+function openProject({ backendBase, fetchImpl, ...body }) {
+  return backtestHttp('POST', '/api/v1/projects/open', body, { backendBase, fetchImpl });
+}
+
+function fetchProjectTree({ backendBase, fetchImpl, project_id }) {
+  return backtestHttp(
+    'GET', `/api/v1/projects/${encodeURIComponent(project_id)}/tree`,
+    undefined, { backendBase, fetchImpl },
+  );
+}
+
+function readProjectFile({ backendBase, fetchImpl, project_id, path }) {
+  const query = new URLSearchParams({ path: String(path) });
+  return backtestHttp(
+    'GET', `/api/v1/projects/${encodeURIComponent(project_id)}/file?${query}`,
+    undefined, { backendBase, fetchImpl },
+  );
+}
+
+function writeProjectFile({ backendBase, fetchImpl, project_id, ...body }) {
+  return backtestHttp(
+    'PUT', `/api/v1/projects/${encodeURIComponent(project_id)}/file`,
+    body, { backendBase, fetchImpl },
+  );
+}
+
+function createProjectFile({ backendBase, fetchImpl, project_id, ...body }) {
+  return backtestHttp(
+    'POST', `/api/v1/projects/${encodeURIComponent(project_id)}/file`,
+    body, { backendBase, fetchImpl },
+  );
+}
+
+function renameProjectFile({ backendBase, fetchImpl, project_id, ...body }) {
+  return backtestHttp(
+    'POST', `/api/v1/projects/${encodeURIComponent(project_id)}/rename`,
+    body, { backendBase, fetchImpl },
+  );
+}
+
+function deleteProjectFile({ backendBase, fetchImpl, project_id, path }) {
+  const query = new URLSearchParams({ path: String(path) });
+  return backtestHttp(
+    'DELETE', `/api/v1/projects/${encodeURIComponent(project_id)}/file?${query}`,
+    undefined, { backendBase, fetchImpl },
+  );
+}
+
 module.exports = {
   backtestHttp,
   fetchPresets,
@@ -221,4 +282,13 @@ module.exports = {
   stopDeployment,
   fetchSignals,
   evaluateDeployment,
+  listProjects,
+  createProject,
+  openProject,
+  fetchProjectTree,
+  readProjectFile,
+  writeProjectFile,
+  createProjectFile,
+  renameProjectFile,
+  deleteProjectFile,
 };

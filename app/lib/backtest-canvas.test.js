@@ -516,7 +516,7 @@ async function mounted(overrides) {
 
 const RECEIPT_KEYS = [
   'id', 'kind', 'applied', 'note', 'rows', 'errors',
-  'suggest_run', 'suggest_validate', 'tab', 'designTab', 'method', 'canUndo',
+  'suggest_run', 'suggest_validate', 'tab', 'designTab', 'method', 'canUndo', 'canApply',
 ];
 
 const CODE_SOURCE = [
@@ -1087,7 +1087,7 @@ test('getContext(): 키 목록이 계약으로 고정돼 있다 — spec은 복�
   assert.deepEqual(Object.keys(ctx), [
     'view', 'tab', 'designTab', 'runPath', 'spec', 'draft', 'pending', 'presets',
     'code', 'codeDraft', 'lastResult', 'diagnosis', 'optimize', 'runs', 'coverage',
-    'lastChange',
+    'lastChange', 'project',
   ]);
   assert.equal(ctx.view, 'design');
   assert.equal(ctx.spec.presetId, 'sma_crossover');
@@ -1321,4 +1321,326 @@ test('오류 화면에는 설계로 돌아가는 버튼이 있다 — 막다른 
   await click(back);
   assert.equal(canvas.getContext().view, 'design');
   assert.equal(findByClass(container, 'backtest-symbol-add').length, 1);
+});
+
+// ── 코드 탭의 프로젝트 IDE(결정 D1~D4) ──────────────────────────────────────
+// 이 캔버스가 지는 몫은 셋뿐이다: IDE를 붙인다, 프로젝트가 없으면 옛 편집기로 되돌아간다,
+// 실행이 "지금 연 파일"을 싣는다. IDE 자체의 계약은 project-ide.test.js가 진다.
+
+const IDE_PROJECT = {
+  id: 'p1', name: '내 전략', path: 'C:/x/p1', kind: 'managed',
+  created_at: '2026-09-02T00:00:00Z', exists: true, py_files: 1,
+};
+
+const IDE_TREE = [
+  { name: 'strategy.py', path: 'strategy.py', is_dir: false, py: true, size: 30 },
+];
+
+const PROJECT_SOURCE = 'PARAMS = {}\ndef signals(df, p):\n    return [["entry", "exit"]]\n';
+
+// 가짜 디스크 — 쓴 것이 읽힌다. 진짜 디스크가 그러하고, "쓰고 나서 실행"이 편집기
+// 버퍼의 옛 내용으로 도는지(캔버스가 파일을 다시 읽는지)를 이 fake만이 잡아낸다.
+function projectDeps(overrides) {
+  const disk = { 'strategy.py': PROJECT_SOURCE };
+  return Object.assign({
+    listProjects: async () => ({ projects: [IDE_PROJECT], notice: null }),
+    projectTree: async () => ({ entries: IDE_TREE, truncated: false }),
+    readProjectFile: async (_id, p) => {
+      if (!(p in disk)) throw new Error('파일이 존재하지 않는다');
+      return { path: p, text: disk[p] };
+    },
+    writeProjectFile: async (_id, p, text) => {
+      disk[p] = text;
+      return { path: p, size: text.length, mtime: 1 };
+    },
+  }, overrides || {});
+}
+
+// 폼을 채우고 → 코드 탭으로 옮겨 → 프로젝트를 고르고 → strategy.py를 연다.
+async function openProjectFile(made) {
+  await fillForm(made.container);
+  await click(findByClass(made.container, 'backtest-subtab')[1]);
+  await flush();
+  await click(findByClass(made.container, 'project-ide-project')[0]);
+  await flush();
+  await click(findByClass(made.container, 'project-ide-file')[0]);
+  await flush();
+}
+
+test('코드 탭: 프로젝트 배선이 없으면 지금까지의 단일 편집기 그대로다', async () => {
+  const { container } = await mounted();
+  await click(findByClass(container, 'backtest-subtab')[1]);
+  assert.equal(findByClass(container, 'project-ide').length, 0);
+  assert.equal(findByClass(container, 'backtest-code-textarea').length, 1);
+  assert.equal(findByClass(container, 'backtest-code-save').length, 1);
+});
+
+test('코드 탭: 프로젝트를 고르기 전에는 IDE와 옛 편집기가 함께 선다', async () => {
+  const made = await mounted(projectDeps());
+  await click(findByClass(made.container, 'backtest-subtab')[1]);
+  await flush();
+  assert.equal(findByClass(made.container, 'project-ide').length, 1);
+  assert.equal(findByClass(made.container, 'backtest-code-textarea').length, 1, '되돌아갈 자리가 남아야 한다');
+  // 프로젝트를 고르면 IDE가 코드 탭을 가져간다.
+  await click(findByClass(made.container, 'project-ide-project')[0]);
+  await flush();
+  assert.equal(findByClass(made.container, 'project-ide-body').length, 1);
+  assert.equal(findByClass(made.container, 'backtest-code-save').length, 0);
+  // 이 코드가 닿을 수 있는 것(경계 카드)은 어느 쪽에서도 사라지지 않는다.
+  assert.equal(findByClass(made.container, 'backtest-code-bounds').length, 1);
+});
+
+test('실행: 지금 연 파일의 본문이 source로 실린다(D2 — 진실은 디스크에 있다)', async () => {
+  let sent = null;
+  const made = await mounted(projectDeps({
+    run: async (body) => { sent = body; return { run_id: 'r1' }; },
+    result: async () => ({ status: 'running' }),
+  }));
+  await openProjectFile(made);
+  await click(findByClass(made.container, 'backtest-run-button')[0]);
+  await flush();
+  assert.equal(sent.source, PROJECT_SOURCE);
+  assert.ok(sent.yaml, '대상·기간은 여전히 폼에서 온다');
+});
+
+test('실행: 저장 안 한 편집이 있으면 막고 "저장하고 실행하세요"를 코드 탭에 적는다', async () => {
+  let sent = null;
+  const made = await mounted(projectDeps({
+    run: async (body) => { sent = body; return { run_id: 'r1' }; },
+    result: async () => ({ status: 'running' }),
+  }));
+  await openProjectFile(made);
+  const area = findByClass(made.container, 'backtest-code-textarea')[0];
+  area.value = '# 아직 저장 안 함\n';
+  await area.dispatchEvent({ type: 'input' });
+  await click(findByClass(made.container, 'backtest-run-button')[0]);
+  await flush();
+  assert.equal(sent, null, '실행이 나가면 안 된다');
+  assert.match(textOf(made.container), /저장하고 실행하세요/);
+
+  // 저장하면 그 본문 그대로 돈다.
+  await click(findByClass(made.container, 'project-ide-save')[0]);
+  await flush();
+  await click(findByClass(made.container, 'backtest-run-button')[0]);
+  await flush();
+  assert.equal(sent.source, '# 아직 저장 안 함\n');
+});
+
+test('실행: 프로젝트 파일을 열면 폼의 진입·청산 조건은 검사하지 않는다(신호는 파이썬이 만든다)', async () => {
+  let sent = null;
+  const made = await mounted(projectDeps({
+    run: async (body) => { sent = body; return { run_id: 'r1' }; },
+    result: async () => ({ status: 'running' }),
+  }));
+  made.canvas.onChatAction({ kind: 'spec_draft', patch: { entry: { logic: 'AND', conditions: [] } } });
+  await openProjectFile(made);
+  await click(findByClass(made.container, 'backtest-run-button')[0]);
+  await flush();
+  assert.ok(sent, '조건이 비어도 코드 경로로 돈다');
+  assert.equal(sent.source, PROJECT_SOURCE);
+});
+
+// ── 채팅이 낸 파일 초안(결정 D4) ─────────────────────────────────────────────
+// code_draft와 결정적으로 다른 점: 이건 디스크의 파일이다. 그래서 바로 반영하지 않고
+// diff만 세운다 — 파일이 쓰이는 순간은 사람이 [적용]을 누른 그때 하나뿐이다.
+
+const DRAFT_SOURCE = `${PROJECT_SOURCE}# 골든크로스\n`;
+
+function fileDeps(writes, overrides) {
+  const deps = projectDeps();
+  const write = deps.writeProjectFile;
+  return Object.assign(deps, {
+    writeProjectFile: async (id, path, text) => {
+      writes.push({ id, path, text });
+      return write(id, path, text);
+    },
+  }, overrides || {});
+}
+
+// 프로젝트만 고르고 파일은 열지 않는다 — 채팅이 새 파일을 내는 흔한 자리다.
+async function selectProjectOnly(made) {
+  await click(findByClass(made.container, 'backtest-subtab')[1]);
+  await flush();
+  await click(findByClass(made.container, 'project-ide-project')[0]);
+  await flush();
+}
+
+test('file_draft: 코드 탭에 diff가 서고 파일은 아직 쓰이지 않는다', async () => {
+  const writes = [];
+  const made = await mounted(fileDeps(writes));
+  await selectProjectOnly(made);
+
+  const receipt = await made.canvas.onChatAction({
+    kind: 'file_draft',
+    project_id: 'p1',
+    path: 'strategy.py',
+    source: DRAFT_SOURCE,
+    note: '골든크로스로 바꿨다',
+    suggest_run: true,
+  });
+  assert.deepEqual(Object.keys(receipt), RECEIPT_KEYS);
+  assert.equal(receipt.kind, 'file_draft');
+  assert.equal(receipt.applied, false, '아직 아무것도 안 썼다');
+  assert.equal(receipt.canApply, true);
+  assert.equal(receipt.canUndo, false, '바뀐 게 없으니 되돌릴 것도 없다');
+  assert.equal(receipt.suggest_run, true);
+  assert.equal(receipt.note, '골든크로스로 바꿨다');
+  assert.equal(receipt.rows.length, 1);
+  assert.equal(receipt.rows[0].label, 'strategy.py');
+  assert.match(receipt.rows[0].after, /\+1 −0/);
+  assert.deepEqual(receipt.errors, []);
+  assert.equal(writes.length, 0, '적용을 누르기 전에는 쓰지 않는다');
+
+  // 화면에는 지금 파일과의 diff가 선다 — 더한 줄 하나가 보여야 한다.
+  assert.equal(findByClass(made.container, 'backtest-file-draft').length, 1);
+  const diffRows = findByClass(made.container, 'backtest-diff-row');
+  assert.ok(diffRows.length > 0);
+  assert.equal(diffRows.filter((n) => n.className.includes('is-add')).length, 1);
+  assert.equal(made.canvas.getContext().designTab, 'code');
+});
+
+test('[적용]: 그때 딱 한 번 파일에 쓴다 — project_id·경로·본문 그대로', async () => {
+  const writes = [];
+  const made = await mounted(fileDeps(writes));
+  await selectProjectOnly(made);
+  const receipt = await made.canvas.onChatAction({
+    kind: 'file_draft', project_id: 'p1', path: 'strategies/golden.py', source: DRAFT_SOURCE,
+  });
+
+  assert.match(textOf(made.container), /새 파일 — 아직 만들지 않았습니다/);
+
+  const applied = await made.canvas.applyFileDraft(receipt.id);
+  assert.deepEqual(applied, { ok: true, path: 'strategies/golden.py' });
+  assert.deepEqual(writes, [{ id: 'p1', path: 'strategies/golden.py', text: DRAFT_SOURCE }]);
+  // 초안은 사라진다 — 같은 초안을 두 번 쓰지 않는다.
+  assert.equal(findByClass(made.container, 'backtest-file-draft').length, 0);
+  assert.equal(made.canvas.getContext().project.fileDraft, null);
+  const again = await made.canvas.applyFileDraft(receipt.id);
+  assert.deepEqual(again, { ok: false, reason: '적용할 파일 초안이 없습니다' });
+  assert.equal(writes.length, 1);
+});
+
+test('[버리기]: 아무것도 쓰지 않고 초안만 사라진다', async () => {
+  const writes = [];
+  const made = await mounted(fileDeps(writes));
+  await selectProjectOnly(made);
+  const receipt = await made.canvas.onChatAction({
+    kind: 'file_draft', project_id: 'p1', path: 'strategies/golden.py', source: DRAFT_SOURCE,
+  });
+
+  assert.deepEqual(
+    made.canvas.discardFileDraft(receipt.id),
+    { ok: true, path: 'strategies/golden.py' },
+  );
+  assert.equal(writes.length, 0);
+  assert.equal(findByClass(made.container, 'backtest-file-draft').length, 0);
+  assert.equal(made.canvas.getContext().project.fileDraft, null);
+  // 버린 초안은 적용할 수도 없다.
+  assert.deepEqual(
+    await made.canvas.applyFileDraft(receipt.id),
+    { ok: false, reason: '적용할 파일 초안이 없습니다' },
+  );
+});
+
+test('file_draft: 프로젝트가 없거나 .py가 아니면 서지 않고 이유를 돌려준다', async () => {
+  const writes = [];
+  const noProject = await mounted();
+  const blocked = await noProject.canvas.onChatAction({
+    kind: 'file_draft', path: 'a.py', source: 'x = 1\n',
+  });
+  assert.equal(blocked.applied, false);
+  assert.equal(blocked.canApply, false);
+  assert.deepEqual(blocked.errors, ['코드 탭에서 프로젝트 폴더를 먼저 여세요']);
+
+  const made = await mounted(fileDeps(writes));
+  await selectProjectOnly(made);
+  const notPython = await made.canvas.onChatAction({
+    kind: 'file_draft', project_id: 'p1', path: 'notes.txt', source: '메모\n',
+  });
+  assert.deepEqual(notPython.errors, ['파이썬(.py) 파일만 쓸 수 있습니다']);
+  const otherProject = await made.canvas.onChatAction({
+    kind: 'file_draft', project_id: 'p9', path: 'a.py', source: 'x = 1\n',
+  });
+  assert.deepEqual(otherProject.errors, ['지금 열어둔 프로젝트의 파일이 아닙니다']);
+  assert.equal(findByClass(made.container, 'backtest-file-draft').length, 0);
+  assert.equal(writes.length, 0);
+  // 빈 페이로드는 영수증도 만들지 않는다.
+  assert.equal(await made.canvas.onChatAction({ kind: 'file_draft', path: 'a.py' }), null);
+  assert.equal(await made.canvas.onChatAction({ kind: 'file_draft', source: 'x = 1' }), null);
+});
+
+test('[적용]: 편집기에 저장 안 한 편집이 있으면 덮어쓰지 않는다', async () => {
+  const writes = [];
+  const made = await mounted(fileDeps(writes));
+  await openProjectFile(made);
+  const area = findByClass(made.container, 'backtest-code-textarea')[0];
+  area.value = '# 사람이 치던 중\n';
+  await area.dispatchEvent({ type: 'input' });
+
+  const receipt = await made.canvas.onChatAction({
+    kind: 'file_draft', project_id: 'p1', path: 'strategy.py', source: DRAFT_SOURCE,
+  });
+  const res = await made.canvas.applyFileDraft(receipt.id);
+  assert.equal(res.ok, false);
+  assert.match(res.reason, /저장하지 않은 편집/);
+  assert.equal(writes.length, 0);
+});
+
+test('[적용]: 쓰기가 실패하면 이유를 돌려주고 초안을 남긴다', async () => {
+  const made = await mounted(fileDeps([], {
+    writeProjectFile: async () => { throw new Error('파일을 저장하지 못했다'); },
+  }));
+  await selectProjectOnly(made);
+  const receipt = await made.canvas.onChatAction({
+    kind: 'file_draft', project_id: 'p1', path: 'strategies/golden.py', source: DRAFT_SOURCE,
+  });
+  const res = await made.canvas.applyFileDraft(receipt.id);
+  assert.deepEqual(res, { ok: false, reason: '파일을 저장하지 못했다' });
+  assert.equal(findByClass(made.container, 'backtest-file-draft').length, 1, '초안은 그대로 서 있다');
+  assert.match(textOf(made.container), /파일을 저장하지 못했다/);
+});
+
+test('getContext().project: 폴더·활성 파일·.py 목록·적용 대기를 싣는다', async () => {
+  const made = await mounted(fileDeps([]));
+  assert.equal(made.canvas.getContext().project, null, '폴더를 열기 전에는 없다');
+
+  await openProjectFile(made);
+  const opened = made.canvas.getContext().project;
+  assert.equal(opened.name, '내 전략');
+  assert.equal(opened.path, 'C:/x/p1');
+  assert.equal(opened.activeFile, 'strategy.py');
+  assert.equal(opened.dirty, false);
+  assert.deepEqual(opened.openFiles, ['strategy.py']);
+  assert.deepEqual(opened.pyFiles, ['strategy.py']);
+  assert.equal(opened.fileDraft, null);
+
+  await made.canvas.onChatAction({
+    kind: 'file_draft', project_id: 'p1', path: 'strategies/golden.py',
+    source: DRAFT_SOURCE, note: '골든크로스',
+  });
+  assert.deepEqual(made.canvas.getContext().project.fileDraft, {
+    path: 'strategies/golden.py', note: '골든크로스', lines: 5,
+  });
+});
+
+test('[적용하고 실행]: 방금 쓴 파일이 돈다 — 편집기 버퍼의 옛 내용이 아니다', async () => {
+  let sent = null;
+  const writes = [];
+  const made = await mounted(fileDeps(writes, {
+    run: async (body) => { sent = body; return { run_id: 'r1' }; },
+    result: async () => ({ status: 'running' }),
+  }));
+  // 사람이 strategy.py를 열어둔 채로 채팅이 같은 파일을 고치는 자리다.
+  await openProjectFile(made);
+  const receipt = await made.canvas.onChatAction({
+    kind: 'file_draft', project_id: 'p1', path: 'strategy.py', source: DRAFT_SOURCE,
+    suggest_run: true,
+  });
+  assert.deepEqual(await made.canvas.applyFileDraft(receipt.id), { ok: true, path: 'strategy.py' });
+
+  // 채팅 카드의 [적용하고 실행]이 부르는 자리.
+  assert.deepEqual(made.canvas.runFromChat(), []);
+  await flush();
+  assert.equal(sent.source, DRAFT_SOURCE);
+  assert.deepEqual(writes, [{ id: 'p1', path: 'strategy.py', text: DRAFT_SOURCE }]);
 });
