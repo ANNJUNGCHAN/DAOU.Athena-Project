@@ -2239,6 +2239,37 @@ const graphMode = window.AthenaLib.GraphModeController.createGraphModeController
   getFilters: () => window.AthenaLib.GraphModePrefs.readPrefs(),
 });
 window.AthenaCanvasMode = graphMode;
+
+// ---------- 그래프 워크스페이스(42번 보드 "환경 전체가 저장된다") ----------
+// 그래프 화면의 상태 가운데 공개 API로 되돌릴 수 있는 것 — 서브뷰(요약/지도/설정)와
+// 고른 노드 — 를 세션에 남긴다. 컨트롤러는 변경 이벤트를 내지 않으므로 그래프 화면이
+// 보이는 동안 1초마다 상태를 읽어 바뀐 조각만 보고한다. 되돌릴 수 없는 것(펼친 군집)은
+// 저장하지 않는다 — 있다고 저장하고 못 돌리는 편이 더 나쁘다.
+(function registerGraphWorkspace() {
+  const bus = window.AthenaSessionWorkspace;
+  if (!bus) return;
+  const snapshotOf = () => {
+    const s = graphMode.state || {};
+    return { surface: s.surface || null, selectedEntityId: s.selectedEntityId || null };
+  };
+  let lastReported = null;
+  setInterval(() => {
+    if (!graphMode.state || graphMode.state.view !== 'graph') return;
+    const key = JSON.stringify(snapshotOf());
+    if (key === lastReported) return;
+    lastReported = key;
+    bus.report({ graph: JSON.parse(key) });
+  }, 1000);
+  bus.register('graph', {
+    async restore(workspace) {
+      const g = workspace && workspace.graph;
+      if (!g) return;
+      lastReported = JSON.stringify({ surface: g.surface || null, selectedEntityId: g.selectedEntityId || null });
+      if (g.surface) await graphMode.setSurface(g.surface);
+      if (g.selectedEntityId) graphMode.selectNode(g.selectedEntityId);
+    },
+  });
+})();
 // 부팅을 순수 답변 모드로 고정한다(US-007) — 정적 HTML의 기본 hidden 속성이
 // 우연히 답변 모드와 맞아떨어지는 데 기대지 않고, 여기서 명시적으로 한 번
 // 그린다. 이후 모든 가시성 변경은 toggle()/setView()/setAvailable() 안에서 이

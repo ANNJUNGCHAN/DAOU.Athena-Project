@@ -189,3 +189,10 @@
 - [x] `sidebar.js` — 행의 점 하나(실행 중 = 스피너, 대기 주황, 완료 회색, 실패 빨강), 모드 옆 스피너, 머리의 "실행 중 N · 대기 M" 알약. 푸시를 받으면 그 행만 고쳐 다시 그린다.
 - 실앱 프로브 27/27 (`ATHENA_PROBE_SHOT=경로`면 사이드바·모드 선택·삭제 확인 PNG를 남긴다).
 - 남은 것: 백테스트가 아닌 모드(그래프·에이전트·플러그인)의 실행은 아직 job을 붙이지 않는다 — 그 모드의 컨트롤러가 다른 세션 소유라 `bridge.attachJob` 호출 지점만 합의하면 된다. 워크스페이스 저장도 같은 이유로 그 모드들은 미배선.
+
+### Wave 7 — 모드 워크스페이스 계약 (42번 보드, 적용 완료)
+- [x] `lib/session-workspace.js` — 렌더러 전역 `window.AthenaSessionWorkspace`: `register(kind, { restore })`·`report(patch)`·`restore(workspace)`. chat.js `restoreConversation`은 초안·스크롤을 돌린 뒤 `restore(ws)`로 kind의 핸들러에 통째로 넘긴다. 핸들러의 동기·비동기 실패는 경고로만 남는다.
+- [x] 그래프(canvas.js) — 서브뷰(요약/지도/설정)·고른 노드를 1초 폴링으로 바뀐 조각만 보고, 복원은 `setSurface`·`selectNode`. 펼친 군집은 공개 API로 못 돌리므로 저장하지 않는다.
+- [ ] 백테스트(backtest-canvas.js, daou-athena-5b 소유) — 폼·탭·선택 파일을 `report({ form… })`, `register('backtest', …)`로 되돌린다. 계약은 전달함(2026-09-03).
+- [ ] 에이전트·플러그인 — 화면 상태가 생기면 같은 두 줄.
+- 실앱 프로브 30/30.
