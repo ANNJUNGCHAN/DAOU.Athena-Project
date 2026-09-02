@@ -259,8 +259,17 @@ function startOrbCursorPoll() {
 // 생겼으니 캔버스를 연다"의 자리를 대신한다 — 캔버스는 늘 떠 있으므로 열 것이
 // 없고, 남는 의미는 **창을 앞으로**뿐이다. focus:false는 REST 직결 경로가 쓴다
 // (3초 예산 안에서 사용자 포커스를 뺏지 않고 표면만 드러낸다).
-function revealShell({ focus = true } = {}) {
+function revealShell({ focus = true, force = false } = {}) {
   if (!shellWin || shellWin.isDestroyed()) return;
+  // 부팅 handoff 전에는 사용자 표면이 bootWin이다(2026-09-02 실측: 두 번째 실행·알림
+  // 클릭·캔버스 피드 등이 이 함수를 타면 부팅 창이 남은 채 셸 창이 하나 더 떴다).
+  // 셸은 attemptShellHandoff()만 연다 — 여기서는 부팅 창만 앞으로 가져온다.
+  // force는 부팅 없이 셸을 바로 쓰는 검증 스크립트(ATHENA_NO_AUTOSTART) 전용이다.
+  if (!force && bootWin && !bootWin.isDestroyed()) {
+    mdlog(`revealShell 보류 — 부팅 handoff 전 (focus=${focus})`);
+    if (focus) { bootWin.focus(); bootWin.moveTop(); }
+    return;
+  }
   if (shellWin.isMinimized()) shellWin.restore();
   if (!shellWin.isVisible()) {
     if (focus) shellWin.show(); else shellWin.showInactive();

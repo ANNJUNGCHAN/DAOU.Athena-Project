@@ -166,7 +166,7 @@ async function main() {
   await mainMod.createWindows();
   const { shellWin } = mainMod.getWins();
   if (!shellWin || shellWin.isDestroyed()) throw new Error('셸 창이 만들어지지 않았다');
-  mainMod.revealShell({ focus: true });
+  mainMod.revealShell({ focus: true, force: true });
   const wc = shellWin.webContents;
 
   await wc.executeJavaScript(`(() => {
