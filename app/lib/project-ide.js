@@ -278,7 +278,10 @@ function createProjectIde(options) {
   // 따로 만들면 언젠가 한쪽만 고쳐진다. 열렸는지를 불리언으로 돌려주는 이유: 부른 쪽이
   // "열었다"고 말하기 전에 정말 열렸는지 알아야 한다(등록부의 파일은 지워졌을 수 있다).
   async function openAt(projectId, pathText) {
-    if (!projects.length) await loadProjects();
+    // 목록이 비었을 때만 다시 읽으면, 이 세션에서 만든 프로젝트(등록 뒤 열기)는 영영
+    // 없는 폴더가 된다 — 처음 그린 목록이 그대로 남기 때문이다(프로브 M10~M13 실측).
+    // 찾는 id가 없을 때도 한 번 다시 읽는다.
+    if (!projects.length || !projects.some((p) => p.id === projectId)) await loadProjects();
     const next = projects.find((p) => p.id === projectId);
     if (!next) {
       say('그 폴더가 프로젝트 목록에 없습니다', true);

@@ -531,6 +531,27 @@ test('openAt: 이미 그 폴더를 열어 뒀으면 폴더를 다시 고르지 �
   assert.equal(made.ide.activeFile().path, 'strategies/golden.py');
 });
 
+test('openAt: 처음 읽은 목록에 없던 폴더(이 세션에서 만든 프로젝트)는 목록을 다시 읽어 연다', async () => {
+  // 전수 프로브 M10~M13 실측: 코드 탭이 먼저 목록을 읽어 두면 그 뒤 등록한 프로젝트는
+  // 영영 "목록에 없습니다"였다. 찾는 id가 없으면 한 번 다시 읽어야 한다.
+  const later = Object.assign({}, PROJECT, { id: 'p2', name: '나중에 만든 폴더', path: 'D:/quant/later' });
+  let calls = 0;
+  const made = makeIde({
+    listProjects: async () => {
+      calls += 1;
+      return { projects: calls === 1 ? [PROJECT] : [PROJECT, later], notice: null };
+    },
+    tree: async () => ({ project_id: 'p2', root: later.path, entries: TREE, truncated: false }),
+  });
+  await mountWithProject(made);
+  assert.equal(calls, 1);
+  const opened = await made.ide.openAt('p2', 'strategies/golden.py');
+  await flush();
+  assert.equal(opened, true);
+  assert.equal(calls, 2, '없는 id면 목록을 한 번 다시 읽는다');
+  assert.equal(made.ide.currentProject().id, 'p2');
+});
+
 test('openAt: 모르는 폴더·없는 파일은 false를 돌려주고 이유를 적는다', async () => {
   const made = makeIde({
     readFile: async () => { throw new Error('파일이 존재하지 않는다'); },
