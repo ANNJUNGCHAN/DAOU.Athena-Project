@@ -552,6 +552,16 @@ test('openAt: 처음 읽은 목록에 없던 폴더(이 세션에서 만든 프�
   assert.equal(made.ide.currentProject().id, 'p2');
 });
 
+test('closeAll: 열린 파일을 전부 닫고 폴더 선택은 남긴다', async () => {
+  const made = makeIde();
+  await made.ide.openAt('p1', 'strategies/golden.py');
+  await flush();
+  assert.equal(made.ide.closeAll(), true);
+  assert.equal(made.ide.activeFile(), null, '닫혔으면 활성 파일이 없다');
+  assert.equal(made.ide.currentProject().id, 'p1', '폴더 선택은 남는다');
+  assert.equal(findByClass(made.root, 'project-ide-tab').length, 0);
+});
+
 test('openAt: 모르는 폴더·없는 파일은 false를 돌려주고 이유를 적는다', async () => {
   const made = makeIde({
     readFile: async () => { throw new Error('파일이 존재하지 않는다'); },
