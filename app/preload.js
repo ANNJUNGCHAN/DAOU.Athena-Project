@@ -17,6 +17,8 @@ const INVOKE_CHANNELS = new Set([
   // 이력 사이드바(리프 1.2.2) — 실데이터 목록·선택 상태.
   'athena:conversations-list',
   'athena:conversations-set-active',
+  // 과거 대화 열기(2026-09-02) — 읽기 전용 조회다, 쓰기가 아니다.
+  'athena:conversation-messages',
   'athena:conversations-new',
   'athena:account-list',
   'athena:account-register',

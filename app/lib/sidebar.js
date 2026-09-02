@@ -450,6 +450,17 @@
       activeConversationId = id;
     }
     renderList();
+    // 그 대화로 이동한다(2026-09-02 사용자 지적 "누르면 해당 대화로 이동이 되어야
+    // 하는데 그런 기능이 전혀 없다"). 위 set-active는 활성 포인터만 바꾸고 화면은
+    // 그대로 뒀다 — 실제로 아무 일도 일어나지 않았다.
+    //
+    // 읽기 전용이다: chat.js가 메시지를 불러 화면을 갈아치우고 입력을 잠근다.
+    // 답변 중이면 거절되므로(진행 중 턴이 사라지면 안 된다) 반환값을 무시하지 않고
+    // 그때는 목록 하이라이트만 남긴다.
+    const conv = conversationsCache.find((c) => c && c.id === id) || null;
+    if (window.AthenaShell && typeof window.AthenaShell.openConversation === 'function') {
+      await window.AthenaShell.openConversation({ id, title: conv ? conv.title : null });
+    }
   }
 
   // ---------- 알림 파생 방(Paper 보드 08) ----------

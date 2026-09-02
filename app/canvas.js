@@ -2861,7 +2861,16 @@ const graphSummaryTable = window.AthenaLib.GraphSummaryTable.createSummaryTableC
   // **보내지는 않는다** — 보드 43 "새 작업은 채팅에서" 원칙의 seedChatInput 버스가
   // 이 저장소의 관례고(lib/agent-canvas.js의 "＋ 새 작업"이 같은 경로), 사람이
   // 읽고 고친 뒤 Enter를 누른다.
-  onConfirmCta: (hintCount) => {
+  onConfirmCta: async (hintCount) => {
+    // 되물을 것들 카드를 먼저 시도한다(2026-09-02) — 백엔드가 아는 그 N건을
+    // 하나씩 묻고, 답을 모아 채팅으로 보낸다. 문장을 심어 사용자가 직접 묻게 하는
+    // 것보다 정확하다: 모델이 후보를 추측하지 않고 실제 AMBIGUOUS 관계를 다룬다.
+    if (window.AthenaShell && typeof window.AthenaShell.openBrainQuestions === 'function') {
+      const opened = await window.AthenaShell.openBrainQuestions();
+      if (opened) return;
+    }
+    // 카드를 못 열었으면(답변 중 · 물을 것이 0건 · 조회 실패) 빈손으로 두지 않고
+    // 옛 경로로 내려간다 — 문장을 심어 사람이 직접 묻게 한다.
     const count = Number.isFinite(hintCount) && hintCount > 0 ? hintCount : null;
     seedGraphChat(count
       ? `확인이 필요한 것 ${count}건이 뭐야? 각각 어느 쪽이 실제에 가까운지 하나씩 물어봐줘.`

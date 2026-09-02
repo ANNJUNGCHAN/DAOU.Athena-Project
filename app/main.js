@@ -4182,6 +4182,29 @@ function handleAuthTokenRevoke(e, { id } = {}) {
 
 // 이력 사이드바(리프 1.2.2) — athena:conversations-list -> { activeId, conversations }
 ipcMain.handle('athena:conversations-list', () => conversations.list());
+// 과거 대화 열기(2026-09-02 사용자 지적 "대화 이력을 누르면 그 대화로 이동해야 한다").
+//
+// 기존 athena:brain-history-query를 재사용할 수 없다 — 그쪽은 (a) 대화가 현재 것으로
+// 고정돼 있고 (b) 결과를 캔버스 카드(테이블 엔벨로프)로 밀어 넣는다. 여기는 채팅
+// 화면에 과거 대화를 펼치는 것이라 목적이 다르다.
+//
+// **읽기 전용이다.** 메시지는 브레인 이력 DB에 conversation_id와 함께 남아 있어
+// 되읽을 수 있지만, Claude 세션은 복원하지 않는다 — 이어서 말할 수 있는 척하면
+// 새 메시지가 과거 제목 아래 섞인다(아래 conversations-set-active 주석과 같은 이유).
+ipcMain.handle('athena:conversation-messages', async (_e, payload = {}) => {
+  const id = payload && typeof payload.conversationId === 'string' ? payload.conversationId : '';
+  if (!id) return { ok: false, error: '대화 id가 없다' };
+  const asked = payload && Number(payload.limit);
+  const limit = Number.isFinite(asked) ? Math.max(1, Math.min(500, Math.trunc(asked))) : 200;
+  const result = await fetchBrainJson('/api/v1/brain/chats', {
+    params: { conversation_id: id, limit },
+  });
+  if (!result.ok) return { ok: false, error: result.error };
+  const messages = ((result.body && result.body.messages) || []).map((m) => ({
+    role: m.role, text: m.text, occurredAt: m.occurred_at,
+  }));
+  return { ok: true, conversationId: id, isCurrent: id === historyConversationId(), messages };
+});
 // 디스크 이력은 제목/프로젝트 메타데이터뿐이라 메시지와 Claude 세션을 복원할 수
 // 없다. 과거 행 클릭은 현재 실행 경계를 바꾸지 않는 조회 전용이다. 복원 배선이
 // 생기기 전까지 선택만 바꿔 새 메시지를 과거 제목 아래에 쓰면 안 된다.

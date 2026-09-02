@@ -1255,6 +1255,9 @@ function createGraphModeController(deps) {
 
 const __exports = {
   createGraphModeController,
+  // 관계명 한글 사전 — 되물을 것들 카드(brain-questions.js)가 주입받아 쓴다.
+  // 공통 패널·엔티티 타임라인과 같은 사전이어야 한 화면이 두 말을 하지 않는다.
+  RELATION_LABELS,
   clusterTitle,
   entityPairKey,
   computeGraphHeaderMeta,
