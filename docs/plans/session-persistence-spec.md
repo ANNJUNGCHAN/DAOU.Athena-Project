@@ -146,15 +146,17 @@
 - `app/lib/session-history-view.js` — 사이드바 뷰모델(5모드 머리 + 프로젝트 + 최근)
 
 ### Wave 2 — 렌더러·메타데이터 배선
-- `app/lib/main/conversations.js` — 레코드에 `mode` 필드. `begin/touch`가 모드를 받아 저장
-- `app/lib/sidebar.js` — 이력을 5모드로 묶어 렌더. 실행 중은 스피너
-- `app/chat.js` — 과거 대화 열기(1700~1900줄대)를 세션 복원으로 확장
+- [x] `app/lib/main/conversations.js` — 레코드에 `mode`·`resumeSessionId`. ff64f93·c51dc10
+- [x] `app/lib/sidebar.js` — 모드 머리에 대화 수(ba63bc5). 실행 중 스피너는 job 배선 뒤
+- [x] `app/chat.js` — 과거 대화 열기가 복원이 된다(c51dc10): 모드 화면 전환·메시지 재그리기·입력 개방
 
-### Wave 3 — main 프로세스 (daou-athena-5b 커밋 후)
-- `app/main.js` — `athena:conversations-new`이 버리는 `mode`를 살린다(2줄)
-- `app/main.js` — `athena:conversations-set-active`의 `restorable:false` 제거, `athena:session-load` 신설
-- `app/main.js` — 세션 스토어 배선(메시지 즉시 커밋, 워크스페이스 디바운스)
-- `app/preload.js` — 세션 채널 추가
+### Wave 3 — main 프로세스
+
+실앱 프로브 `app/probe-session-restore.js`(백엔드·Claude 없이 main+렌더러만) 13/13 통과.
+- [x] `app/main.js` — conversations-new이 mode를 살린다(c51dc10)
+- [x] `app/main.js` — set-active가 switchTo 큐를 타는 실제 전환이 됐다. Claude 커서(--resume)를 대화마다 적고 잇는다(c51dc10)
+- [ ] `app/main.js` — 세션 스토어 배선. 저장 타이밍 정책은 `app/lib/main/session-bridge.js`(작성 중)가 소유
+- [ ] `app/preload.js` — 세션 채널(카드·워크스페이스·뷰포트 저장, 세션 로드) 추가
 
 ### 파일 소유 (2026-09-02 세션 간 합의)
 - daou-athena-5b: main.js, preload.js, canvas.js, shell.css, backtest-*.js, live-prompt.js, project-ide.js, probe-backtest-full.js
@@ -162,3 +164,11 @@
 - 제3 세션: backend brain 계열(brain.py, brain/store.py, brain_tools.py)
 
 편집 규율: main.js·chat.js·preload.js는 CRLF/LF 혼합이라 Edit 도구가 파일을 통째로 정규화한다. 반드시 node로 바이트를 확인하고 바이트 보존 패치로 고친다.
+
+### Wave 4 — 세션 스토어 배선 (설계 확정, 착수 대기)
+- `app/lib/main/session-bridge.js`(작성 중) — 저장 타이밍 정책. 메시지 즉시, 스트리밍 5s/2KB 저널, 카드 200ms, 워크스페이스 300ms/1s, 뷰포트 400ms/2s, 종료 flushSync.
+- main.js 배선 지점(실측): 사용자 메시지 `runLiveQuery` 진입부(historySink.saveChatMessage 직후), 델타 `sendLiveTextDelta`, 툴 단계 `sendLiveToolStep`, 최종 `persistLocalLiveResult`/turn 종료(3684~), 종료 `before-quit`의 conversations.flushSync 옆.
+- 캔버스 카드: 렌더러가 스택을 보고한다. `addLiveCard(result)`가 카드 DOM에 봉투를 매달고(`__athenaSessionEnvelope`), 추가·닫기·비우기 뒤에 `athena:session-cards`로 `[{cardId, kind, channel, envelope, protected}]`를 보낸다. main이 bridge.saveCards로 적는다. 복원은 저장된 봉투를 `athena:add-canvas-live`로 다시 흘려 같은 렌더 경로로 그린다(별도 렌더러 없음). 큰 payload는 dataRef만 남기는 것은 그 다음.
+- 워크스페이스: 각 모드 컨트롤러가 `athena:session-workspace` patch를 보낸다. 백테스트는 backtest-canvas.js 소유 세션(daou-athena-5b)과 조율 뒤.
+- 복원 진입: `athena:session-load`가 스토어 스냅샷을 돌려주고, chat.js `restoreConversation`이 메시지를 브레인 조회 대신 스냅샷에서 그린다(브레인은 폴백).
+- 채널 추가(preload): send `athena:session-cards`·`athena:session-workspace`·`athena:session-viewport`, invoke `athena:session-load`.
