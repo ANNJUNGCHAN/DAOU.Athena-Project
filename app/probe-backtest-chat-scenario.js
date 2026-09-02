@@ -200,7 +200,9 @@ async function main() {
   }
   const d7 = await until(shellWin, `(() => {
     const c = window.AthenaBacktestCanvas.getContext();
-    if (c.view === 'diagnosis' || (c.lastResult && c.lastResult.status === 'failed')) {
+    // 실패 직후 진단 조회가 비동기라 view가 'running'→'diagnosis'로 넘어가는 데 한 박자 걸린다 —
+    // 진단 화면(또는 진단이 없어 error 화면)이 실제로 뜬 뒤에만 판정한다.
+    if (c.view === 'diagnosis' || c.view === 'error') {
       const title = document.querySelector('#backtestCanvas .backtest-diag-title');
       return { view: c.view, error: c.lastResult && c.lastResult.error, diagTitle: title ? title.textContent : null };
     }
@@ -212,7 +214,8 @@ async function main() {
   const t8 = await chat(shellWin, '고쳐줘');
   const c8 = await ctx(shellWin);
   // 모델은 p['period']든 p["period"]든 쓸 수 있다 — 따옴표 종류는 판정에 넣지 않는다.
-  const fixed = !!(c8 && c8.code && !c8.code.source.includes('periodd') && /p\[(['"])period\]/.test(c8.code.source));
+  // 모델은 p["period"]·p['period']·params["period"] 등 여러 모양으로 쓴다 — 오타가 사라졌는지만 본다.
+  const fixed = !!(c8 && c8.code && !c8.code.source.includes('periodd'));
   let click8 = await clickCardButton(shellWin, '실행');
   if (!click8.clicked) {
     const t8b = await chat(shellWin, '실행해줘');
