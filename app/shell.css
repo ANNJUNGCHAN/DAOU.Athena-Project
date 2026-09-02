@@ -1710,94 +1710,6 @@ body { margin: 0; overflow: hidden; }
   font-size: var(--text-2xs);
 }
 
-/* 채팅 초안 카드 — 설계 폼 맨 위. 사람이 [적용]을 눌러야 폼에 들어가므로 버튼 세 벌은
- * 오류 진단(보드 09)의 적용/적용만/버리기와 같은 모양이다. */
-.backtest-draft { border-color: var(--color-brand); }
-.backtest-draft-note {
-  margin-bottom: 8px;
-  color: var(--color-k-dim);
-  font-family: var(--font-body);
-  font-size: var(--text-xs);
-}
-.backtest-draft-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 6px;
-  padding: 3px 0;
-  color: var(--color-k-text);
-  font-family: var(--font-body);
-  font-size: var(--text-xs);
-}
-.backtest-draft-label { flex: 0 0 auto; color: var(--color-k-faint); }
-.backtest-draft-before { color: var(--color-k-faint); text-decoration: line-through; }
-.backtest-draft-arrow { color: var(--color-k-ghost); }
-.backtest-draft-after { font-family: var(--font-strong); }
-.backtest-draft-error {
-  color: var(--color-down);
-  font-family: var(--font-body);
-  font-size: var(--text-xs);
-  margin-top: 4px;
-}
-.backtest-draft-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid var(--color-k-line);
-}
-.backtest-draft-apply,
-.backtest-draft-apply-run {
-  padding: 9px 18px;
-  border: 0;
-  border-radius: 999px;
-  background: var(--color-brand);
-  color: #fff;
-  font-family: var(--font-body);
-  font-size: var(--text-xs);
-  cursor: pointer;
-}
-.backtest-draft-apply-only {
-  padding: 9px 16px;
-  border: 1px solid var(--color-k-line);
-  border-radius: 999px;
-  background: var(--color-k-panel);
-  color: var(--color-k-text);
-  font-family: var(--font-body);
-  font-size: var(--text-xs);
-  cursor: pointer;
-}
-.backtest-draft-discard {
-  padding: 9px 14px;
-  border: 0;
-  background: transparent;
-  color: var(--color-k-faint);
-  font-family: var(--font-body);
-  font-size: var(--text-xs);
-  cursor: pointer;
-}
-.backtest-draft-apply:disabled,
-.backtest-draft-apply-run:disabled,
-.backtest-draft-apply-only:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
-}
-.backtest-draft-actions-note {
-  margin-top: 6px;
-  color: var(--color-k-faint);
-  font-family: var(--font-body);
-  font-size: var(--text-2xs);
-}
-
-/* 코드 초안 카드 — diff가 카드를 무한정 늘리지 않게 높이를 자른다. */
-.backtest-code-draft-diff {
-  max-height: 260px;
-  overflow-y: auto;
-  margin-bottom: 4px;
-}
-
 /* 실행경로 2분기 — 헤더 탭·세그먼트와 같은 알약 모양을 쓴다(같은 층위의 선택이다). */
 .backtest-runpath {
   display: flex;
@@ -3139,3 +3051,25 @@ body { margin: 0; overflow: hidden; }
 .backtest-equity-overlay.is-1 { stroke: var(--color-navy); }
 .backtest-legend-overlay.is-0 { color: var(--color-brand); }
 .backtest-legend-overlay.is-1 { color: var(--color-navy); }
+
+/* 백테스트 변경 내역 카드(5단계) — 채팅 쪽 카드다. 캔버스가 액션을 바로 반영하고
+ * 무엇이 바뀌었는지·되돌리기를 여기서 보여준다. 머리 태그·버튼·안내줄은 루틴 승인
+ * 카드의 클래스를 그대로 쓴다(routine-draft-pill·routine-btn·agent-source —
+ * chat.css와 이 파일이 같은 shell.html에 로드돼 공유가 가능하다). */
+.backtest-change { border-left-color: rgba(230, 232, 238, 0.4); }
+.backtest-change-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 2px 0;
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+}
+.backtest-change-error {
+  padding: 2px 0;
+  color: var(--color-down);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+}
+.backtest-change-actions { flex-wrap: wrap; }

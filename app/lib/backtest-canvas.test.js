@@ -152,11 +152,14 @@ async function fillForm(container) {
 test('container가 없으면 mount()/refresh()·채팅 배선까지 조용히 넘어간다', () => {
   const canvas = createBacktestCanvas({});
   assert.doesNotThrow(() => { canvas.mount(); canvas.refresh(); });
-  // canvas.js가 채널 구독에서 그냥 부르는 자리들 — 없으면 액션 한 번에 TypeError로 죽는다.
+  // chat.js가 채널 구독에서 그냥 부르는 자리들 — 없으면 액션 한 번에 TypeError로 죽는다.
   assert.doesNotThrow(() => {
     canvas.onChatAction({ kind: 'navigate', tab: 'history' });
-    canvas.showDraft({ patch: [] });
+    canvas.onChatAction({ kind: 'spec_draft', patch: {} });
+    canvas.runFromChat();
+    canvas.startOptimizeFromChat();
   });
+  assert.equal(canvas.undoChatAction('bc-1').ok, false);
   assert.equal(canvas.getContext(), null);
 });
 
@@ -447,7 +450,11 @@ test('폴링 중단: 컨테이너가 hidden이면 다음 tick을 예약하지 �
   assert.equal(scheduled, 0);
 });
 
-// ── 채팅 초안(propose_spec → 카드 → 사람이 [적용]) ──────────────────────────
+// ── 채팅 액션(propose_spec → 바로 반영 → 채팅이 [되돌리기]) ────────────────
+//
+// 2026-09-02 사용자 결정: 캔버스에 초안 카드를 세우지 않는다. 검증을 통과한 설정·코드는
+// 바로 반영되고, 무엇이 바뀌었는지와 [되돌리기]는 채팅 카드(chat.js)가 그린다.
+// 이 파일이 지키는 것은 영수증의 모양과 반영·되돌리기·거부(검증 실패·실행 중)다.
 
 const RSI_YAML = `
 version: "1.0"
@@ -487,264 +494,10 @@ async function mounted(overrides) {
   return made;
 }
 
-test('showDraft: 카드가 설계›폼 맨 위에 뜨고 바뀐 항목만 전 → 후로 보인다', async () => {
-  const { container, canvas } = await mounted();
-  await click(findByClass(container, 'backtest-subtab')[1]);        // 코드 탭으로
-  await click(findByClass(container, 'backtest-tab')[2]);           // 이력 탭으로
-  assert.equal(canvas.getContext().tab, 'history');
-
-  canvas.showDraft({ patch: VALID_PATCH, note: '삼성전자 상반기', suggest_run: false });
-  const ctx = canvas.getContext();
-  assert.equal(ctx.view, 'design');
-  assert.equal(ctx.tab, 'design');
-  assert.equal(ctx.designTab, 'form');
-
-  const cards = findByClass(container, 'backtest-draft');
-  assert.equal(cards.length, 1);
-  // 하위 탭 줄 바로 다음, 프리셋 목록보다 앞이다.
-  const design = findByClass(container, 'backtest-design')[0];
-  assert.equal(design.children[0].className, 'backtest-subtabs');
-  assert.ok(design.children[1] === cards[0]);
-  assert.equal(design.children[2].className, 'backtest-preset-wrap');
-
-  const text = textOf(cards[0]);
-  assert.match(text, /채팅이 제안한 설정/);
-  assert.match(text, /삼성전자 상반기/);
-  assert.match(text, /종목 없음 → 005930/);
-  assert.match(text, /시작일 없음 → 20240101/);
-  assert.match(text, /종료일 없음 → 20240630/);
-  assert.equal(findByClass(cards[0], 'backtest-draft-row').length, 3);
-  assert.match(text, /적용해도 실행·수집·저장은 일어나지 않습니다/);
-  assert.equal(findByClass(cards[0], 'backtest-draft-apply').length, 1);
-  assert.equal(findByClass(cards[0], 'backtest-draft-apply-run').length, 0);
-  assert.equal(findByClass(cards[0], 'backtest-draft-discard').length, 1);
-  // 카드는 폼을 아직 건드리지 않았다.
-  assert.deepEqual(ctx.spec.symbols, []);
-});
-
-test('showDraft: 값을 사람 말로 적는다 — 파라미터·주기·리스크·비용·조건', async () => {
-  const { container, canvas } = await mounted();
-  canvas.showDraft({
-    patch: {
-      params: { fast: 10 },
-      period: 'week',
-      adjusted: false,
-      risk: { stop_loss: { enabled: false } },
-      costs: { fee_bps: 2 },
-      exit: { logic: 'OR', conditions: [{ indicator: 'close', operator: 'less_than', compare_to: 70 }] },
-    },
-  });
-  const text = textOf(findByClass(container, 'backtest-draft')[0]);
-  assert.match(text, /파라미터 fast 20 → 10/);
-  assert.match(text, /주기 일 → 주/);
-  assert.match(text, /수정주가 켬 → 끔/);
-  assert.match(text, /리스크 손절 8% 켬 · 익절 20% 끔 → 손절 8% 끔 · 익절 20% 끔/);
-  assert.match(text, /비용 수수료 1\.5bp · 매도세 18bp · 슬리피지 5bp → 수수료 2bp/);
-  assert.match(text, /청산 조건 ma_fast 가 하향 돌파 ma_slow → close 가 더 작음 70/);
-});
-
-test('[적용]: 폼이 병합 결과가 되고 초안·폼 오류가 지워진다 — 실행은 부르지 않는다', async () => {
-  let runs = 0;
-  const { container, canvas } = await mounted({ run: async () => { runs += 1; return {}; } });
-  await click(findByClass(container, 'backtest-run-button')[0]);   // 빈 폼 → 오류 목록
-  await flush();
-  assert.ok(findByClass(container, 'backtest-design-error-line').length >= 1);
-
-  canvas.showDraft({ patch: VALID_PATCH });
-  await click(findByClass(container, 'backtest-draft-apply')[0]);
-  await flush();
-  const ctx = canvas.getContext();
-  assert.deepEqual(ctx.spec.symbols, ['005930']);
-  assert.equal(ctx.spec.fromDt, '20240101');
-  assert.equal(ctx.spec.toDt, '20240630');
-  assert.equal(ctx.spec.presetId, 'sma_crossover');
-  assert.equal(ctx.draft, null);
-  assert.equal(findByClass(container, 'backtest-draft').length, 0);
-  assert.equal(findByClass(container, 'backtest-design-error-line').length, 0);
-  assert.equal(runs, 0);
-  // 폼에도 반영됐다 — 종목 칩이 생겼다.
-  assert.equal(findByClass(container, 'backtest-symbol-code').length, 1);
-});
-
-test('[버리기]: 초안만 사라지고 폼은 그대로다', async () => {
-  const { container, canvas } = await mounted();
-  canvas.showDraft({ patch: VALID_PATCH });
-  await click(findByClass(container, 'backtest-draft-discard')[0]);
-  const ctx = canvas.getContext();
-  assert.equal(ctx.draft, null);
-  assert.equal(findByClass(container, 'backtest-draft').length, 0);
-  assert.deepEqual(ctx.spec.symbols, []);
-  assert.equal(ctx.spec.fromDt, '');
-});
-
-test('병합 결과가 검증에 걸리면 오류 줄이 뜨고 적용 버튼이 잠긴다', async () => {
-  const { container, canvas } = await mounted();
-  canvas.showDraft({
-    patch: { symbols: ['005930'], fromDt: '20240630', toDt: '20240101' },
-    suggest_run: true,
-  });
-  const card = findByClass(container, 'backtest-draft')[0];
-  const errors = findByClass(card, 'backtest-draft-error');
-  assert.ok(errors.length >= 1);
-  assert.match(textOf(card), /종료일은 시작일보다 빠를 수 없습니다/);
-  const applyRun = findByClass(card, 'backtest-draft-apply-run')[0];
-  const applyOnly = findByClass(card, 'backtest-draft-apply-only')[0];
-  assert.equal(applyRun.disabled, true);
-  assert.equal(applyOnly.disabled, true);
-  assert.equal(findByClass(card, 'backtest-draft-discard')[0].disabled, undefined);
-  assert.deepEqual(canvas.getContext().draft.errors, ['종료일은 시작일보다 빠를 수 없습니다']);
-  // 잠긴 버튼의 핸들러가 불려도 폼은 바뀌지 않는다.
-  await click(applyRun);
-  await flush();
-  assert.deepEqual(canvas.getContext().spec.symbols, []);
-  assert.ok(canvas.getContext().draft);
-});
-
-test('suggest_run: [적용하고 실행]·[적용만]·[버리기] 세 버튼, 실행은 사람이 눌러야 한 번 돈다', async () => {
-  const bodies = [];
-  const { container, canvas } = await mounted({
-    run: async (body) => { bodies.push(body); return { run_id: 'r1' }; },
-    result: async () => ({ status: 'running' }),
-  });
-  canvas.showDraft({ patch: VALID_PATCH, suggest_run: true });
-  const card = findByClass(container, 'backtest-draft')[0];
-  assert.equal(findByClass(card, 'backtest-draft-apply-run')[0].textContent, '적용하고 실행');
-  assert.equal(findByClass(card, 'backtest-draft-apply-only')[0].textContent, '적용만');
-  assert.equal(findByClass(card, 'backtest-draft-discard')[0].textContent, '버리기');
-  assert.equal(findByClass(card, 'backtest-draft-apply').length, 0);
-  assert.equal(bodies.length, 0);
-
-  await click(findByClass(card, 'backtest-draft-apply-run')[0]);
-  await flush();
-  assert.equal(bodies.length, 1);
-  assert.match(bodies[0].yaml, /symbols: \["005930"\]/);
-  assert.match(bodies[0].yaml, /from: "20240101"/);
-  assert.equal(canvas.getContext().view, 'running');
-  assert.equal(canvas.getContext().draft, null);
-});
-
-test('suggest_run: [적용만]은 폼만 바꾸고 실행하지 않는다', async () => {
-  let runs = 0;
-  const { container, canvas } = await mounted({ run: async () => { runs += 1; return {}; } });
-  canvas.showDraft({ patch: VALID_PATCH, suggest_run: true });
-  await click(findByClass(container, 'backtest-draft-apply-only')[0]);
-  await flush();
-  assert.equal(runs, 0);
-  assert.deepEqual(canvas.getContext().spec.symbols, ['005930']);
-  assert.equal(canvas.getContext().draft, null);
-  assert.equal(canvas.getContext().view, 'design');
-});
-
-test('getContext(): 화면·폼·초안 — spec은 복사본, draft는 errors를 품는다', async () => {
-  const { canvas } = await mounted();
-  const ctx = canvas.getContext();
-  assert.deepEqual(Object.keys(ctx), [
-    'view', 'tab', 'designTab', 'runPath', 'spec', 'draft', 'presets',
-    'code', 'codeDraft', 'lastResult', 'diagnosis', 'optimize', 'runs', 'coverage',
-  ]);
-  assert.equal(ctx.view, 'design');
-  assert.equal(ctx.tab, 'design');
-  assert.equal(ctx.designTab, 'form');
-  assert.equal(ctx.spec.presetId, 'sma_crossover');
-  assert.equal(ctx.draft, null);
-  assert.deepEqual(ctx.presets, [{ id: 'sma_crossover', name: 'SMA 골든크로스' }]);
-  ctx.spec.symbols.push('000000');
-  assert.deepEqual(canvas.getContext().spec.symbols, []);
-
-  canvas.showDraft({ patch: {}, note: '이대로 실행할까요', suggest_run: true });
-  const draft = canvas.getContext().draft;
-  assert.deepEqual(Object.keys(draft), ['patch', 'note', 'suggest_run', 'errors']);
-  assert.deepEqual(draft.patch, {});
-  assert.equal(draft.note, '이대로 실행할까요');
-  assert.equal(draft.suggest_run, true);
-  assert.ok(draft.errors.includes('종목을 하나 이상 고르세요'));
-});
-
-test('preset이 든 초안: 전략이 바뀌고 종목·기간은 남으며 나머지 키는 새 전략 위에 얹힌다', async () => {
-  const { container, canvas } = await mounted({ fetchPresets: async () => TWO_PRESETS });
-  await fillForm(container);
-  canvas.showDraft({ patch: { preset: 'rsi_reversal', params: { period: 7 } } });
-  const card = findByClass(container, 'backtest-draft')[0];
-  const text = textOf(card);
-  assert.match(text, /전략 SMA 골든크로스 → RSI 과매도/);
-  assert.equal(findByClass(card, 'backtest-draft-row')[0].children[0].textContent, '전략');
-  assert.match(text, /파라미터 period 없음 → 7/);
-  assert.equal(findByClass(card, 'backtest-draft-error').length, 0);
-
-  await click(findByClass(card, 'backtest-draft-apply')[0]);
-  const spec = canvas.getContext().spec;
-  assert.equal(spec.presetId, 'rsi_reversal');
-  assert.equal(spec.name, 'RSI 과매도');
-  assert.deepEqual(spec.symbols, ['005930']);
-  assert.equal(spec.fromDt, '20160101');
-  assert.equal(spec.toDt, '20260828');
-  assert.equal(spec.period, 'day');
-  assert.deepEqual(Object.keys(spec.params), ['period']);
-  assert.equal(spec.params.period.default, 7);
-  const selected = findByClass(container, 'backtest-preset-item').filter((n) => n.getAttribute('aria-pressed') === 'true');
-  assert.equal(selected.length, 1);
-  assert.equal(selected[0].children[0].textContent, 'RSI 과매도');
-});
-
-test('모르는 프리셋 id가 든 초안은 오류로 알리고 [적용]을 잠근다', async () => {
-  const { container, canvas } = await mounted();
-  await fillForm(container);
-  canvas.showDraft({ patch: { preset: 'nope' } });
-  const card = findByClass(container, 'backtest-draft')[0];
-  const errors = findByClass(card, 'backtest-draft-error').map((n) => n.textContent);
-  assert.deepEqual(errors, ['nope는 없는 프리셋입니다']);
-  assert.equal(findByClass(card, 'backtest-draft-apply')[0].disabled, true);
-  assert.ok(canvas.getContext().draft.errors.includes('nope는 없는 프리셋입니다'));
-});
-
-test('실행 중·승인 중에는 showDraft가 화면을 바꾸지 않는다 — 초안만 들고 있는다', async () => {
-  const { container, canvas } = await mounted({
-    run: async () => ({ run_id: 'r1' }),
-    result: async () => ({ status: 'running' }),
-  });
-  await fillForm(container);
-  await click(findByClass(container, 'backtest-run-button')[0]);
-  await flush();
-  assert.equal(canvas.getContext().view, 'running');
-  canvas.showDraft({ patch: VALID_PATCH });
-  assert.equal(canvas.getContext().view, 'running');
-  assert.equal(findByClass(container, 'backtest-draft').length, 0);
-  assert.deepEqual(canvas.getContext().draft.patch, VALID_PATCH);
-
-  const approval = await toApproval();
-  approval.canvas.showDraft({ patch: VALID_PATCH });
-  assert.equal(approval.canvas.getContext().view, 'approval');
-  assert.equal(findByClass(approval.container, 'backtest-approval').length, 1);
-  // 승인을 취소하고 설계로 돌아오면 카드가 그때 보인다.
-  await click(findByClass(approval.container, 'backtest-approval-cancel')[0]);
-  assert.equal(findByClass(approval.container, 'backtest-draft').length, 1);
-});
-
-test('두 번째 showDraft는 앞의 초안을 갈아치운다 — 카드는 하나뿐이다', async () => {
-  const { container, canvas } = await mounted();
-  canvas.showDraft({ patch: { symbols: ['005930'] } });
-  canvas.showDraft({ patch: { symbols: ['000660'] } });
-  const cards = findByClass(container, 'backtest-draft');
-  assert.equal(cards.length, 1);
-  const text = textOf(cards[0]);
-  assert.match(text, /000660/);
-  assert.equal(text.includes('005930'), false);
-  assert.deepEqual(canvas.getContext().draft.patch.symbols, ['000660']);
-});
-
-test('showDraft: patch가 객체가 아니면 무시한다', async () => {
-  const { container, canvas } = await mounted();
-  assert.doesNotThrow(() => {
-    canvas.showDraft(null);
-    canvas.showDraft({});
-    canvas.showDraft({ patch: 'symbols' });
-    canvas.showDraft({ patch: [] });
-  });
-  assert.equal(canvas.getContext().draft, null);
-  assert.equal(findByClass(container, 'backtest-draft').length, 0);
-});
-
-// ── 채팅 액션(코드 초안 · 화면 전환 · 최적화 제안) ──────────────────────────
+const RECEIPT_KEYS = [
+  'id', 'kind', 'applied', 'note', 'rows', 'errors',
+  'suggest_run', 'suggest_validate', 'tab', 'designTab', 'method', 'canUndo',
+];
 
 const CODE_SOURCE = [
   'import athena_bt as bt',
@@ -757,115 +510,332 @@ const CODE_SOURCE = [
   '',
 ].join('\n');
 
-// 코드가 편집기에 들어간 상태를 만든다 — 사람이 [적용]을 누른 것과 같은 경로다.
+// 코드가 편집기에 들어간 상태를 만든다 — 이제 액션 한 번이면 끝이다.
 async function withCode(made) {
   made.canvas.onChatAction({ kind: 'code_draft', source: CODE_SOURCE });
-  await click(findByClass(made.container, 'backtest-draft-apply')[0]);
   await flush();
   return made;
 }
 
-test('onChatAction: 알 수 없는 kind·빈 payload는 조용히 무시한다', async () => {
+test('onChatAction: 알 수 없는 kind·빈 payload는 null이고 아무것도 바꾸지 않는다', async () => {
   const { canvas } = await mounted();
-  assert.doesNotThrow(() => {
-    canvas.onChatAction(null);
-    canvas.onChatAction({});
-    canvas.onChatAction({ kind: 'nope', tab: 'history' });
-    canvas.onChatAction('navigate');
-  });
+  assert.equal(canvas.onChatAction(null), null);
+  assert.equal(canvas.onChatAction({}), null);
+  assert.equal(canvas.onChatAction({ kind: 'nope', tab: 'history' }), null);
+  assert.equal(canvas.onChatAction('navigate'), null);
+  assert.equal(canvas.onChatAction({ kind: 'spec_draft', patch: 'symbols' }), null);
+  assert.equal(canvas.onChatAction({ kind: 'spec_draft', patch: [] }), null);
+  assert.equal(canvas.onChatAction({ kind: 'code_draft', source: '' }), null);
+  assert.equal(canvas.onChatAction({ kind: 'code_draft', source: 42 }), null);
   const ctx = canvas.getContext();
   assert.equal(ctx.tab, 'design');
-  assert.equal(ctx.codeDraft, null);
   assert.equal(ctx.draft, null);
+  assert.equal(ctx.lastChange, null);
 });
 
-test('onChatAction spec_draft: showDraft와 같은 카드로 간다', async () => {
+test('spec_draft: 폼에 바로 들어가고 영수증이 바뀐 항목을 싣는다 — 캔버스 초안 카드는 없다', async () => {
   const { container, canvas } = await mounted();
-  canvas.onChatAction({ kind: 'spec_draft', patch: VALID_PATCH, note: '삼성전자', suggest_run: false });
-  assert.equal(findByClass(container, 'backtest-draft').length, 1);
-  assert.equal(canvas.getContext().draft.note, '삼성전자');
-});
+  await click(findByClass(container, 'backtest-tab')[2]);           // 이력 탭으로
+  assert.equal(canvas.getContext().tab, 'history');
 
-test('code_draft: 코드 탭 맨 위에 카드가 서고 화면이 설계›코드로 간다', async () => {
-  const { container, canvas } = await mounted();
-  canvas.onChatAction({
-    kind: 'code_draft', source: CODE_SOURCE, note: '진입 조건을 고쳤다',
+  const receipt = canvas.onChatAction({
+    kind: 'spec_draft', patch: VALID_PATCH, note: '삼성전자 상반기', suggest_run: false,
   });
+  assert.deepEqual(Object.keys(receipt), RECEIPT_KEYS);
+  assert.match(receipt.id, /^bc-\d+$/);
+  assert.equal(receipt.kind, 'spec_draft');
+  assert.equal(receipt.applied, true);
+  assert.equal(receipt.note, '삼성전자 상반기');
+  assert.deepEqual(receipt.errors, []);
+  assert.equal(receipt.suggest_run, false);
+  assert.equal(receipt.canUndo, true);
+  assert.equal(receipt.tab, 'design');
+  assert.equal(receipt.designTab, 'form');
+  assert.deepEqual(receipt.rows, [
+    { label: '종목', before: '없음', after: '005930' },
+    { label: '시작일', before: '없음', after: '20240101' },
+    { label: '종료일', before: '없음', after: '20240630' },
+  ]);
+
+  // 폼이 곧바로 그 값이다 — 사람이 누를 카드가 캔버스에 서지 않는다.
   const ctx = canvas.getContext();
   assert.equal(ctx.view, 'design');
   assert.equal(ctx.tab, 'design');
-  assert.equal(ctx.designTab, 'code');
-
-  const cards = findByClass(container, 'backtest-code-draft');
-  assert.equal(cards.length, 1);
-  // strategy.py 머리보다 앞이다.
-  const codeTab = findByClass(container, 'backtest-code-tab')[0];
-  assert.ok(codeTab.children[0] === cards[0]);
-  const text = textOf(cards[0]);
-  assert.match(text, /채팅이 제안한 코드/);
-  assert.match(text, /진입 조건을 고쳤다/);
-  assert.match(text, /적용하면 편집기에 들어갑니다 — 저장·실행·검증은 따로 누릅니다/);
-  // 빈 편집기와의 diff라 지워진 줄은 없고 전부 추가 줄이다.
-  const rows = findByClass(cards[0], 'backtest-diff-row');
-  assert.equal(rows.filter((r) => /is-add/.test(r.className)).length, 7);
-  assert.equal(rows.filter((r) => /is-del/.test(r.className)).length, 0);
-  assert.equal(findByClass(cards[0], 'backtest-draft-apply').length, 1);
-  assert.equal(findByClass(cards[0], 'backtest-draft-apply-run').length, 0);
-  assert.equal(findByClass(cards[0], 'backtest-draft-discard').length, 1);
-  // 편집기는 아직 비어 있다.
-  assert.equal(canvas.getContext().code.source, '');
-  assert.equal(canvas.getContext().runPath, 'form');
+  assert.equal(ctx.designTab, 'form');
+  assert.deepEqual(ctx.spec.symbols, ['005930']);
+  assert.equal(ctx.spec.fromDt, '20240101');
+  assert.equal(ctx.draft, null);
+  assert.equal(findByClass(container, 'backtest-draft').length, 0);
+  assert.equal(findByClass(container, 'backtest-symbol-code').length, 1);
 });
 
-test('code_draft 기본 버튼: suggest_run → [적용하고 실행], suggest_validate → [적용하고 검증]', async () => {
+test('spec_draft 영수증: 값을 사람 말로 적는다 — 파라미터·주기·리스크·비용·조건', async () => {
+  const { canvas } = await mounted();
+  const receipt = canvas.onChatAction({
+    kind: 'spec_draft',
+    patch: {
+      params: { fast: 10 },
+      period: 'week',
+      adjusted: false,
+      risk: { stop_loss: { enabled: false } },
+      costs: { fee_bps: 2 },
+      exit: { logic: 'OR', conditions: [{ indicator: 'close', operator: 'less_than', compare_to: 70 }] },
+    },
+  });
+  const said = receipt.rows.map((r) => `${r.label} ${r.before} → ${r.after}`).join(' / ');
+  assert.match(said, /파라미터 fast 20 → 10/);
+  assert.match(said, /주기 일 → 주/);
+  assert.match(said, /수정주가 켬 → 끔/);
+  assert.match(said, /리스크 손절 8% 켬 · 익절 20% 끔 → 손절 8% 끔 · 익절 20% 끔/);
+  assert.match(said, /비용 수수료 1\.5bp · 매도세 18bp · 슬리피지 5bp → 수수료 2bp/);
+  assert.match(said, /청산 조건 ma_fast 가 하향 돌파 ma_slow → close 가 더 작음 70/);
+});
+
+test('spec_draft: 실행은 켜지 않는다 — suggest_run은 영수증에 실려 채팅 버튼이 된다', async () => {
+  let runs = 0;
+  const { canvas } = await mounted({ run: async () => { runs += 1; return {}; } });
+  const receipt = canvas.onChatAction({
+    kind: 'spec_draft', patch: VALID_PATCH, suggest_run: true,
+  });
+  assert.equal(receipt.applied, true);
+  assert.equal(receipt.suggest_run, true);
+  assert.equal(runs, 0);
+  assert.equal(canvas.getContext().view, 'design');
+});
+
+test('[되돌리기]: 반영 직전 폼으로 돌아가고 무엇이 돌아왔는지를 돌려준다', async () => {
   const { container, canvas } = await mounted();
-  canvas.onChatAction({ kind: 'code_draft', source: CODE_SOURCE, suggest_run: true });
-  let card = findByClass(container, 'backtest-code-draft')[0];
-  assert.equal(findByClass(card, 'backtest-draft-apply-run')[0].textContent, '적용하고 실행');
-  assert.equal(findByClass(card, 'backtest-draft-apply-only')[0].textContent, '적용만');
-
-  canvas.onChatAction({ kind: 'code_draft', source: CODE_SOURCE, suggest_validate: true });
-  card = findByClass(container, 'backtest-code-draft')[0];
-  assert.equal(findByClass(card, 'backtest-draft-apply-run')[0].textContent, '적용하고 검증');
-  assert.equal(findByClass(card, 'backtest-draft-apply-only')[0].textContent, '적용만');
-
-  canvas.onChatAction({ kind: 'code_draft', source: CODE_SOURCE });
-  card = findByClass(container, 'backtest-code-draft')[0];
-  assert.equal(findByClass(card, 'backtest-draft-apply')[0].textContent, '적용');
-  assert.equal(findByClass(card, 'backtest-draft-apply-only').length, 0);
+  const receipt = canvas.onChatAction({ kind: 'spec_draft', patch: VALID_PATCH });
+  const undone = canvas.undoChatAction(receipt.id);
+  assert.equal(undone.ok, true);
+  assert.deepEqual(undone.restored.rows, [
+    { label: '종목', before: '005930', after: '없음' },
+    { label: '시작일', before: '20240101', after: '없음' },
+    { label: '종료일', before: '20240630', after: '없음' },
+  ]);
+  const ctx = canvas.getContext();
+  assert.deepEqual(ctx.spec.symbols, []);
+  assert.equal(ctx.spec.fromDt, '');
+  assert.equal(ctx.lastChange, null);
+  assert.equal(findByClass(container, 'backtest-symbol-code').length, 0);
+  // 같은 영수증을 두 번 되돌리지 못한다.
+  assert.deepEqual(canvas.undoChatAction(receipt.id), {
+    ok: false, reason: '되돌릴 내역이 남아 있지 않습니다',
+  });
 });
 
-test('code_draft [적용]: 편집기에 들어가고 실행경로가 코드로 바뀐다 — 실행은 없다', async () => {
+test('되돌리기: 옛 지점으로 돌아가면 그 뒤의 내역은 사라진다', async () => {
+  const { canvas } = await mounted();
+  const first = canvas.onChatAction({ kind: 'spec_draft', patch: VALID_PATCH });
+  const second = canvas.onChatAction({ kind: 'spec_draft', patch: { symbols: ['000660'] } });
+  assert.deepEqual(canvas.getContext().spec.symbols, ['000660']);
+
+  assert.equal(canvas.undoChatAction(first.id).ok, true);
+  assert.deepEqual(canvas.getContext().spec.symbols, []);
+  assert.deepEqual(canvas.undoChatAction(second.id), {
+    ok: false, reason: '되돌릴 내역이 남아 있지 않습니다',
+  });
+});
+
+test('되돌리기 스택은 20개까지 — 더 오래된 변경은 이유를 돌려준다', async () => {
+  const { canvas } = await mounted();
+  const first = canvas.onChatAction({ kind: 'code_draft', source: '# 1\n' });
+  for (let i = 2; i <= 21; i += 1) {
+    canvas.onChatAction({ kind: 'code_draft', source: `# ${i}\n` });
+  }
+  assert.deepEqual(canvas.undoChatAction(first.id), {
+    ok: false, reason: '되돌릴 내역이 남아 있지 않습니다',
+  });
+});
+
+test('검증에 걸린 설정은 반영하지 않고 대기시킨다 — 폼 오류·draft.errors에 남는다', async () => {
+  const { container, canvas } = await mounted();
+  const receipt = canvas.onChatAction({
+    kind: 'spec_draft',
+    patch: { symbols: ['005930'], fromDt: '20240630', toDt: '20240101' },
+    suggest_run: true,
+  });
+  assert.equal(receipt.applied, false);
+  assert.equal(receipt.canUndo, false);
+  assert.deepEqual(receipt.errors, ['종료일은 시작일보다 빠를 수 없습니다']);
+  assert.equal(receipt.rows.length, 3);   // 무엇을 하려 했는지는 그대로 보인다
+
+  const ctx = canvas.getContext();
+  assert.deepEqual(ctx.spec.symbols, []);
+  assert.deepEqual(ctx.draft.errors, ['종료일은 시작일보다 빠를 수 없습니다']);
+  assert.deepEqual(ctx.draft.patch, { symbols: ['005930'], fromDt: '20240630', toDt: '20240101' });
+  assert.equal(ctx.draft.suggest_run, true);
+  assert.deepEqual(ctx.lastChange.errors, ['종료일은 시작일보다 빠를 수 없습니다']);
+  const lines = findByClass(container, 'backtest-design-error-line').map((n) => n.textContent);
+  assert.deepEqual(lines, ['종료일은 시작일보다 빠를 수 없습니다']);
+
+  // 고쳐 보내면 그때 들어가고 대기 중 초안이 지워진다.
+  canvas.onChatAction({ kind: 'spec_draft', patch: VALID_PATCH });
+  assert.equal(canvas.getContext().draft, null);
+  assert.equal(canvas.getContext().spec.toDt, '20240630');
+  assert.equal(findByClass(container, 'backtest-design-error-line').length, 0);
+});
+
+test('모르는 프리셋 id는 반영하지 않고 오류로 알린다', async () => {
+  const { container, canvas } = await mounted();
+  await fillForm(container);
+  const receipt = canvas.onChatAction({ kind: 'spec_draft', patch: { preset: 'nope' } });
+  assert.equal(receipt.applied, false);
+  assert.deepEqual(receipt.errors, ['nope는 없는 프리셋입니다']);
+  assert.equal(canvas.getContext().spec.presetId, 'sma_crossover');
+});
+
+test('preset이 든 설정: 전략이 바뀌고 종목·기간은 남으며 나머지 키가 그 위에 얹힌다', async () => {
+  const { container, canvas } = await mounted({ fetchPresets: async () => TWO_PRESETS });
+  await fillForm(container);
+  const receipt = canvas.onChatAction({
+    kind: 'spec_draft', patch: { preset: 'rsi_reversal', params: { period: 7 } },
+  });
+  assert.equal(receipt.applied, true);
+  assert.equal(receipt.rows[0].label, '전략');
+  const said = receipt.rows.map((r) => `${r.label} ${r.before} → ${r.after}`).join(' / ');
+  assert.match(said, /전략 SMA 골든크로스 → RSI 과매도/);
+  assert.match(said, /파라미터 period 없음 → 7/);
+
+  const spec = canvas.getContext().spec;
+  assert.equal(spec.presetId, 'rsi_reversal');
+  assert.equal(spec.name, 'RSI 과매도');
+  assert.deepEqual(spec.symbols, ['005930']);
+  assert.equal(spec.fromDt, '20160101');
+  assert.equal(spec.toDt, '20260828');
+  assert.deepEqual(Object.keys(spec.params), ['period']);
+  assert.equal(spec.params.period.default, 7);
+  const selected = findByClass(container, 'backtest-preset-item')
+    .filter((n) => n.getAttribute('aria-pressed') === 'true');
+  assert.equal(selected.length, 1);
+  assert.equal(selected[0].children[0].textContent, 'RSI 과매도');
+
+  // 되돌리면 앞 전략으로 통째로 돌아간다.
+  assert.equal(canvas.undoChatAction(receipt.id).ok, true);
+  assert.equal(canvas.getContext().spec.presetId, 'sma_crossover');
+  assert.deepEqual(canvas.getContext().spec.symbols, ['005930']);
+});
+
+test('실행 중·승인 중에는 아무것도 바꾸지 않고 이유를 돌려준다', async () => {
+  const { container, canvas } = await mounted({
+    run: async () => ({ run_id: 'r1' }),
+    result: async () => ({ status: 'running' }),
+  });
+  await fillForm(container);
+  await click(findByClass(container, 'backtest-run-button')[0]);
+  await flush();
+  assert.equal(canvas.getContext().view, 'running');
+
+  const specReceipt = canvas.onChatAction({ kind: 'spec_draft', patch: { symbols: ['000660'] } });
+  assert.equal(specReceipt.applied, false);
+  assert.deepEqual(specReceipt.errors, ['실행 중에는 바꿀 수 없습니다']);
+  assert.equal(canvas.getContext().draft, null);          // 대기시키지도 않는다
+  assert.deepEqual(canvas.getContext().spec.symbols, ['005930']);
+
+  const codeReceipt = canvas.onChatAction({ kind: 'code_draft', source: CODE_SOURCE });
+  assert.equal(codeReceipt.applied, false);
+  assert.equal(canvas.getContext().code.source, '');
+  assert.equal(canvas.onChatAction({ kind: 'navigate', tab: 'history' }).applied, false);
+  assert.equal(canvas.onChatAction({ kind: 'optimize_request', method: 'random' }).applied, false);
+  assert.equal(canvas.getContext().view, 'running');
+  assert.equal(canvas.getContext().tab, 'design');
+  assert.equal(canvas.getContext().optimize.method, 'grid');
+
+  // 실행 중에는 되돌리지도 못한다.
+  const approval = await toApproval();
+  const applied = approval.canvas.onChatAction({ kind: 'spec_draft', patch: VALID_PATCH });
+  assert.equal(applied.applied, false);
+  await click(findByClass(approval.container, 'backtest-approval-cancel')[0]);
+  const now = approval.canvas.onChatAction({ kind: 'spec_draft', patch: { symbols: ['000660'] } });
+  assert.equal(now.applied, true);
+  assert.equal(approval.canvas.getContext().view, 'design');
+});
+
+test('되돌리기: 실행 중에는 잠긴다', async () => {
+  const { container, canvas } = await mounted({
+    run: async () => ({ run_id: 'r1' }),
+    result: async () => ({ status: 'running' }),
+  });
+  const receipt = canvas.onChatAction({ kind: 'spec_draft', patch: VALID_PATCH });
+  await click(findByClass(container, 'backtest-run-button')[0]);
+  await flush();
+  assert.deepEqual(canvas.undoChatAction(receipt.id), {
+    ok: false, reason: '실행 중에는 되돌릴 수 없습니다',
+  });
+});
+
+test('runFromChat: 폼 오류를 돌려주고 실행하지 않는다 — 통과하면 그때 한 번 돈다', async () => {
+  const bodies = [];
+  const { container, canvas } = await mounted({
+    run: async (body) => { bodies.push(body); return { run_id: 'r1' }; },
+    result: async () => ({ status: 'running' }),
+  });
+  const errors = canvas.runFromChat();
+  await flush();
+  assert.ok(errors.includes('종목을 하나 이상 고르세요'), errors.join(' / '));
+  assert.equal(bodies.length, 0);
+  assert.ok(findByClass(container, 'backtest-design-error-line').length >= 1);
+
+  canvas.onChatAction({ kind: 'spec_draft', patch: VALID_PATCH, suggest_run: true });
+  assert.deepEqual(canvas.runFromChat(), []);
+  await flush();
+  assert.equal(bodies.length, 1);
+  assert.match(bodies[0].yaml, /symbols: \["005930"\]/);
+  assert.equal(canvas.getContext().view, 'running');
+});
+
+test('code_draft: 편집기에 바로 들어가고 실행경로가 코드로 바뀐다 — 실행은 없다', async () => {
   let runs = 0;
   const made = await mounted({ run: async () => { runs += 1; return {}; } });
-  await withCode(made);
+  const receipt = made.canvas.onChatAction({
+    kind: 'code_draft', source: CODE_SOURCE, note: '진입 조건을 고쳤다', suggest_validate: true,
+  });
+  assert.deepEqual(Object.keys(receipt), RECEIPT_KEYS);
+  assert.equal(receipt.kind, 'code_draft');
+  assert.equal(receipt.applied, true);
+  assert.equal(receipt.note, '진입 조건을 고쳤다');
+  assert.equal(receipt.suggest_validate, true);
+  assert.equal(receipt.canUndo, true);
+  assert.equal(receipt.tab, 'design');
+  assert.equal(receipt.designTab, 'code');
+  // 빈 편집기와의 diff라 지워진 줄은 없고 전부 추가 줄이다.
+  assert.deepEqual(receipt.rows, [{ label: '코드', before: '0줄', after: '8줄 · +7 −0' }]);
+
   const ctx = made.canvas.getContext();
+  assert.equal(ctx.view, 'design');
+  assert.equal(ctx.designTab, 'code');
   assert.equal(ctx.code.source, CODE_SOURCE);
   assert.equal(ctx.code.lines, 8);
-  assert.equal(ctx.code.truncated, false);
   assert.equal(ctx.runPath, 'code');
   assert.equal(ctx.codeDraft, null);
   assert.equal(findByClass(made.container, 'backtest-code-draft').length, 0);
   assert.equal(runs, 0);
+  // 편집기에 그 원문이 들어가 있다.
+  const area = findByClass(made.container, 'backtest-code-textarea')[0];
+  assert.equal(area.value, CODE_SOURCE);
 });
 
-test('code_draft [적용하고 실행]: 폼이 비어 있으면 코드 탭에 그 이유가 보인다', async () => {
-  const bodies = [];
-  const { container, canvas } = await mounted({
-    run: async (body) => { bodies.push(body); return { run_id: 'r1' }; },
+test('code_draft 되돌리기: 편집기와 실행경로가 함께 돌아간다', async () => {
+  const made = await mounted();
+  const first = made.canvas.onChatAction({ kind: 'code_draft', source: CODE_SOURCE });
+  const second = made.canvas.onChatAction({
+    kind: 'code_draft', source: `${CODE_SOURCE}# 두 번째\n`,
   });
-  // 폼(종목·기간)을 채우지 않은 채 코드 초안의 [적용하고 실행]을 누른다.
-  canvas.onChatAction({ kind: 'code_draft', source: CODE_SOURCE, suggest_run: true });
-  await click(findByClass(container, 'backtest-draft-apply-run')[0]);
-  await flush();
-  assert.equal(bodies.length, 0);
-  assert.equal(canvas.getContext().designTab, 'code');
-  const lines = findByClass(container, 'backtest-design-error-line').map((n) => n.textContent);
-  assert.ok(lines.length >= 1, '코드 탭에 폼 오류가 보여야 한다');
-  assert.ok(lines.some((m) => /종목/.test(m)), lines.join(' / '));
+  assert.deepEqual(second.rows, [{ label: '코드', before: '8줄', after: '9줄 · +1 −0' }]);
+
+  const undone = made.canvas.undoChatAction(second.id);
+  assert.equal(undone.ok, true);
+  assert.deepEqual(undone.restored.rows, [
+    { label: '코드', before: '9줄', after: '8줄 · +0 −1' },
+  ]);
+  assert.equal(made.canvas.getContext().code.source, CODE_SOURCE);
+
+  assert.equal(made.canvas.undoChatAction(first.id).ok, true);
+  assert.equal(made.canvas.getContext().code.source, '');
+  assert.equal(made.canvas.getContext().runPath, 'form');
 });
 
-test('code_draft [적용하고 실행]: run 바디에 source가 실린다', async () => {
+test('code_draft: run 바디에 source가 실린다 — 사람이 실행을 누른 뒤다', async () => {
   const bodies = [];
   const { container, canvas } = await mounted({
     run: async (body) => { bodies.push(body); return { run_id: 'r1' }; },
@@ -874,50 +844,53 @@ test('code_draft [적용하고 실행]: run 바디에 source가 실린다', asyn
   await fillForm(container);
   canvas.onChatAction({ kind: 'code_draft', source: CODE_SOURCE, suggest_run: true });
   assert.equal(bodies.length, 0);
-  await click(findByClass(container, 'backtest-draft-apply-run')[0]);
+  assert.deepEqual(canvas.runFromChat(), []);
   await flush();
   assert.equal(bodies.length, 1);
   assert.equal(bodies[0].source, CODE_SOURCE);
-  assert.equal(canvas.getContext().view, 'running');
 });
 
-test('code_draft [적용하고 검증]: validate(kind=python)를 부르고 오류를 코드 탭에 남긴다', async () => {
+test('validateFromChat: validate(kind=python)를 부르고 판정·오류를 돌려준다', async () => {
   let seen = null;
+  let ok = false;
   const { container, canvas } = await mounted({
     validate: async (body) => {
       seen = body;
-      return { ok: false, errors: [{ message: 'signals(df, p)가 없습니다' }] };
+      return ok ? { ok: true } : { ok: false, errors: [{ message: 'signals(df, p)가 없습니다' }] };
     },
   });
   canvas.onChatAction({ kind: 'code_draft', source: CODE_SOURCE, suggest_validate: true });
-  await click(findByClass(container, 'backtest-draft-apply-run')[0]);
-  await flush();
+  assert.deepEqual(await canvas.validateFromChat(), {
+    ok: false, errors: ['signals(df, p)가 없습니다'],
+  });
   assert.deepEqual(seen, { kind: 'python', source: CODE_SOURCE });
   assert.deepEqual(canvas.getContext().code.errors, ['signals(df, p)가 없습니다']);
   assert.match(textOf(container), /signals\(df, p\)가 없습니다/);
+
+  ok = true;
+  assert.deepEqual(await canvas.validateFromChat(), { ok: true, errors: [] });
+  assert.deepEqual(canvas.getContext().code.errors, []);
 });
 
-test('code_draft [버리기]: 초안만 사라지고 편집기는 그대로다', async () => {
-  const { container, canvas } = await mounted();
-  canvas.onChatAction({ kind: 'code_draft', source: CODE_SOURCE });
-  await click(findByClass(container, 'backtest-draft-discard')[0]);
-  assert.equal(canvas.getContext().codeDraft, null);
-  assert.equal(canvas.getContext().code.source, '');
-  assert.equal(findByClass(container, 'backtest-code-draft').length, 0);
+test('되돌리기: 검증 오류도 함께 지운다 — 사라진 코드의 오류를 남기지 않는다', async () => {
+  const { container, canvas } = await mounted({
+    validate: async () => ({ ok: false, errors: [{ message: 'signals(df, p)가 없습니다' }] }),
+  });
+  canvas.onChatAction({ kind: 'code_draft', source: '# 처음 코드\n' });
+  const receipt = canvas.onChatAction({
+    kind: 'code_draft', source: CODE_SOURCE, suggest_validate: true,
+  });
+  await canvas.validateFromChat();
+  assert.deepEqual(canvas.getContext().code.errors, ['signals(df, p)가 없습니다']);
+
+  assert.equal(canvas.undoChatAction(receipt.id).ok, true);
+  const ctx = canvas.getContext();
+  assert.equal(ctx.code.source, '# 처음 코드\n');
+  assert.deepEqual(ctx.code.errors, []);
+  assert.doesNotMatch(textOf(container), /signals\(df, p\)가 없습니다/);
 });
 
-test('code_draft: 뒤에 온 초안이 앞의 초안을 갈아치우고, 빈 source는 무시한다', async () => {
-  const { container, canvas } = await mounted();
-  canvas.onChatAction({ kind: 'code_draft', source: CODE_SOURCE, note: '첫 번째' });
-  canvas.onChatAction({ kind: 'code_draft', source: `${CODE_SOURCE}# 두 번째\n`, note: '두 번째' });
-  assert.equal(findByClass(container, 'backtest-code-draft').length, 1);
-  assert.equal(canvas.getContext().codeDraft.note, '두 번째');
-  canvas.onChatAction({ kind: 'code_draft', source: '' });
-  canvas.onChatAction({ kind: 'code_draft', source: 42 });
-  assert.equal(canvas.getContext().codeDraft.note, '두 번째');
-});
-
-test('navigate history: 이력을 불러오고 탭이 이력으로 간다', async () => {
+test('navigate: 탭만 옮기고 되돌리기는 없다', async () => {
   let called = 0;
   const { container, canvas } = await mounted({
     runs: async () => {
@@ -925,12 +898,16 @@ test('navigate history: 이력을 불러오고 탭이 이력으로 간다', asyn
       return [{ run_id: 'run_9', status: 'done', metrics: { total_return: 0.12, sharpe: 1.1 } }];
     },
   });
-  canvas.onChatAction({ kind: 'navigate', tab: 'history' });
+  const receipt = canvas.onChatAction({ kind: 'navigate', tab: 'history' });
   await flush();
   assert.equal(called, 1);
+  assert.equal(receipt.kind, 'navigate');
+  assert.equal(receipt.applied, true);
+  assert.equal(receipt.canUndo, false);
+  assert.equal(receipt.tab, 'history');
+  assert.deepEqual(receipt.rows, []);
   const ctx = canvas.getContext();
   assert.equal(ctx.tab, 'history');
-  assert.equal(ctx.view, 'history');
   assert.deepEqual(ctx.runs, [{
     run_id: 'run_9', status: 'done', total_return: 0.12, sharpe: 1.1,
   }]);
@@ -943,44 +920,55 @@ test('navigate design/flow: 코드가 있으면 흐름 지도를 불러온다', 
     flow: async (body) => { asked = body; return { nodes: [] }; },
   });
   await withCode(made);
-  made.canvas.onChatAction({ kind: 'navigate', tab: 'design', designTab: 'flow' });
+  const receipt = made.canvas.onChatAction({
+    kind: 'navigate', tab: 'design', designTab: 'flow',
+  });
   await flush();
   assert.deepEqual(asked, { source: CODE_SOURCE });
+  assert.equal(receipt.designTab, 'flow');
   assert.equal(made.canvas.getContext().designTab, 'flow');
   assert.equal(findByClass(made.container, 'backtest-flow-tab').length, 1);
 });
 
-test('navigate: 모르는 tab·designTab은 무시한다', async () => {
+test('navigate: 모르는 tab은 null이고, 모르는 designTab만 무시한다', async () => {
   const { canvas } = await mounted();
-  canvas.onChatAction({ kind: 'navigate', tab: 'nope' });
+  assert.equal(canvas.onChatAction({ kind: 'navigate', tab: 'nope' }), null);
   assert.equal(canvas.getContext().tab, 'design');
-  canvas.onChatAction({ kind: 'navigate', tab: 'optimize', designTab: 'nope' });
+  const receipt = canvas.onChatAction({
+    kind: 'navigate', tab: 'optimize', designTab: 'nope',
+  });
+  assert.equal(receipt.applied, true);
   const ctx = canvas.getContext();
   assert.equal(ctx.tab, 'optimize');
   assert.equal(ctx.designTab, 'form');
 });
 
-test('optimize_request: 방식을 골라두고 [탐색 시작]을 켠다 — 누르는 것은 사람이다', async () => {
+test('optimize_request: 방식을 골라두고 [탐색 시작]을 켠다 — 시작은 사람·채팅 버튼이다', async () => {
   let started = 0;
   const { container, canvas } = await mounted({
     optimize: async () => { started += 1; return { best: null, warnings: [] }; },
   });
-  canvas.onChatAction({
+  const receipt = canvas.onChatAction({
     kind: 'optimize_request', method: 'random', note: '느린 축부터 훑어보죠',
   });
+  assert.equal(receipt.kind, 'optimize_request');
+  assert.equal(receipt.applied, true);
+  assert.equal(receipt.canUndo, false);
+  assert.equal(receipt.method, 'random');
+  assert.equal(receipt.tab, 'optimize');
+  assert.equal(receipt.note, '느린 축부터 훑어보죠');
   const ctx = canvas.getContext();
   assert.equal(ctx.view, 'design');
   assert.equal(ctx.tab, 'optimize');
   assert.equal(ctx.optimize.method, 'random');
   assert.equal(started, 0);
-  const start = findByClass(container, 'backtest-optimize-start')[0];
-  assert.match(start.className, /is-suggested/);
+  assert.match(findByClass(container, 'backtest-optimize-start')[0].className, /is-suggested/);
   assert.match(
     textOf(findByClass(container, 'backtest-optimize-suggested')[0]),
     /느린 축부터 훑어보죠/,
   );
 
-  await click(start);
+  await canvas.startOptimizeFromChat();
   await flush();
   assert.equal(started, 1);
   assert.equal(findByClass(container, 'backtest-optimize-suggested').length, 0);
@@ -988,7 +976,8 @@ test('optimize_request: 방식을 골라두고 [탐색 시작]을 켠다 — 누
 
 test('optimize_request: 문구가 없으면 기본 한 줄, 모르는 method는 그대로 둔다', async () => {
   const { container, canvas } = await mounted();
-  canvas.onChatAction({ kind: 'optimize_request', method: 'nope' });
+  const receipt = canvas.onChatAction({ kind: 'optimize_request', method: 'nope' });
+  assert.equal(receipt.method, 'grid');
   assert.equal(canvas.getContext().optimize.method, 'grid');
   assert.match(
     textOf(findByClass(container, 'backtest-optimize-suggested')[0]),
@@ -996,26 +985,25 @@ test('optimize_request: 문구가 없으면 기본 한 줄, 모르는 method는 
   );
 });
 
-test('실행 중에는 navigate·optimize_request를 무시하고 코드 초안은 들고만 있는다', async () => {
-  const { container, canvas } = await mounted({
-    run: async () => ({ run_id: 'r1' }),
-    result: async () => ({ status: 'running' }),
+test('getContext(): lastChange는 마지막 변경만 싣고 되돌리면 사라진다', async () => {
+  const { canvas } = await mounted();
+  assert.equal(canvas.getContext().lastChange, null);
+  const receipt = canvas.onChatAction({
+    kind: 'spec_draft', patch: VALID_PATCH, note: '삼성전자',
   });
-  await fillForm(container);
-  await click(findByClass(container, 'backtest-run-button')[0]);
-  await flush();
-  assert.equal(canvas.getContext().view, 'running');
+  const last = canvas.getContext().lastChange;
+  assert.deepEqual(Object.keys(last), ['id', 'kind', 'applied', 'rows', 'errors']);
+  assert.equal(last.id, receipt.id);
+  assert.equal(last.kind, 'spec_draft');
+  assert.equal(last.applied, true);
+  assert.equal(last.rows.length, 3);
+  assert.deepEqual(last.errors, []);
 
-  canvas.onChatAction({ kind: 'navigate', tab: 'history' });
-  canvas.onChatAction({ kind: 'optimize_request', method: 'random' });
-  assert.equal(canvas.getContext().view, 'running');
-  assert.equal(canvas.getContext().tab, 'design');
-  assert.equal(canvas.getContext().optimize.method, 'grid');
+  canvas.onChatAction({ kind: 'navigate', tab: 'optimize' });
+  assert.equal(canvas.getContext().lastChange.kind, 'navigate');
 
-  canvas.onChatAction({ kind: 'code_draft', source: CODE_SOURCE });
-  assert.equal(canvas.getContext().view, 'running');
-  assert.equal(findByClass(container, 'backtest-code-draft').length, 0);
-  assert.equal(canvas.getContext().codeDraft.lines, 8);
+  assert.equal(canvas.undoChatAction(receipt.id).ok, true);
+  assert.equal(canvas.getContext().lastChange, null);
 });
 
 // ── 실행경로(폼 · 코드) ─────────────────────────────────────────────────────
@@ -1063,6 +1051,22 @@ test('결과에 실행경로 뱃지가 붙는다 — run_path=code면 [코드 �
 });
 
 // ── getContext() 확장 ───────────────────────────────────────────────────────
+
+test('getContext(): 키 목록이 계약으로 고정돼 있다 — spec은 복사본이다', async () => {
+  const { canvas } = await mounted();
+  const ctx = canvas.getContext();
+  assert.deepEqual(Object.keys(ctx), [
+    'view', 'tab', 'designTab', 'runPath', 'spec', 'draft', 'presets',
+    'code', 'codeDraft', 'lastResult', 'diagnosis', 'optimize', 'runs', 'coverage',
+    'lastChange',
+  ]);
+  assert.equal(ctx.view, 'design');
+  assert.equal(ctx.spec.presetId, 'sma_crossover');
+  assert.equal(ctx.draft, null);
+  assert.deepEqual(ctx.presets, [{ id: 'sma_crossover', name: 'SMA 골든크로스' }]);
+  ctx.spec.symbols.push('000000');
+  assert.deepEqual(canvas.getContext().spec.symbols, []);
+});
 
 test('getContext(): 새 키는 아무것도 없을 때 없음/빈 값으로 정직하게 내려간다', async () => {
   const { canvas } = await mounted();
@@ -1116,7 +1120,6 @@ test('getContext(): 6000자를 넘는 코드는 잘라 싣고 truncated로 알�
   const made = await mounted();
   const long = `${'# 한 줄\n'.repeat(1200)}`;
   made.canvas.onChatAction({ kind: 'code_draft', source: long });
-  await click(findByClass(made.container, 'backtest-draft-apply')[0]);
   await flush();
   const code = made.canvas.getContext().code;
   assert.equal(code.truncated, true);

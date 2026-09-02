@@ -437,3 +437,37 @@ test('buildBacktestModePrefix: 컨텍스트 없이도 모든 구역이 없음/�
   assert.ok(p.includes('캐시: 모름'));
   assert.ok(p.includes('프리셋: 목록 없음'));
 });
+
+// ---- phase-3 계약 [P] — 초안 카드가 사라지고 캔버스에 바로 반영된다 ----
+// 사용자 결정(2026-09-02): "바로 반영 + 채팅에 변경 내역·되돌리기". 접두는
+// [적용]·초안 카드 문구를 더 이상 쓰지 않고, 검증 오류 때만 대기 초안이 남는다.
+
+test('buildBacktestModePrefix: 설정·코드는 바로 반영, 오류는 대기 초안에 실린다고 알린다', () => {
+  const p = buildBacktestModePrefix(BT_FULL_CONTEXT, '20260902');
+  assert.ok(p.includes('설정은 athena_backtest action=propose_spec 으로 patch를 보내면 폼에 바로 반영된다'));
+  assert.ok(p.includes('검증 오류가 있으면 반영되지 않고 아래 "대기 중 초안"에 오류가 실린다(그 오류를 고쳐 다시 보낸다)'));
+  assert.ok(p.includes('코드는 propose_code로 보내면 편집기에 바로 들어간다'));
+  assert.ok(p.includes('채팅에는 변경 내역과 [되돌리기]가 뜬다'));
+});
+
+test('buildBacktestModePrefix: 실행은 suggest_run으로 채팅 [실행] 버튼만 띄운다', () => {
+  const p = buildBacktestModePrefix(BT_FULL_CONTEXT, '20260902');
+  assert.ok(p.includes('실행은 propose_spec/propose_code에 suggest_run:true를 넣으면 채팅에 [실행] 버튼이 뜬다 — 사람이 누른다.'));
+  assert.ok(p.includes('run·optimize·backfill 액션을 직접 부르지 않는다'));
+  assert.ok(p.includes('실행·검증·수집·저장·활성화·배포·탐색 시작은 사람이 카드 버튼을 누른다'));
+});
+
+test('buildBacktestModePrefix: 알아서·한 번에 요청이면 한 턴에 다 채우고, 답은 변경 한 줄 + 질문 한 줄', () => {
+  const p = buildBacktestModePrefix(BT_FULL_CONTEXT, '20260902');
+  assert.ok(p.includes('한 턴에 한 항목'));
+  assert.ok(p.includes('사용자가 "알아서"·"한 번에"·"전부" 해달라고 하면 한 턴에 필요한 항목을 모두 채운다'));
+  assert.ok(p.includes('답은 두세 문장 — 무엇을 바꿨는지 한 줄과 다음 질문 한 줄.'));
+});
+
+test('buildBacktestModePrefix: 초안 카드·[적용] 문구는 접두에서 사라졌다', () => {
+  const p = buildBacktestModePrefix(BT_FULL_CONTEXT, '20260902');
+  assert.ok(!p.includes('초안 카드'));
+  assert.ok(!p.includes('[적용]'));
+  assert.ok(!p.includes('적용하고 실행'));
+  assert.ok(p.includes('대기 중 초안: 없음'));
+});
