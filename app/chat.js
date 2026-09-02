@@ -1616,6 +1616,235 @@ window.AthenaShell.registerSeedChatInput((text) => {
 });
 
 // ---------- @ 플러그인 멘션 ----------
+// ---------- 되물을 것들 카드(2026-09-02) ----------
+//
+// 확인 필요 배너가 "답하시면 그대로 그래프가 갱신됩니다"라고 약속한다. 산문 대화로는
+// 그 약속을 못 지킨다 — 사용자가 어디에 답해야 하고 그 답이 어떻게 그래프로 돌아가는지가
+// 안 보인다. 실제로 모델은 정직하게 "이것이 배너의 그 3건과 같다고는 말할 수 없다"고
+// 답했다(2026-09-02 실측). 배너의 그 3건은 백엔드가 이미 안다.
+//
+// **왜 N건을 다 묻고 한 번에 제출하나.** 답변마다 턴을 돌리면 그 턴 동안 입력이 잠겨
+// 다음 질문을 누를 수 없다. 카드가 하나씩 묻고, 마지막에 모아 한 문장으로 보낸다 —
+// 턴 하나, 추출 한 번이다.
+//
+// 답이 그래프로 돌아가는 경로는 사람의 채팅뿐이다(brain_tools.py: 모델은 그래프에
+// 쓸 수 없다). 그래서 선택지는 답변 **문장**이 되어 dispatchUserQuery로 제출된다.
+let brainQuestions = null; // { items, index, answers } — 열려 있는 동안만
+
+function brainQuestionsLib() {
+  return window.AthenaLib && window.AthenaLib.BrainQuestions;
+}
+
+function closeBrainQuestions() {
+  brainQuestions = null;
+  const host = document.getElementById('brainQuestionCard');
+  if (!host) return;
+  while (host.firstChild) host.removeChild(host.firstChild);
+  host.hidden = true;
+}
+
+// 모은 답을 한 문장으로 보내고 카드를 닫는다. 건너뛴 것은 아무것도 안 보낸다 —
+// 침묵을 부정으로 굳히지 않는다.
+function submitBrainAnswers() {
+  const sentences = brainQuestions ? brainQuestions.answers.filter(Boolean) : [];
+  closeBrainQuestions();
+  if (!sentences.length) return;
+  dispatchUserQuery(sentences.join('\n'));
+}
+
+function answerBrainQuestion(choice) {
+  const lib = brainQuestionsLib();
+  if (!brainQuestions || !lib) return;
+  const item = brainQuestions.items[brainQuestions.index];
+  brainQuestions.answers.push(lib.answerSentence(item, choice));
+  brainQuestions.index += 1;
+  if (brainQuestions.index >= brainQuestions.items.length) {
+    submitBrainAnswers();
+    return;
+  }
+  renderBrainQuestionCard();
+}
+
+function renderBrainQuestionCard() {
+  const lib = brainQuestionsLib();
+  const host = document.getElementById('brainQuestionCard');
+  if (!host || !brainQuestions || !lib) return;
+  while (host.firstChild) host.removeChild(host.firstChild);
+  const item = brainQuestions.items[brainQuestions.index];
+
+  const head = document.createElement('div');
+  head.className = 'question-card-head';
+  const title = document.createElement('div');
+  title.className = 'question-card-title';
+  title.textContent = item.question;
+  head.appendChild(title);
+  const progress = document.createElement('span');
+  progress.className = 'question-card-progress';
+  progress.textContent = lib.progressLabel(brainQuestions.index, brainQuestions.items.length);
+  head.appendChild(progress);
+  host.appendChild(head);
+
+  const context = document.createElement('div');
+  context.className = 'question-card-context';
+  context.textContent = lib.contextLine(item);
+  host.appendChild(context);
+
+  const note = document.createElement('div');
+  note.className = 'question-card-note';
+  // 답이 어디로 가는지 적는다 — 누르면 채팅에 문장이 제출된다는 사실을 숨기지 않는다.
+  note.textContent = '답하면 채팅으로 보내지고, 그 답이 그래프를 갱신합니다.';
+  host.appendChild(note);
+
+  const actions = document.createElement('div');
+  actions.className = 'question-card-actions';
+  const mkBtn = (choice, className) => {
+    const spec = lib.CHOICES[choice];
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = `question-card-btn ${className}`;
+    const label = document.createElement('span');
+    label.textContent = spec.label;
+    btn.appendChild(label);
+    if (spec.hint) {
+      const hint = document.createElement('span');
+      hint.className = 'question-card-key';
+      hint.textContent = spec.hint;
+      btn.appendChild(hint);
+    }
+    btn.addEventListener('click', () => answerBrainQuestion(choice));
+    return btn;
+  };
+  // 레퍼런스 화면과 같은 배치 — 거절이 왼쪽, 확인이 오른쪽.
+  actions.appendChild(mkBtn('skip', 'is-quiet'));
+  const right = document.createElement('span');
+  right.className = 'question-card-right';
+  right.appendChild(mkBtn('no', 'is-quiet'));
+  right.appendChild(mkBtn('yes', 'is-primary'));
+  actions.appendChild(right);
+  host.appendChild(actions);
+  host.hidden = false;
+}
+
+// 카드가 열려 있을 때만 듣는다 — Esc는 평소 "중단"이고 Ctrl+Enter는 평소 쓰임이 없다.
+document.addEventListener('keydown', (e) => {
+  if (!brainQuestions) return;
+  if (e.key === 'Escape') { e.preventDefault(); answerBrainQuestion('skip'); return; }
+  if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); answerBrainQuestion('yes'); }
+}, true);
+
+window.AthenaShell.registerOpenBrainQuestions(async () => {
+  const lib = brainQuestionsLib();
+  if (!lib) return false;
+  // 답변 중에는 열지 않는다 — 카드의 마지막 제출이 그 턴과 부딪힌다.
+  if (state !== 'idle' || remoteQueryBusy) return false;
+  const res = await window.athena.invoke('athena:brain-suggested-questions').catch(() => null);
+  if (!res || !res.ok) return false;
+  // IPC는 { ok, revision, questions } 평면 구조를 준다(main.js — result.body를 펼쳐 준다).
+  // 관계명 한글 사전은 공통 패널·엔티티 타임라인이 이미 쓰는 것을 그대로 넘긴다
+  // (controller.js RELATION_LABELS). 카드에 복사하면 한쪽만 고치는 실수가 나고,
+  // 그 leaf가 controller를 의존하면 층이 뒤집힌다 — 그래서 여기서 주입한다.
+  const controller = window.AthenaLib && window.AthenaLib.GraphModeController;
+  const items = lib.normalizeQuestions(res, controller && controller.RELATION_LABELS);
+  if (!items.length) return false;
+  brainQuestions = { items, index: 0, answers: [] };
+  renderBrainQuestionCard();
+  return true;
+});
+
+// ---------- 과거 대화 열기(2026-09-02) ----------
+//
+// 제보: 대화 이력 쪽을 누르면 그 대화로 이동해야 하는데 그런 기능이 전혀 없다.
+// 실제로 없었다 — athena:conversations-set-active가 요청한 id를 의도적으로 무시하고
+// 현재 활성 id를 그대로 돌려준다(main.js 주석: "복원 배선이 생기기 전까지 선택만
+// 바꿔 새 메시지를 과거 제목 아래에 쓰면 안 된다"). 그 판단은 옳았지만, 그 주석이
+// 말하는 "메시지를 복원할 수 없다"는 전제는 지금 틀렸다: 브레인 이력 DB가
+// conversation_id와 함께 메시지를 들고 있고 조회 엔드포인트도 있다.
+//
+// **그래서 읽기까지만 한다.** 복원되는 것은 메시지고, Claude 세션은 아니다 —
+// 이어서 말할 수 있는 척하면 원래 주석이 경고한 그 사고가 난다. 그래서 과거 대화를
+// 열면 입력을 잠그고, 돌아갈 길을 화면에 둔다.
+let pastConversation = null; // { id, title, snapshot } — 열려 있는 동안만
+
+function pastMessageTurn(message) {
+  const line = document.createElement('div');
+  line.className = 'turn';
+  const body = document.createElement('div');
+  // 사용자/모델 말풍선은 살아 있는 턴과 같은 클래스를 쓴다 — 과거 대화라고
+  // 다른 모양으로 그리면 같은 대화가 두 얼굴을 갖는다.
+  body.className = message.role === 'user' ? 'turn-q' : 'turn-a';
+  body.textContent = String((message && message.text) || '');
+  line.appendChild(body);
+  return line;
+}
+
+function closePastConversation() {
+  if (!pastConversation) return false;
+  const { snapshot } = pastConversation;
+  pastConversation = null;
+  while ($history.firstChild) $history.removeChild($history.firstChild);
+  for (const node of snapshot) $history.appendChild(node);
+  setLocked(false);
+  scrollHistoryToBottom(true);
+  return true;
+}
+
+function renderPastConversation(conv, messages) {
+  // 살아 있는 대화의 DOM을 노드째 보관한다 — 다시 그리는 대신 그대로 되돌린다.
+  // (innerHTML 문자열로 보관하면 진행 중 턴에 걸린 리스너·타이머 참조가 끊긴다.)
+  if (!pastConversation) {
+    pastConversation = { id: null, title: null, snapshot: Array.from($history.childNodes) };
+  }
+  pastConversation.id = conv.id;
+  pastConversation.title = conv.title || null;
+  while ($history.firstChild) $history.removeChild($history.firstChild);
+
+  const banner = document.createElement('div');
+  banner.className = 'past-banner';
+  const title = document.createElement('span');
+  title.className = 'past-banner-title';
+  title.textContent = conv.title ? `과거 대화 · ${conv.title}` : '과거 대화';
+  banner.appendChild(title);
+  const note = document.createElement('span');
+  note.className = 'past-banner-note';
+  // 무엇이 안 되는지를 화면에 적는다 — 잠긴 입력만 두면 고장으로 읽힌다.
+  note.textContent = '읽기 전용입니다 — 이어서 말하려면 새 대화로 시작하세요';
+  banner.appendChild(note);
+  const back = document.createElement('button');
+  back.type = 'button';
+  back.className = 'past-banner-back';
+  back.textContent = '현재 대화로';
+  back.addEventListener('click', () => { closePastConversation(); });
+  banner.appendChild(back);
+  $history.appendChild(banner);
+
+  if (!messages.length) {
+    // 못 읽은 것과 없는 것은 다르다 — 조회는 됐고 메시지가 0건인 경우다
+    // (이력 저장이 붙기 전에 만들어진 대화가 여기 해당한다).
+    const empty = document.createElement('div');
+    empty.className = 'past-empty';
+    empty.textContent = '이 대화에는 저장된 메시지가 없습니다.';
+    $history.appendChild(empty);
+  } else {
+    for (const message of messages) $history.appendChild(pastMessageTurn(message));
+  }
+  setLocked(true, '과거 대화는 읽기 전용입니다');
+  scrollHistoryToBottom(true);
+}
+
+// sidebar.js가 부르는 다리(shell.js 버스). 열었으면 true.
+window.AthenaShell.registerOpenConversation(async (conv) => {
+  if (!conv || !conv.id) return false;
+  // 답변 중에는 화면을 갈아치우지 않는다 — 진행 중 턴이 과거 대화 밑으로 사라진다.
+  if (!pastConversation && (state !== 'idle' || remoteQueryBusy)) return false;
+  const res = await window.athena.invoke('athena:conversation-messages', { conversationId: conv.id })
+    .catch(() => null);
+  if (!res || !res.ok) return false;
+  // 현재 대화를 다시 누른 것이면 과거 뷰를 닫고 살아 있는 화면으로 돌아간다.
+  if (res.isCurrent) { closePastConversation(); return true; }
+  renderPastConversation(conv, Array.isArray(res.messages) ? res.messages : []);
+  return true;
+});
+
 // Claude 데스크톱의 @ 멘션과 같은 UX: 입력란에서 @를 치면 등록된 MCP 서버 목록이
 // 뜨고, 고르면 @alias가 삽입된다. 제출 시 @alias가 실제 등록 서버와 일치하면
 // 모델에게 그 서버의 도구를 우선 쓰라는 지시를 질의에 동봉한다(화면의 사용자

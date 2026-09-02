@@ -15,7 +15,15 @@
 
   // 영역이 등록하는 콜백. 서로 다른 <script>가 같은 문서에 살지만 모듈 경계는
   // 유지한다 — chat.js가 canvas.js의 내부 함수를 직접 부르지 않고 여기를 지난다.
-  const hooks = { clearCanvases: null, openSettings: null, seedChatInput: null };
+  const hooks = {
+    clearCanvases: null, openSettings: null, seedChatInput: null,
+    // 과거 대화 열기(2026-09-02) — sidebar.js가 부르고 chat.js가 등록한다.
+    // seedChatInput과 같은 이유로 여기를 지난다: 사이드바가 chat.js의 $history를
+    // 직접 만지면 모듈 경계가 무너진다.
+    openConversation: null,
+    // 되물을 것들 카드(2026-09-02) — canvas.js의 확인 필요 배너가 부르고 chat.js가 등록한다.
+    openBrainQuestions: null,
+  };
   const chromeGeometryGeneration = window.crypto?.randomUUID?.()
     || `${performance.timeOrigin}-${Math.random()}`;
   let chromeGeometryRevision = 0;
@@ -178,6 +186,18 @@
     registerSeedChatInput(fn) { hooks.seedChatInput = typeof fn === 'function' ? fn : null; },
     seedChatInput(text) {
       if (hooks.seedChatInput) hooks.seedChatInput(text);
+    },
+    // 과거 대화 열기 — chat.js가 등록한다. 돌려주는 값은 열었는지 여부다
+    // (거절될 수 있다: 답변 중이면 화면을 갈아치우지 않는다).
+    registerOpenConversation(fn) { hooks.openConversation = typeof fn === 'function' ? fn : null; },
+    openConversation(conv) {
+      return hooks.openConversation ? hooks.openConversation(conv) : false;
+    },
+    // 되물을 것들 카드를 연다. 돌려주는 값은 열었는지 여부다(물을 것이 없거나
+    // 답변 중이면 열지 않는다) — 부른 쪽이 대신 다른 안내를 할 수 있어야 한다.
+    registerOpenBrainQuestions(fn) { hooks.openBrainQuestions = typeof fn === 'function' ? fn : null; },
+    openBrainQuestions() {
+      return hooks.openBrainQuestions ? hooks.openBrainQuestions() : false;
     },
   };
 })();

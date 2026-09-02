@@ -303,6 +303,75 @@ async function main() {
   })()`);
   log(`      말풍선 줄바꿈: ${JSON.stringify(bubble)}`);
 
+  // 과거 대화 클릭이 실제로 그 대화로 이동하는지(2026-09-02 제보) — 옛 판은 활성
+  // 포인터만 바꾸고 화면은 그대로였다. 채널이 답을 주는지와 화면이 갈아치워지는지를
+  // 함께 잰다. 씨앗 페르소나에는 저장된 대화가 없을 수 있어 그 경우도 정직하게 찍는다.
+  const past = await wc.executeJavaScript(`(async () => {
+    const list = await window.athena.invoke('athena:conversations-list').catch(() => null);
+    const convs = (list && Array.isArray(list.conversations)) ? list.conversations : [];
+    if (!convs.length) return { ok: false, reason: '저장된 대화가 없다', activeId: list && list.activeId };
+    const target = convs[0];
+    const res = await window.athena.invoke('athena:conversation-messages', { conversationId: target.id })
+      .catch((e) => ({ ok: false, error: String(e && e.message) }));
+    const opened = await window.AthenaShell.openConversation({ id: target.id, title: target.title });
+    await new Promise((r) => setTimeout(r, 300));
+    const banner = document.querySelector('#history .past-banner');
+    const out = {
+      ok: true,
+      channel: { ok: !!(res && res.ok), isCurrent: res && res.isCurrent, count: res && res.messages ? res.messages.length : null },
+      opened,
+      bannerShown: !!banner,
+      bannerText: banner ? banner.textContent.slice(0, 60) : null,
+      inputLocked: document.getElementById('input').disabled,
+    };
+    // 원래 화면으로 되돌린다 — 프로브가 화면을 바꿔놓고 끝내지 않는다.
+    const back = banner && banner.querySelector('.past-banner-back');
+    if (back) back.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    await new Promise((r) => setTimeout(r, 200));
+    out.restored = !document.querySelector('#history .past-banner') && !document.getElementById('input').disabled;
+    return out;
+  })()`);
+  log(`      과거 대화 이동: ${JSON.stringify(past)}`);
+
+  // 되물을 것들 카드(2026-09-02) — 배너 CTA가 카드를 띄우고, 선택지를 누르면 다음
+  // 질문으로 넘어가고, 마지막에 답을 모아 채팅으로 제출하는지를 잰다.
+  const card = await wc.executeJavaScript(`(async () => {
+    document.getElementById('graphHeaderSummaryTab').click();
+    await new Promise((r) => setTimeout(r, 1200));
+    const cta = document.querySelector('#graphConfirmBanner .confirm-banner-cta');
+    if (!cta) return { ok: false, reason: '확인 필요 배너가 없다' };
+    cta.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    await new Promise((r) => setTimeout(r, 800));
+    const host = document.getElementById('brainQuestionCard');
+    if (!host || host.hidden) {
+      document.getElementById('graphViewTab').click();
+      return { ok: false, reason: '카드가 안 떴다(폴백 경로)', seeded: document.getElementById('input').value.slice(0, 40) };
+    }
+    const read = () => ({
+      title: host.querySelector('.question-card-title').textContent.slice(0, 50),
+      progress: host.querySelector('.question-card-progress').textContent,
+      context: host.querySelector('.question-card-context').textContent.slice(0, 60),
+      buttons: [...host.querySelectorAll('.question-card-btn')].map((b) => b.textContent),
+    });
+    const first = read();
+    // "맞다"를 눌러 다음 질문으로 넘어가는지
+    [...host.querySelectorAll('.question-card-btn')].find((b) => b.textContent.startsWith('맞다'))
+      .dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    await new Promise((r) => setTimeout(r, 300));
+    const second = host.hidden ? null : read();
+    // 남은 것을 전부 건너뛰어 카드를 닫는다(제출은 답이 하나라도 있으면 일어난다)
+    let guard = 0;
+    while (!host.hidden && guard++ < 10) {
+      const skip = [...host.querySelectorAll('.question-card-btn')].find((b) => b.textContent.startsWith('건너뛰기'));
+      if (!skip) break;
+      skip.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      await new Promise((r) => setTimeout(r, 200));
+    }
+    document.getElementById('graphViewTab').click();
+    return { ok: true, first, second, closed: host.hidden, advanced: !!(second && second.progress !== first.progress) };
+  })()`);
+  log(`      되물을 것들 카드: ${JSON.stringify(card)}`);
+
   // 자가 확인용 스크린샷 — 화면이 실제로 그려졌는지 사람 없이도 판별한다.
   await wait(4000);
   const shot = await shellWin.webContents.capturePage();
