@@ -2222,6 +2222,90 @@ test('지도 요청: 실행이 멈춰 있으면 그 사실을 함께 보낸다 �
   assert.equal(last.run_id, 'r1');
 });
 
+// 요청을 보내는 자리가 실패·성공 **직후**여야 하는 이유: 그때가 아니면 지도는 앞 실행의
+// 숫자와 빨간 칸을 계속 말한다. 위 진단 검사는 이미 받아둔 지도로도 통과하므로 여기서
+// 요청 자체를 못 박는다.
+test('실행이 멈추면 그 자리에서 지도를 다시 만든다 — 칸에 붙일 기회는 이때뿐이다', async () => {
+  const asked = [];
+  const made = await mounted({
+    map: async (body) => { asked.push(body); return MAP_PAYLOAD; },
+    run: async () => ({ run_id: 'r1' }),
+    result: async () => ({ status: 'failed', error: 'KeyError: atr' }),
+    diagnose: async () => ({ title: 'df에 없는 열을 찾았습니다', why: '없습니다', line: 7 }),
+  });
+  await withCode(made);
+  await fillForm(made.container);
+  const before = asked.length;
+  await click(findByClass(made.container, 'backtest-run-button')[0]);
+  await flush();
+  await flush();
+  await flush();
+  assert.equal(made.canvas.getContext().view, 'diagnosis');
+  assert.ok(asked.length > before, '진단이 선 다음 지도를 다시 만들어야 한다');
+  const last = asked[asked.length - 1];
+  assert.deepEqual(last.error, { message: 'df에 없는 열을 찾았습니다', lineno: 7 });
+  assert.equal(last.run_id, 'r1');
+});
+
+test('실행이 끝나도 지도를 다시 만든다 — 오른쪽 사실은 그 실행이 만든 값이다', async () => {
+  const asked = [];
+  const made = await mounted({
+    map: async (body) => { asked.push(body); return MAP_PAYLOAD; },
+    run: async () => ({ run_id: 'r7' }),
+    result: async () => ({ status: 'done', metrics: {}, equity: [] }),
+    trades: async () => [],
+  });
+  await fillForm(made.container);
+  await click(findByClass(made.container, 'backtest-run-button')[0]);
+  await flush();
+  await flush();
+  const last = asked[asked.length - 1];
+  assert.equal(last.run_id, 'r7');
+  assert.equal(last.error, undefined);
+});
+
+test('지도를 다시 못 만들면 앞 지도를 지운다 — 남의 전략 칸이 서 있으면 안 된다', async () => {
+  let broken = false;
+  const made = await mounted({
+    map: async () => {
+      if (broken) throw new Error('종목이 비어 지도를 만들지 못했습니다');
+      return MAP_PAYLOAD;
+    },
+  });
+  await click(findByClass(made.container, 'backtest-subtab')[0]);
+  await flush();
+  assert.equal(findByClass(made.container, 'backtest-flow-node').length, 4);
+
+  broken = true;
+  await click(findByClass(made.container, 'backtest-subtab')[0]);
+  await flush();
+  assert.equal(findByClass(made.container, 'backtest-flow-node').length, 0);
+  assert.equal(findByClass(made.container, 'backtest-map-drawer-text').length, 0);
+  assert.match(textOf(made.container), /종목이 비어 지도를 만들지 못했습니다/);
+  // 다음 턴 컨텍스트도 없는 칸을 말하지 않는다.
+  assert.deepEqual(made.canvas.getContext().map.nodes, []);
+});
+
+test('프리셋을 고르면 지도 뒤의 코드도 비운다 — 서랍이 남의 코드를 가리키면 안 된다', async () => {
+  const made = await mounted({ map: async () => MAP_PAYLOAD });
+  await withCode(made);
+  assert.equal(made.canvas.getContext().runPath, 'code');
+  await toForm(made.container);
+  await click(findByClass(made.container, 'backtest-preset-item')[0]);
+  await flush();
+  const ctx = made.canvas.getContext();
+  assert.equal(ctx.code.source, '');
+  // 화면은 프리셋인데 도는 것은 앞 파이썬인 상태를 남기지 않는다.
+  assert.equal(ctx.runPath, 'form');
+  assert.equal(findByClass(made.container, 'backtest-runpath-item').length, 0);
+  assert.equal(ctx.designTab, 'flow');
+  assert.equal(ctx.map.version, 1);
+  assert.equal(
+    findByClass(made.container, 'backtest-map-drawer-text')[0].textContent,
+    '이 지도 뒤의 코드 · 생성됨 · 23줄 · 지도 v1과 일치',
+  );
+});
+
 test('오류 화면에는 [지도에서 보기]가 있다 — 무엇이 멈췄는지는 칸 위에서 읽힌다', async () => {
   const made = await mounted({
     map: async () => MAP_PAYLOAD,

@@ -476,13 +476,18 @@ function createBacktestCanvas(options) {
     const preset = presets.find((p) => p.id === id);
     if (!preset) return;
     spec = Object.assign(SpecModel.presetToSpec(preset), keptTarget());
-    // 내 전략에서 프리셋으로 건너오면 실행경로도 폼으로 돌아온다 — 안 그러면 화면은
-    // 프리셋인데 도는 것은 파이썬인 상태가 남는다.
-    if (userStrategyId) runPath = 'form';
+    // 프리셋을 고르는 것은 새 전략을 세우는 것이다 — 앞 전략의 코드를 남기면 화면은
+    // 프리셋인데 도는 것은 그 파이썬이고, 서랍의 "이 지도 뒤의 코드"도 남의 코드를
+    // 가리킨다. 코드는 지도 뒤에 있으므로 지도가 새로 서면 그 뒤도 비워야 한다
+    // ([지도로 되돌리기]가 하는 일과 같다).
+    runPath = 'form';
+    codeSource = '';
     userStrategyId = null;
     // 새 전략은 새 지도다 — 앞 전략에서 세던 버전을 이어 세면 "지도 v7"이 무엇을 센
     // 숫자인지 아무도 모르게 된다.
-    setState({ formErrors: [], designTab: 'flow', mapVersion: 1 });
+    setState({
+      formErrors: [], codeErrors: [], codeFromMap: false, designTab: 'flow', mapVersion: 1,
+    });
     void loadMap();
   }
 
@@ -864,6 +869,9 @@ function createBacktestCanvas(options) {
           view: 'result', tab: 'result',
           result: data, trades: Array.isArray(trades) ? trades : [],
         });
+        // 칸 오른쪽의 사실은 **이 실행**이 만든 값이다 — 다시 만들지 않으면 지도는 앞
+        // 실행의 숫자를, 고쳐서 성공한 뒤에도 앞 실행의 빨간 칸을 계속 말한다.
+        void loadMap();
         return;
       }
       if (data && (data.status === 'failed' || data.status === 'cancelled')) {
@@ -890,6 +898,10 @@ function createBacktestCanvas(options) {
     } catch { diagnosis = null; }
     if (!diagnosis) { setState({ view: 'error', message }); return; }
     setState({ view: 'diagnosis', diagnosis });
+    // 멈춘 사실이 칸에 붙는 자리는 여기뿐이다(보드 12) — 진단이 선 다음 지도를 다시
+    // 만들어야 runErrorForMap()이 실린 요청이 나가고, 그래야 진단 제목이 "② …"로
+    // 시작한다. 안 하면 그 함수는 아무도 부르지 않는 코드가 된다.
+    void loadMap();
   }
 
   // 사람이 [적용]을 눌렀을 때만 불린다(§7.3 — 모델이 코드를 바꿔놓는 경로를 만들지 않는다).
@@ -967,7 +979,10 @@ function createBacktestCanvas(options) {
     setState({ mapLoading: true, mapError: null });
     try { setState({ map: await deps.map(body), mapLoading: false }); }
     catch (err) {
-      setState({ mapLoading: false, mapError: String((err && err.message) || err) });
+      // 앞 지도는 버린다 — 못 그린 자리에 앞 전략의 지도가 그대로 서 있으면 칸도,
+      // 서랍의 "지도 vN과 일치"도 전부 남의 전략을 말한다(2026-09-03 실측: 종목을
+      // 아직 안 채운 폼이 422를 받는 동안 앞 코드 경로의 지도가 계속 서 있었다).
+      setState({ map: null, mapLoading: false, mapError: String((err && err.message) || err) });
     }
   }
 
@@ -2296,6 +2311,7 @@ function createBacktestCanvas(options) {
       Explain.renderFlowMap(map, state.map, {
         onSelect: selectMapNode,
         changedIds: new Set((lastChange && lastChange.nodes) || []),
+        target: mapTarget(),
         // 오른쪽 사실이 어느 실행의 것인지 — 없으면 그 문장 자체를 적지 않는다.
         lastRunLabel: state.runId ? String(state.runId).slice(0, 8) : null,
         drawer: {
@@ -2337,6 +2353,17 @@ function createBacktestCanvas(options) {
   // [코드 열기](보드 14-E) — 폼 경로에서는 지도 뒤의 코드가 아직 없다. 그때만 백엔드에
   // 한 번 만들어 편집기에 얹는다(같은 폼이면 다시 만들지 않는다). **실행경로는 건드리지
   // 않는다** — 코드를 열어봤다는 이유로 도는 것이 바뀌면 사람이 모르는 사이에 코드가 돈다.
+  // 대상 한 줄의 재료 — 코드 경로의 지도는 소스만 보고 그려져 백엔드가 종목·기간을
+  // 모른다. 코드로 돌아도 대상은 폼이 정하므로 그 줄은 여기서 채운다. 종목이 아직
+  // 없으면 null을 주고, 지도는 그 줄을 비운다(지어내지 않는다).
+  function mapTarget() {
+    if (!spec || !Array.isArray(spec.symbols) || !spec.symbols.length) return null;
+    return {
+      symbol: spec.symbols[0], period: spec.period, adjusted: spec.adjusted,
+      from: spec.fromDt || null, to: spec.toDt || null,
+    };
+  }
+
   async function openCodeFromMap() {
     if (runPath === 'code' || activeProjectFile() || !spec || !deps.codegen) {
       setState({ designTab: 'code', codeFromMap: true });
