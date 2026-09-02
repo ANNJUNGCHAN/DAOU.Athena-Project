@@ -179,6 +179,23 @@ def test_compiler_version_may_be_omitted(tmp_path: Path) -> None:
         assert res.json()["compiler_version"] == vs.COMPILER_VERSION
 
 
+def test_a_null_compiler_version_is_treated_as_omitted(tmp_path: Path) -> None:
+    """아직 컴파일 결과가 없던 화면은 그 칸을 null로 직렬화한다 — 생략과 같게 받는다."""
+    with _client(tmp_path) as client:
+        compiled = _compiled(client)
+        created = _strategy(client)
+        res = client.post(
+            f"{BASE}/strategies/{created['strategy_id']}/versions",
+            json=_visual_body(
+                compiled,
+                created["version_id"],
+                bundle=_bundle(compiled, compiler_version=None),
+            ),
+        )
+        assert res.status_code == 200, res.text
+        assert res.json()["compiler_version"] == vs.COMPILER_VERSION
+
+
 def test_a_foreign_compiler_version_is_refused(tmp_path: Path) -> None:
     with _client(tmp_path) as client:
         compiled = _compiled(client)
