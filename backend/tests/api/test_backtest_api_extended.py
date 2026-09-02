@@ -474,3 +474,136 @@ def test_nan_becomes_null_without_an_infinite_flag() -> None:
     payload = _json_safe({"x": float("nan")})
     assert payload["x"] is None
     assert "x_infinite" not in payload
+
+
+# ── 코드 경로 실행 (§6.2 — 폼과 같은 체결·비용·성과를 지난다) ──────────────────
+
+_CODE_SOURCE = '''\
+PARAMS = {
+    "fast": {"default": 2, "min": 2, "max": 10, "step": 1},
+    "slow": {"default": 5, "min": 2, "max": 20, "step": 1},
+}
+
+
+def signals(df, p):
+    import athena_bt as bt
+
+    print("코드 경로 진입 · 봉", len(df))
+    fast = bt.sma(df.close, p["fast"])
+    slow = bt.sma(df.close, p["slow"])
+    return df.assign(
+        entry=bt.cross_above(fast, slow),
+        exit=bt.cross_below(fast, slow),
+    )[["entry", "exit"]]
+'''
+
+_FAILING_CODE_SOURCE = '''\
+PARAMS = {"fast": {"default": 2}}
+
+
+def signals(df, p):
+    print("여기까지는 왔다")
+    raise ValueError("전략 로직이 터졌다")
+'''
+
+# 자식은 성공하고(열이 다 있다) 부모의 정렬에서 터지는 코드 — 중복 인덱스는 reindex가 못 푼다.
+_DUPLICATE_INDEX_CODE_SOURCE = '''\
+PARAMS = {}
+
+
+def signals(df, p):
+    print("정렬 전까지는 왔다")
+    out = df.assign(entry=False, exit=False)[["entry", "exit"]]
+    return out.reindex(list(out.index) + [out.index[0]])
+'''
+
+
+def test_code_path_run_reports_run_path_flag_and_stdout(tmp_path: Path) -> None:
+    """`source`를 실으면 signals를 폼이 아니라 그 파이썬이 만든다. 결과에는 어느 경로로
+    나온 수치인지(run_path)와 워밍업을 못 셌다는 사실이 그대로 남아야 한다."""
+    with _client(tmp_path) as client:
+        rows = _synthetic_candle_rows()
+        _seed_candles(client, "005930", "day", True, rows)
+        yaml_text = _RUN_YAML_TEMPLATE.format(
+            stk_cd="005930", from_dt=rows[0].dt, to_dt=rows[-1].dt
+        )
+
+        accepted = client.post(f"{BASE}/runs", json={"yaml": yaml_text, "source": _CODE_SOURCE})
+        assert accepted.status_code == 202
+        run_id = accepted.json()["run_id"]
+        _await_run(client, run_id)
+
+        result = client.get(f"{BASE}/runs/{run_id}").json()
+        assert result["status"] == "done", result["error"]
+        assert result["metrics"]["run_path"] == "code"
+        assert any("코드 경로" in f for f in result["flags"])
+        # 자식 프로세스의 print가 결과에 실려 온다 — 초심자의 유일한 디버그 창구다.
+        assert "코드 경로 진입" in result["stdout"]
+        assert len(result["equity"]) == len(rows)
+
+        trades = client.get(f"{BASE}/runs/{run_id}/trades").json()["trades"]
+        # 이 파형에는 교차가 실제로 있다 — 신호가 체결까지 갔다는 증거다.
+        assert trades
+
+
+def test_code_path_failure_keeps_the_exception_and_the_print_log(tmp_path: Path) -> None:
+    """전략이 터지면 실행은 failed다. 오류 문구와 터지기 전 print가 둘 다 남아야
+    사용자가 무엇이 잘못됐는지 알 수 있다."""
+    with _client(tmp_path) as client:
+        rows = _synthetic_candle_rows()
+        _seed_candles(client, "005930", "day", True, rows)
+        yaml_text = _RUN_YAML_TEMPLATE.format(
+            stk_cd="005930", from_dt=rows[0].dt, to_dt=rows[-1].dt
+        )
+
+        run_id = client.post(
+            f"{BASE}/runs", json={"yaml": yaml_text, "source": _FAILING_CODE_SOURCE}
+        ).json()["run_id"]
+        _await_run(client, run_id)
+
+        result = client.get(f"{BASE}/runs/{run_id}").json()
+        assert result["status"] == "failed"
+        assert "ValueError" in result["error"]
+        assert "전략 로직이 터졌다" in result["error"]
+        assert "여기까지는 왔다" in result["stdout"]
+        assert result["metrics"] is None
+
+
+def test_code_path_failure_after_the_child_still_keeps_the_print_log(tmp_path: Path) -> None:
+    """자식은 성공했는데 부모의 정렬·체결·지표에서 터진 경우다 — 결과 프레임이 망가진
+    바로 이 상황이야말로 print 로그가 필요하다."""
+    with _client(tmp_path) as client:
+        rows = _synthetic_candle_rows()
+        _seed_candles(client, "005930", "day", True, rows)
+        yaml_text = _RUN_YAML_TEMPLATE.format(
+            stk_cd="005930", from_dt=rows[0].dt, to_dt=rows[-1].dt
+        )
+
+        run_id = client.post(
+            f"{BASE}/runs", json={"yaml": yaml_text, "source": _DUPLICATE_INDEX_CODE_SOURCE}
+        ).json()["run_id"]
+        _await_run(client, run_id)
+
+        result = client.get(f"{BASE}/runs/{run_id}").json()
+        assert result["status"] == "failed"
+        assert result["error"]
+        assert "정렬 전까지는 왔다" in (result["stdout"] or "")
+
+
+def test_form_path_run_stays_form_and_carries_no_code_flag(tmp_path: Path) -> None:
+    """`source` 없는 실행은 예전 그대로다 — 코드 경로 플래그가 붙으면 안 된다."""
+    with _client(tmp_path) as client:
+        rows = _synthetic_candle_rows()
+        _seed_candles(client, "005930", "day", True, rows)
+        yaml_text = _RUN_YAML_TEMPLATE.format(
+            stk_cd="005930", from_dt=rows[0].dt, to_dt=rows[-1].dt
+        )
+
+        run_id = client.post(f"{BASE}/runs", json={"yaml": yaml_text}).json()["run_id"]
+        _await_run(client, run_id)
+
+        result = client.get(f"{BASE}/runs/{run_id}").json()
+        assert result["status"] == "done"
+        assert result["metrics"]["run_path"] == "form"
+        assert not any("코드 경로" in f for f in result["flags"])
+        assert result["stdout"] == ""

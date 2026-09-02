@@ -25,6 +25,8 @@ const { runClaudeQuery } = require('./lib/main/claude-runner');
 const streamJsonParser = require('./lib/main/stream-json-parser');
 const { ensureMcpConfig, createMcpRuntimeSnapshot, canonicalHash } = require('./lib/main/mcp-config');
 const { buildLivePrompt, buildLiveSystemPrompt, buildLiveTurnPrompt } = require('./lib/main/live-prompt');
+// 백테스트 설계 턴 접두의 오늘 날짜(YYYYMMDD) — 렌더러와 같은 함수를 쓴다(UMD 각주라 main에서도 안전).
+const { todayYyyymmdd } = require('./lib/backtest-spec');
 // 상주 채팅 세션(2026-08-30 속도 작업) — 매 턴 claude -p 콜드 스폰의 고정비를
 // 세션당 1회로 바꾼다(모듈 상단 주석 참고). 기본 경로는 이쪽이다.
 const { createClaudeChatSession } = require('./lib/main/claude-chat-session');
@@ -2165,6 +2167,57 @@ function maybeForwardNudgeGuardProposal(step, resultBlock) {
   }
 }
 
+const BACKTEST_TOOL_NAME = 'athena_backtest';
+
+// 백테스트 채팅 액션 카드 — athena_backtest의 HTTP 무호출 액션 넷(backtest_tools.py의
+// propose_spec·propose_code·navigate·propose_optimize)을 셸 렌더러의 백테스트
+// 캔버스로 흘려보낸다. 캔버스는 채팅이 몰지만 폼·편집기에 실제로 들어가는 것은
+// 사용자가 카드의 [적용]을 누른 뒤이고, 실행·검증·탐색 시작은 따로 눌러야 시작된다.
+// orbWin에는 안 보낸다 — 말걸기 가드 카드와 같은 이유(채팅 전용 사람 액션)다.
+// propose_code만 결과가 아니라 호출 입력(step.input.propose_code)에서 읽는다 —
+// strategy_id가 있으면 결과는 버전 저장 응답이라 초안 본문(source)이 안 실린다.
+function maybeForwardBacktestChatAction(step, resultBlock) {
+  if (resultBlock.is_error === true) return;
+  const base = String(step.name || '').split('__').pop();
+  if (base !== BACKTEST_TOOL_NAME) return;
+  if (!step.input) return;
+  const action = step.input.action;
+  let message = null;
+  if (action === 'propose_code') {
+    const input = step.input.propose_code;
+    if (!input || typeof input !== 'object') return;
+    const source = input.source;
+    if (typeof source !== 'string' || !source.trim()) return;
+    message = {
+      kind: 'code_draft', source, note: input.note == null ? null : input.note,
+      suggest_run: input.suggest_run === true, suggest_validate: input.suggest_validate === true,
+    };
+  } else if (action === 'propose_spec' || action === 'navigate' || action === 'propose_optimize') {
+    const text = extractToolResultText(resultBlock.content);
+    if (!text) return;
+    let payload;
+    try { payload = JSON.parse(text); } catch { return; }
+    if (!payload || typeof payload !== 'object' || payload.delivered !== 'canvas') return;
+    const note = payload.note == null ? null : payload.note;
+    if (action === 'propose_spec') {
+      const patch = payload.patch;
+      if (!patch || typeof patch !== 'object' || Array.isArray(patch)) return;
+      message = { kind: 'spec_draft', patch, note, suggest_run: payload.suggest_run === true };
+    } else if (action === 'navigate' && payload.kind === 'navigate') {
+      message = {
+        kind: 'navigate', tab: payload.tab,
+        designTab: payload.designTab == null ? null : payload.designTab,
+      };
+    } else if (action === 'propose_optimize' && payload.kind === 'optimize_request') {
+      message = { kind: 'optimize_request', method: payload.method, note };
+    }
+  }
+  if (!message) return;
+  if (shellWin && !shellWin.isDestroyed()) {
+    shellWin.webContents.send('athena:backtest-chat-action', message);
+  }
+}
+
 // tool_result.content는 문자열 또는 블록 배열로 온다 — athena_mcp/result.py의
 // success()는 항상 [{type:'text', text: JSON 문자열}] 블록 배열을 준다(문자열
 // 케이스는 방어용, stream-json-parser.js의 normalizeToolResultContent와 같은 이유).
@@ -2190,9 +2243,9 @@ function extractToolResultText(content) {
 //       완료 쪽(tool_result)은 steps에 애초에 없어 자동으로 조용히 무시된다.
 // sendFn(선택)으로 송신 채널을 바꿀 수 있다 — 브리핑 턴(R1)이 라벨 변환·중복
 // 방어는 그대로 쓰되 athena:briefing-tool-step으로만 내보내기 위한 주입 지점.
-// forwardNudgeGuard(선택) — 말걸기 가드 확인 카드는 채팅 전용 사람 액션이라
-// 사용자 턴에서만 전달한다. 브리핑 턴(자동 실행)이 이 카드를 띄우면 사용자
-// 승인 흐름이 자동 턴에서 새어나오는 셈이라 끈다.
+// forwardNudgeGuard(선택) — 말걸기 가드 확인 카드·백테스트 채팅 액션 카드는 채팅
+// 전용 사람 액션이라 사용자 턴에서만 전달한다. 브리핑 턴(자동 실행)이 이 카드를
+// 띄우면 사용자 승인 흐름이 자동 턴에서 새어나오는 셈이라 끈다.
 function createToolStepTracker(sendFn = sendLiveToolStep, { forwardNudgeGuard = true } = {}) {
   const steps = new Map(); // tool_use_id -> { label, startedAt, name, input, elapsedMs? }
   return function trackToolStep(event) {
@@ -2227,7 +2280,10 @@ function createToolStepTracker(sendFn = sendLiveToolStep, { forwardNudgeGuard = 
             const elapsedMs = Date.now() - step.startedAt;
             step.elapsedMs = elapsedMs; // 재-tool_result(있을 리 없지만) 방어
             sendFn({ id: block.tool_use_id, label: step.label, done: true, elapsedMs, error: !!block.is_error });
-            if (forwardNudgeGuard) maybeForwardNudgeGuardProposal(step, block);
+            if (forwardNudgeGuard) {
+              maybeForwardNudgeGuardProposal(step, block);
+              maybeForwardBacktestChatAction(step, block);
+            }
           }
         }
       }
@@ -3029,7 +3085,12 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
     activeSelectorFastRun.abort(new Error('새 질의가 이전 Selector fast path를 대체했다'));
     activeSelectorFastRun = null;
   }
-  const chartFollowup = chartFollowupTracker.answer(query);
+  // 백테스트 모드는 모델 앞의 빠른 경로 4종(차트 후속·단순 차트·REST 직결·Selector)을
+  // 전부 건너뛴다 — 넷 다 모델을 안 부르고 캔버스 카드를 밀어, "카드를 올리지 않는다"는
+  // 모드 규율과 백테스트 턴 프리픽스(live-prompt.js)가 무력화된다(2026-09-02 리뷰).
+  // 캐시 리플레이도 같은 이유로 아래서 건너뛴다.
+  const backtestMode = submit.canvasMode === 'backtest';
+  const chartFollowup = backtestMode ? null : chartFollowupTracker.answer(query);
   if (chartFollowup) {
     historySink.saveChatMessage(
       { conversationId: turnConversationId, text: chartFollowup.answerText, role: 'assistant' },
@@ -3048,7 +3109,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   }
   chartFollowupTracker.invalidateForQuery(query);
 
-  const simpleChartRoute = await simpleChartFastPath.runSimpleChartFastPath({
+  const simpleChartRoute = backtestMode ? { handled: false } : await simpleChartFastPath.runSimpleChartFastPath({
     query,
     index: stockEntityIndex,
     ensureReady: (timeoutMs) => stockEntityIndexReadiness.ensureReady(timeoutMs),
@@ -3077,7 +3138,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   }
   // 정형 질의 모델 우회 확장(2026-08-26 속도 레버) — 순서는 의미 없다(각자
   // 닫힌 문법이라 서로 안 겹친다, rest-dataset-runner.js 테스트로 고정).
-  const directDataset = restDatasetRunner.buildQuoteDataset(query, stockEntityIndex, {
+  const directDataset = backtestMode ? null : restDatasetRunner.buildQuoteDataset(query, stockEntityIndex, {
     idFactory: () => `rest-${crypto.randomUUID()}`,
   }) || restDatasetRunner.buildChartDataset(query, stockEntityIndex, {
     idFactory: () => `rest-${crypto.randomUUID()}`,
@@ -3109,7 +3170,9 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   const selectorController = new AbortController();
   activeSelectorFastRun = selectorController;
   try {
-    const selectorResult = await selectorFastPath.runSelectorFastPath({
+    const selectorResult = backtestMode
+      ? { handled: false, reason: '백테스트 모드 — 모델 경로로 넘긴다' }
+      : await selectorFastPath.runSelectorFastPath({
       question: query,
       backendBase: BACKEND_HTTP_BASE,
       intent: orderDraft ? orderDraft.intent : 'auto',
@@ -3226,7 +3289,10 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
 
   // 빠른 경로 — 캐시된 판정이 있으면 claude -p를 스폰하지 않는다. 카드는
   // 백엔드가 사이드 채널로 밀고(캔버스 먼저), 답변은 결정론 템플릿이다.
-  const cachedJudgment = liveQueryCache.get(query);
+  // 백테스트 설계 모드는 리플레이를 건너뛴다 — 리플레이는 모델을 안 부르고 카드를 밀며
+  // 정형 답을 돌려주므로, "카드를 올리지 않는다"는 모드 규율과 설계 대화가 함께 깨진다
+  // (캐시 키는 원문 query 그대로 둔다).
+  const cachedJudgment = submit.canvasMode === 'backtest' ? null : liveQueryCache.get(query);
   if (cachedJudgment) {
     const replay = await fastPath.runCachedReplay({
       judgment: cachedJudgment,
@@ -3286,6 +3352,17 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   // 설정 화면 모델 패널(lib/main/model-prefs.js) 값 — null이면 buildArgs가
   // --model/--effort를 안 붙여 claude CLI 기본값을 쓴다.
   const { model, effort } = modelPrefs.get().claude;
+  // 턴 텍스트는 한 번만 만든다 — chat.js가 제출에 실은 canvasMode·backtestContext를
+  // 그대로 넘기면 백테스트 설계 모드에서만 접두가 붙고(live-prompt.js
+  // buildBacktestModePrefix), 그 외 모드는 문자열 호출과 바이트 동일하다. 캐시 키
+  // (liveQueryCache)는 원문 query 그대로다.
+  const liveTurnInput = {
+    userText: query,
+    canvasMode: submit.canvasMode,
+    backtestContext: submit.backtestContext,
+    today: todayYyyymmdd(),
+  };
+  const turnPrompt = buildLiveTurnPrompt(liveTurnInput);
   if (providerRuntimeEnabled && currentProviderSelection.disabled) {
     return {
       ...currentProviderSelection.disabled,
@@ -3317,7 +3394,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
           clientSubmitId,
           conversationId: turnConversationId,
           origin,
-          userText: buildLiveTurnPrompt({ userText: query }),
+          userText: turnPrompt,
         },
         expectedRendererId,
         rendererSubmittedAt,
@@ -3397,8 +3474,8 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   let result;
   if (persistentChatEnabled()) {
     result = await getLiveChatSession().run({
-      // 규칙은 세션 system prompt로 이미 갔다 — 턴에는 질문만 보낸다.
-      prompt: buildLiveTurnPrompt(query),
+      // 규칙은 세션 system prompt로 이미 갔다 — 턴에는 질문(+백테스트 설계 접두)만 보낸다.
+      prompt: turnPrompt,
       model,
       effort,
       resumeSessionId,
@@ -3408,7 +3485,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
     const legacyQueryOperation = runClaudeQuery({
       // 날것 질문을 그대로 넘기면 모델이 조회만 하고 캔버스를 건너뛸 수 있다 —
       // 렌더 지시·스키마 힌트로 감싼다(lib/main/live-prompt.js의 실측 근거 참조).
-      prompt: buildLivePrompt(query),
+      prompt: buildLivePrompt(liveTurnInput),
       cwd: dir,
       configFile,
       resumeSessionId,
@@ -3593,6 +3670,10 @@ ipcMain.handle('athena__render_canvas', async (e, payload = {}) => {
     clientSubmitId: payload.clientSubmitId,
     rendererSubmittedAt: payload.rendererSubmittedAt,
     expectedRendererId: e.sender.id,
+    // 백테스트 설계 모드 턴 접두 재료(chat.js가 실어 보낸다) — 평범한 데이터만 넘긴다.
+    canvasMode: typeof payload.canvasMode === 'string' ? payload.canvasMode : null,
+    backtestContext: payload.backtestContext && typeof payload.backtestContext === 'object'
+      ? payload.backtestContext : null,
   });
 });
 

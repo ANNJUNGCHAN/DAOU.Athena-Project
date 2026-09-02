@@ -1,4 +1,4 @@
-"""athena_backtest — 허용 액션 13종, 무재시도, backfill·activate·deploy 부재(사람 전용 차단).
+"""athena_backtest — 허용 액션 17종, 무재시도, backfill·activate·deploy 부재(사람 전용 차단).
 
 **왜 propose_code가 허용으로 옮겨졌나(2026-09-01).** Paper 보드 02가 요구하는 저작 흐름은
 "모델이 초안을 쓰고 → 사람이 diff를 보고 → 사람이 적용"이다. 초안 저장까지 막으면 그 흐름의
@@ -27,6 +27,7 @@ def test_tool_schema_lists_allowed_actions_only():
     assert tool.inputSchema["properties"]["action"]["enum"] == [
         "list_presets", "list_indicators", "validate", "plan", "run", "status", "result",
         "list_strategies", "read_code", "propose_code", "flow", "diagnose", "optimize",
+        "propose_spec", "navigate", "propose_optimize", "list_runs",
     ]
     # backfill·activate·deploy는 이 툴에 없다는 것을 설명문이 명시한다.
     assert "backfill" in tool.description or "백필" in tool.description
@@ -141,6 +142,32 @@ async def test_run_proxies_post_and_marks_accepted(mock_http_client):
 
 
 @pytest.mark.asyncio
+async def test_run_drops_source_and_allow_partial_from_model_body(mock_http_client):
+    """모델이 낸 파이썬은 실행되지 않는다 — POST /runs까지 가지 못한다(§7.3)."""
+    seen = {}
+
+    async def handler(request):
+        seen.update(json.loads(request.content))
+        return httpx.Response(202, json={"run_id": "run-1"})
+
+    async with mock_http_client(handler, base_url="http://127.0.0.1:8010") as client:
+        result = await backtest_tools.dispatch(
+            {
+                "action": "run",
+                "run": {
+                    "yaml": "...",
+                    "params": {"n": 5},
+                    "source": "import os\nos.system('echo pwned')",
+                    "allow_partial": True,
+                },
+            },
+            client,
+        )
+    assert not result.isError
+    assert seen == {"yaml": "...", "params": {"n": 5}}
+
+
+@pytest.mark.asyncio
 async def test_run_409_translates_to_blocked_status_payload(mock_http_client):
     async def handler(request):
         return httpx.Response(
@@ -222,15 +249,56 @@ async def test_backend_down_says_do_not_pretend(mock_http_client):
 
 
 @pytest.mark.asyncio
-async def test_propose_code_requires_strategy_id(mock_http_client):
+async def test_read_code_requires_strategy_id(mock_http_client):
+    """strategy_id를 요구하는 건 이제 read_code 하나뿐이다 — 읽을 대상이 없으면 조회가 없다."""
+
     async def handler(request):
         raise AssertionError("strategy_id 없이 백엔드에 도달했다")
+
+    async with mock_http_client(handler, base_url="http://127.0.0.1:8010") as client:
+        result = await backtest_tools.dispatch({"action": "read_code"}, client)
+    assert result.isError
+    assert result.meta[ERROR_ORIGIN_META_KEY] == "gateway-blocked"
+    assert "strategy_id" in result.content[0].text
+
+
+@pytest.mark.asyncio
+async def test_propose_code_without_strategy_id_goes_to_canvas_only(mock_http_client):
+    """저장할 전략이 없으면 백엔드를 타지 않는다 — 코드 탭 초안 카드로만 간다."""
+
+    async def handler(request):  # 호출 자체가 없어야 한다
+        raise AssertionError("strategy_id 없는 propose_code가 백엔드에 도달했다")
+
+    source = "PARAMS = {}\n\n\ndef signals(df, p):\n    return df\n"
+    async with mock_http_client(handler, base_url="http://127.0.0.1:8010") as client:
+        result = await backtest_tools.dispatch(
+            {
+                "action": "propose_code",
+                "propose_code": {"source": source, "note": "골든크로스", "suggest_run": True},
+            },
+            client,
+        )
+    assert not result.isError
+    payload = json.loads(result.content[0].text)
+    assert payload["delivered"] == "canvas"
+    assert payload["kind"] == "code_draft"
+    assert payload["source"] == source
+    assert payload["note"] == "골든크로스"
+    assert payload["suggest_run"] is True
+    assert payload["suggest_validate"] is False
+    assert "적용" in payload["notice"]
+
+
+@pytest.mark.asyncio
+async def test_propose_code_without_source_is_blocked(mock_http_client):
+    async def handler(request):
+        raise AssertionError("source 없이 백엔드에 도달했다")
 
     async with mock_http_client(handler, base_url="http://127.0.0.1:8010") as client:
         result = await backtest_tools.dispatch({"action": "propose_code"}, client)
     assert result.isError
     assert result.meta[ERROR_ORIGIN_META_KEY] == "gateway-blocked"
-    assert "strategy_id" in result.content[0].text
+    assert "source" in result.content[0].text
 
 
 @pytest.mark.asyncio
@@ -296,3 +364,141 @@ async def test_optimize_cache_shortage_reports_blocked_not_error(mock_http_clien
     payload = json.loads(result.content[0].text)
     assert payload["status"] == "blocked"
     assert payload["needed_pages"] == 4
+
+
+# ── propose_spec 규율: 캔버스 초안 카드로만 간다 — 백엔드를 타지 않고 폼도 안 바꾼다 ──
+
+
+@pytest.mark.asyncio
+async def test_propose_spec_makes_no_http_call_and_echoes_patch(mock_http_client):
+    async def handler(request):  # 호출 자체가 없어야 한다
+        raise AssertionError("propose_spec이 백엔드에 도달했다")
+
+    patch = {"preset": "sma_crossover", "symbols": ["005930"]}
+    async with mock_http_client(handler, base_url="http://127.0.0.1:8010") as client:
+        result = await backtest_tools.dispatch(
+            {"action": "propose_spec", "propose_spec": {"patch": patch, "note": "삼성전자로"}},
+            client,
+        )
+    assert not result.isError
+    payload = json.loads(result.content[0].text)
+    assert payload["delivered"] == "canvas"
+    assert payload["patch"] == patch
+    assert payload["note"] == "삼성전자로"
+    assert payload["suggest_run"] is False
+    assert "적용" in payload["notice"]
+
+
+@pytest.mark.asyncio
+async def test_propose_spec_without_patch_is_blocked(mock_http_client):
+    async def handler(request):
+        raise AssertionError("patch 없이 백엔드에 도달했다")
+
+    async with mock_http_client(handler, base_url="http://127.0.0.1:8010") as client:
+        result = await backtest_tools.dispatch({"action": "propose_spec"}, client)
+    assert result.isError
+    assert result.meta[ERROR_ORIGIN_META_KEY] == "gateway-blocked"
+    assert "patch" in result.content[0].text
+
+
+# ── navigate·propose_optimize: 화면만 옮기고 방식만 준비한다 — 실행은 사람 클릭 ──────
+
+
+@pytest.mark.asyncio
+async def test_navigate_makes_no_http_call_and_echoes_tabs(mock_http_client):
+    async def handler(request):  # 호출 자체가 없어야 한다
+        raise AssertionError("navigate가 백엔드에 도달했다")
+
+    async with mock_http_client(handler, base_url="http://127.0.0.1:8010") as client:
+        result = await backtest_tools.dispatch(
+            {"action": "navigate", "navigate": {"tab": "design", "designTab": "flow"}},
+            client,
+        )
+    assert not result.isError
+    payload = json.loads(result.content[0].text)
+    assert payload["delivered"] == "canvas"
+    assert payload["kind"] == "navigate"
+    assert payload["tab"] == "design"
+    assert payload["designTab"] == "flow"
+
+
+@pytest.mark.asyncio
+async def test_navigate_omitting_design_tab_sends_null(mock_http_client):
+    async def handler(request):
+        raise AssertionError("navigate가 백엔드에 도달했다")
+
+    async with mock_http_client(handler, base_url="http://127.0.0.1:8010") as client:
+        result = await backtest_tools.dispatch(
+            {"action": "navigate", "navigate": {"tab": "history"}}, client
+        )
+    assert not result.isError
+    assert json.loads(result.content[0].text)["designTab"] is None
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "nav_input, expected",
+    [
+        ({}, "tab"),
+        ({"tab": "설계"}, "tab"),
+        ({"tab": "design", "designTab": "yaml"}, "designTab"),
+    ],
+)
+async def test_navigate_rejects_unknown_tabs(nav_input, expected, mock_http_client):
+    async def handler(request):
+        raise AssertionError("잘못된 navigate가 백엔드에 도달했다")
+
+    async with mock_http_client(handler, base_url="http://127.0.0.1:8010") as client:
+        result = await backtest_tools.dispatch(
+            {"action": "navigate", "navigate": nav_input}, client
+        )
+    assert result.isError
+    assert result.meta[ERROR_ORIGIN_META_KEY] == "gateway-blocked"
+    assert expected in result.content[0].text
+
+
+@pytest.mark.asyncio
+async def test_propose_optimize_prepares_method_without_starting_search(mock_http_client):
+    async def handler(request):  # 호출 자체가 없어야 한다
+        raise AssertionError("propose_optimize가 백엔드에 도달했다")
+
+    async with mock_http_client(handler, base_url="http://127.0.0.1:8010") as client:
+        result = await backtest_tools.dispatch(
+            {
+                "action": "propose_optimize",
+                "propose_optimize": {"method": "random", "note": "표본 200개로"},
+            },
+            client,
+        )
+    assert not result.isError
+    payload = json.loads(result.content[0].text)
+    assert payload["delivered"] == "canvas"
+    assert payload["kind"] == "optimize_request"
+    assert payload["method"] == "random"
+    assert payload["note"] == "표본 200개로"
+    assert "탐색 시작" in payload["notice"]
+
+
+@pytest.mark.asyncio
+async def test_propose_optimize_without_method_is_blocked(mock_http_client):
+    async def handler(request):
+        raise AssertionError("method 없이 백엔드에 도달했다")
+
+    async with mock_http_client(handler, base_url="http://127.0.0.1:8010") as client:
+        result = await backtest_tools.dispatch({"action": "propose_optimize"}, client)
+    assert result.isError
+    assert result.meta[ERROR_ORIGIN_META_KEY] == "gateway-blocked"
+    assert "method" in result.content[0].text
+
+
+@pytest.mark.asyncio
+async def test_list_runs_proxies_get(mock_http_client):
+    async def handler(request):
+        assert request.method == "GET"
+        assert request.url.path == "/api/v1/backtest/runs"
+        return httpx.Response(200, json={"runs": [{"run_id": "run-1", "status": "done"}]})
+
+    async with mock_http_client(handler, base_url="http://127.0.0.1:8010") as client:
+        result = await backtest_tools.dispatch({"action": "list_runs"}, client)
+    assert not result.isError
+    assert json.loads(result.content[0].text)["runs"][0]["run_id"] == "run-1"

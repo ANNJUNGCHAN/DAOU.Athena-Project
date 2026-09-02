@@ -21,8 +21,11 @@ import asyncio
 import contextlib
 import json
 import math
+import shutil
+import tempfile
 from dataclasses import asdict, dataclass, field
 from datetime import UTC, datetime
+from pathlib import Path
 from typing import Any, Literal
 
 import pandas as pd
@@ -31,7 +34,9 @@ from athena_api.backtest.compile import compile_signals_with_warmup
 from athena_api.backtest.data import FetchPage
 from athena_api.backtest.data import backfill as run_backfill
 from athena_api.backtest.engine import DEFAULT_INITIAL_CASH, run_backtest
+from athena_api.backtest.flow import params_defaults
 from athena_api.backtest.metrics import compute_metrics
+from athena_api.backtest.sandbox import host as sandbox_host
 from athena_api.backtest.schema import StrategySpec
 from athena_api.backtest.store import BacktestStore
 from athena_api.backtest.store import EquityPoint as StoreEquityPoint
@@ -40,9 +45,57 @@ from athena_api.backtest.store import Trade as StoreTrade
 JobKind = Literal["run", "backfill"]
 JobStatus = Literal["running", "done", "failed", "cancelled"]
 
+# 코드 경로는 워밍업 봉 수를 알 수 없다 — 지표 프레임을 만든 것이 사용자 코드라 앞
+# 몇 봉이 NaN이었는지 부모가 알 방법이 없다. 0으로 두되 그 사실을 결과에 남긴다(§6.5).
+CODE_PATH_WARMUP_FLAG = "코드 경로 · 워밍업 미산출 — Sharpe에 초기 구간이 포함됩니다"
+
 
 def _now() -> datetime:
     return datetime.now(UTC)
+
+
+def _align_signals(signals: pd.DataFrame, index: pd.Index) -> pd.DataFrame:
+    """자식이 돌려준 신호를 원본 봉 인덱스에 맞춘다.
+
+    사용자 코드는 봉을 잘라내거나 인덱스를 바꿔 돌려줄 수 있다 — 그대로 engine에 넘기면
+    신호와 봉이 어긋난 채 체결된다. 빠진 행은 "모름"이 아니라 "신호 없음"이라 False다.
+    """
+    frame = signals.reindex(index)
+    aligned = pd.DataFrame(
+        {
+            "entry": frame["entry"].fillna(False).astype(bool),
+            "exit": frame["exit"].fillna(False).astype(bool),
+        },
+        index=index,
+    )
+    if "size" in frame.columns:
+        aligned["size"] = frame["size"]
+    return aligned
+
+
+async def _run_code_signals(
+    source: str, df: pd.DataFrame, overrides: dict[str, int | float] | None
+) -> dict[str, Any]:
+    """전략 코드를 샌드박스 자식 프로세스에서 돌리고 결과 한 장을 회수한다(§7.2).
+
+    jobdir은 실행마다 새로 만들고 끝나면 지운다 — 사용자 코드가 쓴 파일이 다음 실행에
+    남지 않는다. 프로세스 기동은 블로킹이라 `to_thread`로 옮긴다(이벤트 루프를 막으면
+    같은 루프의 다른 잡 폴링이 멈춘다).
+    """
+    params = {**params_defaults(source), **(overrides or {})}
+    jobdir = Path(tempfile.mkdtemp(prefix="athena-bt-run-"))
+
+    def run_and_clean() -> dict[str, Any]:
+        # 정리는 **스레드 안에서** 한다 — to_thread는 취소되지 않아서(새 실행·앱 teardown의
+        # CancelledError는 기다리는 쪽만 푼다) 바깥 finally로 지우면 자식이 아직 jobdir을
+        # cwd로 붙들고 있는 채로 지우게 된다. 윈도우에선 그 삭제가 실패하고
+        # ignore_errors가 그 사실을 삼켜 임시 디렉터리가 남는다.
+        try:
+            return sandbox_host.run_strategy(jobdir, source, df, params)
+        finally:
+            shutil.rmtree(jobdir, ignore_errors=True)
+
+    return await asyncio.to_thread(run_and_clean)
 
 
 def _json_safe(payload: dict[str, Any]) -> dict[str, Any]:
@@ -160,18 +213,41 @@ class BacktestRunner:
         overrides: dict[str, int | float] | None,
         initial_cash: float = DEFAULT_INITIAL_CASH,
         extra_flags: str | None = None,
+        source: str | None = None,
     ) -> Job:
         """`run_id`의 `bt_run` 행은 호출자가 이미 status="running"으로 만들어뒀다고
         전제한다(spec_hash·strategy_version_id는 API 층의 책임 — 재현성 축은 store가 쥔다).
-        이 메서드는 계산과 최종 상태 반영만 한다."""
+        이 메서드는 계산과 최종 상태 반영만 한다.
+
+        `source`가 있으면 signals를 폼(spec) 대신 그 파이썬 코드에서 만든다 — 체결·비용·
+        성과는 두 경로가 정확히 같은 코드를 지난다(§6.2, 두 저작 경로가 갈라지지 않는 이유).
+        """
         job = Job(id=run_id, kind="run")
         self._jobs[run_id] = job
 
         async def run() -> None:
+            stdout_text = ""
             try:
-                # 워밍업 봉 수를 컴파일러에게서 받아 그대로 넘긴다 — metrics가 다시
-                # 추정하면 두 계산이 갈라진다(§6.5, metrics.py 머리말).
-                signals, warmup_bars = compile_signals_with_warmup(spec, df, overrides)
+                if source is not None:
+                    outcome = await _run_code_signals(source, df, overrides)
+                    stdout_text = outcome["stdout"]
+                    if not outcome["ok"]:
+                        err = outcome["error"]
+                        message = f"{err['type']}: {err['message']}\n{err['traceback']}".strip()
+                        job.status = "failed"
+                        job.error = message
+                        # print 로그는 실패했을 때 가장 필요하다 — 여기서 버리지 않는다.
+                        await self._store.update_run_status(
+                            run_id, "failed", finished_at=_now(),
+                            error=message, stdout=stdout_text,
+                        )
+                        return
+                    signals = _align_signals(outcome["signals_df"], df.index)
+                    warmup_bars = 0
+                else:
+                    # 워밍업 봉 수를 컴파일러에게서 받아 그대로 넘긴다 — metrics가 다시
+                    # 추정하면 두 계산이 갈라진다(§6.5, metrics.py 머리말).
+                    signals, warmup_bars = compile_signals_with_warmup(spec, df, overrides)
                 result = run_backtest(
                     df, signals, spec.risk, spec.costs, initial_cash=initial_cash
                 )
@@ -184,6 +260,10 @@ class BacktestRunner:
                 # `extra_flags`는 호출자만 아는 사실(예: 보유 구간만 실행)이라 여기서
                 # 지어낼 수 없어 인자로 받는다.
                 flags = [f for f in (result.costs_flag, extra_flags) if f]
+                if source is not None:
+                    flags.append(CODE_PATH_WARMUP_FLAG)
+                # 결과 화면·채팅이 "어느 경로로 나온 수치인가"를 구분해야 한다(§6.2).
+                metrics_payload["run_path"] = "code" if source is not None else "form"
                 if flags:
                     metrics_payload["flags"] = flags
                 await self._store.save_trades(
@@ -209,6 +289,7 @@ class BacktestRunner:
                 await self._store.update_run_status(
                     run_id, "done", finished_at=_now(),
                     metrics_json=json.dumps(metrics_payload, ensure_ascii=False),
+                    stdout=stdout_text or None,
                 )
             except asyncio.CancelledError:
                 job.status = "cancelled"
@@ -217,8 +298,11 @@ class BacktestRunner:
             except Exception as exc:  # noqa: BLE001 — 잡 실패를 상태로 옮기는 경계
                 job.status = "failed"
                 job.error = str(exc)
+                # 자식이 성공한 뒤(정렬·체결·지표에서) 터진 실패도 여기로 온다 — 코드 경로에선
+                # print 로그가 사용자의 유일한 창이라 위 실패 분기와 같이 남긴다.
                 await self._store.update_run_status(
-                    run_id, "failed", finished_at=_now(), error=str(exc)
+                    run_id, "failed", finished_at=_now(),
+                    error=str(exc), stdout=stdout_text or None,
                 )
             else:
                 job.status = "done"
@@ -238,4 +322,11 @@ class BacktestRunner:
                 await task
 
 
-__all__ = ["BackfillProgress", "BacktestRunner", "Job", "JobKind", "JobStatus"]
+__all__ = [
+    "CODE_PATH_WARMUP_FLAG",
+    "BackfillProgress",
+    "BacktestRunner",
+    "Job",
+    "JobKind",
+    "JobStatus",
+]

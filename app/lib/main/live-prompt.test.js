@@ -2,7 +2,9 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { buildLivePrompt, buildLiveSystemPrompt, buildLiveTurnPrompt } = require('./live-prompt');
+const {
+  buildBacktestModePrefix, buildLivePrompt, buildLiveSystemPrompt, buildLiveTurnPrompt,
+} = require('./live-prompt');
 
 test('persistent prompt split keeps generation rules static and turn text isolated', () => {
   const system = buildLiveSystemPrompt();
@@ -224,4 +226,214 @@ test('buildLivePrompt: resolve question 어휘 규율 — 대화체 대신 카�
   assert.ok(p.includes('detail_groups[].title_ko'));
   assert.ok(p.includes('현재 시세 및 거래량'));
   assert.ok(p.includes('카탈로그 어휘를 우선한다'));
+});
+
+// ---- 백테스트 모드 접두(2026-09-02, 채팅이 캔버스를 제어하는 계약 [E]) ----
+// main.js가 chat.js의 canvasMode·backtestContext와 today(YYYYMMDD)를 턴 객체에
+// 실어 보낸다. 백테스트 모드에서만 접두가 붙고, 나머지 경로는 바이트 동일해야 한다.
+
+// phase-1 형상 — code/lastResult/diagnosis/optimize/runs/coverage 키가 아예 없다.
+const BT_CONTEXT = {
+  view: 'backtest',
+  tab: 'design',
+  designTab: 'form',
+  spec: {
+    presetId: 'sma_crossover',
+    name: 'SMA 골든크로스',
+    symbols: ['005930'],
+    period: 'day',
+    adjusted: true,
+    fromDt: '20250101',
+    toDt: '20250831',
+    params: { fast: 20, slow: 60 },
+  },
+  draft: null,
+  presets: [{ id: 'sma_crossover', name: 'SMA 골든크로스' }],
+};
+
+// phase-2 형상 — getContext()가 채우는 키가 전부 실린 컨텍스트.
+const BT_FULL_CONTEXT = {
+  view: 'design',
+  tab: 'design',
+  designTab: 'code',
+  runPath: 'code',
+  spec: BT_CONTEXT.spec,
+  draft: null,
+  presets: BT_CONTEXT.presets,
+  code: {
+    source: 'import athena_bt as bt\n\nPARAMS = {"fast": {"default": 20}}\n',
+    truncated: false,
+    lines: 4,
+    strategyId: 'stg_1',
+    activeVersionId: 'ver_3',
+    errors: [],
+  },
+  codeDraft: {
+    note: '진입 조건을 고쳤다', suggest_run: true, suggest_validate: false, lines: 12,
+  },
+  lastResult: {
+    runId: 'run_9',
+    status: 'done',
+    metrics: { total_return: 0.12, sharpe: 1.1, run_path: 'code' },
+    flags: [],
+    tradesCount: 7,
+    stdoutTail: '',
+    error: null,
+  },
+  diagnosis: {
+    title: 'NameError', why: '변수가 정의되지 않았다', line: 12, hasFix: true, summary: 'p["fast"]로 바꾼다',
+  },
+  optimize: { method: 'grid', result: null },
+  runs: [{
+    run_id: 'run_9', status: 'done', total_return: 0.12, sharpe: 1.1,
+  }],
+  coverage: {
+    symbol: '005930', fromDt: '20250101', toDt: '20250831', bars: 160,
+  },
+};
+
+test('buildLiveTurnPrompt: 문자열 입력은 접두 없이 이전과 바이트 동일', () => {
+  assert.equal(buildLiveTurnPrompt('삼성전자 시세'), '사용자 질문:\n삼성전자 시세');
+});
+
+test('buildLiveTurnPrompt: canvasMode 없는 객체는 문자열 입력과 동일', () => {
+  assert.equal(
+    buildLiveTurnPrompt({ userText: '삼성전자 시세' }),
+    buildLiveTurnPrompt('삼성전자 시세'),
+  );
+});
+
+test('buildLiveTurnPrompt: canvasMode summary는 문자열 입력과 동일 — 백테스트 컨텍스트가 실려도 무시', () => {
+  assert.equal(
+    buildLiveTurnPrompt({
+      userText: '삼성전자 시세', canvasMode: 'summary', backtestContext: BT_CONTEXT, today: '20260902',
+    }),
+    buildLiveTurnPrompt('삼성전자 시세'),
+  );
+});
+
+test('buildLiveTurnPrompt: canvasMode backtest — 접두 규율 + 현재 폼 JSON + 프리셋, 마지막은 사용자 질문', () => {
+  const p = buildLiveTurnPrompt({
+    userText: '삼성전자로 해줘', canvasMode: 'backtest', backtestContext: BT_CONTEXT, today: '20260902',
+  });
+  assert.ok(p.startsWith('[모드: 백테스트] 오늘: 20260902'));
+  assert.ok(p.includes('캔버스는 채팅이 제어한다'));
+  assert.ok(p.includes('propose_spec'));
+  assert.ok(p.includes('propose_code'));
+  assert.ok(p.includes('한 턴에 한 항목'));
+  assert.ok(p.includes('run·optimize·backfill 액션을 직접 부르지 않는다'));
+  assert.ok(p.includes('athena__render_canvas를 호출하지 않는다'));
+  assert.ok(p.includes('실행·검증·수집·저장·활성화·배포·탐색 시작은 사람이 카드 버튼을 누른다'));
+  assert.ok(p.includes('suggest_run:true'));
+  assert.ok(p.includes(`현재 폼(JSON): ${JSON.stringify(BT_CONTEXT.spec)}`));
+  assert.ok(p.includes('대기 중 초안: 없음'));
+  assert.ok(p.includes('프리셋: sma_crossover(SMA 골든크로스)'));
+  assert.ok(p.endsWith('\n\n사용자 질문:\n삼성전자로 해줘'));
+});
+
+test('buildLiveTurnPrompt: backtest — 대기 초안은 {patch, errors}만 JSON으로 싣는다', () => {
+  const ctx = Object.assign({}, BT_CONTEXT, {
+    draft: {
+      patch: { symbols: ['000660'] }, note: '하이닉스로', suggest_run: false, errors: ['기간을 입력하세요'],
+    },
+  });
+  const p = buildLiveTurnPrompt({ userText: 'x', canvasMode: 'backtest', backtestContext: ctx, today: '20260902' });
+  assert.ok(p.includes('대기 중 초안: {"patch":{"symbols":["000660"]},"errors":["기간을 입력하세요"]}'));
+  assert.ok(!p.includes('하이닉스로'));
+});
+
+test('buildLiveTurnPrompt: backtest — backtestContext null이면 폼 없음으로 접두를 낸다', () => {
+  const p = buildLiveTurnPrompt({ userText: 'x', canvasMode: 'backtest', backtestContext: null, today: '20260902' });
+  assert.ok(p.startsWith('[모드: 백테스트] 오늘: 20260902'));
+  assert.ok(p.includes('현재 폼(JSON): 없음'));
+  assert.ok(p.includes('대기 중 초안: 없음'));
+  assert.ok(p.includes('프리셋: 목록 없음'));
+  assert.ok(p.endsWith('사용자 질문:\nx'));
+});
+
+test('buildBacktestModePrefix: today가 없으면 미상으로 찍는다 (Date 미사용)', () => {
+  const p = buildBacktestModePrefix(null, undefined);
+  assert.ok(p.startsWith('[모드: 백테스트] 오늘: 미상'));
+});
+
+test('buildLivePrompt: 객체 입력 — 시스템 규칙 + 백테스트 접두 + 질문이 한 문자열에 들어간다', () => {
+  const input = {
+    userText: '삼성전자로 해줘', canvasMode: 'backtest', backtestContext: BT_CONTEXT, today: '20260902',
+  };
+  const p = buildLivePrompt(input);
+  assert.ok(p.startsWith(buildLiveSystemPrompt()));
+  assert.ok(p.includes('사용자 노출 언어 규율'));
+  assert.ok(p.includes('[모드: 백테스트]'));
+  assert.equal(p, `${buildLiveSystemPrompt()}\n\n${buildLiveTurnPrompt(input)}`);
+});
+
+// ---- phase-2 계약 [E] — 채팅이 캔버스 전체를 모는 일반화 접두 ----
+
+test('buildBacktestModePrefix: 전체 컨텍스트는 모든 구역 머리줄을 낸다', () => {
+  const p = buildBacktestModePrefix(BT_FULL_CONTEXT, '20260902');
+  const lines = p.split('\n');
+  assert.equal(lines[0], '[모드: 백테스트] 오늘: 20260902');
+  assert.equal(lines[1], '사용자는 백테스트 캔버스에 있고, 캔버스는 채팅이 제어한다. 이 턴의 규칙:');
+  assert.ok(p.includes('현재 화면: tab=design · designTab=code · 실행경로=code'));
+  assert.ok(p.includes(`현재 폼(JSON): ${JSON.stringify(BT_FULL_CONTEXT.spec)}`));
+  assert.ok(p.includes('대기 중 초안: 없음'));
+  assert.ok(p.includes('코드 초안 대기: {"note":"진입 조건을 고쳤다","lines":12}'));
+  assert.ok(p.includes('코드(strategy.py · 4줄):'));
+  assert.ok(p.includes(`마지막 실행: ${JSON.stringify(BT_FULL_CONTEXT.lastResult)}`));
+  assert.ok(p.includes(`진단: ${JSON.stringify(BT_FULL_CONTEXT.diagnosis)}`));
+  assert.ok(p.includes('최적화: {"method":"grid","result":null}'));
+  assert.ok(p.includes('프리셋: sma_crossover(SMA 골든크로스)'));
+});
+
+test('buildBacktestModePrefix: 요청별 경로 규칙이 액션 이름을 그대로 담는다', () => {
+  const p = buildBacktestModePrefix(BT_FULL_CONTEXT, '20260902');
+  assert.ok(p.includes('navigate(history) + list_runs'));
+  assert.ok(p.includes('propose_optimize(method)'));
+  assert.ok(p.includes('navigate(design, flow)'));
+  assert.ok(p.includes('navigate(deploy)'));
+  assert.ok(p.includes('데이터 필요량: plan'));
+  assert.ok(p.includes('def signals(df, p)'));
+  assert.ok(p.includes('아직 실행 결과가 없다'));
+});
+
+test('buildBacktestModePrefix: 코드는 python 펜스 블록으로 싣는다', () => {
+  const p = buildBacktestModePrefix(BT_FULL_CONTEXT, '20260902');
+  const fence = '```';
+  assert.ok(p.includes(`코드(strategy.py · 4줄):\n${fence}python\n${BT_FULL_CONTEXT.code.source}\n${fence}`));
+});
+
+test('buildBacktestModePrefix: truncated면 앞 6000자만 표시를 괄호 안에 붙인다', () => {
+  const ctx = Object.assign({}, BT_FULL_CONTEXT, {
+    code: Object.assign({}, BT_FULL_CONTEXT.code, { truncated: true, lines: 320 }),
+  });
+  const p = buildBacktestModePrefix(ctx, '20260902');
+  assert.ok(p.includes('코드(strategy.py · 320줄, 앞 6000자만):'));
+});
+
+test('buildBacktestModePrefix: 실행 이력과 캐시는 JSON 그대로 싣는다', () => {
+  const p = buildBacktestModePrefix(BT_FULL_CONTEXT, '20260902');
+  assert.ok(p.includes(`실행 이력(최근): ${JSON.stringify(BT_FULL_CONTEXT.runs)}`));
+  assert.ok(p.includes(`캐시: ${JSON.stringify(BT_FULL_CONTEXT.coverage)}`));
+});
+
+test('buildBacktestModePrefix: phase-1 컨텍스트는 새 구역이 없음/모름으로 내려앉고 던지지 않는다', () => {
+  const p = buildBacktestModePrefix(BT_CONTEXT, '20260902');
+  assert.ok(p.includes('현재 화면: tab=design · designTab=form · 실행경로=모름'));
+  assert.ok(p.includes('코드 초안 대기: 없음'));
+  assert.ok(p.includes('코드(strategy.py · 0줄): 없음'));
+  assert.ok(p.includes('마지막 실행: 없음'));
+  assert.ok(p.includes('진단: 없음'));
+  assert.ok(p.includes('최적화: 없음'));
+  assert.ok(p.includes('실행 이력(최근): 없음'));
+  assert.ok(p.includes('캐시: 모름'));
+  assert.ok(!p.includes('```'));
+});
+
+test('buildBacktestModePrefix: 컨텍스트 없이도 모든 구역이 없음/모름으로 나온다', () => {
+  const p = buildBacktestModePrefix(null, '20260902');
+  assert.ok(p.includes('현재 화면: tab=모름 · designTab=모름 · 실행경로=모름'));
+  assert.ok(p.includes('현재 폼(JSON): 없음 — 아직 프리셋을 고르지 않았다'));
+  assert.ok(p.includes('코드(strategy.py · 0줄): 없음'));
+  assert.ok(p.includes('캐시: 모름'));
+  assert.ok(p.includes('프리셋: 목록 없음'));
 });

@@ -86,6 +86,23 @@ const MODE_TABS = [
 
 const DESIGN_TABS = [['form', '폼'], ['code', '코드'], ['flow', '흐름']];
 
+// 채팅 초안이 화면을 덮지 않고 대기만 하는 상태 — 실행·승인 중이거나 아직 폼이 없을 때.
+const DRAFT_HOLD_VIEWS = ['running', 'approval', 'empty', 'error'];
+
+// 실행경로 2분기(폼/코드). 코드가 있어야만 헤더에 뜬다.
+const RUN_PATHS = [['form', '폼'], ['code', '코드']];
+
+const OPTIMIZE_METHODS = [['grid', '그리드'], ['random', '랜덤']];
+
+// getContext()가 마지막 실행에서 뽑아 채팅에 넘기는 지표 — 나머지는 말풍선에 쓸 일이 없다.
+const CONTEXT_METRIC_KEYS = [
+  'total_return', 'cagr', 'sharpe', 'mdd', 'win_rate', 'profit_factor',
+  'buy_hold_return', 'closed_trades', 'open_positions', 'warmup_bars', 'bars', 'run_path',
+];
+
+const CONTEXT_CODE_LIMIT = 6000;
+const CONTEXT_STDOUT_LIMIT = 800;
+
 // 배포 모드 3종 — deploy.py MODE_LABELS와 같은 문구를 쓴다.
 const DEPLOY_MODES = [
   ['observe', '기록만 합니다', '주문은 내지 않습니다. 전략이 실전에서 어떻게 움직이는지만 봅니다.'],
@@ -163,13 +180,64 @@ function heatIntensity(sharpe, min, max) {
   return Math.min(Math.max((sharpe - min) / (max - min), 0), 1);
 }
 
+// 초안 카드의 "전 → 후" 값을 사람 말로 바꾼다 — diffFields가 준 원시 값이 들어온다.
+function draftValueText(key, value) {
+  if (key === 'symbols') return value.length ? value.join(', ') : '없음';
+  if (key === 'period') return (SpecModel.PERIODS.find(([id]) => id === value) || [])[1] || String(value);
+  if (key === 'adjusted') return value ? '켬' : '끔';
+  if (key === 'indicators') {
+    return value.length ? value.map((i) => `${i.alias}(${i.id})`).join(', ') : '없음';
+  }
+  if (key === 'entry' || key === 'exit') {
+    if (!value.conditions.length) return '없음';
+    return value.conditions
+      .map((c) => {
+        const opLabel = (SpecModel.OPERATORS.find((o) => o[0] === c.operator) || [])[1] || c.operator;
+        return `${c.indicator} ${opLabel} ${c.compare_to}`;
+      })
+      .join(` ${value.logic} `);
+  }
+  if (key === 'risk') {
+    return [['stop_loss', '손절'], ['take_profit', '익절']]
+      .map(([k, label]) => `${label} ${value[k].percent}% ${value[k].enabled ? '켬' : '끔'}`)
+      .join(' · ');
+  }
+  if (key === 'costs') {
+    return [['fee_bps', '수수료'], ['tax_bps', '매도세'], ['slippage_bps', '슬리피지']]
+      .map(([k, label]) => `${label} ${value[k]}bp`)
+      .join(' · ');
+  }
+  return value === '' || value == null ? '없음' : String(value);
+}
+
+// 초안 카드 행 [라벨, 전, 후]. 파라미터만은 바뀐 이름마다 한 행이다('파라미터 fast · 20 → 10').
+function draftRows(before, after) {
+  const rows = [];
+  SpecModel.diffFields(before, after).forEach(({ key, label, before: a, after: b }) => {
+    if (key !== 'params') {
+      rows.push([label, draftValueText(key, a), draftValueText(key, b)]);
+      return;
+    }
+    Object.keys(Object.assign({}, a, b)).forEach((name) => {
+      if (a[name] === b[name]) return;
+      rows.push([`${label} ${name}`, draftValueText(key, a[name]), draftValueText(key, b[name])]);
+    });
+  });
+  return rows;
+}
+
 // ---------- 캔버스 ----------
 
 function createBacktestCanvas(options) {
   const deps = options || {};
   const container = deps.container;
   if (!container) {
-    return { mount() {}, refresh() {} };
+    // 컨테이너가 없어도 채팅 배선(onChatAction 채널·getContext)은 그대로 부른다 —
+    // 같은 모양을 돌려주지 않으면 액션 한 번에 TypeError로 죽는다.
+    return {
+      mount() {}, refresh() {}, getContext() { return null; },
+      showDraft() {}, onChatAction() {},
+    };
   }
 
   const setTimeoutImpl = deps.setTimeoutImpl
@@ -182,6 +250,13 @@ function createBacktestCanvas(options) {
   let codeSource = '';          // 코드 탭의 파이썬 원문
   let strategyId = null;        // 저장된 전략(코드 경로에서만 만든다)
   let activeVersionId = null;
+  // 실행이 폼(yaml)을 쓰는지 코드(python)를 쓰는지. 코드가 있어야만 고를 수 있고,
+  // 채팅 코드 초안을 적용하면 자동으로 'code'가 된다.
+  let runPath = 'form';
+  // 마지막 실행 실패 메시지 — 채팅이 getContext()로 읽어 고친 코드를 낸다.
+  let lastError = null;
+  // 캐시 상태를 이미 물어본 대상의 열쇠 — 같은 대상에 요청을 반복하지 않는다.
+  let coverageAsked = null;
   let state = { view: 'empty', tab: 'design', designTab: 'form' };
   let pollTimer = null;
   let loadRequestId = 0;
@@ -231,6 +306,38 @@ function createBacktestCanvas(options) {
     setState({ view: 'design', tab: 'design' });
   }
 
+  // 캐시 상태(몇 봉이 어디까지 있는가)는 대상 하나에 붙는 사실이다 — 종목·주기·수정주가가
+  // 바뀌면 앞 대상의 숫자를 그대로 보여주면 안 되므로 열쇠를 같이 들고 다니고, 열쇠가
+  // 어긋나면 화면도 프롬프트도 "모름"으로 돌아간다(틀린 숫자보다 모름이 낫다).
+  function coverageKey() {
+    if (!spec || spec.symbols.length !== 1) return null;
+    return `${spec.symbols[0]}|${spec.period}|${spec.adjusted ? '1' : '0'}`;
+  }
+
+  function currentCoverage() {
+    const key = coverageKey();
+    if (!key || !state.coverage || state.coverage.key !== key) return null;
+    return state.coverage.value;
+  }
+
+  async function loadCoverage() {
+    const key = coverageKey();
+    if (!deps.coverage || !key) return;
+    let data;
+    try {
+      data = await deps.coverage({
+        stk_cd: spec.symbols[0], period: spec.period, adjusted: spec.adjusted,
+      });
+    } catch { return; }  // 부수 정보다 — 못 읽었다고 화면을 실패로 만들지 않는다
+    if (!data) return;
+    setState({
+      coverage: {
+        key,
+        value: { rows: data.rows, first_dt: data.first_dt, last_dt: data.last_dt },
+      },
+    });
+  }
+
   function selectPreset(id) {
     const preset = presets.find((p) => p.id === id);
     if (!preset) return;
@@ -260,6 +367,8 @@ function createBacktestCanvas(options) {
     try {
       const body = { yaml: currentYaml() };
       if (allowPartial) body.allow_partial = true;
+      // 코드 경로일 때만 파이썬을 싣는다 — 백엔드는 source가 있으면 코드로, 없으면 폼으로 돈다.
+      if (runPath === 'code' && codeSource.trim()) body.source = codeSource;
       res = deps.run ? await deps.run(body) : null;
       if (!res) throw new Error('실행 연결이 없습니다');
     } catch (err) { fail(err); return; }
@@ -340,6 +449,7 @@ function createBacktestCanvas(options) {
         let trades = [];
         try { trades = deps.trades ? await deps.trades({ run_id: state.runId }) : []; }
         catch { trades = []; }
+        lastError = null;
         setState({
           view: 'result', tab: 'result',
           result: data, trades: Array.isArray(trades) ? trades : [],
@@ -359,6 +469,7 @@ function createBacktestCanvas(options) {
   // 모르는 사용자에게 역추적을 그대로 보여주는 것이 이 화면이 고치려는 문제 자체다.
   async function handleRunFailure(data) {
     const message = (data && data.error) || '백테스트 실행에 실패했습니다';
+    lastError = message;
     if (!deps.diagnose || !codeSource) {
       setState({ view: 'error', message });
       return;
@@ -374,6 +485,8 @@ function createBacktestCanvas(options) {
   // 사람이 [적용]을 눌렀을 때만 불린다(§7.3 — 모델이 코드를 바꿔놓는 경로를 만들지 않는다).
   async function applyFix(newSource, alsoRun) {
     codeSource = newSource;
+    // 고친 코드로 다시 돌린다 — 실행경로가 폼에 있으면 적용한 코드가 아니라 폼이 돈다.
+    runPath = 'code';
     if (strategyId && deps.addVersion) {
       try {
         const created = await deps.addVersion(strategyId, { source: newSource, origin: 'human' });
@@ -382,6 +495,15 @@ function createBacktestCanvas(options) {
     }
     if (alsoRun) { await startRun(false); return; }
     setState({ view: 'design', tab: 'design', designTab: 'code' });
+  }
+
+  // 코드 탭 [검증]과 코드 초안 [적용하고 검증]이 같은 자리를 쓴다.
+  async function validateCode() {
+    if (!deps.validate) return;
+    try {
+      const res = await deps.validate({ kind: 'python', source: codeSource });
+      setState({ codeErrors: res && res.ok ? [] : (res.errors || []).map((e) => e.message) });
+    } catch (err) { fail(err); }
   }
 
   async function loadFlow() {
@@ -464,10 +586,267 @@ function createBacktestCanvas(options) {
     else if (state.runId) pollRun();
   }
 
+  // ---------- 초안(채팅 제안) ----------
+  //
+  // 채팅이 athena_backtest propose_spec으로 낸 patch는 state.draft에만 머문다. 폼(spec)에
+  // 들어가는 것은 사람이 카드의 [적용]을 누른 뒤이고, 실행은 [적용하고 실행]을 눌러야
+  // 시작된다 — 모델이 폼을 바꾸거나 실행을 켜는 경로를 만들지 않는다(applyFix와 같은 태도).
+
+  // patch.preset이 아는 프리셋이면 selectPreset과 같은 규칙(종목·기간 유지)으로 템플릿을
+  // 먼저 바꾸고, 나머지 키를 그 위에 얹는다. 얹을 스펙이 없으면(프리셋 미로드) null이다.
+  function draftMerged() {
+    if (!state.draft) return null;
+    const patch = state.draft.patch;
+    const preset = presets.find((p) => p.id === patch.preset);
+    let base = spec;
+    if (preset) {
+      const kept = spec
+        ? { symbols: spec.symbols, fromDt: spec.fromDt, toDt: spec.toDt, period: spec.period }
+        : {};
+      base = Object.assign(SpecModel.presetToSpec(preset), kept);
+    }
+    return base ? SpecModel.applyPatch(base, patch) : null;
+  }
+
+  function draftErrors(merged) {
+    if (!merged) return ['프리셋이 없어 초안을 얹을 수 없습니다'];
+    const errors = SpecModel.validate(merged);
+    // 모르는 프리셋 id는 draftMerged가 조용히 흘려보내 "아무것도 안 바뀐 카드"가 된다 —
+    // 사람에게도 모델에게도(getContext().draft.errors) 알리고 [적용]을 잠근다.
+    const wanted = state.draft ? state.draft.patch.preset : null;
+    if (typeof wanted === 'string' && !presets.some((p) => p.id === wanted)) {
+      errors.unshift(`${wanted}는 없는 프리셋입니다`);
+    }
+    return errors;
+  }
+
+  function showDraft(envelope) {
+    const patch = envelope && envelope.patch;
+    if (!patch || typeof patch !== 'object' || Array.isArray(patch)) return;
+    const draft = {
+      patch,
+      note: typeof envelope.note === 'string' && envelope.note ? envelope.note : null,
+      suggest_run: envelope.suggest_run === true,
+    };
+    // 실행·승인 중이거나 아직 프리셋이 없는(로딩·오류) 화면은 덮지 않는다 — 초안만 두고,
+    // 설계로 돌아오면 카드가 보인다.
+    if (DRAFT_HOLD_VIEWS.indexOf(state.view) !== -1) {
+      setState({ draft });
+      return;
+    }
+    setState({ draft, view: 'design', tab: 'design', designTab: 'form' });
+  }
+
+  async function applyDraft(alsoRun) {
+    const merged = draftMerged();
+    if (!merged || draftErrors(merged).length) return;
+    spec = merged;
+    setState({ draft: null, formErrors: [] });
+    if (alsoRun) await handleRun(false);
+  }
+
+  function discardDraft() {
+    setState({ draft: null });
+  }
+
+  // ---------- 채팅 액션(코드 초안·화면 전환·최적화 제안) ----------
+  //
+  // main.js가 'athena:backtest-chat-action' 하나로 네 종류를 보낸다. 어느 것도 실행을
+  // 켜지 않는다 — 초안은 카드로 서고, 전환은 탭만 옮기고, 최적화는 [탐색 시작]을 켜둘 뿐이다.
+
+  function isBusyView() {
+    return state.view === 'running' || state.view === 'approval';
+  }
+
+  function onChatAction(action) {
+    if (!action || typeof action !== 'object') return;
+    if (action.kind === 'spec_draft') { showDraft(action); return; }
+    if (action.kind === 'code_draft') { showCodeDraft(action); return; }
+    if (action.kind === 'navigate') { navigateTo(action); return; }
+    if (action.kind === 'optimize_request') { requestOptimize(action); }
+  }
+
+  function showCodeDraft(envelope) {
+    const source = envelope && envelope.source;
+    if (typeof source !== 'string' || !source) return;
+    const codeDraft = {
+      source,
+      note: typeof envelope.note === 'string' && envelope.note ? envelope.note : null,
+      suggest_run: envelope.suggest_run === true,
+      suggest_validate: envelope.suggest_validate === true,
+    };
+    if (DRAFT_HOLD_VIEWS.indexOf(state.view) !== -1) {
+      setState({ codeDraft });
+      return;
+    }
+    setState({ codeDraft, view: 'design', tab: 'design', designTab: 'code' });
+  }
+
+  // 사람이 카드 버튼을 눌렀을 때만 불린다. mode는 null(적용만)·'validate'·'run'.
+  async function applyCodeDraft(mode) {
+    const draft = state.codeDraft;
+    if (!draft) return;
+    codeSource = draft.source;
+    runPath = 'code';
+    setState({ codeDraft: null, codeErrors: [] });
+    if (mode === 'validate') { await validateCode(); return; }
+    if (mode === 'run') await handleRun(false);
+  }
+
+  // 헤더 탭 버튼과 같은 규칙이다 — 채팅이 여는 화면이 사람이 누르는 화면과 달라지면
+  // "채팅이 옮긴 곳"과 "내가 가는 곳"이 갈라진다.
+  function navigateTo(payload) {
+    if (isBusyView()) return;
+    const tab = payload && payload.tab;
+    if (!MODE_TABS.some(([key]) => key === tab)) return;
+    const wanted = payload.designTab;
+    const designTab = DESIGN_TABS.some(([key]) => key === wanted) ? wanted : null;
+    if (designTab) setState({ designTab });
+    if (tab === 'history') { void loadHistory(); return; }
+    if (tab === 'deploy') { void loadDeployments(); return; }
+    setState({ view: tab === 'result' && state.result ? 'result' : 'design', tab });
+    if (designTab === 'flow') void loadFlow();
+  }
+
+  function requestOptimize(payload) {
+    if (isBusyView()) return;
+    const method = payload && payload.method;
+    const note = payload && typeof payload.note === 'string' && payload.note ? payload.note : null;
+    setState({
+      view: 'design',
+      tab: 'optimize',
+      optimizeMethod: OPTIMIZE_METHODS.some(([m]) => m === method)
+        ? method
+        : state.optimizeMethod,
+      // 문구가 없으면 true만 남긴다 — 카드가 기본 문장을 대신 적는다.
+      optimizeSuggested: note || true,
+    });
+  }
+
+  // 채팅 턴마다 chat.js가 읽어 main.js buildLiveTurnPrompt에 넘긴다 — 모델이 폼을 알고
+  // 되묻지 않게 하기 위해서다. spec은 복사본이다(모델 경로가 폼을 만지지 못한다).
+  function getContext() {
+    const code = codeSource || '';
+    return {
+      view: state.view,
+      tab: state.tab,
+      designTab: state.designTab,
+      runPath,
+      spec: spec ? JSON.parse(JSON.stringify(spec)) : null,
+      draft: state.draft
+        ? {
+          patch: state.draft.patch,
+          note: state.draft.note,
+          suggest_run: state.draft.suggest_run,
+          errors: draftErrors(draftMerged()),
+        }
+        : null,
+      presets: presets.map((p) => ({ id: p.id, name: p.name })),
+      code: {
+        source: code.slice(0, CONTEXT_CODE_LIMIT),
+        truncated: code.length > CONTEXT_CODE_LIMIT,
+        lines: code ? code.split('\n').length : 0,
+        strategyId,
+        activeVersionId,
+        errors: state.codeErrors || [],
+      },
+      // 원문은 이미 code.source에 있다 — 초안까지 통째로 실으면 프롬프트가 두 배가 된다.
+      codeDraft: state.codeDraft
+        ? {
+          note: state.codeDraft.note,
+          suggest_run: state.codeDraft.suggest_run,
+          suggest_validate: state.codeDraft.suggest_validate,
+          lines: state.codeDraft.source.split('\n').length,
+        }
+        : null,
+      lastResult: lastResultContext(),
+      diagnosis: state.diagnosis
+        ? {
+          title: state.diagnosis.title || null,
+          why: state.diagnosis.why || null,
+          line: state.diagnosis.line == null ? null : state.diagnosis.line,
+          hasFix: !!(state.diagnosis.suggestion && state.diagnosis.suggestion.new_source),
+          summary: (state.diagnosis.suggestion && state.diagnosis.suggestion.summary) || null,
+        }
+        : null,
+      optimize: {
+        method: state.optimizeMethod || 'grid',
+        result: optimizeResultContext(),
+      },
+      runs: (Array.isArray(state.runs) ? state.runs : []).slice(0, 10).map((r) => ({
+        run_id: r.run_id,
+        status: r.status,
+        total_return: r.metrics ? r.metrics.total_return : null,
+        sharpe: r.metrics ? r.metrics.sharpe : null,
+      })),
+      coverage: currentCoverage(),
+    };
+  }
+
+  // 실패한 실행에는 지표가 없다 — 앞 실행의 숫자를 남겨두면 모델이 그것을 이번 결과로 읽는다.
+  function lastResultContext() {
+    if (lastError) {
+      return {
+        runId: state.runId || null,
+        status: 'failed',
+        metrics: {},
+        flags: [],
+        tradesCount: 0,
+        stdoutTail: '',
+        error: lastError,
+      };
+    }
+    if (!state.result) return null;
+    const result = state.result;
+    const metrics = result.metrics || {};
+    const picked = {};
+    CONTEXT_METRIC_KEYS.forEach((key) => {
+      if (metrics[key] !== undefined) picked[key] = metrics[key];
+    });
+    const flags = Array.isArray(result.flags)
+      ? result.flags
+      : (Array.isArray(metrics.flags) ? metrics.flags : []);
+    const stdout = String(result.stdout || '');
+    return {
+      runId: state.runId || null,
+      status: 'done',
+      metrics: picked,
+      flags,
+      tradesCount: Array.isArray(state.trades) ? state.trades.length : 0,
+      stdoutTail: stdout ? stdout.slice(-CONTEXT_STDOUT_LIMIT) : '',
+      error: null,
+    };
+  }
+
+  function optimizeResultContext() {
+    const res = state.optimizeResult;
+    if (!res) return null;
+    const best = res.best || null;
+    const cells = res.heatmap && Array.isArray(res.heatmap.cells) ? res.heatmap.cells.length : 0;
+    return {
+      best: best
+        ? {
+          params: best.params,
+          sharpe: best.sharpe == null ? null : best.sharpe,
+          total_return: best.total_return == null ? null : best.total_return,
+          mdd: best.mdd == null ? null : best.mdd,
+        }
+        : null,
+      warnings: (res.warnings || []).map((w) => (w && w.message) || String(w)),
+      cells,
+    };
+  }
+
   // ---------- 렌더 ----------
 
   function render() {
     if (!mounted) return;
+    // 대상이 바뀐 첫 그리기에서 한 번만 캐시 상태를 묻는다 — 같은 열쇠로 두 번 묻지 않는다.
+    const wantedCoverage = coverageKey();
+    if (wantedCoverage && wantedCoverage !== coverageAsked) {
+      coverageAsked = wantedCoverage;
+      void loadCoverage();
+    }
     clear(container);
     if (state.view === 'empty') {
       container.appendChild(renderMessagePanel('', '프리셋을 불러오는 중입니다…'));
@@ -525,6 +904,21 @@ function createBacktestCanvas(options) {
     });
     head.appendChild(tabs);
 
+    // 코드가 있을 때만 갈래가 생긴다 — 빈 편집기에 "코드로 실행"을 걸어둘 이유가 없다.
+    if (codeSource.trim()) {
+      const paths = el('div', 'backtest-runpath');
+      RUN_PATHS.forEach(([value, label]) => {
+        const isOn = runPath === value;
+        const item = button(`backtest-runpath-item${isOn ? ' is-on' : ''}`, label, () => {
+          runPath = value;
+          render();
+        });
+        item.setAttribute('aria-pressed', String(isOn));
+        paths.appendChild(item);
+      });
+      head.appendChild(paths);
+    }
+
     head.appendChild(button('backtest-run-button', '실행', () => { void handleRun(false); }));
     return head;
   }
@@ -548,6 +942,7 @@ function createBacktestCanvas(options) {
     if (state.designTab === 'code') { wrap.appendChild(renderCodeTab()); return wrap; }
     if (state.designTab === 'flow') { wrap.appendChild(renderFlowTab()); return wrap; }
 
+    if (state.draft) wrap.appendChild(renderDraftCard());
     if (!presets.length) {
       wrap.appendChild(el('div', 'backtest-design-empty', '사용 가능한 프리셋이 없습니다'));
       return wrap;
@@ -598,11 +993,12 @@ function createBacktestCanvas(options) {
     const card = el('div', 'backtest-card');
     const head = el('div', 'backtest-card-head');
     head.appendChild(el('div', 'backtest-card-title', '대상 · 기간'));
-    if (state.coverage) {
+    const coverage = currentCoverage();
+    if (coverage) {
       head.appendChild(el(
         'div', 'backtest-card-note',
-        `캐시 ${formatNumeric(state.coverage.rows)}봉 · ${state.coverage.first_dt || '없음'}`
-        + ` → ${state.coverage.last_dt || '없음'}`,
+        `캐시 ${formatNumeric(coverage.rows)}봉 · ${coverage.first_dt || '없음'}`
+        + ` → ${coverage.last_dt || '없음'}`,
       ));
     }
     card.appendChild(head);
@@ -838,10 +1234,99 @@ function createBacktestCanvas(options) {
     return wrap;
   }
 
+  // ── 채팅 초안 카드 ────────────────────────────────────────────────────────
+
+  function renderDraftCard() {
+    const draft = state.draft;
+    const card = el('div', 'backtest-card backtest-draft');
+    const head = el('div', 'backtest-card-head');
+    head.appendChild(el('div', 'backtest-card-title', '채팅이 제안한 설정'));
+    card.appendChild(head);
+    if (draft.note) card.appendChild(el('div', 'backtest-draft-note', draft.note));
+
+    const merged = draftMerged();
+    const errors = draftErrors(merged);
+    if (merged) {
+      draftRows(spec || SpecModel.createSpec(null), merged).forEach(([label, from, to]) => {
+        const row = el('div', 'backtest-draft-row');
+        row.appendChild(el('span', 'backtest-draft-label', label));
+        row.appendChild(el('span', 'backtest-draft-before', from));
+        row.appendChild(el('span', 'backtest-draft-arrow', '→'));
+        row.appendChild(el('span', 'backtest-draft-after', to));
+        card.appendChild(row);
+      });
+    }
+    errors.forEach((message) => card.appendChild(el('div', 'backtest-draft-error', message)));
+
+    // 오류가 남아 있으면 적용 버튼을 잠근다 — 실행 버튼이 폼 오류를 알리는 것과 같은 자리다.
+    const actions = el('div', 'backtest-draft-actions');
+    const applyButton = (className, text, alsoRun) => {
+      const node = button(className, text, () => { void applyDraft(alsoRun); });
+      node.disabled = errors.length > 0;
+      return node;
+    };
+    if (draft.suggest_run) {
+      actions.appendChild(applyButton('backtest-draft-apply-run', '적용하고 실행', true));
+      actions.appendChild(applyButton('backtest-draft-apply-only', '적용만', false));
+    } else {
+      actions.appendChild(applyButton('backtest-draft-apply', '적용', false));
+    }
+    actions.appendChild(button('backtest-draft-discard', '버리기', discardDraft));
+    card.appendChild(actions);
+    card.appendChild(el(
+      'div', 'backtest-draft-actions-note',
+      '적용해도 실행·수집·저장은 일어나지 않습니다 — 실행은 따로 누릅니다',
+    ));
+    return card;
+  }
+
   // ── 보드 02 · 설계(코드) ──────────────────────────────────────────────────
+
+  // 채팅이 낸 코드 초안 — 편집기 위에 서고, 사람이 [적용]을 눌러야 편집기에 들어간다.
+  // 폼 초안 카드와 같은 버튼 세 벌을 쓴다(같은 규율이므로 같은 모양이어야 한다).
+  function renderCodeDraftCard() {
+    const draft = state.codeDraft;
+    const card = el('div', 'backtest-card backtest-draft backtest-code-draft');
+    const head = el('div', 'backtest-card-head');
+    head.appendChild(el('div', 'backtest-card-title', '채팅이 제안한 코드'));
+    card.appendChild(head);
+    if (draft.note) card.appendChild(el('div', 'backtest-draft-note', draft.note));
+
+    const diff = el('div', 'backtest-code-draft-diff');
+    // 편집기가 비어 있으면 전부 추가 줄로 보인다 — 그것이 사실이다.
+    CodeEditor.renderDiff(diff, codeSource, draft.source);
+    card.appendChild(diff);
+
+    const actions = el('div', 'backtest-draft-actions');
+    const primary = draft.suggest_run
+      ? ['적용하고 실행', 'run']
+      : (draft.suggest_validate ? ['적용하고 검증', 'validate'] : null);
+    if (primary) {
+      actions.appendChild(button('backtest-draft-apply-run', primary[0], () => {
+        void applyCodeDraft(primary[1]);
+      }));
+      actions.appendChild(button('backtest-draft-apply-only', '적용만', () => {
+        void applyCodeDraft(null);
+      }));
+    } else {
+      actions.appendChild(button('backtest-draft-apply', '적용', () => {
+        void applyCodeDraft(null);
+      }));
+    }
+    actions.appendChild(button('backtest-draft-discard', '버리기', () => {
+      setState({ codeDraft: null });
+    }));
+    card.appendChild(actions);
+    card.appendChild(el(
+      'div', 'backtest-draft-actions-note',
+      '적용하면 편집기에 들어갑니다 — 저장·실행·검증은 따로 누릅니다',
+    ));
+    return card;
+  }
 
   function renderCodeTab() {
     const wrap = el('div', 'backtest-code-tab');
+    if (state.codeDraft) wrap.appendChild(renderCodeDraftCard());
     const head = el('div', 'backtest-card-head');
     head.appendChild(el('div', 'backtest-card-title', 'strategy.py'));
     head.appendChild(el('div', 'backtest-card-note', 'python 3.12 · pandas · numpy · athena_bt'));
@@ -861,13 +1346,7 @@ function createBacktestCanvas(options) {
     }
 
     const actions = el('div', 'backtest-code-actions');
-    actions.appendChild(button('backtest-code-validate', '검증', async () => {
-      if (!deps.validate) return;
-      try {
-        const res = await deps.validate({ kind: 'python', source: codeSource });
-        setState({ codeErrors: res && res.ok ? [] : (res.errors || []).map((e) => e.message) });
-      } catch (err) { fail(err); }
-    }));
+    actions.appendChild(button('backtest-code-validate', '검증', () => { void validateCode(); }));
     actions.appendChild(button('backtest-code-save', '이 코드로 저장', async () => {
       if (!deps.createStrategy) return;
       try {
@@ -889,7 +1368,9 @@ function createBacktestCanvas(options) {
     wrap.appendChild(actions);
 
     const errors = el('div', 'backtest-design-error');
-    (state.codeErrors || []).forEach((m) => {
+    // 폼 검증 오류도 여기 적는다 — 코드 초안 카드의 [적용하고 실행]은 폼 검증을 거치는데,
+    // 그 오류를 폼 탭에서만 그리면 코드 탭에 있는 사람에게는 아무 일도 안 일어난 것처럼 보인다.
+    (state.formErrors || []).concat(state.codeErrors || []).forEach((m) => {
       errors.appendChild(el('div', 'backtest-design-error-line', m));
     });
     wrap.appendChild(errors);
@@ -1017,6 +1498,10 @@ function createBacktestCanvas(options) {
       return renderMessagePanel('', '아직 실행한 백테스트가 없습니다');
     }
     const wrap = el('div', 'backtest-result');
+    // 같은 폼으로 폼 경로와 코드 경로가 다른 숫자를 낼 수 있다 — 무엇이 돌았는지 남긴다.
+    const runPathValue = (state.result.metrics && state.result.metrics.run_path) === 'code'
+      ? '코드 경로' : '폼 경로';
+    wrap.appendChild(el('div', 'backtest-result-runpath', runPathValue));
     wrap.appendChild(renderMetricTiles());
     wrap.appendChild(renderEquity());
     wrap.appendChild(renderStdout());
@@ -1227,7 +1712,7 @@ function createBacktestCanvas(options) {
     wrap.appendChild(setup);
 
     const methods = el('div', 'backtest-segment');
-    [['grid', '그리드'], ['random', '랜덤']].forEach(([value, label]) => {
+    OPTIMIZE_METHODS.forEach(([value, label]) => {
       const isOn = (state.optimizeMethod || 'grid') === value;
       const seg = button(`backtest-segment-item${isOn ? ' is-on' : ''}`, label, () => {
         setState({ optimizeMethod: value });
@@ -1237,9 +1722,22 @@ function createBacktestCanvas(options) {
     });
     wrap.appendChild(methods);
 
-    wrap.appendChild(button('backtest-optimize-start', state.optimizeBusy ? '탐색 중…' : '탐색 시작', () => {
-      if (!state.optimizeBusy) void runOptimize();
-    }));
+    // 채팅이 제안한 설정이면 버튼을 켜두되 누르지는 않는다 — 탐색을 시작하는 것은 사람이다.
+    const suggested = state.optimizeSuggested;
+    wrap.appendChild(button(
+      `backtest-optimize-start${suggested ? ' is-suggested' : ''}`,
+      state.optimizeBusy ? '탐색 중…' : '탐색 시작',
+      () => {
+        if (suggested) setState({ optimizeSuggested: null });
+        if (!state.optimizeBusy) void runOptimize();
+      },
+    ));
+    if (suggested) {
+      wrap.appendChild(el(
+        'div', 'backtest-optimize-suggested',
+        typeof suggested === 'string' ? suggested : '채팅이 이 설정으로 탐색을 제안했습니다',
+      ));
+    }
 
     if (state.optimizeError) {
       wrap.appendChild(el('div', 'backtest-design-error-line', state.optimizeError));
@@ -1424,7 +1922,7 @@ function createBacktestCanvas(options) {
     resumePollingIfNeeded();
   }
 
-  return { mount, refresh };
+  return { mount, refresh, getContext, showDraft, onChatAction };
 }
 
 const __exports = {

@@ -283,6 +283,12 @@ async def start_run(request: Request, body: dict[str, Any]) -> JSONResponse:
     params = body.get("params")
     if params is not None and not isinstance(params, dict):
         raise HTTPException(status_code=422, detail="params는 객체여야 한다")
+    # 코드 경로(§6.2). `yaml`은 여전히 필수다 — data(종목·기간)·costs·risk는 코드가 아니라
+    # 폼이 쥔다. 코드가 대신하는 것은 signals 생성 한 곳뿐이다.
+    source = body.get("source")
+    if source is not None and not isinstance(source, str):
+        raise HTTPException(status_code=422, detail="source는 문자열이어야 한다")
+    code_source = source if source and source.strip() else None
 
     try:
         spec = from_kis_yaml(yaml_text)
@@ -335,24 +341,35 @@ async def start_run(request: Request, body: dict[str, Any]) -> JSONResponse:
     )
 
     now = datetime.now(UTC)
-    # POST /runs는 {yaml, params}만 받는다 — 저장된 전략 CRUD(§6.6의 strategies 라우트군)는
+    # POST /runs는 {yaml, params, source}만 받는다 — 저장된 전략 CRUD(§6.6의 strategies 라우트군)는
     # 이 스코프 밖이다. 그래도 bt_run.strategy_version_id는 FK(NOT NULL)라 매 실행마다
     # 익명 전략+버전 한 쌍을 즉석에서 만든다 — 재현성의 축(store.py 문서)은 지킨다.
     strategy_id = str(uuid4())
     version_id = str(uuid4())
-    await store.create_strategy(strategy_id, spec.metadata.name, "yaml", created_at=now)
+    # 재현성의 축은 저장된 소스다 — 코드 경로면 실제로 돌린 파이썬을 버전으로 남긴다.
+    # yaml만 남기면 나중에 그 실행을 다시 만들 수 없다(store.py 계약).
+    kind = "python" if code_source else "yaml"
+    await store.create_strategy(strategy_id, spec.metadata.name, kind, created_at=now)
     await store.add_version(
-        version_id, strategy_id, 1, yaml_text, origin="form", created_at=now, active=True,
+        version_id, strategy_id, 1, code_source or yaml_text,
+        origin="human" if code_source else "form", created_at=now, active=True,
     )
 
     run_id = str(uuid4())
     params_json = json.dumps(params or {}, ensure_ascii=False)
-    spec_hash = hashlib.sha256(f"{yaml_text}\n{params_json}".encode()).hexdigest()
+    hash_input = (
+        f"{yaml_text}\n{code_source}\n{params_json}"
+        if code_source
+        else f"{yaml_text}\n{params_json}"
+    )
+    spec_hash = hashlib.sha256(hash_input.encode()).hexdigest()
     await store.create_run(
         run_id, version_id, params_json=params_json, spec_hash=spec_hash,
         status="running", started_at=now,
     )
-    runner.start_run(run_id, spec=spec, df=df, overrides=params, extra_flags=partial_flag)
+    runner.start_run(
+        run_id, spec=spec, df=df, overrides=params, extra_flags=partial_flag, source=code_source,
+    )
     return JSONResponse(status_code=202, content={"run_id": run_id, "partial": partial_flag})
 
 

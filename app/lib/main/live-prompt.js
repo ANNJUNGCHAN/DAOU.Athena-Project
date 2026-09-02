@@ -214,19 +214,93 @@ function buildLiveSystemPrompt() {
   return LIVE_RULES_TEXT;
 }
 
+// 백테스트 모드 접두(2026-09-02) — 캔버스가 백테스트 모드일 때만 턴 앞에 붙는다.
+// 채팅이 캔버스 전체(폼·코드·이동·최적화)를 제어하고, 실행·검증·수집·저장·활성화·
+// 배포·탐색 시작은 사용자가 카드 버튼을 눌러야 일어난다는 규율과, 모델이 되묻거나
+// 수치를 지어내지 않게 현재 화면·폼·대기 초안·코드·마지막 실행·진단·최적화·이력·
+// 캐시·프리셋을 함께 준다. 순수 함수 — today는 호출자(app/main.js)가 YYYYMMDD
+// 문자열로 넘기고, 여기서는 Date를 쓰지 않는다. context는 backtest-canvas.js
+// getContext() 반환값이며, 키가 없거나 null이면 '없음/모름'으로 찍고 절대 던지지
+// 않는다(phase-1 컨텍스트에는 새 키가 없다). JSON은 들여쓰기 없이 직렬화해 턴을
+// 작게 유지한다.
+function buildBacktestModePrefix(context, today) {
+  const ctx = context && typeof context === 'object' ? context : null;
+  const obj = (v) => (v && typeof v === 'object' ? v : null);
+  const label = (v) => (typeof v === 'string' && v ? v : '모름');
+  const json = (v, empty) => (obj(v) ? JSON.stringify(v) : empty);
+
+  const spec = json(ctx && ctx.spec, '없음 — 아직 프리셋을 고르지 않았다');
+  const draft = obj(ctx && ctx.draft)
+    ? JSON.stringify({ patch: ctx.draft.patch, errors: ctx.draft.errors })
+    : '없음';
+  const codeDraft = obj(ctx && ctx.codeDraft)
+    ? JSON.stringify({ note: ctx.codeDraft.note, lines: ctx.codeDraft.lines })
+    : '없음';
+  const code = obj(ctx && ctx.code);
+  const source = code && typeof code.source === 'string' ? code.source : '';
+  const lines = code && typeof code.lines === 'number'
+    ? code.lines
+    : (source ? source.split('\n').length : 0);
+  const head = `코드(strategy.py · ${lines}줄${code && code.truncated ? ', 앞 6000자만' : ''})`;
+  const codeBlock = source
+    ? `${head}:\n\`\`\`python\n${source}\n\`\`\``
+    : `${head}: 없음`;
+  const runs = ctx && Array.isArray(ctx.runs) && ctx.runs.length
+    ? JSON.stringify(ctx.runs)
+    : '없음';
+  const presets = ctx && Array.isArray(ctx.presets) && ctx.presets.length
+    ? ctx.presets.map((p) => `${p.id}(${p.name})`).join(', ')
+    : '목록 없음';
+
+  return [
+    `[모드: 백테스트] 오늘: ${today ? String(today) : '미상'}`,
+    '사용자는 백테스트 캔버스에 있고, 캔버스는 채팅이 제어한다. 이 턴의 규칙:',
+    '- 캔버스 카드를 올리지 않는다 — athena__render_canvas를 호출하지 않는다. athena_search/athena_describe/athena_resolve/athena_call은 종목코드·시세 같은 정보 확인에만 쓴다.',
+    '- 말풍선에 코드·수치 표·지어낸 결과를 쓰지 않는다. 코드는 propose_code로 코드 탭 초안 카드에, 설정은 propose_spec으로 폼 초안 카드에 보낸다. 결과 수치는 아래 컨텍스트나 result·list_runs 액션이 준 값만 말한다 — 없으면 "아직 실행 결과가 없다"고 말한다.',
+    '- 요청별 경로 — 폼 설정: propose_spec(대상→기간·주기→지표→진입 조건→청산 조건→리스크·비용 순서, 한 턴에 한 항목) · 코드 작성/수정: propose_code(전체 파일 — PARAMS 딕셔너리 + def signals(df, p), import athena_bt as bt) · 오류 수정: 아래 마지막 실행 오류·진단·현재 코드를 읽고 propose_code(고친 전체 코드, suggest_run:true) · 실행: 폼이면 propose_spec(빈 patch, suggest_run:true), 코드면 propose_code(현재 코드, suggest_run:true) · 결과 설명: 아래 마지막 실행 · 이력·비교: navigate(history) + list_runs · 최적화: propose_optimize(method) · 흐름 지도: navigate(design, flow) · 배포: navigate(deploy) 후 사람이 한다고 안내 · 데이터 필요량: plan.',
+    '- 실행·검증·수집·저장·활성화·배포·탐색 시작은 사람이 카드 버튼을 누른다. run·optimize·backfill 액션을 직접 부르지 않는다.',
+    '- 이미 채워진 값은 되묻지 않는다. 모르면 짧게 하나만 묻는다. 실행당 종목 1개, 날짜 YYYYMMDD. 답은 두세 문장 — 초안을 냈으면 무엇을 담았는지 한 줄과 [적용] 안내.',
+    `현재 화면: tab=${label(ctx && ctx.tab)} · designTab=${label(ctx && ctx.designTab)} · 실행경로=${label(ctx && ctx.runPath)}`,
+    `현재 폼(JSON): ${spec}`,
+    `대기 중 초안: ${draft}`,
+    `코드 초안 대기: ${codeDraft}`,
+    codeBlock,
+    `마지막 실행: ${json(ctx && ctx.lastResult, '없음')}`,
+    `진단: ${json(ctx && ctx.diagnosis, '없음')}`,
+    `최적화: ${json(ctx && ctx.optimize, '없음')}`,
+    `실행 이력(최근): ${runs}`,
+    `캐시: ${json(ctx && ctx.coverage, '모름')}`,
+    `프리셋: ${presets}`,
+  ].join('\n');
+}
+
 // 상주 세션의 턴 페이로드 — 질문만. 레거시와 같은 '사용자 질문:' 프레이밍을
 // 유지해 규칙 문구("아래 사용자 질문에 답하라")가 두 경로 모두에서 성립한다.
 // 프로바이더 런타임은 { userText } 객체로 부르므로(app/main.js) 문자열과 객체를
 // 모두 받는다 — 문자열 호출자는 이전과 바이트 동일하다.
+// 객체에 canvasMode:'backtest'가 실려 오면(app/main.js가 chat.js의 canvasMode·
+// backtestContext·today를 그대로 전달) 백테스트 모드 접두를 앞에 붙인다. 그 외
+// 모드(summary 등)와 canvasMode 없는 객체는 문자열 호출과 바이트 동일하다.
 function buildLiveTurnPrompt(input) {
-  const userText = input && typeof input === 'object' ? input.userText : input;
-  return `사용자 질문:\n${String(userText == null ? '' : userText)}`;
+  const isObject = Boolean(input) && typeof input === 'object';
+  const userText = isObject ? input.userText : input;
+  const body = `사용자 질문:\n${String(userText == null ? '' : userText)}`;
+  if (isObject && input.canvasMode === 'backtest') {
+    return `${buildBacktestModePrefix(input.backtestContext, input.today)}\n\n${body}`;
+  }
+  return body;
 }
 
 // 콜드 스폰 경로(킬 스위치 ATHENA_PERSISTENT_CHAT=0) — 분리 전 출력과 바이트
-// 동일해야 한다(live-prompt.test.js가 합성 규칙을 고정).
+// 동일해야 한다(live-prompt.test.js가 합성 규칙을 고정). query는 문자열이든
+// buildLiveTurnPrompt와 같은 객체든 그대로 통과시킨다.
 function buildLivePrompt(query) {
   return `${LIVE_RULES_TEXT}\n\n${buildLiveTurnPrompt(query)}`;
 }
 
-module.exports = { buildLivePrompt, buildLiveSystemPrompt, buildLiveTurnPrompt };
+module.exports = {
+  buildBacktestModePrefix,
+  buildLivePrompt,
+  buildLiveSystemPrompt,
+  buildLiveTurnPrompt,
+};
