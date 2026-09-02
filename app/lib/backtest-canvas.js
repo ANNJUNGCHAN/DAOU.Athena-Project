@@ -131,6 +131,20 @@ const VISUAL_RUN_BLOCKED = '오류 검토';
 // 코드 초안이 지도보다 앞설 때 서랍에 적히는 한 줄. 덮어쓰지 않는다는 사실을 말한다.
 const VISUAL_CODE_AHEAD = '코드가 지도보다 앞섬';
 
+// ── US-010 · 코드 전용 분기와 버전 되열기 ───────────────────────────────────
+// 코드에서 한 수정이 그래프로 표현되지 않으면 화면은 자동 왕복을 가장하지 않고 두 갈래를
+// 명시한다(연구 문서 §표현 불가능한 코드 수정). 아래 문구는 그 두 버튼과, 분기한 뒤의
+// 지도가 무엇인지를 말한다 — 마지막 호환 snapshot이고 지금 코드와 **동기화되지 않았다**.
+const CODE_ONLY_REGRAPH = '그래프에서 다시 만들기';
+const CODE_ONLY_FORK = '코드 전용으로 분기';
+const CODE_ONLY_BADGE = '동기화되지 않음 · 코드 전용';
+// 그 분기가 남기는 버전의 메모. 서버는 origin=code_only 버전에 bundle을 허용하지 않는다
+// (그래프를 같이 저장하면 동기화됐다고 표시하는 것과 같다).
+const CODE_ONLY_NOTE = '코드 전용 분기';
+// 이력에서 다시 연 버전의 배지 — 편집 표면이 아니다. 편집은 한 번 더 눌러야 시작된다.
+const VERSION_READONLY_BADGE = '읽기 전용 · 이력에서 연 버전';
+const VERSION_EDIT_LABEL = '이 버전으로 편집';
+
 const OPTIMIZE_METHODS = [['grid', '그리드'], ['random', '랜덤']];
 
 // getContext()가 마지막 실행에서 뽑아 채팅에 넘기는 지표 — 나머지는 말풍선에 쓸 일이 없다.
@@ -562,6 +576,21 @@ function createBacktestCanvas(options) {
   let lastGeneratedSource = '';
   let pendingQuestion = null;
   let pendingPatch = null;
+  // ── 코드 전용 분기·버전 되열기(US-010) ────────────────────────────────────
+  // 코드가 정본이 된 전략. 지도 탭은 마지막 호환 그래프 snapshot을 읽기 전용으로만
+  // 그리고, 어디에서도 '동기화됨'을 말하지 않는다(그것이 이 분기의 전부다).
+  let codeOnly = false;
+  let codeOnlyGraph = null;
+  // 이력에서 다시 연 버전 — 읽기 전용이다. [이 버전으로 편집]이 작업 초안으로 옮긴다.
+  let openedVersion = null;
+  // 읽기 전용 snapshot 전용 편집기. 편집용 편집기와 나누는 이유 둘: readOnly는 생성
+  // 옵션이라 나중에 못 바꾸고, 같은 인스턴스를 재활용하면 되돌리기 이력이 snapshot과
+  // 지금 초안 사이에서 섞인다.
+  let snapshotEditor = null;
+  let snapshotHost = null;
+  let snapshotShown = null;
+  // 서버가 본 최신 머리 — 409로 돌아온 자리에서 [다시 검토]가 다시 읽어 갈아 끼운다.
+  let visualBase = null;
 
   function setState(patch) {
     state = Object.assign({}, state, patch);
@@ -1183,9 +1212,19 @@ function createBacktestCanvas(options) {
 
   async function loadHistory() {
     setState({ view: 'history', tab: 'history' });
+    await loadVersions();
     if (!deps.runs) return;
     try { setState({ runs: await deps.runs() }); }
     catch (err) { fail(err); }
+  }
+
+  // 실행(run)과 버전(version)은 다른 축이다 — 되열기가 버전에만 있는 이유는 그래프·
+  // spec_yaml·해시가 버전에 붙어 있고 실행에는 없기 때문이다(US-010). 못 읽으면 빈
+  // 목록이다: 부수 정보라 실행 이력까지 실패로 만들지 않는다.
+  async function loadVersions() {
+    if (!deps.versions || !strategyId) return;
+    try { setState({ versions: await deps.versions(strategyId) }); }
+    catch { setState({ versions: [] }); }
   }
 
   // 이력 비교의 곡선 겹쳐보기(보드 05). 목록 응답에는 equity가 없어 실행별로 한 번씩
@@ -1759,6 +1798,9 @@ function createBacktestCanvas(options) {
       // 아직 그래프가 없으면 null이고, 화면이 없는 노드를 지어내지 않는다.
       graph: visualGraphContext(),
       validation_state: visualState,
+      // 코드 전용으로 분기했는가(US-010) — 그렇다면 그래프는 마지막 호환 snapshot일
+      // 뿐이고, 모델이 "지도와 동기화됐다"고 말하면 그것은 거짓이다.
+      code_only: codeOnly,
       hashes: visualHashes || null,
       diagnostics: visualDiagnostics.map((d) => ({
         code: d.code,
@@ -1940,6 +1982,11 @@ function createBacktestCanvas(options) {
     if (spec) {
       title.appendChild(el('span', 'backtest-head-strategy', spec.name));
       if (activeVersionId) title.appendChild(el('span', 'backtest-head-version', '코드 버전 활성'));
+    }
+    // 이력에서 다시 연 버전이면 무엇을 보고 있는지가 제목 옆에 선다 — 지금 편집 중인
+    // 초안과 지난 버전을 화면 어디에서도 구분할 수 없으면 사람은 옛 그래프를 고치려 든다.
+    if (openedVersion) {
+      title.appendChild(el('span', 'backtest-head-opened', openedVersionText()));
     }
     head.appendChild(title);
 
@@ -2365,6 +2412,10 @@ function createBacktestCanvas(options) {
 
   function renderCodeTab() {
     const wrap = el('div', 'backtest-code-tab');
+    // 손으로 고친 초안이 마지막 생성 산출물과 다르면 여기서 갈래를 묻는다(US-010) —
+    // 자동 왕복은 없다. 두 버튼은 지도 서랍의 [지도로 되돌리기]와 같은 결정을 두 번
+    // 두지 않기 위해 이 한 자리에만 선다(초안이 있는 곳이 여기다).
+    if (codeAheadOfMap()) wrap.appendChild(renderCodeAheadChoices());
     // 지도에서 열고 들어왔으면 그 사실을 먼저 말한다(보드 14-E) — 여기서 손으로 고치면
     // 지도가 진실이라는 규칙이 깨지는 순간이 시작된다.
     if (state.codeFromMap) {
@@ -2545,6 +2596,10 @@ function createBacktestCanvas(options) {
       ));
       return wrap;
     }
+    // 코드 전용으로 분기했거나 이력에서 버전을 다시 열었으면 지도는 **읽기 전용
+    // snapshot**이다(US-010) — 편집 표면보다 먼저 걸러야 지난 그래프를 고치는 길이
+    // 애초에 생기지 않는다.
+    if (snapshotGraph()) { wrap.appendChild(renderSnapshotDesign()); return wrap; }
     // 스펙 경로에서는 지도가 편집 표면이다(US-007) — 대상 한 줄과 코드 서랍은 그대로
     // 편집기 위·아래에 남는다. 편집이 가능해졌다고 그 둘이 사라질 이유는 없다.
     if (visualActive()) { wrap.appendChild(renderVisualDesign()); return wrap; }
@@ -2654,6 +2709,224 @@ function createBacktestCanvas(options) {
     codeSource = '';
     setState({ designTab: 'flow', codeFromMap: false, codeErrors: [] });
     void loadMap();
+  }
+
+  // ── US-010 · P3 왕복 경계(코드 전용 분기 · 버전 되열기) ────────────────────
+  //
+  // 지도와 코드가 갈라지는 순간은 하나뿐이다: 사람이 생성된 코드를 손으로 고쳤을 때.
+  // 그때 화면이 하면 안 되는 일이 코드→그래프 자동 왕복이다(연구 문서 §표현 불가능한
+  // 코드 수정 — 지원 subset으로 증명되지 않는 수정을 그래프로 추정하면 보이는 전략과
+  // 도는 전략이 갈라진다). 그래서 여기서는 갈래를 **묻기만** 한다:
+  //   ① [그래프에서 다시 만들기] = backToMap — 코드 초안을 버리고 그래프를 지킨다.
+  //   ② [코드 전용으로 분기]     = forkCodeOnly — 코드를 새 origin=code_only 버전으로
+  //      남기고, 지도는 마지막 호환 snapshot을 읽기 전용으로만 보여준다.
+  // 어느 쪽도 활성화가 아니고 실행이 아니다(그 둘은 여전히 별도의 버튼이다).
+
+  // 코드가 지도보다 앞섰는가 — 마지막으로 화면에 얹은 **생성 코드**와 다르면 사람이
+  // 손으로 고친 것이다. 이미 분기했으면 앞선 것이 아니라 그것이 정본이다.
+  function codeAheadOfMap() {
+    if (codeOnly || openedVersion) return false;
+    if (!codeSource.trim()) return false;
+    return codeSource !== lastGeneratedSource;
+  }
+
+  function renderCodeAheadChoices() {
+    const wrap = el('div', 'backtest-code-ahead');
+    wrap.appendChild(el('div', 'backtest-code-ahead-text', VISUAL_CODE_AHEAD));
+    wrap.appendChild(el(
+      'div', 'backtest-code-ahead-note',
+      '이 수정을 그래프로 옮길 수는 없습니다 — 어느 쪽을 정본으로 삼을지 고르세요',
+    ));
+    wrap.appendChild(button('backtest-code-ahead-regraph', CODE_ONLY_REGRAPH, backToMap));
+    wrap.appendChild(button('backtest-code-ahead-fork', CODE_ONLY_FORK, () => {
+      void forkCodeOnly();
+    }));
+    if (state.codeOnlyError) {
+      wrap.appendChild(el('div', 'backtest-code-ahead-error', state.codeOnlyError));
+    }
+    return wrap;
+  }
+
+  // 지금 초안을 origin=code_only 새 버전으로 남긴다. bundle은 싣지 않는다 — 서버가
+  // 422로 거절하고(api/backtest.py `_add_inactive_version`), 거절이 옳다: 그래프를 같이
+  // 저장하는 것은 동기화됐다고 서명하는 것과 같다. 활성화도 실행도 하지 않는다.
+  async function forkCodeOnly() {
+    const source = codeSource;
+    if (!source.trim()) return null;
+    if (!deps.addVersion) {
+      setState({ codeOnlyError: '이 화면에는 버전 저장 배선이 없습니다' });
+      return null;
+    }
+    let id;
+    try { id = await ensureStrategyId(source); }
+    catch (err) { setState({ codeOnlyError: String((err && err.message) || err) }); return null; }
+    if (!id) { setState({ codeOnlyError: '전략을 먼저 저장해야 합니다' }); return null; }
+    let saved;
+    try {
+      saved = await deps.addVersion(id, {
+        source, origin: 'code_only', note: CODE_ONLY_NOTE,
+      });
+    } catch (err) {
+      setState({ codeOnlyError: String((err && err.message) || err) });
+      return null;
+    }
+    const from = state.mapVersion || 0;
+    const generated = lastGeneratedSource;
+    // 마지막 호환 그래프는 그대로 붙잡아 둔다 — 지도 탭이 그것을 읽기 전용으로 보여준다.
+    // 저장된 버전은 비활성이므로 activeVersionId는 건드리지 않는다(배포가 꺼진 버전을
+    // 집는 길을 만들지 않는다).
+    codeOnlyGraph = visualGraph;
+    codeOnly = true;
+    runPath = 'code';
+    lastGeneratedSource = source;
+    visualCompiled = null;
+    // 'synced'는 이 전략에 더는 쓸 수 없는 말이다 — 상태부터 되돌린다.
+    setVisualState('unvalidated', '');
+    setState({
+      codeOnlyError: null, visualCodeAhead: false, designTab: 'flow',
+      view: 'design', tab: 'design',
+      mapVersion: (saved && saved.version != null) ? saved.version : from + 1,
+    });
+    return emitChatCard(remember(makeReceipt('code_only', {
+      applied: true,
+      note: CODE_ONLY_NOTE,
+      rows: [codeRow(generated, source)],
+      version: { from, to: state.mapVersion },
+      version_id: (saved && saved.version_id) || null,
+      tab: state.tab,
+      designTab: state.designTab,
+    })));
+  }
+
+  // 읽기 전용으로 그릴 그래프 — 되연 버전의 그래프가 먼저고(code_only 버전에는 그래프가
+  // 없으므로 마지막 호환 snapshot으로 물러난다), 그 다음이 분기 당시의 snapshot이다.
+  function snapshotGraph() {
+    if (openedVersion) return openedVersion.graph || codeOnlyGraph;
+    if (codeOnly) return codeOnlyGraph;
+    return null;
+  }
+
+  function ensureSnapshotEditor() {
+    const graph = snapshotGraph();
+    if (!graph) return null;
+    if (!snapshotEditor) {
+      snapshotHost = el('div', 'backtest-visual-host is-snapshot');
+      snapshotEditor = VisualEditor.createVisualEditor(snapshotHost, {
+        registry: visualRegistry,
+        graph,
+        readOnly: true,
+        validation: { state: 'unvalidated', summary_ko: '' },
+        setTimeoutImpl,
+        clearTimeoutImpl,
+      });
+    } else if (snapshotShown !== graph) {
+      snapshotEditor.setGraph(graph);
+    }
+    snapshotShown = graph;
+    return snapshotEditor;
+  }
+
+  // 'origin=visual · v3 · 해시 gh-1' — 무엇을 보고 있는지를 지어내지 않고 그대로 적는다.
+  function openedVersionText() {
+    const hash = String((openedVersion.hashes
+      && (openedVersion.hashes.graph_hash || openedVersion.hashes.artifact_hash)) || '');
+    const parts = [`origin=${openedVersion.origin || '알 수 없음'}`, `v${openedVersion.version}`];
+    if (hash) parts.push(`해시 ${hash.slice(0, 12)}`);
+    return parts.join(' · ');
+  }
+
+  function renderSnapshotDesign() {
+    const wrap = el('div', 'backtest-visual is-snapshot');
+    wrap.appendChild(renderVisualTarget());
+    const head = el('div', 'backtest-visual-head');
+    head.appendChild(el('div', 'backtest-card-title', '마지막으로 그래프와 맞았던 지도'));
+    head.appendChild(el(
+      'div', 'backtest-snapshot-badge',
+      openedVersion && !codeOnly ? VERSION_READONLY_BADGE : CODE_ONLY_BADGE,
+    ));
+    wrap.appendChild(head);
+    if (ensureSnapshotEditor()) wrap.appendChild(snapshotHost);
+    else wrap.appendChild(el('div', 'backtest-card-empty', '이 버전에는 저장된 그래프가 없습니다'));
+    if (openedVersion) {
+      wrap.appendChild(button('backtest-version-edit', VERSION_EDIT_LABEL, () => {
+        editOpenedVersion();
+      }));
+    }
+    if (state.visualNotice) {
+      wrap.appendChild(el('div', 'backtest-flow-notice', state.visualNotice));
+    }
+    return wrap;
+  }
+
+  // 이력에서 버전 하나를 다시 연다. 되열기는 **읽기 전용**이다 — 지난 그래프를 그대로
+  // 편집 표면에 얹으면 지금 작업 중인 초안이 조용히 사라진다. 편집은 [이 버전으로
+  // 편집]이 한 번 더 눌려야 시작된다(그때 새 지도 판이 선다).
+  async function openVersion(entry) {
+    if (!strategyId || !deps.versionDetail) {
+      setState({ historyError: '이 화면에는 버전 되열기 배선이 없습니다' });
+      return null;
+    }
+    let detail;
+    try { detail = await deps.versionDetail(strategyId, entry.id); }
+    catch (err) { setState({ historyError: String((err && err.message) || err) }); return null; }
+    if (!detail) { setState({ historyError: '버전을 읽지 못했습니다' }); return null; }
+    const origin = detail.origin || entry.origin || null;
+    const source = String(detail.source || '');
+    codeSource = source;
+    // 되연 원문은 그때 생성된 것이지 사람이 방금 고친 초안이 아니다 — 앞섬으로 읽히면
+    // 되열기만 해도 분기 두 갈래가 뜬다.
+    lastGeneratedSource = source;
+    openedVersion = {
+      id: entry.id,
+      version: detail.version != null ? detail.version : entry.version,
+      origin,
+      graph: (detail.graph && typeof detail.graph === 'object') ? detail.graph : null,
+      spec_yaml: detail.spec_yaml || null,
+      hashes: detail.hashes || null,
+    };
+    if (origin === 'code_only') {
+      codeOnly = true;
+      runPath = 'code';
+      // code_only 버전에는 저장된 그래프가 없다(서버가 bundle을 거절한다) — 지도에
+      // 세울 것은 지금 화면이 들고 있는 마지막 호환 그래프뿐이다. 없으면 없는 대로
+      // 지금까지의 읽기 전용 지도로 물러난다(지어내지 않는다).
+      if (!codeOnlyGraph) codeOnlyGraph = visualGraph;
+    } else if (openedVersion.spec_yaml) adoptSpecYaml(openedVersion.spec_yaml);
+    if (openedVersion.hashes) visualHashes = openedVersion.hashes;
+    visualCompiled = null;
+    setVisualState('unvalidated', '');
+    setState({
+      view: 'design', tab: 'design',
+      designTab: origin === 'code_only' ? 'code' : 'flow',
+      historyError: null, visualNotice: null, codeSpan: null, visualCodeAhead: false,
+    });
+    return openedVersion;
+  }
+
+  // [이 버전으로 편집] — 되연 버전을 지금 작업 초안으로 삼는다. 새 지도 판이 서는
+  // 이유: 편집의 출발점이 바뀌었고, 서랍의 "지도 vN"이 이력의 번호를 계속 가리키면
+  // 그 숫자가 무엇을 센 것인지 아무도 모르게 된다.
+  function editOpenedVersion() {
+    const opened = openedVersion;
+    if (!opened) return { ok: false, reason: '다시 연 버전이 없습니다' };
+    openedVersion = null;
+    if (opened.graph) {
+      visualSyncing = true;
+      visualGraph = opened.graph;
+      visualGraphYaml = currentYaml();
+      if (visualEditor) visualEditor.setGraph(visualGraph);
+      visualSyncing = false;
+      codeOnly = false;
+      runPath = 'form';
+    }
+    visualCompiled = null;
+    setVisualState('unvalidated', '');
+    setState({
+      mapVersion: (state.mapVersion || 0) + 1,
+      designTab: opened.graph ? 'flow' : 'code',
+      view: 'design', tab: 'design',
+    });
+    return { ok: true, version: opened.version };
   }
 
   // ── US-007/008/009 · 시각 전략 편집기(지도 탭) ─────────────────────────────
@@ -2998,8 +3271,48 @@ function createBacktestCanvas(options) {
     }));
   }
 
+  // patch가 서명할 base — 409 뒤 [다시 검토]가 서버에서 다시 읽어 갈아 끼운다(US-010).
+  // visualBase가 비어 있으면 지금까지처럼 화면이 들고 있는 값이 base다.
   function visualBaseHash() {
-    return String((visualHashes && visualHashes.graph_hash) || '');
+    return String((visualBase && visualBase.graph_hash)
+      || (visualHashes && visualHashes.graph_hash) || '');
+  }
+
+  function baseVersionId() {
+    return String((visualBase && visualBase.version_id) || activeVersionId || '');
+  }
+
+  function baseArtifactHash() {
+    return String((visualBase && visualBase.artifact_hash)
+      || (visualCompiled && visualCompiled.hashes && visualCompiled.hashes.artifact_hash)
+      || (visualHashes && visualHashes.artifact_hash) || '');
+  }
+
+  // 409는 "그 사이 세상이 바뀌었다"는 사실이다 — 다시 묻기 전에 서버의 머리를 다시
+  // 읽지 않으면 다음 수정안도 같은 옛 base로 서명돼 같은 409를 다시 받는다(연구 문서
+  // §주요 리스크와 방어선 — base version/hash optimistic concurrency).
+  async function refreshVisualBase() {
+    if (!strategyId || !deps.versions) return null;
+    let list;
+    try { list = await deps.versions(strategyId); } catch { return null; }
+    const head = (Array.isArray(list) ? list : []).reduce(
+      (best, v) => (best && Number(best.version) >= Number(v.version) ? best : v), null,
+    );
+    if (!head || !head.id) return null;
+    const base = { version_id: head.id, graph_hash: null, artifact_hash: null };
+    if (deps.versionDetail) {
+      // 해시를 못 읽어도 버전 id는 갱신한다 — 절반이라도 새 base가 옛 base보다 낫다.
+      try {
+        const detail = await deps.versionDetail(strategyId, head.id);
+        const hashes = (detail && detail.hashes) || null;
+        if (hashes) {
+          base.graph_hash = hashes.graph_hash || null;
+          base.artifact_hash = hashes.artifact_hash || null;
+        }
+      } catch { /* 위 주석 그대로 */ }
+    }
+    visualBase = base;
+    return base;
   }
 
   // 지금 그래프에서 막고 있는 오류 하나를 서버에 물어 카드로 낸다(검사기의 [대화로 수정]).
@@ -3023,7 +3336,7 @@ function createBacktestCanvas(options) {
       data = await deps.visualPatch({
         graph: visualGraph,
         base_graph_hash: visualBaseHash(),
-        base_version_id: activeVersionId,
+        base_version_id: baseVersionId() || null,
         intent: { code: payload.code, choice_id: payload.choice_id },
       });
     } catch (err) {
@@ -3056,10 +3369,7 @@ function createBacktestCanvas(options) {
     const patch = pendingPatch;
     if (!patch) return null;
     if (patchId && patch.patch_id && patch.patch_id !== patchId) return null;
-    const baseArtifact = String(
-      (visualCompiled && visualCompiled.hashes && visualCompiled.hashes.artifact_hash)
-      || (visualHashes && visualHashes.artifact_hash) || '',
-    );
+    const baseArtifact = baseArtifactHash();
     const from = state.mapVersion || 0;
 
     visualSyncing = true;
@@ -3108,7 +3418,7 @@ function createBacktestCanvas(options) {
           compiler_version: (visualCompiled.hashes && visualCompiled.hashes.compiler_version) || null,
         },
         apply_receipt: {
-          base_version_id: String(patch.base_version_id || activeVersionId || ''),
+          base_version_id: String(patch.base_version_id || baseVersionId()),
           base_graph_hash: String(patch.base_graph_hash || ''),
           base_artifact_hash: baseArtifact,
           patch_id: String(patch.patch_id || ''),
@@ -3119,9 +3429,16 @@ function createBacktestCanvas(options) {
     } catch (err) {
       // 409는 실패가 아니라 "그 사이 다른 수정이 먼저 저장됐다"는 사실이다 — 다시 검토로
       // 돌려보낸다(retryVisualPatch가 그 자리다).
+      //
+      // **여기서 아무것도 버리지 않는다**(US-010). 얹어둔 그래프도, 대기 중인 수정안도
+      // 그대로 둔다: 저장이 거절된 것이지 사람이 검토한 수정이 틀린 것이 아니고, 버리면
+      // 사용자는 같은 대화를 처음부터 다시 해야 한다. 무엇을 갈아 끼워야 하는지는 base
+      // 하나뿐이고 그것은 [다시 검토]가 서버에서 다시 읽는다(refreshVisualBase).
       if (err && err.status === 409) {
         return emitChatCard(remember(makeReceipt('visual_conflict', {
           errors: [String(err.message || err)],
+          patch,
+          canRetry: true,
         })));
       }
       return emitChatCard(remember(makeReceipt('visual_conflict', {
@@ -3187,9 +3504,11 @@ function createBacktestCanvas(options) {
     return openCodeAt(patchedNodeId());
   }
 
-  // [다시 검토] — 지금 그래프를 다시 검증하고, 막고 있는 오류를 다시 하나 묻는다.
+  // [다시 검토] — **최신 base를 다시 읽고** 나서 지금 그래프를 다시 검증하고, 막고 있는
+  // 오류를 다시 하나 묻는다. base를 먼저 읽는 이유는 위 refreshVisualBase 머리말 그대로다.
   async function retryVisualPatch() {
     pendingPatch = null;
+    await refreshVisualBase();
     await runVisualValidate();
     return askVisualQuestion();
   }
@@ -3513,6 +3832,8 @@ function createBacktestCanvas(options) {
     head.appendChild(el('div', 'backtest-card-title', `실행 이력 ${formatNumeric(runs.length)}건`));
     head.appendChild(el('div', 'backtest-card-note', '2개를 고르면 아래에서 겹쳐 봅니다'));
     wrap.appendChild(head);
+    // 저장된 버전은 실행과 다른 축이다 — 되열기가 있는 쪽이 여기다(US-010).
+    wrap.appendChild(renderVersionList());
 
     if (!runs.length) {
       wrap.appendChild(el('div', 'backtest-card-empty', '아직 실행 이력이 없습니다'));
@@ -3545,6 +3866,37 @@ function createBacktestCanvas(options) {
     if (selected.length === 2) {
       const [a, b] = selected.map((id) => runs.find((r) => r.run_id === id)).filter(Boolean);
       if (a && b) wrap.appendChild(renderCompare(a, b));
+    }
+    return wrap;
+  }
+
+  // 저장된 버전 목록 — 한 줄을 누르면 그 버전을 **읽기 전용**으로 다시 연다(US-010).
+  // origin을 그대로 적는 이유: visual과 code_only는 여는 자리가 다르고(지도·코드),
+  // 그 차이를 사람이 누르기 전에 알아야 한다.
+  function renderVersionList() {
+    const list = Array.isArray(state.versions) ? state.versions : [];
+    const wrap = el('div', 'backtest-version-list');
+    wrap.appendChild(el(
+      'div', 'backtest-card-title', `저장된 버전 ${formatNumeric(list.length)}개`,
+    ));
+    if (!list.length) {
+      wrap.appendChild(el('div', 'backtest-card-empty', '아직 저장한 버전이 없습니다'));
+    }
+    list.forEach((entry) => {
+      const isOn = !!(openedVersion && openedVersion.id === entry.id);
+      const row = button(
+        `backtest-version-row${isOn ? ' is-on' : ''}`, null,
+        () => { void openVersion(entry); },
+      );
+      row.setAttribute('aria-pressed', String(isOn));
+      row.appendChild(el('span', 'backtest-version-no', `v${entry.version}`));
+      row.appendChild(el('span', `backtest-version-origin is-${entry.origin}`, entry.origin));
+      row.appendChild(el('span', 'backtest-version-note', entry.note || ''));
+      if (entry.active) row.appendChild(el('span', 'backtest-version-active', '활성'));
+      wrap.appendChild(row);
+    });
+    if (state.historyError) {
+      wrap.appendChild(el('div', 'backtest-design-error-line', state.historyError));
     }
     return wrap;
   }
