@@ -1946,9 +1946,19 @@ window.AthenaShell.registerOpenConversation(async (conv) => {
     .catch(() => null);
   if (!switched || !switched.restorable) return false;
   if (switched.isCurrent) return true;
-  const res = await window.athena.invoke('athena:conversation-messages', { conversationId: conv.id })
-    .catch(() => null);
-  restoreConversation(conv, switched, res && res.ok && Array.isArray(res.messages) ? res.messages : []);
+  // 메시지의 원본은 세션 스토어다(42번 보드). 스냅샷의 currentId 경로만 그린다 — 분기가
+  // 있어도 한 줄로 보인다. 스토어에 없으면(이 배선 전에 만든 대화) 브레인 이력으로 폴백.
+  const snapshot = await window.athena.invoke('athena:session-load', { id: conv.id }).catch(() => null);
+  const snapshotLib = window.AthenaLib && window.AthenaLib.SessionSnapshot;
+  let messages = snapshot && snapshotLib ? snapshotLib.messagePath(snapshot.messages, snapshot.currentId) : [];
+  if (!messages.length) {
+    const res = await window.athena.invoke('athena:conversation-messages', { conversationId: conv.id })
+      .catch(() => null);
+    messages = res && res.ok && Array.isArray(res.messages) ? res.messages : [];
+  }
+  restoreConversation(conv, switched, messages);
+  // 카드는 main이 저장된 봉투를 같은 페인트 채널로 다시 흘린다 — 캔버스를 비운 뒤라 순서가 맞는다.
+  void window.athena.invoke('athena:session-replay-cards', { id: conv.id }).catch(() => {});
   return true;
 });
 
