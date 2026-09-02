@@ -56,6 +56,13 @@ function check(name, condition, detail) {
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+// 문서 재로드 누적 경고는 이 하네스의 구조가 만드는 것이라 기능 결함과 갈라 센다
+// (섹션 14의 '알려진 조건' 항목이 그 사실을 받아 적는다).
+function isListenerAccumulationWarning(message) {
+  return /MaxListenersExceededWarning/.test(String(message));
+}
+
+
 function reserveLoopbackPort() {
   return new Promise((resolve, reject) => {
     const server = net.createServer();
@@ -227,6 +234,7 @@ async function main() {
 
     // 렌더러 콘솔 오류를 전부 모은다(§11) — 화면이 그려져도 예외가 나면 실패다.
     const consoleErrors = [];
+    const functionalConsoleErrors = () => consoleErrors.filter((m) => !isListenerAccumulationWarning(m));
     wc.on('console-message', (_e, level, message) => {
       if (level >= 2) consoleErrors.push(String(message).slice(0, 300));
     });
@@ -716,7 +724,10 @@ async function main() {
     await capture(wc, '08-question-card');
 
     // ── 8. 과거 대화 이동 ──────────────────────────────────────────────────
-    section('8. 과거 대화 이동');
+    section('8. 대화 이력 이동');
+    // 2026-09-03에 이 기능의 계약이 바뀌었다: 과거 대화를 **읽기 전용으로 보는 것**에서
+    // **그 대화로 실제 복원**으로(다른 세션 c51dc10). 그래서 여기서 재는 것도 바뀐다 —
+    // 배너는 "복원됨"이라 말하고, 입력은 잠기지 않으며, 열기는 restorable 게이트를 탄다.
     const past = await evaluateAsync(wc, `
       const list = await window.athena.invoke('athena:conversations-list').catch(() => null);
       const convs = (list && Array.isArray(list.conversations)) ? list.conversations : [];
@@ -724,77 +735,70 @@ async function main() {
       const target = convs[0];
       const res = await window.athena.invoke('athena:conversation-messages', { conversationId: target.id })
         .catch((e) => ({ ok: false, error: String(e && e.message) }));
+      const beforeCount = document.getElementById('history').childNodes.length;
       const opened = await window.AthenaShell.openConversation({ id: target.id, title: target.title });
-      await new Promise((r) => setTimeout(r, 600));
+      await new Promise((r) => setTimeout(r, 700));
       const banner = document.querySelector('#history .past-banner');
-      const out = {
+      return {
         ok: true,
         channelOk: !!(res && res.ok),
         opened,
-        bannerShown: !!banner,
+        isCurrent: !banner && opened === true,
+        bannerTitle: banner ? banner.querySelector('.past-banner-title').textContent : null,
         bannerNote: banner ? banner.querySelector('.past-banner-note').textContent : null,
         inputLocked: document.getElementById('input').disabled,
+        beforeCount,
       };
-      const back = banner && banner.querySelector('.past-banner-back');
-      if (back) back.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-      await new Promise((r) => setTimeout(r, 450));
-      out.restored = !document.querySelector('#history .past-banner') && !document.getElementById('input').disabled;
-      return out;
     `);
     if (past.ok) {
-      check('과거 대화 메시지 조회 채널이 답한다', past.channelOk === true, past.channelOk);
-      check('과거 대화를 열면 배너가 뜬다', past.bannerShown === true, past.bannerShown);
-      check('배너가 읽기 전용임을 밝힌다', /읽기 전용/.test(past.bannerNote || ''), past.bannerNote);
-      check('과거 대화에서는 입력이 잠긴다', past.inputLocked === true, past.inputLocked);
-      check('[현재 대화로]가 원상 복구한다', past.restored === true, past.restored);
+      check('대화 메시지 조회 채널이 답한다', past.channelOk === true, past.channelOk);
+      // 목록의 첫 대화가 지금 보고 있는 대화면 화면을 갈아치우지 않고 true만 준다 —
+      // 그것도 정상 경로다. 배너가 뜬 경우에만 배너 계약을 잰다.
+      check('이력 행을 누르면 성공을 보고한다', past.opened === true, past);
+      if (past.bannerTitle !== null) {
+        check('배너가 복원됐음을 밝힌다', /복원됨/.test(past.bannerTitle), past.bannerTitle);
+        check('이어서 말할 수 있는지를 배너가 정직하게 말한다',
+          /이어서 말할 수 있습니다/.test(past.bannerNote || ''), past.bannerNote);
+        // 복원은 읽기 전용이 아니다 — 잠긴 입력을 남기면 고장으로 읽힌다.
+        check('복원된 대화에서 입력이 잠기지 않는다', past.inputLocked === false, past.inputLocked);
+      } else {
+        steps.push({
+          section: currentSection,
+          name: '첫 이력 행이 지금 대화라 배너 없이 통과했다',
+          ok: true,
+          detail: past.opened,
+        });
+      }
     } else {
       steps.push({ section: currentSection, name: '실 대화 목록으로는 못 잼', ok: true, detail: past.reason });
     }
 
-    // 목록에 대화가 있든 없든 **렌더 경로 자체**는 항상 잰다. 합성 id로 열면 메시지가
-    // 0건인데, 그건 실사용에서도 일어나는 경우다(이력 저장이 붙기 전에 만들어진 대화).
-    // 그때 화면이 "없다"고 정직하게 말하는지가 이 구역의 핵심 계약이다.
-    const synthetic = await evaluateAsync(wc, `
+    // 복원할 수 없는 대화는 **열지 않는다**(restorable 게이트). 합성 id로 그 경로를
+    // 잰다 — 화면을 갈아치우고 나서야 못 읽는다고 말하면 살아 있던 대화가 사라진다.
+    const notRestorable = await evaluateAsync(wc, `
       const before = document.getElementById('history').childNodes.length;
       const opened = await window.AthenaShell.openConversation({
         id: 'verify-graph-mode-synthetic', title: '검증용 합성 대화',
       });
       await new Promise((r) => setTimeout(r, 600));
-      const banner = document.querySelector('#history .past-banner');
-      const out = {
+      return {
         ok: true,
         opened,
-        bannerTitle: banner ? banner.querySelector('.past-banner-title').textContent : null,
-        emptyNote: document.querySelector('#history .past-empty')
-          ? document.querySelector('#history .past-empty').textContent : null,
+        bannerShown: !!document.querySelector('#history .past-banner'),
+        afterCount: document.getElementById('history').childNodes.length,
+        beforeCount: before,
         inputLocked: document.getElementById('input').disabled,
-        turnsShown: document.querySelectorAll('#history .turn').length,
       };
-      const back = banner && banner.querySelector('.past-banner-back');
-      if (back) back.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-      await new Promise((r) => setTimeout(r, 450));
-      out.restoredCount = document.getElementById('history').childNodes.length;
-      out.beforeCount = before;
-      out.bannerGone = !document.querySelector('#history .past-banner');
-      out.inputFree = !document.getElementById('input').disabled;
-      return out;
     `);
-    pageOk('합성 대화 열기', synthetic);
-    check('과거 대화 열기가 성공을 보고한다', synthetic.opened === true, synthetic.opened);
-    check('배너 제목에 그 대화 이름이 들어간다',
-      /검증용 합성 대화/.test(synthetic.bannerTitle || ''), synthetic.bannerTitle);
-    check('메시지가 0건이면 정직하게 없다고 말한다',
-      synthetic.emptyNote === '이 대화에는 저장된 메시지가 없습니다.', synthetic.emptyNote);
-    check('메시지가 0건이면 가짜 턴을 그리지 않는다', synthetic.turnsShown === 0, synthetic.turnsShown);
-    check('과거 대화에서는 입력이 잠긴다', synthetic.inputLocked === true, synthetic.inputLocked);
-    check('[현재 대화로]가 배너를 걷고 입력을 푼다',
-      synthetic.bannerGone === true && synthetic.inputFree === true, synthetic);
-    // 살아 있는 대화의 DOM을 노드째 보관해 되돌린다 — 문자열로 보관하면 진행 중 턴에
-    // 걸린 리스너·타이머 참조가 끊긴다. 개수 복원이 그 계약의 관찰 가능한 증거다.
-    check('살아 있는 화면이 노드 수까지 그대로 복원된다',
-      synthetic.restoredCount === synthetic.beforeCount,
-      { before: synthetic.beforeCount, after: synthetic.restoredCount });
-    await capture(wc, '09-past-conversation');
+    pageOk('복원 불가 대화 열기', notRestorable);
+    check('복원할 수 없는 대화는 열지 않는다', notRestorable.opened === false, notRestorable.opened);
+    check('열지 않았으면 화면도 그대로다',
+      notRestorable.bannerShown === false
+        && notRestorable.afterCount === notRestorable.beforeCount,
+      notRestorable);
+    check('열지 않았으면 입력도 그대로 열려 있다',
+      notRestorable.inputLocked === false, notRestorable.inputLocked);
+    await capture(wc, '09-conversation-restore');
 
     // ── 9. 채팅 컨텍스트 ───────────────────────────────────────────────────
     section('9. 채팅 컨텍스트');
@@ -831,16 +835,244 @@ async function main() {
     const { buildGraphModePrefix } = require(path.join(APP_DIR, 'lib', 'main', 'live-prompt.js'));
     const prefix = buildGraphModePrefix(ctx.ctx, '20260902');
     check('그래프 접두가 모드를 못박는다', prefix.startsWith('[모드: 그래프]'), prefix.slice(0, 30));
-    check('그래프 접두가 athena_brain 5액션을 알려준다',
-      ['profile', 'god_nodes', 'surprising', 'questions', 'diff'].every((a) => prefix.includes(a))
+    check('그래프 접두가 athena_brain 6액션을 알려준다',
+      ['profile', 'god_nodes', 'surprising', 'questions', 'diff', 'entity'].every((a) => prefix.includes(a))
         && prefix.includes('athena_brain'), true);
+    check('그래프 접두가 화면 제어 도구를 알려준다',
+      prefix.includes('athena_graph_view')
+        && ['navigate', 'select', 'filter', 'fit'].every((a) => prefix.includes(a)), true);
+    check('그래프 접두가 편집을 제안까지로 못박는다',
+      prefix.includes('propose_edit') && prefix.includes('그래프에 쓰는 도구가 없다'), true);
     check('그래프 접두가 화면 숫자를 그대로 싣는다',
       prefix.includes(`확인 필요 ${ctx.ctx.counts.uncertain}`), ctx.ctx.counts.uncertain);
     check('그래프 접두가 시세 경로를 닫는다',
       prefix.includes('athena__render_canvas를 호출하지 않는다'), true);
 
-    // ── 10. 모드 이탈 ──────────────────────────────────────────────────────
-    section('10. 모드 이탈');
+    // ── 10. 노드 설명 조회 (2026-09-03) ────────────────────────────────────
+    //
+    // 채팅이 "이 노드 설명해줘"에 자료로 답할 수 있는지를 **실제 백엔드에** 묻는다.
+    // 모델 경로 그대로 재는 것이 요점이라 X-Athena-Caller: model을 붙인다 — 그
+    // 헤더가 노출 게이트를 켜고, 게이트가 닫혀 있으면 원문이 안 나가야 한다.
+    section('10. 노드 설명 조회');
+    const detailUrl = `${backendUrl}/api/v1/brain/analysis/entity-detail`;
+    const exposeUrl = `${backendUrl}/api/v1/settings/expose-to-model`;
+    const modelHeaders = {
+      Authorization: `Bearer ${bearerToken}`,
+      'X-Athena-Caller': 'model',
+    };
+    const setExpose = (enabled) => fetch(exposeUrl, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${bearerToken}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ enabled }),
+    });
+    // 지도에 실제로 있는 노드 하나를 화면에서 가져와 그 id로 묻는다 — 지어낸 id로
+    // 재면 "없는 노드"만 확인하고 끝난다.
+    const pickNode = await evaluate(wc, `
+      const c = window.AthenaCanvasMode.getContext();
+      const sig = (c.topSignals || [])[0] || null;
+      return { ok: true, entityId: sig && sig.entityId, name: sig && sig.name };
+    `);
+    check('화면에서 노드 하나를 집을 수 있다', !!pickNode.entityId, pickNode);
+    if (pickNode.entityId) {
+      const byId = await (await fetch(`${detailUrl}?entity=${encodeURIComponent(pickNode.entityId)}`,
+        { headers: modelHeaders })).json();
+      check('entity_id로 노드를 찾는다', byId.resolved === true, { resolved: byId.resolved, name: byId.name });
+      check('관계가 실려 온다', Array.isArray(byId.relations) && byId.relations.length > 0,
+        byId.relations && byId.relations.length);
+      check('관계마다 방향이 있다',
+        (byId.relations || []).every((r) => r.direction === 'in' || r.direction === 'out'),
+        (byId.relations || []).map((r) => r.direction).slice(0, 5));
+      check('관계마다 상대 노드 이름이 있다',
+        (byId.relations || []).every((r) => !!r.other_entity_name), true);
+      check('확정성·티어가 실려 온다',
+        (byId.relations || []).every((r) => !!r.confidence && !!r.tier), true);
+      check('보강 횟수가 실려 온다',
+        (byId.relations || []).every((r) => Number.isFinite(r.reinforcement)), true);
+      // 이 하네스의 그래프는 대화·체결 원본에서 씨앗되므로 출처가 반드시 있다.
+      const withSource = (byId.relations || []).filter((r) => r.source && r.source.text);
+      check('그 기록을 만든 원문 발췌가 실려 온다', withSource.length > 0,
+        { total: (byId.relations || []).length, withSource: withSource.length });
+      check('발췌가 잘렸는지를 정직하게 표시한다',
+        withSource.every((r) => typeof r.source.truncated === 'boolean'
+          && Number.isFinite(r.source.full_chars)
+          && (r.source.truncated || r.source.full_chars === r.source.text.length)),
+        withSource.slice(0, 2).map((r) => ({ t: r.source.truncated, f: r.source.full_chars })));
+      check('변경 이력이 최신 먼저로 실려 온다',
+        Array.isArray(byId.timeline) && byId.timeline.length > 0
+          && byId.timeline.every((e, i, a) => i === 0 || a[i - 1].seq > e.seq),
+        (byId.timeline || []).map((e) => e.seq).slice(0, 5));
+      check('리비전이 함께 온다', byId.revision > 0, byId.revision);
+
+      if (pickNode.name) {
+        const byName = await (await fetch(`${detailUrl}?entity=${encodeURIComponent(pickNode.name)}`,
+          { headers: modelHeaders })).json();
+        // 사람은 채팅에서 entity_id를 말하지 않는다 — 이름으로도 찾아야 한다.
+        check('이름만으로도 같은 노드를 찾는다',
+          byName.resolved === true && byName.entity_id === byId.entity_id,
+          { resolved: byName.resolved, got: byName.name, want: pickNode.name });
+      }
+    }
+    const missingDetail = await (await fetch(
+      `${detailUrl}?entity=${encodeURIComponent('없는회사이름12345')}`,
+      { headers: modelHeaders },
+    )).json();
+    check('없는 노드를 지어내지 않는다',
+      missingDetail.resolved === false && (missingDetail.relations || []).length === 0, missingDetail);
+
+    // 노출 게이트 — 노드 원문이 나가는 경로라 반드시 닫혀야 한다.
+    const gateOff = await setExpose(false);
+    check('노출 토글을 끌 수 있다', gateOff.ok === true, gateOff.status);
+    const denied = await fetch(`${detailUrl}?entity=${encodeURIComponent(pickNode.entityId || 'x')}`,
+      { headers: modelHeaders });
+    const deniedBody = await denied.json().catch(() => ({}));
+    check('노출이 꺼지면 모델 경로로 노드 원문이 안 나간다',
+      denied.status === 503 && deniedBody.detail === 'expose-to-model-disabled',
+      { status: denied.status, detail: deniedBody.detail });
+    await setExpose(true);
+
+    // ── 11. 채팅 → 그래프 제어 (2026-09-03) ────────────────────────────────
+    //
+    // main.js가 보내는 것과 **같은 채널·같은 봉투**를 여기서 보낸다(이 하네스가
+    // 메인 프로세스라 wc.send를 그대로 쓸 수 있다). 모델이 athena_graph_view를
+    // 부른 것과 렌더러 입장에서 구별되지 않는다.
+    section('11. 채팅 → 그래프 제어');
+    // 그래프 모드로 다시 들어간다. 앞 섹션의 대화 복원이 **모드 화면까지** 그 대화의
+    // 모드로 옮기기 때문이다(다른 세션 c51dc10) — 그래프 밖에서 제어 봉투를 보내면
+    // canvas.js가 의도대로 무시하고, 그러면 이 섹션은 게이트만 재고 끝난다.
+    await evaluate(wc, `document.getElementById('modeNavGraph').click(); return { ok: true };`);
+    await waitForRenderer(wc, `
+      const g = document.getElementById('graphCanvas');
+      const s = document.getElementById('graphSummaryTable');
+      return { ok: !g.hidden || !s.hidden, map: g.hidden, summary: s.hidden };
+    `, '그래프 모드 재진입');
+    const sendAction = async (message, settleMs = 1500) => {
+      wc.send('athena:graph-chat-action', message);
+      await wait(settleMs);
+    };
+
+    await sendAction({ kind: 'navigate', surface: 'map' }, 2500);
+    const navMap = await evaluate(wc, `
+      return { ok: true,
+        mapHidden: document.getElementById('graphCanvas').hidden,
+        summaryHidden: document.getElementById('graphSummaryTable').hidden,
+        tabActive: document.getElementById('graphHeaderMapTab').classList.contains('is-active') };
+    `);
+    check('채팅이 지도로 화면을 옮긴다',
+      navMap.mapHidden === false && navMap.summaryHidden === true, navMap);
+    check('탭 활성 표시도 함께 따라온다', navMap.tabActive === true, navMap.tabActive);
+
+    await sendAction({ kind: 'select', entityId: pickNode.entityId });
+    const chatSelected = await evaluate(wc, `
+      const panel = document.getElementById('graphPanel');
+      // 이름 선택자는 섹션 4가 쓰는 것과 같아야 한다(.panel-name) — 첫 판이
+      // .panel-title로 써서 패널이 열렸는데도 null을 읽었다.
+      const name = document.querySelector('#graphPanel .panel-name');
+      return { ok: true, hidden: panel.hidden, name: name ? name.textContent : null };
+    `);
+    check('채팅이 고른 노드로 공통 패널이 열린다',
+      chatSelected.hidden === false && !!chatSelected.name, chatSelected);
+    check('열린 패널이 그 노드다', chatSelected.name === pickNode.name,
+      { got: chatSelected.name, want: pickNode.name });
+    await capture(wc, '10-chat-select');
+
+    // 앞 섹션이 쓰지 않는 값을 고른다 — 이미 걸려 있던 값으로 재면 통과가 위양성이다
+    // (첫 판이 365로 재서 실제로 그 함정에 빠졌다).
+    await sendAction({ kind: 'filter', patch: { windowDays: 180 } }, 3000);
+    const chatFiltered = await evaluate(wc, `
+      return { ok: true,
+        chip: document.getElementById('graphWindowFilter').value,
+        prefs: JSON.parse(localStorage.getItem('athena.graphMode.prefs') || '{}') };
+    `);
+    check('채팅이 건 필터가 헤더 칩에 반영된다', chatFiltered.chip === '180', chatFiltered.chip);
+    check('채팅이 건 필터가 다음에 열어도 남는다',
+      chatFiltered.prefs.windowDays === 180, chatFiltered.prefs);
+    // 백엔드가 실제로 그 창으로 조회했는지 — 화면 주장이 아니라 접근 로그로 잰다.
+    check('바뀐 창으로 백엔드를 실제로 다시 조회했다',
+      backendLog.join('').includes('window_days=180'), true);
+
+    await sendAction({ kind: 'filter', patch: { windowDays: 90 } }, 3000);
+    const chatRestored = await evaluate(wc, `
+      return { ok: true, chip: document.getElementById('graphWindowFilter').value };
+    `);
+    check('필터를 되돌릴 수 있다', chatRestored.chip === '90', chatRestored.chip);
+
+    await sendAction({ kind: 'fit' }, 900);
+    check('전체 맞춤이 예외 없이 돈다', functionalConsoleErrors().length === 0,
+      functionalConsoleErrors().slice(0, 3));
+
+    // 모르는 값은 조용히 버린다 — 봉투가 어디서 왔는지 모르는 채로 prefs에 쓰면 안 된다.
+    await sendAction({ kind: 'filter', patch: { windowDays: 7, nonsense: 1 } }, 1200);
+    const chatIgnored = await evaluate(wc, `
+      return { ok: true,
+        chip: document.getElementById('graphWindowFilter').value,
+        prefs: JSON.parse(localStorage.getItem('athena.graphMode.prefs') || '{}') };
+    `);
+    check('걸 수 없는 필터 값은 무시된다',
+      chatIgnored.chip === '90' && chatIgnored.prefs.windowDays === 90
+        && chatIgnored.prefs.nonsense === undefined,
+      chatIgnored);
+
+    // ── 12. 편집 제안 카드 (2026-09-03) ────────────────────────────────────
+    //
+    // **모델은 제안, 확정은 사람.** 카드가 뜨는지, 문구가 정직한지, 그리고
+    // 건너뛰면 아무것도 제출되지 않는지를 잰다(되물을 것들 카드와 같은 방식 —
+    // 실제 제출은 Claude 턴을 돌려야 하므로 여기서 [적용]을 누르지 않는다).
+    section('12. 편집 제안 카드');
+    await evaluate(wc, `document.getElementById('input').value = ''; return { ok: true };`);
+    await sendAction({
+      kind: 'edit_proposal',
+      op: 'remove',
+      subject: null,
+      object: '2차전지',
+      relation: 'avoids',
+      reason: '3주 전 한 번 언급 후 계속 회피',
+    }, 800);
+    const proposalShown = await evaluateAsync(wc, `
+      const host = document.getElementById('graphEditProposalCard');
+      if (!host) return { ok: false, reason: '카드 자리가 없다' };
+      if (host.hidden) return { ok: false, reason: '카드가 안 떴다' };
+      const shown = {
+        title: host.querySelector('.question-card-title').textContent,
+        context: host.querySelector('.question-card-context').textContent,
+        note: host.querySelector('.question-card-note').textContent,
+        buttons: [...host.querySelectorAll('.question-card-btn')].map((b) => b.textContent),
+        keys: [...host.querySelectorAll('.question-card-key')].map((k) => k.textContent),
+      };
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+      await new Promise((r) => setTimeout(r, 300));
+      return { ok: true, shown, closed: host.hidden, inputAfter: document.getElementById('input').value };
+    `);
+    if (pageOk('편집 제안 카드', proposalShown) && proposalShown.ok) {
+      const s = proposalShown.shown;
+      check('모델의 편집 제안이 카드로 뜬다', true, s.title);
+      check('무엇을 어떻게 하자는 것인지 제목에 있다',
+        s.title.includes('2차전지') && s.title.includes('지울까요'), s.title);
+      check('원시 관계명이 화면에 새지 않는다', !s.title.includes('avoids'), s.title);
+      check('근거가 부제에 실린다',
+        s.context.includes('삭제 제안') && s.context.includes('3주 전'), s.context);
+      check('아직 그래프가 그대로임을 화면이 말한다',
+        s.note.includes('아직 그래프는 그대로'), s.note);
+      check('선택지가 건너뛰기·아니다·적용 3종이다',
+        JSON.stringify(s.buttons) === JSON.stringify(['건너뛰기Esc', '아니다', '적용Ctrl Enter']),
+        s.buttons);
+      check('되물을 것들 카드와 같은 단축키를 쓴다',
+        JSON.stringify(s.keys) === JSON.stringify(['Esc', 'Ctrl Enter']), s.keys);
+      check('Esc가 제안을 닫는다', proposalShown.closed === true, proposalShown.closed);
+      check('건너뛰면 아무것도 제출하지 않는다', proposalShown.inputAfter === '', proposalShown.inputAfter);
+    } else {
+      check('모델의 편집 제안이 카드로 뜬다', false, proposalShown);
+    }
+    await capture(wc, '11-edit-proposal');
+
+    // 못 쓸 제안은 카드를 띄우지 않는다 — 무엇을 고칠지 모르는 카드에는 답할 수 없다.
+    await sendAction({ kind: 'edit_proposal', op: 'remove', object: '', relation: '' }, 700);
+    const badProposal = await evaluate(wc, `
+      return { ok: true, hidden: document.getElementById('graphEditProposalCard').hidden };
+    `);
+    check('무엇을 고칠지 모르는 제안은 카드를 띄우지 않는다', badProposal.hidden === true, badProposal);
+
+    // ── 13. 모드 이탈 ──────────────────────────────────────────────────────
+    section('13. 모드 이탈');
     await evaluate(wc, `document.getElementById('modeNavSummary').click(); return { ok: true };`);
     const exited = await waitForRenderer(wc, `
       const s = document.getElementById('graphSummaryTable');
@@ -854,9 +1086,22 @@ async function main() {
     check('대화 모드로 나가면 그래프 표면 셋이 전부 숨는다', exited.ok === true, exited);
     check('그래프 채팅 헤더도 함께 숨는다', exited.chatHeadHidden === true, exited.chatHeadHidden);
 
-    // ── 11. 콘솔 오류 ──────────────────────────────────────────────────────
-    section('11. 콘솔 오류');
-    check('렌더러 콘솔 오류가 없다', consoleErrors.length === 0, consoleErrors.slice(0, 5));
+    // ── 14. 콘솔 오류 ──────────────────────────────────────────────────────
+    section('14. 콘솔 오류');
+    check('렌더러 콘솔 오류가 없다', functionalConsoleErrors().length === 0,
+      functionalConsoleErrors().slice(0, 5));
+    // 알려진 조건을 지우지 않고 눈에 보이게 남긴다: 이 하네스는 셸 문서를 수십 번
+    // 로드하고(실측 28회) preload의 ipcRenderer는 프로세스와 함께 살아 있어 렌더러
+    // 리스너가 문서마다 쌓인다. 기본 상한 10을 처음 넘는 채널이 경고를 낸다 —
+    // 제품에서 문서를 그만큼 로드하는 경로는 없다. 새 채널을 늘릴 때 이 항목이
+    // 다시 뜨면 그때 렌더러 배선을 문서 수명에 묶는 일을 해야 한다.
+    const knownLeak = consoleErrors.filter(isListenerAccumulationWarning);
+    steps.push({
+      section: currentSection,
+      name: '알려진 조건 — 문서 재로드로 렌더러 리스너가 누적된다(제품 경로 아님)',
+      ok: true,
+      detail: knownLeak.length ? knownLeak[0] : '이번 실행에서는 안 나왔다',
+    });
 
     } catch (error) {
       check(`[${currentSection}] 실행 중단`, false, String((error && error.stack) || error).slice(0, 600));

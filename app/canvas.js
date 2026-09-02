@@ -3164,13 +3164,30 @@ function renderSummaryUpdatedAt(entries) {
 // change가 부르는 GraphPrefs.writePrefs()+applyGraphFilterChange(). 채팅용 두 번째
 // 경로를 만들면 한쪽만 고치는 실수가 나고, 두 입구가 다른 상태를 남긴다.
 //
-// edit_proposal만 다르다 — 그건 화면 상태가 아니라 사람에게 물을 것이라 채팅 쪽
-// (chat.js의 제안 카드)이 받는다. 이 파일은 그것을 그리지 않는다.
-window.athena.on('athena:graph-chat-action', async (message) => {
+// edit_proposal만 다르다 — 그건 화면 상태가 아니라 사람에게 물을 것이라 채팅 쪽이
+// 그린다. 이 파일은 그리지 않고 훅으로 넘긴다(shell.js openGraphEditProposal).
+// 그 채널의 **구독은 여기 하나뿐**이다: 두 파일이 각각 구독하면 페이지 로드마다
+// 리스너가 두 개씩 쌓여 ipcRenderer 상한을 이 채널만 먼저 넘었다(전수 검증 실측).
+// 구독 해제를 들고 있다가 문서가 내려갈 때 푼다. 한 렌더러 프로세스에서 문서를
+// 여러 번 로드하면(전수 검증 하네스가 그렇게 한다) preload의 ipcRenderer는 살아
+// 있어서 리스너가 로드마다 쌓이고, 이 채널만 상한 10을 먼저 넘어 경고가 났다.
+// 다른 채널이 조용했던 것은 그것들이 먼저 등록돼 상한에 안 닿았을 뿐이다.
+const disposeGraphChatAction = window.athena.on('athena:graph-chat-action', async (message) => {
   if (!message || typeof message !== 'object') return;
+  // 편집 제안은 그래프 기능 밖에서도 유효하다(사람의 답변 문장은 어디서든 보낼 수
+  // 있다) — 아래 진입 게이트보다 앞에 둔다.
+  if (message.kind === 'edit_proposal') {
+    window.AthenaShell.openGraphEditProposal(message);
+    return;
+  }
   // 그래프 기능 밖에 있으면 아무 일도 안 한다 — 캔버스가 다른 모드를 그리는 중에
   // 서브뷰를 갈아치우면 사용자가 보던 화면이 이유 없이 사라진다.
-  if (!graphMode.state.active) return;
+  //
+  // 진입 여부는 state.view다(state.active 같은 필드는 없다 — 첫 판에서 그것을
+  // 읽어 게이트가 **항상** 조기 반환했고, 전수 검증이 그걸 잡았다). 값 비교 대신
+  // store의 술어를 쓴다 — 'graph' 문자열을 여기 또 적으면 store가 바뀔 때 조용히
+  // 어긋난다.
+  if (!window.AthenaLib.GraphModeStore.isGraphView(graphMode.state)) return;
 
   if (message.kind === 'navigate' && SURFACE_TAB_IDS[message.surface]) {
     await graphMode.setSurface(message.surface);
@@ -3211,6 +3228,7 @@ window.athena.on('athena:graph-chat-action', async (message) => {
     graphMode.fitView();
   }
 });
+window.addEventListener('pagehide', disposeGraphChatAction, { once: true });
 
   const relative = window.AthenaLib.GraphSummaryTable.relativeDaysText(
     new Date(latestMs).toISOString(), Date.now());
