@@ -36,6 +36,19 @@ def test_tool_schema_lists_allowed_actions_only():
     assert "사람이" in tool.description or "사용자가" in tool.description
 
 
+def test_tool_description_says_canvas_applies_immediately():
+    """phase-3(2026-09-02 사용자 결정) — 초안 카드·[적용]이 아니라 바로 반영 · 되돌리기다."""
+    (tool,) = backtest_tools.builtin_tool_defs()
+    action_desc = tool.inputSchema["properties"]["action"]["description"]
+    assert "바로 반영된다" in action_desc
+    assert "[되돌리기]" in action_desc
+    assert "[적용]" not in action_desc
+    assert "적용하고" not in action_desc
+    assert "바로 반영된다" in tool.description
+    assert "[되돌리기]" in tool.description
+    assert "[적용]" not in tool.description
+
+
 @pytest.mark.asyncio
 @pytest.mark.parametrize("action", ["backfill", "activate", "deploy", None, 5])
 async def test_state_changing_actions_are_gateway_blocked(action, mock_http_client):
@@ -264,7 +277,7 @@ async def test_read_code_requires_strategy_id(mock_http_client):
 
 @pytest.mark.asyncio
 async def test_propose_code_without_strategy_id_goes_to_canvas_only(mock_http_client):
-    """저장할 전략이 없으면 백엔드를 타지 않는다 — 코드 탭 초안 카드로만 간다."""
+    """저장할 전략이 없으면 백엔드를 타지 않는다 — 캔버스 편집기로 바로 간다."""
 
     async def handler(request):  # 호출 자체가 없어야 한다
         raise AssertionError("strategy_id 없는 propose_code가 백엔드에 도달했다")
@@ -286,7 +299,9 @@ async def test_propose_code_without_strategy_id_goes_to_canvas_only(mock_http_cl
     assert payload["note"] == "골든크로스"
     assert payload["suggest_run"] is True
     assert payload["suggest_validate"] is False
-    assert "적용" in payload["notice"]
+    assert "편집기에 바로 들어갔다" in payload["notice"]
+    assert "사람이 채팅의 버튼을 누른다" in payload["notice"]
+    assert "적용" not in payload["notice"]
 
 
 @pytest.mark.asyncio
@@ -366,7 +381,7 @@ async def test_optimize_cache_shortage_reports_blocked_not_error(mock_http_clien
     assert payload["needed_pages"] == 4
 
 
-# ── propose_spec 규율: 캔버스 초안 카드로만 간다 — 백엔드를 타지 않고 폼도 안 바꾼다 ──
+# ── propose_spec 규율: 캔버스로만 간다 — 백엔드를 타지 않고, 폼 반영은 캔버스가 한다 ──
 
 
 @pytest.mark.asyncio
@@ -386,7 +401,10 @@ async def test_propose_spec_makes_no_http_call_and_echoes_patch(mock_http_client
     assert payload["patch"] == patch
     assert payload["note"] == "삼성전자로"
     assert payload["suggest_run"] is False
-    assert "적용" in payload["notice"]
+    assert "폼에 바로 반영되고" in payload["notice"]
+    assert "오류가 있으면 반영되지 않는다" in payload["notice"]
+    assert "[실행]" in payload["notice"]
+    assert "적용" not in payload["notice"]
 
 
 @pytest.mark.asyncio

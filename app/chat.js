@@ -2716,6 +2716,178 @@ function renderGuardConfirmCard({ current, proposed } = {}, triggerText) {
   _mountTurn(line, card);
 }
 
+// ---------- 백테스트 변경 내역 카드 (5단계, 2026-09-02) ----------
+// 채팅이 athena_backtest로 낸 액션 4종(설정·코드·화면 전환·최적화 제안)은 이제
+// 캔버스에 **바로** 반영된다 — 초안 카드를 띄워놓고 [적용]을 기다리지 않는다
+// (사용자 확정: "바로 반영 + 채팅에 변경 내역·되돌리기"). 대신 무엇이 바뀌었는지와
+// 되돌릴 방법이 여기, 채팅에 남는다. 실행·검증·탐색은 그래도 사람이 이 카드의
+// 버튼을 눌러야 시작된다 — 경계는 그대로다.
+//
+// 구독은 이 파일 하나뿐이다(canvas.js에서 같은 채널을 또 들으면 액션이 두 번
+// 적용된다). 캔버스 API는 canvas.js가 window.AthenaBacktestCanvas로 올려둔다.
+const BACKTEST_CHANGE_TITLES = {
+  spec_draft: '설정 반영',
+  code_draft: '코드 반영',
+  navigate: '탭 이동',
+  optimize_request: '최적화 준비',
+};
+
+function backtestChangeRowText(row) {
+  const label = (row && row.label) || '';
+  const before = (row && row.before) ? String(row.before) : '';
+  const after = (row && row.after) != null ? String(row.after) : '';
+  return before ? `${label} · ${before} → ${after}` : `${label} · ${after}`;
+}
+
+function renderBacktestChangeCard(receipt) {
+  if (!receipt || typeof receipt !== 'object') return;
+
+  const line = document.createElement('div');
+  line.className = 'turn';
+  const card = document.createElement('div');
+  card.className = 'turn-agent backtest-change';
+
+  // 태그 2종 — 무엇을(채움) · 들어갔는지(외곽선, 실패면 초안 색).
+  const head = document.createElement('div');
+  head.className = 'agent-head';
+  const kindPill = document.createElement('span');
+  kindPill.className = 'routine-draft-pill is-filled';
+  kindPill.textContent = BACKTEST_CHANGE_TITLES[receipt.kind] || '백테스트';
+  head.appendChild(kindPill);
+  const statePill = document.createElement('span');
+  statePill.className = receipt.applied ? 'routine-draft-pill' : 'routine-draft-pill is-draft';
+  statePill.textContent = receipt.applied ? '반영됨' : '반영 안 됨';
+  head.appendChild(statePill);
+  card.appendChild(head);
+
+  if (receipt.note) {
+    const note = document.createElement('div');
+    note.className = 'agent-body';
+    note.textContent = receipt.note;
+    card.appendChild(note);
+  }
+
+  (Array.isArray(receipt.rows) ? receipt.rows : []).forEach((row) => {
+    const rowEl = document.createElement('div');
+    rowEl.className = 'backtest-change-row';
+    rowEl.textContent = backtestChangeRowText(row);
+    card.appendChild(rowEl);
+  });
+
+  // 검증에 걸린 변경은 반영되지 않는다 — 오류를 그대로 보여준다(모델은 다음 턴
+  // 컨텍스트의 "대기 중 초안"에서 같은 오류를 읽고 고친다).
+  const errorHost = document.createElement('div');
+  card.appendChild(errorHost);
+  const showErrors = (messages) => {
+    errorHost.textContent = '';
+    (Array.isArray(messages) ? messages : []).forEach((m) => {
+      const errEl = document.createElement('div');
+      errEl.className = 'backtest-change-error';
+      errEl.textContent = String(m);
+      errorHost.appendChild(errEl);
+    });
+  };
+  showErrors(receipt.errors);
+
+  const actions = document.createElement('div');
+  actions.className = 'routine-approval-actions backtest-change-actions';
+  const status = document.createElement('span');
+  status.className = 'agent-mode';
+  const canvasApi = () => window.AthenaBacktestCanvas;
+
+  if (receipt.canUndo) {
+    const undo = _btn('되돌리기', 'routine-btn');
+    undo.addEventListener('click', () => {
+      const api = canvasApi();
+      if (!api || typeof api.undoChatAction !== 'function') return;
+      undo.disabled = true;
+      const res = api.undoChatAction(receipt.id);
+      if (res && res.ok) {
+        // 되돌린 카드에 남길 버튼이 없다 — 같은 지점을 두 번 되돌릴 수는 없다.
+        actions.textContent = '되돌렸습니다';
+        return;
+      }
+      undo.disabled = false;
+      status.textContent = (res && res.reason) || '되돌리지 못했습니다';
+    });
+    actions.appendChild(undo);
+  }
+
+  if (receipt.applied && receipt.suggest_run) {
+    const run = _btn('실행', 'routine-btn routine-btn-approve');
+    run.addEventListener('click', () => {
+      const api = canvasApi();
+      if (!api || typeof api.runFromChat !== 'function') return;
+      const errors = api.runFromChat();
+      if (Array.isArray(errors) && errors.length) {
+        showErrors(errors);
+        status.textContent = '실행 전에 고칠 게 있습니다';
+        return;
+      }
+      showErrors([]);
+      run.disabled = true;
+      status.textContent = '실행을 시작했습니다 — 결과는 캔버스에서 보세요';
+    });
+    actions.appendChild(run);
+  }
+
+  if (receipt.applied && receipt.suggest_validate) {
+    const validate = _btn('검증', 'routine-btn');
+    validate.addEventListener('click', async () => {
+      const api = canvasApi();
+      if (!api || typeof api.validateFromChat !== 'function') return;
+      validate.disabled = true;
+      status.textContent = '검증 중…';
+      let res;
+      try {
+        res = await api.validateFromChat();
+      } catch (err) {
+        res = { ok: false, errors: [String((err && err.message) || err)] };
+      }
+      validate.disabled = false;
+      if (res && res.ok) {
+        showErrors([]);
+        status.textContent = '검증 통과';
+        return;
+      }
+      showErrors((res && res.errors) || ['검증에 실패했습니다']);
+      status.textContent = '검증 실패';
+    });
+    actions.appendChild(validate);
+  }
+
+  // 반영되지 않은 영수증(실행 중 차단)에 살아 있는 버튼을 두지 않는다 — 카드는
+  // "반영 안 됨"이라 적어놓고 탐색만 시작되는 갈라짐을 막는다.
+  if (receipt.kind === 'optimize_request' && receipt.applied) {
+    const start = _btn('탐색 시작', 'routine-btn routine-btn-approve');
+    start.addEventListener('click', () => {
+      const api = canvasApi();
+      if (!api || typeof api.startOptimizeFromChat !== 'function') return;
+      api.startOptimizeFromChat();
+      start.disabled = true;
+      start.textContent = '탐색 시작됨';
+    });
+    actions.appendChild(start);
+  }
+
+  actions.appendChild(status);
+  card.appendChild(actions);
+
+  const notice = document.createElement('div');
+  notice.className = 'agent-source';
+  notice.textContent = '실행·수집·저장·활성화·배포는 버튼으로만 됩니다';
+  card.appendChild(notice);
+
+  _mountTurn(line, card);
+}
+
+window.athena.on('athena:backtest-chat-action', (action) => {
+  const canvas = window.AthenaBacktestCanvas;
+  if (!canvas || typeof canvas.onChatAction !== 'function') return;
+  const receipt = canvas.onChatAction(action);
+  renderBacktestChangeCard(receipt);
+});
+
 // ---------- 주문 확인 모드 — #order (P4, 2026-08-19) ----------
 // 유일하게 미착수였던 모드의 실체(GLOSSARY §1). 온보딩·설정과 같은 형제 패널
 // 문법 — 열리면 #app이 물러나고 높이는 모드가 소유한다. 프리필은 AI(루틴

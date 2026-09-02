@@ -2648,10 +2648,10 @@ const backtestCanvas = window.AthenaLib.BacktestCanvas.createBacktestCanvas({
   },
 });
 backtestCanvas.mount();
-// 채팅이 athena_backtest로 낸 액션 4종(폼 초안·코드 초안·화면 전환·최적화 제안) —
-// main.js trackToolStep이 이 채널로 넘긴다. 카드·탭까지만 움직이고, 실행·저장은
-// 사람이 버튼을 눌러야 시작된다.
-window.athena.on('athena:backtest-chat-action', (action) => backtestCanvas.onChatAction(action));
+// 채팅이 athena_backtest로 낸 액션 4종(설정·코드·화면 전환·최적화 제안)의 구독자는
+// chat.js 하나다 — 액션을 캔버스에 바로 반영하고, 무엇이 바뀌었는지와 [되돌리기]를
+// 채팅 카드로 남긴다(여기서 또 들으면 같은 액션이 두 번 적용된다). 이 전역이 그
+// 배선의 유일한 통로다.
 window.AthenaBacktestCanvas = backtestCanvas;
 
 // --- 에이전트모드 캔버스 배선 (4단계, Paper 보드 39) -------------------------

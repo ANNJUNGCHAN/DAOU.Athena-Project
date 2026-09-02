@@ -49,8 +49,8 @@ _ALLOWED_ACTIONS: tuple[str, ...] = (
     "flow",
     "diagnose",
     "optimize",
-    # 폼 설정 초안 — HTTP를 타지 않고 캔버스 카드로만 간다. 사람이 [적용]을 눌러야 폼에
-    # 반영되고, 실행은 [적용하고 실행]을 눌러야 시작된다.
+    # 폼 설정 — HTTP를 타지 않고 캔버스로 간다. 검증을 통과하면 폼에 바로 반영되고,
+    # 실행은 사람이 채팅의 [실행]을 눌러야 시작된다.
     "propose_spec",
     # 화면 전환(navigate)과 최적화 제안(propose_optimize)도 HTTP를 타지 않고 캔버스로만
     # 간다 — [탐색 시작] 버튼은 여전히 사람이 누른다. list_runs만 읽기 전용 조회다.
@@ -85,12 +85,13 @@ _INPUT_SCHEMA: dict[str, Any] = {
                 "list_strategies/read_code = 저장된 전략과 활성 버전 소스 조회(읽기 전용). "
                 "flow = 전략 코드를 단계 지도로 옮긴다(실행하지 않는다). "
                 "diagnose = 오류 문구와 소스로 원인·수정안을 만든다(적용하지 않는다). "
-                "propose_code = 코드 초안을 낸다 — strategy_id가 있으면 **비활성 버전**으로 "
-                "저장하고, 없으면 캔버스 코드 탭 초안 카드로만 보낸다(HTTP 없음). 어느 쪽이든 "
-                "사람이 diff를 보고 [적용]을 눌러야 편집기·전략에 들어간다. "
+                "propose_code = 코드를 낸다 — strategy_id가 있으면 **비활성 버전**으로 "
+                "저장하고(활성화는 사람 전용), 없으면 캔버스 편집기에 바로 반영된다(HTTP 없음). "
+                "채팅에 변경 내역과 [되돌리기]가 뜬다. "
                 "optimize = 캐시 안에서 파라미터 조합을 훑는다(추가 TR 호출 없음). "
-                "propose_spec = 폼 설정 초안(patch)을 캔버스 카드로 낸다 — 사람이 [적용]을 "
-                "눌러야 폼에 반영되고, 실행은 [적용하고 실행]을 눌러야 시작된다. "
+                "propose_spec = 폼 설정(patch)을 캔버스로 보낸다 — 검증을 통과하면 폼에 바로 "
+                "반영되고 채팅에 변경 내역과 [되돌리기]가 뜬다(오류면 반영되지 않는다). 실행은 "
+                "사람이 채팅의 [실행]을 누른다. "
                 "navigate = 캔버스 탭을 옮긴다(design/result/history/optimize/deploy, "
                 "designTab=form|code|flow). "
                 "propose_optimize = 최적화 탭에 방식을 준비한다 — [탐색 시작]은 사람이 누른다. "
@@ -137,14 +138,14 @@ _INPUT_SCHEMA: dict[str, Any] = {
             "type": "string",
             "description": (
                 "action=read_code일 때 대상 전략 id(필수). propose_code에선 선택 — 넣으면 그 "
-                "전략의 비활성 초안 버전으로 저장되고, 빼면 캔버스 코드 탭 초안 카드로만 간다."
+                "전략의 비활성 초안 버전으로 저장되고, 빼면 캔버스 편집기에 바로 반영된다."
             ),
         },
         "propose_code": {
             "type": "object",
             "description": (
                 "action=propose_code일 때의 입력 — 제안할 **전체 소스**와 왜 바꿨는지. "
-                "저장되든 카드로만 가든 **활성화되지 않는다**."
+                "저장되든 편집기에 바로 반영되든 **활성화되지 않는다**."
             ),
             "required": ["source"],
             "properties": {
@@ -156,13 +157,13 @@ _INPUT_SCHEMA: dict[str, Any] = {
                 "suggest_run": {
                     "type": "boolean",
                     "description": (
-                        "true면 카드에 [적용하고 실행] 버튼이 함께 뜬다 — 실행 여부는 여전히 "
+                        "true면 채팅 변경 카드에 [실행] 버튼이 함께 뜬다 — 실행 여부는 여전히 "
                         "사람이 결정한다."
                     ),
                 },
                 "suggest_validate": {
                     "type": "boolean",
-                    "description": "true면 카드에 [적용하고 검증] 버튼이 함께 뜬다.",
+                    "description": "true면 채팅 변경 카드에 [검증] 버튼이 함께 뜬다.",
                 },
             },
         },
@@ -212,7 +213,7 @@ _INPUT_SCHEMA: dict[str, Any] = {
             "type": "object",
             "description": (
                 "action=propose_spec일 때의 입력 — 백테스트 폼에 제안할 설정 초안. "
-                "캔버스의 초안 카드로만 전달되며 폼에는 사람이 [적용]을 눌러야 반영된다. "
+                "검증을 통과하면 폼에 바로 반영되고, 오류가 있으면 반영되지 않는다. "
                 "실행·수집·저장은 일어나지 않는다."
             ),
             "required": ["patch"],
@@ -361,7 +362,7 @@ _INPUT_SCHEMA: dict[str, Any] = {
                 "suggest_run": {
                     "type": "boolean",
                     "description": (
-                        "true면 카드에 [적용하고 실행] 버튼이 함께 뜬다 — 실행 여부는 여전히 "
+                        "true면 채팅 변경 카드에 [실행] 버튼이 함께 뜬다 — 실행 여부는 여전히 "
                         "사람이 결정한다."
                     ),
                 },
@@ -404,11 +405,11 @@ _DESCRIPTION = (
     "최적화 제안(propose_optimize). run과 optimize는 **캐시가 충분할 때만 즉시 실행된다** — "
     "부족하면 실행하지 않고 blocked 상태로 필요한 수집량을 알려준다(사람이 앱에서 데이터 "
     "수집을 승인해야 한다). propose_code는 strategy_id가 있으면 초안을 저장할 뿐 활성화하지 "
-    "않고, strategy_id가 없으면 코드 탭 초안 카드로만 간다 — 지금 도는 전략은 그대로다. "
-    "propose_spec은 폼 설정 초안을 캔버스 카드로 낼 뿐이다 — 사람이 [적용]을 눌러야 폼에 "
-    "반영된다. propose_optimize도 방식만 준비한다. 실행·탐색 시작·수집·저장·활성화·배포는 "
-    "전부 사람이 카드 버튼을 누른다. 대량 백필(backfill)·전략 버전 활성화(activate)·실전 "
-    "배포(deploy)는 이 툴로 할 수 없다 — 셋 다 사람 클릭 전용이다."
+    "않고, strategy_id가 없으면 캔버스 편집기에 바로 반영된다 — 지금 도는 전략은 그대로다. "
+    "propose_spec은 폼 설정을 캔버스로 보낸다 — 검증을 통과하면 폼에 바로 반영되고, 채팅의 "
+    "[되돌리기]로 되돌린다. propose_optimize도 방식만 준비한다. 실행·탐색 시작·수집·저장·"
+    "활성화·배포는 전부 사람이 카드 버튼을 누른다. 대량 백필(backfill)·전략 버전 "
+    "활성화(activate)·실전 배포(deploy)는 이 툴로 할 수 없다 — 셋 다 사람 클릭 전용이다."
 )
 
 
@@ -459,8 +460,8 @@ async def dispatch(
         return _blocked(f"action={action!r}는 strategy_id(문자열)가 필요하다.")
 
     if action == "propose_code" and not has_strategy_id:
-        # 저장할 전략이 아직 없는 경우 — 백엔드를 타지 않고 코드 탭 초안 카드로만 간다.
-        # 편집기 반영도, 실행·검증도 전부 사람 클릭이다.
+        # 저장할 전략이 아직 없는 경우 — 백엔드를 타지 않고 캔버스 편집기로 바로 간다.
+        # 실행·검증은 사람이 채팅 카드의 버튼을 눌러야 일어난다.
         code_input = arguments.get("propose_code")
         code_input = code_input if isinstance(code_input, dict) else {}
         source = code_input.get("source")
@@ -476,8 +477,7 @@ async def dispatch(
                 "suggest_run": code_input.get("suggest_run") is True,
                 "suggest_validate": code_input.get("suggest_validate") is True,
                 "notice": (
-                    "코드 초안이 캔버스 코드 탭 카드로 전달됐다. 사용자가 [적용]을 눌러야 "
-                    "편집기에 들어가고, 실행은 [적용하고 실행]을 눌러야 시작된다."
+                    "코드가 편집기에 바로 들어갔다. 실행·검증은 사람이 채팅의 버튼을 누른다."
                 ),
             }
         )
@@ -529,8 +529,8 @@ async def dispatch(
         )
 
     if action == "propose_spec":
-        # 백엔드를 타지 않는다 — main.js가 이 결과를 보고 렌더러에 초안 카드를 띄운다.
-        # 폼 반영·실행은 전부 사람 클릭이다.
+        # 백엔드를 타지 않는다 — main.js가 이 결과를 렌더러로 보내고 캔버스가 바로 반영한다.
+        # 검증 오류면 반영되지 않고, 실행은 사람이 채팅 카드의 버튼을 눌러야 일어난다.
         spec_input = arguments.get("propose_spec")
         spec_input = spec_input if isinstance(spec_input, dict) else {}
         patch = spec_input.get("patch")
@@ -544,8 +544,9 @@ async def dispatch(
                 "note": note if isinstance(note, str) else None,
                 "suggest_run": spec_input.get("suggest_run") is True,
                 "notice": (
-                    "초안이 캔버스 카드로 전달됐다. 사용자가 [적용]을 눌러야 폼에 반영되고, "
-                    "실행은 [적용하고 실행]을 눌러야 시작된다."
+                    "설정이 캔버스로 전달됐다. 검증을 통과하면 폼에 바로 반영되고, 오류가 "
+                    "있으면 반영되지 않는다(다음 턴 컨텍스트의 대기 중 초안에 오류가 보인다). "
+                    "실행은 사람이 채팅의 [실행]을 누른다."
                 ),
             }
         )
@@ -576,7 +577,7 @@ async def dispatch(
             # source가 있으면 그 파이썬을 샌드박스에서 돌리고 origin="human"·active=True
             # 버전으로 남기는데, 그걸 모델이 낼 수 있으면 propose_code가 origin을
             # llm_draft로 못박은 이유(§7.3)가 한 칸 옆에서 무너진다. 코드 실행은 사람이
-            # 캔버스에서 [적용하고 실행]을 눌렀을 때만 시작된다.
+            # 캔버스·채팅 카드에서 [실행]을 눌렀을 때만 시작된다.
             run_input = arguments.get("run") or {}
             response = await http_client.post(
                 "/api/v1/backtest/runs",

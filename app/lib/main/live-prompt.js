@@ -215,6 +215,8 @@ function buildLiveSystemPrompt() {
 }
 
 // 백테스트 모드 접두(2026-09-02) — 캔버스가 백테스트 모드일 때만 턴 앞에 붙는다.
+// 초안 카드는 없다(사용자 결정 2026-09-02 "바로 반영 + 채팅에 변경 내역·되돌리기") —
+// 설정·코드는 캔버스에 바로 반영되고, [되돌리기]·[실행]·[검증]은 채팅 카드에 뜬다.
 // 채팅이 캔버스 전체(폼·코드·이동·최적화)를 제어하고, 실행·검증·수집·저장·활성화·
 // 배포·탐색 시작은 사용자가 카드 버튼을 눌러야 일어난다는 규율과, 모델이 되묻거나
 // 수치를 지어내지 않게 현재 화면·폼·대기 초안·코드·마지막 실행·진단·최적화·이력·
@@ -256,10 +258,12 @@ function buildBacktestModePrefix(context, today) {
     `[모드: 백테스트] 오늘: ${today ? String(today) : '미상'}`,
     '사용자는 백테스트 캔버스에 있고, 캔버스는 채팅이 제어한다. 이 턴의 규칙:',
     '- 캔버스 카드를 올리지 않는다 — athena__render_canvas를 호출하지 않는다. athena_search/athena_describe/athena_resolve/athena_call은 종목코드·시세 같은 정보 확인에만 쓴다.',
-    '- 말풍선에 코드·수치 표·지어낸 결과를 쓰지 않는다. 코드는 propose_code로 코드 탭 초안 카드에, 설정은 propose_spec으로 폼 초안 카드에 보낸다. 결과 수치는 아래 컨텍스트나 result·list_runs 액션이 준 값만 말한다 — 없으면 "아직 실행 결과가 없다"고 말한다.',
-    '- 요청별 경로 — 폼 설정: propose_spec(대상→기간·주기→지표→진입 조건→청산 조건→리스크·비용 순서, 한 턴에 한 항목) · 코드 작성/수정: propose_code(전체 파일 — PARAMS 딕셔너리 + def signals(df, p), import athena_bt as bt) · 오류 수정: 아래 마지막 실행 오류·진단·현재 코드를 읽고 propose_code(고친 전체 코드, suggest_run:true) · 실행: 폼이면 propose_spec(빈 patch, suggest_run:true), 코드면 propose_code(현재 코드, suggest_run:true) · 결과 설명: 아래 마지막 실행 · 이력·비교: navigate(history) + list_runs · 최적화: propose_optimize(method) · 흐름 지도: navigate(design, flow) · 배포: navigate(deploy) 후 사람이 한다고 안내 · 데이터 필요량: plan.',
-    '- 실행·검증·수집·저장·활성화·배포·탐색 시작은 사람이 카드 버튼을 누른다. run·optimize·backfill 액션을 직접 부르지 않는다.',
-    '- 이미 채워진 값은 되묻지 않는다. 모르면 짧게 하나만 묻는다. 실행당 종목 1개, 날짜 YYYYMMDD. 답은 두세 문장 — 초안을 냈으면 무엇을 담았는지 한 줄과 [적용] 안내.',
+    '- 말풍선에 코드·수치 표·지어낸 결과를 쓰지 않는다. 결과 수치는 아래 컨텍스트나 result·list_runs 액션이 준 값만 말한다 — 없으면 "아직 실행 결과가 없다"고 말한다.',
+    '- 설정은 athena_backtest action=propose_spec 으로 patch를 보내면 폼에 바로 반영된다 — 검증 오류가 있으면 반영되지 않고 아래 "대기 중 초안"에 오류가 실린다(그 오류를 고쳐 다시 보낸다). 코드는 propose_code로 보내면 편집기에 바로 들어간다. 채팅에는 변경 내역과 [되돌리기]가 뜬다.',
+    '- 요청별 경로 — 폼 설정: propose_spec(대상→기간·주기→지표→진입 조건→청산 조건→리스크·비용 순서, 한 턴에 한 항목) · 코드 작성/수정: propose_code(전체 파일 — PARAMS 딕셔너리 + def signals(df, p), import athena_bt as bt) · 오류 수정: 아래 마지막 실행 오류·진단·현재 코드를 읽고 propose_code(고친 전체 코드, suggest_run:true) · 실행: 폼이면 propose_spec(빈 patch, suggest_run:true), 코드면 propose_code(현재 코드, suggest_run:true) · 결과 설명: 아래 마지막 실행 · 이력·비교: navigate(history) + list_runs · 최적화: propose_optimize(method) · 흐름 지도: navigate(design, flow) · 배포: navigate(deploy) 후 사람이 한다고 안내 · 데이터 필요량: plan. 사용자가 "알아서"·"한 번에"·"전부" 해달라고 하면 한 턴에 필요한 항목을 모두 채운다.',
+    '- 실행은 propose_spec/propose_code에 suggest_run:true를 넣으면 채팅에 [실행] 버튼이 뜬다 — 사람이 누른다. run·optimize·backfill 액션을 직접 부르지 않는다.',
+    '- 실행·검증·수집·저장·활성화·배포·탐색 시작은 사람이 카드 버튼을 누른다.',
+    '- 이미 채워진 값은 되묻지 않는다. 모르면 짧게 하나만 묻는다. 실행당 종목 1개, 날짜 YYYYMMDD. 답은 두세 문장 — 무엇을 바꿨는지 한 줄과 다음 질문 한 줄.',
     `현재 화면: tab=${label(ctx && ctx.tab)} · designTab=${label(ctx && ctx.designTab)} · 실행경로=${label(ctx && ctx.runPath)}`,
     `현재 폼(JSON): ${spec}`,
     `대기 중 초안: ${draft}`,
