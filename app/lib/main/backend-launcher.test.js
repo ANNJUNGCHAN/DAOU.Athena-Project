@@ -83,6 +83,7 @@ test('buildBackendEnv: Electron이 스폰한 제품 백엔드는 brain/routines�
     PATH: 'bin',
     ATHENA_BRAIN_ENABLED: 'true',
     ATHENA_ROUTINES_ENABLED: 'true',
+    ATHENA_BACKTEST_ENABLED: 'true',
     ATHENA_BRAIN_INGEST_SCHEDULE_OWNER: 'external',
     ATHENA_BRAIN_USE_CLAUDE_CLI_EXTRACTION: 'true',
   });
@@ -98,6 +99,7 @@ test('buildBackendEnv: 명시적인 프로세스 override는 true/false 모두 �
   });
   assert.equal(env.ATHENA_BRAIN_ENABLED, 'false');
   assert.equal(env.ATHENA_ROUTINES_ENABLED, 'true');
+  assert.equal(env.ATHENA_BACKTEST_ENABLED, 'true');
   assert.equal(env.ATHENA_BRAIN_USE_CLAUDE_CLI_EXTRACTION, 'false');
   assert.equal(env.ATHENA_BRAIN_INGEST_SCHEDULE_OWNER, 'backend');
   assert.equal(env.OTHER, 'value');
