@@ -134,7 +134,21 @@ function referenceNames(spec) {
   return aliases.concat(['open', 'high', 'low', 'close', 'volume']);
 }
 
-function validate(spec) {
+// 조건이 참조하는 이름이 아는 이름인가. 다중 출력 지표(DONCHIAN → dc_upper·dc_lower·
+// dc_mid, BBANDS → bb_upper…)는 `별칭_출력` 열을 낸다 — 백엔드 compile.py가 그렇게
+// 붙이고 프리셋(52주 신고가 돌파)도 그 이름을 쓴다. 화면은 출력 목록을 모르므로
+// "아는 별칭_무엇"이면 통과시키고 정확한 판정은 백엔드(422)에 맡긴다(2026-09-02 실측:
+// 이 규칙이 없어 52주 신고가 돌파가 폼에서 영영 실행되지 않았다).
+function isKnownName(name, spec) {
+  if (typeof name !== 'string') return false;
+  if (referenceNames(spec).indexOf(name) !== -1) return true;
+  return spec.indicators.some((i) => i.alias && name.startsWith(`${i.alias}_`));
+}
+
+// options.conditions === false 면 진입·청산 조건 검사를 건너뛴다 — 코드 경로(runPath
+// 'code')는 신호를 파이썬이 만들므로 폼의 조건은 실행과 무관하다.
+function validate(spec, options) {
+  const checkConditions = !(options && options.conditions === false);
   const errors = [];
   if (!spec.symbols.length) errors.push('종목을 하나 이상 고르세요');
   if (spec.symbols.some((s) => !isValidStkCd(s))) errors.push('종목코드는 6자리 숫자여야 합니다');
@@ -143,20 +157,21 @@ function validate(spec) {
   } else if (String(spec.fromDt) > String(spec.toDt)) {
     errors.push('종료일은 시작일보다 빠를 수 없습니다');
   }
-  if (!spec.entry.conditions.length) errors.push('진입 조건이 하나도 없습니다');
-  if (!spec.exit.conditions.length) errors.push('청산 조건이 하나도 없습니다');
-  const known = referenceNames(spec);
-  ['entry', 'exit'].forEach((side) => {
-    spec[side].conditions.forEach((c) => {
-      if (known.indexOf(c.indicator) === -1) {
-        errors.push(`${c.indicator}는 정의되지 않은 이름입니다`);
-      }
-      // compare_to는 숫자이거나 아는 이름이어야 한다 — 오타를 실행 전에 잡는다.
-      if (typeof c.compare_to === 'string' && known.indexOf(c.compare_to) === -1) {
-        errors.push(`${c.compare_to}는 정의되지 않은 이름입니다`);
-      }
+  if (checkConditions) {
+    if (!spec.entry.conditions.length) errors.push('진입 조건이 하나도 없습니다');
+    if (!spec.exit.conditions.length) errors.push('청산 조건이 하나도 없습니다');
+    ['entry', 'exit'].forEach((side) => {
+      spec[side].conditions.forEach((c) => {
+        if (!isKnownName(c.indicator, spec)) {
+          errors.push(`${c.indicator}는 정의되지 않은 이름입니다`);
+        }
+        // compare_to는 숫자이거나 아는 이름이어야 한다 — 오타를 실행 전에 잡는다.
+        if (typeof c.compare_to === 'string' && !isKnownName(c.compare_to, spec)) {
+          errors.push(`${c.compare_to}는 정의되지 않은 이름입니다`);
+        }
+      });
     });
-  });
+  }
   [['stop_loss', '손절'], ['take_profit', '익절']].forEach(([key, label]) => {
     const toggle = spec.risk[key];
     if (toggle && toggle.enabled && !(Number(toggle.percent) > 0)) {

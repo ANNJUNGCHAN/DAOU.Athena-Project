@@ -360,8 +360,13 @@ function createBacktestCanvas(options) {
     return SpecModel.toYaml(spec);
   }
 
+  // 코드 경로는 폼의 진입·청산 조건을 검사하지 않는다 — 신호는 파이썬이 만든다.
+  function runErrors() {
+    return SpecModel.validate(spec, { conditions: runPath !== 'code' });
+  }
+
   async function handleRun(allowPartial) {
-    const errors = SpecModel.validate(spec);
+    const errors = runErrors();
     if (errors.length) { setState({ formErrors: errors }); return; }
     setState({ formErrors: [] });
     await startRun(allowPartial);
@@ -853,7 +858,7 @@ function createBacktestCanvas(options) {
   // 카드가 "왜 안 돌았는지"를 그 자리에 적기 위해서다.
   function runFromChat() {
     if (!spec) return ['불러온 전략이 없습니다'];
-    const errors = SpecModel.validate(spec);
+    const errors = runErrors();
     void handleRun(false);
     return errors;
   }

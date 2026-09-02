@@ -1272,3 +1272,18 @@ test('배포 모드 3종의 기본은 승인이다 — 자동 주문이 기본�
   assert.deepEqual(backtestCanvas.DEPLOY_MODES.map((m) => m[0]),
     ['observe', 'approve', 'auto']);
 });
+
+test('코드 경로 실행은 폼의 진입·청산 조건을 검사하지 않는다 — 2026-09-02 52주 실측', async () => {
+  let sent = null;
+  const { container, canvas } = await mounted({
+    run: async (body) => { sent = body; return { run_id: 'r-code' }; },
+    result: async () => ({ status: 'running' }),
+  });
+  await fillForm(container);
+  canvas.onChatAction({ kind: 'code_draft', source: 'PARAMS = {}\ndef signals(df, p):\n    return df\n' });
+  // 폼의 조건을 비운다 — 폼 경로라면 "진입 조건이 하나도 없습니다"로 막힌다.
+  canvas.onChatAction({ kind: 'spec_draft', patch: { entry: { logic: 'AND', conditions: [] } } });
+  assert.deepEqual(canvas.runFromChat(), []);
+  await flush();
+  assert.ok(sent && typeof sent.source === 'string' && sent.source.includes('def signals'));
+});
