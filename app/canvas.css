@@ -231,114 +231,12 @@ html, body { background: transparent; }
   flex: 1 1 auto;
 }
 
-/* 군집 버블 지도(보드 03) — render.js의 renderClusterBubbles(). 색은 전부 여기서
- * 정하고(Paper 보드 03은 군집마다 같은 먹색을 쓴다 — 색을 군집 번호에 쓰면
- * "확인 필요 주황"이라는 유일한 의미색과 경쟁한다), 응집도로 달라지는
- * fill-opacity/stroke-opacity만 인라인으로 온다. */
-/* 버블 아래 흰 바탕 — 연결선이 비쳐 가운데 숫자를 가로지르지 않게 한다. */
-.graph-cluster-bubble-base { fill: #fff; }
-.graph-cluster-bubble { fill: #10131A; stroke: #10131A; stroke-width: 1.5px; }
-.graph-cluster-bubble.is-unnamed-warn {
-  fill: var(--color-warn); stroke: var(--color-warn); stroke-dasharray: 4 3;
-}
-/* 버블 중앙 구성원 수(보드 03) — 고정폭이라 자릿수가 늘어도 중심이 안 흔들린다.
- * 글자 크기는 반지름에 따라 달라져 인라인으로 온다. */
-.graph-cluster-bubble-count {
-  font-family: var(--font-mono); font-weight: 500; letter-spacing: -0.03em;
-  fill: var(--color-k-bright); pointer-events: none;
-}
-.graph-cluster-bubble-count.is-warn { fill: #C26A12; }
-/* 라벨 칩(보드 03) — 흰 배경이 없으면 군집 간 연결선 위에서 글자가 안 읽힌다. */
-.graph-cluster-chip-bg { fill: #fff; fill-opacity: 0.88; }
-.graph-cluster-label { font-family: var(--font-strong); font-size: var(--text-base); fill: var(--color-k-bright); }
-/* 확정 이름이 아닌 제목(AI 추정·규칙 기반 대표) — "· 추정" 접미로도 신호하지만
- * 색까지 낮춰 확정 이름과 한눈에 구분되게 한다(§0 정직성 정책). */
-.graph-cluster-label.is-estimated { font-family: var(--font-body); fill: var(--color-k-soft); }
-.graph-cluster-stats { font-family: var(--font-body); font-size: var(--text-2xs); fill: var(--color-k-hint); }
-.graph-cluster-stats.is-warn { fill: #C26A12; }
-
-/* 군집간 연결선 3종(보드 14 §1.4, 스텝11) — 실선(회색)은 count에 따라 달라지는
- * stroke/stroke-width를 인라인 style로 받는다(버블의 fill-opacity와 같은 이유).
- * 핑크(숨은 연관)·주황(확인 필요, r5 게이팅)은 고정색이라 여기 토큰으로 정한다. */
-.graph-cluster-edge.is-hidden-link { stroke: var(--color-brand); stroke-dasharray: 6 4; }
-.graph-cluster-edge.is-unnamed-warn { stroke: var(--color-warn); stroke-dasharray: 5 4; }
-
-/* 범례(보드 14 §1.5, 스텝11) — render.js가 실제로 쓰인 항목만 그려 넣는다(§0
- * 정직한 데이터 정책). #graphBody의 flex-column화(아래 "그래프 뷰 본문 골격"
- * 참고)로 SVG는 남는 공간을 채우고 범례는 아래 고정폭으로 붙는다. */
-#graphBody > svg.graph-canvas { flex: 1 1 auto; min-height: 0; }
-.graph-cluster-legend {
-  display: flex; align-items: center; gap: 18px; flex-shrink: 0;
-  padding: 11px 18px; border-top: 1px solid var(--color-k-line);
-}
-.graph-cluster-legend-item { display: flex; align-items: center; gap: 6px; }
-/* "점선 = 확인 필요"만 우측 끝에 분리해 붙인다(보드 14 §1.5 "마지막은 flexGrow
- * spacer로 우측 분리") — 새 래퍼 없이 :has()로 그 항목 자체를 미는 쪽을 쓴다. */
-.graph-cluster-legend-item:has(.graph-cluster-legend-label.is-unnamed-warn) { margin-left: auto; }
-.graph-cluster-legend-label { font-family: var(--font-body); font-size: var(--text-xs); color: var(--color-k-soft); white-space: nowrap; }
-.graph-cluster-legend-label.is-unnamed-warn { color: var(--color-warn); }
-/* 이름 출처 캡션 — 다른 범례 항목보다 한 단계 약하게, 우측으로 밀지 않는다. */
-.graph-cluster-legend-label.is-estimated { color: var(--color-k-hint); font-style: italic; }
-.graph-cluster-legend-swatch { display: inline-block; width: 20px; height: 0; border-top-width: 2px; border-top-style: solid; }
-.graph-cluster-legend-swatch.is-solid { border-top-color: var(--color-k-ghost); }
-.graph-cluster-legend-swatch.is-hidden-link { border-top-color: var(--color-brand); border-top-style: dashed; }
-
-/* 2단계 군집 배경 타원(보드 04) — render.js가 지금 보이는 노드들의 바운딩
- * 박스로 계산한다(placed.clusters 좌표는 이 렌더 경로까지 안 온다). 펼친 군집과
- * 이웃 군집을 같은 회색으로 두되 이웃은 한 단계 옅게 — 무엇을 펼쳤는지가
- * 화면에서 읽혀야 한다. */
-.graph-cluster-ellipse { fill: rgba(16, 19, 26, 0.055); }
-.graph-cluster-ellipse.is-neighbour { fill: rgba(16, 19, 26, 0.03); }
-.graph-cluster-ellipse.is-unnamed-warn { fill: rgba(255, 152, 56, 0.07); }
-.graph-cluster-ellipse-label {
-  font-family: var(--font-strong); font-size: var(--text-xs); fill: var(--color-k-soft); letter-spacing: 0.06em;
-}
-.graph-cluster-ellipse-label.is-unnamed-warn { fill: var(--color-warn); font-family: var(--font-body); }
-.graph-cluster-ellipse-label.is-estimated { font-family: var(--font-body); fill: var(--color-k-hint); }
-/* 타원 구성원 수 — "5 / 9"면 지금 5명만 보이고 전체는 9명이라는 뜻이다. */
-.graph-cluster-ellipse-size { font-family: var(--font-mono); font-size: var(--text-2xs); fill: var(--color-k-hint); }
-
-/* 2단계 노드 계층 4종(보드 15 §2.3, 스텝12) — 허브(검정 채움)/leaf(흰 채움+
- * 테두리)는 확정적 데이터(상대 차수)의 추정 분류(§0 r4, 범례 캡션·title
- * 툴팁으로 신호). 선택·무명 오버라이드는 :has() 없이도 이미 부모 .graph-node가
- * 들고 있는 상태 클래스라 자손 선택자로 특이도를 올려 우선순위를 강제한다
- * (§15 비차단 1번 — 선택이 무명 오버라이드보다 우선, 코드 근거는 render.js 참고). */
-/* 노드 채움 3종 — 성향 신호 표의 dot(.summary-row-dot-*)과 같은 인코딩이다.
- * 두 화면이 같은 신호를 같은 모양으로 그려야 표에서 본 것을 지도에서 찾는다. */
-.graph-node-circle.is-fact { fill: var(--color-k-text); }
-.graph-node-circle.is-warn { fill: var(--color-warn); }
-.graph-node-circle.is-soft { fill: #fff; stroke: var(--color-k-hint); stroke-width: 1.5px; }
-.graph-node-circle.is-unnamed-warn { fill: #fff; stroke: rgba(255, 152, 56, 0.75); stroke-width: 1.5px; }
-.graph-node.is-selected .graph-node-circle { stroke: var(--color-brand); stroke-width: 2px; }
-.graph-label { font-family: var(--font-body); font-size: var(--text-xs); fill: var(--color-k-soft); }
-.graph-label.is-fact { font-family: var(--font-strong); fill: var(--color-k-bright); }
-.graph-node.is-selected .graph-label { font-family: var(--font-strong); }
-
-.graph-node-tier-legend { display: flex; gap: 14px; padding: 6px 18px; border-top: 1px solid var(--color-k-line); flex-shrink: 0; }
-.graph-node-tier-caption { font-family: var(--font-body); font-size: var(--text-2xs); color: var(--color-k-hint); font-style: italic; }
-
-/* 2단계 엣지 3종(보드 15 §2.3, 스텝13) — 사실(회색 실선)만 고정 스타일이고,
- * 추론(회색 점선)·숨은연관(핑크 점선)은 확정 색+점선이라 여기 토큰으로 정한다.
- * confidence 메타데이터가 없으면(스텝13-보정 백엔드 예외 미승인/구버전 backend)
- * render.js가 전부 사실 취급으로 폴백해 이 기본 .graph-edge 스타일만 쓴다. */
-.graph-edge { stroke: rgba(16, 19, 26, 0.38); stroke-width: 1.4px; }
-.graph-edge.is-inference { stroke: rgba(16, 19, 26, 0.24); stroke-width: 1.2px; stroke-dasharray: 4 4; }
-.graph-edge.is-hidden-link { stroke: var(--color-brand); stroke-width: 2px; stroke-dasharray: 6 4; }
-
-/* 범례(보드 15 §2.4, 스텝13) — 1단계 군집 범례(.graph-cluster-legend-*)와 같은
- * 모양이지만 화면이 배타적이라(state.stage) 별도 클래스를 쓴다(render.js 주석
- * 참고). "원 크기 = 연결 수"만 항상 뜨고 나머지는 실제로 쓰인 종류만(§0 정책). */
-.graph-node-legend {
-  display: flex; align-items: center; gap: 18px; flex-shrink: 0;
-  padding: 11px 18px; border-top: 1px solid var(--color-k-line);
-}
-.graph-node-legend-item { display: flex; align-items: center; gap: 6px; }
-.graph-node-legend-item:has(.graph-node-legend-label.is-right) { margin-left: auto; }
-.graph-node-legend-label { font-family: var(--font-body); font-size: var(--text-xs); color: var(--color-k-soft); white-space: nowrap; }
-.graph-node-legend-swatch { display: inline-block; width: 20px; height: 0; border-top-width: 1.5px; border-top-style: solid; }
-.graph-node-legend-swatch.is-fact { border-top-color: rgba(16, 19, 26, 0.38); }
-.graph-node-legend-swatch.is-inference { border-top-color: rgba(16, 19, 26, 0.24); border-top-style: dashed; }
-.graph-node-legend-swatch.is-hidden-link { border-top-color: var(--color-brand); border-top-style: dashed; }
+/* 정적 군집 렌더러(render.js)를 지운 자리(2026-09-02) — 1단계 군집 버블·라벨 칩·
+ * 군집간 연결선 3종·군집 범례, 2단계 배경 타원·노드 계층 4종·엣지 3종·노드 범례
+ * 규칙을 함께 걷어냈다. 라이브 지도는 vis-network 캔버스에 그리므로 이 클래스들에
+ * 걸릴 DOM이 더 없다(verify-graph-mode.js가 svg.graph-canvas 0개를 단정한다).
+ * 엣지 3종의 색·점선 값은 live-map.js의 CONFIDENCE 상수가 들고 있다 — 그 파일
+ * 주석이 가리키는 값의 현재 주인이다. */
 
 /* 요약 뷰 본문 골격 — 표 영역(왼쪽, 헤더 아래로 히어로·배너·표가 세로로 쌓인다)
  * + 공통 패널(오른쪽, 스텝8) 좌우 배치(07 §10 스펙). */
@@ -363,8 +261,8 @@ html, body { background: transparent; }
  * 그래서 경계는 JS가 아니라 여기 있다. <canvas>는 원래 자기 밖으로 안 그리므로
  * 클리핑은 공짜고, overflow:hidden은 둥근 모서리를 캔버스에도 먹이기 위한 것이다.
  *
- * 위 SVG 규칙(#graphBody > svg.graph-canvas)과 같은 자리에 같은 방식으로 늘어나야
- * 지도가 헤더 아래 남는 공간을 그대로 채운다. */
+ * #graphBody의 남는 공간을 그대로 채워야 한다 — 지도가 헤더 아래 높이를 다 쓰도록
+ * flex로 늘어난다. */
 .graph-live-map {
   flex: 1 1 auto; min-height: 0;
   margin: 12px 18px 18px;
@@ -701,7 +599,8 @@ html, body { background: transparent; }
 }
 .theme-cluster-title { display: flex; align-items: baseline; gap: 6px; }
 .theme-cluster-name { font-family: var(--font-strong); font-size: var(--text-sm); color: var(--color-k-bright); }
-/* 확정 이름이 아닌 제목(추정) — 지도 버블의 .graph-cluster-label.is-estimated와 같은 톤. */
+/* 확정 이름이 아닌 제목(추정) — 확정 이름과 한눈에 구분되게 색을 한 단계 낮춘다
+ * (§0 정직성 정책). 지도 쪽 같은 규칙은 live-map.js가 들고 있다. */
 .theme-cluster-name.is-estimated { font-family: var(--font-body); color: var(--color-k-soft); }
 .theme-cluster-unnamed-badge {
   font-family: var(--font-body); font-size: var(--text-2xs); color: var(--color-k-hint);
