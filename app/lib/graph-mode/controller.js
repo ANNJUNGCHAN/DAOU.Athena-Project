@@ -676,17 +676,18 @@ function createGraphModeController(deps) {
   // 배치는 이미 있으니 무엇을 보여줄지만 바뀐다, 네트워크 왕복이 필요 없다.
   // 새 fetch 없이 화면만 다시 맞춘다(선택 변경 등).
   //
-  // **라이브 지도에서는 지도를 다시 그리지 않는다.** 옛 정적 시절엔 선택 표시가 SVG
-  // 안에 있어서 stage를 통째로 다시 그려야 했다. 라이브 지도는 자기 상태를 들고
-  // 있으므로 다시 그릴 필요가 없고, 그리면 **정적 렌더러가 캔버스를 덮어써 지도가
-  // 옛 군집 버블 그림으로 되돌아간다** — 노드를 한 번 누르는 것만으로 재현됐다
-  // (2026-09-02, probe-graph-doubleclick.js: 선택 후 hasFrame:false + graph-cluster-legend).
+  // **지도는 다시 그리지 않는다.** 옛 정적 시절엔 선택 표시가 SVG 안에 있어서 stage를
+  // 통째로 다시 그려야 했다. 라이브 지도는 자기 상태를 들고 있어 그럴 필요가 없다 —
+  // 오히려 그리면 정적 렌더러가 캔버스를 덮어써 지도가 옛 군집 버블 그림으로
+  // 되돌아갔다(2026-09-02, probe-graph-doubleclick.js로 재현).
+  //
+  // 정적 렌더러를 지운 뒤에도 그 호출이 한 줄 남아 있었고, vis-network가 없는 경로
+  // (로드 실패 · 라이브 지도를 주입하지 않은 테스트)에서 노드를 고르면
+  // `ReferenceError: renderStage is not defined`로 죽었다 — 라이브 스텁을 주입하는
+  // 단위 테스트는 그 분기를 안 타서 못 잡았다. 이제 분기 자체가 없다: 여기서 하는
+  // 일은 선택 표시와 헤더 갱신뿐이고, 지도를 그리는 유일한 자리는 draw()다.
   function redrawFromCache() {
     if (!lastPlaced || !elements.graphBody) return;
-    if (!liveActive()) {
-      renderStage(lastPlaced);
-      wireNodeClicks();
-    }
     renderSelection();
     renderGraphHeader();
   }
@@ -1103,6 +1104,87 @@ function createGraphModeController(deps) {
       return undefined;
     },
     applyVisibility,
+    // 그래프 모드 채팅에 실을 화면 상태(2026-09-02). backtest-canvas.js의
+    // getContext()와 같은 역할이며, 같은 경로로 흐른다:
+    //   chat.js → main.js → live-prompt.buildGraphModePrefix
+    //
+    // **왜 필요한가.** 그래프 모드에 들어와 있어도 모델은 그래프의 존재조차 몰랐다.
+    // "확인이 필요한 것 3건이 뭐야?"에 "종목 시세·차트·공시 중 어느 쪽인가"라고
+    // 되물은 것이 그 증거다(2026-09-02 제보) — 아는 도구 안에서 답한 것이다.
+    //
+    // **왜 노드를 전부 안 싣나.** cluster-map을 모델 컨텍스트에 쏟는 것은 답이 아니라
+    // 비용이다(brain_tools.py 머리말이 cluster_map 액션을 뺀 이유와 같다). 지금
+    // 40개지만 수백~수천으로 늘 수 있다. 그래서 여기서는 **집계와 지금 보고 있는
+    // 것**만 싣고, 더 깊은 질문은 모델이 athena_brain으로 직접 조회한다.
+    getContext() {
+      const entries = typeof getProfileSummaryEntries === 'function'
+        ? (getProfileSummaryEntries() || []) : [];
+      const surprising = typeof getSurprisingConnections === 'function'
+        ? (getSurprisingConnections() || []) : [];
+      const nodes = (lastPlaced && Array.isArray(lastPlaced.nodes)) ? lastPlaced.nodes : [];
+      const clusters = (lastPlaced && Array.isArray(lastPlaced.clusters)) ? lastPlaced.clusters : [];
+      const panel = state.panel;
+      return {
+        available,
+        surface: state.surface,
+        revision: state.revision,
+        filters: typeof getFilters === 'function' ? getFilters() : null,
+        counts: {
+          entities: nodes.length,
+          relations: (lastPlaced && Array.isArray(lastPlaced.edges)) ? lastPlaced.edges.length : 0,
+          clusters: clusters.filter((c) => c.cluster !== -1).length,
+          unassigned: nodes.filter((n) => n.cluster === -1).length,
+          signals: entries.length,
+          hiddenLinks: surprising.length,
+          // "확인이 필요한 것 N건" — 화면 배너와 같은 값이어야 한다. 채팅이 다른
+          // 숫자를 말하면 사용자는 둘 중 어느 쪽을 믿어야 하는지 알 수 없다.
+          uncertain: entries.filter((e) => e && e.confidence === 'AMBIGUOUS').length,
+        },
+        clusters: clusters.filter((c) => c.cluster !== -1).slice(0, 10).map((c) => ({
+          cluster: c.cluster,
+          size: c.size,
+          cohesion: c.cohesion,
+          title: clusterTitle(c).text,
+          estimated: clusterTitle(c).estimated,
+        })),
+        // 상위 신호는 표의 "상위 5"가 아니라 창 전체에서 보강 순으로 고른다 —
+        // 표가 5개만 보여도 모델은 더 물어볼 수 있어야 한다.
+        topSignals: entries.slice(0, 12).map((e) => ({
+          name: e.entity_name,
+          kind: e.entity_kind,
+          relation: e.relation_kind,
+          rationale: e.rationale,
+          reinforcement: e.reinforcement,
+          confidence: e.confidence,
+          tier: e.tier,
+          observedAt: e.observed_at,
+        })),
+        hiddenLinks: surprising.slice(0, 6).map((s) => ({
+          source: s.source_name,
+          target: s.target_name,
+          score: s.surprise_score,
+          kinds: s.kinds,
+        })),
+        selected: panel ? {
+          entityId: state.selectedEntityId,
+          name: panel.name,
+          kind: panel.kind,
+          cluster: panel.cluster,
+          clusterTitle: panel.clusterTitle,
+          degree: panel.degree,
+          relation: panel.relation,
+          rationale: panel.rationale,
+          reinforcement: panel.reinforcement,
+          confidence: panel.confidence,
+          tier: panel.tier,
+          relations: Array.isArray(panel.relations)
+            ? panel.relations.slice(0, 15).map((r) => ({
+              label: r.label, name: r.name, count: r.count, hidden: r.hidden,
+            }))
+            : [],
+        } : null,
+      };
+    },
     // 노드 선택 — 렌더러와 무관한 진입점(2026-09-02). 라이브 지도의 onSelect가
     // 부르는 것과 **같은 경로**라, 지도 클릭과 이 호출이 같은 패널을 연다.
     //

@@ -3,7 +3,8 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const {
-  buildBacktestModePrefix, buildLivePrompt, buildLiveSystemPrompt, buildLiveTurnPrompt,
+  buildBacktestModePrefix, buildGraphModePrefix, buildLivePrompt, buildLiveSystemPrompt,
+  buildLiveTurnPrompt,
 } = require('./live-prompt');
 
 test('persistent prompt split keeps generation rules static and turn text isolated', () => {
@@ -466,4 +467,104 @@ test('buildBacktestModePrefix: 초안 카드·[적용] 문구는 접두에서 �
   assert.ok(!p.includes('[적용]'));
   assert.ok(!p.includes('적용하고 실행'));
   assert.ok(p.includes('실행 전 확인: 없음'));
+});
+
+// ── 그래프 모드 접두(2026-09-02) ─────────────────────────────────────────────
+// 이 접두가 없던 동안 모델은 그래프의 존재조차 몰랐다: "확인이 필요한 것 3건이
+// 뭐야?"에 "종목 시세·일봉 차트·공시 중 어느 쪽인가"라고 되물었다(실측 제보).
+// 아래 테스트가 고정하는 것은 그 재발 조건이다 — 그래프 모드임을 말하는가,
+// athena_brain을 알려주는가, 화면 숫자를 그대로 싣는가, 없는 것을 지어내지 말라고
+// 하는가.
+
+const GRAPH_CONTEXT = {
+  available: true,
+  surface: 'summary',
+  revision: 34,
+  filters: { windowDays: 90, minDegree: 0, summarySort: 'reinforcement' },
+  counts: {
+    entities: 40, relations: 34, clusters: 7, unassigned: 7,
+    signals: 48, hiddenLinks: 5, uncertain: 3,
+  },
+  clusters: [{ cluster: 0, size: 7, cohesion: 0.29, title: '미국 지수 ETF', estimated: true }],
+  topSignals: [{
+    name: '분산 투자', kind: 'preference', relation: '선호',
+    rationale: '동일 산업 중복을 피한다', reinforcement: 5,
+    confidence: 'INFERRED', tier: 'conversational',
+  }],
+  hiddenLinks: [{ source: '배당·인컴', target: 'ACE 미국배당다우존스', score: 0.82, kinds: ['소속'] }],
+  selected: {
+    entityId: 'e:a', name: '배당·인컴', kind: 'theme', cluster: 2,
+    clusterTitle: '배당·인컴', degree: 7, confidence: 'EXTRACTED', tier: 'brokerage',
+    relations: [{ label: '노출', name: '배당형 자산 비중 34%', count: 2, hidden: false }],
+  },
+};
+
+test('buildGraphModePrefix: 그래프 모드임과 "모든 질문은 그래프 질문"을 못박는다', () => {
+  const p = buildGraphModePrefix(GRAPH_CONTEXT, '20260902');
+  assert.ok(p.startsWith('[모드: 그래프] 오늘: 20260902'));
+  assert.ok(p.includes('이 모드의 모든 질문은 이 그래프에 대한 질문이다'));
+  assert.ok(p.includes('종목 시세·차트·공시 질문으로 해석하지 마라'));
+});
+
+test('buildGraphModePrefix: athena_brain 5개 액션을 알려준다(모델이 조회할 길)', () => {
+  const p = buildGraphModePrefix(GRAPH_CONTEXT, '20260902');
+  for (const action of ['profile', 'god_nodes', 'surprising', 'questions', 'diff']) {
+    assert.ok(p.includes(action), `${action} 액션이 접두에 없다`);
+  }
+  assert.ok(p.includes('노출이 꺼져 있다'), '503(토글 꺼짐)을 지어내지 말라는 지시가 없다');
+});
+
+test('buildGraphModePrefix: 카드·시세 도구를 닫는다', () => {
+  const p = buildGraphModePrefix(GRAPH_CONTEXT, '20260902');
+  assert.ok(p.includes('athena__render_canvas를 호출하지 않는다'));
+  assert.ok(p.includes('시세·차트 도구'));
+});
+
+test('buildGraphModePrefix: 화면 숫자를 그대로 싣는다(채팅과 배너가 다른 말을 하지 않게)', () => {
+  const p = buildGraphModePrefix(GRAPH_CONTEXT, '20260902');
+  assert.ok(p.includes('엔티티 40 · 관계 34 · 군집 7 · 미분류 7 · 성향 신호 48 · 숨은 연관 5 · 확인 필요 3'));
+  assert.ok(p.includes('요약 표'), 'surface를 사람 말로 찍지 않는다');
+  assert.ok(p.includes('"windowDays":90'));
+});
+
+test('buildGraphModePrefix: 사실/추론 구분과 지어내기 금지를 지시한다', () => {
+  const p = buildGraphModePrefix(GRAPH_CONTEXT, '20260902');
+  assert.ok(p.includes('사실과 추론을 섞지 마라'));
+  assert.ok(p.includes('EXTRACTED'));
+  assert.ok(p.includes('AMBIGUOUS'));
+  assert.ok(p.includes('없는 것은 없다고 말한다'));
+  assert.ok(p.includes('투자 판단·매수·매도를 권하지 않는다'));
+});
+
+test('buildGraphModePrefix: 선택된 노드가 실려 온다', () => {
+  const p = buildGraphModePrefix(GRAPH_CONTEXT, '20260902');
+  assert.ok(p.includes('지금 선택된 노드:'));
+  assert.ok(p.includes('배당·인컴'));
+  assert.ok(p.includes('"degree":7'));
+});
+
+test('buildGraphModePrefix: 컨텍스트가 비어도 던지지 않고 정직하게 찍는다', () => {
+  for (const ctx of [null, undefined, {}, { counts: null }]) {
+    const p = buildGraphModePrefix(ctx, null);
+    assert.ok(p.includes('[모드: 그래프] 오늘: 미상'));
+    assert.ok(p.includes('지금 선택된 노드: 없음'));
+    assert.ok(p.includes('모름'));
+  }
+});
+
+test('buildLiveTurnPrompt: canvasMode=graph면 그래프 접두가 붙는다', () => {
+  const out = buildLiveTurnPrompt({
+    userText: '확인이 필요한 것 3건이 뭐야?',
+    canvasMode: 'graph',
+    graphContext: GRAPH_CONTEXT,
+    today: '20260902',
+  });
+  assert.ok(out.startsWith('[모드: 그래프]'));
+  assert.ok(out.endsWith('사용자 질문:\n확인이 필요한 것 3건이 뭐야?'));
+});
+
+test('buildLiveTurnPrompt: 그래프가 아닌 모드는 문자열 호출과 바이트 동일하다', () => {
+  const plain = buildLiveTurnPrompt('무엇이든');
+  assert.equal(buildLiveTurnPrompt({ userText: '무엇이든', canvasMode: 'summary' }), plain);
+  assert.equal(buildLiveTurnPrompt({ userText: '무엇이든' }), plain);
 });

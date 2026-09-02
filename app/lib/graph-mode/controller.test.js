@@ -1186,3 +1186,68 @@ test('D4 — 5 view × 5 표면 배타표: 각 view에서 정확히 그 표면�
     }
   }
 });
+
+// ── 라이브 렌더러가 없는 경로(2026-09-02) ───────────────────────────────────
+// 정적 렌더러를 지운 뒤 redrawFromCache()에 그 호출이 한 줄 남아 있었고,
+// vis-network가 없는 경로에서 노드를 고르면 ReferenceError로 죽었다. 위 테스트들은
+// 전부 라이브 스텁을 주입해 그 분기를 안 타서 못 잡았다 — 여기서 그 경로를 잰다.
+
+test('라이브 렌더러가 없어도 노드 선택이 터지지 않는다(정적 렌더러 잔재 가드)', async () => {
+  const { controller, elements } = setup({
+    payload: payloadTwoClusters, withPanel: true, noLiveMap: true,
+  });
+  await controller.toggle();
+  assert.doesNotThrow(() => controller.selectNode('e:a'));
+  assert.equal(controller.state.selectedEntityId, 'e:a');
+  assert.equal(elements.panel.hidden, false, '패널은 렌더러와 무관하게 열린다');
+});
+
+test('라이브 렌더러가 없으면 빈 화면 대신 정직하게 알린다', async () => {
+  const { controller, elements } = setup({ payload: payloadTwoClusters, noLiveMap: true });
+  await controller.toggle();
+  assert.match(elements.graphBody.textContent, /그래프 렌더러를 불러오지 못했습니다/);
+});
+
+// ── getContext() — 그래프 모드 채팅에 실리는 화면 상태 ──────────────────────
+// 이 계약이 깨지면 채팅이 화면과 다른 숫자를 말한다(사용자는 어느 쪽을 믿을지 모른다).
+
+test('getContext(): 필터·규모·군집·신호·숨은연관·선택을 함께 낸다', async () => {
+  const entries = [
+    { entity_id: 'e:a', entity_name: '반도체', entity_kind: 'theme', relation_kind: '관심', rationale: '질문 4회', reinforcement: 4, confidence: 'AMBIGUOUS', tier: 'conversational' },
+    { entity_id: 'e:b', entity_name: '장비', entity_kind: 'security', relation_kind: '보유', rationale: '잔고', reinforcement: 2, confidence: 'EXTRACTED', tier: 'brokerage' },
+  ];
+  const { controller } = setup({
+    payload: payloadTwoClusters,
+    withPanel: true,
+    getProfileSummaryEntries: () => entries,
+    getFilters: () => ({ windowDays: 90, minDegree: 0, summarySort: 'reinforcement' }),
+  });
+  await controller.toggle();
+  controller.selectNode('e:a');
+  const ctx = controller.getContext();
+  assert.equal(ctx.available, true);
+  assert.equal(ctx.surface, 'summary');
+  assert.deepEqual(ctx.filters, { windowDays: 90, minDegree: 0, summarySort: 'reinforcement' });
+  assert.equal(ctx.counts.signals, 2);
+  // 화면 배너의 "확인이 필요한 것 N건"과 같은 축이어야 한다 — AMBIGUOUS만 센다.
+  assert.equal(ctx.counts.uncertain, 1);
+  assert.ok(ctx.counts.entities > 0);
+  assert.ok(Array.isArray(ctx.clusters));
+  assert.equal(ctx.topSignals[0].name, '반도체');
+  assert.equal(ctx.selected.entityId, 'e:a');
+});
+
+test('getContext(): 아무것도 안 골랐으면 selected는 null이다(지어내지 않는다)', async () => {
+  const { controller } = setup({ payload: payloadTwoClusters, withPanel: true });
+  await controller.toggle();
+  assert.equal(controller.getContext().selected, null);
+});
+
+test('getContext(): 선택 주입(getProfileSummaryEntries 등)이 없어도 빈 배열로 돈다', async () => {
+  const { controller } = setup({ payload: payloadTwoClusters });
+  await controller.toggle();
+  const ctx = controller.getContext();
+  assert.deepEqual(ctx.topSignals, []);
+  assert.deepEqual(ctx.hiddenLinks, []);
+  assert.equal(ctx.counts.uncertain, 0);
+});

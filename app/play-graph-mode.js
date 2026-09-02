@@ -186,6 +186,29 @@ async function main() {
   })()`);
   log(`      라이브 지도: ${JSON.stringify(liveState)}`);
 
+  // 그래프 모드 채팅이 실제로 그래프를 보는지(2026-09-02) — 노드를 하나 고른 뒤
+  // chat.js가 턴에 실어 보낼 컨텍스트를 그대로 찍는다. 여기가 비어 있으면 모델은
+  // 다시 "종목 시세·차트 중 어느 쪽이냐"고 되묻는다.
+  const chatContext = await wc.executeJavaScript(`(() => {
+    const mode = window.AthenaCanvasMode;
+    if (!mode || typeof mode.getContext !== 'function') return { ok: false, reason: 'getContext 없음' };
+    const nodes = (window.__athenaGraphProbeNodes || []);
+    const ctx = mode.getContext();
+    return {
+      ok: true,
+      surface: ctx.surface,
+      available: ctx.available,
+      counts: ctx.counts,
+      clusters: ctx.clusters.length,
+      topSignals: ctx.topSignals.length,
+      hiddenLinks: ctx.hiddenLinks.length,
+      selected: ctx.selected ? ctx.selected.name : null,
+      firstSignal: ctx.topSignals[0] ? ctx.topSignals[0].name : null,
+      nodes: nodes.length,
+    };
+  })()`);
+  log(`      채팅에 실리는 그래프 컨텍스트: ${JSON.stringify(chatContext)}`);
+
   // 자가 확인용 스크린샷 — 화면이 실제로 그려졌는지 사람 없이도 판별한다.
   await wait(4000);
   const shot = await shellWin.webContents.capturePage();
