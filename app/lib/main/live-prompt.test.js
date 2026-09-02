@@ -765,3 +765,119 @@ test('buildBacktestModePrefix: 칸 번호로 말하고 코드 줄 번호는 말�
   assert.ok(p.includes('답 첫 줄에 어느 칸이 어떻게 바뀌는지 한 줄로 적는다'));
   assert.ok(p.includes('실행이 칸에서 멈추면 그 칸 번호로 시작한다'));
 });
+
+// ---- 시각 그래프와 대화형 오류 수정(보드 12~14, 평가 문서 §대화형 오류 수정 계약) ----
+// 여기서 고정하는 것은 두 가지다. (1) 오류가 있는 그래프를 모델이 볼 수 있는가 —
+// 노드 id와 diagnostic이 접두에 없으면 모델은 "어느 포트가 비었나"를 지어낸다.
+// (2) 오류를 만난 모델이 코드/graph JSON을 직접 쓰지 않고 질문 하나 → 비활성 패치
+// 순서로만 움직이는가 — 이 경계가 무너지면 LLM이 전략을 조용히 바꿔 저장한다.
+
+const BT_GRAPH_CONTEXT = {
+  tab: 'design',
+  designTab: 'visual',
+  runPath: 'form',
+  map: {
+    version: 7,
+    nodes: BT_MAP_CONTEXT.map.nodes,
+    graph: {
+      nodes: [
+        { id: 'sma-slow-01', kind: 'sma', label: '느린 이동평균', params: { length: 60 } },
+        { id: 'exit-cross-below-01', kind: 'cross_below', label: '청산 교차', params: {} },
+      ],
+      edges: [
+        {
+          id: 'e-01',
+          from: { node_id: 'sma-slow-01', port: 'value' },
+          to: { node_id: 'exit-cross-below-01', port: 'fast' },
+        },
+      ],
+      diagnostics: [
+        {
+          code: 'BTG-PORT-002', severity: 'error',
+          node_id: 'exit-cross-below-01', port: 'slow',
+          message_ko: '느린 SMA 입력이 없습니다.',
+        },
+        {
+          code: 'BTG-GRAPH-001', severity: 'error',
+          node_id: null, port: null,
+          message_ko: '진입 출력이 없습니다.',
+        },
+      ],
+      validation_state: 'invalid',
+      hashes: { graph: 'g-abc', spec: null },
+    },
+  },
+};
+
+test('buildBacktestModePrefix: 시각 그래프는 노드 id·라벨·종류와 오류를 그대로 싣는다', () => {
+  const p = buildBacktestModePrefix(BT_GRAPH_CONTEXT, '20260903');
+  assert.ok(p.includes('지도 v7 — 시각 그래프(노드 2 · 연결 1):'));
+  assert.ok(p.includes('- sma-slow-01 · 느린 이동평균 (sma)'));
+  assert.ok(p.includes('- exit-cross-below-01 · 청산 교차 (cross_below)'));
+  assert.ok(p.includes('- BTG-PORT-002 @ exit-cross-below-01.slow: 느린 SMA 입력이 없습니다.'));
+  // 위치를 특정할 수 없는 오류는 node_id·port가 null이다(평가 문서 §오류 diagnostic).
+  assert.ok(p.includes('- BTG-GRAPH-001 @ 그래프 전체: 진입 출력이 없습니다.'));
+  assert.ok(p.includes('검증 상태: 오류 있음(invalid)'));
+  // visual_patch의 base_graph_hash로 그대로 되돌려 보낼 값이다.
+  assert.ok(p.includes(`그래프 해시: ${JSON.stringify(BT_GRAPH_CONTEXT.map.graph.hashes)}`));
+  // 칸 번호(①~④)는 그대로 남는다 — 그래프가 왔다고 사람 말 지도가 사라지지 않는다.
+  assert.ok(p.includes('지도 v7 — 대화가 고치는 칸:'));
+  assert.ok(p.includes('- ① 조절할 값을 정합니다: fast 20 (5–60) · slow 60 (20–240)'));
+});
+
+test('buildBacktestModePrefix: 그래프만 있고 칸이 없어도 지도 v{n}과 검증 상태를 낸다', () => {
+  const p = buildBacktestModePrefix({
+    map: {
+      version: 2,
+      graph: {
+        nodes: [], edges: [], diagnostics: [],
+        validation_state: 'valid', hashes: {},
+      },
+    },
+  }, '20260903');
+  assert.ok(p.includes('지도 v2 — 시각 그래프(노드 0 · 연결 0):'));
+  assert.ok(p.includes('오류(diagnostics): 없음'));
+  assert.ok(p.includes('검증 상태: 검증 통과(valid)'));
+  assert.ok(!p.includes('지도: 아직 만들어지지 않았다'));
+});
+
+test('buildBacktestModePrefix: 그래프 없는 옛 컨텍스트는 시각 그래프 줄을 내지 않는다', () => {
+  const p = buildBacktestModePrefix(BT_MAP_CONTEXT, '20260903');
+  assert.ok(p.includes('지도 v5 — 대화가 고치는 칸:'));
+  assert.ok(!p.includes('시각 그래프'));
+  assert.ok(!p.includes('검증 상태'));
+  assert.ok(!p.includes('그래프 해시'));
+});
+
+test('buildBacktestModePrefix: 오류 수정은 질문 하나 → 비활성 패치 순서로만 간다', () => {
+  const p = buildBacktestModePrefix(BT_GRAPH_CONTEXT, '20260903');
+  // ① 오류가 있으면 모델이 직접 쓰지 않는다 — 질문 하나를 받아 그대로 보인다.
+  assert.ok(p.includes('그래프에 오류(diagnostics)가 있으면 코드도 graph JSON도 직접 쓰지 않는다'));
+  assert.ok(p.includes('athena_backtest action=visual_question 으로 질문 하나를 받아 그 문장을 그대로 사용자에게 보인다'));
+  assert.ok(p.includes('한 턴에 질문 하나이고, 여러 결정을 한 메시지에 묶어 묻지 않는다'));
+  // ② 답을 받으면 repair intent만 보낸다 — 적용은 사람이 누른다.
+  assert.ok(p.includes('action=visual_patch 로 repair intent{code, choice_id}만 보낸다'));
+  assert.ok(p.includes('패치는 미리보기 카드로 뜨고 누르는 것은 사람이다'));
+  assert.ok(p.includes('"적용했다·고쳤다·저장했다"고 말하지 않는다'));
+  // ③ 실행·활성화·저장은 모델의 일이 아니다.
+  assert.ok(p.includes('실행·활성화·저장은 절대 모델이 하지 않는다'));
+  assert.ok(p.includes('시각 저장도 사람이 미리보기에서 적용을 누른 뒤에 앱이 한다'));
+  // ④ 오류가 없을 때의 말 수정은 기존 즉시 반영 규칙 그대로다.
+  assert.ok(p.includes('오류가 없는데 지도 칸·노드를 말로 고쳐달라고 하면 위의 즉시 반영 규칙이 그대로 적용된다'));
+  assert.ok(p.includes('propose_spec으로 보내 폼에 바로 반영하고, 노드 라벨로 말하고 코드 줄 번호는 말하지 않는다'));
+  // ⑤ 첫 줄은 어느 노드·포트에 무엇을 할지 한 문장.
+  assert.ok(p.includes('답의 첫 줄은 어느 노드·어느 포트에 무엇을 할지 한 문장으로 적는다'));
+});
+
+test('buildBacktestModePrefix: 어떤 규칙도 모델에게 실행·활성화·저장을 시키지 않는다', () => {
+  // 컨텍스트 없이 부른다 — 이때 '- '로 시작하는 줄은 전부 규칙 줄이다(그래프·칸 줄이 없다).
+  const p = buildBacktestModePrefix(null, '20260903');
+  const rules = p.split('\n').filter((line) => line.startsWith('- '));
+  assert.ok(rules.length >= 15);
+  for (const line of rules) {
+    assert.ok(!/action=(run|activate|backfill|deploy)\b/.test(line), line);
+  }
+  assert.ok(p.includes('run·optimize·backfill 액션을 직접 부르지 않는다'));
+  assert.ok(p.includes('실행·검증·수집·저장·활성화·배포·탐색 시작은 사람이 카드 버튼을 누른다'));
+  assert.ok(p.includes('실행·활성화·저장은 절대 모델이 하지 않는다'));
+});

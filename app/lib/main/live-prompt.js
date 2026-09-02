@@ -281,7 +281,7 @@ function buildBacktestModePrefix(context, today) {
   // 상태가 ok가 아닌 칸은 그 사실을 함께 적는다 — 멈춘 자리에서 말문을 열게 하는 값이다.
   const map = obj(ctx && ctx.map);
   const mapNodes = map && Array.isArray(map.nodes) ? map.nodes : [];
-  const mapBlock = mapNodes.length
+  const nodesBlock = mapNodes.length
     ? [`지도 v${map.version} — 대화가 고치는 칸:`].concat(mapNodes.map((node) => {
       const lines = Array.isArray(node.lines) && node.lines.length
         ? node.lines.join(' · ')
@@ -291,7 +291,40 @@ function buildBacktestModePrefix(context, today) {
         : '';
       return `- ${node.numeral} ${node.title}: ${lines}${state}`;
     })).join('\n')
-    : '지도: 아직 만들어지지 않았다';
+    : '';
+  // 시각 그래프(보드 12~14) — 대화형 오류 수정의 대상이다. 노드는 stable id로 싣는다:
+  // 라벨은 표시 문자열일 뿐이라 visual_patch가 가리킬 수 없고(평가 문서 §데이터 계약),
+  // diagnostic은 code·node_id·port를 한 줄에 붙여 모델이 어느 포트를 말해야 하는지
+  // 고르게 한다. hashes는 visual_patch의 base_graph_hash로 그대로 되돌려 보낼 값이다.
+  const graph = obj(map && map.graph);
+  const graphNodes = graph && Array.isArray(graph.nodes) ? graph.nodes : [];
+  const graphEdges = graph && Array.isArray(graph.edges) ? graph.edges : [];
+  const graphDiags = graph && Array.isArray(graph.diagnostics) ? graph.diagnostics : [];
+  const stateLabel = {
+    unvalidated: '아직 검증하지 않음',
+    valid: '검증 통과',
+    invalid: '오류 있음',
+    synced: '그래프·코드 동기화됨',
+  };
+  const graphBlock = graph
+    ? [`지도 v${map.version} — 시각 그래프(노드 ${graphNodes.length} · 연결 ${graphEdges.length}):`]
+      .concat(graphNodes.map((node) => `- ${node.id} · ${label(node.label)} (${label(node.kind)})`))
+      .concat(graphDiags.length
+        ? ['오류(diagnostics):'].concat(graphDiags.map((d) => {
+          const at = d.node_id
+            ? `${d.node_id}${d.port ? `.${d.port}` : ''}`
+            : '그래프 전체';
+          return `- ${d.code} @ ${at}: ${label(d.message_ko)}`;
+        }))
+        : ['오류(diagnostics): 없음'])
+      .concat([
+        `검증 상태: ${stateLabel[graph.validation_state] || '모름'}(${label(graph.validation_state)})`,
+        `그래프 해시: ${json(graph.hashes, '없음')}`,
+      ])
+      .join('\n')
+    : '';
+  const mapBlock = [nodesBlock, graphBlock].filter(Boolean).join('\n')
+    || '지도: 아직 만들어지지 않았다';
 
   const fileDraft = obj(project && project.fileDraft)
     ? JSON.stringify({
@@ -308,6 +341,11 @@ function buildBacktestModePrefix(context, today) {
     '- **설명은 지도의 칸으로 한다.** 사용자에게 말할 때는 칸 번호(①~④)와 사람 말을 쓰고, 코드 줄 번호·파이썬 문법·함수 이름을 말하지 않는다 — 코드는 최후의 보루라 사람이 열 일이 거의 없다.',
     '- **칸을 고쳐달라는 말은 바로 반영한다.** 폼 경로면 propose_spec, 코드 경로면 propose_code로 보내고, 답 첫 줄에 어느 칸이 어떻게 바뀌는지 한 줄로 적는다(예: "③ 사고·파는 순간 — 청산을 …로 바꿨습니다").',
     '- **실행이 칸에서 멈추면 그 칸 번호로 시작한다.** 아래 지도에서 상태가 ok가 아닌 칸을 찾아 그 번호로 말문을 열고, 왜 멈췄는지와 어떻게 고칠지를 사람 말로 잇는다.',
+    '- **그래프에 오류(diagnostics)가 있으면 코드도 graph JSON도 직접 쓰지 않는다.** athena_backtest action=visual_question 으로 질문 하나를 받아 그 문장을 그대로 사용자에게 보인다 — 카드가 뜬다. 한 턴에 질문 하나이고, 여러 결정을 한 메시지에 묶어 묻지 않는다.',
+    '- **사용자가 선택지를 답하면 action=visual_patch 로 repair intent{code, choice_id}만 보낸다.** 패치는 미리보기 카드로 뜨고 누르는 것은 사람이다 — 모델은 "적용했다·고쳤다·저장했다"고 말하지 않는다.',
+    '- 실행·활성화·저장은 절대 모델이 하지 않는다 — 시각 저장도 사람이 미리보기에서 적용을 누른 뒤에 앱이 한다.',
+    '- **오류가 없는데 지도 칸·노드를 말로 고쳐달라고 하면 위의 즉시 반영 규칙이 그대로 적용된다** — propose_spec으로 보내 폼에 바로 반영하고, 노드 라벨로 말하고 코드 줄 번호는 말하지 않는다.',
+    '- 답의 첫 줄은 어느 노드·어느 포트에 무엇을 할지 한 문장으로 적는다.',
     '- 말풍선에 코드·수치 표·지어낸 결과를 쓰지 않는다. 결과 수치는 아래 컨텍스트나 result·list_runs 액션이 준 값만 말한다 — 없으면 "아직 실행 결과가 없다"고 말한다.',
     '- 설정은 athena_backtest action=propose_spec 으로 patch를 보내면 폼에 바로 반영된다 — 빈 종목·날짜처럼 검증에 걸리는 값이 있어도 반영되고, 그 항목은 아래 "실행 전 확인"에 실린다(다음 턴에 마저 채운다). 코드는 propose_code로 보내면 편집기에 바로 들어간다. 채팅에는 변경 내역과 [되돌리기]가 뜬다.',
     '- 요청별 경로 — 폼 설정: propose_spec(대상→기간·주기→지표→진입 조건→청산 조건→리스크·비용 순서, 한 턴에 한 항목) · 코드 작성/수정: propose_code(전체 파일 — PARAMS 딕셔너리 + def signals(df, p). signals는 entry·exit 불리언 열을 가진 DataFrame 하나를 반환한다, 예: return df.assign(entry=..., exit=...)[["entry", "exit"]] — 튜플이나 시리즈 반환 금지. import athena_bt as bt) · 오류 수정: 아래 마지막 실행 오류·진단·현재 코드를 읽고 propose_code(고친 전체 코드, suggest_run:true) · 실행: 폼이면 propose_spec(빈 patch, suggest_run:true), 코드면 propose_code(현재 코드, suggest_run:true) · 결과 설명: 아래 마지막 실행 · 이력·비교: navigate(history) + list_runs · 최적화: propose_optimize(method) · 흐름 지도: navigate(design, flow) · 배포: navigate(deploy) 후 사람이 한다고 안내 · 데이터 필요량: plan. 사용자가 "알아서"·"한 번에"·"전부" 해달라고 하면 한 턴에 필요한 항목을 모두 채운다.',
