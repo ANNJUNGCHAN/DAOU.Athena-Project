@@ -167,21 +167,22 @@ async function main() {
   await wc.executeJavaScript(`(() => { document.getElementById('modeNavGraph').click(); return true; })()`);
   await wait(1200);
 
-  // 지도 표면으로 가서 "움직이는 그래프"를 켠다(2026-09-02) — 평가 대상이 그것이다.
-  const live = await wc.executeJavaScript(`(() => {
-    document.getElementById('graphViewTab').click();
-    return true;
-  })()`);
-  void live;
-  await wait(1500);
-  const liveState = await wc.executeJavaScript(`(async () => {
-    const btn = document.getElementById('graphLiveToggle');
-    if (!btn || btn.hidden) return { ok: false, reason: 'toggle missing or hidden', hasVis: !!window.vis };
-    if (btn.getAttribute('aria-pressed') !== 'true') btn.click();
-    await new Promise((r) => setTimeout(r, 2500));
-    const canvasCount = document.querySelectorAll('#graphBody .graph-live-map canvas').length;
-    return { ok: canvasCount > 0, pressed: btn.getAttribute('aria-pressed'), canvasCount,
-             svgCount: document.querySelectorAll('#graphBody svg.graph-canvas').length };
+  // 지도 표면으로 간다 — 군집 지도는 라이브 렌더러 하나뿐이라 켤 토글이 없다.
+  await wc.executeJavaScript(`(() => { document.getElementById('graphViewTab').click(); return true; })()`);
+  await wait(2500);
+  const liveState = await wc.executeJavaScript(`(() => {
+    const frame = document.querySelector('#graphBody .graph-live-map');
+    const canvas = frame ? frame.querySelector('canvas') : null;
+    if (!canvas) return { ok: false, reason: 'live map canvas missing', hasVis: !!window.vis };
+    const rect = frame.getBoundingClientRect();
+    return {
+      ok: true,
+      // 네모 창(프레임)의 화면 크기. 확대해도 이 값이 안 변하는 것이 Neo4j 계약이다.
+      frame: { w: Math.round(rect.width), h: Math.round(rect.height) },
+      borderTop: getComputedStyle(frame).borderTopWidth,
+      overflow: getComputedStyle(frame).overflow,
+      svgCount: document.querySelectorAll('#graphBody svg.graph-canvas').length,
+    };
   })()`);
   log(`      라이브 지도: ${JSON.stringify(liveState)}`);
 
@@ -194,7 +195,7 @@ async function main() {
   log(`      스크린샷: ${shotPath}`);
 
   log('');
-  log('창이 열렸습니다. 헤더의 "움직이는 그래프" 칩으로 정적 ⇄ 라이브를 오갈 수 있습니다.');
+  log('창이 열렸습니다. 노드를 끌어 옮기고, 휠 또는 Ctrl+휠로 확대해 보세요.');
   log('창을 닫으면 백엔드도 함께 내려갑니다.');
 }
 

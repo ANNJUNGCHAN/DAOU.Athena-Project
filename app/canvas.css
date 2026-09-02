@@ -355,11 +355,24 @@ html, body { background: transparent; }
  * flex 컨테이너가 돼야 안의 SVG(남는 공간 채움)와 범례(하단 고정)가 함께 쌓인다. */
 #graphBody { position: relative; display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
 
-/* 라이브 군집 지도(2026-09-02, lib/graph-mode/live-map.js) — vis-network가
- * 자식 <canvas>를 만들고 그 크기를 컨테이너에서 읽는다. 위 SVG 규칙
- * (#graphBody > svg.graph-canvas)과 같은 자리에 같은 방식으로 늘어나야
+/* 라이브 군집 지도의 **네모 창**(2026-09-02, lib/graph-mode/live-map.js).
+ *
+ * Neo4j Browser의 결과 프레임과 같은 물건이다(localhost:7474 실측): 화면에 고정된
+ * 테두리 있는 패널이고, 확대해도 크기가 안 변하며, 넘치는 내용은 잘린다. 노드를
+ * 프레임 밖으로 끌면 막히는 게 아니라 그냥 잘린다 — 벽이 아니라 창틀이다.
+ * 그래서 경계는 JS가 아니라 여기 있다. <canvas>는 원래 자기 밖으로 안 그리므로
+ * 클리핑은 공짜고, overflow:hidden은 둥근 모서리를 캔버스에도 먹이기 위한 것이다.
+ *
+ * 위 SVG 규칙(#graphBody > svg.graph-canvas)과 같은 자리에 같은 방식으로 늘어나야
  * 지도가 헤더 아래 남는 공간을 그대로 채운다. */
-.graph-live-map { flex: 1 1 auto; min-height: 0; }
+.graph-live-map {
+  flex: 1 1 auto; min-height: 0;
+  margin: 12px 18px 18px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--color-k-panel2);
+}
 
 /* ── 수집·노출 서브뷰(보드 05) ──────────────────────────────────────────────
  * 요약 표·군집 지도와 같은 3열 셸 안 중앙 카드다. 세 서브뷰가 같은 헤더 골격을

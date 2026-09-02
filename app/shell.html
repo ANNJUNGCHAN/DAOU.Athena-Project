@@ -240,17 +240,11 @@
                    보강 횟수는 cluster-map에 없는 값이라 걸 수 없다. -->
               <select id="graphWindowFilter" class="filter-chip is-control" aria-label="기간"></select>
               <select id="graphDegreeFilter" class="filter-chip is-control" aria-label="최소 연결 수"></select>
-              <!-- 정적(결정적 배치) ⇄ 라이브(힘 시뮬레이션) 렌더러 전환(2026-09-02).
-                   두 답을 나란히 두고 비교하기 위한 것이다 — cluster-layout.js가
-                   힘 시뮬레이션을 거부한 이유(같은 입력이면 픽셀까지 같다)가 여전히
-                   유효해서, 어느 쪽이 옳은지는 만져 보고 정한다. -->
-              <button type="button" id="graphLiveToggle" class="filter-chip is-control"
-                      aria-pressed="false" title="노드를 끌 수 있는 살아 있는 그래프로 봅니다">움직이는 그래프</button>
             </div>
           </div>
           <div id="graphMapGuide" class="graph-map-guide">
             <span class="graph-map-guide-title">테마 지도</span>
-            <span class="graph-map-guide-desc">군집을 누르면 그 안의 종목·테마가 펼쳐집니다 · 채팅으로 물어도 같은 곳이 열립니다</span>
+            <span class="graph-map-guide-desc">노드를 끌어 옮길 수 있습니다 · 휠 또는 Ctrl+휠로 확대 · 채팅으로 물어도 같은 곳이 열립니다</span>
           </div>
         </div>
         <div id="graphBody"></div>

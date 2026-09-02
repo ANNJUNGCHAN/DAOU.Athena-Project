@@ -260,10 +260,9 @@ function createGraphModeController(deps) {
   // 브레인 상태를 아직 모르는 부팅 초반엔 "못 씀"으로 가정한다 — setAvailable(true)가
   // 오기 전에 그래프 모드로 들어오면 renderUnavailable()의 정직한 안내를 보여준다.
   let available = false;
-  // 라이브 렌더러를 쓰는 중인가(2026-09-02). 기본은 꺼짐 — 지금까지의 결정적
-  // 배치가 계속 기본값이고, 라이브는 헤더 토글로 켠다.
-  let liveEnabled = false;
-  let liveMap = null; // 처음 켤 때 만든다 — 안 쓰면 vis-network를 건드리지도 않는다.
+  // 군집 지도는 **라이브 렌더러 하나뿐이다**(2026-09-02 결정). 잠깐 정적 SVG와
+  // 토글로 공존시켰지만, 만져 본 뒤 라이브를 채택하고 정적을 폐기했다.
+  let liveMap = null; // 처음 그릴 때 만든다.
 
   // 라이브 뷰의 노드 선택을 정적 뷰와 같은 경로로 넣는다. 군집 번호는 패널 부제
   // ("군집 N · 연결 M")가 쓰는 값이라 마지막 응답에서 찾아 넘긴다.
@@ -285,7 +284,6 @@ function createGraphModeController(deps) {
   }
 
   function liveActive() {
-    if (!liveEnabled) return false;
     const map = ensureLiveMap();
     return Boolean(map && map.available());
   }
@@ -354,12 +352,10 @@ function createGraphModeController(deps) {
 
   // 노드 클릭 하나가 지금 단계에 따라 다른 뜻이다(보드 15): 1단계에서는 그 노드가
   // 속한 군집을 펼치고, 2단계에서는 그 노드를 고른다 — 공통 패널이 연다.
-  function handleNodeClick(entityId, cluster) {
-    if (state.stage === store.STAGE_CLUSTERS) {
-      state = store.expandCluster(state, Number(cluster));
-      redrawFromCache();
-      return;
-    }
+  // 노드 클릭은 언제나 **선택**이다. 옛 정적 지도는 1단계에서 클릭을 "군집 펼침"으로
+  // 가로챘지만(2단계 진입), 라이브 지도는 노드를 처음부터 전부 펴므로 펼칠 단계가
+  // 없다 — 그 분기를 남겨두면 클릭이 선택 대신 아무 일도 안 한다(실측).
+  function handleNodeClick(entityId) {
     selectNode(entityId);
   }
 
@@ -1105,17 +1101,22 @@ function createGraphModeController(deps) {
       state = store.clearSelection(state);
     }
     // 라이브 뷰는 좌표를 스스로 정한다 — placed는 헤더 메타("엔티티 N · 관계 E ·
-    // 군집 C")를 위해 계속 계산하지만 그리기에는 쓰지 않는다. renderStage와
-    // wireNodeClicks(SVG 클릭 위임)도 건너뛴다: 그릴 SVG가 없고, 노드 선택은
-    // live-map.js의 onSelect가 같은 selectEntity로 넘긴다.
-    if (liveActive()) {
+    // 군집 C")를 위해 계속 계산하지만 그리기에는 쓰지 않는다. 노드 선택은
+    // live-map.js의 onSelect가 handleNodeClick으로 넘겨 같은 공통 패널을 연다.
+    if (!Array.isArray(placed.nodes) || placed.nodes.length === 0) {
+      // 필터가 전부 걷어냈다 — 빈 화면 대신 무엇이 걸렸는지 적는다(보드 07
+      // 정직성 상태). 렌더러보다 **먼저** 본다: 그릴 게 없는 것과 못 그리는 것은
+      // 다르고, 지도에 빈 캔버스만 남기면 전자가 후자처럼 보인다.
+      renderFilteredEmpty();
+    } else if (liveActive()) {
       while (elements.graphBody && elements.graphBody.firstChild) {
         elements.graphBody.removeChild(elements.graphBody.firstChild);
       }
       liveMap.render(payload);
     } else {
-      renderStage(placed);
-      wireNodeClicks();
+      // vis-network를 못 불러왔다. 빈 화면 대신 정직하게 알린다 — 없는 것(그릴
+      // 그래프가 없다)과 못 읽은 것(렌더러가 없다)은 다르다(§0 정책).
+      renderUnavailable('그래프 렌더러를 불러오지 못했습니다. 요약 탭은 계속 사용할 수 있습니다.');
     }
     renderSelection();
     renderGraphHeader();
@@ -1165,19 +1166,15 @@ function createGraphModeController(deps) {
       return undefined;
     },
     applyVisibility,
-    // 정적(결정적 배치) ⇄ 라이브(힘 시뮬레이션) 렌더러 전환(2026-09-02).
-    // 두 렌더러가 같은 #graphBody를 쓰므로 끄는 쪽을 반드시 먼저 정리한다 —
-    // 안 그러면 캔버스와 SVG가 겹쳐 남는다.
-    async setLive(nextLive) {
-      const next = Boolean(nextLive);
-      if (next === liveEnabled) return null;
-      liveEnabled = next;
-      if (!liveEnabled && liveMap) liveMap.destroy();
-      if (!store.isGraphView(state) || state.surface !== store.SURFACE_MAP) return null;
-      return draw(true);
-    },
-    isLive() {
-      return liveActive();
+    // 노드 선택 — 렌더러와 무관한 진입점(2026-09-02). 라이브 지도의 onSelect가
+    // 부르는 것과 **같은 경로**라, 지도 클릭과 이 호출이 같은 패널을 연다.
+    //
+    // 왜 필요한가: 옛 정적 SVG 시절에는 테스트도 사람도 `.graph-node` DOM을 클릭해
+    // 선택을 일으켰다. 라이브 지도는 캔버스에 그려 클릭할 DOM이 없다 — 선택 로직이
+    // 렌더러에 묶여 있으면 렌더러를 바꿀 때마다 그 로직의 검증이 통째로 무너진다.
+    selectNode(entityId) {
+      handleLiveSelect(entityId ? String(entityId) : null);
+      return state.panel;
     },
     // 공통 패널 공개 API — 그래프 밖(요약 표의 행 선택, 보드 07)에서도 같은 패널을
     // 열 수 있어야 한다는 게 store의 원래 계약이다("공통 패널: 어느 단계에서든
