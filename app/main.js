@@ -2222,16 +2222,6 @@ function maybeForwardNudgeGuardProposal(step, resultBlock) {
   }
 }
 
-const BACKTEST_TOOL_NAME = 'athena_backtest';
-
-// 백테스트 채팅 액션 카드 — athena_backtest의 HTTP 무호출 액션 다섯(backtest_tools.py의
-// propose_spec·propose_code·propose_file·navigate·propose_optimize)을 셸 렌더러의 백테스트
-// 캔버스로 흘려보낸다. 캔버스는 채팅이 몰지만 폼·편집기에 실제로 들어가는 것은
-// 사용자가 카드의 [적용]을 누른 뒤이고, 실행·검증·탐색 시작은 따로 눌러야 시작된다.
-// orbWin에는 안 보낸다 — 말걸기 가드 카드와 같은 이유(채팅 전용 사람 액션)다.
-// propose_code만 결과가 아니라 호출 입력(step.input.propose_code)에서 읽는다 —
-// strategy_id가 있으면 결과는 버전 저장 응답이라 초안 본문(source)이 안 실린다.
-function maybeForwardBacktestChatAction(step, resultBlock) {
 const GRAPH_VIEW_TOOL_NAME = 'athena_graph_view';
 
 // 그래프 채팅 액션(2026-09-03) — athena_graph_view의 HTTP 무호출 액션 다섯
@@ -2281,6 +2271,16 @@ function maybeForwardGraphChatAction(step, resultBlock) {
   }
 }
 
+const BACKTEST_TOOL_NAME = 'athena_backtest';
+
+// 백테스트 채팅 액션 카드 — athena_backtest의 HTTP 무호출 액션 다섯(backtest_tools.py의
+// propose_spec·propose_code·propose_file·navigate·propose_optimize)을 셸 렌더러의 백테스트
+// 캔버스로 흘려보낸다. 캔버스는 채팅이 몰지만 폼·편집기에 실제로 들어가는 것은
+// 사용자가 카드의 [적용]을 누른 뒤이고, 실행·검증·탐색 시작은 따로 눌러야 시작된다.
+// orbWin에는 안 보낸다 — 말걸기 가드 카드와 같은 이유(채팅 전용 사람 액션)다.
+// propose_code만 결과가 아니라 호출 입력(step.input.propose_code)에서 읽는다 —
+// strategy_id가 있으면 결과는 버전 저장 응답이라 초안 본문(source)이 안 실린다.
+function maybeForwardBacktestChatAction(step, resultBlock) {
   if (resultBlock.is_error === true) return;
   const base = String(step.name || '').split('__').pop();
   if (base !== BACKTEST_TOOL_NAME) return;
@@ -2401,6 +2401,7 @@ function createToolStepTracker(sendFn = sendLiveToolStep, { forwardNudgeGuard = 
             if (forwardNudgeGuard) {
               maybeForwardNudgeGuardProposal(step, block);
               maybeForwardBacktestChatAction(step, block);
+              maybeForwardGraphChatAction(step, block);
             }
           }
         }
@@ -2411,7 +2412,6 @@ function createToolStepTracker(sendFn = sendLiveToolStep, { forwardNudgeGuard = 
 
 // 하위 에이전트 도크(task #32, 보드04 2EZ-0/DG2-0) — Agent 생애주기 system
 // 이벤트(task_started/progress/updated/notification)를 셸 렌더러로 릴레이한다.
-              maybeForwardGraphChatAction(step, block);
 // 분류 자체는 stream-json-parser.js의 순수 함수(classifySubagentEvent)가 맡고,
 // 여기서는 last_tool_name만 카드 진행 표시와 같은 라벨표(toolStepLabel)를
 // 통과시킨다 — "현재가 조회" 같은 사용자 언어로, 원문 툴 이름은 새지 않는다.
@@ -2941,7 +2941,16 @@ const providerConversationRotationQueue = createConversationRotationQueue({
     liveSessionId = null;
     historyActiveConversationId = conversationId;
   },
-  beginConversation: ({ id, projectId }) => conversations.begin({ id, projectId }),
+  beginConversation: ({ id, projectId, mode }) => conversations.begin({ id, projectId, mode }),
+  // 이력 행을 눌러 기존 대화로 돌아갈 때(41번 보드). publishConversationId가 커서를
+  // 비운 뒤에 불리므로, 그 대화에 적어 둔 Claude 커서를 여기서 다시 잇는다 —
+  // 다음 턴이 --resume으로 문맥까지 이어 붙는다. 커서가 없으면 백지에서 시작한다.
+  selectConversation: ({ id }) => {
+    const state = conversations.setActive(id);
+    const record = state.conversations.find((row) => row.id === id) || null;
+    liveSessionId = record && record.resumeSessionId ? record.resumeSessionId : null;
+    return state;
+  },
   rotateProvider: (reason, metadata) => providerRuntimeEnabled
     ? rotatePersistentProviderInner(reason, {
       verifierCorrelationId: metadata.verifierCorrelationId,
@@ -3636,6 +3645,8 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   if (historyConversationId() === turnConversationId
       && result.ok && result.finalResult && result.finalResult.session_id) {
     liveSessionId = result.finalResult.session_id;
+    // 커서는 대화마다 따로 남긴다 — 이력 행을 다시 눌렀을 때 이 값으로 문맥을 잇는다.
+    try { conversations.setResumeCursor({ id: turnConversationId, resumeSessionId: liveSessionId }); } catch { /* 커서 기록 실패는 턴 성공의 필요조건이 아니다 */ }
   } else if (historyConversationId() === turnConversationId
       && !result.ok && resumeSessionId && !result.aborted && !result.timedOut) {
     // 재개 실패 — 세션 파일이 사라졌거나 CLI가 재개를 거부했을 수 있다. 다음
@@ -4309,26 +4320,35 @@ ipcMain.handle('athena:conversation-messages', async (_e, payload = {}) => {
   }));
   return { ok: true, conversationId: id, isCurrent: id === historyConversationId(), messages };
 });
-// 디스크 이력은 제목/프로젝트 메타데이터뿐이라 메시지와 Claude 세션을 복원할 수
-// 없다. 과거 행 클릭은 현재 실행 경계를 바꾸지 않는 조회 전용이다. 복원 배선이
-// 생기기 전까지 선택만 바꿔 새 메시지를 과거 제목 아래에 쓰면 안 된다.
-ipcMain.handle('athena:conversations-set-active', (e, { id } = {}) => {
-  const state = conversations.list();
-  return {
-    ...state,
-    activeId: historyActiveConversationId,
-    requestedId: typeof id === 'string' ? id : null,
-    restorable: false,
-  };
+// 이력 행을 누르면 그 대화로 실제로 돌아간다(41번 보드 "다시 누르면 그대로").
+// 기록 대상 id와 Claude 커서(--resume)가 함께 바뀌므로, 새 대화 만들기와 같은
+// 직렬화 큐(switchTo) 안에서만 바꾼다 — 진행 중 턴을 먼저 끊고, 프로바이더를
+// 돌린 뒤, 고른 id를 발행한다. 큐 밖에서 historyActiveConversationId를 만지면
+// 새 메시지가 엉뚱한 제목 아래 섞인다(main-conversation-boundary.test.js).
+ipcMain.handle('athena:conversations-set-active', async (e, { id, verifierCorrelationId } = {}) => {
+  const requestedId = typeof id === 'string' && id.trim() ? id.trim() : null;
+  const listed = conversations.list();
+  const known = requestedId && listed.conversations.some((row) => row.id === requestedId);
+  if (!known) {
+    return { ...listed, activeId: historyActiveConversationId, requestedId, restorable: false };
+  }
+  if (requestedId === historyActiveConversationId) {
+    return { ...listed, activeId: historyActiveConversationId, requestedId, restorable: true, isCurrent: true };
+  }
+  if (verifierCorrelationId !== undefined) {
+    providerVerifierTelemetry.authorizeRotation(verifierCorrelationId);
+  }
+  const state = await providerConversationRotationQueue.switchTo({ id: requestedId, verifierCorrelationId });
+  return { ...state, requestedId, restorable: true, isCurrent: false, resumed: Boolean(liveSessionId) };
 });
 // Paper 54: 빈 대화는 첫 입력 전에는 목록에 만들지 않는다. 캔버스 mode는
 // renderer가 그대로 보존하고, main은 새 기록 id와 프로젝트 소속만 원자적으로
 // 바꾼다.
-ipcMain.handle('athena:conversations-new', async (e, { projectId, verifierCorrelationId } = {}) => {
+ipcMain.handle('athena:conversations-new', async (e, { projectId, mode, verifierCorrelationId } = {}) => {
   if (verifierCorrelationId !== undefined) {
     providerVerifierTelemetry.authorizeRotation(verifierCorrelationId);
   }
-  return providerConversationRotationQueue.begin({ projectId, verifierCorrelationId });
+  return providerConversationRotationQueue.begin({ projectId, mode, verifierCorrelationId });
 });
 
 ipcMain.handle('athena:account-list', handleAccountList);

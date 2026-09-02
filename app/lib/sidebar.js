@@ -486,24 +486,18 @@
   async function selectConversation(id) {
     selectedNotifyId = null;
     $roomBanner.hidden = true;
-    try {
-      const res = await window.athena.invoke('athena:conversations-set-active', { id });
-      activeConversationId = res && res.activeId ? res.activeId : id;
-    } catch {
-      activeConversationId = id;
-    }
-    renderList();
-    // 그 대화로 이동한다(2026-09-02 사용자 지적 "누르면 해당 대화로 이동이 되어야
-    // 하는데 그런 기능이 전혀 없다"). 위 set-active는 활성 포인터만 바꾸고 화면은
-    // 그대로 뒀다 — 실제로 아무 일도 일어나지 않았다.
-    //
-    // 읽기 전용이다: chat.js가 메시지를 불러 화면을 갈아치우고 입력을 잠근다.
-    // 답변 중이면 거절되므로(진행 중 턴이 사라지면 안 된다) 반환값을 무시하지 않고
-    // 그때는 목록 하이라이트만 남긴다.
+    // 전환은 chat.js가 한다(41번 보드). 답변 중이면 거절하고, 아니면 main의
+    // set-active(직렬화 큐)를 거쳐 기록 대상과 Claude 커서를 함께 바꾼 뒤 메시지를
+    // 다시 그린다. 여기서 set-active를 먼저 부르면 chat.js가 거절한 경우에도 main의
+    // 기록 대상만 바뀌어 다음 메시지가 엉뚱한 제목 아래 쌓인다 — 그래서 여기서는
+    // 부르지 않고, 성공했을 때만 목록 하이라이트를 옮긴다.
     const conv = conversationsCache.find((c) => c && c.id === id) || null;
+    let opened = false;
     if (window.AthenaShell && typeof window.AthenaShell.openConversation === 'function') {
-      await window.AthenaShell.openConversation({ id, title: conv ? conv.title : null });
+      opened = await window.AthenaShell.openConversation({ id, title: conv ? conv.title : null });
     }
+    if (opened) activeConversationId = id;
+    renderList();
   }
 
   // ---------- 알림 파생 방(Paper 보드 08) ----------

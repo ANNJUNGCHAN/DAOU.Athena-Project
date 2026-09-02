@@ -1848,18 +1848,21 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); answerGraphEditProposal('apply'); }
 }, true);
 
-window.athena.on('athena:graph-chat-action', (message) => {
-  if (!message || message.kind !== 'edit_proposal') return;
+// canvas.js가 athena:graph-chat-action을 받아 이 훅을 부른다 — 그 채널의
+// 구독은 한 곳에만 둔다(shell.js hooks 주석 참고). 되물을 것들 카드가 이미
+// 같은 버스를 쓰므로 chat↔canvas 손넘김 규칙이 하나로 유지된다.
+window.AthenaShell.registerOpenGraphEditProposal((message) => {
   const lib = graphEditProposalLib();
-  if (!lib) return;
+  if (!lib) return false;
   // 관계명 한글 사전은 공통 패널이 이미 쓰는 것을 그대로 넘긴다(되물을 것들 카드와
   // 같은 이유 — 복사하면 한쪽만 고치는 실수가 난다).
   const controller = window.AthenaLib && window.AthenaLib.GraphModeController;
   const item = lib.normalizeProposal(message, controller && controller.RELATION_LABELS);
   // 못 쓸 제안은 카드를 띄우지 않는다 — 무엇을 고칠지 모르는 카드에는 답할 수 없다.
-  if (!item) return;
+  if (!item) return false;
   graphEditProposal = item;
   renderGraphEditProposalCard();
+  return true;
 });
 
 // ---------- 과거 대화 열기(2026-09-02) ----------
@@ -1871,16 +1874,18 @@ window.athena.on('athena:graph-chat-action', (message) => {
 // 말하는 "메시지를 복원할 수 없다"는 전제는 지금 틀렸다: 브레인 이력 DB가
 // conversation_id와 함께 메시지를 들고 있고 조회 엔드포인트도 있다.
 //
-// **그래서 읽기까지만 한다.** 복원되는 것은 메시지고, Claude 세션은 아니다 —
-// 이어서 말할 수 있는 척하면 원래 주석이 경고한 그 사고가 난다. 그래서 과거 대화를
-// 열면 입력을 잠그고, 돌아갈 길을 화면에 둔다.
-let pastConversation = null; // { id, title, snapshot } — 열려 있는 동안만
+// **그래서 이제는 실제로 돌아간다(41번 보드 "다시 누르면 그대로").** main이
+// athena:conversations-set-active에서 기록 대상 id와 Claude 커서(--resume)를 함께
+// 바꾸므로, 여기서는 그 대화의 메시지를 다시 그리고 모드 화면을 그 대화의 모드로
+// 맞춘 뒤 입력을 연다. 읽기 전용 잠금은 없다 — 이어서 말하면 그 대화에 쌓인다.
+// 캔버스 카드·작업 환경의 복원은 세션 스토어 배선(다음 단계)의 몫이라 아직
+// 카드는 비운 채 시작한다. 없는 것을 있다고 그리지 않는다.
 
 function pastMessageTurn(message) {
   const line = document.createElement('div');
   line.className = 'turn';
   const body = document.createElement('div');
-  // 사용자/모델 말풍선은 살아 있는 턴과 같은 클래스를 쓴다 — 과거 대화라고
+  // 사용자/모델 말풍선은 살아 있는 턴과 같은 클래스를 쓴다 — 복원된 대화라고
   // 다른 모양으로 그리면 같은 대화가 두 얼굴을 갖는다.
   body.className = message.role === 'user' ? 'turn-q' : 'turn-a';
   body.textContent = String((message && message.text) || '');
@@ -1888,44 +1893,34 @@ function pastMessageTurn(message) {
   return line;
 }
 
-function closePastConversation() {
-  if (!pastConversation) return false;
-  const { snapshot } = pastConversation;
-  pastConversation = null;
+function restoreConversation(conv, switched, messages) {
   while ($history.firstChild) $history.removeChild($history.firstChild);
-  for (const node of snapshot) $history.appendChild(node);
-  setLocked(false);
-  scrollHistoryToBottom(true);
-  return true;
-}
-
-function renderPastConversation(conv, messages) {
-  // 살아 있는 대화의 DOM을 노드째 보관한다 — 다시 그리는 대신 그대로 되돌린다.
-  // (innerHTML 문자열로 보관하면 진행 중 턴에 걸린 리스너·타이머 참조가 끊긴다.)
-  if (!pastConversation) {
-    pastConversation = { id: null, title: null, snapshot: Array.from($history.childNodes) };
+  if (window.AthenaShell && typeof window.AthenaShell.clearCanvases === 'function') {
+    window.AthenaShell.clearCanvases();
   }
-  pastConversation.id = conv.id;
-  pastConversation.title = conv.title || null;
-  while ($history.firstChild) $history.removeChild($history.firstChild);
+  // 대화는 모드에 묶인다 — 백테스트 대화를 열면 백테스트 캔버스가 뜬다(35번 보드).
+  const snapshotLib = window.AthenaLib && window.AthenaLib.SessionSnapshot;
+  const view = snapshotLib ? snapshotLib.modeToView(switched.activeMode) : null;
+  if (view && window.AthenaCanvasMode && typeof window.AthenaCanvasMode.setView === 'function') {
+    window.AthenaCanvasMode.setView(view);
+  }
+  if (view && window.AthenaModeNav && typeof window.AthenaModeNav.setActive === 'function') {
+    window.AthenaModeNav.setActive(view);
+  }
 
   const banner = document.createElement('div');
   banner.className = 'past-banner';
   const title = document.createElement('span');
   title.className = 'past-banner-title';
-  title.textContent = conv.title ? `과거 대화 · ${conv.title}` : '과거 대화';
+  title.textContent = conv.title ? `복원됨 · ${conv.title}` : '복원됨';
   banner.appendChild(title);
   const note = document.createElement('span');
   note.className = 'past-banner-note';
-  // 무엇이 안 되는지를 화면에 적는다 — 잠긴 입력만 두면 고장으로 읽힌다.
-  note.textContent = '읽기 전용입니다 — 이어서 말하려면 새 대화로 시작하세요';
+  // 문맥이 이어지는지는 커서가 있었느냐에 달렸다 — 있는 그대로 적는다.
+  note.textContent = switched.resumed
+    ? '이어서 말할 수 있습니다 — 모델 문맥까지 이어집니다'
+    : '이어서 말할 수 있습니다 — 모델은 이 대화의 문맥 없이 새로 시작합니다';
   banner.appendChild(note);
-  const back = document.createElement('button');
-  back.type = 'button';
-  back.className = 'past-banner-back';
-  back.textContent = '현재 대화로';
-  back.addEventListener('click', () => { closePastConversation(); });
-  banner.appendChild(back);
   $history.appendChild(banner);
 
   if (!messages.length) {
@@ -1938,21 +1933,22 @@ function renderPastConversation(conv, messages) {
   } else {
     for (const message of messages) $history.appendChild(pastMessageTurn(message));
   }
-  setLocked(true, '과거 대화는 읽기 전용입니다');
+  setLocked(false);
   scrollHistoryToBottom(true);
 }
 
-// sidebar.js가 부르는 다리(shell.js 버스). 열었으면 true.
+// sidebar.js가 부르는 다리(shell.js 버스). 돌아갔으면 true.
 window.AthenaShell.registerOpenConversation(async (conv) => {
   if (!conv || !conv.id) return false;
-  // 답변 중에는 화면을 갈아치우지 않는다 — 진행 중 턴이 과거 대화 밑으로 사라진다.
-  if (!pastConversation && (state !== 'idle' || remoteQueryBusy)) return false;
+  // 답변 중에는 전환하지 않는다 — 진행 중 턴이 다른 대화 밑으로 사라진다.
+  if (state !== 'idle' || remoteQueryBusy) return false;
+  const switched = await window.athena.invoke('athena:conversations-set-active', { id: conv.id })
+    .catch(() => null);
+  if (!switched || !switched.restorable) return false;
+  if (switched.isCurrent) return true;
   const res = await window.athena.invoke('athena:conversation-messages', { conversationId: conv.id })
     .catch(() => null);
-  if (!res || !res.ok) return false;
-  // 현재 대화를 다시 누른 것이면 과거 뷰를 닫고 살아 있는 화면으로 돌아간다.
-  if (res.isCurrent) { closePastConversation(); return true; }
-  renderPastConversation(conv, Array.isArray(res.messages) ? res.messages : []);
+  restoreConversation(conv, switched, res && res.ok && Array.isArray(res.messages) ? res.messages : []);
   return true;
 });
 
