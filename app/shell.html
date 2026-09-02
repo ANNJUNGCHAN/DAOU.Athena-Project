@@ -321,6 +321,13 @@
                (레퍼런스: 권한 확인 카드). 내용은 chat.js가 채우고, 재료는 백엔드의
                suggested-questions(AMBIGUOUS로 기록된 관계)다. -->
           <div id="brainQuestionCard" class="question-card" hidden></div>
+          <!-- 그래프 편집 제안 카드(2026-09-03) — 모델이 athena_graph_view
+               action=propose_edit으로 "이 관계를 이렇게 고칠까요"를 물으면 여기 뜬다.
+               되물을 것들 카드와 **같은 클래스**를 쓴다: 사람이 답해야 하는 일이
+               두 종류인데 모양이 다르면 무엇을 누르는지 매번 새로 배워야 한다.
+               누르면 사람의 답변 문장이 채팅으로 제출되어 추출 경로를 탄다 —
+               모델은 그래프에 직접 쓰지 못한다(graph-edit-proposal.js 참고). -->
+          <div id="graphEditProposalCard" class="question-card" hidden></div>
           <div class="input-row">
             <!-- 키우미(보드 45 v5, 2026-08-27 확정) — 입력창 안 왼쪽, 코덱스 '+' 자리.
                  클릭=옵션 메뉴(파일·폴더 첨부, 모델 설정). 전환은 사이드바 모드 네비.
@@ -457,6 +464,7 @@
 <script src="lib/protected-cards.js"></script>
 <script src="lib/graph-mode/cluster-grouping.js"></script>
 <script src="lib/graph-mode/brain-questions.js"></script>
+<script src="lib/graph-mode/graph-edit-proposal.js"></script>
 <script src="lib/graph-mode/graph-mode-store.js"></script>
 <script src="lib/graph-mode/graph-mode-prefs.js"></script>
 <script src="lib/graph-mode/summary-table.js"></script>

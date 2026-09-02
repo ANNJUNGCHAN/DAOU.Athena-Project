@@ -336,6 +336,30 @@ function createLiveMap(deps) {
     try { network.selectNodes([entityId]); } catch { /* 걸러진 노드 — 선택할 게 없다 */ }
   }
 
+  // 그 노드로 카메라를 옮긴다 — 더블클릭이 하는 것과 **같은 동작**이다. 채팅이
+  // 노드를 골라 줄 때(athena_graph_view action=select) 선택만 하면 화면 밖에 있는
+  // 노드는 패널만 열리고 지도에서는 아무 일도 안 일어난 것처럼 보인다.
+  function focusEntity(entityId) {
+    if (!network || !entityId) return false;
+    try {
+      network.focus(entityId, {
+        scale: Math.max(1.2, network.getScale()),
+        animation: { duration: 400, easingFunction: 'easeInOutQuad' },
+      });
+      return true;
+    } catch {
+      return false; // 필터에 걸려 지도에 없는 노드 — 조용히 아무 일도 안 한다.
+    }
+  }
+
+  // 전체 맞춤 — 빈 곳 더블클릭과 같은 동작이다. 확대해 들어갔다가 나오는 길을
+  // 채팅에도 준다("전체 다시 보여줘").
+  function fitView() {
+    if (!network) return false;
+    network.fit({ animation: { duration: 400 } });
+    return true;
+  }
+
   function destroy() {
     if (host && wheelHandler) host.removeEventListener('wheel', wheelHandler, { capture: true });
     wheelHandler = null;
@@ -347,7 +371,7 @@ function createLiveMap(deps) {
     signature = null;
   }
 
-  return { available, render, selectEntity, destroy };
+  return { available, render, selectEntity, focusEntity, fitView, destroy };
 }
 
 const __exports = {

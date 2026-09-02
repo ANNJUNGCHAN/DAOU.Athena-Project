@@ -585,3 +585,188 @@ async def test_cluster_labels_table_survives_reopen(tmp_path: Path) -> None:
         assert await second.cluster_label("h", "fp") == "라벨"
     finally:
         await second.close()
+
+
+# ── 노드 상세(2026-09-03, 채팅의 "이 노드 설명해줘") ────────────────────────────
+#
+# 이 읽기가 답해야 하는 것은 "지금 어떤 상태인가"가 아니라 **"왜 이렇게 기록됐나"**다.
+# 그래서 관계·이력만으로는 부족하고 출처 원문까지 같은 응답에 있어야 한다.
+
+
+def long_source(source_id: str, text: str, *, fp: str = "fp") -> SourceRecord:
+    return SourceRecord(
+        id=source_id,
+        kind=SourceKind.CHAT_MESSAGE,
+        text=text,
+        locator="conv-1#3",
+        fingerprint=fp,
+        occurred_at=NOW,
+        ingested_at=NOW,
+    )
+
+
+async def test_entity_detail_returns_none_for_an_unknown_node(store: GraphStore) -> None:
+    # 빈 상세를 주면 "연결이 없는 노드"와 "그런 노드가 없다"가 구별되지 않는다.
+    assert await store.entity_detail("entity:security:없는것") is None
+
+
+async def test_entity_detail_carries_both_directions_with_the_other_endpoint_named(
+    store: GraphStore,
+) -> None:
+    """방향을 잃으면 모델이 "삼성전자가 나에게 관심이 있다"처럼 말한다."""
+    await store.upsert_source(source("s1"))
+    samsung = entity(EntityKind.SECURITY, "삼성전자")
+    theme = entity(EntityKind.THEME, "반도체 대형주")
+    await store.apply_extraction(
+        "s1",
+        "fp",
+        (PROFILE, samsung, theme),
+        (
+            relation("interested_in", PROFILE, samsung, "s1"),
+            relation("belongs_to", samsung, theme, "s1"),
+        ),
+    )
+
+    detail = await store.entity_detail(samsung.id)
+    assert detail is not None
+    assert detail.entity.name == "삼성전자"
+    assert detail.entity.degree == 2
+
+    by_kind = {r.relation_kind: r for r in detail.relations}
+    assert by_kind["interested_in"].direction == "in"
+    assert by_kind["interested_in"].other_entity_name == "default"
+    assert by_kind["belongs_to"].direction == "out"
+    assert by_kind["belongs_to"].other_entity_name == "반도체 대형주"
+    assert by_kind["belongs_to"].other_entity_kind == EntityKind.THEME.value
+
+
+async def test_entity_detail_carries_the_source_text_that_produced_the_relation(
+    store: GraphStore,
+) -> None:
+    await store.upsert_source(long_source("s1", "HBM 장비주가 궁금해서 한미반도체를 봤어"))
+    hanmi = entity(EntityKind.SECURITY, "한미반도체")
+    await store.apply_extraction(
+        "s1",
+        "fp",
+        (PROFILE, hanmi),
+        (relation("interested_in", PROFILE, hanmi, "s1", rationale="HBM 장비 질문 반복"),),
+    )
+
+    detail = await store.entity_detail(hanmi.id)
+    assert detail is not None
+    (edge,) = detail.relations
+    assert edge.rationale == "HBM 장비 질문 반복"
+    assert edge.source is not None
+    assert edge.source.text == "HBM 장비주가 궁금해서 한미반도체를 봤어"
+    assert edge.source.kind == SourceKind.CHAT_MESSAGE.value
+    assert edge.source.locator == "conv-1#3"
+    assert edge.source.truncated is False
+    assert edge.source.full_chars == len("HBM 장비주가 궁금해서 한미반도체를 봤어")
+
+
+async def test_entity_detail_marks_a_clipped_excerpt_as_clipped(store: GraphStore) -> None:
+    """잘린 발췌를 전문처럼 인용하면 "원문에 그렇게 적혀 있다"가 거짓이 된다."""
+    body = "가" * 900
+    await store.upsert_source(long_source("s1", body))
+    kospi = entity(EntityKind.THEME, "코스피")
+    await store.apply_extraction(
+        "s1", "fp", (PROFILE, kospi), (relation("interested_in", PROFILE, kospi, "s1"),)
+    )
+
+    detail = await store.entity_detail(kospi.id, excerpt_chars=100)
+    assert detail is not None
+    (edge,) = detail.relations
+    assert edge.source is not None
+    assert edge.source.text == "가" * 100
+    assert edge.source.truncated is True
+    assert edge.source.full_chars == 900
+
+
+async def test_entity_detail_counts_reinforcement_over_all_time(store: GraphStore) -> None:
+    """창을 걸지 않는다 — 같은 응답의 이력이 전 기간이라 횟수도 전 기간이어야 한다."""
+    theme = entity(EntityKind.THEME, "배당")
+    for index, (source_id, confidence) in enumerate(
+        (("s1", Confidence.AMBIGUOUS), ("s2", Confidence.EXTRACTED)), start=1
+    ):
+        await store.upsert_source(source(source_id, fp=f"fp{index}"))
+        await store.apply_extraction(
+            source_id,
+            f"fp{index}",
+            (PROFILE, theme),
+            (
+                relation(
+                    "interested_in",
+                    PROFILE,
+                    theme,
+                    source_id,
+                    confidence=confidence,
+                    observed_at=NOW + timedelta(days=index),
+                ),
+            ),
+        )
+
+    detail = await store.entity_detail(theme.id)
+    assert detail is not None
+    (edge,) = detail.relations
+    # EDGE_ADDED 한 번 + EDGE_CHANGED 한 번 = 두 번 확인됐다.
+    assert edge.reinforcement == 2
+    assert edge.confidence == Confidence.EXTRACTED.value
+
+
+async def test_entity_detail_timeline_is_newest_first(store: GraphStore) -> None:
+    await store.upsert_source(source("s1"))
+    theme = entity(EntityKind.THEME, "고배당")
+    await store.apply_extraction(
+        "s1", "fp", (PROFILE, theme), (relation("interested_in", PROFILE, theme, "s1"),)
+    )
+
+    detail = await store.entity_detail(theme.id)
+    assert detail is not None
+    assert [event.op for event in detail.events] == [
+        GraphEventOp.EDGE_ADDED.value,
+        GraphEventOp.ENTITY_ADDED.value,
+    ]
+    assert detail.events[0].seq > detail.events[1].seq
+
+
+async def test_entity_detail_timeline_excludes_the_projection_marker(
+    store: GraphStore,
+) -> None:
+    """`entity_events()`와 같은 계약 — 재투영 표식은 어떤 노드의 이력에도 안 새어 나온다.
+
+    재투영은 엔티티를 지우므로 다시 적재해 노드를 되살린 뒤 본다. 그 사이 로그에는
+    표식 이벤트가 남아 있다(`test_reset_projection_keeps_sources_and_log`).
+    """
+    await store.upsert_source(source("s1"))
+    theme = entity(EntityKind.THEME, "고배당")
+    payload = (PROFILE, theme), (relation("interested_in", PROFILE, theme, "s1"),)
+    await store.apply_extraction("s1", "fp", *payload)
+    await store.reset_projection()
+    await store.apply_extraction("s1", "fp", *payload)
+
+    detail = await store.entity_detail(theme.id)
+    assert detail is not None
+    assert detail.events, "재적재로 노드가 되살아났으니 이력이 있어야 한다"
+    assert all(event.subject_id != "projection" for event in detail.events)
+    # 표식 문자열 자체를 노드로 넣어도 없는 노드다 — 엔티티가 아니라 표식이므로.
+    assert await store.entity_detail("projection") is None
+
+
+async def test_entity_detail_bounds_are_clamped_not_trusted(store: GraphStore) -> None:
+    await store.upsert_source(source("s1"))
+    theme = entity(EntityKind.THEME, "리츠")
+    await store.apply_extraction(
+        "s1", "fp", (PROFILE, theme), (relation("interested_in", PROFILE, theme, "s1"),)
+    )
+
+    # 0·음수·거대값을 그대로 SQL LIMIT에 넣으면 빈 답이나 전체 덤프가 된다.
+    for relation_limit, event_limit, excerpt in ((0, 0, 0), (-5, -5, -5), (10**9, 10**9, 10**9)):
+        detail = await store.entity_detail(
+            theme.id,
+            relation_limit=relation_limit,
+            event_limit=event_limit,
+            excerpt_chars=excerpt,
+        )
+        assert detail is not None
+        assert len(detail.relations) == 1
+        assert detail.events

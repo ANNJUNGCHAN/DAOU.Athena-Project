@@ -1042,3 +1042,196 @@ async def _collect_cluster_ai_labels(
 
         task.add_done_callback(discard_finished)
     return labels
+
+
+# ── 노드 하나의 상세(2026-09-03) ────────────────────────────────────────────────
+#
+# 채팅의 "이 노드 설명해줘"가 자료로 답할 수 있게 하는 유일한 경로다. 화면의 공통
+# 패널은 같은 질문에 세 왕복(profile-summary·cluster-map·entity-timeline)으로 답하는데
+# 모델에는 그 셋 중 어느 것도 노드 단위로 열려 있지 않았다.
+#
+# `entity-timeline`과 달리 `_require_model_exposure`를 탄다 — 사용자가 모델 전달을
+# 꺼 두면 노드 원문도 나가지 않아야 한다. 표시는 다른 분석과 같은 `_NOT_LLM_EXPOSED`다
+# (모델은 OpenAPI가 아니라 `athena_brain` 프록시로만 온다).
+
+_DEFAULT_ENTITY_DETAIL_LIMIT = 30
+
+
+class SourceExcerptOut(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    source_id: str
+    kind: str
+    text: str
+    locator: str | None
+    occurred_at: str
+    # 잘린 발췌를 전문처럼 인용하면 "원문에 그렇게 적혀 있다"가 거짓이 된다.
+    truncated: bool
+    full_chars: int
+
+
+class EntityRelationOut(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    relation_id: str
+    relation_kind: str
+    direction: Literal["out", "in"]
+    other_entity_id: str
+    other_entity_kind: str
+    other_entity_name: str
+    confidence: str
+    tier: str
+    rationale: str | None
+    observed_at: str
+    reinforcement: int
+    source: SourceExcerptOut | None
+
+
+class EntityDetailEventOut(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    seq: int
+    at: str
+    revision: int
+    op: str
+    subject_id: str
+    object_id: str | None
+    relation: str | None
+    confidence_before: str | None
+    confidence_after: str | None
+    source: SourceExcerptOut | None
+
+
+class EntityCandidateOut(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    entity_id: str
+    kind: str
+    name: str
+
+
+class EntityDetailResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    revision: int
+    # 질의를 그대로 돌려준다 — 모델이 "무엇을 찾아 준 것인가"를 스스로 확인할 수 있어야
+    # 이름이 비슷한 다른 노드를 설명하고도 모르는 일이 없다.
+    query: str
+    resolved: bool
+    entity_id: str | None = None
+    kind: str | None = None
+    name: str | None = None
+    degree: int | None = None
+    aliases: list[str] = []
+    relations: list[EntityRelationOut] = []
+    timeline: list[EntityDetailEventOut] = []
+    # 이름이 여럿에 걸리면 하나를 골라 단정하지 않는다(§0) — 후보를 주고 되묻게 한다.
+    candidates: list[EntityCandidateOut] = []
+
+
+def _source_excerpt_out(excerpt: object) -> SourceExcerptOut | None:
+    if excerpt is None:
+        return None
+    return SourceExcerptOut(
+        source_id=excerpt.source_id,
+        kind=excerpt.kind,
+        text=excerpt.text,
+        locator=excerpt.locator,
+        occurred_at=excerpt.occurred_at,
+        truncated=excerpt.truncated,
+        full_chars=excerpt.full_chars,
+    )
+
+
+@router.get(
+    "/analysis/entity-detail",
+    summary="노드 하나의 관계·이력·출처 원문",
+    operation_id="get_brain_entity_detail",
+    response_model=EntityDetailResponse,
+    openapi_extra={**_NOT_LLM_EXPOSED, "x-athena-side-effect": "none"},
+)
+async def get_brain_entity_detail(
+    request: Request,
+    authorization: Annotated[str, Header(alias="Authorization")],
+    entity: str,
+    x_athena_caller: Annotated[str | None, Header(alias="X-Athena-Caller")] = None,
+    limit: int = _DEFAULT_ENTITY_DETAIL_LIMIT,
+) -> EntityDetailResponse:
+    require_local_bearer(request, authorization)
+    _require_model_exposure(request, x_athena_caller)
+    store = _require_store(request)
+    revision = await store.graph_revision()
+    query = entity.strip()
+    if not query:
+        return EntityDetailResponse(revision=revision, query=entity, resolved=False)
+
+    bounded = _bounded(limit)
+    # 먼저 id로 본다 — 화면이 고른 노드는 id를 그대로 넘긴다. 실패하면 이름 검색이다.
+    detail = await store.entity_detail(query, relation_limit=bounded, event_limit=bounded)
+    if detail is None:
+        hits = await store.search_entities(query, limit=5)
+        if not hits:
+            return EntityDetailResponse(revision=revision, query=query, resolved=False)
+        # 이름이 정확히 하나에만 걸릴 때만 단정한다. 여럿이면 후보만 준다 —
+        # "삼성"이 삼성전자·삼성화재·삼성바이오로직스에 걸리는 일이 실제로 있다.
+        exact = [hit for hit in hits if hit.name.strip() == query]
+        chosen = exact[0] if len(exact) == 1 else (hits[0] if len(hits) == 1 else None)
+        if chosen is None:
+            return EntityDetailResponse(
+                revision=revision,
+                query=query,
+                resolved=False,
+                candidates=[
+                    EntityCandidateOut(entity_id=hit.entity_id, kind=hit.kind, name=hit.name)
+                    for hit in hits
+                ],
+            )
+        detail = await store.entity_detail(
+            chosen.entity_id, relation_limit=bounded, event_limit=bounded
+        )
+        if detail is None:
+            # FTS에는 있는데 엔티티가 없다 — 색인이 앞서간 경우다. 지어내지 않는다.
+            return EntityDetailResponse(revision=revision, query=query, resolved=False)
+
+    return EntityDetailResponse(
+        revision=revision,
+        query=query,
+        resolved=True,
+        entity_id=detail.entity.id,
+        kind=detail.entity.kind,
+        name=detail.entity.name,
+        degree=detail.entity.degree,
+        aliases=list(detail.entity.aliases),
+        relations=[
+            EntityRelationOut(
+                relation_id=edge.relation_id,
+                relation_kind=edge.relation_kind,
+                direction=edge.direction,
+                other_entity_id=edge.other_entity_id,
+                other_entity_kind=edge.other_entity_kind,
+                other_entity_name=edge.other_entity_name,
+                confidence=edge.confidence,
+                tier=edge.tier,
+                rationale=edge.rationale,
+                observed_at=edge.observed_at,
+                reinforcement=edge.reinforcement,
+                source=_source_excerpt_out(edge.source),
+            )
+            for edge in detail.relations
+        ],
+        timeline=[
+            EntityDetailEventOut(
+                seq=event.seq,
+                at=event.at,
+                revision=event.revision,
+                op=event.op,
+                subject_id=event.subject_id,
+                object_id=event.object_id,
+                relation=event.relation,
+                confidence_before=event.confidence_before,
+                confidence_after=event.confidence_after,
+                source=_source_excerpt_out(event.source),
+            )
+            for event in detail.events
+        ],
+    )

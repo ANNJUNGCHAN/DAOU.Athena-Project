@@ -507,7 +507,7 @@ test('buildGraphModePrefix: 그래프 모드임과 "모든 질문은 그래프 �
   assert.ok(p.includes('종목 시세·차트·공시 질문으로 해석하지 마라'));
 });
 
-test('buildGraphModePrefix: athena_brain 5개 액션을 알려준다(모델이 조회할 길)', () => {
+test('buildGraphModePrefix: athena_brain 6개 액션을 알려준다(모델이 조회할 길)', () => {
   const p = buildGraphModePrefix(GRAPH_CONTEXT, '20260902');
   for (const action of ['profile', 'god_nodes', 'surprising', 'questions', 'diff']) {
     assert.ok(p.includes(action), `${action} 액션이 접두에 없다`);
@@ -648,4 +648,44 @@ test('buildLiveTurnPrompt: 백테스트가 아닌 턴에는 프로젝트 블록�
   );
   assert.ok(!plain.includes('프로젝트'));
   assert.ok(!buildGraphModePrefix(GRAPH_CONTEXT, '20260902').includes('프로젝트 파일'));
+});
+
+// ── 노드 설명·화면 제어·편집 제안(2026-09-03) ────────────────────────────────
+//
+// 사용자가 요구한 것은 셋이다: 채팅으로 그래프의 모든 기능을 제어하고, 편집도 하고,
+// "이 노드 설명해줘"에 히스토리를 뒤져 자료로 답하는 것. 접두가 그 셋을 실제로
+// 가르치는지를 여기서 잰다 — 도구를 만들어 두고 접두가 모르면 아무 일도 안 일어난다.
+
+test('buildGraphModePrefix: 노드 설명 요청에는 entity 조회를 먼저 하라고 지시한다', () => {
+  const p = buildGraphModePrefix(GRAPH_CONTEXT, '20260902');
+  assert.ok(p.includes('이 노드 설명해줘'), '어떤 요청에 쓰라는 것인지가 없다');
+  assert.ok(p.includes('source.text'), '원문 발췌를 인용하라는 지시가 없다');
+  assert.ok(p.includes('truncated'), '잘린 발췌를 전문처럼 인용하지 말라는 지시가 없다');
+  assert.ok(p.includes('candidates'), '이름이 여럿에 걸릴 때 되묻으라는 지시가 없다');
+});
+
+test('buildGraphModePrefix: athena_graph_view 4개 제어 액션을 알려준다', () => {
+  const p = buildGraphModePrefix(GRAPH_CONTEXT, '20260902');
+  assert.ok(p.includes('athena_graph_view'));
+  for (const action of ['navigate', 'select', 'filter', 'fit']) {
+    assert.ok(p.includes(action), `${action} 액션이 접두에 없다`);
+  }
+  // 선택지 값이 접두에 없으면 모델이 걸 수 없는 값을 고른다(graph-filters.js와 같은 셋).
+  for (const value of ['summary|map|settings', '30|90|180|365', '0|2|3|5']) {
+    assert.ok(p.includes(value), `${value} 선택지가 접두에 없다`);
+  }
+});
+
+test('buildGraphModePrefix: 말로만 답하고 화면을 그대로 두지 말라고 한다', () => {
+  const p = buildGraphModePrefix(GRAPH_CONTEXT, '20260902');
+  assert.ok(p.includes('화면을 그대로 두면'));
+});
+
+test('buildGraphModePrefix: 편집은 제안까지이고 "고쳤다"고 말하지 말라고 못박는다', () => {
+  // 이 지시가 사라지면 모델이 사람이 누르지도 않은 것을 고쳤다고 말한다 —
+  // 티어 설계(brain_tools.py)를 화면 문구가 배반하는 자리다.
+  const p = buildGraphModePrefix(GRAPH_CONTEXT, '20260902');
+  assert.ok(p.includes('propose_edit'));
+  assert.ok(p.includes('그래프에 쓰는 도구가 없다'));
+  assert.ok(p.includes('이렇게 고칠지 물었다'));
 });

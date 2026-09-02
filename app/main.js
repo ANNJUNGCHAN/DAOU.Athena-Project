@@ -2222,6 +2222,55 @@ const BACKTEST_TOOL_NAME = 'athena_backtest';
 // propose_code만 결과가 아니라 호출 입력(step.input.propose_code)에서 읽는다 —
 // strategy_id가 있으면 결과는 버전 저장 응답이라 초안 본문(source)이 안 실린다.
 function maybeForwardBacktestChatAction(step, resultBlock) {
+const GRAPH_VIEW_TOOL_NAME = 'athena_graph_view';
+
+// 그래프 채팅 액션(2026-09-03) — athena_graph_view의 HTTP 무호출 액션 다섯
+// (graph_view_tools.py의 navigate·select·filter·fit·propose_edit)을 셸 렌더러의
+// 그래프 캔버스로 흘려보낸다. 위 백테스트 함수와 **같은 자리·같은 방식**이다:
+// 도구가 delivered:"canvas" 봉투를 돌려주고, 여기서 그것만 골라 렌더러로 보낸다.
+//
+// 백테스트와 달리 전부 결과(tool_result)에서 읽는다 — 이 도구는 백엔드를 타지 않아
+// 결과가 곧 입력의 정규화판이고, 봉투를 만드는 검증이 이미 백엔드에서 끝났다.
+//
+// propose_edit도 여기로 온다. **그것이 그래프를 고치지 않는다**: 렌더러가 확정 카드를
+// 띄우고, 사람이 누르면 사람의 답변 문장이 평소의 채팅→추출 경로를 탄다
+// (lib/graph-mode/graph-edit-proposal.js 참고). 모델에게는 카드를 누를 길이 없다.
+// orbWin에는 안 보낸다 — 백테스트 액션과 같은 이유(채팅 전용 사람 액션)다.
+function maybeForwardGraphChatAction(step, resultBlock) {
+  if (resultBlock.is_error === true) return;
+  const base = String(step.name || '').split('__').pop();
+  if (base !== GRAPH_VIEW_TOOL_NAME) return;
+  const text = extractToolResultText(resultBlock.content);
+  if (!text) return;
+  let payload;
+  try { payload = JSON.parse(text); } catch { return; }
+  if (!payload || typeof payload !== "object") return;
+  if (payload.delivered !== 'canvas') return;
+  let message = null;
+  if (payload.kind === 'navigate' && typeof payload.surface === 'string') {
+    message = { kind: 'navigate', surface: payload.surface };
+  } else if (payload.kind === 'select' && typeof payload.entity_id === 'string') {
+    message = { kind: 'select', entityId: payload.entity_id };
+  } else if (payload.kind === 'filter' && payload.patch && typeof payload.patch === 'object') {
+    message = { kind: 'filter', patch: payload.patch };
+  } else if (payload.kind === 'fit') {
+    message = { kind: 'fit' };
+  } else if (payload.kind === 'edit_proposal') {
+    message = {
+      kind: 'edit_proposal',
+      op: payload.op,
+      subject: payload.subject == null ? null : payload.subject,
+      object: payload.object,
+      relation: payload.relation,
+      reason: payload.reason == null ? null : payload.reason,
+    };
+  }
+  if (!message) return;
+  if (shellWin && !shellWin.isDestroyed()) {
+    shellWin.webContents.send('athena:graph-chat-action', message);
+  }
+}
+
   if (resultBlock.is_error === true) return;
   const base = String(step.name || '').split('__').pop();
   if (base !== BACKTEST_TOOL_NAME) return;
@@ -2352,6 +2401,7 @@ function createToolStepTracker(sendFn = sendLiveToolStep, { forwardNudgeGuard = 
 
 // 하위 에이전트 도크(task #32, 보드04 2EZ-0/DG2-0) — Agent 생애주기 system
 // 이벤트(task_started/progress/updated/notification)를 셸 렌더러로 릴레이한다.
+              maybeForwardGraphChatAction(step, block);
 // 분류 자체는 stream-json-parser.js의 순수 함수(classifySubagentEvent)가 맡고,
 // 여기서는 last_tool_name만 카드 진행 표시와 같은 라벨표(toolStepLabel)를
 // 통과시킨다 — "현재가 조회" 같은 사용자 언어로, 원문 툴 이름은 새지 않는다.
