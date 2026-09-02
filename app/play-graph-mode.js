@@ -242,6 +242,39 @@ async function main() {
   })()`);
   log(`      배너 CTA가 심은 문장: ${JSON.stringify(ctaSeed)}`);
 
+  // 입력창이 긴 글에서 자라는지(2026-09-02) — <input>이던 시절엔 한 줄에 갇혀
+  // 가로로만 스크롤됐다. 한 줄 높이 / 긴 글 높이 / 상한을 함께 잰다.
+  const grow = await wc.executeJavaScript(`(async () => {
+    const el = document.getElementById('input');
+    const row = document.querySelector('.input-row');
+    const h = () => Math.round(el.getBoundingClientRect().height);
+    const rowH = () => Math.round(row.getBoundingClientRect().height);
+    el.value = '한 줄';
+    el.dispatchEvent(new Event('input', { bubbles: true }));
+    await new Promise((r) => setTimeout(r, 60));
+    const one = { input: h(), row: rowH() };
+    el.value = Array.from({ length: 6 }, (_, i) => '이건 긴 글입니다 ' + i).join(' 그리고 ');
+    el.dispatchEvent(new Event('input', { bubbles: true }));
+    await new Promise((r) => setTimeout(r, 60));
+    const many = { input: h(), row: rowH() };
+    el.value = Array.from({ length: 80 }, () => '아주 긴 글').join(' ');
+    el.dispatchEvent(new Event('input', { bubbles: true }));
+    await new Promise((r) => setTimeout(r, 60));
+    const huge = { input: h(), row: rowH() };
+    el.value = '';
+    el.dispatchEvent(new Event('input', { bubbles: true }));
+    await new Promise((r) => setTimeout(r, 60));
+    const reset = { input: h(), row: rowH() };
+    return {
+      tag: el.tagName,
+      one, many, huge, reset,
+      grew: many.input > one.input,
+      capped: huge.input <= 168 + 1,
+      shrankBack: reset.input === one.input,
+    };
+  })()`);
+  log(`      입력창 자람: ${JSON.stringify(grow)}`);
+
   // 자가 확인용 스크린샷 — 화면이 실제로 그려졌는지 사람 없이도 판별한다.
   await wait(4000);
   const shot = await shellWin.webContents.capturePage();

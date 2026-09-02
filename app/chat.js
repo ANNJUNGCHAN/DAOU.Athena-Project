@@ -89,6 +89,18 @@ function refreshResultDockVisibility() {
   $resultDock.hidden = resultRow.row.hidden && sourceRow.row.hidden && agentDockRow.row.hidden;
 }
 const $input = document.getElementById('input');
+
+// 입력창 높이를 내용에 맞춘다(2026-09-02 사용자 지적 "글 길게 쓰면 여러 줄이 되어야").
+// height를 먼저 비워야 scrollHeight가 "지금 높이"가 아니라 "필요한 높이"를 답한다 —
+// 안 비우면 한 번 커진 높이가 줄지 않는다. 상한은 CSS의 max-height가 쥐고, 여기서는
+// 그 값을 넘겨 받아 그 이상 키우지 않는다(넘으면 textarea가 자체 스크롤한다).
+function autoGrowInput() {
+  if (!$input) return;
+  $input.style.height = 'auto';
+  const max = parseFloat(getComputedStyle($input).maxHeight);
+  const needed = $input.scrollHeight;
+  $input.style.height = `${Number.isFinite(max) ? Math.min(needed, max) : needed}px`;
+}
 const $dot = document.getElementById('dot');
 const $lockHint = document.getElementById('lockHint');
 const $lockText = document.getElementById('lockText');
@@ -1599,6 +1611,7 @@ window.AthenaShell.registerOpenSettings(openSettings);
 window.AthenaShell.registerSeedChatInput((text) => {
   if (!$input) return;
   $input.value = text != null ? String(text) : '';
+  autoGrowInput();
   $input.focus();
 });
 
@@ -1660,6 +1673,7 @@ function insertMention(alias) {
   if (!token) { closeMentionMenu(); return; }
   const value = $input.value;
   $input.value = `${value.slice(0, token.start)}@${alias} ${value.slice(token.end)}`;
+  autoGrowInput();
   const caret = token.start + alias.length + 2;
   $input.setSelectionRange(caret, caret);
   $input.focus();
@@ -1732,6 +1746,10 @@ function dispatchUserQuery(text) {
   runQuery(normalized);
 }
 
+// ��t �tQX� �H�� ���(��#0�\  pi �h  input t�� 
+// keydown�� U�X�).
+$input.addEventListener('input', autoGrowInput);
+
 $input.addEventListener('keydown', (e) => {
   // 멘션 메뉴가 열려 있으면 방향키·Enter·Tab·Esc는 메뉴 몫이다 — 제출보다 먼저.
   if (mentionState.open) {
@@ -1750,10 +1768,16 @@ $input.addEventListener('keydown', (e) => {
     }
     if (e.key === 'Escape') { e.preventDefault(); closeMentionMenu(); return; }
   }
+  // Shift+Enter는 줄바꿈이다(2026-09-02 — 입력창이 textarea가 된 뒤로 필요해졌다).
+  // 그냥 Enter는 그대로 제출이고, 이때 preventDefault를 해야 제출과 동시에 줄바꿈이
+  // 하나 들어가지 않는다(<input> 시절에는 애초에 줄바꿈이 없어 필요 없었다).
+  if (e.key === 'Enter' && e.shiftKey) return;
   if (e.key !== 'Enter' || state !== 'idle' || remoteQueryBusy) return;
+  e.preventDefault();
   // 첨부 칩이 있으면 전송 직전에 경로를 동봉한다(코덱스 UI 이식, 2026-08-27).
   const text = consumeAttachments($input.value);
   $input.value = '';
+  autoGrowInput();
   dispatchUserQuery(text);
 });
 
@@ -2002,11 +2026,13 @@ function renderKiumiMenu() {
   $kiumiMenu.appendChild(kiumiItem('target', '목표', '목표를 대화에서 구체화한다', () => {
     closeKiumiMenu();
     $input.value = '달성할 목표를 구체화해줘: ';
+    autoGrowInput();
     $input.focus();
   }));
   $kiumiMenu.appendChild(kiumiItem('plan', '계획 모드', '실행 전 단계를 먼저 정리한다', () => {
     closeKiumiMenu();
     $input.value = '다음 작업을 실행 가능한 단계와 검증 기준으로 계획해줘: ';
+    autoGrowInput();
     $input.focus();
   }));
   const sep = document.createElement('div');
@@ -2040,6 +2066,7 @@ function renderKiumiMenu() {
           const value = $input.value;
           const spacer = value && !/\s$/.test(value) ? ' ' : '';
           $input.value = `${value}${spacer}@${server.alias} `;
+          autoGrowInput();
           $input.focus();
           $input.setSelectionRange($input.value.length, $input.value.length);
         },
@@ -2619,6 +2646,7 @@ function renderApprovalCard(r) {
   const fix = _btn('고칠 게 있어', 'routine-btn');
   fix.addEventListener('click', () => {
     $input.value = draftFixSeedText(r);
+    autoGrowInput();
     $input.focus();
   });
 

@@ -826,9 +826,14 @@ html.is-boot-expanding #winControls { opacity: 0; }
 }
 .input-row {
   flex-shrink: 0;
-  display: flex; align-items: center; gap: 16px;
+  display: flex; align-items: flex-end; gap: 16px;
   padding: 0 18px;
-  height: 44px;
+  /* 긴 글에서 입력창이 자란다(2026-09-02 사용자 지적) — 고정 height였을 때는
+   * <input>이 한 줄에 갇혀 가로로만 스크롤됐다. 최소 높이는 그대로 44px이라
+   * 한 줄일 때 모습은 안 바뀐다. align-items를 flex-end로 내리는 이유: 여러
+   * 줄이 되면 키우미 버튼이 첫 줄 옆이 아니라 마지막 줄 옆(입력 커서와 같은
+   * 높이)에 있어야 한 덩어리로 읽힌다. */
+  min-height: 44px;
   /* 경계는 어둠이 아니라 광량으로 세운다(2026-08-22 사용자 지적 "검은 선" —
    * liquid-glass.md 렌징 · soul.md §7). 세기는 보드 37(9ID-0) 실측 #FFFFFF66. */
   border-top: 1px solid rgb(255 255 255 / 40%);
@@ -1053,6 +1058,16 @@ html.is-boot-expanding #winControls { opacity: 0; }
   caret-color: var(--color-k-text);
   font-family: var(--font-body);
   font-size: var(--text-lg);
+  /* textarea 전환분(2026-09-02) — 높이는 chat.js가 scrollHeight로 정한다.
+   * resize 손잡이는 이 유리 표면에 없던 요소라 끈다(사람이 끌어 늘리는 것이
+   * 아니라 내용에 맞춰 자란다). line-height 20 + 위아래 12 = 44px, 즉 한 줄일
+   * 때 높이가 옛 고정값과 같다. max-height에서 멈추고 그 뒤로는 안에서
+   * 스크롤한다 — 입력창이 대화를 다 덮으면 방금 무엇을 물었는지가 사라진다. */
+  resize: none;
+  line-height: 20px;
+  padding: 12px 0;
+  max-height: 168px;
+  overflow-y: auto;
 }
 /* 2026-08-19 QA 결함 #4(중대) — --color-k-faint(#6b7480)는 유리 위에서 평시에도
  * 잘 안 읽힌다는 실측 지적(02-chat-only-idle.png). 무채색 원칙 안에서 한 단계
