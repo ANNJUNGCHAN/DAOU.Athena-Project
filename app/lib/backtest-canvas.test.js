@@ -648,32 +648,41 @@ test('되돌리기 스택은 20개까지 — 더 오래된 변경은 이유를 �
   });
 });
 
-test('검증에 걸린 설정은 반영하지 않고 대기시킨다 — 폼 오류·draft.errors에 남는다', async () => {
+test('검증에 걸리는 설정도 반영된다 — 오류는 실행 전 확인으로 폼·영수증·pending에 남는다', async () => {
   const { container, canvas } = await mounted();
   const receipt = canvas.onChatAction({
     kind: 'spec_draft',
     patch: { symbols: ['005930'], fromDt: '20240630', toDt: '20240101' },
     suggest_run: true,
   });
-  assert.equal(receipt.applied, false);
-  assert.equal(receipt.canUndo, false);
+  assert.equal(receipt.applied, true);
+  assert.equal(receipt.canUndo, true);
   assert.deepEqual(receipt.errors, ['종료일은 시작일보다 빠를 수 없습니다']);
-  assert.equal(receipt.rows.length, 3);   // 무엇을 하려 했는지는 그대로 보인다
+  assert.equal(receipt.rows.length, 3);
 
   const ctx = canvas.getContext();
-  assert.deepEqual(ctx.spec.symbols, []);
-  assert.deepEqual(ctx.draft.errors, ['종료일은 시작일보다 빠를 수 없습니다']);
-  assert.deepEqual(ctx.draft.patch, { symbols: ['005930'], fromDt: '20240630', toDt: '20240101' });
-  assert.equal(ctx.draft.suggest_run, true);
+  assert.deepEqual(ctx.spec.symbols, ['005930']);   // 종목·날짜는 들어갔다
+  assert.equal(ctx.spec.toDt, '20240101');
+  assert.equal(ctx.draft, null);
+  assert.deepEqual(ctx.pending, ['종료일은 시작일보다 빠를 수 없습니다']);
   assert.deepEqual(ctx.lastChange.errors, ['종료일은 시작일보다 빠를 수 없습니다']);
   const lines = findByClass(container, 'backtest-design-error-line').map((n) => n.textContent);
   assert.deepEqual(lines, ['종료일은 시작일보다 빠를 수 없습니다']);
 
-  // 고쳐 보내면 그때 들어가고 대기 중 초안이 지워진다.
+  // 다음 턴에 고쳐 보내면 오류 줄과 pending이 비워진다.
   canvas.onChatAction({ kind: 'spec_draft', patch: VALID_PATCH });
-  assert.equal(canvas.getContext().draft, null);
+  assert.deepEqual(canvas.getContext().pending, []);
   assert.equal(canvas.getContext().spec.toDt, '20240630');
   assert.equal(findByClass(container, 'backtest-design-error-line').length, 0);
+});
+
+test('전략 전환은 종목·날짜가 비어 있어도 바로 반영된다 — 2026-09-02 이평이격 실측', async () => {
+  const { canvas } = await mounted({ fetchPresets: async () => TWO_PRESETS });
+  const receipt = canvas.onChatAction({ kind: 'spec_draft', patch: { preset: 'rsi_reversal' } });
+  assert.equal(receipt.applied, true);
+  assert.equal(receipt.rows[0].label, '전략');
+  assert.ok(receipt.errors.includes('종목을 하나 이상 고르세요'));
+  assert.equal(canvas.getContext().spec.presetId, 'rsi_reversal');
 });
 
 test('모르는 프리셋 id는 반영하지 않고 오류로 알린다', async () => {
@@ -1056,7 +1065,7 @@ test('getContext(): 키 목록이 계약으로 고정돼 있다 — spec은 복�
   const { canvas } = await mounted();
   const ctx = canvas.getContext();
   assert.deepEqual(Object.keys(ctx), [
-    'view', 'tab', 'designTab', 'runPath', 'spec', 'draft', 'presets',
+    'view', 'tab', 'designTab', 'runPath', 'spec', 'draft', 'pending', 'presets',
     'code', 'codeDraft', 'lastResult', 'diagnosis', 'optimize', 'runs', 'coverage',
     'lastChange',
   ]);

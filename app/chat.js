@@ -2774,20 +2774,27 @@ function renderBacktestChangeCard(receipt) {
     card.appendChild(rowEl);
   });
 
-  // 검증에 걸린 변경은 반영되지 않는다 — 오류를 그대로 보여준다(모델은 다음 턴
-  // 컨텍스트의 "대기 중 초안"에서 같은 오류를 읽고 고친다).
+  // 반영된 변경에도 검증 오류가 남을 수 있다(빈 종목·날짜) — 그건 "실행 전에 채울 것"이지
+  // 반영 실패가 아니다(2026-09-02). 반영이 막힌 경우(모르는 프리셋 등)만 라벨 없이 보여준다.
   const errorHost = document.createElement('div');
   card.appendChild(errorHost);
-  const showErrors = (messages) => {
+  const showErrors = (messages, label) => {
     errorHost.textContent = '';
-    (Array.isArray(messages) ? messages : []).forEach((m) => {
+    const list = Array.isArray(messages) ? messages : [];
+    if (label && list.length) {
+      const labelEl = document.createElement('div');
+      labelEl.className = 'backtest-change-error-label';
+      labelEl.textContent = label;
+      errorHost.appendChild(labelEl);
+    }
+    list.forEach((m) => {
       const errEl = document.createElement('div');
       errEl.className = 'backtest-change-error';
       errEl.textContent = String(m);
       errorHost.appendChild(errEl);
     });
   };
-  showErrors(receipt.errors);
+  showErrors(receipt.errors, receipt.applied ? '실행 전에 채울 것' : null);
 
   const actions = document.createElement('div');
   actions.className = 'routine-approval-actions backtest-change-actions';

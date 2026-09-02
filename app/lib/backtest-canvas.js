@@ -606,8 +606,11 @@ function createBacktestCanvas(options) {
   // 실행·수집·저장·활성화·배포는 그대로 사람이 버튼을 눌러야 한다. 바뀐 것은 폼에
   // 들어가는 경로 하나뿐이다.
   //
-  // 검증에 걸린 설정은 반영하지 않고 state.draft에 남긴다 — 다음 턴 컨텍스트의
-  // draft.errors로 모델이 자기 오류를 보고 고쳐 보낼 수 있어야 한다.
+  // 검증에 걸리는 값(빈 종목·날짜 등)이 있어도 설정은 반영한다 — 사람이 폼에서 프리셋을
+  // 고를 때 종목이 비어 있어도 바뀌는 것과 같은 규칙이다(2026-09-02 실측: "이평이격으로
+  // 바꿔줘"가 종목 미입력 검증에 막혀 화면이 안 바뀌었다). 오류는 실행 전 확인 사항으로
+  // 폼 오류 줄·채팅 카드·다음 턴 컨텍스트(pending)에 남는다. 반영을 막는 것은 얹을
+  // 스펙이 없거나 모르는 프리셋뿐이다.
 
   const UNDO_LIMIT = 20;
   const undoStack = [];   // {id, kind, before} — 반영 직전의 상태 스냅샷
@@ -632,16 +635,16 @@ function createBacktestCanvas(options) {
     return base ? SpecModel.applyPatch(base, patch) : null;
   }
 
-  function mergeErrors(patch, merged) {
+  // 반영을 막는 것만 돌려준다 — 얹을 스펙이 없거나 모르는 프리셋. 검증 오류는 막지 않는다.
+  function mergeBlockers(patch, merged) {
     if (!merged) return ['프리셋이 없어 설정을 얹을 수 없습니다'];
-    const errors = SpecModel.validate(merged);
     // 모르는 프리셋 id는 mergePatch가 조용히 흘려보내 "아무것도 안 바뀐 반영"이 된다 —
-    // 사람에게도 모델에게도(getContext().draft.errors) 알리고 반영을 막는다.
+    // 사람에게도 모델에게도 알리고 반영을 막는다.
     const wanted = patch.preset;
     if (typeof wanted === 'string' && !presets.some((p) => p.id === wanted)) {
-      errors.unshift(`${wanted}는 없는 프리셋입니다`);
+      return [`${wanted}는 없는 프리셋입니다`];
     }
-    return errors;
+    return [];
   }
 
   function specRows(before, after) {
@@ -729,23 +732,24 @@ function createBacktestCanvas(options) {
     if (isBusyView()) return busyReceipt('spec_draft', note);
 
     const merged = mergePatch(patch);
-    const errors = mergeErrors(patch, merged);
+    const blockers = mergeBlockers(patch, merged);
     const rows = merged ? specRows(spec || SpecModel.createSpec(null), merged) : [];
-    if (errors.length) {
-      // 반영하지 않고 대기시킨다 — 폼에는 오류 줄로, 모델에게는 draft.errors로 남는다.
-      setState({ draft: { patch, note, suggest_run: suggestRun }, formErrors: errors });
+    if (blockers.length) {
       return remember(makeReceipt('spec_draft', {
-        note, rows, errors, suggest_run: suggestRun,
+        note, rows, errors: blockers, suggest_run: suggestRun,
       }));
     }
 
+    // 검증 오류가 있어도 반영한다 — 오류는 폼 오류 줄과 영수증 errors("실행 전에 채울 것")로
+    // 남고, 모델은 다음 턴 컨텍스트의 pending에서 같은 목록을 읽어 마저 채운다.
+    const pending = SpecModel.validate(merged);
     const before = snapshot();
     spec = merged;
     setState({
-      draft: null, formErrors: [], view: 'design', tab: 'design', designTab: 'form',
+      draft: null, formErrors: pending, view: 'design', tab: 'design', designTab: 'form',
     });
     const receipt = remember(makeReceipt('spec_draft', {
-      applied: true, note, rows, suggest_run: suggestRun,
+      applied: true, note, rows, errors: pending, suggest_run: suggestRun,
       tab: state.tab, designTab: state.designTab, canUndo: true,
     }));
     pushUndo(receipt.id, 'spec_draft', before);
@@ -876,14 +880,10 @@ function createBacktestCanvas(options) {
       designTab: state.designTab,
       runPath,
       spec: spec ? JSON.parse(JSON.stringify(spec)) : null,
-      draft: state.draft
-        ? {
-          patch: state.draft.patch,
-          note: state.draft.note,
-          suggest_run: state.draft.suggest_run,
-          errors: mergeErrors(state.draft.patch, mergePatch(state.draft.patch)),
-        }
-        : null,
+      // 설정은 검증과 무관하게 바로 들어가므로 대기 초안은 없다 — 계약 키는 남긴다.
+      draft: null,
+      // 실행 전에 채워야 할 것(SpecModel.validate) — 모델이 다음 턴에 마저 채운다.
+      pending: spec ? SpecModel.validate(spec) : [],
       presets: presets.map((p) => ({ id: p.id, name: p.name })),
       code: {
         source: code.slice(0, CONTEXT_CODE_LIMIT),
