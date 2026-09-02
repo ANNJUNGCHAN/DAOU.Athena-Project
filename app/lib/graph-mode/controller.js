@@ -1161,6 +1161,10 @@ function createGraphModeController(deps) {
         // 상위 신호는 표의 "상위 5"가 아니라 창 전체에서 보강 순으로 고른다 —
         // 표가 5개만 보여도 모델은 더 물어볼 수 있어야 한다.
         topSignals: entries.slice(0, 12).map((e) => ({
+          // id를 함께 싣는다(2026-09-03) — 채팅이 athena_graph_view action=select로
+          // 노드를 지목하려면 id가 필요한데, 이름만 주면 모델이 그것을 알 길이
+          // 없어 조회를 한 번 더 돌거나 이름을 id인 척 넣는다(전수 검증 실측).
+          entityId: e.entity_id,
           name: e.entity_name,
           kind: e.entity_kind,
           relation: e.relation_kind,
