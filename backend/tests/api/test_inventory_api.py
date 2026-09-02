@@ -161,7 +161,13 @@ def test_inventory_partition_and_static_openapi_coverage() -> None:
     # 작업에서 갱신되지 않아 이미 빨간 상태였고, 여기서 실측값으로 맞춘다.
     # 390 = 389 + get_brain_entity_detail 1개(2026-09-03) — 채팅이 "이 노드
     # 설명해줘"에 답할 수 있게 노드 하나의 관계·이력·대화 원문 발췌를 주는 조회.
-    assert len(operation_ids) == 390
+    # 393 = 390 + 3. 핀을 갱신하지 않고 들어온 셋이다: 흐름 지도(map)와 코드
+    # 생성(codegen) 2개(aab199f), 저장된 시각 묶음을 되읽는
+    # GET /strategies/{id}/versions/{id} 1개(e52c101). 여기서 실측값으로 맞춘다.
+    # 399 = 393 + 시각 설계 라우트 6개(/api/v1/backtest/visual의 registry·validate·
+    # compile·question·patch·from-spec) — 그래프를 검증·컴파일하고 질문·수정안을
+    # 계산할 뿐 저장·실행·활성화하지 않는다(별도 파일 api/backtest_visual.py).
+    assert len(operation_ids) == 399
     assert "canvas_chart_page" in operation_ids
     assert "canvas_series_page" in operation_ids
     assert "get_internal_oauth_status" in operation_ids
