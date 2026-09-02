@@ -151,6 +151,9 @@ function validate(spec, options) {
   const checkConditions = !(options && options.conditions === false);
   const errors = [];
   if (!spec.symbols.length) errors.push('종목을 하나 이상 고르세요');
+  // 백엔드 POST /runs는 종목 1개만 받는다(§2 실행당 대상 지정) — 실행 후 422로 알기 전에
+  // 폼과 채팅이 먼저 알아야 한다(2026-09-02 실측: 채팅이 종목 둘을 넣어 실행이 거부됐다).
+  if (spec.symbols.length > 1) errors.push('실행은 종목 1개만 지원합니다 — 하나만 남기세요');
   if (spec.symbols.some((s) => !isValidStkCd(s))) errors.push('종목코드는 6자리 숫자여야 합니다');
   if (!isValidYyyymmdd(spec.fromDt) || !isValidYyyymmdd(spec.toDt)) {
     errors.push('시작일·종료일은 YYYYMMDD 형식이어야 합니다');

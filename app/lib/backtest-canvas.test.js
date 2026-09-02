@@ -1287,3 +1287,18 @@ test('코드 경로 실행은 폼의 진입·청산 조건을 검사하지 않�
   await flush();
   assert.ok(sent && typeof sent.source === 'string' && sent.source.includes('def signals'));
 });
+
+test('오류 화면에는 설계로 돌아가는 버튼이 있다 — 막다른 길 금지(2026-09-02 "뒤로가기가 없어")', async () => {
+  const { container, canvas } = await mounted({
+    run: async () => { throw new Error('이 실행 경로는 종목 1개만 지원한다'); },
+  });
+  await fillForm(container);
+  await click(findByClass(container, 'backtest-run-button')[0]);
+  await flush();
+  assert.equal(findByClass(container, 'backtest-canvas-error').length, 1);
+  const back = findByClass(container, 'backtest-error-back')[0];
+  assert.ok(back, '설계로 돌아가기 버튼이 있어야 한다');
+  await click(back);
+  assert.equal(canvas.getContext().view, 'design');
+  assert.equal(findByClass(container, 'backtest-symbol-add').length, 1);
+});
