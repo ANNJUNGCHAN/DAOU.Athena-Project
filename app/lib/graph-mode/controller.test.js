@@ -1251,3 +1251,33 @@ test('getContext(): 선택 주입(getProfileSummaryEntries 등)이 없어도 빈
   assert.deepEqual(ctx.hiddenLinks, []);
   assert.equal(ctx.counts.uncertain, 0);
 });
+
+// ── CTA가 무엇을 물어야 하는지 함께 넘긴다(2026-09-02) ─────────────────────
+// 인자 없이 부르던 옛 판에서는 받는 쪽이 상황을 몰라 입력창에 포커스만 줬다.
+// 버튼 문구는 "채팅에서 답하기"인데 눌러도 아무 일이 없다는 제보의 원인이다.
+
+test('패널 CTA — 어긋나는 신호면 kind:conflict와 이름을 넘긴다', () => {
+  const asks = [];
+  const { controller, elements } = setup({ withPanel: true, onPanelCta: (a) => asks.push(a) });
+  controller.selectEntity('e:samsung', tablePanelData({
+    // 티어가 둘이면 "두 출처가 다르게 말합니다"가 뜨고 CTA가 conflict가 된다.
+    sources: [
+      { tier: 'deterministic', confidence: 'EXTRACTED', rationale: '체결 4건' },
+      { tier: 'conversational', confidence: 'INFERRED', rationale: '장기 보유라고 말했다' },
+    ],
+  }));
+  elements.panel.querySelector('.panel-cta').dispatchEvent({ type: 'click' });
+  assert.equal(asks.length, 1);
+  assert.equal(asks[0].kind, 'conflict');
+  assert.equal(asks[0].entityId, 'e:samsung');
+  assert.ok(asks[0].name);
+});
+
+test('패널 CTA — 어긋남·숨은연관이 없으면 kind:plain이다', () => {
+  const asks = [];
+  const { controller, elements } = setup({ withPanel: true, onPanelCta: (a) => asks.push(a) });
+  controller.selectEntity('e:samsung', tablePanelData());
+  elements.panel.querySelector('.panel-cta').dispatchEvent({ type: 'click' });
+  assert.equal(asks.length, 1);
+  assert.equal(asks[0].kind, 'plain');
+});

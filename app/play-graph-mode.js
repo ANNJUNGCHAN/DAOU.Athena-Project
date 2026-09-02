@@ -209,6 +209,21 @@ async function main() {
   })()`);
   log(`      채팅에 실리는 그래프 컨텍스트: ${JSON.stringify(chatContext)}`);
 
+  // 배너 CTA가 실제로 채팅 입력에 문장을 심는지(2026-09-02) — 옛 판은 포커스만 줘서
+  // 눌러도 아무 일이 없었다. 요약 표면으로 갔다가 눌러 보고, 원래 표면으로 돌아온다.
+  const ctaSeed = await wc.executeJavaScript(`(async () => {
+    document.getElementById('graphHeaderSummaryTab').click();
+    await new Promise((r) => setTimeout(r, 1200));
+    const cta = document.querySelector('#graphConfirmBanner .confirm-banner-cta');
+    if (!cta) return { ok: false, reason: '확인 필요 배너가 없다(확인할 것이 0건일 수 있다)' };
+    const before = document.getElementById('input').value;
+    cta.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    const after = document.getElementById('input').value;
+    document.getElementById('graphViewTab').click();
+    return { ok: after !== before && after.length > 0, before, after };
+  })()`);
+  log(`      배너 CTA가 심은 문장: ${JSON.stringify(ctaSeed)}`);
+
   // 자가 확인용 스크린샷 — 화면이 실제로 그려졌는지 사람 없이도 판별한다.
   await wait(4000);
   const shot = await shellWin.webContents.capturePage();

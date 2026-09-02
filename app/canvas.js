@@ -2069,6 +2069,26 @@ let lastThemeClusterCount = 0;
 // 핑크 점선·컨텍스트 패널의 "숨은" 관계 행 전부 이 한 번의 fetch에서 나온다.
 let lastSurprisingConnections = [];
 
+// 그래프 화면의 CTA가 채팅에 시작 문장을 심는 공용 다리(2026-09-02).
+//
+// 보드 43 "새 작업은 채팅에서" 원칙의 seedChatInput 버스를 그대로 쓴다 —
+// lib/agent-canvas.js의 "＋ 새 작업 · 채팅에서"와 같은 경로다. **보내지는 않는다**:
+// 사람이 문장을 읽고 고친 뒤 Enter를 누른다.
+//
+// 그래프 모드에서는 이 문장이 곧 모델의 입력이 되고, 모델은 live-prompt.js의
+// 그래프 접두로 화면 상태까지 함께 받는다 — 그래서 "확인이 필요한 것 3건"처럼
+// 화면에만 있던 숫자를 채팅이 그대로 이어받는다.
+function seedGraphChat(text) {
+  if (window.AthenaShell && typeof window.AthenaShell.seedChatInput === 'function') {
+    window.AthenaShell.seedChatInput(text);
+    return true;
+  }
+  // 버스가 없으면(단독 로드 등) 최소한 입력창으로 데려간다 — 옛 동작.
+  const inputEl = document.getElementById('input');
+  if (inputEl) inputEl.focus();
+  return false;
+}
+
 const graphMode = window.AthenaLib.GraphModeController.createGraphModeController({
   store: window.AthenaLib.GraphModeStore,
   grouping: window.AthenaLib.ClusterGrouping,
@@ -2131,9 +2151,21 @@ const graphMode = window.AthenaLib.GraphModeController.createGraphModeController
   onError: (err) => console.warn('[graph-mode] cluster-map 실패', err),
   // 공통 패널 CTA "채팅에서 답하기"(보드 07 §10-5, 스텝8) — 06 확인 필요 배너의
   // onConfirmCta와 같은 최소 구현(새 기능 발명 없음, 입력창 포커스만).
-  onPanelCta: () => {
-    const inputEl = document.getElementById('input');
-    if (inputEl) inputEl.focus();
+  // 공통 패널 CTA(2026-09-02) — 배너 CTA와 같은 이유로 실제 질문을 심는다.
+  // 문구는 패널의 리드인과 같은 축이다: 숨은 연관이면 "왜 이어졌나", 체결·잔고와
+  // 대화가 어긋나면 "어느 쪽이 실제인가".
+  onPanelCta: (ask) => {
+    const name = ask && ask.name ? String(ask.name) : null;
+    const target = name ? `"${name}"` : '지금 고른 것';
+    if (ask && ask.kind === 'hidden') {
+      seedGraphChat(`${target}이 왜 다른 군집과 이어졌는지 설명해줘. 근거가 약하면 그렇다고 말해줘.`);
+      return;
+    }
+    if (ask && ask.kind === 'conflict') {
+      seedGraphChat(`${target}은 체결·잔고와 대화가 어긋나는데, 어느 쪽이 실제에 가까운지 물어봐줘.`);
+      return;
+    }
+    seedGraphChat(`${target}에 대해 그래프가 무엇을 알고 있는지 알려줘. 사실과 추론을 구분해서.`);
   },
   // 스텝14 — 스텝11(숨은 연관 군집 쌍)·13(숨은 연관 엔티티 쌍)의 실배선. 위
   // lastSurprisingConnections 캐시를 그대로 읽는다(이중 fetch 없음).
@@ -2820,10 +2852,20 @@ const graphSummaryTable = window.AthenaLib.GraphSummaryTable.createSummaryTableC
   getFilters: () => window.AthenaLib.GraphModePrefs.readPrefs(),
   // 히어로 부제 "테마 군집 N개" — 테마 군집 카드가 이미 받아 둔 수를 재사용한다.
   getClusterCount: () => lastThemeClusterCount,
-  // CTA "채팅에서 답하기" — 새 기능을 발명하지 않는다, 입력창에 포커스만 준다.
-  onConfirmCta: () => {
-    const inputEl = document.getElementById('input');
-    if (inputEl) inputEl.focus();
+  // 확인 필요 배너의 CTA "채팅에서 답하기"(2026-09-02) — 실제 질문을 심는다.
+  //
+  // 옛 판은 입력창에 포커스만 줬다. 버튼 문구가 "채팅에서 답하기"인데 눌러도
+  // 아무 일이 없어서, 사용자가 직접 문장을 타이핑해야 했다(제보). 배너가 약속하는
+  // 것("답하시면 그대로 그래프가 갱신됩니다")을 시작할 문장을 대신 써 준다.
+  //
+  // **보내지는 않는다** — 보드 43 "새 작업은 채팅에서" 원칙의 seedChatInput 버스가
+  // 이 저장소의 관례고(lib/agent-canvas.js의 "＋ 새 작업"이 같은 경로), 사람이
+  // 읽고 고친 뒤 Enter를 누른다.
+  onConfirmCta: (hintCount) => {
+    const count = Number.isFinite(hintCount) && hintCount > 0 ? hintCount : null;
+    seedGraphChat(count
+      ? `확인이 필요한 것 ${count}건이 뭐야? 각각 어느 쪽이 실제에 가까운지 하나씩 물어봐줘.`
+      : '확인이 필요한 것이 뭐야? 어느 쪽이 실제에 가까운지 물어봐줘.');
   },
 });
 
