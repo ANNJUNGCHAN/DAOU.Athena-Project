@@ -351,6 +351,13 @@ async function ensureRunnableForm(win, from, to) {
   await clickNth(win, `${R}.backtest-preset-item`, 0);
   await wait(250);
 
+  // 4b) 프리셋을 고르면 화면은 지도로 간다(2026-09-03 — 전략이 서면 지도가 첫 화면이다).
+  //     사람도 거기서 [폼]을 눌러 대상을 채운다. 이 클릭이 없으면 아래 5)의 종목·날짜
+  //     입력은 화면에 없는 칸을 만지고 조용히 아무것도 안 한다 — 종목 없는 폼이 남아
+  //     지도는 422를 받고 실행은 시작조차 하지 않는다(2026-09-03 실측 G01·N03).
+  await goSubtab(win, 1);
+  await wait(200);
+
   // 5) 종목·기간을 다시 채운다.
   const cur = await ctx(win);
   const symbols = cur && cur.spec ? cur.spec.symbols : null;
@@ -1853,7 +1860,7 @@ async function main() {
     // F가 진단·에러 화면에서 끝나면 모드 탭이 아예 없다 — 먼저 설계로 돌려놓는다.
     await ensureRunnableForm(shellWin, FROM, TO);
     await goDesignForm(shellWin);
-    await goSubtab(shellWin, 2);
+    await goSubtab(shellWin, 0);
     await wait(400);
     const formMap = await until(shellWin, `(() => {
       const root = document.getElementById('backtestCanvas');
@@ -2522,6 +2529,9 @@ async function main() {
     sendChat(shellWin, {
       kind: 'spec_draft', patch: { params: { fast: 12 } }, note: '프로브 설정', suggest_run: false,
     });
+    // 반영은 지도 탭에 먼저 선다(지도가 첫 표면) — 슬라이더는 폼 탭에 있으니 옮겨서 읽는다.
+    await wait(300);
+    await goSubtab(shellWin, 1);
     const specCard = await until(shellWin, `(() => {
       const s = document.querySelector('${R}.backtest-param-slider[aria-label="fast 값"]');
       const cards = document.querySelectorAll('#history .backtest-change');
@@ -2539,8 +2549,8 @@ async function main() {
       ok: !!specCard && specCard.fast === '12',
       data: { before: beforeSpec.spec.params.fast.default, after: specCard && specCard.fast },
     }));
-    await step('K02', '채팅 카드가 "설정 반영 · 반영됨"과 변경 행을 남긴다', () => ({
-      ok: !!specCard && specCard.text.indexOf('설정 반영') !== -1
+    await step('K02', '채팅 카드가 "지도 반영 · 반영됨"과 변경 행을 남긴다', () => ({
+      ok: !!specCard && specCard.text.indexOf('지도 반영') !== -1
             && specCard.text.indexOf('반영됨') !== -1
             && specCard.rows.some((r) => r.indexOf('fast') !== -1),
       data: specCard ? { rows: specCard.rows, buttons: specCard.buttons } : null,
@@ -3395,8 +3405,11 @@ async function main() {
   // 어느 칸을 바꿨다고 말하는가, 오른쪽 숫자가 **실제 실행**의 값인가.
   // ==================================================================
   if (on('N')) await section('N', async () => {
-    await ensureRunnableForm(shellWin, FROM, TO);
+    // 프리셋을 고르는 순간이 지도 v1이다. 고른 뒤 종목·기간을 채워야 대상 한 줄이 서고
+    // 실행이 승인 화면으로 새지 않는다 — ensureRunnableForm이 그 둘을 한 번에 한다.
     await clickNth(shellWin, `${R}.backtest-preset-item`, 0);
+    await ensureRunnableForm(shellWin, FROM, TO);
+    await goSubtab(shellWin, 0);
     const opened = await until(shellWin, `(() => {
       const root = document.getElementById('backtestCanvas');
       const c = window.AthenaBacktestCanvas.getContext();
@@ -3411,11 +3424,14 @@ async function main() {
         note: (root.querySelector('.backtest-map-drawer-note') || {}).textContent || null,
       };
     })()`, WAIT_VALIDATE);
+    // 서랍이 '생성됨'이어야 하는 이유: 새 프리셋의 지도 뒤에는 아직 코드가 없다.
+    // 앞 섹션의 코드가 남아 'strategy.py · 9줄'로 서면 서랍은 남의 코드를 가리킨다.
     await step('N01', '프리셋을 고르면 지도가 첫 화면이다 — ①~④·대상 한 줄·코드 서랍', () => ({
       ok: !!opened && opened.designTab === 'flow' && opened.version === 1
             && JSON.stringify(opened.numerals) === JSON.stringify(['①', '②', '③', '④'])
             && !!opened.target && opened.target.indexOf(STK) === 0
-            && !!opened.drawer && opened.drawer.indexOf('지도 v1과 일치') !== -1
+            && !!opened.drawer && opened.drawer.indexOf('이 지도 뒤의 코드 · 생성됨 · ') === 0
+            && opened.drawer.indexOf('지도 v1과 일치') !== -1
             && opened.note === '웬만하면 열 일이 없습니다 — 최후의 보루',
       data: opened,
     }));
@@ -3427,13 +3443,19 @@ async function main() {
     );
     const changed = await until(shellWin, `(() => {
       const root = document.getElementById('backtestCanvas');
+      const c = window.AthenaBacktestCanvas.getContext();
       const pills = Array.from(root.querySelectorAll('.backtest-map-changed'));
       if (!pills.length) return null;
+      const version = (root.querySelector('.backtest-map-version') || {}).textContent || null;
+      // 알약은 반영 즉시 서고 지도는 백엔드 왕복 뒤에 온다 — 그 사이를 재면 "v1인데
+      // 방금 바뀜"이라는, 아무도 오래 보지 않는 중간 화면을 판정하게 된다.
+      // 새 판이 도착한 화면만 잰다(그래도 안 오면 시간이 다해 그대로 실패한다).
+      if (version !== '지도 v' + c.map.version) return null;
       const owner = pills[0].parentNode;
       return {
         pill: pills[0].textContent,
         title: (owner.querySelector('.backtest-flow-title') || {}).textContent || null,
-        version: (root.querySelector('.backtest-map-version') || {}).textContent || null,
+        version,
       };
     })()`, WAIT_VALIDATE);
     await step('N02', '대화 한 번이 어느 칸을 바꿨는지 영수증과 지도가 같이 말한다', () => ({

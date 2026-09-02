@@ -223,7 +223,10 @@ function renderFlowMap(container, payload, options) {
   }
   container.appendChild(head);
 
-  const target = targetText(data.target);
+  // 코드 경로의 payload에는 이 줄이 없다 — 백엔드가 받은 것이 소스뿐이라 종목·기간을
+  // 알 방법이 없다(mapmodel.build_map은 spec.data가 있을 때만 target을 싣는다). 그때는
+  // 부르는 쪽이 폼 상태에서 만든 target을 준다: 코드로 돌든 대상은 폼이 정한다.
+  const target = targetText(data.target || opts.target);
   if (target) {
     const line = el('div', 'backtest-map-target');
     line.appendChild(el('span', 'backtest-map-target-text', target));
