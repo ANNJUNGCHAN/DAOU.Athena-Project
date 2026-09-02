@@ -3085,11 +3085,11 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
     activeSelectorFastRun.abort(new Error('새 질의가 이전 Selector fast path를 대체했다'));
     activeSelectorFastRun = null;
   }
-  // 백테스트 모드는 모델 앞의 빠른 경로 4종(차트 후속·단순 차트·REST 직결·Selector)을
-  // 전부 건너뛴다 — 넷 다 모델을 안 부르고 캔버스 카드를 밀어, "카드를 올리지 않는다"는
-  // 모드 규율과 백테스트 턴 프리픽스(live-prompt.js)가 무력화된다(2026-09-02 리뷰).
-  // 캐시 리플레이도 같은 이유로 아래서 건너뛴다.
-  const backtestMode = submit.canvasMode === 'backtest';
+  // 모드 전용 채팅(백테스트·그래프)은 모델 앞의 빠른 경로 4종(차트 후속·단순 차트·
+  // REST 직결·Selector)을 전부 건너뛴다 — 넷 다 모델을 안 부르고 카드를 밀어, 모드 규율과
+  // 턴 프리픽스(live-prompt.js)가 무력화된다. 그래프 모드는 이유가 하나 더 있다: 그 모드의
+  // 모든 질문은 그래프 질문이라(사용자 확정) 시세 경로가 가로채면 접두가 실릴 기회조차 없다.
+  const backtestMode = submit.canvasMode === 'backtest' || submit.canvasMode === 'graph';
   const chartFollowup = backtestMode ? null : chartFollowupTracker.answer(query);
   if (chartFollowup) {
     historySink.saveChatMessage(
@@ -3292,7 +3292,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   // 백테스트 설계 모드는 리플레이를 건너뛴다 — 리플레이는 모델을 안 부르고 카드를 밀며
   // 정형 답을 돌려주므로, "카드를 올리지 않는다"는 모드 규율과 설계 대화가 함께 깨진다
   // (캐시 키는 원문 query 그대로 둔다).
-  const cachedJudgment = submit.canvasMode === 'backtest' ? null : liveQueryCache.get(query);
+  const cachedJudgment = backtestMode ? null : liveQueryCache.get(query);
   if (cachedJudgment) {
     const replay = await fastPath.runCachedReplay({
       judgment: cachedJudgment,
@@ -3360,6 +3360,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
     userText: query,
     canvasMode: submit.canvasMode,
     backtestContext: submit.backtestContext,
+    graphContext: submit.graphContext,
     today: todayYyyymmdd(),
   };
   const turnPrompt = buildLiveTurnPrompt(liveTurnInput);
@@ -3674,6 +3675,8 @@ ipcMain.handle('athena__render_canvas', async (e, payload = {}) => {
     canvasMode: typeof payload.canvasMode === 'string' ? payload.canvasMode : null,
     backtestContext: payload.backtestContext && typeof payload.backtestContext === 'object'
       ? payload.backtestContext : null,
+    graphContext: payload.graphContext && typeof payload.graphContext === 'object'
+      ? payload.graphContext : null,
   });
 });
 

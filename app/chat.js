@@ -1276,6 +1276,10 @@ async function runQueryLive(text) {
       canvasMode: (window.AthenaCanvasMode && window.AthenaCanvasMode.state && window.AthenaCanvasMode.state.view) || 'summary',
       backtestContext: (window.AthenaBacktestCanvas && typeof window.AthenaBacktestCanvas.getContext === 'function')
         ? window.AthenaBacktestCanvas.getContext() : null,
+      // 그래프 모드 턴(2026-09-02) — 지금 보고 있는 그래프 상태를 함께 넘긴다.
+      // 없으면 모델은 그래프의 존재조차 몰라 시세 질문으로 되묻는다(실측).
+      graphContext: (window.AthenaCanvasMode && typeof window.AthenaCanvasMode.getContext === 'function')
+        ? window.AthenaCanvasMode.getContext() : null,
     });
   } catch (err) {
     // 핸들러가 reject하면(예: main 쪽 미처리 예외) 결과 없이 아래로 떨어져

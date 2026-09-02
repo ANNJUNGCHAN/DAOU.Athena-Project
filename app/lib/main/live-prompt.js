@@ -279,6 +279,54 @@ function buildBacktestModePrefix(context, today) {
   ].join('\n');
 }
 
+// 그래프 모드 접두(2026-09-02) — 캔버스가 그래프 모드일 때만 턴 앞에 붙는다.
+//
+// **왜 만들었나.** 그래프 모드에 들어와 있어도 모델은 그래프의 존재를 몰랐다.
+// LIVE_RULES_TEXT는 시세·차트 도구(athena_search/describe/resolve/call)만 설명하고
+// athena_brain은 한 줄도 없다 — 그래서 "확인이 필요한 것 3건이 뭐야?"에 "종목 시세·
+// 일봉 차트·공시 중 어느 쪽인가"라고 되물었다(2026-09-02 제보). 아는 도구 안에서
+// 답한 것이다.
+//
+// **그래프 모드에서는 모든 질문이 그래프에 대한 질문이다**(사용자 확정 2026-09-02).
+// 그래서 시세 경로를 보조로 두지 않고 아예 닫는다 — 두 세계를 섞으면 모델이 매 턴
+// "이건 그래프 질문인가 종목 질문인가"를 먼저 판단해야 하고, 그 판단이 틀리면
+// 스크린샷의 그 답이 다시 나온다.
+//
+// 순수 함수 — today는 호출자(app/main.js)가 넘기고 여기서 Date를 쓰지 않는다.
+// context는 graph-mode/controller.js getContext() 반환값이며, 키가 없거나 null이면
+// '없음/모름'으로 찍고 절대 던지지 않는다.
+function buildGraphModePrefix(context, today) {
+  const ctx = context && typeof context === 'object' ? context : null;
+  const num = (v) => (Number.isFinite(v) ? String(v) : '모름');
+  const json = (v, empty) => {
+    if (Array.isArray(v)) return v.length ? JSON.stringify(v) : empty;
+    return v && typeof v === 'object' ? JSON.stringify(v) : empty;
+  };
+  const counts = (ctx && ctx.counts) || {};
+  const surfaceLabel = { summary: '요약 표', map: '군집 지도', settings: '수집·노출' };
+
+  return [
+    `[모드: 그래프] 오늘: ${today ? String(today) : '미상'}`,
+    '사용자는 투자 성향 그래프 화면에 있다. **이 모드의 모든 질문은 이 그래프에 대한 질문이다** — 종목 시세·차트·공시 질문으로 해석하지 마라.',
+    '이 턴의 규칙:',
+    '- 캔버스 카드를 올리지 않는다 — athena__render_canvas를 호출하지 않는다. 시세·차트 도구(athena_search/athena_describe/athena_resolve/athena_call)도 쓰지 않는다.',
+    '- 더 깊은 조회가 필요하면 athena_brain을 쓴다: action=profile(성향 신호 전체, window_days·limit) · god_nodes(투자의 중심) · surprising(못 본 연결) · questions(되물어야 하는 것 = 불확실하다고 기록된 관계) · diff(from_revision 이후 무엇이 바뀌었나).',
+    '- athena_brain이 "노출이 꺼져 있다"고 503을 주면 지어내지 말고 그 사실을 말한다 — 수집·노출 탭의 모델 전달 토글이 꺼진 것이다.',
+    '- **아래 컨텍스트와 athena_brain이 준 값만 말한다.** 없는 것은 없다고 말한다. 성향·관계·수치를 추측해 채우지 마라.',
+    '- **사실과 추론을 섞지 마라.** 신호마다 tier(체결·잔고 = 행동 = 사실 / 대화 = 말 = 추론)와 confidence(EXTRACTED=사실 · INFERRED=추론 · AMBIGUOUS=불확실)가 있다. 말과 행동이 어긋나는 신호는 어긋난다는 사실 자체가 답이다 — 한쪽을 골라 단정하지 마라.',
+    '- 숫자는 아래 값을 그대로 쓴다. 화면 배너가 "확인이 필요한 것 N건"이라고 말할 때 채팅이 다른 숫자를 말하면 사용자는 어느 쪽을 믿을지 알 수 없다.',
+    '- 투자 판단·매수·매도를 권하지 않는다. 이 화면은 "지금 어떤 성향으로 읽히는가"를 보여줄 뿐이다.',
+    '- 답은 짧게. 사용자가 방금 고른 노드가 있으면 그것을 중심으로 답한다.',
+    `현재 화면: ${surfaceLabel[ctx && ctx.surface] || '모름'} · 브레인=${ctx && ctx.available ? '준비됨' : '준비 안 됨'} · 리비전=${num(ctx && ctx.revision)}`,
+    `걸린 필터: ${json(ctx && ctx.filters, '없음')}`,
+    `규모: 엔티티 ${num(counts.entities)} · 관계 ${num(counts.relations)} · 군집 ${num(counts.clusters)} · 미분류 ${num(counts.unassigned)} · 성향 신호 ${num(counts.signals)} · 숨은 연관 ${num(counts.hiddenLinks)} · 확인 필요 ${num(counts.uncertain)}`,
+    `테마 군집: ${json(ctx && ctx.clusters, '없음')}`,
+    `성향 신호(보강 순): ${json(ctx && ctx.topSignals, '없음')}`,
+    `숨은 연관: ${json(ctx && ctx.hiddenLinks, '없음')}`,
+    `지금 선택된 노드: ${json(ctx && ctx.selected, '없음 — 사용자가 아무것도 고르지 않았다')}`,
+  ].join('\n');
+}
+
 // 상주 세션의 턴 페이로드 — 질문만. 레거시와 같은 '사용자 질문:' 프레이밍을
 // 유지해 규칙 문구("아래 사용자 질문에 답하라")가 두 경로 모두에서 성립한다.
 // 프로바이더 런타임은 { userText } 객체로 부르므로(app/main.js) 문자열과 객체를
@@ -293,6 +341,10 @@ function buildLiveTurnPrompt(input) {
   if (isObject && input.canvasMode === 'backtest') {
     return `${buildBacktestModePrefix(input.backtestContext, input.today)}\n\n${body}`;
   }
+  // 그래프 모드(2026-09-02) — 백테스트와 같은 자리, 같은 규칙이다.
+  if (isObject && input.canvasMode === 'graph') {
+    return `${buildGraphModePrefix(input.graphContext, input.today)}\n\n${body}`;
+  }
   return body;
 }
 
@@ -305,6 +357,7 @@ function buildLivePrompt(query) {
 
 module.exports = {
   buildBacktestModePrefix,
+  buildGraphModePrefix,
   buildLivePrompt,
   buildLiveSystemPrompt,
   buildLiveTurnPrompt,
