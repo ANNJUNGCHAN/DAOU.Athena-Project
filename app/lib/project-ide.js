@@ -312,6 +312,19 @@ function createProjectIde(options) {
     paint();
   }
 
+  // 열린 파일을 전부 닫는다 — 프리셋을 고르면 새 전략이라(backtest-canvas selectPreset) 앞
+  // 폴더의 .py가 열린 채 남으면 화면은 프리셋인데 실행은 그 파이썬이 돈다(프로브 실측).
+  // 고치다 만(dirty) 탭은 닫지 않고 false를 돌려준다 — 저장 안 한 편집을 소리 없이 버리지
+  // 않는다. 그 탭이 남아 있으면 지도는 계속 코드 전용으로 읽히는데, 그게 사실이다.
+  function closeAll() {
+    const dirty = tabs.filter((t) => t.dirty);
+    tabs = dirty;
+    closing = null;
+    activePath = dirty.length ? dirty[dirty.length - 1].path : null;
+    paint();
+    return dirty.length === 0;
+  }
+
   // ---------- 그리기 ----------
 
   function renderPicker() {
@@ -589,6 +602,7 @@ function createProjectIde(options) {
     refresh() { paint(); },
     currentProject() { return project; },
     openAt,
+    closeAll,
     activeFile() {
       const tab = activeTab();
       return tab ? { path: tab.path, text: tab.text, dirty: tab.dirty } : null;
