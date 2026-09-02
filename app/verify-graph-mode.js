@@ -179,7 +179,7 @@ async function main() {
     if (!shellWin || shellWin.isDestroyed()) throw new Error('셸 창이 만들어지지 않았다');
     // 창을 실제로 띄운다 — 숨은 창의 capturePage()는 마지막으로 그려진(대개 빈)
     // 프레임을 돌려주므로, DOM 검사는 통과하는데 스크린샷만 옛 화면인 상태가 된다.
-    mainMod.revealShell({ focus: true });
+    mainMod.revealShell({ focus: true, force: true });
     const wc = shellWin.webContents;
 
     await evaluate(wc, `
