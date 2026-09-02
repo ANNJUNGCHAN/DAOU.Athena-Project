@@ -1,5 +1,5 @@
 const MODULE_LOAD_AT = Date.now();
-const { app, BrowserWindow, ipcMain, screen, Tray, Menu, nativeImage, Notification, nativeTheme, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, screen, Tray, Menu, nativeImage, Notification, nativeTheme, dialog, shell } = require('electron');
 const { performance } = require('node:perf_hooks');
 const path = require('path');
 const fs = require('fs');
@@ -1422,6 +1422,63 @@ Object.keys(PROJECT_CHANNELS).forEach((channel) => {
 ipcMain.handle('athena:project-open-dialog', async () => {
   try {
     const res = await dialog.showOpenDialog(shellWin, { properties: ['openDirectory'] });
+
+// 사이드바 프로젝트(36·37번 보드) — 프로젝트는 폴더 하나다. 폴더는 대화상자로 사람이
+// 고르고, 백엔드 레지스트리가 등록하며(같은 폴더 두 번 등록은 백엔드가 409로 막는다),
+// 사이드바 레코드는 백엔드 id로 이어진다. 두 목록이 다른 id를 들면 같은 폴더가 두 얼굴이 된다.
+ipcMain.handle('athena:project-add', async () => {
+  let picked = null;
+  try {
+    const res = await dialog.showOpenDialog(shellWin, { properties: ['openDirectory'] });
+    picked = res.canceled ? null : ((res.filePaths || [])[0] || null);
+  } catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
+  if (!picked) return { ok: true, canceled: true };
+  const taken = conversations.list().projects.find((row) => row.path
+    && path.resolve(row.path).toLowerCase() === path.resolve(picked).toLowerCase());
+  if (taken) return { ok: false, reason: 'folder_taken', project: taken, path: picked };
+  let registered = null;
+  try {
+    const opened = await backtestBridge.openProject({ backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch, path: picked });
+    registered = opened && opened.ok && opened.data && opened.data.project ? opened.data.project : null;
+    if (!registered && opened && !opened.ok) mdlog(`프로젝트 백엔드 등록 실패 — ${String(opened.error || '')}`);
+  } catch (e) { mdlog(`프로젝트 백엔드 등록 실패 — ${String((e && e.message) || e)}`); }
+  // 백엔드가 없어도 폴더는 폴더다 — 사이드바 레코드는 만들고, id는 백엔드 것이 있으면 그것을 쓴다.
+  const added = conversations.addProject({
+    id: registered ? registered.id : undefined,
+    path: registered ? registered.path : picked,
+    label: registered ? registered.name : path.basename(picked),
+  });
+  return { ...added, path: picked, backendRegistered: Boolean(registered) };
+});
+ipcMain.handle('athena:project-pin', (_e, { id, pinned } = {}) => conversations.setProjectPinned(id, Boolean(pinned)));
+ipcMain.handle('athena:project-reveal', async (_e, { id } = {}) => {
+  const project = conversations.projectById(id);
+  if (!project || !project.path) return { ok: false, reason: 'no_path' };
+  const error = await shell.openPath(project.path);
+  return error ? { ok: false, error } : { ok: true, path: project.path };
+});
+// 제거는 폴더 삭제다(37번 보드) — 휴지통을 거치지 않는 영구 삭제라 이름을 그대로 다시
+// 쳐야 한다. 이름이 다르면 아무것도 지우지 않는다. 폴더가 없어도 레코드는 지운다.
+ipcMain.handle('athena:project-remove', async (_e, { id, confirmName } = {}) => {
+  const project = conversations.projectById(id);
+  if (!project) return { ok: false, reason: 'unknown_project' };
+  if (typeof confirmName !== 'string' || confirmName.trim() !== project.label) return { ok: false, reason: 'name_mismatch' };
+  if (project.path) {
+    try { await fs.promises.rm(project.path, { recursive: true, force: true }); }
+    catch (e) { return { ok: false, reason: 'rm_failed', error: String((e && e.message) || e) }; }
+  }
+  if (typeof backtestBridge.unregisterProject === 'function') {
+    try { await backtestBridge.unregisterProject({ backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch, project_id: id }); }
+    catch (e) { mdlog(`프로젝트 백엔드 등록 해제 실패 — ${String((e && e.message) || e)}`); }
+  }
+  const removed = conversations.removeProject(id);
+  if (removed && removed.ok && removed.removed) {
+    const bridge = getSessionBridge();
+    // 세션 본문도 함께 지운다 — 목록에서만 빼고 본문을 남기면 "지우는 주체는 사용자"가 거짓이 된다.
+    if (bridge && bridge.store) for (const conversationId of removed.removed.conversationIds) bridge.store.deleteSession(conversationId);
+  }
+  return removed;
+});
     const picked = (res.filePaths || [])[0] || null;
     return { ok: true, data: { canceled: res.canceled || !picked, path: picked } };
   } catch (e) { return { ok: false, error: String((e && e.message) || e) }; }

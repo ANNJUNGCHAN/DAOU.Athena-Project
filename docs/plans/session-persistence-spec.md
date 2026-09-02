@@ -155,8 +155,8 @@
 실앱 프로브 `app/probe-session-restore.js`(백엔드·Claude 없이 main+렌더러만) 13/13 통과.
 - [x] `app/main.js` — conversations-new이 mode를 살린다(c51dc10)
 - [x] `app/main.js` — set-active가 switchTo 큐를 타는 실제 전환이 됐다. Claude 커서(--resume)를 대화마다 적고 잇는다(c51dc10)
-- [ ] `app/main.js` — 세션 스토어 배선. 저장 타이밍 정책은 `app/lib/main/session-bridge.js`(작성 중)가 소유
-- [ ] `app/preload.js` — 세션 채널(카드·워크스페이스·뷰포트 저장, 세션 로드) 추가
+- [x] `app/main.js` — 세션 스토어 배선(42f0045). 정책은 `session-bridge.js`(5e09c2d), 형상은 `session-wiring.test.js`
+- [x] `app/preload.js` — 세션 채널 5개(42f0045)
 
 ### 파일 소유 (2026-09-02 세션 간 합의)
 - daou-athena-5b: main.js, preload.js, canvas.js, shell.css, backtest-*.js, live-prompt.js, project-ide.js, probe-backtest-full.js
@@ -165,10 +165,15 @@
 
 편집 규율: main.js·chat.js·preload.js는 CRLF/LF 혼합이라 Edit 도구가 파일을 통째로 정규화한다. 반드시 node로 바이트를 확인하고 바이트 보존 패치로 고친다.
 
-### Wave 4 — 세션 스토어 배선 (설계 확정, 착수 대기)
+### Wave 4 — 세션 스토어 배선 (main·preload·chat 적용됨 42f0045 · canvas.js 보고는 대기)
 - `app/lib/main/session-bridge.js`(작성 중) — 저장 타이밍 정책. 메시지 즉시, 스트리밍 5s/2KB 저널, 카드 200ms, 워크스페이스 300ms/1s, 뷰포트 400ms/2s, 종료 flushSync.
 - main.js 배선 지점(실측): 사용자 메시지 `runLiveQuery` 진입부(historySink.saveChatMessage 직후), 델타 `sendLiveTextDelta`, 툴 단계 `sendLiveToolStep`, 최종 `persistLocalLiveResult`/turn 종료(3684~), 종료 `before-quit`의 conversations.flushSync 옆.
 - 캔버스 카드: 렌더러가 스택을 보고한다. `addLiveCard(result)`가 카드 DOM에 봉투를 매달고(`__athenaSessionEnvelope`), 추가·닫기·비우기 뒤에 `athena:session-cards`로 `[{cardId, kind, channel, envelope, protected}]`를 보낸다. main이 bridge.saveCards로 적는다. 복원은 저장된 봉투를 `athena:add-canvas-live`로 다시 흘려 같은 렌더 경로로 그린다(별도 렌더러 없음). 큰 payload는 dataRef만 남기는 것은 그 다음.
 - 워크스페이스: 각 모드 컨트롤러가 `athena:session-workspace` patch를 보낸다. 백테스트는 backtest-canvas.js 소유 세션(daou-athena-5b)과 조율 뒤.
 - 복원 진입: `athena:session-load`가 스토어 스냅샷을 돌려주고, chat.js `restoreConversation`이 메시지를 브레인 조회 대신 스냅샷에서 그린다(브레인은 폴백).
 - 채널 추가(preload): send `athena:session-cards`·`athena:session-workspace`·`athena:session-viewport`, invoke `athena:session-load`.
+
+### Wave 5 — 프로젝트 = 폴더 (36·37·38번 보드)
+- [x] `conversations.js` — 프로젝트 레코드에 `path`·`pinned`. 폴더 하나 = 프로젝트 하나(경로 중복 접기), `addProject({id,path,label})`·`setProjectPinned`·`removeProject`·`projectById`. 사이드바 프로젝트와 백엔드 프로젝트 레지스트리(`athena_api/api/projects.py`)는 같은 것 — id를 공유한다.
+- [x] `main.js` — `athena:project-add`(폴더 대화상자 → 백엔드 open 등록 → 사이드바 레코드), `project-pin`, `project-reveal`(shell.openPath), `project-remove`(이름을 그대로 다시 쳐야 하는 영구 삭제, 세션 본문도 함께).
+- [ ] `sidebar.js` — ⋯ 메뉴 셋(고정·탐색기·제거), 폴더 추가, 펜 = 모드 골라 새 대화창(작업 중)

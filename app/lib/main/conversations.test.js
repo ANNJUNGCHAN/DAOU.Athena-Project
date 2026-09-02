@@ -191,3 +191,129 @@ test('setResumeCursor는 대화마다 Claude 커서를 따로 적고, setActive�
     assert.equal(a.conversations.find((c) => c.id === 'b').resumeSessionId, null);
   });
 });
+
+test('addProject는 폴더 이름을 프로젝트 이름으로 삼고 현재 프로젝트를 그리로 옮긴다', async () => {
+  await withTempState(undefined, async (file) => {
+    const folder = path.join(path.dirname(file), '추세추종 v3');
+    const added = conversations.addProject({ path: folder });
+    assert.equal(added.ok, true);
+    assert.equal(added.project.label, '추세추종 v3');
+    assert.equal(added.project.path, folder);
+    assert.equal(added.project.pinned, false);
+    assert.match(added.project.id, /^proj-/);
+    assert.equal(added.state.currentProjectId, added.project.id);
+
+    await conversations.flush();
+    const onDisk = JSON.parse(fs.readFileSync(file, 'utf-8'));
+    const saved = onDisk.projects.find((row) => row.id === added.project.id);
+    assert.equal(saved.path, folder);
+    assert.equal(saved.pinned, false);
+    assert.equal(onDisk.currentProjectId, added.project.id);
+  });
+});
+
+test('같은 폴더로 두 번 만들면 거절된다 — 대소문자·구분자가 달라도', async () => {
+  await withTempState(undefined, () => {
+    const folder = path.join(path.dirname(process.env.ATHENA_CONVERSATIONS_PATH), 'quant');
+    const first = conversations.addProject({ path: folder, label: '내 전략' });
+    assert.equal(first.ok, true);
+
+    const disguised = folder.split(path.sep).join('/').toUpperCase();
+    const second = conversations.addProject({ path: disguised, label: '또 하나' });
+    assert.equal(second.ok, false);
+    assert.equal(second.reason, 'folder_taken');
+    assert.equal(second.project.id, first.project.id);
+    assert.equal(conversations.list().projects.filter((row) => row.path).length, 1);
+  });
+});
+
+test('addProject는 백엔드가 준 id를 그대로 쓰고, 같은 id는 거절한다', async () => {
+  await withTempState(undefined, () => {
+    const dir = path.dirname(process.env.ATHENA_CONVERSATIONS_PATH);
+    const first = conversations.addProject({ id: 'proj_backend_1', path: path.join(dir, 'a') });
+    assert.equal(first.ok, true);
+    assert.equal(first.project.id, 'proj_backend_1');
+    assert.equal(conversations.projectById('proj_backend_1').path, path.join(dir, 'a'));
+
+    const second = conversations.addProject({ id: 'proj_backend_1', path: path.join(dir, 'b') });
+    assert.equal(second.ok, false);
+    assert.equal(second.reason, 'id_taken');
+    assert.equal(second.project.id, 'proj_backend_1');
+  });
+});
+
+test('normalizeState는 같은 폴더의 프로젝트 중복을 하나로 접는다', () => {
+  const state = conversations.normalizeState({
+    projects: [
+      { id: 'p1', label: '먼저', path: 'C:/quant/my' },
+      { id: 'p2', label: '나중', path: 'C:/QUANT/my' },
+      { id: 'p3', label: '다른 폴더', path: 'C:/quant/other' },
+    ],
+  });
+  assert.deepEqual(state.projects.map((row) => row.id), ['p1', 'p3']);
+});
+
+test('setProjectPinned는 프로젝트를 맨 앞으로 올리고, 해제하면 원래 자리로 돌아온다', async () => {
+  await withTempState({
+    projects: [
+      { id: 'p1', label: '하나' },
+      { id: 'p2', label: '둘' },
+      { id: 'p3', label: '셋' },
+    ],
+    currentProjectId: 'p1',
+    conversations: [],
+  }, () => {
+    const pinned = conversations.setProjectPinned('p3', true);
+    assert.deepEqual(pinned.projects.map((row) => row.id), ['p3', 'p1', 'p2']);
+    assert.equal(pinned.projects[0].pinned, true);
+
+    const released = conversations.setProjectPinned('p3', false);
+    assert.deepEqual(released.projects.map((row) => row.id), ['p1', 'p2', 'p3']);
+    assert.deepEqual(conversations.setProjectPinned('없음', true).projects.map((row) => row.id), ['p1', 'p2', 'p3']);
+  });
+});
+
+test('removeProject는 프로젝트와 그 대화들을 지우고 현재 프로젝트·활성 대화를 정리한다', async () => {
+  await withTempState({
+    projects: [{ id: 'p1', label: '하나' }, { id: 'p2', label: '둘', path: 'C:/quant/two' }],
+    currentProjectId: 'p2',
+    activeId: 'c2',
+    conversations: [
+      { id: 'c1', title: '남는다', projectId: 'p1', updatedAt: '2026-09-01T00:00:00.000Z' },
+      { id: 'c2', title: '지워진다', projectId: 'p2', updatedAt: '2026-09-02T00:00:00.000Z' },
+    ],
+  }, async (file) => {
+    const removed = conversations.removeProject('p2');
+    assert.equal(removed.ok, true);
+    assert.equal(removed.removed.project.path, 'C:/quant/two');
+    assert.deepEqual(removed.removed.conversationIds, ['c2']);
+    assert.deepEqual(removed.state.projects.map((row) => row.id), ['p1']);
+    assert.deepEqual(removed.state.conversations.map((row) => row.id), ['c1']);
+    assert.equal(removed.state.currentProjectId, 'p1');
+    assert.equal(removed.state.activeId, null);
+
+    await conversations.flush();
+    const onDisk = JSON.parse(fs.readFileSync(file, 'utf-8'));
+    assert.deepEqual(onDisk.projects.map((row) => row.id), ['p1']);
+    assert.deepEqual(onDisk.conversations.map((row) => row.id), ['c1']);
+  });
+});
+
+test('기본 프로젝트는 지울 수 없다', async () => {
+  await withTempState(undefined, () => {
+    const refused = conversations.removeProject('default');
+    assert.equal(refused.ok, false);
+    assert.equal(refused.reason, 'default_project');
+    assert.deepEqual(conversations.list().projects.map((row) => row.id), ['default']);
+  });
+});
+
+test('path가 없는 옛 프로젝트 레코드는 path:null·pinned:false로 읽힌다', () => {
+  const state = conversations.normalizeState({
+    projects: [{ id: 'p1', label: '프로젝트 1' }],
+    currentProjectId: 'p1',
+    conversations: [],
+  });
+  assert.equal(state.projects[0].path, null);
+  assert.equal(state.projects[0].pinned, false);
+});
