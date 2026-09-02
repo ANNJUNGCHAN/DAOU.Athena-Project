@@ -20,6 +20,8 @@ const INVOKE_CHANNELS = new Set([
   // 과거 대화 열기(2026-09-02) — 읽기 전용 조회다, 쓰기가 아니다.
   'athena:conversation-messages',
   'athena:conversations-new',
+  'athena:session-load',
+  'athena:session-replay-cards',
   'athena:account-list',
   'athena:account-register',
   'athena:account-set-active',
@@ -149,6 +151,10 @@ const INVOKE_CHANNELS = new Set([
 ]);
 
 const SEND_CHANNELS = new Set([
+  // 세션 저장 보고(35~43번 보드) — 렌더러 DOM은 투영이고 쓰기 주체는 main이다.
+  'athena:session-cards',
+  'athena:session-workspace',
+  'athena:session-viewport',
   'athena:provider-paint-ack',
   'athena:minimize-windows',
   'athena:close-windows',

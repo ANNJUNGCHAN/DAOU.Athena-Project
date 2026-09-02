@@ -94,6 +94,8 @@ const {
   shouldBroadcastConversationGraph,
 } = require('./lib/main/conversation-graph-refresh');
 const conversations = require('./lib/main/conversations');
+const { createSessionStore } = require('./lib/main/session-store');
+const { createSessionBridge } = require('./lib/main/session-bridge');
 const crypto = require('crypto');
 
 // 프로바이더 런타임 스위치 — ATHENA_PERSISTENT_CHAT은 이미 상주 채팅 세션
@@ -887,6 +889,7 @@ const integratedRealtimeShutdown = integratedCardRealtime.createBoundedShutdownC
     selectorClaudePool.stop(new Error('Athena 앱 종료'));
     if (liveChatSession) liveChatSession.stop(new Error('Athena 앱 종료'));
     conversations.flushSync(); // 예약만 된 사이드바 상태를 마저 저장한다
+    if (sessionBridge) sessionBridge.flushSync(); // 대기 중인 세션 디바운스·저널을 마저 쓴다
   },
   releaseAll: async () => {
     const shutdownRuntime = providerRuntimeController;
@@ -2469,6 +2472,48 @@ let liveSessionId = null;
 // 다음 id로 원자적으로 교체한다.
 let historyActiveConversationId = crypto.randomUUID();
 
+// 세션 저장(35~43번 보드) — 저장 타이밍은 session-bridge가, 저장소는 session-store가
+// 소유한다. 스토어를 못 열면(디스크·권한) null로 두고 턴은 그대로 간다 — 사이드바
+// 메타데이터처럼 세션 저장도 대화 성공의 필요조건은 아니되, 실패는 mdlog에 남긴다.
+let sessionBridge = null;
+function getSessionBridge() {
+  if (sessionBridge !== null) return sessionBridge || null;
+  try {
+    const dbPath = process.env.ATHENA_SESSIONS_DB_PATH
+      || path.join(app.getPath('userData'), 'athena-sessions.sqlite3');
+    sessionBridge = createSessionBridge({
+      store: createSessionStore({ dbPath }),
+      log: (scope, error) => mdlog(`${scope} — ${String((error && error.message) || error)}`),
+    });
+  } catch (error) {
+    mdlog(`세션 스토어 열기 실패 — ${String((error && error.message) || error)}`);
+    sessionBridge = false;
+  }
+  return sessionBridge || null;
+}
+
+// 사용자 메시지를 세션에 즉시 적는다(명세 4절). 실패하면 턴을 시작하지 않는다 —
+// 조용한 유실 금지. 브리지가 없으면(스토어 열기 실패) 그냥 지나간다.
+function beginSessionTurn(conversationId, text, userMessageId) {
+  const bridge = getSessionBridge();
+  if (!bridge) return null;
+  const listed = conversations.list();
+  const record = listed.conversations.find((row) => row.id === conversationId) || null;
+  try {
+    bridge.ensureSession({
+      id: conversationId,
+      mode: record ? record.mode : listed.activeMode,
+      projectId: record ? record.projectId : listed.currentProjectId,
+      title: text,
+    });
+    bridge.recordUserMessage({ sessionId: conversationId, messageId: userMessageId || crypto.randomUUID(), text });
+  } catch (error) {
+    mdlog(`세션 저장 실패 — 턴을 시작하지 않는다: ${String((error && error.message) || error)}`);
+    return '대화를 세션에 저장하지 못해 질문을 보내지 않았습니다.';
+  }
+  return null;
+}
+
 // 디스크 목록은 제목/프로젝트 메타데이터만 보존하고 Claude 세션/메시지 본문은
 // 복원하지 않는다. 따라서 앱 시작 때 이전 activeId를 다시 기록 대상으로 쓰지
 // 않고, 현재 프로젝트 안의 새 빈 대화 경계를 원자적으로 만든다.
@@ -3190,6 +3235,8 @@ async function runLiveQuery(query, expand, origin = 'shell', turnConversationId 
     };
   }
   touchConversationEntry(query, turnConversationId);
+  const sessionTurnError = beginSessionTurn(turnConversationId, query, historyReceipt && historyReceipt.messageId);
+  if (sessionTurnError) return { ok: false, source: 'local', error: sessionTurnError };
   liveQueryBusyDepth += 1;
   if (liveQueryBusyDepth === 1) broadcastLiveQueryBusy(true);
   liveSubmitContexts.set(turnConversationId, submit);
@@ -3205,6 +3252,9 @@ async function runLiveQuery(query, expand, origin = 'shell', turnConversationId 
 // origin — 'shell'(기본, 커맨드바) | 'orb'(오브 대화 모드). onCanvasResult가
 // 오브 기원 엔벌로프만 orbWin에도 추가 relay하는 데 쓴다(board-33③④ 선행).
 async function runLiveQueryInner(query, expand, origin, turnConversationId) {
+  // 답변은 시작 전에 자리표시자(done:false)로 먼저 적는다 — 첫 토큰 전에 죽어도 질문은 남는다.
+  const sessionAssistantId = crypto.randomUUID();
+  { const bridge = getSessionBridge(); if (bridge) bridge.beginAssistant({ sessionId: turnConversationId, messageId: sessionAssistantId }); }
   const queryStartedAt = performance.now();
   const submit = liveSubmitContexts.get(turnConversationId) || {};
   // Selector 단일 dispatch도 새 질의가 선점한다. fetch 구현이 abort를 늦게
@@ -3474,7 +3524,12 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   // 판정 캡처(시맨틱 캐시 재료) — tool_use_id로 resolve 결과 토큰과 render 입력
   // 토큰을 상관시킨다. 마지막 입력끼리 우연히 결합하지 않는다.
   const replayTurnCapture = new ReplayTurnCapture();
-  const trackToolStep = createToolStepTracker();
+  // 툴 단계는 이벤트라 저장하고, 텍스트 청크는 저널만 한다(명세 4절).
+  const trackToolStep = createToolStepTracker((step) => {
+    sendLiveToolStep(step);
+    const bridge = getSessionBridge();
+    if (bridge) bridge.recordToolStep({ sessionId: turnConversationId, messageId: sessionAssistantId, step });
+  });
   const trackSubagent = createSubagentTracker();
   const resumeSessionId = liveSessionId;
   // 설정 화면 모델 패널(lib/main/model-prefs.js) 값 — null이면 buildArgs가
@@ -3554,7 +3609,11 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
     onSpawn: (h) => { myHandle = h; activeLiveQuery = h; },
     // 성공 resolve 1건과 render 1건의 토큰이 정확히 같은 경우만 캐시한다.
     onEvent: (ev) => { replayTurnCapture.observe(ev); trackToolStep(ev); trackSubagent(ev); },
-    onTextDelta: sendLiveTextDelta,
+    onTextDelta: (text, metadata) => {
+      sendLiveTextDelta(text, metadata);
+      const bridge = getSessionBridge();
+      if (bridge) bridge.journalDelta({ sessionId: turnConversationId, messageId: sessionAssistantId, text });
+    },
     onCanvasResult: (r) => {
       const label = r.envelope && (r.envelope.card_title || r.envelope.caption);
       // 실시간 트리거 판정(P1, 2026-08-27) — card_title==='시세' 하나만 보던 옛
@@ -3661,6 +3720,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
       // runLiveQuery로 되돌아가면 사용자 메시지 저장이 한 번 더 돌아 이력이
       // 중복된다 — Inner로 직접 재진입한다. submit은 바깥 runLiveQuery의
       // finally가 아직 안 돌아 liveSubmitContexts에 그대로 살아 있다.
+      { const bridge = getSessionBridge(); if (bridge) bridge.finishAssistant({ sessionId: turnConversationId, messageId: sessionAssistantId, interrupted: true, error: result.error || 'session_retry' }); }
       return runLiveQueryInner(query, expand, origin, turnConversationId);
     }
   }
@@ -3683,6 +3743,19 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   const answerText = result.finalResult && typeof result.finalResult.result === 'string'
     ? result.finalResult.result
     : null;
+  {
+    const bridge = getSessionBridge();
+    if (bridge) {
+      bridge.finishAssistant({
+        sessionId: turnConversationId,
+        messageId: sessionAssistantId,
+        text: answerText === null ? undefined : answerText,
+        usage: result.finalResult && result.finalResult.usage ? result.finalResult.usage : null,
+        error: result.ok ? null : String(result.error || ''),
+        interrupted: !result.ok,
+      });
+    }
+  }
 
   // 응답 산출 직후 role:assistant 1건 — null이면 스킵(계획 §2(a)). 여기도
   // fire-and-forget — 반환을 막지 않는다.
@@ -4297,6 +4370,50 @@ function handleAuthTokenRevoke(e, { id } = {}) {
 
 // 이력 사이드바(리프 1.2.2) — athena:conversations-list -> { activeId, conversations }
 ipcMain.handle('athena:conversations-list', () => conversations.list());
+// 세션 스냅샷(메시지·카드·워크스페이스·뷰포트) — 이력 행을 다시 눌렀을 때 화면을
+// 되살리는 원본. 스토어에 없으면 null이고, 렌더러는 브레인 이력 조회로 폴백한다.
+ipcMain.handle('athena:session-load', (_e, payload = {}) => {
+  const id = payload && typeof payload.id === 'string' ? payload.id : '';
+  const bridge = getSessionBridge();
+  if (!id || !bridge) return null;
+  return bridge.load(id);
+});
+// 렌더러가 보고하는 작업 환경(캔버스 카드 스택·모드 워크스페이스·뷰포트). 렌더러 DOM은
+// 투영이고 쓰기 주체는 main이다 — 브리지가 디바운스해 스토어에 적는다.
+// 렌더러는 세션 id를 모른다 — 기록 대상의 진실은 main의 historyConversationId()다.
+ipcMain.on('athena:session-cards', (_e, payload = {}) => {
+  const bridge = getSessionBridge();
+  if (bridge && payload) bridge.saveCards({ sessionId: historyConversationId(), cards: payload.cards });
+});
+ipcMain.on('athena:session-workspace', (_e, payload = {}) => {
+  const bridge = getSessionBridge();
+  if (bridge && payload) bridge.saveWorkspace({ sessionId: historyConversationId(), workspace: payload.workspace });
+});
+ipcMain.on('athena:session-viewport', (_e, payload = {}) => {
+  const bridge = getSessionBridge();
+  if (bridge && payload) bridge.saveViewport({ sessionId: historyConversationId(), viewport: payload.viewport });
+});
+// 복원 — 저장된 카드 봉투를 같은 페인트 채널로 다시 흘린다(별도 렌더러 없음, 42번 보드).
+// 렌더러가 캔버스를 비운 뒤에 부르므로 순서가 어긋나지 않는다. 다시 그려진 카드는
+// 렌더러가 다시 보고하고, 같은 스택이 그대로 저장된다.
+ipcMain.handle('athena:session-replay-cards', (_e, payload = {}) => {
+  const id = payload && typeof payload.id === 'string' ? payload.id : '';
+  const bridge = getSessionBridge();
+  if (!id || !bridge || !shellWin || shellWin.isDestroyed()) return { replayed: 0 };
+  const snapshot = bridge.load(id);
+  const cards = snapshot && Array.isArray(snapshot.canvasCards) ? snapshot.canvasCards : [];
+  let replayed = 0;
+  for (const card of cards) {
+    if (!card || !card.envelope) continue;
+    if (card.channel === 'fixture') {
+      shellWin.webContents.send('athena:add-canvas', { type: card.envelope.type || card.kind });
+    } else {
+      shellWin.webContents.send('athena:add-canvas-live', { status: 'success', envelope: card.envelope });
+    }
+    replayed += 1;
+  }
+  return { replayed };
+});
 // 과거 대화 열기(2026-09-02 사용자 지적 "대화 이력을 누르면 그 대화로 이동해야 한다").
 //
 // 기존 athena:brain-history-query를 재사용할 수 없다 — 그쪽은 (a) 대화가 현재 것으로
@@ -4980,6 +5097,7 @@ module.exports = {
   // 불변 단언용 게터. 프로덕션 경로는 아무도 부르지 않는다.
   setBriefingClaudeRunnerForVerify,
   getLiveSessionId: () => liveSessionId,
+  getSessionBridge,
   getBriefingBusyDepth: () => briefingBusyDepth,
   // 셸 창을 앞으로 — verify.js가 트레이 복귀·카드 푸시 경로를 검증할 때 쓴다.
   revealShell,
