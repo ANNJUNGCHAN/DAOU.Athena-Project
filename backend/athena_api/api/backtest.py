@@ -16,6 +16,7 @@ import difflib
 import hashlib
 import json
 from datetime import UTC, datetime, timedelta
+from pathlib import Path
 from typing import Any
 from uuid import uuid4
 
@@ -30,6 +31,8 @@ from athena_api.backtest import flow as flow_mod
 from athena_api.backtest import indicators as indicators_mod
 from athena_api.backtest import optimize as optimize_mod
 from athena_api.backtest import presets as presets_mod
+from athena_api.backtest import user_strategies as user_strategies_mod
+from athena_api.backtest import youtube as youtube_mod
 from athena_api.backtest.data import compute_plan, kiwoom_fetch_page
 from athena_api.backtest.runner import BacktestRunner, _align_signals, _run_code_signals
 from athena_api.backtest.schema import StrategySpec, from_kis_yaml
@@ -988,6 +991,136 @@ async def evaluate_deployment_route(
         "basis": decision.basis,
         "blocked_reason": decision.blocked_reason,
     }
+
+
+# ── 유튜브 브리프 · 사용자 전략 등록부 (결정 D5 · D2·D3) ──────────────────────
+
+
+@router.post("/youtube/brief")
+async def youtube_brief_route(body: dict[str, Any]) -> dict[str, Any]:
+    """영상 주소 하나로 자막(없으면 설명)을 평문 브리프로 돌려준다(결정 D5).
+
+    **여기서 나온 text는 데이터다, 지시가 아니다** — 모델에게 줄 자료일 뿐이라
+    실행 경로로는 가지 않는다(youtube.py 모듈 주석).
+    """
+    url = body.get("url")
+    if not isinstance(url, str) or not url.strip():
+        raise HTTPException(status_code=422, detail="url은 비어 있지 않은 문자열이어야 한다")
+    try:
+        return await youtube_mod.fetch_brief(url)
+    except youtube_mod.BriefError as exc:
+        raise HTTPException(status_code=exc.status, detail=exc.message) from None
+
+
+def _user_strategies(request: Request) -> user_strategies_mod.UserStrategyRegistry:
+    """등록부는 sqlite 옆에 JSON 한 장으로 산다 — 파일이 진실이라(D2) 스키마를 늘릴
+    이유가 없다. 서브시스템 비활성 gate는 `_store`와 같은 규율을 쓴다."""
+    _store(request)
+    path = request.app.state.settings.backtest_db_path.parent / "user-strategies.json"
+    registry = user_strategies_mod.UserStrategyRegistry(path)
+    registry.load()
+    return registry
+
+
+def _project_root(project_id: str) -> Path | None:
+    """프로젝트 폴더 해석은 `athena_api/projects`가 소유한다 — 아직 없을 수 있어서 함수
+    안에서 늦게 import하고, 없으면 503으로 말한다(조용히 빈 결과를 주지 않는다).
+
+    등록되지 않은 프로젝트(KeyError)는 None이다 — 목록은 그걸 exists=false로 보여주고,
+    등록은 404로 거절한다.
+    """
+    try:
+        from athena_api.projects.store import resolve_project_path
+    except ImportError as exc:
+        raise HTTPException(status_code=503, detail="프로젝트 저장소가 아직 없다") from exc
+    try:
+        return Path(resolve_project_path(project_id))
+    except KeyError:
+        return None
+
+
+@router.post("/user-strategies")
+async def register_user_strategy_route(request: Request, body: dict[str, Any]) -> dict[str, Any]:
+    """내 폴더의 .py 하나를 프리셋처럼 고를 수 있게 등록한다(결정 D2·D3).
+
+    소스를 복사하지 않는다 — {project_id, 상대경로}만 남긴다. 파일이 진실이라, 등록한
+    뒤 파일을 고치면 다음 실행이 고친 파일을 읽는다.
+    """
+    registry = _user_strategies(request)
+    project_id = body.get("project_id")
+    raw_path = body.get("path")
+    name = body.get("name")
+    if not isinstance(project_id, str) or not project_id.strip():
+        raise HTTPException(status_code=422, detail="project_id는 비어 있지 않은 문자열이어야 한다")
+    if not isinstance(raw_path, str) or not raw_path.strip():
+        raise HTTPException(status_code=422, detail="path는 비어 있지 않은 문자열이어야 한다")
+    if not isinstance(name, str) or not name.strip():
+        raise HTTPException(status_code=422, detail="name은 비어 있지 않은 문자열이어야 한다")
+    root = _project_root(project_id)
+    if root is None:
+        raise HTTPException(status_code=404, detail=f"프로젝트가 존재하지 않는다: {project_id}")
+    try:
+        rel = user_strategies_mod.relative_python_path(root, raw_path)
+    except user_strategies_mod.UserStrategyError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from None
+    target = root / rel
+    if not target.is_file():
+        raise HTTPException(status_code=422, detail=f"파일이 없다: {rel}")
+    try:
+        source = target.read_text(encoding="utf-8")
+    except (OSError, UnicodeDecodeError):
+        raise HTTPException(status_code=422, detail=f"파일을 UTF-8로 읽지 못했다: {rel}") from None
+    # 계약 검사는 POST /validate(kind=python)를 그대로 부른다 — 같은 규칙을 두 번 적어
+    # 두면 언젠가 두 곳이 서로 다른 말을 한다.
+    verdict = await validate_route({"kind": "python", "source": source})
+    if not verdict["ok"]:
+        raise HTTPException(status_code=422, detail=verdict["errors"][0]["message"])
+    entry = registry.add(
+        name=name.strip(),
+        project_id=project_id,
+        path=rel,
+        created_at=datetime.now(UTC).isoformat(),
+    )
+    return entry.to_dict()
+
+
+@router.get("/user-strategies")
+async def list_user_strategies_route(request: Request) -> dict[str, Any]:
+    """`exists`도 `params`도 저장된 값이 아니라 지금 디스크를 본 결과다 — 파일이
+    진실이라(D2) 등록부가 파일을 대신 말하면 안 된다. `params`는 프리셋과 같은 모양의
+    슬라이더를 그리라고 `PARAMS` 기본값을 읽어 주는 것이다."""
+    registry = _user_strategies(request)
+    items: list[dict[str, Any]] = []
+    for entry in registry.list_all():
+        root = _project_root(entry.project_id)
+        target = None if root is None else root / entry.path
+        exists = target is not None and target.is_file()
+        params: dict[str, Any] = {}
+        if exists and target is not None:
+            try:
+                params = dict(flow_mod.params_defaults(target.read_text(encoding="utf-8")))
+            except (OSError, UnicodeDecodeError):
+                params = {}
+        items.append(
+            {
+                "id": entry.id,
+                "name": entry.name,
+                "project_id": entry.project_id,
+                "path": entry.path,
+                "exists": exists,
+                "params": params,
+            }
+        )
+    return {"strategies": items}
+
+
+@router.delete("/user-strategies/{strategy_id}")
+async def unregister_user_strategy_route(request: Request, strategy_id: str) -> dict[str, Any]:
+    """등록만 지운다 — 파일은 사용자 폴더의 것이라 우리가 지울 물건이 아니다(D2)."""
+    registry = _user_strategies(request)
+    if not registry.remove(strategy_id):
+        raise HTTPException(status_code=404, detail="등록된 전략이 아니다")
+    return {"ok": True, "note": "등록만 지웠다 — 파일은 그대로다"}
 
 
 __all__ = ["router"]
