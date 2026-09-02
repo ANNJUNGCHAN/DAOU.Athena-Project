@@ -60,6 +60,7 @@ test('begin은 새 id/프로젝트를 활성화하지만 첫 touch 전에는 목
       updatedAt: touched.conversations[0].updatedAt,
       projectId: 'p1',
       mode: 'chat',
+      resumeSessionId: null,
     });
 
     conversations.touch({ id: 'fresh-1', title: '두 번째 질문' });
@@ -172,4 +173,21 @@ test('mode가 없는 옛 레코드는 마이그레이션 없이 chat으로 읽�
   });
   assert.equal(state.conversations[0].mode, 'chat');
   assert.equal(state.activeMode, 'chat');
+});
+
+test('setResumeCursor는 대화마다 Claude 커서를 따로 적고, setActive가 그것을 돌려준다', async () => {
+  await withTempState({
+    projects: [{ id: 'p1', label: '프로젝트 1' }],
+    currentProjectId: 'p1',
+    conversations: [],
+  }, () => {
+    conversations.touch({ id: 'a', title: '첫 대화', mode: 'chat' });
+    conversations.touch({ id: 'b', title: '둘째 대화', mode: 'backtest' });
+    assert.equal(conversations.setResumeCursor({ id: 'a', resumeSessionId: 'sess-A' }), true);
+    assert.equal(conversations.setResumeCursor({ id: '없음', resumeSessionId: 'x' }), false);
+    const a = conversations.setActive('a');
+    assert.equal(a.conversations.find((c) => c.id === 'a').resumeSessionId, 'sess-A');
+    // 다른 대화의 커서는 그대로 비어 있다 — 커서는 대화마다 따로 산다.
+    assert.equal(a.conversations.find((c) => c.id === 'b').resumeSessionId, null);
+  });
 });

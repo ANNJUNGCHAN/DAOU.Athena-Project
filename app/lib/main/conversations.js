@@ -72,6 +72,10 @@ function normalizeState(raw) {
       // 대화는 만들어진 모드에 묶인다(35·40번 보드). 옛 레코드에는 이 필드가
       // 없으므로 viewToMode가 'chat'으로 떨어뜨린다 — 마이그레이션 없이 읽힌다.
       mode: viewToMode(row.mode),
+      // 마지막으로 관측한 Claude session_id(--resume 커서). 이력 행을 다시 눌렀을 때
+      // 모델 문맥까지 이어 붙이는 열쇠다 — 이것이 없으면 메시지만 다시 보이고
+      // 대화는 백지에서 시작한다(41번 보드 "다시 누르면 그대로").
+      resumeSessionId: validString(row.resumeSessionId),
     });
   }
 
@@ -194,6 +198,7 @@ function touch({ id, title, projectId, mode } = {}) {
       updatedAt: nowIso,
       projectId: requestedProjectId,
       mode: requestedMode,
+      resumeSessionId: null,
     });
   }
   state.activeId = conversationId;
@@ -214,6 +219,21 @@ function setActive(id) {
   state.currentProjectId = conversation.projectId;
   writeState(state);
   return snapshot(state);
+}
+
+// 턴이 끝날 때마다 main이 관측한 Claude session_id를 그 대화에 적어 둔다.
+// 커서는 대화마다 따로 산다 — 한 대화의 커서로 다른 대화를 이으면 문맥이 섞인다.
+function setResumeCursor({ id, resumeSessionId } = {}) {
+  const conversationId = validString(id);
+  if (!conversationId) return false;
+  const state = readState();
+  const conversation = state.conversations.find((row) => row.id === conversationId);
+  if (!conversation) return false;
+  const next = validString(resumeSessionId);
+  if (conversation.resumeSessionId === next) return true;
+  conversation.resumeSessionId = next;
+  writeState(state);
+  return true;
 }
 
 // 백그라운드로 미룬 파일 쓰기가 실제로 끝났는지 기다려야 할 때(테스트) 쓴다.
@@ -244,6 +264,7 @@ module.exports = {
   begin,
   touch,
   setActive,
+  setResumeCursor,
   flush,
   flushSync,
 };
