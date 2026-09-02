@@ -265,10 +265,16 @@ function revealShell({ focus = true, force = false } = {}) {
   // 클릭·캔버스 피드 등이 이 함수를 타면 부팅 창이 남은 채 셸 창이 하나 더 떴다).
   // 셸은 attemptShellHandoff()만 연다 — 여기서는 부팅 창만 앞으로 가져온다.
   // force는 부팅 없이 셸을 바로 쓰는 검증 스크립트(ATHENA_NO_AUTOSTART) 전용이다.
-  if (!force && bootWin && !bootWin.isDestroyed()) {
-    mdlog(`revealShell 보류 — 부팅 handoff 전 (focus=${focus})`);
-    if (focus) { bootWin.focus(); bootWin.moveTop(); }
-    return;
+  if (bootWin && !bootWin.isDestroyed()) {
+    if (!force) {
+      mdlog(`revealShell 보류 — 부팅 handoff 전 (focus=${focus})`);
+      if (focus) { bootWin.focus(); bootWin.moveTop(); }
+      return;
+    }
+    // 런처는 handoff를 안 거치므로 부팅 창을 여기서 걷는다 — 남겨 두면 셸 아래에
+    // 깔려 있다가 셸을 닫거나 숨기는 순간 다시 드러난다(2026-09-02 실측).
+    bootWin.destroy();
+    bootWin = null;
   }
   if (shellWin.isMinimized()) shellWin.restore();
   if (!shellWin.isVisible()) {
