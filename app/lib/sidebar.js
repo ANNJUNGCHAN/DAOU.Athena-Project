@@ -51,6 +51,13 @@
           backtest: document.getElementById('modeNavBacktest'),
         },
         badge: document.getElementById('modeNavAgentBadge'),
+        counts: {
+          summary: document.getElementById('modeNavSummaryCount'),
+          graph: document.getElementById('modeNavGraphCount'),
+          agent: document.getElementById('modeNavAgentCount'),
+          plugin: document.getElementById('modeNavPluginCount'),
+          backtest: document.getElementById('modeNavBacktestCount'),
+        },
         onSelect: (view) => {
           if (window.AthenaCanvasMode && typeof window.AthenaCanvasMode.setView === 'function') {
             window.AthenaCanvasMode.setView(view);
@@ -424,6 +431,41 @@
     }
   }
 
+  // 이력의 머리는 다섯 모드(세션 명세 §3-1) — 대화 목록을 새로 받을 때마다
+  // 모드별 개수를 세어 네비에 넘긴다. 세는 규칙(모드 어휘 정규화·모르는 모드
+  // 접기)의 주인은 session-history-view.js 하나라 여기서 다시 세지 않고,
+  // 레코드 어휘(chat…) ↔ 화면 어휘(summary…)의 다리도 session-snapshot.js
+  // 한 쌍뿐이다. 모듈이 없으면 조용히 건너뛴다(위 modeNav 가드와 같은 방식).
+  function updateModeCounts() {
+    const historyView = window.AthenaLib && window.AthenaLib.SessionHistoryView;
+    const snapshot = window.AthenaLib && window.AthenaLib.SessionSnapshot;
+    if (!modeNav || !historyView || !snapshot) return;
+    // runState는 전부 null이다 — 지금 대화 레코드에는 실행 중인지를 말해주는
+    // 근거가 없다. 없는 "실행 중"을 있다고 그리지 않는다(P3). 실행 상태 배선은
+    // job 레코드가 생기는 다음 단계의 몫이다(명세 §5).
+    const view = historyView.buildHistoryView({
+      sessions: conversationsCache.map((c) => ({
+        id: c.id,
+        mode: c.mode,
+        projectId: c.projectId,
+        title: c.title,
+        pinned: false,
+        archived: false,
+        updatedAt: c.updatedAt,
+        runState: null,
+      })),
+    });
+    const counts = {};
+    const running = {};
+    for (const row of view.modes) {
+      const key = snapshot.modeToView(row.mode);
+      counts[key] = row.count;
+      running[key] = row.runState === 'running';
+    }
+    modeNav.setCounts(counts);
+    modeNav.setRunning(running);
+  }
+
   async function loadConversations() {
     try {
       const res = await window.athena.invoke('athena:conversations-list');
@@ -437,6 +479,7 @@
       conversationsCache = [];
       projectsCache = [];
     }
+    updateModeCounts();
     renderList();
   }
 
@@ -619,6 +662,7 @@
     } catch {
       activeConversationId = null;
     }
+    updateModeCounts();
     renderList();
   }
 

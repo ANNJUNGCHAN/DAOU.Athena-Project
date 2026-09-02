@@ -11,7 +11,7 @@
 // 어긋날 일이 없다.
 
 function createSidebarModeNav(deps) {
-  const { items, badge, onSelect } = deps || {};
+  const { items, badge, counts, onSelect } = deps || {};
   const keys = items ? Object.keys(items) : [];
 
   function setActive(view) {
@@ -19,7 +19,10 @@ function createSidebarModeNav(deps) {
       const el = items[key];
       if (!el) continue;
       const active = key === view;
-      el.className = active ? 'sidebar-mode-item is-active' : 'sidebar-mode-item';
+      // has-running(실행 중 스피너)은 모드 클릭과 무관한 상태다 — 통째로 덮어쓰면
+      // 다른 모드를 눌렀을 때 도는 스피너가 꺼진다. 그 클래스만 살려서 다시 쓴다.
+      const running = /\bhas-running\b/.test(String(el.className || ''));
+      el.className = `sidebar-mode-item${active ? ' is-active' : ''}${running ? ' has-running' : ''}`;
       if (typeof el.setAttribute === 'function') {
         el.setAttribute('aria-pressed', active ? 'true' : 'false');
       }
@@ -51,7 +54,46 @@ function createSidebarModeNav(deps) {
     badge.textContent = String(n);
   }
 
-  return { setActive, setBadgeCount };
+  // 모드별 대화 수(세션 명세 §3-1의 "이력의 머리는 다섯 모드") — 호출자가
+  // session-history-view.js로 센 숫자를 넘긴다. 이 모듈은 숫자만 렌더한다.
+  // 0이거나 없으면 그 자리를 숨긴다(없는 이력을 있다고 표시하지 않는다, P3).
+  function setCounts(map) {
+    if (!counts) return;
+    const source = (map && typeof map === 'object') ? map : {};
+    for (const key of Object.keys(counts)) {
+      const el = counts[key];
+      if (!el) continue;
+      const raw = source[key];
+      const n = Number.isFinite(raw) ? Math.max(0, Math.floor(raw)) : 0;
+      if (n <= 0) {
+        el.hidden = true;
+        el.textContent = '';
+        continue;
+      }
+      el.hidden = false;
+      el.textContent = String(n);
+    }
+  }
+
+  // 실행 중 표시는 스피너 하나로 통일한다(사용자 확정 2026-09-02) — 초록 점은
+  // 쓰지 않는다. 스피너를 그리는 건 CSS의 몫이라 여기서는 상태 클래스와
+  // aria-busy만 남긴다. 모르는 키는 그릴 자리가 없으니 조용히 무시한다.
+  function setRunning(map) {
+    const source = (map && typeof map === 'object') ? map : {};
+    for (const key of keys) {
+      const el = items[key];
+      if (!el) continue;
+      const running = !!source[key];
+      const classes = String(el.className || '').split(' ').filter((c) => c && c !== 'has-running');
+      if (running) classes.push('has-running');
+      el.className = classes.join(' ');
+      if (typeof el.setAttribute === 'function') {
+        el.setAttribute('aria-busy', running ? 'true' : 'false');
+      }
+    }
+  }
+
+  return { setActive, setBadgeCount, setCounts, setRunning };
 }
 
 const __exports = { createSidebarModeNav };
