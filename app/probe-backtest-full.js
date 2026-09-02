@@ -1,0 +1,2896 @@
+// 백테스트 전수 프로브 — **실백엔드 + 실앱 UI**로 백테스트 기능 전체를 한 바퀴 돈다.
+//
+// 기존 세 프로브가 남긴 구멍을 메운다:
+//   - probe-backtest-mode.js   : 백엔드 없이 5중 배타와 정직한 실패만 본다(5스텝)
+//   - probe-backtest-e2e.js    : 행복 경로 한 줄기만 본다(13스텝)
+//   - probe-backtest-chat-scenario.js : 실모델 대화 — 모델 흔들림이 곧 실패다(12스텝)
+// 이 프로브는 모델을 루프에서 빼고, 사람이 누를 수 있는 표면과 IPC 계약을 전수로 잰다.
+// 채팅 액션은 webContents.send로 직접 넣어 결정적으로 만든다.
+//
+// 준비(프로브가 하지 않는다 — 자격증명과 데이터는 사람이 준비한다):
+//   1) 캔들이 시드된 백테스트 sqlite (ATHENA_BACKTEST_DB_PATH)
+//   2) ATHENA_BACKTEST_ENABLED=true 로 백엔드 기동(127.0.0.1:8010)
+//   3) 그 sqlite에 005930 일봉이 캐시돼 있어야 한다 — 없으면 00 단계에서 멈춘다
+//   4) npx electron probe-backtest-full.js
+//
+// 환경변수:
+//   ATHENA_PROBE_STK       종목(기본 005930)
+//   ATHENA_PROBE_FROM/TO   실행 구간. 기본은 00 단계에서 GET /data/coverage를 읽어
+//                          캐시 안쪽(마지막 봉 기준 3년)으로 잡는다 — 고정 날짜를 박으면
+//                          커버리지가 바뀐 기계에서 모든 실행이 409가 된다.
+//                          커버리지를 못 읽으면 20240401~20260801로 떨어진다.
+//   ATHENA_PROBE_SECTIONS  돌릴 섹션만 골라 돈다(예: 'A,B,C') — 고치는 루프용
+//
+// 섹션:
+//   A 부팅·모드 · B 설계 폼 · C 데이터 계획·승인 · D 실행·결과(폼) · E 코드 경로
+//   F 오류·진단 · G 흐름 지도 · H 이력·비교 · I 최적화 · J 배포 · K 채팅 액션 · L 컨텍스트
+//
+// 만드는 것은 되돌린다: 배포는 전부 중지하고 끝낸다. 전략·버전·실행 행은 백엔드에
+// 삭제 API가 없어(store에 delete가 없다) 남는다 — 보고서에 그 사실을 남긴다.
+
+const { app } = require('electron');
+const path = require('path');
+const fs = require('fs');
+const os = require('os');
+
+const PROFILE = fs.mkdtempSync(path.join(os.tmpdir(), 'athena-probe-bt-full-'));
+fs.writeFileSync(
+  path.join(PROFILE, 'athena-onboarding.json'),
+  JSON.stringify({ cliDone: true, accountDone: true }),
+);
+app.setPath('userData', PROFILE);
+
+const BACKEND = process.env.ATHENA_BACKEND_URL || 'http://127.0.0.1:8010';
+const STK = process.env.ATHENA_PROBE_STK || '005930';
+const ENV_FROM = process.env.ATHENA_PROBE_FROM || '';
+const ENV_TO = process.env.ATHENA_PROBE_TO || '';
+// 환경변수도 없고 커버리지도 못 읽었을 때의 최후 기본값(캐시된 범위에 맞춘 값).
+const FALLBACK_FROM = '20240401';
+const FALLBACK_TO = '20260801';
+
+// 캐시 밖 구간 — TR을 태우지 않는다(계획만 계산된다). 승인 화면·부분 실행·422를 여기서 낸다.
+const UNCACHED_FROM = '19900103';   // 캐시보다 앞 → 부분 겹침(보유 구간만 실행이 성립)
+const EMPTY_FROM = '19900101';      // 캐시와 전혀 안 겹침 → allow_partial이 422
+const EMPTY_TO = '19901231';
+
+const ALL_SECTIONS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'];
+const WANTED = new Set(
+  (process.env.ATHENA_PROBE_SECTIONS || ALL_SECTIONS.join(','))
+    .split(',').map((s) => s.trim().toUpperCase()).filter(Boolean),
+);
+const on = (id) => WANTED.has(id);
+
+// 실행 구간은 00 단계에서 커버리지를 보고 정한다(환경변수가 있으면 그것이 이긴다).
+let FROM = ENV_FROM;
+let TO = ENV_TO;
+
+const R = '#backtestCanvas ';
+
+const WAIT_UI = 10000;
+const WAIT_PRESETS = 25000;
+const WAIT_RUN = 90000;
+const WAIT_VALIDATE = 30000;
+const WAIT_OPTIMIZE = 180000;
+
+// ---------- 리포트 ----------
+
+const report = {
+  startedAt: new Date().toISOString(), finishedAt: null, steps: [], summary: null, fatal: null,
+};
+
+// 한 번 죽으면 155개 검사의 결과를 통째로 잃는다 — 조기 종료 사유와 치명상은 값으로 들고 다니다가
+// finish()의 finally에서 리포트에 함께 적는다.
+const outcome = { abortReason: null, fatal: null, finished: false };
+
+// 전제(백엔드·캐시)가 없어 나머지를 돌리지 않는 경우 — 치명상이 아니라 조기 종료다.
+class PreconditionAbort extends Error {}
+
+function record(id, name, ok, data) {
+  report.steps.push({ id, name, ok: !!ok, data: data === undefined ? null : data });
+  console.log(`[probe-backtest-full] ${ok ? 'OK  ' : 'FAIL'} — ${id} ${name}: ${safeJson(data)}`);
+}
+
+function skip(id, name, reason) {
+  report.steps.push({ id, name, ok: true, skipped: true, data: { reason } });
+  console.log(`[probe-backtest-full] SKIP — ${id} ${name}: ${reason}`);
+}
+
+// 검사 하나가 프로브 전체를 죽이지 못하게 감싼다 — fn이 던지면 그 검사만 FAIL로 남기고 다음으로 간다.
+// fn은 { ok, data }를 돌려주고, 이 실행에 해당하지 않으면 { skip: '이유' }를 돌려준다.
+// (분기마다 이름이 다른 검사는 { skip, name }으로 그 이름을 그대로 쓴다.)
+async function step(id, name, fn) {
+  try {
+    const out = await fn();
+    if (out && out.skip) { skip(id, out.name || name, out.skip); return out; }
+    record(id, name, out && out.ok, out ? out.data : null);
+    return out;
+  } catch (err) {
+    record(id, name, false, { error: String((err && err.message) || err) });
+    return null;
+  }
+}
+
+// 섹션 하나가 도중에 끊겨도 나머지 섹션은 돈다 — 끊긴 사실은 합성 FAIL 한 줄로 남긴다.
+async function section(id, fn) {
+  try {
+    await fn();
+  } catch (err) {
+    record(`${id}-SECTION`, `${id} 섹션이 도중에 끊겼다`, false, {
+      error: String((err && err.message) || err),
+    });
+  }
+}
+
+function safeJson(value) {
+  try {
+    const text = JSON.stringify(value);
+    return text && text.length > 600 ? `${text.slice(0, 600)}…` : String(text);
+  } catch { return '<직렬화 불가>'; }
+}
+
+// ---------- 렌더러 구동 헬퍼 ----------
+
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+
+// 렌더러 호출 하나가 영영 안 돌아오는 경우를 막는다 — 무한 대기는 리포트를 통째로 잃는 길이다.
+const WAIT_JS = 15000;
+
+function withTimeout(promise, ms, label) {
+  let timer = null;
+  const capped = new Promise((resolve) => {
+    timer = setTimeout(() => resolve({ __probeError: `${label} 시간 초과(${ms}ms)` }), ms);
+  });
+  return Promise.race([promise, capped]).finally(() => clearTimeout(timer));
+}
+
+// 렌더러에서 던진 예외를 값으로 바꿔 돌려준다 — 셀렉터 하나가 없다고 프로브 전체가
+// 죽으면 나머지 150개 검사의 결과를 못 본다. `source`는 **식 하나**여야 한다.
+// executeJavaScript 자체가 거절하는 경우("Script failed to execute…")도 같은 규칙으로 값이 된다.
+function js(win, source) {
+  if (!win || win.isDestroyed()) return Promise.resolve({ __probeError: '창이 이미 닫혔다' });
+  const run = win.webContents.executeJavaScript(
+    `(() => { try { return (\n${source}\n); } catch (e) {`
+    + ' return { __probeError: String((e && e.message) || e) }; } })()',
+  ).catch((err) => ({ __probeError: `executeJavaScript 실패: ${String((err && err.message) || err)}` }));
+  return withTimeout(run, WAIT_JS, 'executeJavaScript');
+}
+
+// 조건이 참이 될 때까지 기다린다 — 고정 sleep은 느린 기계에서 깨지고 빠른 기계에서 낭비다.
+// 렌더러 예외는 "아직 아님"으로 보고 계속 기다리되, 시간이 다하면 그 예외를 그대로 돌려준다.
+// 마감이 있는 루프다 — 어떤 경우에도 timeoutMs(기본 WAIT_UI) 안에 돌아온다.
+async function until(win, source, timeoutMs) {
+  const budget = timeoutMs || WAIT_UI;
+  const deadline = Date.now() + budget;
+  let last = null;
+  while (Date.now() < deadline) {
+    last = await js(win, source);
+    if (last && last.__probeError) { await wait(250); continue; }
+    if (last) return last;
+    await wait(250);
+  }
+  // 시간이 다했다는 사실 자체가 진단이다 — 반환값 계약(null 또는 마지막 예외)은 그대로 두고 로그로 남긴다.
+  console.log(
+    `[probe-backtest-full] WAIT — ${budget}ms 안에 조건이 참이 되지 않았다:`
+    + ` ${String(source).replace(/\s+/g, ' ').slice(0, 100)} → ${safeJson(last)}`,
+  );
+  return last;
+}
+
+function ctx(win) {
+  return js(win, '(() => { const a = window.AthenaBacktestCanvas; return a ? a.getContext() : null; })()');
+}
+
+function invoke(win, channel, payload) {
+  const arg = payload === undefined ? '' : `, ${JSON.stringify(payload)}`;
+  return js(win, `window.athena.invoke(${JSON.stringify(channel)}${arg})`);
+}
+
+function sendChat(win, action) {
+  try {
+    win.webContents.send('athena:backtest-chat-action', action);
+    return true;
+  } catch (err) {
+    console.log(`[probe-backtest-full] WARN — 채팅 액션 전송 실패: ${String((err && err.message) || err)}`);
+    return false;
+  }
+}
+
+function click(win, selector) {
+  return js(win, `(() => {
+    const n = document.querySelector(${JSON.stringify(selector)});
+    if (!n) return false;
+    n.click();
+    return true;
+  })()`);
+}
+
+function clickNth(win, selector, index) {
+  return js(win, `(() => {
+    const list = document.querySelectorAll(${JSON.stringify(selector)});
+    const n = list[${Number(index)}];
+    if (!n) return false;
+    n.click();
+    return true;
+  })()`);
+}
+
+function clickByText(win, selector, text) {
+  return js(win, `(() => {
+    const list = Array.from(document.querySelectorAll(${JSON.stringify(selector)}));
+    const n = list.find((b) => (b.textContent || '').trim() === ${JSON.stringify(text)});
+    if (!n) return false;
+    n.click();
+    return true;
+  })()`);
+}
+
+function setInput(win, selector, value) {
+  return js(win, `(() => {
+    const n = document.querySelector(${JSON.stringify(selector)});
+    if (!n) return false;
+    n.value = ${JSON.stringify(String(value))};
+    n.dispatchEvent(new Event('input', { bubbles: true }));
+    return true;
+  })()`);
+}
+
+function textOf(win, selector) {
+  return js(win, `(() => {
+    const n = document.querySelector(${JSON.stringify(selector)});
+    return n ? n.textContent : null;
+  })()`);
+}
+
+function countOf(win, selector) {
+  return js(win, `document.querySelectorAll(${JSON.stringify(selector)}).length`);
+}
+
+// ---------- 폼 조작(설계 화면) ----------
+
+function goTab(win, index) {
+  return clickNth(win, `${R}.backtest-tab`, index);
+}
+
+function goSubtab(win, index) {
+  return clickNth(win, `${R}.backtest-subtab`, index);
+}
+
+async function goDesignForm(win) {
+  await goTab(win, 0);
+  await wait(200);
+  await goSubtab(win, 0);
+  await wait(200);
+}
+
+function addSymbol(win, code) {
+  return js(win, `(() => {
+    const s = document.querySelector('${R}.backtest-symbol-add');
+    if (!s) return false;
+    s.value = ${JSON.stringify(code)};
+    s.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    return true;
+  })()`);
+}
+
+// 칩은 지울 때마다 render()가 도므로 한 번에 하나씩 지운다.
+async function clearSymbols(win) {
+  for (let i = 0; i < 8; i += 1) {
+    const removed = await click(win, `${R}.backtest-symbol-remove`);
+    if (!removed) break;
+    await wait(120);
+  }
+}
+
+function setDates(win, from, to) {
+  return js(win, `(() => {
+    const inputs = Array.from(document.querySelectorAll('${R}.backtest-design .backtest-field-input'))
+      .filter((i) => i.placeholder === 'YYYYMMDD');
+    if (inputs.length < 2) return { ok: false, found: inputs.length };
+    inputs[0].value = ${JSON.stringify(from)};
+    inputs[0].dispatchEvent(new Event('input', { bubbles: true }));
+    inputs[1].value = ${JSON.stringify(to)};
+    inputs[1].dispatchEvent(new Event('input', { bubbles: true }));
+    return { ok: true, found: inputs.length };
+  })()`);
+}
+
+// 설계 폼을 "지금 실행해도 되는" 출발점으로 되돌린다 — 섹션을 따로 돌려도, 앞 섹션이 깨진 채
+// 끝나도 같은 자리에서 시작하게. 앞 섹션이 새게 두는 상태가 실제로 여럿 있다:
+//   · E15가 진입 조건을 전부 지운다        → 프리셋 재선택으로 템플릿 조건이 돌아온다
+//   · E/F가 실행경로를 'code'로 굳혀 둔다   → 갈래가 있으면 '폼'으로 되돌린다
+//   · F가 진단·에러 화면에 멈춘다(탭이 없다) → 막다른 화면을 먼저 빠져나온다
+//   · J가 배포 탭에 머문다                  → 설계/폼 탭으로 되돌린다
+async function ensureRunnableForm(win, from, to) {
+  // 1) 막다른 화면에서 먼저 빠져나온다 — 승인·진단·에러 화면에는 모드 탭이 아예 없다.
+  //    없는 버튼은 click()이 false를 돌려줄 뿐이니 순서대로 눌러도 안전하다.
+  await click(win, `${R}.backtest-approval-cancel`);
+  await click(win, `${R}.backtest-diag-discard`);
+  await click(win, `${R}.backtest-error-back`);
+  await wait(250);
+
+  // 2) 설계 탭 · 폼 하위탭.
+  await goDesignForm(win);
+
+  // 3) 코드가 남아 있으면 실행경로 갈래가 'code'에 머문다 — 폼 경로로 되돌린다.
+  await clickByText(win, `${R}.backtest-runpath-item`, '폼');
+  await wait(150);
+
+  // 4) 프리셋을 다시 골라 지표·파라미터·조건을 템플릿 값으로 되돌린다(종목·기간·주기는 유지된다).
+  await clickNth(win, `${R}.backtest-preset-item`, 0);
+  await wait(250);
+
+  // 5) 종목·기간을 다시 채운다.
+  const cur = await ctx(win);
+  const symbols = cur && cur.spec ? cur.spec.symbols : null;
+  if (!Array.isArray(symbols) || symbols.length !== 1 || symbols[0] !== STK) {
+    await clearSymbols(win);
+    await addSymbol(win, STK);
+    await wait(250);
+  }
+  await setDates(win, from || FROM, to || TO);
+  await wait(150);
+
+  // 6) 복구가 실제로 됐는지 한 줄로 남긴다 — 다음 섹션의 실패가 앞 섹션 탓인지 가르는 근거다.
+  const after = await ctx(win);
+  const conditions = after && after.spec && after.spec.entry ? after.spec.entry.conditions : null;
+  if (!Array.isArray(conditions) || conditions.length === 0 || (after && after.view !== 'design')) {
+    console.log(
+      '[probe-backtest-full] WARN — 폼 복구가 끝나지 않았다:'
+      + ` ${safeJson({ view: after && after.view, conditions: Array.isArray(conditions) ? conditions.length : null })}`,
+    );
+  }
+  return after;
+}
+
+// 호출부가 많아 이름은 그대로 둔다 — 실제 복구는 ensureRunnableForm이 한다.
+function prepareForm(win, from, to) {
+  return ensureRunnableForm(win, from, to);
+}
+
+// 실행 버튼을 누른 뒤 running을 벗어난 화면을 기다린다(result·error·diagnosis·approval).
+// **설계 화면에서 누른 클릭에만** 쓴다 — 이미 끝난 화면에서 누르면 그 화면을 그대로 돌려준다.
+function waitRunOutcome(win, timeoutMs) {
+  return until(win, `(() => {
+    const api = window.AthenaBacktestCanvas;
+    if (!api) return null;
+    const c = api.getContext();
+    if (!c) return null;
+    if (c.view === 'running' || c.view === 'design') return null;
+    return { view: c.view, tab: c.tab };
+  })()`, timeoutMs || WAIT_RUN);
+}
+
+// 이미 끝난 화면(진단·결과)에서 실행을 다시 걸 때 쓴다 — 새 실행이 **실제로 끝났는지**만 본다.
+//
+// 왜 따로 필요한가(2026-09-02 F09 실측). applyFix는 setState('running') 앞에서 addVersion을
+// await한다 — 그 왕복 동안 화면은 아직 'diagnosis'다. waitRunOutcome은 "running도 design도
+// 아니면 끝"이라 그 진단 화면을 새 결과로 착각하고 즉시 돌아왔다(applied:{view:'diagnosis'}).
+// 실제로는 재실행이 성공하고 있었다.
+//
+// 새 실행의 표지는 lastResult.runId다 — 캔버스가 startRun에서 setState({runId: res.run_id})로
+// 갈아끼우고, 성공(status:'done')이든 실패(status:'failed')든 lastResultContext가 그 값을 싣는다.
+// prevRunId는 클릭 **직전에** 읽어 넘긴다.
+// 실행이 아예 시작되지 않는 화면(승인)을 기다리는 자리에는 쓰지 않는다 — runId가 바뀌지 않는다.
+function waitNewRunOutcome(win, prevRunId, timeoutMs) {
+  const prev = JSON.stringify(prevRunId == null ? null : String(prevRunId));
+  return until(win, `(() => {
+    const api = window.AthenaBacktestCanvas;
+    if (!api) return null;
+    const c = api.getContext();
+    if (!c) return null;
+    if (c.view === 'running' || c.view === 'design') return null;
+    const runId = c.lastResult ? c.lastResult.runId : null;
+    if (!runId || String(runId) === ${prev}) return null;
+    return { view: c.view, tab: c.tab, runId };
+  })()`, timeoutMs || WAIT_RUN);
+}
+
+// 지금 화면이 물고 있는 runId — waitNewRunOutcome에 넘길 직전 값이다.
+async function currentRunId(win) {
+  const c = await ctx(win);
+  return c && c.lastResult ? c.lastResult.runId : null;
+}
+
+function clickLastCardButton(win, label) {
+  return js(win, `(() => {
+    const cards = document.querySelectorAll('#history .backtest-change');
+    if (!cards.length) return false;
+    const card = cards[cards.length - 1];
+    const btn = Array.from(card.querySelectorAll('button'))
+      .find((b) => (b.textContent || '').trim() === ${JSON.stringify(label)});
+    if (!btn) return false;
+    btn.click();
+    return true;
+  })()`);
+}
+
+// ---------- 전략 소스(코드 경로에서 쓰는 세 벌) ----------
+
+const SRC_GOOD = [
+  'PARAMS = {',
+  '    "fast": {"default": 5, "min": 2, "max": 60, "step": 1, "type": "int"},',
+  '    "slow": {"default": 20, "min": 3, "max": 240, "step": 1, "type": "int"},',
+  '}',
+  '',
+  '',
+  'def signals(df, p):',
+  '    print("probe-code-path")',
+  '    fast = df["close"].rolling(int(p["fast"])).mean()',
+  '    slow = df["close"].rolling(int(p["slow"])).mean()',
+  '    entry = (fast > slow) & (fast.shift(1) <= slow.shift(1))',
+  '    exit = (fast < slow) & (fast.shift(1) >= slow.shift(1))',
+  '    return df.assign(entry=entry, exit=exit)[["entry", "exit"]]',
+  '',
+].join('\n');
+
+// 차단된 import — 샌드박스가 SandboxImportError를 던지고, diagnose가 "그 줄을 지운다"는
+// 수정안을 낸다(_blocked_import_fix). 'os'는 _BLOCKED_HINT의 첫 항목이라 판정이 흔들리지 않는다.
+const SRC_BROKEN_IMPORT = [
+  'import os',
+  '',
+  'PARAMS = {"fast": {"default": 5, "min": 2, "max": 60, "step": 1, "type": "int"}}',
+  '',
+  '',
+  'def signals(df, p):',
+  '    print("probe-fix-path")',
+  '    ma = df["close"].rolling(int(p["fast"])).mean()',
+  '    entry = df["close"] > ma',
+  '    exit = df["close"] < ma',
+  '    return df.assign(entry=entry, exit=exit)[["entry", "exit"]]',
+  '',
+].join('\n');
+
+// 흐름 지도의 4단계(준비·지표·조건·출력)가 또렷하게 갈리는 모양.
+const SRC_FLOW = [
+  'PARAMS = {"fast": {"default": 5, "min": 2, "max": 60, "step": 1, "type": "int"}}',
+  '',
+  '',
+  'def signals(df, p):',
+  '    n = int(p["fast"])',
+  '    ma = df["close"].rolling(n).mean()',
+  '    entry = df["close"] > ma',
+  '    exit = df["close"] < ma',
+  '    return df.assign(entry=entry, exit=exit)[["entry", "exit"]]',
+  '',
+].join('\n');
+
+const SRC_NO_SIGNALS = 'x = 1\n';
+
+// 정적 검증은 통과하고 **실행에서만** 터지는 코드(J08b) — evaluate가 사용자 코드의 예외를
+// yaml 파싱 오류로 바꿔 말하지 않는지 잰다. 샌드박스가 error.type을 그대로 싣는다.
+const SRC_RAISES = [
+  'PARAMS = {"fast": {"default": 5, "min": 2, "max": 60, "step": 1, "type": "int"}}',
+  '',
+  '',
+  'def signals(df, p):',
+  '    raise ValueError("전략 로직이 터졌다")',
+  '',
+].join('\n');
+
+// ---------- 날짜 산출 ----------
+
+function minusYears(yyyymmdd, years) {
+  const y = Number(String(yyyymmdd).slice(0, 4)) - years;
+  return `${y}${String(yyyymmdd).slice(4)}`;
+}
+
+// ---------- 정리 대상 ----------
+
+const created = { strategyIds: [], deploymentIds: [] };
+
+// finish()는 main() 밖(finally·거절 처리기)에서도 불린다 — 창을 여기에 둔다.
+let probeWin = null;
+
+// ---------- 본체 ----------
+
+async function main() {
+  const mainMod = require('./main.js');
+  await mainMod.createWindows();
+  const { shellWin } = mainMod.getWins();
+  probeWin = shellWin;
+  shellWin.show();
+  await wait(1800); // 렌더러 스크립트(canvas.js·chat.js) 로드 대기
+
+  // ==================================================================
+  // 00 전제 — 백엔드·백테스트 서브시스템·캐시가 실제로 있는가
+  // ==================================================================
+
+  let ready = false;
+  const readyDeadline = Date.now() + 90000;
+  while (Date.now() < readyDeadline) {
+    try {
+      const res = await fetch(`${BACKEND}/ready`);
+      if (res.status === 200) { ready = true; break; }
+    } catch { /* 아직 안 떴다 — 다시 묻는다 */ }
+    await wait(1500);
+  }
+  await step('00A', '백엔드 /ready가 200을 준다', () => ({ ok: ready, data: { backend: BACKEND } }));
+  if (!ready) throw new PreconditionAbort('백엔드가 없어 나머지를 돌리지 않았다');
+
+  const presetsEnvelope = await invoke(shellWin, 'athena:backtest-presets');
+  const presetCount = presetsEnvelope && presetsEnvelope.ok && presetsEnvelope.data
+    ? (presetsEnvelope.data.presets || []).length : 0;
+  await step('00B', '백테스트 서브시스템이 켜져 있다(presets 200)', () => ({
+    ok: !!(presetsEnvelope && presetsEnvelope.ok) && presetCount === 10,
+    data: {
+            ok: presetsEnvelope && presetsEnvelope.ok,
+            status: presetsEnvelope && presetsEnvelope.status,
+            error: presetsEnvelope && presetsEnvelope.error,
+            presets: presetCount,
+          },
+  }));
+  if (!presetsEnvelope || !presetsEnvelope.ok) {
+    throw new PreconditionAbort('presets IPC가 실패해 나머지를 돌리지 않았다');
+  }
+
+  const covEnvelope = await invoke(
+    shellWin, 'athena:backtest-coverage', { stk_cd: STK, period: 'day', adjusted: true },
+  );
+  const coverage = covEnvelope && covEnvelope.ok ? covEnvelope.data : null;
+  const rows = coverage ? Number(coverage.rows) || 0 : 0;
+  await step('00C', `${STK} 일봉이 캐시에 있다`, () => ({
+    ok: rows > 0 && !!coverage.first_dt && !!coverage.last_dt,
+    data: { rows, first_dt: coverage && coverage.first_dt, last_dt: coverage && coverage.last_dt },
+  }));
+  if (!(rows > 0) || !coverage.first_dt || !coverage.last_dt) {
+    throw new PreconditionAbort(
+      `${STK} 일봉 캐시가 비어 있다 — ATHENA_BACKTEST_DB_PATH에 봉을 시드한 뒤 다시 돌리세요`,
+    );
+  }
+
+  // 실행 구간은 커버리지 안쪽으로 잡는다 — 밖으로 나가면 모든 실행이 409가 된다.
+  TO = ENV_TO || coverage.last_dt || FALLBACK_TO;
+  const bounded = minusYears(TO, 3);
+  FROM = ENV_FROM
+    || (coverage.first_dt ? (bounded > coverage.first_dt ? bounded : coverage.first_dt) : FALLBACK_FROM);
+  await step('00D', '실행 구간이 캐시 안쪽으로 정해졌다', () => ({
+    ok: FROM < TO,
+    data: { stk: STK, from: FROM, to: TO },
+  }));
+
+  // ==================================================================
+  // A 부팅·모드
+  // ==================================================================
+  if (on('A')) await section('A', async () => {
+    await js(shellWin, "(() => { document.getElementById('modeNavBacktest').click(); return true; })()");
+    await wait(400);
+
+    const surfaces = await js(shellWin, `(() => {
+      const h = (id) => { const el = document.getElementById(id); return el ? el.hidden : null; };
+      const nav = document.getElementById('modeNavBacktest');
+      const region = document.getElementById('canvasRegion');
+      return {
+        backtest: h('backtestCanvas'),
+        mosaic: h('mosaic'),
+        summaryTable: h('graphSummaryTable'),
+        graph: h('graphCanvas'),
+        agent: h('agentCanvas'),
+        plugin: h('pluginCanvas'),
+        navActive: nav ? nav.className.includes('is-active') : null,
+        mode: region && region.dataset ? region.dataset.mode : null,
+      };
+    })()`);
+    await step('A01', '백테스트 모드 진입 — 5중 배타', () => ({
+      ok: surfaces.backtest === false && surfaces.mosaic === true && surfaces.summaryTable === true
+            && surfaces.graph === true && surfaces.agent === true && surfaces.plugin === true
+            && surfaces.navActive === true && surfaces.mode === 'backtest',
+      data: surfaces,
+    }));
+
+    const chatHead = await js(shellWin, `(() => {
+      const head = document.getElementById('chatModeHead');
+      if (!head) return null;
+      const t = head.querySelector('.chat-mode-head-title');
+      const s = head.querySelector('.chat-mode-head-sub');
+      return {
+        hidden: head.hidden,
+        mode: head.dataset ? head.dataset.mode : null,
+        title: t ? t.textContent : null,
+        sub: s ? s.textContent : null,
+      };
+    })()`);
+    await step('A02', '채팅 헤더가 백테스트 얼굴로 바뀐다', () => ({
+      ok: !!chatHead && chatHead.hidden === false && chatHead.mode === 'backtest'
+            && chatHead.title === '전략에게 묻기' && chatHead.sub === '답이 설정과 코드를 바꿉니다',
+      data: chatHead,
+    }));
+
+    const shell = await until(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const c = window.AthenaBacktestCanvas ? window.AthenaBacktestCanvas.getContext() : null;
+      if (!c || c.view !== 'design') return null;
+      return {
+        view: c.view,
+        head: root.querySelectorAll('.backtest-shell > .backtest-head').length,
+        body: root.querySelectorAll('.backtest-shell > .backtest-body').length,
+        empty: root.querySelectorAll('.backtest-canvas-empty').length,
+        tabs: Array.from(root.querySelectorAll('.backtest-tab')).map((t) => t.textContent),
+        runButton: root.querySelectorAll('.backtest-run-button').length,
+      };
+    })()`, WAIT_PRESETS);
+    await step('A03', 'empty 뷰를 지나 design 뷰로 간다(shell 골격 head+body)', () => ({
+      ok: !!shell && shell.head === 1 && shell.body === 1 && shell.empty === 0,
+      data: shell,
+    }));
+    await step('A04', '모드 탭 5개가 계약 순서대로 있다', () => ({
+      ok: !!shell && JSON.stringify(shell.tabs) === JSON.stringify(['설계', '결과', '이력', '최적화', '배포'])
+            && shell.runButton === 1,
+      data: shell ? { tabs: shell.tabs, runButton: shell.runButton } : null,
+    }));
+
+    const presetView = await js(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const first = root.querySelector('.backtest-preset-item');
+      return {
+        items: root.querySelectorAll('.backtest-preset-item').length,
+        title: (root.querySelector('.backtest-preset-wrap .backtest-card-title') || {}).textContent || null,
+        firstName: first ? (first.querySelector('.backtest-preset-name') || {}).textContent : null,
+        firstCategory: first ? (first.querySelector('.backtest-preset-category') || {}).textContent : null,
+      };
+    })()`);
+    await step('A05', '프리셋 10종이 백엔드에서 와 목록으로 그려진다', () => ({
+      ok: presetView.items === 10 && presetView.title === '무엇으로 시작할까요 — 프리셋 10종',
+      data: presetView,
+    }));
+    await step('A06', '프리셋 카드가 이름·분류를 갖는다', () => ({
+      ok: !!presetView.firstName && presetView.firstName.length > 0
+            && presetView.firstCategory !== null,
+      data: { name: presetView.firstName, category: presetView.firstCategory },
+    }));
+
+    const headTitle = await js(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      return {
+        name: (root.querySelector('.backtest-head-name') || {}).textContent || null,
+        strategy: (root.querySelector('.backtest-head-strategy') || {}).textContent || null,
+        version: root.querySelectorAll('.backtest-head-version').length,
+      };
+    })()`);
+    await step('A07', '헤더가 전략 이름을 적고 저장 전에는 버전 배지가 없다', () => ({
+      ok: headTitle.name === '백테스트' && !!headTitle.strategy && headTitle.version === 0,
+      data: headTitle,
+    }));
+  });
+  else {
+    // 다른 섹션도 모드 안에서만 성립한다 — 진입만 조용히 해둔다.
+    await js(shellWin, "(() => { document.getElementById('modeNavBacktest').click(); return true; })()");
+    await until(shellWin, `document.querySelectorAll('${R}.backtest-preset-item').length || null`, WAIT_PRESETS);
+  }
+
+  // ==================================================================
+  // B 설계 폼
+  // ==================================================================
+  if (on('B')) await section('B', async () => {
+    await goDesignForm(shellWin);
+    await clickNth(shellWin, `${R}.backtest-preset-item`, 0);
+    await wait(250);
+    await clearSymbols(shellWin);
+    await wait(200);
+
+    // --- 종목 칩 ---
+    await addSymbol(shellWin, STK);
+    await wait(250);
+    const chip = await js(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const chips = root.querySelectorAll('.backtest-symbol-chip');
+      const add = root.querySelector('.backtest-symbol-add');
+      return {
+        chips: chips.length,
+        code: chips.length ? (chips[0].querySelector('.backtest-symbol-code') || {}).textContent : null,
+        addValue: add ? add.value : null,
+      };
+    })()`);
+    await step('B01', '종목 칩 추가(Enter) — 칩이 생기고 입력칸이 비워진다', () => ({
+      ok: chip.chips === 1 && chip.code === STK && chip.addValue === '',
+      data: chip,
+    }));
+
+    // --- 기간 ---
+    const dateSet = await setDates(shellWin, FROM, TO);
+    await wait(150);
+    const afterDates = await ctx(shellWin);
+    await step('B02', '시작일·종료일 입력이 모델에 들어간다', () => ({
+      ok: dateSet.ok === true && afterDates.spec.fromDt === FROM && afterDates.spec.toDt === TO,
+      data: { found: dateSet.found, fromDt: afterDates.spec.fromDt, toDt: afterDates.spec.toDt },
+    }));
+
+    // --- 주기 세그먼트 ---
+    await clickByText(shellWin, `${R}.backtest-design .backtest-segment-item`, '주');
+    await wait(200);
+    const weekCtx = await ctx(shellWin);
+    const weekPressed = await js(shellWin, `(() => {
+      const list = Array.from(document.querySelectorAll('${R}.backtest-design .backtest-segment-item'));
+      return list.map((b) => [b.textContent, b.getAttribute('aria-pressed')]);
+    })()`);
+    await step('B03', '주기 세그먼트(일/주/월) 전환', () => ({
+      ok: weekCtx.spec.period === 'week'
+            && JSON.stringify(weekPressed) === JSON.stringify([['일', 'false'], ['주', 'true'], ['월', 'false']]),
+      data: { period: weekCtx.spec.period, pressed: weekPressed },
+    }));
+    await clickByText(shellWin, `${R}.backtest-design .backtest-segment-item`, '일');
+    await wait(200);
+
+    // --- 수정주가 ---
+    const adjToggled = await js(shellWin, `(() => {
+      const card = document.querySelectorAll('${R}.backtest-design > .backtest-card')[0];
+      if (!card) return false;
+      const cb = card.querySelector('input[type=checkbox]');
+      if (!cb) return false;
+      cb.checked = false;
+      cb.dispatchEvent(new Event('change', { bubbles: true }));
+      return true;
+    })()`);
+    const adjCtx = await ctx(shellWin);
+    await step('B04', '수정주가 체크박스가 모델을 바꾼다', () => ({
+      ok: adjToggled === true && adjCtx.spec.adjusted === false,
+      data: { adjusted: adjCtx.spec.adjusted },
+    }));
+    await js(shellWin, `(() => {
+      const card = document.querySelectorAll('${R}.backtest-design > .backtest-card')[0];
+      const cb = card.querySelector('input[type=checkbox]');
+      cb.checked = true;
+      cb.dispatchEvent(new Event('change', { bubbles: true }));
+      return true;
+    })()`);
+    await wait(150);
+
+    // --- 캐시 커버리지 한 줄 ---
+    const covNote = await until(shellWin, `(() => {
+      const card = document.querySelectorAll('${R}.backtest-design > .backtest-card')[0];
+      if (!card) return null;
+      const note = card.querySelector('.backtest-card-note');
+      return note && note.textContent.indexOf('캐시') === 0 ? { note: note.textContent } : null;
+    })()`, WAIT_UI);
+    await step('B05', '대상 카드에 캐시 커버리지 한 줄이 뜬다', () => ({
+      ok: !!covNote && /^캐시 .+봉 · .+ → .+$/.test(covNote.note),
+      data: covNote,
+    }));
+
+    // --- 프리셋 교체가 종목·기간을 지키는가 ---
+    const beforeSwitch = await ctx(shellWin);
+    await clickNth(shellWin, `${R}.backtest-preset-item`, 1);
+    await wait(300);
+    const afterSwitch = await ctx(shellWin);
+    const selectedIndex = await js(shellWin, `(() => {
+      const list = Array.from(document.querySelectorAll('${R}.backtest-preset-item'));
+      return list.findIndex((b) => b.className.indexOf('is-selected') !== -1);
+    })()`);
+    await step('B06', '프리셋 교체 — 종목·기간·주기는 유지되고 전략만 갈린다', () => ({
+      ok: JSON.stringify(afterSwitch.spec.symbols) === JSON.stringify(beforeSwitch.spec.symbols)
+            && afterSwitch.spec.fromDt === beforeSwitch.spec.fromDt
+            && afterSwitch.spec.toDt === beforeSwitch.spec.toDt
+            && afterSwitch.spec.period === beforeSwitch.spec.period
+            && afterSwitch.spec.presetId !== beforeSwitch.spec.presetId
+            && selectedIndex === 1,
+      data: {
+              beforePreset: beforeSwitch.spec.presetId,
+              afterPreset: afterSwitch.spec.presetId,
+              symbols: afterSwitch.spec.symbols,
+              selectedIndex,
+            },
+    }));
+    await clickNth(shellWin, `${R}.backtest-preset-item`, 0);
+    await wait(300);
+
+    // --- 지표 카드 ---
+    const indicators = await js(shellWin, `(() => {
+      const rows = Array.from(document.querySelectorAll('${R}.backtest-indicator-row'));
+      const card = document.querySelectorAll('${R}.backtest-design > .backtest-card')[1];
+      return {
+        rows: rows.map((r) => [
+          (r.querySelector('.backtest-indicator-id') || {}).textContent,
+          (r.querySelector('.backtest-indicator-alias') || {}).textContent,
+        ]),
+        note: card ? (card.querySelector('.backtest-card-note') || {}).textContent : null,
+        buttons: document.querySelectorAll('${R}.backtest-indicator-row button').length,
+      };
+    })()`);
+    await step('B07', '지표 카드가 별칭까지 그린다(SMA 골든크로스 = 2행)', () => ({
+      ok: indicators.rows.length === 2 && indicators.rows[0][0] === 'SMA'
+            && indicators.rows[0][1] === 'ma_fast' && indicators.rows[1][1] === 'ma_slow'
+            && /2종 사용/.test(indicators.note || ''),
+      data: indicators,
+    }));
+    await step('B08', '지표 추가/삭제 버튼은 화면에 없다(미구현 계약)', () => ({
+      ok: indicators.buttons === 0,
+      data: { buttons: indicators.buttons, note: 'renderIndicatorCard에는 button()이 하나도 없다 — 프리셋 교체나 채팅 patch만이 경로' },
+    }));
+
+    // --- 파라미터 슬라이더 ---
+    const slider = await js(shellWin, `(() => {
+      const s = document.querySelector('${R}.backtest-param-slider[aria-label="fast 값"]');
+      if (!s) return null;
+      const wrap = s.parentNode;
+      return {
+        min: s.getAttribute('min'), max: s.getAttribute('max'),
+        step: s.getAttribute('step'), value: s.value,
+        name: (wrap.querySelector('.backtest-param-name') || {}).textContent,
+        shown: (wrap.querySelector('.backtest-param-value') || {}).textContent,
+        range: (wrap.querySelector('.backtest-param-range') || {}).textContent,
+      };
+    })()`);
+    await step('B09', 'fast 슬라이더가 프리셋의 min/max/step/기본값을 그대로 쓴다', () => ({
+      ok: !!slider && slider.min === '5' && slider.max === '60' && slider.step === '1'
+            && slider.value === '20' && slider.name === 'fast' && slider.range === '5 – 60',
+      data: slider,
+    }));
+
+    const moved = await js(shellWin, `(() => {
+      const s = document.querySelector('${R}.backtest-param-slider[aria-label="fast 값"]');
+      s.value = '10';
+      s.dispatchEvent(new Event('input', { bubbles: true }));
+      return (s.parentNode.querySelector('.backtest-param-value') || {}).textContent;
+    })()`);
+    const movedCtx = await ctx(shellWin);
+    await step('B10', '슬라이더 조작이 값 표시와 모델을 함께 바꾼다', () => ({
+      ok: moved === '10' && movedCtx.spec.params.fast.default === 10,
+      data: { shown: moved, model: movedCtx.spec.params.fast.default },
+    }));
+
+    const clampHigh = await js(shellWin, `(() => {
+      const s = document.querySelector('${R}.backtest-param-slider[aria-label="fast 값"]');
+      s.value = '999';
+      s.dispatchEvent(new Event('input', { bubbles: true }));
+      return (s.parentNode.querySelector('.backtest-param-value') || {}).textContent;
+    })()`);
+    const clampHighCtx = await ctx(shellWin);
+    await step('B11', '범위 위쪽 값은 max로 잘린다', () => ({
+      ok: clampHigh === '60' && clampHighCtx.spec.params.fast.default === 60,
+      data: { shown: clampHigh, model: clampHighCtx.spec.params.fast.default },
+    }));
+
+    const clampLow = await js(shellWin, `(() => {
+      const s = document.querySelector('${R}.backtest-param-slider[aria-label="fast 값"]');
+      s.value = '1';
+      s.dispatchEvent(new Event('input', { bubbles: true }));
+      return (s.parentNode.querySelector('.backtest-param-value') || {}).textContent;
+    })()`);
+    const clampLowCtx = await ctx(shellWin);
+    await step('B12', '범위 아래쪽 값은 min으로 잘린다', () => ({
+      ok: clampLow === '5' && clampLowCtx.spec.params.fast.default === 5,
+      data: { shown: clampLow, model: clampLowCtx.spec.params.fast.default },
+    }));
+
+    // --- 조건 카드 ---
+    const condCards = await js(shellWin, `(() => {
+      const cards = Array.from(document.querySelectorAll('${R}.backtest-condition-card'));
+      return cards.map((c) => (c.querySelector('.backtest-card-title') || {}).textContent);
+    })()`);
+    await step('B13', '진입·청산 조건 카드 2장', () => ({
+      ok: JSON.stringify(condCards) === JSON.stringify(['진입 조건', '청산 조건']),
+      data: { titles: condCards },
+    }));
+
+    const condRow = await js(shellWin, `(() => {
+      const c = document.querySelector('${R}.backtest-condition');
+      if (!c) return null;
+      return {
+        name: (c.querySelector('.backtest-condition-name') || {}).textContent,
+        op: (c.querySelector('.backtest-condition-op') || {}).textContent,
+        target: (c.querySelector('.backtest-condition-target') || {}).textContent,
+      };
+    })()`);
+    await step('B14', '조건 행이 사람 문장으로 읽힌다', () => ({
+      ok: !!condRow && condRow.name === 'ma_fast' && condRow.op === '가 상향 돌파'
+            && condRow.target === 'ma_slow',
+      data: condRow,
+    }));
+
+    await js(shellWin, `(() => {
+      const card = document.querySelectorAll('${R}.backtest-condition-card')[0];
+      card.querySelector('.backtest-logic-badge').click();
+      return true;
+    })()`);
+    await wait(200);
+    const logic = await js(shellWin, `(() => {
+      const card = document.querySelectorAll('${R}.backtest-condition-card')[0];
+      const b = card.querySelector('.backtest-logic-badge');
+      return { cls: b.className, text: b.textContent };
+    })()`);
+    const logicCtx = await ctx(shellWin);
+    await step('B15', 'AND/OR 뱃지 토글', () => ({
+      ok: logic.cls.indexOf('is-or') !== -1 && logic.text === '하나라도 OR'
+            && logicCtx.spec.entry.logic === 'OR',
+      data: { badge: logic, logic: logicCtx.spec.entry.logic },
+    }));
+    await js(shellWin, `(() => {
+      document.querySelectorAll('${R}.backtest-condition-card')[0]
+        .querySelector('.backtest-logic-badge').click();
+      return true;
+    })()`);
+    await wait(200);
+
+    const adder = await js(shellWin, `(() => {
+      const left = document.querySelector('select[aria-label="entry 조건 왼쪽"]');
+      const op = document.querySelector('select[aria-label="entry 조건 연산자"]');
+      const right = document.querySelector('input[aria-label="entry 조건 오른쪽"]');
+      if (!left || !op || !right) return null;
+      return {
+        left: Array.from(left.children).map((o) => o.value),
+        op: Array.from(op.children).map((o) => [o.value, o.textContent]),
+        placeholder: right.placeholder,
+      };
+    })()`);
+    await step('B16', '조건 추가 — 왼쪽 select가 별칭 + 원시 열 5종을 준다', () => ({
+      ok: !!adder && JSON.stringify(adder.left)
+            === JSON.stringify(['ma_fast', 'ma_slow', 'open', 'high', 'low', 'close', 'volume']),
+      data: adder ? { left: adder.left } : null,
+    }));
+    await step('B17', '조건 추가 — 연산자 select가 7종을 준다', () => ({
+      ok: !!adder && adder.op.length === 7 && adder.op[0][0] === 'cross_above'
+            && adder.op[0][1] === '가 상향 돌파' && adder.placeholder === '이름 또는 숫자',
+      data: adder ? { ops: adder.op.map((o) => o[0]), placeholder: adder.placeholder } : null,
+    }));
+
+    const beforeAdd = (await ctx(shellWin)).spec.entry.conditions.length;
+    await js(shellWin, `(() => {
+      document.querySelector('select[aria-label="entry 조건 왼쪽"]').value = 'ma_fast';
+      document.querySelector('select[aria-label="entry 조건 연산자"]').value = 'greater_than';
+      document.querySelector('input[aria-label="entry 조건 오른쪽"]').value = '30';
+      document.querySelectorAll('${R}.backtest-condition-card')[0]
+        .querySelector('.backtest-condition-add-button').click();
+      return true;
+    })()`);
+    await wait(250);
+    const afterAdd = (await ctx(shellWin)).spec.entry.conditions;
+    await step('B18', '[조건 추가]가 조건을 늘리고 숫자 문자열을 숫자로 담는다', () => ({
+      ok: afterAdd.length === beforeAdd + 1
+            && afterAdd[afterAdd.length - 1].indicator === 'ma_fast'
+            && afterAdd[afterAdd.length - 1].operator === 'greater_than'
+            && afterAdd[afterAdd.length - 1].compare_to === 30,
+      data: { before: beforeAdd, after: afterAdd.length, last: afterAdd[afterAdd.length - 1] },
+    }));
+
+    await js(shellWin, `(() => {
+      document.querySelectorAll('${R}.backtest-condition-card')[0]
+        .querySelector('.backtest-condition-add-button').click();
+      return true;
+    })()`);
+    await wait(250);
+    const afterEmptyAdd = (await ctx(shellWin)).spec.entry.conditions.length;
+    await step('B19', '오른쪽이 비면 [조건 추가]는 아무 일도 하지 않는다', () => ({
+      ok: afterEmptyAdd === afterAdd.length,
+      data: { count: afterEmptyAdd },
+    }));
+
+    await js(shellWin, `(() => {
+      const card = document.querySelectorAll('${R}.backtest-condition-card')[0];
+      const buttons = card.querySelectorAll('.backtest-condition-remove');
+      buttons[buttons.length - 1].click();
+      return true;
+    })()`);
+    await wait(250);
+    const afterRemove = (await ctx(shellWin)).spec.entry.conditions.length;
+    await step('B20', '조건 행 ×가 그 조건만 지운다', () => ({
+      ok: afterRemove === beforeAdd,
+      data: { before: afterAdd.length, after: afterRemove },
+    }));
+
+    // --- 리스크 · 비용 ---
+    await js(shellWin, `(() => {
+      const card = document.querySelectorAll('${R}.backtest-design > .backtest-card')[2];
+      const cbs = card.querySelectorAll('input[type=checkbox]');
+      cbs[1].checked = true;
+      cbs[1].dispatchEvent(new Event('change', { bubbles: true }));
+      return true;
+    })()`);
+    await setInput(shellWin, 'input[aria-label="익절 비율(%)"]', '25');
+    await wait(150);
+    const riskCtx = await ctx(shellWin);
+    await step('B21', '손절·익절 토글과 비율이 모델에 들어간다', () => ({
+      ok: riskCtx.spec.risk.take_profit.enabled === true
+            && riskCtx.spec.risk.take_profit.percent === 25,
+      data: riskCtx.spec.risk,
+    }));
+    await js(shellWin, `(() => {
+      const card = document.querySelectorAll('${R}.backtest-design > .backtest-card')[2];
+      const cbs = card.querySelectorAll('input[type=checkbox]');
+      cbs[1].checked = false;
+      cbs[1].dispatchEvent(new Event('change', { bubbles: true }));
+      return true;
+    })()`);
+    await wait(150);
+
+    const costsBefore = await js(shellWin, `(() => {
+      const card = document.querySelectorAll('${R}.backtest-design > .backtest-card')[2];
+      return Array.from(card.querySelectorAll('.backtest-field')).map((f) => {
+        const label = (f.querySelector('.backtest-field-label') || {}).textContent;
+        const input = f.querySelector('input');
+        return [label, input ? input.value : null];
+      });
+    })()`);
+    await step('B22', '비용 3칸이 화면 기본값을 그대로 보인다', () => ({
+      ok: JSON.stringify(costsBefore.slice(2)) === JSON.stringify([
+            ['수수료(bp)', '1.5'], ['매도세(bp)', '18'], ['슬리피지(bp)', '5'],
+          ]),
+      data: { fields: costsBefore },
+    }));
+
+    await js(shellWin, `(() => {
+      const card = document.querySelectorAll('${R}.backtest-design > .backtest-card')[2];
+      const fields = Array.from(card.querySelectorAll('.backtest-field'));
+      const fee = fields[2].querySelector('input');
+      fee.value = '2.5';
+      fee.dispatchEvent(new Event('input', { bubbles: true }));
+      return true;
+    })()`);
+    await wait(150);
+    const costsCtx = await ctx(shellWin);
+    await step('B23', '수수료 입력이 모델에 들어간다', () => ({
+      ok: costsCtx.spec.costs.fee_bps === 2.5,
+      data: costsCtx.spec.costs,
+    }));
+
+    const riskNote = await js(shellWin, `(() => {
+      const card = document.querySelectorAll('${R}.backtest-design > .backtest-card')[2];
+      return (card.querySelector('.backtest-card-note') || {}).textContent || null;
+    })()`);
+    await step('B24', '비용 카드가 "사실 주장이 아니다"를 적어둔다', () => ({
+      ok: riskNote === '세율·수수료는 시점에 따라 다릅니다 — 기본값일 뿐 사실 주장이 아닙니다',
+      data: { note: riskNote },
+    }));
+
+    // --- 체결 가정 ---
+    const assumptions = await js(shellWin, `(() => {
+      const wrap = document.querySelectorAll('${R}.backtest-assumptions');
+      if (!wrap.length) return null;
+      const t = wrap[0].querySelector('.backtest-assumptions-text');
+      return { count: wrap.length, text: t ? t.textContent : '' };
+    })()`);
+    const phrases = ['종가 확정 후', '다음 봉 시가', '손절이 먼저', '생존 편향', '배당 재투자'];
+    await step('B25', '설계 화면에 체결 가정이 상시로 붙어 있다', () => ({
+      ok: !!assumptions && assumptions.count === 1
+            && phrases.every((p) => assumptions.text.indexOf(p) !== -1),
+      data: assumptions ? { count: assumptions.count, missing: phrases.filter((p) => assumptions.text.indexOf(p) === -1) } : null,
+    }));
+
+    // --- 폼 검증 오류가 뜨고, 지워진다 ---
+    await clearSymbols(shellWin);
+    await wait(200);
+    await click(shellWin, `${R}.backtest-run-button`);
+    await wait(600);
+    const errLines = await js(shellWin, `(() => {
+      const c = window.AthenaBacktestCanvas.getContext();
+      return {
+        view: c.view,
+        lines: Array.from(document.querySelectorAll('${R}.backtest-design-error-line')).map((e) => e.textContent),
+      };
+    })()`);
+    await step('B26', '검증 실패면 실행하지 않고 오류 줄을 세운다', () => ({
+      ok: errLines.view === 'design'
+            && errLines.lines.indexOf('종목을 하나 이상 고르세요') !== -1,
+      data: errLines,
+    }));
+
+    await addSymbol(shellWin, STK);
+    await wait(250);
+    await clickNth(shellWin, `${R}.backtest-preset-item`, 0);
+    await wait(300);
+    const clearedErrors = await countOf(shellWin, `${R}.backtest-design-error-line`);
+    await step('B27', '프리셋을 다시 고르면 오류 줄이 지워진다', () => ({
+      ok: clearedErrors === 0,
+      data: { lines: clearedErrors },
+    }));
+  });
+
+  // ==================================================================
+  // C 데이터 계획 · 수집 승인
+  // ==================================================================
+  if (on('C')) await section('C', async () => {
+    const planCached = await invoke(shellWin, 'athena:backtest-plan', {
+      stk_cd: STK, period: 'day', adjusted: true, from_dt: FROM, to_dt: TO,
+    });
+    await step('C01', 'POST /data/plan — 캐시된 구간은 계획 봉투를 그대로 준다', () => ({
+      ok: !!planCached && planCached.ok === true && planCached.data
+            && typeof planCached.data.needed_pages === 'number'
+            && typeof planCached.data.est_seconds === 'number'
+            && Array.isArray(planCached.data.segments)
+            && Number(planCached.data.cached_rows) > 0,
+      data: planCached && planCached.data ? planCached.data : planCached,
+    }));
+
+    const planGap = await invoke(shellWin, 'athena:backtest-plan', {
+      stk_cd: STK, period: 'day', adjusted: true, from_dt: EMPTY_FROM, to_dt: EMPTY_TO,
+    });
+    await step('C02', 'POST /data/plan — 캐시 밖 구간은 페이지 수와 구간을 계산한다', () => ({
+      ok: !!planGap && planGap.ok === true && planGap.data
+            && planGap.data.needed_pages > 0 && planGap.data.segments.length > 0,
+      data: planGap && planGap.data ? planGap.data : planGap,
+    }));
+
+    const planMissing = await invoke(shellWin, 'athena:backtest-plan', {
+      stk_cd: STK, period: 'day', adjusted: true, from_dt: FROM,
+    });
+    await step('C03', 'POST /data/plan — 필수 키가 빠지면 422로 이름을 짚어준다', () => ({
+      ok: !!planMissing && planMissing.ok === false && planMissing.status === 422
+            && /to_dt/.test(String(planMissing.error)),
+      data: planMissing,
+    }));
+
+    // --- 승인 화면 ---
+    await prepareForm(shellWin, UNCACHED_FROM, TO);
+    await click(shellWin, `${R}.backtest-run-button`);
+    const approval = await waitRunOutcome(shellWin, WAIT_RUN);
+    const approvalDom = await js(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const badge = root.querySelector('.backtest-approval-badge');
+      if (!badge) return null;
+      const held = root.querySelector('.backtest-coverage-held');
+      const missing = root.querySelector('.backtest-coverage-missing');
+      const stats = Array.from(root.querySelectorAll('.backtest-approval-stat')).map((s) => s.textContent);
+      return {
+        badge: badge.textContent,
+        title: (root.querySelector('.backtest-approval-title') || {}).textContent,
+        held: held ? held.getAttribute('style') : null,
+        missing: missing ? missing.getAttribute('style') : null,
+        stats,
+        note: (root.querySelector('.backtest-approval-note') || {}).textContent,
+        buttons: Array.from(root.querySelectorAll('.backtest-approval-actions button')).map((b) => b.textContent),
+      };
+    })()`);
+    await step('C04', '캐시가 모자란 실행은 409 → 수집 승인 화면으로 간다', () => ({
+      ok: !!approval && approval.view === 'approval' && !!approvalDom
+            && approvalDom.badge === '수집 필요'
+            && approvalDom.title === '캐시에 없는 구간이 있습니다',
+      data: { outcome: approval, badge: approvalDom && approvalDom.badge },
+    }));
+
+    const widths = approvalDom
+      ? [approvalDom.held, approvalDom.missing].map((s) => Number(String(s || '').replace(/[^\d.]/g, '')))
+      : [NaN, NaN];
+    await step('C05', '승인 커버리지 막대 두 조각의 합이 100%다', () => ({
+      ok: Number.isFinite(widths[0]) && Number.isFinite(widths[1])
+            && Math.abs(widths[0] + widths[1] - 100) < 0.2,
+      data: { held: approvalDom && approvalDom.held, missing: approvalDom && approvalDom.missing },
+    }));
+
+    await step('C06', '승인 화면이 TR 호출 횟수를 적는다', () => ({
+      ok: !!approvalDom && /^TR 호출 · ka10081 × .+회$/.test(approvalDom.stats[0] || ''),
+      data: { stat: approvalDom && approvalDom.stats[0] },
+    }));
+    await step('C07', '승인 화면이 예상 소요 초를 적는다', () => ({
+      ok: !!approvalDom && /^예상 소요 · .+초$/.test(approvalDom.stats[1] || ''),
+      data: { stat: approvalDom && approvalDom.stats[1] },
+    }));
+    await step('C08', '승인 화면이 권리락 재수집 방침을 적는다', () => ({
+      ok: !!approvalDom && /권리락/.test(approvalDom.note || '') && /수정주가/.test(approvalDom.note || ''),
+      data: { note: approvalDom && (approvalDom.note || '').slice(0, 60) },
+    }));
+    await step('C09', '승인 화면 버튼 3종', () => ({
+      ok: !!approvalDom && JSON.stringify(approvalDom.buttons)
+            === JSON.stringify(['수집하고 실행', '보유 구간만으로 실행', '취소']),
+      data: approvalDom ? { buttons: approvalDom.buttons } : null,
+    }));
+
+    // --- 보유 구간만으로 실행 ---
+    await click(shellWin, `${R}.backtest-approval-partial`);
+    const partialOutcome = await waitRunOutcome(shellWin, WAIT_RUN);
+    const partialCtx = await ctx(shellWin);
+    const partialFlagLine = await textOf(shellWin, `${R}.backtest-assumptions-flags`);
+    await step('C10', '[보유 구간만으로 실행]이 실제로 돌고 partial 플래그를 남긴다', () => ({
+      ok: !!partialOutcome && partialOutcome.view === 'result'
+            && Array.isArray(partialCtx.lastResult && partialCtx.lastResult.flags)
+            && partialCtx.lastResult.flags.some((f) => String(f).indexOf('보유 구간만 실행') === 0),
+      data: {
+              view: partialOutcome && partialOutcome.view,
+              flags: partialCtx.lastResult ? partialCtx.lastResult.flags : null,
+              line: partialFlagLine,
+            },
+    }));
+    await step('C11', 'partial 플래그가 결과 화면 "가정" 줄에도 적힌다', () => ({
+      ok: typeof partialFlagLine === 'string' && partialFlagLine.indexOf('플래그 ·') === 0
+            && partialFlagLine.indexOf('보유 구간만 실행') !== -1,
+      data: { line: partialFlagLine },
+    }));
+
+    // --- 취소 ---
+    await prepareForm(shellWin, UNCACHED_FROM, TO);
+    await click(shellWin, `${R}.backtest-run-button`);
+    const approvalAgain = await waitRunOutcome(shellWin, WAIT_RUN);
+    await click(shellWin, `${R}.backtest-approval-cancel`);
+    await wait(400);
+    const cancelled = await js(shellWin, `(() => {
+      const c = window.AthenaBacktestCanvas.getContext();
+      return {
+        view: c.view, tab: c.tab,
+        presets: document.querySelectorAll('${R}.backtest-preset-item').length,
+      };
+    })()`);
+    await step('C12', '승인 화면 [취소]가 설계로 돌려보낸다', () => ({
+      ok: !!approvalAgain && approvalAgain.view === 'approval'
+            && cancelled.view === 'design' && cancelled.tab === 'design' && cancelled.presets === 10,
+      data: cancelled,
+    }));
+
+    skip(
+      'C13', 'POST /data/backfill 성공 경로',
+      '실제 수집은 키움 mock REST에 cont-yn 페이징으로 붙어 쿼터를 태운다 — 프로브가 자동으로 켜지 않는다'
+      + ' (인벤토리 be-backfill-202: "Human-click-only by design, requires live Kiwoom credentials").'
+      + ' 대신 409 승인 화면(C04~C09)과 allow_partial 경로(C10)로 그 앞뒤를 잰다.',
+    );
+
+    await prepareForm(shellWin, FROM, TO);
+  });
+
+  // ==================================================================
+  // D 실행 · 결과(폼 경로)
+  // ==================================================================
+  if (on('D')) await section('D', async () => {
+    await prepareForm(shellWin, FROM, TO);
+    await click(shellWin, `${R}.backtest-run-button`);
+    const outcome = await waitRunOutcome(shellWin, WAIT_RUN);
+    const resultCtx = await ctx(shellWin);
+    await step('D01', '폼 경로 실행이 결과 화면까지 간다', () => ({
+      ok: !!outcome && outcome.view === 'result' && outcome.tab === 'result'
+            && resultCtx.lastResult && resultCtx.lastResult.status === 'done',
+      data: { outcome, runId: resultCtx.lastResult && resultCtx.lastResult.runId },
+    }));
+
+    const tiles = await js(shellWin, `(() => {
+      const list = Array.from(document.querySelectorAll('${R}.backtest-metric-tile'));
+      return list.map((t) => ({
+        label: (t.querySelector('.backtest-metric-label') || {}).textContent,
+        value: (t.querySelector('.backtest-metric-value') || {}).textContent,
+        sub: (t.querySelector('.backtest-metric-sub') || {}).textContent || '',
+      }));
+    })()`);
+    await step('D02', '지표 타일 6장이 계약 순서로 뜬다', () => ({
+      ok: tiles.length === 6 && JSON.stringify(tiles.map((t) => t.label))
+            === JSON.stringify(['총수익률', 'CAGR', 'Sharpe', 'MDD', '승률', 'Profit Factor']),
+      data: { labels: tiles.map((t) => t.label) },
+    }));
+    await step('D03', '타일 값이 전부 실제 숫자다(— 없음)', () => ({
+      ok: tiles.length === 6 && tiles.every((t) => t.value && t.value !== '—'),
+      data: { values: tiles.map((t) => t.value) },
+    }));
+    const subs = tiles.map((t) => t.sub).filter(Boolean);
+    await step('D04', '타일 부제가 백엔드 값으로 채워진다', () => ({
+      ok: subs.length >= 5,
+      data: { subs },
+    }));
+
+    const equity = await js(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const strategy = root.querySelector('.backtest-equity-strategy');
+      return {
+        svg: root.querySelectorAll('.backtest-equity-svg').length,
+        strategy: root.querySelectorAll('.backtest-equity-strategy').length,
+        d: strategy ? String(strategy.getAttribute('d')).slice(0, 1) : null,
+        benchmark: root.querySelectorAll('.backtest-equity-benchmark').length,
+        buys: root.querySelectorAll('.backtest-equity-marker.is-buy').length,
+        sells: root.querySelectorAll('.backtest-equity-marker.is-sell').length,
+        axis: Array.from(root.querySelectorAll('.backtest-equity-axis span')).map((s) => s.textContent),
+        legend: [
+          (root.querySelector('.backtest-legend-strategy') || {}).textContent,
+          (root.querySelector('.backtest-legend-benchmark') || {}).textContent,
+          (root.querySelector('.backtest-legend-entry') || {}).textContent,
+          (root.querySelector('.backtest-legend-exit') || {}).textContent,
+        ],
+      };
+    })()`);
+    await step('D05', '자산곡선 SVG와 전략 path가 그려진다', () => ({
+      ok: equity.svg === 1 && equity.strategy === 1 && equity.d === 'M',
+      data: { svg: equity.svg, strategy: equity.strategy, dStart: equity.d },
+    }));
+    await step('D06', '매수보유(벤치마크) 곡선이 그려진다', () => ({
+      ok: equity.benchmark >= 1,
+      data: {
+              benchmark: equity.benchmark,
+              known_gap: 'state.closes에 대입하는 코드가 저장소에 없다(backtest-canvas.js:1605) — 범례 "매수보유"만 있고 선이 없다',
+            },
+    }));
+    await step('D07', '진입·청산 마커가 체결 위에 찍힌다', () => ({
+      ok: equity.buys > 0 && equity.sells > 0,
+      data: { buys: equity.buys, sells: equity.sells },
+    }));
+    await step('D08', '자산곡선 x축이 처음·중간·마지막 3점을 적는다', () => ({
+      ok: equity.axis.length === 3 && equity.axis.every((a) => /^\d{4}/.test(String(a || ''))),
+      data: { axis: equity.axis },
+    }));
+    await step('D09', '자산곡선 범례 4개', () => ({
+      ok: JSON.stringify(equity.legend) === JSON.stringify(['전략', '매수보유', '진입', '청산']),
+      data: { legend: equity.legend },
+    }));
+
+    const runId = resultCtx.lastResult ? resultCtx.lastResult.runId : null;
+    const tradesEnvelope = runId
+      ? await invoke(shellWin, 'athena:backtest-trades', { run_id: runId })
+      : null;
+    const trades = tradesEnvelope && tradesEnvelope.ok && tradesEnvelope.data
+      ? (tradesEnvelope.data.trades || []) : [];
+
+    const tradeHead = await js(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const head = root.querySelector('.backtest-trades-head');
+      return {
+        cols: head ? Array.from(head.querySelectorAll('.backtest-trades-cell')).map((c) => c.textContent) : [],
+        rows: root.querySelectorAll('.backtest-trades-row').length,
+        title: (root.querySelector('.backtest-trades-title') || {}).textContent,
+      };
+    })()`);
+    await step('D10', '체결 표 머리 7열', () => ({
+      ok: JSON.stringify(tradeHead.cols)
+            === JSON.stringify(['일자', '방향', '체결가', '수량', '비용', '손익', '사유']),
+      data: { cols: tradeHead.cols },
+    }));
+    await step('D11', '체결 표 행 수가 백엔드 체결 수와 같다(머리 1행 포함)', () => ({
+      ok: trades.length > 0 && tradeHead.rows === trades.length + 1,
+      data: { domRows: tradeHead.rows, backendTrades: trades.length, title: tradeHead.title },
+    }));
+
+    const costCell = await js(shellWin, `(() => {
+      const F = window.AthenaLib.FactsCard;
+      const trades = ${JSON.stringify(trades)};
+      const rows = Array.from(document.querySelectorAll('${R}.backtest-trades-row')).slice(1);
+      const idx = trades.findIndex((t) => t.side === 'sell');
+      if (idx === -1) return { ok: false, reason: '매도 체결이 없다' };
+      if (!rows[idx]) return { ok: false, reason: '해당 행이 화면에 없다' };
+      const cells = rows[idx].querySelectorAll('.backtest-trades-cell');
+      const fee = Number(trades[idx].fee) || 0;
+      const tax = Number(trades[idx].tax) || 0;
+      const expected = F.formatNumeric(fee + tax);
+      return {
+        ok: cells[4].textContent === expected && tax > 0,
+        expected, actual: cells[4].textContent, fee, tax,
+      };
+    })()`);
+    await step('D12', '비용 셀이 수수료 + 매도 거래세다(세금을 버리지 않는다)', () => ({
+      ok: costCell.ok === true,
+      data: costCell,
+    }));
+
+    const stdout = await js(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const panel = root.querySelector('.backtest-stdout');
+      if (!panel) return null;
+      return {
+        title: (panel.querySelector('.backtest-card-title') || {}).textContent,
+        note: (panel.querySelector('.backtest-card-note') || {}).textContent,
+        text: (panel.querySelector('.backtest-stdout-text') || {}).textContent,
+      };
+    })()`);
+    await step('D13', '코드 출력 패널이 폼 경로에서도 자리를 지킨다', () => ({
+      ok: !!stdout && stdout.title === '코드 출력' && stdout.note === 'print 그대로'
+            && stdout.text === '출력이 없습니다',
+      data: stdout,
+    }));
+
+    const resultAssumptions = await js(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const wrap = root.querySelector('.backtest-result .backtest-assumptions');
+      if (!wrap) return null;
+      return {
+        title: (wrap.querySelector('.backtest-assumptions-title') || {}).textContent,
+        text: (wrap.querySelector('.backtest-assumptions-text') || {}).textContent,
+        flags: (wrap.querySelector('.backtest-assumptions-flags') || {}).textContent || null,
+      };
+    })()`);
+    await step('D14', '결과 화면에도 체결 가정이 붙는다', () => ({
+      ok: !!resultAssumptions && resultAssumptions.title === '체결 가정'
+            && resultAssumptions.text.indexOf('다음 봉 시가') !== -1,
+      data: { title: resultAssumptions && resultAssumptions.title },
+    }));
+
+    const backendFlags = (resultCtx.lastResult && resultCtx.lastResult.flags) || [];
+    await step('D15', '플래그 줄은 플래그가 있을 때만 뜨고, 있으면 그 문구를 그대로 적는다', () => ({
+      ok: backendFlags.length
+            ? (!!resultAssumptions && !!resultAssumptions.flags
+                && backendFlags.every((f) => resultAssumptions.flags.indexOf(String(f)) !== -1))
+            : (!!resultAssumptions && resultAssumptions.flags === null),
+      data: { backendFlags, line: resultAssumptions && resultAssumptions.flags },
+    }));
+
+    const runPathBadge = await textOf(shellWin, `${R}.backtest-result-runpath`);
+    await step('D16', '결과 배지가 "폼 경로"라고 적는다', () => ({
+      ok: runPathBadge === '폼 경로',
+      data: { badge: runPathBadge },
+    }));
+    await step('D17', '백엔드 metrics.run_path가 form이다', () => ({
+      ok: !!resultCtx.lastResult && resultCtx.lastResult.metrics
+            && resultCtx.lastResult.metrics.run_path === 'form'
+            && Number(resultCtx.lastResult.metrics.bars) > 0,
+      data: resultCtx.lastResult ? resultCtx.lastResult.metrics : null,
+    }));
+  });
+
+  // ==================================================================
+  // E 코드 경로
+  // ==================================================================
+  let deployBlockedObs = null;
+  if (on('E')) await section('E', async () => {
+    // 저장 전 배포 화면(J01)은 activeVersionId가 null인 지금만 볼 수 있다 — 여기서 재둔다.
+    deployBlockedObs = await observeDeployBlocked(shellWin);
+
+    await prepareForm(shellWin, FROM, TO);
+    sendChat(shellWin, {
+      kind: 'code_draft', source: SRC_GOOD, note: '프로브 코드', suggest_validate: true,
+    });
+    const codeIn = await until(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const ta = root.querySelector('.backtest-code-host .backtest-code-textarea');
+      if (!ta || ta.value.indexOf('probe-code-path') === -1) return null;
+      const sub = root.querySelector('.backtest-subtab.is-on');
+      return {
+        subtab: sub ? sub.textContent : null,
+        lines: ta.value.split('\\n').length,
+        ariaLabel: ta.getAttribute('aria-label'),
+        gutter: root.querySelectorAll('.backtest-code-gutter .backtest-code-line').length,
+      };
+    })()`, WAIT_UI);
+    await step('E01', '코드가 편집기에 바로 들어가고 코드 탭으로 옮겨간다', () => ({
+      ok: !!codeIn && codeIn.subtab === '코드' && codeIn.ariaLabel === '전략 파이썬 코드'
+            && codeIn.gutter === codeIn.lines,
+      data: codeIn,
+    }));
+
+    const codeCtx = await ctx(shellWin);
+    await step('E02', '코드가 들어오면 실행경로가 코드로 강제된다', () => ({
+      ok: codeCtx.runPath === 'code',
+      data: { runPath: codeCtx.runPath },
+    }));
+
+    const runPathItems = await js(shellWin, `(() => {
+      const list = Array.from(document.querySelectorAll('${R}.backtest-runpath-item'));
+      return list.map((b) => [b.textContent, b.getAttribute('aria-pressed')]);
+    })()`);
+    await step('E03', '코드가 있어야만 실행경로 갈래(폼/코드)가 헤더에 생긴다', () => ({
+      ok: JSON.stringify(runPathItems) === JSON.stringify([['폼', 'false'], ['코드', 'true']]),
+      data: { items: runPathItems },
+    }));
+
+    // 검증이 실제로 백엔드를 도는지 — 나쁜 코드로 먼저 확인한다.
+    await setInput(shellWin, `${R}.backtest-code-host .backtest-code-textarea`, SRC_NO_SIGNALS);
+    await wait(200);
+    await click(shellWin, `${R}.backtest-code-validate`);
+    const badValidate = await until(shellWin, `(() => {
+      const c = window.AthenaBacktestCanvas.getContext();
+      return c.code.errors.length ? { errors: c.code.errors } : null;
+    })()`, WAIT_VALIDATE);
+    await step('E04', '코드 탭 [검증]이 계약 위반을 백엔드에서 잡아온다', () => ({
+      ok: !!badValidate && badValidate.errors.some((e) => String(e).indexOf('def signals(df, p)') !== -1),
+      data: badValidate,
+    }));
+
+    await setInput(shellWin, `${R}.backtest-code-host .backtest-code-textarea`, SRC_GOOD);
+    await wait(200);
+    await click(shellWin, `${R}.backtest-code-validate`);
+    const goodValidate = await until(shellWin, `(() => {
+      const c = window.AthenaBacktestCanvas.getContext();
+      const lines = document.querySelectorAll('${R}.backtest-code-tab .backtest-design-error-line').length;
+      if (c.code.errors.length) return null;
+      return { errors: c.code.errors.length, lines };
+    })()`, WAIT_VALIDATE);
+    await step('E05', '검증을 통과한 코드는 오류 줄이 비워진다', () => ({
+      ok: !!goodValidate && goodValidate.errors === 0 && goodValidate.lines === 0,
+      data: goodValidate,
+    }));
+
+    const bounds = await js(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      return {
+        ok: (root.querySelector('.backtest-code-bounds-ok') || {}).textContent,
+        no: (root.querySelector('.backtest-code-bounds-no') || {}).textContent,
+        note: (root.querySelector('.backtest-code-bounds-note') || {}).textContent,
+      };
+    })()`);
+    await step('E06', '코드 권한 경계 패널이 닿는 것과 안 닿는 것을 적는다', () => ({
+      ok: bounds.ok === '건네받은 봉 데이터 · pandas · numpy · athena_bt'
+            && bounds.no === '키움 자격증명 · 계좌 · DB · 네트워크 — 넘기지 않습니다'
+            && String(bounds.note).indexOf('작정한 공격자') !== -1,
+      data: bounds,
+    }));
+
+    // --- 저장 ---
+    await click(shellWin, `${R}.backtest-code-save`);
+    const saved = await until(shellWin, `(() => {
+      const c = window.AthenaBacktestCanvas.getContext();
+      if (!c.code.strategyId || !c.code.activeVersionId) return null;
+      return { strategyId: c.code.strategyId, activeVersionId: c.code.activeVersionId };
+    })()`, WAIT_VALIDATE);
+    await step('E07', '[이 코드로 저장]이 전략과 활성 버전을 만든다', () => ({
+      ok: !!saved && !!saved.strategyId && !!saved.activeVersionId,
+      data: saved,
+    }));
+    if (saved && saved.strategyId) created.strategyIds.push(saved.strategyId);
+
+    const versionBadge = await textOf(shellWin, `${R}.backtest-head-version`);
+    await step('E08', '저장 뒤 헤더에 "코드 버전 활성" 배지가 켜진다', () => ({
+      ok: versionBadge === '코드 버전 활성',
+      data: { badge: versionBadge },
+    }));
+
+    await step('E09', '저장된 버전이 origin=human · active=true로 남는다', async () => {
+      if (!saved || !saved.strategyId) {
+        return { skip: '저장이 실패해 strategy_id가 없다', name: '저장된 버전 조회' };
+      }
+      const versions = await invoke(shellWin, 'athena:backtest-versions', { strategy_id: saved.strategyId });
+      const list = versions && versions.ok && versions.data ? (versions.data.versions || []) : [];
+      return {
+        ok: list.length === 1 && list[0].origin === 'human' && list[0].active === true
+              && list[0].version === 1 && String(list[0].source).indexOf('probe-code-path') !== -1,
+        data: list.map((v) => ({ version: v.version, origin: v.origin, active: v.active })),
+      };
+    });
+
+    // --- 코드 경로 실행 ---
+    await click(shellWin, `${R}.backtest-run-button`);
+    const codeOutcome = await waitRunOutcome(shellWin, WAIT_RUN);
+    const codeResultCtx = await ctx(shellWin);
+    await step('E10', '코드 경로 실행이 결과까지 간다', () => ({
+      ok: !!codeOutcome && codeOutcome.view === 'result'
+            && codeResultCtx.lastResult && codeResultCtx.lastResult.status === 'done',
+      data: { outcome: codeOutcome, runId: codeResultCtx.lastResult && codeResultCtx.lastResult.runId },
+    }));
+
+    const codeBadge = await textOf(shellWin, `${R}.backtest-result-runpath`);
+    await step('E11', '결과 배지가 "코드 경로"라고 적는다', () => ({
+      ok: codeBadge === '코드 경로',
+      data: { badge: codeBadge },
+    }));
+    await step('E12', '백엔드 metrics.run_path가 code다', () => ({
+      ok: !!codeResultCtx.lastResult && codeResultCtx.lastResult.metrics
+            && codeResultCtx.lastResult.metrics.run_path === 'code',
+      data: codeResultCtx.lastResult ? codeResultCtx.lastResult.metrics : null,
+    }));
+
+    const codeStdout = await textOf(shellWin, `${R}.backtest-stdout-text`);
+    await step('E13', '코드의 print가 stdout 패널에 그대로 남는다', () => ({
+      ok: typeof codeStdout === 'string' && codeStdout.indexOf('probe-code-path') !== -1,
+      data: { stdout: String(codeStdout).slice(0, 80) },
+    }));
+
+    const codeFlags = (codeResultCtx.lastResult && codeResultCtx.lastResult.flags) || [];
+    await step('E14', '코드 경로는 "워밍업 미산출" 플래그를 달고 온다', () => ({
+      ok: codeFlags.some((f) => String(f).indexOf('코드 경로 · 워밍업 미산출') === 0),
+      data: { flags: codeFlags },
+    }));
+
+    // --- 코드 경로는 폼 조건을 보지 않는다 ---
+    await goDesignForm(shellWin);
+    for (let i = 0; i < 8; i += 1) {
+      const removed = await js(shellWin, `(() => {
+        const card = document.querySelectorAll('${R}.backtest-condition-card')[0];
+        if (!card) return false;
+        const b = card.querySelector('.backtest-condition-remove');
+        if (!b) return false;
+        b.click();
+        return true;
+      })()`);
+      if (!removed) break;
+      await wait(150);
+    }
+    const strippedCtx = await ctx(shellWin);
+    await step('E15', '진입 조건을 다 지우면 컨텍스트 pending이 그것을 적는다', () => ({
+      ok: strippedCtx.spec.entry.conditions.length === 0
+            && strippedCtx.pending.indexOf('진입 조건이 하나도 없습니다') !== -1,
+      data: { conditions: strippedCtx.spec.entry.conditions.length, pending: strippedCtx.pending },
+    }));
+
+    await click(shellWin, `${R}.backtest-run-button`);
+    const noCondOutcome = await waitRunOutcome(shellWin, WAIT_RUN);
+    const noCondErrors = await js(shellWin, `(() =>
+      Array.from(document.querySelectorAll('${R}.backtest-design-error-line')).map((e) => e.textContent)
+    )()`);
+    await step('E16', '조건이 없어도 코드 경로는 실행된다(신호는 파이썬이 만든다)', () => ({
+      ok: !!noCondOutcome && noCondOutcome.view === 'result'
+            && !noCondErrors.some((e) => String(e).indexOf('진입 조건') !== -1),
+      data: { outcome: noCondOutcome, errors: noCondErrors },
+    }));
+
+    await prepareForm(shellWin, FROM, TO);
+  });
+
+  // ==================================================================
+  // F 오류 · 진단
+  // ==================================================================
+  if (on('F')) await section('F', async () => {
+    await prepareForm(shellWin, FROM, TO);
+    sendChat(shellWin, { kind: 'code_draft', source: SRC_BROKEN_IMPORT, note: '차단 import' });
+    await until(shellWin, `(() => {
+      const ta = document.querySelector('${R}.backtest-code-host .backtest-code-textarea');
+      return ta && ta.value.indexOf('import os') === 0 ? true : null;
+    })()`, WAIT_UI);
+
+    await click(shellWin, `${R}.backtest-run-button`);
+    const failOutcome = await waitRunOutcome(shellWin, WAIT_RUN);
+    await step('F01', '실패한 코드 실행은 에러 화면이 아니라 진단 화면으로 간다', () => ({
+      ok: !!failOutcome && failOutcome.view === 'diagnosis',
+      data: failOutcome,
+    }));
+
+    const diag = await js(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      if (!root.querySelector('.backtest-diagnosis')) return null;
+      return {
+        title: (root.querySelector('.backtest-diag-title') || {}).textContent,
+        detail: (root.querySelector('.backtest-diag-detail') || {}).textContent,
+        whyTitle: (root.querySelector('.backtest-diag-section-title') || {}).textContent,
+        why: (root.querySelector('.backtest-diag-why') || {}).textContent,
+        rawHidden: (root.querySelector('.backtest-diag-raw') || {}).hidden,
+        rawToggle: (root.querySelector('.backtest-diag-raw-toggle') || {}).textContent,
+        stat: (root.querySelector('.backtest-diag-fix-stat') || {}).textContent || null,
+        summary: (root.querySelector('.backtest-diag-fix-summary') || {}).textContent || null,
+        adds: root.querySelectorAll('.backtest-diag-diff .backtest-diff-row.is-add').length,
+        dels: root.querySelectorAll('.backtest-diag-diff .backtest-diff-row.is-del').length,
+        buttons: Array.from(root.querySelectorAll('.backtest-diag-actions button')).map((b) => b.textContent),
+      };
+    })()`);
+    await step('F02', '진단 배너가 제목과 설명을 적는다', () => ({
+      ok: !!diag && String(diag.title).indexOf('os') !== -1 && String(diag.detail).length > 0,
+      data: { title: diag && diag.title, detail: diag && diag.detail },
+    }));
+    await step('F03', '"왜 이렇게 됐나" 절이 백엔드 문장을 그대로 싣는다', () => ({
+      ok: !!diag && diag.whyTitle === '왜 이렇게 됐나' && String(diag.why).length > 20,
+      data: { whyTitle: diag && diag.whyTitle, why: diag && String(diag.why).slice(0, 60) },
+    }));
+
+    const diagCtx = await ctx(shellWin);
+    await step('F04', '진단이 코드의 몇 번째 줄인지 짚는다', () => ({
+      ok: !!diagCtx.diagnosis && Number.isInteger(diagCtx.diagnosis.line),
+      data: diagCtx.diagnosis,
+    }));
+
+    await click(shellWin, `${R}.backtest-diag-raw-toggle`);
+    await wait(250);
+    const raw = await js(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const r = root.querySelector('.backtest-diag-raw');
+      const t = root.querySelector('.backtest-diag-raw-toggle');
+      return { hidden: r.hidden, label: t.textContent, text: (r.textContent || '').slice(0, 120) };
+    })()`);
+    await step('F05', '[파이썬 원문 보기]가 원문을 펴고 라벨을 바꾼다', () => ({
+      ok: diag && diag.rawHidden === true && raw.hidden === false
+            && raw.label === '파이썬 원문 접기' && raw.text.length > 0,
+      data: { before: diag && diag.rawHidden, after: raw.hidden, label: raw.label },
+    }));
+
+    await step('F06', '수정안 diff가 삭제/추가 줄 수와 함께 뜬다', () => ({
+      ok: !!diag && /줄 삭제 · .*줄 추가/.test(String(diag.stat || '')) && diag.dels >= 1,
+      data: { stat: diag && diag.stat, adds: diag && diag.adds, dels: diag && diag.dels, summary: diag && diag.summary },
+    }));
+    await step('F07', '진단 화면 버튼 3종', () => ({
+      ok: !!diag && JSON.stringify(diag.buttons)
+            === JSON.stringify(['적용하고 다시 실행', '적용만 하고 편집기로', '버리기']),
+      data: diag ? { buttons: diag.buttons } : null,
+    }));
+
+    await click(shellWin, `${R}.backtest-diag-apply-only`);
+    const appliedOnly = await until(shellWin, `(() => {
+      const c = window.AthenaBacktestCanvas.getContext();
+      if (c.view !== 'design' || c.designTab !== 'code') return null;
+      const ta = document.querySelector('${R}.backtest-code-host .backtest-code-textarea');
+      if (!ta) return null;
+      return {
+        view: c.view, designTab: c.designTab,
+        hasImport: ta.value.indexOf('import os') !== -1,
+        hasSignals: ta.value.indexOf('def signals') !== -1,
+      };
+    })()`, WAIT_UI);
+    await step('F08', '[적용만 하고 편집기로] — 코드만 고치고 실행하지 않는다', () => ({
+      ok: !!appliedOnly && appliedOnly.view === 'design' && appliedOnly.designTab === 'code'
+            && appliedOnly.hasImport === false && appliedOnly.hasSignals === true,
+      data: appliedOnly,
+    }));
+
+    // 다시 깨뜨린 뒤 [적용하고 다시 실행]
+    sendChat(shellWin, { kind: 'code_draft', source: SRC_BROKEN_IMPORT, note: '차단 import 재현' });
+    await until(shellWin, `(() => {
+      const ta = document.querySelector('${R}.backtest-code-host .backtest-code-textarea');
+      return ta && ta.value.indexOf('import os') === 0 ? true : null;
+    })()`, WAIT_UI);
+    await click(shellWin, `${R}.backtest-run-button`);
+    const secondDiag = await waitRunOutcome(shellWin, WAIT_RUN);
+    let applyRunOutcome = null;
+    if (secondDiag && secondDiag.view === 'diagnosis') {
+      // 클릭을 **진단 화면에서** 낸다 — 여기서 waitRunOutcome을 쓰면 아직 시작도 안 한 그
+      // 진단 화면이 곧바로 결과로 잡힌다. 새 runId가 붙은 화면만 새 실행이다.
+      const prevRunId = await currentRunId(shellWin);
+      await click(shellWin, `${R}.backtest-diag-apply`);
+      applyRunOutcome = await waitNewRunOutcome(shellWin, prevRunId, WAIT_RUN);
+    }
+    const fixedCtx = await ctx(shellWin);
+    await step('F09', '[적용하고 다시 실행]이 고친 코드로 성공까지 간다', () => ({
+      ok: !!applyRunOutcome && applyRunOutcome.view === 'result'
+            && fixedCtx.lastResult && fixedCtx.lastResult.status === 'done'
+            && fixedCtx.code.source.indexOf('import os') === -1,
+      data: { second: secondDiag, applied: applyRunOutcome, status: fixedCtx.lastResult && fixedCtx.lastResult.status },
+    }));
+
+    // --- 에러 화면과 [설계로 돌아가기] ---
+    // 전제는 이 검사가 **스스로** 세운다. 앞 검사가 남긴 화면을 물려받으면(F09가 결과 화면에
+    // 서 있으면) 여기의 setDates는 없는 입력칸을 만지고 실행 클릭은 없는 버튼으로 흘러,
+    // 90초 뒤 에러 패널 대신 null을 본다(2026-09-02 실측).
+    let emptyReady = null;
+    for (let attempt = 0; attempt < 2 && !emptyReady; attempt += 1) {
+      // eslint-disable-next-line no-await-in-loop
+      await ensureRunnableForm(shellWin, EMPTY_FROM, EMPTY_TO);
+      // eslint-disable-next-line no-await-in-loop
+      emptyReady = await until(shellWin, `(() => {
+        const c = window.AthenaBacktestCanvas.getContext();
+        if (c.view !== 'design') return null;
+        if (c.spec.fromDt !== ${JSON.stringify(EMPTY_FROM)}) return null;
+        if (c.spec.toDt !== ${JSON.stringify(EMPTY_TO)}) return null;
+        if (!document.querySelector('${R}.backtest-run-button')) return null;
+        return { view: c.view, fromDt: c.spec.fromDt, toDt: c.spec.toDt };
+      })()`, WAIT_UI);
+    }
+    if (!emptyReady) {
+      console.log('[probe-backtest-full] WARN — F10 전제(캐시 밖 구간 설계 화면)를 세우지 못했다');
+    }
+    await click(shellWin, `${R}.backtest-run-button`);
+    const emptyApproval = await waitRunOutcome(shellWin, WAIT_RUN);
+    if (emptyApproval && emptyApproval.view === 'approval') {
+      await click(shellWin, `${R}.backtest-approval-partial`);
+    }
+    const errView = await until(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const panel = root.querySelector('.backtest-canvas-error');
+      if (!panel) return null;
+      return {
+        title: (panel.querySelector('.backtest-canvas-empty-title') || {}).textContent,
+        sub: (panel.querySelector('.backtest-canvas-empty-sub') || {}).textContent,
+        back: panel.querySelectorAll('.backtest-error-back').length,
+        tabs: root.querySelectorAll('.backtest-tab').length,
+      };
+    })()`, WAIT_RUN);
+    await step('F10', '캐시가 0봉인 구간의 부분 실행은 정직한 에러 화면이 된다', () => ({
+      ok: !!errView && errView.title === '백테스트' && String(errView.sub).length > 12
+            && errView.back === 1 && errView.tabs === 0,
+      data: errView,
+    }));
+
+    // F10이 세운 에러 화면에서만 잴 수 있다 — 다른 화면에서 누른 [설계로 돌아가기]는
+    // 이 검사가 재려는 것이 아니다. 앞 검사의 화면을 물려받아 판정하지 않는다.
+    await step('F11', '[설계로 돌아가기]가 막다른 길을 없앤다', async () => {
+      if (!errView) {
+        return { skip: 'F10이 에러 화면을 세우지 못했다 — 없앨 막다른 길이 없다' };
+      }
+      await click(shellWin, `${R}.backtest-error-back`);
+      const backFromError = await until(shellWin, `(() => {
+        const c = window.AthenaBacktestCanvas.getContext();
+        if (c.view !== 'design') return null;
+        return {
+          view: c.view, tab: c.tab, designTab: c.designTab,
+          presets: document.querySelectorAll('${R}.backtest-preset-item').length,
+        };
+      })()`, WAIT_UI);
+      return {
+        ok: !!backFromError && backFromError.view === 'design' && backFromError.tab === 'design'
+              && backFromError.designTab === 'form' && backFromError.presets === 10,
+        data: backFromError,
+      };
+    });
+
+    await prepareForm(shellWin, FROM, TO);
+  });
+
+  // ==================================================================
+  // G 흐름 지도
+  // ==================================================================
+  if (on('G')) await section('G', async () => {
+    // F가 진단·에러 화면에서 끝나면 모드 탭이 아예 없다 — 먼저 설계로 돌려놓는다.
+    await ensureRunnableForm(shellWin, FROM, TO);
+    await goDesignForm(shellWin);
+    await goSubtab(shellWin, 2);
+    await wait(400);
+    const flowEmpty = await js(shellWin, `(() => {
+      const c = window.AthenaBacktestCanvas.getContext();
+      const empty = document.querySelector('${R}.backtest-flow-tab .backtest-card-empty');
+      return { designTab: c.designTab, empty: empty ? empty.textContent : null, hasCode: !!c.code.source };
+    })()`);
+    await step('G01', '코드가 없으면 흐름 탭은 빈 안내만 그린다', () => ({
+      ok: flowEmpty.designTab === 'flow'
+            && (flowEmpty.hasCode
+              ? flowEmpty.empty === null
+              : flowEmpty.empty === '코드 탭에서 전략을 쓰면 흐름 지도가 여기 그려집니다'),
+      data: flowEmpty,
+    }));
+
+    sendChat(shellWin, { kind: 'code_draft', source: SRC_FLOW, note: '흐름용 코드' });
+    await until(shellWin, `(() => {
+      const ta = document.querySelector('${R}.backtest-code-host .backtest-code-textarea');
+      return ta && ta.value.indexOf('n = int(p["fast"])') !== -1 ? true : null;
+    })()`, WAIT_UI);
+    sendChat(shellWin, { kind: 'navigate', tab: 'design', designTab: 'flow' });
+
+    const flow = await until(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const nodes = Array.from(root.querySelectorAll('button.backtest-flow-node.is-mine'));
+      if (!nodes.length) return null;
+      return {
+        mine: nodes.length,
+        titles: nodes.map((n) => (n.querySelector('.backtest-flow-title') || {}).textContent),
+        details: nodes.map((n) => (n.querySelector('.backtest-flow-detail') || {}).textContent),
+        badges: nodes.map((n) => (n.querySelector('.backtest-flow-badge') || {}).className),
+        boundaries: root.querySelectorAll('.backtest-flow-boundary').length,
+        appNodes: root.querySelectorAll('.backtest-flow-node.is-app').length,
+        note: (root.querySelector('.backtest-flow-tab .backtest-card-note') || {}).textContent,
+        error: root.querySelectorAll('.backtest-flow-error').length,
+      };
+    })()`, WAIT_VALIDATE);
+    await step('G02', '흐름 지도가 내 코드 4단계를 그린다', () => ({
+      ok: !!flow && flow.mine === 4 && flow.error === 0,
+      data: flow ? { mine: flow.mine, titles: flow.titles } : null,
+    }));
+    await step('G03', '경계 3줄(앱 → 내 코드 → 다시 앱)', () => ({
+      ok: !!flow && flow.boundaries === 3,
+      data: flow ? { boundaries: flow.boundaries } : null,
+    }));
+    await step('G04', '앱 구간 칸 4개(load + fill·cost·metrics)', () => ({
+      ok: !!flow && flow.appNodes === 4,
+      data: flow ? { appNodes: flow.appNodes } : null,
+    }));
+    await step('G05', '각 칸이 줄 범위를 적는다', () => ({
+      ok: !!flow && flow.details.every((d) => /^\d+–\d+줄$/.test(String(d || ''))),
+      data: flow ? { details: flow.details } : null,
+    }));
+
+    const clicked = await js(shellWin, `(() => {
+      const nodes = Array.from(document.querySelectorAll('button.backtest-flow-node.is-mine'));
+      const target = nodes[1];
+      if (!target) return null;
+      const detail = (target.querySelector('.backtest-flow-detail') || {}).textContent || '';
+      target.click();
+      return { detail };
+    })()`);
+    const lit = await until(shellWin, `(() => {
+      const c = window.AthenaBacktestCanvas.getContext();
+      if (c.designTab !== 'code') return null;
+      const lines = Array.from(document.querySelectorAll('${R}.backtest-code-gutter .backtest-code-line.is-lit'));
+      if (!lines.length) return null;
+      return { lit: lines.map((l) => Number(l.textContent)) };
+    })()`, WAIT_UI);
+    const expectedSpan = clicked
+      ? String(clicked.detail).replace('줄', '').split('–').map((n) => Number(n))
+      : [];
+    await step('G06', '흐름 칸을 누르면 코드 탭에서 그 줄이 켜진다', () => ({
+      ok: !!lit && expectedSpan.length === 2
+            && lit.lit[0] === expectedSpan[0]
+            && lit.lit[lit.lit.length - 1] === expectedSpan[1],
+      data: { expected: expectedSpan, lit: lit && lit.lit },
+    }));
+  });
+
+  // ==================================================================
+  // H 이력 · 비교
+  // ==================================================================
+  if (on('H')) await section('H', async () => {
+    // 이력 탭도 모드 탭을 눌러야 열린다 — 앞 섹션이 막다른 화면에 멈춰 있으면 못 누른다.
+    await ensureRunnableForm(shellWin, FROM, TO);
+    await goTab(shellWin, 2);
+    const history = await until(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const rows = Array.from(root.querySelectorAll('.backtest-history-row'));
+      if (!rows.length) return null;
+      return {
+        rows: rows.length,
+        title: (root.querySelector('.backtest-history .backtest-card-title') || {}).textContent,
+        note: (root.querySelector('.backtest-history .backtest-card-note') || {}).textContent,
+        first: {
+          check: (rows[0].querySelector('.backtest-history-check') || {}).textContent,
+          id: (rows[0].querySelector('.backtest-history-id') || {}).textContent,
+          status: (rows[0].querySelector('.backtest-history-status') || {}).textContent,
+          statusClass: (rows[0].querySelector('.backtest-history-status') || {}).className,
+          ret: (rows[0].querySelector('.backtest-history-return') || {}).textContent,
+        },
+        failed: rows.filter((r) => {
+          const s = r.querySelector('.backtest-history-status');
+          return s && s.className.indexOf('is-failed') !== -1;
+        }).map((r) => (r.querySelector('.backtest-history-return') || {}).textContent),
+      };
+    })()`, WAIT_VALIDATE);
+    await step('H01', '이력 탭이 실행 목록을 백엔드에서 불러온다', () => ({
+      ok: !!history && history.rows > 0 && /^실행 이력 .+건$/.test(history.title || ''),
+      data: history ? { rows: history.rows, title: history.title, note: history.note } : null,
+    }));
+    await step('H02', '이력 행이 체크·id·상태·수익률 네 칸을 그린다', () => ({
+      ok: !!history && history.first.check === '□' && String(history.first.id).length === 8
+            && !!history.first.status && !!history.first.ret,
+      data: history ? history.first : null,
+    }));
+    await step('H03', '실패한 실행 행은 failed 상태로 수익률 없이 그려진다', () => ({
+      ok: !!history && history.failed.length > 0 && history.failed.every((r) => r === '—'),
+      data: history ? { failedRows: history.failed.length, returns: history.failed } : null,
+    }));
+
+    // 겹쳐보기는 곡선이 있어야 성립한다 — 실패한 실행에는 equity가 없으므로 done만 고른다.
+    const picked = await js(shellWin, `(() => {
+      const rows = Array.from(document.querySelectorAll('${R}.backtest-history-row'))
+        .filter((r) => {
+          const s = r.querySelector('.backtest-history-status');
+          return s && s.className.indexOf('is-done') !== -1;
+        });
+      if (rows.length < 2) return { ok: false, done: rows.length };
+      rows[rows.length - 2].click();
+      return { ok: true, done: rows.length };
+    })()`);
+    await wait(400);
+    await js(shellWin, `(() => {
+      const rows = Array.from(document.querySelectorAll('${R}.backtest-history-row'))
+        .filter((r) => {
+          const s = r.querySelector('.backtest-history-status');
+          return s && s.className.indexOf('is-done') !== -1;
+        });
+      if (rows.length < 2) return false;
+      rows[rows.length - 1].click();
+      return true;
+    })()`);
+    const compare = await until(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const rows = Array.from(root.querySelectorAll('.backtest-compare-row'));
+      if (!rows.length) return null;
+      return {
+        title: (root.querySelector('.backtest-compare .backtest-card-title') || {}).textContent,
+        labels: rows.map((r) => (r.querySelector('.backtest-compare-label') || {}).textContent),
+        a: rows.map((r) => (r.querySelector('.backtest-compare-a') || {}).textContent),
+        b: rows.map((r) => (r.querySelector('.backtest-compare-b') || {}).textContent),
+        checked: root.querySelectorAll('.backtest-history-row.is-on').length,
+      };
+    })()`, WAIT_UI);
+    await step('H04', '2건을 고르면 "무엇이 달랐나" 비교 표 4행이 뜬다', () => ({
+      ok: picked.ok === true && !!compare && compare.title === '무엇이 달랐나'
+            && JSON.stringify(compare.labels) === JSON.stringify(['총수익률', 'Sharpe', 'MDD', '승률'])
+            && compare.checked === 2,
+      data: compare ? { labels: compare.labels, checked: compare.checked, doneRows: picked.done } : picked,
+    }));
+
+    const overlay = await until(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const paths = root.querySelectorAll('.backtest-compare-chart .backtest-equity-overlay');
+      if (!paths.length) return null;
+      return {
+        p0: root.querySelectorAll('.backtest-equity-overlay.is-0').length,
+        p1: root.querySelectorAll('.backtest-equity-overlay.is-1').length,
+        legend: Array.from(root.querySelectorAll('.backtest-legend-overlay')).map((s) => s.textContent),
+      };
+    })()`, WAIT_VALIDATE);
+    await step('H05', '두 실행의 자산곡선이 겹쳐 그려지고 범례가 붙는다', () => ({
+      ok: !!overlay && overlay.p0 === 1 && overlay.p1 === 1 && overlay.legend.length === 2
+            && overlay.legend.every((l) => String(l).length === 8),
+      data: overlay,
+    }));
+
+    const compareDiff = await countOf(shellWin, `${R}.backtest-compare .backtest-diff`);
+    await step('H06', '이력 비교에는 파라미터·코드 diff가 없다(미구현 계약)', () => ({
+      ok: compareDiff === 0,
+      data: {
+              diffs: compareDiff,
+              note: 'renderCompare(backtest-canvas.js:1717)는 지표 4행 + 곡선 겹치기까지다 — CodeEditor.renderDiff는 아무도 안 부른다',
+            },
+    }));
+  });
+
+  // ==================================================================
+  // I 최적화
+  // ==================================================================
+  if (on('I')) await section('I', async () => {
+    await prepareForm(shellWin, FROM, TO);
+    await goTab(shellWin, 3);
+    await wait(400);
+    const setup = await js(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      return {
+        ranges: Array.from(root.querySelectorAll('.backtest-optimize-range')).map((r) => r.textContent),
+        note: (root.querySelector('.backtest-optimize .backtest-card-note') || {}).textContent,
+        methods: Array.from(root.querySelectorAll('.backtest-optimize .backtest-segment-item'))
+          .map((b) => [b.textContent, b.getAttribute('aria-pressed')]),
+        start: root.querySelectorAll('.backtest-optimize-start').length,
+      };
+    })()`);
+    await step('I01', '최적화 탭이 전략 파라미터를 탐색 축으로 세운다', () => ({
+      ok: setup.ranges.length === 2 && /^fast .+ step \d+$/.test(setup.ranges[0] || '')
+            && setup.note === '캐시만 씁니다 — 추가 TR 호출 없음' && setup.start === 1,
+      data: setup,
+    }));
+    await step('I02', '방식 세그먼트는 그리드가 기본이다', () => ({
+      ok: JSON.stringify(setup.methods) === JSON.stringify([['그리드', 'true'], ['랜덤', 'false']]),
+      data: { methods: setup.methods },
+    }));
+
+    await click(shellWin, `${R}.backtest-optimize-start`);
+    const gridResult = await until(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const best = root.querySelector('.backtest-optimize-best-title');
+      if (!best) return null;
+      return {
+        best: best.textContent,
+        params: (root.querySelector('.backtest-optimize-best-params') || {}).textContent,
+        neighbour: (root.querySelector('.backtest-optimize-neighbour') || {}).textContent || null,
+        plateau: (root.querySelector('.backtest-optimize-plateau') || {}).textContent || null,
+        cells: root.querySelectorAll('.backtest-heatmap-cell').length,
+        heatTitle: (root.querySelector('.backtest-heatmap .backtest-card-title') || {}).textContent,
+        firstCell: (() => {
+          const c = root.querySelector('.backtest-heatmap-cell');
+          return c ? { title: c.getAttribute('title'), style: c.getAttribute('style') } : null;
+        })(),
+        warnings: Array.from(root.querySelectorAll('.backtest-optimize-warn')).map((w) => ({
+          cls: w.className,
+          badge: (w.querySelector('.backtest-optimize-warn-badge') || {}).textContent,
+          text: (w.querySelector('.backtest-optimize-warn-text') || {}).textContent,
+        })),
+        apply: root.querySelectorAll('.backtest-optimize-apply').length,
+      };
+    })()`, WAIT_OPTIMIZE);
+    await step('I03', '[탐색 시작](그리드)이 최고 조합 카드를 만든다', () => ({
+      ok: !!gridResult && /^최고 Sharpe /.test(gridResult.best) && !!gridResult.params
+            && gridResult.apply === 1,
+      data: gridResult ? { best: gridResult.best, params: gridResult.params, neighbour: gridResult.neighbour } : null,
+    }));
+    await step('I04', 'Sharpe 히트맵 격자가 그려진다', () => ({
+      ok: !!gridResult && gridResult.cells > 0
+            && /^Sharpe 히트맵 — fast × slow$/.test(gridResult.heatTitle || ''),
+      data: gridResult ? { cells: gridResult.cells, title: gridResult.heatTitle } : null,
+    }));
+    await step('I05', '히트맵 셀이 값과 농도를 함께 싣는다', () => ({
+      ok: !!gridResult && !!gridResult.firstCell
+            && /Sharpe/.test(gridResult.firstCell.title || '')
+            && /^opacity:0\.\d\d$/.test(gridResult.firstCell.style || ''),
+      data: gridResult ? gridResult.firstCell : null,
+    }));
+
+    const optCtx = await ctx(shellWin);
+    const backendWarnings = optCtx.optimize.result ? optCtx.optimize.result.warnings : [];
+    await step('I06', '과최적화 경고가 백엔드 개수 그대로 그려진다', () => ({
+      ok: !!gridResult && gridResult.warnings.length === backendWarnings.length
+            && gridResult.warnings.every((w) => w.badge === '과최적화 의심' && String(w.text).length > 0),
+      data: { dom: gridResult && gridResult.warnings.length, backend: backendWarnings.length, warnings: backendWarnings },
+    }));
+    await step('I07', '컨텍스트 optimize가 best·warnings·cells를 싣는다', () => ({
+      ok: optCtx.optimize.method === 'grid' && !!optCtx.optimize.result
+            && !!optCtx.optimize.result.best && Number(optCtx.optimize.result.cells) > 0,
+      data: optCtx.optimize,
+    }));
+
+    const bestParams = optCtx.optimize.result && optCtx.optimize.result.best
+      ? optCtx.optimize.result.best.params : null;
+    await click(shellWin, `${R}.backtest-optimize-apply`);
+    await wait(500);
+    const appliedCtx = await ctx(shellWin);
+    const sliderValues = await js(shellWin, `(() => {
+      const list = Array.from(document.querySelectorAll('${R}.backtest-param-slider'));
+      const out = {};
+      list.forEach((s) => { out[String(s.getAttribute('aria-label')).replace(' 값', '')] = Number(s.value); });
+      return out;
+    })()`);
+    await step('I08', '[이 값을 설계에 넣기]가 최고 조합을 슬라이더에 옮긴다', () => ({
+      ok: !!bestParams && appliedCtx.view === 'design' && appliedCtx.designTab === 'form'
+            && Object.keys(bestParams).every((k) => sliderValues[k] === Number(bestParams[k])),
+      data: { best: bestParams, sliders: sliderValues, view: appliedCtx.view },
+    }));
+
+    await goTab(shellWin, 3);
+    await wait(300);
+    await clickByText(shellWin, `${R}.backtest-optimize .backtest-segment-item`, '랜덤');
+    await wait(300);
+    const randomPressed = await js(shellWin, `(() => {
+      const c = window.AthenaBacktestCanvas.getContext();
+      const list = Array.from(document.querySelectorAll('${R}.backtest-optimize .backtest-segment-item'));
+      return { method: c.optimize.method, pressed: list.map((b) => [b.textContent, b.getAttribute('aria-pressed')]) };
+    })()`);
+    await step('I09', '방식 세그먼트가 랜덤으로 넘어간다', () => ({
+      ok: randomPressed.method === 'random'
+            && JSON.stringify(randomPressed.pressed) === JSON.stringify([['그리드', 'false'], ['랜덤', 'true']]),
+      data: randomPressed,
+    }));
+
+    await click(shellWin, `${R}.backtest-optimize-start`);
+    const randomResult = await until(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const best = root.querySelector('.backtest-optimize-best-title');
+      const err = root.querySelector('.backtest-optimize .backtest-design-error-line');
+      if (err) return { error: err.textContent };
+      if (!best) return null;
+      return { best: best.textContent, cells: root.querySelectorAll('.backtest-heatmap-cell').length };
+    })()`, WAIT_OPTIMIZE);
+    await step('I10', '랜덤 서치도 같은 자리에서 결과를 낸다', () => ({
+      ok: !!randomResult && !randomResult.error && /^최고 Sharpe /.test(randomResult.best || ''),
+      data: randomResult,
+    }));
+
+    const planEnvelope = await invoke(shellWin, 'athena:backtest-optimize-plan', {
+      ranges: [
+        { name: 'fast', start: 5, stop: 30, step: 5 },
+        { name: 'slow', start: 20, stop: 120, step: 10 },
+      ],
+    });
+    await step('I11', 'IPC optimize-plan이 조합 수를 미리 센다(렌더러에 배선은 없다)', () => ({
+      ok: !!planEnvelope && planEnvelope.ok === true && planEnvelope.data
+            && planEnvelope.data.max_combinations === 1000
+            && planEnvelope.data.values_per_param
+            && planEnvelope.data.values_per_param.fast === 6
+            && planEnvelope.data.values_per_param.slow === 11,
+      data: planEnvelope && planEnvelope.data ? planEnvelope.data : planEnvelope,
+    }));
+  });
+
+  // ==================================================================
+  // J 배포
+  // ==================================================================
+  if (on('J')) await section('J', async () => {
+    // I가 최적화 탭에 머물러 있어도, 앞 섹션이 넘어져 있어도 배포 탭부터 다시 시작한다.
+    await ensureRunnableForm(shellWin, FROM, TO);
+    const ctxNow = await ctx(shellWin);
+    const activeVersionId = ctxNow.code.activeVersionId;
+
+    await step('J01', '저장 전에는 배포를 막고 이유를 적는다', async () => {
+      if (deployBlockedObs) {
+        return {
+          ok: deployBlockedObs.modes === 0 && deployBlockedObs.create === 0
+                && String(deployBlockedObs.empty || '').indexOf('저장') !== -1,
+          data: deployBlockedObs,
+        };
+      }
+      if (activeVersionId) {
+        return {
+          skip: 'E 섹션이 이미 버전을 저장해 activeVersionId가 있다 — 저장 전 상태를 재현할 수 없다',
+          name: '저장 전 배포 차단',
+        };
+      }
+      const live = await observeDeployBlocked(shellWin);
+      return {
+        ok: !!live && live.modes === 0 && live.create === 0
+              && String(live.empty || '').indexOf('저장') !== -1,
+        data: live,
+      };
+    });
+
+    await goTab(shellWin, 4);
+    const deployHead = await until(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const wrap = root.querySelector('.backtest-deploy');
+      if (!wrap) return null;
+      return {
+        title: (wrap.querySelector('.backtest-card-title') || {}).textContent,
+        note: (wrap.querySelector('.backtest-card-note') || {}).textContent,
+        deployNote: (wrap.querySelector('.backtest-deploy-note') || {}).textContent,
+      };
+    })()`, WAIT_VALIDATE);
+    await step('J02', '배포 화면 머리가 "신호까지만"이라고 적는다', () => ({
+      ok: !!deployHead && deployHead.title === '전략 배포 · 실전 적용'
+            && deployHead.note === '배포는 신호까지만 만듭니다 — 주문은 주문 게이트를 통과합니다',
+      data: deployHead ? { title: deployHead.title, note: deployHead.note } : null,
+    }));
+    await step('J03', '배포 화면 하단이 백테스트와 실전의 차이를 고지한다', () => ({
+      ok: !!deployHead && String(deployHead.deployNote).indexOf('다음 봉 시가에 원하는 수량이 전부 체결된다고 가정') !== -1,
+      data: { note: deployHead && String(deployHead.deployNote).slice(0, 60) },
+    }));
+
+    if (!activeVersionId) {
+      skip('J04', '배포 모드 3종', '저장된 버전이 없다 — E 섹션을 함께 돌려야 배포 폼이 열린다');
+      skip('J05', '배포 한도 6칸', '저장된 버전이 없다');
+      skip('J06', '배포 생성(observe)', '저장된 버전이 없다');
+      skip('J07', '배포 신호 목록', '저장된 버전이 없다');
+      skip('J08', 'evaluate — 파이썬 버전도 판정을 준다', '저장된 버전이 없다');
+      skip('J08b', 'evaluate — 터지는 파이썬 배포는 그 예외로 422', '저장된 버전이 없다');
+      skip('J09', 'evaluate — yaml 버전은 판정을 준다', '저장된 버전이 없다');
+      skip('J10', '[배포 중지]', '저장된 버전이 없다');
+    } else {
+      const modes = await js(shellWin, `(() => {
+        const list = Array.from(document.querySelectorAll('${R}.backtest-deploy-mode-item'));
+        return list.map((m) => [
+          (m.querySelector('.backtest-deploy-mode-label') || {}).textContent,
+          m.getAttribute('aria-pressed'),
+          !!(m.querySelector('.backtest-deploy-mode-detail') || {}).textContent,
+        ]);
+      })()`);
+      await step('J04', '배포 모드 3종 — 기본은 승인(자동 주문이 기본이 아니다)', () => ({
+        ok: JSON.stringify(modes) === JSON.stringify([
+              ['기록만 합니다', 'false', true],
+              ['승인을 받고 주문합니다', 'true', true],
+              ['한도 안에서 자동으로 주문합니다', 'false', true],
+            ]),
+        data: { modes },
+      }));
+
+      const limits = await js(shellWin, `(() => {
+        const wrap = document.querySelector('${R}.backtest-deploy .backtest-card .backtest-field-row');
+        if (!wrap) return null;
+        return Array.from(wrap.querySelectorAll('.backtest-field')).map((f) => [
+          (f.querySelector('.backtest-field-label') || {}).textContent,
+          (f.querySelector('input') || {}).value,
+        ]);
+      })()`);
+      await step('J05', '배포 한도 6칸이 기본값과 함께 뜬다', () => ({
+        ok: !!limits && limits.length === 6
+              && JSON.stringify(limits.map((l) => l[0])) === JSON.stringify([
+                '1회 최대 주문(원)', '하루 최대 주문 수', '유효 시작(YYYYMMDD)',
+                '유효 종료(YYYYMMDD)', '자동 정지 낙폭(%)', '자동 정지 연속 손절(회)',
+              ])
+              && limits[0][1] === '2000000' && limits[1][1] === '2',
+        data: { limits },
+      }));
+
+      // 유효 종료가 비면 백엔드가 valid_to로 ''를 받는다 — 만료 판정에 걸리지 않게 채운다.
+      await js(shellWin, `(() => {
+        const wrap = document.querySelector('${R}.backtest-deploy .backtest-card .backtest-field-row');
+        const fields = Array.from(wrap.querySelectorAll('.backtest-field'));
+        const setV = (i, v) => {
+          const input = fields[i].querySelector('input');
+          input.value = v;
+          input.dispatchEvent(new Event('input', { bubbles: true }));
+        };
+        setV(2, '20000101');
+        setV(3, '20991231');
+        return true;
+      })()`);
+      // 배포 목록은 비어 있지 않다 — 백엔드에 배포 삭제가 없어(DELETE는 중지다) 앞선 실행과
+      // 사람의 수동 시험이 남긴 행이 계속 쌓인다. 게다가 목록은 created_at DESC라 "마지막 행"은
+      // 가장 **오래된** 배포다(2026-09-02 실측: J06이 먼저 있던 stopped 행을 읽고 넘어졌다).
+      // 그래서 만든 id를 목록 차이로 집어내고, 그 id가 목록에서 차지한 자리로만 DOM 행을 고른다
+      // — 행에는 id가 실리지 않고, 캔버스는 이 목록 순서 그대로 행을 그린다.
+      const listDeployments = async () => {
+        const res = await invoke(shellWin, 'athena:backtest-deployments');
+        return res && res.ok && res.data ? (res.data.deployments || []) : [];
+      };
+      const beforeIds = (await listDeployments()).map((d) => d.id);
+
+      await clickNth(shellWin, `${R}.backtest-deploy-mode-item`, 0);
+      await wait(300);
+      await click(shellWin, `${R}.backtest-deploy-create`);
+
+      let deployments = [];
+      let pyDeployId = null;
+      const createDeadline = Date.now() + WAIT_VALIDATE;
+      while (Date.now() < createDeadline && !pyDeployId) {
+        // eslint-disable-next-line no-await-in-loop
+        await wait(250);
+        // eslint-disable-next-line no-await-in-loop
+        deployments = await listDeployments();
+        const fresh = deployments.filter((d) => beforeIds.indexOf(d.id) === -1);
+        if (fresh.length) pyDeployId = fresh[0].id;
+      }
+      if (pyDeployId && created.deploymentIds.indexOf(pyDeployId) === -1) {
+        created.deploymentIds.push(pyDeployId);
+      }
+      const myIndex = deployments.findIndex((d) => d.id === pyDeployId);
+
+      // 행 수가 목록 길이와 같아질 때까지 기다린다 — 아직 안 그려진 DOM에서 자리를 세면
+      // 남의 행을 내 행으로 읽는다.
+      const deployRow = myIndex < 0 ? null : await until(shellWin, `(() => {
+        const rows = Array.from(document.querySelectorAll('${R}.backtest-deploy-row'));
+        if (rows.length !== ${deployments.length}) return null;
+        const r = rows[${myIndex}];
+        if (!r) return null;
+        return {
+          rows: rows.length,
+          index: ${myIndex},
+          cls: r.className,
+          symbol: (r.querySelector('.backtest-deploy-symbol') || {}).textContent,
+          mode: (r.querySelector('.backtest-deploy-mode') || {}).textContent,
+          status: (r.querySelector('.backtest-deploy-status') || {}).textContent,
+          stop: r.querySelectorAll('.backtest-deploy-stop').length,
+        };
+      })()`, WAIT_VALIDATE);
+      await step('J06', '[이 전략을 실전에 겁니다](기록만)가 배포 행을 만든다', () => ({
+        ok: !!deployRow && deployRow.symbol === STK && deployRow.mode === '기록만 합니다'
+              && deployRow.status === 'active' && deployRow.stop === 1,
+        data: { id: pyDeployId, row: deployRow },
+      }));
+
+      const signals = pyDeployId
+        ? await invoke(shellWin, 'athena:backtest-signals', { deployment_id: pyDeployId })
+        : null;
+      await step('J07', '배포 신호 목록은 200 + 빈 배열로 시작한다', () => ({
+        ok: !!signals && signals.ok === true && signals.data
+              && Array.isArray(signals.data.signals) && signals.data.signals.length === 0,
+        data: signals && signals.data ? signals.data : signals,
+      }));
+
+      const stages = ['signal', 'skipped', 'pending_approval', 'ordered', 'blocked'];
+
+      // effa50e 이전에는 이 자리가 422였다 — 코드 전략을 yaml로 읽으려다 파싱 오류로 끝나서,
+      // 만들 수는 있는데 영원히 판정할 수 없는 배포가 남았다. 지금은 코드 전략의 신호를
+      // 실행 라우트와 **같은 샌드박스**가 만들고 판정·한도까지 같은 코드를 지난다.
+      const evalPy = pyDeployId
+        ? await invoke(shellWin, 'athena:backtest-evaluate', { deployment_id: pyDeployId, today: TO })
+        : null;
+      const evalPyData = evalPy && evalPy.ok === true && evalPy.data ? evalPy.data : null;
+      await step('J08', 'evaluate — 파이썬 버전 배포도 오늘의 판정을 돌려준다', () => ({
+        ok: !!evalPyData && typeof evalPyData.dt === 'string' && evalPyData.dt.length > 0
+              && stages.indexOf(evalPyData.stage) !== -1
+              && typeof evalPyData.reason === 'string' && evalPyData.reason.length > 0
+              && (evalPyData.stage === 'skipped'
+                ? evalPyData.side === null
+                : (evalPyData.side === 'buy' || evalPyData.side === 'sell')),
+        data: evalPy && evalPy.data ? evalPy.data : evalPy,
+      }));
+
+      // 같은 자리의 반대편 — 파이썬이 실행에서 터지면 **그 예외 이름 그대로** 422여야 한다.
+      // 사용자 코드가 터진 사실을 yaml 파싱 오류로 바꿔 말하면 고칠 곳을 못 찾는다.
+      const boomStrategy = await invoke(shellWin, 'athena:backtest-strategy-create', {
+        name: 'probe-full-python-boom', kind: 'python', source: SRC_RAISES,
+      });
+      if (boomStrategy && boomStrategy.ok && boomStrategy.data && boomStrategy.data.strategy_id) {
+        created.strategyIds.push(boomStrategy.data.strategy_id);
+      }
+      const boomVersionId = boomStrategy && boomStrategy.ok && boomStrategy.data
+        ? boomStrategy.data.version_id : null;
+      const boomDeploy = boomVersionId
+        ? await invoke(shellWin, 'athena:backtest-deployment-create', {
+          strategy_version_id: boomVersionId,
+          stk_cd: STK, period: 'day', adjusted: true, mode: 'observe', params: {},
+          limits: {
+            max_order_amount: 1000000, max_orders_per_day: 1,
+            valid_from: '20000101', valid_to: '20991231',
+            stop_on_drawdown_pct: 90, stop_on_consecutive_losses: 99,
+          },
+        })
+        : null;
+      const boomDeployId = boomDeploy && boomDeploy.ok && boomDeploy.data
+        ? boomDeploy.data.deployment_id : null;
+      if (boomDeployId) created.deploymentIds.push(boomDeployId);
+      const evalBoom = boomDeployId
+        ? await invoke(shellWin, 'athena:backtest-evaluate', { deployment_id: boomDeployId, today: TO })
+        : null;
+      await step('J08b', 'evaluate — 터지는 파이썬 배포는 자식의 예외 이름을 그대로 싣는다', () => {
+        if (!boomDeployId) {
+          return {
+            skip: '터지는 코드용 전략·배포를 만들지 못했다',
+            name: 'evaluate — 터지는 파이썬 배포',
+          };
+        }
+        const detail = String(evalBoom && evalBoom.error);
+        return {
+          ok: !!evalBoom && evalBoom.ok === false && evalBoom.status === 422
+                && detail.indexOf('ValueError:') !== -1
+                && detail.indexOf('전략 로직이 터졌다') !== -1
+                && detail.indexOf('block mapping') === -1
+                && detail.indexOf('스펙으로 읽지 못했다') === -1,
+          data: {
+            deploymentId: boomDeployId,
+            status: evalBoom && evalBoom.status,
+            detail: detail.slice(0, 160),
+          },
+        };
+      });
+
+      // yaml 버전을 따로 만들어 evaluate가 실제 판정을 내는지 본다.
+      const yamlText = await js(shellWin, `(() => {
+        const c = window.AthenaBacktestCanvas.getContext();
+        return window.AthenaLib.BacktestSpec.toYaml(c.spec);
+      })()`);
+      const yamlStrategy = await invoke(shellWin, 'athena:backtest-strategy-create', {
+        name: 'probe-full-yaml', kind: 'yaml', source: yamlText,
+      });
+      const yamlVersionId = yamlStrategy && yamlStrategy.ok && yamlStrategy.data
+        ? yamlStrategy.data.version_id : null;
+      if (yamlStrategy && yamlStrategy.ok && yamlStrategy.data && yamlStrategy.data.strategy_id) {
+        created.strategyIds.push(yamlStrategy.data.strategy_id);
+      }
+      const yamlDeploy = yamlVersionId
+        ? await invoke(shellWin, 'athena:backtest-deployment-create', {
+          strategy_version_id: yamlVersionId,
+          stk_cd: STK, period: 'day', adjusted: true, mode: 'observe', params: {},
+          limits: {
+            max_order_amount: 1000000, max_orders_per_day: 1,
+            valid_from: '20000101', valid_to: '20991231',
+            stop_on_drawdown_pct: 90, stop_on_consecutive_losses: 99,
+          },
+        })
+        : null;
+      const yamlDeployId = yamlDeploy && yamlDeploy.ok && yamlDeploy.data
+        ? yamlDeploy.data.deployment_id : null;
+      if (yamlDeployId) created.deploymentIds.push(yamlDeployId);
+
+      const evalYaml = yamlDeployId
+        ? await invoke(shellWin, 'athena:backtest-evaluate', {
+          deployment_id: yamlDeployId, today: TO, holding: false,
+          orders_today: 0, order_amount: 100000, consecutive_losses: 0, drawdown_pct: 0,
+        })
+        : null;
+      await step('J09', 'evaluate — yaml 버전 배포는 오늘의 판정을 돌려준다(주문은 내지 않는다)', () => ({
+        ok: !!evalYaml && evalYaml.ok === true && evalYaml.data
+              && stages.indexOf(evalYaml.data.stage) !== -1
+              && typeof evalYaml.data.reason === 'string',
+        data: evalYaml && evalYaml.data ? evalYaml.data : evalYaml,
+      }));
+
+      // J06이 만든 **그 배포**만 중지한다 — 남의 배포도, 방금 IPC로 만든 yaml·boom 배포도
+      // 건드리지 않는다. J08b·J09가 만든 배포가 목록 앞(created_at DESC)에 끼어들어 자리가
+      // 밀렸으므로, 탭을 다시 눌러 캔버스를 새 목록으로 그리게 한 뒤 자리를 다시 잰다.
+      await goTab(shellWin, 4);
+      const afterList = await listDeployments();
+      const stopIndex = afterList.findIndex((d) => d.id === pyDeployId);
+      const domReady = stopIndex < 0 ? null : await until(shellWin, `(() => {
+        const rows = document.querySelectorAll('${R}.backtest-deploy-row');
+        return rows.length === ${afterList.length} ? { rows: rows.length } : null;
+      })()`, WAIT_VALIDATE);
+      const stopTarget = (stopIndex < 0 || !domReady) ? null : await js(shellWin, `(() => {
+        const rows = Array.from(document.querySelectorAll('${R}.backtest-deploy-row'));
+        const row = rows[${stopIndex}];
+        if (!row) return null;
+        const before = (row.querySelector('.backtest-deploy-status') || {}).textContent;
+        const btn = row.querySelector('.backtest-deploy-stop');
+        if (!btn) return { before, clicked: false, index: ${stopIndex} };
+        btn.click();
+        return { before, clicked: true, index: ${stopIndex} };
+      })()`);
+      const stopped = !stopTarget ? null : await until(shellWin, `(() => {
+        const rows = Array.from(document.querySelectorAll('${R}.backtest-deploy-row'));
+        const row = rows[${stopIndex}];
+        if (!row) return null;
+        const status = (row.querySelector('.backtest-deploy-status') || {}).textContent;
+        return status === 'stopped' ? { status, cls: row.className } : null;
+      })()`, WAIT_VALIDATE);
+      await step('J10', '[배포 중지]가 그 배포를 stopped로 만든다', () => ({
+        ok: !!stopTarget && stopTarget.clicked === true && stopTarget.before === 'active'
+              && !!stopped && stopped.status === 'stopped',
+        data: { id: pyDeployId, target: stopTarget, after: stopped },
+      }));
+    }
+  });
+
+  // ==================================================================
+  // K 채팅 액션 계약
+  // ==================================================================
+  if (on('K')) await section('K', async () => {
+    await prepareForm(shellWin, FROM, TO);
+
+    const beforeSpec = await ctx(shellWin);
+    const cardsBefore = await countOf(shellWin, '#history .backtest-change');
+    sendChat(shellWin, {
+      kind: 'spec_draft', patch: { params: { fast: 12 } }, note: '프로브 설정', suggest_run: false,
+    });
+    const specCard = await until(shellWin, `(() => {
+      const s = document.querySelector('${R}.backtest-param-slider[aria-label="fast 값"]');
+      const cards = document.querySelectorAll('#history .backtest-change');
+      if (!s || cards.length <= ${cardsBefore}) return null;
+      if (s.value !== '12') return null;
+      const card = cards[cards.length - 1];
+      return {
+        fast: s.value,
+        text: card.textContent,
+        rows: Array.from(card.querySelectorAll('.backtest-change-row')).map((r) => r.textContent),
+        buttons: Array.from(card.querySelectorAll('button')).map((b) => b.textContent),
+      };
+    })()`, WAIT_UI);
+    await step('K01', 'spec_draft가 폼에 바로 반영된다', () => ({
+      ok: !!specCard && specCard.fast === '12',
+      data: { before: beforeSpec.spec.params.fast.default, after: specCard && specCard.fast },
+    }));
+    await step('K02', '채팅 카드가 "설정 반영 · 반영됨"과 변경 행을 남긴다', () => ({
+      ok: !!specCard && specCard.text.indexOf('설정 반영') !== -1
+            && specCard.text.indexOf('반영됨') !== -1
+            && specCard.rows.some((r) => r.indexOf('fast') !== -1),
+      data: specCard ? { rows: specCard.rows, buttons: specCard.buttons } : null,
+    }));
+
+    await clickLastCardButton(shellWin, '되돌리기');
+    const undone = await until(shellWin, `(() => {
+      const s = document.querySelector('${R}.backtest-param-slider[aria-label="fast 값"]');
+      const cards = document.querySelectorAll('#history .backtest-change');
+      const card = cards[cards.length - 1];
+      if (!s || card.textContent.indexOf('되돌렸습니다') === -1) return null;
+      return { fast: s.value, lastChange: window.AthenaBacktestCanvas.getContext().lastChange };
+    })()`, WAIT_UI);
+    await step('K03', '[되돌리기]가 폼을 반영 직전으로 돌린다', () => ({
+      ok: !!undone && Number(undone.fast) === Number(beforeSpec.spec.params.fast.default)
+            && undone.lastChange === null,
+      data: { restored: undone && undone.fast, expected: beforeSpec.spec.params.fast.default },
+    }));
+
+    sendChat(shellWin, { kind: 'spec_draft', patch: { symbols: [] }, note: '종목 비우기' });
+    const pendingCard = await until(shellWin, `(() => {
+      const cards = document.querySelectorAll('#history .backtest-change');
+      const card = cards[cards.length - 1];
+      const label = card.querySelector('.backtest-change-error-label');
+      if (!label) return null;
+      return {
+        label: label.textContent,
+        errors: Array.from(card.querySelectorAll('.backtest-change-error')).map((e) => e.textContent),
+        applied: card.textContent.indexOf('반영됨') !== -1,
+      };
+    })()`, WAIT_UI);
+    await step('K04', '검증에 걸려도 설정은 반영되고 오류는 "실행 전에 채울 것"으로 남는다', () => ({
+      ok: !!pendingCard && pendingCard.applied === true
+            && pendingCard.label === '실행 전에 채울 것'
+            && pendingCard.errors.indexOf('종목을 하나 이상 고르세요') !== -1,
+      data: pendingCard,
+    }));
+    await clickLastCardButton(shellWin, '되돌리기');
+    await wait(400);
+
+    sendChat(shellWin, { kind: 'spec_draft', patch: { preset: 'no_such_preset' }, note: '없는 프리셋' });
+    const blockedCard = await until(shellWin, `(() => {
+      const cards = document.querySelectorAll('#history .backtest-change');
+      const card = cards[cards.length - 1];
+      if (card.textContent.indexOf('반영 안 됨') === -1) return null;
+      return {
+        errors: Array.from(card.querySelectorAll('.backtest-change-error')).map((e) => e.textContent),
+        buttons: Array.from(card.querySelectorAll('button')).map((b) => b.textContent),
+      };
+    })()`, WAIT_UI);
+    await step('K05', '모르는 프리셋은 반영하지 않고 그 사실을 적는다', () => ({
+      ok: !!blockedCard
+            && blockedCard.errors.indexOf('no_such_preset는 없는 프리셋입니다') !== -1
+            && blockedCard.buttons.length === 0,
+      data: blockedCard,
+    }));
+
+    sendChat(shellWin, {
+      kind: 'code_draft', source: SRC_GOOD, note: '코드 계약', suggest_validate: true,
+    });
+    const codeCard = await until(shellWin, `(() => {
+      const c = window.AthenaBacktestCanvas.getContext();
+      const cards = document.querySelectorAll('#history .backtest-change');
+      const card = cards[cards.length - 1];
+      const ta = document.querySelector('${R}.backtest-code-host .backtest-code-textarea');
+      if (!ta || ta.value.indexOf('probe-code-path') === -1) return null;
+      if (card.textContent.indexOf('코드 반영') === -1) return null;
+      return {
+        runPath: c.runPath,
+        designTab: c.designTab,
+        rows: Array.from(card.querySelectorAll('.backtest-change-row')).map((r) => r.textContent),
+        buttons: Array.from(card.querySelectorAll('button')).map((b) => b.textContent),
+      };
+    })()`, WAIT_UI);
+    await step('K06', 'code_draft가 편집기·실행경로·카드를 한 번에 움직인다', () => ({
+      ok: !!codeCard && codeCard.runPath === 'code' && codeCard.designTab === 'code'
+            && codeCard.rows.some((r) => r.indexOf('코드') === 0)
+            && codeCard.buttons.indexOf('검증') !== -1,
+      data: codeCard,
+    }));
+
+    const tabExpect = [['design', '설계'], ['result', '결과'], ['history', '이력'], ['optimize', '최적화'], ['deploy', '배포']];
+    for (let i = 0; i < tabExpect.length; i += 1) {
+      const [key, label] = tabExpect[i];
+      sendChat(shellWin, { kind: 'navigate', tab: key, designTab: null });
+      // eslint-disable-next-line no-await-in-loop
+      const nav = await until(shellWin, `(() => {
+        const on = document.querySelector('${R}.backtest-tab.is-on');
+        const c = window.AthenaBacktestCanvas.getContext();
+        if (!on || on.textContent !== ${JSON.stringify(label)}) return null;
+        return { tab: c.tab, label: on.textContent };
+      })()`, WAIT_VALIDATE);
+      // eslint-disable-next-line no-await-in-loop
+      await step(`K07${String.fromCharCode(97 + i)}`, `navigate — ${label} 탭이 열린다`, () => ({
+        ok: !!nav && nav.tab === key,
+        data: nav,
+      }));
+    }
+
+    const subExpect = [['form', '폼'], ['code', '코드'], ['flow', '흐름']];
+    for (let i = 0; i < subExpect.length; i += 1) {
+      const [key, label] = subExpect[i];
+      sendChat(shellWin, { kind: 'navigate', tab: 'design', designTab: key });
+      // eslint-disable-next-line no-await-in-loop
+      const nav = await until(shellWin, `(() => {
+        const on = document.querySelector('${R}.backtest-subtab.is-on');
+        const c = window.AthenaBacktestCanvas.getContext();
+        if (!on || on.textContent !== ${JSON.stringify(label)}) return null;
+        return { designTab: c.designTab, label: on.textContent };
+      })()`, WAIT_VALIDATE);
+      // eslint-disable-next-line no-await-in-loop
+      await step(`K08${String.fromCharCode(97 + i)}`, `navigate — 설계 하위탭 ${label}이 열린다`, () => ({
+        ok: !!nav && nav.designTab === key,
+        data: nav,
+      }));
+    }
+
+    sendChat(shellWin, { kind: 'optimize_request', method: 'random', note: '표본을 넓혀 볼까요' });
+    const optCard = await until(shellWin, `(() => {
+      const c = window.AthenaBacktestCanvas.getContext();
+      const cards = document.querySelectorAll('#history .backtest-change');
+      const card = cards[cards.length - 1];
+      const start = document.querySelector('${R}.backtest-optimize-start');
+      if (!start || start.className.indexOf('is-suggested') === -1) return null;
+      if (card.textContent.indexOf('최적화 준비') === -1) return null;
+      return {
+        tab: c.tab,
+        method: c.optimize.method,
+        suggested: (document.querySelector('${R}.backtest-optimize-suggested') || {}).textContent,
+        buttons: Array.from(card.querySelectorAll('button')).map((b) => b.textContent),
+      };
+    })()`, WAIT_VALIDATE);
+    await step('K09', 'optimize_request는 방식만 준비하고 탐색은 시작하지 않는다', () => ({
+      ok: !!optCard && optCard.tab === 'optimize' && optCard.method === 'random'
+            && optCard.suggested === '표본을 넓혀 볼까요'
+            && optCard.buttons.indexOf('탐색 시작') !== -1,
+      data: optCard,
+    }));
+
+    // 실행/승인 중 차단 — 승인 화면은 사람 클릭을 기다리므로 결정적으로 붙잡을 수 있다.
+    await prepareForm(shellWin, UNCACHED_FROM, TO);
+    await click(shellWin, `${R}.backtest-run-button`);
+    const busyView = await waitRunOutcome(shellWin, WAIT_RUN);
+    const busySpecBefore = await ctx(shellWin);
+    sendChat(shellWin, { kind: 'spec_draft', patch: { params: { fast: 33 } }, note: '실행 중 변경' });
+    const busyCard = await until(shellWin, `(() => {
+      const cards = document.querySelectorAll('#history .backtest-change');
+      const card = cards[cards.length - 1];
+      if (card.textContent.indexOf('반영 안 됨') === -1) return null;
+      return {
+        errors: Array.from(card.querySelectorAll('.backtest-change-error')).map((e) => e.textContent),
+        buttons: Array.from(card.querySelectorAll('button')).map((b) => b.textContent),
+      };
+    })()`, WAIT_UI);
+    const busySpecAfter = await ctx(shellWin);
+    await step('K10', '승인·실행 중에는 채팅 액션을 거절한다', () => ({
+      ok: !!busyView && busyView.view === 'approval' && !!busyCard
+            && busyCard.errors.indexOf('실행 중에는 바꿀 수 없습니다') !== -1
+            && busyCard.buttons.length === 0
+            && busySpecAfter.spec.params.fast.default === busySpecBefore.spec.params.fast.default,
+      data: { view: busyView && busyView.view, card: busyCard },
+    }));
+
+    const undoBusy = await js(shellWin, "window.AthenaBacktestCanvas.undoChatAction('bc-1')");
+    await step('K11', '실행 중에는 되돌리기도 잠긴다', () => ({
+      ok: !!undoBusy && undoBusy.ok === false && undoBusy.reason === '실행 중에는 되돌릴 수 없습니다',
+      data: undoBusy,
+    }));
+    await click(shellWin, `${R}.backtest-approval-cancel`);
+    await wait(400);
+
+    const receipt = await js(shellWin, "window.AthenaBacktestCanvas.onChatAction({ kind: 'navigate', tab: 'result' })");
+    const receiptKeys = receipt ? Object.keys(receipt) : [];
+    await step('K12', '영수증 키 계약 12개', () => ({
+      ok: JSON.stringify(receiptKeys) === JSON.stringify([
+            'id', 'kind', 'applied', 'note', 'rows', 'errors',
+            'suggest_run', 'suggest_validate', 'tab', 'designTab', 'method', 'canUndo',
+          ]) && /^bc-\d+$/.test(String(receipt.id)),
+      data: { keys: receiptKeys, id: receipt && receipt.id },
+    }));
+
+    const unknownBefore = await countOf(shellWin, '#history .backtest-change');
+    const unknownReceipt = await js(shellWin, "window.AthenaBacktestCanvas.onChatAction({ kind: 'nope' })");
+    sendChat(shellWin, { kind: 'nope' });
+    await wait(700);
+    const unknownAfter = await countOf(shellWin, '#history .backtest-change');
+    await step('K13', '모르는 kind는 null을 돌려주고 카드도 안 그린다', () => ({
+      ok: unknownReceipt === null && unknownAfter === unknownBefore,
+      data: { receipt: unknownReceipt, before: unknownBefore, after: unknownAfter },
+    }));
+
+    const undoMissing = await js(shellWin, "window.AthenaBacktestCanvas.undoChatAction('bc-99999')");
+    await step('K14', '없는 변경은 되돌릴 수 없다고 말한다', () => ({
+      ok: !!undoMissing && undoMissing.ok === false
+            && undoMissing.reason === '되돌릴 내역이 남아 있지 않습니다',
+      data: undoMissing,
+    }));
+
+    await prepareForm(shellWin, FROM, TO);
+  });
+
+  // ==================================================================
+  // L 컨텍스트
+  // ==================================================================
+  if (on('L')) await section('L', async () => {
+    await prepareForm(shellWin, FROM, TO);
+    const c = await ctx(shellWin);
+    const expectedKeys = [
+      'view', 'tab', 'designTab', 'runPath', 'spec', 'draft', 'pending', 'presets',
+      'code', 'codeDraft', 'lastResult', 'diagnosis', 'optimize', 'runs', 'coverage', 'lastChange',
+    ];
+    await step('L01', 'getContext() 최상위 키 16개 계약', () => ({
+      ok: JSON.stringify(Object.keys(c)) === JSON.stringify(expectedKeys),
+      data: { keys: Object.keys(c) },
+    }));
+    await step('L02', 'draft·codeDraft는 계약용 잔존 키로 항상 null이다', () => ({
+      ok: c.draft === null && c.codeDraft === null,
+      data: { draft: c.draft, codeDraft: c.codeDraft },
+    }));
+    await step('L03', '폼이 채워져 있으면 pending이 비어 있다', () => ({
+      ok: Array.isArray(c.pending) && c.pending.length === 0,
+      data: { pending: c.pending, spec: { symbols: c.spec.symbols, from: c.spec.fromDt, to: c.spec.toDt } },
+    }));
+
+    await clearSymbols(shellWin);
+    await wait(300);
+    const emptied = await ctx(shellWin);
+    await step('L04', '종목을 지우면 pending이 그것을 적고 coverage는 모름으로 돌아간다', () => ({
+      ok: emptied.pending.indexOf('종목을 하나 이상 고르세요') !== -1 && emptied.coverage === null,
+      data: { pending: emptied.pending, coverage: emptied.coverage },
+    }));
+
+    await addSymbol(shellWin, STK);
+    const restored = await until(shellWin, `(() => {
+      const x = window.AthenaBacktestCanvas.getContext();
+      return x.coverage ? { coverage: x.coverage } : null;
+    })()`, WAIT_VALIDATE);
+    await step('L05', '종목이 하나면 coverage가 rows·first_dt·last_dt로 채워진다', () => ({
+      ok: !!restored && Number(restored.coverage.rows) > 0
+            && !!restored.coverage.first_dt && !!restored.coverage.last_dt,
+      data: restored,
+    }));
+
+    await step('L06', 'code 컨텍스트가 원문·줄수·전략 id·오류를 싣는다', () => ({
+      ok: typeof c.code.source === 'string' && typeof c.code.truncated === 'boolean'
+            && typeof c.code.lines === 'number' && Array.isArray(c.code.errors)
+            && c.code.lines === (c.code.source ? c.code.source.split('\n').length : 0),
+      data: {
+              lines: c.code.lines, truncated: c.code.truncated,
+              strategyId: c.code.strategyId, activeVersionId: c.code.activeVersionId,
+            },
+    }));
+
+    await step('L07', 'lastResult가 마지막 실행의 상태·지표·플래그를 싣는다', () => {
+      if (c.lastResult === null) {
+        return {
+          skip: '이 실행에서 백테스트를 한 번도 돌리지 않았다 — D 또는 E 섹션이 필요하다',
+          name: 'lastResult 계약',
+        };
+      }
+      return {
+        ok: ['done', 'failed'].indexOf(c.lastResult.status) !== -1
+              && typeof c.lastResult.metrics === 'object' && Array.isArray(c.lastResult.flags)
+              && typeof c.lastResult.tradesCount === 'number'
+              && typeof c.lastResult.stdoutTail === 'string',
+        data: { status: c.lastResult.status, trades: c.lastResult.tradesCount, flags: c.lastResult.flags },
+      };
+    });
+
+    await step('L08', 'runs는 최대 10건까지만 싣는다', () => ({
+      ok: Array.isArray(c.runs) && c.runs.length <= 10
+            && c.runs.every((r) => typeof r.run_id === 'string' && 'status' in r),
+      data: { runs: c.runs.length },
+    }));
+
+    await step('L09', 'optimize 컨텍스트가 method와 결과 요약을 싣는다', () => ({
+      ok: !!c.optimize && ['grid', 'random'].indexOf(c.optimize.method) !== -1
+            && (c.optimize.result === null
+              || (Array.isArray(c.optimize.result.warnings) && typeof c.optimize.result.cells === 'number')),
+      data: c.optimize,
+    }));
+
+    await step('L10', 'diagnosis는 null이거나 5키 요약이다(전체 diff는 안 싣는다)', () => ({
+      ok: c.diagnosis === null
+            || JSON.stringify(Object.keys(c.diagnosis)) === JSON.stringify(['title', 'why', 'line', 'hasFix', 'summary']),
+      data: c.diagnosis,
+    }));
+
+    await step('L11', 'presets는 id·name만 싣는다', () => ({
+      ok: Array.isArray(c.presets) && c.presets.length === 10
+            && c.presets.every((p) => JSON.stringify(Object.keys(p)) === JSON.stringify(['id', 'name'])),
+      data: { presets: c.presets.length },
+    }));
+
+    sendChat(shellWin, { kind: 'spec_draft', patch: { params: { fast: 9 } }, note: 'lastChange 확인' });
+    const lastChange = await until(shellWin, `(() => {
+      const x = window.AthenaBacktestCanvas.getContext();
+      return x.lastChange ? { lastChange: x.lastChange } : null;
+    })()`, WAIT_UI);
+    await step('L12', 'lastChange가 마지막 영수증 요약을 싣는다', () => ({
+      ok: !!lastChange && lastChange.lastChange.applied === true
+            && lastChange.lastChange.kind === 'spec_draft'
+            && Array.isArray(lastChange.lastChange.rows),
+      data: lastChange,
+    }));
+
+    await clickLastCardButton(shellWin, '되돌리기');
+    const clearedChange = await until(shellWin, `(() => {
+      const x = window.AthenaBacktestCanvas.getContext();
+      return x.lastChange === null ? { lastChange: null } : null;
+    })()`, WAIT_UI);
+    await step('L13', '되돌리면 lastChange는 사라진다(반영된 것으로 읽히지 않는다)', () => ({
+      ok: !!clearedChange,
+      data: clearedChange,
+    }));
+  });
+
+  // 리포트 쓰기와 종료는 whenReady의 finally가 한 번만 한다 — 여기서는 돌아가기만 한다.
+}
+
+// 저장 전 배포 화면을 잰다(activeVersionId가 null일 때만 의미가 있다).
+async function observeDeployBlocked(win) {
+  await clickNth(win, `${R}.backtest-tab`, 4);
+  const seen = await until(win, `(() => {
+    const root = document.getElementById('backtestCanvas');
+    const wrap = root.querySelector('.backtest-deploy');
+    if (!wrap) return null;
+    const card = wrap.querySelector('.backtest-card');
+    if (!card) return null;
+    return {
+      modes: root.querySelectorAll('.backtest-deploy-mode-item').length,
+      create: root.querySelectorAll('.backtest-deploy-create').length,
+      empty: (card.querySelector('.backtest-card-empty') || {}).textContent || null,
+      listEmpty: (wrap.querySelector(':scope > .backtest-card-empty') || {}).textContent || null,
+    };
+  })()`, WAIT_VALIDATE);
+  await clickNth(win, `${R}.backtest-tab`, 0);
+  await wait(300);
+  return seen;
+}
+
+// ---------- 마무리 ----------
+
+// 리포트는 **어떤 경우에도** 쓴다 — 치명상·조기 종료·섹션 중단 전부.
+// 두 번 불려도 한 번만 돈다(거절 처리기와 finally가 겹칠 수 있다).
+async function finish() {
+  if (outcome.finished) return;
+  outcome.finished = true;
+
+  // 만든 배포는 전부 중지한다 — 프로브가 켜둔 스위치를 남기지 않는다.
+  const cleanup = { stopped: [], failed: [] };
+  for (let i = 0; i < created.deploymentIds.length; i += 1) {
+    const id = created.deploymentIds[i];
+    try {
+      // eslint-disable-next-line no-await-in-loop
+      const res = await invoke(probeWin, 'athena:backtest-deployment-stop', { deployment_id: id });
+      if (res && res.ok) cleanup.stopped.push(id);
+      else cleanup.failed.push({ id, res });
+    } catch (err) {
+      cleanup.failed.push({ id, error: String((err && err.message) || err) });
+    }
+  }
+  if (created.deploymentIds.length) {
+    await step('Z01', '만든 배포를 전부 중지했다', () => ({
+      ok: cleanup.failed.length === 0,
+      data: cleanup,
+    }));
+  }
+  if (created.strategyIds.length) {
+    skip(
+      'Z02', '만든 전략·버전 정리',
+      `백엔드에 삭제 API가 없다(store에 delete가 없다) — 남는 전략 id: ${created.strategyIds.join(', ')}`,
+    );
+  }
+
+  if (outcome.abortReason) {
+    record('ZZ', '전제 미충족으로 조기 종료', false, { reason: outcome.abortReason });
+  }
+
+  report.finishedAt = new Date().toISOString();
+  report.fatal = outcome.fatal
+    || (outcome.abortReason ? `조기 종료: ${outcome.abortReason}` : null);
+  const passed = report.steps.filter((s) => s.ok && !s.skipped).length;
+  const failed = report.steps.filter((s) => !s.ok);
+  const skipped = report.steps.filter((s) => s.skipped).length;
+  report.summary = { total: report.steps.length, passed, failed: failed.length, skipped };
+
+  const outPath = path.join(__dirname, '..', 'artifacts', 'backtest-tour', 'full-probe.json');
+  try {
+    fs.mkdirSync(path.dirname(outPath), { recursive: true });
+    fs.writeFileSync(outPath, JSON.stringify(report, null, 1));
+  } catch (err) {
+    console.error('[probe-backtest-full] 리포트 저장 실패:', String((err && err.message) || err));
+  }
+
+  if (report.fatal) {
+    console.log(`[probe-backtest-full] FATAL — ${String(report.fatal).split('\n')[0]}`);
+  }
+  if (failed.length === 0 && !report.fatal) {
+    console.log(`[probe-backtest-full] ALL OK (${passed}/${report.steps.length})`);
+  } else {
+    console.log(
+      `[probe-backtest-full] FAIL (${passed}/${report.steps.length})`
+      + ` — failing ids: ${failed.map((s) => s.id).join(', ')}`,
+    );
+  }
+
+  try { fs.rmSync(PROFILE, { recursive: true, force: true }); }
+  catch { /* 다음 실행은 새 디렉터리다 */ }
+  app.exit(failed.length === 0 && !report.fatal ? 0 : 1);
+}
+
+// 프로세스가 통째로 넘어져도 리포트는 남긴다 — 여기서 안 잡으면 155개 결과가 전부 증발한다.
+process.on('unhandledRejection', (reason) => {
+  const text = String((reason && reason.stack) || (reason && reason.message) || reason);
+  console.error('[probe-backtest-full] 처리되지 않은 거절:', text);
+  outcome.fatal = outcome.fatal || `unhandledRejection: ${text}`;
+  record('ZR', '처리되지 않은 거절이 프로브를 끊었다', false, { error: text });
+  void finish();
+});
+
+process.on('uncaughtException', (err) => {
+  const text = String((err && err.stack) || err);
+  console.error('[probe-backtest-full] 잡히지 않은 예외:', text);
+  outcome.fatal = outcome.fatal || `uncaughtException: ${text}`;
+  record('ZE', '잡히지 않은 예외가 프로브를 끊었다', false, { error: text });
+  void finish();
+});
+
+app.whenReady().then(async () => {
+  try {
+    await main();
+  } catch (err) {
+    if (err instanceof PreconditionAbort) {
+      outcome.abortReason = err.message;
+    } else {
+      const text = String((err && err.stack) || err);
+      console.error('[probe-backtest-full] 프로브 자체 오류:', text);
+      outcome.fatal = text;
+    }
+  } finally {
+    await finish();
+  }
+});
