@@ -3641,6 +3641,13 @@ window.athena.on('athena:backtest-chat-action', async (action) => {
   renderBacktestChangeCard(receipt);
 });
 
+// 카드 버튼에서 시작한 왕복(answerVisualQuestion·applyVisualPatch·retryVisualPatch)은
+// main이 보낸 액션이 아니라 캔버스가 스스로 만든 영수증이다 — 위 채널로는 오지 않는다.
+// 캔버스가 document에 던지는 이 이벤트가 그 하나뿐인 통로다(backtest-canvas.js emitChatCard).
+document.addEventListener('athena:backtest-receipt', (event) => {
+  renderBacktestChangeCard(event && event.detail);
+});
+
 // ---------- 주문 확인 모드 — #order (P4, 2026-08-19) ----------
 // 유일하게 미착수였던 모드의 실체(GLOSSARY §1). 온보딩·설정과 같은 형제 패널
 // 문법 — 열리면 #app이 물러나고 높이는 모드가 소유한다. 프리필은 AI(루틴
