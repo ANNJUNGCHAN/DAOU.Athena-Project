@@ -116,6 +116,17 @@ function fetchFlow({ backendBase, fetchImpl, ...body }) {
   return backtestHttp('POST', '/api/v1/backtest/flow', body, { backendBase, fetchImpl });
 }
 
+// 흐름 지도(2026-09-03) — 폼(yaml)이든 코드(source)든 같은 지도 한 장으로 온다.
+// 이 층은 무엇을 보낼지 고르지 않는다(캔버스가 경로를 안다) — 몸체를 그대로 넘긴다.
+function fetchMap({ backendBase, fetchImpl, ...body }) {
+  return backtestHttp('POST', '/api/v1/backtest/map', body, { backendBase, fetchImpl });
+}
+
+// 지도 뒤에 놓을 코드를 만든다. 저장하지 않는다 — 소스를 돌려줄 뿐이다(§7.3).
+function fetchCodegen({ backendBase, fetchImpl, ...body }) {
+  return backtestHttp('POST', '/api/v1/backtest/codegen', body, { backendBase, fetchImpl });
+}
+
 function diagnoseBacktest({ backendBase, fetchImpl, ...body }) {
   return backtestHttp('POST', '/api/v1/backtest/diagnose', body, { backendBase, fetchImpl });
 }
@@ -252,6 +263,15 @@ function openProject({ backendBase, fetchImpl, ...body }) {
   return backtestHttp('POST', '/api/v1/projects/open', body, { backendBase, fetchImpl });
 }
 
+// 등록 해제 — 백엔드 등록부에서만 지운다(폴더·파일은 그대로, projects.py DELETE 계약).
+// 사이드바의 '프로젝트 제거'(보드 37)가 부른다.
+function unregisterProject({ backendBase, fetchImpl, project_id }) {
+  return backtestHttp(
+    'DELETE', `/api/v1/projects/${encodeURIComponent(project_id)}`,
+    undefined, { backendBase, fetchImpl },
+  );
+}
+
 function fetchProjectTree({ backendBase, fetchImpl, project_id }) {
   return backtestHttp(
     'GET', `/api/v1/projects/${encodeURIComponent(project_id)}/tree`,
@@ -309,6 +329,8 @@ module.exports = {
   validateBacktest,
   fetchCoverage,
   fetchFlow,
+  fetchMap,
+  fetchCodegen,
   diagnoseBacktest,
   optimizeBacktest,
   optimizePlan,
@@ -331,6 +353,7 @@ module.exports = {
   listProjects,
   createProject,
   openProject,
+  unregisterProject,
   fetchProjectTree,
   readProjectFile,
   writeProjectFile,

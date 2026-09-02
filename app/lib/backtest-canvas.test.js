@@ -137,9 +137,17 @@ function makeCanvas(overrides) {
   return { container, canvas: createBacktestCanvas(deps), pending };
 }
 
+// 지도가 기본 탭이라(2026-09-03) 폼을 보는 검사는 폼 탭으로 옮긴 뒤에 시작한다.
+// 기본이 지도라는 사실 자체는 아래 '설계 하위 탭' 테스트가 따로 못 박는다.
+async function toForm(container) {
+  const tab = findByClass(container, 'backtest-subtab')[1];
+  if (tab) await click(tab);
+}
+
 // 폼을 실행 가능한 상태로 만든다(종목·기간). 입력 이벤트는 모델만 갱신하므로
 // 화면을 다시 그리지 않아도 값이 남는다.
 async function fillForm(container) {
+  await toForm(container);
   const symbolInput = findByClass(container, 'backtest-symbol-add')[0];
   symbolInput.value = '005930';
   await symbolInput.dispatchEvent({ type: 'keydown', key: 'Enter' });
@@ -181,6 +189,7 @@ test('프리셋 fetch 실패 시 정직한 에러 상태를 그린다(목업 데
   });
   canvas.mount();
   await flush();
+  await toForm(container);
   assert.equal(findByClass(container, 'backtest-canvas-error').length, 1);
   assert.match(textOf(container), /백엔드 없음/);
 });
@@ -191,6 +200,7 @@ test('empty → design: 프리셋 목록·대상·지표·조건·리스크 카�
   const { container, canvas } = makeCanvas();
   canvas.mount();
   await flush();
+  await toForm(container);
   assert.equal(findByClass(container, 'backtest-preset-item').length, 1);
   assert.ok(findByClass(container, 'backtest-symbol-add').length, '종목 입력이 있어야 한다');
   assert.equal(findByClass(container, 'backtest-indicator-row').length, 2);
@@ -202,6 +212,7 @@ test('지표 파라미터가 슬라이더로 나온다 — 프리셋의 min/max�
   const { container, canvas } = makeCanvas();
   canvas.mount();
   await flush();
+  await toForm(container);
   const sliders = findByClass(container, 'backtest-param-slider');
   assert.equal(sliders.length, 2);
   assert.equal(sliders[0].getAttribute('min'), '5');
@@ -217,6 +228,7 @@ test('슬라이더를 움직이면 실행 yaml의 값이 바뀐다', async () =>
   });
   canvas.mount();
   await flush();
+  await toForm(container);
   await fillForm(container);
   const slider = findByClass(container, 'backtest-param-slider')[0];
   slider.value = '35';
@@ -230,6 +242,7 @@ test('AND/OR 뱃지를 누르면 전환된다', async () => {
   const { container, canvas } = makeCanvas();
   canvas.mount();
   await flush();
+  await toForm(container);
   const badge = findByClass(container, 'backtest-logic-badge')[0];
   assert.match(badge.textContent, /AND/);
   await click(badge);
@@ -240,6 +253,7 @@ test('조건을 추가·삭제할 수 있다', async () => {
   const { container, canvas } = makeCanvas();
   canvas.mount();
   await flush();
+  await toForm(container);
   assert.equal(findByClass(container, 'backtest-condition').length, 2);
   const adder = findByClass(container, 'backtest-condition-add')[0];
   const target = findByClass(adder, 'backtest-condition-target-input')[0];
@@ -254,6 +268,7 @@ test('비용 기본값이 채워져 있고 "사실 주장이 아니다"를 함�
   const { container, canvas } = makeCanvas();
   canvas.mount();
   await flush();
+  await toForm(container);
   assert.match(textOf(container), /사실 주장이 아닙니다/);
 });
 
@@ -261,6 +276,7 @@ test('설계 화면에도 체결 가정이 상시 붙는다(보드 01)', async (
   const { container, canvas } = makeCanvas();
   canvas.mount();
   await flush();
+  await toForm(container);
   assert.equal(findByClass(container, 'backtest-assumptions').length, 1);
 });
 
@@ -269,6 +285,7 @@ test('실행 버튼: 폼이 비어있으면 run()을 부르지 않고 오류 목
   const { container, canvas } = makeCanvas({ run: async () => { called = true; return {}; } });
   canvas.mount();
   await flush();
+  await toForm(container);
   await click(findByClass(container, 'backtest-run-button')[0]);
   await flush();
   assert.equal(called, false);
@@ -288,6 +305,7 @@ async function toApproval(extra) {
   }, extra || {}));
   canvas.mount();
   await flush();
+  await toForm(container);
   await fillForm(container);
   await click(findByClass(container, 'backtest-run-button')[0]);
   await flush();
@@ -372,6 +390,7 @@ async function toResult(extra) {
   }, extra || {}));
   canvas.mount();
   await flush();
+  await toForm(container);
   await fillForm(container);
   await click(findByClass(container, 'backtest-run-button')[0]);
   await flush();
@@ -446,6 +465,7 @@ test('코드가 없으면 실패는 그냥 에러 화면이다', async () => {
   });
   canvas.mount();
   await flush();
+  await toForm(container);
   await fillForm(container);
   await click(findByClass(container, 'backtest-run-button')[0]);
   await flush();
@@ -463,6 +483,7 @@ test('폴링 중단: 컨테이너가 hidden이면 다음 tick을 예약하지 �
   });
   canvas.mount();
   await flush();
+  await toForm(container);
   await fillForm(container);
   container.hidden = true;
   await click(findByClass(container, 'backtest-run-button')[0]);
@@ -507,15 +528,18 @@ const TWO_PRESETS = PRESETS.concat([
 
 const VALID_PATCH = { symbols: ['005930'], fromDt: '20240101', toDt: '20240630' };
 
+// 2026-09-03부터 설계의 기본 탭은 지도다 — 폼·코드를 보는 테스트는 폼 탭으로 옮겨서
+// 시작한다. 기본이 지도라는 사실 자체는 아래 '설계 하위 탭' 테스트가 따로 못 박는다.
 async function mounted(overrides) {
   const made = makeCanvas(overrides);
   made.canvas.mount();
   await flush();
+  await toForm(made.container);
   return made;
 }
 
 const RECEIPT_KEYS = [
-  'id', 'kind', 'applied', 'note', 'rows', 'errors',
+  'id', 'kind', 'applied', 'note', 'rows', 'nodes', 'version', 'errors',
   'suggest_run', 'suggest_validate', 'tab', 'designTab', 'method', 'canUndo', 'canApply',
 ];
 
@@ -553,7 +577,7 @@ test('onChatAction: 알 수 없는 kind·빈 payload는 null이고 아무것도 
   assert.equal(ctx.lastChange, null);
 });
 
-test('spec_draft: 폼에 바로 들어가고 영수증이 바뀐 항목을 싣는다 — 캔버스 초안 카드는 없다', async () => {
+test('spec_draft: 폼에 바로 들어가고 지도로 돌아온다 — 캔버스 초안 카드는 없다', async () => {
   const { container, canvas } = await mounted();
   await click(findByClass(container, 'backtest-tab')[2]);           // 이력 탭으로
   assert.equal(canvas.getContext().tab, 'history');
@@ -570,23 +594,64 @@ test('spec_draft: 폼에 바로 들어가고 영수증이 바뀐 항목을 싣�
   assert.equal(receipt.suggest_run, false);
   assert.equal(receipt.canUndo, true);
   assert.equal(receipt.tab, 'design');
-  assert.equal(receipt.designTab, 'form');
+  // 반영을 보는 자리는 지도다 — 대화가 고치는 것은 폼 칸이 아니라 흐름이다.
+  assert.equal(receipt.designTab, 'flow');
+  // 반영 한 번이 지도 한 판이다(보드 14-B).
+  assert.deepEqual(receipt.version, { from: 1, to: 2 });
   assert.deepEqual(receipt.rows, [
     { label: '종목', before: '없음', after: '005930' },
     { label: '시작일', before: '없음', after: '20240101' },
     { label: '종료일', before: '없음', after: '20240630' },
   ]);
 
-  // 폼이 곧바로 그 값이다 — 사람이 누를 카드가 캔버스에 서지 않는다.
   const ctx = canvas.getContext();
   assert.equal(ctx.view, 'design');
   assert.equal(ctx.tab, 'design');
-  assert.equal(ctx.designTab, 'form');
+  assert.equal(ctx.designTab, 'flow');
+  assert.equal(ctx.map.version, 2);
   assert.deepEqual(ctx.spec.symbols, ['005930']);
   assert.equal(ctx.spec.fromDt, '20240101');
   assert.equal(ctx.draft, null);
+  // 폼이 곧바로 그 값이다 — 사람이 누를 카드가 캔버스에 서지 않는다.
+  await toForm(container);
   assert.equal(findByClass(container, 'backtest-draft').length, 0);
   assert.equal(findByClass(container, 'backtest-symbol-code').length, 1);
+});
+
+test('spec_draft: 바뀐 칸이 지도의 어느 번호인지 영수증에 실린다(보드 14-B)', async () => {
+  const drawn = {
+    version: 1,
+    nodes: [
+      { id: 'params', numeral: '①', title: '조절할 값을 정합니다', lines: [], facts: [], status: 'ok' },
+      { id: 'conditions', numeral: '③', title: '사고·파는 순간을 찍습니다', lines: [], facts: [], status: 'ok' },
+    ],
+    code: { lines: 12, matches_map: true },
+  };
+  const { canvas } = await mounted({ map: async () => drawn });
+  const receipt = canvas.onChatAction({
+    kind: 'spec_draft',
+    patch: {
+      params: { fast: 10 },
+      exit: { logic: 'OR', conditions: [{ indicator: 'close', operator: 'less_than', compare_to: 70 }] },
+    },
+  });
+  assert.deepEqual(receipt.nodes, [
+    { numeral: '①', title: '조절할 값을 정합니다', text: '파라미터 fast: 10' },
+    { numeral: '③', title: '사고·파는 순간을 찍습니다', text: '청산 조건: close 가 더 작음 70' },
+  ]);
+  // 지도가 '방금 바뀜'을 붙일 칸의 id — 컨텍스트도 같은 값을 읽는다.
+  assert.deepEqual(canvas.getContext().lastChange.nodes, ['params', 'conditions']);
+});
+
+test('changedNodeIds: 스펙 필드를 지도 칸으로 옮긴다 — 지도 순서, 중복 없음', () => {
+  assert.deepEqual(backtestCanvas.changedNodeIds(['entry', 'exit']), ['conditions']);
+  assert.deepEqual(
+    backtestCanvas.changedNodeIds(['risk', 'params', 'toDt', 'indicators']),
+    ['target', 'params', 'indicators', 'guard'],
+  );
+  // 어느 칸도 아닌 필드(전략 이름)와 모르는 이름은 조용히 빠진다.
+  assert.deepEqual(backtestCanvas.changedNodeIds(['name', 'nope']), []);
+  assert.deepEqual(backtestCanvas.changedNodeIds(null), []);
 });
 
 test('spec_draft 영수증: 값을 사람 말로 적는다 — 파라미터·주기·리스크·비용·조건', async () => {
@@ -734,6 +799,7 @@ test('preset이 든 설정: 전략이 바뀌고 종목·기간은 남으며 나�
   assert.equal(spec.toDt, '20260828');
   assert.deepEqual(Object.keys(spec.params), ['period']);
   assert.equal(spec.params.period.default, 7);
+  await toForm(container);
   const selected = findByClass(container, 'backtest-preset-item')
     .filter((n) => n.getAttribute('aria-pressed') === 'true');
   assert.equal(selected.length, 1);
@@ -943,20 +1009,32 @@ test('navigate: 탭만 옮기고 되돌리기는 없다', async () => {
   assert.equal(findByClass(container, 'backtest-history-row').length, 1);
 });
 
-test('navigate design/flow: 코드가 있으면 흐름 지도를 불러온다', async () => {
-  let asked = null;
+test('navigate design/flow: 코드 경로면 지금 코드로 지도를 다시 만든다', async () => {
+  const asked = [];
   const made = await mounted({
-    flow: async (body) => { asked = body; return { nodes: [] }; },
+    map: async (body) => { asked.push(body); return { version: body.version, nodes: [] }; },
   });
   await withCode(made);
   const receipt = made.canvas.onChatAction({
     kind: 'navigate', tab: 'design', designTab: 'flow',
   });
   await flush();
-  assert.deepEqual(asked, { source: CODE_SOURCE });
+  // 코드가 들어온 순간 이미 한 번 다시 만들었고, 탭을 열 때 또 만든다 — 둘 다 그 코드다.
+  assert.deepEqual(asked[asked.length - 1], { version: 2, source: CODE_SOURCE });
   assert.equal(receipt.designTab, 'flow');
   assert.equal(made.canvas.getContext().designTab, 'flow');
   assert.equal(findByClass(made.container, 'backtest-flow-tab').length, 1);
+});
+
+test('폼 경로의 지도는 지금 폼(yaml)으로 만든다 — 같은 라우트, 다른 몸체', async () => {
+  const asked = [];
+  const made = await mounted({ map: async (body) => { asked.push(body); return { version: 1, nodes: [] }; } });
+  await flush();
+  assert.equal(asked.length >= 1, true, '전략이 서면 지도부터 만든다');
+  assert.equal(asked[0].version, 1);
+  assert.match(asked[0].yaml, /SMA 골든크로스/);
+  assert.equal(asked[0].source, undefined);
+  assert.equal(asked[0].run_id, undefined);
 });
 
 test('navigate: 모르는 tab은 null이고, 모르는 designTab만 무시한다', async () => {
@@ -1021,7 +1099,7 @@ test('getContext(): lastChange는 마지막 변경만 싣고 되돌리면 사라
     kind: 'spec_draft', patch: VALID_PATCH, note: '삼성전자',
   });
   const last = canvas.getContext().lastChange;
-  assert.deepEqual(Object.keys(last), ['id', 'kind', 'applied', 'rows', 'errors']);
+  assert.deepEqual(Object.keys(last), ['id', 'kind', 'applied', 'rows', 'nodes', 'errors']);
   assert.equal(last.id, receipt.id);
   assert.equal(last.kind, 'spec_draft');
   assert.equal(last.applied, true);
@@ -1086,7 +1164,7 @@ test('getContext(): 키 목록이 계약으로 고정돼 있다 — spec은 복�
   const ctx = canvas.getContext();
   assert.deepEqual(Object.keys(ctx), [
     'view', 'tab', 'designTab', 'runPath', 'spec', 'draft', 'pending', 'presets',
-    'code', 'codeDraft', 'lastResult', 'diagnosis', 'optimize', 'runs', 'coverage',
+    'map', 'code', 'codeDraft', 'lastResult', 'diagnosis', 'optimize', 'runs', 'coverage',
     'lastChange', 'project',
   ]);
   assert.equal(ctx.view, 'design');
@@ -1285,7 +1363,9 @@ test('heatIntensity: 범위 밖 값을 0~1로 자른다', () => {
 test('모드 탭 5개와 설계 하위 탭 3개가 계약으로 고정돼 있다', () => {
   assert.deepEqual(backtestCanvas.MODE_TABS.map((t) => t[0]),
     ['design', 'result', 'history', 'optimize', 'deploy']);
-  assert.deepEqual(backtestCanvas.DESIGN_TABS.map((t) => t[0]), ['form', 'code', 'flow']);
+  // 지도가 첫 탭이다(2026-09-03) — 코드 탭의 이름 자체가 그것이 마지막 수단임을 말한다.
+  assert.deepEqual(backtestCanvas.DESIGN_TABS.map((t) => t[0]), ['flow', 'form', 'code']);
+  assert.deepEqual(backtestCanvas.DESIGN_TABS.map((t) => t[1]), ['지도', '폼', '코드 · 최후의 보루']);
 });
 
 test('배포 모드 3종의 기본은 승인이다 — 자동 주문이 기본이 아니다', () => {
@@ -1359,7 +1439,7 @@ function projectDeps(overrides) {
 // 폼을 채우고 → 코드 탭으로 옮겨 → 프로젝트를 고르고 → strategy.py를 연다.
 async function openProjectFile(made) {
   await fillForm(made.container);
-  await click(findByClass(made.container, 'backtest-subtab')[1]);
+  await click(findByClass(made.container, 'backtest-subtab')[2]);
   await flush();
   await click(findByClass(made.container, 'project-ide-project')[0]);
   await flush();
@@ -1369,7 +1449,7 @@ async function openProjectFile(made) {
 
 test('코드 탭: 프로젝트 배선이 없으면 지금까지의 단일 편집기 그대로다', async () => {
   const { container } = await mounted();
-  await click(findByClass(container, 'backtest-subtab')[1]);
+  await click(findByClass(container, 'backtest-subtab')[2]);
   assert.equal(findByClass(container, 'project-ide').length, 0);
   assert.equal(findByClass(container, 'backtest-code-textarea').length, 1);
   assert.equal(findByClass(container, 'backtest-code-save').length, 1);
@@ -1377,7 +1457,7 @@ test('코드 탭: 프로젝트 배선이 없으면 지금까지의 단일 편집
 
 test('코드 탭: 프로젝트를 고르기 전에는 IDE와 옛 편집기가 함께 선다', async () => {
   const made = await mounted(projectDeps());
-  await click(findByClass(made.container, 'backtest-subtab')[1]);
+  await click(findByClass(made.container, 'backtest-subtab')[2]);
   await flush();
   assert.equal(findByClass(made.container, 'project-ide').length, 1);
   assert.equal(findByClass(made.container, 'backtest-code-textarea').length, 1, '되돌아갈 자리가 남아야 한다');
@@ -1459,7 +1539,7 @@ function fileDeps(writes, overrides) {
 
 // 프로젝트만 고르고 파일은 열지 않는다 — 채팅이 새 파일을 내는 흔한 자리다.
 async function selectProjectOnly(made) {
-  await click(findByClass(made.container, 'backtest-subtab')[1]);
+  await click(findByClass(made.container, 'backtest-subtab')[2]);
   await flush();
   await click(findByClass(made.container, 'project-ide-project')[0]);
   await flush();
@@ -1728,6 +1808,7 @@ test('내 전략을 고르면 등록부의 PARAMS가 슬라이더로 서고, 지
   await click(findByClass(made.container, 'backtest-user-strategy-item')[0]);
   await flush();
   await flush();
+  await toForm(made.container);
   const sliders = findByClass(made.container, 'backtest-param-slider');
   assert.equal(sliders.length, 2, 'fast·thresh 둘 다 슬라이더가 된다');
   assert.equal(sliders[0].value, '20');
@@ -1749,6 +1830,7 @@ test('내 전략 실행: 파일 본문·project_id·슬라이더 값이 함께 �
   await click(findByClass(made.container, 'backtest-user-strategy-item')[0]);
   await flush();
   await flush();
+  await toForm(made.container);
   const slider = findByClass(made.container, 'backtest-param-slider')[0];
   slider.value = '35';
   await slider.dispatchEvent({ type: 'input' });
@@ -1800,7 +1882,7 @@ test('[내 전략으로 등록]: 지금 연 파일을 파일 이름(확장자 �
   await click(findByClass(made.container, 'backtest-register-strategy')[0]);
   await flush();
   assert.deepEqual(posted, [{ project_id: 'p1', path: 'strategy.py', name: 'strategy' }]);
-  await click(findByClass(made.container, 'backtest-subtab')[0]);
+  await click(findByClass(made.container, 'backtest-subtab')[1]);
   await flush();
   assert.equal(findByClass(made.container, 'backtest-user-strategy-item').length, 1);
 });
@@ -1825,7 +1907,7 @@ test('등록 버튼: 연 파일이 없는 채로 누르면 조용히 넘어가�
   const made = await mounted(userStrategyDeps({
     registerUserStrategy: async (body) => { posted.push(body); return { id: 'u1' }; },
   }));
-  await click(findByClass(made.container, 'backtest-subtab')[1]);
+  await click(findByClass(made.container, 'backtest-subtab')[2]);
   await flush();
   await click(findByClass(made.container, 'project-ide-project')[0]);
   await flush();
@@ -1945,63 +2027,246 @@ test('환경 잡이 실패하면 이유를 그 자리에 적고 폴링을 멈춘
   assert.equal(made.pending.length, before, '다음 tick을 예약하지 않는다');
 });
 
-// ── 흐름 지도 로딩(사용자 지시 2026-09-02 "로딩 표시") ──────────────────────
+// ── 흐름 지도(보드 11~14) ───────────────────────────────────────────────────
 
-test('흐름 탭: 지도를 만드는 동안 진행 표시가 뜨고, 오면 사라진다', async () => {
-  let resolveFlow;
+// 백엔드 mapmodel.build_map이 내는 모양 그대로의 견본.
+const MAP_PAYLOAD = {
+  version: 1,
+  source_kind: 'spec',
+  target: { symbol: '005930', period: 'day', adjusted: true, from: '20240101', to: '20240630' },
+  app_before: [{ key: 'load', title: '봉 데이터를 모읍니다', detail: '캐시에 있는 봉을 정리합니다' }],
+  app_after: [{ key: 'fill', title: '사고·파는 가격을 정합니다', detail: '다음 봉 시가로 체결합니다' }],
+  boundary_after_note: 'entry·exit 두 열만 받습니다',
+  boundary_after_lines: null,
+  nodes: [
+    {
+      id: 'params', numeral: '①', title: '조절할 값을 정합니다',
+      lines: [{ role: null, text: 'fast 20 (5–60, 1씩)' }], facts: [], status: 'ok',
+      note: null, first_line: null, last_line: null, editable: true,
+    },
+    {
+      id: 'conditions', numeral: '③', title: '사고·파는 순간을 찍습니다',
+      lines: [
+        { role: 'entry', text: 'ma_fast가 ma_slow를 위로 뚫는 날' },
+        { role: 'exit', text: 'ma_fast가 ma_slow를 아래로 뚫는 날' },
+      ],
+      facts: ['entry 3개 · exit 2개'], status: 'ok',
+      note: null, first_line: null, last_line: null, editable: true,
+    },
+  ],
+  free_code: [],
+  unknown: [],
+  error: null,
+  code: { lines: 23, matches_map: true },
+};
+
+
+test('지도 탭: 만드는 동안 진행 표시가 뜨고, 오면 사라진다', async () => {
+  let resolveMap;
   const made = await mounted({
-    flow: () => new Promise((resolve) => { resolveFlow = resolve; }),
+    map: () => new Promise((resolve) => { resolveMap = resolve; }),
   });
-  made.canvas.onChatAction({ kind: 'code_draft', source: 'def signals(df, p):\n    return df\n' });
-  await flush();
-  await click(findByClass(made.container, 'backtest-subtab')[2]);
+  await click(findByClass(made.container, 'backtest-subtab')[0]);
   await flush();
   assert.equal(findByClass(made.container, 'backtest-flow-loading').length, 1);
   assert.equal(findByClass(made.container, 'backtest-flow-spinner').length, 1);
   assert.match(textOf(made.container), /흐름 지도를 만드는 중…/);
 
-  resolveFlow({ nodes: [] });
+  resolveMap(MAP_PAYLOAD);
   await flush();
   assert.equal(findByClass(made.container, 'backtest-flow-loading').length, 0);
+  assert.equal(findByClass(made.container, 'backtest-map-head').length, 1);
 });
 
-test('흐름 탭: 지도를 못 만들면 그 자리에 적는다 — 화면 전체를 오류로 바꾸지 않는다', async () => {
+test('지도 탭: 못 만들면 그 자리에 적는다 — 화면 전체를 오류로 바꾸지 않는다', async () => {
   const made = await mounted({
-    flow: async () => { throw new Error('흐름 서비스가 없다'); },
+    map: async () => { throw new Error('지도 서비스가 없다'); },
   });
-  made.canvas.onChatAction({ kind: 'code_draft', source: 'def signals(df, p):\n    return df\n' });
-  await flush();
-  await click(findByClass(made.container, 'backtest-subtab')[2]);
+  await click(findByClass(made.container, 'backtest-subtab')[0]);
   await flush();
   assert.equal(findByClass(made.container, 'backtest-canvas-error').length, 0);
   assert.equal(findByClass(made.container, 'backtest-flow-loading').length, 0);
-  assert.match(textOf(made.container), /흐름 서비스가 없다/);
+  assert.match(textOf(made.container), /지도 서비스가 없다/);
 });
 
 test('채팅 navigate(design, flow)도 같은 진행 표시를 거친다', async () => {
-  let resolveFlow;
+  let resolveMap;
   const made = await mounted({
-    flow: () => new Promise((resolve) => { resolveFlow = resolve; }),
+    map: () => new Promise((resolve) => { resolveMap = resolve; }),
   });
-  made.canvas.onChatAction({ kind: 'code_draft', source: 'def signals(df, p):\n    return df\n' });
-  await flush();
   made.canvas.onChatAction({ kind: 'navigate', tab: 'design', designTab: 'flow' });
   await flush();
   assert.equal(findByClass(made.container, 'backtest-flow-loading').length, 1);
-  resolveFlow({ nodes: [] });
+  resolveMap(MAP_PAYLOAD);
   await flush();
   assert.equal(findByClass(made.container, 'backtest-flow-loading').length, 0);
 });
 
-test('흐름 탭: 프로젝트 파일을 열었으면 그 파일이 지도의 원문이다', async () => {
+test('지도 탭: 프로젝트 파일을 열었으면 그 파일이 지도의 원문이다', async () => {
   let seen = null;
   const made = await mounted(userStrategyDeps({
-    flow: async (body) => { seen = body; return { nodes: [] }; },
+    map: async (body) => { seen = body; return MAP_PAYLOAD; },
   }));
   await openProjectFile(made);
-  await click(findByClass(made.container, 'backtest-subtab')[2]);
+  await click(findByClass(made.container, 'backtest-subtab')[0]);
   await flush();
   assert.equal(seen.source, PROJECT_SOURCE);
+  assert.equal(seen.yaml, undefined);
+});
+
+test('지도 탭: 대상 한 줄과 ①~④ 칸, 코드 서랍이 함께 선다', async () => {
+  const made = await mounted({ map: async () => MAP_PAYLOAD });
+  await click(findByClass(made.container, 'backtest-subtab')[0]);
+  await flush();
+  assert.equal(findByClass(made.container, 'backtest-map-target-text').length, 1);
+  assert.equal(findByClass(made.container, 'backtest-flow-node').length, 4);
+  assert.equal(
+    findByClass(made.container, 'backtest-map-drawer-text')[0].textContent,
+    '이 지도 뒤의 코드 · 생성됨 · 23줄 · 지도 v1과 일치',
+  );
+});
+
+test('지도 탭: 방금 바뀐 칸에 알약이 붙는다 — 대화 한 번이 어디를 건드렸는지', async () => {
+  const made = await mounted({ map: async () => MAP_PAYLOAD });
+  made.canvas.onChatAction({ kind: 'spec_draft', patch: { params: { fast: 10 } } });
+  await flush();
+  const pills = findByClass(made.container, 'backtest-map-changed');
+  assert.equal(pills.length, 1);
+  assert.equal(pills[0].textContent, '방금 바뀜');
+});
+
+test('[코드 열기]: 폼 경로에서는 지도 뒤의 코드를 한 번 만들고 실행경로는 그대로 둔다', async () => {
+  const asked = [];
+  const made = await mounted({
+    map: async () => MAP_PAYLOAD,
+    codegen: async (body) => { asked.push(body); return { source: 'import athena_bt as bt\n', lines: 1 }; },
+  });
+  await click(findByClass(made.container, 'backtest-subtab')[0]);
+  await flush();
+  await click(findByClass(made.container, 'backtest-map-open-code')[0]);
+  await flush();
+  const ctx = made.canvas.getContext();
+  assert.equal(asked.length, 1);
+  assert.match(asked[0].yaml, /SMA 골든크로스/);
+  assert.equal(ctx.designTab, 'code');
+  assert.match(ctx.code.source, /import athena_bt as bt/);
+  // 코드를 열어봤다는 이유로 도는 것이 바뀌면 안 된다.
+  assert.equal(ctx.runPath, 'form');
+  assert.match(textOf(made.container), /여기서 고치면 지도와 어긋날 수 있습니다 — 웬만하면 대화로/);
+
+  // 같은 폼이면 다시 만들지 않는다.
+  await click(findByClass(made.container, 'backtest-subtab')[0]);
+  await flush();
+  await click(findByClass(made.container, 'backtest-map-open-code')[0]);
+  await flush();
+  assert.equal(asked.length, 1);
+});
+
+test('[지도로 되돌리기]: 코드 초안을 버리고 폼 경로로 돌아간다', async () => {
+  const made = await mounted({ map: async () => MAP_PAYLOAD });
+  await withCode(made);
+  await click(findByClass(made.container, 'backtest-subtab')[0]);
+  await flush();
+  const badge = findByClass(made.container, 'backtest-map-drawer-badge')[0];
+  assert.equal(badge.textContent, '코드가 지도보다 앞섬');
+  await click(findByClass(made.container, 'backtest-map-back')[0]);
+  await flush();
+  const ctx = made.canvas.getContext();
+  assert.equal(ctx.runPath, 'form');
+  assert.equal(ctx.code.source, '');
+  assert.equal(ctx.designTab, 'flow');
+});
+
+test('지도 탭: 실행이 멈추면 진단이 지도 아래에 붙고 제목이 그 칸 번호로 시작한다', async () => {
+  const stopped = Object.assign({}, MAP_PAYLOAD, {
+    nodes: [
+      Object.assign({}, MAP_PAYLOAD.nodes[0]),
+      Object.assign({}, MAP_PAYLOAD.nodes[1], { status: 'error', note: '멈췄습니다' }),
+    ],
+  });
+  const made = await mounted({
+    map: async () => stopped,
+    run: async () => ({ run_id: 'r1' }),
+    result: async () => ({ status: 'failed', error: 'KeyError: atr' }),
+    diagnose: async () => ({ title: 'df에 없는 열을 찾았습니다', why: 'atr가 없습니다', raw: 'KeyError' }),
+  });
+  await withCode(made);
+  await fillForm(made.container);
+  await click(findByClass(made.container, 'backtest-run-button')[0]);
+  await flush();
+  await flush();
+  assert.equal(made.canvas.getContext().view, 'diagnosis');
+  assert.equal(
+    findByClass(made.container, 'backtest-diag-title')[0].textContent,
+    '③ 사고·파는 순간을 찍습니다 — df에 없는 열을 찾았습니다',
+  );
+});
+
+test('지도 요청: 실행이 멈춰 있으면 그 사실을 함께 보낸다 — 칸에 붙일 수 있게', async () => {
+  const asked = [];
+  const made = await mounted({
+    map: async (body) => { asked.push(body); return MAP_PAYLOAD; },
+    run: async () => ({ run_id: 'r1' }),
+    result: async () => ({ status: 'failed', error: 'KeyError: atr' }),
+    diagnose: async () => ({ title: 'df에 없는 열을 찾았습니다', why: '없습니다', line: 7 }),
+  });
+  await withCode(made);
+  await fillForm(made.container);
+  await click(findByClass(made.container, 'backtest-run-button')[0]);
+  await flush();
+  await flush();
+  made.canvas.onChatAction({ kind: 'navigate', tab: 'design', designTab: 'flow' });
+  await flush();
+  const last = asked[asked.length - 1];
+  assert.deepEqual(last.error, { message: 'df에 없는 열을 찾았습니다', lineno: 7 });
+  assert.equal(last.run_id, 'r1');
+});
+
+test('오류 화면에는 [지도에서 보기]가 있다 — 무엇이 멈췄는지는 칸 위에서 읽힌다', async () => {
+  const made = await mounted({
+    map: async () => MAP_PAYLOAD,
+    run: async () => { throw new Error('이 실행 경로는 종목 1개만 지원한다'); },
+  });
+  await fillForm(made.container);
+  await click(findByClass(made.container, 'backtest-run-button')[0]);
+  await flush();
+  assert.equal(findByClass(made.container, 'backtest-canvas-error').length, 1);
+  await click(findByClass(made.container, 'backtest-error-map')[0]);
+  await flush();
+  const ctx = made.canvas.getContext();
+  assert.equal(ctx.view, 'design');
+  assert.equal(ctx.designTab, 'flow');
+});
+
+test('getContext().map: 마지막으로 받아온 칸만 싣는다 — 없으면 빈 목록이다', async () => {
+  const empty = await mounted();
+  assert.deepEqual(empty.canvas.getContext().map, { version: 1, nodes: [] });
+
+  const made = await mounted({ map: async () => MAP_PAYLOAD });
+  await flush();
+  const ctx = made.canvas.getContext();
+  assert.equal(ctx.map.version, 1);
+  assert.deepEqual(ctx.map.nodes, [
+    {
+      id: 'params', numeral: '①', title: '조절할 값을 정합니다',
+      lines: ['fast 20 (5–60, 1씩)'], status: 'ok', note: null,
+    },
+    {
+      id: 'conditions', numeral: '③', title: '사고·파는 순간을 찍습니다',
+      lines: ['진입: ma_fast가 ma_slow를 위로 뚫는 날', '청산: ma_fast가 ma_slow를 아래로 뚫는 날'],
+      status: 'ok', note: null,
+    },
+  ]);
+});
+
+test('되돌리기도 지도 한 판이다 — 버전은 뒤로 가지 않는다', async () => {
+  const made = await mounted({ map: async () => MAP_PAYLOAD });
+  const receipt = made.canvas.onChatAction({ kind: 'spec_draft', patch: VALID_PATCH });
+  assert.deepEqual(receipt.version, { from: 1, to: 2 });
+  assert.equal(made.canvas.undoChatAction(receipt.id).ok, true);
+  assert.equal(made.canvas.getContext().map.version, 3);
+  // 되돌린 변경의 '방금 바뀜'은 더 이상 서 있지 않다.
+  assert.equal(made.canvas.getContext().lastChange, null);
 });
 
 // ── 배포 열기(파일 실행 한 번이면 된다) ─────────────────────────────────────

@@ -723,3 +723,45 @@ test('buildGraphModePrefix: 편집은 제안까지이고 "고쳤다"고 말하�
   assert.ok(p.includes('그래프에 쓰는 도구가 없다'));
   assert.ok(p.includes('이렇게 고칠지 물었다'));
 });
+
+// ---- 흐름 지도(보드 11~14) — 대화가 다루는 것은 코드가 아니라 칸이다 ----
+
+const BT_MAP_CONTEXT = {
+  tab: 'design',
+  designTab: 'flow',
+  runPath: 'form',
+  map: {
+    version: 5,
+    nodes: [
+      {
+        id: 'params', numeral: '①', title: '조절할 값을 정합니다',
+        lines: ['fast 20 (5–60)', 'slow 60 (20–240)'], status: 'ok', note: null,
+      },
+      {
+        id: 'indicators', numeral: '②', title: '가격을 지표로 바꿉니다',
+        lines: [], status: 'error', note: '지표를 만드는 칸이 멈췄습니다',
+      },
+    ],
+  },
+};
+
+test('buildBacktestModePrefix: 지도 칸을 번호·제목·사람 말 한 줄로 싣는다', () => {
+  const p = buildBacktestModePrefix(BT_MAP_CONTEXT, '20260902');
+  assert.ok(p.includes('지도 v5 — 대화가 고치는 칸:'));
+  assert.ok(p.includes('- ① 조절할 값을 정합니다: fast 20 (5–60) · slow 60 (20–240)'));
+  // 상태가 ok가 아닌 칸은 그 사실을 함께 적는다 — 멈춘 자리에서 말문을 열게 하는 값이다.
+  assert.ok(p.includes('- ② 가격을 지표로 바꿉니다: 아직 없음 [error — 지표를 만드는 칸이 멈췄습니다]'));
+});
+
+test('buildBacktestModePrefix: 지도가 없으면 없다고만 적고 던지지 않는다', () => {
+  assert.ok(buildBacktestModePrefix(null, '20260902').includes('지도: 아직 만들어지지 않았다'));
+  assert.ok(buildBacktestModePrefix(BT_CONTEXT, '20260902').includes('지도: 아직 만들어지지 않았다'));
+});
+
+test('buildBacktestModePrefix: 칸 번호로 말하고 코드 줄 번호는 말하지 말라고 못박는다', () => {
+  const p = buildBacktestModePrefix(BT_MAP_CONTEXT, '20260902');
+  assert.ok(p.includes('칸 번호(①~④)와 사람 말을 쓰고, 코드 줄 번호·파이썬 문법·함수 이름을 말하지 않는다'));
+  assert.ok(p.includes('코드는 최후의 보루'));
+  assert.ok(p.includes('답 첫 줄에 어느 칸이 어떻게 바뀌는지 한 줄로 적는다'));
+  assert.ok(p.includes('실행이 칸에서 멈추면 그 칸 번호로 시작한다'));
+});

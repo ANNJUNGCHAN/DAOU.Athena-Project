@@ -113,6 +113,9 @@ const INVOKE_CHANNELS = new Set([
   'athena:backtest-validate',
   'athena:backtest-coverage',
   'athena:backtest-flow',
+  // 흐름 지도(2026-09-03) — 지도는 조회 전용이고 codegen은 저장하지 않는다.
+  'athena:backtest-map',
+  'athena:backtest-codegen',
   'athena:backtest-diagnose',
   'athena:backtest-optimize',
   'athena:backtest-optimize-plan',

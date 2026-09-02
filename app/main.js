@@ -1364,6 +1364,10 @@ const BACKTEST_EXTRA_CHANNELS = {
   'athena:backtest-validate': backtestBridge.validateBacktest,
   'athena:backtest-coverage': backtestBridge.fetchCoverage,
   'athena:backtest-flow': backtestBridge.fetchFlow,
+  // 흐름 지도(2026-09-03) — 설계의 첫 표면. 폼(yaml)이든 코드(source)든 같은 라우트다.
+  'athena:backtest-map': backtestBridge.fetchMap,
+  // 지도 뒤의 코드 생성 — 저장하지 않는다(소스만 돌려준다, §7.3).
+  'athena:backtest-codegen': backtestBridge.fetchCodegen,
   'athena:backtest-diagnose': backtestBridge.diagnoseBacktest,
   'athena:backtest-optimize': backtestBridge.optimizeBacktest,
   'athena:backtest-optimize-plan': backtestBridge.optimizePlan,
