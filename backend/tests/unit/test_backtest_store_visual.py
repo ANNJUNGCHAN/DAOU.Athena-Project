@@ -17,13 +17,7 @@ from typing import Any
 import pytest
 
 from athena_api.backtest import store as store_mod
-from athena_api.backtest.store import (
-    BacktestStore,
-    VersionBundle,
-    canonical_graph_json,
-    hash_bundle,
-    sha256_text,
-)
+from athena_api.backtest.store import BacktestStore, VersionBundle
 from athena_api.brain.db import SqliteOwner
 
 # 결정층(leaf 9): LLM도 난수도 타지 않는다 — 저장층 계약만 검증한다.
@@ -48,6 +42,9 @@ GRAPH: dict[str, Any] = {
 }
 SPEC_YAML = 'version: "1.0"\n'
 SOURCE = "entry = fast > slow\n"
+# 저장층은 hash를 계산하지 않는다 — 규칙의 주인은 `visual_schema`이고, 여기서는 그저
+# 문자열 한 칸으로 왕복하는지만 본다(그래서 값이 진짜 sha256일 필요가 없다).
+HASHES = {"graph_hash": "g" * 64, "spec_hash": "s" * 64, "artifact_hash": "a" * 64}
 SOURCE_MAP: dict[str, Any] = {
     "compiler_version": "v1",
     "entries": [
@@ -84,7 +81,7 @@ def bundle(*, receipt: dict[str, str] | None = None) -> VersionBundle:
         graph_json=json.dumps(GRAPH, ensure_ascii=False, sort_keys=True),
         spec_yaml=SPEC_YAML,
         source_map_json=json.dumps(SOURCE_MAP, ensure_ascii=False, sort_keys=True),
-        hashes_json=json.dumps(hash_bundle(GRAPH, SPEC_YAML, SOURCE), sort_keys=True),
+        hashes_json=json.dumps(HASHES, sort_keys=True),
         compiler_version="btgraph-1",
         apply_receipt_json=None if receipt is None else json.dumps(receipt, sort_keys=True),
     )
@@ -222,7 +219,7 @@ async def test_bundle_round_trips_with_the_version(store: BacktestStore) -> None
     assert json.loads(saved.bundle.graph_json) == GRAPH
     assert saved.bundle.spec_yaml == SPEC_YAML
     assert json.loads(saved.bundle.source_map_json) == SOURCE_MAP
-    assert json.loads(saved.bundle.hashes_json) == hash_bundle(GRAPH, SPEC_YAML, SOURCE)
+    assert json.loads(saved.bundle.hashes_json) == HASHES
     assert saved.bundle.compiler_version == "btgraph-1"
     assert saved.bundle.apply_receipt_json is not None
     assert json.loads(saved.bundle.apply_receipt_json) == receipt
@@ -274,30 +271,3 @@ async def test_a_half_written_bundle_is_read_as_no_bundle(
     await owner.run(corrupt)
     saved = await store.version("v2")
     assert saved is not None and saved.bundle is None
-
-
-# ── hash ────────────────────────────────────────────────────────────────────
-
-
-def test_graph_hash_ignores_ui_and_key_order() -> None:
-    """노드를 화면에서 옮겼다고 base 충돌이 나면 안 된다."""
-    moved = json.loads(json.dumps(GRAPH))
-    moved["nodes"][0]["ui"] = {"x": 999, "y": 999}
-    reordered = {key: moved[key] for key in reversed(list(moved))}
-    assert canonical_graph_json(reordered) == canonical_graph_json(GRAPH)
-    assert hash_bundle(reordered, SPEC_YAML, SOURCE) == hash_bundle(GRAPH, SPEC_YAML, SOURCE)
-
-
-def test_graph_hash_changes_when_a_param_changes() -> None:
-    changed = json.loads(json.dumps(GRAPH))
-    changed["nodes"][0]["params"]["period"] = 20
-    assert (
-        hash_bundle(changed, SPEC_YAML, SOURCE)["graph_hash"]
-        != hash_bundle(GRAPH, SPEC_YAML, SOURCE)["graph_hash"]
-    )
-
-
-def test_spec_and_artifact_hashes_are_plain_sha256_of_the_text() -> None:
-    hashes = hash_bundle(GRAPH, SPEC_YAML, SOURCE)
-    assert hashes["spec_hash"] == sha256_text(SPEC_YAML)
-    assert hashes["artifact_hash"] == sha256_text(SOURCE)

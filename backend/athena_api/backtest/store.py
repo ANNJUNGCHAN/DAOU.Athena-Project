@@ -26,12 +26,12 @@ TR당 1 req/s)을 다시 태우게 된다. 수명과 재생성 비용이 전혀 
 **왜 bundle을 같은 행에 같은 트랜잭션으로 쓰나.** graph/spec/생성 코드/source map/hash는
 따로 있으면 아무 의미가 없다 — 셋 중 하나만 남은 행은 "이 코드가 이 그래프에서 나왔다"를
 증명하지 못하는데도 증명하는 척한다. 부분 저장을 만들 바에는 아무것도 남기지 않는다.
+hash를 **계산**하는 것은 이 층의 일이 아니다: 규칙의 주인은 `visual_schema`(graph_hash ·
+spec_hash · source_hash) 하나이며, 저장층은 그 결과를 다른 열들처럼 그대로 왕복시킨다.
 """
 
 from __future__ import annotations
 
-import hashlib
-import json
 import sqlite3
 from collections.abc import Sequence
 from dataclasses import dataclass
@@ -217,50 +217,12 @@ def _migrate_version_bundle(connection: sqlite3.Connection) -> None:
             connection.execute(f"ALTER TABLE bt_strategy_version ADD COLUMN {name} {sql_type}")
 
 
-def canonical_graph_json(graph: Any) -> str:
-    """그래프를 hash 가능한 정본 문자열로 만든다 — `ui`는 빼고 키는 정렬한다.
-
-    `ui`(위치·접힘)는 실행 의미가 아니다. 노드를 화면에서 옮겼다는 이유로 graph_hash가
-    바뀌면 optimistic concurrency 검사가 "다른 사람이 고쳤다"고 거짓말한다.
-    """
-    return json.dumps(
-        _strip_ui(graph), sort_keys=True, separators=(",", ":"), ensure_ascii=False
-    )
-
-
-def _strip_ui(value: Any) -> Any:
-    if isinstance(value, dict):
-        return {k: _strip_ui(v) for k, v in value.items() if k != "ui"}
-    if isinstance(value, list):
-        return [_strip_ui(v) for v in value]
-    return value
-
-
-def sha256_text(text: str) -> str:
-    """저장층과 API 층이 같은 방식으로 hash를 낸다 — 인코딩이 갈라지면 같은 코드가 다른
-    hash를 갖는다(그러면 base 충돌 검사가 매번 거짓 양성이다)."""
-    return hashlib.sha256(text.encode("utf-8")).hexdigest()
-
-
 def _active_version_id(connection: sqlite3.Connection, strategy_id: str) -> str | None:
     row = connection.execute(
         "SELECT id FROM bt_strategy_version WHERE strategy_id = ? AND active = 1",
         (strategy_id,),
     ).fetchone()
     return None if row is None else str(row["id"])
-
-
-def hash_bundle(graph: Any, spec_yaml: str, source: str) -> dict[str, str]:
-    """bundle 세 조각의 hash를 한자리에서 낸다 — 클라이언트가 보낸 hash를 믿지 않는다.
-
-    저장층과 API 층이 각자 다른 방식으로 hash를 내면 "같은 그래프인데 hash가 다르다"가
-    조용히 생긴다. 재유도(re-derive)와 검증이 같은 함수를 쓰게 해서 그 갈래를 없앤다.
-    """
-    return {
-        "graph_hash": sha256_text(canonical_graph_json(graph)),
-        "spec_hash": sha256_text(spec_yaml),
-        "artifact_hash": sha256_text(source),
-    }
 
 
 @dataclass(frozen=True, slots=True)
