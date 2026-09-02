@@ -1975,6 +1975,9 @@ function restoreConversation(conv, switched, messages, snapshot) {
   } else {
     scrollHistoryToBottom(true);
   }
+  // 모드 화면의 상태(그래프 시점·백테스트 폼 …)는 그 모드가 등록한 핸들러가 받는다 —
+  // 여기서는 kind로 넘길 뿐이다(lib/session-workspace.js).
+  if (ws && window.AthenaSessionWorkspace) window.AthenaSessionWorkspace.restore(ws);
 }
 
 // sidebar.js가 부르는 다리(shell.js 버스). 돌아갔으면 true.

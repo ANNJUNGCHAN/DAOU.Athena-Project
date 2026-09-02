@@ -45,6 +45,8 @@ async function main() {
         createdAt: '2026-09-01T00:00:00.000Z', updatedAt: '2026-09-01T00:00:00.000Z', resumeSessionId: null },
       { id: 'conv-bt', title: '추세추종 v3', projectId: 'default', mode: 'backtest',
         createdAt: '2026-09-02T00:00:00.000Z', updatedAt: '2026-09-02T00:00:00.000Z', resumeSessionId: 'claude-sess-bt-42' },
+      { id: 'conv-graph', title: '성향 지도', projectId: 'default', mode: 'graph',
+        createdAt: '2026-09-02T01:00:00.000Z', updatedAt: '2026-09-02T01:00:00.000Z', resumeSessionId: null },
     ],
   }, null, 2), 'utf8');
 
@@ -95,11 +97,12 @@ async function main() {
   // 2) 사이드바 모드 머리에 대화 수가 달린다
   const counts = await wc.executeJavaScript(`(() => {
     const read = (id) => { const el = document.getElementById(id); return el ? { hidden: el.hidden, text: el.textContent } : null; };
-    return { summary: read('modeNavSummaryCount'), backtest: read('modeNavBacktestCount'), graph: read('modeNavGraphCount') };
+    return { summary: read('modeNavSummaryCount'), backtest: read('modeNavBacktestCount'), graph: read('modeNavGraphCount'), agent: read('modeNavAgentCount') };
   })()`);
-  check('사이드바: 대화 1 · 백테스트 1 · 그래프는 숨김', counts.summary && counts.summary.text === '1' && !counts.summary.hidden
+  check('사이드바: 대화 1 · 백테스트 1 · 그래프 1 · 에이전트는 숨김', counts.summary && counts.summary.text === '1' && !counts.summary.hidden
     && counts.backtest && counts.backtest.text === '1' && !counts.backtest.hidden
-    && counts.graph && counts.graph.hidden, counts);
+    && counts.graph && counts.graph.text === '1' && !counts.graph.hidden
+    && counts.agent && counts.agent.hidden, counts);
 
   // 3) 새 대화가 mode를 살린다
   const begun = await wc.executeJavaScript(`window.athena.invoke('athena:conversations-new', { mode: 'graph' })`);
@@ -256,6 +259,30 @@ async function main() {
     const finished = await readSidebarRun();
     check('완료: 스피너가 회색 점이 되고 모드 옆 스피너·머리 알약이 사라진다',
       /sidebar-item-run-done/.test(finished.bt || '') && finished.navRunning === false && finished.pill === null, finished);
+
+    // 10) 그래프 워크스페이스(42번 보드) — 서브뷰(지도)가 세션에 남고, 돌아오면 그대로 지도다.
+    //     브레인 백엔드가 없어 지도 그리기는 실패하지만 서브뷰 상태 자체는 남아야 한다.
+    const graphOpened = await wc.executeJavaScript(`(async () => {
+      const ok = await window.AthenaShell.openConversation({ id: 'conv-graph', title: '성향 지도' });
+      const mode = window.AthenaCanvasMode;
+      try { await mode.setSurface('map'); } catch { /* 브레인 없음 — 서브뷰 전환은 됐다 */ }
+      return { ok, view: mode.state.view, surface: mode.state.surface, registered: window.AthenaSessionWorkspace.has('graph') };
+    })()`);
+    check('그래프: 대화를 열면 graph 화면, 지도 서브뷰로 바꿀 수 있고 핸들러가 등록돼 있다',
+      graphOpened.ok === true && graphOpened.view === 'graph' && graphOpened.surface === 'map' && graphOpened.registered === true, graphOpened);
+    await new Promise((resolve) => setTimeout(resolve, 1500)); // 1초 폴링 + 300ms 디바운스
+    bridge.flush('conv-graph');
+    const graphStored = bridge.load('conv-graph');
+    check('그래프: 서브뷰가 세션 워크스페이스에 kind=graph로 적힌다',
+      graphStored && graphStored.workspace && graphStored.workspace.kind === 'graph'
+      && graphStored.workspace.graph && graphStored.workspace.graph.surface === 'map', graphStored && graphStored.workspace);
+    await wc.executeJavaScript(`window.AthenaShell.openConversation({ id: 'conv-chat', title: '삼성전자 수급 확인' })`);
+    const graphBack = await wc.executeJavaScript(`(async () => {
+      await window.AthenaShell.openConversation({ id: 'conv-graph', title: '성향 지도' });
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      return { view: window.AthenaCanvasMode.state.view, surface: window.AthenaCanvasMode.state.surface };
+    })()`);
+    check('그래프: 다른 대화에 갔다 돌아오면 지도 서브뷰가 그대로다', graphBack.view === 'graph' && graphBack.surface === 'map', graphBack);
   }
 
   const failed = checks.filter((c) => !c.ok);
