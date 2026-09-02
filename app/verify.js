@@ -3999,6 +3999,18 @@ app.whenReady().then(async () => {
         // 상시 보여야 하는 진입로다(보드 44) — 숨어 있으면 사람이 못 닿는다.
         return { wired: false, reason: 'hidden-though-always-visible' };
       }
+      // 라이브 지도(2026-09-02) — 정적 SVG를 지운 뒤로 "그려졌는가"는 프레임 안에
+      // <canvas>가 있고 크기가 잡혔는가로 본다. 옛 GraphRender.describeRendered 자리다.
+      const describeLive = () => {
+        const frame = container.querySelector('.graph-live-map');
+        const canvas = frame ? frame.querySelector('canvas') : null;
+        const rect = frame ? frame.getBoundingClientRect() : null;
+        return {
+          rendered: Boolean(canvas && rect && rect.width > 0 && rect.height > 0),
+          frame: rect ? { w: Math.round(rect.width), h: Math.round(rect.height) } : null,
+          staticSvg: container.querySelectorAll('svg.graph-canvas').length,
+        };
+      };
       const status = await window.athena.invoke('athena:brain-status').catch(() => null);
       const brainReady = Boolean(status && status.ok && status.ready);
       nav.click();
@@ -4010,7 +4022,7 @@ app.whenReady().then(async () => {
         // surface와 무관하게 여전히 즉시 실행되므로(graphBody에 내용은 쓰인다),
         // 그 내용이 실제로 준비됐는지는 describeRendered로 확인한다.
         if (document.getElementById('mosaic').hidden) {
-          if (!brainReady || window.AthenaLib.GraphRender.describeRendered(container).rendered) break;
+          if (!brainReady || describeLive().rendered) break;
         }
         await new Promise((r) => setTimeout(r, 50));
       }
@@ -4055,12 +4067,12 @@ app.whenReady().then(async () => {
       if (!brainReady) {
         return { wired: true, brainReady, clickOpened, summaryHidden, summaryTableVisible, surfaceToggle, containerText };
       }
-      const byClick = window.AthenaLib.GraphRender.describeRendered(container);
-      // 좌표 계약은 배치 결과와 대조해야 알 수 있고, 클릭 경로는 그 값을 돌려주지
-      // 않는다. 요약으로 접었다 다시 펴서 같은 화면의 배치를 받아 온다.
+      const byClick = describeLive();
+      // 집계 계약은 정리 결과와 대조해야 알 수 있고, 클릭 경로는 그 값을 돌려주지
+      // 않는다. 요약으로 접었다 다시 펴서 같은 화면의 집계를 받아 온다.
       await window.AthenaCanvasMode.toggle();
       const placed = await window.AthenaCanvasMode.toggle();
-      const drawn = window.AthenaLib.GraphRender.describeRendered(container);
+      const drawn = describeLive();
       return {
         wired: true,
         brainReady,
@@ -4071,10 +4083,8 @@ app.whenReady().then(async () => {
         surfaceToggle,
         placedNodes: placed ? placed.nodes.length : 0,
         placedEdges: placed ? placed.edges.length : 0,
-        // 1단계(기본, STAGE_CLUSTERS)는 개별 엔티티가 아니라 군집 버블을 그린다
-        // (79fbedd) — 그려진 것과 대조할 배치 값은 clusters/clusterEdges다.
         placedClusters: placed && Array.isArray(placed.clusters) ? placed.clusters.length : 0,
-        placedClusterEdges: placed && Array.isArray(placed.clusterEdges) ? placed.clusterEdges.length : 0,
+
         drawn,
       };
     })()`);
@@ -4102,15 +4112,22 @@ app.whenReady().then(async () => {
       // 노드가 0개면 '빈 캔버스'와 '고장'을 구분할 수 없다. 브레인이 준비됐으면
       // 여기 왔을 때 그려진 것이 있어야 한다.
       assertOk('graph-mode: 캔버스가 비어 있지 않다', graph.drawn.rendered === true);
-      // 1단계는 군집 버블 집계다(79fbedd) — 그려진 노드/엣지는 개별 엔티티(placedNodes)가
-      // 아니라 군집 버블(placedClusters)·군집간 선(placedClusterEdges)과 일치해야 한다.
+      // 라이브 지도(2026-09-02) — 그려진 것은 <canvas> 한 장이라 노드를 DOM으로 셀 수
+      // 없다. 대신 두 가지를 잰다: 프레임이 실제 크기를 갖는가(0×0이면 캔버스가 있어도
+      // 아무것도 안 보인다), 그리고 폐기한 정적 SVG가 되살아나지 않았는가.
+      // 후자는 실제로 재발했던 결함이다 — 노드를 한 번 누르면 redrawFromCache()가
+      // 정적 렌더러를 다시 불러 지도가 옛 군집 버블 그림으로 되돌아갔다.
       assertOk(
-        'graph-mode: 그려진 버블 수가 배치 군집 수와 일치한다',
-        graph.drawn.nodes === graph.placedClusters,
+        'graph-mode: 지도 프레임이 실제 크기를 갖는다',
+        Boolean(graph.drawn.frame && graph.drawn.frame.w > 0 && graph.drawn.frame.h > 0),
       );
       assertOk(
-        'graph-mode: 그려진 군집간 선 수가 배치와 일치한다',
-        graph.drawn.edges === graph.placedClusterEdges,
+        'graph-mode: 폐기한 정적 SVG 렌더러가 되살아나지 않았다',
+        graph.drawn.staticSvg === 0,
+      );
+      assertOk(
+        'graph-mode: 집계에 그릴 노드가 있다',
+        graph.placedNodes > 0,
       );
       report.graphMode.shot = await shot(shellWin, '90-graph-mode.png');
       // 지도 서브뷰도 증거로 남긴다(버블 AI 추정 라벨·숨은연관 핑크 점선은 지도

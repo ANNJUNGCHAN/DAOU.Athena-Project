@@ -81,6 +81,28 @@ const PHYSICS = {
   minVelocity: 0.4,
 };
 
+// 원 지름 = 연결 수(정적 렌더러 nodeRadiusPx와 같은 축). 캡션이 안에 들어가야 하므로
+// 최솟값이 옛 dot 시절보다 크다 — 한글 두 줄이 들어갈 최소치가 44px 실측이다.
+const NODE_DIAMETER_MIN_PX = 44;
+const NODE_DIAMETER_MAX_PX = 76;
+const NODE_FONT_PX = 11;
+
+function nodeDiameterPx(degree, maxDegree) {
+  const ratio = Math.sqrt(Math.max(0, Number(degree) || 0) / Math.max(1, maxDegree));
+  return Math.round(NODE_DIAMETER_MIN_PX + (NODE_DIAMETER_MAX_PX - NODE_DIAMETER_MIN_PX) * ratio);
+}
+
+// 지름 안에 들어갈 만큼만 남기고 자른다. 원은 위아래로 갈수록 좁아지므로 지름 전체를
+// 글자 폭으로 쓸 수 없다 — 실효 폭을 지름의 0.72로 보고 3줄까지 잡는다(실측).
+// 한글은 대략 글꼴 크기만큼의 폭을 쓴다.
+function truncateForCircle(name, diameter) {
+  const text = String(name || '');
+  const perLine = Math.max(3, Math.floor((diameter * 0.72) / NODE_FONT_PX));
+  const budget = perLine * 3;
+  if (text.length <= budget) return text;
+  return `${text.slice(0, Math.max(1, budget - 1))}…`;
+}
+
 function clusterColor(cluster) {
   const n = Number(cluster) || 0;
   return PALETTE[((n % PALETTE.length) + PALETTE.length) % PALETTE.length];
@@ -110,31 +132,63 @@ function createLiveMap(deps) {
   let host = null;
   let wheelHandler = null; // Ctrl+휠 가로채기 — destroy에서 반드시 떼야 누수가 없다.
 
+  // 지금 **보이는 영역**을 그래프 좌표로 바꾼다.
+  //
+  // 앞서 걷어낸 월드 좌표 벽과는 다른 물건이다: 그건 확대하면 같이 커지는 고정
+  // 울타리였고, 이건 화면이 곧 범위다 — 축소하면 멀리, 확대하면 가까이까지만 던질
+  // 수 있다. "노드를 던질 수 있는 범위가 딱 화면까지"라는 요구가 이 뜻이다.
+  function visibleGraphBounds() {
+    if (!network || !host) return null;
+    const topLeft = network.DOMtoCanvas({ x: 0, y: 0 });
+    const bottomRight = network.DOMtoCanvas({ x: host.clientWidth, y: host.clientHeight });
+    return { left: topLeft.x, top: topLeft.y, right: bottomRight.x, bottom: bottomRight.y };
+  }
+
+  // 끌고 있는 노드만 화면 안으로 되민다. 물리로 움직이는 노드는 안 건드린다 —
+  // 배치는 시뮬레이션이 정하는 것이고, 거기 손대면 노드가 테두리에 늘어붙는다(실측).
+  function clampDragged(ids) {
+    const bounds = visibleGraphBounds();
+    const body = network && network.body;
+    if (!bounds || !body || !body.nodes) return;
+    for (const id of ids) {
+      const node = body.nodes[id];
+      if (!node || typeof node.x !== 'number') continue;
+      const radius = (node.shape && node.shape.radius) || 20;
+      node.x = Math.min(Math.max(node.x, bounds.left + radius), bounds.right - radius);
+      node.y = Math.min(Math.max(node.y, bounds.top + radius), bounds.bottom - radius);
+    }
+  }
+
   function available() {
     return Boolean(container && vis && vis.Network && vis.DataSet);
   }
 
   function buildNodes(payload, theme) {
+    const maxDegree = Math.max(1, ...payload.nodes.map((n) => Number(n.degree) || 0));
     return payload.nodes.map((node) => {
       const color = clusterColor(node.cluster);
+      const diameter = nodeDiameterPx(node.degree, maxDegree);
       return {
         id: node.entity_id,
-        label: node.name,
-        // 원 크기 = 연결 수. 정적 렌더러의 인코딩(nodeRadiusPx)과 같은 축이라
-        // 두 뷰를 오갈 때 "큰 원은 연결이 많다"는 읽기가 유지된다.
-        shape: 'dot',
-        value: node.degree,
+        // 캡션이 원 **안**에 든다(Neo4j와 같은 형태). shape:'dot'은 이름을 원 밖에
+        // 두는데, 노드가 촘촘해지면 이름과 선이 뒤엉켜 무엇의 이름인지 흐려진다.
+        //
+        // 'circle'은 원래 글자 길이에 맞춰 원이 커진다 — 그러면 "원 크기 = 연결 수"
+        // 인코딩이 이름 길이에 잡아먹힌다. widthConstraint로 지름을 못박고, 대신
+        // 이름을 그 지름에 맞게 잘라 넣는다(Neo4j도 "미국 나스닥 ADR…"처럼 자른다).
+        label: truncateForCircle(node.name, diameter),
+        shape: 'circle',
+        widthConstraint: { minimum: diameter, maximum: diameter },
         color: {
           background: color,
           border: color,
-          highlight: { background: color, border: '#ffffff' },
-          hover: { background: color, border: '#ffffff' },
+          highlight: { background: color, border: theme.text },
+          hover: { background: color, border: theme.text },
         },
         borderWidth: 2,
         borderWidthSelected: 4,
-        // 흰 유리 위 잉크 + 흰 후광 — 연결선 위에 라벨이 겹쳐도 읽힌다
-        // (정적 뷰가 .graph-cluster-chip-bg 흰 칩으로 푸는 것과 같은 문제다).
-        font: { color: theme.text, size: 12, strokeWidth: 3, strokeColor: theme.halo },
+        // 원 안이라 후광이 필요 없다 — 파스텔 군집색 위의 잉크로 충분히 읽힌다.
+        font: { color: theme.text, size: 11, multi: false },
         title: `${node.name} · 연결 ${node.degree}개`,
       };
     });
@@ -192,7 +246,8 @@ function createLiveMap(deps) {
     nodesDs = new vis.DataSet(buildNodes(payload, theme));
     edgesDs = new vis.DataSet(buildEdges(payload, theme));
     network = new vis.Network(host, { nodes: nodesDs, edges: edgesDs }, {
-      nodes: { scaling: { min: 12, max: 40 } },
+      // 크기는 노드마다 widthConstraint로 못박는다(buildNodes) — scaling은 shape:'dot'의
+      // value 축에만 듣고 'circle'에는 안 들어서, 남겨두면 안 듣는 설정이 된다.
       edges: { smooth: { type: 'dynamic' }, selectionWidth: 2 },
       physics: PHYSICS,
       interaction: {
@@ -237,16 +292,40 @@ function createLiveMap(deps) {
     // 축의 좌표를 갱신하지 않아, 화면 끝으로 밀어둔 노드를 도로 끌어올 방법이
     // 사라진다(실측·재현 검증). 문서가 physics를 이렇게 정의한다: "not part of the
     // physics simulation. It will not move except for from manual dragging."
-    network.on('dragEnd', (params) => {
-      if (!network || !params.nodes || !params.nodes.length) return;
-      nodesDs.update(params.nodes.map((id) => ({ id, physics: false })));
+    // 끄는 **동안** 매 프레임 되민다 — 놓을 때만 잡으면 화면 밖으로 끌려 나갔다가
+    // 튕겨 돌아오는 것처럼 보인다. 여기서 막으면 커서가 벽을 미는 느낌이 된다.
+    network.on('dragging', (params) => {
+      if (!params.nodes || !params.nodes.length) return;
+      clampDragged(params.nodes);
     });
 
-    // 노드 선택은 컨트롤러의 공통 패널로 넘긴다 — 정적 뷰와 같은 패널이 열려야
-    // "어느 뷰로 보든 같은 것을 보고 있다"가 유지된다.
+    network.on('dragEnd', (params) => {
+      if (!network || !params.nodes || !params.nodes.length) return;
+      clampDragged(params.nodes);
+      nodesDs.update(params.nodes.map((id) => ({ id, physics: false })));
+      network.redraw();
+    });
+
+    // 노드 선택은 컨트롤러의 공통 패널로 넘긴다.
     network.on('click', (params) => {
       if (typeof onSelect !== 'function') return;
       onSelect(params.nodes && params.nodes.length ? String(params.nodes[0]) : null);
+    });
+
+    // 더블클릭 = 그 노드로 카메라를 옮긴다. vis 자체의 doubleClick은 이벤트만 쏘고
+    // 아무 동작도 안 해서(vis-network.js onDoubleTap 실측), 안 붙이면 더블클릭이
+    // 그냥 클릭 두 번이다. 빈 곳을 두 번 누르면 전체 맞춤으로 되돌린다 — 확대해
+    // 들어갔다가 나오는 길이 화면에 하나는 있어야 한다.
+    network.on('doubleClick', (params) => {
+      if (!network) return;
+      if (params.nodes && params.nodes.length) {
+        network.focus(params.nodes[0], {
+          scale: Math.max(1.2, network.getScale()),
+          animation: { duration: 400, easingFunction: 'easeInOutQuad' },
+        });
+        return;
+      }
+      network.fit({ animation: { duration: 400 } });
     });
     return true;
   }
@@ -271,7 +350,9 @@ function createLiveMap(deps) {
   return { available, render, selectEntity, destroy };
 }
 
-const __exports = { createLiveMap, signatureOf, clusterColor, CONFIDENCE, PHYSICS };
+const __exports = {
+  createLiveMap, signatureOf, clusterColor, nodeDiameterPx, truncateForCircle, CONFIDENCE, PHYSICS,
+};
 
 // UMD 각주(2026-08-18 렌더러 격리) — column-fold.js와 같은 패턴.
 if (typeof module !== 'undefined' && module.exports) {

@@ -58,6 +58,25 @@ function formatEventDate(iso) {
 // 확인 시 후속). 어휘는 백엔드 RelationKind(ontology.py:78-95) 전체를 덮고,
 // 미등록 relation은 원문 그대로 폴백한다(summary-table.js 기존 관례와 동일 —
 // 지어낸 한글을 강제하지 않음).
+// ── 정적 렌더러가 남기고 간 순수 함수들(2026-09-02) ─────────────────────────
+// render.js / cluster-layout.js를 지우면서, 그리기와 무관한데 **공통 패널이 계속
+// 쓰는** 것만 여기로 옮겼다. 좌표 계산은 통째로 버렸다 — 라이브 지도가 자기 좌표를
+// 정하므로 배치 결과가 더는 필요 없고, 남은 것은 "무엇이 몇 개인가"뿐이다.
+
+// 군집 제목 사다리(옛 render.clusterTitle). 확정 이름 → AI 추정 → 대표 멤버 →
+// 없음. 추정인지 아닌지를 함께 돌려주는 것이 요점이다(화면이 "· 추정"을 붙인다).
+function clusterTitle(cluster) {
+  if (cluster.name) return { text: cluster.name, estimated: false };
+  if (cluster.aiLabel) return { text: cluster.aiLabel, estimated: true };
+  if (cluster.representative) return { text: cluster.representative, estimated: true };
+  return { text: '이름 없는 군집', estimated: false };
+}
+
+function entityPairKey(a, b) {
+  const [x, y] = String(a) < String(b) ? [a, b] : [b, a];
+  return `${x} ${y}`;
+}
+
 const RELATION_LABELS = {
   relates_to: '연관',
   interested_in: '관심',
@@ -208,8 +227,7 @@ function relativeScoreText(score) {
 function createGraphModeController(deps) {
   const {
     store,          // graph-mode-store
-    layout,         // cluster-layout
-    render,         // render
+    grouping,       // cluster-grouping — 군집 집계(좌표 없음). 요약 뷰와 같은 구현을 쓴다.
     prefs,          // graph-mode-prefs (선택)
     elements,       // { summary, graph(가시성 전용 — applyVisibility()만 소유),
                     //   graphBody(렌더·클릭위임·크기측정 전용), summaryTable(선택 —
@@ -419,7 +437,7 @@ function createGraphModeController(deps) {
       ? lastPlaced.clusters.find((c) => c.cluster === cluster)
       : null;
     if (!meta) return null;
-    const title = render.clusterTitle(meta);
+    const title = clusterTitle(meta);
     return title.estimated ? `${title.text}(추정)` : title.text;
   }
 
@@ -630,20 +648,6 @@ function createGraphModeController(deps) {
     };
   }
 
-  // 렌더된 노드마다 클릭을 건다. 다시 그릴 때마다 SVG가 통째로 교체되므로
-  // (render.js 주석 참고) 리스너도 매번 새로 건다 — 개별 바인딩을 쓰는 이유는
-  // 이 파일이 최소 DOM 스텁(fake-dom.js)에서도 똑같이 돌아야 해서다(버블링 없음).
-  function wireNodeClicks() {
-    if (!elements.graphBody || typeof elements.graphBody.querySelectorAll !== 'function') return;
-    const nodeEls = elements.graphBody.querySelectorAll('.graph-node');
-    for (const nodeEl of nodeEls) {
-      if (typeof nodeEl.addEventListener !== 'function') continue;
-      nodeEl.addEventListener('click', () => {
-        handleNodeClick(nodeEl.getAttribute('data-entity-id'), nodeEl.getAttribute('data-cluster'));
-      });
-    }
-  }
-
   // 필터가 화면을 통째로 비웠을 때의 안내(보드 07 정직성 상태). 빈 캔버스는
   // "성향이 없다"로 읽히는데, 실제로는 방금 건 조건이 너무 빡빡한 것이다 —
   // 어느 조건이 얼마나 걸려 있는지까지 적어 되돌릴 길을 준다. 실측: "연결 3개
@@ -668,98 +672,21 @@ function createGraphModeController(deps) {
     elements.graphBody.appendChild(note);
   }
 
-  // 1단계(clusters)는 군집 버블 집계, 2단계(expanded)는 기존 개별 노드 렌더
-  // (스텝10) — draw()/redrawFromCache() 둘 다 이 분기를 타므로 한 곳에 모아
-  // 둘이 어긋나지 않게 한다.
-  function renderStage(placed) {
-    const surprisingConnections = topSurprising(
-      typeof getSurprisingConnections === 'function' ? getSurprisingConnections() : []
-    );
-    if (!Array.isArray(placed.nodes) || placed.nodes.length === 0) {
-      renderFilteredEmpty();
-      return;
-    }
-    if (state.stage === store.STAGE_CLUSTERS) {
-      // 숨은 연관 군집 쌍(스텝11이 캡able로 만들어 둔 것을 스텝14가 배선) —
-      // layoutClusterMap()이 자동 계산해 둔 clusterEdges(항상 isSurprising:false)를
-      // 실데이터로 다시 계산해 덮어쓴다. surprising-connections는 이미
-      // source_cluster/target_cluster를 주므로(SurprisingConnectionOut) 변환
-      // 없이 그대로 aggregateClusterEdges에 넘긴다.
-      placed.clusterEdges = layout.aggregateClusterEdges(placed, surprisingConnections);
-      render.renderClusterBubbles(elements.graphBody, placed, {});
-      return;
-    }
-    // 2단계는 보이는 것만으로 **다시 배치한다**(보드 04). 1단계 좌표를 그대로
-    // 걸러 쓰면 군집 하나가 원래 자리에서 반지름 68px 링에 뭉친 채 남아 이름표가
-    // 서로를 덮고, 캔버스의 나머지 90%가 빈 채로 남는다(실측). 같은 결정적 배치
-    // 함수를 보이는 부분집합에 다시 적용하면 그 부분집합이 캔버스를 채운다.
-    const visible = store.visibleNodes(state, placed);
-    const visibleIds = new Set(visible.map((n) => n.entity_id));
-    const subPayload = {
-      revision: lastPayload ? lastPayload.revision : 0,
-      nodes: (lastPayload && Array.isArray(lastPayload.nodes) ? lastPayload.nodes : [])
-        .filter((n) => visibleIds.has(String(n.entity_id))),
-      edges: (lastPayload && Array.isArray(lastPayload.edges) ? lastPayload.edges : [])
-        .filter((pair) => Array.isArray(pair) && visibleIds.has(String(pair[0])) && visibleIds.has(String(pair[1]))),
-      edge_details: lastPayload && Array.isArray(lastPayload.edge_details) ? lastPayload.edge_details : [],
-      cluster_cohesion: lastPayload ? lastPayload.cluster_cohesion : undefined,
-      cluster_representative_labels: lastPayload ? lastPayload.cluster_representative_labels : undefined,
-      cluster_ai_labels: lastPayload ? lastPayload.cluster_ai_labels : undefined,
-    };
-    const expandedPlaced = subPayload.nodes.length > 0
-      ? layout.layoutClusterMap(subPayload, {
-        width: elements.graphBody ? elements.graphBody.clientWidth : 0,
-        height: elements.graphBody ? elements.graphBody.clientHeight : 0,
-        // 펼친 군집을 한가운데 놓고 이웃은 그 바깥에 두른다(보드 04).
-        focusCluster: state.expandedCluster,
-      })
-      : { nodes: [], edges: [], clusters: [] };
-    const nodes = expandedPlaced.nodes;
-    const edges = expandedPlaced.edges;
-    const settings = prefs ? prefs.readPrefs() : null;
-    // 이름 있음 임계 규칙(§0 r5, §15 비차단 2번 — "전체 군집 수"는 그래프
-    // 전체 기준)과 지금 펼친 군집의 이름(스텝12가 캡able로 만들어 둔 것을
-    // 스텝14가 배선) — 이름 파이프라인이 아직 없어(§0 발견1) namedCount는
-    // 실제로 항상 0이지만, 로직은 실데이터가 와도 맞게 짠다. theme-clusters.js의
-    // shouldWarnUnnamed()와 같은 규칙이지만 이 판정 하나 때문에 새
-    // window.AthenaLib 의존을 걸지 않고 인라인으로 둔다(이 파일은 이미 store
-    // 주입 패턴이라 전역 참조를 안 만드는 게 원래 계약).
-    const clusters = Array.isArray(placed.clusters) ? placed.clusters : [];
-    const namedCount = clusters.filter((c) => c.name).length;
-    const unnamedClusterWarnEligible = namedCount > 0 && namedCount < clusters.length;
-    const unnamedClusters = clusters.filter((c) => !c.name).map((c) => c.cluster);
-    const surprisingEntityPairs = new Set(
-      surprisingConnections
-        .filter((c) => c && c.source_entity_id != null && c.target_entity_id != null)
-        .map((c) => render.entityPairKey(c.source_entity_id, c.target_entity_id))
-    );
-    render.renderClusterMap(elements.graphBody, { nodes, edges }, {
-      showLabels: prefs ? prefs.shouldShowLabels(settings, nodes.length) : true,
-      highlightCrossings: settings ? settings.highlightCrossings : true,
-      selectedEntityId: state.selectedEntityId,
-      // 노드 채움 인코딩의 근거(render.js classifyNodeFill) — 성향 신호 표와
-      // 같은 confidence/tier를 쓴다. 표가 이미 받아 둔 것을 조인만 한다.
-      nodeConfidence: new Map(
-        (typeof getProfileSummaryEntries === 'function' ? getProfileSummaryEntries() || [] : [])
-          .filter((e) => e && e.entity_id)
-          .map((e) => [String(e.entity_id), { confidence: e.confidence, tier: e.tier }])
-      ),
-      // 보드 04 — 타원 이름표가 군집 제목·전체 크기를 쓴다. 옛 판은 펼친 군집의
-      // name 한 줄만 넘겼는데, 이제 이웃 군집 타원도 그리므로 전체 목록이 필요하다.
-      clusters,
-      expandedCluster: state.expandedCluster,
-      unnamedClusterWarnEligible,
-      unnamedClusters,
-      surprisingEntityPairs,
-    });
-  }
-
   // 지금 상태로 마지막 배치를 다시 그린다 — 펼침·접기·선택 전부 이 경로를 탄다.
   // 배치는 이미 있으니 무엇을 보여줄지만 바뀐다, 네트워크 왕복이 필요 없다.
+  // 새 fetch 없이 화면만 다시 맞춘다(선택 변경 등).
+  //
+  // **라이브 지도에서는 지도를 다시 그리지 않는다.** 옛 정적 시절엔 선택 표시가 SVG
+  // 안에 있어서 stage를 통째로 다시 그려야 했다. 라이브 지도는 자기 상태를 들고
+  // 있으므로 다시 그릴 필요가 없고, 그리면 **정적 렌더러가 캔버스를 덮어써 지도가
+  // 옛 군집 버블 그림으로 되돌아간다** — 노드를 한 번 누르는 것만으로 재현됐다
+  // (2026-09-02, probe-graph-doubleclick.js: 선택 후 hasFrame:false + graph-cluster-legend).
   function redrawFromCache() {
     if (!lastPlaced || !elements.graphBody) return;
-    renderStage(lastPlaced);
-    wireNodeClicks();
+    if (!liveActive()) {
+      renderStage(lastPlaced);
+      wireNodeClicks();
+    }
     renderSelection();
     renderGraphHeader();
   }
@@ -1101,10 +1028,7 @@ function createGraphModeController(deps) {
       payload = filters.applyGraphFilters(payload, getFilters());
     }
 
-    const placed = layout.layoutClusterMap(payload, {
-      width: elements.graphBody ? elements.graphBody.clientWidth : 0,
-      height: elements.graphBody ? elements.graphBody.clientHeight : 0,
-    });
+    const placed = grouping.projectPayload(payload);
     lastPlaced = placed;
     lastPayload = payload; // 헤더 메타의 "관계 E"(필터 전 원본)가 이 값을 읽는다.
     // 필터가 선택 노드를 걷어냈으면 선택도 놓는다 — 화면에 없는 노드의 패널이
@@ -1238,6 +1162,8 @@ function createGraphModeController(deps) {
 
 const __exports = {
   createGraphModeController,
+  clusterTitle,
+  entityPairKey,
   computeGraphHeaderMeta,
   formatEventDate,
   buildTimelineRows,
