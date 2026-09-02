@@ -2623,10 +2623,11 @@ async function main() {
 
     const receipt = await js(shellWin, "window.AthenaBacktestCanvas.onChatAction({ kind: 'navigate', tab: 'result' })");
     const receiptKeys = receipt ? Object.keys(receipt) : [];
-    await step('K12', '영수증 키 계약 12개', () => ({
+    await step('K12', '영수증 키 계약 13개', () => ({
+      // canApply는 프로젝트 IDE(파일 초안 file_draft)가 더한 키다 — 적용 가능 여부를 카드가 읽는다.
       ok: JSON.stringify(receiptKeys) === JSON.stringify([
             'id', 'kind', 'applied', 'note', 'rows', 'errors',
-            'suggest_run', 'suggest_validate', 'tab', 'designTab', 'method', 'canUndo',
+            'suggest_run', 'suggest_validate', 'tab', 'designTab', 'method', 'canUndo', 'canApply',
           ]) && /^bc-\d+$/.test(String(receipt.id)),
       data: { keys: receiptKeys, id: receipt && receipt.id },
     }));
@@ -2659,9 +2660,9 @@ async function main() {
     const c = await ctx(shellWin);
     const expectedKeys = [
       'view', 'tab', 'designTab', 'runPath', 'spec', 'draft', 'pending', 'presets',
-      'code', 'codeDraft', 'lastResult', 'diagnosis', 'optimize', 'runs', 'coverage', 'lastChange',
+      'code', 'codeDraft', 'lastResult', 'diagnosis', 'optimize', 'runs', 'coverage', 'lastChange', 'project',
     ];
-    await step('L01', 'getContext() 최상위 키 16개 계약', () => ({
+    await step('L01', 'getContext() 최상위 키 17개 계약', () => ({
       ok: JSON.stringify(Object.keys(c)) === JSON.stringify(expectedKeys),
       data: { keys: Object.keys(c) },
     }));
