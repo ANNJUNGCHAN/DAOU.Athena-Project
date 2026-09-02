@@ -639,3 +639,57 @@ def test_code_path_inherits_form_param_defaults_when_code_has_no_params(tmp_path
         result = client.get(f"{BASE}/runs/{run_id}").json()
         assert result["status"] == "done", result["error"]
         assert "'fast'" in result["stdout"] and "'slow'" in result["stdout"]
+
+
+# ── 코드 전략 배포 — 만들 수는 있는데 판정할 수 없는 막다른 길을 없앤다 ─────────
+
+
+def _python_version(client: TestClient, source: str) -> str:
+    return client.post(
+        f"{BASE}/strategies", json={"name": "코드 배포", "kind": "python", "source": source}
+    ).json()["version_id"]
+
+
+def test_python_deployment_evaluates_instead_of_failing_yaml_parsing(tmp_path: Path) -> None:
+    """kind=python 버전에 묶인 배포는 예전에 422("스펙으로 읽지 못했다")로 끝났다 —
+    배포는 만들어지는데 영원히 판정되지 않는 막다른 길이었다(2026-09-02 실측)."""
+    with _client(tmp_path) as client:
+        rows = _synthetic_candle_rows(60)
+        _seed_candles(client, "005930", "day", True, rows)
+        version_id = _python_version(client, _CODE_SOURCE)
+        dep_id = client.post(
+            f"{BASE}/deployments", json=_deploy_body(version_id, mode="observe")
+        ).json()["deployment_id"]
+
+        res = client.post(
+            f"{BASE}/deployments/{dep_id}/evaluate",
+            json={"today": "20250301", "holding": False, "orders_today": 0, "order_amount": 100},
+        )
+        assert res.status_code == 200, res.json()
+        body = res.json()
+        assert body["stage"] in {
+            "skipped", "signal", "pending_approval", "ordered", "blocked"
+        }
+        # 마지막 봉으로 판정했다는 증거 — 코드가 만든 신호가 실제 봉 위에 얹혔다.
+        assert body["dt"] == datetime.strptime(rows[-1].dt, "%Y%m%d").strftime("%Y-%m-%d")
+
+
+def test_python_deployment_reports_the_child_error_not_a_yaml_error(tmp_path: Path) -> None:
+    """터진 것은 사용자 코드다 — yaml 파서 문구로 바꿔 말하면 사용자가 엉뚱한 곳을 고친다."""
+    with _client(tmp_path) as client:
+        rows = _synthetic_candle_rows(60)
+        _seed_candles(client, "005930", "day", True, rows)
+        version_id = _python_version(client, _FAILING_CODE_SOURCE)
+        dep_id = client.post(
+            f"{BASE}/deployments", json=_deploy_body(version_id, mode="observe")
+        ).json()["deployment_id"]
+
+        res = client.post(
+            f"{BASE}/deployments/{dep_id}/evaluate", json={"today": "20250301"}
+        )
+        assert res.status_code == 422
+        detail = res.json()["detail"]
+        assert "ValueError" in detail
+        assert "전략 로직이 터졌다" in detail
+        assert "block mapping" not in detail
+        assert "스펙으로 읽지 못했다" not in detail

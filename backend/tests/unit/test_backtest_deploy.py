@@ -181,6 +181,61 @@ def test_basis_quotes_the_actual_conditions():
     assert "cross_above" in d.basis
 
 
+# ── 코드 전략(kind=python) — 신호를 밖에서 받아 판정한다 ──────────────────────
+
+
+def _flat_signals(df: pd.DataFrame, **on_last: bool) -> pd.DataFrame:
+    """전부 False인 신호 프레임에 마지막 봉만 켠다 — "오늘"의 신호만 판정에 닿는지 본다."""
+    frame = pd.DataFrame({"entry": False, "exit": False}, index=df.index)
+    for column, value in on_last.items():
+        frame.iloc[-1, frame.columns.get_loc(column)] = value
+    return frame
+
+
+def test_explicit_signals_decide_the_same_as_the_compile_path():
+    """같은 신호면 판정도 같아야 한다 — 코드 전략이 다른 규율을 타면 사람이 정한
+    한도·정지가 경로마다 갈라진다."""
+    from athena_api.backtest.compile import compile_signals
+
+    df = _df_ending_with("entry")
+    dep = _deployment(mode="auto")
+    args = {"today": "20260601", "holding": False, "orders_today": 0, "order_amount": 100_000}
+
+    via_compile = deploy.evaluate_latest(_spec(), df, dep, **args)
+    via_signals = deploy.evaluate_latest(
+        None, df, dep, signals=compile_signals(_spec(), df), **args
+    )
+
+    assert (via_signals.stage, via_signals.side, via_signals.dt) == (
+        via_compile.stage, via_compile.side, via_compile.dt,
+    )
+    # 근거만 다르다 — 코드에는 옮겨 적을 조건 스펙이 없다.
+    assert via_compile.basis != via_signals.basis
+    assert via_signals.basis == deploy.CODE_BASIS
+
+
+def test_last_bar_entry_and_exit_drive_the_side():
+    df = _wave_df(30)
+    dep = _deployment(mode="observe")
+    args = {"today": "20260601", "orders_today": 0, "order_amount": 100_000}
+
+    buy = deploy.evaluate_latest(
+        None, df, dep, holding=False, signals=_flat_signals(df, entry=True), **args
+    )
+    assert (buy.side, buy.stage) == ("buy", "signal")
+
+    sell = deploy.evaluate_latest(
+        None, df, dep, holding=True, signals=_flat_signals(df, exit=True), **args
+    )
+    assert (sell.side, sell.stage) == ("sell", "signal")
+
+    # 마지막 봉이 아닌 곳의 신호는 오늘의 판정이 아니다.
+    earlier = _flat_signals(df)
+    earlier.iloc[0, earlier.columns.get_loc("entry")] = True
+    quiet = deploy.evaluate_latest(None, df, dep, holding=False, signals=earlier, **args)
+    assert quiet.stage == "skipped"
+
+
 # ── 괴리 보고 ───────────────────────────────────────────────────────────────
 
 
