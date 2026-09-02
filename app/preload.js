@@ -245,6 +245,9 @@ const ON_CHANNELS = new Set([
   'athena:live-tool-step',
   // 말걸기 가드 확인 카드(F-stage9) — athena_nudge_guard propose 결과, 비영속.
   'athena:nudge-guard-proposed',
+  // 백테스트 채팅 액션 — athena_backtest의 propose_spec·propose_code·navigate·
+  // propose_optimize 결과 {kind, ...}, 비영속. 셸에서만 구독한다.
+  'athena:backtest-chat-action',
   // 질의 왕복이 도는 동안 셸·오브 입력을 함께 잠그는 신호 — {busy: boolean}.
   'athena:live-query-state',
   // 오브에서 오간 턴을 셸의 대화 이력에도 늦게 채워 넣는다(셸이 숨어 있는 동안

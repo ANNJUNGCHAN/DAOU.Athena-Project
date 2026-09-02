@@ -1271,6 +1271,11 @@ async function runQueryLive(text) {
     result = await window.athena.invoke('athena__render_canvas', {
       source: 'live', query: augmentMentions(text), expand: prefs.autoExpandCanvas,
       clientSubmitId, rendererSubmittedAt,
+      // 백테스트 설계 턴 — main.js가 모드·폼 상태를 buildLiveTurnPrompt에 넘긴다. 모델은
+      // 폼을 읽기만 하고, 바꾸는 것은 propose_spec 초안 카드의 [적용]을 사람이 누를 때다.
+      canvasMode: (window.AthenaCanvasMode && window.AthenaCanvasMode.state && window.AthenaCanvasMode.state.view) || 'summary',
+      backtestContext: (window.AthenaBacktestCanvas && typeof window.AthenaBacktestCanvas.getContext === 'function')
+        ? window.AthenaBacktestCanvas.getContext() : null,
     });
   } catch (err) {
     // 핸들러가 reject하면(예: main 쪽 미처리 예외) 결과 없이 아래로 떨어져

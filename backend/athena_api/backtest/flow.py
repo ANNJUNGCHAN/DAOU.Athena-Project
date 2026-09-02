@@ -129,6 +129,49 @@ def _params_names(tree: ast.Module) -> tuple[str, ...]:
     return ()
 
 
+def _literal_default(entry: ast.Dict) -> int | float | None:
+    """`{"default": 20, ...}` 한 항목에서 숫자 default만 읽는다. 리터럴이 아니면 None."""
+    for key, value in zip(entry.keys, entry.values, strict=False):
+        if not (isinstance(key, ast.Constant) and key.value == "default"):
+            continue
+        if isinstance(value, ast.Constant) and isinstance(value.value, (int, float)):
+            return None if isinstance(value.value, bool) else value.value
+        return None
+    return None
+
+
+def params_defaults(source: str) -> dict[str, int | float]:
+    """최상위 `PARAMS`의 숫자 기본값만 걷는다 — 코드 경로 실행에 넘길 파라미터의 바닥값이다.
+
+    **왜 여기서 채우나.** 자식 프로세스는 `spec.json`이 준 params를 그대로 쓸 뿐
+    `PARAMS`를 읽지 않는다(sandbox/__main__.py) — 아무도 병합하지 않으면 `p["fast"]`가
+    KeyError로 터진다. `PARAMS`를 이미 `ast`로 읽는 이 모듈이 그 자리다.
+
+    여기서도 코드를 실행하지 않는다(`build_flow`와 같은 규율). 리터럴이 아니면 모른다고
+    하고 빈 딕셔너리를 돌려준다 — 지어낸 기본값으로 다른 전략을 돌리는 것보다 낫다.
+    """
+    try:
+        tree = ast.parse(source)
+    except SyntaxError:
+        return {}
+    for stmt in tree.body:
+        if not (isinstance(stmt, ast.Assign) and "PARAMS" in _assigned_names(stmt)):
+            continue
+        if not isinstance(stmt.value, ast.Dict):
+            return {}
+        out: dict[str, int | float] = {}
+        for key, entry in zip(stmt.value.keys, stmt.value.values, strict=False):
+            if not (isinstance(key, ast.Constant) and isinstance(key.value, str)):
+                continue
+            if not isinstance(entry, ast.Dict):
+                continue
+            default = _literal_default(entry)
+            if default is not None:
+                out[key.value] = default
+        return out
+    return {}
+
+
 def _return_columns(ret: ast.Return | None) -> tuple[str, ...]:
     """`...[["entry", "exit"]]` 형태의 마지막 첨자에서 열 이름을 읽는다."""
     if ret is None or ret.value is None:
@@ -304,5 +347,6 @@ __all__ = [
     "FlowNode",
     "Stage",
     "build_flow",
+    "params_defaults",
     "to_payload",
 ]

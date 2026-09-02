@@ -166,6 +166,119 @@ function validate(spec) {
   return errors;
 }
 
+// ---------- 초안(채팅 제안) ----------
+
+// 채팅이 propose_spec으로 낸 patch를 스펙에 얹는다. 실행·저장은 하지 않고 **새 스펙만**
+// 돌려준다 — 사람이 카드의 [적용]을 누르기 전까지 폼은 그대로다. 'preset' 키는 여기서
+// 다루지 않는다: 프리셋 목록은 캔버스가 들고 있으므로 템플릿 전환은 캔버스 몫이다.
+// 잘못된 값은 조용히 떨어뜨린다 — 남은 문제는 validate()가 사람에게 알린다.
+function applyPatch(spec, patch) {
+  if (!patch || typeof patch !== 'object' || Array.isArray(patch)) return spec;
+  let next = spec;
+  if (Array.isArray(patch.symbols)) {
+    const symbols = [];
+    patch.symbols.forEach((s) => {
+      const code = String(s == null ? '' : s).trim();
+      if (isValidStkCd(code) && symbols.indexOf(code) === -1) symbols.push(code);
+    });
+    next = Object.assign({}, next, { symbols });
+  }
+  if (PERIODS.some(([id]) => id === patch.period)) {
+    next = Object.assign({}, next, { period: patch.period });
+  }
+  if (typeof patch.adjusted === 'boolean') next = Object.assign({}, next, { adjusted: patch.adjusted });
+  if (typeof patch.fromDt === 'string') next = Object.assign({}, next, { fromDt: patch.fromDt });
+  if (typeof patch.toDt === 'string') next = Object.assign({}, next, { toDt: patch.toDt });
+  if (patch.params && typeof patch.params === 'object') {
+    Object.keys(patch.params).forEach((name) => {
+      next = setParam(next, name, patch.params[name]);
+    });
+  }
+  if (Array.isArray(patch.indicators)) {
+    const indicators = patch.indicators
+      .filter((i) => i && typeof i.id === 'string' && typeof i.alias === 'string')
+      .map((i) => ({
+        id: i.id,
+        alias: i.alias,
+        params: i.params && typeof i.params === 'object' ? JSON.parse(JSON.stringify(i.params)) : {},
+      }));
+    next = Object.assign({}, next, { indicators });
+  }
+  ['entry', 'exit'].forEach((side) => {
+    const group = patch[side];
+    if (!group || typeof group !== 'object' || !Array.isArray(group.conditions)) return;
+    const logic = group.logic === 'AND' || group.logic === 'OR' ? group.logic : next[side].logic;
+    const conditions = group.conditions
+      .filter((c) => c
+        && typeof c.indicator === 'string'
+        && OPERATORS.some(([id]) => id === c.operator)
+        && (typeof c.compare_to === 'string' || typeof c.compare_to === 'number'))
+      .map((c) => ({
+        indicator: c.indicator,
+        operator: c.operator,
+        // 스키마가 compare_to를 문자열로도 받으므로 숫자 문자열('30')은 폼의 조건 추가와
+        // 같은 규칙으로 숫자로 바꾼다 — 안 그러면 validate가 이름 참조로 보고 초안을 막는다.
+        compare_to: typeof c.compare_to === 'string' && /^-?\d+(\.\d+)?$/.test(c.compare_to)
+          ? Number(c.compare_to)
+          : c.compare_to,
+      }));
+    next = Object.assign({}, next, { [side]: { logic, conditions } });
+  });
+  if (patch.risk && typeof patch.risk === 'object') {
+    const risk = JSON.parse(JSON.stringify(next.risk));
+    ['stop_loss', 'take_profit'].forEach((key) => {
+      const toggle = patch.risk[key];
+      if (!toggle || typeof toggle !== 'object') return;
+      risk[key] = Object.assign({}, risk[key]);
+      if (typeof toggle.enabled === 'boolean') risk[key].enabled = toggle.enabled;
+      if (Number.isFinite(toggle.percent)) risk[key].percent = toggle.percent;
+    });
+    next = Object.assign({}, next, { risk });
+  }
+  if (patch.costs && typeof patch.costs === 'object') {
+    const costs = Object.assign({}, next.costs);
+    ['fee_bps', 'tax_bps', 'slippage_bps'].forEach((key) => {
+      if (Number.isFinite(patch.costs[key])) costs[key] = patch.costs[key];
+    });
+    next = Object.assign({}, next, { costs });
+  }
+  return next;
+}
+
+// 초안 카드가 "전 → 후"를 그릴 순서와 라벨. 폼 위에서 아래로 읽히는 순서와 같다.
+const DIFF_FIELDS = [
+  ['name', '전략'],
+  ['symbols', '종목'],
+  ['period', '주기'],
+  ['adjusted', '수정주가'],
+  ['fromDt', '시작일'],
+  ['toDt', '종료일'],
+  ['params', '파라미터'],
+  ['indicators', '지표'],
+  ['entry', '진입 조건'],
+  ['exit', '청산 조건'],
+  ['risk', '리스크'],
+  ['costs', '비용'],
+];
+
+function paramDefaults(params) {
+  const out = {};
+  Object.keys(params || {}).forEach((name) => { out[name] = params[name].default; });
+  return out;
+}
+
+// 두 스펙에서 달라진 필드만 DIFF_FIELDS 순서로 돌려준다. before/after는 가공하지 않은
+// 값이다(표시는 캔버스가 한다). params만은 default 값만 비교한다 — min/max/step은
+// 프리셋이 정한 범위라 초안이 바꾸지 않고, 그걸 차이로 보이면 사람이 헷갈린다.
+function diffFields(before, after) {
+  return DIFF_FIELDS.reduce((acc, [key, label]) => {
+    const a = key === 'params' ? paramDefaults(before.params) : before[key];
+    const b = key === 'params' ? paramDefaults(after.params) : after[key];
+    if (JSON.stringify(a) !== JSON.stringify(b)) acc.push({ key, label, before: a, after: b });
+    return acc;
+  }, []);
+}
+
 // ---------- 직렬화 ----------
 
 function quote(value) {
@@ -347,6 +460,8 @@ const __exports = {
   setLogic,
   referenceNames,
   validate,
+  applyPatch,
+  diffFields,
   toYaml,
   parsePresetYaml,
   presetToSpec,

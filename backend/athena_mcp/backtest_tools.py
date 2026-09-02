@@ -49,7 +49,23 @@ _ALLOWED_ACTIONS: tuple[str, ...] = (
     "flow",
     "diagnose",
     "optimize",
+    # 폼 설정 초안 — HTTP를 타지 않고 캔버스 카드로만 간다. 사람이 [적용]을 눌러야 폼에
+    # 반영되고, 실행은 [적용하고 실행]을 눌러야 시작된다.
+    "propose_spec",
+    # 화면 전환(navigate)과 최적화 제안(propose_optimize)도 HTTP를 타지 않고 캔버스로만
+    # 간다 — [탐색 시작] 버튼은 여전히 사람이 누른다. list_runs만 읽기 전용 조회다.
+    "navigate",
+    "propose_optimize",
+    "list_runs",
 )
+
+# action=run이 백엔드로 넘길 수 있는 키 — 스키마 `run`에 적힌 둘뿐이다. `source`(코드
+# 실행)와 `allow_partial`(캐시 부족 우회)은 사람 클릭 전용이라 여기서 걸러낸다.
+_RUN_FORWARDED_KEYS: frozenset[str] = frozenset({"yaml", "params"})
+
+_NAVIGATE_TABS: tuple[str, ...] = ("design", "result", "history", "optimize", "deploy")
+_NAVIGATE_DESIGN_TABS: tuple[str, ...] = ("form", "code", "flow")
+_OPTIMIZE_METHODS: tuple[str, ...] = ("grid", "random")
 
 _TIMEOUT_SECONDS = 15.0
 
@@ -69,9 +85,17 @@ _INPUT_SCHEMA: dict[str, Any] = {
                 "list_strategies/read_code = 저장된 전략과 활성 버전 소스 조회(읽기 전용). "
                 "flow = 전략 코드를 단계 지도로 옮긴다(실행하지 않는다). "
                 "diagnose = 오류 문구와 소스로 원인·수정안을 만든다(적용하지 않는다). "
-                "propose_code = 코드 초안을 **비활성 버전**으로 저장한다 — 사람이 앱에서 "
-                "diff를 보고 [적용]을 눌러야 활성화된다. "
+                "propose_code = 코드 초안을 낸다 — strategy_id가 있으면 **비활성 버전**으로 "
+                "저장하고, 없으면 캔버스 코드 탭 초안 카드로만 보낸다(HTTP 없음). 어느 쪽이든 "
+                "사람이 diff를 보고 [적용]을 눌러야 편집기·전략에 들어간다. "
                 "optimize = 캐시 안에서 파라미터 조합을 훑는다(추가 TR 호출 없음). "
+                "propose_spec = 폼 설정 초안(patch)을 캔버스 카드로 낸다 — 사람이 [적용]을 "
+                "눌러야 폼에 반영되고, 실행은 [적용하고 실행]을 눌러야 시작된다. "
+                "navigate = 캔버스 탭을 옮긴다(design/result/history/optimize/deploy, "
+                "designTab=form|code|flow). "
+                "propose_optimize = 최적화 탭에 방식을 준비한다 — [탐색 시작]은 사람이 누른다. "
+                "list_runs = 실행 이력 목록 조회(읽기 전용). "
+                "실행·탐색 시작·수집·저장·활성화·배포는 전부 사람이 카드 버튼을 누른다. "
                 "backfill(대량 백필)·activate(전략 버전 활성화)·deploy(실전 배포)는 이 툴에 "
                 "없다 — 쿼터를 태우거나 돈이 나가는 경로라 사용자가 앱에서 직접 한다."
             ),
@@ -111,17 +135,35 @@ _INPUT_SCHEMA: dict[str, Any] = {
         },
         "strategy_id": {
             "type": "string",
-            "description": "action=read_code|propose_code일 때 대상 전략 id.",
+            "description": (
+                "action=read_code일 때 대상 전략 id(필수). propose_code에선 선택 — 넣으면 그 "
+                "전략의 비활성 초안 버전으로 저장되고, 빼면 캔버스 코드 탭 초안 카드로만 간다."
+            ),
         },
         "propose_code": {
             "type": "object",
             "description": (
-                "action=propose_code일 때의 입력 — 제안할 전체 소스와 왜 바꿨는지. "
-                "저장은 되지만 **활성화되지 않는다**."
+                "action=propose_code일 때의 입력 — 제안할 **전체 소스**와 왜 바꿨는지. "
+                "저장되든 카드로만 가든 **활성화되지 않는다**."
             ),
+            "required": ["source"],
             "properties": {
-                "source": {"type": "string"},
+                "source": {
+                    "type": "string",
+                    "description": "PARAMS 딕셔너리 + def signals(df, p)를 담은 파일 전체",
+                },
                 "note": {"type": "string", "description": "무엇을 왜 바꿨는지 한 줄"},
+                "suggest_run": {
+                    "type": "boolean",
+                    "description": (
+                        "true면 카드에 [적용하고 실행] 버튼이 함께 뜬다 — 실행 여부는 여전히 "
+                        "사람이 결정한다."
+                    ),
+                },
+                "suggest_validate": {
+                    "type": "boolean",
+                    "description": "true면 카드에 [적용하고 검증] 버튼이 함께 뜬다.",
+                },
             },
         },
         "flow": {
@@ -166,16 +208,207 @@ _INPUT_SCHEMA: dict[str, Any] = {
                 },
             },
         },
+        "propose_spec": {
+            "type": "object",
+            "description": (
+                "action=propose_spec일 때의 입력 — 백테스트 폼에 제안할 설정 초안. "
+                "캔버스의 초안 카드로만 전달되며 폼에는 사람이 [적용]을 눌러야 반영된다. "
+                "실행·수집·저장은 일어나지 않는다."
+            ),
+            "required": ["patch"],
+            "properties": {
+                "patch": {
+                    "type": "object",
+                    "description": (
+                        "폼 설정의 부분 갱신. 한 턴에 한 항목만 담는다. 빈 객체 {}도 허용된다"
+                        "(suggest_run과 함께 실행 제안만 할 때)."
+                    ),
+                    "properties": {
+                        "preset": {
+                            "type": "string",
+                            "description": (
+                                "프리셋 id(예: sma_crossover) — 전략 템플릿을 먼저 고른다"
+                            ),
+                        },
+                        "symbols": {
+                            "type": "array",
+                            "items": {"type": "string"},
+                            "description": "6자리 종목코드 목록 — 전체를 교체한다",
+                        },
+                        "period": {"type": "string", "enum": ["day", "week", "month"]},
+                        "adjusted": {"type": "boolean"},
+                        "fromDt": {"type": "string", "description": "YYYYMMDD"},
+                        "toDt": {"type": "string", "description": "YYYYMMDD"},
+                        "params": {
+                            "type": "object",
+                            "additionalProperties": {"type": "number"},
+                            "description": "파라미터 값만 — 이름별로 병합, 모르는 이름은 무시된다",
+                        },
+                        "indicators": {
+                            "type": "array",
+                            "description": "지표 목록 — 전체를 교체한다",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {"type": "string"},
+                                    "alias": {"type": "string"},
+                                    "params": {"type": "object"},
+                                },
+                            },
+                        },
+                        "entry": {
+                            "type": "object",
+                            "description": "진입 조건 그룹 — 전체를 교체한다",
+                            "properties": {
+                                "logic": {"type": "string", "enum": ["AND", "OR"]},
+                                "conditions": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "indicator": {"type": "string"},
+                                            "operator": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "cross_above",
+                                                    "cross_below",
+                                                    "greater_than",
+                                                    "less_than",
+                                                    "greater_equal",
+                                                    "less_equal",
+                                                    "equals",
+                                                ],
+                                            },
+                                            "compare_to": {
+                                                "type": ["number", "string"],
+                                                "description": (
+                                                    "숫자 임계값은 number로, 지표 별칭·"
+                                                    "원시 열 이름은 string으로 보낸다"
+                                                ),
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        "exit": {
+                            "type": "object",
+                            "description": "청산 조건 그룹 — entry와 같은 형태, 전체를 교체한다",
+                            "properties": {
+                                "logic": {"type": "string", "enum": ["AND", "OR"]},
+                                "conditions": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "indicator": {"type": "string"},
+                                            "operator": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "cross_above",
+                                                    "cross_below",
+                                                    "greater_than",
+                                                    "less_than",
+                                                    "greater_equal",
+                                                    "less_equal",
+                                                    "equals",
+                                                ],
+                                            },
+                                            "compare_to": {
+                                                "type": ["number", "string"],
+                                                "description": (
+                                                    "숫자 임계값은 number로, 지표 별칭·"
+                                                    "원시 열 이름은 string으로 보낸다"
+                                                ),
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        "risk": {
+                            "type": "object",
+                            "description": "손절·익절 — 항목별로 깊이 병합한다",
+                            "properties": {
+                                "stop_loss": {
+                                    "type": "object",
+                                    "properties": {
+                                        "enabled": {"type": "boolean"},
+                                        "percent": {"type": "number"},
+                                    },
+                                },
+                                "take_profit": {
+                                    "type": "object",
+                                    "properties": {
+                                        "enabled": {"type": "boolean"},
+                                        "percent": {"type": "number"},
+                                    },
+                                },
+                            },
+                        },
+                        "costs": {
+                            "type": "object",
+                            "description": "수수료·세금·슬리피지(bp) — 항목별로 병합한다",
+                            "properties": {
+                                "fee_bps": {"type": "number"},
+                                "tax_bps": {"type": "number"},
+                                "slippage_bps": {"type": "number"},
+                            },
+                        },
+                    },
+                },
+                "note": {"type": "string", "description": "무엇을 왜 제안했는지 한 줄"},
+                "suggest_run": {
+                    "type": "boolean",
+                    "description": (
+                        "true면 카드에 [적용하고 실행] 버튼이 함께 뜬다 — 실행 여부는 여전히 "
+                        "사람이 결정한다."
+                    ),
+                },
+            },
+        },
+        "navigate": {
+            "type": "object",
+            "description": (
+                "action=navigate일 때의 입력 — 캔버스에서 보여줄 탭. 화면만 옮기고 "
+                "실행·수집은 하지 않는다."
+            ),
+            "required": ["tab"],
+            "properties": {
+                "tab": {"type": "string", "enum": list(_NAVIGATE_TABS)},
+                "designTab": {
+                    "type": "string",
+                    "enum": list(_NAVIGATE_DESIGN_TABS),
+                    "description": "tab=design일 때의 하위 탭 — 폼·코드·흐름 지도",
+                },
+            },
+        },
+        "propose_optimize": {
+            "type": "object",
+            "description": (
+                "action=propose_optimize일 때의 입력 — 최적화 탭에 준비할 탐색 방식. "
+                "탐색은 사람이 [탐색 시작]을 눌러야 시작된다."
+            ),
+            "required": ["method"],
+            "properties": {
+                "method": {"type": "string", "enum": list(_OPTIMIZE_METHODS)},
+                "note": {"type": "string", "description": "무엇을 왜 제안했는지 한 줄"},
+            },
+        },
     },
 }
 
 _DESCRIPTION = (
-    "백테스트 카탈로그 조회·전략 검증·실행 계획·실행·상태 조회, 코드 플로우 지도·오류 진단, "
-    "코드 초안 제안, 파라미터 최적화. run과 optimize는 **캐시가 충분할 때만 즉시 실행된다** — "
+    "백테스트 카탈로그 조회·전략 검증·실행 계획·실행·상태 조회, 실행 이력 목록(list_runs), "
+    "코드 플로우 지도·오류 진단, 코드 초안 제안, 파라미터 최적화, 캔버스 화면 전환(navigate)과 "
+    "최적화 제안(propose_optimize). run과 optimize는 **캐시가 충분할 때만 즉시 실행된다** — "
     "부족하면 실행하지 않고 blocked 상태로 필요한 수집량을 알려준다(사람이 앱에서 데이터 "
-    "수집을 승인해야 한다). propose_code는 초안을 저장할 뿐 활성화하지 않는다 — 지금 도는 "
-    "전략은 그대로다. 대량 백필(backfill)·전략 버전 활성화(activate)·실전 배포(deploy)는 "
-    "이 툴로 할 수 없다 — 셋 다 사람 클릭 전용이다."
+    "수집을 승인해야 한다). propose_code는 strategy_id가 있으면 초안을 저장할 뿐 활성화하지 "
+    "않고, strategy_id가 없으면 코드 탭 초안 카드로만 간다 — 지금 도는 전략은 그대로다. "
+    "propose_spec은 폼 설정 초안을 캔버스 카드로 낼 뿐이다 — 사람이 [적용]을 눌러야 폼에 "
+    "반영된다. propose_optimize도 방식만 준비한다. 실행·탐색 시작·수집·저장·활성화·배포는 "
+    "전부 사람이 카드 버튼을 누른다. 대량 백필(backfill)·전략 버전 활성화(activate)·실전 "
+    "배포(deploy)는 이 툴로 할 수 없다 — 셋 다 사람 클릭 전용이다."
 )
 
 
@@ -220,10 +453,102 @@ async def dispatch(
         if not isinstance(run_id, str) or not run_id:
             return _blocked(f"action={action!r}는 run_id(문자열)가 필요하다.")
 
-    if action in ("read_code", "propose_code"):
-        strategy_id = arguments.get("strategy_id")
-        if not isinstance(strategy_id, str) or not strategy_id:
-            return _blocked(f"action={action!r}는 strategy_id(문자열)가 필요하다.")
+    strategy_id = arguments.get("strategy_id")
+    has_strategy_id = isinstance(strategy_id, str) and bool(strategy_id)
+    if action == "read_code" and not has_strategy_id:
+        return _blocked(f"action={action!r}는 strategy_id(문자열)가 필요하다.")
+
+    if action == "propose_code" and not has_strategy_id:
+        # 저장할 전략이 아직 없는 경우 — 백엔드를 타지 않고 코드 탭 초안 카드로만 간다.
+        # 편집기 반영도, 실행·검증도 전부 사람 클릭이다.
+        code_input = arguments.get("propose_code")
+        code_input = code_input if isinstance(code_input, dict) else {}
+        source = code_input.get("source")
+        if not isinstance(source, str) or not source.strip():
+            return _blocked("propose_code에는 source(문자열)가 필요하다.")
+        note = code_input.get("note")
+        return _success(
+            {
+                "delivered": "canvas",
+                "kind": "code_draft",
+                "source": source,
+                "note": note if isinstance(note, str) else None,
+                "suggest_run": code_input.get("suggest_run") is True,
+                "suggest_validate": code_input.get("suggest_validate") is True,
+                "notice": (
+                    "코드 초안이 캔버스 코드 탭 카드로 전달됐다. 사용자가 [적용]을 눌러야 "
+                    "편집기에 들어가고, 실행은 [적용하고 실행]을 눌러야 시작된다."
+                ),
+            }
+        )
+
+    if action == "navigate":
+        # 화면만 옮긴다 — 어떤 상태도 바뀌지 않는다.
+        nav_input = arguments.get("navigate")
+        nav_input = nav_input if isinstance(nav_input, dict) else {}
+        tab = nav_input.get("tab")
+        if tab not in _NAVIGATE_TABS:
+            return _blocked(
+                f"navigate에는 tab(문자열)이 필요하다 — {'/'.join(_NAVIGATE_TABS)} 중 하나."
+            )
+        design_tab = nav_input.get("designTab")
+        if design_tab is not None and design_tab not in _NAVIGATE_DESIGN_TABS:
+            return _blocked(
+                f"navigate의 designTab은 {'/'.join(_NAVIGATE_DESIGN_TABS)} 중 하나여야 한다."
+            )
+        return _success(
+            {
+                "delivered": "canvas",
+                "kind": "navigate",
+                "tab": tab,
+                "designTab": design_tab,
+            }
+        )
+
+    if action == "propose_optimize":
+        # 탐색 방식만 준비한다 — 실제 탐색은 사람이 [탐색 시작]을 눌러야 시작된다.
+        opt_input = arguments.get("propose_optimize")
+        opt_input = opt_input if isinstance(opt_input, dict) else {}
+        method = opt_input.get("method")
+        if method not in _OPTIMIZE_METHODS:
+            return _blocked(
+                f"propose_optimize에는 method가 필요하다 — "
+                f"{'/'.join(_OPTIMIZE_METHODS)} 중 하나."
+            )
+        note = opt_input.get("note")
+        return _success(
+            {
+                "delivered": "canvas",
+                "kind": "optimize_request",
+                "method": method,
+                "note": note if isinstance(note, str) else None,
+                "notice": (
+                    "최적화 탭에 방식을 준비했다. 사용자가 [탐색 시작]을 눌러야 실행된다."
+                ),
+            }
+        )
+
+    if action == "propose_spec":
+        # 백엔드를 타지 않는다 — main.js가 이 결과를 보고 렌더러에 초안 카드를 띄운다.
+        # 폼 반영·실행은 전부 사람 클릭이다.
+        spec_input = arguments.get("propose_spec")
+        spec_input = spec_input if isinstance(spec_input, dict) else {}
+        patch = spec_input.get("patch")
+        if not isinstance(patch, dict):
+            return _blocked("propose_spec에는 patch(객체)가 필요하다.")
+        note = spec_input.get("note")
+        return _success(
+            {
+                "delivered": "canvas",
+                "patch": patch,
+                "note": note if isinstance(note, str) else None,
+                "suggest_run": spec_input.get("suggest_run") is True,
+                "notice": (
+                    "초안이 캔버스 카드로 전달됐다. 사용자가 [적용]을 눌러야 폼에 반영되고, "
+                    "실행은 [적용하고 실행]을 눌러야 시작된다."
+                ),
+            }
+        )
 
     try:
         if action == "list_presets":
@@ -247,10 +572,24 @@ async def dispatch(
                 timeout=_TIMEOUT_SECONDS,
             )
         elif action == "run":
+            # 스키마에 적힌 키만 넘긴다 — 특히 `source`는 여기서 잘라낸다. POST /runs는
+            # source가 있으면 그 파이썬을 샌드박스에서 돌리고 origin="human"·active=True
+            # 버전으로 남기는데, 그걸 모델이 낼 수 있으면 propose_code가 origin을
+            # llm_draft로 못박은 이유(§7.3)가 한 칸 옆에서 무너진다. 코드 실행은 사람이
+            # 캔버스에서 [적용하고 실행]을 눌렀을 때만 시작된다.
+            run_input = arguments.get("run") or {}
             response = await http_client.post(
                 "/api/v1/backtest/runs",
-                json=arguments.get("run") or {},
+                json={
+                    key: value
+                    for key, value in run_input.items()
+                    if key in _RUN_FORWARDED_KEYS
+                },
                 timeout=_TIMEOUT_SECONDS,
+            )
+        elif action == "list_runs":
+            response = await http_client.get(
+                "/api/v1/backtest/runs", timeout=_TIMEOUT_SECONDS
             )
         elif action == "list_strategies":
             response = await http_client.get(

@@ -2099,8 +2099,11 @@ const graphMode = window.AthenaLib.GraphModeController.createGraphModeController
     // (모드 네비 활성 하이라이트는 lib/sidebar-mode-nav.js 소유 — 리프 1.2.2.)
     // 캔버스 영역 — 빈 상태 모드별 변형(보드 46)을 CSS로 가르는 data-mode 축.
     canvasRegion: document.getElementById('canvasRegion'),
-    // 모드별 채팅 헤더(보드 38) — 그래프 모드에서만 보인다.
+    // 모드별 채팅 헤더(보드 38 개정) — 그래프·백테스트 모드에서 보인다. 제목·부제
+    // 문구는 graphMode.applyVisibility()가 모드별로 바꾼다.
     chatHead: document.getElementById('chatModeHead'),
+    chatHeadTitle: document.querySelector('#chatModeHead .chat-mode-head-title'),
+    chatHeadSub: document.querySelector('#chatModeHead .chat-mode-head-sub'),
     // 그래프 뷰 본문 — 렌더·클릭위임·크기측정 전용(가시성은 위 graph가 계속
     // 소유). #graphCanvas 안 #graphHeader의 영구 형제라 다시 그려도 헤더는 안 지워진다.
     graphBody: document.getElementById('graphBody'),
@@ -2510,9 +2513,12 @@ const backtestCanvas = window.AthenaLib.BacktestCanvas.createBacktestCanvas({
   },
   // 409(캐시 부족)는 실패가 아니라 승인 화면 전환 신호다(backtest-bridge.js
   // 머리말과 같은 원칙) — blocked로 정규화해 돌려주고, 그 외 실패만 던진다.
-  run: async ({ yaml, params, allow_partial } = {}) => {
+  run: async ({ yaml, params, allow_partial, source } = {}) => {
     const body = { yaml };
     if (params !== undefined) body.params = params;
+    // 코드 경로 실행 — 캔버스가 실을 때만 붙는다. 이걸 빠뜨리면 백엔드는 source가
+    // 없다고 보고 폼(yaml)으로 돌아, 사람이 고른 코드가 조용히 안 돈다.
+    if (source) body.source = source;
     // 보유 구간만으로 실행(Paper 보드 04) — 휴장일을 from으로 준 경우의 영구 409
     // (계획서 §11-9)에서 빠져나오는 유일한 출구다. 사람이 그 버튼을 눌렀을 때만 붙는다.
     if (allow_partial) body.allow_partial = true;
@@ -2643,6 +2649,10 @@ const backtestCanvas = window.AthenaLib.BacktestCanvas.createBacktestCanvas({
   },
 });
 backtestCanvas.mount();
+// 채팅이 athena_backtest로 낸 액션 4종(폼 초안·코드 초안·화면 전환·최적화 제안) —
+// main.js trackToolStep이 이 채널로 넘긴다. 카드·탭까지만 움직이고, 실행·저장은
+// 사람이 버튼을 눌러야 시작된다.
+window.athena.on('athena:backtest-chat-action', (action) => backtestCanvas.onChatAction(action));
 window.AthenaBacktestCanvas = backtestCanvas;
 
 // --- 에이전트모드 캔버스 배선 (4단계, Paper 보드 39) -------------------------
