@@ -3152,6 +3152,12 @@ const BACKTEST_CHANGE_TITLES = {
   file_draft: '파일 반영',
   navigate: '탭 이동',
   optimize_request: '최적화 준비',
+  // 시각 설계 ↔ 코드 왕복(보드 12·13·14, 2026-09-03) — 묻고, 비활성 수정안을 보이고,
+  // 동기화된 초안을 알리고, 그 사이 다른 수정이 먼저 저장됐음을 알린다.
+  visual_question: '한 가지만 확인할게요',
+  visual_patch: '그래프 + 코드 패치',
+  visual_synced: '동기화 완료',
+  visual_conflict: '다시 검토',
 };
 
 function backtestChangeRowText(row) {
@@ -3161,8 +3167,248 @@ function backtestChangeRowText(row) {
   return before ? `${label} · ${before} → ${after}` : `${label} · ${after}`;
 }
 
+// ---------- 시각 설계 오류 수정 카드 (보드 12·13·14, 2026-09-03) ----------
+// backtest-visual-code-roundtrip-implementation-evaluation.md §"대화형 오류 수정 계약"의
+// 채팅 표면이다. 상태는 넷뿐이다: 하나만 묻는다(visual_question) → 비활성 수정안을
+// 보여준다(visual_patch) → 동기화된 초안이 생겼다(visual_synced) → 그 사이 다른 수정이
+// 먼저 저장됐다(visual_conflict).
+//
+// 이 카드는 아무것도 적용하지 않는다. 버튼이 캔버스 API를 부르고, 저장·활성화·실행의
+// 경계는 캔버스와 백엔드가 진다(계약: 수정안 생성만으로 활성 graph·저장된 버전·실행
+// 설정은 바뀌지 않는다). 캔버스 API는 나중에 붙으므로 전부 typeof로 막는다.
+const BACKTEST_VISUAL_KINDS = new Set([
+  'visual_question', 'visual_patch', 'visual_synced', 'visual_conflict',
+]);
+
+function backtestVisualCanvasCall(name, ...args) {
+  const api = window.AthenaBacktestCanvas;
+  if (!api || typeof api[name] !== 'function') return null;
+  return api[name](...args);
+}
+
+// 예상 StrategySpec diff — 배열이 정본이고 {rows:[…]}로 와도 같은 줄로 읽는다.
+function backtestVisualSpecRows(specDiff) {
+  if (Array.isArray(specDiff)) return specDiff;
+  return (specDiff && Array.isArray(specDiff.rows)) ? specDiff.rows : [];
+}
+
+// 코드 diff는 진단 카드의 줄 문법을 그대로 쓴다(backtest-explain.js와 같은 클래스).
+function backtestVisualDiff(diffLines) {
+  const diff = document.createElement('div');
+  diff.className = 'backtest-diff';
+  (Array.isArray(diffLines) ? diffLines : []).forEach((row) => {
+    const cls = row.mark === '+' ? 'is-add' : (row.mark === '-' ? 'is-del' : 'is-same');
+    const el = document.createElement('div');
+    el.className = `backtest-diff-row ${cls}`;
+    const mark = document.createElement('span');
+    mark.className = 'backtest-diff-mark';
+    mark.textContent = row.mark === ' ' ? '' : (row.mark || '');
+    const text = document.createElement('span');
+    text.className = 'backtest-diff-text';
+    text.textContent = row.text || '';
+    el.appendChild(mark);
+    el.appendChild(text);
+    diff.appendChild(el);
+  });
+  return diff;
+}
+
+// [차이 보기]는 예상 설계 diff를 접었다 편다 — 수정안 카드와 동기화 카드가 같이 쓴다.
+function backtestVisualSpecToggle(card, actions, specDiff, label) {
+  const host = document.createElement('div');
+  host.hidden = true;
+  const rows = backtestVisualSpecRows(specDiff);
+  if (rows.length) {
+    rows.forEach((row) => {
+      const el = document.createElement('div');
+      el.className = 'backtest-change-row';
+      el.textContent = backtestChangeRowText(row);
+      host.appendChild(el);
+    });
+  } else {
+    const el = document.createElement('div');
+    el.className = 'backtest-change-row';
+    el.textContent = '설계 차이 내역이 없습니다';
+    host.appendChild(el);
+  }
+  card.appendChild(host);
+  const btn = _btn(label, 'routine-btn');
+  btn.addEventListener('click', () => {
+    host.hidden = !host.hidden;
+    btn.textContent = host.hidden ? label : '차이 접기';
+  });
+  actions.appendChild(btn);
+}
+
+function renderBacktestVisualCard(receipt) {
+  const line = document.createElement('div');
+  line.className = 'turn';
+  const card = document.createElement('div');
+  card.className = 'turn-agent backtest-change backtest-visual';
+
+  const head = document.createElement('div');
+  head.className = 'agent-head';
+  const headPill = (text, filled) => {
+    const el = document.createElement('span');
+    el.className = filled ? 'routine-draft-pill is-filled' : 'routine-draft-pill';
+    el.textContent = text;
+    head.appendChild(el);
+  };
+  headPill(BACKTEST_CHANGE_TITLES[receipt.kind] || '백테스트', true);
+  card.appendChild(head);
+
+  const bodyLine = (text, className) => {
+    const el = document.createElement('div');
+    el.className = className || 'agent-body';
+    el.textContent = text;
+    card.appendChild(el);
+  };
+
+  const actions = document.createElement('div');
+  actions.className = 'routine-approval-actions backtest-change-actions';
+  const status = document.createElement('span');
+  status.className = 'agent-mode';
+  let noteText = '';
+
+  if (receipt.kind === 'visual_question') {
+    // 한 번에 질문 하나 — 고르기 전에는 [수정안 만들기]가 열리지 않는다.
+    const q = receipt.question || {};
+    bodyLine(q.question_ko || '');
+
+    const make = _btn('수정안 만들기', 'routine-btn routine-btn-approve');
+    make.disabled = true;
+    let chosen = null;
+
+    const list = document.createElement('div');
+    list.className = 'backtest-visual-choices';
+    list.setAttribute('role', 'radiogroup');
+    if (q.question_ko) list.setAttribute('aria-label', q.question_ko);
+    const picks = [];
+    (Array.isArray(q.choices) ? q.choices : []).forEach((choice) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'backtest-visual-choice';
+      btn.setAttribute('role', 'radio');
+      btn.setAttribute('aria-checked', 'false');
+      const label = document.createElement('span');
+      label.className = 'backtest-visual-choice-label';
+      label.textContent = choice.label_ko || '';
+      btn.appendChild(label);
+      if (choice.recommended) {
+        const rec = document.createElement('span');
+        rec.className = 'routine-draft-pill is-filled';
+        rec.textContent = '권장';
+        btn.appendChild(rec);
+      }
+      // 이 선택이 무엇을 바꾸는지 — 계약이 요구하는 "각 선택이 바꾸는 node/edge/parameter".
+      const what = (Array.isArray(choice.changes) ? choice.changes : [])
+        .map((c) => c && c.what_ko).filter(Boolean).join(' · ');
+      if (what) {
+        const el = document.createElement('span');
+        el.className = 'backtest-visual-choice-changes';
+        el.textContent = what;
+        btn.appendChild(el);
+      }
+      btn.addEventListener('click', () => {
+        chosen = choice.id;
+        picks.forEach((b) => {
+          const on = b === btn;
+          b.classList.toggle('is-picked', on);
+          b.setAttribute('aria-checked', on ? 'true' : 'false');
+        });
+        make.disabled = false;
+      });
+      picks.push(btn);
+      list.appendChild(btn);
+    });
+    card.appendChild(list);
+
+    make.addEventListener('click', () => {
+      if (!chosen) return;
+      make.disabled = true;
+      status.textContent = '수정안을 만드는 중…';
+      backtestVisualCanvasCall('answerVisualQuestion', { code: q.code, choice_id: chosen });
+    });
+    actions.appendChild(make);
+    noteText = 'AI는 바로 고치지 않고, 필요한 선택을 한 번에 하나씩 묻습니다 · 실행·활성화 없음';
+  }
+
+  if (receipt.kind === 'visual_patch') {
+    const patch = receipt.patch || {};
+    headPill(patch.graph_compatible ? '그래프 호환' : '그래프 비호환');
+    card.appendChild(backtestVisualDiff(patch.code_diff && patch.code_diff.diff_lines));
+    if (patch.summary_ko) bodyLine(patch.summary_ko, 'backtest-change-row');
+
+    const apply = _btn('적용하고 시각 설계로 돌아가기', 'routine-btn routine-btn-approve');
+    apply.addEventListener('click', () => {
+      apply.disabled = true;
+      status.textContent = '적용하는 중…';
+      backtestVisualCanvasCall('applyVisualPatch', patch.patch_id);
+    });
+    actions.appendChild(apply);
+
+    backtestVisualSpecToggle(card, actions, patch.spec_diff, '차이 자세히 보기');
+
+    const drop = _btn('버리기', 'routine-btn');
+    drop.addEventListener('click', () => {
+      backtestVisualCanvasCall('discardVisualPatch', patch.patch_id);
+      actions.textContent = '버렸습니다 — 지도와 코드는 그대로입니다';
+    });
+    actions.appendChild(drop);
+
+    const next = patch.next_version != null
+      ? patch.next_version
+      : (receipt.version && receipt.version.to);
+    noteText = next != null
+      ? `적용하면 새 v${next} 초안이 생깁니다. 활성화와 백테스트 실행은 별도 확인입니다.`
+      : '적용하면 새 초안이 생깁니다. 활성화와 백테스트 실행은 별도 확인입니다.';
+  }
+
+  if (receipt.kind === 'visual_synced') {
+    const from = receipt.version ? receipt.version.from : null;
+    const to = receipt.version ? receipt.version.to : null;
+    if (from != null && to != null) headPill(`v${from} → v${to}`);
+    if (receipt.summary_ko) bodyLine(receipt.summary_ko);
+
+    const review = _btn('실행 전 검토', 'routine-btn routine-btn-approve');
+    review.addEventListener('click', () => { backtestVisualCanvasCall('reviewBeforeRun'); });
+    actions.appendChild(review);
+
+    backtestVisualSpecToggle(card, actions, receipt.spec_diff, '차이 보기');
+
+    const open = _btn('코드 열기', 'routine-btn');
+    open.addEventListener('click', () => { backtestVisualCanvasCall('openCodeFromChat'); });
+    actions.appendChild(open);
+
+    noteText = from != null
+      ? `활성화하거나 실행하기 전까지 현재 v${from}에는 영향이 없습니다.`
+      : '활성화하거나 실행하기 전까지 현재 버전에는 영향이 없습니다.';
+  }
+
+  if (receipt.kind === 'visual_conflict') {
+    bodyLine('다른 수정이 먼저 저장됐습니다 — 다시 검토');
+    const retry = _btn('다시 검토', 'routine-btn routine-btn-approve');
+    retry.addEventListener('click', () => {
+      retry.disabled = true;
+      status.textContent = '다시 검토하는 중…';
+      backtestVisualCanvasCall('retryVisualPatch');
+    });
+    actions.appendChild(retry);
+  }
+
+  actions.appendChild(status);
+  card.appendChild(actions);
+  if (noteText) bodyLine(noteText, 'agent-source');
+
+  _mountTurn(line, card);
+}
+
 function renderBacktestChangeCard(receipt) {
   if (!receipt || typeof receipt !== 'object') return;
+  // 시각 설계 4종은 머리 태그와 상태 문구가 다르다 — 질문 카드에 "반영 안 됨"을 적으면
+  // 사람이 실패로 읽는다. 기존 spec/code/file 초안 렌더에 분기를 섞지 않고 나눈다.
+  if (BACKTEST_VISUAL_KINDS.has(receipt.kind)) { renderBacktestVisualCard(receipt); return; }
+
 
   const line = document.createElement('div');
   line.className = 'turn';

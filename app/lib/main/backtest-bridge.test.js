@@ -276,6 +276,85 @@ test('흐름 지도: 폼이든 코드든 같은 라우트에 몸체를 그대로
   assert.deepEqual(form, { ok: true, data: { version: 3, nodes: [] } });
 });
 
+// ── 시각 설계 ↔ 코드 왕복(2026-09-03) ───────────────────────────────────────
+
+test('시각 라우트 6종: 메서드·경로·몸체가 계약 그대로다', async () => {
+  const calls = [];
+  const fetchImpl = async (url, opts) => {
+    calls.push([opts.method, url, opts.body ? JSON.parse(opts.body) : null]);
+    return { ok: true, status: 200, json: async () => ({}) };
+  };
+  await backtestBridge.fetchVisualRegistry({ backendBase: 'http://x', fetchImpl });
+  await backtestBridge.validateVisual({ backendBase: 'http://x', fetchImpl, graph: { nodes: [] } });
+  await backtestBridge.compileVisual({ backendBase: 'http://x', fetchImpl, graph: { nodes: [] } });
+  await backtestBridge.visualQuestion({
+    backendBase: 'http://x', fetchImpl, graph: { nodes: [] }, diagnostics: [{ code: 'BTG-PORT-002' }],
+  });
+  await backtestBridge.visualPatch({
+    backendBase: 'http://x', fetchImpl, code: 'BTG-PORT-002', choice_id: 'connect-slow',
+  });
+  await backtestBridge.visualFromSpec({ backendBase: 'http://x', fetchImpl, yaml: 'version: "1.0"' });
+  assert.deepEqual(calls, [
+    ['GET', 'http://x/api/v1/backtest/visual/registry', null],
+    ['POST', 'http://x/api/v1/backtest/visual/validate', { graph: { nodes: [] } }],
+    ['POST', 'http://x/api/v1/backtest/visual/compile', { graph: { nodes: [] } }],
+    ['POST', 'http://x/api/v1/backtest/visual/question',
+      { graph: { nodes: [] }, diagnostics: [{ code: 'BTG-PORT-002' }] }],
+    ['POST', 'http://x/api/v1/backtest/visual/patch', { code: 'BTG-PORT-002', choice_id: 'connect-slow' }],
+    ['POST', 'http://x/api/v1/backtest/visual/from-spec', { yaml: 'version: "1.0"' }],
+  ]);
+});
+
+// 저장 경로를 새로 만들지 않았다는 것 자체가 계약이다 — 사람 승인 receipt까지
+// 포함한 몸체가 기존 버전 라우트로 그대로 간다(§"사용자 적용 이후 서버 처리").
+test('saveVisualVersion: 기존 버전 라우트로 가고 strategy_id만 경로로 빠진다', async () => {
+  let seen = null;
+  const res = await backtestBridge.saveVisualVersion({
+    backendBase: 'http://x',
+    fetchImpl: async (url, opts) => {
+      seen = [opts.method, url, JSON.parse(opts.body)];
+      return { ok: true, status: 200, json: async () => ({ version_id: 'v4', is_active: false }) };
+    },
+    strategy_id: 's 1',
+    origin: 'visual',
+    yaml: 'version: "1.0"',
+    source: 'import athena_bt as bt\n',
+    graph: { nodes: [] },
+    source_map: { entries: [] },
+    hashes: { graph_hash: 'g1', artifact_hash: 'a1' },
+    compiler_version: 'c1',
+    apply_receipt: { patch_id: 'p1', base_version_id: 'v3' },
+  });
+  assert.deepEqual(seen, [
+    'POST', 'http://x/api/v1/backtest/strategies/s%201/versions',
+    {
+      origin: 'visual',
+      yaml: 'version: "1.0"',
+      source: 'import athena_bt as bt\n',
+      graph: { nodes: [] },
+      source_map: { entries: [] },
+      hashes: { graph_hash: 'g1', artifact_hash: 'a1' },
+      compiler_version: 'c1',
+      apply_receipt: { patch_id: 'p1', base_version_id: 'v3' },
+    },
+  ]);
+  assert.deepEqual(res, { ok: true, data: { version_id: 'v4', is_active: false } });
+});
+
+test('시각 patch 409(다른 수정이 먼저 저장됨)도 봉투를 지킨다 — detail을 잃지 않는다', async () => {
+  const res = await backtestBridge.visualPatch({
+    backendBase: 'http://x',
+    fetchImpl: fakeFetch(409, {
+      detail: { message: '다른 수정이 먼저 저장됐습니다', base_version_id: 'v3', head_version_id: 'v4' },
+    }),
+    patch_id: 'p1',
+  });
+  assert.equal(res.ok, false);
+  assert.equal(res.status, 409);
+  assert.equal(res.error, '다른 수정이 먼저 저장됐습니다');
+  assert.equal(res.detail.head_version_id, 'v4');
+});
+
 test('지도→코드 생성: 422(읽을 수 없는 yaml)도 봉투를 지킨다', async () => {
   const ok = await backtestBridge.fetchCodegen({
     backendBase: 'http://x',

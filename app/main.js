@@ -1384,6 +1384,16 @@ const BACKTEST_EXTRA_CHANNELS = {
   'athena:backtest-map': backtestBridge.fetchMap,
   // 지도 뒤의 코드 생성 — 저장하지 않는다(소스만 돌려준다, §7.3).
   'athena:backtest-codegen': backtestBridge.fetchCodegen,
+  // 시각 설계 ↔ 코드 왕복(2026-09-03) — 대화형 오류 수정 계약의 요청 표면이다.
+  // visual-save는 기존 버전 라우트로 간다(새 저장 경로 없음). 저장해도 활성화·실행은
+  // 일어나지 않는다 — 그 경계는 백엔드가 지고, 여기서는 프록시만 한다.
+  'athena:backtest-visual-registry': backtestBridge.fetchVisualRegistry,
+  'athena:backtest-visual-validate': backtestBridge.validateVisual,
+  'athena:backtest-visual-compile': backtestBridge.compileVisual,
+  'athena:backtest-visual-question': backtestBridge.visualQuestion,
+  'athena:backtest-visual-patch': backtestBridge.visualPatch,
+  'athena:backtest-visual-from-spec': backtestBridge.visualFromSpec,
+  'athena:backtest-visual-save': backtestBridge.saveVisualVersion,
   'athena:backtest-diagnose': backtestBridge.diagnoseBacktest,
   'athena:backtest-optimize': backtestBridge.optimizeBacktest,
   'athena:backtest-optimize-plan': backtestBridge.optimizePlan,
