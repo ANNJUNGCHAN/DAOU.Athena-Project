@@ -400,3 +400,28 @@ test('왕복: 프리셋 → 스펙 → yaml → 다시 스펙이 같은 전략�
 test('오늘 날짜는 YYYYMMDD 8자리다', () => {
   assert.equal(spec.todayYyyymmdd(new Date(2026, 8, 1)), '20260901');
 });
+
+// ---------- 검증: 다중 출력 지표 · 코드 경로 ----------
+
+test('validate: 다중 출력 지표의 별칭_출력 이름은 아는 이름이다 — 52주 신고가 돌파(DONCHIAN)', () => {
+  const s = Object.assign(spec.createSpec(null), {
+    symbols: ['005930'], fromDt: '20240101', toDt: '20240630',
+    indicators: [{ id: 'DONCHIAN', alias: 'dc', params: { period: 240 } }],
+    entry: { logic: 'AND', conditions: [{ indicator: 'close', operator: 'greater_equal', compare_to: 'dc_upper' }] },
+    exit: { logic: 'AND', conditions: [{ indicator: 'close', operator: 'less_equal', compare_to: 'dc_lower' }] },
+  });
+  assert.deepEqual(spec.validate(s), []);
+  // 모르는 별칭은 여전히 잡는다.
+  s.exit.conditions[0].compare_to = 'bb_lower';
+  assert.deepEqual(spec.validate(s), ['bb_lower는 정의되지 않은 이름입니다']);
+});
+
+test('validate: conditions=false면 진입·청산 조건 검사를 건너뛰고 대상·기간만 본다', () => {
+  const s = Object.assign(spec.createSpec(null), {
+    symbols: [], fromDt: '20240101', toDt: '20240630',
+    entry: { logic: 'AND', conditions: [] },
+    exit: { logic: 'OR', conditions: [{ indicator: 'nope', operator: 'less_than', compare_to: 1 }] },
+  });
+  assert.deepEqual(spec.validate(s, { conditions: false }), ['종목을 하나 이상 고르세요']);
+  assert.equal(spec.validate(s).length, 3);   // 기본은 조건까지 본다(종목·빈 진입·모르는 이름)
+});
