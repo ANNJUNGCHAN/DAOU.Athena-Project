@@ -954,7 +954,18 @@ function createGraphModeController(deps) {
     const cta = elp('button', 'panel-cta');
     cta.setAttribute('type', 'button');
     cta.textContent = ctaLabel;
-    if (typeof onPanelCta === 'function') cta.addEventListener('click', onPanelCta);
+    // 클릭에 **무엇을 물어야 하는지**를 함께 넘긴다(2026-09-02). 옛 판은 인자 없이
+    // 불러서, 받는 쪽(canvas.js)이 입력창에 포커스만 주고 끝났다 — 버튼을 눌러도
+    // 아무 일도 안 일어난다는 제보의 원인이다. 문구는 위 리드인과 같은 축을 쓴다:
+    // 숨은 연관이면 "왜 이어졌나", 어긋나면 "어느 쪽이 실제인가".
+    if (typeof onPanelCta === 'function') {
+      const ask = {
+        kind: reason ? 'hidden' : (conflicting ? 'conflict' : 'plain'),
+        name: data.name || null,
+        entityId: data.entityId || null,
+      };
+      cta.addEventListener('click', () => onPanelCta(ask));
+    }
     ctaBlock.appendChild(cta);
     panel.appendChild(ctaBlock);
   }
