@@ -2988,6 +2988,7 @@ function renderGuardConfirmCard({ current, proposed } = {}, triggerText) {
 const BACKTEST_CHANGE_TITLES = {
   spec_draft: '설정 반영',
   code_draft: '코드 반영',
+  file_draft: '파일 반영',
   navigate: '탭 이동',
   optimize_request: '최적화 준비',
 };
@@ -3016,7 +3017,11 @@ function renderBacktestChangeCard(receipt) {
   head.appendChild(kindPill);
   const statePill = document.createElement('span');
   statePill.className = receipt.applied ? 'routine-draft-pill' : 'routine-draft-pill is-draft';
-  statePill.textContent = receipt.applied ? '반영됨' : '반영 안 됨';
+  // 파일 초안은 실패한 게 아니라 아직 안 쓴 것이다 — 같은 '반영 안 됨'으로 적으면
+  // 사람이 "안 됐구나"로 읽고 다시 시키게 된다(디스크에 쓰는 건 아래 [적용]이다).
+  statePill.textContent = receipt.applied
+    ? '반영됨'
+    : (receipt.canApply ? '적용 대기' : '반영 안 됨');
   head.appendChild(statePill);
   card.appendChild(head);
 
@@ -3078,6 +3083,63 @@ function renderBacktestChangeCard(receipt) {
       status.textContent = (res && res.reason) || '되돌리지 못했습니다';
     });
     actions.appendChild(undo);
+  }
+
+  // 파일만 [적용]이 남아 있다 — 설정·코드와 달리 이건 디스크의 파일이라 사람이
+  // 누르기 전에는 한 글자도 쓰지 않는다(결정 D4). 누르는 순간 캔버스가 쓴다.
+  if (receipt.canApply) {
+    const applyThen = async (btn, thenRun) => {
+      const api = canvasApi();
+      if (!api || typeof api.applyFileDraft !== 'function') return;
+      btn.disabled = true;
+      status.textContent = '파일을 쓰는 중…';
+      let res;
+      try {
+        res = await api.applyFileDraft(receipt.id);
+      } catch (err) {
+        res = { ok: false, reason: String((err && err.message) || err) };
+      }
+      if (!res || !res.ok) {
+        btn.disabled = false;
+        showErrors([(res && res.reason) || '파일을 쓰지 못했습니다']);
+        status.textContent = '파일을 쓰지 못했습니다';
+        return;
+      }
+      showErrors([]);
+      let tail = '파일에 썼습니다';
+      if (thenRun && typeof api.runFromChat === 'function') {
+        const errors = api.runFromChat();
+        if (Array.isArray(errors) && errors.length) {
+          showErrors(errors);
+          tail = '파일에 썼습니다 — 실행 전에 고칠 게 있습니다';
+        } else {
+          tail = '파일에 썼습니다 — 결과는 캔버스에서 보세요';
+        }
+      }
+      // 같은 초안을 두 번 쓸 수는 없다 — 남은 버튼을 치운다([되돌리기]와 같은 규칙).
+      actions.textContent = tail;
+    };
+
+    const apply = _btn('적용', 'routine-btn routine-btn-approve');
+    apply.addEventListener('click', () => { void applyThen(apply, false); });
+    actions.appendChild(apply);
+
+    if (receipt.suggest_run) {
+      const applyRun = _btn('적용하고 실행', 'routine-btn routine-btn-approve');
+      applyRun.addEventListener('click', () => { void applyThen(applyRun, true); });
+      actions.appendChild(applyRun);
+    }
+
+    const drop = _btn('버리기', 'routine-btn');
+    drop.addEventListener('click', () => {
+      const api = canvasApi();
+      if (!api || typeof api.discardFileDraft !== 'function') return;
+      const res = api.discardFileDraft(receipt.id);
+      actions.textContent = res && res.ok
+        ? '버렸습니다 — 파일은 그대로입니다'
+        : ((res && res.reason) || '버리지 못했습니다');
+    });
+    actions.appendChild(drop);
   }
 
   if (receipt.applied && receipt.suggest_run) {
@@ -3148,10 +3210,12 @@ function renderBacktestChangeCard(receipt) {
   _mountTurn(line, card);
 }
 
-window.athena.on('athena:backtest-chat-action', (action) => {
+window.athena.on('athena:backtest-chat-action', async (action) => {
   const canvas = window.AthenaBacktestCanvas;
   if (!canvas || typeof canvas.onChatAction !== 'function') return;
-  const receipt = canvas.onChatAction(action);
+  // file_draft만 Promise를 준다 — diff의 왼쪽(지금 파일)을 디스크에서 읽어야 한다.
+  // 나머지 셋은 예전처럼 그 자리에서 영수증을 돌려준다(await는 그냥 통과한다).
+  const receipt = await canvas.onChatAction(action);
   renderBacktestChangeCard(receipt);
 });
 

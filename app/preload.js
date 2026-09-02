@@ -125,6 +125,18 @@ const INVOKE_CHANNELS = new Set([
   'athena:backtest-deployment-stop',
   'athena:backtest-signals',
   'athena:backtest-evaluate',
+  // 프로젝트 파일 IDE(2026-09-02, 코드 탭) — 내 컴퓨터의 폴더 하나를 점유한다.
+  // open-dialog만 main 전용이다(네이티브 폴더 선택) — 나머지는 백엔드 라우트 프록시다.
+  'athena:project-list',
+  'athena:project-create',
+  'athena:project-open-dialog',
+  'athena:project-open',
+  'athena:project-tree',
+  'athena:project-file-read',
+  'athena:project-file-write',
+  'athena:project-file-create',
+  'athena:project-file-rename',
+  'athena:project-file-delete',
 ]);
 
 const SEND_CHANNELS = new Set([

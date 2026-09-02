@@ -29,6 +29,8 @@ const EquityChart = isNode
   ? require('./backtest-equity-chart')
   : window.AthenaLib.BacktestEquityChart;
 const Explain = isNode ? require('./backtest-explain') : window.AthenaLib.BacktestExplain;
+// 코드 탭의 프로젝트 IDE(결정 D1~D4) — 배선이 있을 때만 켜진다(ensureProjectIde 참고).
+const ProjectIde = isNode ? require('./project-ide') : window.AthenaLib.ProjectIde;
 
 const { formatNumeric, formatDatetime } = FactsCard;
 
@@ -240,6 +242,8 @@ function createBacktestCanvas(options) {
       mount() {}, refresh() {}, getContext() { return null; },
       onChatAction() { return null; },
       undoChatAction() { return { ok: false, reason: '백테스트 화면이 없습니다' }; },
+      applyFileDraft() { return Promise.resolve({ ok: false, reason: '백테스트 화면이 없습니다' }); },
+      discardFileDraft() { return { ok: false, reason: '백테스트 화면이 없습니다' }; },
       runFromChat() { return []; },
       validateFromChat() { return Promise.resolve({ ok: false, errors: [] }); },
       startOptimizeFromChat() {},
@@ -268,6 +272,12 @@ function createBacktestCanvas(options) {
   let loadRequestId = 0;
   let mounted = false;
   let editorHandle = null;
+  // 프로젝트 IDE는 한 번 만들어 계속 들고 있다 — render()가 매번 DOM을 새로 만들어도
+  // 열린 탭·저장 안 한 버퍼가 살아남아야 한다.
+  let projectIde = null;
+  // 지금 프로젝트의 .py 목록 — 화면에는 안 쓰고 다음 턴 컨텍스트에만 실린다. 모델이
+  // 폴더 안을 모르면 없는 경로를 지어내 propose_file을 낸다.
+  let projectFiles = [];
 
   function setState(patch) {
     state = Object.assign({}, state, patch);
@@ -360,12 +370,88 @@ function createBacktestCanvas(options) {
     return SpecModel.toYaml(spec);
   }
 
+  // 프로젝트 IDE는 배선이 있을 때만 만든다 — deps에 프로젝트 채널이 없으면(옛 배선·
+  // 단위 테스트) 코드 탭은 지금까지처럼 단일 버퍼 편집기 하나로 돈다. 새 기능이 옛
+  // 화면을 끄지 않게 하는 유일한 장치다.
+  function ensureProjectIde() {
+    if (projectIde) return projectIde;
+    if (!deps.listProjects) return null;
+    projectIde = ProjectIde.createProjectIde({
+      deps: {
+        listProjects: deps.listProjects,
+        createProject: deps.createProject,
+        openDialog: deps.openProjectDialog,
+        openProject: deps.openProject,
+        tree: deps.projectTree,
+        readFile: deps.readProjectFile,
+        writeFile: deps.writeProjectFile,
+        createFile: deps.createProjectFile,
+        renameFile: deps.renameProjectFile,
+        deleteFile: deps.deleteProjectFile,
+        // 프로젝트가 정해지면 코드 탭의 구성이 바뀐다 — 캔버스를 다시 그린다.
+        // 폴더가 바뀌면 앞 폴더의 파일 목록·파일 초안은 더 이상 이 화면의 것이 아니다.
+        onProjectChange: (project) => {
+          projectFiles = [];
+          if (project) void loadProjectFiles(project.id);
+          setState({ fileDraft: null });
+        },
+      },
+    });
+    projectIde.mount();
+    return projectIde;
+  }
+
+  // 컨텍스트에 실을 .py 경로 — 트리를 한 번 더 읽는다(IDE는 자기 트리를 내주지 않는다).
+  // 못 읽으면 조용히 빈 목록이다. 부수 정보라 화면을 실패로 만들지 않는다.
+  async function loadProjectFiles(projectId) {
+    if (!deps.projectTree || !projectId) { projectFiles = []; return; }
+    let res;
+    try { res = await deps.projectTree(projectId); } catch { projectFiles = []; return; }
+    const out = [];
+    const walk = (list) => {
+      (Array.isArray(list) ? list : []).forEach((entry) => {
+        if (!entry) return;
+        if (entry.is_dir) walk(entry.children);
+        else if (entry.py) out.push(entry.path);
+      });
+    };
+    walk(res && res.entries);
+    projectFiles = out;
+  }
+
+  // 프로젝트에서 실행할 때의 원문 — 디스크의 그 파일이다(D2). 열린 파일이 없으면
+  // null을 돌려주고, 그때는 지금까지의 단일 버퍼(codeSource)가 그대로 쓰인다.
+  function activeProjectFile() {
+    return projectIde ? projectIde.activeFile() : null;
+  }
+
+  // 실행 직전 그 파일의 디스크 내용. 못 읽으면 편집기 버퍼로 물러난다 — 못 읽었다고
+  // 실행을 막지는 않는다(백엔드가 어차피 소스를 검증한다).
+  async function projectFileText(activeFile) {
+    const project = projectIde ? projectIde.currentProject() : null;
+    if (!project || !deps.readProjectFile) return activeFile.text;
+    try {
+      const res = await deps.readProjectFile(project.id, activeFile.path);
+      return res && typeof res.text === 'string' ? res.text : activeFile.text;
+    } catch { return activeFile.text; }
+  }
+
   // 코드 경로는 폼의 진입·청산 조건을 검사하지 않는다 — 신호는 파이썬이 만든다.
   function runErrors() {
-    return SpecModel.validate(spec, { conditions: runPath !== 'code' });
+    const codeRuns = runPath === 'code' || !!activeProjectFile();
+    return SpecModel.validate(spec, { conditions: !codeRuns });
   }
 
   async function handleRun(allowPartial) {
+    // 저장 안 한 편집으로 실행하면 화면의 코드와 도는 코드가 갈라진다 — 디스크가
+    // 진실이라는 결정(D2)이 여기서 지켜진다.
+    if (projectIde && projectIde.isDirty()) {
+      setState({
+        designTab: 'code',
+        codeErrors: ['저장하고 실행하세요 — 저장하지 않은 편집이 있습니다'],
+      });
+      return;
+    }
     const errors = runErrors();
     if (errors.length) { setState({ formErrors: errors }); return; }
     setState({ formErrors: [] });
@@ -379,7 +465,13 @@ function createBacktestCanvas(options) {
       const body = { yaml: currentYaml() };
       if (allowPartial) body.allow_partial = true;
       // 코드 경로일 때만 파이썬을 싣는다 — 백엔드는 source가 있으면 코드로, 없으면 폼으로 돈다.
-      if (runPath === 'code' && codeSource.trim()) body.source = codeSource;
+      // 프로젝트에서 연 파일이 있으면 그 파일이 이긴다(D2: 진실은 디스크에 있다).
+      // 편집기 버퍼가 아니라 디스크를 다시 읽는 이유: 채팅이 방금 쓴 파일이 열려 있으면
+      // 버퍼에는 아직 옛 내용이 남아 있다(IDE에 다시 읽는 길이 없다). 저장 안 한 편집은
+      // 위 handleRun이 이미 막았으므로, 여기서 디스크를 읽어도 사람이 친 것은 안 사라진다.
+      const activeFile = activeProjectFile();
+      if (activeFile) body.source = await projectFileText(activeFile);
+      else if (runPath === 'code' && codeSource.trim()) body.source = codeSource;
       res = deps.run ? await deps.run(body) : null;
       if (!res) throw new Error('실행 연결이 없습니다');
     } catch (err) { fail(err); return; }
@@ -603,9 +695,9 @@ function createBacktestCanvas(options) {
     else if (state.runId) pollRun();
   }
 
-  // ---------- 채팅 액션(설정 · 코드 · 화면 전환 · 최적화) ----------
+  // ---------- 채팅 액션(설정 · 코드 · 파일 · 화면 전환 · 최적화) ----------
   //
-  // main.js가 'athena:backtest-chat-action' 하나로 네 종류를 보낸다. 설정·코드는 검증을
+  // main.js가 'athena:backtest-chat-action' 하나로 다섯 종류를 보낸다. 설정·코드는 검증을
   // 통과하면 화면에 바로 들어간다(사용자 결정 2026-09-02 "바로 반영 + 채팅에 변경 내역·
   // 되돌리기") — 무엇이 바뀌었는지와 [되돌리기]는 캔버스가 아니라 채팅 카드가 맡는다.
   // 실행·수집·저장·활성화·배포는 그대로 사람이 버튼을 눌러야 한다. 바뀐 것은 폼에
@@ -680,6 +772,8 @@ function createBacktestCanvas(options) {
       designTab: null,
       method: null,
       canUndo: false,
+      // 파일 초안만 쓴다 — 아직 디스크에 안 쓴 초안이 서 있다는 뜻이다(채팅의 [적용]).
+      canApply: false,
     }, extra || {});
   }
 
@@ -720,6 +814,8 @@ function createBacktestCanvas(options) {
     if (!action || typeof action !== 'object') return null;
     if (action.kind === 'spec_draft') return applySpecAction(action);
     if (action.kind === 'code_draft') return applyCodeAction(action);
+    // 파일만 비동기다 — diff의 왼쪽(지금 파일)을 디스크에서 읽어야 하기 때문이다.
+    if (action.kind === 'file_draft') return applyFileAction(action);
     if (action.kind === 'navigate') return navigateAction(action);
     if (action.kind === 'optimize_request') return optimizeAction(action);
     return null;
@@ -781,6 +877,101 @@ function createBacktestCanvas(options) {
     }));
     pushUndo(receipt.id, 'code_draft', before);
     return receipt;
+  }
+
+  // ── 파일 초안(결정 D4) — 채팅이 낸 파일은 diff로만 선다 ──────────────────────
+  //
+  // code_draft와 다른 점 하나가 전부다: 이건 **디스크의 파일**을 건드린다. 그래서 바로
+  // 반영하지 않는다 — 캔버스는 지금 파일과의 diff만 띄우고, 파일이 쓰이는 순간은 사람이
+  // 채팅 카드의 [적용]을 누른 그때뿐이다(결정 D2·D4). 되돌리기가 없는 이유도 같다:
+  // 아직 아무것도 바뀌지 않았으므로 되돌릴 것이 없다.
+  async function applyFileAction(envelope) {
+    const path = typeof envelope.path === 'string' ? envelope.path.trim() : '';
+    const source = envelope.source;
+    if (!path || typeof source !== 'string' || !source) return null;
+    const note = envelopeNote(envelope);
+    const suggestRun = envelope.suggest_run === true;
+    if (isBusyView()) return busyReceipt('file_draft', note);
+
+    const ide = ensureProjectIde();
+    const project = ide && ide.currentProject();
+    const blockers = fileBlockers(project, envelope, path);
+    if (blockers.length) {
+      return remember(makeReceipt('file_draft', {
+        note, rows: [fileRow(path, '', source)], errors: blockers, suggest_run: suggestRun,
+      }));
+    }
+
+    const before = await readProjectText(project.id, path);
+    const draft = { id: null, project_id: project.id, path, source, note, before };
+    setState({ fileDraft: draft, view: 'design', tab: 'design', designTab: 'code' });
+    const receipt = remember(makeReceipt('file_draft', {
+      note, rows: [fileRow(path, before, source)], suggest_run: suggestRun,
+      canApply: true, tab: state.tab, designTab: state.designTab,
+    }));
+    draft.id = receipt.id;
+    return receipt;
+  }
+
+  // 쓸 수 없는 이유만 돌려준다 — 여기서 막힌 초안은 화면에 서지 않는다.
+  function fileBlockers(project, envelope, path) {
+    if (!project) return ['코드 탭에서 프로젝트 폴더를 먼저 여세요'];
+    if (typeof envelope.project_id === 'string' && envelope.project_id !== project.id) {
+      return ['지금 열어둔 프로젝트의 파일이 아닙니다'];
+    }
+    if (!/\.py$/i.test(path)) return ['파이썬(.py) 파일만 쓸 수 있습니다'];
+    if (!deps.writeProjectFile) return ['프로젝트 저장 연결이 없습니다'];
+    return [];
+  }
+
+  function fileRow(path, before, after) {
+    return Object.assign(codeRow(before, after), { label: path });
+  }
+
+  // diff의 왼쪽 — 없는 파일이면 빈 문자열이다(새로 만드는 경우가 그렇다).
+  async function readProjectText(projectId, path) {
+    if (!deps.readProjectFile) return '';
+    try {
+      const res = await deps.readProjectFile(projectId, path);
+      return String((res && res.text) || '');
+    } catch { return ''; }
+  }
+
+  // 채팅 카드의 [적용]·[적용하고 실행] — 파일이 디스크에 쓰이는 유일한 자리다.
+  async function applyFileDraft(id) {
+    const draft = state.fileDraft;
+    if (!draft || (id && draft.id !== id)) {
+      return { ok: false, reason: '적용할 파일 초안이 없습니다' };
+    }
+    if (isBusyView()) return { ok: false, reason: '실행 중에는 파일을 쓸 수 없습니다' };
+    if (!deps.writeProjectFile) return { ok: false, reason: '프로젝트 저장 연결이 없습니다' };
+    // 편집기에 저장 안 한 편집이 있는 파일에 쓰면 사람이 친 것이 조용히 사라진다.
+    const open = activeProjectFile();
+    if (open && open.path === draft.path && open.dirty) {
+      return { ok: false, reason: '편집기에 저장하지 않은 편집이 있습니다 — 저장하거나 되돌린 뒤 적용하세요' };
+    }
+    try {
+      await deps.writeProjectFile(draft.project_id, draft.path, draft.source);
+    } catch (err) {
+      const reason = String((err && err.message) || err);
+      setState({ codeErrors: [reason] });
+      return { ok: false, reason };
+    }
+    // 새 파일이면 트리에 없던 경로다 — 목록을 다시 읽어야 다음 턴 컨텍스트가 맞는다.
+    await loadProjectFiles(draft.project_id);
+    setState({ fileDraft: null, codeErrors: [] });
+    if (projectIde) projectIde.refresh();
+    return { ok: true, path: draft.path };
+  }
+
+  // 채팅 카드의 [버리기] — 아무것도 쓰지 않았으므로 초안을 지우면 끝이다.
+  function discardFileDraft(id) {
+    const draft = state.fileDraft;
+    if (!draft || (id && draft.id !== id)) {
+      return { ok: false, reason: '버릴 파일 초안이 없습니다' };
+    }
+    setState({ fileDraft: null });
+    return { ok: true, path: draft.path };
   }
 
   // 헤더 탭 버튼과 같은 규칙이다 — 채팅이 여는 화면이 사람이 누르는 화면과 달라지면
@@ -923,6 +1114,28 @@ function createBacktestCanvas(options) {
       })),
       coverage: currentCoverage(),
       lastChange,
+      project: projectContext(),
+    };
+  }
+
+  // 열린 폴더의 사실만 — 모델이 경로를 지어내지 않게 하고, 아직 안 쓴 파일 초안이
+  // 서 있다는 것을 매 턴 다시 알린다(썼다고 말해버리는 것을 막는 유일한 장치다).
+  function projectContext() {
+    const project = projectIde ? projectIde.currentProject() : null;
+    if (!project) return null;
+    const active = projectIde.activeFile();
+    const draft = state.fileDraft;
+    return {
+      name: project.name,
+      path: project.path,
+      activeFile: active ? active.path : null,
+      dirty: !!(active && active.dirty),
+      // IDE는 열린 탭 목록을 밖으로 내주지 않는다 — 확실히 아는 것은 활성 파일뿐이다.
+      openFiles: active ? [active.path] : [],
+      pyFiles: projectFiles.slice(),
+      fileDraft: draft
+        ? { path: draft.path, note: draft.note, lines: countLines(draft.source) }
+        : null,
     };
   }
 
@@ -1387,6 +1600,17 @@ function createBacktestCanvas(options) {
 
   function renderCodeTab() {
     const wrap = el('div', 'backtest-code-tab');
+    // 프로젝트 IDE는 자기 루트 노드를 계속 들고 있다 — 여기서는 붙이기만 한다.
+    const ide = ensureProjectIde();
+    if (ide) wrap.appendChild(ide.element);
+    // 프로젝트를 고르기 전까지는 지금까지의 단일 버퍼 편집기가 그대로 코드 탭이다.
+    if (ide && ide.currentProject()) {
+      if (state.fileDraft) wrap.appendChild(renderFileDraft());
+      wrap.appendChild(renderCodeErrors());
+      wrap.appendChild(renderCodeBounds());
+      return wrap;
+    }
+
     const head = el('div', 'backtest-card-head');
     head.appendChild(el('div', 'backtest-card-title', 'strategy.py'));
     head.appendChild(el('div', 'backtest-card-note', 'python 3.12 · pandas · numpy · athena_bt'));
@@ -1426,15 +1650,40 @@ function createBacktestCanvas(options) {
       } catch (err) { fail(err); }
     }));
     wrap.appendChild(actions);
+    wrap.appendChild(renderCodeErrors());
+    wrap.appendChild(renderCodeBounds());
+    return wrap;
+  }
 
+  // 채팅이 낸 파일 초안 — 지금 파일과의 diff만 보여준다. 누르는 자리는 채팅 카드
+  // 하나뿐이다(같은 결정을 두 곳에 두면 어느 쪽이 진짜인지 알 수 없다).
+  function renderFileDraft() {
+    const draft = state.fileDraft;
+    const wrap = el('div', 'backtest-file-draft');
+    const head = el('div', 'backtest-diag-fix-head');
+    head.appendChild(el('div', 'backtest-diag-section-title', draft.path));
+    head.appendChild(el(
+      'div', 'backtest-diag-fix-stat',
+      draft.before ? '채팅의 [적용]을 눌러야 이 파일에 씁니다' : '새 파일 — 아직 만들지 않았습니다',
+    ));
+    wrap.appendChild(head);
+    const host = el('div', 'backtest-file-draft-diff');
+    CodeEditor.renderDiff(host, draft.before, draft.source, {});
+    wrap.appendChild(host);
+    return wrap;
+  }
+
+  function renderCodeErrors() {
     const errors = el('div', 'backtest-design-error');
     // 폼 검증 오류도 여기 적는다 — 코드 초안 카드의 [적용하고 실행]은 폼 검증을 거치는데,
     // 그 오류를 폼 탭에서만 그리면 코드 탭에 있는 사람에게는 아무 일도 안 일어난 것처럼 보인다.
     (state.formErrors || []).concat(state.codeErrors || []).forEach((m) => {
       errors.appendChild(el('div', 'backtest-design-error-line', m));
     });
-    wrap.appendChild(errors);
+    return errors;
+  }
 
+  function renderCodeBounds() {
     const bounds = el('div', 'backtest-code-bounds');
     bounds.appendChild(el('div', 'backtest-card-title', '이 코드가 닿을 수 있는 것'));
     bounds.appendChild(el(
@@ -1450,8 +1699,7 @@ function createBacktestCanvas(options) {
       '파이썬 샌드박스는 작정한 공격자를 막지 못합니다. 진짜 경계는 자격증명을 안 넘기는 것, '
       + 'DB에 못 닿는 것, 별도 프로세스, 시간 제한 넷입니다.',
     ));
-    wrap.appendChild(bounds);
-    return wrap;
+    return bounds;
   }
 
   // ── 보드 08 · 코드 플로우 지도 ────────────────────────────────────────────
@@ -1990,6 +2238,8 @@ function createBacktestCanvas(options) {
     getContext,
     onChatAction,
     undoChatAction,
+    applyFileDraft,
+    discardFileDraft,
     runFromChat,
     validateFromChat,
     startOptimizeFromChat,

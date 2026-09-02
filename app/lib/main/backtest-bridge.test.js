@@ -116,3 +116,74 @@ test('fetchRuns: GET /api/v1/backtest/runs', async () => {
   assert.equal(seenUrl, 'http://x/api/v1/backtest/runs');
   assert.deepEqual(res, { ok: true, data: { runs: [] } });
 });
+
+// ── 프로젝트 파일 API(2026-09-02) ────────────────────────────────────────────
+
+test('프로젝트 목록·생성·열기: 경로와 몸체가 계약 그대로다', async () => {
+  const calls = [];
+  const fetchImpl = async (url, opts) => {
+    calls.push([opts.method, url, opts.body ? JSON.parse(opts.body) : null]);
+    return { ok: true, status: 200, json: async () => ({}) };
+  };
+  await backtestBridge.listProjects({ backendBase: 'http://x', fetchImpl });
+  await backtestBridge.createProject({ backendBase: 'http://x', fetchImpl, name: '내 전략' });
+  await backtestBridge.openProject({ backendBase: 'http://x', fetchImpl, path: 'D:/quant/my' });
+  assert.deepEqual(calls, [
+    ['GET', 'http://x/api/v1/projects', null],
+    ['POST', 'http://x/api/v1/projects', { name: '내 전략' }],
+    ['POST', 'http://x/api/v1/projects/open', { path: 'D:/quant/my' }],
+  ]);
+});
+
+test('파일 읽기·지우기: path를 쿼리로, project_id는 경로에 인코딩한다', async () => {
+  const urls = [];
+  const methods = [];
+  const fetchImpl = async (url, opts) => {
+    urls.push(url); methods.push(opts.method);
+    return { ok: true, status: 200, json: async () => ({}) };
+  };
+  await backtestBridge.fetchProjectTree({ backendBase: 'http://x', fetchImpl, project_id: 'p 1' });
+  await backtestBridge.readProjectFile({
+    backendBase: 'http://x', fetchImpl, project_id: 'p1', path: 'strategies/골든.py',
+  });
+  await backtestBridge.deleteProjectFile({
+    backendBase: 'http://x', fetchImpl, project_id: 'p1', path: 'a.py',
+  });
+  assert.deepEqual(methods, ['GET', 'GET', 'DELETE']);
+  assert.equal(urls[0], 'http://x/api/v1/projects/p%201/tree');
+  assert.equal(urls[1], 'http://x/api/v1/projects/p1/file?path=strategies%2F%EA%B3%A8%EB%93%A0.py');
+  assert.equal(urls[2], 'http://x/api/v1/projects/p1/file?path=a.py');
+});
+
+test('파일 쓰기·만들기·이름 바꾸기: project_id는 몸체에서 빠진다', async () => {
+  const calls = [];
+  const fetchImpl = async (url, opts) => {
+    calls.push([opts.method, url, JSON.parse(opts.body)]);
+    return { ok: true, status: 200, json: async () => ({}) };
+  };
+  await backtestBridge.writeProjectFile({
+    backendBase: 'http://x', fetchImpl, project_id: 'p1', path: 'a.py', text: 'x = 1\n',
+  });
+  await backtestBridge.createProjectFile({
+    backendBase: 'http://x', fetchImpl, project_id: 'p1', path: 'b.py', kind: 'file',
+  });
+  await backtestBridge.renameProjectFile({
+    backendBase: 'http://x', fetchImpl, project_id: 'p1', path: 'a.py', to: 'c.py',
+  });
+  assert.deepEqual(calls, [
+    ['PUT', 'http://x/api/v1/projects/p1/file', { path: 'a.py', text: 'x = 1\n' }],
+    ['POST', 'http://x/api/v1/projects/p1/file', { path: 'b.py', kind: 'file' }],
+    ['POST', 'http://x/api/v1/projects/p1/rename', { path: 'a.py', to: 'c.py' }],
+  ]);
+});
+
+test('프로젝트 라우트의 오류도 같은 봉투다 — 한국어 detail을 그대로 싣는다', async () => {
+  const res = await backtestBridge.writeProjectFile({
+    backendBase: 'http://x',
+    fetchImpl: async () => ({
+      ok: false, status: 415, json: async () => ({ detail: '파이썬(.py) 파일만 저장할 수 있다' }),
+    }),
+    project_id: 'p1', path: 'a.txt', text: '',
+  });
+  assert.deepEqual(res, { ok: false, status: 415, error: '파이썬(.py) 파일만 저장할 수 있다' });
+});

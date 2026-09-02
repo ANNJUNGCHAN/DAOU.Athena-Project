@@ -2528,6 +2528,14 @@ function backtestError(res, fallback) {
   return raw;
 }
 
+// 프로젝트 라우트의 실패 문구 — 백엔드가 이미 한국어 문장으로 답하므로(경로 탈출·비 .py·
+// 이름 충돌) 그 문장을 덮어쓰지 않는다. 백엔드가 아예 없을 때만 할 일을 알려준다.
+function projectError(res, fallback) {
+  const raw = (res && res.error) || fallback;
+  if (res && res.status === 0) return `백엔드에 연결하지 못했습니다 — 백엔드가 떠 있는지 확인하세요 (${raw})`;
+  return raw;
+}
+
 const backtestCanvas = window.AthenaLib.BacktestCanvas.createBacktestCanvas({
   container: document.getElementById('backtestCanvas'),
   fetchPresets: async () => {
@@ -2677,6 +2685,70 @@ const backtestCanvas = window.AthenaLib.BacktestCanvas.createBacktestCanvas({
     );
     if (!res || !res.ok) throw new Error(backtestError(res, '신호 이력을 불러오지 못했습니다'));
     return (res.data && Array.isArray(res.data.signals)) ? res.data.signals : [];
+  },
+  // 프로젝트 파일 IDE(2026-09-02, 코드 탭) — 봉투를 벗기는 규칙은 위 백테스트 배선과 같다.
+  // 실패 문구만 다르다: 백엔드가 이미 사람이 읽을 한국어 detail로 답하므로(400/409/415)
+  // 그것을 그대로 올리고, 백엔드가 아예 없을 때(status 0)만 할 일을 알려준다.
+  listProjects: async () => {
+    const res = await window.athena.invoke('athena:project-list');
+    if (!res || !res.ok) throw new Error(projectError(res, '프로젝트 목록을 불러오지 못했습니다'));
+    return res.data;
+  },
+  createProject: async (name) => {
+    const res = await window.athena.invoke('athena:project-create', { name });
+    if (!res || !res.ok) throw new Error(projectError(res, '프로젝트를 만들지 못했습니다'));
+    return res.data;
+  },
+  // 폴더는 사람이 네이티브 창에서 고른다 — 렌더러가 경로를 지어내는 길은 없다.
+  openProjectDialog: async () => {
+    const res = await window.athena.invoke('athena:project-open-dialog');
+    if (!res || !res.ok) throw new Error(projectError(res, '폴더 선택 창을 열지 못했습니다'));
+    return res.data;
+  },
+  openProject: async (folderPath) => {
+    const res = await window.athena.invoke('athena:project-open', { path: folderPath });
+    if (!res || !res.ok) throw new Error(projectError(res, '폴더를 열지 못했습니다'));
+    return res.data;
+  },
+  projectTree: async (projectId) => {
+    const res = await window.athena.invoke('athena:project-tree', { project_id: projectId });
+    if (!res || !res.ok) throw new Error(projectError(res, '파일 목록을 불러오지 못했습니다'));
+    return res.data;
+  },
+  readProjectFile: async (projectId, filePath) => {
+    const res = await window.athena.invoke(
+      'athena:project-file-read', { project_id: projectId, path: filePath },
+    );
+    if (!res || !res.ok) throw new Error(projectError(res, '파일을 열지 못했습니다'));
+    return res.data;
+  },
+  writeProjectFile: async (projectId, filePath, text) => {
+    const res = await window.athena.invoke(
+      'athena:project-file-write', { project_id: projectId, path: filePath, text },
+    );
+    if (!res || !res.ok) throw new Error(projectError(res, '파일을 저장하지 못했습니다'));
+    return res.data;
+  },
+  createProjectFile: async (projectId, filePath, kind) => {
+    const res = await window.athena.invoke(
+      'athena:project-file-create', { project_id: projectId, path: filePath, kind },
+    );
+    if (!res || !res.ok) throw new Error(projectError(res, '파일을 만들지 못했습니다'));
+    return res.data;
+  },
+  renameProjectFile: async (projectId, filePath, to) => {
+    const res = await window.athena.invoke(
+      'athena:project-file-rename', { project_id: projectId, path: filePath, to },
+    );
+    if (!res || !res.ok) throw new Error(projectError(res, '이름을 바꾸지 못했습니다'));
+    return res.data;
+  },
+  deleteProjectFile: async (projectId, filePath) => {
+    const res = await window.athena.invoke(
+      'athena:project-file-delete', { project_id: projectId, path: filePath },
+    );
+    if (!res || !res.ok) throw new Error(projectError(res, '지우지 못했습니다'));
+    return res.data;
   },
 });
 backtestCanvas.mount();

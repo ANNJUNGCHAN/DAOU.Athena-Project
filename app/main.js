@@ -1384,6 +1384,36 @@ Object.keys(BACKTEST_EXTRA_CHANNELS).forEach((channel) => {
   });
 });
 
+// 프로젝트 파일 API(2026-09-02) — 코드 탭이 "내 컴퓨터의 폴더 하나"를 여는 자리다.
+// 위 백테스트 채널과 같은 프록시 규칙을 쓴다 — 경로 검사는 백엔드가 진다(400/415).
+const PROJECT_CHANNELS = {
+  'athena:project-list': backtestBridge.listProjects,
+  'athena:project-create': backtestBridge.createProject,
+  'athena:project-open': backtestBridge.openProject,
+  'athena:project-tree': backtestBridge.fetchProjectTree,
+  'athena:project-file-read': backtestBridge.readProjectFile,
+  'athena:project-file-write': backtestBridge.writeProjectFile,
+  'athena:project-file-create': backtestBridge.createProjectFile,
+  'athena:project-file-rename': backtestBridge.renameProjectFile,
+  'athena:project-file-delete': backtestBridge.deleteProjectFile,
+};
+Object.keys(PROJECT_CHANNELS).forEach((channel) => {
+  const call = PROJECT_CHANNELS[channel];
+  ipcMain.handle(channel, async (_e, body = {}) => {
+    try { return await call({ backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch, ...body }); }
+    catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
+  });
+});
+
+// 폴더는 사람이 고른다 — 렌더러가 경로를 지어내 여는 길은 없다(handlePickFiles와 같은 원칙).
+ipcMain.handle('athena:project-open-dialog', async () => {
+  try {
+    const res = await dialog.showOpenDialog(shellWin, { properties: ['openDirectory'] });
+    const picked = (res.filePaths || [])[0] || null;
+    return { ok: true, data: { canceled: res.canceled || !picked, path: picked } };
+  } catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
+});
+
 // ---------- OS 스냅 이벤트 정착 (2026-08-18 승급 — qa-win-arrow.json 실측 근거) ----------
 // resizable:true 승급으로 Windows가 Win+←/→(스냅)·Win+↑(최대화)·Win+↓(최소화)를
 // 직접 실행하게 됐다. 그 결과 이벤트를 받아 앱이 의미론을 정착시킨다:
@@ -2184,8 +2214,8 @@ function maybeForwardNudgeGuardProposal(step, resultBlock) {
 
 const BACKTEST_TOOL_NAME = 'athena_backtest';
 
-// 백테스트 채팅 액션 카드 — athena_backtest의 HTTP 무호출 액션 넷(backtest_tools.py의
-// propose_spec·propose_code·navigate·propose_optimize)을 셸 렌더러의 백테스트
+// 백테스트 채팅 액션 카드 — athena_backtest의 HTTP 무호출 액션 다섯(backtest_tools.py의
+// propose_spec·propose_code·propose_file·navigate·propose_optimize)을 셸 렌더러의 백테스트
 // 캔버스로 흘려보낸다. 캔버스는 채팅이 몰지만 폼·편집기에 실제로 들어가는 것은
 // 사용자가 카드의 [적용]을 누른 뒤이고, 실행·검증·탐색 시작은 따로 눌러야 시작된다.
 // orbWin에는 안 보낸다 — 말걸기 가드 카드와 같은 이유(채팅 전용 사람 액션)다.
@@ -2206,6 +2236,20 @@ function maybeForwardBacktestChatAction(step, resultBlock) {
     message = {
       kind: 'code_draft', source, note: input.note == null ? null : input.note,
       suggest_run: input.suggest_run === true, suggest_validate: input.suggest_validate === true,
+    };
+  } else if (action === 'propose_file') {
+    // 새 파일은 백엔드에 없으므로 결과가 아니라 호출 입력에서 읽는다(propose_code와 같은 이유).
+    // 캔버스는 이걸로 지금 파일과의 diff만 세운다 — 디스크에 쓰는 건 사람이 [적용]을 누른 뒤다.
+    const input = step.input.propose_file;
+    if (!input || typeof input !== 'object') return;
+    const source = input.source;
+    const filePath = input.path;
+    if (typeof source !== 'string' || !source.trim()) return;
+    if (typeof filePath !== 'string' || !filePath.trim()) return;
+    message = {
+      kind: 'file_draft', project_id: input.project_id, path: filePath, source,
+      note: input.note == null ? null : input.note,
+      suggest_run: input.suggest_run === true,
     };
   } else if (action === 'propose_spec' || action === 'navigate' || action === 'propose_optimize') {
     const text = extractToolResultText(resultBlock.content);
