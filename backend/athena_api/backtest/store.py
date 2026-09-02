@@ -16,10 +16,22 @@ TR당 1 req/s)을 다시 태우게 된다. 수명과 재생성 비용이 전혀 
 트랜잭션(SAVEPOINT) 안에서 움직인다. ② 그래도 애플리케이션 로직에 구멍이 나면
 `bt_strategy_version_one_active`(부분 유니크 인덱스)가 DB 계층에서 막는다 — ①이
 버그로 두 행을 동시에 켜려 들면 ②가 `IntegrityError`로 즉시 거부한다.
+
+**왜 `visual`·`code_only`는 저장층에서도 활성화를 거부하나.** 시각 편집기가 만든 버전은
+"사람이 patch를 검토하고 적용했다"는 뜻이지 "이 전략을 지금부터 돌린다"는 뜻이 아니다
+(docs/research/backtest-visual-code-roundtrip-implementation-evaluation.md §사용자 적용 이후
+서버 처리). API 층이 `active`를 강제로 끄지만, 그 한 겹이 버그로 뚫리면 사용자가 검토한 적
+없는 전략이 실전 경로로 걸어 들어간다 — 저장층도 같은 요청을 fail-closed로 거부한다.
+
+**왜 bundle을 같은 행에 같은 트랜잭션으로 쓰나.** graph/spec/생성 코드/source map/hash는
+따로 있으면 아무 의미가 없다 — 셋 중 하나만 남은 행은 "이 코드가 이 그래프에서 나왔다"를
+증명하지 못하는데도 증명하는 척한다. 부분 저장을 만들 바에는 아무것도 남기지 않는다.
 """
 
 from __future__ import annotations
 
+import hashlib
+import json
 import sqlite3
 from collections.abc import Sequence
 from dataclasses import dataclass
@@ -34,7 +46,14 @@ from athena_api.brain.db import SqliteOwner, atomic
 # 그 캐시를 다시 받으려면 §5.2 레이트 리밋을 처음부터 다시 태워야 한다. 새 표는 전부
 # `CREATE TABLE IF NOT EXISTS`라 기존 파일에도 그대로 얹힌다 — 파괴적 변경이 아니다.
 # 열 타입을 바꾸거나 표를 지우는 날이 오면 그때 마이그레이션과 함께 버전을 올린다.
+# 열을 **더하는** 것도 같은 이유로 버전을 올리지 않는다 — `_migrate_version_bundle()`이
+# 없는 열만 NULL 허용으로 붙이므로 이미 쓰던 파일이 그대로 열린다.
 SCHEMA_VERSION: Final = 1
+
+# 버전 생성이 받을 수 있는 origin. `visual`·`code_only`는 항상 비활성으로만 저장한다
+# (파일 머리 "왜 저장층에서도 활성화를 거부하나").
+_ORIGINS: Final = ("human", "form", "llm_draft", "visual", "code_only")
+_INACTIVE_ONLY_ORIGINS: Final = ("visual", "code_only")
 
 # 이 저장소의 쓰기 한 단위가 공유하는 savepoint 이름. 브레인의 `_GRAPH_WRITE`와 같은
 # 이유로 하나면 된다 — 백테스트 쓰기끼리는 중첩하지 않는다.
@@ -77,7 +96,15 @@ CREATE TABLE IF NOT EXISTS bt_strategy_version (
     note        TEXT,
     origin      TEXT NOT NULL,
     created_at  TEXT NOT NULL,
-    active      INTEGER NOT NULL DEFAULT 0
+    active      INTEGER NOT NULL DEFAULT 0,
+    -- 시각 버전 bundle. 기존 파일에는 `_migrate_version_bundle()`이 같은 열을 붙인다 —
+    -- 여기 정의와 그쪽 목록(`_BUNDLE_COLUMNS`)은 반드시 같은 이름·타입이어야 한다.
+    graph_json         TEXT,
+    spec_yaml          TEXT,
+    source_map_json    TEXT,
+    hashes_json        TEXT,
+    compiler_version   TEXT,
+    apply_receipt_json TEXT
 );
 CREATE UNIQUE INDEX IF NOT EXISTS bt_strategy_version_unique
     ON bt_strategy_version(strategy_id, version);
@@ -163,6 +190,79 @@ def _ts(value: datetime) -> str:
     return value.astimezone(UTC).isoformat()
 
 
+# `bt_strategy_version`에 나중에 붙은 열들. 위 `_SCHEMA`의 CREATE TABLE과 같은 이름·타입을
+# 반복해 적는 이유는 SQLite가 `ADD COLUMN IF NOT EXISTS`를 모르기 때문이다 — 새 파일은
+# CREATE로, 이미 있는 파일은 ALTER로 같은 모양이 된다.
+_BUNDLE_COLUMNS: Final = (
+    ("graph_json", "TEXT"),
+    ("spec_yaml", "TEXT"),
+    ("source_map_json", "TEXT"),
+    ("hashes_json", "TEXT"),
+    ("compiler_version", "TEXT"),
+    ("apply_receipt_json", "TEXT"),
+)
+
+
+def _migrate_version_bundle(connection: sqlite3.Connection) -> None:
+    """이미 쓰던 DB에 bundle 열만 덧붙인다 — 몇 번을 불러도 같은 결과다.
+
+    `ALTER TABLE ... ADD COLUMN`은 NULL 허용 열이라 기존 행을 건드리지 않는다. 표를 새로
+    만들어 옮기는 마이그레이션이 아니므로 캔들 캐시(§5.2 레이트 리밋)도 그대로 남는다.
+    """
+    have = {
+        str(row["name"]) for row in connection.execute("PRAGMA table_info(bt_strategy_version)")
+    }
+    for name, sql_type in _BUNDLE_COLUMNS:
+        if name not in have:
+            connection.execute(f"ALTER TABLE bt_strategy_version ADD COLUMN {name} {sql_type}")
+
+
+def canonical_graph_json(graph: Any) -> str:
+    """그래프를 hash 가능한 정본 문자열로 만든다 — `ui`는 빼고 키는 정렬한다.
+
+    `ui`(위치·접힘)는 실행 의미가 아니다. 노드를 화면에서 옮겼다는 이유로 graph_hash가
+    바뀌면 optimistic concurrency 검사가 "다른 사람이 고쳤다"고 거짓말한다.
+    """
+    return json.dumps(
+        _strip_ui(graph), sort_keys=True, separators=(",", ":"), ensure_ascii=False
+    )
+
+
+def _strip_ui(value: Any) -> Any:
+    if isinstance(value, dict):
+        return {k: _strip_ui(v) for k, v in value.items() if k != "ui"}
+    if isinstance(value, list):
+        return [_strip_ui(v) for v in value]
+    return value
+
+
+def sha256_text(text: str) -> str:
+    """저장층과 API 층이 같은 방식으로 hash를 낸다 — 인코딩이 갈라지면 같은 코드가 다른
+    hash를 갖는다(그러면 base 충돌 검사가 매번 거짓 양성이다)."""
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
+def _active_version_id(connection: sqlite3.Connection, strategy_id: str) -> str | None:
+    row = connection.execute(
+        "SELECT id FROM bt_strategy_version WHERE strategy_id = ? AND active = 1",
+        (strategy_id,),
+    ).fetchone()
+    return None if row is None else str(row["id"])
+
+
+def hash_bundle(graph: Any, spec_yaml: str, source: str) -> dict[str, str]:
+    """bundle 세 조각의 hash를 한자리에서 낸다 — 클라이언트가 보낸 hash를 믿지 않는다.
+
+    저장층과 API 층이 각자 다른 방식으로 hash를 내면 "같은 그래프인데 hash가 다르다"가
+    조용히 생긴다. 재유도(re-derive)와 검증이 같은 함수를 쓰게 해서 그 갈래를 없앤다.
+    """
+    return {
+        "graph_hash": sha256_text(canonical_graph_json(graph)),
+        "spec_hash": sha256_text(spec_yaml),
+        "artifact_hash": sha256_text(source),
+    }
+
+
 @dataclass(frozen=True, slots=True)
 class Candle:
     dt: str
@@ -193,6 +293,23 @@ class Strategy:
 
 
 @dataclass(frozen=True, slots=True)
+class VersionBundle:
+    """시각 버전 한 개가 같이 저장돼야 하는 산출물 묶음.
+
+    `DeploymentRow.params_json`과 같은 태도로 전부 문자열이다 — 저장층은 graph도 source
+    map도 해석하지 않고 그대로 왕복시킨다. 무엇이 유효한 그래프인지는 `visual_schema`가
+    알고, 저장층은 "셋이 한 행에 같이 들어갔는가"만 책임진다.
+    """
+
+    graph_json: str
+    spec_yaml: str
+    source_map_json: str
+    hashes_json: str
+    compiler_version: str
+    apply_receipt_json: str | None = None
+
+
+@dataclass(frozen=True, slots=True)
 class StrategyVersion:
     id: str
     strategy_id: str
@@ -202,6 +319,52 @@ class StrategyVersion:
     origin: str
     created_at: str
     active: bool
+    # bundle 없이 저장된 기존 버전(human/form/llm_draft)은 전부 None이다.
+    bundle: VersionBundle | None = None
+
+
+_VERSION_SELECT: Final = (
+    "SELECT id, strategy_id, version, source, note, origin, created_at, active,"
+    " graph_json, spec_yaml, source_map_json, hashes_json, compiler_version, apply_receipt_json"
+    " FROM bt_strategy_version"
+)
+
+
+def _version_of(row: sqlite3.Row) -> StrategyVersion:
+    """한 행을 버전으로 옮긴다. bundle 열이 하나라도 비면 bundle 전체를 None으로 본다 —
+    반쪽 bundle을 그럴듯한 객체로 돌려주면 호출자가 없는 그래프를 있다고 믿는다."""
+    columns = (
+        row["graph_json"],
+        row["spec_yaml"],
+        row["source_map_json"],
+        row["hashes_json"],
+        row["compiler_version"],
+    )
+    bundle = (
+        None
+        if any(value is None for value in columns)
+        else VersionBundle(
+            graph_json=str(row["graph_json"]),
+            spec_yaml=str(row["spec_yaml"]),
+            source_map_json=str(row["source_map_json"]),
+            hashes_json=str(row["hashes_json"]),
+            compiler_version=str(row["compiler_version"]),
+            apply_receipt_json=(
+                None if row["apply_receipt_json"] is None else str(row["apply_receipt_json"])
+            ),
+        )
+    )
+    return StrategyVersion(
+        id=str(row["id"]),
+        strategy_id=str(row["strategy_id"]),
+        version=int(row["version"]),
+        source=str(row["source"]),
+        note=None if row["note"] is None else str(row["note"]),
+        origin=str(row["origin"]),
+        created_at=str(row["created_at"]),
+        active=bool(row["active"]),
+        bundle=bundle,
+    )
 
 
 @dataclass(frozen=True, slots=True)
@@ -290,6 +453,13 @@ class BacktestStore:
         if not self._owner.is_open:
             raise RuntimeError("sqlite owner must be opened before the backtest store")
         await self._owner.install_schema("backtest", _SCHEMA, SCHEMA_VERSION)
+
+        def migrate() -> None:
+            connection = self._require()
+            with atomic(connection, _BACKTEST_WRITE):
+                _migrate_version_bundle(connection)
+
+        await self._owner.run(migrate)
 
     def _require(self) -> sqlite3.Connection:
         return self._owner.require()
@@ -486,20 +656,28 @@ class BacktestStore:
         created_at: datetime,
         note: str | None = None,
         active: bool = False,
+        bundle: VersionBundle | None = None,
     ) -> str:
         """새 버전을 추가한다. `active=True`면 켜기 전에 기존 활성 버전부터 끈다.
 
         `origin=human`이 즉시 활성화되는 것(§7.3)과 `origin=llm_draft`가 비활성으로
         남는 것 둘 다 이 하나의 파라미터로 표현한다 — 호출자(API 층)가 origin에 맞는
         `active` 값을 골라 넘긴다. 이 메서드 자체는 origin과 active를 연동시키지
-        않는다 — 그 정책은 저장층이 아니라 호출자의 것이다.
+        않는다 — 그 정책은 저장층이 아니라 호출자의 것이다. **예외는 `visual`·`code_only`
+        둘뿐이다**(파일 머리): 이 두 origin에 `active=True`를 주면 저장하지 않고 거부한다.
+
+        `bundle`은 graph/spec/source map/hash를 소스와 **같은 INSERT**로 넣는다 —
+        두 번 나눠 쓰면 그 사이에 죽었을 때 "그래프 없는 시각 버전"이 남는다.
         """
-        if origin not in ("human", "form", "llm_draft"):
-            raise ValueError("origin must be 'human', 'form', or 'llm_draft'")
+        if origin not in _ORIGINS:
+            raise ValueError(f"origin must be one of {_ORIGINS}")
+        if active and origin in _INACTIVE_ONLY_ORIGINS:
+            raise ValueError(f"origin '{origin}' must be saved inactive")
 
         def write() -> str:
             connection = self._require()
             with atomic(connection, _BACKTEST_WRITE):
+                before = _active_version_id(connection, strategy_id)
                 if active:
                     connection.execute(
                         "UPDATE bt_strategy_version SET active = 0"
@@ -508,8 +686,10 @@ class BacktestStore:
                     )
                 connection.execute(
                     "INSERT INTO bt_strategy_version"
-                    "(id, strategy_id, version, source, note, origin, created_at, active)"
-                    " VALUES(?,?,?,?,?,?,?,?)",
+                    "(id, strategy_id, version, source, note, origin, created_at, active,"
+                    " graph_json, spec_yaml, source_map_json, hashes_json, compiler_version,"
+                    " apply_receipt_json)"
+                    " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                     (
                         version_id,
                         strategy_id,
@@ -519,11 +699,31 @@ class BacktestStore:
                         origin,
                         _ts(created_at),
                         int(active),
+                        None if bundle is None else bundle.graph_json,
+                        None if bundle is None else bundle.spec_yaml,
+                        None if bundle is None else bundle.source_map_json,
+                        None if bundle is None else bundle.hashes_json,
+                        None if bundle is None else bundle.compiler_version,
+                        None if bundle is None else bundle.apply_receipt_json,
                     ),
                 )
+                # 쓴 뒤 다시 읽어 활성 버전이 의도대로 움직였는지 확인한다 — 비활성 저장이
+                # 활성 버전을 건드렸다면 그건 이 트랜잭션을 통째로 되돌릴 사고다(§8 receipt).
+                after = _active_version_id(connection, strategy_id)
+                expected = version_id if active else before
+                if after != expected:
+                    raise RuntimeError("active version changed unexpectedly during add_version")
             return version_id
 
         return await self._owner.run(write)
+
+    async def active_version_id(self, strategy_id: str) -> str | None:
+        """전략의 현재 활성 버전 id. 저장 전후를 비교해 "활성은 그대로다"를 증명하는 데 쓴다."""
+
+        def read() -> str | None:
+            return _active_version_id(self._require(), strategy_id)
+
+        return await self._owner.run(read)
 
     async def activate_version(self, strategy_id: str, version_id: str) -> None:
         """버전 하나를 켜고 나머지는 끈다 — 사람 클릭 전용 IPC가 부르는 자리다(§7.3).
@@ -553,23 +753,10 @@ class BacktestStore:
     async def versions(self, strategy_id: str) -> tuple[StrategyVersion, ...]:
         def read() -> tuple[StrategyVersion, ...]:
             rows = self._require().execute(
-                "SELECT id, strategy_id, version, source, note, origin, created_at, active"
-                " FROM bt_strategy_version WHERE strategy_id = ? ORDER BY version",
+                f"{_VERSION_SELECT} WHERE strategy_id = ? ORDER BY version",
                 (strategy_id,),
             ).fetchall()
-            return tuple(
-                StrategyVersion(
-                    id=str(row["id"]),
-                    strategy_id=str(row["strategy_id"]),
-                    version=int(row["version"]),
-                    source=str(row["source"]),
-                    note=None if row["note"] is None else str(row["note"]),
-                    origin=str(row["origin"]),
-                    created_at=str(row["created_at"]),
-                    active=bool(row["active"]),
-                )
-                for row in rows
-            )
+            return tuple(_version_of(row) for row in rows)
 
         return await self._owner.run(read)
 
@@ -580,22 +767,10 @@ class BacktestStore:
 
         def read() -> StrategyVersion | None:
             row = self._require().execute(
-                "SELECT id, strategy_id, version, source, note, origin, created_at, active"
-                " FROM bt_strategy_version WHERE id = ?",
+                f"{_VERSION_SELECT} WHERE id = ?",
                 (version_id,),
             ).fetchone()
-            if row is None:
-                return None
-            return StrategyVersion(
-                id=str(row["id"]),
-                strategy_id=str(row["strategy_id"]),
-                version=int(row["version"]),
-                source=str(row["source"]),
-                note=None if row["note"] is None else str(row["note"]),
-                origin=str(row["origin"]),
-                created_at=str(row["created_at"]),
-                active=bool(row["active"]),
-            )
+            return None if row is None else _version_of(row)
 
         return await self._owner.run(read)
 
