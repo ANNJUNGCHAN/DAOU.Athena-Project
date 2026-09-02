@@ -31,6 +31,11 @@ const EquityChart = isNode
 const Explain = isNode ? require('./backtest-explain') : window.AthenaLib.BacktestExplain;
 // 코드 탭의 프로젝트 IDE(결정 D1~D4) — 배선이 있을 때만 켜진다(ensureProjectIde 참고).
 const ProjectIde = isNode ? require('./project-ide') : window.AthenaLib.ProjectIde;
+// 시각 전략 편집기(US-007) — 지도 탭이 편집 가능해지는 자리. 스펙 경로(프리셋·폼)에서만
+// 선다. 코드 경로·내 전략의 지도는 지금까지처럼 Explain.renderFlowMap 읽기 전용이다.
+const VisualEditor = isNode
+  ? require('./backtest-visual-editor')
+  : window.AthenaLib.BacktestVisualEditor;
 
 const { formatNumeric, formatDatetime } = FactsCard;
 
@@ -107,6 +112,24 @@ const MAP_NODE_ORDER = ['target', 'params', 'indicators', 'conditions', 'guard']
 
 // 실행경로 2분기(폼/코드). 코드가 있어야만 헤더에 뜬다.
 const RUN_PATHS = [['form', '폼'], ['code', '코드']];
+
+// 시각 편집기의 서버 왕복 간격 — 매 키입력마다 검증을 보내면 서버가 타자를 따라 뛴다.
+const VISUAL_DEBOUNCE_MS = 400;
+
+// 헤더의 상태 점 문구(US-007). 'unvalidated'는 여기 없다 — 아직 아무것도 묻지 않은 것은
+// 상태가 아니라 상태 없음이고, 없는 상태에 점을 찍으면 화면이 사실을 지어낸다.
+const VISUAL_STATUS_TEXT = {
+  validating: '검증 중',
+  valid: '서버 검증 가능',
+  invalid: '서버 검증 실패',
+  synced: '그래프·코드 검증 완료',
+};
+
+// 유효하지 않은 그래프에서 [실행]이 서는 자리 — 실행이 아니라 검토가 다음 행동이다.
+const VISUAL_RUN_BLOCKED = '오류 검토';
+
+// 코드 초안이 지도보다 앞설 때 서랍에 적히는 한 줄. 덮어쓰지 않는다는 사실을 말한다.
+const VISUAL_CODE_AHEAD = '코드가 지도보다 앞섬';
 
 const OPTIMIZE_METHODS = [['grid', '그리드'], ['random', '랜덤']];
 
@@ -314,6 +337,141 @@ function userParamSpec(raw) {
 
 // ---------- 캔버스 ----------
 
+// ── 컴파일된 spec_yaml 읽기(US-007) ─────────────────────────────────────────
+//
+// `/visual/compile`이 돌려주는 spec_yaml은 백엔드 `yaml.safe_dump`가 쓴 **블록 스타일**
+// 이다 — 프리셋 yaml의 `{...}` 한 줄 스타일이 아니다. 그래서 SpecModel.parsePresetYaml이
+// 그것을 못 읽는다(실측: `params: {fast: {default: 20 ...}}` 대신 `params:` 아래 두 단계
+// 들여쓰기로 온다). 여기서 다루는 것은 그 문서가 실제로 쓰는 부분집합뿐이다: 들여쓰기 맵,
+// `- ` 목록, 인라인 `{}`·`[]`, 따옴표 스칼라. 완전한 YAML 파서가 아니고 될 필요도 없다 —
+// 이 입력의 생산자는 우리 백엔드 하나다.
+
+// 인라인 흐름(`{a: 1, b: [2, 3]}`)을 쉼표로 자른다. 중첩과 따옴표 안의 쉼표는 세지 않는다.
+function splitFlowItems(body) {
+  const out = [];
+  let depth = 0;
+  let quote = null;
+  let start = 0;
+  for (let i = 0; i < body.length; i += 1) {
+    const ch = body[i];
+    if (quote) { if (ch === quote) quote = null; continue; }
+    if (ch === '"' || ch === "'") { quote = ch; continue; }
+    if (ch === '{' || ch === '[') depth += 1;
+    else if (ch === '}' || ch === ']') depth -= 1;
+    else if (ch === ',' && depth === 0) { out.push(body.slice(start, i)); start = i + 1; }
+  }
+  const tail = body.slice(start);
+  if (tail.trim()) out.push(tail);
+  return out;
+}
+
+function parseYamlFlow(text) {
+  const body = text.slice(1, -1);
+  if (text[0] === '[') return splitFlowItems(body).map(parseYamlScalar);
+  const out = {};
+  splitFlowItems(body).forEach((piece) => {
+    const at = piece.indexOf(':');
+    if (at === -1) return;
+    out[piece.slice(0, at).trim()] = parseYamlScalar(piece.slice(at + 1));
+  });
+  return out;
+}
+
+function parseYamlScalar(raw) {
+  const text = String(raw == null ? '' : raw).trim();
+  if (!text) return '';
+  if (text.length >= 2 && (text[0] === '"' || text[0] === "'") && text[text.length - 1] === text[0]) {
+    return text.slice(1, -1);
+  }
+  if (text[0] === '{' || text[0] === '[') return parseYamlFlow(text);
+  if (text === 'true') return true;
+  if (text === 'false') return false;
+  if (text === 'null' || text === '~') return null;
+  if (/^-?\d+(?:\.\d+)?$/.test(text)) return Number(text);
+  return text;
+}
+
+function parseYamlBlock(text) {
+  const rows = String(text == null ? '' : text).split('\n')
+    .map((line) => ({ indent: line.length - line.replace(/^ +/, '').length, text: line.trim() }))
+    .filter((row) => row.text && row.text[0] !== '#' && row.text !== '---');
+  let i = 0;
+
+  function parseAt(indent) {
+    if (i >= rows.length || rows[i].indent < indent) return null;
+    if (rows[i].text[0] === '-') {
+      const list = [];
+      while (i < rows.length && rows[i].indent === indent && rows[i].text[0] === '-') {
+        const rest = rows[i].text.slice(1).trim();
+        if (!rest) { i += 1; list.push(parseAt(indent + 2)); continue; }
+        if (rest[0] === '{' || rest[0] === '[' || rest.indexOf(':') === -1) {
+          i += 1;
+          list.push(parseYamlScalar(rest));
+          continue;
+        }
+        // `- key: value` — 이 항목의 나머지 키는 한 단계 안쪽 들여쓰기로 이어진다.
+        rows[i] = { indent: indent + 2, text: rest };
+        list.push(parseAt(indent + 2));
+      }
+      return list;
+    }
+    const map = {};
+    while (i < rows.length && rows[i].indent === indent && rows[i].text[0] !== '-') {
+      const row = rows[i];
+      const at = row.text.indexOf(':');
+      if (at === -1) { i += 1; continue; }
+      const key = row.text.slice(0, at).trim();
+      const rest = row.text.slice(at + 1).trim();
+      i += 1;
+      if (rest) { map[key] = parseYamlScalar(rest); continue; }
+      const next = rows[i];
+      // 목록은 safe_dump에서 부모 키와 같은 들여쓰기에 온다 — 다음 줄의 실제 들여쓰기를
+      // 보고 정한다(고정 +2로 가정하면 `indicators:` 아래 목록을 통째로 놓친다).
+      const deeper = next && (next.indent > indent || (next.indent === indent && next.text[0] === '-'));
+      map[key] = deeper ? parseAt(next.indent) : null;
+    }
+    return map;
+  }
+
+  const doc = parseAt(rows.length ? rows[0].indent : 0);
+  return (doc && typeof doc === 'object' && !Array.isArray(doc)) ? doc : {};
+}
+
+// 읽은 문서를 SpecModel.createSpec의 overrides로 옮긴다. 대상(종목·기간·비용)은 여기서
+// 만들지 않는다 — 그래프는 그것을 모르고, 아는 쪽(폼)의 값을 지켜야 한다.
+function specOverridesFromYaml(yamlText) {
+  const doc = parseYamlBlock(yamlText);
+  const strategy = (doc && doc.strategy) || {};
+  const params = {};
+  Object.keys(strategy.params || {}).forEach((name) => {
+    const p = strategy.params[name] || {};
+    params[name] = {
+      default: Number(p.default),
+      min: Number(p.min),
+      max: Number(p.max),
+      step: Number(p.step) || 1,
+      type: p.type === 'int' ? 'int' : 'float',
+    };
+  });
+  const group = (raw, fallbackLogic) => ({
+    logic: (raw && raw.logic) || fallbackLogic,
+    conditions: ((raw && raw.conditions) || []).map((c) => ({
+      indicator: c.indicator, operator: c.operator, compare_to: c.compare_to,
+    })),
+  });
+  return {
+    presetId: strategy.id || null,
+    name: (doc.metadata && doc.metadata.name) || null,
+    params,
+    indicators: (strategy.indicators || []).map((ind) => ({
+      id: ind.id, alias: ind.alias, params: ind.params || {},
+    })),
+    entry: group(strategy.entry, 'AND'),
+    exit: group(strategy.exit, 'OR'),
+    risk: doc.risk || null,
+  };
+}
+
 function createBacktestCanvas(options) {
   const deps = options || {};
   const container = deps.container;
@@ -329,6 +487,12 @@ function createBacktestCanvas(options) {
       runFromChat() { return []; },
       validateFromChat() { return Promise.resolve({ ok: false, errors: [] }); },
       startOptimizeFromChat() {},
+      answerVisualQuestion() { return Promise.resolve(null); },
+      applyVisualPatch() { return Promise.resolve(null); },
+      discardVisualPatch() { return { ok: false, reason: '백테스트 화면이 없습니다' }; },
+      reviewBeforeRun() { return { ok: false, reason: '백테스트 화면이 없습니다' }; },
+      openCodeFromChat() { return Promise.resolve(false); },
+      retryVisualPatch() { return Promise.resolve(null); },
     };
   }
 
@@ -373,10 +537,38 @@ function createBacktestCanvas(options) {
   // 폼 경로에서 [코드 열기]가 만든 코드 — 같은 폼이면 다시 만들지 않는다(§7.3: 생성은
   // 저장이 아니다. 이 캐시는 화면 것이고 백엔드에는 아무것도 남지 않는다).
   let codegenCache = null;
+  // ── 시각 설계 상태(US-007/008/009) ────────────────────────────────────────
+  // 편집기는 한 번 만들어 계속 들고 있다 — render()가 매번 DOM을 새로 만들어도 되돌리기
+  // 이력·선택·연결 중인 포트가 살아남아야 한다(projectIde와 같은 이유).
+  let visualEditor = null;
+  let visualHost = null;
+  let visualRegistry = null;
+  let visualRegistryAsked = false;
+  let visualGraph = null;
+  // 이 그래프가 어느 폼 yaml에서 나왔는가 — 폼 → 그래프 왕복의 열쇠이자 루프 차단기다.
+  let visualGraphYaml = null;
+  // 라우트가 없는 백엔드를 한 번 만나면 다시 묻지 않는다 — 지도는 읽기 전용으로 물러난다.
+  let visualUnavailable = false;
+  let visualDiagnostics = [];
+  let visualState = 'unvalidated';
+  let visualSummary = '';
+  let visualHashes = null;
+  let visualCompiled = null;   // {spec_yaml, source, source_map, hashes}
+  let visualPreview = null;    // {source, source_map} — 검증 실패 때의 미실행 미리보기
+  let visualTimer = null;
+  // 그래프 → 폼 갱신 중이라는 깃발. 이것이 없으면 폼이 바뀐 것을 보고 다시 그래프를 만든다.
+  let visualSyncing = false;
+  // 마지막으로 화면에 얹은 생성 코드 — 사람이 손으로 고친 초안과 구분하는 유일한 축이다.
+  let lastGeneratedSource = '';
+  let pendingQuestion = null;
+  let pendingPatch = null;
 
   function setState(patch) {
     state = Object.assign({}, state, patch);
     render();
+    // 탭·하위 탭이 움직인 것은 사람이 보던 자리가 바뀐 것이다 — 세션 복원이 그 자리를
+    // 돌려주려면 그때마다 조각으로 보고해야 한다(병합·저장 시점은 main이 정한다).
+    if (patch && (patch.tab !== undefined || patch.designTab !== undefined)) reportWorkspace();
   }
 
   function isVisible() {
@@ -487,6 +679,7 @@ function createBacktestCanvas(options) {
     // 숫자인지 아무도 모르게 된다.
     setState({
       formErrors: [], codeErrors: [], codeFromMap: false, designTab: 'flow', mapVersion: 1,
+      codeSpan: null, visualCodeAhead: false,
     });
     void loadMap();
   }
@@ -513,7 +706,9 @@ function createBacktestCanvas(options) {
     );
     userStrategyId = entry.id;
     runPath = 'code';
-    setState({ formErrors: [], codeErrors: [], designTab: 'flow', mapVersion: 1 });
+    setState({
+      formErrors: [], codeErrors: [], designTab: 'flow', mapVersion: 1, codeSpan: null,
+    });
     const opened = await ide.openAt(entry.project_id, entry.path);
     // 못 열었으면 이유는 IDE가 자기 자리에 적었다 — 폼에도 한 줄 남긴다. 폼만 보고 있는
     // 사람에게는 코드 탭의 문장이 보이지 않는다.
@@ -1211,6 +1406,9 @@ function createBacktestCanvas(options) {
     if (action.kind === 'file_draft') return applyFileAction(action);
     if (action.kind === 'navigate') return navigateAction(action);
     if (action.kind === 'optimize_request') return optimizeAction(action);
+    // 시각 설계 2종(US-009) — 화면을 바꾸지 않는다. 대기 상태로 세워두고 카드만 만든다.
+    if (action.kind === 'visual_question') return visualQuestionAction(action);
+    if (action.kind === 'visual_patch') return visualPatchAction(action);
     return null;
   }
 
@@ -1557,6 +1755,44 @@ function createBacktestCanvas(options) {
         status: node.status,
         note: node.note || null,
       })),
+      // 시각 설계(US-007) — 대화가 다루는 것은 이제 칸 설명이 아니라 이 그래프다.
+      // 아직 그래프가 없으면 null이고, 화면이 없는 노드를 지어내지 않는다.
+      graph: visualGraphContext(),
+      validation_state: visualState,
+      hashes: visualHashes || null,
+      diagnostics: visualDiagnostics.map((d) => ({
+        code: d.code,
+        node_id: d.node_id || null,
+        port: d.port || null,
+        message_ko: d.message_ko || null,
+      })),
+      pendingQuestion: pendingQuestion
+        ? {
+          code: pendingQuestion.code || null,
+          question_ko: pendingQuestion.question_ko || null,
+          choices: (pendingQuestion.choices || []).map((c) => c.id),
+        }
+        : null,
+      pendingPatch: pendingPatch
+        ? {
+          patch_id: pendingPatch.patch_id || null,
+          graph_compatible: !!pendingPatch.graph_compatible,
+          summary_ko: pendingPatch.summary_ko || null,
+        }
+        : null,
+    };
+  }
+
+  // 그래프는 좌표를 빼고 싣는다 — 모델이 x·y를 읽을 이유가 없고, 컨텍스트만 두 배가 된다.
+  function visualGraphContext() {
+    if (!visualGraph) return null;
+    return {
+      nodes: (visualGraph.nodes || []).map((node) => ({
+        id: node.id, kind: node.kind, label: node.label || null, params: node.params || {},
+      })),
+      edges: (visualGraph.edges || []).map((edge) => ({
+        id: edge.id, from: edge.from, to: edge.to,
+      })),
     };
   }
 
@@ -1645,6 +1881,9 @@ function createBacktestCanvas(options) {
       coverageAsked = wantedCoverage;
       void loadCoverage();
     }
+    // 스펙이 바뀌면 지도 탭의 그래프도 그 스펙의 것이어야 한다 — 열쇠(yaml)가 같으면
+    // 다시 만들지 않는다. 폼 편집이 그래프로 흐르는 유일한 길이다.
+    void ensureVisualGraph();
     clear(container);
     if (state.view === 'empty') {
       container.appendChild(renderMessagePanel('', '프리셋을 불러오는 중입니다…'));
@@ -1732,6 +1971,20 @@ function createBacktestCanvas(options) {
       head.appendChild(paths);
     }
 
+    // 시각 설계가 서면 실행 버튼 옆에 지금 검증 상태가 선다(US-007). 유효하지 않은
+    // 그래프로는 실행이 시작되지 않고, 버튼이 다음 행동을 대신 말한다.
+    if (visualActive()) {
+      head.appendChild(renderVisualStatus());
+      head.appendChild(button('backtest-visual-validate', '검증', () => { void runVisualValidate(); }));
+      const blocked = visualState === 'invalid';
+      const run = button(
+        'backtest-run-button', blocked ? VISUAL_RUN_BLOCKED : '실행',
+        () => { if (!blocked) void handleRun(false); },
+      );
+      if (blocked) { run.disabled = true; run.setAttribute('aria-disabled', 'true'); }
+      head.appendChild(run);
+      return head;
+    }
     head.appendChild(button('backtest-run-button', '실행', () => { void handleRun(false); }));
     return head;
   }
@@ -2145,10 +2398,14 @@ function createBacktestCanvas(options) {
       container: host,
       value: codeSource,
       onChange: (next) => { codeSource = next; },
+      onBackToNode: backToVisualNode,
     });
     if (state.flowRange) {
       editorHandle.highlightLines(state.flowRange.first, state.flowRange.last);
     }
+    // 노드에서 열고 들어온 연결은 매 그리기마다 되건다 — 한 번만 걸면 다음 render()에서
+    // 리본과 표식이 조용히 사라진다(편집기는 매번 새로 만들어진다).
+    applyCodeSpan();
 
     const actions = el('div', 'backtest-code-actions');
     actions.appendChild(button('backtest-code-validate', '검증', () => { void validateCode(); }));
@@ -2288,6 +2545,16 @@ function createBacktestCanvas(options) {
       ));
       return wrap;
     }
+    // 스펙 경로에서는 지도가 편집 표면이다(US-007) — 대상 한 줄과 코드 서랍은 그대로
+    // 편집기 위·아래에 남는다. 편집이 가능해졌다고 그 둘이 사라질 이유는 없다.
+    if (visualActive()) { wrap.appendChild(renderVisualDesign()); return wrap; }
+    // 코드 경로의 지도는 그래프로 되돌릴 수 없다 — 읽기 전용임을 먼저 말한다.
+    if (visualWired() && !isSpecPath()) {
+      wrap.appendChild(el('div', 'backtest-flow-codeonly', '코드 전용'));
+    }
+    if (state.visualNotice) {
+      wrap.appendChild(el('div', 'backtest-flow-notice', state.visualNotice));
+    }
     // 만드는 중이라는 사실을 그린다 — 빈 자리는 "기능이 죽었다"로 읽힌다.
     if (state.mapLoading) {
       const loading = el('div', 'backtest-flow-loading');
@@ -2387,6 +2654,648 @@ function createBacktestCanvas(options) {
     codeSource = '';
     setState({ designTab: 'flow', codeFromMap: false, codeErrors: [] });
     void loadMap();
+  }
+
+  // ── US-007/008/009 · 시각 전략 편집기(지도 탭) ─────────────────────────────
+  //
+  // 지도가 첫 표면이라는 규칙은 그대로다. 바뀐 것은 **스펙 경로에서 그 지도가 읽기 전용이
+  // 아니라는 것**이다: 프리셋·폼으로 세운 전략은 /visual/from-spec으로 그래프가 되고, 그
+  // 그래프를 고치면 서버가 검증·컴파일해 폼과 코드가 따라온다. 코드 경로(내 전략·프로젝트
+  // 파일)는 그래프로 되돌릴 수 없으므로 지금까지의 읽기 전용 지도에 '코드 전용' 배지만
+  // 붙인다 — 편집기를 세워놓고 저장이 안 되는 화면을 만들지 않는다.
+  //
+  // **두 방향 동기화의 루프 차단.** 폼 → 그래프는 yaml 열쇠(visualGraphYaml)로, 그래프 →
+  // 폼은 visualSyncing 깃발로 막는다. 한쪽이 다른 쪽을 갱신하는 순간 그 열쇠를 같이 옮겨
+  // 두어, 되돌아온 변경이 다시 왕복을 시작하지 못하게 한다.
+  //
+  // **이 경로는 실행·백필·활성화·배포를 부르지 않는다.** 저장(POST versions, origin
+  // visual)까지가 끝이고 is_active=false는 서버가 강제한다.
+
+  function visualWired() {
+    return !!(deps.visualFromSpec && deps.visualValidate);
+  }
+
+  // 스펙 경로인가 — 프리셋·폼으로 세운 전략만 그래프로 되돌릴 수 있다.
+  function isSpecPath() {
+    return !!spec && !userStrategyId && !activeProjectFile() && runPath === 'form';
+  }
+
+  function visualActive() {
+    return visualWired() && !visualUnavailable && isSpecPath() && !!visualGraph;
+  }
+
+  function visualNodeById(nodeId) {
+    const nodes = (visualGraph && Array.isArray(visualGraph.nodes)) ? visualGraph.nodes : [];
+    return nodes.find((node) => node.id === nodeId) || null;
+  }
+
+  // 편집기의 요약 바는 네 상태만 안다 — 'validating'은 그 사이의 시간이라 '검증 전'으로
+  // 넘긴다(없는 상태를 편집기에 지어내 보내지 않는다). 헤더의 점만 그 시간을 말한다.
+  function setVisualState(next, summary) {
+    visualState = next;
+    if (summary != null) visualSummary = summary;
+    if (visualEditor) {
+      visualEditor.setValidation({
+        state: next === 'validating' ? 'unvalidated' : next,
+        summary_ko: visualSummary,
+      });
+    }
+  }
+
+  async function ensureVisualRegistry() {
+    if (visualRegistry || visualRegistryAsked || !deps.visualRegistry) return;
+    visualRegistryAsked = true;
+    let payload;
+    // 팔레트가 비는 것이지 편집이 막히는 것이 아니다 — 못 읽었다고 지도를 접지 않는다.
+    try { payload = await deps.visualRegistry(); } catch { return; }
+    visualRegistry = payload || null;
+    if (visualEditor && visualRegistry) visualEditor.setRegistry(visualRegistry);
+    render();
+  }
+
+  // 스펙 한 벌마다 한 번만 그래프를 받는다(yaml이 열쇠다). 라우트가 없는 백엔드(404)를
+  // 만나면 여기서 한 번 접고 다시 묻지 않는다 — 지도 탭은 읽기 전용으로 물러난다.
+  async function ensureVisualGraph() {
+    if (!visualWired() || visualUnavailable || !isSpecPath()) return;
+    const yaml = currentYaml();
+    if (visualGraphYaml === yaml) return;
+    visualGraphYaml = yaml;
+    let res;
+    try { res = await deps.visualFromSpec({ yaml }); }
+    catch (err) {
+      visualUnavailable = true;
+      visualGraph = null;
+      setState({
+        visualNotice: '시각 설계를 열 수 없어 읽기 전용 지도로 돌아갑니다'
+          + ` — ${String((err && err.message) || err)}`,
+      });
+      return;
+    }
+    visualGraph = (res && res.graph) || null;
+    visualHashes = (res && res.hashes) || null;
+    visualDiagnostics = [];
+    visualCompiled = null;
+    visualPreview = null;
+    visualState = 'unvalidated';
+    visualSummary = '';
+    if (visualEditor && visualGraph) {
+      visualEditor.setGraph(visualGraph);
+      visualEditor.setDiagnostics([]);
+    }
+    void ensureVisualRegistry();
+    setState({ visualNotice: null });
+  }
+
+  function ensureVisualEditor() {
+    if (visualEditor) return visualEditor;
+    if (!visualGraph) return null;
+    visualHost = el('div', 'backtest-visual-host');
+    visualEditor = VisualEditor.createVisualEditor(visualHost, {
+      registry: visualRegistry,
+      graph: visualGraph,
+      diagnostics: visualDiagnostics,
+      validation: { state: visualState === 'validating' ? 'unvalidated' : visualState, summary_ko: visualSummary },
+      setTimeoutImpl,
+      clearTimeoutImpl,
+      onChange: onVisualChange,
+      onOpenCode: (nodeId) => { void openCodeAt(nodeId); },
+      onAskChat: (nodeId) => { void askVisualQuestion(nodeId); },
+      onValidate: () => { void runVisualValidate(); },
+      // "생성될 StrategySpec 보기"는 폼 탭이다 — 같은 값을 두 곳에서 그리지 않는다.
+      onShowSpec: () => { setState({ designTab: 'form' }); },
+    });
+    return visualEditor;
+  }
+
+  function onVisualChange(graph) {
+    if (visualSyncing) return;
+    visualGraph = graph;
+    // 앞선 컴파일 산출물은 이 그래프의 것이 아니다 — 두면 코드 열기가 남의 줄을 연다.
+    visualCompiled = null;
+    setVisualState('validating');
+    if (visualTimer != null && clearTimeoutImpl) clearTimeoutImpl(visualTimer);
+    visualTimer = null;
+    if (!setTimeoutImpl) { void runVisualValidate(); return; }
+    visualTimer = setTimeoutImpl(() => {
+      visualTimer = null;
+      void runVisualValidate();
+    }, VISUAL_DEBOUNCE_MS);
+    render();
+  }
+
+  async function runVisualValidate() {
+    if (!deps.visualValidate || !visualGraph) return null;
+    setVisualState('validating');
+    render();
+    let res;
+    try { res = await deps.visualValidate({ graph: visualGraph }); }
+    catch (err) {
+      const message = String((err && err.message) || err);
+      setVisualState('invalid', message);
+      setState({ visualNotice: message });
+      return null;
+    }
+    visualDiagnostics = (res && Array.isArray(res.diagnostics)) ? res.diagnostics : [];
+    if (res && res.hashes) visualHashes = res.hashes;
+    if (visualEditor) visualEditor.setDiagnostics(visualDiagnostics);
+    if (res && res.valid) {
+      visualPreview = null;
+      setVisualState('valid');
+      await runVisualCompile();
+      return res;
+    }
+    visualPreview = (res && res.preview)
+      ? { source: String(res.preview.source || ''), source_map: res.source_map || null }
+      : null;
+    visualCompiled = null;
+    setVisualState('invalid');
+    // 첫 오류는 지도 아래 "실행 전에 채울 것" 줄에도 남는다 — 폼만 보는 사람에게도 보여야
+    // 한다(기존 lastError 경로는 그대로다: 그것은 실행이 멈춘 사실이고 이건 설계의 사실이다).
+    const first = visualDiagnostics.find((d) => d.severity === 'error') || visualDiagnostics[0];
+    setState({ formErrors: first ? [first.message_ko || first.code] : [] });
+    return res;
+  }
+
+  async function runVisualCompile() {
+    if (!deps.visualCompile || !visualGraph) return null;
+    let res;
+    try { res = await deps.visualCompile({ graph: visualGraph }); }
+    catch (err) {
+      setVisualState('invalid', String((err && err.message) || err));
+      render();
+      return null;
+    }
+    visualCompiled = {
+      spec_yaml: String((res && res.spec_yaml) || ''),
+      source: String((res && res.source) || ''),
+      source_map: (res && res.source_map) || null,
+      hashes: (res && res.hashes) || null,
+    };
+    if (visualCompiled.hashes) visualHashes = visualCompiled.hashes;
+    // 폼이 지도를 따라온다 — 사람이 폼 탭으로 가면 그래프가 만든 값이 거기 있어야 한다.
+    if (visualCompiled.spec_yaml) adoptSpecYaml(visualCompiled.spec_yaml);
+    setVisualState('synced');
+    setState({ formErrors: [], visualNotice: null });
+    return visualCompiled;
+  }
+
+  // 컴파일된 spec_yaml을 폼 스펙으로 옮긴다. 대상(종목·기간·수정주가·비용)은 그래프가
+  // 모르는 값이라 지금 폼의 것을 그대로 지킨다(keptTarget과 같은 규칙).
+  function adoptSpecYaml(yamlText) {
+    const overrides = specOverridesFromYaml(yamlText);
+    if (!overrides) return;
+    const kept = keptTarget();
+    const next = {
+      presetId: overrides.presetId || (spec ? spec.presetId : null),
+      name: overrides.name || (spec ? spec.name : '시각 전략'),
+      params: overrides.params,
+      indicators: overrides.indicators,
+      entry: overrides.entry,
+      exit: overrides.exit,
+    };
+    if (overrides.risk) next.risk = overrides.risk;
+    else if (spec) next.risk = spec.risk;
+    if (spec) { next.adjusted = spec.adjusted; next.costs = spec.costs; }
+    visualSyncing = true;
+    spec = SpecModel.createSpec(null, Object.assign(next, kept));
+    // 폼이 그래프를 따라온 것이므로 이 yaml은 이미 그 그래프의 것이다 — 열쇠를 옮겨 두지
+    // 않으면 다음 render()가 같은 그래프를 다시 만들어 사람이 고친 편집을 덮는다.
+    visualGraphYaml = currentYaml();
+    visualSyncing = false;
+  }
+
+  // ── 보드 13 · 노드에서 코드로 ─────────────────────────────────────────────
+  //
+  // 무엇을 여는가는 지금 검증 상태가 정한다: valid|synced면 컴파일이 만든 authoritative
+  // 산출물, 아니면 검증이 준 **미실행** preview다. 어느 쪽이든 spanIsValid()로 지금 코드가
+  // 그 map에서 나온 것인지 먼저 확인한다 — 어긋나면 비슷한 줄을 추정하지 않고 그 자리에
+  // 알리고 멈춘다(엉뚱한 줄을 원인이라고 말하는 것이 가장 나쁜 실패다).
+  function noticeOnCode(text) {
+    if (editorHandle && typeof editorHandle.showNotice === 'function') editorHandle.showNotice(text);
+  }
+
+  function refuseCodeJump(text) {
+    setState({ visualNotice: text });
+    noticeOnCode(text);
+    return false;
+  }
+
+  async function openCodeAt(nodeId) {
+    const authoritative = (visualState === 'valid' || visualState === 'synced') && !!visualCompiled;
+    const kind = authoritative ? 'authoritative' : 'preview';
+    const raw = authoritative
+      ? visualCompiled.source_map
+      : (visualPreview && visualPreview.source_map);
+    if (!raw) return refuseCodeJump(CodeEditor.STALE_NOTICE_TEXT);
+    const bundle = Object.assign({}, raw, { kind });
+    const source = authoritative ? visualCompiled.source : String(visualPreview.source || '');
+
+    // 사람이 손으로 고친 초안은 절대 덮지 않는다 — 그때는 코드가 지도보다 앞선 것이고,
+    // 그 사실을 말하는 것이 옳다(덮으면 사람이 친 것이 조용히 사라진다).
+    if (codeSource && codeSource !== lastGeneratedSource) {
+      setState({ visualCodeAhead: true });
+      return refuseCodeJump(CodeEditor.STALE_NOTICE_TEXT);
+    }
+    const check = await CodeEditor.spanIsValid(bundle, source);
+    if (!check.ok) return refuseCodeJump(CodeEditor.STALE_NOTICE_TEXT);
+
+    const entries = Array.isArray(bundle.entries) ? bundle.entries : [];
+    const entry = entries.find((e) => e.node_id === nodeId) || entries[0];
+    if (!entry || !entry.source_span) return refuseCodeJump(CodeEditor.STALE_NOTICE_TEXT);
+
+    const node = visualNodeById(entry.node_id);
+    const diag = visualDiagnostics.find((d) => d.node_id === entry.node_id) || null;
+    codeSource = source;
+    lastGeneratedSource = source;
+    setState({
+      view: 'design',
+      tab: 'design',
+      designTab: 'code',
+      codeFromMap: true,
+      visualCodeAhead: false,
+      visualNotice: null,
+      codeSpan: {
+        span: entry.source_span,
+        kind,
+        nodeId: entry.node_id || null,
+        label: (node && (node.label || node.kind)) || entry.node_id || null,
+        code: diag ? diag.code : null,
+        file: (entry.source_span && entry.source_span.file) || codeFileLabel(),
+        reason_ko: check.reason_ko,
+      },
+    });
+    return true;
+  }
+
+  // 열어둔 노드 연결을 편집기가 다시 만들어질 때마다 되건다 — render()가 편집기를 새로
+  // 만들기 때문에, 한 번만 부르면 다음 그리기에서 리본과 표식이 조용히 사라진다.
+  function applyCodeSpan() {
+    const info = state.codeSpan;
+    if (!info || !editorHandle) return;
+    const preview = info.kind === 'preview';
+    editorHandle.setFileMeta({
+      name: info.file,
+      generatedFromGraph: true,
+      compatMode: preview,
+    });
+    editorHandle.setPreviewOnly(preview, preview ? { reason_ko: info.reason_ko } : null);
+    editorHandle.openSpan(info.span, {
+      kind: info.kind,
+      node: { id: info.nodeId, label: info.label },
+      code: info.code,
+      file: info.file,
+    });
+    editorHandle.setLinkStatus({ linked: !preview });
+  }
+
+  // 코드 리본의 [시각 설계에서 보기] — 온 자리로 정확히 돌아간다.
+  function backToVisualNode(nodeId) {
+    const id = nodeId || (state.codeSpan && state.codeSpan.nodeId);
+    setState({ designTab: 'flow', codeFromMap: false });
+    if (id && visualEditor) {
+      visualEditor.select(id);
+      visualEditor.focusNode(id);
+    }
+  }
+
+  // ── US-009 · 대화형 오류 수정(질문 → 비활성 수정안 → 적용 → 동기화) ────────
+  //
+  // 아래 함수들은 chat.js의 카드 버튼이 부르는 자리다. 어느 것도 실행·백필·활성화·배포를
+  // 부르지 않는다 — 저장(origin visual)까지가 끝이고, 그 버전이 켜지지 않는다는 것은
+  // 서버가 강제한다.
+  //
+  // **영수증이 채팅에 닿는 길.** 지금은 하나뿐이다: main이 보낸 액션에 onChatAction이
+  // 돌려주는 값(chat.js의 'athena:backtest-chat-action' 구독). 카드 버튼에서 시작한 왕복은
+  // 그 길이 없어서 문서 이벤트로 한 번 더 낸다 — chat.js가 'athena:backtest-receipt'를
+  // 듣게 되면 그대로 카드가 되고, 아직 안 듣더라도 반환값 경로는 그대로 산다.
+  function emitChatCard(receipt) {
+    try {
+      if (typeof document !== 'undefined'
+        && typeof document.dispatchEvent === 'function'
+        && typeof CustomEvent === 'function') {
+        document.dispatchEvent(new CustomEvent('athena:backtest-receipt', { detail: receipt }));
+      }
+    } catch { /* CustomEvent가 없는 하네스 */ }
+    return receipt;
+  }
+
+  // 모델이 낸 질문·수정안은 화면을 바꾸지 않는다 — 대기 상태로 세워두고 카드만 만든다.
+  function visualQuestionAction(envelope) {
+    const question = envelope.question || envelope.payload || null;
+    if (!question || typeof question !== 'object') return null;
+    pendingQuestion = question;
+    return remember(makeReceipt('visual_question', {
+      note: envelopeNote(envelope), question,
+    }));
+  }
+
+  function visualPatchAction(envelope) {
+    const patch = envelope.patch || envelope.payload || null;
+    if (!patch || typeof patch !== 'object') return null;
+    pendingPatch = patch;
+    return remember(makeReceipt('visual_patch', {
+      note: envelopeNote(envelope), patch, version: bumpMapVersion(),
+    }));
+  }
+
+  function visualBaseHash() {
+    return String((visualHashes && visualHashes.graph_hash) || '');
+  }
+
+  // 지금 그래프에서 막고 있는 오류 하나를 서버에 물어 카드로 낸다(검사기의 [대화로 수정]).
+  async function askVisualQuestion() {
+    if (!deps.visualQuestion || !visualGraph) return null;
+    let data;
+    try { data = await deps.visualQuestion({ graph: visualGraph, diagnostics: visualDiagnostics }); }
+    catch (err) { setState({ visualNotice: String((err && err.message) || err) }); return null; }
+    const question = data && data.question;
+    if (!question) { pendingQuestion = null; return null; }
+    pendingQuestion = question;
+    return emitChatCard(remember(makeReceipt('visual_question', { question })));
+  }
+
+  // 카드에서 선택지를 고른 순간 — 비활성 수정안 하나를 만든다. 적용은 아직이다.
+  async function answerVisualQuestion(intent) {
+    const payload = intent || {};
+    if (!deps.visualPatch || !visualGraph) return null;
+    let data;
+    try {
+      data = await deps.visualPatch({
+        graph: visualGraph,
+        base_graph_hash: visualBaseHash(),
+        base_version_id: activeVersionId,
+        intent: { code: payload.code, choice_id: payload.choice_id },
+      });
+    } catch (err) {
+      return emitChatCard(remember(makeReceipt('visual_conflict', {
+        errors: [String((err && err.message) || err)],
+      })));
+    }
+    pendingQuestion = null;
+    pendingPatch = data || null;
+    return emitChatCard(remember(makeReceipt('visual_patch', {
+      patch: data, version: bumpMapVersion(),
+    })));
+  }
+
+  // 저장할 전략이 아직 없으면 먼저 만든다 — 코드 탭의 [이 코드로 저장]과 같은 경로다.
+  async function ensureStrategyId(source) {
+    if (strategyId) return strategyId;
+    if (!deps.createStrategy) return null;
+    const created = await deps.createStrategy({
+      name: spec ? spec.name : '시각 전략', kind: 'python', source,
+    });
+    strategyId = created && created.strategy_id;
+    if (created && created.version_id) activeVersionId = created.version_id;
+    return strategyId;
+  }
+
+  // 사람이 [적용]을 누른 그 순간 — 그래프에 얹고, 검증·컴파일하고, 새 버전으로 저장한다.
+  // 활성화하지 않는다. 실행하지 않는다. 그 둘은 여전히 별도의 버튼이다.
+  async function applyVisualPatch(patchId) {
+    const patch = pendingPatch;
+    if (!patch) return null;
+    if (patchId && patch.patch_id && patch.patch_id !== patchId) return null;
+    const baseArtifact = String(
+      (visualCompiled && visualCompiled.hashes && visualCompiled.hashes.artifact_hash)
+      || (visualHashes && visualHashes.artifact_hash) || '',
+    );
+    const from = state.mapVersion || 0;
+
+    visualSyncing = true;
+    visualGraph = patch.graph_after || visualGraph;
+    if (visualEditor && visualGraph) visualEditor.setGraph(visualGraph);
+    visualSyncing = false;
+    visualHashes = Object.assign({}, visualHashes, { graph_hash: patch.graph_after_hash });
+    visualCompiled = null;
+
+    await runVisualValidate();
+    if (visualState !== 'synced' || !visualCompiled) {
+      return emitChatCard(remember(makeReceipt('visual_conflict', {
+        errors: ['수정안을 적용한 그래프가 아직 유효하지 않습니다'],
+      })));
+    }
+    if (!deps.visualSave) {
+      return emitChatCard(remember(makeReceipt('visual_conflict', {
+        errors: ['이 화면에는 시각 버전 저장 배선이 없습니다'],
+      })));
+    }
+    let id;
+    try { id = await ensureStrategyId(visualCompiled.source); }
+    catch (err) {
+      return emitChatCard(remember(makeReceipt('visual_conflict', {
+        errors: [String((err && err.message) || err)],
+      })));
+    }
+    if (!id) {
+      return emitChatCard(remember(makeReceipt('visual_conflict', {
+        errors: ['전략을 먼저 저장해야 합니다'],
+      })));
+    }
+    let saved;
+    try {
+      saved = await deps.visualSave({
+        strategy_id: id,
+        origin: 'visual',
+        yaml: visualCompiled.spec_yaml,
+        source: visualCompiled.source,
+        note: patch.summary_ko || null,
+        bundle: {
+          graph: visualGraph,
+          spec_yaml: visualCompiled.spec_yaml,
+          source_map: visualCompiled.source_map,
+          hashes: visualCompiled.hashes,
+          compiler_version: (visualCompiled.hashes && visualCompiled.hashes.compiler_version) || null,
+        },
+        apply_receipt: {
+          base_version_id: String(patch.base_version_id || activeVersionId || ''),
+          base_graph_hash: String(patch.base_graph_hash || ''),
+          base_artifact_hash: baseArtifact,
+          patch_id: String(patch.patch_id || ''),
+          patch_hash: String(patch.patch_hash || ''),
+          applied_at: new Date().toISOString(),
+        },
+      });
+    } catch (err) {
+      // 409는 실패가 아니라 "그 사이 다른 수정이 먼저 저장됐다"는 사실이다 — 다시 검토로
+      // 돌려보낸다(retryVisualPatch가 그 자리다).
+      if (err && err.status === 409) {
+        return emitChatCard(remember(makeReceipt('visual_conflict', {
+          errors: [String(err.message || err)],
+        })));
+      }
+      return emitChatCard(remember(makeReceipt('visual_conflict', {
+        errors: [String((err && err.message) || err)],
+      })));
+    }
+    pendingPatch = null;
+    lastGeneratedSource = visualCompiled.source;
+    const to = (saved && saved.version != null) ? saved.version : from + 1;
+    if (saved && saved.version_id) activeVersionId = saved.version_id;
+    setState({ mapVersion: to, designTab: 'flow', view: 'design', tab: 'design' });
+    return emitChatCard(remember(makeReceipt('visual_synced', {
+      applied: true,
+      version: { from, to },
+      summary_ko: patch.summary_ko || null,
+      spec_diff: patch.spec_diff || null,
+      tab: state.tab,
+      designTab: state.designTab,
+    })));
+  }
+
+  function discardVisualPatch(patchId) {
+    if (patchId && pendingPatch && pendingPatch.patch_id && pendingPatch.patch_id !== patchId) {
+      return { ok: false, reason: '다른 수정안입니다' };
+    }
+    pendingPatch = null;
+    return { ok: true };
+  }
+
+  // [실행 전 검토] — 실행하지 않는다. 사람이 지도를 다시 보는 자리로 옮길 뿐이다.
+  function reviewBeforeRun() {
+    setState({
+      view: 'design', tab: 'design', designTab: 'flow', visualNotice: '실행 전 검토',
+    });
+    return { ok: true };
+  }
+
+  // 방금 패치가 건드린 첫 노드. graph_patch는 RFC 6902라 node_id를 직접 싣지 않는다
+  // (visual_repair._ops_to_patch는 {op, path, value}만 낸다) — path와 value에서 읽고,
+  // 못 읽으면 질문이 가리킨 노드, 그것도 없으면 지금 고른 노드다. 지어내지 않는다.
+  function patchedNodeId() {
+    const patch = pendingPatch;
+    const ops = (patch && Array.isArray(patch.graph_patch)) ? patch.graph_patch : [];
+    const nodes = (visualGraph && Array.isArray(visualGraph.nodes)) ? visualGraph.nodes : [];
+    for (let i = 0; i < ops.length; i += 1) {
+      const op = ops[i] || {};
+      const value = op.value || {};
+      if (value.to && value.to.node_id) return value.to.node_id;
+      if (value.id && String(op.path) === '/nodes/-') return value.id;
+      // '/nodes/3/params/period' → 3번 노드. 정규식 없이 자른다(경로 문법이 고정이다).
+      const path = String(op.path || '');
+      if (path.indexOf('/nodes/') === 0) {
+        const index = Number(path.slice('/nodes/'.length).split('/')[0]);
+        if (nodes[index]) return nodes[index].id;
+      }
+    }
+    if (pendingQuestion && pendingQuestion.node_id) return pendingQuestion.node_id;
+    return visualEditor ? visualEditor.getSelected() : null;
+  }
+
+  // [코드 열기] — 그 노드의 줄로 간다. 못 찾으면 map의 첫 칸이다(openCodeAt이 정한다).
+  function openCodeFromChat() {
+    return openCodeAt(patchedNodeId());
+  }
+
+  // [다시 검토] — 지금 그래프를 다시 검증하고, 막고 있는 오류를 다시 하나 묻는다.
+  async function retryVisualPatch() {
+    pendingPatch = null;
+    await runVisualValidate();
+    return askVisualQuestion();
+  }
+
+  // ── 모드 워크스페이스(session-workspace.js) ───────────────────────────────
+  // 배선이 없는 하네스에서도 죽지 않는다 — 전역이 없으면 조용히 넘어간다.
+  function workspaceApi() {
+    return (typeof window !== 'undefined' && window.AthenaSessionWorkspace) || null;
+  }
+
+  function registerWorkspace() {
+    const ws = workspaceApi();
+    if (!ws || typeof ws.register !== 'function') return;
+    try { ws.register('backtest', { restore: restoreWorkspace }); }
+    catch { /* 등록 실패는 복원이 없다는 뜻일 뿐, 화면은 그대로 돈다 */ }
+  }
+
+  function reportWorkspace() {
+    const ws = workspaceApi();
+    if (!ws || typeof ws.report !== 'function') return;
+    try {
+      ws.report({
+        form: spec ? { yaml: currentYaml() } : null,
+        designTab: state.designTab,
+        tab: state.tab,
+        graph: visualGraph,
+      });
+    } catch { /* 보고는 부수 효과다 — 실패해도 화면은 계속 돈다 */ }
+  }
+
+  function restoreWorkspace(workspace) {
+    const saved = workspace || {};
+    const form = saved.form || {};
+    if (typeof form.yaml === 'string' && form.yaml.trim()) adoptSpecYaml(form.yaml);
+    if (saved.graph && typeof saved.graph === 'object') {
+      visualGraph = saved.graph;
+      if (visualEditor) visualEditor.setGraph(visualGraph);
+    }
+    const patch = { view: 'design' };
+    if (MODE_TABS.some(([key]) => key === saved.tab)) patch.tab = saved.tab;
+    if (DESIGN_TABS.some(([key]) => key === saved.designTab)) patch.designTab = saved.designTab;
+    setState(patch);
+    return true;
+  }
+
+  // ── 시각 설계 그리기 ──────────────────────────────────────────────────────
+
+  function renderVisualStatus() {
+    const box = el('div', 'backtest-visual-status');
+    const text = VISUAL_STATUS_TEXT[visualState];
+    if (text) {
+      box.appendChild(el('span', `backtest-visual-dot is-${visualState}`, ''));
+      box.appendChild(el('span', 'backtest-visual-status-text', text));
+    }
+    return box;
+  }
+
+  // 대상 한 줄 — 무엇을 돌리는지는 그래프가 모른다(종목·기간은 폼이 정한다). 지도가
+  // 편집 가능해져도 이 줄은 그대로 맨 위에 남는다(보드 11 상단).
+  function renderVisualTarget() {
+    const line = el('div', 'backtest-visual-target');
+    const target = mapTarget();
+    if (!target) {
+      line.textContent = '대상 미정 — 폼에서 종목과 기간을 채우세요';
+      return line;
+    }
+    const period = (SpecModel.PERIODS.find(([id]) => id === target.period) || [])[1]
+      || target.period;
+    const span = target.from && target.to ? ` · ${target.from} ~ ${target.to}` : '';
+    line.textContent = `${target.symbol} · ${period}봉 · ${target.adjusted ? '수정주가' : '원주가'}${span}`;
+    return line;
+  }
+
+  // 코드 서랍(보드 14-E) — 지도 뒤의 코드로 가는 한 줄. 지도가 편집 가능해져도 이 줄의
+  // 뜻은 같다: 코드는 최후의 보루이고, 여기서 열면 그 노드의 줄로 간다.
+  function renderVisualDrawer() {
+    const drawer = el('div', 'backtest-visual-drawer');
+    drawer.appendChild(el('span', 'backtest-visual-drawer-file', codeFileLabel()));
+    if (state.visualCodeAhead) {
+      drawer.appendChild(el('span', 'backtest-visual-drawer-ahead', VISUAL_CODE_AHEAD));
+    } else if (visualState === 'synced') {
+      drawer.appendChild(el(
+        'span', 'backtest-visual-drawer-match', `지도 v${state.mapVersion || 0}와 일치`,
+      ));
+    }
+    drawer.appendChild(button('backtest-visual-open-code', '코드 열기', () => {
+      void openCodeAt(visualEditor ? visualEditor.getSelected() : null);
+    }));
+    return drawer;
+  }
+
+  function renderVisualDesign() {
+    const wrap = el('div', 'backtest-visual');
+    wrap.appendChild(renderVisualTarget());
+    const head = el('div', 'backtest-visual-head');
+    head.appendChild(el(
+      'div', 'backtest-card-title', `이 전략은 이렇게 흐릅니다 · 지도 v${state.mapVersion || 0}`,
+    ));
+    head.appendChild(renderVisualStatus());
+    wrap.appendChild(head);
+    if (ensureVisualEditor()) wrap.appendChild(visualHost);
+    if (state.visualNotice) {
+      wrap.appendChild(el('div', 'backtest-flow-notice', state.visualNotice));
+    }
+    wrap.appendChild(renderVisualDrawer());
+    return wrap;
   }
 
   // ── 보드 04 · 데이터 수집 승인 ────────────────────────────────────────────
@@ -2898,6 +3807,8 @@ function createBacktestCanvas(options) {
 
   function mount() {
     mounted = true;
+    // 모드 워크스페이스는 화면이 서기 전에 등록한다 — 복원이 프리셋보다 먼저 올 수 있다.
+    registerWorkspace();
     void loadPresets();
   }
 
@@ -2923,6 +3834,13 @@ function createBacktestCanvas(options) {
     runFromChat,
     validateFromChat,
     startOptimizeFromChat,
+    // 시각 설계 카드(US-009)가 부르는 자리 — 실행·활성화·배포는 여기 없다.
+    answerVisualQuestion,
+    applyVisualPatch,
+    discardVisualPatch,
+    reviewBeforeRun,
+    openCodeFromChat,
+    retryVisualPatch,
   };
 }
 
@@ -2936,6 +3854,8 @@ const __exports = {
   coverageRatio,
   heatIntensity,
   changedNodeIds,
+  parseYamlBlock,
+  specOverridesFromYaml,
   METRIC_TILES,
   MODE_TABS,
   DESIGN_TABS,

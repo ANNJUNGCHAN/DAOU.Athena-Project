@@ -2715,6 +2715,48 @@ const backtestCanvas = window.AthenaLib.BacktestCanvas.createBacktestCanvas({
     if (!res || !res.ok) throw new Error(backtestError(res, '지도 뒤의 코드를 만들지 못했습니다'));
     return res.data;
   },
+  // 시각 설계 ↔ 코드 왕복(2026-09-03, US-007/008/009) — 지도 탭이 편집 가능해지는 자리.
+  // 위 map/codegen과 같은 봉투 규칙이다. 라우트가 없는 백엔드(404)를 만나면 캔버스가 그
+  // 실패를 한 번 보고 지도를 읽기 전용으로 접는다 — 여기서 감추면 화면이 이유를 못 댄다.
+  visualRegistry: async () => {
+    const res = await window.athena.invoke('athena:backtest-visual-registry');
+    if (!res || !res.ok) throw new Error(backtestError(res, '노드 목록을 불러오지 못했습니다'));
+    return res.data;
+  },
+  visualValidate: async (body) => {
+    const res = await window.athena.invoke('athena:backtest-visual-validate', body);
+    if (!res || !res.ok) throw new Error(backtestError(res, '그래프를 검증하지 못했습니다'));
+    return res.data;
+  },
+  visualCompile: async (body) => {
+    const res = await window.athena.invoke('athena:backtest-visual-compile', body);
+    if (!res || !res.ok) throw new Error(backtestError(res, '그래프를 코드로 옮기지 못했습니다'));
+    return res.data;
+  },
+  visualQuestion: async (body) => {
+    const res = await window.athena.invoke('athena:backtest-visual-question', body);
+    if (!res || !res.ok) throw new Error(backtestError(res, '무엇을 물을지 정하지 못했습니다'));
+    return res.data;
+  },
+  visualPatch: async (body) => {
+    const res = await window.athena.invoke('athena:backtest-visual-patch', body);
+    if (!res || !res.ok) throw new Error(backtestError(res, '수정안을 만들지 못했습니다'));
+    return res.data;
+  },
+  visualFromSpec: async (body) => {
+    const res = await window.athena.invoke('athena:backtest-visual-from-spec', body);
+    if (!res || !res.ok) throw new Error(backtestError(res, '폼을 그래프로 옮기지 못했습니다'));
+    return res.data;
+  },
+  // 저장만 status를 살려 던진다 — 409(그 사이 다른 수정이 먼저 저장됐다)는 실패가 아니라
+  // "다시 검토"라는 다음 행동이고, 캔버스가 그 둘을 문구가 아니라 상태 코드로 갈라야 한다.
+  visualSave: async (body) => {
+    const res = await window.athena.invoke('athena:backtest-visual-save', body);
+    if (res && res.ok) return res.data;
+    const error = new Error(backtestError(res, '시각 버전을 저장하지 못했습니다'));
+    error.status = res ? res.status : 0;
+    throw error;
+  },
   diagnose: async (body) => {
     const res = await window.athena.invoke('athena:backtest-diagnose', body);
     if (!res || !res.ok) throw new Error(backtestError(res, '오류를 진단하지 못했습니다'));

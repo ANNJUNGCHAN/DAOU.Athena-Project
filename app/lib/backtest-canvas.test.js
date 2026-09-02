@@ -86,6 +86,8 @@ function fakeNode(tag) {
 test.beforeEach(() => {
   global.document = {
     createElement: (tag) => fakeNode(tag),
+    // 시각 편집기의 엣지는 SVG다 — 이 하나가 없으면 지도 탭 전체가 못 선다.
+    createElementNS: (ns, tag) => fakeNode(tag),
     createTextNode: (text) => ({ tag: '#text', textContent: text, children: [] }),
   };
 });
@@ -2324,7 +2326,17 @@ test('오류 화면에는 [지도에서 보기]가 있다 — 무엇이 멈췄�
 
 test('getContext().map: 마지막으로 받아온 칸만 싣는다 — 없으면 빈 목록이다', async () => {
   const empty = await mounted();
-  assert.deepEqual(empty.canvas.getContext().map, { version: 1, nodes: [] });
+  // 시각 설계(US-007)가 map에 더한 키 — 그래프가 아직 없으면 전부 비어 있다.
+  assert.deepEqual(empty.canvas.getContext().map, {
+    version: 1,
+    nodes: [],
+    graph: null,
+    validation_state: 'unvalidated',
+    hashes: null,
+    diagnostics: [],
+    pendingQuestion: null,
+    pendingPatch: null,
+  });
 
   const made = await mounted({ map: async () => MAP_PAYLOAD });
   await flush();
@@ -2377,4 +2389,612 @@ test('파일 실행이 준 전략·버전 id로 배포 탭이 열린다 — [이
   await click(findByClass(made.container, 'backtest-tab')[4]);
   await flush();
   assert.equal(findByClass(made.container, 'backtest-deploy-create').length, 1);
+});
+
+// ── US-007/008/009 · 편집 가능한 지도 탭(시각 전략 편집기) ───────────────────
+//
+// 편집기 자체의 계약(진단 4곳·키보드·목록 보기)은 backtest-visual-editor.test.js가 본다.
+// 여기서 보는 것은 **캔버스가 그 편집기를 어떻게 세우는가**다: 폼 → 그래프 → 검증 → 컴파일
+// → 폼·코드가 따라오는 왕복, 노드에서 코드로 가는 두 갈래(authoritative·preview), 그리고
+// 채팅 카드가 부르는 다섯 자리가 실행·활성화·백필을 절대 부르지 않는다는 것.
+
+const CodeEditorLib = require('./backtest-code-editor');
+
+const VISUAL_GRAPH = {
+  graph_version: '1',
+  nodes: [
+    { id: 'data-ohlcv', kind: 'data.ohlcv', label: '캔들', params: {} },
+    { id: 'ind-ma_fast', kind: 'indicator.SMA', label: 'ma_fast', params: { period: 33 } },
+  ],
+  edges: [
+    {
+      id: 'e-data.close-ind.source',
+      from: { node_id: 'data-ohlcv', port: 'close' },
+      to: { node_id: 'ind-ma_fast', port: 'source' },
+    },
+  ],
+  scenario: { period: 'day', adjusted: true },
+  meta: { spec_version: '1.0', name: '시각 전략', strategy_id: 'visual_strategy' },
+};
+
+// 백엔드 yaml.safe_dump가 쓰는 **블록 스타일** 그대로다 — 프리셋 yaml의 `{...}` 한 줄
+// 스타일이 아니다. 이 차이가 SpecModel.parsePresetYaml을 쓸 수 없는 이유이자
+// parseYamlBlock이 있는 이유다.
+const COMPILED_YAML = [
+  "version: '1.0'",
+  'metadata:',
+  '  name: 시각 전략',
+  'strategy:',
+  '  id: visual_strategy',
+  '  params:',
+  '    fast:',
+  '      default: 33',
+  '      min: 5',
+  '      max: 60',
+  '      step: 1',
+  '      type: int',
+  '    slow:',
+  '      default: 60',
+  '      min: 20',
+  '      max: 240',
+  '      step: 1',
+  '      type: int',
+  '  indicators:',
+  '  - id: SMA',
+  '    alias: ma_fast',
+  '    params:',
+  '      period: $fast',
+  '  - id: SMA',
+  '    alias: ma_slow',
+  '    params:',
+  '      period: $slow',
+  '  entry:',
+  '    logic: AND',
+  '    conditions:',
+  '    - indicator: ma_fast',
+  '      operator: cross_above',
+  '      compare_to: ma_slow',
+  '  exit:',
+  '    logic: OR',
+  '    conditions:',
+  '    - indicator: ma_fast',
+  '      operator: cross_below',
+  '      compare_to: ma_slow',
+  'risk:',
+  '  stop_loss:',
+  '    enabled: true',
+  '    percent: 8.0',
+  '  take_profit:',
+  '    enabled: false',
+  '    percent: 20.0',
+  '  position:',
+  '    sizing: all_in',
+  '',
+].join('\n');
+
+const VISUAL_SOURCE = [
+  'import pandas as pd',
+  '',
+  '',
+  'def signals(df, params):',
+  "    ma_fast = df['close'].rolling(params['fast']).mean()",
+  "    ma_slow = df['close'].rolling(params['slow']).mean()",
+  '    return ma_fast > ma_slow',
+  '',
+].join('\n');
+
+function visualSourceMap(hash, kind) {
+  const map = {
+    graph_hash: 'gh-1',
+    compiler_version: 'visual-1.0.0',
+    entries: [
+      {
+        node_id: 'ind-ma_fast',
+        role: 'indicator',
+        ast_path: 'body/3/body/0',
+        source_span: {
+          file: 'golden_cross.py',
+          start: { line: 5, column: 4 },
+          end: { line: 5, column: 55 },
+        },
+      },
+    ],
+  };
+  if (kind === 'preview') {
+    return Object.assign(map, { preview_hash: hash, executable: false, preview_only: true });
+  }
+  return Object.assign(map, {
+    spec_hash: 'sh-1', artifact_hash: hash, executable: true, preview_only: false,
+  });
+}
+
+function visualStubs(hash, extra) {
+  const calls = { fromSpec: 0, validate: 0, compile: 0, run: 0, activate: 0, backfill: 0 };
+  const deps = Object.assign({
+    map: async () => MAP_PAYLOAD,
+    visualRegistry: async () => ({ registry_version: '1', graph_version: '1', kinds: [] }),
+    visualFromSpec: async () => {
+      calls.fromSpec += 1;
+      return {
+        graph: JSON.parse(JSON.stringify(VISUAL_GRAPH)),
+        hashes: { graph_hash: 'gh-1', compiler_version: 'visual-1.0.0' },
+      };
+    },
+    visualValidate: async () => {
+      calls.validate += 1;
+      return {
+        valid: true,
+        diagnostics: [],
+        preview: null,
+        source_map: null,
+        exact_code_jump: true,
+        hashes: { graph_hash: 'gh-1', compiler_version: 'visual-1.0.0' },
+      };
+    },
+    visualCompile: async () => {
+      calls.compile += 1;
+      return {
+        spec_yaml: COMPILED_YAML,
+        source: VISUAL_SOURCE,
+        source_map: visualSourceMap(hash, 'authoritative'),
+        hashes: {
+          graph_hash: 'gh-1', spec_hash: 'sh-1', artifact_hash: hash,
+          compiler_version: 'visual-1.0.0',
+        },
+        executable: true,
+        saved: false,
+      };
+    },
+    // 이 셋은 시각 경로가 절대 부르지 않아야 하는 것들이다 — 세기만 한다.
+    run: async () => { calls.run += 1; return { run_id: 'r-never' }; },
+    activate: async () => { calls.activate += 1; return {}; },
+    backfill: async () => { calls.backfill += 1; return { job_id: 'j-never' }; },
+  }, extra || {});
+  return { deps, calls };
+}
+
+async function mountVisual(extra) {
+  const hash = await CodeEditorLib.hashSource(VISUAL_SOURCE);
+  const stub = visualStubs(hash, extra);
+  const made = makeCanvas(stub.deps);
+  made.canvas.mount();
+  // 프리셋 → 스펙 → from-spec → 편집기까지 세 번의 await 사슬이다.
+  await flush();
+  await flush();
+  await flush();
+  return Object.assign(made, { calls: stub.calls, hash });
+}
+
+async function clickVisualValidate(made) {
+  await click(findByClass(made.container, 'backtest-visual-validate')[0]);
+  await flush();
+  await flush();
+  await flush();
+}
+
+const VISUAL_PATCH = {
+  patch_id: 'patch-1',
+  patch_hash: 'ph-1',
+  base_graph_hash: 'gh-1',
+  base_version_id: 'v1',
+  // visual_repair._ops_to_patch가 내는 모양 그대로 — node_id를 직접 싣지 않는다.
+  graph_patch: [{
+    op: 'add',
+    path: '/edges/-',
+    value: {
+      id: 'e-data.close-ind.source',
+      from: { node_id: 'data-ohlcv', port: 'close' },
+      to: { node_id: 'ind-ma_fast', port: 'source' },
+    },
+  }],
+  graph_after: VISUAL_GRAPH,
+  graph_after_hash: 'gh-2',
+  spec_diff: [{ path: 'strategy.indicators.0.params.period', before: null, after: '$fast' }],
+  spec_diff_basis: 'delta',
+  code_diff: { diff_lines: [{ mark: '+', text: 'ma_fast = ...' }] },
+  diagnostics_after: [],
+  graph_compatible: true,
+  applied: false,
+};
+
+test('parseYamlBlock: safe_dump 블록 스타일을 읽는다(프리셋의 한 줄 스타일이 아니다)', () => {
+  const doc = backtestCanvas.parseYamlBlock(COMPILED_YAML);
+  assert.equal(doc.version, '1.0');
+  assert.equal(doc.metadata.name, '시각 전략');
+  assert.equal(doc.strategy.params.fast.default, 33);
+  assert.equal(doc.strategy.params.slow.type, 'int');
+  assert.equal(doc.strategy.indicators.length, 2);
+  assert.equal(doc.strategy.indicators[0].alias, 'ma_fast');
+  assert.equal(doc.strategy.indicators[0].params.period, '$fast');
+  assert.equal(doc.strategy.entry.logic, 'AND');
+  assert.equal(doc.strategy.entry.conditions[0].operator, 'cross_above');
+  assert.equal(doc.risk.stop_loss.enabled, true);
+  assert.equal(doc.risk.position.sizing, 'all_in');
+});
+
+test('프리셋을 세우면 지도 탭이 from-spec 그래프로 편집기를 띄운다', async () => {
+  const made = await mountVisual();
+  assert.equal(made.calls.fromSpec, 1);
+  assert.equal(findByClass(made.container, 'backtest-vis').length, 1, '편집기가 서야 한다');
+  assert.equal(findByClass(made.container, 'backtest-visual-host').length, 1);
+  assert.match(textOf(made.container), /이 전략은 이렇게 흐릅니다 · 지도 v1/);
+  // 대상 한 줄과 코드 서랍은 편집기가 서도 그대로 남는다.
+  assert.equal(findByClass(made.container, 'backtest-visual-target').length, 1);
+  assert.equal(findByClass(made.container, 'backtest-visual-drawer').length, 1);
+  // 같은 폼이면 다시 만들지 않는다 — yaml이 열쇠다.
+  made.canvas.refresh();
+  await flush();
+  assert.equal(made.calls.fromSpec, 1);
+  const ctx = made.canvas.getContext();
+  assert.equal(ctx.map.graph.nodes.length, 2);
+  assert.equal(ctx.map.validation_state, 'unvalidated');
+  assert.equal(ctx.map.hashes.graph_hash, 'gh-1');
+});
+
+test('검증이 실패하면 실행 버튼이 잠기고 라벨이 [오류 검토]가 된다', async () => {
+  const made = await mountVisual({
+    visualValidate: async () => ({
+      valid: false,
+      diagnostics: [{
+        code: 'E_PORT_REQUIRED', severity: 'error', node_id: 'ind-ma_fast',
+        port: 'source', message_ko: '입력이 비어 있습니다',
+      }],
+      preview: null,
+      source_map: null,
+      exact_code_jump: false,
+      hashes: { graph_hash: 'gh-1' },
+    }),
+  });
+  await clickVisualValidate(made);
+  const run = findByClass(made.container, 'backtest-run-button')[0];
+  assert.equal(run.textContent, '오류 검토');
+  assert.equal(run.disabled, true);
+  assert.equal(run.getAttribute('aria-disabled'), 'true');
+  assert.match(textOf(made.container), /서버 검증 실패/);
+  const ctx = made.canvas.getContext();
+  assert.equal(ctx.map.validation_state, 'invalid');
+  assert.equal(ctx.map.diagnostics[0].code, 'E_PORT_REQUIRED');
+  // 첫 오류는 지도 아래 "실행 전에 채울 것" 줄에도 남는다.
+  assert.match(textOf(made.container), /입력이 비어 있습니다/);
+});
+
+test('검증 통과 → 컴파일이 만든 spec_yaml을 폼이 따라온다(대상은 지킨다)', async () => {
+  const made = await mountVisual();
+  await fillForm(made.container);
+  await flush();
+  await flush();
+  await clickVisualValidate(made);
+  assert.equal(made.calls.compile, 1);
+  const ctx = made.canvas.getContext();
+  assert.equal(ctx.map.validation_state, 'synced');
+  assert.equal(ctx.spec.name, '시각 전략');
+  assert.equal(ctx.spec.params.fast.default, 33);
+  assert.equal(ctx.spec.params.fast.type, 'int');
+  assert.equal(ctx.spec.indicators.length, 2);
+  assert.equal(ctx.spec.indicators[1].alias, 'ma_slow');
+  assert.equal(ctx.spec.entry.conditions[0].operator, 'cross_above');
+  assert.equal(ctx.spec.risk.stop_loss.enabled, true);
+  // 그래프는 종목·기간을 모른다 — 폼이 정한 대상은 그대로 남아야 한다.
+  assert.deepEqual(ctx.spec.symbols, ['005930']);
+  assert.equal(ctx.spec.fromDt, '20160101');
+  assert.match(textOf(made.container), /그래프·코드 검증 완료/);
+});
+
+test('노드에서 코드로 — 검증·컴파일을 마친 산출물은 authoritative로 연다', async () => {
+  const made = await mountVisual();
+  await clickVisualValidate(made);
+  await click(findByClass(made.container, 'backtest-visual-open-code')[0]);
+  await flush();
+  await flush();
+  const ctx = made.canvas.getContext();
+  assert.equal(ctx.designTab, 'code');
+  assert.equal(findByClass(made.container, 'backtest-code-ribbon-kind')[0].textContent, '연결됨');
+  assert.match(
+    findByClass(made.container, 'backtest-code-ribbon-loc')[0].textContent,
+    /golden_cross\.py:5/,
+  );
+  assert.match(
+    findByClass(made.container, 'backtest-code-ribbon-label')[0].textContent,
+    /ma_fast/,
+  );
+  assert.equal(findByClass(made.container, 'backtest-code-preview-banner')[0].hidden, true);
+  assert.equal(findByClass(made.container, 'backtest-code-linkstatus')[0].hidden, false);
+  // 편집기에 얹힌 원문은 컴파일이 준 그 코드다.
+  assert.equal(ctx.code.lines, VISUAL_SOURCE.split('\n').length);
+});
+
+test('코드 해시가 어긋나면 줄을 열지 않는다 — 그 자리에 알리고 탭도 안 바꾼다', async () => {
+  const made = await mountVisual({
+    visualCompile: async () => ({
+      spec_yaml: COMPILED_YAML,
+      source: VISUAL_SOURCE,
+      // 다른 코드에서 나온 map이다 — 이 소스의 해시가 아니다.
+      source_map: visualSourceMap('0000deadbeef', 'authoritative'),
+      hashes: { graph_hash: 'gh-1', artifact_hash: '0000deadbeef', compiler_version: 'visual-1.0.0' },
+    }),
+  });
+  await clickVisualValidate(made);
+  await click(findByClass(made.container, 'backtest-visual-open-code')[0]);
+  await flush();
+  await flush();
+  assert.equal(made.canvas.getContext().designTab, 'flow', '탭을 바꾸지 않는다');
+  assert.equal(findByClass(made.container, 'backtest-flow-notice').length, 1);
+  assert.match(textOf(made.container), /다시 검증하거나 코드 전용으로 검토하세요/);
+});
+
+test('검증 실패의 미리보기는 preview로 열리고 편집기가 읽기 전용이 된다', async () => {
+  const previewSource = ['# 미실행 미리보기', 'ma_fast = __MISSING__', ''].join('\n');
+  const previewHash = await CodeEditorLib.hashSource(previewSource);
+  const made = await mountVisual({
+    visualValidate: async () => ({
+      valid: false,
+      diagnostics: [{
+        code: 'E_PORT_REQUIRED', severity: 'error', node_id: 'ind-ma_fast',
+        message_ko: '입력이 비어 있습니다',
+      }],
+      preview: { source: previewSource, preview_hash: previewHash, preview_only: true },
+      source_map: visualSourceMap(previewHash, 'preview'),
+      exact_code_jump: true,
+      hashes: { graph_hash: 'gh-1', preview_hash: previewHash },
+    }),
+  });
+  await clickVisualValidate(made);
+  await click(findByClass(made.container, 'backtest-visual-open-code')[0]);
+  await flush();
+  await flush();
+  assert.equal(made.canvas.getContext().designTab, 'code');
+  assert.equal(
+    findByClass(made.container, 'backtest-code-ribbon-kind')[0].textContent, '미실행 미리보기',
+  );
+  const banner = findByClass(made.container, 'backtest-code-preview-banner')[0];
+  assert.equal(banner.hidden, false);
+  assert.match(banner.textContent, /실행·저장 대상이 아닙니다/);
+  assert.equal(findByClass(made.container, 'backtest-code-textarea')[0].readOnly, true);
+});
+
+test('사람이 고친 코드 초안은 덮지 않는다 — 코드가 지도보다 앞섰다고 말한다', async () => {
+  const made = await mountVisual();
+  await clickVisualValidate(made);
+  await click(findByClass(made.container, 'backtest-visual-open-code')[0]);
+  await flush();
+  await flush();
+  const textarea = findByClass(made.container, 'backtest-code-textarea')[0];
+  textarea.value = `${VISUAL_SOURCE}# 사람이 더한 줄\n`;
+  await textarea.dispatchEvent({ type: 'input' });
+  made.canvas.onChatAction({ kind: 'navigate', tab: 'design', designTab: 'flow' });
+  await flush();
+  await click(findByClass(made.container, 'backtest-visual-open-code')[0]);
+  await flush();
+  await flush();
+  assert.equal(made.canvas.getContext().designTab, 'flow');
+  assert.match(textOf(made.container), /코드가 지도보다 앞섬/);
+});
+
+test('visual_question·visual_patch는 화면을 바꾸지 않고 카드 모양만 돌려준다', async () => {
+  const made = await mountVisual();
+  const before = made.canvas.getContext().designTab;
+  const question = made.canvas.onChatAction({
+    kind: 'visual_question',
+    question: {
+      code: 'E_PORT_REQUIRED',
+      question_ko: '이 지표의 입력을 무엇으로 이을까요?',
+      node_id: 'ind-ma_fast',
+      choices: [{
+        id: 'connect-close', label_ko: '캔들 종가', recommended: true,
+        changes: [{ target: 'edge', id: 'e1', what_ko: '종가 → 입력 연결' }],
+      }],
+    },
+  });
+  assert.equal(question.kind, 'visual_question');
+  assert.equal(question.applied, false);
+  assert.equal(question.question.code, 'E_PORT_REQUIRED');
+  assert.equal(question.question.choices[0].id, 'connect-close');
+
+  const patch = made.canvas.onChatAction({ kind: 'visual_patch', patch: VISUAL_PATCH });
+  assert.equal(patch.kind, 'visual_patch');
+  assert.equal(patch.applied, false);
+  assert.equal(patch.patch.patch_id, 'patch-1');
+  assert.equal(patch.patch.graph_compatible, true);
+  assert.equal(patch.version.to, patch.version.from + 1);
+
+  assert.equal(made.canvas.getContext().designTab, before, '카드는 화면을 바꾸지 않는다');
+  const ctx = made.canvas.getContext();
+  assert.equal(ctx.map.pendingQuestion.code, 'E_PORT_REQUIRED');
+  assert.equal(ctx.map.pendingPatch.patch_id, 'patch-1');
+});
+
+test('[적용]은 새 버전을 저장할 뿐 실행·활성화·백필을 부르지 않는다', async () => {
+  const saved = [];
+  const made = await mountVisual({
+    createStrategy: async () => ({ strategy_id: 's1', version_id: 'v1' }),
+    visualSave: async (body) => {
+      saved.push(body);
+      return {
+        version_id: 'v2', version: 2, active: false, is_active: false,
+        origin: 'visual', active_version_id: 'v1', hashes: {},
+      };
+    },
+  });
+  await clickVisualValidate(made);
+  made.canvas.onChatAction({ kind: 'visual_patch', patch: VISUAL_PATCH });
+  const receipt = await made.canvas.applyVisualPatch('patch-1');
+  await flush();
+
+  assert.equal(receipt.kind, 'visual_synced');
+  assert.deepEqual(receipt.version, { from: 1, to: 2 });
+  assert.equal(receipt.summary_ko, null);
+  assert.equal(saved.length, 1);
+  assert.equal(saved[0].strategy_id, 's1');
+  assert.equal(saved[0].origin, 'visual');
+  assert.equal(saved[0].source, VISUAL_SOURCE);
+  assert.equal(saved[0].bundle.spec_yaml, COMPILED_YAML);
+  assert.equal(saved[0].bundle.compiler_version, 'visual-1.0.0');
+  assert.equal(saved[0].apply_receipt.patch_id, 'patch-1');
+  assert.equal(saved[0].apply_receipt.patch_hash, 'ph-1');
+  assert.equal(saved[0].apply_receipt.base_graph_hash, 'gh-1');
+  assert.equal(saved[0].apply_receipt.base_version_id, 'v1');
+  assert.equal(saved[0].apply_receipt.base_artifact_hash, made.hash);
+  assert.ok(saved[0].apply_receipt.applied_at, 'applied_at은 사람이 누른 시각이다');
+  // 경계: 이 경로는 돈을 쓰거나 도는 것을 바꾸는 어느 것도 부르지 않는다.
+  assert.equal(made.calls.run, 0);
+  assert.equal(made.calls.activate, 0);
+  assert.equal(made.calls.backfill, 0);
+  assert.equal(made.canvas.getContext().map.pendingPatch, null);
+});
+
+test('그 사이 다른 수정이 먼저 저장되면(409) visual_conflict로 돌아온다', async () => {
+  const made = await mountVisual({
+    createStrategy: async () => ({ strategy_id: 's1', version_id: 'v1' }),
+    visualSave: async () => {
+      const error = new Error('그 사이 다른 수정이 먼저 저장됐습니다');
+      error.status = 409;
+      throw error;
+    },
+  });
+  await clickVisualValidate(made);
+  made.canvas.onChatAction({ kind: 'visual_patch', patch: VISUAL_PATCH });
+  const receipt = await made.canvas.applyVisualPatch('patch-1');
+  assert.equal(receipt.kind, 'visual_conflict');
+  assert.match(receipt.errors.join(' '), /먼저 저장/);
+  assert.equal(made.calls.run, 0);
+  assert.equal(made.calls.activate, 0);
+});
+
+test('[버리기]는 대기 중인 수정안만 지운다 · [실행 전 검토]는 지도로 옮길 뿐이다', async () => {
+  const made = await mountVisual();
+  made.canvas.onChatAction({ kind: 'visual_patch', patch: VISUAL_PATCH });
+  assert.equal(made.canvas.discardVisualPatch('patch-1').ok, true);
+  assert.equal(made.canvas.getContext().map.pendingPatch, null);
+
+  await toForm(made.container);
+  assert.equal(made.canvas.reviewBeforeRun().ok, true);
+  assert.equal(made.canvas.getContext().designTab, 'flow');
+  assert.match(textOf(made.container), /실행 전 검토/);
+  assert.equal(made.calls.run, 0);
+});
+
+test('[다시 검토]는 다시 검증하고 막고 있는 오류를 하나 더 묻는다', async () => {
+  let asked = 0;
+  const made = await mountVisual({
+    visualValidate: async () => ({
+      valid: false,
+      diagnostics: [{
+        code: 'E_PORT_REQUIRED', severity: 'error', node_id: 'ind-ma_fast',
+        message_ko: '입력이 비어 있습니다',
+      }],
+      preview: null, source_map: null, exact_code_jump: false, hashes: { graph_hash: 'gh-1' },
+    }),
+    visualQuestion: async () => {
+      asked += 1;
+      return {
+        question: {
+          code: 'E_PORT_REQUIRED', question_ko: '무엇을 이을까요?',
+          choices: [{ id: 'connect-close', label_ko: '캔들 종가', recommended: true, changes: [] }],
+          remaining: 0,
+        },
+      };
+    },
+  });
+  const receipt = await made.canvas.retryVisualPatch();
+  assert.equal(asked, 1);
+  assert.equal(receipt.kind, 'visual_question');
+  assert.equal(receipt.question.code, 'E_PORT_REQUIRED');
+  assert.equal(made.canvas.getContext().map.pendingQuestion.code, 'E_PORT_REQUIRED');
+});
+
+test('선택지를 고르면 비활성 수정안 하나를 만든다 — 아직 아무것도 저장하지 않는다', async () => {
+  const sent = [];
+  const made = await mountVisual({
+    visualPatch: async (body) => { sent.push(body); return VISUAL_PATCH; },
+  });
+  await clickVisualValidate(made);
+  const receipt = await made.canvas.answerVisualQuestion({
+    code: 'E_PORT_REQUIRED', choice_id: 'connect-close',
+  });
+  assert.equal(sent.length, 1);
+  assert.equal(sent[0].base_graph_hash, 'gh-1');
+  assert.deepEqual(sent[0].intent, { code: 'E_PORT_REQUIRED', choice_id: 'connect-close' });
+  assert.equal(receipt.kind, 'visual_patch');
+  assert.equal(receipt.patch.patch_id, 'patch-1');
+  assert.equal(receipt.applied, false);
+  assert.equal(made.canvas.getContext().map.pendingQuestion, null);
+});
+
+test('시각 라우트가 없으면 지도는 읽기 전용으로 물러나고 이유를 한 줄 남긴다', async () => {
+  const made = await mountVisual({
+    visualFromSpec: async () => {
+      throw new Error('백엔드에 백테스트 경로가 없습니다 — 백엔드가 이 브랜치 버전인지 확인하세요 (Not Found)');
+    },
+  });
+  assert.equal(findByClass(made.container, 'backtest-vis').length, 0);
+  assert.equal(findByClass(made.container, 'backtest-flow-notice').length, 1);
+  assert.match(textOf(made.container), /읽기 전용 지도로 돌아갑니다/);
+  // 지금까지의 읽기 전용 지도는 그대로 선다 — 기능이 통째로 사라지지 않는다.
+  assert.ok(findByClass(made.container, 'backtest-flow-map').length >= 1);
+  assert.match(textOf(made.container), /조절할 값을 정합니다/);
+});
+
+test('코드 경로의 지도에는 [코드 전용] 배지가 붙는다 — 그래프로 되돌릴 수 없다', async () => {
+  const made = await mountVisual();
+  made.canvas.onChatAction({
+    kind: 'code_draft', source: 'def signals(df, params):\n    return None\n',
+  });
+  await flush();
+  made.canvas.onChatAction({ kind: 'navigate', tab: 'design', designTab: 'flow' });
+  await flush();
+  assert.equal(findByClass(made.container, 'backtest-flow-codeonly').length, 1);
+  assert.equal(findByClass(made.container, 'backtest-vis').length, 0);
+});
+
+test('모드 워크스페이스에 등록하고 탭이 움직일 때마다 조각을 보고한다', async () => {
+  const registered = [];
+  const reports = [];
+  global.window = {
+    AthenaSessionWorkspace: {
+      register: (kind, handler) => { registered.push([kind, handler]); },
+      report: (patch) => { reports.push(patch); },
+    },
+  };
+  try {
+    const made = await mountVisual();
+    assert.equal(registered.length, 1);
+    assert.equal(registered[0][0], 'backtest');
+    assert.equal(typeof registered[0][1].restore, 'function');
+
+    reports.length = 0;
+    await toForm(made.container);
+    assert.ok(reports.length >= 1, '하위 탭이 움직이면 보고한다');
+    const last = reports[reports.length - 1];
+    assert.equal(last.designTab, 'form');
+    assert.equal(last.tab, 'design');
+    assert.ok(last.form && typeof last.form.yaml === 'string');
+    assert.ok(last.graph && Array.isArray(last.graph.nodes));
+
+    registered[0][1].restore({
+      kind: 'backtest', tab: 'design', designTab: 'flow', graph: VISUAL_GRAPH,
+    });
+    assert.equal(made.canvas.getContext().designTab, 'flow');
+  } finally {
+    delete global.window;
+  }
+});
+
+test('워크스페이스 전역이 없어도 mount·탭 이동이 조용히 넘어간다', async () => {
+  const made = await mountVisual();
+  assert.doesNotThrow(() => { made.canvas.onChatAction({ kind: 'navigate', tab: 'history' }); });
+});
+
+test('[코드 열기]는 패치가 건드린 노드의 줄로 간다 — RFC 6902 path에서 읽는다', async () => {
+  const made = await mountVisual();
+  await clickVisualValidate(made);
+  made.canvas.onChatAction({ kind: 'visual_patch', patch: VISUAL_PATCH });
+  const opened = await made.canvas.openCodeFromChat();
+  await flush();
+  assert.equal(opened, true);
+  assert.equal(made.canvas.getContext().designTab, 'code');
+  assert.match(
+    findByClass(made.container, 'backtest-code-ribbon-label')[0].textContent,
+    /ma_fast/,
+  );
+  assert.equal(made.calls.run, 0);
 });

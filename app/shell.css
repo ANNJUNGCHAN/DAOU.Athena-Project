@@ -4713,3 +4713,135 @@ body { margin: 0; overflow: hidden; }
   .backtest-vis-palette.is-drawer,
   .backtest-vis-inspector.is-drawer { animation: none; }
 }
+
+/* ── 백테스트 · 편집 가능한 지도 탭 (US-007/008/009, 2026-09-03) ──────────────
+   편집기 자체(.backtest-vis-*)는 위 블록이 이미 세웠다. 여기 있는 것은 그 편집기를
+   지도 탭에 앉히는 껍데기 넷뿐이다: 대상 한 줄 · 머리줄과 상태 점 · 편집기 자리 ·
+   코드 서랍. 읽기 전용 지도의 .backtest-map-*와 같은 문법을 그대로 쓴다 — 같은 자리에
+   두 가지 생김새가 서면 사람은 다른 화면에 왔다고 읽는다. */
+.backtest-visual {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.backtest-visual-target {
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: var(--color-k-panel3);
+  color: var(--color-k-dim);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+}
+.backtest-visual-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0 8px;
+}
+.backtest-visual-head .backtest-card-title { flex: 1 1 auto; min-width: 0; }
+/* 상태 점 — 지금 서버가 이 그래프를 어떻게 보는가. 'unvalidated'는 점을 찍지 않는다
+   (아직 묻지 않은 것은 상태가 아니다). 색은 세 뜻만 구분한다: 도는 중 · 됨 · 안 됨. */
+.backtest-visual-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+.backtest-visual-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-k-ghost);
+}
+.backtest-visual-dot.is-validating { background: var(--color-k-dim); }
+.backtest-visual-dot.is-valid { background: var(--color-brand); }
+.backtest-visual-dot.is-synced { background: var(--color-brand); }
+.backtest-visual-dot.is-invalid { background: var(--color-down); }
+.backtest-visual-status-text {
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}
+/* 헤더의 [검증] — 실행 버튼 옆에 선다. 실행과 헷갈리지 않게 채우지 않는다. */
+.backtest-visual-validate,
+.backtest-visual-open-code {
+  flex: 0 0 auto;
+  padding: 6px 14px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 999px;
+  background: var(--color-k-panel3);
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.backtest-run-button[aria-disabled='true'] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+/* 편집기가 앉는 자리 — 높이는 편집기가 정한다(여기서 고정하면 목록 보기가 잘린다). */
+.backtest-visual-host {
+  display: block;
+  min-height: 0;
+}
+/* 코드 서랍 — 읽기 전용 지도의 .backtest-map-drawer와 같은 줄이다. */
+.backtest-visual-drawer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 10px 12px;
+  border-top: 1px solid var(--color-k-line);
+}
+.backtest-visual-drawer-file {
+  color: var(--color-k-dim);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+}
+.backtest-visual-drawer-match {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgb(238 19 123 / 12%);
+  color: var(--color-brand);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}
+/* 코드가 지도보다 앞섰다 — 사람이 손으로 고친 초안을 덮지 않았다는 사실을 말한다. */
+.backtest-visual-drawer-ahead {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgb(255 152 56 / 14%);
+  color: #A85C10;
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}
+.backtest-visual-drawer .backtest-visual-open-code { margin-left: auto; }
+/* 지도 탭의 한 줄 알림 — 낡은 연결·시각 설계 없음처럼 "지금은 못 한다"를 그 자리에
+   적는다. 화면 전체를 오류로 바꾸지 않는다(지도를 못 연 것이지 백테스트가 죽은 것이
+   아니다, .backtest-flow-error와 같은 태도). */
+.backtest-flow-notice {
+  margin: 8px 0;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgb(255 152 56 / 10%);
+  color: #A85C10;
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+}
+/* 코드 경로의 지도는 그래프로 되돌릴 수 없다 — 읽기 전용임을 먼저 말한다. */
+.backtest-flow-codeonly {
+  align-self: flex-start;
+  margin-bottom: 8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--color-k-panel3);
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}
