@@ -25,10 +25,12 @@ from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import JSONResponse
 from pydantic import ValidationError
 
+from athena_api.backtest import codegen as codegen_mod
 from athena_api.backtest import deploy as deploy_mod
 from athena_api.backtest import diagnose as diagnose_mod
 from athena_api.backtest import flow as flow_mod
 from athena_api.backtest import indicators as indicators_mod
+from athena_api.backtest import mapmodel as mapmodel_mod
 from athena_api.backtest import optimize as optimize_mod
 from athena_api.backtest import presets as presets_mod
 from athena_api.backtest import user_strategies as user_strategies_mod
@@ -369,6 +371,28 @@ async def start_run(request: Request, body: dict[str, Any]) -> JSONResponse:
         else None
     )
 
+    # 프로젝트 가상환경으로 실행한다 — 사용자가 자기 폴더에 깐 패키지를 코드가 실제로
+    # 쓸 수 있어야 "내 전략"이 성립한다. 가상환경이 아직 없으면 막지 않고 기본
+    # 인터프리터로 돈다(pandas/numpy만 쓰는 코드는 그대로 돌아간다).
+    #
+    # 행을 만들기 **전에** 푼다 — 없는 프로젝트로 들어온 요청이 404로 끝날 때, 뒤에서
+    # 풀면 status="running" 실행 행이 이미 남아 있고 아무도 그걸 거두지 않는다(store에
+    # 묵은 실행을 쓸어내는 길이 없다). 이력에 영원히 도는 행이 생긴다.
+    python_exe: str | None = None
+    allowed_imports: list[str] | None = None
+    if code_source and project_id:
+        project_root = _project_root(project_id)
+        if project_root is None:
+            raise HTTPException(status_code=404, detail=f"프로젝트가 존재하지 않는다: {project_id}")
+        interpreter = venv_python(project_root)
+        if interpreter is not None:
+            python_exe = str(interpreter)
+            # 차단목록은 자식(guard.py)이 다시 적용한다 — 여기서 빼는 것은 "애초에 보내지
+            # 않는다"는 두 번째 그물이지 유일한 그물이 아니다.
+            allowed_imports = sorted(
+                set(venv_packages(project_root)) - BLOCKED_TOP_LEVEL_IMPORTS
+            )
+
     now = datetime.now(UTC)
     # POST /runs는 {yaml, params, source}만 받는다 — 저장된 전략 CRUD(§6.6의 strategies 라우트군)는
     # 이 스코프 밖이다. 그래도 bt_run.strategy_version_id는 FK(NOT NULL)라 매 실행마다
@@ -396,24 +420,6 @@ async def start_run(request: Request, body: dict[str, Any]) -> JSONResponse:
         run_id, version_id, params_json=params_json, spec_hash=spec_hash,
         status="running", started_at=now,
     )
-    # 프로젝트 가상환경으로 실행한다 — 사용자가 자기 폴더에 깐 패키지를 코드가 실제로
-    # 쓸 수 있어야 "내 전략"이 성립한다. 가상환경이 아직 없으면 막지 않고 기본
-    # 인터프리터로 돈다(pandas/numpy만 쓰는 코드는 그대로 돌아간다).
-    python_exe: str | None = None
-    allowed_imports: list[str] | None = None
-    if code_source and project_id:
-        project_root = _project_root(project_id)
-        if project_root is None:
-            raise HTTPException(status_code=404, detail=f"프로젝트가 존재하지 않는다: {project_id}")
-        interpreter = venv_python(project_root)
-        if interpreter is not None:
-            python_exe = str(interpreter)
-            # 차단목록은 자식(guard.py)이 다시 적용한다 — 여기서 빼는 것은 "애초에 보내지
-            # 않는다"는 두 번째 그물이지 유일한 그물이 아니다.
-            allowed_imports = sorted(
-                set(venv_packages(project_root)) - BLOCKED_TOP_LEVEL_IMPORTS
-            )
-
     runner.start_run(
         run_id, spec=spec, df=df, overrides=params, extra_flags=partial_flag, source=code_source,
         python_exe=python_exe, allowed_imports=allowed_imports,
@@ -521,6 +527,63 @@ async def flow_route(body: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(source, str) or not source.strip():
         raise HTTPException(status_code=422, detail="source는 비어 있지 않은 문자열이어야 한다")
     return flow_mod.to_payload(flow_mod.build_flow(source))
+
+
+@router.post("/map")
+async def map_route(request: Request, body: dict[str, Any]) -> dict[str, Any]:
+    """흐름 지도 — 폼(`yaml`)이든 코드(`source`)든 같은 지도 한 장으로 옮긴다(보드 11~14).
+    실행하지 않는다: 폼은 스펙을 읽고, 코드는 `ast`로만 읽는다.
+
+    `run_id`가 있으면 그 실행이 남긴 값으로 칸 오른쪽의 "사실"을 채운다 — 지도가 숫자를
+    다시 계산하지 않는 이유는 그 순간 사실이 추정이 되기 때문이다(mapmodel.py 머리말).
+    """
+    yaml_text = body.get("yaml")
+    source = body.get("source")
+    has_yaml = isinstance(yaml_text, str) and bool(yaml_text.strip())
+    has_source = isinstance(source, str) and bool(source.strip())
+    if has_yaml == has_source:
+        raise HTTPException(
+            status_code=422, detail="yaml(폼)이나 source(코드) 중 하나만 줘야 한다"
+        )
+    spec: StrategySpec | None = None
+    if has_yaml:
+        try:
+            spec = from_kis_yaml(str(yaml_text))
+        except Exception as exc:  # noqa: BLE001 — 사용자 입력 검증 실패를 422로 옮긴다
+            raise HTTPException(status_code=422, detail=_yaml_error_detail(exc)) from None
+
+    result: dict[str, Any] | None = None
+    run_id = body.get("run_id")
+    if isinstance(run_id, str) and run_id:
+        row = await _store(request).run(run_id)
+        if row is None:
+            raise HTTPException(status_code=404, detail="실행이 존재하지 않는다")
+        result, _flags, _benchmark = _metrics_view(row.metrics_json)
+
+    error = body.get("error") if isinstance(body.get("error"), dict) else None
+    version = body.get("version") if isinstance(body.get("version"), int) else None
+    return mapmodel_mod.build_map(
+        spec=spec,
+        source=str(source) if has_source else None,
+        result=result,
+        error=error,
+        version=version,
+    )
+
+
+@router.post("/codegen")
+async def codegen_route(body: dict[str, Any]) -> dict[str, Any]:
+    """지도(폼 yaml) 뒤에 놓을 전략 코드를 만든다. **저장하지 않는다** — 소스를 돌려줄
+    뿐이고, 버전으로 남기는 것은 사람이 누른 뒤 버전 라우트가 한다(§7.3, /diagnose와 같다)."""
+    yaml_text = body.get("yaml")
+    if not isinstance(yaml_text, str) or not yaml_text.strip():
+        raise HTTPException(status_code=422, detail="yaml은 비어 있지 않은 문자열이어야 한다")
+    try:
+        spec = from_kis_yaml(yaml_text)
+    except Exception as exc:  # noqa: BLE001 — 사용자 입력 검증 실패를 422로 옮긴다
+        raise HTTPException(status_code=422, detail=_yaml_error_detail(exc)) from None
+    source = codegen_mod.spec_to_python(spec)
+    return {"source": source, "lines": len(source.splitlines())}
 
 
 @router.post("/diagnose")

@@ -48,6 +48,10 @@ _ALLOWED_ACTIONS: tuple[str, ...] = (
     "propose_code",
     "flow",
     "diagnose",
+    # 지도(map)와 코드 생성(codegen)도 상태를 바꾸지 않는다 — 지도는 읽기만 하고,
+    # codegen은 소스를 돌려줄 뿐 저장·활성화하지 않는다(propose_code와 다르다).
+    "map",
+    "codegen",
     "optimize",
     # 폼 설정 — HTTP를 타지 않고 캔버스로 간다. 검증을 통과하면 폼에 바로 반영되고,
     # 실행은 사람이 채팅의 [실행]을 눌러야 시작된다.
@@ -105,6 +109,9 @@ _INPUT_SCHEMA: dict[str, Any] = {
                 "list_strategies/read_code = 저장된 전략과 활성 버전 소스 조회(읽기 전용). "
                 "flow = 전략 코드를 단계 지도로 옮긴다(실행하지 않는다). "
                 "diagnose = 오류 문구와 소스로 원인·수정안을 만든다(적용하지 않는다). "
+                "map = 폼(yaml)이나 코드(source)를 흐름 지도 한 장으로 옮긴다"
+                "(실행하지 않는다 — run_id를 주면 그 실행이 남긴 사실이 같이 실린다). "
+                "codegen = 지도(폼 yaml) 뒤에 놓을 전략 코드를 만든다(저장·활성화하지 않는다). "
                 "propose_code = 코드를 낸다 — strategy_id가 있으면 **비활성 버전**으로 "
                 "저장하고(활성화는 사람 전용), 없으면 캔버스 편집기에 바로 반영된다(HTTP 없음). "
                 "채팅에 변경 내역과 [되돌리기]가 뜬다. "
@@ -214,6 +221,24 @@ _INPUT_SCHEMA: dict[str, Any] = {
                 "error": {"type": "string"},
                 "source": {"type": "string"},
             },
+        },
+        "map": {
+            "type": "object",
+            "description": (
+                "action=map일 때의 입력 — 폼 yaml **또는** 파이썬 source 중 하나만 준다. "
+                "run_id를 주면 그 실행의 신호 개수·워밍업·행 수가 지도에 같이 실린다."
+            ),
+            "properties": {
+                "yaml": {"type": "string"},
+                "source": {"type": "string"},
+                "run_id": {"type": "string"},
+                "version": {"type": "integer"},
+            },
+        },
+        "codegen": {
+            "type": "object",
+            "description": "action=codegen일 때의 입력 — 코드를 만들 폼 yaml.",
+            "properties": {"yaml": {"type": "string"}},
         },
         "optimize": {
             "type": "object",
@@ -832,6 +857,18 @@ async def dispatch(
             response = await http_client.post(
                 "/api/v1/backtest/diagnose",
                 json=arguments.get("diagnose") or {},
+                timeout=_TIMEOUT_SECONDS,
+            )
+        elif action == "map":
+            response = await http_client.post(
+                "/api/v1/backtest/map",
+                json=arguments.get("map") or {},
+                timeout=_TIMEOUT_SECONDS,
+            )
+        elif action == "codegen":
+            response = await http_client.post(
+                "/api/v1/backtest/codegen",
+                json=arguments.get("codegen") or {},
                 timeout=_TIMEOUT_SECONDS,
             )
         elif action == "optimize":

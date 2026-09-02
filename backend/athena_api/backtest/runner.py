@@ -290,9 +290,15 @@ class BacktestRunner:
 
             줄 전체를 쌓아두지 않는다 — 진행은 "지금 어디인가"라 한 줄이면 되고, 실패
             메시지에 붙일 꼬리만 20줄 남긴다(pip 오류는 마지막 몇 줄에 이유가 있다).
+
+            자식 env에서 ATHENA_*는 뺀다 — `pip install`은 남이 쓴 build/setup 코드를
+            그대로 돌리는 자리라, 전략 코드에 자격증명을 안 넘긴다는 규율(sandbox/host.py
+            `_ENV_ALLOWLIST`)이 여기만 비어 있으면 그 규율이 아니다. 나머지는 남긴다 —
+            pip은 PATH·TEMP·프록시 설정으로 산다.
             """
             job.progress = EnvProgress(step=step, line="시작")
             tail: deque[str] = deque(maxlen=20)
+            child_env = {k: v for k, v in os.environ.items() if not k.startswith("ATHENA_")}
             proc = subprocess.Popen(
                 cmd,
                 stdout=subprocess.PIPE,
@@ -300,6 +306,7 @@ class BacktestRunner:
                 text=True,
                 encoding="utf-8",
                 errors="replace",
+                env=child_env,
             )
             with proc:
                 for raw in proc.stdout:  # stdout=PIPE라 항상 있다
@@ -408,6 +415,14 @@ class BacktestRunner:
                     initial_cash=initial_cash, warmup_bars=warmup_bars,
                 )
                 metrics_payload: dict[str, Any] = _json_safe(asdict(metrics))
+                # 흐름 지도(mapmodel.py) 오른쪽의 "사실"이 읽는 두 값. 신호 개수는 여기
+                # 말고 아무도 세지 않는다 — 지도가 세면 실행이 만든 신호가 아니라 지도가
+                # 다시 계산한 신호가 되고, 그 순간 사실이 아니라 추정이 된다.
+                metrics_payload["signal_counts"] = {
+                    "entry": int(signals["entry"].sum()),
+                    "exit": int(signals["exit"].sum()),
+                }
+                metrics_payload["rows"] = int(len(df))
                 # 정직 표기 플래그는 결과 화면 "가정" 섹션이 그대로 노출한다(§8.3).
                 # `extra_flags`는 호출자만 아는 사실(예: 보유 구간만 실행)이라 여기서
                 # 지어낼 수 없어 인자로 받는다.
