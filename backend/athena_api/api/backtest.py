@@ -30,8 +30,8 @@ from athena_api.backtest import indicators as indicators_mod
 from athena_api.backtest import optimize as optimize_mod
 from athena_api.backtest import presets as presets_mod
 from athena_api.backtest.data import compute_plan, kiwoom_fetch_page
-from athena_api.backtest.runner import BacktestRunner
-from athena_api.backtest.schema import from_kis_yaml
+from athena_api.backtest.runner import BacktestRunner, _align_signals, _run_code_signals
+from athena_api.backtest.schema import StrategySpec, from_kis_yaml
 from athena_api.backtest.store import BacktestStore, Candle, Coverage
 from athena_api.dependencies import KiwoomClientDep
 
@@ -882,12 +882,18 @@ async def evaluate_deployment_route(
     version = await store.version(row.strategy_version_id)
     if version is None:
         raise HTTPException(status_code=404, detail="배포에 묶인 전략 버전을 찾을 수 없다")
+    # 배포에 묶인 소스가 폼(yaml)인지 코드(python)인지는 전략의 kind가 쥔다. 코드 전략을
+    # yaml로 읽으려 들면 파싱 오류 422로 끝나 — 만들 수는 있는데 영원히 판정할 수 없는
+    # 배포가 남는다(2026-09-02 실측). 그 막다른 길을 여기서 없앤다.
+    strategy = await store.strategy(version.strategy_id)
+    spec: StrategySpec | None = None
     try:
         spec = from_kis_yaml(version.source)
     except Exception as exc:  # noqa: BLE001 — 저장된 소스가 yaml이 아닐 수 있다
-        raise HTTPException(
-            status_code=422, detail=f"배포에 묶인 버전을 스펙으로 읽지 못했다: {exc}"
-        ) from None
+        if strategy is None or strategy.kind != "python":
+            raise HTTPException(
+                status_code=422, detail=f"배포에 묶인 버전을 스펙으로 읽지 못했다: {exc}"
+            ) from None
 
     candles = await store.candles(row.stk_cd, row.period, row.adjusted)
     if not candles:
@@ -907,9 +913,24 @@ async def evaluate_deployment_route(
         limits=deploy_mod.Limits(**limits_raw),
         status=row.status,  # type: ignore[arg-type]
     )
+    signals = None
+    if spec is None:
+        # 코드 전략의 신호는 실행 라우트와 **같은 샌드박스**가 만든다(§6.2) — 여기서 두 번째
+        # 신호 생성 경로를 만들면 배포가 낸 신호와 백테스트가 낸 신호가 갈라진다.
+        # 파라미터 우선순위도 그쪽과 같다: 코드 PARAMS 기본값 < 배포에 저장된 params.
+        outcome = await _run_code_signals(version.source, df, deployment.params or None)
+        if not outcome["ok"]:
+            err = outcome["error"]
+            # 사용자 코드가 터진 사실을 yaml 파싱 오류로 바꿔 말하지 않는다.
+            raise HTTPException(
+                status_code=422, detail=f"{err['type']}: {err['message']}"
+            )
+        signals = _align_signals(outcome["signals_df"], df.index)
+
     today = str(body.get("today") or deploy_mod.today_str())
     decision = deploy_mod.evaluate_latest(
         spec, df, deployment,
+        signals=signals,
         today=today,
         holding=bool(body.get("holding", False)),
         orders_today=int(body.get("orders_today", 0)),

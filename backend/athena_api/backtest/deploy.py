@@ -38,6 +38,9 @@ MODE_LABELS: dict[Mode, str] = {
     "auto": "한도 안에서 자동으로 주문합니다",
 }
 
+# 코드 전략에는 옮겨 적을 조건 스펙이 없다 — 조건을 지어내는 대신 그 사실을 그대로 적는다.
+CODE_BASIS = "코드 전략 — 조건은 코드 안에 있습니다"
+
 
 @dataclass(frozen=True, slots=True)
 class Limits:
@@ -92,8 +95,10 @@ class DriftReport:
     notes: tuple[str, ...] = field(default_factory=tuple)
 
 
-def _basis_text(spec: StrategySpec, side: Side) -> str:
+def _basis_text(spec: StrategySpec | None, side: Side) -> str:
     """진입·청산 조건을 사람이 읽는 한 줄로. 조건 스펙 자체를 옮길 뿐 새로 지어내지 않는다."""
+    if spec is None:
+        return CODE_BASIS
     group = spec.strategy.entry if side == "buy" else spec.strategy.exit
     joiner = " 그리고 " if group.logic == "AND" else " 또는 "
     return joiner.join(
@@ -106,7 +111,7 @@ def is_expired(deployment: Deployment, today: str) -> bool:
 
 
 def evaluate_latest(
-    spec: StrategySpec,
+    spec: StrategySpec | None,
     df: pd.DataFrame,
     deployment: Deployment,
     *,
@@ -116,6 +121,7 @@ def evaluate_latest(
     order_amount: float,
     consecutive_losses: int = 0,
     drawdown_pct: float = 0.0,
+    signals: pd.DataFrame | None = None,
 ) -> Decision:
     """마지막 봉의 신호를 판정하고 한도를 적용한다.
 
@@ -123,12 +129,20 @@ def evaluate_latest(
     무보유 중 exit 무시"(§6.4 규칙 5)를 실전에서도 그대로 지키기 위해 호출자가 넘긴다.
     이 모듈이 계좌를 직접 조회하지 않는 이유는, 계좌 조회는 이 모듈의 책임이 아니고
     자격증명이 닿는 경로를 여기로 끌어오지 않기 위해서다.
+
+    `signals`는 이미 만들어진 신호 프레임이다 — 코드 전략(kind=python)은 조건이 폼 스펙이
+    아니라 파이썬에 있어 이 모듈이 컴파일할 수 없다. 그 경우 호출자가 샌드박스로 만든
+    신호를 넘기고 `spec`은 None이 된다(근거 문구는 그래서 CODE_BASIS다). 판정·한도·정지
+    규칙은 두 경로가 정확히 같은 코드를 지난다 — 여기서 갈라지면 실전 규율이 둘이 된다.
     """
     if len(df) == 0:
         return Decision(dt=today, side=None, stage="skipped",
                         reason="봉 데이터가 없습니다", basis="")
 
-    signals = compile_signals(spec, df, deployment.params or None)
+    if signals is None:
+        if spec is None:
+            raise ValueError("spec이 없으면 signals를 넘겨야 한다 — 둘 다 없으면 판정할 수 없다")
+        signals = compile_signals(spec, df, deployment.params or None)
     last = signals.iloc[-1]
     dt = str(df.index[-1].date()) if hasattr(df.index[-1], "date") else str(df.index[-1])
 
@@ -242,6 +256,7 @@ def today_str(today: date | None = None) -> str:
 
 
 __all__ = [
+    "CODE_BASIS",
     "MODE_LABELS",
     "Decision",
     "Deployment",
