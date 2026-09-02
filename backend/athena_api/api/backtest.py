@@ -760,7 +760,7 @@ def _visual_bundle(
     spec_doc = raw.get("spec")
     spec_yaml = raw.get("spec_yaml")
     source_map = raw.get("source_map")
-    compiler_version = raw.get("compiler_version", visual_mod.COMPILER_VERSION)
+    claimed_compiler = raw.get("compiler_version")
     claimed = raw.get("hashes")
     if not isinstance(graph_doc, dict):
         raise HTTPException(status_code=422, detail="bundle.graph는 객체여야 한다")
@@ -774,8 +774,14 @@ def _visual_bundle(
         raise HTTPException(status_code=422, detail="bundle.source_map은 객체여야 한다")
     if not isinstance(claimed, dict):
         raise HTTPException(status_code=422, detail="bundle.hashes는 객체여야 한다")
-    # compiler version은 생략할 수 있다(서버 것을 쓴다). 보냈다면 서버와 같아야 한다 —
-    # 다른 컴파일러가 냈다고 적힌 코드를 이 서버의 hash로 검증해 저장하면 그 표기가 거짓이 된다.
+    # compiler version은 생략할 수 있다(서버 것을 쓴다). JSON `null`도 생략과 같게 본다 —
+    # 아직 컴파일 결과가 없는 화면은 그 칸을 null로 직렬화하는 것이 자연스럽고, 거기서
+    # 422를 내면 "안 보내면 되는데 null로 보내서 막히는" 함정이 된다(us011 프로브 실측).
+    # 값을 실제로 보냈다면 서버와 같아야 한다 — 다른 컴파일러가 냈다고 적힌 코드를 이 서버의
+    # hash로 검증해 저장하면 그 표기가 거짓이 된다.
+    compiler_version = (
+        visual_mod.COMPILER_VERSION if claimed_compiler is None else claimed_compiler
+    )
     if compiler_version != visual_mod.COMPILER_VERSION:
         raise HTTPException(
             status_code=422,
