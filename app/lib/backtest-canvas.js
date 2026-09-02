@@ -2610,6 +2610,16 @@ function createBacktestCanvas(options) {
     if (state.visualNotice) {
       wrap.appendChild(el('div', 'backtest-flow-notice', state.visualNotice));
     }
+    wrap.appendChild(renderSummaryMap(true));
+    return wrap;
+  }
+
+  // 요약 지도(보드 15·16) — 칸 ①~④를 사람 말로, 오른쪽엔 지난 실행의 실제 값, 멈춘 칸엔
+  // 오류. 코드 경로에서는 이것이 지도의 전부이고, 스펙 경로에서는 편집기 위에 먼저 선다:
+  // 비개발자가 읽는 단위는 노드·연결이 아니라 "이 전략은 이렇게 흐릅니다"의 네 칸이다.
+  // 서랍(코드 열기)은 한 번만 그린다 — withDrawer=false면 부르는 쪽이 따로 그린다.
+  function renderSummaryMap(withDrawer) {
+    const wrap = el('div', 'backtest-flow-summary');
     // 만드는 중이라는 사실을 그린다 — 빈 자리는 "기능이 죽었다"로 읽힌다.
     if (state.mapLoading) {
       const loading = el('div', 'backtest-flow-loading');
@@ -2636,13 +2646,13 @@ function createBacktestCanvas(options) {
         target: mapTarget(),
         // 오른쪽 사실이 어느 실행의 것인지 — 없으면 그 문장 자체를 적지 않는다.
         lastRunLabel: state.runId ? String(state.runId).slice(0, 8) : null,
-        drawer: {
+        drawer: withDrawer ? {
           fileLabel: codeFileLabel(),
           matchesMap: !!(state.map.code && state.map.code.matches_map),
           aheadOfMap: runPath === 'code' && !!spec,
           onOpenCode: () => { void openCodeFromMap(); },
           onBackToMap: backToMap,
-        },
+        } : null,
       });
     }
     wrap.appendChild(map);
@@ -3609,6 +3619,8 @@ function createBacktestCanvas(options) {
     ));
     head.appendChild(renderVisualStatus());
     wrap.appendChild(head);
+    // 칸 ①~④가 먼저, 노드·연결 편집기는 그 아래(보드 15 위에 보드 11).
+    wrap.appendChild(renderSummaryMap(false));
     if (ensureVisualEditor()) wrap.appendChild(visualHost);
     if (state.visualNotice) {
       wrap.appendChild(el('div', 'backtest-flow-notice', state.visualNotice));
