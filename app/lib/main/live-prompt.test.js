@@ -321,6 +321,7 @@ test('buildLiveTurnPrompt: canvasMode backtest — 접두 규율 + 현재 폼 JS
   assert.ok(p.includes('캔버스는 채팅이 제어한다'));
   assert.ok(p.includes('propose_spec'));
   assert.ok(p.includes('propose_code'));
+  assert.ok(p.includes('entry·exit 불리언 열을 가진 DataFrame 하나를 반환한다'));
   assert.ok(p.includes('한 턴에 한 항목'));
   assert.ok(p.includes('run·optimize·backfill 액션을 직접 부르지 않는다'));
   assert.ok(p.includes('athena__render_canvas를 호출하지 않는다'));

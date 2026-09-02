@@ -47,6 +47,31 @@ def _write_stdout(jobdir: Path, text: str, cap_bytes: int) -> None:
     (jobdir / "stdout.txt").write_text(text, encoding="utf-8")
 
 
+
+def _coerce_signals(result: object) -> object:
+    """(entry, exit) 튜플·리스트나 {"entry":…, "exit":…} dict도 DataFrame으로 받아준다.
+
+    모델이 짠 전략 코드가 시리즈 둘을 튜플로 돌려주는 일이 잦다(2026-09-02 실채팅 시나리오
+    실측 — 그 한 번의 계약 위반이 오류→진단 경로로 빠졌다). 계약 문서는 DataFrame 그대로지만,
+    뜻이 분명한 모양은 여기서 흡수한다. 그 밖의 값은 그대로 돌려보내 기존 TypeError가 난다.
+    """
+    if isinstance(result, pd.DataFrame):
+        return result
+    if (
+        isinstance(result, (tuple, list))
+        and len(result) == 2
+        and all(isinstance(s, pd.Series) for s in result)
+    ):
+        return pd.DataFrame({"entry": result[0], "exit": result[1]})
+    if (
+        isinstance(result, dict)
+        and {"entry", "exit"} <= set(result)
+        and all(isinstance(result[k], pd.Series) for k in ("entry", "exit"))
+    ):
+        return pd.DataFrame({"entry": result["entry"], "exit": result["exit"]})
+    return result
+
+
 def main(argv: list[str]) -> int:
     if len(argv) != 2:
         print("usage: python -m athena_api.backtest.sandbox <jobdir>", file=sys.stderr)
@@ -81,7 +106,7 @@ def main(argv: list[str]) -> int:
         if not callable(signals_fn):
             raise ValueError("전략 코드에 signals(df, p) 함수가 없다")
 
-        result = signals_fn(bars, params)
+        result = _coerce_signals(signals_fn(bars, params))
         if not isinstance(result, pd.DataFrame):
             raise TypeError("signals()는 DataFrame을 반환해야 한다")
         missing = {"entry", "exit"} - set(result.columns)

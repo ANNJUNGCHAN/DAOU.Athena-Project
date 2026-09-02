@@ -164,3 +164,26 @@ def test_strategy_exception_is_reported_in_error_json(tmp_path: Path) -> None:
     assert result["error"]["type"] == "ValueError"
     assert result["error"]["message"] == "전략 로직 오류 테스트"
     assert "traceback" in result["error"]
+
+
+def test_tuple_of_two_series_is_accepted_as_entry_exit(tmp_path: Path) -> None:
+    """모델이 (entry, exit) 튜플을 돌려줘도 DataFrame으로 받는다(2026-09-02 실채팅 실측)."""
+    bars = _synthetic_bars()
+    source = chr(10).join([
+        "def signals(df, p):",
+        "    import athena_bt as bt",
+        "    fast = bt.sma(df.close, 2)",
+        "    slow = bt.sma(df.close, 5)",
+        "    return bt.cross_above(fast, slow), bt.cross_below(fast, slow)",
+        "",
+    ])
+    result = host.run_strategy(tmp_path, source, bars, {})
+    assert result["ok"] is True, result["error"]
+    assert list(result["signals_df"].columns) == ["entry", "exit"]
+
+
+def test_non_dataframe_return_still_fails_honestly(tmp_path: Path) -> None:
+    source = chr(10).join(["def signals(df, p):", "    return 42", ""])
+    result = host.run_strategy(tmp_path, source, _synthetic_bars(), {})
+    assert result["ok"] is False
+    assert result["error"]["type"] == "TypeError"
