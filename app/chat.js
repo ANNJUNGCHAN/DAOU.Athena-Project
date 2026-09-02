@@ -1751,6 +1751,117 @@ window.AthenaShell.registerOpenBrainQuestions(async () => {
   return true;
 });
 
+// ---------- 그래프 편집 제안 카드(2026-09-03) ----------
+//
+// 사용자 확정 방향: **모델은 제안, 확정은 사람.** 모델이 athena_graph_view
+// action=propose_edit을 부르면 main.js가 athena:graph-chat-action으로 보내고,
+// 여기서 카드를 띄운다. 누르면 사람의 답변 문장이 dispatchUserQuery로 제출되어
+// POST /brain/chat → 추출로 그래프가 갱신된다 — 되물을 것들 카드와 **같은 경로**다.
+//
+// 되물을 것들 카드와 같은 클래스(.question-card*)를 쓰고 같은 키(Ctrl+Enter·Esc)를
+// 쓴다. 다른 점은 하나뿐이다: 저쪽은 백엔드가 고른 불확실한 관계를 N건 묻고 한 번에
+// 제출하고, 이쪽은 모델의 제안 한 건을 즉시 묻는다(제안은 대화 흐름 안에서 나오므로
+// 모아 둘 이유가 없다).
+let graphEditProposal = null; // 열려 있는 동안만
+
+function graphEditProposalLib() {
+  return window.AthenaLib && window.AthenaLib.GraphEditProposal;
+}
+
+function closeGraphEditProposal() {
+  graphEditProposal = null;
+  const host = document.getElementById('graphEditProposalCard');
+  if (!host) return;
+  while (host.firstChild) host.removeChild(host.firstChild);
+  host.hidden = true;
+}
+
+function answerGraphEditProposal(choice) {
+  const lib = graphEditProposalLib();
+  if (!graphEditProposal || !lib) return;
+  const sentence = lib.proposalSentence(graphEditProposal, choice);
+  closeGraphEditProposal();
+  // 건너뛰기는 아무것도 보내지 않는다 — 침묵을 답으로 굳히지 않는다.
+  if (sentence) dispatchUserQuery(sentence);
+}
+
+function renderGraphEditProposalCard() {
+  const lib = graphEditProposalLib();
+  const host = document.getElementById('graphEditProposalCard');
+  if (!host || !graphEditProposal || !lib) return;
+  while (host.firstChild) host.removeChild(host.firstChild);
+
+  const head = document.createElement('div');
+  head.className = 'question-card-head';
+  const title = document.createElement('div');
+  title.className = 'question-card-title';
+  title.textContent = lib.proposalTitle(graphEditProposal);
+  head.appendChild(title);
+  host.appendChild(head);
+
+  const context = document.createElement('div');
+  context.className = 'question-card-context';
+  context.textContent = lib.proposalContext(graphEditProposal);
+  host.appendChild(context);
+
+  const note = document.createElement('div');
+  note.className = 'question-card-note';
+  // 아직 아무것도 안 바뀌었다는 사실을 화면이 말한다 — 모델의 notice와 같은 내용이다.
+  note.textContent = '아직 그래프는 그대로입니다. 누르면 그 답이 채팅으로 보내지고, 그 답이 그래프를 갱신합니다.';
+  host.appendChild(note);
+
+  const actions = document.createElement('div');
+  actions.className = 'question-card-actions';
+  const mkBtn = (choice, className) => {
+    const spec = lib.CHOICES[choice];
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = `question-card-btn ${className}`;
+    const label = document.createElement('span');
+    label.textContent = spec.label;
+    btn.appendChild(label);
+    if (spec.hint) {
+      const hint = document.createElement('span');
+      hint.className = 'question-card-key';
+      hint.textContent = spec.hint;
+      btn.appendChild(hint);
+    }
+    btn.addEventListener('click', () => answerGraphEditProposal(choice));
+    return btn;
+  };
+  // 되물을 것들 카드와 같은 배치 — 거절이 왼쪽, 확인이 오른쪽.
+  actions.appendChild(mkBtn('skip', 'is-quiet'));
+  const right = document.createElement('span');
+  right.className = 'question-card-right';
+  right.appendChild(mkBtn('reject', 'is-quiet'));
+  right.appendChild(mkBtn('apply', 'is-primary'));
+  actions.appendChild(right);
+  host.appendChild(actions);
+  host.hidden = false;
+}
+
+// 카드가 열려 있을 때만 듣는다 — 되물을 것들 카드와 같은 키를 쓰므로, 그 카드가
+// 열려 있으면 이쪽은 듣지 않는다(위 핸들러가 먼저 preventDefault한다).
+document.addEventListener('keydown', (e) => {
+  if (!graphEditProposal || brainQuestions) return;
+  if (e.key === 'Escape') { e.preventDefault(); answerGraphEditProposal('skip'); return; }
+  if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); answerGraphEditProposal('apply'); }
+}, true);
+
+window.athena.on('athena:graph-chat-action', (message) => {
+  if (!message || message.kind !== 'edit_proposal') return;
+  const lib = graphEditProposalLib();
+  if (!lib) return;
+  // 관계명 한글 사전은 공통 패널이 이미 쓰는 것을 그대로 넘긴다(되물을 것들 카드와
+  // 같은 이유 — 복사하면 한쪽만 고치는 실수가 난다).
+  const controller = window.AthenaLib && window.AthenaLib.GraphModeController;
+  const item = lib.normalizeProposal(message, controller && controller.RELATION_LABELS);
+  // 못 쓸 제안은 카드를 띄우지 않는다 — 무엇을 고칠지 모르는 카드에는 답할 수 없다.
+  if (!item) return;
+  graphEditProposal = item;
+  renderGraphEditProposalCard();
+});
+
 // ---------- 과거 대화 열기(2026-09-02) ----------
 //
 // 제보: 대화 이력 쪽을 누르면 그 대화로 이동해야 하는데 그런 기능이 전혀 없다.

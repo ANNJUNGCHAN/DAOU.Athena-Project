@@ -271,6 +271,10 @@ const ON_CHANNELS = new Set([
   // render_canvas 결과만 main이 여기로도 relay한다(classifyCanvasBlock의
   // status/envelope 그대로). 오브의 표/차트 축약 카드 렌더러가 구독한다.
   'athena:orb-canvas-result',
+  // 그래프 채팅 액션(2026-09-03) — athena_graph_view의 navigate·select·filter·fit·
+  // propose_edit 결과 {kind, ...}, 비영속. 백테스트 채널과 같은 성질이라 같은 자리에
+  // 둔다. propose_edit은 확정 카드를 띄우는 것이 전부다 — 그래프 쓰기가 아니다.
+  'athena:graph-chat-action',
   // ---------- 예약 자동 브리핑(R1, 4단계) — 사용자 턴 채널과 분리 ----------
   // 브리핑 텍스트 조각 — {text}. 사용자 턴(athena:live-text-delta)과 별개 채널.
   'athena:briefing-text-delta',

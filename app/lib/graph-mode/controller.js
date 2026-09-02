@@ -1206,6 +1206,21 @@ function createGraphModeController(deps) {
       handleLiveSelect(entityId ? String(entityId) : null);
       return state.panel;
     },
+    // 지도 카메라 — 채팅이 노드를 골라 주거나 "전체 다시 보여줘"라고 할 때 쓴다
+    // (2026-09-03, athena_graph_view action=select·fit). 선택과 초점이 갈려 있는
+    // 이유: 요약 표의 행 선택은 패널만 열어야 하고(지도를 안 보고 있다), 채팅이
+    // 노드를 지목한 것은 지도에서도 그 노드가 보여야 한다.
+    //
+    // 지도가 없거나(요약 서브뷰) 그 노드가 필터에 걸려 지도에 없으면 false다 —
+    // 호출자가 "아무 일도 안 일어났다"를 알아야 채팅이 됐다고 말하지 않는다.
+    focusNode(entityId) {
+      if (!liveActive() || !entityId) return false;
+      return liveMap.focusEntity(String(entityId)) === true;
+    },
+    fitView() {
+      if (!liveActive()) return false;
+      return liveMap.fitView() === true;
+    },
     // 공통 패널 공개 API — 그래프 밖(요약 표의 행 선택, 보드 07)에서도 같은 패널을
     // 열 수 있어야 한다는 게 store의 원래 계약이다("공통 패널: 어느 단계에서든
     // 노드를 고르면 같은 패널이 열린다"). 요약 표 자체는 이 디렉터리 밖(canvas.js)에

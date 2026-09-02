@@ -3112,6 +3112,63 @@ function renderSummaryUpdatedAt(entries) {
     el.textContent = '';
     return;
   }
+// --- 채팅 → 그래프 제어 (2026-09-03) ---------------------------------------
+//
+// main.js가 athena_graph_view의 delivered:'canvas' 봉투를 이 채널 하나로 보낸다
+// (백테스트의 athena:backtest-chat-action과 같은 구조). 여기서 하는 일은 **사람이
+// 직접 눌렀을 때와 같은 경로를 부르는 것**이다 — 탭 클릭 핸들러가 부르는
+// graphMode.setSurface(), 지도 클릭이 부르는 graphMode.selectNode(), 필터 select의
+// change가 부르는 GraphPrefs.writePrefs()+applyGraphFilterChange(). 채팅용 두 번째
+// 경로를 만들면 한쪽만 고치는 실수가 나고, 두 입구가 다른 상태를 남긴다.
+//
+// edit_proposal만 다르다 — 그건 화면 상태가 아니라 사람에게 물을 것이라 채팅 쪽
+// (chat.js의 제안 카드)이 받는다. 이 파일은 그것을 그리지 않는다.
+window.athena.on('athena:graph-chat-action', async (message) => {
+  if (!message || typeof message !== 'object') return;
+  // 그래프 기능 밖에 있으면 아무 일도 안 한다 — 캔버스가 다른 모드를 그리는 중에
+  // 서브뷰를 갈아치우면 사용자가 보던 화면이 이유 없이 사라진다.
+  if (!graphMode.state.active) return;
+
+  if (message.kind === 'navigate' && SURFACE_TAB_IDS[message.surface]) {
+    await graphMode.setSurface(message.surface);
+    updateSurfaceTabs();
+    return;
+  }
+  if (message.kind === 'select' && message.entityId) {
+    // 지도를 보고 있지 않으면 먼저 지도로 옮긴다 — 노드를 골라 달라는 요청은
+    // 그 노드를 보여 달라는 뜻이고, 요약 표에서는 선택이 표 밖의 일이 된다.
+    if (graphMode.state.surface !== 'map') {
+      await graphMode.setSurface('map');
+      updateSurfaceTabs();
+    }
+    graphMode.selectNode(message.entityId);
+    graphMode.focusNode(message.entityId);
+    return;
+  }
+  if (message.kind === 'filter' && message.patch && typeof message.patch === 'object') {
+    // 화이트리스트로만 받는다 — 봉투가 어디서 왔는지 모르는 채로 prefs에 쓰면
+    // 모르는 키가 localStorage에 쌓이고, normalize()가 그것을 조용히 버린다.
+    const patch = {};
+    if (GraphFilters.WINDOW_DAY_OPTIONS.includes(message.patch.windowDays)) {
+      patch.windowDays = message.patch.windowDays;
+    }
+    if (GraphFilters.MIN_DEGREE_OPTIONS.includes(message.patch.minDegree)) {
+      patch.minDegree = message.patch.minDegree;
+    }
+    if (GraphFilters.SORT_OPTIONS.includes(message.patch.summarySort)) {
+      patch.summarySort = message.patch.summarySort;
+    }
+    if (!Object.keys(patch).length) return;
+    GraphPrefs.writePrefs(patch);
+    renderFilterChips();
+    await applyGraphFilterChange();
+    return;
+  }
+  if (message.kind === 'fit') {
+    graphMode.fitView();
+  }
+});
+
   const relative = window.AthenaLib.GraphSummaryTable.relativeDaysText(
     new Date(latestMs).toISOString(), Date.now());
   el.hidden = !relative;

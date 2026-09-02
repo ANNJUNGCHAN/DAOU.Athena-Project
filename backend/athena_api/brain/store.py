@@ -50,6 +50,13 @@ MAX_NEIGHBORHOOD_DEPTH: Final = 3
 MAX_ENTITIES_PER_EXTRACTION: Final = 64
 MAX_RELATIONS_PER_EXTRACTION: Final = 128
 
+# 출처 원문 발췌 길이(2026-09-03, `entity_detail()`). 대화 원문은 한 건이 수천 자까지
+# 가므로(`SourceKind.CHAT_MESSAGE`는 큰 허용치를 쓴다) 관계 50건 × 전문을 그대로 실으면
+# 응답 하나가 모델 컨텍스트를 통째로 먹는다. 잘랐다는 사실은 `SourceExcerpt.truncated`가
+# 들고 가므로 모델이 전문인 척 인용하지는 않는다.
+DEFAULT_EXCERPT_CHARS: Final = 600
+MAX_EXCERPT_CHARS: Final = 4000
+
 # 이 단일 사용자 로컬 앱에는 투자자가 한 명뿐이다. 발견도 없고 호출자별 id도 없다 —
 # `investor_profile_summary()`가 읽는 유일한 id다.
 INVESTOR_PROFILE_ENTITY_ID: Final = entity_id(EntityKind.INVESTOR_PROFILE, INVESTOR_PROFILE_NAME)
@@ -76,6 +83,27 @@ def _graph_event_from_row(row: sqlite3.Row) -> GraphEvent:
             None if row["confidence_after"] is None else Confidence(str(row["confidence_after"]))
         ),
         source_id=None if row["source_id"] is None else str(row["source_id"]),
+    )
+
+
+def _source_excerpt_from_row(row: sqlite3.Row, excerpt_chars: int) -> SourceExcerpt | None:
+    """`sources` LEFT JOIN 결과에서 발췌 하나 — 관계·이벤트가 같은 함수를 쓴다.
+
+    LEFT JOIN이라 출처가 없으면(이벤트의 `source_id`는 NULL일 수 있다) 전부 NULL로 오고,
+    그때는 `None`이다 — 빈 문자열 발췌를 만들면 "원문이 비어 있다"로 읽힌다.
+    """
+    if row["source_id"] is None or row["source_text"] is None:
+        return None
+    text = str(row["source_text"])
+    truncated = len(text) > excerpt_chars
+    return SourceExcerpt(
+        source_id=str(row["source_id"]),
+        kind=str(row["source_kind"]),
+        text=text[:excerpt_chars] if truncated else text,
+        locator=None if row["source_locator"] is None else str(row["source_locator"]),
+        occurred_at=str(row["source_occurred_at"]),
+        truncated=truncated,
+        full_chars=len(text),
     )
 
 # 그래프 쓰기 한 단위의 savepoint 이름. 그래프 쓰기끼리는 중첩하지 않으므로 하나면 된다.
@@ -236,6 +264,81 @@ class InvestorProfileSummaryEntry:
     rationale: str | None
     observed_at: str
     reinforcement: int
+
+
+# ── 노드 하나의 상세(2026-09-03) ────────────────────────────────────────────────
+#
+# 채팅이 "이 노드 설명해줘"에 **자료로** 답할 수 있게 하는 읽기다. 화면의 공통 패널이
+# 이미 같은 질문에 답하지만 그 자료는 세 왕복(profile-summary·cluster-map·
+# entity-timeline)으로 흩어져 있고, 모델에는 아예 열려 있지 않았다.
+#
+# 원문 발췌를 함께 싣는 이유: 관계의 `rationale`은 추출기가 요약한 한 줄이라 "왜
+# 이렇게 기록됐나"를 사람이 되짚을 수 없다. 그 근거의 출처인 대화 원문이 `sources`에
+# 있는데 아무도 읽지 않고 있었다. 발췌 없이 rationale만 주면 모델은 요약의 요약을
+# 말하게 되고, 그건 지어내기와 구별되지 않는다.
+
+
+@dataclass(frozen=True, slots=True)
+class SourceExcerpt:
+    """관계·이벤트의 출처 한 조각.
+
+    `truncated`/`full_chars`를 함께 주는 이유는 §0 정직성이다 — 잘린 발췌를 전문처럼
+    인용하면 "원문에 그렇게 적혀 있다"가 거짓이 된다. 모델이 잘렸음을 알아야 한다.
+    """
+
+    source_id: str
+    kind: str
+    text: str
+    locator: str | None
+    occurred_at: str
+    truncated: bool
+    full_chars: int
+
+
+@dataclass(frozen=True, slots=True)
+class EntityRelationDetail:
+    """이 노드에 붙은 관계 한 줄. 방향까지 남긴다.
+
+    `direction`이 필요한 이유: "삼성전자 → 반도체 대형주(belongs_to)"와
+    "투자자 → 삼성전자(interested_in)"는 같은 노드에 붙지만 뜻이 반대다. 방향을 잃으면
+    모델이 "삼성전자가 나에게 관심이 있다"처럼 말할 수 있다.
+    """
+
+    relation_id: str
+    relation_kind: str
+    direction: str  # 'out' = 이 노드가 주체 / 'in' = 이 노드가 대상
+    other_entity_id: str
+    other_entity_kind: str
+    other_entity_name: str
+    confidence: str
+    tier: str
+    rationale: str | None
+    observed_at: str
+    reinforcement: int
+    source: SourceExcerpt | None
+
+
+@dataclass(frozen=True, slots=True)
+class EntityEventDetail:
+    """이 노드가 얽힌 변경 한 줄 — `entity_events()`와 같은 행에 출처를 붙인 것."""
+
+    seq: int
+    at: str
+    revision: int
+    op: str
+    subject_id: str
+    object_id: str | None
+    relation: str | None
+    confidence_before: str | None
+    confidence_after: str | None
+    source: SourceExcerpt | None
+
+
+@dataclass(frozen=True, slots=True)
+class EntityDetail:
+    entity: EntityRow
+    relations: tuple[EntityRelationDetail, ...]
+    events: tuple[EntityEventDetail, ...]
 
 
 def utc_now() -> datetime:
@@ -1018,6 +1121,135 @@ class GraphStore:
                 (entity_id, entity_id, _PROJECTION_MARKER, bounded),
             ).fetchall()
             return tuple(_graph_event_from_row(r) for r in rows)
+
+        return await self._owner.run(read)
+
+    async def entity_detail(
+        self,
+        entity_id: str,
+        *,
+        relation_limit: int = 50,
+        event_limit: int = 50,
+        excerpt_chars: int = DEFAULT_EXCERPT_CHARS,
+    ) -> EntityDetail | None:
+        """노드 하나를 관계·이력·출처 원문까지 **한 시점에서** 읽는다.
+
+        세 조회를 하나로 묶은 이유는 `entities()`가 차수를 함께 세는 이유와 같다 —
+        따로 물으면 그 사이에 그래프가 바뀌어, 관계에는 있는 엣지가 이력에는 없는
+        조각난 답이 나온다. 채팅이 그 답을 사람에게 문장으로 말하므로 더 나쁘다.
+
+        없는 엔티티는 `None`이다 — 빈 상세를 돌려주면 "연결이 없는 노드"와 "그런 노드가
+        아예 없다"가 구별되지 않는다(§0 정직성).
+
+        `reinforcement`는 `investor_profile_summary()`와 같은 방식으로 `graph_events`를
+        센다. **다만 창을 걸지 않는다** — 프로필 요약은 "요즘 어떤 성향인가"를 묻는 표라
+        90일 창이 뜻이 있지만, 노드 설명은 "이 관계가 지금까지 몇 번 확인됐나"를 묻는다.
+        같은 응답에 실려 가는 이력이 전 기간이므로 횟수도 전 기간이어야 두 값이 서로를
+        설명한다.
+        """
+        bounded_relations = max(1, min(int(relation_limit), MAX_SEARCH_LIMIT))
+        bounded_events = max(1, min(int(event_limit), MAX_SEARCH_LIMIT))
+        bounded_excerpt = max(1, min(int(excerpt_chars), MAX_EXCERPT_CHARS))
+
+        def read() -> EntityDetail | None:
+            connection = self._require()
+            entity_row = connection.execute(
+                "SELECT e.id, e.kind, e.name, e.norm_name, e.aliases_json, e.created_at,"
+                " (SELECT count(*) FROM relations r"
+                "    WHERE r.source_entity_id = e.id OR r.target_entity_id = e.id) AS degree"
+                " FROM entities e WHERE e.id = ?",
+                (entity_id,),
+            ).fetchone()
+            if entity_row is None:
+                return None
+            entity = EntityRow(
+                id=str(entity_row["id"]),
+                kind=str(entity_row["kind"]),
+                name=str(entity_row["name"]),
+                normalized_name=str(entity_row["norm_name"]),
+                aliases=tuple(json.loads(str(entity_row["aliases_json"]))),
+                degree=int(entity_row["degree"]),
+                created_at=str(entity_row["created_at"]),
+            )
+
+            # 양방향을 한 번에. relations_src/relations_tgt 인덱스가 OR 양쪽을 받는다.
+            relation_rows = connection.execute(
+                "SELECT r.id AS relation_id, r.kind AS relation_kind,"
+                " r.confidence AS confidence, r.tier AS tier, r.rationale AS rationale,"
+                " r.observed_at AS observed_at, r.source_id AS source_id,"
+                " CASE WHEN r.source_entity_id = ? THEN 'out' ELSE 'in' END AS direction,"
+                " o.id AS other_id, o.kind AS other_kind, o.name AS other_name,"
+                " s.kind AS source_kind, s.text AS source_text, s.locator AS source_locator,"
+                " s.occurred_at AS source_occurred_at,"
+                " (SELECT count(*) FROM graph_events g"
+                "    WHERE g.subject_id = r.source_entity_id"
+                "      AND g.object_id = r.target_entity_id"
+                "      AND g.relation = r.kind) AS reinforcement"
+                " FROM relations r"
+                " JOIN entities o ON o.id = CASE WHEN r.source_entity_id = ?"
+                "   THEN r.target_entity_id ELSE r.source_entity_id END"
+                " LEFT JOIN sources s ON s.id = r.source_id"
+                " WHERE r.source_entity_id = ? OR r.target_entity_id = ?"
+                " ORDER BY reinforcement DESC, r.observed_at DESC, o.name ASC LIMIT ?",
+                (entity_id, entity_id, entity_id, entity_id, bounded_relations),
+            ).fetchall()
+
+            event_rows = connection.execute(
+                "SELECT g.seq AS seq, g.at AS at, g.revision AS revision, g.op AS op,"
+                " g.subject_id AS subject_id, g.object_id AS object_id,"
+                " g.relation AS relation, g.confidence_before AS confidence_before,"
+                " g.confidence_after AS confidence_after, g.source_id AS source_id,"
+                " s.kind AS source_kind, s.text AS source_text, s.locator AS source_locator,"
+                " s.occurred_at AS source_occurred_at"
+                " FROM graph_events g LEFT JOIN sources s ON s.id = g.source_id"
+                " WHERE (g.subject_id = ? OR g.object_id = ?) AND g.subject_id <> ?"
+                " ORDER BY g.seq DESC LIMIT ?",
+                (entity_id, entity_id, _PROJECTION_MARKER, bounded_events),
+            ).fetchall()
+
+            return EntityDetail(
+                entity=entity,
+                relations=tuple(
+                    EntityRelationDetail(
+                        relation_id=str(r["relation_id"]),
+                        relation_kind=str(r["relation_kind"]),
+                        direction=str(r["direction"]),
+                        other_entity_id=str(r["other_id"]),
+                        other_entity_kind=str(r["other_kind"]),
+                        other_entity_name=str(r["other_name"]),
+                        confidence=str(r["confidence"]),
+                        tier=str(r["tier"]),
+                        rationale=None if r["rationale"] is None else str(r["rationale"]),
+                        observed_at=str(r["observed_at"]),
+                        reinforcement=int(r["reinforcement"]),
+                        source=_source_excerpt_from_row(r, bounded_excerpt),
+                    )
+                    for r in relation_rows
+                ),
+                events=tuple(
+                    EntityEventDetail(
+                        seq=int(r["seq"]),
+                        at=str(r["at"]),
+                        revision=int(r["revision"]),
+                        op=str(r["op"]),
+                        subject_id=str(r["subject_id"]),
+                        object_id=None if r["object_id"] is None else str(r["object_id"]),
+                        relation=None if r["relation"] is None else str(r["relation"]),
+                        confidence_before=(
+                            None
+                            if r["confidence_before"] is None
+                            else str(r["confidence_before"])
+                        ),
+                        confidence_after=(
+                            None
+                            if r["confidence_after"] is None
+                            else str(r["confidence_after"])
+                        ),
+                        source=_source_excerpt_from_row(r, bounded_excerpt),
+                    )
+                    for r in event_rows
+                ),
+            )
 
         return await self._owner.run(read)
 
