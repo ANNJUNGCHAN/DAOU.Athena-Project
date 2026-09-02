@@ -22,6 +22,7 @@ from uuid import uuid4
 import pandas as pd
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import JSONResponse
+from pydantic import ValidationError
 
 from athena_api.backtest import deploy as deploy_mod
 from athena_api.backtest import diagnose as diagnose_mod
@@ -117,6 +118,19 @@ def _metrics_view(metrics_json: str | None) -> tuple[dict[str, Any] | None, list
     payload = json.loads(metrics_json)
     flags = payload.pop("flags", [])
     return payload, flags
+
+
+def _yaml_error_detail(exc: Exception) -> str:
+    """전략 yaml 파싱 실패를 사람이 읽는 한 문장으로 옮긴다.
+
+    pydantic 원본 덤프는 "N validation errors for StrategySpec"과 errors.pydantic.dev
+    링크까지 통째로 실려 온다 — 앱 오류 패널이 그 문장을 그대로 보여줘 사용자가 어느
+    칸을 고쳐야 하는지 알 수 없었다(2026-09-02 실측). 어긋난 필드 이름만 남긴다.
+    """
+    if not isinstance(exc, ValidationError):
+        return f"전략 yaml을 읽지 못했다: {exc}"
+    fields = list(dict.fromkeys(".".join(str(x) for x in err["loc"]) for err in exc.errors()))
+    return f"전략 yaml을 읽지 못했다 — 확인이 필요한 항목: {', '.join(fields)}"
 
 
 # ── 조회 전용 ─────────────────────────────────────────────────────────────────
@@ -290,10 +304,13 @@ async def start_run(request: Request, body: dict[str, Any]) -> JSONResponse:
         raise HTTPException(status_code=422, detail="source는 문자열이어야 한다")
     code_source = source if source and source.strip() else None
 
+    # 코드 경로에서는 폼의 진입/청산 조건이 읽히지 않는다 — 그 칸이 비었다고 실행을
+    # 막으면 쓰지도 않는 규칙이 코드 전략을 가둔다(2026-09-02 실측). 완화는 조건 개수
+    # 하나뿐이고, data·costs·risk·params는 폼 경로와 똑같이 검증된다.
     try:
-        spec = from_kis_yaml(yaml_text)
-    except Exception as exc:  # noqa: BLE001 — 사용자 입력 검증 결과를 그대로 옮긴다
-        raise HTTPException(status_code=422, detail=str(exc)) from None
+        spec = from_kis_yaml(yaml_text, require_conditions=code_source is None)
+    except Exception as exc:  # noqa: BLE001 — 사용자 입력 검증 실패를 422로 옮긴다
+        raise HTTPException(status_code=422, detail=_yaml_error_detail(exc)) from None
 
     if spec.data is None:
         raise HTTPException(

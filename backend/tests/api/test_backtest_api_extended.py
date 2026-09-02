@@ -609,6 +609,75 @@ def test_form_path_run_stays_form_and_carries_no_code_flag(tmp_path: Path) -> No
         assert result["stdout"] == ""
 
 
+# 코드 모드에서 캔버스가 실제로 보내는 폼 — 신호를 코드가 만들어서 조건 칸이 비어 있다.
+_NO_CONDITION_YAML_TEMPLATE = """
+version: "1.0"
+metadata:
+  name: API 테스트 — 코드 전략
+data:
+  symbols: ["{stk_cd}"]
+  period: day
+  adjusted: true
+  from: "{from_dt}"
+  to: "{to_dt}"
+strategy:
+  id: t1
+  params:
+    fast: {{default: 3, min: 2, max: 10, step: 1, type: int}}
+    slow: {{default: 5, min: 2, max: 20, step: 1, type: int}}
+  indicators:
+    - {{id: SMA, alias: ma_fast, params: {{period: "$fast"}}}}
+    - {{id: SMA, alias: ma_slow, params: {{period: "$slow"}}}}
+  entry: {{logic: AND, conditions: []}}
+  exit: {{logic: AND, conditions: []}}
+risk:
+  stop_loss:   {{enabled: false, percent: 0}}
+  take_profit: {{enabled: false, percent: 0}}
+  position:    {{sizing: all_in}}
+"""
+
+
+def test_code_path_run_accepts_a_form_whose_conditions_are_empty(tmp_path: Path) -> None:
+    """코드 전략은 신호를 자기가 만든다 — 폼의 조건 칸이 비어도 실행돼야 한다
+    (2026-09-02 실측: 읽히지도 않는 폼 규칙에 걸려 422로 거부됐다)."""
+    with _client(tmp_path) as client:
+        rows = _synthetic_candle_rows()
+        _seed_candles(client, "005930", "day", True, rows)
+        yaml_text = _NO_CONDITION_YAML_TEMPLATE.format(
+            stk_cd="005930", from_dt=rows[0].dt, to_dt=rows[-1].dt
+        )
+
+        accepted = client.post(f"{BASE}/runs", json={"yaml": yaml_text, "source": _CODE_SOURCE})
+        assert accepted.status_code == 202, accepted.json()
+        run_id = accepted.json()["run_id"]
+        _await_run(client, run_id)
+
+        result = client.get(f"{BASE}/runs/{run_id}").json()
+        assert result["status"] == "done", result["error"]
+        assert result["metrics"]["run_path"] == "code"
+
+
+def test_form_path_run_rejects_empty_conditions_with_a_readable_message(tmp_path: Path) -> None:
+    """폼 경로는 그대로 거부한다 — 다만 문구가 pydantic 덤프면 안 된다. 앱 오류 패널이
+    이 문장을 그대로 보여준다."""
+    with _client(tmp_path) as client:
+        rows = _synthetic_candle_rows()
+        _seed_candles(client, "005930", "day", True, rows)
+        yaml_text = _NO_CONDITION_YAML_TEMPLATE.format(
+            stk_cd="005930", from_dt=rows[0].dt, to_dt=rows[-1].dt
+        )
+
+        response = client.post(f"{BASE}/runs", json={"yaml": yaml_text})
+
+    assert response.status_code == 422
+    detail = response.json()["detail"]
+    assert "전략 yaml" in detail
+    assert "strategy.entry.conditions" in detail
+    assert "strategy.exit.conditions" in detail
+    assert "pydantic" not in detail
+    assert "too_short" not in detail
+
+
 _CODE_WITHOUT_PARAMS = '''\
 def signals(df, p):
     import athena_bt as bt
