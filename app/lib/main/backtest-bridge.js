@@ -176,6 +176,49 @@ function fetchVersionDiff({ backendBase, fetchImpl, strategy_id, base, head }) {
   );
 }
 
+// ── 2026-09-03 시각 설계 ↔ 코드 왕복 ─────────────────────────────────────────
+// backtest-visual-code-roundtrip-implementation-evaluation.md의 요청 표면이다.
+// 이 층은 아무것도 판정하지 않는다 — patch 가능성, optimistic concurrency,
+// "저장해도 활성화·실행은 안 한다"는 경계는 전부 서버가 진다(§"사용자 적용 이후
+// 서버 처리"). 렌더러는 사람이 누른 것을 그대로 실어 보낼 뿐이다.
+
+function fetchVisualRegistry({ backendBase, fetchImpl }) {
+  return backtestHttp(
+    'GET', '/api/v1/backtest/visual/registry', undefined, { backendBase, fetchImpl },
+  );
+}
+
+function validateVisual({ backendBase, fetchImpl, ...body }) {
+  return backtestHttp('POST', '/api/v1/backtest/visual/validate', body, { backendBase, fetchImpl });
+}
+
+function compileVisual({ backendBase, fetchImpl, ...body }) {
+  return backtestHttp('POST', '/api/v1/backtest/visual/compile', body, { backendBase, fetchImpl });
+}
+
+// 한 번에 질문 하나(§"한 번에 질문 하나") — 무엇을 물을지는 서버가 고른다.
+function visualQuestion({ backendBase, fetchImpl, ...body }) {
+  return backtestHttp('POST', '/api/v1/backtest/visual/question', body, { backendBase, fetchImpl });
+}
+
+// 비활성 patch preview(§"비활성 patch preview") — 만들기만 한다. 화면의 활성
+// graph도, 저장된 버전도, 실행 설정도 이 호출로는 바뀌지 않는다.
+function visualPatch({ backendBase, fetchImpl, ...body }) {
+  return backtestHttp('POST', '/api/v1/backtest/visual/patch', body, { backendBase, fetchImpl });
+}
+
+function visualFromSpec({ backendBase, fetchImpl, ...body }) {
+  return backtestHttp('POST', '/api/v1/backtest/visual/from-spec', body, { backendBase, fetchImpl });
+}
+
+// 저장은 기존 버전 라우트 그대로다 — visual 전용 저장 경로를 새로 만들지 않는다.
+// 그 라우트는 일반 버전 생성 API이고(§"사용자 적용 이후 서버 처리"), is_active=false는
+// 서버가 강제한다. 이름만 나눠 두는 이유는 몸체가 다르기 때문이다 — 여기 오는
+// 몸체에는 사람이 누른 apply_receipt가 실린다.
+function saveVisualVersion(args) {
+  return addVersion(args);
+}
+
 // -- 2026-09-02 사용자 전략 등록부 -- 내 폴더의 .py 하나를 프리셋과 같은 자리에 세운다.
 // 등록은 소스를 복사하지 않는다({project_id, 상대경로, 이름}만 남는다) -- 그래서 이
 // 층에도 소스가 흐르지 않고, 실행은 늘 그때의 파일을 다시 읽는다(백엔드 D2).
@@ -340,6 +383,13 @@ module.exports = {
   addVersion,
   activateVersion,
   fetchVersionDiff,
+  fetchVisualRegistry,
+  validateVisual,
+  compileVisual,
+  visualQuestion,
+  visualPatch,
+  visualFromSpec,
+  saveVisualVersion,
   fetchDeployments,
   createDeployment,
   stopDeployment,
