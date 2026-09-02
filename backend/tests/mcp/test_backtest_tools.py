@@ -1,4 +1,4 @@
-"""athena_backtest — 허용 액션 23종, 무재시도, backfill·activate·deploy 부재(사람 전용 차단).
+"""athena_backtest — 허용 액션 31종, 무재시도, backfill·activate·deploy 부재(사람 전용 차단).
 
 **왜 propose_code가 허용으로 옮겨졌나(2026-09-01).** Paper 보드 02가 요구하는 저작 흐름은
 "모델이 초안을 쓰고 → 사람이 diff를 보고 → 사람이 적용"이다. 초안 저장까지 막으면 그 흐름의
@@ -31,6 +31,8 @@ def test_tool_schema_lists_allowed_actions_only():
         "propose_spec", "navigate", "propose_optimize", "list_runs",
         "list_files", "read_file", "propose_file", "youtube_brief",
         "source_brief", "register_strategy",
+        "visual_registry", "visual_validate", "visual_compile",
+        "visual_question", "visual_patch", "visual_from_spec",
     ]
     # backfill·activate·deploy는 이 툴에 없다는 것을 설명문이 명시한다.
     assert "backfill" in tool.description or "백필" in tool.description
@@ -856,3 +858,162 @@ def test_tool_description_says_source_brief_covers_every_kind_and_registration_i
     assert "활성화도 배포도 아니고" in tool.description
     enum = tool.inputSchema["properties"]["action"]["enum"]
     assert "backfill" not in enum and "activate" not in enum and "deploy" not in enum
+
+
+@pytest.mark.asyncio
+async def test_visual_actions_proxy_to_the_visual_routes(mock_http_client):
+    """시각 6종은 그래프 라우트로만 간다 — 실행·저장·활성화 라우트를 건드리지 않는다."""
+    seen = []
+
+    async def handler(request):
+        body = json.loads(request.content) if request.content else None
+        seen.append((request.method, request.url.path, body))
+        return httpx.Response(200, json={})
+
+    graph = {"graph_version": "1", "nodes": [], "edges": []}
+    async with mock_http_client(handler, base_url="http://127.0.0.1:8010") as client:
+        await backtest_tools.dispatch({"action": "visual_registry"}, client)
+        await backtest_tools.dispatch(
+            {"action": "visual_validate", "visual_validate": {"graph": graph}}, client
+        )
+        await backtest_tools.dispatch(
+            {"action": "visual_compile", "visual_compile": {"graph": graph}}, client
+        )
+        await backtest_tools.dispatch(
+            {"action": "visual_question", "visual_question": {"graph": graph}}, client
+        )
+        await backtest_tools.dispatch(
+            {"action": "visual_from_spec", "visual_from_spec": {"yaml": "version: '1.0'"}}, client
+        )
+    assert [(method, path) for method, path, _ in seen] == [
+        ("GET", "/api/v1/backtest/visual/registry"),
+        ("POST", "/api/v1/backtest/visual/validate"),
+        ("POST", "/api/v1/backtest/visual/compile"),
+        ("POST", "/api/v1/backtest/visual/question"),
+        ("POST", "/api/v1/backtest/visual/from-spec"),
+    ]
+    assert seen[1][2] == {"graph": graph}
+    assert seen[4][2] == {"yaml": "version: '1.0'"}
+
+
+@pytest.mark.asyncio
+async def test_visual_question_is_delivered_to_the_chat_as_a_card(mock_http_client):
+    """질문은 모델이 문장으로 옮겨 적을 것이 아니라 사용자가 카드에서 고를 것이다 —
+    propose_spec과 같은 `delivered=canvas` 봉투로 나가야 main.js가 렌더러로 넘긴다."""
+    question = {
+        "code": "BTG-PORT-002",
+        "question_ko": "비어 있는 입력을 어떻게 채울까요?",
+        "node_id": "ind-ma_slow",
+        "port": "source",
+        "choices": [{"id": "connect:ind-ma_slow:source", "label_ko": "연결", "recommended": True,
+                     "changes": []}],
+        "remaining": 1,
+    }
+
+    async def handler(request):
+        assert request.url.path == "/api/v1/backtest/visual/question"
+        return httpx.Response(200, json={"question": question})
+
+    async with mock_http_client(handler, base_url="http://127.0.0.1:8010") as client:
+        result = await backtest_tools.dispatch(
+            {"action": "visual_question", "visual_question": {"graph": {"graph_version": "1"}}},
+            client,
+        )
+    body = json.loads(result.content[0].text)
+    assert body["delivered"] == "canvas"
+    assert body["kind"] == "visual_question"
+    assert body["payload"] == question
+    assert "질문 카드" in body["message"]
+    assert "네가 대신 고르거나" in body["message"]
+
+
+@pytest.mark.asyncio
+async def test_visual_question_without_a_blocking_error_delivers_nothing(mock_http_client):
+    async def handler(request):
+        return httpx.Response(200, json={"question": None})
+
+    async with mock_http_client(handler, base_url="http://127.0.0.1:8010") as client:
+        result = await backtest_tools.dispatch(
+            {"action": "visual_question", "visual_question": {"graph": {"graph_version": "1"}}},
+            client,
+        )
+    body = json.loads(result.content[0].text)
+    assert body["delivered"] is None
+    assert body["payload"] is None
+    assert "막는 오류가 없다" in body["message"]
+
+
+@pytest.mark.asyncio
+async def test_visual_patch_is_delivered_as_a_card_and_says_it_applied_nothing(mock_http_client):
+    """patch를 만들었다는 사실이 '고쳤다'로 읽히면 안 된다 — propose_code와 같은 규율이다."""
+    sent = {}
+    upstream = {
+        "patch_id": "patch-9d5fb582e7ec",
+        "patch_hash": "9d5fb582e7ec" + "0" * 52,
+        "summary_ko": "cond-entry-1의 compare_to을(를) 0(으)로 — 아직 적용하지 않았습니다",
+        "base_graph_hash": "abc",
+        "base_artifact_hash": "f" * 64,
+        "base_version_id": "v-7",
+        "graph_patch": [{"op": "add", "path": "/nodes/5/params/compare_to", "value": 0}],
+        "graph_after": {"graph_version": "1"},
+        "spec_diff": [{"path": "$.strategy.entry.conditions[0].compare_to",
+                       "before": None, "after": 0.0}],
+        "code_diff": {"removed": 1, "added": 1,
+                      "diff_lines": [{"mark": "-", "text": "old"}, {"mark": "+", "text": "new"}]},
+        "diagnostics_after": [{"code": "BTG-DATA-001"}],
+        "spec_diff_basis": "first_compile",
+        "graph_compatible": True,
+        "applied": False,
+    }
+
+    async def handler(request):
+        sent.update(json.loads(request.content))
+        assert request.url.path == "/api/v1/backtest/visual/patch"
+        return httpx.Response(200, json=upstream)
+
+    async with mock_http_client(handler, base_url="http://127.0.0.1:8010") as client:
+        result = await backtest_tools.dispatch(
+            {
+                "action": "visual_patch",
+                "visual_patch": {
+                    "graph": {"graph_version": "1"},
+                    "base_graph_hash": "abc",
+                    "base_version_id": "v-7",
+                    "intent": {"code": "BTG-PORT-002", "choice_id": "set:cond-entry-1:compare_to"},
+                },
+            },
+            client,
+        )
+    assert not result.isError
+    body = json.loads(result.content[0].text)
+    assert body["delivered"] == "canvas"
+    assert body["kind"] == "visual_patch"
+    payload = body["payload"]
+    assert payload["patch_id"] == upstream["patch_id"]
+    assert payload["patch_hash"] == upstream["patch_hash"]
+    assert payload["summary_ko"] == upstream["summary_ko"]
+    assert payload["graph_compatible"] is True
+    assert payload["code_diff"]["diff_lines"][0] == {"mark": "-", "text": "old"}
+    assert payload["spec_diff"] == upstream["spec_diff"]
+    assert payload["spec_diff_basis"] == "first_compile"
+    assert payload["diagnostics_after"] == upstream["diagnostics_after"]
+    assert payload["base_graph_hash"] == "abc"
+    assert payload["base_artifact_hash"] == "f" * 64
+    assert payload["base_version_id"] == "v-7"
+    assert payload["next_version"] is None  # 새 버전은 사람이 적용한 뒤에 생긴다
+    assert payload["applied"] is False
+    assert "수정안 카드" in body["message"]
+    assert "고쳤다고 말하지 마라" in body["message"]
+    assert sent["base_graph_hash"] == "abc"
+
+
+def test_tool_description_says_visual_actions_do_not_save():
+    (tool,) = backtest_tools.builtin_tool_defs()
+    action_desc = tool.inputSchema["properties"]["action"]["description"]
+    assert "visual_validate" in action_desc and "visual_patch" in action_desc
+    assert "비활성 수정안" in action_desc
+    assert "질문 카드" in action_desc and "수정안 카드" in action_desc
+    assert "비활성 수정안" in tool.description
+    schema = tool.inputSchema["properties"]
+    assert schema["visual_patch"]["required"] == ["graph", "base_graph_hash", "intent"]
+    assert schema["visual_validate"]["required"] == ["graph"]
