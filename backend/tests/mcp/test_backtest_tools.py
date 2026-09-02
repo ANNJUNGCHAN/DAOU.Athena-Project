@@ -26,7 +26,8 @@ def test_tool_schema_lists_allowed_actions_only():
     assert tool.name == "athena_backtest"
     assert tool.inputSchema["properties"]["action"]["enum"] == [
         "list_presets", "list_indicators", "validate", "plan", "run", "status", "result",
-        "list_strategies", "read_code", "propose_code", "flow", "diagnose", "optimize",
+        "list_strategies", "read_code", "propose_code", "flow", "diagnose",
+        "map", "codegen", "optimize",
         "propose_spec", "navigate", "propose_optimize", "list_runs",
         "list_files", "read_file", "propose_file", "youtube_brief",
         "source_brief", "register_strategy",
@@ -362,6 +363,29 @@ async def test_flow_and_diagnose_do_not_execute_code(mock_http_client):
             {"action": "diagnose", "diagnose": {"error": "boom", "source": "x = 1"}}, client
         )
     assert paths == ["/api/v1/backtest/flow", "/api/v1/backtest/diagnose"]
+
+
+@pytest.mark.asyncio
+async def test_map_and_codegen_are_read_only_routes(mock_http_client):
+    """지도와 코드 생성도 flow·diagnose와 같은 자리다 — 실행·저장 라우트를 건드리지 않는다."""
+    seen = []
+
+    async def handler(request):
+        seen.append((request.url.path, json.loads(request.content)))
+        return httpx.Response(200, json={})
+
+    async with mock_http_client(handler, base_url="http://127.0.0.1:8010") as client:
+        await backtest_tools.dispatch(
+            {"action": "map", "map": {"yaml": "version: '1.0'", "run_id": "r1"}}, client
+        )
+        await backtest_tools.dispatch(
+            {"action": "codegen", "codegen": {"yaml": "version: '1.0'"}}, client
+        )
+    assert [path for path, _ in seen] == [
+        "/api/v1/backtest/map",
+        "/api/v1/backtest/codegen",
+    ]
+    assert seen[0][1] == {"yaml": "version: '1.0'", "run_id": "r1"}
 
 
 @pytest.mark.asyncio

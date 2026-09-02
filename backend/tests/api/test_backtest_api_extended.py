@@ -18,6 +18,7 @@ import pandas as pd
 import pytest
 from fastapi.testclient import TestClient
 
+from athena_api.backtest.presets import preset_yaml
 from athena_api.backtest.store import Candle
 from athena_api.config import Settings
 from athena_api.main import create_app
@@ -292,6 +293,71 @@ def test_flow_route_maps_code_without_running_it() -> None:
 def test_flow_route_rejects_empty_source() -> None:
     client = _disabled_client()
     assert client.post(f"{BASE}/flow", json={"source": "  "}).status_code == 422
+
+
+def test_map_route_draws_the_form_as_four_numbered_nodes() -> None:
+    client = _disabled_client()
+    body = client.post(f"{BASE}/map", json={"yaml": preset_yaml("sma_crossover")}).json()
+    assert body["source_kind"] == "spec"
+    assert [n["id"] for n in body["nodes"]] == ["params", "indicators", "conditions", "guard"]
+    assert [n["numeral"] for n in body["nodes"]] == ["①", "②", "③", "④"]
+    assert body["code"]["matches_map"] is True
+
+
+def test_map_route_draws_code_with_line_ranges() -> None:
+    client = _disabled_client()
+    src = (
+        "PARAMS = {'fast': {'default': 3}}\n"
+        "def signals(df, p):\n"
+        "    fast = bt.sma(df['close'], p['fast'])\n"
+        "    entry = fast > 0\n"
+        "    return df.assign(entry=entry, exit=~entry)[['entry','exit']]\n"
+    )
+    body = client.post(f"{BASE}/map", json={"source": src}).json()
+    assert body["source_kind"] == "code"
+    nodes = {n["id"]: n for n in body["nodes"]}
+    assert nodes["indicators"]["first_line"] == 3
+    assert nodes["guard"]["status"] == "unknown"
+    assert body["boundary_after_lines"] == {"first_line": 5, "last_line": 5}
+
+
+def test_map_route_takes_exactly_one_of_yaml_or_source() -> None:
+    client = _disabled_client()
+    assert client.post(f"{BASE}/map", json={}).status_code == 422
+    both = {"yaml": preset_yaml("sma_crossover"), "source": "x = 1"}
+    assert client.post(f"{BASE}/map", json=both).status_code == 422
+    assert client.post(f"{BASE}/map", json={"yaml": "just: text"}).status_code == 422
+
+
+def test_map_route_fills_facts_from_a_real_run(tmp_path: Path) -> None:
+    """오른쪽 "사실"은 지도가 계산한 값이 아니라 그 실행이 실제로 만든 값이다."""
+    with _client(tmp_path) as client:
+        rows = _synthetic_candle_rows()
+        _seed_candles(client, "005930", "day", True, rows)
+        yaml_text = _RUN_YAML_TEMPLATE.format(
+            stk_cd="005930", from_dt=rows[0].dt, to_dt=rows[-1].dt
+        )
+        run_id = client.post(f"{BASE}/runs", json={"yaml": yaml_text}).json()["run_id"]
+        _await_run(client, run_id)
+
+        body = client.post(
+            f"{BASE}/map", json={"yaml": yaml_text, "run_id": run_id, "version": 1}
+        ).json()
+        nodes = {n["id"]: n for n in body["nodes"]}
+        assert any(f.startswith("df — ") for f in nodes["indicators"]["facts"])
+        assert any(f.startswith("entry ") for f in nodes["conditions"]["facts"])
+        assert body["version"] == 1
+        assert body["target"]["symbol"] == "005930"
+
+
+def test_codegen_route_returns_source_that_the_map_can_read_back() -> None:
+    client = _disabled_client()
+    body = client.post(f"{BASE}/codegen", json={"yaml": preset_yaml("sma_crossover")}).json()
+    assert body["lines"] == len(body["source"].splitlines())
+    assert "def signals(df, p):" in body["source"]
+    mapped = client.post(f"{BASE}/map", json={"source": body["source"]}).json()
+    assert mapped["unknown"] == [] and mapped["free_code"] == []
+    assert client.post(f"{BASE}/codegen", json={"yaml": "  "}).status_code == 422
 
 
 def test_diagnose_route_returns_explanation_and_optional_fix() -> None:
