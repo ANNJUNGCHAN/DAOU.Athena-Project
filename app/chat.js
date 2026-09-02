@@ -1745,9 +1745,8 @@ function dispatchUserQuery(text) {
   }
   runQuery(normalized);
 }
-
-// ¬Œt ÀtQX” ÙHÐÄ €ä(™ì#0·\  pi ìh  input t¤¸ 
-// keydownôä UäXä).
+// ì‚¬ëžŒì´ íƒ€ì´í•‘í•˜ëŠ” ë™ì•ˆì—ë„ ìžëž€ë‹¤(ë¶™ì—¬ë„£ê¸°Â·í•œê¸€ ì¡°í•© í¬í•¨ â€” input ì´ë²¤íŠ¸ê°€
+// keydownë³´ë‹¤ í™•ì‹¤í•˜ë‹¤).
 $input.addEventListener('input', autoGrowInput);
 
 $input.addEventListener('keydown', (e) => {
