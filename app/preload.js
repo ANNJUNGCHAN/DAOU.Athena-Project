@@ -125,6 +125,11 @@ const INVOKE_CHANNELS = new Set([
   'athena:backtest-deployment-stop',
   'athena:backtest-signals',
   'athena:backtest-evaluate',
+  // 2026-09-02 사용자 전략 등록부 — 내 폴더의 .py 하나가 프리셋과 같은 자리에 선다.
+  // 등록·해제는 사람이 누르는 버튼이고, 목록은 설계 폼이 매번 다시 읽는다.
+  'athena:backtest-user-strategies',
+  'athena:backtest-user-strategy-register',
+  'athena:backtest-user-strategy-unregister',
   // 프로젝트 파일 IDE(2026-09-02, 코드 탭) — 내 컴퓨터의 폴더 하나를 점유한다.
   // open-dialog만 main 전용이다(네이티브 폴더 선택) — 나머지는 백엔드 라우트 프록시다.
   'athena:project-list',
@@ -137,6 +142,10 @@ const INVOKE_CHANNELS = new Set([
   'athena:project-file-create',
   'athena:project-file-rename',
   'athena:project-file-delete',
+  // 프로젝트 가상환경(2026-09-02) — 폴더 안의 .venv 하나. 만드는 것은 202+job_id라
+  // 진행은 기존 athena:backtest-status가 보여준다(잡 표면을 둘로 만들지 않는다).
+  'athena:project-env-get',
+  'athena:project-env-create',
 ]);
 
 const SEND_CHANNELS = new Set([

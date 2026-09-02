@@ -24,9 +24,11 @@
 // 섹션:
 //   A 부팅·모드 · B 설계 폼 · C 데이터 계획·승인 · D 실행·결과(폼) · E 코드 경로
 //   F 오류·진단 · G 흐름 지도 · H 이력·비교 · I 최적화 · J 배포 · K 채팅 액션 · L 컨텍스트
+//   M 출처→전략→등록→배포(바깥 자료 → 내 폴더의 파이썬 → 프리셋 자리 → 실전)
 //
-// 만드는 것은 되돌린다: 배포는 전부 중지하고 끝낸다. 전략·버전·실행 행은 백엔드에
-// 삭제 API가 없어(store에 delete가 없다) 남는다 — 보고서에 그 사실을 남긴다.
+// 만드는 것은 되돌린다: 배포는 전부 중지하고, M이 만든 등록·프로젝트는 등록에서 뺀다.
+// 전략·버전·실행 행은 백엔드에 삭제 API가 없어(store에 delete가 없다) 남고, M이 만든
+// 폴더와 .py는 사용자 디스크의 물건이라 일부러 남긴다 — 보고서에 그 사실을 남긴다.
 
 const { app } = require('electron');
 const path = require('path');
@@ -53,7 +55,7 @@ const UNCACHED_FROM = '19900103';   // 캐시보다 앞 → 부분 겹침(보유
 const EMPTY_FROM = '19900101';      // 캐시와 전혀 안 겹침 → allow_partial이 422
 const EMPTY_TO = '19901231';
 
-const ALL_SECTIONS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'];
+const ALL_SECTIONS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M'];
 const WANTED = new Set(
   (process.env.ATHENA_PROBE_SECTIONS || ALL_SECTIONS.join(','))
     .split(',').map((s) => s.trim().toUpperCase()).filter(Boolean),
@@ -71,6 +73,16 @@ const WAIT_PRESETS = 25000;
 const WAIT_RUN = 90000;
 const WAIT_VALIDATE = 30000;
 const WAIT_OPTIMIZE = 180000;
+// 가상환경 만들기는 `python -m venv` + `pip install pandas numpy`다 — 인덱스와 디스크
+// 사정에 따라 분 단위로 갈린다. 이 예산 안에 안 끝나면 실패가 아니라 SKIP이다.
+const WAIT_ENV = 240000;
+
+// pip이 바깥 인덱스에 닿지 못한 실패는 제품 결함이 아니다 — 그 경우만 SKIP으로 가른다.
+const OFFLINE_PIP = new RegExp([
+  'Could not find a version', 'No matching distribution', 'Failed to establish a new connection',
+  'Temporary failure in name resolution', 'Network is unreachable', 'getaddrinfo',
+  'ProxyError', 'ReadTimeoutError', 'SSLError',
+].join('|'), 'i');
 
 // ---------- 리포트 ----------
 
@@ -183,6 +195,24 @@ function ctx(win) {
 function invoke(win, channel, payload) {
   const arg = payload === undefined ? '' : `, ${JSON.stringify(payload)}`;
   return js(win, `window.athena.invoke(${JSON.stringify(channel)}${arg})`);
+}
+
+// 렌더러 채널이 없는 백엔드 라우트를 직접 두드린다(출처 브리프·프로젝트 등록 해제).
+// preload의 INVOKE_CHANNELS에 없는 것을 프로브가 지어내면, 프로브만 통과하고 사람은
+// 못 하는 길이 생긴다 — 그래서 여기서는 IPC 봉투가 아니라 {status, body} 그대로 잰다.
+async function backendJson(method, pathText, body) {
+  try {
+    const res = await fetch(`${BACKEND}${pathText}`, {
+      method,
+      headers: body === undefined ? undefined : { 'content-type': 'application/json' },
+      body: body === undefined ? undefined : JSON.stringify(body),
+    });
+    let parsed = null;
+    try { parsed = await res.json(); } catch { parsed = null; }
+    return { status: res.status, body: parsed, error: null };
+  } catch (err) {
+    return { status: 0, body: null, error: String((err && err.message) || err) };
+  }
 }
 
 function sendChat(win, action) {
@@ -467,6 +497,28 @@ const SRC_RAISES = [
   '',
 ].join('\n');
 
+// M 섹션이 내 폴더에 놓는 전략 — 하위 폴더째 만들어지는지도 같이 재려고 algos/ 아래다.
+// PARAMS 두 개는 등록부가 읽어(flow.params_defaults) 슬라이더 두 개가 되고, print는
+// 그 파이썬이 정말 돌았다는 증거로 stdout 패널에 남는다.
+const USER_STRATEGY_PATH = 'algos/ma.py';
+
+const SRC_USER_STRATEGY = [
+  'PARAMS = {',
+  '    "fast": {"default": 5, "min": 2, "max": 60, "step": 1, "type": "int"},',
+  '    "slow": {"default": 20, "min": 3, "max": 240, "step": 1, "type": "int"},',
+  '}',
+  '',
+  '',
+  'def signals(df, p):',
+  '    print("probe-user-strategy")',
+  '    fast = df["close"].rolling(int(p["fast"])).mean()',
+  '    slow = df["close"].rolling(int(p["slow"])).mean()',
+  '    entry = (fast > slow) & (fast.shift(1) <= slow.shift(1))',
+  '    exit = (fast < slow) & (fast.shift(1) >= slow.shift(1))',
+  '    return df.assign(entry=entry, exit=exit)[["entry", "exit"]]',
+  '',
+].join('\n');
+
 // ---------- 날짜 산출 ----------
 
 function minusYears(yyyymmdd, years) {
@@ -476,7 +528,11 @@ function minusYears(yyyymmdd, years) {
 
 // ---------- 정리 대상 ----------
 
-const created = { strategyIds: [], deploymentIds: [] };
+const created = {
+  strategyIds: [], deploymentIds: [],
+  // M이 만든 것 — M14가 되돌리고 나면 비어 있다. 섹션이 도중에 끊긴 경우에만 남는다.
+  userStrategyIds: [], projectIds: [],
+};
 
 // finish()는 main() 밖(finally·거절 처리기)에서도 불린다 — 창을 여기에 둔다.
 let probeWin = null;
@@ -2768,6 +2824,532 @@ async function main() {
     }));
   });
 
+  // ==================================================================
+  // M 출처 → 전략 → 등록 → 배포
+  //
+  // 앞의 열두 섹션이 재는 것은 "이미 있는 전략을 돌리는 길"이다. 여기서 재는 것은 그
+  // 앞에 있는 길이다: 바깥 자료 하나를 글로 옮기고(M01~M03), 내 폴더에 파이썬을 놓고
+  // (M04~M05), 그 폴더의 가상환경을 만들고(M06~M07), 그 파일을 프리셋과 같은 자리에
+  // 세우고(M08~M10), 그대로 돌려(M11) 실전에 걸고(M12), 흐름 지도까지 본다(M13).
+  // 만든 것(등록·배포·프로젝트)은 M14가 되돌린다 — 파일만 디스크에 남는다.
+  // ==================================================================
+  if (on('M')) await section('M', async () => {
+    const brief = (url) => backendJson('POST', '/api/v1/backtest/source/brief', { url });
+
+    // --- 출처 브리프 --- 렌더러 채널이 없는 라우트다(preload INVOKE_CHANNELS에 없다) —
+    // 없는 채널을 지어내지 않고 00A와 같은 자리에서 백엔드를 직접 두드린다.
+    const htmlBrief = await brief('https://example.com/');
+    const htmlBody = htmlBrief.body || {};
+    // 바깥 네트워크가 아예 없는 기계인가 — M03의 SKIP 판정을 여기서 한 번만 정한다.
+    const netOk = htmlBrief.status === 200;
+    await step('M01', '일반 웹페이지 주소가 200 · html 갈래 · 본문으로 온다', () => ({
+      ok: htmlBrief.status === 200 && htmlBody.source_kind === 'html'
+            && typeof htmlBody.text === 'string' && htmlBody.text.trim().length > 0
+            && typeof htmlBody.title === 'string' && htmlBody.title.length > 0,
+      data: {
+        status: htmlBrief.status, kind: htmlBody.source_kind, title: htmlBody.title,
+        chars: typeof htmlBody.text === 'string' ? htmlBody.text.length : null,
+        truncated: htmlBody.truncated,
+        error: htmlBrief.error || (htmlBody.detail === undefined ? null : htmlBody.detail),
+      },
+    }));
+
+    const deadBrief = await brief('https://athena-probe-no-such-host.invalid/x');
+    const deadDetail = String((deadBrief.body && deadBrief.body.detail) || '');
+    await step('M02', '닿지 않는 주소는 502 + 어느 단계가 실패했는지 한국어로 말한다', () => ({
+      ok: deadBrief.status === 502 && deadDetail.indexOf('단계가 실패했다') !== -1,
+      data: { status: deadBrief.status, detail: deadDetail.slice(0, 120) },
+    }));
+
+    // 유튜브는 실제 영상을 태우지 않는다 — 계정·자막 사정에 판정이 흔들린다. 대신 주소
+    // 모양만으로 유튜브 갈래에 들어갔다는 사실을 잰다: 그 갈래에서만 나오는 말로 거절하면
+    // 분기표(source_kind)가 살아 있다는 뜻이다.
+    await step('M03', '유튜브 주소는 유튜브 갈래로 간다(유튜브 말로 거절한다)', async () => {
+      if (!netOk) {
+        return { skip: '이 기계에 바깥 네트워크가 없다(M01이 200을 못 받았다)', name: '유튜브 분기' };
+      }
+      const noId = await brief('https://www.youtube.com/watch?v=');
+      const fake = await brief('https://www.youtube.com/watch?v=zzzzzzzzzzz');
+      const noIdDetail = String((noId.body && noId.body.detail) || '');
+      const fakeDetail = String((fake.body && fake.body.detail) || '');
+      return {
+        ok: noId.status === 422 && noIdDetail.indexOf('영상 id') !== -1
+              && [422, 502].indexOf(fake.status) !== -1
+              && /영상 id|자막|워치 페이지/.test(fakeDetail),
+        data: {
+          noId: { status: noId.status, detail: noIdDetail.slice(0, 80) },
+          fakeId: { status: fake.status, detail: fakeDetail.slice(0, 80) },
+        },
+      };
+    });
+
+    // --- 내 폴더 --- 관리형 프로젝트 하나를 만들고 그 안에 전략 파일을 놓는다.
+    const projectName = `probe-full-M-${Date.now()}`;
+    const madeProject = await invoke(shellWin, 'athena:project-create', { name: projectName });
+    const projectInfo = madeProject && madeProject.ok && madeProject.data
+      ? madeProject.data.project : null;
+    const projectId = projectInfo ? projectInfo.id : null;
+    const projectPath = projectInfo ? projectInfo.path : null;
+    if (projectId) created.projectIds.push(projectId);
+    await step('M04', '관리형 프로젝트가 폴더와 씨앗 파일로 생긴다', () => ({
+      ok: !!projectInfo && !!projectId && projectInfo.exists === true
+            && projectInfo.kind === 'managed'
+            && /\.py$/.test(String((madeProject.data || {}).seed || ''))
+            && !!projectPath && fs.existsSync(projectPath),
+      data: {
+        id: projectId, name: projectInfo && projectInfo.name, path: projectPath,
+        seed: madeProject && madeProject.data ? madeProject.data.seed : null,
+        error: madeProject && madeProject.error,
+      },
+    }));
+    if (!projectId) {
+      throw new Error(`프로젝트를 못 만들어 M05 이후를 돌리지 않았다: ${safeJson(madeProject)}`);
+    }
+
+    const wrote = await invoke(shellWin, 'athena:project-file-write', {
+      project_id: projectId, path: USER_STRATEGY_PATH, text: SRC_USER_STRATEGY,
+    });
+    const wroteData = wrote && wrote.ok ? wrote.data : null;
+    await step('M05', '하위 폴더째 새 .py를 쓴다(algos/ma.py)', () => ({
+      ok: !!wroteData && wroteData.path === USER_STRATEGY_PATH && Number(wroteData.size) > 0
+            && fs.existsSync(path.join(projectPath, 'algos', 'ma.py')),
+      data: { file: wroteData, error: wrote && wrote.error },
+    }));
+
+    // --- 가상환경 --- 만들기 전에는 "없음"이라고 말해야 한다(캐시가 아니라 지금 디스크다).
+    const envBefore = await invoke(shellWin, 'athena:project-env-get', { project_id: projectId });
+    const envBeforeData = envBefore && envBefore.ok ? envBefore.data : null;
+    await step('M06', '환경을 만들기 전에는 exists=false · 패키지 0개다', () => ({
+      ok: !!envBeforeData && envBeforeData.exists === false
+            && Array.isArray(envBeforeData.packages) && envBeforeData.packages.length === 0
+            && envBeforeData.base_ok === false && envBeforeData.python === null,
+      data: envBeforeData || { error: envBefore && envBefore.error },
+    }));
+
+    // 202 + job_id로 시작해 기존 잡 라우트(athena:backtest-status)로 진행을 본다 —
+    // 잡 표면을 둘로 만들지 않는다는 계약이 실제로 지켜지는지가 이 검사의 절반이다.
+    const envStart = await invoke(shellWin, 'athena:project-env-create', {
+      project_id: projectId, packages: [],
+    });
+    const envJobId = envStart && envStart.ok && envStart.data ? envStart.data.job_id : null;
+    const envSteps = [];
+    let envFinal = null;
+    if (envJobId) {
+      const envDeadline = Date.now() + WAIT_ENV;
+      while (Date.now() < envDeadline && !envFinal) {
+        // eslint-disable-next-line no-await-in-loop
+        const res = await invoke(shellWin, 'athena:backtest-status', { job_id: envJobId });
+        const job = res && res.ok ? res.data : null;
+        if (job && job.progress && envSteps.indexOf(job.progress.step) === -1) {
+          envSteps.push(job.progress.step);
+        }
+        if (job && ['done', 'failed', 'cancelled'].indexOf(job.status) !== -1) envFinal = job;
+        // eslint-disable-next-line no-await-in-loop
+        else await wait(2000);
+      }
+    }
+    const envAfter = envFinal && envFinal.status === 'done'
+      ? await invoke(shellWin, 'athena:project-env-get', { project_id: projectId })
+      : null;
+    const envAfterData = envAfter && envAfter.ok ? envAfter.data : null;
+    await step('M07', '[환경 만들기]가 잡으로 돌고, 끝나면 base_ok가 참이 된다', () => {
+      if (!envJobId) {
+        return { skip: `환경 잡을 시작하지 못했다: ${safeJson(envStart)}`, name: '프로젝트 가상환경' };
+      }
+      if (!envFinal) {
+        return {
+          skip: `${WAIT_ENV}ms 안에 환경 잡이 끝나지 않았다(단계: ${envSteps.join(' → ') || '없음'})`,
+          name: '프로젝트 가상환경',
+        };
+      }
+      const err = String(envFinal.error || '');
+      if (envFinal.status !== 'done' && OFFLINE_PIP.test(err)) {
+        return { skip: `pip이 인덱스에 닿지 못했다 — ${err.slice(0, 160)}`, name: '프로젝트 가상환경' };
+      }
+      return {
+        ok: envFinal.status === 'done'
+              && envSteps.indexOf('venv') !== -1 && envSteps.indexOf('install') !== -1
+              && !!envAfterData && envAfterData.exists === true && envAfterData.base_ok === true
+              && typeof envAfterData.python === 'string' && envAfterData.python.length > 0,
+        data: {
+          jobId: envJobId, status: envFinal.status, steps: envSteps,
+          error: err ? err.slice(0, 200) : null,
+          env: envAfterData
+            ? {
+              exists: envAfterData.exists, base_ok: envAfterData.base_ok,
+              packages: (envAfterData.packages || []).length, python: envAfterData.python,
+            }
+            : null,
+        },
+      };
+    });
+
+    // --- 등록 --- 모델의 MCP register_strategy가 지나는 그 라우트다(채널도 같다).
+    const registered = await invoke(shellWin, 'athena:backtest-user-strategy-register', {
+      project_id: projectId, path: USER_STRATEGY_PATH, name: projectName,
+    });
+    const registeredData = registered && registered.ok ? registered.data : null;
+    const userStrategyId = registeredData ? registeredData.id : null;
+    if (userStrategyId) created.userStrategyIds.push(userStrategyId);
+    await step('M08', '내 폴더의 .py가 등록부에 오른다(소스는 복사하지 않는다)', () => ({
+      ok: !!registeredData && !!userStrategyId
+            && registeredData.project_id === projectId
+            && registeredData.path === USER_STRATEGY_PATH
+            && registeredData.name === projectName
+            && registeredData.source === undefined,
+      data: { entry: registeredData, error: registered && registered.error },
+    }));
+    if (!userStrategyId) {
+      throw new Error(`등록이 실패해 M09 이후를 돌리지 않았다: ${safeJson(registered)}`);
+    }
+
+    // 사람이 할 수 있는 가장 센 새로고침 — 모드를 나갔다 들어온다(사이드바가
+    // AthenaBacktestCanvas.refresh()를 부르는 유일한 자리다, lib/sidebar.js:64).
+    await js(shellWin, "(() => { document.getElementById('modeNavSummary').click(); return true; })()");
+    await wait(400);
+    await js(shellWin, "(() => { document.getElementById('modeNavBacktest').click(); return true; })()");
+    await until(shellWin, `(() => {
+      const api = window.AthenaBacktestCanvas;
+      const c = api ? api.getContext() : null;
+      return c && Array.isArray(c.presets) && c.presets.length ? true : null;
+    })()`, WAIT_PRESETS);
+    await prepareForm(shellWin, FROM, TO);
+    const readPicker = () => js(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const wrap = root.querySelector('.backtest-user-strategy-wrap');
+      if (!wrap) return { wrap: false, names: [], paths: [] };
+      return {
+        wrap: true,
+        title: (wrap.querySelector('.backtest-card-title') || {}).textContent,
+        names: Array.from(wrap.querySelectorAll('.backtest-user-strategy-name'))
+          .map((n) => n.textContent),
+        paths: Array.from(wrap.querySelectorAll('.backtest-user-strategy-path'))
+          .map((n) => n.textContent),
+        removes: wrap.querySelectorAll('.backtest-user-strategy-remove').length,
+        presets: root.querySelectorAll('.backtest-preset-item').length,
+      };
+    })()`);
+    const pickerLive = await readPicker();
+    const inPicker = (seen) => !!(seen && Array.isArray(seen.names)
+      && seen.names.indexOf(projectName) !== -1);
+
+    // 목록에 없으면 화면이 등록부를 다시 읽지 않은 것이다. 그 사실을 검사로 남긴 뒤,
+    // M10 이후를 살리려고 창을 다시 띄운다(= 앱을 다시 켠 것). 되살린 사실도 함께 남긴다.
+    let reloaded = null;
+    if (!inPicker(pickerLive)) {
+      shellWin.webContents.reload();
+      await wait(2500);
+      await until(shellWin, '(window.AthenaBacktestCanvas ? true : null)', WAIT_UI);
+      await js(shellWin, "(() => { document.getElementById('modeNavBacktest').click(); return true; })()");
+      await until(shellWin, `(() => {
+        const api = window.AthenaBacktestCanvas;
+        const c = api ? api.getContext() : null;
+        return c && Array.isArray(c.presets) && c.presets.length ? true : null;
+      })()`, WAIT_PRESETS);
+      await prepareForm(shellWin, FROM, TO);
+      reloaded = await readPicker();
+    }
+    const pickerNow = reloaded || pickerLive;
+    await step('M09', '설계 폼의 [내 전략] 무리에 방금 등록한 이름이 선다', () => ({
+      ok: inPicker(pickerLive) && pickerLive.wrap === true
+            && String(pickerLive.title || '').indexOf('내 전략') === 0
+            && pickerLive.paths.indexOf(USER_STRATEGY_PATH) !== -1,
+      data: {
+        live: pickerLive,
+        afterReload: reloaded,
+        note: reloaded
+          ? '모드를 나갔다 들어와도 목록이 그대로라 창을 다시 띄웠다(앱 재시작에 해당)'
+          : null,
+      },
+    }));
+
+    if (!inPicker(pickerNow)) {
+      skip('M10', '내 전략 선택', '목록에 서지 않아 고를 수 없다');
+      skip('M11', '내 전략 실행', '목록에 서지 않아 고를 수 없다');
+      skip('M12', '배포 행 생성', '실행하지 못해 걸 버전이 없다');
+      skip('M12b', 'evaluate 판정', '실행하지 못해 걸 버전이 없다');
+      skip('M12c', '배포 중지', '실행하지 못해 걸 버전이 없다');
+      skip('M13', '흐름 지도', '내 전략을 열지 못했다');
+    } else {
+      // --- 고르기 --- 프리셋을 고르는 것과 같은 동작이어야 한다. 다른 점은 신호를
+      // 지표·조건이 아니라 그 파일의 파이썬이 만든다는 것뿐이다.
+      await js(shellWin, `(() => {
+        const items = Array.from(document.querySelectorAll('${R}.backtest-user-strategy-item'));
+        const target = items.find((b) => {
+          const n = b.querySelector('.backtest-user-strategy-name');
+          return n && n.textContent === ${JSON.stringify(projectName)};
+        });
+        if (!target) return false;
+        target.click();
+        return true;
+      })()`);
+      const selected = await until(shellWin, `(() => {
+        const c = window.AthenaBacktestCanvas.getContext();
+        if (!c || c.runPath !== 'code') return null;
+        if (!c.project || c.project.activeFile !== ${JSON.stringify(USER_STRATEGY_PATH)}) return null;
+        return {
+          runPath: c.runPath,
+          project: c.project.name,
+          activeFile: c.project.activeFile,
+          dirty: c.project.dirty,
+          params: Object.keys(c.spec.params),
+          name: c.spec.name,
+        };
+      })()`, WAIT_VALIDATE);
+      // 고르는 것만으로 탭이 바뀌지는 않는다 — 사람이 보는 자리(코드 탭)로 옮겨 확인한다.
+      await goSubtab(shellWin, 1);
+      await wait(400);
+      const editorSeen = await until(shellWin, `(() => {
+        const ta = document.querySelector('${R}.project-ide-editor .backtest-code-textarea');
+        if (!ta || !ta.value) return null;
+        return {
+          marker: ta.value.indexOf('probe-user-strategy') !== -1,
+          chars: ta.value.length,
+          headPath: (document.querySelector('${R}.project-ide-head-path') || {}).textContent,
+          venvPanel: document.querySelectorAll('${R}.backtest-venv-panel').length,
+          registerButton: document.querySelectorAll('${R}.backtest-register-strategy').length,
+        };
+      })()`, WAIT_UI);
+      await step('M10', '고르면 그 파일이 코드 탭에 열리고 실행경로가 코드가 된다', () => ({
+        ok: !!selected && selected.runPath === 'code'
+              && selected.activeFile === USER_STRATEGY_PATH && selected.dirty === false
+              && JSON.stringify(selected.params) === JSON.stringify(['fast', 'slow'])
+              && !!editorSeen && editorSeen.marker === true
+              && editorSeen.headPath === USER_STRATEGY_PATH
+              && editorSeen.venvPanel === 1 && editorSeen.registerButton === 1,
+        data: { selected, editor: editorSeen },
+      }));
+
+      // --- 실행 --- 파일이 진실이다(D2): 실행은 편집기 버퍼가 아니라 디스크를 다시 읽고,
+      // 백엔드는 매 실행마다 전략+버전 한 쌍을 남긴다. 그 버전의 소스가 우리 파일이어야
+      // "방금 그 실행이 어느 버전이었는가"라고 응답이 실어 준 두 값이 진짜다.
+      const beforeRun = await ctx(shellWin);
+      const prevRunId = beforeRun && beforeRun.lastResult ? beforeRun.lastResult.runId : null;
+      const beforeVersionId = beforeRun ? beforeRun.code.activeVersionId : null;
+      await click(shellWin, `${R}.backtest-run-button`);
+      const runOutcome = await waitNewRunOutcome(shellWin, prevRunId, WAIT_RUN);
+      const afterRun = await ctx(shellWin);
+      const strategyIdNow = afterRun ? afterRun.code.strategyId : null;
+      const versionIdNow = afterRun ? afterRun.code.activeVersionId : null;
+      if (strategyIdNow) created.strategyIds.push(strategyIdNow);
+      const versionsRes = strategyIdNow
+        ? await invoke(shellWin, 'athena:backtest-versions', { strategy_id: strategyIdNow })
+        : null;
+      const versionList = versionsRes && versionsRes.ok && versionsRes.data
+        ? (versionsRes.data.versions || []) : [];
+      const ranVersion = versionList.find((v) => v.id === versionIdNow) || null;
+      const stdout = await textOf(shellWin, `${R}.backtest-stdout-text`);
+      await step('M11', '내 전략 실행이 코드 경로로 끝나고, 응답이 실은 버전이 그 파일이다', () => ({
+        ok: !!runOutcome && runOutcome.view === 'result'
+              && !!afterRun.lastResult && afterRun.lastResult.status === 'done'
+              && !!afterRun.lastResult.metrics && afterRun.lastResult.metrics.run_path === 'code'
+              && !!strategyIdNow && !!versionIdNow && versionIdNow !== beforeVersionId
+              && !!ranVersion && String(ranVersion.source).indexOf('probe-user-strategy') !== -1
+              && typeof stdout === 'string' && stdout.indexOf('probe-user-strategy') !== -1,
+        data: {
+          outcome: runOutcome,
+          runPath: afterRun.lastResult && afterRun.lastResult.metrics
+            ? afterRun.lastResult.metrics.run_path : null,
+          strategyId: strategyIdNow,
+          versionId: versionIdNow,
+          changed: versionIdNow !== beforeVersionId,
+          versionOrigin: ranVersion ? ranVersion.origin : null,
+          stdout: String(stdout).slice(0, 60),
+        },
+      }));
+
+      // --- 배포 --- J와 같은 규칙으로 내 배포만 집는다: 목록은 created_at DESC라
+      // "마지막 행"이 가장 오래된 배포다. 만든 id를 목록 차이로 집고, 그 id가 목록에서
+      // 차지한 자리로만 DOM 행을 고른다(행에는 id가 실리지 않는다).
+      const listDeployments = async () => {
+        const res = await invoke(shellWin, 'athena:backtest-deployments');
+        return res && res.ok && res.data ? (res.data.deployments || []) : [];
+      };
+      await goTab(shellWin, 4);
+      await until(
+        shellWin,
+        `(() => (document.querySelector('${R}.backtest-deploy-create') ? true : null))()`,
+        WAIT_VALIDATE,
+      );
+      await clickNth(shellWin, `${R}.backtest-deploy-mode-item`, 0);
+      await wait(300);
+      // 유효 종료가 비면 백엔드가 valid_to로 ''를 받아 만료 판정에 걸린다(J06과 같다).
+      await js(shellWin, `(() => {
+        const wrap = document.querySelector('${R}.backtest-deploy .backtest-card .backtest-field-row');
+        if (!wrap) return false;
+        const fields = Array.from(wrap.querySelectorAll('.backtest-field'));
+        const setV = (i, v) => {
+          const input = fields[i].querySelector('input');
+          input.value = v;
+          input.dispatchEvent(new Event('input', { bubbles: true }));
+        };
+        setV(2, '20000101');
+        setV(3, '20991231');
+        return true;
+      })()`);
+      const beforeDeployIds = (await listDeployments()).map((d) => d.id);
+      await click(shellWin, `${R}.backtest-deploy-create`);
+      let deployments = [];
+      let deployId = null;
+      const deployDeadline = Date.now() + WAIT_VALIDATE;
+      while (Date.now() < deployDeadline && !deployId) {
+        // eslint-disable-next-line no-await-in-loop
+        await wait(250);
+        // eslint-disable-next-line no-await-in-loop
+        deployments = await listDeployments();
+        const fresh = deployments.filter((d) => beforeDeployIds.indexOf(d.id) === -1);
+        if (fresh.length) deployId = fresh[0].id;
+      }
+      if (deployId) created.deploymentIds.push(deployId);
+      const mine = deployments.find((d) => d.id === deployId) || null;
+      const deployIndex = deployments.findIndex((d) => d.id === deployId);
+      const deployRow = deployIndex < 0 ? null : await until(shellWin, `(() => {
+        const rows = Array.from(document.querySelectorAll('${R}.backtest-deploy-row'));
+        if (rows.length !== ${deployments.length}) return null;
+        const r = rows[${deployIndex}];
+        if (!r) return null;
+        return {
+          symbol: (r.querySelector('.backtest-deploy-symbol') || {}).textContent,
+          mode: (r.querySelector('.backtest-deploy-mode') || {}).textContent,
+          status: (r.querySelector('.backtest-deploy-status') || {}).textContent,
+          stop: r.querySelectorAll('.backtest-deploy-stop').length,
+        };
+      })()`, WAIT_VALIDATE);
+      await step('M12', '내 전략 버전을 기록만 모드로 실전에 건다(그 행이 목록에 선다)', () => ({
+        ok: !!deployId && !!mine && mine.strategy_version_id === versionIdNow
+              && mine.mode === 'observe' && mine.status === 'active'
+              && !!deployRow && deployRow.symbol === STK
+              && deployRow.mode === '기록만 합니다' && deployRow.status === 'active'
+              && deployRow.stop === 1,
+        data: { id: deployId, versionId: versionIdNow, listed: mine, row: deployRow },
+      }));
+
+      const stages = ['signal', 'skipped', 'pending_approval', 'ordered', 'blocked'];
+      const evaluated = deployId
+        ? await invoke(shellWin, 'athena:backtest-evaluate', { deployment_id: deployId, today: TO })
+        : null;
+      const evalData = evaluated && evaluated.ok === true ? evaluated.data : null;
+      await step('M12b', 'evaluate가 그 배포의 오늘 판정을 돌려준다(주문은 내지 않는다)', () => {
+        if (!deployId) return { skip: '배포를 만들지 못했다', name: 'evaluate 판정' };
+        return {
+          ok: !!evalData && typeof evalData.dt === 'string' && evalData.dt.length > 0
+                && stages.indexOf(evalData.stage) !== -1
+                && typeof evalData.reason === 'string' && evalData.reason.length > 0,
+          data: evalData
+            || { status: evaluated && evaluated.status, error: evaluated && evaluated.error },
+        };
+      });
+
+      const stopIndex = deployId
+        ? (await listDeployments()).findIndex((d) => d.id === deployId) : -1;
+      const stopClick = stopIndex < 0 ? null : await js(shellWin, `(() => {
+        const rows = Array.from(document.querySelectorAll('${R}.backtest-deploy-row'));
+        const row = rows[${stopIndex}];
+        if (!row) return null;
+        const before = (row.querySelector('.backtest-deploy-status') || {}).textContent;
+        const btn = row.querySelector('.backtest-deploy-stop');
+        if (!btn) return { before, clicked: false };
+        btn.click();
+        return { before, clicked: true };
+      })()`);
+      const stoppedRow = !stopClick ? null : await until(shellWin, `(() => {
+        const rows = Array.from(document.querySelectorAll('${R}.backtest-deploy-row'));
+        const row = rows[${stopIndex}];
+        if (!row) return null;
+        const status = (row.querySelector('.backtest-deploy-status') || {}).textContent;
+        return status === 'stopped' ? { status } : null;
+      })()`, WAIT_VALIDATE);
+      await step('M12c', '[배포 중지]가 그 배포를 stopped로 만든다', () => {
+        if (!deployId) return { skip: '배포를 만들지 못했다', name: '배포 중지' };
+        return {
+          ok: !!stopClick && stopClick.clicked === true && stopClick.before === 'active'
+                && !!stoppedRow && stoppedRow.status === 'stopped',
+          data: { id: deployId, target: stopClick, after: stoppedRow },
+        };
+      });
+
+      // --- 흐름 지도 --- 로딩 블록은 백엔드 왕복 동안만 서 있다. 폴링으로 잡으면 빠른
+      // 기계에서 놓치므로, 탭을 누르기 전에 관찰자를 걸어 "뜬 적이 있는가"를 사실로 남긴다.
+      await goTab(shellWin, 0);
+      await goSubtab(shellWin, 0);
+      await wait(300);
+      await js(shellWin, `(() => {
+        const root = document.getElementById('backtestCanvas');
+        if (window.__probeFlowObs) window.__probeFlowObs.disconnect();
+        window.__probeFlowLoading = null;
+        window.__probeFlowObs = new MutationObserver(() => {
+          const n = root.querySelector('.backtest-flow-loading');
+          if (n && window.__probeFlowLoading === null) {
+            const t = n.querySelector('.backtest-flow-loading-text');
+            window.__probeFlowLoading = {
+              text: t ? t.textContent : null,
+              spinner: n.querySelectorAll('.backtest-flow-spinner').length,
+              nodes: root.querySelectorAll('.backtest-flow-node.is-mine').length,
+            };
+          }
+        });
+        window.__probeFlowObs.observe(root, { childList: true, subtree: true });
+        return true;
+      })()`);
+      await goSubtab(shellWin, 2);
+      const flowMap = await until(shellWin, `(() => {
+        const root = document.getElementById('backtestCanvas');
+        const nodes = root.querySelectorAll('button.backtest-flow-node.is-mine');
+        if (!nodes.length) return null;
+        return {
+          mine: nodes.length,
+          loading: root.querySelectorAll('.backtest-flow-loading').length,
+          error: root.querySelectorAll('.backtest-flow-error').length,
+        };
+      })()`, WAIT_VALIDATE);
+      const flowWatch = await js(shellWin, `(() => {
+        const seen = window.__probeFlowLoading;
+        if (window.__probeFlowObs) window.__probeFlowObs.disconnect();
+        window.__probeFlowObs = null;
+        return { seen: seen || null };
+      })()`);
+      const loadingSeen = flowWatch ? flowWatch.seen : null;
+      await step('M13', '흐름 탭은 만드는 중임을 먼저 그리고, 그 자리에 지도를 세운다', () => ({
+        ok: !!loadingSeen && loadingSeen.text === '흐름 지도를 만드는 중…'
+              && loadingSeen.spinner === 1
+              && !!flowMap && flowMap.mine > 0 && flowMap.loading === 0 && flowMap.error === 0,
+        data: { loading: loadingSeen, map: flowMap },
+      }));
+    }
+
+    // --- 되돌리기 --- 등록과 배포는 프로브가 켠 스위치라 끈다. 프로젝트는 목록에서만
+    // 빼고 파일은 그대로 둔다 — 백엔드가 그렇게 답하는지, 디스크가 그런지까지 확인한다.
+    const unregistered = await invoke(
+      shellWin, 'athena:backtest-user-strategy-unregister', { strategy_id: userStrategyId },
+    );
+    if (unregistered && unregistered.ok) {
+      const at = created.userStrategyIds.indexOf(userStrategyId);
+      if (at !== -1) created.userStrategyIds.splice(at, 1);
+    }
+    const listAfter = await invoke(shellWin, 'athena:backtest-user-strategies');
+    const stillRegistered = listAfter && listAfter.ok && listAfter.data
+      ? (listAfter.data.strategies || []).some((s) => s.id === userStrategyId) : true;
+    const dropped = await backendJson('DELETE', `/api/v1/projects/${encodeURIComponent(projectId)}`);
+    const droppedBody = dropped.body || {};
+    if (dropped.status === 200) {
+      const at = created.projectIds.indexOf(projectId);
+      if (at !== -1) created.projectIds.splice(at, 1);
+    }
+    const folderStill = !!projectPath && fs.existsSync(projectPath);
+    const fileStill = !!projectPath && fs.existsSync(path.join(projectPath, 'algos', 'ma.py'));
+    await step('M14', '등록과 프로젝트를 되돌린다 — 디스크의 파일은 그대로 남는다', () => ({
+      ok: !!(unregistered && unregistered.ok) && stillRegistered === false
+            && dropped.status === 200 && droppedBody.files_deleted === false
+            && folderStill === true && fileStill === true,
+      data: {
+        unregister: unregistered && unregistered.data,
+        stillRegistered,
+        project: { status: dropped.status, files_deleted: droppedBody.files_deleted },
+        disk: { folder: folderStill, file: fileStill, path: projectPath },
+      },
+    }));
+  });
+
   // 리포트 쓰기와 종료는 whenReady의 finally가 한 번만 한다 — 여기서는 돌아가기만 한다.
 }
 
@@ -2819,6 +3401,37 @@ async function finish() {
       data: cleanup,
     }));
   }
+  // M이 남긴 등록·프로젝트도 되돌린다 — M14가 돌았으면 여기 남는 것은 없다.
+  const swept = { strategies: [], projects: [], failed: [] };
+  for (let i = 0; i < created.userStrategyIds.length; i += 1) {
+    const id = created.userStrategyIds[i];
+    try {
+      // eslint-disable-next-line no-await-in-loop
+      const res = await invoke(probeWin, 'athena:backtest-user-strategy-unregister', { strategy_id: id });
+      if (res && res.ok) swept.strategies.push(id);
+      else swept.failed.push({ id, res });
+    } catch (err) {
+      swept.failed.push({ id, error: String((err && err.message) || err) });
+    }
+  }
+  for (let i = 0; i < created.projectIds.length; i += 1) {
+    const id = created.projectIds[i];
+    try {
+      // eslint-disable-next-line no-await-in-loop
+      const res = await backendJson('DELETE', `/api/v1/projects/${encodeURIComponent(id)}`);
+      if (res.status === 200) swept.projects.push(id);
+      else swept.failed.push({ id, status: res.status });
+    } catch (err) {
+      swept.failed.push({ id, error: String((err && err.message) || err) });
+    }
+  }
+  if (swept.strategies.length || swept.projects.length || swept.failed.length) {
+    await step('Z03', 'M이 남긴 등록·프로젝트를 되돌렸다(파일은 그대로 둔다)', () => ({
+      ok: swept.failed.length === 0,
+      data: swept,
+    }));
+  }
+
   if (created.strategyIds.length) {
     skip(
       'Z02', '만든 전략·버전 정리',

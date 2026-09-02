@@ -230,6 +230,43 @@ function countLines(source) {
   return source ? String(source).split('\n').length : 0;
 }
 
+// 등록 이름의 기본값 — 파일 이름에서 .py를 뗀 것. 사람이 "골든크로스.py"를 만들었으면
+// 목록에도 "골든크로스"로 뜨는 것이 가장 덜 놀랍다.
+function fileStem(pathText) {
+  const base = String(pathText == null ? '' : pathText).split('/').pop();
+  return base.replace(/\.py$/i, '') || base;
+}
+
+// 설치를 요청할 수 있는 이름인가 — 백엔드 store.py `_PACKAGE_SPEC`과 같은 규칙이다.
+// 화면에서 막는 것은 설명이고(왜 안 되는지를 그 자리에서 말한다), 백엔드의 422가 보장이다.
+const PACKAGE_SPEC_RE = /^[A-Za-z0-9][A-Za-z0-9._-]*(==[A-Za-z0-9][A-Za-z0-9._+!-]*)?$/;
+
+function isValidPackageSpec(text) {
+  return String(text).length <= 128 && PACKAGE_SPEC_RE.test(String(text));
+}
+
+// "pandas, scipy==1.14" → ['pandas', 'scipy==1.14']. 쉼표·공백·줄바꿈 아무거나 받는다.
+function parsePackageList(text) {
+  return String(text == null ? '' : text).split(/[\s,]+/).filter((t) => t);
+}
+
+// 등록부가 주는 파라미터는 파일의 `PARAMS` 기본값뿐이다(백엔드 flow.params_defaults) —
+// 파일에는 범위가 없다. 슬라이더를 그리려면 범위가 필요해서 기본값을 기준으로 잡되,
+// 지어낸 범위라는 사실은 카드에 적어 숨기지 않는다(프리셋의 min/max는 전략이 정한 값이다).
+function userParamSpec(raw) {
+  const n = Number(raw);
+  if (!Number.isFinite(n)) return null;
+  const isInt = Number.isInteger(n);
+  const span = Math.abs(n) || 1;
+  return {
+    default: n,
+    min: n < 0 ? -span * 4 : 0,
+    max: n < 0 ? 0 : span * 4,
+    step: isInt ? 1 : span / 100,
+    type: isInt ? 'int' : 'float',
+  };
+}
+
 // ---------- 캔버스 ----------
 
 function createBacktestCanvas(options) {
@@ -256,6 +293,10 @@ function createBacktestCanvas(options) {
     || (typeof clearTimeout !== 'undefined' ? clearTimeout : null);
 
   let presets = [];
+  // 내 폴더의 .py를 프리셋과 같은 자리에 세운 등록부(GET /backtest/user-strategies).
+  // 배선이 없으면 빈 목록이고, 그때 설계 폼은 지금까지처럼 프리셋만 보여준다.
+  let userStrategies = [];
+  let userStrategyId = null;    // 고른 내 전략의 등록 id — 프리셋을 고르면 풀린다
   let spec = null;              // 편집 중인 전략(SpecModel)
   let codeSource = '';          // 코드 탭의 파이썬 원문
   let strategyId = null;        // 저장된 전략(코드 경로에서만 만든다)
@@ -269,6 +310,9 @@ function createBacktestCanvas(options) {
   let coverageAsked = null;
   let state = { view: 'empty', tab: 'design', designTab: 'form' };
   let pollTimer = null;
+  // 환경 구성 잡의 폴링은 실행·수집 폴링과 별개 타이머다 — 같은 자리를 쓰면 pip이 도는
+  // 동안 실행 폴링이 끊기거나 그 반대가 된다(둘은 서로를 모른다).
+  let envTimer = null;
   let loadRequestId = 0;
   let mounted = false;
   let editorHandle = null;
@@ -320,6 +364,19 @@ function createBacktestCanvas(options) {
     presets = Array.isArray(list) ? list : [];
     if (presets.length && !spec) spec = SpecModel.presetToSpec(presets[0]);
     setState({ view: 'design', tab: 'design' });
+    // 등록부는 부수 정보다 — 못 읽었다고 프리셋 화면까지 실패로 만들지 않는다.
+    await loadUserStrategies();
+  }
+
+  // 내 전략 목록. exists·params는 저장된 값이 아니라 백엔드가 지금 디스크를 본 결과다
+  // (D2 — 파일이 진실이다). 그래서 등록해두고 파일을 지우면 목록이 그 사실을 말한다.
+  async function loadUserStrategies() {
+    if (!deps.userStrategies) return;
+    let list;
+    try { list = await deps.userStrategies(); }
+    catch { return; }
+    userStrategies = Array.isArray(list) ? list : [];
+    render();
   }
 
   // 캐시 상태(몇 봉이 어디까지 있는가)는 대상 하나에 붙는 사실이다 — 종목·주기·수정주가가
@@ -354,16 +411,53 @@ function createBacktestCanvas(options) {
     });
   }
 
+  // 전략을 바꿔도 유지하는 것 — 같은 대상에 다른 전략을 걸어보는 것이 이 화면에서 가장
+  // 잦은 동작이고, 매번 다시 입력하게 하면 그 흐름이 끊긴다.
+  function keptTarget() {
+    return spec
+      ? { symbols: spec.symbols, fromDt: spec.fromDt, toDt: spec.toDt, period: spec.period }
+      : {};
+  }
+
   function selectPreset(id) {
     const preset = presets.find((p) => p.id === id);
     if (!preset) return;
-    // 종목·기간은 전략을 바꿔도 유지한다 — 같은 대상에 다른 전략을 걸어보는 것이
-    // 이 화면에서 가장 잦은 동작이고, 매번 다시 입력하게 하면 그 흐름이 끊긴다.
-    const kept = spec
-      ? { symbols: spec.symbols, fromDt: spec.fromDt, toDt: spec.toDt, period: spec.period }
-      : {};
-    spec = Object.assign(SpecModel.presetToSpec(preset), kept);
+    spec = Object.assign(SpecModel.presetToSpec(preset), keptTarget());
+    // 내 전략에서 프리셋으로 건너오면 실행경로도 폼으로 돌아온다 — 안 그러면 화면은
+    // 프리셋인데 도는 것은 파이썬인 상태가 남는다.
+    if (userStrategyId) runPath = 'form';
+    userStrategyId = null;
     setState({ formErrors: [] });
+  }
+
+  // 내 전략을 고르는 것은 프리셋을 고르는 것과 같은 동작이어야 한다 — 다른 점은 신호를
+  // 만드는 것이 지표·조건이 아니라 그 파일의 파이썬이라는 것뿐이다. 그래서 여기서는
+  // ① 폴더와 파일을 IDE로 실제로 열고(실행이 읽을 원문이 그 파일이다, D2)
+  // ② 실행경로를 코드로 돌리고 ③ 등록부가 준 PARAMS 기본값을 슬라이더로 세운다.
+  async function selectUserStrategy(id) {
+    const entry = userStrategies.find((s) => s.id === id);
+    if (!entry) return;
+    const ide = ensureProjectIde();
+    if (!ide) {
+      setState({ formErrors: ['이 화면에는 프로젝트 배선이 없어 내 전략을 열 수 없습니다'] });
+      return;
+    }
+    const params = {};
+    Object.keys(entry.params || {}).forEach((name) => {
+      const p = userParamSpec(entry.params[name]);
+      if (p) params[name] = p;
+    });
+    spec = Object.assign(
+      SpecModel.createSpec(null, { name: entry.name, params }), keptTarget(),
+    );
+    userStrategyId = entry.id;
+    runPath = 'code';
+    setState({ formErrors: [], codeErrors: [] });
+    const opened = await ide.openAt(entry.project_id, entry.path);
+    // 못 열었으면 이유는 IDE가 자기 자리에 적었다 — 폼에도 한 줄 남긴다. 폼만 보고 있는
+    // 사람에게는 코드 탭의 문장이 보이지 않는다.
+    if (!opened) setState({ formErrors: [`${entry.path}를 열지 못했습니다 — 코드 탭을 보세요`] });
+    else render();
   }
 
   function currentYaml() {
@@ -393,7 +487,15 @@ function createBacktestCanvas(options) {
         onProjectChange: (project) => {
           projectFiles = [];
           if (project) void loadProjectFiles(project.id);
-          setState({ fileDraft: null });
+          // 앞 폴더의 환경 잡도 여기서 끊는다 — 안 끊으면 대기 중인 틱이 앞 폴더의
+          // 진행 줄을 이 폴더의 패널에 적고, 끝나면 앞 폴더의 venv를 이 폴더의
+          // "준비됨 · N개 패키지"로 읽는다.
+          if (envTimer != null && clearTimeoutImpl) clearTimeoutImpl(envTimer);
+          envTimer = null;
+          setState({
+            fileDraft: null, env: null, envError: null, envProgress: null, envJobId: null,
+          });
+          if (project) void loadProjectEnv(project.id);
         },
       },
     });
@@ -436,6 +538,114 @@ function createBacktestCanvas(options) {
     } catch { return activeFile.text; }
   }
 
+  // ---------- 프로젝트 가상환경(폴더 안의 .venv 하나) ----------
+  //
+  // 환경을 만드는 것은 돈도 할당량도 지나지 않는 준비 작업이다(WAVE-3 계약) — 그래도
+  // 버튼은 사람이 누른다. 여기서 사람 손이 필요한 이유는 승인이 아니라 시간이다: pip이
+  // 수십 초를 쓰고 그 동안 이 폴더의 실행이 무엇을 쓸 수 있는지가 바뀐다.
+
+  async function loadProjectEnv(projectId) {
+    if (!deps.projectEnv || !projectId) return;
+    try { setState({ env: await deps.projectEnv(projectId), envError: null }); }
+    catch (err) { setState({ env: null, envError: String((err && err.message) || err) }); }
+  }
+
+  async function startProjectEnv() {
+    const project = projectIde ? projectIde.currentProject() : null;
+    if (!project || !deps.createProjectEnv) return;
+    const packages = parsePackageList(state.envPackages);
+    const bad = packages.filter((name) => !isValidPackageSpec(name));
+    if (bad.length) {
+      setState({ envError: `설치할 수 있는 이름이 아닙니다: ${bad.join(', ')} (예: pandas, pandas==2.2.3)` });
+      return;
+    }
+    setState({ envError: null, envProgress: '환경을 만드는 중입니다…' });
+    let res;
+    try { res = await deps.createProjectEnv(project.id, packages); }
+    catch (err) {
+      setState({ envProgress: null, envError: String((err && err.message) || err) });
+      return;
+    }
+    const jobId = res && res.job_id;
+    if (!jobId) { setState({ envProgress: null, envError: 'job_id를 받지 못했습니다' }); return; }
+    setState({ envJobId: jobId });
+    pollEnvJob(project.id);
+  }
+
+  // 진행은 기존 잡 라우트를 그대로 쓴다(deps.status = athena:backtest-status) — 잡 표면을
+  // 둘로 만들지 않는다. 끝나면 상태를 다시 읽어 "몇 개 패키지"가 실제 디스크와 맞게 한다.
+  function pollEnvJob(projectId) {
+    if (envTimer != null && clearTimeoutImpl) clearTimeoutImpl(envTimer);
+    envTimer = null;
+    const tick = async () => {
+      envTimer = null;
+      if (!isVisible()) return;
+      let job;
+      try { job = deps.status ? await deps.status({ job_id: state.envJobId }) : null; }
+      catch (err) {
+        setState({ envProgress: null, envJobId: null, envError: String((err && err.message) || err) });
+        return;
+      }
+      if (!isVisible()) return;
+      if (job && job.status === 'done') {
+        setState({ envProgress: null, envJobId: null });
+        await loadProjectEnv(projectId);
+        return;
+      }
+      if (job && (job.status === 'failed' || job.status === 'cancelled')) {
+        setState({
+          envProgress: null, envJobId: null, envError: job.error || '환경 구성에 실패했습니다',
+        });
+        return;
+      }
+      const progress = job && job.progress;
+      setState({
+        envProgress: progress
+          ? `${progress.step} · ${progress.line || ''}`.trim()
+          : '환경을 만드는 중입니다…',
+      });
+      if (setTimeoutImpl) envTimer = setTimeoutImpl(tick, POLL_INTERVAL_MS);
+    };
+    tick();
+  }
+
+  // ---------- 내 전략 등록(사람이 누른다) ----------
+
+  async function registerActiveStrategy() {
+    const project = projectIde ? projectIde.currentProject() : null;
+    const active = activeProjectFile();
+    if (!project || !deps.registerUserStrategy) return;
+    if (!active) {
+      setState({ codeErrors: ['등록할 파일을 먼저 여세요 — 왼쪽에서 .py를 고릅니다'] });
+      return;
+    }
+    // 저장 안 한 편집으로 등록하면 등록부가 가리키는 파일과 화면의 코드가 갈라진다
+    // (실행이 저장을 요구하는 것과 같은 이유 — 진실은 디스크에 있다).
+    if (active.dirty) {
+      setState({ codeErrors: ['저장하고 등록하세요 — 저장하지 않은 편집이 있습니다'] });
+      return;
+    }
+    try {
+      await deps.registerUserStrategy({
+        project_id: project.id, path: active.path, name: fileStem(active.path),
+      });
+      setState({ codeErrors: [] });
+    } catch (err) {
+      setState({ codeErrors: [String((err && err.message) || err)] });
+      return;
+    }
+    await loadUserStrategies();
+  }
+
+  // 등록만 지운다 — 파일은 사용자 폴더의 것이라 우리가 지울 물건이 아니다(백엔드도 그렇다).
+  async function unregisterUserStrategy(id) {
+    if (!deps.unregisterUserStrategy) return;
+    try { await deps.unregisterUserStrategy(id); }
+    catch (err) { setState({ formErrors: [String((err && err.message) || err)] }); return; }
+    if (userStrategyId === id) userStrategyId = null;
+    await loadUserStrategies();
+  }
+
   // 코드 경로는 폼의 진입·청산 조건을 검사하지 않는다 — 신호는 파이썬이 만든다.
   function runErrors() {
     const codeRuns = runPath === 'code' || !!activeProjectFile();
@@ -458,9 +668,21 @@ function createBacktestCanvas(options) {
     await startRun(allowPartial);
   }
 
+  // 지금 연 파일이 고른 내 전략의 그 파일인가 — 슬라이더 값을 실을지 가르는 기준이다.
+  // 프리셋으로 건너가면 selectPreset이 풀지만, 트리에서 다른 .py를 고르는 길은 캔버스를
+  // 거치지 않아 userStrategyId가 그대로 남는다. 그래서 실을 때마다 다시 맞춰 본다.
+  function runsPickedStrategy(activeFile) {
+    if (!userStrategyId || !activeFile) return false;
+    const entry = userStrategies.find((s) => s.id === userStrategyId);
+    if (!entry) return false;
+    const project = projectIde ? projectIde.currentProject() : null;
+    return !!project && project.id === entry.project_id && activeFile.path === entry.path;
+  }
+
   async function startRun(allowPartial) {
     setState({ view: 'running', progressText: '백테스트를 실행하는 중입니다…' });
     let res;
+    let codeRun = false;
     try {
       const body = { yaml: currentYaml() };
       if (allowPartial) body.allow_partial = true;
@@ -470,8 +692,24 @@ function createBacktestCanvas(options) {
       // 버퍼에는 아직 옛 내용이 남아 있다(IDE에 다시 읽는 길이 없다). 저장 안 한 편집은
       // 위 handleRun이 이미 막았으므로, 여기서 디스크를 읽어도 사람이 친 것은 안 사라진다.
       const activeFile = activeProjectFile();
-      if (activeFile) body.source = await projectFileText(activeFile);
-      else if (runPath === 'code' && codeSource.trim()) body.source = codeSource;
+      if (activeFile) {
+        body.source = await projectFileText(activeFile);
+        // 어느 폴더의 코드인가 — 백엔드가 그 폴더의 가상환경으로 돌린다. 안 실으면
+        // 사용자가 자기 폴더에 깐 패키지를 코드가 import하지 못한다.
+        const project = projectIde ? projectIde.currentProject() : null;
+        if (project) body.project_id = project.id;
+      } else if (runPath === 'code' && codeSource.trim()) body.source = codeSource;
+      codeRun = !!body.source;
+      // 내 전략의 슬라이더는 실제로 값을 바꿔야 한다 — 백엔드는 파일의 PARAMS 기본값이
+      // 폼 yaml의 값을 덮으므로(runner.py `_run_code_signals`), 슬라이더 값은 그것보다
+      // 센 자리인 params(override)로 실어야 화면과 실행이 같은 숫자를 쓴다. 단 지금 도는
+      // 파일이 그 전략의 파일일 때만이다 — 트리에서 다른 .py를 고르면 실행은 그 파일인데
+      // 슬라이더는 앞 전략의 것이라, 그대로 실으면 남의 숫자가 그 파일 위에 얹힌다.
+      if (runsPickedStrategy(activeFile) && spec && Object.keys(spec.params).length) {
+        const overrides = {};
+        Object.keys(spec.params).forEach((name) => { overrides[name] = spec.params[name].default; });
+        body.params = overrides;
+      }
       res = deps.run ? await deps.run(body) : null;
       if (!res) throw new Error('실행 연결이 없습니다');
     } catch (err) { fail(err); return; }
@@ -486,6 +724,17 @@ function createBacktestCanvas(options) {
       return;
     }
     if (!res.run_id) { fail(new Error('run_id를 받지 못했습니다')); return; }
+    // 백엔드는 매 실행마다 전략+버전 한 쌍을 남긴다(재현성의 축) — 그 id를 받아두면
+    // 파일로 한 번 돌린 뒤 [이 코드로 저장]을 거치지 않고도 배포 탭이 열린다. 추측하면
+    // 다른 행을 배포하게 되므로 백엔드가 준 값일 때만 갈아 끼운다.
+    //
+    // **코드로 돈 실행일 때만이다.** 폼 실행이 만든 전략은 kind="yaml"이라(api/backtest.py),
+    // 거기에 [이 코드로 저장]이 파이썬 버전을 얹으면 배포는 받아주고 평가는 422로 죽는
+    // 막다른 길이 된다 — 그 길을 없앤 결정을 여기서 되살리지 않는다.
+    if (codeRun) {
+      if (res.strategy_id) strategyId = res.strategy_id;
+      if (res.version_id) activeVersionId = res.version_id;
+    }
     setState({ runId: res.run_id, partial: res.partial || null });
     pollRun();
   }
@@ -615,10 +864,29 @@ function createBacktestCanvas(options) {
     }
   }
 
+  // 흐름 지도가 읽는 원문은 "지금 보고 있는 코드"다 — 프로젝트 파일을 열었으면 그 버퍼,
+  // 아니면 단일 편집기. 실행이 디스크를 다시 읽는 것과 다른 이유: 지도는 사람이 지금
+  // 화면에서 읽고 있는 코드를 설명해야 하고, 그것은 저장 전 편집분까지 포함한다.
+  function currentSource() {
+    const active = activeProjectFile();
+    return (active && active.text) || codeSource;
+  }
+
+  // 지도는 백엔드 왕복이라 즉시 뜨지 않는다. 그 사이를 빈 화면으로 두면 사용자는 기능이
+  // 죽은 줄 안다(사용자 지시 2026-09-02 "로딩 표시") — 그래서 진행 중임을 그린다.
+  // 실패도 화면 전체를 오류로 바꾸지 않고 그 자리에 적는다: 지도를 못 그린 것이지
+  // 백테스트가 망가진 것이 아니다.
   async function loadFlow() {
-    if (!deps.flow || !codeSource) { setState({ flow: null }); return; }
-    try { setState({ flow: await deps.flow({ source: codeSource }) }); }
-    catch (err) { fail(err); }
+    const source = currentSource();
+    if (!deps.flow || !source) {
+      setState({ flow: null, flowLoading: false, flowError: null });
+      return;
+    }
+    setState({ flowLoading: true, flowError: null });
+    try { setState({ flow: await deps.flow({ source }), flowLoading: false }); }
+    catch (err) {
+      setState({ flowLoading: false, flowError: String((err && err.message) || err) });
+    }
   }
 
   async function loadHistory() {
@@ -689,6 +957,9 @@ function createBacktestCanvas(options) {
   }
 
   function resumePollingIfNeeded() {
+    // 환경 잡은 실행과 무관하게 돈다 — 모드를 나갔다 와도 진행 줄이 다시 흐른다.
+    const project = projectIde ? projectIde.currentProject() : null;
+    if (envTimer == null && state.envJobId && project) pollEnvJob(project.id);
     if (pollTimer != null) return;
     if (state.view !== 'running') return;
     if (state.jobId && !state.runId) pollJob();
@@ -1305,14 +1576,21 @@ function createBacktestCanvas(options) {
     if (state.designTab === 'code') { wrap.appendChild(renderCodeTab()); return wrap; }
     if (state.designTab === 'flow') { wrap.appendChild(renderFlowTab()); return wrap; }
 
-    if (!presets.length) {
+    if (!presets.length && !userStrategies.length) {
       wrap.appendChild(el('div', 'backtest-design-empty', '사용 가능한 프리셋이 없습니다'));
       return wrap;
     }
     wrap.appendChild(renderPresetList());
     wrap.appendChild(renderTargetCard());
-    wrap.appendChild(renderIndicatorCard());
-    wrap.appendChild(renderConditionCards());
+    // 내 전략은 지표·조건을 쓰지 않는다 — 신호를 만드는 것은 그 파일의 파이썬이다.
+    // 빈 조건 빌더를 세워두면 "여기를 채워야 도는가"라고 묻게 된다(실행은 이미 그
+    // 칸들을 검사하지 않는다, runErrors 참고).
+    if (userStrategyId) {
+      wrap.appendChild(renderUserParamsCard());
+    } else {
+      wrap.appendChild(renderIndicatorCard());
+      wrap.appendChild(renderConditionCards());
+    }
     wrap.appendChild(renderRiskCard());
     wrap.appendChild(renderFormErrors());
     wrap.appendChild(renderAssumptions());
@@ -1324,7 +1602,7 @@ function createBacktestCanvas(options) {
     wrap.appendChild(el('div', 'backtest-card-title', `무엇으로 시작할까요 — 프리셋 ${presets.length}종`));
     const list = el('div', 'backtest-preset-list');
     presets.forEach((preset) => {
-      const isSelected = spec && preset.id === spec.presetId;
+      const isSelected = spec && !userStrategyId && preset.id === spec.presetId;
       const item = button(
         `backtest-preset-item${isSelected ? ' is-selected' : ''}`, null,
         () => selectPreset(preset.id),
@@ -1335,7 +1613,62 @@ function createBacktestCanvas(options) {
       list.appendChild(item);
     });
     wrap.appendChild(list);
+    if (userStrategies.length) wrap.appendChild(renderUserStrategyList());
     return wrap;
+  }
+
+  // 내 폴더의 .py를 프리셋 바로 아래 같은 모양으로 세운다 — "프리셋과 같은 자리"라는
+  // 것이 이 기능의 요구 자체다. 다른 점은 둘뿐이다: 파일이 사라졌으면 그렇다고 적고,
+  // 줄마다 [등록 해제]가 붙는다(등록만 지우고 파일은 건드리지 않는다).
+  function renderUserStrategyList() {
+    const wrap = el('div', 'backtest-user-strategy-wrap');
+    wrap.appendChild(el(
+      'div', 'backtest-card-title', `내 전략 ${userStrategies.length}개 — 내 폴더의 파이썬`,
+    ));
+    const list = el('div', 'backtest-user-strategy-list');
+    userStrategies.forEach((entry) => {
+      const row = el('div', 'backtest-user-strategy-row');
+      const isSelected = userStrategyId === entry.id;
+      const item = button(
+        `backtest-user-strategy-item${isSelected ? ' is-selected' : ''}`, null,
+        () => { void selectUserStrategy(entry.id); },
+      );
+      item.setAttribute('aria-pressed', String(isSelected));
+      item.appendChild(el('div', 'backtest-user-strategy-name', entry.name));
+      item.appendChild(el('div', 'backtest-user-strategy-path', entry.path));
+      if (entry.exists === false) {
+        item.appendChild(el('div', 'backtest-user-strategy-missing', '파일이 없습니다'));
+      }
+      row.appendChild(item);
+      row.appendChild(button('backtest-user-strategy-remove', '등록 해제', () => {
+        void unregisterUserStrategy(entry.id);
+      }));
+      list.appendChild(row);
+    });
+    wrap.appendChild(list);
+    return wrap;
+  }
+
+  // 등록부가 주는 것은 파일의 PARAMS 기본값뿐이라 범위는 화면이 잡았다 — 그 사실을
+  // 부제에 적는다(프리셋의 min/max는 전략이 정한 값이고, 이것은 아니다).
+  function renderUserParamsCard() {
+    const card = el('div', 'backtest-card');
+    const head = el('div', 'backtest-card-head');
+    head.appendChild(el('div', 'backtest-card-title', '파라미터'));
+    head.appendChild(el(
+      'div', 'backtest-card-note',
+      '신호는 이 파일의 파이썬이 만듭니다 · 슬라이더 범위는 기본값에서 화면이 잡은 것입니다',
+    ));
+    card.appendChild(head);
+    const names = spec ? Object.keys(spec.params) : [];
+    if (!names.length) {
+      card.appendChild(el('div', 'backtest-card-empty', '이 전략에는 PARAMS가 없습니다'));
+      return card;
+    }
+    const row = el('div', 'backtest-user-param-row');
+    names.forEach((name) => { row.appendChild(renderParamSlider(name, spec.params[name])); });
+    card.appendChild(row);
+    return card;
   }
 
   function textField(label, value, placeholder, onInput) {
@@ -1605,6 +1938,7 @@ function createBacktestCanvas(options) {
     if (ide) wrap.appendChild(ide.element);
     // 프로젝트를 고르기 전까지는 지금까지의 단일 버퍼 편집기가 그대로 코드 탭이다.
     if (ide && ide.currentProject()) {
+      wrap.appendChild(renderIdeActions());
       if (state.fileDraft) wrap.appendChild(renderFileDraft());
       wrap.appendChild(renderCodeErrors());
       wrap.appendChild(renderCodeBounds());
@@ -1653,6 +1987,57 @@ function createBacktestCanvas(options) {
     wrap.appendChild(renderCodeErrors());
     wrap.appendChild(renderCodeBounds());
     return wrap;
+  }
+
+  // 프로젝트를 열었을 때의 코드 탭 행동줄 — 옛 편집기의 .backtest-code-actions와 같은
+  // 자리다(검증·저장이 있던 곳). 여기 있는 것은 이 폴더에 붙는 둘: 환경과 등록.
+  //
+  // **왜 IDE 안이 아니라 캔버스가 그리는가.** IDE의 paint()는 편집기를 다시 만든다 —
+  // 환경 잡 진행을 1초마다 IDE 안에서 갱신하면 pip이 도는 30초 동안 타자와 한글 조합이
+  // 계속 날아간다. 캔버스가 그리면 그 갱신이 편집기에 닿지 않는다.
+  function renderIdeActions() {
+    const bar = el('div', 'backtest-ide-actions');
+    bar.appendChild(renderVenvPanel());
+    // 대상은 "지금 연 파일"이다. 그 값을 여기서 읽어 버튼의 유무를 정하지 않는 이유:
+    // 파일을 여는 것은 IDE의 paint()이고 캔버스는 그때 다시 그리지 않는다 — 버튼이
+    // 뒤늦게 생기는 대신, 누르는 순간 activeProjectFile()을 읽고 없으면 그렇다고 말한다.
+    if (deps.registerUserStrategy) {
+      bar.appendChild(button('backtest-register-strategy', '내 전략으로 등록', () => {
+        void registerActiveStrategy();
+      }));
+    }
+    return bar;
+  }
+
+  // 환경 패널 — 지금 이 폴더의 .venv가 어떤 상태인가, 그리고 만들기. 상태는 백엔드가
+  // 지금 디스크를 본 결과다(캐시가 아니다).
+  function renderVenvPanel() {
+    const panel = el('div', 'backtest-venv-panel');
+    panel.appendChild(el('span', 'backtest-venv-title', '환경'));
+    const env = state.env;
+    const status = env && env.exists
+      ? `준비됨 · ${(env.packages || []).length}개 패키지`
+      : '없음';
+    panel.appendChild(el('span', 'backtest-venv-status', status));
+
+    const box = el('input', 'backtest-venv-packages');
+    box.type = 'text';
+    box.placeholder = '더 깔 패키지 (예: scipy, ta==0.11.0)';
+    box.value = state.envPackages == null ? '' : String(state.envPackages);
+    // 매 키입력마다 다시 그리면 커서가 날아간다 — 값만 담는다(폼 입력들과 같은 규칙).
+    box.addEventListener('input', () => { state.envPackages = box.value; });
+    panel.appendChild(box);
+
+    panel.appendChild(button('backtest-venv-create', '환경 만들기', () => {
+      void startProjectEnv();
+    }));
+    if (state.envProgress) {
+      panel.appendChild(el('div', 'backtest-venv-progress', state.envProgress));
+    }
+    if (state.envError) {
+      panel.appendChild(el('div', 'backtest-venv-error', state.envError));
+    }
+    return panel;
   }
 
   // 채팅이 낸 파일 초안 — 지금 파일과의 diff만 보여준다. 누르는 자리는 채팅 카드
@@ -1706,7 +2091,7 @@ function createBacktestCanvas(options) {
 
   function renderFlowTab() {
     const wrap = el('div', 'backtest-flow-tab');
-    if (!codeSource) {
+    if (!currentSource()) {
       wrap.appendChild(el(
         'div', 'backtest-card-empty',
         '코드 탭에서 전략을 쓰면 흐름 지도가 여기 그려집니다',
@@ -1717,6 +2102,16 @@ function createBacktestCanvas(options) {
     head.appendChild(el('div', 'backtest-card-title', '이 코드는 이렇게 흐릅니다'));
     head.appendChild(el('div', 'backtest-card-note', '칸을 누르면 코드 탭에서 그 줄이 켜집니다'));
     wrap.appendChild(head);
+    // 만드는 중이라는 사실을 그린다 — 빈 자리는 "기능이 죽었다"로 읽힌다.
+    if (state.flowLoading) {
+      const loading = el('div', 'backtest-flow-loading');
+      loading.appendChild(el('span', 'backtest-flow-spinner', ''));
+      loading.appendChild(el('span', 'backtest-flow-loading-text', '흐름 지도를 만드는 중…'));
+      wrap.appendChild(loading);
+    }
+    if (state.flowError) {
+      wrap.appendChild(el('div', 'backtest-flow-error', state.flowError));
+    }
     const map = el('div', 'backtest-flow-map');
     Explain.renderFlowMap(map, state.flow, {
       onSelect: (range) => { setState({ flowRange: range, designTab: 'code' }); },
@@ -2158,7 +2553,7 @@ function createBacktestCanvas(options) {
     if (!activeVersionId) {
       card.appendChild(el(
         'div', 'backtest-card-empty',
-        '먼저 코드 탭에서 전략을 저장해야 배포할 수 있습니다 — 배포는 저장된 버전에 묶입니다',
+        '먼저 코드를 한 번 실행하거나 코드 탭에서 저장해야 배포할 수 있습니다 — 배포는 저장된 버전에 묶입니다',
       ));
       return card;
     }
@@ -2228,6 +2623,10 @@ function createBacktestCanvas(options) {
   function refresh() {
     if (!mounted) { mount(); return; }
     if (state.view === 'empty' || state.view === 'error') { void loadPresets(); return; }
+    // 등록부는 이 화면 밖에서도 바뀐다 — 대화가 register_strategy로 등록하면 캔버스에는
+    // 아무 액션도 오지 않는다. 모드에 들어올 때마다 다시 읽지 않으면 앱을 껐다 켜기
+    // 전까지 "대화로 등록 → 프리셋과 같은 자리"가 화면에 아예 나타나지 않는다.
+    void loadUserStrategies();
     render();
     resumePollingIfNeeded();
   }

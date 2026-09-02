@@ -494,3 +494,58 @@ test('지우기: 인라인으로 되묻고, 지우면 탭도 함께 사라진다
   assert.equal(findByClass(made.root, 'project-ide-tab').length, 0);
   assert.equal(made.ide.activeFile(), null);
 });
+
+// ── 밖에서 여는 길(openAt) ──────────────────────────────────────────────────
+// 설계 폼의 [내 전략]이 부르는 자리다. 사람이 폴더를 고르고 트리를 누르는 그 경로를
+// 그대로 타야 한다 — 두 길이 갈라지면 한쪽만 고쳐지는 날이 온다.
+
+test('openAt: 목록을 안 읽었어도 폴더를 고르고 그 파일을 연다', async () => {
+  const made = makeIde();
+  const opened = await made.ide.openAt('p1', 'strategies/golden.py');
+  await flush();
+  assert.equal(opened, true);
+  assert.equal(made.ide.currentProject().id, 'p1');
+  assert.equal(made.ide.activeFile().path, 'strategies/golden.py');
+  assert.equal(made.ide.activeText(), 'PARAMS = {"slow": 20}\n');
+  assert.equal(findByClass(made.root, 'project-ide-body').length, 1);
+});
+
+test('openAt: 이미 그 폴더를 열어 뒀으면 폴더를 다시 고르지 않는다 — 열린 탭이 살아남는다', async () => {
+  let treeCalls = 0;
+  const made = makeIde({
+    tree: async () => {
+      treeCalls += 1;
+      return { project_id: 'p1', root: PROJECT.path, entries: TREE, truncated: false };
+    },
+  });
+  await mountWithProject(made);
+  assert.equal(treeCalls, 1);
+  await click(findByClass(made.root, 'project-ide-file').find((f) => f.textContent === 'strategy.py'));
+  await flush();
+
+  const opened = await made.ide.openAt('p1', 'strategies/golden.py');
+  await flush();
+  assert.equal(opened, true);
+  assert.equal(treeCalls, 1, '같은 폴더면 트리를 다시 읽지 않는다');
+  assert.equal(findByClass(made.root, 'project-ide-tab').length, 2, '먼저 연 탭이 남아야 한다');
+  assert.equal(made.ide.activeFile().path, 'strategies/golden.py');
+});
+
+test('openAt: 모르는 폴더·없는 파일은 false를 돌려주고 이유를 적는다', async () => {
+  const made = makeIde({
+    readFile: async () => { throw new Error('파일이 존재하지 않는다'); },
+  });
+  assert.equal(await made.ide.openAt('없는폴더', 'a.py'), false);
+  assert.match(textOf(made.root), /그 폴더가 프로젝트 목록에 없습니다/);
+
+  assert.equal(await made.ide.openAt('p1', 'strategies/golden.py'), false);
+  await flush();
+  assert.match(textOf(made.root), /파일이 존재하지 않는다/);
+});
+
+test('openAt: .py가 아니면 열지 않는다(D3 — 화면이 막는 것은 설명이고 백엔드가 보장이다)', async () => {
+  const made = makeIde();
+  assert.equal(await made.ide.openAt('p1', 'data/prices.csv'), false);
+  assert.equal(made.ide.activeFile(), null);
+  assert.match(textOf(made.root), /파이썬\(\.py\) 파일만 엽니다/);
+});

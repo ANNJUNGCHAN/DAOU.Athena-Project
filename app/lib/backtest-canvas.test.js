@@ -1644,3 +1644,388 @@ test('[적용하고 실행]: 방금 쓴 파일이 돈다 — 편집기 버퍼의
   assert.equal(sent.source, DRAFT_SOURCE);
   assert.deepEqual(writes, [{ id: 'p1', path: 'strategy.py', text: DRAFT_SOURCE }]);
 });
+
+// ── 내 전략(등록부) · 환경 · 흐름 지도 로딩(WAVE-3, 2026-09-02) ─────────────
+// 이 묶음이 지키는 계약: 내 폴더의 .py가 프리셋과 같은 자리에 서고 고르면 실제로 열린다,
+// 환경은 상태를 정직하게 말하고 만들기는 잡을 폴링한다, 지도는 만드는 중임을 그린다,
+// 파일 실행 한 번이면 배포 탭이 열린다(저장 버튼을 거치지 않아도).
+
+const USER_STRATEGY = {
+  id: 'u1',
+  name: 'golden',
+  project_id: 'p1',
+  path: 'strategies/golden.py',
+  exists: true,
+  params: { fast: 20, thresh: 0.02 },
+};
+
+const USER_TREE = [
+  { name: 'strategy.py', path: 'strategy.py', is_dir: false, py: true, size: 30 },
+  {
+    name: 'strategies',
+    path: 'strategies',
+    is_dir: true,
+    py: false,
+    size: 0,
+    children: [
+      { name: 'golden.py', path: 'strategies/golden.py', is_dir: false, py: true, size: 40 },
+    ],
+  },
+];
+
+const GOLDEN_SOURCE = 'PARAMS = {"fast": {"default": 20}}\ndef signals(df, p):\n    return df\n';
+
+// projectDeps에 등록부·환경까지 얹은 배선. 가짜 디스크는 그대로 쓴다.
+function userStrategyDeps(overrides) {
+  return Object.assign(projectDeps({
+    projectTree: async () => ({ entries: USER_TREE, truncated: false }),
+    readProjectFile: async (_id, p) => {
+      const disk = { 'strategy.py': PROJECT_SOURCE, 'strategies/golden.py': GOLDEN_SOURCE };
+      if (!(p in disk)) throw new Error('파일이 존재하지 않는다');
+      return { path: p, text: disk[p] };
+    },
+    userStrategies: async () => [USER_STRATEGY],
+  }), overrides || {});
+}
+
+test('설계 폼: 프리셋 아래에 [내 전략] 묶음이 선다 — 같은 자리, 같은 모양', async () => {
+  const { container } = await mounted(userStrategyDeps());
+  await flush();
+  assert.equal(findByClass(container, 'backtest-preset-item').length, 1);
+  const items = findByClass(container, 'backtest-user-strategy-item');
+  assert.equal(items.length, 1);
+  assert.match(textOf(items[0]), /golden/);
+  assert.match(textOf(items[0]), /strategies\/golden\.py/);
+  assert.match(textOf(container), /내 전략 1개/);
+  assert.equal(findByClass(container, 'backtest-user-strategy-remove').length, 1);
+});
+
+test('설계 폼: 등록부 배선이 없으면 [내 전략] 묶음은 아예 없다 — 옛 화면 그대로', async () => {
+  const { container } = await mounted();
+  assert.equal(findByClass(container, 'backtest-user-strategy-list').length, 0);
+  assert.equal(findByClass(container, 'backtest-preset-item').length, 1);
+});
+
+test('내 전략을 고르면 그 파일이 IDE에 열리고 실행경로가 코드로 바뀐다', async () => {
+  const made = await mounted(userStrategyDeps());
+  await flush();
+  await fillForm(made.container);
+  await click(findByClass(made.container, 'backtest-user-strategy-item')[0]);
+  await flush();
+  await flush();
+  const ctx = made.canvas.getContext();
+  assert.equal(ctx.runPath, 'code');
+  assert.equal(ctx.project.activeFile, 'strategies/golden.py');
+  // 종목·기간은 전략을 바꿔도 남는다 — 프리셋 전환과 같은 규칙이다.
+  assert.deepEqual(ctx.spec.symbols, ['005930']);
+  assert.equal(ctx.spec.fromDt, '20160101');
+  assert.equal(ctx.spec.name, 'golden');
+});
+
+test('내 전략을 고르면 등록부의 PARAMS가 슬라이더로 서고, 지표·조건 카드는 사라진다', async () => {
+  const made = await mounted(userStrategyDeps());
+  await flush();
+  await click(findByClass(made.container, 'backtest-user-strategy-item')[0]);
+  await flush();
+  await flush();
+  const sliders = findByClass(made.container, 'backtest-param-slider');
+  assert.equal(sliders.length, 2, 'fast·thresh 둘 다 슬라이더가 된다');
+  assert.equal(sliders[0].value, '20');
+  assert.equal(sliders[0].getAttribute('max'), '80');
+  // 신호를 만드는 것은 파이썬이다 — 빈 조건 빌더를 세워두지 않는다.
+  assert.equal(findByClass(made.container, 'backtest-condition-card').length, 0);
+  assert.equal(findByClass(made.container, 'backtest-indicator-row').length, 0);
+  assert.match(textOf(made.container), /슬라이더 범위는 기본값에서 화면이 잡은 것입니다/);
+});
+
+test('내 전략 실행: 파일 본문·project_id·슬라이더 값이 함께 나간다', async () => {
+  let sent = null;
+  const made = await mounted(userStrategyDeps({
+    run: async (body) => { sent = body; return { run_id: 'r1' }; },
+    result: async () => ({ status: 'running' }),
+  }));
+  await flush();
+  await fillForm(made.container);
+  await click(findByClass(made.container, 'backtest-user-strategy-item')[0]);
+  await flush();
+  await flush();
+  const slider = findByClass(made.container, 'backtest-param-slider')[0];
+  slider.value = '35';
+  await slider.dispatchEvent({ type: 'input' });
+  await click(findByClass(made.container, 'backtest-run-button')[0]);
+  await flush();
+  assert.equal(sent.source, GOLDEN_SOURCE);
+  assert.equal(sent.project_id, 'p1');
+  // 파일의 PARAMS 기본값이 폼 yaml을 덮으므로, 슬라이더는 그보다 센 params로 실려야 한다.
+  assert.equal(sent.params.fast, 35);
+});
+
+test('[등록 해제]는 등록만 지우고 목록을 다시 읽는다 — 파일은 건드리지 않는다', async () => {
+  const removed = [];
+  let list = [USER_STRATEGY];
+  const made = await mounted(userStrategyDeps({
+    userStrategies: async () => list,
+    unregisterUserStrategy: async (id) => { removed.push(id); list = []; return { ok: true }; },
+  }));
+  await flush();
+  await click(findByClass(made.container, 'backtest-user-strategy-remove')[0]);
+  await flush();
+  assert.deepEqual(removed, ['u1']);
+  assert.equal(findByClass(made.container, 'backtest-user-strategy-item').length, 0);
+});
+
+test('등록부가 exists:false를 주면 그 사실을 그대로 적는다 — 지어내지 않는다', async () => {
+  const { container } = await mounted(userStrategyDeps({
+    userStrategies: async () => [Object.assign({}, USER_STRATEGY, { exists: false })],
+  }));
+  await flush();
+  assert.equal(findByClass(container, 'backtest-user-strategy-missing').length, 1);
+  assert.match(textOf(container), /파일이 없습니다/);
+});
+
+// ── 코드 탭의 행동줄: 등록 버튼 ─────────────────────────────────────────────
+
+test('[내 전략으로 등록]: 지금 연 파일을 파일 이름(확장자 뺀)으로 등록하고 목록을 갱신한다', async () => {
+  const posted = [];
+  let list = [];
+  const made = await mounted(userStrategyDeps({
+    userStrategies: async () => list,
+    registerUserStrategy: async (body) => {
+      posted.push(body);
+      list = [USER_STRATEGY];
+      return { id: 'u1' };
+    },
+  }));
+  await openProjectFile(made);
+  await click(findByClass(made.container, 'backtest-register-strategy')[0]);
+  await flush();
+  assert.deepEqual(posted, [{ project_id: 'p1', path: 'strategy.py', name: 'strategy' }]);
+  await click(findByClass(made.container, 'backtest-subtab')[0]);
+  await flush();
+  assert.equal(findByClass(made.container, 'backtest-user-strategy-item').length, 1);
+});
+
+test('[내 전략으로 등록]: 저장 안 한 편집이 있으면 등록하지 않는다 — 등록부와 화면이 갈라진다', async () => {
+  const posted = [];
+  const made = await mounted(userStrategyDeps({
+    registerUserStrategy: async (body) => { posted.push(body); return { id: 'u1' }; },
+  }));
+  await openProjectFile(made);
+  const area = findByClass(made.container, 'backtest-code-textarea')[0];
+  area.value = '# 아직 저장 안 함\n';
+  await area.dispatchEvent({ type: 'input' });
+  await click(findByClass(made.container, 'backtest-register-strategy')[0]);
+  await flush();
+  assert.deepEqual(posted, []);
+  assert.match(textOf(made.container), /저장하고 등록하세요/);
+});
+
+test('등록 버튼: 연 파일이 없는 채로 누르면 조용히 넘어가지 않고 무엇을 하라고 말한다', async () => {
+  const posted = [];
+  const made = await mounted(userStrategyDeps({
+    registerUserStrategy: async (body) => { posted.push(body); return { id: 'u1' }; },
+  }));
+  await click(findByClass(made.container, 'backtest-subtab')[1]);
+  await flush();
+  await click(findByClass(made.container, 'project-ide-project')[0]);
+  await flush();
+  await click(findByClass(made.container, 'backtest-register-strategy')[0]);
+  await flush();
+  assert.deepEqual(posted, []);
+  assert.match(textOf(made.container), /등록할 파일을 먼저 여세요/);
+});
+
+// ── 코드 탭의 행동줄: 환경 패널 ─────────────────────────────────────────────
+
+test('환경 패널: 없음/준비됨 상태를 백엔드가 준 그대로 적는다', async () => {
+  const made = await mounted(userStrategyDeps({
+    projectEnv: async () => ({
+      project_id: 'p1', exists: false, python: null, packages: [], base_ok: false,
+    }),
+  }));
+  await openProjectFile(made);
+  assert.equal(findByClass(made.container, 'backtest-venv-panel').length, 1);
+  assert.equal(findByClass(made.container, 'backtest-venv-status')[0].textContent, '없음');
+
+  const ready = await mounted(userStrategyDeps({
+    projectEnv: async () => ({
+      project_id: 'p1',
+      exists: true,
+      python: 'C:/p/.venv/Scripts/python.exe',
+      packages: ['numpy', 'pandas'],
+      base_ok: true,
+    }),
+  }));
+  await openProjectFile(ready);
+  assert.equal(
+    findByClass(ready.container, 'backtest-venv-status')[0].textContent, '준비됨 · 2개 패키지',
+  );
+});
+
+test('[환경 만들기]: 패키지 칸을 실어 보내고 잡을 폴링하다가 끝나면 상태를 다시 읽는다', async () => {
+  const posted = [];
+  const asked = [];
+  let envExists = false;
+  let jobStatus = 'running';
+  const made = await mounted(userStrategyDeps({
+    projectEnv: async () => ({
+      project_id: 'p1',
+      exists: envExists,
+      python: envExists ? 'C:/p/.venv/Scripts/python.exe' : null,
+      packages: envExists ? ['numpy', 'pandas', 'scipy'] : [],
+      base_ok: envExists,
+    }),
+    createProjectEnv: async (id, packages) => {
+      posted.push([id, packages]);
+      return { job_id: 'j9' };
+    },
+    status: async ({ job_id }) => {
+      asked.push(job_id);
+      const now = jobStatus;
+      jobStatus = 'done';
+      envExists = true;
+      return {
+        job_id,
+        kind: 'env',
+        status: now,
+        progress: { step: 'install', line: 'pandas 설치 중' },
+        error: null,
+      };
+    },
+  }));
+  await openProjectFile(made);
+  const box = findByClass(made.container, 'backtest-venv-packages')[0];
+  box.value = 'scipy, ta==0.11.0';
+  await box.dispatchEvent({ type: 'input' });
+  await click(findByClass(made.container, 'backtest-venv-create')[0]);
+  await flush();
+  assert.deepEqual(posted, [['p1', ['scipy', 'ta==0.11.0']]]);
+  assert.deepEqual(asked, ['j9']);
+  assert.match(textOf(made.container), /install · pandas 설치 중/);
+
+  // 다음 tick에서 done — 상태를 다시 읽어 "몇 개 패키지"가 디스크와 맞아야 한다.
+  await made.pending[made.pending.length - 1]();
+  await flush();
+  assert.equal(
+    findByClass(made.container, 'backtest-venv-status')[0].textContent, '준비됨 · 3개 패키지',
+  );
+  assert.equal(findByClass(made.container, 'backtest-venv-progress').length, 0);
+});
+
+test('[환경 만들기]: 설치할 수 없는 이름은 보내기 전에 그 자리에서 막는다', async () => {
+  const posted = [];
+  const made = await mounted(userStrategyDeps({
+    createProjectEnv: async (id, packages) => {
+      posted.push([id, packages]);
+      return { job_id: 'j9' };
+    },
+  }));
+  await openProjectFile(made);
+  const box = findByClass(made.container, 'backtest-venv-packages')[0];
+  box.value = '-r requirements.txt';
+  await box.dispatchEvent({ type: 'input' });
+  await click(findByClass(made.container, 'backtest-venv-create')[0]);
+  await flush();
+  assert.deepEqual(posted, []);
+  assert.match(textOf(made.container), /설치할 수 있는 이름이 아닙니다/);
+});
+
+test('환경 잡이 실패하면 이유를 그 자리에 적고 폴링을 멈춘다', async () => {
+  const made = await mounted(userStrategyDeps({
+    createProjectEnv: async () => ({ job_id: 'j9' }),
+    status: async () => ({
+      job_id: 'j9', kind: 'env', status: 'failed', progress: null, error: 'pip이 죽었다',
+    }),
+  }));
+  await openProjectFile(made);
+  const before = made.pending.length;
+  await click(findByClass(made.container, 'backtest-venv-create')[0]);
+  await flush();
+  assert.match(textOf(made.container), /pip이 죽었다/);
+  assert.equal(made.pending.length, before, '다음 tick을 예약하지 않는다');
+});
+
+// ── 흐름 지도 로딩(사용자 지시 2026-09-02 "로딩 표시") ──────────────────────
+
+test('흐름 탭: 지도를 만드는 동안 진행 표시가 뜨고, 오면 사라진다', async () => {
+  let resolveFlow;
+  const made = await mounted({
+    flow: () => new Promise((resolve) => { resolveFlow = resolve; }),
+  });
+  made.canvas.onChatAction({ kind: 'code_draft', source: 'def signals(df, p):\n    return df\n' });
+  await flush();
+  await click(findByClass(made.container, 'backtest-subtab')[2]);
+  await flush();
+  assert.equal(findByClass(made.container, 'backtest-flow-loading').length, 1);
+  assert.equal(findByClass(made.container, 'backtest-flow-spinner').length, 1);
+  assert.match(textOf(made.container), /흐름 지도를 만드는 중…/);
+
+  resolveFlow({ nodes: [] });
+  await flush();
+  assert.equal(findByClass(made.container, 'backtest-flow-loading').length, 0);
+});
+
+test('흐름 탭: 지도를 못 만들면 그 자리에 적는다 — 화면 전체를 오류로 바꾸지 않는다', async () => {
+  const made = await mounted({
+    flow: async () => { throw new Error('흐름 서비스가 없다'); },
+  });
+  made.canvas.onChatAction({ kind: 'code_draft', source: 'def signals(df, p):\n    return df\n' });
+  await flush();
+  await click(findByClass(made.container, 'backtest-subtab')[2]);
+  await flush();
+  assert.equal(findByClass(made.container, 'backtest-canvas-error').length, 0);
+  assert.equal(findByClass(made.container, 'backtest-flow-loading').length, 0);
+  assert.match(textOf(made.container), /흐름 서비스가 없다/);
+});
+
+test('채팅 navigate(design, flow)도 같은 진행 표시를 거친다', async () => {
+  let resolveFlow;
+  const made = await mounted({
+    flow: () => new Promise((resolve) => { resolveFlow = resolve; }),
+  });
+  made.canvas.onChatAction({ kind: 'code_draft', source: 'def signals(df, p):\n    return df\n' });
+  await flush();
+  made.canvas.onChatAction({ kind: 'navigate', tab: 'design', designTab: 'flow' });
+  await flush();
+  assert.equal(findByClass(made.container, 'backtest-flow-loading').length, 1);
+  resolveFlow({ nodes: [] });
+  await flush();
+  assert.equal(findByClass(made.container, 'backtest-flow-loading').length, 0);
+});
+
+test('흐름 탭: 프로젝트 파일을 열었으면 그 파일이 지도의 원문이다', async () => {
+  let seen = null;
+  const made = await mounted(userStrategyDeps({
+    flow: async (body) => { seen = body; return { nodes: [] }; },
+  }));
+  await openProjectFile(made);
+  await click(findByClass(made.container, 'backtest-subtab')[2]);
+  await flush();
+  assert.equal(seen.source, PROJECT_SOURCE);
+});
+
+// ── 배포 열기(파일 실행 한 번이면 된다) ─────────────────────────────────────
+
+test('파일 실행이 준 전략·버전 id로 배포 탭이 열린다 — [이 코드로 저장]을 거치지 않는다', async () => {
+  const made = await mounted(userStrategyDeps({
+    run: async () => ({ run_id: 'r1', strategy_id: 's9', version_id: 'v9' }),
+    result: async () => ({ status: 'done', metrics: {}, equity: [] }),
+    trades: async () => [],
+    deployments: async () => [],
+  }));
+  await openProjectFile(made);
+  // 실행 전에는 배포 탭이 "먼저 저장하라"고 막는다.
+  await click(findByClass(made.container, 'backtest-tab')[4]);
+  await flush();
+  assert.match(textOf(made.container), /먼저 코드를 한 번 실행하거나 코드 탭에서 저장해야/);
+
+  // 대상·기간은 openProjectFile이 이미 채웠다 — 실행 버튼은 헤더라 어느 탭에서든 눌린다.
+  await click(findByClass(made.container, 'backtest-tab')[0]);
+  await click(findByClass(made.container, 'backtest-run-button')[0]);
+  await flush();
+  assert.equal(made.canvas.getContext().code.activeVersionId, 'v9');
+
+  await click(findByClass(made.container, 'backtest-tab')[4]);
+  await flush();
+  assert.equal(findByClass(made.container, 'backtest-deploy-create').length, 1);
+});

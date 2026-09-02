@@ -2552,12 +2552,15 @@ const backtestCanvas = window.AthenaLib.BacktestCanvas.createBacktestCanvas({
   },
   // 409(캐시 부족)는 실패가 아니라 승인 화면 전환 신호다(backtest-bridge.js
   // 머리말과 같은 원칙) — blocked로 정규화해 돌려주고, 그 외 실패만 던진다.
-  run: async ({ yaml, params, allow_partial, source } = {}) => {
+  run: async ({ yaml, params, allow_partial, source, project_id } = {}) => {
     const body = { yaml };
     if (params !== undefined) body.params = params;
     // 코드 경로 실행 — 캔버스가 실을 때만 붙는다. 이걸 빠뜨리면 백엔드는 source가
     // 없다고 보고 폼(yaml)으로 돌아, 사람이 고른 코드가 조용히 안 돈다.
     if (source) body.source = source;
+    // 어느 폴더의 코드인가 — 백엔드가 그 폴더의 가상환경으로 돌린다(코드 경로에서만
+    // 읽힌다). 빠뜨리면 사용자가 자기 폴더에 깐 패키지를 코드가 import하지 못한다.
+    if (project_id) body.project_id = project_id;
     // 보유 구간만으로 실행(Paper 보드 04) — 휴장일을 from으로 준 경우의 영구 409
     // (계획서 §11-9)에서 빠져나오는 유일한 출구다. 사람이 그 버튼을 눌렀을 때만 붙는다.
     if (allow_partial) body.allow_partial = true;
@@ -2565,7 +2568,15 @@ const backtestCanvas = window.AthenaLib.BacktestCanvas.createBacktestCanvas({
     if (res && res.ok) {
       const runId = res.data && res.data.run_id;
       if (!runId) throw new Error('run_id를 받지 못했습니다');
-      return { blocked: false, run_id: runId, partial: res.data.partial || null };
+      // 백엔드가 매 실행마다 남기는 전략·버전 id — 파일로 한 번 돌린 뒤 곧바로 배포로
+      // 넘어가려면 화면이 "방금 그 실행이 어느 버전이었는가"를 알아야 한다.
+      return {
+        blocked: false,
+        run_id: runId,
+        partial: res.data.partial || null,
+        strategy_id: res.data.strategy_id || null,
+        version_id: res.data.version_id || null,
+      };
     }
     if (res && res.status === 409 && res.detail) {
       return { blocked: true, needed_pages: res.detail.needed_pages, est_seconds: res.detail.est_seconds };
@@ -2685,6 +2696,38 @@ const backtestCanvas = window.AthenaLib.BacktestCanvas.createBacktestCanvas({
     );
     if (!res || !res.ok) throw new Error(backtestError(res, '신호 이력을 불러오지 못했습니다'));
     return (res.data && Array.isArray(res.data.signals)) ? res.data.signals : [];
+  },
+  // 내 전략 등록부(2026-09-02) — 내 폴더의 .py 하나가 프리셋과 같은 자리에 선다.
+  // 등록·해제는 사람이 누르는 버튼이고(모델에게는 등록만 있다), 목록은 설계 폼이 읽는다.
+  userStrategies: async () => {
+    const res = await window.athena.invoke('athena:backtest-user-strategies');
+    if (!res || !res.ok) throw new Error(backtestError(res, '내 전략 목록을 불러오지 못했습니다'));
+    return (res.data && Array.isArray(res.data.strategies)) ? res.data.strategies : [];
+  },
+  registerUserStrategy: async (body) => {
+    const res = await window.athena.invoke('athena:backtest-user-strategy-register', body);
+    if (!res || !res.ok) throw new Error(projectError(res, '내 전략으로 등록하지 못했습니다'));
+    return res.data;
+  },
+  unregisterUserStrategy: async (strategyId) => {
+    const res = await window.athena.invoke(
+      'athena:backtest-user-strategy-unregister', { strategy_id: strategyId },
+    );
+    if (!res || !res.ok) throw new Error(projectError(res, '등록을 지우지 못했습니다'));
+    return res.data;
+  },
+  // 프로젝트 가상환경 — 만들기는 202+job_id라 진행은 위 status(잡 라우트)가 이어 본다.
+  projectEnv: async (projectId) => {
+    const res = await window.athena.invoke('athena:project-env-get', { project_id: projectId });
+    if (!res || !res.ok) throw new Error(projectError(res, '환경 상태를 불러오지 못했습니다'));
+    return res.data;
+  },
+  createProjectEnv: async (projectId, packages) => {
+    const res = await window.athena.invoke(
+      'athena:project-env-create', { project_id: projectId, packages },
+    );
+    if (!res || !res.ok) throw new Error(projectError(res, '환경을 만들지 못했습니다'));
+    return res.data;
   },
   // 프로젝트 파일 IDE(2026-09-02, 코드 탭) — 봉투를 벗기는 규칙은 위 백테스트 배선과 같다.
   // 실패 문구만 다르다: 백엔드가 이미 사람이 읽을 한국어 detail로 답하므로(400/409/415)

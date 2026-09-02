@@ -165,6 +165,47 @@ function fetchVersionDiff({ backendBase, fetchImpl, strategy_id, base, head }) {
   );
 }
 
+// -- 2026-09-02 사용자 전략 등록부 -- 내 폴더의 .py 하나를 프리셋과 같은 자리에 세운다.
+// 등록은 소스를 복사하지 않는다({project_id, 상대경로, 이름}만 남는다) -- 그래서 이
+// 층에도 소스가 흐르지 않고, 실행은 늘 그때의 파일을 다시 읽는다(백엔드 D2).
+
+function fetchUserStrategies({ backendBase, fetchImpl }) {
+  return backtestHttp(
+    'GET', '/api/v1/backtest/user-strategies', undefined, { backendBase, fetchImpl },
+  );
+}
+
+function registerUserStrategy({ backendBase, fetchImpl, ...body }) {
+  return backtestHttp(
+    'POST', '/api/v1/backtest/user-strategies', body, { backendBase, fetchImpl },
+  );
+}
+
+function unregisterUserStrategy({ backendBase, fetchImpl, strategy_id }) {
+  return backtestHttp(
+    'DELETE', `/api/v1/backtest/user-strategies/${encodeURIComponent(strategy_id)}`,
+    undefined, { backendBase, fetchImpl },
+  );
+}
+
+// -- 2026-09-02 프로젝트 가상환경 -- 폴더 안의 .venv 하나가 "내 전략이 도는 환경"이다.
+// POST는 202 + {job_id}이고 진행은 기존 잡 라우트(athena:backtest-status)가 보여준다 --
+// 여기서 폴링용 라우트를 새로 만들지 않는 이유다(잡 표면은 하나뿐이어야 한다).
+
+function fetchProjectEnv({ backendBase, fetchImpl, project_id }) {
+  return backtestHttp(
+    'GET', `/api/v1/projects/${encodeURIComponent(project_id)}/env`,
+    undefined, { backendBase, fetchImpl },
+  );
+}
+
+function createProjectEnv({ backendBase, fetchImpl, project_id, ...body }) {
+  return backtestHttp(
+    'POST', `/api/v1/projects/${encodeURIComponent(project_id)}/env`,
+    body, { backendBase, fetchImpl },
+  );
+}
+
 function fetchDeployments({ backendBase, fetchImpl }) {
   return backtestHttp('GET', '/api/v1/backtest/deployments', undefined, { backendBase, fetchImpl });
 }
@@ -282,6 +323,11 @@ module.exports = {
   stopDeployment,
   fetchSignals,
   evaluateDeployment,
+  fetchUserStrategies,
+  registerUserStrategy,
+  unregisterUserStrategy,
+  fetchProjectEnv,
+  createProjectEnv,
   listProjects,
   createProject,
   openProject,

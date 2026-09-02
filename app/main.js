@@ -1375,6 +1375,12 @@ const BACKTEST_EXTRA_CHANNELS = {
   'athena:backtest-deployment-stop': backtestBridge.stopDeployment,
   'athena:backtest-signals': backtestBridge.fetchSignals,
   'athena:backtest-evaluate': backtestBridge.evaluateDeployment,
+  // 2026-09-02 사용자 전략 등록부 — 등록·해제는 사람이 누르는 버튼이다(모델의 MCP
+  // 툴에는 register_strategy만 있고 해제는 없다). 소스는 지나가지 않는다 — 등록부에
+  // 남는 것은 {project_id, 상대경로, 이름}뿐이고 실행은 늘 그때의 파일을 다시 읽는다.
+  'athena:backtest-user-strategies': backtestBridge.fetchUserStrategies,
+  'athena:backtest-user-strategy-register': backtestBridge.registerUserStrategy,
+  'athena:backtest-user-strategy-unregister': backtestBridge.unregisterUserStrategy,
 };
 Object.keys(BACKTEST_EXTRA_CHANNELS).forEach((channel) => {
   const call = BACKTEST_EXTRA_CHANNELS[channel];
@@ -1396,6 +1402,10 @@ const PROJECT_CHANNELS = {
   'athena:project-file-create': backtestBridge.createProjectFile,
   'athena:project-file-rename': backtestBridge.renameProjectFile,
   'athena:project-file-delete': backtestBridge.deleteProjectFile,
+  // 가상환경(2026-09-02) — 만드는 것은 돈도 할당량도 지나지 않는 준비 작업이라
+  // 대화가 몰아도 되는 경로다. 진행은 202가 준 job_id를 athena:backtest-status로 본다.
+  'athena:project-env-get': backtestBridge.fetchProjectEnv,
+  'athena:project-env-create': backtestBridge.createProjectEnv,
 };
 Object.keys(PROJECT_CHANNELS).forEach((channel) => {
   const call = PROJECT_CHANNELS[channel];

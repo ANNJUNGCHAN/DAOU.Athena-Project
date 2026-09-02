@@ -187,3 +187,70 @@ test('프로젝트 라우트의 오류도 같은 봉투다 — 한국어 detail�
   });
   assert.deepEqual(res, { ok: false, status: 415, error: '파이썬(.py) 파일만 저장할 수 있다' });
 });
+
+// ── 내 전략 등록부·가상환경(2026-09-02) ─────────────────────────────────────
+
+test('내 전략 등록부: 목록·등록·해제의 메서드·경로·몸체가 계약 그대로다', async () => {
+  const calls = [];
+  const fetchImpl = async (url, opts) => {
+    calls.push([opts.method, url, opts.body ? JSON.parse(opts.body) : null]);
+    return { ok: true, status: 200, json: async () => ({}) };
+  };
+  await backtestBridge.fetchUserStrategies({ backendBase: 'http://x', fetchImpl });
+  await backtestBridge.registerUserStrategy({
+    backendBase: 'http://x', fetchImpl,
+    project_id: 'p1', path: 'strategies/golden.py', name: 'golden',
+  });
+  await backtestBridge.unregisterUserStrategy({
+    backendBase: 'http://x', fetchImpl, strategy_id: 'u 1',
+  });
+  assert.deepEqual(calls, [
+    ['GET', 'http://x/api/v1/backtest/user-strategies', null],
+    ['POST', 'http://x/api/v1/backtest/user-strategies',
+      { project_id: 'p1', path: 'strategies/golden.py', name: 'golden' }],
+    ['DELETE', 'http://x/api/v1/backtest/user-strategies/u%201', null],
+  ]);
+});
+
+test('등록 실패(422)도 같은 봉투다 — 백엔드의 한국어 사유를 그대로 싣는다', async () => {
+  const res = await backtestBridge.registerUserStrategy({
+    backendBase: 'http://x',
+    fetchImpl: async () => ({
+      ok: false, status: 422, json: async () => ({ detail: '파이썬 파일(.py)만 등록할 수 있다' }),
+    }),
+    project_id: 'p1', path: 'notes.txt', name: 'notes',
+  });
+  assert.deepEqual(res, { ok: false, status: 422, error: '파이썬 파일(.py)만 등록할 수 있다' });
+});
+
+test('가상환경: 조회는 GET, 만들기는 POST + packages 몸체다(project_id는 경로로 빠진다)', async () => {
+  const calls = [];
+  const fetchImpl = async (url, opts) => {
+    calls.push([opts.method, url, opts.body ? JSON.parse(opts.body) : null]);
+    return { ok: true, status: 202, json: async () => ({ job_id: 'j1' }) };
+  };
+  await backtestBridge.fetchProjectEnv({ backendBase: 'http://x', fetchImpl, project_id: 'p 1' });
+  const made = await backtestBridge.createProjectEnv({
+    backendBase: 'http://x', fetchImpl, project_id: 'p1', packages: ['scipy'],
+  });
+  assert.deepEqual(calls, [
+    ['GET', 'http://x/api/v1/projects/p%201/env', null],
+    ['POST', 'http://x/api/v1/projects/p1/env', { packages: ['scipy'] }],
+  ]);
+  assert.deepEqual(made, { ok: true, data: { job_id: 'j1' } });
+});
+
+test('가상환경 409(이미 도는 중)도 봉투를 지킨다 — 사유가 job_id를 품고 올라온다', async () => {
+  const res = await backtestBridge.createProjectEnv({
+    backendBase: 'http://x',
+    fetchImpl: async () => ({
+      ok: false,
+      status: 409,
+      json: async () => ({ detail: '이 프로젝트의 환경 구성이 아직 돌고 있다 (job_id=j1)' }),
+    }),
+    project_id: 'p1', packages: [],
+  });
+  assert.equal(res.ok, false);
+  assert.equal(res.status, 409);
+  assert.match(res.error, /job_id=j1/);
+});

@@ -273,6 +273,23 @@ function createProjectIde(options) {
     paint();
   }
 
+  // 밖에서 "이 폴더의 이 파일을 열어라"라고 부르는 자리(설계 폼의 [내 전략] 선택).
+  // 사람이 목록에서 폴더를 고르고 트리에서 파일을 누르는 그 경로를 그대로 탄다 — 두 길을
+  // 따로 만들면 언젠가 한쪽만 고쳐진다. 열렸는지를 불리언으로 돌려주는 이유: 부른 쪽이
+  // "열었다"고 말하기 전에 정말 열렸는지 알아야 한다(등록부의 파일은 지워졌을 수 있다).
+  async function openAt(projectId, pathText) {
+    if (!projects.length) await loadProjects();
+    const next = projects.find((p) => p.id === projectId);
+    if (!next) {
+      say('그 폴더가 프로젝트 목록에 없습니다', true);
+      paint();
+      return false;
+    }
+    if (!project || project.id !== projectId) await selectProject(next);
+    await openFile(pathText);
+    return activePath === pathText;
+  }
+
   function closeTab(pathText) {
     const tab = findTab(pathText);
     if (!tab) return;
@@ -568,6 +585,7 @@ function createProjectIde(options) {
     mount() { void loadProjects(); },
     refresh() { paint(); },
     currentProject() { return project; },
+    openAt,
     activeFile() {
       const tab = activeTab();
       return tab ? { path: tab.path, text: tab.text, dirty: tab.dirty } : null;

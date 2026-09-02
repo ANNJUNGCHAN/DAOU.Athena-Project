@@ -21,6 +21,7 @@
 from __future__ import annotations
 
 import io
+import ipaddress
 import re
 from dataclasses import dataclass
 from html.parser import HTMLParser
@@ -32,11 +33,14 @@ import httpx
 from athena_api.backtest import youtube as youtube_mod
 from athena_api.backtest.youtube import DEFAULT_TIMEOUT_SECONDS, MAX_TEXT_CHARS, BriefError
 
-# PDF 상한. 논문 한 편이 60쪽을 넘는 일은 드물고, 넘는다면 앞 60쪽으로도 무슨 글인지
-# 알 수 있다. 바이트 상한은 "받다가 메모리를 다 먹는" 경우를 막는다 — PDF는 잘라서
-# 파싱할 수 없으므로 넘으면 읽지 않고 그렇다고 말한다.
+# PDF 쪽 상한. 논문 한 편이 60쪽을 넘는 일은 드물고, 넘는다면 앞 60쪽으로도 무슨 글인지
+# 알 수 있다.
 MAX_PDF_PAGES = 60
-MAX_PDF_BYTES = 20 * 1024 * 1024
+# 본문 바이트 상한. **받으면서** 재고 넘는 순간 끊는다(`_get`) — 다 받아 놓고 크기를 재면
+# "받다가 메모리를 다 먹는" 경우를 하나도 막지 못한다(2 GB 응답은 이미 메모리 안이다).
+# PDF·HTML을 가리지 않는다: 잘라서 파싱할 수 없는 것은 PDF뿐이지만, 메모리를 먹는 것은
+# 종류를 안 가린다.
+MAX_FETCH_BYTES = 20 * 1024 * 1024
 
 _NAVER_HOSTS = frozenset({"blog.naver.com", "m.blog.naver.com"})
 _LOG_NO = re.compile(r"^\d+$")
@@ -205,6 +209,32 @@ def _parse(html_text: str) -> _Document:
     return doc
 
 
+def _guard_host(url: str) -> None:
+    """안쪽(루프백·사설망·링크로컬)을 가리키는 주소는 읽지 않는다.
+
+    **왜 여기에 있어야 하는가.** 이 모듈이 돌려주는 글은 남이 쓴 것이고, 그 글에
+    "http://127.0.0.1:8010/…"이 적혀 있으면 모델이 그 주소로 `source_brief`를 부를 수 있다 —
+    그러면 백엔드가 자기 자신과 사내망을 대신 읽어 모델에게 넘겨준다(SSRF). 앞의
+    youtube.py는 호스트가 유튜브로 잠겨 있어 이 길이 없었는데, 아무 주소나 받기로 하면서
+    그 잠금이 풀렸다. 그래서 잠금을 대상 쪽으로 옮긴다.
+
+    막는 것은 **주소에 적힌 대상**이다 — 바깥 이름이 사설 IP로 풀리는 경우까지는 여기서
+    보지 않는다(그건 이름을 풀고 연결 시점에 다시 고정해야 하는 별개의 그물이고, 이
+    모듈의 테스트는 네트워크를 쓰지 않는다).
+    """
+    host = (urlsplit(url).hostname or "").lower()
+    if not host:
+        return
+    if host == "localhost" or host.endswith((".localhost", ".local", ".internal")):
+        raise BriefError(422, f"안쪽 주소는 읽지 않는다: {host}")
+    try:
+        address = ipaddress.ip_address(host)
+    except ValueError:
+        return
+    if not address.is_global:
+        raise BriefError(422, f"안쪽 주소는 읽지 않는다: {host}")
+
+
 def _normalize(url: str) -> str:
     raw = url.strip()
     if not raw:
@@ -216,6 +246,7 @@ def _normalize(url: str) -> str:
     # 공백이 든 호스트는 주소가 아니라 그냥 문장이다 — 네트워크를 두드려 502로 알기 전에 막는다.
     if parts.scheme not in ("http", "https") or not host or " " in host:
         raise BriefError(422, f"읽을 수 있는 주소가 아니다: {url}")
+    _guard_host(raw)
     return raw
 
 
@@ -263,14 +294,37 @@ async def _brief(client: httpx.AsyncClient, url: str) -> dict[str, Any]:
 
 
 async def _get(client: httpx.AsyncClient, url: str, *, step: str) -> httpx.Response:
-    """실패하면 **어느 단계가** 실패했는지 이름을 대고 502로 올린다(youtube.py와 동형)."""
+    """실패하면 **어느 단계가** 실패했는지 이름을 대고 502로 올린다(youtube.py와 동형).
+
+    본문은 스트림으로 받으며 `MAX_FETCH_BYTES`를 넘는 순간 끊는다 — 다 받은 뒤에 재는
+    상한은 상한이 아니다. 리다이렉트를 따라간 **최종** 주소도 여기서 다시 본다: 바깥
+    페이지가 302로 안쪽을 가리키면 `_normalize`의 검사를 우회하기 때문이다.
+    """
+    chunks: list[bytes] = []
+    content_type = ""
     try:
-        response = await client.get(url, headers=youtube_mod._HEADERS, follow_redirects=True)
+        async with client.stream(
+            "GET", url, headers=youtube_mod._HEADERS, follow_redirects=True
+        ) as response:
+            if response.status_code != 200:
+                raise BriefError(502, f"{step} 단계가 실패했다 (HTTP {response.status_code})")
+            _guard_host(str(response.url))
+            content_type = response.headers.get("content-type", "")
+            received = 0
+            async for chunk in response.aiter_bytes():
+                received += len(chunk)
+                if received > MAX_FETCH_BYTES:
+                    raise BriefError(
+                        422,
+                        f"내용이 너무 크다 — {MAX_FETCH_BYTES // (1024 * 1024)}MB까지만 받는다",
+                    )
+                chunks.append(chunk)
     except httpx.HTTPError as exc:
         raise BriefError(502, f"{step} 단계가 실패했다: {type(exc).__name__}") from exc
-    if response.status_code != 200:
-        raise BriefError(502, f"{step} 단계가 실패했다 (HTTP {response.status_code})")
-    return response
+    # 실어 나르는 헤더는 content-type 하나다 — 인코딩(글자셋·gzip)은 스트림에서 이미 풀렸고,
+    # 그 표시가 남아 있으면 다시 푸는 쪽이 헷갈린다.
+    headers = {"content-type": content_type} if content_type else {}
+    return httpx.Response(200, headers=headers, content=b"".join(chunks))
 
 
 def _payload(
@@ -356,10 +410,7 @@ async def _naver_brief(client: httpx.AsyncClient, url: str) -> dict[str, Any]:
 
 
 def _pdf_brief(url: str, data: bytes) -> dict[str, Any]:
-    if len(data) > MAX_PDF_BYTES:
-        raise BriefError(
-            422, f"PDF가 너무 크다 — {MAX_PDF_BYTES // (1024 * 1024)}MB까지만 읽는다"
-        )
+    # 바이트 상한은 `_get`이 받으면서 이미 걸었다 — 여기까지 온 것은 그 예산 안이다.
     # PDF일 때만 든다 — 다른 주소는 이 import 비용을 내지 않는다.
     from pypdf import PdfReader
 
@@ -399,7 +450,7 @@ def _html_brief(url: str, html_text: str) -> dict[str, Any]:
 
 
 __all__ = [
-    "MAX_PDF_BYTES",
+    "MAX_FETCH_BYTES",
     "MAX_PDF_PAGES",
     "MAX_TEXT_CHARS",
     "BriefError",

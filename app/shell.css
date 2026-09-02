@@ -567,6 +567,65 @@ body { margin: 0; overflow: hidden; }
   font-size: var(--text-2xs);
   letter-spacing: 0.1em;
 }
+/* 내 전략(2026-09-02) — 프리셋 바로 아래, 같은 모양. 다른 것은 줄마다 붙는
+   [등록 해제]와 파일이 사라졌을 때의 한 줄뿐이다. */
+.backtest-user-strategy-wrap { margin-bottom: 16px; }
+.backtest-user-strategy-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.backtest-user-strategy-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.backtest-user-strategy-item {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--color-k-panel);
+  border: 1px solid var(--color-k-line);
+  border-radius: 12px;
+  cursor: pointer;
+  text-align: left;
+}
+.backtest-user-strategy-item.is-selected { border-color: var(--color-brand); }
+.backtest-user-strategy-name {
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+}
+.backtest-user-strategy-path {
+  color: var(--color-k-faint);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+}
+.backtest-user-strategy-missing {
+  color: var(--color-down);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+}
+.backtest-user-strategy-remove {
+  flex: 0 0 auto;
+  padding: 5px 12px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 999px;
+  background: var(--color-k-panel3);
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  cursor: pointer;
+}
+.backtest-user-param-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
 .backtest-design-form {
   display: flex;
   flex-wrap: wrap;
@@ -1113,6 +1172,68 @@ body { margin: 0; overflow: hidden; }
 .backtest-code-bounds-no { color: var(--color-down); }
 .backtest-code-bounds-note { color: var(--color-k-faint); }
 
+/* 프로젝트를 열었을 때의 코드 탭 행동줄(2026-09-02) — 환경과 등록. 옛 편집기의
+   .backtest-code-actions와 같은 자리다. */
+.backtest-ide-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.backtest-venv-panel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 999px;
+  background: var(--color-k-panel);
+}
+.backtest-venv-title {
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  letter-spacing: 0.1em;
+}
+.backtest-venv-status {
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+}
+.backtest-venv-packages {
+  width: 200px;
+  padding: 4px 10px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 999px;
+  background: var(--color-k-panel2);
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+}
+.backtest-venv-create,
+.backtest-register-strategy {
+  padding: 5px 12px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 999px;
+  background: var(--color-k-panel3);
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  cursor: pointer;
+}
+.backtest-register-strategy { border-color: var(--color-brand); color: var(--color-brand); }
+.backtest-venv-progress,
+.backtest-venv-error {
+  flex: 1 1 100%;
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  line-height: 16px;
+}
+.backtest-venv-progress { color: var(--color-k-faint); }
+.backtest-venv-error { color: var(--color-down); }
+
 /* 플로우 지도(보드 08) — 앱/내 코드 경계 두 줄이 이 화면의 핵심이다. */
 .backtest-flow-boundary {
   display: flex;
@@ -1134,6 +1255,36 @@ body { margin: 0; overflow: hidden; }
 }
 .backtest-flow-boundary.is-mine .backtest-flow-boundary-line {
   background: rgb(238 19 123 / 28%);
+}
+/* 지도를 만드는 동안(2026-09-02 사용자 지시 "로딩 표시") — 빈 자리는 죽은 화면으로
+   읽힌다. 실패도 화면 전체를 오류로 바꾸지 않고 이 자리에 적는다. */
+.backtest-flow-loading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 0;
+}
+.backtest-flow-spinner {
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--color-k-line);
+  border-top-color: var(--color-brand);
+  border-radius: 50%;
+  animation: backtest-spin 0.8s linear infinite;
+}
+@keyframes backtest-spin {
+  to { transform: rotate(360deg); }
+}
+.backtest-flow-loading-text {
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+}
+.backtest-flow-error {
+  padding: 10px 0;
+  color: var(--color-down);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
 }
 .backtest-flow-node {
   display: flex;
