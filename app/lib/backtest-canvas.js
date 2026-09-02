@@ -996,9 +996,16 @@ function createBacktestCanvas(options) {
       return;
     }
     if (state.view === 'error') {
-      container.appendChild(renderMessagePanel(
+      const panel = renderMessagePanel(
         'backtest-canvas-error', state.message || '알 수 없는 오류입니다',
-      ));
+      );
+      // 막다른 길 금지(보드 10) — 오류 화면에서 설계로 돌아갈 길이 없어 사용자가 갇혔다
+      // (2026-09-02 실측 "뒤로가기가 없어"). 전략이 있으면 설계 폼으로, 없으면 프리셋부터.
+      panel.appendChild(button('backtest-error-back', '설계로 돌아가기', () => {
+        if (spec) setState({ view: 'design', tab: 'design', designTab: 'form', message: null });
+        else void loadPresets();
+      }));
+      container.appendChild(panel);
       return;
     }
     const shell = el('div', 'backtest-shell');

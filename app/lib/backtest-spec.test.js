@@ -425,3 +425,12 @@ test('validate: conditions=false면 진입·청산 조건 검사를 건너뛰고
   assert.deepEqual(spec.validate(s, { conditions: false }), ['종목을 하나 이상 고르세요']);
   assert.equal(spec.validate(s).length, 3);   // 기본은 조건까지 본다(종목·빈 진입·모르는 이름)
 });
+
+test('validate: 종목이 둘 이상이면 실행 전에 알린다 — 백엔드 /runs는 1종목만 받는다', () => {
+  const s = Object.assign(spec.createSpec(null), {
+    symbols: ['005930', '000660'], fromDt: '20240101', toDt: '20240630',
+    entry: { logic: 'AND', conditions: [{ indicator: 'close', operator: 'greater_than', compare_to: 1 }] },
+    exit: { logic: 'OR', conditions: [{ indicator: 'close', operator: 'less_than', compare_to: 1 }] },
+  });
+  assert.deepEqual(spec.validate(s), ['실행은 종목 1개만 지원합니다 — 하나만 남기세요']);
+});
