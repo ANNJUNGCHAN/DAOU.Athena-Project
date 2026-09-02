@@ -11,6 +11,7 @@ from athena_api.api.chart_page import router as chart_page_router
 from athena_api.api.llm_tools import router as llm_tools_router
 from athena_api.api.nudge_guard import router as nudge_guard_router
 from athena_api.api.oauth_status import router as oauth_status_router
+from athena_api.api.projects import router as projects_router
 from athena_api.api.raw import router as raw_router
 from athena_api.api.routines import router as routines_router
 from athena_api.api.routines_ws import router as routines_ws_router
@@ -30,6 +31,7 @@ router.include_router(catalog_router)
 router.include_router(llm_tools_router)
 router.include_router(nudge_guard_router)
 router.include_router(oauth_status_router)
+router.include_router(projects_router)
 router.include_router(raw_router)
 router.include_router(routines_router)
 router.include_router(routines_ws_router)

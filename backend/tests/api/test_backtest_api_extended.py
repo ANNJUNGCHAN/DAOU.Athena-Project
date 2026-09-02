@@ -8,9 +8,12 @@
 from __future__ import annotations
 
 import math
+import sys
+import types
 from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 
+import pytest
 from fastapi.testclient import TestClient
 
 from athena_api.backtest.store import Candle
@@ -793,3 +796,204 @@ def test_python_deployment_reports_the_child_error_not_a_yaml_error(tmp_path: Pa
         assert "전략 로직이 터졌다" in detail
         assert "block mapping" not in detail
         assert "스펙으로 읽지 못했다" not in detail
+
+
+# ── 사용자 전략 등록부 · 유튜브 브리프 (결정 D2·D3·D5) ────────────────────────
+
+
+_USER_STRATEGY_SOURCE = '''\
+import athena_bt as bt
+
+PARAMS = {
+    "fast": {"default": 5, "min": 2, "max": 60, "step": 1},
+    "slow": {"default": 20, "min": 5, "max": 240, "step": 1},
+}
+
+
+def signals(df, p):
+    fast = bt.sma(df.close, p["fast"])
+    slow = bt.sma(df.close, p["slow"])
+    entry = bt.cross_above(fast, slow)
+    exit_ = bt.cross_below(fast, slow)
+    return df.assign(entry=entry, exit=exit_)[["entry", "exit"]]
+'''
+
+
+def _install_projects_registry(monkeypatch: pytest.MonkeyPatch, roots: dict[str, Path]) -> None:
+    """프로젝트 폴더 해석은 `athena_api/projects/store.py`가 소유한다 — 아직 없어서
+    여기서는 그 계약(`resolve_project_path(id) -> Path`, 모르는 id면 KeyError)만
+    sys.modules에 끼워 넣는다. 진짜 모듈이 생기면 이 대역과 같은지가 계약 검사다."""
+
+    def resolve_project_path(project_id: str) -> Path:
+        return roots[project_id]
+
+    store = types.ModuleType("athena_api.projects.store")
+    store.resolve_project_path = resolve_project_path  # type: ignore[attr-defined]
+    monkeypatch.setitem(sys.modules, "athena_api.projects", types.ModuleType("athena_api.projects"))
+    monkeypatch.setitem(sys.modules, "athena_api.projects.store", store)
+
+
+def _seed_project(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
+    root = tmp_path / "projects" / "my-quant"
+    root.mkdir(parents=True)
+    _install_projects_registry(monkeypatch, {"p1": root})
+    return root
+
+
+def test_user_strategy_registration_points_at_the_file_and_reads_its_params(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """등록은 파일을 가리키기만 한다 — 소스를 복사하지 않는다(결정 D2). 목록의 params는
+    프리셋과 같은 슬라이더를 그리라고 파일의 PARAMS에서 지금 읽은 값이다."""
+    root = _seed_project(tmp_path, monkeypatch)
+    (root / "strategies").mkdir()
+    (root / "strategies" / "golden.py").write_text(_USER_STRATEGY_SOURCE, encoding="utf-8")
+
+    with _client(tmp_path) as client:
+        res = client.post(
+            f"{BASE}/user-strategies",
+            json={"project_id": "p1", "path": "strategies/golden.py", "name": "골든크로스"},
+        )
+        assert res.status_code == 200, res.json()
+        body = res.json()
+        assert body["name"] == "골든크로스"
+        assert body["project_id"] == "p1"
+        assert body["path"] == "strategies/golden.py"
+        assert body["id"] and body["created_at"]
+
+        listed = client.get(f"{BASE}/user-strategies").json()["strategies"]
+        assert listed == [
+            {
+                "id": body["id"],
+                "name": "골든크로스",
+                "project_id": "p1",
+                "path": "strategies/golden.py",
+                "exists": True,
+                "params": {"fast": 5, "slow": 20},
+            }
+        ]
+
+
+def test_user_strategy_without_signals_is_refused_with_the_validate_wording(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """POST /validate(kind=python)와 같은 문구여야 한다 — 같은 계약을 두 화면이 서로
+    다른 말로 설명하면 사용자가 엉뚱한 곳을 고친다."""
+    root = _seed_project(tmp_path, monkeypatch)
+    (root / "notes.py").write_text("def helper(x):\n    return x\n", encoding="utf-8")
+
+    with _client(tmp_path) as client:
+        res = client.post(
+            f"{BASE}/user-strategies",
+            json={"project_id": "p1", "path": "notes.py", "name": "메모"},
+        )
+        assert res.status_code == 422
+        assert res.json()["detail"] == "최상위에 def signals(df, p): 함수가 없다(§7.1 계약)"
+        assert client.get(f"{BASE}/user-strategies").json()["strategies"] == []
+
+
+def test_only_python_files_can_be_registered(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """데이터 파일은 목록에는 보여도(다른 라우트) 이 등록부에는 못 들어온다(결정 D3)."""
+    root = _seed_project(tmp_path, monkeypatch)
+    (root / "prices.csv").write_text("dt,close\n20250102,100\n", encoding="utf-8")
+
+    with _client(tmp_path) as client:
+        res = client.post(
+            f"{BASE}/user-strategies",
+            json={"project_id": "p1", "path": "prices.csv", "name": "가격표"},
+        )
+        assert res.status_code == 422
+        assert res.json()["detail"] == "파이썬 파일(.py)만 등록할 수 있다"
+
+
+def test_paths_this_feature_will_not_reach(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """프로젝트 폴더 밖과 없는 파일 — 둘 다 등록 전에 잘린다."""
+    _seed_project(tmp_path, monkeypatch)
+    (tmp_path / "outside.py").write_text(_USER_STRATEGY_SOURCE, encoding="utf-8")
+
+    with _client(tmp_path) as client:
+        escaped = client.post(
+            f"{BASE}/user-strategies",
+            json={"project_id": "p1", "path": "../../outside.py", "name": "탈출"},
+        )
+        assert escaped.status_code == 422
+        assert escaped.json()["detail"] == "프로젝트 폴더 밖의 경로다"
+
+        missing = client.post(
+            f"{BASE}/user-strategies",
+            json={"project_id": "p1", "path": "없는파일.py", "name": "없음"},
+        )
+        assert missing.status_code == 422
+        assert "파일이 없다" in missing.json()["detail"]
+
+
+def test_list_reports_a_vanished_file_as_missing(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """exists는 저장된 값이 아니라 지금 디스크를 본 결과다 — 파일이 진실이다(D2)."""
+    root = _seed_project(tmp_path, monkeypatch)
+    target = root / "golden.py"
+    target.write_text(_USER_STRATEGY_SOURCE, encoding="utf-8")
+
+    with _client(tmp_path) as client:
+        client.post(
+            f"{BASE}/user-strategies",
+            json={"project_id": "p1", "path": "golden.py", "name": "골든크로스"},
+        )
+        target.unlink()
+        entry = client.get(f"{BASE}/user-strategies").json()["strategies"][0]
+        assert entry["exists"] is False
+        assert entry["params"] == {}
+
+
+def test_unregister_removes_the_entry_but_never_the_file(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    root = _seed_project(tmp_path, monkeypatch)
+    target = root / "golden.py"
+    target.write_text(_USER_STRATEGY_SOURCE, encoding="utf-8")
+
+    with _client(tmp_path) as client:
+        strategy_id = client.post(
+            f"{BASE}/user-strategies",
+            json={"project_id": "p1", "path": "golden.py", "name": "골든크로스"},
+        ).json()["id"]
+
+        res = client.delete(f"{BASE}/user-strategies/{strategy_id}")
+        assert res.status_code == 200
+        assert res.json()["ok"] is True
+        assert client.get(f"{BASE}/user-strategies").json()["strategies"] == []
+        assert target.exists()  # 지운 것은 등록이지 사용자 파일이 아니다
+
+        assert client.delete(f"{BASE}/user-strategies/{strategy_id}").status_code == 404
+
+
+def test_registration_says_so_while_the_projects_store_is_missing(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """프로젝트 등록부는 다른 모듈이 만드는 중이다 — 없으면 503으로 말한다(빈 결과로
+    조용히 넘어가지 않는다). sys.modules에 None을 박아 import를 확실히 막는다."""
+    monkeypatch.setitem(sys.modules, "athena_api.projects.store", None)
+
+    with _client(tmp_path) as client:
+        res = client.post(
+            f"{BASE}/user-strategies",
+            json={"project_id": "p1", "path": "golden.py", "name": "골든크로스"},
+        )
+        assert res.status_code == 503
+        assert res.json()["detail"] == "프로젝트 저장소가 아직 없다"
+
+
+def test_youtube_brief_refuses_a_url_that_is_not_youtube(tmp_path: Path) -> None:
+    """네트워크로 나가기 전에 잘린다 — 이 테스트는 바깥을 두드리지 않는다."""
+    with _client(tmp_path) as client:
+        res = client.post(f"{BASE}/youtube/brief", json={"url": "https://vimeo.com/123456789"})
+        assert res.status_code == 422
+        assert "유튜브 주소가 아니다" in res.json()["detail"]
+
+        empty = client.post(f"{BASE}/youtube/brief", json={})
+        assert empty.status_code == 422
