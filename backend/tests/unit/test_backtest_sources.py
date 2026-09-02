@@ -320,7 +320,7 @@ async def test_pdf_over_the_page_cap_is_cut_and_says_so() -> None:
 
 
 async def test_pdf_over_the_byte_cap_is_not_parsed_at_all(monkeypatch) -> None:
-    monkeypatch.setattr(sources, "MAX_PDF_BYTES", 1024 * 1024)
+    monkeypatch.setattr(sources, "MAX_FETCH_BYTES", 1024 * 1024)
     data = _pdf_bytes(["short"]) + b"%" * (1024 * 1024)
 
     async with _client(_pdf_response(data)) as client:
