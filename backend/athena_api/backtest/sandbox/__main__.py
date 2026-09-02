@@ -1,14 +1,15 @@
 """샌드박스 자식 진입점 — 별도 프로세스에서만 실행된다 (§7.2).
 
-진입: `python -I -B -m athena_api.backtest.sandbox <jobdir>`. host.py가 이 명령으로만
-띄운다 — 사람이 직접 부를 일이 없다.
+진입: `python -s -P -B -m athena_api.backtest.sandbox <jobdir>`. host.py가 이 명령으로만
+띄운다 — 사람이 직접 부를 일이 없다(플래그를 고른 이유는 host.py `_CHILD_FLAGS`).
 
 책임은 signals 생성까지다. 체결·비용·성과 계산·DB 쓰기는 전부 부모(engine.py)의 몫이고,
 이 프로세스는 DB 핸들도 자격증명도 받지 않는다 — 전략 코드가 성과 수치를 직접 쓸 방법이
 구조적으로 없다.
 
-프로토콜: jobdir에서 spec.json(파라미터 값 + stdout 상한) · bars.csv(OHLCV) · strategy.py
-(사용자 코드)를 읽고, jobdir에 signals.csv(성공) 또는 error.json(실패)과 stdout.txt를 쓴다.
+프로토콜: jobdir에서 spec.json(파라미터 값 + stdout 상한 + 선택적 allowed_imports) ·
+bars.csv(OHLCV) · strategy.py(사용자 코드)를 읽고, jobdir에 signals.csv(성공) 또는
+error.json(실패)과 stdout.txt를 쓴다.
 """
 
 from __future__ import annotations
@@ -97,7 +98,9 @@ def main(argv: list[str]) -> int:
         source = strategy_path.read_text(encoding="utf-8")
 
         strategy_globals: dict = {"__name__": "__athena_strategy__"}
-        guard.install(strategy_globals, jobdir)
+        # 프로젝트 가상환경으로 돌 때 host가 그 환경의 패키지 이름을 실어 보낸다. 넓히는
+        # 값이지만 guard의 차단목록이 그 위에 다시 적용된다 — os·subprocess는 여기로 못 들어온다.
+        guard.install(strategy_globals, jobdir, allowed_imports=spec.get("allowed_imports"))
 
         code = compile(source, str(strategy_path), "exec")
         exec(code, strategy_globals)  # noqa: S102 — 이 프로세스의 존재 이유 자체가 이 실행이다.

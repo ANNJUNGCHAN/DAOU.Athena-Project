@@ -10,6 +10,8 @@
 from __future__ import annotations
 
 import json
+import subprocess
+import sys
 from pathlib import Path
 
 import pytest
@@ -24,8 +26,12 @@ from athena_api.projects.store import (
     build_tree,
     count_py_files,
     is_safe_project_name,
+    is_valid_package_spec,
     relative_path,
     resolve_in_project,
+    venv_packages,
+    venv_python,
+    venv_site_packages,
 )
 
 # 결정층(leaf 9): 파일 시스템 위의 순수 조작이다. LLM도 난수도 없다.
@@ -298,3 +304,87 @@ def test_count_py_files_skips_ignored_dirs_and_honours_cap(tmp_path: Path) -> No
 
     assert count_py_files(root) == 2  # strategy.py + pkg/inner.py, 캐시는 세지 않는다
     assert count_py_files(root, cap=1) == 1
+
+
+# ── 프로젝트 가상환경 ────────────────────────────────────────────────────────
+
+
+def test_venv_python_is_none_until_a_real_interpreter_is_there(tmp_path: Path) -> None:
+    """폴더만 있는 것과 환경이 있는 것은 다르다 — `.venv/`가 있어도 인터프리터가 없으면
+    "없음"이다(빈 껍데기를 환경이라고 부르면 실행이 그 거짓말 위에서 터진다)."""
+    root = tmp_path / "proj"
+    (root / ".venv").mkdir(parents=True)
+
+    assert venv_python(root) is None
+    assert venv_packages(root) == []
+
+
+def test_venv_python_finds_both_windows_and_posix_layouts(tmp_path: Path) -> None:
+    """윈도우는 `Scripts/python.exe`, POSIX는 `bin/python`이다. 지금 도는 OS로 고르지 않고
+    둘 다 찾는다 — 프로젝트 폴더는 사용자 디스크의 물건이라 다른 OS에서 만들어져 올 수 있다."""
+    windows = tmp_path / "win"
+    (windows / ".venv" / "Scripts").mkdir(parents=True)
+    (windows / ".venv" / "Scripts" / "python.exe").write_bytes(b"")
+
+    posix = tmp_path / "nix"
+    (posix / ".venv" / "bin").mkdir(parents=True)
+    (posix / ".venv" / "bin" / "python").write_bytes(b"")
+
+    assert venv_python(windows) == (windows / ".venv" / "Scripts" / "python.exe").resolve()
+    assert venv_python(posix) == (posix / ".venv" / "bin" / "python").resolve()
+
+
+def test_venv_helpers_read_a_real_venv(tmp_path: Path) -> None:
+    """진짜 `python -m venv`로 만든 환경을 읽는다 — 가짜 파일 배치가 아니라 실제 레이아웃.
+
+    `--without-pip`인 이유는 하나뿐이다: 네트워크도 ensurepip도 필요 없어 빠르다. 확인하려는
+    것은 "인터프리터가 실제로 돈다"와 "dist-info를 읽어 이름을 센다"라 pip이 필요 없다.
+    """
+    root = tmp_path / "proj"
+    root.mkdir()
+    subprocess.run(
+        [sys.executable, "-m", "venv", "--without-pip", str(root / ".venv")],
+        check=True,
+        capture_output=True,
+        timeout=180,
+    )
+
+    interpreter = venv_python(root)
+    assert interpreter is not None and interpreter.is_file()
+    # 경로만 맞는 게 아니라 실제로 도는 인터프리터여야 한다.
+    probe = subprocess.run(
+        [str(interpreter), "-c", "import sys; print(sys.executable)"],
+        check=True, capture_output=True, text=True, timeout=60,
+    )
+    assert Path(probe.stdout.strip()) == interpreter
+
+    site = venv_site_packages(root)
+    assert site is not None and site.is_dir()
+    assert venv_packages(root) == []
+
+    # dist-info 폴더 이름이 곧 답이다 — PEP 427 이스케이프를 거쳐 이미 import 이름 모양이다.
+    for name in ("pandas-2.3.3.dist-info", "numpy-2.5.2.dist-info", "httpx_sse-0.4.3.dist-info"):
+        (site / name).mkdir()
+    (site / "not-a-dist-info").mkdir()
+
+    assert venv_packages(root) == ["httpx_sse", "numpy", "pandas"]
+
+
+def test_package_spec_allows_names_and_pins_and_nothing_else() -> None:
+    """설치 요청에 실릴 수 있는 것은 이름과 고정 버전뿐이다 — 셸 조각·옵션·경로는 전부 거짓."""
+    for good in ("pandas", "numpy", "scikit-learn", "httpx_sse", "pandas==2.2.3", "ta-lib==0.4.0"):
+        assert is_valid_package_spec(good) is True, good
+    for bad in (
+        "pandas; rm -rf",
+        "pandas && echo",
+        "pandas | tee x",
+        "-r requirements.txt",
+        "--index-url http://evil",
+        "../../etc/passwd",
+        r"C:\pkg\evil.whl",
+        "https://evil/x.whl",
+        "pandas 2.2.3",
+        "",
+        "p" * 129,
+    ):
+        assert is_valid_package_spec(bad) is False, bad
