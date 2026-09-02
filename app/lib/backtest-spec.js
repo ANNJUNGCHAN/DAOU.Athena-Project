@@ -333,6 +333,12 @@ function serializeIndicators(indicators) {
 }
 
 function serializeGroup(name, group) {
+  // 조건이 없으면 `conditions:`(값 없음)는 yaml에서 리스트가 아니라 **널**이다 —
+  // 백엔드가 "리스트여야 한다"로 거절해, 신호를 파이썬이 만드는 코드 실행까지 막혔다
+  // (2026-09-02 전수 프로브 E16 실측). 빈 목록은 빈 목록으로 적는다.
+  if (!group.conditions.length) {
+    return [`  ${name}:`, `    logic: ${group.logic}`, '    conditions: []'].join('\n');
+  }
   const lines = [`  ${name}:`, `    logic: ${group.logic}`, '    conditions:'];
   group.conditions.forEach((c) => {
     const compare = typeof c.compare_to === 'number' ? c.compare_to : c.compare_to;

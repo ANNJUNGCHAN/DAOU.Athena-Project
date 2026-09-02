@@ -434,3 +434,18 @@ test('validate: 종목이 둘 이상이면 실행 전에 알린다 — 백엔드
   });
   assert.deepEqual(spec.validate(s), ['실행은 종목 1개만 지원합니다 — 하나만 남기세요']);
 });
+
+test('toYaml: 조건이 없으면 빈 목록으로 적는다 — `conditions:`는 널이라 백엔드가 거절한다', () => {
+  const s = Object.assign(spec.createSpec(null), {
+    symbols: ['005930'], fromDt: '20240401', toDt: '20260801',
+    entry: { logic: 'AND', conditions: [] },
+    exit: { logic: 'OR', conditions: [] },
+  });
+  const y = spec.toYaml(s);
+  assert.match(y, /entry:\n\s+logic: AND\n\s+conditions: \[\]/);
+  assert.match(y, /exit:\n\s+logic: OR\n\s+conditions: \[\]/);
+  assert.ok(!/conditions:\s*\n\s*(exit|risk):/.test(y), '값 없는 conditions: 줄이 남으면 안 된다');
+  // 조건이 있으면 예전 그대로 목록 항목으로 적는다.
+  const withCond = spec.addCondition(s, 'entry', { indicator: 'close', operator: 'greater_than', compare_to: 1 });
+  assert.match(spec.toYaml(withCond), /conditions:\n\s+- \{indicator: close,/);
+});
