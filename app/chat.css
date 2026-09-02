@@ -456,10 +456,19 @@ html.is-boot-expanding #winControls { opacity: 0; }
   background: rgb(16 19 26 / 7%);
   font-family: var(--font-body);
   font-size: var(--text-base);
+  /* 공백 없는 긴 글도 상자 안에서 끊는다(2026-09-02 사용자 지적 — 말풍선이 이상하다).
+   * max-width만 있고 줄바꿈 규칙이 없으면 "dfssss…ssss"처럼 끊을 자리가 없는 토큰이
+   * 300px를 뚫고 나가 오른쪽으로 잘려 나갔다. anywhere를 쓰는 이유: break-word와 달리
+   * 상자의 고유 최소폭 계산에도 반영돼, 좁은 창에서 버블 자체가 줄어들 수 있다. */
+  overflow-wrap: anywhere;
   line-height: var(--leading-normal);
   color: var(--color-k-text);
 }
 .turn-a {
+  /* 답변 쪽도 같은 규칙이 필요하다(2026-09-02 실측 — .turn-q만 고친 뒤 재 보니
+   * .turn-a는 overflows:true, wrap:normal이었다). 긴 URL·해시·공백 없는 토큰이
+   * 대화 폭을 뚫고 나간다. 사용자 말풍선과 같은 이유로 anywhere를 쓴다. */
+  overflow-wrap: anywhere;
   font-size: var(--text-lg);
   line-height: 1.5;
   color: var(--color-k-text);

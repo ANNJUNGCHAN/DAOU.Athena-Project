@@ -275,6 +275,34 @@ async function main() {
   })()`);
   log(`      입력창 자람: ${JSON.stringify(grow)}`);
 
+  // 말풍선이 공백 없는 긴 글에서 상자를 뚫는지(2026-09-02 제보) — 가짜 턴을 하나
+  // 붙여 실제로 재고 걷어낸다. 답변 쪽(.turn-a)에도 같은 규칙이 있는지 함께 본다.
+  const bubble = await wc.executeJavaScript(`(() => {
+    const history = document.getElementById('history');
+    const line = document.createElement('div');
+    line.className = 'turn';
+    const q = document.createElement('div');
+    q.className = 'turn-q';
+    q.textContent = 'd' + 'f' + 's'.repeat(120);
+    const a = document.createElement('div');
+    a.className = 'turn-a';
+    a.textContent = 'x'.repeat(200);
+    line.appendChild(q); line.appendChild(a);
+    history.appendChild(line);
+    const m = (el) => {
+      const r = el.getBoundingClientRect();
+      return {
+        w: Math.round(r.width),
+        overflows: el.scrollWidth > el.clientWidth + 1,
+        wrap: getComputedStyle(el).overflowWrap,
+      };
+    };
+    const out = { q: m(q), a: m(a) };
+    history.removeChild(line);
+    return out;
+  })()`);
+  log(`      말풍선 줄바꿈: ${JSON.stringify(bubble)}`);
+
   // 자가 확인용 스크린샷 — 화면이 실제로 그려졌는지 사람 없이도 판별한다.
   await wait(4000);
   const shot = await shellWin.webContents.capturePage();
