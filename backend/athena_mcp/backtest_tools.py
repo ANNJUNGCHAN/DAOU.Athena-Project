@@ -530,7 +530,8 @@ async def dispatch(
 
     if action == "propose_spec":
         # 백엔드를 타지 않는다 — main.js가 이 결과를 렌더러로 보내고 캔버스가 바로 반영한다.
-        # 검증 오류면 반영되지 않고, 실행은 사람이 채팅 카드의 버튼을 눌러야 일어난다.
+        # 검증에 걸리는 값이 있어도 반영된다(실행 전 확인으로 남는다). 실행은 사람이 채팅
+        # 카드의 버튼을 눌러야 일어난다.
         spec_input = arguments.get("propose_spec")
         spec_input = spec_input if isinstance(spec_input, dict) else {}
         patch = spec_input.get("patch")
@@ -544,8 +545,8 @@ async def dispatch(
                 "note": note if isinstance(note, str) else None,
                 "suggest_run": spec_input.get("suggest_run") is True,
                 "notice": (
-                    "설정이 캔버스로 전달됐다. 검증을 통과하면 폼에 바로 반영되고, 오류가 "
-                    "있으면 반영되지 않는다(다음 턴 컨텍스트의 대기 중 초안에 오류가 보인다). "
+                    "설정이 폼에 바로 반영됐다. 빈 종목·날짜처럼 실행 전에 채울 값은 다음 턴 "
+                    "컨텍스트의 '실행 전 확인'에 보인다 — 마저 채워 보낸다. "
                     "실행은 사람이 채팅의 [실행]을 누른다."
                 ),
             }

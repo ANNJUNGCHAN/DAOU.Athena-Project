@@ -401,8 +401,9 @@ async def test_propose_spec_makes_no_http_call_and_echoes_patch(mock_http_client
     assert payload["patch"] == patch
     assert payload["note"] == "삼성전자로"
     assert payload["suggest_run"] is False
-    assert "폼에 바로 반영되고" in payload["notice"]
-    assert "오류가 있으면 반영되지 않는다" in payload["notice"]
+    assert "폼에 바로 반영됐다" in payload["notice"]
+    assert "실행 전 확인" in payload["notice"]
+    assert "반영되지 않는다" not in payload["notice"]
     assert "[실행]" in payload["notice"]
     assert "적용" not in payload["notice"]
 

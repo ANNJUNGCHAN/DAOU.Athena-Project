@@ -3073,3 +3073,9 @@ body { margin: 0; overflow: hidden; }
   font-size: var(--text-xs);
 }
 .backtest-change-actions { flex-wrap: wrap; }
+
+.backtest-change-error-label {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--color-text-muted, #6b7280);
+}

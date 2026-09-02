@@ -232,8 +232,9 @@ function buildBacktestModePrefix(context, today) {
   const json = (v, empty) => (obj(v) ? JSON.stringify(v) : empty);
 
   const spec = json(ctx && ctx.spec, '없음 — 아직 프리셋을 고르지 않았다');
-  const draft = obj(ctx && ctx.draft)
-    ? JSON.stringify({ patch: ctx.draft.patch, errors: ctx.draft.errors })
+  // 실행 전에 채워야 할 것 — 설정은 검증과 무관하게 이미 폼에 들어가 있다(2026-09-02).
+  const pending = ctx && Array.isArray(ctx.pending) && ctx.pending.length
+    ? JSON.stringify(ctx.pending)
     : '없음';
   const codeDraft = obj(ctx && ctx.codeDraft)
     ? JSON.stringify({ note: ctx.codeDraft.note, lines: ctx.codeDraft.lines })
@@ -259,14 +260,14 @@ function buildBacktestModePrefix(context, today) {
     '사용자는 백테스트 캔버스에 있고, 캔버스는 채팅이 제어한다. 이 턴의 규칙:',
     '- 캔버스 카드를 올리지 않는다 — athena__render_canvas를 호출하지 않는다. athena_search/athena_describe/athena_resolve/athena_call은 종목코드·시세 같은 정보 확인에만 쓴다.',
     '- 말풍선에 코드·수치 표·지어낸 결과를 쓰지 않는다. 결과 수치는 아래 컨텍스트나 result·list_runs 액션이 준 값만 말한다 — 없으면 "아직 실행 결과가 없다"고 말한다.',
-    '- 설정은 athena_backtest action=propose_spec 으로 patch를 보내면 폼에 바로 반영된다 — 검증 오류가 있으면 반영되지 않고 아래 "대기 중 초안"에 오류가 실린다(그 오류를 고쳐 다시 보낸다). 코드는 propose_code로 보내면 편집기에 바로 들어간다. 채팅에는 변경 내역과 [되돌리기]가 뜬다.',
+    '- 설정은 athena_backtest action=propose_spec 으로 patch를 보내면 폼에 바로 반영된다 — 빈 종목·날짜처럼 검증에 걸리는 값이 있어도 반영되고, 그 항목은 아래 "실행 전 확인"에 실린다(다음 턴에 마저 채운다). 코드는 propose_code로 보내면 편집기에 바로 들어간다. 채팅에는 변경 내역과 [되돌리기]가 뜬다.',
     '- 요청별 경로 — 폼 설정: propose_spec(대상→기간·주기→지표→진입 조건→청산 조건→리스크·비용 순서, 한 턴에 한 항목) · 코드 작성/수정: propose_code(전체 파일 — PARAMS 딕셔너리 + def signals(df, p), import athena_bt as bt) · 오류 수정: 아래 마지막 실행 오류·진단·현재 코드를 읽고 propose_code(고친 전체 코드, suggest_run:true) · 실행: 폼이면 propose_spec(빈 patch, suggest_run:true), 코드면 propose_code(현재 코드, suggest_run:true) · 결과 설명: 아래 마지막 실행 · 이력·비교: navigate(history) + list_runs · 최적화: propose_optimize(method) · 흐름 지도: navigate(design, flow) · 배포: navigate(deploy) 후 사람이 한다고 안내 · 데이터 필요량: plan. 사용자가 "알아서"·"한 번에"·"전부" 해달라고 하면 한 턴에 필요한 항목을 모두 채운다.',
     '- 실행은 propose_spec/propose_code에 suggest_run:true를 넣으면 채팅에 [실행] 버튼이 뜬다 — 사람이 누른다. run·optimize·backfill 액션을 직접 부르지 않는다.',
     '- 실행·검증·수집·저장·활성화·배포·탐색 시작은 사람이 카드 버튼을 누른다.',
     '- 이미 채워진 값은 되묻지 않는다. 모르면 짧게 하나만 묻는다. 실행당 종목 1개, 날짜 YYYYMMDD. 답은 두세 문장 — 무엇을 바꿨는지 한 줄과 다음 질문 한 줄.',
     `현재 화면: tab=${label(ctx && ctx.tab)} · designTab=${label(ctx && ctx.designTab)} · 실행경로=${label(ctx && ctx.runPath)}`,
     `현재 폼(JSON): ${spec}`,
-    `대기 중 초안: ${draft}`,
+    `실행 전 확인: ${pending}`,
     `코드 초안 대기: ${codeDraft}`,
     codeBlock,
     `마지막 실행: ${json(ctx && ctx.lastResult, '없음')}`,

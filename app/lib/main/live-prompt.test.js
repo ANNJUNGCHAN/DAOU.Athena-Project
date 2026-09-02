@@ -326,27 +326,23 @@ test('buildLiveTurnPrompt: canvasMode backtest — 접두 규율 + 현재 폼 JS
   assert.ok(p.includes('실행·검증·수집·저장·활성화·배포·탐색 시작은 사람이 카드 버튼을 누른다'));
   assert.ok(p.includes('suggest_run:true'));
   assert.ok(p.includes(`현재 폼(JSON): ${JSON.stringify(BT_CONTEXT.spec)}`));
-  assert.ok(p.includes('대기 중 초안: 없음'));
+  assert.ok(p.includes('실행 전 확인: 없음'));
   assert.ok(p.includes('프리셋: sma_crossover(SMA 골든크로스)'));
   assert.ok(p.endsWith('\n\n사용자 질문:\n삼성전자로 해줘'));
 });
 
-test('buildLiveTurnPrompt: backtest — 대기 초안은 {patch, errors}만 JSON으로 싣는다', () => {
-  const ctx = Object.assign({}, BT_CONTEXT, {
-    draft: {
-      patch: { symbols: ['000660'] }, note: '하이닉스로', suggest_run: false, errors: ['기간을 입력하세요'],
-    },
-  });
+test('buildLiveTurnPrompt: backtest — 실행 전 확인은 pending 배열을 JSON으로 싣는다', () => {
+  const ctx = Object.assign({}, BT_CONTEXT, { pending: ['종목을 하나 이상 고르세요', '기간을 입력하세요'] });
   const p = buildLiveTurnPrompt({ userText: 'x', canvasMode: 'backtest', backtestContext: ctx, today: '20260902' });
-  assert.ok(p.includes('대기 중 초안: {"patch":{"symbols":["000660"]},"errors":["기간을 입력하세요"]}'));
-  assert.ok(!p.includes('하이닉스로'));
+  assert.ok(p.includes('실행 전 확인: ["종목을 하나 이상 고르세요","기간을 입력하세요"]'));
+  assert.ok(!p.includes('대기 중 초안'));
 });
 
 test('buildLiveTurnPrompt: backtest — backtestContext null이면 폼 없음으로 접두를 낸다', () => {
   const p = buildLiveTurnPrompt({ userText: 'x', canvasMode: 'backtest', backtestContext: null, today: '20260902' });
   assert.ok(p.startsWith('[모드: 백테스트] 오늘: 20260902'));
   assert.ok(p.includes('현재 폼(JSON): 없음'));
-  assert.ok(p.includes('대기 중 초안: 없음'));
+  assert.ok(p.includes('실행 전 확인: 없음'));
   assert.ok(p.includes('프리셋: 목록 없음'));
   assert.ok(p.endsWith('사용자 질문:\nx'));
 });
@@ -376,7 +372,7 @@ test('buildBacktestModePrefix: 전체 컨텍스트는 모든 구역 머리줄을
   assert.equal(lines[1], '사용자는 백테스트 캔버스에 있고, 캔버스는 채팅이 제어한다. 이 턴의 규칙:');
   assert.ok(p.includes('현재 화면: tab=design · designTab=code · 실행경로=code'));
   assert.ok(p.includes(`현재 폼(JSON): ${JSON.stringify(BT_FULL_CONTEXT.spec)}`));
-  assert.ok(p.includes('대기 중 초안: 없음'));
+  assert.ok(p.includes('실행 전 확인: 없음'));
   assert.ok(p.includes('코드 초안 대기: {"note":"진입 조건을 고쳤다","lines":12}'));
   assert.ok(p.includes('코드(strategy.py · 4줄):'));
   assert.ok(p.includes(`마지막 실행: ${JSON.stringify(BT_FULL_CONTEXT.lastResult)}`));
@@ -442,10 +438,10 @@ test('buildBacktestModePrefix: 컨텍스트 없이도 모든 구역이 없음/�
 // 사용자 결정(2026-09-02): "바로 반영 + 채팅에 변경 내역·되돌리기". 접두는
 // [적용]·초안 카드 문구를 더 이상 쓰지 않고, 검증 오류 때만 대기 초안이 남는다.
 
-test('buildBacktestModePrefix: 설정·코드는 바로 반영, 오류는 대기 초안에 실린다고 알린다', () => {
+test('buildBacktestModePrefix: 설정·코드는 바로 반영, 검증 오류는 실행 전 확인에 실린다고 알린다', () => {
   const p = buildBacktestModePrefix(BT_FULL_CONTEXT, '20260902');
   assert.ok(p.includes('설정은 athena_backtest action=propose_spec 으로 patch를 보내면 폼에 바로 반영된다'));
-  assert.ok(p.includes('검증 오류가 있으면 반영되지 않고 아래 "대기 중 초안"에 오류가 실린다(그 오류를 고쳐 다시 보낸다)'));
+  assert.ok(p.includes('검증에 걸리는 값이 있어도 반영되고, 그 항목은 아래 "실행 전 확인"에 실린다(다음 턴에 마저 채운다)'));
   assert.ok(p.includes('코드는 propose_code로 보내면 편집기에 바로 들어간다'));
   assert.ok(p.includes('채팅에는 변경 내역과 [되돌리기]가 뜬다'));
 });
@@ -469,5 +465,5 @@ test('buildBacktestModePrefix: 초안 카드·[적용] 문구는 접두에서 �
   assert.ok(!p.includes('초안 카드'));
   assert.ok(!p.includes('[적용]'));
   assert.ok(!p.includes('적용하고 실행'));
-  assert.ok(p.includes('대기 중 초안: 없음'));
+  assert.ok(p.includes('실행 전 확인: 없음'));
 });
