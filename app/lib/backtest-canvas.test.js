@@ -63,7 +63,12 @@ function fakeNode(tag) {
     get firstChild() { return this.children[0] || null; },
     appendChild(child) { this.children.push(child); return child; },
     removeChild(child) { this.children = this.children.filter((c) => c !== child); return child; },
-    setAttribute(k, v) { this.attrs[k] = String(v); },
+    // class 속성은 className으로 되비친다 — 진짜 DOM이 그렇고, SVG 노드는 className이
+    // 아니라 setAttribute('class', ...)로만 클래스를 받는다(backtest-equity-chart.js).
+    setAttribute(k, v) {
+      this.attrs[k] = String(v);
+      if (k === 'class') this.className = String(v);
+    },
     getAttribute(k) {
       return Object.prototype.hasOwnProperty.call(this.attrs, k) ? this.attrs[k] : null;
     },
@@ -345,7 +350,13 @@ const DONE_RESULT = {
     buy_hold_return: 1.41, bars: 2559, warmup_bars: 60,
     mdd_start: '2020-03-02', mdd_bars: 87, closed_trades: 41, winning_trades: 19,
   },
-  equity: [{ dt: '2026-01-01', equity: 100, drawdown: 0 }],
+  equity: [
+    { dt: '2026-01-01', equity: 100, drawdown: 0 },
+    { dt: '2026-02-01', equity: 118, drawdown: -0.02 },
+    { dt: '2026-03-01', equity: 284.2, drawdown: 0 },
+  ],
+  // 매수보유 곡선 — 백엔드가 첫 종가 대비 배수로 준다(GET /runs/{id}의 top-level).
+  benchmark: [1, 1.12, 2.41],
   stdout: 'bars=2559\n',
   flags: [],
 };
@@ -393,6 +404,15 @@ test('자산곡선 자리가 플레이스홀더가 아니라 실제 영역이다
   const { container } = await toResult();
   assert.equal(findByClass(container, 'backtest-equity-host').length, 1);
   assert.equal(textOf(container).includes('곡선은 다음 단계'), false);
+});
+
+test('매수보유 곡선을 실제로 그린다 — 범례만 있고 선이 없으면 안 된다', async () => {
+  // 이 테스트만 SVG를 만들 수 있게 한다 — 기본 스텁에 createElementNS가 없어서 다른
+  // 테스트는 곡선을 건너뛴다(backtest-canvas.js의 그 분기 주석 그대로).
+  document.createElementNS = (_ns, tag) => fakeNode(tag);
+  const { container } = await toResult();
+  assert.equal(findByClass(container, 'backtest-equity-benchmark').length, 1);
+  assert.equal(findByClass(container, 'backtest-equity-strategy').length, 1);
 });
 
 test('코드 출력(stdout)을 버리지 않고 보여준다', async () => {

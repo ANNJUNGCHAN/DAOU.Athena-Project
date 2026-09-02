@@ -110,14 +110,20 @@ def _candles_to_frame(candles: tuple[Candle, ...]) -> pd.DataFrame:
     )
 
 
-def _metrics_view(metrics_json: str | None) -> tuple[dict[str, Any] | None, list[str]]:
+def _metrics_view(
+    metrics_json: str | None,
+) -> tuple[dict[str, Any] | None, list[str], list[float]]:
     """저장된 metrics_json에서 사람이 읽는 지표와 정직 표기 flags를 분리한다(engine.py
-    §6.4 "가정" 섹션, runner.py가 costs_flag를 여기 얹어 저장했다)."""
+    §6.4 "가정" 섹션, runner.py가 costs_flag를 여기 얹어 저장했다).
+
+    매수보유 곡선(benchmark)도 같이 떼낸다 — 지표 타일이 읽는 값이 아니라 자산곡선이
+    쓰는 봉 수만큼의 배열이라, 목록 라우트가 실행 수만큼 그걸 실어 나르지 않게 한다."""
     if not metrics_json:
-        return None, []
+        return None, [], []
     payload = json.loads(metrics_json)
     flags = payload.pop("flags", [])
-    return payload, flags
+    benchmark = payload.pop("benchmark", [])
+    return payload, flags, benchmark
 
 
 def _yaml_error_detail(exc: Exception) -> str:
@@ -396,7 +402,7 @@ async def list_runs(request: Request) -> dict[str, Any]:
     rows = await store.runs()
     items = []
     for r in rows:
-        metrics, _flags = _metrics_view(r.metrics_json)
+        metrics, _flags, _benchmark = _metrics_view(r.metrics_json)
         items.append(
             {
                 "run_id": r.id,
@@ -416,12 +422,14 @@ async def get_run(request: Request, run_id: str) -> dict[str, Any]:
     if row is None:
         raise HTTPException(status_code=404, detail="실행이 존재하지 않는다")
     equity = await store.equity(run_id)
-    metrics, flags = _metrics_view(row.metrics_json)
+    metrics, flags, benchmark = _metrics_view(row.metrics_json)
     return {
         "run_id": row.id,
         "status": row.status,
         "metrics": metrics,
         "equity": [{"dt": p.dt, "equity": p.equity, "drawdown": p.drawdown} for p in equity],
+        # 자산곡선의 두 번째 선 — equity와 같은 길이·같은 봉이다(보드 03 "전략 vs 매수보유").
+        "benchmark": benchmark,
         "stdout": row.stdout or "",
         "flags": flags,
         "error": row.error,
