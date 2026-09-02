@@ -2839,7 +2839,18 @@ const graphSummaryTable = window.AthenaLib.GraphSummaryTable.createSummaryTableC
   // 패널을 건드리지 않는다(스텝0-2 소유권 계약).
   container: document.getElementById('graphSummaryTableArea'),
   limit: 5, // 보드 07 "성향 신호 상위 5"
-  fetchProfileSummary: ({ limit } = {}) => window.athena.invoke('athena:brain-profile-summary', { limit }),
+  // windowDays를 반드시 함께 넘긴다(2026-09-02 결함).
+  //
+  // summary-table.js는 헤더 기간 칩 값을 `{ limit, windowDays }`로 넘기고 main.js
+  // 핸들러도 그걸 받아 `window_days`로 백엔드에 전달한다. 그런데 이 자리가
+  // `{ limit }`만 구조분해해 windowDays를 **버리고 있었다** — 그 결과 "최근 30일"을
+  // 골라도 표는 백엔드 기본 창을 그대로 봤다. graph-filters.js 머리말이 경계한
+  // "안 되는 컨트롤보다 나쁜 것은 거짓말하는 라벨"이 그대로 재발한 상태였고,
+  // 지도·전체 캐시(loadProfileSignals)는 제대로 넘기고 있어 **두 표면이 다른 창을**
+  // 보고 있었다(applyGraphFilterChange 주석이 금지한 바로 그것).
+  fetchProfileSummary: ({ limit, windowDays } = {}) => window.athena.invoke(
+    'athena:brain-profile-summary', { limit, windowDays },
+  ),
   selectEntity: (entityId, panelData) => graphMode.selectEntity(entityId, panelData),
   onError: (err) => console.warn('[graph-mode] profile-summary 실패', err),
   // 히어로(보드 06 §5)·확인 필요 배너(§6, 06 전용) — 스텝3. 배너 개수원은
